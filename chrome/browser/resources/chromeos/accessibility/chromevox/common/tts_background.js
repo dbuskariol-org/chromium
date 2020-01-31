@@ -511,6 +511,14 @@ TtsBackground = class extends ChromeTtsBase {
     this.capturingTtsEventListeners_.push(listener);
   }
 
+  /** @override */
+  removeCapturingEventListener(listener) {
+    this.capturingTtsEventListeners_ =
+        this.capturingTtsEventListeners_.filter((item) => {
+          return item != listener;
+        });
+  }
+
   /**
    * An error handler passed as a callback to chrome.tts.speak.
    * @param {string} errorMessage Describes the error (set by onEvent).

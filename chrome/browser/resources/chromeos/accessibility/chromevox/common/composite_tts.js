@@ -64,12 +64,17 @@ CompositeTts = class {
     });
   }
 
-  /**
-   * @override
-   */
+  /** @override */
   addCapturingEventListener(listener) {
     this.ttsEngines_.forEach(function(engine) {
       engine.addCapturingEventListener(listener);
+    });
+  }
+
+  /** @override */
+  removeCapturingEventListener(listener) {
+    this.ttsEngines_.forEach(function(engine) {
+      engine.removeCapturingEventListener(listener);
     });
   }
 
