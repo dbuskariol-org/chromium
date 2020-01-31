@@ -1328,8 +1328,8 @@ void ServiceWorkerContextWrapper::GetUserDataForAllRegistrationsOnCoreThread(
                             blink::ServiceWorkerStatusCode::kErrorAbort);
     return;
   }
-  context_core_->storage()->GetUserDataForAllRegistrations(key,
-                                                           std::move(callback));
+  context_core_->registry()->GetUserDataForAllRegistrations(
+      key, std::move(callback));
 }
 
 void ServiceWorkerContextWrapper::GetUserDataForAllRegistrationsByKeyPrefix(
@@ -1363,7 +1363,7 @@ void ServiceWorkerContextWrapper::
                             blink::ServiceWorkerStatusCode::kErrorAbort);
     return;
   }
-  context_core_->storage()->GetUserDataForAllRegistrationsByKeyPrefix(
+  context_core_->registry()->GetUserDataForAllRegistrationsByKeyPrefix(
       key_prefix, std::move(callback));
 }
 

@@ -744,13 +744,13 @@ void ServiceWorkerStorage::ClearUserDataByKeyPrefixes(
 
 void ServiceWorkerStorage::GetUserDataForAllRegistrations(
     const std::string& key,
-    GetUserDataForAllRegistrationsCallback callback) {
+    GetUserDataForAllRegistrationsInDBCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
       RunSoon(FROM_HERE,
               base::BindOnce(std::move(callback),
                              std::vector<std::pair<int64_t, std::string>>(),
-                             blink::ServiceWorkerStatusCode::kErrorAbort));
+                             ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -762,33 +762,26 @@ void ServiceWorkerStorage::GetUserDataForAllRegistrations(
       break;
   }
 
-  if (key.empty()) {
-    RunSoon(FROM_HERE,
-            base::BindOnce(std::move(callback),
-                           std::vector<std::pair<int64_t, std::string>>(),
-                           blink::ServiceWorkerStatusCode::kErrorFailed));
-    return;
-  }
+  // TODO(bashi): Consider replacing this DCHECK with returning errors once
+  // this class is moved to the Storage Service.
+  DCHECK(!key.empty());
 
   database_task_runner_->PostTask(
       FROM_HERE,
-      base::BindOnce(
-          &ServiceWorkerStorage::GetUserDataForAllRegistrationsInDB,
-          database_.get(), base::ThreadTaskRunnerHandle::Get(), key,
-          base::BindOnce(
-              &ServiceWorkerStorage::DidGetUserDataForAllRegistrations,
-              weak_factory_.GetWeakPtr(), std::move(callback))));
+      base::BindOnce(&ServiceWorkerStorage::GetUserDataForAllRegistrationsInDB,
+                     database_.get(), base::ThreadTaskRunnerHandle::Get(), key,
+                     std::move(callback)));
 }
 
 void ServiceWorkerStorage::GetUserDataForAllRegistrationsByKeyPrefix(
     const std::string& key_prefix,
-    GetUserDataForAllRegistrationsCallback callback) {
+    GetUserDataForAllRegistrationsInDBCallback callback) {
   switch (state_) {
     case STORAGE_STATE_DISABLED:
       RunSoon(FROM_HERE,
               base::BindOnce(std::move(callback),
                              std::vector<std::pair<int64_t, std::string>>(),
-                             blink::ServiceWorkerStatusCode::kErrorAbort));
+                             ServiceWorkerDatabase::STATUS_ERROR_DISABLED));
       return;
     case STORAGE_STATE_INITIALIZING:  // Fall-through.
     case STORAGE_STATE_UNINITIALIZED:
@@ -800,22 +793,16 @@ void ServiceWorkerStorage::GetUserDataForAllRegistrationsByKeyPrefix(
       break;
   }
 
-  if (key_prefix.empty()) {
-    RunSoon(FROM_HERE,
-            base::BindOnce(std::move(callback),
-                           std::vector<std::pair<int64_t, std::string>>(),
-                           blink::ServiceWorkerStatusCode::kErrorFailed));
-    return;
-  }
+  // TODO(bashi): Consider replacing this DCHECK with returning errors once
+  // this class is moved to the Storage Service.
+  DCHECK(!key_prefix.empty());
 
   database_task_runner_->PostTask(
       FROM_HERE,
       base::BindOnce(
           &ServiceWorkerStorage::GetUserDataForAllRegistrationsByKeyPrefixInDB,
           database_.get(), base::ThreadTaskRunnerHandle::Get(), key_prefix,
-          base::BindOnce(
-              &ServiceWorkerStorage::DidGetUserDataForAllRegistrations,
-              weak_factory_.GetWeakPtr(), std::move(callback))));
+          std::move(callback)));
 }
 
 void ServiceWorkerStorage::ClearUserDataForAllRegistrationsByKeyPrefix(
@@ -1147,15 +1134,6 @@ void ServiceWorkerStorage::DidPurgeUncommittedResourceIds(
     return;
   }
   StartPurgingResources(resource_ids);
-}
-
-void ServiceWorkerStorage::DidGetUserDataForAllRegistrations(
-    GetUserDataForAllRegistrationsCallback callback,
-    const std::vector<std::pair<int64_t, std::string>>& user_data,
-    ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK)
-    ScheduleDeleteAndStartOver();
-  std::move(callback).Run(user_data, DatabaseStatusToStatusCode(status));
 }
 
 ServiceWorkerDiskCache* ServiceWorkerStorage::disk_cache() {

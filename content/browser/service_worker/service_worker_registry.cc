@@ -495,6 +495,40 @@ void ServiceWorkerRegistry::ClearUserDataForAllRegistrationsByKeyPrefix(
                      weak_factory_.GetWeakPtr(), std::move(callback)));
 }
 
+void ServiceWorkerRegistry::GetUserDataForAllRegistrations(
+    const std::string& key,
+    GetUserDataForAllRegistrationsCallback callback) {
+  if (key.empty()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback),
+                           std::vector<std::pair<int64_t, std::string>>(),
+                           blink::ServiceWorkerStatusCode::kErrorFailed));
+    return;
+  }
+
+  storage()->GetUserDataForAllRegistrations(
+      key,
+      base::BindOnce(&ServiceWorkerRegistry::DidGetUserDataForAllRegistrations,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
+void ServiceWorkerRegistry::GetUserDataForAllRegistrationsByKeyPrefix(
+    const std::string& key_prefix,
+    GetUserDataForAllRegistrationsCallback callback) {
+  if (key_prefix.empty()) {
+    RunSoon(FROM_HERE,
+            base::BindOnce(std::move(callback),
+                           std::vector<std::pair<int64_t, std::string>>(),
+                           blink::ServiceWorkerStatusCode::kErrorFailed));
+    return;
+  }
+
+  storage()->GetUserDataForAllRegistrationsByKeyPrefix(
+      key_prefix,
+      base::BindOnce(&ServiceWorkerRegistry::DidGetUserDataForAllRegistrations,
+                     weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
 ServiceWorkerRegistration*
 ServiceWorkerRegistry::FindInstallingRegistrationForClientUrl(
     const GURL& client_url) {
@@ -914,6 +948,16 @@ void ServiceWorkerRegistry::DidClearUserData(
     ScheduleDeleteAndStartOver();
   std::move(callback).Run(
       ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
+}
+
+void ServiceWorkerRegistry::DidGetUserDataForAllRegistrations(
+    GetUserDataForAllRegistrationsCallback callback,
+    const std::vector<std::pair<int64_t, std::string>>& user_data,
+    ServiceWorkerDatabase::Status status) {
+  if (status != ServiceWorkerDatabase::STATUS_OK)
+    ScheduleDeleteAndStartOver();
+  std::move(callback).Run(
+      user_data, ServiceWorkerStorage::DatabaseStatusToStatusCode(status));
 }
 
 void ServiceWorkerRegistry::ScheduleDeleteAndStartOver() {

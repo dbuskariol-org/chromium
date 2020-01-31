@@ -423,7 +423,7 @@ class ServiceWorkerStorageTest : public testing::Test {
       std::vector<std::pair<int64_t, std::string>>* data) {
     base::RunLoop loop;
     base::Optional<blink::ServiceWorkerStatusCode> result;
-    storage()->GetUserDataForAllRegistrations(
+    registry()->GetUserDataForAllRegistrations(
         key,
         base::BindLambdaForTesting(
             [&](const std::vector<std::pair<int64_t, std::string>>& user_data,

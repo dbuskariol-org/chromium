@@ -57,6 +57,9 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   using GetUserKeysAndDataCallback = base::OnceCallback<void(
       const base::flat_map<std::string, std::string>& data_map,
       blink::ServiceWorkerStatusCode status)>;
+  using GetUserDataForAllRegistrationsCallback = base::OnceCallback<void(
+      const std::vector<std::pair<int64_t, std::string>>& user_data,
+      blink::ServiceWorkerStatusCode status)>;
   using StatusCallback = ServiceWorkerStorage::StatusCallback;
 
   ServiceWorkerRegistry(
@@ -184,6 +187,12 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   void ClearUserDataForAllRegistrationsByKeyPrefix(
       const std::string& key_prefix,
       StatusCallback callback);
+  void GetUserDataForAllRegistrations(
+      const std::string& key,
+      GetUserDataForAllRegistrationsCallback callback);
+  void GetUserDataForAllRegistrationsByKeyPrefix(
+      const std::string& key_prefix,
+      GetUserDataForAllRegistrationsCallback callback);
 
   // TODO(crbug.com/1039200): Make this private once methods/fields related to
   // ServiceWorkerRegistration in ServiceWorkerStorage are moved into this
@@ -260,6 +269,10 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
                         ServiceWorkerDatabase::Status status);
   void DidClearUserData(StatusCallback callback,
                         ServiceWorkerDatabase::Status status);
+  void DidGetUserDataForAllRegistrations(
+      GetUserDataForAllRegistrationsCallback callback,
+      const std::vector<std::pair<int64_t, std::string>>& user_data,
+      ServiceWorkerDatabase::Status status);
 
   void ScheduleDeleteAndStartOver();
 

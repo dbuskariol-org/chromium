@@ -89,9 +89,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       blink::ServiceWorkerStatusCode status,
       int64_t deleted_version_id,
       const std::vector<int64_t>& newly_purgeable_resources)>;
-  using GetUserDataForAllRegistrationsCallback = base::OnceCallback<void(
-      const std::vector<std::pair<int64_t, std::string>>& user_data,
-      blink::ServiceWorkerStatusCode status)>;
 
   using DatabaseStatusCallback =
       base::OnceCallback<void(ServiceWorkerDatabase::Status status)>;
@@ -100,6 +97,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
                               ServiceWorkerDatabase::Status)>;
   using GetUserKeysAndDataInDBCallback = base::OnceCallback<void(
       const base::flat_map<std::string, std::string>& data_map,
+      ServiceWorkerDatabase::Status)>;
+  using GetUserDataForAllRegistrationsInDBCallback = base::OnceCallback<void(
+      const std::vector<std::pair<int64_t, std::string>>& user_data,
       ServiceWorkerDatabase::Status)>;
 
   ~ServiceWorkerStorage();
@@ -239,12 +239,12 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // as well as that user data.
   void GetUserDataForAllRegistrations(
       const std::string& key,
-      GetUserDataForAllRegistrationsCallback callback);
+      GetUserDataForAllRegistrationsInDBCallback callback);
   // Responds with all registrations that have user data with a particular key,
   // as well as that user data.
   void GetUserDataForAllRegistrationsByKeyPrefix(
       const std::string& key_prefix,
-      GetUserDataForAllRegistrationsCallback callback);
+      GetUserDataForAllRegistrationsInDBCallback callback);
   // Responds OK if all are successfully deleted or not found in the database.
   // |key_prefix| cannot be empty.
   void ClearUserDataForAllRegistrationsByKeyPrefix(
@@ -346,9 +346,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
       std::unique_ptr<ResourceList> resources,
       ServiceWorkerDatabase::Status status)>;
-  using GetUserDataForAllRegistrationsInDBCallback = base::OnceCallback<void(
-      const std::vector<std::pair<int64_t, std::string>>& user_data,
-      ServiceWorkerDatabase::Status)>;
   using GetResourcesCallback =
       base::OnceCallback<void(const std::vector<int64_t>& resource_ids,
                               ServiceWorkerDatabase::Status status)>;
@@ -399,10 +396,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void DidWriteUncommittedResourceIds(ServiceWorkerDatabase::Status status);
   void DidPurgeUncommittedResourceIds(const std::set<int64_t>& resource_ids,
                                       ServiceWorkerDatabase::Status status);
-  void DidGetUserDataForAllRegistrations(
-      GetUserDataForAllRegistrationsCallback callback,
-      const std::vector<std::pair<int64_t, std::string>>& user_data,
-      ServiceWorkerDatabase::Status status);
 
   // Lazy disk_cache getter.
   ServiceWorkerDiskCache* disk_cache();
