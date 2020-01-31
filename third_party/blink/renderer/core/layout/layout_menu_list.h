@@ -73,6 +73,7 @@ class CORE_EXPORT LayoutMenuList final : public LayoutFlexibleBox {
 
   void StyleDidChange(StyleDifference, const ComputedStyle* old_style) override;
 
+  LayoutBlock* InnerBlock() const;
   void CreateInnerBlock();
   scoped_refptr<ComputedStyle> CreateInnerStyle();
   void UpdateInnerStyle();
