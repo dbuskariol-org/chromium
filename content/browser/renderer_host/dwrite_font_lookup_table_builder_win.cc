@@ -23,7 +23,6 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/task/post_task.h"
 #include "base/task/task_traits.h"
-#include "base/task/thread_pool.h"
 #include "base/threading/scoped_blocking_call.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "base/threading/thread_restrictions.h"
@@ -150,6 +149,9 @@ DWriteFontLookupTableBuilder::~DWriteFontLookupTableBuilder() = default;
 
 base::ReadOnlySharedMemoryRegion
 DWriteFontLookupTableBuilder::DuplicateMemoryRegion() {
+  DCHECK(!TableCacheFilePath().empty())
+      << "Ensure that a cache_directory_ is set (see "
+         "InitializeCacheDirectoryFromProfile())";
   DCHECK(FontUniqueNameTableReady());
   return font_table_memory_.region.Duplicate();
 }
@@ -248,21 +250,13 @@ base::TimeDelta DWriteFontLookupTableBuilder::IndexingTimeout() {
   return font_indexing_timeout_;
 }
 
-void DWriteFontLookupTableBuilder::PostCallbacksImpl() {
-  DCHECK_CALLED_ON_VALID_SEQUENCE(callbacks_access_sequence_checker_);
+void DWriteFontLookupTableBuilder::PostCallbacks() {
   for (auto& pending_callback : pending_callbacks_) {
     pending_callback.task_runner->PostTask(
         FROM_HERE, base::BindOnce(std::move(pending_callback.mojo_callback),
                                   DuplicateMemoryRegion()));
   }
   pending_callbacks_.clear();
-}
-
-void DWriteFontLookupTableBuilder::PostCallbacks() {
-  callbacks_access_task_runner_->PostTask(
-      FROM_HERE,
-      base::BindOnce(&DWriteFontLookupTableBuilder::PostCallbacksImpl,
-                     base::Unretained(this)));
 }
 
 base::FilePath DWriteFontLookupTableBuilder::TableCacheFilePath() {
@@ -306,38 +300,18 @@ DWriteFontLookupTableBuilder::CallbackOnTaskRunner::CallbackOnTaskRunner(
 DWriteFontLookupTableBuilder::CallbackOnTaskRunner::~CallbackOnTaskRunner() =
     default;
 
-void DWriteFontLookupTableBuilder::QueueShareMemoryRegionWhenReadyImpl(
-    scoped_refptr<base::SequencedTaskRunner> task_runner,
-    blink::mojom::DWriteFontProxy::GetUniqueNameLookupTableCallback callback) {
-  DCHECK_CALLED_ON_VALID_SEQUENCE(callbacks_access_sequence_checker_);
-
-  // Don't queue but post response directly if the table is already ready for
-  // sharing with renderers to cover the condition in which the font table
-  // becomes ready briefly after a renderer asking for
-  // GetUniqueNameLookupTableIfAvailable(), receiving the information that it
-  // wasn't ready. (https://crbug.com/977283)
-  if (font_table_built_.IsSignaled()) {
-    task_runner->PostTask(FROM_HERE, base::BindOnce(std::move(callback),
-                                                    DuplicateMemoryRegion()));
-    return;
-  }
-
-  pending_callbacks_.push_back(
-      CallbackOnTaskRunner(std::move(task_runner), std::move(callback)));
-}
-
 void DWriteFontLookupTableBuilder::QueueShareMemoryRegionWhenReady(
     scoped_refptr<base::SequencedTaskRunner> task_runner,
     blink::mojom::DWriteFontProxy::GetUniqueNameLookupTableCallback callback) {
   TRACE_EVENT0("dwrite,fonts",
                "DWriteFontLookupTableBuilder::QueueShareMemoryRegionWhenReady");
   DCHECK(!HasDWriteUniqueFontLookups());
-  CHECK(callbacks_access_task_runner_);
-  callbacks_access_task_runner_->PostTask(
-      FROM_HERE,
-      base::BindOnce(
-          &DWriteFontLookupTableBuilder::QueueShareMemoryRegionWhenReadyImpl,
-          base::Unretained(this), std::move(task_runner), std::move(callback)));
+  pending_callbacks_.emplace_back(std::move(task_runner), std::move(callback));
+  // Cover for the condition in which the font table becomes ready briefly after
+  // a renderer asking for GetUniqueNameLookupTableIfAvailable(), receiving the
+  // information that it wasn't ready.
+  if (font_table_built_.IsSignaled())
+    PostCallbacks();
 }
 
 bool DWriteFontLookupTableBuilder::FontUniqueNameTableReady() {
@@ -372,15 +346,6 @@ void DWriteFontLookupTableBuilder::
 
   start_time_table_ready_ = base::TimeTicks::Now();
   scanning_error_reasons_.clear();
-
-  // Create callbacks_access_task_runner_ here instead of the constructor
-  // because between unit tests the DWriteFontTableBuilder instance persists,
-  // but the ThreadPool changes as the TaskEnvironment recreates this. Recreate
-  // the task runner here so it is associated with the new ThreadPool.
-  callbacks_access_task_runner_ = base::ThreadPool::CreateSequencedTaskRunner(
-      {base::TaskPriority::USER_VISIBLE,
-       base::TaskShutdownBehavior::SKIP_ON_SHUTDOWN});
-  DETACH_FROM_SEQUENCE(callbacks_access_sequence_checker_);
 
   scoped_refptr<base::SequencedTaskRunner> results_collection_task_runner =
       base::CreateSequencedTaskRunner(
