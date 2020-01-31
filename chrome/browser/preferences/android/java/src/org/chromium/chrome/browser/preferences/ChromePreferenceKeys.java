@@ -431,6 +431,7 @@ public final class ChromePreferenceKeys {
 
     public static final String MEDIA_WEBRTC_NOTIFICATION_IDS = "WebRTCNotificationIds";
 
+    public static final String NOTIFICATIONS_CHANNELS_VERSION = "channels_version_key";
     public static final String NOTIFICATIONS_LAST_SHOWN_NOTIFICATION_TYPE =
             "NotificationUmaTracker.LastShownNotificationType";
     public static final String NOTIFICATIONS_NEXT_TRIGGER =
@@ -836,6 +837,7 @@ public final class ChromePreferenceKeys {
                 LOCALE_MANAGER_SEARCH_ENGINE_PROMO_SHOW_STATE,
                 LOCALE_MANAGER_WAS_IN_SPECIAL_LOCALE,
                 MEDIA_WEBRTC_NOTIFICATION_IDS,
+                NOTIFICATIONS_CHANNELS_VERSION,
                 NOTIFICATIONS_LAST_SHOWN_NOTIFICATION_TYPE,
                 NOTIFICATIONS_NEXT_TRIGGER,
                 NTP_SNIPPETS_IS_SCHEDULED,
