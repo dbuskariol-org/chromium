@@ -18,15 +18,14 @@
 #include "base/test/simple_test_tick_clock.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
-#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
-#include "chrome/test/base/testing_profile.h"
+#include "build/chromecast_buildflags.h"
 #include "components/captive_portal/content/captive_portal_service.h"
 #include "components/captive_portal/core/buildflags.h"
 #include "components/captive_portal/core/captive_portal_testing_utils.h"
+#include "components/embedder_support/pref_names.h"
 #include "components/network_time/network_time_test_utils.h"
 #include "components/network_time/network_time_tracker.h"
+#include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/testing_pref_service.h"
 #include "components/security_interstitials/content/common_name_mismatch_handler.h"
 #include "components/security_interstitials/content/ssl_error_assistant.h"
@@ -36,6 +35,7 @@
 #include "components/security_interstitials/core/ssl_error_ui.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
+#include "content/public/test/test_renderer_host.h"
 #include "net/base/net_errors.h"
 #include "net/cert/cert_status_flags.h"
 #include "net/cert/x509_certificate.h"
@@ -137,21 +137,15 @@ class TestSSLErrorHandler : public SSLErrorHandler {
                       int cert_error,
                       const net::SSLInfo& ssl_info,
                       network_time::NetworkTimeTracker* network_time_tracker,
-                      const GURL& request_url)
-      : SSLErrorHandler(
-            std::move(delegate),
-            web_contents,
-            cert_error,
-            ssl_info,
-            network_time_tracker,
-#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
-            CaptivePortalServiceFactory::GetForProfile(
-                Profile::FromBrowserContext(web_contents->GetBrowserContext())),
-#else
-            nullptr,
-#endif
-            request_url) {
-  }
+                      const GURL& request_url,
+                      CaptivePortalService* captive_portal_service)
+      : SSLErrorHandler(std::move(delegate),
+                        web_contents,
+                        cert_error,
+                        ssl_info,
+                        network_time_tracker,
+                        captive_portal_service,
+                        request_url) {}
 
   using SSLErrorHandler::StartHandlingError;
 };
@@ -224,9 +218,7 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
   }
 
  private:
-  void CheckForCaptivePortal() override {
-    captive_portal_checked_ = true;
-  }
+  void CheckForCaptivePortal() override { captive_portal_checked_ = true; }
 
   bool DoesOSReportCaptivePortal() override {
     return os_reports_captive_portal_;
@@ -311,13 +303,14 @@ class TestSSLErrorHandlerDelegate : public SSLErrorHandler::Delegate {
 
 // A class to test name mismatch errors. Creates an error handler with a name
 // mismatch error.
-class SSLErrorHandlerNameMismatchTest : public ChromeRenderViewHostTestHarness {
+class SSLErrorHandlerNameMismatchTest
+    : public content::RenderViewHostTestHarness {
  public:
   SSLErrorHandlerNameMismatchTest() {}
   ~SSLErrorHandlerNameMismatchTest() override {}
 
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
+    content::RenderViewHostTestHarness::SetUp();
     SSLErrorHandler::ResetConfigForTesting();
     SSLErrorHandler::SetInterstitialDelayForTesting(base::TimeDelta());
     ssl_info_.cert = GetCertificate();
@@ -325,18 +318,27 @@ class SSLErrorHandlerNameMismatchTest : public ChromeRenderViewHostTestHarness {
     ssl_info_.public_key_hashes.push_back(
         net::HashValue(kCertPublicKeyHashValue));
 
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+    pref_service_.registry()->RegisterBooleanPref(
+        embedder_support::kAlternateErrorPagesEnabled, true);
+    captive_portal_service_ = std::make_unique<CaptivePortalService>(
+        web_contents()->GetBrowserContext(), &pref_service_);
+#endif
+
     delegate_ = new TestSSLErrorHandlerDelegate(web_contents(), ssl_info_);
     error_handler_.reset(new TestSSLErrorHandler(
         std::unique_ptr<SSLErrorHandler::Delegate>(delegate_), web_contents(),
         net::MapCertStatusToNetError(ssl_info_.cert_status), ssl_info_,
-        /*network_time_tracker=*/nullptr, GURL() /*request_url*/));
+        /*network_time_tracker=*/nullptr, GURL() /*request_url*/,
+        captive_portal_service_.get()));
   }
 
   void TearDown() override {
     EXPECT_FALSE(error_handler()->IsTimerRunningForTesting());
+    captive_portal_service_.reset();
     error_handler_.reset(nullptr);
     SSLErrorHandler::ResetConfigForTesting();
-    ChromeRenderViewHostTestHarness::TearDown();
+    content::RenderViewHostTestHarness::TearDown();
   }
 
   TestSSLErrorHandler* error_handler() { return error_handler_.get(); }
@@ -353,6 +355,8 @@ class SSLErrorHandlerNameMismatchTest : public ChromeRenderViewHostTestHarness {
   }
 
   net::SSLInfo ssl_info_;
+  TestingPrefServiceSimple pref_service_;
+  std::unique_ptr<CaptivePortalService> captive_portal_service_;
   std::unique_ptr<TestSSLErrorHandler> error_handler_;
   TestSSLErrorHandlerDelegate* delegate_;
 
@@ -378,10 +382,14 @@ class SSLErrorHandlerNameMismatchNoSANTest
 // A class to test the captive portal certificate list feature. Creates an error
 // handler with a name mismatch error by default. The error handler can be
 // recreated by calling ResetErrorHandler() with an appropriate cert status.
-class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
+class SSLErrorAssistantProtoTest : public content::RenderViewHostTestHarness {
  public:
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
+    content::RenderViewHostTestHarness::SetUp();
+
+    pref_service_.registry()->RegisterBooleanPref(
+        embedder_support::kAlternateErrorPagesEnabled, true);
+
     SSLErrorHandler::ResetConfigForTesting();
     SSLErrorHandler::SetErrorAssistantProto(
         SSLErrorAssistant::GetErrorAssistantProtoFromResourceBundle());
@@ -393,9 +401,10 @@ class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
 
   void TearDown() override {
     EXPECT_FALSE(error_handler()->IsTimerRunningForTesting());
+    captive_portal_service_.reset();
     error_handler_.reset(nullptr);
     SSLErrorHandler::ResetConfigForTesting();
-    ChromeRenderViewHostTestHarness::TearDown();
+    content::RenderViewHostTestHarness::TearDown();
   }
 
   TestSSLErrorHandler* error_handler() { return error_handler_.get(); }
@@ -464,9 +473,9 @@ class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
 
     RunCaptivePortalTest();
 
-#if !defined(OS_ANDROID)
-    // On non-Android platforms (except for iOS where this code is disabled),
-    // timer should start for captive portal detection.
+#if !defined(OS_ANDROID) && !BUILDFLAG(IS_CHROMECAST)
+    // On platforms where captive portal detection is enabled, timer should
+    // start for captive portal detection.
     EXPECT_TRUE(error_handler()->IsTimerRunningForTesting());
     EXPECT_TRUE(delegate()->captive_portal_checked());
     EXPECT_FALSE(delegate()->ssl_interstitial_shown());
@@ -483,9 +492,9 @@ class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
     EXPECT_FALSE(delegate()->captive_portal_interstitial_shown());
     EXPECT_FALSE(delegate()->suggested_url_checked());
 #else
-    // On Android there is no custom captive portal detection logic, so the
-    // timer should not start and an SSL interstitial should be shown
-    // immediately.
+    // On Android and Chromecast there is no custom captive portal detection
+    // logic, so the timer should not start and an SSL interstitial should be
+    // shown immediately.
     EXPECT_FALSE(error_handler()->IsTimerRunningForTesting());
     EXPECT_FALSE(delegate()->captive_portal_checked());
     EXPECT_TRUE(delegate()->ssl_interstitial_shown());
@@ -586,14 +595,22 @@ class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
     ssl_info_.public_key_hashes.push_back(
         net::HashValue(kCertPublicKeyHashValue));
 
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+    captive_portal_service_ = std::make_unique<CaptivePortalService>(
+        web_contents()->GetBrowserContext(), &pref_service_);
+#endif
+
     delegate_ = new TestSSLErrorHandlerDelegate(web_contents(), ssl_info_);
     error_handler_.reset(new TestSSLErrorHandler(
         std::unique_ptr<SSLErrorHandler::Delegate>(delegate_), web_contents(),
         net::MapCertStatusToNetError(ssl_info_.cert_status), ssl_info_,
-        /*network_time_tracker=*/nullptr, GURL() /*request_url*/));
+        /*network_time_tracker=*/nullptr, GURL() /*request_url*/,
+        captive_portal_service_.get()));
   }
 
   net::SSLInfo ssl_info_;
+  TestingPrefServiceSimple pref_service_;
+  std::unique_ptr<CaptivePortalService> captive_portal_service_;
   std::unique_ptr<TestSSLErrorHandler> error_handler_;
   TestSSLErrorHandlerDelegate* delegate_;
   base::test::ScopedFeatureList scoped_feature_list_;
@@ -601,10 +618,11 @@ class SSLErrorAssistantProtoTest : public ChromeRenderViewHostTestHarness {
   DISALLOW_COPY_AND_ASSIGN(SSLErrorAssistantProtoTest);
 };
 
-class SSLErrorHandlerDateInvalidTest : public ChromeRenderViewHostTestHarness {
+class SSLErrorHandlerDateInvalidTest
+    : public content::RenderViewHostTestHarness {
  public:
   SSLErrorHandlerDateInvalidTest()
-      : ChromeRenderViewHostTestHarness(
+      : content::RenderViewHostTestHarness(
             content::BrowserTaskEnvironment::REAL_IO_THREAD),
         field_trial_test_(new network_time::FieldTrialTest()),
         clock_(new base::SimpleTestClock),
@@ -618,7 +636,7 @@ class SSLErrorHandlerDateInvalidTest : public ChromeRenderViewHostTestHarness {
   }
 
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
+    content::RenderViewHostTestHarness::SetUp();
     SSLErrorHandler::ResetConfigForTesting();
 
     base::RunLoop run_loop;
@@ -650,7 +668,8 @@ class SSLErrorHandlerDateInvalidTest : public ChromeRenderViewHostTestHarness {
     error_handler_.reset(new TestSSLErrorHandler(
         std::unique_ptr<SSLErrorHandler::Delegate>(delegate_), web_contents(),
         net::MapCertStatusToNetError(ssl_info_.cert_status), ssl_info_,
-        tracker_.get(), GURL() /*request_url*/));
+        tracker_.get(), GURL() /*request_url*/,
+        /*captive_portal_service=*/nullptr));
 
     // Fix flakiness in case system time is off and triggers a bad clock
     // interstitial. https://crbug.com/666821#c50
@@ -668,13 +687,13 @@ class SSLErrorHandlerDateInvalidTest : public ChromeRenderViewHostTestHarness {
     }
     SSLErrorHandler::ResetConfigForTesting();
 
-    // ChromeRenderViewHostTestHarness::TearDown() simulates shutdown and as
+    // content::RenderViewHostTestHarness::TearDown() simulates shutdown and as
     // such destroys parts of the task environment required in these
     // destructors.
     test_server_.reset();
     tracker_.reset();
 
-    ChromeRenderViewHostTestHarness::TearDown();
+    content::RenderViewHostTestHarness::TearDown();
   }
 
   TestSSLErrorHandler* error_handler() { return error_handler_.get(); }
@@ -1503,7 +1522,7 @@ TEST_F(SSLErrorAssistantProtoTest,
   TestNoMITMSoftwareInterstitial();
 }
 
-using SSLErrorHandlerTest = ChromeRenderViewHostTestHarness;
+using SSLErrorHandlerTest = content::RenderViewHostTestHarness;
 
 // Test that a blocked interception interstitial is shown. It would be nicer to
 // set the SSLInfo properly so that the cert is blocked at net level rather than
@@ -1524,7 +1543,8 @@ TEST_F(SSLErrorHandlerTest, BlockedInterceptionInterstitial) {
   TestSSLErrorHandler error_handler(
       std::move(delegate), web_contents(),
       net::MapCertStatusToNetError(ssl_info.cert_status), ssl_info,
-      /*network_time_tracker=*/nullptr, GURL() /*request_url*/);
+      /*network_time_tracker=*/nullptr, GURL() /*request_url*/,
+      /*captive_portal_service=*/nullptr);
 
   base::HistogramTester histograms;
   delegate_ptr->set_has_blocked_interception();
@@ -1561,7 +1581,8 @@ TEST_F(SSLErrorHandlerTest, LegacyTLSInterstitial) {
   TestSSLErrorHandler error_handler(
       std::move(delegate), web_contents(),
       net::MapCertStatusToNetError(ssl_info.cert_status), ssl_info,
-      /*network_time_tracker=*/nullptr, /*request_url=*/GURL());
+      /*network_time_tracker=*/nullptr, /*request_url=*/GURL(),
+      /*captive_portal_service=*/nullptr);
 
   base::HistogramTester histograms;
   delegate_ptr->set_has_legacy_tls();
