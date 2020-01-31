@@ -1523,6 +1523,22 @@
             ]
         }
     ],
+    "ChromeOSNeuralPalm": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "EnableNeuralPalmDetectionFilter",
+                        "EnableNeuralStylusReportFilter"
+                    ]
+                }
+            ]
+        }
+    ],
     "ChromeSmartSelection": [
         {
             "platforms": [
