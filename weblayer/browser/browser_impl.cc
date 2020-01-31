@@ -30,25 +30,12 @@ namespace weblayer {
 std::unique_ptr<Browser> Browser::Create(
     Profile* profile,
     const PersistenceInfo* persistence_info) {
-  return std::make_unique<BrowserImpl>(static_cast<ProfileImpl*>(profile),
-                                       persistence_info);
-}
-
-#if defined(OS_ANDROID)
-BrowserImpl::BrowserImpl(ProfileImpl* profile,
-                         const PersistenceInfo* persistence_info,
-                         const base::android::JavaParamRef<jobject>& java_impl)
-    : BrowserImpl(profile, persistence_info) {
-  java_impl_ = java_impl;
-}
-#endif
-
-BrowserImpl::BrowserImpl(ProfileImpl* profile,
-                         const PersistenceInfo* persistence_info)
-    : profile_(profile),
-      persistence_id_(persistence_info ? persistence_info->id : std::string()) {
+  // BrowserImpl's constructor is private.
+  auto browser =
+      base::WrapUnique(new BrowserImpl(static_cast<ProfileImpl*>(profile)));
   if (persistence_info)
-    RestoreStateIfNecessary(*persistence_info);
+    browser->RestoreStateIfNecessary(*persistence_info);
+  return browser;
 }
 
 BrowserImpl::~BrowserImpl() {
@@ -165,6 +152,36 @@ BrowserImpl::GetMinimalPersistenceState(
   return base::android::ToJavaByteArray(env, &(state.front()), state.size());
 }
 
+void BrowserImpl::RestoreStateIfNecessary(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& caller,
+    const base::android::JavaParamRef<jstring>& j_persistence_id,
+    const base::android::JavaParamRef<jbyteArray>& j_persistence_crypto_key,
+    const base::android::JavaParamRef<jbyteArray>&
+        j_minimal_persistence_state) {
+  Browser::PersistenceInfo persistence_info;
+  Browser::PersistenceInfo* persistence_info_ptr = nullptr;
+
+  if (j_persistence_id.obj()) {
+    const std::string persistence_id =
+        base::android::ConvertJavaStringToUTF8(j_persistence_id);
+    if (!persistence_id.empty()) {
+      persistence_info.id = persistence_id;
+      if (j_persistence_crypto_key.obj()) {
+        base::android::JavaByteArrayToByteVector(
+            env, j_persistence_crypto_key, &(persistence_info.last_crypto_key));
+      }
+      persistence_info_ptr = &persistence_info;
+    }
+  } else if (j_minimal_persistence_state.obj()) {
+    base::android::JavaByteArrayToByteVector(env, j_minimal_persistence_state,
+                                             &(persistence_info.minimal_state));
+    persistence_info_ptr = &persistence_info;
+  }
+  if (persistence_info_ptr)
+    RestoreStateIfNecessary(*persistence_info_ptr);
+}
+
 #endif
 
 std::vector<uint8_t> BrowserImpl::GetMinimalPersistenceState(
@@ -268,6 +285,19 @@ void BrowserImpl::RemoveObserver(BrowserObserver* observer) {
   browser_observers_.RemoveObserver(observer);
 }
 
+BrowserImpl::BrowserImpl(ProfileImpl* profile) : profile_(profile) {}
+
+void BrowserImpl::RestoreStateIfNecessary(
+    const PersistenceInfo& persistence_info) {
+  persistence_id_ = persistence_info.id;
+  if (!persistence_id_.empty()) {
+    session_service_ = std::make_unique<SessionService>(
+        GetSessionServiceDataPath(), this, persistence_info.last_crypto_key);
+  } else if (!persistence_info.minimal_state.empty()) {
+    RestoreMinimalState(this, persistence_info.minimal_state);
+  }
+}
+
 base::FilePath BrowserImpl::GetSessionServiceDataPath() {
   base::FilePath base_path;
   if (profile_->GetBrowserContext()->IsOffTheRecord()) {
@@ -281,41 +311,30 @@ base::FilePath BrowserImpl::GetSessionServiceDataPath() {
   return base_path.AppendASCII("State" + encoded_name);
 }
 
-void BrowserImpl::RestoreStateIfNecessary(
-    const PersistenceInfo& persistence_info) {
-  if (!persistence_info.id.empty()) {
-    session_service_ = std::make_unique<SessionService>(
-        GetSessionServiceDataPath(), this, persistence_info.last_crypto_key);
-  } else if (!persistence_info.minimal_state.empty()) {
-    RestoreMinimalState(this, persistence_info.minimal_state);
-  }
+#if defined(OS_ANDROID)
+// This function is friended. JNI_BrowserImpl_CreateBrowser can not be
+// friended, as it requires browser_impl.h to include BrowserImpl_jni.h, which
+// is problematic (meaning not really supported and generates compile errors).
+BrowserImpl* CreateBrowserForAndroid(
+    ProfileImpl* profile,
+    const base::android::JavaParamRef<jobject>& java_impl) {
+  BrowserImpl* browser = new BrowserImpl(profile);
+  browser->java_impl_ = java_impl;
+  return browser;
 }
 
-#if defined(OS_ANDROID)
 static jlong JNI_BrowserImpl_CreateBrowser(
     JNIEnv* env,
     jlong profile,
-    const base::android::JavaParamRef<jstring>& j_persistence_id,
-    const base::android::JavaParamRef<jbyteArray>& j_persistence_crypto_key,
     const base::android::JavaParamRef<jobject>& java_impl) {
-  Browser::PersistenceInfo persistence_info;
-  Browser::PersistenceInfo* persistence_info_ptr = nullptr;
-
-  if (j_persistence_id.obj()) {
-    const std::string persistence_id =
-        base::android::ConvertJavaStringToUTF8(j_persistence_id);
-    if (!persistence_id.empty()) {
-      persistence_info.id = persistence_id;
-      if (j_persistence_crypto_key.obj()) {
-        base::android::JavaByteArrayToByteVector(
-            env, j_persistence_crypto_key, &(persistence_info.last_crypto_key));
-      }
-      persistence_info_ptr = &persistence_info;
-    }
-  }
-  return reinterpret_cast<intptr_t>(
-      new BrowserImpl(reinterpret_cast<ProfileImpl*>(profile),
-                      persistence_info_ptr, java_impl));
+  // The android side does not trigger restore from the constructor as at the
+  // time this is called not enough of WebLayer has been wired up. Specifically,
+  // when this is called BrowserImpl.java hasn't obtained the return value so
+  // that it can't call any functions and further the client side hasn't been
+  // fully created, leading to all sort of assertions if Tabs are created
+  // and/or navigations start (which restore may trigger).
+  return reinterpret_cast<intptr_t>(CreateBrowserForAndroid(
+      reinterpret_cast<ProfileImpl*>(profile), java_impl));
 }
 
 static void JNI_BrowserImpl_DeleteBrowser(JNIEnv* env, jlong browser) {

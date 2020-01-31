@@ -39,16 +39,6 @@ public final class Browser {
         } catch (RemoteException e) {
             throw new APICallException(e);
         }
-        try {
-            for (Object tab : impl.getTabs()) {
-                // getTabs() returns List<TabImpl>, which isn't accessible from the client library.
-                ITab iTab = ITab.Stub.asInterface((android.os.IBinder) tab);
-                // Tab's constructor calls registerTab().
-                new Tab(iTab, this);
-            }
-        } catch (RemoteException e) {
-            throw new APICallException(e);
-        }
     }
 
     /**

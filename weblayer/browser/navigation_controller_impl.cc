@@ -34,7 +34,7 @@ NavigationControllerImpl::~NavigationControllerImpl() = default;
 void NavigationControllerImpl::SetNavigationControllerImpl(
     JNIEnv* env,
     const base::android::JavaParamRef<jobject>& java_controller) {
-  java_controller_.Reset(env, java_controller);
+  java_controller_ = java_controller;
 }
 
 void NavigationControllerImpl::GoToIndex(
