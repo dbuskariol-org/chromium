@@ -1095,12 +1095,6 @@ bool RenderWidget::HandleInputEvent(
     const blink::WebCoalescedInputEvent& input_event,
     const ui::LatencyInfo& latency_info,
     HandledEventCallback callback) {
-  // We shouldn't receive IPC messages on provisional frames. It's possible the
-  // message was destined for a RenderWidget that was destroyed and then
-  // recreated since it keeps the same routing id. Just drop it here if that
-  // happened.
-  if (IsForProvisionalFrame())
-    return false;
   input_handler_->HandleInputEvent(input_event, latency_info,
                                    std::move(callback));
   return true;
@@ -1115,47 +1109,19 @@ scoped_refptr<MainThreadEventQueue> RenderWidget::GetInputEventQueue() {
 }
 
 void RenderWidget::OnCursorVisibilityChange(bool is_visible) {
-  // This is a mojo IPC entry point.
-  // TODO(danakj): Since this is for a mojo IPC, it should be dropped
-  // when destroying and recreating the RenderWidget. So this check
-  // should not be needed.
-  if (IsForProvisionalFrame())
-    return;
-
   GetWebWidget()->SetCursorVisibilityState(is_visible);
 }
 
 void RenderWidget::OnFallbackCursorModeToggled(bool is_on) {
-  // This is a mojo IPC entry point.
-  // TODO(danakj): Since this is for a mojo IPC, it should be dropped
-  // when destroying and recreating the RenderWidget. So this check
-  // should not be needed.
-  if (IsForProvisionalFrame())
-    return;
-
   GetWebWidget()->OnFallbackCursorModeToggled(is_on);
 }
 
 void RenderWidget::OnMouseCaptureLost() {
-  // This is a mojo IPC entry point.
-  // TODO(danakj): Since this is for a mojo IPC, it should be dropped
-  // when destroying and recreating the RenderWidget. So this check
-  // should not be needed.
-  if (IsForProvisionalFrame())
-    return;
-
   GetWebWidget()->MouseCaptureLost();
 }
 
 void RenderWidget::OnSetEditCommandsForNextKeyEvent(
     const EditCommands& edit_commands) {
-  // This is a mojo IPC entry point.
-  // TODO(danakj): Since this is for a mojo IPC, it should be dropped
-  // when destroying and recreating the RenderWidget. So this check
-  // should not be needed.
-  if (IsForProvisionalFrame())
-    return;
-
   edit_commands_ = edit_commands;
 }
 
@@ -1165,13 +1131,6 @@ void RenderWidget::OnSetActive(bool active) {
 }
 
 void RenderWidget::OnSetFocus(bool enable) {
-  // This is a mojo IPC entry point.
-  // TODO(danakj): Since this is for a mojo IPC, it should be dropped
-  // when destroying and recreating the RenderWidget. So this check
-  // should not be needed.
-  if (IsForProvisionalFrame())
-    return;
-
   if (delegate())
     delegate()->DidReceiveSetFocusEventForWidget();
 

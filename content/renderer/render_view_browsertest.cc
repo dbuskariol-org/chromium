@@ -1628,10 +1628,10 @@ TEST_F(RenderViewImplTest, OnSetTextDirection) {
       {blink::kWebTextDirectionRightToLeft, L"rtl,rtl"},
       {blink::kWebTextDirectionLeftToRight, L"ltr,ltr"},
   };
-  for (size_t i = 0; i < base::size(kTextDirection); ++i) {
+  for (auto& test_case : kTextDirection) {
     // Set the text direction of the <textarea> element.
     ExecuteJavaScriptForTests("document.getElementById('test').focus();");
-    ReceiveSetTextDirection(main_widget(), kTextDirection[i].direction);
+    ReceiveSetTextDirection(main_widget(), test_case.direction);
 
     // Write the values of its DOM 'dir' attribute and its CSS 'direction'
     // property to the <div> element.
@@ -1649,7 +1649,7 @@ TEST_F(RenderViewImplTest, OnSetTextDirection) {
     base::string16 output = WebFrameContentDumper::DumpWebViewAsText(
                                 view()->GetWebView(), kMaxOutputCharacters)
                                 .Utf16();
-    EXPECT_EQ(base::WideToUTF16(kTextDirection[i].expected_result), output);
+    EXPECT_EQ(base::WideToUTF16(test_case.expected_result), output);
   }
 }
 
@@ -1833,8 +1833,8 @@ TEST_F(RenderViewImplTest, GetCompositionCharacterBoundsTest) {
   main_widget()->GetCompositionCharacterBounds(&bounds);
   ASSERT_EQ(ascii_composition.size(), bounds.size());
 
-  for (size_t i = 0; i < bounds.size(); ++i)
-    EXPECT_LT(0, bounds[i].width());
+  for (const gfx::Rect& r : bounds)
+    EXPECT_LT(0, r.width());
   main_widget()->OnImeCommitText(empty_string,
                                  std::vector<blink::WebImeTextSpan>(),
                                  gfx::Range::InvalidRange(), 0);
@@ -1846,8 +1846,8 @@ TEST_F(RenderViewImplTest, GetCompositionCharacterBoundsTest) {
                                      gfx::Range::InvalidRange(), 0, 0);
   main_widget()->GetCompositionCharacterBounds(&bounds);
   ASSERT_EQ(unicode_composition.size(), bounds.size());
-  for (size_t i = 0; i < bounds.size(); ++i)
-    EXPECT_LT(0, bounds[i].width());
+  for (const gfx::Rect& r : bounds)
+    EXPECT_LT(0, r.width());
   main_widget()->OnImeCommitText(empty_string, empty_ime_text_span,
                                  gfx::Range::InvalidRange(), 0);
 
