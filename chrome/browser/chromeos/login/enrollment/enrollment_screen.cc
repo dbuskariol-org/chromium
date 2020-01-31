@@ -135,15 +135,15 @@ void EnrollmentScreen::SetEnrollmentConfig(
   switch (enrollment_config_.auth_mechanism) {
     case EnrollmentConfig::AUTH_MECHANISM_INTERACTIVE:
       current_auth_ = AUTH_OAUTH;
-      last_auth_ = AUTH_OAUTH;
+      next_auth_ = AUTH_OAUTH;
       break;
     case EnrollmentConfig::AUTH_MECHANISM_ATTESTATION:
       current_auth_ = AUTH_ATTESTATION;
-      last_auth_ = AUTH_ATTESTATION;
+      next_auth_ = AUTH_ATTESTATION;
       break;
     case EnrollmentConfig::AUTH_MECHANISM_BEST_AVAILABLE:
       current_auth_ = AUTH_ATTESTATION;
-      last_auth_ = enrollment_config_.should_enroll_interactively()
+      next_auth_ = enrollment_config_.should_enroll_interactively()
                        ? AUTH_OAUTH
                        : AUTH_ATTESTATION;
       break;
@@ -173,10 +173,10 @@ void EnrollmentScreen::SetConfig() {
 }
 
 bool EnrollmentScreen::AdvanceToNextAuth() {
-  if (current_auth_ != last_auth_ && current_auth_ == AUTH_ATTESTATION) {
+  if (current_auth_ != next_auth_ && current_auth_ == AUTH_ATTESTATION) {
     LOG(WARNING) << "User stopped using auth: " << current_auth_
-                 << ", current auth: " << last_auth_ << ".";
-    current_auth_ = last_auth_;
+                 << ", current auth: " << next_auth_ << ".";
+    current_auth_ = next_auth_;
     SetConfig();
     return true;
   }
@@ -518,7 +518,7 @@ void EnrollmentScreen::ShowSigninScreen() {
 void EnrollmentScreen::RecordEnrollmentErrorMetrics() {
   enrollment_failed_once_ = true;
   //  TODO(crbug.com/896793): Have other metrics for each auth mechanism.
-  if (elapsed_timer_ && current_auth_ == last_auth_)
+  if (elapsed_timer_ && current_auth_ == next_auth_)
     UMA_ENROLLMENT_TIME(kMetricEnrollmentTimeFailure, elapsed_timer_);
 }
 
