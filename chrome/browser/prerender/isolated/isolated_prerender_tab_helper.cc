@@ -11,6 +11,9 @@
 #include "chrome/browser/navigation_predictor/navigation_predictor_keyed_service_factory.h"
 #include "chrome/browser/prerender/isolated/isolated_prerender_features.h"
 #include "chrome/browser/prerender/isolated/isolated_prerender_params.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_service.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_service_factory.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_service_workers_observer.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/data_reduction_proxy/core/browser/data_reduction_proxy_settings.h"
 #include "components/google/core/common/google_util.h"
@@ -29,6 +32,7 @@
 #include "services/network/public/cpp/resource_request.h"
 #include "services/network/public/cpp/simple_url_loader.h"
 #include "services/network/public/mojom/cookie_manager.mojom.h"
+#include "url/origin.h"
 
 IsolatedPrerenderTabHelper::IsolatedPrerenderTabHelper(
     content::WebContents* web_contents)
@@ -239,6 +243,12 @@ void IsolatedPrerenderTabHelper::OnPredictionUpdated(
     return;
   }
 
+  IsolatedPrerenderService* isolated_prerender_service =
+      IsolatedPrerenderServiceFactory::GetForProfile(profile_);
+  if (!isolated_prerender_service) {
+    return;
+  }
+
   // This is also checked before prefetching from the network, but checking
   // again here allows us to skip querying for cookies if we won't be
   // prefetching the url anyways.
@@ -276,14 +286,32 @@ void IsolatedPrerenderTabHelper::OnPredictionUpdated(
       continue;
     }
 
-    content::StoragePartition* storage_partition =
+    content::StoragePartition* default_storage_partition =
+        content::BrowserContext::GetDefaultStoragePartition(profile_);
+
+    // Only the default storage partition is supported since that is the only
+    // place where service workers are observed by
+    // |IsolatedPrerenderServiceWorkersObserver|.
+    if (default_storage_partition !=
         content::BrowserContext::GetStoragePartitionForSite(
-            profile_, url, /*can_create=*/false);
+            profile_, url, /*can_create=*/false)) {
+      continue;
+    }
+
+    base::Optional<bool> site_has_service_worker =
+        isolated_prerender_service->service_workers_observer()
+            ->IsServiceWorkerRegisteredForOrigin(url::Origin::Create(url));
+    if (!site_has_service_worker.has_value() ||
+        site_has_service_worker.value()) {
+      continue;
+    }
+
     net::CookieOptions options = net::CookieOptions::MakeAllInclusive();
-    storage_partition->GetCookieManagerForBrowserProcess()->GetCookieList(
-        url, options,
-        base::BindOnce(&IsolatedPrerenderTabHelper::OnGotCookieList,
-                       weak_factory_.GetWeakPtr(), url));
+    default_storage_partition->GetCookieManagerForBrowserProcess()
+        ->GetCookieList(
+            url, options,
+            base::BindOnce(&IsolatedPrerenderTabHelper::OnGotCookieList,
+                           weak_factory_.GetWeakPtr(), url));
   }
 }
 

@@ -16,6 +16,9 @@
 #include "chrome/browser/navigation_predictor/navigation_predictor_keyed_service.h"
 #include "chrome/browser/navigation_predictor/navigation_predictor_keyed_service_factory.h"
 #include "chrome/browser/prerender/isolated/isolated_prerender_features.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_service.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_service_factory.h"
+#include "chrome/browser/prerender/isolated/isolated_prerender_service_workers_observer.h"
 #include "chrome/browser/prerender/isolated/prefetched_response_container.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "components/data_reduction_proxy/core/browser/data_reduction_proxy_settings.h"
@@ -60,6 +63,12 @@ class IsolatedPrerenderTabHelperTest : public ChromeRenderViewHostTestHarness {
 
   void SetUp() override {
     ChromeRenderViewHostTestHarness::SetUp();
+
+    IsolatedPrerenderService* isolated_prerender_service =
+        IsolatedPrerenderServiceFactory::GetForProfile(profile());
+    isolated_prerender_service->service_workers_observer()
+        ->CallOnHasUsageInfoForTesting({});
+
     IsolatedPrerenderTabHelper::CreateForWebContents(web_contents());
 
     IsolatedPrerenderTabHelper::FromWebContents(web_contents())
@@ -457,4 +466,43 @@ TEST_F(IsolatedPrerenderTabHelperTest, LimitedNumberOfPrefetches) {
   MakeResponseAndWait(net::HTTP_OK, net::OK, kHTMLMimeType, {}, kHTMLBody);
 
   EXPECT_EQ(RequestCount(), 0);
+}
+
+TEST_F(IsolatedPrerenderTabHelperTest, ServiceWorkerRegistered) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitAndEnableFeature(
+      features::kPrefetchSRPNavigationPredictions_HTMLOnly);
+
+  GURL doc_url("https://www.google.com/search?q=cats");
+  GURL prediction_url("https://www.cat-food.com/");
+
+  IsolatedPrerenderService* isolated_prerender_service =
+      IsolatedPrerenderServiceFactory::GetForProfile(profile());
+  content::ServiceWorkerContextObserver* observer =
+      isolated_prerender_service->service_workers_observer();
+  observer->OnRegistrationCompleted(prediction_url);
+
+  MakeNavigationPrediction(web_contents(), doc_url, {prediction_url});
+
+  EXPECT_EQ(RequestCount(), 0);
+}
+
+TEST_F(IsolatedPrerenderTabHelperTest, ServiceWorkerNotRegistered) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitAndEnableFeature(
+      features::kPrefetchSRPNavigationPredictions_HTMLOnly);
+
+  GURL doc_url("https://www.google.com/search?q=cats");
+  GURL prediction_url("https://www.cat-food.com/");
+  GURL service_worker_registration("https://www.service-worker.com/");
+
+  IsolatedPrerenderService* isolated_prerender_service =
+      IsolatedPrerenderServiceFactory::GetForProfile(profile());
+  content::ServiceWorkerContextObserver* observer =
+      isolated_prerender_service->service_workers_observer();
+  observer->OnRegistrationCompleted(service_worker_registration);
+
+  MakeNavigationPrediction(web_contents(), doc_url, {prediction_url});
+
+  VerifyCommonRequestState(prediction_url);
 }
