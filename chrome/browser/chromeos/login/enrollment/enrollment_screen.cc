@@ -29,6 +29,7 @@
 #include "components/policy/core/common/cloud/cloud_policy_constants.h"
 #include "components/user_manager/user_manager.h"
 #include "google_apis/gaia/gaia_auth_util.h"
+#include "ui/chromeos/devicetype_utils.h"
 
 using policy::EnrollmentConfig;
 
@@ -88,6 +89,13 @@ bool ShouldAttemptRestart() {
     return true;
 
   return false;
+}
+
+// Returns the enterprise display domain after enrollment, or an empty string.
+std::string GetEnterpriseDisplayDomain() {
+  policy::BrowserPolicyConnectorChromeOS* connector =
+      g_browser_process->platform_part()->browser_policy_connector_chromeos();
+  return connector->GetEnterpriseDisplayDomain();
 }
 
 }  // namespace
@@ -365,6 +373,10 @@ void EnrollmentScreen::OnOtherError(
 void EnrollmentScreen::OnDeviceEnrolled() {
   VLOG(1) << "Device enrolled.";
   enrollment_succeeded_ = true;
+  // Some info to be shown on the success screen.
+  view_->SetEnterpriseDomainAndDeviceType(GetEnterpriseDisplayDomain(),
+                                          ui::GetChromeOSDeviceName());
+
   enrollment_helper_->GetDeviceAttributeUpdatePermission();
 
   // Evaluates device policy TPMFirmwareUpdateSettings and updates the TPM if
@@ -408,6 +420,10 @@ void EnrollmentScreen::OnDeviceAttributeUpdatePermission(bool granted) {
 }
 
 void EnrollmentScreen::OnRestoreAfterRollbackCompleted() {
+  // Pass the enterprise domain and the device type to be shown.
+  view_->SetEnterpriseDomainAndDeviceType(GetEnterpriseDisplayDomain(),
+                                          ui::GetChromeOSDeviceName());
+  // Show the success screen
   StartupUtils::MarkDeviceRegistered(
       base::BindOnce(&EnrollmentScreen::ShowEnrollmentStatusOnSuccess,
                      weak_ptr_factory_.GetWeakPtr()));
