@@ -45,7 +45,6 @@ LayoutMenuList::LayoutMenuList(Element* element)
     : LayoutFlexibleBox(element),
       button_text_(nullptr),
       inner_block_(nullptr),
-      inner_block_height_(LayoutUnit()),
       options_width_(0) {
   DCHECK(IsA<HTMLSelectElement>(element));
 }
@@ -200,14 +199,6 @@ void LayoutMenuList::StyleDidChange(StyleDifference diff,
 
   button_text_->SetStyle(Style());
   UpdateInnerStyle();
-  UpdateInnerBlockHeight();
-}
-
-void LayoutMenuList::UpdateInnerBlockHeight() {
-  const SimpleFontData* font_data = StyleRef().GetFont().PrimaryFont();
-  DCHECK(font_data);
-  inner_block_height_ = (font_data ? font_data->GetFontMetrics().Height() : 0) +
-                        inner_block_->BorderAndPaddingHeight();
 }
 
 void LayoutMenuList::UpdateOptionsWidth() const {
@@ -286,8 +277,14 @@ void LayoutMenuList::ComputeLogicalHeight(
     LayoutUnit logical_height,
     LayoutUnit logical_top,
     LogicalExtentComputedValues& computed_values) const {
-  if (StyleRef().HasEffectiveAppearance())
-    logical_height = inner_block_height_ + BorderAndPaddingHeight();
+  if (StyleRef().HasEffectiveAppearance()) {
+    const SimpleFontData* font_data = StyleRef().GetFont().PrimaryFont();
+    DCHECK(font_data);
+    const LayoutUnit inner_block_height =
+        (font_data ? font_data->GetFontMetrics().Height() : 0) +
+        inner_block_->BorderAndPaddingHeight();
+    logical_height = inner_block_height + BorderAndPaddingHeight();
+  }
   LayoutBox::ComputeLogicalHeight(logical_height, logical_top, computed_values);
 }
 
