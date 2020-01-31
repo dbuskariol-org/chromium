@@ -460,6 +460,7 @@ void WorkerWatcherTest::CallOnGraphAndWait(
             std::move(graph_callback).Run(graph);
             quit_closure.Run();
           }));
+  run_loop.Run();
 }
 
 WorkerNodeImpl* WorkerWatcherTest::GetSharedWorkerNode(
