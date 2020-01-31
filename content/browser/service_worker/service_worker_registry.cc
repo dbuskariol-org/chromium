@@ -770,6 +770,7 @@ void ServiceWorkerRegistry::DidGetRegistrationsForOrigin(
 
   if (status != blink::ServiceWorkerStatusCode::kOk &&
       status != blink::ServiceWorkerStatusCode::kErrorNotFound) {
+    ScheduleDeleteAndStartOver();
     std::move(callback).Run(
         status, std::vector<scoped_refptr<ServiceWorkerRegistration>>());
     return;
@@ -806,6 +807,7 @@ void ServiceWorkerRegistry::DidGetAllRegistrations(
     std::unique_ptr<RegistrationList> registration_data_list) {
   if (status != blink::ServiceWorkerStatusCode::kOk &&
       status != blink::ServiceWorkerStatusCode::kErrorNotFound) {
+    ScheduleDeleteAndStartOver();
     std::move(callback).Run(status,
                             std::vector<ServiceWorkerRegistrationInfo>());
     return;
@@ -894,6 +896,7 @@ void ServiceWorkerRegistry::DidStoreRegistration(
     int64_t deleted_version_id,
     const std::vector<int64_t>& newly_purgeable_resources) {
   if (status != blink::ServiceWorkerStatusCode::kOk) {
+    ScheduleDeleteAndStartOver();
     std::move(callback).Run(status);
     return;
   }
@@ -932,6 +935,12 @@ void ServiceWorkerRegistry::DidDeleteRegistration(
     blink::ServiceWorkerStatusCode status,
     int64_t deleted_version_id,
     const std::vector<int64_t>& newly_purgeable_resources) {
+  if (status != blink::ServiceWorkerStatusCode::kOk) {
+    ScheduleDeleteAndStartOver();
+    std::move(callback).Run(status);
+    return;
+  }
+
   if (!context_->GetLiveVersion(deleted_version_id))
     storage()->PurgeResources(newly_purgeable_resources);
 

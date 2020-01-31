@@ -1006,10 +1006,6 @@ void ServiceWorkerStorage::DidGetRegistrationsForOrigin(
     std::unique_ptr<RegistrationList> registration_data_list,
     std::unique_ptr<std::vector<ResourceList>> resource_lists,
     ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK &&
-      status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
-    ScheduleDeleteAndStartOver();
-  }
   std::move(callback).Run(DatabaseStatusToStatusCode(status),
                           std::move(registration_data_list),
                           std::move(resource_lists));
@@ -1019,10 +1015,6 @@ void ServiceWorkerStorage::DidGetAllRegistrations(
     GetAllRegistrationsCallback callback,
     std::unique_ptr<RegistrationList> registration_data_list,
     ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK &&
-      status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
-    ScheduleDeleteAndStartOver();
-  }
   std::move(callback).Run(DatabaseStatusToStatusCode(status),
                           std::move(registration_data_list));
 }
@@ -1035,7 +1027,6 @@ void ServiceWorkerStorage::DidStoreRegistrationData(
     const std::vector<int64_t>& newly_purgeable_resources,
     ServiceWorkerDatabase::Status status) {
   if (status != ServiceWorkerDatabase::STATUS_OK) {
-    ScheduleDeleteAndStartOver();
     std::move(callback).Run(DatabaseStatusToStatusCode(status),
                             deleted_version.version_id,
                             newly_purgeable_resources);
@@ -1064,7 +1055,6 @@ void ServiceWorkerStorage::DidDeleteRegistration(
     const std::vector<int64_t>& newly_purgeable_resources,
     ServiceWorkerDatabase::Status status) {
   if (status != ServiceWorkerDatabase::STATUS_OK) {
-    ScheduleDeleteAndStartOver();
     std::move(params->callback)
         .Run(DatabaseStatusToStatusCode(status), deleted_version.version_id,
              newly_purgeable_resources);
