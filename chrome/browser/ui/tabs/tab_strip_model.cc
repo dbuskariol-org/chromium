@@ -1183,6 +1183,9 @@ bool TabStripModel::IsContextMenuCommandEnabled(
     case CommandTogglePinned:
       return true;
 
+    case CommandToggleGrouped:
+      return true;
+
     case CommandFocusMode:
       return GetIndicesForCommand(context_index).size() == 1;
 
@@ -1317,6 +1320,17 @@ void TabStripModel::ExecuteContextMenuCommand(int context_index,
       break;
     }
 
+    case CommandToggleGrouped: {
+      std::vector<int> indices = GetIndicesForCommand(context_index);
+      bool group = WillContextMenuGroup(context_index);
+      if (group)
+        AddToNewGroup(indices);
+      else
+        RemoveFromGroup(indices);
+
+      break;
+    }
+
     case CommandFocusMode: {
       base::RecordAction(UserMetricsAction("TabContextMenu_FocusMode"));
       std::vector<int> indices = GetIndicesForCommand(context_index);
@@ -1388,6 +1402,22 @@ bool TabStripModel::WillContextMenuPin(int index) {
   for (size_t i = 0; i < indices.size() && all_pinned; ++i)
     all_pinned = IsTabPinned(indices[i]);
   return !all_pinned;
+}
+
+bool TabStripModel::WillContextMenuGroup(int index) {
+  std::vector<int> indices = GetIndicesForCommand(index);
+  DCHECK(!indices.empty());
+
+  // If all tabs are in the same group, then we ungroup, otherwise we group.
+  base::Optional<tab_groups::TabGroupId> group = GetTabGroupForTab(indices[0]);
+  if (!group.has_value())
+    return true;
+
+  for (size_t i = 1; i < indices.size(); ++i) {
+    if (GetTabGroupForTab(indices[i]) != group)
+      return true;
+  }
+  return false;
 }
 
 // static
