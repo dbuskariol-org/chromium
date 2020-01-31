@@ -223,6 +223,7 @@ void CorsURLLoaderFactory::Clone(
 
 void CorsURLLoaderFactory::ClearBindings() {
   receivers_.Clear();
+  DeleteIfNeeded();
 }
 
 void CorsURLLoaderFactory::DeleteIfNeeded() {

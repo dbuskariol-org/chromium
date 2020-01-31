@@ -49,7 +49,8 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) CorsURLLoaderFactory final
   void DestroyURLLoader(mojom::URLLoader* loader);
 
   // Clears the bindings for this factory, but does not touch any in-progress
-  // URLLoaders.
+  // URLLoaders. Calling this may delete this factory and remove it from the
+  // network context.
   void ClearBindings();
 
   int32_t process_id() const { return process_id_; }

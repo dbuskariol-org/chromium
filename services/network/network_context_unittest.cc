@@ -6489,6 +6489,28 @@ TEST_F(NetworkContextTest, HSTSPolicyBypassList) {
   EXPECT_TRUE(transport_security_state->ShouldUpgradeToSSL("sub.example"));
 }
 
+TEST_F(NetworkContextTest, FactoriesDeletedWhenBindingsCleared) {
+  std::unique_ptr<NetworkContext> network_context =
+      CreateContextWithParams(CreateContextParams());
+
+  auto loader_params = mojom::URLLoaderFactoryParams::New();
+  loader_params->process_id = 1;
+  mojo::Remote<mojom::URLLoaderFactory> remote1;
+  network_context->CreateURLLoaderFactory(remote1.BindNewPipeAndPassReceiver(),
+                                          std::move(loader_params));
+
+  loader_params = mojom::URLLoaderFactoryParams::New();
+  loader_params->process_id = 1;
+  mojo::Remote<mojom::URLLoaderFactory> remote2;
+  network_context->CreateURLLoaderFactory(remote2.BindNewPipeAndPassReceiver(),
+                                          std::move(loader_params));
+
+  // We should have at least 2 loader factories.
+  EXPECT_GT(network_context->num_url_loader_factories_for_testing(), 1u);
+  network_context->ResetURLLoaderFactories();
+  EXPECT_EQ(network_context->num_url_loader_factories_for_testing(), 0u);
+}
+
 #if BUILDFLAG(BUILTIN_CERT_VERIFIER_FEATURE_SUPPORTED)
 TEST_F(NetworkContextTest, UseCertVerifierBuiltin) {
   net::EmbeddedTestServer test_server(net::EmbeddedTestServer::TYPE_HTTPS);
