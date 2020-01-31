@@ -778,9 +778,6 @@
       status: {"ChromeOS": "stable"},
     },
     {
-      name: "FractionalMouseEvent",
-    },
-    {
       name: "FractionalScrollOffsets",
       status: "experimental",
     },
