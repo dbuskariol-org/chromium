@@ -113,9 +113,10 @@ class PendingBubbleControllerTest : public ::testing::Test {
   }
 
   void SetUpWithState(password_manager::ui::State state,
-                      ManagePasswordsBubbleModel::DisplayReason reason);
-  void PretendPasswordWaiting(ManagePasswordsBubbleModel::DisplayReason reason =
-                                  ManagePasswordsBubbleModel::AUTOMATIC);
+                      PasswordBubbleControllerBase::DisplayReason reason);
+  void PretendPasswordWaiting(
+      PasswordBubbleControllerBase::DisplayReason reason =
+          PasswordBubbleControllerBase::DisplayReason::kAutomatic);
   void PretendUpdatePasswordWaiting();
 
   void DestroyModelAndVerifyControllerExpectations();
@@ -137,7 +138,7 @@ class PendingBubbleControllerTest : public ::testing::Test {
 
 void PendingBubbleControllerTest::SetUpWithState(
     password_manager::ui::State state,
-    ManagePasswordsBubbleModel::DisplayReason reason) {
+    PasswordBubbleControllerBase::DisplayReason reason) {
   GURL origin(kSiteOrigin);
   EXPECT_CALL(*delegate(), GetOrigin()).WillOnce(ReturnRef(origin));
   EXPECT_CALL(*delegate(), GetState()).WillRepeatedly(Return(state));
@@ -152,7 +153,7 @@ void PendingBubbleControllerTest::SetUpWithState(
 }
 
 void PendingBubbleControllerTest::PretendPasswordWaiting(
-    ManagePasswordsBubbleModel::DisplayReason reason) {
+    PasswordBubbleControllerBase::DisplayReason reason) {
   EXPECT_CALL(*delegate(), GetPendingPassword())
       .WillOnce(ReturnRef(pending_password()));
   password_manager::InteractionsStats stats = GetTestStats();
@@ -175,7 +176,7 @@ void PendingBubbleControllerTest::PretendUpdatePasswordWaiting() {
   forms.push_back(std::move(current_form));
   EXPECT_CALL(*delegate(), GetCurrentForms()).WillOnce(ReturnRef(forms));
   SetUpWithState(password_manager::ui::PENDING_PASSWORD_UPDATE_STATE,
-                 ManagePasswordsBubbleModel::AUTOMATIC);
+                 PasswordBubbleControllerBase::DisplayReason::kAutomatic);
 }
 
 void PendingBubbleControllerTest::
@@ -527,29 +528,31 @@ class PendingBubbleControllerPasswordRevealingTest
           std::tuple<bool /*is manual fallback*/,
                      bool /*form has autofilled value*/,
                      bool /*does os support user authentication*/,
-                     ManagePasswordsBubbleModel::DisplayReason>> {};
+                     PasswordBubbleControllerBase::DisplayReason>> {};
 
 TEST_P(PendingBubbleControllerPasswordRevealingTest,
        EyeIcon_ReauthForPasswordsRevealing) {
   bool is_manual_fallback_for_saving = std::get<0>(GetParam());
   bool form_has_autofilled_value = std::get<1>(GetParam());
   bool does_os_support_user_auth = std::get<2>(GetParam());
-  ManagePasswordsBubbleModel::DisplayReason display_reason =
+  PasswordBubbleControllerBase::DisplayReason display_reason =
       std::get<3>(GetParam());
 
   // That state is impossible.
   if (is_manual_fallback_for_saving &&
-      (display_reason == ManagePasswordsBubbleModel::AUTOMATIC))
+      (display_reason ==
+       PasswordBubbleControllerBase::DisplayReason::kAutomatic))
     SUCCEED();
 
-  SCOPED_TRACE(testing::Message()
-               << "is_manual_fallback_for_saving = "
-               << is_manual_fallback_for_saving
-               << " form_has_autofilled_value = " << form_has_autofilled_value
-               << " display_reason = "
-               << (display_reason == ManagePasswordsBubbleModel::AUTOMATIC
-                       ? "AUTOMATIC"
-                       : "USER_ACTION"));
+  SCOPED_TRACE(
+      testing::Message()
+      << "is_manual_fallback_for_saving = " << is_manual_fallback_for_saving
+      << " form_has_autofilled_value = " << form_has_autofilled_value
+      << " display_reason = "
+      << (display_reason ==
+                  PasswordBubbleControllerBase::DisplayReason::kAutomatic
+              ? "AUTOMATIC"
+              : "USER_ACTION"));
 
   pending_password().form_has_autofilled_value = form_has_autofilled_value;
   EXPECT_CALL(*delegate(), ArePasswordsRevealedWhenBubbleIsOpened())
@@ -560,8 +563,10 @@ TEST_P(PendingBubbleControllerPasswordRevealingTest,
   PretendPasswordWaiting(display_reason);
   bool reauth_expected = form_has_autofilled_value;
   if (!reauth_expected) {
-    reauth_expected = !is_manual_fallback_for_saving &&
-                      display_reason == ManagePasswordsBubbleModel::USER_ACTION;
+    reauth_expected =
+        !is_manual_fallback_for_saving &&
+        display_reason ==
+            PasswordBubbleControllerBase::DisplayReason::kUserAction;
   }
   EXPECT_EQ(reauth_expected,
             controller()->password_revealing_requires_reauth());
@@ -581,11 +586,13 @@ TEST_P(PendingBubbleControllerPasswordRevealingTest,
 INSTANTIATE_TEST_SUITE_P(
     PendingBubbleController,
     PendingBubbleControllerPasswordRevealingTest,
-    testing::Combine(testing::Bool(),
-                     testing::Bool(),
-                     testing::Bool(),
-                     testing::Values(ManagePasswordsBubbleModel::AUTOMATIC,
-                                     ManagePasswordsBubbleModel::USER_ACTION)));
+    testing::Combine(
+        testing::Bool(),
+        testing::Bool(),
+        testing::Bool(),
+        testing::Values(
+            PasswordBubbleControllerBase::DisplayReason::kAutomatic,
+            PasswordBubbleControllerBase::DisplayReason::kUserAction)));
 
 TEST_F(PendingBubbleControllerTest, EyeIcon_BubbleReopenedAfterAuth) {
   // Checks re-authentication is not needed if the bubble is opened right after
@@ -594,7 +601,8 @@ TEST_F(PendingBubbleControllerTest, EyeIcon_BubbleReopenedAfterAuth) {
   // After successful authentication this value is set to true.
   EXPECT_CALL(*delegate(), ArePasswordsRevealedWhenBubbleIsOpened())
       .WillOnce(Return(true));
-  PretendPasswordWaiting(ManagePasswordsBubbleModel::USER_ACTION);
+  PretendPasswordWaiting(
+      PasswordBubbleControllerBase::DisplayReason::kUserAction);
 
   EXPECT_FALSE(controller()->password_revealing_requires_reauth());
   EXPECT_TRUE(controller()->RevealPasswords());
@@ -614,7 +622,8 @@ TEST_F(PendingBubbleControllerTest, PasswordsRevealedReportedAfterReauth) {
   EXPECT_CALL(*delegate(), ArePasswordsRevealedWhenBubbleIsOpened())
       .WillOnce(Return(true));
   EXPECT_CALL(*delegate(), OnPasswordsRevealed());
-  PretendPasswordWaiting(ManagePasswordsBubbleModel::USER_ACTION);
+  PretendPasswordWaiting(
+      PasswordBubbleControllerBase::DisplayReason::kUserAction);
 }
 
 TEST_F(PendingBubbleControllerTest, DisableEditing) {

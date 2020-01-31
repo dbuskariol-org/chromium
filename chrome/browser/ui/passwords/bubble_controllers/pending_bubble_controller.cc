@@ -9,7 +9,6 @@
 #include "chrome/browser/password_manager/password_store_factory.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/sync/profile_sync_service_factory.h"
-#include "chrome/browser/ui/passwords/manage_passwords_bubble_model.h"
 #include "chrome/browser/ui/passwords/manage_passwords_view_utils.h"
 #include "chrome/browser/ui/passwords/passwords_model_delegate.h"
 #include "chrome/grit/generated_resources.h"
@@ -35,9 +34,10 @@ namespace metrics_util = password_manager::metrics_util;
 using Store = autofill::PasswordForm::Store;
 
 password_manager::metrics_util::UIDisplayDisposition ComputeDisplayDisposition(
-    ManagePasswordsBubbleModel::DisplayReason display_reason,
+    PasswordBubbleControllerBase::DisplayReason display_reason,
     password_manager::ui::State state) {
-  if (display_reason == ManagePasswordsBubbleModel::USER_ACTION) {
+  if (display_reason ==
+      PasswordBubbleControllerBase::DisplayReason::kUserAction) {
     switch (state) {
       case password_manager::ui::PENDING_PASSWORD_STATE:
         return metrics_util::MANUAL_WITH_PASSWORD_PENDING;
@@ -90,7 +90,7 @@ bool IsSyncUser(Profile* profile) {
 
 PendingBubbleController::PendingBubbleController(
     base::WeakPtr<PasswordsModelDelegate> delegate,
-    ManagePasswordsBubbleModel::DisplayReason display_reason)
+    PasswordBubbleControllerBase::DisplayReason display_reason)
     : PasswordBubbleControllerBase(
           delegate,
           ComputeDisplayDisposition(display_reason, delegate->GetState())),
@@ -134,7 +134,8 @@ PendingBubbleController::PendingBubbleController(
       !are_passwords_revealed_when_bubble_is_opened_ &&
       (pending_password_.form_has_autofilled_value ||
        (!delegate_->BubbleIsManualFallbackForSaving() &&
-        display_reason == ManagePasswordsBubbleModel::USER_ACTION));
+        display_reason ==
+            PasswordBubbleControllerBase::DisplayReason::kUserAction));
   enable_editing_ = delegate_->GetCredentialSource() !=
                     password_manager::metrics_util::CredentialSourceType::
                         kCredentialManagementAPI;

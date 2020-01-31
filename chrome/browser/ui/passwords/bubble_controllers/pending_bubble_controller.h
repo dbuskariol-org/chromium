@@ -7,17 +7,21 @@
 
 #include "base/memory/weak_ptr.h"
 #include "chrome/browser/ui/passwords/bubble_controllers/password_bubble_controller_base.h"
-#include "chrome/browser/ui/passwords/manage_passwords_bubble_model.h"
 #include "components/password_manager/core/browser/manage_passwords_referrer.h"
+#include "components/password_manager/core/browser/statistics_table.h"
+#include "components/password_manager/core/common/password_manager_ui.h"
 
 class PasswordsModelDelegate;
+namespace base {
+class Clock;
+}
 
 // This controller provides data and actions for the PasswordPendingView.
 class PendingBubbleController : public PasswordBubbleControllerBase {
  public:
   explicit PendingBubbleController(
       base::WeakPtr<PasswordsModelDelegate> delegate,
-      ManagePasswordsBubbleModel::DisplayReason display_reason);
+      DisplayReason display_reason);
   ~PendingBubbleController() override;
 
   // Called by the view code when the save/update button is clicked by the user.

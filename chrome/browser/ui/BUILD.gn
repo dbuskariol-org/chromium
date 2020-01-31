@@ -1079,8 +1079,6 @@ jumbo_static_library("ui") {
       "passwords/credential_manager_dialog_controller_impl.h",
       "passwords/google_password_manager_navigation_throttle.cc",
       "passwords/google_password_manager_navigation_throttle.h",
-      "passwords/manage_passwords_bubble_model.cc",
-      "passwords/manage_passwords_bubble_model.h",
       "passwords/manage_passwords_icon_view.h",
       "passwords/manage_passwords_ui_controller.cc",
       "passwords/manage_passwords_ui_controller.h",
