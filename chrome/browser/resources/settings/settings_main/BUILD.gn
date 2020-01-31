@@ -29,26 +29,22 @@ js_library("settings_main") {
 #  deps = [ ":settings_main.m" ]
 #}
 
-# TODO(crbug.com/1026426): Fix and enable.
-#js_library("settings_main.m") {
-#  sources = [ "$root_gen_dir/chrome/browser/resources/settings/settings_main/settings_main.m.js" ]
-#  deps = [
-#    # TODO: Fill those in.
-#  ]
-#  extra_deps = [ ":settings_main_module" ]
-#}
+js_library("settings_main.m") {
+  sources = [ "$root_gen_dir/chrome/browser/resources/settings/settings_main/settings_main.m.js" ]
+  deps = [
+    # TODO: Fill those in.
+  ]
+  extra_deps = [ ":settings_main_module" ]
+}
 
 import("//tools/polymer/polymer.gni")
 
 group("polymer3_elements") {
-  deps = [
-    # TODO(crbug.com/1026426): Fix and uncomment.
-    #":settings_main_module"
-  ]
+  deps = [ ":settings_main_module" ]
 }
-# TODO(crbug.com/1026426): Fix and enable.
-#polymer_modulizer("settings_main") {
-#  js_file = "settings_main.js"
-#  html_file = "settings_main.html"
-#  html_type = "dom-module"
-#}
+
+polymer_modulizer("settings_main") {
+  js_file = "settings_main.js"
+  html_file = "settings_main.html"
+  html_type = "dom-module"
+}
