@@ -51787,7 +51787,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="20" label="SOURCE_RENDER_VIEW_CLOSED (Obsolete)"/>
   <int value="21" label="RENDERER_CRASHED"/>
   <int value="22" label="UNSUPPORTED_SCHEME"/>
-  <int value="23" label="INVALID_HTTP_METHOD"/>
+  <int value="23" label="INVALID_HTTP_METHOD (Obsolete)"/>
   <int value="24" label="WINDOW_PRINT (Obsolete)"/>
   <int value="25" label="RECENTLY_VISITED"/>
   <int value="26" label="WINDOW_OPENER"/>
