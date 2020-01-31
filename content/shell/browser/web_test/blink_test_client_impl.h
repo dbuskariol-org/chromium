@@ -2,26 +2,26 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_SHELL_BROWSER_WEB_TEST_WEB_TEST_BLINK_TEST_CLIENT_H_
-#define CONTENT_SHELL_BROWSER_WEB_TEST_WEB_TEST_BLINK_TEST_CLIENT_H_
+#ifndef CONTENT_SHELL_BROWSER_WEB_TEST_BLINK_TEST_CLIENT_IMPL_H_
+#define CONTENT_SHELL_BROWSER_WEB_TEST_BLINK_TEST_CLIENT_IMPL_H_
 
 #include "base/macros.h"
 #include "content/public/common/web_preferences.h"
-#include "content/shell/common/web_test.mojom.h"
+#include "content/shell/common/blink_test.mojom.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "url/gurl.h"
 
 namespace content {
 
-class WebTestBlinkTestClient : public mojom::WebTestClient {
+class BlinkTestClientImpl : public mojom::BlinkTestClient {
  public:
-  WebTestBlinkTestClient() = default;
-  ~WebTestBlinkTestClient() override = default;
+  BlinkTestClientImpl() = default;
+  ~BlinkTestClientImpl() override = default;
 
-  static void Create(mojo::PendingReceiver<mojom::WebTestClient> receiver);
+  static void Create(mojo::PendingReceiver<mojom::BlinkTestClient> receiver);
 
  private:
-  // WebTestClient implementation.
+  // BlinkTestClient implementation.
   void InitiateLayoutDump() override;
   void PrintMessageToStderr(const std::string& message) override;
   void Reload() override;
@@ -37,9 +37,9 @@ class WebTestBlinkTestClient : public mojom::WebTestClient {
   void LoadURLForFrame(const GURL& url, const std::string& frame_name) override;
   void NavigateSecondaryWindow(const GURL& url) override;
 
-  DISALLOW_COPY_AND_ASSIGN(WebTestBlinkTestClient);
+  DISALLOW_COPY_AND_ASSIGN(BlinkTestClientImpl);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_SHELL_BROWSER_WEB_TEST_WEB_TEST_BLINK_TEST_CLIENT_H_
+#endif  // CONTENT_SHELL_BROWSER_WEB_TEST_BLINK_TEST_CLIENT_IMPL_H_

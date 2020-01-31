@@ -35,7 +35,7 @@ struct ShellTestConfiguration {
 };
 
 // Results of a CaptureDump call.
-struct WebTestDump {
+struct BlinkTestDump {
   // Audio dump.
   array<uint8>? audio;
 
@@ -51,8 +51,8 @@ struct WebTestDump {
 };
 
 // Blink test messages sent from the browser process to the renderer.
-interface WebTestControl {
-  CaptureDump() => (WebTestDump result);
+interface BlinkTestControl {
+  CaptureDump() => (BlinkTestDump result);
 
   CompositeWithRaster() => ();
 
@@ -89,10 +89,10 @@ interface WebTestControl {
 };
 
 // Blink test messages sent from the renderer process to the browser.
-interface WebTestClient {
+interface BlinkTestClient {
   // Asks the browser process to perform a layout dump spanning all the
   // (potentially cross-process) frames.  This goes through multiple
-  // WebTestControl.DumpFrameLayout calls and ends with sending of
+  // BlinkTestControl.DumpFrameLayout calls and ends with sending of
   // BlinkTestMsg_LayoutDumpCompleted.
   InitiateLayoutDump();
 

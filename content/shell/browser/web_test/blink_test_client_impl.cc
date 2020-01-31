@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/shell/browser/web_test/web_test_blink_test_client.h"
+#include "content/shell/browser/web_test/blink_test_client_impl.h"
 
 #include <memory>
 #include <string>
@@ -15,62 +15,62 @@
 namespace content {
 
 // static
-void WebTestBlinkTestClient::Create(
-    mojo::PendingReceiver<mojom::WebTestClient> receiver) {
-  mojo::MakeSelfOwnedReceiver(std::make_unique<WebTestBlinkTestClient>(),
+void BlinkTestClientImpl::Create(
+    mojo::PendingReceiver<mojom::BlinkTestClient> receiver) {
+  mojo::MakeSelfOwnedReceiver(std::make_unique<BlinkTestClientImpl>(),
                               std::move(receiver));
 }
 
-void WebTestBlinkTestClient::InitiateLayoutDump() {
+void BlinkTestClientImpl::InitiateLayoutDump() {
   BlinkTestController::Get()->OnInitiateLayoutDump();
 }
 
-void WebTestBlinkTestClient::PrintMessageToStderr(const std::string& message) {
+void BlinkTestClientImpl::PrintMessageToStderr(const std::string& message) {
   BlinkTestController::Get()->OnPrintMessageToStderr(message);
 }
 
-void WebTestBlinkTestClient::Reload() {
+void BlinkTestClientImpl::Reload() {
   BlinkTestController::Get()->OnReload();
 }
 
-void WebTestBlinkTestClient::OverridePreferences(
+void BlinkTestClientImpl::OverridePreferences(
     const content::WebPreferences& web_preferences) {
   BlinkTestController::Get()->OnOverridePreferences(web_preferences);
 }
 
-void WebTestBlinkTestClient::CloseRemainingWindows() {
+void BlinkTestClientImpl::CloseRemainingWindows() {
   BlinkTestController::Get()->OnCloseRemainingWindows();
 }
 
-void WebTestBlinkTestClient::GoToOffset(int offset) {
+void BlinkTestClientImpl::GoToOffset(int offset) {
   BlinkTestController::Get()->OnGoToOffset(offset);
 }
 
-void WebTestBlinkTestClient::SendBluetoothManualChooserEvent(
+void BlinkTestClientImpl::SendBluetoothManualChooserEvent(
     const std::string& event,
     const std::string& argument) {
   BlinkTestController::Get()->OnSendBluetoothManualChooserEvent(event,
                                                                 argument);
 }
 
-void WebTestBlinkTestClient::SetBluetoothManualChooser(bool enable) {
+void BlinkTestClientImpl::SetBluetoothManualChooser(bool enable) {
   BlinkTestController::Get()->OnSetBluetoothManualChooser(enable);
 }
 
-void WebTestBlinkTestClient::GetBluetoothManualChooserEvents() {
+void BlinkTestClientImpl::GetBluetoothManualChooserEvents() {
   BlinkTestController::Get()->OnGetBluetoothManualChooserEvents();
 }
 
-void WebTestBlinkTestClient::SetPopupBlockingEnabled(bool block_popups) {
+void BlinkTestClientImpl::SetPopupBlockingEnabled(bool block_popups) {
   BlinkTestController::Get()->OnSetPopupBlockingEnabled(block_popups);
 }
 
-void WebTestBlinkTestClient::LoadURLForFrame(const GURL& url,
-                                             const std::string& frame_name) {
+void BlinkTestClientImpl::LoadURLForFrame(const GURL& url,
+                                          const std::string& frame_name) {
   BlinkTestController::Get()->OnLoadURLForFrame(url, frame_name);
 }
 
-void WebTestBlinkTestClient::NavigateSecondaryWindow(const GURL& url) {
+void BlinkTestClientImpl::NavigateSecondaryWindow(const GURL& url) {
   BlinkTestController::Get()->OnNavigateSecondaryWindow(url);
 }
 
