@@ -656,9 +656,17 @@ void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
     const GURL& client_url,
     int64_t trace_event_id,
     FindRegistrationCallback callback,
-    blink::ServiceWorkerStatusCode status,
     std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
-    std::unique_ptr<ResourceList> resources) {
+    std::unique_ptr<ResourceList> resources,
+    ServiceWorkerDatabase::Status database_status) {
+  if (database_status != ServiceWorkerDatabase::STATUS_OK &&
+      database_status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
+    ScheduleDeleteAndStartOver();
+  }
+
+  blink::ServiceWorkerStatusCode status =
+      ServiceWorkerStorage::DatabaseStatusToStatusCode(database_status);
+
   if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
     // Look for something currently being installed.
     scoped_refptr<ServiceWorkerRegistration> installing_registration =
@@ -696,9 +704,17 @@ void ServiceWorkerRegistry::DidFindRegistrationForClientUrl(
 
 void ServiceWorkerRegistry::DidFindRegistrationForScope(
     FindRegistrationCallback callback,
-    blink::ServiceWorkerStatusCode status,
     std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
-    std::unique_ptr<ResourceList> resources) {
+    std::unique_ptr<ResourceList> resources,
+    ServiceWorkerDatabase::Status database_status) {
+  if (database_status != ServiceWorkerDatabase::STATUS_OK &&
+      database_status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
+    ScheduleDeleteAndStartOver();
+  }
+
+  blink::ServiceWorkerStatusCode status =
+      ServiceWorkerStorage::DatabaseStatusToStatusCode(database_status);
+
   scoped_refptr<ServiceWorkerRegistration> registration;
   if (status == blink::ServiceWorkerStatusCode::kOk) {
     DCHECK(data);
@@ -712,9 +728,17 @@ void ServiceWorkerRegistry::DidFindRegistrationForScope(
 void ServiceWorkerRegistry::DidFindRegistrationForId(
     int64_t registration_id,
     FindRegistrationCallback callback,
-    blink::ServiceWorkerStatusCode status,
     std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
-    std::unique_ptr<ResourceList> resources) {
+    std::unique_ptr<ResourceList> resources,
+    ServiceWorkerDatabase::Status database_status) {
+  if (database_status != ServiceWorkerDatabase::STATUS_OK &&
+      database_status != ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND) {
+    ScheduleDeleteAndStartOver();
+  }
+
+  blink::ServiceWorkerStatusCode status =
+      ServiceWorkerStorage::DatabaseStatusToStatusCode(database_status);
+
   if (status == blink::ServiceWorkerStatusCode::kErrorNotFound) {
     // Look for something currently being installed.
     scoped_refptr<ServiceWorkerRegistration> installing_registration =
