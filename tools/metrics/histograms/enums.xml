@@ -50698,6 +50698,13 @@ Called by update_net_trust_anchors.py.-->
   <int value="2126196629" label="PPB_UDPSocket_Private;0.4"/>
 </enum>
 
+<enum name="PerformanceHintsObserverHintForURLResult">
+  <int value="0" label="Hint not found for URL"/>
+  <int value="1" label="Hint not yet processed"/>
+  <int value="2" label="Invalid URL"/>
+  <int value="3" label="Hint found for URL"/>
+</enum>
+
 <enum name="PerformanceMeasureParameterType">
   <obsolete>
     Deprecated as of June 2019.
