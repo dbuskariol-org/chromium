@@ -1134,15 +1134,19 @@ void ShelfLayoutManager::OnCenterVisibilityChanged(
   if (!chromeos::switches::ShouldShowShelfHotseat())
     return;
 
-  if (visibility != message_center::VISIBILITY_MESSAGE_CENTER ||
-      hotseat_state() != HotseatState::kExtended) {
-    return;
-  }
+  // Uses base::CancelableClosure to handle two edge cases: (1)
+  // ShelfLayoutManager is destructed before the callback runs. (2) The previous
+  // callback is still pending.
+  visibility_update_for_tray_callback_.Reset(base::BindOnce(
+      &ShelfLayoutManager::UpdateVisibilityStateForSystemTrayChange,
+      base::Unretained(this), visibility));
 
-  // Hides the hotseat when the hotseat is in kExtended mode and the system
-  // tray shows.
-  base::AutoReset<bool> reset(&should_hide_hotseat_, true);
-  UpdateVisibilityState();
+  // OnCenterVisibilityChanged is called when the visibility of system tray
+  // is set, which is before the tray bubble is created/destructed. Meanwhile,
+  // we rely on the state of tray bubble to calculate the auto-hide state.
+  // Use ThreadTaskRunnerHandle to specify that the task runs on the UI thread.
+  base::ThreadTaskRunnerHandle::Get()->PostTask(
+      FROM_HERE, visibility_update_for_tray_callback_.callback());
 }
 
 void ShelfLayoutManager::SuspendWorkAreaUpdate() {
@@ -2823,6 +2827,20 @@ void ShelfLayoutManager::MaybeCancelWindowDrag() {
 
 bool ShelfLayoutManager::IsWindowDragInProgress() const {
   return window_drag_controller_ && window_drag_controller_->drag_started();
+}
+
+void ShelfLayoutManager::UpdateVisibilityStateForSystemTrayChange(
+    message_center::Visibility visibility) {
+  base::Optional<base::AutoReset<bool>> reset;
+
+  // Hides the hotseat when the hotseat is in kExtended mode and the system tray
+  // shows.
+  if (visibility == message_center::Visibility::VISIBILITY_MESSAGE_CENTER &&
+      hotseat_state() == HotseatState::kExtended) {
+    reset.emplace(&should_hide_hotseat_, true);
+  }
+
+  UpdateVisibilityState();
 }
 
 }  // namespace ash
