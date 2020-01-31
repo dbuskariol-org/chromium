@@ -150,6 +150,8 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) AssistantManagerServiceImpl
   void OnAccessibilityStatusChanged(bool spoken_feedback_enabled) override;
   void SendAssistantFeedback(
       mojom::AssistantFeedbackPtr assistant_feedback) override;
+  void NotifyEntryIntoAssistantUi(
+      mojom::AssistantEntryPoint entry_point) override;
   void StopAlarmTimerRinging() override;
   void CreateTimer(base::TimeDelta duration) override;
 
@@ -297,6 +299,8 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) AssistantManagerServiceImpl
       mojom::AssistantQuerySource source,
       const std::string& query);
 
+  std::string ConsumeLastTriggerSource();
+
   ash::mojom::AssistantAlarmTimerController* assistant_alarm_timer_controller();
   ash::mojom::AssistantNotificationController*
   assistant_notification_controller();
@@ -347,8 +351,8 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) AssistantManagerServiceImpl
   ax::mojom::AssistantExtraPtr assistant_extra_;
   std::unique_ptr<ui::AssistantTree> assistant_tree_;
   std::vector<uint8_t> assistant_screenshot_;
-  std::string last_search_source_;
-  base::Lock last_search_source_lock_;
+  std::string last_trigger_source_;
+  base::Lock last_trigger_source_lock_;
   base::TimeTicks started_time_;
 
   base::Thread background_thread_;

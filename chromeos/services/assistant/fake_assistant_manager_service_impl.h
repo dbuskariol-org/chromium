@@ -68,6 +68,8 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) FakeAssistantManagerServiceImpl
   void ClearScreenContextCache() override;
   void OnAccessibilityStatusChanged(bool spoken_feedback_enabled) override;
   void SendAssistantFeedback(mojom::AssistantFeedbackPtr feedback) override;
+  void NotifyEntryIntoAssistantUi(
+      mojom::AssistantEntryPoint entry_point) override;
   void StopAlarmTimerRinging() override;
   void CreateTimer(base::TimeDelta duration) override;
 

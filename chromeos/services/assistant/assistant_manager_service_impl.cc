@@ -1532,11 +1532,21 @@ void AssistantManagerServiceImpl::SendScreenContextRequest(
   assistant_manager_internal_->SendScreenContextRequest(context_protos);
 }
 
+void AssistantManagerServiceImpl::NotifyEntryIntoAssistantUi(
+    mojom::AssistantEntryPoint entry_point) {
+  base::AutoLock lock(last_trigger_source_lock_);
+  last_trigger_source_ = ToTriggerSource(entry_point);
+}
+
+std::string AssistantManagerServiceImpl::ConsumeLastTriggerSource() {
+  base::AutoLock lock(last_trigger_source_lock_);
+  auto trigger_source = last_trigger_source_;
+  last_trigger_source_ = std::string();
+  return trigger_source;
+}
+
 std::string AssistantManagerServiceImpl::GetLastSearchSource() {
-  base::AutoLock lock(last_search_source_lock_);
-  auto search_source = last_search_source_;
-  last_search_source_ = std::string();
-  return search_source;
+  return ConsumeLastTriggerSource();
 }
 
 void AssistantManagerServiceImpl::FillServerExperimentIds(
