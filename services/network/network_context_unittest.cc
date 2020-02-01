@@ -73,6 +73,7 @@
 #include "net/dns/host_resolver_source.h"
 #include "net/dns/mock_host_resolver.h"
 #include "net/dns/public/dns_query_type.h"
+#include "net/dns/resolve_context.h"
 #include "net/http/http_auth.h"
 #include "net/http/http_cache.h"
 #include "net/http/http_network_session.h"
@@ -3214,8 +3215,10 @@ class TestResolverFactory : public net::HostResolver::Factory {
       base::StringPiece host_mapping_rules,
       bool enable_caching) override {
     DCHECK(host_mapping_rules.empty());
+    auto resolve_context = std::make_unique<net::ResolveContext>(
+        nullptr /* url_request_context */, nullptr /* host_cache */);
     auto resolver = std::make_unique<net::ContextHostResolver>(
-        manager, nullptr /* host_cache */);
+        manager, std::move(resolve_context));
     resolvers_.push_back(resolver.get());
     return resolver;
   }
