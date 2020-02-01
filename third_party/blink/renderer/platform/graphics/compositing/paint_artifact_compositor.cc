@@ -676,9 +676,9 @@ bool PaintArtifactCompositor::MightOverlap(const PendingLayer& layer_a,
 
 bool PaintArtifactCompositor::DecompositeEffect(
     const EffectPaintPropertyNode& unaliased_parent_effect,
-    size_t first_layer_in_parent_group_index,
+    wtf_size_t first_layer_in_parent_group_index,
     const EffectPaintPropertyNode& unaliased_effect,
-    size_t layer_index) {
+    wtf_size_t layer_index) {
   // The layer must be the last layer in pending_layers_.
   DCHECK_EQ(layer_index, pending_layers_.size() - 1);
 
@@ -1417,7 +1417,7 @@ static cc::RenderSurfaceReason GetRenderSurfaceCandidateReason(
     return cc::RenderSurfaceReason::kBlendModeDstIn;
   if (effect.opacity != 1.f)
     return cc::RenderSurfaceReason::kOpacity;
-  if (static_cast<size_t>(effect.id) < blink_effects.size() &&
+  if (static_cast<wtf_size_t>(effect.id) < blink_effects.size() &&
       blink_effects[effect.id] &&
       blink_effects[effect.id]->HasActiveOpacityAnimation())
     return cc::RenderSurfaceReason::kOpacityAnimation;
