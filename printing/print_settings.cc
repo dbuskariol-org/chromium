@@ -167,7 +167,13 @@ void GetColorModelForMode(int color_mode,
 #endif  // defined(USE_CUPS)
 
 base::Optional<bool> IsColorModelSelected(int color_mode) {
-  switch (color_mode) {
+  if (color_mode <= UNKNOWN_COLOR_MODEL || color_mode > COLOR_MODEL_LAST) {
+    NOTREACHED();
+    return base::nullopt;
+  }
+
+  ColorModel color_model = static_cast<ColorModel>(color_mode);
+  switch (color_model) {
     case COLOR:
     case CMYK:
     case CMY:
@@ -200,7 +206,9 @@ base::Optional<bool> IsColorModelSelected(int color_mode) {
     case SHARP_ARCMODE_CMBW:
     case XEROX_XRXCOLOR_BW:
       return false;
-    default:
+    case UNKNOWN_COLOR_MODEL:
+      // The default case is excluded from this switch statement to ensure that
+      // all ColorModel values are determinantly handled.
       NOTREACHED();
       return base::nullopt;
   }

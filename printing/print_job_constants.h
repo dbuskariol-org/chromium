@@ -152,6 +152,7 @@ enum ColorModel {
   SHARP_ARCMODE_CMBW,           // Used in Sharp printer PPDs.
   XEROX_XRXCOLOR_AUTOMATIC,     // Used in Xerox printer PPDs.
   XEROX_XRXCOLOR_BW,            // Used in Xerox printer PPDs.
+  COLOR_MODEL_LAST = XEROX_XRXCOLOR_BW
 };
 
 // What kind of margins to use.
