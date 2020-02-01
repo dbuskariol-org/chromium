@@ -1771,6 +1771,8 @@ template("monochrome_public_apk_or_module_tmpl") {
       deps += [
         ":monochrome_java",
         "//android_webview:platform_service_bridge_upstream_implementation_java",
+        "//android_webview/nonembedded:icon_resources",
+        "//android_webview/nonembedded:monochrome_devui_launcher_icon_resources",
       ]
       if (webview_includes_weblayer) {
         deps += [ "//weblayer/browser/java:gms_bridge_upstream_impl_java" ]
