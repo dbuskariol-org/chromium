@@ -3791,11 +3791,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          chromeos::assistant::features::kEnableMediaSessionIntegration)},
 
-    {"enable-assistant-launcher-ui",
-     flag_descriptions::kEnableAssistantLauncherUIName,
-     flag_descriptions::kEnableAssistantLauncherUIDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(app_list_features::kEnableAssistantLauncherUI)},
-
     {"enable-quick-answers", flag_descriptions::kEnableQuickAnswersName,
      flag_descriptions::kEnableQuickAnswersDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kQuickAnswers)},
