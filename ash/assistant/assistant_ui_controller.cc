@@ -105,24 +105,6 @@ void AssistantUiController::OnMicStateChanged(MicState mic_state) {
     UpdateUiMode();
 }
 
-bool AssistantUiController::OnCaptionButtonPressed(AssistantButtonId id) {
-  switch (id) {
-    case AssistantButtonId::kBack:
-      UpdateUiMode(AssistantUiMode::kLauncherEmbeddedUi);
-      return true;
-    case AssistantButtonId::kClose:
-      CloseUi(AssistantExitPoint::kCloseButton);
-      return true;
-    case AssistantButtonId::kMinimize:
-      UpdateUiMode(AssistantUiMode::kMiniUi);
-      return true;
-    default:
-      // No action necessary.
-      break;
-  }
-  return false;
-}
-
 void AssistantUiController::OnHighlighterEnabledChanged(
     HighlighterEnabledState state) {
   if (state != HighlighterEnabledState::kEnabled)

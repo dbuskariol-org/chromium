@@ -14,7 +14,6 @@
 #include "ash/assistant/model/assistant_interaction_model_observer.h"
 #include "ash/assistant/model/assistant_ui_model.h"
 #include "ash/assistant/model/assistant_ui_model_observer.h"
-#include "ash/assistant/ui/caption_bar.h"
 #include "ash/highlighter/highlighter_controller.h"
 #include "base/macros.h"
 #include "base/optional.h"
@@ -35,7 +34,6 @@ class ASH_EXPORT AssistantUiController
     : public AssistantControllerObserver,
       public AssistantInteractionModelObserver,
       public AssistantUiModelObserver,
-      public CaptionBarDelegate,
       public HighlighterController::Observer {
  public:
   explicit AssistantUiController(AssistantController* assistant_controller);
@@ -55,9 +53,6 @@ class ASH_EXPORT AssistantUiController
   void OnInputModalityChanged(InputModality input_modality) override;
   void OnInteractionStateChanged(InteractionState interaction_state) override;
   void OnMicStateChanged(MicState mic_state) override;
-
-  // CaptionBarDelegate:
-  bool OnCaptionButtonPressed(AssistantButtonId id) override;
 
   // HighlighterController::Observer:
   void OnHighlighterEnabledChanged(HighlighterEnabledState state) override;

@@ -40,7 +40,6 @@ class AssistantViewDelegateImpl : public AssistantViewDelegate {
       AssistantSuggestionsModelObserver* observer) override;
   void AddUiModelObserver(AssistantUiModelObserver* observer) override;
   void RemoveUiModelObserver(AssistantUiModelObserver* observer) override;
-  CaptionBarDelegate* GetCaptionBarDelegate() override;
   void DownloadImage(
       const GURL& url,
       AssistantImageDownloader::DownloadCallback callback) override;

@@ -93,10 +93,6 @@ void AssistantViewDelegateImpl::RemoveUiModelObserver(
   assistant_controller_->ui_controller()->RemoveModelObserver(observer);
 }
 
-CaptionBarDelegate* AssistantViewDelegateImpl::GetCaptionBarDelegate() {
-  return assistant_controller_->ui_controller();
-}
-
 void AssistantViewDelegateImpl::DownloadImage(
     const GURL& url,
     AssistantImageDownloader::DownloadCallback callback) {

@@ -16,7 +16,6 @@
 #include "ash/assistant/model/assistant_suggestions_model_observer.h"
 #include "ash/assistant/model/assistant_ui_model.h"
 #include "ash/assistant/model/assistant_ui_model_observer.h"
-#include "ash/assistant/ui/caption_bar.h"
 #include "ash/public/cpp/assistant/assistant_image_downloader.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
 #include "base/component_export.h"
@@ -108,9 +107,6 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantViewDelegate {
   // Adds/removes the ui model observer associated with the view delegate.
   virtual void AddUiModelObserver(AssistantUiModelObserver* observer) = 0;
   virtual void RemoveUiModelObserver(AssistantUiModelObserver* observer) = 0;
-
-  // Gets the caption bar delegate associated with the view delegate.
-  virtual CaptionBarDelegate* GetCaptionBarDelegate() = 0;
 
   // Downloads the image found at the specified |url|. On completion, the
   // supplied |callback| will be run with the downloaded image. If the download
