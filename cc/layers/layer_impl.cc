@@ -318,13 +318,6 @@ void LayerImpl::UpdateScrollable() {
   // Scrollbar positions depend on the bounds.
   layer_tree_impl()->SetScrollbarGeometriesNeedUpdate();
 
-  if (was_scrollable != scrollable_) {
-    if (scrollable_)
-      layer_tree_impl()->AddScrollableLayer(this);
-    else
-      layer_tree_impl()->RemoveScrollableLayer(this);
-  }
-
   if (layer_tree_impl()->settings().scrollbar_animator ==
       LayerTreeSettings::AURA_OVERLAY) {
     set_needs_show_scrollbars(scrollable_);
