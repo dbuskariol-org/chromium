@@ -132,11 +132,6 @@ void AssistantViewDelegateImpl::OnDialogPlateContentsCommitted(
     observer.OnDialogPlateContentsCommitted(text);
 }
 
-void AssistantViewDelegateImpl::OnMiniViewPressed() {
-  for (auto& observer : view_delegate_observers_)
-    observer.OnMiniViewPressed();
-}
-
 void AssistantViewDelegateImpl::OnNotificationButtonPressed(
     const std::string& notification_id,
     int notification_button_index) {

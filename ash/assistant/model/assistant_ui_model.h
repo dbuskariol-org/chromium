@@ -40,7 +40,7 @@ enum class AssistantButtonId {
   kMinimize = 3,
   kKeyboardInputToggle = 4,
   kVoiceInputToggle = 5,
-  kSettings = 6,
+  kSettingsDeprecated = 6,
   kBackInLauncherDeprecated = 7,
   kMaxValue = kBackInLauncherDeprecated
 };
