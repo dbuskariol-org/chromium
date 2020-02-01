@@ -6406,9 +6406,6 @@ void Document::FinishedParsing() {
 
   // Parser should have picked up all preloads by now
   fetcher_->ClearPreloads(ResourceFetcher::kClearSpeculativeMarkupPreloads);
-
-  if (IsPrefetchOnly())
-    WebPrerenderingSupport::Current()->PrefetchFinished();
 }
 
 void Document::ElementDataCacheClearTimerFired(TimerBase*) {
