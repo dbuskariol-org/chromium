@@ -35,6 +35,7 @@ void GetColorModelForMode(int color_mode,
   constexpr char kCUPSBrotherMonoColor[] = "BRMonoColor";
   constexpr char kCUPSBrotherPrintQuality[] = "BRPrintQuality";
   constexpr char kCUPSSharpARCMode[] = "ARCMode";
+  constexpr char kCUPSXeroxXRXColor[] = "XRXColor";
 #else
   constexpr char kCUPSColorMode[] = "cups-ColorMode";
   constexpr char kCUPSColorModel[] = "cups-ColorModel";
@@ -44,6 +45,7 @@ void GetColorModelForMode(int color_mode,
   constexpr char kCUPSBrotherMonoColor[] = "cups-BRMonoColor";
   constexpr char kCUPSBrotherPrintQuality[] = "cups-BRPrintQuality";
   constexpr char kCUPSSharpARCMode[] = "cups-ARCMode";
+  constexpr char kCUPSXeroxXRXColor[] = "cups-XRXColor";
 #endif  // defined(OS_MACOSX)
 
   color_setting_name->assign(kCUPSColorModel);
@@ -149,6 +151,14 @@ void GetColorModelForMode(int color_mode,
       color_setting_name->assign(kCUPSSharpARCMode);
       color_value->assign(kSharpCMBW);
       break;
+    case XEROX_XRXCOLOR_AUTOMATIC:
+      color_setting_name->assign(kCUPSXeroxXRXColor);
+      color_value->assign(kXeroxAutomatic);
+      break;
+    case XEROX_XRXCOLOR_BW:
+      color_setting_name->assign(kCUPSXeroxXRXColor);
+      color_value->assign(kXeroxBW);
+      break;
     default:
       color_value->assign(kGrayscale);
       break;
@@ -175,6 +185,7 @@ base::Optional<bool> IsColorModelSelected(int color_mode) {
     case BROTHER_BRSCRIPT3_COLOR:
     case EPSON_INK_COLOR:
     case SHARP_ARCMODE_CMCOLOR:
+    case XEROX_XRXCOLOR_AUTOMATIC:
       return true;
     case GRAY:
     case BLACK:
@@ -187,6 +198,7 @@ base::Optional<bool> IsColorModelSelected(int color_mode) {
     case BROTHER_BRSCRIPT3_BLACK:
     case EPSON_INK_MONO:
     case SHARP_ARCMODE_CMBW:
+    case XEROX_XRXCOLOR_BW:
       return false;
     default:
       NOTREACHED();

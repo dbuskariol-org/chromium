@@ -401,4 +401,25 @@ TEST(PrintBackendCupsHelperTest, TestPpdParsingSharpPrinters) {
   EXPECT_EQ(SHARP_ARCMODE_CMBW, caps.bw_model);
 }
 
+TEST(PrintBackendCupsHelperTest, TestPpdParsingXeroxPrinters) {
+  constexpr char kTestPpdData[] =
+      R"(*PPD-Adobe: "4.3"
+*ColorDevice: True
+*OpenUI *XRXColor/Color Correction: PickOne
+*OrderDependency: 48.0 AnySetup *XRXColor
+*DefaultXRXColor: Automatic
+*XRXColor Automatic/Automatic: "
+  <</ProcessColorModel /DeviceCMYK>> setpagedevice"
+*XRXColor BW/Black and White:  "
+  <</ProcessColorModel /DeviceGray>> setpagedevice"
+*CloseUI: *XRXColor)";
+
+  PrinterSemanticCapsAndDefaults caps;
+  EXPECT_TRUE(ParsePpdCapabilities("test", "", kTestPpdData, &caps));
+  EXPECT_TRUE(caps.color_changeable);
+  EXPECT_TRUE(caps.color_default);
+  EXPECT_EQ(XEROX_XRXCOLOR_AUTOMATIC, caps.color_model);
+  EXPECT_EQ(XEROX_XRXCOLOR_BW, caps.bw_model);
+}
+
 }  // namespace printing
