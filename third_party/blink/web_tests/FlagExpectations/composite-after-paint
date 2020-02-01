@@ -137,8 +137,6 @@ virtual/threaded/compositing/visibility/layer-visible-content.html [ Failure ]
 crbug.com/931486 paint/invalidation/compositing/pointer-events-composited-scrolling.html [ Failure ]
 crbug.com/931486 paint/invalidation/compositing/scrolling-neg-z-index-descendants.html [ Failure ]
 crbug.com/931486 paint/invalidation/scroll/composited-iframe-scroll-repaint.html [ Failure ]
-crbug.com/931486 paint/invalidation/scroll/fixed-and-absolute-position-scrolled.html [ Failure ]
-crbug.com/931486 scrollbars/overlay-scrollbars-within-overflow-scroll.html [ Failure ]
 crbug.com/931486 scrollbars/reconstruct-coordinated-scrollbar.html [ Failure ]
 crbug.com/931486 virtual/prefer_compositing_to_lcd_text/scrollbars/reconstruct-coordinated-scrollbar.html [ Failure ]
 

@@ -228,6 +228,10 @@ PaintArtifactCompositor::ScrollHitTestLayerForPendingLayer(
   // Set the layer's bounds equal to the container because the scroll layer
   // does not scroll.
   scroll_layer->SetBounds(static_cast<gfx::Size>(bounds));
+
+  if (scroll_node.NodeChanged() != PaintPropertyChangeType::kUnchanged)
+    scroll_layer->SetNeedsPushProperties();
+
   return scroll_layer;
 }
 

@@ -895,6 +895,35 @@ TEST_F(ScrollbarLayerTest, LayerChangesAffectingScrollbarGeometries) {
   impl.host_impl()->active_tree()->UpdateScrollbarGeometries();
 }
 
+TEST_F(ScrollbarLayerTest, UpdateScrollbarGeometriesScrollNodeOnContainer) {
+  LayerTreeImplTestBase impl;
+
+  LayerImpl* scroll_layer = impl.AddLayer<LayerImpl>();
+  scroll_layer->SetElementId(LayerIdToElementIdForTesting(scroll_layer->id()));
+  scroll_layer->SetBounds(gfx::Size(100, 100));
+
+  CopyProperties(impl.root_layer(), scroll_layer);
+  CreateTransformNode(scroll_layer);
+  // In CompositeAfterPaint, the scroll node is associated with the scroll
+  // container layer. Its |container_bounds| is the same as the bounds of the
+  // layer, and its |bounds| is the bounds of the scrolling contents.
+  CreateScrollNode(scroll_layer, gfx::Size(100, 100)).bounds =
+      gfx::Size(1000, 1000);
+
+  EXPECT_TRUE(impl.host_impl()->active_tree()->ScrollbarGeometriesNeedUpdate());
+  impl.host_impl()->active_tree()->UpdateScrollbarGeometries();
+
+  GetScrollNode(scroll_layer)->bounds = gfx::Size(1000, 2000);
+  scroll_layer->UpdateScrollable();
+  EXPECT_TRUE(impl.host_impl()->active_tree()->ScrollbarGeometriesNeedUpdate());
+  impl.host_impl()->active_tree()->UpdateScrollbarGeometries();
+
+  scroll_layer->UpdateScrollable();
+  EXPECT_FALSE(
+      impl.host_impl()->active_tree()->ScrollbarGeometriesNeedUpdate());
+  impl.host_impl()->active_tree()->UpdateScrollbarGeometries();
+}
+
 TEST_F(AuraScrollbarLayerTest, ScrollbarLayerCreateAfterSetScrollable) {
   // Scrollbar Layer can be created after SetScrollable is called and in a
   // separate commit. Ensure we do not missing the DidRequestShowFromMainThread
