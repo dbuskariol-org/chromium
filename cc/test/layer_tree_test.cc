@@ -651,14 +651,6 @@ LayerTreeTest::~LayerTreeTest() {
     animation_host_->SetMutatorHostClient(nullptr);
 }
 
-gfx::Vector2dF LayerTreeTest::ScrollDelta(LayerImpl* layer_impl) {
-  gfx::ScrollOffset delta = layer_impl->layer_tree_impl()
-                                ->property_trees()
-                                ->scroll_tree.GetScrollOffsetDeltaForTesting(
-                                    layer_impl->element_id());
-  return gfx::Vector2dF(delta.x(), delta.y());
-}
-
 void LayerTreeTest::EndTest() {
   {
     base::AutoLock hold(test_ended_lock_);

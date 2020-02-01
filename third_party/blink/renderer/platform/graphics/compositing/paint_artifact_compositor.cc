@@ -225,10 +225,6 @@ PaintArtifactCompositor::ScrollHitTestLayerForPendingLayer(
   // match (see: crbug.com/753124). To do this, use
   // |scroll_hit_test->scroll_container_bounds|.
   auto bounds = scroll_node.ContainerRect().Size();
-  // Mark the layer as scrollable.
-  // TODO(pdr): When CAP launches this parameter for bounds will not be
-  // needed.
-  scroll_layer->SetScrollable(static_cast<gfx::Size>(bounds));
   // Set the layer's bounds equal to the container because the scroll layer
   // does not scroll.
   scroll_layer->SetBounds(static_cast<gfx::Size>(bounds));
@@ -393,15 +389,12 @@ void PaintArtifactCompositor::UpdateNonFastScrollableRegions(
     // pre-CompositeAfterPaint does not paint scroll hit test data for
     // composited scrollers.
     if (RuntimeEnabledFeatures::CompositeAfterPaintEnabled()) {
-      if (layer->scrollable()) {
-        const auto* scroll_offset =
-            hit_test_data->scroll_hit_test->scroll_offset;
-        if (scroll_offset) {
-          const auto& scroll_node = *scroll_offset->ScrollNode();
-          auto scroll_element_id = scroll_node.GetCompositorElementId();
-          if (layer->element_id() == scroll_element_id)
-            continue;
-        }
+      const auto* scroll_offset = hit_test_data->scroll_hit_test->scroll_offset;
+      if (scroll_offset) {
+        const auto& scroll_node = *scroll_offset->ScrollNode();
+        auto scroll_element_id = scroll_node.GetCompositorElementId();
+        if (layer->element_id() == scroll_element_id)
+          continue;
       }
     }
 
