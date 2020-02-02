@@ -172,9 +172,7 @@ void StartUserSession(Profile* user_profile, const std::string& login_user_id) {
         user_profile);
 
     if (user->GetType() == user_manager::USER_TYPE_CHILD) {
-      ChildStatusReportingServiceFactory::GetForBrowserContext(user_profile);
-      ChildUserServiceFactory::GetForBrowserContext(user_profile);
-      ScreenTimeControllerFactory::GetForBrowserContext(user_profile);
+      user_session_mgr->InitializeChildUserServices(user_profile);
     }
 
     // Send the PROFILE_PREPARED notification and call SessionStarted()

@@ -1799,12 +1799,6 @@ void UserSessionManager::InitializeBrowser(Profile* profile) {
     delegate_->OnProfilePrepared(profile, browser_launched);
 }
 
-void UserSessionManager::InitializeChildUserServices(Profile* profile) {
-  ChildStatusReportingServiceFactory::GetForBrowserContext(profile);
-  ChildUserServiceFactory::GetForBrowserContext(profile);
-  ScreenTimeControllerFactory::GetForBrowserContext(profile);
-}
-
 void UserSessionManager::ActivateWizard(OobeScreenId screen) {
   LoginDisplayHost* host = LoginDisplayHost::default_host();
   CHECK(host);
@@ -2030,6 +2024,12 @@ void UserSessionManager::InitializeCertificateTransparencyComponents(
         ProfileHelper::GetProfilePathByUserIdHash(username_hash);
     component_updater::DeleteLegacySTHSet(path);
   }
+}
+
+void UserSessionManager::InitializeChildUserServices(Profile* profile) {
+  ChildStatusReportingServiceFactory::GetForBrowserContext(profile);
+  ChildUserServiceFactory::GetForBrowserContext(profile);
+  ScreenTimeControllerFactory::GetForBrowserContext(profile);
 }
 
 void UserSessionManager::OnRestoreActiveSessions(
