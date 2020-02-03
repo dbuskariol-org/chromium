@@ -961,11 +961,6 @@ LocalFrameClientImpl::CreateURLLoaderFactory() {
   return web_frame_->Client()->CreateURLLoaderFactory();
 }
 
-service_manager::InterfaceProvider*
-LocalFrameClientImpl::GetInterfaceProvider() {
-  return web_frame_->Client()->GetInterfaceProvider();
-}
-
 blink::BrowserInterfaceBrokerProxy&
 LocalFrameClientImpl::GetBrowserInterfaceBroker() {
   return *web_frame_->Client()->GetBrowserInterfaceBroker();

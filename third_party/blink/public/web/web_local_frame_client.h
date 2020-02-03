@@ -79,10 +79,6 @@
 #include "ui/events/types/scroll_types.h"
 #include "v8/include/v8.h"
 
-namespace service_manager {
-class InterfaceProvider;
-}
-
 namespace blink {
 namespace mojom {
 enum class WebFeature : int32_t;
@@ -191,11 +187,6 @@ class BLINK_EXPORT WebLocalFrameClient {
 
   // Returns a blame context for attributing work belonging to this frame.
   virtual BlameContext* GetFrameBlameContext() { return nullptr; }
-
-  // DEPRECATED. Please use GetBrowserInterfaceBroker() instead.
-  // Returns an InterfaceProvider the frame can use to request interfaces from
-  // the browser. This method may not return nullptr.
-  virtual service_manager::InterfaceProvider* GetInterfaceProvider();
 
   // Returns a BrowserInterfaceBrokerProxy the frame can use to request
   // interfaces from the browser.

@@ -231,8 +231,6 @@ class LocalFrameClientImpl final : public LocalFrameClient {
 
   std::unique_ptr<WebURLLoaderFactory> CreateURLLoaderFactory() override;
 
-  service_manager::InterfaceProvider* GetInterfaceProvider() override;
-
   blink::BrowserInterfaceBrokerProxy& GetBrowserInterfaceBroker() override;
 
   AssociatedInterfaceProvider* GetRemoteNavigationAssociatedInterfaces()

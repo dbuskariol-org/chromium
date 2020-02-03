@@ -76,10 +76,6 @@
 #include "third_party/blink/renderer/platform/wtf/vector.h"
 #include "v8/include/v8.h"
 
-namespace service_manager {
-class InterfaceProvider;
-}  // namespace service_manager
-
 namespace blink {
 namespace mojom {
 enum class WebFeature : int32_t;
@@ -342,10 +338,6 @@ class CORE_EXPORT LocalFrameClient : public FrameClient {
   virtual KURL OverrideFlashEmbedWithHTML(const KURL&) { return KURL(); }
 
   virtual BlameContext* GetFrameBlameContext() { return nullptr; }
-
-  virtual service_manager::InterfaceProvider* GetInterfaceProvider() {
-    return nullptr;
-  }
 
   virtual BrowserInterfaceBrokerProxy& GetBrowserInterfaceBroker() = 0;
 

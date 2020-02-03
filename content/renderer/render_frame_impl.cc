@@ -3952,10 +3952,6 @@ RenderFrameImpl::CreateServiceWorkerProvider() {
   return std::make_unique<WebServiceWorkerProviderImpl>(provider->context());
 }
 
-service_manager::InterfaceProvider* RenderFrameImpl::GetInterfaceProvider() {
-  return &remote_interfaces_;
-}
-
 blink::AssociatedInterfaceProvider*
 RenderFrameImpl::GetRemoteNavigationAssociatedInterfaces() {
   return GetRemoteAssociatedInterfaces();
