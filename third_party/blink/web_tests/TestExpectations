@@ -5145,7 +5145,6 @@ crbug.com/882756 [ Debug ] external/wpt/requestidlecallback/cancel-invoked.html 
 crbug.com/868706 external/wpt/css/css-layout-api/auto-block-size-inflow.https.html [ Pass Failure ]
 
 # Sheriff 2018-07-31
-crbug.com/869364 external/wpt/IndexedDB/parallel-cursors-upgrade.html [ Pass Timeout ]
 crbug.com/869364 http/tests/devtools/console/console-correct-suggestions.js [ Pass Timeout ]
 
 # Sheriff 2018-08-01
