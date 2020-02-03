@@ -886,7 +886,7 @@ void UiControllerAndroid::OnDateTimeRangeEndTimeSlotCleared() {
 }
 
 void UiControllerAndroid::OnKeyValueChanged(const std::string& key,
-                                            const std::string& value) {
+                                            const ValueProto& value) {
   ui_delegate_->SetAdditionalValue(key, value);
 }
 
