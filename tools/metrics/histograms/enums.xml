@@ -55811,9 +55811,13 @@ Called by update_net_trust_anchors.py.-->
     Scheme excluded from request_initiator_site_lock checks. Since ~M80 this
     value can only be recorded during tests.
   </int>
-  <int value="6" label="ExcludedUniversalAccessPlugin">
-    Requests from a renderer processes that embeds an universal access plugin
-    (like Flash).
+  <int value="6" label="ExcludedCorbForPlugin">
+    Requests from a renderer process that embeds a plugin (e.g. Flash) that
+    needs to disable CORB and request_initiator_site_lock enforcement.
+  </int>
+  <int value="7" label="AllowedRequestInitiatorForPlugin">
+    Requests from a renderer process that embeds a plugin (e.g. PDF) that needs
+    to poke small, targeted holes in request_initiator_site_lock enforcement.
   </int>
 </enum>
 
