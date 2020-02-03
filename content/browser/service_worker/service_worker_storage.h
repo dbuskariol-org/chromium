@@ -39,7 +39,6 @@ class SpecialStoragePolicy;
 namespace content {
 
 class ServiceWorkerDiskCache;
-class ServiceWorkerRegistry;
 class ServiceWorkerResponseMetadataWriter;
 class ServiceWorkerResponseReader;
 class ServiceWorkerResponseWriter;
@@ -116,13 +115,11 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const base::FilePath& user_data_directory,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
-      storage::SpecialStoragePolicy* special_storage_policy,
-      ServiceWorkerRegistry* registry);
+      storage::SpecialStoragePolicy* special_storage_policy);
 
   // Used for DeleteAndStartOver. Creates new storage based on |old_storage|.
   static std::unique_ptr<ServiceWorkerStorage> Create(
-      ServiceWorkerStorage* old_storage,
-      ServiceWorkerRegistry* registry);
+      ServiceWorkerStorage* old_storage);
 
   // Reads stored registrations for |client_url| or |scope| or
   // |registration_id|. Returns blink::ServiceWorkerStatusCode::kOk with
@@ -366,8 +363,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const base::FilePath& user_data_directory,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
-      storage::SpecialStoragePolicy* special_storage_policy,
-      ServiceWorkerRegistry* registry);
+      storage::SpecialStoragePolicy* special_storage_policy);
 
   base::FilePath GetDatabasePath();
   base::FilePath GetDiskCachePath();
@@ -548,11 +544,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   bool is_purge_pending_;
   bool has_checked_for_stale_resources_;
   base::OnceClosure purging_complete_callback_for_test_;
-
-  // |registry_| owns this class and must outlive this.
-  // TODO(crbug.com/1039200): Remove this reference once
-  // ServiceWorkerRegistration dependencies are moved to ServiceWorkerRegistry.
-  ServiceWorkerRegistry* registry_;
 
   base::WeakPtrFactory<ServiceWorkerStorage> weak_factory_{this};
 

@@ -22,7 +22,6 @@
 #include "content/browser/service_worker/service_worker_disk_cache.h"
 #include "content/browser/service_worker/service_worker_info.h"
 #include "content/browser/service_worker/service_worker_registration.h"
-#include "content/browser/service_worker/service_worker_registry.h"
 #include "content/common/service_worker/service_worker_utils.h"
 #include "content/public/browser/browser_thread.h"
 #include "net/base/completion_once_callback.h"
@@ -104,21 +103,19 @@ std::unique_ptr<ServiceWorkerStorage> ServiceWorkerStorage::Create(
     const base::FilePath& user_data_directory,
     scoped_refptr<base::SequencedTaskRunner> database_task_runner,
     storage::QuotaManagerProxy* quota_manager_proxy,
-    storage::SpecialStoragePolicy* special_storage_policy,
-    ServiceWorkerRegistry* registry) {
+    storage::SpecialStoragePolicy* special_storage_policy) {
   return base::WrapUnique(new ServiceWorkerStorage(
       user_data_directory, std::move(database_task_runner), quota_manager_proxy,
-      special_storage_policy, registry));
+      special_storage_policy));
 }
 
 // static
 std::unique_ptr<ServiceWorkerStorage> ServiceWorkerStorage::Create(
-    ServiceWorkerStorage* old_storage,
-    ServiceWorkerRegistry* registry) {
+    ServiceWorkerStorage* old_storage) {
   return base::WrapUnique(new ServiceWorkerStorage(
       old_storage->user_data_directory_, old_storage->database_task_runner_,
       old_storage->quota_manager_proxy_.get(),
-      old_storage->special_storage_policy_.get(), registry));
+      old_storage->special_storage_policy_.get()));
 }
 
 void ServiceWorkerStorage::FindRegistrationForClientUrl(
@@ -910,8 +907,7 @@ ServiceWorkerStorage::ServiceWorkerStorage(
     const base::FilePath& user_data_directory,
     scoped_refptr<base::SequencedTaskRunner> database_task_runner,
     storage::QuotaManagerProxy* quota_manager_proxy,
-    storage::SpecialStoragePolicy* special_storage_policy,
-    ServiceWorkerRegistry* registry)
+    storage::SpecialStoragePolicy* special_storage_policy)
     : next_registration_id_(blink::mojom::kInvalidServiceWorkerRegistrationId),
       next_version_id_(blink::mojom::kInvalidServiceWorkerVersionId),
       next_resource_id_(ServiceWorkerConsts::kInvalidServiceWorkerResourceId),
@@ -922,9 +918,7 @@ ServiceWorkerStorage::ServiceWorkerStorage(
       quota_manager_proxy_(quota_manager_proxy),
       special_storage_policy_(special_storage_policy),
       is_purge_pending_(false),
-      has_checked_for_stale_resources_(false),
-      registry_(registry) {
-  DCHECK(registry_);
+      has_checked_for_stale_resources_(false) {
   database_.reset(new ServiceWorkerDatabase(GetDatabasePath()));
 }
 

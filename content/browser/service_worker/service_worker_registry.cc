@@ -55,8 +55,7 @@ ServiceWorkerRegistry::ServiceWorkerRegistry(
       storage_(ServiceWorkerStorage::Create(user_data_directory,
                                             std::move(database_task_runner),
                                             quota_manager_proxy,
-                                            special_storage_policy,
-                                            this)) {
+                                            special_storage_policy)) {
   DCHECK(context_);
 }
 
@@ -64,7 +63,7 @@ ServiceWorkerRegistry::ServiceWorkerRegistry(
     ServiceWorkerContextCore* context,
     ServiceWorkerRegistry* old_registry)
     : context_(context),
-      storage_(ServiceWorkerStorage::Create(old_registry->storage(), this)) {
+      storage_(ServiceWorkerStorage::Create(old_registry->storage())) {
   DCHECK(context_);
 }
 
