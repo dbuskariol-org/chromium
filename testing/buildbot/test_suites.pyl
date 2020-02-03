@@ -3134,16 +3134,16 @@
     },
 
     'skia_renderer_isolated_scripts': {
-      'skia_renderer_swiftshader_blink_web_tests': {
+      'non_skia_renderer_swiftshader_blink_web_tests': {
         # layout test failures are retried 3 times when '--test-list' is not
         # passed, but 0 times when '--test-list' is passed. We want to always
         # retry 3 times, so we explicitly specify it.
         'args': [
           '--num-retries=3',
-          '--additional-driver-flag=--enable-features=UseSkiaRenderer',
-          '--fuzzy-diff',
+          '--additional-driver-flag=--disable-features=UseSkiaRenderer',
           '--skipped=always',
-          '--test-list=../../testing/buildbot/filters/gpu.skiarenderer_vulkan_blink_web_tests.filter',
+          '--fuzzy-diff',
+	  '--test-list=../../testing/buildbot/filters/gpu.skiarenderer_vulkan_blink_web_tests.filter',
         ],
         'isolate_name': 'blink_web_tests',
         'merge': {
