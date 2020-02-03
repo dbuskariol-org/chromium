@@ -2491,6 +2491,8 @@ static_library("arc_test_support") {
   sources = [
     "arc/test/arc_data_removed_waiter.cc",
     "arc/test/arc_data_removed_waiter.h",
+    "arc/test/test_arc_session_manager.cc",
+    "arc/test/test_arc_session_manager.h",
   ]
 
   deps = [
