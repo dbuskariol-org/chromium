@@ -137,6 +137,7 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
     {"confirm", IDS_CONFIRM},
     {"continue", IDS_SETTINGS_CONTINUE},
     {"controlledByExtension", IDS_SETTINGS_CONTROLLED_BY_EXTENSION},
+    {"custom", IDS_SETTINGS_CUSTOM},
     {"delete", IDS_SETTINGS_DELETE},
     {"disable", IDS_DISABLE},
     {"done", IDS_DONE},
@@ -162,6 +163,14 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
     {"notValidWebAddress", IDS_SETTINGS_NOT_VALID_WEB_ADDRESS},
     {"notValidWebAddressForContentType",
      IDS_SETTINGS_NOT_VALID_WEB_ADDRESS_FOR_CONTENT_TYPE},
+
+    // Common font related strings shown in a11y and appearance sections.
+    {"quickBrownFox", IDS_SETTINGS_QUICK_BROWN_FOX},
+    {"verySmall", IDS_SETTINGS_VERY_SMALL_FONT},
+    {"small", IDS_SETTINGS_SMALL_FONT},
+    {"medium", IDS_SETTINGS_MEDIUM_FONT},
+    {"large", IDS_SETTINGS_LARGE_FONT},
+    {"veryLarge", IDS_SETTINGS_VERY_LARGE_FONT},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
@@ -250,14 +259,6 @@ void AddAppearanceStrings(content::WebUIDataSource* html_source,
     {"enterCustomWebAddress", IDS_SETTINGS_ENTER_CUSTOM_WEB_ADDRESS},
     {"homeButtonDisabled", IDS_SETTINGS_HOME_BUTTON_DISABLED},
     {"themes", IDS_SETTINGS_THEMES},
-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-    {"systemTheme", IDS_SETTINGS_SYSTEM_THEME},
-    {"useSystemTheme", IDS_SETTINGS_USE_SYSTEM_THEME},
-    {"classicTheme", IDS_SETTINGS_CLASSIC_THEME},
-    {"useClassicTheme", IDS_SETTINGS_USE_CLASSIC_THEME},
-#else
-    {"resetToDefaultTheme", IDS_SETTINGS_RESET_TO_DEFAULT_THEME},
-#endif
     {"chromeColors", IDS_SETTINGS_CHROME_COLORS},
     {"showHomeButton", IDS_SETTINGS_SHOW_HOME_BUTTON},
     {"showBookmarksBar", IDS_SETTINGS_SHOW_BOOKMARKS_BAR},
@@ -265,8 +266,28 @@ void AddAppearanceStrings(content::WebUIDataSource* html_source,
     {"changeHomePage", IDS_SETTINGS_CHANGE_HOME_PAGE},
     {"themesGalleryUrl", IDS_THEMES_GALLERY_URL},
     {"chooseFromWebStore", IDS_SETTINGS_WEB_STORE},
+    {"pageZoom", IDS_SETTINGS_PAGE_ZOOM_LABEL},
+    {"fontSize", IDS_SETTINGS_FONT_SIZE_LABEL},
+    {"customizeFonts", IDS_SETTINGS_CUSTOMIZE_FONTS},
+    {"fonts", IDS_SETTINGS_FONTS},
+    {"standardFont", IDS_SETTINGS_STANDARD_FONT_LABEL},
+    {"serifFont", IDS_SETTINGS_SERIF_FONT_LABEL},
+    {"sansSerifFont", IDS_SETTINGS_SANS_SERIF_FONT_LABEL},
+    {"fixedWidthFont", IDS_SETTINGS_FIXED_WIDTH_FONT_LABEL},
+    {"minimumFont", IDS_SETTINGS_MINIMUM_FONT_SIZE_LABEL},
+    {"tiny", IDS_SETTINGS_TINY_FONT_SIZE},
+    {"huge", IDS_SETTINGS_HUGE_FONT_SIZE},
+    {"advancedFontSettings", IDS_SETTINGS_ADVANCED_FONT_SETTINGS},
+    {"openAdvancedFontSettings", IDS_SETTINGS_OPEN_ADVANCED_FONT_SETTINGS},
+    {"requiresWebStoreExtension", IDS_SETTINGS_REQUIRES_WEB_STORE_EXTENSION},
 #if defined(OS_LINUX) && !defined(OS_CHROMEOS)
+    {"systemTheme", IDS_SETTINGS_SYSTEM_THEME},
+    {"useSystemTheme", IDS_SETTINGS_USE_SYSTEM_THEME},
+    {"classicTheme", IDS_SETTINGS_CLASSIC_THEME},
+    {"useClassicTheme", IDS_SETTINGS_USE_CLASSIC_THEME},
     {"showWindowDecorations", IDS_SHOW_WINDOW_DECORATIONS},
+#else
+    {"resetToDefaultTheme", IDS_SETTINGS_RESET_TO_DEFAULT_THEME},
 #endif
 #if defined(OS_MACOSX)
     {"tabsToLinks", IDS_SETTINGS_TABS_TO_LINKS_PREF},
@@ -2039,36 +2060,6 @@ void AddSystemStrings(content::WebUIDataSource* html_source) {
 }
 #endif
 
-void AddWebContentStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"webContent", IDS_SETTINGS_WEB_CONTENT},
-      {"pageZoom", IDS_SETTINGS_PAGE_ZOOM_LABEL},
-      {"fontSize", IDS_SETTINGS_FONT_SIZE_LABEL},
-      {"verySmall", IDS_SETTINGS_VERY_SMALL_FONT},
-      {"small", IDS_SETTINGS_SMALL_FONT},
-      {"medium", IDS_SETTINGS_MEDIUM_FONT},
-      {"large", IDS_SETTINGS_LARGE_FONT},
-      {"veryLarge", IDS_SETTINGS_VERY_LARGE_FONT},
-      {"custom", IDS_SETTINGS_CUSTOM},
-      {"customizeFonts", IDS_SETTINGS_CUSTOMIZE_FONTS},
-      {"fonts", IDS_SETTINGS_FONTS},
-      {"standardFont", IDS_SETTINGS_STANDARD_FONT_LABEL},
-      {"serifFont", IDS_SETTINGS_SERIF_FONT_LABEL},
-      {"sansSerifFont", IDS_SETTINGS_SANS_SERIF_FONT_LABEL},
-      {"fixedWidthFont", IDS_SETTINGS_FIXED_WIDTH_FONT_LABEL},
-      {"minimumFont", IDS_SETTINGS_MINIMUM_FONT_SIZE_LABEL},
-      {"tiny", IDS_SETTINGS_TINY_FONT_SIZE},
-      {"huge", IDS_SETTINGS_HUGE_FONT_SIZE},
-      {"loremIpsum", IDS_SETTINGS_LOREM_IPSUM},
-      {"loading", IDS_SETTINGS_LOADING},
-      {"advancedFontSettings", IDS_SETTINGS_ADVANCED_FONT_SETTINGS},
-      {"openAdvancedFontSettings", IDS_SETTINGS_OPEN_ADVANCED_FONT_SETTINGS},
-      {"requiresWebStoreExtension", IDS_SETTINGS_REQUIRES_WEB_STORE_EXTENSION},
-      {"quickBrownFox", IDS_SETTINGS_QUICK_BROWN_FOX},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-}
-
 void AddExtensionsStrings(content::WebUIDataSource* html_source) {
   html_source->AddLocalizedString("extensionsPageTitle",
                                   IDS_SETTINGS_EXTENSIONS_CHECKBOX_LABEL);
@@ -2212,7 +2203,6 @@ void AddBrowserLocalizedStrings(content::WebUIDataSource* html_source,
   AddSearchInSettingsStrings(html_source);
   AddSearchStrings(html_source, profile);
   AddSiteSettingsStrings(html_source, profile);
-  AddWebContentStrings(html_source);
 
 #if defined(OS_CHROMEOS)
   AddChromeOSUserStrings(html_source, profile);

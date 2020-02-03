@@ -4667,9 +4667,6 @@
   </if>
 
   <!-- Web Content -->
-  <message name="IDS_SETTINGS_WEB_CONTENT" desc="Title for the web content settings.">
-    Web content
-  </message>
   <message name="IDS_SETTINGS_PAGE_ZOOM_LABEL" desc="Label for the page zoom dropdown menu in settings.">
     Page zoom
   </message>
@@ -4720,12 +4717,6 @@
   </message>
   <message name="IDS_SETTINGS_HUGE_FONT_SIZE" desc="The large end of the minimum font size slider in settings.">
     Huge
-  </message>
-  <message name="IDS_SETTINGS_LOREM_IPSUM" desc="Gibberish example text in settings.">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  </message>
-  <message name="IDS_SETTINGS_LOADING" desc="Placeholder text while waiting for font settings to appear, shown only until font settings have loaded.">
-    Loading...
   </message>
   <message name="IDS_SETTINGS_ADVANCED_FONT_SETTINGS" desc="Label for advanced font settings.">
     Advanced font settings

@@ -87,6 +87,7 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
       {"close", IDS_CLOSE},
       {"confirm", IDS_CONFIRM},
       {"continue", IDS_SETTINGS_CONTINUE},
+      {"custom", IDS_SETTINGS_CUSTOM},
       {"delete", IDS_SETTINGS_DELETE},
       {"deviceOff", IDS_SETTINGS_DEVICE_OFF},
       {"deviceOn", IDS_SETTINGS_DEVICE_ON},
@@ -109,6 +110,14 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
       {"notValidWebAddress", IDS_SETTINGS_NOT_VALID_WEB_ADDRESS},
       {"notValidWebAddressForContentType",
        IDS_SETTINGS_NOT_VALID_WEB_ADDRESS_FOR_CONTENT_TYPE},
+
+      // Common font related strings shown in a11y and appearance sections.
+      {"quickBrownFox", IDS_SETTINGS_QUICK_BROWN_FOX},
+      {"verySmall", IDS_SETTINGS_VERY_SMALL_FONT},
+      {"small", IDS_SETTINGS_SMALL_FONT},
+      {"medium", IDS_SETTINGS_MEDIUM_FONT},
+      {"large", IDS_SETTINGS_LARGE_FONT},
+      {"veryLarge", IDS_SETTINGS_VERY_LARGE_FONT},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
