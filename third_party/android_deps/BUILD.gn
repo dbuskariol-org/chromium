@@ -1102,6 +1102,13 @@ java_prebuilt("com_google_auto_service_auto_service_annotations_java") {
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
+java_prebuilt("com_google_code_gson_gson_java") {
+  jar_path = "libs/com_google_code_gson_gson/gson-2.8.0.jar"
+  output_name = "com_google_code_gson_gson"
+  enable_bytecode_rewriter = false
+}
+
+# This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
 java_prebuilt("com_google_dagger_dagger_java") {
   jar_path = "libs/com_google_dagger_dagger/dagger-2.17.jar"
   output_name = "com_google_dagger_dagger"
@@ -1806,8 +1813,8 @@ java_prebuilt("com_android_tools_build_jetifier_jetifier_core_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   deps = [
+    ":com_google_code_gson_gson_java",
     ":org_jetbrains_kotlin_kotlin_stdlib_java",
-    "//third_party/gson:gson_java",
   ]
   skip_jetify = true
 }

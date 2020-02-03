@@ -400,7 +400,6 @@ check_targets = [
   "//third_party/google_toolbox_for_mac/*",
   "//third_party/google-truth/*",
   "//third_party/gradle_wrapper/*",
-  "//third_party/gson/*",
   "//third_party/guava/*",
   "//third_party/gvr-android-keyboard/*",
   "//third_party/gvr-android-sdk/*",

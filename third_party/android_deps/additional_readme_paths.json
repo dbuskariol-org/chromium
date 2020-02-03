@@ -127,6 +127,7 @@
     "libs/com_google_auto_service_auto_service_annotations",
     "libs/com_google_code_findbugs_jFormatString",
     "libs/com_google_code_findbugs_jsr305",
+    "libs/com_google_code_gson_gson",
     "libs/com_google_dagger_dagger",
     "libs/com_google_dagger_dagger_compiler",
     "libs/com_google_dagger_dagger_producers",

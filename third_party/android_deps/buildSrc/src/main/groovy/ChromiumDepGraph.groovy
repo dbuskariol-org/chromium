@@ -39,6 +39,10 @@ class ChromiumDepGraph {
             licenseName: "Apache 2.0"),
         'com_google_code_findbugs_jFormatString': new PropertyOverride(
             licenseUrl: "https://raw.githubusercontent.com/spotbugs/spotbugs/master/spotbugs/licenses/LICENSE.txt"),
+        'com_google_code_gson_gson': new PropertyOverride(
+            url: "https://github.com/google/gson",
+            licenseUrl: "https://raw.githubusercontent.com/google/gson/master/LICENSE",
+            licenseName: "Apache 2.0"),
         'com_google_errorprone_error_prone_annotation': new PropertyOverride(
             url: "https://errorprone.info/",
             licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0.txt"),

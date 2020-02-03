@@ -35,7 +35,6 @@ class BuildConfigGenerator extends DefaultTask {
     // Some libraries are hosted in Chromium's //third_party directory. This is a mapping between
     // them so they can be used instead of android_deps pulling in its own copy.
     private static final def EXISTING_LIBS = [
-        'com_google_code_gson_gson': '//third_party/gson:gson_java',
         'junit_junit': '//third_party/junit:junit',
         'org_hamcrest_hamcrest_core': '//third_party/hamcrest:hamcrest_core_java',
     ]
