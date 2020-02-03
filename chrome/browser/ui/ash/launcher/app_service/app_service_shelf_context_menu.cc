@@ -83,6 +83,15 @@ AppServiceShelfContextMenu::AppServiceShelfContextMenu(
       apps::AppServiceProxyFactory::GetForProfile(controller->profile());
   DCHECK(proxy);
 
+  if (base::StartsWith(item->id.app_id, crostini::kCrostiniAppIdPrefix,
+                       base::CompareCase::SENSITIVE)) {
+    // For Crostini app_id with the prefix "crostini:", set app_type as Unknown
+    // to skip the ArcAppShelfId valid. App type can't be set as Crostini,
+    // because the pin item should not be added for it.
+    app_type_ = apps::mojom::AppType::kUnknown;
+    return;
+  }
+
   // Remove the ARC shelf group Prefix.
   const arc::ArcAppShelfId arc_shelf_id =
       arc::ArcAppShelfId::FromString(item->id.app_id);
