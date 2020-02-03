@@ -44,10 +44,10 @@ DOMWindow::~DOMWindow() {
   DCHECK(!frame_);
 }
 
-v8::Local<v8::Object> DOMWindow::Wrap(v8::Isolate* isolate,
-                                      v8::Local<v8::Object> creation_context) {
+v8::Local<v8::Value> DOMWindow::Wrap(v8::Isolate* isolate,
+                                     v8::Local<v8::Object> creation_context) {
   NOTREACHED();
-  return v8::Local<v8::Object>();
+  return v8::Local<v8::Value>();
 }
 
 v8::Local<v8::Object> DOMWindow::AssociateWithWrapper(
