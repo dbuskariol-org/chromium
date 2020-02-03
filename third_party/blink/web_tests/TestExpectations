@@ -6434,10 +6434,7 @@ crbug.com/1041851 [ Mac ] external/wpt/bluetooth/idl/idlharness.tentative.https.
 crbug.com/1041851 [ Win10 ] external/wpt/bluetooth/idl/idlharness.tentative.https.window.html [ Pass Timeout ]
 crbug.com/1045346 external/wpt/offscreen-canvas/fill-and-stroke-styles/2d.pattern.basic.nocontext.worker.html [ Crash Pass Timeout ]
 
-# COOP window name issue.
-crbug.com/1018655 external/wpt/html/cross-origin-opener-policy/blob-popup.https.html [ Failure ]
-
-# COOP random timeout failure.
+# COOP timeout failure.
 crbug.com/1046698 external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
 
 # Sheriff 2020-01-29
