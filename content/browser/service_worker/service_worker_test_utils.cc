@@ -430,6 +430,21 @@ ServiceWorkerDatabase::ResourceRecord WriteToDiskCacheAsync(
       std::move(callback));
 }
 
+std::unique_ptr<ServiceWorkerResponseWriter> CreateNewResponseWriterSync(
+    ServiceWorkerStorage* storage) {
+  base::RunLoop run_loop;
+  std::unique_ptr<ServiceWorkerResponseWriter> writer;
+  storage->CreateNewResponseWriter(base::BindLambdaForTesting(
+      [&](int64_t /*resource_id*/,
+          std::unique_ptr<ServiceWorkerResponseWriter> new_writer) {
+        DCHECK(new_writer);
+        writer = std::move(new_writer);
+        run_loop.Quit();
+      }));
+  run_loop.Run();
+  return writer;
+}
+
 MockServiceWorkerResponseReader::MockServiceWorkerResponseReader()
     : ServiceWorkerResponseReader(/* resource_id=*/0, /*disk_cache=*/nullptr) {}
 

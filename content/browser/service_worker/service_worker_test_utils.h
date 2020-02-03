@@ -172,6 +172,11 @@ ServiceWorkerDatabase::ResourceRecord WriteToDiskCacheAsync(
     const std::string& meta_data,
     base::OnceClosure callback);
 
+// Calls ServiceWorkerStorage::CreateNewResponseWriter() and returns the
+// created writer synchronously.
+std::unique_ptr<ServiceWorkerResponseWriter> CreateNewResponseWriterSync(
+    ServiceWorkerStorage* storage);
+
 // A test implementation of ServiceWorkerResponseReader.
 //
 // This class exposes the ability to expect reads (see ExpectRead*() below).
