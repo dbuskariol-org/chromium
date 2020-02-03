@@ -188,6 +188,7 @@ public final class ChromePreferenceKeys {
 
     public static final KeyPrefix CUSTOM_TABS_DEX_LAST_UPDATE_TIME_PREF_PREFIX =
             new KeyPrefix("pref_local_custom_tabs_module_dex_last_update_time_*");
+    public static final String CUSTOM_TABS_LAST_URL = "pref_last_custom_tab_url";
 
     /**
      * Key used to save the time in milliseconds since epoch that the first run experience or second
@@ -787,6 +788,7 @@ public final class ChromePreferenceKeys {
                 CRASH_UPLOAD_SUCCESS_GPU,
                 CRASH_UPLOAD_SUCCESS_OTHER,
                 CRASH_UPLOAD_SUCCESS_RENDERER,
+                CUSTOM_TABS_LAST_URL,
                 DATA_REDUCTION_DISPLAYED_FRE_OR_SECOND_PROMO_TIME_MS,
                 DATA_REDUCTION_DISPLAYED_FRE_OR_SECOND_PROMO_VERSION,
                 DATA_REDUCTION_DISPLAYED_FRE_OR_SECOND_RUN_PROMO,
