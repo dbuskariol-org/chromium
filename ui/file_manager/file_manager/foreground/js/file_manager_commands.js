@@ -1025,9 +1025,10 @@ CommandHandler.COMMANDS_['delete'] = new class extends Command {
   }
 
   /**
-   * Checks if the entries are deletable.
+   * Returns true if all entries can be deleted.
    * @param {!Array<!Entry>} entries
    * @param {!CommandHandlerDeps} fileManager
+   * @return {boolean}
    */
   canDeleteEntries_(entries, fileManager) {
     return entries.length > 0 &&
