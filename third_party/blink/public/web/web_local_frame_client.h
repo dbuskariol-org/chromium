@@ -265,13 +265,6 @@ class BLINK_EXPORT WebLocalFrameClient {
       const ParsedFeaturePolicy& feature_policy_header,
       const DocumentPolicy::FeatureState& document_policy_header) {}
 
-  // Called when a new Content Security Policy is added to the frame's
-  // document.  This can be triggered by handling of HTTP headers, handling
-  // of <meta> element, or by inheriting CSP from the parent (in case of
-  // about:blank).
-  virtual void DidAddContentSecurityPolicies(
-      const WebVector<WebContentSecurityPolicy>& policies) {}
-
   // Some frame owner properties have changed for a child frame of this frame.
   // Frame owner properties currently include: scrolling, marginwidth and
   // marginheight.

@@ -1644,7 +1644,7 @@ void DocumentLoader::CreateParserPostCommit() {
     // Security Policies that have accumulated so far for the new navigation.
     frame_->GetSecurityContext()
         ->GetContentSecurityPolicy()
-        ->ReportAccumulatedHeaders(&GetLocalFrameClient());
+        ->ReportAccumulatedHeaders(frame_);
   }
 
   // Initializing origin trials might force window proxy initialization,
