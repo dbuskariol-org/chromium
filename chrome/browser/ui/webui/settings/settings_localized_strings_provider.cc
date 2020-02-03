@@ -61,7 +61,6 @@
 #include "components/sync/driver/sync_service.h"
 #include "components/sync/driver/sync_service_utils.h"
 #include "components/sync/driver/sync_user_settings.h"
-#include "components/version_ui/version_ui_constants.h"
 #include "components/zoom/page_zoom_constants.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_ui_data_source.h"
@@ -213,103 +212,26 @@ void AddA11yStrings(content::WebUIDataSource* html_source) {
 }
 
 void AddAboutStrings(content::WebUIDataSource* html_source) {
+  // Top level About Page strings.
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
     {"aboutProductLogoAlt", IDS_SHORT_PRODUCT_LOGO_ALT_TEXT},
-
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
     {"aboutReportAnIssue", IDS_SETTINGS_ABOUT_PAGE_REPORT_AN_ISSUE},
 #endif
-
     {"aboutRelaunch", IDS_SETTINGS_ABOUT_PAGE_RELAUNCH},
     {"aboutUpgradeCheckStarted", IDS_SETTINGS_ABOUT_UPGRADE_CHECK_STARTED},
     {"aboutUpgradeRelaunch", IDS_SETTINGS_UPGRADE_SUCCESSFUL_RELAUNCH},
     {"aboutUpgradeUpdating", IDS_SETTINGS_UPGRADE_UPDATING},
     {"aboutUpgradeUpdatingPercent", IDS_SETTINGS_UPGRADE_UPDATING_PERCENT},
-
+    {"aboutGetHelpUsingChrome", IDS_SETTINGS_GET_HELP_USING_CHROME},
+    {"aboutPageTitle", IDS_SETTINGS_ABOUT_PROGRAM},
+    {"aboutProductTitle", IDS_PRODUCT_NAME},
 #if defined(OS_CHROMEOS)
-    {"aboutBuildDetailsTitle", IDS_OS_SETTINGS_ABOUT_PAGE_BUILD_DETAILS},
-    {"aboutChannelBeta", IDS_SETTINGS_ABOUT_PAGE_CURRENT_CHANNEL_BETA},
-    {"aboutChannelCanary", IDS_SETTINGS_ABOUT_PAGE_CURRENT_CHANNEL_CANARY},
-    {"aboutChannelDev", IDS_SETTINGS_ABOUT_PAGE_CURRENT_CHANNEL_DEV},
-    {"aboutChannelLabel", IDS_SETTINGS_ABOUT_PAGE_CHANNEL},
-    {"aboutChannelStable", IDS_SETTINGS_ABOUT_PAGE_CURRENT_CHANNEL_STABLE},
-    {"aboutCheckForUpdates", IDS_SETTINGS_ABOUT_PAGE_CHECK_FOR_UPDATES},
-    {"aboutCurrentlyOnChannel", IDS_SETTINGS_ABOUT_PAGE_CURRENT_CHANNEL},
-    {"aboutDetailedBuildInfo", IDS_SETTINGS_ABOUT_PAGE_DETAILED_BUILD_INFO},
-    {"aboutEndOfLifeTitle", IDS_SETTINGS_ABOUT_PAGE_END_OF_LIFE_TITLE},
-    {"aboutRelaunchAndPowerwash",
-     IDS_SETTINGS_ABOUT_PAGE_RELAUNCH_AND_POWERWASH},
-    {"aboutRollbackInProgress", IDS_SETTINGS_UPGRADE_ROLLBACK_IN_PROGRESS},
-    {"aboutRollbackSuccess", IDS_SETTINGS_UPGRADE_ROLLBACK_SUCCESS},
     {"aboutUpdateOsSettingsLink",
      IDS_SETTINGS_ABOUT_SEE_OS_SETTINGS_FOR_UPDATE_MESSAGE},
-    {"aboutUpgradeUpdatingChannelSwitch",
-     IDS_SETTINGS_UPGRADE_UPDATING_CHANNEL_SWITCH},
-    {"aboutUpgradeSuccessChannelSwitch",
-     IDS_SETTINGS_UPGRADE_SUCCESSFUL_CHANNEL_SWITCH},
-    {"aboutTPMFirmwareUpdateTitle",
-     IDS_SETTINGS_ABOUT_TPM_FIRMWARE_UPDATE_TITLE},
-    {"aboutTPMFirmwareUpdateDescription",
-     IDS_SETTINGS_ABOUT_TPM_FIRMWARE_UPDATE_DESCRIPTION},
-
-    // About page, channel switcher dialog.
-    {"aboutChangeChannel", IDS_SETTINGS_ABOUT_PAGE_CHANGE_CHANNEL},
-    {"aboutChangeChannelAndPowerwash",
-     IDS_SETTINGS_ABOUT_PAGE_CHANGE_CHANNEL_AND_POWERWASH},
-    {"aboutDelayedWarningMessage",
-     IDS_SETTINGS_ABOUT_PAGE_DELAYED_WARNING_MESSAGE},
-    {"aboutDelayedWarningTitle", IDS_SETTINGS_ABOUT_PAGE_DELAYED_WARNING_TITLE},
-    {"aboutPowerwashWarningMessage",
-     IDS_SETTINGS_ABOUT_PAGE_POWERWASH_WARNING_MESSAGE},
-    {"aboutPowerwashWarningTitle",
-     IDS_SETTINGS_ABOUT_PAGE_POWERWASH_WARNING_TITLE},
-    {"aboutUnstableWarningMessage",
-     IDS_SETTINGS_ABOUT_PAGE_UNSTABLE_WARNING_MESSAGE},
-    {"aboutUnstableWarningTitle",
-     IDS_SETTINGS_ABOUT_PAGE_UNSTABLE_WARNING_TITLE},
-    {"aboutChannelDialogBeta", IDS_SETTINGS_ABOUT_PAGE_DIALOG_CHANNEL_BETA},
-    {"aboutChannelDialogDev", IDS_SETTINGS_ABOUT_PAGE_DIALOG_CHANNEL_DEV},
-    {"aboutChannelDialogStable", IDS_SETTINGS_ABOUT_PAGE_DIALOG_CHANNEL_STABLE},
-
-    // About page, update warning dialog.
-    {"aboutUpdateWarningMessage",
-     IDS_SETTINGS_ABOUT_PAGE_UPDATE_WARNING_MESSAGE},
-    {"aboutUpdateWarningTitle", IDS_SETTINGS_ABOUT_PAGE_UPDATE_WARNING_TITLE},
-
-    // Detailed build information
-    {version_ui::kApplicationLabel, IDS_PRODUCT_NAME},
-    {version_ui::kPlatform, IDS_PLATFORM_LABEL},
-    {version_ui::kFirmwareVersion, IDS_VERSION_UI_FIRMWARE_VERSION},
-    {version_ui::kARC, IDS_ARC_LABEL},
-    {"aboutBuildDetailsCopyTooltipLabel",
-     IDS_OS_SETTINGS_ABOUT_PAGE_BUILD_DETAILS_COPY_TOOLTIP_LABEL},
-    {"aboutIsArcStatusTitle", IDS_OS_SETTINGS_ABOUT_ARC_STATUS_TITLE},
-    {"aboutIsDeveloperModeTitle", IDS_OS_SETTINGS_ABOUT_DEVELOPER_MODE},
-    {"isEnterpriseManagedTitle",
-     IDS_OS_SETTINGS_ABOUT_PAGE_ENTERPRISE_ENNROLLED_TITLE},
-#endif  // defined(OS_CHROMEOS)
+#endif
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-#if defined(OS_CHROMEOS)
-  html_source->AddLocalizedString("aboutOsPageTitle", IDS_SETTINGS_ABOUT_OS);
-  html_source->AddLocalizedString("aboutGetHelpUsingChromeOs",
-                                  IDS_SETTINGS_GET_HELP_USING_CHROME_OS);
-  html_source->AddLocalizedString("aboutOsProductTitle", IDS_PRODUCT_OS_NAME);
-  html_source->AddLocalizedString("aboutReleaseNotesOffline",
-                                  IDS_SETTINGS_ABOUT_PAGE_RELEASE_NOTES);
-  html_source->AddLocalizedString("aboutShowReleaseNotes",
-                                  IDS_SETTINGS_ABOUT_PAGE_SHOW_RELEASE_NOTES);
-  html_source->AddLocalizedString("aboutGetHelpUsingChrome",
-                                  IDS_SETTINGS_GET_HELP_USING_CHROME);
-  html_source->AddLocalizedString("aboutPageTitle", IDS_SETTINGS_ABOUT_PROGRAM);
-  html_source->AddLocalizedString("aboutProductTitle", IDS_PRODUCT_NAME);
-#else
-  html_source->AddLocalizedString("aboutGetHelpUsingChrome",
-                                  IDS_SETTINGS_GET_HELP_USING_CHROME);
-  html_source->AddLocalizedString("aboutPageTitle", IDS_SETTINGS_ABOUT_PROGRAM);
-  html_source->AddLocalizedString("aboutProductTitle", IDS_PRODUCT_NAME);
-#endif
 
   html_source->AddString(
       "aboutUpgradeUpToDate",
@@ -317,11 +239,6 @@ void AddAboutStrings(content::WebUIDataSource* html_source) {
       ui::SubstituteChromeOSDeviceType(IDS_SETTINGS_UPGRADE_UP_TO_DATE));
 #else
       l10n_util::GetStringUTF16(IDS_SETTINGS_UPGRADE_UP_TO_DATE));
-#endif
-
-#if defined(OS_CHROMEOS)
-  html_source->AddString("aboutTPMFirmwareUpdateLearnMoreURL",
-                         chrome::kTPMFirmwareUpdateLearnMoreURL);
 #endif
 }
 
