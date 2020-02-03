@@ -11,14 +11,18 @@
 #include "ash/public/cpp/system_tray.h"
 #include "base/bind.h"
 #include "base/time/default_clock.h"
+#include "chrome/browser/browser_process.h"
+#include "chrome/browser/browser_process_platform_part.h"
 #include "chrome/browser/chromeos/login/error_screens_histogram_helper.h"
 #include "chrome/browser/chromeos/login/helper.h"
 #include "chrome/browser/chromeos/login/ui/login_display.h"
 #include "chrome/browser/chromeos/login/ui/login_display_host.h"
 #include "chrome/browser/chromeos/login/wizard_controller.h"
+#include "chrome/browser/chromeos/policy/browser_policy_connector_chromeos.h"
 #include "chrome/browser/ui/webui/chromeos/login/update_required_screen_handler.h"
 #include "chromeos/network/network_handler.h"
 #include "chromeos/network/network_state_handler.h"
+#include "ui/chromeos/devicetype_utils.h"
 
 namespace {
 constexpr char kUserActionSelectNetworkButtonClicked[] = "select-network";
@@ -65,6 +69,11 @@ void UpdateRequiredScreen::Show() {
   RefreshNetworkState();
   SubscribeNetworkNotification();
 
+  policy::BrowserPolicyConnectorChromeOS* connector =
+      g_browser_process->platform_part()->browser_policy_connector_chromeos();
+  view_->SetEnterpriseAndDeviceName(connector->GetEnterpriseDisplayDomain(),
+                                    ui::GetChromeOSDeviceName());
+
   is_shown_ = true;
 
   if (first_time_shown_) {
@@ -85,7 +94,7 @@ void UpdateRequiredScreen::OnGetEolInfo(
   if (!info.eol_date.is_null() && info.eol_date <= clock_->Now()) {
     EnsureScreenIsShown();
     if (view_)
-      view_->SetUIState(UpdateRequiredView::EOL);
+      view_->SetUIState(UpdateRequiredView::EOL_REACHED);
   }
 }
 

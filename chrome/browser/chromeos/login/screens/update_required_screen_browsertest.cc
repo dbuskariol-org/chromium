@@ -135,7 +135,7 @@ IN_PROC_BROWSER_TEST_F(UpdateRequiredScreenTest, TestEolNotReached) {
   test::OobeJS().ExpectVisible("update-required-card");
   test::OobeJS().ExpectHiddenPath({"update-required-card", "eol-dialog"});
   test::OobeJS().ExpectVisiblePath(
-      {"update-required-card", "update-required-error-dialog"});
+      {"update-required-card", "update-required-dialog"});
 }
 
 }  // namespace chromeos
