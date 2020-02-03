@@ -3560,6 +3560,10 @@ test("unit_tests") {
       "../browser/ui/webui/favicon_source_unittest.cc",
       "../browser/ui/webui/ntp/cookie_controls_handler_unittest.cc",
       "../browser/ui/webui/signin/sync_confirmation_handler_unittest.cc",
+      "../browser/upgrade_detector/build_state_unittest.cc",
+      "../browser/upgrade_detector/get_installed_version_win_unittest.cc",
+      "../browser/upgrade_detector/mock_build_state_observer.cc",
+      "../browser/upgrade_detector/mock_build_state_observer.h",
       "../browser/webauthn/authenticator_request_scheduler_unittest.cc",
       "../browser/webauthn/chrome_authenticator_request_delegate_unittest.cc",
       "../test/pixel/browser_skia_gold_pixel_diff_unittest.cc",
@@ -4834,6 +4838,7 @@ test("unit_tests") {
     sources += [
       "../browser/shell_integration_linux_unittest.cc",
       "../browser/ui/input_method/input_method_engine_unittest.cc",
+      "../browser/upgrade_detector/get_installed_version_linux_unittest.cc",
     ]
   }
   if (use_gtk) {
@@ -5212,12 +5217,15 @@ test("unit_tests") {
       "../browser/ui/views/sharing/sharing_dialog_view_unittest.cc",
       "../browser/ui/webui/signin/signin_create_profile_handler_unittest.cc",
       "../browser/ui/webui/signin/signin_error_handler_unittest.cc",
+      "../browser/upgrade_detector/installed_version_poller_unittest.cc",
       "../browser/upgrade_detector/upgrade_detector_impl_unittest.cc",
     ]
   }
   if (is_chromeos) {
-    sources +=
-        [ "../browser/upgrade_detector/upgrade_detector_chromeos_unittest.cc" ]
+    sources += [
+      "../browser/upgrade_detector/installed_version_updater_chromeos_unittest.cc",
+      "../browser/upgrade_detector/upgrade_detector_chromeos_unittest.cc",
+    ]
   }
   if (toolkit_views) {
     deps += [
