@@ -36464,6 +36464,9 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
 </enum>
 
 <enum name="LoadLibraryStatus">
+  <obsolete>
+    Removed 2020-02 as part of crbug.com/1021156.
+  </obsolete>
   <int value="0"
       label="Failed to load, no fixed address, on retry, child process"/>
   <int value="1"
