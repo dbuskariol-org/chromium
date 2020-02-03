@@ -2873,7 +2873,12 @@ group("ct_telemetry_perf_tests_without_chrome") {
   testonly = true
   deps = [ "//tools/perf/:perf_without_chrome" ]
 
-  data = [ "//tools/perf/contrib/cluster_telemetry/" ]
+  data = [
+    # crbug.com/1048153
+    "//testing/scripts/run_rendering_benchmark_with_gated_performance.py",
+
+    "//tools/perf/contrib/cluster_telemetry/",
+  ]
 
   data_deps = [
     "//components/subresource_filter/tools:index_ruleset",
