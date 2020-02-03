@@ -76,6 +76,7 @@ android_library("java") {
     "//components/find_in_page/android:java",
     "//components/metrics:metrics_java",
     "//components/minidump_uploader:minidump_uploader_java",
+    "//components/security_interstitials/content/android:java",
     "//components/spellcheck/browser/android:java",
     "//components/version_info/android:version_constants_java",
     "//content/public/android:content_java",

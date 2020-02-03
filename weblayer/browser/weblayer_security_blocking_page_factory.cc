@@ -138,8 +138,20 @@ WebLayerSecurityBlockingPageFactory::CreateLegacyTLSBlockingPage(
     const GURL& request_url,
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
     const net::SSLInfo& ssl_info) {
-  // TODO (crbug.com/1030692): Implement.
-  return nullptr;
+  security_interstitials::MetricsHelper::ReportDetails report_details;
+  report_details.metric_prefix = "legacy_tls";
+  auto metrics_helper = std::make_unique<security_interstitials::MetricsHelper>(
+      request_url, report_details, /*history_service=*/nullptr);
+
+  auto controller_client = std::make_unique<SSLErrorControllerClient>(
+      web_contents, cert_error, ssl_info, request_url,
+      std::move(metrics_helper));
+
+  auto interstitial_page = std::make_unique<LegacyTLSBlockingPage>(
+      web_contents, cert_error, request_url, std::move(ssl_cert_reporter),
+      ssl_info, std::move(controller_client));
+
+  return interstitial_page;
 }
 
 std::unique_ptr<MITMSoftwareBlockingPage>
@@ -150,8 +162,21 @@ WebLayerSecurityBlockingPageFactory::CreateMITMSoftwareBlockingPage(
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
     const net::SSLInfo& ssl_info,
     const std::string& mitm_software_name) {
-  // TODO (crbug.com/1030692): Implement.
-  return nullptr;
+  security_interstitials::MetricsHelper::ReportDetails report_details;
+  report_details.metric_prefix = "mitm_software";
+  auto metrics_helper = std::make_unique<security_interstitials::MetricsHelper>(
+      request_url, report_details, /*history_service=*/nullptr);
+
+  auto controller_client = std::make_unique<SSLErrorControllerClient>(
+      web_contents, cert_error, ssl_info, request_url,
+      std::move(metrics_helper));
+
+  auto interstitial_page = std::make_unique<MITMSoftwareBlockingPage>(
+      web_contents, cert_error, request_url, std::move(ssl_cert_reporter),
+      ssl_info, mitm_software_name, /*is_enterprise_managed=*/false,
+      std::move(controller_client));
+
+  return interstitial_page;
 }
 
 std::unique_ptr<BlockedInterceptionBlockingPage>
@@ -161,8 +186,20 @@ WebLayerSecurityBlockingPageFactory::CreateBlockedInterceptionBlockingPage(
     const GURL& request_url,
     std::unique_ptr<SSLCertReporter> ssl_cert_reporter,
     const net::SSLInfo& ssl_info) {
-  // TODO (crbug.com/1030692): Implement.
-  return nullptr;
+  security_interstitials::MetricsHelper::ReportDetails report_details;
+  report_details.metric_prefix = "blocked_interception";
+  auto metrics_helper = std::make_unique<security_interstitials::MetricsHelper>(
+      request_url, report_details, /*history_service=*/nullptr);
+
+  auto controller_client = std::make_unique<SSLErrorControllerClient>(
+      web_contents, cert_error, ssl_info, request_url,
+      std::move(metrics_helper));
+
+  auto interstitial_page = std::make_unique<BlockedInterceptionBlockingPage>(
+      web_contents, cert_error, request_url, std::move(ssl_cert_reporter),
+      ssl_info, std::move(controller_client));
+
+  return interstitial_page;
 }
 
 #if defined(OS_ANDROID)
