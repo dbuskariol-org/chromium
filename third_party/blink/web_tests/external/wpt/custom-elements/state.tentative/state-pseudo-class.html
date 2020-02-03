@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <style>
 #state-and-part::part(inner) {
   opacity: 0;
@@ -21,7 +21,7 @@ class TestElement extends HTMLElement {
     this._internals = this.attachInternals();
   }
 
-  get internals() {
+  get i() {
     return this._internals;
   }
 }
@@ -44,7 +44,7 @@ class ContainerElement extends HTMLElement {
 <test-element part="inner"></test-element>`;
   }
 
-  get internals() {
+  get i() {
     return this._internals;
   }
   get innerElement() {
@@ -72,7 +72,7 @@ test(() => {
 
 test(() => {
   let element = new TestElement();
-  let states = element.internals.states;
+  let states = element.i.states;
 
   assert_false(element.matches(':state(foo)'));
   assert_true(element.matches(':not(:state(foo))'));
@@ -90,7 +90,7 @@ test(() => {
   element.tabIndex = 0;
   document.body.appendChild(element);
   element.focus();
-  let states = element.internals.states;
+  let states = element.i.states;
 
   states.value = 'foo';
   assert_true(element.matches(':focus:state(foo)'));
@@ -102,7 +102,7 @@ test(() => {
   outer.id = 'state-and-part';
   document.body.appendChild(outer);
   let inner = outer.innerElement;
-  let innerStates = inner.internals.states;
+  let innerStates = inner.i.states;
 
   innerStates.add('innerFoo');
   assert_equals(getComputedStyle(inner).opacity, '0.5',
@@ -112,7 +112,7 @@ test(() => {
       ':state() matching should be case-sensitive');
   innerStates.remove('innerfoo');
 
-  outer.internals.states.add('outerFoo');
+  outer.i.states.add('outerFoo');
   assert_equals(getComputedStyle(inner).opacity, '0.25',
       ':state() followed by ::part()');
 }, ':state() and ::part()');
@@ -122,7 +122,7 @@ test(() => {
   document.body.appendChild(outer);
 
   assert_equals(getComputedStyle(outer).borderStyle, 'solid');
-  outer.internals.states.toggle('dotted');
+  outer.i.states.toggle('dotted');
   assert_equals(getComputedStyle(outer).borderStyle, 'dotted');
 }, ':state() and :host()');
 </script>
