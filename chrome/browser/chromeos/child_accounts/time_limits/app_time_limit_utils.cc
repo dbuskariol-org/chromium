@@ -15,5 +15,14 @@ AppId GetChromeAppId() {
   return AppId(apps::mojom::AppType::kExtension, extension_misc::kChromeAppId);
 }
 
+// Returns true if the application shares chrome's time limit.
+bool ContributesToWebTimeLimit(const AppId& app_id, AppState state) {
+  if (state == AppState::kAlwaysAvailable)
+    return false;
+
+  return app_id.app_type() == apps::mojom::AppType::kWeb ||
+         app_id == GetChromeAppId();
+}
+
 }  // namespace app_time
 }  // namespace chromeos

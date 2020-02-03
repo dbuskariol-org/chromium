@@ -9,8 +9,12 @@ namespace chromeos {
 namespace app_time {
 
 class AppId;
+enum class AppState;
 
 AppId GetChromeAppId();
+
+// Returns true if the application shares chrome's time limit.
+bool ContributesToWebTimeLimit(const AppId& app_id, AppState app_state);
 
 }  // namespace app_time
 }  // namespace chromeos

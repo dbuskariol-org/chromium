@@ -148,6 +148,10 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   // Checks the limit and shows notification if needed.
   void CheckTimeLimitForApp(const AppId& app_id);
 
+  base::TimeDelta GetWebActiveRunningTime() const;
+
+  void WebTimeLimitReached(base::Time timestamp);
+
   // Owned by AppTimeController.
   AppServiceWrapper* const app_service_wrapper_;
 

@@ -375,12 +375,10 @@ void AppActivityRegistry::SetAppActive(const AppId& app_id,
   DCHECK(base::Contains(activity_registry_, app_id));
   AppDetails& app_details = activity_registry_[app_id];
   DCHECK(!app_details.activity.is_active());
-  app_details.activity.SetAppActive(timestamp);
+  if (ContributesToWebTimeLimit(app_id, GetAppState(app_id)))
+    app_details.activity.set_running_active_time(GetWebActiveRunningTime());
 
-  // For web apps, chrome app will be set active, and it will have a timer
-  // set.
-  if (app_id.app_type() == apps::mojom::AppType::kWeb)
-    return;
+  app_details.activity.SetAppActive(timestamp);
 
   ScheduleTimeLimitCheckForApp(app_id);
 }
@@ -393,6 +391,22 @@ void AppActivityRegistry::SetAppInactive(const AppId& app_id,
   details.activity.SetAppInactive(timestamp);
   if (details.app_limit_timer)
     details.app_limit_timer->AbandonAndStop();
+
+  // If the application is a web app, synchronize its running active time with
+  // those of other inactive web apps.
+  if (ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
+    base::TimeDelta active_time = details.activity.RunningActiveTime();
+    for (auto& app_info : activity_registry_) {
+      const AppId& app_id = app_info.first;
+      if (!ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
+        continue;
+      }
+
+      AppDetails& details = app_info.second;
+      if (!details.activity.is_active())
+        details.activity.set_running_active_time(active_time);
+    }
+  }
 }
 
 void AppActivityRegistry::ScheduleTimeLimitCheckForApp(const AppId& app_id) {
@@ -460,7 +474,13 @@ base::Optional<base::TimeDelta> AppActivityRegistry::GetTimeLeftForApp(
   DCHECK(state == AppState::kAvailable);
 
   base::TimeDelta time_limit = limit.daily_limit().value();
-  base::TimeDelta active_time = app_details.activity.RunningActiveTime();
+
+  base::TimeDelta active_time;
+  if (ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
+    active_time = GetWebActiveRunningTime();
+  } else {
+    active_time = app_details.activity.RunningActiveTime();
+  }
 
   if (active_time >= time_limit)
     return kZeroMinutes;
@@ -498,11 +518,54 @@ void AppActivityRegistry::CheckTimeLimitForApp(const AppId& app_id) {
   if (time_left == kZeroMinutes &&
       last_notification != AppNotification::kTimeLimitReached) {
     details.activity.set_last_notification(AppNotification::kTimeLimitReached);
-    // Set app activity state as time limit reached.
-    details.activity.SetAppInactive(base::Time::Now());
-    details.activity.SetAppState(AppState::kLimitReached);
+
+    if (ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
+      WebTimeLimitReached(base::Time::Now());
+    } else {
+      // Set app activity state as time limit reached.
+      details.activity.SetAppInactive(base::Time::Now());
+      details.activity.SetAppState(AppState::kLimitReached);
+    }
+
     notification_delegate_->ShowAppTimeLimitNotification(
         app_id, AppNotification::kTimeLimitReached);
+  }
+}
+
+base::TimeDelta AppActivityRegistry::GetWebActiveRunningTime() const {
+  base::TimeDelta active_running_time = base::TimeDelta::FromSeconds(0);
+  for (const auto& app_info : activity_registry_) {
+    const AppId& app_id = app_info.first;
+    const AppDetails& details = app_info.second;
+    if (!ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
+      continue;
+    }
+
+    active_running_time = details.activity.RunningActiveTime();
+
+    // If the app is active, then it has the most up to date active running
+    // time.
+    if (details.activity.is_active())
+      return active_running_time;
+  }
+
+  return active_running_time;
+}
+
+void AppActivityRegistry::WebTimeLimitReached(base::Time timestamp) {
+  for (auto& app_info : activity_registry_) {
+    const AppId& app_id = app_info.first;
+    AppDetails& details = app_info.second;
+    if (!ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
+      continue;
+    }
+
+    if (details.activity.app_state() == AppState::kLimitReached)
+      return;
+
+    if (details.activity.is_active())
+      details.activity.SetAppInactive(timestamp);
+    details.activity.SetAppState(AppState::kLimitReached);
   }
 }
 

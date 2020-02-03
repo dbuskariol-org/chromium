@@ -191,6 +191,13 @@ class AppActivity {
     last_notification_ = notification;
   }
 
+  // Chrome and web apps share the same time limit. Therefore, we need to have a
+  // consistent |running_active_time_| across all web apps and chrome.
+  void set_running_active_time(base::TimeDelta time) {
+    DCHECK(!is_active_);
+    running_active_time_ = time;
+  }
+
  private:
   // boolean to specify if the application is active.
   bool is_active_ = false;
