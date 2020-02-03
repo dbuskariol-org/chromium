@@ -199,8 +199,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   // Removes resource ids from uncommitted list, adds them to the purgeable list
   // and purges them.
-  void DoomUncommittedResource(int64_t resource_id);
-  void DoomUncommittedResources(const std::set<int64_t>& resource_ids);
+  void DoomUncommittedResources(const std::set<int64_t>& resource_ids,
+                                DatabaseStatusCallback callback);
 
   // Provide a storage mechanism to read/write arbitrary data associated with
   // a registration. Each registration has its own key namespace.
@@ -279,6 +279,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // the uncommitted resource keys.
   void PurgeResources(const ResourceList& resources);
   void PurgeResources(const std::vector<int64_t>& resource_ids);
+  void PurgeResources(const std::set<int64_t>& resource_ids);
 
   void LazyInitializeForTest();
 
@@ -387,8 +388,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const ServiceWorkerDatabase::RegistrationData& deleted_version,
       const std::vector<int64_t>& newly_purgeable_resources,
       ServiceWorkerDatabase::Status status);
-  void DidPurgeUncommittedResourceIds(const std::set<int64_t>& resource_ids,
-                                      ServiceWorkerDatabase::Status status);
 
   // Lazy disk_cache getter.
   ServiceWorkerDiskCache* disk_cache();

@@ -328,7 +328,7 @@ void ServiceWorkerRegistry::NotifyDoneInstallingRegistration(
     std::set<int64_t> resource_ids;
     for (const auto& resource : resources)
       resource_ids.insert(resource.resource_id);
-    storage()->DoomUncommittedResources(resource_ids);
+    DoomUncommittedResources(resource_ids);
   }
 }
 
@@ -353,6 +353,18 @@ void ServiceWorkerRegistry::StoreUncommittedResourceId(int64_t resource_id) {
       resource_id,
       base::BindOnce(&ServiceWorkerRegistry::DidWriteUncommittedResourceIds,
                      weak_factory_.GetWeakPtr()));
+}
+
+void ServiceWorkerRegistry::DoomUncommittedResource(int64_t resource_id) {
+  DoomUncommittedResources(std::set<int64_t>(&resource_id, &resource_id + 1));
+}
+
+void ServiceWorkerRegistry::DoomUncommittedResources(
+    const std::set<int64_t>& resource_ids) {
+  storage()->DoomUncommittedResources(
+      resource_ids,
+      base::BindOnce(&ServiceWorkerRegistry::DidDoomUncommittedResourceIds,
+                     weak_factory_.GetWeakPtr(), resource_ids));
 }
 
 void ServiceWorkerRegistry::GetUserData(int64_t registration_id,
@@ -967,6 +979,16 @@ void ServiceWorkerRegistry::DidWriteUncommittedResourceIds(
     ServiceWorkerDatabase::Status status) {
   if (status != ServiceWorkerDatabase::STATUS_OK)
     ScheduleDeleteAndStartOver();
+}
+
+void ServiceWorkerRegistry::DidDoomUncommittedResourceIds(
+    const std::set<int64_t>& resource_ids,
+    ServiceWorkerDatabase::Status status) {
+  if (status != ServiceWorkerDatabase::STATUS_OK) {
+    ScheduleDeleteAndStartOver();
+    return;
+  }
+  storage()->PurgeResources(resource_ids);
 }
 
 void ServiceWorkerRegistry::DidGetUserData(

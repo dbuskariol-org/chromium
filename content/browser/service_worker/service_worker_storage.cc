@@ -516,18 +516,9 @@ void ServiceWorkerStorage::StoreUncommittedResourceId(
       std::move(callback));
 }
 
-void ServiceWorkerStorage::DoomUncommittedResource(int64_t resource_id) {
-  DCHECK_NE(ServiceWorkerConsts::kInvalidServiceWorkerResourceId, resource_id);
-  DCHECK(STORAGE_STATE_INITIALIZED == state_ ||
-         STORAGE_STATE_DISABLED == state_)
-      << state_;
-  if (IsDisabled())
-    return;
-  DoomUncommittedResources(std::set<int64_t>(&resource_id, &resource_id + 1));
-}
-
 void ServiceWorkerStorage::DoomUncommittedResources(
-    const std::set<int64_t>& resource_ids) {
+    const std::set<int64_t>& resource_ids,
+    DatabaseStatusCallback callback) {
   DCHECK(STORAGE_STATE_INITIALIZED == state_ ||
          STORAGE_STATE_DISABLED == state_)
       << state_;
@@ -538,8 +529,7 @@ void ServiceWorkerStorage::DoomUncommittedResources(
       database_task_runner_.get(), FROM_HERE,
       base::BindOnce(&ServiceWorkerDatabase::PurgeUncommittedResourceIds,
                      base::Unretained(database_.get()), resource_ids),
-      base::BindOnce(&ServiceWorkerStorage::DidPurgeUncommittedResourceIds,
-                     weak_factory_.GetWeakPtr(), resource_ids));
+      std::move(callback));
 }
 
 void ServiceWorkerStorage::StoreUserData(
@@ -902,6 +892,13 @@ void ServiceWorkerStorage::PurgeResources(
   StartPurgingResources(resource_ids);
 }
 
+void ServiceWorkerStorage::PurgeResources(
+    const std::set<int64_t>& resource_ids) {
+  if (!has_checked_for_stale_resources_)
+    DeleteStaleResources();
+  StartPurgingResources(resource_ids);
+}
+
 ServiceWorkerStorage::ServiceWorkerStorage(
     const base::FilePath& user_data_directory,
     ServiceWorkerContextCore* context,
@@ -1076,16 +1073,6 @@ void ServiceWorkerStorage::DidDeleteRegistration(
   std::move(params->callback)
       .Run(blink::ServiceWorkerStatusCode::kOk, deleted_version.version_id,
            newly_purgeable_resources);
-}
-
-void ServiceWorkerStorage::DidPurgeUncommittedResourceIds(
-    const std::set<int64_t>& resource_ids,
-    ServiceWorkerDatabase::Status status) {
-  if (status != ServiceWorkerDatabase::STATUS_OK) {
-    ScheduleDeleteAndStartOver();
-    return;
-  }
-  StartPurgingResources(resource_ids);
 }
 
 ServiceWorkerDiskCache* ServiceWorkerStorage::disk_cache() {
