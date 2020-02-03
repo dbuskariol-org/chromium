@@ -416,7 +416,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/android_webview/tools/cts_archive',
-              'version': '4kDr36wBuZtvbfaEin4U4oeFD7oAuN0flkWDImKBts4C',
+              'version': 'Zmi8uHgTaLXGm9f8Fu_0U-Xa6BljyNjsyL0Nq7VouKoC',
           },
       ],
       'condition': 'checkout_android',
