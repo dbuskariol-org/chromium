@@ -813,8 +813,9 @@ gfx::Size ScrollableShelfView::CalculatePreferredSize() const {
 }
 
 void ScrollableShelfView::Layout() {
-  gfx::Size arrow_button_size(kArrowButtonSize, kArrowButtonSize);
   gfx::Rect shelf_container_bounds = gfx::Rect(size());
+  gfx::Size arrow_button_size(kArrowButtonSize,
+                              shelf_container_bounds.height());
 
   // Transpose and layout as if it is horizontal.
   const bool is_horizontal = GetShelf()->IsHorizontalAlignment();
