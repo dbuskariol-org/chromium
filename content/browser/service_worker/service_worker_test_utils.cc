@@ -375,17 +375,16 @@ CreateProviderHostForServiceWorkerContext(
 scoped_refptr<ServiceWorkerRegistration>
 CreateServiceWorkerRegistrationAndVersion(ServiceWorkerContextCore* context,
                                           const GURL& scope,
-                                          const GURL& script) {
-  ServiceWorkerStorage* storage = context->storage();
-
+                                          const GURL& script,
+                                          int64_t resource_id) {
   blink::mojom::ServiceWorkerRegistrationOptions options;
   options.scope = scope;
   auto registration = context->registry()->CreateNewRegistration(options);
   auto version = context->registry()->CreateNewVersion(
       registration.get(), script, blink::mojom::ScriptType::kClassic);
-  std::vector<ServiceWorkerDatabase::ResourceRecord> records = {
-      ServiceWorkerDatabase::ResourceRecord(storage->NewResourceId(), script,
-                                            100)};
+  ServiceWorkerDatabase::ResourceRecord record(resource_id, script,
+                                               /*size_bytes=*/100);
+  std::vector<ServiceWorkerDatabase::ResourceRecord> records = {record};
   version->script_cache_map()->SetResources(records);
   version->set_fetch_handler_existence(
       ServiceWorkerVersion::FetchHandlerExistence::EXISTS);
