@@ -149,7 +149,7 @@ Polymer({
     });
 
     BrowserProxy.getInstance().handler.requestAmountOfFreeDiskSpace();
-    this.$$('.action-button').focus();
+    this.$$('.action-button:not([hidden])').focus();
   },
 
   /** @override */

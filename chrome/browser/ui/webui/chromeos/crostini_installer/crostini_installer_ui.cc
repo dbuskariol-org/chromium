@@ -150,9 +150,12 @@ bool CrostiniInstallerUI::can_close() {
 }
 
 void CrostiniInstallerUI::ClickInstallForTesting() {
+  // TODO(lxj): This assumes the config page does not show. When flag
+  // CrostiniUsername or CrostiniDiskResizing is turned on by default, we should
+  // click the "next" button first.
   web_ui()->GetWebContents()->GetMainFrame()->ExecuteJavaScriptForTests(
       base::ASCIIToUTF16("document.querySelector('crostini-installer-app')"
-                         ".$$('.action-button').click()"),
+                         ".$.install.click()"),
       base::NullCallback());
 }
 
