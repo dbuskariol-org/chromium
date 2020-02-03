@@ -898,7 +898,7 @@ void ScrollableShelfView::OnScrollEvent(ui::ScrollEvent* event) {
     return;
   if (ShouldDelegateScrollToShelf(*event)) {
     ui::MouseWheelEvent wheel(*event);
-    GetShelf()->ProcessMouseWheelEvent(&wheel);
+    GetShelf()->ProcessMouseWheelEvent(&wheel, /*from_touchpad=*/true);
     event->StopPropagation();
   }
 }
@@ -1571,7 +1571,7 @@ void ScrollableShelfView::HandleMouseWheelEvent(ui::MouseWheelEvent* event) {
   if (!ShouldHandleScroll(gfx::Vector2dF(event->x_offset(), event->y_offset()),
                           /*is_gesture_fling=*/false) &&
       GetShelf()->IsHorizontalAlignment()) {
-    GetShelf()->ProcessMouseWheelEvent(event);
+    GetShelf()->ProcessMouseWheelEvent(event, /*from_touchpad=*/false);
     return;
   }
 
