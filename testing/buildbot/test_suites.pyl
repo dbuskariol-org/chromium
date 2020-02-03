@@ -3930,6 +3930,7 @@
     'gpu_desktop_gtests': [
       'gpu_angle_unit_gtests',
       'gpu_common_gtests',
+      'gpu_dawn_integration_gtests',
       'gpu_desktop_specific_gtests',
     ],
 
@@ -4191,6 +4192,7 @@
     'gpu_win_gtests': [
       'gpu_angle_unit_gtests',
       'gpu_common_gtests',
+      'gpu_dawn_integration_gtests',
       'gpu_default_and_optional_win_specific_gtests',
       'gpu_desktop_specific_gtests',
     ],
