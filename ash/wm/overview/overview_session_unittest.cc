@@ -47,7 +47,6 @@
 #include "ash/wm/overview/overview_wallpaper_controller.h"
 #include "ash/wm/overview/overview_window_drag_controller.h"
 #include "ash/wm/overview/rounded_label_widget.h"
-#include "ash/wm/overview/rounded_rect_view.h"
 #include "ash/wm/resize_shadow.h"
 #include "ash/wm/resize_shadow_controller.h"
 #include "ash/wm/splitview/multi_display_overview_and_split_view_test.h"
@@ -263,7 +262,7 @@ class OverviewSessionTest : public MultiDisplayOverviewAndSplitViewTest {
     return item->overview_item_view_->title_label();
   }
 
-  RoundedRectView* GetBackdropView(OverviewItem* item) {
+  views::View* GetBackdropView(OverviewItem* item) {
     return item->overview_item_view_->backdrop_view();
   }
 
