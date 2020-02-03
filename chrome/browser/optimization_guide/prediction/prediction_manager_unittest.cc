@@ -68,6 +68,7 @@ std::unique_ptr<proto::PredictionModel> CreatePredictionModel() {
       proto::OPTIMIZATION_TARGET_PAINFUL_PAGE_LOAD);
   model_info->add_supported_model_types(
       proto::ModelType::MODEL_TYPE_DECISION_TREE);
+  prediction_model->mutable_model()->mutable_threshold()->set_value(5.0);
   return prediction_model;
 }
 
@@ -625,14 +626,13 @@ TEST_F(PredictionManagerTest, EvaluatePredictionModel) {
           GURL("https://foo.com"));
 
   CreatePredictionManager({});
+  // The model will be loaded from the store.
   prediction_manager()->SetPredictionModelFetcherForTesting(
       BuildTestPredictionModelFetcher(
-          PredictionModelFetcherEndState::
-              kFetchSuccessWithModelsAndHostsModelFeatures));
+          PredictionModelFetcherEndState::kFetchSuccessWithEmptyResponse));
 
   prediction_manager()->RegisterOptimizationTargets(
       {proto::OPTIMIZATION_TARGET_PAINFUL_PAGE_LOAD});
-
   SetStoreInitialized();
   EXPECT_TRUE(prediction_model_fetcher()->models_fetched());
 
@@ -654,14 +654,14 @@ TEST_F(PredictionManagerTest, EvaluatePredictionModel) {
               optimization_guide::proto::OPTIMIZATION_TARGET_PAINFUL_PAGE_LOAD),
       1);
 
-  histogram_tester.ExpectBucketCount(
+  histogram_tester.ExpectUniqueSample(
       "OptimizationGuide.IsPredictionModelValid." +
           GetStringNameForOptimizationTarget(
               optimization_guide::proto::OPTIMIZATION_TARGET_PAINFUL_PAGE_LOAD),
       true, 1);
 
-  histogram_tester.ExpectBucketCount("OptimizationGuide.IsPredictionModelValid",
-                                     true, 1);
+  histogram_tester.ExpectUniqueSample(
+      "OptimizationGuide.IsPredictionModelValid", true, 1);
 
   histogram_tester.ExpectTotalCount(
       "OptimizationGuide.PredictionModelValidationLatency." +

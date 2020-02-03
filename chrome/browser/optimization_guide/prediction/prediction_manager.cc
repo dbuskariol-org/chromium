@@ -728,6 +728,8 @@ bool PredictionManager::ProcessAndStorePredictionModel(
   SEQUENCE_CHECKER(sequence_checker_);
   if (!model.model_info().has_optimization_target())
     return false;
+  if (!model.has_model())
+    return false;
   if (!registered_optimization_targets_.contains(
           model.model_info().optimization_target())) {
     return false;
