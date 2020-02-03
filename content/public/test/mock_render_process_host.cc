@@ -464,8 +464,7 @@ void MockRenderProcessHost::BindIndexedDB(
   idb_factory_receiver_ = std::move(receiver);
 }
 
-void MockRenderProcessHost::
-    CleanupNetworkServicePluginExceptionsUponDestruction() {}
+void MockRenderProcessHost::CleanupCorbExceptionForPluginUponDestruction() {}
 
 void MockRenderProcessHost::FilterURL(bool empty_allowed, GURL* url) {
   RenderProcessHostImpl::FilterURL(this, empty_allowed, url);

@@ -525,14 +525,13 @@ class CONTENT_EXPORT RenderProcessHost : public IPC::Sender,
 
   // Controls whether the destructor of RenderProcessHost*Impl* will end up
   // cleaning the memory used by the exception added via
-  // RenderProcessHostImpl::AddCorbExceptionForPlugin and
-  // AddAllowedRequestInitiatorForPlugin.
+  // RenderProcessHostImpl::AddCorbExceptionForPlugin.
   //
   // TODO(lukasza): https://crbug.com/652474: This method shouldn't be part of
   // the //content public API, because it shouldn't be called by anyone other
   // than RenderProcessHostImpl (from underneath
   // RenderProcessHostImpl::AddCorbExceptionForPlugin).
-  virtual void CleanupNetworkServicePluginExceptionsUponDestruction() = 0;
+  virtual void CleanupCorbExceptionForPluginUponDestruction() = 0;
 
   // Static management functions -----------------------------------------------
 

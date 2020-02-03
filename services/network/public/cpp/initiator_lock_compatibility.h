@@ -45,12 +45,9 @@ enum class InitiatorLockCompatibility {
   kIncorrectLock = 4,
 
   // Covered by CrossOriginReadBlocking::ShouldAllowForPlugin.
-  kExcludedCorbForPlugin = 6,
+  kExcludedUniversalAccessPlugin = 6,
 
-  // Covered by AddAllowedRequestInitiatorForPlugin.
-  kAllowedRequestInitiatorForPlugin = 7,
-
-  kMaxValue = kAllowedRequestInitiatorForPlugin,
+  kMaxValue = kExcludedUniversalAccessPlugin,
 };
 
 // Verifies if |request.request_initiator| matches
