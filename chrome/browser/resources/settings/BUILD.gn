@@ -36,6 +36,19 @@ if (optimize_webui) {
     deps = [ ":unpak" ]
   }
 
+  optimize_webui("build_polymer3") {
+    host = "settings"
+    input = rebase_path("$target_gen_dir/$unpak_folder", root_build_dir)
+    js_out_files = [ "settings.rollup.js" ]
+    js_module_in_files = [ "settings.js" ]
+
+    deps = [
+      ":unpak",
+      "../../../../ui/webui/resources:modulize",
+    ]
+    excludes = [ "chrome://resources/js/cr.m.js" ]
+  }
+
   unpak("unpak") {
     pak_file = settings_pak_file
     out_folder = unpak_folder
