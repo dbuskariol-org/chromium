@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.autofill.settings;
+package org.chromium.chrome.browser.settings.autofill;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,8 +31,8 @@ public class AutofillServerCardEditor extends AutofillCreditCardEditor {
     public AutofillServerCardEditor() {}
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         final View v = super.onCreateView(inflater, container, savedInstanceState);
         if (mCard == null) {
             getActivity().finish();
@@ -40,8 +40,8 @@ public class AutofillServerCardEditor extends AutofillCreditCardEditor {
         }
 
         ((TextView) v.findViewById(R.id.title)).setText(mCard.getObfuscatedNumber());
-        ((TextView) v.findViewById(R.id.summary))
-                .setText(mCard.getFormattedExpirationDate(getActivity()));
+        ((TextView) v.findViewById(R.id.summary)).setText(mCard.getFormattedExpirationDate(
+                getActivity()));
         v.findViewById(R.id.edit_server_card).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,6 +49,7 @@ public class AutofillServerCardEditor extends AutofillCreditCardEditor {
                         getActivity(), ChromeStringConstants.AUTOFILL_MANAGE_WALLET_CARD_URL);
             }
         });
+
 
         mLocalCopyLabel = v.findViewById(R.id.local_copy_label);
         mClearLocalCopy = v.findViewById(R.id.clear_local_copy);

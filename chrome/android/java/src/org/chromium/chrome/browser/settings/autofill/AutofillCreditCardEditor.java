@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.autofill.settings;
+package org.chromium.chrome.browser.settings.autofill;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -29,8 +29,8 @@ abstract class AutofillCreditCardEditor extends AutofillEditorBase {
     protected int mInitialBillingAddressPos;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
 
         // Do not use autofill for the fields.

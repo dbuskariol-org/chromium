@@ -36,12 +36,12 @@
         android:order="5"
         android:title="@string/password_settings_title"/>
     <org.chromium.chrome.browser.settings.ChromeBasePreference
-        android:fragment="org.chromium.chrome.browser.autofill.settings.AutofillPaymentMethodsFragment"
+        android:fragment="org.chromium.chrome.browser.settings.autofill.AutofillPaymentMethodsFragment"
         android:key="autofill_payment_methods"
         android:order="6"
         android:title="@string/autofill_payment_methods"/>
     <org.chromium.chrome.browser.settings.ChromeBasePreference
-        android:fragment="org.chromium.chrome.browser.autofill.settings.AutofillProfilesFragment"
+        android:fragment="org.chromium.chrome.browser.settings.autofill.AutofillProfilesFragment"
         android:key="autofill_addresses"
         android:order="7"
         android:title="@string/autofill_addresses_settings_title"/>

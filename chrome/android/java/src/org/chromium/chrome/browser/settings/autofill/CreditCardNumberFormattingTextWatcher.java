@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.autofill.settings;
+package org.chromium.chrome.browser.settings.autofill;
 
 import android.text.Editable;
 import android.text.TextUtils;
@@ -110,7 +110,8 @@ public class CreditCardNumberFormattingTextWatcher implements TextWatcher {
         }
     }
 
-    public static boolean hasDashOrSpace(final CharSequence s, final int start, final int count) {
+    public static boolean hasDashOrSpace(final CharSequence s, final int start,
+            final int count) {
         return TextUtils.indexOf(s, " ", start, start + count) != -1
                 || TextUtils.indexOf(s, "-", start, start + count) != -1;
     }

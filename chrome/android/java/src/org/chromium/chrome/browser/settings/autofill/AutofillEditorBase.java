@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.autofill.settings;
+package org.chromium.chrome.browser.settings.autofill;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -49,8 +49,8 @@ public abstract class AutofillEditorBase
     protected Context mContext;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         mContext = container.getContext();
@@ -129,21 +129,21 @@ public abstract class AutofillEditorBase
     protected void initializeButtons(View layout) {
         Button button = (Button) layout.findViewById(R.id.button_secondary);
         button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
 
         button = (Button) layout.findViewById(R.id.button_primary);
         button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (saveEntry()) {
-                    getActivity().finish();
+                @Override
+                public void onClick(View v) {
+                    if (saveEntry()) {
+                        getActivity().finish();
+                    }
                 }
-            }
-        });
+            });
         button.setEnabled(false);
     }
 
