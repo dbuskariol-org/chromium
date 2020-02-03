@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.autofill;
+package org.chromium.chrome.browser.autofill.settings;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.MediumTest;
@@ -123,8 +123,8 @@ public class AutofillProfilesFragmentTest {
         Assert.assertNotNull(addProfile);
 
         // Try to add an incomplete profile.
-        updatePreferencesAndWait(autofillProfileFragment, addProfile,
-                new String[] {"Mike Doe"}, R.id.editor_dialog_done_button, true);
+        updatePreferencesAndWait(autofillProfileFragment, addProfile, new String[] {"Mike Doe"},
+                R.id.editor_dialog_done_button, true);
         activity.finish();
     }
 
@@ -148,8 +148,8 @@ public class AutofillProfilesFragmentTest {
         Assert.assertEquals("Seb Doe", sebProfile.getTitle());
 
         // Delete a profile.
-        updatePreferencesAndWait(autofillProfileFragment, sebProfile, null,
-                R.id.delete_menu_id, false);
+        updatePreferencesAndWait(
+                autofillProfileFragment, sebProfile, null, R.id.delete_menu_id, false);
 
         Assert.assertEquals(5 /* One toggle + one add button + three profile. */,
                 autofillProfileFragment.getPreferenceScreen().getPreferenceCount());
@@ -226,8 +226,8 @@ public class AutofillProfilesFragmentTest {
         Assert.assertEquals("Bob Doe", bobProfile.getTitle());
 
         // Open the profile.
-        updatePreferencesAndWait(autofillProfileFragment, bobProfile, null,
-                R.id.editor_dialog_done_button, false);
+        updatePreferencesAndWait(
+                autofillProfileFragment, bobProfile, null, R.id.editor_dialog_done_button, false);
 
         Assert.assertEquals(6 /* One toggle + one add button + four profiles. */,
                 autofillProfileFragment.getPreferenceScreen().getPreferenceCount());
@@ -254,8 +254,8 @@ public class AutofillProfilesFragmentTest {
         Assert.assertEquals("Bill Doe", billProfile.getTitle());
 
         // Open the profile.
-        updatePreferencesAndWait(autofillProfileFragment, billProfile, null,
-                R.id.editor_dialog_done_button, false);
+        updatePreferencesAndWait(
+                autofillProfileFragment, billProfile, null, R.id.editor_dialog_done_button, false);
 
         // Check if the preferences are updated correctly.
         Assert.assertEquals(6 /* One toggle + one add button + four profiles. */,
@@ -310,7 +310,7 @@ public class AutofillProfilesFragmentTest {
                     public boolean isSatisfied() {
                         return keyboardVisible
                                 == KeyboardVisibilityDelegate.getInstance().isKeyboardShowing(
-                                           activity, activity.findViewById(android.R.id.content));
+                                        activity, activity.findViewById(android.R.id.content));
                     }
                 });
     }
