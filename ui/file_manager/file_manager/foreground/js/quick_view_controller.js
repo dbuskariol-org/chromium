@@ -66,7 +66,7 @@ class QuickViewController {
 
     /**
      * Delete confirm dialog.
-     * @type {?FilesConfirmDialog}
+     * @private {?FilesConfirmDialog}
      */
     this.deleteConfirmDialog_ = null;
 
@@ -432,7 +432,6 @@ class QuickViewController {
       if (params.hasTask) {
         this.tasks_ = fileTasks;
       }
-
     });
   }
 
