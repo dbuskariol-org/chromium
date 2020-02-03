@@ -280,6 +280,7 @@ class QuickViewController {
     // Create a delete confirm dialog if needed.
     if (!this.deleteConfirmDialog_) {
       const parent = this.quickView_.shadowRoot.getElementById('dialog');
+      assert(parent);
       this.deleteConfirmDialog_ = new FilesConfirmDialog(parent);
       this.deleteConfirmDialog_.setOkLabel(str('DELETE_BUTTON_LABEL'));
     }
