@@ -1486,6 +1486,9 @@
             "experiments": [
                 {
                     "name": "Enabled",
+                    "params": {
+                        "neural_palm_radius_polynomial": "0.17889799, 4.22584412"
+                    },
                     "enable_features": [
                         "EnableNeuralPalmDetectionFilter",
                         "EnableNeuralStylusReportFilter"
