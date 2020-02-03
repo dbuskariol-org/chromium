@@ -74,7 +74,6 @@ try_.chromium_android_builder(
     name = 'android-kitkat-arm-rel',
     goma_jobs = goma.jobs.J150,
     tryjob = try_.job(),
-    should_exonerate_flaky_failures = True,
 )
 
 try_.chromium_android_builder(
@@ -173,7 +172,6 @@ try_.chromium_linux_builder(
     goma_jobs = goma.jobs.J150,
     tryjob = try_.job(),
     use_clang_coverage = True,
-    should_exonerate_flaky_failures = True,
 )
 
 try_.chromium_linux_builder(
@@ -206,7 +204,6 @@ try_.chromium_mac_builder(
     name = 'mac-rel',
     goma_jobs = goma.jobs.J150,
     tryjob = try_.job(),
-    should_exonerate_flaky_failures = True,
 )
 
 try_.chromium_mac_builder(
@@ -243,5 +240,4 @@ try_.chromium_win_builder(
     os = os.WINDOWS_10,
     ssd = True,
     tryjob = try_.job(),
-    should_exonerate_flaky_failures = True,
 )
