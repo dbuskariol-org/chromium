@@ -1619,12 +1619,6 @@ This file contains the strings for ash.
 
       <!-- Deprecated Accelerators Messages -->
       <!-- Shortcut keys MUST be connected with pluses (e.g. Ctrl+Shift+L). -->
-      <message name="IDS_SHORTCUT_LOCK_SCREEN_OLD" desc="the old deprecated shortcut to lock the screen.">
-        Ctrl+Shift+L
-      </message>
-      <message name="IDS_SHORTCUT_LOCK_SCREEN_NEW" desc="the new shortcut to lock the screen.">
-        Search+L
-      </message>
       <message name="IDS_SHORTCUT_TASK_MANAGER_OLD" desc="the old deprecated shortcut to open the task manager.">
         Shift+Esc
       </message>
@@ -1642,10 +1636,6 @@ This file contains the strings for ash.
       </message>
       <message name="IDS_SHORTCUT_TOGGLE_HIGH_CONTRAST_NEW" desc="the new shortcut to toggle the high contrast display mode.">
         Ctrl+Search+H
-      </message>
-      <message name="IDS_DEPRECATED_LOCK_SCREEN_MSG"
-               desc="Notification message to tell users about the deprecation of Ctrl+Shift+L shortcut to lock the screen.">
-        The shortcut to lock the screen has changed. Please use <ph name="NEW_SHORTCUT">$1<ex>Search+L</ex></ph> instead of <ph name="OLD_SHORTCUT">$2<ex>Ctrl+Shift+L</ex></ph>.
       </message>
       <message name="IDS_DEPRECATED_SHOW_TASK_MANAGER_MSG"
                desc="Notification message to tell users about the deprecation of Shift+ESC shortcut to show the task manager.">
