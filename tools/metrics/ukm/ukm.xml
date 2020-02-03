@@ -238,12 +238,18 @@ be describing additional metrics about the same event.
     </summary>
   </metric>
   <metric name="AdBytesPerSecond">
+    <obsolete>
+      Deprecated 01/2020.
+    </obsolete>
     <summary>
       Amount of network bytes used to load ad resources on the page, per second
       the page was alive after commit. Measured in kilobytes per second.
     </summary>
   </metric>
   <metric name="AdBytesPerSecondAfterInteractive">
+    <obsolete>
+      Deprecated 01/2020.
+    </obsolete>
     <summary>
       Amount of network bytes used to load ad resources on the page per second
       after the page was interactive. Measured in kilobytes.
