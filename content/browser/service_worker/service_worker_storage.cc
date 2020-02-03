@@ -102,24 +102,21 @@ blink::ServiceWorkerStatusCode ServiceWorkerStorage::DatabaseStatusToStatusCode(
 // static
 std::unique_ptr<ServiceWorkerStorage> ServiceWorkerStorage::Create(
     const base::FilePath& user_data_directory,
-    ServiceWorkerContextCore* context,
     scoped_refptr<base::SequencedTaskRunner> database_task_runner,
     storage::QuotaManagerProxy* quota_manager_proxy,
     storage::SpecialStoragePolicy* special_storage_policy,
     ServiceWorkerRegistry* registry) {
   return base::WrapUnique(new ServiceWorkerStorage(
-      user_data_directory, context, std::move(database_task_runner),
-      quota_manager_proxy, special_storage_policy, registry));
+      user_data_directory, std::move(database_task_runner), quota_manager_proxy,
+      special_storage_policy, registry));
 }
 
 // static
 std::unique_ptr<ServiceWorkerStorage> ServiceWorkerStorage::Create(
-    ServiceWorkerContextCore* context,
     ServiceWorkerStorage* old_storage,
     ServiceWorkerRegistry* registry) {
   return base::WrapUnique(new ServiceWorkerStorage(
-      old_storage->user_data_directory_, context,
-      old_storage->database_task_runner_,
+      old_storage->user_data_directory_, old_storage->database_task_runner_,
       old_storage->quota_manager_proxy_.get(),
       old_storage->special_storage_policy_.get(), registry));
 }
@@ -911,7 +908,6 @@ void ServiceWorkerStorage::PurgeResources(
 
 ServiceWorkerStorage::ServiceWorkerStorage(
     const base::FilePath& user_data_directory,
-    ServiceWorkerContextCore* context,
     scoped_refptr<base::SequencedTaskRunner> database_task_runner,
     storage::QuotaManagerProxy* quota_manager_proxy,
     storage::SpecialStoragePolicy* special_storage_policy,
@@ -922,14 +918,12 @@ ServiceWorkerStorage::ServiceWorkerStorage(
       state_(STORAGE_STATE_UNINITIALIZED),
       expecting_done_with_disk_on_disable_(false),
       user_data_directory_(user_data_directory),
-      context_(context),
       database_task_runner_(std::move(database_task_runner)),
       quota_manager_proxy_(quota_manager_proxy),
       special_storage_policy_(special_storage_policy),
       is_purge_pending_(false),
       has_checked_for_stale_resources_(false),
       registry_(registry) {
-  DCHECK(context_);
   DCHECK(registry_);
   database_.reset(new ServiceWorkerDatabase(GetDatabasePath()));
 }
@@ -1000,7 +994,7 @@ void ServiceWorkerStorage::DidReadInitialData(
   } else {
     DVLOG(2) << "Failed to initialize: "
              << ServiceWorkerDatabase::StatusToString(status);
-    ScheduleDeleteAndStartOver();
+    Disable();
   }
 
   for (base::OnceClosure& task : pending_tasks_)
@@ -1126,7 +1120,7 @@ void ServiceWorkerStorage::OnDiskCacheInitialized(int rv) {
   if (rv != net::OK) {
     LOG(ERROR) << "Failed to open the serviceworker diskcache: "
                << net::ErrorToString(rv);
-    ScheduleDeleteAndStartOver();
+    Disable();
   }
   ServiceWorkerMetrics::CountInitDiskCacheResult(rv == net::OK);
 }
@@ -1219,7 +1213,7 @@ void ServiceWorkerStorage::DidCollectStaleResources(
     ServiceWorkerDatabase::Status status) {
   if (status != ServiceWorkerDatabase::STATUS_OK) {
     DCHECK_NE(ServiceWorkerDatabase::STATUS_ERROR_NOT_FOUND, status);
-    ScheduleDeleteAndStartOver();
+    Disable();
     return;
   }
   StartPurgingResources(stale_resource_ids);
@@ -1555,23 +1549,6 @@ void ServiceWorkerStorage::PerformStorageCleanupInDB(
     ServiceWorkerDatabase* database) {
   DCHECK(database);
   database->RewriteDB();
-}
-
-// TODO(nhiroki): The corruption recovery should not be scheduled if the error
-// is transient and it can get healed soon (e.g. IO error). To do that, the
-// database should not disable itself when an error occurs and the storage
-// controls it instead.
-void ServiceWorkerStorage::ScheduleDeleteAndStartOver() {
-  // TODO(dmurph): Notify the quota manager somehow that all of our data is now
-  // removed.
-  if (state_ == STORAGE_STATE_DISABLED) {
-    // Recovery process has already been scheduled.
-    return;
-  }
-  Disable();
-
-  DVLOG(1) << "Schedule to delete the context and start over.";
-  context_->ScheduleDeleteAndStartOver();
 }
 
 void ServiceWorkerStorage::DidDeleteDatabase(

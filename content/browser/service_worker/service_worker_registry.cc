@@ -53,7 +53,6 @@ ServiceWorkerRegistry::ServiceWorkerRegistry(
     storage::SpecialStoragePolicy* special_storage_policy)
     : context_(context),
       storage_(ServiceWorkerStorage::Create(user_data_directory,
-                                            context,
                                             std::move(database_task_runner),
                                             quota_manager_proxy,
                                             special_storage_policy,
@@ -65,9 +64,7 @@ ServiceWorkerRegistry::ServiceWorkerRegistry(
     ServiceWorkerContextCore* context,
     ServiceWorkerRegistry* old_registry)
     : context_(context),
-      storage_(ServiceWorkerStorage::Create(context,
-                                            old_registry->storage(),
-                                            this)) {
+      storage_(ServiceWorkerStorage::Create(old_registry->storage(), this)) {
   DCHECK(context_);
 }
 
@@ -555,6 +552,20 @@ void ServiceWorkerRegistry::GetUserDataForAllRegistrationsByKeyPrefix(
       key_prefix,
       base::BindOnce(&ServiceWorkerRegistry::DidGetUserDataForAllRegistrations,
                      weak_factory_.GetWeakPtr(), std::move(callback)));
+}
+
+void ServiceWorkerRegistry::PrepareForDeleteAndStarOver() {
+  should_schedule_delete_and_start_over_ = false;
+  storage()->Disable();
+}
+
+void ServiceWorkerRegistry::DeleteAndStartOver(StatusCallback callback) {
+  storage()->DeleteAndStartOver(std::move(callback));
+}
+
+void ServiceWorkerRegistry::DisableDeleteAndStartOverForTesting() {
+  DCHECK(should_schedule_delete_and_start_over_);
+  should_schedule_delete_and_start_over_ = false;
 }
 
 ServiceWorkerRegistration*
@@ -1049,13 +1060,18 @@ void ServiceWorkerRegistry::DidGetUserDataForAllRegistrations(
 }
 
 void ServiceWorkerRegistry::ScheduleDeleteAndStartOver() {
-  if (storage()->IsDisabled()) {
+  if (!should_schedule_delete_and_start_over_) {
     // Recovery process has already been scheduled.
     return;
   }
 
-  storage()->Disable();
+  // Ideally, the corruption recovery should not be scheduled if the error
+  // is transient as it can get healed soon (e.g. IO error). However we
+  // unconditionally start recovery here for simplicity and low error rates.
+  DVLOG(1) << "Schedule to delete the context and start over.";
   context_->ScheduleDeleteAndStartOver();
+  // ServiceWorkerContextCore should call PrepareForDeleteAndStartOver().
+  DCHECK(!should_schedule_delete_and_start_over_);
 }
 
 }  // namespace content

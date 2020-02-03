@@ -200,6 +200,15 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       const std::string& key_prefix,
       GetUserDataForAllRegistrationsCallback callback);
 
+  // Disables the internal storage to prepare for error recovery.
+  void PrepareForDeleteAndStarOver();
+
+  // Deletes this registry and internal storage, then starts over for error
+  // recovery.
+  void DeleteAndStartOver(StatusCallback callback);
+
+  void DisableDeleteAndStartOverForTesting();
+
  private:
   ServiceWorkerRegistration* FindInstallingRegistrationForClientUrl(
       const GURL& client_url);
@@ -294,6 +303,9 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       std::map<int64_t, scoped_refptr<ServiceWorkerRegistration>>;
   RegistrationRefsById installing_registrations_;
   RegistrationRefsById uninstalling_registrations_;
+
+  // Indicates whether recovery process should be scheduled.
+  bool should_schedule_delete_and_start_over_ = true;
 
   base::WeakPtrFactory<ServiceWorkerRegistry> weak_factory_{this};
 };

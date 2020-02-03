@@ -592,6 +592,7 @@ TEST_F(ServiceWorkerStorageTest, DisabledStorage) {
   const int64_t kVersionId = 0;
   const int64_t kResourceId = 0;
 
+  registry()->DisableDeleteAndStartOverForTesting();
   LazyInitialize();
   storage()->Disable();
 

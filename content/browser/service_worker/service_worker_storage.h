@@ -38,7 +38,6 @@ class SpecialStoragePolicy;
 
 namespace content {
 
-class ServiceWorkerContextCore;
 class ServiceWorkerDiskCache;
 class ServiceWorkerRegistry;
 class ServiceWorkerResponseMetadataWriter;
@@ -115,7 +114,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // ServiceWorkerRegistration dependencies are moved to ServiceWorkerRegistry.
   static std::unique_ptr<ServiceWorkerStorage> Create(
       const base::FilePath& user_data_directory,
-      ServiceWorkerContextCore* context,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
       storage::SpecialStoragePolicy* special_storage_policy,
@@ -123,7 +121,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   // Used for DeleteAndStartOver. Creates new storage based on |old_storage|.
   static std::unique_ptr<ServiceWorkerStorage> Create(
-      ServiceWorkerContextCore* context,
       ServiceWorkerStorage* old_storage,
       ServiceWorkerRegistry* registry);
 
@@ -264,7 +261,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const std::string& key_prefix,
       DatabaseStatusCallback callback);
 
-  // Deletes the storage and starts over.
+  // Deletes the storage and starts over. This should be called only from
+  // ServiceWorkerRegistry other than tests.
   void DeleteAndStartOver(StatusCallback callback);
 
   // Returns a new registration id which is guaranteed to be unique in the
@@ -366,7 +364,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   ServiceWorkerStorage(
       const base::FilePath& user_data_directory,
-      ServiceWorkerContextCore* context,
       scoped_refptr<base::SequencedTaskRunner> database_task_runner,
       storage::QuotaManagerProxy* quota_manager_proxy,
       storage::SpecialStoragePolicy* special_storage_policy,
@@ -497,11 +494,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       const std::set<GURL>& origins);
   static void PerformStorageCleanupInDB(ServiceWorkerDatabase* database);
 
-  // TODO(crbug.com/1039200): Remove this method. This relies on
-  // ServiceWorkerContextCore but it won't be available when this class is moved
-  // to the Storage Service.
-  void ScheduleDeleteAndStartOver();
-
   // Posted by the underlying cache implementation after it finishes making
   // disk changes upon its destruction.
   void DiskCacheImplDoneWithDisk();
@@ -542,9 +534,6 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   bool expecting_done_with_disk_on_disable_;
 
   base::FilePath user_data_directory_;
-
-  // The ServiceWorkerContextCore object must outlive this.
-  ServiceWorkerContextCore* const context_;
 
   // |database_| is only accessed using |database_task_runner_|.
   std::unique_ptr<ServiceWorkerDatabase> database_;
