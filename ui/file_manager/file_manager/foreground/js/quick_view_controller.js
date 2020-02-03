@@ -641,6 +641,7 @@ QuickViewController.UNSUPPORTED_IMAGE_SUBTYPES_ = [
  *   type: string,
  *   subtype: string,
  *   filePath: string,
+ *   hasTask: boolean,
  *   contentUrl: (string|undefined),
  *   videoPoster: (string|undefined),
  *   audioArtwork: (string|undefined),
