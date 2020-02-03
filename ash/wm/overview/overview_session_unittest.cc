@@ -1749,7 +1749,7 @@ TEST_P(OverviewSessionTest, OverviewGridBounds) {
   Shelf* shelf = Shelf::ForWindow(Shell::GetPrimaryRootWindow());
   const gfx::Rect shelf_bounds = shelf->GetIdealBounds();
   const gfx::Rect hotseat_bounds =
-      shelf->shelf_widget()->hotseat_widget()->GetWindowBoundsInScreen();
+      shelf->hotseat_widget()->GetWindowBoundsInScreen();
   EXPECT_FALSE(GetGridBounds().Intersects(shelf_bounds));
   EXPECT_FALSE(GetGridBounds().Intersects(hotseat_bounds));
 }

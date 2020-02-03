@@ -1989,7 +1989,7 @@ TEST_P(ShelfLayoutManagerTest, PressHomeButtonOnAutoHideShelf) {
   GetAppListTestHelper()->CheckVisibility(false);
 
   ShelfNavigationWidget::TestApi navigation_test_api(
-      shelf->shelf_widget()->navigation_widget());
+      shelf->navigation_widget());
   ASSERT_TRUE(navigation_test_api.IsHomeButtonVisible());
   // Wait for the back button to finish animating from behind the home button.
   ShelfViewTestAPI(GetPrimaryShelf()->GetShelfViewForTesting())
@@ -2100,7 +2100,7 @@ TEST_P(ShelfLayoutManagerTest, MousePressAppListBtnWhenShelfBeingDragged) {
 
   // Press the AppList button by mouse.
   views::View* home_button =
-      GetPrimaryShelf()->shelf_widget()->navigation_widget()->GetHomeButton();
+      GetPrimaryShelf()->navigation_widget()->GetHomeButton();
   GetEventGenerator()->MoveMouseTo(
       home_button->GetBoundsInScreen().CenterPoint());
   GetEventGenerator()->ClickLeftButton();
@@ -3560,12 +3560,10 @@ TEST_P(DimShelfLayoutManagerTest, AutoDimHandlerInitialized) {
 
   EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()),
             kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->navigation_widget()),
-      kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->hotseat_widget()),
-      kExpectedDefaultShelfOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->navigation_widget()),
+            kExpectedDefaultShelfOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->hotseat_widget()),
+            kExpectedDefaultShelfOpacity);
   EXPECT_EQ(
       GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->status_area_widget()),
       kExpectedDefaultShelfOpacity);
@@ -3595,14 +3593,12 @@ TEST_P(DimShelfLayoutManagerTest, FloatingShelfDimAlpha) {
 
   EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()),
             kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->navigation_widget()),
-      dim_shelf_enabled ? kExpectedFloatingShelfDimOpacity
-                        : kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->hotseat_widget()),
-      dim_shelf_enabled ? kExpectedFloatingShelfDimOpacity
-                        : kExpectedDefaultShelfOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->navigation_widget()),
+            dim_shelf_enabled ? kExpectedFloatingShelfDimOpacity
+                              : kExpectedDefaultShelfOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->hotseat_widget()),
+            dim_shelf_enabled ? kExpectedFloatingShelfDimOpacity
+                              : kExpectedDefaultShelfOpacity);
   EXPECT_EQ(
       GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->status_area_widget()),
       dim_shelf_enabled ? kExpectedFloatingShelfDimOpacity
@@ -3624,14 +3620,12 @@ TEST_P(DimShelfLayoutManagerTest, MaximizedShelfDimAlpha) {
 
   EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()),
             kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->navigation_widget()),
-      dim_shelf_enabled ? kExpectedMaximizedShelfDimOpacity
-                        : kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->hotseat_widget()),
-      dim_shelf_enabled ? kExpectedMaximizedShelfDimOpacity
-                        : kExpectedDefaultShelfOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->navigation_widget()),
+            dim_shelf_enabled ? kExpectedMaximizedShelfDimOpacity
+                              : kExpectedDefaultShelfOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->hotseat_widget()),
+            dim_shelf_enabled ? kExpectedMaximizedShelfDimOpacity
+                              : kExpectedDefaultShelfOpacity);
   EXPECT_EQ(
       GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->status_area_widget()),
       dim_shelf_enabled ? kExpectedMaximizedShelfDimOpacity
@@ -3693,13 +3687,11 @@ TEST_P(HotseatDimShelfLayoutManagerTest, TabletModeShelfDimAlpha) {
 
   EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()),
             kExpectedDefaultShelfOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->navigation_widget()),
-      kExpectedFloatingShelfDimOpacity);
-  EXPECT_EQ(
-      GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->hotseat_widget()),
-      shelf_hotseat_enabled ? kExpectedDefaultShelfOpacity
-                            : kExpectedFloatingShelfDimOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->navigation_widget()),
+            kExpectedFloatingShelfDimOpacity);
+  EXPECT_EQ(GetWidgetOpacity(GetPrimaryShelf()->hotseat_widget()),
+            shelf_hotseat_enabled ? kExpectedDefaultShelfOpacity
+                                  : kExpectedFloatingShelfDimOpacity);
   EXPECT_EQ(
       GetWidgetOpacity(GetPrimaryShelf()->shelf_widget()->status_area_widget()),
       kExpectedFloatingShelfDimOpacity);
