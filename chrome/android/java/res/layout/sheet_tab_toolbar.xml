@@ -118,9 +118,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:max="100"
-            android:progressBackgroundTint="@color/modern_blue_300"
-            android:progressTint="@color/modern_blue_600" />
+            android:max="100" />
     </LinearLayout>
 
     <org.chromium.components.browser_ui.widget.FadingShadowView
