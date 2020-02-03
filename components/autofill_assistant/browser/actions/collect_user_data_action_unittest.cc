@@ -615,7 +615,8 @@ TEST_F(CollectUserDataActionTest, UserDataComplete_Contact) {
   EXPECT_TRUE(CollectUserDataAction::IsUserDataComplete(user_data, options));
 }
 
-TEST_F(CollectUserDataActionTest, UserDataComplete_Payment) {
+// Flaky: https://crbug.com/1048074
+TEST_F(CollectUserDataActionTest, DISABLED_UserDataComplete_Payment) {
   UserData user_data;
   CollectUserDataOptions options;
 
