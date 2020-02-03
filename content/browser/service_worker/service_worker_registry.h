@@ -198,13 +198,6 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       const std::string& key_prefix,
       GetUserDataForAllRegistrationsCallback callback);
 
-  // TODO(crbug.com/1039200): Make this private once methods/fields related to
-  // ServiceWorkerRegistration in ServiceWorkerStorage are moved into this
-  // class.
-  scoped_refptr<ServiceWorkerRegistration> GetOrCreateRegistration(
-      const ServiceWorkerDatabase::RegistrationData& data,
-      const ResourceList& resources);
-
  private:
   ServiceWorkerRegistration* FindInstallingRegistrationForClientUrl(
       const GURL& client_url);
@@ -212,6 +205,10 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
       const GURL& scope);
   ServiceWorkerRegistration* FindInstallingRegistrationForId(
       int64_t registration_id);
+
+  scoped_refptr<ServiceWorkerRegistration> GetOrCreateRegistration(
+      const ServiceWorkerDatabase::RegistrationData& data,
+      const ResourceList& resources);
 
   // Looks up live registrations and returns an optional value which may contain
   // a "findable" registration. See the implementation of this method for

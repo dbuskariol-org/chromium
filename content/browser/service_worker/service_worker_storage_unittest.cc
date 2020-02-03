@@ -1242,27 +1242,32 @@ class ServiceWorkerResourceStorageTest : public ServiceWorkerStorageTest {
     script_ = GURL("http://www.test.not/script.js");
     import_ = GURL("http://www.test.not/import.js");
     document_url_ = GURL("http://www.test.not/scope/document.html");
-    registration_id_ = storage()->NewRegistrationId();
-    version_id_ = storage()->NewVersionId();
     resource_id1_ = storage()->NewResourceId();
     resource_id2_ = storage()->NewResourceId();
     resource_id1_size_ = 239193;
     resource_id2_size_ = 59923;
 
     // Cons up a new registration+version with two script resources.
-    RegistrationData data;
-    data.registration_id = registration_id_;
-    data.scope = scope_;
-    data.script = script_;
-    data.version_id = version_id_;
-    data.is_active = false;
+    blink::mojom::ServiceWorkerRegistrationOptions options;
+    options.scope = scope_;
+    registration_ = registry()->CreateNewRegistration(options);
+    scoped_refptr<ServiceWorkerVersion> version = registry()->CreateNewVersion(
+        registration_.get(), script_, options.type);
+    version->set_fetch_handler_existence(
+        ServiceWorkerVersion::FetchHandlerExistence::DOES_NOT_EXIST);
+    version->SetStatus(ServiceWorkerVersion::INSTALLED);
+
     std::vector<ResourceRecord> resources;
     resources.push_back(
         ResourceRecord(resource_id1_, script_, resource_id1_size_));
     resources.push_back(
         ResourceRecord(resource_id2_, import_, resource_id2_size_));
-    registration_ = registry()->GetOrCreateRegistration(data, resources);
-    registration_->waiting_version()->SetStatus(ServiceWorkerVersion::NEW);
+    version->script_cache_map()->SetResources(resources);
+
+    registration_->SetWaitingVersion(version);
+
+    registration_id_ = registration_->id();
+    version_id_ = version->version_id();
 
     // Add the resources ids to the uncommitted list.
     registry()->StoreUncommittedResourceId(resource_id1_);
