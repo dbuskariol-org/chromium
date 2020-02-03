@@ -273,15 +273,6 @@ void AssistantInteractionController::OnUiVisibilityChanged(
       model_.ClearInteraction();
       model_.SetInputModality(GetDefaultInputModality());
       break;
-    case AssistantVisibility::kHidden:
-      // When the UI is hidden we stop any voice query in progress so that we
-      // don't listen to the user while not visible. We also restore the default
-      // input modality for the next launch.
-      if (model_.pending_query().type() == AssistantQueryType::kVoice) {
-        StopActiveInteraction(false);
-      }
-      model_.SetInputModality(GetDefaultInputModality());
-      break;
     case AssistantVisibility::kVisible:
       OnUiVisible(entry_point.value());
       break;
