@@ -491,7 +491,7 @@ TEST_F(CollectUserDataActionTest, SelectPaymentMethod) {
 
   autofill::CreditCard credit_card(base::GenerateGUID(), kFakeUrl);
   autofill::test::SetCreditCardInfo(&credit_card, "Marion Mitchell",
-                                    "4111 1111 1111 1111", "01", "2020",
+                                    "4111 1111 1111 1111", "01", "2050",
                                     billing_profile.guid());
 
   ON_CALL(mock_action_delegate_, CollectUserData(_))
@@ -615,8 +615,7 @@ TEST_F(CollectUserDataActionTest, UserDataComplete_Contact) {
   EXPECT_TRUE(CollectUserDataAction::IsUserDataComplete(user_data, options));
 }
 
-// Flaky: https://crbug.com/1048074
-TEST_F(CollectUserDataActionTest, DISABLED_UserDataComplete_Payment) {
+TEST_F(CollectUserDataActionTest, UserDataComplete_Payment) {
   UserData user_data;
   CollectUserDataOptions options;
 
@@ -629,7 +628,7 @@ TEST_F(CollectUserDataActionTest, DISABLED_UserDataComplete_Payment) {
       std::make_unique<autofill::CreditCard>(base::GenerateGUID(), kFakeUrl);
   autofill::test::SetCreditCardInfo(user_data.selected_card_.get(),
                                     "Marion Mitchell", "4111 1111 1111 1111",
-                                    "01", "2020",
+                                    "01", "2050",
                                     /* billing_address_id = */ "");
   EXPECT_FALSE(CollectUserDataAction::IsUserDataComplete(user_data, options));
 
@@ -1054,7 +1053,7 @@ TEST_F(CollectUserDataActionTest, AllowedBasicCardNetworks) {
                 base::GenerateGUID(), kFakeUrl);
             autofill::test::SetCreditCardInfo(
                 user_data_.selected_card_.get(), "Marion Mitchell",
-                "4111 1111 1111 1111", "01", "2020",
+                "4111 1111 1111 1111", "01", "2050",
                 user_data_.selected_addresses_["billing_address"]->guid());
 
             std::move(collect_user_data_options->confirm_callback)
