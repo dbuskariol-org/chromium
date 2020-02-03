@@ -49,6 +49,7 @@ UpdateRequiredScreen::UpdateRequiredScreen(UpdateRequiredView* view,
       version_updater_(std::make_unique<VersionUpdater>(this)),
       network_state_helper_(std::make_unique<login::NetworkStateHelper>()),
       clock_(base::DefaultClock::GetInstance()) {
+  error_message_delay_ = kDelayErrorMessage;
   if (view_)
     view_->Bind(this);
 }
@@ -208,7 +209,6 @@ void UpdateRequiredScreen::ShowErrorMessage() {
   error_message_timer_.Stop();
 
   is_shown_ = false;
-
   connect_request_subscription_ = error_screen_->RegisterConnectRequestCallback(
       base::BindRepeating(&UpdateRequiredScreen::OnConnectRequested,
                           weak_factory_.GetWeakPtr()));
@@ -237,9 +237,13 @@ void UpdateRequiredScreen::UpdateErrorMessage(
 void UpdateRequiredScreen::DelayErrorMessage() {
   if (error_message_timer_.IsRunning())
     return;
-
-  error_message_timer_.Start(FROM_HERE, kDelayErrorMessage, this,
+  error_message_timer_.Start(FROM_HERE, error_message_delay_, this,
                              &UpdateRequiredScreen::ShowErrorMessage);
+}
+
+void UpdateRequiredScreen::SetErrorMessageDelayForTesting(
+    const base::TimeDelta& delay) {
+  error_message_delay_ = delay;
 }
 
 void UpdateRequiredScreen::UpdateInfoChanged(
