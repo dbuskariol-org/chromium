@@ -134,10 +134,9 @@ class QuickViewController {
     this.quickView_.onOpenInNewButtonTap =
         this.onOpenInNewButtonTap_.bind(this);
 
-    const toolTip = this.quickView_.$$('files-tooltip');
-    const elems =
+    const toolTipElements =
         this.quickView_.$$('#toolbar').querySelectorAll('[has-tooltip]');
-    toolTip.addTargets(elems);
+    this.quickView_.$$('files-tooltip').addTargets(toolTipElements);
   }
 
   /**
