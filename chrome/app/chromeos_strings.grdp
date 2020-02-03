@@ -3620,6 +3620,15 @@
   <message name="IDS_CROSTINI_INSTALLER_USERNAME_MESSAGE" desc="Text shown in the Crostini installer dialog prompting the user to pick their username">
     Select a username
   </message>
+  <message name="IDS_CROSTINI_INSTALLER_USERNAME_INVALID_FIRST_CHARACTER_ERROR" desc="Text shown in the Crostini installer dialog when the user picks a username starting with an invalid character">
+    Must start with a lowercase character or underscore
+  </message>
+  <message name="IDS_CROSTINI_INSTALLER_USERNAME_INVALID_CHARACTERS_ERROR" desc="Text shown in the Crostini installer dialog when the user picks a username containing an invalid character">
+    Lowercase characters, digits, underscores, or dashes only
+  </message>
+  <message name="IDS_CROSTINI_INSTALLER_USERNAME_NOT_AVAILABLE_ERROR" desc="Text shown in the Crostini installer dialog when the user picks a username that is not available">
+    Username "<ph name="USERNAME">$1<ex>root</ex></ph>" is not available
+  </message>
   <message name="IDS_CROSTINI_UNINSTALLER_TITLE" desc="Title of the Crostini uninstaller, a dialog for uninstalling Linux, the associated VM and Linux files.">
     Delete Linux (Beta)
   </message>

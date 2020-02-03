@@ -73,6 +73,12 @@ void AddStringResources(content::WebUIDataSource* source) {
       {"configureMessage", IDS_CROSTINI_INSTALLER_CONFIGURE_MESSAGE},
       {"diskSizeMessage", IDS_CROSTINI_INSTALLER_DISK_SIZE_MESSAGE},
       {"usernameMessage", IDS_CROSTINI_INSTALLER_USERNAME_MESSAGE},
+      {"usernameInvalidFirstCharacterError",
+       IDS_CROSTINI_INSTALLER_USERNAME_INVALID_FIRST_CHARACTER_ERROR},
+      {"usernameInvalidCharactersError",
+       IDS_CROSTINI_INSTALLER_USERNAME_INVALID_CHARACTERS_ERROR},
+      {"usernameNotAvailableError",
+       IDS_CROSTINI_INSTALLER_USERNAME_NOT_AVAILABLE_ERROR},
   };
   AddLocalizedStringsBulk(source, kStrings);
 
