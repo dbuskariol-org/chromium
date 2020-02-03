@@ -7143,7 +7143,8 @@
     "V8WasmLiftoffMobile": [
         {
             "platforms": [
-                "android"
+                "android",
+                "ios"
             ],
             "experiments": [
                 {
