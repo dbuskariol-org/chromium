@@ -688,6 +688,7 @@ class _IRBuilder(object):
 
         buffer_source_types = set([
             'ArrayBuffer',
+            'ArrayBufferView',  # Blink-specific ArrayBufferView definition
             'DataView',
             'Int8Array',
             'Int16Array',
