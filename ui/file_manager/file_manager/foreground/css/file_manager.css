@@ -2280,7 +2280,11 @@ body.files-ng #list-container li .detail-icon {
 }
 
 body.files-ng #list-container li .detail-checkmark {
-  background-image: url(../images/files/ui/list_check.svg);
+  -webkit-mask-image: url(../images/files/ui/list_check.svg);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  background-color: currentColor;
+  background-image: none;
   height: 40px;
   width: 32px;
 }
