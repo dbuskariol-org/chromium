@@ -429,7 +429,7 @@ def _intermediate_work_dir_name(dist_config):
     return dist_config.packaging_basename
 
 
-def sign_chrome(orig_paths,
+def sign_all(orig_paths,
              config,
              disable_packaging=False,
              do_notarization=True,
