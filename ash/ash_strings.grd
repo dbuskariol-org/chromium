@@ -190,7 +190,15 @@ This file contains the strings for ash.
 
       <!-- Status tray items -->
       <message name="IDS_ASH_STATUS_TRAY_ACCESSIBLE_DESCRIPTION" desc="The accessible description of the status tray and the information on it.">
-        Status tray, time <ph name="time">$1<ex>9:50</ex></ph>, <ph name="battery">$2<ex>Battery is full.</ex></ph> Press search + left to access the notification center.
+        Status tray, time <ph name="time">$1<ex>9:50</ex></ph>,
+        <ph name="battery">$2<ex>Battery is full.</ex></ph>
+        <ph name="network">$3<ex>Connected to Wifi.</ex></ph>,
+        <ph name="notification">$4<ex>1 notification</ex></ph>,
+        <ph name="ime">$5<ex>Using US keyboard</ex></ph>
+        <ph name="locale">$6<ex>Using English</ex></ph>
+      </message>
+      <message name="IDS_ASH_QUICK_SETTINGS_BUBBLE_ACCESSIBLE_DESCRIPTION" desc="The accessible description of the quick settings bubble and the information in it.">
+        Quick Settings, Press search + left to access the notification center.
       </message>
       <message name="IDS_ASH_STATUS_TRAY_BRAILLE_DISPLAY_CONNECTED" desc="The message shown on a notification when a braille display is connected">
         Braille display connected.
