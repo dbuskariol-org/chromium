@@ -46,13 +46,6 @@ void HandleSSLError(content::WebContents* web_contents,
 // portals.
 void SetDiagnoseSSLErrorsAsCaptivePortalForTesting(bool enabled);
 
-#if defined(OS_ANDROID)
-// Returns the URL that will be navigated to when the user clicks on the
-// "Connect" button of the captive portal interstitial. Used by tests to
-// verify this flow.
-GURL GetCaptivePortalLoginPageUrlForTesting();
-#endif
-
 }  // namespace weblayer
 
 #endif  // WEBLAYER_BROWSER_SSL_ERROR_HANDLER_H_

@@ -8,7 +8,6 @@
 #include "build/build_config.h"
 #include "components/security_interstitials/content/bad_clock_blocking_page.h"
 #include "components/security_interstitials/content/captive_portal_blocking_page.h"
-#include "components/security_interstitials/content/ssl_blocking_page.h"
 #include "components/security_interstitials/content/ssl_cert_reporter.h"
 #include "components/security_interstitials/content/ssl_error_navigation_throttle.h"
 #include "components/security_interstitials/core/metrics_helper.h"
@@ -18,13 +17,10 @@
 #include "weblayer/browser/browser_process.h"
 #include "weblayer/browser/ssl_error_controller_client.h"
 #include "weblayer/browser/weblayer_content_browser_overlay_manifest.h"
+#include "weblayer/browser/weblayer_security_blocking_page_factory.h"
 
 #if defined(OS_ANDROID)
-#include "content/public/browser/page_navigator.h"
-#include "content/public/browser/web_contents.h"
-#include "content/public/common/referrer.h"
 #include "net/android/network_library.h"
-#include "ui/base/window_open_disposition.h"
 #endif
 
 namespace weblayer {
@@ -48,32 +44,6 @@ bool IsBehindCaptivePortal() {
 #endif
 }
 
-#if defined(OS_ANDROID)
-GURL GetCaptivePortalLoginPageUrlInternal() {
-  // NOTE: This is taken from the default login URL in //chrome's
-  // CaptivePortalHelper.java, which is used in the implementation referenced
-  // in OpenLoginPage() below.
-  return GURL("http://connectivitycheck.gstatic.com/generate_204");
-}
-#endif
-
-void OpenLoginPage(content::WebContents* web_contents) {
-  // TODO(https://crbug.com/1030692): Componentize and share the
-  // Android implementation from //chrome's
-  // ChromeSecurityBlockingPageFactory::OpenLoginPage(), from which this is
-  // adapted.
-#if defined(OS_ANDROID)
-  // NOTE: In Chrome this opens in a new tab; however, as WebLayer doesn't have
-  // the ability to open new tabs it must open in the current tab.
-  content::OpenURLParams params(
-      GetCaptivePortalLoginPageUrlInternal(), content::Referrer(),
-      WindowOpenDisposition::CURRENT_TAB, ui::PAGE_TRANSITION_LINK, false);
-  web_contents->OpenURL(params);
-#else
-  NOTIMPLEMENTED();
-#endif
-}
-
 // Constructs and shows a captive portal interstitial. Adapted from //chrome's
 // SSLErrorHandlerDelegateImpl::ShowCaptivePortalInterstitial().
 void ShowCaptivePortalInterstitial(
@@ -85,31 +55,21 @@ void ShowCaptivePortalInterstitial(
     base::OnceCallback<
         void(std::unique_ptr<security_interstitials::SecurityInterstitialPage>)>
         blocking_page_ready_callback) {
-  security_interstitials::MetricsHelper::ReportDetails report_details;
-  report_details.metric_prefix = "captive_portal";
-  auto metrics_helper = std::make_unique<security_interstitials::MetricsHelper>(
-      request_url, report_details, /*history_service=*/nullptr);
-
-  auto controller_client = std::make_unique<SSLErrorControllerClient>(
-      web_contents, cert_error, ssl_info, request_url,
-      std::move(metrics_helper));
-
   // When captive portals are detected by the underlying platform (the only
   // context in which captive portals are currently detected in WebLayer),
   // the login URL is not specified by the client but is determined internally.
   GURL login_url;
 
-  auto* interstitial_page = new CaptivePortalBlockingPage(
-      web_contents, request_url, login_url, std::move(ssl_cert_reporter),
-      ssl_info, std::move(controller_client),
-      base::BindRepeating(&OpenLoginPage));
-
   // Note: |blocking_page_ready_callback| must be posted due to
   // HandleSSLError()'s guarantee that it will not invoke this callback
   // synchronously.
+  WebLayerSecurityBlockingPageFactory blocking_page_factory;
   base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(std::move(blocking_page_ready_callback),
-                                base::WrapUnique(interstitial_page)));
+      FROM_HERE,
+      base::BindOnce(std::move(blocking_page_ready_callback),
+                     blocking_page_factory.CreateCaptivePortalBlockingPage(
+                         web_contents, request_url, login_url,
+                         std::move(ssl_cert_reporter), ssl_info, cert_error)));
 }
 
 // Constructs and shows an SSL interstitial. Adapted from //chrome's
@@ -124,29 +84,18 @@ void ShowSSLInterstitial(
         void(std::unique_ptr<security_interstitials::SecurityInterstitialPage>)>
         blocking_page_ready_callback,
     int options_mask) {
-  bool overridable = SSLBlockingPage::IsOverridable(options_mask);
-
-  security_interstitials::MetricsHelper::ReportDetails report_details;
-  report_details.metric_prefix =
-      overridable ? "ssl_overridable" : "ssl_nonoverridable";
-  auto metrics_helper = std::make_unique<security_interstitials::MetricsHelper>(
-      request_url, report_details, /*history_service=*/nullptr);
-
-  auto controller_client = std::make_unique<SSLErrorControllerClient>(
-      web_contents, cert_error, ssl_info, request_url,
-      std::move(metrics_helper));
-
-  auto* interstitial_page = new SSLBlockingPage(
-      web_contents, cert_error, ssl_info, request_url, options_mask,
-      base::Time::NowFromSystemTime(), /*support_url=*/GURL(),
-      std::move(ssl_cert_reporter), overridable, std::move(controller_client));
-
   // Note: |blocking_page_ready_callback| must be posted due to
   // HandleSSLError()'s guarantee that it will not invoke this callback
   // synchronously.
+  WebLayerSecurityBlockingPageFactory blocking_page_factory;
   base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(std::move(blocking_page_ready_callback),
-                                base::WrapUnique(interstitial_page)));
+      FROM_HERE,
+      base::BindOnce(
+          std::move(blocking_page_ready_callback),
+          blocking_page_factory.CreateSSLPage(
+              web_contents, cert_error, ssl_info, request_url, options_mask,
+              base::Time::NowFromSystemTime(), /*support_url=*/GURL(),
+              std::move(ssl_cert_reporter))));
 }
 
 // Constructs and shows a bad clock interstitial. Adapted from //chrome's
@@ -161,26 +110,17 @@ void ShowBadClockInterstitial(
     base::OnceCallback<
         void(std::unique_ptr<security_interstitials::SecurityInterstitialPage>)>
         blocking_page_ready_callback) {
-  security_interstitials::MetricsHelper::ReportDetails report_details;
-  report_details.metric_prefix = "bad_clock";
-  auto metrics_helper = std::make_unique<security_interstitials::MetricsHelper>(
-      request_url, report_details, /*history_service=*/nullptr);
-
-  auto controller_client = std::make_unique<SSLErrorControllerClient>(
-      web_contents, cert_error, ssl_info, request_url,
-      std::move(metrics_helper));
-
-  auto* interstitial_page = new BadClockBlockingPage(
-      web_contents, cert_error, ssl_info, request_url,
-      base::Time::NowFromSystemTime(), clock_state,
-      std::move(ssl_cert_reporter), std::move(controller_client));
-
   // Note: |blocking_page_ready_callback| must be posted due to
   // HandleSSLError()'s guarantee that it will not invoke this callback
   // synchronously.
+  WebLayerSecurityBlockingPageFactory blocking_page_factory;
   base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(std::move(blocking_page_ready_callback),
-                                base::WrapUnique(interstitial_page)));
+      FROM_HERE,
+      base::BindOnce(std::move(blocking_page_ready_callback),
+                     blocking_page_factory.CreateBadClockBlockingPage(
+                         web_contents, cert_error, ssl_info, request_url,
+                         base::Time::NowFromSystemTime(), clock_state,
+                         std::move(ssl_cert_reporter))));
 }
 
 }  // namespace
@@ -255,11 +195,5 @@ void HandleSSLError(
 void SetDiagnoseSSLErrorsAsCaptivePortalForTesting(bool enabled) {
   g_is_behind_captive_portal_for_testing = enabled;
 }
-
-#if defined(OS_ANDROID)
-GURL GetCaptivePortalLoginPageUrlForTesting() {
-  return GetCaptivePortalLoginPageUrlInternal();
-}
-#endif
 
 }  // namespace weblayer

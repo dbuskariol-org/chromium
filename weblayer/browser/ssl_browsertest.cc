@@ -12,6 +12,7 @@
 #include "net/test/embedded_test_server/embedded_test_server.h"
 #include "weblayer/browser/browser_process.h"
 #include "weblayer/browser/ssl_error_handler.h"
+#include "weblayer/browser/weblayer_security_blocking_page_factory.h"
 #include "weblayer/shell/browser/shell.h"
 #include "weblayer/test/interstitial_utils.h"
 #include "weblayer/test/load_completion_observer.h"
@@ -166,7 +167,8 @@ class SSLBrowserTest : public WebLayerBrowserTest {
     // Note: The embedded test server cannot actually load the captive portal
     // login URL, so simply detect the start of the navigation to the page.
     TestNavigationObserver navigation_observer(
-        GetCaptivePortalLoginPageUrlForTesting(),
+        WebLayerSecurityBlockingPageFactory::
+            GetCaptivePortalLoginPageUrlForTesting(),
         TestNavigationObserver::NavigationEvent::kStart, shell());
     ExecuteScript(shell(), "window.certificateErrorPageController.openLogin();",
                   false /*use_separate_isolate*/);
