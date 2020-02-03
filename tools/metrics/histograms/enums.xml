@@ -57116,6 +57116,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="393" label="DER"/>
   <int value="394" label="FILELOC"/>
   <int value="395" label="WEBLOC"/>
+  <int value="396" label="XSD"/>
 </enum>
 
 <enum name="SBClientDownloadIsSignedBinary">
