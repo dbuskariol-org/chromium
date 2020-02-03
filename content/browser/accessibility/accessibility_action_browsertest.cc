@@ -346,7 +346,14 @@ IN_PROC_BROWSER_TEST_F(AccessibilityCanvasActionBrowserTest,
   EXPECT_EQ(SK_ColorMAGENTA, bitmap.getColor(3, 1));
 }
 
-IN_PROC_BROWSER_TEST_F(AccessibilityActionBrowserTest, ImgElementGetImage) {
+// Flaky on Mac, crbug.com/1047921
+#if defined(OS_MACOSX)
+#define MAYBE_ImgElementGetImage DISABLED_ImgElementGetImage
+#else
+#define MAYBE_ImgElementGetImage ImgElementGetImage
+#endif
+IN_PROC_BROWSER_TEST_F(AccessibilityActionBrowserTest,
+                       MAYBE_ImgElementGetImage) {
   EXPECT_TRUE(NavigateToURL(shell(), GURL(url::kAboutBlankURL)));
 
   AccessibilityNotificationWaiter waiter(shell()->web_contents(),
