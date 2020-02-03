@@ -5,6 +5,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_localized_strings_provider.h"
 
 #include "ash/public/cpp/ash_features.h"
+#include "ash/public/mojom/assistant_state_controller.mojom.h"
 #include "base/command_line.h"
 #include "base/feature_list.h"
 #include "base/strings/stringprintf.h"
@@ -16,6 +17,7 @@
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/browser_process_platform_part.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
+#include "chrome/browser/chromeos/assistant/assistant_util.h"
 #include "chrome/browser/chromeos/crostini/crostini_features.h"
 #include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/browser/chromeos/policy/browser_policy_connector_chromeos.h"
@@ -1545,6 +1547,37 @@ void AddResetStrings(content::WebUIDataSource* html_source) {
                                  l10n_util::GetStringUTF16(IDS_PRODUCT_NAME)));
 }
 
+void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
+  static constexpr webui::LocalizedString kLocalizedStrings[] = {
+      {"osSearchEngineLabel", IDS_OS_SETTINGS_SEARCH_ENGINE_LABEL},
+      {"searchGoogleAssistant", IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT},
+      {"searchGoogleAssistantEnabled",
+       IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_ENABLED},
+      {"searchGoogleAssistantDisabled",
+       IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_DISABLED},
+      {"searchGoogleAssistantOn", IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_ON},
+      {"searchGoogleAssistantOff", IDS_SETTINGS_SEARCH_GOOGLE_ASSISTANT_OFF},
+  };
+  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+
+  // NOTE: This will be false when the flag is disabled.
+  const bool is_assistant_allowed =
+      ::assistant::IsAssistantAllowedForProfile(profile) ==
+      ash::mojom::AssistantAllowedState::ALLOWED;
+  html_source->AddBoolean("isAssistantAllowed", is_assistant_allowed);
+  html_source->AddLocalizedString("osSearchPageTitle",
+                                  is_assistant_allowed
+                                      ? IDS_SETTINGS_SEARCH_AND_ASSISTANT
+                                      : IDS_SETTINGS_SEARCH);
+  html_source->AddString("searchExplanation",
+                         l10n_util::GetStringFUTF16(
+                             IDS_SETTINGS_SEARCH_EXPLANATION,
+                             base::ASCIIToUTF16(chrome::kOmniboxLearnMoreURL)));
+  html_source->AddString(
+      "osSearchEngineTooltip",
+      ui::SubstituteChromeOSDeviceType(IDS_OS_SETTINGS_SEARCH_ENGINE_TOOLTIP));
+}
+
 }  // namespace
 
 void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
@@ -1573,6 +1606,7 @@ void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
   AddPrintingStrings(html_source);
   AddResetStrings(html_source);
   AddSearchInSettingsStrings(html_source);
+  AddSearchStrings(html_source, profile);
   AddUsersStrings(html_source);
 }
 
