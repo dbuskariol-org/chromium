@@ -27,6 +27,7 @@
 #include "chrome/browser/ui/app_list/app_list_controller_delegate.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_list_prefs.h"
 #include "chrome/browser/ui/app_list/extension_app_utils.h"
+#include "chrome/browser/ui/ash/launcher/browser_shortcut_launcher_item_controller.h"
 #include "chrome/browser/ui/ash/launcher/chrome_launcher_controller.h"
 #include "chrome/browser/ui/browser_commands.h"
 #include "chrome/browser/ui/chrome_pages.h"
@@ -260,6 +261,13 @@ void AppServiceShelfContextMenu::OnGetMenuModel(
 
   for (size_t i = index; i < menu_items->items.size(); i++) {
     DCHECK_EQ(apps::mojom::MenuItemType::kCommand, menu_items->items[i]->type);
+
+    // For Chrome browser, add the close item before the app info item.
+    if (item().id.app_id == extension_misc::kChromeAppId &&
+        menu_items->items[i]->command_id == ash::SHOW_APP_INFO) {
+      BuildChromeAppMenu(menu_model.get());
+    }
+
     AddContextMenuOption(
         menu_model.get(),
         static_cast<ash::CommandId>(menu_items->items[i]->command_id),
@@ -348,6 +356,15 @@ void AppServiceShelfContextMenu::BuildCrostiniAppMenu(
   } else {
     AddContextMenuOption(menu_model, ash::MENU_OPEN_NEW,
                          IDS_APP_CONTEXT_MENU_ACTIVATE_ARC);
+  }
+}
+
+void AppServiceShelfContextMenu::BuildChromeAppMenu(
+    ui::SimpleMenuModel* menu_model) {
+  if (!BrowserShortcutLauncherItemController::IsListOfActiveBrowserEmpty() ||
+      item().type == ash::TYPE_DIALOG || controller()->IsOpen(item().id)) {
+    AddContextMenuOption(menu_model, ash::MENU_CLOSE,
+                         IDS_SHELF_CONTEXT_MENU_CLOSE);
   }
 }
 
