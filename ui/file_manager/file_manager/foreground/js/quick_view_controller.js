@@ -289,11 +289,11 @@ class QuickViewController {
         event.stopPropagation();
       });
 
-      this.deleteConfirmDialog_.showModalElement = function() {
+      this.deleteConfirmDialog_.showModalElement = () => {
         dialogElement.showModal();
       };
 
-      this.deleteConfirmDialog_.doneCallback = function() {
+      this.deleteConfirmDialog_.doneCallback = () => {
         dialogElement.close();
       };
     }
