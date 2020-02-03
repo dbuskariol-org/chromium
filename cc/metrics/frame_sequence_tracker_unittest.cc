@@ -318,6 +318,10 @@ class FrameSequenceTrackerTest : public testing::Test {
     return tracker_->main_throughput();
   }
 
+  void SetTerminationStatus(FrameSequenceTracker::TerminationStatus status) {
+    tracker_->termination_status_ = status;
+  }
+
  protected:
   uint32_t number_of_frames_checkerboarded() const {
     return tracker_->metrics_->frames_checkerboarded();
@@ -715,7 +719,6 @@ TEST_F(FrameSequenceTrackerTest, BeginImplFrameBeforeTerminate) {
 }
 
 // b(2417)B(0,2417)E(2417)n(2417)N(2417,2417)
-
 TEST_F(FrameSequenceTrackerTest, SequenceNumberReset) {
   const char sequence[] =
       "b(6)B(0,6)n(6)e(6)Rb(1)B(0,1)N(1,1)n(1)e(1)b(2)B(1,2)n(2)e(2)";
@@ -732,6 +735,29 @@ TEST_F(FrameSequenceTrackerTest, MainThroughputWithHighLatency) {
   EXPECT_EQ(MainThroughput().frames_expected, 2u);
   EXPECT_EQ(MainThroughput().frames_produced, 1u);
 }
+
+#if DCHECK_IS_ON()
+// These two tests ensures that when present a frame, the frames_received is
+// the same as frames_processed. As long as there is no crash, the condition is
+// true.
+TEST_F(FrameSequenceTrackerTest, FramesProcessedMatch1) {
+  const char sequence[] = "b(1)n(1)e(1)b(2)s(2)e(2)b(3)n(3)";
+  GenerateSequence(sequence);
+  collection_.StopSequence(FrameSequenceTrackerType::kTouchScroll);
+  SetTerminationStatus(
+      FrameSequenceTracker::TerminationStatus::kReadyForTermination);
+  GenerateSequence("P(2)");
+}
+
+TEST_F(FrameSequenceTrackerTest, FramesProcessedMatch2) {
+  const char sequence[] = "b(1)n(1)e(1)b(2)s(2)e(2)b(3)s(3)";
+  GenerateSequence(sequence);
+  collection_.StopSequence(FrameSequenceTrackerType::kTouchScroll);
+  SetTerminationStatus(
+      FrameSequenceTracker::TerminationStatus::kReadyForTermination);
+  GenerateSequence("P(2)");
+}
+#endif
 
 TEST_F(FrameSequenceTrackerTest, OffScreenMainDamage1) {
   const char sequence[] =

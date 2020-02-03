@@ -110,7 +110,7 @@ class CC_EXPORT FrameSequenceMetrics {
   bool HasEnoughDataForReporting() const;
   bool HasDataLeftForReporting() const;
   // Report related metrics: throughput, checkboarding...
-  void ReportMetrics(std::string debug_trace = std::string());
+  void ReportMetrics();
 
   ThroughputData& impl_throughput() { return impl_throughput_; }
   ThroughputData& main_throughput() { return main_throughput_; }
