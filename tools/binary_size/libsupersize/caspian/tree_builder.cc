@@ -130,7 +130,8 @@ Json::Value TreeBuilder::Open(const char* path) {
     exit(1);
   }
   Json::Value v;
-  node->WriteIntoJson(1, node_sort_func, size_info_->IsSparse(), &v);
+  node->WriteIntoJson(1, node_sort_func, size_info_->IsSparse(),
+                      method_count_mode_, &v);
   return v;
 }
 

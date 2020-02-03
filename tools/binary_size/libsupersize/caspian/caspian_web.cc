@@ -91,6 +91,16 @@ bool BuildTree(bool method_count_mode,
 
   const bool diff_mode = info && before_info;
 
+  if (method_count_mode && diff_mode) {
+    // include_sections is used to filter to just .dex.method symbols.
+    // For diffs, we also want to filter to just adds & removes.
+    filters.push_back([](const GroupedPath&, const BaseSymbol& sym) -> bool {
+      DiffStatus diff_status = sym.GetDiffStatus();
+      return diff_status == DiffStatus::kAdded ||
+             diff_status == DiffStatus::kRemoved;
+    });
+  }
+
   if (minimum_size_bytes > 0) {
     if (!diff_mode) {
       filters.push_back([minimum_size_bytes](const GroupedPath&,
