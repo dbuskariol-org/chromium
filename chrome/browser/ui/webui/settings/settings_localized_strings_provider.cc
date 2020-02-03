@@ -517,15 +517,7 @@ void AddResetStrings(content::WebUIDataSource* html_source) {
     {"triggeredResetPageTitle", IDS_TRIGGERED_RESET_PROFILE_SETTINGS_TITLE},
     {"resetDialogCommit", IDS_SETTINGS_RESET},
     {"resetPageFeedback", IDS_SETTINGS_RESET_PROFILE_FEEDBACK},
-#if defined(OS_CHROMEOS)
-    {"powerwashTitle", IDS_SETTINGS_FACTORY_RESET},
-    {"powerwashDialogTitle", IDS_SETTINGS_FACTORY_RESET_HEADING},
-    {"powerwashDialogExplanation", IDS_SETTINGS_FACTORY_RESET_WARNING},
-    {"powerwashDialogButton", IDS_SETTINGS_RESTART},
-    {"powerwashLearnMoreUrl", IDS_FACTORY_RESET_HELP_URL},
-    {"powerwashButton", IDS_SETTINGS_FACTORY_RESET_BUTTON_LABEL},
-    {"powerwashButtonRoleDescription", IDS_SETTINGS_FACTORY_RESET_BUTTON_ROLE},
-#endif
+
     // Automatic reset banner (now a dialog).
     {"resetAutomatedDialogTitle", IDS_SETTINGS_RESET_AUTOMATED_DIALOG_TITLE},
     {"resetProfileBannerButton", IDS_SETTINGS_RESET_BANNER_RESET_BUTTON_TEXT},
@@ -541,12 +533,6 @@ void AddResetStrings(content::WebUIDataSource* html_source) {
                          chrome::kResetProfileSettingsLearnMoreURL);
   html_source->AddString("resetProfileBannerLearnMoreUrl",
                          chrome::kAutomaticSettingsResetLearnMoreURL);
-#if defined(OS_CHROMEOS)
-  html_source->AddString(
-      "powerwashDescription",
-      l10n_util::GetStringFUTF16(IDS_SETTINGS_FACTORY_RESET_DESCRIPTION,
-                                 l10n_util::GetStringUTF16(IDS_PRODUCT_NAME)));
-#endif
 }
 
 #if !defined(OS_CHROMEOS)

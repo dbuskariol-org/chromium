@@ -32,6 +32,7 @@
 #include "chrome/common/url_constants.h"
 #include "chrome/grit/chromium_strings.h"
 #include "chrome/grit/generated_resources.h"
+#include "chrome/grit/locale_settings.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/constants/chromeos_switches.h"
 #include "chromeos/services/assistant/public/features.h"
@@ -1515,6 +1516,26 @@ void AddAboutStrings(content::WebUIDataSource* html_source) {
       ui::SubstituteChromeOSDeviceType(IDS_SETTINGS_UPGRADE_UP_TO_DATE));
 }
 
+void AddResetStrings(content::WebUIDataSource* html_source) {
+  static constexpr webui::LocalizedString kLocalizedStrings[] = {
+      {"resetPageTitle", IDS_SETTINGS_RESET},
+      {"powerwashTitle", IDS_SETTINGS_FACTORY_RESET},
+      {"powerwashDialogTitle", IDS_SETTINGS_FACTORY_RESET_HEADING},
+      {"powerwashDialogButton", IDS_SETTINGS_RESTART},
+      {"powerwashButton", IDS_SETTINGS_FACTORY_RESET_BUTTON_LABEL},
+      {"powerwashDialogExplanation", IDS_SETTINGS_FACTORY_RESET_WARNING},
+      {"powerwashLearnMoreUrl", IDS_FACTORY_RESET_HELP_URL},
+      {"powerwashButtonRoleDescription",
+       IDS_SETTINGS_FACTORY_RESET_BUTTON_ROLE},
+  };
+  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+
+  html_source->AddString(
+      "powerwashDescription",
+      l10n_util::GetStringFUTF16(IDS_SETTINGS_FACTORY_RESET_DESCRIPTION,
+                                 l10n_util::GetStringUTF16(IDS_PRODUCT_NAME)));
+}
+
 }  // namespace
 
 void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
@@ -1541,6 +1562,7 @@ void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
   AddPersonalizationStrings(html_source);
   AddPluginVmStrings(html_source, profile);
   AddPrintingStrings(html_source);
+  AddResetStrings(html_source);
   AddSearchInSettingsStrings(html_source);
   AddUsersStrings(html_source);
 }
