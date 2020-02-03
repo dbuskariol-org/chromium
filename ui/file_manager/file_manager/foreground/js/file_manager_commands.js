@@ -1017,11 +1017,14 @@ CommandHandler.COMMANDS_['delete'] = new class extends Command {
 
     if (!dialog) {
       dialog = fileManager.ui.deleteConfirmDialog;
+    } else if (dialog.showModalElement) {
+      dialog.showModalElement();
     }
 
     dialog.show(message, () => {
+      dialog.doneCallback && dialog.doneCallback();
       fileManager.fileOperationManager.deleteEntries(entries);
-    }, null, null);
+    }, dialog.doneCallback, null);
   }
 
   /**

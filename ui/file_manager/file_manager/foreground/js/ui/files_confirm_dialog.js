@@ -7,7 +7,7 @@
  */
 class FilesConfirmDialog extends cr.ui.dialogs.ConfirmDialog {
   /**
-   * @param {!HTMLElement} parentElement
+   * @param {!Element} parentElement
    */
   constructor(parentElement) {
     super(parentElement);
