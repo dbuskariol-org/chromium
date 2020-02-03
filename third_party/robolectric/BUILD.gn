@@ -169,10 +169,10 @@ java_annotation_processor("robolectric_processor") {
     ":sdk_list_txt",
     "//build/android:sun_tools_java",
     "//third_party/android_deps:com_google_guava_guava_java",
+    "//third_party/android_deps:org_ow2_asm_asm_commons_java",
+    "//third_party/android_deps:org_ow2_asm_asm_java",
+    "//third_party/android_deps:org_ow2_asm_asm_tree_java",
     "//third_party/gson:gson_java",
-    "//third_party/ow2_asm:asm_commons_java",
-    "//third_party/ow2_asm:asm_java",
-    "//third_party/ow2_asm:asm_tree_java",
   ]
   provider_configurations = [ "local/processor/src/main/resources/META-INF/services/javax.annotation.processing.Processor" ]
   main_class = "org.robolectric.annotation.processing.RobolectricProcessor"
@@ -378,9 +378,9 @@ java_library("robolectric_sandbox_java") {
     ":robolectric_shadowapi_java",
     ":robolectric_utils_java",
     "//third_party/android_deps:com_google_guava_guava_java",
-    "//third_party/ow2_asm:asm_commons_java",
-    "//third_party/ow2_asm:asm_java",
-    "//third_party/ow2_asm:asm_tree_java",
+    "//third_party/android_deps:org_ow2_asm_asm_commons_java",
+    "//third_party/android_deps:org_ow2_asm_asm_java",
+    "//third_party/android_deps:org_ow2_asm_asm_tree_java",
   ]
 
   sources = [

@@ -141,6 +141,11 @@ dependencies {
     buildCompile "com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta08"
     buildCompile "commons-cli:commons-cli:1.3.1"
 
+    buildCompile "org.ow2.asm:asm:7.0"
+    buildCompile "org.ow2.asm:asm-commons:7.0"
+    buildCompile "org.ow2.asm:asm-tree:7.0"
+    buildCompile "org.ow2.asm:asm-util:7.0"
+
     // testCompile targets have test_only = true.
     testCompile "androidx.test:core:1.0.0"
     testCompile "androidx.test:monitor:1.1.0"

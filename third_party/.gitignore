@@ -113,7 +113,6 @@
 /hunspell_dictionaries
 /icu
 /icu4j/lib/
-/intellij/lib/
 /instrumented_libraries/scripts/*.tgz
 /instrumented_libraries/scripts/out/*
 /javax_inject/lib/
@@ -179,7 +178,6 @@
 /openh264/src
 /openscreen/src
 /openxr/src
-/ow2_asm/lib/
 /pdfsqueeze
 /pdfium
 /pefile

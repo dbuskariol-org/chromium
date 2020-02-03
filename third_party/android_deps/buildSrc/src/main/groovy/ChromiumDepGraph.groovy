@@ -104,6 +104,16 @@ class ChromiumDepGraph {
         'org_checkerframework_javacutil': new PropertyOverride(
             licenseUrl: "https://raw.githubusercontent.com/typetools/checker-framework/master/LICENSE.txt",
             licenseName: "GPL v2 with the classpath exception"),
+        'org_ow2_asm_asm': new PropertyOverride(
+            licenseUrl: "https://gitlab.ow2.org/asm/asm/raw/master/LICENSE.txt"),
+        'org_ow2_asm_asm_analysis': new PropertyOverride(
+            licenseUrl: "https://gitlab.ow2.org/asm/asm/raw/master/LICENSE.txt"),
+        'org_ow2_asm_asm_commons': new PropertyOverride(
+            licenseUrl: "https://gitlab.ow2.org/asm/asm/raw/master/LICENSE.txt"),
+        'org_ow2_asm_asm_tree': new PropertyOverride(
+            licenseUrl: "https://gitlab.ow2.org/asm/asm/raw/master/LICENSE.txt"),
+        'org_ow2_asm_asm_util': new PropertyOverride(
+            licenseUrl: "https://gitlab.ow2.org/asm/asm/raw/master/LICENSE.txt"),
         'org_pcollections_pcollections': new PropertyOverride(
             licenseUrl: "https://raw.githubusercontent.com/hrldcpr/pcollections/master/LICENSE"),
         'org_plumelib_plume_util': new PropertyOverride(
