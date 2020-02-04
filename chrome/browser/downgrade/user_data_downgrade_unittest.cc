@@ -31,10 +31,10 @@ TEST(UserDataDowngradeTests, GetInvalidSnapshots) {
              base::File::FLAG_CREATE | base::File::FLAG_WRITE);
   ASSERT_TRUE(base::CreateDirectory(snapshot_path.AppendASCII("Something")));
   auto snapshots = GetInvalidSnapshots(snapshot_path);
-  std::vector<base::FilePath> expected{snapshot_path.AppendASCII("20"),
-                                       snapshot_path.AppendASCII("Snapshot 20"),
-                                       snapshot_path.AppendASCII("Something")};
-  EXPECT_EQ(snapshots, expected);
+  base::flat_set<base::FilePath> expected{
+      snapshot_path.AppendASCII("Snapshot 20"), snapshot_path.AppendASCII("20"),
+      snapshot_path.AppendASCII("Something")};
+  EXPECT_EQ(base::flat_set<base::FilePath>(snapshots), expected);
 }
 
 TEST(UserDataDowngradeTests, GetAvailableSnapshots) {
