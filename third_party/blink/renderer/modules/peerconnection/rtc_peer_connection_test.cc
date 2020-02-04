@@ -384,7 +384,7 @@ class RTCPeerConnectionTest : public testing::Test {
     RTCConfiguration* config = RTCConfiguration::Create();
     config->setSdpSemantics(sdpSemantics);
     RTCIceServer* ice_server = RTCIceServer::Create();
-    ice_server->setURL("stun:fake.stun.url");
+    ice_server->setUrl("stun:fake.stun.url");
     HeapVector<Member<RTCIceServer>> ice_servers;
     ice_servers.push_back(ice_server);
     config->setIceServers(ice_servers);

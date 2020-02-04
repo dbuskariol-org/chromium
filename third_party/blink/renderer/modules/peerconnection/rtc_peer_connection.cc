@@ -353,7 +353,7 @@ webrtc::PeerConnectionInterface::RTCConfiguration ParseConfiguration(
     WebVector<webrtc::PeerConnectionInterface::IceServer> ice_servers;
     for (const RTCIceServer* ice_server : configuration->iceServers()) {
       Vector<String> url_strings;
-      if (ice_server->hasURLs()) {
+      if (ice_server->hasUrls()) {
         UseCounter::Count(context, WebFeature::kRTCIceServerURLs);
         const StringOrStringSequence& urls = ice_server->urls();
         if (urls.IsString()) {
@@ -362,7 +362,7 @@ webrtc::PeerConnectionInterface::RTCConfiguration ParseConfiguration(
           DCHECK(urls.IsStringSequence());
           url_strings = urls.GetAsStringSequence();
         }
-      } else if (ice_server->hasURL()) {
+      } else if (ice_server->hasUrl()) {
         UseCounter::Count(context, WebFeature::kRTCIceServerURL);
         url_strings.push_back(ice_server->url());
       } else {
@@ -1519,7 +1519,7 @@ RTCConfiguration* RTCPeerConnection::getConfiguration(
     }
     urls.SetStringSequence(std::move(url_vector));
 
-    ice_server->setURLs(urls);
+    ice_server->setUrls(urls);
     ice_server->setUsername(webrtc_server.username.c_str());
     ice_server->setCredential(webrtc_server.password.c_str());
     ice_servers.push_back(ice_server);
