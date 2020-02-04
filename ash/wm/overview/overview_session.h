@@ -172,8 +172,8 @@ class ASH_EXPORT OverviewSession : public display::DisplayObserver,
   void AddItem(aura::Window* window,
                bool reposition,
                bool animate,
-               const base::flat_set<OverviewItem*>& ignored_items = {},
-               size_t index = 0);
+               const base::flat_set<OverviewItem*>& ignored_items,
+               size_t index);
 
   // Similar to the above function, but adds the window at the end of the grid.
   // This will use the spawn-item animation.
