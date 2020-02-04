@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_GPU_TEST_VIDEO_PLAYER_VIDEO_H_
-#define MEDIA_GPU_TEST_VIDEO_PLAYER_VIDEO_H_
+#ifndef MEDIA_GPU_TEST_VIDEO_H_
+#define MEDIA_GPU_TEST_VIDEO_H_
 
 #include <string>
 #include <vector>
@@ -108,4 +108,4 @@ class Video {
 }  // namespace test
 }  // namespace media
 
-#endif  // MEDIA_GPU_TEST_VIDEO_PLAYER_VIDEO_H_
+#endif  // MEDIA_GPU_TEST_VIDEO_H_

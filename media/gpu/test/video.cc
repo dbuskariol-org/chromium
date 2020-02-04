@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "media/gpu/test/video_player/video.h"
+#include "media/gpu/test/video.h"
 
 #include <memory>
 #include <utility>
