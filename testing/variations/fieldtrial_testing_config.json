@@ -7772,6 +7772,22 @@
             ]
         }
     ],
+    "WindowsHybridSpellCheck": [
+        {
+            "platforms": [
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "WinUseBrowserSpellChecker",
+                        "WinUseHybridSpellChecker"
+                    ]
+                }
+            ]
+        }
+    ],
     "WindowsSensorAPIs": [
         {
             "platforms": [
