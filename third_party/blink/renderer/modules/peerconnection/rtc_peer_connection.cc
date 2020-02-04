@@ -525,6 +525,11 @@ bool FingerprintMismatch(String old_sdp, String new_sdp) {
                            new_fingerprint_end - new_fingerprint_pos);
 }
 
+bool ContainsLegacySimulcast(String sdp) {
+  // Looks for the non-spec simulcast that іs enabled via SDP munging.
+  return sdp.Find("\na=ssrc-group:SIM") != kNotFound;
+}
+
 enum class SdpFormat {
   kSimple,
   kComplexPlanB,
@@ -1057,6 +1062,10 @@ DOMException* RTCPeerConnection::checkSdpForStateErrors(
             DOMExceptionCode::kInvalidModificationError, kModifiedSdpMessage);
       } else {
         UseCounter::Count(context, WebFeature::kRTCLocalSdpModification);
+        if (ContainsLegacySimulcast(*sdp)) {
+          UseCounter::Count(context,
+                            WebFeature::kRTCLocalSdpModificationSimulcast);
+        }
         return nullptr;
         // TODO(https://crbug.com/823036): Return failure for all modification.
       }
@@ -1071,6 +1080,10 @@ DOMException* RTCPeerConnection::checkSdpForStateErrors(
             DOMExceptionCode::kInvalidModificationError, kModifiedSdpMessage);
       } else {
         UseCounter::Count(context, WebFeature::kRTCLocalSdpModification);
+        if (ContainsLegacySimulcast(*sdp)) {
+          UseCounter::Count(context,
+                            WebFeature::kRTCLocalSdpModificationSimulcast);
+        }
         return nullptr;
         // TODO(https://crbug.com/823036): Return failure for all modification.
       }
