@@ -146,8 +146,10 @@ bool PrepareVideoCaptureAttributesMediaFoundation(
   // Once https://bugs.chromium.org/p/chromium/issues/detail?id=791615 is fixed,
   // we must make sure that this method succeeds in capture_unittests context
   // when MediaFoundation is enabled.
-  if (!VideoCaptureDeviceFactoryWin::PlatformSupportsMediaFoundation())
+  if (!VideoCaptureDeviceFactoryWin::PlatformSupportsMediaFoundation() ||
+      !InitializeMediaFoundation()) {
     return false;
+  }
 
   if (FAILED(MFCreateAttributes(attributes, count)))
     return false;
@@ -380,7 +382,6 @@ VideoCaptureDeviceFactoryWin::VideoCaptureDeviceFactoryWin()
     LogVideoCaptureWinBackendUsed(
         VideoCaptureWinBackendUsed::kUsingDirectShowAsFallback);
   } else if (use_media_foundation_) {
-    session_ = InitializeMediaFoundation();
     LogVideoCaptureWinBackendUsed(
         VideoCaptureWinBackendUsed::kUsingMediaFoundationAsDefault);
   } else {
@@ -436,7 +437,6 @@ void VideoCaptureDeviceFactoryWin::GetDeviceDescriptors(
   DCHECK(thread_checker_.CalledOnValidThread());
 
   if (use_media_foundation_) {
-    DCHECK(PlatformSupportsMediaFoundation());
     GetDeviceDescriptorsMediaFoundation(device_descriptors);
     AugmentDescriptorListWithDirectShowOnlyDevices(device_descriptors);
   } else {
