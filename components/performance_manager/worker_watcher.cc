@@ -103,8 +103,7 @@ void WorkerWatcher::OnWorkerStarted(
     const base::UnguessableToken& dev_tools_token) {
   auto worker_node = PerformanceManagerImpl::GetInstance()->CreateWorkerNode(
       browser_context_id_, WorkerNode::WorkerType::kShared,
-      process_node_source_->GetProcessNode(worker_process_id), instance.url(),
-      dev_tools_token);
+      process_node_source_->GetProcessNode(worker_process_id), dev_tools_token);
   bool inserted =
       shared_worker_nodes_.emplace(instance, std::move(worker_node)).second;
   DCHECK(inserted);

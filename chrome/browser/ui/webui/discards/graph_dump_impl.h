@@ -153,6 +153,8 @@ class DiscardsGraphDumpImpl : public discards::mojom::GraphDump,
       const performance_manager::WorkerNode* worker_node) override;
   void OnBeforeWorkerNodeRemoved(
       const performance_manager::WorkerNode* worker_node) override;
+  void OnFinalResponseURLDetermined(
+      const performance_manager::WorkerNode* worker_node) override;
   void OnClientFrameAdded(
       const performance_manager::WorkerNode* worker_node,
       const performance_manager::FrameNode* client_frame_node) override;
