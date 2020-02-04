@@ -468,7 +468,6 @@
 <translation id="7526573455193969409">नेटवर्कचे परीक्षण केले जाऊ शकते</translation>
 <translation id="7536035074519304529">IP पत्ता: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">झोपण्याची वेळ</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> <ph name="SPECIFIED_RESOLUTION" /> ला सपोर्ट करत नाही. रिझोल्युशन <ph name="FALLBACK_RESOLUTION" /> मध्ये बदलले</translation>
 <translation id="7562368315689366235">इमोजी पॅलेट</translation>
 <translation id="7564874036684306347">दुसऱ्या डेस्कटॉपवर विंडो हलवण्याने अनपेक्षित वर्तन घडू शकते. नंतर येणाऱ्या सूचना, विंडो आणि डायलॉग हे डेस्कटॉपच्या दरम्यान विभाजित केले जाऊ शकतात.</translation>
 <translation id="7568294522609223312">ऑटोमेटिक क्लिक बंद करा</translation>
@@ -511,6 +510,7 @@
 <translation id="8061464966246066292">उच्च रंगभेद</translation>
 <translation id="8098591350844501178"><ph name="RECEIVER_NAME" /> वर स्क्रीन कास्ट करणे थांबवा</translation>
 <translation id="8113423164597455979">सुरू, सर्व ॲप्स</translation>
+<translation id="8131740175452115882">पुष्टी करा</translation>
 <translation id="8132793192354020517"><ph name="NAME" /> शी कनेक्ट केलेले</translation>
 <translation id="813913629614996137">प्रारंभ करत आहे…</translation>
 <translation id="8142441511840089262">डबल क्लिक करा</translation>

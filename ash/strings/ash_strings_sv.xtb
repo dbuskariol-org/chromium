@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Sök bakåt</translation>
 <translation id="4129129681837227511">Lås upp enheten för att ändra inställningen för aviseringar på låsskärmen</translation>
 <translation id="4146833061457621061">Spela upp musik</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> hanteras av <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Språk</translation>
 <translation id="4195877955194704651">Knapp för Automatiska klick</translation>
 <translation id="4217571870635786043">Diktering</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Ansluter</translation>
 <translation id="7165278925115064263">Alt + Skift + K</translation>
 <translation id="7168224885072002358">Återgår till den gamla upplösningen om <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Denna Chromebook behöver startas om så att en uppdatering tillämpas. Det kan ta upp till en minut.</translation>
 <translation id="7256634071279256947">Mikrofonen på baksidan</translation>
 <translation id="726276584504105859">Dra hit för att dela upp skärmen</translation>
 <translation id="7262906531272962081">Skapa påminnelse</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Nätverket kan vara övervakat</translation>
 <translation id="7536035074519304529">IP-adress: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Läggdags</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> har inte stöd för <ph name="SPECIFIED_RESOLUTION" />. Upplösningen ändrades till <ph name="FALLBACK_RESOLUTION" /></translation>
 <translation id="7562368315689366235">Emoji-palett</translation>
 <translation id="7564874036684306347">Om du flyttar fönster till ett annat skrivbord kan det leda till oväntat beteende. Efterföljande meddelanden, fönster och dialogrutor kan delas upp mellan skrivborden.</translation>
 <translation id="7568294522609223312">Inaktivera automatiska klick</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Hög kontrast</translation>
 <translation id="8098591350844501178">Sluta casta skärmen till <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">På för alla appar</translation>
+<translation id="8131740175452115882">Bekräfta</translation>
 <translation id="8132793192354020517">Ansluten till <ph name="NAME" /></translation>
 <translation id="813913629614996137">Initierar …</translation>
 <translation id="8142441511840089262">Dubbelklicka</translation>

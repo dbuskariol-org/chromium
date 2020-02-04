@@ -239,6 +239,7 @@ Alle gebruikers moet afmeld om voort te gaan.</translation>
 <translation id="4112140312785995938">Soek agtertoe</translation>
 <translation id="4129129681837227511">Om kennisgewings op jou sluitskerm te sien, ontsluit om die instelling te verander</translation>
 <translation id="4146833061457621061">Speel musiek</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> bestuur deur <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Tale</translation>
 <translation id="4195877955194704651">Outomatiese Klikke-knoppie</translation>
 <translation id="4217571870635786043">Diktee</translation>
@@ -451,6 +452,7 @@ Alle gebruikers moet afmeld om voort te gaan.</translation>
 <translation id="7143207342074048698">Koppel tans</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358">Stel oor <ph name="TIMEOUT_SECONDS" /> terug na ou resolusie</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Hierdie Chromebook moet herbegin om 'n opdatering toe te pas. Dit kan tot 1 minuut neem.</translation>
 <translation id="7256634071279256947">Agterste mikrofoon</translation>
 <translation id="726276584504105859">Sleep hierheen om verdeelde skerm te gebruik</translation>
 <translation id="7262906531272962081">Skep herinnering</translation>
@@ -469,7 +471,6 @@ Alle gebruikers moet afmeld om voort te gaan.</translation>
 <translation id="7526573455193969409">Netwerk kan gemonitor word</translation>
 <translation id="7536035074519304529">IP-adres: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Slaaptyd</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> werk nie met <ph name="SPECIFIED_RESOLUTION" /> nie. Die resolusie is na <ph name="FALLBACK_RESOLUTION" /> verander</translation>
 <translation id="7562368315689366235">Emosiekoon-palet</translation>
 <translation id="7564874036684306347">Om vensters na 'n ander werkskerm te skuif, kan lei tot onverwagte gedrag. Opeenvolgende kennisgewings, vensters en dialoë kan tussen werkskerms verdeel word.</translation>
 <translation id="7568294522609223312">Skakel outomatiese klikke af</translation>
@@ -512,6 +513,7 @@ Alle gebruikers moet afmeld om voort te gaan.</translation>
 <translation id="8061464966246066292">Hoë kontras</translation>
 <translation id="8098591350844501178">Hou op om skerm na <ph name="RECEIVER_NAME" /> toe uit te saai</translation>
 <translation id="8113423164597455979">Aan; alle programme</translation>
+<translation id="8131740175452115882">Bevestig</translation>
 <translation id="8132793192354020517">Gekoppel aan <ph name="NAME" /></translation>
 <translation id="813913629614996137">Inisialiseer tans …</translation>
 <translation id="8142441511840089262">Dubbelklik</translation>

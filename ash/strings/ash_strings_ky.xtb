@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Артка түрдүрүү</translation>
 <translation id="4129129681837227511">Билдирмелерди кулпуланган экранда көрүү максатында өзгөртүү киргизүү үчүн, түзмөгүңүздүн кулпусун ачыңыз</translation>
 <translation id="4146833061457621061">Музыканы ойнотуу</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> түзмөгү <ph name="DOMAIN" /> тарабынан башкарылат</translation>
 <translation id="4181841719683918333">Тилдер</translation>
 <translation id="4195877955194704651">Автоматтык чыкылдатуу баскычы</translation>
 <translation id="4217571870635786043">Үн менен жазуу</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Туташууда</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358"><ph name="TIMEOUT_SECONDS" /> кийин эски чечилишине кайтарылат</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Жаңыртууну колдонуу үчүн Chromebook'ту өчүрүп күйгүзүү керек. Бул 1 мүнөткө созулушу мүмкүн.</translation>
 <translation id="7256634071279256947">Арткы микрофон</translation>
 <translation id="726276584504105859">Экранды бөлүү үчүн бул жерге сүйрөңүз</translation>
 <translation id="7262906531272962081">Эстеткич түзүү</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Тармак көзөмөлдөнүшү мүмкүн</translation>
 <translation id="7536035074519304529">IP дареги: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Уктоого убакыт келди</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> мында <ph name="SPECIFIED_RESOLUTION" /> колдоого алынбайт. Чечилиш төмөнкүгө өзгөртүлгөн <ph name="FALLBACK_RESOLUTION" /></translation>
 <translation id="7562368315689366235">Быйтыкчалар тактасы</translation>
 <translation id="7564874036684306347">Терезелер башка иш тактасына жылдырылганда күтүлбөгөн аракеттер орун алышы мүмкүн. Кийинки эскертмелер, терезелер жана диалог кутучалары иш такталардын ортосунда бөлүнүп калышы мүмкүн.</translation>
 <translation id="7568294522609223312">Автоматтык түрдө чыкылдатууларды өчүрүү</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Жогорку контраст</translation>
 <translation id="8098591350844501178">Экранды <ph name="RECEIVER_NAME" /> түзмөгүнө чыгарууну токтотуу</translation>
 <translation id="8113423164597455979">Бардык колдонмолордо күйүк</translation>
+<translation id="8131740175452115882">Ырастоо</translation>
 <translation id="8132793192354020517"><ph name="NAME" /> менен туташты</translation>
 <translation id="813913629614996137">Баштапкы маанини берүүдө...</translation>
 <translation id="8142441511840089262">Эки жолу чыкылдатуу</translation>

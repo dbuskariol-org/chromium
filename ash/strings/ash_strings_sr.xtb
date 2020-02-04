@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Премотај уназад</translation>
 <translation id="4129129681837227511">Да бисте видели обавештења на закључаном екрану, откључајте га како бисте променили подешавање</translation>
 <translation id="4146833061457621061">Пусти музику</translation>
+<translation id="4149156641122542261">Уређајем <ph name="DEVICE_TYPE" /> управља <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Језици</translation>
 <translation id="4195877955194704651">Аутоматски кликови на дугмад</translation>
 <translation id="4217571870635786043">Диктирање</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Повезивање</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358">Враћање на стару резолуцију за <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Овај Chromebook мора да се растартује ради примене ажурирања. Ово може да потраје највише 1 минут.</translation>
 <translation id="7256634071279256947">Задњи микрофон</translation>
 <translation id="726276584504105859">Превуците овде да бисте користили подељени екран</translation>
 <translation id="7262906531272962081">Направи подсетник</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Мрежа се можда надгледа</translation>
 <translation id="7536035074519304529">IP адреса: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Време је за спавање</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> не подржава <ph name="SPECIFIED_RESOLUTION" />. Резолуција је промењена на <ph name="FALLBACK_RESOLUTION" /></translation>
 <translation id="7562368315689366235">Палета емоџија</translation>
 <translation id="7564874036684306347">Премештање прозора на други рачунар може да доведе до неочекиваног понашања. Накнадна обавештења, прозори и дијалози ће можда бити подељени између рачунара.</translation>
 <translation id="7568294522609223312">Искључите аутоматске кликове</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Високи контраст</translation>
 <translation id="8098591350844501178">Заустави пребацивање екрана на <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">Укључено, све апликације</translation>
+<translation id="8131740175452115882">Потврди</translation>
 <translation id="8132793192354020517">Успостављена је веза са <ph name="NAME" /></translation>
 <translation id="813913629614996137">Покреће се…</translation>
 <translation id="8142441511840089262">Двоструки клик</translation>

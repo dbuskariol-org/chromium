@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">পিছলৈ যাওক</translation>
 <translation id="4129129681837227511">আপোনাৰ লক স্ক্রীণত জাননীসমূহ চাবলৈ ছেটিংটো সলনি কৰিবলৈ আনলক কৰক</translation>
 <translation id="4146833061457621061">সংগীত প্লে’ কৰক</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> <ph name="DOMAIN" />ৰ দ্বাৰা পৰিচালনা কৰা হয়</translation>
 <translation id="4181841719683918333">ভাষাসমূহ</translation>
 <translation id="4195877955194704651">স্বয়ংক্ৰিয়ভাৱে ক্লিকৰ বুটাম</translation>
 <translation id="4217571870635786043">শ্ৰুতলিপি</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">সংযোগ কৰি থকা হৈছে</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358"><ph name="TIMEOUT_SECONDS" />ত আগৰ ৰিজলিউশ্বনটোলৈ উভতি যোৱা হ’ব</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />। কোনো আপডে’ট প্ৰয়োগ কৰিবলৈ এই Chromebookটো ৰিষ্টাৰ্ট কৰাৰ আৱশ্যক। এইটোৱে ১ মিনিট পৰ্যন্ত সময় লগাব পাৰে।</translation>
 <translation id="726276584504105859">বিভাজিত স্ক্ৰীণ ব্যৱহাৰ কৰিবলৈ ইয়ালৈ টানি আনি এৰক</translation>
 <translation id="7262906531272962081">ৰিমাইণ্ডাৰ সৃষ্টি কৰক</translation>
 <translation id="7303365578352795231">অন্য এটা ডিভাইচত উত্তৰ দি থকা হৈছে।</translation>
@@ -466,7 +468,6 @@
 <translation id="7510334386202674593">Ctrl+Shift+L</translation>
 <translation id="7536035074519304529">আইপি ঠিকনা: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">শুবৰ সময় হ’ল</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" />এ <ph name="SPECIFIED_RESOLUTION" /> সমর্থন নকৰে। ৰিজ’লিউশ্বন <ph name="FALLBACK_RESOLUTION" />লৈ সলনি কৰা হৈছিল</translation>
 <translation id="7562368315689366235">ইম’জি পেলেট</translation>
 <translation id="7564874036684306347">ৱিণ্ড’সমূহ অন্য ডেস্কটপলৈ নিয়া কার্যই আচৰণসমূহ অপ্ৰত্যাশিতভাৱে সলনি হ’ব পাৰে। পৰৱর্তী জাননী, ৱিণ্ড’ আৰু ডায়ল’গসমূহ ডেস্কটপৰ মাজত বিভক্ত হৈ পৰিব পাৰে।</translation>
 <translation id="7568294522609223312">স্বয়ংক্ৰিয়ভাৱে ক্লিক কৰা সুবিধাটো অফ কৰক</translation>
@@ -508,6 +509,7 @@
 <translation id="8061464966246066292">ৰঙৰ উচ্চ প্ৰভেদ</translation>
 <translation id="8098591350844501178"><ph name="RECEIVER_NAME" /> লৈ স্ক্ৰীন কাষ্ট কৰা বন্ধ কৰক</translation>
 <translation id="8113423164597455979">অন কৰা আছে, সকলো এপতে</translation>
+<translation id="8131740175452115882">নিশ্চিত কৰক</translation>
 <translation id="8132793192354020517"><ph name="NAME" />ৰ সৈতে সংযুক্ত</translation>
 <translation id="813913629614996137">আৰম্ভ কৰা হৈছে…</translation>
 <translation id="8142441511840089262">দুবাৰ ক্লিক</translation>

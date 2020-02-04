@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Przewiń do tyłu</translation>
 <translation id="4129129681837227511">Aby wyświetlać powiadomienia na ekranie blokady, odblokuj ekran i zmień ustawienie</translation>
 <translation id="4146833061457621061">Włącz muzykę</translation>
+<translation id="4149156641122542261">Urządzenie <ph name="DEVICE_TYPE" /> zarządzane przez <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Języki</translation>
 <translation id="4195877955194704651">Automatyczne klikanie przycisku</translation>
 <translation id="4217571870635786043">Dyktowanie</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Łączenie</translation>
 <translation id="7165278925115064263">Alt + Shift + K</translation>
 <translation id="7168224885072002358">Powrót do wcześniejszej rozdzielczości za <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Konieczne jest ponowne uruchomienie tego Chromebooka, by zainstalować aktualizację. Może to potrwać około minuty.</translation>
 <translation id="7256634071279256947">Tylny mikrofon</translation>
 <translation id="726276584504105859">Przeciągnij tutaj, by podzielić ekran</translation>
 <translation id="7262906531272962081">Utwórz przypomnienie</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Sieć może być monitorowana</translation>
 <translation id="7536035074519304529">Adres IP: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Czas iść spać</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> nie obsługuje <ph name="SPECIFIED_RESOLUTION" />. Zmieniono rozdzielczość na <ph name="FALLBACK_RESOLUTION" /></translation>
 <translation id="7562368315689366235">Paleta emotikonów</translation>
 <translation id="7564874036684306347">Przenoszenie okien na inny pulpit może spowodować nieoczekiwane zachowanie. Kolejne powiadomienia, okna i okna dialogowe mogą pojawiać się na różnych pulpitach.</translation>
 <translation id="7568294522609223312">Wyłączanie automatycznych kliknięć</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Wysoki kontrast</translation>
 <translation id="8098591350844501178">Zakończ przesyłanie ekranu do: <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">Włączono w przypadku wszystkich aplikacji</translation>
+<translation id="8131740175452115882">Potwierdź</translation>
 <translation id="8132793192354020517">Połączono z <ph name="NAME" /></translation>
 <translation id="813913629614996137">Inicjuję…</translation>
 <translation id="8142441511840089262">Dwukrotne kliknięcie</translation>

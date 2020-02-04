@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Orqaga qaytarish</translation>
 <translation id="4129129681837227511">Bildirishnomalar qulflangan ekranda chiqishi uchun avval qulfdan chiqaring va sozlamani yangilang</translation>
 <translation id="4146833061457621061">Musiqani tinglash</translation>
+<translation id="4149156641122542261">Bu <ph name="DEVICE_TYPE" /> qurilmasi <ph name="DOMAIN" /> domeni tomonidan boshqariladi</translation>
 <translation id="4181841719683918333">Tillar</translation>
 <translation id="4195877955194704651">Avtomatik bosish menyusi</translation>
 <translation id="4217571870635786043">Ovoz bilan yozish</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Ulanmoqda</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358">Avvalgi ekran hajmiga qaytishga <ph name="TIMEOUT_SECONDS" /> qoldi.</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Yangilanish amalga oshishi uchun Chromebook qayta ishga tushirilishi lozim. Bu 1 daqiqacha vaqt olishi mumkin.</translation>
 <translation id="7256634071279256947">Orqa mikrofon</translation>
 <translation id="726276584504105859">Ekranni bo‘lish xususiyatidan foydalanish uchun bu yerga torting</translation>
 <translation id="7262906531272962081">Eslatma yaratish</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Tarmoq kuzatilishi mumkin</translation>
 <translation id="7536035074519304529">IP manzil: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Uyqu vaqti keldi</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> displeyi <ph name="SPECIFIED_RESOLUTION" /> ekran hajmini qo‘llab-quvvatlamaydi. <ph name="FALLBACK_RESOLUTION" /> ekran hajmiga qaytarildi.</translation>
 <translation id="7562368315689366235">Emoji menyusi</translation>
 <translation id="7564874036684306347">Oynalarni boshqa ish stoliga ko‘chirish oqibatida kutilmagan xatti-harakatlar sodir bo‘lishi mumkin. Bildirishnomalar va muloqot oynalari turli ekranlarda ko‘rsatiladi.</translation>
 <translation id="7568294522609223312">Avtomatik kliklarni faolsizlantirish</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Yuqori kontrast</translation>
 <translation id="8098591350844501178">Ekranni “<ph name="RECEIVER_NAME" />” qurilmasiga translatsiya qilishni to‘xtatish</translation>
 <translation id="8113423164597455979">Barcha ilovalar uchun yoniq</translation>
+<translation id="8131740175452115882">Tasdiqlash</translation>
 <translation id="8132793192354020517"><ph name="NAME" /> tarmog‘iga ulanilgan</translation>
 <translation id="813913629614996137">Ishga tushirilmoqda...</translation>
 <translation id="8142441511840089262">Ikki marta bosish</translation>

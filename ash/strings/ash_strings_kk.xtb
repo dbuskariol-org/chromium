@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Артқа</translation>
 <translation id="4129129681837227511">Құлып экранында хабарландыруларды көру және параметрді өзгерту үшін құлыпты ашыңыз.</translation>
 <translation id="4146833061457621061">Музыка ойнату</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> құрылғысын <ph name="DOMAIN" /> басқарады.</translation>
 <translation id="4181841719683918333">Тілдер</translation>
 <translation id="4195877955194704651">Автоматты басу түймесі</translation>
 <translation id="4217571870635786043">Мәтінді дауыспен енгізу</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Қосылып жатыр</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358"><ph name="TIMEOUT_SECONDS" /> уақыт ішінде ескі ажыратымдылыққа ауысады</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Жаңартылған нұсқаны қолдану үшін бұл Chromebook-ті қайта қосу қажет. Оған 1 минуттай кетуі мүмкін.</translation>
 <translation id="7256634071279256947">Артқы микрофон</translation>
 <translation id="726276584504105859">Бөлінген экранды пайдалану үшін осында сүйреңіз</translation>
 <translation id="7262906531272962081">Еске салғыш жасау</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Желі бақылануы мүмкін</translation>
 <translation id="7536035074519304529">IP мекенжайы: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Ұйықтайтын уақыт болды</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> дисплейі <ph name="SPECIFIED_RESOLUTION" /> ажыратымдылығын қолдамайды. Ажыратымждылық <ph name="FALLBACK_RESOLUTION" /> болып өзгертілді</translation>
 <translation id="7562368315689366235">Эмодзилер палитрасы</translation>
 <translation id="7564874036684306347">Терезелерді басқа жұмыс үстеліне ауыстырғанда, күтпеген қате шығуы мүмкін. Хабарландырулар, терезелер мен диалогтік терезелер түрлі жұмыс үстелдерінде көрсетілуі ықтимал.</translation>
 <translation id="7568294522609223312">Автоматты түрде басу функцияларын өшіру</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Жоғары контраст</translation>
 <translation id="8098591350844501178">Экран мазмұнын <ph name="RECEIVER_NAME" /> құрылғысына трансляциялауды тоқтату</translation>
 <translation id="8113423164597455979">Қосулы, барлық қолданбалар</translation>
+<translation id="8131740175452115882">Растау</translation>
 <translation id="8132793192354020517"><ph name="NAME" /> желісіне қосылған</translation>
 <translation id="813913629614996137">Дайындауда…</translation>
 <translation id="8142441511840089262">Екі рет басу</translation>

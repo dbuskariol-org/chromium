@@ -112,7 +112,7 @@
 <translation id="2352467521400612932">Configuració del llapis òptic</translation>
 <translation id="2354174487190027830">S'està activant <ph name="NAME" /></translation>
 <translation id="2359808026110333948">Continua</translation>
-<translation id="2364154243880592194">Safata d'estat. Temps: <ph name="TIME" />. <ph name="BATTERY" /> Prem Cerca+fletxa esquerra per accedir al centre de notificacions.</translation>
+<translation id="2364154243880592194">Safata d'estat. Hora: <ph name="TIME" />. <ph name="BATTERY" /> Prem Cerca+fletxa esquerra per accedir al centre de notificacions.</translation>
 <translation id="2365393535144473978">En activar les dades mòbils s'activarà el Bluetooth.</translation>
 <translation id="2391579633712104609">180°</translation>
 <translation id="2412593942846481727">Hi ha una actualització disponible</translation>
@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Retrocedeix</translation>
 <translation id="4129129681837227511">Per veure notificacions a la pantalla de bloqueig, desbloqueja el dispositiu per canviar aquesta opció</translation>
 <translation id="4146833061457621061">Reprodueix música</translation>
+<translation id="4149156641122542261"><ph name="DOMAIN" /> gestiona <ph name="DEVICE_TYPE" /></translation>
 <translation id="4181841719683918333">Idiomes</translation>
 <translation id="4195877955194704651">Botó Clics automàtics</translation>
 <translation id="4217571870635786043">Dictat</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">S'està connectant</translation>
 <translation id="7165278925115064263">Alt+Maj+K</translation>
 <translation id="7168224885072002358">Es revertirà a la resolució anterior d'aquí a <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Aquest Chromebook s'ha de reiniciar perquè s'apliqui una actualització. Aquest procés pot tardar fins a 1 minut</translation>
 <translation id="7256634071279256947">Micròfon posterior</translation>
 <translation id="726276584504105859">Arrossega-la aquí per utilitzar la pantalla dividida</translation>
 <translation id="7262906531272962081">Crea un recordatori</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">És possible que la xarxa estigui supervisada</translation>
 <translation id="7536035074519304529">Adreça IP: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Ara toca anar a dormir</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> no admet <ph name="SPECIFIED_RESOLUTION" />. S'ha canviat la resolució per <ph name="FALLBACK_RESOLUTION" />.</translation>
 <translation id="7562368315689366235">Paleta d'emoji</translation>
 <translation id="7564874036684306347">Moure finestres a un altre escriptori pot provocar un comportament imprevist. És possible que les notificacions, les finestres i els quadres de diàleg següents quedin dividits entre escriptoris.</translation>
 <translation id="7568294522609223312">Desactiva els clics automàtics</translation>
@@ -511,12 +512,13 @@
 <translation id="8061464966246066292">Contrast alt</translation>
 <translation id="8098591350844501178">Deixa d'emetre la pantalla a <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">Activades en totes les aplicacions</translation>
+<translation id="8131740175452115882">Confirma</translation>
 <translation id="8132793192354020517">Connectat a <ph name="NAME" /></translation>
 <translation id="813913629614996137">S'està inicialitzant…</translation>
 <translation id="8142441511840089262">Fes doble clic</translation>
 <translation id="8142699993796781067">Xarxa privada</translation>
 <translation id="8152092012181020186">Prem Ctrl+W per tancar.</translation>
-<translation id="8155007568264258537"><ph name="FEATURE_NAME" /> El teu administrador gestiona aquesta opció de configuració.</translation>
+<translation id="8155007568264258537"><ph name="FEATURE_NAME" />. El teu administrador gestiona aquesta opció de configuració.</translation>
 <translation id="8167567890448493835">S'està utilitzant <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Personalitza idiomes i introducció de text...</translation>
 <translation id="8192202700944119416">S'han amagat les notificacions.</translation>

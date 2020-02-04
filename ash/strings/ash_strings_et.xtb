@@ -239,6 +239,7 @@ Jätkamiseks peavad kõik kasutajad välja logima.</translation>
 <translation id="4112140312785995938">Keri tagasi</translation>
 <translation id="4129129681837227511">Lukustuskuval märguannete nägemiseks avage ekraan ja muutke seadet</translation>
 <translation id="4146833061457621061">Esita muusikat</translation>
+<translation id="4149156641122542261">Seadet <ph name="DEVICE_TYPE" /> haldab <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Keeled</translation>
 <translation id="4195877955194704651">Nupp Automaatsed klikid</translation>
 <translation id="4217571870635786043">Dikteerimine</translation>
@@ -451,6 +452,7 @@ Jätkamiseks peavad kõik kasutajad välja logima.</translation>
 <translation id="7143207342074048698">Ühendamine</translation>
 <translation id="7165278925115064263">Alt + Tõstuklahv + K</translation>
 <translation id="7168224885072002358">Ekraan ennistatakse vanale eraldusvõimele <ph name="TIMEOUT_SECONDS" /> pärast</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. See Chromebook tuleb värskenduse rakendamiseks taaskäivitada. Selleks võib kuluda kuni 1 minut.</translation>
 <translation id="7256634071279256947">Tagumine mikrofon</translation>
 <translation id="726276584504105859">Jagatud ekraani kasutamiseks lohistage siia</translation>
 <translation id="7262906531272962081">Loo meeldetuletus</translation>
@@ -469,7 +471,6 @@ Jätkamiseks peavad kõik kasutajad välja logima.</translation>
 <translation id="7526573455193969409">Võrku võidakse jälgida</translation>
 <translation id="7536035074519304529">IP-adress: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Aeg magama minna</translation>
-<translation id="7561014039265304140">Üksus <ph name="DISPLAY_NAME" /> ei toeta eraldusvõimet <ph name="SPECIFIED_RESOLUTION" />. Eraldusvõime muudeti tagasi väärtusele <ph name="FALLBACK_RESOLUTION" /></translation>
 <translation id="7562368315689366235">Emotikonide palett</translation>
 <translation id="7564874036684306347">Kui teisaldate aknad teisele töölauale, võib tagajärjeks olla ootamatu käitumine. Järgmised märguanded, aknad ja dialoogid võivad jaguneda eri töölaudade vahel.</translation>
 <translation id="7568294522609223312">Automaatsete klikkide väljalülitamine</translation>
@@ -512,6 +513,7 @@ Jätkamiseks peavad kõik kasutajad välja logima.</translation>
 <translation id="8061464966246066292">Kõrge kontrast</translation>
 <translation id="8098591350844501178">Peata ekraani ülekandmine vastuvõtjasse <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">Sisse lülitatud, kõik rakendused</translation>
+<translation id="8131740175452115882">Kinnita</translation>
 <translation id="8132793192354020517">Ühendus <ph name="NAME" />iga</translation>
 <translation id="813913629614996137">Lähtestamine …</translation>
 <translation id="8142441511840089262">Topeltklikk</translation>

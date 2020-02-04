@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Pārtīt atpakaļ</translation>
 <translation id="4129129681837227511">Lai skatītu paziņojumus bloķēšanas ekrānā, atbloķējiet, lai mainītu iestatījumu</translation>
 <translation id="4146833061457621061">Atskaņot mūziku</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> pārvalda domēns <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Valodas</translation>
 <translation id="4195877955194704651">Poga Automātiskie klikšķi</translation>
 <translation id="4217571870635786043">Diktēšana</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Notiek savienojuma izveide</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358">Iepriekšējā izšķirtspēja tiks atgriezta pēc <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Šis Chromebook dators ir jārestartē, lai lietotu atjauninājumu. Tas var ilgt aptuveni 1 minūti.</translation>
 <translation id="7256634071279256947">Aizmugurējais mikrofons</translation>
 <translation id="726276584504105859">Velciet šeit, lai izmantotu ekrāna sadalīšanu.</translation>
 <translation id="7262906531272962081">Izveidot atgādinājumu</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Var tikt pārraudzītas tīklā veiktās darbības</translation>
 <translation id="7536035074519304529">IP adrese: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Laiks naktsmieram</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> neatbalsta šādu izšķirtspēju: <ph name="SPECIFIED_RESOLUTION" />. Izšķirtspēja tika mainīta uz <ph name="FALLBACK_RESOLUTION" />.</translation>
 <translation id="7562368315689366235">Emocijzīmju palete</translation>
 <translation id="7564874036684306347">Logu pārvietošana uz citu darbvirsmu var izraisīt neparedzētu darbību. Turpmākie paziņojumi, logi un dialoglodziņi var tikt sadalīti pa darbvirsmām.</translation>
 <translation id="7568294522609223312">Izslēgt automātiskos klikšķus</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">Augsts kontrasts</translation>
 <translation id="8098591350844501178">Apturēt ekrāna apraidi uztvērējā “<ph name="RECEIVER_NAME" />”</translation>
 <translation id="8113423164597455979">Ieslēgt visās lietotnēs</translation>
+<translation id="8131740175452115882">Apstiprināt</translation>
 <translation id="8132793192354020517">Savienots ar <ph name="NAME" /></translation>
 <translation id="813913629614996137">Notiek inicializēšana...</translation>
 <translation id="8142441511840089262">Veikt dubultklikšķi</translation>

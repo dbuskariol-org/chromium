@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">رفتن به عقب</translation>
 <translation id="4129129681837227511">برای دیدن اعلان‌ها در صفحه قفل، ابتدا قفل را باز کنید و تنظیمات را تغییر دهید</translation>
 <translation id="4146833061457621061">‏Play music (موسیقی پخش کن)</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> تحت مدیریت <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">زبان‌ها</translation>
 <translation id="4195877955194704651">دکمه کلیک خودکار</translation>
 <translation id="4217571870635786043">املا</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">در حال اتصال</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358">برگرداندن به وضوح قدیمی در <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765">‏<ph name="UPDATE_TEXT" />. این Chromebook برای اعمال به‌روزرسانی باید بازراه‌اندازی شود. این کار ممکن است تا ۱ دقیقه طول بکشد.</translation>
 <translation id="7256634071279256947">میکروفون پشت</translation>
 <translation id="726276584504105859">برای استفاده از تقسیم صفحه، به اینجا بکشید</translation>
 <translation id="7262906531272962081">ایجاد یادآوری</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">ممکن است شبکه پایش شود</translation>
 <translation id="7536035074519304529">‏نشانی IP: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">وقت خواب</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" />،‏ <ph name="SPECIFIED_RESOLUTION" /> را پشتیبانی نمی‌کند. وضوح به <ph name="FALLBACK_RESOLUTION" /> تغییر کرد</translation>
 <translation id="7562368315689366235">پالت صورتک</translation>
 <translation id="7564874036684306347">انتقال پنجره‌ها به میز کار دیگر می‌تواند به رفتار غیرمنتظره منجر شود. اعلان‌ها، پنجره‌ها و کادرهای گفتگوی بعدی ممکن است بین میز کارها تقسیم شوند.</translation>
 <translation id="7568294522609223312">خاموش کردن کلیک‌های خودکار</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">کنتراست بالا</translation>
 <translation id="8098591350844501178">توقف ارسال محتوای صفحه به <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">روشن، همه برنامه‌ها</translation>
+<translation id="8131740175452115882">تأیید</translation>
 <translation id="8132793192354020517">متصل به <ph name="NAME" /></translation>
 <translation id="813913629614996137">درحال مقداردهی اولیه…</translation>
 <translation id="8142441511840089262">دوبار کلیک کردن</translation>

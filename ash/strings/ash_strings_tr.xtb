@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Geri Sar</translation>
 <translation id="4129129681837227511">Kilit ekranınızda bildirim göstermek için cihazın kilidini açarak ayarı değiştirin</translation>
 <translation id="4146833061457621061">Müzik çal</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" />, <ph name="DOMAIN" /> tarafından yönetilmektedir</translation>
 <translation id="4181841719683918333">Diller</translation>
 <translation id="4195877955194704651">Otomatik tıklamalar düğmesi</translation>
 <translation id="4217571870635786043">Dikte</translation>
@@ -451,6 +452,7 @@
 <translation id="7143207342074048698">Bağlanıyor</translation>
 <translation id="7165278925115064263">Alt+Üst Karakter+K</translation>
 <translation id="7168224885072002358"><ph name="TIMEOUT_SECONDS" /> saniye içinde eski çözünürlüğe dönülüyor</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. Bir güncellemenin uygulanması için bu Chromebook'un yeniden başlatılması gerekiyor. Bu işlem bir dakika kadar sürebilir.</translation>
 <translation id="7256634071279256947">Arka mikrofon</translation>
 <translation id="726276584504105859">Ekranı bölünmüş olarak kullanmak için burayı sürükleyin</translation>
 <translation id="7262906531272962081">Hatırlatıcı oluştur</translation>
@@ -469,7 +471,6 @@
 <translation id="7526573455193969409">Ağ trafiği izleniyor olabilir</translation>
 <translation id="7536035074519304529">IP adresi: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Uyku vakti geldi</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" />, <ph name="SPECIFIED_RESOLUTION" /> çözünürlüğünü desteklemiyor. Çözünürlük <ph name="FALLBACK_RESOLUTION" /> olarak değiştirildi</translation>
 <translation id="7562368315689366235">Emoji paleti</translation>
 <translation id="7564874036684306347">Pencereleri başka bir masaüstüne taşımak, beklenmeyen davranışlara neden olabilir. Pencereler taşındıktan sonra gelen bildirimler, pencereler ve iletişim kutuları masaüstleri arasında bölünebilir.</translation>
 <translation id="7568294522609223312">Otomatik tıklamayı kapat</translation>
@@ -512,6 +513,7 @@
 <translation id="8061464966246066292">Yüksek kontrast</translation>
 <translation id="8098591350844501178">Ekranın <ph name="RECEIVER_NAME" /> cihazına yayınını durdur</translation>
 <translation id="8113423164597455979">Açık, tüm uygulamalar</translation>
+<translation id="8131740175452115882">Onayla</translation>
 <translation id="8132793192354020517"><ph name="NAME" /> ağına bağlanıldı</translation>
 <translation id="813913629614996137">İlk kullanıma hazırlanıyor...</translation>
 <translation id="8142441511840089262">Çift tıklama</translation>

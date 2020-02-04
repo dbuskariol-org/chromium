@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">Seek backwards</translation>
 <translation id="4129129681837227511">To see notifications on your lock screen, unlock to change the setting</translation>
 <translation id="4146833061457621061">Play music</translation>
+<translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> managed by <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Languages</translation>
 <translation id="4195877955194704651">Automatic clicks button</translation>
 <translation id="4217571870635786043">Dictation</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">Connecting ...</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358">Reverting to old resolution in <ph name="TIMEOUT_SECONDS" /></translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />. This Chromebook needs to restart to apply an update. This can take up to one minute.</translation>
 <translation id="7256634071279256947">Rear microphone</translation>
 <translation id="726276584504105859">Drag here to use split screen</translation>
 <translation id="7262906531272962081">Create reminder</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">Network may be monitored</translation>
 <translation id="7536035074519304529">IP address: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">Time for bed</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> doesn't support <ph name="SPECIFIED_RESOLUTION" />. The resolution was changed to <ph name="FALLBACK_RESOLUTION" /></translation>
 <translation id="7562368315689366235">Emoji palette</translation>
 <translation id="7564874036684306347">Moving windows to another desktop may result in unexpected behaviour. Subsequent notifications, windows and dialogues may be split between desktops.</translation>
 <translation id="7568294522609223312">Turn off automatic clicks</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">High contrast</translation>
 <translation id="8098591350844501178">Stop casting screen to <ph name="RECEIVER_NAME" /></translation>
 <translation id="8113423164597455979">On, all apps</translation>
+<translation id="8131740175452115882">Confirm</translation>
 <translation id="8132793192354020517">Connected to <ph name="NAME" /></translation>
 <translation id="813913629614996137">Initialising...</translation>
 <translation id="8142441511840089262">Double click</translation>

@@ -238,6 +238,7 @@
 <translation id="4112140312785995938">पछाडि जानुहोस्</translation>
 <translation id="4129129681837227511">आफ्नो लक स्क्रिनमा सूचनाहरू हेर्नका लागि सेटिङहरू परिवर्तन गर्न अनलक गर्नुहोस्</translation>
 <translation id="4146833061457621061">सङ्गीत प्ले गर्नुहोस्</translation>
+<translation id="4149156641122542261"><ph name="DOMAIN" /> ले व्यवस्थित गरेको<ph name="DEVICE_TYPE" /></translation>
 <translation id="4181841719683918333">भाषाहरू</translation>
 <translation id="4195877955194704651">स्वतः क्लिक गर्ने बटन</translation>
 <translation id="4217571870635786043">श्रुतिलेखन</translation>
@@ -450,6 +451,7 @@
 <translation id="7143207342074048698">जडान गर्दै...</translation>
 <translation id="7165278925115064263">Alt+Shift+K</translation>
 <translation id="7168224885072002358"><ph name="TIMEOUT_SECONDS" /> सेकेन्डमा पुरानो रिजोल्युसनमा फिर्ता जाँदै</translation>
+<translation id="7246071203293827765"><ph name="UPDATE_TEXT" />। कुनै अद्यावधिक लागू गर्न यो Chromebook पुनः सुरु गर्नु पर्ने हुन्छ। यो प्रक्रिया पूरा हुन १ मिनेटसम्म लाग्न सक्छ।</translation>
 <translation id="7256634071279256947">पछाडिको माइक्रोफोन</translation>
 <translation id="726276584504105859">विभाजित स्क्रिनको प्रयोग गर्न यहाँ ड्र्याग गर्नुहोस्</translation>
 <translation id="7262906531272962081">रिमाइन्डर सिर्जना गर्नुहोस्</translation>
@@ -468,7 +470,6 @@
 <translation id="7526573455193969409">नेटवर्कको अनुगमन गरिने सम्भावना छ</translation>
 <translation id="7536035074519304529">IP ठेगाना: <ph name="ADDRESS" /></translation>
 <translation id="7548434653388805669">सुत्ने बेला भयो</translation>
-<translation id="7561014039265304140"><ph name="DISPLAY_NAME" /> ले <ph name="SPECIFIED_RESOLUTION" /> समर्थन गर्दैन। रिजोल्युसन <ph name="FALLBACK_RESOLUTION" /> मा परिवर्तन गरिएको थियो।</translation>
 <translation id="7562368315689366235">इमोजी प्यालेट</translation>
 <translation id="7564874036684306347">विन्डोलाई अर्को डेस्कटपमा सार्नुले अनपेक्षित व्यवहार देखाउन सक्छ। यसपछि आउने सूचना, विन्डो र संवादहरू डेस्कटपहरूका बीचमा विभाजित हुन सक्छन्।</translation>
 <translation id="7568294522609223312">स्वचालित क्लिक सुविधा निष्क्रिय पार्नुहोस्</translation>
@@ -511,6 +512,7 @@
 <translation id="8061464966246066292">उच्च कन्ट्रास्ट</translation>
 <translation id="8098591350844501178"><ph name="RECEIVER_NAME" /> मा स्क्रिन casting गर्ने काम रोक्नुहोस्</translation>
 <translation id="8113423164597455979">सबै यन्त्रहरूमा सक्रिय</translation>
+<translation id="8131740175452115882">निश्चित</translation>
 <translation id="8132793192354020517"><ph name="NAME" /> मा जडित</translation>
 <translation id="813913629614996137">सुरुवात गर्दै...</translation>
 <translation id="8142441511840089262">दुई पटक क्लिक गर्नुहोस्</translation>
