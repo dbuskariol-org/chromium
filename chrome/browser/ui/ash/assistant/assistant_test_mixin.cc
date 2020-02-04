@@ -11,7 +11,6 @@
 #include "ash/public/cpp/assistant/assistant_state.h"
 #include "ash/public/cpp/test/assistant_test_api.h"
 #include "ash/public/mojom/assistant_state_controller.mojom-shared.h"
-#include "base/auto_reset.h"
 #include "base/run_loop.h"
 #include "base/test/bind_test_util.h"
 #include "base/time/time.h"
@@ -46,6 +45,23 @@ bool Equals(const char* left, const char* right) {
   return strcmp(left, right) == 0;
 }
 
+// Run the loop until the timeout expires, or until it is quit through other
+// mechanisms.
+// Returns whether the loop finished successfully, i.e. |false| if the timeout
+// expired.
+bool RunWithTimeout(base::RunLoop* run_loop, base::TimeDelta timeout) {
+  bool success = true;
+
+  base::RunLoop::ScopedRunTimeoutForTest scoped_timeout(
+      timeout, base::BindLambdaForTesting([&success, run_loop] {
+        success = false;
+        run_loop->QuitClosure();
+      }));
+  run_loop->Run();
+
+  return success;
+}
+
 // Waiter that blocks in the |Wait| method until a given |mojom::AssistantState|
 // is reached, or until a timeout is hit.
 // On timeout this will abort the test with a useful error message.
@@ -59,30 +75,31 @@ class AssistantStatusWaiter : private ash::AssistantStateObserver {
 
   ~AssistantStatusWaiter() override { state_->RemoveObserver(this); }
 
-  void RunUntilExpectedStatus() {
+  void Wait(base::TimeDelta wait_timeout) {
     if (state_->assistant_state() == expected_status_)
       return;
 
     // Wait until we're ready or we hit the timeout.
-    base::RunLoop run_loop;
-    base::AutoReset<base::OnceClosure> quit_loop(&quit_loop_,
-                                                 run_loop.QuitClosure());
-    EXPECT_NO_FATAL_FAILURE(run_loop.Run())
-        << "Failed waiting for AssistantStatus |" << expected_status_ << "|. "
+    run_loop_ = std::make_unique<base::RunLoop>();
+    bool success = RunWithTimeout(run_loop_.get(), wait_timeout);
+    run_loop_.reset();
+
+    EXPECT_TRUE(success)
+        << "Timeout waiting for AssistantStatus |" << expected_status_ << "|. "
         << "Current status is |" << state_->assistant_state() << "|. "
         << "One possible cause is that you're using an expired access token.";
   }
 
  private:
   void OnAssistantStatusChanged(ash::mojom::AssistantState status) override {
-    if (status == expected_status_ && quit_loop_)
-      std::move(quit_loop_).Run();
+    if (status == expected_status_ && run_loop_ != nullptr)
+      run_loop_->Quit();
   }
 
   ash::AssistantState* const state_;
   ash::mojom::AssistantState const expected_status_;
 
-  base::OnceClosure quit_loop_;
+  std::unique_ptr<base::RunLoop> run_loop_;
 };
 
 // Base class that observes all new responses being displayed under the
@@ -103,18 +120,19 @@ class ResponseWaiter : private views::ViewObserver {
       parent_view_->RemoveObserver(this);
   }
 
-  void RunUntilResponseReceived() {
+  void Wait(base::TimeDelta wait_timeout) {
     if (HasExpectedResponse())
       return;
 
     // Wait until we're ready or we hit the timeout.
-    base::RunLoop run_loop;
-    base::AutoReset<base::OnceClosure> quit_loop(&quit_loop_,
-                                                 run_loop.QuitClosure());
-    EXPECT_NO_FATAL_FAILURE(run_loop.Run())
-        << "Failed waiting for Assistant response.\n"
-        << "Expected any of " << FormatExpectedResponses() << ".\n"
-        << "Got \"" << GetResponseText() << "\"";
+    run_loop_ = std::make_unique<base::RunLoop>();
+    bool success = RunWithTimeout(run_loop_.get(), wait_timeout);
+    run_loop_.reset();
+
+    EXPECT_TRUE(success) << "Timeout waiting for Assistant response.\n"
+                         << "Expected any of " << FormatExpectedResponses()
+                         << ".\n"
+                         << "Got \"" << GetResponseText() << "\"";
   }
 
  private:
@@ -122,19 +140,19 @@ class ResponseWaiter : private views::ViewObserver {
   void OnViewHierarchyChanged(
       views::View* observed_view,
       const views::ViewHierarchyChangedDetails& details) override {
-    if (quit_loop_ && HasExpectedResponse())
-      std::move(quit_loop_).Run();
+    if (run_loop_ && HasExpectedResponse())
+      run_loop_->Quit();
   }
 
   void OnViewIsDeleting(views::View* observed_view) override {
     DCHECK(observed_view == parent_view_);
 
-    if (quit_loop_) {
+    if (run_loop_) {
       FAIL() << parent_view_->GetClassName() << " is deleted "
              << "before receiving the Assistant response.\n"
              << "Expected any of " << FormatExpectedResponses() << ".\n"
              << "Got \"" << GetResponseText() << "\"";
-      std::move(quit_loop_).Run();
+      run_loop_->Quit();
     }
 
     parent_view_ = nullptr;
@@ -180,7 +198,7 @@ class ResponseWaiter : private views::ViewObserver {
   views::View* parent_view_;
   std::vector<std::string> expected_responses_;
 
-  base::OnceClosure quit_loop_;
+  std::unique_ptr<base::RunLoop> run_loop_;
 };
 
 class TextResponseWaiter : public ResponseWaiter {
@@ -321,8 +339,6 @@ void AssistantTestMixin::TearDownOnMainThread() {
 
 void AssistantTestMixin::StartAssistantAndWaitForReady(
     base::TimeDelta wait_timeout) {
-  const base::RunLoop::ScopedRunTimeoutForTest run_timeout(
-      wait_timeout, base::MakeExpectedNotRunClosure(FROM_HERE));
   // Note: You might be tempted to call this function from SetUpOnMainThread(),
   // but that will not work as the Assistant service can not start until
   // |BrowserTestBase| calls InitializeNetworkProcess(), which it only does
@@ -333,7 +349,7 @@ void AssistantTestMixin::StartAssistantAndWaitForReady(
 
   AssistantStatusWaiter waiter(test_api_->GetAssistantState(),
                                ash::mojom::AssistantState::NEW_READY);
-  waiter.RunUntilExpectedStatus();
+  waiter.Wait(wait_timeout);
 
   // With the warmer welcome enabled the Assistant service will start an
   // interaction that will never complete (as our tests finish too soon).
@@ -354,11 +370,9 @@ void AssistantTestMixin::SendTextQuery(const std::string& query) {
 void AssistantTestMixin::ExpectCardResponse(
     const std::string& expected_response,
     base::TimeDelta wait_timeout) {
-  const base::RunLoop::ScopedRunTimeoutForTest run_timeout(
-      wait_timeout, base::MakeExpectedNotRunClosure(FROM_HERE));
   CardResponseWaiter waiter(test_api_->ui_element_container(),
                             {expected_response});
-  waiter.RunUntilResponseReceived();
+  waiter.Wait(wait_timeout);
 }
 
 void AssistantTestMixin::ExpectTextResponse(
@@ -370,11 +384,9 @@ void AssistantTestMixin::ExpectTextResponse(
 void AssistantTestMixin::ExpectAnyOfTheseTextResponses(
     const std::vector<std::string>& expected_responses,
     base::TimeDelta wait_timeout) {
-  const base::RunLoop::ScopedRunTimeoutForTest run_timeout(
-      wait_timeout, base::MakeExpectedNotRunClosure(FROM_HERE));
   TextResponseWaiter waiter(test_api_->ui_element_container(),
                             expected_responses);
-  waiter.RunUntilResponseReceived();
+  waiter.Wait(wait_timeout);
 }
 
 void AssistantTestMixin::PressAssistantKey() {
