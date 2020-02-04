@@ -733,13 +733,7 @@ void HandleShowTaskManager() {
 
 void HandleSwapPrimaryDisplay() {
   base::RecordAction(UserMetricsAction("Accel_Swap_Primary_Display"));
-
-  // TODO(rjkroege): This is not correct behaviour on devices with more than
-  // two screens. Behave the same as mirroring: fail and notify if there are
-  // three or more screens.
-  Shell::Get()->display_configuration_controller()->SetPrimaryDisplayId(
-      Shell::Get()->display_manager()->GetSecondaryDisplay().id(),
-      true /* throttle */);
+  accelerators::ShiftPrimaryDisplay();
 }
 
 bool CanHandleSwitchIme(const ui::Accelerator& accelerator) {
