@@ -65520,6 +65520,12 @@ Full version information for the fingerprint enum values:
   <int value="6" label="Waiting for network status"/>
 </enum>
 
+<enum name="VariationsRestrictionPolicyValues">
+  <int value="0" label="All variations are applied"/>
+  <int value="1" label="Only critical variations applied"/>
+  <int value="2" label="All variations are restricted"/>
+</enum>
+
 <enum name="VariationsSeedDateChange">
   <int value="0" label="No previous date"/>
   <int value="1" label="New date older than old date"/>
