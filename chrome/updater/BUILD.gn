@@ -93,6 +93,7 @@ if (is_win || is_mac) {
       ":updater",
       "//base",
       "//base/test:test_support",
+      "//chrome/common:constants",
       "//testing/gtest",
     ]
 
