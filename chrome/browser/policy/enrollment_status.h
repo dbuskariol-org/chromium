@@ -2,10 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_POLICY_ENROLLMENT_STATUS_CHROMEOS_H_
-#define CHROME_BROWSER_CHROMEOS_POLICY_ENROLLMENT_STATUS_CHROMEOS_H_
+#ifndef CHROME_BROWSER_POLICY_ENROLLMENT_STATUS_H_
+#define CHROME_BROWSER_POLICY_ENROLLMENT_STATUS_H_
 
+#if defined(OS_CHROMEOS)
 #include "chromeos/tpm/install_attributes.h"
+#endif
 #include "components/policy/core/common/cloud/cloud_policy_constants.h"
 #include "components/policy/core/common/cloud/cloud_policy_store.h"
 #include "components/policy/core/common/cloud/cloud_policy_validator.h"
@@ -66,8 +68,10 @@ class EnrollmentStatus {
   static EnrollmentStatus ForStoreError(
       CloudPolicyStore::Status store_error,
       CloudPolicyValidatorBase::Status validation_status);
+#if defined(OS_CHROMEOS)
   static EnrollmentStatus ForLockError(
       chromeos::InstallAttributes::LockResult lock_status);
+#endif
 
   Status status() const { return status_; }
   DeviceManagementStatus client_status() const { return client_status_; }
@@ -76,26 +80,47 @@ class EnrollmentStatus {
   CloudPolicyValidatorBase::Status validation_status() const {
     return validation_status_;
   }
+#if defined(OS_CHROMEOS)
   chromeos::InstallAttributes::LockResult lock_status() const {
     return lock_status_;
   }
+#endif
 
  private:
+#if defined(OS_CHROMEOS)
   EnrollmentStatus(Status status,
                    DeviceManagementStatus client_status,
                    int http_status,
                    CloudPolicyStore::Status store_status,
                    CloudPolicyValidatorBase::Status validation_status,
                    chromeos::InstallAttributes::LockResult lock_status);
+#else
+  EnrollmentStatus(Status status,
+                   DeviceManagementStatus client_status,
+                   int http_status,
+                   CloudPolicyStore::Status store_status,
+                   CloudPolicyValidatorBase::Status validation_status);
+#endif
+
+  // Helper to implement the For* functions above without them knowing about the
+  // current platform.
+  static EnrollmentStatus CreateEnrollmentStatusWithoutLockError(
+      Status status,
+      DeviceManagementStatus client_status,
+      int http_status,
+      CloudPolicyStore::Status store_status,
+      CloudPolicyValidatorBase::Status validation_status);
 
   Status status_;
   DeviceManagementStatus client_status_;
   int http_status_;
   CloudPolicyStore::Status store_status_;
   CloudPolicyValidatorBase::Status validation_status_;
+#if defined(OS_CHROMEOS)
   chromeos::InstallAttributes::LockResult lock_status_;
+#endif
 };
 
 }  // namespace policy
 
-#endif  // CHROME_BROWSER_CHROMEOS_POLICY_ENROLLMENT_STATUS_CHROMEOS_H_
+#endif  // CHROME_BROWSER_POLICY_ENROLLMENT_STATUS_H_
