@@ -6022,9 +6022,9 @@
       'tags': [],
       'desc': '''Specifies the maximum delay in milliseconds between receiving a policy invalidation and fetching the new policy from the device management service.
 
-      Setting this policy overrides the default value of 5000 milliseconds. Valid values for this policy are in the range from 1000 (1 second) to 300000 (5 minutes). Any values not in this range will be clamped to the respective boundary.
+      Setting this policy overrides the default value of 10000 milliseconds. Valid values for this policy are in the range from 1000 (1 second) to 300000 (5 minutes). Any values not in this range will be clamped to the respective boundary.
 
-      Leaving this policy not set will make <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> use the default value of 5000 milliseconds.''',
+      Leaving this policy not set will make <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> use the default value of 10000 milliseconds.''',
     },
     {
       'name': 'ChromeFrameRendererSettings',
