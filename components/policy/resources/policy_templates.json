@@ -4950,7 +4950,7 @@
 
           Automatic playback is only allowed for domains explictly listed in the <ph name="PLUGINS_ALLOWED_FOR_URLS_POLICY_NAME">PluginsAllowedForUrls</ph> policy. If you want to enabled automatic playback for all sites consider adding http://* and https://* to this list.
 
-          If this policy is left not set, the user will be able to change this setting manually.''',
+          If this policy is left not set, 'BlockPlugins' will be used and the user will be able to change this setting manually.''',
     },
     {
       'name': 'DefaultPopupsSetting',
