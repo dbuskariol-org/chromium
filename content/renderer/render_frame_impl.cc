@@ -543,7 +543,7 @@ mojom::CommonNavigationParamsPtr MakeCommonNavigationParams(
   }
 
   const RequestExtraData* extra_data =
-      static_cast<RequestExtraData*>(info->url_request.GetExtraData());
+      static_cast<RequestExtraData*>(info->url_request.GetExtraData().get());
   DCHECK(extra_data);
 
   // Convert from WebVector<int> to std::vector<int>.
@@ -4858,7 +4858,7 @@ void RenderFrameImpl::WillSendRequestInternal(
   std::unique_ptr<NavigationResponseOverrideParameters> response_override;
   if (request.GetExtraData()) {
     RequestExtraData* old_extra_data =
-        static_cast<RequestExtraData*>(request.GetExtraData());
+        static_cast<RequestExtraData*>(request.GetExtraData().get());
 
     custom_user_agent = old_extra_data->custom_user_agent();
     if (!custom_user_agent.IsNull()) {
@@ -4873,8 +4873,9 @@ void RenderFrameImpl::WillSendRequestInternal(
 
   WebDocument frame_document = frame_->GetDocument();
   if (!request.GetExtraData())
-    request.SetExtraData(std::make_unique<RequestExtraData>());
-  auto* extra_data = static_cast<RequestExtraData*>(request.GetExtraData());
+    request.SetExtraData(base::MakeRefCounted<RequestExtraData>());
+  auto* extra_data =
+      static_cast<RequestExtraData*>(request.GetExtraData().get());
   extra_data->set_custom_user_agent(custom_user_agent);
   extra_data->set_render_frame_id(routing_id_);
   extra_data->set_is_main_frame(IsMainFrame());
@@ -6355,7 +6356,7 @@ void RenderFrameImpl::BeginNavigationInternal(
       transition_type);
 
   if (!info->url_request.GetExtraData())
-    info->url_request.SetExtraData(std::make_unique<RequestExtraData>());
+    info->url_request.SetExtraData(base::MakeRefCounted<RequestExtraData>());
 
   // TODO(clamy): Same-document navigations should not be sent back to the
   // browser.
