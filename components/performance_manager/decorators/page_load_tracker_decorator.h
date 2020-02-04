@@ -1,9 +1,9 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_PAGE_ALMOST_IDLE_DECORATOR_H_
-#define COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_PAGE_ALMOST_IDLE_DECORATOR_H_
+#ifndef COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_PAGE_LOAD_TRACKER_DECORATOR_H_
+#define COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_PAGE_LOAD_TRACKER_DECORATOR_H_
 
 #include "base/time/time.h"
 #include "base/timer/timer.h"
@@ -18,19 +18,19 @@ class FrameNodeImpl;
 class PageNodeImpl;
 class ProcessNodeImpl;
 
-// The PageAlmostIdle decorator is responsible for determining when a page has
-// reached an "almost idle" state after initial load, based on CPU and network
-// quiescence, as well as an absolute timeout. This state is then updated on
-// PageNodes in a graph.
-class PageAlmostIdleDecorator : public FrameNode::ObserverDefaultImpl,
-                                public GraphOwnedDefaultImpl,
-                                public PageNode::ObserverDefaultImpl,
-                                public ProcessNode::ObserverDefaultImpl {
+// The PageLoadTracker decorator is responsible for determining when a page is
+// loading. A page starts loading when incoming data starts arriving for a
+// top-level load to a different document. It stops loading when it reaches an
+// "almost idle" state, based on CPU and network quiescence, or after an
+// absolute timeout. This state is then updated on PageNodes in a graph.
+class PageLoadTrackerDecorator : public FrameNode::ObserverDefaultImpl,
+                                 public GraphOwnedDefaultImpl,
+                                 public ProcessNode::ObserverDefaultImpl {
  public:
   class Data;
 
-  PageAlmostIdleDecorator();
-  ~PageAlmostIdleDecorator() override;
+  PageLoadTrackerDecorator();
+  ~PageLoadTrackerDecorator() override;
 
   // FrameNodeObserver implementation:
   void OnNetworkAlmostIdleChanged(const FrameNode* frame_node) override;
@@ -39,15 +39,17 @@ class PageAlmostIdleDecorator : public FrameNode::ObserverDefaultImpl,
   void OnPassedToGraph(Graph* graph) override;
   void OnTakenFromGraph(Graph* graph) override;
 
-  // PageNodeObserver implementation:
-  void OnIsLoadingChanged(const PageNode* page_node) override;
-  void OnMainFrameDocumentChanged(const PageNode* page_node) override;
-
   // ProcessNodeObserver implementation:
   void OnMainThreadTaskLoadIsLow(const ProcessNode* process_node) override;
 
+  // Invoked by PageLoadTrackerDecoratorHelper when corresponding
+  // WebContentsObserver methods are invoked, and the WebContents is loading to
+  // a different document.
+  static void DidReceiveResponse(PageNodeImpl* page_node);
+  static void DidStopLoading(PageNodeImpl* page_node);
+
  protected:
-  friend class PageAlmostIdleDecoratorTest;
+  friend class PageLoadTrackerDecoratorTest;
 
   // The amount of time a page has to be idle post-loading in order for it to be
   // considered loaded and idle. This is used in UpdateLoadIdleState
@@ -78,27 +80,28 @@ class PageAlmostIdleDecorator : public FrameNode::ObserverDefaultImpl,
   // observed. Frame and Process variants will eventually all redirect to the
   // appropriate Page variant, where the real work is done.
   void UpdateLoadIdleStateFrame(FrameNodeImpl* frame_node);
-  void UpdateLoadIdleStatePage(PageNodeImpl* page_node);
   void UpdateLoadIdleStateProcess(ProcessNodeImpl* process_node);
+  static void UpdateLoadIdleStatePage(PageNodeImpl* page_node);
 
   // Helper function for transitioning to the final state.
-  void TransitionToLoadedAndIdle(PageNodeImpl* page_node);
+  static void TransitionToLoadedAndIdle(PageNodeImpl* page_node);
 
   static bool IsIdling(const PageNodeImpl* page_node);
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PageAlmostIdleDecorator);
+  DISALLOW_COPY_AND_ASSIGN(PageLoadTrackerDecorator);
 };
 
-class PageAlmostIdleDecorator::Data {
+class PageLoadTrackerDecorator::Data {
  public:
-  // The state transitions for the PageAlmostIdle signal. In general a page
-  // transitions through these states from top to bottom.
+  // The state transitions associated with a load. In general a page transitions
+  // through these states from top to bottom.
   enum class LoadIdleState {
     // The initial state. Can only transition to kLoading from here.
     kLoadingNotStarted,
-    // Loading has started. Almost idle signals are ignored in this state.
-    // Can transition to kLoadedNotIdling and kLoadedAndIdling from here.
+    // Incoming data has started to arrive for a load. Almost idle signals are
+    // ignored in this state. Can transition to kLoadedNotIdling and
+    // kLoadedAndIdling from here.
     kLoading,
     // Loading has completed, but the page has not started idling. Can only
     // transition to kLoadedAndIdling from here.
@@ -117,6 +120,17 @@ class PageAlmostIdleDecorator::Data {
   static Data* GetForTesting(PageNodeImpl* page_node);
   static bool DestroyForTesting(PageNodeImpl* page_node);
 
+  // Sets the LoadIdleState for the page, and updates PageNode::IsLoading()
+  // accordingly.
+  void SetLoadIdleState(PageNodeImpl* page_node, LoadIdleState load_idle_state);
+
+  // Returns the LoadIdleState for the page.
+  LoadIdleState load_idle_state() const { return load_idle_state_; }
+
+  // Whether there is an ongoing different-document load for which data started
+  // arriving.
+  bool loading_received_response_ = false;
+
   // Marks the point in time when the DidStopLoading signal was received,
   // transitioning to kLoadedAndNotIdling or kLoadedAndIdling. This is used as
   // the basis for the kWaitingForIdleTimeout.
@@ -130,6 +144,7 @@ class PageAlmostIdleDecorator::Data {
   // kLoadedAndIdle.
   base::OneShotTimer idling_timer_;
 
+ private:
   // Initially at kLoadingNotStarted. Transitions through the states via calls
   // to UpdateLoadIdleState. Is reset to kLoadingNotStarted when a non-same
   // document navigation is committed.
@@ -138,4 +153,4 @@ class PageAlmostIdleDecorator::Data {
 
 }  // namespace performance_manager
 
-#endif  // COMPONENTS_BROWSER_PERFORMANCE_MANAGER_DECORATORS_PAGE_ALMOST_IDLE_DECORATOR_H_
+#endif  // COMPONENTS_BROWSER_PERFORMANCE_MANAGER_DECORATORS_PAGE_LOAD_TRACKER_DECORATOR_H_

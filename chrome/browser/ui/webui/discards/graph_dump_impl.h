@@ -120,8 +120,6 @@ class DiscardsGraphDumpImpl : public discards::mojom::GraphDump,
   void OnMainFrameUrlChanged(
       const performance_manager::PageNode* page_node) override;
   // Ignored.
-  void OnPageAlmostIdleChanged(
-      const performance_manager::PageNode* page_node) override {}
   void OnMainFrameDocumentChanged(
       const performance_manager::PageNode* page_node) override {}
   void OnHadFormInteractionChanged(

@@ -213,14 +213,6 @@ void PerformanceManagerTabHelper::RenderFrameHostChanged(
                      old_frame, new_frame));
 }
 
-void PerformanceManagerTabHelper::DidStartLoading() {
-  PostToGraph(FROM_HERE, &PageNodeImpl::SetIsLoading, page_node_.get(), true);
-}
-
-void PerformanceManagerTabHelper::DidStopLoading() {
-  PostToGraph(FROM_HERE, &PageNodeImpl::SetIsLoading, page_node_.get(), false);
-}
-
 void PerformanceManagerTabHelper::OnVisibilityChanged(
     content::Visibility visibility) {
   const bool is_visible = visibility == content::Visibility::VISIBLE;

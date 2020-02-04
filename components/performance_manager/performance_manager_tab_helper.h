@@ -62,8 +62,6 @@ class PerformanceManagerTabHelper
   void RenderFrameDeleted(content::RenderFrameHost* render_frame_host) override;
   void RenderFrameHostChanged(content::RenderFrameHost* old_host,
                               content::RenderFrameHost* new_host) override;
-  void DidStartLoading() override;
-  void DidStopLoading() override;
   void OnVisibilityChanged(content::Visibility visibility) override;
   void OnAudioStateChanged(bool audible) override;
   void DidFinishNavigation(

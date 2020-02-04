@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/performance_manager/decorators/page_almost_idle_decorator.h"
+#include "components/performance_manager/decorators/page_load_tracker_decorator.h"
 
 #include <algorithm>
 
@@ -14,25 +14,21 @@
 
 namespace performance_manager {
 
-// Provides PageAlmostIdle machinery access to some internals of a PageNodeImpl.
-class PageAlmostIdleAccess {
+// Provides PageLoadTracker machinery access to some internals of a
+// PageNodeImpl.
+class PageLoadTrackerAccess {
  public:
   static std::unique_ptr<NodeAttachedData>* GetUniquePtrStorage(
       PageNodeImpl* page_node) {
-    return &page_node->page_almost_idle_data_;
-  }
-
-  static void SetPageAlmostIdle(PageNodeImpl* page_node,
-                                bool page_almost_idle) {
-    page_node->SetPageAlmostIdle(page_almost_idle);
+    return &page_node->page_load_tracker_data_;
   }
 };
 
 namespace {
 
-using LoadIdleState = PageAlmostIdleDecorator::Data::LoadIdleState;
+using LoadIdleState = PageLoadTrackerDecorator::Data::LoadIdleState;
 
-class DataImpl : public PageAlmostIdleDecorator::Data,
+class DataImpl : public PageLoadTrackerDecorator::Data,
                  public NodeAttachedDataImpl<DataImpl> {
  public:
   struct Traits : public NodeAttachedDataOwnedByNodeType<PageNodeImpl> {};
@@ -42,7 +38,7 @@ class DataImpl : public PageAlmostIdleDecorator::Data,
 
   static std::unique_ptr<NodeAttachedData>* GetUniquePtrStorage(
       PageNodeImpl* page_node) {
-    return PageAlmostIdleAccess::GetUniquePtrStorage(page_node);
+    return PageLoadTrackerAccess::GetUniquePtrStorage(page_node);
   }
 
  private:
@@ -52,69 +48,64 @@ class DataImpl : public PageAlmostIdleDecorator::Data,
 }  // namespace
 
 // static
-constexpr base::TimeDelta PageAlmostIdleDecorator::kLoadedAndIdlingTimeout;
+constexpr base::TimeDelta PageLoadTrackerDecorator::kLoadedAndIdlingTimeout;
 // static
-constexpr base::TimeDelta PageAlmostIdleDecorator::kWaitingForIdleTimeout;
+constexpr base::TimeDelta PageLoadTrackerDecorator::kWaitingForIdleTimeout;
 
-PageAlmostIdleDecorator::PageAlmostIdleDecorator() {
+PageLoadTrackerDecorator::PageLoadTrackerDecorator() {
   // Ensure the timeouts make sense relative to each other.
   static_assert(kWaitingForIdleTimeout > kLoadedAndIdlingTimeout,
                 "timeouts must be well ordered");
 }
 
-PageAlmostIdleDecorator::~PageAlmostIdleDecorator() = default;
+PageLoadTrackerDecorator::~PageLoadTrackerDecorator() = default;
 
-void PageAlmostIdleDecorator::OnNetworkAlmostIdleChanged(
+void PageLoadTrackerDecorator::OnNetworkAlmostIdleChanged(
     const FrameNode* frame_node) {
   UpdateLoadIdleStateFrame(FrameNodeImpl::FromNode(frame_node));
 }
 
-void PageAlmostIdleDecorator::OnPassedToGraph(Graph* graph) {
+void PageLoadTrackerDecorator::OnPassedToGraph(Graph* graph) {
   RegisterObservers(graph);
 }
 
-void PageAlmostIdleDecorator::OnTakenFromGraph(Graph* graph) {
+void PageLoadTrackerDecorator::OnTakenFromGraph(Graph* graph) {
   UnregisterObservers(graph);
 }
 
-void PageAlmostIdleDecorator::OnIsLoadingChanged(const PageNode* page_node) {
-  UpdateLoadIdleStatePage(PageNodeImpl::FromNode(page_node));
-}
-
-void PageAlmostIdleDecorator::OnMainFrameDocumentChanged(
-    const PageNode* page_node) {
-  DCHECK_NE(0, page_node->GetNavigationID());
-  // Reset the load-idle state associated with this page as a new navigation has
-  // started.
-  auto* page_impl = PageNodeImpl::FromNode(page_node);
-  auto* data = DataImpl::GetOrCreate(page_impl);
-  data->load_idle_state_ = LoadIdleState::kLoadingNotStarted;
-  PageAlmostIdleAccess::SetPageAlmostIdle(page_impl, false);
-  UpdateLoadIdleStatePage(page_impl);
-}
-
-void PageAlmostIdleDecorator::OnMainThreadTaskLoadIsLow(
+void PageLoadTrackerDecorator::OnMainThreadTaskLoadIsLow(
     const ProcessNode* process_node) {
   UpdateLoadIdleStateProcess(ProcessNodeImpl::FromNode(process_node));
 }
 
-void PageAlmostIdleDecorator::RegisterObservers(Graph* graph) {
+void PageLoadTrackerDecorator::DidReceiveResponse(PageNodeImpl* page_node) {
+  auto* data = DataImpl::GetOrCreate(page_node);
+  DCHECK(!data->loading_received_response_);
+  data->loading_received_response_ = true;
+  UpdateLoadIdleStatePage(page_node);
+}
+
+void PageLoadTrackerDecorator::DidStopLoading(PageNodeImpl* page_node) {
+  auto* data = DataImpl::GetOrCreate(page_node);
+  data->loading_received_response_ = false;
+  UpdateLoadIdleStatePage(page_node);
+}
+
+void PageLoadTrackerDecorator::RegisterObservers(Graph* graph) {
   // This observer presumes that it's been added before any nodes exist in the
   // graph.
   // TODO(chrisha): Add graph introspection functions to Graph.
   DCHECK(GraphImpl::FromGraph(graph)->nodes().empty());
   graph->AddFrameNodeObserver(this);
-  graph->AddPageNodeObserver(this);
   graph->AddProcessNodeObserver(this);
 }
 
-void PageAlmostIdleDecorator::UnregisterObservers(Graph* graph) {
+void PageLoadTrackerDecorator::UnregisterObservers(Graph* graph) {
   graph->RemoveFrameNodeObserver(this);
-  graph->RemovePageNodeObserver(this);
   graph->RemoveProcessNodeObserver(this);
 }
 
-void PageAlmostIdleDecorator::UpdateLoadIdleStateFrame(
+void PageLoadTrackerDecorator::UpdateLoadIdleStateFrame(
     FrameNodeImpl* frame_node) {
   // Only main frames are relevant in the load idle state.
   if (!frame_node->IsMainFrame())
@@ -127,7 +118,9 @@ void PageAlmostIdleDecorator::UpdateLoadIdleStateFrame(
   UpdateLoadIdleStatePage(page_node);
 }
 
-void PageAlmostIdleDecorator::UpdateLoadIdleStatePage(PageNodeImpl* page_node) {
+// static
+void PageLoadTrackerDecorator::UpdateLoadIdleStatePage(
+    PageNodeImpl* page_node) {
   // Once the cycle is complete state transitions are no longer tracked for this
   // page. When this occurs the backing data store is deleted.
   auto* data = DataImpl::Get(page_node);
@@ -135,33 +128,33 @@ void PageAlmostIdleDecorator::UpdateLoadIdleStatePage(PageNodeImpl* page_node) {
     return;
 
   // This is the terminal state, so should never occur.
-  DCHECK_NE(LoadIdleState::kLoadedAndIdle, data->load_idle_state_);
+  DCHECK_NE(LoadIdleState::kLoadedAndIdle, data->load_idle_state());
 
   // Cancel any ongoing timers. A new timer will be set if necessary.
   data->idling_timer_.Stop();
   const base::TimeTicks now = base::TimeTicks::Now();
 
   // Determine if the overall timeout has fired.
-  if ((data->load_idle_state_ == LoadIdleState::kLoadedNotIdling ||
-       data->load_idle_state_ == LoadIdleState::kLoadedAndIdling) &&
+  if ((data->load_idle_state() == LoadIdleState::kLoadedNotIdling ||
+       data->load_idle_state() == LoadIdleState::kLoadedAndIdling) &&
       (now - data->loading_stopped_) >= kWaitingForIdleTimeout) {
     TransitionToLoadedAndIdle(page_node);
     return;
   }
 
   // Otherwise do normal state transitions.
-  switch (data->load_idle_state_) {
+  switch (data->load_idle_state()) {
     case LoadIdleState::kLoadingNotStarted: {
-      if (!page_node->is_loading())
+      if (!data->loading_received_response_)
         return;
-      data->load_idle_state_ = LoadIdleState::kLoading;
+      data->SetLoadIdleState(page_node, LoadIdleState::kLoading);
       return;
     }
 
     case LoadIdleState::kLoading: {
-      if (page_node->is_loading())
+      if (data->loading_received_response_)
         return;
-      data->load_idle_state_ = LoadIdleState::kLoadedNotIdling;
+      data->SetLoadIdleState(page_node, LoadIdleState::kLoadedNotIdling);
       data->loading_stopped_ = now;
       // Let the kLoadedNotIdling state transition evaluate, allowing an
       // effective transition directly from kLoading to kLoadedAndIdling.
@@ -170,7 +163,7 @@ void PageAlmostIdleDecorator::UpdateLoadIdleStatePage(PageNodeImpl* page_node) {
 
     case LoadIdleState::kLoadedNotIdling: {
       if (IsIdling(page_node)) {
-        data->load_idle_state_ = LoadIdleState::kLoadedAndIdling;
+        data->SetLoadIdleState(page_node, LoadIdleState::kLoadedAndIdling);
         data->idling_started_ = now;
       }
       // Break out of the switch statement and set a timer to check for the
@@ -181,7 +174,7 @@ void PageAlmostIdleDecorator::UpdateLoadIdleStatePage(PageNodeImpl* page_node) {
     case LoadIdleState::kLoadedAndIdling: {
       // If the page is not still idling then transition back a state.
       if (!IsIdling(page_node)) {
-        data->load_idle_state_ = LoadIdleState::kLoadedNotIdling;
+        data->SetLoadIdleState(page_node, LoadIdleState::kLoadedNotIdling);
       } else {
         // Idling has been happening long enough so make the last state
         // transition.
@@ -204,7 +197,7 @@ void PageAlmostIdleDecorator::UpdateLoadIdleStatePage(PageNodeImpl* page_node) {
   // applicable timeouts.
   base::TimeDelta timeout =
       (data->loading_stopped_ + kWaitingForIdleTimeout) - now;
-  if (data->load_idle_state_ == LoadIdleState::kLoadedAndIdling) {
+  if (data->load_idle_state() == LoadIdleState::kLoadedAndIdling) {
     timeout = std::min(timeout,
                        (data->idling_started_ + kLoadedAndIdlingTimeout) - now);
   }
@@ -215,21 +208,21 @@ void PageAlmostIdleDecorator::UpdateLoadIdleStatePage(PageNodeImpl* page_node) {
   // already been destroyed and the associated posted task canceled.
   data->idling_timer_.Start(
       FROM_HERE, timeout,
-      base::BindRepeating(&PageAlmostIdleDecorator::UpdateLoadIdleStatePage,
-                          base::Unretained(this), page_node));
+      base::BindRepeating(&PageLoadTrackerDecorator::UpdateLoadIdleStatePage,
+                          page_node));
 }
 
-void PageAlmostIdleDecorator::UpdateLoadIdleStateProcess(
+void PageLoadTrackerDecorator::UpdateLoadIdleStateProcess(
     ProcessNodeImpl* process_node) {
   for (auto* frame_node : process_node->frame_nodes())
     UpdateLoadIdleStateFrame(frame_node);
 }
 
-void PageAlmostIdleDecorator::TransitionToLoadedAndIdle(
+// static
+void PageLoadTrackerDecorator::TransitionToLoadedAndIdle(
     PageNodeImpl* page_node) {
   auto* data = DataImpl::Get(page_node);
-  data->load_idle_state_ = LoadIdleState::kLoadedAndIdle;
-  PageAlmostIdleAccess::SetPageAlmostIdle(page_node, true);
+  data->SetLoadIdleState(page_node, LoadIdleState::kLoadedAndIdle);
 
   // Destroy the metadata as there are no more transitions possible. The
   // machinery will start up again if a navigation occurs.
@@ -237,7 +230,7 @@ void PageAlmostIdleDecorator::TransitionToLoadedAndIdle(
 }
 
 // static
-bool PageAlmostIdleDecorator::IsIdling(const PageNodeImpl* page_node) {
+bool PageLoadTrackerDecorator::IsIdling(const PageNodeImpl* page_node) {
   // Get the frame node for the main frame associated with this page.
   const FrameNodeImpl* main_frame_node = page_node->GetMainFrameNodeImpl();
   if (!main_frame_node)
@@ -259,20 +252,39 @@ bool PageAlmostIdleDecorator::IsIdling(const PageNodeImpl* page_node) {
 }
 
 // static
-PageAlmostIdleDecorator::Data*
-PageAlmostIdleDecorator::Data::GetOrCreateForTesting(PageNodeImpl* page_node) {
+PageLoadTrackerDecorator::Data*
+PageLoadTrackerDecorator::Data::GetOrCreateForTesting(PageNodeImpl* page_node) {
   return DataImpl::GetOrCreate(page_node);
 }
 
 // static
-PageAlmostIdleDecorator::Data* PageAlmostIdleDecorator::Data::GetForTesting(
+PageLoadTrackerDecorator::Data* PageLoadTrackerDecorator::Data::GetForTesting(
     PageNodeImpl* page_node) {
   return DataImpl::Get(page_node);
 }
 
 // static
-bool PageAlmostIdleDecorator::Data::DestroyForTesting(PageNodeImpl* page_node) {
+bool PageLoadTrackerDecorator::Data::DestroyForTesting(
+    PageNodeImpl* page_node) {
   return DataImpl::Destroy(page_node);
+}
+
+void PageLoadTrackerDecorator::Data::SetLoadIdleState(
+    PageNodeImpl* page_node,
+    LoadIdleState load_idle_state) {
+  load_idle_state_ = load_idle_state;
+
+  switch (load_idle_state_) {
+    case LoadIdleState::kLoadingNotStarted:
+    case LoadIdleState::kLoadedAndIdle:
+      page_node->SetIsLoading(false);
+      break;
+    case LoadIdleState::kLoading:
+    case LoadIdleState::kLoadedNotIdling:
+    case LoadIdleState::kLoadedAndIdling:
+      page_node->SetIsLoading(true);
+      break;
+  }
 }
 
 }  // namespace performance_manager
