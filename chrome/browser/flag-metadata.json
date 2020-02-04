@@ -3612,7 +3612,7 @@
   },
   {
     "name": "update-notification-scheduling-integration",
-    "owners": [ "//chrome/android/java/src/org/chromium/chrome/browser/updates/OWNERS" ],
+    "owners": [ "//chrome/browser/updates/OWNERS" ],
     "expiry_milestone": 86
   },
   {
