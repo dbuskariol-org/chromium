@@ -36,6 +36,7 @@
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/core/frame/frame_view.h"
 #include "third_party/blink/renderer/core/frame/layout_subtree_root_list.h"
+#include "third_party/blink/renderer/core/frame/overlay_interstitial_ad_detector.h"
 #include "third_party/blink/renderer/core/layout/depth_ordered_layout_object_list.h"
 #include "third_party/blink/renderer/core/paint/compositing/paint_layer_compositor.h"
 #include "third_party/blink/renderer/core/paint/layout_object_counter.h"
@@ -836,6 +837,10 @@ class CORE_EXPORT LocalFrameView final
   // MemoryPressureListener
   void OnPurgeMemory() override;
 
+  // Return the interstitial-ad detector for this frame, creating it if
+  // necessary.
+  OverlayInterstitialAdDetector& EnsureOverlayInterstitialAdDetector();
+
   LayoutSize size_;
 
   typedef HashSet<scoped_refptr<LayoutEmbeddedObject>> EmbeddedObjectSet;
@@ -994,6 +999,9 @@ class CORE_EXPORT LocalFrameView final
   // throttled, this will force the lifecycle to reach the paint phase so that
   // it can clear the painted output.
   bool need_paint_phase_after_throttling_ = false;
+
+  std::unique_ptr<OverlayInterstitialAdDetector>
+      overlay_interstitial_ad_detector_;
 
 #if DCHECK_IS_ON()
   bool is_updating_descendant_dependent_flags_;
