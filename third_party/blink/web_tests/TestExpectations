@@ -1413,7 +1413,6 @@ crbug.com/370604 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozi
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/flexbox_justifycontent-center-overflow.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/getcomputedstyle/flexbox_computedstyle_flex-basis-0percent.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/getcomputedstyle/flexbox_computedstyle_flex-shorthand-number.html [ Failure ]
-crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/negative-margins-001.html [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-align-content-horiz-001a.xhtml [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-align-content-horiz-001b.xhtml [ Failure ]
 crbug.com/467127 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-align-content-vert-001a.xhtml [ Failure ]
@@ -2343,7 +2342,6 @@ crbug.com/467127 external/wpt/css/css-flexbox/getcomputedstyle/flexbox_computeds
 crbug.com/467127 [ Mac ] external/wpt/css/css-flexbox/ttwf-reftest-flex-wrap-reverse.html [ Failure ]
 crbug.com/467127 [ Mac ] external/wpt/css/css-flexbox/ttwf-reftest-flex-wrap.html [ Failure ]
 
-crbug.com/467127 external/wpt/css/css-flexbox/negative-margins-001.html [ Failure ]
 crbug.com/467127 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-align-content-horiz-001a.xhtml [ Failure ]
 crbug.com/467127 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-align-content-horiz-001b.xhtml [ Failure ]
 crbug.com/467127 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-align-content-vert-001a.xhtml [ Failure ]
