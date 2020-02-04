@@ -1412,13 +1412,17 @@ int ChromeBrowserMainParts::PreMainMessageLoopRunImpl() {
       return chrome::RESULT_CODE_PROFILE_IN_USE;
   }
 
-#if defined(OS_WIN)
+#if BUILDFLAG(ENABLE_DOWNGRADE_PROCESSING)
   // Begin relaunch processing immediately if User Data migration is required
   // to handle a version downgrade.
-  if (downgrade_manager_.IsMigrationRequired(user_data_dir_))
+  if (downgrade_manager_.PrepareUserDataDirectoryForCurrentVersion(
+          user_data_dir_)) {
     return chrome::RESULT_CODE_DOWNGRADE_AND_RELAUNCH;
+  }
   downgrade_manager_.UpdateLastVersion(user_data_dir_);
+#endif
 
+#if defined(OS_WIN)
   // Write current executable path to |user_data_dir_| to inform Progressive Web
   // App launchers inside |user_data_dir_| which chrome.exe to launch from.
   base::PostTask(
@@ -1802,8 +1806,8 @@ int ChromeBrowserMainParts::PreMainMessageLoopRunImpl() {
     run_message_loop_ = false;
   }
 
-#if defined(OS_WIN)
-  // Clean up old user data directory and disk cache directory.
+#if BUILDFLAG(ENABLE_DOWNGRADE_PROCESSING)
+  // Clean up old user data directory, snapshots and disk cache directory.
   downgrade_manager_.DeleteMovedUserDataSoon(user_data_dir_);
 #endif
 
@@ -1910,16 +1914,17 @@ void ChromeBrowserMainParts::PostDestroyThreads() {
   // release it.
   ignore_result(browser_process_.release());
 
-#if defined(OS_WIN)
+#if BUILDFLAG(ENABLE_DOWNGRADE_PROCESSING)
   if (result_code_ == chrome::RESULT_CODE_DOWNGRADE_AND_RELAUNCH) {
     // Process a pending User Data downgrade before restarting.
     downgrade_manager_.ProcessDowngrade(user_data_dir_);
+
     // It's impossible for there to also be a user-driven relaunch since the
     // browser never fully starts in this case.
     DCHECK(!restart_last_session_);
     restart_mode = browser_shutdown::RestartMode::kRestartThisSession;
   }
-#endif  // !defined(OS_WIN)
+#endif  // BUILDFLAG(ENABLE_DOWNGRADE_PROCESSING)
 
   browser_shutdown::ShutdownPostThreadsStop(restart_mode);
 

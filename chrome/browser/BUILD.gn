@@ -12,6 +12,7 @@ import("//build/config/jumbo.gni")
 import("//build/config/linux/gtk/gtk.gni")
 import("//build/config/ui.gni")
 import("//chrome/browser/buildflags.gni")
+import("//chrome/browser/downgrade/buildflags.gni")
 import("//chrome/common/features.gni")
 import("//components/captive_portal/core/features.gni")
 import("//components/feature_engagement/features.gni")
@@ -3937,10 +3938,6 @@ jumbo_static_library("browser") {
       "browser_switcher/browser_switcher_policy_migrator.h",
       "browser_switcher/browser_switcher_service_win.cc",
       "browser_switcher/browser_switcher_service_win.h",
-      "downgrade/downgrade_manager.cc",
-      "downgrade/downgrade_manager.h",
-      "downgrade/user_data_downgrade.cc",
-      "downgrade/user_data_downgrade.h",
       "notifications/win/notification_image_retainer.cc",
       "notifications/win/notification_image_retainer.h",
       "notifications/win/notification_template_builder.cc",
@@ -4221,6 +4218,21 @@ jumbo_static_library("browser") {
 
   if (is_chromeos && use_cras) {
     defines += [ "USE_CRAS" ]
+  }
+
+  if (enable_downgrade_processing) {
+    sources += [
+      "downgrade/downgrade_manager.cc",
+      "downgrade/downgrade_manager.h",
+      "downgrade/downgrade_utils.cc",
+      "downgrade/downgrade_utils.h",
+      "downgrade/snapshot_file_collector.cc",
+      "downgrade/snapshot_file_collector.h",
+      "downgrade/snapshot_manager.cc",
+      "downgrade/snapshot_manager.h",
+      "downgrade/user_data_downgrade.cc",
+      "downgrade/user_data_downgrade.h",
+    ]
   }
 
   if (!is_android && !is_chromeos) {

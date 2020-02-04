@@ -60018,6 +60018,15 @@ Called by update_net_trust_anchors.py.-->
   <int value="32" label="UMA_TAB_GROUP_MANUAL_CREATION_UNDO"/>
 </enum>
 
+<enum name="SnapshotOperationResult">
+  <int value="0" label="Success">Operation succeeded</int>
+  <int value="1" label="Partial Sucess">Operation suceeded partially</int>
+  <int value="2" label="Failure">Operation failed</int>
+  <int value="3" label="Failed To Create Snapshot Directory">
+    Operation failed because the snapshot directory could not be created
+  </int>
+</enum>
+
 <enum name="SnippetOpenMethod">
   <int value="0" label="Plain click"/>
   <int value="1" label="New Window"/>
@@ -65125,6 +65134,10 @@ Full version information for the fingerprint enum values:
   <int value="2" label="Unsupported Downgrade">
     Unsupported downgrade detected
   </int>
+  <int value="3" label="Snapshot Restoration">
+    Downgrade with snapshot restoration detected
+  </int>
+  <int value="4" label="Minor Downgrade">Minor version downgrade</int>
 </enum>
 
 <enum name="UserDemographicsStatus">

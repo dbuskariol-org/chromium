@@ -13,6 +13,7 @@ import("//build/config/ui.gni")
 import("//build/toolchain/toolchain.gni")
 import("//build/util/version.gni")
 import("//chrome/browser/buildflags.gni")
+import("//chrome/browser/downgrade/buildflags.gni")
 import("//chrome/common/features.gni")
 import("//chrome/test/base/js2gtest.gni")
 import("//chromeos/assistant/assistant.gni")
@@ -3538,6 +3539,13 @@ test("unit_tests") {
     "../../third_party/zlib/google/zip_reader_unittest.cc",
     "../../third_party/zlib/google/zip_unittest.cc",
   ]
+
+  if (enable_downgrade_processing) {
+    sources += [
+      "../browser/downgrade/snapshot_manager_unittest.cc",
+      "../browser/downgrade/user_data_downgrade_unittest.cc",
+    ]
+  }
 
   if (toolkit_views) {
     # Test accessibility checks that audit any UI opened in a browser test.
