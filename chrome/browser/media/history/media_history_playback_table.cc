@@ -28,7 +28,7 @@ sql::InitStatus MediaHistoryPlaybackTable::CreateTableIfNonExistent() {
                                        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                                        "origin_id INTEGER NOT NULL,"
                                        "url TEXT,"
-                                       "watch_time_ms INTEGER,"
+                                       "watch_time_s INTEGER,"
                                        "has_video INTEGER,"
                                        "has_audio INTEGER,"
                                        "last_updated_time_s BIGINT NOT NULL,"
@@ -65,17 +65,16 @@ bool MediaHistoryPlaybackTable::SavePlayback(
 
   sql::Statement statement(DB()->GetCachedStatement(
       SQL_FROM_HERE,
-      base::StringPrintf(
-          "INSERT INTO %s "
-          "(origin_id, url, watch_time_ms, has_video, has_audio, "
-          "last_updated_time_s) "
-          "VALUES ((SELECT id FROM origin WHERE origin = ?), "
-          "?, ?, ?, ?, ?)",
-          kTableName)
+      base::StringPrintf("INSERT INTO %s "
+                         "(origin_id, url, watch_time_s, has_video, has_audio, "
+                         "last_updated_time_s) "
+                         "VALUES ((SELECT id FROM origin WHERE origin = ?), "
+                         "?, ?, ?, ?, ?)",
+                         kTableName)
           .c_str()));
   statement.BindString(0, watch_time.origin.spec());
   statement.BindString(1, watch_time.url.spec());
-  statement.BindInt64(2, watch_time.cumulative_watch_time.InMilliseconds());
+  statement.BindInt64(2, watch_time.cumulative_watch_time.InSeconds());
   statement.BindInt(3, watch_time.has_video);
   statement.BindInt(4, watch_time.has_audio);
   statement.BindInt64(5,
