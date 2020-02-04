@@ -204,6 +204,7 @@
 #include "chrome/browser/resource_coordinator/tab_activity_watcher.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
+#include "chrome/browser/upgrade_detector/upgrade_detector.h"
 #include "chrome/browser/usb/web_usb_detector.h"
 #include "ui/base/l10n/l10n_util.h"
 #endif  // defined(OS_ANDROID)
@@ -861,6 +862,12 @@ void ChromeBrowserMainParts::PreMainMessageLoopStart() {
 
 void ChromeBrowserMainParts::PostMainMessageLoopStart() {
   TRACE_EVENT0("startup", "ChromeBrowserMainParts::PostMainMessageLoopStart");
+
+#if !defined(OS_ANDROID)
+  // Initialize the upgrade detector here after ChromeBrowserMainPartsChromeos
+  // has had a chance to connect the DBus services.
+  UpgradeDetector::GetInstance()->Init();
+#endif
 
   ThreadProfiler::SetMainThreadTaskRunner(base::ThreadTaskRunnerHandle::Get());
 
@@ -1861,6 +1868,10 @@ void ChromeBrowserMainParts::PostMainMessageLoopRun() {
   // Android specific MessageLoop
   NOTREACHED();
 #else
+  // Shutdown the UpgradeDetector here before ChromeBrowserMainPartsChromeos
+  // disconnects DBus services in its PostDestroyThreads.
+  UpgradeDetector::GetInstance()->Shutdown();
+
   // Start watching for jank during shutdown. It gets disarmed when
   // |shutdown_watcher_| object is destructed.
   shutdown_watcher_->Arm(base::TimeDelta::FromSeconds(300));

@@ -893,6 +893,16 @@ BrowserProcessImpl::resource_coordinator_parts() {
   return resource_coordinator_parts_.get();
 }
 
+BuildState* BrowserProcessImpl::GetBuildState() {
+#if !defined(OS_ANDROID)
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  return &build_state_;
+#else
+  NOTIMPLEMENTED();
+  return nullptr;
+#endif
+}
+
 // static
 void BrowserProcessImpl::RegisterPrefs(PrefRegistrySimple* registry) {
   registry->RegisterBooleanPref(prefs::kDefaultBrowserSettingEnabled,
