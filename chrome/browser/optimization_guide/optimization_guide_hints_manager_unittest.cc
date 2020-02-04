@@ -579,7 +579,7 @@ TEST_F(OptimizationGuideHintsManagerTest, ParseTwoConfigVersions) {
   optimization1->set_optimization_type(
       optimization_guide::proto::RESOURCE_LOADING);
   optimization_guide::proto::ResourceLoadingHint* resource_loading_hint1 =
-      optimization1->add_resource_loading_hints();
+      optimization1->mutable_previews_metadata()->add_resource_loading_hints();
   resource_loading_hint1->set_loading_optimization_type(
       optimization_guide::proto::LOADING_BLOCK_RESOURCE);
   resource_loading_hint1->set_resource_pattern("news_cruft.js");
