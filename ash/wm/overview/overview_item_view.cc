@@ -134,10 +134,8 @@ class OverviewCloseButton : public views::ImageButton {
   std::unique_ptr<views::InkDropHighlight> CreateInkDropHighlight()
       const override {
     return std::make_unique<views::InkDropHighlight>(
-        gfx::PointF(GetLocalBounds().CenterPoint()),
-        std::make_unique<views::CircleLayerDelegate>(
-            kCloseButtonInkDropRippleHighlightColor,
-            kCloseButtonInkDropRadiusDp));
+        gfx::SizeF(GetLocalBounds().size()),
+        kCloseButtonInkDropRippleHighlightColor);
   }
 };
 
