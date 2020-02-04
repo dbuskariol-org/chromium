@@ -48,7 +48,7 @@ void DestroyMainloop(pa_threaded_mainloop* mainloop) {
 }
 
 void DestroyContext(pa_context* context) {
-  pa_context_set_state_callback(context, nullptr, nullptr);
+  pa_context_set_state_callback(context, NULL, NULL);
   pa_context_disconnect(context);
   pa_context_unref(context);
 }
@@ -202,13 +202,10 @@ bool InitPulse(pa_threaded_mainloop** mainloop, pa_context** context) {
 
   pa_context_set_state_callback(pa_context, &pulse::ContextStateCallback,
                                 pa_mainloop);
-
-  // Note: We don't use PA_CONTEXT_NOAUTOSPAWN here since when the daemon is
-  // missing, we seem to just hang forever.
-  if (pa_context_connect(pa_context, nullptr, PA_CONTEXT_NOFLAGS, nullptr)) {
+  if (pa_context_connect(pa_context, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL)) {
     VLOG(1) << "Failed to connect to the context.  Error: "
             << pa_strerror(pa_context_errno(pa_context));
-    pa_context_set_state_callback(pa_context, nullptr, nullptr);
+    pa_context_set_state_callback(pa_context, NULL, NULL);
     pa_context_unref(pa_context);
     pa_threaded_mainloop_free(pa_mainloop);
     return false;
@@ -380,8 +377,8 @@ bool CreateInputStream(pa_threaded_mainloop* mainloop,
   // Get channel mapping and open recording stream.
   pa_channel_map source_channel_map = ChannelLayoutToPAChannelMap(
       params.channel_layout());
-  pa_channel_map* map =
-      (source_channel_map.channels != 0) ? &source_channel_map : nullptr;
+  pa_channel_map* map = (source_channel_map.channels != 0) ?
+      &source_channel_map : NULL;
 
   // Create a new recording stream and
   // tells PulseAudio what the stream icon should be.
@@ -411,10 +408,9 @@ bool CreateInputStream(pa_threaded_mainloop* mainloop,
               PA_STREAM_START_CORKED;
   RETURN_ON_FAILURE(
       pa_stream_connect_record(
-          *stream,
-          device_id == AudioDeviceDescription::kDefaultDeviceId
-              ? nullptr
-              : device_id.c_str(),
+          *stream, device_id == AudioDeviceDescription::kDefaultDeviceId
+                       ? NULL
+                       : device_id.c_str(),
           &buffer_attributes, static_cast<pa_stream_flags_t>(flags)) == 0,
       "pa_stream_connect_record FAILED ");
 
@@ -461,9 +457,9 @@ bool CreateOutputStream(pa_threaded_mainloop** mainloop,
 
   RETURN_ON_FAILURE(pa_threaded_mainloop_start(*mainloop) == 0,
                     "Failed to start PulseAudio main loop.");
-  RETURN_ON_FAILURE(pa_context_connect(*context, nullptr,
-                                       PA_CONTEXT_NOAUTOSPAWN, nullptr) == 0,
-                    "Failed to connect PulseAudio context.");
+  RETURN_ON_FAILURE(
+      pa_context_connect(*context, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL) == 0,
+      "Failed to connect PulseAudio context.");
 
   // Wait until |pa_context_| is ready.  pa_threaded_mainloop_wait() must be
   // called after pa_context_get_state() in case the context is already ready,
@@ -484,12 +480,12 @@ bool CreateOutputStream(pa_threaded_mainloop** mainloop,
   sample_specifications.channels = params.channels();
 
   // Get channel mapping.
-  pa_channel_map* map = nullptr;
+  pa_channel_map* map = NULL;
   pa_channel_map source_channel_map = ChannelLayoutToPAChannelMap(
       params.channel_layout());
   if (source_channel_map.channels != 0) {
     // The source data uses a supported channel map so we will use it rather
-    // than the default channel map (nullptr).
+    // than the default channel map (NULL).
     map = &source_channel_map;
   }
 
@@ -531,16 +527,15 @@ bool CreateOutputStream(pa_threaded_mainloop** mainloop,
   // and error.
   RETURN_ON_FAILURE(
       pa_stream_connect_playback(
-          *stream,
-          device_id == AudioDeviceDescription::kDefaultDeviceId
-              ? nullptr
-              : device_id.c_str(),
+          *stream, device_id == AudioDeviceDescription::kDefaultDeviceId
+                       ? NULL
+                       : device_id.c_str(),
           &pa_buffer_attributes,
           static_cast<pa_stream_flags_t>(
               PA_STREAM_INTERPOLATE_TIMING | PA_STREAM_ADJUST_LATENCY |
               PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_NOT_MONOTONIC |
               PA_STREAM_START_CORKED),
-          nullptr, nullptr) == 0,
+          NULL, NULL) == 0,
       "pa_stream_connect_playback FAILED ");
 
   // Wait for the stream to be ready.
