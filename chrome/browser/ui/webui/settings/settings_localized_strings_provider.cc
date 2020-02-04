@@ -1380,13 +1380,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
       {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
       {"privacyPageMore", IDS_SETTINGS_PRIVACY_MORE},
-      {"signinAllowedTitle", IDS_SETTINGS_SIGNIN_ALLOWED},
-      {"signinAllowedDescription", IDS_SETTINGS_SIGNIN_ALLOWED_DESC},
       {"doNotTrack", IDS_SETTINGS_ENABLE_DO_NOT_TRACK},
       {"doNotTrackDialogTitle", IDS_SETTINGS_ENABLE_DO_NOT_TRACK_DIALOG_TITLE},
-      {"enableContentProtectionAttestation",
-       IDS_SETTINGS_ENABLE_CONTENT_PROTECTION_ATTESTATION},
-      {"wakeOnWifi", IDS_SETTINGS_WAKE_ON_WIFI_DESCRIPTION},
       {"securityPageTitle", IDS_SETTINGS_SECURITY},
       {"securityPageAdvancedSectionLabel",
        IDS_SETTINGS_SECURITY_ADVANCED_SECTION_LABEL},
@@ -1415,28 +1410,12 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
       {"safeBrowsingSectionLabel", IDS_SETTINGS_SAFEBROWSING_SECTION_LABEL},
       {"syncAndGoogleServicesPrivacyDescription",
        IDS_SETTINGS_SYNC_AND_GOOGLE_SERVICES_PRIVACY_DESC_UNIFIED_CONSENT},
-      {"urlKeyedAnonymizedDataCollection",
-       IDS_SETTINGS_ENABLE_URL_KEYED_ANONYMIZED_DATA_COLLECTION},
-      {"urlKeyedAnonymizedDataCollectionDesc",
-       IDS_SETTINGS_ENABLE_URL_KEYED_ANONYMIZED_DATA_COLLECTION_DESC},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  static constexpr webui::LocalizedString kConditionalLocalizedStrings[] = {
-      {"searchSuggestPref", IDS_SETTINGS_SUGGEST_PREF},
-      {"searchSuggestPrefDesc", IDS_SETTINGS_SUGGEST_PREF_DESC},
       {"networkPredictionEnabled",
        IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_LABEL},
       {"networkPredictionEnabledDesc",
        IDS_SETTINGS_NETWORK_PREDICTION_ENABLED_DESC},
-      {"linkDoctorPref", IDS_SETTINGS_LINKDOCTOR_PREF},
-      {"linkDoctorPrefDesc", IDS_SETTINGS_LINKDOCTOR_PREF_DESC},
-      {"spellingPref", IDS_SETTINGS_SPELLING_PREF},
-      {"spellingDescription", IDS_SETTINGS_SPELLING_PREF_DESC},
-      {"enableLogging", IDS_SETTINGS_ENABLE_LOGGING_PREF},
-      {"enableLoggingDesc", IDS_SETTINGS_ENABLE_LOGGING_PREF_DESC},
   };
-  AddLocalizedStringsBulk(html_source, kConditionalLocalizedStrings);
+  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
   html_source->AddString("syncAndGoogleServicesLearnMoreURL",
                          chrome::kSyncAndGoogleServicesLearnMoreURL);
@@ -1455,6 +1434,8 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
   html_source->AddBoolean(
       "installedAppsInCbd",
       base::FeatureList::IsEnabled(features::kStoragePressureUI));
+
+  AddPersonalizationOptionsStrings(html_source);
 }
 
 void AddSearchInSettingsStrings(content::WebUIDataSource* html_source) {

@@ -1578,6 +1578,22 @@ void AddSearchStrings(content::WebUIDataSource* html_source, Profile* profile) {
       ui::SubstituteChromeOSDeviceType(IDS_OS_SETTINGS_SEARCH_ENGINE_TOOLTIP));
 }
 
+void AddPrivacyStrings(content::WebUIDataSource* html_source) {
+  static constexpr webui::LocalizedString kLocalizedStrings[] = {
+      {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
+      {"enableLogging", IDS_SETTINGS_ENABLE_LOGGING_PREF},
+      {"enableLoggingDesc", IDS_SETTINGS_ENABLE_LOGGING_PREF_DESC},
+      {"wakeOnWifi", IDS_SETTINGS_WAKE_ON_WIFI_DESCRIPTION},
+      {"enableContentProtectionAttestation",
+       IDS_SETTINGS_ENABLE_CONTENT_PROTECTION_ATTESTATION},
+  };
+  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+
+  html_source->AddString("syncAndGoogleServicesLearnMoreURL",
+                         chrome::kSyncAndGoogleServicesLearnMoreURL);
+  ::settings::AddPersonalizationOptionsStrings(html_source);
+}
+
 }  // namespace
 
 void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
@@ -1604,6 +1620,7 @@ void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
   AddPersonalizationStrings(html_source);
   AddPluginVmStrings(html_source, profile);
   AddPrintingStrings(html_source);
+  AddPrivacyStrings(html_source);
   AddResetStrings(html_source);
   AddSearchInSettingsStrings(html_source);
   AddSearchStrings(html_source, profile);
