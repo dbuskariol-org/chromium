@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.datareduction;
+package org.chromium.chrome.browser.datareduction.settings;
 
 import static org.chromium.third_party.android.datausagechart.ChartDataUsageView.MAXIMUM_DAYS_IN_CHART;
 import static org.chromium.third_party.android.datausagechart.ChartDataUsageView.MINIMUM_DAYS_IN_CHART;

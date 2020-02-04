@@ -17,6 +17,7 @@ import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ContextUtils;
 import org.chromium.chrome.R;
+import org.chromium.chrome.browser.datareduction.settings.DataReductionPreferenceFragment;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.FeatureUtilities;
 import org.chromium.chrome.browser.net.spdyproxy.DataReductionProxySettings;
@@ -26,7 +27,6 @@ import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
 import org.chromium.chrome.browser.password_manager.ManagePasswordsReferrer;
 import org.chromium.chrome.browser.password_manager.PasswordManagerLauncher;
 import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
-import org.chromium.chrome.browser.settings.datareduction.DataReductionPreferenceFragment;
 import org.chromium.chrome.browser.settings.developer.DeveloperSettings;
 import org.chromium.chrome.browser.settings.sync.SignInPreference;
 import org.chromium.chrome.browser.settings.sync.SyncSettingsUtils;

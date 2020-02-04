@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.datareduction;
+package org.chromium.chrome.browser.datareduction.settings;
 
 import static android.text.format.DateUtils.FORMAT_ABBREV_MONTH;
 import static android.text.format.DateUtils.FORMAT_NO_YEAR;
@@ -37,6 +37,7 @@ import org.chromium.chrome.browser.datareduction.DataReductionProxyUma;
 import org.chromium.chrome.browser.net.spdyproxy.DataReductionProxySettings;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
+import org.chromium.chrome.browser.settings.datareduction.DataReductionProxySavingsClearedReason;
 import org.chromium.chrome.browser.util.ConversionUtils;
 import org.chromium.chrome.browser.util.FileSizeUtil;
 import org.chromium.third_party.android.datausagechart.ChartDataUsageView;
@@ -227,12 +228,12 @@ public class DataReductionStatsPreference extends Preference {
         mStartDateTextView.setText(mShouldShowRealData ? mStartDatePhrase : "");
         mStartDateTextView.setContentDescription(mShouldShowRealData
                         ? context.getString(R.string.data_reduction_start_date_content_description,
-                                  mStartDatePhrase)
+                                mStartDatePhrase)
                         : "");
         mEndDateTextView.setText(mShouldShowRealData ? mEndDatePhrase : "");
         mEndDateTextView.setContentDescription(mShouldShowRealData
                         ? context.getString(R.string.data_reduction_end_date_content_description,
-                                  mEndDatePhrase)
+                                mEndDatePhrase)
                         : "");
         if (mDataUsageTextView != null) {
             mDataUsageTextView.setText(mShouldShowRealData ? mReceivedTotalPhrase : "");
