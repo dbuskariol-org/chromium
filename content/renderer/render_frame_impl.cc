@@ -535,12 +535,9 @@ mojom::CommonNavigationParamsPtr MakeCommonNavigationParams(
       navigation_type = mojom::NavigationType::RELOAD;
   }
 
-  base::Optional<SourceLocation> source_location;
-  if (!info->source_location.url.IsNull()) {
-    source_location = SourceLocation(info->source_location.url.Latin1(),
-                                     info->source_location.line_number,
-                                     info->source_location.column_number);
-  }
+  SourceLocation source_location(info->source_location.url.Latin1(),
+                                 info->source_location.line_number,
+                                 info->source_location.column_number);
 
   const RequestExtraData* extra_data =
       static_cast<RequestExtraData*>(info->url_request.GetExtraData().get());
