@@ -1863,6 +1863,7 @@ void RenderFrameHostImpl::RenderProcessExited(
   SetLastCommittedUrl(GURL());
   web_bundle_handle_.reset();
 
+  must_be_replaced_ = IsRenderDocumentEnabledForCrashedFrame();
   has_committed_any_navigation_ = false;
 
   // Execute any pending AX tree snapshot callbacks with an empty response,
