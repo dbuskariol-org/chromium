@@ -3781,9 +3781,29 @@ be describing additional metrics about the same event.
   </metric>
   <metric
       name="SubmitCompositorFrameToPresentationCompositorFrame.StartDrawToSwapEnd">
+    <obsolete>
+      Deprecated 02/2020. Split into
+      SubmitCompositorFrameToPresentationCompositorFrame.StartDrawToSwapStart
+      and SubmitCompositorFrameToPresentationCompositorFrame.SwapStartToSwapEnd.
+    </obsolete>
     <summary>
       The time from when the a compositor frame is started to draw to when it
       ends swap.
+    </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+  <metric
+      name="SubmitCompositorFrameToPresentationCompositorFrame.StartDrawToSwapStart">
+    <summary>
+      The time from when a compositor frame is started to draw to when it starts
+      swap.
     </summary>
     <aggregation>
       <history>
@@ -3814,6 +3834,20 @@ be describing additional metrics about the same event.
     <summary>
       The time from when the a compositor frame ends swap to when it is
       presented.
+    </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+  <metric
+      name="SubmitCompositorFrameToPresentationCompositorFrame.SwapStartToSwapEnd">
+    <summary>
+      The time from when a compositor frame starts swap to when it ends swap.
     </summary>
     <aggregation>
       <history>
