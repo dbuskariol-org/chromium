@@ -6434,7 +6434,6 @@ crbug.com/1041847 virtual/gpu/fast/canvas/color-space/canvas-colorManaged-conver
 crbug.com/995663 [ Linux ] http/tests/media/autoplay/document-user-activation-cross-origin-feature-policy-header.html [ Pass Failure Timeout ]
 
 # Sheriff 2020-01-30
-crbug.com/1047126 [ Win ] external/wpt/IndexedDB/keypath-exceptions.htm [ Failure ]
 crbug.com/1047164 [ Mac ] fast/scroll-snap/snaps-after-keyboard-scrolling.html [ Pass Failure ]
 crbug.com/1047208 virtual/omt-service-worker-startup/http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
 crbug.com/1047208 http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
