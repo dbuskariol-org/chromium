@@ -223,6 +223,11 @@ class VoiceSearchOverlayElement extends PolymerElement {
   connectedCallback() {
     super.connectedCallback();
     this.$.dialog.showModal();
+    this.start();
+  }
+
+  /** @private */
+  start() {
     this.voiceRecognition_.start();
     this.state_ = State.STARTED;
     this.resetIdleTimer_();
@@ -237,6 +242,19 @@ class VoiceSearchOverlayElement extends PolymerElement {
   /** @private */
   onOverlayClick_() {
     this.$.dialog.close();
+  }
+
+  /**
+   * @param {!Event} e
+   * @private
+   */
+  onRetryClick_(e) {
+    if (this.state_ !== State.ERROR_RECEIVED ||
+        this.error_ !== Error.NO_MATCH) {
+      return;
+    }
+    e.stopPropagation();
+    this.start();
   }
 
   /** @private */
@@ -257,6 +275,7 @@ class VoiceSearchOverlayElement extends PolymerElement {
       this.onFinalResult_();
       return;
     }
+    this.voiceRecognition_.abort();
     this.onError_(Error.NO_MATCH);
   }
 

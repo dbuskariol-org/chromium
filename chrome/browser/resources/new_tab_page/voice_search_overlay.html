@@ -183,7 +183,10 @@
           <a link="details" target="_blank" href="[[helpUrl_]]"><!--
             -->$i18n{details}
           </a>
-          <a link="try-again" href="#">$i18n{tryAgain}</a>
+          <a link="try-again" id="retryLink" href="#"
+              on-click="onRetryClick_"><!--
+            -->$i18n{tryAgain}
+          </a>
         </iron-pages>
       </div>
     </iron-pages>
@@ -194,7 +197,7 @@
         <div id="micVolumeCutout">
         </div>
       </div>
-      <cr-button id="micButton">
+      <cr-button id="micButton" on-click="onRetryClick_">
         <div id="micIcon"></div>
       </cr-button>
     </div>
