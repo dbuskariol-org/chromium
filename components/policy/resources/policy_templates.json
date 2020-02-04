@@ -19526,6 +19526,26 @@
       If this policy is left unset, the Click to Call feature is enabled by default.''',
     },
     {
+      'name': 'UserDataSnapshotRentionLimit',
+      'owners': ['ydago@chromium.org', 'grt@chromium.org'],
+      'type': 'int',
+      'schema': { 'type': 'integer', 'minimum': 0 },
+      'supported_on': ['chrome.*:82-'],
+      'features': {
+        'dynamic_refresh': False,
+        'per_profile': False,
+      },
+      'example_value': 3,
+      'id': 673,
+      'caption': '''Limits the number of user data snapshots retained for use in case of emergency rollback.''',
+      'tags': [],
+      'desc': '''Following each major version update, Chrome will create a snapshot of certain portions of the user's browsing data for use in case of a later emergency version rollback. If an emergency rollback is performed to a version for which a user has a corresponding snapshot, the data in the snapshot is restored. This allows users to retain such settings as bookmarks and autofill data.
+
+      If this policy is not set, the default value of 3 is used
+
+      If the policy is set, old snapshots are deleted as needed to respect the limit. If the policy is set to 0, no snapshots will be taken'''
+    },
+    {
       'name': 'PrinterTypeDenyList',
       'owners': ['file://printing/OWNERS'],
       'type': 'string-enum-list',
@@ -20685,6 +20705,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 672,
+  'highest_id_currently_used': 673,
   'highest_atomic_group_id_currently_used': 38
 }

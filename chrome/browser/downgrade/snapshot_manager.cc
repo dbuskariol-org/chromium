@@ -9,6 +9,7 @@
 #include "base/files/file_enumerator.h"
 #include "base/files/file_util.h"
 #include "base/metrics/histogram_functions.h"
+#include "base/numerics/safe_conversions.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
@@ -20,8 +21,6 @@
 namespace downgrade {
 
 namespace {
-
-constexpr size_t kMaxNumberOfSnapshots = 3;
 
 // These values are persisted to logs. Entries should not be renumbered and
 // numeric values should never be reused.
@@ -286,7 +285,8 @@ void SnapshotManager::RestoreSnapshot(const base::Version& version) {
   }
 }
 
-void SnapshotManager::PurgeInvalidAndOldSnapshots() const {
+void SnapshotManager::PurgeInvalidAndOldSnapshots(
+    int max_number_of_snapshots) const {
   const auto snapshot_dir = user_data_dir_.Append(kSnapshotsDir);
 
   // Move the invalid snapshots within from Snapshots/NN to Snapshots.DELETE/NN.
@@ -304,11 +304,13 @@ void SnapshotManager::PurgeInvalidAndOldSnapshots() const {
 
   auto available_snapshots = GetAvailableSnapshots(snapshot_dir);
 
-  if (available_snapshots.size() <= kMaxNumberOfSnapshots)
+  if (available_snapshots.size() <=
+      base::checked_cast<size_t>(max_number_of_snapshots)) {
     return;
+  }
 
   size_t number_of_snapshots_to_delete =
-      available_snapshots.size() - kMaxNumberOfSnapshots;
+      available_snapshots.size() - max_number_of_snapshots;
 
   // Moves all the older snapshots for later deletion.
   for (const auto& snapshot : available_snapshots) {

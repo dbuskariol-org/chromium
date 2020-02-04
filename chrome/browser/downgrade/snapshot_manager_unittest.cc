@@ -351,8 +351,9 @@ TEST_F(SnapshotManagerTest, PurgeInvalidAndOldSnapshotsKeepsMaxValidSnapshots) {
                base::File::FLAG_CREATE | base::File::FLAG_WRITE);
   }
 
+  int max_number_of_snapshots = 3;
   SnapshotManager snapshot_manager(user_data_dir());
-  snapshot_manager.PurgeInvalidAndOldSnapshots();
+  snapshot_manager.PurgeInvalidAndOldSnapshots(max_number_of_snapshots);
 
   const base::FilePath deletion_directory =
       user_data_dir()
@@ -366,13 +367,12 @@ TEST_F(SnapshotManagerTest, PurgeInvalidAndOldSnapshotsKeepsMaxValidSnapshots) {
   }
 
   // Only 3 valid snapshots remains
-  size_t max_number_of_snapshot = 3;
   for (auto it = valid_snapshot_paths.rbegin();
        it != valid_snapshot_paths.rend(); ++it) {
-    EXPECT_EQ(base::PathExists(*it), max_number_of_snapshot != 0);
+    EXPECT_EQ(base::PathExists(*it), max_number_of_snapshots != 0);
     EXPECT_EQ(!base::PathExists(deletion_directory.Append(it->BaseName())),
-              max_number_of_snapshot != 0);
-    --max_number_of_snapshot;
+              max_number_of_snapshots != 0);
+    --max_number_of_snapshots;
   }
 }
 
@@ -388,8 +388,9 @@ TEST_F(SnapshotManagerTest, PurgeInvalidAndOldSnapshotsKeepsValidSnapshots) {
                base::File::FLAG_CREATE | base::File::FLAG_WRITE);
   }
 
+  size_t max_number_of_snapshots = 3;
   SnapshotManager snapshot_manager(user_data_dir());
-  snapshot_manager.PurgeInvalidAndOldSnapshots();
+  snapshot_manager.PurgeInvalidAndOldSnapshots(max_number_of_snapshots);
 
   for (const auto& path : valid_snapshot_paths)
     EXPECT_TRUE(base::PathExists(path));

@@ -26,11 +26,14 @@
 #include "base/version.h"
 #include "build/build_config.h"
 #include "chrome/browser/browser_features.h"
+#include "chrome/browser/browser_process.h"
 #include "chrome/browser/downgrade/downgrade_utils.h"
 #include "chrome/browser/downgrade/snapshot_manager.h"
 #include "chrome/browser/downgrade/user_data_downgrade.h"
 #include "chrome/browser/policy/browser_dm_token_storage.h"
 #include "chrome/common/chrome_switches.h"
+#include "chrome/common/pref_names.h"
+#include "components/prefs/pref_service.h"
 #include "components/version_info/version_info.h"
 #include "components/version_info/version_info_values.h"
 #include "content/public/browser/browser_thread.h"
@@ -202,7 +205,9 @@ bool DowngradeManager::PrepareUserDataDirectoryForCurrentVersion(
 
   const base::Version& current_version = version_info::GetVersion();
 
-  if (!UserDataSnapshotEnabled()) {
+  const bool user_data_snapshot_enabled = UserDataSnapshotEnabled();
+
+  if (!user_data_snapshot_enabled) {
     if (current_version >= *last_version)
       return false;  // Same version or upgrade.
 
@@ -217,16 +222,21 @@ bool DowngradeManager::PrepareUserDataDirectoryForCurrentVersion(
 
   // Take a snapshot on the first launch after a major version jump.
   if (current_milestone > last_milestone) {
+    const int max_number_of_snapshots =
+        g_browser_process->local_state()->GetInteger(
+            prefs::kUserDataSnapshotRentionLimit);
     SnapshotManager snapshot_manager(user_data_dir);
-    snapshot_manager.TakeSnapshot(*last_version);
-    snapshot_manager.PurgeInvalidAndOldSnapshots();
+    if (max_number_of_snapshots > 0)
+      snapshot_manager.TakeSnapshot(*last_version);
+    snapshot_manager.PurgeInvalidAndOldSnapshots(max_number_of_snapshots);
     return false;
   }
 
   if (current_version >= *last_version)
     return false;  // Same version or mid-milestone upgrade.
 
-  type_ = GetDowngradeType(user_data_dir, current_version, *last_version);
+  type_ = GetDowngradeTypeWithSnapshot(user_data_dir, current_version,
+                                       *last_version);
   if (type_ != Type::kNone)
     base::UmaHistogramEnumeration("Downgrade.Type", type_);
 
@@ -308,17 +318,24 @@ DowngradeManager::Type DowngradeManager::GetDowngradeType(
   DCHECK(!user_data_dir.empty());
   DCHECK_LT(current_version, last_version);
 
-  const uint16_t milestone = current_version.components()[0];
-
-  if (!UserDataSnapshotEnabled()) {
 #if defined(OS_WIN)
     // Move User Data aside for a clean launch if it follows an
     // administrator-driven downgrade.
-    if (IsAdministratorDrivenDowngrade(milestone))
-      return Type::kAdministrativeWipe;
+  if (IsAdministratorDrivenDowngrade(current_version.components()[0]))
+    return Type::kAdministrativeWipe;
 #endif
     return Type::kUnsupported;
-  }
+}
+
+// static
+DowngradeManager::Type DowngradeManager::GetDowngradeTypeWithSnapshot(
+    const base::FilePath& user_data_dir,
+    const base::Version& current_version,
+    const base::Version& last_version) {
+  DCHECK(!user_data_dir.empty());
+  DCHECK_LT(current_version, last_version);
+
+  const uint16_t milestone = current_version.components()[0];
 
   // Move User Data and restore from a snapshot if there is a candidate
   // snapshot to restore.

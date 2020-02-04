@@ -62,6 +62,10 @@ class DowngradeManager {
                                const base::Version& current_version,
                                const base::Version& last_version);
 
+  static Type GetDowngradeTypeWithSnapshot(const base::FilePath& user_data_dir,
+                                           const base::Version& current_version,
+                                           const base::Version& last_version);
+
   Type type_ = Type::kNone;
 };
 

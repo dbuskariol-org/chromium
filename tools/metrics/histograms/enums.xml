@@ -19555,6 +19555,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="670" label="MinimumChromeVersionEnforced"/>
   <int value="671" label="ReportDeviceTimezoneInfo"/>
   <int value="672" label="SystemProxySettings"/>
+  <int value="673" label="UserDataSnapshotRentionLimit"/>
 </enum>
 
 <enum name="EnterprisePolicyInvalidations">

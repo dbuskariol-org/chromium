@@ -40,10 +40,9 @@ class SnapshotManager {
   // moved for later deletion.
   void RestoreSnapshot(const base::Version& version);
 
-  // Keeps the number of snapshots on the disk under the maximum allowed by
-  // moving invalid and older snapshots for later deletion before taking
-  // a new snapshot.
-  void PurgeInvalidAndOldSnapshots() const;
+  // Keeps the number of snapshots on the disk under |max_number_of_snapshots|
+  // by moving invalid and older snapshots for later deletion.
+  void PurgeInvalidAndOldSnapshots(int max_number_of_snapshots) const;
 
  private:
   virtual std::vector<SnapshotItemDetails> GetUserSnapshotItemDetails(
