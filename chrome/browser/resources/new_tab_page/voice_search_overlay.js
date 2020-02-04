@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'chrome://resources/polymer/v3_0/iron-pages/iron-pages.js';
+import 'chrome://resources/polymer/v3_0/iron-selector/iron-selector.js';
 import 'chrome://resources/cr_elements/cr_button/cr_button.m.js';
 
 import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
