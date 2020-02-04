@@ -14,7 +14,7 @@ import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.ThemeColorProvider;
 import org.chromium.chrome.browser.compositor.layouts.EmptyOverviewModeObserver;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior;
-import org.chromium.chrome.browser.flags.FeatureUtilities;
+import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.chrome.browser.tab.TabSelectionType;
@@ -251,7 +251,7 @@ public class TabGroupUiMediator {
                     Tab currentTab = mTabModelSelector.getCurrentTab();
                     if (currentTab == null) return;
                     mResetHandler.resetGridWithListOfTabs(getRelatedTabsForId(currentTab.getId()));
-                    if (FeatureUtilities.isTabGroupsAndroidUiImprovementsEnabled()) {
+                    if (CachedFeatureFlags.isTabGroupsAndroidUiImprovementsEnabled()) {
                         RecordUserAction.record("TabGroup.ExpandedFromStrip.TabGridDialog");
                     }
                 });
@@ -285,8 +285,8 @@ public class TabGroupUiMediator {
             mIsTabGroupUiVisible = true;
         }
         boolean isDuetTabStripIntegrationEnabled =
-                FeatureUtilities.isDuetTabStripIntegrationAndroidEnabled()
-                && FeatureUtilities.isBottomToolbarEnabled();
+                CachedFeatureFlags.isDuetTabStripIntegrationAndroidEnabled()
+                && CachedFeatureFlags.isBottomToolbarEnabled();
         assert (mVisibilityController == null) == isDuetTabStripIntegrationEnabled;
         if (isDuetTabStripIntegrationEnabled) return;
         mVisibilityController.setBottomControlsVisible(mIsTabGroupUiVisible);

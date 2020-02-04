@@ -55,7 +55,7 @@ import java.util.Map;
  * remedied on the next process restart, when the static Boolean is reset to the newly cached
  * value in shared preferences.
  */
-public class FeatureUtilities {
+public class CachedFeatureFlags {
     /**
      * Stores the default values for each feature flag queried, used as a fallback in case native
      * isn't loaded, and no value has been previously cached.
@@ -141,7 +141,7 @@ public class FeatureUtilities {
         // All cached feature flags should have a default value.
         if (!sDefaults.containsKey(featureName)) {
             throw new IllegalArgumentException(
-                    "Feature " + featureName + " has no default in FeatureUtilities.");
+                    "Feature " + featureName + " has no default in CachedFeatureFlags.");
         }
 
         String preferenceName = getPrefForFeatureFlag(featureName);
@@ -210,7 +210,7 @@ public class FeatureUtilities {
         for (String featureName : featuresToCache) {
             if (!sDefaults.containsKey(featureName)) {
                 throw new IllegalArgumentException(
-                        "Feature " + featureName + " has no default in FeatureUtilities.");
+                        "Feature " + featureName + " has no default in CachedFeatureFlags.");
             }
             cacheFeature(featureName);
         }
@@ -642,7 +642,7 @@ public class FeatureUtilities {
     private static void cacheNetworkServiceWarmUpEnabled() {
         SharedPreferencesManager.getInstance().writeBoolean(
                 ChromePreferenceKeys.FLAGS_CACHED_NETWORK_SERVICE_WARM_UP_ENABLED,
-                FeatureUtilitiesJni.get().isNetworkServiceWarmUpEnabled());
+                CachedFeatureFlagsJni.get().isNetworkServiceWarmUpEnabled());
     }
 
     /**

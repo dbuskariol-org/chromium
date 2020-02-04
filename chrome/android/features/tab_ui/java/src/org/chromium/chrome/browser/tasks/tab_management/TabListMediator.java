@@ -36,7 +36,7 @@ import org.chromium.base.Log;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
-import org.chromium.chrome.browser.flags.FeatureUtilities;
+import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
 import org.chromium.chrome.browser.native_page.NativePageFactory;
 import org.chromium.chrome.browser.profiles.Profile;
@@ -375,7 +375,7 @@ class TabListMediator {
 
         @Override
         public void onUrlUpdated(Tab tab) {
-            if (!FeatureUtilities.isTabGroupsAndroidContinuationEnabled()) return;
+            if (!CachedFeatureFlags.isTabGroupsAndroidContinuationEnabled()) return;
             int index = mModel.indexFromId(tab.getId());
 
             if (index == TabModel.INVALID_TAB_INDEX && mActionsOnAllRelatedTabs) {
@@ -744,7 +744,7 @@ class TabListMediator {
             }
         };
 
-        if (FeatureUtilities.isTabGroupsAndroidUiImprovementsEnabled()) {
+        if (CachedFeatureFlags.isTabGroupsAndroidUiImprovementsEnabled()) {
             mTabGroupTitleEditor = new TabGroupTitleEditor(mTabModelSelector) {
                 @Override
                 protected void updateTabGroupTitle(Tab tab, String title) {
@@ -1051,7 +1051,7 @@ class TabListMediator {
      * @param helper The {@link TabGridAccessibilityHelper} used to setup accessibility support.
      */
     void setupAccessibilityDelegate(TabGridAccessibilityHelper helper) {
-        if (!FeatureUtilities.isTabGroupsAndroidContinuationEnabled()) {
+        if (!CachedFeatureFlags.isTabGroupsAndroidContinuationEnabled()) {
             return;
         }
         mAccessibilityDelegate = new View.AccessibilityDelegate() {
@@ -1215,7 +1215,7 @@ class TabListMediator {
     }
 
     private String getUrlForTab(Tab tab) {
-        if (!FeatureUtilities.isTabGroupsAndroidContinuationEnabled()) return "";
+        if (!CachedFeatureFlags.isTabGroupsAndroidContinuationEnabled()) return "";
         if (!mActionsOnAllRelatedTabs) return tab.getUrl();
 
         List<Tab> relatedTabs = getRelatedTabsForId(tab.getId());

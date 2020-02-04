@@ -38,8 +38,8 @@ import org.chromium.base.test.util.Restriction;
 import org.chromium.chrome.browser.ChromeSwitches;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.compositor.layouts.Layout;
+import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.flags.FeatureUtilities;
 import org.chromium.chrome.browser.incognito.IncognitoUtils;
 import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarVariationManager;
 import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarVariationManager.Variations;
@@ -68,21 +68,21 @@ public class AdaptiveToolbarTest {
 
     @Before
     public void setUp() {
-        FeatureUtilities.setTabGroupsAndroidEnabledForTesting(false);
+        CachedFeatureFlags.setTabGroupsAndroidEnabledForTesting(false);
     }
 
     @After
     public void tearDown() {
-        FeatureUtilities.setGridTabSwitcherEnabledForTesting(null);
-        FeatureUtilities.setIsBottomToolbarEnabledForTesting(null);
+        CachedFeatureFlags.setGridTabSwitcherEnabledForTesting(null);
+        CachedFeatureFlags.setIsBottomToolbarEnabledForTesting(null);
         mActivityTestRule.getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     private void setupFlagsAndLaunchActivity(
             boolean isBottomToolbarEnabled, boolean isGridTabSwitcherEnabled) {
-        FeatureUtilities.setGridTabSwitcherEnabledForTesting(isGridTabSwitcherEnabled);
-        FeatureUtilities.setIsBottomToolbarEnabledForTesting(isBottomToolbarEnabled);
+        CachedFeatureFlags.setGridTabSwitcherEnabledForTesting(isGridTabSwitcherEnabled);
+        CachedFeatureFlags.setIsBottomToolbarEnabledForTesting(isBottomToolbarEnabled);
         mActivityTestRule.startMainActivityOnBlankPage();
         CriteriaHelper.pollUiThread(mActivityTestRule.getActivity()
                                             .getTabModelSelector()

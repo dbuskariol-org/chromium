@@ -24,8 +24,8 @@ import androidx.annotation.Nullable;
 
 import org.chromium.base.MathUtils;
 import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.flags.FeatureUtilities;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
@@ -149,7 +149,7 @@ public class TabListCoordinator implements Destroyable {
                 ViewLookupCachingFrameLayout root = (ViewLookupCachingFrameLayout) holder.itemView;
                 ImageView thumbnail = (ImageView) root.fastFindViewById(R.id.tab_thumbnail);
                 if (thumbnail == null) return;
-                if (FeatureUtilities.isTabThumbnailAspectRatioNotOne()) {
+                if (CachedFeatureFlags.isTabThumbnailAspectRatioNotOne()) {
                     float expectedThumbnailAspectRatio =
                             (float) ChromeFeatureList.getFieldTrialParamByFeatureAsDouble(
                                     ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID,
@@ -289,7 +289,7 @@ public class TabListCoordinator implements Destroyable {
      *         animations for tab switcher.
      */
     int getTabListTopOffset() {
-        if (!FeatureUtilities.isStartSurfaceEnabled()) return 0;
+        if (!CachedFeatureFlags.isStartSurfaceEnabled()) return 0;
         Rect tabListRect = getRecyclerViewLocation();
         Rect parentRect = new Rect();
         ((ChromeActivity) mContext).getCompositorViewHolder().getGlobalVisibleRect(parentRect);

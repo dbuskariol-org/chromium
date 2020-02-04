@@ -27,19 +27,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Unit Test for FeatureUtilities.
+ * Unit Test for {@link CachedFeatureFlags}.
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
-public class FeatureUtilitiesTest {
+public class CachedFeatureFlagsTest {
     private IntentTestMockContext mContextWithSpeech;
     private IntentTestMockContext mContextWithoutSpeech;
 
-    public FeatureUtilitiesTest() {
-        mContextWithSpeech = new IntentTestMockContext(
-                RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    public CachedFeatureFlagsTest() {
+        mContextWithSpeech = new IntentTestMockContext(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
-        mContextWithoutSpeech = new IntentTestMockContext(
-                RecognizerIntent.ACTION_WEB_SEARCH);
+        mContextWithoutSpeech = new IntentTestMockContext(RecognizerIntent.ACTION_WEB_SEARCH);
     }
 
     @After
@@ -48,7 +46,6 @@ public class FeatureUtilitiesTest {
     }
 
     private static class IntentTestPackageManager extends MockPackageManager {
-
         private final String mAction;
 
         public IntentTestPackageManager(String recognizesAction) {
@@ -88,12 +85,12 @@ public class FeatureUtilitiesTest {
     private static boolean isRecognitionIntentPresent(final boolean useCachedResult) {
         // Context can only be queried on a UI Thread.
         return TestThreadUtils.runOnUiThreadBlockingNoException(
-                () -> FeatureUtilities.isRecognitionIntentPresent(useCachedResult));
+                () -> CachedFeatureFlags.isRecognitionIntentPresent(useCachedResult));
     }
 
     @Test
     @SmallTest
-    @Feature({"FeatureUtilities", "Speech"})
+    @Feature({"Flags", "Speech"})
     public void testSpeechFeatureAvailable() {
         ContextUtils.initApplicationContextForTests(mContextWithSpeech);
         final boolean doNotUseCachedResult = false;
@@ -104,7 +101,7 @@ public class FeatureUtilitiesTest {
 
     @Test
     @SmallTest
-    @Feature({"FeatureUtilities", "Speech"})
+    @Feature({"Flags", "Speech"})
     public void testSpeechFeatureUnavailable() {
         ContextUtils.initApplicationContextForTests(mContextWithoutSpeech);
         final boolean doNotUseCachedResult = false;
@@ -115,29 +112,25 @@ public class FeatureUtilitiesTest {
 
     @Test
     @SmallTest
-    @Feature({"FeatureUtilities", "Speech"})
+    @Feature({"Flags", "Speech"})
     public void testCachedSpeechFeatureAvailability() {
         ContextUtils.initApplicationContextForTests(mContextWithSpeech);
         // Initial call will cache the fact that speech is recognized.
         final boolean doNotUseCachedResult = false;
-        isRecognitionIntentPresent(
-                doNotUseCachedResult);
+        isRecognitionIntentPresent(doNotUseCachedResult);
 
         ContextUtils.initApplicationContextForTests(mContextWithoutSpeech);
         // Pass a context that does not recognize speech, but use cached result
         // which does recognize speech.
         final boolean useCachedResult = true;
-        final boolean recognizesSpeech = isRecognitionIntentPresent(
-                useCachedResult);
+        final boolean recognizesSpeech = isRecognitionIntentPresent(useCachedResult);
 
         // Check that we still recognize speech as we're using cached result.
         Assert.assertTrue(recognizesSpeech);
 
         // Check if we can turn cached result off again.
-        final boolean RecognizesSpeechUncached = isRecognitionIntentPresent(
-                doNotUseCachedResult);
+        final boolean RecognizesSpeechUncached = isRecognitionIntentPresent(doNotUseCachedResult);
 
         Assert.assertFalse(RecognizesSpeechUncached);
     }
-
 }

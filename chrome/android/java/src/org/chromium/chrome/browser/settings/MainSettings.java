@@ -18,8 +18,8 @@ import androidx.annotation.VisibleForTesting;
 import org.chromium.base.ContextUtils;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.datareduction.settings.DataReductionPreferenceFragment;
+import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.flags.FeatureUtilities;
 import org.chromium.chrome.browser.net.spdyproxy.DataReductionProxySettings;
 import org.chromium.chrome.browser.night_mode.NightModeUtils;
 import org.chromium.chrome.browser.offlinepages.prefetch.PrefetchConfiguration;
@@ -196,7 +196,7 @@ public class MainSettings extends PreferenceFragmentCompat
         Preference homepagePref = addPreferenceIfAbsent(PREF_HOMEPAGE);
         setOnOffSummary(homepagePref, HomepageManager.isHomepageEnabled());
 
-        if (NightModeUtils.isNightModeSupported() && FeatureUtilities.isNightModeAvailable()) {
+        if (NightModeUtils.isNightModeSupported() && CachedFeatureFlags.isNightModeAvailable()) {
             addPreferenceIfAbsent(PREF_UI_THEME);
         } else {
             removePreferenceIfPresent(PREF_UI_THEME);

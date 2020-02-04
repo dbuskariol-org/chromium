@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_FEATURE_UTILITIES_H_
-#define CHROME_BROWSER_ANDROID_FEATURE_UTILITIES_H_
+#ifndef CHROME_BROWSER_ANDROID_CACHED_FEATURE_FLAGS_H_
+#define CHROME_BROWSER_ANDROID_CACHED_FEATURE_FLAGS_H_
 
 #include <jni.h>
 
@@ -18,7 +18,7 @@ bool IsDownloadAutoResumptionEnabledInNative();
 // Returns an empty string if the group isn't specified.
 std::string GetReachedCodeProfilerTrialGroup();
 
-} // namespace android
-} // namespace chrome
+}  // namespace android
+}  // namespace chrome
 
-#endif  // CHROME_BROWSER_ANDROID_FEATURE_UTILITIES_H_
+#endif  // CHROME_BROWSER_ANDROID_CACHED_FEATURE_FLAGS_H_
