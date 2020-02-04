@@ -101,10 +101,9 @@ public class ClearDataDialogResultRecorderTest {
     }
 
     private void restartApp() {
-        when(mBrowserInitializer.isFullBrowserInitialized()).thenReturn(false);
-        doNothing()
-                .when(mBrowserInitializer)
-                .runNowOrAfterFullBrowserStarted(mTaskOnNativeInitCaptor.capture());
+        when(mBrowserInitializer.hasNativeInitializationCompleted()).thenReturn(false);
+        doNothing().when(mBrowserInitializer).runNowOrAfterNativeInitialization(
+                mTaskOnNativeInitCaptor.capture());
         mRecorder = new ClearDataDialogResultRecorder(() -> mPrefsManager, mBrowserInitializer,
                 mUmaRecorder);
     }
@@ -113,10 +112,9 @@ public class ClearDataDialogResultRecorderTest {
         for (Runnable task : mTaskOnNativeInitCaptor.getAllValues()) {
             task.run();
         }
-        when(mBrowserInitializer.isFullBrowserInitialized()).thenReturn(true);
-        doAnswer(answerVoid(Runnable::run))
-                .when(mBrowserInitializer)
-                .runNowOrAfterFullBrowserStarted(any());
+        when(mBrowserInitializer.hasNativeInitializationCompleted()).thenReturn(true);
+        doAnswer(answerVoid(Runnable::run)).when(mBrowserInitializer)
+                .runNowOrAfterNativeInitialization(any());
     }
 
 }

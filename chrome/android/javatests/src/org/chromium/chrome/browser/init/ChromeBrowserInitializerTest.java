@@ -25,16 +25,16 @@ public class ChromeBrowserInitializerTest {
     @Before
     public void setUp() {
         mInstance = ChromeBrowserInitializer.getInstance();
-        Assert.assertFalse(mInstance.isFullBrowserInitialized());
+        Assert.assertFalse(mInstance.hasNativeInitializationCompleted());
     }
 
     @Test
     @SmallTest
     public void testSynchronousInitialization() throws Exception {
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            Assert.assertFalse(mInstance.isFullBrowserInitialized());
+            Assert.assertFalse(mInstance.hasNativeInitializationCompleted());
             mInstance.handleSynchronousStartup();
-            Assert.assertTrue(mInstance.isFullBrowserInitialized());
+            Assert.assertTrue(mInstance.hasNativeInitializationCompleted());
             return true;
         });
     }
@@ -50,16 +50,17 @@ public class ChromeBrowserInitializerTest {
             }
         };
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            Assert.assertFalse(mInstance.isFullBrowserInitialized());
+            Assert.assertFalse(mInstance.hasNativeInitializationCompleted());
             mInstance.handlePreNativeStartup(parts);
             mInstance.handlePostNativeStartup(true, parts);
 
-            Assert.assertFalse("Should not be synchronous", mInstance.isFullBrowserInitialized());
+            Assert.assertFalse(
+                    "Should not be synchronous", mInstance.hasNativeInitializationCompleted());
             return true;
         });
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             Assert.assertFalse("Inititialization tasks should yield to new UI thread tasks",
-                    mInstance.isFullBrowserInitialized());
+                    mInstance.hasNativeInitializationCompleted());
         });
         Assert.assertTrue(done.tryAcquire(10, TimeUnit.SECONDS));
     }
@@ -69,14 +70,14 @@ public class ChromeBrowserInitializerTest {
     public void testDelayedTasks() throws Exception {
         final Semaphore done = new Semaphore(0);
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            mInstance.runNowOrAfterFullBrowserStarted(done::release);
+            mInstance.runNowOrAfterNativeInitialization(done::release);
             Assert.assertFalse("Should not run synchronously", done.tryAcquire());
             mInstance.handleSynchronousStartup();
             Assert.assertTrue(done.tryAcquire());
             return true;
         });
         TestThreadUtils.runOnUiThreadBlocking(() -> {
-            mInstance.runNowOrAfterFullBrowserStarted(done::release);
+            mInstance.runNowOrAfterNativeInitialization(done::release);
             // Runs right away in the same task is initialization is done.
             Assert.assertTrue(done.tryAcquire());
         });

@@ -811,7 +811,7 @@ public class CustomTabsConnection {
         if (mWarmupTasks != null) mWarmupTasks.cancel();
 
         maybePreconnectToRedirectEndpoint(session, url, intent);
-        ChromeBrowserInitializer.getInstance().runNowOrAfterFullBrowserStarted(
+        ChromeBrowserInitializer.getInstance().runNowOrAfterNativeInitialization(
                 () -> handleParallelRequest(session, intent));
         maybePrefetchResources(session, intent);
     }
@@ -819,7 +819,7 @@ public class CustomTabsConnection {
     private void maybePreconnectToRedirectEndpoint(
             CustomTabsSessionToken session, String url, Intent intent) {
         // For the preconnection to not be a no-op, we need more than just the native library.
-        if (!ChromeBrowserInitializer.getInstance().isFullBrowserInitialized()) {
+        if (!ChromeBrowserInitializer.getInstance().hasNativeInitializationCompleted()) {
             return;
         }
         if (!ChromeFeatureList.isEnabled(ChromeFeatureList.CCT_REDIRECT_PRECONNECT)) return;
@@ -878,7 +878,7 @@ public class CustomTabsConnection {
         ThreadUtils.assertOnUiThread();
 
         if (!intent.hasExtra(PARALLEL_REQUEST_URL_KEY)) return ParallelRequestStatus.NO_REQUEST;
-        if (!ChromeBrowserInitializer.getInstance().isFullBrowserInitialized()) {
+        if (!ChromeBrowserInitializer.getInstance().hasNativeInitializationCompleted()) {
             return ParallelRequestStatus.FAILURE_NOT_INITIALIZED;
         }
         if (!mClientManager.getAllowParallelRequestForSession(session)) {

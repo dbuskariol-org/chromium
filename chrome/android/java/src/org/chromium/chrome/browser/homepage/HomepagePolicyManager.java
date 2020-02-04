@@ -110,7 +110,7 @@ public class HomepagePolicyManager implements PrefObserver {
         mIsHomepageLocationPolicyEnabled = !TextUtils.isEmpty(mHomepage);
 
         if (isFeatureFlagEnabled()) {
-            ChromeBrowserInitializer.getInstance().runNowOrAfterFullBrowserStarted(
+            ChromeBrowserInitializer.getInstance().runNowOrAfterNativeInitialization(
                     this::onFinishNativeInitialization);
         }
     }
