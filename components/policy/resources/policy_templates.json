@@ -19809,6 +19809,46 @@
       'tags': [],
       'desc': '''This policy controls whether users enrolled in the Advanced Protection program are allowed to send their downloads to Google for malware scanning. If set to True or not set, enrolled users will be be prompted to send their files to Google for deep scanning. If the user selects 'Scan', their download will be sent to Google. If set to False, users will not be prompted and their downloads will not be sent to Google.''',
     },
+    {
+      'name': 'SystemProxySettings',
+      'owners': ['acostinas@google.com', 'pmarko@chromium.org'],
+      'supported_on': ['chrome_os:81-'],
+      'future': True,
+      'device_only': True,
+      'id': 672,
+      'type': 'dict',
+      'schema': {
+        'type': 'object',
+        'properties': {
+          'system_proxy_enabled': {
+            'type': 'boolean',
+          },
+          'system_services_username': {
+            'description': '''The username for authenticating system services to the remote web proxy.''',
+            'type': 'string',
+            'sensitiveValue': True,
+          },
+          'system_services_password': {
+            'description': '''The password for authenticating system services to the remote web proxy.''',
+            'type': 'string',
+            'sensitiveValue': True,
+          },
+        },
+      },
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'example_value': {
+        'system_proxy_enabled': True,
+        'system_services_username': 'test_user',
+        'system_services_password': '0000'
+      },
+      'caption': '''Configures System-proxy service for <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph>.''',
+      'tags': [],
+      'desc': '''Configures the availability of System-proxy service and the proxy credentials for system services.
+      If the policy is not set, System-proxy service will not be available.''',
+    },
   ],
 
   'messages': {
@@ -20190,6 +20230,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     'DeviceLoginScreenWebUsbAllowDevicesForUrls': 'device_login_screen_webusb_allow_devices_for_urls.device_login_screen_webusb_allow_devices_for_urls',
     'DeviceWebBasedAttestationAllowedUrls': 'device_web_based_attestation_allowed_urls.value',
     'MinimumChromeVersionEnforced' : 'minimum_chrome_version_enforced.value',
+    'SystemProxySettings': 'system_proxy_settings.system_proxy_settings',
   },
   'policy_atomic_group_definitions': [
     {
@@ -20644,6 +20685,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 671,
+  'highest_id_currently_used': 672,
   'highest_atomic_group_id_currently_used': 38
 }

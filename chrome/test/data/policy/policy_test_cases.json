@@ -6744,5 +6744,22 @@
 	}
       }
     ]
-  }
+  },
+  "SystemProxySettings": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_test": [
+     {
+      "policies": {
+       "SystemProxySettings": {
+        "system_proxy_enabled": "true",
+        "system_services_username": "test_user",
+        "system_services_password": "0000"
+       }
+      },
+      "prefs": {
+       "cros.system_proxy_settings": { "local_state": true }
+      }
+     }
+    ]
+   }
 }
