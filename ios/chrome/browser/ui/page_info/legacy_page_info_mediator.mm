@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/page_info/page_info_mediator.h"
+#import "ios/chrome/browser/ui/page_info/legacy_page_info_mediator.h"
 
 #include "base/strings/sys_string_conversions.h"
 #include "base/strings/utf_string_conversions.h"
@@ -61,7 +61,7 @@ NSString* BuildMessage(NSArray<NSString*>* messageComponents) {
 
 }  // namespace
 
-@implementation PageInfoMediator
+@implementation LegacyPageInfoMediator
 
 + (PageInfoConfig*)configurationForURL:(const GURL&)URL
                              SSLStatus:(web::SSLStatus&)status

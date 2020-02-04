@@ -16,10 +16,10 @@
 #error "This file requires ARC support."
 #endif
 
-@interface PageInfoTestCase : ChromeTestCase
+@interface LegacyPageInfoTestCase : ChromeTestCase
 @end
 
-@implementation PageInfoTestCase
+@implementation LegacyPageInfoTestCase
 
 // Tests that rotating the device will automatically dismiss the page info view.
 - (void)testShowPageInfoAndDismissOnDeviceRotation {
