@@ -410,7 +410,7 @@ deps = {
   },
 
   'src/chrome/browser/resources/media_router/extension/src':
-    Var('chromium_git') + '/media_router.git' + '@' + '7835fcd45668c54dd202eb3ede497e513a732301',
+    Var('chromium_git') + '/media_router.git' + '@' + 'd4389c097c61fa8c5aa5eb7c3ba34ee203dd62e3',
 
   'src/android_webview/tools/cts_archive': {
       'packages': [
