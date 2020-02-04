@@ -28,7 +28,6 @@ sql::InitStatus MediaHistoryPlaybackTable::CreateTableIfNonExistent() {
                                        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                                        "origin_id INTEGER NOT NULL,"
                                        "url TEXT,"
-                                       "timestamp_ms INTEGER,"
                                        "watch_time_ms INTEGER,"
                                        "has_video INTEGER,"
                                        "has_audio INTEGER,"
@@ -45,14 +44,6 @@ sql::InitStatus MediaHistoryPlaybackTable::CreateTableIfNonExistent() {
     success = DB()->Execute(
         base::StringPrintf("CREATE INDEX IF NOT EXISTS origin_id_index ON "
                            "%s (origin_id)",
-                           kTableName)
-            .c_str());
-  }
-
-  if (success) {
-    success = DB()->Execute(
-        base::StringPrintf("CREATE INDEX IF NOT EXISTS timestamp_index ON "
-                           "%s (timestamp_ms)",
                            kTableName)
             .c_str());
   }
@@ -76,19 +67,18 @@ bool MediaHistoryPlaybackTable::SavePlayback(
       SQL_FROM_HERE,
       base::StringPrintf(
           "INSERT INTO %s "
-          "(origin_id, url, watch_time_ms, timestamp_ms, has_video, has_audio, "
+          "(origin_id, url, watch_time_ms, has_video, has_audio, "
           "last_updated_time_s) "
           "VALUES ((SELECT id FROM origin WHERE origin = ?), "
-          "?, ?, ?, ?, ?, ?)",
+          "?, ?, ?, ?, ?)",
           kTableName)
           .c_str()));
   statement.BindString(0, watch_time.origin.spec());
   statement.BindString(1, watch_time.url.spec());
   statement.BindInt64(2, watch_time.cumulative_watch_time.InMilliseconds());
-  statement.BindInt64(3, watch_time.last_timestamp.InMilliseconds());
-  statement.BindInt(4, watch_time.has_video);
-  statement.BindInt(5, watch_time.has_audio);
-  statement.BindInt64(6,
+  statement.BindInt(3, watch_time.has_video);
+  statement.BindInt(4, watch_time.has_audio);
+  statement.BindInt64(5,
                       base::Time::Now().ToDeltaSinceWindowsEpoch().InSeconds());
   if (!statement.Run()) {
     return false;
