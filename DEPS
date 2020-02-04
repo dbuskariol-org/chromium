@@ -952,7 +952,7 @@ deps = {
     Var('chromium_git') + '/external/github.com/google/emoji-segmenter.git' + '@' + Var('emoji_segmenter_revision'),
 
   'src/third_party/libgav1/src':
-    Var('chromium_git') + '/codecs/libgav1.git' + '@' + '16e312f5066806284b080665545aef1fa51818a4',
+    Var('chromium_git') + '/codecs/libgav1.git' + '@' + '25dc90ee07763b13db1be14e1f2afadc6894c9f3',
 
   # Chrome OS touchpad gestures library.
   'src/third_party/gestures/gestures': {
