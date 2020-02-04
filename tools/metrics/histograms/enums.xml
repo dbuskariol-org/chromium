@@ -58625,6 +58625,14 @@ Called by update_net_trust_anchors.py.-->
   <int value="4" label="Relay"/>
 </enum>
 
+<enum name="SharingWebRtcOnMessageReceivedResult">
+  <int value="0" label="Decryption Failed"/>
+  <int value="1" label="Parsing Failed"/>
+  <int value="2" label="Invalid Payload"/>
+  <int value="3" label="Handler Not Found"/>
+  <int value="4" label="Success"/>
+</enum>
+
 <enum name="SharingWebRtcSendMessageResult">
   <int value="0" label="Internal error"/>
   <int value="1" label="Success"/>
