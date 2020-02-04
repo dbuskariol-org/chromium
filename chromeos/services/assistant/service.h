@@ -106,6 +106,7 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) Service
   void BindAssistant(mojo::PendingReceiver<mojom::Assistant> receiver) override;
   void BindSettingsManager(
       mojo::PendingReceiver<mojom::AssistantSettingsManager> receiver) override;
+  void Shutdown() override;
 
   // chromeos::PowerManagerClient::Observer overrides:
   void PowerChanged(const power_manager::PowerSupplyProperties& prop) override;

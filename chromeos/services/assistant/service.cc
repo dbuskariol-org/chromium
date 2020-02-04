@@ -258,6 +258,13 @@ void Service::BindSettingsManager(
       std::move(receiver));
 }
 
+void Service::Shutdown() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  if (assistant_manager_service_)
+    StopAssistantManagerService();
+}
+
 void Service::PowerChanged(const power_manager::PowerSupplyProperties& prop) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   const bool power_source_connected =
