@@ -149,14 +149,14 @@ builder(
 
 builder(
     name = 'WebRTC Chromium FYI ios-device',
-    caches = [xcode_cache.x11a1027],
+    caches = [xcode_cache.x11c29],
     executable = 'recipe:webrtc/chromium_ios',
     os = os.MAC_ANY,
 )
 
 builder(
     name = 'WebRTC Chromium FYI ios-simulator',
-    caches = [xcode_cache.x11a1027],
+    caches = [xcode_cache.x11c29],
     executable = 'recipe:webrtc/chromium_ios',
     os = os.MAC_ANY,
 )

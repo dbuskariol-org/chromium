@@ -1071,7 +1071,7 @@ ci.fyi_coverage_builder(
 
 ci.fyi_coverage_builder(
     name = 'ios-simulator-code-coverage',
-    caches = [xcode_cache.x11a1027],
+    caches = [xcode_cache.x11m382q],
     cores = None,
     goma_backend = None,  # TODO(crbug.com/950413): Use goma.backend.RBE_PROD
     os = os.MAC_ANY,
