@@ -68,6 +68,7 @@
 #include "ash/wm/desks/desks_controller.h"
 #include "ash/wm/mru_window_tracker.h"
 #include "ash/wm/overview/overview_controller.h"
+#include "ash/wm/overview/overview_session.h"
 #include "ash/wm/screen_pinning_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_window_manager.h"
@@ -149,6 +150,20 @@ enum class RotationAcceleratorAction {
   kAlreadyAcceptedDialog = 2,
   kMaxValue = kAlreadyAcceptedDialog,
 };
+
+bool IsAnyWindowDragged() {
+  OverviewController* overview_controller = Shell::Get()->overview_controller();
+  if (overview_controller->InOverviewSession() &&
+      overview_controller->overview_session()->IsAnyOverviewItemDragged()) {
+    return true;
+  }
+  for (aura::Window* window :
+       Shell::Get()->mru_window_tracker()->BuildMruWindowList(kActiveDesk)) {
+    if (WindowState::Get(window)->is_dragged())
+      return true;
+  }
+  return false;
+}
 
 void RecordRotationAcceleratorAction(const RotationAcceleratorAction& action) {
   UMA_HISTOGRAM_ENUMERATION("Ash.Accelerators.Rotation.Usage", action);
@@ -368,6 +383,9 @@ void HandleNewDesk() {
 }
 
 void HandleRemoveCurrentDesk() {
+  if (IsAnyWindowDragged())
+    return;
+
   auto* desks_controller = DesksController::Get();
   if (!desks_controller->CanRemoveDesks()) {
     ShowToast(kVirtualDesksToastId,
