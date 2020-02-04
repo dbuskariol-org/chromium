@@ -553,7 +553,7 @@ TEST_P(HomeButtonTest, InteractOutsideHomeButtonBounds) {
   GetAppListTestHelper()->CheckVisibility(false);
 }
 
-// Tests that clicking the corner of the display opens the AppList.
+// Tests that clicking the corner of the display opens and closes the AppList.
 TEST_P(HomeButtonTest, ClickOnCornerPixel) {
   // Screen corners are extremely easy to reach with a mouse. Let's make sure
   // that a click on the bottom-left corner (or bottom-right corner in RTL)
@@ -570,6 +570,10 @@ TEST_P(HomeButtonTest, ClickOnCornerPixel) {
   GetEventGenerator()->ClickLeftButton();
   GetAppListTestHelper()->WaitUntilIdle();
   GetAppListTestHelper()->CheckVisibility(true);
+
+  GetEventGenerator()->ClickLeftButton();
+  GetAppListTestHelper()->WaitUntilIdle();
+  GetAppListTestHelper()->CheckVisibility(false);
 }
 
 INSTANTIATE_TEST_SUITE_P(
