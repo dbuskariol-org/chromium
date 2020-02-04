@@ -1398,7 +1398,7 @@ public class ChromeTabbedActivity extends ChromeActivity {
                         } else if (IncognitoTabLauncher.didCreateIntent(intent)) {
                             Tab tab = getTabCreator(true).launchUrl(UrlConstants.NTP_URL,
                                     TabLaunchType.FROM_LAUNCH_NEW_INCOGNITO_TAB);
-                            if (IncognitoTabLauncher.shouldFocusOmnibox()) {
+                            if (IncognitoTabLauncher.shouldFocusOmnibox(intent)) {
                                 // Since the Tab is created in the foreground, its View will gain
                                 // focus, and since the Tab and the URL bar are not yet in the same
                                 // View hierarchy, setting the URL bar's focus here won't clear the
