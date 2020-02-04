@@ -64225,6 +64225,14 @@ Full version information for the fingerprint enum values:
   <int value="2" label="unexpected other schemes"/>
 </enum>
 
+<enum name="TranslateTargetLanguageOrigin">
+  <int value="0" label="Recent target language"/>
+  <int value="1" label="Language model"/>
+  <int value="2" label="Application UI"/>
+  <int value="3" label="Accept languages"/>
+  <int value="4" label="Default English"/>
+</enum>
+
 <enum name="TriggerHelpUIResult">
   <int value="0" label="SUCCESS"/>
   <int value="1" label="FAILURE"/>
