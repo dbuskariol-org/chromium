@@ -51845,7 +51845,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="23" label="INVALID_HTTP_METHOD (Obsolete)"/>
   <int value="24" label="WINDOW_PRINT (Obsolete)"/>
   <int value="25" label="RECENTLY_VISITED"/>
-  <int value="26" label="WINDOW_OPENER"/>
+  <int value="26" label="WINDOW_OPENER (Obsolete)"/>
   <int value="27" label="PAGE_ID_CONFLICT (Obsolete)"/>
   <int value="28" label="SAFE_BROWSING"/>
   <int value="29" label="FRAGMENT_MISMATCH (Obsolete)"/>
