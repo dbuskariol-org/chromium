@@ -86,9 +86,9 @@ class MediaHistoryStoreUnitTest : public testing::Test {
 };
 
 TEST_F(MediaHistoryStoreUnitTest, CreateDatabaseTables) {
-  ASSERT_TRUE(GetDB().DoesTableExist("mediaEngagement"));
   ASSERT_TRUE(GetDB().DoesTableExist("origin"));
   ASSERT_TRUE(GetDB().DoesTableExist("playback"));
+  ASSERT_TRUE(GetDB().DoesTableExist("playbackSession"));
 }
 
 TEST_F(MediaHistoryStoreUnitTest, SavePlayback) {
@@ -135,8 +135,8 @@ TEST_F(MediaHistoryStoreUnitTest, SavePlayback) {
   EXPECT_EQ(2, playback_row_count);
 
   // Verify that the origin table contains the expected number of items
-  sql::Statement select_from_origin_statement(
-      GetDB().GetUniqueStatement("SELECT id, origin FROM origin"));
+  sql::Statement select_from_origin_statement(GetDB().GetUniqueStatement(
+      "SELECT id, origin, last_updated_time_s FROM origin"));
   ASSERT_TRUE(select_from_origin_statement.is_valid());
   int origin_row_count = 0;
   while (select_from_origin_statement.Step()) {
@@ -144,6 +144,10 @@ TEST_F(MediaHistoryStoreUnitTest, SavePlayback) {
     EXPECT_EQ(1, select_from_origin_statement.ColumnInt(0));
     EXPECT_EQ("http://google.com/",
               select_from_origin_statement.ColumnString(1));
+    EXPECT_LE(now_in_seconds_before,
+              select_from_origin_statement.ColumnInt64(2));
+    EXPECT_GE(now_in_seconds_after,
+              select_from_origin_statement.ColumnInt64(2));
   }
 
   EXPECT_EQ(1, origin_row_count);
@@ -156,8 +160,6 @@ TEST_F(MediaHistoryStoreUnitTest, GetStats) {
     EXPECT_EQ(0, stats->table_row_counts[MediaHistoryOriginTable::kTableName]);
     EXPECT_EQ(0,
               stats->table_row_counts[MediaHistoryPlaybackTable::kTableName]);
-    EXPECT_EQ(0,
-              stats->table_row_counts[MediaHistoryEngagementTable::kTableName]);
     EXPECT_EQ(0, stats->table_row_counts[MediaHistorySessionTable::kTableName]);
   }
 
@@ -176,8 +178,6 @@ TEST_F(MediaHistoryStoreUnitTest, GetStats) {
     EXPECT_EQ(1, stats->table_row_counts[MediaHistoryOriginTable::kTableName]);
     EXPECT_EQ(1,
               stats->table_row_counts[MediaHistoryPlaybackTable::kTableName]);
-    EXPECT_EQ(0,
-              stats->table_row_counts[MediaHistoryEngagementTable::kTableName]);
     EXPECT_EQ(0, stats->table_row_counts[MediaHistorySessionTable::kTableName]);
   }
 }
