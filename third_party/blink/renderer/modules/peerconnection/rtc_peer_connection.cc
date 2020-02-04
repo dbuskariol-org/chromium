@@ -698,6 +698,27 @@ RTCPeerConnection* RTCPeerConnection::Create(
   return peer_connection;
 }
 
+RTCPeerConnection* RTCPeerConnection::Create(
+    ExecutionContext* context,
+    const RTCConfiguration* rtc_configuration,
+    const ScriptValue& media_constraints_value,
+    ExceptionState& exception_state) {
+  Dictionary media_constraints(context->GetIsolate(),
+                               media_constraints_value.V8Value(),
+                               exception_state);
+  if (exception_state.HadException())
+    return nullptr;
+
+  return Create(context, rtc_configuration, media_constraints, exception_state);
+}
+
+RTCPeerConnection* RTCPeerConnection::Create(
+    ExecutionContext* context,
+    const RTCConfiguration* rtc_configuration,
+    ExceptionState& exception_state) {
+  return Create(context, rtc_configuration, Dictionary(), exception_state);
+}
+
 RTCPeerConnection::RTCPeerConnection(
     ExecutionContext* context,
     webrtc::PeerConnectionInterface::RTCConfiguration configuration,
@@ -833,6 +854,31 @@ ScriptPromise RTCPeerConnection::createOffer(
     ScriptState* script_state,
     V8RTCSessionDescriptionCallback* success_callback,
     V8RTCPeerConnectionErrorCallback* error_callback,
+    const ScriptValue& rtc_offer_options_value,
+    ExceptionState& exception_state) {
+  Dictionary rtc_offer_options(script_state->GetIsolate(),
+                               rtc_offer_options_value.V8Value(),
+                               exception_state);
+  if (exception_state.HadException())
+    return ScriptPromise();
+
+  return CreateOffer(script_state, success_callback, error_callback,
+                     rtc_offer_options, exception_state);
+}
+
+ScriptPromise RTCPeerConnection::createOffer(
+    ScriptState* script_state,
+    V8RTCSessionDescriptionCallback* success_callback,
+    V8RTCPeerConnectionErrorCallback* error_callback,
+    ExceptionState& exception_state) {
+  return CreateOffer(script_state, success_callback, error_callback,
+                     Dictionary(), exception_state);
+}
+
+ScriptPromise RTCPeerConnection::CreateOffer(
+    ScriptState* script_state,
+    V8RTCSessionDescriptionCallback* success_callback,
+    V8RTCPeerConnectionErrorCallback* error_callback,
     const Dictionary& rtc_offer_options,
     ExceptionState& exception_state) {
   DCHECK(success_callback);
@@ -922,6 +968,30 @@ ScriptPromise RTCPeerConnection::createAnswer(ScriptState* script_state,
 }
 
 ScriptPromise RTCPeerConnection::createAnswer(
+    ScriptState* script_state,
+    V8RTCSessionDescriptionCallback* success_callback,
+    V8RTCPeerConnectionErrorCallback* error_callback,
+    const ScriptValue& media_constraints_value,
+    ExceptionState& exception_state) {
+  Dictionary media_constraints(script_state->GetIsolate(),
+                               media_constraints_value.V8Value(),
+                               exception_state);
+  if (exception_state.HadException())
+    return ScriptPromise();
+  return CreateAnswer(script_state, success_callback, error_callback,
+                      media_constraints);
+}
+
+ScriptPromise RTCPeerConnection::createAnswer(
+    ScriptState* script_state,
+    V8RTCSessionDescriptionCallback* success_callback,
+    V8RTCPeerConnectionErrorCallback* error_callback,
+    ExceptionState&) {
+  return CreateAnswer(script_state, success_callback, error_callback,
+                      Dictionary());
+}
+
+ScriptPromise RTCPeerConnection::CreateAnswer(
     ScriptState* script_state,
     V8RTCSessionDescriptionCallback* success_callback,
     V8RTCPeerConnectionErrorCallback* error_callback,
@@ -1879,6 +1949,24 @@ void RTCPeerConnection::restartIce() {
 }
 
 void RTCPeerConnection::addStream(ScriptState* script_state,
+                                  MediaStream* stream,
+                                  const ScriptValue& media_constraints_value,
+                                  ExceptionState& exception_state) {
+  Dictionary media_constraints(script_state->GetIsolate(),
+                               media_constraints_value.V8Value(),
+                               exception_state);
+  if (exception_state.HadException())
+    return;
+  AddStream(script_state, stream, media_constraints, exception_state);
+}
+
+void RTCPeerConnection::addStream(ScriptState* script_state,
+                                  MediaStream* stream,
+                                  ExceptionState& exception_state) {
+  AddStream(script_state, stream, Dictionary(), exception_state);
+}
+
+void RTCPeerConnection::AddStream(ScriptState* script_state,
                                   MediaStream* stream,
                                   const Dictionary& media_constraints,
                                   ExceptionState& exception_state) {
