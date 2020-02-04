@@ -1503,6 +1503,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
                            UnloadHandlersArePowerful);
   FRIEND_TEST_ALL_PREFIXES(SitePerProcessSSLBrowserTest,
                            UnloadHandlersArePowerfulGrandChild);
+  FRIEND_TEST_ALL_PREFIXES(RenderFrameHostImplTest, ExpectedMainWorldOrigin);
 
   class DroppedInterfaceRequestLogger;
 
@@ -1677,6 +1678,21 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void UpdatePermissionsForNavigation(
       const mojom::CommonNavigationParams& common_params,
       const mojom::CommitNavigationParams& commit_params);
+
+  // Calculates main world origin that will use the URLLoaderFactory if the
+  // factory is sent at this point to the renderer process.  This may be
+  // different from |last_committed_origin_| between ReadyToCommit and DidCommit
+  // states of a navigation.
+  //
+  // TODO(lukasza): https://crbug.com/729021: This method should not be needed
+  // once we swap RenderFrameHost on every document or origin change.  See also
+  // https://crbug.com/1047436.
+  //
+  // TODO(lukasza): Rename and make it more general purpose if we find more
+  // cases where this origin needs to be used instead of GetLastCommittedOrigin
+  // - currently URLLoaderFactory/request_initiator_site_lock computations are
+  // the only known case.  See also https://crbug.com/1047436#c1.
+  url::Origin GetExpectedMainWorldOriginForUrlLoaderFactory();
 
   network::mojom::URLLoaderFactoryParamsPtr
   CreateURLLoaderFactoryParamsForMainWorld(

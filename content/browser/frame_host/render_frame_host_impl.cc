@@ -1481,8 +1481,9 @@ void RenderFrameHostImpl::MarkIsolatedWorldsAsRequiringSeparateURLLoaderFactory(
         subresource_loader_factories =
             std::make_unique<blink::PendingURLLoaderFactoryBundle>();
     subresource_loader_factories->pending_isolated_world_factories() =
-        CreateURLLoaderFactoriesForIsolatedWorlds(last_committed_origin_,
-                                                  isolated_world_origins);
+        CreateURLLoaderFactoriesForIsolatedWorlds(
+            GetExpectedMainWorldOriginForUrlLoaderFactory(),
+            isolated_world_origins);
     GetNavigationControl()->UpdateSubresourceLoaderFactories(
         std::move(subresource_loader_factories));
   }
@@ -3395,7 +3396,7 @@ void RenderFrameHostImpl::UpdateSubresourceLoaderFactories() {
               std::move(default_factory_remote),
               blink::PendingURLLoaderFactoryBundle::SchemeMap(),
               CreateURLLoaderFactoriesForIsolatedWorlds(
-                  last_committed_origin_,
+                  GetExpectedMainWorldOriginForUrlLoaderFactory(),
                   isolated_worlds_requiring_separate_url_loader_factory_),
               bypass_redirect_checks);
   GetNavigationControl()->UpdateSubresourceLoaderFactories(
@@ -4438,7 +4439,7 @@ RenderFrameHostImpl::CreateCrossOriginPrefetchLoaderFactoryBundle() {
       std::move(pending_default_factory),
       blink::PendingURLLoaderFactoryBundle::SchemeMap(),
       CreateURLLoaderFactoriesForIsolatedWorlds(
-          last_committed_origin_,
+          GetExpectedMainWorldOriginForUrlLoaderFactory(),
           isolated_worlds_requiring_separate_url_loader_factory_),
       bypass_redirect_checks);
 }
@@ -6259,6 +6260,41 @@ void RenderFrameHostImpl::NavigationRequestCancelled(
     NavigationRequest* navigation_request) {
   OnCrossDocumentCommitProcessed(navigation_request,
                                  blink::mojom::CommitResult::Aborted);
+}
+
+url::Origin
+RenderFrameHostImpl::GetExpectedMainWorldOriginForUrlLoaderFactory() {
+  // Find the most recent NavigationRequest that has triggered a Commit IPC to
+  // the renderer process.  Once the renderer process handles the IPC, it may
+  // possibly change the origin from |last_committed_origin_| to another origin.
+  NavigationRequest* found_request = nullptr;
+  for (const auto& it : navigation_requests_) {
+    NavigationRequest* candidate = it.first;
+    DCHECK_EQ(candidate, it.second.get());
+
+    if (candidate->state() < NavigationRequest::READY_TO_COMMIT)
+      continue;
+    if (candidate->state() >= NavigationRequest::DID_COMMIT)
+      continue;
+
+    if (!found_request ||
+        found_request->NavigationStart() < candidate->NavigationStart()) {
+      found_request = candidate;
+    }
+  }
+
+  // If there are no pending navigation requests then the URLLoaderFactory sent
+  // now to the renderer process will end up being used by
+  // |last_committed_origin_|.
+  if (!found_request) {
+    DCHECK(has_committed_any_navigation_);
+    return last_committed_origin_;
+  }
+
+  // URLLoaderFactory sent now to the renderer process will end up being used by
+  // the origin associated the navigation that is getting committed in that
+  // renderer process.
+  return GetOriginForURLLoaderFactory(found_request);
 }
 
 network::mojom::URLLoaderFactoryParamsPtr
