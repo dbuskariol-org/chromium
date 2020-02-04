@@ -16,6 +16,7 @@ class TargetImpl {
   ping() { return Promise.resolve(); }
   repeat(message, numbers) { return {message: message, numbers: numbers}; }
   echo(nested) { return Promise.resolve({nested: nested}); }
+  deconstruct(test_struct) {}
   flatten(values) {}
   flattenUnions(unions) {}
   requestSubinterface(request, client) {}
@@ -155,6 +156,23 @@ promise_test(() => {
     subinterfaceRemote.flush();
   });
 }, 'can send and receive interface requests and proxies');
+
+promise_test(() => {
+  const targetRouter = new liteJsTest.mojom.TestMessageTargetCallbackRouter;
+  const targetRemote = targetRouter.$.bindNewPipeAndPassRemote();
+  targetRouter.deconstruct.addListener(({x, y, z}) => ({
+    x: x,
+    y: y,
+    z: z
+  }));
+
+  return targetRemote.deconstruct({x: 1}).then(reply => {
+    assert_equals(reply.x, 1);
+    assert_equals(reply.y, 2);
+    assert_equals(reply.z, 1);
+  });
+}, 'structs with default values from nested enums and constants are ' +
+   'correctly serialized');
 
 promise_test(() => {
   const targetRouter = new liteJsTest.mojom.TestMessageTargetCallbackRouter;
