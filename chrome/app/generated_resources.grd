@@ -4654,6 +4654,20 @@ Keep your key file in a safe place. You will need it to create new versions of y
         ''' It also controls what page is shown when you click the Home button or search from the Omnibox. '''
       </message>
 
+      <!-- Strings for the print job confirmation dialog triggered by chrome.printing -->
+      <message name="IDS_EXTENSIONS_PRINTING_API_PRINT_REQUEST_BUBBLE_TITLE" desc="Title of a bubble with print job confirmation dialog triggered by chrome.printing API">
+        Print request
+      </message>
+      <message name="IDS_EXTENSIONS_PRINTING_API_PRINT_REQUEST_BUBBLE_HEADING" desc="Heading of a bubble with print job confirmation dialog triggered by chrome.printing API">
+        "<ph name="EXTENSION_NAME">$1<ex>Managed Printing</ex></ph>" wants to print <ph name="FILE_NAME">$2<ex>sample.pdf</ex></ph> with <ph name="PRINTER_NAME">$3<ex>Lexmark CS417dn</ex></ph>.
+      </message>
+      <message name="IDS_EXTENSIONS_PRINTING_API_PRINT_REQUEST_ALLOW" desc="Text for the allow button on the print job confirmation dialog">
+        Allow
+      </message>
+      <message name="IDS_EXTENSIONS_PRINTING_API_PRINT_REQUEST_DENY" desc="Text for the deny button on the print job confirmation dialog">
+        Deny
+      </message>
+
       <message name="IDS_EXTENSIONS_NTP_CONTROLLED_FIRST_LINE" desc="Text displayed as the first line in the NTP bubble when an extension has changed the new tab page.">
         An extension has changed what page is shown when you open a new tab.
       </message>

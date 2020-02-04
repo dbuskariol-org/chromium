@@ -1661,6 +1661,8 @@ jumbo_static_library("ui") {
       "views/apps/chrome_native_app_window_views_aura_ash.cc",
       "views/apps/chrome_native_app_window_views_aura_ash.h",
       "views/chrome_views_delegate_chromeos.cc",
+      "views/extensions/print_job_confirmation_dialog_view.cc",
+      "views/extensions/print_job_confirmation_dialog_view.h",
       "views/extensions/request_file_system_dialog_view.cc",
       "views/extensions/request_file_system_dialog_view.h",
       "views/frame/browser_frame_ash.cc",
