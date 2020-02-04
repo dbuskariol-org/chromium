@@ -66,7 +66,6 @@
 #include "third_party/blink/renderer/core/layout/layout_object.h"
 #include "third_party/blink/renderer/core/loader/empty_clients.h"
 #include "third_party/blink/renderer/core/page/page.h"
-#include "third_party/blink/renderer/core/svg/svg_style_element.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
 #include "third_party/blink/renderer/platform/bindings/runtime_call_stats.h"
 #include "third_party/blink/renderer/platform/bindings/v8_per_isolate_data.h"
@@ -793,22 +792,11 @@ static Document* CreateStagingDocumentForMarkupSanitization() {
   return document;
 }
 
-static bool ContainsStyleElements(const DocumentFragment& fragment) {
-  for (const Node& node : NodeTraversal::DescendantsOf(fragment)) {
-    if (IsA<HTMLStyleElement>(node) || IsA<SVGStyleElement>(node))
-      return true;
-  }
-  return false;
-}
-
-DocumentFragment* CreateSanitizedFragmentFromMarkupWithContext(
-    Document& document,
-    const String& raw_markup,
-    unsigned fragment_start,
-    unsigned fragment_end,
-    const String& base_url) {
+String SanitizeMarkupWithContext(const String& raw_markup,
+                                 unsigned fragment_start,
+                                 unsigned fragment_end) {
   if (raw_markup.IsEmpty())
-    return nullptr;
+    return g_empty_string;
 
   Document* staging_document = CreateStagingDocumentForMarkupSanitization();
   Element* body = staging_document->body();
@@ -817,28 +805,21 @@ DocumentFragment* CreateSanitizedFragmentFromMarkupWithContext(
       *staging_document, raw_markup, fragment_start, fragment_end, KURL(),
       kDisallowScriptingAndPluginContent);
   if (!fragment)
-    return nullptr;
-
-  if (!ContainsStyleElements(*fragment)) {
-    return CreateFragmentFromMarkupWithContext(
-        document, raw_markup, fragment_start, fragment_end, base_url,
-        kDisallowScriptingAndPluginContent);
-  }
+    return g_empty_string;
 
   body->appendChild(fragment);
   staging_document->UpdateStyleAndLayout();
 
   // This sanitizes stylesheets in the markup into element inline styles
-  String markup = CreateMarkup(Position::FirstPositionInNode(*body),
+  String result = CreateMarkup(Position::FirstPositionInNode(*body),
                                Position::LastPositionInNode(*body),
                                CreateMarkupOptions::Builder()
                                    .SetShouldAnnotateForInterchange(true)
                                    .SetIsForMarkupSanitization(true)
                                    .Build());
-  staging_document->GetPage()->WillBeDestroyed();
 
-  return CreateFragmentFromMarkup(document, markup, base_url,
-                                  kDisallowScriptingAndPluginContent);
+  staging_document->GetPage()->WillBeDestroyed();
+  return result;
 }
 
 template class CORE_TEMPLATE_EXPORT CreateMarkupAlgorithm<EditingStrategy>;

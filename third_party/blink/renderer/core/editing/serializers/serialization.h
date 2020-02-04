@@ -96,12 +96,9 @@ CreateMarkup(const PositionInFlatTree& start,
              const PositionInFlatTree& end,
              const CreateMarkupOptions& options = CreateMarkupOptions());
 
-CORE_EXPORT DocumentFragment* CreateSanitizedFragmentFromMarkupWithContext(
-    Document&,
-    const String& raw_markup,
-    unsigned fragment_start,
-    unsigned fragment_end,
-    const String& base_url);
+CORE_EXPORT String SanitizeMarkupWithContext(const String& raw_markup,
+                                             unsigned fragment_start,
+                                             unsigned fragment_end);
 
 void MergeWithNextTextNode(Text*, ExceptionState&);
 
