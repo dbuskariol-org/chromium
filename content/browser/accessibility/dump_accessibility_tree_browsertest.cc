@@ -2311,8 +2311,8 @@ IN_PROC_BROWSER_TEST_P(DumpAccessibilityTreeTest,
 }
 
 IN_PROC_BROWSER_TEST_P(DumpAccessibilityTreeTest,
-                       LanguageDetectionLangDetectionBasic) {
-  RunLanguageDetectionTest(FILE_PATH_LITERAL("basic.html"));
+                       LanguageDetectionLangDetectionStaticBasic) {
+  RunLanguageDetectionTest(FILE_PATH_LITERAL("static-basic.html"));
 }
 
 //
