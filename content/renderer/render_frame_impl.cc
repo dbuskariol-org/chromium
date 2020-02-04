@@ -35,6 +35,7 @@
 #include "base/process/process.h"
 #include "base/run_loop.h"
 #include "base/stl_util.h"
+#include "base/strings/strcat.h"
 #include "base/strings/string16.h"
 #include "base/strings/string_piece.h"
 #include "base/strings/string_split.h"
@@ -795,9 +796,7 @@ std::vector<gfx::Size> ConvertToFaviconSizes(
 void RecordSuffixedMemoryMBHistogram(base::StringPiece name,
                                      base::StringPiece suffix,
                                      int sample_mb) {
-  std::string name_with_suffix(name);
-  suffix.AppendToString(&name_with_suffix);
-  base::UmaHistogramMemoryMB(name_with_suffix, sample_mb);
+  base::UmaHistogramMemoryMB(base::StrCat({name, suffix}), sample_mb);
 }
 
 void RecordSuffixedRendererMemoryMetrics(
