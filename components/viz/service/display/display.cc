@@ -953,11 +953,7 @@ void Display::RemoveOverdrawQuads(CompositorFrame* frame) {
         // Case 2: for simple transforms, if the quad is partially shown on
         // screen and the region formed by (occlusion region - visible_rect) is
         // a rect, then update visible_rect to the resulting rect.
-        gfx::Rect origin_rect = quad->visible_rect;
         quad->visible_rect.Subtract(occlusion_in_quad_content_space);
-        if (origin_rect != quad->visible_rect) {
-          origin_rect.Subtract(quad->visible_rect);
-        }
         ++quad;
       } else if (occlusion_in_quad_content_space.IsEmpty() &&
                  occlusion_in_target_space.Contains(
