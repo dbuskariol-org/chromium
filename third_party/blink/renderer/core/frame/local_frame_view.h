@@ -34,6 +34,7 @@
 #include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom-blink-forward.h"
 #include "third_party/blink/public/platform/shape_properties.h"
 #include "third_party/blink/renderer/core/core_export.h"
+#include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/frame/frame_view.h"
 #include "third_party/blink/renderer/core/frame/layout_subtree_root_list.h"
 #include "third_party/blink/renderer/core/frame/overlay_interstitial_ad_detector.h"
@@ -168,7 +169,7 @@ class CORE_EXPORT LocalFrameView final
 
   // Methods to capture forced layout metrics.
   void WillStartForcedLayout();
-  void DidFinishForcedLayout();
+  void DidFinishForcedLayout(DocumentUpdateReason);
 
   void ClearLayoutSubtreeRoot(const LayoutObject&);
   void AddOrthogonalWritingModeRoot(LayoutBox&);

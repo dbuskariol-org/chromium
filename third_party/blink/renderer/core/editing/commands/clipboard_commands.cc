@@ -135,7 +135,7 @@ bool ClipboardCommands::DispatchCopyOrCutEvent(LocalFrame& frame,
                                                const AtomicString& event_type) {
   // TODO(editing-dev): The use of UpdateStyleAndLayout
   // needs to be audited.  See http://crbug.com/590369 for more details.
-  frame.GetDocument()->UpdateStyleAndLayout();
+  frame.GetDocument()->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
   if (IsInPasswordField(
           frame.Selection().ComputeVisibleSelectionInDOMTree().Start()))
     return true;
@@ -235,7 +235,7 @@ bool ClipboardCommands::ExecuteCopy(LocalFrame& frame,
   // needs to be audited.  See http://crbug.com/590369 for more details.
   // A 'copy' event handler might have dirtied the layout so we need to update
   // before we obtain the selection.
-  document->UpdateStyleAndLayout();
+  document->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
 
   if (HTMLImageElement* image_element =
           ImageElementFromImageDocument(document)) {
@@ -300,7 +300,7 @@ bool ClipboardCommands::ExecuteCut(LocalFrame& frame,
   // needs to be audited.  See http://crbug.com/590369 for more details.
   // A 'cut' event handler might have dirtied the layout so we need to update
   // before we obtain the selection.
-  frame.GetDocument()->UpdateStyleAndLayout();
+  frame.GetDocument()->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
 
   if (source == EditorCommandSource::kMenuOrKeyBinding &&
       !frame.Selection().SelectionHasFocus())
@@ -381,7 +381,7 @@ ClipboardCommands::GetFragmentFromClipboard(LocalFrame& frame) {
   // needs to be audited. See http://crbug.com/590369 for more details.
   // |SelectedRange| requires clean layout for visible selection
   // normalization.
-  frame.GetDocument()->UpdateStyleAndLayout();
+  frame.GetDocument()->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
   fragment = CreateFragmentFromText(frame.GetEditor().SelectedRange(), text);
   return std::make_pair(fragment, true);
 }
@@ -410,7 +410,7 @@ void ClipboardCommands::Paste(LocalFrame& frame, EditorCommandSource source) {
   // needs to be audited.  See http://crbug.com/590369 for more details.
   // A 'paste' event handler might have dirtied the layout so we need to update
   // before we obtain the selection.
-  frame.GetDocument()->UpdateStyleAndLayout();
+  frame.GetDocument()->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
 
   if (source == EditorCommandSource::kMenuOrKeyBinding &&
       !frame.Selection().SelectionHasFocus())
@@ -482,7 +482,7 @@ bool ClipboardCommands::ExecutePasteAndMatchStyle(LocalFrame& frame,
   // needs to be audited.  See http://crbug.com/590369 for more details.
   // A 'paste' event handler might have dirtied the layout so we need to update
   // before we obtain the selection.
-  frame.GetDocument()->UpdateStyleAndLayout();
+  frame.GetDocument()->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
 
   if (source == EditorCommandSource::kMenuOrKeyBinding &&
       !frame.Selection().SelectionHasFocus())

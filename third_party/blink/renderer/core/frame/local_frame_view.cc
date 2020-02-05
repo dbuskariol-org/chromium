@@ -946,7 +946,7 @@ void LocalFrameView::WillStartForcedLayout() {
   forced_layout_start_time_ = base::TimeTicks::Now();
 }
 
-void LocalFrameView::DidFinishForcedLayout() {
+void LocalFrameView::DidFinishForcedLayout(DocumentUpdateReason reason) {
   CHECK_GT(forced_layout_stack_depth_, (unsigned)0);
   forced_layout_stack_depth_--;
   if (!forced_layout_stack_depth_ && base::TimeTicks::IsHighResolution()) {
@@ -2132,7 +2132,8 @@ void LocalFrameView::NotifyResizeObservers() {
        min_depth != ResizeObserverController::kDepthBottom;
        min_depth = resize_controller.GatherObservations(min_depth)) {
     resize_controller.DeliverObservations();
-    GetFrame().GetDocument()->UpdateStyleAndLayout(Document::IsNotForcedLayout);
+    GetFrame().GetDocument()->UpdateStyleAndLayout(
+        DocumentUpdateReason::kSizeChange);
   }
 
   if (resize_controller.SkippedObservations()) {

@@ -829,7 +829,7 @@ DocumentFragment* CreateSanitizedFragmentFromMarkupWithContext(
   }
 
   body->appendChild(fragment);
-  staging_document->UpdateStyleAndLayout();
+  staging_document->UpdateStyleAndLayout(DocumentUpdateReason::kEditing);
 
   // This sanitizes stylesheets in the markup into element inline styles
   String markup = CreateMarkup(Position::FirstPositionInNode(*body),

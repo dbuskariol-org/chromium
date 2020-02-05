@@ -948,7 +948,7 @@ void HTMLSelectElement::ScrollToOptionTask() {
   // OptionRemoved() makes sure option_to_scroll_to_ doesn't have an option with
   // another owner.
   DCHECK_EQ(option->OwnerSelectElement(), this);
-  GetDocument().UpdateStyleAndLayout();
+  GetDocument().UpdateStyleAndLayout(DocumentUpdateReason::kScroll);
   if (!GetLayoutObject() || !GetLayoutObject()->IsListBox())
     return;
   PhysicalRect bounds = option->BoundingBoxForScrollIntoView();
