@@ -698,7 +698,8 @@
   },
   {
     "prefix": "split-http-cache",
-    "bases": ["external/wpt/fetch/http-cache"],
+    "bases": ["external/wpt/fetch/http-cache",
+              "external/wpt/signed-exchange"],
     "args": ["--enable-features=SplitCacheByNetworkIsolationKey"]
   },
   {
