@@ -401,6 +401,7 @@ public final class ChromePreferenceKeys {
     /** Keys used to save settings related to homepage. */
     public static final String HOMEPAGE_CUSTOM_URI = "homepage_custom_uri";
     public static final String HOMEPAGE_ENABLED = "homepage";
+    public static final String HOMEPAGE_USE_CHROME_NTP = "Chrome.Homepage.UseNTP";
     public static final String HOMEPAGE_USE_DEFAULT_URI = "homepage_partner_enabled";
 
     /**
@@ -682,7 +683,8 @@ public final class ChromePreferenceKeys {
                 FLAGS_CACHED_DUET_TABSTRIP_INTEGRATION_ANDROID_ENABLED,
                 FLAGS_CACHED_PAINT_PREVIEW_TEST_ENABLED_KEY,
                 FLAGS_FIELD_TRIAL_PARAM_CACHED.pattern(),
-                HOMEPAGE_LOCATION_POLICY
+                HOMEPAGE_LOCATION_POLICY,
+                HOMEPAGE_USE_CHROME_NTP
         );
         // clang-format on
     }
