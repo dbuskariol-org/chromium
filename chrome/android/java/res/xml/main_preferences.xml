@@ -96,7 +96,7 @@
         android:order="17"
         android:title="@string/menu_downloads"/>
     <Preference
-        android:fragment="org.chromium.chrome.browser.settings.developer.DeveloperSettings"
+        android:fragment="org.chromium.chrome.browser.tracing.settings.DeveloperSettings"
         android:key="developer"
         android:order="18"
         android:title="Developer options"/>
