@@ -298,12 +298,9 @@ class QuickViewController {
       };
     }
 
-    // Delete the entry.
-    const deleteCommand = CommandHandler.getCommand('delete');
-    if (deleteCommand.canDeleteEntries_([entry], this.fileManager_)) {
-      deleteCommand.deleteEntries_(
-          [entry], this.fileManager_, this.deleteConfirmDialog_);
-    }
+    // Delete the entry if the entry can be deleted.
+    CommandHandler.getCommand('delete').deleteEntries(
+        [entry], this.fileManager_, this.deleteConfirmDialog_);
   }
 
   /**
