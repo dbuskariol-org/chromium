@@ -6247,6 +6247,25 @@
             ]
         }
     ],
+    "SmartDimModelV3": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "dim_threshold": "-0.5"
+                    },
+                    "enable_features": [
+                        "SmartDimModelV3",
+                        "UserActivityPredictionMlService"
+                    ]
+                }
+            ]
+        }
+    ],
     "SplitCacheByNetworkIsolationKey": [
         {
             "platforms": [
