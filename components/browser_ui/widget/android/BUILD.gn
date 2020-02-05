@@ -15,8 +15,11 @@ android_library("java") {
     "java/src/org/chromium/components/browser_ui/widget/FadingEdgeScrollView.java",
     "java/src/org/chromium/components/browser_ui/widget/FadingShadow.java",
     "java/src/org/chromium/components/browser_ui/widget/FadingShadowView.java",
+    "java/src/org/chromium/components/browser_ui/widget/FeatureHighlightProvider.java",
+    "java/src/org/chromium/components/browser_ui/widget/InsetObserverView.java",
     "java/src/org/chromium/components/browser_ui/widget/LoadingView.java",
     "java/src/org/chromium/components/browser_ui/widget/MaterialProgressBar.java",
+    "java/src/org/chromium/components/browser_ui/widget/MenuOrKeyboardActionController.java",
     "java/src/org/chromium/components/browser_ui/widget/MoreProgressButton.java",
     "java/src/org/chromium/components/browser_ui/widget/NumberRollView.java",
     "java/src/org/chromium/components/browser_ui/widget/PaddedFrameLayout.java",
@@ -150,6 +153,7 @@ java_library("junit") {
   testonly = true
   sources = [
     "java/src/org/chromium/components/browser_ui/widget/CompositeTouchDelegateUnitTest.java",
+    "java/src/org/chromium/components/browser_ui/widget/InsetObserverViewTest.java",
     "java/src/org/chromium/components/browser_ui/widget/selectable_list/SelectionDelegateTest.java",
   ]
   deps = [

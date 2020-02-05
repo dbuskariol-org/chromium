@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget;
+package org.chromium.components.browser_ui.widget;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
