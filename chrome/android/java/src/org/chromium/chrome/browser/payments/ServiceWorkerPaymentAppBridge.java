@@ -412,6 +412,7 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
             String paymentRequestId, PaymentInstrument.AbortCallback callback) {
         ThreadUtils.assertOnUiThread();
 
+        if (webContents.isDestroyed()) return;
         ServiceWorkerPaymentAppBridgeJni.get().abortPaymentApp(
                 webContents, registrationId, swScope, paymentRequestId, callback);
     }
@@ -425,7 +426,7 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
     public static void addTabObserverForPaymentRequestTab(Tab tab) {
         tab.addObserver(new EmptyTabObserver() {
             @Override
-            public void onDidFinishNavigation(Tab tab, NavigationHandle navigationHandle){} {
+            public void onDidFinishNavigation(Tab tab, NavigationHandle navigationHandle) {
                 // Notify closing payment app window so as to abort payment if unsecure.
                 WebContents webContents = tab.getWebContents();
                 if (!SslValidityChecker.isValidPageInPaymentHandlerWindow(webContents)) {
@@ -455,6 +456,7 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
      * @param webContents The web contents in the opened window.
      */
     public static void onClosingPaymentAppWindowForInsecureNavigation(WebContents webContents) {
+        if (webContents.isDestroyed()) return;
         ServiceWorkerPaymentAppBridgeJni.get().onClosingPaymentAppWindow(
                 webContents, PaymentEventResponseType.PAYMENT_HANDLER_INSECURE_NAVIGATION);
     }
@@ -465,6 +467,7 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
      * @param webContents The web contents in the opened window.
      */
     public static void onClosingPaymentAppWindow(WebContents webContents) {
+        if (webContents.isDestroyed()) return;
         ServiceWorkerPaymentAppBridgeJni.get().onClosingPaymentAppWindow(
                 webContents, PaymentEventResponseType.PAYMENT_HANDLER_WINDOW_CLOSING);
     }

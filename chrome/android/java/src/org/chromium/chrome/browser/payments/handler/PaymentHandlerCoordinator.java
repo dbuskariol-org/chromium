@@ -98,6 +98,7 @@ public class PaymentHandlerCoordinator {
             bottomSheetController.hideContent(/*content=*/view, /*animate=*/true);
             mWebContents.destroy();
             uiObserver.onPaymentHandlerUiClosed();
+            mediator.destroy();
         };
         return bottomSheetController.requestShowContent(view, /*animate=*/true);
     }

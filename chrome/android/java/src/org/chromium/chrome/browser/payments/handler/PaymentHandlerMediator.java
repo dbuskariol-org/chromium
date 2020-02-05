@@ -58,6 +58,12 @@ import org.chromium.ui.modelutil.PropertyModel;
         mPaymentHandlerUiObserver = observer;
     }
 
+    @Override
+    public void destroy() {
+        super.destroy(); // Stops observing the web contents and cleans up associated references.
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
     // BottomSheetObserver:
     @Override
     public void onSheetStateChanged(@SheetState int newState) {
