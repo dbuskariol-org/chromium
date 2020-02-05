@@ -52,6 +52,7 @@ js_modulizer("modulize") {
     "Polymer.dom.flush|flush",
     "test_util.eventToPromise|eventToPromise",
     "test_util.flushTasks|flushTasks",
+    "test_util.isChildVisible|isChildVisible",
     "test_util.isVisible|isVisible",
     "test_util.waitBeforeNextRender|waitBeforeNextRender",
     "test_util.whenAttributeIs|whenAttributeIs",
