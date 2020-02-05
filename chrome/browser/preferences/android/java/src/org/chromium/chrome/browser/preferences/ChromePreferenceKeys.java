@@ -483,6 +483,9 @@ public final class ChromePreferenceKeys {
     public static final String PRIVACY_BANDWIDTH_NO_CELLULAR_OLD = "prefetch_bandwidth_no_cellular";
     public static final String PRIVACY_ALLOW_PRERENDER_OLD = "allow_prefetch";
 
+    public static final String PROFILES_BOOT_TIMESTAMP =
+            "com.google.android.apps.chrome.ChromeMobileApplication.BOOT_TIMESTAMP";
+
     /**
      * Key to cache the enabled bottom toolbar parameter.
      */
@@ -863,6 +866,7 @@ public final class ChromePreferenceKeys {
                 PRIVACY_METRICS_IN_SAMPLE,
                 PRIVACY_METRICS_REPORTING,
                 PRIVACY_NETWORK_PREDICTIONS,
+                PROFILES_BOOT_TIMESTAMP,
                 PROMOS_SKIPPED_ON_FIRST_START,
                 REACHED_CODE_PROFILER_GROUP,
                 RLZ_NOTIFIED,
