@@ -273,6 +273,8 @@ class COMPONENT_EXPORT(STORAGE_BROWSER) QuotaManager
   // the quota for syncable storage. (http://crbug.com/155488)
   static int64_t kSyncableStorageDefaultHostQuota;
 
+  void DisableDatabaseForTesting() { db_disabled_ = true; }
+
  protected:
   ~QuotaManager() override;
 
