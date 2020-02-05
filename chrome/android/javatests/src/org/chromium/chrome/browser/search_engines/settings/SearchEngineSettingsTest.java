@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.search_engine;
+package org.chromium.chrome.browser.search_engines.settings;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;

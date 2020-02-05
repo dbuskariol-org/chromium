@@ -26,7 +26,7 @@
         android:order="3"
         android:title="@string/prefs_section_basics"/>
     <org.chromium.chrome.browser.settings.ChromeBasePreference
-        android:fragment="org.chromium.chrome.browser.settings.search_engine.SearchEngineSettings"
+        android:fragment="org.chromium.chrome.browser.search_engines.settings.SearchEngineSettings"
         android:key="search_engine"
         android:order="4"
         android:title="@string/search_engine_settings"/>
