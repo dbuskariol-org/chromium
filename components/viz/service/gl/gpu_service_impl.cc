@@ -149,6 +149,7 @@ GpuServiceImpl::GpuServiceImpl(
     const base::Optional<gpu::GpuFeatureInfo>&
         gpu_feature_info_for_hardware_gpu,
     const gpu::GpuExtraInfo& gpu_extra_info,
+    const base::Optional<gpu::DevicePerfInfo>& device_perf_info,
     gpu::VulkanImplementation* vulkan_implementation,
     base::OnceCallback<void(bool /*immediately*/)> exit_callback)
     : main_runner_(base::ThreadTaskRunnerHandle::Get()),
@@ -160,6 +161,7 @@ GpuServiceImpl::GpuServiceImpl(
       gpu_info_for_hardware_gpu_(gpu_info_for_hardware_gpu),
       gpu_feature_info_for_hardware_gpu_(gpu_feature_info_for_hardware_gpu),
       gpu_extra_info_(gpu_extra_info),
+      device_perf_info_(device_perf_info),
 #if BUILDFLAG(ENABLE_VULKAN)
       vulkan_implementation_(vulkan_implementation),
 #endif
@@ -575,14 +577,15 @@ void GpuServiceImpl::GetPeakMemoryUsage(uint32_t sequence_num,
 }
 
 #if defined(OS_WIN)
-void GpuServiceImpl::GetGpuSupportedRuntimeVersion(
-    GetGpuSupportedRuntimeVersionCallback callback) {
+void GpuServiceImpl::GetGpuSupportedRuntimeVersionAndDevicePerfInfo(
+    GetGpuSupportedRuntimeVersionAndDevicePerfInfoCallback callback) {
   if (io_runner_->BelongsToCurrentThread()) {
     auto wrap_callback = WrapCallback(io_runner_, std::move(callback));
     main_runner_->PostTask(
         FROM_HERE,
-        base::BindOnce(&GpuServiceImpl::GetGpuSupportedRuntimeVersion,
-                       weak_ptr_, std::move(wrap_callback)));
+        base::BindOnce(
+            &GpuServiceImpl::GetGpuSupportedRuntimeVersionAndDevicePerfInfo,
+            weak_ptr_, std::move(wrap_callback)));
     return;
   }
   DCHECK(main_runner_->BelongsToCurrentThread());
@@ -594,7 +597,9 @@ void GpuServiceImpl::GetGpuSupportedRuntimeVersion(
 
   gpu::RecordGpuSupportedRuntimeVersionHistograms(
       &gpu_info_.dx12_vulkan_version_info);
-  std::move(callback).Run(gpu_info_.dx12_vulkan_version_info);
+  DCHECK(device_perf_info_.has_value());
+  std::move(callback).Run(gpu_info_.dx12_vulkan_version_info,
+                          device_perf_info_.value());
 
   // The unsandboxed GPU process fulfilled its duty and Dxdiag task is not
   // running. Bye bye.

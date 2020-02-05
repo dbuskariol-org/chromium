@@ -666,9 +666,11 @@ void GpuDataManagerImplPrivate::RequestGpuSupportedRuntimeVersion(
     }
 
     GpuDataManagerImpl::GetInstance()->UpdateDx12VulkanRequestStatus(true);
-    host->gpu_service()->GetGpuSupportedRuntimeVersion(
-        base::BindOnce([](const gpu::Dx12VulkanVersionInfo& info) {
+    host->gpu_service()->GetGpuSupportedRuntimeVersionAndDevicePerfInfo(
+        base::BindOnce([](const gpu::Dx12VulkanVersionInfo& info,
+                          const gpu::DevicePerfInfo& device_perf_info) {
           GpuDataManagerImpl::GetInstance()->UpdateDx12VulkanInfo(info);
+          // TODO(zmo): Process collected DevicePerfInfo.
         }));
   });
 
@@ -990,6 +992,7 @@ void GpuDataManagerImplPrivate::UpdateGpuPreferences(
 #if defined(OS_WIN)
   if (kind == GPU_PROCESS_KIND_UNSANDBOXED_NO_GL) {
     gpu_preferences->disable_gpu_watchdog = true;
+    gpu_preferences->enable_perf_data_collection = true;
   }
 #endif
 
