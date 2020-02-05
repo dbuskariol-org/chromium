@@ -64,12 +64,12 @@ IN_PROC_BROWSER_TEST_P(PWAMixedContentBrowserTest,
   EXPECT_EQ(GetAppMenuCommandState(IDC_INSTALL_PWA, browser()), kNotPresent);
 }
 
-// TODO(crbug.com/1026080): Also test kUnifiedControllerWithWebApp.
 INSTANTIATE_TEST_SUITE_P(
     All,
     PWAMixedContentBrowserTest,
     ::testing::Values(ControllerType::kHostedAppController,
-                      ControllerType::kUnifiedControllerWithBookmarkApp),
+                      ControllerType::kUnifiedControllerWithBookmarkApp,
+                      ControllerType::kUnifiedControllerWithWebApp),
     ControllerTypeParamToString);
 
 }  // namespace web_app
