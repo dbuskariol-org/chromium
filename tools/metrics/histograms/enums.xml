@@ -6393,6 +6393,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Blocked"/>
 </enum>
 
+<enum name="BooleanBounced">
+  <int value="0" label="Not Bounced"/>
+  <int value="1" label="Bounced"/>
+</enum>
+
 <enum name="BooleanBringToForegroundReason">
   <int value="0" label="Other"/>
   <int value="1" label="Notification click (within last 5 seconds)"/>
