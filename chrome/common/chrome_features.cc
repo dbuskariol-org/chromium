@@ -317,11 +317,6 @@ const base::Feature kDownloadsLocationChange{"DownloadsLocationChange",
                                              base::FEATURE_ENABLED_BY_DEFAULT};
 #endif
 
-// If enabled, policies will use FCM (Firebase Cloud Messaging) for its
-// invalidations.
-const base::Feature kPolicyFcmInvalidations{"PolicyFCMInvalidations",
-                                            base::FEATURE_ENABLED_BY_DEFAULT};
-
 // Disables ambient authentication in incognito mode.
 const base::Feature kEnableAmbientAuthenticationInIncognito{
     "EnableAmbientAuthenticationInIncognito",
