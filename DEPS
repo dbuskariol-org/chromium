@@ -36,7 +36,6 @@ gclient_gn_args = [
   'checkout_nacl',
   'checkout_oculus_sdk',
   'checkout_openxr',
-  'checkout_aemu'
 ]
 
 
@@ -1374,7 +1373,7 @@ deps = {
               'version': 'hvClQbzFhJApEEpHpfc8UqpDdzLK0eabIbmpPlfODp8C'
           },
       ],
-      'condition': 'host_os == "linux" and checkout_aemu',
+      'condition': 'host_os == "linux" and checkout_fuchsia',
       'dep_type': 'cipd',
   },
 
@@ -1385,7 +1384,7 @@ deps = {
               'version': 'T9bWxf8aUC5TwCFgPxpuW29Mfy-7Z9xCfXB9QO8MfU0C'
           },
       ],
-      'condition': 'host_os == "mac" and checkout_aemu',
+      'condition': 'host_os == "mac" and checkout_fuchsia',
       'dep_type': 'cipd',
   },
 
