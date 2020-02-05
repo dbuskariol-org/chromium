@@ -6254,8 +6254,6 @@ crbug.com/1026712 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/time
 # The Wasm code cache requires disabling the baseline compiler, so only the
 # virtual test should be run.
 http/tests/devtools/wasm-isolated-code-cache/wasm-cache-test.js [ Skip ]
-# Temporarily disabled to land wasm module caching for streaming compilation in V8 (https://crbug.com/v8/10165).
-virtual/wasm-site-isolated-code-cache/http/tests/devtools/wasm-isolated-code-cache/wasm-cache-test.js [ Failure Pass ]
 
 # Memory measurement tests are run as virtual tests.
 external/wpt/measure-memory/measure-memory.tentative.any.html [ Skip ]
