@@ -4415,6 +4415,10 @@ jumbo_static_library("browser") {
     ]
   }
 
+  if (enable_paint_preview) {
+    deps += [ "//components/paint_preview/browser" ]
+  }
+
   if (enable_basic_printing) {
     # Some form of printing support.
     sources += [

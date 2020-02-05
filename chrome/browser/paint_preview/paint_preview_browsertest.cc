@@ -136,4 +136,74 @@ IN_PROC_BROWSER_TEST_F(PaintPreviewBrowserTest, CaptureFrame) {
   loop.Run();
 }
 
+IN_PROC_BROWSER_TEST_F(PaintPreviewBrowserTest, CaptureMainFrameWithSubframe) {
+  LoadPage(
+      http_server_.GetURL("a.com", "/cross_site_iframe_factory.html?a(b)"));
+
+  base::UnguessableToken guid = base::UnguessableToken::Create();
+  PaintPreviewClient::PaintPreviewParams params;
+  params.document_guid = guid;
+  params.is_main_frame = true;
+  params.root_dir = temp_dir_.GetPath();
+  base::RunLoop loop;
+
+  CreateClient();
+  auto* client = PaintPreviewClient::FromWebContents(GetWebContents());
+  WaitForLoadStopWithoutSuccessCheck();
+  client->CapturePaintPreview(
+      params, GetWebContents()->GetMainFrame(),
+      base::BindOnce(
+          [](base::RepeatingClosure quit, base::UnguessableToken expected_guid,
+             base::UnguessableToken guid, mojom::PaintPreviewStatus status,
+             std::unique_ptr<PaintPreviewProto> proto) {
+            EXPECT_EQ(guid, expected_guid);
+            EXPECT_EQ(status, mojom::PaintPreviewStatus::kOk);
+            EXPECT_TRUE(proto->has_root_frame());
+            EXPECT_EQ(proto->subframes_size(), 1);
+            EXPECT_EQ(proto->root_frame().content_id_to_embedding_tokens_size(),
+                      1);
+            EXPECT_TRUE(proto->root_frame().is_main_frame());
+            EXPECT_EQ(proto->subframes(0).content_id_to_embedding_tokens_size(),
+                      0);
+            EXPECT_FALSE(proto->subframes(0).is_main_frame());
+#if defined(OS_WIN)
+            base::FilePath main_path = base::FilePath(
+                base::UTF8ToUTF16(proto->root_frame().file_path()));
+            base::FilePath subframe_path = base::FilePath(
+                base::UTF8ToUTF16(proto->subframes(0).file_path()));
+#else
+            base::FilePath main_path =
+                base::FilePath(proto->root_frame().file_path());
+            base::FilePath subframe_path =
+                base::FilePath(proto->subframes(0).file_path());
+#endif
+            {
+              base::ScopedAllowBlockingForTesting scoped_blocking;
+              EXPECT_TRUE(base::PathExists(main_path));
+              EXPECT_TRUE(base::PathExists(subframe_path));
+              FileRStream rstream_main(base::File(
+                  main_path, base::File::FLAG_OPEN | base::File::FLAG_READ));
+              // Check that the result is a valid SkPicture. Don't bother
+              // checking the contents as this could change depending on how
+              // page rendering changes and is possibly unstable.
+              DeserializationContext ctx;
+              auto deserial_procs = MakeDeserialProcs(&ctx);
+              EXPECT_NE(
+                  SkPicture::MakeFromStream(&rstream_main, &deserial_procs),
+                  nullptr);
+              FileRStream rstream_subframe(
+                  base::File(subframe_path,
+                             base::File::FLAG_OPEN | base::File::FLAG_READ));
+              ctx.clear();
+              deserial_procs = MakeDeserialProcs(&ctx);
+              EXPECT_NE(
+                  SkPicture::MakeFromStream(&rstream_subframe, &deserial_procs),
+                  nullptr);
+            }
+            quit.Run();
+          },
+          loop.QuitClosure(), guid));
+  loop.Run();
+}
+
 }  // namespace paint_preview
