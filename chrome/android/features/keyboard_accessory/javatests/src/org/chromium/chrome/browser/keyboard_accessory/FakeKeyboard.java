@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import org.chromium.chrome.browser.ChromeKeyboardVisibilityDelegate;
 import org.chromium.chrome.browser.ChromeWindow;
-import org.chromium.components.browser_ui.widget.InsetObserverView;
+import org.chromium.chrome.browser.InsetObserverView;
 
 import java.lang.ref.WeakReference;
 
