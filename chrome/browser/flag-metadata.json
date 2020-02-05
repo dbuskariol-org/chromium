@@ -3609,11 +3609,6 @@
     "expiry_milestone": 82
   },
   {
-    "name": "update-hover-at-begin-frame",
-    "owners": [ "lanwei", "input-dev" ],
-    "expiry_milestone": 81
-  },
-  {
     "name": "update-menu-item-custom-summary",
     "owners": [ "//chrome/android/java/src/org/chromium/chrome/browser/omaha/OWNERS" ],
      // This is required by test teams to verify functionality on devices which

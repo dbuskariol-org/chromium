@@ -4495,11 +4495,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kNotificationSchedulerDebugOptionDescription,
      kOsAndroid, MULTI_VALUE_TYPE(kNotificationSchedulerChoices)},
 
-    {"update-hover-at-begin-frame",
-     flag_descriptions::kUpdateHoverAtBeginFrameName,
-     flag_descriptions::kUpdateHoverAtBeginFrameDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kUpdateHoverAtBeginFrame)},
-
 #if defined(OS_ANDROID)
     {"usage-stats", flag_descriptions::kUsageStatsName,
      flag_descriptions::kUsageStatsDescription, kOsAndroid,

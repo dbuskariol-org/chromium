@@ -1718,10 +1718,6 @@
       implied_by: ["ExperimentalProductivityFeatures"]
     },
     {
-      name: "UpdateHoverAtBeginFrame",
-      settable_from_internals: true,
-    },
-    {
       name: "UserActivationAPI",
       status: "stable",
     },
