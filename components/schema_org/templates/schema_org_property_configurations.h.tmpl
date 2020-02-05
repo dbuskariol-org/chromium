@@ -8,14 +8,23 @@
 #ifndef SCHEMA_ORG_PROPERTY_{{ header_guard | upper }}
 #define SCHEMA_ORG_PROPERTY_{{ header_guard | upper }}
 
+#include <set>
 #include <string>
 
 namespace schema_org {
 namespace property {
 
-{% for property in properties %}
-extern const char k{{property.name[0]|upper}}{{property.name[1:]}}[];
-{% endfor %} 
+struct PropertyConfiguration {
+  bool text;
+  bool date;
+  bool time;
+  bool date_time;
+  bool number;
+
+  std::set<std::string> thing_types;
+};
+
+PropertyConfiguration GetPropertyConfiguration(const std::string& name);
 
 }  // namespace property
 }  // namespace schema_org
