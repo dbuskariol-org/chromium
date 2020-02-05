@@ -18,9 +18,9 @@ documentation].
   functionality to a user. There are three types: [page actions],
   [browser actions], and regular actions. Actions add buttons to the toolbar or
   to the extension menu.
-* **Permission**: the ability of an extension to access or not access a specific
-  API. Most things extensions can do are controlled by permissions. See
-  [permissions] for more details.
+* **Permission**: the ability of an extension to access a specific API. Most
+  things extensions can do are controlled by permissions. See [permissions]
+  for more details.
 * **Extension renderer**: because extensions are logically their own web
   environments, each extension may have a renderer process that hosts its
   content. These renderers are annotated in the task manager as
@@ -78,11 +78,7 @@ TODO(ellyjones): How does extension sync work?
 
 TODO(ellyjones): Write some words!
 
-[background page]: https://developer.chrome.com/extensions/background_pages
 [browser actions]: https://developer.chrome.com/extensions/browserAction
-[builder pattern]: https://en.wikipedia.org/wiki/Builder_pattern
-[chrome.commands]: https://developer.chrome.com/extensions/commands
-[chrome.omnibox]: https://developer.chrome.com/extensions/omnibox
 [extension types]: extension_and_app_types.md
 [manifest file format]: https://developer.chrome.com/extensions/manifest
 [page actions]: https://developer.chrome.com/extensions/pageAction
