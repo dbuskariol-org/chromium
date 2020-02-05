@@ -536,7 +536,7 @@
 <translation id="3366477098757335611">Ver tarxetas</translation>
 <translation id="3369192424181595722">Erro do reloxo</translation>
 <translation id="337363190475750230">Desaprovisionado</translation>
-<translation id="3376829916920036789"><ph name="ENROLLMENT_DOMAIN" /> activou Enterprise Service Hooks no navegador. Estes ganchos teñen acceso a algúns dos teus datos.</translation>
+<translation id="3376829916920036789"><ph name="ENROLLMENT_DOMAIN" /> activou Enterprise Service Hooks no navegador. Estes hooks teñen acceso a algúns dos teus datos.</translation>
 <translation id="3377144306166885718">O servidor utilizou unha versión obsoleta de TLS.</translation>
 <translation id="3377188786107721145">Erro de análise da política</translation>
 <translation id="3377736046129930310">Usar o bloqueo de pantalla para confirmar as tarxetas máis rápido</translation>
@@ -1408,7 +1408,7 @@ Detalles adicionais:
 <translation id="725866823122871198">Non se pode establecer unha conexión privada con <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> porque a data e a hora do ordenador (<ph name="DATE_AND_TIME" />) non son correctas.</translation>
 <translation id="7260504762447901703">Revogar acceso</translation>
 <translation id="7275334191706090484">Marcadores xestionados</translation>
-<translation id="7288778322931489286">O teu administrador activou Enterprise Service Hooks no navegador. Estes ganchos teñen acceso a algúns dos teus datos.</translation>
+<translation id="7288778322931489286">O teu administrador activou Enterprise Service Hooks no navegador. Estes hooks teñen acceso a algúns dos teus datos.</translation>
 <translation id="7292031607255951991">Nome do destinatario</translation>
 <translation id="7298195798382681320">Recomendada</translation>
 <translation id="7300012071106347854">Azul cobalto</translation>

@@ -849,7 +849,7 @@ Du kan administrere indstillingerne for denne konto ved at installere Family Lin
 <translation id="2165421703844373933">Få adgang til din Google-assistent, når du siger "Ok Google". Du kan spare på batteriet ved at vælge "Til (anbefales)". Google-assistenten svarer kun, når din enhed oplader eller er sluttet til en strømkilde.</translation>
 <translation id="2166369534954157698">Quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen Walther spillede på xylofon</translation>
 <translation id="2169062631698640254">Log ind alligevel</translation>
-<translation id="2170519224423744029">Avanceret beskyttelse anbefaler, at du sender <ph name="FILE_NAME" /> til gennemgang hos Google, så den kan tjekkes for malware.</translation>
+<translation id="2170519224423744029">Avanceret beskyttelse anbefaler, at du sender <ph name="FILE_NAME" /> til gennemgang hos Google, så den kan blive tjekket for malware.</translation>
 <translation id="2172784515318616985">Fortsæt</translation>
 <translation id="2173302385160625112">Tjek din internetforbindelse</translation>
 <translation id="2173801458090845390">Føj rekvisitions-id til denne enhed</translation>
@@ -3905,7 +3905,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="6467304607960172345">Optimer videoer i fuld skærm</translation>
 <translation id="6468485451923838994">Skrifttyper</translation>
 <translation id="6472207088655375767">Engangskode</translation>
-<translation id="6472804939621540371">Dette rydder alle de data og cookies, der er gemt af <ph name="SITE_GROUP_NAME" />, eventuelle websitesi denne gruppe og de apps, den har installeret.</translation>
+<translation id="6472804939621540371">Dette rydder alle de data og cookies, der er gemt af <ph name="SITE_GROUP_NAME" />, eventuelle websites i denne gruppe og de apps, den har installeret.</translation>
 <translation id="6472893788822429178">Vis knappen Startside</translation>
 <translation id="6473842110411557830">Powerwash-illustration</translation>
 <translation id="6474884162850599008">Fjern tilknytningen af din Google Drev-konto</translation>

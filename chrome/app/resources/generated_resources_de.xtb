@@ -173,7 +173,7 @@
 <translation id="1224275271335624810">Schnellste</translation>
 <translation id="1225177025209879837">Ihre Anfrage wird verarbeitet...</translation>
 <translation id="1227507814927581609">Beim Herstellen der Verbindung zu "<ph name="DEVICE_NAME" />" ist ein Authentifizierungsfehler aufgetreten.</translation>
-<translation id="1229587244632896090">Die ausgewählte Datei ist unbekannt und könnte schädlich sein. Die Empfehlung gemäß dem erweiterten Sicherheitsprogramm ist, die Datei zur Überprüfung auf Malware an Google zu schicken.</translation>
+<translation id="1229587244632896090">Die ausgewählte Datei ist unbekannt und könnte schädlich sein. Es wird gemäß dem erweiterten Sicherheitsprogramm empfohlen, die Datei zur Überprüfung auf Malware an Google zu schicken.</translation>
 <translation id="1231733316453485619">Synchronisierung aktivieren?</translation>
 <translation id="1232569758102978740">Unbenannt</translation>
 <translation id="1233497634904001272">Tippen Sie noch einmal auf Ihren Sicherheitsschlüssel, um die Anfrage abzuschließen.</translation>
@@ -287,7 +287,7 @@
 <translation id="1396963298126346194">Der eingegebene Nutzername und das Passwort stimmen nicht überein</translation>
 <translation id="1397500194120344683">Keine geeigneten Geräte vorhanden. <ph name="LINK_BEGIN" />Weitere Informationen<ph name="LINK_END" /></translation>
 <translation id="1398853756734560583">Vergrößern</translation>
-<translation id="139911022479327130">Ihr Smartphone entsperren, um Ihre Identität zu bestätigen</translation>
+<translation id="139911022479327130">Entsperren Sie Ihr Smartphone, um Ihre Identität zu bestätigen</translation>
 <translation id="1399511500114202393">Kein Nutzerzertifikat</translation>
 <translation id="1403519882106291341">Nutzungsbedingungen von Google Chrome OS</translation>
 <translation id="140520891692800925"><ph name="PROFILE_DISPLAY_NAME" /> (betreut)</translation>
@@ -846,7 +846,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2165421703844373933">Mit "Ok Google" können Sie auf Ihren Assistant zugreifen. Damit der Akku geschont wird, sollten Sie die Option "An (empfohlen)" auswählen. So reagiert Ihr Assistant nur, wenn Ihr Gerät an eine Stromquelle angeschlossen ist oder auflädt.</translation>
 <translation id="2166369534954157698">Zwölf Boxkämpfer jagen Viktor quer über den großen Sylter Deich</translation>
 <translation id="2169062631698640254">Trotzdem anmelden</translation>
-<translation id="2170519224423744029">Die Empfehlung gemäß dem erweiterten Sicherheitsprogramm ist, <ph name="FILE_NAME" /> zur Überprüfung auf Malware an Google zu schicken.</translation>
+<translation id="2170519224423744029">Es wird gemäß dem erweiterten Sicherheitsprogramm empfohlen, <ph name="FILE_NAME" /> zur Überprüfung auf Malware an Google zu schicken.</translation>
 <translation id="2172784515318616985">Weiter</translation>
 <translation id="2173302385160625112">Bitte überprüfen Sie Ihre Internetverbindung</translation>
 <translation id="2173801458090845390">Diesem Gerät eine Anforderungs-ID hinzufügen</translation>
