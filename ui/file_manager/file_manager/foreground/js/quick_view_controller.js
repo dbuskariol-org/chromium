@@ -339,9 +339,9 @@ class QuickViewController {
       }
 
       if (this.currentSelection_ >= this.entries_.length) {
-        this.currentSelection_ = 0;
-      } else if (this.currentSelection_ < 0) {
         this.currentSelection_ = this.entries_.length - 1;
+      } else if (this.currentSelection_ < 0) {
+        this.currentSelection_ = 0;
       }
     }
 
