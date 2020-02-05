@@ -1379,6 +1379,8 @@ jumbo_static_library("ui") {
       "webui/settings/settings_media_devices_selection_handler.h",
       "webui/settings/settings_page_ui_handler.cc",
       "webui/settings/settings_page_ui_handler.h",
+      "webui/settings/settings_secure_dns_handler.cc",
+      "webui/settings/settings_secure_dns_handler.h",
       "webui/settings/settings_security_key_handler.cc",
       "webui/settings/settings_security_key_handler.h",
       "webui/settings/settings_startup_pages_handler.cc",
