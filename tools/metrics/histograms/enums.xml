@@ -66536,6 +66536,7 @@ Full version information for the fingerprint enum values:
   <int value="0" label="VULKAN_API_VERSION_UNKNOWN"/>
   <int value="1" label="VULKAN_API_VERSION_1_0_0"/>
   <int value="2" label="VULKAN_API_VERSION_1_1_0"/>
+  <int value="3" label="VULKAN_API_VERSION_1_2_0"/>
 </enum>
 
 <enum name="WaitForVBlankErrorCode">
