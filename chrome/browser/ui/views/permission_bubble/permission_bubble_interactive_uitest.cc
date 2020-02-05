@@ -2,15 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import <Cocoa/Cocoa.h>
-
 #include <memory>
 
-#include "base/command_line.h"
-#import "base/mac/scoped_nsobject.h"
 #include "base/run_loop.h"
-#include "base/test/scoped_feature_list.h"
-#include "chrome/browser/chrome_notification_types.h"
+#include "build/build_config.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_commands.h"
 #include "chrome/browser/ui/browser_window.h"
@@ -20,42 +15,37 @@
 #include "chrome/test/base/ui_test_utils.h"
 #include "chrome/test/permissions/permission_request_manager_test_api.h"
 #include "ui/base/test/ui_controls.h"
-#import "ui/base/test/windowed_nsnotification_observer.h"
-#include "ui/base/ui_base_features.h"
-#import "ui/events/test/cocoa_test_event_utils.h"
+#include "ui/views/test/widget_test.h"
 
 class PermissionBubbleInteractiveUITest : public InProcessBrowserTest {
  public:
-  PermissionBubbleInteractiveUITest() {}
+  PermissionBubbleInteractiveUITest() = default;
 
-  void EnsureWindowActive(NSWindow* window, const char* message) {
-    SCOPED_TRACE(message);
-    EXPECT_TRUE(window);
-
-    // Activation is asynchronous on Mac. If the window didn't become active,
-    // wait for it.
-    if (![window isKeyWindow]) {
-      base::scoped_nsobject<WindowedNSNotificationObserver> waiter(
-          [[WindowedNSNotificationObserver alloc]
-              initForNotification:NSWindowDidBecomeKeyNotification
-                           object:window]);
-      [waiter wait];
-    }
-    EXPECT_TRUE([window isKeyWindow]);
-
-    // Whether or not we had to wait, flush the run loop. This ensures any
-    // asynchronous close operations have completed.
-    base::RunLoop().RunUntilIdle();
+  void EnsureWindowActive(ui::BaseWindow* window, const char* message) {
+    EnsureWindowActive(
+        views::Widget::GetWidgetForNativeWindow(window->GetNativeWindow()),
+        message);
   }
 
-  // Send Cmd+keycode in the key window to NSApp.
+  void EnsureWindowActive(views::Widget* widget, const char* message) {
+    SCOPED_TRACE(message);
+    EXPECT_TRUE(widget);
+
+    views::test::WidgetActivationWaiter waiter(widget, true);
+    waiter.Wait();
+  }
+
+  // Send Ctrl/Cmd+keycode in the key window to the browser.
   void SendAccelerator(ui::KeyboardCode keycode, bool shift, bool alt) {
+#if defined(OS_MACOSX)
     bool control = false;
     bool command = true;
-    // Note that although this takes an NSWindow, it's just used to create the
-    // NSEvent* which will be dispatched to NSApp (i.e. not NSWindow).
-    ui_controls::SendKeyPress(
-        [NSApp keyWindow], keycode, control, shift, alt, command);
+#else
+    bool control = true;
+    bool command = false;
+#endif
+    ui_controls::SendKeyPress(browser()->window()->GetNativeWindow(), keycode,
+                              control, shift, alt, command);
   }
 
   void SetUpOnMainThread() override {
@@ -68,46 +58,53 @@ class PermissionBubbleInteractiveUITest : public InProcessBrowserTest {
 
     test_api_->AddSimpleRequest(ContentSettingsType::GEOLOCATION);
 
-    EXPECT_TRUE([browser()->window()->GetNativeWindow().GetNativeNSWindow()
-                     isKeyWindow]);
+    EXPECT_TRUE(browser()->window()->IsActive());
 
-    // The PermissionRequestManager displays prompts asynchronously.
+    // The permission prompt is shown asynchronously.
     base::RunLoop().RunUntilIdle();
-
-    // The bubble should steal key focus when shown.
-    EnsureWindowActive(test_api_->GetPromptWindow().GetNativeNSWindow(),
-                       "show permission bubble");
+    EnsureWindowActive(test_api_->GetPromptWindow(), "show permission bubble");
   }
 
  protected:
   std::unique_ptr<test::PermissionRequestManagerTestApi> test_api_;
-  base::test::ScopedFeatureList scoped_feature_list_;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(PermissionBubbleInteractiveUITest);
 };
 
-// There is only one tab. Cmd+w will close it along with the browser window.
-IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, CmdWClosesWindow) {
-  base::scoped_nsobject<NSWindow> browser_window(
-      browser()->window()->GetNativeWindow().GetNativeNSWindow(),
-      base::scoped_policy::RETAIN);
-  EXPECT_TRUE([browser_window isVisible]);
+#if defined(OS_WIN) || defined(OS_LINUX)
+// TODO(https://crbug.com/866878): Accelerators are broken when this bubble is
+// showing on non-Mac.
+#define MAYBE_CmdWClosesWindow DISABLED_CmdWClosesWindow
+#else
+#define MAYBE_CmdWClosesWindow CmdWClosesWindow
+#endif
+
+// There is only one tab. Ctrl/Cmd+w will close it along with the browser
+// window.
+IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest,
+                       MAYBE_CmdWClosesWindow) {
+  EXPECT_TRUE(browser()->window()->IsVisible());
 
   SendAccelerator(ui::VKEY_W, false, false);
 
   // The actual window close happens via a posted task.
-  EXPECT_TRUE([browser_window isVisible]);
+  EXPECT_TRUE(browser()->window()->IsVisible());
   ui_test_utils::WaitForBrowserToClose(browser());
-  EXPECT_FALSE([browser_window isVisible]);
+  EXPECT_FALSE(browser()->window()->IsVisible());
 }
 
-// Add a tab, ensure we can switch away and back using Cmd+Alt+Left/Right and
-// curly braces.
-IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, SwitchTabs) {
-  NSWindow* browser_window =
-      browser()->window()->GetNativeWindow().GetNativeNSWindow();
+#if defined(OS_WIN) || defined(OS_LINUX)
+// TODO(https://crbug.com/866878): Accelerators are broken when this bubble is
+// showing on non-Mac.
+#define MAYBE_SwitchTabs DISABLED_SwitchTabs
+#else
+#define MAYBE_SwitchTabs SwitchTabs
+#endif
 
+// Add a tab, ensure we can switch away and back using Ctrl/Cmd+Alt+Left/Right
+// and curly braces.
+IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, MAYBE_SwitchTabs) {
   EXPECT_EQ(0, browser()->tab_strip_model()->active_index());
   EXPECT_TRUE(test_api_->GetPromptWindow());
 
@@ -119,8 +116,8 @@ IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, SwitchTabs) {
   // test environment can't guarantee that macOS decides that the Browser window
   // is actually the "best" window to activate upon closing the current key
   // window. So activate it manually.
-  [browser_window makeKeyAndOrderFront:nil];
-  EnsureWindowActive(browser_window, "tab added");
+  browser()->window()->Activate();
+  EnsureWindowActive(browser()->window(), "tab added");
 
   // Prompt is hidden while its tab is not active.
   EXPECT_FALSE(test_api_->GetPromptWindow());
@@ -134,7 +131,7 @@ IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, SwitchTabs) {
 
   // Note we don't need to makeKeyAndOrderFront: the permission window will take
   // focus when it is shown again.
-  EnsureWindowActive(test_api_->GetPromptWindow().GetNativeNSWindow(),
+  EnsureWindowActive(test_api_->GetPromptWindow(),
                      "switched to permission tab with arrow");
   EXPECT_TRUE(test_api_->GetPromptWindow());
 
@@ -142,8 +139,8 @@ IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, SwitchTabs) {
   SendAccelerator(ui::VKEY_RIGHT, false, true);
   EXPECT_EQ(1, browser()->tab_strip_model()->active_index());
 
-  [browser_window makeKeyAndOrderFront:nil];
-  EnsureWindowActive(browser_window, "switch away with arrow");
+  browser()->window()->Activate();
+  EnsureWindowActive(browser()->window(), "switch away with arrow");
   EXPECT_FALSE(test_api_->GetPromptWindow());
 
   // Also test switching tabs with curly braces. "VKEY_OEM_4" is
@@ -153,13 +150,13 @@ IN_PROC_BROWSER_TEST_F(PermissionBubbleInteractiveUITest, SwitchTabs) {
   chrome::FocusLocationBar(browser());
   SendAccelerator(ui::VKEY_OEM_4, true, false);
   EXPECT_EQ(0, browser()->tab_strip_model()->active_index());
-  EnsureWindowActive(test_api_->GetPromptWindow().GetNativeNSWindow(),
+  EnsureWindowActive(test_api_->GetPromptWindow(),
                      "switch to permission tab with curly brace");
   EXPECT_TRUE(test_api_->GetPromptWindow());
 
   SendAccelerator(ui::VKEY_OEM_4, true, false);
   EXPECT_EQ(1, browser()->tab_strip_model()->active_index());
-  [browser_window makeKeyAndOrderFront:nil];
-  EnsureWindowActive(browser_window, "switch away with curly brace");
+  browser()->window()->Activate();
+  EnsureWindowActive(browser()->window(), "switch away with curly brace");
   EXPECT_FALSE(test_api_->GetPromptWindow());
 }

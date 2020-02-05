@@ -5705,7 +5705,6 @@ if (!is_android) {
       "../browser/ui/views/accessibility/navigation_accessibility_uitest_win.cc",
       "../browser/ui/views/content_test_utils.cc",
       "../browser/ui/views/content_test_utils.h",
-      "../browser/ui/views/permission_bubble/permission_bubble_views_interactive_uitest_mac.mm",
       "../browser/ui/views/tabs/tab_spinner_interactive_uitest.cc",
       "../browser/ui/views/web_apps/web_app_frame_toolbar_interactive_uitest.cc",
       "../browser/ui/views/web_dialog_view_browsertest.cc",
@@ -5859,6 +5858,7 @@ if (!is_android) {
         "../browser/ui/views/omnibox/omnibox_view_views_browsertest.cc",
         "../browser/ui/views/passwords/manage_passwords_icon_view_interactive_uitest.cc",
         "../browser/ui/views/passwords/password_bubble_interactive_uitest.cc",
+        "../browser/ui/views/permission_bubble/permission_bubble_interactive_uitest.cc",
         "../browser/ui/views/sad_tab_view_interactive_uitest.cc",
         "../browser/ui/views/status_icons/status_tray_state_changer_interactive_uitest_win.cc",
         "../browser/ui/views/tabs/tab_drag_controller_interactive_uitest.cc",
@@ -5999,15 +5999,6 @@ if (!is_android) {
       data_deps += [
         "//chrome",
         "//chrome:chrome_framework",
-      ]
-
-      # The browser window can be views or Cocoa on Mac, but this is chosen at
-      # runtime. This block captures tests that only run with a Cocoa browser.
-      sources += [
-        # Note permission_bubble_cocoa_interactive_uitest tests both Cocoa and
-        # toolkit-views secondary UI. It should not be deleted with the Cocoa
-        # bubble (but it can be deleted with the Cocoa browser window).
-        "../browser/ui/cocoa/permission_bubble/permission_bubble_cocoa_interactive_uitest.mm",
       ]
     }
 
