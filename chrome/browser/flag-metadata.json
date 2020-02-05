@@ -3087,6 +3087,11 @@
     "expiry_milestone": 80
   },
   {
+    "name": "post-quantum-cecpq2",
+    "owners": [ "agl" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "prefetch-main-resource-network-isolation-key",
     "owners": [ "dom", "yhirano" ],
     "expiry_milestone": 85

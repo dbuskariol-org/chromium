@@ -38054,6 +38054,7 @@ from previous Chrome versions.
   <int value="-589096918" label="ash-enable-fullscreen-app-list"/>
   <int value="-579192400" label="disable-input-view"/>
   <int value="-577982497" label="CupsPrintersUiOverhaul:enabled"/>
+  <int value="-574354898" label="PostQuantumCECPQ2:enabled"/>
   <int value="-572112724" label="DialogTouchBar:disabled"/>
   <int value="-572012175" label="AssistantEnableStereoAudioInput:disabled"/>
   <int value="-571236436" label="AppManagement:disabled"/>
@@ -39981,6 +39982,7 @@ from previous Chrome versions.
   <int value="1831835753" label="MaterialDesignIncognitoNTP:enabled"/>
   <int value="1832552562" label="EnableVirtualKeyboardUkm:enabled"/>
   <int value="1834968807" label="OmniboxAutocompleteTitles:enabled"/>
+  <int value="1835075399" label="PostQuantumCECPQ2:disabled"/>
   <int value="1835523483" label="OmniboxUIExperimentSwapTitleAndUrl:enabled"/>
   <int value="1837330563" label="WebPaymentsMinimalUI:disabled"/>
   <int value="1838990777" label="V8Future:enabled"/>
