@@ -333,7 +333,7 @@ void AddLanguagesStrings(content::WebUIDataSource* html_source) {
       {"showImeMenu", IDS_SETTINGS_LANGUAGES_SHOW_IME_MENU},
       {"displayLanguageRestart",
        IDS_SETTINGS_LANGUAGES_RESTART_TO_DISPLAY_LANGUAGE},
-      {"moveDown", IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_ORDERING_INSTRUCTIONS},
+      {"moveDown", IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_MOVE_DOWN},
       {"displayInThisLanguage",
        IDS_SETTINGS_LANGUAGES_DISPLAY_IN_THIS_LANGUAGE},
       {"searchLanguages", IDS_SETTINGS_LANGUAGE_SEARCH},
@@ -344,7 +344,7 @@ void AddLanguagesStrings(content::WebUIDataSource* html_source) {
        IDS_SETTINGS_LANGUAGES_IS_DISPLAYED_IN_THIS_LANGUAGE},
       {"removeLanguage", IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_REMOVE},
       {"addLanguages", IDS_SETTINGS_LANGUAGES_LANGUAGES_ADD},
-      {"moveUp", IDS_SETTINGS_LANGUAGES_LANGUAGES_ADD},
+      {"moveUp", IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_MOVE_UP},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 }
