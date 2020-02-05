@@ -12,6 +12,7 @@
 #include "ui/events/test/events_test_utils_x11.h"
 #include "ui/events/test/keyboard_layout.h"
 #include "ui/events/types/event_type.h"
+#include "ui/gfx/x/x11.h"
 
 namespace ui {
 
@@ -20,7 +21,6 @@ namespace ui {
 // regressions such as crbug.com/1007389.
 TEST(XEventTranslationTest, KeyEventDomKeyExtraction) {
   ui::ScopedKeyboardLayout keyboard_layout(ui::KEYBOARD_LAYOUT_ENGLISH_US);
-
   ScopedXI2Event xev;
   xev.InitKeyEvent(ET_KEY_PRESSED, VKEY_RETURN, EF_NONE);
 
