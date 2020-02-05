@@ -186,9 +186,9 @@ public class PageInfoController
         // Work out the URL and connection message and status visibility.
         // TODO(crbug.com/1033178): dedupe the DomDistillerUrlUtils#getOriginalUrlFromDistillerUrl()
         // calls.
-        mFullUrl = isShowingOfflinePage()
-                ? offlinePageUrl
-                : DomDistillerUrlUtils.getOriginalUrlFromDistillerUrl(webContents.getVisibleUrl());
+        mFullUrl = isShowingOfflinePage() ? offlinePageUrl
+                                          : DomDistillerUrlUtils.getOriginalUrlFromDistillerUrl(
+                                                  webContents.getVisibleUrlString());
 
         // This can happen if an invalid chrome-distiller:// url was entered.
         if (mFullUrl == null) mFullUrl = "";
@@ -325,7 +325,8 @@ public class PageInfoController
                     bridge.loadOriginal(mWebContents);
                 });
             };
-            final String previewOriginalHost = bridge.getOriginalHost(mWebContents.getVisibleUrl());
+            final String previewOriginalHost =
+                    bridge.getOriginalHost(mWebContents.getVisibleUrlString());
             final String loadOriginalText = context.getString(
                     R.string.page_info_preview_load_original, previewOriginalHost);
             final SpannableString loadOriginalSpan = SpanApplier.applySpans(loadOriginalText,

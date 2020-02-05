@@ -353,7 +353,7 @@ public class ContextualSearchManager implements ContextualSearchManagementDelega
         WebContents baseWebContents = mSelectionController.getBaseWebContents();
         if (baseWebContents == null) return null;
         try {
-            return new URL(baseWebContents.getVisibleUrl());
+            return new URL(baseWebContents.getVisibleUrlString());
         } catch (MalformedURLException e) {
             return null;
         }

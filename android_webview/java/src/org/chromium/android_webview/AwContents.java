@@ -1970,7 +1970,7 @@ public class AwContents implements SmartClipProvider {
      */
     public String getUrl() {
         if (isDestroyed(WARN)) return null;
-        String url = mWebContents.getVisibleUrl();
+        String url = mWebContents.getVisibleUrlString();
         if (url == null || url.trim().isEmpty()) return null;
         return url;
     }
