@@ -25,6 +25,7 @@ import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.components.payments.MethodStrings;
 import org.chromium.components.payments.PaymentHandlerHost;
+import org.chromium.content_public.browser.NavigationHandle;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.payments.mojom.PaymentAddress;
@@ -424,7 +425,16 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
     public static void addTabObserverForPaymentRequestTab(Tab tab) {
         tab.addObserver(new EmptyTabObserver() {
             @Override
-            public void onPageLoadFinished(Tab tab, String url) {
+            public void onDidFinishNavigation(Tab tab, NavigationHandle navigationHandle){} {
+                // Notify closing payment app window so as to abort payment if unsecure.
+                WebContents webContents = tab.getWebContents();
+                if (!SslValidityChecker.isValidPageInPaymentHandlerWindow(webContents)) {
+                    onClosingPaymentAppWindowForInsecureNavigation(webContents);
+                }
+            }
+
+            @Override
+            public void onSSLStateUpdated(Tab tab) {
                 // Notify closing payment app window so as to abort payment if unsecure.
                 WebContents webContents = tab.getWebContents();
                 if (!SslValidityChecker.isValidPageInPaymentHandlerWindow(webContents)) {

@@ -117,6 +117,7 @@ public class PaymentHandlerCoordinator {
     public void hide() {
         if (mHider == null) return;
         mHider.run();
+        mHider = null;
     }
 
     /**
