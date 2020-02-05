@@ -37669,6 +37669,8 @@ from previous Chrome versions.
   <int value="-1045882995" label="UseNewDoodleApi:enabled"/>
   <int value="-1044244605"
       label="UpdateNotificationSchedulingIntegration:enabled"/>
+  <int value="-1042723808"
+      label="HappinessTrackingSurveysForDesktopSettingsPrivacy:enabled"/>
   <int value="-1042579955" label="ChromeOSParentalControlsSettings:enabled"/>
   <int value="-1041650038" label="enable-forced-migration-to-tabbed-mode"/>
   <int value="-1040000888" label="ContextMenuSearchWithGoogleLens:disabled"/>
@@ -39256,6 +39258,8 @@ from previous Chrome versions.
   <int value="963457392" label="ChromeHomeModernLayout:disabled"/>
   <int value="963671232" label="DrawOcclusion:disabled"/>
   <int value="964613807" label="ContextualSearchTranslationModel:disabled"/>
+  <int value="965037619"
+      label="HappinessTrackingSurveysForDesktopSettingsPrivacy:disabled"/>
   <int value="966415988" label="SyncPseudoUSSPasswords:enabled"/>
   <int value="969340095" label="EnableDspHotword:disabled"/>
   <int value="972228058" label="SyncUSSSessions:disabled"/>

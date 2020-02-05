@@ -411,16 +411,22 @@ const base::Feature kHappinessTrackingSystem{"HappinessTrackingSystem",
 const base::Feature kHappinessTrackingSurveysForDesktop{
     "HappinessTrackingSurveysForDesktop", base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Enables or disables the Happiness Tracking System demo mode for Desktop
+// Chrome.
+const base::Feature kHappinessTrackingSurveysForDesktopDemo{
+    "HappinessTrackingSurveysForDesktopDemo",
+    base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Enables or disables the Happiness Tracking System for Desktop Chrome
 // Settings.
 const base::Feature kHappinessTrackingSurveysForDesktopSettings{
     "HappinessTrackingSurveysForDesktopSettings",
     base::FEATURE_DISABLED_BY_DEFAULT};
 
-// Enables or disables the Happiness Tracking System demo mode for Desktop
-// Chrome.
-const base::Feature kHappinessTrackingSurveysForDesktopDemo{
-    "HappinessTrackingSurveysForDesktopDemo",
+// Enables or disables the Happiness Tracking System for Desktop Chrome
+// Privacy Settings.
+const base::Feature kHappinessTrackingSurveysForDesktopSettingsPrivacy{
+    "HappinessTrackingSurveysForDesktopSettingsPrivacy",
     base::FEATURE_DISABLED_BY_DEFAULT};
 #endif  // !defined(OS_ANDROID)
 
