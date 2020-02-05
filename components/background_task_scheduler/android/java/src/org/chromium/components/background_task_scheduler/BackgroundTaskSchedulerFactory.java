@@ -1,32 +1,57 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 package org.chromium.components.background_task_scheduler;
 
+import android.os.Build;
+
 import androidx.annotation.VisibleForTesting;
 
-import org.chromium.components.background_task_scheduler.internal.BackgroundTaskSchedulerFactoryInternal;
-import org.chromium.components.background_task_scheduler.internal.BackgroundTaskSchedulerPrefs;
-import org.chromium.components.background_task_scheduler.internal.BackgroundTaskSchedulerUma;
+import org.chromium.base.ThreadUtils;
 
 /**
- * A factory for {@link BackgroundTaskScheduler}.
+ * A factory for {@link BackgroundTaskScheduler} that ensures there is only ever a single instance.
  */
 public final class BackgroundTaskSchedulerFactory {
-    private static BackgroundTaskSchedulerExternalUma sUmaReporter;
+    private static BackgroundTaskScheduler sBackgroundTaskScheduler;
+    private static BackgroundTaskFactory sBackgroundTaskFactory;
+
+    static BackgroundTaskSchedulerDelegate getSchedulerDelegateForSdk(int sdkInt) {
+        if (sdkInt >= Build.VERSION_CODES.M) {
+            return new BackgroundTaskSchedulerJobService();
+        } else {
+            return new BackgroundTaskSchedulerGcmNetworkManager();
+        }
+    }
 
     /**
      * @return the current instance of the {@link BackgroundTaskScheduler}. Creates one if none
      * exist.
      */
     public static BackgroundTaskScheduler getScheduler() {
-        return BackgroundTaskSchedulerFactoryInternal.getScheduler();
+        ThreadUtils.assertOnUiThread();
+        if (sBackgroundTaskScheduler == null) {
+            sBackgroundTaskScheduler = new BackgroundTaskSchedulerImpl(
+                    getSchedulerDelegateForSdk(Build.VERSION.SDK_INT),
+                    new BackgroundTaskSchedulerAlarmManager());
+        }
+        return sBackgroundTaskScheduler;
     }
 
     @VisibleForTesting
     public static void setSchedulerForTesting(BackgroundTaskScheduler backgroundTaskScheduler) {
-        BackgroundTaskSchedulerFactoryInternal.setSchedulerForTesting(backgroundTaskScheduler);
+        sBackgroundTaskScheduler = backgroundTaskScheduler;
+    }
+
+    /**
+     * @param taskId id of the scheduled task.
+     * @return instance of the {@link BackgroundTask} that implements the functionality for the
+     * task id.
+     */
+    public static BackgroundTask getBackgroundTaskFromTaskId(int taskId) {
+        assert sBackgroundTaskFactory != null;
+        return sBackgroundTaskFactory.getBackgroundTaskFromTaskId(taskId);
     }
 
     /**
@@ -34,24 +59,7 @@ public final class BackgroundTaskSchedulerFactory {
      * the caller.
      */
     public static void setBackgroundTaskFactory(BackgroundTaskFactory backgroundTaskFactory) {
-        BackgroundTaskSchedulerFactoryInternal.setBackgroundTaskFactory(backgroundTaskFactory);
-    }
-
-    /**
-     * @return The helper class to report UMA.
-     */
-    public static BackgroundTaskSchedulerExternalUma getUmaReporter() {
-        if (sUmaReporter == null) {
-            sUmaReporter = new BackgroundTaskSchedulerUma();
-        }
-        return sUmaReporter;
-    }
-
-    /**
-     * Pre-load shared prefs to avoid being blocked on the disk reads in the future.
-     */
-    public static void warmUpSharedPrefs() {
-        BackgroundTaskSchedulerPrefs.warmUpSharedPrefs();
+        sBackgroundTaskFactory = backgroundTaskFactory;
     }
 
     // Do not instantiate.
