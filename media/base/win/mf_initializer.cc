@@ -8,19 +8,13 @@
 
 #include "base/logging.h"
 
-#include "base/optional.h"
-
 namespace media {
 
-MFSessionLifetime InitializeMediaFoundation() {
-  if (MFStartup(MF_VERSION, MFSTARTUP_LITE) == S_OK)
-    return std::make_unique<MFSession>();
-  DVLOG(1) << "Media Foundation unavailable or it failed to initialize";
-  return nullptr;
-}
-
-MFSession::~MFSession() {
-  MFShutdown();
+bool InitializeMediaFoundation() {
+  static const bool success = MFStartup(MF_VERSION, MFSTARTUP_LITE) == S_OK;
+  DVLOG_IF(1, !success)
+      << "Media Foundation unavailable or it failed to initialize";
+  return success;
 }
 
 }  // namespace media
