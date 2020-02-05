@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "base/bind.h"
+#include "base/bind_helpers.h"
 #include "base/files/scoped_temp_dir.h"
 #include "base/run_loop.h"
 #include "base/stl_util.h"
@@ -26,6 +27,7 @@
 #include "components/password_manager/core/browser/form_parsing/form_parser.h"
 #include "components/password_manager/core/browser/password_manager_test_utils.h"
 #include "components/password_manager/core/browser/password_reuse_detector.h"
+#include "components/password_manager/core/browser/password_store.h"
 #include "components/password_manager/core/browser/password_store_consumer.h"
 #include "components/password_manager/core/browser/password_store_default.h"
 #include "components/password_manager/core/browser/password_store_signin_notifier.h"
@@ -107,6 +109,11 @@ class MockPasswordStoreConsumer : public PasswordStoreConsumer {
 
  private:
   DISALLOW_COPY_AND_ASSIGN(MockPasswordStoreConsumer);
+};
+
+struct MockCompromisedPasswordsObserver
+    : PasswordStore::CompromisedPasswordsObserver {
+  MOCK_METHOD0(OnCompromisedPasswordsChanged, void());
 };
 
 class MockPasswordStoreSigninNotifier : public PasswordStoreSigninNotifier {
@@ -495,6 +502,94 @@ TEST_F(PasswordStoreTest, CompromisedCredentialsObserverOnLoginAdded) {
 
   EXPECT_CALL(consumer, OnGetCompromisedCredentials(testing::IsEmpty()));
   store->GetAllCompromisedCredentials(&consumer);
+  WaitForPasswordStore();
+
+  store->ShutdownOnUIThread();
+}
+
+TEST_F(PasswordStoreTest,
+       CompromisedPasswordObserverOnCompromisedCredentialAdded) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(features::kPasswordCheck);
+  MockCompromisedPasswordsObserver observer;
+
+  CompromisedCredentials compromised_credentials(
+      kTestWebRealm1, base::ASCIIToUTF16("username_value_1"),
+      base::Time::FromTimeT(1), CompromiseType::kLeaked);
+
+  scoped_refptr<PasswordStoreDefault> store = CreatePasswordStore();
+  store->Init(syncer::SyncableService::StartSyncFlare(), nullptr);
+  store->AddCompromisedPasswordsObserver(&observer);
+
+  // Expect a notification after adding a credential.
+  EXPECT_CALL(observer, OnCompromisedPasswordsChanged);
+  store->AddCompromisedCredentials(compromised_credentials);
+  WaitForPasswordStore();
+
+  // Adding the same credential should not result in another notification.
+  EXPECT_CALL(observer, OnCompromisedPasswordsChanged).Times(0);
+  store->AddCompromisedCredentials(compromised_credentials);
+  WaitForPasswordStore();
+
+  store->ShutdownOnUIThread();
+}
+
+TEST_F(PasswordStoreTest,
+       CompromisedPasswordObserverOnCompromisedCredentialRemoved) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(features::kPasswordCheck);
+  MockCompromisedPasswordsObserver observer;
+
+  CompromisedCredentials compromised_credentials(
+      kTestWebRealm1, base::ASCIIToUTF16("username_value_1"),
+      base::Time::FromTimeT(1), CompromiseType::kLeaked);
+
+  scoped_refptr<PasswordStoreDefault> store = CreatePasswordStore();
+  store->Init(syncer::SyncableService::StartSyncFlare(), nullptr);
+  store->AddCompromisedCredentials(compromised_credentials);
+  WaitForPasswordStore();
+
+  store->AddCompromisedPasswordsObserver(&observer);
+
+  // Expect a notification after removing a credential.
+  EXPECT_CALL(observer, OnCompromisedPasswordsChanged);
+  store->RemoveCompromisedCredentials(
+      compromised_credentials.signon_realm, compromised_credentials.username,
+      RemoveCompromisedCredentialsReason::kRemove);
+  WaitForPasswordStore();
+
+  // Removing the same credential should not result in another notification.
+  EXPECT_CALL(observer, OnCompromisedPasswordsChanged).Times(0);
+  store->RemoveCompromisedCredentials(
+      compromised_credentials.signon_realm, compromised_credentials.username,
+      RemoveCompromisedCredentialsReason::kRemove);
+  WaitForPasswordStore();
+
+  store->ShutdownOnUIThread();
+}
+
+TEST_F(PasswordStoreTest,
+       CompromisedPasswordObserverOnCompromisedCredentialRemovedByTime) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(features::kPasswordCheck);
+  MockCompromisedPasswordsObserver observer;
+
+  CompromisedCredentials compromised_credentials(
+      kTestWebRealm1, base::ASCIIToUTF16("username_value_1"),
+      base::Time::FromTimeT(1), CompromiseType::kLeaked);
+
+  scoped_refptr<PasswordStoreDefault> store = CreatePasswordStore();
+  store->Init(syncer::SyncableService::StartSyncFlare(), nullptr);
+  store->AddCompromisedCredentials(compromised_credentials);
+  WaitForPasswordStore();
+
+  store->AddCompromisedPasswordsObserver(&observer);
+
+  // Expect a notification after removing all credential.
+  EXPECT_CALL(observer, OnCompromisedPasswordsChanged);
+  store->RemoveCompromisedCredentialsByUrlAndTime(
+      base::NullCallback(), base::Time::Min(), base::Time::Max(),
+      base::NullCallback());
   WaitForPasswordStore();
 
   store->ShutdownOnUIThread();

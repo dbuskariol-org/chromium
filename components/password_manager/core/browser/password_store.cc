@@ -373,8 +373,11 @@ void PasswordStore::GetSiteStats(const GURL& origin_domain,
 void PasswordStore::AddCompromisedCredentials(
     const CompromisedCredentials& compromised_credentials) {
   DCHECK(main_task_runner_->RunsTasksInCurrentSequence());
-  ScheduleTask(base::BindOnce(&PasswordStore::AddCompromisedCredentialsImpl,
-                              this, compromised_credentials));
+  auto callback = base::BindOnce(&PasswordStore::AddCompromisedCredentialsImpl,
+                                 this, compromised_credentials);
+  ScheduleTask(base::BindOnce(
+      &PasswordStore::InvokeAndNotifyAboutCompromisedPasswordsChange, this,
+      std::move(callback)));
 }
 
 void PasswordStore::RemoveCompromisedCredentials(
@@ -382,8 +385,12 @@ void PasswordStore::RemoveCompromisedCredentials(
     const base::string16& username,
     RemoveCompromisedCredentialsReason reason) {
   DCHECK(main_task_runner_->RunsTasksInCurrentSequence());
-  ScheduleTask(base::BindOnce(&PasswordStore::RemoveCompromisedCredentialsImpl,
-                              this, signon_realm, username, reason));
+  auto callback =
+      base::BindOnce(&PasswordStore::RemoveCompromisedCredentialsImpl, this,
+                     signon_realm, username, reason);
+  ScheduleTask(base::BindOnce(
+      &PasswordStore::InvokeAndNotifyAboutCompromisedPasswordsChange, this,
+      std::move(callback)));
 }
 
 void PasswordStore::GetAllCompromisedCredentials(
@@ -400,9 +407,13 @@ void PasswordStore::RemoveCompromisedCredentialsByUrlAndTime(
     base::Time remove_end,
     base::OnceClosure completion) {
   DCHECK(main_task_runner_->RunsTasksInCurrentSequence());
-  ScheduleTask(base::BindOnce(
+  auto callback = base::BindOnce(
       &PasswordStore::RemoveCompromisedCredentialsByUrlAndTimeInternal, this,
-      std::move(url_filter), remove_begin, remove_end, std::move(completion)));
+      std::move(url_filter), remove_begin, remove_end, std::move(completion));
+
+  ScheduleTask(base::BindOnce(
+      &PasswordStore::InvokeAndNotifyAboutCompromisedPasswordsChange, this,
+      std::move(callback)));
 }
 
 void PasswordStore::AddFieldInfo(const FieldInfo& field_info) {
@@ -439,10 +450,19 @@ void PasswordStore::RemoveObserver(Observer* observer) {
   observers_->RemoveObserver(observer);
 }
 
+void PasswordStore::AddCompromisedPasswordsObserver(
+    CompromisedPasswordsObserver* observer) {
+  compromised_passwords_observers_->AddObserver(observer);
+}
+
+void PasswordStore::RemoveCompromisedPasswordsObserver(
+    CompromisedPasswordsObserver* observer) {
+  compromised_passwords_observers_->RemoveObserver(observer);
+}
+
 bool PasswordStore::ScheduleTask(base::OnceClosure task) {
-  if (background_task_runner_)
-    return background_task_runner_->PostTask(FROM_HERE, std::move(task));
-  return false;
+  return background_task_runner_ &&
+         background_task_runner_->PostTask(FROM_HERE, std::move(task));
 }
 
 bool PasswordStore::IsAbleToSavePasswords() const {
@@ -689,6 +709,16 @@ void PasswordStore::NotifyLoginsChanged(
     if (reuse_detector_)
       reuse_detector_->OnLoginsChanged(changes);
 #endif
+  }
+}
+
+void PasswordStore::InvokeAndNotifyAboutCompromisedPasswordsChange(
+    base::OnceCallback<bool()> callback) {
+  DCHECK(background_task_runner_->RunsTasksInCurrentSequence());
+  if (std::move(callback).Run()) {
+    compromised_passwords_observers_->Notify(
+        FROM_HERE,
+        &CompromisedPasswordsObserver::OnCompromisedPasswordsChanged);
   }
 }
 
@@ -953,16 +983,17 @@ void PasswordStore::UnblacklistInternal(
     main_task_runner_->PostTask(FROM_HERE, std::move(completion));
 }
 
-void PasswordStore::RemoveCompromisedCredentialsByUrlAndTimeInternal(
+bool PasswordStore::RemoveCompromisedCredentialsByUrlAndTimeInternal(
     const base::RepeatingCallback<bool(const GURL&)>& url_filter,
     base::Time remove_begin,
     base::Time remove_end,
     base::OnceClosure completion) {
   DCHECK(background_task_runner_->RunsTasksInCurrentSequence());
-  RemoveCompromisedCredentialsByUrlAndTimeImpl(url_filter, remove_begin,
-                                               remove_end);
+  bool result = RemoveCompromisedCredentialsByUrlAndTimeImpl(
+      url_filter, remove_begin, remove_end);
   if (!completion.is_null())
     main_task_runner_->PostTask(FROM_HERE, std::move(completion));
+  return result;
 }
 
 void PasswordStore::RemoveFieldInfoByTimeInternal(
