@@ -3995,7 +3995,7 @@ void LocalFrameView::DeliverSynchronousIntersectionObservations() {
   });
 }
 
-void LocalFrameView::CrossOriginStatusChanged() {
+void LocalFrameView::CrossOriginToMainFrameChanged() {
   if (auto* owner = frame_->DeprecatedLocalOwner())
     owner->FrameCrossOriginStatusChanged();
 
