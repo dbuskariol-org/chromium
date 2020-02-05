@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef FUCHSIA_ENGINE_BROWSER_FUCHSIA_LAYOUT_MANAGER_H_
-#define FUCHSIA_ENGINE_BROWSER_FUCHSIA_LAYOUT_MANAGER_H_
+#ifndef FUCHSIA_ENGINE_BROWSER_FRAME_LAYOUT_MANAGER_H_
+#define FUCHSIA_ENGINE_BROWSER_FRAME_LAYOUT_MANAGER_H_
 
-#include "base/macros.h"
 #include "ui/aura/layout_manager.h"
 #include "ui/aura/window.h"
 
@@ -15,10 +14,13 @@
 // boxes). These windows get the location and size they request. The main
 // window for the web content is identified by window.type() ==
 // WINDOW_TYPE_CONTROL (set in WebContentsViewAura).
-class FuchsiaLayoutManager : public aura::LayoutManager {
+class FrameLayoutManager : public aura::LayoutManager {
  public:
-  FuchsiaLayoutManager();
-  ~FuchsiaLayoutManager() override;
+  FrameLayoutManager();
+  ~FrameLayoutManager() override;
+
+  FrameLayoutManager(const FrameLayoutManager&) = delete;
+  FrameLayoutManager& operator=(const FrameLayoutManager&) = delete;
 
   // Renders web content within a virtual window of a given |size|, which is
   // proportionately scaled to fit within the View.
@@ -45,8 +47,6 @@ class FuchsiaLayoutManager : public aura::LayoutManager {
   aura::Window* main_child_ = nullptr;
 
   gfx::Size render_size_override_;
-
-  DISALLOW_COPY_AND_ASSIGN(FuchsiaLayoutManager);
 };
 
-#endif  // FUCHSIA_ENGINE_BROWSER_FUCHSIA_LAYOUT_MANAGER_H_
+#endif  // FUCHSIA_ENGINE_BROWSER_FRAME_LAYOUT_MANAGER_H_

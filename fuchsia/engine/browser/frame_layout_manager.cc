@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "fuchsia/engine/browser/fuchsia_layout_manager.h"
+#include "fuchsia/engine/browser/frame_layout_manager.h"
 
 #include "ui/aura/window_tree_host.h"
 #include "ui/gfx/geometry/size.h"
@@ -34,21 +34,21 @@ float ProportionalScale(gfx::Size inset, gfx::Size container) {
 
 }  // namespace
 
-FuchsiaLayoutManager::FuchsiaLayoutManager() {}
+FrameLayoutManager::FrameLayoutManager() {}
 
-FuchsiaLayoutManager::~FuchsiaLayoutManager() {}
+FrameLayoutManager::~FrameLayoutManager() {}
 
-void FuchsiaLayoutManager::ForceContentDimensions(gfx::Size size) {
+void FrameLayoutManager::ForceContentDimensions(gfx::Size size) {
   render_size_override_ = size;
   UpdateContentBounds();
 }
 
-void FuchsiaLayoutManager::OnWindowResized() {
+void FrameLayoutManager::OnWindowResized() {
   // Resize the child to match the size of the parent.
   UpdateContentBounds();
 }
 
-void FuchsiaLayoutManager::OnWindowAddedToLayout(aura::Window* child) {
+void FrameLayoutManager::OnWindowAddedToLayout(aura::Window* child) {
   if (child->type() == aura::client::WINDOW_TYPE_CONTROL) {
     DCHECK(!main_child_);
     main_child_ = child;
@@ -59,25 +59,25 @@ void FuchsiaLayoutManager::OnWindowAddedToLayout(aura::Window* child) {
   }
 }
 
-void FuchsiaLayoutManager::OnWillRemoveWindowFromLayout(aura::Window* child) {
+void FrameLayoutManager::OnWillRemoveWindowFromLayout(aura::Window* child) {
   if (child->type() == aura::client::WINDOW_TYPE_CONTROL) {
     DCHECK_EQ(child, main_child_);
     main_child_ = nullptr;
   }
 }
 
-void FuchsiaLayoutManager::OnWindowRemovedFromLayout(aura::Window* child) {}
+void FrameLayoutManager::OnWindowRemovedFromLayout(aura::Window* child) {}
 
-void FuchsiaLayoutManager::OnChildWindowVisibilityChanged(aura::Window* child,
-                                                          bool visible) {}
+void FrameLayoutManager::OnChildWindowVisibilityChanged(aura::Window* child,
+                                                        bool visible) {}
 
-void FuchsiaLayoutManager::SetChildBounds(aura::Window* child,
-                                          const gfx::Rect& requested_bounds) {
+void FrameLayoutManager::SetChildBounds(aura::Window* child,
+                                        const gfx::Rect& requested_bounds) {
   if (child != main_child_)
     SetChildBoundsDirect(child, requested_bounds);
 }
 
-void FuchsiaLayoutManager::UpdateContentBounds() {
+void FrameLayoutManager::UpdateContentBounds() {
   if (!main_child_)
     return;
 
