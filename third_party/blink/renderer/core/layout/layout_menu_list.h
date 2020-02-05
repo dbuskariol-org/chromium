@@ -38,8 +38,12 @@ class CORE_EXPORT LayoutMenuList final : public LayoutFlexibleBox {
   ~LayoutMenuList() override;
 
   HTMLSelectElement* SelectElement() const;
+  String GetText() const;
 
   const char* GetName() const override { return "LayoutMenuList"; }
+
+  LayoutUnit ClientPaddingLeft() const;
+  LayoutUnit ClientPaddingRight() const;
 
  private:
   bool IsOfType(LayoutObjectType type) const override {
