@@ -72,7 +72,11 @@ class PermissionBubbleInteractiveUITest : public InProcessBrowserTest {
   DISALLOW_COPY_AND_ASSIGN(PermissionBubbleInteractiveUITest);
 };
 
-#if defined(OS_WIN) || defined(OS_LINUX)
+#if defined(OS_MACOSX)
+// TODO(https://crbug.com/1049284): Disabled due to persistent use after free
+// on Mac causing crash.
+#define MAYBE_CmdWClosesWindow DISABLED_CmdWClosesWindow
+#elif defined(OS_WIN) || defined(OS_LINUX)
 // TODO(https://crbug.com/866878): Accelerators are broken when this bubble is
 // showing on non-Mac.
 #define MAYBE_CmdWClosesWindow DISABLED_CmdWClosesWindow
