@@ -4258,6 +4258,37 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="IOS.PageZoomChanged">
+  <owner>rkgibson@google.com</owner>
+  <summary>
+    Logged when the user changes their zoom level on iOS.
+  </summary>
+  <metric name="ContentSizeCategory" enum="IOSContentSizeCategory">
+    <summary>
+      The content size category the user is currently using.
+    </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+  <metric name="OverallZoomLevel">
+    <summary>
+      The overall zoom level. This is based on a combination of the user zoom
+      level and a multiplier from the user's content size category.
+    </summary>
+  </metric>
+  <metric name="UserZoomLevel">
+    <summary>
+      The current zoom multiplier (percentage-based, with 100 -&gt; 100%) the
+      user has chosen.
+    </summary>
+  </metric>
+</event>
+
 <event name="IOS.RendererGone">
   <owner>olivierrobin@chromium.org</owner>
   <summary>
