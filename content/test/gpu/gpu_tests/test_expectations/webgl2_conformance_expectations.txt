@@ -118,6 +118,9 @@ crbug.com/1042246 [ opengl win passthrough intel ] conformance2/extensions/ext-t
 crbug.com/602688 [ opengl win passthrough intel ] conformance2/glsl3/vector-dynamic-indexing.html [ Failure ]
 
 # Passthrough command decoder / Windows / OpenGL / Intel
+# Recent regressions on passthrough command decoder
+crbug.com/1048861 [ opengl win passthrough intel ] conformance/extensions/webgl-compressed-texture-astc.html [ Failure ]
+crbug.com/1048861 [ opengl win passthrough intel ] conformance/extensions/webgl-compressed-texture-s3tc-srgb.html [ Failure ]
 # This case causes no-over-optimization-on-uniform-array fail.
 crbug.com/884210 [ opengl win passthrough intel ] conformance/ogles/GL/gl_FragCoord/gl_FragCoord_001_to_003.html [ Skip ]
 
