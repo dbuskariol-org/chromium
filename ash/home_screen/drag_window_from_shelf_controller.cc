@@ -8,6 +8,7 @@
 #include "ash/home_screen/home_screen_controller.h"
 #include "ash/home_screen/home_screen_delegate.h"
 #include "ash/home_screen/window_scale_animation.h"
+#include "ash/public/cpp/presentation_time_recorder.h"
 #include "ash/public/cpp/shelf_config.h"
 #include "ash/public/cpp/window_backdrop.h"
 #include "ash/public/cpp/window_properties.h"
@@ -32,6 +33,7 @@
 #include "ash/wm/window_util.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/numerics/ranges.h"
+#include "ui/aura/window_tree_host.h"
 #include "ui/base/hit_test.h"
 #include "ui/compositor/layer_animation_observer.h"
 #include "ui/compositor/scoped_layer_animation_settings.h"
@@ -65,6 +67,12 @@ constexpr float kReturnToMaximizedStandardThreshold = 164.f;
 
 // The scroll update threshold to restart the show overview timer.
 constexpr float kScrollUpdateOverviewThreshold = 2.f;
+
+// Presentation time histogram names.
+constexpr char kDragWindowFromShelfHistogram[] =
+    "Ash.DragWindowFromShelf.PresentationTime";
+constexpr char kDragWindowFromShelfMaxLatencyHistogram[] =
+    "Ash.DragWindowFromShelf.PresentationTime.MaxLatency";
 
 }  // namespace
 
@@ -146,6 +154,10 @@ DragWindowFromShelfController::DragWindowFromShelfController(
   DCHECK_NE(hotseat_state, HotseatState::kShown);
   window_->AddObserver(this);
   OnDragStarted(location_in_screen);
+
+  presentation_time_recorder_ = CreatePresentationTimeHistogramRecorder(
+      window_->GetHost()->compositor(), kDragWindowFromShelfHistogram,
+      kDragWindowFromShelfMaxLatencyHistogram);
 }
 
 DragWindowFromShelfController::~DragWindowFromShelfController() {
@@ -164,6 +176,7 @@ void DragWindowFromShelfController::Drag(const gfx::PointF& location_in_screen,
   if (!drag_started_)
     return;
 
+  presentation_time_recorder_->RequestNext();
   UpdateDraggedWindow(location_in_screen);
 
   // Open overview if the window has been dragged far enough and the scroll
@@ -227,6 +240,7 @@ base::Optional<ShelfWindowDragResult> DragWindowFromShelfController::EndDrag(
     return base::nullopt;
 
   drag_started_ = false;
+  presentation_time_recorder_.reset();
   OverviewController* overview_controller = Shell::Get()->overview_controller();
   SplitViewController* split_view_controller =
       SplitViewController::Get(Shell::GetPrimaryRootWindow());
@@ -278,6 +292,7 @@ void DragWindowFromShelfController::CancelDrag() {
                             ShelfWindowDragResult::kDragCanceled);
 
   drag_started_ = false;
+  presentation_time_recorder_.reset();
   // Reset the window's transform to identity transform.
   window_->SetTransform(gfx::Transform());
   WindowBackdrop::Get(window_)->RestoreBackdrop();
