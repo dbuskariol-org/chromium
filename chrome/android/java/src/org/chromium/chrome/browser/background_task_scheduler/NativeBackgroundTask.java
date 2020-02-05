@@ -20,6 +20,7 @@ import org.chromium.chrome.browser.init.EmptyBrowserParts;
 import org.chromium.chrome.browser.metrics.BackgroundTaskMemoryMetricsEmitter;
 import org.chromium.components.background_task_scheduler.BackgroundTask;
 import org.chromium.components.background_task_scheduler.BackgroundTaskSchedulerExternalUma;
+import org.chromium.components.background_task_scheduler.BackgroundTaskSchedulerFactory;
 import org.chromium.components.background_task_scheduler.TaskParameters;
 import org.chromium.content_public.browser.BrowserStartupController;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
@@ -67,7 +68,7 @@ public abstract class NativeBackgroundTask implements BackgroundTask {
     private BackgroundTaskSchedulerExternalUma mExternalUma;
 
     protected NativeBackgroundTask() {
-        this(BackgroundTaskSchedulerExternalUma.getInstance());
+        this(BackgroundTaskSchedulerFactory.getUmaReporter());
     }
 
     @VisibleForTesting
