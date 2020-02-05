@@ -34,6 +34,7 @@
 #include "chrome/browser/ui/webui/chromeos/network_element_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/chromeos/smb_shares/smb_shares_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/management_ui.h"
+#include "chrome/browser/ui/webui/policy_indicator_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/webui_util.h"
 #include "chrome/common/chrome_features.h"
@@ -97,6 +98,7 @@ void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
       {"close", IDS_CLOSE},
       {"confirm", IDS_CONFIRM},
       {"continue", IDS_SETTINGS_CONTINUE},
+      {"controlledByExtension", IDS_SETTINGS_CONTROLLED_BY_EXTENSION},
       {"custom", IDS_SETTINGS_CUSTOM},
       {"delete", IDS_SETTINGS_DELETE},
       {"deviceOff", IDS_SETTINGS_DEVICE_OFF},
@@ -367,6 +369,10 @@ void AddLanguagesStrings(content::WebUIDataSource* html_source) {
       {"moveUp", IDS_SETTINGS_LANGUAGES_LANGUAGES_LIST_MOVE_UP},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+
+  html_source->AddString(
+      "languagesLearnMoreURL",
+      base::ASCIIToUTF16(chrome::kLanguageSettingsLearnMoreUrl));
 }
 
 void AddPersonalizationStrings(content::WebUIDataSource* html_source) {
@@ -812,6 +818,9 @@ void AddChromeOSUserStrings(content::WebUIDataSource* html_source,
                              base::ASCIIToUTF16(chrome::kChromeUISettingsURL)));
   html_source->AddBoolean("isActiveDirectoryUser",
                           user && user->IsActiveDirectoryUser());
+  html_source->AddBoolean(
+      "isSecondaryUser",
+      user && user->GetAccountId() != primary_user->GetAccountId());
   html_source->AddString(
       "secondaryUserBannerText",
       l10n_util::GetStringFUTF16(IDS_SETTINGS_SECONDARY_USER_BANNER,
@@ -2003,6 +2012,10 @@ void AddOsLocalizedStrings(content::WebUIDataSource* html_source,
   AddSearchInSettingsStrings(html_source);
   AddSearchStrings(html_source, profile);
   AddUsersStrings(html_source);
+
+  policy_indicator::AddLocalizedStrings(html_source);
+
+  html_source->UseStringsJs();
 }
 
 }  // namespace settings
