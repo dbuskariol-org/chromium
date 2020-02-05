@@ -512,6 +512,12 @@
       status: "experimental",
     },
     {
+      // Perform partial style and layout invalidation on web font loading.
+      // See https://crbug.com/441925 and https://bit.ly/35JjPmq for details.
+      name: "CSSReducedFontLoadingInvalidations",
+      status: "test",
+    },
+    {
       name: "CSSRenderSubtree",
       status: "experimental",
     },

@@ -2419,6 +2419,7 @@ void Document::UpdateStyleAndLayoutTree() {
   UpdateDistributionForLegacyDistributedNodes();
 
   UpdateActiveStyle();
+  InvalidateStyleAndLayoutForFontUpdates();
   UpdateStyleInvalidationIfNeeded();
   UpdateStyle();
 
@@ -2446,6 +2447,12 @@ void Document::UpdateActiveStyle() {
   DCHECK(IsMainThread());
   TRACE_EVENT0("blink", "Document::updateActiveStyle");
   GetStyleEngine().UpdateActiveStyle();
+}
+
+void Document::InvalidateStyleAndLayoutForFontUpdates() {
+  DCHECK(IsActive());
+  DCHECK(IsMainThread());
+  GetStyleEngine().InvalidateStyleAndLayoutForFontUpdates();
 }
 
 void Document::UpdateStyle() {
