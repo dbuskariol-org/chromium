@@ -2949,6 +2949,22 @@
       }
     },
 
+    'ozone_linux_gtests_wayland': {
+      # TODO(crbug.com/1029241): Add tests once third_party weston is added.
+    },
+
+    'ozone_linux_gtests_x11': {
+      'content_unittests': {},
+      'ozone_unittests': {},
+      'ozone_x11_unittests': {},
+      'services_unittests': {},
+      'views_unittests': {
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/ozone-linux.x11_views_unittests.filter',
+        ],
+      }
+    },
+
     'performance_smoke_test_isolated_scripts': {
       'performance_test_suite': {
         'args': [
