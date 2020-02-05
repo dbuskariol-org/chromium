@@ -98,6 +98,7 @@
 #include "third_party/blink/public/mojom/image_downloader/image_downloader.mojom.h"
 #include "third_party/blink/public/mojom/input/focus_type.mojom-forward.h"
 #include "third_party/blink/public/mojom/installedapp/installed_app_provider.mojom.h"
+#include "third_party/blink/public/mojom/loader/resource_load_info.mojom-forward.h"
 #include "third_party/blink/public/mojom/native_file_system/native_file_system_manager.mojom-forward.h"
 #include "third_party/blink/public/mojom/notifications/notification_service.mojom-forward.h"
 #include "third_party/blink/public/mojom/payments/payment_app.mojom.h"
@@ -1613,7 +1614,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
       const url::Origin& origin_of_final_response_url,
       net::CertStatus cert_status) override;
   void ResourceLoadComplete(
-      mojom::ResourceLoadInfoPtr resource_load_info) override;
+      blink::mojom::ResourceLoadInfoPtr resource_load_info) override;
   void DidChangeName(const std::string& name,
                      const std::string& unique_name) override;
   void DidSetFramePolicyHeaders(
@@ -2504,7 +2505,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // is necessary so the renderer ID can be mapped to the global ID in
   // |DidCommitProvisionalLoad()|. This situation should only happen when an
   // empty document is loaded.
-  mojom::ResourceLoadInfoPtr deferred_main_frame_load_info_;
+  blink::mojom::ResourceLoadInfoPtr deferred_main_frame_load_info_;
 
   enum class UnloadState {
     // The initial state. The frame is alive.

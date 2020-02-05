@@ -205,6 +205,7 @@
 #include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/geolocation/geolocation_service.mojom.h"
 #include "third_party/blink/public/mojom/loader/pause_subresource_loading_handle.mojom.h"
+#include "third_party/blink/public/mojom/loader/resource_load_info.mojom.h"
 #include "third_party/blink/public/mojom/loader/url_loader_factory_bundle.mojom.h"
 #include "third_party/blink/public/mojom/service_worker/service_worker_object.mojom.h"
 #include "third_party/blink/public/mojom/sms/sms_receiver.mojom.h"
@@ -4807,12 +4808,12 @@ void RenderFrameHostImpl::SubresourceResponseStarted(
 }
 
 void RenderFrameHostImpl::ResourceLoadComplete(
-    mojom::ResourceLoadInfoPtr resource_load_info) {
+    blink::mojom::ResourceLoadInfoPtr resource_load_info) {
   GlobalRequestID global_request_id;
   if (main_frame_request_ids_.first == resource_load_info->request_id) {
     global_request_id = main_frame_request_ids_.second;
   } else if (resource_load_info->resource_type ==
-             content::ResourceType::kMainFrame) {
+             blink::mojom::ResourceType::kMainFrame) {
     // The load complete message for the main resource arrived before
     // |DidCommitProvisionalLoad()|. We save the load info so
     // |ResourceLoadComplete()| can be called later in
