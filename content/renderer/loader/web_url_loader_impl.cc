@@ -438,9 +438,7 @@ class WebURLLoaderImpl::Context : public base::RefCounted<Context> {
 // Context and held by ResourceDispatcher.
 class WebURLLoaderImpl::RequestPeerImpl : public RequestPeer {
  public:
-  // If |discard_body| is false this doesn't propagate the received data
-  // to the context.
-  explicit RequestPeerImpl(Context* context, bool discard_body = false);
+  explicit RequestPeerImpl(Context* context);
 
   // RequestPeer methods:
   void OnUploadProgress(uint64_t position, uint64_t size) override;
@@ -459,7 +457,6 @@ class WebURLLoaderImpl::RequestPeerImpl : public RequestPeer {
 
  private:
   scoped_refptr<Context> context_;
-  const bool discard_body_;
   DISALLOW_COPY_AND_ASSIGN(RequestPeerImpl);
 };
 
@@ -684,10 +681,7 @@ void WebURLLoaderImpl::Context::Start(
   if (download_to_network_cache_only) {
     peer = std::make_unique<SinkPeer>(this);
   } else {
-    const bool discard_body =
-        (resource_type == blink::mojom::ResourceType::kPrefetch);
-    peer =
-        std::make_unique<WebURLLoaderImpl::RequestPeerImpl>(this, discard_body);
+    peer = std::make_unique<WebURLLoaderImpl::RequestPeerImpl>(this);
   }
 
   if (resource_type == blink::mojom::ResourceType::kPrefetch) {
@@ -853,9 +847,8 @@ void WebURLLoaderImpl::Context::CancelBodyStreaming() {
 
 // WebURLLoaderImpl::RequestPeerImpl ------------------------------------------
 
-WebURLLoaderImpl::RequestPeerImpl::RequestPeerImpl(Context* context,
-                                                   bool discard_body)
-    : context_(context), discard_body_(discard_body) {}
+WebURLLoaderImpl::RequestPeerImpl::RequestPeerImpl(Context* context)
+    : context_(context) {}
 
 void WebURLLoaderImpl::RequestPeerImpl::OnUploadProgress(uint64_t position,
                                                          uint64_t size) {
@@ -885,8 +878,6 @@ void WebURLLoaderImpl::RequestPeerImpl::OnTransferSizeUpdated(
 
 void WebURLLoaderImpl::RequestPeerImpl::OnReceivedCachedMetadata(
     mojo_base::BigBuffer data) {
-  if (discard_body_)
-    return;
   context_->OnReceivedCachedMetadata(std::move(data));
 }
 
