@@ -22,8 +22,8 @@
 #include "components/password_manager/core/browser/android_affiliation/affiliated_match_helper.h"
 #include "components/password_manager/core/browser/android_affiliation/affiliation_service.h"
 #include "components/password_manager/core/browser/android_affiliation/mock_affiliated_match_helper.h"
+#include "components/password_manager/core/browser/compromised_credentials_consumer.h"
 #include "components/password_manager/core/browser/form_parsing/form_parser.h"
-#include "components/password_manager/core/browser/password_leak_history_consumer.h"
 #include "components/password_manager/core/browser/password_manager_test_utils.h"
 #include "components/password_manager/core/browser/password_reuse_detector.h"
 #include "components/password_manager/core/browser/password_store_consumer.h"
@@ -79,15 +79,16 @@ constexpr const char kTestAndroidIconURL1[] = "https://example.com/icon_1.png";
 constexpr const char kTestAndroidName2[] = "Example Android App 2";
 constexpr const char kTestAndroidIconURL2[] = "https://example.com/icon_2.png";
 
-class MockPasswordLeakHistoryConsumer : public PasswordLeakHistoryConsumer {
+class MockCompromisedCredentialsConsumer
+    : public CompromisedCredentialsConsumer {
  public:
-  MockPasswordLeakHistoryConsumer() = default;
+  MockCompromisedCredentialsConsumer() = default;
 
   MOCK_METHOD1(OnGetCompromisedCredentials,
                void(std::vector<CompromisedCredentials>));
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(MockPasswordLeakHistoryConsumer);
+  DISALLOW_COPY_AND_ASSIGN(MockCompromisedCredentialsConsumer);
 };
 
 class MockPasswordStoreConsumer : public PasswordStoreConsumer {
@@ -401,7 +402,7 @@ TEST_F(PasswordStoreTest, CompromisedCredentialsObserverOnRemoveLogin) {
   store->AddLogin(*test_form);
   WaitForPasswordStore();
 
-  MockPasswordLeakHistoryConsumer consumer;
+  MockCompromisedCredentialsConsumer consumer;
   base::RunLoop run_loop;
   store->RemoveLoginsCreatedBetween(base::Time::FromDoubleT(0),
                                     base::Time::FromDoubleT(2),
@@ -443,7 +444,7 @@ TEST_F(PasswordStoreTest, CompromisedCredentialsObserverOnLoginUpdated) {
   store->AddLogin(*test_form);
   WaitForPasswordStore();
 
-  MockPasswordLeakHistoryConsumer consumer;
+  MockCompromisedCredentialsConsumer consumer;
   kTestCredential.password_value = L"password_value_2";
   std::unique_ptr<PasswordForm> test_form_2(
       FillPasswordFormWithData(kTestCredential));
@@ -485,7 +486,7 @@ TEST_F(PasswordStoreTest, CompromisedCredentialsObserverOnLoginAdded) {
   store->AddLogin(*test_form);
   WaitForPasswordStore();
 
-  MockPasswordLeakHistoryConsumer consumer;
+  MockCompromisedCredentialsConsumer consumer;
   kTestCredential.password_value = L"password_value_2";
   std::unique_ptr<PasswordForm> test_form_2(
       FillPasswordFormWithData(kTestCredential));
@@ -1400,7 +1401,7 @@ TEST_F(PasswordStoreTest, GetAllCompromisedCredentials) {
 
   store->AddCompromisedCredentials(compromised_credentials);
   store->AddCompromisedCredentials(compromised_credentials2);
-  MockPasswordLeakHistoryConsumer consumer;
+  MockCompromisedCredentialsConsumer consumer;
   EXPECT_CALL(consumer,
               OnGetCompromisedCredentials(UnorderedElementsAre(
                   compromised_credentials, compromised_credentials2)));
@@ -1439,7 +1440,7 @@ TEST_F(PasswordStoreTest, RemoveCompromisedCredentialsCreatedBetween) {
   store->AddCompromisedCredentials(compromised_credentials2);
   store->AddCompromisedCredentials(compromised_credentials3);
 
-  MockPasswordLeakHistoryConsumer consumer;
+  MockCompromisedCredentialsConsumer consumer;
   EXPECT_CALL(consumer, OnGetCompromisedCredentials(UnorderedElementsAre(
                             compromised_credentials1, compromised_credentials2,
                             compromised_credentials3)));

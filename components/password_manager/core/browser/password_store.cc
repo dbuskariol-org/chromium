@@ -25,10 +25,10 @@
 #include "components/autofill/core/common/form_data.h"
 #include "components/autofill/core/common/password_form.h"
 #include "components/password_manager/core/browser/android_affiliation/affiliated_match_helper.h"
+#include "components/password_manager/core/browser/compromised_credentials_consumer.h"
 #include "components/password_manager/core/browser/compromised_credentials_observer.h"
 #include "components/password_manager/core/browser/compromised_credentials_table.h"
 #include "components/password_manager/core/browser/field_info_table.h"
-#include "components/password_manager/core/browser/password_leak_history_consumer.h"
 #include "components/password_manager/core/browser/password_manager_metrics_util.h"
 #include "components/password_manager/core/browser/password_manager_util.h"
 #include "components/password_manager/core/browser/password_store_consumer.h"
@@ -387,7 +387,7 @@ void PasswordStore::RemoveCompromisedCredentials(
 }
 
 void PasswordStore::GetAllCompromisedCredentials(
-    PasswordLeakHistoryConsumer* consumer) {
+    CompromisedCredentialsConsumer* consumer) {
   DCHECK(main_task_runner_->RunsTasksInCurrentSequence());
   PostCompromisedCredentialsTaskAndReplyToConsumerWithResult(
       consumer,
@@ -807,12 +807,13 @@ void PasswordStore::PostStatsTaskAndReplyToConsumerWithResult(
 }
 
 void PasswordStore::PostCompromisedCredentialsTaskAndReplyToConsumerWithResult(
-    PasswordLeakHistoryConsumer* consumer,
+    CompromisedCredentialsConsumer* consumer,
     CompromisedCredentialsTask task) {
   consumer->cancelable_task_tracker()->PostTaskAndReplyWithResult(
       background_task_runner_.get(), FROM_HERE, std::move(task),
-      base::BindOnce(&PasswordLeakHistoryConsumer::OnGetCompromisedCredentials,
-                     consumer->GetWeakPtr()));
+      base::BindOnce(
+          &CompromisedCredentialsConsumer::OnGetCompromisedCredentials,
+          consumer->GetWeakPtr()));
 }
 
 void PasswordStore::AddLoginInternal(const PasswordForm& form) {

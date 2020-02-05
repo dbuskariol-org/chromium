@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_PASSWORD_LEAK_HISTORY_CONSUMER_H_
-#define COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_PASSWORD_LEAK_HISTORY_CONSUMER_H_
+#ifndef COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_COMPROMISED_CREDENTIALS_CONSUMER_H_
+#define COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_COMPROMISED_CREDENTIALS_CONSUMER_H_
 
 #include <vector>
 
@@ -18,9 +18,9 @@ struct CompromisedCredentials;
 // provides the virtual callback method, which is guaranteed to be executed on
 // this (the UI) thread. It also provides the base::CancelableTaskTracker
 // member, which cancels any outstanding tasks upon destruction.
-class PasswordLeakHistoryConsumer {
+class CompromisedCredentialsConsumer {
  public:
-  PasswordLeakHistoryConsumer();
+  CompromisedCredentialsConsumer();
 
   // Called when the GetAllCompromisedCredentials() request is finished, with
   // the associated |compromised_credentials|.
@@ -33,18 +33,18 @@ class PasswordLeakHistoryConsumer {
     return &cancelable_task_tracker_;
   }
 
-  base::WeakPtr<PasswordLeakHistoryConsumer> GetWeakPtr() {
+  base::WeakPtr<CompromisedCredentialsConsumer> GetWeakPtr() {
     return weak_ptr_factory_.GetWeakPtr();
   }
 
  protected:
-  virtual ~PasswordLeakHistoryConsumer();
+  virtual ~CompromisedCredentialsConsumer();
 
  private:
   base::CancelableTaskTracker cancelable_task_tracker_;
-  base::WeakPtrFactory<PasswordLeakHistoryConsumer> weak_ptr_factory_{this};
+  base::WeakPtrFactory<CompromisedCredentialsConsumer> weak_ptr_factory_{this};
 };
 
 }  // namespace password_manager
 
-#endif  // COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_PASSWORD_LEAK_HISTORY_CONSUMER_H_
+#endif  // COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_COMPROMISED_CREDENTIALS_CONSUMER_H_

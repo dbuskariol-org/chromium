@@ -56,7 +56,7 @@ using metrics_util::GaiaPasswordHashChange;
 class AffiliatedMatchHelper;
 class CompromisedCredentialsObserver;
 class PasswordStoreConsumer;
-class PasswordLeakHistoryConsumer;
+class CompromisedCredentialsConsumer;
 class PasswordStoreSigninNotifier;
 class PasswordSyncableService;
 class PasswordSyncBridge;
@@ -259,7 +259,7 @@ class PasswordStore : protected PasswordStoreSync,
 
   // Retrieves all compromised credentials and notifies |consumer| on
   // completion. The request will be cancelled if the consumer is destroyed.
-  void GetAllCompromisedCredentials(PasswordLeakHistoryConsumer* consumer);
+  void GetAllCompromisedCredentials(CompromisedCredentialsConsumer* consumer);
 
   // Removes all compromised credentials in the given date range. If
   // |url_filter| is not null, only compromised credentials for matching urls
@@ -622,7 +622,7 @@ class PasswordStore : protected PasswordStoreSync,
   // Invokes |consumer|->OnGetCompromisedCredentials() on the caller's thread
   // with the result.
   void PostCompromisedCredentialsTaskAndReplyToConsumerWithResult(
-      PasswordLeakHistoryConsumer* consumer,
+      CompromisedCredentialsConsumer* consumer,
       CompromisedCredentialsTask task);
 
   // The following methods notify observers that the password store may have
