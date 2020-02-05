@@ -601,8 +601,8 @@ void GpuServiceImpl::GetGpuSupportedRuntimeVersionAndDevicePerfInfo(
   std::move(callback).Run(gpu_info_.dx12_vulkan_version_info,
                           device_perf_info_.value());
 
-  // The unsandboxed GPU process fulfilled its duty and Dxdiag task is not
-  // running. Bye bye.
+  // The unsandboxed GPU info collection process fulfilled its duty and Dxdiag
+  // task is not running. Bye bye.
   if (!long_dx_task_different_thread_in_progress_)
     MaybeExit(false);
 }
@@ -624,7 +624,8 @@ void GpuServiceImpl::RequestCompleteGpuInfo(
           [](GpuServiceImpl* gpu_service,
              RequestCompleteGpuInfoCallback callback) {
             std::move(callback).Run(gpu_service->gpu_info_.dx_diagnostics);
-            // The unsandboxed GPU process fulfilled its duty. Bye bye.
+            // The unsandboxed GPU info collection process fulfilled its duty.
+            // Bye bye.
             gpu_service->long_dx_task_different_thread_in_progress_ = false;
             gpu_service->MaybeExit(false);
           },
@@ -992,9 +993,9 @@ void GpuServiceImpl::MaybeExit(bool for_context_loss) {
                   "from errors. GPU process will restart shortly.";
   }
   is_exiting_.Set();
-  // For the unsandboxed GPU process used for info collection, if we exit
-  // immediately, then the reply message could be lost. That's why the
-  // |exit_callback_| takes the boolean argument.
+  // For the unsandboxed GPU info collection process used for info collection,
+  // if we exit immediately, then the reply message could be lost. That's why
+  // the |exit_callback_| takes the boolean argument.
   std::move(exit_callback_).Run(/*immediately=*/for_context_loss);
 }
 
