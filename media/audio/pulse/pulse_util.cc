@@ -13,6 +13,7 @@
 #include "base/logging.h"
 #include "base/macros.h"
 #include "base/memory/ptr_util.h"
+#include "base/synchronization/waitable_event.h"
 #include "build/branding_buildflags.h"
 #include "media/audio/audio_device_description.h"
 #include "media/base/audio_timestamp_helper.h"
@@ -48,7 +49,7 @@ void DestroyMainloop(pa_threaded_mainloop* mainloop) {
 }
 
 void DestroyContext(pa_context* context) {
-  pa_context_set_state_callback(context, NULL, NULL);
+  pa_context_set_state_callback(context, nullptr, nullptr);
   pa_context_disconnect(context);
   pa_context_unref(context);
 }
@@ -170,13 +171,26 @@ void GetDefaultDeviceIdCallback(pa_context* c,
   pa_threaded_mainloop_signal(data->loop_, 0);
 }
 
+struct ContextStartupData {
+  base::WaitableEvent* context_wait;
+  pa_threaded_mainloop* pa_mainloop;
+};
+
+void SignalReadyOrErrorStateCallback(pa_context* context, void* context_data) {
+  auto context_state = pa_context_get_state(context);
+  auto* data = static_cast<ContextStartupData*>(context_data);
+  if (!PA_CONTEXT_IS_GOOD(context_state) || context_state == PA_CONTEXT_READY)
+    data->context_wait->Signal();
+  pa_threaded_mainloop_signal(data->pa_mainloop, 0);
+}
+
 }  // namespace
 
 bool InitPulse(pa_threaded_mainloop** mainloop, pa_context** context) {
 #if defined(DLOPEN_PULSEAUDIO)
   StubPathMap paths;
 
-  // Check if the pulse library is avialbale.
+  // Check if the pulse library is available.
   paths[kModulePulse].push_back(kPulseLib);
   if (!InitializeStubs(paths)) {
     VLOG(1) << "Failed on loading the Pulse library and symbols";
@@ -200,13 +214,20 @@ bool InitPulse(pa_threaded_mainloop** mainloop, pa_context** context) {
     return false;
   }
 
-  pa_context_set_state_callback(pa_context, &pulse::ContextStateCallback,
-                                pa_mainloop);
-  if (pa_context_connect(pa_context, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL)) {
+  // We can't rely on pa_threaded_mainloop_wait() for PulseAudio startup since
+  // it can hang indefinitely. Instead we use a WaitableEvent to time out the
+  // startup process if it takes too long.
+  base::WaitableEvent context_wait;
+  ContextStartupData data = {&context_wait, pa_mainloop};
+
+  pa_context_set_state_callback(pa_context, &SignalReadyOrErrorStateCallback,
+                                &data);
+
+  if (pa_context_connect(pa_context, nullptr, PA_CONTEXT_NOAUTOSPAWN,
+                         nullptr)) {
     VLOG(1) << "Failed to connect to the context.  Error: "
             << pa_strerror(pa_context_errno(pa_context));
-    pa_context_set_state_callback(pa_context, NULL, NULL);
-    pa_context_unref(pa_context);
+    DestroyContext(pa_context);
     pa_threaded_mainloop_free(pa_mainloop);
     return false;
   }
@@ -217,26 +238,44 @@ bool InitPulse(pa_threaded_mainloop** mainloop, pa_context** context) {
 
   // Start the threaded mainloop after everything has been configured.
   if (pa_threaded_mainloop_start(pa_mainloop)) {
+    DestroyContext(pa_context);
     mainloop_lock.reset();
     DestroyMainloop(pa_mainloop);
     return false;
   }
 
-  // Wait until |pa_context| is ready.  pa_threaded_mainloop_wait() must be
-  // called after pa_context_get_state() in case the context is already ready,
-  // otherwise pa_threaded_mainloop_wait() will hang indefinitely.
-  while (true) {
-    pa_context_state_t context_state = pa_context_get_state(pa_context);
-    if (!PA_CONTEXT_IS_GOOD(context_state)) {
-      DestroyContext(pa_context);
-      mainloop_lock.reset();
-      DestroyMainloop(pa_mainloop);
-      return false;
-    }
-    if (context_state == PA_CONTEXT_READY)
-      break;
-    pa_threaded_mainloop_wait(pa_mainloop);
+  // Don't hold the mainloop lock while waiting for the context to become ready,
+  // or we'll never complete since PulseAudio can't continue working.
+  mainloop_lock.reset();
+
+  // Wait for up to 5 seconds for pa_context to become ready. We'll be signaled
+  // by the SignalReadyOrErrorStateCallback that we setup above.
+  //
+  // We've chosen a timeout value of 5 seconds because this can be executed at
+  // browser startup (other times it's during audio process startup). In the
+  // normal case, this should only take ~50ms, but we've seen some test bots
+  // hang indefinitely when the pulse daemon can't be started.
+  constexpr base::TimeDelta kStartupTimeout = base::TimeDelta::FromSeconds(5);
+  const bool was_signaled = context_wait.TimedWait(kStartupTimeout);
+
+  // Require the mainloop lock before checking the context state.
+  mainloop_lock = std::make_unique<AutoPulseLock>(pa_mainloop);
+
+  auto context_state = pa_context_get_state(pa_context);
+  if (context_state != PA_CONTEXT_READY) {
+    if (!was_signaled)
+      VLOG(1) << "Timed out trying to connect to PulseAudio.";
+    else
+      VLOG(1) << "Failed to connect to PulseAudio: " << context_state;
+    DestroyContext(pa_context);
+    mainloop_lock.reset();
+    DestroyMainloop(pa_mainloop);
+    return false;
   }
+
+  // Replace our function local state callback with a global appropriate one.
+  pa_context_set_state_callback(pa_context, &pulse::ContextStateCallback,
+                                pa_mainloop);
 
   *mainloop = pa_mainloop;
   *context = pa_context;
@@ -377,8 +416,8 @@ bool CreateInputStream(pa_threaded_mainloop* mainloop,
   // Get channel mapping and open recording stream.
   pa_channel_map source_channel_map = ChannelLayoutToPAChannelMap(
       params.channel_layout());
-  pa_channel_map* map = (source_channel_map.channels != 0) ?
-      &source_channel_map : NULL;
+  pa_channel_map* map =
+      (source_channel_map.channels != 0) ? &source_channel_map : nullptr;
 
   // Create a new recording stream and
   // tells PulseAudio what the stream icon should be.
@@ -408,9 +447,10 @@ bool CreateInputStream(pa_threaded_mainloop* mainloop,
               PA_STREAM_START_CORKED;
   RETURN_ON_FAILURE(
       pa_stream_connect_record(
-          *stream, device_id == AudioDeviceDescription::kDefaultDeviceId
-                       ? NULL
-                       : device_id.c_str(),
+          *stream,
+          device_id == AudioDeviceDescription::kDefaultDeviceId
+              ? nullptr
+              : device_id.c_str(),
           &buffer_attributes, static_cast<pa_stream_flags_t>(flags)) == 0,
       "pa_stream_connect_record FAILED ");
 
@@ -457,9 +497,9 @@ bool CreateOutputStream(pa_threaded_mainloop** mainloop,
 
   RETURN_ON_FAILURE(pa_threaded_mainloop_start(*mainloop) == 0,
                     "Failed to start PulseAudio main loop.");
-  RETURN_ON_FAILURE(
-      pa_context_connect(*context, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL) == 0,
-      "Failed to connect PulseAudio context.");
+  RETURN_ON_FAILURE(pa_context_connect(*context, nullptr,
+                                       PA_CONTEXT_NOAUTOSPAWN, nullptr) == 0,
+                    "Failed to connect PulseAudio context.");
 
   // Wait until |pa_context_| is ready.  pa_threaded_mainloop_wait() must be
   // called after pa_context_get_state() in case the context is already ready,
@@ -480,12 +520,12 @@ bool CreateOutputStream(pa_threaded_mainloop** mainloop,
   sample_specifications.channels = params.channels();
 
   // Get channel mapping.
-  pa_channel_map* map = NULL;
+  pa_channel_map* map = nullptr;
   pa_channel_map source_channel_map = ChannelLayoutToPAChannelMap(
       params.channel_layout());
   if (source_channel_map.channels != 0) {
     // The source data uses a supported channel map so we will use it rather
-    // than the default channel map (NULL).
+    // than the default channel map (nullptr).
     map = &source_channel_map;
   }
 
@@ -527,15 +567,16 @@ bool CreateOutputStream(pa_threaded_mainloop** mainloop,
   // and error.
   RETURN_ON_FAILURE(
       pa_stream_connect_playback(
-          *stream, device_id == AudioDeviceDescription::kDefaultDeviceId
-                       ? NULL
-                       : device_id.c_str(),
+          *stream,
+          device_id == AudioDeviceDescription::kDefaultDeviceId
+              ? nullptr
+              : device_id.c_str(),
           &pa_buffer_attributes,
           static_cast<pa_stream_flags_t>(
               PA_STREAM_INTERPOLATE_TIMING | PA_STREAM_ADJUST_LATENCY |
               PA_STREAM_AUTO_TIMING_UPDATE | PA_STREAM_NOT_MONOTONIC |
               PA_STREAM_START_CORKED),
-          NULL, NULL) == 0,
+          nullptr, nullptr) == 0,
       "pa_stream_connect_playback FAILED ");
 
   // Wait for the stream to be ready.
