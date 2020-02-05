@@ -2708,13 +2708,21 @@ message ChildStatusReportResponse {
   optional string error_message = 2;
 }
 
+// Hashing Algorithm for Client Certificate Provisioning Flow.
+enum HashingAlgorithm {
+  // DO NOT USE
+  HASHING_ALGORITHM_UNSPECIFIED = 0;
+
+  SHA1 = 1;
+  SHA256 = 2;
+}
+
 // Signing Algorithm for Client Certificate Provisioning Flow.
 enum SigningAlgorithm {
   // DO NOT USE
   SIGNING_ALGORITHM_UNSPECIFIED = 0;
 
-  SHA1_WITH_RSA = 1;
-  SHA256_WITH_RSA = 2;
+  RSA_PKCS1_v1_5 = 1;
 }
 
 // Client Certificate Provisioning Flow, Stage 1: Start a CSR request.
@@ -2729,6 +2737,9 @@ message StartCsrResponse {
 
   // The verified access challenge.
   optional bytes va_challenge = 2;
+
+  // Algorithm to hash data with before signing.
+  optional HashingAlgorithm hashing_algorithm = 5;
 
   // Algorithm to sign data with for CSR creation.
   optional SigningAlgorithm signing_algorithm = 3;
