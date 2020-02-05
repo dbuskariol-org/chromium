@@ -5,6 +5,7 @@
 #include "remoting/host/desktop_display_info.h"
 
 #include "base/location.h"
+#include "build/build_config.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 // TODO(crbug.com/961064): Fix memory leaks in tests and re-enable on LSAN.
