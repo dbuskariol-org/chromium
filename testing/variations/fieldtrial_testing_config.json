@@ -6378,6 +6378,27 @@
             ]
         }
     ],
+    "SyncInstanceIDTokenTTL": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "time_to_live_seconds": "1209600"
+                    },
+                    "enable_features": [
+                        "SyncInstanceIDTokenTTL"
+                    ]
+                }
+            ]
+        }
+    ],
     "SyncUssBookmarks'": [
         {
             "platforms": [
