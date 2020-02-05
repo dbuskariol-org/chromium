@@ -6,8 +6,6 @@
 #define THIRD_PARTY_BLINK_RENDERER_MODULES_STORAGE_CACHED_STORAGE_AREA_H_
 
 #include "base/trace_event/memory_dump_provider.h"
-#include "mojo/public/cpp/bindings/associated_remote.h"
-#include "mojo/public/cpp/bindings/pending_associated_remote.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
@@ -64,7 +62,7 @@ class MODULES_EXPORT CachedStorageArea
       StorageNamespace* storage_namespace);
   static scoped_refptr<CachedStorageArea> CreateForSessionStorage(
       scoped_refptr<const SecurityOrigin> origin,
-      mojo::PendingAssociatedRemote<mojom::blink::StorageArea> area,
+      mojo::PendingRemote<mojom::blink::StorageArea> area,
       scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
       StorageNamespace* storage_namespace);
 
@@ -91,16 +89,19 @@ class MODULES_EXPORT CachedStorageArea
     kSessionStorageForceUTF8
   };
 
+  mojo::Remote<mojom::blink::StorageArea>& RemoteArea() { return remote_area_; }
+
  private:
-  CachedStorageArea(scoped_refptr<const SecurityOrigin> origin,
+  enum class AreaType {
+    kSessionStorage,
+    kLocalStorage,
+  };
+
+  CachedStorageArea(AreaType type,
+                    scoped_refptr<const SecurityOrigin> origin,
                     mojo::PendingRemote<mojom::blink::StorageArea> area,
                     scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
                     StorageNamespace* storage_namespace);
-  CachedStorageArea(
-      scoped_refptr<const SecurityOrigin> origin,
-      mojo::PendingAssociatedRemote<mojom::blink::StorageArea> area,
-      scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-      StorageNamespace* storage_namespace);
 
   friend class RefCounted<CachedStorageArea>;
   ~CachedStorageArea() override;
@@ -170,6 +171,7 @@ class MODULES_EXPORT CachedStorageArea
   static Vector<uint8_t> StringToUint8Vector(const String& input,
                                              FormatOption format_option);
 
+  const AreaType type_;
   const scoped_refptr<const SecurityOrigin> origin_;
   const WeakPersistent<StorageNamespace> storage_namespace_;
   const scoped_refptr<base::SingleThreadTaskRunner> ipc_task_runner_;
@@ -203,13 +205,12 @@ class MODULES_EXPORT CachedStorageArea
   // See ShouldSendOldValueOnMutations().
   bool should_send_old_value_on_mutations_ = true;
 
-  // Depending on if this is a session storage or local storage area only one of
-  // |mojo_area_remote_| and |mojo_area_associated_remote_| will be non-null.
-  // Either way |mojo_area_| will be equal to the non-null one.
-  mojo::Remote<mojom::blink::StorageArea> mojo_area_remote_;
-  mojo::AssociatedRemote<mojom::blink::StorageArea>
-      mojo_area_associated_remote_;
-  mojom::blink::StorageArea* mojo_area_;
+  // Connection to the backing implementation of this StorageArea. This is
+  // always bound.
+  mojo::Remote<mojom::blink::StorageArea> remote_area_;
+
+  // Receives StorageAreaObserver events from the StorageArea implementation and
+  // dispatches them to this CachedStorageArea.
   mojo::Receiver<mojom::blink::StorageAreaObserver> receiver_{this};
 
   Persistent<HeapHashMap<WeakMember<Source>, String>> areas_;

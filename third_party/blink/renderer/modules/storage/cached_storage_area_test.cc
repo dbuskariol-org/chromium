@@ -31,7 +31,7 @@ class CachedStorageAreaTest : public testing::Test {
   void SetUp() override {
     if (IsSessionStorage()) {
       cached_area_ = CachedStorageArea::CreateForSessionStorage(
-          kOrigin, mock_storage_area_.GetAssociatedInterfaceRemote(),
+          kOrigin, mock_storage_area_.GetInterfaceRemote(),
           scheduler::GetSingleThreadTaskRunnerForTesting(), nullptr);
     } else {
       cached_area_ = CachedStorageArea::CreateForLocalStorage(
