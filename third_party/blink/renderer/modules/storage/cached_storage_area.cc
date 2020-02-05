@@ -65,9 +65,10 @@ scoped_refptr<CachedStorageArea> CachedStorageArea::CreateForLocalStorage(
     scoped_refptr<const SecurityOrigin> origin,
     mojo::PendingRemote<mojom::blink::StorageArea> area,
     scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-    InspectorEventListener* listener) {
-  return base::AdoptRef(new CachedStorageArea(
-      std::move(origin), std::move(area), std::move(ipc_runner), listener));
+    StorageNamespace* storage_namespace) {
+  return base::AdoptRef(
+      new CachedStorageArea(std::move(origin), std::move(area),
+                            std::move(ipc_runner), storage_namespace));
 }
 
 // static
@@ -75,9 +76,10 @@ scoped_refptr<CachedStorageArea> CachedStorageArea::CreateForSessionStorage(
     scoped_refptr<const SecurityOrigin> origin,
     mojo::PendingAssociatedRemote<mojom::blink::StorageArea> area,
     scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-    InspectorEventListener* listener) {
-  return base::AdoptRef(new CachedStorageArea(
-      std::move(origin), std::move(area), std::move(ipc_runner), listener));
+    StorageNamespace* storage_namespace) {
+  return base::AdoptRef(
+      new CachedStorageArea(std::move(origin), std::move(area),
+                            std::move(ipc_runner), storage_namespace));
 }
 
 unsigned CachedStorageArea::GetLength() {
@@ -199,9 +201,9 @@ CachedStorageArea::CachedStorageArea(
     scoped_refptr<const SecurityOrigin> origin,
     mojo::PendingRemote<mojom::blink::StorageArea> area,
     scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-    InspectorEventListener* listener)
+    StorageNamespace* storage_namespace)
     : origin_(std::move(origin)),
-      inspector_event_listener_(listener),
+      storage_namespace_(storage_namespace),
       ipc_task_runner_(std::move(ipc_runner)),
       mojo_area_remote_(std::move(area), ipc_task_runner_),
       mojo_area_(mojo_area_remote_.get()),
@@ -217,9 +219,9 @@ CachedStorageArea::CachedStorageArea(
     scoped_refptr<const SecurityOrigin> origin,
     mojo::PendingAssociatedRemote<mojom::blink::StorageArea> area,
     scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-    InspectorEventListener* listener)
+    StorageNamespace* storage_namespace)
     : origin_(std::move(origin)),
-      inspector_event_listener_(listener),
+      storage_namespace_(storage_namespace),
       ipc_task_runner_(std::move(ipc_runner)),
       mojo_area_associated_remote_(std::move(area), ipc_task_runner_),
       mojo_area_(mojo_area_associated_remote_.get()),
@@ -578,8 +580,10 @@ void CachedStorageArea::EnqueueStorageEvent(const String& key,
     }
   }
   areas_->RemoveAll(areas_to_remove_);
-  inspector_event_listener_->DidDispatchStorageEvent(origin_.get(), key,
-                                                     old_value, new_value);
+  if (storage_namespace_) {
+    storage_namespace_->DidDispatchStorageEvent(origin_.get(), key, old_value,
+                                                new_value);
+  }
 }
 
 // static

@@ -52,8 +52,6 @@ StorageNamespace::StorageNamespace(StorageController* controller,
                                    const String& namespace_id)
     : controller_(controller), namespace_id_(namespace_id) {}
 
-StorageNamespace::~StorageNamespace() = default;
-
 // static
 void StorageNamespace::ProvideSessionStorageNamespaceTo(Page& page,
                                                         WebViewClient* client) {

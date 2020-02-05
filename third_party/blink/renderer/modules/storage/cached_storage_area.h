@@ -15,6 +15,7 @@
 #include "third_party/blink/public/platform/scheduler/web_scoped_virtual_time_pauser.h"
 #include "third_party/blink/renderer/modules/modules_export.h"
 #include "third_party/blink/renderer/modules/storage/storage_area_map.h"
+#include "third_party/blink/renderer/modules/storage/storage_namespace.h"
 #include "third_party/blink/renderer/platform/heap/heap_allocator.h"
 #include "third_party/blink/renderer/platform/heap/persistent.h"
 #include "third_party/blink/renderer/platform/weborigin/security_origin.h"
@@ -56,26 +57,16 @@ class MODULES_EXPORT CachedStorageArea
         WebScopedVirtualTimePauser::VirtualTaskDuration duration) = 0;
   };
 
-  // Used to send events to the InspectorDOMStorageAgent.
-  class InspectorEventListener {
-   public:
-    virtual ~InspectorEventListener() = default;
-    virtual void DidDispatchStorageEvent(const SecurityOrigin* origin,
-                                         const String& key,
-                                         const String& old_value,
-                                         const String& new_value) = 0;
-  };
-
   static scoped_refptr<CachedStorageArea> CreateForLocalStorage(
       scoped_refptr<const SecurityOrigin> origin,
       mojo::PendingRemote<mojom::blink::StorageArea> area,
       scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-      InspectorEventListener* listener);
+      StorageNamespace* storage_namespace);
   static scoped_refptr<CachedStorageArea> CreateForSessionStorage(
       scoped_refptr<const SecurityOrigin> origin,
       mojo::PendingAssociatedRemote<mojom::blink::StorageArea> area,
       scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-      InspectorEventListener* listener);
+      StorageNamespace* storage_namespace);
 
   // These correspond to blink::Storage.
   unsigned GetLength();
@@ -104,12 +95,12 @@ class MODULES_EXPORT CachedStorageArea
   CachedStorageArea(scoped_refptr<const SecurityOrigin> origin,
                     mojo::PendingRemote<mojom::blink::StorageArea> area,
                     scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-                    InspectorEventListener* listener);
+                    StorageNamespace* storage_namespace);
   CachedStorageArea(
       scoped_refptr<const SecurityOrigin> origin,
       mojo::PendingAssociatedRemote<mojom::blink::StorageArea> area,
       scoped_refptr<base::SingleThreadTaskRunner> ipc_runner,
-      InspectorEventListener* listener);
+      StorageNamespace* storage_namespace);
 
   friend class RefCounted<CachedStorageArea>;
   ~CachedStorageArea() override;
@@ -180,7 +171,7 @@ class MODULES_EXPORT CachedStorageArea
                                              FormatOption format_option);
 
   const scoped_refptr<const SecurityOrigin> origin_;
-  InspectorEventListener* const inspector_event_listener_;
+  const WeakPersistent<StorageNamespace> storage_namespace_;
   const scoped_refptr<base::SingleThreadTaskRunner> ipc_task_runner_;
 
   std::unique_ptr<StorageAreaMap> map_;
