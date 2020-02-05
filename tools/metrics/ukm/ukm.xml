@@ -7314,6 +7314,22 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="PaintPreviewCapture">
+  <owner>ckitagawa@chromium.org</owner>
+  <owner>fredmello@chromium.org</owner>
+  <owner>mahmoudi@chromium.org</owner>
+  <owner>vollick@chromium.org</owner>
+  <summary>
+    Metrics related to the performance of capturing Paint Previews.
+  </summary>
+  <metric name="BlinkCaptureTime">
+    <summary>
+      The amount of time spent painting in Blink to record a Paint Preview of
+      the main frame.
+    </summary>
+  </metric>
+</event>
+
 <event name="PasswordForm">
   <owner>battre@chromium.org</owner>
   <summary>

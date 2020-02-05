@@ -16,10 +16,12 @@
 #include "components/paint_preview/browser/paint_preview_client.h"
 #include "components/paint_preview/common/file_stream.h"
 #include "components/paint_preview/common/serial_utils.h"
+#include "components/ukm/test_ukm_recorder.h"
 #include "content/public/browser/notification_types.h"
 #include "content/public/common/content_switches.h"
 #include "net/dns/mock_host_resolver.h"
 #include "net/test/embedded_test_server/embedded_test_server.h"
+#include "services/metrics/public/cpp/ukm_builders.h"
 #include "third_party/skia/include/core/SkPicture.h"
 #include "url/gurl.h"
 
@@ -88,6 +90,7 @@ class PaintPreviewBrowserTest : public InProcessBrowserTest {
 
 IN_PROC_BROWSER_TEST_F(PaintPreviewBrowserTest, CaptureFrame) {
   LoadPage(http_server_.GetURL("a.com", "/cross_site_iframe_factory.html?a"));
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
 
   base::UnguessableToken guid = base::UnguessableToken::Create();
   PaintPreviewClient::PaintPreviewParams params;
@@ -134,6 +137,10 @@ IN_PROC_BROWSER_TEST_F(PaintPreviewBrowserTest, CaptureFrame) {
           },
           loop.QuitClosure(), guid));
   loop.Run();
+
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::PaintPreviewCapture::kEntryName);
+  EXPECT_EQ(1u, entries.size());
 }
 
 IN_PROC_BROWSER_TEST_F(PaintPreviewBrowserTest, CaptureMainFrameWithSubframe) {
