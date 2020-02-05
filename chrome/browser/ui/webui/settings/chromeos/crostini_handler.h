@@ -45,6 +45,10 @@ class CrostiniHandler : public ::settings::SettingsPageUIHandler,
   void HandleGetCrostiniSharedPathsDisplayText(const base::ListValue* args);
   // Remove a specified path from being shared.
   void HandleRemoveCrostiniSharedPath(const base::ListValue* args);
+  void OnCrostiniSharedPathRemoved(const std::string& callback_id,
+                                   const std::string& path,
+                                   bool result,
+                                   const std::string& failure_reason);
   // Returns a list of available USB devices.
   void HandleGetCrostiniSharedUsbDevices(const base::ListValue* args);
   // Set the share state of a USB device.

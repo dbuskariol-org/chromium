@@ -168,24 +168,31 @@ void CrostiniHandler::HandleGetCrostiniSharedPathsDisplayText(
 
 void CrostiniHandler::HandleRemoveCrostiniSharedPath(
     const base::ListValue* args) {
-  CHECK_EQ(2U, args->GetSize());
+  AllowJavascript();
+  CHECK_EQ(3U, args->GetSize());
+  std::string callback_id;
   std::string vm_name;
-  CHECK(args->GetString(0, &vm_name));
   std::string path;
-  CHECK(args->GetString(1, &path));
+  CHECK(args->GetString(0, &callback_id));
+  CHECK(args->GetString(1, &vm_name));
+  CHECK(args->GetString(2, &path));
 
   guest_os::GuestOsSharePath::GetForProfile(profile_)->UnsharePath(
       vm_name, base::FilePath(path),
       /*unpersist=*/true,
-      base::BindOnce(
-          [](const std::string& path, bool result,
-             const std::string& failure_reason) {
-            if (!result) {
-              LOG(ERROR) << "Error unsharing " << path << ": "
-                         << failure_reason;
-            }
-          },
-          path));
+      base::BindOnce(&CrostiniHandler::OnCrostiniSharedPathRemoved,
+                     weak_ptr_factory_.GetWeakPtr(), callback_id, path));
+}
+
+void CrostiniHandler::OnCrostiniSharedPathRemoved(
+    const std::string& callback_id,
+    const std::string& path,
+    bool result,
+    const std::string& failure_reason) {
+  if (!result) {
+    LOG(ERROR) << "Error unsharing " << path << ": " << failure_reason;
+  }
+  ResolveJavascriptCallback(base::Value(callback_id), base::Value(result));
 }
 
 namespace {
