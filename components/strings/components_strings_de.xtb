@@ -532,7 +532,7 @@
 <translation id="3366477098757335611">Karten ansehen</translation>
 <translation id="3369192424181595722">Fehler bei der Uhrzeit</translation>
 <translation id="337363190475750230">Bereitstellung aufgehoben</translation>
-<translation id="3376829916920036789"><ph name="ENROLLMENT_DOMAIN" /> hat Enterprise Service Hooks für Ihren Browser aktiviert. Diese Hooks haben Zugriff auf einige Ihrer Daten.</translation>
+<translation id="3376829916920036789"><ph name="ENROLLMENT_DOMAIN" /> hat Enterprise Service Hooks für Ihren Browser aktiviert. Diese Service Hooks haben Zugriff auf einige Ihrer Daten.</translation>
 <translation id="3377144306166885718">Der Server hat eine veraltete TLS-Version verwendet.</translation>
 <translation id="3377188786107721145">Fehler beim Parsen der Richtlinie</translation>
 <translation id="3377736046129930310">Bildschirmsperre verwenden, um Karten schneller zu bestätigen</translation>
@@ -1399,7 +1399,7 @@ Weitere Details:
 <translation id="725866823122871198">Es kann keine private Verbindung zu <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> hergestellt werden, weil Datum und Uhrzeit Ihres Computers falsch sind (<ph name="DATE_AND_TIME" />).</translation>
 <translation id="7260504762447901703">Zugriff entziehen</translation>
 <translation id="7275334191706090484">Verwaltete Lesezeichen</translation>
-<translation id="7288778322931489286">Ihr Administrator hat Enterprise Service Hooks für Ihren Browser aktiviert. Diese Hooks haben Zugriff auf einige Ihrer Daten.</translation>
+<translation id="7288778322931489286">Ihr Administrator hat Enterprise Service Hooks für Ihren Browser aktiviert. Diese Service Hooks haben Zugriff auf einige Ihrer Daten.</translation>
 <translation id="7292031607255951991">Name des Empfängers</translation>
 <translation id="7298195798382681320">Empfohlen</translation>
 <translation id="7300012071106347854">Kobaltblau</translation>
