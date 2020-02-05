@@ -1179,7 +1179,7 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="2616366145935564096">Ler e alterar seus dados em <ph name="WEBSITE_1" /></translation>
 <translation id="2617342710774726426">O chip está bloqueado</translation>
 <translation id="2619761439309613843">Atualização diária</translation>
-<translation id="2620215283731032047">O download de <ph name="FILE_NAME" /> não é possível por motivo de segurança.</translation>
+<translation id="2620215283731032047">Não foi possível fazer o download de <ph name="FILE_NAME" /> por motivo de segurança.</translation>
 <translation id="2620436844016719705">Sistema</translation>
 <translation id="2621713457727696555">Protegida</translation>
 <translation id="26224892172169984">Não permitir que qualquer site trabalhe com protocolos</translation>
@@ -1348,7 +1348,7 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="2825758591930162672">Chave pública do requerente</translation>
 <translation id="2825848369316359348">Localize o nome impresso na parte de trás da sua chave de segurança</translation>
 <translation id="2828650939514476812">Conectar à rede Wi-Fi</translation>
-<translation id="2835294513443818940">O download deste arquivo não é possível por motivo de segurança.</translation>
+<translation id="2835294513443818940">Não foi possível fazer o download do arquivo por motivos de segurança.</translation>
 <translation id="2836269494620652131">Falha</translation>
 <translation id="2836635946302913370">O login com este nome foi desativado pelo administrador.</translation>
 <translation id="283669119850230892">Para usar a rede <ph name="NETWORK_ID" />, conclua primeiro sua conexão com a Internet abaixo.</translation>

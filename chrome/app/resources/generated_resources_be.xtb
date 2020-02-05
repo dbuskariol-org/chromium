@@ -2988,7 +2988,7 @@
 <translation id="520621735928254154">Памылка імпарту сертыфіката</translation>
 <translation id="5209320130288484488">Прылады не знойдзены</translation>
 <translation id="5209518306177824490">Лічбавы адбітак SHA-1:</translation>
-<translation id="5210990770352357081">Не ўдалося ўсталяваць Plugin VM</translation>
+<translation id="5210990770352357081">Не ўдалося выдаліць Plugin VM</translation>
 <translation id="5213481667492808996">Сэрвіс перадачы даных "<ph name="NAME" />" гатовы да выкарыстання</translation>
 <translation id="5213891612754844763">Паказаць налады проксі-сервера</translation>
 <translation id="5215502535566372932">Выберыце краіну</translation>
@@ -3237,7 +3237,7 @@
 <translation id="554517032089923082">GTC</translation>
 <translation id="5546865291508181392">Шукаць</translation>
 <translation id="5548159762883465903">{NUM_OTHER_TABS,plural, =0{"<ph name="TAB_TITLE" />"}=1{"<ph name="TAB_TITLE" />" і яшчэ 1 укладка}one{"<ph name="TAB_TITLE" />" і яшчэ # укладка}few{"<ph name="TAB_TITLE" />" і яшчэ # укладкі}many{"<ph name="TAB_TITLE" />" і яшчэ # укладак}other{"<ph name="TAB_TITLE" />" і яшчэ # укладкі}}</translation>
-<translation id="5549467165017213645">Будуць выдалены даныя (<ph name="TOTAL_USAGE" />), захаваныя сайтамі, а таксама ўсталяваныя імі праграмы.</translation>
+<translation id="5549467165017213645">Будуць выдалены даныя (<ph name="TOTAL_USAGE" />), захаваныя сайтамі і ўсталяванымі імі праграмамі.</translation>
 <translation id="5551573675707792127">Клавіятура і ўвод тэксту</translation>
 <translation id="5553089923092577885">Супастаўленні палітык сертыфікатаў</translation>
 <translation id="5554489410841842733">Гэты значок будзе бачным, калі пашырэнне можа працаваць на бягучай старонцы.</translation>

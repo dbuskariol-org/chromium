@@ -1600,7 +1600,7 @@
 <translation id="3192947282887913208">ไฟล์เสียง</translation>
 <translation id="3194737229810486521"><ph name="URL" /> ต้องการจัดเก็บข้อมูลอย่างถาวรในอุปกรณ์ของคุณ</translation>
 <translation id="3199127022143353223">เซิร์ฟเวอร์</translation>
-<translation id="3200941271596533635">สลับโหมดผู้อ่าน</translation>
+<translation id="3200941271596533635">เปิด/ปิดโหมดผู้อ่าน</translation>
 <translation id="3201306578844503970">ติดตั้งเครื่องเสมือนไม่ได้เพราะข้อผิดพลาดเกี่ยวกับเครือข่าย โปรดลองอีกครั้ง หรือติดต่อผู้ดูแลระบบอุปกรณ์ขององค์กร รหัสข้อผิดพลาด: <ph name="ERROR_CODE" /></translation>
 <translation id="3201422919974259695">อุปกรณ์ USB ที่ใช้ได้จะปรากฏที่นี่</translation>
 <translation id="3202131003361292969">เส้นทาง</translation>
@@ -3237,7 +3237,7 @@
 <translation id="554517032089923082">GTC</translation>
 <translation id="5546865291508181392">ค้นหา</translation>
 <translation id="5548159762883465903">{NUM_OTHER_TABS,plural, =0{"<ph name="TAB_TITLE" />"}=1{"<ph name="TAB_TITLE" />" และแท็บอื่นอีก 1 แท็บ}other{"<ph name="TAB_TITLE" />" และแท็บอื่นอีก # แท็บ}}</translation>
-<translation id="5549467165017213645">การดำเนินการนี้จะล้างข้อมูลที่เว็บไซต์ต่างๆ และแอปที่ติดตั้งไว้จัดเก็บรวมทั้งสิ้น <ph name="TOTAL_USAGE" /></translation>
+<translation id="5549467165017213645">การดำเนินการนี้จะล้างข้อมูลที่จัดเก็บโดยเว็บไซต์ต่างๆ และแอปที่ติดตั้งไว้รวมทั้งสิ้น <ph name="TOTAL_USAGE" /></translation>
 <translation id="5551573675707792127">แป้นพิมพ์และการป้อนข้อความ</translation>
 <translation id="5553089923092577885">การจับคู่นโยบายใบรับรอง</translation>
 <translation id="5554489410841842733">ไอคอนนี้จะมองเห็นได้เมื่อส่วนขยายสามารถทำงานบนหน้าปัจจุบันได้</translation>
