@@ -62271,16 +62271,23 @@ would be helpful to identify which type is being sent.
   <int value="3" label="Did not expect restored types but found some"/>
 </enum>
 
+<enum name="SyncBookmarkModelMetadataClientTagState">
+  <int value="0" label="At least one mismatch found"/>
+  <int value="1" label="All present do match but some are not present"/>
+  <int value="2" label="All present and matching"/>
+</enum>
+
 <enum name="SyncBookmarkModelMetadataCorruptionReason">
   <int value="0" label="No corruption"/>
   <int value="1" label="Entity missing server id"/>
   <int value="2" label="Tombstone has a bookmark id"/>
   <int value="3" label="Non-tombstone is missing a bookmark id"/>
-  <int value="4"
-      label="Number of bookmarks doesn't match number of metadata entities"/>
-  <int value="5"
-      label="Ids in the bookmarks model don't match the ids in the metadata
-             entities"/>
+  <int value="4" label="DEPRECATED_4"/>
+  <int value="5" label="DEPRECATED_5"/>
+  <int value="6" label="Duplicated server ids exist"/>
+  <int value="7" label="Bookmark id does not exist in model"/>
+  <int value="8" label="Bookmark in model is missing sync metadata"/>
+  <int value="9" label="Client tag hash does not match bookmark GUID"/>
 </enum>
 
 <enum name="SyncBookmarkModelSyncState">
