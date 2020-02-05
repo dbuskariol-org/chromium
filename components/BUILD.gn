@@ -652,6 +652,7 @@ if (!is_ios && !is_fuchsia) {
       "omnibox/browser/history_quick_provider_performance_unittest.cc",
       "subresource_filter/core/common/perftests/indexed_ruleset_perftest.cc",
       "test/run_all_perftests.cc",
+      "url_matcher/substring_set_matcher_perftest.cc",
       "visitedlink/test/visitedlink_perftest.cc",
     ]
 
@@ -666,6 +667,7 @@ if (!is_ios && !is_fuchsia) {
       "//components/subresource_filter/core/common",
       "//components/subresource_filter/tools:tools_lib",
       "//components/test:test_support",
+      "//components/url_matcher",
       "//components/visitedlink/browser",
       "//testing/perf",
       "//url",
