@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/viz/common/gl_helper.h"
+#include "gpu/command_buffer/client/gl_helper.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -21,30 +21,28 @@
 #include "base/strings/string_util.h"
 #include "base/time/time.h"
 #include "base/trace_event/trace_event.h"
-#include "components/viz/common/gl_helper_scaling.h"
 #include "gpu/GLES2/gl2extchromium.h"
 #include "gpu/command_buffer/client/context_support.h"
-#include "third_party/skia/include/core/SkRegion.h"
-#include "third_party/skia/include/gpu/GrTypes.h"
+#include "gpu/command_buffer/client/gl_helper_scaling.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/geometry/vector2d.h"
 
-using gpu::gles2::GLES2Interface;
+namespace gpu {
 
-namespace viz {
+using gles2::GLES2Interface;
 
 namespace {
 
 class ScopedFlush {
  public:
-  explicit ScopedFlush(gpu::gles2::GLES2Interface* gl) : gl_(gl) {}
+  explicit ScopedFlush(gles2::GLES2Interface* gl) : gl_(gl) {}
 
   ~ScopedFlush() { gl_->Flush(); }
 
  private:
-  gpu::gles2::GLES2Interface* gl_;
+  gles2::GLES2Interface* gl_;
 
   DISALLOW_COPY_AND_ASSIGN(ScopedFlush);
 };
@@ -137,7 +135,7 @@ class GLHelper::CopyTextureToImpl
     : public base::SupportsWeakPtr<GLHelper::CopyTextureToImpl> {
  public:
   CopyTextureToImpl(GLES2Interface* gl,
-                    gpu::ContextSupport* context_support,
+                    ContextSupport* context_support,
                     GLHelper* helper)
       : gl_(gl),
         context_support_(context_support),
@@ -149,7 +147,7 @@ class GLHelper::CopyTextureToImpl
                             GLenum texture_target,
                             const gfx::Size& dst_size,
                             unsigned char* out,
-                            SkColorType color_type,
+                            GLenum format,
                             base::OnceCallback<void(bool)> callback);
 
   // Reads back bytes from the currently bound frame buffer.
@@ -295,7 +293,7 @@ class GLHelper::CopyTextureToImpl
   bool IsBGRAReadbackSupported();
 
   GLES2Interface* gl_;
-  gpu::ContextSupport* context_support_;
+  ContextSupport* context_support_;
   GLHelper* helper_;
 
   // A scoped flush that will ensure all resource deletions are flushed when
@@ -370,21 +368,16 @@ void GLHelper::CopyTextureToImpl::ReadbackTextureAsync(
     GLenum texture_target,
     const gfx::Size& dst_size,
     unsigned char* out,
-    SkColorType color_type,
+    GLenum format,
     base::OnceCallback<void(bool)> callback) {
   constexpr size_t kBytesPerPixel = 4;
 
-  GLenum format;
-  if (color_type == kRGBA_8888_SkColorType) {
-    format = GL_RGBA;
-  } else if (color_type == kBGRA_8888_SkColorType &&
-             IsBGRAReadbackSupported()) {
-    format = GL_BGRA_EXT;
-  } else {
-    // Note: It's possible the GL implementation supports other readback
-    // types. However, as of this writing, no caller of this method will
-    // request a different |color_type| (i.e., requiring using some other GL
-    // format).
+  // Note: It's possible the GL implementation supports other readback
+  // types. However, as of this writing, no caller of this method will
+  // request a different |color_type| (i.e., requiring using some other GL
+  // format).
+  if (format != GL_RGBA &&
+      (format != GL_BGRA_EXT || !IsBGRAReadbackSupported())) {
     std::move(callback).Run(false);
     return;
   }
@@ -488,7 +481,7 @@ bool GLHelper::CopyTextureToImpl::IsBGRAReadbackSupported() {
   return bgra_support_ == BGRA_SUPPORTED;
 }
 
-GLHelper::GLHelper(GLES2Interface* gl, gpu::ContextSupport* context_support)
+GLHelper::GLHelper(GLES2Interface* gl, ContextSupport* context_support)
     : gl_(gl), context_support_(context_support) {}
 
 GLHelper::~GLHelper() {}
@@ -497,11 +490,11 @@ void GLHelper::ReadbackTextureAsync(GLuint texture,
                                     GLenum texture_target,
                                     const gfx::Size& dst_size,
                                     unsigned char* out,
-                                    SkColorType color_type,
+                                    GLenum format,
                                     base::OnceCallback<void(bool)> callback) {
   InitCopyTextToImpl();
-  copy_texture_to_impl_->ReadbackTextureAsync(
-      texture, texture_target, dst_size, out, color_type, std::move(callback));
+  copy_texture_to_impl_->ReadbackTextureAsync(texture, texture_target, dst_size,
+                                              out, format, std::move(callback));
 }
 
 void GLHelper::InitCopyTextToImpl() {
@@ -865,4 +858,4 @@ ReadbackYUVInterface* GLHelper::GetReadbackPipelineYUV(
   return yuv_reader;
 }
 
-}  // namespace viz
+}  // namespace gpu

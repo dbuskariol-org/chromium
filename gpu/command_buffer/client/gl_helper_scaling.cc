@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/viz/common/gl_helper_scaling.h"
+#include "gpu/command_buffer/client/gl_helper_scaling.h"
 
 #include <stddef.h>
 
@@ -22,16 +22,14 @@
 #include "base/trace_event/trace_event.h"
 #include "gpu/GLES2/gl2extchromium.h"
 #include "gpu/command_buffer/client/gles2_interface.h"
-#include "third_party/skia/include/core/SkRegion.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/rect_conversions.h"
 #include "ui/gfx/geometry/rect_f.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/geometry/vector2d_f.h"
 
-using gpu::gles2::GLES2Interface;
-
-namespace viz {
+namespace gpu {
+using gles2::GLES2Interface;
 
 namespace {
 
@@ -757,7 +755,7 @@ std::unique_ptr<GLHelper::ScalerInterface> GLHelperScaling::CreateScaler(
                                        std::move(ret));
   }
   ret->SetChainProperties(scale_from, scale_to, swizzle);
-  return ret;
+  return std::move(ret);
 }
 
 std::unique_ptr<GLHelper::ScalerInterface>
@@ -771,7 +769,7 @@ GLHelperScaling::CreateGrayscalePlanerizer(bool flipped_source,
   auto result = std::make_unique<ScalerImpl>(gl_, this, stage, nullptr);
   result->SetColorWeights(0, kRGBtoGrayscaleColorWeights);
   result->SetChainProperties(stage.scale_from, stage.scale_to, swizzle);
-  return result;
+  return std::move(result);
 }
 
 std::unique_ptr<GLHelper::ScalerInterface>
@@ -802,7 +800,7 @@ GLHelperScaling::CreateI420Planerizer(int plane,
       NOTREACHED();
   }
   result->SetChainProperties(stage.scale_from, stage.scale_to, swizzle);
-  return result;
+  return std::move(result);
 }
 
 std::unique_ptr<GLHelper::ScalerInterface>
@@ -821,7 +819,7 @@ GLHelperScaling::CreateI420MrtPass1Planerizer(bool flipped_source,
   result->SetColorWeights(1, kRGBtoUColorWeights);
   result->SetColorWeights(2, kRGBtoVColorWeights);
   result->SetChainProperties(stage.scale_from, stage.scale_to, swizzle);
-  return result;
+  return std::move(result);
 }
 
 std::unique_ptr<GLHelper::ScalerInterface>
@@ -835,7 +833,7 @@ GLHelperScaling::CreateI420MrtPass2Planerizer(bool swizzle) {
                              swizzle};
   auto result = std::make_unique<ScalerImpl>(gl_, this, stage, nullptr);
   result->SetChainProperties(stage.scale_from, stage.scale_to, swizzle);
-  return result;
+  return std::move(result);
 }
 
 // Triangle strip coordinates, used to sweep the entire source area when
@@ -1325,4 +1323,4 @@ void ShaderProgram::UseProgram(const gfx::Size& src_texture_size,
   }
 }
 
-}  // namespace viz
+}  // namespace gpu

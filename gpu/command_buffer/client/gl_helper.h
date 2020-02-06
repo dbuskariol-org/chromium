@@ -2,16 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_VIZ_COMMON_GL_HELPER_H_
-#define COMPONENTS_VIZ_COMMON_GL_HELPER_H_
+#ifndef GPU_COMMAND_BUFFER_CLIENT_GL_HELPER_H_
+#define GPU_COMMAND_BUFFER_CLIENT_GL_HELPER_H_
 
 #include <memory>
 
 #include "base/callback.h"
 #include "base/macros.h"
-#include "components/viz/common/viz_common_export.h"
 #include "gpu/command_buffer/client/gles2_interface.h"
-#include "third_party/skia/include/core/SkImageInfo.h"
+#include "gpu/gpu_export.h"
 #include "ui/gfx/geometry/size.h"
 
 namespace gfx {
@@ -22,19 +21,16 @@ class Vector2dF;
 }  // namespace gfx
 
 namespace gpu {
+
 class ContextSupport;
-}  // namespace gpu
-
-namespace viz {
-
 class GLHelperScaling;
 
 class ScopedGLuint {
  public:
-  typedef void (gpu::gles2::GLES2Interface::*GenFunc)(GLsizei n, GLuint* ids);
-  typedef void (gpu::gles2::GLES2Interface::*DeleteFunc)(GLsizei n,
-                                                         const GLuint* ids);
-  ScopedGLuint(gpu::gles2::GLES2Interface* gl,
+  typedef void (gles2::GLES2Interface::*GenFunc)(GLsizei n, GLuint* ids);
+  typedef void (gles2::GLES2Interface::*DeleteFunc)(GLsizei n,
+                                                    const GLuint* ids);
+  ScopedGLuint(gles2::GLES2Interface* gl,
                GenFunc gen_func,
                DeleteFunc delete_func)
       : gl_(gl), id_(0u), delete_func_(delete_func) {
@@ -52,7 +48,7 @@ class ScopedGLuint {
   }
 
  private:
-  gpu::gles2::GLES2Interface* gl_;
+  gles2::GLES2Interface* gl_;
   GLuint id_;
   DeleteFunc delete_func_;
 
@@ -61,34 +57,33 @@ class ScopedGLuint {
 
 class ScopedBuffer : public ScopedGLuint {
  public:
-  explicit ScopedBuffer(gpu::gles2::GLES2Interface* gl)
+  explicit ScopedBuffer(gles2::GLES2Interface* gl)
       : ScopedGLuint(gl,
-                     &gpu::gles2::GLES2Interface::GenBuffers,
-                     &gpu::gles2::GLES2Interface::DeleteBuffers) {}
+                     &gles2::GLES2Interface::GenBuffers,
+                     &gles2::GLES2Interface::DeleteBuffers) {}
 };
 
 class ScopedFramebuffer : public ScopedGLuint {
  public:
-  explicit ScopedFramebuffer(gpu::gles2::GLES2Interface* gl)
+  explicit ScopedFramebuffer(gles2::GLES2Interface* gl)
       : ScopedGLuint(gl,
-                     &gpu::gles2::GLES2Interface::GenFramebuffers,
-                     &gpu::gles2::GLES2Interface::DeleteFramebuffers) {}
+                     &gles2::GLES2Interface::GenFramebuffers,
+                     &gles2::GLES2Interface::DeleteFramebuffers) {}
 };
 
 class ScopedTexture : public ScopedGLuint {
  public:
-  explicit ScopedTexture(gpu::gles2::GLES2Interface* gl)
+  explicit ScopedTexture(gles2::GLES2Interface* gl)
       : ScopedGLuint(gl,
-                     &gpu::gles2::GLES2Interface::GenTextures,
-                     &gpu::gles2::GLES2Interface::DeleteTextures) {}
+                     &gles2::GLES2Interface::GenTextures,
+                     &gles2::GLES2Interface::DeleteTextures) {}
 };
 
 template <GLenum Target>
 class ScopedBinder {
  public:
-  typedef void (gpu::gles2::GLES2Interface::*BindFunc)(GLenum target,
-                                                       GLuint id);
-  ScopedBinder(gpu::gles2::GLES2Interface* gl, GLuint id, BindFunc bind_func)
+  typedef void (gles2::GLES2Interface::*BindFunc)(GLenum target, GLuint id);
+  ScopedBinder(gles2::GLES2Interface* gl, GLuint id, BindFunc bind_func)
       : gl_(gl), bind_func_(bind_func) {
     (gl_->*bind_func_)(Target, id);
   }
@@ -96,7 +91,7 @@ class ScopedBinder {
   virtual ~ScopedBinder() { (gl_->*bind_func_)(Target, 0); }
 
  private:
-  gpu::gles2::GLES2Interface* gl_;
+  gles2::GLES2Interface* gl_;
   BindFunc bind_func_;
 
   DISALLOW_COPY_AND_ASSIGN(ScopedBinder);
@@ -105,39 +100,35 @@ class ScopedBinder {
 template <GLenum Target>
 class ScopedBufferBinder : ScopedBinder<Target> {
  public:
-  ScopedBufferBinder(gpu::gles2::GLES2Interface* gl, GLuint id)
-      : ScopedBinder<Target>(gl, id, &gpu::gles2::GLES2Interface::BindBuffer) {}
+  ScopedBufferBinder(gles2::GLES2Interface* gl, GLuint id)
+      : ScopedBinder<Target>(gl, id, &gles2::GLES2Interface::BindBuffer) {}
 };
 
 template <GLenum Target>
 class ScopedFramebufferBinder : ScopedBinder<Target> {
  public:
-  ScopedFramebufferBinder(gpu::gles2::GLES2Interface* gl, GLuint id)
-      : ScopedBinder<Target>(gl,
-                             id,
-                             &gpu::gles2::GLES2Interface::BindFramebuffer) {}
+  ScopedFramebufferBinder(gles2::GLES2Interface* gl, GLuint id)
+      : ScopedBinder<Target>(gl, id, &gles2::GLES2Interface::BindFramebuffer) {}
 };
 
 template <GLenum Target>
 class ScopedTextureBinder : ScopedBinder<Target> {
  public:
-  ScopedTextureBinder(gpu::gles2::GLES2Interface* gl, GLuint id)
-      : ScopedBinder<Target>(gl, id, &gpu::gles2::GLES2Interface::BindTexture) {
-  }
+  ScopedTextureBinder(gles2::GLES2Interface* gl, GLuint id)
+      : ScopedBinder<Target>(gl, id, &gles2::GLES2Interface::BindTexture) {}
 };
 
 class I420Converter;
 class ReadbackYUVInterface;
 
-// Provides higher level operations on top of the gpu::gles2::GLES2Interface
+// Provides higher level operations on top of the gles2::GLES2Interface
 // interfaces.
 //
 // TODO(crbug.com/870036): DEPRECATED. Please contact the crbug owner before
 // adding any new dependencies on this code.
-class VIZ_COMMON_EXPORT GLHelper {
+class GPU_EXPORT GLHelper {
  public:
-  GLHelper(gpu::gles2::GLES2Interface* gl,
-           gpu::ContextSupport* context_support);
+  GLHelper(gles2::GLES2Interface* gl, ContextSupport* context_support);
   ~GLHelper();
 
   enum ScalerQuality {
@@ -167,7 +158,7 @@ class VIZ_COMMON_EXPORT GLHelper {
                             GLenum texture_target,
                             const gfx::Size& dst_size,
                             unsigned char* out,
-                            SkColorType color_type,
+                            GLenum format,
                             base::OnceCallback<void(bool)> callback);
 
   // Caches all intermediate textures and programs needed to scale any subset of
@@ -345,15 +336,15 @@ class VIZ_COMMON_EXPORT GLHelper {
  protected:
   class CopyTextureToImpl;
 
-  // Creates |copy_texture_to_impl_| if NULL.
+  // Creates |copy_texture_to_impl_| if nullptr.
   void InitCopyTextToImpl();
-  // Creates |scaler_impl_| if NULL.
+  // Creates |scaler_impl_| if nullptr.
   void InitScalerImpl();
 
   enum ReadbackSwizzle { kSwizzleNone = 0, kSwizzleBGRA };
 
-  gpu::gles2::GLES2Interface* gl_;
-  gpu::ContextSupport* context_support_;
+  gles2::GLES2Interface* gl_;
+  ContextSupport* context_support_;
   std::unique_ptr<CopyTextureToImpl> copy_texture_to_impl_;
   std::unique_ptr<GLHelperScaling> scaler_impl_;
   std::unique_ptr<ReadbackYUVInterface> shared_readback_yuv_flip_;
@@ -369,7 +360,7 @@ class VIZ_COMMON_EXPORT GLHelper {
 
 // Splits an RGBA source texture's image into separate Y, U, and V planes. The U
 // and V planes are half-width and half-height, according to the I420 standard.
-class VIZ_COMMON_EXPORT I420Converter {
+class GPU_EXPORT I420Converter {
  public:
   I420Converter();
   virtual ~I420Converter();
@@ -427,7 +418,7 @@ class VIZ_COMMON_EXPORT I420Converter {
 //
 // TODO(crbug.com/870036): DEPRECATED. This will be removed soon, in favor of
 // I420Converter and readback implementation in GLRendererCopier.
-class VIZ_COMMON_EXPORT ReadbackYUVInterface {
+class GPU_EXPORT ReadbackYUVInterface {
  public:
   ReadbackYUVInterface() {}
   virtual ~ReadbackYUVInterface() {}
@@ -467,6 +458,6 @@ class VIZ_COMMON_EXPORT ReadbackYUVInterface {
                            base::OnceCallback<void(bool)> callback) = 0;
 };
 
-}  // namespace viz
+}  // namespace gpu
 
-#endif  // COMPONENTS_VIZ_COMMON_GL_HELPER_H_
+#endif  // GPU_COMMAND_BUFFER_CLIENT_GL_HELPER_H_

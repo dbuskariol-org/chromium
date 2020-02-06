@@ -2,28 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_VIZ_COMMON_GL_HELPER_SCALING_H_
-#define COMPONENTS_VIZ_COMMON_GL_HELPER_SCALING_H_
+#ifndef GPU_COMMAND_BUFFER_CLIENT_GL_HELPER_SCALING_H_
+#define GPU_COMMAND_BUFFER_CLIENT_GL_HELPER_SCALING_H_
 
 #include <map>
 #include <vector>
 
 #include "base/containers/circular_deque.h"
 #include "base/macros.h"
-#include "components/viz/common/gl_helper.h"
-#include "components/viz/common/viz_common_export.h"
+#include "gpu/command_buffer/client/gl_helper.h"
+#include "gpu/gpu_export.h"
 #include "ui/gfx/geometry/vector2d.h"
 
-namespace viz {
+namespace gpu {
 
-class ShaderProgram;
-class ScalerImpl;
 class GLHelperTest;
+class ScalerImpl;
+class ShaderProgram;
 
 // Implements GPU texture scaling methods.
 // Note that you should probably not use this class directly.
 // See gl_helper.cc::CreateScaler instead.
-class VIZ_COMMON_EXPORT GLHelperScaling {
+class GPU_EXPORT GLHelperScaling {
  public:
   enum ShaderType {
     SHADER_BILINEAR,
@@ -40,7 +40,7 @@ class VIZ_COMMON_EXPORT GLHelperScaling {
 
   using ShaderProgramKeyType = std::pair<ShaderType, bool>;
 
-  GLHelperScaling(gpu::gles2::GLES2Interface* gl, GLHelper* helper);
+  GLHelperScaling(gles2::GLES2Interface* gl, GLHelper* helper);
   ~GLHelperScaling();
   void InitBuffer();
 
@@ -176,7 +176,7 @@ class VIZ_COMMON_EXPORT GLHelperScaling {
   // 2-dimentional texture coordinates (s, t).
   static const GLfloat kVertexAttributes[];
 
-  gpu::gles2::GLES2Interface* gl_;
+  gles2::GLES2Interface* gl_;
   GLHelper* helper_;
 
   // The buffer that holds the vertices and the texture coordinates data for
@@ -192,6 +192,6 @@ class VIZ_COMMON_EXPORT GLHelperScaling {
   DISALLOW_COPY_AND_ASSIGN(GLHelperScaling);
 };
 
-}  // namespace viz
+}  // namespace gpu
 
-#endif  // COMPONENTS_VIZ_COMMON_GL_HELPER_SCALING_H_
+#endif  // GPU_COMMAND_BUFFER_CLIENT_GL_HELPER_SCALING_H_

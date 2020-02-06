@@ -27,28 +27,30 @@
 #include "base/test/task_environment.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/time/time.h"
-#include "components/viz/common/gl_helper.h"
-#include "components/viz/common/gl_helper_scaling.h"
 #include "components/viz/test/test_gpu_service_holder.h"
+#include "gpu/command_buffer/client/gl_helper.h"
+#include "gpu/command_buffer/client/gl_helper_scaling.h"
 #include "gpu/command_buffer/client/gles2_implementation.h"
 #include "gpu/command_buffer/client/shared_memory_limits.h"
 #include "gpu/ipc/gl_in_process_context.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkTypes.h"
 #include "ui/gfx/codec/png_codec.h"
 
-namespace viz {
+namespace gpu {
 
 namespace {
 
 GLHelper::ScalerQuality kQualities[] = {
-    GLHelper::SCALER_QUALITY_BEST, GLHelper::SCALER_QUALITY_GOOD,
+    GLHelper::SCALER_QUALITY_BEST,
+    GLHelper::SCALER_QUALITY_GOOD,
     GLHelper::SCALER_QUALITY_FAST,
 };
 
 const char* const kQualityNames[] = {
-    "best", "good", "fast",
+    "best",
+    "good",
+    "fast",
 };
 
 }  // namespace
@@ -56,7 +58,7 @@ const char* const kQualityNames[] = {
 class GLHelperBenchmark : public testing::Test {
  protected:
   void SetUp() override {
-    gpu::ContextCreationAttribs attributes;
+    ContextCreationAttribs attributes;
     attributes.alpha_size = 8;
     attributes.depth_size = 24;
     attributes.red_size = 8;
@@ -68,19 +70,19 @@ class GLHelperBenchmark : public testing::Test {
     attributes.bind_generates_resource = false;
     attributes.gpu_preference = gl::GpuPreference::kHighPerformance;
 
-    context_ = std::make_unique<gpu::GLInProcessContext>();
+    context_ = std::make_unique<GLInProcessContext>();
     auto result = context_->Initialize(
-        TestGpuServiceHolder::GetInstance()->task_executor(),
-        nullptr,                 /* surface */
-        true,                    /* offscreen */
-        gpu::kNullSurfaceHandle, /* window */
-        attributes, gpu::SharedMemoryLimits(),
+        viz::TestGpuServiceHolder::GetInstance()->task_executor(),
+        nullptr,            /* surface */
+        true,               /* offscreen */
+        kNullSurfaceHandle, /* window */
+        attributes, SharedMemoryLimits(),
         nullptr, /* gpu_memory_buffer_manager */
         nullptr, /* image_factory */
         base::ThreadTaskRunnerHandle::Get());
-    DCHECK_EQ(result, gpu::ContextResult::kSuccess);
+    DCHECK_EQ(result, ContextResult::kSuccess);
     gl_ = context_->GetImplementation();
-    gpu::ContextSupport* support = context_->GetImplementation();
+    ContextSupport* support = context_->GetImplementation();
 
     helper_.reset(new GLHelper(gl_, support));
     helper_scaling_.reset(new GLHelperScaling(gl_, helper_.get()));
@@ -119,8 +121,8 @@ class GLHelperBenchmark : public testing::Test {
   }
 
   base::test::TaskEnvironment task_environment_;
-  std::unique_ptr<gpu::GLInProcessContext> context_;
-  gpu::gles2::GLES2Interface* gl_;
+  std::unique_ptr<GLInProcessContext> context_;
+  gles2::GLES2Interface* gl_;
   std::unique_ptr<GLHelper> helper_;
   std::unique_ptr<GLHelperScaling> helper_scaling_;
   base::circular_deque<GLHelperScaling::ScaleOp> x_ops_, y_ops_;
@@ -208,4 +210,4 @@ TEST_F(GLHelperBenchmark, ScaleBenchmark) {
   }
 }
 
-}  // namespace viz
+}  // namespace gpu

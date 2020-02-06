@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/viz/common/gl_helper.h"
+#include "gpu/command_buffer/client/gl_helper.h"
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -25,32 +25,38 @@
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
-#include "components/viz/common/gl_helper_scaling.h"
 #include "components/viz/test/test_gpu_service_holder.h"
+#include "gpu/command_buffer/client/gl_helper_scaling.h"
 #include "gpu/command_buffer/client/gles2_implementation.h"
 #include "gpu/command_buffer/client/shared_memory_limits.h"
 #include "gpu/ipc/gl_in_process_context.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkTypes.h"
 
 #if !defined(OS_ANDROID)
 
-namespace viz {
+namespace gpu {
+
+namespace {
 
 GLHelper::ScalerQuality kQualities[] = {
-    GLHelper::SCALER_QUALITY_BEST, GLHelper::SCALER_QUALITY_GOOD,
+    GLHelper::SCALER_QUALITY_BEST,
+    GLHelper::SCALER_QUALITY_GOOD,
     GLHelper::SCALER_QUALITY_FAST,
 };
 
 const char* kQualityNames[] = {
-    "best", "good", "fast",
+    "best",
+    "good",
+    "fast",
 };
+
+}  // namespace
 
 class GLHelperTest : public testing::Test {
  protected:
   void SetUp() override {
-    gpu::ContextCreationAttribs attributes;
+    ContextCreationAttribs attributes;
     attributes.alpha_size = 8;
     attributes.depth_size = 24;
     attributes.red_size = 8;
@@ -61,19 +67,19 @@ class GLHelperTest : public testing::Test {
     attributes.sample_buffers = 1;
     attributes.bind_generates_resource = false;
 
-    context_ = std::make_unique<gpu::GLInProcessContext>();
+    context_ = std::make_unique<GLInProcessContext>();
     auto result = context_->Initialize(
-        TestGpuServiceHolder::GetInstance()->task_executor(),
-        nullptr,                 /* surface */
-        true,                    /* offscreen */
-        gpu::kNullSurfaceHandle, /* window */
-        attributes, gpu::SharedMemoryLimits(),
+        viz::TestGpuServiceHolder::GetInstance()->task_executor(),
+        nullptr,            /* surface */
+        true,               /* offscreen */
+        kNullSurfaceHandle, /* window */
+        attributes, SharedMemoryLimits(),
         nullptr, /* gpu_memory_buffer_manager */
         nullptr, /* image_factory */
         base::ThreadTaskRunnerHandle::Get());
-    DCHECK_EQ(result, gpu::ContextResult::kSuccess);
+    DCHECK_EQ(result, ContextResult::kSuccess);
     gl_ = context_->GetImplementation();
-    gpu::ContextSupport* support = context_->GetImplementation();
+    ContextSupport* support = context_->GetImplementation();
 
     helper_.reset(new GLHelper(gl_, support));
     helper_scaling_.reset(new GLHelperScaling(gl_, helper_.get()));
@@ -1006,10 +1012,18 @@ class GLHelperTest : public testing::Test {
                        const gfx::Size& src_size,
                        unsigned char* pixels,
                        SkColorType color_type) {
+    DCHECK(color_type == kRGBA_8888_SkColorType ||
+           color_type == kBGRA_8888_SkColorType);
     base::RunLoop run_loop;
     bool success = false;
+    GLenum format;
+    if (color_type == kRGBA_8888_SkColorType)
+      format = GL_RGBA;
+    else
+      format = GL_BGRA_EXT;
+
     helper_->ReadbackTextureAsync(
-        src_texture, GL_TEXTURE_2D, src_size, pixels, color_type,
+        src_texture, GL_TEXTURE_2D, src_size, pixels, format,
         base::BindOnce(
             [](bool* success, base::OnceClosure callback, bool result) {
               *success = result;
@@ -1247,8 +1261,8 @@ class GLHelperTest : public testing::Test {
                    "8x1 -> 1x1 bilinear4 X\n");
   }
 
-  std::unique_ptr<gpu::GLInProcessContext> context_;
-  gpu::gles2::GLES2Interface* gl_;
+  std::unique_ptr<GLInProcessContext> context_;
+  gles2::GLES2Interface* gl_;
   std::unique_ptr<GLHelper> helper_;
   std::unique_ptr<GLHelperScaling> helper_scaling_;
   base::circular_deque<GLHelperScaling::ScaleOp> x_ops_, y_ops_;
@@ -1393,6 +1407,6 @@ TEST_F(GLHelperTest, CheckOptimizations) {
   CheckOptimizationsTest();
 }
 
-}  // namespace viz
+}  // namespace gpu
 
 #endif  // OS_ANDROID
