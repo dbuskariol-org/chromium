@@ -104,8 +104,9 @@ class ManagePasswordsUIController
     return bubble_status_ == BubbleStatus::SHOULD_POP_UP;
   }
 
-  // virtual to be overridden in tests.
-  virtual base::WeakPtr<PasswordsModelDelegate> GetModelDelegateProxy();
+  // TODO(crbug.com/1044034): Rename to GetControllerDelegateProxy after the
+  // refactoring of ManagePasswordsBubbleModel is done.
+  base::WeakPtr<PasswordsModelDelegate> GetModelDelegateProxy();
 
   // PasswordsModelDelegate:
   content::WebContents* GetWebContents() const override;
