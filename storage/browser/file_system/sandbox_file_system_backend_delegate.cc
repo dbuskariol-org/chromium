@@ -241,12 +241,12 @@ SandboxFileSystemBackendDelegate::CreateOriginEnumerator() {
 
 base::FilePath
 SandboxFileSystemBackendDelegate::GetBaseDirectoryForOriginAndType(
-    const GURL& origin_url,
+    const url::Origin& origin,
     FileSystemType type,
     bool create) {
   base::File::Error error = base::File::FILE_OK;
   base::FilePath path = obfuscated_file_util()->GetDirectoryForOriginAndType(
-      url::Origin::Create(origin_url), GetTypeString(type), create, &error);
+      origin, GetTypeString(type), create, &error);
   if (error != base::File::FILE_OK)
     return base::FilePath();
   return path;
@@ -420,7 +420,7 @@ int64_t SandboxFileSystemBackendDelegate::GetOriginUsageOnFileTaskRunner(
     return RecalculateUsage(file_system_context, origin.GetURL(), type);
 
   base::FilePath base_path =
-      GetBaseDirectoryForOriginAndType(origin.GetURL(), type, false);
+      GetBaseDirectoryForOriginAndType(origin, type, false);
   if (base_path.empty() ||
       !obfuscated_file_util()->delegate()->DirectoryExists(base_path)) {
     return 0;
@@ -684,21 +684,21 @@ void SandboxFileSystemBackendDelegate::CopyFileSystem(
     SandboxFileSystemBackendDelegate* destination) {
   DCHECK(file_task_runner()->RunsTasksInCurrentSequence());
 
-  base::FilePath base_path =
-      GetBaseDirectoryForOriginAndType(origin_url, type, false /* create */);
+  base::FilePath base_path = GetBaseDirectoryForOriginAndType(
+      url::Origin::Create(origin_url), type, false /* create */);
   if (base::PathExists(base_path)) {
     // Delete any existing file system directories in the destination. A
     // previously failed migration
     // may have left behind partially copied directories.
     base::FilePath dest_path = destination->GetBaseDirectoryForOriginAndType(
-        origin_url, type, false /* create */);
+        url::Origin::Create(origin_url), type, false /* create */);
 
     // Make sure we're not about to delete our own file system.
     CHECK_NE(base_path.value(), dest_path.value());
     base::DeleteFileRecursively(dest_path);
 
     dest_path = destination->GetBaseDirectoryForOriginAndType(
-        origin_url, type, true /* create */);
+        url::Origin::Create(origin_url), type, true /* create */);
 
     obfuscated_file_util()->CloseFileSystemForOriginAndType(
         url::Origin::Create(origin_url), GetTypeString(type));
