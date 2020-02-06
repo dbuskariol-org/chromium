@@ -2534,7 +2534,6 @@
                           'sbc@chromium.org'],
     'navigation': ['alexmos+watch@chromium.org',
                    'creis+watch@chromium.org',
-                   'dom+watch@chromium.org',
                    'nasko+codewatch@chromium.org',
                    'navigation-cc+reviews@chromium.org'],
     'net': ['net-reviews@chromium.org'],
