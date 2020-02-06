@@ -1393,6 +1393,7 @@
 <translation id="7201591969684833065">L'amministratore è in grado di vedere:</translation>
 <translation id="7202346780273620635">Letter-Extra</translation>
 <translation id="7210863904660874423"><ph name="HOST_NAME" /> non è conforme agli standard di sicurezza.</translation>
+<translation id="7210993021468939304">Attività Linux all'interno del contenitore; possono installare ed eseguire app Linux all'interno del contenitore</translation>
 <translation id="721197778055552897"><ph name="BEGIN_LINK" />Ulteriori informazioni<ph name="END_LINK" /> su questo problema.</translation>
 <translation id="7219179957768738017">La connessione utilizza <ph name="SSL_VERSION" />.</translation>
 <translation id="7220786058474068424">Elaborazione in corso</translation>
@@ -1557,6 +1558,7 @@ Ulteriori dettagli:
 <translation id="7878562273885520351">La tua password potrebbe essere stata compromessa</translation>
 <translation id="7882421473871500483">Marrone</translation>
 <translation id="7887683347370398519">Controlla il tuo codice CVC e riprova</translation>
+<translation id="7887885240995164102">Attiva Picture in picture</translation>
 <translation id="7888575728750733395">Stampa intent di rendering</translation>
 <translation id="7904208859782148177">C3 (Envelope)</translation>
 <translation id="7932579305932748336">Rivestimento</translation>

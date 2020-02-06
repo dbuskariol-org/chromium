@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">Доколку избришете еден од сопствените сертификати, веќе нема да може да го користите за да се идентификувате.</translation>
 <translation id="2079545284768500474">Врати</translation>
 <translation id="2080070583977670716">Повеќе поставки</translation>
+<translation id="2082187087049518845">Групирајте ја картичката</translation>
 <translation id="2087822576218954668">Печати: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN-мрежа</translation>
 <translation id="2089566709556890888">Прелистувајте безбедно со Google Chrome</translation>
@@ -2724,6 +2725,7 @@
 <translation id="4808319664292298116">Да се влезе во VR од <ph name="DOMAIN" />?</translation>
 <translation id="4808667324955055115">Блокирани скокачки прозорци:</translation>
 <translation id="480990236307250886">Отвори ја почетната страница</translation>
+<translation id="4811503964269049987">Групирајте ја избраната картичка</translation>
 <translation id="4813136279048157860">Мои слики</translation>
 <translation id="4813512666221746211">Грешка на мрежа</translation>
 <translation id="4814378367953456825">Внесете име за отпечатоков</translation>
@@ -5269,6 +5271,7 @@
 <translation id="8352772353338965963">Додајте сметка за повеќекратно најавување. Сите најавени сметки се достапни без лозинка, така што оваа можност треба да се користи само со сметки на кои им се верува.</translation>
 <translation id="8353683614194668312">Тоа може:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Грешка при инсталирањето на Linux</translation>
 <translation id="8358685469073206162">Да се обноват страниците?</translation>
 <translation id="8358912028636606457">Емитувањето на звукот од картичката не е поддржано на овој уред.</translation>
 <translation id="8363095875018065315">стабилно</translation>

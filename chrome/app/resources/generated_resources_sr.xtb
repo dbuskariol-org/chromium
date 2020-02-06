@@ -778,6 +778,7 @@
 <translation id="2079053412993822885">Ако избришете неки свој сертификат, више нећете моћи да га користите да се идентификујете.</translation>
 <translation id="2079545284768500474">Опозови</translation>
 <translation id="2080070583977670716">Више подешавања</translation>
+<translation id="2082187087049518845">Додајте картицу у групу</translation>
 <translation id="2087822576218954668">Штампање: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN мрежа</translation>
 <translation id="2089566709556890888">Прегледајте безбедно уз Google Chrome</translation>
@@ -2721,6 +2722,7 @@
 <translation id="4808319664292298116">Желите да активирате ВР са <ph name="DOMAIN" />?</translation>
 <translation id="4808667324955055115">Искачући прозори су блокирани:</translation>
 <translation id="480990236307250886">Отвори почетну страницу</translation>
+<translation id="4811503964269049987">Додајте изабрану картицу у групу</translation>
 <translation id="4813136279048157860">Моје слике</translation>
 <translation id="4813512666221746211">Грешка на мрежи</translation>
 <translation id="4814378367953456825">Унесите назив за овај отисак прста</translation>
@@ -5265,6 +5267,7 @@
 <translation id="8352772353338965963">Додајте налог за вишеструко пријављивање. Свим пријављеним налозима се може приступити без лозинке, па ову функцију треба користити само са поузданим налозима.</translation>
 <translation id="8353683614194668312">Може да:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> – <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Грешка при инсталирању Linux-а</translation>
 <translation id="8358685469073206162">Желите ли да вратите странице?</translation>
 <translation id="8358912028636606457">Пребацивање звука картице није подржано на овом уређају.</translation>
 <translation id="8363095875018065315">стабилан</translation>

@@ -781,6 +781,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="2079053412993822885">Ako izbrišete jedan od svojih certifikata, više ga ne možete koristiti za identifikaciju.</translation>
 <translation id="2079545284768500474">Poništi</translation>
 <translation id="2080070583977670716">Više postavki</translation>
+<translation id="2082187087049518845">Dodaj karticu u grupu</translation>
 <translation id="2087822576218954668">Ispis: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN mreža</translation>
 <translation id="2089566709556890888">Sigurno pregledavajte uz Google Chrome</translation>
@@ -2724,6 +2725,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="4808319664292298116">Želite li pokrenuti VR s web-lokacije <ph name="DOMAIN" />?</translation>
 <translation id="4808667324955055115">Skočni su prozori blokirani:</translation>
 <translation id="480990236307250886">Otvori početnu stranicu</translation>
+<translation id="4811503964269049987">Dodaj odabranu karticu u grupu</translation>
 <translation id="4813136279048157860">Moje slike</translation>
 <translation id="4813512666221746211">Pogreška mreže</translation>
 <translation id="4814378367953456825">Unesite naziv za ovaj otisak prsta</translation>
@@ -5267,6 +5269,7 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="8352772353338965963">Dodajte račun na višestruku prijavu. Svim računima na koje ste prijavljeni može se pristupiti bez zaporke, pa bi se ta značajka trebala upotrebljavati samo s pouzdanim računima.</translation>
 <translation id="8353683614194668312">Proširenje ili aplikacija može:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> – <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Došlo je do pogreške prilikom instaliranja Linuxa</translation>
 <translation id="8358685469073206162">Želite li vratiti stranice?</translation>
 <translation id="8358912028636606457">Kartica audio sustava za emitiranje nije podržana na ovom uređaju.</translation>
 <translation id="8363095875018065315">stabilan</translation>

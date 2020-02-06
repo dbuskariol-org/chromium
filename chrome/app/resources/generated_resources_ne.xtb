@@ -777,6 +777,7 @@
 <translation id="2079053412993822885">यदि तपाइँले तपाइँको आफ्नै प्रमाणपत्रहरू मध्ये एक हटाउनुभयो भने, तपाइँले उप्रान्त आफैलाई परिचय दिन सक्नुहुन्न।</translation>
 <translation id="2079545284768500474">अन्डू गर्नुहोस्</translation>
 <translation id="2080070583977670716">थप सेटिङहरू</translation>
+<translation id="2082187087049518845">समूहको ट्याब</translation>
 <translation id="2087822576218954668">प्रिन्ट: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN नेटवर्क</translation>
 <translation id="2089566709556890888">Google Chrome मार्फत सुरक्षित ब्राउज गर्नुहोस्</translation>
@@ -2720,6 +2721,7 @@
 <translation id="4808319664292298116"><ph name="DOMAIN" /> बाट VR मा प्रवेश गर्ने हो?</translation>
 <translation id="4808667324955055115">रोक लगाइएका पपअपहरू:</translation>
 <translation id="480990236307250886">गृह पृष्ठ खोल्नुहोस्</translation>
+<translation id="4811503964269049987">चयन गरिएको ट्याब समूहमा थप्नुहोस्</translation>
 <translation id="4813136279048157860">मेरा छविहरू</translation>
 <translation id="4813512666221746211">सञ्जाल त्रुटि</translation>
 <translation id="4814378367953456825">यो फिंगरप्रिन्टको नाम प्रविष्टि गर्नुहोस्</translation>
@@ -5261,6 +5263,7 @@
 <translation id="8352772353338965963">बहुविध साइन-इन को लागि एउटा खाता थप्नुहोस्। सबै साइन-इन भएका खाताहरू पासवर्ड विना नै पहुँच गर्न सकिन्छ, त्यसैले यो सुविधा विश्वसनीय खाताहरूसँग मात्रै प्रयोग गर्नुपर्छ।</translation>
 <translation id="8353683614194668312">यसले निम्न गर्न सक्छ:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Linux स्थापना गर्ने क्रममा त्रुटि भयो</translation>
 <translation id="8358685469073206162">पानाहरू पुनर्स्थापित गर्ने?</translation>
 <translation id="8358912028636606457">यो यन्त्रमा ट्याबको अडियो Cast गर्ने सुविधा प्रयोग गर्न मिल्दैन।</translation>
 <translation id="8363095875018065315">स्थिर</translation>
