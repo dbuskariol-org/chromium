@@ -329,7 +329,6 @@ js_modulizer("modulize_local") {
     "test_util.js",
   ]
   namespace_rewrites = [
-    "cr.ui.FocusRowBehavior|FocusRowBehavior",
     "cr.ui.Store|Store",
     "MockInteractions.down|down",
     "MockInteractions.pressAndReleaseKeyOn|pressAndReleaseKeyOn",
