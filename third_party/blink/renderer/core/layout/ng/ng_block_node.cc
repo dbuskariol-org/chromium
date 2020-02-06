@@ -45,6 +45,7 @@
 #include "third_party/blink/renderer/core/layout/ng/ng_simplified_layout_algorithm.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_space_utils.h"
 #include "third_party/blink/renderer/core/layout/shapes/shape_outside_info.h"
+#include "third_party/blink/renderer/core/layout/text_autosizer.h"
 #include "third_party/blink/renderer/core/mathml/mathml_element.h"
 #include "third_party/blink/renderer/core/mathml/mathml_space_element.h"
 #include "third_party/blink/renderer/core/paint/paint_layer_scrollable_area.h"
@@ -345,6 +346,9 @@ scoped_refptr<const NGLayoutResult> NGBlockNode::Layout(
     fragment_geometry =
         CalculateInitialFragmentGeometry(constraint_space, *this);
   }
+
+  TextAutosizer::NGLayoutScope text_autosizer_layout_scope(
+      box_, fragment_geometry->border_box_size.inline_size);
 
   PrepareForLayout();
 
