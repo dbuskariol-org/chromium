@@ -46514,6 +46514,48 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Dismiss"/>
 </enum>
 
+<enum name="NotificationTypeDetailed">
+  <int value="0" label="ChromeApp priority=-2"/>
+  <int value="1" label="ChromeApp priority=-2 requireInteraction"/>
+  <int value="2" label="ChromeApp priority=-1"/>
+  <int value="3" label="ChromeApp priority=-1 requireInteraction"/>
+  <int value="4" label="ChromeApp priority=0"/>
+  <int value="5" label="ChromeApp priority=0 requireInteraction"/>
+  <int value="6" label="ChromeApp priority=1"/>
+  <int value="7" label="ChromeApp priority=1 requireInteraction"/>
+  <int value="8" label="ChromeApp priority=2"/>
+  <int value="9" label="ChromeApp priority=2 requireInteraction"/>
+  <int value="10" label="Arc priority=-2"/>
+  <int value="11" label="Arc priority=-2 pinned"/>
+  <int value="12" label="Arc priority=-1"/>
+  <int value="13" label="Arc priority=-1 pinned"/>
+  <int value="14" label="Arc priority=0"/>
+  <int value="15" label="Arc priority=0 pinned"/>
+  <int value="16" label="Arc priority=1"/>
+  <int value="17" label="Arc priority=1 pinned"/>
+  <int value="18" label="Arc priority=2"/>
+  <int value="19" label="Arc priority=2 pinned"/>
+  <int value="20" label="Web"/>
+  <int value="21" label="Web requireInteraction"/>
+  <int value="22" label="CrOS priority=-2"/>
+  <int value="23" label="CrOS priority=-2 pinned"/>
+  <int value="24" label="CrOS priority=-1"/>
+  <int value="25" label="CrOS priority=-1 pinned"/>
+  <int value="26" label="CrOS priority=0"/>
+  <int value="27" label="CrOS priority=0 pinned"/>
+  <int value="28" label="CrOS priority=1"/>
+  <int value="29" label="CrOS priority=1 pinned"/>
+  <int value="30" label="CrOS priority=2"/>
+  <int value="31" label="CrOS priority=2 pinned"/>
+  <int value="32" label="CrOS SystemPriority"/>
+  <int value="33" label="CrOS SystemPriority pinned"/>
+  <int value="34" label="CrOS SystemPriority level=Warning pinned"/>
+  <int value="35" label="CrOS SystemPriority level=Warning"/>
+  <int value="36" label="CrOS SystemPriority level=CriticalWarning"/>
+  <int value="37" label="CrOS SystemPriority level=CriticalWarning pinned"/>
+  <int value="38" label="Other"/>
+</enum>
+
 <enum name="NotifierType">
   <int value="0" label="Application"/>
   <int value="1" label="Arc++"/>
