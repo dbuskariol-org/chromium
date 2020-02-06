@@ -4203,10 +4203,15 @@
             "experiments": [
                 {
                     "name": "AndroidExperiments",
+                    "params": {
+                        "ZeroSuggestVariant:1:*": "Local",
+                        "ZeroSuggestVariant:7:*": "Local",
+                        "ZeroSuggestVariant:8:*": "Local",
+                        "rounded_edges": "true"
+                    },
                     "enable_features": [
-                        "OmniboxDisplayTitleForCurrentUrl",
-                        "OmniboxUIExperimentHideSteadyStateUrlScheme",
-                        "OmniboxUIExperimentHideSteadyStateUrlTrivialSubdomains"
+                        "OmniboxDisableInstantExtendedLimit",
+                        "OmniboxOnFocusSuggestions"
                     ]
                 }
             ]
