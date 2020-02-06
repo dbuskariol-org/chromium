@@ -284,9 +284,6 @@ LocalFrameView::LocalFrameView(LocalFrame& frame, IntRect frame_rect)
   if (frame_->Owner() &&
       frame_->Owner()->ScrollingMode() == ScrollbarMode::kAlwaysOff)
     SetCanHaveScrollbars(false);
-
-  if (frame_->IsLocalRoot())
-    MemoryPressureListenerRegistry::Instance().RegisterClient(this);
 }
 
 LocalFrameView::~LocalFrameView() {
@@ -395,9 +392,6 @@ void LocalFrameView::Dispose() {
 
   ukm_aggregator_.reset();
   layout_shift_tracker_->Dispose();
-
-  if (frame_->IsLocalRoot())
-    MemoryPressureListenerRegistry::Instance().UnregisterClient(this);
 
 #if DCHECK_IS_ON()
   has_been_disposed_ = true;
@@ -4426,37 +4420,6 @@ void LocalFrameView::UpdateLayerDebugInfoEnabled() {
     layer_debug_info_enabled_ = should_enable;
     SetPaintArtifactCompositorNeedsUpdate();
   }
-}
-
-// These are reported to UMA server. Do not renumber or reuse values.
-enum LocalFrameRootPurgeSignal {
-  kInitial = 0,
-  kMultiple = 1,
-  // Note: Only add new values immediately before this line.
-  kSignalCount
-};
-
-void LocalFrameView::OnPurgeMemory() {
-  DCHECK(frame_->IsLocalRoot());
-
-  // Only record memory purge signals for frames with accelerated compositing.
-  if (!frame_->GetSettings()->GetAcceleratedCompositingEnabled())
-    return;
-
-  // Only record memory purge signals when visible (foregrounded).
-  Page* page = frame_->GetPage();
-  if (!page || !page->IsPageVisible())
-    return;
-
-  auto initial_or_multiple =
-      received_foreground_compositor_memory_pressure_purge_signal_
-          ? LocalFrameRootPurgeSignal::kMultiple
-          : LocalFrameRootPurgeSignal::kInitial;
-  UMA_HISTOGRAM_ENUMERATION(
-      "Memory.Experimental.Renderer.LocalFrameRootPurgeSignal",
-      initial_or_multiple, LocalFrameRootPurgeSignal::kSignalCount);
-  if (!received_foreground_compositor_memory_pressure_purge_signal_)
-    received_foreground_compositor_memory_pressure_purge_signal_ = true;
 }
 
 OverlayInterstitialAdDetector&
