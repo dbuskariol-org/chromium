@@ -630,7 +630,7 @@ void BlinkTestRunner::SetPermission(const std::string& name,
 }
 
 void BlinkTestRunner::ResetPermissions() {
-  Send(new WebTestHostMsg_ResetPermissions(routing_id()));
+  GetWebTestClientRemote().ResetPermissions();
 }
 
 void BlinkTestRunner::DispatchBeforeInstallPromptEvent(

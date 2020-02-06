@@ -38,7 +38,6 @@ IPC_MESSAGE_ROUTED4(WebTestHostMsg_SetPermission,
                     blink::mojom::PermissionStatus /* status */,
                     GURL /* origin */,
                     GURL /* embedding_origin */)
-IPC_MESSAGE_ROUTED0(WebTestHostMsg_ResetPermissions)
 IPC_MESSAGE_ROUTED2(WebTestHostMsg_InitiateCaptureDump,
                     bool /* should dump navigation history */,
                     bool /* should dump pixels */)

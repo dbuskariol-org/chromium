@@ -25,4 +25,7 @@ interface WebTestClient {
   // - allow all cookies when |block| is false
   // - block only third-party cookies when |block| is true
   BlockThirdPartyCookies(bool block);
+
+  // Reset all permissions of WebTestPermissionManager.
+  ResetPermissions();
 };
