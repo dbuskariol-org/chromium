@@ -2,20 +2,29 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// clang-format off
+// #import {flush} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
+// #import {flushTasks} from 'chrome://test/test_util.m.js';
+// #import {Route, Router} from 'chrome://settings/settings.js';
+// #import {setupPopstateListener} from 'chrome://test/settings/test_util.m.js';
+// clang-format on
+
 suite('SettingsSubpage', function() {
+  let testRoutes;
+
   setup(function() {
-    const routes = {
+    testRoutes = {
       BASIC: new settings.Route('/'),
     };
-    routes.SEARCH = routes.BASIC.createSection('/search', 'search');
-    routes.SEARCH_ENGINES = routes.SEARCH.createChild('/searchEngines');
-    routes.PEOPLE = routes.BASIC.createSection('/people', 'people');
-    routes.SYNC = routes.PEOPLE.createChild('/syncSetup');
-    routes.PRIVACY = routes.BASIC.createSection('/privacy', 'privacy');
-    routes.CERTIFICATES = routes.PRIVACY.createChild('/certificates');
+    testRoutes.SEARCH = testRoutes.BASIC.createSection('/search', 'search');
+    testRoutes.SEARCH_ENGINES = testRoutes.SEARCH.createChild('/searchEngines');
+    testRoutes.PEOPLE = testRoutes.BASIC.createSection('/people', 'people');
+    testRoutes.SYNC = testRoutes.PEOPLE.createChild('/syncSetup');
+    testRoutes.PRIVACY = testRoutes.BASIC.createSection('/privacy', 'privacy');
+    testRoutes.CERTIFICATES = testRoutes.PRIVACY.createChild('/certificates');
 
-    settings.Router.resetInstanceForTesting(new settings.Router(routes));
-    settings.routes = routes;
+    settings.Router.resetInstanceForTesting(new settings.Router(testRoutes));
+
     test_util.setupPopstateListener();
 
     PolymerTest.clearBody();
@@ -53,11 +62,10 @@ suite('SettingsSubpage', function() {
 
   test('navigates to parent when there is no history', function() {
     // Pretend that we initially started on the CERTIFICATES route.
-    window.history.replaceState(
-        undefined, '', settings.routes.CERTIFICATES.path);
+    window.history.replaceState(undefined, '', testRoutes.CERTIFICATES.path);
     settings.Router.getInstance().initializeRouteFromUrl();
     assertEquals(
-        settings.routes.CERTIFICATES,
+        testRoutes.CERTIFICATES,
         settings.Router.getInstance().getCurrentRoute());
 
     const subpage = document.createElement('settings-subpage');
@@ -65,15 +73,14 @@ suite('SettingsSubpage', function() {
 
     subpage.$$('cr-icon-button').click();
     assertEquals(
-        settings.routes.PRIVACY,
-        settings.Router.getInstance().getCurrentRoute());
+        testRoutes.PRIVACY, settings.Router.getInstance().getCurrentRoute());
   });
 
   test('navigates to any route via window.back()', function(done) {
-    settings.Router.getInstance().navigateTo(settings.routes.BASIC);
-    settings.Router.getInstance().navigateTo(settings.routes.SYNC);
+    settings.Router.getInstance().navigateTo(testRoutes.BASIC);
+    settings.Router.getInstance().navigateTo(testRoutes.SYNC);
     assertEquals(
-        settings.routes.SYNC, settings.Router.getInstance().getCurrentRoute());
+        testRoutes.SYNC, settings.Router.getInstance().getCurrentRoute());
 
     const subpage = document.createElement('settings-subpage');
     document.body.appendChild(subpage);
@@ -90,13 +97,13 @@ suite('SettingsSubpage', function() {
 
   test('updates the title of the document when active', function() {
     const expectedTitle = 'My Subpage Title';
-    settings.Router.getInstance().navigateTo(settings.routes.SEARCH);
+    settings.Router.getInstance().navigateTo(testRoutes.SEARCH);
     const subpage = document.createElement('settings-subpage');
-    subpage.setAttribute('route-path', settings.routes.SEARCH_ENGINES.path);
+    subpage.setAttribute('route-path', testRoutes.SEARCH_ENGINES.path);
     subpage.setAttribute('page-title', expectedTitle);
     document.body.appendChild(subpage);
 
-    settings.Router.getInstance().navigateTo(settings.routes.SEARCH_ENGINES);
+    settings.Router.getInstance().navigateTo(testRoutes.SEARCH_ENGINES);
     assertEquals(
         document.title,
         loadTimeData.getStringF('settingsAltPageTitle', expectedTitle));
