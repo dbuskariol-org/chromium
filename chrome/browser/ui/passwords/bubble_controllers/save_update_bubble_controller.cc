@@ -24,10 +24,6 @@
 #include "content/public/browser/web_contents.h"
 #include "ui/base/l10n/l10n_util.h"
 
-#if defined(PASSWORD_STORE_SELECT_ENABLED)
-#include "components/password_manager/core/browser/password_feature_manager.h"
-#endif  // defined(PASSWORD_STORE_SELECT_ENABLED)
-
 namespace {
 
 namespace metrics_util = password_manager::metrics_util;
@@ -255,18 +251,6 @@ bool SaveUpdateBubbleController::RevealPasswords() {
     delegate_->OnPasswordsRevealed();
   return reveal_immediately;
 }
-
-#if defined(PASSWORD_STORE_SELECT_ENABLED)
-void SaveUpdateBubbleController::OnToggleAccountStore(bool is_checked) {
-  delegate_->GetPasswordFeatureManager()->SetDefaultPasswordStore(
-      is_checked ? Store::kAccountStore : Store::kProfileStore);
-}
-
-bool SaveUpdateBubbleController::IsUsingAccountStore() {
-  return delegate_->GetPasswordFeatureManager()->GetDefaultPasswordStore() ==
-         Store::kAccountStore;
-}
-#endif  // defined(PASSWORD_STORE_SELECT_ENABLED)
 
 void SaveUpdateBubbleController::ReportInteractions() {
   if (state_ == password_manager::ui::CHROME_SIGN_IN_PROMO_STATE)

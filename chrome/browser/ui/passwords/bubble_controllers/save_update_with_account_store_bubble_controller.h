@@ -61,13 +61,11 @@ class SaveUpdateWithAccountStoreBubbleController
   // re-authentication is successful.
   bool RevealPasswords();
 
-#if defined(PASSWORD_STORE_SELECT_ENABLED)
   // Called by the view when the account store checkbox is toggled.
   void OnToggleAccountStore(bool is_checked);
 
   // Returns true iff the password account store is used.
   bool IsUsingAccountStore();
-#endif  // defined(PASSWORD_STORE_SELECT_ENABLED)
 
   password_manager::ui::State state() const { return state_; }
 
