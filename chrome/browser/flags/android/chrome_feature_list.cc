@@ -166,7 +166,6 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kKitKatSupported,
     &kNewPhotoPicker,
     &kNotificationSuspender,
-    &kNTPLaunchAfterInactivity,
     &kOfflineIndicatorV2,
     &kOmniboxSpareRenderer,
     &kOverlayNewLayout,
@@ -500,9 +499,6 @@ const base::Feature kNewPhotoPicker{"NewPhotoPicker",
 // okay about leaving it on.
 const base::Feature kNotificationSuspender{"NotificationSuspender",
                                            base::FEATURE_ENABLED_BY_DEFAULT};
-
-const base::Feature kNTPLaunchAfterInactivity{
-    "NTPLaunchAfterInactivity", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kOfflineIndicatorV2{"OfflineIndicatorV2",
                                         base::FEATURE_DISABLED_BY_DEFAULT};

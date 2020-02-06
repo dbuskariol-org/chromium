@@ -91,7 +91,6 @@ extern const base::Feature kKitKatSupported;
 extern const base::Feature kLanguagesPreference;
 extern const base::Feature kNewPhotoPicker;
 extern const base::Feature kNotificationSuspender;
-extern const base::Feature kNTPLaunchAfterInactivity;
 extern const base::Feature kOfflineIndicatorV2;
 extern const base::Feature kOmniboxSpareRenderer;
 extern const base::Feature kOverlayNewLayout;

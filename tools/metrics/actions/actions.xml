@@ -13583,6 +13583,7 @@ should be able to be added at any place in this file.
 </action>
 
 <action name="MobileStartup.MainIntent.NTPCreatedDueToInactivity">
+  <obsolete>Deprecated as of 02/2019</obsolete>
   <owner>tedchoc@chromium.org</owner>
   <description>
     An ACTION_MAIN intent was received by Chrome and an NTP was created due to

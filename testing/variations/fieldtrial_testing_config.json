@@ -3740,24 +3740,6 @@
             ]
         }
     ],
-    "NTPLaunchAfterInactivity": [
-        {
-            "platforms": [
-                "android"
-            ],
-            "experiments": [
-                {
-                    "name": "OneHourDelay",
-                    "params": {
-                        "delay_in_mins": "60"
-                    },
-                    "enable_features": [
-                        "NTPLaunchAfterInactivity"
-                    ]
-                }
-            ]
-        }
-    ],
     "NTPPopularSites": [
         {
             "platforms": [
