@@ -12,7 +12,8 @@ def _setup_sys_path():
     expected_path = 'third_party/blink/renderer/bindings/scripts/bind_gen/'
 
     this_dir = os.path.dirname(__file__)
-    root_dir = os.path.join(this_dir, *(['..'] * expected_path.count('/')))
+    root_dir = os.path.abspath(
+        os.path.join(this_dir, *(['..'] * expected_path.count('/'))))
 
     sys.path = [
         # //third_party/blink/renderer/bindings/scripts/web_idl
