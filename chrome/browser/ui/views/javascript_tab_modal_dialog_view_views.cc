@@ -32,24 +32,6 @@ base::string16 JavaScriptTabModalDialogViewViews::GetWindowTitle() const {
   return title_;
 }
 
-bool JavaScriptTabModalDialogViewViews::Cancel() {
-  if (dialog_callback_)
-    std::move(dialog_callback_).Run(false, base::string16());
-  return true;
-}
-
-bool JavaScriptTabModalDialogViewViews::Accept() {
-  if (dialog_callback_)
-    std::move(dialog_callback_).Run(true, message_box_view_->GetInputText());
-  return true;
-}
-
-bool JavaScriptTabModalDialogViewViews::Close() {
-  if (dialog_force_closed_callback_)
-    std::move(dialog_force_closed_callback_).Run();
-  return true;
-}
-
 bool JavaScriptTabModalDialogViewViews::ShouldShowCloseButton() const {
   return false;
 }
@@ -90,6 +72,26 @@ JavaScriptTabModalDialogViewViews::JavaScriptTabModalDialogViewViews(
       // being made.
       is_alert ? ui::DIALOG_BUTTON_OK
                : (ui::DIALOG_BUTTON_OK | ui::DIALOG_BUTTON_CANCEL));
+
+  DialogDelegate::set_accept_callback(base::BindOnce(
+      [](JavaScriptTabModalDialogViewViews* dialog) {
+        if (dialog->dialog_callback_)
+          std::move(dialog->dialog_callback_)
+              .Run(true, dialog->message_box_view_->GetInputText());
+      },
+      base::Unretained(this)));
+  DialogDelegate::set_cancel_callback(base::BindOnce(
+      [](JavaScriptTabModalDialogViewViews* dialog) {
+        if (dialog->dialog_callback_)
+          std::move(dialog->dialog_callback_).Run(false, base::string16());
+      },
+      base::Unretained(this)));
+  DialogDelegate::set_close_callback(base::BindOnce(
+      [](JavaScriptTabModalDialogViewViews* dialog) {
+        if (dialog->dialog_force_closed_callback_)
+          std::move(dialog->dialog_force_closed_callback_).Run();
+      },
+      base::Unretained(this)));
 
   int options = views::MessageBoxView::DETECT_DIRECTIONALITY;
   if (dialog_type == content::JAVASCRIPT_DIALOG_TYPE_PROMPT)

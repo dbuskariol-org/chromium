@@ -31,9 +31,6 @@ class JavaScriptTabModalDialogViewViews
 
   // views::DialogDelegate:
   base::string16 GetWindowTitle() const override;
-  bool Cancel() override;
-  bool Accept() override;
-  bool Close() override;
 
   // views::WidgetDelegate:
   bool ShouldShowCloseButton() const override;

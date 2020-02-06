@@ -281,6 +281,8 @@ PasswordSaveUpdateView::PasswordSaveUpdateView(
   }
 
   DialogDelegate::SetFootnoteView(CreateFooterView());
+  DialogDelegate::set_cancel_callback(base::BindOnce(
+      &PasswordSaveUpdateView::OnDialogCancelled, base::Unretained(this)));
   UpdateDialogButtons();
 }
 
@@ -309,18 +311,13 @@ bool PasswordSaveUpdateView::Accept() {
   return true;
 }
 
-bool PasswordSaveUpdateView::Cancel() {
+void PasswordSaveUpdateView::OnDialogCancelled() {
   UpdateUsernameAndPasswordInModel();
   if (is_update_bubble_) {
     controller_.OnNopeUpdateClicked();
-    return true;
+  } else {
+    controller_.OnNeverForThisSiteClicked();
   }
-  controller_.OnNeverForThisSiteClicked();
-  return true;
-}
-
-bool PasswordSaveUpdateView::Close() {
-  return true;
 }
 
 void PasswordSaveUpdateView::ButtonPressed(views::Button* sender,
