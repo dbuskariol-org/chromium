@@ -2360,6 +2360,11 @@
     "expiry_milestone": 90
   },
   {
+    "name": "global-media-controls-picture-in-picture",
+    "owners": [ "jazzhsu", "steimel", "media-dev" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "google-password-manager",
     "owners": [ "ioanap", "jdoerrie" ],
     "expiry_milestone": 82
