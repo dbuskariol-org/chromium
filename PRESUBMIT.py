@@ -4752,6 +4752,13 @@ def _CheckTranslationScreenshots(input_api, output_api):
     file_path = f.LocalPath()
     old_id_to_msg_map = {}
     new_id_to_msg_map = {}
+    # Note that this code doesn't check if the file has been deleted. This is
+    # OK because it only uses the old and new file contents and doesn't load
+    # the file via its path.
+    # It's also possible that a file's content refers to a renamed or deleted
+    # file via a <part> tag, such as <part file="now-deleted-file.grdp">. This
+    # is OK as well, because grd_helper ignores <part> tags when loading .grd or
+    # .grdp files.
     if file_path.endswith('.grdp'):
       if f.OldContents():
         old_id_to_msg_map = grd_helper.GetGrdpMessagesFromString(
