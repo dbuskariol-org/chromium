@@ -6323,9 +6323,6 @@ crbug.com/1034789 [ Mac ] http/tests/security/frameNavigation/xss-ALLOWED-parent
 crbug.com/1034789 [ Mac10.13 ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 
-# Sheriff 2019-12-18
-crbug.com/859169 http/tests/devtools/layers/layer-compositing-reasons.js [ Pass Failure ]
-
 # Sheriff 2019-12-23
 crbug.com/1036626 http/tests/devtools/tracing/tracing-record-input-events.js [ Pass Failure ]
 crbug.com/1036626 virtual/threaded/http/tests/devtools/tracing/tracing-record-input-events.js [ Pass Failure ]
