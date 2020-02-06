@@ -469,6 +469,9 @@ void AccountReconcilor::StartReconcile() {
     return;
   }
 
+  // TODO(crbug.com/967603): remove when root cause is found.
+  CHECK(delegate_);
+  CHECK(client_);
   if (!delegate_->IsReconcileEnabled() || !client_->AreSigninCookiesAllowed()) {
     VLOG(1) << "AccountReconcilor::StartReconcile: !enabled or no cookies";
     SetState(AccountReconcilorState::ACCOUNT_RECONCILOR_OK);

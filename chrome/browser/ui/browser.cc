@@ -473,6 +473,10 @@ Browser::Browser(const CreateParams& params)
           std::make_unique<extensions::ExtensionBrowserWindowHelper>(this))
 #endif
 {
+  // TODO(crbug.com/967603): remove when root cause is found.
+  CHECK(g_browser_process);
+  CHECK(!g_browser_process->IsShuttingDown());
+
   // If this causes a crash then a window is being opened using a profile type
   // that is disallowed by policy. The crash prevents the disabled window type
   // from opening at all, but the path that triggered it should be fixed.
