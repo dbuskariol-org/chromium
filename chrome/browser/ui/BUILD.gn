@@ -1327,6 +1327,8 @@ jumbo_static_library("ui") {
       "webui/policy_indicator_localized_strings_provider.h",
       "webui/profile_info_watcher.cc",
       "webui/profile_info_watcher.h",
+      "webui/recent_site_settings_helper.cc",
+      "webui/recent_site_settings_helper.h",
       "webui/settings/about_handler.cc",
       "webui/settings/about_handler.h",
       "webui/settings/accessibility_main_handler.cc",
