@@ -438,6 +438,7 @@ viz_source_set("unit_tests") {
     "display/layer_quad_unittest.cc",
     "display/renderer_pixeltest.cc",
     "display/shader_unittest.cc",
+    "display/skia_readback_pixeltest.cc",
     "display/software_renderer_unittest.cc",
     "display/surface_aggregator_pixeltest.cc",
     "display/surface_aggregator_unittest.cc",
