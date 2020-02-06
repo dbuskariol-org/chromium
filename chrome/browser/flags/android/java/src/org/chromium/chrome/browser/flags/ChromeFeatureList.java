@@ -173,7 +173,6 @@ public abstract class ChromeFeatureList {
             "AndroidNightModeTabReparenting";
     public static final String ANDROID_PAY_INTEGRATION_V1 = "AndroidPayIntegrationV1";
     public static final String ANDROID_PAY_INTEGRATION_V2 = "AndroidPayIntegrationV2";
-    public static final String ANDROID_PAYMENT_APPS = "AndroidPaymentApps";
     public static final String ANDROID_SEARCH_ENGINE_CHOICE_NOTIFICATION =
             "AndroidSearchEngineChoiceNotification";
     public static final String ANDROID_SETUP_SEARCH_ENGINE = "AndroidSetupSearchEngine";

@@ -103,7 +103,6 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kAndroidNightModeTabReparenting,
     &kAndroidPayIntegrationV1,
     &kAndroidPayIntegrationV2,
-    &kAndroidPaymentApps,
     &kAndroidSearchEngineChoiceNotification,
     &kAndroidSetupSearchEngine,
     &kAndroidSiteSettingsUIRefresh,
@@ -298,10 +297,6 @@ const base::Feature kAllowRemoteContextForNotifications{
 // TODO(rouslan): Remove this.
 const base::Feature kAndroidPayIntegrationV2{"AndroidPayIntegrationV2",
                                              base::FEATURE_ENABLED_BY_DEFAULT};
-
-// TODO(rouslan): Remove this.
-const base::Feature kAndroidPaymentApps{"AndroidPaymentApps",
-                                        base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kAndroidSearchEngineChoiceNotification{
     "AndroidSearchEngineChoiceNotification", base::FEATURE_ENABLED_BY_DEFAULT};
