@@ -8,8 +8,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.Visibility.GONE;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -21,6 +23,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.areAnimatorsEnabled;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.closeFirstTabInTabSwitcher;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.createTabs;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.enterTabSwitcher;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.rotateDeviceToOrientation;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabModelTabCount;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabSwitcherCardCount;
@@ -443,7 +448,7 @@ public class StartSurfaceLayoutTest {
         assertEquals(1, cta.getCurrentTabModel().index());
 
         // The last tab should still get thumbnail even though readbacks for other tabs are stuck.
-        TabUiTestHelper.enterTabSwitcher(cta);
+        enterTabSwitcher(cta);
         TabUiTestHelper.checkThumbnailsExist(cta.getTabModelSelector().getCurrentTab());
     }
 
@@ -1004,7 +1009,7 @@ public class StartSurfaceLayoutTest {
     public void testThumbnailAspectRatio_default() throws Exception {
         // clang-format on
         prepareTabs(2, 0, mUrl);
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view))
                 .check(ThumbnailAspectRatioAssertion.havingAspectRatio(1.0));
     }
@@ -1016,7 +1021,7 @@ public class StartSurfaceLayoutTest {
     @CommandLineFlags.Add({BASE_PARAMS + "/thumbnail_aspect_ratio/0.75"})
     public void testThumbnailAspectRatio_point75() throws Exception {
         prepareTabs(2, 0, mUrl);
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view))
                 .check(ThumbnailAspectRatioAssertion.havingAspectRatio(0.75));
         leaveGTSAndVerifyThumbnailsAreReleased();
@@ -1024,7 +1029,7 @@ public class StartSurfaceLayoutTest {
         Tab tab = mActivityTestRule.getActivity().getTabModelSelector().getCurrentTab();
         mActivityTestRule.loadUrlInTab(
                 NTP_URL, PageTransition.TYPED | PageTransition.FROM_ADDRESS_BAR, tab);
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view))
                 .check(ThumbnailAspectRatioAssertion.havingAspectRatio(0.75));
     }
@@ -1037,7 +1042,7 @@ public class StartSurfaceLayoutTest {
     public void testThumbnailAspectRatio_fromTwoToPoint75() throws Exception {
         // clang-format on
         prepareTabs(2, 0, mUrl);
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view))
                 .check(ThumbnailAspectRatioAssertion.havingAspectRatio(2.0));
         TabModel currentTabModel =
@@ -1050,7 +1055,7 @@ public class StartSurfaceLayoutTest {
         simulateAspectRatioChangedToPoint75();
         verifyAllThumbnailHasAspectRatio(0.75);
 
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view))
                 .check(ThumbnailAspectRatioAssertion.havingAspectRatio(2.0));
         ApplicationTestUtils.finishActivity(mActivityTestRule.getActivity());
@@ -1077,7 +1082,7 @@ public class StartSurfaceLayoutTest {
                 TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
                 TabContentManager.ThumbnailFetchingResult.GOT_DIFFERENT_ASPECT_RATIO_JPEG);
 
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         int currentJpegCount = RecordHistogram.getHistogramValueCountForTesting(
                 TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
                 TabContentManager.ThumbnailFetchingResult.GOT_JPEG);
@@ -1111,7 +1116,7 @@ public class StartSurfaceLayoutTest {
         ApplicationTestUtils.finishActivity(mActivityTestRule.getActivity());
         mActivityTestRule.startMainActivityFromLauncher();
 
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         assertEquals(2,
                 RecordHistogram.getHistogramValueCountForTesting(
                         TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
@@ -1155,7 +1160,7 @@ public class StartSurfaceLayoutTest {
                 TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
                 TabContentManager.ThumbnailFetchingResult.GOT_DIFFERENT_ASPECT_RATIO_JPEG);
 
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         int currentJpegCount = RecordHistogram.getHistogramValueCountForTesting(
                 TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
                 TabContentManager.ThumbnailFetchingResult.GOT_JPEG);
@@ -1193,7 +1198,7 @@ public class StartSurfaceLayoutTest {
         simulateAspectRatioChangedToPoint75();
         verifyAllThumbnailHasAspectRatio(0.75);
 
-        TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+        enterTabSwitcher(mActivityTestRule.getActivity());
         assertEquals(0,
                 RecordHistogram.getHistogramValueCountForTesting(
                         TabContentManager.UMA_THUMBNAIL_FETCHING_RESULT,
@@ -1260,6 +1265,69 @@ public class StartSurfaceLayoutTest {
         prepareTabs(1, 0, mUrl);
         enterGTSWithThumbnailChecking();
         leaveGTSAndVerifyThumbnailsAreReleased();
+    }
+
+    @Test
+    @MediumTest
+    @Feature("NewTabVariation")
+    // clang-format off
+    @Features.DisableFeatures({ChromeFeatureList.TAB_TO_GTS_ANIMATION,
+            ChromeFeatureList.CLOSE_TAB_SUGGESTIONS})
+    @CommandLineFlags.Add({BASE_PARAMS + "/tab_grid_layout_android_new_tab/NewTabVariation"})
+    public void testNewTabVariation() throws InterruptedException {
+        // clang-format on
+        ChromeTabbedActivity cta = mActivityTestRule.getActivity();
+        prepareTabs(2, 0, null);
+        enterTabSwitcher(cta);
+        verifyTabModelTabCount(cta, 2, 0);
+        checkNewTabVariationVisibility(true);
+
+        createTabs(cta, true, 1);
+        verifyTabModelTabCount(cta, 2, 1);
+        enterTabSwitcher(cta);
+        checkNewTabVariationVisibility(false);
+
+        switchTabModel(false);
+        checkNewTabVariationVisibility(false);
+
+        switchTabModel(true);
+        checkNewTabVariationVisibility(false);
+
+        closeFirstTabInTabSwitcher();
+        verifyTabModelTabCount(cta, 2, 0);
+        checkNewTabVariationVisibility(true);
+
+        createTabs(cta, true, 2);
+        verifyTabModelTabCount(cta, 2, 2);
+        enterTabSwitcher(cta);
+        checkNewTabVariationVisibility(false);
+
+        MenuUtils.invokeCustomMenuActionSync(InstrumentationRegistry.getInstrumentation(), cta,
+                R.id.close_all_incognito_tabs_menu_id);
+        verifyTabModelTabCount(cta, 2, 0);
+        checkNewTabVariationVisibility(true);
+    }
+
+    private void checkNewTabVariationVisibility(boolean isVisible) {
+        if (isVisible) {
+            onView(allOf(withId(R.id.incognito_toggle_tabs),
+                           withParent(withId(R.id.tab_switcher_toolbar))))
+                    .check(matches(withEffectiveVisibility(GONE)));
+            onView(allOf(withId(R.id.new_tab_button),
+                           withParent(withId(R.id.tab_switcher_toolbar))))
+                    .check(matches(withEffectiveVisibility(GONE)));
+            onView(allOf(withId(R.id.new_tab_view), withParent(withId(R.id.tab_switcher_toolbar))))
+                    .check(matches(isDisplayed()));
+        } else {
+            onView(allOf(withId(R.id.incognito_toggle_tabs),
+                           withParent(withId(R.id.tab_switcher_toolbar))))
+                    .check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.new_tab_button),
+                           withParent(withId(R.id.tab_switcher_toolbar))))
+                    .check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.new_tab_view), withParent(withId(R.id.tab_switcher_toolbar))))
+                    .check(matches(withEffectiveVisibility(GONE)));
+        }
     }
 
     private static class TabCountAssertion implements ViewAssertion {
