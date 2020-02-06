@@ -283,7 +283,6 @@ _NOT_CONVERTED_TO_MODERN_BIND_AND_CALLBACK = '|'.join((
   '^chrome/app/',
   '^chrome/browser/',
   '^chrome/chrome_elf/',
-  '^chrome/chrome_watcher/',
   '^chrome/common/',
   '^chrome/installer/',
   '^chrome/renderer/',

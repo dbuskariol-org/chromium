@@ -815,9 +815,6 @@ const char kShowIcons[]                     = "show-icons";
 
 // Runs un-installation steps that were done by chrome first-run.
 const char kUninstall[]                     = "uninstall";
-
-// Causes the process to run as a watcher process.
-const char kWatcherProcess[]                = "watcher";
 #endif  // defined(OS_WIN)
 
 #if BUILDFLAG(ENABLE_PRINT_PREVIEW) && !defined(OFFICIAL_BUILD)

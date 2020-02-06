@@ -54,7 +54,6 @@
 #include "chrome/browser/win/conflicts/enumerate_shell_extensions.h"
 #include "chrome/browser/win/conflicts/module_database.h"
 #include "chrome/browser/win/conflicts/module_event_sink_impl.h"
-#include "chrome/chrome_watcher/chrome_watcher_main_api.h"
 #include "chrome/common/channel_info.h"
 #include "chrome/common/chrome_constants.h"
 #include "chrome/common/chrome_features.h"

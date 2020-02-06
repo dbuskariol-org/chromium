@@ -6083,10 +6083,6 @@ test("chrome_app_unittests") {
     "../app/android/chrome_main_delegate_android_unittest.cc",
     "../app/chrome_main_delegate.cc",
     "../app/chrome_main_delegate.h",
-    "../app/chrome_watcher_client_unittest_win.cc",
-    "../app/chrome_watcher_client_win.cc",
-    "../app/chrome_watcher_command_line_win.cc",
-    "../app/chrome_watcher_command_line_win_unittest.cc",
     "../app/resources/resources_unittest.cc",
   ]
   deps = [

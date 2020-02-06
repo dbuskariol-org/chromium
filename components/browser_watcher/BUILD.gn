@@ -9,26 +9,10 @@ if (is_win) {
     sources = [ "activity_report.proto" ]
   }
 
-  static_library("browser_watcher") {
-    # This is a separate lib to minimize the dependencies for its
-    # hosting binary "chrome_watcher.dll".
-    sources = [
-      "endsession_watcher_window_win.cc",
-      "endsession_watcher_window_win.h",
-      "exit_code_watcher_win.cc",
-      "exit_code_watcher_win.h",
-      "window_hang_monitor_win.cc",
-      "window_hang_monitor_win.h",
-    ]
-    deps = [ "//base" ]
-  }
-
   static_library("browser_watcher_client") {
     sources = [
-      "watcher_client_win.cc",
-      "watcher_client_win.h",
-      "watcher_metrics_provider_win.cc",
-      "watcher_metrics_provider_win.h",
+      "exit_code_watcher_win.cc",
+      "exit_code_watcher_win.h",
     ]
     deps = [
       ":activity_report_proto",
@@ -100,17 +84,12 @@ if (is_win) {
     sources = [
       "activity_report_extractor_unittest.cc",
       "activity_tracker_annotation_unittest.cc",
-      "endsession_watcher_window_win_unittest.cc",
       "exit_code_watcher_win_unittest.cc",
       "extended_crash_reporting_win_unittest.cc",
-      "watcher_client_win_unittest.cc",
-      "watcher_metrics_provider_win_unittest.cc",
-      "window_hang_monitor_win_unittest.cc",
     ]
     configs += [ "//build/config/compiler:no_size_t_to_int_warning" ]
     deps = [
       ":activity_report_proto",
-      ":browser_watcher",
       ":browser_watcher_client",
       ":stability_client",
       ":stability_common",
