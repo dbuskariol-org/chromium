@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.autofill;
+package org.chromium.chrome.browser.autofill.settings;
 
 import android.view.KeyEvent;
 import android.widget.EditText;

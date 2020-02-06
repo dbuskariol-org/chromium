@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.autofill;
+package org.chromium.chrome.browser.autofill.settings;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -49,8 +49,8 @@ public class AutofillLocalCardEditor extends AutofillCreditCardEditor {
     public AutofillLocalCardEditor() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Allow screenshots of the credit card number in Canary, Dev, and developer builds.
         if (ChromeVersionInfo.isBetaBuild() || ChromeVersionInfo.isStableBuild()) {
             WindowManager.LayoutParams attributes = getActivity().getWindow().getAttributes();
@@ -84,8 +84,8 @@ public class AutofillLocalCardEditor extends AutofillCreditCardEditor {
 
     @Override
     protected int getTitleResourceId(boolean isNewEntry) {
-        return isNewEntry
-                ? R.string.autofill_create_credit_card : R.string.autofill_edit_credit_card;
+        return isNewEntry ? R.string.autofill_create_credit_card
+                          : R.string.autofill_edit_credit_card;
     }
 
     @Override
@@ -103,8 +103,8 @@ public class AutofillLocalCardEditor extends AutofillCreditCardEditor {
     }
 
     void addSpinnerAdapters() {
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(),
-                android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter =
+                new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item);
 
         // Populate the month dropdown.
         Calendar calendar = Calendar.getInstance();
@@ -119,8 +119,8 @@ public class AutofillLocalCardEditor extends AutofillCreditCardEditor {
         mExpirationMonth.setAdapter(adapter);
 
         // Populate the year dropdown.
-        adapter = new ArrayAdapter<CharSequence>(getActivity(),
-                android.R.layout.simple_spinner_item);
+        adapter =
+                new ArrayAdapter<CharSequence>(getActivity(), android.R.layout.simple_spinner_item);
         int initialYear = calendar.get(Calendar.YEAR);
         for (int year = initialYear; year < initialYear + 10; year++) {
             adapter.add(Integer.toString(year));
@@ -181,8 +181,8 @@ public class AutofillLocalCardEditor extends AutofillCreditCardEditor {
         // Issuer network will be empty if credit card number is not valid.
         if (TextUtils.isEmpty(personalDataManager.getBasicCardIssuerNetwork(
                     cardNumber, true /* emptyIfInvalid */))) {
-            mNumberLabel.setError(mContext.getString(
-                    R.string.payments_card_number_invalid_validation_message));
+            mNumberLabel.setError(
+                    mContext.getString(R.string.payments_card_number_invalid_validation_message));
             return false;
         }
         CreditCard card = personalDataManager.getCreditCardForNumber(cardNumber);
