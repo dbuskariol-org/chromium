@@ -2182,6 +2182,10 @@ crbug.com/991413 external/wpt/css/css-text/white-space/trailing-other-space-sepa
 crbug.com/991413 external/wpt/css/css-text/white-space/trailing-other-space-separators-break-spaces-014.html [ Skip ]
 crbug.com/991413 external/wpt/css/css-text/white-space/trailing-other-space-separators-break-spaces-015.html [ Skip ]
 
+# Sheriff 2020-02-06
+# Flaking on Linux Leak
+crbug.com/1049599 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/events/overscroll-event-fired-to-element-with-overscroll-behavior.html [ Pass Failure ]
+
 # Sheriff 2019-08-19
 crbug.com/626703 [ Win7 ] external/wpt/xhr/responsexml-document-properties.htm [ Failure ]
 crbug.com/626703 [ Win7 ] external/wpt/html/dom/documents/resource-metadata-management/document-lastModified-01.html [ Failure ]
