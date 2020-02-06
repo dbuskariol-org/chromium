@@ -1367,6 +1367,8 @@ jumbo_static_library("browser") {
     "prerender/prerender_message_filter.h",
     "prerender/prerender_origin.cc",
     "prerender/prerender_origin.h",
+    "prerender/prerender_processor_impl.cc",
+    "prerender/prerender_processor_impl.h",
     "prerender/prerender_tab_helper.cc",
     "prerender/prerender_tab_helper.h",
     "prerender/prerender_util.cc",

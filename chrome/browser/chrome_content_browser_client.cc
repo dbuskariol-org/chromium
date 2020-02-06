@@ -1459,7 +1459,7 @@ void ChromeContentBrowserClient::RenderProcessWillLaunch(
 #if BUILDFLAG(ENABLE_PRINTING)
   host->AddFilter(new printing::PrintingMessageFilter(id, profile));
 #endif
-  host->AddFilter(new prerender::PrerenderMessageFilter(id, profile));
+  host->AddFilter(new prerender::PrerenderMessageFilter(id));
 
   WebRtcLoggingController::AttachToRenderProcessHost(
       host, g_browser_process->webrtc_log_uploader());
