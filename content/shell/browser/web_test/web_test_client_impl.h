@@ -32,6 +32,7 @@ class WebTestClientImpl : public mojom::WebTestClient {
   void SimulateWebNotificationClose(const std::string& title,
                                     bool by_user) override;
   void SimulateWebContentIndexDelete(const std::string& id) override;
+  void BlockThirdPartyCookies(bool block) override;
 };
 
 }  // namespace content
