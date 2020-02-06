@@ -1267,11 +1267,9 @@ LayoutUnit ClampIntrinsicBlockSize(
 
 base::Optional<MinMaxSize> CalculateMinMaxSizesIgnoringChildren(
     const NGBlockNode& node,
-    const NGBoxStrut& border_scrollbar_padding,
-    NGMinMaxSizeType type) {
+    const NGBoxStrut& border_scrollbar_padding) {
   MinMaxSize sizes;
-  if (type == NGMinMaxSizeType::kBorderBoxSize)
-    sizes += border_scrollbar_padding.InlineSum();
+  sizes += border_scrollbar_padding.InlineSum();
 
   // If intrinsic size was overridden, then use that.
   const LayoutUnit intrinsic_size_override =

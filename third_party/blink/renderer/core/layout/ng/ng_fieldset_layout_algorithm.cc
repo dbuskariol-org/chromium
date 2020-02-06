@@ -160,12 +160,8 @@ base::Optional<MinMaxSize> NGFieldsetLayoutAlgorithm::ComputeMinMaxSize(
     const MinMaxSizeInput& input) const {
   MinMaxSize sizes;
 
-  bool apply_size_containment = node_.ShouldApplySizeContainment();
   // TODO(crbug.com/1011842): Need to consider content-size here.
-  if (apply_size_containment) {
-    if (input.size_type == NGMinMaxSizeType::kContentBoxSize)
-      return sizes;
-  }
+  bool apply_size_containment = node_.ShouldApplySizeContainment();
 
   // Size containment does not consider the legend for sizing.
   if (!apply_size_containment) {

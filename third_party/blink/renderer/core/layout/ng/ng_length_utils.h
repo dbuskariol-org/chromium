@@ -611,9 +611,7 @@ LayoutUnit ClampIntrinsicBlockSize(
 // itself.
 base::Optional<MinMaxSize> CalculateMinMaxSizesIgnoringChildren(
     const NGBlockNode&,
-    const NGBoxStrut& border_scrollbar_padding,
-    NGMinMaxSizeType);
-
+    const NGBoxStrut& border_scrollbar_padding);
 
 }  // namespace blink
 
