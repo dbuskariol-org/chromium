@@ -91,7 +91,10 @@ SkiaOutputDeviceGL::SkiaOutputDeviceGL(
   supports_alpha_ = alpha_bits > 0;
 }
 
-SkiaOutputDeviceGL::~SkiaOutputDeviceGL() = default;
+SkiaOutputDeviceGL::~SkiaOutputDeviceGL() {
+  // gl_surface_ will be destructed soon.
+  memory_type_tracker_->TrackMemFree(backbuffer_estimated_size_);
+}
 
 bool SkiaOutputDeviceGL::Reshape(const gfx::Size& size,
                                  float device_scale_factor,
@@ -139,6 +142,19 @@ bool SkiaOutputDeviceGL::Reshape(const gfx::Size& size,
                << framebuffer_info.fFormat << " " << color_space.ToString()
                << " " << size.ToString();
   }
+
+  memory_type_tracker_->TrackMemFree(backbuffer_estimated_size_);
+  GLenum format = gpu::gles2::TextureManager::ExtractFormatFromStorageFormat(
+      framebuffer_info.fFormat);
+  GLenum type = gpu::gles2::TextureManager::ExtractTypeFromStorageFormat(
+      framebuffer_info.fFormat);
+  uint32_t estimated_size;
+  gpu::gles2::GLES2Util::ComputeImageDataSizes(
+      size.width(), size.height(), 1 /* depth */, format, type,
+      4 /* alignment */, &estimated_size, nullptr, nullptr);
+  backbuffer_estimated_size_ = estimated_size * gl_surface_->GetBufferCount();
+  memory_type_tracker_->TrackMemAlloc(backbuffer_estimated_size_);
+
   return !!sk_surface_;
 }
 
