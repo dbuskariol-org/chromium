@@ -2055,4 +2055,34 @@
       await remoteCall.waitForElement(appId, query.query);
     }
   };
+
+  /**
+   * Tests deleting an item from Quick View when in single select mode, and
+   * that Quick View closes when there are no more items to view.
+   */
+  testcase.deleteItemFromQuickViewSingleSelection = async () => {
+    // Open Files app on Downloads containing ENTRIES.hello.
+    const appId =
+        await setupAndWaitUntilReady(RootPath.DOWNLOADS, [ENTRIES.hello], []);
+
+    // Open the file in Quick View.
+    await openQuickView(appId, ENTRIES.hello.nameText);
+
+    // Press Delete
+    const deleteKey = ['#quick-view', 'Delete', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, deleteKey),
+        'Pressing Delete failed.');
+
+    // Click the OK button.
+    const deleteConfirm = ['#quick-view', '.cr-dialog-ok:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, deleteConfirm);
+
+    // Check: File has been deleted.
+    await remoteCall.waitForElementLost(
+        appId, '#file-list [file-name="hello.txt"]');
+
+    // Check: Quick View has closed.
+    await waitQuickViewClose(appId);
+  };
 })();
