@@ -186,6 +186,7 @@
 #if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
 #include "chrome/browser/first_run/upgrade_util.h"
 #include "chrome/browser/notifications/notification_ui_manager.h"
+#include "chrome/browser/policy/chrome_browser_cloud_management_controller.h"
 #include "chrome/browser/ui/user_manager.h"
 #endif
 
@@ -360,6 +361,17 @@ void BrowserProcessImpl::StartTearDown() {
   network_time_tracker_.reset();
 #if BUILDFLAG(ENABLE_PLUGINS)
   plugins_resource_service_.reset();
+#endif
+
+#if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
+  // Initial cleanup for ChromeBrowserCloudManagement, shutdown components that
+  // depend on profile and notification system. For example, ProfileManager
+  // observer and KeyServices observer need to be removed before profiles.
+  if (browser_policy_connector_ &&
+      browser_policy_connector_->chrome_browser_cloud_management_controller()) {
+    browser_policy_connector_->chrome_browser_cloud_management_controller()
+        ->ShutDown();
+  }
 #endif
 
   system_notification_helper_.reset();

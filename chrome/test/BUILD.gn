@@ -918,6 +918,7 @@ if (!is_android) {
       "../browser/download/download_frame_policy_browsertest.cc",
       "../browser/download/download_started_animation_browsertest.cc",
       "../browser/download/save_page_browsertest.cc",
+      "../browser/enterprise_reporting/report_scheduler_browsertest.cc",
       "../browser/fast_shutdown_browsertest.cc",
       "../browser/favicon/content_favicon_driver_browsertest.cc",
       "../browser/first_run/first_run_browsertest.cc",
@@ -2500,6 +2501,7 @@ if (!is_android) {
         "../browser/ui/webui/signin/user_manager_ui_browsertest.cc",
 
         # chromeos does not support machine level user cloud policies
+        "../browser/enterprise_reporting/report_scheduler_browsertest.cc",
         "../browser/policy/cloud/chrome_browser_cloud_management_browsertest.cc",
 
         # TODO(1026473): Re-enable these when linux-chromeos-rel breakage is
