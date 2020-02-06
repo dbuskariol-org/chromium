@@ -92,6 +92,10 @@ namespace blink {
 // signed.
 static const unsigned kMaxListItems = INT_MAX;
 
+// Default size when the multiple attribute is present but size attribute is
+// absent.
+const int kDefaultListBoxSize = 4;
+
 HTMLSelectElement::HTMLSelectElement(Document& document)
     : HTMLFormControlElementWithState(html_names::kSelectTag, document),
       type_ahead_(this),
@@ -198,6 +202,14 @@ void HTMLSelectElement::SelectMultipleOptionsByPopup(
   SetNeedsValidityCheck();
   // TODO(tkent): Using listBoxOnChange() is very confusing.
   ListBoxOnChange();
+}
+
+unsigned HTMLSelectElement::ListBoxSize() const {
+  DCHECK(!UsesMenuList());
+  const unsigned specified_size = size();
+  if (specified_size >= 1)
+    return specified_size;
+  return kDefaultListBoxSize;
 }
 
 bool HTMLSelectElement::UsesMenuList() const {
@@ -545,13 +557,10 @@ HTMLOptionElement* HTMLSelectElement::LastSelectableOption() const {
 HTMLOptionElement* HTMLSelectElement::NextSelectableOptionPageAway(
     HTMLOptionElement* start_option,
     SkipDirection direction) const {
+  DCHECK(!UsesMenuList());
   const ListItems& items = GetListItems();
-  // Can't use size_ because LayoutObject forces a minimum size.
-  int page_size = 0;
-  if (GetLayoutObject()->IsListBox()) {
-    // -1 so we still show context.
-    page_size = ToLayoutListBox(GetLayoutObject())->size() - 1;
-  }
+  // -1 so we still show context.
+  int page_size = ListBoxSize() - 1;
 
   // One page away, but not outside valid bounds.
   // If there is a valid option item one page away, the index is chosen.
