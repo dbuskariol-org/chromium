@@ -235,7 +235,7 @@ BrowserProcessImpl::BrowserProcessImpl(StartupData* startup_data) {
 
 void BrowserProcessImpl::Init() {
 #if defined(OS_CHROMEOS)
-  // Forces creation of |metrics_services_manager_client_| if neccessary
+  // Forces creation of |metrics_services_manager_client_| if necessary
   // (typically this call is a no-op as MetricsServicesManager has already been
   // created).
   GetMetricsServicesManager();
