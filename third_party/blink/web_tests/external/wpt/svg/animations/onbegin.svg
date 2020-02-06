@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg">
   <title>'onbegin' event handler content attribute</title>
-  <script href="../../resources/testharness.js"/>
-  <script href="../../resources/testharnessreport.js"/>
+  <script href="/resources/testharness.js"/>
+  <script href="/resources/testharnessreport.js"/>
   <rect width="0" height="100" fill="green">
     <animate id="anim" attributeName="visibility" to="visible" begin="0s" end="2s" fill="freeze"
              onbegin="document.getElementById('anim2').beginElement()"/>
