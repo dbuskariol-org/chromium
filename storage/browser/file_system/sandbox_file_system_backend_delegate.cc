@@ -253,25 +253,24 @@ SandboxFileSystemBackendDelegate::GetBaseDirectoryForOriginAndType(
 }
 
 void SandboxFileSystemBackendDelegate::OpenFileSystem(
-    const GURL& origin_url,
+    const url::Origin& origin,
     FileSystemType type,
     OpenFileSystemMode mode,
     OpenFileSystemCallback callback,
     const GURL& root_url) {
-  if (!IsAllowedScheme(origin_url)) {
+  if (!IsAllowedScheme(origin.GetURL())) {
     std::move(callback).Run(GURL(), std::string(),
                             base::File::FILE_ERROR_SECURITY);
     return;
   }
 
-  std::string name = GetFileSystemName(origin_url, type);
+  std::string name = GetFileSystemName(origin.GetURL(), type);
 
   // |quota_manager_proxy_| may be null in unit tests.
   base::OnceClosure quota_callback =
       (quota_manager_proxy_.get())
           ? base::BindOnce(&QuotaManagerProxy::NotifyStorageAccessed,
-                           quota_manager_proxy_,
-                           url::Origin::Create(origin_url),
+                           quota_manager_proxy_, origin,
                            FileSystemTypeToQuotaStorageType(type))
           : base::DoNothing();
 
@@ -279,7 +278,7 @@ void SandboxFileSystemBackendDelegate::OpenFileSystem(
   file_task_runner_->PostTaskAndReply(
       FROM_HERE,
       base::BindOnce(&OpenSandboxFileSystemOnFileTaskRunner,
-                     obfuscated_file_util(), origin_url, type, mode,
+                     obfuscated_file_util(), origin.GetURL(), type, mode,
                      base::Unretained(error_ptr)),
       base::BindOnce(&DidOpenFileSystem, weak_factory_.GetWeakPtr(),
                      std::move(quota_callback),

@@ -109,7 +109,7 @@ class COMPONENT_EXPORT(STORAGE_BROWSER) SandboxFileSystemBackendDelegate
                                                   bool create);
 
   // FileSystemBackend helpers.
-  void OpenFileSystem(const GURL& origin_url,
+  void OpenFileSystem(const url::Origin& origin,
                       FileSystemType type,
                       OpenFileSystemMode mode,
                       OpenFileSystemCallback callback,
