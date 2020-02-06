@@ -429,6 +429,15 @@ crbug.com/1044742 [ Win ] external/wpt/css/compositing/mix-blend-mode/mix-blend-
 crbug.com/1044742 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-parent-with-text.html [ Failure ]
 crbug.com/1044742 [ Linux ] external/wpt/css/compositing/mix-blend-mode/mix-blend-mode-mask.html [ Failure ]
 
+# These Timeout on Mac 10.10 only, which is odd indeed.
+crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/svgangle-animation-grad-to-rad.html [ Skip ]
+crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/types/scripted/SVGAnimatedLength.html [ Skip ]
+crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/svglength-animation-number-to-number.html [ Skip ]
+crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/animate-marker-orient-from-angle-to-auto.html [ Skip ]
+crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/animate-dynamic-update-attributeName.html [ Skip ]
+crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/short-simple-duration-and-fractional-repeatcount.html [ Skip ]
+
+
 # ====== Paint team owned tests to here ======
 
 crbug.com/922249 virtual/android/fullscreen/compositor-touch-hit-rects-fullscreen-video-controls.html [ Failure Pass ]
@@ -2866,8 +2875,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/top.htt
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/top.meta/unsafe-url/fetch/cross-https.swap-origin.http.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/service-workers/service-worker/unregister-then-register-new-script.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/worker-module.http-rp/strict-origin/xhr/cross-https.keep-origin.http.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/svg/animations/svgangle-animation-grad-to-rad.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/svg/types/scripted/SVGAnimatedLength.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/infrastructure/server/http2-context.sub.h2.any.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/infrastructure/server/http2-context.sub.h2.any.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/infrastructure/server/http2-context.sub.h2.any.html [ Timeout ]
@@ -2888,7 +2895,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/srcdoc-
 crbug.com/626703 [ Mac10.10 ] external/wpt/trusted-types/block-Node-multiple-arguments.tentative.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/iframe-blank-inherit.meta/unset/fetch/cross-https.downgrade.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/srcdoc-inherit.meta/upgrade/sharedworker-module/same-http-downgrade.no-redirect.https.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/svg/animations/svglength-animation-number-to-number.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/webmessaging/with-ports/007.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/srcdoc-inherit.meta/upgrade/worklet-layout-import-data/same-http-downgrade.downgrade.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/top.meta/unset/fetch/cross-http.swap-origin.http.html [ Timeout ]
@@ -2897,7 +2903,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/worker-
 crbug.com/626703 [ Mac10.10 ] external/wpt/webmessaging/with-ports/021.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/resource-timing/resource_connection_reuse_mixed_content_redirect.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/top.meta/upgrade/worklet-animation-import-data/same-http-downgrade.no-redirect.https.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/svg/animations/animate-marker-orient-from-angle-to-auto.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/streams/readable-streams/brand-checks.any.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/worker-classic.http-rp/origin-when-cross-origin/fetch/same-https.no-redirect.http.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/worker-module.http-rp/origin/xhr/same-https.swap-origin.http.html [ Timeout ]
@@ -2913,7 +2918,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/web-animations/animation-model/keyfra
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/worker-classic.http-rp/no-referrer-when-downgrade/worker-module/same-http.keep-origin.http.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/resource-timing/buffer-full-increase-buffer-during-callback.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/service-workers/service-worker/clients-matchall-on-evaluation.https.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/svg/animations/animate-dynamic-update-attributeName.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/srcdoc-inherit.meta/unset/worklet-animation-import-data/cross-http-downgrade.no-redirect.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/streams/piping/then-interception.any.worker.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/worker-classic.http-rp/origin-when-cross-origin/xhr/same-http.keep-origin.http.html [ Timeout ]
@@ -2935,7 +2939,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/resource-timing/resource_script_types
 crbug.com/626703 [ Mac10.10 ] external/wpt/service-workers/service-worker/multi-globals/url-parsing.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/iframe-blank-inherit.meta/upgrade/worklet-paint-import-data/same-https.downgrade.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/top.meta/unsafe-url/a-tag/cross-https.no-redirect.http.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/svg/animations/short-simple-duration-and-fractional-repeatcount.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/web-locks/query.tentative.https.any.worker.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/user-timing/clear_all_measures.any.worker.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/wake-lock/wakelock-disabled-by-feature-policy.https.sub.html [ Timeout ]
