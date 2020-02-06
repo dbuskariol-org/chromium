@@ -3018,6 +3018,21 @@
             ]
         }
     ],
+    "IOSSSLCommittedInterstitials": [
+        {
+            "platforms": [
+                "ios"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "SSLCommittedInterstitials"
+                    ]
+                }
+            ]
+        }
+    ],
     "IOSUseWKLoading": [
         {
             "platforms": [
