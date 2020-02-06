@@ -4479,6 +4479,20 @@ test("unit_tests") {
       "../tools/convert_dict/convert_dict_unittest.cc",
     ]
 
+    if (!is_mac) {
+      sources += [ "../tools/convert_dict/aff_reader_unittest.cc" ]
+    }
+
+    data += [
+      "data/convert_dict/affix-flags.aff",
+      "data/convert_dict/empty.aff",
+      "data/convert_dict/indexed-affix.aff",
+      "data/convert_dict/leading-comment.aff",
+      "data/convert_dict/other-commands.aff",
+      "data/convert_dict/prefix-suffix.aff",
+      "data/convert_dict/rep.aff",
+    ]
+
     if (use_renderer_spellchecker) {
       sources +=
           [ "../browser/spellchecker/spell_check_host_chrome_impl_unittest.cc" ]
