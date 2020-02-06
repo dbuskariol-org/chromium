@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/browser_watcher/stability_report_extractor.h"
+#include "components/browser_watcher/activity_report_extractor.h"
 
 #include <memory>
 #include <string>
@@ -15,7 +15,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
-#include "components/browser_watcher/stability_data_names.h"
+#include "components/browser_watcher/activity_data_names.h"
 #include "components/variations/active_field_trials.h"
 #include "third_party/crashpad/crashpad/util/misc/uuid.h"
 
@@ -84,8 +84,8 @@ void CollectUserData(
         // Promote version information to the global key value store.
         if (report) {
           bool should_promote =
-              key == kStabilityProduct || key == kStabilityChannel ||
-              key == kStabilityPlatform || key == kStabilityVersion;
+              key == kActivityProduct || key == kActivityChannel ||
+              key == kActivityPlatform || key == kActivityVersion;
           if (should_promote) {
             (*report->mutable_global_data())[key].Swap(&collected_value);
             continue;
@@ -115,7 +115,7 @@ void CollectUserData(
         collected_value.set_signed_value(recorded_value.GetInt());
 
         // Promote the execution timestamp to the global key value store.
-        if (report && key == kStabilityStartTimestamp) {
+        if (report && key == kActivityStartTimestamp) {
           (*report->mutable_global_data())[key].Swap(&collected_value);
           continue;
         }
@@ -241,7 +241,7 @@ bool SetProcessType(ProcessState* process_state) {
   google::protobuf::Map<std::string, TypedValue>* process_data =
       process_state->mutable_data();
 
-  const auto it = process_data->find(kStabilityProcessType);
+  const auto it = process_data->find(kActivityProcessType);
   if (it == process_data->end())
     return false;
 

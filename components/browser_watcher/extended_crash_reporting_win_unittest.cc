@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/browser_watcher/stability_debugging.h"
+#include "components/browser_watcher/extended_crash_reporting.h"
 
 #include <windows.h>
 
@@ -16,8 +16,8 @@
 #include "base/test/multiprocess_test.h"
 #include "base/test/test_timeouts.h"
 #include "build/build_config.h"
-#include "components/browser_watcher/stability_report.pb.h"
-#include "components/browser_watcher/stability_report_extractor.h"
+#include "components/browser_watcher/activity_report.pb.h"
+#include "components/browser_watcher/activity_report_extractor.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "testing/multiprocess_func_list.h"
 
@@ -69,7 +69,7 @@ class StabilityDebuggingTest : public testing::Test {
 #define MAYBE_CrashingTest CrashingTest
 #endif
 TEST_F(StabilityDebuggingTest, MAYBE_CrashingTest) {
-  RegisterStabilityVEH();
+  ExtendedCrashReporting::RegisterVEH();
 
   // Raise an exception, then continue.
   __try {

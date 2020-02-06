@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/browser_watcher/stability_report_user_stream_data_source.h"
+#include "components/browser_watcher/activity_report_user_stream_data_source.h"
 
 #include <string>
 #include <utility>
@@ -21,10 +21,10 @@
 #include "base/process/process.h"
 #include "base/strings/string16.h"
 #include "base/time/time.h"
+#include "components/browser_watcher/activity_report_extractor.h"
 #include "components/browser_watcher/activity_tracker_annotation.h"
+#include "components/browser_watcher/extended_crash_reporting_metrics.h"
 #include "components/browser_watcher/minidump_user_streams.h"
-#include "components/browser_watcher/stability_metrics.h"
-#include "components/browser_watcher/stability_report_extractor.h"
 #include "third_party/crashpad/crashpad/minidump/minidump_user_extension_stream_data_source.h"
 #include "third_party/crashpad/crashpad/snapshot/annotation_snapshot.h"
 #include "third_party/crashpad/crashpad/snapshot/exception_snapshot.h"
@@ -255,12 +255,12 @@ MaybeGetInMemoryActivityAnalyzer(crashpad::ProcessSnapshot* process_snapshot) {
 
 }  // namespace
 
-StabilityReportUserStreamDataSource::StabilityReportUserStreamDataSource(
+ActivityReportUserStreamDataSource::ActivityReportUserStreamDataSource(
     const base::FilePath& user_data_dir)
     : user_data_dir_(user_data_dir) {}
 
 std::unique_ptr<crashpad::MinidumpUserExtensionStreamDataSource>
-StabilityReportUserStreamDataSource::ProduceStreamData(
+ActivityReportUserStreamDataSource::ProduceStreamData(
     crashpad::ProcessSnapshot* process_snapshot) {
   DCHECK(process_snapshot);
   LogCollectOnCrashEvent(CollectOnCrashEvent::kCollectAttempt);
@@ -283,7 +283,7 @@ StabilityReportUserStreamDataSource::ProduceStreamData(
   CollectProcessPerformanceMetrics(process_snapshot, &report);
 
   std::unique_ptr<BufferExtensionStreamDataSource> source(
-      new BufferExtensionStreamDataSource(kStabilityReportStreamType));
+      new BufferExtensionStreamDataSource(kActivityReportStreamType));
   if (!source->Init(report))
     return nullptr;
 

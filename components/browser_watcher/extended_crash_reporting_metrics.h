@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_BROWSER_WATCHER_STABILITY_METRICS_H_
-#define COMPONENTS_BROWSER_WATCHER_STABILITY_METRICS_H_
+#ifndef COMPONENTS_BROWSER_WATCHER_EXTENDED_CRASH_REPORTING_METRICS_H_
+#define COMPONENTS_BROWSER_WATCHER_EXTENDED_CRASH_REPORTING_METRICS_H_
 
 namespace browser_watcher {
 
@@ -22,21 +22,21 @@ enum class CollectOnCrashEvent {
 };
 
 // DO NOT REMOVE OR REORDER VALUES. This is logged persistently in a histogram.
-enum class StabilityRecordEvent {
+enum class ActivityRecordEvent {
   kRecordAttempt,
-  kStabilityDirectoryExistsUnused,  // No longer used.
-  kGotStabilityPathUnused,          // No longer used.
+  kActivityDirectoryExistsUnused,  // No longer used.
+  kGotActivityPathUnused,          // No longer used.
   kGotTracker,
   kMarkDeletedUnused,          // No longer used.
   kMarkDeletedGotFileUnused,   // No longer used.
   kOpenForDeleteFailedUnused,  // No longer used.
   // New values go here.
-  kStabilityRecordEventMax
+  kActivityRecordEventMax
 };
 
 void LogCollectOnCrashEvent(CollectOnCrashEvent event);
-void LogStabilityRecordEvent(StabilityRecordEvent event);
+void LogActivityRecordEvent(ActivityRecordEvent event);
 
 }  // namespace browser_watcher
 
-#endif  // COMPONENTS_BROWSER_WATCHER_STABILITY_METRICS_H_
+#endif  // COMPONENTS_BROWSER_WATCHER_EXTENDED_CRASH_REPORTING_METRICS_H_

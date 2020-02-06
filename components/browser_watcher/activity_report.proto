@@ -244,6 +244,9 @@ message SystemMemoryState {
 // single logical instance of a "chrome browser". It is comprised of information
 // about the system state and about the chrome browser's processes.
 // Next id: 9
+// This message would more appropriately be named ActivityReport, but since this
+// proto is used in the crash backend, renaming it will take some dancing
+// around.
 message StabilityReport {
   // Whether the report is complete. Reports can be incomplete when the
   // recording size quota is hit.

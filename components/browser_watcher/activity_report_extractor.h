@@ -4,11 +4,11 @@
 //
 // Implementation of the collection of a stability file to a protocol buffer.
 
-#ifndef COMPONENTS_BROWSER_WATCHER_STABILITY_REPORT_EXTRACTOR_H_
-#define COMPONENTS_BROWSER_WATCHER_STABILITY_REPORT_EXTRACTOR_H_
+#ifndef COMPONENTS_BROWSER_WATCHER_ACTIVITY_REPORT_EXTRACTOR_H_
+#define COMPONENTS_BROWSER_WATCHER_ACTIVITY_REPORT_EXTRACTOR_H_
 
 #include "base/debug/activity_analyzer.h"
-#include "components/browser_watcher/stability_report.pb.h"
+#include "components/browser_watcher/activity_report.pb.h"
 
 namespace browser_watcher {
 
@@ -36,4 +36,4 @@ CollectionStatus Extract(
 
 }  // namespace browser_watcher
 
-#endif  // COMPONENTS_BROWSER_WATCHER_STABILITY_REPORT_EXTRACTOR_H_
+#endif  // COMPONENTS_BROWSER_WATCHER_ACTIVITY_REPORT_EXTRACTOR_H_

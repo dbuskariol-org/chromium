@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/browser_watcher/stability_debugging.h"
+#include "components/browser_watcher/extended_crash_reporting.h"
 
 #include <windows.h>
 
@@ -48,7 +48,7 @@ LONG CALLBACK VectoredExceptionHandler(EXCEPTION_POINTERS* exception_pointers) {
 
 }  // namespace
 
-void SetStabilityDataBool(base::StringPiece name, bool value) {
+void ExtendedCrashReporting::SetDataBool(base::StringPiece name, bool value) {
   base::debug::GlobalActivityTracker* global_tracker =
       base::debug::GlobalActivityTracker::Get();
   if (!global_tracker)
@@ -57,7 +57,7 @@ void SetStabilityDataBool(base::StringPiece name, bool value) {
   global_tracker->process_data().SetBool(name, value);
 }
 
-void SetStabilityDataInt(base::StringPiece name, int64_t value) {
+void ExtendedCrashReporting::SetDataInt(base::StringPiece name, int64_t value) {
   base::debug::GlobalActivityTracker* global_tracker =
       base::debug::GlobalActivityTracker::Get();
   if (!global_tracker)
@@ -66,7 +66,7 @@ void SetStabilityDataInt(base::StringPiece name, int64_t value) {
   global_tracker->process_data().SetInt(name, value);
 }
 
-void RegisterStabilityVEH() {
+void ExtendedCrashReporting::RegisterVEH() {
 #if defined(ADDRESS_SANITIZER)
   // ASAN on windows x64 is dynamically allocating the shadow memory on a
   // memory access violation by setting up an vector exception handler.

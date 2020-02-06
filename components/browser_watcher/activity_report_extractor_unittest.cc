@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/browser_watcher/stability_report_extractor.h"
+#include "components/browser_watcher/activity_report_extractor.h"
 
 #include <memory>
 #include <utility>
@@ -16,6 +16,7 @@
 #include "base/metrics/persistent_memory_allocator.h"
 #include "base/stl_util.h"
 #include "base/time/time.h"
+#include "build/build_config.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/crashpad/crashpad/client/crash_report_database.h"
 
@@ -240,7 +241,8 @@ TEST_F(StabilityReportExtractorThreadTrackerTest, CollectException) {
   const uint32_t expected_code = 42U;
 
   // Record an exception.
-  const int64_t timestamp = base::Time::Now().ToInternalValue();
+  const int64_t timestamp =
+      base::Time::Now().ToDeltaSinceWindowsEpoch().InMicroseconds();
   tracker_->RecordExceptionActivity(expected_pc, expected_address,
                                     base::debug::Activity::ACT_EXCEPTION,
                                     ActivityData::ForException(expected_code));

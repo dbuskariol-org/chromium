@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_BROWSER_WATCHER_STABILITY_REPORT_USER_STREAM_DATA_SOURCE_H_
-#define COMPONENTS_BROWSER_WATCHER_STABILITY_REPORT_USER_STREAM_DATA_SOURCE_H_
+#ifndef COMPONENTS_BROWSER_WATCHER_ACTIVITY_REPORT_USER_STREAM_DATA_SOURCE_H_
+#define COMPONENTS_BROWSER_WATCHER_ACTIVITY_REPORT_USER_STREAM_DATA_SOURCE_H_
 
 #include <memory>
 
@@ -20,10 +20,10 @@ namespace browser_watcher {
 
 // Collects stability instrumentation corresponding to a ProcessSnapshot and
 // makes it available to the crash handler.
-class StabilityReportUserStreamDataSource
+class ActivityReportUserStreamDataSource
     : public crashpad::UserStreamDataSource {
  public:
-  explicit StabilityReportUserStreamDataSource(
+  explicit ActivityReportUserStreamDataSource(
       const base::FilePath& user_data_dir);
 
   std::unique_ptr<crashpad::MinidumpUserExtensionStreamDataSource>
@@ -32,9 +32,9 @@ class StabilityReportUserStreamDataSource
  private:
   base::FilePath user_data_dir_;
 
-  DISALLOW_COPY_AND_ASSIGN(StabilityReportUserStreamDataSource);
+  DISALLOW_COPY_AND_ASSIGN(ActivityReportUserStreamDataSource);
 };
 
 }  // namespace browser_watcher
 
-#endif  // COMPONENTS_BROWSER_WATCHER_STABILITY_REPORT_USER_STREAM_DATA_SOURCE_H_
+#endif  // COMPONENTS_BROWSER_WATCHER_ACTIVITY_REPORT_USER_STREAM_DATA_SOURCE_H_
