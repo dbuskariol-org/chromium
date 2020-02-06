@@ -1756,9 +1756,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAppNotificationStatusMessagingDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(features::kAppNotificationStatusMessaging)},
 #endif  // OS_ANDROID
-    {"enable-devtools-experiments", flag_descriptions::kDevtoolsExperimentsName,
-     flag_descriptions::kDevtoolsExperimentsDescription, kOsDesktop,
-     SINGLE_VALUE_TYPE(switches::kEnableDevToolsExperiments)},
     {"silent-debugger-extension-api",
      flag_descriptions::kSilentDebuggerExtensionApiName,
      flag_descriptions::kSilentDebuggerExtensionApiDescription, kOsDesktop,

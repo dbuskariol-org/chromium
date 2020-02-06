@@ -273,9 +273,6 @@ const char kEnableCloudPrintProxy[]         = "enable-cloud-print-proxy";
 const char kEnableDeviceDiscoveryNotifications[] =
     "enable-device-discovery-notifications";
 
-// If true devtools experimental settings are enabled.
-const char kEnableDevToolsExperiments[]     = "enable-devtools-experiments";
-
 // Enables Domain Reliability Monitoring.
 const char kEnableDomainReliability[] = "enable-domain-reliability";
 
