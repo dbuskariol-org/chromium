@@ -32,6 +32,7 @@
 #import "ios/web/public/web_state.h"                             // nogncheck
 #endif
 
+using base::test::ios::kWaitForActionTimeout;
 using base::test::ios::kWaitForJSCompletionTimeout;
 using base::test::ios::kWaitForPageLoadTimeout;
 using base::test::ios::kWaitForUIElementTimeout;
@@ -735,9 +736,17 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeEarlGreyAppInterface)
 
 #pragma mark - SignIn Utilities (EG2)
 
-- (void)signOutAndClearAccounts {
-  EG_TEST_HELPER_ASSERT_NO_ERROR(
-      [ChromeEarlGreyAppInterface signOutAndClearAccounts]);
+- (void)signOutAndClearIdentities {
+  [ChromeEarlGreyAppInterface signOutAndClearIdentities];
+
+  GREYCondition* allIdentitiesCleared = [GREYCondition
+      conditionWithName:@"All Chrome identities were cleared"
+                  block:^{
+                    return ![ChromeEarlGreyAppInterface hasIdentities];
+                  }];
+  bool success = [allIdentitiesCleared waitWithTimeout:kWaitForActionTimeout];
+  EG_TEST_HELPER_ASSERT_TRUE(success,
+                             @"Failed waiting for identities to be cleared");
 }
 
 #pragma mark - Bookmarks Utilities (EG2)
