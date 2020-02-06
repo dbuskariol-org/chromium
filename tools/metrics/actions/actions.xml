@@ -5996,6 +5996,15 @@ should be able to be added at any place in this file.
   <description>Please enter the description of this user action.</description>
 </action>
 
+<action name="Extensions.NtpPromoClicked">
+  <owner>archanasimha@chromium.org</owner>
+  <owner>extensions-core@chromium.org</owner>
+  <description>
+    Records every time the user clicks on the extensions checkup middle slot
+    promo link.
+  </description>
+</action>
+
 <action name="Extensions.RemovedDefaultInstalledExtension">
   <owner>archanasimha@chromium.org</owner>
   <description>
