@@ -63,6 +63,7 @@
   <include name="IDR_SETTINGS_PAGE_VISIBILITY_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/page_visibility.m.js"
            use_base_dir="false"
+           preprocess="true"
            type="BINDATA" />
   <include name="IDR_SETTINGS_PREFS_PREFS_TYPES_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/prefs/prefs_types.m.js"
