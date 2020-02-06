@@ -29,23 +29,39 @@ namespace chrome_test_util {
 
 namespace {
 
-// Starts forgetting all identities from the ChromeIdentity services.
-//
-// Note: Forgetting an identity is a asynchronous operation. This function does
-// not wait for the forget identity operation to finish.
-void StartForgetAllIdentities() {
+// Forgets all identities from the ChromeIdentity services. Returns true if all
+// identities were successfully forgotten.
+bool ForgetAllIdentities() {
   ios::ChromeIdentityService* identity_service =
       ios::GetChromeBrowserProvider()->GetChromeIdentityService();
+
+  if (!identity_service->HasIdentities())
+    return YES;
+
   NSArray* identities_to_remove =
       [NSArray arrayWithArray:identity_service->GetAllIdentities()];
+  NSMutableArray* identities_left =
+      [NSMutableArray arrayWithArray:identities_to_remove];
+
   for (ChromeIdentity* identity in identities_to_remove) {
     identity_service->ForgetIdentity(identity, ^(NSError* error) {
       if (error) {
         NSLog(@"ForgetIdentity failed: [identity = %@, error = %@]",
               identity.userEmail, [error localizedDescription]);
       }
+      [identities_left removeObject:identity];
     });
   }
+
+  // Wait maximum 10s for all forget identitites to be forgotten.
+  NSDate* deadline = [NSDate dateWithTimeIntervalSinceNow:10.0];
+  while ([identities_left count] &&
+         [[NSDate date] compare:deadline] != NSOrderedDescending) {
+    base::test::ios::SpinRunLoopWithMaxDelay(
+        base::TimeDelta::FromSecondsD(0.01));
+  }
+
+  return !identity_service->HasIdentities();
 }
 
 }  // namespace
@@ -75,7 +91,7 @@ void TearDownMockAccountReconcilor() {
   GaiaAuthFetcherIOS::SetShouldUseGaiaAuthFetcherIOSForTesting(true);
 }
 
-void SignOutAndClearIdentities() {
+bool SignOutAndClearAccounts() {
   // EarlGrey monitors network requests by swizzling internal iOS network
   // objects and expects them to be dealloced before the tear down. It is
   // important to autorelease all objects that make network requests to avoid
@@ -96,21 +112,13 @@ void SignOutAndClearIdentities() {
     browser_state->GetPrefs()->ClearPref(prefs::kGoogleServicesLastAccountId);
     browser_state->GetPrefs()->ClearPref(prefs::kGoogleServicesLastUsername);
 
-    // |SignOutAndClearIdentities()| is called during shutdown. Commit all pref
+    // |SignOutAndClearAccounts()| is called during shutdown. Commit all pref
     // changes to ensure that clearing the last signed in account is saved on
     // disk in case Chrome crashes during shutdown.
     browser_state->GetPrefs()->CommitPendingWrite();
 
-    // Once the browser was signed out, start clearing all identities from the
-    // ChromeIdentityService.
-    StartForgetAllIdentities();
+    return ForgetAllIdentities();
   }
-}
-
-bool HasIdentities() {
-  ios::ChromeIdentityService* identity_service =
-      ios::GetChromeBrowserProvider()->GetChromeIdentityService();
-  return identity_service->HasIdentities();
 }
 
 void ResetMockAuthentication() {

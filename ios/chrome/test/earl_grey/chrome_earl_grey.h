@@ -315,7 +315,7 @@ id ExecuteJavaScript(NSString* javascript, NSError* __autoreleasing* out_error);
 // Signs the user out, clears the known accounts entirely and checks whether the
 // accounts were correctly removed from the keychain. Induces a GREYAssert if
 // the operation fails.
-- (void)signOutAndClearIdentities;
+- (void)signOutAndClearAccounts;
 
 #pragma mark - Sync Utilities (EG2)
 

@@ -21,12 +21,9 @@ void SetUpMockAccountReconcilor();
 // Tears down the mock AccountReconcilor if it was previously set up.
 void TearDownMockAccountReconcilor();
 
-// Signs the user out and starts clearing all identities from the
-// ChromeIdentityService.
-void SignOutAndClearIdentities();
-
-// Returns true when there are no identities in the ChromeIdentityService.
-bool HasIdentities();
+// Signs the user out and clears the known accounts entirely. Returns whether
+// the accounts were correctly removed from the keychain.
+bool SignOutAndClearAccounts();
 
 // Resets mock authentication.
 void ResetMockAuthentication();
