@@ -8,6 +8,7 @@
 #include "base/metrics/histogram_macros.h"
 #include "base/time/time.h"
 #include "chrome/browser/browser_process.h"
+#include "chrome/browser/history/history_service_factory.h"
 #include "chrome/browser/interstitials/chrome_metrics_helper.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/renderer_preferences_util.h"
@@ -113,9 +114,17 @@ std::unique_ptr<ChromeMetricsHelper> CreateMetricsHelperWithRecording(
   security_interstitials::MetricsHelper::ReportDetails reporting_info;
   reporting_info.metric_prefix = metric_prefix;
   std::unique_ptr<ChromeMetricsHelper> metrics_helper =
-      std::make_unique<ChromeMetricsHelper>(web_contents, request_url,
-                                            reporting_info);
-  metrics_helper.get()->StartRecordingCaptivePortalMetrics(overridable);
+      std::make_unique<ChromeMetricsHelper>(
+          HistoryServiceFactory::GetForProfile(
+              Profile::FromBrowserContext(web_contents->GetBrowserContext()),
+              ServiceAccessType::EXPLICIT_ACCESS),
+          request_url, reporting_info);
+#if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
+  metrics_helper.get()->StartRecordingCaptivePortalMetrics(
+      CaptivePortalServiceFactory::GetForProfile(
+          Profile::FromBrowserContext(web_contents->GetBrowserContext())),
+      overridable);
+#endif
   return metrics_helper;
 }
 
