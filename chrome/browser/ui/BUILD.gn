@@ -3979,6 +3979,8 @@ jumbo_static_library("ui") {
       "extensions/extension_install_ui_factory.h",
       "extensions/extension_installed_bubble.cc",
       "extensions/extension_installed_bubble.h",
+      "extensions/extension_installed_bubble_model.cc",
+      "extensions/extension_installed_bubble_model.h",
       "extensions/extension_installed_waiter.cc",
       "extensions/extension_installed_waiter.h",
       "extensions/extension_message_bubble_bridge.cc",

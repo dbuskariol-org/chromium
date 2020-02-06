@@ -4089,6 +4089,7 @@ test("unit_tests") {
       "../browser/ui/content_settings/content_setting_media_image_model_unittest.mm",
       "../browser/ui/exclusive_access/fullscreen_controller_state_unittest.cc",
       "../browser/ui/extensions/extension_action_view_controller_unittest.cc",
+      "../browser/ui/extensions/extension_installed_bubble_model_unittest.cc",
       "../browser/ui/extensions/extension_installed_waiter_unittest.cc",
       "../browser/ui/extensions/extension_message_bubble_bridge_unittest.cc",
       "../browser/ui/global_error/global_error_service_unittest.cc",
