@@ -188,6 +188,7 @@
 #include "third_party/blink/renderer/core/html/document_all_name_collection.h"
 #include "third_party/blink/renderer/core/html/document_name_collection.h"
 #include "third_party/blink/renderer/core/html/forms/form_controller.h"
+#include "third_party/blink/renderer/core/html/forms/html_form_element.h"
 #include "third_party/blink/renderer/core/html/forms/html_input_element.h"
 #include "third_party/blink/renderer/core/html/html_all_collection.h"
 #include "third_party/blink/renderer/core/html/html_anchor_element.h"
@@ -3340,6 +3341,7 @@ void Document::open(Document* entered_document,
   if (ignore_opens_during_unload_count_)
     return;
 
+  // If |document|'s active parser was aborted is true, then return |document|.
   if (ignore_opens_and_writes_for_abort_)
     return;
 
@@ -3398,6 +3400,7 @@ void Document::open() {
       frame_->Client()->AbortClientNavigation();
   }
   CancelPendingJavaScriptUrls();
+  CancelFormSubmissions();
 
   // For each shadow-including inclusive descendant |node| of |document|, erase
   // all event listeners and handlers given |node|.
@@ -8420,6 +8423,24 @@ bool Document::IsAnimatedPropertyCounted(CSSPropertyID property) const {
 void Document::ClearUseCounterForTesting(mojom::WebFeature feature) {
   if (DocumentLoader* loader = Loader())
     loader->GetUseCounterHelper().ClearMeasurementForTesting(feature);
+}
+
+void Document::ScheduleFormSubmission(HTMLFormElement* form_element) {
+  form_to_pending_submission_[form_element] = PostCancellableTask(
+      *GetFrame()->GetFrameScheduler()->GetTaskRunner(
+          TaskType::kDOMManipulation),
+      FROM_HERE,
+      WTF::Bind(&Document::ExecuteFormSubmission, WrapWeakPersistent(this),
+                WrapWeakPersistent(form_element)));
+}
+
+void Document::ExecuteFormSubmission(HTMLFormElement* form_element) {
+  form_to_pending_submission_.erase(form_element);
+  form_element->SubmitForm();
+}
+
+void Document::CancelFormSubmissions() {
+  form_to_pending_submission_.clear();
 }
 
 template class CORE_TEMPLATE_EXPORT Supplement<Document>;
