@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_JAVASCRIPT_DIALOGS_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
-#define COMPONENTS_JAVASCRIPT_DIALOGS_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
+#ifndef COMPONENTS_JAVASCRIPT_DIALOGS_ANDROID_APP_MODAL_DIALOG_VIEW_ANDROID_H_
+#define COMPONENTS_JAVASCRIPT_DIALOGS_ANDROID_APP_MODAL_DIALOG_VIEW_ANDROID_H_
 
 #include <memory>
 
@@ -17,12 +17,12 @@ namespace javascript_dialogs {
 
 class AppModalDialogController;
 
-class JavascriptAppModalDialogAndroid : public AppModalDialogView {
+class AppModalDialogViewAndroid : public AppModalDialogView {
  public:
-  JavascriptAppModalDialogAndroid(JNIEnv* env,
-                                  AppModalDialogController* controller,
-                                  gfx::NativeWindow parent);
-  ~JavascriptAppModalDialogAndroid() override;
+  AppModalDialogViewAndroid(JNIEnv* env,
+                            AppModalDialogController* controller,
+                            gfx::NativeWindow parent);
+  ~AppModalDialogViewAndroid() override;
 
   // AppModalDialogView:
   void ShowAppModalDialog() override;
@@ -49,9 +49,9 @@ class JavascriptAppModalDialogAndroid : public AppModalDialogView {
   base::android::ScopedJavaGlobalRef<jobject> dialog_jobject_;
   JavaObjectWeakGlobalRef parent_jobject_weak_ref_;
 
-  DISALLOW_COPY_AND_ASSIGN(JavascriptAppModalDialogAndroid);
+  DISALLOW_COPY_AND_ASSIGN(AppModalDialogViewAndroid);
 };
 
 }  // namespace javascript_dialogs
 
-#endif  // COMPONENTS_JAVASCRIPT_DIALOGS_ANDROID_JAVASCRIPT_APP_MODAL_DIALOG_ANDROID_H_
+#endif  // COMPONENTS_JAVASCRIPT_DIALOGS_ANDROID_APP_MODAL_DIALOG_VIEW_ANDROID_H_

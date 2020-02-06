@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper.h"
+#include "components/javascript_dialogs/tab_modal_dialog_manager.h"
 
 #include <utility>
 
@@ -11,8 +11,8 @@
 #include "base/feature_list.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/strings/stringprintf.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog.h"
 #include "components/javascript_dialogs/app_modal_dialog_manager.h"
+#include "components/javascript_dialogs/tab_modal_dialog_view.h"
 #include "components/navigation_metrics/navigation_metrics.h"
 #include "components/ukm/content/source_url_recorder.h"
 #include "content/public/browser/devtools_agent_host.h"
@@ -22,10 +22,12 @@
 #include "services/metrics/public/cpp/ukm_recorder.h"
 #include "ui/gfx/text_elider.h"
 
+namespace javascript_dialogs {
+
 namespace {
 
-javascript_dialogs::AppModalDialogManager* AppModalDialogManager() {
-  return javascript_dialogs::AppModalDialogManager::GetInstance();
+AppModalDialogManager* GetAppModalDialogManager() {
+  return AppModalDialogManager::GetInstance();
 }
 
 // The relationship between origins in displayed dialogs.
@@ -109,53 +111,53 @@ DialogOriginRelationship GetDialogOriginRelationship(
 }  // namespace
 
 // static
-void JavaScriptDialogTabHelper::CreateForWebContents(
+void TabModalDialogManager::CreateForWebContents(
     content::WebContents* web_contents,
-    std::unique_ptr<JavaScriptDialogTabHelperDelegate> delegate) {
+    std::unique_ptr<TabModalDialogManagerDelegate> delegate) {
   if (!FromWebContents(web_contents)) {
     web_contents->SetUserData(UserDataKey(),
-                              base::WrapUnique(new JavaScriptDialogTabHelper(
+                              base::WrapUnique(new TabModalDialogManager(
                                   web_contents, std::move(delegate))));
   }
 }
 
-JavaScriptDialogTabHelper::~JavaScriptDialogTabHelper() {
+TabModalDialogManager::~TabModalDialogManager() {
   CloseDialog(DismissalCause::kTabHelperDestroyed, false, base::string16());
 }
 
-void JavaScriptDialogTabHelper::BrowserActiveStateChanged() {
+void TabModalDialogManager::BrowserActiveStateChanged() {
   if (delegate_->IsWebContentsForemost())
     OnVisibilityChanged(content::Visibility::VISIBLE);
   else
     HandleTabSwitchAway(DismissalCause::kBrowserSwitched);
 }
 
-void JavaScriptDialogTabHelper::CloseDialogWithReason(DismissalCause reason) {
+void TabModalDialogManager::CloseDialogWithReason(DismissalCause reason) {
   CloseDialog(reason, false, base::string16());
 }
 
-void JavaScriptDialogTabHelper::SetDialogShownCallbackForTesting(
+void TabModalDialogManager::SetDialogShownCallbackForTesting(
     base::OnceClosure callback) {
   dialog_shown_ = std::move(callback);
 }
 
-bool JavaScriptDialogTabHelper::IsShowingDialogForTesting() const {
+bool TabModalDialogManager::IsShowingDialogForTesting() const {
   return !!dialog_;
 }
 
-void JavaScriptDialogTabHelper::ClickDialogButtonForTesting(
+void TabModalDialogManager::ClickDialogButtonForTesting(
     bool accept,
     const base::string16& user_input) {
   DCHECK(!!dialog_);
   CloseDialog(DismissalCause::kDialogButtonClicked, accept, user_input);
 }
 
-void JavaScriptDialogTabHelper::SetDialogDismissedCallbackForTesting(
+void TabModalDialogManager::SetDialogDismissedCallbackForTesting(
     DialogDismissedCallback callback) {
   dialog_dismissed_ = std::move(callback);
 }
 
-void JavaScriptDialogTabHelper::RunJavaScriptDialog(
+void TabModalDialogManager::RunJavaScriptDialog(
     content::WebContents* alerting_web_contents,
     content::RenderFrameHost* render_frame_host,
     content::JavaScriptDialogType dialog_type,
@@ -255,20 +257,20 @@ void JavaScriptDialogTabHelper::RunJavaScriptDialog(
   gfx::ElideString(default_prompt_text, kDefaultPromptMaxSize,
                    &truncated_default_prompt_text);
 
-  base::string16 title = AppModalDialogManager()->GetTitle(
+  base::string16 title = GetAppModalDialogManager()->GetTitle(
       alerting_web_contents, alerting_frame_url);
   dialog_callback_ = std::move(callback);
   dialog_type_ = dialog_type;
   if (make_pending) {
     DCHECK(!dialog_);
     pending_dialog_ = base::BindOnce(
-        &JavaScriptDialogTabHelperDelegate::CreateNewDialog,
+        &TabModalDialogManagerDelegate::CreateNewDialog,
         base::Unretained(delegate_.get()), alerting_web_contents, title,
         dialog_type, truncated_message_text, truncated_default_prompt_text,
-        base::BindOnce(&JavaScriptDialogTabHelper::CloseDialog,
+        base::BindOnce(&TabModalDialogManager::CloseDialog,
                        base::Unretained(this),
                        DismissalCause::kDialogButtonClicked),
-        base::BindOnce(&JavaScriptDialogTabHelper::CloseDialog,
+        base::BindOnce(&TabModalDialogManager::CloseDialog,
                        base::Unretained(this), DismissalCause::kDialogClosed,
                        false, base::string16()));
   } else {
@@ -276,10 +278,10 @@ void JavaScriptDialogTabHelper::RunJavaScriptDialog(
     dialog_ = delegate_->CreateNewDialog(
         alerting_web_contents, title, dialog_type, truncated_message_text,
         truncated_default_prompt_text,
-        base::BindOnce(&JavaScriptDialogTabHelper::CloseDialog,
+        base::BindOnce(&TabModalDialogManager::CloseDialog,
                        base::Unretained(this),
                        DismissalCause::kDialogButtonClicked),
-        base::BindOnce(&JavaScriptDialogTabHelper::CloseDialog,
+        base::BindOnce(&TabModalDialogManager::CloseDialog,
                        base::Unretained(this), DismissalCause::kDialogClosed,
                        false, base::string16()));
   }
@@ -296,7 +298,7 @@ void JavaScriptDialogTabHelper::RunJavaScriptDialog(
     std::move(dialog_shown_).Run();
 }
 
-void JavaScriptDialogTabHelper::RunBeforeUnloadDialog(
+void TabModalDialogManager::RunBeforeUnloadDialog(
     content::WebContents* web_contents,
     content::RenderFrameHost* render_frame_host,
     bool is_reload,
@@ -320,12 +322,12 @@ void JavaScriptDialogTabHelper::RunBeforeUnloadDialog(
   // - they can be requested for many tabs at the same time
   // and therefore auto-dismissal is inappropriate for them.
 
-  return AppModalDialogManager()->RunBeforeUnloadDialogWithOptions(
+  return GetAppModalDialogManager()->RunBeforeUnloadDialogWithOptions(
       web_contents, render_frame_host, is_reload, delegate_->IsApp(),
       std::move(callback));
 }
 
-bool JavaScriptDialogTabHelper::HandleJavaScriptDialog(
+bool TabModalDialogManager::HandleJavaScriptDialog(
     content::WebContents* web_contents,
     bool accept,
     const base::string16* prompt_override) {
@@ -336,20 +338,19 @@ bool JavaScriptDialogTabHelper::HandleJavaScriptDialog(
   }
 
   // Handle any app-modal dialogs being run by the app-modal dialog system.
-  return AppModalDialogManager()->HandleJavaScriptDialog(web_contents, accept,
-                                                         prompt_override);
+  return GetAppModalDialogManager()->HandleJavaScriptDialog(
+      web_contents, accept, prompt_override);
 }
 
-void JavaScriptDialogTabHelper::CancelDialogs(
-    content::WebContents* web_contents,
-    bool reset_state) {
+void TabModalDialogManager::CancelDialogs(content::WebContents* web_contents,
+                                          bool reset_state) {
   CloseDialog(DismissalCause::kCancelDialogsCalled, false, base::string16());
 
   // Cancel any app-modal dialogs being run by the app-modal dialog system.
-  return AppModalDialogManager()->CancelDialogs(web_contents, reset_state);
+  return GetAppModalDialogManager()->CancelDialogs(web_contents, reset_state);
 }
 
-void JavaScriptDialogTabHelper::OnVisibilityChanged(
+void TabModalDialogManager::OnVisibilityChanged(
     content::Visibility visibility) {
   if (visibility == content::Visibility::HIDDEN) {
     HandleTabSwitchAway(DismissalCause::kTabHidden);
@@ -360,20 +361,20 @@ void JavaScriptDialogTabHelper::OnVisibilityChanged(
   }
 }
 
-void JavaScriptDialogTabHelper::DidStartNavigation(
+void TabModalDialogManager::DidStartNavigation(
     content::NavigationHandle* navigation_handle) {
   // Close the dialog if the user started a new navigation. This allows reloads
   // and history navigations to proceed.
   CloseDialog(DismissalCause::kTabNavigated, false, base::string16());
 }
 
-JavaScriptDialogTabHelper::JavaScriptDialogTabHelper(
+TabModalDialogManager::TabModalDialogManager(
     content::WebContents* web_contents,
-    std::unique_ptr<JavaScriptDialogTabHelperDelegate> delegate)
+    std::unique_ptr<TabModalDialogManagerDelegate> delegate)
     : content::WebContentsObserver(web_contents),
       delegate_(std::move(delegate)) {}
 
-void JavaScriptDialogTabHelper::LogDialogDismissalCause(DismissalCause cause) {
+void TabModalDialogManager::LogDialogDismissalCause(DismissalCause cause) {
   if (dialog_dismissed_)
     std::move(dialog_dismissed_).Run(cause);
 
@@ -392,7 +393,7 @@ void JavaScriptDialogTabHelper::LogDialogDismissalCause(DismissalCause cause) {
   }
 }
 
-void JavaScriptDialogTabHelper::HandleTabSwitchAway(DismissalCause cause) {
+void TabModalDialogManager::HandleTabSwitchAway(DismissalCause cause) {
   if (!dialog_ || content::DevToolsAgentHost::IsDebuggerAttached(
                       WebContentsObserver::web_contents())) {
     return;
@@ -410,22 +411,22 @@ void JavaScriptDialogTabHelper::HandleTabSwitchAway(DismissalCause cause) {
   }
 }
 
-void JavaScriptDialogTabHelper::CloseDialog(DismissalCause cause,
-                                            bool success,
-                                            const base::string16& user_input) {
+void TabModalDialogManager::CloseDialog(DismissalCause cause,
+                                        bool success,
+                                        const base::string16& user_input) {
   if (!dialog_ && !pending_dialog_)
     return;
 
   LogDialogDismissalCause(cause);
 
   // CloseDialog() can be called two ways. It can be called from within
-  // JavaScriptDialogTabHelper, in which case the dialog needs to be closed.
+  // TabModalDialogManager, in which case the dialog needs to be closed.
   // However, it can also be called, bound, from the JavaScriptDialog. In that
   // case, the dialog is already closing, so the JavaScriptDialog doesn't need
   // to be told to close.
   //
   // Using the |cause| to distinguish a call from JavaScriptDialog vs from
-  // within JavaScriptDialogTabHelper is a bit hacky, but is the simplest way.
+  // within TabModalDialogManager is a bit hacky, but is the simplest way.
   if (dialog_ && cause != DismissalCause::kDialogButtonClicked &&
       cause != DismissalCause::kDialogClosed)
     dialog_->CloseDialogWithoutCallback();
@@ -451,4 +452,6 @@ void JavaScriptDialogTabHelper::CloseDialog(DismissalCause cause,
   delegate_->DidCloseDialog();
 }
 
-WEB_CONTENTS_USER_DATA_KEY_IMPL(JavaScriptDialogTabHelper)
+WEB_CONTENTS_USER_DATA_KEY_IMPL(TabModalDialogManager)
+
+}  // namespace javascript_dialogs

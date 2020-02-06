@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_H_
-#define CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_H_
+#ifndef COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_MANAGER_H_
+#define COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_MANAGER_H_
 
 #include <memory>
 
@@ -12,14 +12,16 @@
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
 #include "build/build_config.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper_delegate.h"
+#include "components/javascript_dialogs/tab_modal_dialog_manager_delegate.h"
+#include "components/javascript_dialogs/tab_modal_dialog_view.h"
 #include "content/public/browser/javascript_dialog_manager.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 
-// A class, attached to WebContentses in browser windows, that is the
-// JavaScriptDialogManager for them and handles displaying their dialogs.
+namespace javascript_dialogs {
+
+// A class that serves as the JavaScriptDialogManager for tab modal JavaScript
+// dialogs.
 //
 // This implements two different functionalities for JavaScript dialogs.
 //
@@ -36,10 +38,10 @@
 //
 // References:
 //   http://bit.ly/project-oldspice
-class JavaScriptDialogTabHelper
+class TabModalDialogManager
     : public content::JavaScriptDialogManager,
       public content::WebContentsObserver,
-      public content::WebContentsUserData<JavaScriptDialogTabHelper> {
+      public content::WebContentsUserData<TabModalDialogManager> {
  public:
   enum class DismissalCause {
     // This is used for a UMA histogram. Please never alter existing values,
@@ -91,9 +93,9 @@ class JavaScriptDialogTabHelper
 
   static void CreateForWebContents(
       content::WebContents* web_contents,
-      std::unique_ptr<JavaScriptDialogTabHelperDelegate> delegate);
+      std::unique_ptr<TabModalDialogManagerDelegate> delegate);
 
-  ~JavaScriptDialogTabHelper() override;
+  ~TabModalDialogManager() override;
 
   void BrowserActiveStateChanged();
   void CloseDialogWithReason(DismissalCause reason);
@@ -129,15 +131,15 @@ class JavaScriptDialogTabHelper
       content::NavigationHandle* navigation_handle) override;
 
  private:
-  friend class content::WebContentsUserData<JavaScriptDialogTabHelper>;
+  friend class content::WebContentsUserData<TabModalDialogManager>;
 
   // This is here to hide the normal WebContentsUserData factory function in
   // favor of that which takes a delegate.
   static void CreateForWebContents(content::WebContents* web_contents);
 
-  JavaScriptDialogTabHelper(
+  TabModalDialogManager(
       content::WebContents* web_contents,
-      std::unique_ptr<JavaScriptDialogTabHelperDelegate> delegate);
+      std::unique_ptr<TabModalDialogManagerDelegate> delegate);
 
   // Logs the cause of a dialog dismissal in UMA.
   void LogDialogDismissalCause(DismissalCause cause);
@@ -177,8 +179,8 @@ class JavaScriptDialogTabHelper
 
   // The dialog being displayed on the observed WebContents, if any. At any
   // given time at most one of |dialog_| and |pending_dialog_| can be non-null.
-  base::WeakPtr<JavaScriptDialog> dialog_;
-  base::OnceCallback<base::WeakPtr<JavaScriptDialog>()> pending_dialog_;
+  base::WeakPtr<TabModalDialogView> dialog_;
+  base::OnceCallback<base::WeakPtr<TabModalDialogView>()> pending_dialog_;
 
   // The callback to return a result for a dialog. Not null if the renderer is
   // waiting for a result; null if there is no |dialog_| or if the dialog is an
@@ -196,11 +198,13 @@ class JavaScriptDialogTabHelper
   // A closure to be fired when a dialog is dismissed. For testing only.
   DialogDismissedCallback dialog_dismissed_;
 
-  std::unique_ptr<JavaScriptDialogTabHelperDelegate> delegate_;
+  std::unique_ptr<TabModalDialogManagerDelegate> delegate_;
 
   WEB_CONTENTS_USER_DATA_KEY_DECL();
 
-  DISALLOW_COPY_AND_ASSIGN(JavaScriptDialogTabHelper);
+  DISALLOW_COPY_AND_ASSIGN(TabModalDialogManager);
 };
 
-#endif  // CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_H_
+}  // namespace javascript_dialogs
+
+#endif  // COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_MANAGER_H_

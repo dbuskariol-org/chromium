@@ -2,18 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper_delegate_desktop.h"
+#include "chrome/browser/ui/javascript_dialogs/javascript_tab_modal_dialog_manager_delegate_desktop.h"
 
 #include <utility>
 
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_list.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper.h"
 #include "chrome/browser/ui/tab_modal_confirm_dialog.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "components/javascript_dialogs/app_modal_dialog_manager.h"
+#include "components/javascript_dialogs/tab_modal_dialog_manager.h"
+#include "components/javascript_dialogs/tab_modal_dialog_view.h"
 #include "components/navigation_metrics/navigation_metrics.h"
 #include "components/ukm/content/source_url_recorder.h"
 #include "content/public/browser/devtools_agent_host.h"
@@ -23,24 +23,25 @@
 #include "services/metrics/public/cpp/ukm_recorder.h"
 #include "ui/gfx/text_elider.h"
 
-JavaScriptDialogTabHelperDelegateDesktop::
-    JavaScriptDialogTabHelperDelegateDesktop(content::WebContents* web_contents)
+JavaScriptTabModalDialogManagerDelegateDesktop::
+    JavaScriptTabModalDialogManagerDelegateDesktop(
+        content::WebContents* web_contents)
     : web_contents_(web_contents) {}
 
-JavaScriptDialogTabHelperDelegateDesktop::
-    ~JavaScriptDialogTabHelperDelegateDesktop() {
+JavaScriptTabModalDialogManagerDelegateDesktop::
+    ~JavaScriptTabModalDialogManagerDelegateDesktop() {
   DCHECK(!tab_strip_model_being_observed_);
 }
 
-void JavaScriptDialogTabHelperDelegateDesktop::WillRunDialog() {
+void JavaScriptTabModalDialogManagerDelegateDesktop::WillRunDialog() {
   BrowserList::AddObserver(this);
 }
 
-void JavaScriptDialogTabHelperDelegateDesktop::DidCloseDialog() {
+void JavaScriptTabModalDialogManagerDelegateDesktop::DidCloseDialog() {
   BrowserList::RemoveObserver(this);
 }
 
-void JavaScriptDialogTabHelperDelegateDesktop::SetTabNeedsAttention(
+void JavaScriptTabModalDialogManagerDelegateDesktop::SetTabNeedsAttention(
     bool attention) {
   Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);
   if (!browser) {
@@ -55,24 +56,24 @@ void JavaScriptDialogTabHelperDelegateDesktop::SetTabNeedsAttention(
       tab_strip_model->GetIndexOfWebContents(web_contents_));
 }
 
-bool JavaScriptDialogTabHelperDelegateDesktop::IsWebContentsForemost() {
+bool JavaScriptTabModalDialogManagerDelegateDesktop::IsWebContentsForemost() {
   Browser* browser = BrowserList::GetInstance()->GetLastActive();
   DCHECK(browser);
   return browser->tab_strip_model()->GetActiveWebContents() == web_contents_;
 }
 
-bool JavaScriptDialogTabHelperDelegateDesktop::IsApp() {
+bool JavaScriptTabModalDialogManagerDelegateDesktop::IsApp() {
   Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);
   return browser && browser->deprecated_is_app();
 }
 
-void JavaScriptDialogTabHelperDelegateDesktop::OnBrowserSetLastActive(
+void JavaScriptTabModalDialogManagerDelegateDesktop::OnBrowserSetLastActive(
     Browser* browser) {
-  JavaScriptDialogTabHelper::FromWebContents(web_contents_)
+  javascript_dialogs::TabModalDialogManager::FromWebContents(web_contents_)
       ->BrowserActiveStateChanged();
 }
 
-void JavaScriptDialogTabHelperDelegateDesktop::OnTabStripModelChanged(
+void JavaScriptTabModalDialogManagerDelegateDesktop::OnTabStripModelChanged(
     TabStripModel* tab_strip_model,
     const TabStripModelChange& change,
     const TabStripSelectionChange& selection) {
@@ -84,9 +85,9 @@ void JavaScriptDialogTabHelperDelegateDesktop::OnTabStripModelChanged(
       // must be done here.
       SetTabNeedsAttentionImpl(false, tab_strip_model, replace->index);
 
-      JavaScriptDialogTabHelper::FromWebContents(web_contents_)
-          ->CloseDialogWithReason(
-              JavaScriptDialogTabHelper::DismissalCause::kTabSwitchedOut);
+      javascript_dialogs::TabModalDialogManager::FromWebContents(web_contents_)
+          ->CloseDialogWithReason(javascript_dialogs::TabModalDialogManager::
+                                      DismissalCause::kTabSwitchedOut);
     }
   } else if (change.type() == TabStripModelChange::kRemoved) {
     for (const auto& contents : change.GetRemove()->contents) {
@@ -101,16 +102,17 @@ void JavaScriptDialogTabHelperDelegateDesktop::OnTabStripModelChanged(
         DCHECK(tab_strip_model_being_observed_);
         tab_strip_model_being_observed_->RemoveObserver(this);
         tab_strip_model_being_observed_ = nullptr;
-        JavaScriptDialogTabHelper::FromWebContents(web_contents_)
-            ->CloseDialogWithReason(
-                JavaScriptDialogTabHelper::DismissalCause::kTabHelperDestroyed);
+        javascript_dialogs::TabModalDialogManager::FromWebContents(
+            web_contents_)
+            ->CloseDialogWithReason(javascript_dialogs::TabModalDialogManager::
+                                        DismissalCause::kTabHelperDestroyed);
         break;
       }
     }
   }
 }
 
-void JavaScriptDialogTabHelperDelegateDesktop::SetTabNeedsAttentionImpl(
+void JavaScriptTabModalDialogManagerDelegateDesktop::SetTabNeedsAttentionImpl(
     bool attention,
     TabStripModel* tab_strip_model,
     int index) {

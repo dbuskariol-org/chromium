@@ -2,16 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/android/javascript_dialog_android.h"
+#include "components/javascript_dialogs/android/tab_modal_dialog_view_android.h"
 
 #include "base/android/jni_android.h"
 #include "base/android/jni_string.h"
 #include "base/callback.h"
 #include "base/macros.h"
 #include "base/metrics/histogram_macros.h"
-#include "chrome/android/chrome_jni_headers/JavascriptTabModalDialog_jni.h"
-#include "chrome/browser/android/tab_android.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper_delegate_android.h"
+#include "components/javascript_dialogs/android/jni_headers/JavascriptTabModalDialog_jni.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_contents_delegate.h"
@@ -23,8 +21,29 @@ using base::android::JavaParamRef;
 using base::android::ScopedJavaGlobalRef;
 using base::android::ScopedJavaLocalRef;
 
-// JavaScriptDialogAndroid:
-JavaScriptDialogAndroid::~JavaScriptDialogAndroid() {
+namespace javascript_dialogs {
+
+// static
+base::WeakPtr<TabModalDialogViewAndroid> TabModalDialogViewAndroid::Create(
+    content::WebContents* parent_web_contents,
+    content::WebContents* alerting_web_contents,
+    const base::string16& title,
+    content::JavaScriptDialogType dialog_type,
+    const base::string16& message_text,
+    const base::string16& default_prompt_text,
+    content::JavaScriptDialogManager::DialogClosedCallback
+        callback_on_button_clicked,
+    base::OnceClosure callback_on_cancelled) {
+  return (new TabModalDialogViewAndroid(
+              parent_web_contents, alerting_web_contents, title, dialog_type,
+              message_text, default_prompt_text,
+              std::move(callback_on_button_clicked),
+              std::move(callback_on_cancelled)))
+      ->weak_factory_.GetWeakPtr();
+}
+
+// TabModalDialogViewAndroid:
+TabModalDialogViewAndroid::~TabModalDialogViewAndroid() {
   // In case the dialog is still displaying, tell it to close itself.
   // This can happen if you trigger a dialog but close the Tab before it's
   // shown, and then accept the dialog.
@@ -34,20 +53,20 @@ JavaScriptDialogAndroid::~JavaScriptDialogAndroid() {
   }
 }
 
-void JavaScriptDialogAndroid::CloseDialogWithoutCallback() {
+void TabModalDialogViewAndroid::CloseDialogWithoutCallback() {
   delete this;
 }
 
-base::string16 JavaScriptDialogAndroid::GetUserInput() {
+base::string16 TabModalDialogViewAndroid::GetUserInput() {
   JNIEnv* env = AttachCurrentThread();
   ScopedJavaLocalRef<jstring> prompt =
       Java_JavascriptTabModalDialog_getUserInput(env, dialog_jobject_);
   return base::android::ConvertJavaStringToUTF16(env, prompt);
 }
 
-void JavaScriptDialogAndroid::Accept(JNIEnv* env,
-                                     const JavaParamRef<jobject>&,
-                                     const JavaParamRef<jstring>& prompt) {
+void TabModalDialogViewAndroid::Accept(JNIEnv* env,
+                                       const JavaParamRef<jobject>&,
+                                       const JavaParamRef<jstring>& prompt) {
   if (callback_on_button_clicked_) {
     base::string16 prompt_text =
         base::android::ConvertJavaStringToUTF16(env, prompt);
@@ -56,9 +75,9 @@ void JavaScriptDialogAndroid::Accept(JNIEnv* env,
   delete this;
 }
 
-void JavaScriptDialogAndroid::Cancel(JNIEnv* env,
-                                     const JavaParamRef<jobject>&,
-                                     jboolean button_clicked) {
+void TabModalDialogViewAndroid::Cancel(JNIEnv* env,
+                                       const JavaParamRef<jobject>&,
+                                       jboolean button_clicked) {
   if (button_clicked) {
     if (callback_on_button_clicked_) {
       std::move(callback_on_button_clicked_).Run(false, base::string16());
@@ -69,7 +88,7 @@ void JavaScriptDialogAndroid::Cancel(JNIEnv* env,
   delete this;
 }
 
-JavaScriptDialogAndroid::JavaScriptDialogAndroid(
+TabModalDialogViewAndroid::TabModalDialogViewAndroid(
     content::WebContents* parent_web_contents,
     content::WebContents* alerting_web_contents,
     const base::string16& title,
@@ -126,24 +145,4 @@ JavaScriptDialogAndroid::JavaScriptDialogAndroid(
                                            reinterpret_cast<intptr_t>(this));
 }
 
-// Note on the two callbacks: |dialog_callback_on_button_clicked| is for the
-// case where user responds to the dialog. |dialog_callback_on_cancelled| is
-// for the case where user cancels the dialog without interacting with the
-// dialog (e.g. clicks the navigate back button on Android).
-base::WeakPtr<JavaScriptDialog>
-JavaScriptDialogTabHelperDelegateAndroid::CreateNewDialog(
-    content::WebContents* alerting_web_contents,
-    const base::string16& title,
-    content::JavaScriptDialogType dialog_type,
-    const base::string16& message_text,
-    const base::string16& default_prompt_text,
-    content::JavaScriptDialogManager::DialogClosedCallback
-        callback_on_button_clicked,
-    base::OnceClosure callback_on_cancelled) {
-  return (new JavaScriptDialogAndroid(web_contents_, alerting_web_contents,
-                                      title, dialog_type, message_text,
-                                      default_prompt_text,
-                                      std::move(callback_on_button_clicked),
-                                      std::move(callback_on_cancelled)))
-      ->weak_factory_.GetWeakPtr();
-}
+}  // namespace javascript_dialogs

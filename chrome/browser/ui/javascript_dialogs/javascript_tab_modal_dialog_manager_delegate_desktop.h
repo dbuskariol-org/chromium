@@ -2,28 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_DELEGATE_DESKTOP_H_
-#define CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_DELEGATE_DESKTOP_H_
+#ifndef CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_TAB_MODAL_DIALOG_MANAGER_DELEGATE_DESKTOP_H_
+#define CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_TAB_MODAL_DIALOG_MANAGER_DELEGATE_DESKTOP_H_
 
 #include <memory>
 
 #include "base/callback_forward.h"
 #include "base/macros.h"
 #include "chrome/browser/ui/browser_list_observer.h"
-#include "chrome/browser/ui/javascript_dialogs/javascript_dialog_tab_helper_delegate.h"
 #include "chrome/browser/ui/tabs/tab_strip_model_observer.h"
+#include "components/javascript_dialogs/tab_modal_dialog_manager_delegate.h"
 
-class JavaScriptDialogTabHelperDelegateDesktop
-    : public JavaScriptDialogTabHelperDelegate,
+class JavaScriptTabModalDialogManagerDelegateDesktop
+    : public javascript_dialogs::TabModalDialogManagerDelegate,
       public BrowserListObserver,
       public TabStripModelObserver {
  public:
-  explicit JavaScriptDialogTabHelperDelegateDesktop(
+  explicit JavaScriptTabModalDialogManagerDelegateDesktop(
       content::WebContents* web_contents);
-  ~JavaScriptDialogTabHelperDelegateDesktop() override;
+  ~JavaScriptTabModalDialogManagerDelegateDesktop() override;
 
-  // JavaScriptDialogTabHelperDelegate
-  base::WeakPtr<JavaScriptDialog> CreateNewDialog(
+  // javascript_dialogs::TabModalDialogManagerDelegate
+  base::WeakPtr<javascript_dialogs::TabModalDialogView> CreateNewDialog(
       content::WebContents* alerting_web_contents,
       const base::string16& title,
       content::JavaScriptDialogType dialog_type,
@@ -71,7 +71,7 @@ class JavaScriptDialogTabHelperDelegateDesktop
   // Chrome app <webview>s.
   content::WebContents* web_contents_;
 
-  DISALLOW_COPY_AND_ASSIGN(JavaScriptDialogTabHelperDelegateDesktop);
+  DISALLOW_COPY_AND_ASSIGN(JavaScriptTabModalDialogManagerDelegateDesktop);
 };
 
-#endif  // CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_DELEGATE_DESKTOP_H_
+#endif  // CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_TAB_MODAL_DIALOG_MANAGER_DELEGATE_DESKTOP_H_

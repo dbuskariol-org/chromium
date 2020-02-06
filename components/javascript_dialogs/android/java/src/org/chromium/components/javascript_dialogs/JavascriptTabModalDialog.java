@@ -2,22 +2,22 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.jsdialog;
+package org.chromium.components.javascript_dialogs;
 
 import android.content.Context;
 
 import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
-import org.chromium.components.javascript_dialogs.JavascriptModalDialog;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
 import org.chromium.ui.modaldialog.ModalDialogManager;
 
 /**
- * The controller to communicate with native JavaScriptDialogAndroid for a tab modal JavaScript
+ * The controller to communicate with native TabModalDialogViewAndroid for a tab modal JavaScript
  * dialog. This can be an alert dialog, a prompt dialog or a confirm dialog.
  */
+@JNINamespace("javascript_dialogs")
 public class JavascriptTabModalDialog extends JavascriptModalDialog {
     private long mNativeDialogPointer;
 
@@ -96,9 +96,9 @@ public class JavascriptTabModalDialog extends JavascriptModalDialog {
 
     @NativeMethods
     interface Natives {
-        void accept(
-                long nativeJavaScriptDialogAndroid, JavascriptTabModalDialog caller, String prompt);
-        void cancel(long nativeJavaScriptDialogAndroid, JavascriptTabModalDialog caller,
+        void accept(long nativeTabModalDialogViewAndroid, JavascriptTabModalDialog caller,
+                String prompt);
+        void cancel(long nativeTabModalDialogViewAndroid, JavascriptTabModalDialog caller,
                 boolean buttonClicked);
     }
 }

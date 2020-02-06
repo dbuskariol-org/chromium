@@ -2,24 +2,26 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_DELEGATE_H_
-#define CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_DELEGATE_H_
+#ifndef COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_MANAGER_DELEGATE_H_
+#define COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_MANAGER_DELEGATE_H_
 
 #include "base/callback_forward.h"
 #include "base/memory/weak_ptr.h"
 #include "base/strings/string16.h"
 #include "content/public/browser/javascript_dialog_manager.h"
 
-class JavaScriptDialog;
+namespace javascript_dialogs {
+
+class TabModalDialogView;
 
 // This interface provides platform-specific controller functionality to
-// JavaScriptDialogTabHelper.
-class JavaScriptDialogTabHelperDelegate {
+// TabModalDialogManager.
+class TabModalDialogManagerDelegate {
  public:
-  virtual ~JavaScriptDialogTabHelperDelegate() = default;
+  virtual ~TabModalDialogManagerDelegate() = default;
 
   // Factory function for creating a tab modal view.
-  virtual base::WeakPtr<JavaScriptDialog> CreateNewDialog(
+  virtual base::WeakPtr<TabModalDialogView> CreateNewDialog(
       content::WebContents* alerting_web_contents,
       const base::string16& title,
       content::JavaScriptDialogType dialog_type,
@@ -46,4 +48,6 @@ class JavaScriptDialogTabHelperDelegate {
   virtual bool IsApp() = 0;
 };
 
-#endif  // CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_TAB_HELPER_DELEGATE_H_
+}  // namespace javascript_dialogs
+
+#endif  // COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_MANAGER_DELEGATE_H_

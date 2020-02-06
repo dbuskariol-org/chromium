@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/javascript_dialogs/android/javascript_app_modal_dialog_android.h"
+#include "components/javascript_dialogs/android/app_modal_dialog_view_android.h"
 
 #include "base/android/jni_android.h"
 #include "base/android/jni_string.h"
@@ -27,7 +27,7 @@ using base::android::ScopedJavaLocalRef;
 
 namespace javascript_dialogs {
 
-JavascriptAppModalDialogAndroid::JavascriptAppModalDialogAndroid(
+AppModalDialogViewAndroid::AppModalDialogViewAndroid(
     JNIEnv* env,
     AppModalDialogController* controller,
     gfx::NativeWindow parent)
@@ -37,7 +37,7 @@ JavascriptAppModalDialogAndroid::JavascriptAppModalDialogAndroid(
       controller->web_contents());
 }
 
-void JavascriptAppModalDialogAndroid::ShowAppModalDialog() {
+void AppModalDialogViewAndroid::ShowAppModalDialog() {
   JNIEnv* env = AttachCurrentThread();
   // Keep a strong ref to the parent window while we make the call to java to
   // display the dialog.
@@ -89,7 +89,7 @@ void JavascriptAppModalDialogAndroid::ShowAppModalDialog() {
       env, dialog_object, parent_jobj, reinterpret_cast<intptr_t>(this));
 }
 
-void JavascriptAppModalDialogAndroid::ActivateAppModalDialog() {
+void AppModalDialogViewAndroid::ActivateAppModalDialog() {
   // This is called on desktop (Views) when interacting with a browser window
   // that does not host the currently active app modal dialog, as a way to
   // redirect activation to the app modal dialog host. It's not relevant on
@@ -97,17 +97,17 @@ void JavascriptAppModalDialogAndroid::ActivateAppModalDialog() {
   NOTREACHED();
 }
 
-void JavascriptAppModalDialogAndroid::CloseAppModalDialog() {
+void AppModalDialogViewAndroid::CloseAppModalDialog() {
   CancelAppModalDialog();
 }
 
-void JavascriptAppModalDialogAndroid::AcceptAppModalDialog() {
+void AppModalDialogViewAndroid::AcceptAppModalDialog() {
   base::string16 prompt_text;
   controller_->OnAccept(prompt_text, false);
   delete this;
 }
 
-void JavascriptAppModalDialogAndroid::DidAcceptAppModalDialog(
+void AppModalDialogViewAndroid::DidAcceptAppModalDialog(
     JNIEnv* env,
     const JavaParamRef<jobject>&,
     const JavaParamRef<jstring>& prompt,
@@ -118,16 +118,16 @@ void JavascriptAppModalDialogAndroid::DidAcceptAppModalDialog(
   delete this;
 }
 
-void JavascriptAppModalDialogAndroid::CancelAppModalDialog() {
+void AppModalDialogViewAndroid::CancelAppModalDialog() {
   controller_->OnCancel(false);
   delete this;
 }
 
-bool JavascriptAppModalDialogAndroid::IsShowing() const {
+bool AppModalDialogViewAndroid::IsShowing() const {
   return true;
 }
 
-void JavascriptAppModalDialogAndroid::DidCancelAppModalDialog(
+void AppModalDialogViewAndroid::DidCancelAppModalDialog(
     JNIEnv* env,
     const JavaParamRef<jobject>&,
     bool should_suppress_js_dialogs) {
@@ -135,12 +135,12 @@ void JavascriptAppModalDialogAndroid::DidCancelAppModalDialog(
   delete this;
 }
 
-const ScopedJavaGlobalRef<jobject>&
-JavascriptAppModalDialogAndroid::GetDialogObject() const {
+const ScopedJavaGlobalRef<jobject>& AppModalDialogViewAndroid::GetDialogObject()
+    const {
   return dialog_jobject_;
 }
 
-JavascriptAppModalDialogAndroid::~JavascriptAppModalDialogAndroid() {
+AppModalDialogViewAndroid::~AppModalDialogViewAndroid() {
   // In case the dialog is still displaying, tell it to close itself.
   // This can happen if you trigger a dialog but close the Tab before it's
   // shown, and then accept the dialog.
@@ -158,8 +158,8 @@ ScopedJavaLocalRef<jobject> JNI_JavascriptAppModalDialog_GetCurrentModalDialog(
   if (!controller || !controller->view())
     return ScopedJavaLocalRef<jobject>();
 
-  JavascriptAppModalDialogAndroid* js_dialog =
-      static_cast<JavascriptAppModalDialogAndroid*>(controller->view());
+  AppModalDialogViewAndroid* js_dialog =
+      static_cast<AppModalDialogViewAndroid*>(controller->view());
   return ScopedJavaLocalRef<jobject>(js_dialog->GetDialogObject());
 }
 

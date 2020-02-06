@@ -2,17 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_H_
-#define CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_H_
+#ifndef COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_VIEW_H_
+#define COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_VIEW_H_
 
 #include "base/strings/string16.h"
 
-class JavaScriptDialog {
+namespace javascript_dialogs {
+
+class TabModalDialogView {
  public:
-  virtual ~JavaScriptDialog() {}
+  virtual ~TabModalDialogView() {}
 
   // Closes the dialog without sending a callback. This is useful when the
-  // JavaScriptDialogTabHelper needs to make this dialog go away so that it can
+  // TabModalDialogManager needs to make this dialog go away so that it can
   // respond to a call that requires it to make no callback or make a customized
   // one.
   virtual void CloseDialogWithoutCallback() = 0;
@@ -21,4 +23,6 @@ class JavaScriptDialog {
   virtual base::string16 GetUserInput() = 0;
 };
 
-#endif  // CHROME_BROWSER_UI_JAVASCRIPT_DIALOGS_JAVASCRIPT_DIALOG_H_
+}  // namespace javascript_dialogs
+
+#endif  // COMPONENTS_JAVASCRIPT_DIALOGS_TAB_MODAL_DIALOG_VIEW_H_
