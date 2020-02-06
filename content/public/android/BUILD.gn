@@ -438,6 +438,7 @@ android_library("content_javatests") {
     "//ui/android:ui_java",
     "//ui/android:ui_java_test_support",
     "//ui/gfx/geometry/mojom:mojom_java",
+    "//url:gurl_java",
   ]
 
   sources = [
