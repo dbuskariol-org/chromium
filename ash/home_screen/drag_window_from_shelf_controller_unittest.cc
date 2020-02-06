@@ -660,9 +660,8 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
   const gfx::Rect display_bounds = display::Screen::GetScreen()
                                        ->GetDisplayNearestWindow(window1.get())
                                        .bounds();
-  int snap_edge_inset =
-      display_bounds.width() * kHighlightScreenPrimaryAxisRatio +
-      kHighlightScreenEdgePaddingDp;
+  const int snap_edge_inset =
+      DragWindowFromShelfController::kScreenEdgeInsetForSnap;
 
   base::HistogramTester histogram_tester;
   histogram_tester.ExpectBucketCount(kHandleDragWindowFromShelfHistogramName,
@@ -682,9 +681,7 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
       window_drag_controller());
   // Drag into the snap region and release.
   gfx::Point end = gfx::Point(
-      start.x() -
-          DragWindowFromShelfController::kMinDragDistanceOutsideSnapRegion + 10,
-      200);
+      start.x() - DragWindowFromShelfController::kMinDragDistance + 10, 200);
   EndDrag(end, base::nullopt);
   OverviewController* overview_controller = Shell::Get()->overview_controller();
   EXPECT_TRUE(overview_controller->InOverviewSession());
@@ -701,8 +698,8 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
   EXPECT_FALSE(overview_controller->InOverviewSession());
   EXPECT_FALSE(split_view_controller()->InSplitViewMode());
 
-  // If the drag starts outside of the snap region and then into snap region,
-  // and the drag distance is long enough.
+  // If the drag starts outside of the snap region and then into snap region
+  // (kScreenEdgeInsetForSnap), and the drag distance is long enough.
   StartDrag(window1.get(), start, HotseatState::kExtended);
 
   Drag(start + gfx::Vector2d(0, 100), 0.f, 1.f);
@@ -710,8 +707,7 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
       window_drag_controller());
 
   // Drag into the snap region and release.
-  end.set_x(start.x() - 10 -
-            DragWindowFromShelfController::kMinDragDistanceOutsideSnapRegion);
+  end.set_x(start.x() - 10 - DragWindowFromShelfController::kMinDragDistance);
   EndDrag(end, base::nullopt);
 
   EXPECT_TRUE(overview_controller->InOverviewSession());
@@ -729,8 +725,8 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
   EXPECT_FALSE(overview_controller->InOverviewSession());
   EXPECT_FALSE(split_view_controller()->InSplitViewMode());
 
-  // If the drag starts inside of the snap region, but the drag distance is not
-  // long enough.
+  // If the drag starts inside of the snap region (kScreenEdgeInsetForSnap), but
+  // the drag distance is not long enough.
   start = gfx::Point(display_bounds.x() + snap_edge_inset - 5,
                      shelf_bounds.CenterPoint().y());
   StartDrag(window1.get(), start, HotseatState::kExtended);
@@ -738,8 +734,7 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
   DragWindowFromShelfControllerTestApi().WaitUntilOverviewIsShown(
       window_drag_controller());
   // Drag for a small distance and release.
-  end.set_x(start.x() -
-            DragWindowFromShelfController::kMinDragDistanceInSnapRegion + 10);
+  end.set_x(start.x() - 10);
   EndDrag(end, base::nullopt);
   EXPECT_TRUE(overview_controller->InOverviewSession());
   EXPECT_FALSE(split_view_controller()->InSplitViewMode());
@@ -755,7 +750,8 @@ TEST_F(DragWindowFromShelfControllerTest, DragToSnapMinDistance) {
   EXPECT_FALSE(overview_controller->InOverviewSession());
   EXPECT_FALSE(split_view_controller()->InSplitViewMode());
 
-  // If the drag starts near the screen edge, the window should snap directly.
+  // If the drag starts near the screen edge (kDistanceFromEdge), the window
+  // should snap directly.
   start = gfx::Point(
       display_bounds.x() + DragWindowFromShelfController::kDistanceFromEdge - 5,
       shelf_bounds.CenterPoint().y());
@@ -832,9 +828,7 @@ TEST_F(DragWindowFromShelfControllerTest,
   // to the home screen.
   gfx::Point end =
       start -
-      gfx::Vector2d(
-          10 + DragWindowFromShelfController::kMinDragDistanceOutsideSnapRegion,
-          200);
+      gfx::Vector2d(10 + DragWindowFromShelfController::kMinDragDistance, 200);
   EndDrag(end, base::nullopt);
 
   EXPECT_FALSE(Shell::Get()->overview_controller()->InOverviewSession());
