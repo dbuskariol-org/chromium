@@ -113,7 +113,7 @@ bool IsPinnedToTaskbarHelper::ShortcutHasUnpinToTaskbarVerb(
 
   Microsoft::WRL::ComPtr<FolderItem> item;
   hresult = folder->ParseName(
-      base::win::ScopedBstr(shortcut.BaseName().value()), &item);
+      base::win::ScopedBstr(shortcut.BaseName().value()).Get(), &item);
   if (FAILED(hresult) || !item) {
     error_occured_ = true;
     return false;
@@ -147,7 +147,7 @@ bool IsPinnedToTaskbarHelper::ShortcutHasUnpinToTaskbarVerb(
       error_count++;
       continue;
     }
-    if (base::StringPiece16(name, name.Length()) == verb_name)
+    if (base::StringPiece16(name.Get(), name.Length()) == verb_name)
       return true;
   }
 
