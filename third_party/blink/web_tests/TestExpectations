@@ -850,7 +850,6 @@ crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/border-radius-clippe
 crbug.com/591099 editing/selection/paint-hyphen.html [ Failure Pass ]
 crbug.com/591099 external/wpt/dom/ranges/Range-compareBoundaryPoints.html [ Timeout Failure Pass ]
 crbug.com/591099 external/wpt/dom/ranges/Range-set.html [ Failure Timeout ]
-crbug.com/591099 external/wpt/encoding/legacy-mb-korean/euc-kr/euckr-decode-ksc_5601.html [ Timeout Failure Pass ]
 crbug.com/591099 [ Mac ] virtual/text-antialias/international/shape-across-elements-simple.html [ Failure ]
 crbug.com/591099 [ Win ] virtual/text-antialias/international/shape-across-elements-simple.html [ Failure ]
 crbug.com/591099 [ Mac ] virtual/text-antialias/word-space-monospace.html [ Failure ]
