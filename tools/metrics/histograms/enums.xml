@@ -57713,8 +57713,11 @@ Called by update_net_trust_anchors.py.-->
       label="Cookie was not marked as 'Secure', so no URL-modification was
              performed"/>
   <int value="4"
-      label="The URL's scheme was fixed up 'HTTPS' for backwards
-             compatibility"/>
+      label="The URL's scheme was fixed up to 'HTTPS' for backwards
+             compatibility (app targets &lt; Android R)"/>
+  <int value="5"
+      label="The cookie was rejected because it uses both 'HTTP' scheme and
+             'Secure' directive (app targets &gt;= Android R)"/>
 </enum>
 
 <enum name="SecurityInterstitialDecision">
