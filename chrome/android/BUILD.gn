@@ -2790,6 +2790,7 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/settings/privacy/BrowsingDataCounterBridge.java",
     "java/src/org/chromium/chrome/browser/settings/privacy/PrivacyPreferencesManager.java",
     "java/src/org/chromium/chrome/browser/settings/website/CookieControlsBridge.java",
+    "java/src/org/chromium/chrome/browser/settings/website/CookieControlsServiceBridge.java",
     "java/src/org/chromium/chrome/browser/settings/website/WebsitePreferenceBridge.java",
     "java/src/org/chromium/chrome/browser/sharing/SharingJNIBridge.java",
     "java/src/org/chromium/chrome/browser/sharing/SharingServiceProxy.java",
