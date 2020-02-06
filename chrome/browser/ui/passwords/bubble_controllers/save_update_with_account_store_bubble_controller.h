@@ -110,9 +110,6 @@ class SaveUpdateWithAccountStoreBubbleController
   // True iff password revealing should require re-auth for privacy reasons.
   bool password_revealing_requires_reauth_;
 
-  // True iff bubble should pop up with revealed password value.
-  bool are_passwords_revealed_when_bubble_is_opened_;
-
   // True iff username/password editing should be enabled.
   bool enable_editing_;
 

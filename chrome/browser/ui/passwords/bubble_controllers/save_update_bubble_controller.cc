@@ -97,7 +97,6 @@ SaveUpdateBubbleController::SaveUpdateBubbleController(
       display_disposition_(
           ComputeDisplayDisposition(display_reason, delegate->GetState())),
       password_revealing_requires_reauth_(false),
-      are_passwords_revealed_when_bubble_is_opened_(false),
       enable_editing_(false),
       dismissal_reason_(metrics_util::NO_DIRECT_INTERACTION),
       clock_(base::DefaultClock::GetInstance()) {
@@ -119,8 +118,7 @@ SaveUpdateBubbleController::SaveUpdateBubbleController(
     }
   }
 
-  if (delegate_->ArePasswordsRevealedWhenBubbleIsOpened()) {
-    are_passwords_revealed_when_bubble_is_opened_ = true;
+  if (are_passwords_revealed_when_bubble_is_opened_) {
     delegate_->OnPasswordsRevealed();
   }
   // The condition for the password reauth:
