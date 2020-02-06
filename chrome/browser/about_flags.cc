@@ -4072,7 +4072,7 @@ const FeatureEntry kFeatureEntries[] = {
     {"mobile-identity-consistency",
      flag_descriptions::kMobileIdentityConsistencyName,
      flag_descriptions::kMobileIdentityConsistencyDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(signin::kMiceFeature)},
+     FEATURE_VALUE_TYPE(signin::kMobileIdentityConsistency)},
 #endif  // defined(OS_ANDROID)
 
 #if defined(OS_ANDROID)
