@@ -2,15 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/captive_portal_metrics_recorder.h"
-
-#include <vector>
+#include "components/security_interstitials/content/captive_portal_metrics_recorder.h"
 
 #include "base/metrics/histogram_macros.h"
-#include "chrome/browser/browser_process.h"
-#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
-#include "chrome/browser/profiles/profile.h"
-#include "content/public/browser/web_contents.h"
 
 namespace {
 
@@ -36,21 +30,16 @@ void RecordCaptivePortalEventStats(SSLInterstitialCauseCaptivePortal event) {
 }  // namespace
 
 CaptivePortalMetricsRecorder::CaptivePortalMetricsRecorder(
-    content::WebContents* web_contents,
+    captive_portal::CaptivePortalService* captive_portal_service,
     bool overridable)
     : overridable_(overridable),
       captive_portal_detection_enabled_(false),
       captive_portal_probe_completed_(false),
       captive_portal_no_response_(false),
       captive_portal_detected_(false) {
-  Profile* profile =
-      Profile::FromBrowserContext(web_contents->GetBrowserContext());
-  captive_portal_detection_enabled_ =
-      CaptivePortalServiceFactory::GetForProfile(profile)->enabled();
-  subscription_ =
-      CaptivePortalServiceFactory::GetForProfile(profile)->RegisterCallback(
-          base::Bind(&CaptivePortalMetricsRecorder::Observe,
-                     base::Unretained(this)));
+  captive_portal_detection_enabled_ = captive_portal_service->enabled();
+  subscription_ = captive_portal_service->RegisterCallback(base::Bind(
+      &CaptivePortalMetricsRecorder::Observe, base::Unretained(this)));
 }
 
 CaptivePortalMetricsRecorder::~CaptivePortalMetricsRecorder() = default;

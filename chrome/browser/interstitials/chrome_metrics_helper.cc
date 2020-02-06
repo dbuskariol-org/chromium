@@ -12,7 +12,9 @@
 #include "content/public/browser/web_contents.h"
 
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
-#include "chrome/browser/ssl/captive_portal_metrics_recorder.h"
+#include "chrome/browser/captive_portal/captive_portal_service_factory.h"
+#include "chrome/browser/profiles/profile.h"
+#include "components/security_interstitials/content/captive_portal_metrics_recorder.h"
 #endif
 
 ChromeMetricsHelper::ChromeMetricsHelper(
@@ -35,8 +37,10 @@ ChromeMetricsHelper::~ChromeMetricsHelper() {}
 
 void ChromeMetricsHelper::StartRecordingCaptivePortalMetrics(bool overridable) {
 #if BUILDFLAG(ENABLE_CAPTIVE_PORTAL_DETECTION)
-  captive_portal_recorder_.reset(
-      new CaptivePortalMetricsRecorder(web_contents_, overridable));
+  captive_portal_recorder_.reset(new CaptivePortalMetricsRecorder(
+      CaptivePortalServiceFactory::GetForProfile(
+          Profile::FromBrowserContext(web_contents_->GetBrowserContext())),
+      overridable));
 #endif
 }
 

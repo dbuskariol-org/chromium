@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SSL_CAPTIVE_PORTAL_METRICS_RECORDER_H_
-#define CHROME_BROWSER_SSL_CAPTIVE_PORTAL_METRICS_RECORDER_H_
+#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_CAPTIVE_PORTAL_METRICS_RECORDER_H_
+#define COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_CAPTIVE_PORTAL_METRICS_RECORDER_H_
 
 #include <string>
 #include <vector>
@@ -13,18 +13,15 @@
 #include "net/cert/x509_certificate.h"
 #include "url/gurl.h"
 
-namespace content {
-class WebContents;
-}
-
 // This class helps the SSL interstitial record captive portal-specific
 // metrics. It should only be used on the UI thread because its implementation
 // uses captive_portal::CaptivePortalService which can only be
 // accessed on the UI thread.
 class CaptivePortalMetricsRecorder {
  public:
-  CaptivePortalMetricsRecorder(content::WebContents* web_contents,
-                               bool overridable);
+  CaptivePortalMetricsRecorder(
+      captive_portal::CaptivePortalService* captive_portal_service,
+      bool overridable);
   ~CaptivePortalMetricsRecorder();
 
   // Should be called when the interstitial is closing.
@@ -47,4 +44,4 @@ class CaptivePortalMetricsRecorder {
       subscription_;
 };
 
-#endif  // CHROME_BROWSER_SSL_CAPTIVE_PORTAL_METRICS_RECORDER_H_
+#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_CAPTIVE_PORTAL_METRICS_RECORDER_H_
