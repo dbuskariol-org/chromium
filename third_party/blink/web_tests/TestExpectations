@@ -6503,11 +6503,6 @@ crbug.com/1047420 [ Mac ] http/tests/devtools/persistence/persistence-move-break
 # Sheriff 2020-01-31
 crbug.com/1047760 [ Win ] http/tests/devtools/screen-orientation-override.js [ Pass Timeout ]
 
-# Sheriff 2020-02-03
-crbug.com/1048113 [ Debug ] virtual/threaded-prefer-compositing/fast/scroll-behavior/main-frame-interrupted-scroll.html [ Pass Failure ]
-crbug.com/1048113 [ Debug ] virtual/threaded-prefer-compositing/fast/scroll-behavior/main-frame-scrollLeft.html [ Pass Failure ]
-crbug.com/1048113 [ Debug ] virtual/threaded-prefer-compositing/fast/scroll-behavior/subframe-interrupted-scroll.html [ Pass Failure ]
-
 crbug.com/1049689 external/wpt/workers/modules/shared-worker-import-referrer.html [ Pass Timeout ]
 crbug.com/1049689 virtual/omt-worker-fetch/external/wpt/workers/modules/shared-worker-import-referrer.html [ Pass Timeout ]
 
