@@ -716,20 +716,12 @@ LocalFrame* ToLocalFrameIfNotDetached(v8::Local<v8::Context> context) {
 
 void ToFlexibleArrayBufferView(v8::Isolate* isolate,
                                v8::Local<v8::Value> value,
-                               FlexibleArrayBufferView& result,
-                               void* storage) {
+                               FlexibleArrayBufferView& result) {
   if (!value->IsArrayBufferView()) {
     result.Clear();
     return;
   }
-  v8::Local<v8::ArrayBufferView> buffer = value.As<v8::ArrayBufferView>();
-  if (!storage) {
-    result.SetFull(V8ArrayBufferView::ToImpl(buffer));
-    return;
-  }
-  size_t length = buffer->ByteLength();
-  buffer->CopyContents(storage, length);
-  result.SetSmall(storage, SafeCast<uint32_t>(length));
+  result.SetContents(value.As<v8::ArrayBufferView>());
 }
 
 static ScriptState* ToScriptStateImpl(LocalFrame* frame,
