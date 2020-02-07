@@ -300,7 +300,7 @@ TEST_F(PerUserTopicSubscriptionManagerTest, ShouldRepeatRequestsOnFailure) {
       ids, kFakeInstanceIdToken);
   // This should have resulted in a request for an access token. Return one.
   identity_test_env()->WaitForAccessTokenRequestIfNecessaryAndRespondWithToken(
-      "access_token", base::Time::Now());
+      "access_token", base::Time::Max());
 
   // Wait for the subscription requests to happen.
   base::RunLoop().RunUntilIdle();
@@ -313,6 +313,13 @@ TEST_F(PerUserTopicSubscriptionManagerTest, ShouldRepeatRequestsOnFailure) {
 
   // The second attempt will succeed.
   AddCorrectSubscriptionResponce();
+
+  // Repeating subscriptions shouldn't bypass backoff.
+  // This should have resulted in a request for an access token. Return one.
+  per_user_topic_subscription_manager->UpdateSubscribedTopics(
+      ids, kFakeInstanceIdToken);
+  identity_test_env()->WaitForAccessTokenRequestIfNecessaryAndRespondWithToken(
+      "access_token", base::Time::Max());
 
   // Initial backoff is 2 seconds with 20% jitter, so the minimum possible delay
   // is 1600ms. Advance time to just before that; nothing should have changed
