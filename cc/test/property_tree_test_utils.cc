@@ -163,6 +163,7 @@ ScrollNode& CreateScrollNodeInternal(LayerType* layer,
   transform_node->scrolls = true;
 
   scroll_tree.SetScrollOffset(layer->element_id(), gfx::ScrollOffset());
+  scroll_tree.set_needs_update(true);
   return *node;
 }
 
