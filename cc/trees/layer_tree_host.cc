@@ -945,8 +945,10 @@ void LayerTreeHost::RecordStartOfFrameMetrics() {
   client_->RecordStartOfFrameMetrics();
 }
 
-void LayerTreeHost::RecordEndOfFrameMetrics(base::TimeTicks frame_begin_time) {
-  client_->RecordEndOfFrameMetrics(frame_begin_time);
+void LayerTreeHost::RecordEndOfFrameMetrics(
+    base::TimeTicks frame_begin_time,
+    ActiveFrameSequenceTrackers trackers) {
+  client_->RecordEndOfFrameMetrics(frame_begin_time, trackers);
 }
 
 const base::WeakPtr<InputHandler>& LayerTreeHost::GetInputHandler() const {
