@@ -832,7 +832,7 @@ void SkiaOutputSurfaceImplOnGpu::Reshape(
     const gfx::Size& size,
     float device_scale_factor,
     const gfx::ColorSpace& color_space,
-    bool has_alpha,
+    gfx::BufferFormat format,
     bool use_stencil,
     gfx::OverlayTransform transform,
     SkSurfaceCharacterization* characterization,
@@ -852,8 +852,8 @@ void SkiaOutputSurfaceImplOnGpu::Reshape(
 
   size_ = size;
   color_space_ = color_space;
-  if (!output_device_->Reshape(size_, device_scale_factor, color_space,
-                               has_alpha, transform)) {
+  if (!output_device_->Reshape(size_, device_scale_factor, color_space, format,
+                               transform)) {
     MarkContextLost();
     return;
   }
