@@ -2959,7 +2959,6 @@ crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/srcdoc-
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/iframe-blank-inherit.meta/upgrade/iframe-tag/same-https.downgrade.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/requestidlecallback/callback-invoked.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/upgrade-insecure-requests/gen/srcdoc-inherit.meta/unset/worklet-audio/cross-http-downgrade.downgrade.https.html [ Timeout ]
-crbug.com/626703 [ Mac10.10 ] external/wpt/cookie-store/cookieStoreManager_getSubscriptions_single.tentative.https.any.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/worker-module.http-rp/unsafe-url/fetch/same-http.swap-origin.http.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/service-workers/service-worker/registration-schedule-job.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/referrer-policy/gen/top.meta/unset/worker-module/same-http.keep-origin.http.html [ Timeout ]
