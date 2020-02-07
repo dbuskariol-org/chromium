@@ -739,14 +739,14 @@ bool BorderSpacing::ParseShorthand(
     const CSSParserLocalContext&,
     HeapVector<CSSPropertyValue, 256>& properties) const {
   CSSValue* horizontal_spacing =
-      ConsumeLength(range, context.Mode(), kValueRangeNonNegative,
+      ConsumeLength(range, context, kValueRangeNonNegative,
                     css_property_parser_helpers::UnitlessQuirk::kAllow);
   if (!horizontal_spacing)
     return false;
   CSSValue* vertical_spacing = horizontal_spacing;
   if (!range.AtEnd()) {
     vertical_spacing =
-        ConsumeLength(range, context.Mode(), kValueRangeNonNegative,
+        ConsumeLength(range, context, kValueRangeNonNegative,
                       css_property_parser_helpers::UnitlessQuirk::kAllow);
   }
   if (!vertical_spacing || !range.AtEnd())
@@ -854,15 +854,15 @@ const CSSValue* ColumnRule::CSSValueFromComputedStyleInternal(
 bool Columns::ParseShorthand(
     bool important,
     CSSParserTokenRange& range,
-    const CSSParserContext&,
+    const CSSParserContext& context,
     const CSSParserLocalContext&,
     HeapVector<CSSPropertyValue, 256>& properties) const {
   CSSValue* column_width = nullptr;
   CSSValue* column_count = nullptr;
-  if (!css_parsing_utils::ConsumeColumnWidthOrCount(range, column_width,
-                                                    column_count))
+  if (!css_parsing_utils::ConsumeColumnWidthOrCount(range, context,
+                                                    column_width, column_count))
     return false;
-  css_parsing_utils::ConsumeColumnWidthOrCount(range, column_width,
+  css_parsing_utils::ConsumeColumnWidthOrCount(range, context, column_width,
                                                column_count);
   if (!range.AtEnd())
     return false;

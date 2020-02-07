@@ -55,7 +55,7 @@ CSSPrimitiveValue* ConsumePositiveInteger(CSSParserTokenRange&);
 bool ConsumeNumberRaw(CSSParserTokenRange&, double& result);
 CSSPrimitiveValue* ConsumeNumber(CSSParserTokenRange&, ValueRange);
 CSSPrimitiveValue* ConsumeLength(CSSParserTokenRange&,
-                                 CSSParserMode,
+                                 const CSSParserContext&,
                                  ValueRange,
                                  UnitlessQuirk = UnitlessQuirk::kForbid);
 CSSPrimitiveValue* ConsumePercent(CSSParserTokenRange&, ValueRange);
@@ -103,7 +103,9 @@ CSSValue* ConsumeColor(CSSParserTokenRange&,
                        CSSParserMode,
                        bool accept_quirky_colors = false);
 
-CSSValue* ConsumeLineWidth(CSSParserTokenRange&, CSSParserMode, UnitlessQuirk);
+CSSValue* ConsumeLineWidth(CSSParserTokenRange&,
+                           const CSSParserContext&,
+                           UnitlessQuirk);
 
 CSSValuePair* ConsumePosition(CSSParserTokenRange&,
                               const CSSParserContext&,

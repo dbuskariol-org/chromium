@@ -54,9 +54,12 @@ const CSSValue* ConsumeSingleType(const CSSSyntaxComponent& syntax,
             AtomicString(syntax.GetString()));
       }
       return nullptr;
-    case CSSSyntaxType::kLength:
+    case CSSSyntaxType::kLength: {
+      CSSParserContext::ParserModeOverridingScope scope(*context,
+                                                        kHTMLStandardMode);
       return css_property_parser_helpers::ConsumeLength(
-          range, kHTMLStandardMode, ValueRange::kValueRangeAll);
+          range, *context, ValueRange::kValueRangeAll);
+    }
     case CSSSyntaxType::kNumber:
       return css_property_parser_helpers::ConsumeNumber(
           range, ValueRange::kValueRangeAll);
