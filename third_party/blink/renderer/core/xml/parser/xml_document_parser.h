@@ -176,6 +176,8 @@ class XMLDocumentParser final : public ScriptableDocumentParser,
   void DoWrite(const String&);
   void DoEnd();
 
+  void CheckIfBlockingStyleSheetAdded();
+
   SegmentedString original_source_for_transform_;
 
   xmlParserCtxtPtr Context() const {
@@ -200,6 +202,7 @@ class XMLDocumentParser final : public ScriptableDocumentParser,
   bool requesting_script_;
   bool finish_called_;
   bool waiting_for_stylesheets_ = false;
+  bool added_pending_parser_blocking_stylesheet_ = false;
 
   XMLErrors xml_errors_;
 

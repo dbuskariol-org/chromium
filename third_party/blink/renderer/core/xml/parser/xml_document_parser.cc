@@ -1058,6 +1058,9 @@ void XMLDocumentParser::EndElementNs() {
   }
 
   element->FinishParsingChildren();
+
+  CheckIfBlockingStyleSheetAdded();
+
   if (element->IsScriptElement() &&
       !ScriptingContentIsAllowed(GetParserContentPolicy())) {
     PopCurrentNode();
@@ -1163,6 +1166,8 @@ void XMLDocumentParser::GetProcessingInstruction(const String& target,
 
   if (pi->IsCSS())
     saw_css_ = true;
+
+  CheckIfBlockingStyleSheetAdded();
 
   if (!RuntimeEnabledFeatures::XSLTEnabled())
     return;
@@ -1667,12 +1672,20 @@ void XMLDocumentParser::DidAddPendingParserBlockingStylesheet() {
   DCHECK(IsParsing());
   if (!context_)
     return;
-  PauseParsing();
-  waiting_for_stylesheets_ = true;
+  added_pending_parser_blocking_stylesheet_ = true;
 }
 
 void XMLDocumentParser::DidLoadAllPendingParserBlockingStylesheets() {
+  added_pending_parser_blocking_stylesheet_ = false;
   waiting_for_stylesheets_ = false;
+}
+
+void XMLDocumentParser::CheckIfBlockingStyleSheetAdded() {
+  if (!added_pending_parser_blocking_stylesheet_)
+    return;
+  added_pending_parser_blocking_stylesheet_ = false;
+  waiting_for_stylesheets_ = true;
+  PauseParsing();
 }
 
 void XMLDocumentParser::ExecuteScriptsWaitingForResources() {
