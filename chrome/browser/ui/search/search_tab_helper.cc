@@ -510,9 +510,6 @@ void SearchTabHelper::OnResultChanged(bool default_result_changed) {
     return;
   }
 
-  if (!autocomplete_controller_->done())
-    return;
-
   if (!search::DefaultSearchProviderIsGoogle(profile())) {
     return;
   }
