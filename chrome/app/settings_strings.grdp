@@ -1020,6 +1020,12 @@
   <message name="IDS_SETTINGS_PASSWORDS" desc="Name for the password section and settings entry used for managing passwords.">
     Passwords
   </message>
+  <message name="IDS_SETTINGS_CHECK_PASSWORDS" desc="Name for the check passwords subsection and settings entry used to perform a password bulk check.">
+    Check passwords
+  </message>
+  <message name="IDS_SETTINGS_CHECK_PASSWORDS_DESCRIPTION" desc="Explanation of the passwords bulk check feature found within the password settings.">
+    Keep your passwords safe from data breaches and other security issues
+  </message>
   <message name="IDS_SETTINGS_PASSWORDS_SAVE_PASSWORDS_TOGGLE_LABEL" desc="Label for a toggle that allows users to be prompted if they want to save their passwords when logging into webpages.">
     Offer to save passwords
   </message>
