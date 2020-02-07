@@ -1313,14 +1313,20 @@ void PaintArtifactCompositor::Update(
 #endif
 }
 
-bool PaintArtifactCompositor::CanDirectlyUpdateProperties() const {
+cc::PropertyTrees* PaintArtifactCompositor::GetPropertyTreesForDirectUpdate() {
   // Don't try to retrieve property trees if we need an update. The full
   // update will update all of the nodes, so a direct update doesn't need to
   // do anything.
   if (needs_update_)
-    return false;
+    return nullptr;
 
-  return root_layer_ && root_layer_->layer_tree_host();
+  if (!root_layer_)
+    return nullptr;
+
+  auto* host = root_layer_->layer_tree_host();
+  if (!host)
+    return nullptr;
+  return host->property_trees();
 }
 
 bool PaintArtifactCompositor::DirectlyUpdateCompositedOpacityValue(
@@ -1328,9 +1334,9 @@ bool PaintArtifactCompositor::DirectlyUpdateCompositedOpacityValue(
   // We can only directly-update compositor values if all content associated
   // with the node is known to be composited.
   DCHECK(effect.HasDirectCompositingReasons());
-  if (CanDirectlyUpdateProperties()) {
+  if (auto* property_trees = GetPropertyTreesForDirectUpdate()) {
     return PropertyTreeManager::DirectlyUpdateCompositedOpacityValue(
-        *root_layer_->layer_tree_host(), effect);
+        property_trees, *root_layer_->layer_tree_host(), effect);
   }
   return false;
 }
@@ -1343,9 +1349,9 @@ bool PaintArtifactCompositor::DirectlyUpdateScrollOffsetTransform(
     // CompositeAfterPaint because we cannot query CompositedLayerMapping here.
     DCHECK(transform.HasDirectCompositingReasons());
   }
-  if (CanDirectlyUpdateProperties()) {
+  if (auto* property_trees = GetPropertyTreesForDirectUpdate()) {
     return PropertyTreeManager::DirectlyUpdateScrollOffsetTransform(
-        *root_layer_->layer_tree_host(), transform);
+        property_trees, *root_layer_->layer_tree_host(), transform);
   }
   return false;
 }
@@ -1355,9 +1361,9 @@ bool PaintArtifactCompositor::DirectlyUpdateTransform(
   // We can only directly-update compositor values if all content associated
   // with the node is known to be composited.
   DCHECK(transform.HasDirectCompositingReasons());
-  if (CanDirectlyUpdateProperties()) {
+  if (auto* property_trees = GetPropertyTreesForDirectUpdate()) {
     return PropertyTreeManager::DirectlyUpdateTransform(
-        *root_layer_->layer_tree_host(), transform);
+        property_trees, *root_layer_->layer_tree_host(), transform);
   }
   return false;
 }
@@ -1367,21 +1373,23 @@ bool PaintArtifactCompositor::DirectlyUpdatePageScaleTransform(
   // We can only directly-update compositor values if all content associated
   // with the node is known to be composited.
   DCHECK(transform.HasDirectCompositingReasons());
-  if (CanDirectlyUpdateProperties()) {
+  if (auto* property_trees = GetPropertyTreesForDirectUpdate()) {
     return PropertyTreeManager::DirectlyUpdatePageScaleTransform(
-        *root_layer_->layer_tree_host(), transform);
+        property_trees, *root_layer_->layer_tree_host(), transform);
   }
   return false;
 }
 
-bool PaintArtifactCompositor::DirectlySetScrollOffset(
+bool PaintArtifactCompositor::DirectlyUpdateScrollOffset(
     CompositorElementId element_id,
     const FloatPoint& scroll_offset) {
   if (!root_layer_ || !root_layer_->layer_tree_host())
     return false;
-  PropertyTreeManager::DirectlySetScrollOffset(
-      *root_layer_->layer_tree_host(), element_id,
-      gfx::ScrollOffset(scroll_offset));
+  auto* property_trees = root_layer_->layer_tree_host()->property_trees();
+  if (!property_trees->element_id_to_scroll_node_index.contains(element_id))
+    return false;
+  property_trees->scroll_tree.SetScrollOffset(element_id,
+                                              gfx::ScrollOffset(scroll_offset));
   return true;
 }
 

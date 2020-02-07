@@ -380,7 +380,7 @@ bool ScrollingCoordinator::UpdateCompositorScrollOffset(
       frame.LocalFrameRoot().View()->GetPaintArtifactCompositor();
   if (!paint_artifact_compositor)
     return false;
-  return paint_artifact_compositor->DirectlySetScrollOffset(
+  return paint_artifact_compositor->DirectlyUpdateScrollOffset(
       scrollable_area.GetScrollElementId(), scrollable_area.ScrollPosition());
 }
 
