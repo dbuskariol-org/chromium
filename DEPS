@@ -511,7 +511,7 @@ deps = {
       'packages': [
         {
           'package': 'chromium/third_party/firebase_ios',
-          'version': 'LF-Sg4wxHfilYCXiSZoj0gcLub1ueZX-q8H-xAVUrKQC',
+          'version': 'QmLncusdxHhHwXryoNEHHUGacx1Tg5ij449uwZL2dpAC',
         },
       ],
       'condition': 'checkout_ios',
