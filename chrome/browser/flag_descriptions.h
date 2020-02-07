@@ -17,10 +17,6 @@
 #include "media/media_buildflags.h"
 #include "ppapi/buildflags/buildflags.h"
 
-#if defined(OS_ANDROID)
-#include "ui/android/buildflags.h"
-#endif  // defined(OS_ANDROID)
-
 #if defined(OS_LINUX)
 #include "base/allocator/buildflags.h"
 #endif  // defined(OS_LINUX)
@@ -1548,15 +1544,8 @@ extern const char kUsageStatsName[];
 extern const char kInlineUpdateFlowName[];
 extern const char kInlineUpdateFlowDescription[];
 
-#if BUILDFLAG(ENABLE_ANDROID_NIGHT_MODE)
-
-extern const char kAndroidNightModeName[];
-extern const char kAndroidNightModeDescription[];
-
 extern const char kAndroidNightModeTabReparentingName[];
 extern const char kAndroidNightModeTabReparentingDescription[];
-
-#endif  // BUILDFLAG(ENABLE_ANDROID_NIGHT_MODE)
 
 // Non-Android ----------------------------------------------------------------
 
