@@ -54,16 +54,20 @@ class ExternalConnector {
 
   // Asks the Mojo broker to bind to a matching interface on the service with
   // the given |service_name|. If the service does not yet exist, the binding
-  // will remain in progress until the service is registered.
+  // will remain in progress until the service is registered. If |async| is
+  // |false|, then the bind will execute synchronously; otherwise, it will
+  // execute asynchronously on the same sequence (see b/146508043).
   template <typename Interface>
   void BindInterface(const std::string& service_name,
-                     mojo::PendingReceiver<Interface> receiver) {
-    BindInterface(service_name, Interface::Name_, receiver.PassPipe());
+                     mojo::PendingReceiver<Interface> receiver,
+                     bool async = true) {
+    BindInterface(service_name, Interface::Name_, receiver.PassPipe(), async);
   }
 
   virtual void BindInterface(const std::string& service_name,
                              const std::string& interface_name,
-                             mojo::ScopedMessagePipeHandle interface_pipe) = 0;
+                             mojo::ScopedMessagePipeHandle interface_pipe,
+                             bool async = true) = 0;
 
   // Creates a new instance of this class which may be passed to another thread.
   // The returned object may be passed across sequences until any of its public
