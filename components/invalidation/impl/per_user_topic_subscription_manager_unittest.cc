@@ -274,6 +274,19 @@ TEST_F(PerUserTopicSubscriptionManagerTest, ShouldUpdateSubscribedTopics) {
   }
 }
 
+TEST_F(PerUserTopicSubscriptionManagerTest,
+       ShouldNotRequestAccessTokenWhileHaveNoRequests) {
+  NiceMock<MockIdentityDiagnosticsObserver> identity_observer;
+  identity_test_env()->identity_manager()->AddDiagnosticsObserver(
+      &identity_observer);
+
+  EXPECT_CALL(identity_observer, OnAccessTokenRequested(_, _, _)).Times(0);
+  BuildRegistrationManager()->UpdateSubscribedTopics({}, kFakeInstanceIdToken);
+
+  identity_test_env()->identity_manager()->RemoveDiagnosticsObserver(
+      &identity_observer);
+}
+
 TEST_F(PerUserTopicSubscriptionManagerTest, ShouldRepeatRequestsOnFailure) {
   // For this test, we want to manually control when access tokens are returned.
   identity_test_env()->SetAutomaticIssueOfAccessTokens(false);

@@ -334,11 +334,11 @@ void PerUserTopicSubscriptionManager::UpdateSubscribedTopics(
   // longer interested. Replacement by unsubscription request might be
   // required, because request can already reach the server.
 
-  // Kick off the process of actually processing the (un)subscriptions we just
-  // scheduled.
-  // TODO(crbug.com/1020117): Only do this if we actually scheduled anything,
-  // i.e. |pending_subscriptions_| is not empty.
-  RequestAccessToken();
+  if (!pending_subscriptions_.empty()) {
+    // Kick off the process of actually processing the (un)subscriptions we just
+    // scheduled.
+    RequestAccessToken();
+  }
 }
 
 void PerUserTopicSubscriptionManager::ClearInstanceIDToken() {
