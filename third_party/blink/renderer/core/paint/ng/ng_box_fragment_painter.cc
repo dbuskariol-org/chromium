@@ -2118,7 +2118,7 @@ bool NGBoxFragmentPainter::HitTestFloatingChildren(
       continue;
     }
 
-    if (child_fragment.IsBlockFormattingContextRoot())
+    if (child_fragment.IsPaintedAtomically())
       continue;
 
     if (const auto* child_container =
