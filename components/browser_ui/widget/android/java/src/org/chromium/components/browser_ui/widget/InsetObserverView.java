@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser;
+package org.chromium.components.browser_ui.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -195,8 +195,9 @@ public class InsetObserverView extends View {
 
             // If the safe area has not changed then we should stop now.
             if (mCurrentSafeArea.left == left && mCurrentSafeArea.top == top
-                    && mCurrentSafeArea.right == right && mCurrentSafeArea.bottom == bottom)
+                    && mCurrentSafeArea.right == right && mCurrentSafeArea.bottom == bottom) {
                 return;
+            }
 
             mCurrentSafeArea.set(left, top, right, bottom);
 
