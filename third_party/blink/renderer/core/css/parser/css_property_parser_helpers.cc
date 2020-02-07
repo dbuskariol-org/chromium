@@ -476,17 +476,17 @@ bool CanConsumeCalcValue(CalculationCategory category,
 }
 
 CSSPrimitiveValue* ConsumeLengthOrPercent(CSSParserTokenRange& range,
-                                          CSSParserMode css_parser_mode,
+                                          const CSSParserContext& context,
                                           ValueRange value_range,
                                           UnitlessQuirk unitless) {
   const CSSParserToken& token = range.Peek();
   if (token.GetType() == kDimensionToken || token.GetType() == kNumberToken)
-    return ConsumeLength(range, css_parser_mode, value_range, unitless);
+    return ConsumeLength(range, context.Mode(), value_range, unitless);
   if (token.GetType() == kPercentageToken)
     return ConsumePercent(range, value_range);
-  MathFunctionParser math_parser(range, value_range);
+  MathFunctionParser math_parser(range, &context, value_range);
   if (const CSSMathFunctionValue* calculation = math_parser.Value()) {
-    if (CanConsumeCalcValue(calculation->Category(), css_parser_mode))
+    if (CanConsumeCalcValue(calculation->Category(), context.Mode()))
       return math_parser.ConsumeValue();
   }
   return nullptr;
@@ -521,8 +521,9 @@ CSSPrimitiveValue* ConsumeSVGGeometryPropertyLength(
     CSSParserTokenRange& range,
     const CSSParserContext& context,
     ValueRange value_range) {
-  CSSPrimitiveValue* value = ConsumeLengthOrPercent(
-      range, kSVGAttributeMode, value_range, UnitlessQuirk::kForbid);
+  CSSParserContext::ParserModeOverridingScope scope(context, kSVGAttributeMode);
+  CSSPrimitiveValue* value = ConsumeLengthOrPercent(range, context, value_range,
+                                                    UnitlessQuirk::kForbid);
   if (IsNonZeroUserUnitsValue(value))
     context.Count(WebFeature::kSVGGeometryPropertyHasNonZeroUnitlessValue);
   return value;
@@ -533,7 +534,7 @@ CSSPrimitiveValue* ConsumeGradientLengthOrPercent(
     const CSSParserContext& context,
     ValueRange value_range,
     UnitlessQuirk unitless) {
-  return ConsumeLengthOrPercent(range, context.Mode(), value_range, unitless);
+  return ConsumeLengthOrPercent(range, context, value_range, unitless);
 }
 
 CSSPrimitiveValue* ConsumeAngle(
@@ -941,13 +942,12 @@ CSSValue* ConsumeLineWidth(CSSParserTokenRange& range,
 }
 
 static CSSValue* ConsumePositionComponent(CSSParserTokenRange& range,
-                                          CSSParserMode css_parser_mode,
+                                          const CSSParserContext& context,
                                           UnitlessQuirk unitless,
                                           bool& horizontal_edge,
                                           bool& vertical_edge) {
   if (range.Peek().GetType() != kIdentToken)
-    return ConsumeLengthOrPercent(range, css_parser_mode, kValueRangeAll,
-                                  unitless);
+    return ConsumeLengthOrPercent(range, context, kValueRangeAll, unitless);
 
   CSSValueID id = range.Peek().Id();
   if (id == CSSValueID::kLeft || id == CSSValueID::kRight) {
@@ -1058,7 +1058,7 @@ bool ConsumePosition(CSSParserTokenRange& range,
                      CSSValue*& result_y) {
   bool horizontal_edge = false;
   bool vertical_edge = false;
-  CSSValue* value1 = ConsumePositionComponent(range, context.Mode(), unitless,
+  CSSValue* value1 = ConsumePositionComponent(range, context, unitless,
                                               horizontal_edge, vertical_edge);
   if (!value1)
     return false;
@@ -1066,7 +1066,7 @@ bool ConsumePosition(CSSParserTokenRange& range,
     horizontal_edge = true;
 
   CSSParserTokenRange range_after_first_consume = range;
-  CSSValue* value2 = ConsumePositionComponent(range, context.Mode(), unitless,
+  CSSValue* value2 = ConsumePositionComponent(range, context, unitless,
                                               horizontal_edge, vertical_edge);
   if (!value2) {
     PositionFromOneValue(value1, result_x, result_y);
@@ -1083,9 +1083,10 @@ bool ConsumePosition(CSSParserTokenRange& range,
       !!identifier_value2 != (range.Peek().GetType() == kIdentToken) &&
       (identifier_value2
            ? identifier_value2->GetValueID()
-           : identifier_value1->GetValueID()) != CSSValueID::kCenter)
-    value3 = ConsumePositionComponent(range, context.Mode(), unitless,
-                                      horizontal_edge, vertical_edge);
+           : identifier_value1->GetValueID()) != CSSValueID::kCenter) {
+    value3 = ConsumePositionComponent(range, context, unitless, horizontal_edge,
+                                      vertical_edge);
+  }
   if (!value3) {
     if (vertical_edge && !value2->IsIdentifierValue()) {
       range = range_after_first_consume;
@@ -1100,9 +1101,10 @@ bool ConsumePosition(CSSParserTokenRange& range,
   auto* identifier_value3 = DynamicTo<CSSIdentifierValue>(value3);
   if (identifier_value3 &&
       identifier_value3->GetValueID() != CSSValueID::kCenter &&
-      range.Peek().GetType() != kIdentToken)
-    value4 = ConsumePositionComponent(range, context.Mode(), unitless,
-                                      horizontal_edge, vertical_edge);
+      range.Peek().GetType() != kIdentToken) {
+    value4 = ConsumePositionComponent(range, context, unitless, horizontal_edge,
+                                      vertical_edge);
+  }
 
   if (!value4) {
     if (!three_value_position) {
@@ -1146,25 +1148,25 @@ CSSValuePair* ConsumePosition(CSSParserTokenRange& range,
 }
 
 bool ConsumeOneOrTwoValuedPosition(CSSParserTokenRange& range,
-                                   CSSParserMode css_parser_mode,
+                                   const CSSParserContext& context,
                                    UnitlessQuirk unitless,
                                    CSSValue*& result_x,
                                    CSSValue*& result_y) {
   bool horizontal_edge = false;
   bool vertical_edge = false;
-  CSSValue* value1 = ConsumePositionComponent(range, css_parser_mode, unitless,
+  CSSValue* value1 = ConsumePositionComponent(range, context, unitless,
                                               horizontal_edge, vertical_edge);
   if (!value1)
     return false;
   if (!value1->IsIdentifierValue())
     horizontal_edge = true;
 
-  if (vertical_edge && ConsumeLengthOrPercent(range, css_parser_mode,
-                                              kValueRangeAll, unitless)) {
+  if (vertical_edge &&
+      ConsumeLengthOrPercent(range, context, kValueRangeAll, unitless)) {
     // <length-percentage> is not permitted after top | bottom.
     return false;
   }
-  CSSValue* value2 = ConsumePositionComponent(range, css_parser_mode, unitless,
+  CSSValue* value2 = ConsumePositionComponent(range, context, unitless,
                                               horizontal_edge, vertical_edge);
   if (!value2) {
     PositionFromOneValue(value1, result_x, result_y);
@@ -1419,8 +1421,8 @@ static CSSValue* ConsumeDeprecatedRadialGradient(
     cssvalue::CSSGradientRepeat repeating) {
   CSSValue* center_x = nullptr;
   CSSValue* center_y = nullptr;
-  ConsumeOneOrTwoValuedPosition(args, context.Mode(), UnitlessQuirk::kForbid,
-                                center_x, center_y);
+  ConsumeOneOrTwoValuedPosition(args, context, UnitlessQuirk::kForbid, center_x,
+                                center_y);
   if ((center_x || center_y) && !ConsumeCommaIncludingWhitespace(args))
     return nullptr;
 
@@ -1438,10 +1440,10 @@ static CSSValue* ConsumeDeprecatedRadialGradient(
   const CSSPrimitiveValue* vertical_size = nullptr;
   if (!shape && !size_keyword) {
     horizontal_size =
-        ConsumeLengthOrPercent(args, context.Mode(), kValueRangeNonNegative);
+        ConsumeLengthOrPercent(args, context, kValueRangeNonNegative);
     if (horizontal_size) {
       vertical_size =
-          ConsumeLengthOrPercent(args, context.Mode(), kValueRangeNonNegative);
+          ConsumeLengthOrPercent(args, context, kValueRangeNonNegative);
       if (!vertical_size)
         return nullptr;
       ConsumeCommaIncludingWhitespace(args);
@@ -1491,14 +1493,13 @@ static CSSValue* ConsumeRadialGradient(CSSParserTokenRange& args,
       }
     } else {
       CSSPrimitiveValue* center =
-          ConsumeLengthOrPercent(args, context.Mode(), kValueRangeNonNegative);
+          ConsumeLengthOrPercent(args, context, kValueRangeNonNegative);
       if (!center)
         break;
       if (horizontal_size)
         return nullptr;
       horizontal_size = center;
-      center =
-          ConsumeLengthOrPercent(args, context.Mode(), kValueRangeNonNegative);
+      center = ConsumeLengthOrPercent(args, context, kValueRangeNonNegative);
       if (center) {
         vertical_size = center;
         ++i;
