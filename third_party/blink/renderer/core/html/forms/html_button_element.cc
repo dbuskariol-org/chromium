@@ -44,8 +44,15 @@ void HTMLButtonElement::setType(const AtomicString& type) {
   setAttribute(html_names::kTypeAttr, type);
 }
 
-LayoutObject* HTMLButtonElement::CreateLayoutObject(const ComputedStyle&,
-                                                    LegacyLayout) {
+LayoutObject* HTMLButtonElement::CreateLayoutObject(const ComputedStyle& style,
+                                                    LegacyLayout legacy) {
+  // https://html.spec.whatwg.org/C/#button-layout
+  EDisplay display = style.Display();
+  if (display == EDisplay::kInlineGrid || display == EDisplay::kGrid ||
+      display == EDisplay::kInlineFlex || display == EDisplay::kFlex ||
+      display == EDisplay::kInlineLayoutCustom ||
+      display == EDisplay::kLayoutCustom)
+    return HTMLFormControlElement::CreateLayoutObject(style, legacy);
   return new LayoutButton(this);
 }
 
