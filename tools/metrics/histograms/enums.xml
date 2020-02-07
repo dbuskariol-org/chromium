@@ -7754,6 +7754,13 @@ Unknown properties are collapsed to zero. -->
   <int value="31" label="Chooser Permissions Bubble"/>
 </enum>
 
+<enum name="CachedMetadataHandlerState">
+  <int value="0" label="Present"/>
+  <int value="1" label="DataType mismatch"/>
+  <int value="2" label="Was never present"/>
+  <int value="3" label="Was discarded"/>
+</enum>
+
 <enum name="CacheResult">
   <int value="0" label="MEMORY_CACHE_HIT"/>
   <int value="1" label="DISK_CACHE_HIT"/>
