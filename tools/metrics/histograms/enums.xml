@@ -51336,6 +51336,9 @@ Called by update_net_trust_anchors.py.-->
   <int value="0" label="PluginVM DLC installed successfully."/>
   <int value="1" label="PluginVM DLC not supported."/>
   <int value="2" label="PluginVM DLC internal error within dlcservice."/>
+  <int value="3"
+      label="PluginVM DLC not installed as dlcservice/update_engine is busy."/>
+  <int value="4" label="PluginVM DLC not installed due to reboot required."/>
 </enum>
 
 <enum name="PluginVmLaunchResult">
