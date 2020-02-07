@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg">
   <title>Animation triggers on 'repeatEvent' iteration</title>
-  <script href="../../resources/testharness.js"/>
-  <script href="../../resources/testharnessreport.js"/>
+  <script xmlns="http://www.w3.org/1999/xhtml" src="/resources/testharness.js"/>
+  <script xmlns="http://www.w3.org/1999/xhtml" src="/resources/testharnessreport.js"/>
   <g>
     <animate id="anim" attributeName="visibility" to="visible" begin="0s" dur="2s" repeatCount="4"/>
     <rect x="0" y="0" width="100" height="100" fill="green">
