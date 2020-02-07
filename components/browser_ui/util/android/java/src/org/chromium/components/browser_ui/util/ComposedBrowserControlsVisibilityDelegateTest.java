@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.fullscreen;
+package org.chromium.components.browser_ui.util;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +14,6 @@ import org.robolectric.shadows.ShadowLooper;
 
 import org.chromium.base.Callback;
 import org.chromium.base.test.BaseRobolectricTestRunner;
-import org.chromium.chrome.browser.tab.BrowserControlsVisibilityDelegate;
 import org.chromium.content_public.common.BrowserControlsState;
 
 /** Unit tests for {@link ComposedBrowserControlsVisibilityDelegate}. */
