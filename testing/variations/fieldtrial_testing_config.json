@@ -4001,21 +4001,6 @@
             ]
         }
     ],
-    "NewClearBrowsingDataUI": [
-        {
-            "platforms": [
-                "ios"
-            ],
-            "experiments": [
-                {
-                    "name": "NewClearBrowsingDataUI",
-                    "enable_features": [
-                        "NewClearBrowsingDataUI"
-                    ]
-                }
-            ]
-        }
-    ],
     "NewTabInProductHelp": [
         {
             "platforms": [
