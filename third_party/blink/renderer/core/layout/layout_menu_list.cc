@@ -27,18 +27,11 @@
 #include "third_party/blink/renderer/core/layout/layout_menu_list.h"
 
 #include <math.h>
-#include "third_party/blink/public/strings/grit/blink_strings.h"
-#include "third_party/blink/renderer/core/accessibility/ax_object_cache.h"
 #include "third_party/blink/renderer/core/dom/node_computed_style.h"
-#include "third_party/blink/renderer/core/frame/local_frame_view.h"
 #include "third_party/blink/renderer/core/html/forms/html_option_element.h"
 #include "third_party/blink/renderer/core/html/forms/html_select_element.h"
-#include "third_party/blink/renderer/core/html/forms/menu_list_inner_element.h"
-#include "third_party/blink/renderer/core/layout/layout_block_flow.h"
-#include "third_party/blink/renderer/core/layout/layout_text.h"
 #include "third_party/blink/renderer/core/layout/layout_theme.h"
-#include "third_party/blink/renderer/core/paint/paint_layer.h"
-#include "third_party/blink/renderer/platform/text/platform_locale.h"
+#include "third_party/blink/renderer/core/layout/text_run_constructor.h"
 
 namespace blink {
 
@@ -56,51 +49,6 @@ bool LayoutMenuList::IsChildAllowed(LayoutObject* object,
   // InnerElement. We do not allow adding layout objects for options,
   // optgroups, ::before, or ::after.
   return object->GetNode() == &SelectElement()->InnerElement();
-}
-
-// TODO(tkent): Move this to menu_list_inner_element.cc.
-void MenuListInnerElement::AdjustInnerStyle(const ComputedStyle& parent_style,
-                                            ComputedStyle& inner_style) const {
-  inner_style.SetFlexGrow(1);
-  inner_style.SetFlexShrink(1);
-  // min-width: 0; is needed for correct shrinking.
-  inner_style.SetMinWidth(Length::Fixed(0));
-  inner_style.SetHasLineIfEmpty(true);
-
-  // Use margin:auto instead of align-items:center to get safe centering, i.e.
-  // when the content overflows, treat it the same as align-items: flex-start.
-  // But we only do that for the cases where html.css would otherwise use
-  // center.
-  if (parent_style.AlignItemsPosition() == ItemPosition::kCenter) {
-    inner_style.SetMarginTop(Length());
-    inner_style.SetMarginBottom(Length());
-    inner_style.SetAlignSelfPosition(ItemPosition::kFlexStart);
-  }
-
-  LayoutTheme& theme = LayoutTheme::GetTheme();
-  Length padding_start =
-      Length::Fixed(theme.PopupInternalPaddingStart(parent_style));
-  Length padding_end = Length::Fixed(
-      theme.PopupInternalPaddingEnd(GetDocument().GetFrame(), parent_style));
-  if (parent_style.IsLeftToRightDirection()) {
-    inner_style.SetTextAlign(ETextAlign::kLeft);
-    inner_style.SetPaddingLeft(padding_start);
-    inner_style.SetPaddingRight(padding_end);
-  } else {
-    inner_style.SetTextAlign(ETextAlign::kRight);
-    inner_style.SetPaddingLeft(padding_end);
-    inner_style.SetPaddingRight(padding_start);
-  }
-  inner_style.SetPaddingTop(
-      Length::Fixed(theme.PopupInternalPaddingTop(parent_style)));
-  inner_style.SetPaddingBottom(
-      Length::Fixed(theme.PopupInternalPaddingBottom(parent_style)));
-
-  if (const ComputedStyle* option_style =
-          To<HTMLSelectElement>(OwnerShadowHost())->OptionStyle()) {
-    inner_style.SetDirection(option_style->Direction());
-    inner_style.SetUnicodeBidi(option_style->GetUnicodeBidi());
-  }
 }
 
 HTMLSelectElement* LayoutMenuList::SelectElement() const {
