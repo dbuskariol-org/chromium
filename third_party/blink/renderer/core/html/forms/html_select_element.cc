@@ -329,8 +329,9 @@ void HTMLSelectElement::ParseAttribute(
     SetNeedsValidityCheck();
     if (size_ != old_size) {
       ChangeRendering();
-      ResetToDefaultSelection();
       UpdateUserAgentShadowTree(*UserAgentShadowRoot());
+      ResetToDefaultSelection();
+      UpdateMenuListLabel(UpdateFromElement());
       if (!UsesMenuList())
         SaveListboxActiveSelection();
     }
@@ -1282,6 +1283,7 @@ void HTMLSelectElement::ParseMultipleAttribute(const AtomicString& value) {
   is_multiple_ = !value.IsNull();
   SetNeedsValidityCheck();
   ChangeRendering();
+  UpdateUserAgentShadowTree(*UserAgentShadowRoot());
   // Restore selectedIndex after changing the multiple flag to preserve
   // selection as single-line and multi-line has different defaults.
   if (old_multiple != is_multiple_) {
@@ -1293,7 +1295,7 @@ void HTMLSelectElement::ParseMultipleAttribute(const AtomicString& value) {
     else
       ResetToDefaultSelection();
   }
-  UpdateUserAgentShadowTree(*UserAgentShadowRoot());
+  UpdateMenuListLabel(UpdateFromElement());
 }
 
 void HTMLSelectElement::AppendToFormData(FormData& form_data) {
@@ -2001,6 +2003,7 @@ void HTMLSelectElement::DidAddUserAgentShadowRoot(ShadowRoot& root) {
   root.AppendChild(
       HTMLSlotElement::CreateUserAgentCustomAssignSlot(GetDocument()));
   UpdateUserAgentShadowTree(root);
+  UpdateMenuListLabel(UpdateFromElement());
 }
 
 void HTMLSelectElement::UpdateUserAgentShadowTree(ShadowRoot& root) {
@@ -2022,7 +2025,6 @@ void HTMLSelectElement::UpdateUserAgentShadowTree(ShadowRoot& root) {
     // Make sure InnerElement() always has a Text node.
     inner_element->appendChild(Text::Create(GetDocument(), g_empty_string));
     root.insertBefore(inner_element, root.firstChild());
-    UpdateMenuListLabel(UpdateFromElement());
   }
 }
 
@@ -2371,12 +2373,7 @@ String HTMLSelectElement::UpdateFromElement() {
 void HTMLSelectElement::UpdateMenuListLabel(const String& label) {
   if (!UsesMenuList())
     return;
-  // TODO(tkent): If this function is called between size_ / is_multiple_
-  // change and UpdateUserAgentShadowTree(), InnerElement() can be a <slot>
-  // instead of MenuListInnerElement, and InnerElement() doesn't have a Text.
-  // We must fix it!
-  if (InnerElement().firstChild())
-    InnerElement().firstChild()->setNodeValue(label);
+  InnerElement().firstChild()->setNodeValue(label);
   // LayoutMenuList::ControlClipRect() depends on the content box size of
   // inner_element.
   if (auto* box = GetLayoutBox()) {
