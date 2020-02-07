@@ -53,6 +53,15 @@ class DeepScanningDialogViews : public views::DialogDelegate {
     // paste.
     FAILURE,
   };
+
+  static void SetInitialUIDelayForTesting(base::TimeDelta delta);
+  static void SetMinimumPendingDialogTimeForTesting(base::TimeDelta delta);
+  static void SetSuccessDialogTimeoutForTesting(base::TimeDelta delta);
+
+  static base::TimeDelta GetInitialUIDelay();
+  static base::TimeDelta GetMinimumPendingDialogTime();
+  static base::TimeDelta GetSuccessDialogTimeout();
+
   DeepScanningDialogViews(std::unique_ptr<DeepScanningDialogDelegate> delegate,
                           content::WebContents* web_contents,
                           DeepScanAccessPoint access_point,
