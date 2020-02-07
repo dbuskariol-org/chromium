@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_OAUTH2_TOKEN_SERVICE_H_
-#define CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_OAUTH2_TOKEN_SERVICE_H_
+#ifndef CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_OAUTH2_TOKEN_SERVICE_H_
+#define CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_OAUTH2_TOKEN_SERVICE_H_
 
 #include <string>
 #include <vector>
@@ -11,7 +11,7 @@
 #include "base/callback.h"
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
-#include "chrome/browser/chromeos/settings/cros_settings.h"
+#include "chrome/browser/device_identity/device_oauth2_token_store.h"
 #include "google_apis/gaia/core_account_id.h"
 #include "google_apis/gaia/gaia_oauth_client.h"
 #include "google_apis/gaia/google_service_auth_error.h"
@@ -24,7 +24,6 @@ class SharedURLLoaderFactory;
 class OAuth2AccessTokenFetcher;
 class OAuth2AccessTokenConsumer;
 class PrefRegistrySimple;
-class PrefService;
 
 namespace chromeos {
 
@@ -34,7 +33,8 @@ namespace chromeos {
 //
 // Note that requests must be made from the UI thread.
 class DeviceOAuth2TokenService : public OAuth2AccessTokenManager::Delegate,
-                                 public gaia::GaiaOAuthClient::Delegate {
+                                 public gaia::GaiaOAuthClient::Delegate,
+                                 public DeviceOAuth2TokenStore::Observer {
  public:
   typedef base::RepeatingCallback<void()> RefreshTokenAvailableCallback;
   typedef base::Callback<void(bool)> StatusCallback;
@@ -114,6 +114,14 @@ class DeviceOAuth2TokenService : public OAuth2AccessTokenManager::Delegate,
   void OnOAuthError() override;
   void OnNetworkError(int response_code) override;
 
+  // DeviceOAuth2TokenStore callbacks:
+  void OnInitComplete(bool init_result, bool validation_required);
+  void OnPrepareTrustedAccountIdFinished(const CoreAccountId& gaia_robot_id,
+                                         bool check_passed);
+
+  // DeviceOAuth2TokenStore::Observer:
+  void OnRefreshTokenAvailable() override;
+
   // OAuth2AccessTokenManager::Delegate:
   std::unique_ptr<OAuth2AccessTokenFetcher> CreateAccessTokenFetcher(
       const CoreAccountId& account_id,
@@ -135,7 +143,7 @@ class DeviceOAuth2TokenService : public OAuth2AccessTokenManager::Delegate,
   // Use DeviceOAuth2TokenServiceFactory to get an instance of this class.
   explicit DeviceOAuth2TokenService(
       scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
-      PrefService* local_state);
+      std::unique_ptr<DeviceOAuth2TokenStore> store);
   ~DeviceOAuth2TokenService() override;
 
   // Flushes |pending_requests_|, indicating the specified result.
@@ -151,25 +159,8 @@ class DeviceOAuth2TokenService : public OAuth2AccessTokenManager::Delegate,
 
   void RequestValidation();
 
-  // Invoked by CrosSettings when the robot account ID becomes available.
-  void OnServiceAccountIdentityChanged();
-
-  // Checks whether |gaia_robot_id| matches the expected account ID indicated in
-  // device settings.
-  void CheckRobotAccountId(const CoreAccountId& gaia_robot_id);
-
   // Returns the refresh token for the robot account id.
   std::string GetRefreshToken() const;
-
-  // Handles completion of the system salt input.
-  void DidGetSystemSalt(const std::string& system_salt);
-
-  // Encrypts and saves the refresh token. Should only be called when the system
-  // salt is available.
-  void EncryptAndSaveToken();
-
-  // Flushes |token_save_callbacks_|, indicating the specified result.
-  void FlushTokenSaveCallbacks(bool result);
 
   void ReportServiceError(GoogleServiceAuthError::State error);
 
@@ -184,31 +175,19 @@ class DeviceOAuth2TokenService : public OAuth2AccessTokenManager::Delegate,
 
   scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory_;
 
-  PrefService* local_state_;
-
   // Current operational state.
   State state_;
-
-  // Token save callbacks waiting to be completed.
-  std::vector<StatusCallback> token_save_callbacks_;
-
-  // The system salt for encrypting and decrypting the refresh token.
-  std::string system_salt_;
 
   int max_refresh_token_validation_retries_;
 
   // Flag to indicate whether there are pending requests.
   bool validation_requested_;
 
-  // Cache the decrypted refresh token, so we only decrypt once.
-  std::string refresh_token_;
-
   std::unique_ptr<gaia::GaiaOAuthClient> gaia_oauth_client_;
 
-  std::unique_ptr<CrosSettings::ObserverSubscription>
-      service_account_identity_subscription_;
-
   CoreAccountId robot_account_id_for_testing_;
+
+  std::unique_ptr<DeviceOAuth2TokenStore> store_;
 
   base::WeakPtrFactory<DeviceOAuth2TokenService> weak_ptr_factory_{this};
 
@@ -217,4 +196,4 @@ class DeviceOAuth2TokenService : public OAuth2AccessTokenManager::Delegate,
 
 }  // namespace chromeos
 
-#endif  // CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_OAUTH2_TOKEN_SERVICE_H_
+#endif  // CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_OAUTH2_TOKEN_SERVICE_H_

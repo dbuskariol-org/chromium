@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/settings/device_oauth2_token_service.h"
+#include "chrome/browser/device_identity/device_oauth2_token_service.h"
 
 #include <stdint.h>
 
@@ -18,6 +18,7 @@
 #include "chrome/browser/chromeos/settings/device_settings_service.h"
 #include "chrome/browser/chromeos/settings/scoped_testing_cros_settings.h"
 #include "chrome/browser/chromeos/settings/token_encryptor.h"
+#include "chrome/browser/device_identity/chromeos/device_oauth2_token_store_chromeos.h"
 #include "chrome/common/pref_names.h"
 #include "chrome/test/base/scoped_testing_local_state.h"
 #include "chrome/test/base/testing_browser_process.h"
@@ -105,7 +106,9 @@ class DeviceOAuth2TokenServiceTest : public testing::Test {
   void CreateService() {
     oauth2_service_.reset(new DeviceOAuth2TokenService(
         test_url_loader_factory_.GetSafeWeakWrapper(),
-        scoped_testing_local_state_.Get()));
+        std::unique_ptr<DeviceOAuth2TokenStore>(
+            new DeviceOAuth2TokenStoreChromeOS(
+                scoped_testing_local_state_.Get()))));
     oauth2_service_->max_refresh_token_validation_retries_ = 0;
     oauth2_service_->GetAccessTokenManager()
         ->set_max_authorization_token_fetch_retries_for_testing(0);
@@ -120,7 +123,8 @@ class DeviceOAuth2TokenServiceTest : public testing::Test {
   }
 
   std::string GetValidTokenInfoResponse(const std::string& email) {
-    return "{ \"email\": \"" + email + "\","
+    return "{ \"email\": \"" + email +
+           "\","
            "  \"user_id\": \"1234567890\" }";
   }
 
@@ -325,10 +329,10 @@ TEST_F(DeviceOAuth2TokenServiceTest,
   std::unique_ptr<OAuth2AccessTokenManager::Request> request =
       StartTokenRequest();
 
-  PerformURLFetchesWithResults(
-      net::HTTP_UNAUTHORIZED, "",
-      net::HTTP_OK, GetValidTokenInfoResponse("service_acct@g.com"),
-      net::HTTP_OK, GetValidTokenResponse("ignored", 3600));
+  PerformURLFetchesWithResults(net::HTTP_UNAUTHORIZED, "", net::HTTP_OK,
+                               GetValidTokenInfoResponse("service_acct@g.com"),
+                               net::HTTP_OK,
+                               GetValidTokenResponse("ignored", 3600));
 
   AssertConsumerTokensAndErrors(0, 1);
 }
@@ -339,10 +343,10 @@ TEST_F(DeviceOAuth2TokenServiceTest,
   std::unique_ptr<OAuth2AccessTokenManager::Request> request =
       StartTokenRequest();
 
-  PerformURLFetchesWithResults(
-      net::HTTP_OK, "invalid response",
-      net::HTTP_OK, GetValidTokenInfoResponse("service_acct@g.com"),
-      net::HTTP_OK, GetValidTokenResponse("ignored", 3600));
+  PerformURLFetchesWithResults(net::HTTP_OK, "invalid response", net::HTTP_OK,
+                               GetValidTokenInfoResponse("service_acct@g.com"),
+                               net::HTTP_OK,
+                               GetValidTokenResponse("ignored", 3600));
 
   AssertConsumerTokensAndErrors(0, 1);
 }
@@ -355,8 +359,8 @@ TEST_F(DeviceOAuth2TokenServiceTest,
 
   PerformURLFetchesWithResults(
       net::HTTP_OK, GetValidTokenResponse("tokeninfo_access_token", 3600),
-      net::HTTP_INTERNAL_SERVER_ERROR, "",
-      net::HTTP_OK, GetValidTokenResponse("ignored", 3600));
+      net::HTTP_INTERNAL_SERVER_ERROR, "", net::HTTP_OK,
+      GetValidTokenResponse("ignored", 3600));
 
   AssertConsumerTokensAndErrors(0, 1);
 }
@@ -369,8 +373,8 @@ TEST_F(DeviceOAuth2TokenServiceTest,
 
   PerformURLFetchesWithResults(
       net::HTTP_OK, GetValidTokenResponse("tokeninfo_access_token", 3600),
-      net::HTTP_OK, "invalid response",
-      net::HTTP_OK, GetValidTokenResponse("ignored", 3600));
+      net::HTTP_OK, "invalid response", net::HTTP_OK,
+      GetValidTokenResponse("ignored", 3600));
 
   AssertConsumerTokensAndErrors(0, 1);
 }
@@ -424,9 +428,9 @@ TEST_F(DeviceOAuth2TokenServiceTest, RefreshTokenValidation_Retry) {
       StartTokenRequest();
 
   PerformURLFetchesWithResults(
-      net::HTTP_INTERNAL_SERVER_ERROR, "",
-      net::HTTP_OK, GetValidTokenInfoResponse("service_acct@g.com"),
-      net::HTTP_OK, GetValidTokenResponse("ignored", 3600));
+      net::HTTP_INTERNAL_SERVER_ERROR, "", net::HTTP_OK,
+      GetValidTokenInfoResponse("service_acct@g.com"), net::HTTP_OK,
+      GetValidTokenResponse("ignored", 3600));
 
   AssertConsumerTokensAndErrors(0, 1);
 

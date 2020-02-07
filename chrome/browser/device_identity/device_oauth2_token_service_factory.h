@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_OAUTH2_TOKEN_SERVICE_FACTORY_H_
-#define CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_OAUTH2_TOKEN_SERVICE_FACTORY_H_
+#ifndef CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_OAUTH2_TOKEN_SERVICE_FACTORY_H_
+#define CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_OAUTH2_TOKEN_SERVICE_FACTORY_H_
 
 #include <queue>
 #include <string>
@@ -24,10 +24,10 @@ class DeviceOAuth2TokenService;
 class DeviceOAuth2TokenServiceFactory {
  public:
   // Returns the instance of the DeviceOAuth2TokenService singleton.  May return
-  // NULL during browser startup and shutdown.  When calling Get(), either make
-  // sure that your code executes after browser startup and before shutdown or
-  // be careful to call Get() every time (instead of holding a pointer) and
-  // check for NULL to handle cases where you might access
+  // nullptr during browser startup and shutdown.  When calling Get(), either
+  // make sure that your code executes after browser startup and before shutdown
+  // or be careful to call Get() every time (instead of holding a pointer) and
+  // check for nullptr to handle cases where you might access
   // DeviceOAuth2TokenService during startup or shutdown.
   static DeviceOAuth2TokenService* Get();
 
@@ -53,4 +53,4 @@ class DeviceOAuth2TokenServiceFactory {
 
 }  // namespace chromeos
 
-#endif  // CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_OAUTH2_TOKEN_SERVICE_FACTORY_H_
+#endif  // CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_OAUTH2_TOKEN_SERVICE_FACTORY_H_

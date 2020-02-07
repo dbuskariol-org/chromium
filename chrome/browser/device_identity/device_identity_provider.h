@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_IDENTITY_PROVIDER_H_
-#define CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_IDENTITY_PROVIDER_H_
+#ifndef CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_IDENTITY_PROVIDER_H_
+#define CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_IDENTITY_PROVIDER_H_
 
 #include "base/macros.h"
 #include "components/invalidation/public/identity_provider.h"
@@ -41,4 +41,4 @@ class DeviceIdentityProvider : public invalidation::IdentityProvider {
 
 }  // namespace chromeos
 
-#endif  // CHROME_BROWSER_CHROMEOS_SETTINGS_DEVICE_IDENTITY_PROVIDER_H_
+#endif  // CHROME_BROWSER_DEVICE_IDENTITY_DEVICE_IDENTITY_PROVIDER_H_

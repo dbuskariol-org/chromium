@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/settings/device_oauth2_token_service_factory.h"
+#include "chrome/browser/device_identity/device_oauth2_token_service_factory.h"
 
 #include <memory>
 
-#include "chrome/browser/chromeos/settings/device_oauth2_token_service.h"
 #include "chrome/browser/chromeos/settings/token_encryptor.h"
+#include "chrome/browser/device_identity/chromeos/device_oauth2_token_store_chromeos.h"
+#include "chrome/browser/device_identity/device_oauth2_token_service.h"
 #include "chromeos/cryptohome/system_salt_getter.h"
 #include "content/public/browser/browser_thread.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
@@ -16,7 +17,7 @@ namespace chromeos {
 
 namespace {
 
-static DeviceOAuth2TokenService* g_device_oauth2_token_service_ = NULL;
+static DeviceOAuth2TokenService* g_device_oauth2_token_service_ = nullptr;
 
 }  // namespace
 
@@ -32,8 +33,9 @@ void DeviceOAuth2TokenServiceFactory::Initialize(
     PrefService* local_state) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   DCHECK(!g_device_oauth2_token_service_);
-  g_device_oauth2_token_service_ =
-      new DeviceOAuth2TokenService(url_loader_factory, local_state);
+  g_device_oauth2_token_service_ = new DeviceOAuth2TokenService(
+      url_loader_factory, std::unique_ptr<DeviceOAuth2TokenStore>(
+                              new DeviceOAuth2TokenStoreChromeOS(local_state)));
 }
 
 // static
@@ -41,7 +43,7 @@ void DeviceOAuth2TokenServiceFactory::Shutdown() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   if (g_device_oauth2_token_service_) {
     delete g_device_oauth2_token_service_;
-    g_device_oauth2_token_service_ = NULL;
+    g_device_oauth2_token_service_ = nullptr;
   }
 }
 
