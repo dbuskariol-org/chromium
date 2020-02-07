@@ -120,10 +120,7 @@ struct ReadPixelsContext {
       : request(std::move(request)),
         result_rect(result_rect),
         color_space(color_space),
-        impl_on_gpu(impl_on_gpu) {
-    // TODO(crbug.com/1048251): Remove after finding source of null requests.
-    CHECK(this->request);
-  }
+        impl_on_gpu(impl_on_gpu) {}
 
   std::unique_ptr<CopyOutputRequest> request;
   gfx::Rect result_rect;
@@ -258,9 +255,6 @@ void OnRGBAReadbackDone(
     // This will automatically send an empty result.
     return;
   }
-
-  // TODO(crbug.com/1048251): Remove after finding source of null requests.
-  CHECK(context->request);
 
   DCHECK_EQ(1, async_result->count());
 
@@ -1146,9 +1140,6 @@ void SkiaOutputSurfaceImplOnGpu::CopyOutput(
   TRACE_EVENT0("viz", "SkiaOutputSurfaceImplOnGpu::CopyOutput");
   // TODO(crbug.com/898595): Do this on the GPU instead of CPU with Vulkan.
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-
-  // TODO(crbug.com/1048251): Remove after finding source of null requests.
-  CHECK(request);
 
   // Clear |destroy_after_swap_| if we CopyOutput without SwapBuffers.
   base::ScopedClosureRunner cleanup(
