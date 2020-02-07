@@ -1,0 +1,9 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+modules_dependency_idl_files = [
+  "html_media_element_encrypted_media.idl",
+  "media_keys_get_status_for_policy.idl",
+  "navigator_request_media_key_system_access.idl",
+]
