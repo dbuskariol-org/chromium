@@ -631,8 +631,6 @@ jumbo_static_library("browser") {
     "installable/installable_task_queue.h",
     "internal_auth.cc",
     "internal_auth.h",
-    "interstitials/chrome_metrics_helper.cc",
-    "interstitials/chrome_metrics_helper.h",
     "interstitials/enterprise_util.cc",
     "interstitials/enterprise_util.h",
     "intranet_redirect_detector.cc",
