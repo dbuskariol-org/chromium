@@ -222,7 +222,8 @@ public class AppMenuPropertiesDelegateImpl implements AppMenuPropertiesDelegate 
                 Drawable icon =
                         AppCompatResources.getDrawable(mContext, R.drawable.btn_reload_stop);
                 DrawableCompat.setTintList(icon,
-                        AppCompatResources.getColorStateList(mContext, R.color.standard_mode_tint));
+                        AppCompatResources.getColorStateList(
+                                mContext, R.color.default_icon_color_tint_list));
                 mReloadMenuItem.setIcon(icon);
                 loadingStateChanged(currentTab.isLoading());
 
