@@ -532,15 +532,12 @@ class CC_EXPORT LayerTreeHost : public MutatorHostClient {
 
   MutatorHost* mutator_host() const { return mutator_host_; }
 
-  // These methods are for layer tree mode only.
   // Returns the layer with the given |element_id|. In layer-list mode, only
   // scrollable layers are registered in this map.
+  Layer* LayerByElementId(ElementId element_id) const;
   void RegisterElement(ElementId element_id,
-                       ElementListType list_type,
                        Layer* layer);
-  void UnregisterElement(ElementId element_id, ElementListType list_type);
-
-  Layer* LayerByElementIdForTesting(ElementId element_id) const;
+  void UnregisterElement(ElementId element_id);
 
   // For layer list mode only.
   void UpdateActiveElements();
@@ -719,9 +716,6 @@ class CC_EXPORT LayerTreeHost : public MutatorHostClient {
   // This is the number of consecutive frames in which we want the content to be
   // free of slow-paths before toggling the flag.
   enum { kNumFramesToConsiderBeforeRemovingSlowPathFlag = 60 };
-
-  // For layer tree mode only.
-  Layer* LayerByElementId(ElementId element_id) const;
 
   void ApplyViewportChanges(const ScrollAndScaleSet& info);
   void RecordManipulationTypeCounts(const ScrollAndScaleSet& scroll_info);
