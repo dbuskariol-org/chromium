@@ -3365,6 +3365,61 @@ TEST_F(EventRewriterAshTest, KeyEventRewritingEdgeCases) {
             static_cast<ui::KeyEvent*>(events[0].get())->key_code());
 }
 
+TEST_F(EventRewriterAshTest, ScrollEventDispatchImpl) {
+  std::vector<std::unique_ptr<ui::Event>> events;
+
+  // Test scroll event is correctly modified.
+  SendActivateStickyKeyPattern(ui::VKEY_CONTROL, ui::DomCode::CONTROL_LEFT,
+                               ui::DomKey::CONTROL);
+  PopEvents(&events);
+  gfx::PointF location(0, 0);
+  ui::ScrollEvent scroll(ui::ET_SCROLL, location, location,
+                         ui::EventTimeForNow(), 0 /* flag */, 0 /* x_offset */,
+                         1 /* y_offset */, 0 /* x_offset_ordinal */,
+                         1 /* y_offset_ordinal */, 2 /* finger */);
+  ui::EventDispatchDetails details = Send(&scroll);
+  ASSERT_FALSE(details.dispatcher_destroyed);
+  PopEvents(&events);
+  EXPECT_EQ(1u, events.size());
+  EXPECT_TRUE(events[0]->IsScrollEvent());
+  EXPECT_TRUE(events[0]->flags() & ui::EF_CONTROL_DOWN);
+
+  // Test FLING_START event deactivates the sticky key, but is modified.
+  ui::ScrollEvent fling_start(
+      ui::ET_SCROLL_FLING_START, location, location, ui::EventTimeForNow(),
+      0 /* flag */, 0 /* x_offset */, 0 /* y_offset */,
+      0 /* x_offset_ordinal */, 0 /* y_offset_ordinal */, 2 /* finger */);
+  details = Send(&fling_start);
+  PopEvents(&events);
+  EXPECT_EQ(2u, events.size());
+  EXPECT_TRUE(events[0]->IsScrollEvent());
+  EXPECT_TRUE(events[0]->flags() & ui::EF_CONTROL_DOWN);
+  EXPECT_EQ(ui::ET_KEY_RELEASED, events[1]->type());
+  EXPECT_EQ(ui::VKEY_CONTROL,
+            static_cast<ui::KeyEvent*>(events[1].get())->key_code());
+
+  // Test scroll direction change causes that modifier release event is sent.
+  SendActivateStickyKeyPattern(ui::VKEY_CONTROL, ui::DomCode::CONTROL_LEFT,
+                               ui::DomKey::CONTROL);
+  details = Send(&scroll);
+  ASSERT_FALSE(details.dispatcher_destroyed);
+  PopEvents(&events);
+
+  ui::ScrollEvent scroll2(ui::ET_SCROLL, location, location,
+                          ui::EventTimeForNow(), 0 /* flag */, 0 /* x_offset */,
+                          -1 /* y_offset */, 0 /* x_offset_ordinal */,
+                          -1 /* y_offset_ordinal */, 2 /* finger */);
+  details = Send(&scroll2);
+  ASSERT_FALSE(details.dispatcher_destroyed);
+  PopEvents(&events);
+  EXPECT_EQ(2u, events.size());
+  EXPECT_TRUE(events[0]->IsScrollEvent());
+  EXPECT_FALSE(events[0]->flags() & ui::EF_CONTROL_DOWN);
+  EXPECT_EQ(ui::ET_KEY_RELEASED, events[1]->type());
+  EXPECT_EQ(ui::VKEY_CONTROL,
+            static_cast<ui::KeyEvent*>(events[1].get())->key_code());
+}
+
 class StickyKeysOverlayTest : public EventRewriterAshTest {
  public:
   StickyKeysOverlayTest() : overlay_(NULL) {}
