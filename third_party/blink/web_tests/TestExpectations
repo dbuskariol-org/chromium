@@ -6521,7 +6521,7 @@ crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-appearance
 crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-top-left-selection-position-after-reopen.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-zoom150-bottom-edge-no-nan.html [ Pass Crash ]
 # This used to be [ Pass Crash ], but as of crbug.com/1050039 it started flaking as well.
-crbug.com/1048149 [ Mac ] virtual/controls-refresh/month-picker/month-picker-appearance-zoom150.html [ Pass Failure Crash ]
+crbug.com/1048149 crbug.com/1050121 [ Mac ] virtual/controls-refresh/month-picker/month-picker-appearance-zoom150.html [ Pass Failure Crash Failure ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-key-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-touch-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-type-change-onchange.html [ Pass Crash ]
