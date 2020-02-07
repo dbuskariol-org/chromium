@@ -2962,7 +2962,8 @@ void Node::DefaultEventHandler(Event& event) {
       }
     }
   } else if (event_type == event_type_names::kClick) {
-    int detail = event.IsUIEvent() ? ToUIEvent(event).detail() : 0;
+    auto* ui_event = DynamicTo<UIEvent>(event);
+    int detail = ui_event ? ui_event->detail() : 0;
     if (DispatchDOMActivateEvent(detail, event) !=
         DispatchEventResult::kNotCanceled)
       event.SetDefaultHandled();
