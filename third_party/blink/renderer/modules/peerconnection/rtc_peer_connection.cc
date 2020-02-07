@@ -2246,6 +2246,20 @@ RTCRtpTransceiver* RTCPeerConnection::addTransceiver(
   if (ThrowExceptionIfSignalingStateClosed(signaling_state_, &exception_state))
     return nullptr;
   auto webrtc_init = ToRtpTransceiverInit(init);
+  // Validate sendEncodings.
+  for (auto& encoding : webrtc_init.send_encodings) {
+    if (encoding.rid.length() > 16) {
+      exception_state.ThrowTypeError("Illegal length of rid");
+      return nullptr;
+    }
+    // Allowed characters: a-z 0-9 _ and -
+    if (encoding.rid.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLM"
+                                       "NOPQRSTUVWXYZ012456789-_") !=
+        std::string::npos) {
+      exception_state.ThrowTypeError("Illegal character in rid");
+      return nullptr;
+    }
+  }
   webrtc::RTCErrorOr<std::unique_ptr<RTCRtpTransceiverPlatform>> result =
       webrtc::RTCError(webrtc::RTCErrorType::UNSUPPORTED_OPERATION);
   if (track_or_kind.IsMediaStreamTrack()) {
