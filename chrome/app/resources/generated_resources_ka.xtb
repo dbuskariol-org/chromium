@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">თუ წაშლით რომელიმე საკუთარ სერტიფიკატს, ვეღარ შეძლებთ მის გამოყენებას საკუთარი თავის იდენტიფიცირებისთვის.</translation>
 <translation id="2079545284768500474">მოქმედების გაუქმება</translation>
 <translation id="2080070583977670716">დამატებითი პარამეტრები</translation>
+<translation id="2082187087049518845">ჩანართის დაჯგუფება</translation>
 <translation id="2087822576218954668">დაბეჭდეთ: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN ქსელი</translation>
 <translation id="2089566709556890888">დაათვალიერეთ ვები უსაფრთხოდ Google Chrome-ის მეშვეობით</translation>
@@ -2723,6 +2724,7 @@
 <translation id="4808319664292298116">გსურთ VR-ში შესვლა <ph name="DOMAIN" />-დან?</translation>
 <translation id="4808667324955055115">ამომხტარი ფანჯრები დაბლოკილია:</translation>
 <translation id="480990236307250886">გახსენით საწყისი გვერდი</translation>
+<translation id="4811503964269049987">არჩეული ჩანართის დაჯგუფება</translation>
 <translation id="4813136279048157860">ჩემი სურათები</translation>
 <translation id="4813512666221746211">ქსელის შეცდომა</translation>
 <translation id="4814378367953456825">შეიყვანეთ თითის ამ ანაბეჭდის სახელი</translation>
@@ -5264,6 +5266,7 @@
 <translation id="8352772353338965963">დაამატეთ ანგარიში მრავლობითი შესვლისთვის. სისტემაში შესულ ანგარიშზე წვდომის მიღება შესაძლებელია პაროლის შეყვანის გარეშე, ამიტომ ეს ფუნქცია უნდა გამოიყენოთ მხოლოდ სანდო ანგარიშებზე.</translation>
 <translation id="8353683614194668312">მას შეუძლია:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> — <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">შეცდომა Linux-ის ინსტალაციისას</translation>
 <translation id="8358685469073206162">აღვადგინოთ გვერდები?</translation>
 <translation id="8358912028636606457">ჩანართის აუდიოს ტრანსლირება ამ მოწყობილობაზე მხარდაუჭერელია.</translation>
 <translation id="8363095875018065315">სტაბილური</translation>

@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">如果你刪除了你所擁有的某個憑證，那麼你將無法再使用這個憑證來識別你的身分。</translation>
 <translation id="2079545284768500474">復原</translation>
 <translation id="2080070583977670716">顯示更多設定</translation>
+<translation id="2082187087049518845">將分頁分組</translation>
 <translation id="2087822576218954668">列印：<ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN 網路</translation>
 <translation id="2089566709556890888">使用 Google Chrome 安全瀏覽網路</translation>
@@ -2722,6 +2723,7 @@
 <translation id="4808319664292298116">要從 <ph name="DOMAIN" /> 進入 VR 嗎？</translation>
 <translation id="4808667324955055115">已封鎖彈出式視窗：</translation>
 <translation id="480990236307250886">開啟首頁</translation>
+<translation id="4811503964269049987">將所選分頁分組</translation>
 <translation id="4813136279048157860">我的圖片</translation>
 <translation id="4813512666221746211">網路錯誤</translation>
 <translation id="4814378367953456825">請輸入這個指紋的名稱</translation>
@@ -5264,6 +5266,7 @@
 <translation id="8352772353338965963">新增可多重登入的帳戶。這些帳戶的使用者不需提供密碼即可存取所有已登入的帳戶。因此，建議你只讓信任的帳戶使用這項功能。</translation>
 <translation id="8353683614194668312">可用權限：</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">安裝 Linux 時發生錯誤</translation>
 <translation id="8358685469073206162">你要還原網頁嗎？</translation>
 <translation id="8358912028636606457">這個裝置不支援分頁音訊投放功能。</translation>
 <translation id="8363095875018065315">穩定版</translation>

@@ -778,6 +778,7 @@
 <translation id="2079053412993822885">如果您删除了自己的某个证书，则不能再用该证书标识自己的身份。</translation>
 <translation id="2079545284768500474">撤消</translation>
 <translation id="2080070583977670716">更多设置</translation>
+<translation id="2082187087049518845">为标签页建组</translation>
 <translation id="2087822576218954668">打印：<ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN 网络</translation>
 <translation id="2089566709556890888">使用 Google Chrome 进行安全浏览</translation>
@@ -2719,6 +2720,7 @@
 <translation id="4808319664292298116">从 <ph name="DOMAIN" /> 进入 VR 环境？</translation>
 <translation id="4808667324955055115">已拦截弹出式窗口：</translation>
 <translation id="480990236307250886">打开主页</translation>
+<translation id="4811503964269049987">为所选标签页建组</translation>
 <translation id="4813136279048157860">我的图片</translation>
 <translation id="4813512666221746211">网络错误</translation>
 <translation id="4814378367953456825">请为此指纹输入一个名称</translation>
@@ -5261,6 +5263,7 @@
 <translation id="8352772353338965963">为多帐号登录添加帐号。用户无需使用密码即可访问所有已登录的帐号，因此您应仅通过受信任的帐号使用此功能。</translation>
 <translation id="8353683614194668312">该程序可以：</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /> 项</translation>
+<translation id="8357388086258943206">安装 Linux 时出错</translation>
 <translation id="8358685469073206162">要恢复页面吗？</translation>
 <translation id="8358912028636606457">此设备不支持投射标签页中的音频。</translation>
 <translation id="8363095875018065315">稳定</translation>

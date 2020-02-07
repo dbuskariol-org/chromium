@@ -781,6 +781,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="2079053412993822885">Nếu bạn xóa một trong các chứng chỉ của mình, bạn sẽ không thể sử dụng chứng chỉ đó để nhận dạng mình nữa.</translation>
 <translation id="2079545284768500474">Hoàn tác</translation>
 <translation id="2080070583977670716">Cài đặt khác</translation>
+<translation id="2082187087049518845">Nhóm thẻ</translation>
 <translation id="2087822576218954668">Bản in: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">Mạng riêng ảo (VPN)</translation>
 <translation id="2089566709556890888">Duyệt web an toàn bằng Google Chrome</translation>
@@ -2724,6 +2725,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="4808319664292298116">Chuyển sang chế độ thực tế ảo trên <ph name="DOMAIN" />?</translation>
 <translation id="4808667324955055115">Đã chặn cửa sổ bật lên:</translation>
 <translation id="480990236307250886">Mở trang chủ</translation>
+<translation id="4811503964269049987">Nhóm thẻ đã chọn</translation>
 <translation id="4813136279048157860">Hình ảnh của tôi</translation>
 <translation id="4813512666221746211">Lỗi mạng</translation>
 <translation id="4814378367953456825">Nhập tên cho vân tay này</translation>
@@ -5267,6 +5269,7 @@ Giữ tệp khóa của bạn ở nơi an toàn. Bạn sẽ cần tệp khóa đ
 <translation id="8352772353338965963">Thêm một tài khoản để đăng nhập nhiều lần. Tất cả các tài khoản đã đăng nhập đều có thể truy cập được mà không cần mật khẩu, do đó bạn chỉ nên sử dụng tính năng này với các tài khoản đáng tin cậy.</translation>
 <translation id="8353683614194668312">Tiện ích/ứng dụng có thể:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Lỗi khi cài đặt Linux</translation>
 <translation id="8358685469073206162">Bạn có muốn khôi phục trang không?</translation>
 <translation id="8358912028636606457">Thiết bị này không hỗ trợ truyền âm thanh của tab.</translation>
 <translation id="8363095875018065315">chính thức</translation>

@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">인증서 중 하나를 삭제하면 더 이상 삭제한 인증서를 사용하여 신원을 확인할 수 없습니다.</translation>
 <translation id="2079545284768500474">실행취소</translation>
 <translation id="2080070583977670716">설정 더보기</translation>
+<translation id="2082187087049518845">탭 그룹화</translation>
 <translation id="2087822576218954668">인쇄: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN 네트워크</translation>
 <translation id="2089566709556890888">Chrome으로 안전하게 탐색</translation>
@@ -2722,6 +2723,7 @@
 <translation id="4808319664292298116"><ph name="DOMAIN" />에서 VR을 시작하시겠습니까?</translation>
 <translation id="4808667324955055115">팝업 차단됨</translation>
 <translation id="480990236307250886">홈페이지 열기</translation>
+<translation id="4811503964269049987">선택한 탭 그룹화</translation>
 <translation id="4813136279048157860">내 이미지</translation>
 <translation id="4813512666221746211">네트워크 오류</translation>
 <translation id="4814378367953456825">지문 이름 입력</translation>
@@ -5265,6 +5267,7 @@
 <translation id="8352772353338965963">멀티 로그인에 계정을 추가하세요. 비밀번호를 입력하지 않고 모든 로그인 계정에 액세스할 수 있으므로 이 기능은 신뢰할 수 있는 계정에만 사용해야 합니다.</translation>
 <translation id="8353683614194668312">앱의 권한:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" />개</translation>
+<translation id="8357388086258943206">Linux 설치 오류</translation>
 <translation id="8358685469073206162">페이지를 복원하시겠습니까?</translation>
 <translation id="8358912028636606457">이 기기에서는 탭 오디오 전송이 지원되지 않습니다.</translation>
 <translation id="8363095875018065315">안정</translation>

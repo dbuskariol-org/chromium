@@ -1391,6 +1391,7 @@
 <translation id="7201591969684833065">Msimamizi wako anaweza kuona:</translation>
 <translation id="7202346780273620635">Letter-Extra</translation>
 <translation id="7210863904660874423"><ph name="HOST_NAME" /> haizingatii viwango vya usalama.</translation>
+<translation id="7210993021468939304">Shughuli ya Linux ndani ya metadata inaweza kusakinisha na kutekeleza programu za Linux ndani ya metadata</translation>
 <translation id="721197778055552897"><ph name="BEGIN_LINK" />Pata maelezo zaidi<ph name="END_LINK" /> kuhusu tatizo hili.</translation>
 <translation id="7219179957768738017">Muunganisho unatumia <ph name="SSL_VERSION" />.</translation>
 <translation id="7220786058474068424">Malipo yanashughulikiwa</translation>
@@ -1451,7 +1452,6 @@
 <translation id="7451311239929941790"><ph name="BEGIN_LINK" />Pata maelezo zaidi<ph name="END_LINK" /> kuhusu hitilafu hii.</translation>
 <translation id="7455133967321480974">Tumia chaguomsingi la duniani (Zuia)</translation>
 <translation id="7460618730930299168">Onyesho kwenye skrini ni tofauti na ile uliyochagua. Ungependa kuendelea?</translation>
-<translation id="7464821087936825778">Ondoka kwenye hali ya utafutaji</translation>
 <translation id="7473891865547856676">La Asante</translation>
 <translation id="7481312909269577407">Mbele</translation>
 <translation id="7485870689360869515">Hakuna data iliyopatikana.</translation>
@@ -1553,6 +1553,7 @@
 <translation id="7878562273885520351">Huenda nenosiri lako limetambulika</translation>
 <translation id="7882421473871500483">Kahawia</translation>
 <translation id="7887683347370398519">Angalia CVC yako na ujaribu tena</translation>
+<translation id="7887885240995164102">Washa hali ya picha ndani ya picha</translation>
 <translation id="7888575728750733395">Utaratibu wa kuratibu utekelezaji wa uchapishaji</translation>
 <translation id="7904208859782148177">C3 (Bahasha)</translation>
 <translation id="7932579305932748336">Koleza</translation>

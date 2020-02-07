@@ -393,7 +393,7 @@
 <translation id="2664887757054927933">{COUNT,plural, =0{Жок}=1{1 сырсөз (<ph name="DOMAIN_LIST" /> доменде)}=2{2 сырсөз (<ph name="DOMAIN_LIST" /> доменде)}other{# сырсөз (<ph name="DOMAIN_LIST" /> доменде)}}</translation>
 <translation id="2666092431469916601">Өйдө</translation>
 <translation id="2666117266261740852">Башка өтмөктөрдү же колдонмолорду жабыңыз</translation>
-<translation id="2674170444375937751">Бул барактарды чын эле таржымалыңыздан жок кыласызбы?</translation>
+<translation id="2674170444375937751">Бул барактарды чын эле таржымалыңыздан өчүрөсүзбү?</translation>
 <translation id="2676271551327853224">Roc-8K</translation>
 <translation id="2677748264148917807">Чыгуу</translation>
 <translation id="2684561033061424857">11x12</translation>
@@ -1396,6 +1396,7 @@
 <translation id="7201591969684833065">Администраторуңуз төмөнкүлөрдү көрөт:</translation>
 <translation id="7202346780273620635">Letter-Extra</translation>
 <translation id="7210863904660874423"><ph name="HOST_NAME" /> сайты коопсуздук стандарттарына жооп бербейт.</translation>
+<translation id="7210993021468939304">Контейнердеги Linux аракеттери Linux колдомолорун контейнердин алкагында орнотуп, иштете алышат</translation>
 <translation id="721197778055552897">Бул көйгөй жөнүндө <ph name="BEGIN_LINK" />Көбүрөөк билүү<ph name="END_LINK" />.</translation>
 <translation id="7219179957768738017">Туташуу <ph name="SSL_VERSION" /> колдонот.</translation>
 <translation id="7220786058474068424">Иштелүүдө</translation>
@@ -1458,7 +1459,6 @@
 <translation id="7451311239929941790">Бул көйгөй жөнүндө <ph name="BEGIN_LINK" />көбүрөөк маалымат<ph name="END_LINK" />.</translation>
 <translation id="7455133967321480974">Глобалдык демейки маанини колдонуу (Бөгөттөө)</translation>
 <translation id="7460618730930299168">Сеанстын форматы сиз тандагандан башкача экен. Уланта бересизби?</translation>
-<translation id="7464821087936825778">Издөө режиминен чыгууда</translation>
 <translation id="7473891865547856676">Жок, рахмат</translation>
 <translation id="7481312909269577407">Багыттоо</translation>
 <translation id="7485870689360869515">Дайындар табылган жок.</translation>
@@ -1560,6 +1560,7 @@
 <translation id="7878562273885520351">Сырсөзүңүздү башка адамдар бузуп кирген окшойт</translation>
 <translation id="7882421473871500483">Күрөң</translation>
 <translation id="7887683347370398519">CVC'иңизди текшерип, кайра аракет кылыңыз</translation>
+<translation id="7887885240995164102">Сүрөт ичиндеги сүрөт режимине кирүү</translation>
 <translation id="7888575728750733395">Басып чыгаруу аралыгы</translation>
 <translation id="7904208859782148177">C3 (Конверт)</translation>
 <translation id="7932579305932748336">Пальто</translation>

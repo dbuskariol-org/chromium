@@ -1401,6 +1401,7 @@
 <translation id="7201591969684833065">អ្នកគ្រប់គ្រង​របស់អ្នកអាច​មើលឃើញ៖</translation>
 <translation id="7202346780273620635">Letter-Extra</translation>
 <translation id="7210863904660874423"><ph name="HOST_NAME" /> មិនត្រូវតាមបទដ្ឋានសុវត្ថិភាពទេ</translation>
+<translation id="7210993021468939304">សកម្មភាព Linux នៅក្នុង​ទម្រង់ផ្ទុក និងអាចដំឡើង និងដំណើរការ​កម្មវិធី Linux នៅក្នុងទម្រង់ផ្ទុក</translation>
 <translation id="721197778055552897"><ph name="BEGIN_LINK" />ស្វែងយល់បន្ថែម<ph name="END_LINK" /> អំពីបញ្ហានេះ។</translation>
 <translation id="7219179957768738017">ការភ្ជាប់នេះប្រើ <ph name="SSL_VERSION" />។</translation>
 <translation id="7220786058474068424">កំពុងដំណើរការ</translation>
@@ -1463,7 +1464,6 @@
 <translation id="7451311239929941790"><ph name="BEGIN_LINK" />ស្វែងយល់បន្ថែម<ph name="END_LINK" />អំពីបញ្ហានេះ</translation>
 <translation id="7455133967321480974">ប្រើលំនាំដើមជាសកល (រារាំង)</translation>
 <translation id="7460618730930299168">ការបញ្ចាំងមានភាពខុសគ្នាពី​អ្វីដែលអ្នកបាន​ជ្រើសរើស។ បន្ត?</translation>
-<translation id="7464821087936825778">កំពុង​ចាកចេញ​ពី​មុខងារ​ស្វែងរក</translation>
 <translation id="7473891865547856676">ទេ អរគុណ</translation>
 <translation id="7481312909269577407">ទៅមុខ</translation>
 <translation id="7485870689360869515">គ្មានទិន្នន័យត្រូវបានរកឃើញទេ។</translation>
@@ -1566,6 +1566,7 @@
 <translation id="7878562273885520351">ពាក្យសម្ងាត់​របស់អ្នក​អាចត្រូវ​បានគេលួចប្រើ​</translation>
 <translation id="7882421473871500483">ត្នោត</translation>
 <translation id="7887683347370398519">ពិនិត្យលេខកូដ CVC ហើយព្យាយាមម្តងទៀត</translation>
+<translation id="7887885240995164102">ចូលមុខងារ​រូបក្នុងរូប</translation>
 <translation id="7888575728750733395">ចេតនានៃ​ការបំប្លែង​ការបោះពុម្ព</translation>
 <translation id="7904208859782148177">C3 (ស្រោម​សំបុត្រ)</translation>
 <translation id="7932579305932748336">ស្រោប</translation>

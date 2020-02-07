@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">ប្រសិនបើអ្នកលុបវិញ្ញាបនប័ត្រមួយក្នុងចំណោមវិញ្ញាបនប័ត្រទាំងឡាយរបស់អ្នក អ្នកមិនអាចប្រើវាដើម្បីសម្គាល់ខ្លួនអ្នកទៀតទេ។</translation>
 <translation id="2079545284768500474">បកក្រោយ</translation>
 <translation id="2080070583977670716">ការកំណត់ច្រើនទៀត</translation>
+<translation id="2082187087049518845">បញ្ចូលផ្ទាំងទៅក្នុងក្រុម</translation>
 <translation id="2087822576218954668">បោះពុម្ព៖ <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">បណ្ដាញ VPN</translation>
 <translation id="2089566709556890888">រុករក​ដោយសុវត្ថិភាពជាមួយ Google Chrome</translation>
@@ -2724,6 +2725,7 @@
 <translation id="4808319664292298116">ចូលក្នុង VR ពី <ph name="DOMAIN" /> ដែរទេ?</translation>
 <translation id="4808667324955055115">បានទប់ស្កាត់​ផ្ទាំងផុស៖</translation>
 <translation id="480990236307250886">បើកទំព័រដើម</translation>
+<translation id="4811503964269049987">បញ្ចូលផ្ទាំង​ដែលបានជ្រើសរើស​ទៅក្នុងក្រុម</translation>
 <translation id="4813136279048157860">រូបភាព​របស់ខ្ញុំ</translation>
 <translation id="4813512666221746211">កំហុសឆ្គងបណ្តាញ</translation>
 <translation id="4814378367953456825">បញ្ចូល​ឈ្មោះ​សម្រាប់​ស្នាមម្រាមដៃនេះ</translation>
@@ -5267,6 +5269,7 @@
 <translation id="8352772353338965963">បន្ថែមគណនីមួយដើម្បីចូលពីគណនីច្រើន។ គណនីដែលចូលទាំងអស់អាចចូលប្រើដោយគ្មានពាក្យសម្ងាត់ ដូច្នេះលក្ខណពិសេសនេះគួរត្រូវបានប្រើជាមួយគណនីដែលគួរជឿជាក់តែប៉ុណ្ណោះ។</translation>
 <translation id="8353683614194668312">វាអាច៖</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">មានបញ្ហា​ក្នុងការ​ដំឡើង Linux</translation>
 <translation id="8358685469073206162">ស្តារទំព័រ?</translation>
 <translation id="8358912028636606457">មិនអាចប្រើ​ការបញ្ជូន​សំឡេងរបស់ផ្ទាំង​នៅលើឧបករណ៍​នេះបានទេ។</translation>
 <translation id="8363095875018065315">ថេរ</translation>

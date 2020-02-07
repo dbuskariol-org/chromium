@@ -1395,6 +1395,7 @@
 <translation id="7201591969684833065">Администраторът ви може да вижда:</translation>
 <translation id="7202346780273620635">Letter-Extra</translation>
 <translation id="7210863904660874423"><ph name="HOST_NAME" /> не се придържа към стандартите за сигурност.</translation>
+<translation id="7210993021468939304">Може да инсталира и стартира приложения за Linux в контейнера, както и да вижда активността в него</translation>
 <translation id="721197778055552897"><ph name="BEGIN_LINK" />Научете повече<ph name="END_LINK" /> за този проблем.</translation>
 <translation id="7219179957768738017">Връзката използва <ph name="SSL_VERSION" />.</translation>
 <translation id="7220786058474068424">Обработва се</translation>
@@ -1457,7 +1458,6 @@
 <translation id="7451311239929941790"><ph name="BEGIN_LINK" />Научете повече<ph name="END_LINK" /> за този проблем.</translation>
 <translation id="7455133967321480974">Използване на глобалната стандартна стойност (блокиране)</translation>
 <translation id="7460618730930299168">Прожекцията е различна от избраната от вас. Искате ли да продължите?</translation>
-<translation id="7464821087936825778">Излиза се от режима на търсене</translation>
 <translation id="7473891865547856676">Не, благодаря</translation>
 <translation id="7481312909269577407">Препращане</translation>
 <translation id="7485870689360869515">Няма намерени данни.</translation>
@@ -1559,6 +1559,7 @@
 <translation id="7878562273885520351">Възможно е паролата ви да е компрометирана</translation>
 <translation id="7882421473871500483">кафяво</translation>
 <translation id="7887683347370398519">Прегледайте кода за проверка и опитайте отново</translation>
+<translation id="7887885240995164102">Преминаване в режим „Картина в картината“</translation>
 <translation id="7888575728750733395">Режим на изобразяване на цветовете при отпечатване</translation>
 <translation id="7904208859782148177">C3 (плик)</translation>
 <translation id="7932579305932748336">Покритие</translation>

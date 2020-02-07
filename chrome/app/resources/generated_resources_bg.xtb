@@ -778,6 +778,7 @@
 <translation id="2079053412993822885">Ако изтриете някой от собствените си сертификати, няма да можете повече да го използвате, за да се идентифицирате.</translation>
 <translation id="2079545284768500474">Отмяна</translation>
 <translation id="2080070583977670716">Още настройки</translation>
+<translation id="2082187087049518845">Добавяне на раздела към група</translation>
 <translation id="2087822576218954668">Отпечатване: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN мрежа</translation>
 <translation id="2089566709556890888">Сърфирайте безопасно с Google Chrome</translation>
@@ -2723,6 +2724,7 @@
 <translation id="4808319664292298116">Да се стартира ли VR от <ph name="DOMAIN" />?</translation>
 <translation id="4808667324955055115">Изскачащите прозорци са блокирани:</translation>
 <translation id="480990236307250886">Отваряне на началната страница</translation>
+<translation id="4811503964269049987">Добавяне на избрания раздел към група</translation>
 <translation id="4813136279048157860">Моите изображения</translation>
 <translation id="4813512666221746211">Грешка в мрежата</translation>
 <translation id="4814378367953456825">Въведете име за този отпечатък</translation>
@@ -5267,6 +5269,7 @@
 <translation id="8352772353338965963">Добавете профил към функцията за централизиран вход. Всички профили, в които влезете чрез нея, ще бъдат достъпни без парола, така че трябва да използвате тази функция само с надеждни профили.</translation>
 <translation id="8353683614194668312">То има възможност за:</translation>
 <translation id="8356197132883132838">„<ph name="TITLE" />“ – <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Грешка при инсталирането на Linux</translation>
 <translation id="8358685469073206162">Да се възстановят ли страниците?</translation>
 <translation id="8358912028636606457">Предаването на звук от раздел не се поддържа на това устройство.</translation>
 <translation id="8363095875018065315">стабилен</translation>

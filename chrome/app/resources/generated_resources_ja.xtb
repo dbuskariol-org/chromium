@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">ユーザーの証明書のいずれかを削除すると、それを使って身元を証明することはできなくなります。</translation>
 <translation id="2079545284768500474">元に戻す</translation>
 <translation id="2080070583977670716">詳細設定</translation>
+<translation id="2082187087049518845">タブをグループ化する</translation>
 <translation id="2087822576218954668">印刷: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN ネットワーク</translation>
 <translation id="2089566709556890888">Google Chrome で安全にブラウジング</translation>
@@ -2724,6 +2725,7 @@
 <translation id="4808319664292298116"><ph name="DOMAIN" /> で VR を使用しますか？</translation>
 <translation id="4808667324955055115">ポップアップがブロックされました:</translation>
 <translation id="480990236307250886">ホームページを開く</translation>
+<translation id="4811503964269049987">選択したタブをグループ化する</translation>
 <translation id="4813136279048157860">自分の画像</translation>
 <translation id="4813512666221746211">ネットワーク エラー</translation>
 <translation id="4814378367953456825">このフィンガープリントの名前を入力してください</translation>
@@ -5267,6 +5269,7 @@
 <translation id="8352772353338965963">マルチログインにアカウントを追加します。ログインしているすべてのアカウントにパスワードなしでアクセスできるようになるため、この機能は信頼できるアカウントでのみ使用してください。</translation>
 <translation id="8353683614194668312">次の権限にアクセス可能:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Linux のインストール中にエラーが発生しました</translation>
 <translation id="8358685469073206162">ページを復元しますか？</translation>
 <translation id="8358912028636606457">このデバイスのタブの音声をキャストすることはできません。</translation>
 <translation id="8363095875018065315">Stable</translation>

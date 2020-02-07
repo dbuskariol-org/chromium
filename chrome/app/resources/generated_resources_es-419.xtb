@@ -778,6 +778,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2079053412993822885">Si eliminas uno de tus propios certificados, ya no podrás utilizarlo para identificarte.</translation>
 <translation id="2079545284768500474">Deshacer</translation>
 <translation id="2080070583977670716">Más opciones de configuración</translation>
+<translation id="2082187087049518845">Crear un grupo con la pestaña</translation>
 <translation id="2087822576218954668">Imprimir: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">Red VPN</translation>
 <translation id="2089566709556890888">Navega de forma segura con Google Chrome</translation>
@@ -2721,6 +2722,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4808319664292298116">¿Quieres ingresar a RV desde <ph name="DOMAIN" />?</translation>
 <translation id="4808667324955055115">Se bloquearon ventanas emergentes:</translation>
 <translation id="480990236307250886">Abrir la página principal</translation>
+<translation id="4811503964269049987">Crear un grupo con la pestaña seleccionada</translation>
 <translation id="4813136279048157860">Mis imágenes</translation>
 <translation id="4813512666221746211">Error de red</translation>
 <translation id="4814378367953456825">Escribe un nombre para esta huella digital</translation>
@@ -5264,6 +5266,7 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
 <translation id="8352772353338965963">Agrega una cuenta para el acceso múltiple. Puedes acceder a todas las cuentas abiertas sin una contraseña, por lo que esta función solo debe utilizarse con cuentas de confianza.</translation>
 <translation id="8353683614194668312">Puede:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> (<ph name="COUNT" />)</translation>
+<translation id="8357388086258943206">Error al instalar Linux</translation>
 <translation id="8358685469073206162">¿Restaurar las páginas?</translation>
 <translation id="8358912028636606457">La transmisión de audio de la pestaña no es compatible con este dispositivo.</translation>
 <translation id="8363095875018065315">estable</translation>

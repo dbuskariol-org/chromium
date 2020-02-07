@@ -782,6 +782,7 @@
 <translation id="2079053412993822885">Եթե ջնջեք ձեր սեփական վկայագրերից մեկը, այլևս չեք կարողանա օգտագործել այն ձեզ նույնացնելու նպատակով:</translation>
 <translation id="2079545284768500474">Հետարկել</translation>
 <translation id="2080070583977670716">Այլ կարգավորումներ</translation>
+<translation id="2082187087049518845">Ավելացնել ներդիր խմբում</translation>
 <translation id="2087822576218954668">Տպում՝ <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN ցանց</translation>
 <translation id="2089566709556890888">Համացանցում ավելի անվտանգ շրջեք Google Chrome-ի օգնությամբ</translation>
@@ -2725,6 +2726,7 @@
 <translation id="4808319664292298116">Մտնե՞լ VR <ph name="DOMAIN" /> կայքից</translation>
 <translation id="4808667324955055115">Ելնող պատուհաններն արգելափակված են՝</translation>
 <translation id="480990236307250886">Բացել գլխավոր էջը</translation>
+<translation id="4811503964269049987">Ավելացնել ընտրված ներդիրը խմբում</translation>
 <translation id="4813136279048157860">Իմ պատկերները</translation>
 <translation id="4813512666221746211">Ցանցի սխալ</translation>
 <translation id="4814378367953456825">Անուն տվեք այս մատնահետքին</translation>
@@ -5269,6 +5271,7 @@
 <translation id="8352772353338965963">Ավելացնել հաշիվ բազմակի մուտքի համակարգում: Բոլոր մուտք գործած հաշիվները մատչելի են առանց գաղտնաբառի մուտքագրման, ուստի այս գործառույթը պետք է միայն օգտագործվի վստահելի հաշիվների հետ:</translation>
 <translation id="8353683614194668312">Թույլտվություններ՝</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Լինուքսը տեղադրելիս սխալ առաջացավ</translation>
 <translation id="8358685469073206162">Վերականգնե՞լ էջերը:</translation>
 <translation id="8358912028636606457">Ներդիրի ձայնի հեռարձակումն այս սարքում չի աջակցվում:</translation>
 <translation id="8363095875018065315">կայուն</translation>
