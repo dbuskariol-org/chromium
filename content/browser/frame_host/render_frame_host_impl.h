@@ -425,8 +425,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void DeleteRenderFrame(FrameDeleteIntention intent);
 
   // Tracks whether the RenderFrame for this RenderFrameHost has been created in
-  // the renderer process.  This is currently only used for subframes.
-  // TODO(creis): Use this for main frames as well when RVH goes away.
+  // the renderer process.
   void SetRenderFrameCreated(bool created);
 
   // Called for renderer-created windows to resume requests from this frame,
