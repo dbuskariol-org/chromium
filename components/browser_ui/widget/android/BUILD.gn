@@ -54,6 +54,11 @@ android_library("java") {
     "java/src/org/chromium/components/browser_ui/widget/listmenu/ListMenuItemAdapter.java",
     "java/src/org/chromium/components/browser_ui/widget/listmenu/ListMenuItemProperties.java",
     "java/src/org/chromium/components/browser_ui/widget/listmenu/ListMenuItemViewBinder.java",
+    "java/src/org/chromium/components/browser_ui/widget/scrim/ScrimCoordinator.java",
+    "java/src/org/chromium/components/browser_ui/widget/scrim/ScrimMediator.java",
+    "java/src/org/chromium/components/browser_ui/widget/scrim/ScrimProperties.java",
+    "java/src/org/chromium/components/browser_ui/widget/scrim/ScrimView.java",
+    "java/src/org/chromium/components/browser_ui/widget/scrim/ScrimViewBinder.java",
     "java/src/org/chromium/components/browser_ui/widget/selectable_list/SelectableItemView.java",
     "java/src/org/chromium/components/browser_ui/widget/selectable_list/SelectableItemViewBase.java",
     "java/src/org/chromium/components/browser_ui/widget/selectable_list/SelectableItemViewHolder.java",
@@ -117,6 +122,7 @@ android_library("javatests") {
     "java/src/org/chromium/components/browser_ui/widget/RadioButtonWithEditTextTest.java",
     "java/src/org/chromium/components/browser_ui/widget/WrappingLayoutTest.java",
     "java/src/org/chromium/components/browser_ui/widget/highlight/ViewHighlighterTest.java",
+    "java/src/org/chromium/components/browser_ui/widget/scrim/ScrimTest.java",
     "java/src/org/chromium/components/browser_ui/widget/text/ChromeTextInputLayoutRenderTest.java",
   ]
   deps = [
@@ -124,6 +130,7 @@ android_library("javatests") {
     ":java_resources",
     ":java_test_resources",
     ":test_support_java",
+    "//base:base_java",
     "//base:base_java_test_support",
     "//content/public/test/android:content_java_test_support",
     "//third_party/android_deps:com_android_support_appcompat_v7_java",
