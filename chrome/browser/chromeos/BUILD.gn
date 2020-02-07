@@ -2864,6 +2864,7 @@ source_set("unit_tests") {
     "login/enterprise_user_session_metrics_unittest.cc",
     "login/error_screens_histogram_helper_unittest.cc",
     "login/existing_user_controller_auto_login_unittest.cc",
+    "login/existing_user_controller_forced_online_auth_unittest.cc",
     "login/hwid_checker_unittest.cc",
     "login/lock/screen_locker_unittest.cc",
     "login/profile_auth_data_unittest.cc",
