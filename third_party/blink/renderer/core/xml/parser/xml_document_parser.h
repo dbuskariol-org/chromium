@@ -108,6 +108,17 @@ class XMLDocumentParser final : public ScriptableDocumentParser,
    public:
     virtual ~PendingCallback() = default;
     virtual void Call(XMLDocumentParser*) = 0;
+
+    TextPosition GetTextPosition() const { return text_position_; }
+    OrdinalNumber LineNumber() const { return text_position_.line_; }
+    OrdinalNumber ColumnNumber() const { return text_position_.column_; }
+
+   protected:
+    PendingCallback(TextPosition text_position)
+        : text_position_(text_position) {}
+
+   private:
+    TextPosition text_position_;
   };
 
   void SetScriptStartPosition(TextPosition);
@@ -185,6 +196,7 @@ class XMLDocumentParser final : public ScriptableDocumentParser,
   }
   scoped_refptr<XMLParserContext> context_;
   Deque<std::unique_ptr<PendingCallback>> pending_callbacks_;
+  std::unique_ptr<PendingCallback> callback_;
   Vector<xmlChar> buffered_text_;
 
   Member<ContainerNode> current_node_;
