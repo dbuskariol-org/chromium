@@ -3,9 +3,10 @@
 # found in the LICENSE file.
 
 modules_idl_files = [
-  "scheduler.idl",
-  "task_controller.idl",
-  "task_signal.idl",
+  "barcode_detector.idl",
+  "detected_barcode.idl",
+  "detected_face.idl",
+  "detected_text.idl",
+  "face_detector.idl",
+  "text_detector.idl",
 ]
-
-modules_dependency_idl_files = [ "window_scheduler.idl" ]

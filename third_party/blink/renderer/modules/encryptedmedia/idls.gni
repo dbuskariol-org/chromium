@@ -2,6 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+modules_idl_files = [
+  "media_encrypted_event.idl",
+  "media_key_message_event.idl",
+  "media_key_session.idl",
+  "media_key_status_map.idl",
+  "media_key_system_access.idl",
+  "media_keys.idl",
+]
+
 modules_dependency_idl_files = [
   "html_media_element_encrypted_media.idl",
   "media_keys_get_status_for_policy.idl",

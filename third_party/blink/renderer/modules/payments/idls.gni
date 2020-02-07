@@ -2,6 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+modules_idl_files = [
+  "abort_payment_event.idl",
+  "can_make_payment_event.idl",
+  "merchant_validation_event.idl",
+  "payment_address.idl",
+  "payment_instruments.idl",
+  "payment_manager.idl",
+  "payment_method_change_event.idl",
+  "payment_request.idl",
+  "payment_request_event.idl",
+  "payment_request_update_event.idl",
+  "payment_response.idl",
+]
+
 modules_dependency_idl_files = [
   "html_iframe_element_payments.idl",
   "payment_app_service_worker_global_scope.idl",

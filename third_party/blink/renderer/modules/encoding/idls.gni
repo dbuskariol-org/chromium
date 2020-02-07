@@ -3,9 +3,8 @@
 # found in the LICENSE file.
 
 modules_idl_files = [
-  "scheduler.idl",
-  "task_controller.idl",
-  "task_signal.idl",
+  "text_decoder.idl",
+  "text_decoder_stream.idl",
+  "text_encoder.idl",
+  "text_encoder_stream.idl",
 ]
-
-modules_dependency_idl_files = [ "window_scheduler.idl" ]

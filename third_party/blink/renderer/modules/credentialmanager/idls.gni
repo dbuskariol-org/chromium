@@ -2,6 +2,17 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+modules_idl_files = [
+  "authenticator_assertion_response.idl",
+  "authenticator_attestation_response.idl",
+  "authenticator_response.idl",
+  "credential.idl",
+  "credentials_container.idl",
+  "federated_credential.idl",
+  "password_credential.idl",
+  "public_key_credential.idl",
+]
+
 modules_dependency_idl_files = [
   "credential_user_data.idl",
   "navigator_credentials.idl",

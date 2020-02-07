@@ -3,9 +3,6 @@
 # found in the LICENSE file.
 
 modules_idl_files = [
-  "scheduler.idl",
-  "task_controller.idl",
-  "task_signal.idl",
+  "compression_stream.idl",
+  "decompression_stream.idl",
 ]
-
-modules_dependency_idl_files = [ "window_scheduler.idl" ]

@@ -3,9 +3,9 @@
 # found in the LICENSE file.
 
 modules_idl_files = [
-  "scheduler.idl",
-  "task_controller.idl",
-  "task_signal.idl",
+  "encoded_video_chunk.idl",
+  "video_decoder.idl",
+  "video_frame.idl",
+  "video_track_reader.idl",
+  "video_track_writer.idl",
 ]
-
-modules_dependency_idl_files = [ "window_scheduler.idl" ]

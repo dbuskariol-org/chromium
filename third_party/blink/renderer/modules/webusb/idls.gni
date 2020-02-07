@@ -2,6 +2,22 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+modules_idl_files = [
+  "usb.idl",
+  "usb_alternate_interface.idl",
+  "usb_configuration.idl",
+  "usb_connection_event.idl",
+  "usb_device.idl",
+  "usb_endpoint.idl",
+  "usb_in_transfer_result.idl",
+  "usb_interface.idl",
+  "usb_isochronous_in_transfer_packet.idl",
+  "usb_isochronous_in_transfer_result.idl",
+  "usb_isochronous_out_transfer_packet.idl",
+  "usb_isochronous_out_transfer_result.idl",
+  "usb_out_transfer_result.idl",
+]
+
 modules_dependency_idl_files = [
   "navigator_usb.idl",
   "worker_navigator_usb.idl",

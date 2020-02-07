@@ -2,6 +2,23 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+modules_idl_files = [
+  "idb_cursor.idl",
+  "idb_cursor_with_value.idl",
+  "idb_database.idl",
+  "idb_factory.idl",
+  "idb_index.idl",
+  "idb_key_range.idl",
+  "idb_object_store.idl",
+  "idb_observation.idl",
+  "idb_observer.idl",
+  "idb_observer_changes.idl",
+  "idb_open_db_request.idl",
+  "idb_request.idl",
+  "idb_transaction.idl",
+  "idb_version_change_event.idl",
+]
+
 modules_dependency_idl_files = [
   "window_indexed_database.idl",
   "worker_global_scope_indexed_database.idl",
