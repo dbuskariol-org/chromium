@@ -58,8 +58,6 @@ class ASH_EXPORT ShelfWidget : public AccessibilityObserver,
   // Returns true if the views-based shelf is being shown.
   static bool IsUsingViewsShelf();
 
-  void OnShelfAlignmentChanged();
-
   void OnTabletModeChanged();
 
   ShelfBackgroundType GetBackgroundType() const;
