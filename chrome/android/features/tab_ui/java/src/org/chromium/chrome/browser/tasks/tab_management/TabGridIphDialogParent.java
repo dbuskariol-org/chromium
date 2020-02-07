@@ -7,17 +7,11 @@ package org.chromium.chrome.browser.tasks.tab_management;
 import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.support.graphics.drawable.Animatable2Compat;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,41 +23,37 @@ import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
 
-import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.chrome.browser.widget.ScrimView;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.ui.display.DisplayAndroid;
-import org.chromium.ui.widget.ChromeImageView;
 
 /**
- * Represents a view that works as the entrance for IPH in GridTabSwitcher.
+ * Represents a parent component for TabGridIph related UIs.
  */
-public class TabGridIphItemView extends FrameLayout {
+public class TabGridIphDialogParent {
     private final int mDialogSideMargin;
     private final int mDialogTextSideMargin;
     private final int mDialogTextTopMarginPortrait;
     private final int mDialogTextTopMarginLandscape;
     private final Context mContext;
+    private final View mParentView;
     private View mIphDialogView;
-    private TextView mShowIPHDialogButton;
     private TextView mCloseIPHDialogButton;
-    private TextView mIphIntroduction;
-    private ChromeImageView mCloseIPHEntranceButton;
     private ScrimView mScrimView;
     private ScrimView.ScrimParams mScrimParams;
     private Drawable mIphDrawable;
     private PopupWindow mIphWindow;
     private Animatable mIphAnimation;
     private Animatable2Compat.AnimationCallback mAnimationCallback;
-    private MarginLayoutParams mDialogMarginParams;
-    private MarginLayoutParams mTitleTextMarginParams;
-    private MarginLayoutParams mDescriptionTextMarginParams;
-    private MarginLayoutParams mCloseButtonMarginParams;
+    private ViewGroup.MarginLayoutParams mDialogMarginParams;
+    private ViewGroup.MarginLayoutParams mTitleTextMarginParams;
+    private ViewGroup.MarginLayoutParams mDescriptionTextMarginParams;
+    private ViewGroup.MarginLayoutParams mCloseButtonMarginParams;
     private ComponentCallbacks mComponentCallbacks;
 
-    public TabGridIphItemView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    TabGridIphDialogParent(Context context, View parentView) {
         mContext = context;
+        mParentView = parentView;
         mDialogSideMargin =
                 (int) mContext.getResources().getDimension(R.dimen.tab_grid_iph_dialog_side_margin);
         mDialogTextSideMargin = (int) mContext.getResources().getDimension(
@@ -72,20 +62,10 @@ public class TabGridIphItemView extends FrameLayout {
                 R.dimen.tab_grid_iph_dialog_text_top_margin_portrait);
         mDialogTextTopMarginLandscape = (int) mContext.getResources().getDimension(
                 R.dimen.tab_grid_iph_dialog_text_top_margin_landscape);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
 
         FrameLayout backgroundView = new FrameLayout(mContext);
         mIphDialogView = LayoutInflater.from(mContext).inflate(
                 R.layout.iph_drag_and_drop_dialog_layout, backgroundView, false);
-        mShowIPHDialogButton = findViewById(R.id.show_me_button);
-        mCloseIPHEntranceButton = findViewById(R.id.close_iph_button);
-        mIphIntroduction = findViewById(R.id.iph_description);
-        Drawable closeButtonDrawable = getScaledCloseImageDrawable();
-        mCloseIPHEntranceButton.setImageDrawable(closeButtonDrawable);
         mCloseIPHDialogButton = mIphDialogView.findViewById(R.id.close_button);
         mIphDrawable =
                 ((ImageView) mIphDialogView.findViewById(R.id.animation_drawable)).getDrawable();
@@ -103,11 +83,13 @@ public class TabGridIphItemView extends FrameLayout {
         mIphWindow = new PopupWindow(backgroundView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         mScrimView = new ScrimView(mContext, null, backgroundView);
-        mDialogMarginParams = (MarginLayoutParams) mIphDialogView.getLayoutParams();
-        mTitleTextMarginParams = (MarginLayoutParams) iphDialogTitleText.getLayoutParams();
+        mDialogMarginParams = (ViewGroup.MarginLayoutParams) mIphDialogView.getLayoutParams();
+        mTitleTextMarginParams =
+                (ViewGroup.MarginLayoutParams) iphDialogTitleText.getLayoutParams();
         mDescriptionTextMarginParams =
-                (MarginLayoutParams) iphDialogDescriptionText.getLayoutParams();
-        mCloseButtonMarginParams = (MarginLayoutParams) mCloseIPHDialogButton.getLayoutParams();
+                (ViewGroup.MarginLayoutParams) iphDialogDescriptionText.getLayoutParams();
+        mCloseButtonMarginParams =
+                (ViewGroup.MarginLayoutParams) mCloseIPHDialogButton.getLayoutParams();
 
         mComponentCallbacks = new ComponentCallbacks() {
             @Override
@@ -122,30 +104,12 @@ public class TabGridIphItemView extends FrameLayout {
     }
 
     /**
-     * Setup the {@link View.OnClickListener} for close button in the entrance of IPH.
-     *
-     * @param listener The {@link View.OnClickListener} used to setup close button in IPH entrance.
-     */
-    void setupCloseIphEntranceButtonOnclickListener(View.OnClickListener listener) {
-        mCloseIPHEntranceButton.setOnClickListener(listener);
-    }
-
-    /**
      * Setup the {@link View.OnClickListener} for close button in the IPH dialog.
      *
      * @param listener The {@link View.OnClickListener} used to setup close button in IPH dialog.
      */
     void setupCloseIphDialogButtonOnclickListener(View.OnClickListener listener) {
         mCloseIPHDialogButton.setOnClickListener(listener);
-    }
-
-    /**
-     * Setup the {@link View.OnClickListener} for the button that shows the IPH dialog.
-     *
-     * @param listener The {@link View.OnClickListener} used to setup show IPH button.
-     */
-    void setupShowIphButtonOnclickListener(View.OnClickListener listener) {
-        mShowIPHDialogButton.setOnClickListener(listener);
     }
 
     /**
@@ -175,25 +139,13 @@ public class TabGridIphItemView extends FrameLayout {
             mScrimView.showScrim(mScrimParams);
         }
         updateMargins(mContext.getResources().getConfiguration().orientation);
-        mIphWindow.showAtLocation((View) getParent(), Gravity.CENTER, 0, 0);
+        mIphWindow.showAtLocation(mParentView, Gravity.CENTER, 0, 0);
         AnimatedVectorDrawableCompat.registerAnimationCallback(mIphDrawable, mAnimationCallback);
         mIphAnimation.start();
     }
 
-    private Drawable getScaledCloseImageDrawable() {
-        // Scale down the close button image to 18dp.
-        Context context = getContext();
-        int size = (int) context.getResources().getDimension(
-                R.dimen.tab_grid_iph_card_close_button_size);
-        Drawable closeDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.btn_close);
-        Bitmap closeBitmap = ((BitmapDrawable) closeDrawable).getBitmap();
-        return new BitmapDrawable(
-                getResources(), Bitmap.createScaledBitmap(closeBitmap, size, size, true));
-    }
-
     private void updateMargins(int orientation) {
-        int screenHeight = DisplayAndroid.getNonMultiDisplay(getContext()).getDisplayHeight();
-
+        int screenHeight = DisplayAndroid.getNonMultiDisplay(mContext).getDisplayHeight();
         int dialogHeight =
                 (int) mContext.getResources().getDimension(R.dimen.tab_grid_iph_dialog_height);
         // Dynamically setup the top margin base on screen height, the minimum top margin is
@@ -221,31 +173,6 @@ public class TabGridIphItemView extends FrameLayout {
                 mDialogTextSideMargin, 0, mDialogTextSideMargin, textTopMargin);
         mCloseButtonMarginParams.setMargins(
                 mDialogTextSideMargin, textTopMargin, mDialogTextSideMargin, textTopMargin);
-    }
-
-    /**
-     * Updates color for inner views based on incognito mode.
-     * @param isIncognito Whether the color is updated for incognito mode.
-     */
-    void updateColor(boolean isIncognito) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            setBackground(
-                    TabUiColorProvider.getCardViewBackgroundDrawable(getContext(), isIncognito));
-        } else {
-            ViewCompat.setBackgroundTintList(
-                    this, TabUiColorProvider.getCardViewTintList(getContext(), isIncognito));
-        }
-
-        mShowIPHDialogButton.setTextAppearance(mShowIPHDialogButton.getContext(),
-                isIncognito ? R.style.TextAppearance_BlueTitle2Incognito
-                            : R.style.TextAppearance_BlueTitle2);
-        mIphIntroduction.setTextAppearance(mIphIntroduction.getContext(),
-                isIncognito ? R.style.TextAppearance_TextMedium_Primary_Light
-                            : R.style.TextAppearance_TextMedium_Primary);
-
-        ApiCompatibilityUtils.setImageTintList(mCloseIPHEntranceButton,
-                TabUiColorProvider.getActionButtonTintList(
-                        mCloseIPHEntranceButton.getContext(), isIncognito));
     }
 
     /**
