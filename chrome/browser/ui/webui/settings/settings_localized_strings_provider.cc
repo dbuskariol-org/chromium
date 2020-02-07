@@ -906,8 +906,6 @@ void AddPeopleStrings(content::WebUIDataSource* html_source, Profile* profile) {
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
-  // Top level people strings:
-  html_source->AddString("syncLearnMoreUrl", chrome::kSyncLearnMoreURL);
   // Add Google Account URL and include UTM parameter to signal the source of
   // the navigation.
   html_source->AddString(
