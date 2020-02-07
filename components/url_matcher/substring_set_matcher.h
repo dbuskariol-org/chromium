@@ -74,23 +74,21 @@ class URL_MATCHER_EXPORT SubstringSetMatcher {
   // It will make sense. Eventually.
   class AhoCorasickNode {
    public:
-    // Key: label of the edge, value: node index in |tree_| of parent class.
-    typedef std::map<char, uint32_t> Edges;
+    // Key: label of the edge, value: pointer to child node.
+    typedef std::map<char, AhoCorasickNode*> Edges;
     typedef std::set<StringPattern::ID> Matches;
-
-    static const uint32_t kNoSuchEdge;  // Represents an invalid node index.
 
     AhoCorasickNode();
     ~AhoCorasickNode();
     AhoCorasickNode(AhoCorasickNode&& other);
     AhoCorasickNode& operator=(AhoCorasickNode&& other);
 
-    uint32_t GetEdge(char c) const;
-    void SetEdge(char c, uint32_t node);
+    AhoCorasickNode* GetEdge(char c) const;
+    void SetEdge(char c, AhoCorasickNode* node);
     const Edges& edges() const { return edges_; }
 
-    uint32_t failure() const { return failure_; }
-    void set_failure(uint32_t failure) { failure_ = failure; }
+    const AhoCorasickNode* failure() const { return failure_; }
+    void SetFailure(const AhoCorasickNode* failure);
 
     void AddMatch(StringPattern::ID id);
     void AddMatches(const Matches& matches);
@@ -102,8 +100,8 @@ class URL_MATCHER_EXPORT SubstringSetMatcher {
     // Outgoing edges of current node.
     Edges edges_;
 
-    // Node index that failure edge leads to.
-    uint32_t failure_;
+    // Node that failure edge leads to. Null when uninitialized.
+    const AhoCorasickNode* failure_ = nullptr;
 
     // Identifiers of matches.
     Matches matches_;
