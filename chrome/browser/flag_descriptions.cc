@@ -2063,6 +2063,12 @@ const char kWalletServiceUseSandboxName[] =
 const char kWalletServiceUseSandboxDescription[] =
     "For developers: use the sandbox service for Google Payments API calls.";
 
+const char kWebBluetoothNewPermissionsBackendName[] =
+    "Use the new permissions backend for Web Bluetooth";
+const char kWebBluetoothNewPermissionsBackendDescription[] =
+    "Enables the new permissions backend for Web Bluetooth. This will enable "
+    "persistent storage of device permissions.";
+
 const char kWebBundlesName[] = "Web Bundles";
 const char kWebBundlesDescription[] =
     "Enables experimental supports for Web Bundles (Bundled HTTP Exchanges) "

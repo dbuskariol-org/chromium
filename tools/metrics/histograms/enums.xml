@@ -37743,6 +37743,7 @@ from previous Chrome versions.
   <int value="-998255750" label="ExperimentalKeyboardLockUI:enabled"/>
   <int value="-996673716" label="enable-web-app-frame"/>
   <int value="-994558985" label="EnableNotificationIndicator:disabled"/>
+  <int value="-994219683" label="WebBluetoothNewPermissionsBackend:disabled"/>
   <int value="-994088375" label="VrBrowsingExperimentalRendering:enabled"/>
   <int value="-994044484" label="TemporaryUnexpireFlagsM76:disabled"/>
   <int value="-993476089" label="AutoScreenBrightness:disabled"/>
@@ -38403,6 +38404,7 @@ from previous Chrome versions.
   <int value="-170986053" label="EnableManualFallbacksFilling:enabled"/>
   <int value="-169745744" label="SyncPseudoUSSPreferences:enabled"/>
   <int value="-167744090" label="EnableHomeLauncher:enabled"/>
+  <int value="-167420098" label="WebBluetoothNewPermissionsBackend:enabled"/>
   <int value="-165756594" label="enable-touch-feedback"/>
   <int value="-165006916" label="EnableNeuralPalmDetectionFilter:enabled"/>
   <int value="-164539906"

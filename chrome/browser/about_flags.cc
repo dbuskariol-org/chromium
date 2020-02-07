@@ -1960,6 +1960,11 @@ const FeatureEntry kFeatureEntries[] = {
          "1",
          autofill::switches::kWalletServiceUseSandbox,
          "0")},
+    {"enable-web-bluetooth-new-permissions-backend",
+     flag_descriptions::kWebBluetoothNewPermissionsBackendName,
+     flag_descriptions::kWebBluetoothNewPermissionsBackendDescription,
+     kOsAndroid | kOsDesktop,
+     FEATURE_VALUE_TYPE(features::kWebBluetoothNewPermissionsBackend)},
 #if defined(USE_AURA) || defined(OS_ANDROID)
     {"overscroll-history-navigation",
      flag_descriptions::kOverscrollHistoryNavigationName,

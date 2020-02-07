@@ -175,6 +175,8 @@ jumbo_static_library("browser") {
     "bluetooth/bluetooth_chooser_context.h",
     "bluetooth/bluetooth_chooser_context_factory.cc",
     "bluetooth/bluetooth_chooser_context_factory.h",
+    "bluetooth/chrome_bluetooth_delegate.cc",
+    "bluetooth/chrome_bluetooth_delegate.h",
     "bookmarks/bookmark_model_factory.cc",
     "bookmarks/bookmark_model_factory.h",
     "bookmarks/chrome_bookmark_client.cc",
