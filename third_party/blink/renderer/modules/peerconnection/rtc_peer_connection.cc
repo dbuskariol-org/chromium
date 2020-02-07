@@ -746,7 +746,7 @@ RTCPeerConnection::RTCPeerConnection(
       blink_webrtc_time_diff_(
           base::TimeTicks::Now() - base::TimeTicks() -
           base::TimeDelta::FromMicroseconds(rtc::TimeMicros())) {
-  Document* document = To<Document>(GetExecutionContext());
+  Document* document = Document::From(GetExecutionContext());
 
   InstanceCounters::IncrementCounter(
       InstanceCounters::kRTCPeerConnectionCounter);
@@ -1126,7 +1126,7 @@ void RTCPeerConnection::MaybeWarnAboutUnsafeSdp(
   if (!complex_sdp_category)
     return;
 
-  Document* document = To<Document>(GetExecutionContext());
+  Document* document = Document::From(GetExecutionContext());
   RTCPeerConnectionController::From(*document).MaybeReportComplexSdp(
       *complex_sdp_category);
 
@@ -1263,7 +1263,7 @@ void RTCPeerConnection::GenerateCertificateCompleted(
 
 bool RTCPeerConnection::HasDocumentMedia() const {
   UserMediaController* user_media_controller = UserMediaController::From(
-      To<Document>(GetExecutionContext())->GetFrame());
+      Document::From(GetExecutionContext())->GetFrame());
   return user_media_controller &&
          user_media_controller->HasRequestedUserMedia();
 }
@@ -3142,7 +3142,7 @@ void RTCPeerConnection::DidAddRemoteDataChannel(
 }
 
 void RTCPeerConnection::DidNoteInterestingUsage(int usage_pattern) {
-  Document* document = To<Document>(GetExecutionContext());
+  Document* document = Document::From(GetExecutionContext());
   ukm::SourceId source_id = document->UkmSourceID();
   ukm::builders::WebRTC_AddressHarvesting(source_id)
       .SetUsagePattern(usage_pattern)
@@ -3358,7 +3358,7 @@ void RTCPeerConnection::CloseInternal() {
     dtls_transport_iter.value->Close();
   }
 
-  Document* document = To<Document>(GetExecutionContext());
+  Document* document = Document::From(GetExecutionContext());
   HostsUsingFeatures::CountAnyWorld(
       *document, HostsUsingFeatures::Feature::kRTCPeerConnectionUsed);
 
