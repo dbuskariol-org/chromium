@@ -6418,6 +6418,7 @@ if (!is_android && !is_fuchsia) {
       "//crypto:platform",
       "//testing/gmock",
       "//testing/gtest",
+      "//testing/perf",
     ]
 
     if (is_mac) {
