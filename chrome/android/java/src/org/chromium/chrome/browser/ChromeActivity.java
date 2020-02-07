@@ -158,6 +158,7 @@ import org.chromium.chrome.browser.vr.VrModuleProvider;
 import org.chromium.chrome.browser.webapps.addtohomescreen.AddToHomescreenCoordinator;
 import org.chromium.chrome.browser.widget.ScrimView;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
+import org.chromium.chrome.modules.image_editor.ImageEditorModuleProvider;
 import org.chromium.components.bookmarks.BookmarkId;
 import org.chromium.components.browser_ui.modaldialog.AppModalPresenter;
 import org.chromium.components.browser_ui.util.ComposedBrowserControlsVisibilityDelegate;
@@ -1351,6 +1352,11 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         if (getSavedInstanceState() == null && getIntent() != null) {
             VrModuleProvider.getDelegate().onNewIntentWithNative(this, getIntent());
         }
+
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.CHROME_SHARE_SCREENSHOT)) {
+            ImageEditorModuleProvider.maybeInstallModuleDeferred();
+        }
+
         super.finishNativeInitialization();
 
         mManualFillingComponent.initialize(getWindowAndroid(),
