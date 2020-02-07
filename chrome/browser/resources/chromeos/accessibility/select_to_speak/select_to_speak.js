@@ -54,10 +54,6 @@ class SelectToSpeak {
     /** @private {number|undefined} */
     this.intervalRef_;
 
-    // TODO(katie): Maybe remove/replace.
-    /** @private {boolean|undefined} */
-    this.trackingMouse_;
-
     chrome.automation.getDesktop(function(desktop) {
       this.desktop_ = desktop;
 
@@ -792,15 +788,6 @@ class SelectToSpeak {
    */
   onStateChanged_(state) {
     if (this.state_ != state) {
-      if (this.state_ == SelectToSpeakState.SELECTING &&
-          state == SelectToSpeakState.INACTIVE && this.trackingMouse_) {
-        // If we are tracking the mouse actively, then we have requested tts
-        // to stop speaking just before mouse tracking began, so we
-        // shouldn't transition into the inactive state now: The call to stop
-        // speaking created an async 'cancel' event from the TTS engine that
-        // is now resulting in an attempt to set the state inactive.
-        return;
-      }
       if (state == SelectToSpeakState.INACTIVE) {
         this.clearFocusRingAndNode_();
       }
