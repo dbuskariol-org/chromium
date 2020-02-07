@@ -117,7 +117,9 @@ bool ConsumeBorderImageComponents(CSSParserTokenRange&,
                                   CSSValue*& repeat,
                                   DefaultFill);
 CSSValue* ConsumeBorderImageRepeat(CSSParserTokenRange&);
-CSSValue* ConsumeBorderImageSlice(CSSParserTokenRange&, DefaultFill);
+CSSValue* ConsumeBorderImageSlice(CSSParserTokenRange&,
+                                  const CSSParserContext&,
+                                  DefaultFill);
 CSSValue* ConsumeBorderImageWidth(CSSParserTokenRange&,
                                   const CSSParserContext&);
 CSSValue* ConsumeBorderImageOutset(CSSParserTokenRange&,
@@ -159,7 +161,7 @@ CSSValue* ConsumeGenericFamily(CSSParserTokenRange&);
 CSSValue* ConsumeFamilyName(CSSParserTokenRange&);
 String ConcatenateFamilyName(CSSParserTokenRange&);
 CSSIdentifierValue* ConsumeFontStretchKeywordOnly(CSSParserTokenRange&);
-CSSValue* ConsumeFontStretch(CSSParserTokenRange&, const CSSParserMode&);
+CSSValue* ConsumeFontStretch(CSSParserTokenRange&, const CSSParserContext&);
 CSSValue* ConsumeFontStyle(CSSParserTokenRange&, const CSSParserMode&);
 CSSValue* ConsumeFontWeight(CSSParserTokenRange&, const CSSParserMode&);
 CSSValue* ConsumeFontFeatureSettings(CSSParserTokenRange&);

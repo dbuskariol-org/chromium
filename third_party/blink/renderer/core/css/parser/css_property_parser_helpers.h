@@ -58,8 +58,11 @@ CSSPrimitiveValue* ConsumeLength(CSSParserTokenRange&,
                                  const CSSParserContext&,
                                  ValueRange,
                                  UnitlessQuirk = UnitlessQuirk::kForbid);
-CSSPrimitiveValue* ConsumePercent(CSSParserTokenRange&, ValueRange);
-CSSPrimitiveValue* ConsumeAlphaValue(CSSParserTokenRange&);
+CSSPrimitiveValue* ConsumePercent(CSSParserTokenRange&,
+                                  const CSSParserContext&,
+                                  ValueRange);
+CSSPrimitiveValue* ConsumeAlphaValue(CSSParserTokenRange&,
+                                     const CSSParserContext&);
 CSSPrimitiveValue* ConsumeLengthOrPercent(
     CSSParserTokenRange&,
     const CSSParserContext&,
@@ -100,7 +103,7 @@ cssvalue::CSSURIValue* ConsumeUrl(CSSParserTokenRange&,
                                   const CSSParserContext*);
 
 CSSValue* ConsumeColor(CSSParserTokenRange&,
-                       CSSParserMode,
+                       const CSSParserContext&,
                        bool accept_quirky_colors = false);
 
 CSSValue* ConsumeLineWidth(CSSParserTokenRange&,
