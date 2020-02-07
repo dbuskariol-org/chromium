@@ -6626,12 +6626,14 @@ crbug.com/1048149 [ Mac ] fast/forms/calendar-picker/month-picker-appearance-ste
 crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-appearance-zoom125.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-top-left-selection-position-after-reopen.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-zoom150-bottom-edge-no-nan.html [ Pass Crash ]
-crbug.com/1048149 [ Mac ] virtual/controls-refresh/month-picker/month-picker-appearance-zoom150.html [ Pass Crash ]
+# This used to be [ Pass Crash ], but as of crbug.com/1050039 it started flaking as well.
+crbug.com/1048149 [ Mac ] virtual/controls-refresh/month-picker/month-picker-appearance-zoom150.html [ Pass Failure Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-key-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-touch-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-type-change-onchange.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/date-picker-choose-default-value-after-set-value.html [ Pass Crash ]
-crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/date-picker-events.html [ Pass Crash ]
+# This used to be [ Pass Crash ], but as of crbug.com/1050039 it started flaking as well.
+crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/date-picker-events.html [ Pass Failure Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-appearance-step.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-appearance.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-choose-default-value-after-set-value.html [ Pass Crash ]
@@ -6648,3 +6650,19 @@ crbug.com/1049607 external/wpt/fetch/api/response/response-error-from-stream.htm
 crbug.com/1049607 virtual/omt-worker-fetch/external/wpt/fetch/api/response/response-error-from-stream.html [ Pass Failure ]
 crbug.com/1049607 [ Linux ] external/wpt/js-self-profiling/idlharness.any.html [ Pass Failure ]
 crbug.com/1049607 [ Linux ] external/wpt/js-self-profiling/idlharness.any.worker.html [ Pass Failure ]
+
+# Sheriff 2020-02-07
+
+crbug.com/1050039 [ Mac ] fast/events/onbeforeunload-focused-iframe.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] fast/forms/calendar-picker/calendar-picker-type-change-onchange.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-appearance.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/datetimelocal-picker-choose-default-value-after-set-value.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/not-site-per-process/http/tests/devtools/oopif/oopif-storage.js [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-01.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-02.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-03.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-04.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-06.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-08.html [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-09.html [ Pass Failure ]
+
