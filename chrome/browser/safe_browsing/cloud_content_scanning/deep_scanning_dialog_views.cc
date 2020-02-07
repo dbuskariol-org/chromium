@@ -79,6 +79,8 @@ SkColor GetBackgroundColor(const views::Widget* widget) {
       ui::NativeTheme::kColorId_DialogBackground);
 }
 
+DeepScanningDialogViews::TestObserver* observer_for_testing = nullptr;
+
 }  // namespace
 
 // View classes used to override OnThemeChanged and update the sub-views to the
@@ -182,6 +184,9 @@ DeepScanningDialogViews::DeepScanningDialogViews(
                         base::BindOnce(&DeepScanningDialogViews::Show,
                                        weak_ptr_factory_.GetWeakPtr()),
                         GetInitialUIDelay());
+
+  if (observer_for_testing)
+    observer_for_testing->ConstructorCalled(this);
 }
 
 base::string16 DeepScanningDialogViews::GetWindowTitle() const {
@@ -236,7 +241,10 @@ void DeepScanningDialogViews::ShowResult(bool success) {
   }
 }
 
-DeepScanningDialogViews::~DeepScanningDialogViews() = default;
+DeepScanningDialogViews::~DeepScanningDialogViews() {
+  if (observer_for_testing)
+    observer_for_testing->DestructorCalled(this);
+}
 
 const views::Widget* DeepScanningDialogViews::GetWidgetImpl() const {
   return contents_view_->GetWidget();
@@ -279,6 +287,14 @@ void DeepScanningDialogViews::UpdateDialog() {
                                          weak_ptr_factory_.GetWeakPtr()),
                           GetSuccessDialogTimeout());
   }
+
+  if (observer_for_testing)
+    observer_for_testing->DialogUpdated(this, is_success());
+
+  // Cancel the dialog as it is updated in tests in the failure dialog case.
+  // This is necessary to terminate tests that end when the dialog is closed.
+  if (observer_for_testing && is_failure())
+    CancelDialog();
 }
 
 void DeepScanningDialogViews::Resize(int height_to_add) {
@@ -420,6 +436,14 @@ void DeepScanningDialogViews::Show() {
   layout->AddPaddingRow(views::GridLayout::kFixedSize, 10);
 
   constrained_window::ShowWebModalDialogViews(this, web_contents_);
+
+  if (observer_for_testing)
+    observer_for_testing->ViewsFirstShown(this, first_shown_timestamp_);
+
+  // Cancel the dialog as it is shown in tests if the failure dialog is shown
+  // immediately.
+  if (observer_for_testing && is_failure())
+    CancelDialog();
 }
 
 std::unique_ptr<views::View> DeepScanningDialogViews::CreateSideIcon() {
@@ -555,6 +579,11 @@ void DeepScanningDialogViews::SetMinimumPendingDialogTimeForTesting(
 void DeepScanningDialogViews::SetSuccessDialogTimeoutForTesting(
     base::TimeDelta delta) {
   success_dialog_timeout_ = delta;
+}
+
+// static
+void DeepScanningDialogViews::SetObserverForTesting(TestObserver* observer) {
+  observer_for_testing = observer;
 }
 
 }  // namespace safe_browsing
