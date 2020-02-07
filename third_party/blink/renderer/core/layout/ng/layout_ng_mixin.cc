@@ -76,7 +76,9 @@ void LayoutNGMixin<Base>::ComputeIntrinsicLogicalWidths(
 
   LayoutUnit available_logical_height =
       LayoutBoxUtils::AvailableLogicalHeight(*this, Base::ContainingBlock());
-  WritingMode writing_mode = node.Style().GetWritingMode();
+
+  const ComputedStyle& style = node.Style();
+  WritingMode writing_mode = style.GetWritingMode();
 
   MinMaxSize sizes = node.ComputeMinMaxSize(
       writing_mode, MinMaxSizeInput(available_logical_height));
@@ -85,7 +87,7 @@ void LayoutNGMixin<Base>::ComputeIntrinsicLogicalWidths(
                                                      /* is_new_fc */ true)
                                 .ToConstraintSpace();
   NGBoxStrut border_padding =
-      ComputeBorders(space, node) + ComputePadding(space, node.Style());
+      ComputeBorders(space, style) + ComputePadding(space, style);
 
   // This function returns content-box plus scrollbar.
   sizes -= border_padding.InlineSum();
@@ -133,7 +135,7 @@ void LayoutNGMixin<Base>::UpdateOutOfFlowBlockLayout() {
       container_node.CreatesNewFormattingContext());
 
   NGFragmentGeometry fragment_geometry;
-  fragment_geometry.border = ComputeBorders(constraint_space, container_node);
+  fragment_geometry.border = ComputeBorders(constraint_space, *container_style);
   fragment_geometry.scrollbar =
       ComputeScrollbars(constraint_space, container_node);
   fragment_geometry.padding =

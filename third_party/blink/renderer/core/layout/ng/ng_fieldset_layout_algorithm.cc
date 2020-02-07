@@ -161,7 +161,7 @@ base::Optional<MinMaxSize> NGFieldsetLayoutAlgorithm::ComputeMinMaxSize(
   MinMaxSize sizes;
 
   // TODO(crbug.com/1011842): Need to consider content-size here.
-  bool apply_size_containment = node_.ShouldApplySizeContainment();
+  bool apply_size_containment = Node().ShouldApplySizeContainment();
 
   // Size containment does not consider the legend for sizing.
   if (!apply_size_containment) {
@@ -174,7 +174,7 @@ base::Optional<MinMaxSize> NGFieldsetLayoutAlgorithm::ComputeMinMaxSize(
   // The fieldset content includes the fieldset padding (and any scrollbars),
   // while the legend is a regular child and doesn't. We may have a fieldset
   // without any content or legend, so add the padding here, on the outside.
-  sizes += ComputePadding(ConstraintSpace(), node_.Style()).InlineSum();
+  sizes += ComputePadding(ConstraintSpace(), Style()).InlineSum();
 
   // Size containment does not consider the content for sizing.
   if (!apply_size_containment) {
@@ -186,7 +186,7 @@ base::Optional<MinMaxSize> NGFieldsetLayoutAlgorithm::ComputeMinMaxSize(
     }
   }
 
-  sizes += ComputeBorders(ConstraintSpace(), node_).InlineSum();
+  sizes += ComputeBorders(ConstraintSpace(), Style()).InlineSum();
   return sizes;
 }
 
