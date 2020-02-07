@@ -13,4 +13,10 @@ modules_idl_files = [
   "midi_port.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "midi_connection_event_init.idl",
+  "midi_message_event_init.idl",
+  "midi_options.idl",
+]
+
 modules_dependency_idl_files = [ "navigator_web_midi.idl" ]

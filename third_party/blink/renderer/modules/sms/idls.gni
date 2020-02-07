@@ -7,4 +7,6 @@ modules_idl_files = [
   "sms_receiver.idl",
 ]
 
+modules_dictionary_idl_files = [ "sms_receiver_options.idl" ]
+
 modules_dependency_idl_files = [ "navigator_sms.idl" ]

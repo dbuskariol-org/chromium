@@ -11,6 +11,14 @@ modules_idl_files = [
   "media_keys.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "media_encrypted_event_init.idl",
+  "media_key_message_event_init.idl",
+  "media_key_system_configuration.idl",
+  "media_key_system_media_capability.idl",
+  "media_keys_policy.idl",
+]
+
 modules_dependency_idl_files = [
   "html_media_element_encrypted_media.idl",
   "media_keys_get_status_for_policy.idl",

@@ -12,4 +12,10 @@ modules_idl_files = [
   "hid_report_item.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "hid_connection_event_init.idl",
+  "hid_device_filter.idl",
+  "hid_device_request_options.idl",
+]
+
 modules_dependency_idl_files = [ "navigator_hid.idl" ]

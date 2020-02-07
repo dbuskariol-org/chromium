@@ -17,4 +17,11 @@ modules_idl_files = [
   "bluetooth_uuid.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "bluetooth_advertising_event_init.idl",
+  "bluetooth_le_scan_filter_init.idl",
+  "bluetooth_le_scan_options.idl",
+  "request_device_options.idl",
+]
+
 modules_dependency_idl_files = [ "navigator_bluetooth.idl" ]

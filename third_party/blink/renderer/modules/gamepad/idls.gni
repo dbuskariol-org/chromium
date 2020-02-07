@@ -12,4 +12,11 @@ modules_idl_files = [
   "gamepad_list.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "gamepad_axis_event_init.idl",
+  "gamepad_button_event_init.idl",
+  "gamepad_effect_parameters.idl",
+  "gamepad_event_init.idl",
+]
+
 modules_dependency_idl_files = [ "navigator_gamepad.idl" ]

@@ -9,6 +9,13 @@ modules_idl_files = [
   "device_orientation_event.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "device_motion_event_acceleration_init.idl",
+  "device_motion_event_init.idl",
+  "device_motion_event_rotation_rate_init.idl",
+  "device_orientation_event_init.idl",
+]
+
 modules_dependency_idl_files = [
   "window_device_motion.idl",
   "window_device_orientation.idl",

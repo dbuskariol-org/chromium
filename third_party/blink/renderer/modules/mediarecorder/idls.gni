@@ -6,3 +6,8 @@ modules_idl_files = [
   "blob_event.idl",
   "media_recorder.idl",
 ]
+
+modules_dictionary_idl_files = [
+  "blob_event_init.idl",
+  "media_recorder_options.idl",
+]

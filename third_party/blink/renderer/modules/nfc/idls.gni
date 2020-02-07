@@ -9,3 +9,11 @@ modules_idl_files = [
   "ndef_reading_event.idl",
   "ndef_writer.idl",
 ]
+
+modules_dictionary_idl_files = [
+  "ndef_message_init.idl",
+  "ndef_record_init.idl",
+  "ndef_reading_event_init.idl",
+  "ndef_scan_options.idl",
+  "ndef_write_options.idl",
+]

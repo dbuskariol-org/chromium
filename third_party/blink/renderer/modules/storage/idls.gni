@@ -7,4 +7,6 @@ modules_idl_files = [
   "storage_event.idl",
 ]
 
+modules_dictionary_idl_files = [ "storage_event_init.idl" ]
+
 modules_dependency_idl_files = [ "window_storage.idl" ]

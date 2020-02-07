@@ -19,6 +19,15 @@ modules_idl_files = [
   "idb_version_change_event.idl",
 ]
 
+modules_dictionary_idl_files = [
+  "idb_database_info.idl",
+  "idb_index_parameters.idl",
+  "idb_object_store_parameters.idl",
+  "idb_observer_init.idl",
+  "idb_transaction_options.idl",
+  "idb_version_change_event_init.idl",
+]
+
 modules_dependency_idl_files = [
   "window_indexed_database.idl",
   "worker_global_scope_indexed_database.idl",

@@ -14,3 +14,9 @@ modules_idl_files = [
   "sensor.idl",
   "sensor_error_event.idl",
 ]
+
+modules_dictionary_idl_files = [
+  "sensor_error_event_init.idl",
+  "sensor_options.idl",
+  "spatial_sensor_options.idl",
+]

@@ -10,3 +10,9 @@ modules_idl_files = [
   "face_detector.idl",
   "text_detector.idl",
 ]
+
+modules_dictionary_idl_files = [
+  "barcode_detector_options.idl",
+  "face_detector_options.idl",
+  "landmark.idl",
+]

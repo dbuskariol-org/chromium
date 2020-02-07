@@ -8,3 +8,9 @@ modules_idl_files = [
   "text_encoder.idl",
   "text_encoder_stream.idl",
 ]
+
+modules_dictionary_idl_files = [
+  "text_decode_options.idl",
+  "text_decoder_options.idl",
+  "text_encoder_encode_into_result.idl",
+]

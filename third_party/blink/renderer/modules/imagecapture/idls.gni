@@ -7,3 +7,9 @@ modules_idl_files = [
   "media_settings_range.idl",
   "photo_capabilities.idl",
 ]
+
+modules_dictionary_idl_files = [
+  "constrain_point_2d_parameters.idl",
+  "photo_settings.idl",
+  "point_2d.idl",
+]
