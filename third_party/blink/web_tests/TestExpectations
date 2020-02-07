@@ -6550,6 +6550,7 @@ crbug.com/1049607 external/wpt/fetch/api/response/response-error-from-stream.htm
 crbug.com/1049607 virtual/omt-worker-fetch/external/wpt/fetch/api/response/response-error-from-stream.html [ Pass Failure ]
 crbug.com/1049607 [ Linux ] external/wpt/js-self-profiling/idlharness.any.html [ Pass Failure ]
 crbug.com/1049607 [ Linux ] external/wpt/js-self-profiling/idlharness.any.worker.html [ Pass Failure ]
+crbug.com/1049607 [ Win ] external/wpt/html/semantics/selectors/pseudo-classes/link.html [ Pass Failure ]
 
 # Sheriff 2020-02-07
 
