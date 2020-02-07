@@ -2860,9 +2860,10 @@ content::MediaObserver* ChromeContentBrowserClient::GetMediaObserver() {
   return MediaCaptureDevicesDispatcher::GetInstance();
 }
 
-content::LockObserver* ChromeContentBrowserClient::GetLockObserver() {
+content::FeatureObserverClient*
+ChromeContentBrowserClient::GetFeatureObserverClient() {
   return ChromeBrowserMainExtraPartsPerformanceManager::GetInstance()
-      ->GetLockObserver();
+      ->GetFeatureObserverClient();
 }
 
 content::PlatformNotificationService*

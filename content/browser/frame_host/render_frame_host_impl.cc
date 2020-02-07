@@ -6603,6 +6603,20 @@ void RenderFrameHostImpl::CreateAudioOutputStreamFactory(
       this, audio_system, media_stream_manager, std::move(receiver));
 }
 
+void RenderFrameHostImpl::GetFeatureObserver(
+    mojo::PendingReceiver<blink::mojom::FeatureObserver> receiver) {
+  if (!feature_observer_) {
+    // Lazy initialize because tests sets the overridden content client
+    // after the RFHI constructor.
+    auto* client = GetContentClient()->browser()->GetFeatureObserverClient();
+    if (!client)
+      return;
+    feature_observer_ = std::make_unique<FeatureObserver>(
+        client, GlobalFrameRoutingId(GetProcess()->GetID(), routing_id_));
+  }
+  feature_observer_->GetFeatureObserver(std::move(receiver));
+}
+
 void RenderFrameHostImpl::BindMediaInterfaceFactoryReceiver(
     mojo::PendingReceiver<media::mojom::InterfaceFactory> receiver) {
   DCHECK(!media_interface_proxy_);
