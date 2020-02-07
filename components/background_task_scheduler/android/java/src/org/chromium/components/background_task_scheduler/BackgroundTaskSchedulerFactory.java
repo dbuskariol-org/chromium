@@ -14,6 +14,8 @@ import org.chromium.components.background_task_scheduler.internal.BackgroundTask
  * A factory for {@link BackgroundTaskScheduler}.
  */
 public final class BackgroundTaskSchedulerFactory {
+    private static BackgroundTaskSchedulerExternalUma sExternalUmaForTesting;
+
     /**
      * @return the current instance of the {@link BackgroundTaskScheduler}. Creates one if none
      * exist.
@@ -39,7 +41,13 @@ public final class BackgroundTaskSchedulerFactory {
      * @return The helper class to report UMA.
      */
     public static BackgroundTaskSchedulerExternalUma getUmaReporter() {
-        return BackgroundTaskSchedulerUma.getInstance();
+        return sExternalUmaForTesting == null ? BackgroundTaskSchedulerUma.getInstance()
+                                              : sExternalUmaForTesting;
+    }
+
+    @VisibleForTesting
+    public static void setUmaReporterForTesting(BackgroundTaskSchedulerExternalUma externalUma) {
+        sExternalUmaForTesting = externalUma;
     }
 
     /**

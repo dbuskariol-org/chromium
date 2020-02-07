@@ -42,12 +42,16 @@ if (is_android) {
       "android/java/src/org/chromium/components/background_task_scheduler/BackgroundTaskFactory.java",
       "android/java/src/org/chromium/components/background_task_scheduler/BackgroundTaskScheduler.java",
       "android/java/src/org/chromium/components/background_task_scheduler/BackgroundTaskSchedulerExternalUma.java",
+      "android/java/src/org/chromium/components/background_task_scheduler/NativeBackgroundTask.java",
+      "android/java/src/org/chromium/components/background_task_scheduler/NativeBackgroundTaskDelegate.java",
       "android/java/src/org/chromium/components/background_task_scheduler/TaskInfo.java",
       "android/java/src/org/chromium/components/background_task_scheduler/TaskParameters.java",
     ]
 
     deps = [
       ":background_task_scheduler_task_ids_java",
+      "//base:base_java",
+      "//content/public/android:content_java",
       "//third_party/android_deps:androidx_annotation_annotation_java",
     ]
   }
