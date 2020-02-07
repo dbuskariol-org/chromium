@@ -35,9 +35,7 @@
 
 namespace blink {
 
-LayoutMenuList::LayoutMenuList(Element* element)
-    : LayoutFlexibleBox(element),
-      options_width_(0) {
+LayoutMenuList::LayoutMenuList(Element* element) : LayoutFlexibleBox(element) {
   DCHECK(IsA<HTMLSelectElement>(element));
 }
 
@@ -59,11 +57,9 @@ LayoutBlock* LayoutMenuList::InnerBlock() const {
   return To<LayoutBlock>(SelectElement()->InnerElement().GetLayoutObject());
 }
 
-void LayoutMenuList::UpdateOptionsWidth() const {
-  if (ShouldApplySizeContainment()) {
-    options_width_ = 0;
-    return;
-  }
+int LayoutMenuList::MeasureOptionsWidth() const {
+  if (ShouldApplySizeContainment())
+    return 0;
 
   float max_option_width = 0;
 
@@ -72,13 +68,13 @@ void LayoutMenuList::UpdateOptionsWidth() const {
     const ComputedStyle* item_style =
         option->GetComputedStyle() ? option->GetComputedStyle() : Style();
     item_style->ApplyTextTransform(&text);
-    // We apply SELECT's style, not OPTION's style because m_optionsWidth is
+    // We apply SELECT's style, not OPTION's style because max_option_width is
     // used to determine intrinsic width of the menulist box.
     TextRun text_run = ConstructTextRun(StyleRef().GetFont(), text, *Style());
     max_option_width =
         std::max(max_option_width, StyleRef().GetFont().Width(text_run));
   }
-  options_width_ = static_cast<int>(ceilf(max_option_width));
+  return static_cast<int>(ceilf(max_option_width));
 }
 
 PhysicalRect LayoutMenuList::ControlClipRect(
@@ -102,11 +98,11 @@ PhysicalRect LayoutMenuList::ControlClipRect(
 void LayoutMenuList::ComputeIntrinsicLogicalWidths(
     LayoutUnit& min_logical_width,
     LayoutUnit& max_logical_width) const {
-  UpdateOptionsWidth();
+  int options_width = MeasureOptionsWidth();
 
   LayoutBlock* block = InnerBlock();
   max_logical_width =
-      std::max(options_width_,
+      std::max(options_width,
                LayoutTheme::GetTheme().MinimumMenuListSize(StyleRef())) +
       block->PaddingLeft() + block->PaddingRight();
   if (!StyleRef().Width().IsPercentOrCalc())
