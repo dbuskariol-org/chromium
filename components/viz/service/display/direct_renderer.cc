@@ -318,8 +318,16 @@ void DirectRenderer::DrawFrame(RenderPassList* render_passes_in_draw_order,
         reshape_device_color_space_, reshape_has_alpha_, reshape_use_stencil_);
     if (overlay_processor_)
       overlay_processor_->SetViewportSize(reshape_surface_size_);
+#if defined(OS_MACOSX)
+    // For Mac, all render passes will be promoted to CALayer, the redraw full
+    // frame is for the main surface only.
+    // TODO(penghuang): verify this logic with SkiaRenderer.
+    if (!output_surface_->capabilities().supports_surfaceless)
+      needs_full_frame_redraw = true;
+#else
     // The entire surface has to be redrawn if reshape is requested.
     needs_full_frame_redraw = true;
+#endif
   }
 
   BeginDrawingFrame();
