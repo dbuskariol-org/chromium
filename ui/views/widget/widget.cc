@@ -1658,8 +1658,9 @@ void Widget::UnlockPaintAsActive() {
 void Widget::UpdatePaintAsActiveState(bool paint_as_active) {
   if (non_client_view_)
     non_client_view_->frame_view()->PaintAsActiveChanged(paint_as_active);
-  if (widget_delegate())
-    widget_delegate()->OnPaintAsActiveChanged(paint_as_active);
+
+  for (WidgetObserver& observer : observers_)
+    observer.OnWidgetPaintAsActiveChanged(this, paint_as_active);
 }
 
 void Widget::ClearFocusFromWidget() {
