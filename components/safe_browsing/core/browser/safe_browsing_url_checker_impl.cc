@@ -562,8 +562,8 @@ void SafeBrowsingUrlCheckerImpl::OnRTLookupResponse(
   if (response && (response->threat_info_size() > 0)) {
     base::PostTask(FROM_HERE, CreateTaskTraits(ThreadID::UI),
                    base::BindOnce(&VerdictCacheManager::CacheRealTimeUrlVerdict,
-                                  cache_manager_on_ui_, url, *response,
-                                  base::Time::Now()));
+                                  cache_manager_on_ui_, url, *response, base::Time::Now(),
+                                  /* store_old_cache */ false));
 
     // TODO(crbug.com/1033692): Only take the first threat info into account
     // because threat infos are returned in decreasing order of severity.
