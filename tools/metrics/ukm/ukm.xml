@@ -7001,6 +7001,22 @@ be describing additional metrics about the same event.
       navigation for this page load was initiated.
     </summary>
   </metric>
+  <metric name="Net.ImageBytes">
+    <summary>
+      The total number of bytes loaded from the network for images on the page.
+      This is rounded down to the nearest exponential bucket (with a bucket
+      spacing factor of 1.3). On mobile this only records bytes up until the
+      page/app is backgrounded.
+    </summary>
+  </metric>
+  <metric name="Net.ImageSubframeBytes">
+    <summary>
+      The total number of bytes loaded from the network for images on the
+      subframes of the page. This is rounded down to the nearest exponential
+      bucket (with a bucket spacing factor of 1.3). On mobile this only records
+      bytes up until the page/app is backgrounded.
+    </summary>
+  </metric>
   <metric name="Net.JavaScriptBytes">
     <summary>
       The sum of decoded body lengths of all JavaScript resouces that completed
@@ -7015,6 +7031,14 @@ be describing additional metrics about the same event.
       loading on the page. This is rounded down to the nearest exponential
       bucket (with a bucket spacing factor of 10). On mobile this only records
       bytes up until the page/app is backgrounded.
+    </summary>
+  </metric>
+  <metric name="Net.MediaBytes">
+    <summary>
+      The total number of bytes loaded from the network for media (video, audio)
+      on the page. This is rounded down to the nearest exponential bucket (with
+      a bucket spacing factor of 1.3). On mobile this only records bytes up
+      until the page/app is backgrounded.
     </summary>
   </metric>
   <metric name="Net.NetworkBytes">
