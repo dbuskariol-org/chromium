@@ -533,6 +533,10 @@ class ASH_EXPORT ShelfLayoutManager
   void MaybeCancelWindowDrag();
   bool IsWindowDragInProgress() const;
 
+  // Updates the visibility state because of the change on the system tray.
+  void UpdateVisibilityStateForSystemTrayChange(
+      message_center::Visibility visibility);
+
   // True when inside UpdateBoundsAndOpacity() method. Used to prevent calling
   // UpdateBoundsAndOpacity() again from SetChildBounds().
   bool updating_bounds_ = false;
@@ -682,6 +686,10 @@ class ASH_EXPORT ShelfLayoutManager
 
   // Tracks whether the shelf is currently dimmed for inactivity.
   bool dimmed_for_inactivity_ = false;
+
+  // Callback to update the shelf's state when the visibility of system tray
+  // changes.
+  base::CancelableOnceClosure visibility_update_for_tray_callback_;
 
   // Records the presentation time for hotseat dragging.
   std::unique_ptr<PresentationTimeRecorder> hotseat_presentation_time_recorder_;
