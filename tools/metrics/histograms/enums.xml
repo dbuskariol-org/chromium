@@ -7362,6 +7362,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Revoked"/>
 </enum>
 
+<enum name="BooleanRisk">
+  <int value="0" label="Safe"/>
+  <int value="1" label="Risky"/>
+</enum>
+
 <enum name="BooleanSafeMode">
   <int value="0" label="Regular mode"/>
   <int value="1" label="Safe mode"/>
