@@ -82,7 +82,7 @@ class AssistantCoordinator {
      */
     public void showFeedback(String debugContext) {
         HelpAndFeedback.getInstance().showFeedback(mActivity, Profile.getLastUsedProfile(),
-                mActivity.getActivityTab().getUrl(), FEEDBACK_CATEGORY_TAG,
+                mActivity.getActivityTab().getUrlString(), FEEDBACK_CATEGORY_TAG,
                 FeedbackContext.buildContextString(mActivity, debugContext, 4));
     }
 }

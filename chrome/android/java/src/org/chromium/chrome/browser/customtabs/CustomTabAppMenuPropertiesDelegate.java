@@ -170,7 +170,7 @@ public class CustomTabAppMenuPropertiesDelegate extends AppMenuPropertiesDelegat
                 addToHomeScreenVisible = false;
             }
 
-            String url = currentTab.getUrl();
+            String url = currentTab.getUrlString();
             boolean isChromeScheme = url.startsWith(UrlConstants.CHROME_URL_PREFIX)
                     || url.startsWith(UrlConstants.CHROME_NATIVE_URL_PREFIX);
             if (isChromeScheme || TextUtils.isEmpty(url)) {

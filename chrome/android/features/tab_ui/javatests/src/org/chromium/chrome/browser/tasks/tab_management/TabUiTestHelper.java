@@ -407,7 +407,7 @@ public class TabUiTestHelper {
 
     private static void verifyAllTabsHaveUrl(TabModel tabModel, String url) {
         for (int i = 0; i < tabModel.getCount(); i++) {
-            assertEquals(url, tabModel.getTabAt(i).getUrl());
+            assertEquals(url, tabModel.getTabAt(i).getUrlString());
         }
     }
 
