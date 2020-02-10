@@ -284,6 +284,11 @@ const base::Feature kDisallowUnsafeHttpDownloads{
     "DisallowUnsafeHttpDownloads", base::FEATURE_DISABLED_BY_DEFAULT};
 const char kDisallowUnsafeHttpDownloadsParamName[] = "MimeTypeList";
 
+// Enables Chrome to query HTTPSSVC records from DNS over DoH. Returned HTTPSSVC
+// records may cause us to upgrade the URL to HTTPS and/or to attempt QUIC.
+const base::Feature kDnsHttpssvc{"DnsHttpssvc",
+                                 base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Enable DNS over HTTPS (DoH).
 const base::Feature kDnsOverHttps{"DnsOverHttps",
                                   base::FEATURE_DISABLED_BY_DEFAULT};

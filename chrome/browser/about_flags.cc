@@ -4587,6 +4587,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kDecodeLossyWebPImagesToYUVDescription, kOsAll,
      FEATURE_VALUE_TYPE(blink::features::kDecodeLossyWebPImagesToYUV)},
 
+    {"dns-httpssvc", flag_descriptions::kDnsHttpssvcName,
+     flag_descriptions::kDnsHttpssvcDescription,
+     kOsMac | kOsWin | kOsCrOS | kOsAndroid,
+     FEATURE_VALUE_TYPE(features::kDnsHttpssvc)},
+
     {"dns-over-https", flag_descriptions::kDnsOverHttpsName,
      flag_descriptions::kDnsOverHttpsDescription,
      kOsMac | kOsWin | kOsCrOS | kOsAndroid,
