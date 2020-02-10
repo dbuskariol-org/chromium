@@ -51192,6 +51192,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="5" label="Unthrottled by Omnibox icon"/>
 </enum>
 
+<enum name="PluginVmDlcUseResult">
+  <int value="0" label="PluginVM DLC installed successfully."/>
+  <int value="1" label="PluginVM DLC not supported."/>
+  <int value="2" label="PluginVM DLC internal error within dlcservice."/>
+</enum>
+
 <enum name="PluginVmLaunchResult">
   <int value="0" label="Success"/>
   <int value="1" label="Error"/>
