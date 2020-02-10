@@ -33,7 +33,6 @@
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/paint_vector_icon.h"
 #include "ui/views/bubble/bubble_frame_view.h"
-#include "ui/views/controls/button/checkbox.h"
 #include "ui/views/controls/button/image_button.h"
 #include "ui/views/controls/button/md_text_button.h"
 #include "ui/views/controls/combobox/combobox.h"
@@ -270,14 +269,18 @@ std::unique_ptr<views::EditableCombobox> CreatePasswordEditableCombobox(
 }
 
 std::unique_ptr<views::Combobox> CreateDestinationCombobox(
-    const std::string& account) {
+    const std::string& account,
+    bool is_using_account_store) {
   std::vector<base::string16> destinations;
   destinations.push_back(base::ASCIIToUTF16(account));
   // TODO(crbug.com/1044038): Use an internationalized string instead.
   destinations.push_back(base::ASCIIToUTF16("Local"));
   auto combobox = std::make_unique<views::Combobox>(
       std::make_unique<ui::SimpleComboboxModel>(std::move(destinations)));
-  combobox->SetSelectedRow(0);
+  if (is_using_account_store)
+    combobox->SetSelectedRow(0);
+  else
+    combobox->SetSelectedRow(1);
 
   // TODO(crbug.com/1044038): SetAccessibleName of the combobox.
   return combobox;
@@ -297,21 +300,6 @@ std::unique_ptr<views::View> CreateHeaderImage(int image_id) {
     image_view->SetImageSize(preferred_size);
   }
   return image_view;
-}
-
-views::Checkbox* AppendAccountCheckboxRow(views::GridLayout* layout,
-                                          bool uses_account_store,
-                                          int height,
-                                          views::ButtonListener* listener) {
-  auto account_store_checkbox = std::make_unique<views::Checkbox>(
-      base::ASCIIToUTF16("Store passwords in account store?"), listener);
-  account_store_checkbox->SetChecked(uses_account_store);
-  BuildColumnSet(layout, DOUBLE_VIEW_COLUMN_SET_PASSWORD);
-  layout->StartRow(views::GridLayout::kFixedSize,
-                   DOUBLE_VIEW_COLUMN_SET_PASSWORD);
-  return layout->AddView(std::move(account_store_checkbox), 1, 1,
-                         views::GridLayout::FILL, views::GridLayout::FILL, 0,
-                         height);
 }
 
 std::string GetSignedInEmail(Profile* profile) {
@@ -368,7 +356,8 @@ PasswordSaveUpdateWithAccountStoreView::PasswordSaveUpdateWithAccountStoreView(
     std::unique_ptr<views::Combobox> destination_dropdown;
     if (controller_.ShouldShowPasswordStorePicker()) {
       destination_dropdown =
-          CreateDestinationCombobox(GetSignedInEmail(controller_.GetProfile()));
+          CreateDestinationCombobox(GetSignedInEmail(controller_.GetProfile()),
+                                    controller_.IsUsingAccountStore());
       destination_dropdown->set_listener(this);
     }
     std::unique_ptr<views::EditableCombobox> username_dropdown =
@@ -391,10 +380,6 @@ PasswordSaveUpdateWithAccountStoreView::PasswordSaveUpdateWithAccountStoreView(
     BuildCredentialRows(
         layout, std::move(destination_dropdown), std::move(username_dropdown),
         std::move(password_dropdown), std::move(password_view_button));
-
-    account_store_checkbox_ = AppendAccountCheckboxRow(
-        layout, controller_.IsUsingAccountStore(),
-        password_dropdown_->GetPreferredSize().height(), this);
   }
 
   DialogDelegate::SetFootnoteView(CreateFooterView());
@@ -438,16 +423,15 @@ void PasswordSaveUpdateWithAccountStoreView::ButtonPressed(
     views::Button* sender,
     const ui::Event& event) {
   DCHECK(sender);
-  if (sender == account_store_checkbox_) {
-    controller_.OnToggleAccountStore(account_store_checkbox_->GetChecked());
-    return;
-  }
   DCHECK(sender == password_view_button_);
   TogglePasswordVisibility();
 }
 
 void PasswordSaveUpdateWithAccountStoreView::OnPerformAction(
-    views::Combobox* combobox) {}
+    views::Combobox* combobox) {
+  controller_.OnToggleAccountStore(
+      /*is_account_store_selected=*/combobox->GetSelectedIndex() == 0);
+}
 
 void PasswordSaveUpdateWithAccountStoreView::OnContentChanged(
     views::EditableCombobox* editable_combobox) {
@@ -478,9 +462,9 @@ views::View* PasswordSaveUpdateWithAccountStoreView::GetInitiallyFocusedView() {
   View* initial_view = PasswordBubbleViewBase::GetInitiallyFocusedView();
   // |initial_view| will normally be the 'Save' button, but in case it's not
   // focusable, we return nullptr so the Widget doesn't give focus to the next
-  // focusable View, which would be |username_dropdown_|, and which would bring
-  // up the menu without a user interaction. We only allow initial focus on
-  // |username_dropdown_| above, when the text is empty.
+  // focusable View, which would be |username_dropdown_|, and which would
+  // bring up the menu without a user interaction. We only allow initial focus
+  // on |username_dropdown_| above, when the text is empty.
   return (initial_view && initial_view->IsFocusable()) ? initial_view : nullptr;
 }
 

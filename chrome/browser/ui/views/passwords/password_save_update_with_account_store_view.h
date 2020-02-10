@@ -16,7 +16,6 @@ namespace views {
 class Combobox;
 class EditableCombobox;
 class ToggleImageButton;
-class Checkbox;
 }  // namespace views
 
 // A view offering the user the ability to save or update credentials (depending
@@ -85,8 +84,6 @@ class PasswordSaveUpdateWithAccountStoreView
 
   // The view for the password value.
   views::EditableCombobox* password_dropdown_;
-
-  views::Checkbox* account_store_checkbox_ = nullptr;
 
   bool are_passwords_revealed_;
 };

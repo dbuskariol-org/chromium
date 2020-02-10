@@ -238,9 +238,9 @@ bool SaveUpdateWithAccountStoreBubbleController::ShouldShowPasswordStorePicker()
 }
 
 void SaveUpdateWithAccountStoreBubbleController::OnToggleAccountStore(
-    bool is_checked) {
+    bool is_account_store_selected) {
   delegate_->GetPasswordFeatureManager()->SetDefaultPasswordStore(
-      is_checked ? Store::kAccountStore : Store::kProfileStore);
+      is_account_store_selected ? Store::kAccountStore : Store::kProfileStore);
 }
 
 bool SaveUpdateWithAccountStoreBubbleController::IsUsingAccountStore() {

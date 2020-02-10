@@ -65,8 +65,8 @@ class SaveUpdateWithAccountStoreBubbleController
   // or the profile store).
   bool ShouldShowPasswordStorePicker() const;
 
-  // Called by the view when the account store checkbox is toggled.
-  void OnToggleAccountStore(bool is_checked);
+  // Called by the view when the selected destination store has changed.
+  void OnToggleAccountStore(bool is_account_store_selected);
 
   // Returns true iff the password account store is used.
   bool IsUsingAccountStore();
