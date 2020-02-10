@@ -8,10 +8,12 @@
 #include "chrome/browser/ui/passwords/bubble_controllers/save_update_with_account_store_bubble_controller.h"
 #include "chrome/browser/ui/views/passwords/password_bubble_view_base.h"
 #include "ui/views/controls/button/button.h"
+#include "ui/views/controls/combobox/combobox_listener.h"
 #include "ui/views/controls/editable_combobox/editable_combobox_listener.h"
 #include "ui/views/view.h"
 
 namespace views {
+class Combobox;
 class EditableCombobox;
 class ToggleImageButton;
 class Checkbox;
@@ -25,7 +27,8 @@ class Checkbox;
 class PasswordSaveUpdateWithAccountStoreView
     : public PasswordBubbleViewBase,
       public views::ButtonListener,
-      public views::EditableComboboxListener {
+      public views::EditableComboboxListener,
+      public views::ComboboxListener {
  public:
   PasswordSaveUpdateWithAccountStoreView(content::WebContents* web_contents,
                                          views::View* anchor_view,
@@ -40,6 +43,10 @@ class PasswordSaveUpdateWithAccountStoreView
 
   // views::ButtonListener:
   void ButtonPressed(views::Button* sender, const ui::Event& event) override;
+
+  // views::ComboboxListener:
+  // User for the destination combobox.
+  void OnPerformAction(views::Combobox* combobox) override;
 
   // views::EditableComboboxListener:
   // Used for both the username and password editable comboboxes.
@@ -70,6 +77,8 @@ class PasswordSaveUpdateWithAccountStoreView
   // True iff it is an update password bubble on creation. False iff it is a
   // save bubble.
   const bool is_update_bubble_;
+
+  views::Combobox* destination_dropdown_;
 
   views::EditableCombobox* username_dropdown_;
   views::ToggleImageButton* password_view_button_;
