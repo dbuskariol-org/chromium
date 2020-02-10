@@ -6504,6 +6504,9 @@ crbug.com/1047760 [ Win ] http/tests/devtools/screen-orientation-override.js [ P
 crbug.com/1049689 external/wpt/workers/modules/shared-worker-import-referrer.html [ Pass Timeout ]
 crbug.com/1049689 virtual/omt-worker-fetch/external/wpt/workers/modules/shared-worker-import-referrer.html [ Pass Timeout ]
 
+# Sheriff 2020-02-10
+crbug.com/1050306 [ Fuchsia ] virtual/gpu/fast/canvas/canvas-filter-frameless-document.html [ Pass Failure ]
+
 # Swiftshader issue.
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-innerwidth.html [ Crash Timeout ]
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-screeny.html [ Crash Timeout ]
