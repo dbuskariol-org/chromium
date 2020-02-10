@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_WEB_PACKAGE_SIGNED_EXCHANGE_REQUEST_MATCHER_H_
-#define THIRD_PARTY_BLINK_PUBLIC_COMMON_WEB_PACKAGE_SIGNED_EXCHANGE_REQUEST_MATCHER_H_
+#ifndef THIRD_PARTY_BLINK_PUBLIC_COMMON_WEB_PACKAGE_WEB_PACKAGE_REQUEST_MATCHER_H_
+#define THIRD_PARTY_BLINK_PUBLIC_COMMON_WEB_PACKAGE_WEB_PACKAGE_REQUEST_MATCHER_H_
 
 #include <map>
 #include <string>
@@ -17,9 +17,9 @@
 
 namespace blink {
 
-// SignedExchangeRequestMatcher implements the Request Matching algorithm [1].
+// WebPackageRequestMatcher implements the Request Matching algorithm [1].
 // [1] https://wicg.github.io/webpackage/loading.html#request-matching
-class BLINK_COMMON_EXPORT SignedExchangeRequestMatcher {
+class BLINK_COMMON_EXPORT WebPackageRequestMatcher {
  public:
   // Keys must be lower-cased.
   using HeaderMap = std::map<std::string, std::string>;
@@ -28,8 +28,8 @@ class BLINK_COMMON_EXPORT SignedExchangeRequestMatcher {
   // it does not have an Accept-Language header, languages in |accept_langs|
   // are used for matching.
   // |accept_langs| is a comma separated ordered list of language codes.
-  SignedExchangeRequestMatcher(const net::HttpRequestHeaders& request_headers,
-                               const std::string& accept_langs);
+  WebPackageRequestMatcher(const net::HttpRequestHeaders& request_headers,
+                           const std::string& accept_langs);
   bool MatchRequest(const HeaderMap& response_headers) const;
 
   // Returns the iterator of |variant_keys_list| which contains the best
@@ -66,14 +66,13 @@ class BLINK_COMMON_EXPORT SignedExchangeRequestMatcher {
       const net::HttpRequestHeaders& request_headers,
       const std::string& variants);
 
-  FRIEND_TEST_ALL_PREFIXES(SignedExchangeRequestMatcherTest, MatchRequest);
-  FRIEND_TEST_ALL_PREFIXES(SignedExchangeRequestMatcherTest, CacheBehavior);
-  FRIEND_TEST_ALL_PREFIXES(SignedExchangeRequestMatcherTest,
+  FRIEND_TEST_ALL_PREFIXES(WebPackageRequestMatcherTest, MatchRequest);
+  FRIEND_TEST_ALL_PREFIXES(WebPackageRequestMatcherTest, CacheBehavior);
+  FRIEND_TEST_ALL_PREFIXES(WebPackageRequestMatcherTest,
                            FindBestMatchingVariantKey);
-  FRIEND_TEST_ALL_PREFIXES(SignedExchangeRequestMatcherTest,
-                           FindBestMatchingIndex);
+  FRIEND_TEST_ALL_PREFIXES(WebPackageRequestMatcherTest, FindBestMatchingIndex);
 };
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_WEB_PACKAGE_SIGNED_EXCHANGE_REQUEST_MATCHER_H_
+#endif  // THIRD_PARTY_BLINK_PUBLIC_COMMON_WEB_PACKAGE_WEB_PACKAGE_REQUEST_MATCHER_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/public/common/web_package/signed_exchange_request_matcher.h"
+#include "third_party/blink/public/common/web_package/web_package_request_matcher.h"
 
 #include <algorithm>
 #include <limits>
@@ -382,7 +382,7 @@ base::Optional<size_t> GetPossibleKeysIndex(
 
 }  // namespace
 
-SignedExchangeRequestMatcher::SignedExchangeRequestMatcher(
+WebPackageRequestMatcher::WebPackageRequestMatcher(
     const net::HttpRequestHeaders& request_headers,
     const std::string& accept_langs)
     : request_headers_(request_headers) {
@@ -397,20 +397,20 @@ SignedExchangeRequestMatcher::SignedExchangeRequestMatcher(
                              "mi-sha256-03");
 }
 
-bool SignedExchangeRequestMatcher::MatchRequest(
+bool WebPackageRequestMatcher::MatchRequest(
     const HeaderMap& response_headers) const {
   return MatchRequest(request_headers_, response_headers);
 }
 
 std::vector<std::string>::const_iterator
-SignedExchangeRequestMatcher::FindBestMatchingVariantKey(
+WebPackageRequestMatcher::FindBestMatchingVariantKey(
     const std::string& variants,
     const std::vector<std::string>& variant_key_list) const {
   return FindBestMatchingVariantKey(request_headers_, variants,
                                     variant_key_list);
 }
 
-base::Optional<size_t> SignedExchangeRequestMatcher::FindBestMatchingIndex(
+base::Optional<size_t> WebPackageRequestMatcher::FindBestMatchingIndex(
     const std::string& variants) const {
   return FindBestMatchingIndex(request_headers_, variants);
 }
@@ -418,8 +418,7 @@ base::Optional<size_t> SignedExchangeRequestMatcher::FindBestMatchingIndex(
 // Implements "Cache Behaviour" [1] when "stored-responses" is a singleton list
 // containing a response that has "Variants" header whose value is |variants|.
 // [1] https://httpwg.org/http-extensions/draft-ietf-httpbis-variants.html#cache
-std::vector<std::vector<std::string>>
-SignedExchangeRequestMatcher::CacheBehavior(
+std::vector<std::vector<std::string>> WebPackageRequestMatcher::CacheBehavior(
     const std::vector<std::pair<std::string, std::vector<std::string>>>&
         variants,
     const net::HttpRequestHeaders& request_headers) {
@@ -486,7 +485,7 @@ SignedExchangeRequestMatcher::CacheBehavior(
 
 // Implements step 3- of
 // https://wicg.github.io/webpackage/loading.html#request-matching
-bool SignedExchangeRequestMatcher::MatchRequest(
+bool WebPackageRequestMatcher::MatchRequest(
     const net::HttpRequestHeaders& request_headers,
     const HeaderMap& response_headers) {
   auto variants_found =
@@ -567,7 +566,7 @@ bool SignedExchangeRequestMatcher::MatchRequest(
 
 // static
 std::vector<std::string>::const_iterator
-SignedExchangeRequestMatcher::FindBestMatchingVariantKey(
+WebPackageRequestMatcher::FindBestMatchingVariantKey(
     const net::HttpRequestHeaders& request_headers,
     const std::string& variants,
     const std::vector<std::string>& variant_keys_list) {
@@ -614,7 +613,7 @@ SignedExchangeRequestMatcher::FindBestMatchingVariantKey(
 }
 
 // static
-base::Optional<size_t> SignedExchangeRequestMatcher::FindBestMatchingIndex(
+base::Optional<size_t> WebPackageRequestMatcher::FindBestMatchingIndex(
     const net::HttpRequestHeaders& request_headers,
     const std::string& variants) {
   auto parsed_variants = ParseVariants(variants);

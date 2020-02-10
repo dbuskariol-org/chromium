@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/public/common/web_package/signed_exchange_request_matcher.h"
+#include "third_party/blink/public/common/web_package/web_package_request_matcher.h"
 
 #include "net/http/http_request_headers.h"
 #include "net/http/http_util.h"
@@ -13,7 +13,7 @@ namespace blink {
 constexpr char kVariantsHeader[] = "variants-04";
 constexpr char kVariantKeyHeader[] = "variant-key-04";
 
-TEST(SignedExchangeRequestMatcherTest, CacheBehavior) {
+TEST(WebPackageRequestMatcherTest, CacheBehavior) {
   const struct TestCase {
     const char* name;
     std::map<std::string, std::string> req_headers;
@@ -134,17 +134,17 @@ TEST(SignedExchangeRequestMatcherTest, CacheBehavior) {
     net::HttpRequestHeaders request_headers;
     for (auto it = c.req_headers.begin(); it != c.req_headers.end(); ++it)
       request_headers.SetHeader(it->first, it->second);
-    EXPECT_EQ(c.expected, SignedExchangeRequestMatcher::CacheBehavior(
+    EXPECT_EQ(c.expected, WebPackageRequestMatcher::CacheBehavior(
                               c.variants, request_headers))
         << c.name;
   }
 }
 
-TEST(SignedExchangeRequestMatcherTest, MatchRequest) {
+TEST(WebPackageRequestMatcherTest, MatchRequest) {
   const struct TestCase {
     const char* name;
     std::map<std::string, std::string> req_headers;
-    SignedExchangeRequestMatcher::HeaderMap res_headers;
+    WebPackageRequestMatcher::HeaderMap res_headers;
     bool should_match;
   } cases[] = {
       {"no variants and variant-key", {{"accept", "text/html"}}, {}, true},
@@ -219,13 +219,13 @@ TEST(SignedExchangeRequestMatcherTest, MatchRequest) {
     net::HttpRequestHeaders request_headers;
     for (auto it = c.req_headers.begin(); it != c.req_headers.end(); ++it)
       request_headers.SetHeader(it->first, it->second);
-    EXPECT_EQ(c.should_match, SignedExchangeRequestMatcher::MatchRequest(
+    EXPECT_EQ(c.should_match, WebPackageRequestMatcher::MatchRequest(
                                   request_headers, c.res_headers))
         << c.name;
   }
 }
 
-TEST(SignedExchangeRequestMatcherTest, FindBestMatchingVariantKey) {
+TEST(WebPackageRequestMatcherTest, FindBestMatchingVariantKey) {
   const struct TestCase {
     const char* name;
     std::map<std::string, std::string> req_headers;
@@ -299,7 +299,7 @@ TEST(SignedExchangeRequestMatcherTest, FindBestMatchingVariantKey) {
     for (auto it = c.req_headers.begin(); it != c.req_headers.end(); ++it)
       request_headers.SetHeader(it->first, it->second);
     auto variant_key_list_it =
-        SignedExchangeRequestMatcher::FindBestMatchingVariantKey(
+        WebPackageRequestMatcher::FindBestMatchingVariantKey(
             request_headers, c.variants, c.variant_key_list);
     if (variant_key_list_it == c.variant_key_list.end()) {
       EXPECT_EQ(c.expected_result, base::nullopt) << c.name;
@@ -309,7 +309,7 @@ TEST(SignedExchangeRequestMatcherTest, FindBestMatchingVariantKey) {
   }
 }
 
-TEST(SignedExchangeRequestMatcherTest, FindBestMatchingIndex) {
+TEST(WebPackageRequestMatcherTest, FindBestMatchingIndex) {
   const struct TestCase {
     const char* name;
     std::string variants;
@@ -347,8 +347,8 @@ TEST(SignedExchangeRequestMatcherTest, FindBestMatchingIndex) {
     for (auto it = c.req_headers.begin(); it != c.req_headers.end(); ++it)
       request_headers.SetHeader(it->first, it->second);
     base::Optional<size_t> result =
-        SignedExchangeRequestMatcher::FindBestMatchingIndex(request_headers,
-                                                            c.variants);
+        WebPackageRequestMatcher::FindBestMatchingIndex(request_headers,
+                                                        c.variants);
     EXPECT_EQ(c.expected_result, result) << c.name;
   }
 }
