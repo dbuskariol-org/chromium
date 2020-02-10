@@ -96,6 +96,7 @@ void BuildColumnSet(views::GridLayout* layout,
 }
 
 // Builds a credential row, adds the given elements to the layout.
+// |destination_field| is nullptr if the destination field shouldn't be shown.
 // |password_view_button| is an optional field. If it is a nullptr, a
 // DOUBLE_VIEW_COLUMN_SET_PASSWORD will be used for password row instead of
 // TRIPLE_VIEW_COLUMN_SET.
@@ -106,11 +107,18 @@ void BuildCredentialRows(
     std::unique_ptr<views::View> password_field,
     std::unique_ptr<views::ToggleImageButton> password_view_button) {
   // TODO(crbug.com/1044038): Use an internationalized string instead.
-  std::unique_ptr<views::Label> destination_label(new views::Label(
-      base::ASCIIToUTF16("Destination"), views::style::CONTEXT_LABEL,
-      views::style::STYLE_PRIMARY));
-  destination_label->SetHorizontalAlignment(
-      gfx::HorizontalAlignment::ALIGN_LEFT);
+  int destination_label_width = 0;
+  int destination_field_height = 0;
+  std::unique_ptr<views::Label> destination_label;
+  if (destination_field) {
+    destination_label = std::make_unique<views::Label>(
+        base::ASCIIToUTF16("Destination"), views::style::CONTEXT_LABEL,
+        views::style::STYLE_PRIMARY);
+    destination_label->SetHorizontalAlignment(
+        gfx::HorizontalAlignment::ALIGN_LEFT);
+    destination_label_width = destination_label->GetPreferredSize().width();
+    destination_field_height = destination_field->GetPreferredSize().height();
+  }
 
   std::unique_ptr<views::Label> username_label(new views::Label(
       l10n_util::GetStringUTF16(IDS_PASSWORD_MANAGER_USERNAME_LABEL),
@@ -122,26 +130,28 @@ void BuildCredentialRows(
       views::style::CONTEXT_LABEL, views::style::STYLE_PRIMARY));
   password_label->SetHorizontalAlignment(gfx::HorizontalAlignment::ALIGN_LEFT);
 
-  int labels_width = std::max({destination_label->GetPreferredSize().width(),
+  int labels_width = std::max({destination_label_width,
                                username_label->GetPreferredSize().width(),
                                password_label->GetPreferredSize().width()});
-  int fields_height = std::max({destination_field->GetPreferredSize().height(),
+  int fields_height = std::max({destination_field_height,
                                 username_field->GetPreferredSize().height(),
                                 password_field->GetPreferredSize().height()});
 
   // Destination row.
-  BuildColumnSet(layout, DOUBLE_VIEW_COLUMN_SET_DESTINATION);
-  layout->StartRow(views::GridLayout::kFixedSize,
-                   DOUBLE_VIEW_COLUMN_SET_DESTINATION);
-  layout->AddView(std::move(destination_label), 1, 1,
-                  views::GridLayout::LEADING, views::GridLayout::FILL,
-                  labels_width, 0);
-  layout->AddView(std::move(destination_field), 1, 1, views::GridLayout::FILL,
-                  views::GridLayout::FILL, 0, fields_height);
+  if (destination_field) {
+    BuildColumnSet(layout, DOUBLE_VIEW_COLUMN_SET_DESTINATION);
+    layout->StartRow(views::GridLayout::kFixedSize,
+                     DOUBLE_VIEW_COLUMN_SET_DESTINATION);
+    layout->AddView(std::move(destination_label), 1, 1,
+                    views::GridLayout::LEADING, views::GridLayout::FILL,
+                    labels_width, 0);
+    layout->AddView(std::move(destination_field), 1, 1, views::GridLayout::FILL,
+                    views::GridLayout::FILL, 0, fields_height);
 
-  layout->AddPaddingRow(views::GridLayout::kFixedSize,
-                        ChromeLayoutProvider::Get()->GetDistanceMetric(
-                            DISTANCE_CONTROL_LIST_VERTICAL));
+    layout->AddPaddingRow(views::GridLayout::kFixedSize,
+                          ChromeLayoutProvider::Get()->GetDistanceMetric(
+                              DISTANCE_CONTROL_LIST_VERTICAL));
+  }
 
   // Username row.
   BuildColumnSet(layout, DOUBLE_VIEW_COLUMN_SET_USERNAME);
@@ -355,9 +365,12 @@ PasswordSaveUpdateWithAccountStoreView::PasswordSaveUpdateWithAccountStoreView(
     credential_view->SetEnabled(false);
     AddChildView(credential_view);
   } else {
-    std::unique_ptr<views::Combobox> destination_dropdown =
-        CreateDestinationCombobox(GetSignedInEmail(controller_.GetProfile()));
-    destination_dropdown->set_listener(this);
+    std::unique_ptr<views::Combobox> destination_dropdown;
+    if (controller_.ShouldShowPasswordStorePicker()) {
+      destination_dropdown =
+          CreateDestinationCombobox(GetSignedInEmail(controller_.GetProfile()));
+      destination_dropdown->set_listener(this);
+    }
     std::unique_ptr<views::EditableCombobox> username_dropdown =
         CreateUsernameEditableCombobox(password_form);
     username_dropdown->set_listener(this);

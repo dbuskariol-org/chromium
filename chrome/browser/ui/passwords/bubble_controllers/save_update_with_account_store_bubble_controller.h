@@ -61,6 +61,10 @@ class SaveUpdateWithAccountStoreBubbleController
   // re-authentication is successful.
   bool RevealPasswords();
 
+  // Whether we should show the password store picker (either the account store
+  // or the profile store).
+  bool ShouldShowPasswordStorePicker() const;
+
   // Called by the view when the account store checkbox is toggled.
   void OnToggleAccountStore(bool is_checked);
 
