@@ -434,7 +434,11 @@ def _make_blink_api_call(code_node, cg_context, num_of_args=None):
     if "ExecutionContext" in values:
         arguments.append("${execution_context}")
     if "Document" in values:
-        arguments.append("*To<Document>(${execution_context})")
+        # TODO(yukishiino): Implement this part after the refactoring of
+        # ExecutionContext.
+        arguments.append(
+            "*reinterpret_cast<Document*>(((void)${execution_context}, 0xDEADBEEF))"
+        )
 
     code_generator_info = cg_context.member_like.code_generator_info
     is_partial = code_generator_info.defined_in_partial
@@ -516,8 +520,11 @@ def bind_return_value(code_node, cg_context):
             elif cg_context.is_return_by_argument:
                 nodes.append(F("{} ${return_value};", return_type))
                 nodes.append(F("{};", api_call))
-            else:
+            elif "ReflectOnly" in cg_context.member_like.extended_attributes:
+                # [ReflectOnly]
                 nodes.append(F("auto ${return_value} = {};", api_call))
+            else:
+                nodes.append(F("auto&& ${return_value} = {};", api_call))
         else:
             branches = SequenceNode()
             for index, api_call in api_calls:
@@ -687,10 +694,17 @@ def make_check_security_of_return_value(cg_context):
         T("bindings::V8SetReturnValue(${info}, nullptr);\n"
           "return;"),
     ]
-    return SequenceNode([
+    node = SequenceNode([
         T("// [CheckSecurity=ReturnValue]"),
         CxxUnlikelyIfNode(cond=cond, body=body),
     ])
+    node.accumulate(
+        CodeGenAccumulator.require_include_headers([
+            "third_party/blink/renderer/bindings/core/v8/binding_security.h",
+            "third_party/blink/renderer/core/frame/web_feature.h",
+            "third_party/blink/renderer/platform/instrumentation/use_counter.h",
+        ]))
+    return node
 
 
 def make_cooperative_scheduling_safepoint(cg_context):
@@ -1088,7 +1102,7 @@ def make_return_value_cache_return_early(cg_context):
         return TextNode("""\
 // [CachedAttribute]
 static const V8PrivateProperty::SymbolKey kPrivatePropertyCachedAttribute;
-auto v8_private_cached_attribute =
+auto&& v8_private_cached_attribute =
     V8PrivateProperty::GetSymbol(${isolate}, kPrivatePropertyCachedAttribute);
 if (!${blink_receiver}->""" + pred + """()) {
   v8::Local<v8::Value> v8_value;
@@ -1103,7 +1117,7 @@ if (!${blink_receiver}->""" + pred + """()) {
         return TextNode("""\
 // [SaveSameObject]
 static const V8PrivateProperty::SymbolKey kPrivatePropertySaveSameObject;
-auto v8_private_save_same_object =
+auto&& v8_private_save_same_object =
     V8PrivateProperty::GetSymbol(${isolate}, kPrivatePropertySaveSameObject);
 {
   v8::Local<v8::Value> v8_value;
@@ -2821,7 +2835,6 @@ def _collect_include_headers(interface):
     headers = set(interface.code_generator_info.blink_headers)
 
     def collect_from_idl_type(idl_type):
-        idl_type = idl_type.unwrap()
         type_def_obj = idl_type.type_definition_object
         if type_def_obj is not None:
             headers.add(PathManager(type_def_obj).api_path(ext="h"))
@@ -2834,14 +2847,21 @@ def _collect_include_headers(interface):
             return
 
     for attribute in interface.attributes:
-        collect_from_idl_type(attribute.idl_type)
+        attribute.idl_type.apply_to_all_composing_elements(
+            collect_from_idl_type)
     for constructor in interface.constructors:
         for argument in constructor.arguments:
-            collect_from_idl_type(argument.idl_type)
+            argument.idl_type.apply_to_all_composing_elements(
+                collect_from_idl_type)
     for operation in interface.operations:
-        collect_from_idl_type(operation.return_type)
+        operation.return_type.apply_to_all_composing_elements(
+            collect_from_idl_type)
         for argument in operation.arguments:
-            collect_from_idl_type(argument.idl_type)
+            argument.idl_type.apply_to_all_composing_elements(
+                collect_from_idl_type)
+
+    for exposed_construct in interface.exposed_constructs:
+        headers.add(PathManager(exposed_construct).api_path(ext="h"))
 
     path_manager = PathManager(interface)
     headers.discard(path_manager.api_path(ext="h"))
@@ -3182,6 +3202,10 @@ def generate_interface(interface):
     ])
     impl_source_node.accumulator.add_include_headers(
         _collect_include_headers(interface))
+    if interface.constructor_groups:
+        impl_source_node.accumulator.add_include_headers([
+            "third_party/blink/renderer/platform/bindings/v8_object_constructor.h",
+        ])
 
     # Assemble the parts.
     api_header_blink_ns.body.append(api_class_def)
@@ -3259,5 +3283,12 @@ def generate_interface(interface):
 
 
 def generate_interfaces(web_idl_database):
-    interface = web_idl_database.find("WebGLRenderingContext")
+    interface = web_idl_database.find("ReadableStreamDefaultReader")
     generate_interface(interface)
+    return
+
+    i = 0
+    for interface in web_idl_database.interfaces:
+        i += 1
+        print i, interface.identifier
+        generate_interface(interface)

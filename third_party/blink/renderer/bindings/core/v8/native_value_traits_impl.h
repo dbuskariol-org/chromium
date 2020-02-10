@@ -227,16 +227,22 @@ class NativeValueTraitsStringAdapter {
   NativeValueTraitsStringAdapter(const NativeValueTraitsStringAdapter&) =
       default;
   NativeValueTraitsStringAdapter(NativeValueTraitsStringAdapter&&) = default;
-  NativeValueTraitsStringAdapter(v8::Local<v8::String> value)
+  explicit NativeValueTraitsStringAdapter(v8::Local<v8::String> value)
       : v8_string_(value) {}
-  NativeValueTraitsStringAdapter(const String& value) : wtf_string_(value) {}
-  NativeValueTraitsStringAdapter(int32_t value)
+  explicit NativeValueTraitsStringAdapter(const String& value)
+      : wtf_string_(value) {}
+  explicit NativeValueTraitsStringAdapter(int32_t value)
       : wtf_string_(ToBlinkString(value)) {}
 
   NativeValueTraitsStringAdapter& operator=(
       const NativeValueTraitsStringAdapter&) = default;
   NativeValueTraitsStringAdapter& operator=(NativeValueTraitsStringAdapter&&) =
       default;
+  NativeValueTraitsStringAdapter& operator=(const String& value) {
+    v8_string_.Clear();
+    wtf_string_ = value;
+    return *this;
+  }
 
   operator String() const { return ToString<String>(); }
   operator AtomicString() const { return ToString<AtomicString>(); }
@@ -352,15 +358,17 @@ template <bindings::IDLStringConvMode mode>
 struct NativeValueTraits<IDLUSVStringBaseV2<mode>>
     : public NativeValueTraitsBase<IDLUSVStringBaseV2<mode>> {
   // http://heycam.github.io/webidl/#es-USVString
-  static String NativeValue(v8::Isolate* isolate,
-                            v8::Local<v8::Value> value,
-                            ExceptionState& exception_state) {
+  static bindings::NativeValueTraitsStringAdapter NativeValue(
+      v8::Isolate* isolate,
+      v8::Local<v8::Value> value,
+      ExceptionState& exception_state) {
     String string = NativeValueTraits<IDLStringBaseV2<mode>>::NativeValue(
         isolate, value, exception_state);
     if (exception_state.HadException())
-      return String();
+      return bindings::NativeValueTraitsStringAdapter();
 
-    return ReplaceUnmatchedSurrogates(string);
+    return bindings::NativeValueTraitsStringAdapter(
+        ReplaceUnmatchedSurrogates(string));
   }
 };
 
