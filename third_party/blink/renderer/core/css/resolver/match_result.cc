@@ -98,4 +98,13 @@ void MatchResult::FinishAddingAuthorRulesForTreeScope() {
   current_tree_order_ = clampTo<uint16_t>(author_range_ends_.size());
 }
 
+MatchedExpansionsRange MatchResult::Expansions(const Document& document,
+                                               CascadeFilter filter) const {
+  return MatchedExpansionsRange(
+      MatchedExpansionsIterator(matched_properties_.begin(), document, filter,
+                                0),
+      MatchedExpansionsIterator(matched_properties_.end(), document, filter,
+                                matched_properties_.size()));
+}
+
 }  // namespace blink
