@@ -111,6 +111,8 @@ class ShelfWidget::DelegateView : public views::WidgetDelegate,
 
   // views::WidgetDelegate:
   void DeleteDelegate() override { delete this; }
+  views::Widget* GetWidget() override { return View::GetWidget(); }
+  const views::Widget* GetWidget() const override { return View::GetWidget(); }
 
   bool CanActivate() const override;
   void ReorderChildLayers(ui::Layer* parent_layer) override;
