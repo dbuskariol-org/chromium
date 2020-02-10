@@ -26,6 +26,7 @@
 
 #include "base/macros.h"
 #include "base/memory/scoped_refptr.h"
+#include "third_party/blink/renderer/core/css/resolver/cascade_origin.h"
 #include "third_party/blink/renderer/core/css/rule_set.h"
 #include "third_party/blink/renderer/core/css/selector_checker.h"
 #include "third_party/blink/renderer/platform/heap/handle.h"
@@ -48,6 +49,7 @@ struct CORE_EXPORT MatchedProperties {
   struct Data {
     unsigned link_match_type : 2;
     unsigned valid_property_filter : 2;
+    CascadeOrigin origin;
     // This is approximately equivalent to the 'shadow-including tree order'.
     // It can be used to evaluate the 'Shadow Tree' criteria. Note that the
     // number stored here is 'local' to each origin (user, author), and is
@@ -156,6 +158,7 @@ class CORE_EXPORT MatchResult {
   Vector<unsigned, 16> author_range_ends_;
   unsigned ua_range_end_ = 0;
   bool is_cacheable_ = true;
+  CascadeOrigin current_origin_ = CascadeOrigin::kUserAgent;
   uint16_t current_tree_order_ = 0;
   DISALLOW_COPY_AND_ASSIGN(MatchResult);
 };

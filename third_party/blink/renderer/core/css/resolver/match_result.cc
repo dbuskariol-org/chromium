@@ -62,13 +62,16 @@ void MatchResult::AddMatchedProperties(
   // Reevaluate this when cascade has shipped.
   new_properties.types_.tree_order =
       std::numeric_limits<uint16_t>::max() - current_tree_order_;
+  new_properties.types_.origin = current_origin_;
 }
 
 void MatchResult::FinishAddingUARules() {
+  current_origin_ = CascadeOrigin::kUser;
   ua_range_end_ = matched_properties_.size();
 }
 
 void MatchResult::FinishAddingUserRules() {
+  current_origin_ = CascadeOrigin::kAuthor;
   // Don't add empty ranges.
   if (user_range_ends_.IsEmpty() &&
       ua_range_end_ == matched_properties_.size())

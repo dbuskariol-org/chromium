@@ -39,6 +39,14 @@ void TestMatchedPropertiesRange(const MatchedPropertiesRange& range,
     EXPECT_EQ(*expected_sets++, matched_properties.properties);
 }
 
+void TestOriginInRange(const MatchedPropertiesRange& range,
+                       int expected_length,
+                       CascadeOrigin expected_origin) {
+  EXPECT_EQ(expected_length, range.end() - range.begin());
+  for (const auto& matched_properties : range)
+    EXPECT_EQ(matched_properties.types_.origin, expected_origin);
+}
+
 TEST_F(MatchResultTest, UARules) {
   const CSSPropertyValueSet* ua_sets[] = {PropertySet(0), PropertySet(1)};
 
@@ -223,6 +231,125 @@ TEST_F(MatchResultTest, AllRulesMultipleScopes) {
 
   ImportantUserRanges importantUser(result);
   EXPECT_EQ(importantUser.end(), ++importantUser.begin());
+}
+
+TEST_F(MatchResultTest, CascadeOriginUserAgent) {
+  MatchResult result;
+  result.AddMatchedProperties(PropertySet(0));
+  result.AddMatchedProperties(PropertySet(1));
+  result.FinishAddingUARules();
+  result.FinishAddingUserRules();
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UaRules(), 2, CascadeOrigin::kUserAgent);
+  TestOriginInRange(result.AllRules(), 2, CascadeOrigin::kUserAgent);
+}
+
+TEST_F(MatchResultTest, CascadeOriginUser) {
+  MatchResult result;
+  result.FinishAddingUARules();
+  result.AddMatchedProperties(PropertySet(0));
+  result.AddMatchedProperties(PropertySet(1));
+  result.FinishAddingUserRules();
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UserRules(), 2, CascadeOrigin::kUser);
+  TestOriginInRange(result.AllRules(), 2, CascadeOrigin::kUser);
+}
+
+TEST_F(MatchResultTest, CascadeOriginAuthor) {
+  MatchResult result;
+  result.FinishAddingUARules();
+  result.FinishAddingUserRules();
+  result.AddMatchedProperties(PropertySet(0));
+  result.AddMatchedProperties(PropertySet(1));
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.AuthorRules(), 2, CascadeOrigin::kAuthor);
+  TestOriginInRange(result.AllRules(), 2, CascadeOrigin::kAuthor);
+}
+
+TEST_F(MatchResultTest, CascadeOriginAll) {
+  MatchResult result;
+  result.AddMatchedProperties(PropertySet(0));
+  result.FinishAddingUARules();
+  result.AddMatchedProperties(PropertySet(1));
+  result.AddMatchedProperties(PropertySet(2));
+  result.FinishAddingUserRules();
+  result.AddMatchedProperties(PropertySet(3));
+  result.AddMatchedProperties(PropertySet(4));
+  result.AddMatchedProperties(PropertySet(5));
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UaRules(), 1, CascadeOrigin::kUserAgent);
+  TestOriginInRange(result.UserRules(), 2, CascadeOrigin::kUser);
+  TestOriginInRange(result.AuthorRules(), 3, CascadeOrigin::kAuthor);
+}
+
+TEST_F(MatchResultTest, CascadeOriginAllExceptUserAgent) {
+  MatchResult result;
+  result.FinishAddingUARules();
+  result.AddMatchedProperties(PropertySet(1));
+  result.AddMatchedProperties(PropertySet(2));
+  result.FinishAddingUserRules();
+  result.AddMatchedProperties(PropertySet(3));
+  result.AddMatchedProperties(PropertySet(4));
+  result.AddMatchedProperties(PropertySet(5));
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UaRules(), 0, CascadeOrigin::kUserAgent);
+  TestOriginInRange(result.UserRules(), 2, CascadeOrigin::kUser);
+  TestOriginInRange(result.AuthorRules(), 3, CascadeOrigin::kAuthor);
+}
+
+TEST_F(MatchResultTest, CascadeOriginAllExceptUser) {
+  MatchResult result;
+  result.AddMatchedProperties(PropertySet(0));
+  result.FinishAddingUARules();
+  result.FinishAddingUserRules();
+  result.AddMatchedProperties(PropertySet(3));
+  result.AddMatchedProperties(PropertySet(4));
+  result.AddMatchedProperties(PropertySet(5));
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UaRules(), 1, CascadeOrigin::kUserAgent);
+  TestOriginInRange(result.UserRules(), 0, CascadeOrigin::kUser);
+  TestOriginInRange(result.AuthorRules(), 3, CascadeOrigin::kAuthor);
+}
+
+TEST_F(MatchResultTest, CascadeOriginAllExceptAuthor) {
+  MatchResult result;
+  result.AddMatchedProperties(PropertySet(0));
+  result.FinishAddingUARules();
+  result.AddMatchedProperties(PropertySet(1));
+  result.AddMatchedProperties(PropertySet(2));
+  result.FinishAddingUserRules();
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UaRules(), 1, CascadeOrigin::kUserAgent);
+  TestOriginInRange(result.UserRules(), 2, CascadeOrigin::kUser);
+  TestOriginInRange(result.AuthorRules(), 0, CascadeOrigin::kAuthor);
+}
+
+TEST_F(MatchResultTest, CascadeOriginTreeScopes) {
+  MatchResult result;
+  result.AddMatchedProperties(PropertySet(0));
+  result.FinishAddingUARules();
+  result.AddMatchedProperties(PropertySet(1));
+  result.FinishAddingUserRules();
+  result.AddMatchedProperties(PropertySet(2));
+  result.FinishAddingAuthorRulesForTreeScope();
+  result.AddMatchedProperties(PropertySet(3));
+  result.AddMatchedProperties(PropertySet(4));
+  result.FinishAddingAuthorRulesForTreeScope();
+  result.AddMatchedProperties(PropertySet(5));
+  result.AddMatchedProperties(PropertySet(6));
+  result.AddMatchedProperties(PropertySet(7));
+  result.FinishAddingAuthorRulesForTreeScope();
+
+  TestOriginInRange(result.UaRules(), 1, CascadeOrigin::kUserAgent);
+  TestOriginInRange(result.UserRules(), 1, CascadeOrigin::kUser);
+  TestOriginInRange(result.AuthorRules(), 6, CascadeOrigin::kAuthor);
 }
 
 }  // namespace blink
