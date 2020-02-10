@@ -1787,7 +1787,7 @@
         },
         'os_type': 'android',
         'test_suites': {
-          'gtest_tests': 'mojo_android_gtests',
+          'gtest_tests': 'network_service_android_gtests',
         },
       },
       # Note:
