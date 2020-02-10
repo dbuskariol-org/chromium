@@ -422,11 +422,6 @@ const base::Feature kHappinessTrackingSurveysForDesktopSettingsPrivacy{
     base::FEATURE_DISABLED_BY_DEFAULT};
 #endif  // !defined(OS_ANDROID)
 
-// Enables committed error pages instead of transient navigation entries for
-// HTTP auth interstitial pages (i.e. HTTP auth prompts initiated cross-origin).
-const base::Feature kHTTPAuthCommittedInterstitials{
-    "HTTPAuthCommittedInterstitials", base::FEATURE_ENABLED_BY_DEFAULT};
-
 // Enables navigation suggestions UI for lookalike URLs (e.g. internationalized
 // domain names that are visually similar to popular domains or to domains with
 // engagement score, such as googlé.com).
