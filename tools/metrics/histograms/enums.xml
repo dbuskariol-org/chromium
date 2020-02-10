@@ -37809,6 +37809,7 @@ from previous Chrome versions.
   <int value="-970067535" label="BackgroundTaskComponentUpdate:disabled"/>
   <int value="-969815853" label="migrate-linux-to-logindb:enabled"/>
   <int value="-969332901" label="stop-non-timers-in-background:disabled"/>
+  <int value="-968675274" label="Rar2Fs:enabled"/>
   <int value="-968010468" label="SharedArrayBuffer:disabled"/>
   <int value="-966290456" label="WebAuthenticationCtap2:enabled"/>
   <int value="-965842218" label="MultiDeviceApi:disabled"/>
@@ -39450,6 +39451,7 @@ from previous Chrome versions.
   <int value="1096477444" label="AssistantVoiceMatch:enabled"/>
   <int value="1098823967" label="ash-enable-window-cycle-ui"/>
   <int value="1100244809" label="MacSystemMediaPermissionsInfoUI:disabled"/>
+  <int value="1101062411" label="Rar2Fs:disabled"/>
   <int value="1102780374" label="ClickToCallDetectionV2:disabled"/>
   <int value="1104948452" label="manual-enhanced-bookmarks-optout"/>
   <int value="1105439588" label="enable-swipe-selection"/>
