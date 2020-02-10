@@ -382,6 +382,23 @@ PasswordSaveUpdateWithAccountStoreView::PasswordSaveUpdateWithAccountStoreView(
         std::move(password_dropdown), std::move(password_view_button));
   }
 
+  {
+    using Controller = SaveUpdateWithAccountStoreBubbleController;
+    using ControllerNotifyFn = void (Controller::*)();
+    auto button_clicked = [](PasswordSaveUpdateWithAccountStoreView* dialog,
+                             ControllerNotifyFn func) {
+      dialog->UpdateUsernameAndPasswordInModel();
+      (dialog->controller_.*func)();
+    };
+
+    DialogDelegate::set_accept_callback(base::BindOnce(
+        button_clicked, base::Unretained(this), &Controller::OnSaveClicked));
+    DialogDelegate::set_cancel_callback(base::BindOnce(
+        button_clicked, base::Unretained(this),
+        is_update_bubble_ ? &Controller::OnNopeUpdateClicked
+                          : &Controller::OnNeverForThisSiteClicked));
+  }
+
   DialogDelegate::SetFootnoteView(CreateFooterView());
   UpdateDialogButtons();
 }
@@ -397,26 +414,6 @@ PasswordSaveUpdateWithAccountStoreView::GetController() {
 const PasswordBubbleControllerBase*
 PasswordSaveUpdateWithAccountStoreView::GetController() const {
   return &controller_;
-}
-
-bool PasswordSaveUpdateWithAccountStoreView::Accept() {
-  UpdateUsernameAndPasswordInModel();
-  controller_.OnSaveClicked();
-  return true;
-}
-
-bool PasswordSaveUpdateWithAccountStoreView::Cancel() {
-  UpdateUsernameAndPasswordInModel();
-  if (is_update_bubble_) {
-    controller_.OnNopeUpdateClicked();
-    return true;
-  }
-  controller_.OnNeverForThisSiteClicked();
-  return true;
-}
-
-bool PasswordSaveUpdateWithAccountStoreView::Close() {
-  return true;
 }
 
 void PasswordSaveUpdateWithAccountStoreView::ButtonPressed(

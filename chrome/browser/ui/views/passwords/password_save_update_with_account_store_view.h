@@ -58,9 +58,6 @@ class PasswordSaveUpdateWithAccountStoreView
   gfx::ImageSkia GetWindowIcon() override;
   bool ShouldShowWindowIcon() const override;
   bool ShouldShowCloseButton() const override;
-  bool Accept() override;
-  bool Cancel() override;
-  bool Close() override;
 
   // View:
   void AddedToWidget() override;
