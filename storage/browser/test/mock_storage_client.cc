@@ -20,11 +20,12 @@ namespace content {
 
 using std::make_pair;
 
-MockStorageClient::MockStorageClient(QuotaManagerProxy* quota_manager_proxy,
-                                     const MockOriginData* mock_data,
-                                     QuotaClient::ID id,
-                                     size_t mock_data_size)
-    : quota_manager_proxy_(quota_manager_proxy),
+MockStorageClient::MockStorageClient(
+    scoped_refptr<QuotaManagerProxy> quota_manager_proxy,
+    const MockOriginData* mock_data,
+    QuotaClient::ID id,
+    size_t mock_data_size)
+    : quota_manager_proxy_(std::move(quota_manager_proxy)),
       id_(id),
       mock_time_counter_(0) {
   Populate(mock_data, mock_data_size);
@@ -86,6 +87,8 @@ base::Time MockStorageClient::IncrementMockTime() {
 QuotaClient::ID MockStorageClient::id() const {
   return id_;
 }
+
+void MockStorageClient::OnQuotaManagerDestroyed() {}
 
 void MockStorageClient::GetOriginUsage(const url::Origin& origin,
                                        StorageType type,
