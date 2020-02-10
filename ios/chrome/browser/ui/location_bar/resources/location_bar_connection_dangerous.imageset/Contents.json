@@ -2,18 +2,13 @@
     "images": [
         {
             "idiom": "universal",
-            "scale": "1x",
-            "filename": "omnibox_voice.png"
-        },
-        {
-            "idiom": "universal",
             "scale": "2x",
-            "filename": "omnibox_voice@2x.png"
+            "filename": "location_bar_connection_dangerous@2x.png"
         },
         {
             "idiom": "universal",
             "scale": "3x",
-            "filename": "omnibox_voice@3x.png"
+            "filename": "location_bar_connection_dangerous@3x.png"
         }
     ],
     "info": {
