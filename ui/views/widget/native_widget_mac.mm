@@ -157,15 +157,9 @@ void NativeWidgetMac::OnWindowKeyStatusChanged(
   if (is_key) {
     widget->OnNativeFocus();
     widget->GetFocusManager()->RestoreFocusedView();
-    if (NativeWidgetMacNSWindowHost* parent_host = ns_window_host_->parent()) {
-      parent_key_lock_ = parent_host->native_widget_mac()
-                             ->GetTopLevelWidget()
-                             ->LockPaintAsActive();
-    }
   } else {
     widget->OnNativeBlur();
     widget->GetFocusManager()->StoreFocusedView(true);
-    parent_key_lock_.reset();
   }
 }
 
@@ -798,7 +792,6 @@ void NativeWidgetMac::OnNativeViewHierarchyWillChange() {
   // listeners.
   if (!GetWidget()->is_top_level())
     SetFocusManager(nullptr);
-  parent_key_lock_.reset();
 }
 
 void NativeWidgetMac::OnNativeViewHierarchyChanged() {
