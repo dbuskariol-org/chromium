@@ -494,7 +494,7 @@ bool FileSystemContext::CanServeURLRequest(const FileSystemURL& url) const {
 }
 
 void FileSystemContext::OpenPluginPrivateFileSystem(
-    const GURL& origin_url,
+    const url::Origin& origin,
     FileSystemType type,
     const std::string& filesystem_id,
     const std::string& plugin_id,
@@ -502,8 +502,7 @@ void FileSystemContext::OpenPluginPrivateFileSystem(
     StatusCallback callback) {
   DCHECK(plugin_private_backend_);
   plugin_private_backend_->OpenPrivateFileSystem(
-      url::Origin::Create(origin_url), type, filesystem_id, plugin_id, mode,
-      std::move(callback));
+      origin, type, filesystem_id, plugin_id, mode, std::move(callback));
 }
 
 FileSystemContext::~FileSystemContext() {
