@@ -294,6 +294,7 @@ class SkiaOutputSurfaceImplOnGpu : public gpu::ImageTransportSurfaceDelegate,
   BufferPresentedCallback buffer_presented_callback_;
   ContextLostCallback context_lost_callback_;
   GpuVSyncCallback gpu_vsync_callback_;
+  bool use_gl_renderer_copier_ = false;
 
 #if defined(USE_OZONE)
   // This should outlive gl_surface_ and vulkan_surface_.

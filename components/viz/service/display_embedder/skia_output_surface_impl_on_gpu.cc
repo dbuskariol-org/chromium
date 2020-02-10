@@ -1145,14 +1145,12 @@ void SkiaOutputSurfaceImplOnGpu::CopyOutput(
       base::BindOnce([](std::vector<std::unique_ptr<SkDeferredDisplayList>>) {},
                      std::move(destroy_after_swap_)));
 
-  bool use_gl_renderer_copier = !is_using_vulkan() && !is_using_dawn() &&
-                                !features::IsUsingSkiaForGLReadback();
-  if (use_gl_renderer_copier)
+  if (use_gl_renderer_copier_)
     gpu::ContextUrl::SetActiveUrl(copier_active_url_);
 
   // Lazy initialize GLRendererCopier before draw because
   // DirectContextProvider ctor the backbuffer.
-  if (use_gl_renderer_copier && !copier_) {
+  if (use_gl_renderer_copier_ && !copier_) {
     if (!MakeCurrent(true /* need_fbo0 */))
       return;
     auto client = std::make_unique<DirectContextProviderDelegateImpl>(
@@ -1218,7 +1216,7 @@ void SkiaOutputSurfaceImplOnGpu::CopyOutput(
     surface->flush();
   }
 
-  if (use_gl_renderer_copier) {
+  if (use_gl_renderer_copier_) {
     surface->flush();
 
     GLuint gl_id = 0;
@@ -1269,18 +1267,40 @@ void SkiaOutputSurfaceImplOnGpu::CopyOutput(
   SkFilterQuality filter_quality = is_downscale_in_both_dimensions
                                        ? kMedium_SkFilterQuality
                                        : kHigh_SkFilterQuality;
-  SkIRect src_rect = SkIRect::MakeXYWH(
-      geometry.sampling_bounds.x(), geometry.sampling_bounds.y(),
-      geometry.sampling_bounds.width(), geometry.sampling_bounds.height());
+
+  // Compute |source_selection| as a workaround to support |result_selection|
+  // with Skia readback. |result_selection| is a clip rect specified in the
+  // destination pixel space. By transforming |result_selection| back to the
+  // source pixel space we can compute what rectangle to sample from.
+  //
+  // This might introduce some rounding error if destination pixel space is
+  // scaled up from the source pixel space. When scaling |result_selection| back
+  // down it might not be pixel aligned.
+  gfx::Rect source_selection = geometry.sampling_bounds;
+  if (request->has_result_selection()) {
+    gfx::Rect sampling_selection = request->result_selection();
+    if (request->is_scaled()) {
+      // Invert the scaling.
+      sampling_selection = copy_output::ComputeResultRect(
+          sampling_selection, request->scale_to(), request->scale_from());
+    }
+    sampling_selection.Offset(source_selection.OffsetFromOrigin());
+    source_selection.Intersect(sampling_selection);
+  }
+
+  SkIRect src_rect =
+      SkIRect::MakeXYWH(source_selection.x(), source_selection.y(),
+                        source_selection.width(), source_selection.height());
 
   if (request->result_format() ==
       CopyOutputRequest::ResultFormat::I420_PLANES) {
     std::unique_ptr<ReadPixelsContext> context =
-        std::make_unique<ReadPixelsContext>(
-            std::move(request), geometry.result_bounds, color_space, weak_ptr_);
+        std::make_unique<ReadPixelsContext>(std::move(request),
+                                            geometry.result_selection,
+                                            color_space, weak_ptr_);
     surface->asyncRescaleAndReadPixelsYUV420(
         kRec709_SkYUVColorSpace, SkColorSpace::MakeSRGB(), src_rect,
-        {geometry.result_bounds.width(), geometry.result_bounds.height()},
+        {geometry.result_selection.width(), geometry.result_selection.height()},
         SkSurface::RescaleGamma::kSrc, filter_quality, &OnYUVReadbackDone,
         context.release());
   } else if (request->result_format() ==
@@ -1288,12 +1308,13 @@ void SkiaOutputSurfaceImplOnGpu::CopyOutput(
     // Perform swizzle during readback.
     const bool skbitmap_is_bgra = (kN32_SkColorType == kBGRA_8888_SkColorType);
     SkImageInfo dst_info = SkImageInfo::Make(
-        geometry.result_bounds.width(), geometry.result_bounds.height(),
+        geometry.result_selection.width(), geometry.result_selection.height(),
         skbitmap_is_bgra ? kBGRA_8888_SkColorType : kRGBA_8888_SkColorType,
         kPremul_SkAlphaType);
     std::unique_ptr<ReadPixelsContext> context =
-        std::make_unique<ReadPixelsContext>(
-            std::move(request), geometry.result_bounds, color_space, weak_ptr_);
+        std::make_unique<ReadPixelsContext>(std::move(request),
+                                            geometry.result_selection,
+                                            color_space, weak_ptr_);
     surface->asyncRescaleAndReadPixels(
         dst_info, src_rect, SkSurface::RescaleGamma::kSrc, filter_quality,
         &OnRGBAReadbackDone, context.release());
@@ -1444,6 +1465,8 @@ bool SkiaOutputSurfaceImplOnGpu::Initialize() {
     if (!InitializeForGL())
       return false;
   }
+  use_gl_renderer_copier_ = !is_using_vulkan() && !is_using_dawn() &&
+                            !features::IsUsingSkiaForGLReadback();
   max_resource_cache_bytes_ =
       context_state_->gr_context()->getResourceCacheLimit();
   return true;
