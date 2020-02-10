@@ -1894,7 +1894,7 @@ bool NGBoxFragmentPainter::HitTestChildBoxFragment(
   if (fragment.IsInline() && hit_test.action != kHitTestForeground)
     return false;
 
-  if (fragment.IsAtomicInline() || fragment.IsFloating()) {
+  if (fragment.IsPaintedAtomically()) {
     return HitTestAllPhasesInFragment(fragment, hit_test.location,
                                       physical_offset, hit_test.result);
   }
