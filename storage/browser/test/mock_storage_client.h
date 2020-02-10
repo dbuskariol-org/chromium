@@ -72,6 +72,8 @@ class MockStorageClient : public QuotaClient {
   void DeleteOriginData(const url::Origin& origin,
                         StorageType type,
                         DeletionCallback callback) override;
+  void PerformStorageCleanup(blink::mojom::StorageType type,
+                             base::OnceClosure callback) override;
   bool DoesSupport(StorageType type) const override;
 
  private:

@@ -76,6 +76,12 @@ void CacheStorageQuotaClient::DeleteOriginData(const url::Origin& origin,
   cache_manager_->DeleteOriginData(origin, owner_, std::move(callback));
 }
 
+void CacheStorageQuotaClient::PerformStorageCleanup(
+    blink::mojom::StorageType type,
+    base::OnceClosure callback) {
+  std::move(callback).Run();
+}
+
 bool CacheStorageQuotaClient::DoesSupport(
     blink::mojom::StorageType type) const {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);

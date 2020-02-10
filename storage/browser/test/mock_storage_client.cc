@@ -125,6 +125,11 @@ void MockStorageClient::DeleteOriginData(const url::Origin& origin,
                                 std::move(callback)));
 }
 
+void MockStorageClient::PerformStorageCleanup(blink::mojom::StorageType type,
+                                              base::OnceClosure callback) {
+  std::move(callback).Run();
+}
+
 bool MockStorageClient::DoesSupport(StorageType type) const {
   return true;
 }
