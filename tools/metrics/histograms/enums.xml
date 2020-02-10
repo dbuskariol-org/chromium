@@ -64130,6 +64130,7 @@ Full version information for the fingerprint enum values:
   <int value="189188535" label="CROS Cr50 0.4.19"/>
   <int value="228456405" label="CROS Cr50 0.3.11"/>
   <int value="230386903" label="CROS Cr50 0.0.24 Eve Flags 0x7f00(prod)"/>
+  <int value="245471087" label="CROS Cr50 0.4.25"/>
   <int value="276176597" label="CROS Cr50 0.1.0 Flags 0x10(pre-pvt)"/>
   <int value="305524852" label="IFX 9655 rev 41 fw 4.32 build 036f"/>
   <int value="313962517" label="CROS Cr50 0.3.16"/>
