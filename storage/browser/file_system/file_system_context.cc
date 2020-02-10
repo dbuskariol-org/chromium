@@ -401,11 +401,11 @@ void FileSystemContext::AttemptAutoMountForURLRequest(
   copyable_callback.Run(base::File::FILE_ERROR_NOT_FOUND);
 }
 
-void FileSystemContext::DeleteFileSystem(const GURL& origin_url,
+void FileSystemContext::DeleteFileSystem(const url::Origin& origin,
                                          FileSystemType type,
                                          StatusCallback callback) {
   DCHECK(io_task_runner_->RunsTasksInCurrentSequence());
-  DCHECK(origin_url == origin_url.GetOrigin());
+  DCHECK(origin.GetURL().is_valid());
   DCHECK(!callback.is_null());
 
   FileSystemBackend* backend = GetFileSystemBackend(type);
@@ -421,10 +421,10 @@ void FileSystemContext::DeleteFileSystem(const GURL& origin_url,
   base::PostTaskAndReplyWithResult(
       default_file_task_runner(), FROM_HERE,
       // It is safe to pass Unretained(quota_util) since context owns it.
-      base::BindOnce(&FileSystemQuotaUtil::DeleteOriginDataOnFileTaskRunner,
-                     base::Unretained(backend->GetQuotaUtil()),
-                     base::RetainedRef(this),
-                     base::Unretained(quota_manager_proxy()), origin_url, type),
+      base::BindOnce(
+          &FileSystemQuotaUtil::DeleteOriginDataOnFileTaskRunner,
+          base::Unretained(backend->GetQuotaUtil()), base::RetainedRef(this),
+          base::Unretained(quota_manager_proxy()), origin.GetURL(), type),
       std::move(callback));
 }
 

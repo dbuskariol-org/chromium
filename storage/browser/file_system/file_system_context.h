@@ -233,7 +233,7 @@ class COMPONENT_EXPORT(STORAGE_BROWSER) FileSystemContext
 
   // Deletes the filesystem for the given |origin_url| and |type|. This should
   // be called on the IO thread.
-  void DeleteFileSystem(const GURL& origin_url,
+  void DeleteFileSystem(const url::Origin& origin,
                         FileSystemType type,
                         StatusCallback callback);
 
