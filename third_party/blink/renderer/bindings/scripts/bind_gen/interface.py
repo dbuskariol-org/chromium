@@ -860,20 +860,14 @@ def _make_overload_dispatcher_per_arg_size(cg_context, items):
         dispatch_if(
             _format("{}::HasInstance(${isolate}, {value})", v8_bridge_name))
 
+    # V8 specific optimization: BufferSource = ArrayBufferView or ArrayBuffer
     is_typedef_name = lambda t, name: t.is_typedef and t.identifier == name
-    func_like_a = find(lambda t, u: u.is_array_buffer_view)
-    func_like_b = find(
+    func_like = find(
         lambda t, u: is_typedef_name(t.unwrap(typedef=False), "BufferSource"))
-    if func_like_a or func_like_b:
-        # V8 specific optimization: ArrayBufferView
-        if func_like_a:
-            func_like = func_like_a
-            dispatch_if("{value}->IsArrayBufferView()")
-        if func_like_b:
-            func_like = func_like_b
-            dispatch_if("{value}->IsArrayBufferView() || "
-                        "{value}->IsArrayBuffer() || "
-                        "{value}->IsSharedArrayBuffer()")
+    if func_like:
+        dispatch_if("{value}->IsArrayBufferView() || "
+                    "{value}->IsArrayBuffer() || "
+                    "{value}->IsSharedArrayBuffer()")
     else:
         # 12.5. if Type(V) is Object, V has an [[ArrayBufferData]] internal
         #   slot, ...
@@ -882,16 +876,24 @@ def _make_overload_dispatcher_per_arg_size(cg_context, items):
             dispatch_if("{value}->IsArrayBuffer() || "
                         "{value}->IsSharedArrayBuffer()")
 
-        # 12.6. if Type(V) is Object, V has a [[DataView]] internal slot, ...
-        func_like = find(lambda t, u: u.is_data_view)
+        # V8 specific optimization: ArrayBufferView
+        func_like = find(lambda t, u: u.is_array_buffer_view)
         if func_like:
-            dispatch_if("{value}->IsDataView()")
+            dispatch_if("{value}->IsArrayBufferView()")
 
-        # 12.7. if Type(V) is Object, V has a [[TypedArrayName]] internal slot,
-        #   ...
-        func_like = find(lambda t, u: u.is_typed_array_type)
+    # 12.6. if Type(V) is Object, V has a [[DataView]] internal slot, ...
+    func_like = find(lambda t, u: u.is_data_view)
+    if func_like:
+        dispatch_if("{value}->IsDataView()")
+
+    # 12.7. if Type(V) is Object, V has a [[TypedArrayName]] internal slot, ...
+    typed_array_types = ("Int8Array", "Int16Array", "Int32Array", "Uint8Array",
+                         "Uint16Array", "Uint32Array", "Uint8ClampedArray",
+                         "Float32Array", "Float64Array")
+    for typed_array_type in typed_array_types:
+        func_like = find(lambda t, u: u.keyword_typename == typed_array_type)
         if func_like:
-            dispatch_if("{value}->IsTypedArray()")
+            dispatch_if(_format("{value}->Is{}()", typed_array_type))
 
     # 12.8. if IsCallable(V) is true, ...
     func_like = find(lambda t, u: u.is_callback_function)
