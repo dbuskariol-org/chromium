@@ -16,12 +16,14 @@ CacheStorageQuotaClient::CacheStorageQuotaClient(
     CacheStorageOwner owner)
     : cache_manager_(std::move(cache_manager)), owner_(owner) {}
 
-CacheStorageQuotaClient::~CacheStorageQuotaClient() {}
+CacheStorageQuotaClient::~CacheStorageQuotaClient() = default;
 
 storage::QuotaClient::ID CacheStorageQuotaClient::id() const {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
   return GetIDFromOwner(owner_);
 }
+
+void CacheStorageQuotaClient::OnQuotaManagerDestroyed() {}
 
 void CacheStorageQuotaClient::GetOriginUsage(const url::Origin& origin,
                                              blink::mojom::StorageType type,
