@@ -116,7 +116,7 @@ LogicalRect ExpandedSelectionRectForSoftLineBreakIfNeeded(
   if (layout_block_flow && layout_block_flow->ShouldTruncateOverflowingText())
     return rect;
   // Copy from InlineTextBoxPainter::PaintSelection.
-  const LayoutUnit space_width(cursor.CurrentStyle().GetFont().SpaceWidth());
+  const LayoutUnit space_width(cursor.Current().Style().GetFont().SpaceWidth());
   return {rect.offset,
           {rect.size.inline_size + space_width, rect.size.block_size}};
 }
@@ -928,7 +928,7 @@ PhysicalRect ComputeLocalSelectionRectForText(
       !IsLastBRInPage(*cursor.CurrentLayoutObject())) {
     DCHECK(!logical_rect.size.inline_size);
     logical_rect.size.inline_size =
-        LayoutUnit(cursor.CurrentStyle().GetFont().SpaceWidth());
+        LayoutUnit(cursor.Current().Style().GetFont().SpaceWidth());
   }
   const LogicalRect line_break_extended_rect =
       cursor.Current().IsLineBreak()

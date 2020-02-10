@@ -236,10 +236,6 @@ bool NGInlineCursorPosition::IsHiddenForPaint() const {
   return false;
 }
 
-bool NGInlineCursor::IsHorizontal() const {
-  return CurrentStyle().GetWritingMode() == WritingMode::kHorizontalTb;
-}
-
 bool NGInlineCursor::IsInlineLeaf() const {
   if (Current().IsHiddenForPaint())
     return false;
@@ -540,10 +536,10 @@ TextDirection NGInlineCursor::CurrentResolvedDirection() const {
   return TextDirection::kLtr;
 }
 
-const ComputedStyle& NGInlineCursor::CurrentStyle() const {
-  if (current_.paint_fragment_)
-    return current_.paint_fragment_->Style();
-  return current_.item_->Style();
+const ComputedStyle& NGInlineCursorPosition::Style() const {
+  if (paint_fragment_)
+    return paint_fragment_->Style();
+  return item_->Style();
 }
 
 NGStyleVariant NGInlineCursorPosition::StyleVariant() const {
@@ -629,20 +625,21 @@ PhysicalOffset NGInlineCursor::LineStartPoint() const {
   DCHECK(Current().IsLineBox()) << this;
   const LogicalOffset logical_start;  // (0, 0)
   const PhysicalSize pixel_size(LayoutUnit(1), LayoutUnit(1));
-  return logical_start.ConvertToPhysical(CurrentStyle().GetWritingMode(),
+  return logical_start.ConvertToPhysical(Current().Style().GetWritingMode(),
                                          CurrentBaseDirection(),
                                          Current().Size(), pixel_size);
 }
 
 PhysicalOffset NGInlineCursor::LineEndPoint() const {
   DCHECK(Current().IsLineBox()) << this;
-  const LayoutUnit inline_size =
-      IsHorizontal() ? Current().Size().width : Current().Size().height;
+  const WritingMode writing_mode = Current().Style().GetWritingMode();
+  const LayoutUnit inline_size = IsHorizontalWritingMode(writing_mode)
+                                     ? Current().Size().width
+                                     : Current().Size().height;
   const LogicalOffset logical_end(inline_size, LayoutUnit());
   const PhysicalSize pixel_size(LayoutUnit(1), LayoutUnit(1));
-  return logical_end.ConvertToPhysical(CurrentStyle().GetWritingMode(),
-                                       CurrentBaseDirection(), Current().Size(),
-                                       pixel_size);
+  return logical_end.ConvertToPhysical(writing_mode, CurrentBaseDirection(),
+                                       Current().Size(), pixel_size);
 }
 
 PositionWithAffinity NGInlineCursor::PositionForPointInInlineFormattingContext(
@@ -1063,7 +1060,7 @@ void NGInlineCursor::MoveToFirstLogicalLeaf() {
   // should compute and store it during layout.
   // TODO(yosin): We should check direction of each container instead of line
   // box.
-  if (IsLtr(CurrentStyle().Direction())) {
+  if (IsLtr(Current().Style().Direction())) {
     while (TryToMoveToFirstChild())
       continue;
     return;
@@ -1093,7 +1090,7 @@ void NGInlineCursor::MoveToLastLogicalLeaf() {
   // should compute and store it during layout.
   // TODO(yosin): We should check direction of each container instead of line
   // box.
-  if (IsLtr(CurrentStyle().Direction())) {
+  if (IsLtr(Current().Style().Direction())) {
     while (TryToMoveToLastChild())
       continue;
     return;

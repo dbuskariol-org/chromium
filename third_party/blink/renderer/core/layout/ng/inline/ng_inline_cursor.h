@@ -98,8 +98,10 @@ class CORE_EXPORT NGInlineCursorPosition {
   // end.
   bool IsHiddenForPaint() const;
 
+  // |ComputedStyle| and related functions.
   NGStyleVariant StyleVariant() const;
   bool UsesFirstLineStyle() const;
+  const ComputedStyle& Style() const;
 
   const DisplayItemClient* GetDisplayItemClient() const;
 
@@ -200,9 +202,6 @@ class CORE_EXPORT NGInlineCursor {
   // at end.
   bool IsBeforeSoftLineBreak() const;
 
-  // True if the current position's writing mode in style is horizontal.
-  bool IsHorizontal() const;
-
   // True if the current position is text or atomic inline box.
   // Note: Because of this function is used for caret rect, hit testing, etc,
   // this function returns false for hidden for paint, text overflow ellipsis,
@@ -233,7 +232,6 @@ class CORE_EXPORT NGInlineCursor {
   // call at other than text or atomic inline. Note: <span> doesn't have
   // reserved direction.
   TextDirection CurrentResolvedDirection() const;
-  const ComputedStyle& CurrentStyle() const;
 
   // InkOverflow of itself, including contents if they contribute to the ink
   // overflow of this object (e.g. when not clipped,) in the local coordinate.

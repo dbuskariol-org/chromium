@@ -166,7 +166,7 @@ String NGAbstractInlineTextBox::GetTextContent() const {
 
 bool NGAbstractInlineTextBox::NeedsTrailingSpace() const {
   const NGInlineCursor& cursor = GetCursor();
-  if (!cursor.CurrentStyle().CollapseWhiteSpace())
+  if (!cursor.Current().Style().CollapseWhiteSpace())
     return false;
   NGInlineCursor line_box = cursor;
   line_box.MoveToContainingLine();

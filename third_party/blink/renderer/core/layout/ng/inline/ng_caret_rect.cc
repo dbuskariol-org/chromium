@@ -17,7 +17,7 @@ namespace {
 
 PhysicalRect ComputeLocalCaretRectByBoxSide(const NGInlineCursor& cursor,
                                             NGCaretPositionType position_type) {
-  const bool is_horizontal = cursor.CurrentStyle().IsHorizontalWritingMode();
+  const bool is_horizontal = cursor.Current().Style().IsHorizontalWritingMode();
   NGInlineCursor line_box(cursor);
   line_box.MoveToContainingLine();
   DCHECK(line_box);
@@ -62,7 +62,7 @@ PhysicalRect ComputeLocalCaretRectAtTextOffset(const NGInlineCursor& cursor,
       cursor.CurrentLayoutObject()->GetDocument().View();
   LayoutUnit caret_width = frame_view->CaretWidth();
 
-  const bool is_horizontal = cursor.CurrentStyle().IsHorizontalWritingMode();
+  const bool is_horizontal = cursor.Current().Style().IsHorizontalWritingMode();
 
   LayoutUnit caret_height = is_horizontal ? cursor.Current().Size().height
                                           : cursor.Current().Size().width;
@@ -153,7 +153,7 @@ LocalCaretRect ComputeLocalSelectionRect(
   DCHECK(line_box);
 
   PhysicalRect rect = caret_rect.rect;
-  if (caret_position.cursor.CurrentStyle().IsHorizontalWritingMode()) {
+  if (caret_position.cursor.Current().Style().IsHorizontalWritingMode()) {
     rect.SetY(line_box.Current().OffsetInContainerBlock().top);
     rect.SetHeight(line_box.Current().Size().height);
   } else {
