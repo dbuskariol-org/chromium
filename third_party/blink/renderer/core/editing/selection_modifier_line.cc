@@ -63,7 +63,7 @@ class AbstractLineBox {
       return GetRootInlineBox().LogicalHeight() &&
              GetRootInlineBox().FirstLeafChild();
     }
-    if (cursor_.IsEmptyLineBox())
+    if (cursor_.Current().IsEmptyLineBox())
       return false;
     const PhysicalSize physical_size = cursor_.Current().Size();
     const LogicalSize logical_size =
@@ -139,7 +139,7 @@ class AbstractLineBox {
 
   explicit AbstractLineBox(const NGInlineCursor& cursor)
       : cursor_(cursor), type_(Type::kLayoutNG) {
-    DCHECK(cursor_.IsLineBox());
+    DCHECK(cursor_.Current().IsLineBox());
   }
 
   const LayoutBlockFlow& GetBlock() const {

@@ -922,7 +922,8 @@ PhysicalRect ComputeLocalSelectionRectForText(
   LogicalRect logical_rect = ComputeLogicalRectFor(selection_rect, cursor);
   // Let LocalRect for line break have a space width to paint line break
   // when it is only character in a line or only selected in a line.
-  if (selection_status.start != selection_status.end && cursor.IsLineBreak() &&
+  if (selection_status.start != selection_status.end &&
+      cursor.Current().IsLineBreak() &&
       // This is for old compatible that old doesn't paint last br in a page.
       !IsLastBRInPage(*cursor.CurrentLayoutObject())) {
     DCHECK(!logical_rect.size.inline_size);
@@ -930,9 +931,10 @@ PhysicalRect ComputeLocalSelectionRectForText(
         LayoutUnit(cursor.CurrentStyle().GetFont().SpaceWidth());
   }
   const LogicalRect line_break_extended_rect =
-      cursor.IsLineBreak() ? logical_rect
-                           : ExpandedSelectionRectForSoftLineBreakIfNeeded(
-                                 logical_rect, cursor, selection_status);
+      cursor.Current().IsLineBreak()
+          ? logical_rect
+          : ExpandedSelectionRectForSoftLineBreakIfNeeded(logical_rect, cursor,
+                                                          selection_status);
   const LogicalRect line_height_expanded_rect =
       ExpandSelectionRectToLineHeight(line_break_extended_rect, cursor);
   const PhysicalRect physical_rect =
