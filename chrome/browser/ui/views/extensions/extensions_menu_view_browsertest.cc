@@ -555,8 +555,14 @@ class ActivateWithReloadExtensionsMenuBrowserTest
     : public ExtensionsMenuViewBrowserTest,
       public ::testing::WithParamInterface<bool> {};
 
+// Flaky on windows, http://crbug.com/1048956
+#if defined(OS_WIN)
+#define MAYBE_ActivateWithReload DISABLED_ActivateWithReload
+#else
+#define MAYBE_ActivateWithReload ActivateWithReload
+#endif
 IN_PROC_BROWSER_TEST_P(ActivateWithReloadExtensionsMenuBrowserTest,
-                       ActivateWithReload) {
+                       MAYBE_ActivateWithReload) {
   ASSERT_TRUE(embedded_test_server()->Start());
   LoadTestExtension("extensions/blocked_actions/content_scripts");
   auto extension = extensions().back();
