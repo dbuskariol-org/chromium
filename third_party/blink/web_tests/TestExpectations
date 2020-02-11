@@ -447,6 +447,8 @@ crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/animate-marker-orient
 crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/animate-dynamic-update-attributeName.html [ Skip ]
 crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/short-simple-duration-and-fractional-repeatcount.html [ Skip ]
 
+# Slightly flaky timeouts (about 1 in 30)
+crbug.com/1050993 [ Linux ] virtual/gpu-rasterization/images/drag-image-descendant-painting-sibling.html [ Pass Timeout ]
 
 # ====== Paint team owned tests to here ======
 
