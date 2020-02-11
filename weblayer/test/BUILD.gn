@@ -174,7 +174,7 @@ test("weblayer_browsertests") {
       # setup for. Persistence related tests for Java will be done as
       # integration tests.
       "../browser/persistence/minimal_browser_persister_browsertest.cc",
-      "../browser/session_service_browsertest.cc",
+      "../browser/persistence/session_service_browsertest.cc",
     ]
   }
 }

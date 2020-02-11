@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef WEBLAYER_BROWSER_SESSION_SERVICE_H_
-#define WEBLAYER_BROWSER_SESSION_SERVICE_H_
+#ifndef WEBLAYER_BROWSER_PERSISTENCE_SESSION_SERVICE_H_
+#define WEBLAYER_BROWSER_PERSISTENCE_SESSION_SERVICE_H_
 
 #include <stddef.h>
 
@@ -130,4 +130,4 @@ class SessionService : public sessions::CommandStorageManagerDelegate,
 
 }  // namespace weblayer
 
-#endif  // WEBLAYER_BROWSER_SESSION_SERVICE_H_
+#endif  // WEBLAYER_BROWSER_PERSISTENCE_SESSION_SERVICE_H_
