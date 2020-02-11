@@ -2174,6 +2174,73 @@
     chrome.test.assertEq(mimeType, 'audio/ogg');
   };
 
+
+  /**
+   * Tests that deleting all items in a check-selection closes the Quick View.
+   */
+  testcase.openQuickViewDeleteEntireCheckSelection = async () => {
+    // Open Files app on Downloads containing BASIC_LOCAL_ENTRY_SET.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, BASIC_LOCAL_ENTRY_SET, []);
+
+    const caller = getCaller();
+
+    // Check-select Beautiful Song.ogg and My Desktop Background.png.
+    const ctrlDown = ['#file-list', 'ArrowDown', true, false, false];
+    const ctrlSpace = ['#file-list', ' ', true, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, ctrlDown),
+        'Pressing Ctrl+Down failed.');
+
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, ctrlDown),
+        'Pressing Ctrl+Down failed.');
+
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, ctrlSpace),
+        'Pressing Ctrl+Space failed.');
+
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, ctrlDown),
+        'Pressing Ctrl+Down failed.');
+
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, ctrlSpace),
+        'Pressing Ctrl+Space failed.');
+
+    // Open Quick View on the check-selected files.
+    await openQuickViewMultipleSelection(appId, ['Beautiful', 'Desktop']);
+
+    // Open the Quick View delete confirm dialog.
+    const deleteKey = ['#quick-view', 'Delete', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, deleteKey),
+        'Pressing Delete failed.');
+
+    // Click the delete confirm dialog OK button.
+    const deleteConfirm = ['#quick-view', '.cr-dialog-ok:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, deleteConfirm);
+
+    // Check: the Beautiful Song.ogg file should be deleted.
+    await remoteCall.waitForElementLost(
+        appId, '#file-list [file-name="Beautiful Song.ogg"]');
+
+    // Open the Quick View delete confirm dialog.
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, deleteKey),
+        'Pressing Delete failed.');
+
+    // Click the delete confirm dialog OK button.
+    await remoteCall.waitAndClickElement(appId, deleteConfirm);
+
+    // Check: the My Desktop Background.png file should be deleted.
+    await remoteCall.waitForElementLost(
+        appId, '#file-list [file-name="My Desktop Background.png"]');
+
+    // Check: the Quick View dialog should close.
+    await waitQuickViewClose(appId);
+  };
+
   /**
    * Tests that an item can be deleted using the Quick View delete button.
    */
