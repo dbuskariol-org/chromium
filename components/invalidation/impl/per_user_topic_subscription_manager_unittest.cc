@@ -29,8 +29,10 @@
 
 using testing::_;
 using testing::Contains;
+using testing::Eq;
 using testing::NiceMock;
 using testing::Not;
+using testing::SizeIs;
 
 namespace syncer {
 
@@ -353,6 +355,34 @@ TEST_F(PerUserTopicSubscriptionManagerTest, ShouldRepeatRequestsOnFailure) {
 
   identity_test_env()->identity_manager()->RemoveDiagnosticsObserver(
       &identity_observer);
+}
+
+TEST_F(PerUserTopicSubscriptionManagerTest, ShouldNotRepeatOngoingRequests) {
+  auto ids = GetSequenceOfTopics(kInvalidationObjectIdsCount);
+
+  auto per_user_topic_subscription_manager = BuildRegistrationManager();
+
+  per_user_topic_subscription_manager->UpdateSubscribedTopics(
+      ids, kFakeInstanceIdToken);
+  // Wait for the subscription requests to happen.
+  base::RunLoop().RunUntilIdle();
+  // No response was set, so there should be one pending request per
+  // invalidation object id.
+  // Check pending_requests() size instead of NumPending(), because
+  // NumPending() filters out cancelled requests.
+  ASSERT_THAT(*url_loader_factory()->pending_requests(),
+              SizeIs(kInvalidationObjectIdsCount));
+
+  per_user_topic_subscription_manager->UpdateSubscribedTopics(
+      ids, kFakeInstanceIdToken);
+  // Ensure that all subscription requests have happened.
+  base::RunLoop().RunUntilIdle();
+  // No changes in wanted subscriptions or access token, so there should still
+  // be only one pending request per invalidation object id.
+  // Check pending_requests() size instead of NumPending(), because
+  // NumPending() filters out cancelled requests.
+  EXPECT_THAT(*url_loader_factory()->pending_requests(),
+              SizeIs(kInvalidationObjectIdsCount));
 }
 
 TEST_F(PerUserTopicSubscriptionManagerTest,

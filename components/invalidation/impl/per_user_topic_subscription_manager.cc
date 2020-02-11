@@ -184,6 +184,7 @@ struct PerUserTopicSubscriptionManager::SubscriptionEntry {
   net::BackoffEntry request_backoff_;
 
   std::unique_ptr<PerUserTopicSubscriptionRequest> request;
+  std::string last_request_access_token;
 
   bool has_retried_on_auth_error = false;
 
@@ -366,8 +367,13 @@ void PerUserTopicSubscriptionManager::StartPendingSubscriptionRequest(
     // A retry is already scheduled for this request; nothing to do.
     return;
   }
-
+  if (it->second->request &&
+      it->second->last_request_access_token == access_token_) {
+    // The request with the same access token was already sent; nothing to do.
+    return;
+  }
   PerUserTopicSubscriptionRequest::Builder builder;
+  it->second->last_request_access_token = access_token_;
   it->second->request = builder.SetInstanceIdToken(instance_id_token_)
                             .SetScope(kInvalidationRegistrationScope)
                             .SetPublicTopicName(topic)
@@ -441,6 +447,9 @@ void PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic(
   }
 
   auto it = pending_subscriptions_.find(topic);
+  // Reset |request| to make sure it will be rescheduled during the next
+  // attempt.
+  it->second->request.reset();
   // If this is the first auth error we've encountered, then most likely the
   // access token has just expired. Get a new one and retry immediately.
   if (code.IsAuthFailure() && !it->second->has_retried_on_auth_error) {
