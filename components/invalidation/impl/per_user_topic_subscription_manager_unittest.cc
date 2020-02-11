@@ -345,9 +345,16 @@ TEST_F(PerUserTopicSubscriptionManagerTest, ShouldRepeatRequestsOnFailure) {
   EXPECT_FALSE(
       per_user_topic_subscription_manager->HaveAllRequestsFinishedForTest());
 
-  // The maximum backoff is 2 seconds; advance to just past that. Now all
-  // subscriptions should have finished.
+  // The maximum backoff is 2 seconds; advance to just past that.
+  // Access token should be refreshed in order to avoid requests with expired
+  // access token.
+  EXPECT_CALL(identity_observer, OnAccessTokenRequested(_, _, _));
   FastForwardTimeBy(base::TimeDelta::FromMilliseconds(600));
+  identity_test_env()->WaitForAccessTokenRequestIfNecessaryAndRespondWithToken(
+      "access_token", base::Time::Max());
+  base::RunLoop().RunUntilIdle();
+
+  // Now all subscriptions should have finished.
   EXPECT_FALSE(per_user_topic_subscription_manager->GetSubscribedTopicsForTest()
                    .empty());
   EXPECT_TRUE(
