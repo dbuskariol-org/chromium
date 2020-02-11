@@ -2855,6 +2855,12 @@ crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-004.html [ Fail
 crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-005.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Linux ] virtual/omt-worker-fetch/external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
+crbug.com/626703 [ Mac ] virtual/omt-worker-fetch/external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
+crbug.com/626703 [ Win ] virtual/omt-worker-fetch/external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
+crbug.com/626703 [ Linux ] external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
+crbug.com/626703 [ Mac ] external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
+crbug.com/626703 [ Win ] external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/css/css-text/line-break/line-break-strict-hyphens-002.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-text/line-break/line-break-strict-hyphens-002.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-text/line-break/line-break-strict-hyphens-002.html [ Failure ]
