@@ -657,6 +657,8 @@ class Generator(generator.Generator):
       return "mojo::ScopedMessagePipeHandle"
     if mojom.IsSharedBufferKind(kind):
       return "mojo::ScopedSharedBufferHandle"
+    if mojom.IsPlatformHandleKind(kind):
+      return "mojo::PlatformHandle"
     if not kind in _kind_to_cpp_type:
       raise Exception("Unrecognized kind %s" % kind.spec)
     return _kind_to_cpp_type[kind]
@@ -968,6 +970,8 @@ class Generator(generator.Generator):
       return "mojo::ScopedMessagePipeHandle"
     if mojom.IsSharedBufferKind(kind):
       return "mojo::ScopedSharedBufferHandle"
+    if mojom.IsPlatformHandleKind(kind):
+      return "mojo::PlatformHandle"
     return _kind_to_cpp_type[kind]
 
   def _GetUnmappedTypeForSerializer(self, kind):
