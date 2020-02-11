@@ -156,6 +156,11 @@ void SubstringSetMatcher::BuildAhoCorasickTree(
   for (const StringPattern* pattern : patterns)
     InsertPatternIntoAhoCorasickTree(pattern);
 
+  // Trie creation is complete and edges are finalized. Shrink to fit each edge
+  // map to save on memory.
+  for (AhoCorasickNode& node : tree_)
+    node.ShrinkEdges();
+
   CreateFailureAndOutputEdges();
 }
 

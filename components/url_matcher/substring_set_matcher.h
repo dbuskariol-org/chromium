@@ -8,11 +8,11 @@
 #include <stdint.h>
 
 #include <limits>
-#include <map>
 #include <set>
 #include <string>
 #include <vector>
 
+#include "base/containers/flat_map.h"
 #include "base/macros.h"
 #include "base/optional.h"
 #include "components/url_matcher/string_pattern.h"
@@ -89,8 +89,7 @@ class URL_MATCHER_EXPORT SubstringSetMatcher {
   // It will make sense. Eventually.
   class AhoCorasickNode {
    public:
-    // Key: label of the edge, value: pointer to child node.
-    typedef std::map<char, AhoCorasickNode*> Edges;
+    using Edges = base::flat_map<char, AhoCorasickNode*>;
 
     AhoCorasickNode();
     ~AhoCorasickNode();
@@ -100,6 +99,8 @@ class URL_MATCHER_EXPORT SubstringSetMatcher {
     AhoCorasickNode* GetEdge(char c) const;
     void SetEdge(char c, AhoCorasickNode* node);
     const Edges& edges() const { return edges_; }
+
+    void ShrinkEdges() { edges_.shrink_to_fit(); }
 
     const AhoCorasickNode* failure() const { return failure_; }
     void SetFailure(const AhoCorasickNode* failure);
@@ -148,7 +149,7 @@ class URL_MATCHER_EXPORT SubstringSetMatcher {
     const AhoCorasickNode* output_link_ = nullptr;
   };
 
-  typedef std::vector<const StringPattern*> SubstringPatternVector;
+  using SubstringPatternVector = std::vector<const StringPattern*>;
 
   void BuildAhoCorasickTree(const SubstringPatternVector& patterns);
 
