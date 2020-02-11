@@ -2621,10 +2621,10 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 <translation id="4988291787868618635">Acción que se realiza al alcanzar el retraso de inactividad</translation>
 <translation id="500149597848135831">Habilitar todas las variaciones</translation>
 <translation id="5023555740504506178">Si se habilita o no se configura (opción predeterminada), una página web puede usar
-      APIs de pantalla compartida (p. ej., getDisplayMedia() o la API de extensión de Captura de escritorio)
+      APIs de pantalla compartida (p. ej., getDisplayMedia() o la API Desktop Capture extension)
       para pedir al usuario que elija de qué pestaña, ventana o escritorio quiere hacer una captura de pantalla.
 
-      Cuando esta política esté inhabilitada, aparecerá un código de error en las llamadas de las
+      Cuando esta política esté inhabilitada, aparecerá un error en las llamadas de las
       API de pantalla compartida.</translation>
 <translation id="5032164758660626397">Impedir al usuario transferir archivos grandes</translation>
 <translation id="5047604665028708335">Permitir acceso a sitios no incluidos en paquetes de contenido</translation>
@@ -3073,7 +3073,7 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 <translation id="5530347722229944744">Bloquear descargas potencialmente peligrosas</translation>
 <translation id="5534198977061777727">Controla cómo <ph name="PRODUCT_NAME" /> gestiona los datos que se han subido, descargado, pegado del portapapeles o arrastrado y soltado que tengan tipos de archivo que no admiten un análisis de software malicioso o de DLP.
 
-      Si no se habilita esta política o se le asigna el valor "No bloquear ningún tipo de archivo no admitido" (0), <ph name="PRODUCT_NAME" /> permitirá la subida y descarga de datos con tipos de archivo que no admiten un análisis de software malicioso o de DLP.
+      Si no se establece ningún valor para esta política o se le asigna el valor "No bloquear ningún tipo de archivo no admitido" (0), <ph name="PRODUCT_NAME" /> permitirá la subida y descarga de datos con tipos de archivo que no admiten un análisis de software malicioso o de DLP.
 
       Si se le asigna el valor "Bloquear descargas de tipos de archivo no admitidos" (1) y el usuario intenta descargar un archivo desde una URL incluida en la política <ph name="DOMAINS_TO_CHECK_COMPLIANCE_OF_DOWNLOADED_CONTENT_POLICTY_NAME" /> y tiene un tipo de archivo que no admite un análisis de software malicioso o de DLP, <ph name="PRODUCT_NAME" /> bloqueará los datos descargados.
 
@@ -3241,7 +3241,7 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
           Si la acción es la suspensión, <ph name="PRODUCT_OS_NAME" /> se puede configurar por separado para bloquear o no la pantalla antes de entrar en modo de suspensión.</translation>
 <translation id="5746196829700407864">Indica la lista de patrones de URL en los que no se comprobará si el contenido descargado tiene software malicioso.  Esta política solo se utilizará si se le asigna a la política <ph name="SEND_FILES_FOR_MALWARE_CHECK_POLICY_NAME" /> un valor que permita o requiera las comprobaciones de software malicioso en los archivos descargados.
 
-      Si no se establece esta política o se le asigna una lista vacía de patrones de URL, se comprobará si todos los archivos descargados tienen software malicioso.
+      Si no se establece esta política o se le asigna una lista vacía de patrones de URL, se comprobarán todos los archivos descargados en busca de software malicioso.
 
       Los patrones de URL deben seguir el mismo formato que en la política "URLBlacklist", tal y como se indica en la página https://www.chromium.org/administrators/url-blacklist-filter-format.
       </translation>
