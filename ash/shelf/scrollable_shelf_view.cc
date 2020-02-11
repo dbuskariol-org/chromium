@@ -1555,7 +1555,7 @@ bool ScrollableShelfView::ProcessGestureEvent(const ui::GestureEvent& event) {
   DCHECK(presentation_time_recorder_);
   presentation_time_recorder_->RequestNext();
 
-  const int scroll_x = -event.details().scroll_x();
+  const float scroll_x = -event.details().scroll_x();
   if (GetShelf()->IsHorizontalAlignment()) {
     ScrollByXOffset(ShouldAdaptToRTL() ? -scroll_x : scroll_x,
                     /*animate=*/false);
