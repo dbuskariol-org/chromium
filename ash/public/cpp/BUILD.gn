@@ -19,6 +19,8 @@ component("cpp") {
     "accessibility_focus_ring_info.h",
     "ambient/ambient_mode_state.cc",
     "ambient/ambient_mode_state.h",
+    "ambient/ambient_prefs.cc",
+    "ambient/ambient_prefs.h",
     "ambient/photo_controller.cc",
     "ambient/photo_controller.h",
     "android_intent_helper.cc",
