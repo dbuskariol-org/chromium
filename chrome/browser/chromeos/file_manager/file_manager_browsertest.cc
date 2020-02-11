@@ -467,6 +467,8 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
         TestCase("openQuickViewBrokenImage"),
         TestCase("openQuickViewVideo"),
         TestCase("openQuickViewPdf"),
+        // TODO(isabella): Group these with the other delete tests.
+        TestCase("openQuickViewDeleteButtonNotShown"),
         TestCase("openQuickViewPdfPreviewsDisabled"),
         TestCase("openQuickViewKeyboardUpDownChangesView"),
         TestCase("openQuickViewKeyboardLeftRightChangesView"),

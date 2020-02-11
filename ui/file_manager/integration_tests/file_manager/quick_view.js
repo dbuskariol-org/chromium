@@ -2201,4 +2201,32 @@
     // Check: the Quick View dialog should close.
     await waitQuickViewClose(appId);
   };
+
+  /**
+   * Tests that the delete button is not shown if the file displayed in Quick
+   * View cannot be deleted.
+   */
+  testcase.openQuickViewDeleteButtonNotShown = async () => {
+    // Open Files app on My Files
+    const appId = await openNewWindow(RootPath.MYFILES);
+
+    // Wait for the file list to appear.
+    await remoteCall.waitForElement(appId, '#file-list');
+
+    // Check: My Files should contain the expected entries.
+    const expectedRows = [
+      ['Play files', '--', 'Folder'],
+      ['Downloads', '--', 'Folder'],
+      ['Linux files', '--', 'Folder'],
+    ];
+    await remoteCall.waitForFiles(
+        appId, expectedRows, {ignoreLastModifiedTime: true});
+
+    // Open Play files in Quick View, which cannot be deleted.
+    await openQuickView(appId, 'Play files');
+
+    // Check: the delete button should not be shown.
+    const quickViewDeleteButton = ['#quick-view', '#delete-button[hidden]'];
+    await remoteCall.waitForElement(appId, quickViewDeleteButton);
+  };
 })();
