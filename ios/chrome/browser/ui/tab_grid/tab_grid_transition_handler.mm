@@ -5,7 +5,7 @@
 #import "ios/chrome/browser/ui/tab_grid/tab_grid_transition_handler.h"
 
 #import "ios/chrome/browser/ui/tab_grid/transitions/grid_to_visible_tab_animator.h"
-#import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_state_providing.h"
+#import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_animation_layout_providing.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/reduced_motion_animator.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/tab_to_grid_animator.h"
 
@@ -23,8 +23,8 @@ animationControllerForPresentedController:(UIViewController*)presented
                          sourceController:(UIViewController*)source {
   if (!UIAccessibilityIsReduceMotionEnabled() &&
       self.provider.selectedCellVisible) {
-    return
-        [[GridToVisibleTabAnimator alloc] initWithStateProvider:self.provider];
+    return [[GridToVisibleTabAnimator alloc]
+        initWithAnimationLayoutProvider:self.provider];
   }
   ReducedMotionAnimator* simpleAnimator = [[ReducedMotionAnimator alloc] init];
   simpleAnimator.presenting = YES;
@@ -34,7 +34,8 @@ animationControllerForPresentedController:(UIViewController*)presented
 - (id<UIViewControllerAnimatedTransitioning>)
 animationControllerForDismissedController:(UIViewController*)dismissed {
   if (!UIAccessibilityIsReduceMotionEnabled()) {
-    return [[TabToGridAnimator alloc] initWithStateProvider:self.provider];
+    return [[TabToGridAnimator alloc]
+        initWithAnimationLayoutProvider:self.provider];
   }
   ReducedMotionAnimator* simpleAnimator = [[ReducedMotionAnimator alloc] init];
   simpleAnimator.presenting = NO;

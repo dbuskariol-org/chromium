@@ -6,8 +6,8 @@
 
 #include "ios/chrome/browser/crash_report/breakpad_helper.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_animation.h"
+#import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_animation_layout_providing.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_layout.h"
-#import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_state_providing.h"
 #import "ios/chrome/browser/ui/util/layout_guide_names.h"
 #import "ios/chrome/browser/ui/util/named_guide.h"
 #import "ios/chrome/browser/ui/util/property_animator_group.h"
@@ -17,7 +17,8 @@
 #endif
 
 @interface GridToVisibleTabAnimator ()
-@property(nonatomic, weak) id<GridTransitionStateProviding> stateProvider;
+@property(nonatomic, weak) id<GridTransitionAnimationLayoutProviding>
+    animationLayoutProvider;
 // Animation object for this transition.
 @property(nonatomic, strong) GridTransitionAnimation* animation;
 // Transition context passed into this object when the animation is started.
@@ -26,14 +27,11 @@
 @end
 
 @implementation GridToVisibleTabAnimator
-@synthesize stateProvider = _stateProvider;
-@synthesize animation = _animation;
-@synthesize transitionContext = _transitionContext;
 
-- (instancetype)initWithStateProvider:
-    (id<GridTransitionStateProviding>)stateProvider {
+- (instancetype)initWithAnimationLayoutProvider:
+    (id<GridTransitionAnimationLayoutProviding>)animationLayoutProvider {
   if ((self = [super init])) {
-    _stateProvider = stateProvider;
+    _animationLayoutProvider = animationLayoutProvider;
   }
   return self;
 }
@@ -65,11 +63,11 @@
 
   // Get the layout of the grid for the transition.
   GridTransitionLayout* layout =
-      [self.stateProvider layoutForTransitionContext:transitionContext];
+      [self.animationLayoutProvider transitionLayout];
 
   // Ask the state provider for the views to use when inserting the animation.
-  UIView* proxyContainer =
-      [self.stateProvider proxyContainerForTransitionContext:transitionContext];
+  UIView* animationContainer =
+      [self.animationLayoutProvider animationViewsContainer];
 
   // Find the rect for the animating tab by getting the content area layout
   // guide.
@@ -89,8 +87,9 @@
   [layout.activeItem populateWithSnapshotsFromView:viewWithNamedGuides
                                         middleRect:finalRect];
 
-  layout.expandedRect = [proxyContainer convertRect:viewWithNamedGuides.frame
-                                           fromView:presentedView];
+  layout.expandedRect =
+      [animationContainer convertRect:viewWithNamedGuides.frame
+                             fromView:presentedView];
 
   NSTimeInterval duration = [self transitionDuration:transitionContext];
   // Create the animation view and insert it.
@@ -99,9 +98,10 @@
             duration:duration
            direction:GridAnimationDirectionExpanding];
 
-  UIView* viewBehindProxies =
-      [self.stateProvider proxyPositionForTransitionContext:transitionContext];
-  [proxyContainer insertSubview:self.animation aboveSubview:viewBehindProxies];
+  UIView* bottomViewForAnimations =
+      [self.animationLayoutProvider animationViewsContainerBottomView];
+  [animationContainer insertSubview:self.animation
+                       aboveSubview:bottomViewForAnimations];
 
   // Reparent the active cell view so that it can animate above the presenting
   // view while the rest of the animation is embedded inside it.

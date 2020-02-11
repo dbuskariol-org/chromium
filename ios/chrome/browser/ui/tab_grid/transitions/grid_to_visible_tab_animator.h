@@ -7,17 +7,17 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol GridTransitionStateProviding;
+@protocol GridTransitionAnimationLayoutProviding;
 
 // Animator object for transitioning from a collection view of square-ish items
 // (the "grid") into a fullscreen view controller (the "tab").
 @interface GridToVisibleTabAnimator
     : NSObject<UIViewControllerAnimatedTransitioning>
 
-// Initialize an animator object with |stateProvider| to provide state
-// information for the transition.
-- (instancetype)initWithStateProvider:
-    (id<GridTransitionStateProviding>)stateProvider;
+// Initialize an animator object with |animationLayoutProvider| to provide
+// layout information for the transition.
+- (instancetype)initWithAnimationLayoutProvider:
+    (id<GridTransitionAnimationLayoutProviding>)animationLayoutProvider;
 
 @end
 
