@@ -15,13 +15,12 @@
 #include "chrome/browser/notifications/scheduler/public/notification_params.h"
 #include "chrome/browser/notifications/scheduler/public/notification_schedule_service.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/profiles/profile_key.h"
 #include "content/public/browser/web_ui.h"
 
 NotificationsInternalsUIMessageHandler::NotificationsInternalsUIMessageHandler(
     Profile* profile)
-    : schedule_service_(NotificationScheduleServiceFactory::GetForKey(
-          profile->GetProfileKey())) {}
+    : schedule_service_(
+          NotificationScheduleServiceFactory::GetForBrowserContext(profile)) {}
 
 NotificationsInternalsUIMessageHandler::
     ~NotificationsInternalsUIMessageHandler() = default;

@@ -41,7 +41,7 @@ const base::FilePath::CharType kNotificationDBName[] =
     FILE_PATH_LITERAL("NotificationDB");
 }  // namespace
 
-std::unique_ptr<KeyedService> CreateNotificationScheduleService(
+KeyedService* CreateNotificationScheduleService(
     std::unique_ptr<NotificationSchedulerClientRegistrar> client_registrar,
     std::unique_ptr<NotificationBackgroundTaskScheduler>
         background_task_scheduler,
@@ -51,7 +51,7 @@ std::unique_ptr<KeyedService> CreateNotificationScheduleService(
     bool off_the_record) {
   if (!base::FeatureList::IsEnabled(features::kNotificationScheduleService) ||
       off_the_record)
-    return std::make_unique<NoopNotificationScheduleService>();
+    return static_cast<KeyedService*>(new NoopNotificationScheduleService());
 
   auto config = SchedulerConfig::Create();
   auto task_runner = base::CreateSequencedTaskRunner(
@@ -108,8 +108,8 @@ std::unique_ptr<KeyedService> CreateNotificationScheduleService(
   auto scheduler = NotificationScheduler::Create(std::move(context));
   auto init_aware_scheduler =
       std::make_unique<InitAwareNotificationScheduler>(std::move(scheduler));
-  return std::make_unique<NotificationScheduleServiceImpl>(
-      (std::move(init_aware_scheduler)));
+  return static_cast<KeyedService*>(
+      new NotificationScheduleServiceImpl(std::move(init_aware_scheduler)));
 }
 
 }  // namespace notifications

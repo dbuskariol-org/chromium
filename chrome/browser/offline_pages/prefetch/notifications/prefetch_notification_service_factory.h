@@ -5,39 +5,32 @@
 #ifndef CHROME_BROWSER_OFFLINE_PAGES_PREFETCH_NOTIFICATIONS_PREFETCH_NOTIFICATION_SERVICE_FACTORY_H_
 #define CHROME_BROWSER_OFFLINE_PAGES_PREFETCH_NOTIFICATIONS_PREFETCH_NOTIFICATION_SERVICE_FACTORY_H_
 
-#include <memory>
-
 #include "base/macros.h"
-#include "components/keyed_service/core/simple_keyed_service_factory.h"
-
-class SimpleFactoryKey;
-
-namespace base {
-template <typename T>
-struct DefaultSingletonTraits;
-}  // namespace base
+#include "base/no_destructor.h"
+#include "components/keyed_service/content/browser_context_keyed_service_factory.h"
 
 namespace offline_pages {
 class PrefetchNotificationService;
 }  // namespace offline_pages
 
-class PrefetchNotificationServiceFactory : public SimpleKeyedServiceFactory {
+class PrefetchNotificationServiceFactory
+    : public BrowserContextKeyedServiceFactory {
  public:
   static PrefetchNotificationServiceFactory* GetInstance();
-  static offline_pages::PrefetchNotificationService* GetForKey(
-      SimpleFactoryKey* key);
+  static offline_pages::PrefetchNotificationService* GetForBrowserContext(
+      content::BrowserContext* context);
 
  private:
-  friend struct base::DefaultSingletonTraits<
-      PrefetchNotificationServiceFactory>;
+  friend class base::NoDestructor<PrefetchNotificationServiceFactory>;
+
+  // BrowserContextKeyedServiceFactory implementation.
+  KeyedService* BuildServiceInstanceFor(
+      content::BrowserContext* context) const override;
+  content::BrowserContext* GetBrowserContextToUse(
+      content::BrowserContext* context) const override;
 
   PrefetchNotificationServiceFactory();
   ~PrefetchNotificationServiceFactory() override;
-
-  // SimpleKeyedServiceFactory implementation.
-  std::unique_ptr<KeyedService> BuildServiceInstanceFor(
-      SimpleFactoryKey* key) const override;
-  SimpleFactoryKey* GetKeyToUse(SimpleFactoryKey* key) const override;
 
   DISALLOW_COPY_AND_ASSIGN(PrefetchNotificationServiceFactory);
 };

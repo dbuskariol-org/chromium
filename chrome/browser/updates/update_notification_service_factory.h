@@ -5,35 +5,32 @@
 #ifndef CHROME_BROWSER_UPDATES_UPDATE_NOTIFICATION_SERVICE_FACTORY_H_
 #define CHROME_BROWSER_UPDATES_UPDATE_NOTIFICATION_SERVICE_FACTORY_H_
 
-#include <memory>
-
 #include "base/macros.h"
-#include "components/keyed_service/core/simple_keyed_service_factory.h"
-
-namespace base {
-template <typename T>
-struct DefaultSingletonTraits;
-}  // namespace base
+#include "base/no_destructor.h"
+#include "components/keyed_service/content/browser_context_keyed_service_factory.h"
 
 namespace updates {
 class UpdateNotificationService;
 }  // namespace updates
 
-class UpdateNotificationServiceFactory : public SimpleKeyedServiceFactory {
+class UpdateNotificationServiceFactory
+    : public BrowserContextKeyedServiceFactory {
  public:
   static UpdateNotificationServiceFactory* GetInstance();
-  static updates::UpdateNotificationService* GetForKey(SimpleFactoryKey* key);
+  static updates::UpdateNotificationService* GetForBrowserContext(
+      content::BrowserContext* context);
 
  private:
-  friend struct base::DefaultSingletonTraits<UpdateNotificationServiceFactory>;
+  friend class base::NoDestructor<UpdateNotificationServiceFactory>;
+
+  // BrowserContextKeyedServiceFactory implementation.
+  KeyedService* BuildServiceInstanceFor(
+      content::BrowserContext* context) const override;
+  content::BrowserContext* GetBrowserContextToUse(
+      content::BrowserContext* context) const override;
 
   UpdateNotificationServiceFactory();
   ~UpdateNotificationServiceFactory() override;
-
-  // SimpleKeyedServiceFactory implementation.
-  std::unique_ptr<KeyedService> BuildServiceInstanceFor(
-      SimpleFactoryKey* key) const override;
-  SimpleFactoryKey* GetKeyToUse(SimpleFactoryKey* key) const override;
 
   DISALLOW_COPY_AND_ASSIGN(UpdateNotificationServiceFactory);
 };
