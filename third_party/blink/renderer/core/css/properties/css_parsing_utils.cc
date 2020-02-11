@@ -810,7 +810,7 @@ CSSValue* ConsumeBackgroundComponent(CSSPropertyID resolved_property,
                                    WebFeature::kNegativeMaskSize,
                                    ParsingStyle::kNotLegacy);
     case CSSPropertyID::kBackgroundColor:
-      return css_property_parser_helpers::ConsumeColor(range, context.Mode());
+      return css_property_parser_helpers::ConsumeColor(range, context);
     case CSSPropertyID::kWebkitMaskClip:
       return ConsumePrefixedBackgroundBox(range, AllowTextValue::kAllow);
     case CSSPropertyID::kWebkitMaskOrigin:
@@ -1031,7 +1031,7 @@ bool ConsumeBorderImageComponents(CSSParserTokenRange& range,
         continue;
     }
     if (!slice) {
-      slice = ConsumeBorderImageSlice(range, default_fill);
+      slice = ConsumeBorderImageSlice(range, context, default_fill);
       if (slice) {
         DCHECK(!width);
         DCHECK(!outset);
@@ -1069,6 +1069,7 @@ CSSValue* ConsumeBorderImageRepeat(CSSParserTokenRange& range) {
 }
 
 CSSValue* ConsumeBorderImageSlice(CSSParserTokenRange& range,
+                                  const CSSParserContext& context,
                                   DefaultFill default_fill) {
   bool fill =
       css_property_parser_helpers::ConsumeIdent<CSSValueID::kFill>(range);
@@ -1076,7 +1077,7 @@ CSSValue* ConsumeBorderImageSlice(CSSParserTokenRange& range,
 
   for (size_t index = 0; index < 4; ++index) {
     CSSPrimitiveValue* value = css_property_parser_helpers::ConsumePercent(
-        range, kValueRangeNonNegative);
+        range, context, kValueRangeNonNegative);
     if (!value) {
       value = css_property_parser_helpers::ConsumeNumber(
           range, kValueRangeNonNegative);
@@ -1205,13 +1206,13 @@ CSSShadowValue* ParseSingleShadow(CSSParserTokenRange& range,
   if (range.AtEnd())
     return nullptr;
 
-  color = css_property_parser_helpers::ConsumeColor(range, context.Mode());
+  color = css_property_parser_helpers::ConsumeColor(range, context);
   if (range.Peek().Id() == CSSValueID::kInset) {
     if (inset_and_spread != AllowInsetAndSpread::kAllow)
       return nullptr;
     style = css_property_parser_helpers::ConsumeIdent(range);
     if (!color)
-      color = css_property_parser_helpers::ConsumeColor(range, context.Mode());
+      color = css_property_parser_helpers::ConsumeColor(range, context);
   }
 
   CSSPrimitiveValue* horizontal_offset =
@@ -1238,14 +1239,13 @@ CSSShadowValue* ParseSingleShadow(CSSParserTokenRange& range,
 
   if (!range.AtEnd()) {
     if (!color)
-      color = css_property_parser_helpers::ConsumeColor(range, context.Mode());
+      color = css_property_parser_helpers::ConsumeColor(range, context);
     if (range.Peek().Id() == CSSValueID::kInset) {
       if (inset_and_spread != AllowInsetAndSpread::kAllow || style)
         return nullptr;
       style = css_property_parser_helpers::ConsumeIdent(range);
       if (!color) {
-        color =
-            css_property_parser_helpers::ConsumeColor(range, context.Mode());
+        color = css_property_parser_helpers::ConsumeColor(range, context);
       }
     }
   }
@@ -1471,23 +1471,23 @@ CSSIdentifierValue* ConsumeFontStretchKeywordOnly(CSSParserTokenRange& range) {
 }
 
 CSSValue* ConsumeFontStretch(CSSParserTokenRange& range,
-                             const CSSParserMode& parser_mode) {
+                             const CSSParserContext& context) {
   CSSIdentifierValue* parsed_keyword = ConsumeFontStretchKeywordOnly(range);
   if (parsed_keyword)
     return parsed_keyword;
 
   CSSPrimitiveValue* start_percent =
-      css_property_parser_helpers::ConsumePercent(range,
+      css_property_parser_helpers::ConsumePercent(range, context,
                                                   kValueRangeNonNegative);
   if (!start_percent)
     return nullptr;
 
   // In a non-font-face context, more than one percentage is not allowed.
-  if (parser_mode != kCSSFontFaceRuleMode || range.AtEnd())
+  if (context.Mode() != kCSSFontFaceRuleMode || range.AtEnd())
     return start_percent;
 
   CSSPrimitiveValue* end_percent = css_property_parser_helpers::ConsumePercent(
-      range, kValueRangeNonNegative);
+      range, context, kValueRangeNonNegative);
   if (!end_percent)
     return nullptr;
 
@@ -2635,7 +2635,7 @@ CSSValue* ConsumeBorderColorSide(CSSParserTokenRange& range,
   bool allow_quirky_colors = IsQuirksModeBehavior(context.Mode()) &&
                              (shorthand == CSSPropertyID::kInvalid ||
                               shorthand == CSSPropertyID::kBorderColor);
-  return css_property_parser_helpers::ConsumeColor(range, context.Mode(),
+  return css_property_parser_helpers::ConsumeColor(range, context,
                                                    allow_quirky_colors);
 }
 
@@ -2668,8 +2668,7 @@ CSSValue* ParsePaintStroke(CSSParserTokenRange& range,
     if (range.Peek().Id() == CSSValueID::kNone) {
       parsed_value = css_property_parser_helpers::ConsumeIdent(range);
     } else {
-      parsed_value =
-          css_property_parser_helpers::ConsumeColor(range, context.Mode());
+      parsed_value = css_property_parser_helpers::ConsumeColor(range, context);
     }
     if (parsed_value) {
       CSSValueList* values = CSSValueList::CreateSpaceSeparated();
@@ -2679,7 +2678,7 @@ CSSValue* ParsePaintStroke(CSSParserTokenRange& range,
     }
     return url;
   }
-  return css_property_parser_helpers::ConsumeColor(range, context.Mode());
+  return css_property_parser_helpers::ConsumeColor(range, context);
 }
 
 css_property_parser_helpers::UnitlessQuirk UnitlessUnlessShorthand(

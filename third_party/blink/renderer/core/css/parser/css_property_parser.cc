@@ -310,7 +310,7 @@ static CSSValue* ConsumeSingleViewportDescriptor(
       if (parsed_value)
         return parsed_value;
       return css_property_parser_helpers::ConsumePercent(
-          range, kValueRangeNonNegative);
+          range, context, kValueRangeNonNegative);
     }
     case CSSPropertyID::kUserZoom:
       return ConsumeIdent<CSSValueID::kZoom, CSSValueID::kFixed>(range);
