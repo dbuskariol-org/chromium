@@ -689,11 +689,9 @@ crbug.com/847274 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain
 crbug.com/880802 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-paint-021.html [ Failure ]
 crbug.com/882367 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-paint-clip-015.html [ Failure ]
 crbug.com/882367 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-paint-clip-016.html [ Failure ]
-crbug.com/845235 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-size-flexbox-001.html [ Failure ]
 crbug.com/955170 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-size-replaced-003a.html [ Failure ]
 crbug.com/955163 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-size-replaced-003b.html [ Failure ]
 crbug.com/955163 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-size-replaced-003c.html [ Failure ]
-crbug.com/845235 virtual/layout_ng_fieldset/external/wpt/css/css-contain/contain-size-scrollbars-002.html [ Failure ]
 crbug.com/882383 virtual/layout_ng_fieldset/external/wpt/css/css-contain/counter-scoping-001.html [ Failure ]
 crbug.com/882383 virtual/layout_ng_fieldset/external/wpt/css/css-contain/counter-scoping-002.html [ Failure ]
 crbug.com/882383 virtual/layout_ng_fieldset/external/wpt/css/css-contain/counter-scoping-003.html [ Failure ]
@@ -706,8 +704,6 @@ crbug.com/881057 [ Mac ] virtual/layout_ng_fieldset/external/wpt/css/vendor-impo
 crbug.com/881057 [ Mac ] virtual/layout_ng_fieldset/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/contain/contain-paint-clip-005.html [ Failure ]
 crbug.com/880802 virtual/layout_ng_fieldset/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/contain/contain-paint-ignored-cases-ruby-stacking-and-clipping-001.html [ Failure ]
 crbug.com/965491 virtual/layout_ng_fieldset/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/contain/contain-size-fieldset-002.html [ Failure ]
-crbug.com/845235 virtual/layout_ng_fieldset/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/contain/contain-size-flex-001.html [ Failure ]
-crbug.com/845235 virtual/layout_ng_fieldset/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/contain/contain-size-inline-flex-001.html [ Failure ]
 
 # [css-align]
 
@@ -1573,27 +1569,30 @@ crbug.com/782948 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/table-a
 
 # Fieldset in NG
 #
+crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-border-gap-position-relative.html [ Failure ]
+crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-containing-block.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-overflow.html [ Failure ]
-crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-painting-order.html [ Failure Crash ]
+crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-overflow-hidden.html [ Failure ]
+crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-painting-order.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-percentage-block-size.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-transform-translatez.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-vertical.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-align.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-auto-margins.html [ Failure ]
-crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-block-formatting-context.html [ Crash ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-block-margins.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-block-margins-2.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-display-rendering.html [ Failure ]
-crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-list-item-numbering.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-list-item.html [ Failure ]
+crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-list-item-numbering.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-margin-inline.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/legend-tall.html [ Failure ]
 
 ### virtual/layout_ng_fieldset/fast/forms/fieldset/
 crbug.com/875235 virtual/layout_ng_fieldset/fast/forms/fieldset/fieldset-align.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/fast/forms/fieldset/fieldset-legend-change.html [ Crash ]
+crbug.com/875235 virtual/layout_ng_fieldset/fast/forms/fieldset/fieldset-legend-padding-unclipped-fieldset-border.html [ Failure ]
+crbug.com/875235 virtual/layout_ng_fieldset/fast/forms/fieldset/float-before-fieldset.html [ Failure ]
 crbug.com/875235 virtual/layout_ng_fieldset/fast/forms/fieldset/legend-after-margin-with-before-border-horizontal-mode.html [ Failure ]
-crbug.com/875235 virtual/layout_ng_fieldset/fast/forms/fieldset/legend-small-after-margin-before-border-horizontal-mode.html [ Failure ]
 
 # ====== LayoutNG-only failures until here ======
 
