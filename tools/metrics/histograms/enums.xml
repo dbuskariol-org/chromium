@@ -19595,6 +19595,17 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="674" label="DeviceLoginScreenChromeVariations"/>
 </enum>
 
+<enum name="EnterprisePolicyDeviceIdValidity">
+  <summary>
+    Defined as PolicyDeviceIdValidity in
+    components/policy/core/common/cloud/enterprise_metrics.h.
+  </summary>
+  <int value="0" label="Valid"/>
+  <int value="1" label="Actual device ID is unknown"/>
+  <int value="2" label="Missing"/>
+  <int value="3" label="Invalid"/>
+</enum>
+
 <enum name="EnterprisePolicyInvalidations">
   <summary>
     Defined as PolicyInvalidationType in
