@@ -38575,6 +38575,7 @@ from previous Chrome versions.
   <int value="-30966385" label="enable-hardware-overlays"/>
   <int value="-29877377" label="TabHoverCardImages:disabled"/>
   <int value="-29847483" label="MemoryAblation:enabled"/>
+  <int value="-29507521" label="ContextualNudges:disabled"/>
   <int value="-28295905" label="AutofillEnableAccountWalletStorage:enabled"/>
   <int value="-27213807" label="GlobalMediaControls:enabled"/>
   <int value="-23804418"
@@ -39814,6 +39815,7 @@ from previous Chrome versions.
   <int value="1495748045" label="SignedHTTPExchange:enabled"/>
   <int value="1496135626" label="UploadCrashReportsUsingJobScheduler:enabled"/>
   <int value="1496571153" label="enable-webapk"/>
+  <int value="1497609106" label="ContextualNudges:enabled"/>
   <int value="1497924954" label="js-flags"/>
   <int value="1499163193" label="PostScriptPrinting:disabled"/>
   <int value="1500390299" label="NtpCustomizationMenuV2:disabled"/>
