@@ -6653,6 +6653,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Duplicate"/>
 </enum>
 
+<enum name="BooleanEligible">
+  <int value="0" label="Not elibible"/>
+  <int value="1" label="Eligible"/>
+</enum>
+
 <enum name="BooleanEmpty">
   <int value="0" label="Not Empty"/>
   <int value="1" label="Empty"/>
