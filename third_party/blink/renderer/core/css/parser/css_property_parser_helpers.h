@@ -62,7 +62,7 @@ CSSPrimitiveValue* ConsumePercent(CSSParserTokenRange&, ValueRange);
 CSSPrimitiveValue* ConsumeAlphaValue(CSSParserTokenRange&);
 CSSPrimitiveValue* ConsumeLengthOrPercent(
     CSSParserTokenRange&,
-    CSSParserMode,
+    const CSSParserContext&,
     ValueRange,
     UnitlessQuirk = UnitlessQuirk::kForbid);
 CSSPrimitiveValue* ConsumeSVGGeometryPropertyLength(CSSParserTokenRange&,
@@ -116,7 +116,7 @@ bool ConsumePosition(CSSParserTokenRange&,
                      CSSValue*& result_x,
                      CSSValue*& result_y);
 bool ConsumeOneOrTwoValuedPosition(CSSParserTokenRange&,
-                                   CSSParserMode,
+                                   const CSSParserContext&,
                                    UnitlessQuirk,
                                    CSSValue*& result_x,
                                    CSSValue*& result_y);

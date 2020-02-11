@@ -670,7 +670,7 @@ bool BorderRadius::ParseShorthand(
   CSSValue* vertical_radii[4] = {nullptr};
 
   if (!css_parsing_utils::ConsumeRadii(horizontal_radii, vertical_radii, range,
-                                       context.Mode(),
+                                       context,
                                        local_context.UseAliasParsing()))
     return false;
 
@@ -930,7 +930,7 @@ bool Flex::ParseShorthand(bool important,
           flex_basis = css_property_parser_helpers::ConsumeIdent(range);
         if (!flex_basis) {
           flex_basis = css_property_parser_helpers::ConsumeLengthOrPercent(
-              range, context.Mode(), kValueRangeNonNegative);
+              range, context, kValueRangeNonNegative);
         }
         if (index == 2 && !range.AtEnd())
           return false;
@@ -1182,7 +1182,7 @@ bool ConsumeFont(bool important,
 
   if (css_property_parser_helpers::ConsumeSlashIncludingWhitespace(range)) {
     CSSValue* line_height =
-        css_parsing_utils::ConsumeLineHeight(range, context.Mode());
+        css_parsing_utils::ConsumeLineHeight(range, context);
     if (!line_height)
       return false;
     css_property_parser_helpers::AddProperty(
@@ -1628,23 +1628,22 @@ bool Grid::ParseShorthand(bool important,
       auto_rows_value = CSSInitialValue::Create();
     } else {
       auto_rows_value = css_parsing_utils::ConsumeGridTrackList(
-          range, context, context.Mode(),
-          css_parsing_utils::TrackListType::kGridAuto);
+          range, context, css_parsing_utils::TrackListType::kGridAuto);
       if (!auto_rows_value)
         return false;
       if (!css_property_parser_helpers::ConsumeSlashIncludingWhitespace(range))
         return false;
     }
     if (!(template_columns =
-              css_parsing_utils::ConsumeGridTemplatesRowsOrColumns(
-                  range, context, context.Mode())))
+              css_parsing_utils::ConsumeGridTemplatesRowsOrColumns(range,
+                                                                   context)))
       return false;
     template_rows = CSSInitialValue::Create();
     auto_columns_value = CSSInitialValue::Create();
   } else {
     // 3- <grid-template-rows> / [ auto-flow && dense? ] <grid-auto-columns>?
-    template_rows = css_parsing_utils::ConsumeGridTemplatesRowsOrColumns(
-        range, context, context.Mode());
+    template_rows =
+        css_parsing_utils::ConsumeGridTemplatesRowsOrColumns(range, context);
     if (!template_rows)
       return false;
     if (!css_property_parser_helpers::ConsumeSlashIncludingWhitespace(range))
@@ -1657,8 +1656,7 @@ bool Grid::ParseShorthand(bool important,
       auto_columns_value = CSSInitialValue::Create();
     } else {
       auto_columns_value = css_parsing_utils::ConsumeGridTrackList(
-          range, context, context.Mode(),
-          css_parsing_utils::TrackListType::kGridAuto);
+          range, context, css_parsing_utils::TrackListType::kGridAuto);
       if (!auto_columns_value)
         return false;
     }
@@ -2166,11 +2164,11 @@ bool Offset::ParseShorthand(
   const CSSValue* offset_rotate = nullptr;
   if (offset_path) {
     offset_distance = css_property_parser_helpers::ConsumeLengthOrPercent(
-        range, context.Mode(), kValueRangeAll);
+        range, context, kValueRangeAll);
     offset_rotate = css_parsing_utils::ConsumeOffsetRotate(range, context);
     if (offset_rotate && !offset_distance) {
       offset_distance = css_property_parser_helpers::ConsumeLengthOrPercent(
-          range, context.Mode(), kValueRangeAll);
+          range, context, kValueRangeAll);
     }
   }
   const CSSValue* offset_anchor = nullptr;
