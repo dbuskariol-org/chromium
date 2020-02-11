@@ -384,6 +384,11 @@ size_t AndroidSystemProducer::shared_buffer_page_size_kb() const {
   return 0;
 }
 
+bool AndroidSystemProducer::IsShmemProvidedByProducer() const {
+  NOTREACHED();
+  return false;
+}
+
 perfetto::SharedMemoryArbiter*
 AndroidSystemProducer::MaybeSharedMemoryArbiter() {
   return service_->MaybeSharedMemoryArbiter();
