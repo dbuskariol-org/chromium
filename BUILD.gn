@@ -856,7 +856,7 @@ if ((is_linux || is_win) && enable_remoting && !use_ozone) {
 if (is_fuchsia) {
   # TODO(https://crbug.com/731217): This can't practically be in //v8 without
   # duplicating all the Fuchsia running infrastructure there.
-  fuchsia_package("d8_fuchsia_pkg") {
+  cr_fuchsia_package("d8_fuchsia_pkg") {
     testonly = true
     binary = "//v8:d8"
     package_name_override = "d8"
