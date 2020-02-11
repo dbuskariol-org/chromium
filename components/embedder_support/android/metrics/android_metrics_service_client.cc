@@ -114,12 +114,8 @@ AndroidMetricsServiceClient::CreateMetricsService(
     AndroidMetricsServiceClient* client,
     PrefService* prefs) {
   auto service = std::make_unique<MetricsService>(state_manager, client, prefs);
-  // Although targeted at mobile, the unit tests runs on all platforms and the
-  // chrome os version CHECK fails if we include NetworkMetricsProvider.
-#if !defined(OS_CHROMEOS)
   service->RegisterMetricsProvider(std::make_unique<NetworkMetricsProvider>(
       content::CreateNetworkConnectionTrackerAsyncGetter()));
-#endif  // defined(OS_CHROMEOS)
   service->RegisterMetricsProvider(std::make_unique<CPUMetricsProvider>());
   service->RegisterMetricsProvider(
       std::make_unique<ScreenInfoMetricsProvider>());
