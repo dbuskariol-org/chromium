@@ -86,7 +86,7 @@ bool StoreDMTokenInRegistry(const std::string& token) {
   ConfigureProxyBlanket(app_bundle.Get());
   app_bundle->initialize();
   const wchar_t* app_guid = install_static::GetAppGuid();
-  hr = app_bundle->createInstalledApp(base::win::ScopedBstr(app_guid));
+  hr = app_bundle->createInstalledApp(base::win::ScopedBstr(app_guid).Get());
   if (FAILED(hr))
     return false;
 
@@ -101,8 +101,8 @@ bool StoreDMTokenInRegistry(const std::string& token) {
 
   dispatch.Reset();
   ConfigureProxyBlanket(app.Get());
-  hr = app->get_command(base::win::ScopedBstr(installer::kCmdStoreDMToken),
-                        &dispatch);
+  hr = app->get_command(
+      base::win::ScopedBstr(installer::kCmdStoreDMToken).Get(), &dispatch);
   if (FAILED(hr) || !dispatch)
     return false;
 
