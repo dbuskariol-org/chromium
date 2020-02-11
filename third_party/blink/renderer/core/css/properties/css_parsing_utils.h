@@ -120,7 +120,8 @@ CSSValue* ConsumeBorderImageRepeat(CSSParserTokenRange&);
 CSSValue* ConsumeBorderImageSlice(CSSParserTokenRange&, DefaultFill);
 CSSValue* ConsumeBorderImageWidth(CSSParserTokenRange&,
                                   const CSSParserContext&);
-CSSValue* ConsumeBorderImageOutset(CSSParserTokenRange&);
+CSSValue* ConsumeBorderImageOutset(CSSParserTokenRange&,
+                                   const CSSParserContext&);
 
 CSSValue* ParseBorderRadiusCorner(CSSParserTokenRange&,
                                   const CSSParserContext&);
@@ -129,15 +130,18 @@ CSSValue* ParseBorderWidthSide(CSSParserTokenRange&,
                                const CSSParserLocalContext&);
 
 CSSValue* ConsumeShadow(CSSParserTokenRange&,
-                        CSSParserMode,
+                        const CSSParserContext&,
                         AllowInsetAndSpread);
 CSSShadowValue* ParseSingleShadow(CSSParserTokenRange&,
-                                  CSSParserMode,
+                                  const CSSParserContext&,
                                   AllowInsetAndSpread);
 
 CSSValue* ConsumeColumnCount(CSSParserTokenRange&);
-CSSValue* ConsumeColumnWidth(CSSParserTokenRange&);
-bool ConsumeColumnWidthOrCount(CSSParserTokenRange&, CSSValue*&, CSSValue*&);
+CSSValue* ConsumeColumnWidth(CSSParserTokenRange&, const CSSParserContext&);
+bool ConsumeColumnWidthOrCount(CSSParserTokenRange&,
+                               const CSSParserContext&,
+                               CSSValue*&,
+                               CSSValue*&);
 CSSValue* ConsumeGapLength(CSSParserTokenRange&, const CSSParserContext&);
 
 CSSValue* ConsumeCounter(CSSParserTokenRange&, const CSSParserContext&, int);
@@ -234,7 +238,7 @@ CSSValue* ConsumeBorderColorSide(CSSParserTokenRange&,
                                  const CSSParserContext&,
                                  const CSSParserLocalContext&);
 CSSValue* ConsumeBorderWidth(CSSParserTokenRange&,
-                             CSSParserMode,
+                             const CSSParserContext&,
                              css_property_parser_helpers::UnitlessQuirk);
 CSSValue* ParsePaintStroke(CSSParserTokenRange&, const CSSParserContext&);
 CSSValue* ParseSpacing(CSSParserTokenRange&, const CSSParserContext&);

@@ -386,7 +386,7 @@ bool ConsumePerspective(CSSParserTokenRange& args,
                         CSSFunctionValue*& transform_value,
                         bool use_legacy_parsing) {
   CSSPrimitiveValue* parsed_value = css_property_parser_helpers::ConsumeLength(
-      args, context.Mode(), kValueRangeNonNegative);
+      args, context, kValueRangeNonNegative);
   if (!parsed_value && use_legacy_parsing) {
     double perspective;
     if (!css_property_parser_helpers::ConsumeNumberRaw(args, perspective) ||
@@ -417,8 +417,8 @@ bool ConsumeTranslate3d(CSSParserTokenRange& args,
     if (!css_property_parser_helpers::ConsumeCommaIncludingWhitespace(args))
       return false;
   } while (--number_of_arguments);
-  parsed_value = css_property_parser_helpers::ConsumeLength(
-      args, context.Mode(), kValueRangeAll);
+  parsed_value =
+      css_property_parser_helpers::ConsumeLength(args, context, kValueRangeAll);
   if (!parsed_value)
     return false;
   transform_value->Append(*parsed_value);
@@ -1040,7 +1040,7 @@ bool ConsumeBorderImageComponents(CSSParserTokenRange& range,
           width = ConsumeBorderImageWidth(range, context);
           if (css_property_parser_helpers::ConsumeSlashIncludingWhitespace(
                   range)) {
-            outset = ConsumeBorderImageOutset(range);
+            outset = ConsumeBorderImageOutset(range, context);
             if (!outset)
               return false;
           } else if (!width) {
@@ -1133,7 +1133,8 @@ CSSValue* ConsumeBorderImageWidth(CSSParserTokenRange& range,
                                             CSSQuadValue::kSerializeAsQuad);
 }
 
-CSSValue* ConsumeBorderImageOutset(CSSParserTokenRange& range) {
+CSSValue* ConsumeBorderImageOutset(CSSParserTokenRange& range,
+                                   const CSSParserContext& context) {
   CSSValue* outsets[4] = {nullptr};
 
   CSSValue* value = nullptr;
@@ -1141,8 +1142,10 @@ CSSValue* ConsumeBorderImageOutset(CSSParserTokenRange& range) {
     value = css_property_parser_helpers::ConsumeNumber(range,
                                                        kValueRangeNonNegative);
     if (!value) {
+      CSSParserContext::ParserModeOverridingScope scope(context,
+                                                        kHTMLStandardMode);
       value = css_property_parser_helpers::ConsumeLength(
-          range, kHTMLStandardMode, kValueRangeNonNegative);
+          range, context, kValueRangeNonNegative);
     }
     if (!value)
       break;
@@ -1181,20 +1184,20 @@ CSSValue* ParseBorderWidthSide(CSSParserTokenRange& range,
       allow_quirky_lengths
           ? css_property_parser_helpers::UnitlessQuirk::kAllow
           : css_property_parser_helpers::UnitlessQuirk::kForbid;
-  return ConsumeBorderWidth(range, context.Mode(), unitless);
+  return ConsumeBorderWidth(range, context, unitless);
 }
 
 CSSValue* ConsumeShadow(CSSParserTokenRange& range,
-                        CSSParserMode css_parser_mode,
+                        const CSSParserContext& context,
                         AllowInsetAndSpread inset_and_spread) {
   if (range.Peek().Id() == CSSValueID::kNone)
     return css_property_parser_helpers::ConsumeIdent(range);
   return css_property_parser_helpers::ConsumeCommaSeparatedList(
-      ParseSingleShadow, range, css_parser_mode, inset_and_spread);
+      ParseSingleShadow, range, context, inset_and_spread);
 }
 
 CSSShadowValue* ParseSingleShadow(CSSParserTokenRange& range,
-                                  CSSParserMode css_parser_mode,
+                                  const CSSParserContext& context,
                                   AllowInsetAndSpread inset_and_spread) {
   CSSIdentifierValue* style = nullptr;
   CSSValue* color = nullptr;
@@ -1202,47 +1205,47 @@ CSSShadowValue* ParseSingleShadow(CSSParserTokenRange& range,
   if (range.AtEnd())
     return nullptr;
 
-  color = css_property_parser_helpers::ConsumeColor(range, css_parser_mode);
+  color = css_property_parser_helpers::ConsumeColor(range, context.Mode());
   if (range.Peek().Id() == CSSValueID::kInset) {
     if (inset_and_spread != AllowInsetAndSpread::kAllow)
       return nullptr;
     style = css_property_parser_helpers::ConsumeIdent(range);
     if (!color)
-      color = css_property_parser_helpers::ConsumeColor(range, css_parser_mode);
+      color = css_property_parser_helpers::ConsumeColor(range, context.Mode());
   }
 
   CSSPrimitiveValue* horizontal_offset =
-      css_property_parser_helpers::ConsumeLength(range, css_parser_mode,
+      css_property_parser_helpers::ConsumeLength(range, context,
                                                  kValueRangeAll);
   if (!horizontal_offset)
     return nullptr;
 
   CSSPrimitiveValue* vertical_offset =
-      css_property_parser_helpers::ConsumeLength(range, css_parser_mode,
+      css_property_parser_helpers::ConsumeLength(range, context,
                                                  kValueRangeAll);
   if (!vertical_offset)
     return nullptr;
 
   CSSPrimitiveValue* blur_radius = css_property_parser_helpers::ConsumeLength(
-      range, css_parser_mode, kValueRangeNonNegative);
+      range, context, kValueRangeNonNegative);
   CSSPrimitiveValue* spread_distance = nullptr;
   if (blur_radius) {
     if (inset_and_spread == AllowInsetAndSpread::kAllow) {
       spread_distance = css_property_parser_helpers::ConsumeLength(
-          range, css_parser_mode, kValueRangeAll);
+          range, context, kValueRangeAll);
     }
   }
 
   if (!range.AtEnd()) {
     if (!color)
-      color = css_property_parser_helpers::ConsumeColor(range, css_parser_mode);
+      color = css_property_parser_helpers::ConsumeColor(range, context.Mode());
     if (range.Peek().Id() == CSSValueID::kInset) {
       if (inset_and_spread != AllowInsetAndSpread::kAllow || style)
         return nullptr;
       style = css_property_parser_helpers::ConsumeIdent(range);
       if (!color) {
         color =
-            css_property_parser_helpers::ConsumeColor(range, css_parser_mode);
+            css_property_parser_helpers::ConsumeColor(range, context.Mode());
       }
     }
   }
@@ -1257,19 +1260,22 @@ CSSValue* ConsumeColumnCount(CSSParserTokenRange& range) {
   return css_property_parser_helpers::ConsumePositiveInteger(range);
 }
 
-CSSValue* ConsumeColumnWidth(CSSParserTokenRange& range) {
+CSSValue* ConsumeColumnWidth(CSSParserTokenRange& range,
+                             const CSSParserContext& context) {
   if (range.Peek().Id() == CSSValueID::kAuto)
     return css_property_parser_helpers::ConsumeIdent(range);
   // Always parse lengths in strict mode here, since it would be ambiguous
   // otherwise when used in the 'columns' shorthand property.
+  CSSParserContext::ParserModeOverridingScope scope(context, kHTMLStandardMode);
   CSSPrimitiveValue* column_width = css_property_parser_helpers::ConsumeLength(
-      range, kHTMLStandardMode, kValueRangeNonNegative);
+      range, context, kValueRangeNonNegative);
   if (!column_width)
     return nullptr;
   return column_width;
 }
 
 bool ConsumeColumnWidthOrCount(CSSParserTokenRange& range,
+                               const CSSParserContext& context,
                                CSSValue*& column_width,
                                CSSValue*& column_count) {
   if (range.Peek().Id() == CSSValueID::kAuto) {
@@ -1277,7 +1283,7 @@ bool ConsumeColumnWidthOrCount(CSSParserTokenRange& range,
     return true;
   }
   if (!column_width) {
-    column_width = ConsumeColumnWidth(range);
+    column_width = ConsumeColumnWidth(range, context);
     if (column_width)
       return true;
   }
@@ -2533,8 +2539,8 @@ CSSValue* ConsumeTransformValue(CSSParserTokenRange& range,
       }
       break;
     case CSSValueID::kTranslateZ:
-      parsed_value = css_property_parser_helpers::ConsumeLength(
-          args, context.Mode(), kValueRangeAll);
+      parsed_value = css_property_parser_helpers::ConsumeLength(args, context,
+                                                                kValueRangeAll);
       break;
     case CSSValueID::kMatrix:
     case CSSValueID::kMatrix3d:
@@ -2635,9 +2641,9 @@ CSSValue* ConsumeBorderColorSide(CSSParserTokenRange& range,
 
 CSSValue* ConsumeBorderWidth(
     CSSParserTokenRange& range,
-    CSSParserMode css_parser_mode,
+    const CSSParserContext& context,
     css_property_parser_helpers::UnitlessQuirk unitless) {
-  return css_property_parser_helpers::ConsumeLineWidth(range, css_parser_mode,
+  return css_property_parser_helpers::ConsumeLineWidth(range, context,
                                                        unitless);
 }
 
@@ -2647,7 +2653,7 @@ CSSValue* ParseSpacing(CSSParserTokenRange& range,
     return css_property_parser_helpers::ConsumeIdent(range);
   // TODO(timloh): allow <percentage>s in word-spacing.
   return css_property_parser_helpers::ConsumeLength(
-      range, context.Mode(), kValueRangeAll,
+      range, context, kValueRangeAll,
       css_property_parser_helpers::UnitlessQuirk::kAllow);
 }
 
@@ -2690,7 +2696,7 @@ CSSValue* ConsumeIntrinsicLength(CSSParserTokenRange& range,
           range.Peek().Id())) {
     return css_property_parser_helpers::ConsumeIdent(range);
   }
-  return css_property_parser_helpers::ConsumeLength(range, context.Mode(),
+  return css_property_parser_helpers::ConsumeLength(range, context,
                                                     kValueRangeNonNegative);
 }
 
