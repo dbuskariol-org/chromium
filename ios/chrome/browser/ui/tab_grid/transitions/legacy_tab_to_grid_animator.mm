@@ -2,9 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/tab_grid/transitions/grid_to_visible_tab_animator.h"
+#import "ios/chrome/browser/ui/tab_grid/transitions/legacy_tab_to_grid_animator.h"
 
-#include "ios/chrome/browser/crash_report/breakpad_helper.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_animation.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_animation_layout_providing.h"
 #import "ios/chrome/browser/ui/tab_grid/transitions/grid_transition_layout.h"
@@ -16,7 +15,7 @@
 #error "This file requires ARC support."
 #endif
 
-@interface GridToVisibleTabAnimator ()
+@interface LegacyTabToGridAnimator ()
 @property(nonatomic, weak) id<GridTransitionAnimationLayoutProviding>
     animationLayoutProvider;
 // Animation object for this transition.
@@ -26,7 +25,7 @@
     transitionContext;
 @end
 
-@implementation GridToVisibleTabAnimator
+@implementation LegacyTabToGridAnimator
 
 - (instancetype)initWithAnimationLayoutProvider:
     (id<GridTransitionAnimationLayoutProviding>)animationLayoutProvider {
@@ -38,7 +37,7 @@
 
 - (NSTimeInterval)transitionDuration:
     (id<UIViewControllerContextTransitioning>)transitionContext {
-  return 0.5;
+  return 0.3;
 }
 
 - (void)animateTransition:
@@ -49,123 +48,98 @@
 
   // Get views and view controllers for this transition.
   UIView* containerView = [transitionContext containerView];
-  UIViewController* presentedViewController = [transitionContext
+  UIViewController* gridViewController = [transitionContext
       viewControllerForKey:UITransitionContextToViewControllerKey];
-  UIView* presentedView =
+  UIView* gridView =
       [transitionContext viewForKey:UITransitionContextToViewKey];
+  UIView* dismissingView =
+      [transitionContext viewForKey:UITransitionContextFromViewKey];
 
-  // Add the presented view to the container. This isn't just for the
-  // transition; this is how the presented view controller's view is added to
-  // the view hierarchy.
-  [containerView addSubview:presentedView];
-  presentedView.frame =
-      [transitionContext finalFrameForViewController:presentedViewController];
-
-  // Get the layout of the grid for the transition.
-  GridTransitionLayout* layout =
-      [self.animationLayoutProvider transitionLayout];
+  // Find the rect for the animating tab by getting the content area layout
+  // guide.
+  // Add the grid view to the container. This isn't just for the transition;
+  // this is how the grid view controller's view is added to the view
+  // hierarchy.
+  [containerView insertSubview:gridView belowSubview:dismissingView];
+  gridView.frame =
+      [transitionContext finalFrameForViewController:gridViewController];
+  // Normally this view will layout before it's displayed, but in order to build
+  // the layout for the animation, |gridView|'s layout needs to be current, so
+  // force an update here.
+  [gridView layoutIfNeeded];
 
   // Ask the state provider for the views to use when inserting the animation.
   UIView* animationContainer =
       [self.animationLayoutProvider animationViewsContainer];
 
-  // Find the rect for the animating tab by getting the content area layout
-  // guide.
-  // Conceptually this transition is presenting a tab (a BVC). However,
+  // Get the layout of the grid for the transition.
+  GridTransitionLayout* layout =
+      [self.animationLayoutProvider transitionLayout];
+
+  // Get the initial rect for the snapshotted content of the active tab.
+  // Conceptually this transition is dismissing a tab (a BVC). However,
   // currently the BVC instances are themselves contanted within a BVCContainer
-  // view controller. This means that the |presentedView| is not the BVC's
+  // view controller. This means that the |dismissingView| is not the BVC's
   // view; rather it's the view of the view controller that contains the BVC.
   // Unfortunatley, the layout guide needed here is attached to the BVC's view,
   // which is the first (and only) subview of the BVCContainerViewController's
   // view.
   // TODO(crbug.com/860234) Clean up this arrangement.
-  UIView* viewWithNamedGuides = presentedView.subviews[0];
-  CGRect finalRect =
-      [NamedGuide guideWithName:kContentAreaGuide view:viewWithNamedGuides]
-          .layoutFrame;
+  UIView* viewWithNamedGuides = dismissingView.subviews[0];
+  CGRect initialRect = [NamedGuide guideWithName:kContentAreaGuide
+                                            view:viewWithNamedGuides]
+                           .layoutFrame;
 
   [layout.activeItem populateWithSnapshotsFromView:viewWithNamedGuides
-                                        middleRect:finalRect];
+                                        middleRect:initialRect];
 
   layout.expandedRect =
       [animationContainer convertRect:viewWithNamedGuides.frame
-                             fromView:presentedView];
+                             fromView:dismissingView];
 
   NSTimeInterval duration = [self transitionDuration:transitionContext];
   // Create the animation view and insert it.
   self.animation = [[GridTransitionAnimation alloc]
       initWithLayout:layout
             duration:duration
-           direction:GridAnimationDirectionExpanding];
+           direction:GridAnimationDirectionContracting];
 
   UIView* bottomViewForAnimations =
       [self.animationLayoutProvider animationViewsContainerBottomView];
   [animationContainer insertSubview:self.animation
                        aboveSubview:bottomViewForAnimations];
 
-  // Reparent the active cell view so that it can animate above the presenting
-  // view while the rest of the animation is embedded inside it.
-  UIView* presentingView =
-      [transitionContext viewForKey:UITransitionContextFromViewKey];
-  [containerView insertSubview:self.animation.activeCell
-                  aboveSubview:presentingView];
-
-  // Make the presented view alpha-zero; this should happen after all snapshots
-  // are taken.
-  presentedView.alpha = 0.0;
-
   [self.animation.animator addCompletion:^(UIViewAnimatingPosition position) {
     BOOL finished = (position == UIViewAnimatingPositionEnd);
     [self gridTransitionAnimationDidFinish:finished];
   }];
+
+  // TODO(crbug.com/850507): Have the tab view animate itself out alongside this
+  // transition instead of just zeroing the alpha here.
+  dismissingView.alpha = 0;
 
   // Run the main animation.
   [self.animation.animator startAnimation];
 }
 
 - (void)gridTransitionAnimationDidFinish:(BOOL)finished {
-  // Clean up the animation. First the active cell, then the animation itself.
-  // These views will not be re-used, so there's no need to reparent the 
-  // active cell view.
-  [self.animation.activeCell removeFromSuperview];
+  // Clean up the animation
   [self.animation removeFromSuperview];
-  // If the transition was cancelled, remove the presented view.
-  // If not, remove the grid view.
+  // If the transition was cancelled, restore the dismissing view and
+  // remove the grid view.
+  // If not, remove the dismissing view.
   UIView* gridView =
-      [self.transitionContext viewForKey:UITransitionContextFromViewKey];
-  UIView* presentedView =
       [self.transitionContext viewForKey:UITransitionContextToViewKey];
+  UIView* dismissingView =
+      [self.transitionContext viewForKey:UITransitionContextFromViewKey];
   if (self.transitionContext.transitionWasCancelled) {
-    [presentedView removeFromSuperview];
-  } else {
-    // TODO(crbug.com/850507): Have the tab view animate itself in alongside
-    // this transition instead of just setting the alpha here.
-    presentedView.alpha = 1;
+    dismissingView.alpha = 1.0;
     [gridView removeFromSuperview];
+  } else {
+    [dismissingView removeFromSuperview];
   }
-
-  // TODO(crbug.com/959774): The logging below is to better understand a crash
-  // when |-completeTransition| is called. We expect the |toViewController| to
-  // be BVC. We are testing the assumption below that there should be no
-  // presentingViewController, presentedViewController, or parentViewController.
-  UIViewController* toViewController = [self.transitionContext
-      viewControllerForKey:UITransitionContextToViewControllerKey];
-  NSString* toViewControllerName = NSStringFromClass([toViewController class]);
-  NSString* presentingViewControllerName =
-      NSStringFromClass([toViewController.presentingViewController class]);
-  NSString* presentedViewControllerName =
-      NSStringFromClass([toViewController.presentedViewController class]);
-  NSString* parentViewControllerName =
-      NSStringFromClass([toViewController.parentViewController class]);
-  breakpad_helper::SetGridToVisibleTabAnimation(
-      toViewControllerName, presentingViewControllerName,
-      presentedViewControllerName, parentViewControllerName);
-
   // Mark the transition as completed.
   [self.transitionContext completeTransition:YES];
-
-  // Remove the crash log since the presentation completed without a crash.
-  breakpad_helper::RemoveGridToVisibleTabAnimation();
 }
 
 @end

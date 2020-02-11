@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_TAB_GRID_TRANSITIONS_TAB_TO_GRID_ANIMATOR_H_
-#define IOS_CHROME_BROWSER_UI_TAB_GRID_TRANSITIONS_TAB_TO_GRID_ANIMATOR_H_
+#ifndef IOS_CHROME_BROWSER_UI_TAB_GRID_TRANSITIONS_LEGACY_TAB_TO_GRID_ANIMATOR_H_
+#define IOS_CHROME_BROWSER_UI_TAB_GRID_TRANSITIONS_LEGACY_TAB_TO_GRID_ANIMATOR_H_
 
 #import <UIKit/UIKit.h>
 
@@ -11,7 +11,8 @@
 
 // Animator object for transitioning from a fullscreen view controller (the
 // "tab") into a collection view of square-ish items (the "grid").
-@interface TabToGridAnimator : NSObject<UIViewControllerAnimatedTransitioning>
+@interface LegacyTabToGridAnimator
+    : NSObject <UIViewControllerAnimatedTransitioning>
 
 // Initialize an animator object with |animationLayoutProvider| to provide
 // layout information for the transition.
@@ -20,4 +21,4 @@
 
 @end
 
-#endif  // IOS_CHROME_BROWSER_UI_TAB_GRID_TRANSITIONS_TAB_TO_GRID_ANIMATOR_H_
+#endif  // IOS_CHROME_BROWSER_UI_TAB_GRID_TRANSITIONS_LEGACY_TAB_TO_GRID_ANIMATOR_H_
