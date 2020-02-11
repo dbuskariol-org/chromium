@@ -53858,6 +53858,13 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="4" label="Required but not shown - grace exceeded"/>
 </enum>
 
+<enum name="QueryWebAndAppActivityState">
+  <int value="0" label="History recording enabled"/>
+  <int value="1" label="History recording disabled"/>
+  <int value="2" label="Request failed"/>
+  <int value="3" label="Unexpected response"/>
+</enum>
+
 <enum name="QuicAddressMismatch">
   <int value="0" label="Address mismatch: IPv4 IPv4"/>
   <int value="1" label="Address mismatch: IPv6 IPv6"/>
