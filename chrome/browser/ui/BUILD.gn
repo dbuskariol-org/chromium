@@ -3650,8 +3650,6 @@ jumbo_static_library("ui") {
       "app_list/arc/arc_app_icon_descriptor.h",
       "app_list/arc/arc_app_icon_loader.cc",
       "app_list/arc/arc_app_icon_loader.h",
-      "app_list/arc/arc_app_item.cc",
-      "app_list/arc/arc_app_item.h",
       "app_list/arc/arc_app_launcher.cc",
       "app_list/arc/arc_app_launcher.h",
       "app_list/arc/arc_app_list_prefs.cc",
