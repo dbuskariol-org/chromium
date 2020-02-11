@@ -14,15 +14,6 @@ PhotoController* g_photo_controller = nullptr;
 
 }  // namespace
 
-PhotoController::Topic::Topic() = default;
-
-PhotoController::Topic::~Topic() = default;
-
-PhotoController::Topic::Topic(const Topic&) = default;
-
-PhotoController::Topic& PhotoController::Topic::operator=(const Topic&) =
-    default;
-
 // static
 PhotoController* PhotoController::Get() {
   return g_photo_controller;
