@@ -6,6 +6,9 @@
 #define CHROME_BROWSER_UI_WEBUI_SETTINGS_CHROMEOS_SEARCH_SETTINGS_USER_ACTION_TRACKER_H_
 
 #include "base/time/time.h"
+#include "chrome/browser/ui/webui/settings/chromeos/search/search.mojom.h"
+#include "mojo/public/cpp/bindings/pending_receiver.h"
+#include "mojo/public/cpp/bindings/receiver.h"
 
 namespace chromeos {
 namespace settings {
@@ -14,22 +17,29 @@ namespace settings {
 // This class is only meant to track actions from an individual settings
 // session; if the settings window is closed and reopened again, a new instance
 // should be created for that new session.
-class SettingsUserActionTracker {
+class SettingsUserActionTracker : public mojom::UserActionRecorder {
  public:
-  SettingsUserActionTracker();
+  explicit SettingsUserActionTracker(
+      mojo::PendingReceiver<mojom::UserActionRecorder> pending_receiver);
   SettingsUserActionTracker(const SettingsUserActionTracker& other) = delete;
   SettingsUserActionTracker& operator=(const SettingsUserActionTracker& other) =
       delete;
-  ~SettingsUserActionTracker();
+  ~SettingsUserActionTracker() override;
 
-  void RecordPageFocus();
-  void RecordPageBlur();
-  void RecordClick();
-  void RecordNavigation();
-  void RecordSearch();
-  void RecordSettingChange();
+  // mojom::UserActionRecorder:
+  void RecordPageFocus() override;
+  void RecordPageBlur() override;
+  void RecordClick() override;
+  void RecordNavigation() override;
+  void RecordSearch() override;
+  void RecordSettingChange() override;
 
  private:
+  friend class SettingsUserActionTrackerTest;
+
+  // For unit tests.
+  SettingsUserActionTracker();
+
   void ResetMetricsCountersAndTimestamp();
 
   // Whether a setting has been changed since the window has been focused. Note
@@ -52,6 +62,8 @@ class SettingsUserActionTracker {
   // The last time at which a page blur event was received; if no blur events
   // have been received, this field is_null().
   base::TimeTicks last_blur_timestamp_;
+
+  mojo::Receiver<mojom::UserActionRecorder> receiver_{this};
 };
 
 }  // namespace settings

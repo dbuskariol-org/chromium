@@ -29,6 +29,12 @@ void LogDurationMetric(const char* metric_name, base::TimeDelta duration) {
 
 }  // namespace
 
+SettingsUserActionTracker::SettingsUserActionTracker(
+    mojo::PendingReceiver<mojom::UserActionRecorder> pending_receiver)
+    : SettingsUserActionTracker() {
+  receiver_.Bind(std::move(pending_receiver));
+}
+
 SettingsUserActionTracker::SettingsUserActionTracker()
     : metric_start_time_(base::TimeTicks::Now()) {}
 
