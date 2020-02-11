@@ -3476,12 +3476,6 @@ const char kMediaSessionNotificationsDescription[] =
     "Shows notifications for media sessions showing the currently playing "
     "media and providing playback controls";
 
-const char kNewOverviewTabletLayoutName[] = "New overview tablet mode layout";
-const char kNewOverviewTabletLayoutDescription[] =
-    "If enabled, in tablet mode, overview items will be laid out in two rows "
-    "with six items showing at a time. Users can scroll through to see hidden "
-    "items.";
-
 const char kPrintServerUiName[] = "Print Server UI";
 const char kPrintServerUiDescription[] =
     "Enables users to add their own print server in the printer settings page.";

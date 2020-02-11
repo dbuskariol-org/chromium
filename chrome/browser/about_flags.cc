@@ -4662,11 +4662,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kZeroStateFilesDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(app_list_features::kEnableZeroStateMixedTypesRanker)},
 
-    {"new-overview-tablet-layout",
-     flag_descriptions::kNewOverviewTabletLayoutName,
-     flag_descriptions::kNewOverviewTabletLayoutDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(ash::features::kNewOverviewLayout)},
-
     {"aggregated-ml-app-ranking",
      flag_descriptions::kAggregatedMlAppRankingName,
      flag_descriptions::kAggregatedMlAppRankingDescription, kOsCrOS,

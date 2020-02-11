@@ -2026,9 +2026,6 @@ extern const char kMediaAppDescription[];
 extern const char kMediaSessionNotificationsName[];
 extern const char kMediaSessionNotificationsDescription[];
 
-extern const char kNewOverviewTabletLayoutName[];
-extern const char kNewOverviewTabletLayoutDescription[];
-
 extern const char kPrintServerUiName[];
 extern const char kPrintServerUiDescription[];
 
