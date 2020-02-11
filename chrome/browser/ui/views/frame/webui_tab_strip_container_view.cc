@@ -394,8 +394,8 @@ TabStripUILayout WebUITabStripContainerView::GetLayout() {
       tab_contents_container_->size());
 }
 
-SkColor WebUITabStripContainerView::GetColor(int id) const {
-  return GetThemeProvider()->GetColor(id);
+const ui::ThemeProvider* WebUITabStripContainerView::GetThemeProvider() {
+  return View::GetThemeProvider();
 }
 
 void WebUITabStripContainerView::AddedToWidget() {
