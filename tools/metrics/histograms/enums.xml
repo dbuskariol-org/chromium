@@ -16282,6 +16282,15 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3" label="Cancelled"/>
 </enum>
 
+<enum name="DownloadInitiatedByWindowOpenerType">
+  <int value="0" label="Same Origin">
+    window.opener is the same origin as the top frame of this download.
+  </int>
+  <int value="1" label="Cross Origin">
+    window.opener is cross origin to the top frame of this download.
+  </int>
+</enum>
+
 <enum name="DownloadInProgressDBCountType">
   <int value="0" label="In-progress DB initialization started"/>
   <int value="1" label="In-progress DB successfully initialized"/>
