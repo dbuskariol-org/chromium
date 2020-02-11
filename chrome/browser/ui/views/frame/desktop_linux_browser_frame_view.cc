@@ -22,13 +22,13 @@ DesktopLinuxBrowserFrameView::DesktopLinuxBrowserFrameView(
     : OpaqueBrowserFrameView(frame, browser_view, layout),
       nav_button_provider_(std::move(nav_button_provider)) {}
 
-DesktopLinuxBrowserFrameView::~DesktopLinuxBrowserFrameView() = default;
+DesktopLinuxBrowserFrameView::~DesktopLinuxBrowserFrameView() {}
 
 void DesktopLinuxBrowserFrameView::Layout() {
   // Calling MaybeUpdateCachedFrameButtonImages() from Layout() is sufficient to
   // catch all cases that could update the appearance, since
-  // DesktopWindowTreeHostPlatform::On{Window,Activation}StateChanged() does a
-  // layout any time the maximized and activation state changes, respectively.
+  // DesktopWindowTreeHostPlatform::OnWindowStateChanged() does a layout any
+  // time any properties change.
   MaybeUpdateCachedFrameButtonImages();
   OpaqueBrowserFrameView::Layout();
 }
