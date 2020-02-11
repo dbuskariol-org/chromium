@@ -2173,4 +2173,32 @@
     const mimeType = await getQuickViewMetadataBoxField(appId, 'Type');
     chrome.test.assertEq(mimeType, 'audio/ogg');
   };
+
+  /**
+   * Tests that an item can be deleted using the Quick View delete button.
+   */
+  testcase.openQuickViewClickDeleteButton = async () => {
+    // Open Files app on Downloads containing ENTRIES.hello.
+    const appId =
+        await setupAndWaitUntilReady(RootPath.DOWNLOADS, [ENTRIES.hello], []);
+
+    // Open the file in Quick View.
+    await openQuickView(appId, ENTRIES.hello.nameText);
+
+    // Click the Quick View delete button.
+    const quickViewDeleteButton =
+        ['#quick-view', '#delete-button:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, quickViewDeleteButton);
+
+    // Click the delete confirm dialog OK button.
+    const deleteConfirm = ['#quick-view', '.cr-dialog-ok:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, deleteConfirm);
+
+    // Check: the file should have been deleted.
+    await remoteCall.waitForElementLost(
+        appId, '#file-list [file-name="hello.txt"]');
+
+    // Check: the Quick View dialog should close.
+    await waitQuickViewClose(appId);
+  };
 })();
