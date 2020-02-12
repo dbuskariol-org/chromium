@@ -14,7 +14,6 @@
 #include <utility>
 
 #include "base/bind.h"
-#include "base/feature_list.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/rand_util.h"
 #include "base/stl_util.h"
@@ -22,7 +21,6 @@
 #include "base/strings/stringprintf.h"
 #include "base/values.h"
 #include "components/gcm_driver/instance_id/instance_id_driver.h"
-#include "components/invalidation/impl/invalidation_switches.h"
 #include "components/invalidation/public/identity_provider.h"
 #include "components/invalidation/public/invalidation_util.h"
 #include "components/prefs/pref_registry_simple.h"
@@ -423,9 +421,7 @@ void PerUserTopicSubscriptionManager::ActOnSuccessfulSubscription(
     }
   }
   // Emit ENABLED once all requests have finished.
-  if (all_subscriptions_completed &&
-      base::FeatureList::IsEnabled(
-          invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
+  if (all_subscriptions_completed) {
     NotifySubscriptionChannelStateChange(SubscriptionChannelState::ENABLED);
   }
 }
@@ -478,9 +474,7 @@ void PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic(
 
   // If one of the subscription requests failed (and we need to either observe
   // backoff before retrying, or won't retry at all), emit SUBSCRIPTION_FAILURE.
-  if (type == PerUserTopicSubscriptionRequest::SUBSCRIBE &&
-      base::FeatureList::IsEnabled(
-          invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
+  if (type == PerUserTopicSubscriptionRequest::SUBSCRIBE) {
     // TODO(crbug.com/1020117): case !code.ShouldRetry() now leads to
     // inconsistent behavior depending on requests completion order: if any
     // request was successful after it, we may have no |pending_subscriptions_|
@@ -551,11 +545,6 @@ void PerUserTopicSubscriptionManager::OnAccessTokenRequestSucceeded(
   // Reset backoff time after successful response.
   request_access_token_backoff_.InformOfRequest(/*succeeded=*/true);
   access_token_ = access_token;
-  if (!base::FeatureList::IsEnabled(
-          invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
-    // Emit ENABLED when successfully got the token.
-    NotifySubscriptionChannelStateChange(SubscriptionChannelState::ENABLED);
-  }
   StartPendingSubscriptions();
 }
 
