@@ -592,6 +592,7 @@ crbug.com/874695 virtual/streaming-preload/http/tests/fetch/workers/thorough/* [
 crbug.com/874695 http/tests/devtools/sxg/sxg-cert-not-found.js [ Slow ]
 crbug.com/874695 http/tests/devtools/sxg/sxg-disable-cache.js [ Slow ]
 crbug.com/874695 virtual/sxg-with-network-service/http/tests/devtools/sxg/sxg-disable-cache.js [ Slow ]
+crbug.com/874695 virtual/scalefactor200/css3/filters/effect-reference-hw.html [ Slow ]
 crbug.com/874695 virtual/threaded-no-composited-antialiasing/animations/svg/animated-filter-svg-element.html [ Slow ]
 crbug.com/874695 virtual/threaded/fast/idle-callback/idle_periods.html [ Slow ]
 crbug.com/874695 virtual/threaded/fast/idle-callback/long_idle_periods.html [ Slow ]
