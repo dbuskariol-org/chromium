@@ -1073,7 +1073,7 @@ void NGBlockNode::CopyFragmentDataToLayoutBoxForInlineChildren(
     return;
   bool initial_container_is_flipped = Style().IsFlippedBlocksWritingMode();
   for (NGInlineCursor cursor(*items); cursor; cursor.MoveToNext()) {
-    if (const NGPhysicalBoxFragment* child = cursor.CurrentBoxFragment()) {
+    if (const NGPhysicalBoxFragment* child = cursor.Current().BoxFragment()) {
       // Replaced elements and inline blocks need Location() set relative to
       // their block container.
       LayoutObject* layout_object = child->GetMutableLayoutObject();
