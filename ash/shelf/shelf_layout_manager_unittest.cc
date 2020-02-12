@@ -319,11 +319,8 @@ TEST_P(ShelfLayoutManagerTest, ShelfUpdatedWhenStatusAreaChangesSize) {
           .width();
   const int nav_width =
       shelf_widget->navigation_widget()->GetWindowBoundsInScreen().width();
-  const int hotseat_width = GetPrimaryShelf()
-                                ->shelf_widget()
-                                ->hotseat_widget()
-                                ->GetWindowBoundsInScreen()
-                                .width();
+  const int hotseat_width =
+      GetPrimaryShelf()->hotseat_widget()->GetWindowBoundsInScreen().width();
   const int margins = ShelfConfig::Get()->control_button_edge_spacing(
                           true /* is_primary_axis_edge */) +
                       ShelfConfig::Get()->app_icon_group_margin();
