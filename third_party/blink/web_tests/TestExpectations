@@ -6507,7 +6507,7 @@ crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-0
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-08.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-09.html [ Pass Failure ]
 
-crbug.com/1050212 [ Win ] external/wpt/infrastructure/server/wpt-server-http.sub.html [ Skip ]
+crbug.com/1050212 external/wpt/infrastructure/server/wpt-server-http.sub.html [ Skip ]
 
 # Sheriff 2020-02-10
 
