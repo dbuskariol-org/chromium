@@ -1390,7 +1390,7 @@ NGInlineBackwardCursor::NGInlineBackwardCursor(const NGInlineCursor& cursor)
     }
     return;
   }
-  NOTREACHED();
+  DCHECK(!cursor);
 }
 
 NGInlineCursor NGInlineBackwardCursor::CursorForDescendants() const {
