@@ -322,6 +322,15 @@ void NGBoxFragmentPainter::PaintInternal(const PaintInfo& paint_info) {
   PhysicalOffset paint_offset = paint_state.PaintOffset();
   PaintPhase original_phase = info.phase;
 
+  ScopedPaintTimingDetectorBlockPaintHook
+      scoped_paint_timing_detector_block_paint_hook;
+  if (original_phase == PaintPhase::kForeground &&
+      box_fragment_.GetLayoutObject()->IsBox()) {
+    scoped_paint_timing_detector_block_paint_hook.EmplaceIfNeeded(
+        ToLayoutBox(*box_fragment_.GetLayoutObject()),
+        paint_info.context.GetPaintController().CurrentPaintChunkProperties());
+  }
+
   if (original_phase == PaintPhase::kOutline) {
     info.phase = PaintPhase::kDescendantOutlinesOnly;
   } else if (ShouldPaintSelfBlockBackground(original_phase)) {
