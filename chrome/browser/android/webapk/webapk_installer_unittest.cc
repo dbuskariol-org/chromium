@@ -65,6 +65,8 @@ const char* kToken = "token";
 // The package name of the downloaded WebAPK.
 const char* kDownloadedWebApkPackageName = "party.unicode";
 
+const char* kUnusedIconPath = "https://example.com/unused_icon.png";
+
 // WebApkInstaller subclass where
 // WebApkInstaller::StartInstallingDownloadedWebApk() and
 // WebApkInstaller::StartUpdateUsingDownloadedWebApk() and
@@ -213,6 +215,8 @@ class BuildProtoRunner {
     ShortcutInfo info(GURL::EmptyGURL());
     info.best_primary_icon_url = best_primary_icon_url;
     info.best_badge_icon_url = best_badge_icon_url;
+    info.icon_urls = {best_primary_icon_url.spec(), best_badge_icon_url.spec(),
+                      kUnusedIconPath};
 
     for (const GURL& shortcut_url : best_shortcut_icon_urls) {
       info.best_shortcut_icon_urls.push_back(shortcut_url);
@@ -538,7 +542,7 @@ TEST_F(WebApkInstallerTest, BuildWebApkProtoWhenManifestIsObsolete) {
   ASSERT_NE(nullptr, webapk_request);
 
   webapk::WebAppManifest manifest = webapk_request->manifest();
-  ASSERT_EQ(2, manifest.icons_size());
+  ASSERT_EQ(5, manifest.icons_size());
 
   EXPECT_EQ("", manifest.icons(0).src());
   EXPECT_FALSE(manifest.icons(0).has_hash());
@@ -547,6 +551,18 @@ TEST_F(WebApkInstallerTest, BuildWebApkProtoWhenManifestIsObsolete) {
   EXPECT_EQ("", manifest.icons(1).src());
   EXPECT_FALSE(manifest.icons(1).has_hash());
   EXPECT_TRUE(manifest.icons(1).has_image_data());
+
+  EXPECT_EQ("", manifest.icons(2).src());
+  EXPECT_EQ("", manifest.icons(2).hash());
+  EXPECT_TRUE(manifest.icons(2).has_image_data());
+
+  EXPECT_EQ("", manifest.icons(3).src());
+  EXPECT_EQ("", manifest.icons(3).hash());
+  EXPECT_TRUE(manifest.icons(3).has_image_data());
+
+  EXPECT_EQ(kUnusedIconPath, manifest.icons(4).src());
+  EXPECT_FALSE(manifest.icons(4).has_hash());
+  EXPECT_FALSE(manifest.icons(4).has_image_data());
 }
 
 // Tests a WebApk install or update request is built properly when the Chrome
@@ -573,23 +589,28 @@ TEST_F(WebApkInstallerTest, BuildWebApkProtoWhenManifestIsAvailable) {
   ASSERT_NE(nullptr, webapk_request);
 
   webapk::WebAppManifest manifest = webapk_request->manifest();
-  ASSERT_EQ(2, manifest.icons_size());
-
-  // Check protobuf fields for kBestBadgeIconUrl.
-  EXPECT_EQ(best_badge_icon_url, manifest.icons(0).src());
-  EXPECT_EQ(icon_url_to_murmur2_hash[best_badge_icon_url],
-            manifest.icons(0).hash());
-  EXPECT_THAT(manifest.icons(0).usages(),
-              testing::ElementsAre(webapk::Image::BADGE_ICON));
-  EXPECT_TRUE(manifest.icons(0).has_image_data());
+  ASSERT_EQ(3, manifest.icons_size());
 
   // Check protobuf fields for kBestPrimaryIconUrl.
-  EXPECT_EQ(best_primary_icon_url, manifest.icons(1).src());
+  EXPECT_EQ(best_primary_icon_url, manifest.icons(0).src());
   EXPECT_EQ(icon_url_to_murmur2_hash[best_primary_icon_url],
+            manifest.icons(0).hash());
+  EXPECT_THAT(manifest.icons(0).usages(),
+              testing::ElementsAre(webapk::Image::PRIMARY_ICON));
+  EXPECT_TRUE(manifest.icons(0).has_image_data());
+
+  // Check protobuf fields for kBestBadgeIconUrl.
+  EXPECT_EQ(best_badge_icon_url, manifest.icons(1).src());
+  EXPECT_EQ(icon_url_to_murmur2_hash[best_badge_icon_url],
             manifest.icons(1).hash());
   EXPECT_THAT(manifest.icons(1).usages(),
-              testing::ElementsAre(webapk::Image::PRIMARY_ICON));
+              testing::ElementsAre(webapk::Image::BADGE_ICON));
   EXPECT_TRUE(manifest.icons(1).has_image_data());
+
+  // Check protobuf fields for unused icon.
+  EXPECT_EQ(kUnusedIconPath, manifest.icons(2).src());
+  EXPECT_FALSE(manifest.icons(2).has_hash());
+  EXPECT_FALSE(manifest.icons(2).has_image_data());
 
   // Check shortcut fields.
   ASSERT_EQ(manifest.shortcuts_size(), 1);
@@ -618,15 +639,27 @@ TEST_F(WebApkInstallerTest, BuildWebApkProtoPrimaryIconAndBadgeIconSameUrl) {
   ASSERT_NE(nullptr, webapk_request);
 
   webapk::WebAppManifest manifest = webapk_request->manifest();
-  ASSERT_EQ(1, manifest.icons_size());
+  ASSERT_EQ(3, manifest.icons_size());
 
-  // Check protobuf fields for kBestPrimaryIconUrl.
+  // Check protobuf fields for icons.
   EXPECT_EQ(best_icon_url, manifest.icons(0).src());
   EXPECT_EQ(icon_url_to_murmur2_hash[best_icon_url], manifest.icons(0).hash());
   EXPECT_THAT(manifest.icons(0).usages(),
               testing::ElementsAre(webapk::Image::PRIMARY_ICON,
                                    webapk::Image::BADGE_ICON));
   EXPECT_TRUE(manifest.icons(0).has_image_data());
+
+  EXPECT_EQ(best_icon_url, manifest.icons(1).src());
+  EXPECT_EQ(icon_url_to_murmur2_hash[best_icon_url], manifest.icons(1).hash());
+  EXPECT_THAT(manifest.icons(1).usages(),
+              testing::ElementsAre(webapk::Image::PRIMARY_ICON,
+                                   webapk::Image::BADGE_ICON));
+  EXPECT_TRUE(manifest.icons(1).has_image_data());
+
+  // Check protobuf fields for unused icon.
+  EXPECT_EQ(kUnusedIconPath, manifest.icons(2).src());
+  EXPECT_FALSE(manifest.icons(2).has_hash());
+  EXPECT_FALSE(manifest.icons(2).has_image_data());
 
   // Check shortcut fields.
   ASSERT_EQ(manifest.shortcuts_size(), 1);
