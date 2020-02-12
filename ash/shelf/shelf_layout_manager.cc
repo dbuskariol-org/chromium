@@ -1267,7 +1267,7 @@ void ShelfLayoutManager::SetState(ShelfVisibilityState visibility_state) {
 
   // Do not set the hotseat state until after bounds have been set because
   // observers rely on final bounds.
-  shelf_widget_->hotseat_widget()->SetState(new_hotseat_state);
+  shelf_->hotseat_widget()->SetState(new_hotseat_state);
   if (previous_hotseat_state != hotseat_state()) {
     if (hotseat_state() == HotseatState::kExtended)
       hotseat_event_handler_ = std::make_unique<HotseatEventHandler>(this);
@@ -1320,7 +1320,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
             return HotseatState::kShown;
 
           // Show the hotseat if the shelf view's context menu is showing.
-          if (shelf_widget_->hotseat_widget()->IsShowingShelfMenu())
+          if (shelf_->hotseat_widget()->IsShowingShelfMenu())
             return HotseatState::kExtended;
 
           if (in_split_view)
@@ -1336,7 +1336,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
             }
             return HotseatState::kExtended;
           }
-          if (shelf_widget_->hotseat_widget()->is_manually_extended() &&
+          if (shelf_->hotseat_widget()->is_manually_extended() &&
               !should_hide_hotseat_) {
             return HotseatState::kExtended;
           }
@@ -1345,7 +1345,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
           // changed because of an action other than a user intervention.
           // We should hide the hotseat and reset the |is_manually extended|
           // flag to false.
-          shelf_widget_->hotseat_widget()->set_manually_extended(false);
+          shelf_->hotseat_widget()->set_manually_extended(false);
           return HotseatState::kHidden;
       }
     }
@@ -1371,7 +1371,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
       if (in_overview && !in_split_view)
         return HotseatState::kExtended;
 
-      if (shelf_widget_->hotseat_widget()->IsExtended())
+      if (shelf_->hotseat_widget()->IsExtended())
         return HotseatState::kExtended;
 
       // |drag_amount_| is relative to the top of the hotseat when the drag
@@ -1404,7 +1404,7 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
 
       const int top_of_hotseat_to_screen_bottom =
           screen_bottom -
-          shelf_widget_->hotseat_widget()->GetWindowBoundsInScreen().y();
+          shelf_->hotseat_widget()->GetWindowBoundsInScreen().y();
       const bool dragged_over_half_hotseat_size =
           top_of_hotseat_to_screen_bottom <
           ShelfConfig::Get()->hotseat_size() / 2;
@@ -1480,7 +1480,7 @@ void ShelfLayoutManager::UpdateBoundsAndOpacity(bool animate) {
   }
 
   ShelfNavigationWidget* nav_widget = shelf_->navigation_widget();
-  HotseatWidget* hotseat_widget = shelf_widget_->hotseat_widget();
+  HotseatWidget* hotseat_widget = shelf_->hotseat_widget();
   StatusAreaWidget* status_widget = shelf_widget_->status_area_widget();
   base::AutoReset<bool> auto_reset_updating_bounds(&updating_bounds_, true);
   {
@@ -1926,11 +1926,11 @@ ShelfAutoHideState ShelfLayoutManager::CalculateAutoHideState(
   if (shelf_widget_->IsShowingMenu())
     return SHELF_AUTO_HIDE_SHOWN;
 
-  if (shelf_widget_->hotseat_widget()->IsShowingOverflowBubble())
+  if (shelf_->hotseat_widget()->IsShowingOverflowBubble())
     return SHELF_AUTO_HIDE_SHOWN;
 
   if (shelf_widget_->IsActive() || shelf_->navigation_widget()->IsActive() ||
-      shelf_widget_->hotseat_widget()->IsActive() ||
+      shelf_->hotseat_widget()->IsActive() ||
       (shelf_widget_->status_area_widget() &&
        shelf_widget_->status_area_widget()->IsActive())) {
     return SHELF_AUTO_HIDE_SHOWN;
@@ -2041,7 +2041,7 @@ bool ShelfLayoutManager::IsShelfWindow(aura::Window* window) {
   const aura::Window* navigation_window =
       shelf_->navigation_widget()->GetNativeWindow();
   const aura::Window* hotseat_window =
-      shelf_widget_->hotseat_widget()->GetNativeWindow();
+      shelf_->hotseat_widget()->GetNativeWindow();
   const aura::Window* status_area_window =
       shelf_widget_->status_area_widget()->GetNativeWindow();
   return (shelf_window && shelf_window->Contains(window)) ||
@@ -2314,7 +2314,7 @@ bool ShelfLayoutManager::StartAppListDrag(
 
   // Do not show the fullscreen app list until the overflow bubble has been
   // closed.
-  if (shelf_widget_->hotseat_widget()->IsShowingOverflowBubble())
+  if (shelf_->hotseat_widget()->IsShowingOverflowBubble())
     return false;
 
   // If the app list is already open, swiping up on the shelf should keep it
@@ -2351,7 +2351,7 @@ bool ShelfLayoutManager::StartShelfDrag(const ui::LocatedEvent& event_in_screen,
     return false;
 
   // Also disable shelf drags until the overflow shelf is closed.
-  if (shelf_widget_->hotseat_widget()->IsShowingOverflowBubble())
+  if (shelf_->hotseat_widget()->IsShowingOverflowBubble())
     return false;
 
   drag_status_ = kDragInProgress;
@@ -2365,7 +2365,7 @@ bool ShelfLayoutManager::StartShelfDrag(const ui::LocatedEvent& event_in_screen,
     DCHECK(!hotseat_presentation_time_recorder_);
     hotseat_presentation_time_recorder_ =
         CreatePresentationTimeHistogramRecorder(
-            shelf_widget_->hotseat_widget()->GetCompositor(),
+            shelf_->hotseat_widget()->GetCompositor(),
             "Ash.HotseatTransition.Drag.PresentationTime",
             "Ash.HotseatTransition.Drag.PresentationTime.MaxLatency");
   }
@@ -2406,7 +2406,7 @@ void ShelfLayoutManager::MaybeSetupHotseatDrag(
 
   // Make sure hotseat is stacked above other shelf control windows when the
   // hotseat drag starts.
-  shelf_widget_->hotseat_widget()->StackAtTop();
+  shelf_->hotseat_widget()->StackAtTop();
 
   hotseat_is_in_drag_ = true;
 }
@@ -2542,7 +2542,7 @@ void ShelfLayoutManager::CancelDrag(
     // If the gesture started the overview session, the hotseat will be
     // extended, but should not be marked as manually extended, as
     // extending the hotseat was not the primary goal of the gesture.
-    shelf_widget_->hotseat_widget()->set_manually_extended(
+    shelf_->hotseat_widget()->set_manually_extended(
         hotseat_state() == HotseatState::kExtended &&
         (!Shell::Get()->overview_controller()->InOverviewSession() ||
          (window_drag_result.has_value() &&
