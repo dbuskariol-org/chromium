@@ -13,8 +13,7 @@ import "ui/gfx/geometry/mojom/geometry.mojom";
 // scrolling across multiple processes is accommodated through passing the state
 // using this struct to the browser and then to the target (parent) process.
 
-// A public wrapper around ScrollAlignment. The default value matches
-// kAlignCenterIfNeeded.
+// The default value matches ScrollAlignment::CenterIfNeeded().
 struct ScrollAlignment {
   enum Behavior {
     kNoScroll = 0,

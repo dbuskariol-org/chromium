@@ -61,7 +61,6 @@
 #include "third_party/blink/renderer/core/layout/layout_view.h"
 #include "third_party/blink/renderer/core/layout/text_autosizer.h"
 #include "third_party/blink/renderer/core/page/page.h"
-#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/platform/instrumentation/histogram.h"
 #include "third_party/blink/renderer/platform/timer.h"
 
@@ -94,12 +93,11 @@ static void ScrollToVisible(Range* match) {
                           : mojom::blink::ScrollBehavior::kAuto;
   first_node.GetLayoutObject()->ScrollRectToVisible(
       PhysicalRect(match->BoundingBox()),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
-                                 ScrollAlignment::kAlignCenterIfNeeded,
-                                 mojom::blink::ScrollType::kUser,
-                                 true /* make_visible_in_visual_viewport */,
-                                 scroll_behavior,
-                                 true /* is_for_scroll_sequence */));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::CenterIfNeeded(), ScrollAlignment::CenterIfNeeded(),
+          mojom::blink::ScrollType::kUser,
+          true /* make_visible_in_visual_viewport */, scroll_behavior,
+          true /* is_for_scroll_sequence */));
   first_node.GetDocument().SetSequentialFocusNavigationStartingPoint(
       const_cast<Node*>(&first_node));
 }
@@ -639,9 +637,10 @@ int TextFinder::SelectFindMatch(unsigned index, WebRect* selection_rect) {
         active_match_->FirstNode()->GetLayoutObject()) {
       active_match_->FirstNode()->GetLayoutObject()->ScrollRectToVisible(
           PhysicalRect(active_match_bounding_box),
-          CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
-                                     ScrollAlignment::kAlignCenterIfNeeded,
-                                     mojom::blink::ScrollType::kUser));
+          ScrollAlignment::CreateScrollIntoViewParams(
+              ScrollAlignment::CenterIfNeeded(),
+              ScrollAlignment::CenterIfNeeded(),
+              mojom::blink::ScrollType::kUser));
 
       // Absolute coordinates are scroll-variant so the bounding box will change
       // if the page is scrolled by ScrollRectToVisible above. Recompute the

@@ -19,7 +19,6 @@
 #include "third_party/blink/renderer/core/page/page.h"
 #include "third_party/blink/renderer/core/page/scrolling/text_fragment_selector.h"
 #include "third_party/blink/renderer/core/scroll/scroll_alignment.h"
-#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/core/scroll/scrollable_area.h"
 
 namespace blink {
@@ -266,9 +265,9 @@ void TextFragmentAnchor::DidFindMatch(const EphemeralRangeInFlatTree& range) {
 
     PhysicalRect scrolled_bounding_box =
         node.GetLayoutObject()->ScrollRectToVisible(
-            bounding_box, CreateScrollIntoViewParams(
-                              ScrollAlignment::kAlignCenterAlways,
-                              ScrollAlignment::kAlignCenterAlways,
+            bounding_box, ScrollAlignment::CreateScrollIntoViewParams(
+                              ScrollAlignment::CenterAlways(),
+                              ScrollAlignment::CenterAlways(),
                               mojom::blink::ScrollType::kProgrammatic));
     did_scroll_into_view_ = true;
 

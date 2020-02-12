@@ -84,7 +84,6 @@
 #include "third_party/blink/renderer/core/loader/document_loader.h"
 #include "third_party/blink/renderer/core/page/frame_tree.h"
 #include "third_party/blink/renderer/core/page/page.h"
-#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/core/svg/svg_svg_element.h"
 #include "third_party/blink/renderer/core/xml/document_xpath_evaluator.h"
 #include "third_party/blink/renderer/core/xml/xpath_result.h"
@@ -2302,13 +2301,12 @@ protocol::Response InspectorDOMAgent::scrollIntoViewIfNeeded(
   }
   layout_object->ScrollRectToVisible(
       rect_to_scroll,
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
-                                 ScrollAlignment::kAlignCenterIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic,
-                                 true /* make_visible_in_visual_viewport */,
-                                 mojom::blink::ScrollBehavior::kInstant,
-                                 true /* is_for_scroll_sequence */,
-                                 false /* zoom_into_rect */));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::CenterIfNeeded(), ScrollAlignment::CenterIfNeeded(),
+          mojom::blink::ScrollType::kProgrammatic,
+          true /* make_visible_in_visual_viewport */,
+          mojom::blink::ScrollBehavior::kInstant,
+          true /* is_for_scroll_sequence */, false /* zoom_into_rect */));
   return Response::OK();
 }
 

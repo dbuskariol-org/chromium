@@ -10,7 +10,6 @@
 #include "third_party/blink/public/platform/scheduler/test/renderer_scheduler_test_support.h"
 #include "third_party/blink/renderer/core/frame/visual_viewport.h"
 #include "third_party/blink/renderer/core/scroll/scroll_alignment.h"
-#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/core/scroll/scroll_types.h"
 #include "third_party/blink/renderer/core/scroll/scrollable_area.h"
 #include "third_party/blink/renderer/core/scroll/scrollbar_theme_overlay_mock.h"
@@ -335,19 +334,19 @@ TEST_F(RootFrameViewportTest, ScrollIntoView) {
   visual_viewport->SetViewportSize(IntSize(100, 100));
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(100, 250, 50, 50)),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::ToEdgeIfNeeded(), ScrollAlignment::ToEdgeIfNeeded(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(50, 150), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(0, 50), visual_viewport->GetScrollOffset());
 
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(25, 75, 50, 50)),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::ToEdgeIfNeeded(), ScrollAlignment::ToEdgeIfNeeded(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(25, 75), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(0, 0), visual_viewport->GetScrollOffset());
 
@@ -360,19 +359,19 @@ TEST_F(RootFrameViewportTest, ScrollIntoView) {
 
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(50, 75, 50, 75)),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::ToEdgeIfNeeded(), ScrollAlignment::ToEdgeIfNeeded(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(0, 0), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(50, 75), visual_viewport->GetScrollOffset());
 
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(190, 290, 10, 10)),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::ToEdgeIfNeeded(), ScrollAlignment::ToEdgeIfNeeded(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(100, 150), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(50, 75), visual_viewport->GetScrollOffset());
 
@@ -391,30 +390,30 @@ TEST_F(RootFrameViewportTest, ScrollIntoView) {
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(
           root_frame_viewport->VisibleContentRect(kExcludeScrollbars))),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 ScrollAlignment::kAlignToEdgeIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::ToEdgeIfNeeded(), ScrollAlignment::ToEdgeIfNeeded(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(50, 50), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(0, 10), visual_viewport->GetScrollOffset());
 
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(
           root_frame_viewport->VisibleContentRect(kExcludeScrollbars))),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterAlways,
-                                 ScrollAlignment::kAlignCenterAlways,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::CenterAlways(), ScrollAlignment::CenterAlways(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(50, 50), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(0, 10), visual_viewport->GetScrollOffset());
 
   root_frame_viewport->ScrollIntoView(
       layout_viewport->DocumentToFrame(PhysicalRect(
           root_frame_viewport->VisibleContentRect(kExcludeScrollbars))),
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignTopAlways,
-                                 ScrollAlignment::kAlignTopAlways,
-                                 mojom::blink::ScrollType::kProgrammatic, true,
-                                 mojom::blink::ScrollBehavior::kInstant));
+      ScrollAlignment::CreateScrollIntoViewParams(
+          ScrollAlignment::TopAlways(), ScrollAlignment::TopAlways(),
+          mojom::blink::ScrollType::kProgrammatic, true,
+          mojom::blink::ScrollBehavior::kInstant));
   EXPECT_EQ(ScrollOffset(50, 50), layout_viewport->GetScrollOffset());
   EXPECT_EQ(ScrollOffset(0, 10), visual_viewport->GetScrollOffset());
 }

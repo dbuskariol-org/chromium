@@ -141,7 +141,6 @@
 #include "third_party/blink/renderer/core/paint/paint_layer_scrollable_area.h"
 #include "third_party/blink/renderer/core/paint/paint_timing_detector.h"
 #include "third_party/blink/renderer/core/probe/core_probes.h"
-#include "third_party/blink/renderer/core/scroll/scroll_into_view_params_type_converters.h"
 #include "third_party/blink/renderer/core/scroll/scrollbar_theme.h"
 #include "third_party/blink/renderer/core/timing/dom_window_performance.h"
 #include "third_party/blink/renderer/core/timing/window_performance.h"
@@ -2117,11 +2116,10 @@ bool WebViewImpl::ScrollFocusedEditableElementIntoView() {
   // only the visual and layout viewports. We'll call ScrollRectToVisible with
   // the stop_at_main_frame_layout_viewport param to ensure the element is
   // actually visible in the page.
-  auto params =
-      CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
-                                 ScrollAlignment::kAlignCenterIfNeeded,
-                                 mojom::blink::ScrollType::kProgrammatic, false,
-                                 mojom::blink::ScrollBehavior::kInstant);
+  auto params = ScrollAlignment::CreateScrollIntoViewParams(
+      ScrollAlignment::CenterIfNeeded(), ScrollAlignment::CenterIfNeeded(),
+      mojom::blink::ScrollType::kProgrammatic, false,
+      mojom::blink::ScrollBehavior::kInstant);
   params->stop_at_main_frame_layout_viewport = true;
   layout_object->ScrollRectToVisible(
       PhysicalRect(layout_object->AbsoluteBoundingBoxRect()),
