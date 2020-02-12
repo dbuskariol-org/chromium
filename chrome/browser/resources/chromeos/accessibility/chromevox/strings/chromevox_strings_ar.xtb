@@ -160,7 +160,7 @@
 <translation id="2121067395472282800">مفتاح الدخول:<ph name="KEY" /></translation>
 <translation id="2126597928985245619">لا يتوفّر نص لهذا العنصر.</translation>
 <translation id="2127747486437921899">مائل</translation>
-<translation id="2138345533858834403">‏يحاكي إخراج جهاز عرض طريقة برايل القابلة للتحديث
+<translation id="2138345533858834403">‏يحاكي إخراج جهاز عرض طريقة برايل القابلة لإعادة التحميل
         في لوحة ChromeVox بأعلى الشاشة.</translation>
 <translation id="2163782704988363449">قائمة بالأخطاء</translation>
 <translation id="2169714232367507776">النقر على العنصر الحالي</translation>
@@ -225,7 +225,7 @@
 <translation id="2644542693584024604">misspelled</translation>
 <translation id="2661530546602071611">ملاحظة</translation>
 <translation id="2673280813984708147">جارٍ التعديل</translation>
-<translation id="267442004702508783">تحديث</translation>
+<translation id="267442004702508783">إعادة تحميل</translation>
 <translation id="2675533876313964202">أخضر مصفر</translation>
 <translation id="2684412629217766642">‏إغلاق برنامج ChromeVox التعليمي</translation>
 <translation id="2697408785920771974">autoinl</translation>
@@ -1236,7 +1236,7 @@
 <translation id="9212322457209634662">ليس هناك قسم تالٍ.</translation>
 <translation id="9220679313820249046">أحمر برتقالي</translation>
 <translation id="9223032053830369045">أحمر داكن</translation>
-<translation id="923331726185079994">‏تم تحديث ChromeVox</translation>
+<translation id="923331726185079994">‏تم إعادة تحميل ChromeVox</translation>
 <translation id="930275611743429116">بدء أو إنهاء التحديد.</translation>
 <translation id="93384979447910801">أخضر بحري داكن</translation>
 <translation id="948171205378458592">خفض تقييم النطق</translation>

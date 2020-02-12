@@ -1213,6 +1213,7 @@
 <translation id="2653659639078652383">സമര്‍പ്പിക്കൂ</translation>
 <translation id="265390580714150011">ഫീല്‍‌ഡ് മൂല്യം</translation>
 <translation id="2654166010170466751">പേയ്‌മെന്റ് കൈകാര്യം ചെയ്യുന്ന സംവിധാനങ്ങൾ ഇൻസ്റ്റാൾ ചെയ്യാൻ സൈറ്റുകളെ അനുവദിക്കുന്നു</translation>
+<translation id="2654553774144920065">പ്രിന്റ് അഭ്യർത്ഥന</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />ഉപകരണത്തിന് അനുസരിച്ച് ഫീച്ചറുകൾ വ്യത്യാസപ്പെടും</translation>
 <translation id="2660779039299703961">ഇവന്റ്</translation>
 <translation id="266079277508604648">പ്രിന്‍റർ കണക്റ്റ് ചെയ്യാനാവുന്നില്ല. പ്രിന്‍റർ ഓണാണോ എന്നും വൈഫൈയോ USB-യോ ഉപയോഗിച്ച് Chromebook-ലേക്ക് കണക്റ്റ് ചെയ്‌‌തിട്ടുണ്ടോ എന്നും പരിശോധിക്കുക.</translation>
@@ -4158,6 +4159,7 @@
 <translation id="6843423766595476978">Ok Google സജ്ജമാണ്‌</translation>
 <translation id="6845038076637626672">ചെറുതാക്കി തുറക്കുക</translation>
 <translation id="6845325883481699275">Chrome സുരക്ഷ മെച്ചപ്പെടുത്താൻ സഹായിക്കുക</translation>
+<translation id="6846178040388691741"><ph name="PRINTER_NAME" /> ഉപയോഗിച്ച് <ph name="FILE_NAME" /> പ്രിന്റ് ചെയ്യാൻ "<ph name="EXTENSION_NAME" />" താൽപ്പര്യപ്പെടുന്നു.</translation>
 <translation id="6847125920277401289">തുടരാൻ ഇടം സൃഷ്ടിക്കുക</translation>
 <translation id="6848388270925200958">ഇപ്പോൾ, ഈ ഉപകരണത്തിൽ മാത്രം ഉപയോഗിക്കാനാവുന്ന ചില കാർഡുകൾ നിങ്ങൾക്കുണ്ട്</translation>
 <translation id="6850286078059909152">ടെക്‌സ്‌റ്റ് വർണ്ണം</translation>

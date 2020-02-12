@@ -1216,6 +1216,7 @@
 <translation id="2653659639078652383">ដាក់ស្នើ</translation>
 <translation id="265390580714150011">តម្លៃប្រអប់</translation>
 <translation id="2654166010170466751">អនុញ្ញាត​ឱ្យ​ទំព័រ​ដំឡើង​ឧបករណ៍​ដោះស្រាយ​ការ​បង់​ប្រាក់</translation>
+<translation id="2654553774144920065">សំណើសុំ​បោះពុម្ព</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />មុខងារ​ផ្សេង​ៗ​អាចខុសគ្នា​ទៅតាម​ឧបករណ៍</translation>
 <translation id="2660779039299703961">ព្រឹត្តិការណ៍</translation>
 <translation id="266079277508604648">មិនអាច​ភ្ជាប់​ម៉ាស៊ីន​បោះពុម្ព​បានទេ។ សូម​ពិនិត្យ​ថា​ម៉ាស៊ីន​បោះពុម្ពនេះ​ត្រូវបាន​បើក និង​បាន​ភ្ជាប់​ជាមួយ Chromebook របស់​អ្នក​តាមរយៈ Wi-Fi ឬ USB ។</translation>
@@ -4161,6 +4162,7 @@
 <translation id="6843423766595476978">Ok Google ត្រូវបាន​កំណត់រួចហើយ</translation>
 <translation id="6845038076637626672">បើកការពង្រីក</translation>
 <translation id="6845325883481699275">ជួយ​កែលម្អ​សុវត្ថិភាព Chrome</translation>
+<translation id="6846178040388691741">"<ph name="EXTENSION_NAME" />" ចង់​បោះពុម្ព <ph name="FILE_NAME" /> ដោយប្រើ <ph name="PRINTER_NAME" />។</translation>
 <translation id="6847125920277401289">បង្កើន​ទំហំផ្ទុក ដើម្បីបន្ត</translation>
 <translation id="6848388270925200958">ឥឡូវនេះ អ្នកមានបណ្ណ​មួយចំនួន​ដែលអាចប្រើបាន​តែនៅលើឧបករណ៍នេះ​ប៉ុណ្ណោះ</translation>
 <translation id="6850286078059909152">ពណ៌អក្សរ</translation>

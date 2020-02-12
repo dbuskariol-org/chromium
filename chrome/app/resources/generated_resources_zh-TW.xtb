@@ -1215,6 +1215,7 @@
 <translation id="2653659639078652383">提交</translation>
 <translation id="265390580714150011">欄位值</translation>
 <translation id="2654166010170466751">允許網站安裝付款處理常式</translation>
+<translation id="2654553774144920065">列印要求</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />功能會因裝置而異</translation>
 <translation id="2660779039299703961">活動</translation>
 <translation id="266079277508604648">無法連上印表機。請確認印表機已開啟，且已透過 Wi-Fi 或 USB 連上 Chromebook。</translation>
@@ -4028,7 +4029,7 @@
 <translation id="6655458902729017087">隱藏帳戶</translation>
 <translation id="6657585470893396449">密碼</translation>
 <translation id="6659213950629089752">「<ph name="NAME" />」擴充功能已調整這個頁面的大小</translation>
-<translation id="6659594942844771486">Tab</translation>
+<translation id="6659594942844771486">分頁</translation>
 <translation id="6664237456442406323">抱歉，你的電腦是由格式錯誤的硬體 ID 所設定。這樣會防止 Chrome 作業系統更新最新的安全性修復，你的電腦也可能<ph name="BEGIN_BOLD" />容易遭受惡意攻擊<ph name="END_BOLD" />。</translation>
 <translation id="6664774537677393800">開啟你的設定檔時發生錯誤。請先登出，然後再次登入。</translation>
 <translation id="6667776121818773738">透過其他裝置分享的圖片</translation>
@@ -4158,6 +4159,7 @@
 <translation id="6843423766595476978">Ok Google 設定完成</translation>
 <translation id="6845038076637626672">最大化開啟</translation>
 <translation id="6845325883481699275">協助改善 Chrome 安全性</translation>
+<translation id="6846178040388691741">「<ph name="EXTENSION_NAME" />」要求使用「<ph name="PRINTER_NAME" />」列印「<ph name="FILE_NAME" />」。</translation>
 <translation id="6847125920277401289">釋出空間以便繼續操作</translation>
 <translation id="6848388270925200958">目前你有一些卡片只能在這部裝置上使用</translation>
 <translation id="6850286078059909152">文字顏色</translation>

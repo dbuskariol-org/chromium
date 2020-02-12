@@ -1212,6 +1212,7 @@
 <translation id="2653659639078652383">पेश गर्नुहोस्</translation>
 <translation id="265390580714150011">फाँट मान</translation>
 <translation id="2654166010170466751">साइटहरूलाई भुक्तानी ह्यान्ड्लर स्थापना गर्न अनुमति दिनुहोस्‌</translation>
+<translation id="2654553774144920065">छपाइका लागि अनुरोध</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />यन्त्रअनुसार सुविधाहरू फरक हुन्छन्</translation>
 <translation id="2660779039299703961">घटना</translation>
 <translation id="266079277508604648">प्रिन्टरमा जडान गर्न सकिएन। उक्त प्रिन्टर सक्रिय अवस्थामा हुनुका साथै त्यसलाई Wi-Fi वा USB मार्फत तपाईंको Chromebook सँग जडान गरिएको छ भन्ने कुरा सुनिश्चित गर्नुहोस्।</translation>
@@ -4155,6 +4156,7 @@
 <translation id="6843423766595476978">Ok Google नामक सेवा पूर्ण रूपमा तयार छ</translation>
 <translation id="6845038076637626672">ठूलि बनाइएकोलाई खोल्नुहोस्</translation>
 <translation id="6845325883481699275">Chrome को सुरक्षामा सुधार गर्न मद्दत गर्नुहोस्</translation>
+<translation id="6846178040388691741">"<ph name="EXTENSION_NAME" />" <ph name="PRINTER_NAME" /> प्रयोग गरी <ph name="FILE_NAME" /> प्रिन्ट गर्न चाहन्छ।</translation>
 <translation id="6847125920277401289">जारी राख्न ठाउँ खाली गर्नुहोस्</translation>
 <translation id="6848388270925200958">यस बेला, तपाईंसँग यस यन्त्रमा मात्र प्रयोग गर्न मिल्ने केही कार्डहरू छन्</translation>
 <translation id="6850286078059909152">पाठको रङ</translation>

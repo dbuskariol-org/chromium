@@ -1216,6 +1216,7 @@
 <translation id="2653659639078652383">Υποβολή</translation>
 <translation id="265390580714150011">Τιμή πεδίου</translation>
 <translation id="2654166010170466751">Να επιτρέπεται σε ιστοτόπους η εγκατάσταση δεικτών χειρισμού για πληρωμές</translation>
+<translation id="2654553774144920065">Αίτημα για εκτύπωση</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />Οι λειτουργίες διαφέρουν ανά συσκευή</translation>
 <translation id="2660779039299703961">Συμβάν</translation>
 <translation id="266079277508604648">Δεν είναι δυνατή η σύνδεση του εκτυπωτή. Βεβαιωθείτε ότι ο εκτυπωτής είναι ενεργοποιημένος και ότι είναι συνδεδεμένος στο Chromebook μέσω Wi-Fi ή USB.</translation>
@@ -4161,6 +4162,7 @@
 <translation id="6843423766595476978">Η εντολή "Ok Google" είναι έτοιμη</translation>
 <translation id="6845038076637626672">Άνοιγμα μεγιστοποιημένης εφαρμογής</translation>
 <translation id="6845325883481699275">Συμβάλετε στη βελτίωση της ασφάλειας του Chrome</translation>
+<translation id="6846178040388691741">Η επέκταση "<ph name="EXTENSION_NAME" />" θέλει να εκτυπώσει το αρχείο <ph name="FILE_NAME" /> με τον εκτυπωτή <ph name="PRINTER_NAME" />.</translation>
 <translation id="6847125920277401289">Ελευθερώστε χώρο για να συνεχίσετε</translation>
 <translation id="6848388270925200958">Αυτήν τη στιγμή, έχετε ορισμένες κάρτες που μπορούν να χρησιμοποιηθούν μόνο σε αυτήν τη συσκευή</translation>
 <translation id="6850286078059909152">Χρώμα κειμένου</translation>

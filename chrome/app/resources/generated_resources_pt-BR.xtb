@@ -1216,6 +1216,7 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="2653659639078652383">Enviar</translation>
 <translation id="265390580714150011">Valor do campo</translation>
 <translation id="2654166010170466751">Permitir que sites instalem gerenciadores de pagamento</translation>
+<translation id="2654553774144920065">Solicitação de impressão</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />Os recursos variam de acordo com o dispositivo</translation>
 <translation id="2660779039299703961">Evento</translation>
 <translation id="266079277508604648">Não é possível conectar a impressora. Verifique se ela está ligada e conectada ao seu Chromebook por Wi-Fi ou USB.</translation>
@@ -4162,6 +4163,7 @@ permanentemente excluídos assim que esse usuário for removido. Os websites vis
 <translation id="6843423766595476978">Ok Google configurado</translation>
 <translation id="6845038076637626672">Abrir maximizado</translation>
 <translation id="6845325883481699275">Ajudar a melhorar a segurança do Chrome</translation>
+<translation id="6846178040388691741"><ph name="EXTENSION_NAME" /> quer imprimir <ph name="FILE_NAME" /> com <ph name="PRINTER_NAME" />.</translation>
 <translation id="6847125920277401289">Liberar espaço para continuar</translation>
 <translation id="6848388270925200958">No momento, você tem alguns cartões que só podem ser usados neste dispositivo</translation>
 <translation id="6850286078059909152">Cor do texto</translation>
