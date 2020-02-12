@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "net/http/structured_headers.h"
+#include "third_party/blink/public/common/http/structured_header.h"
 
 #include <limits>
 #include <string>
 
 #include "testing/gtest/include/gtest/gtest.h"
 
-namespace net {
-namespace structured_headers {
+namespace blink {
+namespace http_structured_header {
 namespace {
 
 // Helpers to make test cases clearer
@@ -996,5 +996,5 @@ TEST(StructuredHeaderTest, UnserializableLists) {
   }
 }
 
-}  // namespace structured_headers
-}  // namespace net
+}  // namespace http_structured_header
+}  // namespace blink
