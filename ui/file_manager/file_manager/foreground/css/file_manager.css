@@ -477,6 +477,13 @@ body[type='open-multi-file'].check-select .dialog-header {
   --text-color: currentColor;
 }
 
+.dialog-header.files-ng cr-button::after {
+  content: '';
+  height: 48px;
+  position: absolute;
+  width: 48px;
+}
+
 .dialog-header.files-ng cr-button:focus {
   border: 1px solid var(--google-blue-600);
 }
