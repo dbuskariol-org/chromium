@@ -198,10 +198,6 @@ class PLATFORM_EXPORT MarkingVisitor
   // to be in construction.
   void DynamicallyMarkAddress(Address);
 
-  // Adds tracing callback for an already marked object. The object is not
-  // allowed to be in construction.
-  void VisitMarkedHeader(HeapObjectHeader* header);
-
   void FlushMarkingWorklists();
 
  private:
