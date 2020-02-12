@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/policy/policy_conversions.h"
+#include "components/policy/core/browser/policy_conversions.h"
 
 #include <utility>
 
 #include "base/logging.h"
-#include "chrome/browser/policy/policy_conversions_client.h"
+#include "components/policy/core/browser/policy_conversions_client.h"
 #include "components/strings/grit/components_strings.h"
 #include "extensions/buildflags/buildflags.h"
 #include "ui/base/l10n/l10n_util.h"

@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_POLICY_POLICY_CONVERSIONS_CLIENT_H_
-#define CHROME_BROWSER_POLICY_POLICY_CONVERSIONS_CLIENT_H_
+#ifndef COMPONENTS_POLICY_CORE_BROWSER_POLICY_CONVERSIONS_CLIENT_H_
+#define COMPONENTS_POLICY_CORE_BROWSER_POLICY_CONVERSIONS_CLIENT_H_
 
 #include <string>
 
 #include "base/containers/flat_map.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/values.h"
-#include "chrome/browser/policy/policy_conversions.h"
+#include "components/policy/core/browser/policy_conversions.h"
 #include "components/policy/core/common/schema.h"
+#include "components/policy/policy_export.h"
 
 namespace policy {
 
@@ -27,7 +28,7 @@ class SchemaRegistry;
 // helpers needed to compute and format policy information.  Embedders must
 // subclass PolicyConversionsClient and provide an instance to
 // PolicyConversions.
-class PolicyConversionsClient {
+class POLICY_EXPORT PolicyConversionsClient {
  public:
   // Maps known policy names to their schema. If a policy is not present, it is
   // not known (either through policy_templates.json or through an extension's
@@ -146,4 +147,4 @@ class PolicyConversionsClient {
 
 }  // namespace policy
 
-#endif  // CHROME_BROWSER_POLICY_POLICY_CONVERSIONS_CLIENT_H_
+#endif  // COMPONENTS_POLICY_CORE_BROWSER_POLICY_CONVERSIONS_CLIENT_H_

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_POLICY_POLICY_CONVERSIONS_H_
-#define CHROME_BROWSER_POLICY_POLICY_CONVERSIONS_H_
+#ifndef COMPONENTS_POLICY_CORE_BROWSER_POLICY_CONVERSIONS_H_
+#define COMPONENTS_POLICY_CORE_BROWSER_POLICY_CONVERSIONS_H_
 
 #include <memory>
 #include <string>
@@ -12,16 +12,18 @@
 #include "components/policy/core/common/policy_map.h"
 #include "components/policy/core/common/policy_namespace.h"
 #include "components/policy/core/common/policy_types.h"
+#include "components/policy/policy_export.h"
 #include "ui/base/webui/web_ui_util.h"
 
 namespace policy {
 
 class PolicyConversionsClient;
 
-extern const webui::LocalizedString kPolicySources[POLICY_SOURCE_COUNT];
+extern const POLICY_EXPORT webui::LocalizedString
+    kPolicySources[POLICY_SOURCE_COUNT];
 
 // A convenience class to retrieve all policies values.
-class PolicyConversions {
+class POLICY_EXPORT PolicyConversions {
  public:
   // |client| provides embedder-specific policy information and must not be
   // nullptr.
@@ -63,7 +65,7 @@ class PolicyConversions {
   DISALLOW_COPY_AND_ASSIGN(PolicyConversions);
 };
 
-class DictionaryPolicyConversions : public PolicyConversions {
+class POLICY_EXPORT DictionaryPolicyConversions : public PolicyConversions {
  public:
   explicit DictionaryPolicyConversions(
       std::unique_ptr<PolicyConversionsClient> client);
@@ -81,7 +83,7 @@ class DictionaryPolicyConversions : public PolicyConversions {
   DISALLOW_COPY_AND_ASSIGN(DictionaryPolicyConversions);
 };
 
-class ArrayPolicyConversions : public PolicyConversions {
+class POLICY_EXPORT ArrayPolicyConversions : public PolicyConversions {
  public:
   explicit ArrayPolicyConversions(
       std::unique_ptr<PolicyConversionsClient> client);
@@ -97,4 +99,4 @@ class ArrayPolicyConversions : public PolicyConversions {
 
 }  // namespace policy
 
-#endif  // CHROME_BROWSER_POLICY_POLICY_CONVERSIONS_H_
+#endif  // COMPONENTS_POLICY_CORE_BROWSER_POLICY_CONVERSIONS_H_
