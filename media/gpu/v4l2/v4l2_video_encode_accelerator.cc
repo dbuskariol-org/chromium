@@ -28,6 +28,7 @@
 #include "base/task/task_traits.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/trace_event/trace_event.h"
+#include "gpu/ipc/service/gpu_memory_buffer_factory.h"
 #include "media/base/bitstream_buffer.h"
 #include "media/base/color_plane_layout.h"
 #include "media/base/scopedfd_helper.h"
@@ -317,28 +318,30 @@ bool V4L2VideoEncodeAccelerator::CreateImageProcessor(
   DCHECK_NE(input_layout.format(), output_layout.format());
 
   // Convert from |config.input_format| + |input_visible_rect| to
-  // |device_input_layout_->format()| + |output_visible_rect|, requiring the
-  // output buffers to be of at least |device_input_layout_->coded_size()|.
-  // |input_storage_type| can be STORAGE_SHMEM and STORAGE_MOJO_SHARED_BUFFER.
-  // However, it doesn't matter VideoFrame::STORAGE_OWNED_MEMORY is specified
-  // for |input_storage_type| here, as long as VideoFrame on Process()'s data
-  // can be accessed by VideoFrame::data().
+  // |device_input_layout_->format()| + |output_visible_rect|.
+  // The storage type of VideoFrame given on Encode() must be
+  // STORAGE_GPU_MEMORY_BUFFER if |input_storage_type| is
+  // STORAGE_GPU_MEMORY_BUFFER, but any VideoFrame::IsMappable() storage_type is
+  // allowed if |input_storage_type| is STORAGE_OWNED_MEMORY.
+  VideoFrame::StorageType input_storage_type =
+      native_input_mode_ ? VideoFrame::STORAGE_GPU_MEMORY_BUFFER
+                         : VideoFrame::STORAGE_OWNED_MEMORY;
+
   auto input_config = VideoFrameLayoutToPortConfig(
-      input_layout, input_visible_rect, {VideoFrame::STORAGE_OWNED_MEMORY});
+      input_layout, input_visible_rect, {input_storage_type});
   if (!input_config)
     return false;
-  auto output_config = VideoFrameLayoutToPortConfig(
-      output_layout, output_visible_rect,
-      {VideoFrame::STORAGE_DMABUFS, VideoFrame::STORAGE_OWNED_MEMORY});
+  auto output_config =
+      VideoFrameLayoutToPortConfig(output_layout, output_visible_rect,
+                                   {VideoFrame::STORAGE_GPU_MEMORY_BUFFER,
+                                    VideoFrame::STORAGE_OWNED_MEMORY});
   if (!output_config)
     return false;
 
   image_processor_ = ImageProcessorFactory::Create(
       *input_config, *output_config,
-      // Try OutputMode::ALLOCATE first because we want v4l2IP chooses
-      // ALLOCATE mode. For libyuvIP, it accepts only IMPORT.
-      {ImageProcessor::OutputMode::ALLOCATE,
-       ImageProcessor::OutputMode::IMPORT},
+      {ImageProcessor::OutputMode::IMPORT,
+       ImageProcessor::OutputMode::ALLOCATE},
       kImageProcBufferCount, encoder_task_runner_,
       base::BindRepeating(&V4L2VideoEncodeAccelerator::ImageProcessorError,
                           weak_this_));
@@ -377,25 +380,42 @@ bool V4L2VideoEncodeAccelerator::AllocateImageProcessorOutputBuffers(
     return true;
   }
 
-  image_processor_output_buffers_.resize(count);
   const ImageProcessor::PortConfig& output_config =
       image_processor_->output_config();
+  if (output_config.storage_type() == VideoFrame::STORAGE_GPU_MEMORY_BUFFER &&
+      !image_processor_gmb_factory_) {
+    image_processor_gmb_factory_ =
+        gpu::GpuMemoryBufferFactory::CreateNativeType(nullptr);
+    if (!image_processor_gmb_factory_) {
+      VLOGF(1) << "Failed to create GpuMemoryBufferFactory";
+      return false;
+    }
+  }
+
+  image_processor_output_buffers_.resize(count);
   for (size_t i = 0; i < count; i++) {
     switch (output_config.storage_type()) {
       case VideoFrame::STORAGE_OWNED_MEMORY:
         image_processor_output_buffers_[i] = VideoFrame::CreateFrameWithLayout(
             *device_input_layout_, output_config.visible_rect,
             output_config.visible_rect.size(), base::TimeDelta(), true);
-        if (!image_processor_output_buffers_[i]) {
-          VLOG(1) << "Failed to create VideoFrame";
-          return false;
-        }
         break;
-      // TODO(crbug.com/910590): Support VideoFrame::STORAGE_DMABUFS.
+      case VideoFrame::STORAGE_GPU_MEMORY_BUFFER:
+        image_processor_output_buffers_[i] = CreateGpuMemoryBufferVideoFrame(
+            image_processor_gmb_factory_.get(),
+            output_config.fourcc.ToVideoPixelFormat(), output_config.size,
+            output_config.visible_rect, output_config.visible_rect.size(),
+            base::TimeDelta(),
+            gfx::BufferUsage::SCANOUT_VEA_READ_CAMERA_AND_CPU_READ_WRITE);
+        break;
       default:
         VLOGF(1) << "Unsupported output storage type of image processor: "
                  << output_config.storage_type();
         return false;
+    }
+    if (!image_processor_output_buffers_[i]) {
+      VLOGF(1) << "Failed to create VideoFrame";
+      return false;
     }
   }
   return true;
@@ -405,7 +425,7 @@ bool V4L2VideoEncodeAccelerator::InitInputMemoryType(const Config& config) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(encoder_sequence_checker_);
   if (image_processor_) {
     const auto storage_type = image_processor_->output_config().storage_type();
-    if (storage_type == VideoFrame::STORAGE_DMABUFS) {
+    if (storage_type == VideoFrame::STORAGE_GPU_MEMORY_BUFFER) {
       input_memory_type_ = V4L2_MEMORY_DMABUF;
     } else if (VideoFrame::IsStorageTypeMappable(storage_type)) {
       input_memory_type_ = V4L2_MEMORY_USERPTR;
