@@ -941,12 +941,6 @@ deps = {
   'src/third_party/libgav1/src':
     Var('chromium_git') + '/codecs/libgav1.git' + '@' + '25dc90ee07763b13db1be14e1f2afadc6894c9f3',
 
-  # Chrome OS touchpad gestures library.
-  'src/third_party/gestures/gestures': {
-      'url': Var('chromium_git') + '/chromiumos/platform/gestures.git' + '@' + '74f55100df966280d305d5d5ada824605f875839',
-      'condition': 'checkout_linux',
-  },
-
   'src/third_party/glslang/src':
     Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + 'ae59435606fc5bc453cf4e32320e6579ff7ea22e',
 
@@ -1102,12 +1096,6 @@ deps = {
   # Userspace interface to kernel DRM services.
   'src/third_party/libdrm/src': {
       'url': Var('chromium_git') + '/chromiumos/third_party/libdrm.git' + '@' + '0061b1f244574e615c415479725046ab2951f09a',
-      'condition': 'checkout_linux',
-  },
-
-  # The libevdev library (Chrome OS version).
-  'src/third_party/libevdev/src': {
-      'url': Var('chromium_git') + '/chromiumos/platform/libevdev.git' + '@' + '9f7a1961eb4726211e18abd147d5a11a4ea86744',
       'condition': 'checkout_linux',
   },
 
