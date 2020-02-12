@@ -13,7 +13,6 @@
 
 #include "base/logging.h"
 #include "base/win/scoped_com_initializer.h"
-#include "chrome/updater/update_service.h"
 
 namespace updater {
 
@@ -116,7 +115,7 @@ HRESULT ComServer::Run() {
   return hr;
 }
 
-int RunServer(std::unique_ptr<UpdateService> update_service) {
+int RunServer() {
   return ComServer().RunComServer();
 }
 

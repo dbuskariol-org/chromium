@@ -8,14 +8,11 @@
 #include "base/command_line.h"
 #include "base/files/file_path.h"
 #include "base/logging.h"
-#include "base/run_loop.h"
 #include "base/task/thread_pool/thread_pool_instance.h"
 #include "build/build_config.h"
-#include "chrome/updater/configurator.h"
 #include "chrome/updater/crash_client.h"
 #include "chrome/updater/crash_reporter.h"
 #include "chrome/updater/update_apps.h"
-#include "chrome/updater/update_service.h"
 #include "chrome/updater/updater_constants.h"
 #include "chrome/updater/updater_version.h"
 #include "chrome/updater/util.h"
@@ -91,8 +88,8 @@ void TerminateUpdaterMain() {
   ThreadPoolStop();
 }
 
-void UpdaterUpdateApps() {
-  UpdateApps();
+int UpdaterUpdateApps() {
+  return UpdateApps();
 }
 
 int UpdaterInstallApp() {
@@ -119,10 +116,8 @@ int HandleUpdaterCommands(const base::CommandLine* command_line) {
   DCHECK(!command_line->HasSwitch(kCrashHandlerSwitch));
 
 #if defined(OS_WIN) || defined(OS_MACOSX)
-  if (command_line->HasSwitch(kServerSwitch)) {
-    return RunServer(
-        std::make_unique<UpdateService>(base::MakeRefCounted<Configurator>()));
-  }
+  if (command_line->HasSwitch(kServerSwitch))
+    return RunServer();
 #endif
 
   if (command_line->HasSwitch(kCrashMeSwitch)) {
@@ -136,10 +131,8 @@ int HandleUpdaterCommands(const base::CommandLine* command_line) {
   if (command_line->HasSwitch(kUninstallSwitch))
     return UpdaterUninstall();
 
-  if (command_line->HasSwitch(kUpdateAppsSwitch)) {
-    UpdaterUpdateApps();
-    return 0;
-  }
+  if (command_line->HasSwitch(kUpdateAppsSwitch))
+    return UpdaterUpdateApps();
 
   VLOG(1) << "Unknown command line switch.";
   return -1;

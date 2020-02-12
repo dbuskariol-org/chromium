@@ -9,7 +9,6 @@
 
 #include <wrl/implements.h>
 #include <wrl/module.h>
-#include <memory>
 
 #include "base/macros.h"
 #include "base/strings/string16.h"
@@ -17,8 +16,6 @@
 #include "chrome/updater/server/win/updater_idl.h"
 
 namespace updater {
-
-class UpdateService;
 
 // This class implements the IUpdater interface and exposes it as a COM object.
 class UpdaterImpl
@@ -75,7 +72,7 @@ class ComServer {
 };
 
 // Sets up and runs the server.
-int RunServer(std::unique_ptr<UpdateService> update_service);
+int RunServer();
 
 }  // namespace updater
 
