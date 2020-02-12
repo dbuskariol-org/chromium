@@ -432,6 +432,7 @@ div.splitter {
   background: none;
   border-bottom: 1px solid var(--cr-separator-color, rgb(224, 224, 224));
   color: var(--google-grey-700);
+  height: 56px;
 }
 
 body.check-select .dialog-header {
@@ -2055,6 +2056,11 @@ cr-menu-item[command='#install-new-extension'] .icon.start {
 #action-bar {
   display: flex;
   flex: none;
+}
+
+.dialog-header.files-ng #action-bar {
+  align-items: center;
+  height: 48px;
 }
 
 .detail-name > * {
