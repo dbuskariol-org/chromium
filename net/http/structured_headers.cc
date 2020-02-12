@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/public/common/http/structured_header.h"
+#include "net/http/structured_headers.h"
 
 #include <cmath>
 #include <string>
@@ -14,8 +14,8 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 
-namespace blink {
-namespace http_structured_header {
+namespace net {
+namespace structured_headers {
 
 namespace {
 
@@ -60,8 +60,7 @@ class StructuredHeaderParser {
     kDraft09,
     kDraft13,
   };
-  explicit StructuredHeaderParser(const base::StringPiece& str,
-                                  DraftVersion version)
+  explicit StructuredHeaderParser(base::StringPiece str, DraftVersion version)
       : input_(str), version_(version) {
     // [SH09] 4.2 Step 1.
     // [SH13] 4.2 Step 2.
@@ -697,7 +696,7 @@ ParameterisedIdentifier::ParameterisedIdentifier(Item id, const Parameters& ps)
     : identifier(std::move(id)), params(ps) {}
 ParameterisedIdentifier::~ParameterisedIdentifier() = default;
 
-base::Optional<Item> ParseItem(const base::StringPiece& str) {
+base::Optional<Item> ParseItem(base::StringPiece str) {
   StructuredHeaderParser parser(str, StructuredHeaderParser::kDraft13);
   base::Optional<Item> item = parser.ReadItem();
   if (item && parser.FinishParsing())
@@ -706,7 +705,7 @@ base::Optional<Item> ParseItem(const base::StringPiece& str) {
 }
 
 base::Optional<ParameterisedList> ParseParameterisedList(
-    const base::StringPiece& str) {
+    base::StringPiece str) {
   StructuredHeaderParser parser(str, StructuredHeaderParser::kDraft09);
   base::Optional<ParameterisedList> param_list = parser.ReadParameterisedList();
   if (param_list && parser.FinishParsing())
@@ -714,7 +713,7 @@ base::Optional<ParameterisedList> ParseParameterisedList(
   return base::nullopt;
 }
 
-base::Optional<ListOfLists> ParseListOfLists(const base::StringPiece& str) {
+base::Optional<ListOfLists> ParseListOfLists(base::StringPiece str) {
   StructuredHeaderParser parser(str, StructuredHeaderParser::kDraft09);
   base::Optional<ListOfLists> list_of_lists = parser.ReadListOfLists();
   if (list_of_lists && parser.FinishParsing())
@@ -722,7 +721,7 @@ base::Optional<ListOfLists> ParseListOfLists(const base::StringPiece& str) {
   return base::nullopt;
 }
 
-base::Optional<List> ParseList(const base::StringPiece& str) {
+base::Optional<List> ParseList(base::StringPiece str) {
   StructuredHeaderParser parser(str, StructuredHeaderParser::kDraft13);
   base::Optional<List> list = parser.ReadList();
   if (list && parser.FinishParsing())
@@ -744,5 +743,5 @@ base::Optional<std::string> SerializeList(const List& value) {
   return base::nullopt;
 }
 
-}  // namespace http_structured_header
-}  // namespace blink
+}  // namespace structured_headers
+}  // namespace net
