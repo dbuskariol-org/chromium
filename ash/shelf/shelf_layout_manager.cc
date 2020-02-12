@@ -1093,10 +1093,6 @@ gfx::Rect ShelfLayoutManager::GetShelfBoundsInScreen() const {
   return target_bounds_.shelf_bounds;
 }
 
-gfx::Rect ShelfLayoutManager::GetHotseatBoundsInScreen() const {
-  return target_bounds_.hotseat_bounds_in_screen;
-}
-
 float ShelfLayoutManager::GetOpacity() const {
   return target_bounds_.opacity;
 }
@@ -1615,12 +1611,6 @@ void ShelfLayoutManager::CalculateTargetBounds(
     const State& state,
     HotseatState hotseat_target_state) {
   const int shelf_size = ShelfConfig::Get()->shelf_size();
-  const int horizontal_edge_spacing =
-      ShelfConfig::Get()->control_button_edge_spacing(
-          shelf_->IsHorizontalAlignment());
-  const int vertical_edge_spacing =
-      ShelfConfig::Get()->control_button_edge_spacing(
-          !shelf_->IsHorizontalAlignment());
 
   // By default, show the whole shelf on the screen.
   int shelf_in_screen_portion = shelf_size;
@@ -1661,39 +1651,7 @@ void ShelfLayoutManager::CalculateTargetBounds(
 
   shelf_->status_area_widget()->CalculateTargetBounds();
   shelf_->navigation_widget()->CalculateTargetBounds();
-
-  const gfx::Size status_size =
-      shelf_->status_area_widget()->GetTargetBounds().size();
-  gfx::Rect nav_bounds = shelf_->navigation_widget()->GetTargetBounds();
-  gfx::Point hotseat_origin;
-  int hotseat_width;
-  int hotseat_height;
-  if (shelf_->IsHorizontalAlignment()) {
-    hotseat_width =
-        shelf_width - nav_bounds.size().width() - horizontal_edge_spacing -
-        ShelfConfig::Get()->app_icon_group_margin() - status_size.width();
-    int hotseat_x =
-        base::i18n::IsRTL()
-            ? nav_bounds.x() - horizontal_edge_spacing - hotseat_width
-            : nav_bounds.right() + horizontal_edge_spacing;
-    if (hotseat_target_state != HotseatState::kShown) {
-      // Give the hotseat more space if it is shown outside of the shelf.
-      hotseat_width = available_bounds.width();
-      hotseat_x = target_bounds_.shelf_bounds.x();
-    }
-    hotseat_origin =
-        gfx::Point(hotseat_x, CalculateHotseatYInScreen(hotseat_target_state));
-    hotseat_height = ShelfConfig::Get()->hotseat_size();
-  } else {
-    hotseat_origin = gfx::Point(target_bounds_.shelf_bounds.x(),
-                                nav_bounds.bottom() + vertical_edge_spacing);
-    hotseat_width = shelf_width;
-    hotseat_height =
-        shelf_height - nav_bounds.size().height() - vertical_edge_spacing -
-        ShelfConfig::Get()->app_icon_group_margin() - status_size.height();
-  }
-  target_bounds_.hotseat_bounds_in_screen =
-      gfx::Rect(hotseat_origin, gfx::Size(hotseat_width, hotseat_height));
+  shelf_->hotseat_widget()->CalculateTargetBounds();
 
   target_bounds_.opacity = ComputeTargetOpacity(state);
 
@@ -1709,12 +1667,6 @@ void ShelfLayoutManager::CalculateTargetBounds(
                   0),
       gfx::Insets(0, GetShelfInset(state.visibility_state, shelf_width), 0, 0),
       gfx::Insets(0, 0, 0, GetShelfInset(state.visibility_state, shelf_width)));
-
-  // This needs to happen after calling UpdateTargetBoundsForGesture(), because
-  // that can change the size of the shelf.
-  gfx::Rect nav_bounds_in_shelf = nav_bounds;
-  // Convert back into shelf coordinates.
-  nav_bounds_in_shelf.Offset(-shelf_origin.x(), -shelf_origin.y());
 }
 
 void ShelfLayoutManager::CalculateTargetBoundsAndUpdateWorkArea() {
@@ -1723,7 +1675,7 @@ void ShelfLayoutManager::CalculateTargetBoundsAndUpdateWorkArea() {
   CalculateTargetBounds(state_, hotseat_target_state);
   gfx::Rect shelf_bounds_for_workarea_calculation = target_bounds_.shelf_bounds;
   // When the hotseat is enabled, only use the in-app shelf bounds when
-  // calculating the work area. This prevents windows resizing unnecesarily.
+  // calculating the work area. This prevents windows resizing unnecessarily.
   if (IsHotseatEnabled()) {
     shelf_bounds_for_workarea_calculation =
         GetIdealBoundsForWorkAreaCalculation();
@@ -1791,7 +1743,9 @@ void ShelfLayoutManager::UpdateTargetBoundsForGesture(
     if (!IsHotseatEnabled()) {
       target_bounds_.shelf_bounds.set_y(baseline + translate);
       shelf_->navigation_widget()->UpdateTargetBoundsForGesture();
-      target_bounds_.hotseat_bounds_in_screen.set_y(baseline + translate);
+      gfx::Rect hotseat_bounds = shelf_->hotseat_widget()->GetTargetBounds();
+      hotseat_bounds.set_y(baseline + translate);
+      shelf_->hotseat_widget()->set_target_bounds(hotseat_bounds);
       shelf_->status_area_widget()->UpdateTargetBoundsForGesture();
       return;
     }
@@ -1833,14 +1787,17 @@ void ShelfLayoutManager::UpdateTargetBoundsForGesture(
     // the hotseat down.
     if (IsWindowDragInProgress())
       hotseat_y = -hotseat_extended_y;
-    target_bounds_.hotseat_bounds_in_screen.set_y(
-        hotseat_y + target_bounds_.shelf_bounds.y());
+    gfx::Rect hotseat_bounds = shelf_->hotseat_widget()->GetTargetBounds();
+    hotseat_bounds.set_y(hotseat_y + target_bounds_.shelf_bounds.y());
+    shelf_->hotseat_widget()->set_target_bounds(hotseat_bounds);
     return;
   }
 
   target_bounds_.shelf_bounds.set_x(baseline + translate);
   shelf_->navigation_widget()->UpdateTargetBoundsForGesture();
-  target_bounds_.hotseat_bounds_in_screen.set_x(baseline + translate);
+  gfx::Rect hotseat_bounds = shelf_->hotseat_widget()->GetTargetBounds();
+  hotseat_bounds.set_x(baseline + translate);
+  shelf_->hotseat_widget()->set_target_bounds(hotseat_bounds);
   shelf_->status_area_widget()->UpdateTargetBoundsForGesture();
 }
 

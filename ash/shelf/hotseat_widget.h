@@ -78,6 +78,12 @@ class ASH_EXPORT HotseatWidget : public ShelfComponent,
   gfx::Rect GetTargetBounds() const override;
   void UpdateLayout(bool animate) override;
 
+  // TODO(manucornet): Remove this method once all the hotseat layout
+  // code has moved to this class.
+  void set_target_bounds(gfx::Rect target_bounds) {
+    target_bounds_ = target_bounds;
+  }
+
   gfx::Size GetTranslucentBackgroundSize() const;
 
   // Sets the focus cycler and adds the hotseat to the cycle.
@@ -130,6 +136,7 @@ class ASH_EXPORT HotseatWidget : public ShelfComponent,
   // changed.
   base::Optional<LayoutInputs> layout_inputs_;
 
+  gfx::Rect target_bounds_;
   HotseatState state_ = HotseatState::kShown;
 
   Shelf* shelf_ = nullptr;
