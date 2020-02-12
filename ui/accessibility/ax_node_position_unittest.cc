@@ -3581,6 +3581,20 @@ TEST_F(AXPositionTest, MoveByFormatWithIgnoredNodes) {
   // ++++++9 kHeading
   // ++++++++10 kStaticText
   // ++++++++++11 kInlineTextBox
+  // ++++++12 kStaticText
+  // ++++++++13 kInlineTextBox
+  // ++++++14 kGenericContainer ignored
+  // ++++15 kGenericContainer
+  // ++++++16 kHeading
+  // ++++++++17 kStaticText
+  // ++++++++++18 kInlineTextBox
+  // ++++19 kGenericContainer
+  // ++++++20 kGenericContainer ignored
+  // ++++++21 kStaticText
+  // ++++++++22 kInlineTextBox
+  // ++++++23 kHeading
+  // ++++++++24 kStaticText
+  // ++++++++++25 kInlineTextBox
   AXNodeData root_1;
   AXNodeData generic_container_2;
   AXNodeData button_3;
@@ -3592,6 +3606,20 @@ TEST_F(AXPositionTest, MoveByFormatWithIgnoredNodes) {
   AXNodeData heading_9;
   AXNodeData static_text_10;
   AXNodeData inline_box_11;
+  AXNodeData static_text_12;
+  AXNodeData inline_box_13;
+  AXNodeData generic_container_14;
+  AXNodeData generic_container_15;
+  AXNodeData heading_16;
+  AXNodeData static_text_17;
+  AXNodeData inline_box_18;
+  AXNodeData generic_container_19;
+  AXNodeData generic_container_20;
+  AXNodeData static_text_21;
+  AXNodeData inline_box_22;
+  AXNodeData heading_23;
+  AXNodeData static_text_24;
+  AXNodeData inline_box_25;
 
   root_1.id = 1;
   generic_container_2.id = 2;
@@ -3604,9 +3632,24 @@ TEST_F(AXPositionTest, MoveByFormatWithIgnoredNodes) {
   heading_9.id = 9;
   static_text_10.id = 10;
   inline_box_11.id = 11;
+  static_text_12.id = 12;
+  inline_box_13.id = 13;
+  generic_container_14.id = 14;
+  generic_container_15.id = 15;
+  heading_16.id = 16;
+  static_text_17.id = 17;
+  inline_box_18.id = 18;
+  generic_container_19.id = 19;
+  generic_container_20.id = 20;
+  static_text_21.id = 21;
+  inline_box_22.id = 22;
+  heading_23.id = 23;
+  static_text_24.id = 24;
+  inline_box_25.id = 25;
 
   root_1.role = ax::mojom::Role::kRootWebArea;
-  root_1.child_ids = {generic_container_2.id, generic_container_8.id};
+  root_1.child_ids = {generic_container_2.id, generic_container_8.id,
+                      generic_container_15.id, generic_container_19.id};
 
   generic_container_2.role = ax::mojom::Role::kGenericContainer;
   generic_container_2.child_ids = {button_3.id};
@@ -3629,7 +3672,8 @@ TEST_F(AXPositionTest, MoveByFormatWithIgnoredNodes) {
   generic_container_7.AddState(ax::mojom::State::kIgnored);
 
   generic_container_8.role = ax::mojom::Role::kGenericContainer;
-  generic_container_8.child_ids = {heading_9.id};
+  generic_container_8.child_ids = {heading_9.id, static_text_12.id,
+                                   generic_container_14.id};
 
   heading_9.role = ax::mojom::Role::kHeading;
   heading_9.child_ids = {static_text_10.id};
@@ -3641,42 +3685,156 @@ TEST_F(AXPositionTest, MoveByFormatWithIgnoredNodes) {
   inline_box_11.role = ax::mojom::Role::kInlineTextBox;
   inline_box_11.SetName("Heading");
 
-  SetTree(CreateAXTree({root_1, generic_container_2, button_3, static_text_4,
-                        inline_box_5, svg_root_6, generic_container_7,
-                        generic_container_8, heading_9, static_text_10,
-                        inline_box_11}));
+  static_text_12.role = ax::mojom::Role::kStaticText;
+  static_text_12.child_ids = {inline_box_13.id};
+  static_text_12.SetName("3.14");
 
-  // Forward movement
-  TestPositionType text_position = AXNodePosition::CreateTextPosition(
-      GetTreeID(), inline_box_5.id, 6 /* text_offset */,
-      ax::mojom::TextAffinity::kDownstream);
-  ASSERT_NE(nullptr, text_position);
-  EXPECT_TRUE(text_position->IsTextPosition());
-  EXPECT_EQ(inline_box_5.id, text_position->anchor_id());
-  EXPECT_EQ(6, text_position->text_offset());
+  inline_box_13.role = ax::mojom::Role::kInlineTextBox;
+  inline_box_13.SetName("3.14");
 
-  text_position = text_position->CreateNextFormatEndPosition(
-      AXBoundaryBehavior::StopAtLastAnchorBoundary);
-  ASSERT_NE(nullptr, text_position);
-  EXPECT_TRUE(text_position->IsTextPosition());
-  EXPECT_EQ(inline_box_11.id, text_position->anchor_id());
-  EXPECT_EQ(7, text_position->text_offset());
+  generic_container_14.role = ax::mojom::Role::kGenericContainer;
+  generic_container_14.AddState(ax::mojom::State::kIgnored);
 
-  // Backward movement
-  text_position = AXNodePosition::CreateTextPosition(
-      GetTreeID(), inline_box_11.id, 0 /* text_offset */,
-      ax::mojom::TextAffinity::kDownstream);
-  ASSERT_NE(nullptr, text_position);
-  EXPECT_TRUE(text_position->IsTextPosition());
-  EXPECT_EQ(inline_box_11.id, text_position->anchor_id());
-  EXPECT_EQ(0, text_position->text_offset());
+  generic_container_15.role = ax::mojom::Role::kGenericContainer;
+  generic_container_15.child_ids = {heading_16.id};
 
-  text_position = text_position->CreatePreviousFormatStartPosition(
-      AXBoundaryBehavior::StopAtLastAnchorBoundary);
-  ASSERT_NE(nullptr, text_position);
-  EXPECT_TRUE(text_position->IsTextPosition());
-  EXPECT_EQ(inline_box_5.id, text_position->anchor_id());
-  EXPECT_EQ(0, text_position->text_offset());
+  heading_16.role = ax::mojom::Role::kHeading;
+  heading_16.child_ids = {static_text_17.id};
+
+  static_text_17.role = ax::mojom::Role::kStaticText;
+  static_text_17.child_ids = {inline_box_18.id};
+  static_text_17.SetName("Heading");
+
+  inline_box_18.role = ax::mojom::Role::kInlineTextBox;
+  inline_box_18.SetName("Heading");
+
+  generic_container_19.role = ax::mojom::Role::kGenericContainer;
+  generic_container_19.child_ids = {generic_container_20.id, static_text_21.id,
+                                    heading_23.id};
+
+  generic_container_20.role = ax::mojom::Role::kGenericContainer;
+  generic_container_20.AddState(ax::mojom::State::kIgnored);
+
+  static_text_21.role = ax::mojom::Role::kStaticText;
+  static_text_21.child_ids = {inline_box_22.id};
+  static_text_21.SetName("3.14");
+
+  inline_box_22.role = ax::mojom::Role::kInlineTextBox;
+  inline_box_22.SetName("3.14");
+
+  heading_23.role = ax::mojom::Role::kHeading;
+  heading_23.child_ids = {static_text_24.id};
+
+  static_text_24.role = ax::mojom::Role::kStaticText;
+  static_text_24.child_ids = {inline_box_25.id};
+  static_text_24.SetName("Heading");
+
+  inline_box_25.role = ax::mojom::Role::kInlineTextBox;
+  inline_box_25.SetName("Heading");
+
+  SetTree(CreateAXTree({root_1,
+                        generic_container_2,
+                        button_3,
+                        static_text_4,
+                        inline_box_5,
+                        svg_root_6,
+                        generic_container_7,
+                        generic_container_8,
+                        heading_9,
+                        static_text_10,
+                        inline_box_11,
+                        static_text_12,
+                        inline_box_13,
+                        generic_container_14,
+                        generic_container_15,
+                        heading_16,
+                        static_text_17,
+                        inline_box_18,
+                        generic_container_19,
+                        generic_container_20,
+                        static_text_21,
+                        inline_box_22,
+                        heading_23,
+                        static_text_24,
+                        inline_box_25}));
+
+  // There are two major cases to consider for format boundaries with ignored
+  // nodes:
+  // Case 1: When the ignored node is directly next to the current position.
+  // Case 2: When the ignored node is directly next to the next/previous format
+  // boundary.
+
+  // Case 1
+  // This test case spans nodes 2 to 11, inclusively.
+  {
+    // Forward movement
+    TestPositionType text_position = AXNodePosition::CreateTextPosition(
+        GetTreeID(), inline_box_5.id, 6 /* text_offset */,
+        ax::mojom::TextAffinity::kDownstream);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_5.id, text_position->anchor_id());
+    EXPECT_EQ(6, text_position->text_offset());
+
+    text_position = text_position->CreateNextFormatEndPosition(
+        AXBoundaryBehavior::StopAtLastAnchorBoundary);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_11.id, text_position->anchor_id());
+    EXPECT_EQ(7, text_position->text_offset());
+
+    // Backward movement
+    text_position = AXNodePosition::CreateTextPosition(
+        GetTreeID(), inline_box_11.id, 0 /* text_offset */,
+        ax::mojom::TextAffinity::kDownstream);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_11.id, text_position->anchor_id());
+    EXPECT_EQ(0, text_position->text_offset());
+
+    text_position = text_position->CreatePreviousFormatStartPosition(
+        AXBoundaryBehavior::StopAtLastAnchorBoundary);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_5.id, text_position->anchor_id());
+    EXPECT_EQ(0, text_position->text_offset());
+  }
+
+  // Case 2
+  // This test case spans nodes 8 to 25.
+  {
+    // Forward movement
+    TestPositionType text_position = AXNodePosition::CreateTextPosition(
+        GetTreeID(), inline_box_11.id, 7 /* text_offset */,
+        ax::mojom::TextAffinity::kDownstream);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_11.id, text_position->anchor_id());
+    EXPECT_EQ(7, text_position->text_offset());
+
+    text_position = text_position->CreateNextFormatEndPosition(
+        AXBoundaryBehavior::StopAtLastAnchorBoundary);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_13.id, text_position->anchor_id());
+    EXPECT_EQ(4, text_position->text_offset());
+
+    // Backward movement
+    text_position = AXNodePosition::CreateTextPosition(
+        GetTreeID(), inline_box_25.id, 0 /* text_offset */,
+        ax::mojom::TextAffinity::kDownstream);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_25.id, text_position->anchor_id());
+    EXPECT_EQ(0, text_position->text_offset());
+
+    text_position = text_position->CreatePreviousFormatStartPosition(
+        AXBoundaryBehavior::StopAtLastAnchorBoundary);
+    ASSERT_NE(nullptr, text_position);
+    EXPECT_TRUE(text_position->IsTextPosition());
+    EXPECT_EQ(inline_box_22.id, text_position->anchor_id());
+    EXPECT_EQ(0, text_position->text_offset());
+  }
 }
 
 TEST_F(AXPositionTest, CreatePositionAtPageBoundaryWithTextPosition) {
