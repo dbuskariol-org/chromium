@@ -17,6 +17,7 @@ import("//chrome/browser/downgrade/buildflags.gni")
 import("//chrome/browser/page_load_metrics/integration_tests/jsdeps.gni")
 import("//chrome/common/features.gni")
 import("//chrome/test/base/js2gtest.gni")
+import("//chrome/test/include_js_tests.gni")
 import("//chromeos/assistant/assistant.gni")
 import("//components/captive_portal/core/features.gni")
 import("//components/feature_engagement/features.gni")
@@ -46,10 +47,6 @@ if (is_android) {
   import("//build/config/android/rules.gni")
   import("//chrome/android/features/dev_ui/dev_ui_module.gni")
   import("//tools/v8_context_snapshot/v8_context_snapshot.gni")
-} else {
-  # js_tests don't work in cross builds, https://crbug.com/1010561
-  include_js_tests =
-      !(is_asan || is_msan || is_tsan || (is_win && host_os != "win"))
 }
 
 # This target exists to reference other test executables to bring these files
