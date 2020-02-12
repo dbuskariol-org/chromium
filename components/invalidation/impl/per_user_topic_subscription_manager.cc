@@ -331,9 +331,11 @@ void PerUserTopicSubscriptionManager::UpdateSubscribedTopics(
       ++it;
     }
   }
-  // TODO(crbug.com/1020117): remove pending subscriptions for topics we're not
-  // longer interested. Replacement by unsubscription request might be
-  // required, because request can already reach the server.
+  // There might be pending subscriptions for topics which are no longer
+  // needed, but they could be in half-completed state (i.e. request already
+  // sent to the server). To reduce subscription leaks they are allowed to
+  // proceed and unsubscription requests will be scheduled by the next
+  // UpdateSubscribedTopics() call after they successfully completed.
 
   if (!pending_subscriptions_.empty()) {
     // Kick off the process of actually processing the (un)subscriptions we just
@@ -539,9 +541,7 @@ void PerUserTopicSubscriptionManager::OnAccessTokenRequestCompleted(
 void PerUserTopicSubscriptionManager::OnAccessTokenRequestSucceeded(
     const std::string& access_token) {
   // Reset backoff time after successful response.
-  // TODO(crbug.com/1020117): This should probably be .InformOfRequest(true)
-  // rather than .Reset().
-  request_access_token_backoff_.Reset();
+  request_access_token_backoff_.InformOfRequest(/*succeeded=*/true);
   access_token_ = access_token;
   // Emit ENABLED when successfully got the token.
   // TODO(crbug.com/1020117): This seems wrong; we generally emit ENABLED only
