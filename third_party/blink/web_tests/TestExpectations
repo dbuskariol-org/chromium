@@ -1850,39 +1850,11 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 
 # ====== Cascade failures until here ======
 
-# ====== Form Controls Refresh (chrome://flags/#form-controls-refresh) failures from here ======
-
-
-# ======
-# From this point until the end of the Form Controls Refresh section, these are
-# in-progress rebaselines, tracked at crbug.com/1035582.
-#
-# PLEASE DO NOT PUT ANYTHING INSIDE THIS SECTION!!
-# ======
-
-# These need another look (timeout):
-crbug.com/1035582 external/wpt/css/selectors/focus-visible-003-manual.html [ Skip ]
-crbug.com/1035582 external/wpt/css/selectors/focus-visible-004-manual.html [ Skip ]
-
-# Still broken, all platforms:
-crbug.com/1035582 fast/forms/button/button-with-float.html [ Skip ]
-crbug.com/1035582 fast/forms/select/listbox-overlay-scrollbar.html [ Skip ]
-crbug.com/1035582 external/wpt/css/css-transforms/transform-input-015.html [ Skip ]
-
-# ======
-# ====== End of rebaselines for crbug.com/1035582 ======
-# ======
-#
-# PLEASE put new form controls refresh failures BELOW THIS LINE, and CREATE A NEW BUG NUMBER.
-#
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
 
 # Bug in FormControlsRefresh <select multiple> tap behavior:
 crbug.com/1045672 fast/forms/select/listbox-tap.html [ Failure ]
-
-
-# ====== Form Controls Refresh failures until here ======
 
 ### sheriff 2019-07-16
 crbug.com/983799 [ Win ] http/tests/navigation/redirect-on-back-updates-history-item.html [ Timeout Pass ]
@@ -1972,6 +1944,14 @@ crbug.com/410974 virtual/threaded-prefer-compositing/fast/scroll-behavior/scroll
 crbug.com/410974 virtual/threaded-prefer-compositing/fast/scroll-behavior/scroll-customization/touch-scroll-customization.html [ Pass Failure ]
 
 crbug.com/518987 http/tests/xmlhttprequest/navigation-abort-detaches-frame.html [ Pass Timeout ]
+
+# Tests that fail when FormControlsRefresh is enabled:
+crbug.com/1051136 fast/forms/select/listbox-overlay-scrollbar.html [ Failure ]
+crbug.com/1051141 external/wpt/css/selectors/focus-visible-003-manual.html [ Timeout ]
+crbug.com/1051141 external/wpt/css/selectors/focus-visible-004-manual.html [ Timeout ]
+
+# This test needs the fuzzy-diff feature - it has small anti-aliasing failures:
+crbug.com/1051143 external/wpt/css/css-transforms/transform-input-015.html [ Pass Failure ]
 
 # These performance-sensitive user-timing tests are flaky in debug on all platforms, and flaky on all configurations of windows.
 # See: crbug.com/567965, crbug.com/518992, and crbug.com/518993
