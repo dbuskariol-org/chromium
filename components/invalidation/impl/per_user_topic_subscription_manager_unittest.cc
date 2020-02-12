@@ -727,6 +727,13 @@ TEST_F(PerUserTopicSubscriptionManagerTest,
   }
 }
 
+TEST_F(PerUserTopicSubscriptionManagerTest,
+       ShouldChangeStatusToEnabledWhenHasNoPendingSubscription) {
+  BuildRegistrationManager()->UpdateSubscribedTopics(/*topics=*/{},
+                                                     kFakeInstanceIdToken);
+  EXPECT_EQ(observed_state(), SubscriptionChannelState::ENABLED);
+}
+
 TEST_F(
     PerUserTopicSubscriptionManagerTest,
     ShouldNotChangeStatusToDisabledWhenTopicsRegistrationFailedFeatureDisabled) {

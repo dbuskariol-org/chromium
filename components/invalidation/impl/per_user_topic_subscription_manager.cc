@@ -341,6 +341,9 @@ void PerUserTopicSubscriptionManager::UpdateSubscribedTopics(
     // Kick off the process of actually processing the (un)subscriptions we just
     // scheduled.
     RequestAccessToken();
+  } else {
+    // No work to be done, emit ENABLED.
+    NotifySubscriptionChannelStateChange(SubscriptionChannelState::ENABLED);
   }
 }
 
@@ -419,7 +422,7 @@ void PerUserTopicSubscriptionManager::ActOnSuccessfulSubscription(
       all_subscriptions_completed = false;
     }
   }
-  // Emit ENABLED once we recovered from failed request.
+  // Emit ENABLED once all requests have finished.
   if (all_subscriptions_completed &&
       base::FeatureList::IsEnabled(
           invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
@@ -478,6 +481,11 @@ void PerUserTopicSubscriptionManager::SubscriptionFinishedForTopic(
   if (type == PerUserTopicSubscriptionRequest::SUBSCRIBE &&
       base::FeatureList::IsEnabled(
           invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
+    // TODO(crbug.com/1020117): case !code.ShouldRetry() now leads to
+    // inconsistent behavior depending on requests completion order: if any
+    // request was successful after it, we may have no |pending_subscriptions_|
+    // and emit ENABLED; otherwise, if failed request is the last one, state
+    // would be SUBSCRIPTION_FAILURE.
     NotifySubscriptionChannelStateChange(
         SubscriptionChannelState::SUBSCRIPTION_FAILURE);
   }
@@ -543,10 +551,11 @@ void PerUserTopicSubscriptionManager::OnAccessTokenRequestSucceeded(
   // Reset backoff time after successful response.
   request_access_token_backoff_.InformOfRequest(/*succeeded=*/true);
   access_token_ = access_token;
-  // Emit ENABLED when successfully got the token.
-  // TODO(crbug.com/1020117): This seems wrong; we generally emit ENABLED only
-  // when all subscriptions have successfully completed.
-  NotifySubscriptionChannelStateChange(SubscriptionChannelState::ENABLED);
+  if (!base::FeatureList::IsEnabled(
+          invalidation::switches::kFCMInvalidationsConservativeEnabling)) {
+    // Emit ENABLED when successfully got the token.
+    NotifySubscriptionChannelStateChange(SubscriptionChannelState::ENABLED);
+  }
   StartPendingSubscriptions();
 }
 
