@@ -43,7 +43,7 @@ void UpdateUserGestureCarryoverInfo(int render_frame_id) {
 
 void ResourceResponseReceived(int render_frame_id,
                               int request_id,
-                              const url::Origin& origin_of_final_response_url,
+                              const GURL& response_url,
                               network::mojom::URLResponseHeadPtr response_head,
                               content::ResourceType resource_type,
                               PreviewsState previews_state) {
@@ -52,11 +52,10 @@ void ResourceResponseReceived(int render_frame_id,
     return;
   if (!IsResourceTypeFrame(resource_type)) {
     frame->GetFrameHost()->SubresourceResponseStarted(
-        origin_of_final_response_url, response_head->cert_status);
+        response_url, response_head->cert_status);
   }
-  frame->DidStartResponse(origin_of_final_response_url, request_id,
-                          std::move(response_head), resource_type,
-                          previews_state);
+  frame->DidStartResponse(response_url, request_id, std::move(response_head),
+                          resource_type, previews_state);
 }
 
 void ResourceTransferSizeUpdated(int render_frame_id,
@@ -111,7 +110,7 @@ mojom::ResourceLoadInfoPtr NotifyResourceLoadInitiated(
   auto resource_load_info = mojom::ResourceLoadInfo::New();
   resource_load_info->method = http_method;
   resource_load_info->original_url = request_url;
-  resource_load_info->origin_of_final_url = url::Origin::Create(request_url);
+  resource_load_info->final_url = request_url;
   resource_load_info->resource_type = resource_type;
   resource_load_info->request_id = request_id;
   resource_load_info->referrer = referrer;
@@ -125,8 +124,7 @@ void NotifyResourceRedirectReceived(
     mojom::ResourceLoadInfo* resource_load_info,
     const net::RedirectInfo& redirect_info,
     network::mojom::URLResponseHeadPtr redirect_response) {
-  resource_load_info->origin_of_final_url =
-      url::Origin::Create(redirect_info.new_url);
+  resource_load_info->final_url = redirect_info.new_url;
   resource_load_info->method = redirect_info.new_method;
   resource_load_info->referrer = GURL(redirect_info.new_referrer);
   mojom::RedirectInfoPtr net_redirect_info = mojom::RedirectInfo::New();
@@ -174,7 +172,7 @@ void NotifyResourceResponseReceived(
     return;
   if (task_runner->BelongsToCurrentThread()) {
     ResourceResponseReceived(render_frame_id, resource_load_info->request_id,
-                             resource_load_info->origin_of_final_url,
+                             resource_load_info->final_url,
                              std::move(response_head),
                              resource_load_info->resource_type, previews_state);
     return;
@@ -189,8 +187,7 @@ void NotifyResourceResponseReceived(
       FROM_HERE,
       base::BindOnce(ResourceResponseReceived, render_frame_id,
                      resource_load_info->request_id,
-                     resource_load_info->origin_of_final_url,
-                     std::move(response_head),
+                     resource_load_info->final_url, std::move(response_head),
                      resource_load_info->resource_type, previews_state));
 }
 
@@ -216,7 +213,7 @@ void NotifyResourceLoadCompleted(
     int render_frame_id,
     mojom::ResourceLoadInfoPtr resource_load_info,
     const network::URLLoaderCompletionStatus& status) {
-  RecordLoadHistograms(resource_load_info->origin_of_final_url,
+  RecordLoadHistograms(url::Origin::Create(resource_load_info->final_url),
                        resource_load_info->resource_type, status.error_code);
 
   resource_load_info->was_cached = status.exists_in_cache;
@@ -240,7 +237,7 @@ void NotifyResourceLoadCompleted(
 void NotifyResourceLoadCanceled(int render_frame_id,
                                 mojom::ResourceLoadInfoPtr resource_load_info,
                                 int net_error) {
-  RecordLoadHistograms(resource_load_info->origin_of_final_url,
+  RecordLoadHistograms(url::Origin::Create(resource_load_info->final_url),
                        resource_load_info->resource_type, net_error);
 
   auto task_runner = RenderThreadImpl::DeprecatedGetMainTaskRunner();

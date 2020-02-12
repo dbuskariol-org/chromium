@@ -106,7 +106,7 @@ void PageRequestSummary::UpdateOrAddToOrigins(
     UpdateOrAddToOrigins(redirect_info->origin_of_new_url,
                          redirect_info->network_info);
   }
-  UpdateOrAddToOrigins(resource_load_info.origin_of_final_url,
+  UpdateOrAddToOrigins(url::Origin::Create(resource_load_info.final_url),
                        resource_load_info.network_info);
 }
 
@@ -235,7 +235,7 @@ void LoadingDataCollector::RecordFirstContentfulPaint(
 bool LoadingDataCollector::ShouldRecordResourceLoad(
     const NavigationID& navigation_id,
     const content::mojom::ResourceLoadInfo& resource_load_info) const {
-  const GURL& url = resource_load_info.origin_of_final_url.GetURL();
+  const GURL& url = resource_load_info.final_url;
   if (!url.is_valid() || !url.SchemeIsHTTPOrHTTPS())
     return false;
 

@@ -51,7 +51,7 @@ content::mojom::ResourceLoadInfoPtr CreateResourceLoadInfo(
     content::ResourceType resource_type) {
   content::mojom::ResourceLoadInfoPtr resource_load_info =
       content::mojom::ResourceLoadInfo::New();
-  resource_load_info->origin_of_final_url = url::Origin::Create(url);
+  resource_load_info->final_url = url;
   resource_load_info->original_url = url;
   resource_load_info->resource_type = resource_type;
   resource_load_info->was_cached = false;
