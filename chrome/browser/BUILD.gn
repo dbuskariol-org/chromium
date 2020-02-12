@@ -2538,6 +2538,7 @@ jumbo_static_library("browser") {
       "android/hung_renderer_infobar_delegate.h",
       "android/image_fetcher/image_fetcher_bridge.cc",
       "android/image_fetcher/image_fetcher_bridge.h",
+      "android/installedapp/installed_app_verifier.cc",
       "android/instantapps/instant_apps_infobar_delegate.cc",
       "android/instantapps/instant_apps_infobar_delegate.h",
       "android/instantapps/instant_apps_settings.cc",
