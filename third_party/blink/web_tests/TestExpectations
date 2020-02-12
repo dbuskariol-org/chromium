@@ -6525,3 +6525,8 @@ crbug.com/1050559 [ Linux ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.http
 # the try bot, so we have to skip these tests on Win10 for now to ensure
 # test coverage of other tests.
 crbug.com/1050834 crbug.com/1050838 [ Win10 ] virtual/off-main-thread-css-paint/* [ Skip ]
+
+# Temporarily disable to unblock WebRTC CL roll making it PASS a test.
+crbug.com/webrtc/7061 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
+crbug.com/webrtc/7061 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
+
