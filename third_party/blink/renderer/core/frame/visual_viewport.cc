@@ -683,8 +683,8 @@ SmoothScrollSequencer* VisualViewport::GetSmoothScrollSequencer() const {
 
 void VisualViewport::SetScrollOffset(
     const ScrollOffset& offset,
-    mojom::blink::ScrollIntoViewParams::Type scroll_type,
-    mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior,
+    mojom::blink::ScrollType scroll_type,
+    mojom::blink::ScrollBehavior scroll_behavior,
     ScrollCallback on_finish) {
   // We clamp the offset here, because the ScrollAnimator may otherwise be
   // set to a non-clamped offset by ScrollableArea::setScrollOffset,
@@ -701,8 +701,8 @@ void VisualViewport::SetScrollOffset(
 
 void VisualViewport::SetScrollOffset(
     const ScrollOffset& offset,
-    mojom::blink::ScrollIntoViewParams::Type scroll_type,
-    mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior) {
+    mojom::blink::ScrollType scroll_type,
+    mojom::blink::ScrollBehavior scroll_behavior) {
   SetScrollOffset(offset, scroll_type, scroll_behavior, ScrollCallback());
 }
 
@@ -719,9 +719,8 @@ PhysicalRect VisualViewport::ScrollIntoView(
 
   if (new_scroll_offset != GetScrollOffset()) {
     if (params->is_for_scroll_sequence) {
-      DCHECK(params->type ==
-                 mojom::blink::ScrollIntoViewParams::Type::kProgrammatic ||
-             params->type == mojom::blink::ScrollIntoViewParams::Type::kUser);
+      DCHECK(params->type == mojom::blink::ScrollType::kProgrammatic ||
+             params->type == mojom::blink::ScrollType::kUser);
       if (SmoothScrollSequencer* sequencer = GetSmoothScrollSequencer()) {
         sequencer->QueueAnimation(this, new_scroll_offset, params->behavior);
       }
@@ -849,17 +848,15 @@ WebColorScheme VisualViewport::UsedColorScheme() const {
   return ComputedStyle::InitialStyle().UsedColorScheme();
 }
 
-void VisualViewport::UpdateScrollOffset(
-    const ScrollOffset& position,
-    mojom::blink::ScrollIntoViewParams::Type scroll_type) {
+void VisualViewport::UpdateScrollOffset(const ScrollOffset& position,
+                                        mojom::blink::ScrollType scroll_type) {
   if (!DidSetScaleOrLocation(scale_, is_pinch_gesture_active_,
                              FloatPoint(position))) {
     return;
   }
   if (IsExplicitScrollType(scroll_type)) {
     NotifyRootFrameViewport();
-    if (scroll_type != mojom::blink::ScrollIntoViewParams::Type::kCompositor &&
-        scroll_layer_)
+    if (scroll_type != mojom::blink::ScrollType::kCompositor && scroll_layer_)
       scroll_layer_->ShowScrollbars();
   }
 }

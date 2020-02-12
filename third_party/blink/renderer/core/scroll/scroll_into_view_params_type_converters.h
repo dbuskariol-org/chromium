@@ -34,11 +34,11 @@ namespace blink {
 CORE_EXPORT mojom::blink::ScrollIntoViewParamsPtr CreateScrollIntoViewParams(
     ScrollAlignment = ScrollAlignment::kAlignCenterIfNeeded,
     ScrollAlignment = ScrollAlignment::kAlignCenterIfNeeded,
-    mojom::blink::ScrollIntoViewParams::Type scroll_type =
-        mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
+    mojom::blink::ScrollType scroll_type =
+        mojom::blink::ScrollType::kProgrammatic,
     bool make_visible_in_visual_viewport = true,
-    mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
-        mojom::blink::ScrollIntoViewParams::Behavior::kAuto,
+    mojom::blink::ScrollBehavior scroll_behavior =
+        mojom::blink::ScrollBehavior::kAuto,
     bool is_for_scroll_sequence = false,
     bool zoom_into_rect = false);
 

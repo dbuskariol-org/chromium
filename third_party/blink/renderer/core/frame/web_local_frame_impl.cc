@@ -684,9 +684,8 @@ WebSize WebLocalFrameImpl::GetScrollOffset() const {
 
 void WebLocalFrameImpl::SetScrollOffset(const WebSize& offset) {
   if (ScrollableArea* scrollable_area = LayoutViewport()) {
-    scrollable_area->SetScrollOffset(
-        ScrollOffset(offset.width, offset.height),
-        mojom::blink::ScrollIntoViewParams::Type::kProgrammatic);
+    scrollable_area->SetScrollOffset(ScrollOffset(offset.width, offset.height),
+                                     mojom::blink::ScrollType::kProgrammatic);
   }
 }
 

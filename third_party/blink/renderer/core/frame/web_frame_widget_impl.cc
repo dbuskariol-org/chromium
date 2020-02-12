@@ -1120,7 +1120,7 @@ void WebFrameWidgetImpl::GetScrollParamsForFocusedEditableElement(
       Intersection(absolute_element_bounds, maximal_rect), maximal_rect);
   params->relative_caret_bounds = NormalizeRect(
       Intersection(absolute_caret_bounds, maximal_rect), maximal_rect);
-  params->behavior = mojom::blink::ScrollIntoViewParams::Behavior::kInstant;
+  params->behavior = mojom::blink::ScrollBehavior::kInstant;
   rect_to_scroll = PhysicalRect(maximal_rect);
 }
 

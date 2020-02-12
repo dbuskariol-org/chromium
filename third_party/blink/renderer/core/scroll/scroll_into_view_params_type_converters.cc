@@ -33,9 +33,9 @@ namespace blink {
 mojom::blink::ScrollIntoViewParamsPtr CreateScrollIntoViewParams(
     ScrollAlignment align_x,
     ScrollAlignment align_y,
-    mojom::blink::ScrollIntoViewParams::Type scroll_type,
+    mojom::blink::ScrollType scroll_type,
     bool make_visible_in_visual_viewport,
-    mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior,
+    mojom::blink::ScrollBehavior scroll_behavior,
     bool is_for_scroll_sequence,
     bool zoom_into_rect) {
   auto params = mojom::blink::ScrollIntoViewParams::New();

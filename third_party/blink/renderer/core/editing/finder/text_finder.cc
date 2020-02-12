@@ -89,18 +89,17 @@ static void ScrollToVisible(Range* match) {
   Settings* settings = first_node.GetDocument().GetSettings();
   bool smooth_find_enabled =
       settings ? settings->GetSmoothScrollForFindEnabled() : false;
-  mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
-      smooth_find_enabled
-          ? mojom::blink::ScrollIntoViewParams::Behavior::kSmooth
-          : mojom::blink::ScrollIntoViewParams::Behavior::kAuto;
+  mojom::blink::ScrollBehavior scroll_behavior =
+      smooth_find_enabled ? mojom::blink::ScrollBehavior::kSmooth
+                          : mojom::blink::ScrollBehavior::kAuto;
   first_node.GetLayoutObject()->ScrollRectToVisible(
       PhysicalRect(match->BoundingBox()),
-      CreateScrollIntoViewParams(
-          ScrollAlignment::kAlignCenterIfNeeded,
-          ScrollAlignment::kAlignCenterIfNeeded,
-          mojom::blink::ScrollIntoViewParams::Type::kUser,
-          true /* make_visible_in_visual_viewport */, scroll_behavior,
-          true /* is_for_scroll_sequence */));
+      CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
+                                 ScrollAlignment::kAlignCenterIfNeeded,
+                                 mojom::blink::ScrollType::kUser,
+                                 true /* make_visible_in_visual_viewport */,
+                                 scroll_behavior,
+                                 true /* is_for_scroll_sequence */));
   first_node.GetDocument().SetSequentialFocusNavigationStartingPoint(
       const_cast<Node*>(&first_node));
 }
@@ -640,10 +639,9 @@ int TextFinder::SelectFindMatch(unsigned index, WebRect* selection_rect) {
         active_match_->FirstNode()->GetLayoutObject()) {
       active_match_->FirstNode()->GetLayoutObject()->ScrollRectToVisible(
           PhysicalRect(active_match_bounding_box),
-          CreateScrollIntoViewParams(
-              ScrollAlignment::kAlignCenterIfNeeded,
-              ScrollAlignment::kAlignCenterIfNeeded,
-              mojom::blink::ScrollIntoViewParams::Type::kUser));
+          CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
+                                     ScrollAlignment::kAlignCenterIfNeeded,
+                                     mojom::blink::ScrollType::kUser));
 
       // Absolute coordinates are scroll-variant so the bounding box will change
       // if the page is scrolled by ScrollRectToVisible above. Recompute the

@@ -2302,13 +2302,13 @@ protocol::Response InspectorDOMAgent::scrollIntoViewIfNeeded(
   }
   layout_object->ScrollRectToVisible(
       rect_to_scroll,
-      CreateScrollIntoViewParams(
-          ScrollAlignment::kAlignCenterIfNeeded,
-          ScrollAlignment::kAlignCenterIfNeeded,
-          mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
-          true /* make_visible_in_visual_viewport */,
-          mojom::blink::ScrollIntoViewParams::Behavior::kInstant,
-          true /* is_for_scroll_sequence */, false /* zoom_into_rect */));
+      CreateScrollIntoViewParams(ScrollAlignment::kAlignCenterIfNeeded,
+                                 ScrollAlignment::kAlignCenterIfNeeded,
+                                 mojom::blink::ScrollType::kProgrammatic,
+                                 true /* make_visible_in_visual_viewport */,
+                                 mojom::blink::ScrollBehavior::kInstant,
+                                 true /* is_for_scroll_sequence */,
+                                 false /* zoom_into_rect */));
   return Response::OK();
 }
 

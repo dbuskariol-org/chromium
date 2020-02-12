@@ -971,11 +971,10 @@ void HTMLSelectElement::ScrollToOptionTask() {
   DCHECK(box->Layer()->GetScrollableArea());
   box->Layer()->GetScrollableArea()->ScrollIntoView(
       bounds,
-      CreateScrollIntoViewParams(
-          ScrollAlignment::kAlignToEdgeIfNeeded,
-          ScrollAlignment::kAlignToEdgeIfNeeded,
-          mojom::blink::ScrollIntoViewParams::Type::kProgrammatic, false,
-          mojom::blink::ScrollIntoViewParams::Behavior::kInstant));
+      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
+                                 ScrollAlignment::kAlignToEdgeIfNeeded,
+                                 mojom::blink::ScrollType::kProgrammatic, false,
+                                 mojom::blink::ScrollBehavior::kInstant));
 }
 
 void HTMLSelectElement::OptionSelectionStateChanged(HTMLOptionElement* option,

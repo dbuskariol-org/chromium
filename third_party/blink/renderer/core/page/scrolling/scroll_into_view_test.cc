@@ -591,8 +591,8 @@ TEST_F(ScrollIntoViewTest, StopAtLayoutViewportOption) {
       GetDocument().getElementById("target")->GetLayoutObject();
   auto params = CreateScrollIntoViewParams(
       ScrollAlignment::kAlignLeftAlways, ScrollAlignment::kAlignTopAlways,
-      mojom::blink::ScrollIntoViewParams::Type::kProgrammatic, false,
-      mojom::blink::ScrollIntoViewParams::Behavior::kInstant);
+      mojom::blink::ScrollType::kProgrammatic, false,
+      mojom::blink::ScrollBehavior::kInstant);
   params->stop_at_main_frame_layout_viewport = true;
   target->ScrollRectToVisible(PhysicalRect(target->AbsoluteBoundingBoxRect()),
                               std::move(params));
@@ -685,11 +685,10 @@ TEST_F(ScrollIntoViewTest, SmoothUserScrollNotAbortedByProgrammaticScrolls) {
   Element* content = GetDocument().getElementById("content");
   content->GetLayoutObject()->ScrollRectToVisible(
       content->BoundingBoxForScrollIntoView(),
-      CreateScrollIntoViewParams(
-          ScrollAlignment::kAlignToEdgeIfNeeded,
-          ScrollAlignment::kAlignTopAlways,
-          mojom::blink::ScrollIntoViewParams::Type::kUser, false,
-          mojom::blink::ScrollIntoViewParams::Behavior::kSmooth, true));
+      CreateScrollIntoViewParams(ScrollAlignment::kAlignToEdgeIfNeeded,
+                                 ScrollAlignment::kAlignTopAlways,
+                                 mojom::blink::ScrollType::kUser, false,
+                                 mojom::blink::ScrollBehavior::kSmooth, true));
 
   // Animating the container
   Compositor().BeginFrame();  // update run_state_.

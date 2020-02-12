@@ -1133,10 +1133,9 @@ void Element::ScrollIntoViewNoVisualUpdate(
           DisplayLockActivationReason::kScrollIntoView))
     return;
 
-  mojom::blink::ScrollIntoViewParams::Behavior behavior =
-      (options->behavior() == "smooth")
-          ? mojom::blink::ScrollIntoViewParams::Behavior::kSmooth
-          : mojom::blink::ScrollIntoViewParams::Behavior::kAuto;
+  mojom::blink::ScrollBehavior behavior =
+      (options->behavior() == "smooth") ? mojom::blink::ScrollBehavior::kSmooth
+                                        : mojom::blink::ScrollBehavior::kAuto;
 
   WritingMode writing_mode = GetComputedStyle()->GetWritingMode();
   bool is_ltr = GetComputedStyle()->IsLeftToRightDirection();
@@ -1148,8 +1147,7 @@ void Element::ScrollIntoViewNoVisualUpdate(
   PhysicalRect bounds = BoundingBoxForScrollIntoView();
   GetLayoutObject()->ScrollRectToVisible(
       bounds, CreateScrollIntoViewParams(
-                  align_x, align_y,
-                  mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
+                  align_x, align_y, mojom::blink::ScrollType::kProgrammatic,
                   /*make_visible_in_visual_viewport=*/true, behavior));
 
   GetDocument().SetSequentialFocusNavigationStartingPoint(this);
@@ -1465,9 +1463,9 @@ void Element::setScrollLeft(double new_left) {
         end_offset =
             scrollable_area->ScrollPositionToOffset(snap_point.value());
       }
-      scrollable_area->SetScrollOffset(
-          end_offset, mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
-          mojom::blink::ScrollIntoViewParams::Behavior::kAuto);
+      scrollable_area->SetScrollOffset(end_offset,
+                                       mojom::blink::ScrollType::kProgrammatic,
+                                       mojom::blink::ScrollBehavior::kAuto);
     } else {
       FloatPoint end_point(new_left * box->Style()->EffectiveZoom(),
                            scrollable_area->ScrollPosition().Y());
@@ -1481,7 +1479,7 @@ void Element::setScrollLeft(double new_left) {
       FloatPoint new_position(end_point.X(),
                               scrollable_area->ScrollPosition().Y());
       scrollable_area->ScrollToAbsolutePosition(
-          new_position, mojom::blink::ScrollIntoViewParams::Behavior::kAuto);
+          new_position, mojom::blink::ScrollBehavior::kAuto);
     }
   }
 }
@@ -1533,9 +1531,9 @@ void Element::setScrollTop(double new_top) {
             scrollable_area->ScrollPositionToOffset(snap_point.value());
       }
 
-      scrollable_area->SetScrollOffset(
-          end_offset, mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
-          mojom::blink::ScrollIntoViewParams::Behavior::kAuto);
+      scrollable_area->SetScrollOffset(end_offset,
+                                       mojom::blink::ScrollType::kProgrammatic,
+                                       mojom::blink::ScrollBehavior::kAuto);
     } else {
       FloatPoint end_point(scrollable_area->ScrollPosition().X(),
                            new_top * box->Style()->EffectiveZoom());
@@ -1548,7 +1546,7 @@ void Element::setScrollTop(double new_top) {
       FloatPoint new_position(scrollable_area->ScrollPosition().X(),
                               end_point.Y());
       scrollable_area->ScrollToAbsolutePosition(
-          new_position, mojom::blink::ScrollIntoViewParams::Behavior::kAuto);
+          new_position, mojom::blink::ScrollBehavior::kAuto);
     }
   }
 }
@@ -1656,8 +1654,8 @@ void Element::ScrollLayoutBoxBy(const ScrollToOptions* scroll_to_options) {
         ScrollableArea::NormalizeNonFiniteScroll(scroll_to_options->top()));
   }
 
-  mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
-      mojom::blink::ScrollIntoViewParams::Behavior::kAuto;
+  mojom::blink::ScrollBehavior scroll_behavior =
+      mojom::blink::ScrollBehavior::kAuto;
   ScrollableArea::ScrollBehaviorFromString(scroll_to_options->behavior(),
                                            scroll_behavior);
   if (PaintLayerScrollableArea* scrollable_area = GetScrollableArea()) {
@@ -1681,8 +1679,8 @@ void Element::ScrollLayoutBoxBy(const ScrollToOptions* scroll_to_options) {
 }
 
 void Element::ScrollLayoutBoxTo(const ScrollToOptions* scroll_to_options) {
-  mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
-      mojom::blink::ScrollIntoViewParams::Behavior::kAuto;
+  mojom::blink::ScrollBehavior scroll_behavior =
+      mojom::blink::ScrollBehavior::kAuto;
   ScrollableArea::ScrollBehaviorFromString(scroll_to_options->behavior(),
                                            scroll_behavior);
 
@@ -1744,8 +1742,7 @@ void Element::ScrollLayoutBoxTo(const ScrollToOptions* scroll_to_options) {
       }
 
       scrollable_area->SetScrollOffset(
-          new_offset, mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
-          scroll_behavior);
+          new_offset, mojom::blink::ScrollType::kProgrammatic, scroll_behavior);
     } else {
       FloatPoint new_position(scrollable_area->ScrollPosition().X(),
                               scrollable_area->ScrollPosition().Y());
@@ -1783,8 +1780,8 @@ void Element::ScrollFrameBy(const ScrollToOptions* scroll_to_options) {
         ScrollableArea::NormalizeNonFiniteScroll(scroll_to_options->top()));
   }
 
-  mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
-      mojom::blink::ScrollIntoViewParams::Behavior::kAuto;
+  mojom::blink::ScrollBehavior scroll_behavior =
+      mojom::blink::ScrollBehavior::kAuto;
   ScrollableArea::ScrollBehaviorFromString(scroll_to_options->behavior(),
                                            scroll_behavior);
   LocalFrame* frame = GetDocument().GetFrame();
@@ -1806,14 +1803,14 @@ void Element::ScrollFrameBy(const ScrollToOptions* scroll_to_options) {
           RuntimeEnabledFeatures::FractionalScrollOffsetsEnabled());
   new_position =
       viewport->GetSnapPositionAndSetTarget(*strategy).value_or(new_position);
-  viewport->SetScrollOffset(
-      viewport->ScrollPositionToOffset(new_position),
-      mojom::blink::ScrollIntoViewParams::Type::kProgrammatic, scroll_behavior);
+  viewport->SetScrollOffset(viewport->ScrollPositionToOffset(new_position),
+                            mojom::blink::ScrollType::kProgrammatic,
+                            scroll_behavior);
 }
 
 void Element::ScrollFrameTo(const ScrollToOptions* scroll_to_options) {
-  mojom::blink::ScrollIntoViewParams::Behavior scroll_behavior =
-      mojom::blink::ScrollIntoViewParams::Behavior::kAuto;
+  mojom::blink::ScrollBehavior scroll_behavior =
+      mojom::blink::ScrollBehavior::kAuto;
   ScrollableArea::ScrollBehaviorFromString(scroll_to_options->behavior(),
                                            scroll_behavior);
   LocalFrame* frame = GetDocument().GetFrame();
@@ -1844,9 +1841,8 @@ void Element::ScrollFrameTo(const ScrollToOptions* scroll_to_options) {
   new_position =
       viewport->GetSnapPositionAndSetTarget(*strategy).value_or(new_position);
   new_offset = viewport->ScrollPositionToOffset(new_position);
-  viewport->SetScrollOffset(
-      new_offset, mojom::blink::ScrollIntoViewParams::Type::kProgrammatic,
-      scroll_behavior);
+  viewport->SetScrollOffset(new_offset, mojom::blink::ScrollType::kProgrammatic,
+                            scroll_behavior);
 }
 
 IntRect Element::BoundsInViewport() const {
