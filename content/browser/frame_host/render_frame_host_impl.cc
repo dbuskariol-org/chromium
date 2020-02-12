@@ -880,7 +880,10 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       process_(site_instance->GetProcess()),
       frame_tree_(frame_tree),
       frame_tree_node_(frame_tree_node),
-      parent_(nullptr),
+      // If it has a parent, that parent must have a RFH.
+      parent_(frame_tree_node_->parent()
+                  ? frame_tree_node_->parent()->current_frame_host()
+                  : nullptr),
       routing_id_(routing_id),
       is_waiting_for_unload_ack_(false),
       render_frame_created_(false),
@@ -924,11 +927,6 @@ RenderFrameHostImpl::RenderFrameHostImpl(
   GetSiteInstance()->IncrementActiveFrameCount();
 
   if (frame_tree_node_->parent()) {
-    // Keep track of the parent RenderFrameHost, which shouldn't change even if
-    // this RenderFrameHost is on the pending deletion list and the parent
-    // FrameTreeNode has changed its current RenderFrameHost.
-    parent_ = frame_tree_node_->parent()->current_frame_host();
-
     cross_origin_embedder_policy_ = parent_->cross_origin_embedder_policy();
 
     // New child frames should inherit the nav_entry_id of their parent.
