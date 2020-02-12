@@ -39002,6 +39002,7 @@ from previous Chrome versions.
   <int value="417709910"
       label="AutofillSendExperimentIdsInPaymentsRPCs:disabled"/>
   <int value="418769094" label="MixedContentSiteSetting:enabled"/>
+  <int value="420160748" label="CornerShortcuts:enabled"/>
   <int value="422307097" label="PhysicalWeb:disabled"/>
   <int value="423615350" label="enable-tab-audio-muting"/>
   <int value="423855924" label="enable-tab-switcher-theme-colors"/>
@@ -39388,6 +39389,7 @@ from previous Chrome versions.
   <int value="928900043" label="OmniboxLooseMaxLimitOnDedicatedRows:disabled"/>
   <int value="929462705" label="disable-link-disambiguation-popup"/>
   <int value="934292666" label="DownloadRename:enabled"/>
+  <int value="934805020" label="CornerShortcuts:disabled"/>
   <int value="935655516" label="password-import-export:disabled"/>
   <int value="936341613" label="OfflinePagesCT:disabled"/>
   <int value="936919953" label="bypass-app-banner-engagement-checks"/>
