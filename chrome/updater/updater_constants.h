@@ -18,8 +18,8 @@ extern const char kChromeAppId[];
 // Command line switches.
 //
 
-// Launch the server.
-extern const char kServerSwitch[];
+// COM server.
+extern const char kComServerSwitch[];
 
 // Crash the program for testing purposes.
 extern const char kCrashMeSwitch[];

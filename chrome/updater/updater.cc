@@ -19,14 +19,13 @@
 #include "components/crash/core/common/crash_key.h"
 
 #if defined(OS_WIN)
-#include "chrome/updater/server/win/server.h"
+#include "chrome/updater/win/com/com_server.h"
 #include "chrome/updater/win/install_app.h"
 #include "chrome/updater/win/setup/uninstall.h"
 #endif
 
 #if defined(OS_MACOSX)
 #include "chrome/updater/mac/setup/setup.h"
-#include "chrome/updater/server/mac/server.h"
 #endif
 
 // To install the updater on Windows, run "updatersetup.exe" from the
@@ -115,9 +114,9 @@ int UpdaterUninstall() {
 int HandleUpdaterCommands(const base::CommandLine* command_line) {
   DCHECK(!command_line->HasSwitch(kCrashHandlerSwitch));
 
-#if defined(OS_WIN) || defined(OS_MACOSX)
-  if (command_line->HasSwitch(kServerSwitch))
-    return RunServer();
+#if defined(OS_WIN)
+  if (command_line->HasSwitch(kComServerSwitch))
+    return ComServer().RunComServer();
 #endif
 
   if (command_line->HasSwitch(kCrashMeSwitch)) {
