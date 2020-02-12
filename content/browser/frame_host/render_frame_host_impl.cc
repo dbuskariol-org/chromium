@@ -1966,16 +1966,16 @@ void RenderFrameHostImpl::RenderProcessGone(
 }
 
 void RenderFrameHostImpl::ReportContentSecurityPolicyViolation(
-    const CSPViolationParams& violation_params) {
-  GetNavigationControl()->ReportContentSecurityPolicyViolation(
-      violation_params);
+    network::mojom::CSPViolationPtr violation_params) {
+  GetAssociatedLocalFrame()->ReportContentSecurityPolicyViolation(
+      std::move(violation_params));
 }
 
 void RenderFrameHostImpl::SanitizeDataForUseInCspViolation(
     bool is_redirect,
     network::mojom::CSPDirectiveName directive,
     GURL* blocked_url,
-    SourceLocation* source_location) const {
+    network::mojom::SourceLocation* source_location) const {
   DCHECK(blocked_url);
   DCHECK(source_location);
   GURL source_location_url(source_location->url);
@@ -2003,8 +2003,9 @@ void RenderFrameHostImpl::SanitizeDataForUseInCspViolation(
   if (sanitize_blocked_url)
     *blocked_url = blocked_url->GetOrigin();
   if (sanitize_source_location) {
-    *source_location =
-        SourceLocation(source_location_url.GetOrigin().spec(), 0u, 0u);
+    source_location->url = source_location_url.GetOrigin().spec();
+    source_location->line = 0u;
+    source_location->column = 0u;
   }
 }
 
@@ -4964,7 +4965,8 @@ void RenderFrameHostImpl::NavigateToInterstitialURL(const GURL& data_url) {
       data_url, base::nullopt, blink::mojom::Referrer::New(),
       ui::PAGE_TRANSITION_LINK, mojom::NavigationType::DIFFERENT_DOCUMENT,
       download_policy, false, GURL(), GURL(), PREVIEWS_OFF,
-      base::TimeTicks::Now(), "GET", nullptr, SourceLocation(),
+      base::TimeTicks::Now(), "GET", nullptr,
+      network::mojom::SourceLocation::New(),
       false /* started_from_context_menu */, false /* has_user_gesture */,
       CreateInitiatorCSPInfo(), std::vector<int>(), std::string(),
       false /* is_history_navigation_in_new_child_frame */, base::TimeTicks());

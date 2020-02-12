@@ -402,13 +402,13 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // CSPContext
   void ReportContentSecurityPolicyViolation(
-      const CSPViolationParams& violation_params) override;
+      network::mojom::CSPViolationPtr violation_params) override;
   bool SchemeShouldBypassCSP(const base::StringPiece& scheme) override;
   void SanitizeDataForUseInCspViolation(
       bool is_redirect,
       network::mojom::CSPDirectiveName directive,
       GURL* blocked_url,
-      SourceLocation* source_location) const override;
+      network::mojom::SourceLocation* source_location) const override;
 
   // ui::AXActionHandler:
   void PerformAction(const ui::AXActionData& data) override;
