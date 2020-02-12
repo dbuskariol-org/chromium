@@ -1014,6 +1014,13 @@ const char kGlobalMediaControlsForCastDescription[] =
     "Shows Cast sessions in the Global Media Controls UI. Requires "
     "#global-media-controls and #cast-media-route-provider to also be enabled.";
 
+const char kGlobalMediaControlsPictureInPictureName[] =
+    "Global Media Controls Picture-in-Picture";
+const char kGlobalMediaControlsPictureInPictureDescription[] =
+    "Enables Picture-in-Picture controls in the Global Media Controls UI. "
+    "Requires "
+    "#global-media-controls to also be enabled.";
+
 const char kGpuRasterizationName[] = "GPU rasterization";
 const char kGpuRasterizationDescription[] =
     "Use GPU to rasterize web content. Requires impl-side painting.";
