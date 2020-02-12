@@ -1751,6 +1751,13 @@ AXObject* AXLayoutObject::AccessibilityHitTest(const IntPoint& point) const {
   }
 
   LayoutObject* obj = node->GetLayoutObject();
+
+  // Retarget to respect https://dom.spec.whatwg.org/#retarget.
+  if (auto* elem = DynamicTo<Element>(node)) {
+    Element* element = &(GetDocument()->Retarget(*elem));
+    obj = element->GetLayoutObject();
+  }
+
   if (!obj)
     return nullptr;
 
