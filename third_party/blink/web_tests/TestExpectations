@@ -2069,7 +2069,6 @@ crbug.com/832274 [ Win ] virtual/form-controls-refresh-disabled/fast/forms/searc
 crbug.com/543369 virtual/form-controls-refresh-disabled/fast/forms/select-popup/popup-menu-appearance-tall.html [ Failure Pass ]
 crbug.com/681468 virtual/form-controls-refresh-disabled/fast/forms/suggestion-picker/date-suggestion-picker-appearance-zoom125.html [ Failure Pass ]
 crbug.com/681468 virtual/form-controls-refresh-disabled/fast/forms/suggestion-picker/date-suggestion-picker-appearance-zoom200.html [ Failure Pass ]
-crbug.com/660185 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/datalist/input-appearance-range-with-transform.html [ Pass Failure ]
 crbug.com/953591 [ Win ] virtual/form-controls-refresh-disabled/fast/forms/datalist/input-appearance-range-with-transform.html [ Pass Failure ]
 crbug.com/591099 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/text/text-lineheight-centering.html [ Failure ]
 crbug.com/770971 [ Win7 ] virtual/form-controls-refresh-disabled/fast/forms/suggested-value.html [ Pass Failure ]
@@ -2416,7 +2415,6 @@ crbug.com/467127 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftest
 
 crbug.com/654999 [ Win ] fast/forms/color/color-suggestion-picker-appearance-zoom200.html [ Pass Failure ]
 crbug.com/654999 [ Linux ] fast/forms/color/color-suggestion-picker-appearance-zoom200.html [ Pass Failure ]
-crbug.com/660185 [ Mac ] fast/forms/datalist/input-appearance-range-with-transform.html [ Pass Failure ]
 
 crbug.com/658304 [ Win ] fast/forms/select/input-select-after-resize.html [ Crash Timeout Pass Failure ]
 
