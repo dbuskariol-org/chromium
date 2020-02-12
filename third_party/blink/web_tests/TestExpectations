@@ -6179,7 +6179,6 @@ external/wpt/measure-memory/measure-memory-same-origin-iframe.tentative.window.h
 # Assertion errors need to be fixed
 crbug.com/1034492 http/tests/devtools/unit/filtered-item-selection-dialog-filtering.js [ Pass Failure ]
 crbug.com/1034492 http/tests/devtools/unit/filtered-list-widget-providers.js [ Pass Failure ]
-crbug.com/1034492 http/tests/devtools/unit/soft-drop-down.js [ Pass Failure ]
 
 # Sheriff 2019-12-17
 crbug.com/1034789 [ Mac ] http/tests/security/frameNavigation/xss-ALLOWED-parent-navigation-change-async.html [ Pass Timeout ]
