@@ -5716,6 +5716,9 @@ interface OscillatorNode : AudioScheduledSourceNode
     method constructor
     method setPeriodicWave
     setter type
+interface OtpCredential : Credential
+    attribute @@toStringTag
+    method constructor
 interface OverconstrainedError
     attribute @@toStringTag
     getter constraint
