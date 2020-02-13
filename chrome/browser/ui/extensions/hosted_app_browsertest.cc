@@ -849,36 +849,6 @@ IN_PROC_BROWSER_TEST_P(SharedPWATest, PopOutDisabledInIncognito) {
   EXPECT_FALSE(model->IsEnabledAt(index));
 }
 
-// Tests that app windows are restored in a tab if the app is uninstalled.
-IN_PROC_BROWSER_TEST_P(HostedAppPWAOnlyTest,
-                       RestoreAppWindowForUninstalledApp) {
-  ASSERT_TRUE(https_server()->Start());
-
-  InstallSecurePWA();
-  ASSERT_TRUE(app_browser_->is_type_app());
-  ASSERT_FALSE(app_browser_->is_type_normal());
-  app_browser_->window()->Close();
-
-  extensions::TestExtensionRegistryObserver test_observer(
-      extensions::ExtensionRegistry::Get(browser()->profile()), app_->id());
-  UninstallExtension(app_->id());
-  test_observer.WaitForExtensionUninstalled();
-
-  content::WebContentsAddedObserver new_contents_observer;
-
-  sessions::TabRestoreService* service =
-      TabRestoreServiceFactory::GetForProfile(profile());
-  service->RestoreMostRecentEntry(nullptr);
-
-  content::WebContents* restored_web_contents =
-      new_contents_observer.GetWebContents();
-  Browser* restored_browser =
-      chrome::FindBrowserWithWebContents(restored_web_contents);
-
-  EXPECT_FALSE(restored_browser->is_type_app());
-  EXPECT_TRUE(restored_browser->is_type_normal());
-}
-
 // Tests that PWA menus have an uninstall option.
 IN_PROC_BROWSER_TEST_P(SharedPWATest, UninstallMenuOption) {
   ASSERT_TRUE(https_server()->Start());
@@ -1213,47 +1183,6 @@ IN_PROC_BROWSER_TEST_P(HostedAppPWAOnlyTestWithAutoupgradesDisabled,
       iframe, embedded_test_server()->GetURL("foo.com", kImagePath)));
 
   web_app::CheckMixedContentLoaded(browser());
-}
-
-// Check that uninstalling a PWA with a window opened doesn't crash.
-IN_PROC_BROWSER_TEST_P(SharedPWATest, UninstallPwaWithWindowOpened) {
-  ASSERT_TRUE(https_server()->Start());
-  ASSERT_TRUE(embedded_test_server()->Start());
-  InstallSecurePWA();
-
-  EXPECT_TRUE(IsBrowserOpen(app_browser_));
-
-  // TODO (crbug.com/876576): Remove references to extensions in SharedPWATest.
-  UninstallExtension(app_->id());
-  base::RunLoop().RunUntilIdle();
-
-  EXPECT_FALSE(IsBrowserOpen(app_browser_));
-}
-
-// PWAs moved to tabbed browsers should not get closed when uninstalled.
-IN_PROC_BROWSER_TEST_P(HostedAppPWAOnlyTest, UninstallPwaWithWindowMovedToTab) {
-  ASSERT_TRUE(https_server()->Start());
-  ASSERT_TRUE(embedded_test_server()->Start());
-
-  InstallSecurePWA();
-
-  EXPECT_TRUE(IsBrowserOpen(app_browser_));
-
-  Browser* tabbed_browser = chrome::OpenInChrome(app_browser_);
-  base::RunLoop().RunUntilIdle();
-
-  EXPECT_TRUE(IsBrowserOpen(tabbed_browser));
-  EXPECT_EQ(tabbed_browser, browser());
-  EXPECT_FALSE(IsBrowserOpen(app_browser_));
-
-  UninstallExtension(app_->id());
-  base::RunLoop().RunUntilIdle();
-
-  EXPECT_TRUE(IsBrowserOpen(tabbed_browser));
-  EXPECT_EQ(tabbed_browser->tab_strip_model()
-                ->GetActiveWebContents()
-                ->GetLastCommittedURL(),
-            GetSecureAppURL());
 }
 
 IN_PROC_BROWSER_TEST_P(HostedAppTest, CreatedForInstalledPwaForNonPwas) {

@@ -376,12 +376,12 @@ INSTANTIATE_TEST_SUITE_P(
                       ControllerType::kUnifiedControllerWithWebApp),
     ControllerTypeParamToString);
 
-// TODO(crbug.com/1049906): Support kUnifiedControllerWithWebApp
 INSTANTIATE_TEST_SUITE_P(
     All,
     WebAppTabRestoreBrowserTest,
     ::testing::Values(ControllerType::kHostedAppController,
-                      ControllerType::kUnifiedControllerWithBookmarkApp),
+                      ControllerType::kUnifiedControllerWithBookmarkApp,
+                      ControllerType::kUnifiedControllerWithWebApp),
     ControllerTypeParamToString);
 
 }  // namespace web_app
