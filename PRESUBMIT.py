@@ -409,7 +409,6 @@ _NOT_CONVERTED_TO_MODERN_BIND_AND_CALLBACK = '|'.join((
   '^remoting/ios/',
   '^remoting/protocol/',
   '^remoting/signaling/',
-  '^remoting/test/',
   '^services/',
   '^third_party/blink/',
   '^tools/clang/base_bind_rewriters/',  # Intentional.
