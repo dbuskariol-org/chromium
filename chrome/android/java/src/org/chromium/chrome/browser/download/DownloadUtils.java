@@ -32,7 +32,6 @@ import org.chromium.base.StrictModeContext;
 import org.chromium.base.TimeUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.base.library_loader.LibraryProcessType;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
@@ -205,8 +204,7 @@ public class DownloadUtils {
             }
         }
 
-        if (BrowserStartupController.get(LibraryProcessType.PROCESS_BROWSER)
-                        .isFullBrowserStarted()) {
+        if (BrowserStartupController.getInstance().isFullBrowserStarted()) {
             Profile profile =
                     (tab == null ? Profile.getLastUsedProfile() : ((TabImpl) tab).getProfile());
             Tracker tracker = TrackerFactory.getTrackerForProfile(profile);
@@ -716,8 +714,7 @@ public class DownloadUtils {
      * @return String representing the current download status.
      */
     public static String getFailStatusString(@FailState int failState) {
-        if (BrowserStartupController.get(LibraryProcessType.PROCESS_BROWSER)
-                        .isFullBrowserStarted()) {
+        if (BrowserStartupController.getInstance().isFullBrowserStarted()) {
             return DownloadUtilsJni.get().getFailStateMessage(failState);
         }
         Context context = ContextUtils.getApplicationContext();
@@ -734,7 +731,7 @@ public class DownloadUtils {
         Context context = ContextUtils.getApplicationContext();
         // When foreground service restarts and there is no connection to native, use the default
         // pending status. The status will be replaced when connected to native.
-        if (BrowserStartupController.get(LibraryProcessType.PROCESS_BROWSER).isFullBrowserStarted()
+        if (BrowserStartupController.getInstance().isFullBrowserStarted()
                 && ChromeFeatureList.isEnabled(
                         ChromeFeatureList.OFFLINE_PAGES_DESCRIPTIVE_PENDING_STATUS)) {
             switch (pendingState) {
