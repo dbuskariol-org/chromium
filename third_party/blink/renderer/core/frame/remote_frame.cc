@@ -464,7 +464,7 @@ void RemoteFrame::SetPageFocus(bool is_focused) {
 }
 
 void RemoteFrame::ScrollRectToVisible(
-    const WebRect& rect_to_scroll,
+    const gfx::Rect& rect_to_scroll,
     mojom::blink::ScrollIntoViewParamsPtr params) {
   Element* owner_element = DeprecatedLocalOwner();
   LayoutObject* owner_object = owner_element->GetLayoutObject();
@@ -477,9 +477,10 @@ void RemoteFrame::ScrollRectToVisible(
 
   // Schedule the scroll.
   PhysicalRect absolute_rect = owner_object->LocalToAncestorRect(
-      PhysicalRect(LayoutUnit(rect_to_scroll.x), LayoutUnit(rect_to_scroll.y),
-                   LayoutUnit(rect_to_scroll.width),
-                   LayoutUnit(rect_to_scroll.height)),
+      PhysicalRect(LayoutUnit(rect_to_scroll.x()),
+                   LayoutUnit(rect_to_scroll.y()),
+                   LayoutUnit(rect_to_scroll.width()),
+                   LayoutUnit(rect_to_scroll.height())),
       owner_object->View());
 
   if (!params->zoom_into_rect ||
