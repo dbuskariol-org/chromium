@@ -124,7 +124,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     run_loop.Run();
   }
 
-  void CheckElementVisibleCallback(const base::Closure& done_callback,
+  void CheckElementVisibleCallback(base::OnceClosure done_callback,
                                    const Selector& selector,
                                    size_t* pending_number_of_checks_output,
                                    bool expected_result,
@@ -132,14 +132,14 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     EXPECT_EQ(expected_result, result.ok()) << "selector: " << selector;
     *pending_number_of_checks_output -= 1;
     if (*pending_number_of_checks_output == 0) {
-      done_callback.Run();
+      std::move(done_callback).Run();
     }
   }
 
-  void ClickElementCallback(const base::Closure& done_callback,
+  void ClickElementCallback(base::OnceClosure done_callback,
                             const ClientStatus& status) {
     EXPECT_EQ(ACTION_APPLIED, status.proto_status());
-    done_callback.Run();
+    std::move(done_callback).Run();
   }
 
   void ClickOrTapElement(const Selector& selector,
@@ -162,10 +162,10 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     run_loop.Run();
   }
 
-  void OnWaitForElementRemove(const base::Closure& done_callback,
+  void OnWaitForElementRemove(base::OnceClosure done_callback,
                               const Selector& selector,
                               const ClientStatus& result) {
-    done_callback.Run();
+    std::move(done_callback).Run();
     if (result.ok()) {
       WaitForElementRemove(selector);
     }
@@ -199,14 +199,14 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     return result;
   }
 
-  void OnClientStatus(base::Closure done_callback,
+  void OnClientStatus(base::OnceClosure done_callback,
                       ClientStatus* result_output,
                       const ClientStatus& status) {
     *result_output = status;
     std::move(done_callback).Run();
   }
 
-  void OnClientStatusAndReadyState(base::Closure done_callback,
+  void OnClientStatusAndReadyState(base::OnceClosure done_callback,
                                    ClientStatus* result_output,
                                    DocumentReadyState* ready_state_out,
                                    const ClientStatus& status,
@@ -239,7 +239,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     return result;
   }
 
-  void OnGetOuterHtml(const base::Closure& done_callback,
+  void OnGetOuterHtml(base::OnceClosure done_callback,
                       ClientStatus* successful_output,
                       std::string* html_output,
                       const ClientStatus& status,
@@ -247,7 +247,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     EXPECT_EQ(ACTION_APPLIED, status.proto_status());
     *successful_output = status;
     *html_output = html;
-    done_callback.Run();
+    std::move(done_callback).Run();
   }
 
   ClientStatus GetElementTag(const Selector& selector,
@@ -262,7 +262,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     return result;
   }
 
-  void OnGetElementTag(const base::Closure& done_callback,
+  void OnGetElementTag(base::OnceClosure done_callback,
                        ClientStatus* successful_output,
                        std::string* element_tag_output,
                        const ClientStatus& status,
@@ -270,7 +270,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     EXPECT_EQ(ACTION_APPLIED, status.proto_status());
     *successful_output = status;
     *element_tag_output = element_tag;
-    done_callback.Run();
+    std::move(done_callback).Run();
   }
 
   void FindElement(const Selector& selector,
@@ -286,13 +286,13 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     run_loop.Run();
   }
 
-  void OnFindElement(const base::Closure& done_callback,
+  void OnFindElement(base::OnceClosure done_callback,
                      ClientStatus* status_out,
                      ElementFinder::Result* result_out,
                      const ClientStatus& status,
                      std::unique_ptr<ElementFinder::Result> result) {
     ASSERT_TRUE(result);
-    done_callback.Run();
+    std::move(done_callback).Run();
     if (status_out)
       *status_out = status;
 
@@ -349,7 +349,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     run_loop.Run();
   }
 
-  void OnGetFieldValue(const base::Closure& done_callback,
+  void OnGetFieldValue(base::OnceClosure done_callback,
                        size_t* pending_number_of_checks_output,
                        const std::string& expected_value,
                        const ClientStatus& status,
@@ -377,7 +377,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     return result;
   }
 
-  void OnSetFieldValue(const base::Closure& done_callback,
+  void OnSetFieldValue(base::OnceClosure done_callback,
                        ClientStatus* result_output,
                        const ClientStatus& status) {
     *result_output = status;
@@ -403,7 +403,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     return SendKeyboardInput(selector, codepoints, -1);
   }
 
-  void OnSendKeyboardInput(const base::Closure& done_callback,
+  void OnSendKeyboardInput(base::OnceClosure done_callback,
                            ClientStatus* result_output,
                            const ClientStatus& status) {
     *result_output = status;
@@ -424,7 +424,7 @@ class WebControllerBrowserTest : public content::ContentBrowserTest,
     return result;
   }
 
-  void OnSetAttribute(const base::Closure& done_callback,
+  void OnSetAttribute(base::OnceClosure done_callback,
                       ClientStatus* result_output,
                       const ClientStatus& status) {
     *result_output = status;
