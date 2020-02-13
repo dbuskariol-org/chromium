@@ -696,7 +696,7 @@ base::Optional<FloatPoint> RootFrameViewport::GetSnapPositionAndSetTarget(
   return LayoutViewport().GetSnapPositionAndSetTarget(strategy);
 }
 
-void RootFrameViewport::Trace(blink::Visitor* visitor) {
+void RootFrameViewport::Trace(Visitor* visitor) {
   visitor->Trace(visual_viewport_);
   visitor->Trace(layout_viewport_);
   ScrollableArea::Trace(visitor);
