@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/android/nfc_system_level_setting_impl.h"
+#include "chrome/browser/nfc/android/nfc_system_level_setting_impl.h"
 
 #include "base/android/jni_android.h"
-#include "chrome/android/chrome_jni_headers/NfcSystemLevelSetting_jni.h"
+#include "chrome/browser/nfc/android/jni_headers/NfcSystemLevelSetting_jni.h"
 #include "content/public/browser/web_contents.h"
 
 NfcSystemLevelSettingImpl::NfcSystemLevelSettingImpl() {}
