@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/nfc/android/mock_nfc_system_level_setting.h"
+#include "chrome/browser/android/mock_nfc_system_level_setting.h"
 
 namespace {
 

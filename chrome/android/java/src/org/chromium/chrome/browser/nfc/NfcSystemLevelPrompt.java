@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.task.PostTask;
+import org.chromium.chrome.R;
+import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
@@ -42,12 +44,12 @@ public class NfcSystemLevelPrompt implements ModalDialogProperties.Controller {
      * @param callback The callback to be called when dialog is closed.
      */
     public void show(WindowAndroid window, Runnable callback) {
-        ModalDialogManager modalDialogManager = window.getModalDialogManager();
-        if (modalDialogManager == null) {
+        ChromeActivity chromeActivity = (ChromeActivity) window.getActivity().get();
+        if (chromeActivity == null) {
             PostTask.postTask(UiThreadTaskTraits.DEFAULT, () -> callback.run());
             return;
         }
-        show(window, modalDialogManager, callback);
+        show(window, chromeActivity.getModalDialogManager(), callback);
     }
 
     @VisibleForTesting

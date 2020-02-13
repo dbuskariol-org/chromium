@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
-#define CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
+#ifndef CHROME_BROWSER_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
+#define CHROME_BROWSER_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
@@ -41,4 +41,4 @@ class NfcSystemLevelSetting {
       base::OnceClosure prompt_completed_callback) = 0;
 };
 
-#endif  // CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
+#endif  // CHROME_BROWSER_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
