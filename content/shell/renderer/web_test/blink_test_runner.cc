@@ -428,7 +428,7 @@ void BlinkTestRunner::OnWebTestRuntimeFlagsChanged(
   if (!interfaces->TestIsRunning())
     return;
 
-  Send(new WebTestHostMsg_WebTestRuntimeFlagsChanged(changed_values));
+  GetWebTestClientRemote().WebTestRuntimeFlagsChanged(changed_values.Clone());
 }
 
 void BlinkTestRunner::TestFinished() {

@@ -161,7 +161,8 @@ void WebTestContentBrowserClient::ExposeInterfacesToRenderer(
   registry->AddInterface(base::BindRepeating(&BlinkTestClientImpl::Create),
                          ui_task_runner);
 
-  registry->AddInterface(base::BindRepeating(&WebTestClientImpl::Create),
+  registry->AddInterface(base::BindRepeating(&WebTestClientImpl::Create,
+                                             render_process_host->GetID()),
                          ui_task_runner);
 
   registry->AddInterface(base::BindRepeating(&bluetooth::FakeBluetooth::Create),

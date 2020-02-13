@@ -42,11 +42,6 @@ IPC_SYNC_MESSAGE_ROUTED0_1(WebTestHostMsg_GetWritableDirectory,
 IPC_MESSAGE_ROUTED1(WebTestHostMsg_SetFilePathForMockFileDialog,
                     base::FilePath /* local_path */)
 
-// Notifies the browser that one of renderers has changed web test runtime
-// flags (i.e. has set dump_as_text).
-IPC_MESSAGE_CONTROL1(WebTestHostMsg_WebTestRuntimeFlagsChanged,
-                     base::DictionaryValue /* changed_web_test_runtime_flags */)
-
 // Used send flag changes to renderers - either when
 // 1) broadcasting change happening in one renderer to all other renderers, or
 // 2) sending accumulated changes to a single new renderer.

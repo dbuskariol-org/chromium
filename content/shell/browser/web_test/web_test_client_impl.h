@@ -17,13 +17,14 @@ namespace content {
 // initialized and is managed by the registry of the RenderProcessHost.
 class WebTestClientImpl : public mojom::WebTestClient {
  public:
-  WebTestClientImpl() = default;
+  explicit WebTestClientImpl(int render_process_id);
   ~WebTestClientImpl() override = default;
 
   WebTestClientImpl(const WebTestClientImpl&) = delete;
   WebTestClientImpl& operator=(const WebTestClientImpl&) = delete;
 
-  static void Create(mojo::PendingReceiver<mojom::WebTestClient> receiver);
+  static void Create(int render_process_id,
+                     mojo::PendingReceiver<mojom::WebTestClient> receiver);
 
  private:
   // WebTestClient implementation.
@@ -38,6 +39,10 @@ class WebTestClientImpl : public mojom::WebTestClient {
                      blink::mojom::PermissionStatus status,
                      const GURL& origin,
                      const GURL& embedding_origin) override;
+  void WebTestRuntimeFlagsChanged(
+      base::Value changed_web_test_runtime_flags) override;
+
+  int render_process_id_;
 };
 
 }  // namespace content

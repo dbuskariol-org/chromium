@@ -17,10 +17,6 @@
 #include "mojo/public/cpp/bindings/remote.h"
 #include "services/network/public/mojom/cookie_manager.mojom.h"
 
-namespace base {
-class DictionaryValue;
-}  // namespace base
-
 namespace network {
 namespace mojom {
 class NetworkContext;
@@ -66,8 +62,6 @@ class WebTestMessageFilter : public BrowserMessageFilter {
       const base::Optional<int>& action_index,
       const base::Optional<base::string16>& reply);
   void OnDeleteAllCookies();
-  void OnWebTestRuntimeFlagsChanged(
-      const base::DictionaryValue& changed_web_test_runtime_flags);
   void OnInitiateCaptureDump(bool capture_navigation_history,
                              bool capture_pixels);
   void OnGetWritableDirectory(base::FilePath* path);

@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 
+#include "base/values.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/content_index_context.h"
 #include "content/public/browser/storage_partition.h"
@@ -52,10 +53,15 @@ ContentIndexContext* GetContentIndexContext(const url::Origin& origin) {
 
 // static
 void WebTestClientImpl::Create(
+    int render_process_id,
     mojo::PendingReceiver<mojom::WebTestClient> receiver) {
-  mojo::MakeSelfOwnedReceiver(std::make_unique<WebTestClientImpl>(),
-                              std::move(receiver));
+  mojo::MakeSelfOwnedReceiver(
+      std::make_unique<WebTestClientImpl>(render_process_id),
+      std::move(receiver));
 }
+
+WebTestClientImpl::WebTestClientImpl(int render_process_id)
+    : render_process_id_(render_process_id) {}
 
 void WebTestClientImpl::InspectSecondaryWindow() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
@@ -150,6 +156,21 @@ void WebTestClientImpl::SetPermission(const std::string& name,
       ->GetWebTestBrowserContext()
       ->GetWebTestPermissionManager()
       ->SetPermission(type, status, origin, embedding_origin);
+}
+
+void WebTestClientImpl::WebTestRuntimeFlagsChanged(
+    base::Value changed_web_test_runtime_flags) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  if (!BlinkTestController::Get())
+    return;
+
+  base::DictionaryValue* changed_web_test_runtime_flags_dictionary = nullptr;
+  bool ok = changed_web_test_runtime_flags.GetAsDictionary(
+      &changed_web_test_runtime_flags_dictionary);
+  DCHECK(ok);
+
+  BlinkTestController::Get()->OnWebTestRuntimeFlagsChanged(
+      render_process_id_, *changed_web_test_runtime_flags_dictionary);
 }
 
 }  // namespace content
