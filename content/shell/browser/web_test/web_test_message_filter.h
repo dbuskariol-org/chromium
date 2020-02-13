@@ -42,9 +42,6 @@ class WebTestMessageFilter : public BrowserMessageFilter {
       const IPC::Message& message) override;
   bool OnMessageReceived(const IPC::Message& message) override;
 
-  void OnRegisterIsolatedFileSystem(
-      const std::vector<base::FilePath>& absolute_filenames,
-      std::string* filesystem_id);
   void OnClearAllDatabases();
   void OnSetDatabaseQuota(int quota);
   void OnSimulateWebNotificationClick(

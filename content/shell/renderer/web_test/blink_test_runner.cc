@@ -201,11 +201,10 @@ void BlinkTestRunner::PostDelayedTask(base::OnceClosure task,
 WebString BlinkTestRunner::RegisterIsolatedFileSystem(
     const blink::WebVector<blink::WebString>& absolute_filenames) {
   std::vector<base::FilePath> files;
-  for (size_t i = 0; i < absolute_filenames.size(); ++i)
-    files.push_back(blink::WebStringToFilePath(absolute_filenames[i]));
+  for (auto& filename : absolute_filenames)
+    files.push_back(blink::WebStringToFilePath(filename));
   std::string filesystem_id;
-  Send(new WebTestHostMsg_RegisterIsolatedFileSystem(routing_id(), files,
-                                                     &filesystem_id));
+  GetWebTestClientRemote().RegisterIsolatedFileSystem(files, &filesystem_id);
   return WebString::FromUTF8(filesystem_id);
 }
 

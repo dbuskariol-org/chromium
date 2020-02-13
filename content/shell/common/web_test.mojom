@@ -55,4 +55,11 @@ interface WebTestClient {
   // directory.
   [Sync]
   GetWritableDirectory() => (mojo_base.mojom.FilePath path);
+
+  // Registers a new isolated filesystem with the given files, and returns the
+  // new filesystem id.
+  [Sync]
+  RegisterIsolatedFileSystem(
+      array<mojo_base.mojom.FilePath> absolute_filenames)
+          => (string filesystem_id);
 };

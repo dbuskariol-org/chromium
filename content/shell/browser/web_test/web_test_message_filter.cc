@@ -11,7 +11,6 @@
 #include "base/task/post_task.h"
 #include "base/threading/thread_restrictions.h"
 #include "content/public/browser/browser_task_traits.h"
-#include "content/public/browser/child_process_security_policy.h"
 #include "content/public/browser/content_index_context.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/browser/permission_type.h"
@@ -31,7 +30,6 @@
 #include "net/base/net_errors.h"
 #include "services/network/public/mojom/network_service.mojom.h"
 #include "storage/browser/database/database_tracker.h"
-#include "storage/browser/file_system/isolated_context.h"
 #include "storage/browser/quota/quota_manager.h"
 #include "url/origin.h"
 
@@ -83,8 +81,6 @@ WebTestMessageFilter::OverrideTaskRunnerForMessage(
 bool WebTestMessageFilter::OnMessageReceived(const IPC::Message& message) {
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(WebTestMessageFilter, message)
-    IPC_MESSAGE_HANDLER(WebTestHostMsg_RegisterIsolatedFileSystem,
-                        OnRegisterIsolatedFileSystem)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_ClearAllDatabases, OnClearAllDatabases)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_SetDatabaseQuota, OnSetDatabaseQuota)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_SimulateWebNotificationClick,
@@ -97,22 +93,6 @@ bool WebTestMessageFilter::OnMessageReceived(const IPC::Message& message) {
   IPC_END_MESSAGE_MAP()
 
   return handled;
-}
-
-void WebTestMessageFilter::OnRegisterIsolatedFileSystem(
-    const std::vector<base::FilePath>& absolute_filenames,
-    std::string* filesystem_id) {
-  storage::IsolatedContext::FileInfoSet files;
-  ChildProcessSecurityPolicy* policy =
-      ChildProcessSecurityPolicy::GetInstance();
-  for (size_t i = 0; i < absolute_filenames.size(); ++i) {
-    files.AddPath(absolute_filenames[i], nullptr);
-    if (!policy->CanReadFile(render_process_id_, absolute_filenames[i]))
-      policy->GrantReadFile(render_process_id_, absolute_filenames[i]);
-  }
-  *filesystem_id =
-      storage::IsolatedContext::GetInstance()->RegisterDraggedFileSystem(files);
-  policy->GrantReadFileSystem(render_process_id_, *filesystem_id);
 }
 
 void WebTestMessageFilter::OnClearAllDatabases() {
