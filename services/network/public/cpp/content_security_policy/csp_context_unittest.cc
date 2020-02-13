@@ -4,14 +4,15 @@
 
 #include <set>
 
-#include "content/common/content_security_policy/csp_context.h"
-#include "content/common/navigation_params.h"
+#include "services/network/public/cpp/content_security_policy/content_security_policy.h"
+#include "services/network/public/cpp/content_security_policy/csp_context.h"
 #include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "url/origin.h"
 
-namespace content {
+namespace network {
 
-using CSPDirectiveName = network::mojom::CSPDirectiveName;
+using CSPDirectiveName = mojom::CSPDirectiveName;
 
 namespace {
 
@@ -58,19 +59,18 @@ class CSPContextTest : public CSPContext {
   bool sanitize_data_for_use_in_csp_violation_ = false;
 };
 
-network::mojom::ContentSecurityPolicyPtr EmptyCSP() {
-  auto policy = network::mojom::ContentSecurityPolicy::New();
-  policy->header = network::mojom::ContentSecurityPolicyHeader::New();
+mojom::ContentSecurityPolicyPtr EmptyCSP() {
+  auto policy = mojom::ContentSecurityPolicy::New();
+  policy->header = mojom::ContentSecurityPolicyHeader::New();
   return policy;
 }
 
 // Build a new policy made of only one directive and no report endpoints.
-network::mojom::ContentSecurityPolicyPtr BuildPolicy(
-    CSPDirectiveName directive_name,
-    network::mojom::CSPSourcePtr source) {
-  auto directive = network::mojom::CSPDirective::New();
+mojom::ContentSecurityPolicyPtr BuildPolicy(CSPDirectiveName directive_name,
+                                            mojom::CSPSourcePtr source) {
+  auto directive = mojom::CSPDirective::New();
   directive->name = directive_name;
-  directive->source_list = network::mojom::CSPSourceList::New();
+  directive->source_list = mojom::CSPSourceList::New();
   directive->source_list->sources.push_back(std::move(source));
   auto policy = EmptyCSP();
   policy->directives.push_back(std::move(directive));
@@ -78,13 +78,12 @@ network::mojom::ContentSecurityPolicyPtr BuildPolicy(
 }
 
 // Build a new policy made of only one directive and no report endpoints.
-network::mojom::ContentSecurityPolicyPtr BuildPolicy(
-    CSPDirectiveName directive_name,
-    network::mojom::CSPSourcePtr source_1,
-    network::mojom::CSPSourcePtr source_2) {
-  auto directive = network::mojom::CSPDirective::New();
+mojom::ContentSecurityPolicyPtr BuildPolicy(CSPDirectiveName directive_name,
+                                            mojom::CSPSourcePtr source_1,
+                                            mojom::CSPSourcePtr source_2) {
+  auto directive = mojom::CSPDirective::New();
   directive->name = directive_name;
-  directive->source_list = network::mojom::CSPSourceList::New();
+  directive->source_list = mojom::CSPSourceList::New();
   directive->source_list->sources.push_back(std::move(source_1));
   directive->source_list->sources.push_back(std::move(source_2));
   auto policy = EmptyCSP();
@@ -92,10 +91,9 @@ network::mojom::ContentSecurityPolicyPtr BuildPolicy(
   return policy;
 }
 
-network::mojom::CSPSourcePtr BuildCSPSource(const char* scheme,
-                                            const char* host) {
-  return network::mojom::CSPSource::New(scheme, host, url::PORT_UNSPECIFIED, "",
-                                        false, false);
+mojom::CSPSourcePtr BuildCSPSource(const char* scheme, const char* host) {
+  return mojom::CSPSource::New(scheme, host, url::PORT_UNSPECIFIED, "", false,
+                               false);
 }
 
 network::mojom::SourceLocationPtr SourceLocation() {
@@ -150,10 +148,10 @@ TEST(CSPContextTest, SanitizeDataForUseInCspViolation) {
   context.SetSelf(url::Origin::Create(GURL("http://a.com")));
 
   // Content-Security-Policy: frame-src "a.com/iframe"
-  context.AddContentSecurityPolicy(BuildPolicy(
-      CSPDirectiveName::FrameSrc,
-      network::mojom::CSPSource::New("", "a.com", url::PORT_UNSPECIFIED,
-                                     "/iframe", false, false)));
+  context.AddContentSecurityPolicy(
+      BuildPolicy(CSPDirectiveName::FrameSrc,
+                  mojom::CSPSource::New("", "a.com", url::PORT_UNSPECIFIED,
+                                        "/iframe", false, false)));
 
   GURL blocked_url("http://a.com/login?password=1234");
   auto source_location =
@@ -231,8 +229,7 @@ TEST(CSPContextTest, CheckCSPDisposition) {
   // Add a report-only policy.
   auto report_only_csp = BuildPolicy(CSPDirectiveName::DefaultSrc,
                                      BuildCSPSource("", "example.com"));
-  report_only_csp->header->type =
-      network::mojom::ContentSecurityPolicyType::kReport;
+  report_only_csp->header->type = mojom::ContentSecurityPolicyType::kReport;
 
   context.AddContentSecurityPolicy(std::move(enforce_csp));
   context.AddContentSecurityPolicy(std::move(report_only_csp));
@@ -277,4 +274,4 @@ TEST(CSPContextTest, CheckCSPDisposition) {
   EXPECT_EQ(console_message_a, context.violations()[0]->console_message);
 }
 
-}  // namespace content
+}  // namespace network

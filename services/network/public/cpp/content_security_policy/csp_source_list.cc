@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/common/content_security_policy/csp_source_list.h"
+#include "services/network/public/cpp/content_security_policy/csp_source_list.h"
+#include "services/network/public/cpp/content_security_policy/content_security_policy.h"
+#include "services/network/public/cpp/content_security_policy/csp_context.h"
+#include "services/network/public/cpp/content_security_policy/csp_source.h"
 
-#include "content/common/content_security_policy/csp_context.h"
-#include "content/common/content_security_policy/csp_source.h"
-
-namespace content {
+namespace network {
 
 namespace {
 
 bool AllowFromSources(const GURL& url,
-                      const std::vector<network::mojom::CSPSourcePtr>& sources,
+                      const std::vector<mojom::CSPSourcePtr>& sources,
                       CSPContext* context,
                       bool has_followed_redirect) {
   for (const auto& source : sources) {
@@ -24,7 +24,7 @@ bool AllowFromSources(const GURL& url,
 
 }  // namespace
 
-bool CheckCSPSourceList(const network::mojom::CSPSourceListPtr& source_list,
+bool CheckCSPSourceList(const mojom::CSPSourceListPtr& source_list,
                         const GURL& url,
                         CSPContext* context,
                         bool has_followed_redirect,
@@ -58,7 +58,7 @@ bool CheckCSPSourceList(const network::mojom::CSPSourceListPtr& source_list,
                           has_followed_redirect);
 }
 
-std::string ToString(const network::mojom::CSPSourceListPtr& source_list) {
+std::string ToString(const mojom::CSPSourceListPtr& source_list) {
   bool is_none = !source_list->allow_self && !source_list->allow_star &&
                  source_list->sources.empty();
   if (is_none)
@@ -83,4 +83,4 @@ std::string ToString(const network::mojom::CSPSourceListPtr& source_list) {
   return text.str();
 }
 
-}  // namespace content
+}  // namespace network

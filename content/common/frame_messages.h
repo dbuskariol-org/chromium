@@ -24,7 +24,6 @@
 #include "content/common/buildflags.h"
 #include "content/common/content_export.h"
 #include "content/common/content_param_traits.h"
-#include "content/common/content_security_policy/csp_context.h"
 #include "content/common/frame_delete_intention.h"
 #include "content/common/frame_message_structs.h"
 #include "content/common/frame_owner_properties.h"

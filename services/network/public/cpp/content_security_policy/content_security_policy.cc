@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/network/public/cpp/content_security_policy.h"
+#include "services/network/public/cpp/content_security_policy/content_security_policy.h"
 
+#include <sstream>
 #include <string>
-
 #include "base/containers/flat_map.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_piece.h"
@@ -13,6 +13,9 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "net/http/http_response_headers.h"
+#include "services/network/public/cpp/content_security_policy/csp_context.h"
+#include "services/network/public/cpp/content_security_policy/csp_source.h"
+#include "services/network/public/cpp/content_security_policy/csp_source_list.h"
 #include "services/network/public/cpp/is_potentially_trustworthy.h"
 #include "url/gurl.h"
 #include "url/url_canon.h"
@@ -20,20 +23,156 @@
 
 namespace network {
 
+using CSPDirectiveName = mojom::CSPDirectiveName;
 using DirectivesMap = base::flat_map<base::StringPiece, base::StringPiece>;
 
 namespace {
 
+static CSPDirectiveName CSPFallback(CSPDirectiveName directive) {
+  switch (directive) {
+    case CSPDirectiveName::DefaultSrc:
+    case CSPDirectiveName::FormAction:
+    case CSPDirectiveName::UpgradeInsecureRequests:
+    case CSPDirectiveName::NavigateTo:
+    case CSPDirectiveName::FrameAncestors:
+      return CSPDirectiveName::Unknown;
+
+    case CSPDirectiveName::FrameSrc:
+      return CSPDirectiveName::ChildSrc;
+
+    case CSPDirectiveName::ChildSrc:
+      return CSPDirectiveName::DefaultSrc;
+
+    case CSPDirectiveName::Unknown:
+      NOTREACHED();
+      return CSPDirectiveName::Unknown;
+  }
+  NOTREACHED();
+  return CSPDirectiveName::Unknown;
+}
+
 // Looks by name for a directive in a list of directives.
 // If it is not found, returns nullptr.
-static mojom::CSPDirectivePtr* FindDirective(
-    mojom::CSPDirectiveName name,
-    std::vector<mojom::CSPDirectivePtr>* directives) {
-  for (auto& directive : *directives) {
-    if (directive->name == name)
+static const mojom::CSPDirectivePtr* FindDirective(
+    CSPDirectiveName name,
+    const std::vector<mojom::CSPDirectivePtr>& directives) {
+  for (const mojom::CSPDirectivePtr& directive : directives) {
+    if (directive->name == name) {
       return &directive;
+    }
   }
   return nullptr;
+}
+
+std::string ElideURLForReportViolation(const GURL& url) {
+  // TODO(arthursonzogni): the url length should be limited to 1024 char. Find
+  // a function that will not break the utf8 encoding while eliding the string.
+  return url.spec();
+}
+
+// Return the error message specific to one CSP |directive|.
+// $1: Blocked URL.
+// $2: Blocking policy.
+const char* ErrorMessage(CSPDirectiveName directive) {
+  switch (directive) {
+    case CSPDirectiveName::FormAction:
+      return "Refused to send form data to '$1' because it violates the "
+             "following Content Security Policy directive: \"$2\".";
+    case CSPDirectiveName::FrameAncestors:
+      return "Refused to frame '$1' because an ancestor violates the following "
+             "Content Security Policy directive: \"$2\".";
+    case CSPDirectiveName::FrameSrc:
+      return "Refused to frame '$1' because it violates the "
+             "following Content Security Policy directive: \"$2\".";
+    case CSPDirectiveName::NavigateTo:
+      return "Refused to navigate to '$1' because it violates the "
+             "following Content Security Policy directive: \"$2\".";
+
+    case CSPDirectiveName::ChildSrc:
+    case CSPDirectiveName::DefaultSrc:
+    case CSPDirectiveName::Unknown:
+    case CSPDirectiveName::UpgradeInsecureRequests:
+      NOTREACHED();
+      return nullptr;
+  };
+}
+
+void ReportViolation(CSPContext* context,
+                     const mojom::ContentSecurityPolicyPtr& policy,
+                     const mojom::CSPDirectivePtr& directive,
+                     const CSPDirectiveName directive_name,
+                     const GURL& url,
+                     bool has_followed_redirect,
+                     const mojom::SourceLocationPtr& source_location) {
+  // For security reasons, some urls must not be disclosed. This includes the
+  // blocked url and the source location of the error. Care must be taken to
+  // ensure that these are not transmitted between different cross-origin
+  // renderers.
+  GURL blocked_url = (directive_name == CSPDirectiveName::FrameAncestors)
+                         ? GURL(ToString(context->self_source()))
+                         : url;
+  auto safe_source_location =
+      source_location ? source_location->Clone() : mojom::SourceLocation::New();
+  context->SanitizeDataForUseInCspViolation(has_followed_redirect,
+                                            directive_name, &blocked_url,
+                                            safe_source_location.get());
+
+  std::stringstream message;
+
+  if (policy->header->type == mojom::ContentSecurityPolicyType::kReport)
+    message << "[Report Only] ";
+
+  message << base::ReplaceStringPlaceholders(
+      ErrorMessage(directive_name),
+      {ElideURLForReportViolation(blocked_url), ToString(directive)}, nullptr);
+
+  if (directive->name != directive_name) {
+    message << " Note that '" << ToString(directive_name)
+            << "' was not explicitly set, so '" << ToString(directive->name)
+            << "' is used as a fallback.";
+  }
+
+  message << "\n";
+
+  context->ReportContentSecurityPolicyViolation(mojom::CSPViolation::New(
+      ToString(directive->name), ToString(directive_name), message.str(),
+      blocked_url, policy->report_endpoints, policy->use_reporting_api,
+      policy->header->header_value, policy->header->type, has_followed_redirect,
+      std::move(safe_source_location)));
+}
+
+bool AllowDirective(CSPContext* context,
+                    const mojom::ContentSecurityPolicyPtr& policy,
+                    const mojom::CSPDirectivePtr& directive,
+                    CSPDirectiveName directive_name,
+                    const GURL& url,
+                    bool has_followed_redirect,
+                    bool is_response_check,
+                    const mojom::SourceLocationPtr& source_location) {
+  if (CheckCSPSourceList(directive->source_list, url, context,
+                         has_followed_redirect, is_response_check)) {
+    return true;
+  }
+
+  ReportViolation(context, policy, directive, directive_name, url,
+                  has_followed_redirect, source_location);
+  return false;
+}
+
+const GURL ExtractInnerURL(const GURL& url) {
+  if (const GURL* inner_url = url.inner_url())
+    return *inner_url;
+  else
+    // TODO(arthursonzogni): revisit this once GURL::inner_url support blob-URL.
+    return GURL(url.path());
+}
+
+bool ShouldBypassContentSecurityPolicy(CSPContext* context, const GURL& url) {
+  if (url.SchemeIsFileSystem() || url.SchemeIsBlob()) {
+    return context->SchemeShouldBypassCSP(ExtractInnerURL(url).scheme());
+  } else {
+    return context->SchemeShouldBypassCSP(url.scheme());
+  }
 }
 
 // Parses a "Content-Security-Policy" header.
@@ -305,11 +444,9 @@ void ParseFrameAncestors(const mojom::ContentSecurityPolicyPtr& policy,
   // A frame-ancestors directive has already been parsed. Skip further
   // frame-ancestors directives per
   // https://www.w3.org/TR/CSP3/#parse-serialized-policy.
-  if (FindDirective(mojom::CSPDirectiveName::FrameAncestors,
-                    &(policy->directives))) {
-    // TODO(arthursonzogni, lfg): Should a warning be fired to the user here?
+  // TODO(arthursonzogni, lfg): Should a warning be fired to the user here?
+  if (FindDirective(CSPDirectiveName::FrameAncestors, policy->directives))
     return;
-  }
 
   auto source_list = ParseFrameAncestorsSourceList(frame_ancestors_value);
 
@@ -319,7 +456,7 @@ void ParseFrameAncestors(const mojom::ContentSecurityPolicyPtr& policy,
     return;
 
   policy->directives.push_back(mojom::CSPDirective::New(
-      mojom::CSPDirectiveName::FrameAncestors, std::move(source_list)));
+      CSPDirectiveName::FrameAncestors, std::move(source_list)));
 }
 
 // Parses the report-uri directive of a Content-Security-Policy header.
@@ -398,52 +535,45 @@ void AddContentSecurityPolicyFromHeaders(
   }
 }
 
-std::string ToString(mojom::CSPDirectiveName name) {
-  switch (name) {
-    case mojom::CSPDirectiveName::DefaultSrc:
-      return "default-src";
-    case mojom::CSPDirectiveName::ChildSrc:
-      return "child-src";
-    case mojom::CSPDirectiveName::FrameSrc:
-      return "frame-src";
-    case mojom::CSPDirectiveName::FormAction:
-      return "form-action";
-    case mojom::CSPDirectiveName::UpgradeInsecureRequests:
-      return "upgrade-insecure-requests";
-    case mojom::CSPDirectiveName::NavigateTo:
-      return "navigate-to";
-    case mojom::CSPDirectiveName::FrameAncestors:
-      return "frame-ancestors";
-    case mojom::CSPDirectiveName::Unknown:
-      return "";
-  }
-  NOTREACHED();
-  return "";
-}
+bool CheckContentSecurityPolicy(const mojom::ContentSecurityPolicyPtr& policy,
+                                CSPDirectiveName directive_name,
+                                const GURL& url,
+                                bool has_followed_redirect,
+                                bool is_response_check,
+                                CSPContext* context,
+                                const mojom::SourceLocationPtr& source_location,
+                                bool is_form_submission) {
+  if (ShouldBypassContentSecurityPolicy(context, url))
+    return true;
 
-mojom::CSPDirectiveName ToCSPDirectiveName(const std::string& name) {
-  if (name == "default-src")
-    return mojom::CSPDirectiveName::DefaultSrc;
-  if (name == "child-src")
-    return mojom::CSPDirectiveName::ChildSrc;
-  if (name == "frame-src")
-    return mojom::CSPDirectiveName::FrameSrc;
-  if (name == "form-action")
-    return mojom::CSPDirectiveName::FormAction;
-  if (name == "upgrade-insecure-requests")
-    return mojom::CSPDirectiveName::UpgradeInsecureRequests;
-  if (name == "navigate-to")
-    return mojom::CSPDirectiveName::NavigateTo;
-  if (name == "frame-ancestors")
-    return mojom::CSPDirectiveName::FrameAncestors;
-  return mojom::CSPDirectiveName::Unknown;
+  // 'navigate-to' has no effect when doing a form submission and a
+  // 'form-action' directive is present.
+  if (is_form_submission && directive_name == CSPDirectiveName::NavigateTo &&
+      FindDirective(CSPDirectiveName::FormAction, policy->directives)) {
+    return true;
+  }
+
+  CSPDirectiveName current_directive_name = directive_name;
+  do {
+    const mojom::CSPDirectivePtr* current_directive =
+        FindDirective(current_directive_name, policy->directives);
+    if (current_directive) {
+      bool allowed = AllowDirective(context, policy, *current_directive,
+                                    directive_name, url, has_followed_redirect,
+                                    is_response_check, source_location);
+      return allowed ||
+             policy->header->type == mojom::ContentSecurityPolicyType::kReport;
+    }
+    current_directive_name = CSPFallback(current_directive_name);
+  } while (current_directive_name != CSPDirectiveName::Unknown);
+  return true;
 }
 
 bool ShouldUpgradeInsecureRequest(
     const std::vector<mojom::ContentSecurityPolicyPtr>& policies) {
   for (const auto& policy : policies) {
     for (const auto& directive : policy->directives) {
-      if (directive->name == mojom::CSPDirectiveName::UpgradeInsecureRequests) {
+      if (directive->name == CSPDirectiveName::UpgradeInsecureRequests) {
         return true;
       }
     }
@@ -467,6 +597,51 @@ void UpgradeInsecureRequest(GURL* url) {
   GURL::Replacements replacements;
   replacements.SetSchemeStr(url::kHttpsScheme);
   *url = url->ReplaceComponents(replacements);
+}
+
+CSPDirectiveName ToCSPDirectiveName(const std::string& name) {
+  if (name == "default-src")
+    return CSPDirectiveName::DefaultSrc;
+  if (name == "child-src")
+    return CSPDirectiveName::ChildSrc;
+  if (name == "frame-src")
+    return CSPDirectiveName::FrameSrc;
+  if (name == "form-action")
+    return CSPDirectiveName::FormAction;
+  if (name == "upgrade-insecure-requests")
+    return CSPDirectiveName::UpgradeInsecureRequests;
+  if (name == "navigate-to")
+    return CSPDirectiveName::NavigateTo;
+  if (name == "frame-ancestors")
+    return CSPDirectiveName::FrameAncestors;
+  return CSPDirectiveName::Unknown;
+}
+
+std::string ToString(const mojom::CSPDirectivePtr& directive) {
+  return ToString(directive->name) + " " + ToString(directive->source_list);
+}
+
+std::string ToString(CSPDirectiveName name) {
+  switch (name) {
+    case CSPDirectiveName::DefaultSrc:
+      return "default-src";
+    case CSPDirectiveName::ChildSrc:
+      return "child-src";
+    case CSPDirectiveName::FrameSrc:
+      return "frame-src";
+    case CSPDirectiveName::FormAction:
+      return "form-action";
+    case CSPDirectiveName::UpgradeInsecureRequests:
+      return "upgrade-insecure-requests";
+    case CSPDirectiveName::NavigateTo:
+      return "navigate-to";
+    case CSPDirectiveName::FrameAncestors:
+      return "frame-ancestors";
+    case CSPDirectiveName::Unknown:
+      return "";
+  }
+  NOTREACHED();
+  return "";
 }
 
 }  // namespace network

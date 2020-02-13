@@ -2,18 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/common/content_security_policy/csp_source_list.h"
-#include "content/common/content_security_policy/csp_context.h"
-#include "content/public/test/test_utils.h"
+#include "services/network/public/cpp/content_security_policy/csp_source_list.h"
+#include "services/network/public/cpp/content_security_policy/content_security_policy.h"
+#include "services/network/public/cpp/content_security_policy/csp_context.h"
+#include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "url/origin.h"
 
-namespace content {
+namespace network {
 
 namespace {
 
 // Allow() is an abbreviation of CheckCSPSourceList. Useful for writing
 // test expectations on one line.
-bool Allow(const network::mojom::CSPSourceListPtr& source_list,
+bool Allow(const mojom::CSPSourceListPtr& source_list,
            const GURL& url,
            CSPContext* context,
            bool is_redirect = false,
@@ -27,13 +29,13 @@ bool Allow(const network::mojom::CSPSourceListPtr& source_list,
 TEST(CSPSourceList, MultipleSource) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  std::vector<network::mojom::CSPSourcePtr> sources;
-  sources.push_back(network::mojom::CSPSource::New(
-      "", "a.com", url::PORT_UNSPECIFIED, "", false, false));
-  sources.push_back(network::mojom::CSPSource::New(
-      "", "b.com", url::PORT_UNSPECIFIED, "", false, false));
-  auto source_list = network::mojom::CSPSourceList::New(std::move(sources),
-                                                        false, false, false);
+  std::vector<mojom::CSPSourcePtr> sources;
+  sources.push_back(mojom::CSPSource::New("", "a.com", url::PORT_UNSPECIFIED,
+                                          "", false, false));
+  sources.push_back(mojom::CSPSource::New("", "b.com", url::PORT_UNSPECIFIED,
+                                          "", false, false));
+  auto source_list =
+      mojom::CSPSourceList::New(std::move(sources), false, false, false);
   EXPECT_TRUE(Allow(source_list, GURL("http://a.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("http://b.com"), &context));
   EXPECT_FALSE(Allow(source_list, GURL("http://c.com"), &context));
@@ -42,11 +44,11 @@ TEST(CSPSourceList, MultipleSource) {
 TEST(CSPSourceList, AllowStar) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  auto source_list = network::mojom::CSPSourceList::New(
-      std::vector<network::mojom::CSPSourcePtr>(),  // source_list
-      false,                                        // allow_self
-      true,                                         // allow_star
-      false);                                       // allow_redirects
+  auto source_list = mojom::CSPSourceList::New(
+      std::vector<mojom::CSPSourcePtr>(),  // source_list
+      false,                               // allow_self
+      true,                                // allow_star
+      false);                              // allow_redirects
   EXPECT_TRUE(Allow(source_list, GURL("http://not-example.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("https://not-example.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("ws://not-example.com"), &context));
@@ -65,11 +67,11 @@ TEST(CSPSourceList, AllowStar) {
 TEST(CSPSourceList, AllowSelf) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  auto source_list = network::mojom::CSPSourceList::New(
-      std::vector<network::mojom::CSPSourcePtr>(),  // source_list
-      true,                                         // allow_self,
-      false,                                        // allow_star
-      false);                                       // allow_redirects
+  auto source_list = mojom::CSPSourceList::New(
+      std::vector<mojom::CSPSourcePtr>(),  // source_list
+      true,                                // allow_self,
+      false,                               // allow_star
+      false);                              // allow_redirects
   EXPECT_TRUE(Allow(source_list, GURL("http://example.com"), &context));
   EXPECT_FALSE(Allow(source_list, GURL("http://not-example.com"), &context));
   EXPECT_TRUE(Allow(source_list, GURL("https://example.com"), &context));
@@ -79,11 +81,11 @@ TEST(CSPSourceList, AllowSelf) {
 TEST(CSPSourceList, AllowStarAndSelf) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("https://a.com")));
-  auto source_list = network::mojom::CSPSourceList::New(
-      std::vector<network::mojom::CSPSourcePtr>(),
-      false,   // allow_self
-      false,   // allow_star
-      false);  // allow_redirects
+  auto source_list =
+      mojom::CSPSourceList::New(std::vector<mojom::CSPSourcePtr>(),
+                                false,   // allow_self
+                                false,   // allow_star
+                                false);  // allow_redirects
 
   // If the request is allowed by {*} and not by {'self'} then it should be
   // allowed by the union {*,'self'}.
@@ -100,38 +102,36 @@ TEST(CSPSourceList, AllowStarAndSelf) {
 
 TEST(CSPSourceList, AllowSelfWithUnspecifiedPort) {
   CSPContext context;
-  context.SetSelf(url::Origin::Create(GetWebUIURL("print")));
-  auto source_list = network::mojom::CSPSourceList::New(
-      std::vector<network::mojom::CSPSourcePtr>(),  // source_list
-      true,                                         // allow_self
-      false,                                        // allow_star
-      false);                                       // allow_redirects
+  context.SetSelf(url::Origin::Create(GURL("https://example.com/")));
+  auto source_list = mojom::CSPSourceList::New(
+      std::vector<mojom::CSPSourcePtr>(),  // source_list
+      true,                                // allow_self
+      false,                               // allow_star
+      false);                              // allow_redirects
 
-  EXPECT_TRUE(Allow(source_list,
-                    GURL(GetWebUIURLString("print/pdf/index.html?") +
-                         GetWebUIURLString("print/1/0/print.pdf")),
-                    &context));
+  EXPECT_TRUE(
+      Allow(source_list, GURL("https://example.com/print.pdf"), &context));
 }
 
 TEST(CSPSourceList, AllowNone) {
   CSPContext context;
   context.SetSelf(url::Origin::Create(GURL("http://example.com")));
-  auto source_list = network::mojom::CSPSourceList::New(
-      std::vector<network::mojom::CSPSourcePtr>(),  // source_list
-      false,                                        // allow_self
-      false,                                        // allow_star
-      false);                                       // allow_redirects
+  auto source_list = mojom::CSPSourceList::New(
+      std::vector<mojom::CSPSourcePtr>(),  // source_list
+      false,                               // allow_self
+      false,                               // allow_star
+      false);                              // allow_redirects
   EXPECT_FALSE(Allow(source_list, GURL("http://example.com"), &context));
   EXPECT_FALSE(Allow(source_list, GURL("https://example.test/"), &context));
 }
 
 TEST(CSPSourceTest, SelfIsUnique) {
   // Policy: 'self'
-  auto source_list = network::mojom::CSPSourceList::New(
-      std::vector<network::mojom::CSPSourcePtr>(),  // source_list
-      true,                                         // allow_self
-      false,                                        // allow_star
-      false);                                       // allow_redirects
+  auto source_list = mojom::CSPSourceList::New(
+      std::vector<mojom::CSPSourcePtr>(),  // source_list
+      true,                                // allow_self
+      false,                               // allow_star
+      false);                              // allow_redirects
   CSPContext context;
 
   context.SetSelf(url::Origin::Create(GURL("http://a.com")));
@@ -144,4 +144,4 @@ TEST(CSPSourceTest, SelfIsUnique) {
   EXPECT_FALSE(Allow(source_list, GURL("data:text/html,hello"), &context));
 }
 
-}  // namespace content
+}  // namespace network

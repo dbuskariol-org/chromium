@@ -4,24 +4,25 @@
 
 #include <sstream>
 
-#include "content/common/content_security_policy/csp_source.h"
+#include "services/network/public/cpp/content_security_policy/csp_source.h"
 
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
-#include "content/common/content_security_policy/csp_context.h"
+#include "services/network/public/cpp/content_security_policy/content_security_policy.h"
+#include "services/network/public/cpp/content_security_policy/csp_context.h"
 #include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "url/url_canon.h"
 #include "url/url_util.h"
 
-namespace content {
+namespace network {
 
 namespace {
 
-bool HasHost(const network::mojom::CSPSourcePtr& source) {
+bool HasHost(const mojom::CSPSourcePtr& source) {
   return !source->host.empty() || source->is_host_wildcard;
 }
 
-bool IsSchemeOnly(const network::mojom::CSPSourcePtr& source) {
+bool IsSchemeOnly(const mojom::CSPSourcePtr& source) {
   return !HasHost(source);
 }
 
@@ -47,10 +48,9 @@ enum class PortMatchingResult {
 };
 enum class SchemeMatchingResult { NotMatching, MatchingUpgrade, MatchingExact };
 
-SchemeMatchingResult SourceAllowScheme(
-    const network::mojom::CSPSourcePtr& source,
-    const GURL& url,
-    CSPContext* context) {
+SchemeMatchingResult SourceAllowScheme(const mojom::CSPSourcePtr& source,
+                                       const GURL& url,
+                                       CSPContext* context) {
   // The source doesn't specify a scheme and the current origin is unique. In
   // this case, the url doesn't match regardless of its scheme.
   if (source->scheme.empty() && !context->self_source())
@@ -72,8 +72,7 @@ SchemeMatchingResult SourceAllowScheme(
   return SchemeMatchingResult::NotMatching;
 }
 
-bool SourceAllowHost(const network::mojom::CSPSourcePtr& source,
-                     const GURL& url) {
+bool SourceAllowHost(const mojom::CSPSourcePtr& source, const GURL& url) {
   if (source->is_host_wildcard) {
     if (source->host.empty())
       return true;
@@ -88,7 +87,7 @@ bool SourceAllowHost(const network::mojom::CSPSourcePtr& source,
   }
 }
 
-PortMatchingResult SourceAllowPort(const network::mojom::CSPSourcePtr& source,
+PortMatchingResult SourceAllowPort(const mojom::CSPSourcePtr& source,
                                    const GURL& url) {
   int url_port = url.EffectiveIntPort();
 
@@ -118,7 +117,7 @@ PortMatchingResult SourceAllowPort(const network::mojom::CSPSourcePtr& source,
   return PortMatchingResult::NotMatching;
 }
 
-bool SourceAllowPath(const network::mojom::CSPSourcePtr& source,
+bool SourceAllowPath(const mojom::CSPSourcePtr& source,
                      const GURL& url,
                      bool has_followed_redirect) {
   if (has_followed_redirect)
@@ -162,7 +161,7 @@ bool canUpgrade(const SchemeMatchingResult result) {
 
 }  // namespace
 
-bool CheckCSPSource(const network::mojom::CSPSourcePtr& source,
+bool CheckCSPSource(const mojom::CSPSourcePtr& source,
                     const GURL& url,
                     CSPContext* context,
                     bool has_followed_redirect) {
@@ -182,7 +181,7 @@ bool CheckCSPSource(const network::mojom::CSPSourcePtr& source,
          SourceAllowPath(source, url, has_followed_redirect);
 }
 
-std::string ToString(const network::mojom::CSPSourcePtr& source) {
+std::string ToString(const mojom::CSPSourcePtr& source) {
   // scheme
   if (IsSchemeOnly(source))
     return source->scheme + ":";
@@ -213,4 +212,4 @@ std::string ToString(const network::mojom::CSPSourcePtr& source) {
   return text.str();
 }
 
-}  // namespace content
+}  // namespace network

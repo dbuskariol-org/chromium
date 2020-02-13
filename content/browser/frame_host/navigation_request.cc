@@ -92,7 +92,7 @@
 #include "net/http/http_request_headers.h"
 #include "net/http/http_status_code.h"
 #include "net/url_request/redirect_info.h"
-#include "services/network/public/cpp/content_security_policy.h"
+#include "services/network/public/cpp/content_security_policy/content_security_policy.h"
 #include "services/network/public/cpp/features.h"
 #include "services/network/public/cpp/resource_request_body.h"
 #include "services/network/public/cpp/url_loader_completion_status.h"
@@ -2676,17 +2676,18 @@ void NavigationRequest::UpdateSiteURL(
 }
 
 bool NavigationRequest::IsAllowedByCSPDirective(
-    CSPContext* context,
+    network::CSPContext* context,
     network::mojom::CSPDirectiveName directive,
     bool has_followed_redirect,
     bool url_upgraded_after_redirect,
     bool is_response_check,
-    CSPContext::CheckCSPDisposition disposition) {
+    network::CSPContext::CheckCSPDisposition disposition) {
   GURL url;
   // If this request was upgraded in the net stack, downgrade the URL back to
   // HTTP before checking report only policies.
   if (url_upgraded_after_redirect &&
-      disposition == CSPContext::CheckCSPDisposition::CHECK_REPORT_ONLY_CSP &&
+      disposition ==
+          network::CSPContext::CheckCSPDisposition::CHECK_REPORT_ONLY_CSP &&
       common_params_->url.SchemeIs(url::kHttpsScheme)) {
     GURL::Replacements replacements;
     replacements.SetSchemeStr(url::kHttpScheme);
@@ -2705,7 +2706,7 @@ net::Error NavigationRequest::CheckCSPDirectives(
     bool has_followed_redirect,
     bool url_upgraded_after_redirect,
     bool is_response_check,
-    CSPContext::CheckCSPDisposition disposition) {
+    network::CSPContext::CheckCSPDisposition disposition) {
   bool navigate_to_allowed = IsAllowedByCSPDirective(
       initiator_csp_context_.get(),
       network::mojom::CSPDirectiveName::NavigateTo, has_followed_redirect,
@@ -2782,7 +2783,7 @@ net::Error NavigationRequest::CheckContentSecurityPolicy(
 
   net::Error report_only_csp_status = CheckCSPDirectives(
       parent, has_followed_redirect, url_upgraded_after_redirect,
-      is_response_check, CSPContext::CHECK_REPORT_ONLY_CSP);
+      is_response_check, network::CSPContext::CHECK_REPORT_ONLY_CSP);
 
   // upgrade-insecure-requests is handled in the network code for redirects,
   // only do the upgrade here if this is not a redirect.
@@ -2797,7 +2798,7 @@ net::Error NavigationRequest::CheckContentSecurityPolicy(
 
   net::Error enforced_csp_status = CheckCSPDirectives(
       parent, has_followed_redirect, url_upgraded_after_redirect,
-      is_response_check, CSPContext::CHECK_ENFORCED_CSP);
+      is_response_check, network::CSPContext::CHECK_ENFORCED_CSP);
   if (enforced_csp_status != net::OK)
     return enforced_csp_status;
   return report_only_csp_status;
