@@ -8,6 +8,8 @@
 #include <string>
 #include <utility>
 
+#include "base/files/file_util.h"
+#include "base/threading/thread_restrictions.h"
 #include "base/values.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/content_index_context.h"
@@ -187,6 +189,15 @@ void WebTestClientImpl::DeleteAllCookies() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   cookie_manager_->DeleteCookies(network::mojom::CookieDeletionFilter::New(),
                                  base::BindOnce([](uint32_t) {}));
+}
+
+void WebTestClientImpl::GetWritableDirectory(
+    GetWritableDirectoryCallback callback) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  base::FilePath path;
+  if (BlinkTestController::Get())
+    path = BlinkTestController::Get()->GetWritableDirectoryForTests();
+  std::move(callback).Run(path);
 }
 
 }  // namespace content

@@ -52,6 +52,7 @@ class WebTestClientImpl : public mojom::WebTestClient {
   void WebTestRuntimeFlagsChanged(
       base::Value changed_web_test_runtime_flags) override;
   void DeleteAllCookies() override;
+  void GetWritableDirectory(GetWritableDirectoryCallback callback) override;
 
   int render_process_id_;
 

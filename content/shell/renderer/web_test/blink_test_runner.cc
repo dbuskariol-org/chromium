@@ -227,22 +227,6 @@ WebString BlinkTestRunner::GetAbsoluteWebStringFromUTF8Path(
   return blink::FilePathToWebString(path);
 }
 
-WebURL BlinkTestRunner::LocalFileToDataURL(const WebURL& file_url) {
-  base::FilePath local_path;
-  if (!net::FileURLToFilePath(file_url, &local_path))
-    return WebURL();
-
-  std::string contents;
-  Send(
-      new WebTestHostMsg_ReadFileToString(routing_id(), local_path, &contents));
-
-  std::string contents_base64;
-  base::Base64Encode(contents, &contents_base64);
-
-  const char data_url_prefix[] = "data:text/css:charset=utf-8;base64,";
-  return WebURL(GURL(data_url_prefix + contents_base64));
-}
-
 WebURL BlinkTestRunner::RewriteWebTestsURL(const std::string& utf8_url,
                                            bool is_wpt_mode) {
   return content::RewriteWebTestsURL(utf8_url, is_wpt_mode);
@@ -410,7 +394,7 @@ void BlinkTestRunner::SetLocale(const std::string& locale) {
 
 base::FilePath BlinkTestRunner::GetWritableDirectory() {
   base::FilePath result;
-  Send(new WebTestHostMsg_GetWritableDirectory(routing_id(), &result));
+  GetWebTestClientRemote().GetWritableDirectory(&result);
   return result;
 }
 

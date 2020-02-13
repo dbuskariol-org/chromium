@@ -74,7 +74,6 @@ WebTestMessageFilter::OverrideTaskRunnerForMessage(
       return database_tracker_->task_runner();
     case WebTestHostMsg_SimulateWebNotificationClick::ID:
     case WebTestHostMsg_InitiateCaptureDump::ID:
-    case WebTestHostMsg_GetWritableDirectory::ID:
     case WebTestHostMsg_SetFilePathForMockFileDialog::ID:
       return base::CreateSingleThreadTaskRunner({BrowserThread::UI});
   }
@@ -84,7 +83,6 @@ WebTestMessageFilter::OverrideTaskRunnerForMessage(
 bool WebTestMessageFilter::OnMessageReceived(const IPC::Message& message) {
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(WebTestMessageFilter, message)
-    IPC_MESSAGE_HANDLER(WebTestHostMsg_ReadFileToString, OnReadFileToString)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_RegisterIsolatedFileSystem,
                         OnRegisterIsolatedFileSystem)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_ClearAllDatabases, OnClearAllDatabases)
@@ -93,20 +91,12 @@ bool WebTestMessageFilter::OnMessageReceived(const IPC::Message& message) {
                         OnSimulateWebNotificationClick)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_InitiateCaptureDump,
                         OnInitiateCaptureDump)
-    IPC_MESSAGE_HANDLER(WebTestHostMsg_GetWritableDirectory,
-                        OnGetWritableDirectory)
     IPC_MESSAGE_HANDLER(WebTestHostMsg_SetFilePathForMockFileDialog,
                         OnSetFilePathForMockFileDialog)
     IPC_MESSAGE_UNHANDLED(handled = false)
   IPC_END_MESSAGE_MAP()
 
   return handled;
-}
-
-void WebTestMessageFilter::OnReadFileToString(const base::FilePath& local_file,
-                                              std::string* contents) {
-  base::ScopedAllowBlockingForTesting allow_blocking;
-  base::ReadFileToString(local_file, contents);
 }
 
 void WebTestMessageFilter::OnRegisterIsolatedFileSystem(
@@ -163,11 +153,6 @@ void WebTestMessageFilter::OnInitiateCaptureDump(
   }
 }
 
-void WebTestMessageFilter::OnGetWritableDirectory(base::FilePath* path) {
-  DCHECK_CURRENTLY_ON(BrowserThread::UI);
-  if (BlinkTestController::Get())
-    *path = BlinkTestController::Get()->GetWritableDirectoryForTests();
-}
 void WebTestMessageFilter::OnSetFilePathForMockFileDialog(
     const base::FilePath& path) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
