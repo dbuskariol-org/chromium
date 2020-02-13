@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_LOGIN_UI_PARENT_ACCESS_WIDGET_H_
-#define ASH_LOGIN_UI_PARENT_ACCESS_WIDGET_H_
+#ifndef ASH_LOGIN_UI_PIN_REQUEST_WIDGET_H_
+#define ASH_LOGIN_UI_PIN_REQUEST_WIDGET_H_
 
 #include <memory>
 
 #include "ash/ash_export.h"
-#include "ash/login/ui/parent_access_view.h"
+#include "ash/login/ui/pin_request_view.h"
 #include "base/callback.h"
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
@@ -23,68 +23,66 @@ namespace ash {
 
 class WindowDimmer;
 
-enum class ParentAccessRequestReason;
-enum class ParentAccessRequestViewState;
+enum class PinRequestReason;
+enum class PinRequestViewState;
 
-// Widget to display the Parent Access View in a standalone container.
+// Widget to display the Pin Request View in a standalone container.
 // This widget is modal and only one instance can be created at a time. It will
 // be destroyed when dismissed.
-class ASH_EXPORT ParentAccessWidget {
+class ASH_EXPORT PinRequestWidget {
  public:
   // TestApi is used for tests to get internal implementation details.
   class ASH_EXPORT TestApi {
    public:
-    explicit TestApi(ParentAccessWidget* widget);
+    explicit TestApi(PinRequestWidget* widget);
     ~TestApi();
 
-    ParentAccessView* parent_access_view();
+    PinRequestView* pin_request_view();
 
-    // Simulates that parent access code validation finished with the result
-    // specified in |access_granted|, which dismisses the widget.
+    // Simulates that pin validation finished with the result specified in
+    // |access_granted|, which dismisses the widget.
     void SimulateValidationFinished(bool access_granted);
 
    private:
-    ParentAccessWidget* const parent_access_widget_;
+    PinRequestWidget* const pin_request_widget_;
   };
 
-  // Creates and shows the instance of ParentAccessWidget.
+  // Creates and shows the instance of PinRequestWidget.
   // This widget is modal and only one instance can be created at a time. It
   // will be destroyed when dismissed.
-  static void Show(ParentAccessRequest request,
-                   ParentAccessView::Delegate* delegate);
+  static void Show(PinRequest request, PinRequestView::Delegate* delegate);
 
-  // Returns the instance of ParentAccessWidget or nullptr if it does not exits.
-  static ParentAccessWidget* Get();
+  // Returns the instance of PinRequestWidget or nullptr if it does not exits.
+  static PinRequestWidget* Get();
 
   // Toggles showing an error state and updates displayed strings.
-  void UpdateState(ParentAccessRequestViewState state,
+  void UpdateState(PinRequestViewState state,
                    const base::string16& title,
                    const base::string16& description);
 
   // Closes the widget.
   // |success| describes whether the validation was successful and is passed to
-  // |on_parent_access_done_|.
+  // |on_pin_request_done_|.
   void Close(bool success);
 
  private:
-  ParentAccessWidget(ParentAccessRequest request,
-                     ParentAccessView::Delegate* delegate);
-  ~ParentAccessWidget();
+  PinRequestWidget(PinRequest request, PinRequestView::Delegate* delegate);
+  ~PinRequestWidget();
 
   // Shows the |widget_| and |dimmer_| if applicable.
   void Show();
 
   // Callback invoked when closing the widget.
-  ParentAccessRequest::OnParentAccessDone on_parent_access_done_;
+  PinRequest::OnPinRequestDone on_pin_request_done_;
 
   std::unique_ptr<views::Widget> widget_;
   std::unique_ptr<WindowDimmer> dimmer_;
 
-  base::WeakPtrFactory<ParentAccessWidget> weak_factory_{this};
+  base::WeakPtrFactory<PinRequestWidget> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(ParentAccessWidget);
+  DISALLOW_COPY_AND_ASSIGN(PinRequestWidget);
 };
 
 }  // namespace ash
 
-#endif  // ASH_LOGIN_UI_PARENT_ACCESS_WIDGET_H_
+#endif  // ASH_LOGIN_UI_PIN_REQUEST_WIDGET_H_

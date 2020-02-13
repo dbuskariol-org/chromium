@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/login/ui/parent_access_view.h"
+#include "ash/login/ui/pin_request_view.h"
 
 #include <memory>
 #include <string>
@@ -15,7 +15,7 @@
 #include "ash/login/ui/login_pin_view.h"
 #include "ash/login/ui/login_test_base.h"
 #include "ash/login/ui/login_test_utils.h"
-#include "ash/login/ui/parent_access_widget.h"
+#include "ash/login/ui/pin_request_widget.h"
 #include "ash/public/cpp/login_types.h"
 #include "ash/session/test_session_controller_client.h"
 #include "ash/shell.h"
@@ -44,11 +44,11 @@
 
 namespace ash {
 
-class ParentAccessViewTest : public LoginTestBase,
-                             public ParentAccessView::Delegate {
+class PinRequestViewTest : public LoginTestBase,
+                           public PinRequestView::Delegate {
  protected:
-  ParentAccessViewTest() {}
-  ~ParentAccessViewTest() override = default;
+  PinRequestViewTest() {}
+  ~PinRequestViewTest() override = default;
 
   // LoginScreenTest:
   void SetUp() override {
@@ -60,9 +60,9 @@ class ParentAccessViewTest : public LoginTestBase,
     LoginTestBase::TearDown();
 
     // If the test did not explicitly dismissed the widget, destroy it now.
-    ParentAccessWidget* parent_access_widget = ParentAccessWidget::Get();
-    if (parent_access_widget)
-      parent_access_widget->Close(false /* validation success */);
+    PinRequestWidget* pin_request_widget = PinRequestWidget::Get();
+    if (pin_request_widget)
+      pin_request_widget->Close(false /* validation success */);
   }
 
   // Simulates mouse press event on a |button|.
@@ -79,16 +79,16 @@ class ParentAccessViewTest : public LoginTestBase,
     button->OnEvent(&event);
   }
 
-  ParentAccessView::SubmissionResult OnPinSubmitted(
+  PinRequestView::SubmissionResult OnPinSubmitted(
       const std::string& code) override {
     ++pin_submitted_;
     last_code_submitted_ = code;
     if (!will_authenticate_) {
-      view_->UpdateState(ParentAccessRequestViewState::kError, base::string16(),
+      view_->UpdateState(PinRequestViewState::kError, base::string16(),
                          base::string16());
-      return ParentAccessView::SubmissionResult::kPinError;
+      return PinRequestView::SubmissionResult::kPinError;
     }
-    return ParentAccessView::SubmissionResult::kPinAccepted;
+    return PinRequestView::SubmissionResult::kPinAccepted;
   }
 
   void OnBack() override { ++back_action_; }
@@ -98,35 +98,34 @@ class ParentAccessViewTest : public LoginTestBase,
   }
 
   void StartView(base::Optional<int> pin_length = 6) {
-    ParentAccessRequest request;
+    PinRequest request;
     request.help_button_enabled = true;
     request.pin_length = pin_length;
-    request.on_parent_access_done = base::DoNothing::Once<bool>();
-    view_ = new ParentAccessView(std::move(request), this);
+    request.on_pin_request_done = base::DoNothing::Once<bool>();
+    view_ = new PinRequestView(std::move(request), this);
 
     SetWidget(CreateWidgetWithContent(view_));
   }
 
-  // Shows parent access widget with the specified |reason|.
+  // Shows pin request widget with the specified |reason|.
   void ShowWidget(base::Optional<int> pin_length = 6) {
-    ParentAccessRequest request;
+    PinRequest request;
     request.help_button_enabled = true;
     request.pin_length = pin_length;
-    request.on_parent_access_done = base::DoNothing::Once<bool>();
-    ParentAccessWidget::Show(std::move(request), this);
-    ParentAccessWidget* widget = ParentAccessWidget::Get();
+    request.on_pin_request_done = base::DoNothing::Once<bool>();
+    PinRequestWidget::Show(std::move(request), this);
+    PinRequestWidget* widget = PinRequestWidget::Get();
     ASSERT_TRUE(widget);
   }
 
-  // Dismisses existing parent access widget with back button click. Should be
+  // Dismisses existing pin request widget with back button click. Should be
   // only called when the widget is shown.
   void DismissWidget() {
-    ParentAccessWidget* widget = ParentAccessWidget::Get();
+    PinRequestWidget* widget = PinRequestWidget::Get();
     ASSERT_TRUE(widget);
 
-    ParentAccessView* view =
-        ParentAccessWidget::TestApi(widget).parent_access_view();
-    ParentAccessView::TestApi test_api(view);
+    PinRequestView* view = PinRequestWidget::TestApi(widget).pin_request_view();
+    PinRequestView::TestApi test_api(view);
     ui::MouseEvent event(ui::ET_MOUSE_PRESSED, gfx::Point(), gfx::Point(),
                          ui::EventTimeForNow(), 0, 0);
     view->ButtonPressed(test_api.back_button(), event);
@@ -162,31 +161,31 @@ class ParentAccessViewTest : public LoginTestBase,
   // Whether the next pin submission will trigger setting an error state.
   bool will_authenticate_ = true;
 
-  ParentAccessView* view_ = nullptr;  // Owned by test widget view hierarchy.
+  PinRequestView* view_ = nullptr;  // Owned by test widget view hierarchy.
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(ParentAccessViewTest);
+  DISALLOW_COPY_AND_ASSIGN(PinRequestViewTest);
 };
 
 // Tests that back button works.
-TEST_F(ParentAccessViewTest, BackButton) {
+TEST_F(PinRequestViewTest, BackButton) {
   ShowWidget();
-  ParentAccessWidget* widget = ParentAccessWidget::Get();
-  view_ = ParentAccessWidget::TestApi(widget).parent_access_view();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestWidget* widget = PinRequestWidget::Get();
+  view_ = PinRequestWidget::TestApi(widget).pin_request_view();
+  PinRequestView::TestApi test_api(view_);
   EXPECT_TRUE(test_api.back_button()->GetEnabled());
   EXPECT_EQ(0, back_action_);
 
   SimulateButtonPress(test_api.back_button());
 
   EXPECT_EQ(1, back_action_);
-  EXPECT_EQ(nullptr, ParentAccessWidget::Get());
+  EXPECT_EQ(nullptr, PinRequestWidget::Get());
 }
 
 // Tests that the code is autosubmitted when input is complete.
-TEST_F(ParentAccessViewTest, Autosubmit) {
+TEST_F(PinRequestViewTest, Autosubmit) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_FALSE(test_api.submit_button()->GetEnabled());
 
   ui::test::EventGenerator* generator = GetEventGenerator();
@@ -201,16 +200,16 @@ TEST_F(ParentAccessViewTest, Autosubmit) {
 }
 
 // Tests that submit button submits code from code input.
-TEST_F(ParentAccessViewTest, SubmitButton) {
+TEST_F(PinRequestViewTest, SubmitButton) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_FALSE(test_api.submit_button()->GetEnabled());
   SimulateFailedValidation();
 
   auto* generator = GetEventGenerator();
   // Updating input code (here last digit) should clear error state.
   generator->PressKey(ui::KeyboardCode::VKEY_6, ui::EF_NONE);
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
   EXPECT_TRUE(test_api.submit_button()->GetEnabled());
 
   SimulateButtonPress(test_api.submit_button());
@@ -220,10 +219,10 @@ TEST_F(ParentAccessViewTest, SubmitButton) {
 }
 
 // Tests that help button opens help app.
-TEST_F(ParentAccessViewTest, HelpButton) {
+TEST_F(PinRequestViewTest, HelpButton) {
   StartView();
 
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_TRUE(test_api.help_button()->GetEnabled());
 
   SimulateButtonPress(test_api.help_button());
@@ -232,9 +231,9 @@ TEST_F(ParentAccessViewTest, HelpButton) {
 }
 
 // Tests that access code can be entered with numpad.
-TEST_F(ParentAccessViewTest, Numpad) {
+TEST_F(PinRequestViewTest, Numpad) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
 
   ui::test::EventGenerator* generator = GetEventGenerator();
   for (int i = 0; i < 6; ++i) {
@@ -247,9 +246,9 @@ TEST_F(ParentAccessViewTest, Numpad) {
 }
 
 // Tests that access code can be submitted with press of 'enter' key.
-TEST_F(ParentAccessViewTest, SubmitWithEnter) {
+TEST_F(PinRequestViewTest, SubmitWithEnter) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_FALSE(test_api.submit_button()->GetEnabled());
 
   SimulateFailedValidation();
@@ -257,7 +256,7 @@ TEST_F(ParentAccessViewTest, SubmitWithEnter) {
   // Updating input code (here last digit) should clear error state.
   auto* generator = GetEventGenerator();
   generator->PressKey(ui::KeyboardCode::VKEY_6, ui::EF_NONE);
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
 
   generator->PressKey(ui::KeyboardCode::VKEY_RETURN, ui::EF_NONE);
   base::RunLoop().RunUntilIdle();
@@ -266,9 +265,9 @@ TEST_F(ParentAccessViewTest, SubmitWithEnter) {
 }
 
 // Tests that 'enter' key does not submit incomplete code.
-TEST_F(ParentAccessViewTest, PressEnterOnIncompleteCode) {
+TEST_F(PinRequestViewTest, PressEnterOnIncompleteCode) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_FALSE(test_api.submit_button()->GetEnabled());
 
   // Enter incomplete code.
@@ -294,7 +293,7 @@ TEST_F(ParentAccessViewTest, PressEnterOnIncompleteCode) {
 
   // Updating input code (here last digit) should clear error state.
   generator->PressKey(ui::KeyboardCode::VKEY_6, ui::EF_NONE);
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
 
   // Now the code should be submitted with enter key.
   generator->PressKey(ui::KeyboardCode::VKEY_RETURN, ui::EF_NONE);
@@ -304,13 +303,13 @@ TEST_F(ParentAccessViewTest, PressEnterOnIncompleteCode) {
 }
 
 // Tests that backspace button works.
-TEST_F(ParentAccessViewTest, Backspace) {
+TEST_F(PinRequestViewTest, Backspace) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_FALSE(test_api.submit_button()->GetEnabled());
 
   SimulateFailedValidation();
-  EXPECT_EQ(ParentAccessRequestViewState::kError, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kError, test_api.state());
 
   ui::test::EventGenerator* generator = GetEventGenerator();
 
@@ -340,9 +339,9 @@ TEST_F(ParentAccessViewTest, Backspace) {
 }
 
 // Tests input with unknown pin length.
-TEST_F(ParentAccessViewTest, FlexCodeInput) {
+TEST_F(PinRequestViewTest, FlexCodeInput) {
   StartView(base::nullopt);
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   ui::test::EventGenerator* generator = GetEventGenerator();
   will_authenticate_ = false;
 
@@ -365,13 +364,13 @@ TEST_F(ParentAccessViewTest, FlexCodeInput) {
 }
 
 // Tests input with virtual pin keyboard.
-TEST_F(ParentAccessViewTest, PinKeyboard) {
+TEST_F(PinRequestViewTest, PinKeyboard) {
   ShowWidget();
   Shell::Get()->tablet_mode_controller()->SetEnabledForTest(true);
 
-  ParentAccessWidget* widget = ParentAccessWidget::Get();
-  view_ = ParentAccessWidget::TestApi(widget).parent_access_view();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestWidget* widget = PinRequestWidget::Get();
+  view_ = PinRequestWidget::TestApi(widget).pin_request_view();
+  PinRequestView::TestApi test_api(view_);
   LoginPinView::TestApi test_pin_keyboard(test_api.pin_keyboard_view());
   EXPECT_FALSE(test_api.submit_button()->GetEnabled());
 
@@ -384,9 +383,9 @@ TEST_F(ParentAccessViewTest, PinKeyboard) {
 }
 
 // Tests that pin keyboard visibility changes upon tablet mode changes.
-TEST_F(ParentAccessViewTest, PinKeyboardVisibilityChange) {
+TEST_F(PinRequestViewTest, PinKeyboardVisibilityChange) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   LoginPinView::TestApi test_pin_keyboard(test_api.pin_keyboard_view());
   EXPECT_FALSE(test_api.pin_keyboard_view()->GetVisible());
 
@@ -398,19 +397,19 @@ TEST_F(ParentAccessViewTest, PinKeyboardVisibilityChange) {
 }
 
 // Tests that error state is shown and cleared when neccesary.
-TEST_F(ParentAccessViewTest, ErrorState) {
+TEST_F(PinRequestViewTest, ErrorState) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  PinRequestView::TestApi test_api(view_);
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
 
   // Error should be shown after unsuccessful validation.
   SimulateFailedValidation();
-  EXPECT_EQ(ParentAccessRequestViewState::kError, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kError, test_api.state());
 
   // Updating input code (here last digit) should clear error state.
   auto* generator = GetEventGenerator();
   generator->PressKey(ui::KeyboardCode::VKEY_6, ui::EF_NONE);
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
 
   SimulateButtonPress(test_api.submit_button());
   base::RunLoop().RunUntilIdle();
@@ -419,9 +418,9 @@ TEST_F(ParentAccessViewTest, ErrorState) {
 }
 
 // Tests children views traversal with tab key.
-TEST_F(ParentAccessViewTest, TabKeyTraversal) {
+TEST_F(PinRequestViewTest, TabKeyTraversal) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_TRUE(HasFocusInAnyChildView(test_api.access_code_view()));
 
   SimulateFailedValidation();
@@ -430,7 +429,7 @@ TEST_F(ParentAccessViewTest, TabKeyTraversal) {
   auto* generator = GetEventGenerator();
   generator->PressKey(ui::KeyboardCode::VKEY_6, ui::EF_NONE);
   base::RunLoop().RunUntilIdle();
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
   EXPECT_TRUE(test_api.submit_button()->HasFocus());
 
   generator->PressKey(ui::KeyboardCode::VKEY_TAB, ui::EF_NONE);
@@ -444,16 +443,16 @@ TEST_F(ParentAccessViewTest, TabKeyTraversal) {
 }
 
 // Tests children views backwards traversal with tab key.
-TEST_F(ParentAccessViewTest, BackwardTabKeyTraversal) {
+TEST_F(PinRequestViewTest, BackwardTabKeyTraversal) {
   StartView();
-  ParentAccessView::TestApi test_api(view_);
+  PinRequestView::TestApi test_api(view_);
   EXPECT_TRUE(HasFocusInAnyChildView(test_api.access_code_view()));
 
   SimulateFailedValidation();
   auto* generator = GetEventGenerator();
   generator->PressKey(ui::KeyboardCode::VKEY_6, ui::EF_NONE);
   base::RunLoop().RunUntilIdle();
-  EXPECT_EQ(ParentAccessRequestViewState::kNormal, test_api.state());
+  EXPECT_EQ(PinRequestViewState::kNormal, test_api.state());
   EXPECT_TRUE(test_api.submit_button()->HasFocus());
 
   generator->PressKey(ui::KeyboardCode::VKEY_TAB, ui::EF_SHIFT_DOWN);
@@ -475,18 +474,17 @@ TEST_F(ParentAccessViewTest, BackwardTabKeyTraversal) {
   EXPECT_TRUE(HasFocusInAnyChildView(test_api.access_code_view()));
 }
 
-using ParentAccessWidgetTest = ParentAccessViewTest;
+using PinRequestWidgetTest = PinRequestViewTest;
 
 // Tests that the widget is properly resized when tablet mode changes.
-TEST_F(ParentAccessWidgetTest, WidgetResizingInTabletMode) {
+TEST_F(PinRequestWidgetTest, WidgetResizingInTabletMode) {
   // Set display large enough to fit preferred view sizes.
   UpdateDisplay("1200x800");
   ShowWidget();
 
-  ParentAccessWidget* widget = ParentAccessWidget::Get();
+  PinRequestWidget* widget = PinRequestWidget::Get();
   ASSERT_TRUE(widget);
-  ParentAccessView* view =
-      ParentAccessWidget::TestApi(widget).parent_access_view();
+  PinRequestView* view = PinRequestWidget::TestApi(widget).pin_request_view();
 
   constexpr auto kClamshellModeSize = gfx::Size(340, 340);
   constexpr auto kTabletModeSize = gfx::Size(340, 580);
@@ -521,7 +519,7 @@ TEST_F(ParentAccessWidgetTest, WidgetResizingInTabletMode) {
   widget->Close(false /* validation success */);
 }
 
-TEST_F(ParentAccessViewTest, VirtualKeyboardHidden) {
+TEST_F(PinRequestViewTest, VirtualKeyboardHidden) {
   // Enable and show virtual keyboard.
   auto* keyboard_controller = Shell::Get()->keyboard_controller();
   ASSERT_NE(keyboard_controller, nullptr);
@@ -530,9 +528,9 @@ TEST_F(ParentAccessViewTest, VirtualKeyboardHidden) {
 
   // Show widget.
   ShowWidget();
-  auto* view = ParentAccessWidget::TestApi(ParentAccessWidget::Get())
-                   .parent_access_view();
-  ParentAccessView::TestApi test_api(view);
+  auto* view =
+      PinRequestWidget::TestApi(PinRequestWidget::Get()).pin_request_view();
+  PinRequestView::TestApi test_api(view);
 
   views::Textfield* text_field = test_api.GetInputTextField(0);
 
@@ -550,7 +548,7 @@ TEST_F(ParentAccessViewTest, VirtualKeyboardHidden) {
 }
 
 // Tests that spoken feedback keycombo starts screen reader.
-TEST_F(ParentAccessWidgetTest, SpokenFeedbackKeyCombo) {
+TEST_F(PinRequestWidgetTest, SpokenFeedbackKeyCombo) {
   ShowWidget();
 
   AccessibilityControllerImpl* controller =

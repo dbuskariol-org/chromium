@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_LOGIN_UI_PARENT_ACCESS_VIEW_H_
-#define ASH_LOGIN_UI_PARENT_ACCESS_VIEW_H_
+#ifndef ASH_LOGIN_UI_PIN_REQUEST_VIEW_H_
+#define ASH_LOGIN_UI_PIN_REQUEST_VIEW_H_
 
 #include <string>
 
@@ -34,23 +34,23 @@ class LoginButton;
 class LoginPinView;
 class NonAccessibleView;
 
-// State of the ParentAccessView.
-enum class ParentAccessRequestViewState {
+// State of the PinRequestView.
+enum class PinRequestViewState {
   kNormal,
   kError,
 };
 
-struct ASH_EXPORT ParentAccessRequest {
-  ParentAccessRequest();
-  ParentAccessRequest(ParentAccessRequest&&);
-  ParentAccessRequest& operator=(ParentAccessRequest&&);
-  ~ParentAccessRequest();
+struct ASH_EXPORT PinRequest {
+  PinRequest();
+  PinRequest(PinRequest&&);
+  PinRequest& operator=(PinRequest&&);
+  ~PinRequest();
 
   // Callback for PIN validations. It is called when the validation has finished
   // and the view is closing.
   // |success| indicates whether the validation was successful.
-  using OnParentAccessDone = base::OnceCallback<void(bool success)>;
-  OnParentAccessDone on_parent_access_done = base::NullCallback();
+  using OnPinRequestDone = base::OnceCallback<void(bool success)>;
+  OnPinRequestDone on_pin_request_done = base::NullCallback();
 
   // Whether the help button is displayed.
   bool help_button_enabled = false;
@@ -62,7 +62,7 @@ struct ASH_EXPORT ParentAccessRequest {
   // mode.
   bool pin_keyboard_always_enabled = false;
 
-  // The parent access widget is a modal and already contains a dimmer, however
+  // The pin widget is a modal and already contains a dimmer, however
   // when another modal is the parent of the widget, the dimmer will be placed
   // behind the two windows. |extra_dimmer| will create an extra dimmer between
   // the two.
@@ -77,14 +77,13 @@ struct ASH_EXPORT ParentAccessRequest {
   base::string16 accessible_title;
 };
 
-// The view that allows for input of parent access code to authorize certain
-// actions on child's device.
-class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
-                                    public views::ButtonListener,
-                                    public TabletModeObserver {
+// The view that allows for input of pins to authorize certain actions.
+class ASH_EXPORT PinRequestView : public views::DialogDelegateView,
+                                  public views::ButtonListener,
+                                  public TabletModeObserver {
  public:
   enum class SubmissionResult {
-    // Closes the UI and calls |on_parent_access_done_|.
+    // Closes the UI and calls |on_pin_request_done_|.
     kPinAccepted,
     // PIN rejected - keeps the UI in its current state.
     kPinError,
@@ -104,7 +103,7 @@ class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
 
   class ASH_EXPORT TestApi {
    public:
-    explicit TestApi(ParentAccessView* view);
+    explicit TestApi(PinRequestView* view);
     ~TestApi();
 
     LoginButton* back_button();
@@ -117,10 +116,10 @@ class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
 
     views::Textfield* GetInputTextField(int index);
 
-    ParentAccessRequestViewState state() const;
+    PinRequestViewState state() const;
 
    private:
-    ParentAccessView* const view_;
+    PinRequestView* const view_;
   };
 
   // Returns color used for dialog and UI elements specific for child user.
@@ -128,10 +127,10 @@ class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
   // (color transparency depends on it).
   static SkColor GetChildUserDialogColor(bool using_blur);
 
-  // Creates parent access view that will enable the user to enter a pin.
+  // Creates pin request view that will enable the user to enter a pin.
   // |request| is used to configure callbacks and UI details.
-  ParentAccessView(ParentAccessRequest request, Delegate* delegate);
-  ~ParentAccessView() override;
+  PinRequestView(PinRequest request, Delegate* delegate);
+  ~PinRequestView() override;
 
   // views::View:
   void OnPaint(gfx::Canvas* canvas) override;
@@ -156,7 +155,7 @@ class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
   void SetInputEnabled(bool input_enabled);
 
   // Updates state of the view.
-  void UpdateState(ParentAccessRequestViewState state,
+  void UpdateState(PinRequestViewState state,
                    const base::string16& title,
                    const base::string16& description);
 
@@ -188,15 +187,15 @@ class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
 
   // Sizes that depend on the pin keyboards visibility.
   gfx::Size GetPinKeyboardToFooterSpacerSize() const;
-  gfx::Size GetParentAccessViewSize() const;
+  gfx::Size GetPinRequestViewSize() const;
 
-  ParentAccessRequestViewState state_ = ParentAccessRequestViewState::kNormal;
+  PinRequestViewState state_ = PinRequestViewState::kNormal;
 
   // Unowned pointer to the delegate. The delegate should outlive this instance.
   Delegate* delegate_;
 
   // Callback to close the UI.
-  ParentAccessRequest::OnParentAccessDone on_parent_access_done_;
+  PinRequest::OnPinRequestDone on_pin_request_done_;
 
   // Auto submit code when the last input has been inserted.
   bool auto_submit_enabled_ = true;
@@ -221,11 +220,11 @@ class ASH_EXPORT ParentAccessView : public views::DialogDelegateView,
   ScopedObserver<TabletModeController, TabletModeObserver>
       tablet_mode_observer_{this};
 
-  base::WeakPtrFactory<ParentAccessView> weak_ptr_factory_{this};
+  base::WeakPtrFactory<PinRequestView> weak_ptr_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(ParentAccessView);
+  DISALLOW_COPY_AND_ASSIGN(PinRequestView);
 };
 
 }  // namespace ash
 
-#endif  // ASH_LOGIN_UI_PARENT_ACCESS_VIEW_H_
+#endif  // ASH_LOGIN_UI_PIN_REQUEST_VIEW_H_

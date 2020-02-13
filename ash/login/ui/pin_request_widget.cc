@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/login/ui/parent_access_widget.h"
+#include "ash/login/ui/pin_request_widget.h"
 
 #include <utility>
 
@@ -18,52 +18,52 @@ namespace ash {
 
 namespace {
 
-ParentAccessWidget* instance_ = nullptr;
+PinRequestWidget* instance_ = nullptr;
 
 }  // namespace
 
-ParentAccessWidget::TestApi::TestApi(ParentAccessWidget* widget)
-    : parent_access_widget_(widget) {}
+PinRequestWidget::TestApi::TestApi(PinRequestWidget* widget)
+    : pin_request_widget_(widget) {}
 
-ParentAccessWidget::TestApi::~TestApi() = default;
+PinRequestWidget::TestApi::~TestApi() = default;
 
-ParentAccessView* ParentAccessWidget::TestApi::parent_access_view() {
-  return static_cast<ParentAccessView*>(
-      parent_access_widget_->widget_->widget_delegate());
+PinRequestView* PinRequestWidget::TestApi::pin_request_view() {
+  return static_cast<PinRequestView*>(
+      pin_request_widget_->widget_->widget_delegate());
 }
 
 // static
-void ParentAccessWidget::Show(ParentAccessRequest request,
-                              ParentAccessView::Delegate* delegate) {
+void PinRequestWidget::Show(PinRequest request,
+                            PinRequestView::Delegate* delegate) {
   DCHECK(!instance_);
-  instance_ = new ParentAccessWidget(std::move(request), delegate);
+  instance_ = new PinRequestWidget(std::move(request), delegate);
 }
 
 // static
-ParentAccessWidget* ParentAccessWidget::Get() {
+PinRequestWidget* PinRequestWidget::Get() {
   return instance_;
 }
 
-void ParentAccessWidget::UpdateState(ParentAccessRequestViewState state,
-                                     const base::string16& title,
-                                     const base::string16& description) {
+void PinRequestWidget::UpdateState(PinRequestViewState state,
+                                   const base::string16& title,
+                                   const base::string16& description) {
   DCHECK_EQ(instance_, this);
-  static_cast<ParentAccessView*>(widget_->widget_delegate())
+  static_cast<PinRequestView*>(widget_->widget_delegate())
       ->UpdateState(state, title, description);
 }
 
-void ParentAccessWidget::Close(bool success) {
+void PinRequestWidget::Close(bool success) {
   DCHECK_EQ(instance_, this);
-  ParentAccessWidget* instance = instance_;
+  PinRequestWidget* instance = instance_;
   instance_ = nullptr;
-  std::move(on_parent_access_done_).Run(success);
+  std::move(on_pin_request_done_).Run(success);
   widget_->Close();
   delete instance;
 }
 
-ParentAccessWidget::ParentAccessWidget(ParentAccessRequest request,
-                                       ParentAccessView::Delegate* delegate)
-    : on_parent_access_done_(std::move(request.on_parent_access_done)) {
+PinRequestWidget::PinRequestWidget(PinRequest request,
+                                   PinRequestView::Delegate* delegate)
+    : on_pin_request_done_(std::move(request.on_pin_request_done)) {
   views::Widget::InitParams widget_params;
   // Using window frameless to be able to get focus on the view input fields,
   // which does not work with popup type.
@@ -83,9 +83,9 @@ ParentAccessWidget::ParentAccessWidget(ParentAccessRequest request,
       Shell::GetPrimaryRootWindow()->GetChildById(parent_window_id);
   if (request.extra_dimmer)
     dimmer_ = std::make_unique<WindowDimmer>(widget_params.parent);
-  request.on_parent_access_done =
-      base::BindOnce(&ParentAccessWidget::Close, weak_factory_.GetWeakPtr());
-  widget_params.delegate = new ParentAccessView(std::move(request), delegate);
+  request.on_pin_request_done =
+      base::BindOnce(&PinRequestWidget::Close, weak_factory_.GetWeakPtr());
+  widget_params.delegate = new PinRequestView(std::move(request), delegate);
 
   widget_ = std::make_unique<views::Widget>();
   widget_->Init(std::move(widget_params));
@@ -93,9 +93,9 @@ ParentAccessWidget::ParentAccessWidget(ParentAccessRequest request,
   Show();
 }
 
-ParentAccessWidget::~ParentAccessWidget() = default;
+PinRequestWidget::~PinRequestWidget() = default;
 
-void ParentAccessWidget::Show() {
+void PinRequestWidget::Show() {
   if (dimmer_)
     dimmer_->window()->Show();
 
