@@ -44,4 +44,7 @@ interface WebTestClient {
   // flags (i.e. has set dump_as_text).
   WebTestRuntimeFlagsChanged(
       mojo_base.mojom.DictionaryValue changed_web_test_runtime_flags);
+
+  // Delete all cookies created in this associated storage context.
+  DeleteAllCookies();
 };

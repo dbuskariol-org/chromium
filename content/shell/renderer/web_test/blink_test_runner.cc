@@ -589,7 +589,7 @@ void BlinkTestRunner::CloseRemainingWindows() {
 }
 
 void BlinkTestRunner::DeleteAllCookies() {
-  Send(new WebTestHostMsg_DeleteAllCookies(routing_id()));
+  GetWebTestClientRemote().DeleteAllCookies();
 }
 
 int BlinkTestRunner::NavigationEntryCount() {

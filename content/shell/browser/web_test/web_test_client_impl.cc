@@ -22,6 +22,7 @@
 #include "content/test/mock_platform_notification_service.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
+#include "services/network/public/mojom/network_service.mojom.h"
 
 namespace content {
 
@@ -54,14 +55,23 @@ ContentIndexContext* GetContentIndexContext(const url::Origin& origin) {
 // static
 void WebTestClientImpl::Create(
     int render_process_id,
+    network::mojom::NetworkContext* network_context,
     mojo::PendingReceiver<mojom::WebTestClient> receiver) {
   mojo::MakeSelfOwnedReceiver(
-      std::make_unique<WebTestClientImpl>(render_process_id),
+      std::make_unique<WebTestClientImpl>(render_process_id, network_context),
       std::move(receiver));
 }
 
-WebTestClientImpl::WebTestClientImpl(int render_process_id)
-    : render_process_id_(render_process_id) {}
+WebTestClientImpl::WebTestClientImpl(
+    int render_process_id,
+    network::mojom::NetworkContext* network_context)
+    : render_process_id_(render_process_id) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  network_context->GetCookieManager(
+      cookie_manager_.BindNewPipeAndPassReceiver());
+}
+
+WebTestClientImpl::~WebTestClientImpl() = default;
 
 void WebTestClientImpl::InspectSecondaryWindow() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
@@ -171,6 +181,12 @@ void WebTestClientImpl::WebTestRuntimeFlagsChanged(
 
   BlinkTestController::Get()->OnWebTestRuntimeFlagsChanged(
       render_process_id_, *changed_web_test_runtime_flags_dictionary);
+}
+
+void WebTestClientImpl::DeleteAllCookies() {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  cookie_manager_->DeleteCookies(network::mojom::CookieDeletionFilter::New(),
+                                 base::BindOnce([](uint32_t) {}));
 }
 
 }  // namespace content
