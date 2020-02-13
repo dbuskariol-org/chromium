@@ -74,11 +74,6 @@ views::View* FindFirstOrLastFocusableChild(views::View* root,
       &dummy_focus_traversable, &dummy_focus_traversable_view);
 }
 
-bool IsInTabletMode() {
-  return Shell::Get()->tablet_mode_controller() &&
-         Shell::Get()->tablet_mode_controller()->InTabletMode();
-}
-
 }  // namespace
 
 // The contents view of the Shelf. In an active session, this is used to
@@ -304,7 +299,7 @@ void ShelfWidget::DelegateView::UpdateOpaqueBackground() {
   const Shelf* shelf = shelf_widget_->shelf();
   const ShelfBackgroundType background_type =
       shelf_widget_->GetBackgroundType();
-  const bool tablet_mode = IsInTabletMode();
+  const bool tablet_mode = Shell::Get()->IsInTabletMode();
   const bool in_app = ShelfConfig::Get()->is_in_app();
 
   bool show_opaque_background =
@@ -350,7 +345,7 @@ void ShelfWidget::DelegateView::UpdateOpaqueBackground() {
 }
 
 void ShelfWidget::DelegateView::UpdateDragHandle() {
-  if (!IsInTabletMode() || !ShelfConfig::Get()->is_in_app() ||
+  if (!Shell::Get()->IsInTabletMode() || !ShelfConfig::Get()->is_in_app() ||
       !chromeos::switches::ShouldShowShelfHotseat() ||
       hide_background_for_transitions_) {
     drag_handle_->SetVisible(false);
@@ -588,7 +583,7 @@ void ShelfWidget::RegisterHotseatWidget(HotseatWidget* hotseat_widget) {
 
 void ShelfWidget::OnTabletModeChanged() {
   // Resets |is_hotseat_forced_to_show| when leaving the tablet mode.
-  if (!IsInTabletMode())
+  if (!Shell::Get()->IsInTabletMode())
     is_hotseat_forced_to_show_ = false;
 }
 

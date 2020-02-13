@@ -42,7 +42,6 @@
 #include "ash/wm/overview/overview_controller.h"
 #include "ash/wm/screen_pinning_controller.h"
 #include "ash/wm/splitview/split_view_controller.h"
-#include "ash/wm/tablet_mode/tablet_mode_controller.h"
 #include "ash/wm/window_state.h"
 #include "ash/wm/window_util.h"
 #include "ash/wm/work_area_insets.h"
@@ -139,15 +138,9 @@ bool IsAppListWindow(const aura::Window* window) {
   return parent && parent->id() == kShellWindowId_AppListContainer;
 }
 
-bool IsTabletModeEnabled() {
-  // Shell could be destroying. Shell destroys TabletModeController before
-  // closing all windows.
-  return Shell::Get()->tablet_mode_controller() &&
-         Shell::Get()->tablet_mode_controller()->InTabletMode();
-}
-
 bool IsHotseatEnabled() {
-  return IsTabletModeEnabled() && chromeos::switches::ShouldShowShelfHotseat();
+  return Shell::Get()->IsInTabletMode() &&
+         chromeos::switches::ShouldShowShelfHotseat();
 }
 
 int GetOffset(int offset, bool from_touchpad) {
@@ -197,7 +190,7 @@ int GetShelfInset(ShelfVisibilityState visibility_state, int size) {
 // window.
 aura::Window* GetWindowForDragToHomeOrOverview(
     const gfx::Point& location_in_screen) {
-  if (!IsTabletModeEnabled())
+  if (!Shell::Get()->IsInTabletMode())
     return nullptr;
 
   auto mru_windows =
@@ -475,7 +468,8 @@ gfx::Rect ShelfLayoutManager::GetIdealBounds() const {
 }
 
 gfx::Rect ShelfLayoutManager::GetIdealBoundsForWorkAreaCalculation() const {
-  if (!IsTabletModeEnabled() || !chromeos::switches::ShouldShowShelfHotseat() ||
+  if (!Shell::Get()->IsInTabletMode() ||
+      !chromeos::switches::ShouldShowShelfHotseat() ||
       state_.session_state != session_manager::SessionState::ACTIVE) {
     return GetIdealBounds();
   }
@@ -787,7 +781,7 @@ ShelfBackgroundType ShelfLayoutManager::GetShelfBackgroundType() const {
   const bool in_overview =
       Shell::Get()->overview_controller() &&
       Shell::Get()->overview_controller()->InOverviewSession();
-  if (IsTabletModeEnabled()) {
+  if (Shell::Get()->IsInTabletMode()) {
     if (app_list_is_visible) {
       // If the home launcher is shown or mostly shown, show the home launcher
       // background. If it is mostly hidden, show the in-app or overview
@@ -819,7 +813,8 @@ ShelfBackgroundType ShelfLayoutManager::GetShelfBackgroundType() const {
     // When a window is maximized, if the auto-hide shelf is enabled and we are
     // in clamshell mode, the shelf will keep the default transparent
     // background.
-    if (!IsTabletModeEnabled() && state_.visibility_state == SHELF_AUTO_HIDE)
+    if (!Shell::Get()->IsInTabletMode() &&
+        state_.visibility_state == SHELF_AUTO_HIDE)
       return ShelfBackgroundType::kDefaultBg;
 
     return ShelfBackgroundType::kMaximized;
@@ -1583,7 +1578,7 @@ void ShelfLayoutManager::UpdateBoundsAndOpacity(bool animate) {
 bool ShelfLayoutManager::IsDraggingWindowFromTopOrCaptionArea() const {
   // Currently dragging maximized or fullscreen window from the top or the
   // caption area is only allowed in tablet mode.
-  if (!IsTabletModeEnabled())
+  if (!Shell::Get()->IsInTabletMode())
     return false;
 
   // TODO(minch): Check active window directly if removed search field
@@ -1865,7 +1860,7 @@ ShelfAutoHideState ShelfLayoutManager::CalculateAutoHideState(
   if (shelf_->auto_hide_lock())
     return state_.auto_hide_state;
 
-  const bool in_tablet_mode = IsTabletModeEnabled();
+  const bool in_tablet_mode = Shell::Get()->IsInTabletMode();
   // Don't let the shelf auto-hide when in tablet mode and Chromevox is on.
   if (in_tablet_mode &&
       Shell::Get()->accessibility_controller()->spoken_feedback_enabled()) {
@@ -1937,7 +1932,7 @@ base::Optional<ShelfAutoHideState>
 ShelfLayoutManager::CalculateAutoHideStateBasedOnCursorLocation() const {
   // No mouse is available in tablet mode. So there is no point to calculate
   // the auto-hide state by the cursor location in this scenario.
-  const bool in_tablet_mode = IsTabletModeEnabled();
+  const bool in_tablet_mode = Shell::Get()->IsInTabletMode();
   if (in_tablet_mode)
     return base::nullopt;
 
@@ -2023,7 +2018,8 @@ void ShelfLayoutManager::UpdateShelfVisibilityAfterLoginUIChange() {
 float ShelfLayoutManager::ComputeTargetOpacity(const State& state) const {
   // The shelf should not become transparent during the animation to or from
   // HomeLauncher.
-  if (chromeos::switches::ShouldShowShelfHotseat() && IsTabletModeEnabled() &&
+  if (chromeos::switches::ShouldShowShelfHotseat() &&
+      Shell::Get()->IsInTabletMode() &&
       Shell::Get()->app_list_controller()->home_launcher_transition_state() !=
           AppListControllerImpl::HomeLauncherTransitionState::kFinished) {
     return 1.0f;
@@ -2054,7 +2050,7 @@ float ShelfLayoutManager::ComputeTargetOpacity(const State& state) const {
 bool ShelfLayoutManager::IsShelfHiddenForFullscreen() const {
   // If the non-fullscreen app list should be shown, the shelf should not be
   // hidden.
-  if (!IsTabletModeEnabled() &&
+  if (!Shell::Get()->IsInTabletMode() &&
       Shell::Get()->app_list_controller()->GetTargetVisibility()) {
     return false;
   }
@@ -2258,7 +2254,7 @@ bool ShelfLayoutManager::StartAppListDrag(
     float scroll_y_hint) {
   // If the home screen is available, gesture dragging is handled by
   // HomeLauncherGestureHandler.
-  if (IsTabletModeEnabled() && event_in_screen.IsGestureEvent())
+  if (Shell::Get()->IsInTabletMode() && event_in_screen.IsGestureEvent())
     return false;
 
   // Fullscreen app list can only be dragged from bottom alignment shelf.
@@ -2304,7 +2300,7 @@ bool ShelfLayoutManager::StartShelfDrag(const ui::LocatedEvent& event_in_screen,
                                         const gfx::Vector2dF& scroll_hint) {
   // Disable the shelf dragging if the fullscreen app list is opened.
   if (Shell::Get()->app_list_controller()->IsVisible() &&
-      !IsTabletModeEnabled())
+      !Shell::Get()->IsInTabletMode())
     return false;
 
   // Also disable shelf drags until the overflow shelf is closed.
@@ -2430,7 +2426,8 @@ void ShelfLayoutManager::CompleteDrag(const ui::LocatedEvent& event_in_screen) {
     window_drag_controller_->FinalizeDraggedWindow();
 
   // Hotseat gestures are meaningful only in tablet mode with hotseat enabled.
-  if (chromeos::switches::ShouldShowShelfHotseat() && IsTabletModeEnabled()) {
+  if (chromeos::switches::ShouldShowShelfHotseat() &&
+      Shell::Get()->IsInTabletMode()) {
     base::Optional<InAppShelfGestures> gesture_to_record =
         CalculateHotseatGestureToRecord(window_drag_result,
                                         transitioned_from_overview_to_home,
@@ -2643,7 +2640,7 @@ bool ShelfLayoutManager::MaybeStartDragWindowFromShelf(
     const gfx::Vector2dF& scroll) {
   if (!features::IsDragFromShelfToHomeOrOverviewEnabled())
     return false;
-  if (!IsTabletModeEnabled())
+  if (!Shell::Get()->IsInTabletMode())
     return false;
   if (drag_status_ != kDragInProgress)
     return false;
