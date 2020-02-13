@@ -58,7 +58,7 @@ class GeometryStructTraitsTest
     std::move(callback).Run(r);
   }
 
-  void EchoRectF(const WebFloatRect& r, EchoRectFCallback callback) override {
+  void EchoRectF(const gfx::RectF& r, EchoRectFCallback callback) override {
     std::move(callback).Run(r);
   }
 
@@ -105,18 +105,5 @@ class GeometryStructTraitsTest
 
 }  // namespace
 
-
-TEST_F(GeometryStructTraitsTest, RectF) {
-  const float kX = 1.234;
-  const float kY = 2.345;
-  const float kWidth = 3.456;
-  const float kHeight = 4.567;
-  WebFloatRect input(kX, kY, kWidth, kHeight);
-  mojo::Remote<gfx::mojom::blink::GeometryTraitsTestService> proxy =
-      GetTraitsTestProxy();
-  WebFloatRect output;
-  proxy->EchoRectF(input, &output);
-  EXPECT_EQ(input, output);
-}
 
 }  // namespace blink

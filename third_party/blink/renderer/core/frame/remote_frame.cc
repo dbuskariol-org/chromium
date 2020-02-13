@@ -47,8 +47,8 @@
 namespace blink {
 
 namespace {
-FloatRect DeNormalizeRect(const WebFloatRect& normalized, const IntRect& base) {
-  FloatRect result = normalized;
+FloatRect DeNormalizeRect(const gfx::RectF& normalized, const IntRect& base) {
+  FloatRect result(normalized);
   result.Scale(base.Width(), base.Height());
   result.MoveBy(FloatPoint(base.Location()));
   return result;
