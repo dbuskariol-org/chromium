@@ -1210,6 +1210,8 @@ void FrameLoader::RestoreScrollPositionAndViewState(
   if (!NeedsHistoryItemRestore(load_type))
     return;
 
+  view->LayoutViewport()->SetPendingHistoryRestoreScrollOffset(
+      view_state, scroll_restoration_type != kScrollRestorationManual);
   view->GetScrollableArea()->SetPendingHistoryRestoreScrollOffset(
       view_state, scroll_restoration_type != kScrollRestorationManual);
 
