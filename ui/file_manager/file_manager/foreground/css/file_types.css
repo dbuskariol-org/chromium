@@ -803,7 +803,7 @@ body.files-ng [file-type-icon='android_files'] {
 }
 
 body.files-ng [file-type-icon='plugin_vm'] {
-  -webkit-mask-image: url(../images/volumes/plugin_vm.svg);
+  -webkit-mask-image: url(../images/volumes/plugin_vm_ng.svg);
   background-color: currentColor;
   background-image: none;
 }
