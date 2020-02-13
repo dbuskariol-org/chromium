@@ -6525,3 +6525,5 @@ crbug.com/1050559 [ Linux ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.http
 crbug.com/webrtc/7061 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 crbug.com/webrtc/7061 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 
+# DevTools roll
+crbug.com/1006759 http/tests/devtools/elements/styles-1/edit-value-url-with-color.js [ Skip ]
