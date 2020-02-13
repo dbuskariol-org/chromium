@@ -1595,50 +1595,47 @@ network::mojom::blink::ContentSecurityPolicyPtr
 CSPDirectiveList::ExposeForNavigationalChecks() const {
   using CSPDirectiveName = network::mojom::blink::CSPDirectiveName;
 
-  WTF::Vector<network::mojom::blink::CSPDirectivePtr> directives;
+  auto policy = network::mojom::blink::ContentSecurityPolicy::New();
+
+  policy->use_reporting_api = use_reporting_api_;
+  policy->report_endpoints = report_endpoints_;
+  policy->header = network::mojom::blink::ContentSecurityPolicyHeader::New(
+      header_, header_type_, header_source_);
 
   if (child_src_) {
-    directives.push_back(network::mojom::blink::CSPDirective::New(
-        CSPDirectiveName::ChildSrc, child_src_->ExposeForNavigationalChecks()));
+    policy->directives.Set(CSPDirectiveName::ChildSrc,
+                           child_src_->ExposeForNavigationalChecks());
   }
 
   if (default_src_) {
-    directives.push_back(network::mojom::blink::CSPDirective::New(
-        CSPDirectiveName::DefaultSrc,
-        default_src_->ExposeForNavigationalChecks()));
+    policy->directives.Set(CSPDirectiveName::DefaultSrc,
+                           default_src_->ExposeForNavigationalChecks());
   }
 
   if (form_action_) {
-    directives.push_back(network::mojom::blink::CSPDirective::New(
-        CSPDirectiveName::FormAction,
-        form_action_->ExposeForNavigationalChecks()));
+    policy->directives.Set(CSPDirectiveName::FormAction,
+                           form_action_->ExposeForNavigationalChecks());
   }
 
   if (frame_src_) {
-    directives.push_back(network::mojom::blink::CSPDirective::New(
-        CSPDirectiveName::FrameSrc, frame_src_->ExposeForNavigationalChecks()));
+    policy->directives.Set(CSPDirectiveName::FrameSrc,
+                           frame_src_->ExposeForNavigationalChecks());
   }
 
   if (navigate_to_) {
-    directives.push_back(network::mojom::blink::CSPDirective::New(
-        CSPDirectiveName::NavigateTo,
-        navigate_to_->ExposeForNavigationalChecks()));
+    policy->directives.Set(CSPDirectiveName::NavigateTo,
+                           navigate_to_->ExposeForNavigationalChecks());
   }
 
   if (upgrade_insecure_requests_) {
     auto empty_source_list = network::mojom::blink::CSPSourceList::New(
         WTF::Vector<network::mojom::blink::CSPSourcePtr>(), false, false,
         false);
-    directives.push_back(network::mojom::blink::CSPDirective::New(
-        CSPDirectiveName::UpgradeInsecureRequests,
-        std::move(empty_source_list)));
+    policy->directives.Set(CSPDirectiveName::UpgradeInsecureRequests,
+                           std::move(empty_source_list));
   }
 
-  return network::mojom::blink::ContentSecurityPolicy::New(
-      std::move(directives),
-      network::mojom::blink::ContentSecurityPolicyHeader::New(
-          header_, header_type_, header_source_),
-      use_reporting_api_, report_endpoints_);
+  return policy;
 }
 
 bool CSPDirectiveList::IsObjectRestrictionReasonable() const {
