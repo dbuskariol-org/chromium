@@ -220,4 +220,11 @@ void WebTestClientImpl::RegisterIsolatedFileSystem(
   std::move(callback).Run(filesystem_id);
 }
 
+void WebTestClientImpl::SetFilePathForMockFileDialog(
+    const base::FilePath& path) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  if (BlinkTestController::Get())
+    BlinkTestController::Get()->SetFilePathForMockFileDialog(path);
+}
+
 }  // namespace content

@@ -398,7 +398,7 @@ base::FilePath BlinkTestRunner::GetWritableDirectory() {
 }
 
 void BlinkTestRunner::SetFilePathForMockFileDialog(const base::FilePath& path) {
-  Send(new WebTestHostMsg_SetFilePathForMockFileDialog(routing_id(), path));
+  GetWebTestClientRemote().SetFilePathForMockFileDialog(path);
 }
 
 void BlinkTestRunner::OnWebTestRuntimeFlagsChanged(

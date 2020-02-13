@@ -29,9 +29,6 @@ IPC_MESSAGE_ROUTED2(WebTestHostMsg_InitiateCaptureDump,
                     bool /* should dump navigation history */,
                     bool /* should dump pixels */)
 
-IPC_MESSAGE_ROUTED1(WebTestHostMsg_SetFilePathForMockFileDialog,
-                    base::FilePath /* local_path */)
-
 // Used send flag changes to renderers - either when
 // 1) broadcasting change happening in one renderer to all other renderers, or
 // 2) sending accumulated changes to a single new renderer.

@@ -62,4 +62,8 @@ interface WebTestClient {
   RegisterIsolatedFileSystem(
       array<mojo_base.mojom.FilePath> absolute_filenames)
           => (string filesystem_id);
+
+  // For the duration of the current test this causes all file choosers to
+  // return the passed in |path|.
+  SetFilePathForMockFileDialog(mojo_base.mojom.FilePath path);
 };
