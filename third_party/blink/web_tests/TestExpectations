@@ -6523,3 +6523,4 @@ crbug.com/webrtc/7061 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConne
 
 # DevTools roll
 crbug.com/1006759 http/tests/devtools/elements/styles-1/edit-value-url-with-color.js [ Skip ]
+crbug.com/1006759 http/tests/devtools/sources/css-outline-dialog.js [ Skip ]
