@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_COMPONENTS_CURSOR_CURSOR_VIEW_H_
-#define ASH_COMPONENTS_CURSOR_CURSOR_VIEW_H_
+#ifndef ASH_FAST_INK_CURSOR_CURSOR_VIEW_H_
+#define ASH_FAST_INK_CURSOR_CURSOR_VIEW_H_
 
-#include "ash/components/fast_ink/fast_ink_view.h"
+#include "ash/fast_ink/fast_ink_view.h"
 #include "base/sequence_checker.h"
 #include "base/timer/timer.h"
 #include "components/viz/common/frame_sinks/delay_based_time_source.h"
@@ -94,4 +94,4 @@ class CursorView : public fast_ink::FastInkView,
 
 }  // namespace cursor
 
-#endif  // ASH_COMPONENTS_CURSOR_CURSOR_VIEW_H_
+#endif  // ASH_FAST_INK_CURSOR_CURSOR_VIEW_H_

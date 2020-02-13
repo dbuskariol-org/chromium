@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_LASER_LASER_SEGMENT_UTILS_H_
-#define ASH_LASER_LASER_SEGMENT_UTILS_H_
+#ifndef ASH_FAST_INK_LASER_LASER_SEGMENT_UTILS_H_
+#define ASH_FAST_INK_LASER_LASER_SEGMENT_UTILS_H_
 
 #include <vector>
 
@@ -12,7 +12,7 @@
 namespace gfx {
 class PointF;
 class Vector2dF;
-}
+}  // namespace gfx
 
 namespace ash {
 
@@ -54,4 +54,4 @@ bool ASH_EXPORT IsFirstPointSmallerAngle(const gfx::PointF& start_point,
 
 }  // namespace ash
 
-#endif  // ASH_LASER_LASER_SEGMENT_UTILS_H_
+#endif  // ASH_FAST_INK_LASER_LASER_SEGMENT_UTILS_H_

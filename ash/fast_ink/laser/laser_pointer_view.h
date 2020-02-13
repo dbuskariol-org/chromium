@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_LASER_LASER_POINTER_VIEW_H_
-#define ASH_LASER_LASER_POINTER_VIEW_H_
+#ifndef ASH_FAST_INK_LASER_LASER_POINTER_VIEW_H_
+#define ASH_FAST_INK_LASER_LASER_POINTER_VIEW_H_
 
-#include "ash/components/fast_ink/fast_ink_points.h"
-#include "ash/components/fast_ink/fast_ink_view.h"
+#include "ash/fast_ink/fast_ink_points.h"
+#include "ash/fast_ink/fast_ink_view.h"
 #include "base/timer/timer.h"
 
 namespace ash {
@@ -56,4 +56,4 @@ class LaserPointerView : public fast_ink::FastInkView {
 
 }  // namespace ash
 
-#endif  // ASH_LASER_LASER_POINTER_VIEW_H_
+#endif  // ASH_FAST_INK_LASER_LASER_POINTER_VIEW_H_

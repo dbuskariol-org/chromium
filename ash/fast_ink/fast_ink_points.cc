@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/fast_ink/fast_ink_points.h"
+#include "ash/fast_ink/fast_ink_points.h"
 
 #include <algorithm>
 #include <array>

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/laser/laser_segment_utils.h"
+#include "ash/fast_ink/laser/laser_segment_utils.h"
 #include "ash/test/ash_test_base.h"
 #include "ui/gfx/geometry/angle_conversions.h"
 #include "ui/gfx/geometry/point.h"
@@ -17,7 +17,7 @@ namespace {
 // each other, checking for equality up to 5 significant figures is more than
 // enough.
 const float kEpsilon = 0.0001f;
-}
+}  // namespace
 
 // Helper function to check if a given |point| has the |expected_angle_degree|
 // in the coordinate system formed by |origin| and |direction|.

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/fast_ink/fast_ink_view.h"
+#include "ash/fast_ink/fast_ink_view.h"
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>

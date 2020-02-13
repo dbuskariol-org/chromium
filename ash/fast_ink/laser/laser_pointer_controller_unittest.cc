@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/laser/laser_pointer_controller.h"
+#include "ash/fast_ink/laser/laser_pointer_controller.h"
 
-#include "ash/laser/laser_pointer_controller_test_api.h"
-#include "ash/laser/laser_pointer_view.h"
+#include "ash/fast_ink/laser/laser_pointer_controller_test_api.h"
+#include "ash/fast_ink/laser/laser_pointer_view.h"
 #include "ash/shell.h"
 #include "ash/test/ash_test_base.h"
 #include "ui/events/test/event_generator.h"

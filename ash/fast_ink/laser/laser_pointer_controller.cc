@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/laser/laser_pointer_controller.h"
+#include "ash/fast_ink/laser/laser_pointer_controller.h"
 
 #include <memory>
 
-#include "ash/laser/laser_pointer_view.h"
+#include "ash/fast_ink/laser/laser_pointer_view.h"
 #include "ash/public/cpp/shell_window_ids.h"
 #include "ash/shell.h"
 #include "ash/system/palette/palette_utils.h"

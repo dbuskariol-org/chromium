@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_COMPONENTS_FAST_INK_FAST_INK_POINTER_CONTROLLER_H_
-#define ASH_COMPONENTS_FAST_INK_FAST_INK_POINTER_CONTROLLER_H_
+#ifndef ASH_FAST_INK_FAST_INK_POINTER_CONTROLLER_H_
+#define ASH_FAST_INK_FAST_INK_POINTER_CONTROLLER_H_
 
 #include "base/macros.h"
 #include "base/time/time.h"
@@ -63,4 +63,4 @@ class FastInkPointerController : public ui::EventHandler {
 
 }  // namespace fast_ink
 
-#endif  // ASH_COMPONENTS_FAST_INK_FAST_INK_POINTER_CONTROLLER_H_
+#endif  // ASH_FAST_INK_FAST_INK_POINTER_CONTROLLER_H_

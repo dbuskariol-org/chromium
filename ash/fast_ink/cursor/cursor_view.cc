@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/cursor/cursor_view.h"
+#include "ash/fast_ink/cursor/cursor_view.h"
 
 #include "base/bind.h"
 #include "base/task/post_task.h"

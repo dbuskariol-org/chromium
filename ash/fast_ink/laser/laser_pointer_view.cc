@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/laser/laser_pointer_view.h"
+#include "ash/fast_ink/laser/laser_pointer_view.h"
 
-#include "ash/laser/laser_segment_utils.h"
+#include "ash/fast_ink/laser/laser_segment_utils.h"
 #include "base/bind.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "third_party/skia/include/core/SkColor.h"

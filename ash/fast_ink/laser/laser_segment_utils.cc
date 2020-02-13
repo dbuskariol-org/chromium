@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/laser/laser_segment_utils.h"
+#include "ash/fast_ink/laser/laser_segment_utils.h"
 
 #include <cmath>
 #include <limits>
@@ -26,7 +26,7 @@ float QuadraticEquation(bool use_plus, float a, float b, float c) {
   return (-1.0f * b + sqrt(b * b - 4.0f * a * c) * (use_plus ? 1.0f : -1.0f)) /
          (2.0f * a);
 }
-}
+}  // namespace
 
 float AngleOfPointInNewCoordinates(const gfx::PointF& origin,
                                    const gfx::Vector2dF& direction,

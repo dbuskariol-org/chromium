@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_COMPONENTS_FAST_INK_FAST_INK_VIEW_H_
-#define ASH_COMPONENTS_FAST_INK_FAST_INK_VIEW_H_
+#ifndef ASH_FAST_INK_FAST_INK_VIEW_H_
+#define ASH_FAST_INK_FAST_INK_VIEW_H_
 
 #include <memory>
 #include <vector>
@@ -22,7 +22,7 @@ class Window;
 namespace gfx {
 class GpuMemoryBuffer;
 struct PresentationFeedback;
-}
+}  // namespace gfx
 
 namespace views {
 class Widget;
@@ -104,4 +104,4 @@ class FastInkView : public views::View {
 
 }  // namespace fast_ink
 
-#endif  // ASH_COMPONENTS_FAST_INK_FAST_INK_VIEW_H_
+#endif  // ASH_FAST_INK_FAST_INK_VIEW_H_
