@@ -402,6 +402,28 @@ void IndexedDBContextImpl::GetAllOriginsDetails(
   std::move(callback).Run(is_incognito(), std::move(list));
 }
 
+void IndexedDBContextImpl::SetForceKeepSessionState() {
+  force_keep_session_state_ = true;
+}
+
+void IndexedDBContextImpl::BindTestInterface(
+    mojo::PendingReceiver<storage::mojom::IndexedDBControlTest> receiver) {
+  DCHECK(IDBTaskRunner()->RunsTasksInCurrentSequence());
+  test_receivers_.Add(this, std::move(receiver));
+}
+
+void IndexedDBContextImpl::GetFilePathForTesting(
+    const Origin& origin,
+    GetFilePathForTestingCallback callback) {
+  std::move(callback).Run(GetLevelDBPath(origin));
+}
+
+void IndexedDBContextImpl::ResetCachesForTesting(base::OnceClosure callback) {
+  origin_set_.reset();
+  origin_size_map_.clear();
+  std::move(callback).Run();
+}
+
 void IndexedDBContextImpl::ForceCloseSync(
     const Origin& origin,
     storage::mojom::ForceCloseReason reason) {
@@ -551,20 +573,6 @@ std::vector<base::FilePath> IndexedDBContextImpl::GetStoragePaths(
   std::vector<base::FilePath> paths = {GetLevelDBPath(origin),
                                        GetBlobStorePath(origin)};
   return paths;
-}
-
-base::FilePath IndexedDBContextImpl::GetFilePathForTesting(
-    const Origin& origin) {
-  return GetLevelDBPath(origin);
-}
-
-void IndexedDBContextImpl::ResetCachesForTesting() {
-  origin_set_.reset();
-  origin_size_map_.clear();
-}
-
-void IndexedDBContextImpl::SetForceKeepSessionState() {
-  force_keep_session_state_ = true;
 }
 
 void IndexedDBContextImpl::FactoryOpened(const Origin& origin) {

@@ -19,6 +19,7 @@
 #include "base/macros.h"
 #include "base/strings/string16.h"
 #include "components/services/storage/public/mojom/indexed_db_control.mojom.h"
+#include "components/services/storage/public/mojom/indexed_db_control_test.mojom.h"
 #include "components/services/storage/public/mojom/native_file_system_context.mojom.h"
 #include "content/browser/browser_main_loop.h"
 #include "content/browser/indexed_db/indexed_db_backing_store.h"
@@ -48,7 +49,8 @@ class IndexedDBFactoryImpl;
 
 class CONTENT_EXPORT IndexedDBContextImpl
     : public IndexedDBContext,
-      public storage::mojom::IndexedDBControl {
+      public storage::mojom::IndexedDBControl,
+      public storage::mojom::IndexedDBControlTest {
  public:
   class Observer {
    public:
@@ -95,6 +97,14 @@ class CONTENT_EXPORT IndexedDBContextImpl
                           DownloadOriginDataCallback callback) override;
   void GetAllOriginsDetails(GetAllOriginsDetailsCallback callback) override;
   void SetForceKeepSessionState() override;
+  void BindTestInterface(
+      mojo::PendingReceiver<storage::mojom::IndexedDBControlTest> receiver)
+      override;
+
+  // mojom::IndexedDBControlTest implementation:
+  void GetFilePathForTesting(const url::Origin& origin,
+                             GetFilePathForTestingCallback callback) override;
+  void ResetCachesForTesting(base::OnceClosure callback) override;
 
   // TODO(enne): fix internal indexeddb callers to use ForceClose async instead.
   void ForceCloseSync(const url::Origin& origin,
@@ -113,8 +123,6 @@ class CONTENT_EXPORT IndexedDBContextImpl
   base::SequencedTaskRunner* IDBTaskRunner() override;
   void CopyOriginData(const url::Origin& origin,
                       IndexedDBContext* dest_context) override;
-  base::FilePath GetFilePathForTesting(const url::Origin& origin) override;
-  void ResetCachesForTesting() override;
 
   // Methods called by IndexedDBFactoryImpl or IndexedDBDispatcherHost for
   // quota support.
@@ -224,6 +232,7 @@ class CONTENT_EXPORT IndexedDBContextImpl
   base::Clock* clock_;
 
   mojo::ReceiverSet<storage::mojom::IndexedDBControl> receivers_;
+  mojo::ReceiverSet<storage::mojom::IndexedDBControlTest> test_receivers_;
 
   DISALLOW_COPY_AND_ASSIGN(IndexedDBContextImpl);
 };

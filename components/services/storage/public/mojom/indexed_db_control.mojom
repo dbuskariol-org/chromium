@@ -4,6 +4,7 @@
 
 module storage.mojom;
 
+import "components/services/storage/public/mojom/indexed_db_control_test.mojom";
 import "mojo/public/mojom/base/file_path.mojom";
 import "mojo/public/mojom/base/values.mojom";
 import "mojo/public/mojom/base/time.mojom";
@@ -68,4 +69,8 @@ interface IndexedDBControl {
   // Disables the exit-time deletion of session-only data, so that internal
   // restarts can preserve that data.
   SetForceKeepSessionState();
+
+  // Binds the testing interface for extra functionality only available in
+  // tests.
+  BindTestInterface(pending_receiver<IndexedDBControlTest> receiver);
 };
