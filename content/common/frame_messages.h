@@ -587,13 +587,6 @@ IPC_MESSAGE_ROUTED1(FrameMsg_SetAccessibilityMode, ui::AXMode)
 // container policy.
 IPC_MESSAGE_ROUTED1(FrameMsg_DidUpdateFramePolicy, blink::FramePolicy)
 
-// Sent to a frame proxy after navigation, when the active sandbox flags on its
-// real frame have been updated by a CSP header which sets sandbox flags, or
-// when the feature policy header has been set.
-IPC_MESSAGE_ROUTED2(FrameMsg_DidSetFramePolicyHeaders,
-                    blink::WebSandboxFlags,
-                    blink::ParsedFeaturePolicy)
-
 // Update a proxy's window.name property.  Used when the frame's name is
 // changed in another process.
 IPC_MESSAGE_ROUTED2(FrameMsg_DidUpdateName,
