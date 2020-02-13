@@ -1074,6 +1074,9 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kBrowserSwitcherChromeParameters,
     browser_switcher::prefs::kChromeParameters,
     base::Value::Type::LIST },
+  { key::kNativeWindowOcclusionEnabled,
+    policy::policy_prefs::kNativeWindowOcclusionEnabled,
+    base::Value::Type::BOOLEAN },
 #else  // defined(OS_WIN)
   { key::kNtlmV2Enabled,
     prefs::kNtlmV2Enabled,

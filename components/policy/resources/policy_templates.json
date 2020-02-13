@@ -1275,6 +1275,31 @@
       If this policy is left not set, this will be enabled but the user will be able to change it.''',
     },
     {
+      'name': 'NativeWindowOcclusionEnabled',
+      'owners': ['file://components/policy/resources/OWNERS'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': [
+        'chrome.win:81-',
+      ],
+      'features': {
+        'can_be_recommended': False,
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'example_value': True,
+      'id': 675,
+      'caption': '''Enable Native Window Occlusion''',
+      'tags': [],
+      'desc': '''Enables native window occlusion in <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph>.
+
+      If you enable this setting, to reduce CPU and power consumption <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will detect when a window is covered by other windows, and will suspend work painting pixels.
+
+      If you disable this setting <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not detect when a window is covered by other windows.
+
+      If this policy is left not set, occlusion detection will be enabled.''',
+    },
+    {
       'name': 'DnsPrefetchingEnabled',
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
@@ -20753,6 +20778,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 546, 562, 569, 578],
-  'highest_id_currently_used': 674,
+  'highest_id_currently_used': 675,
   'highest_atomic_group_id_currently_used': 38
 }
