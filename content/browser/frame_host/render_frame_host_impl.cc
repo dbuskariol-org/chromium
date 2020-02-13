@@ -65,6 +65,7 @@
 #include "content/browser/frame_host/render_frame_proxy_host.h"
 #include "content/browser/generic_sensor/sensor_provider_proxy_impl.h"
 #include "content/browser/geolocation/geolocation_service_impl.h"
+#include "content/browser/gpu/gpu_data_manager_impl.h"
 #include "content/browser/installedapp/installed_app_provider_impl.h"
 #include "content/browser/interface_provider_filtering.h"
 #include "content/browser/loader/file_url_loader_factory.h"
@@ -165,6 +166,7 @@
 #include "content/public/common/referrer_type_converters.h"
 #include "content/public/common/service_manager_connection.h"
 #include "content/public/common/service_names.mojom.h"
+#include "content/public/common/three_d_api_types.h"
 #include "content/public/common/url_constants.h"
 #include "content/public/common/url_utils.h"
 #include "device/gamepad/gamepad_monitor.h"
@@ -3254,6 +3256,13 @@ void RenderFrameHostImpl::RunBeforeUnloadConfirm(
 
   delegate_->RunBeforeUnloadConfirm(this, is_reload,
                                     std::move(dialog_closed_callback));
+}
+
+void RenderFrameHostImpl::Are3DAPIsBlocked(Are3DAPIsBlockedCallback callback) {
+  bool blocked = GpuDataManagerImpl::GetInstance()->Are3DAPIsBlocked(
+      frame_tree_node_->frame_tree()->GetMainFrame()->GetLastCommittedURL(),
+      GetProcess()->GetID(), GetRoutingID(), THREE_D_API_TYPE_WEBGL);
+  std::move(callback).Run(blocked);
 }
 
 void RenderFrameHostImpl::RequestTextSurroundingSelection(
