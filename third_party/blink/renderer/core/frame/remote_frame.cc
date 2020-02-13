@@ -104,10 +104,11 @@ void RemoteFrame::Navigate(FrameLoadRequest& frame_request,
   const KURL& url = frame_request.GetResourceRequest().Url();
   if (!frame_request.CanDisplay(url)) {
     if (frame_request.OriginDocument()) {
-      frame_request.OriginDocument()->AddConsoleMessage(ConsoleMessage::Create(
-          mojom::ConsoleMessageSource::kSecurity,
-          mojom::ConsoleMessageLevel::kError,
-          "Not allowed to load local resource: " + url.ElidedString()));
+      frame_request.OriginDocument()->AddConsoleMessage(
+          MakeGarbageCollected<ConsoleMessage>(
+              mojom::ConsoleMessageSource::kSecurity,
+              mojom::ConsoleMessageLevel::kError,
+              "Not allowed to load local resource: " + url.ElidedString()));
     }
     return;
   }

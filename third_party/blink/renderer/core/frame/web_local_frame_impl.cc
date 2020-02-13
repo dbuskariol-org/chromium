@@ -2503,7 +2503,7 @@ void WebLocalFrameImpl::AddMessageToConsoleImpl(
     bool discard_duplicates) {
   DCHECK(GetFrame());
   GetFrame()->GetDocument()->AddConsoleMessage(
-      ConsoleMessage::CreateFromWebConsoleMessage(message, GetFrame()),
+      MakeGarbageCollected<ConsoleMessage>(message, GetFrame()),
       discard_duplicates);
 }
 

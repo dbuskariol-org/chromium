@@ -18,6 +18,7 @@
 #include "third_party/blink/renderer/core/html/html_script_element.h"
 #include "third_party/blink/renderer/core/inspector/console_message.h"
 #include "third_party/blink/renderer/platform/crypto.h"
+#include "third_party/blink/renderer/platform/heap/heap.h"
 #include "third_party/blink/renderer/platform/instrumentation/use_counter.h"
 #include "third_party/blink/renderer/platform/network/content_security_policy_parsers.h"
 #include "third_party/blink/renderer/platform/weborigin/kurl.h"
@@ -190,9 +191,9 @@ void CSPDirectiveList::ReportViolation(
     const String& sample_prefix) const {
   String message =
       IsReportOnly() ? "[Report Only] " + console_message : console_message;
-  policy_->LogToConsole(
-      ConsoleMessage::Create(mojom::ConsoleMessageSource::kSecurity,
-                             mojom::ConsoleMessageLevel::kError, message));
+  policy_->LogToConsole(MakeGarbageCollected<ConsoleMessage>(
+      mojom::ConsoleMessageSource::kSecurity,
+      mojom::ConsoleMessageLevel::kError, message));
   policy_->ReportViolation(directive_text, effective_type, message, blocked_url,
                            report_endpoints_, use_reporting_api_, header_,
                            header_type_, violation_type,
@@ -211,10 +212,10 @@ void CSPDirectiveList::ReportViolationWithFrame(
     LocalFrame* frame) const {
   String message =
       IsReportOnly() ? "[Report Only] " + console_message : console_message;
-  policy_->LogToConsole(
-      ConsoleMessage::Create(mojom::ConsoleMessageSource::kSecurity,
-                             mojom::ConsoleMessageLevel::kError, message),
-      frame);
+  policy_->LogToConsole(MakeGarbageCollected<ConsoleMessage>(
+                            mojom::ConsoleMessageSource::kSecurity,
+                            mojom::ConsoleMessageLevel::kError, message),
+                        frame);
   policy_->ReportViolation(directive_text, effective_type, message, blocked_url,
                            report_endpoints_, use_reporting_api_, header_,
                            header_type_, ContentSecurityPolicy::kURLViolation,
@@ -234,7 +235,7 @@ void CSPDirectiveList::ReportViolationWithLocation(
       IsReportOnly() ? "[Report Only] " + console_message : console_message;
   std::unique_ptr<SourceLocation> source_location =
       SourceLocation::Capture(context_url, context_line.OneBasedInt(), 0);
-  policy_->LogToConsole(ConsoleMessage::Create(
+  policy_->LogToConsole(MakeGarbageCollected<ConsoleMessage>(
       mojom::ConsoleMessageSource::kSecurity,
       mojom::ConsoleMessageLevel::kError, message, source_location->Clone()));
   policy_->ReportViolation(directive_text, effective_type, message, blocked_url,
@@ -259,7 +260,7 @@ void CSPDirectiveList::ReportEvalViolation(
   // a violation.)
   if (IsReportOnly() ||
       exception_status == ContentSecurityPolicy::kWillNotThrowException) {
-    ConsoleMessage* console_message = ConsoleMessage::Create(
+    auto* console_message = MakeGarbageCollected<ConsoleMessage>(
         mojom::ConsoleMessageSource::kSecurity,
         mojom::ConsoleMessageLevel::kError, report_message);
     policy_->LogToConsole(console_message);
