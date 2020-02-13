@@ -799,7 +799,7 @@ CSSValue* ConsumeBackgroundComponent(CSSPropertyID resolved_property,
       return ConsumeBackgroundBox(range);
     case CSSPropertyID::kBackgroundImage:
     case CSSPropertyID::kWebkitMaskImage:
-      return css_property_parser_helpers::ConsumeImageOrNone(range, &context);
+      return css_property_parser_helpers::ConsumeImageOrNone(range, context);
     case CSSPropertyID::kBackgroundPositionX:
     case CSSPropertyID::kWebkitMaskPositionX:
       return ConsumePositionLonghand<CSSValueID::kLeft, CSSValueID::kRight>(
@@ -1028,7 +1028,7 @@ bool ConsumeBorderImageComponents(CSSParserTokenRange& range,
                                   DefaultFill default_fill) {
   do {
     if (!source) {
-      source = css_property_parser_helpers::ConsumeImageOrNone(range, &context);
+      source = css_property_parser_helpers::ConsumeImageOrNone(range, context);
       if (source)
         continue;
     }
@@ -2677,7 +2677,7 @@ CSSValue* ParsePaintStroke(CSSParserTokenRange& range,
   if (range.Peek().Id() == CSSValueID::kNone)
     return css_property_parser_helpers::ConsumeIdent(range);
   cssvalue::CSSURIValue* url =
-      css_property_parser_helpers::ConsumeUrl(range, &context);
+      css_property_parser_helpers::ConsumeUrl(range, context);
   if (url) {
     CSSValue* parsed_value = nullptr;
     if (range.Peek().Id() == CSSValueID::kNone) {

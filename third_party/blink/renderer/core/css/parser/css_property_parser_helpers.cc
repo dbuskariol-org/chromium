@@ -45,12 +45,12 @@ namespace {
 bool AddCSSPaintArgument(
     const Vector<CSSParserToken>& tokens,
     Vector<scoped_refptr<CSSVariableData>>* const variable_data,
-    const CSSParserContext* context) {
+    const CSSParserContext& context) {
   CSSParserTokenRange token_range(tokens);
   if (!token_range.AtEnd()) {
     scoped_refptr<CSSVariableData> unparsed_css_variable_data =
-        CSSVariableData::Create(token_range, false, false, context->BaseURL(),
-                                context->Charset());
+        CSSVariableData::Create(token_range, false, false, context.BaseURL(),
+                                context.Charset());
     if (unparsed_css_variable_data.get()) {
       variable_data->push_back(std::move(unparsed_css_variable_data));
       return true;
@@ -684,7 +684,7 @@ CSSStringValue* ConsumeString(CSSParserTokenRange& range) {
 }
 
 StringView ConsumeUrlAsStringView(CSSParserTokenRange& range,
-                                  const CSSParserContext* context) {
+                                  const CSSParserContext& context) {
   StringView url;
   const CSSParserToken& token = range.Peek();
   if (token.GetType() == kUrlToken) {
@@ -705,7 +705,7 @@ StringView ConsumeUrlAsStringView(CSSParserTokenRange& range,
   // Invalidate the URL if only data URLs are allowed and the protocol is not
   // data.
   if (!url.IsNull() &&
-      context->ResourceFetchRestriction() ==
+      context.ResourceFetchRestriction() ==
           ResourceFetchRestriction::kOnlyDataUrls &&
       !ProtocolIs(url.ToString(), "data")) {
     // The StringView must be instantiated with an empty string otherwise the
@@ -718,13 +718,13 @@ StringView ConsumeUrlAsStringView(CSSParserTokenRange& range,
 }
 
 cssvalue::CSSURIValue* ConsumeUrl(CSSParserTokenRange& range,
-                                  const CSSParserContext* context) {
+                                  const CSSParserContext& context) {
   StringView url = ConsumeUrlAsStringView(range, context);
   if (url.IsNull())
     return nullptr;
   AtomicString url_string(url.ToString());
   return MakeGarbageCollected<cssvalue::CSSURIValue>(
-      url_string, context->CompleteURL(url_string));
+      url_string, context.CompleteURL(url_string));
 }
 
 static int ClampRGBComponent(const CSSPrimitiveValue& value) {
@@ -1642,7 +1642,7 @@ static CSSValue* ConsumeConicGradient(CSSParserTokenRange& args,
 }
 
 CSSValue* ConsumeImageOrNone(CSSParserTokenRange& range,
-                             const CSSParserContext* context) {
+                             const CSSParserContext& context) {
   if (range.Peek().Id() == CSSValueID::kNone)
     return ConsumeIdent(range);
   return ConsumeImage(range, context);
@@ -1673,10 +1673,10 @@ CSSValue* ConsumeAxis(CSSParserTokenRange& range,
 
 static CSSValue* ConsumeCrossFade(CSSParserTokenRange& args,
                                   const CSSParserContext& context) {
-  CSSValue* from_image_value = ConsumeImageOrNone(args, &context);
+  CSSValue* from_image_value = ConsumeImageOrNone(args, context);
   if (!from_image_value || !ConsumeCommaIncludingWhitespace(args))
     return nullptr;
-  CSSValue* to_image_value = ConsumeImageOrNone(args, &context);
+  CSSValue* to_image_value = ConsumeImageOrNone(args, context);
   if (!to_image_value || !ConsumeCommaIncludingWhitespace(args))
     return nullptr;
 
@@ -1699,9 +1699,9 @@ static CSSValue* ConsumeCrossFade(CSSParserTokenRange& args,
 }
 
 static CSSValue* ConsumePaint(CSSParserTokenRange& args,
-                              const CSSParserContext* context) {
+                              const CSSParserContext& context) {
   const CSSParserToken& name_token = args.ConsumeIncludingWhitespace();
-  CSSCustomIdentValue* name = ConsumeCustomIdentWithToken(name_token, *context);
+  CSSCustomIdentValue* name = ConsumeCustomIdentWithToken(name_token, context);
   if (!name)
     return nullptr;
 
@@ -1739,51 +1739,49 @@ static CSSValue* ConsumePaint(CSSParserTokenRange& args,
   return MakeGarbageCollected<CSSPaintValue>(name, variable_data);
 }
 
-// TODO(xiaochengh): |context| is always non-null. Turn it into a reference to
-// avoid confusions.
 static CSSValue* ConsumeGeneratedImage(CSSParserTokenRange& range,
-                                       const CSSParserContext* context) {
+                                       const CSSParserContext& context) {
   CSSValueID id = range.Peek().FunctionId();
   CSSParserTokenRange range_copy = range;
   CSSParserTokenRange args = ConsumeFunction(range_copy);
   CSSValue* result = nullptr;
   if (id == CSSValueID::kRadialGradient) {
-    result = ConsumeRadialGradient(args, *context, cssvalue::kNonRepeating);
+    result = ConsumeRadialGradient(args, context, cssvalue::kNonRepeating);
   } else if (id == CSSValueID::kRepeatingRadialGradient) {
-    result = ConsumeRadialGradient(args, *context, cssvalue::kRepeating);
+    result = ConsumeRadialGradient(args, context, cssvalue::kRepeating);
   } else if (id == CSSValueID::kWebkitLinearGradient) {
-    context->Count(WebFeature::kDeprecatedWebKitLinearGradient);
-    result = ConsumeLinearGradient(args, *context, cssvalue::kNonRepeating,
+    context.Count(WebFeature::kDeprecatedWebKitLinearGradient);
+    result = ConsumeLinearGradient(args, context, cssvalue::kNonRepeating,
                                    cssvalue::kCSSPrefixedLinearGradient);
   } else if (id == CSSValueID::kWebkitRepeatingLinearGradient) {
-    context->Count(WebFeature::kDeprecatedWebKitRepeatingLinearGradient);
-    result = ConsumeLinearGradient(args, *context, cssvalue::kRepeating,
+    context.Count(WebFeature::kDeprecatedWebKitRepeatingLinearGradient);
+    result = ConsumeLinearGradient(args, context, cssvalue::kRepeating,
                                    cssvalue::kCSSPrefixedLinearGradient);
   } else if (id == CSSValueID::kRepeatingLinearGradient) {
-    result = ConsumeLinearGradient(args, *context, cssvalue::kRepeating,
+    result = ConsumeLinearGradient(args, context, cssvalue::kRepeating,
                                    cssvalue::kCSSLinearGradient);
   } else if (id == CSSValueID::kLinearGradient) {
-    result = ConsumeLinearGradient(args, *context, cssvalue::kNonRepeating,
+    result = ConsumeLinearGradient(args, context, cssvalue::kNonRepeating,
                                    cssvalue::kCSSLinearGradient);
   } else if (id == CSSValueID::kWebkitGradient) {
-    context->Count(WebFeature::kDeprecatedWebKitGradient);
-    result = ConsumeDeprecatedGradient(args, *context);
+    context.Count(WebFeature::kDeprecatedWebKitGradient);
+    result = ConsumeDeprecatedGradient(args, context);
   } else if (id == CSSValueID::kWebkitRadialGradient) {
-    context->Count(WebFeature::kDeprecatedWebKitRadialGradient);
-    result = ConsumeDeprecatedRadialGradient(args, *context,
-                                             cssvalue::kNonRepeating);
-  } else if (id == CSSValueID::kWebkitRepeatingRadialGradient) {
-    context->Count(WebFeature::kDeprecatedWebKitRepeatingRadialGradient);
+    context.Count(WebFeature::kDeprecatedWebKitRadialGradient);
     result =
-        ConsumeDeprecatedRadialGradient(args, *context, cssvalue::kRepeating);
+        ConsumeDeprecatedRadialGradient(args, context, cssvalue::kNonRepeating);
+  } else if (id == CSSValueID::kWebkitRepeatingRadialGradient) {
+    context.Count(WebFeature::kDeprecatedWebKitRepeatingRadialGradient);
+    result =
+        ConsumeDeprecatedRadialGradient(args, context, cssvalue::kRepeating);
   } else if (id == CSSValueID::kConicGradient) {
-    result = ConsumeConicGradient(args, *context, cssvalue::kNonRepeating);
+    result = ConsumeConicGradient(args, context, cssvalue::kNonRepeating);
   } else if (id == CSSValueID::kRepeatingConicGradient) {
-    result = ConsumeConicGradient(args, *context, cssvalue::kRepeating);
+    result = ConsumeConicGradient(args, context, cssvalue::kRepeating);
   } else if (id == CSSValueID::kWebkitCrossFade) {
-    result = ConsumeCrossFade(args, *context);
+    result = ConsumeCrossFade(args, context);
   } else if (id == CSSValueID::kPaint) {
-    result = context->IsSecureContext() ? ConsumePaint(args, context) : nullptr;
+    result = context.IsSecureContext() ? ConsumePaint(args, context) : nullptr;
   }
   if (!result || !args.AtEnd())
     return nullptr;
@@ -1795,7 +1793,7 @@ static CSSValue* ConsumeGeneratedImage(CSSParserTokenRange& range,
     feature = WebFeature::kCSSPaintFunction;
   else
     feature = WebFeature::kCSSGradient;
-  context->Count(feature);
+  context.Count(feature);
 
   range = range_copy;
   return result;
@@ -1803,18 +1801,18 @@ static CSSValue* ConsumeGeneratedImage(CSSParserTokenRange& range,
 
 static CSSValue* CreateCSSImageValueWithReferrer(
     const AtomicString& raw_value,
-    const CSSParserContext* context) {
+    const CSSParserContext& context) {
   CSSValue* image_value = MakeGarbageCollected<CSSImageValue>(
-      raw_value, context->CompleteURL(raw_value), context->GetReferrer(),
-      context->IsOriginClean() ? OriginClean::kTrue : OriginClean::kFalse);
+      raw_value, context.CompleteURL(raw_value), context.GetReferrer(),
+      context.IsOriginClean() ? OriginClean::kTrue : OriginClean::kFalse);
   return image_value;
 }
 
 static CSSValue* ConsumeImageSet(CSSParserTokenRange& range,
-                                 const CSSParserContext* context) {
+                                 const CSSParserContext& context) {
   CSSParserTokenRange range_copy = range;
   CSSParserTokenRange args = ConsumeFunction(range_copy);
-  auto* image_set = MakeGarbageCollected<CSSImageSetValue>(context->Mode());
+  auto* image_set = MakeGarbageCollected<CSSImageSetValue>(context.Mode());
   do {
     AtomicString url_value =
         ConsumeUrlAsStringView(args, context).ToAtomicString();
@@ -1858,7 +1856,7 @@ static bool IsGeneratedImage(CSSValueID id) {
 }
 
 CSSValue* ConsumeImage(CSSParserTokenRange& range,
-                       const CSSParserContext* context,
+                       const CSSParserContext& context,
                        ConsumeGeneratedImagePolicy generated_image) {
   AtomicString uri = ConsumeUrlAsStringView(range, context).ToAtomicString();
   if (!uri.IsNull())
@@ -1946,7 +1944,7 @@ CSSValue* ConsumeFilterFunctionList(CSSParserTokenRange& range,
 
   CSSValueList* list = CSSValueList::CreateSpaceSeparated();
   do {
-    CSSValue* filter_value = ConsumeUrl(range, &context);
+    CSSValue* filter_value = ConsumeUrl(range, context);
     if (!filter_value) {
       filter_value = ConsumeFilterFunction(range, context);
       if (!filter_value)

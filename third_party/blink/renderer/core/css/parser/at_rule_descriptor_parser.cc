@@ -73,7 +73,7 @@ CSSValueList* ConsumeFontFaceUnicodeRange(CSSParserTokenRange& range) {
 CSSValue* ConsumeFontFaceSrcURI(CSSParserTokenRange& range,
                                 const CSSParserContext& context) {
   String url =
-      css_property_parser_helpers::ConsumeUrlAsStringView(range, &context)
+      css_property_parser_helpers::ConsumeUrlAsStringView(range, context)
           .ToString();
   if (url.IsNull())
     return nullptr;

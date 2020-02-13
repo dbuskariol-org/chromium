@@ -78,9 +78,9 @@ const CSSValue* ConsumeSingleType(const CSSSyntaxComponent& syntax,
       return css_property_parser_helpers::ConsumeColor(range, *context);
     }
     case CSSSyntaxType::kImage:
-      return css_property_parser_helpers::ConsumeImage(range, context);
+      return css_property_parser_helpers::ConsumeImage(range, *context);
     case CSSSyntaxType::kUrl:
-      return css_property_parser_helpers::ConsumeUrl(range, context);
+      return css_property_parser_helpers::ConsumeUrl(range, *context);
     case CSSSyntaxType::kInteger:
       return css_property_parser_helpers::ConsumeIntegerOrNumberCalc(range,
                                                                      *context);

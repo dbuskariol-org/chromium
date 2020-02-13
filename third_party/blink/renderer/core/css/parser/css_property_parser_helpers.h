@@ -107,9 +107,9 @@ CSSCustomIdentValue* ConsumeCustomIdent(CSSParserTokenRange&,
                                         const CSSParserContext&);
 CSSStringValue* ConsumeString(CSSParserTokenRange&);
 StringView ConsumeUrlAsStringView(CSSParserTokenRange&,
-                                  const CSSParserContext*);
+                                  const CSSParserContext&);
 cssvalue::CSSURIValue* ConsumeUrl(CSSParserTokenRange&,
-                                  const CSSParserContext*);
+                                  const CSSParserContext&);
 
 CSSValue* ConsumeColor(CSSParserTokenRange&,
                        const CSSParserContext&,
@@ -144,9 +144,9 @@ enum class ConsumeGeneratedImagePolicy { kAllow, kForbid };
 
 CSSValue* ConsumeImage(
     CSSParserTokenRange&,
-    const CSSParserContext*,
+    const CSSParserContext&,
     ConsumeGeneratedImagePolicy = ConsumeGeneratedImagePolicy::kAllow);
-CSSValue* ConsumeImageOrNone(CSSParserTokenRange&, const CSSParserContext*);
+CSSValue* ConsumeImageOrNone(CSSParserTokenRange&, const CSSParserContext&);
 
 CSSValue* ConsumeAxis(CSSParserTokenRange&, const CSSParserContext& context);
 
