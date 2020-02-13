@@ -674,6 +674,8 @@ void DocumentLoader::BodyLoadingFinished(
 }
 
 void DocumentLoader::LoadFailed(const ResourceError& error) {
+  TRACE_EVENT1("navigation,rail", "DocumentLoader::LoadFailed", "error",
+               error.ErrorCode());
   body_loader_.reset();
   virtual_time_pauser_.UnpauseVirtualTime();
 

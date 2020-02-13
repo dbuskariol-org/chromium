@@ -1990,12 +1990,12 @@ WebViewImpl* WebLocalFrameImpl::ViewImpl() const {
 
 void WebLocalFrameImpl::DidFailLoad(const ResourceError& error,
                                     WebHistoryCommitType web_commit_type) {
-  if (!Client())
-    return;
-  WebURLError web_error = error;
   if (WebPluginContainerImpl* plugin = GetFrame()->GetWebPluginContainer())
     plugin->DidFailLoading(error);
-  Client()->DidFailLoad(web_error, web_commit_type);
+  WebDocumentLoader* document_loader = GetDocumentLoader();
+  DCHECK(document_loader);
+  GetFrame()->GetLocalFrameHostRemote().DidFailLoadWithError(
+      document_loader->GetUrl(), error.ErrorCode());
 }
 
 void WebLocalFrameImpl::DidFinish() {

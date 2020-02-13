@@ -163,6 +163,9 @@ class BlinkTestController : public WebContentsObserver,
   void PluginCrashed(const base::FilePath& plugin_path,
                      base::ProcessId plugin_pid) override;
   void RenderFrameCreated(RenderFrameHost* render_frame_host) override;
+  void DidFailLoad(RenderFrameHost* render_frame_host,
+                   const GURL& validated_url,
+                   int error_code) override;
   void WebContentsDestroyed() override;
 
   // RenderProcessHostObserver implementation.

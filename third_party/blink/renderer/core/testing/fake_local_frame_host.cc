@@ -55,6 +55,9 @@ void FakeLocalFrameHost::VisibilityChanged(
 void FakeLocalFrameHost::DidChangeThemeColor(
     const base::Optional<::SkColor>& theme_color) {}
 
+void FakeLocalFrameHost::DidFailLoadWithError(const ::blink::KURL& url,
+                                              int32_t error_code) {}
+
 void FakeLocalFrameHost::DidFocusFrame() {}
 
 void FakeLocalFrameHost::EnforceInsecureRequestPolicy(uint8_t policy_bitmap) {}

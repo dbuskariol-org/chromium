@@ -2572,6 +2572,19 @@ void RenderFrameHostImpl::OnDetach() {
   PendingDeletionCheckCompletedOnSubtree();  // Can delete |this|.
 }
 
+void RenderFrameHostImpl::DidFailLoadWithError(const GURL& url,
+                                               int32_t error_code) {
+  TRACE_EVENT2("navigation", "RenderFrameHostImpl::DidFailLoadWithError",
+               "frame_tree_node", frame_tree_node_->frame_tree_node_id(),
+               "error", error_code);
+
+  GURL validated_url(url);
+  GetProcess()->FilterURL(false, &validated_url);
+
+  frame_tree_node_->navigator()->DidFailLoadWithError(this, validated_url,
+                                                      error_code);
+}
+
 void RenderFrameHostImpl::DidFocusFrame() {
   if (!is_active())
     return;
@@ -2646,20 +2659,6 @@ void RenderFrameHostImpl::OnSchedulerTrackedFeatureUsed(
 
 bool RenderFrameHostImpl::IsFrozen() {
   return frame_lifecycle_state_ != blink::mojom::FrameLifecycleState::kRunning;
-}
-
-void RenderFrameHostImpl::DidFailLoadWithError(const GURL& url,
-                                               int error_code) {
-  TRACE_EVENT2("navigation",
-               "RenderFrameHostImpl::DidFailProvisionalLoadWithError",
-               "frame_tree_node", frame_tree_node_->frame_tree_node_id(),
-               "error", error_code);
-
-  GURL validated_url(url);
-  GetProcess()->FilterURL(false, &validated_url);
-
-  frame_tree_node_->navigator()->DidFailLoadWithError(this, validated_url,
-                                                      error_code);
 }
 
 void RenderFrameHostImpl::DidCommitProvisionalLoad(
