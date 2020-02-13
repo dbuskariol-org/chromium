@@ -290,8 +290,8 @@ void BlinkTestRunner::SimulateWebNotificationClick(
     const std::string& title,
     const base::Optional<int>& action_index,
     const base::Optional<base::string16>& reply) {
-  Send(new WebTestHostMsg_SimulateWebNotificationClick(routing_id(), title,
-                                                       action_index, reply));
+  GetWebTestClientRemote().SimulateWebNotificationClick(
+      title, action_index.value_or(std::numeric_limits<int32_t>::min()), reply);
 }
 
 void BlinkTestRunner::SimulateWebNotificationClose(const std::string& title,
