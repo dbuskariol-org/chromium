@@ -424,6 +424,19 @@ void IndexedDBContextImpl::ResetCachesForTesting(base::OnceClosure callback) {
   std::move(callback).Run();
 }
 
+void IndexedDBContextImpl::AddObserver(
+    mojo::PendingRemote<storage::mojom::IndexedDBObserver> observer) {
+  IDBTaskRunner()->PostTask(
+      FROM_HERE,
+      base::BindOnce(
+          [](IndexedDBContextImpl* context,
+             mojo::PendingRemote<storage::mojom::IndexedDBObserver> observer) {
+            context->observers_.Add(std::move(observer));
+          },
+          // As |this| is destroyed on the IDBTaskRunner it is safe to post raw.
+          base::Unretained(this), std::move(observer)));
+}
+
 void IndexedDBContextImpl::ForceCloseSync(
     const Origin& origin,
     storage::mojom::ForceCloseReason reason) {
@@ -623,20 +636,9 @@ void IndexedDBContextImpl::BlobFilesCleaned(const url::Origin& origin) {
   QueryDiskAndUpdateQuotaUsage(origin);
 }
 
-void IndexedDBContextImpl::AddObserver(
-    IndexedDBContextImpl::Observer* observer) {
-  DCHECK(!observers_.HasObserver(observer));
-  observers_.AddObserver(observer);
-}
-
-void IndexedDBContextImpl::RemoveObserver(
-    IndexedDBContextImpl::Observer* observer) {
-  observers_.RemoveObserver(observer);
-}
-
 void IndexedDBContextImpl::NotifyIndexedDBListChanged(const Origin& origin) {
   for (auto& observer : observers_)
-    observer.OnIndexedDBListChanged(origin);
+    observer->OnIndexedDBListChanged(origin);
 }
 
 void IndexedDBContextImpl::NotifyIndexedDBContentChanged(
@@ -644,8 +646,8 @@ void IndexedDBContextImpl::NotifyIndexedDBContentChanged(
     const base::string16& database_name,
     const base::string16& object_store_name) {
   for (auto& observer : observers_) {
-    observer.OnIndexedDBContentChanged(origin, database_name,
-                                       object_store_name);
+    observer->OnIndexedDBContentChanged(origin, database_name,
+                                        object_store_name);
   }
 }
 
