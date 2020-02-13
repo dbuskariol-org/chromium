@@ -9,6 +9,8 @@ import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Build;
@@ -112,6 +114,8 @@ public class DownloadUtils {
 
     private static final String EXTRA_IS_OFF_THE_RECORD =
             "org.chromium.chrome.browser.download.IS_OFF_THE_RECORD";
+    private static final String MIME_TYPE_ZIP = "application/zip";
+    private static final String DOCUMENTS_UI_PACKAGE_NAME = "com.android.documentsui";
     public static final String EXTRA_SHOW_PREFETCHED_CONTENT =
             "org.chromium.chrome.browser.download.SHOW_PREFETCHED_CONTENT";
 
@@ -452,14 +456,32 @@ public class DownloadUtils {
             service.updateLastAccessTime(downloadGuid, isOffTheRecord);
             return true;
         } catch (Exception e) {
-            // Can't launch the Intent.
-            if (source != DownloadOpenSource.DOWNLOAD_PROGRESS_INFO_BAR) {
-                Toast.makeText(context, context.getString(R.string.download_cant_open_file),
-                             Toast.LENGTH_SHORT)
-                        .show();
-            }
-            return false;
+            Log.e(TAG, "Cannot start activity to open file", e);
         }
+
+        // If this is a zip file, check if Android Files app exists.
+        if (MIME_TYPE_ZIP.equals(mimeType)) {
+            try {
+                PackageInfo packageInfo = context.getPackageManager().getPackageInfo(
+                        DOCUMENTS_UI_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
+                if (packageInfo != null) {
+                    Intent viewDownloadsIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+                    viewDownloadsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    viewDownloadsIntent.setPackage(DOCUMENTS_UI_PACKAGE_NAME);
+                    context.startActivity(viewDownloadsIntent);
+                    return true;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Cannot find files app for openning zip files", e);
+            }
+        }
+        // Can't launch the Intent.
+        if (source != DownloadOpenSource.DOWNLOAD_PROGRESS_INFO_BAR) {
+            Toast.makeText(context, context.getString(R.string.download_cant_open_file),
+                         Toast.LENGTH_SHORT)
+                    .show();
+        }
+        return false;
     }
 
     @CalledByNative
