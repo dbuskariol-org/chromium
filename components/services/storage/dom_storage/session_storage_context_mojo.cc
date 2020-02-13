@@ -2,18 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_context_mojo.h"
+#include "components/services/storage/dom_storage/session_storage_context_mojo.h"
 
 #include <inttypes.h>
+
 #include <cctype>  // for std::isalnum
-#include <cstring>
 #include <utility>
 
-#include "base/barrier_closure.h"
 #include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/compiler_specific.h"
-#include "base/containers/span.h"
 #include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
@@ -27,15 +25,13 @@
 #include "components/services/storage/dom_storage/async_dom_storage_database.h"
 #include "components/services/storage/dom_storage/dom_storage_database.h"
 #include "components/services/storage/dom_storage/session_storage_area_impl.h"
-#include "content/browser/dom_storage/session_storage_namespace_impl_mojo.h"
-#include "content/public/browser/session_storage_usage_info.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
-#include "third_party/blink/public/common/features.h"
 #include "third_party/leveldatabase/env_chromium.h"
 #include "third_party/leveldatabase/leveldb_chrome.h"
 #include "url/gurl.h"
 
-namespace content {
+namespace storage {
+
 namespace {
 // After this many consecutive commit errors we'll throw away the entire
 // database.
@@ -95,6 +91,7 @@ void SessionStorageErrorResponse(base::OnceClosure callback,
                                  leveldb::Status status) {
   std::move(callback).Run();
 }
+
 }  // namespace
 
 SessionStorageContextMojo::SessionStorageContextMojo(
@@ -102,18 +99,22 @@ SessionStorageContextMojo::SessionStorageContextMojo(
     scoped_refptr<base::SequencedTaskRunner> blocking_task_runner,
     scoped_refptr<base::SequencedTaskRunner> memory_dump_task_runner,
     BackingMode backing_mode,
-    std::string leveldb_name)
+    std::string leveldb_name,
+    mojo::PendingReceiver<mojom::SessionStorageControl> receiver)
     : backing_mode_(backing_mode),
       leveldb_name_(std::move(leveldb_name)),
       partition_directory_(partition_directory),
       leveldb_task_runner_(std::move(blocking_task_runner)),
       memory_dump_id_(base::StringPrintf("SessionStorage/0x%" PRIXPTR,
                                          reinterpret_cast<uintptr_t>(this))),
+      receiver_(this, std::move(receiver)),
       is_low_end_device_(base::SysInfo::IsLowEndDevice()) {
   base::trace_event::MemoryDumpManager::GetInstance()
       ->RegisterDumpProviderWithSequencedTaskRunner(
           this, "SessionStorage", std::move(memory_dump_task_runner),
           base::trace_event::MemoryDumpProvider::Options());
+  receiver_.set_disconnect_handler(base::BindOnce(
+      &SessionStorageContextMojo::ShutdownAndDelete, base::Unretained(this)));
 }
 
 SessionStorageContextMojo::~SessionStorageContextMojo() {
@@ -124,18 +125,18 @@ SessionStorageContextMojo::~SessionStorageContextMojo() {
 
 void SessionStorageContextMojo::BindSessionStorageNamespace(
     const std::string& namespace_id,
-    mojo::ReportBadMessageCallback bad_message_callback,
-    mojo::PendingReceiver<blink::mojom::SessionStorageNamespace> receiver) {
+    mojo::PendingReceiver<blink::mojom::SessionStorageNamespace> receiver,
+    BindSessionStorageNamespaceCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(
         base::BindOnce(&SessionStorageContextMojo::BindSessionStorageNamespace,
                        weak_ptr_factory_.GetWeakPtr(), namespace_id,
-                       std::move(bad_message_callback), std::move(receiver)));
+                       std::move(receiver), std::move(callback)));
     return;
   }
   auto found = namespaces_.find(namespace_id);
   if (found == namespaces_.end()) {
-    std::move(bad_message_callback).Run("Namespace not found: " + namespace_id);
+    std::move(callback).Run(/*success=*/false);
     return;
   }
 
@@ -153,26 +154,25 @@ void SessionStorageContextMojo::BindSessionStorageNamespace(
   // Track the total sessionStorage cache size.
   UMA_HISTOGRAM_COUNTS_100000("SessionStorageContext.CacheSizeInKB",
                               total_cache_size / 1024);
+  std::move(callback).Run(/*success=*/true);
 }
 
 void SessionStorageContextMojo::BindSessionStorageArea(
-    ChildProcessSecurityPolicyImpl::Handle security_policy_handle,
     const url::Origin& origin,
     const std::string& namespace_id,
-    mojo::ReportBadMessageCallback bad_message_callback,
-    mojo::PendingReceiver<blink::mojom::StorageArea> receiver) {
+    mojo::PendingReceiver<blink::mojom::StorageArea> receiver,
+    BindSessionStorageAreaCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(
         base::BindOnce(&SessionStorageContextMojo::BindSessionStorageArea,
-                       weak_ptr_factory_.GetWeakPtr(),
-                       std::move(security_policy_handle), origin, namespace_id,
-                       std::move(bad_message_callback), std::move(receiver)));
+                       weak_ptr_factory_.GetWeakPtr(), origin, namespace_id,
+                       std::move(receiver), std::move(callback)));
     return;
   }
 
   auto found = namespaces_.find(namespace_id);
   if (found == namespaces_.end()) {
-    std::move(bad_message_callback).Run("Namespace not found: " + namespace_id);
+    std::move(callback).Run(/*success=*/false);
     return;
   }
 
@@ -183,8 +183,8 @@ void SessionStorageContextMojo::BindSessionStorageArea(
   }
 
   PurgeUnusedAreasIfNeeded();
-  found->second->OpenArea(std::move(security_policy_handle), origin,
-                          std::move(bad_message_callback), std::move(receiver));
+  found->second->OpenArea(origin, std::move(receiver));
+  std::move(callback).Run(/*success=*/true);
 }
 
 void SessionStorageContextMojo::CreateSessionNamespace(
@@ -199,7 +199,7 @@ void SessionStorageContextMojo::CreateSessionNamespace(
 void SessionStorageContextMojo::CloneSessionNamespace(
     const std::string& clone_from_namespace_id,
     const std::string& clone_to_namespace_id,
-    CloneType clone_type) {
+    mojom::SessionStorageCloneType clone_type) {
   if (namespaces_.find(clone_to_namespace_id) != namespaces_.end()) {
     // Non-immediate clones expect to be paired with a |Clone| from the mojo
     // namespace object. If that clone has already happened, then we don't need
@@ -207,7 +207,7 @@ void SessionStorageContextMojo::CloneSessionNamespace(
     // However, immediate clones happen without a |Clone| from the mojo
     // namespace object, so there should never be a namespace already populated
     // for an immediate clone.
-    DCHECK_NE(clone_type, CloneType::kImmediate);
+    DCHECK_NE(clone_type, mojom::SessionStorageCloneType::kImmediate);
     return;
   }
 
@@ -215,7 +215,7 @@ void SessionStorageContextMojo::CloneSessionNamespace(
   std::unique_ptr<SessionStorageNamespaceImplMojo> clone_to_namespace_impl =
       CreateSessionStorageNamespaceImplMojo(clone_to_namespace_id);
   switch (clone_type) {
-    case CloneType::kImmediate: {
+    case mojom::SessionStorageCloneType::kImmediate: {
       // If the namespace doesn't exist or it's not populated yet, just create
       // an empty session storage by not marking it as pending a clone.
       if (clone_from_ns == namespaces_.end() ||
@@ -225,7 +225,7 @@ void SessionStorageContextMojo::CloneSessionNamespace(
       clone_from_ns->second->Clone(clone_to_namespace_id);
       return;
     }
-    case CloneType::kWaitForCloneOnNamespace:
+    case mojom::SessionStorageCloneType::kWaitForCloneOnNamespace:
       if (clone_from_ns != namespaces_.end()) {
         // The namespace exists and is in-use, so wait until receiving a clone
         // call on that mojo binding.
@@ -298,14 +298,16 @@ void SessionStorageContextMojo::DeleteSessionNamespace(
   }
 }
 
-void SessionStorageContextMojo::Flush() {
+void SessionStorageContextMojo::Flush(FlushCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(base::BindOnce(&SessionStorageContextMojo::Flush,
-                                    weak_ptr_factory_.GetWeakPtr()));
+                                    weak_ptr_factory_.GetWeakPtr(),
+                                    std::move(callback)));
     return;
   }
   for (const auto& it : data_maps_)
     it.second->storage_area()->ScheduleImmediateCommit();
+  std::move(callback).Run();
 }
 
 void SessionStorageContextMojo::GetStorageUsage(
@@ -320,13 +322,12 @@ void SessionStorageContextMojo::GetStorageUsage(
   const storage::SessionStorageMetadata::NamespaceOriginMap& all_namespaces =
       metadata_.namespace_origin_map();
 
-  std::vector<SessionStorageUsageInfo> result;
+  std::vector<mojom::SessionStorageUsageInfoPtr> result;
   result.reserve(all_namespaces.size());
   for (const auto& pair : all_namespaces) {
     for (const auto& origin_map_pair : pair.second) {
-      SessionStorageUsageInfo info = {origin_map_pair.first.GetURL(),
-                                      pair.first};
-      result.push_back(std::move(info));
+      result.push_back(mojom::SessionStorageUsageInfo::New(
+          origin_map_pair.first, pair.first));
     }
   }
   std::move(callback).Run(std::move(result));
@@ -334,7 +335,7 @@ void SessionStorageContextMojo::GetStorageUsage(
 
 void SessionStorageContextMojo::DeleteStorage(const url::Origin& origin,
                                               const std::string& namespace_id,
-                                              base::OnceClosure callback) {
+                                              DeleteStorageCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(base::BindOnce(&SessionStorageContextMojo::DeleteStorage,
                                     weak_ptr_factory_.GetWeakPtr(), origin,
@@ -363,7 +364,7 @@ void SessionStorageContextMojo::DeleteStorage(const url::Origin& origin,
 }
 
 void SessionStorageContextMojo::PerformStorageCleanup(
-    base::OnceClosure callback) {
+    PerformStorageCleanupCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(
         base::BindOnce(&SessionStorageContextMojo::PerformStorageCleanup,
@@ -467,13 +468,15 @@ void SessionStorageContextMojo::PurgeUnusedAreasIfNeeded() {
 }
 
 void SessionStorageContextMojo::ScavengeUnusedNamespaces(
-    base::OnceClosure done) {
-  if (has_scavenged_)
+    ScavengeUnusedNamespacesCallback callback) {
+  if (has_scavenged_) {
+    std::move(callback).Run();
     return;
+  }
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(
         base::BindOnce(&SessionStorageContextMojo::ScavengeUnusedNamespaces,
-                       weak_ptr_factory_.GetWeakPtr(), std::move(done)));
+                       weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
     return;
   }
   has_scavenged_ = true;
@@ -499,8 +502,7 @@ void SessionStorageContextMojo::ScavengeUnusedNamespaces(
   }
 
   protected_namespaces_from_scavenge_.clear();
-  if (done)
-    std::move(done).Run();
+  std::move(callback).Run();
 }
 
 bool SessionStorageContextMojo::OnMemoryDump(
@@ -1077,4 +1079,4 @@ void SessionStorageContextMojo::LogDatabaseOpenResult(OpenResult result) {
   }
 }
 
-}  // namespace content
+}  // namespace storage

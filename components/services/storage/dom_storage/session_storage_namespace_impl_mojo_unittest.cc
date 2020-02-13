@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_namespace_impl_mojo.h"
+#include "components/services/storage/dom_storage/session_storage_namespace_impl_mojo.h"
 
 #include "base/barrier_closure.h"
 #include "base/bind.h"
@@ -12,29 +12,23 @@
 #include "base/run_loop.h"
 #include "base/task/post_task.h"
 #include "base/test/bind_test_util.h"
+#include "base/test/gmock_callback_support.h"
+#include "base/test/task_environment.h"
 #include "components/services/storage/dom_storage/async_dom_storage_database.h"
 #include "components/services/storage/dom_storage/dom_storage_database.h"
 #include "components/services/storage/dom_storage/session_storage_data_map.h"
 #include "components/services/storage/dom_storage/session_storage_metadata.h"
 #include "components/services/storage/dom_storage/storage_area_test_util.h"
-#include "content/browser/child_process_security_policy_impl.h"
-#include "content/public/test/browser_task_environment.h"
-#include "content/public/test/test_browser_context.h"
-#include "content/test/gmock_util.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "url/gurl.h"
 
-namespace content {
+namespace storage {
 
 namespace {
 
 using NamespaceEntry = storage::SessionStorageMetadata::NamespaceEntry;
-
-constexpr const int kTestProcessIdOrigin1 = 11;
-constexpr const int kTestProcessIdAllOrigins = 12;
-constexpr const int kTestProcessIdOrigin3 = 13;
 
 std::vector<uint8_t> StdStringToUint8Vector(const std::string& s) {
   return std::vector<uint8_t>(s.begin(), s.end());
@@ -63,8 +57,7 @@ class SessionStorageNamespaceImplMojoTest
       : test_namespace_id1_(base::GenerateGUID()),
         test_namespace_id2_(base::GenerateGUID()),
         test_origin1_(url::Origin::Create(GURL("https://host1.com/"))),
-        test_origin2_(url::Origin::Create(GURL("https://host2.com/"))),
-        test_origin3_(url::Origin::Create(GURL("https://host3.com/"))) {}
+        test_origin2_(url::Origin::Create(GURL("https://host2.com/"))) {}
   ~SessionStorageNamespaceImplMojoTest() override = default;
 
   void RunBatch(
@@ -103,34 +96,6 @@ class SessionStorageNamespaceImplMojoTest
           put_loop.Quit();
         }));
     put_loop.Run();
-
-    auto* security_policy = ChildProcessSecurityPolicyImpl::GetInstance();
-    security_policy->Add(kTestProcessIdOrigin1, &browser_context_);
-    security_policy->Add(kTestProcessIdAllOrigins, &browser_context_);
-    security_policy->Add(kTestProcessIdOrigin3, &browser_context_);
-    security_policy->AddIsolatedOrigins(
-        {test_origin1_, test_origin2_, test_origin3_},
-        ChildProcessSecurityPolicy::IsolatedOriginSource::TEST);
-    security_policy->LockToOrigin(IsolationContext(&browser_context_),
-                                  kTestProcessIdOrigin1,
-                                  test_origin1_.GetURL());
-    security_policy->LockToOrigin(IsolationContext(&browser_context_),
-                                  kTestProcessIdOrigin3,
-                                  test_origin3_.GetURL());
-  }
-
-  void OnBadMessage(const std::string& reason) { bad_message_called_ = true; }
-
-  mojo::ReportBadMessageCallback MakeBadMessageCallback() {
-    return base::BindOnce(&SessionStorageNamespaceImplMojoTest::OnBadMessage,
-                          base::Unretained(this));
-  }
-
-  void TearDown() override {
-    auto* security_policy = ChildProcessSecurityPolicyImpl::GetInstance();
-    security_policy->Remove(kTestProcessIdOrigin1);
-    security_policy->Remove(kTestProcessIdAllOrigins);
-    security_policy->Remove(kTestProcessIdOrigin3);
   }
 
   // Creates a SessionStorageNamespaceImplMojo, saves it in the namespaces_ map,
@@ -192,22 +157,13 @@ class SessionStorageNamespaceImplMojoTest
     return it->second;
   }
 
-  ChildProcessSecurityPolicyImpl::Handle CreateSecurityPolicyHandle(
-      int process_id) {
-    return ChildProcessSecurityPolicyImpl::GetInstance()->CreateHandle(
-        process_id);
-  }
-
  protected:
-  BrowserTaskEnvironment task_environment_;
-  TestBrowserContext browser_context_;
+  base::test::TaskEnvironment task_environment_;
   const std::string test_namespace_id1_;
   const std::string test_namespace_id2_;
   const url::Origin test_origin1_;
   const url::Origin test_origin2_;
-  const url::Origin test_origin3_;
   storage::SessionStorageMetadata metadata_;
-  bool bad_message_called_ = false;
 
   std::map<std::string, std::unique_ptr<SessionStorageNamespaceImplMojo>>
       namespaces_;
@@ -232,8 +188,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, MetadataLoad) {
       metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
 
   mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
+  namespace_impl->OpenArea(test_origin1_,
                            leveldb_1.BindNewPipeAndPassReceiver());
 
   std::vector<blink::mojom::KeyValuePtr> data;
@@ -263,8 +218,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, MetadataLoadWithMapOperations) {
       metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
 
   mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
+  namespace_impl->OpenArea(test_origin1_,
                            leveldb_1.BindNewPipeAndPassReceiver());
 
   base::RunLoop commit_loop;
@@ -314,8 +268,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, CloneBeforeBind) {
   ASSERT_TRUE(namespace_impl2->IsPopulated());
 
   mojo::Remote<blink::mojom::StorageArea> leveldb_2;
-  namespace_impl2->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                            test_origin1_, MakeBadMessageCallback(),
+  namespace_impl2->OpenArea(test_origin1_,
                             leveldb_2.BindNewPipeAndPassReceiver());
 
   // Do a put in the cloned namespace.
@@ -378,17 +331,14 @@ TEST_F(SessionStorageNamespaceImplMojoTest, CloneAfterBind) {
   // Get a new area.
   mojo::Remote<blink::mojom::StorageArea> leveldb_n2_o1;
   mojo::Remote<blink::mojom::StorageArea> leveldb_n2_o2;
-  namespace_impl2->OpenArea(
-      CreateSecurityPolicyHandle(kTestProcessIdAllOrigins), test_origin1_,
-      MakeBadMessageCallback(), leveldb_n2_o1.BindNewPipeAndPassReceiver());
-  namespace_impl2->OpenArea(
-      CreateSecurityPolicyHandle(kTestProcessIdAllOrigins), test_origin2_,
-      MakeBadMessageCallback(), leveldb_n2_o2.BindNewPipeAndPassReceiver());
+  namespace_impl2->OpenArea(test_origin1_,
+                            leveldb_n2_o1.BindNewPipeAndPassReceiver());
+  namespace_impl2->OpenArea(test_origin2_,
+                            leveldb_n2_o2.BindNewPipeAndPassReceiver());
 
   // Finally do the clone.
   ss_namespace1->Clone(test_namespace_id2_);
   ss_namespace1.FlushForTesting();
-  EXPECT_FALSE(bad_message_called_);
   ASSERT_TRUE(namespace_impl2->IsPopulated());
 
   // Do a put in the cloned namespace.
@@ -434,8 +384,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, RemoveOriginData) {
       metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
 
   mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
+  namespace_impl->OpenArea(test_origin1_,
                            leveldb_1.BindNewPipeAndPassReceiver());
 
   // Create an observer to make sure the deletion is observed.
@@ -489,32 +438,6 @@ TEST_F(SessionStorageNamespaceImplMojoTest, RemoveOriginDataWithoutBinding) {
   namespaces_.clear();
 }
 
-TEST_F(SessionStorageNamespaceImplMojoTest, ProcessLockedToOtherOrigin) {
-  // Tries to open an area with a process that is locked to a different origin
-  // and verifies the bad message callback.
-  SessionStorageNamespaceImplMojo* namespace_impl =
-      CreateSessionStorageNamespaceImplMojo(test_namespace_id1_);
-
-  EXPECT_CALL(listener_,
-              OnDataMapCreation(StdStringToUint8Vector("0"), testing::_))
-      .Times(1);
-
-  namespace_impl->PopulateFromMetadata(
-      database_.get(),
-      metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
-
-  mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin3_, MakeBadMessageCallback(),
-                           leveldb_1.BindNewPipeAndPassReceiver());
-  leveldb_1.FlushForTesting();
-  EXPECT_TRUE(bad_message_called_);
-
-  EXPECT_CALL(listener_, OnDataMapDestruction(StdStringToUint8Vector("0")))
-      .Times(1);
-  namespaces_.clear();
-}
-
 TEST_F(SessionStorageNamespaceImplMojoTest, PurgeUnused) {
   // Verifies that areas are kept alive after the area is unbound, and they
   // are removed when PurgeUnboundWrappers() is called.
@@ -530,8 +453,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, PurgeUnused) {
       metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
 
   mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
+  namespace_impl->OpenArea(test_origin1_,
                            leveldb_1.BindNewPipeAndPassReceiver());
   EXPECT_TRUE(namespace_impl->HasAreaForOrigin(test_origin1_));
 
@@ -547,44 +469,6 @@ TEST_F(SessionStorageNamespaceImplMojoTest, PurgeUnused) {
   namespaces_.clear();
 }
 
-TEST_F(SessionStorageNamespaceImplMojoTest, NamespaceBindingPerOrigin) {
-  // Tries to open an area with a process that is locked to a different origin
-  // and verifies the bad message callback.
-  SessionStorageNamespaceImplMojo* namespace_impl =
-      CreateSessionStorageNamespaceImplMojo(test_namespace_id1_);
-
-  EXPECT_CALL(listener_,
-              OnDataMapCreation(StdStringToUint8Vector("0"), testing::_))
-      .Times(1);
-
-  namespace_impl->PopulateFromMetadata(
-      database_.get(),
-      metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
-
-  mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
-                           leveldb_1.BindNewPipeAndPassReceiver());
-  leveldb_1.FlushForTesting();
-  EXPECT_FALSE(bad_message_called_);
-
-  EXPECT_CALL(listener_,
-              OnDataMapCreation(StdStringToUint8Vector("1"), testing::_))
-      .Times(1);
-
-  mojo::Remote<blink::mojom::StorageArea> leveldb_2;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin3),
-                           test_origin3_, MakeBadMessageCallback(),
-                           leveldb_2.BindNewPipeAndPassReceiver());
-  leveldb_2.FlushForTesting();
-  EXPECT_FALSE(bad_message_called_);
-
-  EXPECT_CALL(listener_, OnDataMapDestruction(StdStringToUint8Vector("0")))
-      .Times(1);
-  EXPECT_CALL(listener_, OnDataMapDestruction(StdStringToUint8Vector("1")))
-      .Times(1);
-  namespaces_.clear();
-}
 }  // namespace
 
 TEST_F(SessionStorageNamespaceImplMojoTest, ReopenClonedAreaAfterPurge) {
@@ -603,8 +487,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, ReopenClonedAreaAfterPurge) {
       metadata_.GetOrCreateNamespaceEntry(test_namespace_id1_));
 
   mojo::Remote<blink::mojom::StorageArea> leveldb_1;
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
+  namespace_impl->OpenArea(test_origin1_,
                            leveldb_1.BindNewPipeAndPassReceiver());
 
   // Save the data map, as if we did a clone:
@@ -615,8 +498,7 @@ TEST_F(SessionStorageNamespaceImplMojoTest, ReopenClonedAreaAfterPurge) {
   namespace_impl->PurgeUnboundAreas();
   EXPECT_FALSE(namespace_impl->HasAreaForOrigin(test_origin1_));
 
-  namespace_impl->OpenArea(CreateSecurityPolicyHandle(kTestProcessIdOrigin1),
-                           test_origin1_, MakeBadMessageCallback(),
+  namespace_impl->OpenArea(test_origin1_,
                            leveldb_1.BindNewPipeAndPassReceiver());
   leveldb_1.FlushForTesting();
 
@@ -629,4 +511,5 @@ TEST_F(SessionStorageNamespaceImplMojoTest, ReopenClonedAreaAfterPurge) {
 
   namespaces_.clear();
 }
-}  // namespace content
+
+}  // namespace storage

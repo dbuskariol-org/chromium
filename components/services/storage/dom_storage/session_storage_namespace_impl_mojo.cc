@@ -2,16 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/dom_storage/session_storage_namespace_impl_mojo.h"
+#include "components/services/storage/dom_storage/session_storage_namespace_impl_mojo.h"
 
 #include <algorithm>
 #include <memory>
 #include <utility>
 
 #include "base/bind.h"
-#include "content/browser/child_process_security_policy_impl.h"
 
-namespace content {
+namespace storage {
 
 namespace {
 
@@ -171,21 +170,12 @@ void SessionStorageNamespaceImplMojo::RemoveOriginData(
 }
 
 void SessionStorageNamespaceImplMojo::OpenArea(
-    ChildProcessSecurityPolicyImpl::Handle security_policy_handle,
     const url::Origin& origin,
-    mojo::ReportBadMessageCallback bad_message_callback,
     mojo::PendingReceiver<blink::mojom::StorageArea> receiver) {
-  if (!security_policy_handle.CanAccessDataForOrigin(origin)) {
-    std::move(bad_message_callback)
-        .Run("Access denied for sessionStorage request");
-    return;
-  }
-
   if (!IsPopulated()) {
-    run_after_population_.push_back(base::BindOnce(
-        &SessionStorageNamespaceImplMojo::OpenArea, base::Unretained(this),
-        std::move(security_policy_handle), origin,
-        std::move(bad_message_callback), std::move(receiver)));
+    run_after_population_.push_back(
+        base::BindOnce(&SessionStorageNamespaceImplMojo::OpenArea,
+                       base::Unretained(this), origin, std::move(receiver)));
     return;
   }
 
@@ -244,8 +234,8 @@ void SessionStorageNamespaceImplMojo::CloneAllNamespacesWaitingForClone(
     auto parent_it =
         namespaces_map.find(pending_population_from_parent_namespace_);
     // The parent must be in the map, because the only way to remove something
-    // from the map is to call DeleteSessionNamespace, which would have called
-    // this method on the parent if there were children, and resolved our clone
+    // from the map is to call DeleteNamespace, which would have called this
+    // method on the parent if there were children, and resolved our clone
     // dependency.
     DCHECK(parent_it != namespaces_map.end());
     parent = parent_it->second.get();
@@ -297,4 +287,4 @@ void SessionStorageNamespaceImplMojo::FlushOriginForTesting(
   it->second->data_map()->storage_area()->ScheduleImmediateCommit();
 }
 
-}  // namespace content
+}  // namespace storage

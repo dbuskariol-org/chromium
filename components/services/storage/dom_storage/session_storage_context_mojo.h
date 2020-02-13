@@ -2,22 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
-#define CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
 
 #include <stdint.h>
+
 #include <map>
 #include <memory>
 #include <string>
-#include <tuple>
 #include <vector>
 
 #include "base/callback_forward.h"
 #include "base/files/file_path.h"
 #include "base/gtest_prod_util.h"
-#include "base/memory/ref_counted.h"
+#include "base/memory/scoped_refptr.h"
 #include "base/memory/weak_ptr.h"
-#include "base/optional.h"
 #include "base/threading/sequence_bound.h"
 #include "base/trace_event/memory_allocator_dump.h"
 #include "base/trace_event/memory_dump_provider.h"
@@ -25,12 +24,10 @@
 #include "components/services/storage/dom_storage/dom_storage_database.h"
 #include "components/services/storage/dom_storage/session_storage_data_map.h"
 #include "components/services/storage/dom_storage/session_storage_metadata.h"
-#include "content/browser/child_process_security_policy_impl.h"
-#include "content/browser/dom_storage/session_storage_namespace_impl_mojo.h"
-#include "content/common/content_export.h"
-#include "content/public/browser/session_storage_usage_info.h"
-#include "mojo/public/cpp/bindings/message.h"
+#include "components/services/storage/dom_storage/session_storage_namespace_impl_mojo.h"
+#include "components/services/storage/public/mojom/session_storage_control.mojom.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
+#include "mojo/public/cpp/bindings/receiver.h"
 #include "third_party/blink/public/mojom/dom_storage/session_storage_namespace.mojom.h"
 #include "url/origin.h"
 
@@ -38,31 +35,17 @@ namespace base {
 class SequencedTaskRunner;
 }  // namespace base
 
-namespace content {
-struct SessionStorageUsageInfo;
+namespace storage {
 
-// Used for mojo-based SessionStorage implementation.
-// Created on the UI thread, but all further methods are called on the task
-// runner passed to the constructor. Furthermore since destruction of this class
-// can involve asynchronous steps, it can only be deleted by calling
-// ShutdownAndDelete (on the correct task runner).
-class CONTENT_EXPORT SessionStorageContextMojo
+// The Session Storage implementation. An instance of this class exists for each
+// storage partition using Session Storage, managing storage for all origins
+// and namespaces within the partition.
+class SessionStorageContextMojo
     : public base::trace_event::MemoryDumpProvider,
+      public mojom::SessionStorageControl,
       public storage::SessionStorageDataMap::Listener,
       public SessionStorageNamespaceImplMojo::Delegate {
  public:
-  using GetStorageUsageCallback =
-      base::OnceCallback<void(std::vector<SessionStorageUsageInfo>)>;
-
-  enum class CloneType {
-    // Expect a clone to come from the SessionStorageNamespace mojo object. This
-    // guarantees ordering with any writes from that namespace.
-    kWaitForCloneOnNamespace,
-    // There will not be a clone coming from the SessionStorageNamespace mojo
-    // object, so clone immediately.
-    kImmediate
-  };
-
   enum class BackingMode {
     // Use an in-memory leveldb database to store our state.
     kNoDisk,
@@ -82,60 +65,44 @@ class CONTENT_EXPORT SessionStorageContextMojo
       scoped_refptr<base::SequencedTaskRunner> blocking_task_runner,
       scoped_refptr<base::SequencedTaskRunner> memory_dump_task_runner,
       BackingMode backing_option,
-      std::string leveldb_name);
+      std::string leveldb_name,
+      mojo::PendingReceiver<mojom::SessionStorageControl> receiver);
 
+  // mojom::SessionStorageControl implementation:
   void BindSessionStorageNamespace(
       const std::string& namespace_id,
-      mojo::ReportBadMessageCallback bad_message_callback,
-      mojo::PendingReceiver<blink::mojom::SessionStorageNamespace> receiver);
+      mojo::PendingReceiver<blink::mojom::SessionStorageNamespace> receiver,
+      BindSessionStorageNamespaceCallback callback) override;
   void BindSessionStorageArea(
-      ChildProcessSecurityPolicyImpl::Handle security_policy_handle,
       const url::Origin& origin,
       const std::string& namespace_id,
-      mojo::ReportBadMessageCallback bad_message_callback,
-      mojo::PendingReceiver<blink::mojom::StorageArea> receiver);
-
-  void CreateSessionNamespace(const std::string& namespace_id);
-  void CloneSessionNamespace(const std::string& namespace_id_to_clone,
-                             const std::string& clone_namespace_id,
-                             CloneType clone_type);
-
-  // This function is called when the SessionStorageNamespaceImpl is destructed.
-  // These generally map 1:1 to each open chrome tab/window, although they are
-  // kept alive after the window is closed for restoring purposes.
-  void DeleteSessionNamespace(const std::string& namespace_id,
-                              bool should_persist);
-
-  void Flush();
-
-  void GetStorageUsage(GetStorageUsageCallback callback);
-
+      mojo::PendingReceiver<blink::mojom::StorageArea> receiver,
+      BindSessionStorageAreaCallback callback) override;
+  void GetStorageUsage(GetStorageUsageCallback callback) override;
   void DeleteStorage(const url::Origin& origin,
                      const std::string& namespace_id,
-                     base::OnceClosure callback);
+                     DeleteStorageCallback callback) override;
+  void PerformStorageCleanup(PerformStorageCleanupCallback callback) override;
+  void ScavengeUnusedNamespaces(
+      ScavengeUnusedNamespacesCallback callback) override;
+  void Flush(FlushCallback callback) override;
+  void PurgeMemory() override;
+  void CreateSessionNamespace(const std::string& namespace_id) override;
+  void CloneSessionNamespace(
+      const std::string& namespace_id_to_clone,
+      const std::string& clone_namespace_id,
+      mojom::SessionStorageCloneType clone_type) override;
+  void DeleteSessionNamespace(const std::string& namespace_id,
+                              bool should_persist) override;
 
-  // Ensure that no traces of data are left in the backing storage.
-  void PerformStorageCleanup(base::OnceClosure callback);
-
-  // Called when the owning BrowserContext is ending. Schedules the commit of
-  // any unsaved changes then deletes this object. All data on disk (where there
-  // was no call to |DeleteSessionNamespace| will stay on disk for later
-  // restoring.
+  // Called when the client (i.e. the corresponding browser storage partition)
+  // disconnects. Schedules the commit of any unsaved changes then deletes this
+  // object. All data on disk (where there was no call to
+  // |DeleteSessionNamespace| will stay on disk for later restoring.
   void ShutdownAndDelete();
-
-  // Clears any caches, to free up as much memory as possible. Next access to
-  // storage for a particular origin will reload the data from the database.
-  void PurgeMemory();
 
   // Clears unused storage areas, when thresholds are reached.
   void PurgeUnusedAreasIfNeeded();
-
-  // Any namespaces that have been loaded from disk and have not had a
-  // corresponding CreateSessionNamespace() call will be deleted. Called after
-  // startup. The calback is used for unittests, and is called after the
-  // scavenging has finished (but not necessarily saved to disk). A null
-  // callback is ok.
-  void ScavengeUnusedNamespaces(base::OnceClosure done);
 
   // base::trace_event::MemoryDumpProvider implementation:
   bool OnMemoryDump(const base::trace_event::MemoryDumpArgs& args,
@@ -280,6 +247,8 @@ class CONTENT_EXPORT SessionStorageContextMojo
 
   base::trace_event::MemoryAllocatorDumpGuid memory_dump_id_;
 
+  mojo::Receiver<mojom::SessionStorageControl> receiver_;
+
   std::unique_ptr<storage::AsyncDomStorageDatabase> database_;
   bool in_memory_ = false;
   bool tried_to_recreate_during_open_ = false;
@@ -314,6 +283,6 @@ class CONTENT_EXPORT SessionStorageContextMojo
   base::WeakPtrFactory<SessionStorageContextMojo> weak_ptr_factory_{this};
 };
 
-}  // namespace content
+}  // namespace storage
 
-#endif  // CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_

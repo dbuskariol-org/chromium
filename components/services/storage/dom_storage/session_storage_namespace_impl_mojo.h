@@ -1,8 +1,9 @@
 // Copyright 2018 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-#ifndef CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_NAMESPACE_IMPL_MOJO_H_
-#define CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_NAMESPACE_IMPL_MOJO_H_
+
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_NAMESPACE_IMPL_MOJO_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_NAMESPACE_IMPL_MOJO_H_
 
 #include <map>
 #include <memory>
@@ -15,19 +16,15 @@
 #include "components/services/storage/dom_storage/session_storage_area_impl.h"
 #include "components/services/storage/dom_storage/session_storage_data_map.h"
 #include "components/services/storage/dom_storage/session_storage_metadata.h"
-#include "content/browser/child_process_security_policy_impl.h"
-#include "content/common/content_export.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "third_party/blink/public/mojom/dom_storage/session_storage_namespace.mojom.h"
 #include "url/origin.h"
 
 namespace storage {
+
 class AsyncDomStorageDatabase;
-}
 
-namespace content {
-
-// Implements the mojo interface SessionStorageNamespace. Stores data maps per
+// Implements the Blink SessionStorageNamespace interface. Stores data maps per
 // origin, which are accessible using the StorageArea interface with the
 // |OpenArea| call. Supports cloning (shallow cloning with copy-on-write
 // behavior) from another SessionStorageNamespaceImplMojo.
@@ -50,7 +47,7 @@ namespace content {
 // renderer. Second, the RenderViewHostImpl of the navigated-to-frame will
 // create the cloned namespace and expect to manage it's lifetime that way, and
 // this can happen before the first case, as they are on different task runners.
-class CONTENT_EXPORT SessionStorageNamespaceImplMojo final
+class SessionStorageNamespaceImplMojo final
     : public blink::mojom::SessionStorageNamespace {
  public:
   using OriginAreas =
@@ -62,9 +59,8 @@ class CONTENT_EXPORT SessionStorageNamespaceImplMojo final
     kNotPopulated,
     // This is the same as kNotPopulated but it also means that this namespace
     // was created by Cloning from a 'parent' namespace (see
-    // SessionStorageContext.CloneStorageNamespace), but the Clone call has not
-    // yet been called on the parent's SessionStorageNamespaceImplMojo (from
-    // mojo).
+    // SessionStorageContext.CloneSessionNamespace), but the Clone call has not
+    // yet been called on the parent's SessionStorageNamespaceImplMojo.
     kNotPopulatedAndPendingClone,
     // This means the namespace is connected to disk, |database_| is populated,
     // and it is operating normally. This happens when PopulateFromMetadata or
@@ -173,10 +169,9 @@ class CONTENT_EXPORT SessionStorageNamespaceImplMojo final
   void RemoveOriginData(const url::Origin& origin, base::OnceClosure callback);
 
   // Connects the given database mojo request to the data map for the given
-  // origin.
-  void OpenArea(ChildProcessSecurityPolicyImpl::Handle security_policy_handle,
-                const url::Origin& origin,
-                mojo::ReportBadMessageCallback bad_message_callback,
+  // origin. Note that the source of |receiver| must have already been
+  // access-checked for access to |origin|.
+  void OpenArea(const url::Origin& origin,
                 mojo::PendingReceiver<blink::mojom::StorageArea> receiver);
 
   // SessionStorageNamespace:
@@ -227,6 +222,6 @@ class CONTENT_EXPORT SessionStorageNamespaceImplMojo final
   mojo::ReceiverSet<blink::mojom::SessionStorageNamespace> receivers_;
 };
 
-}  // namespace content
+}  // namespace storage
 
-#endif  // CONTENT_BROWSER_DOM_STORAGE_SESSION_STORAGE_NAMESPACE_IMPL_MOJO_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_NAMESPACE_IMPL_MOJO_H_
