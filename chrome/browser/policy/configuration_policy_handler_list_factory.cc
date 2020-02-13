@@ -1049,6 +1049,9 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kRelaunchHeadsUpPeriod,
     prefs::kRelaunchHeadsUpPeriod,
     base::Value::Type::INTEGER },
+  { key::kPrivacyScreenEnabled,
+    ash::prefs::kDisplayPrivacyScreenEnabled,
+    base::Value::Type::BOOLEAN },
 #else  // defined(OS_CHROMEOS)
   { key::kMetricsReportingEnabled,
     metrics::prefs::kMetricsReportingEnabled,

@@ -6203,6 +6203,26 @@
     "pref_mappings": [{"pref": "child_user.per_app_time_limits.whitelist"}]
   },
 
+  "DeviceLoginScreenPrivacyScreenEnabled": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_tests": [
+      {
+        "policies": { "DeviceLoginScreenPrivacyScreenEnabled": true },
+        "prefs": { "settings.display.privacy_screen_enabled": { "local_state": true } }
+      }
+    ]
+  },
+
+  "PrivacyScreenEnabled": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_tests": [
+      {
+        "policies": { "PrivacyScreenEnabled": true },
+        "prefs": { "settings.display.privacy_screen_enabled": {} }
+      }
+    ]
+  },
+
   "----- Chrome Frame policies -------------------------------------------": {},
 
   "ChromeFrameRendererSettings": {},
