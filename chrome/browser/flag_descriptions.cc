@@ -2696,6 +2696,12 @@ const char kAndroidNightModeName[] = "Android Chrome UI dark mode";
 const char kAndroidNightModeDescription[] =
     "If enabled, user can enable Android Chrome UI dark mode through settings.";
 
+const char kAndroidNightModeTabReparentingName[] =
+    "Android Chrome UI dark mode tab reparenting";
+const char kAndroidNightModeTabReparentingDescription[] =
+    "If enabled, when the user changes themes the current tabs are reparented "
+    "instead of reloaded.";
+
 #endif  // BUILDFLAG(ENABLE_ANDROID_NIGHT_MODE)
 
 // Non-Android -----------------------------------------------------------------

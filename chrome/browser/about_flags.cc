@@ -2539,6 +2539,10 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kAndroidNightMode,
                                     kAndroidNightModeFeatureVariations,
                                     "AndroidNightMode")},
+    {"enable-android-night-mode-tab-reparenting",
+     flag_descriptions::kAndroidNightModeTabReparentingName,
+     flag_descriptions::kAndroidNightModeTabReparentingDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kAndroidNightModeTabReparenting)},
 #endif  // BUILDFLAG(ENABLE_ANDROID_NIGHT_MODE)
 #endif  // OS_ANDROID
     {"enable-experimental-accessibility-features",
