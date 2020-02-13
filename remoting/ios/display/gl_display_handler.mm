@@ -98,7 +98,7 @@ Core::Core() : weak_factory_(this) {
 
   // Do not bind GlRenderer::OnFrameReceived. |renderer_| is not ready yet.
   owned_frame_consumer_.reset(new remoting::DualBufferFrameConsumer(
-      base::Bind(&Core::OnFrameReceived, weak_ptr_),
+      base::BindRepeating(&Core::OnFrameReceived, weak_ptr_),
       runtime_->display_task_runner(),
       protocol::FrameConsumer::PixelFormat::FORMAT_RGBA));
   frame_consumer_ = owned_frame_consumer_->GetWeakPtr();
