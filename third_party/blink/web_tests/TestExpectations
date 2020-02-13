@@ -1549,6 +1549,7 @@ crbug.com/626703 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozi
 crbug.com/626703 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-justify-content-wmvert-001.xhtml [ Failure ]
 crbug.com/626703 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-safe-overflow-position-001.html [ Failure ]
 crbug.com/807497 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/anonymous-flex-item-005.html [ Failure ]
+crbug.com/898186 virtual/layout_ng_flex_box/external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-003v.html [ Pass Failure ]
 crbug.com/953534 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/ttwf-reftest-flex-wrap.html [ Failure ]
 crbug.com/953534 [ Mac ] virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/ttwf-reftest-flex-wrap-reverse.html [ Failure ]
 crbug.com/1003506 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/percentage-heights-007.html [ Failure ]
@@ -5200,6 +5201,8 @@ crbug.com/874162 [ Mac ] fast/events/selection-autoscroll-borderbelt.html [ Skip
 
 # Flaky
 crbug.com/894077 virtual/android/fullscreen/video-fixed-background.html [ Pass Failure ]
+
+crbug.com/898186 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-003v.html [ Pass Failure ]
 
 # Sheriff 2018-09-10
 crbug.com/881207 fast/js/regress/splice-to-remove.html [ Timeout Pass ]
