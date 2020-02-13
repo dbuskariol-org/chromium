@@ -43,8 +43,10 @@ crbug.com/1028631 external/wpt/infrastructure/reftest/reftest_wait_TestRendered.
 
 # WPT HTTP/2 is not supported by run_web_tests.
 crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.html [ Skip ]
+crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.serviceworker.html [ Skip ]
 crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.sharedworker.html [ Skip ]
 crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.worker.html [ Skip ]
+crbug.com/1048761 external/wpt/infrastructure/server/wpt-server-http.sub.html [ Skip ]
 
 crbug.com/807686 crbug.com/24182 jquery/manipulation.html [ Timeout Pass ]
 
@@ -6507,8 +6509,6 @@ crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-0
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-06.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-08.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-09.html [ Pass Failure ]
-
-crbug.com/1050212 external/wpt/infrastructure/server/wpt-server-http.sub.html [ Skip ]
 
 # Sheriff 2020-02-10
 
