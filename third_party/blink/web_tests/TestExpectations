@@ -6512,6 +6512,13 @@ crbug.com/1050559 [ Linux ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.http
 crbug.com/webrtc/7061 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 crbug.com/webrtc/7061 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
 
+# Temporarily disable to unblock a Skia roll
+crbug.com/1052146 css3/filters/effect-all-on-background-hw.html [ Pass Failure ]
+crbug.com/1052146 css3/filters/effect-brightness-clamping-hw.html [ Pass Failure ]
+crbug.com/1052146 css3/filters/effect-reference-hw.html [ Pass Failure ]
+crbug.com/1052146 css3/filters/effect-reference-zoom-hw.html [ Pass Failure ]
+crbug.com/1052146 virtual/gpu/fast/canvas/canvas-pattern-no-repeat-with-transformations.html [ Pass Failure ]
+
 # DevTools roll
 crbug.com/1006759 http/tests/devtools/elements/styles-1/edit-value-url-with-color.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/sources/css-outline-dialog.js [ Skip ]
