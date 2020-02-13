@@ -915,7 +915,6 @@ static_idl_files_in_modules = get_path_info(
           "//third_party/blink/renderer/modules/xr/xr_dom_overlay_state.idl",
           "//third_party/blink/renderer/modules/xr/xr_frame.idl",
           "//third_party/blink/renderer/modules/xr/xr_frame_request_callback.idl",
-          "//third_party/blink/renderer/modules/xr/xr_hit_result.idl",
           "//third_party/blink/renderer/modules/xr/xr_hit_test_options_init.idl",
           "//third_party/blink/renderer/modules/xr/xr_hit_test_result.idl",
           "//third_party/blink/renderer/modules/xr/xr_hit_test_source.idl",
