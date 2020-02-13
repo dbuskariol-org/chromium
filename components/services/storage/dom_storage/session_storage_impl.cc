@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/services/storage/dom_storage/session_storage_context_mojo.h"
+#include "components/services/storage/dom_storage/session_storage_impl.h"
 
 #include <inttypes.h>
 
@@ -94,7 +94,7 @@ void SessionStorageErrorResponse(base::OnceClosure callback,
 
 }  // namespace
 
-SessionStorageContextMojo::SessionStorageContextMojo(
+SessionStorageImpl::SessionStorageImpl(
     const base::FilePath& partition_directory,
     scoped_refptr<base::SequencedTaskRunner> blocking_task_runner,
     scoped_refptr<base::SequencedTaskRunner> memory_dump_task_runner,
@@ -114,24 +114,23 @@ SessionStorageContextMojo::SessionStorageContextMojo(
           this, "SessionStorage", std::move(memory_dump_task_runner),
           base::trace_event::MemoryDumpProvider::Options());
   receiver_.set_disconnect_handler(base::BindOnce(
-      &SessionStorageContextMojo::ShutdownAndDelete, base::Unretained(this)));
+      &SessionStorageImpl::ShutdownAndDelete, base::Unretained(this)));
 }
 
-SessionStorageContextMojo::~SessionStorageContextMojo() {
+SessionStorageImpl::~SessionStorageImpl() {
   DCHECK_EQ(connection_state_, CONNECTION_SHUTDOWN);
   base::trace_event::MemoryDumpManager::GetInstance()->UnregisterDumpProvider(
       this);
 }
 
-void SessionStorageContextMojo::BindSessionStorageNamespace(
+void SessionStorageImpl::BindNamespace(
     const std::string& namespace_id,
     mojo::PendingReceiver<blink::mojom::SessionStorageNamespace> receiver,
-    BindSessionStorageNamespaceCallback callback) {
+    BindNamespaceCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
-    RunWhenConnected(
-        base::BindOnce(&SessionStorageContextMojo::BindSessionStorageNamespace,
-                       weak_ptr_factory_.GetWeakPtr(), namespace_id,
-                       std::move(receiver), std::move(callback)));
+    RunWhenConnected(base::BindOnce(
+        &SessionStorageImpl::BindNamespace, weak_ptr_factory_.GetWeakPtr(),
+        namespace_id, std::move(receiver), std::move(callback)));
     return;
   }
   auto found = namespaces_.find(namespace_id);
@@ -141,7 +140,7 @@ void SessionStorageContextMojo::BindSessionStorageNamespace(
   }
 
   if (found->second->state() ==
-      SessionStorageNamespaceImplMojo::State::kNotPopulated) {
+      SessionStorageNamespaceImpl::State::kNotPopulated) {
     found->second->PopulateFromMetadata(
         database_.get(), metadata_.GetOrCreateNamespaceEntry(namespace_id));
   }
@@ -157,16 +156,15 @@ void SessionStorageContextMojo::BindSessionStorageNamespace(
   std::move(callback).Run(/*success=*/true);
 }
 
-void SessionStorageContextMojo::BindSessionStorageArea(
+void SessionStorageImpl::BindStorageArea(
     const url::Origin& origin,
     const std::string& namespace_id,
     mojo::PendingReceiver<blink::mojom::StorageArea> receiver,
-    BindSessionStorageAreaCallback callback) {
+    BindStorageAreaCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
-    RunWhenConnected(
-        base::BindOnce(&SessionStorageContextMojo::BindSessionStorageArea,
-                       weak_ptr_factory_.GetWeakPtr(), origin, namespace_id,
-                       std::move(receiver), std::move(callback)));
+    RunWhenConnected(base::BindOnce(
+        &SessionStorageImpl::BindStorageArea, weak_ptr_factory_.GetWeakPtr(),
+        origin, namespace_id, std::move(receiver), std::move(callback)));
     return;
   }
 
@@ -177,7 +175,7 @@ void SessionStorageContextMojo::BindSessionStorageArea(
   }
 
   if (found->second->state() ==
-      SessionStorageNamespaceImplMojo::State::kNotPopulated) {
+      SessionStorageNamespaceImpl::State::kNotPopulated) {
     found->second->PopulateFromMetadata(
         database_.get(), metadata_.GetOrCreateNamespaceEntry(namespace_id));
   }
@@ -187,16 +185,15 @@ void SessionStorageContextMojo::BindSessionStorageArea(
   std::move(callback).Run(/*success=*/true);
 }
 
-void SessionStorageContextMojo::CreateSessionNamespace(
-    const std::string& namespace_id) {
+void SessionStorageImpl::CreateNamespace(const std::string& namespace_id) {
   if (namespaces_.find(namespace_id) != namespaces_.end())
     return;
 
   namespaces_.emplace(std::make_pair(
-      namespace_id, CreateSessionStorageNamespaceImplMojo(namespace_id)));
+      namespace_id, CreateSessionStorageNamespaceImpl(namespace_id)));
 }
 
-void SessionStorageContextMojo::CloneSessionNamespace(
+void SessionStorageImpl::CloneNamespace(
     const std::string& clone_from_namespace_id,
     const std::string& clone_to_namespace_id,
     mojom::SessionStorageCloneType clone_type) {
@@ -212,8 +209,8 @@ void SessionStorageContextMojo::CloneSessionNamespace(
   }
 
   auto clone_from_ns = namespaces_.find(clone_from_namespace_id);
-  std::unique_ptr<SessionStorageNamespaceImplMojo> clone_to_namespace_impl =
-      CreateSessionStorageNamespaceImplMojo(clone_to_namespace_id);
+  std::unique_ptr<SessionStorageNamespaceImpl> clone_to_namespace_impl =
+      CreateSessionStorageNamespaceImpl(clone_to_namespace_id);
   switch (clone_type) {
     case mojom::SessionStorageCloneType::kImmediate: {
       // If the namespace doesn't exist or it's not populated yet, just create
@@ -238,8 +235,7 @@ void SessionStorageContextMojo::CloneSessionNamespace(
         DCHECK_EQ(connection_state_, CONNECTION_FINISHED);
         // The namespace exists on disk but is not in-use, so do the appropriate
         // metadata operations to clone the namespace and set up the new object.
-        std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-            save_tasks;
+        std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
         auto source_namespace_entry =
             metadata_.GetOrCreateNamespaceEntry(clone_from_namespace_id);
         auto namespace_entry =
@@ -249,7 +245,7 @@ void SessionStorageContextMojo::CloneSessionNamespace(
         if (database_) {
           database_->RunBatchDatabaseTasks(
               std::move(save_tasks),
-              base::BindOnce(&SessionStorageContextMojo::OnCommitResult,
+              base::BindOnce(&SessionStorageImpl::OnCommitResult,
                              weak_ptr_factory_.GetWeakPtr()));
         }
       }
@@ -264,19 +260,18 @@ void SessionStorageContextMojo::CloneSessionNamespace(
       std::forward_as_tuple(std::move(clone_to_namespace_impl)));
 }
 
-void SessionStorageContextMojo::DeleteSessionNamespace(
-    const std::string& namespace_id,
-    bool should_persist) {
+void SessionStorageImpl::DeleteNamespace(const std::string& namespace_id,
+                                         bool should_persist) {
   auto namespace_it = namespaces_.find(namespace_id);
   // If the namespace has pending clones, do the clone now before destroying it.
   if (namespace_it != namespaces_.end()) {
-    SessionStorageNamespaceImplMojo* namespace_ptr = namespace_it->second.get();
+    SessionStorageNamespaceImpl* namespace_ptr = namespace_it->second.get();
     if (namespace_ptr->HasChildNamespacesWaitingForClone()) {
       // Wait until we are connected, as it simplifies our choices.
       if (connection_state_ != CONNECTION_FINISHED) {
-        RunWhenConnected(base::BindOnce(
-            &SessionStorageContextMojo::DeleteSessionNamespace,
-            weak_ptr_factory_.GetWeakPtr(), namespace_id, should_persist));
+        RunWhenConnected(base::BindOnce(&SessionStorageImpl::DeleteNamespace,
+                                        weak_ptr_factory_.GetWeakPtr(),
+                                        namespace_id, should_persist));
         return;
       }
       namespace_ptr->CloneAllNamespacesWaitingForClone(database_.get(),
@@ -292,15 +287,15 @@ void SessionStorageContextMojo::DeleteSessionNamespace(
     protected_namespaces_from_scavenge_.insert(namespace_id);
 
   if (!should_persist) {
-    RunWhenConnected(
-        base::BindOnce(&SessionStorageContextMojo::DoDatabaseDelete,
-                       weak_ptr_factory_.GetWeakPtr(), namespace_id));
+    RunWhenConnected(base::BindOnce(&SessionStorageImpl::DoDatabaseDelete,
+                                    weak_ptr_factory_.GetWeakPtr(),
+                                    namespace_id));
   }
 }
 
-void SessionStorageContextMojo::Flush(FlushCallback callback) {
+void SessionStorageImpl::Flush(FlushCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
-    RunWhenConnected(base::BindOnce(&SessionStorageContextMojo::Flush,
+    RunWhenConnected(base::BindOnce(&SessionStorageImpl::Flush,
                                     weak_ptr_factory_.GetWeakPtr(),
                                     std::move(callback)));
     return;
@@ -310,16 +305,15 @@ void SessionStorageContextMojo::Flush(FlushCallback callback) {
   std::move(callback).Run();
 }
 
-void SessionStorageContextMojo::GetStorageUsage(
-    GetStorageUsageCallback callback) {
+void SessionStorageImpl::GetUsage(GetUsageCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
-    RunWhenConnected(base::BindOnce(&SessionStorageContextMojo::GetStorageUsage,
+    RunWhenConnected(base::BindOnce(&SessionStorageImpl::GetUsage,
                                     weak_ptr_factory_.GetWeakPtr(),
                                     std::move(callback)));
     return;
   }
 
-  const storage::SessionStorageMetadata::NamespaceOriginMap& all_namespaces =
+  const SessionStorageMetadata::NamespaceOriginMap& all_namespaces =
       metadata_.namespace_origin_map();
 
   std::vector<mojom::SessionStorageUsageInfoPtr> result;
@@ -333,11 +327,11 @@ void SessionStorageContextMojo::GetStorageUsage(
   std::move(callback).Run(std::move(result));
 }
 
-void SessionStorageContextMojo::DeleteStorage(const url::Origin& origin,
-                                              const std::string& namespace_id,
-                                              DeleteStorageCallback callback) {
+void SessionStorageImpl::DeleteStorage(const url::Origin& origin,
+                                       const std::string& namespace_id,
+                                       DeleteStorageCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
-    RunWhenConnected(base::BindOnce(&SessionStorageContextMojo::DeleteStorage,
+    RunWhenConnected(base::BindOnce(&SessionStorageImpl::DeleteStorage,
                                     weak_ptr_factory_.GetWeakPtr(), origin,
                                     namespace_id, std::move(callback)));
     return;
@@ -345,17 +339,17 @@ void SessionStorageContextMojo::DeleteStorage(const url::Origin& origin,
   auto found = namespaces_.find(namespace_id);
   if (found != namespaces_.end() &&
       found->second->state() !=
-          SessionStorageNamespaceImplMojo::State::kNotPopulated) {
+          SessionStorageNamespaceImpl::State::kNotPopulated) {
     found->second->RemoveOriginData(origin, std::move(callback));
   } else {
     // If we don't have the namespace loaded, then we can delete it all
     // using the metadata.
-    std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
+    std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
     metadata_.DeleteArea(namespace_id, origin, &tasks);
     if (database_) {
       database_->RunBatchDatabaseTasks(
           std::move(tasks),
-          base::BindOnce(&SessionStorageContextMojo::OnCommitResultWithCallback,
+          base::BindOnce(&SessionStorageImpl::OnCommitResultWithCallback,
                          weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
     } else {
       std::move(callback).Run();
@@ -363,12 +357,11 @@ void SessionStorageContextMojo::DeleteStorage(const url::Origin& origin,
   }
 }
 
-void SessionStorageContextMojo::PerformStorageCleanup(
-    PerformStorageCleanupCallback callback) {
+void SessionStorageImpl::CleanUpStorage(CleanUpStorageCallback callback) {
   if (connection_state_ != CONNECTION_FINISHED) {
-    RunWhenConnected(
-        base::BindOnce(&SessionStorageContextMojo::PerformStorageCleanup,
-                       weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
+    RunWhenConnected(base::BindOnce(&SessionStorageImpl::CleanUpStorage,
+                                    weak_ptr_factory_.GetWeakPtr(),
+                                    std::move(callback)));
     return;
   }
   if (database_) {
@@ -381,7 +374,7 @@ void SessionStorageContextMojo::PerformStorageCleanup(
   }
 }
 
-void SessionStorageContextMojo::ShutdownAndDelete() {
+void SessionStorageImpl::ShutdownAndDelete() {
   DCHECK_NE(connection_state_, CONNECTION_SHUTDOWN);
 
   // The namespaces will DCHECK if they are destructed with pending clones. It
@@ -413,7 +406,7 @@ void SessionStorageContextMojo::ShutdownAndDelete() {
   OnShutdownComplete(leveldb::Status::OK());
 }
 
-void SessionStorageContextMojo::PurgeMemory() {
+void SessionStorageImpl::PurgeMemory() {
   size_t total_cache_size, unused_area_count;
   GetStatistics(&total_cache_size, &unused_area_count);
 
@@ -435,7 +428,7 @@ void SessionStorageContextMojo::PurgeMemory() {
       purged_size_kib);
 }
 
-void SessionStorageContextMojo::PurgeUnusedAreasIfNeeded() {
+void SessionStorageImpl::PurgeUnusedAreasIfNeeded() {
   size_t total_cache_size, unused_area_count;
   GetStatistics(&total_cache_size, &unused_area_count);
 
@@ -467,7 +460,7 @@ void SessionStorageContextMojo::PurgeUnusedAreasIfNeeded() {
   RecordSessionStorageCachePurgedHistogram(purge_reason, purged_size_kib);
 }
 
-void SessionStorageContextMojo::ScavengeUnusedNamespaces(
+void SessionStorageImpl::ScavengeUnusedNamespaces(
     ScavengeUnusedNamespacesCallback callback) {
   if (has_scavenged_) {
     std::move(callback).Run();
@@ -475,7 +468,7 @@ void SessionStorageContextMojo::ScavengeUnusedNamespaces(
   }
   if (connection_state_ != CONNECTION_FINISHED) {
     RunWhenConnected(
-        base::BindOnce(&SessionStorageContextMojo::ScavengeUnusedNamespaces,
+        base::BindOnce(&SessionStorageImpl::ScavengeUnusedNamespaces,
                        weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
     return;
   }
@@ -490,14 +483,14 @@ void SessionStorageContextMojo::ScavengeUnusedNamespaces(
     }
     namespaces_to_delete.push_back(namespace_id);
   }
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
   for (const auto& namespace_id : namespaces_to_delete)
     metadata_.DeleteNamespace(namespace_id, &save_tasks);
 
   if (database_) {
     database_->RunBatchDatabaseTasks(
         std::move(save_tasks),
-        base::BindOnce(&SessionStorageContextMojo::OnCommitResult,
+        base::BindOnce(&SessionStorageImpl::OnCommitResult,
                        weak_ptr_factory_.GetWeakPtr()));
   }
 
@@ -505,7 +498,7 @@ void SessionStorageContextMojo::ScavengeUnusedNamespaces(
   std::move(callback).Run();
 }
 
-bool SessionStorageContextMojo::OnMemoryDump(
+bool SessionStorageImpl::OnMemoryDump(
     const base::trace_event::MemoryDumpArgs& args,
     base::trace_event::ProcessMemoryDump* pmd) {
   if (connection_state_ != CONNECTION_FINISHED)
@@ -552,13 +545,12 @@ bool SessionStorageContextMojo::OnMemoryDump(
   return true;
 }
 
-void SessionStorageContextMojo::PretendToConnectForTesting() {
+void SessionStorageImpl::PretendToConnectForTesting() {
   OnDatabaseOpened(leveldb::Status::OK());
 }
 
-void SessionStorageContextMojo::FlushAreaForTesting(
-    const std::string& namespace_id,
-    const url::Origin& origin) {
+void SessionStorageImpl::FlushAreaForTesting(const std::string& namespace_id,
+                                             const url::Origin& origin) {
   if (connection_state_ != CONNECTION_FINISHED)
     return;
   const auto& it = namespaces_.find(namespace_id);
@@ -567,43 +559,43 @@ void SessionStorageContextMojo::FlushAreaForTesting(
   it->second->FlushOriginForTesting(origin);
 }
 
-void SessionStorageContextMojo::SetDatabaseOpenCallbackForTesting(
+void SessionStorageImpl::SetDatabaseOpenCallbackForTesting(
     base::OnceClosure callback) {
   RunWhenConnected(std::move(callback));
 }
 
-scoped_refptr<storage::SessionStorageMetadata::MapData>
-SessionStorageContextMojo::RegisterNewAreaMap(
-    storage::SessionStorageMetadata::NamespaceEntry namespace_entry,
+scoped_refptr<SessionStorageMetadata::MapData>
+SessionStorageImpl::RegisterNewAreaMap(
+    SessionStorageMetadata::NamespaceEntry namespace_entry,
     const url::Origin& origin) {
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
-  scoped_refptr<storage::SessionStorageMetadata::MapData> map_entry =
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
+  scoped_refptr<SessionStorageMetadata::MapData> map_entry =
       metadata_.RegisterNewMap(namespace_entry, origin, &save_tasks);
 
   if (database_) {
     database_->RunBatchDatabaseTasks(
         std::move(save_tasks),
-        base::BindOnce(&SessionStorageContextMojo::OnCommitResult,
+        base::BindOnce(&SessionStorageImpl::OnCommitResult,
                        weak_ptr_factory_.GetWeakPtr()));
   }
   return map_entry;
 }
 
-void SessionStorageContextMojo::OnDataMapCreation(
+void SessionStorageImpl::OnDataMapCreation(
     const std::vector<uint8_t>& map_prefix,
-    storage::SessionStorageDataMap* map) {
+    SessionStorageDataMap* map) {
   DCHECK(data_maps_.find(map_prefix) == data_maps_.end());
   data_maps_.emplace(std::piecewise_construct,
                      std::forward_as_tuple(map_prefix),
                      std::forward_as_tuple(map));
 }
 
-void SessionStorageContextMojo::OnDataMapDestruction(
+void SessionStorageImpl::OnDataMapDestruction(
     const std::vector<uint8_t>& map_prefix) {
   data_maps_.erase(map_prefix);
 }
 
-void SessionStorageContextMojo::OnCommitResult(leveldb::Status status) {
+void SessionStorageImpl::OnCommitResult(leveldb::Status status) {
   DCHECK_EQ(connection_state_, CONNECTION_FINISHED);
   UMA_HISTOGRAM_ENUMERATION("SessionStorageContext.CommitResult",
                             leveldb_env::GetLevelDBStatusUMAValue(status),
@@ -630,15 +622,14 @@ void SessionStorageContextMojo::OnCommitResult(leveldb::Status status) {
   }
 }
 
-void SessionStorageContextMojo::OnCommitResultWithCallback(
-    base::OnceClosure callback,
-    leveldb::Status status) {
+void SessionStorageImpl::OnCommitResultWithCallback(base::OnceClosure callback,
+                                                    leveldb::Status status) {
   OnCommitResult(status);
   std::move(callback).Run();
 }
 
-scoped_refptr<storage::SessionStorageDataMap>
-SessionStorageContextMojo::MaybeGetExistingDataMapForId(
+scoped_refptr<SessionStorageDataMap>
+SessionStorageImpl::MaybeGetExistingDataMapForId(
     const std::vector<uint8_t>& map_number_as_bytes) {
   auto it = data_maps_.find(map_number_as_bytes);
   if (it == data_maps_.end())
@@ -646,11 +637,11 @@ SessionStorageContextMojo::MaybeGetExistingDataMapForId(
   return base::WrapRefCounted(it->second);
 }
 
-void SessionStorageContextMojo::RegisterShallowClonedNamespace(
-    storage::SessionStorageMetadata::NamespaceEntry source_namespace_entry,
+void SessionStorageImpl::RegisterShallowClonedNamespace(
+    SessionStorageMetadata::NamespaceEntry source_namespace_entry,
     const std::string& new_namespace_id,
-    const SessionStorageNamespaceImplMojo::OriginAreas& clone_from_areas) {
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
+    const SessionStorageNamespaceImpl::OriginAreas& clone_from_areas) {
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> save_tasks;
 
   bool found = false;
   auto it = namespaces_.find(new_namespace_id);
@@ -670,7 +661,7 @@ void SessionStorageContextMojo::RegisterShallowClonedNamespace(
   if (database_) {
     database_->RunBatchDatabaseTasks(
         std::move(save_tasks),
-        base::BindOnce(&SessionStorageContextMojo::OnCommitResult,
+        base::BindOnce(&SessionStorageImpl::OnCommitResult,
                        weak_ptr_factory_.GetWeakPtr()));
   }
 
@@ -680,7 +671,7 @@ void SessionStorageContextMojo::RegisterShallowClonedNamespace(
     return;
   }
 
-  auto namespace_impl = CreateSessionStorageNamespaceImplMojo(new_namespace_id);
+  auto namespace_impl = CreateSessionStorageNamespaceImpl(new_namespace_id);
   namespace_impl->PopulateAsClone(database_.get(), namespace_entry,
                                   clone_from_areas);
   namespaces_.emplace(std::piecewise_construct,
@@ -688,31 +679,29 @@ void SessionStorageContextMojo::RegisterShallowClonedNamespace(
                       std::forward_as_tuple(std::move(namespace_impl)));
 }
 
-std::unique_ptr<SessionStorageNamespaceImplMojo>
-SessionStorageContextMojo::CreateSessionStorageNamespaceImplMojo(
+std::unique_ptr<SessionStorageNamespaceImpl>
+SessionStorageImpl::CreateSessionStorageNamespaceImpl(
     std::string namespace_id) {
-  storage::SessionStorageAreaImpl::RegisterNewAreaMap map_id_callback =
-      base::BindRepeating(&SessionStorageContextMojo::RegisterNewAreaMap,
+  SessionStorageAreaImpl::RegisterNewAreaMap map_id_callback =
+      base::BindRepeating(&SessionStorageImpl::RegisterNewAreaMap,
                           base::Unretained(this));
 
-  return std::make_unique<SessionStorageNamespaceImplMojo>(
+  return std::make_unique<SessionStorageNamespaceImpl>(
       std::move(namespace_id), this, std::move(map_id_callback), this);
 }
 
-void SessionStorageContextMojo::DoDatabaseDelete(
-    const std::string& namespace_id) {
+void SessionStorageImpl::DoDatabaseDelete(const std::string& namespace_id) {
   DCHECK_EQ(connection_state_, CONNECTION_FINISHED);
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> tasks;
   metadata_.DeleteNamespace(namespace_id, &tasks);
   if (database_) {
     database_->RunBatchDatabaseTasks(
-        std::move(tasks),
-        base::BindOnce(&SessionStorageContextMojo::OnCommitResult,
-                       weak_ptr_factory_.GetWeakPtr()));
+        std::move(tasks), base::BindOnce(&SessionStorageImpl::OnCommitResult,
+                                         weak_ptr_factory_.GetWeakPtr()));
   }
 }
 
-void SessionStorageContextMojo::RunWhenConnected(base::OnceClosure callback) {
+void SessionStorageImpl::RunWhenConnected(base::OnceClosure callback) {
   switch (connection_state_) {
     case NO_CONNECTION:
       // If we don't have a filesystem_connection_, we'll need to establish one.
@@ -734,16 +723,15 @@ void SessionStorageContextMojo::RunWhenConnected(base::OnceClosure callback) {
   NOTREACHED();
 }
 
-void SessionStorageContextMojo::InitiateConnection(bool in_memory_only) {
+void SessionStorageImpl::InitiateConnection(bool in_memory_only) {
   DCHECK_EQ(connection_state_, CONNECTION_IN_PROGRESS);
 
   if (backing_mode_ != BackingMode::kNoDisk && !in_memory_only &&
       !partition_directory_.empty()) {
     // We were given a subdirectory to write to, so use a disk backed database.
     if (backing_mode_ == BackingMode::kClearDiskStateOnOpen) {
-      storage::DomStorageDatabase::Destroy(partition_directory_, leveldb_name_,
-                                           leveldb_task_runner_,
-                                           base::DoNothing());
+      DomStorageDatabase::Destroy(partition_directory_, leveldb_name_,
+                                  leveldb_task_runner_, base::DoNothing());
     }
 
     leveldb_env::Options options;
@@ -755,39 +743,36 @@ void SessionStorageContextMojo::InitiateConnection(bool in_memory_only) {
     options.block_cache = leveldb_chrome::GetSharedWebBlockCache();
 
     in_memory_ = false;
-    database_ = storage::AsyncDomStorageDatabase::OpenDirectory(
+    database_ = AsyncDomStorageDatabase::OpenDirectory(
         std::move(options), partition_directory_, leveldb_name_,
         memory_dump_id_, leveldb_task_runner_,
-        base::BindOnce(&SessionStorageContextMojo::OnDatabaseOpened,
+        base::BindOnce(&SessionStorageImpl::OnDatabaseOpened,
                        weak_ptr_factory_.GetWeakPtr()));
     return;
   }
 
   // We were not given a subdirectory. Use a memory backed database.
   in_memory_ = true;
-  database_ = storage::AsyncDomStorageDatabase::OpenInMemory(
+  database_ = AsyncDomStorageDatabase::OpenInMemory(
       memory_dump_id_, "SessionStorageDatabase", leveldb_task_runner_,
-      base::BindOnce(&SessionStorageContextMojo::OnDatabaseOpened,
+      base::BindOnce(&SessionStorageImpl::OnDatabaseOpened,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-SessionStorageContextMojo::ValueAndStatus::ValueAndStatus() = default;
+SessionStorageImpl::ValueAndStatus::ValueAndStatus() = default;
 
-SessionStorageContextMojo::ValueAndStatus::ValueAndStatus(ValueAndStatus&&) =
-    default;
+SessionStorageImpl::ValueAndStatus::ValueAndStatus(ValueAndStatus&&) = default;
 
-SessionStorageContextMojo::ValueAndStatus::~ValueAndStatus() = default;
+SessionStorageImpl::ValueAndStatus::~ValueAndStatus() = default;
 
-SessionStorageContextMojo::KeyValuePairsAndStatus::KeyValuePairsAndStatus() =
-    default;
+SessionStorageImpl::KeyValuePairsAndStatus::KeyValuePairsAndStatus() = default;
 
-SessionStorageContextMojo::KeyValuePairsAndStatus::KeyValuePairsAndStatus(
+SessionStorageImpl::KeyValuePairsAndStatus::KeyValuePairsAndStatus(
     KeyValuePairsAndStatus&&) = default;
 
-SessionStorageContextMojo::KeyValuePairsAndStatus::~KeyValuePairsAndStatus() =
-    default;
+SessionStorageImpl::KeyValuePairsAndStatus::~KeyValuePairsAndStatus() = default;
 
-void SessionStorageContextMojo::OnDatabaseOpened(leveldb::Status status) {
+void SessionStorageImpl::OnDatabaseOpened(leveldb::Status status) {
   if (!status.ok()) {
     UMA_HISTOGRAM_ENUMERATION("SessionStorageContext.DatabaseOpenError",
                               leveldb_env::GetLevelDBStatusUMAValue(status),
@@ -818,38 +803,34 @@ void SessionStorageContextMojo::OnDatabaseOpened(leveldb::Status status) {
   }
 
   database_->RunDatabaseTask(
-      base::BindOnce([](const storage::DomStorageDatabase& db) {
+      base::BindOnce([](const DomStorageDatabase& db) {
         ValueAndStatus version;
-        version.status =
-            db.Get(base::make_span(
-                       storage::SessionStorageMetadata::kDatabaseVersionBytes),
-                   &version.value);
+        version.status = db.Get(
+            base::make_span(SessionStorageMetadata::kDatabaseVersionBytes),
+            &version.value);
 
         KeyValuePairsAndStatus namespaces;
         namespaces.status = db.GetPrefixed(
-            base::make_span(
-                storage::SessionStorageMetadata::kNamespacePrefixBytes),
+            base::make_span(SessionStorageMetadata::kNamespacePrefixBytes),
             &namespaces.key_value_pairs);
 
         ValueAndStatus next_map_id;
         next_map_id.status =
-            db.Get(base::make_span(
-                       storage::SessionStorageMetadata::kNextMapIdKeyBytes),
+            db.Get(base::make_span(SessionStorageMetadata::kNextMapIdKeyBytes),
                    &next_map_id.value);
 
         return std::make_tuple(std::move(version), std::move(namespaces),
                                std::move(next_map_id));
       }),
-      base::BindOnce(&SessionStorageContextMojo::OnGotDatabaseMetadata,
+      base::BindOnce(&SessionStorageImpl::OnGotDatabaseMetadata,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-void SessionStorageContextMojo::OnGotDatabaseMetadata(
+void SessionStorageImpl::OnGotDatabaseMetadata(
     ValueAndStatus version,
     KeyValuePairsAndStatus namespaces,
     ValueAndStatus next_map_id) {
-  std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-      migration_tasks;
+  std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> migration_tasks;
 
   MetadataParseResult version_parse =
       ParseDatabaseVersion(std::move(version), &migration_tasks);
@@ -878,11 +859,10 @@ void SessionStorageContextMojo::OnGotDatabaseMetadata(
   OnConnectionFinished();
 }
 
-SessionStorageContextMojo::MetadataParseResult
-SessionStorageContextMojo::ParseDatabaseVersion(
+SessionStorageImpl::MetadataParseResult
+SessionStorageImpl::ParseDatabaseVersion(
     ValueAndStatus version,
-    std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-        migration_tasks) {
+    std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* migration_tasks) {
   if (version.status.ok()) {
     if (!metadata_.ParseDatabaseVersion(std::move(version.value),
                                         migration_tasks)) {
@@ -908,11 +888,9 @@ SessionStorageContextMojo::ParseDatabaseVersion(
           "SessionStorageContext.OpenResultAfterReadVersionError"};
 }
 
-SessionStorageContextMojo::MetadataParseResult
-SessionStorageContextMojo::ParseNamespaces(
+SessionStorageImpl::MetadataParseResult SessionStorageImpl::ParseNamespaces(
     KeyValuePairsAndStatus namespaces,
-    std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-        migration_tasks) {
+    std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> migration_tasks) {
   DCHECK_EQ(connection_state_, CONNECTION_IN_PROGRESS);
 
   if (!namespaces.status.ok()) {
@@ -950,7 +928,7 @@ SessionStorageContextMojo::ParseNamespaces(
               callback_task_runner->PostTask(
                   FROM_HERE, base::BindOnce(std::move(callback), status));
             },
-            base::BindOnce(&SessionStorageContextMojo::OnCommitResult,
+            base::BindOnce(&SessionStorageImpl::OnCommitResult,
                            weak_ptr_factory_.GetWeakPtr()),
             base::SequencedTaskRunnerHandle::Get()));
   }
@@ -958,8 +936,8 @@ SessionStorageContextMojo::ParseNamespaces(
   return {OpenResult::kSuccess, ""};
 }
 
-SessionStorageContextMojo::MetadataParseResult
-SessionStorageContextMojo::ParseNextMapId(ValueAndStatus next_map_id) {
+SessionStorageImpl::MetadataParseResult SessionStorageImpl::ParseNextMapId(
+    ValueAndStatus next_map_id) {
   if (!next_map_id.status.ok()) {
     if (next_map_id.status.IsNotFound())
       return {OpenResult::kSuccess, ""};
@@ -977,7 +955,7 @@ SessionStorageContextMojo::ParseNextMapId(ValueAndStatus next_map_id) {
   return {OpenResult::kSuccess, ""};
 }
 
-void SessionStorageContextMojo::OnConnectionFinished() {
+void SessionStorageImpl::OnConnectionFinished() {
   DCHECK(!database_ || connection_state_ == CONNECTION_IN_PROGRESS);
 
   // If connection was opened successfully, reset tried_to_recreate_during_open_
@@ -997,8 +975,7 @@ void SessionStorageContextMojo::OnConnectionFinished() {
     std::move(callbacks[i]).Run();
 }
 
-void SessionStorageContextMojo::DeleteAndRecreateDatabase(
-    const char* histogram_name) {
+void SessionStorageImpl::DeleteAndRecreateDatabase(const char* histogram_name) {
   // We're about to set database_ to null, so delete the StorageAreas
   // that might still be using the old database.
   for (const auto& it : data_maps_)
@@ -1034,9 +1011,9 @@ void SessionStorageContextMojo::DeleteAndRecreateDatabase(
 
   // Destroy database, and try again.
   if (!in_memory_) {
-    storage::DomStorageDatabase::Destroy(
+    DomStorageDatabase::Destroy(
         partition_directory_, leveldb_name_, leveldb_task_runner_,
-        base::BindOnce(&SessionStorageContextMojo::OnDBDestroyed,
+        base::BindOnce(&SessionStorageImpl::OnDBDestroyed,
                        weak_ptr_factory_.GetWeakPtr(), recreate_in_memory));
   } else {
     // No directory, so nothing to destroy. Retrying to recreate will probably
@@ -1045,8 +1022,8 @@ void SessionStorageContextMojo::DeleteAndRecreateDatabase(
   }
 }
 
-void SessionStorageContextMojo::OnDBDestroyed(bool recreate_in_memory,
-                                              leveldb::Status status) {
+void SessionStorageImpl::OnDBDestroyed(bool recreate_in_memory,
+                                       leveldb::Status status) {
   UMA_HISTOGRAM_ENUMERATION("SessionStorageContext.DestroyDBResult",
                             leveldb_env::GetLevelDBStatusUMAValue(status),
                             leveldb_env::LEVELDB_STATUS_MAX);
@@ -1055,12 +1032,12 @@ void SessionStorageContextMojo::OnDBDestroyed(bool recreate_in_memory,
   InitiateConnection(recreate_in_memory);
 }
 
-void SessionStorageContextMojo::OnShutdownComplete(leveldb::Status status) {
+void SessionStorageImpl::OnShutdownComplete(leveldb::Status status) {
   delete this;
 }
 
-void SessionStorageContextMojo::GetStatistics(size_t* total_cache_size,
-                                              size_t* unused_area_count) {
+void SessionStorageImpl::GetStatistics(size_t* total_cache_size,
+                                       size_t* unused_area_count) {
   *total_cache_size = 0;
   *unused_area_count = 0;
   for (const auto& it : data_maps_) {
@@ -1070,7 +1047,7 @@ void SessionStorageContextMojo::GetStatistics(size_t* total_cache_size,
   }
 }
 
-void SessionStorageContextMojo::LogDatabaseOpenResult(OpenResult result) {
+void SessionStorageImpl::LogDatabaseOpenResult(OpenResult result) {
   if (result != OpenResult::kSuccess) {
     UMA_HISTOGRAM_ENUMERATION("SessionStorageContext.OpenError", result);
   }

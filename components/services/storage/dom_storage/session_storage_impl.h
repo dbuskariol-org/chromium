@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
-#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
+#ifndef COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_IMPL_H_
+#define COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_IMPL_H_
 
 #include <stdint.h>
 
@@ -24,7 +24,7 @@
 #include "components/services/storage/dom_storage/dom_storage_database.h"
 #include "components/services/storage/dom_storage/session_storage_data_map.h"
 #include "components/services/storage/dom_storage/session_storage_metadata.h"
-#include "components/services/storage/dom_storage/session_storage_namespace_impl_mojo.h"
+#include "components/services/storage/dom_storage/session_storage_namespace_impl.h"
 #include "components/services/storage/public/mojom/session_storage_control.mojom.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver.h"
@@ -40,11 +40,10 @@ namespace storage {
 // The Session Storage implementation. An instance of this class exists for each
 // storage partition using Session Storage, managing storage for all origins
 // and namespaces within the partition.
-class SessionStorageContextMojo
-    : public base::trace_event::MemoryDumpProvider,
-      public mojom::SessionStorageControl,
-      public storage::SessionStorageDataMap::Listener,
-      public SessionStorageNamespaceImplMojo::Delegate {
+class SessionStorageImpl : public base::trace_event::MemoryDumpProvider,
+                           public mojom::SessionStorageControl,
+                           public SessionStorageDataMap::Listener,
+                           public SessionStorageNamespaceImpl::Delegate {
  public:
   enum class BackingMode {
     // Use an in-memory leveldb database to store our state.
@@ -60,7 +59,7 @@ class SessionStorageContextMojo
     kRestoreDiskState
   };
 
-  SessionStorageContextMojo(
+  SessionStorageImpl(
       const base::FilePath& partition_directory,
       scoped_refptr<base::SequencedTaskRunner> blocking_task_runner,
       scoped_refptr<base::SequencedTaskRunner> memory_dump_task_runner,
@@ -69,36 +68,35 @@ class SessionStorageContextMojo
       mojo::PendingReceiver<mojom::SessionStorageControl> receiver);
 
   // mojom::SessionStorageControl implementation:
-  void BindSessionStorageNamespace(
+  void BindNamespace(
       const std::string& namespace_id,
       mojo::PendingReceiver<blink::mojom::SessionStorageNamespace> receiver,
-      BindSessionStorageNamespaceCallback callback) override;
-  void BindSessionStorageArea(
+      BindNamespaceCallback callback) override;
+  void BindStorageArea(
       const url::Origin& origin,
       const std::string& namespace_id,
       mojo::PendingReceiver<blink::mojom::StorageArea> receiver,
-      BindSessionStorageAreaCallback callback) override;
-  void GetStorageUsage(GetStorageUsageCallback callback) override;
+      BindStorageAreaCallback callback) override;
+  void GetUsage(GetUsageCallback callback) override;
   void DeleteStorage(const url::Origin& origin,
                      const std::string& namespace_id,
                      DeleteStorageCallback callback) override;
-  void PerformStorageCleanup(PerformStorageCleanupCallback callback) override;
+  void CleanUpStorage(CleanUpStorageCallback callback) override;
   void ScavengeUnusedNamespaces(
       ScavengeUnusedNamespacesCallback callback) override;
   void Flush(FlushCallback callback) override;
   void PurgeMemory() override;
-  void CreateSessionNamespace(const std::string& namespace_id) override;
-  void CloneSessionNamespace(
-      const std::string& namespace_id_to_clone,
-      const std::string& clone_namespace_id,
-      mojom::SessionStorageCloneType clone_type) override;
-  void DeleteSessionNamespace(const std::string& namespace_id,
-                              bool should_persist) override;
+  void CreateNamespace(const std::string& namespace_id) override;
+  void CloneNamespace(const std::string& namespace_id_to_clone,
+                      const std::string& clone_namespace_id,
+                      mojom::SessionStorageCloneType clone_type) override;
+  void DeleteNamespace(const std::string& namespace_id,
+                       bool should_persist) override;
 
   // Called when the client (i.e. the corresponding browser storage partition)
   // disconnects. Schedules the commit of any unsaved changes then deletes this
   // object. All data on disk (where there was no call to
-  // |DeleteSessionNamespace| will stay on disk for later restoring.
+  // |DeleteNamespace| will stay on disk for later restoring.
   void ShutdownAndDelete();
 
   // Clears unused storage areas, when thresholds are reached.
@@ -110,17 +108,14 @@ class SessionStorageContextMojo
 
   void PretendToConnectForTesting();
 
-  storage::AsyncDomStorageDatabase* DatabaseForTesting() {
-    return database_.get();
-  }
+  AsyncDomStorageDatabase* DatabaseForTesting() { return database_.get(); }
 
   void FlushAreaForTesting(const std::string& namespace_id,
                            const url::Origin& origin);
 
   // Access the underlying DomStorageDatabase. May be null if the database is
   // not yet open.
-  const base::SequenceBound<storage::DomStorageDatabase>&
-  GetDatabaseForTesting() const {
+  const base::SequenceBound<DomStorageDatabase>& GetDatabaseForTesting() const {
     return database_->database();
   }
 
@@ -130,7 +125,7 @@ class SessionStorageContextMojo
 
  private:
   friend class DOMStorageBrowserTest;
-  FRIEND_TEST_ALL_PREFIXES(SessionStorageContextMojoTest,
+  FRIEND_TEST_ALL_PREFIXES(SessionStorageImplTest,
                            PurgeMemoryDoesNotCrashOrHang);
 
   // These values are written to logs.  New enum values can be added, but
@@ -146,31 +141,31 @@ class SessionStorageContextMojo
   };
 
   // Object deletion is done through |ShutdownAndDelete()|.
-  ~SessionStorageContextMojo() override;
+  ~SessionStorageImpl() override;
 
-  scoped_refptr<storage::SessionStorageMetadata::MapData> RegisterNewAreaMap(
-      storage::SessionStorageMetadata::NamespaceEntry namespace_entry,
+  scoped_refptr<SessionStorageMetadata::MapData> RegisterNewAreaMap(
+      SessionStorageMetadata::NamespaceEntry namespace_entry,
       const url::Origin& origin);
 
-  // storage::SessionStorageAreaImpl::Listener implementation:
+  // SessionStorageAreaImpl::Listener implementation:
   void OnDataMapCreation(const std::vector<uint8_t>& map_prefix,
-                         storage::SessionStorageDataMap* map) override;
+                         SessionStorageDataMap* map) override;
   void OnDataMapDestruction(const std::vector<uint8_t>& map_prefix) override;
   void OnCommitResult(leveldb::Status status) override;
   void OnCommitResultWithCallback(base::OnceClosure callback,
                                   leveldb::Status status);
 
-  // SessionStorageNamespaceImplMojo::Delegate implementation:
-  scoped_refptr<storage::SessionStorageDataMap> MaybeGetExistingDataMapForId(
+  // SessionStorageNamespaceImpl::Delegate implementation:
+  scoped_refptr<SessionStorageDataMap> MaybeGetExistingDataMapForId(
       const std::vector<uint8_t>& map_number_as_bytes) override;
   void RegisterShallowClonedNamespace(
-      storage::SessionStorageMetadata::NamespaceEntry source_namespace_entry,
+      SessionStorageMetadata::NamespaceEntry source_namespace_entry,
       const std::string& new_namespace_id,
-      const SessionStorageNamespaceImplMojo::OriginAreas& clone_from_areas)
+      const SessionStorageNamespaceImpl::OriginAreas& clone_from_areas)
       override;
 
-  std::unique_ptr<SessionStorageNamespaceImplMojo>
-  CreateSessionStorageNamespaceImplMojo(std::string namespace_id);
+  std::unique_ptr<SessionStorageNamespaceImpl>
+  CreateSessionStorageNamespaceImpl(std::string namespace_id);
 
   void DoDatabaseDelete(const std::string& namespace_id);
 
@@ -188,7 +183,7 @@ class SessionStorageContextMojo
     ValueAndStatus(ValueAndStatus&&);
     ~ValueAndStatus();
     leveldb::Status status;
-    storage::DomStorageDatabase::Value value;
+    DomStorageDatabase::Value value;
   };
 
   struct KeyValuePairsAndStatus {
@@ -196,7 +191,7 @@ class SessionStorageContextMojo
     KeyValuePairsAndStatus(KeyValuePairsAndStatus&&);
     ~KeyValuePairsAndStatus();
     leveldb::Status status;
-    std::vector<storage::DomStorageDatabase::KeyValuePair> key_value_pairs;
+    std::vector<DomStorageDatabase::KeyValuePair> key_value_pairs;
   };
 
   void OnGotDatabaseMetadata(ValueAndStatus version,
@@ -209,12 +204,10 @@ class SessionStorageContextMojo
   };
   MetadataParseResult ParseDatabaseVersion(
       ValueAndStatus version,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>*
-          migration_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask>* migration_tasks);
   MetadataParseResult ParseNamespaces(
       KeyValuePairsAndStatus namespaces,
-      std::vector<storage::AsyncDomStorageDatabase::BatchDatabaseTask>
-          migration_tasks);
+      std::vector<AsyncDomStorageDatabase::BatchDatabaseTask> migration_tasks);
   MetadataParseResult ParseNextMapId(ValueAndStatus next_map_id);
 
   void OnConnectionFinished();
@@ -229,7 +222,7 @@ class SessionStorageContextMojo
 
   // Since the session storage object hierarchy references iterators owned by
   // the metadata, make sure it is destroyed last on destruction.
-  storage::SessionStorageMetadata metadata_;
+  SessionStorageMetadata metadata_;
 
   BackingMode backing_mode_;
   std::string leveldb_name_;
@@ -249,20 +242,20 @@ class SessionStorageContextMojo
 
   mojo::Receiver<mojom::SessionStorageControl> receiver_;
 
-  std::unique_ptr<storage::AsyncDomStorageDatabase> database_;
+  std::unique_ptr<AsyncDomStorageDatabase> database_;
   bool in_memory_ = false;
   bool tried_to_recreate_during_open_ = false;
 
   std::vector<base::OnceClosure> on_database_opened_callbacks_;
 
   // The removal of items from this map is managed by the refcounting in
-  // storage::SessionStorageDataMap.
+  // SessionStorageDataMap.
   // Populated after the database is connected.
-  std::map<std::vector<uint8_t>, storage::SessionStorageDataMap*> data_maps_;
-  // Populated in CreateSessionNamespace, CloneSessionNamespace, and sometimes
+  std::map<std::vector<uint8_t>, SessionStorageDataMap*> data_maps_;
+  // Populated in CreateNamespace, CloneNamespace, and sometimes
   // RegisterShallowClonedNamespace. Items are removed in
-  // DeleteSessionNamespace.
-  std::map<std::string, std::unique_ptr<SessionStorageNamespaceImplMojo>>
+  // DeleteNamespace.
+  std::map<std::string, std::unique_ptr<SessionStorageNamespaceImpl>>
       namespaces_;
 
   // Scavenging only happens once.
@@ -280,9 +273,9 @@ class SessionStorageContextMojo
   // Name of an extra histogram to log open results to, if not null.
   const char* open_result_histogram_ = nullptr;
 
-  base::WeakPtrFactory<SessionStorageContextMojo> weak_ptr_factory_{this};
+  base::WeakPtrFactory<SessionStorageImpl> weak_ptr_factory_{this};
 };
 
 }  // namespace storage
 
-#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_CONTEXT_MOJO_H_
+#endif  // COMPONENTS_SERVICES_STORAGE_DOM_STORAGE_SESSION_STORAGE_IMPL_H_
