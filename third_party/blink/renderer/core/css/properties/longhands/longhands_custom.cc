@@ -2634,7 +2634,7 @@ const CSSValue* FontStyle::ParseSingleValue(
     CSSParserTokenRange& range,
     const CSSParserContext& context,
     const CSSParserLocalContext&) const {
-  return css_parsing_utils::ConsumeFontStyle(range, context.Mode());
+  return css_parsing_utils::ConsumeFontStyle(range, context);
 }
 
 const CSSValue* FontStyle::CSSValueFromComputedStyleInternal(
@@ -5075,7 +5075,7 @@ const CSSValue* Rotate::ParseSingleValue(CSSParserTokenRange& range,
   CSSValueList* list = CSSValueList::CreateSpaceSeparated();
 
   CSSValue* rotation = css_property_parser_helpers::ConsumeAngle(
-      range, &context, base::Optional<WebFeature>());
+      range, context, base::Optional<WebFeature>());
 
   CSSValue* axis = css_property_parser_helpers::ConsumeAxis(range, context);
   if (axis)
@@ -5085,7 +5085,7 @@ const CSSValue* Rotate::ParseSingleValue(CSSParserTokenRange& range,
 
   if (!rotation) {
     rotation = css_property_parser_helpers::ConsumeAngle(
-        range, &context, base::Optional<WebFeature>());
+        range, context, base::Optional<WebFeature>());
     if (!rotation)
       return nullptr;
   }

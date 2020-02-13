@@ -1096,7 +1096,7 @@ bool ConsumeFont(bool important,
     }
     if (!font_style &&
         (id == CSSValueID::kItalic || id == CSSValueID::kOblique)) {
-      font_style = css_parsing_utils::ConsumeFontStyle(range, context.Mode());
+      font_style = css_parsing_utils::ConsumeFontStyle(range, context);
       if (!font_style)
         return false;
       continue;

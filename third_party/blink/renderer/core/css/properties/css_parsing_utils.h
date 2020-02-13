@@ -164,7 +164,7 @@ CSSValue* ConsumeFamilyName(CSSParserTokenRange&);
 String ConcatenateFamilyName(CSSParserTokenRange&);
 CSSIdentifierValue* ConsumeFontStretchKeywordOnly(CSSParserTokenRange&);
 CSSValue* ConsumeFontStretch(CSSParserTokenRange&, const CSSParserContext&);
-CSSValue* ConsumeFontStyle(CSSParserTokenRange&, const CSSParserMode&);
+CSSValue* ConsumeFontStyle(CSSParserTokenRange&, const CSSParserContext&);
 CSSValue* ConsumeFontWeight(CSSParserTokenRange&, const CSSParserContext&);
 CSSValue* ConsumeFontFeatureSettings(CSSParserTokenRange&,
                                      const CSSParserContext&);

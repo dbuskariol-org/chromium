@@ -86,7 +86,7 @@ const CSSValue* ConsumeSingleType(const CSSSyntaxComponent& syntax,
                                                                      *context);
     case CSSSyntaxType::kAngle:
       return css_property_parser_helpers::ConsumeAngle(
-          range, context, base::Optional<WebFeature>());
+          range, *context, base::Optional<WebFeature>());
     case CSSSyntaxType::kTime:
       return css_property_parser_helpers::ConsumeTime(
           range, *context, ValueRange::kValueRangeAll);

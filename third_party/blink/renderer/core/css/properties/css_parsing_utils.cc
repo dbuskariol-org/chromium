@@ -1432,7 +1432,7 @@ bool IsAngleWithinLimits(CSSPrimitiveValue* angle) {
 }
 
 CSSValue* ConsumeFontStyle(CSSParserTokenRange& range,
-                           const CSSParserMode& parser_mode) {
+                           const CSSParserContext& context) {
   if (range.Peek().Id() == CSSValueID::kNormal ||
       range.Peek().Id() == CSSValueID::kItalic)
     return css_property_parser_helpers::ConsumeIdent(range);
@@ -1444,13 +1444,13 @@ CSSValue* ConsumeFontStyle(CSSParserTokenRange& range,
       css_property_parser_helpers::ConsumeIdent<CSSValueID::kOblique>(range);
 
   CSSPrimitiveValue* start_angle = css_property_parser_helpers::ConsumeAngle(
-      range, nullptr, base::nullopt, MinObliqueValue(), MaxObliqueValue());
+      range, context, base::nullopt, MinObliqueValue(), MaxObliqueValue());
   if (!start_angle)
     return oblique_identifier;
   if (!IsAngleWithinLimits(start_angle))
     return nullptr;
 
-  if (parser_mode != kCSSFontFaceRuleMode || range.AtEnd()) {
+  if (context.Mode() != kCSSFontFaceRuleMode || range.AtEnd()) {
     CSSValueList* value_list = CSSValueList::CreateSpaceSeparated();
     value_list->Append(*start_angle);
     return MakeGarbageCollected<cssvalue::CSSFontStyleRangeValue>(
@@ -1458,7 +1458,7 @@ CSSValue* ConsumeFontStyle(CSSParserTokenRange& range,
   }
 
   CSSPrimitiveValue* end_angle = css_property_parser_helpers::ConsumeAngle(
-      range, nullptr, base::nullopt, MinObliqueValue(), MaxObliqueValue());
+      range, context, base::nullopt, MinObliqueValue(), MaxObliqueValue());
   if (!end_angle || !IsAngleWithinLimits(end_angle))
     return nullptr;
 
@@ -2256,7 +2256,7 @@ CSSValue* ConsumeRay(CSSParserTokenRange& range,
   while (!function_args.AtEnd()) {
     if (!angle) {
       angle = css_property_parser_helpers::ConsumeAngle(
-          function_args, &context, base::Optional<WebFeature>());
+          function_args, context, base::Optional<WebFeature>());
       if (angle)
         continue;
     }
@@ -2350,7 +2350,7 @@ CSSValue* ConsumePathOrNone(CSSParserTokenRange& range) {
 CSSValue* ConsumeOffsetRotate(CSSParserTokenRange& range,
                               const CSSParserContext& context) {
   CSSValue* angle = css_property_parser_helpers::ConsumeAngle(
-      range, &context, base::Optional<WebFeature>());
+      range, context, base::Optional<WebFeature>());
   CSSValue* keyword =
       css_property_parser_helpers::ConsumeIdent<CSSValueID::kAuto,
                                                 CSSValueID::kReverse>(range);
@@ -2359,7 +2359,7 @@ CSSValue* ConsumeOffsetRotate(CSSParserTokenRange& range,
 
   if (!angle) {
     angle = css_property_parser_helpers::ConsumeAngle(
-        range, &context, base::Optional<WebFeature>());
+        range, context, base::Optional<WebFeature>());
   }
 
   CSSValueList* list = CSSValueList::CreateSpaceSeparated();
@@ -2502,14 +2502,14 @@ CSSValue* ConsumeTransformValue(CSSParserTokenRange& range,
     case CSSValueID::kSkewY:
     case CSSValueID::kSkew:
       parsed_value = css_property_parser_helpers::ConsumeAngle(
-          args, &context, WebFeature::kUnitlessZeroAngleTransform);
+          args, context, WebFeature::kUnitlessZeroAngleTransform);
       if (!parsed_value)
         return nullptr;
       if (function_id == CSSValueID::kSkew &&
           css_property_parser_helpers::ConsumeCommaIncludingWhitespace(args)) {
         transform_value->Append(*parsed_value);
         parsed_value = css_property_parser_helpers::ConsumeAngle(
-            args, &context, WebFeature::kUnitlessZeroAngleTransform);
+            args, context, WebFeature::kUnitlessZeroAngleTransform);
         if (!parsed_value)
           return nullptr;
       }
@@ -2574,7 +2574,7 @@ CSSValue* ConsumeTransformValue(CSSParserTokenRange& range,
         return nullptr;
       }
       parsed_value = css_property_parser_helpers::ConsumeAngle(
-          args, &context, WebFeature::kUnitlessZeroAngleTransform);
+          args, context, WebFeature::kUnitlessZeroAngleTransform);
       if (!parsed_value)
         return nullptr;
       break;

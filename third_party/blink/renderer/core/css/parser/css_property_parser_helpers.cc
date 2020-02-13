@@ -114,7 +114,7 @@ CSSFunctionValue* ConsumeFilterFunction(CSSParserTokenRange& range,
       }
     } else if (filter_type == CSSValueID::kHueRotate) {
       parsed_value = css_property_parser_helpers::ConsumeAngle(
-          args, &context, WebFeature::kUnitlessZeroAngleFilter);
+          args, context, WebFeature::kUnitlessZeroAngleFilter);
     } else if (filter_type == CSSValueID::kBlur) {
       CSSParserContext::ParserModeOverridingScope scope(context,
                                                         kHTMLStandardMode);
@@ -193,7 +193,7 @@ class MathFunctionParser {
 
  public:
   MathFunctionParser(CSSParserTokenRange& range,
-                     const CSSParserContext* context,
+                     const CSSParserContext& context,
                      ValueRange value_range)
       : source_range_(range), range_(range) {
     const CSSParserToken& token = range.Peek();
@@ -222,13 +222,13 @@ class MathFunctionParser {
       default:
         break;
     }
-    if (context && calc_value_ && calc_value_->HasComparisons())
-      context->Count(WebFeature::kCSSComparisonFunctions);
+    if (calc_value_ && calc_value_->HasComparisons())
+      context.Count(WebFeature::kCSSComparisonFunctions);
   }
 
   explicit MathFunctionParser(CSSParserTokenRange& range,
                               const CSSParserContext& context)
-      : MathFunctionParser(range, &context, kValueRangeAll) {}
+      : MathFunctionParser(range, context, kValueRangeAll) {}
 
   const CSSMathFunctionValue* Value() const { return calc_value_; }
   CSSMathFunctionValue* ConsumeValue() {
@@ -342,7 +342,7 @@ bool ConsumeNumberRaw(CSSParserTokenRange& range,
     result = range.ConsumeIncludingWhitespace().NumericValue();
     return true;
   }
-  MathFunctionParser math_parser(range, &context, kValueRangeAll);
+  MathFunctionParser math_parser(range, context, kValueRangeAll);
   return math_parser.ConsumeNumberRaw(result);
 }
 
@@ -357,7 +357,7 @@ CSSPrimitiveValue* ConsumeNumber(CSSParserTokenRange& range,
     return CSSNumericLiteralValue::Create(
         range.ConsumeIncludingWhitespace().NumericValue(), token.GetUnitType());
   }
-  MathFunctionParser math_parser(range, &context, kValueRangeAll);
+  MathFunctionParser math_parser(range, context, kValueRangeAll);
   if (const CSSMathFunctionValue* calculation = math_parser.Value()) {
     // TODO(rwlbuis) Calcs should not be subject to parse time range checks.
     // spec: https://drafts.csswg.org/css-values-3/#calc-range
@@ -427,7 +427,7 @@ CSSPrimitiveValue* ConsumeLength(CSSParserTokenRange& range,
   }
   if (context.Mode() == kSVGAttributeMode)
     return nullptr;
-  MathFunctionParser math_parser(range, &context, value_range);
+  MathFunctionParser math_parser(range, context, value_range);
   if (math_parser.Value() && math_parser.Value()->Category() == kCalcLength)
     return math_parser.ConsumeValue();
   return nullptr;
@@ -444,7 +444,7 @@ CSSPrimitiveValue* ConsumePercent(CSSParserTokenRange& range,
         range.ConsumeIncludingWhitespace().NumericValue(),
         CSSPrimitiveValue::UnitType::kPercentage);
   }
-  MathFunctionParser math_parser(range, &context, value_range);
+  MathFunctionParser math_parser(range, context, value_range);
   if (const CSSMathFunctionValue* calculation = math_parser.Value()) {
     if (calculation->Category() == kCalcPercent)
       return math_parser.ConsumeValue();
@@ -491,7 +491,7 @@ CSSPrimitiveValue* ConsumeLengthOrPercent(CSSParserTokenRange& range,
     return ConsumeLength(range, context, value_range, unitless);
   if (token.GetType() == kPercentageToken)
     return ConsumePercent(range, context, value_range);
-  MathFunctionParser math_parser(range, &context, value_range);
+  MathFunctionParser math_parser(range, context, value_range);
   if (const CSSMathFunctionValue* calculation = math_parser.Value()) {
     if (CanConsumeCalcValue(calculation->Category(), context.Mode()))
       return math_parser.ConsumeValue();
@@ -546,13 +546,10 @@ CSSPrimitiveValue* ConsumeGradientLengthOrPercent(
 
 CSSPrimitiveValue* ConsumeAngle(
     CSSParserTokenRange& range,
-    const CSSParserContext* context,
+    const CSSParserContext& context,
     base::Optional<WebFeature> unitless_zero_feature,
     double minimum_value,
     double maximum_value) {
-  // Ensure that we have a context for counting the
-  // unitless_zero_feature if it is requested.
-  DCHECK(context || !unitless_zero_feature);
   const CSSParserToken& token = range.Peek();
   if (token.GetType() == kDimensionToken) {
     switch (token.GetUnitType()) {
@@ -570,7 +567,7 @@ CSSPrimitiveValue* ConsumeAngle(
   if (token.GetType() == kNumberToken && token.NumericValue() == 0 &&
       unitless_zero_feature) {
     range.ConsumeIncludingWhitespace();
-    context->Count(*unitless_zero_feature);
+    context.Count(*unitless_zero_feature);
     return CSSNumericLiteralValue::Create(
         0, CSSPrimitiveValue::UnitType::kDegrees);
   }
@@ -595,7 +592,7 @@ CSSPrimitiveValue* ConsumeAngle(
 
 CSSPrimitiveValue* ConsumeAngle(
     CSSParserTokenRange& range,
-    const CSSParserContext* context,
+    const CSSParserContext& context,
     base::Optional<WebFeature> unitless_zero_feature) {
   return ConsumeAngle(range, context, std::move(unitless_zero_feature),
                       std::numeric_limits<double>::lowest(),
@@ -617,7 +614,7 @@ CSSPrimitiveValue* ConsumeTime(CSSParserTokenRange& range,
           token.GetUnitType());
     return nullptr;
   }
-  MathFunctionParser math_parser(range, &context, value_range);
+  MathFunctionParser math_parser(range, context, value_range);
   if (const CSSMathFunctionValue* calculation = math_parser.Value()) {
     if (calculation->Category() == kCalcTime)
       return math_parser.ConsumeValue();
@@ -802,7 +799,7 @@ static bool ParseHSLParameters(CSSParserTokenRange& range,
   DCHECK(range.Peek().FunctionId() == CSSValueID::kHsl ||
          range.Peek().FunctionId() == CSSValueID::kHsla);
   CSSParserTokenRange args = ConsumeFunction(range);
-  CSSPrimitiveValue* hsl_value = ConsumeAngle(args, nullptr, base::nullopt);
+  CSSPrimitiveValue* hsl_value = ConsumeAngle(args, context, base::nullopt);
   double angle_value;
   if (!hsl_value) {
     hsl_value = ConsumeNumber(args, context, kValueRangeAll);
@@ -1373,12 +1370,11 @@ static CSSPrimitiveValue* ConsumeGradientAngleOrPercent(
     UnitlessQuirk) {
   const CSSParserToken& token = range.Peek();
   if (token.GetType() == kDimensionToken || token.GetType() == kNumberToken) {
-    return ConsumeAngle(range, &context,
-                        WebFeature::kUnitlessZeroAngleGradient);
+    return ConsumeAngle(range, context, WebFeature::kUnitlessZeroAngleGradient);
   }
   if (token.GetType() == kPercentageToken)
     return ConsumePercent(range, context, value_range);
-  MathFunctionParser math_parser(range, &context, value_range);
+  MathFunctionParser math_parser(range, context, value_range);
   if (const CSSMathFunctionValue* calculation = math_parser.Value()) {
     CalculationCategory category = calculation->Category();
     // TODO(fs): Add and support kCalcPercentAngle?
@@ -1580,7 +1576,7 @@ static CSSValue* ConsumeLinearGradient(
     cssvalue::CSSGradientType gradient_type) {
   bool expect_comma = true;
   const CSSPrimitiveValue* angle =
-      ConsumeAngle(args, &context, WebFeature::kUnitlessZeroAngleGradient);
+      ConsumeAngle(args, context, WebFeature::kUnitlessZeroAngleGradient);
   const CSSIdentifierValue* end_x = nullptr;
   const CSSIdentifierValue* end_y = nullptr;
   if (!angle) {
@@ -1618,7 +1614,7 @@ static CSSValue* ConsumeConicGradient(CSSParserTokenRange& args,
                                       cssvalue::CSSGradientRepeat repeating) {
   const CSSPrimitiveValue* from_angle = nullptr;
   if (ConsumeIdent<CSSValueID::kFrom>(args)) {
-    if (!(from_angle = ConsumeAngle(args, &context,
+    if (!(from_angle = ConsumeAngle(args, context,
                                     WebFeature::kUnitlessZeroAngleGradient)))
       return nullptr;
   }
