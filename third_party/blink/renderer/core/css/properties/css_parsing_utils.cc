@@ -2703,15 +2703,5 @@ css_property_parser_helpers::UnitlessQuirk UnitlessUnlessShorthand(
              : css_property_parser_helpers::UnitlessQuirk::kForbid;
 }
 
-CSSValue* ConsumeIntrinsicLength(CSSParserTokenRange& range,
-                                 const CSSParserContext& context) {
-  if (css_property_parser_helpers::IdentMatches<CSSValueID::kAuto>(
-          range.Peek().Id())) {
-    return css_property_parser_helpers::ConsumeIdent(range);
-  }
-  return css_property_parser_helpers::ConsumeLength(range, context,
-                                                    kValueRangeNonNegative);
-}
-
 }  // namespace css_parsing_utils
 }  // namespace blink

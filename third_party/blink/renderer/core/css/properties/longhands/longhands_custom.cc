@@ -1758,56 +1758,40 @@ const CSSValue* Contain::CSSValueFromComputedStyleInternal(
   return list;
 }
 
-const CSSValue* ContainIntrinsicBlockSize::ParseSingleValue(
+const CSSValue* ContainIntrinsicSize::ParseSingleValue(
     CSSParserTokenRange& range,
     const CSSParserContext& context,
     const CSSParserLocalContext&) const {
-  return css_parsing_utils::ConsumeIntrinsicLength(range, context);
+  if (range.Peek().Id() == CSSValueID::kAuto)
+    return css_property_parser_helpers::ConsumeIdent(range);
+  CSSValue* width = css_property_parser_helpers::ConsumeLength(
+      range, context, kValueRangeNonNegative);
+  if (!width)
+    return nullptr;
+  CSSValue* height = css_property_parser_helpers::ConsumeLength(
+      range, context, kValueRangeNonNegative);
+  if (!height)
+    height = width;
+  return MakeGarbageCollected<CSSValuePair>(width, height,
+                                            CSSValuePair::kDropIdenticalValues);
 }
 
-const CSSValue* ContainIntrinsicInlineSize::ParseSingleValue(
-    CSSParserTokenRange& range,
-    const CSSParserContext& context,
-    const CSSParserLocalContext&) const {
-  return css_parsing_utils::ConsumeIntrinsicLength(range, context);
-}
-
-const CSSValue* ContainIntrinsicWidth::ParseSingleValue(
-    CSSParserTokenRange& range,
-    const CSSParserContext& context,
-    const CSSParserLocalContext&) const {
-  return css_parsing_utils::ConsumeIntrinsicLength(range, context);
-}
-
-const CSSValue* ContainIntrinsicWidth::CSSValueFromComputedStyleInternal(
+const CSSValue* ContainIntrinsicSize::CSSValueFromComputedStyleInternal(
     const ComputedStyle& style,
     const SVGComputedStyle&,
     const LayoutObject* layout_object,
     bool allow_visited_style) const {
-  auto& width = style.ContainIntrinsicWidth();
-  if (width.IsAuto())
+  auto& size = style.ContainIntrinsicSize();
+  if (size.Width().IsAuto()) {
+    DCHECK(size.Height().IsAuto());
     return CSSIdentifierValue::Create(CSSValueID::kAuto);
-  return ComputedStyleUtils::ZoomAdjustedPixelValueForLength(width.GetLength(),
-                                                             style);
-}
-
-const CSSValue* ContainIntrinsicHeight::ParseSingleValue(
-    CSSParserTokenRange& range,
-    const CSSParserContext& context,
-    const CSSParserLocalContext&) const {
-  return css_parsing_utils::ConsumeIntrinsicLength(range, context);
-}
-
-const CSSValue* ContainIntrinsicHeight::CSSValueFromComputedStyleInternal(
-    const ComputedStyle& style,
-    const SVGComputedStyle&,
-    const LayoutObject* layout_object,
-    bool allow_visited_style) const {
-  auto& height = style.ContainIntrinsicHeight();
-  if (height.IsAuto())
-    return CSSIdentifierValue::Create(CSSValueID::kAuto);
-  return ComputedStyleUtils::ZoomAdjustedPixelValueForLength(height.GetLength(),
-                                                             style);
+  }
+  return MakeGarbageCollected<CSSValuePair>(
+      ComputedStyleUtils::ZoomAdjustedPixelValueForLength(
+          style.ContainIntrinsicSize().Width(), style),
+      ComputedStyleUtils::ZoomAdjustedPixelValueForLength(
+          style.ContainIntrinsicSize().Height(), style),
+      CSSValuePair::kDropIdenticalValues);
 }
 
 namespace {
