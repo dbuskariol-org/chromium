@@ -1325,16 +1325,26 @@ const FeatureEntry::FeatureVariation kAndroidNightModeFeatureVariations[] = {
     {"(default to light theme)", kAndroidNightModeDefaultToLightConstant,
      base::size(kAndroidNightModeDefaultToLightConstant), nullptr}};
 
-const FeatureEntry::FeatureParam kOmniboxAssistantVoiceSearch_Variations[] = {
-    {"min_agsa_version", ""},
-    {"min_android_sdk", ""},
-    {"min_memory_mb", ""},
-    {"enabled_locales", ""}};
+const FeatureEntry::FeatureParam kOmniboxAssistantVoiceSearchGreyMic[] = {
+    {"min_agsa_version", "10.95"},
+    {"min_android_sdk", "21"},
+    {"min_memory_mb", "1024"},
+    {"enabled_locales", ""},
+    {"colorful_mic", "false"}};
+
+const FeatureEntry::FeatureParam kOmniboxAssistantVoiceSearchColorfulMic[] = {
+    {"min_agsa_version", "10.95"},
+    {"min_android_sdk", "21"},
+    {"min_memory_mb", "1024"},
+    {"enabled_locales", ""},
+    {"colorful_mic", "true"}};
 
 const FeatureEntry::FeatureVariation kOmniboxAssistantVoiceSearchVariations[] =
     {
-        {"(with params)", kOmniboxAssistantVoiceSearch_Variations,
-         base::size(kOmniboxAssistantVoiceSearch_Variations), nullptr},
+        {"(grey mic)", kOmniboxAssistantVoiceSearchGreyMic,
+         base::size(kOmniboxAssistantVoiceSearchGreyMic), nullptr},
+        {"(colorful mic)", kOmniboxAssistantVoiceSearchColorfulMic,
+         base::size(kOmniboxAssistantVoiceSearchColorfulMic), nullptr},
 };
 
 const FeatureEntry::FeatureParam
