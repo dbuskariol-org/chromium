@@ -86,6 +86,7 @@ using web_app::IsBrowserOpen;
 using web_app::kDisabled;
 using web_app::kEnabled;
 using web_app::kNotPresent;
+using web_app::NavigateAndCheckForToolbar;
 using web_app::NavigateToURLAndWait;
 
 namespace {
@@ -110,17 +111,6 @@ enum class AppType {
   BOOKMARK_APP,  // Using HostedAppBrowserController
   WEB_APP,       // Using WebAppBrowserController
 };
-
-// Used by ShouldShowCustomTabBarForXXX. Performs a navigation and then checks
-// that the toolbar visibility is as expected.
-void NavigateAndCheckForToolbar(Browser* browser,
-                                const GURL& url,
-                                bool expected_visibility,
-                                bool proceed_through_interstitial = false) {
-  NavigateToURLAndWait(browser, url, proceed_through_interstitial);
-  EXPECT_EQ(expected_visibility,
-            browser->app_controller()->ShouldShowCustomTabBar());
-}
 
 void CheckWebContentsHasAppPrefs(content::WebContents* web_contents) {
   blink::mojom::RendererPreferences* prefs =
@@ -2107,44 +2097,6 @@ IN_PROC_BROWSER_TEST_P(HostedAppProcessModelTest,
   EXPECT_EQ("bar",
             content::EvalJs(bar_contents2,
                             "window.open('', 'bg2').document.body.innerText"));
-}
-
-// Check that toolbar is not shown for apps hosted within extensions pages.
-// This simulates a case where the user has manually navigated to a page hosted
-// within an extension, then added it as a bookmark app.
-// Regression test for https://crbug.com/828233.
-IN_PROC_BROWSER_TEST_P(HostedAppPWAOnlyTest,
-                       ShouldShowCustomTabBarForExtensionPage) {
-  // Note: This involves the creation of *two* extensions: The first is a
-  // regular (non-app) extension with a popup page. The second is a bookmark app
-  // created from the popup page URL (allowing the extension's popup page to be
-  // loaded in a window).
-
-  // Install the extension that has the popup page.
-  ASSERT_TRUE(LoadExtension(
-      test_data_dir_.AppendASCII("ui").AppendASCII("browser_action_popup")));
-  base::RunLoop().RunUntilIdle();  // Ensure the extension is fully loaded.
-
-  // Install the bookmark app that links to the extension's popup page.
-  GURL popup_url("chrome-extension://" + last_loaded_extension_id() +
-                 "/popup.html");
-  // TODO(mgiuca): Abstract this logic to share code with InstallPWA (which does
-  // almost the same thing, but also sets a scope).
-  WebApplicationInfo web_app_info;
-  web_app_info.app_url = popup_url;
-  app_ = InstallBookmarkApp(web_app_info);
-
-  ui_test_utils::UrlLoadObserver url_observer(
-      popup_url, content::NotificationService::AllSources());
-  app_browser_ = LaunchAppBrowser(app_);
-  url_observer.Wait();
-
-  CHECK(app_browser_);
-  CHECK(app_browser_ != browser());
-
-  // Navigate to the app's launch page; the toolbar should not be visible,
-  // because extensions pages are secure.
-  NavigateAndCheckForToolbar(app_browser_, popup_url, false);
 }
 
 INSTANTIATE_TEST_SUITE_P(All,

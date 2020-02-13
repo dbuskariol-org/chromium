@@ -44,17 +44,6 @@ constexpr const char kExampleURL[] = "http://example.org/";
 
 constexpr char kLaunchWebAppDisplayModeHistogram[] = "Launch.WebAppDisplayMode";
 
-// Performs a navigation and then checks that the toolbar visibility is as
-// expected.
-void NavigateAndCheckForToolbar(Browser* browser,
-                                const GURL& url,
-                                bool expected_visibility,
-                                bool proceed_through_interstitial = false) {
-  web_app::NavigateToURLAndWait(browser, url, proceed_through_interstitial);
-  EXPECT_EQ(expected_visibility,
-            browser->app_controller()->ShouldShowCustomTabBar());
-}
-
 // Opens |url| in a new popup window with the dimensions |popup_size|.
 Browser* OpenPopupAndWait(Browser* browser,
                           const GURL& url,
