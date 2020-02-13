@@ -9,7 +9,7 @@
 #define __WRL_CLASSIC_COM_STRICT__
 #endif  // __WRL_CLASSIC_COM_STRICT__
 
-#include "chrome/updater/win/com/com_server.h"
+#include "chrome/updater/server/win/server.h"
 
 #include "base/logging.h"
 #include "base/win/scoped_com_initializer.h"
@@ -113,6 +113,10 @@ HRESULT ComServer::Run() {
   }
 
   return hr;
+}
+
+int RunServer() {
+  return ComServer().RunComServer();
 }
 
 }  // namespace updater

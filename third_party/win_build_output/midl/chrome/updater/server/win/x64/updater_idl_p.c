@@ -6,8 +6,8 @@
  /* File created by MIDL compiler version 8.xx.xxxx */
 /* at a redacted point in time
  */
-/* Compiler settings for ../../chrome/updater/win/com/updater_idl.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=ARM64 8.01.0622 
+/* Compiler settings for ../../chrome/updater/server/win/updater_idl.idl:
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.xx.xxxx 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -16,7 +16,7 @@
 */
 /* @@MIDL_FILE_HEADING(  ) */
 
-#if defined(_M_ARM64)
+#if defined(_M_AMD64)
 
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
@@ -47,7 +47,7 @@
 #include "updater_idl.h"
 
 #define TYPE_FORMAT_STRING_SIZE   7                                 
-#define PROC_FORMAT_STRING_SIZE   85                                
+#define PROC_FORMAT_STRING_SIZE   77                                
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -88,7 +88,7 @@ extern const MIDL_STUBLESS_PROXY_INFO IUpdater_ProxyInfo;
 
 
 
-#if !defined(__RPC_ARM64__)
+#if !defined(__RPC_WIN64__)
 #error  Invalid build platform for this stub.
 #endif
 
@@ -103,68 +103,60 @@ static const updater_idl_MIDL_PROC_FORMAT_STRING updater_idl__MIDL_ProcFormatStr
 			0x6c,		/* Old Flags:  object, Oi2 */
 /*  2 */	NdrFcLong( 0x0 ),	/* 0 */
 /*  6 */	NdrFcShort( 0x3 ),	/* 3 */
-/*  8 */	NdrFcShort( 0x18 ),	/* ARM64 Stack size/offset = 24 */
+/*  8 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 10 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 12 */	NdrFcShort( 0x8 ),	/* 8 */
 /* 14 */	0x46,		/* Oi2 Flags:  clt must size, has return, has ext, */
 			0x2,		/* 2 */
-/* 16 */	0xe,		/* 14 */
+/* 16 */	0xa,		/* 10 */
 			0x1,		/* Ext Flags:  new corr desc, */
 /* 18 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 20 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 22 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 24 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 26 */	0x2,		/* 2 */
-			0x80,		/* 128 */
-/* 28 */	0x81,		/* 129 */
-			0x0,		/* 0 */
+/* 24 */	NdrFcShort( 0x0 ),	/* 0 */
 
 	/* Parameter guid */
 
-/* 30 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
-/* 32 */	NdrFcShort( 0x8 ),	/* ARM64 Stack size/offset = 8 */
-/* 34 */	NdrFcShort( 0x4 ),	/* Type Offset=4 */
+/* 26 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
+/* 28 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 30 */	NdrFcShort( 0x4 ),	/* Type Offset=4 */
 
 	/* Return value */
 
-/* 36 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 38 */	NdrFcShort( 0x10 ),	/* ARM64 Stack size/offset = 16 */
-/* 40 */	0x8,		/* FC_LONG */
+/* 32 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 34 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 36 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
 	/* Procedure Update */
 
-/* 42 */	0x33,		/* FC_AUTO_HANDLE */
+/* 38 */	0x33,		/* FC_AUTO_HANDLE */
 			0x6c,		/* Old Flags:  object, Oi2 */
-/* 44 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 48 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 50 */	NdrFcShort( 0x18 ),	/* ARM64 Stack size/offset = 24 */
-/* 52 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 54 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 56 */	0x46,		/* Oi2 Flags:  clt must size, has return, has ext, */
+/* 40 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 44 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 46 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 48 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 50 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 52 */	0x46,		/* Oi2 Flags:  clt must size, has return, has ext, */
 			0x2,		/* 2 */
-/* 58 */	0xe,		/* 14 */
+/* 54 */	0xa,		/* 10 */
 			0x1,		/* Ext Flags:  new corr desc, */
+/* 56 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 58 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 60 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 62 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 64 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 66 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 68 */	0x2,		/* 2 */
-			0x80,		/* 128 */
-/* 70 */	0x81,		/* 129 */
-			0x0,		/* 0 */
 
 	/* Parameter guid */
 
-/* 72 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
-/* 74 */	NdrFcShort( 0x8 ),	/* ARM64 Stack size/offset = 8 */
-/* 76 */	NdrFcShort( 0x4 ),	/* Type Offset=4 */
+/* 64 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
+/* 66 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 68 */	NdrFcShort( 0x4 ),	/* Type Offset=4 */
 
 	/* Return value */
 
-/* 78 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 80 */	NdrFcShort( 0x10 ),	/* ARM64 Stack size/offset = 16 */
-/* 82 */	0x8,		/* FC_LONG */
+/* 70 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
+/* 72 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
+/* 74 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
 			0x0
@@ -198,7 +190,7 @@ static const updater_idl_MIDL_TYPE_FORMAT_STRING updater_idl__MIDL_TypeFormatStr
 static const unsigned short IUpdater_FormatStringOffsetTable[] =
     {
     0,
-    42
+    38
     };
 
 static const MIDL_STUBLESS_PROXY_INFO IUpdater_ProxyInfo =
@@ -318,5 +310,5 @@ const ExtendedProxyFileInfo updater_idl_ProxyFileInfo =
 #endif
 
 
-#endif /* defined(_M_ARM64)*/
+#endif /* defined(_M_AMD64)*/
 

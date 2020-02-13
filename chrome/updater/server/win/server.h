@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_UPDATER_WIN_COM_COM_SERVER_H_
-#define CHROME_UPDATER_WIN_COM_COM_SERVER_H_
+#ifndef CHROME_UPDATER_SERVER_WIN_SERVER_H_
+#define CHROME_UPDATER_SERVER_WIN_SERVER_H_
 
 #include <windows.h>
 
@@ -13,7 +13,7 @@
 #include "base/macros.h"
 #include "base/strings/string16.h"
 #include "base/synchronization/waitable_event.h"
-#include "chrome/updater/win/updater_idl.h"
+#include "chrome/updater/server/win/updater_idl.h"
 
 namespace updater {
 
@@ -71,6 +71,9 @@ class ComServer {
   DISALLOW_COPY_AND_ASSIGN(ComServer);
 };
 
+// Sets up and runs the server.
+int RunServer();
+
 }  // namespace updater
 
-#endif  // CHROME_UPDATER_WIN_COM_COM_SERVER_H_
+#endif  // CHROME_UPDATER_SERVER_WIN_SERVER_H_
