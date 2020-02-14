@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_NFC_SYSTEM_LEVEL_SETTING_IMPL_H_
-#define CHROME_BROWSER_ANDROID_NFC_SYSTEM_LEVEL_SETTING_IMPL_H_
+#ifndef CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_IMPL_H_
+#define CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_IMPL_H_
 
 #include <memory>
 
 #include "base/android/jni_weak_ref.h"
 #include "base/android/scoped_java_ref.h"
 #include "base/macros.h"
-#include "chrome/browser/android/nfc_system_level_setting.h"
+#include "chrome/browser/nfc/android/nfc_system_level_setting.h"
 
 class NfcSystemLevelSettingImpl : public NfcSystemLevelSetting {
  public:
@@ -28,4 +28,4 @@ class NfcSystemLevelSettingImpl : public NfcSystemLevelSetting {
   DISALLOW_COPY_AND_ASSIGN(NfcSystemLevelSettingImpl);
 };
 
-#endif  // CHROME_BROWSER_ANDROID_NFC_SYSTEM_LEVEL_SETTING_IMPL_H_
+#endif  // CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_IMPL_H_
