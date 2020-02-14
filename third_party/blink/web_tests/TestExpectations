@@ -440,6 +440,9 @@ crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/animate-marker-orient
 crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/animate-dynamic-update-attributeName.html [ Skip ]
 crbug.com/1048765 [ Mac10.10 ] external/wpt/svg/animations/short-simple-duration-and-fractional-repeatcount.html [ Skip ]
 
+crbug.com/1052202 external/wpt/svg/linking/scripted/href-mpath-element.html [ Timeout ]
+crbug.com/1052202 external/wpt/svg/linking/scripted/href-animate-element.html [ Timeout ]
+
 # Slightly flaky timeouts (about 1 in 30)
 crbug.com/1050993 [ Linux ] virtual/gpu-rasterization/images/drag-image-descendant-painting-sibling.html [ Pass Timeout ]
 
@@ -2812,9 +2815,6 @@ crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-004.html [ Fail
 crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-005.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
-crbug.com/626703 [ Linux ] external/wpt/svg/linking/scripted/href-mpath-element.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/svg/linking/scripted/href-mpath-element.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/svg/linking/scripted/href-mpath-element.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/css/css-text/letter-spacing/letter-spacing-nesting-003.xht [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-text/letter-spacing/letter-spacing-nesting-003.xht [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-text/letter-spacing/letter-spacing-nesting-003.xht [ Failure ]
@@ -2839,9 +2839,6 @@ crbug.com/626703 [ Win ] external/wpt/css/css-text/letter-spacing/letter-spacing
 crbug.com/626703 [ Linux ] virtual/web-components-v0-disabled/external/wpt/html/semantics/embedded-content/the-img-element/image-loading-lazy-in-cross-origin-ifame-001.sub.html [ Timeout ]
 crbug.com/626703 [ Mac ] virtual/web-components-v0-disabled/external/wpt/html/semantics/embedded-content/the-img-element/image-loading-lazy-in-cross-origin-ifame-001.sub.html [ Timeout ]
 crbug.com/626703 [ Win ] virtual/web-components-v0-disabled/external/wpt/html/semantics/embedded-content/the-img-element/image-loading-lazy-in-cross-origin-ifame-001.sub.html [ Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/svg/linking/scripted/href-animate-element.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/svg/linking/scripted/href-animate-element.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/svg/linking/scripted/href-animate-element.html [ Timeout ]
 crbug.com/626703 [ Linux ] virtual/omt-worker-fetch/external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
 crbug.com/626703 [ Mac ] virtual/omt-worker-fetch/external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
 crbug.com/626703 [ Win ] virtual/omt-worker-fetch/external/wpt/workers/shared-worker-options-mismatch.html [ Timeout ]
