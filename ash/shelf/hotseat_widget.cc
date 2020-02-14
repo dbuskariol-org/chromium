@@ -21,6 +21,7 @@
 #include "ash/system/status_area_widget.h"
 #include "ash/wallpaper/wallpaper_controller_impl.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
+#include "base/metrics/histogram_macros.h"
 #include "chromeos/constants/chromeos_switches.h"
 #include "ui/aura/scoped_window_targeter.h"
 #include "ui/aura/window_targeter.h"
@@ -460,6 +461,8 @@ void HotseatWidget::UpdateLayout(bool animate) {
   animation_setter.SetTweenType(gfx::Tween::EASE_OUT);
   animation_setter.SetPreemptionStrategy(
       ui::LayerAnimator::IMMEDIATELY_ANIMATE_TO_NEW_TARGET);
+  animation_setter.SetAnimationMetricsReporter(
+      shelf_->GetHotseatTransitionMetricsReporter());
 
   layer->SetOpacity(new_layout_inputs.opacity);
   SetBounds(new_layout_inputs.bounds);
