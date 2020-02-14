@@ -29,8 +29,8 @@
  *
  */
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_PRERENDER_CLIENT_H_
-#define THIRD_PARTY_BLINK_RENDERER_PLATFORM_PRERENDER_CLIENT_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_LOADER_PRIVATE_PRERENDER_CLIENT_H_
+#define THIRD_PARTY_BLINK_RENDERER_CORE_LOADER_PRIVATE_PRERENDER_CLIENT_H_
 
 #include "third_party/blink/renderer/platform/heap/handle.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
@@ -51,4 +51,4 @@ class PLATFORM_EXPORT PrerenderClient : public GarbageCollectedMixin {
 
 }  // namespace blink
 
-#endif
+#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_LOADER_PRIVATE_PRERENDER_CLIENT_H_
