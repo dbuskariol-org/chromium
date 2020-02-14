@@ -46,7 +46,7 @@ class ClipboardPromise final : public GarbageCollected<ClipboardPromise>,
   // For rejections originating from ClipboardWriter.
   void RejectFromReadOrDecodeFailure();
 
-  void Trace(blink::Visitor*) override;
+  void Trace(Visitor*) override;
 
  private:
   // Called to begin writing a type.
