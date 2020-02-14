@@ -180,10 +180,7 @@ component("web_engine_core") {
     "web_engine_main_delegate.cc",
     "web_engine_main_delegate.h",
   ]
-  visibility = [
-    ":*",
-    "//fuchsia/runners:cast_runner_browsertests__exec",
-  ]
+  visibility = [ ":*" ]
 }
 
 source_set("switches") {

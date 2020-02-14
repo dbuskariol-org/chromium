@@ -180,7 +180,6 @@ test("cast_runner_browsertests") {
     "//fuchsia/base",
     "//fuchsia/base:test_support",
     "//fuchsia/engine:browsertest_core",
-    "//fuchsia/engine:web_engine_core",
     "//testing/gmock",
     "//testing/gtest",
     "//ui/ozone",
