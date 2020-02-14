@@ -1298,8 +1298,8 @@ class MetaBuildWrapper(object):
       # these will lead to incorrect incremental builds if their directory
       # contents change. Do not add to this list.
       # TODO(https://crbug.com/912946): Remove this if statement.
-      if ((is_msan and f == 'instrumented_libraries_prebuilt/') or
-          f == 'mr_extension/' or # https://crbug.com/997947
+      if ((is_msan and f == 'instrumented_libraries_prebuilt/')
+          or f == 'mr_extension/' or  # https://crbug.com/997947
           f.startswith('nacl_test_data/') or
           f.startswith('ppapi_nacl_tests_libs/') or
           (is_cros and f in (  # https://crbug.com/1002509
@@ -1310,17 +1310,17 @@ class MetaBuildWrapper(object):
               'resources/chromeos/accessibility/chromevox/',
               'resources/chromeos/accessibility/select_to_speak/',
               'test_data/chrome/browser/resources/chromeos/accessibility/'
-                  'autoclick/',
+              'autoclick/',
               'test_data/chrome/browser/resources/chromeos/accessibility/'
-                  'chromevox/',
+              'chromevox/',
               'test_data/chrome/browser/resources/chromeos/accessibility/'
-                  'select_to_speak/',
-          )) or
-          (is_mac and f in (  # https://crbug.com/1000667
+              'select_to_speak/',
+          )) or (is_mac and f in (  # https://crbug.com/1000667
               'AlertNotificationService.xpc/',
               'Chromium Framework.framework/',
               'Chromium Helper.app/',
               'Chromium.app/',
+              'ChromiumUpdater.app/',
               'Content Shell.app/',
               'Google Chrome Framework.framework/',
               'Google Chrome Helper (GPU).app/',
@@ -1328,7 +1328,7 @@ class MetaBuildWrapper(object):
               'Google Chrome Helper (Renderer).app/',
               'Google Chrome Helper.app/',
               'Google Chrome.app/',
-              'GoogleUpdate.app/',
+              'GoogleUpdater.app/',
               'blink_deprecated_test_plugin.plugin/',
               'blink_test_plugin.plugin/',
               'corb_test_plugin.plugin/',
