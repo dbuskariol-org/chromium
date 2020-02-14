@@ -222,6 +222,27 @@ class HostedAppTest : public extensions::ExtensionBrowserTest,
 
   static const char* GetInstallableAppName() { return "Manifest test app"; }
 
+  void InstallMixedContentPWA() { return InstallPWA(GetMixedContentAppURL()); }
+
+  void InstallSecurePWA() { return InstallPWA(GetSecureAppURL()); }
+
+  void InstallPWA(const GURL& app_url) {
+    WebApplicationInfo web_app_info;
+    web_app_info.app_url = app_url;
+    web_app_info.scope = app_url.GetWithoutFilename();
+    web_app_info.open_as_window = true;
+
+    app_ = InstallBookmarkApp(web_app_info);
+
+    ui_test_utils::UrlLoadObserver url_observer(
+        app_url, content::NotificationService::AllSources());
+    app_browser_ = LaunchAppBrowser(app_);
+    url_observer.Wait();
+
+    CHECK(app_browser_);
+    CHECK(app_browser_ != browser());
+  }
+
   void SetUpInProcessBrowserTestFixture() override {
     extensions::ExtensionBrowserTest::SetUpInProcessBrowserTestFixture();
     cert_verifier_.SetUpInProcessBrowserTestFixture();
@@ -301,6 +322,8 @@ class HostedAppTest : public extensions::ExtensionBrowserTest,
 
   DISALLOW_COPY_AND_ASSIGN(HostedAppTest);
 };
+
+using SharedAppTest = HostedAppTest;
 
 // Tests that "Open link in new tab" opens a link in a foreground tab.
 IN_PROC_BROWSER_TEST_P(HostedAppTest, OpenLinkInNewTab) {
@@ -568,8 +591,8 @@ IN_PROC_BROWSER_TEST_P(HostedAppTest, ShouldShowCustomTabBarForAppWithoutWWW) {
 }
 
 // Check that a subframe on a regular web page can navigate to a URL that
-// redirects to a platform app.  https://crbug.com/721949.
-IN_PROC_BROWSER_TEST_P(HostedAppTest, SubframeRedirectsToHostedApp) {
+// redirects to a hosted app.  https://crbug.com/721949.
+IN_PROC_BROWSER_TEST_P(SharedAppTest, SubframeRedirectsToHostedApp) {
   // This test only applies to hosted apps.
   if (app_type() != AppType::HOSTED_APP)
     return;
@@ -604,6 +627,27 @@ IN_PROC_BROWSER_TEST_P(HostedAppTest, SubframeRedirectsToHostedApp) {
       EvalJs(subframe, "document.body.innerText.trim();").ExtractString());
 }
 
+// Check that no assertions are hit when showing a permission request bubble.
+IN_PROC_BROWSER_TEST_P(HostedAppTest, PermissionBubble) {
+  ASSERT_TRUE(https_server()->Start());
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  WebApplicationInfo web_app_info;
+  web_app_info.app_url = GetSecureAppURL();
+  const extensions::Extension* app = InstallBookmarkApp(web_app_info);
+
+  ui_test_utils::UrlLoadObserver url_observer(
+      GetSecureAppURL(), content::NotificationService::AllSources());
+  Browser* app_browser = LaunchAppBrowser(app);
+  url_observer.Wait();
+
+  RenderFrameHost* render_frame_host =
+      app_browser->tab_strip_model()->GetActiveWebContents()->GetMainFrame();
+  EXPECT_TRUE(content::ExecuteScript(
+      render_frame_host,
+      "navigator.geolocation.getCurrentPosition(function(){});"));
+}
+
 // Tests that platform apps can still load mixed content.
 IN_PROC_BROWSER_TEST_P(HostedAppTestWithAutoupgradesDisabled,
                        MixedContentInPlatformApp) {
@@ -621,6 +665,78 @@ IN_PROC_BROWSER_TEST_P(HostedAppTestWithAutoupgradesDisabled,
   url_observer.Wait();
 
   web_app::CheckMixedContentLoaded(app_browser_);
+}
+
+// Ensure that hosted app windows with blank titles don't display the URL as a
+// default window title.
+IN_PROC_BROWSER_TEST_P(HostedAppTest, EmptyTitlesDoNotDisplayUrl) {
+  ASSERT_TRUE(https_server()->Start());
+  GURL url = https_server()->GetURL("app.site.com", "/empty.html");
+
+  WebApplicationInfo web_app_info;
+  web_app_info.app_url = url;
+  const extensions::Extension* app = InstallBookmarkApp(web_app_info);
+
+  Browser* app_browser = LaunchAppBrowser(app);
+  content::WebContents* web_contents =
+      app_browser->tab_strip_model()->GetActiveWebContents();
+  content::WaitForLoadStop(web_contents);
+  EXPECT_EQ(base::string16(), app_browser->GetWindowTitleForCurrentTab(false));
+  NavigateToURLAndWait(app_browser,
+                       https_server()->GetURL("app.site.com", "/simple.html"));
+  EXPECT_EQ(base::ASCIIToUTF16("OK"),
+            app_browser->GetWindowTitleForCurrentTab(false));
+}
+
+// Ensure that hosted app windows display the app title instead of the page
+// title when off scope.
+IN_PROC_BROWSER_TEST_P(HostedAppTest, OffScopeUrlsDisplayAppTitle) {
+  ASSERT_TRUE(https_server()->Start());
+  GURL url = GetSecureAppURL();
+
+  WebApplicationInfo web_app_info;
+  web_app_info.app_url = url;
+  web_app_info.scope = url.GetWithoutFilename();
+  web_app_info.title = base::ASCIIToUTF16("A Hosted App");
+  const extensions::Extension* app = InstallBookmarkApp(web_app_info);
+
+  Browser* app_browser = LaunchAppBrowser(app);
+  content::WebContents* web_contents =
+      app_browser->tab_strip_model()->GetActiveWebContents();
+  content::WaitForLoadStop(web_contents);
+
+  // When we are within scope, show the page title.
+  EXPECT_EQ(base::ASCIIToUTF16("Google"),
+            app_browser->GetWindowTitleForCurrentTab(false));
+
+  NavigateToURLAndWait(app_browser,
+                       https_server()->GetURL("app.site.com", "/simple.html"));
+
+  // When we are off scope, show the app title.
+  EXPECT_EQ(base::ASCIIToUTF16("A Hosted App"),
+            app_browser->GetWindowTitleForCurrentTab(false));
+}
+
+// Ensure that hosted app windows display the app title instead of the page
+// title when using http.
+IN_PROC_BROWSER_TEST_P(HostedAppTest, InScopeHttpUrlsDisplayAppTitle) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+  GURL url = embedded_test_server()->GetURL("app.site.com", "/simple.html");
+  WebApplicationInfo web_app_info;
+  web_app_info.app_url = url;
+  web_app_info.title = base::ASCIIToUTF16("A Hosted App");
+
+  const extensions::Extension* app = InstallBookmarkApp(web_app_info);
+
+  Browser* app_browser = LaunchAppBrowser(app);
+  content::WebContents* web_contents =
+      app_browser->tab_strip_model()->GetActiveWebContents();
+  content::WaitForLoadStop(web_contents);
+
+  // The page title is "OK" but the page is being served over HTTP, so the app
+  // title should be used instead.
+  EXPECT_EQ(base::ASCIIToUTF16("A Hosted App"),
+            app_browser->GetWindowTitleForCurrentTab(false));
 }
 
 IN_PROC_BROWSER_TEST_P(HostedAppTest, CreatedForInstalledPwaForNonPwas) {
@@ -1755,6 +1871,12 @@ INSTANTIATE_TEST_SUITE_P(All,
                          HostedAppTest,
                          ::testing::Values(AppType::HOSTED_APP,
                                            AppType::BOOKMARK_APP));
+
+INSTANTIATE_TEST_SUITE_P(All,
+                         SharedAppTest,
+                         ::testing::Values(AppType::HOSTED_APP,
+                                           AppType::BOOKMARK_APP,
+                                           AppType::WEB_APP));
 
 INSTANTIATE_TEST_SUITE_P(All,
                          HostedAppTestWithAutoupgradesDisabled,
