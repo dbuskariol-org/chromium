@@ -67,6 +67,7 @@
 #include "content/public/browser/native_file_system_entry_factory.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/browser/permission_controller.h"
+#include "content/public/browser/service_process_host.h"
 #include "content/public/browser/session_storage_usage_info.h"
 #include "content/public/browser/storage_notification_service.h"
 #include "content/public/browser/storage_usage_info.h"
@@ -140,9 +141,18 @@ storage::mojom::StorageService* GetStorageService() {
   mojo::Remote<storage::mojom::StorageService>& remote =
       GetStorageServiceRemote();
   if (!remote) {
-    base::PostTask(FROM_HERE, {BrowserThread::IO},
-                   base::BindOnce(&RunInProcessStorageService,
-                                  remote.BindNewPipeAndPassReceiver()));
+    if (base::FeatureList::IsEnabled(features::kStorageServiceOutOfProcess)) {
+      remote = ServiceProcessHost::Launch<storage::mojom::StorageService>(
+          ServiceProcessHost::Options()
+              .WithSandboxType(SandboxType::kNoSandbox)
+              .WithDisplayName("Storage Service")
+              .Pass());
+    } else {
+      base::PostTask(FROM_HERE, {BrowserThread::IO},
+                     base::BindOnce(&RunInProcessStorageService,
+                                    remote.BindNewPipeAndPassReceiver()));
+    }
+
     if (base::CommandLine::ForCurrentProcess()->HasSwitch(
             switches::kEnableAggressiveDOMStorageFlushing)) {
       remote->EnableAggressiveDomStorageFlushing();
