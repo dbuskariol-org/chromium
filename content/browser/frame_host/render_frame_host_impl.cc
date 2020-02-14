@@ -3265,6 +3265,10 @@ void RenderFrameHostImpl::Are3DAPIsBlocked(Are3DAPIsBlockedCallback callback) {
   std::move(callback).Run(blocked);
 }
 
+void RenderFrameHostImpl::ScaleFactorChanged(float scale) {
+  delegate_->OnPageScaleFactorChanged(this, scale);
+}
+
 void RenderFrameHostImpl::RequestTextSurroundingSelection(
     blink::mojom::LocalFrame::GetTextSurroundingSelectionCallback callback,
     int max_length) {
@@ -5957,6 +5961,18 @@ void RenderFrameHostImpl::SetUpMojoIfNeeded() {
             std::make_unique<ActiveURLMessageFilter>(impl));
       },
       base::Unretained(this)));
+
+  if (frame_tree_node_->IsMainFrame()) {
+    associated_registry_->AddInterface(base::BindRepeating(
+        [](RenderFrameHostImpl* impl,
+           mojo::PendingAssociatedReceiver<blink::mojom::LocalMainFrameHost>
+               receiver) {
+          impl->local_main_frame_host_receiver_.Bind(std::move(receiver));
+          impl->local_main_frame_host_receiver_.SetFilter(
+              std::make_unique<ActiveURLMessageFilter>(impl));
+        },
+        base::Unretained(this)));
+  }
   RegisterMojoInterfaces();
   mojo::PendingRemote<mojom::FrameFactory> frame_factory;
   GetProcess()->BindReceiver(frame_factory.InitWithNewPipeAndPassReceiver());
