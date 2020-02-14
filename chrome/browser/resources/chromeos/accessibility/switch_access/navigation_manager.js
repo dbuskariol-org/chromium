@@ -47,17 +47,12 @@ class NavigationManager {
    * is selected.
    */
   static enterMenu() {
-    if (!NavigationManager.instance) {
-      return;
-    }
-    const menuManager = NavigationManager.instance.menuManager_;
-    const currentNode = NavigationManager.instance.node_;
-
-    const didEnter = menuManager.enter(currentNode);
+    const navigator = NavigationManager.instance;
+    const didEnter = navigator.menuManager_.enter(navigator.node_);
 
     // If the menu does not or cannot open, select the current node.
     if (!didEnter) {
-      NavigationManager.instance.selectCurrentNode();
+      navigator.selectCurrentNode();
     }
   }
 
@@ -69,9 +64,6 @@ class NavigationManager {
    */
   static forceFocusedNode(node) {
     const navigator = NavigationManager.instance;
-    if (!navigator) {
-      return;
-    }
     navigator.setNode_(node);
   }
 
@@ -104,9 +96,6 @@ class NavigationManager {
    */
   static moveBackward() {
     const navigator = NavigationManager.instance;
-    if (!navigator) {
-      return;
-    }
 
     if (navigator.menuManager_.moveBackward()) {
       // The menu navigation is handled separately. If we are in the menu, do
@@ -122,9 +111,6 @@ class NavigationManager {
    */
   static moveForward() {
     const navigator = NavigationManager.instance;
-    if (!navigator) {
-      return;
-    }
 
     if (navigator.onMoveForwardForTesting_) {
       navigator.onMoveForwardForTesting_();
@@ -145,9 +131,6 @@ class NavigationManager {
    */
   static moveToValidNode() {
     const navigator = NavigationManager.instance;
-    if (!navigator) {
-      return;
-    }
 
     const nodeIsValid = navigator.node_.isValidAndVisible();
     const groupIsValid = navigator.group_.isValidGroup();
@@ -190,9 +173,6 @@ class NavigationManager {
    */
   static refreshFocusRings() {
     const navigator = NavigationManager.instance;
-    if (!navigator) {
-      return;
-    }
 
     navigator.focusRingManager_.setFocusNodes(
         navigator.node_, navigator.group_);
