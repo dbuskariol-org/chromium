@@ -63,5 +63,15 @@ luci.console_view(
             category = 'ios|default',
             short_name = 'non',
         ),
+        luci.console_view_entry(
+            builder = 'ci/ios-device-xcode-clang',
+            category = 'ios|xcode',
+            short_name = 'dev',
+        ),
+        luci.console_view_entry(
+            builder = 'ci/ios-simulator-xcode-clang',
+            category = 'ios|xcode',
+            short_name = 'sim',
+        ),
     ],
 )
