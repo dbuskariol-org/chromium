@@ -6,10 +6,6 @@
  * This class handles navigation amongst the elements onscreen.
  */
 class NavigationManager {
-  /** @param {!chrome.automation.AutomationNode} desktop */
-  static initialize(desktop) {
-    NavigationManager.instance = new NavigationManager(desktop);
-  }
 
   /**
    * @param {!chrome.automation.AutomationNode} desktop
@@ -43,37 +39,7 @@ class NavigationManager {
     this.init_();
   }
 
-  // -------------------------------------------------------
-  // |                 Public Methods                      |
-  // -------------------------------------------------------
-
-  /**
-   * Enters |this.node_|.
-   */
-  enterGroup() {
-    if (!this.node_.isGroup()) {
-      return;
-    }
-
-    SwitchAccessMetrics.recordMenuAction('EnterGroup');
-
-    const newGroup = this.node_.asRootNode();
-    if (newGroup) {
-      this.groupStack_.push(this.group_);
-      this.setGroup_(newGroup);
-    }
-  }
-
-  /**
-   * Puts focus on the virtual keyboard, if the current node is a text input.
-   * TODO(cbug/946190): Handle the case where the user has not enabled the
-   *     onscreen keyboard.
-   */
-  enterKeyboard() {
-    const keyboard = KeyboardRootNode.buildTree(this.desktop_);
-    this.node_.performAction(SAConstants.MenuAction.OPEN_KEYBOARD);
-    this.jumpTo_(keyboard);
-  }
+  // =============== Static Methods ==============
 
   /**
    * Open the Switch Access menu for the currently highlighted node. If there
@@ -96,6 +62,20 @@ class NavigationManager {
   }
 
   /**
+   * Forces the current node to be |node|.
+   * Should only be called by subclasses of SARootNode and
+   *    only when they are focused.
+   * @param {!SAChildNode} node
+   */
+  static forceFocusedNode(node) {
+    const navigator = NavigationManager.instance;
+    if (!navigator) {
+      return;
+    }
+    navigator.setNode_(node);
+  }
+
+  /**
    * Returns the current Switch Access tree, for debugging purposes.
    * @param {boolean} wholeTree Whether to print the whole tree, or just the
    * current focus.
@@ -112,6 +92,11 @@ class NavigationManager {
     console.log(desktopRoot.debugString(
         wholeTree, '', NavigationManager.instance.node_));
     return desktopRoot;
+  }
+
+  /** @param {!chrome.automation.AutomationNode} desktop */
+  static initialize(desktop) {
+    NavigationManager.instance = new NavigationManager(desktop);
   }
 
   /**
@@ -213,6 +198,36 @@ class NavigationManager {
         navigator.node_, navigator.group_);
   }
 
+  // =============== Instance Methods ==============
+
+  /**
+   * Enters |this.node_|.
+   */
+  enterGroup() {
+    if (!this.node_.isGroup()) {
+      return;
+    }
+
+    SwitchAccessMetrics.recordMenuAction('EnterGroup');
+
+    const newGroup = this.node_.asRootNode();
+    if (newGroup) {
+      this.groupStack_.push(this.group_);
+      this.setGroup_(newGroup);
+    }
+  }
+
+  /**
+   * Puts focus on the virtual keyboard, if the current node is a text input.
+   * TODO(cbug/946190): Handle the case where the user has not enabled the
+   *     onscreen keyboard.
+   */
+  enterKeyboard() {
+    const keyboard = KeyboardRootNode.buildTree(this.desktop_);
+    this.node_.performAction(SAConstants.MenuAction.OPEN_KEYBOARD);
+    this.jumpTo_(keyboard);
+  }
+
   /**
    * Selects the current node.
    */
@@ -242,23 +257,7 @@ class NavigationManager {
     }
   }
 
-  /**
-   * Forces the current node to be |node|.
-   * Should only be called by subclasses of SARootNode and
-   *    only when they are focused.
-   * @param {!SAChildNode} node
-   */
-  static forceFocusedNode(node) {
-    const navigator = NavigationManager.instance;
-    if (!navigator) {
-      return;
-    }
-    navigator.setNode_(node);
-  }
-
-  // -------------------------------------------------------
-  // |                 Event Handlers                      |
-  // -------------------------------------------------------
+  // =============== Event Handlers ==============
 
   /**
    * Sets up the connection between the menuPanel and menuManager.
@@ -307,9 +306,7 @@ class NavigationManager {
     }
   }
 
-  // -------------------------------------------------------
-  // |                 Private Methods                     |
-  // -------------------------------------------------------
+  // =============== Private Methods ==============
 
   /**
    * Create a stack of the groups the specified node is in, and set
