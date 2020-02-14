@@ -470,7 +470,7 @@ body[type='open-multi-file'].check-select .dialog-header {
 
 .dialog-header.files-ng cr-button {
   --hover-bg-color: rgba(0, 0, 0, 4%);
-  --ink-color: var(--google-grey-700);
+  --ink-color: rgba(0, 0, 0, 88%);
   --text-color: currentColor;
   border: 1px solid transparent;
   border-radius: 18px;
