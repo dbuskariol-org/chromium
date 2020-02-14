@@ -2224,14 +2224,8 @@ crbug.com/636239 [ Win7 ] virtual/audio-service/media/video-zoom-controls.html [
 
 crbug.com/377696 printing/setPrinting.html [ Failure ]
 
-crbug.com/658305 [ Mac ] css3/filters/buffer-offset.html [ Failure Pass ]
-crbug.com/658305 [ Mac ] css3/filters/effect-reference-external.html [ Failure Pass ]
 crbug.com/658305 css3/filters/effect-reference-image.html [ Pass Failure ]
 crbug.com/658305 css3/filters/effect-reference-image-lazy-attach.html [ Pass Failure ]
-crbug.com/658305 [ Mac ] css3/filters/effect-reference-subregion-chained.html [ Failure Pass ]
-crbug.com/658305 [ Mac ] css3/filters/effect-reference-subregion-colormatrix.html [ Failure Pass ]
-crbug.com/658305 [ Mac ] css3/filters/effect-reference-tile.html [ Failure Pass ]
-crbug.com/658305 [ Mac ] css3/filters/effect-reference-tile-hw.html [ Failure Pass ]
 
 crbug.com/524160 [ Debug ] http/tests/media/media-source/stream_memory_tests/mediasource-appendbuffer-quota-exceeded-default-buffers.html [ Timeout ]
 crbug.com/524160 [ Debug ] virtual/audio-service/http/tests/media/media-source/stream_memory_tests/mediasource-appendbuffer-quota-exceeded-default-buffers.html [ Timeout ]
