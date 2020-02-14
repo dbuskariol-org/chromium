@@ -6,7 +6,7 @@ import("//build/config/android/rules.gni")
 
 android_library("java") {
   sources = [
-    "android/java/src/org/chromium/chrome/browser/cardrenderer/CardRendererAdapter.java",
-    "android/java/src/org/chromium/chrome/browser/cardrenderer/CardRendererAdapterFactory.java",
+    "android/java/src/org/chromium/chrome/browser/xsurface/SurfaceAdapter.java",
+    "android/java/src/org/chromium/chrome/browser/xsurface/SurfaceAdapterFactory.java",
   ]
 }

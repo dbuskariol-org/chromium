@@ -2,18 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.cardrenderer;
+package org.chromium.chrome.browser.xsurface;
 
 import android.content.Context;
 
 /**
- * Creates CardRendererAdapters on demand.
+ * Creates SurfaceAdapters on demand.
  */
-public interface CardRendererAdapterFactory {
+public interface SurfaceAdapterFactory {
     /**
      * Creates a new adapter backed by a shared set of dependencies with other adapters.
      * @param context The context that any new Android UI objects should be created within.
      * @return A new wrapper capable of making view objects.
      */
-    CardRendererAdapter createCardRendererAdapter(Context context);
+    SurfaceAdapter createSurfaceAdapter(Context context);
 }
