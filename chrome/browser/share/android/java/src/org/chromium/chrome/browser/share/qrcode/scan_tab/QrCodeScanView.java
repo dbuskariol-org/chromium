@@ -80,13 +80,28 @@ class QrCodeScanView {
     private final ErrorCallback mCameraErrorCallback = new ErrorCallback() {
         @Override
         public void onError(int error, Camera camera) {
+            int stringResource;
+            switch (error) {
+                case Camera.CAMERA_ERROR_EVICTED:
+                case Camera.CAMERA_ERROR_SERVER_DIED:
+                case CameraPreview.CAMERA_IN_USE_ERROR:
+                    stringResource = org.chromium.chrome.R.string.qr_code_in_use_camera_error;
+                    break;
+                case CameraPreview.NO_CAMERA_FOUND_ERROR:
+                    stringResource = org.chromium.chrome.R.string.qr_code_no_camera_error;
+                    break;
+                case CameraPreview.CAMERA_DISABLED_ERROR:
+                    stringResource = org.chromium.chrome.R.string.qr_code_disabled_camera_error;
+                    break;
+                default:
+                    stringResource = org.chromium.chrome.R.string.qr_code_hardware_camera_error;
+            }
             if (mCameraPreview != null) {
                 mCameraPreview.stopCamera();
                 mCameraPreview = null;
             }
-            // TODO(ehsankia): Adjust error message given error code.
-            String errorString = mContext.getResources().getString(
-                    org.chromium.chrome.R.string.qr_code_in_use_camera_error);
+
+            String errorString = mContext.getResources().getString(stringResource);
             displayCameraErrorDialog(errorString);
         }
     };
