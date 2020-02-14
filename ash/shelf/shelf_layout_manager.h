@@ -44,7 +44,6 @@
 
 namespace ui {
 class EventHandler;
-class ImplicitAnimationObserver;
 class LocatedEvent;
 class MouseEvent;
 class MouseWheelEvent;
@@ -366,9 +365,6 @@ class ASH_EXPORT ShelfLayoutManager
   // it's only allowed in tablet mode, not in laptop mode.
   bool IsDraggingWindowFromTopOrCaptionArea() const;
 
-  // Stops any animations and progresses them to the end.
-  void StopAnimating();
-
   // Calculates shelf target bounds assuming visibility of
   // |state.visibilty_state| and |hotseat_target_state|.
   void CalculateTargetBounds(const State& state,
@@ -592,9 +588,6 @@ class ASH_EXPORT ShelfLayoutManager
 
   // The display on which this shelf is shown.
   display::Display display_;
-
-  // Sets shelf opacity to 0 after all animations have completed.
-  std::unique_ptr<ui::ImplicitAnimationObserver> hide_animation_observer_;
 
   // The current shelf background. Should not be assigned to directly, use
   // MaybeUpdateShelfBackground() instead.
