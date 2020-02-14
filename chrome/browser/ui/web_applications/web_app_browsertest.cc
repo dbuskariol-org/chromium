@@ -412,7 +412,7 @@ IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, OverscrollEnabled) {
 #endif
 }
 
-// Check the 'Copy URL' menu button for Hosted App windows.
+// Check the 'Copy URL' menu button for Web App windows.
 IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, CopyURL) {
   const GURL app_url(kExampleURL);
   const AppId app_id = InstallPWA(app_url);
@@ -643,6 +643,122 @@ IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, InstallToShelfContainsAppName) {
   EXPECT_EQ(app_menu_model.get(), model);
   EXPECT_EQ(model->GetLabelAt(index),
             base::UTF8ToUTF16("Install Manifest test app\xE2\x80\xA6"));
+}
+
+// Check that no assertions are hit when showing a permission request bubble.
+IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, PermissionBubble) {
+  ASSERT_TRUE(https_server()->Start());
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  const GURL app_url = GetSecureAppURL();
+  const AppId app_id = InstallPWA(app_url);
+  Browser* const app_browser = LaunchWebAppBrowserAndWait(app_id);
+
+  content::RenderFrameHost* const render_frame_host =
+      app_browser->tab_strip_model()->GetActiveWebContents()->GetMainFrame();
+  EXPECT_TRUE(content::ExecuteScript(
+      render_frame_host,
+      "navigator.geolocation.getCurrentPosition(function(){});"));
+}
+
+// Ensure that web app windows with blank titles don't display the URL as a
+// default window title.
+IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, EmptyTitlesDoNotDisplayUrl) {
+  ASSERT_TRUE(https_server()->Start());
+  const GURL app_url = https_server()->GetURL("app.site.com", "/empty.html");
+  const AppId app_id = InstallPWA(app_url);
+  Browser* const app_browser = LaunchWebAppBrowser(app_id);
+  content::WebContents* const web_contents =
+      app_browser->tab_strip_model()->GetActiveWebContents();
+  content::WaitForLoadStop(web_contents);
+  EXPECT_EQ(base::string16(), app_browser->GetWindowTitleForCurrentTab(false));
+  NavigateToURLAndWait(app_browser,
+                       https_server()->GetURL("app.site.com", "/simple.html"));
+  EXPECT_EQ(base::ASCIIToUTF16("OK"),
+            app_browser->GetWindowTitleForCurrentTab(false));
+}
+
+// Ensure that web app windows display the app title instead of the page
+// title when off scope.
+IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, OffScopeUrlsDisplayAppTitle) {
+  ASSERT_TRUE(https_server()->Start());
+  const GURL app_url = GetSecureAppURL();
+  const base::string16 app_title = base::ASCIIToUTF16("A Web App");
+
+  auto web_app_info = std::make_unique<WebApplicationInfo>();
+  web_app_info->app_url = app_url;
+  web_app_info->scope = app_url.GetWithoutFilename();
+  web_app_info->title = app_title;
+  const AppId app_id = InstallWebApp(std::move(web_app_info));
+
+  Browser* const app_browser = LaunchWebAppBrowser(app_id);
+  content::WebContents* const web_contents =
+      app_browser->tab_strip_model()->GetActiveWebContents();
+  content::WaitForLoadStop(web_contents);
+
+  // When we are within scope, show the page title.
+  EXPECT_EQ(base::ASCIIToUTF16("Google"),
+            app_browser->GetWindowTitleForCurrentTab(false));
+
+  NavigateToURLAndWait(app_browser,
+                       https_server()->GetURL("app.site.com", "/simple.html"));
+
+  // When we are off scope, show the app title.
+  EXPECT_EQ(app_title, app_browser->GetWindowTitleForCurrentTab(false));
+}
+
+// Ensure that web app windows display the app title instead of the page
+// title when using http.
+IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, InScopeHttpUrlsDisplayAppTitle) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+  const GURL app_url =
+      embedded_test_server()->GetURL("app.site.com", "/simple.html");
+  const base::string16 app_title = base::ASCIIToUTF16("A Web App");
+
+  auto web_app_info = std::make_unique<WebApplicationInfo>();
+  web_app_info->app_url = app_url;
+  web_app_info->title = app_title;
+  const AppId app_id = InstallWebApp(std::move(web_app_info));
+
+  Browser* const app_browser = LaunchWebAppBrowser(app_id);
+  content::WebContents* const web_contents =
+      app_browser->tab_strip_model()->GetActiveWebContents();
+  content::WaitForLoadStop(web_contents);
+
+  // The page title is "OK" but the page is being served over HTTP, so the app
+  // title should be used instead.
+  EXPECT_EQ(app_title, app_browser->GetWindowTitleForCurrentTab(false));
+}
+
+// Check that a subframe on a regular web page can navigate to a URL that
+// redirects to a web app.  https://crbug.com/721949.
+IN_PROC_BROWSER_TEST_P(WebAppBrowserTest, SubframeRedirectsToWebApp) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  // Set up a web app which covers app.com URLs.
+  GURL app_url = embedded_test_server()->GetURL("app.com", "/title1.html");
+  const AppId app_id = InstallPWA(app_url);
+
+  // Navigate a regular tab to a page with a subframe.
+  const GURL url = embedded_test_server()->GetURL("foo.com", "/iframe.html");
+  content::WebContents* const tab =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  NavigateToURLAndWait(browser(), url);
+
+  // Navigate the subframe to a URL that redirects to a URL in the web app's
+  // web extent.
+  const GURL redirect_url = embedded_test_server()->GetURL(
+      "bar.com", "/server-redirect?" + app_url.spec());
+  EXPECT_TRUE(NavigateIframeToURL(tab, "test", redirect_url));
+
+  // Ensure that the frame navigated successfully and that it has correct
+  // content.
+  content::RenderFrameHost* const subframe =
+      content::ChildFrameAt(tab->GetMainFrame(), 0);
+  EXPECT_EQ(app_url, subframe->GetLastCommittedURL());
+  EXPECT_EQ(
+      "This page has no title.",
+      EvalJs(subframe, "document.body.innerText.trim();").ExtractString());
 }
 
 INSTANTIATE_TEST_SUITE_P(
