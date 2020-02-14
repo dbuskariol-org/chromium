@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_UMA_UTIL_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_UMA_UTIL_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_UMA_UTIL_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_UMA_UTIL_H_
 
 #include <vector>
 
@@ -14,16 +14,15 @@
 #include "components/permissions/permission_util.h"
 
 namespace content {
+class BrowserContext;
 class WebContents;
-}
+}  // namespace content
+
+class GURL;
 
 namespace permissions {
 enum class PermissionRequestGestureType;
 class PermissionRequest;
-}  // namespace permissions
-
-class GURL;
-class Profile;
 
 // Any new values should be inserted immediately prior to NUM.
 enum class PermissionSourceUI {
@@ -113,13 +112,13 @@ class PermissionUmaUtil {
   static void PermissionRevoked(ContentSettingsType permission,
                                 PermissionSourceUI source_ui,
                                 const GURL& revoked_origin,
-                                Profile* profile);
+                                content::BrowserContext* browser_context);
 
   static void RecordEmbargoPromptSuppression(
       PermissionEmbargoStatus embargo_status);
 
   static void RecordEmbargoPromptSuppressionFromSource(
-      permissions::PermissionStatusSource source);
+      PermissionStatusSource source);
 
   static void RecordEmbargoStatus(PermissionEmbargoStatus embargo_status);
 
@@ -133,12 +132,12 @@ class PermissionUmaUtil {
   //   granted+denied+dismissed+ignored is not equal to requested), so it is
   //   unclear from those metrics alone how many prompts are seen by users.
   static void PermissionPromptShown(
-      const std::vector<permissions::PermissionRequest*>& requests);
+      const std::vector<PermissionRequest*>& requests);
 
   static void PermissionPromptResolved(
-      const std::vector<permissions::PermissionRequest*>& requests,
+      const std::vector<PermissionRequest*>& requests,
       content::WebContents* web_contents,
-      permissions::PermissionAction permission_action,
+      PermissionAction permission_action,
       PermissionPromptDisposition ui_disposition);
 
   static void RecordWithBatteryBucket(const std::string& histogram);
@@ -158,13 +157,13 @@ class PermissionUmaUtil {
   // condition is met (from ALLOW to something else).
   class ScopedRevocationReporter {
    public:
-    ScopedRevocationReporter(Profile* profile,
+    ScopedRevocationReporter(content::BrowserContext* browser_context,
                              const GURL& primary_url,
                              const GURL& secondary_url,
                              ContentSettingsType content_type,
                              PermissionSourceUI source_ui);
 
-    ScopedRevocationReporter(Profile* profile,
+    ScopedRevocationReporter(content::BrowserContext* browser_context,
                              const ContentSettingsPattern& primary_pattern,
                              const ContentSettingsPattern& secondary_pattern,
                              ContentSettingsType content_type,
@@ -173,7 +172,7 @@ class PermissionUmaUtil {
     ~ScopedRevocationReporter();
 
    private:
-    Profile* profile_;
+    content::BrowserContext* browser_context_;
     const GURL primary_url_;
     const GURL secondary_url_;
     ContentSettingsType content_type_;
@@ -185,28 +184,28 @@ class PermissionUmaUtil {
   friend class PermissionUmaUtilTest;
 
   // web_contents may be null when for recording non-prompt actions.
-  static void RecordPermissionAction(
-      ContentSettingsType permission,
-      permissions::PermissionAction action,
-      PermissionSourceUI source_ui,
-      permissions::PermissionRequestGestureType gesture_type,
-      PermissionPromptDisposition ui_disposition,
-      const GURL& requesting_origin,
-      const content::WebContents* web_contents,
-      Profile* profile);
+  static void RecordPermissionAction(ContentSettingsType permission,
+                                     PermissionAction action,
+                                     PermissionSourceUI source_ui,
+                                     PermissionRequestGestureType gesture_type,
+                                     PermissionPromptDisposition ui_disposition,
+                                     const GURL& requesting_origin,
+                                     const content::WebContents* web_contents,
+                                     content::BrowserContext* browser_context);
 
   // Records |count| total prior actions for a prompt of type |permission|
   // for a single origin using |prefix| for the metric.
-  static void RecordPermissionPromptPriorCount(
-      ContentSettingsType permission,
-      const std::string& prefix,
-      int count);
+  static void RecordPermissionPromptPriorCount(ContentSettingsType permission,
+                                               const std::string& prefix,
+                                               int count);
 
   static void RecordPromptDecided(
-      const std::vector<permissions::PermissionRequest*>& requests,
+      const std::vector<PermissionRequest*>& requests,
       bool accepted);
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(PermissionUmaUtil);
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_UMA_UTIL_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_UMA_UTIL_H_
