@@ -279,7 +279,6 @@ crbug.com/968791 virtual/scalefactor200/external/wpt/css/filter-effects/filters-
 
 # Copying these from elsewhere in TestExpectations (for non-scalefactor200 virtual suite)
 crbug.com/658305 [ Mac ] virtual/scalefactor200/css3/filters/effect-all-on-background-hw.html [ Failure Pass ]
-crbug.com/968791 [ Win10 ] virtual/scalefactor200/css3/filters/effect-contrast-hw.html [ Failure ]
 crbug.com/658305 [ Mac ] virtual/scalefactor200/css3/filters/effect-reference-colorspace-hw.html [ Failure Pass ]
 crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-hw.html [ Failure Pass ]
 crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-image-hw.html [ Failure Pass ]
