@@ -6345,7 +6345,7 @@
                     },
                     "enable_features": [
                         "SmartDimModelV3",
-                        "UserActivityPredictionMlService"
+                        "UserActivityPrediction"
                     ]
                 }
             ]
