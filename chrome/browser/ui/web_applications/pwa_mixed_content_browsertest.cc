@@ -216,10 +216,9 @@ IN_PROC_BROWSER_TEST_P(PWAMixedContentBrowserTest, IFrameMixedContentInPWA) {
 
 // Tests that iframes can't dynamically load mixed content in a PWA window, when
 // the iframe was created in a regular tab.
-// TODO(crbug.com/1052230): Address Network Service Linux failures, enable test.
 IN_PROC_BROWSER_TEST_P(
-    PWAMixedContentBrowserTest,
-    DISABLED_IFrameDynamicMixedContentInPWAReparentWebContentsIntoAppBrowser) {
+    PWAMixedContentBrowserTestWithAutoupgradesDisabled,
+    IFrameDynamicMixedContentInPWAReparentWebContentsIntoAppBrowser) {
   ASSERT_TRUE(https_server()->Start());
   ASSERT_TRUE(embedded_test_server()->Start());
 
