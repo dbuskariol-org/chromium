@@ -111,7 +111,6 @@ class CORE_EXPORT ImageBitmap final : public ScriptWrappable,
                                                AccelerationHint,
                                                const FloatSize&) override;
   bool WouldTaintOrigin() const override { return !image_->OriginClean(); }
-  void AdjustDrawRects(FloatRect* src_rect, FloatRect* dst_rect) const override;
   FloatSize ElementSize(const FloatSize&) const override;
   bool IsImageBitmap() const override { return true; }
   bool IsAccelerated() const override;

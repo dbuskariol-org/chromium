@@ -1203,8 +1203,6 @@ void BaseRenderingContext2D::drawImage(ScriptState* script_state,
   ClipRectsToImageRect(FloatRect(FloatPoint(), image_size), &src_rect,
                        &dst_rect);
 
-  image_source->AdjustDrawRects(&src_rect, &dst_rect);
-
   if (src_rect.IsEmpty())
     return;
 

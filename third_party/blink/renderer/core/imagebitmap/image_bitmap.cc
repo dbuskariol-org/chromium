@@ -1117,9 +1117,6 @@ scoped_refptr<Image> ImageBitmap::GetSourceImageForCanvas(
   return GetImageWithAlphaDisposition(std::move(image_), kPremultiplyAlpha);
 }
 
-void ImageBitmap::AdjustDrawRects(FloatRect* src_rect,
-                                  FloatRect* dst_rect) const {}
-
 FloatSize ImageBitmap::ElementSize(const FloatSize&) const {
   return FloatSize(width(), height());
 }

@@ -35,7 +35,6 @@
 
 namespace blink {
 
-class FloatRect;
 class Image;
 
 enum SourceImageStatus {
@@ -66,12 +65,6 @@ class CORE_EXPORT CanvasImageSource {
   virtual bool IsSVGSource() const { return false; }
   virtual bool IsImageBitmap() const { return false; }
   virtual bool IsOffscreenCanvas() const { return false; }
-
-  // Adjusts the source and destination rectangles for cases where the actual
-  // source image is a subregion of the image returned by
-  // getSourceImageForCanvas.
-  virtual void AdjustDrawRects(FloatRect* src_rect, FloatRect* dst_rect) const {
-  }
 
   virtual FloatSize ElementSize(const FloatSize& default_object_size) const = 0;
   virtual FloatSize DefaultDestinationSize(
