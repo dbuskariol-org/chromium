@@ -302,8 +302,6 @@ class ASH_EXPORT ShelfLayoutManager
     ~TargetBounds();
 
     float opacity;
-
-    gfx::Insets shelf_insets;           // Shelf insets within the screen
   };
 
   struct State {
@@ -366,9 +364,10 @@ class ASH_EXPORT ShelfLayoutManager
   bool IsDraggingWindowFromTopOrCaptionArea() const;
 
   // Calculates shelf target bounds assuming visibility of
-  // |state.visibilty_state| and |hotseat_target_state|.
-  void CalculateTargetBounds(const State& state,
-                             HotseatState hotseat_target_state);
+  // |state.visibilty_state| and |hotseat_target_state|. Returns the desired
+  // shelf insets.
+  gfx::Insets CalculateTargetBounds(const State& state,
+                                    HotseatState hotseat_target_state);
 
   // Calculates the target bounds using |state_| and updates the
   // |user_work_area_bounds_|.

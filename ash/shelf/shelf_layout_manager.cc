@@ -1537,7 +1537,7 @@ bool ShelfLayoutManager::IsDraggingWindowFromTopOrCaptionArea() const {
   return false;
 }
 
-void ShelfLayoutManager::CalculateTargetBounds(
+gfx::Insets ShelfLayoutManager::CalculateTargetBounds(
     const State& state,
     HotseatState hotseat_target_state) {
   shelf_->shelf_widget()->CalculateTargetBounds();
@@ -1556,7 +1556,7 @@ void ShelfLayoutManager::CalculateTargetBounds(
       snapped_shelf_bounds, shelf_->shelf_widget()->GetNativeWindow());
   shelf_->shelf_widget()->set_target_bounds(snapped_shelf_bounds);
 
-  target_bounds_.shelf_insets = shelf_->SelectValueForShelfAlignment(
+  return shelf_->SelectValueForShelfAlignment(
       gfx::Insets(0, 0,
                   GetShelfInset(state.visibility_state,
                                 IsHotseatEnabled()
@@ -1572,7 +1572,8 @@ void ShelfLayoutManager::CalculateTargetBounds(
 void ShelfLayoutManager::CalculateTargetBoundsAndUpdateWorkArea() {
   HotseatState hotseat_target_state =
       CalculateHotseatState(visibility_state(), auto_hide_state());
-  CalculateTargetBounds(state_, hotseat_target_state);
+  gfx::Insets shelf_insets =
+      CalculateTargetBounds(state_, hotseat_target_state);
   gfx::Rect shelf_bounds_for_workarea_calculation =
       shelf_->shelf_widget()->GetTargetBounds();
   // When the hotseat is enabled, only use the in-app shelf bounds when
@@ -1584,7 +1585,7 @@ void ShelfLayoutManager::CalculateTargetBoundsAndUpdateWorkArea() {
   if (!suspend_work_area_update_) {
     WorkAreaInsets::ForWindow(shelf_widget_->GetNativeWindow())
         ->SetShelfBoundsAndInsets(shelf_bounds_for_workarea_calculation,
-                                  target_bounds_.shelf_insets);
+                                  shelf_insets);
     for (auto& observer : observers_)
       observer.OnWorkAreaInsetsChanged();
   }
