@@ -37710,6 +37710,7 @@ from previous Chrome versions.
   <int value="-1184480269" label="LsdPermissionPrompt:enabled"/>
   <int value="-1183321008" label="ImeDecoderWithSandbox:disabled"/>
   <int value="-1183009666" label="OfflinePagesLimitlessPrefetching:disabled"/>
+  <int value="-1182777927" label="ShareButtonInTopToolbar:enabled"/>
   <int value="-1178350793" label="RemoteCopyReceiver:disabled"/>
   <int value="-1177802205" label="enable-hosted-app-quit-notification"/>
   <int value="-1176748003"
@@ -38659,6 +38660,7 @@ from previous Chrome versions.
   <int value="-15879016"
       label="OmniboxUIExperimentUnboldSuggestionText:disabled"/>
   <int value="-13918890" label="disable-download-notification"/>
+  <int value="-12225998" label="ShareButtonInTopToolbar:disabled"/>
   <int value="-11260186" label="enable-offline-pages-as-saved-pages"/>
   <int value="-10709540"
       label="OmniboxUIExperimentHideSuggestionUrlScheme:enabled"/>
