@@ -348,6 +348,7 @@ class CORE_EXPORT NGInlineCursor {
   void MoveToNextLine();
 
   // Move the current position to next sibling fragment.
+  // |MoveToNextSibling()| is deprecated. New code should not be used.
   void MoveToNextSibling();
 
   // Same as |MoveToNext| except that this skips children even if they exist.
@@ -452,6 +453,8 @@ class CORE_EXPORT NGInlineBackwardCursor {
   STACK_ALLOCATED();
 
  public:
+  // |cursor| should be the first child of root or descendants, e.g. the first
+  // item in |NGInlineCursor::items_|.
   NGInlineBackwardCursor(const NGInlineCursor& cursor);
 
   const NGInlineCursorPosition& Current() const { return current_; }
