@@ -271,6 +271,7 @@ jumbo_static_library("browser") {
 if (is_android) {
   android_resources("java_resources") {
     resource_dirs = [ "android/java/res" ]
+    deps = [ "//components/browser_ui/strings/android:browser_ui_strings_grd" ]
     custom_package = "org.chromium.components.omnibox"
   }
 

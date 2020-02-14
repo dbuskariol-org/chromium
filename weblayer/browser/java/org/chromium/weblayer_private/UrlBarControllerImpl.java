@@ -118,9 +118,12 @@ public class UrlBarControllerImpl extends IUrlBarController.Stub {
                     TypedValue.COMPLEX_UNIT_SP, Math.max(MINIMUM_TEXT_SIZE, mTextSize));
 
             mSecurityButton.setImageResource(getSecurityIcon());
+            mSecurityButton.setContentDescription(getContext().getResources().getString(
+                    SecurityStatusIcon.getSecurityIconContentDescriptionResourceId(
+                            UrlBarControllerImplJni.get().getConnectionSecurityLevel(
+                                    mNativeUrlBarController))));
 
-            // TODO(crbug.com/1025607): Set content description for accessibility, and a click
-            // listener.
+            // TODO(crbug.com/1025607): Set a click listener to show Page Info UI.
         }
 
         @DrawableRes
