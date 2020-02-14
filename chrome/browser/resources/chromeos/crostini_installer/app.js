@@ -204,7 +204,8 @@ Polymer({
   onNextButtonClick_() {
     assert(this.state_ === State.PROMPT);
     this.state_ = State.CONFIGURE;
-    this.$.install.focus();
+    // Focus the username input and move the cursor to the end.
+    this.$.username.select(this.username_.length, this.username_.length);
   },
 
   /** @private */
