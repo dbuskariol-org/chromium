@@ -814,10 +814,6 @@ try_.chromium_mac_ios_builder(
 )
 
 try_.chromium_mac_ios_builder(
-    name = 'ios-device-xcode-clang',
-)
-
-try_.chromium_mac_ios_builder(
     name = 'ios-simulator-cr-recipe',
     executable = 'recipe:chromium_trybot',
     properties = {
@@ -854,10 +850,6 @@ try_.chromium_mac_ios_builder(
             '.+/[+]/ios/.+',
         ],
     ),
-)
-
-try_.chromium_mac_ios_builder(
-    name = 'ios-simulator-xcode-clang',
 )
 
 try_.chromium_mac_ios_builder(
