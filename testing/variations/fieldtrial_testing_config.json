@@ -81,6 +81,28 @@
             ]
         }
     ],
+    "AllPassiveMixedContentAutoupgrade": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "mode": "all-passive"
+                    },
+                    "enable_features": [
+                        "AutoupgradeMixedContent"
+                    ]
+                }
+            ]
+        }
+    ],
     "AllowClientHintsToThirdParty": [
         {
             "platforms": [
@@ -4631,28 +4653,6 @@
                     "name": "Enabled",
                     "enable_features": [
                         "PassiveEventListenersDueToFling"
-                    ]
-                }
-            ]
-        }
-    ],
-    "PassiveMixedContentAutoupgrade": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "params": {
-                        "mode": "no-images"
-                    },
-                    "enable_features": [
-                        "AutoupgradeMixedContent"
                     ]
                 }
             ]
