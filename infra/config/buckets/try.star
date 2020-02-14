@@ -181,6 +181,9 @@ try_.chromium_android_builder(
     cores = 16,
     goma_jobs = goma.jobs.J300,
     ssd = True,
+    tryjob = try_.job(
+        experiment_percentage = 100,
+    ),
 )
 
 try_.chromium_android_builder(
