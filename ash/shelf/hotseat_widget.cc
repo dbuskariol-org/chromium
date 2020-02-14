@@ -109,9 +109,6 @@ class HotseatWidget::DelegateView : public HotseatTransitionAnimator::Observer,
   // true, in which case this disables background blur.
   void SetBackgroundBlur(bool enable_blur);
 
-  // Updates the hotseat background when tablet mode changes.
-  void OnTabletModeChanged();
-
   // HotseatTransitionAnimator::Observer:
   void OnHotseatTransitionAnimationStarted(HotseatState from_state,
                                            HotseatState to_state) override;
@@ -228,10 +225,6 @@ void HotseatWidget::DelegateView::SetBackgroundBlur(bool enable_blur) {
       enable_blur ? ShelfConfig::Get()->shelf_blur_radius() : 0;
   if (translucent_background_.background_blur() != blur_radius)
     translucent_background_.SetBackgroundBlur(blur_radius);
-}
-
-void HotseatWidget::DelegateView::OnTabletModeChanged() {
-  UpdateTranslucentBackground();
 }
 
 void HotseatWidget::DelegateView::OnHotseatTransitionAnimationStarted(
@@ -388,7 +381,6 @@ void HotseatWidget::FocusFirstOrLastFocusableChild(bool last) {
 
 void HotseatWidget::OnTabletModeChanged() {
   GetShelfView()->OnTabletModeChanged();
-  delegate_view_->OnTabletModeChanged();
 }
 
 float HotseatWidget::CalculateOpacity() const {
@@ -472,6 +464,7 @@ void HotseatWidget::UpdateLayout(bool animate) {
   layer->SetOpacity(new_layout_inputs.opacity);
   SetBounds(new_layout_inputs.bounds);
   layout_inputs_ = new_layout_inputs;
+  delegate_view_->UpdateTranslucentBackground();
 }
 
 gfx::Size HotseatWidget::GetTranslucentBackgroundSize() const {
