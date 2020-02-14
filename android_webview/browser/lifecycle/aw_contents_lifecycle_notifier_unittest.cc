@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/browser/aw_contents_lifecycle_notifier.h"
+#include "android_webview/browser/lifecycle/aw_contents_lifecycle_notifier.h"
 
 #include "base/task/post_task.h"
 #include "content/public/browser/browser_task_traits.h"

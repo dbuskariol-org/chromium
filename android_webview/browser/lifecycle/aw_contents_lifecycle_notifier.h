@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_BROWSER_AW_CONTENTS_LIFECYCLE_NOTIFIER_H_
-#define ANDROID_WEBVIEW_BROWSER_AW_CONTENTS_LIFECYCLE_NOTIFIER_H_
+#ifndef ANDROID_WEBVIEW_BROWSER_LIFECYCLE_AW_CONTENTS_LIFECYCLE_NOTIFIER_H_
+#define ANDROID_WEBVIEW_BROWSER_LIFECYCLE_AW_CONTENTS_LIFECYCLE_NOTIFIER_H_
 
 #include <map>
 
-#include "android_webview/browser/webview_app_state_observer.h"
+#include "android_webview/browser/lifecycle/webview_app_state_observer.h"
 #include "base/android/jni_android.h"
 #include "base/macros.h"
 #include "base/no_destructor.h"
@@ -93,4 +93,4 @@ class AwContentsLifecycleNotifier {
 
 }  // namespace android_webview
 
-#endif  // ANDROID_WEBVIEW_BROWSER_AW_CONTENTS_LIFECYCLE_NOTIFIER_H_
+#endif  // ANDROID_WEBVIEW_BROWSER_LIFECYCLE_AW_CONTENTS_LIFECYCLE_NOTIFIER_H_
