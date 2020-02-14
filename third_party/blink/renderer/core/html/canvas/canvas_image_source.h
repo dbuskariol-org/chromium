@@ -31,6 +31,7 @@
 #include "third_party/blink/renderer/core/core_export.h"
 #include "third_party/blink/renderer/platform/geometry/float_size.h"
 #include "third_party/blink/renderer/platform/graphics/graphics_types.h"
+#include "third_party/blink/renderer/platform/graphics/image_orientation.h"
 #include "third_party/blink/renderer/platform/weborigin/kurl.h"
 
 namespace blink {
@@ -66,10 +67,12 @@ class CORE_EXPORT CanvasImageSource {
   virtual bool IsImageBitmap() const { return false; }
   virtual bool IsOffscreenCanvas() const { return false; }
 
-  virtual FloatSize ElementSize(const FloatSize& default_object_size) const = 0;
+  virtual FloatSize ElementSize(const FloatSize& default_object_size,
+                                const RespectImageOrientationEnum) const = 0;
   virtual FloatSize DefaultDestinationSize(
-      const FloatSize& default_object_size) const {
-    return ElementSize(default_object_size);
+      const FloatSize& default_object_size,
+      const RespectImageOrientationEnum respect_orientation) const {
+    return ElementSize(default_object_size, respect_orientation);
   }
   virtual const KURL& SourceURL() const { return BlankURL(); }
   virtual bool IsOpaque() const { return false; }
