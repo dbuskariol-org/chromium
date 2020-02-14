@@ -597,6 +597,24 @@ html[dir='rtl'] .dialog-header button.icon-button > files-toggle-ripple {
   background-image: none;
 }
 
+.dialog-header #search-wrapper {
+  display: flex;
+}
+
+.dialog-header #search-box cr-input {
+  --cr-input-background-color: transparent;
+  --cr-input-border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  --cr-input-border-radius: 0;
+  --cr-input-error-display: none;
+  --cr-input-padding-end: 20px;
+  --cr-input-padding-start: 0;
+  --cr-input-placeholder-color: rgba(255, 255, 255, 0.5);
+  display: inline-block;
+  transition: width 200ms ease;
+  vertical-align: middle;
+  width: 0;
+}
+
 .dialog-header:not(.files-ng) #search-button > .icon {
   background-image: -webkit-image-set(
       url(../images/files/ui/search_white.png) 1x,
