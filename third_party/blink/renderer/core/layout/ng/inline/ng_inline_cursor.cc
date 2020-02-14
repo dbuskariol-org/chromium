@@ -82,6 +82,11 @@ NGInlineCursor::NGInlineCursor(const NGPaintFragment& root_paint_fragment) {
   SetRoot(root_paint_fragment);
 }
 
+NGInlineCursor::NGInlineCursor(const NGInlineBackwardCursor& backward_cursor)
+    : NGInlineCursor(backward_cursor.cursor_) {
+  MoveTo(backward_cursor.Current());
+}
+
 bool NGInlineCursor::operator==(const NGInlineCursor& other) const {
   if (root_paint_fragment_) {
     return root_paint_fragment_ == other.root_paint_fragment_ &&
