@@ -1138,11 +1138,13 @@ void NGBoxFragmentPainter::PaintInlineItems(const PaintInfo& paint_info,
     switch (item->Type()) {
       case NGFragmentItem::kText:
       case NGFragmentItem::kGeneratedText:
-        PaintTextItem(*cursor, paint_info, paint_offset, parent_offset);
+        if (!item->IsHiddenForPaint())
+          PaintTextItem(*cursor, paint_info, paint_offset, parent_offset);
         cursor->MoveToNext();
         break;
       case NGFragmentItem::kBox:
-        PaintBoxItem(*item, *cursor, paint_info, paint_offset);
+        if (!item->IsHiddenForPaint())
+          PaintBoxItem(*item, *cursor, paint_info, paint_offset);
         cursor->MoveToNextSkippingChildren();
         break;
       case NGFragmentItem::kLine:
@@ -1428,11 +1430,6 @@ void NGBoxFragmentPainter::PaintTextItem(const NGInlineCursor& cursor,
       paint_info.phase != PaintPhase::kMask)
     return;
 
-  // Need to check the style of each text items because they can have different
-  // styles than its siblings if inline boxes are culled.
-  if (UNLIKELY(!IsVisibleToPaint(item, item.Style())))
-    return;
-
   NGTextFragmentPainter<NGInlineCursor> text_painter(cursor, parent_offset);
   text_painter.Paint(paint_info, paint_offset);
 }
@@ -1459,10 +1456,6 @@ void NGBoxFragmentPainter::PaintBoxItem(const NGFragmentItem& item,
                                         const PhysicalOffset& paint_offset) {
   DCHECK_EQ(item.Type(), NGFragmentItem::kBox);
   DCHECK_EQ(&item, cursor.Current().Item());
-
-  const ComputedStyle& style = item.Style();
-  if (UNLIKELY(!IsVisibleToPaint(item, style)))
-    return;
 
   if (const NGPhysicalBoxFragment* child_fragment = item.BoxFragment()) {
     DCHECK(!child_fragment->IsHiddenForPaint());
