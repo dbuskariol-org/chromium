@@ -59,7 +59,7 @@ class MediaHistoryStoreInternal
   sql::Database* DB();
 
   // Returns a flag indicating whether the origin id was created successfully.
-  bool CreateOriginId(const std::string& origin);
+  bool CreateOriginId(const url::Origin& origin);
 
   void SavePlayback(const content::MediaPlayerWatchTime& watch_time);
 
@@ -135,7 +135,7 @@ void MediaHistoryStoreInternal::SavePlayback(
     return;
   }
 
-  auto origin = watch_time.origin.spec();
+  auto origin = url::Origin::Create(watch_time.origin);
 
   if (!(CreateOriginId(origin) && playback_table_->SavePlayback(watch_time))) {
     DB()->RollbackTransaction();
@@ -211,7 +211,7 @@ sql::InitStatus MediaHistoryStoreInternal::InitializeTables() {
   return status;
 }
 
-bool MediaHistoryStoreInternal::CreateOriginId(const std::string& origin) {
+bool MediaHistoryStoreInternal::CreateOriginId(const url::Origin& origin) {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   if (!initialization_successful_)
     return false;
@@ -320,7 +320,7 @@ void MediaHistoryStoreInternal::SavePlaybackSession(
   }
 
   auto origin = url::Origin::Create(url);
-  if (!CreateOriginId(origin.Serialize())) {
+  if (!CreateOriginId(origin)) {
     DB()->RollbackTransaction();
     return;
   }

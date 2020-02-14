@@ -7,6 +7,7 @@
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/updateable_sequenced_task_runner.h"
+#include "chrome/browser/media/history/media_history_origin_table.h"
 #include "chrome/browser/media/history/media_history_store.h"
 #include "services/media_session/public/cpp/media_image.h"
 #include "services/media_session/public/cpp/media_metadata.h"
@@ -84,7 +85,7 @@ base::Optional<int64_t> MediaHistorySessionTable::SavePlaybackSession(
           "((SELECT id FROM origin WHERE origin = ?), ?, ?, ?, ?, ?, ?, ?, ?)",
           kTableName)
           .c_str()));
-  statement.BindString(0, origin.Serialize());
+  statement.BindString(0, MediaHistoryOriginTable::GetOriginForStorage(origin));
   statement.BindString(1, url.spec());
 
   if (position.has_value()) {
