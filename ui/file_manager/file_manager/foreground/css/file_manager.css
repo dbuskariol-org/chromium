@@ -110,6 +110,7 @@ body.files-ng .dialog-main {
 
 body.files-ng .dialog-navigation-list {
   background-color: inherit;
+  border-inline-end: none;
 }
 
 .dialog-navigation-list-contents {
