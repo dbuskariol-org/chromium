@@ -38,12 +38,13 @@ source_set("common") {
     "//base",
     "//fuchsia/base",
     "//fuchsia/base:modular",
-    "//third_party/fuchsia-sdk/sdk:fuchsia-ui-app",
     "//ui/gfx/geometry",
     "//url",
   ]
   public_deps = [
+    "//third_party/fuchsia-sdk/sdk:fuchsia-modular",
     "//third_party/fuchsia-sdk/sdk:fuchsia-sys",
+    "//third_party/fuchsia-sdk/sdk:fuchsia-ui-app",
     "//third_party/fuchsia-sdk/sdk:fuchsia-web",
     "//third_party/fuchsia-sdk/sdk:sys_cpp",
   ]
