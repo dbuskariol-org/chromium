@@ -52867,6 +52867,9 @@ Called by update_net_trust_anchors.py.-->
   <int value="76954" label="kRelatedNewsVideoCard"/>
   <int value="76955" label="kRelatedPageCard"/>
   <int value="76958" label="kRelatedYoutubeVideoCard"/>
+  <int value="77131" label="kRoot"/>
+  <int value="87972" label="kRelatedPageList"/>
+  <int value="87973" label="kRelatedNewsTimelineList"/>
 </enum>
 
 <enum name="ProbeResult">
