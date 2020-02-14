@@ -2217,7 +2217,6 @@ crbug.com/492664 [ Mac ] external/wpt/css/css-writing-modes/sizing-orthog-htb-in
 
 crbug.com/381684 [ Mac ] fonts/family-fallback-gardiner.html [ Skip ]
 crbug.com/381684 [ Win ] fonts/family-fallback-gardiner.html [ Skip ]
-crbug.com/467635 fast/dom/HTMLImageElement/image-sizes-meta-viewport.html [ Skip ]
 
 crbug.com/636239 [ Win7 ] media/video-zoom-controls.html [ Failure ]
 crbug.com/636239 [ Win7 ] virtual/audio-service/media/video-zoom-controls.html [ Failure ]
