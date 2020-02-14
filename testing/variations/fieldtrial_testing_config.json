@@ -3650,6 +3650,21 @@
             ]
         }
     ],
+    "MacCustomPaperSize": [
+        {
+            "platforms": [
+                "mac"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "MacCustomPaperSize"
+                    ]
+                }
+            ]
+        }
+    ],
     "MacMDDownloadShelf": [
         {
             "platforms": [
