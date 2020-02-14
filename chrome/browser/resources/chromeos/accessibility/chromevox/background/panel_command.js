@@ -30,7 +30,7 @@ PanelCommand = class {
   send() {
     const views = chrome.extension.getViews();
     for (let i = 0; i < views.length; i++) {
-      if (views[i].location.href.indexOf('background/panel/panel.html') > 0) {
+      if (views[i].location.href.indexOf('panel/panel.html') > 0) {
         views[i].postMessage(JSON.stringify(this), window.location.origin);
       }
     }

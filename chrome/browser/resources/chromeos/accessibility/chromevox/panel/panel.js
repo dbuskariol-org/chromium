@@ -258,8 +258,7 @@ Panel = class {
 
     // Fully qualify the path here because this function might be called with a
     // window object belonging to the background page.
-    Panel.ownerWindow.location =
-        chrome.extension.getURL('background/panel/panel.html') +
+    Panel.ownerWindow.location = chrome.extension.getURL('panel/panel.html') +
         Panel.ModeInfo[Panel.mode_].location;
 
     $('main').hidden = (Panel.mode_ == Panel.Mode.FULLSCREEN_TUTORIAL);
@@ -948,7 +947,7 @@ Panel = class {
     // Change the url fragment to 'close', which signals the native code
     // to exit ChromeVox.
     Panel.ownerWindow.location =
-        chrome.extension.getURL('background/panel/panel.html') + '#close';
+        chrome.extension.getURL('panel/panel.html') + '#close';
   }
 
   /**

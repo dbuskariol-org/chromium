@@ -4,7 +4,7 @@
 
 // Include test fixture.
 GEN_INCLUDE([
-  '../../testing/chromevox_next_e2e_test_base.js',
+  '../testing/chromevox_next_e2e_test_base.js',
   '//chrome/browser/resources/chromeos/accessibility/chromevox/testing/assert_additions.js',
   '//chrome/browser/resources/chromeos/accessibility/chromevox/testing/mock_feedback.js'
 ]);
@@ -23,8 +23,7 @@ ChromeVoxOptionsTest = class extends ChromeVoxNextE2ETest {
     chrome.automation.getDesktop((desktop) => {
       desktop.addEventListener(
           chrome.automation.EventType.LOAD_COMPLETE, (evt) => {
-            if (evt.target.docUrl.indexOf('background/options/options.html') ==
-                    -1 ||
+            if (evt.target.docUrl.indexOf('options/options.html') == -1 ||
                 !evt.target.docLoaded) {
               return;
             }

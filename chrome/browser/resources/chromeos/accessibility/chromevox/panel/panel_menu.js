@@ -292,96 +292,96 @@ PanelNodeMenu = class extends PanelMenu {
     if (activateFirstItem) {
       this.activateItem(this.activeIndex_);
     }
-    }
+  }
 
-    /**
-     * Create the AutomationTreeWalker and kick off the search to find
-     * nodes that match the predicate for this menu.
-     * @private
-     */
-    populate_() {
-      if (!this.node_) {
-        this.finish_();
-        return;
-      }
-
-      const root = AutomationUtil.getTopLevelRoot(this.node_);
-      if (!root) {
-        this.finish_();
-        return;
-      }
-
-      this.walker_ = new AutomationTreeWalker(root, constants.Dir.FORWARD, {
-        visit(node) {
-          return !AutomationPredicate.shouldIgnoreNode(node);
-        }
-      });
-      this.nodeCount_ = 0;
-      this.selectNext_ = false;
-      this.findMoreNodes_();
-    }
-
-    /**
-     * Iterate over nodes from the tree walker. If a node matches the
-     * predicate, add an item to the menu.
-     *
-     * If |this.async_| is true, then after MAX_NODES_BEFORE_ASYNC nodes
-     * have been scanned, call setTimeout to defer searching. This frees
-     * up the main event loop to keep the panel menu responsive, otherwise
-     * it basically freezes up until all of the nodes have been found.
-     * @private
-     */
-    findMoreNodes_() {
-      while (this.walker_.next().node) {
-        const node = this.walker_.node;
-        if (node == this.node_) {
-          this.selectNext_ = true;
-        }
-        if (this.pred_(node)) {
-          const output = new Output();
-          const range = cursors.Range.fromNode(node);
-          output.withoutHints();
-          output.withSpeech(range, range, Output.EventType.NAVIGATE);
-          const label = output.toString();
-          this.addMenuItem(label, '', '', '', (function() {
-                             const savedNode = node;
-                             return function() {
-                               chrome.extension.getBackgroundPage()
-                                   .ChromeVoxState.instance['navigateToRange'](
-                                       cursors.Range.fromNode(savedNode));
-                             };
-                           }()));
-
-          if (this.selectNext_) {
-            this.activateItem(this.items_.length - 1);
-            this.selectNext_ = false;
-          }
-        }
-
-        if (this.async_) {
-          this.nodeCount_++;
-          if (this.nodeCount_ >= PanelNodeMenu.MAX_NODES_BEFORE_ASYNC) {
-            this.nodeCount_ = 0;
-            window.setTimeout(this.findMoreNodes_.bind(this), 0);
-            return;
-          }
-        }
-      }
+  /**
+   * Create the AutomationTreeWalker and kick off the search to find
+   * nodes that match the predicate for this menu.
+   * @private
+   */
+  populate_() {
+    if (!this.node_) {
       this.finish_();
+      return;
     }
 
-    /**
-     * Called when we've finished searching for nodes. If no matches were
-     * found, adds an item to the menu indicating none were found.
-     * @private
-     */
-    finish_() {
-      if (!this.items_.length) {
-        this.addMenuItem(
-            Msgs.getMsg('panel_menu_item_none'), '', '', '', function() {});
-        this.activateItem(0);
+    const root = AutomationUtil.getTopLevelRoot(this.node_);
+    if (!root) {
+      this.finish_();
+      return;
+    }
+
+    this.walker_ = new AutomationTreeWalker(root, constants.Dir.FORWARD, {
+      visit(node) {
+        return !AutomationPredicate.shouldIgnoreNode(node);
+      }
+    });
+    this.nodeCount_ = 0;
+    this.selectNext_ = false;
+    this.findMoreNodes_();
+  }
+
+  /**
+   * Iterate over nodes from the tree walker. If a node matches the
+   * predicate, add an item to the menu.
+   *
+   * If |this.async_| is true, then after MAX_NODES_BEFORE_ASYNC nodes
+   * have been scanned, call setTimeout to defer searching. This frees
+   * up the main event loop to keep the panel menu responsive, otherwise
+   * it basically freezes up until all of the nodes have been found.
+   * @private
+   */
+  findMoreNodes_() {
+    while (this.walker_.next().node) {
+      const node = this.walker_.node;
+      if (node == this.node_) {
+        this.selectNext_ = true;
+      }
+      if (this.pred_(node)) {
+        const output = new Output();
+        const range = cursors.Range.fromNode(node);
+        output.withoutHints();
+        output.withSpeech(range, range, Output.EventType.NAVIGATE);
+        const label = output.toString();
+        this.addMenuItem(label, '', '', '', (function() {
+                           const savedNode = node;
+                           return function() {
+                             chrome.extension.getBackgroundPage()
+                                 .ChromeVoxState.instance['navigateToRange'](
+                                     cursors.Range.fromNode(savedNode));
+                           };
+                         }()));
+
+        if (this.selectNext_) {
+          this.activateItem(this.items_.length - 1);
+          this.selectNext_ = false;
+        }
+      }
+
+      if (this.async_) {
+        this.nodeCount_++;
+        if (this.nodeCount_ >= PanelNodeMenu.MAX_NODES_BEFORE_ASYNC) {
+          this.nodeCount_ = 0;
+          window.setTimeout(this.findMoreNodes_.bind(this), 0);
+          return;
+        }
       }
     }
+    this.finish_();
+  }
+
+  /**
+   * Called when we've finished searching for nodes. If no matches were
+   * found, adds an item to the menu indicating none were found.
+   * @private
+   */
+  finish_() {
+    if (!this.items_.length) {
+      this.addMenuItem(
+          Msgs.getMsg('panel_menu_item_none'), '', '', '', function() {});
+      this.activateItem(0);
+    }
+  }
 };
 
 /**
