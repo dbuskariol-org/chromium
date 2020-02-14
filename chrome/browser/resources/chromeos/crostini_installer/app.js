@@ -167,7 +167,7 @@ Polymer({
       }),
       callbackRouter.onCanceled.addListener(() => this.closeDialog_()),
       callbackRouter.onAmountOfFreeDiskSpace.addListener(
-          (ticks, defaultIndex, min, max) => {
+          (ticks, defaultIndex) => {
             if (ticks.length === 0) {
               // Error getting the data we need for the slider e.g. unable to
               // get the amount of free space.
