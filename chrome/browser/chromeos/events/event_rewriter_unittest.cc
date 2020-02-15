@@ -183,11 +183,13 @@ class EventRewriterTest : public ChromeAshTestBase {
   // or search-click.
   void DontRewriteIfNotRewritten(int right_click_flags);
 
-  const ui::MouseEvent* RewriteMouseButtonEvent(
-      const ui::MouseEvent& event,
-      std::unique_ptr<ui::Event>* new_event) {
-    rewriter_->RewriteMouseButtonEventForTesting(event, new_event);
-    return *new_event ? new_event->get()->AsMouseEvent() : &event;
+  ui::MouseEvent RewriteMouseButtonEvent(const ui::MouseEvent& event) {
+    TestEventRewriterContinuation continuation;
+    rewriter_->RewriteMouseButtonEventForTesting(
+        event, continuation.weak_ptr_factory_.GetWeakPtr());
+    if (!continuation.rewritten_events.empty())
+      return ui::MouseEvent(*continuation.rewritten_events[0]->AsMouseEvent());
+    return ui::MouseEvent(event);
   }
 
   sync_preferences::TestingPrefServiceSyncable* prefs() { return &prefs_; }
@@ -2978,11 +2980,10 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
     // Sanity check.
     EXPECT_EQ(ui::ET_MOUSE_PRESSED, press.type());
     EXPECT_EQ(right_click_flags, press.flags());
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(press, &new_event);
-    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result->flags());
-    EXPECT_NE(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(press);
+    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result.flags());
+    EXPECT_NE(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result.changed_button_flags());
   }
   {
     ui::MouseEvent release(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(),
@@ -2990,11 +2991,10 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                            ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_release(&release);
     test_release.set_source_device_id(kTouchpadId1);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(release, &new_event);
-    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result->flags());
-    EXPECT_NE(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(release);
+    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result.flags());
+    EXPECT_NE(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result.changed_button_flags());
   }
 
   // No (ALT|SEARCH) in first click.
@@ -3004,10 +3004,9 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                          ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_press(&press);
     test_press.set_source_device_id(kTouchpadId1);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(press, &new_event);
-    EXPECT_TRUE(ui::EF_LEFT_MOUSE_BUTTON & result->flags());
-    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(press);
+    EXPECT_TRUE(ui::EF_LEFT_MOUSE_BUTTON & result.flags());
+    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result.changed_button_flags());
   }
   {
     ui::MouseEvent release(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(),
@@ -3015,10 +3014,9 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                            ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_release(&release);
     test_release.set_source_device_id(kTouchpadId1);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(release, &new_event);
-    EXPECT_EQ(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(release);
+    EXPECT_EQ(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result.changed_button_flags());
   }
 
   // ALT on different device.
@@ -3028,11 +3026,10 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                          ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_press(&press);
     test_press.set_source_device_id(kTouchpadId2);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(press, &new_event);
-    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result->flags());
-    EXPECT_NE(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(press);
+    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result.flags());
+    EXPECT_NE(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result.changed_button_flags());
   }
   {
     ui::MouseEvent release(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(),
@@ -3040,10 +3037,9 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                            ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_release(&release);
     test_release.set_source_device_id(kTouchpadId1);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(release, &new_event);
-    EXPECT_EQ(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(release);
+    EXPECT_EQ(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result.changed_button_flags());
   }
   {
     ui::MouseEvent release(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(),
@@ -3051,11 +3047,10 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                            ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_release(&release);
     test_release.set_source_device_id(kTouchpadId2);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(release, &new_event);
-    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result->flags());
-    EXPECT_NE(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(release);
+    EXPECT_TRUE(ui::EF_RIGHT_MOUSE_BUTTON & result.flags());
+    EXPECT_NE(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_RIGHT_MOUSE_BUTTON, result.changed_button_flags());
   }
 
   // No rewrite for non-touchpad devices.
@@ -3067,10 +3062,9 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
     test_press.set_source_device_id(kMouseId);
     EXPECT_EQ(ui::ET_MOUSE_PRESSED, press.type());
     EXPECT_EQ(right_click_flags, press.flags());
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(press, &new_event);
-    EXPECT_EQ(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(press);
+    EXPECT_EQ(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result.changed_button_flags());
   }
   {
     ui::MouseEvent release(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(),
@@ -3078,10 +3072,9 @@ void EventRewriterTest::DontRewriteIfNotRewritten(int right_click_flags) {
                            ui::EF_LEFT_MOUSE_BUTTON);
     ui::EventTestApi test_release(&release);
     test_release.set_source_device_id(kMouseId);
-    std::unique_ptr<ui::Event> new_event;
-    const ui::MouseEvent* result = RewriteMouseButtonEvent(release, &new_event);
-    EXPECT_EQ(right_click_flags, right_click_flags & result->flags());
-    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result->changed_button_flags());
+    const ui::MouseEvent result = RewriteMouseButtonEvent(release);
+    EXPECT_EQ(right_click_flags, right_click_flags & result.flags());
+    EXPECT_EQ(ui::EF_LEFT_MOUSE_BUTTON, result.changed_button_flags());
   }
 }
 

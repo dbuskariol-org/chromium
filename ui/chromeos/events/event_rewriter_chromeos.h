@@ -136,9 +136,8 @@ class EventRewriterChromeOS : public ui::EventRewriter {
   void ResetStateForTesting();
 
   // Calls RewriteMouseEvent().
-  void RewriteMouseButtonEventForTesting(
-      const ui::MouseEvent& event,
-      std::unique_ptr<ui::Event>* rewritten_event);
+  void RewriteMouseButtonEventForTesting(const ui::MouseEvent& event,
+                                         const Continuation continuation);
 
   void set_last_keyboard_device_id_for_testing(int device_id) {
     last_keyboard_device_id_ = device_id;
@@ -233,9 +232,9 @@ class EventRewriterChromeOS : public ui::EventRewriter {
   ui::EventRewriteStatus RewriteKeyEvent(
       const ui::KeyEvent& key_event,
       std::unique_ptr<ui::Event>* rewritten_event);
-  ui::EventRewriteStatus RewriteMouseButtonEvent(
+  ui::EventDispatchDetails RewriteMouseButtonEvent(
       const ui::MouseEvent& mouse_event,
-      std::unique_ptr<ui::Event>* rewritten_event);
+      const Continuation continuation);
   ui::EventRewriteStatus RewriteMouseWheelEvent(
       const ui::MouseWheelEvent& mouse_event,
       std::unique_ptr<ui::Event>* rewritten_event);

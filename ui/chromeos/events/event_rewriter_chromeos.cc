@@ -504,13 +504,18 @@ void EventRewriterChromeOS::ResetStateForTesting() {
 
 void EventRewriterChromeOS::RewriteMouseButtonEventForTesting(
     const ui::MouseEvent& event,
-    std::unique_ptr<ui::Event>* rewritten_event) {
-  RewriteMouseButtonEvent(event, rewritten_event);
+    const Continuation continuation) {
+  RewriteMouseButtonEvent(event, continuation);
 }
 
 ui::EventDispatchDetails EventRewriterChromeOS::RewriteEvent(
     const ui::Event& event,
     const Continuation continuation) {
+  if ((event.type() == ui::ET_MOUSE_PRESSED) ||
+      (event.type() == ui::ET_MOUSE_RELEASED)) {
+    return RewriteMouseButtonEvent(static_cast<const ui::MouseEvent&>(event),
+                                   continuation);
+  }
   if ((event.type() == ui::ET_TOUCH_PRESSED) ||
       (event.type() == ui::ET_TOUCH_RELEASED)) {
     return RewriteTouchEvent(static_cast<const ui::TouchEvent&>(event),
@@ -535,11 +540,6 @@ ui::EventRewriteStatus EventRewriterChromeOS::RewriteEvent(
     RewriteKeyEventInContext(*((&event)->AsKeyEvent()), rewritten_event,
                              &status);
     return status;
-  }
-  if ((event.type() == ui::ET_MOUSE_PRESSED) ||
-      (event.type() == ui::ET_MOUSE_RELEASED)) {
-    return RewriteMouseButtonEvent(static_cast<const ui::MouseEvent&>(event),
-                                   rewritten_event);
   }
   if (event.type() == ui::ET_MOUSEWHEEL) {
     return RewriteMouseWheelEvent(
@@ -985,9 +985,11 @@ ui::EventRewriteStatus EventRewriterChromeOS::RewriteKeyEvent(
   return status;
 }
 
-ui::EventRewriteStatus EventRewriterChromeOS::RewriteMouseButtonEvent(
+// TODO(yhanada): Clean up this method once StickyKeysController migrates to the
+// new API.
+ui::EventDispatchDetails EventRewriterChromeOS::RewriteMouseButtonEvent(
     const ui::MouseEvent& mouse_event,
-    std::unique_ptr<ui::Event>* rewritten_event) {
+    const Continuation continuation) {
   int flags = mouse_event.flags();
   RewriteLocatedEvent(mouse_event, &flags);
   ui::EventRewriteStatus status = ui::EVENT_REWRITE_CONTINUE;
@@ -997,8 +999,9 @@ ui::EventRewriteStatus EventRewriterChromeOS::RewriteMouseButtonEvent(
     std::unique_ptr<ui::Event> output_event;
     status = sticky_keys_controller_->RewriteEvent(tmp_event, &output_event);
     if (status == ui::EVENT_REWRITE_REWRITTEN ||
-        status == ui::EVENT_REWRITE_DISPATCH_ANOTHER)
+        status == ui::EVENT_REWRITE_DISPATCH_ANOTHER) {
       flags = output_event->flags();
+    }
   }
   int changed_button = ui::EF_NONE;
   if ((mouse_event.type() == ui::ET_MOUSE_PRESSED) ||
@@ -1007,16 +1010,29 @@ ui::EventRewriteStatus EventRewriterChromeOS::RewriteMouseButtonEvent(
   }
   if ((mouse_event.flags() == flags) &&
       (status == ui::EVENT_REWRITE_CONTINUE)) {
-    return ui::EVENT_REWRITE_CONTINUE;
+    return SendEvent(continuation, &mouse_event);
   }
-  if (status == ui::EVENT_REWRITE_CONTINUE)
-    status = ui::EVENT_REWRITE_REWRITTEN;
-  ui::MouseEvent* rewritten_mouse_event = new ui::MouseEvent(mouse_event);
-  rewritten_event->reset(rewritten_mouse_event);
-  rewritten_mouse_event->set_flags(flags);
-  if (changed_button != ui::EF_NONE)
-    rewritten_mouse_event->set_changed_button_flags(changed_button);
-  return status;
+
+  std::unique_ptr<ui::Event> rewritten_event = ui::Event::Clone(mouse_event);
+  rewritten_event->set_flags(flags);
+  if (changed_button != ui::EF_NONE) {
+    static_cast<ui::MouseEvent*>(rewritten_event.get())
+        ->set_changed_button_flags(changed_button);
+  }
+
+  ui::EventDispatchDetails details =
+      SendEventFinally(continuation, rewritten_event.get());
+  while (status == ui::EVENT_REWRITE_DISPATCH_ANOTHER &&
+         !details.dispatcher_destroyed) {
+    // Here, we know that another event is a modifier key release event from
+    // StickyKeysController.
+    std::unique_ptr<ui::Event> new_event;
+    status = sticky_keys_controller_->NextDispatchEvent(*rewritten_event,
+                                                        &new_event);
+    details = SendEventFinally(continuation, new_event.get());
+    rewritten_event = std::move(new_event);
+  }
+  return details;
 }
 
 ui::EventRewriteStatus EventRewriterChromeOS::RewriteMouseWheelEvent(
