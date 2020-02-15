@@ -3329,18 +3329,17 @@
   <message name="IDS_SETTINGS_SITE_SETTINGS_ADS" desc="Label for the ads site settings.">
     Ads
   </message>
-  <!-- TODO(crbug.com/1041009): Finalize WebXr Permissions strings -->
   <message name="IDS_SETTINGS_SITE_SETTINGS_AR" desc="Label for the AR site settings.">
-    Augmented Reality
+    Augmented reality
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_AR_ASK" desc="The Ask label for the AR feature in site settings.">
-    Ask when a site wants to access your camera position or map your room
+    Ask when a site wants to track your camera position or map your room
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_AR_ASK_RECOMMENDED" desc="The Ask label for the AR feature in site settings (with the 'recommended' suffix).">
-    Ask when a site wants to access your camera position or map your room (recommended)
+    Ask when a site wants to track your camera position or map your room (recommended)
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_AR_BLOCK" desc="The Ask label for the AR feature in site settings (with the 'recommended' suffix).">
-    Do not allow sites to access your camera position or map your room
+    Do not allow sites to track your camera position or map your room
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_AUTOMATIC_DOWNLOADS" desc="Label for the automatic downloads site settings.">
     Automatic downloads
@@ -3444,18 +3443,17 @@
   <message name="IDS_SETTINGS_SITE_SETTINGS_PROTECTED_CONTENT_ENABLE" desc="Label for the toggle enabling protected content.">
     Allow sites to play protected content (recommended)
   </message>
-  <!-- TODO(crbug.com/1041009): Finalize WebXr Permissions strings -->
   <message name="IDS_SETTINGS_SITE_SETTINGS_VR" desc="Label for the VR site settings.">
-    Virtual Reality
+    Virtual reality
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_VR_ASK" desc="The Ask label for the VR feature in site settings.">
-    Ask when a site wants to access your virtual reality devices/data
+    Ask when a site wants to use your virtual reality devices and data
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_VR_ASK_RECOMMENDED" desc="The Ask label for the VR feature in site settings (with the 'recommended' suffix).">
-    Ask when a site wants to access your virtual reality devices/data (recommended)
+    Ask when a site wants to use your virtual reality devices and data (recommended)
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_VR_BLOCK" desc="The Ask label for the VR feature in site settings (with the 'recommended' suffix).">
-    Do not allow sites to access your virtual reality devices/data
+    Do not allow sites to use your virtual reality devices and data
   </message>
   <if expr="chromeos or is_win">
     <message name="IDS_SETTINGS_SITE_SETTINGS_PROTECTED_CONTENT_IDENTIFIERS_EXPLANATION" desc="Text that is displayed on the Protected Content section of Content Settings. This text explains that enabling protected content may require using a uniquely identifiable machine identifier.">
