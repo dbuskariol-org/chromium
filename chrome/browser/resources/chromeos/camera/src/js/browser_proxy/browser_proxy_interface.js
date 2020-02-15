@@ -51,4 +51,12 @@ export class BrowserProxy {
    * @abstract
    */
   async getBoard() {}
+
+  /**
+   * @param {string} name
+   * @param {Array<string>|string=} substitutions
+   * @return {string}
+   * @abstract
+   */
+  getI18nMessage(name, substitutions = undefined) {}
 }

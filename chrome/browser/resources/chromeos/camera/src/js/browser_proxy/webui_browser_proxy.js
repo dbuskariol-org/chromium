@@ -91,6 +91,12 @@ class WebUIBrowserProxy {
     NOTIMPLEMENTED();
     return '';
   }
+
+  /** @override */
+  getI18nMessage(name, substitutions = undefined) {
+    NOTIMPLEMENTED();
+    return '';
+  }
 }
 
 export const browserProxy = new WebUIBrowserProxy();

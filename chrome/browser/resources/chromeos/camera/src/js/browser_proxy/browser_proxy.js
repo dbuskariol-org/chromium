@@ -54,6 +54,11 @@ class ChromeAppBrowserProxy {
         await util.promisify(chrome.chromeosInfoPrivate.get)(['board']);
     return values['board'];
   }
+
+  /** @override */
+  getI18nMessage(name, substitutions = undefined) {
+    return chrome.i18n.getMessage(name, substitutions);
+  }
 }
 
 export const browserProxy = new ChromeAppBrowserProxy();
