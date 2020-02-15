@@ -483,7 +483,7 @@ void OverviewWindowDragController::ContinueNormalDrag(
     UpdateDragIndicatorsAndOverviewGrid(location_in_screen);
     // The newly updated indicator state may cause the desks widget to be pushed
     // down to make room for the top splitview guidance indicator when in
-    // portrait mode.
+    // portrait orientation in tablet mode.
     overview_grid->MaybeUpdateDesksWidgetBounds();
   }
   if (AreMultiDisplayOverviewAndSplitViewEnabled()) {
