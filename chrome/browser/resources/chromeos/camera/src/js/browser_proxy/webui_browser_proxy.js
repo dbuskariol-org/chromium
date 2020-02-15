@@ -74,6 +74,23 @@ class WebUIBrowserProxy {
       callback();
     }
   }
+
+  /** @override */
+  async checkMigrated() {
+    NOTIMPLEMENTED();
+    return false;
+  }
+
+  /** @override */
+  async doneMigrate() {
+    NOTIMPLEMENTED();
+  }
+
+  /** @override */
+  async getBoard() {
+    NOTIMPLEMENTED();
+    return '';
+  }
 }
 
 export const browserProxy = new WebUIBrowserProxy();
