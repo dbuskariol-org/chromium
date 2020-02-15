@@ -14,6 +14,7 @@ import './controls/settings_textarea.m.js';
 import './controls/settings_toggle_button.m.js';
 import './on_startup_page/on_startup_page.m.js';
 import './on_startup_page/startup_urls_page.m.js';
+import './prefs/prefs.m.js';
 import './site_favicon.m.js';
 import './search_engines_page/omnibox_extension_entry.m.js';
 import './search_engines_page/search_engine_dialog.m.js';
@@ -33,6 +34,7 @@ export {DefaultBrowserBrowserProxyImpl} from './default_browser_page/default_bro
 // </if>
 
 export {AppearanceBrowserProxy, AppearanceBrowserProxyImpl} from './appearance_page/appearance_browser_proxy.m.js';
+export {CrSettingsPrefs} from './prefs/prefs_types.m.js';
 export {ExtensionControlBrowserProxyImpl} from './extension_control_browser_proxy.m.js';
 export {FontsBrowserProxy, FontsBrowserProxyImpl} from './appearance_page/fonts_browser_proxy.m.js';
 export {OnStartupBrowserProxy, OnStartupBrowserProxyImpl} from './on_startup_page/on_startup_browser_proxy.m.js';

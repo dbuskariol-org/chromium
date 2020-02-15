@@ -131,6 +131,14 @@
            use_base_dir="false"
            preprocess="true"
            type="BINDATA" />
+  <include name="IDR_SETTINGS_PREFS_PREFS_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/prefs/prefs.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
+  <include name="IDR_SETTINGS_PREFS_PREFS_BEHAVIOR_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/prefs/prefs_behavior.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
   <include name="IDR_SETTINGS_PREFS_PREFS_TYPES_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/prefs/prefs_types.m.js"
            use_base_dir="false"

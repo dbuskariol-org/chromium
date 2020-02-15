@@ -264,3 +264,15 @@ var CrSettingsMenuV3Test = class extends CrSettingsV3BrowserTest {
 TEST_F('CrSettingsMenuV3Test', 'SettingsMenu', function() {
   mocha.run();
 });
+
+// eslint-disable-next-line no-var
+var CrSettingsPrefsV3Test = class extends CrSettingsV3BrowserTest {
+  /** @override */
+  get browsePreload() {
+    return 'chrome://settings/test_loader.html?module=settings/prefs_tests.m.js';
+  }
+};
+
+TEST_F('CrSettingsPrefsV3Test', 'All', function() {
+  mocha.run();
+});
