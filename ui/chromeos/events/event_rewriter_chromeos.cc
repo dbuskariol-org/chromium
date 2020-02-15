@@ -516,6 +516,10 @@ ui::EventDispatchDetails EventRewriterChromeOS::RewriteEvent(
     return RewriteMouseButtonEvent(static_cast<const ui::MouseEvent&>(event),
                                    continuation);
   }
+  if (event.type() == ui::ET_MOUSEWHEEL) {
+    return RewriteMouseWheelEvent(
+        static_cast<const ui::MouseWheelEvent&>(event), continuation);
+  }
   if ((event.type() == ui::ET_TOUCH_PRESSED) ||
       (event.type() == ui::ET_TOUCH_RELEASED)) {
     return RewriteTouchEvent(static_cast<const ui::TouchEvent&>(event),
@@ -540,10 +544,6 @@ ui::EventRewriteStatus EventRewriterChromeOS::RewriteEvent(
     RewriteKeyEventInContext(*((&event)->AsKeyEvent()), rewritten_event,
                              &status);
     return status;
-  }
-  if (event.type() == ui::ET_MOUSEWHEEL) {
-    return RewriteMouseWheelEvent(
-        static_cast<const ui::MouseWheelEvent&>(event), rewritten_event);
   }
   return ui::EVENT_REWRITE_CONTINUE;
 }
@@ -1035,36 +1035,44 @@ ui::EventDispatchDetails EventRewriterChromeOS::RewriteMouseButtonEvent(
   return details;
 }
 
-ui::EventRewriteStatus EventRewriterChromeOS::RewriteMouseWheelEvent(
+// TODO(yhanada): Clean up this method once StickyKeysController migrates to the
+// new API.
+ui::EventDispatchDetails EventRewriterChromeOS::RewriteMouseWheelEvent(
     const ui::MouseWheelEvent& wheel_event,
-    std::unique_ptr<ui::Event>* rewritten_event) {
+    const Continuation continuation) {
   if (!sticky_keys_controller_)
-    return ui::EVENT_REWRITE_CONTINUE;
+    return SendEvent(continuation, &wheel_event);
   int flags = wheel_event.flags();
   RewriteLocatedEvent(wheel_event, &flags);
   auto tmp_event = wheel_event;
   tmp_event.set_flags(flags);
-  ui::EventRewriteStatus status =
-      sticky_keys_controller_->RewriteEvent(tmp_event, rewritten_event);
 
-  switch (status) {
-    case ui::EVENT_REWRITE_REWRITTEN:
-    case ui::EVENT_REWRITE_DISPATCH_ANOTHER:
-      // whell event has been rewritten and stored in |rewritten_event|.
-      break;
-    case ui::EVENT_REWRITE_CONTINUE:
-      if (flags != wheel_event.flags()) {
-        *rewritten_event = std::make_unique<ui::MouseWheelEvent>(wheel_event);
-        (*rewritten_event)->set_flags(flags);
-        status = ui::EVENT_REWRITE_REWRITTEN;
-      }
-      break;
-    case ui::EVENT_REWRITE_DISCARD:
-      NOTREACHED();
-      break;
+  std::unique_ptr<ui::Event> rewritten_event;
+  ui::EventRewriteStatus status =
+      sticky_keys_controller_->RewriteEvent(tmp_event, &rewritten_event);
+  // Wheel event shouldn't be discarded.
+  DCHECK_NE(status, ui::EVENT_REWRITE_DISCARD);
+
+  if (status == ui::EVENT_REWRITE_CONTINUE) {
+    if (flags != wheel_event.flags()) {
+      ui::MouseWheelEvent new_event = wheel_event;
+      new_event.set_flags(flags);
+      return SendEventFinally(continuation, &new_event);
+    }
+    return SendEvent(continuation, &wheel_event);
   }
 
-  return status;
+  ui::EventDispatchDetails details =
+      SendEventFinally(continuation, rewritten_event.get());
+  while (status == ui::EVENT_REWRITE_DISPATCH_ANOTHER &&
+         !details.dispatcher_destroyed) {
+    std::unique_ptr<ui::Event> new_event;
+    status = sticky_keys_controller_->NextDispatchEvent(*rewritten_event,
+                                                        &new_event);
+    details = SendEventFinally(continuation, new_event.get());
+    rewritten_event = std::move(new_event);
+  }
+  return details;
 }
 
 ui::EventDispatchDetails EventRewriterChromeOS::RewriteTouchEvent(

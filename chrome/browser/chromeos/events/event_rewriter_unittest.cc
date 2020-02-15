@@ -3211,13 +3211,8 @@ TEST_F(EventRewriterAshTest, MouseWheelEventDispatchImpl) {
 // Tests that if modifier keys are remapped, the flags of a mouse wheel event
 // will be rewritten properly.
 TEST_F(EventRewriterAshTest, MouseWheelEventModifiersRewritten) {
-  // Remap Control to Alt.
-  IntegerPrefMember control;
-  InitModifierKeyPref(&control, prefs::kLanguageRemapControlKeyTo,
-                      ui::chromeos::ModifierKey::kAltKey);
-
   // Generate a mouse wheel event that has a CONTROL_DOWN modifier flag and
-  // expect that it will be rewritten to ALT_DOWN.
+  // expect that no rewriting happens as no modifier remapping is active.
   std::vector<std::unique_ptr<ui::Event>> events;
   gfx::Point location(0, 0);
   ui::MouseWheelEvent positive(
@@ -3225,6 +3220,20 @@ TEST_F(EventRewriterAshTest, MouseWheelEventModifiersRewritten) {
       ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON | ui::EF_CONTROL_DOWN,
       ui::EF_LEFT_MOUSE_BUTTON);
   ui::EventDispatchDetails details = Send(&positive);
+  ASSERT_FALSE(details.dispatcher_destroyed);
+  PopEvents(&events);
+  EXPECT_EQ(1u, events.size());
+  EXPECT_TRUE(events[0]->IsMouseWheelEvent());
+  EXPECT_TRUE(events[0]->flags() & ui::EF_CONTROL_DOWN);
+
+  // Remap Control to Alt.
+  IntegerPrefMember control;
+  InitModifierKeyPref(&control, prefs::kLanguageRemapControlKeyTo,
+                      ui::chromeos::ModifierKey::kAltKey);
+
+  // Sends the same events once again and expect that it will be rewritten to
+  // ALT_DOWN.
+  details = Send(&positive);
   ASSERT_FALSE(details.dispatcher_destroyed);
   PopEvents(&events);
   EXPECT_EQ(1u, events.size());

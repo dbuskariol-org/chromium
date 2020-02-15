@@ -235,9 +235,9 @@ class EventRewriterChromeOS : public ui::EventRewriter {
   ui::EventDispatchDetails RewriteMouseButtonEvent(
       const ui::MouseEvent& mouse_event,
       const Continuation continuation);
-  ui::EventRewriteStatus RewriteMouseWheelEvent(
+  ui::EventDispatchDetails RewriteMouseWheelEvent(
       const ui::MouseWheelEvent& mouse_event,
-      std::unique_ptr<ui::Event>* rewritten_event);
+      const Continuation continuation);
   ui::EventDispatchDetails RewriteTouchEvent(const ui::TouchEvent& touch_event,
                                              const Continuation continuation);
   ui::EventDispatchDetails RewriteScrollEvent(
