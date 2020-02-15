@@ -601,10 +601,6 @@
       status: "experimental",
     },
     {
-      name: "DiscardInputToMovingIframes",
-      status: "stable",
-    },
-    {
       name: "DisplayCutoutAPI",
       settable_from_internals: true,
     },
