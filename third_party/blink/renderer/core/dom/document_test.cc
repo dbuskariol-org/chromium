@@ -275,30 +275,29 @@ class TestDocumentShutdownObserver
   USING_GARBAGE_COLLECTED_MIXIN(TestDocumentShutdownObserver);
 
  public:
-  TestDocumentShutdownObserver(Document&);
+  explicit TestDocumentShutdownObserver(Document&);
   virtual ~TestDocumentShutdownObserver() = default;
 
-  int CountContextDestroyedCalled() const {
-    return context_destroyed_called_counter_;
+  int CountOnDocumentShutdownCalled() const {
+    return on_document_shutdown_called_counter_;
   }
 
   void Trace(Visitor*) override;
 
  private:
   // Implement |DocumentShutdownObserver| member functions.
-  void ContextDestroyed(Document*) final;
+  void OnDocumentShutdown() final;
 
-  int context_destroyed_called_counter_ = 0;
+  int on_document_shutdown_called_counter_ = 0;
 
   DISALLOW_COPY_AND_ASSIGN(TestDocumentShutdownObserver);
 };
 
-TestDocumentShutdownObserver::TestDocumentShutdownObserver(Document& document) {
-  SetContext(&document);
-}
+TestDocumentShutdownObserver::TestDocumentShutdownObserver(Document& document)
+    : DocumentShutdownObserver(&document) {}
 
-void TestDocumentShutdownObserver::ContextDestroyed(Document*) {
-  ++context_destroyed_called_counter_;
+void TestDocumentShutdownObserver::OnDocumentShutdown() {
+  ++on_document_shutdown_called_counter_;
 }
 
 void TestDocumentShutdownObserver::Trace(Visitor* visitor) {
@@ -831,12 +830,12 @@ TEST_F(DocumentTest, DocumentShutdownNotifier) {
   auto& observer =
       *MakeGarbageCollected<TestDocumentShutdownObserver>(GetDocument());
 
-  EXPECT_EQ(GetDocument(), observer.LifecycleContext());
-  EXPECT_EQ(0, observer.CountContextDestroyedCalled());
+  EXPECT_EQ(GetDocument(), observer.GetDocument());
+  EXPECT_EQ(0, observer.CountOnDocumentShutdownCalled());
 
   GetDocument().Shutdown();
-  EXPECT_EQ(nullptr, observer.LifecycleContext());
-  EXPECT_EQ(1, observer.CountContextDestroyedCalled());
+  EXPECT_EQ(nullptr, observer.GetDocument());
+  EXPECT_EQ(1, observer.CountOnDocumentShutdownCalled());
 }
 
 TEST_F(DocumentTest, AttachExecutionContext) {

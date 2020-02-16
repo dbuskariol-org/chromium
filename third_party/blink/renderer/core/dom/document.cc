@@ -3203,7 +3203,12 @@ void Document::Shutdown() {
   frame_->GetEventHandlerRegistry().DocumentDetached(*this);
 
   // Signal destruction to mutation observers.
-  DocumentShutdownNotifier::NotifyContextDestroyed();
+  document_shutdown_observer_list_.ForEachObserver(
+      [](DocumentShutdownObserver* observer) {
+        observer->OnDocumentShutdown();
+        observer->ObserverListWillBeCleared();
+      });
+  document_shutdown_observer_list_.Clear();
   SynchronousMutationNotifier::NotifyContextDestroyed();
 
   cookie_jar_ = nullptr;  // Not accessible after navigated away.
@@ -8087,6 +8092,7 @@ void Document::Trace(Visitor* visitor) {
   visitor->Trace(find_in_page_root_);
   visitor->Trace(computed_node_mapping_);
   visitor->Trace(mime_handler_view_before_unload_event_listener_);
+  visitor->Trace(document_shutdown_observer_list_);
   visitor->Trace(element_explicitly_set_attr_elements_map_);
   visitor->Trace(display_lock_activation_observer_);
   visitor->Trace(form_to_pending_submission_);
@@ -8094,7 +8100,6 @@ void Document::Trace(Visitor* visitor) {
   TreeScope::Trace(visitor);
   ContainerNode::Trace(visitor);
   ExecutionContext::Trace(visitor);
-  DocumentShutdownNotifier::Trace(visitor);
   SynchronousMutationNotifier::Trace(visitor);
 }
 
