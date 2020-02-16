@@ -597,8 +597,8 @@ class Document::NetworkStateObserver final
     probe::NetworkStateChanged(document->GetFrame(), on_line);
   }
 
-  void ContextDestroyed(ExecutionContext* context) override {
-    UnregisterAsObserver(context);
+  void ContextDestroyed() override {
+    UnregisterAsObserver(GetExecutionContext());
   }
 
   void UnregisterAsObserver(ExecutionContext* context) {
