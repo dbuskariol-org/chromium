@@ -39,6 +39,9 @@ void ContextClient::Trace(Visitor* visitor) {
   visitor->Trace(execution_context_);
 }
 
+ContextLifecycleObserver::ContextLifecycleObserver()
+    : observer_type_(kGenericType) {}
+
 ContextLifecycleObserver::ContextLifecycleObserver(Document* document,
                                                    Type type)
     : ContextLifecycleObserver(

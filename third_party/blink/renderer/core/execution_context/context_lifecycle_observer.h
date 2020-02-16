@@ -127,6 +127,7 @@ class CORE_EXPORT ContextLifecycleObserver : public GarbageCollectedMixin {
   void Trace(Visitor*) override;
 
  protected:
+  ContextLifecycleObserver();
   // TODO(crbug.com/1029822): This is a shim to enable migrating
   // ExecutionContext to LocalDOMWindow.
   explicit ContextLifecycleObserver(Document*, Type type = kGenericType);
