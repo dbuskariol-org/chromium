@@ -8258,7 +8258,7 @@ void Document::CountPotentialFeaturePolicyViolation(
 }
 void Document::ReportFeaturePolicyViolation(
     mojom::blink::FeaturePolicyFeature feature,
-    mojom::blink::FeaturePolicyDisposition disposition,
+    mojom::FeaturePolicyDisposition disposition,
     const String& message,
     const String& source_file) const {
   if (!RuntimeEnabledFeatures::FeaturePolicyReportingEnabled(this))
@@ -8270,9 +8270,8 @@ void Document::ReportFeaturePolicyViolation(
   // Construct the feature policy violation report.
   const String& feature_name = GetNameForFeature(feature);
   const String& disp_str =
-      (disposition == mojom::blink::FeaturePolicyDisposition::kReport
-           ? "report"
-           : "enforce");
+      (disposition == mojom::FeaturePolicyDisposition::kReport ? "report"
+                                                               : "enforce");
 
   FeaturePolicyViolationReportBody* body =
       source_file.IsEmpty()
