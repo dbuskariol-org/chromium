@@ -838,10 +838,6 @@ crbug.com/591099 [ Win ] virtual/text-antialias/ellipsis-with-self-painting-laye
 
 # LayoutNG failures that needs to be triaged
 crbug.com/591099 virtual/text-antialias/selection/selection-rect-line-height-too-small.html [ Failure ]
-crbug.com/591099 external/wpt/css/css-rhythm/line-height-step-basic-001.html [ Failure ]
-crbug.com/591099 external/wpt/css/css-rhythm/line-height-step-boundary-001.html [ Failure ]
-crbug.com/591099 external/wpt/css/css-rhythm/line-height-step-valign-001.html [ Failure ]
-crbug.com/591099 external/wpt/css/css-rhythm/line-height-step-writing-mode-vrl-001.html [ Failure ]
 crbug.com/591099 external/wpt/css/css-text/hyphens/hyphens-out-of-flow-002.html [ Failure ]
 crbug.com/591099 external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-vertical.html [ Failure ]
 crbug.com/591099 fast/css-intrinsic-dimensions/width-avoid-floats.html [ Failure ]
