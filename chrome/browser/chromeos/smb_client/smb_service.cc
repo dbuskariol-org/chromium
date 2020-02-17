@@ -389,6 +389,7 @@ void SmbService::MountInternal(
     smbfs_options.workgroup = info.workgroup();
     smbfs_options.password = password;
     smbfs_options.allow_ntlm = IsNTLMAuthenticationEnabled();
+    smbfs_options.skip_connect = skip_connect;
     if (info.use_kerberos()) {
       if (user->IsActiveDirectoryUser()) {
         smbfs_options.kerberos_options =
