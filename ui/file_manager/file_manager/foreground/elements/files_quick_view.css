@@ -189,6 +189,13 @@ cr-button:focus:not(:active) {
   width: 36px;
 }
 
+:host([files-ng]) cr-button::after {
+  content: '';
+  height: 48px;
+  position: absolute;
+  width: 48px;
+}
+
 :host([files-ng]) #back-button > .icon,
 :host([files-ng]) #open-button > .icon,
 :host([files-ng]) #delete-button > .icon,
