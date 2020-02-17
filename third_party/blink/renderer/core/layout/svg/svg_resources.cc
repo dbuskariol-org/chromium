@@ -293,16 +293,13 @@ InvalidationModeMask SVGResources::RemoveClientFromCacheAffectingObjectBounds(
     SVGResourceClient& client) const {
   if (!clipper_filter_masker_data_)
     return 0;
-  InvalidationModeMask invalidation_flags = 0;
-  if (LayoutSVGResourceClipper* clipper = clipper_filter_masker_data_->clipper)
-    clipper->RemoveClientFromCache(client);
+  InvalidationModeMask invalidation_flags =
+      SVGResourceClient::kBoundariesInvalidation;
   if (LayoutSVGResourceFilter* filter = clipper_filter_masker_data_->filter) {
     if (filter->RemoveClientFromCache(client))
       invalidation_flags |= SVGResourceClient::kPaintInvalidation;
   }
-  if (LayoutSVGResourceMasker* masker = clipper_filter_masker_data_->masker)
-    masker->RemoveClientFromCache(client);
-  return invalidation_flags | SVGResourceClient::kBoundariesInvalidation;
+  return invalidation_flags;
 }
 
 InvalidationModeMask SVGResources::RemoveClientFromCache(
