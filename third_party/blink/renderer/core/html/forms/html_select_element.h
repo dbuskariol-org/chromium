@@ -190,10 +190,6 @@ class CORE_EXPORT HTMLSelectElement final
 
  private:
   const AtomicString& FormControlType() const override;
-  // Update style on style or selected OPTION change, and return text to be
-  // shown.
-  String UpdateFromElement();
-  void UpdateMenuListLabel(const String& label);
 
   bool MayTriggerVirtualKeyboard() const override;
 

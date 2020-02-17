@@ -23,6 +23,13 @@ class SelectType : public GarbageCollected<SelectType> {
                                HTMLSelectElement::SelectOptionFlags flags,
                                bool should_update_popup);
 
+  // Update style of text in the CSS box on style or selected OPTION change.
+  virtual void UpdateTextStyle();
+
+  // Update style of text in the CSS box on style or selected OPTION change,
+  // and update the text.
+  virtual void UpdateTextStyleAndContent();
+
   // TODO(crbug.com/1052232): Add more virtual functions.
 
  protected:
