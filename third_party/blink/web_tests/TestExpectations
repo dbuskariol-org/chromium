@@ -6405,7 +6405,6 @@ crbug.com/1041973 virtual/web-components-v0-disabled/external/wpt/html/semantics
 # Disabled for landing devtools changes
 crbug.com/1030746 http/tests/devtools/sources/debugger-ui/sourcemap-src-not-loaded.js [ Pass Failure ]
 crbug.com/1030746 http/tests/devtools/network/load-resource-for-frontend.js [ Pass Failure ]
-crbug.com/1050756 http/tests/devtools/copy-network-request.js [ Pass Failure ]
 
 # Disable for landing devtools changes
 crbug.com/1006759 http/tests/devtools/console/argument-hints.js [ Pass Failure ]
