@@ -2168,10 +2168,6 @@ crbug.com/1024331 external/wpt/css/css-text/line-breaking/line-breaking-017.html
 crbug.com/1024331 external/wpt/css/css-text/line-breaking/line-breaking-018.html [ Failure ]
 crbug.com/1024331 external/wpt/css/css-text/line-breaking/line-breaking-019.html [ Failure ]
 
-# Follow up the spec change for atomic inlines
-crbug.com/1025715 external/wpt/css/css-text/line-breaking/line-breaking-atomic-008.html [ Failure ]
-crbug.com/1025715 external/wpt/css/css-text/line-breaking/line-breaking-replaced-005.html [ Failure ]
-
 # Follow up the spec change for U+2010, U+2013
 crbug.com/1052717 external/wpt/css/css-text/line-break/line-break-loose-hyphens-001.html [ Failure ]
 crbug.com/1052717 external/wpt/css/css-text/line-break/line-break-normal-hyphens-002.html [ Failure ]
