@@ -45,7 +45,7 @@ namespace blink {
 
 SVGResources::SVGResources() : linked_resource_(nullptr) {}
 
-SVGResourceClient* SVGResources::GetClient(const LayoutObject& object) {
+SVGElementResourceClient* SVGResources::GetClient(const LayoutObject& object) {
   return To<SVGElement>(object.GetNode())->GetSVGResourceClient();
 }
 
@@ -290,7 +290,7 @@ bool SVGResources::DifferenceNeedsLayout(const SVGResources* a,
 }
 
 InvalidationModeMask SVGResources::RemoveClientFromCacheAffectingObjectBounds(
-    SVGResourceClient& client) const {
+    SVGElementResourceClient& client) const {
   if (!clipper_filter_masker_data_)
     return 0;
   InvalidationModeMask invalidation_flags =
@@ -303,7 +303,7 @@ InvalidationModeMask SVGResources::RemoveClientFromCacheAffectingObjectBounds(
 }
 
 InvalidationModeMask SVGResources::RemoveClientFromCache(
-    SVGResourceClient& client) const {
+    SVGElementResourceClient& client) const {
   if (!HasResourceData())
     return 0;
 
