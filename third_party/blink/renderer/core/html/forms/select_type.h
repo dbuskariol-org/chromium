@@ -17,6 +17,7 @@ class SelectType : public GarbageCollected<SelectType> {
   // Creates an instance of a SelectType subclass depending on the current mode
   // of |select|.
   static SelectType* Create(HTMLSelectElement& select);
+  void WillBeDestroyed();
   virtual void Trace(Visitor* visitor);
 
   virtual void DidSelectOption(HTMLOptionElement* element,
@@ -36,6 +37,7 @@ class SelectType : public GarbageCollected<SelectType> {
   explicit SelectType(HTMLSelectElement& select);
 
   const Member<HTMLSelectElement> select_;
+  bool will_be_destroyed_ = false;
 
  private:
   SelectType(const SelectType&) = delete;

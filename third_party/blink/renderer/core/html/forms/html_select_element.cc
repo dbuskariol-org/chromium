@@ -1511,27 +1511,6 @@ void HTMLSelectElement::UpdateSelectedState(HTMLOptionElement* clicked_option,
   UpdateListBoxSelection(!multi_select);
 }
 
-void HTMLSelectElement::DidUpdateMenuListActiveOption(
-    HTMLOptionElement* option) {
-  if (!GetDocument().ExistingAXObjectCache())
-    return;
-
-  int option_index = option ? option->index() : -1;
-  if (ax_menulist_last_active_index_ == option_index)
-    return;
-  ax_menulist_last_active_index_ = option_index;
-
-  // We skip sending accessiblity notifications for the very first option,
-  // otherwise we get extra focus and select events that are undesired.
-  if (!has_updated_menulist_active_option_) {
-    has_updated_menulist_active_option_ = true;
-    return;
-  }
-
-  GetDocument().ExistingAXObjectCache()->HandleUpdateActiveMenuOption(
-      GetLayoutObject(), option_index);
-}
-
 HTMLOptionElement* HTMLSelectElement::EventTargetOption(const Event& event) {
   return DynamicTo<HTMLOptionElement>(event.target()->ToNode());
 }
@@ -2261,6 +2240,7 @@ void HTMLSelectElement::CloneNonAttributePropertiesFrom(
 
 void HTMLSelectElement::ChangeRendering() {
   UpdateUsesMenuList();
+  select_type_->WillBeDestroyed();
   select_type_ = SelectType::Create(*this);
   if (!InActiveDocument())
     return;
@@ -2270,11 +2250,6 @@ void HTMLSelectElement::ChangeRendering() {
   DetachLayoutTree();
   SetNeedsStyleRecalc(kLocalStyleChange, StyleChangeReasonForTracing::Create(
                                              style_change_reason::kControl));
-
-  if (UsesMenuList()) {
-    ax_menulist_last_active_index_ = -1;
-    has_updated_menulist_active_option_ = false;
-  }
 }
 
 const ComputedStyle* HTMLSelectElement::OptionStyle() const {

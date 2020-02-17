@@ -52,6 +52,10 @@ class MenuListSelectType final : public SelectType {
 
  private:
   String UpdateTextStyleInternal();
+  void DidUpdateActiveOption(HTMLOptionElement* option);
+
+  int ax_menulist_last_active_index_ = -1;
+  bool has_updated_menulist_active_option_ = false;
 };
 
 void MenuListSelectType::DidSelectOption(
@@ -76,12 +80,11 @@ void MenuListSelectType::DidSelectOption(
     select_->DispatchChangeEvent();
   }
   if (select_->GetLayoutObject()) {
-    // Need to check UsesMenuList() again because event handlers might
-    // change the status.
-    if (select_->UsesMenuList()) {
-      // DidUpdateMenuListActiveOption() is O(N) because of
-      // HTMLOptionElement::index().
-      select_->DidUpdateMenuListActiveOption(element);
+    // Need to check will_be_destroyed_ because event handlers might
+    // disassociate |this| and select_.
+    if (!will_be_destroyed_) {
+      // DidUpdateActiveOption() is O(N) because of HTMLOptionElement::index().
+      DidUpdateActiveOption(element);
     }
   }
 }
@@ -137,7 +140,7 @@ String MenuListSelectType::UpdateTextStyleInternal() {
     }
   }
   if (select_->GetLayoutObject())
-    select_->DidUpdateMenuListActiveOption(option);
+    DidUpdateActiveOption(option);
 
   return text.StripWhiteSpace();
 }
@@ -156,6 +159,27 @@ void MenuListSelectType::UpdateTextStyleAndContent() {
   }
 }
 
+void MenuListSelectType::DidUpdateActiveOption(HTMLOptionElement* option) {
+  Document& document = select_->GetDocument();
+  if (!document.ExistingAXObjectCache())
+    return;
+
+  int option_index = option ? option->index() : -1;
+  if (ax_menulist_last_active_index_ == option_index)
+    return;
+  ax_menulist_last_active_index_ = option_index;
+
+  // We skip sending accessiblity notifications for the very first option,
+  // otherwise we get extra focus and select events that are undesired.
+  if (!has_updated_menulist_active_option_) {
+    has_updated_menulist_active_option_ = true;
+    return;
+  }
+
+  document.ExistingAXObjectCache()->HandleUpdateActiveMenuOption(
+      select_->GetLayoutObject(), option_index);
+}
+
 // ============================================================================
 
 class ListBoxSelectType final : public SelectType {
@@ -172,6 +196,10 @@ SelectType* SelectType::Create(HTMLSelectElement& select) {
     return MakeGarbageCollected<MenuListSelectType>(select);
   else
     return MakeGarbageCollected<ListBoxSelectType>(select);
+}
+
+void SelectType::WillBeDestroyed() {
+  will_be_destroyed_ = true;
 }
 
 void SelectType::Trace(Visitor* visitor) {
