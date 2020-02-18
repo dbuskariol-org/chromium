@@ -2214,7 +2214,7 @@ void PepperPluginInstanceImpl::UpdateLayer(bool force_creation) {
 
   if (texture_layer_) {
     if (fullscreen_container_)
-      fullscreen_container_->SetLayer(texture_layer_.get());
+      fullscreen_container_->SetLayer(texture_layer_);
     else
       container_->SetCcLayer(texture_layer_.get(), true);
     if (is_flash_plugin_)

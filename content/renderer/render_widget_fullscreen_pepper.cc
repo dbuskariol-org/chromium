@@ -331,9 +331,8 @@ void RenderWidgetFullscreenPepper::PepperDidChangeCursor(
   DidChangeCursor(cursor);
 }
 
-// TODO(danakj): These should be a scoped_refptr<cc::Layer>.
-void RenderWidgetFullscreenPepper::SetLayer(cc::Layer* layer) {
-  layer_ = layer;
+void RenderWidgetFullscreenPepper::SetLayer(scoped_refptr<cc::Layer> layer) {
+  layer_ = layer.get();
   if (!layer_) {
     RenderWidget::SetRootLayer(nullptr);
     return;
@@ -341,7 +340,7 @@ void RenderWidgetFullscreenPepper::SetLayer(cc::Layer* layer) {
   UpdateLayerBounds();
   layer_->SetIsDrawable(true);
   layer_->SetHitTestable(true);
-  layer_tree_host()->SetNonBlinkManagedRootLayer(layer_);
+  layer_tree_host()->SetNonBlinkManagedRootLayer(std::move(layer));
 }
 
 bool RenderWidgetFullscreenPepper::OnMessageReceived(const IPC::Message& msg) {
