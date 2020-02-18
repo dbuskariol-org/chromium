@@ -1501,7 +1501,11 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   self.view.clipsToBounds = YES;
 
   self.contentArea.frame = initialViewsRect;
+
+  // Create the typing shield.  It is initially hidden, and is made visible when
+  // the keyboard appears.
   self.typingShield = [[UIButton alloc] initWithFrame:initialViewsRect];
+  self.typingShield.hidden = YES;
   self.typingShield.autoresizingMask = initialViewAutoresizing;
   self.typingShield.accessibilityIdentifier = @"Typing Shield";
   self.typingShield.accessibilityLabel = l10n_util::GetNSString(IDS_CANCEL);
@@ -2261,9 +2265,8 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   fakeStatusBarFrame.size.height = topInset;
   _fakeStatusBarView.frame = fakeStatusBarFrame;
 
-  // Position the toolbar next, either at the top of the browser view or
-  // directly under the tabstrip.
   if (initialLayout) {
+    // Add the toolbars as child view controllers.
     [self addChildViewController:self.primaryToolbarCoordinator.viewController];
     if (self.secondaryToolbarCoordinator) {
       if (base::FeatureList::IsEnabled(
@@ -2275,39 +2278,38 @@ NSString* const kBrowserViewControllerSnackbarCategory =
                                          .viewController];
       }
     }
-  }
 
-  // Place the toolbar controller above the infobar container and adds the
-  // layout guides.
-  if (initialLayout) {
-    UIView* bottomView =
-        IsIPadIdiom() ? _fakeStatusBarView
-                      : [self.infobarContainerCoordinator legacyContainerView];
-    [[self view]
-        insertSubview:self.primaryToolbarCoordinator.viewController.view
-         aboveSubview:bottomView];
+    // Add the primary toolbar.  On iPad, it should be behind the tab strip.
+    UIView* primaryToolbarView =
+        self.primaryToolbarCoordinator.viewController.view;
+    if (IsIPadIdiom()) {
+      [self.view insertSubview:primaryToolbarView
+                  belowSubview:self.tabStripView];
+    } else {
+      [self.view addSubview:primaryToolbarView];
+    }
+
+    // Add the secondary toolbar.
     if (self.secondaryToolbarCoordinator) {
       if (base::FeatureList::IsEnabled(
               toolbar_container::kToolbarContainerEnabled)) {
         // Add the container view to the hierarchy.
         UIView* containerView =
             self.secondaryToolbarContainerCoordinator.viewController.view;
-        [self.view
-            insertSubview:containerView
-             aboveSubview:self.primaryToolbarCoordinator.viewController.view];
+        [self.view insertSubview:containerView aboveSubview:primaryToolbarView];
       } else {
-        // Create the container view for the secondary toolbar and add it to the
-        // hierarchy
+        // Create the container view for the secondary toolbar and add it to
+        // the hierarchy
         UIView* container = [[LegacyToolbarContainerView alloc] init];
         container.translatesAutoresizingMaskIntoConstraints = NO;
         [container
             addSubview:self.secondaryToolbarCoordinator.viewController.view];
-        [self.view
-            insertSubview:container
-             aboveSubview:self.primaryToolbarCoordinator.viewController.view];
+        [self.view insertSubview:container aboveSubview:primaryToolbarView];
         self.secondaryToolbarContainerView = container;
       }
     }
+
+    // Create the NamedGuides and add them to the browser view.
     NSArray<GuideName*>* guideNames = @[
       kContentAreaGuide,
       kPrimaryToolbarGuide,
@@ -2331,8 +2333,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
                                                         view:self.view];
 
     // Constrain top to bottom of top toolbar.
-    UIView* primaryToolbarView =
-        self.primaryToolbarCoordinator.viewController.view;
     [contentAreaGuide.topAnchor
         constraintEqualToAnchor:primaryToolbarView.bottomAnchor]
         .active = YES;
@@ -2352,8 +2352,9 @@ NSString* const kBrowserViewControllerSnackbarCategory =
       contentSides = contentSides | LayoutSides::kBottom;
     }
     AddSameConstraintsToSides(self.view, contentAreaGuide, contentSides);
-  }
-  if (initialLayout) {
+
+    // Complete child UIViewController containment flow now that the views are
+    // finished being added.
     [self.primaryToolbarCoordinator.viewController
         didMoveToParentViewController:self];
     if (self.secondaryToolbarCoordinator) {
@@ -2368,13 +2369,12 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     }
   }
 
-  // Attach the typing shield to the content area but have it hidden.
+  // Resize the typing shield to cover the entire browser view and bring it to
+  // the front.
   self.typingShield.frame = self.contentArea.frame;
-  if (initialLayout) {
-    [self.view insertSubview:self.typingShield aboveSubview:self.contentArea];
-    [self.typingShield setHidden:YES];
-  }
+  [self.view bringSubviewToFront:self.typingShield];
 
+  // Move the overlay containers in front of the hierarchy.
   [self updateOverlayContainerOrder];
 }
 
