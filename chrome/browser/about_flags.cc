@@ -3308,6 +3308,17 @@ const FeatureEntry kFeatureEntries[] = {
          chrome::android::kUpdateNotificationSchedulingIntegration)},
 #endif
 
+#if defined(OS_ANDROID)
+    {"update-notification-scheduling-show-immediately",
+     flag_descriptions::kUpdateNotificationServiceImmediateShowOptionName,
+     flag_descriptions::
+         kUpdateNotificationServiceImmediateShowOptionDescription,
+     kOsAndroid,
+     FEATURE_VALUE_TYPE(
+         chrome::android::
+             kUpdateNotificationScheduleServiceImmediateShowOption)},
+#endif
+
     {"tab-hover-cards", flag_descriptions::kTabHoverCardsName,
      flag_descriptions::kTabHoverCardsDescription, kOsDesktop,
      FEATURE_WITH_PARAMS_VALUE_TYPE(features::kTabHoverCards,

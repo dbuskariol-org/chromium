@@ -3659,6 +3659,11 @@
     "expiry_milestone": 86
   },
   {
+    "name": "update-notification-scheduling-show-immediately",
+    "owners": [ "//chrome/browser/updates/OWNERS" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "updated_cellular_activation_ui",
     "owners": [ "azeemarshad", "khorimoto", "vecore", "cros-system-services@google.com" ],
     "expiry_milestone": 85

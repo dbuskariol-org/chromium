@@ -37395,6 +37395,8 @@ from previous Chrome versions.
   <int value="-1532014193" label="disable-encryption-migration"/>
   <int value="-1529907580" label="ImeServiceConnectable:disabled"/>
   <int value="-1528455406" label="OmniboxPedalSuggestions:enabled"/>
+  <int value="-1521296022"
+      label="UpdateNotificationScheduleServiceImmediateShowOption:disabled"/>
   <int value="-1521160841" label="DismissNtpPromos:enabled"/>
   <int value="-1520952503" label="SearchReadyOmnibox:enabled"/>
   <int value="-1520855274" label="PWAFullCodeCache:disabled"/>
@@ -37743,6 +37745,8 @@ from previous Chrome versions.
   <int value="-1156179600" label="OmniboxRichEntitySuggestions:enabled"/>
   <int value="-1155543191" label="CopylessPaste:disabled"/>
   <int value="-1154819618" label="FilesNG:enabled"/>
+  <int value="-1154394293"
+      label="UpdateNotificationScheduleServiceImmediateShowOption:enabled"/>
   <int value="-1154343236" label="VrBrowsingTabsView:disabled"/>
   <int value="-1151766565" label="enable-fullscreen-tab-detaching"/>
   <int value="-1145905507" label="SendTabToSelfWhenSignedIn:disabled"/>

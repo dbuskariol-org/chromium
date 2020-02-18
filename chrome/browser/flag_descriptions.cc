@@ -2681,6 +2681,11 @@ const char kUpdateNotificationSchedulingIntegrationDescription[] =
     "if enable update notification will hook up to notification scheduling "
     "system in native side";
 
+const char kUpdateNotificationServiceImmediateShowOptionName[] =
+    "Update notification service debug options";
+const char kUpdateNotificationServiceImmediateShowOptionDescription[] =
+    "Show update notification right immediately";
+
 const char kUsageStatsDescription[] =
     "When set, enables sharing of per-domain usage stats with the Digital "
     "Wellbeing app on Android, and allows Digital Wellbeing to suspend access "

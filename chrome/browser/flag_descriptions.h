@@ -1540,6 +1540,8 @@ extern const char kUpdateMenuTypeInlineUpdateInstallFailed[];
 
 extern const char kUpdateNotificationSchedulingIntegrationName[];
 extern const char kUpdateNotificationSchedulingIntegrationDescription[];
+extern const char kUpdateNotificationServiceImmediateShowOptionName[];
+extern const char kUpdateNotificationServiceImmediateShowOptionDescription[];
 
 extern const char kUsageStatsDescription[];
 extern const char kUsageStatsName[];

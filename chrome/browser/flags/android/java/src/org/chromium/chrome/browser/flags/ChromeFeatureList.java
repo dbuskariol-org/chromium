@@ -388,6 +388,8 @@ public abstract class ChromeFeatureList {
             "SplitCacheByNetworkIsolationKey";
     public static final String UPDATE_NOTIFICATION_SCHEDULING_INTEGRATION =
             "UpdateNotificationSchedulingIntegration";
+    public static final String UPDATE_NOTIFICATION_IMMEDIATE_SHOW_OPTION =
+            "UpdateNotificationScheduleServiceImmediateShowOption";
 
     @NativeMethods
     interface Natives {

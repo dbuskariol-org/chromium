@@ -203,6 +203,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kStartSurfaceAndroid,
     &kUmaBackgroundSessions,
     &kUpdateNotificationSchedulingIntegration,
+    &kUpdateNotificationScheduleServiceImmediateShowOption,
     &kUsageStatsFeature,
     &kVideoPersistence,
     &kVrBrowsingFeedback,
@@ -602,6 +603,10 @@ const base::Feature kUmaBackgroundSessions{"UMABackgroundSessions",
 
 const base::Feature kUpdateNotificationSchedulingIntegration{
     "UpdateNotificationSchedulingIntegration",
+    base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kUpdateNotificationScheduleServiceImmediateShowOption{
+    "UpdateNotificationScheduleServiceImmediateShowOption",
     base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kUsageStatsFeature{"UsageStats",
