@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/installer/setup/install_service_work_item.h"
-#include "chrome/installer/setup/install_service_work_item_impl.h"
+#include "chrome/installer/util/install_service_work_item.h"
+#include "chrome/installer/util/install_service_work_item_impl.h"
 
 #include <memory>
 #include <vector>

@@ -9,8 +9,8 @@
 // In the event that the upgrade fails, this module will install a new service
 // and mark the original service for deletion.
 
-#ifndef CHROME_INSTALLER_SETUP_INSTALL_SERVICE_WORK_ITEM_H_
-#define CHROME_INSTALLER_SETUP_INSTALL_SERVICE_WORK_ITEM_H_
+#ifndef CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_H_
+#define CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_H_
 
 #include <memory>
 
@@ -62,4 +62,4 @@ class InstallServiceWorkItem : public WorkItem {
 
 }  // namespace installer
 
-#endif  // CHROME_INSTALLER_SETUP_INSTALL_SERVICE_WORK_ITEM_H_
+#endif  // CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_H_

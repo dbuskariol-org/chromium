@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_INSTALLER_SETUP_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
-#define CHROME_INSTALLER_SETUP_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
+#ifndef CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
+#define CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
 
 #include <windows.h>
 #include <vector>
@@ -170,4 +170,4 @@ class InstallServiceWorkItemImpl {
 
 }  // namespace installer
 
-#endif  // CHROME_INSTALLER_SETUP_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
+#endif  // CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
