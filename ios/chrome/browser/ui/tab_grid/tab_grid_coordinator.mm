@@ -284,15 +284,18 @@
   // It's also expected that |tabSwitcher| will be |self.tabSwitcher|, but that
   // may not be worth a DCHECK?
 
+  BOOL animated = !self.animationsDisabledForTesting;
+
   // If a BVC is currently being presented, dismiss it.  This will trigger any
   // necessary animations.
   if (self.bvcContainer) {
     if (base::FeatureList::IsEnabled(kContainedBVC)) {
-      [self.baseViewController contentWillAppearAnimated:NO];
+      [self.baseViewController contentWillAppearAnimated:animated];
       self.baseViewController.childViewControllerForStatusBarStyle = nil;
 
       self.transitionHandler = [[TabGridTransitionHandler alloc]
           initWithLayoutProvider:self.baseViewController];
+      self.transitionHandler.animationDisabled = !animated;
       [self.transitionHandler
           transitionFromBrowser:self.bvcContainer
                       toTabGrid:self.baseViewController
@@ -304,7 +307,6 @@
     } else {
       self.bvcContainer.transitioningDelegate = self.legacyTransitionHandler;
       self.bvcContainer = nil;
-      BOOL animated = !self.animationsDisabledForTesting;
       [self.baseViewController dismissViewControllerAnimated:animated
                                                   completion:nil];
     }
@@ -361,6 +363,7 @@
 
     self.transitionHandler = [[TabGridTransitionHandler alloc]
         initWithLayoutProvider:self.baseViewController];
+    self.transitionHandler.animationDisabled = !animated;
     [self.transitionHandler transitionFromTabGrid:self.baseViewController
                                         toBrowser:self.bvcContainer
                                    withCompletion:^{
