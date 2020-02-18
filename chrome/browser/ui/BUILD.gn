@@ -3394,6 +3394,7 @@ jumbo_static_library("ui") {
       "views/webauthn/sheet_view_factory.h",
       "webauthn/account_hover_list_model.cc",
       "webauthn/account_hover_list_model.h",
+      "webauthn/authenticator_request_sheet_model.cc",
       "webauthn/authenticator_request_sheet_model.h",
       "webauthn/ble_device_hover_list_model.cc",
       "webauthn/ble_device_hover_list_model.h",
