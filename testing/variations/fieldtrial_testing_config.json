@@ -7978,6 +7978,23 @@
             ]
         }
     ],
+    "WebRTC-Vp9ExternalRefCtrl": [
+        {
+            "platforms": [
+                "windows",
+                "mac",
+                "chromeos",
+                "linux",
+                "ios",
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled"
+                }
+            ]
+        }
+    ],
     "WebRtcHybridAgc": [
         {
             "platforms": [
