@@ -369,6 +369,11 @@
     // Mount USB device containing partitions.
     await sendTestMessage({name: 'mountUsbWithPartitions'});
 
+    // Wait for the USB root to be available.
+    await remoteCall.waitForElement(
+        appId, '#directory-tree [entry-label="Drive Label"]');
+    await navigateWithDirectoryTree(appId, '/Drive Label');
+
     // Wait for 2 removable partitions to appear in the directory tree.
     await repeatUntil(async () => {
       const partitions = await remoteCall.callRemoteTestUtil(
