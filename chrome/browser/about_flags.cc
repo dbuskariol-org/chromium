@@ -4628,13 +4628,6 @@ const FeatureEntry kFeatureEntries[] = {
      kOsMac | kOsWin | kOsCrOS | kOsAndroid,
      FEATURE_VALUE_TYPE(features::kDnsOverHttps)},
 
-#if defined(OS_ANDROID)
-    {"tab-switcher-longpress-menu",
-     flag_descriptions::kTabSwitcherLongpressMenuName,
-     flag_descriptions::kTabSwitcherLongpressMenuDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(chrome::android::kTabSwitcherLongpressMenu)},
-#endif  // defined(OS_ANDROID)
-
     {"web-bundles", flag_descriptions::kWebBundlesName,
      flag_descriptions::kWebBundlesDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kWebBundles)},

@@ -3510,11 +3510,6 @@
     "expiry_milestone":  82
   },
   {
-    "name": "tab-switcher-longpress-menu",
-    "owners": [ "lazzzis@google.com", "twellington" ],
-    "expiry_milestone": 81
-  },
-  {
     "name": "temporary-unexpire-flags-m78",
     "owners": [ "ellyjones", "flags-dev" ],
     "expiry_milestone": 81

@@ -2638,12 +2638,6 @@ const char kStrictSiteIsolationDescription[] =
     "#site-isolation-trial-opt-out for how to disable site isolation for "
     "testing.";
 
-const char kTabSwitcherLongpressMenuName[] =
-    "Enable tab switcher long-press menu";
-const char kTabSwitcherLongpressMenuDescription[] =
-    "Enable showing a popup menu when the tab switcher is long-pressed, which "
-    "displays options for 'NewTab', 'New incognito tab' and 'Close tab'.";
-
 const char kUpdateMenuBadgeName[] = "Force show update menu badge";
 const char kUpdateMenuBadgeDescription[] =
     "When enabled, a badge will be shown on the app menu button if the update "
