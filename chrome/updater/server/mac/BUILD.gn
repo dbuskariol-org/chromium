@@ -6,6 +6,9 @@ source_set("mac") {
   sources = [
     "server.h",
     "server.mm",
+    "service_delegate.h",
+    "service_delegate.mm",
+    "service_protocol.h",
   ]
 
   deps = [ "//base" ]
