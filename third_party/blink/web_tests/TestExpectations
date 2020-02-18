@@ -273,12 +273,12 @@ crbug.com/968791 [ Mac ] virtual/scalefactor200/css3/filters/effect-blur-hw.html
 crbug.com/968791 virtual/scalefactor200/css3/filters/filterRegions.html [ Failure ]
 
 # These appear to be actually incorrect at device_scale_factor 2.0:
-crbug.com/968791 virtual/scalefactor200/css3/filters/effect-reference-image-lazy-attach.html [ Failure ]
-crbug.com/968791 virtual/scalefactor200/css3/filters/effect-reference-image.html [ Failure ]
+crbug.com/968791 crbug.com/1051044 virtual/scalefactor200/css3/filters/effect-reference-image-lazy-attach.html [ Failure ]
+crbug.com/968791 crbug.com/1051044 virtual/scalefactor200/css3/filters/effect-reference-image.html [ Failure ]
+crbug.com/968791 crbug.com/1051044 virtual/scalefactor200/css3/filters/effect-reference-image-hw.html [ Failure ]
 crbug.com/968791 virtual/scalefactor200/external/wpt/css/filter-effects/filters-test-brightness-003.html [ Failure ]
 
 # Copying these from elsewhere in TestExpectations (for non-scalefactor200 virtual suite)
-crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-image-hw.html [ Failure Pass ]
 crbug.com/903383 virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-combined-001.html [ Failure ]
 crbug.com/903383 virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-blur.html [ Failure ]
 crbug.com/626703 virtual/scalefactor200/external/wpt/css/filter-effects/filter-subregion-01.html [ Failure ]
@@ -2221,8 +2221,8 @@ crbug.com/636239 [ Win7 ] virtual/audio-service/media/video-zoom-controls.html [
 
 crbug.com/377696 printing/setPrinting.html [ Failure ]
 
-crbug.com/658305 css3/filters/effect-reference-image.html [ Pass Failure ]
-crbug.com/658305 css3/filters/effect-reference-image-lazy-attach.html [ Pass Failure ]
+crbug.com/1051044 css3/filters/effect-reference-image.html [ Pass Failure ]
+crbug.com/1051044 css3/filters/effect-reference-image-lazy-attach.html [ Pass Failure ]
 
 crbug.com/524160 [ Debug ] http/tests/media/media-source/stream_memory_tests/mediasource-appendbuffer-quota-exceeded-default-buffers.html [ Timeout ]
 crbug.com/524160 [ Debug ] virtual/audio-service/http/tests/media/media-source/stream_memory_tests/mediasource-appendbuffer-quota-exceeded-default-buffers.html [ Timeout ]
