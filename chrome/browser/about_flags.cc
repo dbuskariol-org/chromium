@@ -3357,10 +3357,6 @@ const FeatureEntry kFeatureEntries[] = {
      kOsDesktop, FEATURE_VALUE_TYPE(device::kWebAuthPhoneSupport)},
 #endif  // !defined(OS_ANDROID)
 
-    {"simplify-https-indicator", flag_descriptions::kSimplifyHttpsIndicatorName,
-     flag_descriptions::kSimplifyHttpsIndicatorDescription, kOsDesktop,
-     FEATURE_VALUE_TYPE(omnibox::kSimplifyHttpsIndicator)},
-
     {"use-preferred-interval-for-video",
      flag_descriptions::kUsePreferredIntervalForVideoName,
      flag_descriptions::kUsePreferredIntervalForVideoDescription, kOsCrOS,

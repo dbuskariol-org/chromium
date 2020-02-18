@@ -1034,9 +1034,6 @@ extern const char kHistoryManipulationInterventionDescription[];
 extern const char kSilentDebuggerExtensionApiName[];
 extern const char kSilentDebuggerExtensionApiDescription[];
 
-extern const char kSimplifyHttpsIndicatorName[];
-extern const char kSimplifyHttpsIndicatorDescription[];
-
 extern const char kStorageAccessAPIName[];
 extern const char kStorageAccessAPIDescription[];
 

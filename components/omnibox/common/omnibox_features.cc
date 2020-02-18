@@ -48,13 +48,6 @@ const base::Feature kHideSteadyStateUrlPathQueryAndRef {
 const base::Feature kOneClickUnelide{"OmniboxOneClickUnelide",
                                      base::FEATURE_DISABLED_BY_DEFAULT};
 
-// This feature simplifies the security indiciator UI for https:// pages.
-// The default behavior is to show no verbose text for EV pages. When disabled,
-// the verbose EV indicator text will be displayed.
-// This feature is used for EV UI removal experiment (https://crbug.com/803501).
-const base::Feature kSimplifyHttpsIndicator{"SimplifyHttpsIndicator",
-                                            base::FEATURE_ENABLED_BY_DEFAULT};
-
 // Feature used to enable local entity suggestions. Similar to rich entities but
 // but location specific. E.g., typing 'starbucks near' could display the local
 // entity suggestion 'starbucks near disneyland \n starbucks * Anaheim, CA'.

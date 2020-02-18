@@ -1784,10 +1784,6 @@ const char kSilentDebuggerExtensionApiDescription[] =
     "chrome.debugger API. This is required to debug extension background "
     "pages.";
 
-const char kSimplifyHttpsIndicatorName[] = "Simplify HTTPS indicator UI";
-const char kSimplifyHttpsIndicatorDescription[] =
-    "Change the UI treatment for HTTPS pages.";
-
 const char kIsolateOriginsName[] = "Isolate additional origins";
 const char kIsolateOriginsDescription[] =
     "Requires dedicated processes for an additional set of origins, "
