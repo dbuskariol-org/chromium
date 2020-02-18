@@ -4614,7 +4614,6 @@ test("unit_tests") {
       "../browser/extensions/api/web_request/web_request_permissions_unittest.cc",
       "../browser/extensions/api/webstore_private/extension_install_status_unittest.cc",
       "../browser/extensions/api/webstore_private/webstore_private_unittest.cc",
-      "../browser/extensions/app_data_migrator_unittest.cc",
       "../browser/extensions/blacklist_check_unittest.cc",
       "../browser/extensions/blacklist_state_fetcher_unittest.cc",
       "../browser/extensions/chrome_app_icon_unittest.cc",
