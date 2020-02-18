@@ -190,6 +190,9 @@ extern const char kDecodeJpeg420ImagesToYUVDescription[];
 extern const char kDecodeLossyWebPImagesToYUVName[];
 extern const char kDecodeLossyWebPImagesToYUVDescription[];
 
+extern const char kDoubleBufferCompositingName[];
+extern const char kDoubleBufferCompositingDescription[];
+
 extern const char kDnsOverHttpsName[];
 extern const char kDnsOverHttpsDescription[];
 

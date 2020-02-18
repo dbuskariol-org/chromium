@@ -4967,6 +4967,10 @@ const FeatureEntry kFeatureEntries[] = {
     {"export-tagged-pdf", flag_descriptions::kExportTaggedPDFName,
      flag_descriptions::kExportTaggedPDFDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kExportTaggedPDF)},
+    {"double-buffer-compositing",
+     flag_descriptions::kDoubleBufferCompositingName,
+     flag_descriptions::kDoubleBufferCompositingDescription, kOsCrOS,
+     SINGLE_VALUE_TYPE(switches::kDoubleBufferCompositing)},
 
 #if defined(OS_CHROMEOS)
     {"enable-ambient-mode", flag_descriptions::kEnableAmbientModeName,

@@ -318,6 +318,12 @@ const char kDecodeLossyWebPImagesToYUVDescription[] =
     "Decode and render lossy WebP images from YUV instead of RGB. "
     "You must also have GPU rasterization or OOP rasterization.";
 
+const char kDoubleBufferCompositingName[] = "Double buffered compositing";
+const char kDoubleBufferCompositingDescription[] =
+    "Use double buffer for compositing (instead of triple-buffering). "
+    "Latency should be reduced in some cases. On the other hand, more skipped "
+    "frames are expected.";
+
 const char kEnablePasswordsAccountStorageName[] =
     "Enable the account data storage for passwords";
 const char kEnablePasswordsAccountStorageDescription[] =
