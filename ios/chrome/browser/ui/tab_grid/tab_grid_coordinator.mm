@@ -205,16 +205,19 @@
       regularWebStateList;
   baseViewController.remoteTabsViewController.presentationDelegate = self;
 
-  // Insert the launch screen view in front of this view to hide it until after
-  // launch. This should happen before |baseViewController| is made the window's
-  // root view controller.
-  NSBundle* mainBundle = base::mac::FrameworkBundle();
-  NSArray* topObjects =
-      [mainBundle loadNibNamed:@"LaunchScreen" owner:self options:nil];
-  UIViewController* launchScreenController =
-      base::mac::ObjCCastStrict<UIViewController>([topObjects lastObject]);
-  self.launchMaskView = launchScreenController.view;
-  [baseViewController.view addSubview:self.launchMaskView];
+  if (!base::FeatureList::IsEnabled(kContainedBVC)) {
+    // Insert the launch screen view in front of this view to hide it until
+    // after launch. This should happen before |baseViewController| is made the
+    // window's root view controller.
+    NSBundle* mainBundle = base::mac::FrameworkBundle();
+    NSArray* topObjects = [mainBundle loadNibNamed:@"LaunchScreen"
+                                             owner:self
+                                           options:nil];
+    UIViewController* launchScreenController =
+        base::mac::ObjCCastStrict<UIViewController>([topObjects lastObject]);
+    self.launchMaskView = launchScreenController.view;
+    [baseViewController.view addSubview:self.launchMaskView];
+  }
 
   // TODO(crbug.com/850387) : Currently, consumer calls from the mediator
   // prematurely loads the view in |RecentTabsTableViewController|. Fix this so
