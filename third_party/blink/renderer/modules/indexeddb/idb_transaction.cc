@@ -82,7 +82,7 @@ IDBTransaction::IDBTransaction(
     mojom::IDBTransactionMode mode,
     mojom::IDBTransactionDurability durability,
     IDBDatabase* db)
-    : ExecutionContextClient(ExecutionContext::From(script_state)),
+    : ExecutionContextLifecycleObserver(ExecutionContext::From(script_state)),
       transaction_backend_(std::move(transaction_backend)),
       id_(id),
       database_(db),
@@ -120,7 +120,7 @@ IDBTransaction::IDBTransaction(
     IDBDatabase* db,
     IDBOpenDBRequest* open_db_request,
     const IDBDatabaseMetadata& old_metadata)
-    : ExecutionContextClient(execution_context),
+    : ExecutionContextLifecycleObserver(execution_context),
       transaction_backend_(std::move(transaction_backend)),
       id_(id),
       database_(db),
@@ -140,6 +140,9 @@ IDBTransaction::IDBTransaction(
 }
 
 IDBTransaction::~IDBTransaction() {
+  // Note: IDBTransaction is a ExecutionContextLifecycleObserver (rather than
+  // ContextClient) only in order to be able call upon GetExecutionContext()
+  // during this destructor.
   DCHECK(state_ == kFinished || !GetExecutionContext());
   DCHECK(request_list_.IsEmpty() || !GetExecutionContext());
 }
@@ -154,7 +157,7 @@ void IDBTransaction::Trace(Visitor* visitor) {
   visitor->Trace(deleted_indexes_);
   visitor->Trace(event_queue_);
   EventTargetWithInlineData::Trace(visitor);
-  ExecutionContextClient::Trace(visitor);
+  ExecutionContextLifecycleObserver::Trace(visitor);
 }
 
 void IDBTransaction::SetError(DOMException* error) {
@@ -540,7 +543,7 @@ const AtomicString& IDBTransaction::InterfaceName() const {
 }
 
 ExecutionContext* IDBTransaction::GetExecutionContext() const {
-  return ExecutionContextClient::GetExecutionContext();
+  return ExecutionContextLifecycleObserver::GetExecutionContext();
 }
 
 const char* IDBTransaction::InactiveErrorMessage() const {
