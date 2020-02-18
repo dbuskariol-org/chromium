@@ -2031,13 +2031,11 @@ WebLocalFrameImpl* WebViewImpl::MainFrameImpl() const {
 void WebViewImpl::DidAttachLocalMainFrame() {
   DCHECK(MainFrameImpl());
 
-  MainFrameImpl()->GetFrame()->WasAttachedAsLocalMainFrame();
+  LocalFrame* local_frame = MainFrameImpl()->GetFrame();
+  local_frame->WasAttachedAsLocalMainFrame();
 
-  MainFrameImpl()
-      ->GetFrame()
-      ->GetRemoteNavigationAssociatedInterfaces()
-      ->GetInterface(
-          local_main_frame_host_remote_.BindNewEndpointAndPassReceiver());
+  local_frame->GetRemoteNavigationAssociatedInterfaces()->GetInterface(
+      local_main_frame_host_remote_.BindNewEndpointAndPassReceiver());
 
   if (does_composite_) {
     WebWidgetClient* widget_client =

@@ -705,7 +705,8 @@ class CORE_EXPORT WebViewImpl final : public WebView,
 
   Persistent<ResizeViewportAnchor> resize_viewport_anchor_;
 
-  // Handle to the local main frame host.
+  // Handle to the local main frame host. Only valid when the MainFrame is
+  // local.
   mojo::AssociatedRemote<mojom::blink::LocalMainFrameHost>
       local_main_frame_host_remote_;
 
