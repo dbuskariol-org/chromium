@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">अगर आप अपने प्रमाणपत्रों में से किसी एक को मिटाते हैं, तो इसके बाद आप इसका इस्तेमाल खुद की पहचान करने के लिए नहीं कर पाएंगे.</translation>
 <translation id="2079545284768500474">वापस लाएं</translation>
 <translation id="2080070583977670716">ज़्यादा सेटिंग</translation>
+<translation id="2082187087049518845">ग्रुप टैब</translation>
 <translation id="2087822576218954668">प्रिंट: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">वीपीएन नेटवर्क</translation>
 <translation id="2089566709556890888">Google Chrome के ज़रिए सुरक्षित रूप से ब्राउज़ करें</translation>
@@ -1215,6 +1216,7 @@
 <translation id="2653659639078652383">सबमिट करें</translation>
 <translation id="265390580714150011">फ़ील्ड मान</translation>
 <translation id="2654166010170466751">साइटों को भुगतान हैंडलर इंस्टॉल करने की अनुमति दें</translation>
+<translation id="2654553774144920065">प्रिंट करने का अनुरोध</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />डिवाइस के हिसाब से सुविधाएं अलग-अलग हो सकती हैं</translation>
 <translation id="2660779039299703961">इवेंट</translation>
 <translation id="266079277508604648">प्रिंटर से कनेक्ट नहीं किया जा सका. जांचें  कि प्रिंटर चालू है और वाई-फ़ाई या यूएसबी के ज़रिए आपके Chromebook से कनेक्ट किया हुआ है.</translation>
@@ -2723,6 +2725,7 @@
 <translation id="4808319664292298116"><ph name="DOMAIN" /> से वीआर डालें?</translation>
 <translation id="4808667324955055115">पॉप-अप ब्लॉक किए गए हैं:</translation>
 <translation id="480990236307250886">होम पेज खोलें</translation>
+<translation id="4811503964269049987">चुने गए टैब का ग्रुप बनाएं</translation>
 <translation id="4813136279048157860">मेरी इमेज</translation>
 <translation id="4813512666221746211">नेटवर्क गड़बड़ी</translation>
 <translation id="4814378367953456825">इस फ़िंगरप्रिंट के लिए कोई नाम डालें</translation>
@@ -4157,6 +4160,7 @@
 <translation id="6843423766595476978">Ok Google पूरी तरह तैयार है</translation>
 <translation id="6845038076637626672">बड़े दृश्य में खोलें</translation>
 <translation id="6845325883481699275">'Chrome सुरक्षा' को बेहतर बनाने में मदद करें</translation>
+<translation id="6846178040388691741">"<ph name="EXTENSION_NAME" />", <ph name="FILE_NAME" /> को <ph name="PRINTER_NAME" /> इस्तेमाल करके प्रिंट करना चाहता है.</translation>
 <translation id="6847125920277401289">जारी रखने के लिए डिवाइस में स्पेस खाली करें</translation>
 <translation id="6848388270925200958">फ़िलहाल, आपके कुछ कार्ड सिर्फ़ इसी डिवाइस पर इस्तेमाल किए जा सकते हैं</translation>
 <translation id="6850286078059909152">टेक्स्ट का रंग</translation>
@@ -5265,6 +5269,7 @@
 <translation id="8352772353338965963">एक से ज़्यादा साइन-इन के लिए कोई खाता जोड़ें. सभी साइन इन किए गए खातों को पासवर्ड के बिना एक्सेस किया जा सकता है, इसलिए इस सुविधा का इस्तेमाल सिर्फ़ विश्वसनीय खातों के साथ किया जाना चाहिए.</translation>
 <translation id="8353683614194668312">यह निम्न कर सकता है:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Linux इंस्टॉल करने में गड़बड़ी</translation>
 <translation id="8358685469073206162">सभी पेज वापस लाएं?</translation>
 <translation id="8358912028636606457">टैब ऑडियो कास्ट करने की सुविधा इस डिवाइस पर काम नहीं करती.</translation>
 <translation id="8363095875018065315">स्‍थिर</translation>

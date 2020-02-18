@@ -2722,7 +2722,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4808319664292298116">VR von <ph name="DOMAIN" /> aus aktivieren?</translation>
 <translation id="4808667324955055115">Pop-ups blockiert:</translation>
 <translation id="480990236307250886">Startseite öffnen</translation>
-<translation id="4811503964269049987">Ausgewählten Tab gruppieren</translation>
+<translation id="4811503964269049987">Ausgewählten Tab zu neuer Gruppe hinzufügen</translation>
 <translation id="4813136279048157860">Meine Bilder</translation>
 <translation id="4813512666221746211">Netzwerkfehler</translation>
 <translation id="4814378367953456825">Geben Sie einen Namen für diesen Fingerabdruck ein</translation>
@@ -4027,7 +4027,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="6655458902729017087">Konten ausblenden</translation>
 <translation id="6657585470893396449">Passwort</translation>
 <translation id="6659213950629089752">Diese Seite wurde mit der Erweiterung "<ph name="NAME" />" gezoomt.</translation>
-<translation id="6659594942844771486">Tabulatortaste</translation>
+<translation id="6659594942844771486">Tab</translation>
 <translation id="6664237456442406323">Ihr Computer wurde mit einer ungültigen Hardware-ID konfiguriert. Daher kann Chrome OS keine aktuellen Sicherheitsupdates installieren und Ihr Computer ist <ph name="BEGIN_BOLD" />möglicherweise anfällig für schädliche Angriffe<ph name="END_BOLD" />.</translation>
 <translation id="6664774537677393800">Beim Öffnen Ihres Profils ist ein Fehler aufgetreten. Melden Sie sich bitte ab und dann wieder an.</translation>
 <translation id="6667776121818773738">Bild wurde von einem anderen Gerät geteilt</translation>

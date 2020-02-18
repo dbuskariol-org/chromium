@@ -1688,7 +1688,7 @@
 <translation id="3315158641124845231">Скриване на <ph name="PRODUCT_NAME" /></translation>
 <translation id="3317459757438853210">Двустранно</translation>
 <translation id="3317678681329786349">Достъпът до камерата и микрофона е блокиран</translation>
-<translation id="3319048459796106952">Нов &amp;прозорец при използване на функцията „инкогнито“</translation>
+<translation id="3319048459796106952">Нов &amp;прозорец в режим „инкогнито“</translation>
 <translation id="3323521181261657960">Бонус! Получихте още време на ползване</translation>
 <translation id="3325910708063135066">Камерата и микрофонът са изключени в системните предпочитания за Mac</translation>
 <translation id="3328489342742826322">При възстановяването от резервно копие ще бъдат изтрити съществуващите приложения за Linux и данните в папката с файлове на Linux.</translation>
@@ -2467,7 +2467,7 @@
 <translation id="4411578466613447185">Подписване на код</translation>
 <translation id="4412698727486357573">Помощен център</translation>
 <translation id="44141919652824029">Да се разреши ли на <ph name="APP_NAME" /> да получи списъка със свързани USB устройства?</translation>
-<translation id="4414232939543644979">Нов &amp;прозорец при използване на функцията „инкогнито“</translation>
+<translation id="4414232939543644979">Нов &amp;прозорец в режим „инкогнито“</translation>
 <translation id="4415245286584082850">Няма намерени устройства. Отваряне на статия в Помощния център в нов раздел.</translation>
 <translation id="4415276339145661267">Управление на профила ви в Google</translation>
 <translation id="4415748029120993980">Елиптична крива secp384r1 по SECG (позната и като NIST P-384)</translation>
@@ -4906,7 +4906,7 @@
 <translation id="7857949311770343000">Това очакваният от вас нов раздел ли е?</translation>
 <translation id="7859938049767853383">Файлът „<ph name="FILE_NAME" />“ е твърде голям, за да бъде сканиран в облака, и отварянето му бе блокирано.</translation>
 <translation id="786073089922909430">Услуга: <ph name="ARC_PROCESS_NAME" /></translation>
-<translation id="7861215335140947162">&amp;За изтегляне</translation>
+<translation id="7861215335140947162">&amp;Изтегляния</translation>
 <translation id="7868378670806575181">{NUM_COOKIES,plural, =1{1 „бисквитка“}other{# „бисквитки“}}</translation>
 <translation id="786957569166715433"><ph name="DEVICE_NAME" /> – сдвоено</translation>
 <translation id="7870730066603611552">Преглед на опциите за синхронизиране след настройването</translation>

@@ -68,7 +68,7 @@
 <translation id="1430915738399379752">Imprimeix</translation>
 <translation id="1446450296470737166">Permet control total disp. MIDI</translation>
 <translation id="1450753235335490080">No es pot compartir <ph name="CONTENT_TYPE" /></translation>
-<translation id="145097072038377568">Aquest permís està desactivat a la configuració d'Android</translation>
+<translation id="145097072038377568">Desactivat a la configuració d'Android</translation>
 <translation id="1477626028522505441">No s'ha pogut baixar <ph name="FILE_NAME" /> a causa de problemes amb el servidor.</translation>
 <translation id="1506061864768559482">Motor de cerca</translation>
 <translation id="1513352483775369820">Adreces interès i historial web</translation>
@@ -954,7 +954,7 @@ El lloc web NO obté accés a la càmera. Només tu pots veure les imatges de la
 <translation id="8110087112193408731">Vols veure l'activitat de Chrome a Benestar digital?</translation>
 <translation id="8116925261070264013">Silenciats</translation>
 <translation id="8127542551745560481">Edita la pàgina d'inici</translation>
-<translation id="813082847718468539">Mostra la informació del lloc</translation>
+<translation id="813082847718468539">Mostra la informació del lloc web</translation>
 <translation id="8137558756159375272">La funció Toca per cercar envia la paraula seleccionada i la pàgina actual com a context a la Cerca de Google. La podeu desactivar a <ph name="BEGIN_LINK" />Configuració<ph name="END_LINK" />.</translation>
 <translation id="8156139159503939589">En quins idiomes pots llegir?</translation>
 <translation id="8168435359814927499">Contingut</translation>

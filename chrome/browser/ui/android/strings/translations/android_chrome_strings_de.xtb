@@ -696,7 +696,7 @@ Wenn Sie diese Einstellung ändern möchten, <ph name="BEGIN_LINK" />setzen Sie 
 Einige Websites schalten möglicherweise Werbeanzeigen, deren Auswahl nicht darauf basiert, welche Websites Sie zuvor besucht haben. Viele Websites erfassen weiterhin Ihre Browserdaten und verwenden sie, um beispielsweise die Sicherheit zu verbessern oder Inhalte, Werbeanzeigen und Empfehlungen bereitzustellen und Statistiken für Berichte zu erstellen.</translation>
 <translation id="6238003486329291387">Erfahren Sie mehr über Website-Themen, ohne die Seite zu verlassen. Mit der Option "Zum Suchen tippen" werden ein Wort sowie dessen Kontext an die Google-Suche gesendet. Daraufhin erhalten Sie Definitionen, Bilder, Suchergebnisse und andere Details.
 
-Halten Sie ein Wort lange gedrückt, um eine Suche damit zu starten. Sie können Ihre Suche eingrenzen, indem Sie die Auswahl anpassen. Sie können auch das Feld durch Ziehen öffnen, auf das Symbol "Erweitern" tippen, um einen neuen Tab zu erstellen, und dann auf das Suchfeld tippen.</translation>
+Halten Sie ein Wort lange gedrückt, um eine Suche damit zu starten. Sie können Ihre Suche verfeinern, indem Sie die Auswahl anpassen. Ihre Suche können Sie auch so bearbeiten: Öffnen Sie das Feld durch Ziehen vom unteren Bildschirmrand, tippen Sie auf das Symbol "In neuem Tab öffnen" und dann auf das Suchfeld.</translation>
 <translation id="624789221780392884">Update bereit</translation>
 <translation id="6255999984061454636">Inhaltsvorschläge</translation>
 <translation id="6270391203985052864">Websites können fragen, ob Sie Benachrichtigungen erhalten möchten</translation>
@@ -759,7 +759,7 @@ Halten Sie ein Wort lange gedrückt, um eine Suche damit zu starten. Sie können
 <translation id="6649642165559792194">Bildvorschau <ph name="BEGIN_NEW" />Neu<ph name="END_NEW" /></translation>
 <translation id="6656545060687952787">Chrome benötigt Zugriff auf den Standort, um nach Geräten suchen zu können. <ph name="BEGIN_LINK" />Berechtigungen aktualisieren<ph name="END_LINK" /></translation>
 <translation id="6657585470893396449">Passwort</translation>
-<translation id="6659594942844771486">Tabulatortaste</translation>
+<translation id="6659594942844771486">Tab</translation>
 <translation id="666731172850799929">In <ph name="APP_NAME" /> öffnen</translation>
 <translation id="666981079809192359">Chrome-Datenschutzhinweise</translation>
 <translation id="6671495933530132209">Bild kopieren</translation>

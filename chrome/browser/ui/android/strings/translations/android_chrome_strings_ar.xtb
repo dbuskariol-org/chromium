@@ -297,7 +297,7 @@
 <translation id="3254409185687681395">وضع إشارة على هذه الصفحة</translation>
 <translation id="3259831549858767975">تصغير كامل محتوى الصفحة</translation>
 <translation id="3269093882174072735">تحميل الصورة</translation>
-<translation id="3269956123044984603">‏للحصول على علامات التبويب من أجهزتك الأخرى، شغِّل "المزامنة التلقائية للبيانات" في إعدادات حساب Android.</translation>
+<translation id="3269956123044984603">‏للحصول على علامات التبويب من أجهزتك الأخرى، فعِّل "المزامنة التلقائية للبيانات" في إعدادات حساب Android.</translation>
 <translation id="3277252321222022663">يمكنك السماح للمواقع بالوصول إلى أجهزة الاستشعار (مُقترَح).</translation>
 <translation id="3282568296779691940">‏تسجيل الدخول إلى Chrome</translation>
 <translation id="3288003805934695103">إعادة تحميل الصفحة</translation>
@@ -351,14 +351,14 @@
 <translation id="3701167022068948696">إصلاح الخطأ الآن</translation>
 <translation id="3714981814255182093">فتح شريط البحث</translation>
 <translation id="3716182511346448902">‏تستهلك هذه الصفحة مساحة كبيرة من الذاكرة، لذلك أوقفها Chrome مؤقتًا.</translation>
-<translation id="3730075448226062617">‏للسماح لمتصفِّح Chrome بالوصول إلى الميكروفون، يُرجى أيضًا تشغيل الميكروفون في <ph name="BEGIN_LINK" />إعدادات Android<ph name="END_LINK" />.</translation>
+<translation id="3730075448226062617">‏للسماح لمتصفِّح Chrome بالوصول إلى الميكروفون، يُرجى أيضًا تفعيل الميكروفون في <ph name="BEGIN_LINK" />إعدادات Android<ph name="END_LINK" />.</translation>
 <translation id="3738139272394829648">المس للبحث</translation>
 <translation id="3739899004075612870">تمت إضافة إشارة مرجعية في <ph name="PRODUCT_NAME" /></translation>
 <translation id="3744111561329211289">المزامنة في الخلفية</translation>
 <translation id="3749259744154402564">غير متوافق</translation>
 <translation id="3771001275138982843">تعذُّر تنزيل التحديث</translation>
 <translation id="3771033907050503522">علامات تبويب التصفح المتخفي</translation>
-<translation id="3773755127849930740"><ph name="BEGIN_LINK" />تشغيل البلوتوث<ph name="END_LINK" /> للسماح بالإقران</translation>
+<translation id="3773755127849930740"><ph name="BEGIN_LINK" />تفعيل البلوتوث<ph name="END_LINK" /> للسماح بالإقران</translation>
 <translation id="3775705724665058594">إرسال إلى أجهزتك</translation>
 <translation id="3778956594442850293">تمت الإضافة إلى الشاشة الرئيسية</translation>
 <translation id="3789841737615482174">تثبيت</translation>
@@ -685,7 +685,7 @@
 <translation id="6181444274883918285">إضافة موقع ويب إلى قائمة الاستثناءات</translation>
 <translation id="6192333916571137726">ملف تحميل</translation>
 <translation id="6192792657125177640">الاستثناءات</translation>
-<translation id="6194112207524046168">‏للسماح لمتصفِّح Chrome بالوصول إلى الكاميرا، يُرجى أيضًا تشغيل الكاميرا في <ph name="BEGIN_LINK" />إعدادات Android<ph name="END_LINK" />.</translation>
+<translation id="6194112207524046168">‏للسماح لمتصفِّح Chrome بالوصول إلى الكاميرا، يُرجى أيضًا تفعيل الكاميرا في <ph name="BEGIN_LINK" />إعدادات Android<ph name="END_LINK" />.</translation>
 <translation id="6196640612572343990">حظر ملفات تعريف الارتباط للجهات الخارجية</translation>
 <translation id="6201345951596836663">تم نسخ الرابط</translation>
 <translation id="6206551242102657620">يُعدُّ اتصالك آمنًا. معلومات موقع الويب</translation>
@@ -1017,7 +1017,7 @@
 <translation id="860043288473659153">اسم حامل البطاقة</translation>
 <translation id="8616006591992756292">‏قد يتضمّن حسابك على Google نماذج أخرى من سجلّ التصفّح في <ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" />.</translation>
 <translation id="8617240290563765734">‏هل تريد فتح عنوان URL المقترح والمحدد في المحتوى الذي تم تنزيله؟</translation>
-<translation id="8636825310635137004">للحصول على علامات التبويب من أجهزتك الأخرى، شغِّل المزامنة.</translation>
+<translation id="8636825310635137004">للحصول على علامات التبويب من أجهزتك الأخرى، فعِّل المزامنة.</translation>
 <translation id="8641930654639604085">محاولة حظر مواقع الويب التي تتضمن محتوى للبالغين</translation>
 <translation id="8655129584991699539">‏يمكنك محو البيانات في إعدادات Chrome.</translation>
 <translation id="8655599981421006542">انقر هنا لإنشاء علامات تبويب جديدة والرجوع إلى علامات التبويب السابقة</translation>

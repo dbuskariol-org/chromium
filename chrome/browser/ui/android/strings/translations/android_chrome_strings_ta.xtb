@@ -242,7 +242,7 @@
 <translation id="2842985007712546952">மூலக் கோப்புறை</translation>
 <translation id="2860954141821109167">இந்தச் சாதனத்தில் ஃபோன் ஆப்ஸ் இயக்கப்பட்டுள்ளதை உறுதிசெய்து கொள்ளவும்</translation>
 <translation id="2870560284913253234">தளம்</translation>
-<translation id="2874939134665556319">முந்தைய ட்ராக்</translation>
+<translation id="2874939134665556319">முந்தைய டிராக்</translation>
 <translation id="2876369937070532032">ஆபத்தான தளங்களைப் பார்ப்பதால் உங்கள் பாதுகாப்பிற்கு ஆபத்து ஏற்படும்போது நீங்கள் பார்வையிடும் சில பக்கங்களின் URLகளை Googleளுக்கு அனுப்பும்</translation>
 <translation id="2888126860611144412">Chrome அறிமுகம்</translation>
 <translation id="2891154217021530873">பக்கத்தை ஏற்றுவதை நிறுத்து</translation>
@@ -390,7 +390,7 @@
 <translation id="4000212216660919741">Home ஆஃப்லைனில் உள்ளது</translation>
 <translation id="4008040567710660924">குறிப்பிட்ட தளத்திற்கு, குக்கீகளை அனுமதிக்கும்.</translation>
 <translation id="4034817413553209278">{HOURS,plural, =1{# மணிநேரம்}other{# மணிநேரம்}}</translation>
-<translation id="4046123991198612571">அடுத்த ட்ராக்</translation>
+<translation id="4046123991198612571">அடுத்த டிராக்</translation>
 <translation id="4056223980640387499">செபியா</translation>
 <translation id="4060598801229743805">திரையின் மேற்பகுதிக்கு அருகில், விருப்பங்கள் உள்ளன</translation>
 <translation id="4062305924942672200">சட்டப்பூர்வத் தகவல்</translation>
@@ -432,7 +432,7 @@
 <translation id="4415276339145661267">Google கணக்கை நிர்வகி</translation>
 <translation id="4432792777822557199">இனி <ph name="SOURCE_LANGUAGE" /> மொழியில் உள்ள பக்கங்கள் <ph name="TARGET_LANGUAGE" /> மொழிக்கு மொழிபெயர்க்கப்படும்</translation>
 <translation id="4433925000917964731">Google வழங்கும் Lite பக்கம்</translation>
-<translation id="4434045419905280838">பாப் அப்கள் &amp; திசைதிருப்புதல்கள்</translation>
+<translation id="4434045419905280838">பாப்-அப்கள் &amp; திசைதிருப்புதல்கள்</translation>
 <translation id="4440958355523780886">Google வழங்கும் Lite பக்கம். அசல் பக்கத்தை ஏற்ற, தட்டவும்.</translation>
 <translation id="4452411734226507615"><ph name="TAB_TITLE" /> தாவலை மூடும்</translation>
 <translation id="4452548195519783679"><ph name="FOLDER_NAME" /> இல் புத்தகக்குறியைச் சேர்த்தது</translation>
@@ -798,7 +798,7 @@
 <translation id="7015203776128479407">ஒத்திசைப்பதற்கான துவக்க அமைவு முடியவில்லை. ஒத்திசைவு முடக்கப்பட்டுள்ளது.</translation>
 <translation id="7016516562562142042">நடப்புத் தேடல் இன்ஜினுக்கு அனுமதிக்கப்பட்டுள்ளது</translation>
 <translation id="7022756207310403729">உலாவியில் திற</translation>
-<translation id="702463548815491781">TalkBack அல்லது ‘சுவிட்ச் அணுகல்’ இயக்கத்தில் இருக்கும்போது பரிந்துரைக்கப்படுகிறது</translation>
+<translation id="702463548815491781">TalkBack அல்லது ‘ஸ்விட்ச் அணுகல்’ இயக்கத்தில் இருக்கும்போது பரிந்துரைக்கப்படுகிறது</translation>
 <translation id="7029809446516969842">கடவுச்சொற்கள்</translation>
 <translation id="7053983685419859001">தடு</translation>
 <translation id="7055152154916055070">திசைதிருப்புதல் தடுக்கப்பட்டது:</translation>

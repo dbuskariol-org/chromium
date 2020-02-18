@@ -657,7 +657,7 @@
 <translation id="1879000426787380528">登入身分</translation>
 <translation id="1880905663253319515">要刪除憑證「<ph name="CERTIFICATE_NAME" />」嗎？</translation>
 <translation id="1884013283844450420">第 <ph name="NETWORK_INDEX" /> 個網絡，一共有 <ph name="NETWORK_COUNT" /> 個網絡，<ph name="NETWORK_NAME" />，連接</translation>
-<translation id="1884930769492918228">追蹤攝錄機位置並對應您的房間佈局</translation>
+<translation id="1884930769492918228">追蹤攝錄機位置並繪製房間平面圖</translation>
 <translation id="1886996562706621347">允許網站要求成為通訊協定的預設處理常式 (建議)</translation>
 <translation id="1887442540531652736">登入錯誤</translation>
 <translation id="1887597546629269384">再說一次「Hey Google」</translation>
@@ -2426,7 +2426,7 @@
 <translation id="4353114845960720315">當您處於 VR 模式時，此網站可以識別：</translation>
 <translation id="4354344420232759511">您瀏覽過的網站會在這裡顯示</translation>
 <translation id="435527878592612277">選取相片</translation>
-<translation id="4357784477082216550"><ph name="URL" /> 想追蹤攝錄機位置並對應您的房間佈局</translation>
+<translation id="4357784477082216550"><ph name="URL" /> 想追蹤攝錄機位置並繪製房間平面圖</translation>
 <translation id="4358313196493694334">穩定點擊位置</translation>
 <translation id="4359408040881008151">您已安裝有依賴關係的擴充功能，因此必須安裝此擴充功能。</translation>
 <translation id="4359717112757026264">城市景觀</translation>
