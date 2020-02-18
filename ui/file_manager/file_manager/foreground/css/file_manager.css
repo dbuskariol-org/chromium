@@ -457,6 +457,7 @@ body[type='open-multi-file'].check-select .dialog-header {
 .dialog-header button {
   border: none;
   border-radius: 2px;
+  box-sizing: border-box;
   cursor: pointer;
   height: 32px;
   margin: 0 8px;
