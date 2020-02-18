@@ -845,6 +845,44 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   return self.browser ? self.browser->GetBrowserState() : nullptr;
 }
 
+- (void)setInfobarBannerOverlayContainerViewController:
+    (UIViewController*)infobarBannerOverlayContainerViewController {
+  if (_infobarBannerOverlayContainerViewController ==
+      infobarBannerOverlayContainerViewController) {
+    return;
+  }
+
+  _infobarBannerOverlayContainerViewController =
+      infobarBannerOverlayContainerViewController;
+  if (!_infobarBannerOverlayContainerViewController)
+    return;
+
+  DCHECK_EQ(_infobarBannerOverlayContainerViewController.parentViewController,
+            self);
+  DCHECK_EQ(_infobarBannerOverlayContainerViewController.view.superview,
+            self.view);
+  [self updateOverlayContainerOrder];
+}
+
+- (void)setInfobarModalOverlayContainerViewController:
+    (UIViewController*)infobarModalOverlayContainerViewController {
+  if (_infobarModalOverlayContainerViewController ==
+      infobarModalOverlayContainerViewController) {
+    return;
+  }
+
+  _infobarModalOverlayContainerViewController =
+      infobarModalOverlayContainerViewController;
+  if (!_infobarModalOverlayContainerViewController)
+    return;
+
+  DCHECK_EQ(_infobarModalOverlayContainerViewController.parentViewController,
+            self);
+  DCHECK_EQ(_infobarModalOverlayContainerViewController.view.superview,
+            self.view);
+  [self updateOverlayContainerOrder];
+}
+
 #pragma mark - Private Properties
 
 - (SideSwipeController*)sideSwipeController {
@@ -2336,6 +2374,8 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     [self.view insertSubview:self.typingShield aboveSubview:self.contentArea];
     [self.typingShield setHidden:YES];
   }
+
+  [self updateOverlayContainerOrder];
 }
 
 - (void)displayWebState:(web::WebState*)webState {
@@ -2415,6 +2455,30 @@ NSString* const kBrowserViewControllerSnackbarCategory =
           parentController:self
                 dispatcher:self.dispatcher
               webStateList:self.tabModel.webStateList];
+}
+
+- (void)updateOverlayContainerOrder {
+  // Both infobar overlay container views should exist in front of the entire
+  // browser UI, and the banner container should appear behind the modal
+  // container.
+  [self bringOverlayContainerToFront:
+            self.infobarBannerOverlayContainerViewController];
+  [self bringOverlayContainerToFront:
+            self.infobarModalOverlayContainerViewController];
+}
+
+- (void)bringOverlayContainerToFront:
+    (UIViewController*)containerViewController {
+  [self.view bringSubviewToFront:containerViewController.view];
+  // If |containerViewController| is presenting a view over its current context,
+  // its presentation container view is added as a sibling to
+  // |containerViewController|'s view. This presented view should be brought in
+  // front of the container view.
+  UIView* presentedContainerView =
+      containerViewController.presentedViewController.presentationController
+          .containerView;
+  if (presentedContainerView.superview == self.view)
+    [self.view bringSubviewToFront:presentedContainerView];
 }
 
 #pragma mark - Private Methods: UI Configuration, update and Layout
