@@ -18,8 +18,5 @@ source_set("native_messaging") {
 
   configs += [ "//build/config/compiler:wexit_time_destructors" ]
 
-  deps = [
-    "//base",
-    "//ui/gfx:native_widget_types",
-  ]
+  deps = [ "//base" ]
 }

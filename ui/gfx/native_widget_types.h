@@ -9,7 +9,6 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
-#include "ui/base/buildflags.h"
 #include "ui/gfx/gfx_export.h"
 
 #if defined(OS_ANDROID)
@@ -103,7 +102,7 @@ class ViewAndroid;
 #endif
 class SkBitmap;
 
-#if BUILDFLAG(USE_ATK)
+#if defined(USE_X11)
 extern "C" {
 struct _AtkObject;
 typedef struct _AtkObject AtkObject;
@@ -206,7 +205,7 @@ typedef NSFont* NativeFont;
 typedef id NativeViewAccessible;
 #else  // Android, Linux, Chrome OS, etc.
 // Linux doesn't have a native font type.
-#if BUILDFLAG(USE_ATK)
+#if defined(USE_X11)
 typedef AtkObject* NativeViewAccessible;
 #else
 typedef struct _UnimplementedNativeViewAccessible
