@@ -4975,6 +4975,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kExportTaggedPDFDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kExportTaggedPDF)},
 
+#if defined(OS_CHROMEOS)
+    {"enable-ambient-mode", flag_descriptions::kEnableAmbientModeName,
+     flag_descriptions::kEnableAmbientModeDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kAmbientModeFeature)},
+#endif  // defined(OS_CHROMEOS)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

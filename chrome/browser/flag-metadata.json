@@ -922,6 +922,11 @@
     "expiry_milestone": 87
   },
   {
+    "name": "enable-ambient-mode",
+    "owners": [ "croissant-eng" ],
+    "expiry_milestone": 88
+  },
+  {
     "name": "enable-android-autofill-accessibility",
     "owners": [ "ftirelo" ],
     "expiry_milestone": 73
@@ -985,11 +990,6 @@
     "name": "enable-assistant-dsp",
     "owners": [ "croissant-eng" ],
     "expiry_milestone": 88
-  },
-  {
-    "name": "enable-assistant-key-remapping",
-    "owners": [ "croissant-eng" ],
-    "expiry_milestone": 78
   },
   {
     "name": "enable-assistant-launcher-integration",
