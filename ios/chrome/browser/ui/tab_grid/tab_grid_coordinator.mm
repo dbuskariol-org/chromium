@@ -316,7 +316,6 @@
 - (void)showTabViewController:(UIViewController*)viewController
                    completion:(ProceduralBlock)completion {
   DCHECK(viewController);
-  [self.adaptor.tabGridViewController contentWillDisappearAnimated:NO];
 
   // Record when the tab switcher is dismissed.
   base::RecordAction(base::UserMetricsAction("MobileTabGridExited"));
@@ -357,6 +356,8 @@
   if (base::FeatureList::IsEnabled(kContainedBVC)) {
     self.baseViewController.childViewControllerForStatusBarStyle =
         self.bvcContainer.currentBVC;
+
+    [self.adaptor.tabGridViewController contentWillDisappearAnimated:animated];
 
     self.transitionHandler = [[TabGridTransitionHandler alloc]
         initWithLayoutProvider:self.baseViewController];
