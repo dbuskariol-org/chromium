@@ -836,10 +836,17 @@
             ],
             "experiments": [
                 {
-                    "name": "Enabled_Full_20191119",
+                    "name": "Enabled_Full_20200214",
+                    "params": {
+                        "availability": "any",
+                        "event_trigger": "name:keyboard_accessory_address_filling_iph_trigger;comparator:<1;window:90;storage:360",
+                        "event_used": "name:keyboard_accessory_address_suggestion_accepted;comparator:<2;window:90;storage:360",
+                        "session_rate": "<1"
+                    },
                     "enable_features": [
                         "AutofillKeyboardAccessory",
-                        "AutofillManualFallbackAndroid"
+                        "AutofillManualFallbackAndroid",
+                        "IPH_KeyboardAccessoryAddressFilling"
                     ]
                 }
             ]
@@ -3495,28 +3502,6 @@
                     "enable_features": [
                         "SetLowPriorityForBeacon"
                     ]
-                }
-            ]
-        }
-    ],
-    "KeyboardAccessoryAddressIPH": [
-        {
-            "platforms": [
-                "android"
-            ],
-            "experiments": [
-                {
-                    "name": "Address_IPH_Enabled",
-                    "params": {
-                        "availability": "any",
-                        "event_trigger": "name:keyboard_accessory_address_filling_iph_trigger;comparator:<1;window:90;storage:360",
-                        "event_used": "name:keyboard_accessory_address_suggestion_accepted;comparator:<2;window:90;storage:360",
-                        "session_rate": "<1"
-                    },
-                    "enable_features": [
-                        "IPH_KeyboardAccessoryAddressFilling"
-                    ],
-                    "disable_features": []
                 }
             ]
         }
