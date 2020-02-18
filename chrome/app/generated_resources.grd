@@ -6846,8 +6846,8 @@ the Bookmarks menu.">
       </if>
 
       <if expr="is_android">
-        <message name="IDS_OPTIONS_HOMEPAGE_TITLE" desc="The title of the home page overlay on Android" formatter_data="android_java">
-          Home page
+        <message name="IDS_OPTIONS_HOMEPAGE_TITLE" desc="The title of Chrome's homepage setting screen on Android. " formatter_data="android_java">
+          Homepage
         </message>
       </if>
 
