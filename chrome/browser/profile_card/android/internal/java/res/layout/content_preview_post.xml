@@ -3,17 +3,19 @@
      Use of this source code is governed by a BSD-style license that can be
      found in the LICENSE file. -->
 
-<org.chromium.chrome.browser.profile_card.ProfileCardView
+<org.chromium.chrome.browser.profile_card.ContentPreviewPostView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/profile_card"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_preview_post"
+    android:gravity="start"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_margin="16dp">
 
     <ImageView
-        android:id="@+id/avatar"
-        android:contentDescription="@strings/creator_avatar"
+        android:id="@+id/post_image"
+        android:contentDescription="@strings/post_image"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -23,17 +25,8 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/posted_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/post_freq"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/content_preview_posts_container" />
-</org.chromium.chrome.browser.profile_card.ProfileCardView>
+</org.chromium.chrome.browser.profile_card.ContentPreviewPostView>
