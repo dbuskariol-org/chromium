@@ -67173,6 +67173,7 @@ Full version information for the fingerprint enum values:
   <int value="6" label="App not eligible"/>
   <int value="7" label="App update failed"/>
   <int value="8" label="App updated"/>
+  <int value="9" label="App is system web app"/>
 </enum>
 
 <enum name="WebappUninstallDialogAction">
