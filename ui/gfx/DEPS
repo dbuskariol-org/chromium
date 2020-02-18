@@ -6,6 +6,7 @@ include_rules = [
   "+skia/ext",
   "+third_party/harfbuzz-ng",
   "+third_party/skia",
+  "+ui/base/buildflags.h",
   "+ui/ios",
 
   "-testing/gmock",
