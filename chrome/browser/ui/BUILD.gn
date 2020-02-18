@@ -4301,6 +4301,8 @@ static_library("test_support") {
       "exclusive_access/fullscreen_controller_test.h",
       "global_error/global_error_waiter.cc",
       "global_error/global_error_waiter.h",
+      "hats/mock_hats_service.cc",
+      "hats/mock_hats_service.h",
       "passwords/credential_manager_dialog_controller_mock.cc",
       "passwords/credential_manager_dialog_controller_mock.h",
       "passwords/manage_passwords_ui_controller_mock.cc",
