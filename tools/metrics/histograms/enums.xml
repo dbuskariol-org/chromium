@@ -10783,6 +10783,7 @@ Called by update_net_error_codes.py.-->
   <int value="61" label="Clipboard sanitized write"/>
   <int value="64" label="VR"/>
   <int value="65" label="AR"/>
+  <int value="66" label="Native file system read guard"/>
 </enum>
 
 <enum name="ContentTypeParseableResult">
