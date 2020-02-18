@@ -5305,31 +5305,6 @@
             ]
         }
     ],
-    "ProactiveTabFreezeAndDiscard": [
-        {
-            "platforms": [
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "params": {
-                        "HighLoadedTabCount": "1000",
-                        "ShouldPeriodicallyUnfreeze": "true",
-                        "ShouldProactivelyDiscard": "false",
-                        "ShouldProtectTabsSharingBrowsingInstance": "true"
-                    },
-                    "enable_features": [
-                        "ProactiveTabFreezeAndDiscard",
-                        "stop-non-timers-in-background"
-                    ]
-                }
-            ]
-        }
-    ],
     "ProactivelySwapBrowsingInstance": [
         {
             "platforms": [
@@ -7177,6 +7152,21 @@
                     "params": {
                         "min_required_storage_for_update_mb": "500"
                     }
+                }
+            ]
+        }
+    ],
+    "UrgentDiscardingFromPerformanceManager": [
+        {
+            "platforms": [
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled_20200129",
+                    "enable_features": [
+                        "UrgentDiscardingFromPerformanceManager"
+                    ]
                 }
             ]
         }
