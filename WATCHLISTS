@@ -1089,7 +1089,7 @@
     },
     'image_editor': {
       'filepath': 'chrome/browser/image_editor'\
-                  'chrome/android/modules/image_editor',
+                  '|chrome/android/modules/image_editor',
     },
     'incident_reporting': {
       'filepath': 'chrome/browser/safe_browsing/incident_reporting',
@@ -1635,8 +1635,8 @@
     },
    'share_sheet': {
       'filepath': 'chrome/android/java/src/org/chromium/chrome/browser/share/'\
-                  'chrome/android/java/res/layout/share_sheet_.*'\
-                  'chrome/browser/share/android/java/src/org/chromium/chrome/browser/share/',
+                  '|chrome/android/java/res/layout/share_sheet_.*'\
+                  '|chrome/browser/share/android/java/src/org/chromium/chrome/browser/share/',
     },
     'sharing': {
       'filepath': 'chrome/browser/sharing/|'\
