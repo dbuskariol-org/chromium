@@ -203,7 +203,7 @@ defaults. Find the block of builders defined using the appropriate function and
 add a new definition, which may be as simple as:
 
 ```starlark
-linux_builder(
+ci.linux_builder(
     name = '$BUILDER_NAME',
 )
 ```
@@ -308,7 +308,7 @@ their own definition by setting the `triggered_by` field. For builders in the
 behavior of being triggered by the poller.
 
 ```starlark
-linux_builder(
+ci.linux_builder(
     name = '$BUILDER_NAME',
     triggered_by = ['$PARENT_BUILDER_NAME'],
 )
@@ -324,7 +324,7 @@ the poller. See the documentation of the `schedule` field in the `Job` message
 in the [scheduler schema][11].
 
 ```starlark
-builder(
+ci.builder(
     name = '$BUILDER_NAME',
     schedule = 'with 10m interval',
     triggered_by = [],
