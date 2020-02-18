@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef WEBLAYER_RENDERER_SSL_ERROR_HELPER_H_
-#define WEBLAYER_RENDERER_SSL_ERROR_HELPER_H_
+#ifndef WEBLAYER_RENDERER_ERROR_PAGE_HELPER_H_
+#define WEBLAYER_RENDERER_ERROR_PAGE_HELPER_H_
 
 #include "base/memory/weak_ptr.h"
 #include "components/security_interstitials/content/renderer/security_interstitial_page_controller.h"
@@ -14,22 +14,23 @@
 
 namespace weblayer {
 
-// A class that helps present SSL interstitials by enabling security
-// interstitial javascript in WebContents that have navigation errors. This is a
-// stripped down version of Chrome's NetErrorHelper.
-class SSLErrorHelper
+// A class that allows error pages to handle user interaction by handling their
+// javascript commands. Currently only SSL and safebrowsing related
+// interstitials are supported.
+// This is a stripped down version of Chrome's NetErrorHelper.
+class ErrorPageHelper
     : public content::RenderFrameObserver,
-      public content::RenderFrameObserverTracker<SSLErrorHelper>,
+      public content::RenderFrameObserverTracker<ErrorPageHelper>,
       public security_interstitials::SecurityInterstitialPageController::
           Delegate {
  public:
-  // Creates an SSLErrorHelper which will observe and tie its lifetime to
-  // |render_frame|, if it's a main frame. SSLErrorHelpers will not be created
+  // Creates an ErrorPageHelper which will observe and tie its lifetime to
+  // |render_frame|, if it's a main frame. ErrorPageHelpers will not be created
   // for sub frames.
   static void Create(content::RenderFrame* render_frame);
 
-  // Returns the SSLErrorHelper for the frame, if it exists.
-  static SSLErrorHelper* GetForFrame(content::RenderFrame* render_frame);
+  // Returns the ErrorPageHelper for the frame, if it exists.
+  static ErrorPageHelper* GetForFrame(content::RenderFrame* render_frame);
 
   // Called when the current navigation results in an error.
   void PrepareErrorPage();
@@ -48,17 +49,17 @@ class SSLErrorHelper
   GetInterface() override;
 
  private:
-  explicit SSLErrorHelper(content::RenderFrame* render_frame);
-  ~SSLErrorHelper() override;
+  explicit ErrorPageHelper(content::RenderFrame* render_frame);
+  ~ErrorPageHelper() override;
 
   bool next_load_is_error_ = false;
   bool this_load_is_error_ = false;
 
-  base::WeakPtrFactory<SSLErrorHelper> weak_factory_{this};
+  base::WeakPtrFactory<ErrorPageHelper> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(SSLErrorHelper);
+  DISALLOW_COPY_AND_ASSIGN(ErrorPageHelper);
 };
 
 }  // namespace weblayer
 
-#endif  // WEBLAYER_RENDERER_SSL_ERROR_HELPER_H_
+#endif  // WEBLAYER_RENDERER_ERROR_PAGE_HELPER_H_

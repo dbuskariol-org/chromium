@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "weblayer/renderer/ssl_error_helper.h"
+#include "weblayer/renderer/error_page_helper.h"
 
 #include "content/public/renderer/render_frame.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
@@ -10,23 +10,23 @@
 namespace weblayer {
 
 // static
-void SSLErrorHelper::Create(content::RenderFrame* render_frame) {
+void ErrorPageHelper::Create(content::RenderFrame* render_frame) {
   if (render_frame->IsMainFrame())
-    new SSLErrorHelper(render_frame);
+    new ErrorPageHelper(render_frame);
 }
 
 // static
-SSLErrorHelper* SSLErrorHelper::GetForFrame(
+ErrorPageHelper* ErrorPageHelper::GetForFrame(
     content::RenderFrame* render_frame) {
   return render_frame->IsMainFrame() ? Get(render_frame) : nullptr;
 }
 
-void SSLErrorHelper::PrepareErrorPage() {
+void ErrorPageHelper::PrepareErrorPage() {
   next_load_is_error_ = true;
 }
 
-void SSLErrorHelper::DidCommitProvisionalLoad(bool is_same_document_navigation,
-                                              ui::PageTransition transition) {
+void ErrorPageHelper::DidCommitProvisionalLoad(bool is_same_document_navigation,
+                                               ui::PageTransition transition) {
   if (is_same_document_navigation)
     return;
 
@@ -35,18 +35,18 @@ void SSLErrorHelper::DidCommitProvisionalLoad(bool is_same_document_navigation,
   next_load_is_error_ = false;
 }
 
-void SSLErrorHelper::DidFinishLoad() {
+void ErrorPageHelper::DidFinishLoad() {
   if (this_load_is_error_) {
     security_interstitials::SecurityInterstitialPageController::Install(
         render_frame(), weak_factory_.GetWeakPtr());
   }
 }
 
-void SSLErrorHelper::OnDestruct() {
+void ErrorPageHelper::OnDestruct() {
   delete this;
 }
 
-void SSLErrorHelper::SendCommand(
+void ErrorPageHelper::SendCommand(
     security_interstitials::SecurityInterstitialCommand command) {
   mojo::AssociatedRemote<security_interstitials::mojom::InterstitialCommands>
       interface = GetInterface();
@@ -89,17 +89,17 @@ void SSLErrorHelper::SendCommand(
 }
 
 mojo::AssociatedRemote<security_interstitials::mojom::InterstitialCommands>
-SSLErrorHelper::GetInterface() {
+ErrorPageHelper::GetInterface() {
   mojo::AssociatedRemote<security_interstitials::mojom::InterstitialCommands>
       interface;
   render_frame()->GetRemoteAssociatedInterfaces()->GetInterface(&interface);
   return interface;
 }
 
-SSLErrorHelper::SSLErrorHelper(content::RenderFrame* render_frame)
+ErrorPageHelper::ErrorPageHelper(content::RenderFrame* render_frame)
     : RenderFrameObserver(render_frame),
-      RenderFrameObserverTracker<SSLErrorHelper>(render_frame) {}
+      RenderFrameObserverTracker<ErrorPageHelper>(render_frame) {}
 
-SSLErrorHelper::~SSLErrorHelper() = default;
+ErrorPageHelper::~ErrorPageHelper() = default;
 
 }  // namespace weblayer
