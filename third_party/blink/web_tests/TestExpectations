@@ -278,12 +278,7 @@ crbug.com/968791 virtual/scalefactor200/css3/filters/effect-reference-image.html
 crbug.com/968791 virtual/scalefactor200/external/wpt/css/filter-effects/filters-test-brightness-003.html [ Failure ]
 
 # Copying these from elsewhere in TestExpectations (for non-scalefactor200 virtual suite)
-crbug.com/658305 [ Mac ] virtual/scalefactor200/css3/filters/effect-all-on-background-hw.html [ Failure Pass ]
-crbug.com/658305 [ Mac ] virtual/scalefactor200/css3/filters/effect-reference-colorspace-hw.html [ Failure Pass ]
-crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-hw.html [ Failure Pass ]
 crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-image-hw.html [ Failure Pass ]
-crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-subregion-hw.html [ Failure Pass ]
-crbug.com/658305 virtual/scalefactor200/css3/filters/effect-reference-zoom-hw.html [ Failure Pass Timeout ]
 crbug.com/903383 virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-combined-001.html [ Failure ]
 crbug.com/903383 virtual/scalefactor200/external/wpt/css/filter-effects/css-filters-animation-blur.html [ Failure ]
 crbug.com/626703 virtual/scalefactor200/external/wpt/css/filter-effects/filter-subregion-01.html [ Failure ]
