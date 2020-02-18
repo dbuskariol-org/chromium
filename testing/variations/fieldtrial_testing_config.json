@@ -7139,29 +7139,10 @@
             ],
             "experiments": [
                 {
-                    "name": "Enabled_2020-02-06",
+                    "name": "Enabled_2020-02-18",
                     "enable_features": [
                         "SharingSendViaSync",
                         "SyncDeviceInfoInTransportMode"
-                    ]
-                }
-            ]
-        }
-    ],
-    "UnidoUseDeviceInfo": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "SharingUseDeviceInfo"
                     ]
                 }
             ]
