@@ -24,6 +24,8 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread_task_runner_handle.h"
+#include "chrome/browser/apps/app_service/app_service_proxy.h"
+#include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
 #include "chrome/browser/chromeos/crostini/crostini_features.h"
 #include "chrome/browser/chromeos/crostini/crostini_util.h"
@@ -469,7 +471,18 @@ void ChromeLauncherController::LaunchApp(const ash::ShelfID& id,
                                          ash::ShelfLaunchSource source,
                                          int event_flags,
                                          int64_t display_id) {
-  launcher_controller_helper_->LaunchApp(id, source, event_flags, display_id);
+  // Handle recording app launch source from the Shelf in Demo Mode.
+  if (source == ash::ShelfLaunchSource::LAUNCH_FROM_SHELF) {
+    chromeos::DemoSession::RecordAppLaunchSourceIfInDemoMode(
+        chromeos::DemoSession::AppLaunchSource::kShelf);
+  }
+
+  const std::string& app_id = id.app_id;
+  apps::AppServiceProxy* proxy =
+      apps::AppServiceProxyFactory::GetForProfile(profile_);
+  DCHECK(proxy);
+  proxy->Launch(app_id, event_flags, apps::mojom::LaunchSource::kFromShelf,
+                display_id);
 }
 
 void ChromeLauncherController::ActivateApp(const std::string& app_id,
