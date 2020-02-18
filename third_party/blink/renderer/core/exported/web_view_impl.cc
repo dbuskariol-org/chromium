@@ -1639,7 +1639,7 @@ void WebViewImpl::UpdateLifecycle(WebWidget::LifecycleUpdate requested_update,
 void WebViewImpl::PaintContent(cc::PaintCanvas* canvas, const gfx::Rect& rect) {
   // This should only be used when compositing is not being used for this
   // WebView, and it is painting into the recording of its parent.
-  DCHECK(!IsAcceleratedCompositingActive());
+  DCHECK(!does_composite_);
   // Non-composited WebViews always have a local main frame.
   DCHECK(MainFrameImpl());
 
@@ -1960,10 +1960,6 @@ bool WebViewImpl::SelectionBounds(WebRect& anchor_web,
   focus_web = visual_viewport.RootFrameToViewport(
       frame_view->ConvertToRootFrame(focus));
   return true;
-}
-
-bool WebViewImpl::IsAcceleratedCompositingActive() const {
-  return !!root_layer_;
 }
 
 void WebViewImpl::DidAcquirePointerLock() {

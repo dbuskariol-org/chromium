@@ -302,10 +302,6 @@ RenderWidgetFullscreenPepper::RenderWidgetFullscreenPepper(
 RenderWidgetFullscreenPepper::~RenderWidgetFullscreenPepper() {
 }
 
-void RenderWidgetFullscreenPepper::ScrollRect(
-    int dx, int dy, const blink::WebRect& rect) {
-}
-
 void RenderWidgetFullscreenPepper::Destroy() {
   // The plugin instance is going away reset any lock target that is set
   // on the dispatcher since this object can still live and receive IPC

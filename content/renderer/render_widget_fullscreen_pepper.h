@@ -43,7 +43,6 @@ class RenderWidgetFullscreenPepper : public RenderWidget,
       mojo::PendingReceiver<mojom::Widget> widget_receiver);
 
   // pepper::FullscreenContainer API.
-  void ScrollRect(int dx, int dy, const blink::WebRect& rect) override;
   void Destroy() override;
   void PepperDidChangeCursor(const blink::WebCursorInfo& cursor) override;
   void SetLayer(scoped_refptr<cc::Layer> layer) override;
