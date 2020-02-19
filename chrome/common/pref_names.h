@@ -1029,6 +1029,11 @@ extern const char kWebComponentsV0Enabled[];
 extern const char kKnownInterceptionDisclosureInfobarLastShown[];
 #endif
 
+#if defined(OS_CHROMEOS)
+extern const char kRequiredClientCertificateForUser[];
+extern const char kRequiredClientCertificateForDevice[];
+#endif
+
 }  // namespace prefs
 
 #endif  // CHROME_COMMON_PREF_NAMES_H_

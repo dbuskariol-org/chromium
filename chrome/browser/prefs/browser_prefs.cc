@@ -250,6 +250,7 @@
 #include "chrome/browser/chromeos/arc/policy/arc_policy_bridge.h"
 #include "chrome/browser/chromeos/arc/session/arc_session_manager.h"
 #include "chrome/browser/chromeos/bluetooth/debug_logs_manager.h"
+#include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_common.h"
 #include "chrome/browser/chromeos/child_accounts/parent_access_code/parent_access_service.h"
 #include "chrome/browser/chromeos/child_accounts/screen_time_controller.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_time_controller.h"
@@ -756,6 +757,7 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
   UpgradeDetectorChromeos::RegisterPrefs(registry);
   syncer::PerUserTopicSubscriptionManager::RegisterPrefs(registry);
   syncer::InvalidatorRegistrarWithMemory::RegisterPrefs(registry);
+  chromeos::cert_provisioning::RegisterLocalStatePrefs(registry);
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_MACOSX)
@@ -1030,6 +1032,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
   policy::StatusCollector::RegisterProfilePrefs(registry);
   RegisterChromeLauncherUserPrefs(registry);
   ::onc::RegisterProfilePrefs(registry);
+  chromeos::cert_provisioning::RegisterProfilePrefs(registry);
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_WIN)

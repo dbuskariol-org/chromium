@@ -2927,4 +2927,11 @@ const char kKnownInterceptionDisclosureInfobarLastShown[] =
     "known_interception_disclosure_infobar_last_shown";
 #endif
 
+#if defined(OS_CHROMEOS)
+extern const char kRequiredClientCertificateForUser[] =
+    "required_client_certificate_for_user";
+extern const char kRequiredClientCertificateForDevice[] =
+    "required_client_certificate_for_device";
+#endif
+
 }  // namespace prefs
