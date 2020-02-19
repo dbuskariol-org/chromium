@@ -774,9 +774,8 @@ void ChromeClientImpl::AttachRootLayer(scoped_refptr<cc::Layer> root_layer,
       WebLocalFrameImpl::FromFrame(local_frame)->LocalRoot();
   DCHECK(WebLocalFrameImpl::FromFrame(local_frame) == web_frame);
 
-  // This method can be called while the frame is being detached. In that
-  // case, the rootLayer is null, and the widget is already destroyed.
-  // TODO(dcheng): This should be called before the widget is gone...
+  // This method is called during Document::Shutdown. For some tests it is
+  // possible that this a FrameWidget was never created for those.
   DCHECK(web_frame->FrameWidget() || !root_layer);
   if (web_frame->FrameWidgetImpl())
     web_frame->FrameWidgetImpl()->SetRootLayer(std::move(root_layer));

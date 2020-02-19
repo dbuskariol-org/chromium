@@ -37,8 +37,6 @@
 #include "cc/input/event_listener_properties.h"
 #include "cc/input/layer_selection_bound.h"
 #include "cc/input/overscroll_behavior.h"
-#include "cc/layers/layer.h"
-#include "cc/paint/paint_worklet_layer_painter.h"
 #include "cc/trees/layer_tree_host.h"
 #include "components/viz/common/surfaces/frame_sink_id.h"
 #include "services/network/public/mojom/referrer_policy.mojom-shared.h"
@@ -56,7 +54,6 @@ class SkBitmap;
 
 namespace cc {
 struct ElementId;
-class LayerTreeMutator;
 class ScopedDeferMainFrameUpdate;
 class PaintImage;
 }
@@ -79,21 +76,6 @@ class WebLocalFrame;
 class WebWidgetClient {
  public:
   virtual ~WebWidgetClient() = default;
-
-  // Sets an object which the compositor uses to ask blink for mutations on the
-  // compositor thread, in order to modify compositor state directly, avoiding
-  // the need to generate and commit main frames, and avoiding the potentially-
-  // janky main thread. This is used to allow AnimationWorklet to operate in
-  // sync with composited animations running ahead of the main frame state.
-  virtual void SetLayerTreeMutator(std::unique_ptr<cc::LayerTreeMutator>) {}
-
-  // Similar to the |SetLayerTreeMutator|, but used by PaintWorklet.
-  virtual void SetPaintWorkletLayerPainterClient(
-      std::unique_ptr<cc::PaintWorkletLayerPainter>) {}
-
-  // Sets the root layer of the tree in the compositor. It may be null to remove
-  // the root layer in which case nothing would be shown by the compositor.
-  virtual void SetRootLayer(scoped_refptr<cc::Layer>) {}
 
   // Called to request a BeginMainFrame from the compositor. For tests with
   // single thread and no scheduler, the impl should schedule a task to run

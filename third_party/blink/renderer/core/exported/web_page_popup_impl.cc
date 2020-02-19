@@ -157,13 +157,13 @@ class PagePopupChromeClient final : public EmptyChromeClient {
 
   void AttachCompositorAnimationTimeline(CompositorAnimationTimeline* timeline,
                                          LocalFrame*) override {
-    popup_->animation_host_->AddAnimationTimeline(
+    popup_->widget_base_.AnimationHost()->AddAnimationTimeline(
         timeline->GetAnimationTimeline());
   }
 
   void DetachCompositorAnimationTimeline(CompositorAnimationTimeline* timeline,
                                          LocalFrame*) override {
-    popup_->animation_host_->RemoveAnimationTimeline(
+    popup_->widget_base_.AnimationHost()->RemoveAnimationTimeline(
         timeline->GetAnimationTimeline());
   }
 
@@ -317,7 +317,7 @@ void WebPagePopupImpl::Initialize(WebViewImpl* web_view,
     cache->ChildrenChanged(&popup_client_->OwnerElement());
   }
 
-  page_->AnimationHostInitialized(*animation_host_, nullptr);
+  page_->AnimationHostInitialized(*widget_base_.AnimationHost(), nullptr);
 
   scoped_refptr<SharedBuffer> data = SharedBuffer::Create();
   popup_client_->WriteDocument(data.get());
@@ -330,11 +330,11 @@ void WebPagePopupImpl::Initialize(WebViewImpl* web_view,
   SetFocus(true);
 }
 
-void WebPagePopupImpl::SetAnimationHost(cc::AnimationHost* animation_host) {
-  // The WebWidgetClient is given |this| as its WebWidget but it is set up
-  // before Initialize() is called on |this|. So we store the |animation_host_|
-  // here, but finish setting it up in Initialize().
-  animation_host_ = animation_host;
+void WebPagePopupImpl::SetCompositorHosts(cc::LayerTreeHost* layer_tree_host,
+                                          cc::AnimationHost* animation_host) {
+  // Careful Initialize() is called after SetCompositorHosts, so don't do
+  // much work here.
+  widget_base_.SetCompositorHosts(layer_tree_host, animation_host);
 }
 
 void WebPagePopupImpl::PostMessageToPopup(const String& message) {
@@ -383,7 +383,7 @@ void WebPagePopupImpl::SetWindowRect(const IntRect& rect_in_screen) {
 
 void WebPagePopupImpl::SetRootLayer(scoped_refptr<cc::Layer> layer) {
   root_layer_ = std::move(layer);
-  WidgetClient()->SetRootLayer(root_layer_);
+  widget_base_.LayerTreeHost()->SetRootLayer(root_layer_);
 }
 
 void WebPagePopupImpl::SetSuppressFrameRequestsWorkaroundFor704763Only(
@@ -565,8 +565,8 @@ void WebPagePopupImpl::Close() {
     Cancel();
   }
 
-  animation_host_ = nullptr;
   web_page_popup_client_ = nullptr;
+  SetCompositorHosts(nullptr, nullptr);
 
   // Self-delete on Close().
   Release();
