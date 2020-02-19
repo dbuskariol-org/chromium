@@ -980,8 +980,8 @@ void VaapiVideoDecodeAccelerator::Cleanup() {
 
   // Call DismissPictureBuffer() to notify |client_| that the picture buffers
   // are no longer used and thus |client_| shall release them. If |client_| has
-  // been destroyed, DismissPictureBuffer() on all picture buffers are executed
-  // on the |client_| destruction.
+  // been invalidated in NotifyError(),|client_| will be destroyed shortly. The
+  // destruction should release all the PictureBuffers.
   if (client_) {
     for (const auto& id_and_picture : pictures_)
       client_->DismissPictureBuffer(id_and_picture.first);
