@@ -68,3 +68,6 @@ crbug.com/906850 external/wpt/mixed-content/gen/top.http-rp/opt-in/sharedworker-
 # Expectation differs from m82.
 crbug.com/1050438 http/tests/workers/shared-worker-redirect.html [ Failure ]
 crbug.com/1050438 virtual/omt-worker-fetch/http/tests/workers/shared-worker-redirect.html [ Failure ]
+
+# XHRReplayData support for Blink CORS was dropped from m82.
+crbug.com/958524 http/tests/inspector-protocol/network/xhr-post-replay-cors.js [ Failure ]
