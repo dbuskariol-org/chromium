@@ -693,16 +693,6 @@ html[dir='rtl'] .dialog-header button.icon-button > files-toggle-ripple {
   width: 0;
 }
 
-.dialog-header:not(.files-ng) #search-box cr-input {
-  --cr-input-border-bottom: 1px solid rgba(255, 255, 255, 50%);
-  --cr-input-placeholder-color: rgba(255, 255, 255, 50%);
-}
-
-.dialog-header.files-ng #search-box cr-input {
-  --cr-input-border-bottom: 1px solid rgba(0, 0, 0, 50%);
-  --cr-input-placeholder-color: rgba(0, 0, 0, 50%);
-}
-
 .dialog-header:not(.files-ng) #search-button > .icon {
   background-image: -webkit-image-set(
       url(../images/files/ui/search_white.png) 1x,
@@ -1039,13 +1029,21 @@ body.check-select #search-button {
 }
 
 .dialog-header:not(.files-ng) #search-box cr-input {
+  --cr-input-border-bottom: 1px solid rgba(255, 255, 255, 50%);
   --cr-input-color: white;
   --cr-input-focus-color: white;
+  --cr-input-placeholder-color: rgba(255, 255, 255, 50%);
 }
 
 .dialog-header.files-ng #search-box cr-input {
+  --cr-input-border-bottom: transparent;
   --cr-input-color: var(--google-grey-800);
-  --cr-input-focus-color: var(--google-grey-700);
+  --cr-input-focus-color: transparent;
+  --cr-input-placeholder-color: rgba(0, 0, 0, 50%);
+}
+
+.dialog-header.files-ng #search-box cr-input::part(input) {
+  caret-color: var(--cr-input-color);
 }
 
 body.check-select #search-box {
