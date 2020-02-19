@@ -194,8 +194,9 @@ void PasswordsPrivateDelegateImpl::
   password_manager_presenter_->UndoRemoveSavedPasswordOrException();
 }
 
-void PasswordsPrivateDelegateImpl::RequestShowPassword(
+void PasswordsPrivateDelegateImpl::RequestPlaintextPassword(
     int id,
+    api::passwords_private::PlaintextReason reason,
     PlaintextPasswordCallback callback,
     content::WebContents* web_contents) {
   // Save |web_contents| so that it can be used later when OsReauthCall() is
@@ -203,6 +204,7 @@ void PasswordsPrivateDelegateImpl::RequestShowPassword(
   // exiting this method.
   // TODO(crbug.com/495290): Pass the native window directly to the
   // reauth-handling code.
+  // TODO(crbug.com/1047726): Make use of the different values for reason.
   web_contents_ = web_contents;
   if (!password_access_authenticator_.EnsureUserIsAuthenticated(
           password_manager::ReauthPurpose::VIEW_PASSWORD)) {
@@ -217,8 +219,8 @@ void PasswordsPrivateDelegateImpl::RequestShowPassword(
     return;
   }
 
-  password_manager_presenter_->RequestShowPassword(*sort_key,
-                                                   std::move(callback));
+  password_manager_presenter_->RequestPlaintextPassword(*sort_key,
+                                                        std::move(callback));
 }
 
 bool PasswordsPrivateDelegateImpl::OsReauthCall(

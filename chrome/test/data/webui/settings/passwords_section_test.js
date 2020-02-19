@@ -571,10 +571,12 @@ cr.define('settings_passwords_section', function() {
 
       passwordManager.setPlaintextPassword('password');
       passwordDialog.$.showPasswordButton.click();
-      return passwordManager.whenCalled('getPlaintextPassword').then(id => {
-        assertEquals(1, id);
-        assertEquals('password', passwordDialog.item.password);
-      });
+      return passwordManager.whenCalled('requestPlaintextPassword')
+          .then(({id, reason}) => {
+            assertEquals(1, id);
+            assertEquals('VIEW', reason);
+            assertEquals('password', passwordDialog.item.password);
+          });
     });
 
     test('onShowSavedPasswordListItem', function() {
@@ -585,10 +587,12 @@ cr.define('settings_passwords_section', function() {
 
       passwordManager.setPlaintextPassword('password');
       passwordListItem.$$('#showPasswordButton').click();
-      return passwordManager.whenCalled('getPlaintextPassword').then(id => {
-        assertEquals(1, id);
-        assertEquals('password', passwordListItem.item.password);
-      });
+      return passwordManager.whenCalled('requestPlaintextPassword')
+          .then(({id, reason}) => {
+            assertEquals(1, id);
+            assertEquals('VIEW', reason);
+            assertEquals('password', passwordListItem.item.password);
+          });
     });
 
     test('closingPasswordsSectionHidesUndoToast', function(done) {

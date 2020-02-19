@@ -21,6 +21,7 @@
 #include "chrome/browser/extensions/api/passwords_private/passwords_private_event_router.h"
 #include "chrome/browser/extensions/api/passwords_private/passwords_private_event_router_factory.h"
 #include "chrome/browser/password_manager/password_store_factory.h"
+#include "chrome/common/extensions/api/passwords_private.h"
 #include "chrome/test/base/testing_profile.h"
 #include "components/autofill/core/common/password_form.h"
 #include "components/password_manager/core/browser/password_list_sorter.h"
@@ -252,7 +253,9 @@ TEST_F(PasswordsPrivateDelegateImplTest, TestPassedReauthOnView) {
 
   MockPlaintextPasswordCallback password_callback;
   EXPECT_CALL(password_callback, Run(Eq(base::ASCIIToUTF16("test"))));
-  delegate.RequestShowPassword(0, password_callback.Get(), nullptr);
+  delegate.RequestPlaintextPassword(
+      0, api::passwords_private::PLAINTEXT_REASON_VIEW, password_callback.Get(),
+      nullptr);
 }
 
 TEST_F(PasswordsPrivateDelegateImplTest, TestFailedReauthOnView) {
@@ -271,7 +274,9 @@ TEST_F(PasswordsPrivateDelegateImplTest, TestFailedReauthOnView) {
 
   MockPlaintextPasswordCallback password_callback;
   EXPECT_CALL(password_callback, Run(Eq(base::nullopt)));
-  delegate.RequestShowPassword(0, password_callback.Get(), nullptr);
+  delegate.RequestPlaintextPassword(
+      0, api::passwords_private::PLAINTEXT_REASON_VIEW, password_callback.Get(),
+      nullptr);
 }
 
 TEST_F(PasswordsPrivateDelegateImplTest, TestReauthOnExport) {
