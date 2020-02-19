@@ -72,6 +72,8 @@ bool LayoutSVGResourcePattern::RemoveClientFromCache(
 
 std::unique_ptr<PatternData> LayoutSVGResourcePattern::BuildPatternData(
     const FloatRect& object_bounding_box) {
+  auto pattern_data = std::make_unique<PatternData>();
+
   DCHECK(GetElement());
   // Validate pattern DOM state before building the actual pattern. This should
   // avoid tearing down the pattern we're currently working on. Preferably the
@@ -91,11 +93,11 @@ std::unique_ptr<PatternData> LayoutSVGResourcePattern::BuildPatternData(
   if (attributes.PatternUnits() ==
           SVGUnitTypes::kSvgUnitTypeObjectboundingbox &&
       object_bounding_box.IsEmpty())
-    return nullptr;
+    return pattern_data;
 
   // If there's no content disable rendering of the pattern.
   if (!attributes.PatternContentElement())
-    return nullptr;
+    return pattern_data;
 
   // Compute tile metrics.
   FloatRect tile_bounds = SVGLengthContext::ResolveRectangle(
@@ -103,13 +105,13 @@ std::unique_ptr<PatternData> LayoutSVGResourcePattern::BuildPatternData(
       *attributes.X(), *attributes.Y(), *attributes.Width(),
       *attributes.Height());
   if (tile_bounds.IsEmpty())
-    return nullptr;
+    return pattern_data;
 
   AffineTransform tile_transform;
   if (attributes.HasViewBox()) {
     // An empty viewBox disables rendering of the pattern.
     if (attributes.ViewBox().IsEmpty())
-      return nullptr;
+      return pattern_data;
     tile_transform = SVGFitToViewBox::ViewBoxToViewTransform(
         attributes.ViewBox(), attributes.PreserveAspectRatio(),
         tile_bounds.Width(), tile_bounds.Height());
@@ -122,7 +124,6 @@ std::unique_ptr<PatternData> LayoutSVGResourcePattern::BuildPatternData(
     }
   }
 
-  auto pattern_data = std::make_unique<PatternData>();
   pattern_data->pattern = Pattern::CreatePaintRecordPattern(
       AsPaintRecord(tile_bounds.Size(), tile_transform),
       FloatRect(FloatPoint(), tile_bounds.Size()));
@@ -144,9 +145,7 @@ SVGPaintServer LayoutSVGResourcePattern::PreparePaintServer(
   if (!pattern_data)
     pattern_data = BuildPatternData(object_bounding_box);
 
-  // TODO(fs): Always allocate a PatternData, and let PatternData::pattern
-  // being nullptr indicate that the pattern is in error/disabled.
-  if (!pattern_data || !pattern_data->pattern)
+  if (!pattern_data->pattern)
     return SVGPaintServer::Invalid();
 
   return SVGPaintServer(pattern_data->pattern, pattern_data->transform);
