@@ -130,10 +130,21 @@ void GpuVideoAcceleratorFactoriesImpl::BindOnTaskRunner(
 
   context_provider_->AddObserver(this);
 
-  vea_provider_->GetVideoEncodeAcceleratorSupportedProfiles(
-      base::BindOnce(&GpuVideoAcceleratorFactoriesImpl::
-                         OnGetVideoEncodeAcceleratorSupportedProfiles,
-                     base::Unretained(this)));
+  if (video_accelerator_enabled_) {
+    {
+      // TODO(crbug.com/709631): This should be removed.
+      base::AutoLock lock(supported_profiles_lock_);
+      supported_vea_profiles_ =
+          media::GpuVideoAcceleratorUtil::ConvertGpuToMediaEncodeProfiles(
+              gpu_channel_host_->gpu_info()
+                  .video_encode_accelerator_supported_profiles);
+    }
+
+    vea_provider_->GetVideoEncodeAcceleratorSupportedProfiles(
+        base::BindOnce(&GpuVideoAcceleratorFactoriesImpl::
+                           OnGetVideoEncodeAcceleratorSupportedProfiles,
+                       base::Unretained(this)));
+  }
 
 #if BUILDFLAG(ENABLE_MOJO_VIDEO_DECODER)
   // Note: This is a bit of a hack, since we don't specify the implementation
@@ -408,11 +419,10 @@ GpuVideoAcceleratorFactoriesImpl::GetTaskRunner() {
   return task_runner_;
 }
 
-media::VideoEncodeAccelerator::SupportedProfiles
+base::Optional<media::VideoEncodeAccelerator::SupportedProfiles>
 GpuVideoAcceleratorFactoriesImpl::GetVideoEncodeAcceleratorSupportedProfiles() {
   base::AutoLock lock(supported_profiles_lock_);
-  return supported_vea_profiles_.value_or(
-      media::VideoEncodeAccelerator::SupportedProfiles());
+  return supported_vea_profiles_;
 }
 
 scoped_refptr<viz::ContextProvider>
