@@ -81,10 +81,7 @@ source_set("unit_tests") {
 source_set("browser_tests") {
   testonly = true
 
-  sources = [
-    "bookmark_app_registrar_browsertest.cc",
-    "web_app_audio_focus_browsertest.cc",
-  ]
+  sources = [ "web_app_audio_focus_browsertest.cc" ]
 
   defines = [ "HAS_OUT_OF_PROC_TEST_RUNNER" ]
 
