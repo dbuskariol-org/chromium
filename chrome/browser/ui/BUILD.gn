@@ -1542,6 +1542,8 @@ jumbo_static_library("ui") {
       "ash/ash_shell_init.h",
       "ash/ash_util.cc",
       "ash/ash_util.h",
+      "ash/back_gesture_contextual_nudge_delegate.cc",
+      "ash/back_gesture_contextual_nudge_delegate.h",
       "ash/cast_config_controller_media_router.cc",
       "ash/cast_config_controller_media_router.h",
       "ash/chrome_accessibility_delegate.cc",
