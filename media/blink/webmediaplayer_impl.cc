@@ -2686,7 +2686,7 @@ void WebMediaPlayerImpl::StartPipeline() {
   DCHECK(main_task_runner_->BelongsToCurrentThread());
 
   Demuxer::EncryptedMediaInitDataCB encrypted_media_init_data_cb =
-      BindToCurrentLoop(base::Bind(
+      BindToCurrentLoop(base::BindRepeating(
           &WebMediaPlayerImpl::OnEncryptedMediaInitData, weak_this_));
 
   vfc_task_runner_->PostTask(
