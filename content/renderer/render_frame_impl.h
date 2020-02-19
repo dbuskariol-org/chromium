@@ -98,7 +98,6 @@
 #include "third_party/blink/public/web/web_frame_load_type.h"
 #include "third_party/blink/public/web/web_frame_serializer_client.h"
 #include "third_party/blink/public/web/web_history_commit_type.h"
-#include "third_party/blink/public/web/web_icon_url.h"
 #include "third_party/blink/public/web/web_local_frame_client.h"
 #include "third_party/blink/public/web/web_meaningful_layout.h"
 #include "third_party/blink/public/web/web_script_execution_callback.h"
@@ -713,7 +712,6 @@ class CONTENT_EXPORT RenderFrameImpl
   void DidCreateDocumentElement() override;
   void RunScriptsAtDocumentElementAvailable() override;
   void DidReceiveTitle(const blink::WebString& title) override;
-  void DidChangeIcon(blink::WebIconURL::Type icon_type) override;
   void DidFinishDocumentLoad() override;
   void RunScriptsAtDocumentReady(bool document_is_empty) override;
   void RunScriptsAtDocumentIdle() override;
@@ -1195,8 +1193,6 @@ class CONTENT_EXPORT RenderFrameImpl
 
   // Ask the host to send our AndroidOverlay routing token to us.
   void RequestOverlayRoutingTokenFromHost();
-
-  void SendUpdateFaviconURL();
 
   void BindWidget(mojo::PendingReceiver<mojom::Widget> receiver);
 

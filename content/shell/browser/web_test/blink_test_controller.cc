@@ -908,6 +908,17 @@ void BlinkTestController::WebContentsDestroyed() {
   DiscardMainWindow();
 }
 
+void BlinkTestController::DidUpdateFaviconURL(
+    const std::vector<blink::mojom::FaviconURLPtr>& candidates) {
+  bool should_dump_icon_changes = false;
+  accumulated_web_test_runtime_flags_changes_.GetBoolean(
+      "dump_icon_changes", &should_dump_icon_changes);
+  if (should_dump_icon_changes) {
+    std::string log = IsMainWindow(web_contents()) ? "main frame " : "frame ";
+    printer_->AddMessageRaw(log + "- didChangeIcons\n");
+  }
+}
+
 void BlinkTestController::RenderProcessHostDestroyed(
     RenderProcessHost* render_process_host) {
   render_process_host_observer_.Remove(render_process_host);

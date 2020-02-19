@@ -3253,6 +3253,11 @@ void RenderFrameHostImpl::ScaleFactorChanged(float scale) {
   delegate_->OnPageScaleFactorChanged(this, scale);
 }
 
+void RenderFrameHostImpl::UpdateFaviconURL(
+    std::vector<blink::mojom::FaviconURLPtr> favicon_urls) {
+  delegate_->UpdateFaviconURL(this, std::move(favicon_urls));
+}
+
 void RenderFrameHostImpl::RequestTextSurroundingSelection(
     blink::mojom::LocalFrame::GetTextSurroundingSelectionCallback callback,
     int max_length) {

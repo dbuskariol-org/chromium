@@ -69,7 +69,6 @@
 #include "third_party/blink/public/web/web_frame_owner_properties.h"
 #include "third_party/blink/public/web/web_history_commit_type.h"
 #include "third_party/blink/public/web/web_history_item.h"
-#include "third_party/blink/public/web/web_icon_url.h"
 #include "third_party/blink/public/web/web_media_inspector.h"
 #include "third_party/blink/public/web/web_navigation_params.h"
 #include "third_party/blink/public/web/web_navigation_policy.h"
@@ -394,9 +393,6 @@ class BLINK_EXPORT WebLocalFrameClient {
 
   // The page title is available.
   virtual void DidReceiveTitle(const WebString& title) {}
-
-  // The icon for the page have changed.
-  virtual void DidChangeIcon(WebIconURL::Type) {}
 
   // The frame's document finished loading.
   // This method may not execute JavaScript code.

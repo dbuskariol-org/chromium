@@ -2293,28 +2293,6 @@ TEST_F(RendererErrorPageTest, MAYBE_HttpStatusCodeErrorWithEmptyBody) {
                 .Ascii());
 }
 
-// Ensure the render view sends favicon url update events correctly.
-TEST_F(RenderViewImplTest, SendFaviconURLUpdateEvent) {
-  // An event should be sent when a favicon url exists.
-  LoadHTML("<html>"
-           "<head>"
-           "<link rel='icon' href='http://www.google.com/favicon.ico'>"
-           "</head>"
-           "</html>");
-  EXPECT_TRUE(render_thread_->sink().GetFirstMessageMatching(
-      FrameHostMsg_UpdateFaviconURL::ID));
-  render_thread_->sink().ClearMessages();
-
-  // An event should not be sent if no favicon url exists. This is an assumption
-  // made by some of Chrome's favicon handling.
-  LoadHTML("<html>"
-           "<head>"
-           "</head>"
-           "</html>");
-  EXPECT_FALSE(render_thread_->sink().GetFirstMessageMatching(
-      FrameHostMsg_UpdateFaviconURL::ID));
-}
-
 TEST_F(RenderViewImplTest, FocusElementCallsFocusedNodeChanged) {
   LoadHTML("<input id='test1' value='hello1'></input>"
            "<input id='test2' value='hello2'></input>");

@@ -13051,4 +13051,56 @@ TEST_F(WebFrameTest, RemoteViewportAndMainframeIntersections) {
   EXPECT_EQ(PhysicalRect(7, -11, 25, 35), mainframe_rect);
 }
 
+class TestUpdateFaviconURLLocalFrameHost : public FakeLocalFrameHost {
+ public:
+  TestUpdateFaviconURLLocalFrameHost() = default;
+  ~TestUpdateFaviconURLLocalFrameHost() override = default;
+
+  // FakeLocalFrameHost:
+  void UpdateFaviconURL(
+      WTF::Vector<blink::mojom::blink::FaviconURLPtr> favicon_urls) override {
+    did_notify_ = true;
+  }
+
+  bool did_notify_ = false;
+};
+
+// Ensure the render view sends favicon url update events correctly.
+TEST_F(WebFrameTest, FaviconURLUpdateEvent) {
+  TestUpdateFaviconURLLocalFrameHost frame_host;
+  frame_test_helpers::TestWebFrameClient web_frame_client;
+  frame_host.Init(web_frame_client.GetRemoteNavigationAssociatedInterfaces());
+  frame_test_helpers::WebViewHelper web_view_helper;
+  web_view_helper.Initialize(&web_frame_client);
+  RunPendingTasks();
+
+  WebViewImpl* web_view = web_view_helper.GetWebView();
+  LocalFrame* frame = web_view->MainFrameImpl()->GetFrame();
+
+  // An event should be sent when a favicon url exists.
+  frame->GetDocument()->documentElement()->SetInnerHTMLFromString(
+      "<html>"
+      "<head>"
+      "<link rel='icon' href='http://www.google.com/favicon.ico'>"
+      "</head>"
+      "</html>");
+  RunPendingTasks();
+
+  EXPECT_TRUE(frame_host.did_notify_);
+
+  frame_host.did_notify_ = false;
+
+  // An event should not be sent if no favicon url exists. This is an assumption
+  // made by some of Chrome's favicon handling.
+  frame->GetDocument()->documentElement()->SetInnerHTMLFromString(
+      "<html>"
+      "<head>"
+      "</head>"
+      "</html>");
+  RunPendingTasks();
+
+  EXPECT_FALSE(frame_host.did_notify_);
+  web_view_helper.Reset();
+}
+
 }  // namespace blink

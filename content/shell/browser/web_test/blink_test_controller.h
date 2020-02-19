@@ -168,6 +168,8 @@ class BlinkTestController : public WebContentsObserver,
                    const GURL& validated_url,
                    int error_code) override;
   void WebContentsDestroyed() override;
+  void DidUpdateFaviconURL(
+      const std::vector<blink::mojom::FaviconURLPtr>& candidates) override;
 
   // RenderProcessHostObserver implementation.
   void RenderProcessHostDestroyed(

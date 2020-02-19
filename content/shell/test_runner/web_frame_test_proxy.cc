@@ -164,11 +164,6 @@ void WebFrameTestProxy::DownloadURL(
                                std::move(blob_url_token));
 }
 
-void WebFrameTestProxy::DidChangeIcon(blink::WebIconURL::Type icon_type) {
-  test_client_->DidChangeIcon(icon_type);
-  RenderFrameImpl::DidChangeIcon(icon_type);
-}
-
 void WebFrameTestProxy::DidStartLoading() {
   test_client_->DidStartLoading();
   RenderFrameImpl::DidStartLoading();

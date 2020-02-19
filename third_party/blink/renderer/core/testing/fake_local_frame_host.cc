@@ -147,6 +147,9 @@ void FakeLocalFrameHost::Are3DAPIsBlocked(Are3DAPIsBlockedCallback callback) {
   std::move(callback).Run(true);
 }
 
+void FakeLocalFrameHost::UpdateFaviconURL(
+    WTF::Vector<blink::mojom::blink::FaviconURLPtr> favicon_urls) {}
+
 void FakeLocalFrameHost::BindFrameHostReceiver(
     mojo::ScopedInterfaceEndpointHandle handle) {
   receiver_.Bind(mojo::PendingAssociatedReceiver<mojom::blink::LocalFrameHost>(

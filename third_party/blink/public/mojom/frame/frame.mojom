@@ -15,6 +15,7 @@ import "third_party/blink/public/mojom/ad_tagging/ad_frame.mojom";
 import "third_party/blink/public/mojom/devtools/console_message.mojom";
 import "third_party/blink/public/mojom/devtools/inspector_issue.mojom";
 import "third_party/blink/public/mojom/feature_policy/feature_policy.mojom";
+import "third_party/blink/public/mojom/favicon/favicon_url.mojom";
 import "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom";
 import "third_party/blink/public/mojom/frame/frame_policy.mojom";
 import "third_party/blink/public/mojom/frame/fullscreen.mojom";
@@ -272,6 +273,9 @@ interface LocalFrameHost {
   // A request to check whether WebGL is explicitly blocked.
   [Sync]
   Are3DAPIsBlocked() => (bool blocked);
+
+  // Notifies that the urls for the favicon of a site has been determined.
+  UpdateFaviconURL(array<FaviconURL> favicon_urls);
 };
 
 // Implemented in Blink, this interface defines frame-specific methods that will

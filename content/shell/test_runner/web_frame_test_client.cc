@@ -328,13 +328,6 @@ void WebFrameTestClient::DownloadURL(
   }
 }
 
-void WebFrameTestClient::DidChangeIcon(blink::WebIconURL::Type icon_type) {
-  if (test_runner()->ShouldDumpIconChanges()) {
-    PrintFrameDescription(delegate_, web_frame_test_proxy_->GetWebFrame());
-    delegate_->PrintMessage(std::string(" - didChangeIcons\n"));
-  }
-}
-
 void WebFrameTestClient::DidStartLoading() {
   test_runner()->AddLoadingFrame(web_frame_test_proxy_->GetWebFrame());
 }
