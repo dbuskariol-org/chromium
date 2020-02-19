@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_PERMISSION_BUBBLE_MOCK_PERMISSION_PROMPT_H_
-#define CHROME_BROWSER_UI_PERMISSION_BUBBLE_MOCK_PERMISSION_PROMPT_H_
+#ifndef COMPONENTS_PERMISSIONS_TEST_MOCK_PERMISSION_PROMPT_H_
+#define COMPONENTS_PERMISSIONS_TEST_MOCK_PERMISSION_PROMPT_H_
 
-#include "chrome/browser/ui/permission_bubble/permission_prompt.h"
+#include "components/permissions/permission_prompt.h"
 
+namespace permissions {
 class MockPermissionPromptFactory;
 
 // Provides a skeleton class for unit and browser testing when trying to test
@@ -33,4 +34,6 @@ class MockPermissionPrompt : public PermissionPrompt {
   Delegate* delegate_;
 };
 
-#endif  // CHROME_BROWSER_UI_PERMISSION_BUBBLE_MOCK_PERMISSION_PROMPT_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_TEST_MOCK_PERMISSION_PROMPT_H_

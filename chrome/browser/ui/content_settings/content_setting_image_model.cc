@@ -18,7 +18,6 @@
 #include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 #include "chrome/browser/content_settings/tab_specific_content_settings.h"
 #include "chrome/browser/download/download_request_limiter.h"
-#include "chrome/browser/permissions/permission_request_manager.h"
 #include "chrome/browser/permissions/quiet_notification_permission_ui_config.h"
 #include "chrome/browser/permissions/quiet_notification_permission_ui_state.h"
 #include "chrome/browser/prerender/prerender_manager.h"
@@ -33,6 +32,7 @@
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "components/content_settings/core/common/features.h"
+#include "components/permissions/permission_request_manager.h"
 #include "components/prefs/pref_service.h"
 #include "components/vector_icons/vector_icons.h"
 #include "content/public/browser/web_contents.h"
@@ -876,7 +876,8 @@ ContentSettingNotificationsImageModel::ContentSettingNotificationsImageModel()
 
 bool ContentSettingNotificationsImageModel::UpdateAndGetVisibility(
     WebContents* web_contents) {
-  auto* manager = PermissionRequestManager::FromWebContents(web_contents);
+  auto* manager =
+      permissions::PermissionRequestManager::FromWebContents(web_contents);
   auto* profile =
       Profile::FromBrowserContext(web_contents->GetBrowserContext());
 
@@ -887,7 +888,8 @@ bool ContentSettingNotificationsImageModel::UpdateAndGetVisibility(
   set_should_show_promo(
       QuietNotificationPermissionUiState::ShouldShowPromo(profile));
   if (manager->ReasonForUsingQuietUi() ==
-      PermissionRequestManager::QuietUiReason::kTriggeredByCrowdDeny) {
+      permissions::PermissionRequestManager::QuietUiReason::
+          kTriggeredByCrowdDeny) {
     set_explanatory_string_id(0);
   } else {
     set_explanatory_string_id(IDS_NOTIFICATIONS_OFF_EXPLANATORY_TEXT);

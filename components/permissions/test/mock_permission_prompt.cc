@@ -2,17 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/permission_bubble/mock_permission_prompt.h"
+#include "components/permissions/test/mock_permission_prompt.h"
 
 #include "base/bind.h"
 #include "base/run_loop.h"
 #include "build/build_config.h"
-#include "chrome/browser/ui/permission_bubble/mock_permission_prompt_factory.h"
+#include "components/permissions/test/mock_permission_prompt_factory.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 #if !defined(OS_ANDROID)
 #include "ui/gfx/vector_icon_types.h"
 #endif
+
+namespace permissions {
 
 MockPermissionPrompt::~MockPermissionPrompt() {
   if (factory_)
@@ -33,7 +35,7 @@ MockPermissionPrompt::GetTabSwitchingBehavior() {
 MockPermissionPrompt::MockPermissionPrompt(MockPermissionPromptFactory* factory,
                                            Delegate* delegate)
     : factory_(factory), delegate_(delegate) {
-  for (const permissions::PermissionRequest* request : delegate_->Requests()) {
+  for (const PermissionRequest* request : delegate_->Requests()) {
     // The actual prompt will call these, so test they're sane.
     EXPECT_FALSE(request->GetMessageTextFragment().empty());
 #if defined(OS_ANDROID)
@@ -44,3 +46,5 @@ MockPermissionPrompt::MockPermissionPrompt(MockPermissionPromptFactory* factory,
 #endif
   }
 }
+
+}  // namespace permissions

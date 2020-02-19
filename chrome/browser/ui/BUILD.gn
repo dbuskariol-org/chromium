@@ -146,7 +146,6 @@ jumbo_static_library("ui") {
     "passwords/settings/password_manager_presenter.cc",
     "passwords/settings/password_manager_presenter.h",
     "passwords/settings/password_ui_view.h",
-    "permission_bubble/permission_prompt.h",
     "prefs/pref_watcher.cc",
     "prefs/pref_watcher.h",
     "prefs/prefs_tab_helper.cc",
@@ -4256,10 +4255,6 @@ static_library("test_support") {
     "login/login_handler_test_utils.h",
     "passwords/settings/password_ui_view_mock.cc",
     "passwords/settings/password_ui_view_mock.h",
-    "permission_bubble/mock_permission_prompt.cc",
-    "permission_bubble/mock_permission_prompt.h",
-    "permission_bubble/mock_permission_prompt_factory.cc",
-    "permission_bubble/mock_permission_prompt_factory.h",
     "toolbar/test_toolbar_action_view_controller.cc",
     "toolbar/test_toolbar_action_view_controller.h",
   ]

@@ -2,22 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_PERMISSION_BUBBLE_MOCK_PERMISSION_PROMPT_FACTORY_H_
-#define CHROME_BROWSER_UI_PERMISSION_BUBBLE_MOCK_PERMISSION_PROMPT_FACTORY_H_
+#ifndef COMPONENTS_PERMISSIONS_TEST_MOCK_PERMISSION_PROMPT_FACTORY_H_
+#define COMPONENTS_PERMISSIONS_TEST_MOCK_PERMISSION_PROMPT_FACTORY_H_
 
 #include <memory>
 #include <vector>
 
-#include "chrome/browser/permissions/permission_request_manager.h"
-#include "chrome/browser/ui/permission_bubble/permission_prompt.h"
+#include "components/permissions/permission_prompt.h"
 #include "components/permissions/permission_request.h"
+#include "components/permissions/permission_request_manager.h"
 #include "url/gurl.h"
-
-class MockPermissionPrompt;
 
 namespace content {
 class WebContents;
 }
+
+namespace permissions {
+class MockPermissionPrompt;
 
 // Provides a skeleton class for both unit and browser testing when trying to
 // test the bubble manager logic. Should not be used for anything that requires
@@ -55,7 +56,7 @@ class MockPermissionPromptFactory {
   // Number of requests seen.
   int TotalRequestCount();
   // Whether the specified permission was shown in a prompt.
-  bool RequestTypeSeen(permissions::PermissionRequestType type);
+  bool RequestTypeSeen(PermissionRequestType type);
   // Whether a prompt with the given origin was shown.
   bool RequestOriginSeen(const GURL& origin);
 
@@ -74,7 +75,7 @@ class MockPermissionPromptFactory {
 
   int show_count_;
   int requests_count_;
-  std::vector<permissions::PermissionRequestType> request_types_seen_;
+  std::vector<PermissionRequestType> request_types_seen_;
   std::vector<GURL> request_origins_seen_;
 
   std::vector<MockPermissionPrompt*> prompts_;
@@ -88,4 +89,6 @@ class MockPermissionPromptFactory {
   DISALLOW_COPY_AND_ASSIGN(MockPermissionPromptFactory);
 };
 
-#endif  // CHROME_BROWSER_UI_PERMISSION_BUBBLE_MOCK_PERMISSION_PROMPT_FACTORY_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_TEST_MOCK_PERMISSION_PROMPT_FACTORY_H_

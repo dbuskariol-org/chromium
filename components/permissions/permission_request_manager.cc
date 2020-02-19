@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_request_manager.h"
+#include "components/permissions/permission_request_manager.h"
 
 #include <algorithm>
 
@@ -17,20 +17,13 @@
 #include "base/task/post_task.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "build/build_config.h"
-#include "chrome/browser/permissions/adaptive_quiet_notification_permission_ui_enabler.h"
-#include "chrome/browser/permissions/contextual_notification_permission_ui_selector.h"
-#include "chrome/browser/permissions/notification_permission_ui_selector.h"
-#include "chrome/browser/permissions/permission_decision_auto_blocker_factory.h"
-#include "chrome/browser/permissions/quiet_notification_permission_ui_config.h"
-#include "chrome/browser/permissions/quiet_notification_permission_ui_state.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ui/permission_bubble/permission_prompt.h"
-#include "chrome/common/chrome_features.h"
-#include "chrome/common/chrome_switches.h"
+#include "components/permissions/features.h"
 #include "components/permissions/permission_decision_auto_blocker.h"
+#include "components/permissions/permission_prompt.h"
 #include "components/permissions/permission_request.h"
 #include "components/permissions/permission_uma_util.h"
-#include "components/url_formatter/elide_url.h"
+#include "components/permissions/permissions_client.h"
+#include "components/permissions/switches.h"
 #include "content/public/browser/back_forward_cache.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
@@ -38,22 +31,10 @@
 #include "content/public/browser/web_contents.h"
 #include "url/origin.h"
 
-#if !defined(OS_ANDROID)
-#include "chrome/browser/extensions/extension_ui_util.h"
-#include "extensions/common/constants.h"
-#endif
-
-#if defined(OS_CHROMEOS)
-#include "chrome/browser/chromeos/app_mode/web_app/web_kiosk_app_data.h"
-#include "chrome/browser/chromeos/app_mode/web_app/web_kiosk_app_manager.h"
-#include "components/user_manager/user.h"
-#include "components/user_manager/user_manager.h"
-#endif
-
+namespace permissions {
 namespace {
 
-bool IsMessageTextEqual(permissions::PermissionRequest* a,
-                        permissions::PermissionRequest* b) {
+bool IsMessageTextEqual(PermissionRequest* a, PermissionRequest* b) {
   if (a == b)
     return true;
   if (a->GetMessageTextFragment() == b->GetMessageTextFragment() &&
@@ -65,21 +46,20 @@ bool IsMessageTextEqual(permissions::PermissionRequest* a,
 
 // We only group together media requests. We don't display grouped requests for
 // any other permissions at present.
-bool ShouldGroupRequests(permissions::PermissionRequest* a,
-                         permissions::PermissionRequest* b) {
+bool ShouldGroupRequests(PermissionRequest* a, PermissionRequest* b) {
   if (a->GetOrigin() != b->GetOrigin())
     return false;
 
   if (a->GetPermissionRequestType() ==
-      permissions::PermissionRequestType::PERMISSION_MEDIASTREAM_MIC) {
+      PermissionRequestType::PERMISSION_MEDIASTREAM_MIC) {
     return b->GetPermissionRequestType() ==
-           permissions::PermissionRequestType::PERMISSION_MEDIASTREAM_CAMERA;
+           PermissionRequestType::PERMISSION_MEDIASTREAM_CAMERA;
   }
 
   if (a->GetPermissionRequestType() ==
-      permissions::PermissionRequestType::PERMISSION_MEDIASTREAM_CAMERA) {
+      PermissionRequestType::PERMISSION_MEDIASTREAM_CAMERA) {
     return b->GetPermissionRequestType() ==
-           permissions::PermissionRequestType::PERMISSION_MEDIASTREAM_MIC;
+           PermissionRequestType::PERMISSION_MEDIASTREAM_MIC;
   }
 
   return false;
@@ -95,8 +75,7 @@ PermissionRequestManager::~PermissionRequestManager() {
   DCHECK(queued_requests_.empty());
 }
 
-void PermissionRequestManager::AddRequest(
-    permissions::PermissionRequest* request) {
+void PermissionRequestManager::AddRequest(PermissionRequest* request) {
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kDenyPermissionPrompts)) {
     request->PermissionDenied();
@@ -128,29 +107,19 @@ void PermissionRequestManager::AddRequest(
       url::Origin::Create(main_frame_url_)
           .IsSameOriginWith(url::Origin::Create(request->GetOrigin()));
 
-#if defined(OS_CHROMEOS)
-  // In web kiosk mode, all permission requests are auto-approved for the origin
-  // of the main app.
-  if (user_manager::UserManager::IsInitialized() &&
-      user_manager::UserManager::Get()->IsLoggedInAsWebKioskApp()) {
-    const AccountId& account_id =
-        user_manager::UserManager::Get()->GetPrimaryUser()->GetAccountId();
-    DCHECK(chromeos::WebKioskAppManager::IsInitialized());
-    const chromeos::WebKioskAppData* app_data =
-        chromeos::WebKioskAppManager::Get()->GetAppByAccountId(account_id);
-    DCHECK(app_data);
+  base::Optional<url::Origin> auto_approval_origin =
+      PermissionsClient::Get()->GetAutoApprovalOrigin(request);
+  if (auto_approval_origin) {
     if (url::Origin::Create(request->GetOrigin()) ==
-        url::Origin::Create(app_data->install_url())) {
+        auto_approval_origin.value()) {
       request->PermissionGranted();
     }
     request->RequestFinished();
     return;
   }
-#endif
 
   // Don't re-add an existing request or one with a duplicate text request.
-  permissions::PermissionRequest* existing_request =
-      GetExistingRequest(request);
+  PermissionRequest* existing_request = GetExistingRequest(request);
   if (existing_request) {
     // |request| is a duplicate. Add it to |duplicate_requests_| unless it's the
     // same object as |existing_request| or an existing duplicate.
@@ -180,7 +149,7 @@ void PermissionRequestManager::AddRequest(
   // permission request.
   if (ShouldCurrentRequestUseQuietUI()) {
     // FinalizeBubble will call ScheduleDequeueRequest on its own.
-    FinalizeBubble(permissions::PermissionAction::IGNORED);
+    FinalizeBubble(PermissionAction::IGNORED);
   } else {
     ScheduleDequeueRequestIfNeeded();
   }
@@ -277,7 +246,7 @@ void PermissionRequestManager::OnVisibilityChanged(
           break;
         case PermissionPrompt::TabSwitchingBehavior::
             kDestroyPromptAndIgnoreRequest:
-          FinalizeBubble(permissions::PermissionAction::IGNORED);
+          FinalizeBubble(PermissionAction::IGNORED);
           break;
         case PermissionPrompt::TabSwitchingBehavior::kKeepPromptAlive:
           break;
@@ -304,42 +273,20 @@ void PermissionRequestManager::OnVisibilityChanged(
   }
 }
 
-const std::vector<permissions::PermissionRequest*>&
-PermissionRequestManager::Requests() {
+const std::vector<PermissionRequest*>& PermissionRequestManager::Requests() {
   return requests_;
-}
-
-PermissionPrompt::DisplayNameOrOrigin
-PermissionRequestManager::GetDisplayNameOrOrigin() {
-  DCHECK(IsRequestInProgress());
-  GURL origin_url = requests_[0]->GetOrigin();
-
-#if !defined(OS_ANDROID)
-  if (origin_url.SchemeIs(extensions::kExtensionScheme)) {
-    base::string16 extension_name =
-        extensions::ui_util::GetEnabledExtensionNameForUrl(
-            origin_url, web_contents()->GetBrowserContext());
-    if (!extension_name.empty())
-      return {extension_name, false /* is_origin */};
-  }
-#endif  // !defined(OS_ANDROID)
-
-  // Web URLs should be displayed as the origin in the URL.
-  return {url_formatter::FormatUrlForSecurityDisplay(
-              origin_url, url_formatter::SchemeDisplay::OMIT_CRYPTOGRAPHIC),
-          true /* is_origin */};
 }
 
 void PermissionRequestManager::Accept() {
   if (deleting_bubble_)
     return;
   DCHECK(view_);
-  std::vector<permissions::PermissionRequest*>::iterator requests_iter;
+  std::vector<PermissionRequest*>::iterator requests_iter;
   for (requests_iter = requests_.begin(); requests_iter != requests_.end();
        requests_iter++) {
     PermissionGrantedIncludingDuplicates(*requests_iter);
   }
-  FinalizeBubble(permissions::PermissionAction::GRANTED);
+  FinalizeBubble(PermissionAction::GRANTED);
 }
 
 void PermissionRequestManager::Deny() {
@@ -360,26 +307,24 @@ void PermissionRequestManager::Deny() {
     is_notification_prompt_cooldown_active_ = true;
   }
 
-  std::vector<permissions::PermissionRequest*>::iterator requests_iter;
-  for (requests_iter = requests_.begin();
-       requests_iter != requests_.end();
+  std::vector<PermissionRequest*>::iterator requests_iter;
+  for (requests_iter = requests_.begin(); requests_iter != requests_.end();
        requests_iter++) {
     PermissionDeniedIncludingDuplicates(*requests_iter);
   }
-  FinalizeBubble(permissions::PermissionAction::DENIED);
+  FinalizeBubble(PermissionAction::DENIED);
 }
 
 void PermissionRequestManager::Closing() {
   if (deleting_bubble_)
     return;
   DCHECK(view_);
-  std::vector<permissions::PermissionRequest*>::iterator requests_iter;
-  for (requests_iter = requests_.begin();
-       requests_iter != requests_.end();
+  std::vector<PermissionRequest*>::iterator requests_iter;
+  for (requests_iter = requests_.begin(); requests_iter != requests_.end();
        requests_iter++) {
     CancelledIncludingDuplicates(*requests_iter);
   }
-  FinalizeBubble(permissions::PermissionAction::DISMISSED);
+  FinalizeBubble(PermissionAction::DISMISSED);
 }
 
 PermissionRequestManager::PermissionRequestManager(
@@ -391,9 +336,8 @@ PermissionRequestManager::PermissionRequestManager(
                      content::Visibility::HIDDEN),
       auto_response_for_test_(NONE),
       notification_permission_ui_selector_(
-          std::make_unique<ContextualNotificationPermissionUiSelector>(
-              Profile::FromBrowserContext(web_contents->GetBrowserContext()))) {
-}
+          PermissionsClient::Get()->CreateNotificationPermissionUiSelector(
+              web_contents->GetBrowserContext())) {}
 
 void PermissionRequestManager::ScheduleShowBubble() {
   base::RecordAction(base::UserMetricsAction("PermissionBubbleRequest"));
@@ -417,8 +361,9 @@ void PermissionRequestManager::DequeueRequestIfNeeded() {
     queued_requests_.pop_front();
   }
 
-  if (requests_.front()->GetPermissionRequestType() ==
-      permissions::PermissionRequestType::PERMISSION_NOTIFICATIONS) {
+  if (notification_permission_ui_selector_ &&
+      requests_.front()->GetPermissionRequestType() ==
+          PermissionRequestType::PERMISSION_NOTIFICATIONS) {
     notification_permission_ui_selector_->SelectUiToUse(
         requests_.front(),
         base::BindOnce(
@@ -455,7 +400,7 @@ void PermissionRequestManager::ShowBubble() {
     return;
 
   if (!current_request_view_shown_to_user_) {
-    permissions::PermissionUmaUtil::PermissionPromptShown(requests_);
+    PermissionUmaUtil::PermissionPromptShown(requests_);
 
     if (ShouldCurrentRequestUseQuietUI()) {
       base::RecordAction(base::UserMetricsAction(
@@ -480,60 +425,56 @@ void PermissionRequestManager::DeleteBubble() {
 }
 
 void PermissionRequestManager::FinalizeBubble(
-    permissions::PermissionAction permission_action) {
+    PermissionAction permission_action) {
   DCHECK(IsRequestInProgress());
 
-  permissions::PermissionUmaUtil::PermissionPromptResolved(
+  PermissionUmaUtil::PermissionPromptResolved(
       requests_, web_contents(), permission_action,
       DetermineCurrentRequestUIDispositionForUMA());
 
-  Profile* profile =
-      Profile::FromBrowserContext(web_contents()->GetBrowserContext());
-  permissions::PermissionDecisionAutoBlocker* autoblocker =
-      PermissionDecisionAutoBlockerFactory::GetForProfile(profile);
+  content::BrowserContext* browser_context =
+      web_contents()->GetBrowserContext();
+  PermissionDecisionAutoBlocker* autoblocker =
+      PermissionsClient::Get()->GetPermissionDecisionAutoBlocker(
+          browser_context);
 
-  auto* adaptive_notification_permission_ui_enabler =
-      AdaptiveQuietNotificationPermissionUiEnabler::GetForProfile(profile);
-  for (permissions::PermissionRequest* request : requests_) {
+  for (PermissionRequest* request : requests_) {
     // TODO(timloh): We only support dismiss and ignore embargo for permissions
     // which use PermissionRequestImpl as the other subclasses don't support
     // GetContentSettingsType.
     if (request->GetContentSettingsType() == ContentSettingsType::DEFAULT)
       continue;
 
-    if (request->GetPermissionRequestType() ==
-        permissions::PermissionRequestType::PERMISSION_NOTIFICATIONS) {
-      adaptive_notification_permission_ui_enabler
-          ->RecordPermissionPromptOutcome(permission_action);
-    }
+    PermissionsClient::Get()->OnPromptResolved(
+        browser_context, request->GetPermissionRequestType(),
+        permission_action);
 
-    permissions::PermissionEmbargoStatus embargo_status =
-        permissions::PermissionEmbargoStatus::NOT_EMBARGOED;
-    if (permission_action == permissions::PermissionAction::DISMISSED) {
+    PermissionEmbargoStatus embargo_status =
+        PermissionEmbargoStatus::NOT_EMBARGOED;
+    if (permission_action == PermissionAction::DISMISSED) {
       if (autoblocker->RecordDismissAndEmbargo(
               request->GetOrigin(), request->GetContentSettingsType(),
               ShouldCurrentRequestUseQuietUI())) {
-        embargo_status =
-            permissions::PermissionEmbargoStatus::REPEATED_DISMISSALS;
+        embargo_status = PermissionEmbargoStatus::REPEATED_DISMISSALS;
       }
-    } else if (permission_action == permissions::PermissionAction::IGNORED) {
+    } else if (permission_action == PermissionAction::IGNORED) {
       if (autoblocker->RecordIgnoreAndEmbargo(
               request->GetOrigin(), request->GetContentSettingsType(),
               ShouldCurrentRequestUseQuietUI())) {
-        embargo_status = permissions::PermissionEmbargoStatus::REPEATED_IGNORES;
+        embargo_status = PermissionEmbargoStatus::REPEATED_IGNORES;
       }
     }
-    permissions::PermissionUmaUtil::RecordEmbargoStatus(embargo_status);
+    PermissionUmaUtil::RecordEmbargoStatus(embargo_status);
   }
-  std::vector<permissions::PermissionRequest*>::iterator requests_iter;
-  for (requests_iter = requests_.begin();
-       requests_iter != requests_.end();
+  std::vector<PermissionRequest*>::iterator requests_iter;
+  for (requests_iter = requests_.begin(); requests_iter != requests_.end();
        requests_iter++) {
     RequestFinishedIncludingDuplicates(*requests_iter);
   }
   requests_.clear();
 
-  notification_permission_ui_selector_->Cancel();
+  if (notification_permission_ui_selector_)
+    notification_permission_ui_selector_->Cancel();
 
   current_request_view_shown_to_user_ = false;
   current_request_ui_to_use_.reset();
@@ -546,21 +487,21 @@ void PermissionRequestManager::FinalizeBubble(
 }
 
 void PermissionRequestManager::CleanUpRequests() {
-  for (permissions::PermissionRequest* request : queued_requests_)
+  for (PermissionRequest* request : queued_requests_)
     RequestFinishedIncludingDuplicates(request);
   queued_requests_.clear();
 
   if (IsRequestInProgress())
-    FinalizeBubble(permissions::PermissionAction::IGNORED);
+    FinalizeBubble(PermissionAction::IGNORED);
 }
 
-permissions::PermissionRequest* PermissionRequestManager::GetExistingRequest(
-    permissions::PermissionRequest* request) {
-  for (permissions::PermissionRequest* existing_request : requests_) {
+PermissionRequest* PermissionRequestManager::GetExistingRequest(
+    PermissionRequest* request) {
+  for (PermissionRequest* existing_request : requests_) {
     if (IsMessageTextEqual(existing_request, request))
       return existing_request;
   }
-  for (permissions::PermissionRequest* existing_request : queued_requests_) {
+  for (PermissionRequest* existing_request : queued_requests_) {
     if (IsMessageTextEqual(existing_request, request))
       return existing_request;
   }
@@ -568,7 +509,7 @@ permissions::PermissionRequest* PermissionRequestManager::GetExistingRequest(
 }
 
 void PermissionRequestManager::PermissionGrantedIncludingDuplicates(
-    permissions::PermissionRequest* request) {
+    PermissionRequest* request) {
   DCHECK_EQ(request, GetExistingRequest(request))
       << "Only requests in [queued_[frame_]]requests_ can have duplicates";
   request->PermissionGranted();
@@ -578,7 +519,7 @@ void PermissionRequestManager::PermissionGrantedIncludingDuplicates(
 }
 
 void PermissionRequestManager::PermissionDeniedIncludingDuplicates(
-    permissions::PermissionRequest* request) {
+    PermissionRequest* request) {
   DCHECK_EQ(request, GetExistingRequest(request))
       << "Only requests in [queued_]requests_ can have duplicates";
   request->PermissionDenied();
@@ -588,7 +529,7 @@ void PermissionRequestManager::PermissionDeniedIncludingDuplicates(
 }
 
 void PermissionRequestManager::CancelledIncludingDuplicates(
-    permissions::PermissionRequest* request) {
+    PermissionRequest* request) {
   DCHECK_EQ(request, GetExistingRequest(request))
       << "Only requests in [queued_]requests_ can have duplicates";
   request->Cancelled();
@@ -598,7 +539,7 @@ void PermissionRequestManager::CancelledIncludingDuplicates(
 }
 
 void PermissionRequestManager::RequestFinishedIncludingDuplicates(
-    permissions::PermissionRequest* request) {
+    PermissionRequest* request) {
   // We can't call GetExistingRequest here, because other entries in requests_,
   // queued_requests_ might already have been deleted.
   DCHECK_EQ(1, std::count(requests_.begin(), requests_.end(), request) +
@@ -659,19 +600,18 @@ void PermissionRequestManager::OnSelectedUiToUseForNotifications(
   ScheduleShowBubble();
 }
 
-permissions::PermissionPromptDisposition
+PermissionPromptDisposition
 PermissionRequestManager::DetermineCurrentRequestUIDispositionForUMA() {
 #if defined(OS_ANDROID)
   return ShouldCurrentRequestUseQuietUI()
-             ? permissions::PermissionPromptDisposition::MINI_INFOBAR
-             : permissions::PermissionPromptDisposition::MODAL_DIALOG;
+             ? PermissionPromptDisposition::MINI_INFOBAR
+             : PermissionPromptDisposition::MODAL_DIALOG;
 #else
   return !ShouldCurrentRequestUseQuietUI()
-             ? permissions::PermissionPromptDisposition::ANCHORED_BUBBLE
+             ? PermissionPromptDisposition::ANCHORED_BUBBLE
              : ReasonForUsingQuietUi() == QuietUiReason::kTriggeredByCrowdDeny
-                   ? permissions::PermissionPromptDisposition::
-                         LOCATION_BAR_RIGHT_STATIC_ICON
-                   : permissions::PermissionPromptDisposition::
+                   ? PermissionPromptDisposition::LOCATION_BAR_RIGHT_STATIC_ICON
+                   : PermissionPromptDisposition::
                          LOCATION_BAR_RIGHT_ANIMATED_ICON;
 #endif
 }
@@ -693,3 +633,5 @@ void PermissionRequestManager::DoAutoResponseForTesting() {
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(PermissionRequestManager)
+
+}  // namespace permissions

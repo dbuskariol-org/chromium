@@ -44,13 +44,14 @@ class TestPermissionRequestOwner {
 }  // namespace
 
 PermissionRequestManagerTestApi::PermissionRequestManagerTestApi(
-    PermissionRequestManager* manager)
+    permissions::PermissionRequestManager* manager)
     : manager_(manager) {}
 
 PermissionRequestManagerTestApi::PermissionRequestManagerTestApi(
     Browser* browser)
-    : PermissionRequestManagerTestApi(PermissionRequestManager::FromWebContents(
-          browser->tab_strip_model()->GetActiveWebContents())) {}
+    : PermissionRequestManagerTestApi(
+          permissions::PermissionRequestManager::FromWebContents(
+              browser->tab_strip_model()->GetActiveWebContents())) {}
 
 void PermissionRequestManagerTestApi::AddSimpleRequest(
     ContentSettingsType type) {
