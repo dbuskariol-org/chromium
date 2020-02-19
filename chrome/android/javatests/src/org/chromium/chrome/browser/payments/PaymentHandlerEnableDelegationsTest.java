@@ -86,6 +86,7 @@ public class PaymentHandlerEnableDelegationsTest {
 
     @Test
     @Feature({"Payments"})
+    @DisabledTest(message = "Test is flaky, see crbug.com/1054103")
     @MediumTest
     public void testShippingDelegation() throws Throwable {
         installPaymentHandlerWithDelegations("['shippingAddress']");
