@@ -8987,7 +8987,7 @@ class SwapMainFrameWhenTitleChangesWebFrameClient
   ~SwapMainFrameWhenTitleChangesWebFrameClient() override = default;
 
   // frame_test_helpers::TestWebFrameClient:
-  void DidReceiveTitle(const WebString& title, WebTextDirection) override {
+  void DidReceiveTitle(const WebString& title) override {
     if (title.IsEmpty())
       return;
 

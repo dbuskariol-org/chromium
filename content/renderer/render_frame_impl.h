@@ -712,8 +712,7 @@ class CONTENT_EXPORT RenderFrameImpl
   void DidClearWindowObject() override;
   void DidCreateDocumentElement() override;
   void RunScriptsAtDocumentElementAvailable() override;
-  void DidReceiveTitle(const blink::WebString& title,
-                       blink::WebTextDirection direction) override;
+  void DidReceiveTitle(const blink::WebString& title) override;
   void DidChangeIcon(blink::WebIconURL::Type icon_type) override;
   void DidFinishDocumentLoad() override;
   void RunScriptsAtDocumentReady(bool document_is_empty) override;

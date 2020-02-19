@@ -7,6 +7,7 @@ module blink.mojom;
 import "cc/mojom/touch_action.mojom";
 import "mojo/public/mojom/base/string16.mojom";
 import "mojo/public/mojom/base/unguessable_token.mojom";
+import "mojo/public/mojom/base/text_direction.mojom";
 import "mojo/public/mojom/base/time.mojom";
 import "services/network/public/mojom/content_security_policy.mojom";
 import "skia/public/mojom/skcolor.mojom";
@@ -51,6 +52,10 @@ struct FindInPageResultAXParams {
   // The character offset into the text of the end object.
   int32 end_offset;
 };
+
+// The maximum number of characters of the document's title that we're willing
+// to accept in the browser process.
+const uint16 kMaxTitleChars = 4096; // 4 * 1024;
 
 // Implemented in Browser, this interface defines frame-specific methods that
 // will be invoked from the render process (e.g. content::RenderFrameHostImpl).
@@ -207,6 +212,12 @@ interface LocalFrameHost {
   // Asks the frame host to notify the owner element in parent process that it
   // should render fallback content.
   RenderFallbackContentInParentProcess();
+
+  // Changes the title for the page in the UI when the page is navigated or the
+  // title changes. Sent for top-level frames. This can be null when loading an
+  // initial empty document (and in some tests).
+  UpdateTitle(mojo_base.mojom.String16? title,
+              mojo_base.mojom.TextDirection title_direction);
 
   // Indicates that the user activation state in the current frame has been
   // updated, so the replicated states need to be synced (in the browser process

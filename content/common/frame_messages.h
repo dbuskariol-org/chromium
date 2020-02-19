@@ -710,12 +710,6 @@ IPC_MESSAGE_ROUTED2(FrameHostMsg_DidChangeFrameOwnerProperties,
                     int32_t /* subframe_routing_id */,
                     content::FrameOwnerProperties /* frame_owner_properties */)
 
-// Changes the title for the page in the UI when the page is navigated or the
-// title changes. Sent for top-level frames.
-IPC_MESSAGE_ROUTED2(FrameHostMsg_UpdateTitle,
-                    base::string16 /* title */,
-                    blink::WebTextDirection /* title direction */)
-
 // Following message is used to communicate the values received by the
 // callback binding the JS to Cpp.
 // An instance of browser that has an automation host listening to it can

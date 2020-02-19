@@ -393,8 +393,7 @@ class BLINK_EXPORT WebLocalFrameClient {
   virtual void RunScriptsAtDocumentElementAvailable() {}
 
   // The page title is available.
-  virtual void DidReceiveTitle(const WebString& title,
-                               WebTextDirection direction) {}
+  virtual void DidReceiveTitle(const WebString& title) {}
 
   // The icon for the page have changed.
   virtual void DidChangeIcon(WebIconURL::Type) {}

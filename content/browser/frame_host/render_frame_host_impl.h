@@ -23,6 +23,7 @@
 #include "base/containers/id_map.h"
 #include "base/containers/unique_ptr_adapters.h"
 #include "base/gtest_prod_util.h"
+#include "base/i18n/rtl.h"
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
@@ -1374,6 +1375,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void DispatchLoad() override;
   void GoToEntryAtOffset(int32_t offset, bool has_user_gesture) override;
   void RenderFallbackContentInParentProcess() override;
+  void UpdateTitle(const base::Optional<::base::string16>& title,
+                   base::i18n::TextDirection title_direction) override;
   void UpdateUserActivationState(
       blink::mojom::UserActivationUpdateType update_type) override;
   void HandleAccessibilityFindInPageResult(
@@ -1555,8 +1558,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
                               const blink::FramePolicy& frame_policy);
   void OnDidChangeFrameOwnerProperties(int32_t frame_routing_id,
                                        const FrameOwnerProperties& properties);
-  void OnUpdateTitle(const base::string16& title,
-                     blink::WebTextDirection title_direction);
   void OnForwardResourceTimingToParent(
       const ResourceTimingInfo& resource_timing);
   void OnAccessibilityEvents(
