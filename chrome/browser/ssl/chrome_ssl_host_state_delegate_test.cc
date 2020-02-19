@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ssl/chrome_ssl_host_state_delegate.h"
+#include "components/security_interstitials/content/chrome_ssl_host_state_delegate.h"
 
 #include <stdint.h>
 #include <utility>

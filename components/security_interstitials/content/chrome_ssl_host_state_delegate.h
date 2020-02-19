@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SSL_CHROME_SSL_HOST_STATE_DELEGATE_H_
-#define CHROME_BROWSER_SSL_CHROME_SSL_HOST_STATE_DELEGATE_H_
+#ifndef COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_CHROME_SSL_HOST_STATE_DELEGATE_H_
+#define COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_CHROME_SSL_HOST_STATE_DELEGATE_H_
 
 #include <memory>
 #include <set>
@@ -28,7 +28,6 @@ class BrowserContext;
 namespace user_prefs {
 class PrefRegistrySyncable;
 }  // namespace user_prefs
-
 
 // Tracks state related to certificate and SSL errors. This state includes:
 // - certificate error exceptions (which are remembered for a particular length
@@ -79,10 +78,10 @@ class ChromeSSLHostStateDelegate : public content::SSLHostStateDelegate {
   void DidDisplayErrorPage(int error);
 
   // Returns true if DidDisplayErrorPage() has been called over a threshold
-  // number of times for a particular error in a particular time period. The number
-  // of times and time period are controlled by the feature parameters. Only
-  // certain error codes of interest are tracked, so this may return false for
-  // an error code that has recurred.
+  // number of times for a particular error in a particular time period. The
+  // number of times and time period are controlled by the feature parameters.
+  // Only certain error codes of interest are tracked, so this may return false
+  // for an error code that has recurred.
   bool HasSeenRecurrentErrors(int error) const;
 
   void ResetRecurrentErrorCountForTesting();
@@ -164,4 +163,4 @@ class ChromeSSLHostStateDelegate : public content::SSLHostStateDelegate {
   int recurrent_interstitial_reset_time_for_testing;
 };
 
-#endif  // CHROME_BROWSER_SSL_CHROME_SSL_HOST_STATE_DELEGATE_H_
+#endif  // COMPONENTS_SECURITY_INTERSTITIALS_CONTENT_CHROME_SSL_HOST_STATE_DELEGATE_H_
