@@ -266,9 +266,6 @@ extern const char kDisableBestEffortTasksDescription[];
 extern const char kDisallowDocWrittenScriptsUiName[];
 extern const char kDisallowDocWrittenScriptsUiDescription[];
 
-extern const char kDisallowUnsafeHttpDownloadsName[];
-extern const char kDisallowUnsafeHttpDownloadsNameDescription[];
-
 extern const char kEnableAccessibilityObjectModelName[];
 extern const char kEnableAccessibilityObjectModelDescription[];
 
