@@ -104,7 +104,8 @@ DesktopAutomationHandler = class extends BaseAutomationHandler {
    * @param {!ChromeVoxEvent} evt
    */
   onEventFromViews(evt) {
-    if (evt.target.root.role == RoleType.DESKTOP) {
+    if (evt.target.root.role == RoleType.DESKTOP ||
+        evt.target.root.role == RoleType.APPLICATION) {
       this.onEventDefault(evt);
     }
   }
