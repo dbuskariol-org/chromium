@@ -1244,24 +1244,12 @@ extern const char kWebUITabStripDemoOptionsName[];
 extern const char kWebUITabStripDemoOptionsDescription[];
 #endif  // BUILDFLAG(ENABLE_WEBUI_TAB_STRIP)
 
-extern const char kWebXrName[];
-extern const char kWebXrDescription[];
-
 extern const char kWebXrForceRuntimeName[];
 extern const char kWebXrForceRuntimeDescription[];
 
 extern const char kWebXrRuntimeChoiceNone[];
-extern const char kWebXrRuntimeChoiceOrientationSensors[];
-extern const char kWebXrRuntimeChoiceOculus[];
-extern const char kWebXrRuntimeChoiceOpenVR[];
 extern const char kWebXrRuntimeChoiceOpenXR[];
 extern const char kWebXrRuntimeChoiceWindowsMixedReality[];
-
-extern const char kWebXrArModuleName[];
-extern const char kWebXrArModuleDescription[];
-
-extern const char kWebXrHitTestName[];
-extern const char kWebXrHitTestDescription[];
 
 extern const char kWebXrIncubationsName[];
 extern const char kWebXrIncubationsDescription[];
@@ -2209,11 +2197,6 @@ extern const char kWebContentsOcclusionDescription[];
 extern const char kDcheckIsFatalName[];
 extern const char kDcheckIsFatalDescription[];
 #endif  // defined(DCHECK_IS_CONFIGURABLE)
-
-#if BUILDFLAG(ENABLE_VR) && !defined(OS_ANDROID)
-extern const char kXRSandboxName[];
-extern const char kXRSandboxDescription[];
-#endif  // ENABLE_VR && !defined(OS_ANDROID)
 
 #if BUILDFLAG(ENABLE_NACL)
 extern const char kNaclName[];

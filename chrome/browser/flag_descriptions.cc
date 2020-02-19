@@ -2162,11 +2162,6 @@ const char kWebUITabStripDemoOptionsDescription[] =
     "enabled.";
 #endif  // BUILDFLAG(ENABLE_WEBUI_TAB_STRIP)
 
-const char kWebXrName[] = "WebXR Device API";
-const char kWebXrDescription[] =
-    "Enables access to experimental APIs to interact with Virtual Reality (VR) "
-    "and Augmented Reality (AR) devices.";
-
 const char kWebXrForceRuntimeName[] = "Force WebXr Runtime";
 const char kWebXrForceRuntimeDescription[] =
     "Force the browser to use a particular runtime, even if it would not "
@@ -2174,20 +2169,8 @@ const char kWebXrForceRuntimeDescription[] =
     "attached hardware.";
 
 const char kWebXrRuntimeChoiceNone[] = "No Runtime";
-const char kWebXrRuntimeChoiceOrientationSensors[] = "Orientation sensors";
-const char kWebXrRuntimeChoiceOculus[] = "Oculus";
-const char kWebXrRuntimeChoiceOpenVR[] = "SteamVR (OpenVR)";
 const char kWebXrRuntimeChoiceOpenXR[] = "OpenXR";
 const char kWebXrRuntimeChoiceWindowsMixedReality[] = "Windows Mixed Reality";
-
-const char kWebXrArModuleName[] = "WebXR AR Module";
-const char kWebXrArModuleDescription[] =
-    "Enables access to Augmented Reality features defined in the WebXR AR "
-    "Module";
-
-const char kWebXrHitTestName[] = "WebXR Hit Test";
-const char kWebXrHitTestDescription[] =
-    "Enables access to raycasting against estimated XR scene geometry.";
 
 const char kWebXrIncubationsName[] = "WebXR Incubations";
 const char kWebXrIncubationsDescription[] =
@@ -3761,12 +3744,6 @@ const char kDcheckIsFatalDescription[] =
     "By default Chrome will evaluate in this build, but only log failures, "
     "rather than crashing. If enabled, DCHECKs will crash the calling process.";
 #endif  // defined(DCHECK_IS_CONFIGURABLE)
-
-#if BUILDFLAG(ENABLE_VR) && !defined(OS_ANDROID)
-const char kXRSandboxName[] = "XR device sandboxing";
-const char kXRSandboxDescription[] =
-    "If enabled, Chrome will host VR APIs in a restricted process on desktop.";
-#endif  // ENABLE_VR && !defined(OS_ANDROID)
 
 #if BUILDFLAG(ENABLE_NACL)
 const char kNaclName[] = "Native Client";

@@ -355,19 +355,6 @@ const FeatureEntry::Choice kWebXrForceRuntimeChoices[] = {
     {flag_descriptions::kWebXrRuntimeChoiceNone, switches::kWebXrForceRuntime,
      switches::kWebXrRuntimeNone},
 
-    {flag_descriptions::kWebXrRuntimeChoiceOrientationSensors,
-     switches::kWebXrForceRuntime, switches::kWebXrRuntimeOrientationSensors},
-
-#if BUILDFLAG(ENABLE_OCULUS_VR)
-    {flag_descriptions::kWebXrRuntimeChoiceOculus, switches::kWebXrForceRuntime,
-     switches::kWebXrRuntimeOculus},
-#endif  // ENABLE_OCULUS_VR
-
-#if BUILDFLAG(ENABLE_OPENVR)
-    {flag_descriptions::kWebXrRuntimeChoiceOpenVR, switches::kWebXrForceRuntime,
-     switches::kWebXrRuntimeOpenVr},
-#endif  // ENABLE_OPENVR
-
 #if BUILDFLAG(ENABLE_OPENXR)
     {flag_descriptions::kWebXrRuntimeChoiceOpenXR, switches::kWebXrForceRuntime,
      switches::kWebXrRuntimeOpenXr},
@@ -2369,26 +2356,12 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kMacV2GPUSandbox)},
 #endif  // OS_MACOSX
 #if BUILDFLAG(ENABLE_VR)
-    {"webxr", flag_descriptions::kWebXrName,
-     flag_descriptions::kWebXrDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kWebXr)},
-    {"webxr-ar-module", flag_descriptions::kWebXrArModuleName,
-     flag_descriptions::kWebXrArModuleDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kWebXrArModule)},
-    {"webxr-hit-test", flag_descriptions::kWebXrHitTestName,
-     flag_descriptions::kWebXrHitTestDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kWebXrHitTest)},
     {"webxr-incubations", flag_descriptions::kWebXrIncubationsName,
      flag_descriptions::kWebXrIncubationsDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kWebXrIncubations)},
     {"webxr-runtime", flag_descriptions::kWebXrForceRuntimeName,
      flag_descriptions::kWebXrForceRuntimeDescription, kOsDesktop,
      MULTI_VALUE_TYPE(kWebXrForceRuntimeChoices)},
-#if !defined(OS_ANDROID)
-    {"xr-sandbox", flag_descriptions::kXRSandboxName,
-     flag_descriptions::kXRSandboxDescription, kOsWin,
-     FEATURE_VALUE_TYPE(service_manager::features::kXRSandbox)},
-#endif  // !defined(OS_ANDROID)
 #endif  // ENABLE_VR
 #if defined(OS_CHROMEOS)
     {"disable-accelerated-mjpeg-decode",
