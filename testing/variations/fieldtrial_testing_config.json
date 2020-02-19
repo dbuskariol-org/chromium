@@ -2544,6 +2544,24 @@
             ]
         }
     ],
+    "GlobalMediaControlsPictureInPicture": [
+        {
+            "platforms": [
+                "linux",
+                "mac",
+                "windows",
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "GlobalMediaControlsPictureInPicture"
+                    ]
+                }
+            ]
+        }
+    ],
     "GoogleBrandedContextMenu": [
         {
             "platforms": [
