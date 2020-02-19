@@ -10784,6 +10784,7 @@ Called by update_net_error_codes.py.-->
   <int value="64" label="VR"/>
   <int value="65" label="AR"/>
   <int value="66" label="Native file system read guard"/>
+  <int value="67" label="Storage Access Grants"/>
 </enum>
 
 <enum name="ContentTypeParseableResult">
@@ -26621,7 +26622,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="67" label="PublicKeyCredentials"/>
   <int value="68" label="Clipboard"/>
   <int value="69" label="ClientHintUAMobile"/>
-  <int value="70" label="FontAccess"/>
+  <int value="70" label="StorageAccessAPI"/>
 </enum>
 
 <enum name="FeaturePolicyImageCompressionFormat">
@@ -51056,6 +51057,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="20" label="PERMISSION_CLIPBOARD_READ_WRITE"/>
   <int value="21" label="PERMISSION_VR"/>
   <int value="22" label="PERMISSION_AR"/>
+  <int value="23" label="PERMISSION_STORAGE_ACCESS"/>
 </enum>
 
 <enum name="PermissionStatus">
@@ -67827,6 +67829,7 @@ Full version information for the fingerprint enum values:
   <int value="30" label="WebXR"/>
   <int value="31" label="SharedWorker"/>
   <int value="32" label="WebLocks"/>
+  <int value="37" label="RequestedStorageAccessGrant"/>
 </enum>
 
 <enum name="WebShareMethod">
