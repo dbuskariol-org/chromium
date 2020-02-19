@@ -20,7 +20,6 @@ import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.favicon.LargeIconBridge;
-import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
 import org.chromium.chrome.browser.omnibox.suggestions.OmniboxSuggestion;
 import org.chromium.chrome.browser.omnibox.suggestions.OmniboxSuggestionUiType;
@@ -109,9 +108,6 @@ public class EditUrlSuggestionProcessor implements OnClickListener, SuggestionPr
     /** Whether this processor should ignore all subsequent suggestion. */
     private boolean mIgnoreSuggestions;
 
-    /** Whether suggestion site favicons are enabled. */
-    private boolean mEnableSuggestionFavicons;
-
     /** Edge size (in pixels) of the favicon. Used to request best matching favicon from cache. */
     private final int mDesiredFaviconWidthPx;
 
@@ -192,7 +188,7 @@ public class EditUrlSuggestionProcessor implements OnClickListener, SuggestionPr
     }
 
     private void fetchIcon(PropertyModel model, String url) {
-        if (!mEnableSuggestionFavicons || url == null) return;
+        if (url == null) return;
 
         final LargeIconBridge iconBridge = mIconBridgeSupplier.get();
         if (iconBridge == null) return;
@@ -203,10 +199,7 @@ public class EditUrlSuggestionProcessor implements OnClickListener, SuggestionPr
     }
 
     @Override
-    public void onNativeInitialized() {
-        mEnableSuggestionFavicons =
-                ChromeFeatureList.isEnabled(ChromeFeatureList.OMNIBOX_SHOW_SUGGESTION_FAVICONS);
-    }
+    public void onNativeInitialized() {}
 
     @Override
     public void recordSuggestionPresented(OmniboxSuggestion suggestion, PropertyModel model) {}

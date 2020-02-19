@@ -238,7 +238,6 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &omnibox::kOmniboxRichEntitySuggestions,
     &omnibox::kOmniboxSearchEngineLogo,
     &omnibox::kQueryInOmnibox,
-    &omnibox::kUIExperimentShowSuggestionFavicons,
     &password_manager::features::kGooglePasswordManager,
     &password_manager::features::kPasswordEditingAndroid,
     &password_manager::features::kPasswordManagerOnboardingAndroid,
@@ -251,9 +250,9 @@ const base::Feature* kFeaturesExposedToJava[] = {
 };
 
 const base::Feature* FindFeatureExposedToJava(const std::string& feature_name) {
-  for (size_t i = 0; i < base::size(kFeaturesExposedToJava); ++i) {
-    if (kFeaturesExposedToJava[i]->name == feature_name)
-      return kFeaturesExposedToJava[i];
+  for (const auto* feature : kFeaturesExposedToJava) {
+    if (feature->name == feature_name)
+      return feature;
   }
   NOTREACHED() << "Queried feature cannot be found in ChromeFeatureList: "
                << feature_name;
