@@ -1,9 +1,9 @@
-// Copyright 2014 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_POLICY_CORE_BROWSER_BROWSER_POLICY_CONNECTOR_IOS_H_
-#define COMPONENTS_POLICY_CORE_BROWSER_BROWSER_POLICY_CONNECTOR_IOS_H_
+#ifndef IOS_CHROME_BROWSER_POLICY_BROWSER_POLICY_CONNECTOR_IOS_H_
+#define IOS_CHROME_BROWSER_POLICY_BROWSER_POLICY_CONNECTOR_IOS_H_
 
 #include <memory>
 #include <string>
@@ -11,21 +11,20 @@
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
 #include "components/policy/core/browser/browser_policy_connector.h"
-#include "components/policy/policy_export.h"
 
 namespace network {
 class SharedURLLoaderFactory;
 }
 
 namespace policy {
-
 class ConfigurationPolicyProvider;
+}  // namespace policy
 
 // Extends BrowserPolicyConnector with the setup for iOS builds.
-class POLICY_EXPORT BrowserPolicyConnectorIOS : public BrowserPolicyConnector {
+class BrowserPolicyConnectorIOS : public policy::BrowserPolicyConnector {
  public:
-  BrowserPolicyConnectorIOS(const HandlerListFactory& handler_list_factory,
-                            const std::string& user_agent);
+  BrowserPolicyConnectorIOS(
+      const policy::HandlerListFactory& handler_list_factory);
 
   ~BrowserPolicyConnectorIOS() override;
 
@@ -42,17 +41,13 @@ class POLICY_EXPORT BrowserPolicyConnectorIOS : public BrowserPolicyConnector {
   CreatePolicyProviders() override;
 
  private:
-  std::unique_ptr<ConfigurationPolicyProvider> CreatePlatformProvider();
-  ConfigurationPolicyProvider* GetPlatformProvider();
-
-  std::string user_agent_;
+  std::unique_ptr<policy::ConfigurationPolicyProvider> CreatePlatformProvider();
+  policy::ConfigurationPolicyProvider* GetPlatformProvider();
 
   // Owned by base class.
-  ConfigurationPolicyProvider* platform_provider_ = nullptr;
+  policy::ConfigurationPolicyProvider* platform_provider_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(BrowserPolicyConnectorIOS);
 };
 
-}  // namespace policy
-
-#endif  // COMPONENTS_POLICY_CORE_BROWSER_BROWSER_POLICY_CONNECTOR_IOS_H_
+#endif  // IOS_CHROME_BROWSER_POLICY_BROWSER_POLICY_CONNECTOR_IOS_H_
