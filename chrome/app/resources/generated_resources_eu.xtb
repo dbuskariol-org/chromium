@@ -220,7 +220,7 @@
 <translation id="1301135395320604080"><ph name="ORIGIN" /> webguneak fitxategi hauek edita ditzake:</translation>
 <translation id="1302227299132585524">Baimendu JavaScript Apple gertaeretan</translation>
 <translation id="1303101771013849280">HTML fitxategiaren laster-marka egiten du</translation>
-<translation id="1303671224831497365">Ez da aurkitu Bluetooth gailurik</translation>
+<translation id="1303671224831497365">Ez da aurkitu Bluetooth bidezko gailurik</translation>
 <translation id="130491383855577612">Ordeztu dira Linux aplikazioak eta fitxategiak</translation>
 <translation id="1306606229401759371">Aldatu ezarpenak</translation>
 <translation id="1307165550267142340">Sortu da PIN kodea</translation>
@@ -946,7 +946,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="2282155092769082568">Konfigurazio automatikoaren URLa:</translation>
 <translation id="2288181517385084064">Aldatu bideo-grabagailura</translation>
 <translation id="2288735659267887385">Erabilerraztasun-ezarpenak</translation>
-<translation id="2289270750774289114">Eskatu nire baimena webgune batek inguruko Bluetooth gailuak bilatu nahi dituenean (gomendatua)</translation>
+<translation id="2289270750774289114">Eskatu nire baimena webgune batek inguruko Bluetooth bidezko gailuak bilatu nahi dituenean (gomendatua)</translation>
 <translation id="2292848386125228270">Abiarazi <ph name="PRODUCT_NAME" /> erabiltzaile arrunt bat bazina bezala. Erro gisa exekutatu behar baduzu garapen-lanetarako, berrabiaraz ezazu proben eremuaren adierazlerik gabe.</translation>
 <translation id="2294358108254308676"><ph name="PRODUCT_NAME" /> instalatu nahi duzu?</translation>
 <translation id="2295864384543949385"><ph name="NUM_RESULTS" /> emaitza</translation>
@@ -1438,7 +1438,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="2936851848721175671">Babeskopiak eta leheneratzea</translation>
 <translation id="2938225289965773019">Ireki <ph name="PROTOCOL" /> estekak</translation>
 <translation id="2938845886082362843">Ikusi eta ezabatu segurtasun-giltzan gordeta dauden saioa hasteko datu guztiak</translation>
-<translation id="2939938020978911855">Erakutsi erabilgarri dauden Bluetooth gailuak</translation>
+<translation id="2939938020978911855">Erakutsi erabilgarri dauden Bluetooth bidezko gailuak</translation>
 <translation id="2941112035454246133">Txikia</translation>
 <translation id="2942560570858569904">Zain…</translation>
 <translation id="2942581856830209953">Pertsonalizatu orri hau</translation>
@@ -1814,7 +1814,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3498215018399854026">Ezin izan gara jarri harremanetan zure arduradunarekin. Saiatu berriro.</translation>
 <translation id="3505030558724226696">Baliogabetu gailurako sarbidea</translation>
 <translation id="3507421388498836150">"<ph name="EXTENSION_NAME" />" luzapenak dituen baimenak</translation>
-<translation id="3507888235492474624">Bilatu berriro Bluetooth gailuak</translation>
+<translation id="3507888235492474624">Bilatu berriro Bluetooth bidezko gailuak</translation>
 <translation id="3508492320654304609">Ezin izan dira ezabatu saioa hasteko datuak</translation>
 <translation id="3508920295779105875">Aukeratu beste karpeta bat…</translation>
 <translation id="3509680540198371098"><ph name="NETWORK_INDEX" />/<ph name="NETWORK_COUNT" /> sarea. <ph name="NETWORK_NAME" /> (<ph name="SECURITY_STATUS" />; <ph name="CONNECTION_STATUS" />). Seinalearen indarra: % <ph name="SIGNAL_STRENGTH" />. Xehetasunak.</translation>
@@ -3747,7 +3747,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="6238767809035845642">Beste gailu batetik partekatutako testua</translation>
 <translation id="6238923052227198598">Eduki azken oharra pantaila blokeatuan</translation>
 <translation id="6239558157302047471">&amp;Kargatu markoa berriro</translation>
-<translation id="6241530762627360640">Atzitu zure sistemarekin parekatutako Bluetooth gailuei buruzko informazioa eta aurkitu inguruko Bluetooth gailuak.</translation>
+<translation id="6241530762627360640">Atzitu zure sistemarekin parekatutako Bluetooth bidezko gailuei buruzko informazioa eta aurkitu inguruko Bluetooth bidezko gailuak.</translation>
 <translation id="6241844896329831164">Sarbidea behar ez dutenak</translation>
 <translation id="6242589501614145408">Berrezarri segurtasun-giltza</translation>
 <translation id="6242852299490624841">Fokuratu fitxa</translation>
@@ -5830,7 +5830,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="9128317794749765148">Ezin izan da osatu konfigurazioa</translation>
 <translation id="9128870381267983090">Konektatu sarera</translation>
 <translation id="9130015405878219958">Sartutako moduak ez du balio.</translation>
-<translation id="9131487537093447019">Bidali mezuak Bluetooth gailuetara eta jaso haien mezuak.</translation>
+<translation id="9131487537093447019">Bidali mezuak Bluetooth bidezko gailuetara eta jaso haien mezuak.</translation>
 <translation id="9137013805542155359">Ikusi jatorrizkoa</translation>
 <translation id="9137157311132182254">Bilatzaile hobetsia</translation>
 <translation id="9137248913990643158">Aplikazio hau erabili aurretik, ireki Chrome eta hasi saioa.</translation>
@@ -5857,7 +5857,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="9169931577761441333">Gehitu <ph name="APP_NAME" /> hasierako pantailan</translation>
 <translation id="9170848237812810038">&amp;Desegin</translation>
 <translation id="9170884462774788842">Ordenagailuko beste programa batek Chrome-ren funtzionamenduari eragin diezaiokeen gai bat gehitu du.</translation>
-<translation id="9173995187295789444">Bluetooth gailuak bilatzen…</translation>
+<translation id="9173995187295789444">Bluetooth bidezko gailuak bilatzen…</translation>
 <translation id="9176476835295860688">Bidali erabilera- eta diagnostiko-datuak. Gailu honek automatikoki bidaltzen dizkio Google-ri diagnostikoak eta gailu zein aplikazioen erabilerari buruzko datuak. Horri esker, sistemaren eta aplikazioen egonkortasuna hobetuko da, besteak beste. Gainera, multzokatutako datu batzuk oso baliagarriak izango dira Google-ren aplikazioak hobetzeko eta bazkideei laguntzeko (adibidez, Android-en garatzaileei). Jabeak konfiguratu du <ph name="BEGIN_LINK1" />ezarpen<ph name="END_LINK1" /> hori. Sareko eta aplikazioetako jarduera gehigarriak ezarpena aktibatuta badago, baliteke datu horiek Google-ko kontuan gordetzea. <ph name="BEGIN_LINK2" />Lortu informazio gehiago<ph name="END_LINK2" /></translation>
 <translation id="9176611096776448349"><ph name="WINDOW_TITLE" /> - Bluetooth bidezko gailu bat konektatu da</translation>
 <translation id="9179734824669616955">Konfiguratu Linux (Beta) <ph name="DEVICE_TYPE" /> gailuan</translation>
