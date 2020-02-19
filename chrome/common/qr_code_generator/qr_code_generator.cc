@@ -1,24 +1,24 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/webauthn/authenticator_qr_code.h"
+#include "chrome/common/qr_code_generator/qr_code_generator.h"
 
 #include <string.h>
 
 #include "base/logging.h"
 
-static_assert(AuthenticatorQRCode::kNumSegments != 0 &&
-                  AuthenticatorQRCode::kTotalBytes %
-                          AuthenticatorQRCode::kNumSegments ==
+static_assert(QRCodeGenerator::kNumSegments != 0 &&
+                  QRCodeGenerator::kTotalBytes %
+                          QRCodeGenerator::kNumSegments ==
                       0,
               "invalid configuration");
 
 // Generate generates a QR code containing the given data and returns a
 // pointer to an array of kSize×kSize bytes where the least-significant bit of
 // each byte is set if that tile should be "black".
-base::span<const uint8_t, AuthenticatorQRCode::kTotalSize>
-AuthenticatorQRCode::Generate(const uint8_t in[kInputBytes]) {
+base::span<const uint8_t, QRCodeGenerator::kTotalSize>
+QRCodeGenerator::Generate(const uint8_t in[kInputBytes]) {
   memset(d_, 0, sizeof(d_));
   PutVerticalTiming(6);
   PutHorizontalTiming(6);
@@ -79,12 +79,12 @@ AuthenticatorQRCode::Generate(const uint8_t in[kInputBytes]) {
 
 // MaskFunction3 implements one of the data-masking functions. See figure 21.
 // static
-uint8_t AuthenticatorQRCode::MaskFunction3(int x, int y) {
+uint8_t QRCodeGenerator::MaskFunction3(int x, int y) {
   return (x + y) % 3 == 0;
 }
 
 // PutFinder paints a finder symbol at the given coordinates.
-void AuthenticatorQRCode::PutFinder(int x, int y) {
+void QRCodeGenerator::PutFinder(int x, int y) {
   DCHECK_GE(x, 3);
   DCHECK_GE(y, 3);
   fillAt(x - 3, y - 3, 7, 0b11);
@@ -114,7 +114,7 @@ void AuthenticatorQRCode::PutFinder(int x, int y) {
 }
 
 // PutAlignment paints an alignment symbol centered at the given coordinates.
-void AuthenticatorQRCode::PutAlignment(int x, int y) {
+void QRCodeGenerator::PutAlignment(int x, int y) {
   fillAt(x - 2, y - 2, 5, 0b11);
   fillAt(x - 2, y + 2, 5, 0b11);
   static constexpr uint8_t kLine[5] = {0b11, 0b10, 0b10, 0b10, 0b11};
@@ -125,14 +125,14 @@ void AuthenticatorQRCode::PutAlignment(int x, int y) {
 }
 
 // PutVerticalTiming paints the vertical timing signal.
-void AuthenticatorQRCode::PutVerticalTiming(int x) {
+void QRCodeGenerator::PutVerticalTiming(int x) {
   for (int y = 0; y < kSize; y++) {
     at(x, y) = 0b10 | (1 ^ (y & 1));
   }
 }
 
 // PutVerticalTiming paints the horizontal timing signal.
-void AuthenticatorQRCode::PutHorizontalTiming(int y) {
+void QRCodeGenerator::PutHorizontalTiming(int y) {
   for (int x = 0; x < kSize; x++) {
     at(x, y) = 0b10 | (1 ^ (x & 1));
   }
@@ -140,7 +140,7 @@ void AuthenticatorQRCode::PutHorizontalTiming(int y) {
 
 // PutFormatBits paints the 15-bit, pre-encoded format metadata. See page 56
 // for the location of the format bits.
-void AuthenticatorQRCode::PutFormatBits(const uint16_t format) {
+void QRCodeGenerator::PutFormatBits(const uint16_t format) {
   // kRun1 is the location of the initial format bits, where the upper nibble
   // is the x coordinate and the lower the y.
   static constexpr uint8_t kRun1[15] = {
@@ -171,9 +171,9 @@ void AuthenticatorQRCode::PutFormatBits(const uint16_t format) {
 // PutBits writes the given data into the QR code in correct order, avoiding
 // structural elements that must have already been painted. See section 7.7.3
 // about the placement algorithm.
-void AuthenticatorQRCode::PutBits(const uint8_t* data,
-                                  size_t data_len,
-                                  uint8_t (*mask_func)(int, int)) {
+void QRCodeGenerator::PutBits(const uint8_t* data,
+                              size_t data_len,
+                              uint8_t (*mask_func)(int, int)) {
   // BitStream vends bits from |data| on demand, in the order that QR codes
   // expect them.
   class BitStream {
@@ -245,7 +245,7 @@ void AuthenticatorQRCode::PutBits(const uint8_t* data,
 }
 
 // at returns a reference to the given element of |d_|.
-uint8_t& AuthenticatorQRCode::at(int x, int y) {
+uint8_t& QRCodeGenerator::at(int x, int y) {
   DCHECK_LE(0, x);
   DCHECK_LT(x, kSize);
   DCHECK_LE(0, y);
@@ -254,7 +254,7 @@ uint8_t& AuthenticatorQRCode::at(int x, int y) {
 }
 
 // fillAt sets the |len| elements at (x, y) to |value|.
-void AuthenticatorQRCode::fillAt(int x, int y, size_t len, uint8_t value) {
+void QRCodeGenerator::fillAt(int x, int y, size_t len, uint8_t value) {
   DCHECK_LE(0, x);
   DCHECK_LE(static_cast<int>(x + len), kSize);
   DCHECK_LE(0, y);
@@ -263,10 +263,7 @@ void AuthenticatorQRCode::fillAt(int x, int y, size_t len, uint8_t value) {
 }
 
 // copyTo copies |len| elements from |data| to the elements at (x, y).
-void AuthenticatorQRCode::copyTo(int x,
-                                 int y,
-                                 const uint8_t* data,
-                                 size_t len) {
+void QRCodeGenerator::copyTo(int x, int y, const uint8_t* data, size_t len) {
   DCHECK_LE(0, x);
   DCHECK_LE(static_cast<int>(x + len), kSize);
   DCHECK_LE(0, y);
@@ -276,7 +273,7 @@ void AuthenticatorQRCode::copyTo(int x,
 
 // clipped returns a reference to the given element of |d_|, or to
 // |clip_dump_| if the coordinates are out of bounds.
-uint8_t& AuthenticatorQRCode::clipped(int x, int y) {
+uint8_t& QRCodeGenerator::clipped(int x, int y) {
   if (0 <= x && x < kSize && 0 <= y && y < kSize) {
     return d_[kSize * y + x];
   }
@@ -286,7 +283,7 @@ uint8_t& AuthenticatorQRCode::clipped(int x, int y) {
 // GF28Mul returns the product of |a| and |b| (which must be field elements,
 // i.e. < 256) in the field GF(2^8) mod x^8 + x^4 + x^3 + x^2 + 1.
 // static
-uint8_t AuthenticatorQRCode::GF28Mul(uint16_t a, uint16_t b) {
+uint8_t QRCodeGenerator::GF28Mul(uint16_t a, uint16_t b) {
   uint16_t acc = 0;
 
   // Perform 8-bit, carry-less multiplication of |a| and |b|.
@@ -313,9 +310,8 @@ uint8_t AuthenticatorQRCode::GF28Mul(uint16_t a, uint16_t b) {
 // AddErrorCorrection writes the Reed-Solomon expanded version of |in| to
 // |out|.
 // static
-void AuthenticatorQRCode::AddErrorCorrection(
-    uint8_t out[kSegmentBytes],
-    const uint8_t in[kSegmentDataBytes]) {
+void QRCodeGenerator::AddErrorCorrection(uint8_t out[kSegmentBytes],
+                                         const uint8_t in[kSegmentDataBytes]) {
   // kGenerator is the product of (z - x^i) for 0 <= i < |kSegmentECBytes|,
   // where x is the term of GF(2^8) and z is the term of a polynomial ring
   // over GF(2^8). It's generated with the following Sage script:

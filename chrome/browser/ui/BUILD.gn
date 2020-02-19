@@ -3379,8 +3379,6 @@ jumbo_static_library("ui") {
       "views/webauthn/authenticator_client_pin_entry_sheet_view.h",
       "views/webauthn/authenticator_client_pin_entry_view.cc",
       "views/webauthn/authenticator_client_pin_entry_view.h",
-      "views/webauthn/authenticator_qr_code.cc",
-      "views/webauthn/authenticator_qr_code.h",
       "views/webauthn/authenticator_qr_sheet_view.cc",
       "views/webauthn/authenticator_qr_sheet_view.h",
       "views/webauthn/authenticator_request_dialog_view.cc",
@@ -3418,6 +3416,7 @@ jumbo_static_library("ui") {
 
     deps += [
       "//chrome/browser/ui/views",
+      "//chrome/common/qr_code_generator",
       "//components/constrained_window",
       "//components/media_message_center",
       "//components/payments/content",

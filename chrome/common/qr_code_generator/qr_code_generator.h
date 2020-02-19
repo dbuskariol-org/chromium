@@ -1,19 +1,19 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_WEBAUTHN_AUTHENTICATOR_QR_CODE_H_
-#define CHROME_BROWSER_UI_VIEWS_WEBAUTHN_AUTHENTICATOR_QR_CODE_H_
+#ifndef CHROME_COMMON_QR_CODE_GENERATOR_QR_CODE_GENERATOR_H_
+#define CHROME_COMMON_QR_CODE_GENERATOR_QR_CODE_GENERATOR_H_
 
 #include <stddef.h>
 #include <stdint.h>
 
 #include "base/containers/span.h"
 
-// AuthenticatorQRCode generates version three, class Q QR codes that carry 32
+// QRCodeGenerator generates version three, class Q QR codes that carry 32
 // bytes of raw data. References in the following comments refer to ISO 18004
 // (3rd edition).
-class AuthenticatorQRCode {
+class QRCodeGenerator {
  public:
   // kSize is the number of "tiles" in each dimension for a v3 QR code. See
   // table 1. (The colored squares in in QR codes are called tiles in the
@@ -98,4 +98,4 @@ class AuthenticatorQRCode {
   uint8_t clip_dump_;
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_WEBAUTHN_AUTHENTICATOR_QR_CODE_H_
+#endif  // CHROME_COMMON_QR_CODE_GENERATOR_QR_CODE_GENERATOR_H_
