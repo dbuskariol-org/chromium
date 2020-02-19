@@ -2376,6 +2376,11 @@ void RenderProcessHostImpl::RegisterMojoInterfaces() {
       base::BindRepeating(&RenderProcessHostImpl::BindP2PSocketManager,
                           weak_factory_.GetWeakPtr()));
 
+  AddUIThreadInterface(
+      registry.get(),
+      base::BindRepeating(&RenderProcessHostImpl::CreateMediaLogRecordHost,
+                          weak_factory_.GetWeakPtr()));
+
 #if BUILDFLAG(ENABLE_MDNS)
   AddUIThreadInterface(
       registry.get(),
@@ -2588,6 +2593,11 @@ void RenderProcessHostImpl::BindPushMessagingManager(
 void RenderProcessHostImpl::BindP2PSocketManager(
     mojo::PendingReceiver<network::mojom::P2PSocketManager> receiver) {
   p2p_socket_dispatcher_host_->BindReceiver(std::move(receiver));
+}
+
+void RenderProcessHostImpl::CreateMediaLogRecordHost(
+    mojo::PendingReceiver<content::mojom::MediaInternalLogRecords> receiver) {
+  content::MediaInternals::CreateMediaLogRecords(GetID(), std::move(receiver));
 }
 
 #if BUILDFLAG(ENABLE_PLUGINS)
