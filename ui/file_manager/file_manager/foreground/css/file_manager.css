@@ -422,8 +422,8 @@ body.files-ng div.splitter {
   display: flex;
   flex: none;
   justify-content: center;
-  margin-inline-end: calc(16px - 6px);
   margin: 0;
+  margin-inline-end: calc(16px - 6px);
   position: relative;
   width: 32px;
   z-index: 500;  /* Must be below the contextmenu (600). */
@@ -436,8 +436,8 @@ body:not(.files-ng) div.splitter .splitter-button {
 body.files-ng div.splitter .splitter-button {
   --hover-bg-color: rgba(0, 0, 0, 4%);
   --ink-color: rgba(0, 0, 0, 88%);
-  border-radius: 50%;
   border: none;
+  border-radius: 50%;
   cursor: col-resize;
   height: 32px;
   min-width: 32px;
@@ -459,8 +459,8 @@ body.files-ng div.splitter.splitter-active .splitter-button:not(:active) {
 
 body.files-ng div.splitter .splitter-button .icon {
   -webkit-mask-image: url(../images/common/dragger.svg);
-  -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
   height: 20px;
   padding: 6px;
   width: 20px;
@@ -1105,9 +1105,14 @@ html[dir='rtl'] #search-box .clear {
   right: auto;
 }
 
-#search-box.has-cursor .clear,
-#search-box.has-text .clear {
+.dialog-header:not(.files-ng) #search-box.has-cursor .clear,
+.dialog-header:not(.files-ng) #search-box.has-text .clear {
   display: block;
+}
+
+.dialog-header.files-ng #search-box.has-cursor .clear,
+.dialog-header.files-ng #search-box.has-text .clear {
+  display: flex;
 }
 
 #search-box.has-text .clear {
