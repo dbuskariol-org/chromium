@@ -3708,7 +3708,7 @@
   {
     "name": "use-preferred-interval-for-video",
     "owners": [ "jiahe.zhang@intel.com", "khushalsagar" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 85
   },
   {
     "name": "use-search-click-for-right-click",
