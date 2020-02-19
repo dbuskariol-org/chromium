@@ -18,10 +18,6 @@ namespace base {
 class SequencedTaskRunner;
 }
 
-namespace url {
-class Origin;
-}
-
 namespace content {
 
 // Represents the per-BrowserContext IndexedDB data.
@@ -35,11 +31,6 @@ class IndexedDBContext
  public:
   // Only call the below methods by posting to this IDBTaskRunner.
   virtual base::SequencedTaskRunner* IDBTaskRunner() = 0;
-
-  // Copies the indexed db files from this context to another. The
-  // indexed db directory in the destination context needs to be empty.
-  virtual void CopyOriginData(const url::Origin& origin,
-                              IndexedDBContext* dest_context) = 0;
 
  protected:
   friend class base::RefCountedDeleteOnSequence<IndexedDBContext>;

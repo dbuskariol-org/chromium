@@ -112,8 +112,6 @@ class CONTENT_EXPORT IndexedDBContextImpl
 
   // IndexedDBContext implementation:
   base::SequencedTaskRunner* IDBTaskRunner() override;
-  void CopyOriginData(const url::Origin& origin,
-                      IndexedDBContext* dest_context) override;
 
   // Methods called by IndexedDBFactoryImpl or IndexedDBDispatcherHost for
   // quota support.
