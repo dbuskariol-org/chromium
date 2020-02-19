@@ -1304,44 +1304,21 @@ void ChromeLauncherController::AttachProfile(Profile* profile_to_attach) {
     launcher_controller_helper_->set_profile(profile_);
   }
 
-  bool app_service_enabled =
-      base::FeatureList::IsEnabled(features::kAppServiceShelf);
+  std::unique_ptr<AppIconLoader> app_service_app_icon_loader =
+      std::make_unique<AppServiceAppIconLoader>(
+          profile_, extension_misc::EXTENSION_ICON_MEDIUM, this);
+  app_icon_loaders_.push_back(std::move(app_service_app_icon_loader));
 
-  if (app_service_enabled) {
-    std::unique_ptr<AppIconLoader> app_service_app_icon_loader =
-        std::make_unique<AppServiceAppIconLoader>(
-            profile_, extension_misc::EXTENSION_ICON_MEDIUM, this);
-    app_icon_loaders_.push_back(std::move(app_service_app_icon_loader));
-
-    // Some special extensions open new windows, and on Chrome OS, those windows
-    // should show the extension icon in the shelf. Extensions are not present
-    // in the App Service, so try loading extensions icon using
-    // ChromeAppIconLoader.
-    std::unique_ptr<extensions::ChromeAppIconLoader> chrome_app_icon_loader =
-        std::make_unique<extensions::ChromeAppIconLoader>(
-            profile_, extension_misc::EXTENSION_ICON_MEDIUM,
-            base::BindRepeating(&app_list::MaybeResizeAndPadIconForMd), this);
-    chrome_app_icon_loader->SetExtensionsOnly();
-    app_icon_loaders_.push_back(std::move(chrome_app_icon_loader));
-  } else {
-    // TODO(skuhne): The AppIconLoaderImpl has the same problem. Each loaded
-    // image is associated with a profile (its loader requires the profile).
-    // Since icon size changes are possible, the icon could be requested to be
-    // reloaded. However - having it not multi profile aware would cause
-    // problems if the icon cache gets deleted upon user switch.
-    std::unique_ptr<AppIconLoader> chrome_app_icon_loader =
-        std::make_unique<extensions::ChromeAppIconLoader>(
-            profile_, extension_misc::EXTENSION_ICON_MEDIUM,
-            base::BindRepeating(&app_list::MaybeResizeAndPadIconForMd), this);
-    app_icon_loaders_.push_back(std::move(chrome_app_icon_loader));
-
-    if (arc::IsArcAllowedForProfile(profile_)) {
-      std::unique_ptr<AppIconLoader> arc_app_icon_loader =
-          std::make_unique<ArcAppIconLoader>(
-              profile_, extension_misc::EXTENSION_ICON_MEDIUM, this);
-      app_icon_loaders_.push_back(std::move(arc_app_icon_loader));
-    }
-  }
+  // Some special extensions open new windows, and on Chrome OS, those windows
+  // should show the extension icon in the shelf. Extensions are not present
+  // in the App Service, so try loading extensions icon using
+  // ChromeAppIconLoader.
+  std::unique_ptr<extensions::ChromeAppIconLoader> chrome_app_icon_loader =
+      std::make_unique<extensions::ChromeAppIconLoader>(
+          profile_, extension_misc::EXTENSION_ICON_MEDIUM,
+          base::BindRepeating(&app_list::MaybeResizeAndPadIconForMd), this);
+  chrome_app_icon_loader->SetExtensionsOnly();
+  app_icon_loaders_.push_back(std::move(chrome_app_icon_loader));
 
   pref_change_registrar_.Init(profile()->GetPrefs());
   pref_change_registrar_.Add(
