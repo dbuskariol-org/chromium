@@ -42,7 +42,6 @@ import org.chromium.chrome.browser.explore_sites.ExploreSitesBridge;
 import org.chromium.chrome.browser.externalauth.ExternalAuthUtils;
 import org.chromium.chrome.browser.gsa.GSAState;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
-import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher.ActivityState;
 import org.chromium.chrome.browser.lifecycle.Destroyable;
 import org.chromium.chrome.browser.lifecycle.NativeInitObserver;
 import org.chromium.chrome.browser.native_page.ContextMenuManager;
@@ -934,11 +933,7 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
         public void initialize(ActivityLifecycleDispatcher activityLifecycleDispatcher) {
             mActivityLifecycleDispatcher = activityLifecycleDispatcher;
             mActivityLifecycleDispatcher.register(this);
-
-            @ActivityState
-            int activityState = mActivityLifecycleDispatcher.getCurrentActivityState();
-            if (activityState == ActivityState.STARTED_WITH_NATIVE
-                    || activityState == ActivityState.RESUMED_WITH_NATIVE) {
+            if (mActivityLifecycleDispatcher.isNativeInitializationFinished()) {
                 onFinishNativeInitialization();
             }
         }
