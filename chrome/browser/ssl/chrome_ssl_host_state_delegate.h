@@ -13,12 +13,17 @@
 #include "base/time/time.h"
 #include "content/public/browser/ssl_host_state_delegate.h"
 
-class Profile;
+class HostContentSettingsMap;
+class PrefService;
 
 namespace base {
 class Clock;
 class DictionaryValue;
 }  //  namespace base
+
+namespace content {
+class BrowserContext;
+}
 
 namespace user_prefs {
 class PrefRegistrySyncable;
@@ -34,7 +39,9 @@ class ChromeSSLHostStateDelegate : public content::SSLHostStateDelegate {
  public:
   enum RecurrentInterstitialMode { PREF, IN_MEMORY, NOT_SET };
 
-  explicit ChromeSSLHostStateDelegate(Profile* profile);
+  ChromeSSLHostStateDelegate(content::BrowserContext* browser_context,
+                             PrefService* pref_service,
+                             HostContentSettingsMap* host_content_settings_map);
   ~ChromeSSLHostStateDelegate() override;
 
   static void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry);
@@ -105,7 +112,7 @@ class ChromeSSLHostStateDelegate : public content::SSLHostStateDelegate {
   //
   // |dict| specifies the user's full exceptions dictionary for a specific site
   // in their content settings. Must be retrieved directly from a website
-  // setting in the the profile's HostContentSettingsMap.
+  // setting in |host_content_settings_map_|.
   //
   // If |create_entries| specifies CreateDictionaryEntries, then
   // GetValidCertDecisionsDict will create a new set of entries within the
@@ -116,7 +123,9 @@ class ChromeSSLHostStateDelegate : public content::SSLHostStateDelegate {
       CreateDictionaryEntriesDisposition create_entries);
 
   std::unique_ptr<base::Clock> clock_;
-  Profile* profile_;
+  content::BrowserContext* browser_context_;
+  PrefService* pref_service_;
+  HostContentSettingsMap* host_content_settings_map_;
 
   using AllowedCert = std::pair<std::string /* certificate fingerprint */,
                                 base::FilePath /* StoragePartition path */>;
