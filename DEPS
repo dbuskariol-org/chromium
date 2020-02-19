@@ -2953,7 +2953,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_google_dagger_dagger',
-              'version': 'version:2.17-cr0',
+              'version': 'version:2.26-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2964,7 +2964,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_google_dagger_dagger_compiler',
-              'version': 'version:2.17-cr0',
+              'version': 'version:2.26-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2975,7 +2975,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_google_dagger_dagger_producers',
-              'version': 'version:2.17-cr0',
+              'version': 'version:2.26-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2986,7 +2986,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_google_dagger_dagger_spi',
-              'version': 'version:2.17-cr0',
+              'version': 'version:2.26-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3096,7 +3096,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_google_guava_guava',
-              'version': 'version:27.0.1-jre-cr0',
+              'version': 'version:27.1-jre-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3162,7 +3162,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_squareup_javapoet',
-              'version': 'version:1.11.0-cr0',
+              'version': 'version:1.11.1-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3213,6 +3213,17 @@ deps = {
       'dep_type': 'cipd',
   },
 
+  'src/third_party/android_deps/libs/net_ltgt_gradle_incap_incap': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/net_ltgt_gradle_incap_incap',
+              'version': 'version:0.2-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
   'src/third_party/android_deps/libs/net_sf_kxml_kxml2': {
       'packages': [
           {
@@ -3228,7 +3239,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/org_checkerframework_checker_compat_qual',
-              'version': 'version:2.3.0-cr0',
+              'version': 'version:2.5.3-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3305,7 +3316,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/org_jetbrains_kotlin_kotlin_stdlib',
-              'version': 'version:1.3.41-cr0',
+              'version': 'version:1.3.50-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3316,7 +3327,18 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/org_jetbrains_kotlin_kotlin_stdlib_common',
-              'version': 'version:1.3.41-cr0',
+              'version': 'version:1.3.50-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
+  'src/third_party/android_deps/libs/org_jetbrains_kotlinx_kotlinx_metadata_jvm': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/org_jetbrains_kotlinx_kotlinx_metadata_jvm',
+              'version': 'version:0.1.0-cr0',
           },
       ],
       'condition': 'checkout_android',

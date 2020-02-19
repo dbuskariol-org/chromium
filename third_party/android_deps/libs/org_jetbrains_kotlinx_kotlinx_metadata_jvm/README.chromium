@@ -1,13 +1,13 @@
-Name: org.jetbrains.kotlin:kotlin-stdlib
-Short Name: kotlin-stdlib
+Name: org.jetbrains.kotlinx:kotlinx-metadata-jvm
+Short Name: kotlinx-metadata-jvm
 URL: https://kotlinlang.org/
-Version: 1.3.50
+Version: 0.1.0
 License: The Apache License, Version 2.0
 License File: NOT_SHIPPED
 Security Critical: no
 
 Description:
-Kotlin Standard Library for JVM
+Kotlin JVM metadata manipulation library
 
 Local Modifications:
 No modifications.
