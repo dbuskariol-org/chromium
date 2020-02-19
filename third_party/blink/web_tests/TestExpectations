@@ -6582,10 +6582,6 @@ crbug.com/1050559 [ Linux ] external/wpt/shape-detection/idlharness.https.any.ht
 crbug.com/1050559 [ Linux ] external/wpt/video-raf/idlharness.window.html [ Pass Failure ]
 crbug.com/1050559 [ Linux ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.worker.html?1-1000 [ Pass Failure ]
 
-# Temporarily disable to unblock WebRTC CL roll making it PASS a test.
-crbug.com/webrtc/7061 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
-crbug.com/webrtc/7061 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
-
 # DevTools roll
 crbug.com/1006759 http/tests/devtools/elements/styles-1/edit-value-url-with-color.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/sources/css-outline-dialog.js [ Skip ]
