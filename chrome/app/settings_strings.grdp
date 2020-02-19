@@ -3823,59 +3823,11 @@
     <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_NEW_FINGERPRINT_DEFAULT_NAME" desc="The default name (plus a number for a newly added fingerprint).">
       Finger <ph name="NEW_FINGER_NUMBER">$1<ex>1</ex></ph>
     </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_ADD_ACCOUNT_LABEL" desc="Label of the Add account button in Account Manager.">
-      Add account
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_DESCRIPTION" desc="Description of the Account Manager Settings page. Shown just below the title of the page.">
-      Manage your signed-in accounts. Websites, apps, and extensions in Chrome and Google Play may use these accounts to customize your experience, depending on permissions. &lt;a&gt;Learn more&lt;/a&gt;
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_LIST_HEADER" desc="List header for Account List in Account Manager Settings page.">
-      Accounts
-    </message>
     <message name="IDS_SETTINGS_ACCOUNT_MANAGER_PAGE_TITLE" desc="Title of Account Manager Settings page.">
       My accounts
     </message>
     <message name="IDS_SETTINGS_ACCOUNT_MANAGER_SUBMENU_LABEL" desc="Label of Account Manager submenu in Settings page.">
       Google Accounts
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_PRIMARY_ACCOUNT_TOOLTIP" desc="Tooltip for the primary account in accounts list in Settings describing how to sign out.">
-      To sign out of the primary account on this device, click the time on your screen. In the menu that appears, click "Sign out".
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_SECONDARY_ACCOUNTS_DISABLED_TEXT" desc="Text for 'secondary accounts disabled' message in Settings page.">
-      Your administrator has disabled the addition of more Google Accounts
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_SECONDARY_ACCOUNTS_DISABLED_CHILD_TEXT" desc="Text for 'secondary accounts disabled' message for child accounts in Settings page.">
-      Addition of more Google Accounts is disabled
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_SIGNED_OUT_ACCOUNT_PLACEHOLDER" desc="Placeholder text for the full name of a signed out account in Account Manager.">
-      Sign in again
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_UNMIGRATED_ACCOUNT_PLACEHOLDER" desc="Placeholder text for the unmigrated account in Account Manager.">
-      Not updated yet
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_MORE_ACTIONS_TOOLTIP" desc="Tooltip text (shows on hover or for screenreaders) for a button that shows a menu with more actions when clicked or tapped.">
-      More actions, <ph name="EMAIL">$1<ex>abcd@google.com</ex></ph>
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_MIGRATION_LABEL" desc="Label of the migration button on Account Manager Settings page.">
-      Update account
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_REAUTHENTICATION_LABEL" desc="Label of the re-authentication button on Account Manager Settings page.">
-      Sign in
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_MIGRATION_TOOLTIP" desc="Tooltip text (shows on hover or for screenreaders) for the migration button on Account Manager Settings page.">
-      Update account, <ph name="EMAIL">$1<ex>abcd@google.com</ex></ph>
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_REAUTHENTICATION_TOOLTIP" desc="Tooltip text (shows on hover or for screenreaders) for the re-authentication button on Account Manager Settings page.">
-      Sign in, <ph name="EMAIL">$1<ex>abcd@google.com</ex></ph>
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_REMOVE_ACCOUNT_LABEL" desc="Label of the Remove account button in Account Manager.">
-      Remove this account
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_MANAGEMENT_STATUS_MANAGED_ACCOUNT" desc="Management status label for managed accounts. This will be e.g. 'Managed by google.com' for Enterprise accounts and 'Managed by Family Link' for child accounts.">
-      Managed by <ph name="DOMAIN">$1<ex>google.com</ex></ph>
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_MANAGEMENT_STATUS_UNMANAGED_ACCOUNT" desc="Management status label for unmanaged accounts.">
-      Primary account
     </message>
     <message name="IDS_SETTINGS_ACCOUNT_MANAGER_ACCOUNT_REMOVED_MESSAGE" desc="Notification message after account removal.">
       <ph name="EMAIL">$1<ex>abcd@google.com</ex></ph> was removed from this device
