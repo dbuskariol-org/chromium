@@ -1212,7 +1212,6 @@ void WizardController::OnChangedMetricsReportingState(bool enabled) {
   StatsReportingController::Get()->SetEnabled(
       ProfileManager::GetActiveUserProfile(), enabled);
   if (crash_reporter::IsCrashpadEnabled()) {
-    crash_reporter::SetUploadConsent(enabled);
     return;
   }
 
