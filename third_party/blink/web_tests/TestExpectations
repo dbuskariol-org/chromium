@@ -1144,7 +1144,6 @@ crbug.com/994172 virtual/layout_ng_block_frag/fast/multicol/balance-line-underfl
 crbug.com/994172 virtual/layout_ng_block_frag/fast/multicol/balance-line-underflow-2.html [ Pass Crash ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/basic-rtl.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/break-before-first-line-in-first-child.html [ Failure ]
-crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/break-in-scrollable.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/caret-range-anonymous-block.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/caret-range-anonymous-block-rtl.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/fast/multicol/caret-range-outside-columns.html [ Failure ]
