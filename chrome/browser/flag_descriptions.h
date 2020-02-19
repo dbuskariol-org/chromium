@@ -2060,6 +2060,9 @@ extern const char kSmartDimModelV3Description[];
 extern const char kSmartTextSelectionName[];
 extern const char kSmartTextSelectionDescription[];
 
+extern const char kSmbfsFileSharesName[];
+extern const char kSmbfsFileSharesDescription[];
+
 extern const char kSplitSettingsSyncName[];
 extern const char kSplitSettingsSyncDescription[];
 

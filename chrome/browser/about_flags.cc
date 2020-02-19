@@ -2847,6 +2847,9 @@ const FeatureEntry kFeatureEntries[] = {
     {"rar2fs", flag_descriptions::kRar2FsName,
      flag_descriptions::kRar2FsDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kRar2Fs)},
+    {"smbfs-file-shares", flag_descriptions::kSmbfsFileSharesName,
+     flag_descriptions::kSmbfsFileSharesName, kOsCrOS,
+     FEATURE_VALUE_TYPE(features::kSmbFs)},
 #endif  // OS_CHROMEOS
 
 #if defined(OS_WIN)

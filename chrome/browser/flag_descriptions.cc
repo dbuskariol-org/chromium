@@ -3535,6 +3535,10 @@ const char kSmartTextSelectionDescription[] =
     "Shows quick actions for text "
     "selections in the context menu.";
 
+const char kSmbfsFileSharesName[] = "Smbfs file shares";
+const char kSmbfsFileSharesDescription[] =
+    "Use smbfs for accessing network file shares.";
+
 const char kSplitSettingsSyncName[] = "Split OS and browser sync";
 const char kSplitSettingsSyncDescription[] =
     "Allows OS sync to be configured separately from browser sync. Changes the "

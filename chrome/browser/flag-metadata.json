@@ -3426,6 +3426,11 @@
     "expiry_milestone": 76
   },
   {
+    "name": "smbfs-file-shares",
+    "owners": [ "amistry", "dats" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "smooth-scrolling",
     "owners": [ "bokan", "input-dev" ],
     "expiry_milestone": 85
