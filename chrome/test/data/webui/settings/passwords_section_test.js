@@ -595,6 +595,21 @@ cr.define('settings_passwords_section', function() {
           });
     });
 
+    test('onCopyPasswordListItem', function() {
+      const expectedItem = FakeDataMaker.passwordEntry('goo.gl', 'bart', 8, 1);
+      const passwordsSection = elementFactory.createPasswordsSection(
+          passwordManager, [expectedItem], []);
+
+      getFirstPasswordListItem(passwordsSection).$$('#passwordMenu').click();
+      passwordsSection.$$('#menuCopyPassword').click();
+
+      return passwordManager.whenCalled('requestPlaintextPassword')
+          .then(({id, reason}) => {
+            assertEquals(1, id);
+            assertEquals('COPY', reason);
+          });
+    });
+
     test('closingPasswordsSectionHidesUndoToast', function(done) {
       const passwordEntry = FakeDataMaker.passwordEntry('goo.gl', 'bart', 1);
       const passwordsSection = elementFactory.createPasswordsSection(

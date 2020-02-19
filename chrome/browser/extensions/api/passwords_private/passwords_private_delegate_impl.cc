@@ -28,6 +28,7 @@
 #include "components/password_manager/core/common/password_manager_features.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/browser/web_contents.h"
+#include "ui/base/clipboard/scoped_clipboard_writer.h"
 #include "ui/base/l10n/l10n_util.h"
 
 #if defined(OS_WIN)
@@ -219,6 +220,23 @@ void PasswordsPrivateDelegateImpl::RequestPlaintextPassword(
     return;
   }
 
+  if (reason == api::passwords_private::PLAINTEXT_REASON_COPY) {
+    // In case of copy we don't need to give password back to UI. callback
+    // will receive either empty string in case of success or null otherwise.
+    // Copying occurs here so javascript doesn't need plaintext password.
+    callback = base::BindOnce(
+        [](PlaintextPasswordCallback callback,
+           base::Optional<base::string16> password) {
+          if (!password) {
+            std::move(callback).Run(base::nullopt);
+            return;
+          }
+          ui::ScopedClipboardWriter(ui::ClipboardBuffer::kCopyPaste)
+              .WriteText(*password);
+          std::move(callback).Run(base::string16());
+        },
+        std::move(callback));
+  }
   password_manager_presenter_->RequestPlaintextPassword(*sort_key,
                                                         std::move(callback));
 }
