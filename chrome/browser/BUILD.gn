@@ -4106,6 +4106,7 @@ jumbo_static_library("browser") {
       "ImageCaptureCore.framework",
       "OpenGL.framework",
       "QuartzCore.framework",
+      "SafariServices.framework",
       "SecurityInterface.framework",
     ]
   }
