@@ -293,6 +293,8 @@ public abstract class ChromeFeatureList {
             "OfflinePagesDescriptivePendingStatus";
     public static final String OFFLINE_PAGES_LIVE_PAGE_SHARING = "OfflinePagesLivePageSharing";
     public static final String OFFLINE_PAGES_PREFETCHING = "OfflinePagesPrefetching";
+    public static final String OMNIBOX_ADAPTIVE_SUGGESTIONS_COUNT =
+            "OmniboxAdaptiveSuggestionsCount";
     public static final String OMNIBOX_ASSISTANT_VOICE_SEARCH = "OmniboxAssistantVoiceSearch";
     public static final String OMNIBOX_HIDE_SCHEME_IN_STEADY_STATE =
             "OmniboxUIExperimentHideSteadyStateUrlScheme";

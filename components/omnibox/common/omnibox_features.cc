@@ -8,6 +8,12 @@
 
 namespace omnibox {
 
+// Allows Omnibox to dynamically adjust number of offered suggestions to fill in
+// the space between Omnibox an the soft keyboard. The number of suggestions
+// shown will be no less than minimum for the platform (eg. 5 for Android).
+const base::Feature kAdaptiveSuggestionsCount{
+    "OmniboxAdaptiveSuggestionsCount", base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Feature used to hide the scheme from steady state URLs displayed in the
 // toolbar. It is restored during editing.
 const base::Feature kHideFileUrlScheme {

@@ -736,6 +736,9 @@ extern const char kUseMultiloginEndpointDescription[];
 extern const char kOfferStoreUnmaskedWalletCardsName[];
 extern const char kOfferStoreUnmaskedWalletCardsDescription[];
 
+extern const char kOmniboxAdaptiveSuggestionsCountName[];
+extern const char kOmniboxAdaptiveSuggestionsCountDescription[];
+
 extern const char kOmniboxAssistantVoiceSearchName[];
 extern const char kOmniboxAssistantVoiceSearchDescription[];
 

@@ -2880,6 +2880,10 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // defined(OS_WIN)
 
 #if defined(OS_ANDROID)
+    {"omnibox-adaptive-suggestions-count",
+     flag_descriptions::kOmniboxAdaptiveSuggestionsCountName,
+     flag_descriptions::kOmniboxAdaptiveSuggestionsCountDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(omnibox::kAdaptiveSuggestionsCount)},
     {"omnibox-assistant-voice-search",
      flag_descriptions::kOmniboxAssistantVoiceSearchName,
      flag_descriptions::kOmniboxAssistantVoiceSearchDescription, kOsAndroid,

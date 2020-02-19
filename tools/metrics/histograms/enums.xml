@@ -38011,6 +38011,7 @@ from previous Chrome versions.
   <int value="-836123854" label="wallet-service-use-sandbox"/>
   <int value="-835672415" label="PointerEventV1SpecCapturing:disabled"/>
   <int value="-835331907" label="TabOutlinesInLowContrastThemes:disabled"/>
+  <int value="-835242361" label="OmniboxAdaptiveSuggestionsCount:enabled"/>
   <int value="-834661509" label="ModalPermissionPrompts:disabled"/>
   <int value="-832561975" label="enable-picture-in-picture"/>
   <int value="-825942229" label="tab-management-experiment-type-elderberry"/>
@@ -40317,6 +40318,7 @@ from previous Chrome versions.
   <int value="2004604350" label="AutofillGetPaymentsIdentityFromSync:enabled"/>
   <int value="2004651603" label="NativeFileSystemAPI:disabled"/>
   <int value="2004829262" label="enable-webgl-draft-extensions"/>
+  <int value="2005009211" label="OmniboxAdaptiveSuggestionsCount:disabled"/>
   <int value="2005245012" label="SecurityInterstitialsDarkMode:disabled"/>
   <int value="2005614493" label="tab-management-experiment-type-dill"/>
   <int value="2006413281"

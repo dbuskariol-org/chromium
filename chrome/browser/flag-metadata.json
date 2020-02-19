@@ -2803,6 +2803,11 @@
     "expiry_milestone": 76
   },
   {
+    "name": "omnibox-adaptive-suggestions-count",
+    "owners": [ "ender", "chrome-omnibox-team@google.com" ],
+    "expiry_milestone": 87
+  },
+  {
     "name": "omnibox-assistant-voice-search",
     "owners": [ "wylieb", "chrome-omnibox-team@google.com" ],
     "expiry_milestone": 85

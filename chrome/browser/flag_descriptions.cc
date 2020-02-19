@@ -1240,6 +1240,16 @@ const char kOfferStoreUnmaskedWalletCardsDescription[] =
     "Show the checkbox to offer local saving of a credit card downloaded from "
     "the server.";
 
+const char kOmniboxAdaptiveSuggestionsCountName[] =
+    "Adaptive Omnibox Suggestions count";
+const char kOmniboxAdaptiveSuggestionsCountDescription[] =
+    "Dynamically adjust number of presented Omnibox suggestions depending on "
+    "available space. When enabled, this feature will increase (or decrease) "
+    "amount of offered Omnibox suggestions to fill in the space between the "
+    "Omnibox and soft keyboard (if any). See also Max Autocomplete Matches "
+    "flag to adjust the limit of offered suggestions. The number of shown "
+    "suggestions will be no less than the platform default limit.";
+
 const char kOmniboxAssistantVoiceSearchName[] =
     "Omnibox Assistant Voice Search";
 const char kOmniboxAssistantVoiceSearchDescription[] =
