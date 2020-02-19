@@ -3574,7 +3574,6 @@ void RenderProcessHostImpl::OnChannelConnected(int32_t peer_pid) {
 }
 
 void RenderProcessHostImpl::OnChannelError() {
-  UMA_HISTOGRAM_BOOLEAN("BrowserRenderProcessHost.OnChannelError", true);
   ProcessDied(true /* already_dead */, nullptr);
 }
 
