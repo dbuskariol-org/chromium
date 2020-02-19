@@ -26,8 +26,7 @@ void UpdateHttpInfo(net::HttpResponseInfo* response,
   response->headers->Update(*new_response->headers.get());
   response->stale_revalidate_timeout = base::Time();
   bool was_corrupt = false;
-  if (AppCacheUpdateJob::IsEmptyTime(response->response_time) ||
-      AppCacheUpdateJob::IsEmptyTime(response->request_time)) {
+  if (response->response_time.is_null() || response->request_time.is_null()) {
     was_corrupt = true;
     // Metrics for corrupt resources are tracked in AppCacheUpdateJob's
     // CanUseExistingResource(), so we don't change anything here to avoid
@@ -35,8 +34,8 @@ void UpdateHttpInfo(net::HttpResponseInfo* response,
   }
   response->response_time = new_response->response_time;
   response->request_time = new_response->request_time;
-  if (was_corrupt && !AppCacheUpdateJob::IsEmptyTime(response->response_time) &&
-      !AppCacheUpdateJob::IsEmptyTime(response->request_time)) {
+  if (was_corrupt && !response->response_time.is_null() &&
+      !response->request_time.is_null()) {
     metrics->IncrementExistingCorruptionFixedInUpdate();
   }
   response->network_accessed = new_response->network_accessed;

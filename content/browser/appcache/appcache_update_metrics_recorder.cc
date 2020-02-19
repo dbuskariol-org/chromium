@@ -8,7 +8,7 @@
 
 namespace content {
 
-AppCacheUpdateMetricsRecorder::AppCacheUpdateMetricsRecorder() {}
+AppCacheUpdateMetricsRecorder::AppCacheUpdateMetricsRecorder() = default;
 
 void AppCacheUpdateMetricsRecorder::IncrementExistingCorruptionFixedInUpdate() {
 #if DCHECK_IS_ON()

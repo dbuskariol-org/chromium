@@ -134,13 +134,13 @@ ResourceCheck CanUseExistingResource(
   bool found_corruption = false;
   static constexpr base::Time::Exploded kInvalidTimePlaceholderExploded = {
       2019, 7, 0, 7, 0, 0, 0, 0};
-  if (AppCacheUpdateJob::IsEmptyTime(request_time)) {
+  if (request_time.is_null()) {
     bool conversion_succeeded = base::Time::FromUTCExploded(
         kInvalidTimePlaceholderExploded, &request_time);
     DCHECK(conversion_succeeded);
     found_corruption = true;
   }
-  if (AppCacheUpdateJob::IsEmptyTime(response_time)) {
+  if (response_time.is_null()) {
     bool conversion_succeeded = base::Time::FromUTCExploded(
         kInvalidTimePlaceholderExploded, &response_time);
     DCHECK(conversion_succeeded);
@@ -256,12 +256,6 @@ AppCacheUpdateJob::UrlToFetch::UrlToFetch(const GURL& url,
 AppCacheUpdateJob::UrlToFetch::UrlToFetch(const UrlToFetch& other) = default;
 
 AppCacheUpdateJob::UrlToFetch::~UrlToFetch() {
-}
-
-// static
-bool AppCacheUpdateJob::IsEmptyTime(const base::Time& t) {
-  constexpr base::Time default_initialized_time;
-  return t == default_initialized_time;
 }
 
 AppCacheUpdateJob::AppCacheUpdateJob(AppCacheServiceImpl* service,
