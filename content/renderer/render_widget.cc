@@ -150,7 +150,6 @@ using blink::WebRange;
 using blink::WebRect;
 using blink::WebSize;
 using blink::WebString;
-using blink::WebTextDirection;
 using blink::WebTouchEvent;
 using blink::WebTouchPoint;
 using blink::WebVector;
@@ -2060,7 +2059,7 @@ WebRect RenderWidget::ViewRect() {
 }
 
 void RenderWidget::SetToolTipText(const blink::WebString& text,
-                                  WebTextDirection hint) {
+                                  base::i18n::TextDirection hint) {
   Send(new WidgetHostMsg_SetTooltipText(routing_id_, text.Utf16(), hint));
 }
 
@@ -2296,7 +2295,7 @@ void RenderWidget::SetWindowRectSynchronously(
   }
 }
 
-void RenderWidget::OnSetTextDirection(WebTextDirection direction) {
+void RenderWidget::OnSetTextDirection(base::i18n::TextDirection direction) {
   if (auto* frame = GetFocusedWebLocalFrameInWidget())
     frame->SetTextDirection(direction);
 }

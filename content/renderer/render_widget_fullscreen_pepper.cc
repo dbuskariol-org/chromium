@@ -40,7 +40,6 @@ using blink::WebMouseWheelEvent;
 using blink::WebRect;
 using blink::WebSize;
 using blink::WebString;
-using blink::WebTextDirection;
 using blink::WebTextInputType;
 using blink::WebVector;
 using blink::WebWidget;

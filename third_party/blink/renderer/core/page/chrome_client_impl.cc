@@ -54,7 +54,6 @@
 #include "third_party/blink/public/web/web_plugin.h"
 #include "third_party/blink/public/web/web_popup_menu_info.h"
 #include "third_party/blink/public/web/web_settings.h"
-#include "third_party/blink/public/web/web_text_direction.h"
 #include "third_party/blink/public/web/web_view_client.h"
 #include "third_party/blink/public/web/web_window_features.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_controller.h"
@@ -106,6 +105,7 @@
 #include "third_party/blink/renderer/platform/instrumentation/resource_coordinator/document_resource_coordinator.h"
 #include "third_party/blink/renderer/platform/instrumentation/use_counter.h"
 #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
+#include "third_party/blink/renderer/platform/text/text_direction.h"
 #include "third_party/blink/renderer/platform/web_test_support.h"
 #include "third_party/blink/renderer/platform/weborigin/security_origin.h"
 #include "third_party/blink/renderer/platform/wtf/text/character_names.h"
@@ -580,13 +580,13 @@ void ChromeClientImpl::SetToolTip(LocalFrame& frame,
   WebLocalFrameImpl* web_frame = WebLocalFrameImpl::FromFrame(frame);
   if (!tooltip_text.IsEmpty()) {
     web_frame->LocalRootFrameWidget()->Client()->SetToolTipText(
-        tooltip_text, ToWebTextDirection(dir));
+        tooltip_text, ToBaseTextDirection(dir));
     did_request_non_empty_tool_tip_ = true;
   } else if (did_request_non_empty_tool_tip_) {
     // WebWidgetClient::setToolTipText will send an IPC message.  We'd like to
     // reduce the number of setToolTipText calls.
     web_frame->LocalRootFrameWidget()->Client()->SetToolTipText(
-        tooltip_text, ToWebTextDirection(dir));
+        tooltip_text, ToBaseTextDirection(dir));
     did_request_non_empty_tool_tip_ = false;
   }
 }

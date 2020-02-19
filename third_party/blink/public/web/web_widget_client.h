@@ -33,6 +33,7 @@
 
 #include <memory>
 
+#include "base/i18n/rtl.h"
 #include "cc/input/event_listener_properties.h"
 #include "cc/input/layer_selection_bound.h"
 #include "cc/input/overscroll_behavior.h"
@@ -50,7 +51,6 @@
 #include "third_party/blink/public/platform/web_touch_action.h"
 #include "third_party/blink/public/web/web_meaningful_layout.h"
 #include "third_party/blink/public/web/web_navigation_policy.h"
-#include "third_party/blink/public/web/web_text_direction.h"
 
 class SkBitmap;
 
@@ -147,7 +147,8 @@ class WebWidgetClient {
   virtual WebRect ViewRect() { return WebRect(); }
 
   // Called when a tooltip should be shown at the current cursor position.
-  virtual void SetToolTipText(const WebString&, WebTextDirection hint) {}
+  virtual void SetToolTipText(const WebString&,
+                              base::i18n::TextDirection hint) {}
 
   // Requests to lock the mouse cursor for the |requester_frame| in the
   // widget. If true is returned, the success result will be asynchronously

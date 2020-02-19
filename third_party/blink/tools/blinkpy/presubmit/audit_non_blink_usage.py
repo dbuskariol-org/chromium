@@ -42,6 +42,7 @@ _CONFIG = [
             'base::File',
             'base::FilePath',
             'base::GetUniqueIdForProcess',
+            "base::i18n::TextDirection",
             'base::Location',
             'base::MakeRefCounted',
             'base::Optional',

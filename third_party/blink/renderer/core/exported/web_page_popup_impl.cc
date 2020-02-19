@@ -69,6 +69,7 @@
 #include "third_party/blink/renderer/platform/heap/heap.h"
 #include "third_party/blink/renderer/platform/instrumentation/tracing/trace_event.h"
 #include "third_party/blink/renderer/platform/keyboard_codes.h"
+#include "third_party/blink/renderer/platform/text/text_direction.h"
 #include "third_party/blink/renderer/platform/web_test_support.h"
 
 namespace blink {
@@ -224,7 +225,7 @@ class PagePopupChromeClient final : public EmptyChromeClient {
                   TextDirection dir) override {
     if (popup_->WidgetClient()) {
       popup_->WidgetClient()->SetToolTipText(tooltip_text,
-                                             ToWebTextDirection(dir));
+                                             ToBaseTextDirection(dir));
     }
   }
 
