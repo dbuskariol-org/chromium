@@ -65,11 +65,11 @@ import org.chromium.ui.modelutil.PropertyModel;
 import org.chromium.ui.test.util.UiRestriction;
 
 /**
- * Tests for {@link TabModalPresenter}.
+ * Tests for {@link ChromeTabModalPresenter}.
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE})
-public class TabModalPresenterTest {
+public class ChromeTabModalPresenterTest {
     private class TestObserver extends EmptyTabObserver
             implements UrlFocusChangeListener, ModalDialogTestUtils.TestDialogDismissedObserver {
         public final CallbackHelper onUrlFocusChangedCallback = new CallbackHelper();
@@ -98,7 +98,7 @@ public class TabModalPresenterTest {
 
     private ChromeTabbedActivity mActivity;
     private ModalDialogManager mManager;
-    private TabModalPresenter mTabModalPresenter;
+    private ChromeTabModalPresenter mTabModalPresenter;
     private TestObserver mTestObserver;
     private Integer mExpectedDismissalCause;
 
@@ -112,7 +112,8 @@ public class TabModalPresenterTest {
                 .getToolbarLayoutForTesting()
                 .getLocationBar()
                 .addUrlFocusChangeListener(mTestObserver);
-        mTabModalPresenter = (TabModalPresenter) mManager.getPresenterForTest(ModalDialogType.TAB);
+        mTabModalPresenter =
+                (ChromeTabModalPresenter) mManager.getPresenterForTest(ModalDialogType.TAB);
         mTabModalPresenter.disableAnimationForTest();
     }
 
@@ -125,8 +126,8 @@ public class TabModalPresenterTest {
                 createDialog(mActivity, mActivity.getModalDialogManager(), "1", null);
         showDialog(mManager, dialog1, ModalDialogType.TAB);
 
-        TabModalPresenter presenter =
-                (TabModalPresenter) mManager.getPresenterForTest(ModalDialogType.TAB);
+        ChromeTabModalPresenter presenter =
+                (ChromeTabModalPresenter) mManager.getPresenterForTest(ModalDialogType.TAB);
         final View dialogContainer = presenter.getDialogContainerForTest();
         final View controlContainer = mActivity.findViewById(R.id.control_container);
         final ViewGroup containerParent = presenter.getContainerParentForTest();
