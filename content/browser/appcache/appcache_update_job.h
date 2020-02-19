@@ -60,6 +60,10 @@ class CONTENT_EXPORT AppCacheUpdateJob
     SECURITY_ERROR, NUM_UPDATE_JOB_RESULT_TYPES
   };
 
+  // Return whether |t| is empty / has no value.  This is useful for knowing if
+  // a given time value wasn't set which could happen in the past due to bugs.
+  static bool IsEmptyTime(const base::Time& t);
+
   AppCacheUpdateJob(AppCacheServiceImpl* service, AppCacheGroup* group);
   ~AppCacheUpdateJob() override;
 
