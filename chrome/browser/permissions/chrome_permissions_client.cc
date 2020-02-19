@@ -4,6 +4,7 @@
 
 #include "chrome/browser/permissions/chrome_permissions_client.h"
 
+#include "build/build_config.h"
 #include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 #include "chrome/browser/engagement/site_engagement_service.h"
 #include "chrome/browser/metrics/ukm_background_recorder_service.h"
@@ -11,6 +12,10 @@
 #include "chrome/browser/profiles/profile.h"
 #include "components/ukm/content/source_url_recorder.h"
 #include "url/origin.h"
+
+#if !defined(OS_ANDROID)
+#include "chrome/app/vector_icons/vector_icons.h"
+#endif
 
 // static
 ChromePermissionsClient* ChromePermissionsClient::GetInstance() {
@@ -56,4 +61,14 @@ void ChromePermissionsClient::GetUkmSourceId(
         ->GetBackgroundSourceIdIfAllowed(url::Origin::Create(requesting_origin),
                                          std::move(callback));
   }
+}
+
+permissions::PermissionRequest::IconId
+ChromePermissionsClient::GetOverrideIconId(ContentSettingsType type) {
+#if defined(OS_CHROMEOS)
+  // TODO(xhwang): fix this icon, see crbug.com/446263.
+  if (type == ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER)
+    return kProductIcon;
+#endif
+  return PermissionsClient::GetOverrideIconId(type);
 }

@@ -58,6 +58,11 @@ class PermissionsClient {
                               const GURL& requesting_origin,
                               GetUkmSourceIdCallback callback);
 
+  // Returns the icon ID that should be used for permissions UI for |type|. If
+  // the embedder returns an empty IconId, the default icon for |type| will be
+  // used.
+  virtual PermissionRequest::IconId GetOverrideIconId(ContentSettingsType type);
+
  private:
   PermissionsClient(const PermissionsClient&) = delete;
   PermissionsClient& operator=(const PermissionsClient&) = delete;

@@ -18,7 +18,6 @@
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 #include "chrome/browser/permissions/permission_decision_auto_blocker_factory.h"
-#include "chrome/browser/permissions/permission_request_impl.h"
 #include "chrome/browser/permissions/permission_request_manager.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/common/chrome_features.h"
@@ -29,6 +28,7 @@
 #include "components/permissions/permission_decision_auto_blocker.h"
 #include "components/permissions/permission_request.h"
 #include "components/permissions/permission_request_id.h"
+#include "components/permissions/permission_request_impl.h"
 #include "components/permissions/permission_uma_util.h"
 #include "components/permissions/permission_util.h"
 #include "components/prefs/pref_service.h"
@@ -366,7 +366,7 @@ void PermissionContextBase::DecidePermission(
     return;
 
   std::unique_ptr<permissions::PermissionRequest> request_ptr =
-      std::make_unique<PermissionRequestImpl>(
+      std::make_unique<permissions::PermissionRequestImpl>(
           requesting_origin, content_settings_type_, user_gesture,
           base::BindOnce(&PermissionContextBase::PermissionDecided,
                          weak_factory_.GetWeakPtr(), id, requesting_origin,

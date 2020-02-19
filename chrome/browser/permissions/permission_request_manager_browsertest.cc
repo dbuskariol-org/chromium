@@ -18,7 +18,6 @@
 #include "chrome/browser/media/webrtc/media_stream_devices_controller.h"
 #include "chrome/browser/permissions/mock_permission_request.h"
 #include "chrome/browser/permissions/permission_context_base.h"
-#include "chrome/browser/permissions/permission_request_impl.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/permission_bubble/mock_permission_prompt_factory.h"
@@ -30,6 +29,7 @@
 #include "chrome/test/base/ui_test_utils.h"
 #include "chrome/test/permissions/permission_request_manager_test_api.h"
 #include "components/content_settings/core/common/content_settings_types.h"
+#include "components/permissions/permission_request_impl.h"
 #include "components/permissions/permission_util.h"
 #include "components/variations/variations_associated_data.h"
 #include "content/public/browser/render_frame_host.h"
@@ -213,9 +213,10 @@ permissions::PermissionRequest* PermissionDialogTest::MakePermissionRequest(
   bool user_gesture = true;
   auto decided = [](ContentSetting) {};
   auto cleanup = [] {};  // Leave cleanup to test harness destructor.
-  owned_requests_.push_back(std::make_unique<PermissionRequestImpl>(
-      GetUrl(), permission, user_gesture, base::Bind(decided),
-      base::Bind(cleanup)));
+  owned_requests_.push_back(
+      std::make_unique<permissions::PermissionRequestImpl>(
+          GetUrl(), permission, user_gesture, base::Bind(decided),
+          base::Bind(cleanup)));
   return owned_requests_.back().get();
 }
 

@@ -12,6 +12,8 @@ source_set("permissions") {
     "permission_request.h",
     "permission_request_id.cc",
     "permission_request_id.h",
+    "permission_request_impl.cc",
+    "permission_request_impl.h",
     "permission_result.cc",
     "permission_result.h",
     "permission_uma_util.cc",
@@ -25,12 +27,19 @@ source_set("permissions") {
     "//base",
     "//components/content_settings/core/browser",
     "//components/keyed_service/content",
+    "//components/strings:components_strings_grit",
     "//components/ukm/content",
+    "//components/url_formatter",
     "//components/variations",
+    "//components/vector_icons",
     "//content/public/browser",
     "//services/metrics/public/cpp:ukm_builders",
   ]
   if (is_android) {
+    sources += [
+      "android/resource_id.h",
+      "android/theme_resources.h",
+    ]
     deps += [ "//components/permissions/android:jni" ]
   }
 }

@@ -222,16 +222,16 @@ struct ContentSettingsImageDetails {
 };
 
 const ContentSettingsImageDetails kImageDetails[] = {
-    {ContentSettingsType::COOKIES, kCookieIcon, IDS_BLOCKED_COOKIES_MESSAGE, 0,
-     IDS_ACCESSED_COOKIES_MESSAGE},
+    {ContentSettingsType::COOKIES, vector_icons::kCookieIcon,
+     IDS_BLOCKED_COOKIES_MESSAGE, 0, IDS_ACCESSED_COOKIES_MESSAGE},
     {ContentSettingsType::IMAGES, kPhotoIcon, IDS_BLOCKED_IMAGES_MESSAGE, 0, 0},
     {ContentSettingsType::JAVASCRIPT, kCodeIcon, IDS_BLOCKED_JAVASCRIPT_MESSAGE,
      0, 0},
-    {ContentSettingsType::PLUGINS, kExtensionIcon, IDS_BLOCKED_PLUGINS_MESSAGE,
-     IDS_BLOCKED_PLUGIN_EXPLANATORY_TEXT, 0},
+    {ContentSettingsType::PLUGINS, vector_icons::kExtensionIcon,
+     IDS_BLOCKED_PLUGINS_MESSAGE, IDS_BLOCKED_PLUGIN_EXPLANATORY_TEXT, 0},
     {ContentSettingsType::MIXEDSCRIPT, kMixedContentIcon,
      IDS_BLOCKED_DISPLAYING_INSECURE_CONTENT, 0, 0},
-    {ContentSettingsType::PPAPI_BROKER, kExtensionIcon,
+    {ContentSettingsType::PPAPI_BROKER, vector_icons::kExtensionIcon,
      IDS_BLOCKED_PPAPI_BROKER_MESSAGE, 0, IDS_ALLOWED_PPAPI_BROKER_MESSAGE},
     {ContentSettingsType::SOUND, kTabAudioIcon, IDS_BLOCKED_SOUND_TITLE, 0, 0},
     {ContentSettingsType::ADS, kAdsIcon, IDS_BLOCKED_ADS_PROMPT_TOOLTIP,
@@ -606,7 +606,8 @@ bool ContentSettingClipboardReadWriteImageModel::UpdateAndGetVisibility(
   if (!blocked && !allowed)
     return false;
 
-  set_icon(kContentPasteIcon, allowed ? gfx::kNoneIcon : kBlockedBadgeIcon);
+  set_icon(vector_icons::kContentPasteIcon,
+           allowed ? gfx::kNoneIcon : kBlockedBadgeIcon);
   set_tooltip(l10n_util::GetStringUTF16(
       allowed ? IDS_ALLOWED_CLIPBOARD_MESSAGE : IDS_BLOCKED_CLIPBOARD_MESSAGE));
   return true;

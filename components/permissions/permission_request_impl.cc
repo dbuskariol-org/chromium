@@ -2,23 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_request_impl.h"
+#include "components/permissions/permission_request_impl.h"
 
 #include "base/strings/utf_string_conversions.h"
 #include "build/build_config.h"
-#include "chrome/grit/generated_resources.h"
 #include "components/permissions/permission_util.h"
+#include "components/permissions/permissions_client.h"
+#include "components/strings/grit/components_strings.h"
 #include "components/url_formatter/elide_url.h"
-#include "net/base/escape.h"
 #include "ui/base/l10n/l10n_util.h"
 
 #if defined(OS_ANDROID)
-#include "chrome/browser/android/android_theme_resources.h"
+#include "components/permissions/android/theme_resources.h"
 #include "media/base/android/media_drm_bridge.h"
 #else
-#include "chrome/app/vector_icons/vector_icons.h"
 #include "components/vector_icons/vector_icons.h"
+#include "ui/gfx/vector_icon_types.h"
 #endif
+
+namespace permissions {
 
 PermissionRequestImpl::PermissionRequestImpl(
     const GURL& request_origin,
@@ -37,9 +39,12 @@ PermissionRequestImpl::~PermissionRequestImpl() {
   DCHECK(is_finished_);
 }
 
-permissions::PermissionRequest::IconId PermissionRequestImpl::GetIconId()
-    const {
+PermissionRequest::IconId PermissionRequestImpl::GetIconId() const {
+  PermissionRequest::IconId icon_id =
+      PermissionsClient::Get()->GetOverrideIconId(content_settings_type_);
 #if defined(OS_ANDROID)
+  if (icon_id)
+    return icon_id;
   switch (content_settings_type_) {
     case ContentSettingsType::GEOLOCATION:
       return IDR_ANDROID_INFOBAR_GEOLOCATION;
@@ -69,20 +74,17 @@ permissions::PermissionRequest::IconId PermissionRequestImpl::GetIconId()
       return IDR_ANDROID_INFOBAR_WARNING;
   }
 #else
+  if (!icon_id.is_empty())
+    return icon_id;
   switch (content_settings_type_) {
     case ContentSettingsType::GEOLOCATION:
       return vector_icons::kLocationOnIcon;
     case ContentSettingsType::NOTIFICATIONS:
       return vector_icons::kNotificationsIcon;
-#if defined(OS_CHROMEOS)
-    // TODO(xhwang): fix this icon, see crrev.com/863263007
-    case ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER:
-      return kProductIcon;
-#endif
     case ContentSettingsType::MIDI_SYSEX:
       return vector_icons::kMidiIcon;
     case ContentSettingsType::PLUGINS:
-      return kExtensionIcon;
+      return vector_icons::kExtensionIcon;
     case ContentSettingsType::MEDIASTREAM_MIC:
       return vector_icons::kMicIcon;
     case ContentSettingsType::MEDIASTREAM_CAMERA:
@@ -90,15 +92,15 @@ permissions::PermissionRequest::IconId PermissionRequestImpl::GetIconId()
     case ContentSettingsType::ACCESSIBILITY_EVENTS:
       return vector_icons::kAccessibilityIcon;
     case ContentSettingsType::CLIPBOARD_READ_WRITE:
-      return kContentPasteIcon;
+      return vector_icons::kContentPasteIcon;
     case ContentSettingsType::VR:
     case ContentSettingsType::AR:
-      return kVrHeadsetIcon;
+      return vector_icons::kVrHeadsetIcon;
     case ContentSettingsType::STORAGE_ACCESS:
-      return kCookieIcon;
+      return vector_icons::kCookieIcon;
     default:
       NOTREACHED();
-      return kExtensionIcon;
+      return vector_icons::kExtensionIcon;
   }
 #endif
 }
@@ -263,16 +265,16 @@ void PermissionRequestImpl::RequestFinished() {
   std::move(delete_callback_).Run();
 }
 
-permissions::PermissionRequestType
-PermissionRequestImpl::GetPermissionRequestType() const {
-  return permissions::PermissionUtil::GetRequestType(content_settings_type_);
+PermissionRequestType PermissionRequestImpl::GetPermissionRequestType() const {
+  return PermissionUtil::GetRequestType(content_settings_type_);
 }
 
-permissions::PermissionRequestGestureType
-PermissionRequestImpl::GetGestureType() const {
-  return permissions::PermissionUtil::GetGestureType(has_gesture_);
+PermissionRequestGestureType PermissionRequestImpl::GetGestureType() const {
+  return PermissionUtil::GetGestureType(has_gesture_);
 }
 
 ContentSettingsType PermissionRequestImpl::GetContentSettingsType() const {
   return content_settings_type_;
 }
+
+}  // namespace permissions

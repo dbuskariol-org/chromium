@@ -5,6 +5,11 @@
 #include "components/permissions/permissions_client.h"
 
 #include "base/callback.h"
+#include "build/build_config.h"
+
+#if !defined(OS_ANDROID)
+#include "ui/gfx/paint_vector_icon.h"
+#endif
 
 namespace permissions {
 namespace {
@@ -37,6 +42,15 @@ void PermissionsClient::GetUkmSourceId(content::BrowserContext* browser_context,
                                        const GURL& requesting_origin,
                                        GetUkmSourceIdCallback callback) {
   std::move(callback).Run(base::nullopt);
+}
+
+PermissionRequest::IconId PermissionsClient::GetOverrideIconId(
+    ContentSettingsType type) {
+#if defined(OS_ANDROID)
+  return 0;
+#else
+  return gfx::kNoneIcon;
+#endif
 }
 
 }  // namespace permissions

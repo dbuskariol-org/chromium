@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_IMPL_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_IMPL_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_IMPL_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_IMPL_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
+#include "build/build_config.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "components/permissions/permission_request.h"
@@ -14,10 +15,12 @@
 
 class GURL;
 
-// Default implementation of permissions::PermissionRequest, it is assumed that
+namespace permissions {
+
+// Default implementation of PermissionRequest, it is assumed that
 // the caller owns it and that it can be deleted once the |delete_callback| is
 // executed.
-class PermissionRequestImpl : public permissions::PermissionRequest {
+class PermissionRequestImpl : public PermissionRequest {
  public:
   using PermissionDecidedCallback = base::OnceCallback<void(ContentSetting)>;
 
@@ -30,7 +33,7 @@ class PermissionRequestImpl : public permissions::PermissionRequest {
   ~PermissionRequestImpl() override;
 
  private:
-  // permissions::PermissionRequest:
+  // PermissionRequest:
   IconId GetIconId() const override;
 #if defined(OS_ANDROID)
   base::string16 GetMessageText() const override;
@@ -43,8 +46,8 @@ class PermissionRequestImpl : public permissions::PermissionRequest {
   void PermissionDenied() override;
   void Cancelled() override;
   void RequestFinished() override;
-  permissions::PermissionRequestType GetPermissionRequestType() const override;
-  permissions::PermissionRequestGestureType GetGestureType() const override;
+  PermissionRequestType GetPermissionRequestType() const override;
+  PermissionRequestGestureType GetGestureType() const override;
   ContentSettingsType GetContentSettingsType() const override;
 
   GURL request_origin_;
@@ -62,4 +65,6 @@ class PermissionRequestImpl : public permissions::PermissionRequest {
   DISALLOW_COPY_AND_ASSIGN(PermissionRequestImpl);
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_REQUEST_IMPL_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_REQUEST_IMPL_H_

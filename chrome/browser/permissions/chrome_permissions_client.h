@@ -23,6 +23,8 @@ class ChromePermissionsClient : public permissions::PermissionsClient {
                       const content::WebContents* web_contents,
                       const GURL& requesting_origin,
                       GetUkmSourceIdCallback callback) override;
+  permissions::PermissionRequest::IconId GetOverrideIconId(
+      ContentSettingsType type) override;
 
  private:
   friend base::NoDestructor<ChromePermissionsClient>;
