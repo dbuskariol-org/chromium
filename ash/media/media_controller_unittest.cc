@@ -74,6 +74,8 @@ class MediaControllerTest : public AshTestBase {
     Flush();
     Shell::Get()->media_controller()->HandleMediaPlay();
     Flush();
+    Shell::Get()->media_controller()->HandleMediaPause();
+    Flush();
     Shell::Get()->media_controller()->HandleMediaPrevTrack();
     Flush();
     Shell::Get()->media_controller()->HandleMediaNextTrack();
@@ -94,7 +96,7 @@ TEST_F(MediaControllerTest, EnableMediaKeysWhenUnlocked) {
 
   HandleMediaKeys();
 
-  EXPECT_EQ(1, controller()->suspend_count());
+  EXPECT_EQ(2, controller()->suspend_count());
   EXPECT_EQ(1, controller()->resume_count());
   EXPECT_EQ(1, controller()->previous_track_count());
   EXPECT_EQ(1, controller()->next_track_count());
@@ -158,7 +160,7 @@ TEST_F(MediaControllerTest, EnableMediaKeysWhenLockedAndControlsEnabled) {
 
   HandleMediaKeys();
 
-  EXPECT_EQ(1, controller()->suspend_count());
+  EXPECT_EQ(2, controller()->suspend_count());
   EXPECT_EQ(1, controller()->resume_count());
   EXPECT_EQ(1, controller()->previous_track_count());
   EXPECT_EQ(1, controller()->next_track_count());

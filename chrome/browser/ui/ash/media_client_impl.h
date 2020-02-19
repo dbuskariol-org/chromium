@@ -38,6 +38,7 @@ class MediaClientImpl : public ash::MediaClient,
   void HandleMediaNextTrack() override;
   void HandleMediaPlayPause() override;
   void HandleMediaPlay() override;
+  void HandleMediaPause() override;
   void HandleMediaPrevTrack() override;
   void RequestCaptureState() override;
   void SuspendMediaSessions() override;

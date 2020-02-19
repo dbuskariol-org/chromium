@@ -21,6 +21,7 @@ class TestMediaClient : public MediaClient {
   void HandleMediaNextTrack() override;
   void HandleMediaPlayPause() override;
   void HandleMediaPlay() override;
+  void HandleMediaPause() override;
   void HandleMediaPrevTrack() override;
   void RequestCaptureState() override;
   void SuspendMediaSessions() override;
@@ -32,6 +33,7 @@ class TestMediaClient : public MediaClient {
     return handle_media_play_pause_count_;
   }
   int handle_media_play_count() const { return handle_media_play_count_; }
+  int handle_media_pause_count() const { return handle_media_pause_count_; }
   int handle_media_prev_track_count() const {
     return handle_media_prev_track_count_;
   }
@@ -41,6 +43,7 @@ class TestMediaClient : public MediaClient {
   int handle_media_next_track_count_ = 0;
   int handle_media_play_pause_count_ = 0;
   int handle_media_play_count_ = 0;
+  int handle_media_pause_count_ = 0;
   int handle_media_prev_track_count_ = 0;
   bool media_sessions_suspended_ = false;
 
