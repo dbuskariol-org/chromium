@@ -2037,7 +2037,7 @@
   {
     "name": "enable-vulkan",
     "owners": [ "penghuang" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 90
   },
   {
     "name": "enable-web-authentication-ble-support",
