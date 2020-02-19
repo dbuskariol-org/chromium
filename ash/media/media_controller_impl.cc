@@ -127,6 +127,31 @@ void MediaControllerImpl::HandleMediaPlayPause() {
     client_->HandleMediaPlayPause();
 }
 
+void MediaControllerImpl::HandleMediaPlay() {
+  if (Shell::Get()->session_controller()->IsScreenLocked() &&
+      !AreLockScreenMediaKeysEnabled()) {
+    return;
+  }
+
+  ui::RecordMediaHardwareKeyAction(ui::MediaHardwareKeyAction::kPlay);
+
+  // If the |client_| is force handling the keys then we should forward them.
+  if (client_ && force_media_client_key_handling_) {
+    client_->HandleMediaPlay();
+    return;
+  }
+
+  // If media session media key handling is enabled. Fire play using the media
+  // session service.
+  if (ShouldUseMediaSession()) {
+    GetMediaSessionController()->Resume();
+    return;
+  }
+
+  if (client_)
+    client_->HandleMediaPlay();
+}
+
 void MediaControllerImpl::HandleMediaNextTrack() {
   if (Shell::Get()->session_controller()->IsScreenLocked() &&
       !AreLockScreenMediaKeysEnabled()) {

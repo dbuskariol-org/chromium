@@ -60,6 +60,7 @@ class ASH_EXPORT MediaControllerImpl
   // media session service to control playback. Otherwise it will forward to
   // |client_|.
   void HandleMediaPlayPause();
+  void HandleMediaPlay();
   void HandleMediaNextTrack();
   void HandleMediaPrevTrack();
 

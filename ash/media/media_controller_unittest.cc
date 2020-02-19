@@ -72,6 +72,8 @@ class MediaControllerTest : public AshTestBase {
   void HandleMediaKeys() {
     Shell::Get()->media_controller()->HandleMediaPlayPause();
     Flush();
+    Shell::Get()->media_controller()->HandleMediaPlay();
+    Flush();
     Shell::Get()->media_controller()->HandleMediaPrevTrack();
     Flush();
     Shell::Get()->media_controller()->HandleMediaNextTrack();
@@ -86,12 +88,14 @@ class MediaControllerTest : public AshTestBase {
 
 TEST_F(MediaControllerTest, EnableMediaKeysWhenUnlocked) {
   EXPECT_EQ(0, controller()->suspend_count());
+  EXPECT_EQ(0, controller()->resume_count());
   EXPECT_EQ(0, controller()->previous_track_count());
   EXPECT_EQ(0, controller()->next_track_count());
 
   HandleMediaKeys();
 
   EXPECT_EQ(1, controller()->suspend_count());
+  EXPECT_EQ(1, controller()->resume_count());
   EXPECT_EQ(1, controller()->previous_track_count());
   EXPECT_EQ(1, controller()->next_track_count());
 }
@@ -146,6 +150,7 @@ TEST_F(MediaControllerTest, EnableMediaKeysWhenLockedAndControlsEnabled) {
   prefs->SetBoolean(prefs::kLockScreenMediaControlsEnabled, true);
 
   EXPECT_EQ(0, controller()->suspend_count());
+  EXPECT_EQ(0, controller()->resume_count());
   EXPECT_EQ(0, controller()->previous_track_count());
   EXPECT_EQ(0, controller()->next_track_count());
 
@@ -154,6 +159,7 @@ TEST_F(MediaControllerTest, EnableMediaKeysWhenLockedAndControlsEnabled) {
   HandleMediaKeys();
 
   EXPECT_EQ(1, controller()->suspend_count());
+  EXPECT_EQ(1, controller()->resume_count());
   EXPECT_EQ(1, controller()->previous_track_count());
   EXPECT_EQ(1, controller()->next_track_count());
 }
@@ -164,6 +170,7 @@ TEST_F(MediaControllerTest, DisableMediaKeysWhenLockedAndControlsDisabled) {
   prefs->SetBoolean(prefs::kLockScreenMediaControlsEnabled, false);
 
   EXPECT_EQ(0, controller()->suspend_count());
+  EXPECT_EQ(0, controller()->resume_count());
   EXPECT_EQ(0, controller()->previous_track_count());
   EXPECT_EQ(0, controller()->next_track_count());
 
@@ -172,6 +179,7 @@ TEST_F(MediaControllerTest, DisableMediaKeysWhenLockedAndControlsDisabled) {
   HandleMediaKeys();
 
   EXPECT_EQ(0, controller()->suspend_count());
+  EXPECT_EQ(0, controller()->resume_count());
   EXPECT_EQ(0, controller()->previous_track_count());
   EXPECT_EQ(0, controller()->next_track_count());
 }
