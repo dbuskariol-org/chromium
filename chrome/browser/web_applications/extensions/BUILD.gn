@@ -83,8 +83,6 @@ source_set("browser_tests") {
 
   sources = [
     "bookmark_app_registrar_browsertest.cc",
-    "system_web_app_manager_browsertest.cc",
-    "system_web_app_manager_browsertest.h",
     "web_app_audio_focus_browsertest.cc",
   ]
 
@@ -103,7 +101,6 @@ source_set("browser_tests") {
     "//chrome/browser/web_applications/components",
     "//chrome/test:test_support",
     "//chrome/test:test_support_ui",
-    "//components/permissions:permissions",
     "//extensions:test_support",
     "//extensions/browser",
     "//extensions/common",
