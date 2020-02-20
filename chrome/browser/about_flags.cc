@@ -1221,6 +1221,9 @@ const FeatureEntry::FeatureParam
 const FeatureEntry::FeatureParam kTabGridLayoutAndroid_DisableRefetch[] = {
     {"allow_to_refetch", "false"}};
 
+const FeatureEntry::FeatureParam kTabGridLayoutAndroid_SearchChip[] = {
+    {"enable_search_term_chip", "true"}};
+
 const FeatureEntry::FeatureVariation kTabGridLayoutAndroidVariations[] = {
     {"New Tab Variation", kTabGridLayoutAndroid_NewTabVariation,
      base::size(kTabGridLayoutAndroid_NewTabVariation), nullptr},
@@ -1238,6 +1241,8 @@ const FeatureEntry::FeatureVariation kTabGridLayoutAndroidVariations[] = {
      nullptr},
     {"Disable refetch", kTabGridLayoutAndroid_DisableRefetch,
      base::size(kTabGridLayoutAndroid_DisableRefetch), nullptr},
+    {"Search term chip", kTabGridLayoutAndroid_SearchChip,
+     base::size(kTabGridLayoutAndroid_SearchChip), nullptr},
 };
 
 const FeatureEntry::FeatureParam kStartSurfaceAndroid_SingleSurface[] = {
