@@ -6062,6 +6062,8 @@ crbug.com/1016364 [ Linux Debug ] http/tests/devtools/console/console-search.js 
 crbug.com/1016364 [ Mac Debug ] http/tests/devtools/console/console-search.js [ Pass Timeout ]
 crbug.com/1016457 [ Linux Debug ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
 crbug.com/1016457 [ Mac Debug ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
+crbug.com/1016457 [ Linux Debug ] virtual/web-components-v0-disabled/external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
+crbug.com/1016457 [ Mac Debug ] virtual/web-components-v0-disabled/external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
 
 # Sheriff 2019-10-24
 crbug.com/1017626 [ Linux ] external/wpt/compat/idlharness.window.html [ Pass Timeout ]
