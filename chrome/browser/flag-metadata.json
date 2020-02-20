@@ -1587,8 +1587,8 @@
   },
   {
     "name": "enable-navigation-tracing",
-    "owners": [ "tracing" ],
-    "expiry_milestone": 80
+    "owners": [ "oysteine" ],
+    "expiry_milestone": 85
   },
   {
     "name": "enable-network-logging-to-file",
@@ -3573,8 +3573,8 @@
   },
   {
     "name": "trace-upload-url",
-    "owners": [ "tracing" ],
-    "expiry_milestone": 80
+    "owners": [ "oysteine" ],
+    "expiry_milestone": 85
   },
   {
     "name": "translate-android-manual-trigger",
