@@ -371,6 +371,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "bluetooth-kernel-suspend-notifier",
+    "owners": [ "abhishekpandit", "chromeos-bluetooth@google.com" ],
+    "expiry_milestone": 83
+  },
+  {
     "name": "BundledConnectionHelp",
     "owners": [ "carlosil" ],
     "expiry_milestone": 76

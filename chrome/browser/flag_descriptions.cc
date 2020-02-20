@@ -3093,6 +3093,12 @@ const char kBluetoothAggressiveAppearanceFilterDescription[] =
     "Enables a more aggressive Bluetooth filter in the UI to hide devices that "
     "likely cannot be connected to.";
 
+const char kBluetoothKernelSuspendNotifierName[] =
+    "Bluetooth kernel suspend notifier handler";
+const char kBluetoothKernelSuspendNotifierDescription[] =
+    "Enables the Bluetooth kernel suspend notifier which will allow wake from "
+    "suspend using Bluetooth HID devices.";
+
 const char kCameraSystemWebAppName[] = "Camera System Web App";
 const char kCameraSystemWebAppDescription[] =
     "Run the Chrome Camera App as a System Web App.";

@@ -1782,6 +1782,9 @@ extern const char kAshSwipingFromLeftEdgeToGoBackDescription[];
 extern const char kBluetoothAggressiveAppearanceFilterName[];
 extern const char kBluetoothAggressiveAppearanceFilterDescription[];
 
+extern const char kBluetoothKernelSuspendNotifierName[];
+extern const char kBluetoothKernelSuspendNotifierDescription[];
+
 extern const char kCameraSystemWebAppName[];
 extern const char kCameraSystemWebAppDescription[];
 

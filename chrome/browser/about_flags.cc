@@ -1858,6 +1858,10 @@ const FeatureEntry kFeatureEntries[] = {
      kOsCrOS,
      FEATURE_VALUE_TYPE(
          chromeos::features::kBluetoothAggressiveAppearanceFilter)},
+    {"bluetooth-kernel-suspend-notifier",
+     flag_descriptions::kBluetoothKernelSuspendNotifierName,
+     flag_descriptions::kBluetoothKernelSuspendNotifierDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kBluetoothKernelSuspendNotifier)},
     {"cryptauth-v2-device-activity-status",
      flag_descriptions::kCryptAuthV2DeviceActivityStatusName,
      flag_descriptions::kCryptAuthV2DeviceActivityStatusDescription, kOsCrOS,
