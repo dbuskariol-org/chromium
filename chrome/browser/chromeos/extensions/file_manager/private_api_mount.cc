@@ -30,29 +30,11 @@
 #include "google_apis/drive/task_util.h"
 #include "ui/shell_dialogs/selected_file_info.h"
 
+namespace extensions {
+
 using chromeos::disks::DiskMountManager;
 using content::BrowserThread;
 namespace file_manager_private = extensions::api::file_manager_private;
-
-namespace extensions {
-
-namespace {
-
-// Does chmod o+r for the given path to ensure the file is readable from avfs.
-void EnsureReadableFilePermissionAsync(
-    const base::FilePath& path,
-    base::OnceCallback<void(drive::FileError, const base::FilePath&)>
-        callback) {
-  int mode = 0;
-  if (!base::GetPosixFilePermissions(path, &mode) ||
-      !base::SetPosixFilePermissions(path, mode | S_IROTH)) {
-    std::move(callback).Run(drive::FILE_ERROR_ACCESS_DENIED, base::FilePath());
-    return;
-  }
-  std::move(callback).Run(drive::FILE_ERROR_OK, path);
-}
-
-}  // namespace
 
 FileManagerPrivateAddMountFunction::FileManagerPrivateAddMountFunction()
     : chrome_details_(this) {}
@@ -77,57 +59,11 @@ ExtensionFunction::ResponseAction FileManagerPrivateAddMountFunction::Run() {
   if (path.empty())
     return RespondNow(Error("Invalid path"));
 
-  file_manager::VolumeManager* volume_manager =
-      file_manager::VolumeManager::Get(chrome_details_.GetProfile());
-  DCHECK(volume_manager);
-
-  bool is_under_downloads = false;
-  const std::vector<base::WeakPtr<file_manager::Volume>> volumes =
-      volume_manager->GetVolumeList();
-  for (const auto& volume : volumes) {
-    if (volume->type() == file_manager::VOLUME_TYPE_DOWNLOADS_DIRECTORY &&
-        volume->mount_path().IsParent(path)) {
-      is_under_downloads = true;
-      break;
-    }
-  }
-
-  if (is_under_downloads) {
-    // For files under downloads, change the file permission and make it
-    // readable from avfs/fuse if needed.
-    base::PostTask(
-        FROM_HERE,
-        {base::ThreadPool(), base::MayBlock(),
-         base::TaskPriority::USER_BLOCKING},
-        base::BindOnce(&EnsureReadableFilePermissionAsync, path,
-                       google_apis::CreateRelayCallback(base::BindOnce(
-                           &FileManagerPrivateAddMountFunction::
-                               RunAfterEnsureReadableFilePermission,
-                           this, path.BaseName()))));
-  } else {
-    RunAfterEnsureReadableFilePermission(path.BaseName(), drive::FILE_ERROR_OK,
-                                         path);
-  }
-  return RespondLater();
-}
-
-void FileManagerPrivateAddMountFunction::RunAfterEnsureReadableFilePermission(
-    const base::FilePath& display_name,
-    drive::FileError error,
-    const base::FilePath& file_path) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
-
-  if (error != drive::FILE_ERROR_OK) {
-    Respond(Error(FileErrorToString(error)));
-    return;
-  }
-
-  // Pass back the actual source path of the mount point.
-  Respond(OneArgument(std::make_unique<base::Value>(file_path.AsUTF8Unsafe())));
 
   // TODO(crbug.com/996549) Remove this once the old avfsd-based RAR mounter is
   // removed.
-  std::string format = base::ToLowerASCII(display_name.Extension());
+  std::string format = base::ToLowerASCII(path.Extension());
   if (format == ".rar" &&
       base::FeatureList::IsEnabled(chromeos::features::kRar2Fs)) {
     format = ".rar2fs";
@@ -136,8 +72,12 @@ void FileManagerPrivateAddMountFunction::RunAfterEnsureReadableFilePermission(
   // MountPath() takes a std::string.
   DiskMountManager* disk_mount_manager = DiskMountManager::GetInstance();
   disk_mount_manager->MountPath(
-      file_path.AsUTF8Unsafe(), format, display_name.AsUTF8Unsafe(), {},
+      path.AsUTF8Unsafe(), format, path.BaseName().AsUTF8Unsafe(), {},
       chromeos::MOUNT_TYPE_ARCHIVE, chromeos::MOUNT_ACCESS_MODE_READ_WRITE);
+
+  // Pass back the actual source path of the mount point.
+  return RespondNow(
+      OneArgument(std::make_unique<base::Value>(path.AsUTF8Unsafe())));
 }
 
 ExtensionFunction::ResponseAction FileManagerPrivateRemoveMountFunction::Run() {
