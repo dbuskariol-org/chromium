@@ -2250,7 +2250,7 @@
   {
     "name": "extensions-toolbar-menu",
     "owners": [ "//extensions/OWNERS", "pbos" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 84
   },
   {
     "name": "file-handling-api",
