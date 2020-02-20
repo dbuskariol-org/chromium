@@ -232,13 +232,17 @@ class CertsSourcePlatformNSS : public CertificateManagerModel::CertsSource {
     cert_infos.reserve(certs.size());
     for (auto& cert : certs) {
       net::CertType type = x509_certificate_model::GetType(cert.get());
-      bool can_be_deleted = !cert_db_->IsReadOnly(cert.get());
-      bool untrusted = cert_db_->IsUntrusted(cert.get());
-      bool hardware_backed = cert_db_->IsHardwareBacked(cert.get());
-      bool web_trust_anchor = cert_db_->IsWebTrustAnchor(cert.get());
+      bool can_be_deleted = !net::NSSCertDatabase::IsReadOnly(cert.get());
+      bool untrusted = net::NSSCertDatabase::IsUntrusted(cert.get());
+      bool hardware_backed = net::NSSCertDatabase::IsHardwareBacked(cert.get());
+      bool web_trust_anchor =
+          net::NSSCertDatabase::IsWebTrustAnchor(cert.get());
       bool device_wide = false;
 #if defined(OS_CHROMEOS)
-      device_wide = cert_db_->IsCertificateOnSystemSlot(cert.get());
+
+      device_wide = net::NSSCertDatabase::IsCertificateOnSlot(
+          /*cert=*/cert.get(),
+          /*slot=*/cert_db_->GetSystemSlot().get());
 #endif
       base::string16 name = GetName(cert.get(), hardware_backed);
       cert_infos.push_back(std::make_unique<CertificateManagerModel::CertInfo>(
