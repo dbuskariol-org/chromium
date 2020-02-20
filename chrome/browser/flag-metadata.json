@@ -2275,7 +2275,7 @@
   {
     "name": "fill-on-account-select",
     "owners": [ "jdoerrie" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 87
   },
   {
     "name": "focus-mode",
@@ -2397,7 +2397,7 @@
   {
     "name": "google-password-manager",
     "owners": [ "ioanap", "jdoerrie" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 87
   },
   {
     "name": "handwriting-gesture",
@@ -3569,7 +3569,7 @@
   {
     "name": "touch-to-fill",
     "owners": [ "jdoerrie" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 87
   },
   {
     "name": "touchpad-overscroll-history-navigation",
