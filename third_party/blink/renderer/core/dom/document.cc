@@ -2626,6 +2626,9 @@ void Document::ApplyScrollRestorationLogic() {
   if (!history_item || !history_item->GetViewState())
     return;
 
+  if (!View()->GetScrollableArea()->HasPendingHistoryRestoreScrollOffset())
+    return;
+
   bool should_restore_scroll =
       history_item->ScrollRestorationType() != kScrollRestorationManual;
   auto& scroll_offset = history_item->GetViewState()->scroll_offset_;
@@ -2633,11 +2636,13 @@ void Document::ApplyScrollRestorationLogic() {
   // This tries to balance:
   // 1. restoring as soon as possible.
   // 2. not overriding user scroll (TODO(majidvp): also respect user scale).
-  // 3. detecting clamping to avoid repeatedly popping the scroll position down
+  // 3. detecting clamping to avoid repeatedly popping the scroll position
+  // down
   //    as the page height increases.
-  // 4. ignoring clamp detection if scroll state is not being restored, if load
-  //    is complete, or if the navigation is same-document (as the new page may
-  //    be smaller than the previous page).
+  // 4. ignoring clamp detection if scroll state is not being restored, if
+  // load
+  //    is complete, or if the navigation is same-document (as the new page
+  //    may be smaller than the previous page).
   bool can_restore_without_clamping =
       View()->LayoutViewport()->ClampScrollOffset(scroll_offset) ==
       scroll_offset;
@@ -2649,8 +2654,9 @@ void Document::ApplyScrollRestorationLogic() {
   if (!can_restore_without_annoying_user)
     return;
 
-  frame_loader.RestoreScrollPositionAndViewState();
   View()->GetScrollableArea()->ApplyPendingHistoryRestoreScrollOffset();
+
+  document_loader->GetInitialScrollState().did_restore_from_history = true;
 }
 
 void Document::MarkHasFindInPageRequest() {

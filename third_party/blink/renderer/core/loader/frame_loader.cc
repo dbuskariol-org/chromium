@@ -988,6 +988,8 @@ void FrameLoader::CommitNavigation(
                        std::move(call_before_attaching_new_document),
                        is_javascript_url);
 
+  RestoreScrollPositionAndViewState();
+
   TakeObjectSnapshot();
 }
 
@@ -1205,9 +1207,8 @@ void FrameLoader::RestoreScrollPositionAndViewState(
 
   view->GetScrollableArea()->SetPendingHistoryRestoreScrollOffset(
       view_state, scroll_restoration_type != kScrollRestorationManual);
-  view->ScheduleAnimation();
 
-  GetDocumentLoader()->GetInitialScrollState().did_restore_from_history = true;
+  view->ScheduleAnimation();
 }
 
 String FrameLoader::UserAgent() const {
