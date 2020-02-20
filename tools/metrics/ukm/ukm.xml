@@ -3981,6 +3981,51 @@ be describing additional metrics about the same event.
     number of frames that were not displayed on screen (dropped). It is the
     ratio of dropped over expected, converted to a percentage.
   </summary>
+  <metric name="AllAnimations">
+    <summary>
+      Tracks the throughput of a particular sequence of frames for all
+      animations. This metric is reported for all animations (e.g.
+      comositor-driven animations, main-thread driven animations, and raf-driven
+      animations).
+    </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+  <metric name="AllInteractions">
+    <summary>
+      Tracks the throughput of a particular sequence of frames where a
+      user-input (e.g. scroll, pinch) is active. This metric is reported for all
+      sources of user-input (i.e. both touchscreen and touchpad/mouse-wheel).
+    </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+  <metric name="AllSequences">
+    <summary>
+      Tracks the throughput of a particular sequence of frames. This metric is
+      reported for all animations and all interactions.
+    </summary>
+    <aggregation>
+      <history>
+        <index fields="profile.country"/>
+        <statistics>
+          <quantiles type="std-percentiles"/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
   <metric name="CompositorThread.CompositorAnimation">
     <summary>
       The throughput of the compositor thread during a compositor animation.
