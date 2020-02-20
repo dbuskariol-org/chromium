@@ -199,6 +199,8 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kTabReparenting,
     &kTabSwitcherOnReturn,
     &kTabToGTSAnimation,
+    &kTestDefaultDisabled,
+    &kTestDefaultEnabled,
     &kTrustedWebActivityPostMessage,
     &kStartSurfaceAndroid,
     &kUmaBackgroundSessions,
@@ -590,6 +592,12 @@ const base::Feature kTabSwitcherOnReturn{"TabSwitcherOnReturn",
 
 const base::Feature kTabToGTSAnimation{"TabToGTSAnimation",
                                        base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kTestDefaultDisabled{"TestDefaultDisabled",
+                                         base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kTestDefaultEnabled{"TestDefaultEnabled",
+                                        base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTrustedWebActivityPostMessage{
     "TrustedWebActivityPostMessage", base::FEATURE_DISABLED_BY_DEFAULT};

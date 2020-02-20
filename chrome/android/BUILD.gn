@@ -664,6 +664,7 @@ junit_binary("chrome_junit_tests") {
     "//chrome/android/webapk/libs/client:client_java",
     "//chrome/android/webapk/libs/common:common_java",
     "//chrome/android/webapk/test:junit_test_support",
+    "//chrome/browser/flags:flags_junit_tests",
     "//chrome/browser/image_fetcher:java",
     "//chrome/browser/preferences:preferences_junit_tests",
     "//chrome/browser/thumbnail:java",
