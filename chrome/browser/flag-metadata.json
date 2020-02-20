@@ -3473,7 +3473,7 @@
   {
     "name": "sync-error-infobar",
     "owners": [ "triploblastic", "bsazonov" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 85
   },
   {
     "name": "sync-setup-friendly-settings",
