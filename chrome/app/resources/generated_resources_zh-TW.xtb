@@ -2389,7 +2389,6 @@
 <translation id="4285418559658561636">更新密碼</translation>
 <translation id="4285498937028063278">取消固定</translation>
 <translation id="428565720843367874">掃描這個檔案時，防毒軟體發生意外錯誤。</translation>
-<translation id="4287502004382794929">你的軟體授權量不足，無法註冊這個裝置。如要購買更多授權，請與銷售人員聯絡。如果你認為這則訊息有誤，請與支援小組聯絡。</translation>
 <translation id="4289540628985791613">總覽</translation>
 <translation id="4295072614469448764">應用程式已出現在你的終端機上，且可能在啟動器中顯示圖示。</translation>
 <translation id="4295979599050707005">請再次登入，並確認你的帳戶 (<ph name="USER_EMAIL" />) 可用於 Chrome 和 Google Play 的網站、應用程式與擴充功能。你也可以移除這個帳戶。<ph name="LINK_BEGIN" />瞭解詳情<ph name="LINK_END" /></translation>
@@ -5775,7 +5774,6 @@
 <translation id="9050666287014529139">通關密語</translation>
 <translation id="9052208328806230490">你已透過 <ph name="EMAIL" /> 帳戶並使用 <ph name="CLOUD_PRINT_NAME" /> 為你的印表機註冊</translation>
 <translation id="9052404922357793350">繼續封鎖</translation>
-<translation id="9053091947372579468">你的裝置擁有 Chrome 授權，但你的使用者名稱尚未與管理控制台建立連結。如要註冊，請建立管理控制台帳戶。注意：如果你選擇使用自己的網域建立新的管理控制台帳戶，則必須在建立帳戶後完成網域驗證程序。https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">雙面列印</translation>
 <translation id="9053893665344928494">記住我的選擇</translation>
 <translation id="9055636786322918818">強制執行 RC4 加密。由於 RC4 加密不安全，使用這個加密選項會提高風險。</translation>

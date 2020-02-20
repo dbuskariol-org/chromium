@@ -2388,7 +2388,6 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4285418559658561636">Actualizar contraseña</translation>
 <translation id="4285498937028063278">No fijar</translation>
 <translation id="428565720843367874">Se produjo un error inesperado con el software antivirus al examinar este archivo.</translation>
-<translation id="4287502004382794929">No tienes suficientes licencias de software para inscribir este dispositivo. Comunícate con el departamento de ventas para adquirir más licencias. Si crees que este mensaje apareció por error, comunícate con un el servicio de ayuda.</translation>
 <translation id="4289540628985791613">Descripción general</translation>
 <translation id="4295072614469448764">La app está disponible en tu terminal. Es posible que haya un ícono en el Selector.</translation>
 <translation id="4295979599050707005">Vuelve a acceder para confirmar que tu cuenta <ph name="USER_EMAIL" /> se puede usar con sitios web, apps y extensiones en Chrome y Google Play. También puedes quitarla. <ph name="LINK_BEGIN" />Más información<ph name="LINK_END" /></translation>
@@ -5775,7 +5774,6 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
 <translation id="9050666287014529139">Frase de contraseña</translation>
 <translation id="9052208328806230490">Registraste tus impresoras con <ph name="CLOUD_PRINT_NAME" /> utilizando la cuenta <ph name="EMAIL" /></translation>
 <translation id="9052404922357793350">Seguir bloqueando</translation>
-<translation id="9053091947372579468">Tu dispositivo incluye una licencia de Chrome, pero tu nombre de usuario no está asociado a una consola del administrador. Para continuar con la inscripción, crea una cuenta de consola del administrador. Nota: Si eliges usar tu propio dominio para crear una nueva cuenta de consola del administrador, también deberás completar la verificación del dominio después del registro. https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">Imprimir de ambos lados</translation>
 <translation id="9053893665344928494">Recordar mi selección</translation>
 <translation id="9055636786322918818">Aplica la encriptación RC4. Esta opción es riesgosa, ya que los cifrados RC4 son inseguros.</translation>

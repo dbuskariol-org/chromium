@@ -2391,7 +2391,6 @@
 <translation id="4285418559658561636">パスワードを更新</translation>
 <translation id="4285498937028063278">固定を解除</translation>
 <translation id="428565720843367874">このファイルのスキャン中にウイルス対策ソフトウェアで予期しないエラーが発生しました。</translation>
-<translation id="4287502004382794929">このデバイスを登録するソフトウェア ライセンスを持っていません。さらに購入するには、販売担当者にお問い合わせください。このメッセージが間違って表示されていると思われる場合は、サポートにお問い合わせください。</translation>
 <translation id="4289540628985791613">概要</translation>
 <translation id="4295072614469448764">アプリはお使いのデバイスでご利用いただけます。ランチャーにアイコンが追加されている可能性もあります。</translation>
 <translation id="4295979599050707005">もう一度ログインして、Chrome と Google Play のウェブサイト、アプリ、拡張機能でアカウント（<ph name="USER_EMAIL" />）を使用できることを確認してください。このアカウントを削除することも可能です。<ph name="LINK_BEGIN" />詳細<ph name="LINK_END" /></translation>
@@ -5778,7 +5777,6 @@
 <translation id="9050666287014529139">パスフレーズ</translation>
 <translation id="9052208328806230490"><ph name="CLOUD_PRINT_NAME" /> に、アカウント <ph name="EMAIL" /> を使ってプリンタを登録しました</translation>
 <translation id="9052404922357793350">引き続きブロックする</translation>
-<translation id="9053091947372579468">ご利用のデバイスには Chrome ライセンスが付与されていますが、ご利用のユーザー名が管理コンソールに関連付けられていません。登録を続けるには、管理コンソール アカウントを作成してください。注: 新しい管理コンソール アカウントを作成するにあたって自社ドメインを使用する場合は、登録後にドメインの確認も行う必要があります。https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">両面に印刷する</translation>
 <translation id="9053893665344928494">選択内容を保存</translation>
 <translation id="9055636786322918818">RC4 暗号化を適用します。なお RC4 暗号は安全でないため、このオプションを使用するとリスクが高まります。</translation>

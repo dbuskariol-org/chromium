@@ -2390,7 +2390,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="4285418559658561636">Aggiorna password</translation>
 <translation id="4285498937028063278">Sblocca</translation>
 <translation id="428565720843367874">La scansione del software antivirus non è inaspettatamente riuscita durante la scansione di questo file.</translation>
-<translation id="4287502004382794929">Non disponi di licenze software sufficienti per registrare questo dispositivo. Contatta l'ufficio vendite per acquistarne altre. Se ritieni che questo messaggio sia stato visualizzato per sbaglio, contatta l'assistenza.</translation>
 <translation id="4289540628985791613">Panoramica</translation>
 <translation id="4295072614469448764">L'app è disponibile nel tuo terminale. Potrebbe anche essere presente un'icona nell'Avvio app.</translation>
 <translation id="4295979599050707005">Accedi di nuovo per confermare che il tuo account <ph name="USER_EMAIL" /> può essere utilizzato con siti web, app ed estensioni in Chrome e Google Play. Potresti anche rimuovere questo account. <ph name="LINK_BEGIN" />Ulteriori informazioni<ph name="LINK_END" /></translation>
@@ -3721,6 +3720,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="6207282396926186323">Installazione di <ph name="APP_NAME" /> (app Linux)</translation>
 <translation id="6207937957461833379">Paese/Regione</translation>
 <translation id="6208521041562685716">Attivazione dei dati mobili in corso</translation>
+<translation id="6209908325007204267">Il tuo dispositivo include una licenza Chrome Enterprise Upgrade, ma il tuo nome utente non è associato a un account aziendale. Crea un account aziendale dal sito g.co/ChromeEnterpriseAccount su un dispositivo secondario.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: la sincronizzazione non funziona</translation>
 <translation id="6212039847102026977">Mostra proprietà di rete avanzate</translation>
 <translation id="6212168817037875041">Disattiva lo schermo</translation>
@@ -4404,6 +4404,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="7186088072322679094">Mantieni in barra degli strumenti</translation>
 <translation id="7187428571767585875">Voci del registro da rimuovere o modificare:</translation>
 <translation id="7189234443051076392">Assicurati di avere spazio sufficiente sul dispositivo</translation>
+<translation id="7189451821249468368">Non disponi di licenze Upgrade sufficienti per registrare questo dispositivo. Contatta l'ufficio vendite per acquistarne altre. Se ritieni che questo messaggio sia stato visualizzato per sbaglio, contatta l'assistenza.</translation>
 <translation id="7189965711416741966">Impronta digitale aggiunta.</translation>
 <translation id="7191159667348037">Stampante sconosciuta (USB)</translation>
 <translation id="7193051357671784796">Questa app è stata aggiunta dalla tua organizzazione. Riavvia l'app per terminarne l'installazione.</translation>
@@ -5776,7 +5777,6 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="9050666287014529139">Passphrase</translation>
 <translation id="9052208328806230490">Hai registrato le stampanti con <ph name="CLOUD_PRINT_NAME" /> utilizzando l'account <ph name="EMAIL" /></translation>
 <translation id="9052404922357793350">Continua a bloccare</translation>
-<translation id="9053091947372579468">Il tuo dispositivo include una licenza Chrome, ma il tuo nome utente non è associato a una console di amministrazione. Crea una console di amministrazione per procedere con la registrazione. Nota: se scegli di utilizzare il tuo dominio per creare un nuovo account Console di amministrazione, devi completare anche la verifica del dominio dopo la registrazione. https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">Stampa su entrambe le facciate</translation>
 <translation id="9053893665344928494">Memorizza la mia scelta</translation>
 <translation id="9055636786322918818">Applica la crittografia RC4. Se scegli di utilizzare quest'opzione vai incontro a un rischio maggiore, in quanto le crittografie RC4 non sono sicure.</translation>

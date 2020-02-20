@@ -2384,7 +2384,6 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="4285418559658561636">Parolu Yeniləyin</translation>
 <translation id="4285498937028063278">Çıxarın</translation>
 <translation id="428565720843367874">Bu faylı skan edərkən antivirus dayandı.</translation>
-<translation id="4287502004382794929">Bu cihazı qeydiyyata almaq üçün yetərincə lisenziyanız yoxdur. Əlavə lisenziya almaq üçün satış şöbəsi ilə əlaqə saxlayın. Bu mesajın səhvən göndərildiyini düünürsünüzsə, dəstək şöbəsi ilə əlaqə saxlayın.</translation>
 <translation id="4289540628985791613">Baxış</translation>
 <translation id="4295072614469448764">Terminalda tətbiq əlçatandır. Başladıcınızda da işarə görünə bilər.</translation>
 <translation id="4295979599050707005"><ph name="USER_EMAIL" /> hesabının Chrome və Google Play'də veb sayt, tətbiq və artırmalar ilə istifadə edilə biləcəyini təsdiq etmək üçün yenidən daxil olun. Həmçinin bu hesabı silə bilərsiniz. <ph name="LINK_BEGIN" />Ətraflı məlumat<ph name="LINK_END" /></translation>
@@ -5765,7 +5764,6 @@ Bu saytın blok edilməsini düşünmürəm!</translation>
 <translation id="9050666287014529139">Parol ifadəsi</translation>
 <translation id="9052208328806230490"><ph name="EMAIL" /> hesabını istifadə etməklə, printerlərinizi <ph name="CLOUD_PRINT_NAME" /> adı ilə qeydiyyatdan keçirdiniz.</translation>
 <translation id="9052404922357793350">Blok etməyə davam edin</translation>
-<translation id="9053091947372579468">Cihazınızda Chrome lisenziyası var, lakin istifadəçi adı Admin konsolu ilə əlaqələndrilməyib. Qeydiyyata davam etmək üçün Admin konsolu hesabı yaradın. Qeyd: Yeni Admin konsolu yaratmaq üçün öz domeninizi seçsəniz, qeydiyyatdan sonra domeni doğrulamağı tamamlamalısınız. https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">Hər iki tərəfində çap edin</translation>
 <translation id="9053893665344928494">Seçimi yadda saxlayın</translation>
 <translation id="9055636786322918818">RC4 şifrələməsini tətbiq edin. RC4 şifrələri təhlükəli olduğu üçün bu seçimdən istifadə etmək riski artırır.</translation>

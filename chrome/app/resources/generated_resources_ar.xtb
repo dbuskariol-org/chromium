@@ -152,7 +152,7 @@
 <translation id="1197979282329025000">حدث خطأ أثناء استرداد إمكانيات الطابعة للطابعة <ph name="PRINTER_NAME" />. تعذر تسجيل هذه الطابعة في <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">محو الكل</translation>
 <translation id="1201402288615127009">التالي</translation>
-<translation id="1202596434010270079">‏تمت إعادة تحميل تطبيق Kiosk. يُرجى إزالة جهاز USB.</translation>
+<translation id="1202596434010270079">‏تم تحديث تطبيق Kiosk. يُرجى إزالة جهاز USB.</translation>
 <translation id="120368089816228251">نوتة موسيقية</translation>
 <translation id="1205489148908752564">قراءة وتغيير المستخدمين في القائمة البيضاء</translation>
 <translation id="1206407435587370571">‏استكشاف جهاز Chromebook</translation>
@@ -618,7 +618,7 @@
 <translation id="1829129547161959350">بطريق</translation>
 <translation id="1829192082282182671">ت&amp;صغير</translation>
 <translation id="1830550083491357902">لم يتم تسجيل الدخول</translation>
-<translation id="1832511806131704864">تمت إعادة تحميل تغيير الهاتف</translation>
+<translation id="1832511806131704864">تم تحديث تغيير الهاتف</translation>
 <translation id="1834503245783133039">تعذّر التنزيل: <ph name="FILE_NAME" /></translation>
 <translation id="1834583737373831634">‏أجهزة MIDI</translation>
 <translation id="1835261175655098052">‏جارٍ ترقية نظام التشغيل Linux</translation>
@@ -864,7 +864,7 @@
 <translation id="2182058453334755893">تم النسخ إلى الحافظة.</translation>
 <translation id="2184515124301515068">‏السماح لمتصفِّح Chrome باختيار الوقت الذي يمكن للمواقع الإلكترونية تشغيل الصوت فيه (مُوصى به)</translation>
 <translation id="2187895286714876935">خط استيراد شهادة الخادم</translation>
-<translation id="2187906491731510095">تمت إعادة تحميل الإضافات.</translation>
+<translation id="2187906491731510095">تم تحديث الإضافات.</translation>
 <translation id="2188881192257509750">فتح <ph name="APPLICATION" /></translation>
 <translation id="2190069059097339078">‏أداة الحصول على بيانات اعتماد WiFi</translation>
 <translation id="219008588003277019">وحدة البرنامج العميل الأصلي: <ph name="NEXE_NAME" /></translation>
@@ -1492,7 +1492,7 @@
 <translation id="3013291976881901233">‏أجهزة MIDI</translation>
 <translation id="3015639418649705390">إعادة التشغيل الآن</translation>
 <translation id="3016381065346027039">لا تتوفر إدخالات في السجلّ</translation>
-<translation id="3016641847947582299">تمت إعادة تحميل المُكوّن</translation>
+<translation id="3016641847947582299">تم تحديث المُكوّن</translation>
 <translation id="3016780570757425217">معرفة موقعك</translation>
 <translation id="3017079585324758401">الخلفية</translation>
 <translation id="3019285239893817657">زر صفحة فرعية</translation>
@@ -2388,7 +2388,6 @@
 <translation id="4285418559658561636">إعادة تحميل كلمة المرور</translation>
 <translation id="4285498937028063278">إزالة تثبيت</translation>
 <translation id="428565720843367874">تعذّر برنامج مكافحة الفيروسات بشكل غير متوقع أثناء فحص هذا الملف.</translation>
-<translation id="4287502004382794929">ليست لديك تراخيص برامج كافية لتسجيل هذا الجهاز. يُرجى الاتصال بالمبيعات لشراء المزيد. إذا كنت تعتقد أن هذه الرسالة ظهرت عن طريق الخطأ، فيُرجى الاتصال بالدعم.</translation>
 <translation id="4289540628985791613">نظرة عامة</translation>
 <translation id="4295072614469448764">أصبح التطبيق متاحًا في الوحدة الطرفية وقد تجد رمزًا له في مشغِّل التطبيقات.</translation>
 <translation id="4295979599050707005">‏يُرجى تسجيل الدخول مرة أخرى لتأكيد إمكانية استخدام حسابك <ph name="USER_EMAIL" /> مع مواقع الويب والتطبيقات والإضافات في Chrome وGoogle Play. يمكنك أيضًا إزالة هذا الحساب. <ph name="LINK_BEGIN" />مزيد من المعلومات<ph name="LINK_END" /></translation>
@@ -3180,7 +3179,7 @@
 <translation id="5457991019809708398">مفعَّل، بلا تجوال</translation>
 <translation id="5458998536542739734">ملاحظات شاشة التأمين</translation>
 <translation id="546322474339998983">‏يتم استخدام محرك البحث من قِبَل متصفح Chrome ومشغّل التطبيقات للجهاز <ph name="DEVICE_TYPE" />.</translation>
-<translation id="5463231940765244860">Enter</translation>
+<translation id="5463231940765244860">إدخال</translation>
 <translation id="5463275305984126951">فهرس المجلد <ph name="LOCATION" /></translation>
 <translation id="5463856536939868464">قائمة تحتوي على إشارات مخفية</translation>
 <translation id="5464632865477611176">التشغيل في هذه المرة</translation>
@@ -5357,7 +5356,7 @@
 <translation id="8481187309597259238">‏تأكيد إذن USB</translation>
 <translation id="8483248364096924578">‏عنوان IP</translation>
 <translation id="8487678622945914333">تكبير</translation>
-<translation id="8490896350101740396">‏تمت إعادة تحميل تطبيقات kiosk التالية "<ph name="UPDATED_APPS" />". يُرجى إعادة تشغيل الجهاز لإكمال عملية الإعادة تحميل.</translation>
+<translation id="8490896350101740396">‏تم تحديث تطبيقات kiosk التالية "<ph name="UPDATED_APPS" />". يُرجى إعادة تشغيل الجهاز لإكمال عملية الإعادة تحميل.</translation>
 <translation id="8493236660459102203">الميكروفون:</translation>
 <translation id="8496717697661868878">تشغيل هذا المكون الإضافي</translation>
 <translation id="8497219075884839166">‏الأدوات المساعدة في Windows</translation>
@@ -5535,7 +5534,7 @@
 <translation id="8734073480934656039">يتيح تفعيل هذا الإعداد تشغيل تطبيقات الكشك تلقائيًا عند بدء التشغيل.</translation>
 <translation id="8734674662128056360">حظر ملفات تعريف الارتباط التابعة لجهة خارجية</translation>
 <translation id="873545264931343897">عند انتهاء <ph name="PLUGIN_NAME" /> من التحديث، أعد تحميل الصفحة لتفعيلها</translation>
-<translation id="8736288397686080465">تمت إعادة تحميل هذا الموقع في الخلفية.</translation>
+<translation id="8736288397686080465">تم تحديث هذا الموقع في الخلفية.</translation>
 <translation id="8737685506611670901">فتح روابط <ph name="PROTOCOL" /> بدلاً من <ph name="REPLACED_HANDLER_TITLE" /></translation>
 <translation id="8737709691285775803">Shill</translation>
 <translation id="8738766971144275885">هذا الملف مشفّر وتم حظر فتحه.</translation>
@@ -5776,7 +5775,6 @@
 <translation id="9050666287014529139">عبارة المرور</translation>
 <translation id="9052208328806230490">لقد سجّلت طابعاتك في <ph name="CLOUD_PRINT_NAME" /> باستخدام الحساب <ph name="EMAIL" /></translation>
 <translation id="9052404922357793350">متابعة الحظر</translation>
-<translation id="9053091947372579468">‏يتضمن جهازك ترخيصًا لـ Chrome، ولكن اسم المستخدم لديك غير مرتبط بوحدة تحكّم المشرف. يُرجى إنشاء حساب على وحدة تحكّم المشرف لمتابعة التسجيل. ملاحظة: إذا اختَرت استخدام نطاقك الخاص لإنشاء حساب جديد على وحدة تحكّم المشرف، عليك أيضًا إنهاء إثبات ملكية النطاق بعد الاشتراك. https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">الطباعة على كلا الجانبين</translation>
 <translation id="9053893665344928494">تذكَّر اختياري</translation>
 <translation id="9055636786322918818">‏فرض تشفير RC4: يؤدي استخدام هذا الخيار إلى زيادة المخاطر، لأن رموز RC4 غير آمنة.</translation>

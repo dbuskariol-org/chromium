@@ -2391,7 +2391,6 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="4285418559658561636">Kemas kini Kata laluan</translation>
 <translation id="4285498937028063278">Menyahpin</translation>
 <translation id="428565720843367874">Perisian anti-virus gagal tanpa dijangka semasa mengimbas fail ini.</translation>
-<translation id="4287502004382794929">Anda tidak mempunyai lesen perisian yang cukup untuk mendaftarkan peranti ini. Sila hubungi bahagian jualan untuk membeli lagi. Jika anda percaya anda melihat mesej yang salah, sila hubungi sokongan.</translation>
 <translation id="4289540628985791613">Gambaran keseluruhan</translation>
 <translation id="4295072614469448764">Apl tersedia di terminal anda. Mungkin terdapat ikon dalam Pelancar anda juga.</translation>
 <translation id="4295979599050707005">Sila log masuk semula untuk mengesahkan bahawa akaun <ph name="USER_EMAIL" /> anda boleh digunakan dengan tapak web, apl dan sambungan dalam Chrome serta Google Play. Anda juga boleh mengalih keluar akaun ini. <ph name="LINK_BEGIN" />Ketahui lebih lanjut<ph name="LINK_END" /></translation>
@@ -3722,6 +3721,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="6207282396926186323">Pasang <ph name="APP_NAME" /> (Apl Linux)</translation>
 <translation id="6207937957461833379">Negara/Rantau</translation>
 <translation id="6208521041562685716">Data mudah alih sedang diaktifkan</translation>
+<translation id="6209908325007204267">Peranti anda termasuk Peningkatan Chrome Enterprise tetapi nama pengguna anda tidak dikaitkan dengan akaun perusahaan. Sila buat akaun perusahaan dengan melawati g.co/ChromeEnterpriseAccount pada peranti kedua.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Penyegerakan tidak berfungsi</translation>
 <translation id="6212039847102026977">Tunjukkan sifat rangkaian terperinci</translation>
 <translation id="6212168817037875041">Matikan paparan</translation>
@@ -4405,6 +4405,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="7186088072322679094">Simpan dalam Bar Alat</translation>
 <translation id="7187428571767585875">Masukan daftaran yang hendak dialih keluar atau diubah:</translation>
 <translation id="7189234443051076392">Pastikan ruang pada peranti anda mencukupi</translation>
+<translation id="7189451821249468368">Anda tidak mempunyai kemas kini yang mencukupi untuk mendaftarkan peranti ini. Sila hubungi bahagian jualan untuk membeli lagi. Jika anda percaya anda melihat mesej yang salah, sila hubungi sokongan.</translation>
 <translation id="7189965711416741966">Cap jari ditambahkan.</translation>
 <translation id="7191159667348037">Pencetak Tidak Diketahui (USB)</translation>
 <translation id="7193051357671784796">Apl ini ditambahkan oleh organisasi anda. Mulakan semula apl untuk menyelesaikan pemasangan.</translation>
@@ -5779,7 +5780,6 @@ perubahan ini berlaku, anda mungkin tidak mahukannya.</translation>
 <translation id="9050666287014529139">Frasa laluan</translation>
 <translation id="9052208328806230490">Anda telah mendaftarkan pencetak anda dengan <ph name="CLOUD_PRINT_NAME" /> menggunakan akaun <ph name="EMAIL" /></translation>
 <translation id="9052404922357793350">Teruskan menyekat</translation>
-<translation id="9053091947372579468">Peranti anda disertakan dengan lesen Chrome, tetapi nama pengguna anda tidak dikaitkan dengan konsol Pentadbiran. Sila buat akaun konsol Pentadbiran untuk meneruskan pendaftaran. Nota: Jika anda mahu menggunakan domain anda sendiri untuk membuat akaun konsol Pentadbiran baharu, anda juga perlu melengkapkan pengesahan domain selepas pendaftaran. https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">Cetak pada kedua-dua belah halaman</translation>
 <translation id="9053893665344928494">Ingat pilihan saya</translation>
 <translation id="9055636786322918818">Kuat kuasakan penyulitan RC4. Penggunaan pilihan ini akan meningkatkan risiko anda, kerana sifer RC4 tidak selamat.</translation>

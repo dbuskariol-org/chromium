@@ -2389,7 +2389,6 @@
 <translation id="4285418559658561636">更新密碼</translation>
 <translation id="4285498937028063278">取消固定</translation>
 <translation id="428565720843367874">掃描這個檔案時，防毒軟件發生意外錯誤。</translation>
-<translation id="4287502004382794929">您沒有足夠軟件授權，無法註冊這部裝置。如要購買更多授權，請與銷售人員聯絡。如果您認為這則訊息有誤，請與支援團隊聯絡。</translation>
 <translation id="4289540628985791613">概覽</translation>
 <translation id="4295072614469448764">應用程式已在終端機上完成安裝，其圖示可能會在啟動器中顯示。</translation>
 <translation id="4295979599050707005">請再次登入，確認您的帳戶 <ph name="USER_EMAIL" /> 可用於 Chrome 和 Google Play 的網站、應用程式和擴充程式。您亦可以移除此帳戶。<ph name="LINK_BEGIN" />瞭解詳情<ph name="LINK_END" /></translation>
@@ -3720,6 +3719,7 @@
 <translation id="6207282396926186323">安裝 <ph name="APP_NAME" /> (Linux 應用程式)</translation>
 <translation id="6207937957461833379">國家/地區</translation>
 <translation id="6208521041562685716">正在啟用流動數據</translation>
+<translation id="6209908325007204267">您的裝置包含一項 Chrome Enterprise 升級，但您的使用者名稱並未連結企業賬戶。請透過另一部裝置前往 g.co/ChromeEnterpriseAccount 建立企業帳戶。</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />：同步處理無法正常運作</translation>
 <translation id="6212039847102026977">顯示進階網絡屬性</translation>
 <translation id="6212168817037875041">關閉螢幕</translation>
@@ -4403,6 +4403,7 @@
 <translation id="7186088072322679094">保留在工具列上</translation>
 <translation id="7187428571767585875">系統將移除或變更以下的登錄項目：</translation>
 <translation id="7189234443051076392">確保您的裝置上有足夠的儲存空間</translation>
+<translation id="7189451821249468368">您沒有足夠升級，無法註冊這部裝置。如要購買更多升級，請與銷售人員聯絡。如果您認為這則訊息有誤，請與支援團隊聯絡。</translation>
 <translation id="7189965711416741966">已新增指紋。</translation>
 <translation id="7191159667348037">不明打印機 (USB)</translation>
 <translation id="7193051357671784796">此應用程式由您的機構新增。重新啟動應用程式即可完成安裝。</translation>
@@ -5775,7 +5776,6 @@
 <translation id="9050666287014529139">複雜密碼</translation>
 <translation id="9052208328806230490">您已透過 <ph name="EMAIL" /> 帳戶並使用 <ph name="CLOUD_PRINT_NAME" /> 為您的打印機註冊</translation>
 <translation id="9052404922357793350">繼續封鎖</translation>
-<translation id="9053091947372579468">您的裝置隨附 Chrome 授權，但您的使用者名稱與管理控制台並無關聯。您必需建立管理控制台帳戶，才能繼續註冊。請注意，若您使用自己的網域建立新管理控制台帳戶，亦需要在登記後驗證網域。https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">雙面列印</translation>
 <translation id="9053893665344928494">記住我的選擇</translation>
 <translation id="9055636786322918818">強制執行 RC4 加密。由於 RC4 加密不安全，因此使用此選項會提高風險。</translation>

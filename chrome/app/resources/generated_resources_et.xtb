@@ -2391,7 +2391,6 @@ kasutades juhtpaneeli funktsiooni <ph name="CONTROL_PANEL_APPLET_NAME" />.
 <translation id="4285418559658561636">Värskenda parooli</translation>
 <translation id="4285498937028063278">Vabasta</translation>
 <translation id="428565720843367874">Viirusetõrjetarkvara ebaõnnestus selle faili skannimisel ootamatult.</translation>
-<translation id="4287502004382794929">Teil ei ole piisavalt tarkvaralitsentse selle seadme registreerimiseks. Täiendavate ostmiseks võtke ühendust müügiosakonnaga. Kui arvate, et saite selle teate ekslikult, võtke ühendust toega.</translation>
 <translation id="4289540628985791613">Ülevaade</translation>
 <translation id="4295072614469448764">Rakendus on teie terminalis saadaval. Käivitajas võib olla kuvatud ka ikoon.</translation>
 <translation id="4295979599050707005">Logige uuesti sisse, kinnitamaks, et teie kontot <ph name="USER_EMAIL" /> võib kasutada veebisaitide, rakenduste ja laiendustega Chrome’is ning Google Plays. Võite selle konto ka eemaldada. <ph name="LINK_BEGIN" />Lisateave<ph name="LINK_END" /></translation>
@@ -5778,7 +5777,6 @@ Hoidke oma võtmefail kindlas kohas. Teil läheb seda oma laiendi uute versiooni
 <translation id="9050666287014529139">Parool</translation>
 <translation id="9052208328806230490">Olete oma printerid registreerinud rakenduse <ph name="CLOUD_PRINT_NAME" /> abil kontot <ph name="EMAIL" /> kasutades</translation>
 <translation id="9052404922357793350">Jätka blokeerimist</translation>
-<translation id="9053091947372579468">Teie seade hõlmab Chrome'i litsentsi, ent teie kasutajanimi ei ole administraatorikonsooliga seotud. Looge administraatorikonsooli konto, et registreerimist jätkata. Märkus. Kui otsustate uue administraatorikonsooli konto loomiseks kasutada enda domeeni, tuleb teil pärast registreerumist domeen kinnitada. https://g.co/ChromeEnterpriseAccount</translation>
 <translation id="9053563360605707198">Prindi mõlemale poolele</translation>
 <translation id="9053893665344928494">Jäta valik meelde</translation>
 <translation id="9055636786322918818">Jõustatakse RC4-krüpteerimine. Selle valiku kasutamine suurendab riski, kuna RC4-šifrid on ebaturvalised.</translation>
