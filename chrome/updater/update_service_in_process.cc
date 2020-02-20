@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/updater/update_service.h"
-
-#include <memory>
+#include "chrome/updater/update_service_in_process.h"
 
 #include "base/bind.h"
 #include "base/memory/scoped_refptr.h"
@@ -20,11 +18,12 @@
 
 namespace updater {
 
-UpdateService::UpdateService(scoped_refptr<update_client::Configurator> config)
+UpdateServiceInProcess::UpdateServiceInProcess(
+    scoped_refptr<update_client::Configurator> config)
     : config_(config),
       update_client_(update_client::UpdateClientFactory(config)) {}
 
-void UpdateService::UpdateAll(
+void UpdateServiceInProcess::UpdateAll(
     base::OnceCallback<void(update_client::Error)> callback) {
   auto app_ids = Installer::FindAppIds();
 
@@ -55,7 +54,7 @@ void UpdateService::UpdateAll(
       false, std::move(callback));
 }
 
-UpdateService::~UpdateService() {
+UpdateServiceInProcess::~UpdateServiceInProcess() {
   // Block until prefs write is committed.
   base::RunLoop runloop;
   config_->GetPrefService()->CommitPendingWrite(base::BindOnce(
