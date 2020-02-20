@@ -5983,6 +5983,7 @@ void RenderFrameHostImpl::InvalidateMojoConnection() {
   navigation_control_.reset();
   frame_input_handler_.reset();
   find_in_page_.reset();
+  render_accessibility_.reset();
 
   // Disconnect with ImageDownloader Mojo service in Blink.
   mojo_image_downloader_.reset();
@@ -6155,8 +6156,15 @@ bool RenderFrameHostImpl::IsSameSiteInstance(
 }
 
 void RenderFrameHostImpl::UpdateAccessibilityMode() {
-  Send(new FrameMsg_SetAccessibilityMode(routing_id_,
-                                         delegate_->GetAccessibilityMode()));
+  // Don't update accessibility mode for a frame that hasn't been created yet.
+  if (!IsRenderFrameCreated())
+    return;
+
+  if (!render_accessibility_)
+    GetRemoteAssociatedInterfaces()->GetInterface(&render_accessibility_);
+
+  ui::AXMode ax_mode = delegate_->GetAccessibilityMode();
+  render_accessibility_->SetMode(ax_mode.mode());
 }
 
 void RenderFrameHostImpl::RequestAXTreeSnapshot(AXTreeSnapshotCallback callback,
