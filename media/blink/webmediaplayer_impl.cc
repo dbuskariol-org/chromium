@@ -2726,7 +2726,7 @@ void WebMediaPlayerImpl::StartPipeline() {
 
 #if BUILDFLAG(ENABLE_FFMPEG)
     Demuxer::MediaTracksUpdatedCB media_tracks_updated_cb =
-        BindToCurrentLoop(base::Bind(
+        BindToCurrentLoop(base::BindRepeating(
             &WebMediaPlayerImpl::OnFFmpegMediaTracksUpdated, weak_this_));
 
     demuxer_ = std::make_unique<FFmpegDemuxer>(
