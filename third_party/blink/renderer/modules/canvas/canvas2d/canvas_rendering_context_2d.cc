@@ -678,7 +678,6 @@ void CanvasRenderingContext2D::FinalizeFrame() {
   TRACE_EVENT0("blink", "CanvasRenderingContext2D::FinalizeFrame");
   if (IsPaintable())
     canvas()->GetCanvas2DLayerBridge()->FinalizeFrame();
-  usage_counters_.num_frames_since_reset++;
 }
 
 bool CanvasRenderingContext2D::ParseColorOrCurrentColor(
@@ -1012,7 +1011,6 @@ bool CanvasRenderingContext2D::FocusRingCallIsValid(const Path& path,
 }
 
 void CanvasRenderingContext2D::DrawFocusRing(const Path& path) {
-  usage_counters_.num_draw_focus_calls++;
   if (!GetOrCreatePaintCanvas())
     return;
 
