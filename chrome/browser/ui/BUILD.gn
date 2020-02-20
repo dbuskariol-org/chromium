@@ -2022,11 +2022,11 @@ jumbo_static_library("ui") {
 
     deps += [
       "//ash",
+      "//ash/components/shortcut_viewer",
       "//ash/keyboard/ui",
       "//ash/public/cpp",
       "//ash/public/cpp/resources:ash_public_unscaled_resources",
       "//ash/public/cpp/vector_icons",
-      "//ash/shortcut_viewer",
       "//chrome/browser/chromeos",
       "//chrome/browser/chromeos:backdrop_wallpaper_proto",
       "//chrome/browser/resources/chromeos:camera_resources",

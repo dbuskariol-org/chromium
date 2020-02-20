@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/shortcut_viewer/views/ksv_search_box_view.h"
+#include "ash/components/shortcut_viewer/views/ksv_search_box_view.h"
 
-#include "ash/shortcut_viewer/strings/grit/ash_components_strings.h"
-#include "ash/shortcut_viewer/vector_icons/vector_icons.h"
+#include "ash/components/shortcut_viewer/vector_icons/vector_icons.h"
+#include "ash/components/strings/grit/ash_components_strings.h"
 #include "ui/accessibility/ax_enums.mojom.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/l10n/l10n_util.h"

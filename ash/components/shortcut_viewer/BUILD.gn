@@ -26,10 +26,10 @@ source_set("shortcut_viewer") {
 
   deps = [
     "//ash",
+    "//ash/components/shortcut_viewer/vector_icons",
+    "//ash/components/strings",
     "//ash/public/cpp",
     "//ash/public/cpp/resources:ash_public_unscaled_resources",
-    "//ash/shortcut_viewer/strings",
-    "//ash/shortcut_viewer/vector_icons",
     "//cc/paint",
     "//ui/accessibility",
     "//ui/aura",
