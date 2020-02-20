@@ -44263,6 +44263,9 @@ Called by update_use_counter_css.py.-->
 </enum>
 
 <enum name="NearOomDetectionEndReason">
+  <obsolete>
+    Removed in Feb 2020.
+  </obsolete>
   <int value="0" label="OOM protected renderer is crashed"/>
   <int value="1"
       label="Foreground renderer is gone for some reason other than OOM crash"/>
