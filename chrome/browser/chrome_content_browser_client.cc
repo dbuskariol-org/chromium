@@ -4232,6 +4232,9 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
             ? IdentityManagerFactory::GetForProfile(profile)
             : nullptr;
 
+    // TODO(crbug.com/1050859): Get url_lookup_service from
+    // url_lookup_service_factory and pass it into the throttle.
+
     result.push_back(safe_browsing::BrowserURLLoaderThrottle::Create(
         base::BindOnce(
             &ChromeContentBrowserClient::GetSafeBrowsingUrlCheckerDelegate,
