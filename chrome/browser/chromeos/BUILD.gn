@@ -105,6 +105,7 @@ source_set("chromeos") {
     "//chromeos/components/multidevice/logging",
     "//chromeos/components/power",
     "//chromeos/components/proximity_auth",
+    "//chromeos/components/quick_answers/public/cpp:prefs",
     "//chromeos/components/smbfs",
     "//chromeos/components/smbfs/mojom",
     "//chromeos/components/tether",
