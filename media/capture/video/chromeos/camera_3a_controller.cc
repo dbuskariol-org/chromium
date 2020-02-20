@@ -181,7 +181,7 @@ void Camera3AController::Stabilize3AForStillCapture(
     return;
   }
 
-  if (Is3AStabilized() || zero_shutter_lag_enabled_) {
+  if (Is3AStabilized()) {
     std::move(on_3a_stabilized_callback).Run();
     return;
   }
@@ -499,10 +499,6 @@ void Camera3AController::SetPointOfInterestUnlockAe() {
 
   ae_locked_for_point_of_interest_ = false;
   ClearRepeatingCaptureMetadata();
-}
-
-void Camera3AController::UpdateZeroShutterLagAvailability(bool enabled) {
-  zero_shutter_lag_enabled_ = enabled;
 }
 
 base::WeakPtr<Camera3AController> Camera3AController::GetWeakPtr() {
