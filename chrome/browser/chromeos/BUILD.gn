@@ -2588,6 +2588,7 @@ static_library("test_support") {
 
   deps = [
     ":chromeos",
+    "//chrome/browser/web_applications/components",
     "//chrome/test:test_support",
     "//chromeos",
     "//chromeos/components/drivefs",
