@@ -9,9 +9,11 @@
 #include <utility>
 
 #include "base/bind.h"
+#include "base/feature_list.h"
 #include "base/files/file_util.h"
 #include "base/format_macros.h"
 #include "base/memory/weak_ptr.h"
+#include "base/strings/string_util.h"
 #include "base/task/post_task.h"
 #include "chrome/browser/chromeos/drive/file_system_util.h"
 #include "chrome/browser/chromeos/extensions/file_manager/private_api_util.h"
@@ -21,6 +23,7 @@
 #include "chrome/browser/chromeos/smb_client/smb_service_factory.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/common/extensions/api/file_manager_private.h"
+#include "chromeos/constants/chromeos_features.h"
 #include "chromeos/disks/disk_mount_manager.h"
 #include "components/drive/event_logger.h"
 #include "content/public/browser/browser_thread.h"
@@ -122,13 +125,19 @@ void FileManagerPrivateAddMountFunction::RunAfterEnsureReadableFilePermission(
   // Pass back the actual source path of the mount point.
   Respond(OneArgument(std::make_unique<base::Value>(file_path.AsUTF8Unsafe())));
 
+  // TODO(crbug.com/996549) Remove this once the old avfsd-based RAR mounter is
+  // removed.
+  std::string format = base::ToLowerASCII(display_name.Extension());
+  if (format == ".rar" &&
+      base::FeatureList::IsEnabled(chromeos::features::kRar2Fs)) {
+    format = ".rar2fs";
+  }
+
   // MountPath() takes a std::string.
   DiskMountManager* disk_mount_manager = DiskMountManager::GetInstance();
   disk_mount_manager->MountPath(
-      file_path.AsUTF8Unsafe(),
-      base::FilePath(display_name.Extension()).AsUTF8Unsafe(),
-      display_name.AsUTF8Unsafe(), {}, chromeos::MOUNT_TYPE_ARCHIVE,
-      chromeos::MOUNT_ACCESS_MODE_READ_WRITE);
+      file_path.AsUTF8Unsafe(), format, display_name.AsUTF8Unsafe(), {},
+      chromeos::MOUNT_TYPE_ARCHIVE, chromeos::MOUNT_ACCESS_MODE_READ_WRITE);
 }
 
 ExtensionFunction::ResponseAction FileManagerPrivateRemoveMountFunction::Run() {
@@ -145,8 +154,8 @@ ExtensionFunction::ResponseAction FileManagerPrivateRemoveMountFunction::Run() {
   }
   set_log_on_completion(true);
 
-  using file_manager::VolumeManager;
   using file_manager::Volume;
+  using file_manager::VolumeManager;
   VolumeManager* const volume_manager =
       VolumeManager::Get(chrome_details.GetProfile());
   DCHECK(volume_manager);
