@@ -335,6 +335,10 @@ class ListBoxSelectType final : public SelectType {
  public:
   explicit ListBoxSelectType(HTMLSelectElement& select) : SelectType(select) {}
   bool DefaultEventHandler(const Event& event) override;
+  void UpdateMultiSelectFocus() override;
+
+ private:
+  bool is_in_non_contiguous_selection_ = false;
 };
 
 bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
@@ -527,12 +531,11 @@ bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
 
       select_->SetActiveSelectionEnd(end_option);
 
-      select_->is_in_non_contiguous_selection_ =
-          select_->is_multiple_ && is_control_key;
+      is_in_non_contiguous_selection_ = select_->is_multiple_ && is_control_key;
       bool select_new_item =
           !select_->is_multiple_ || keyboard_event->shiftKey() ||
           (!IsSpatialNavigationEnabled(select_->GetDocument().GetFrame()) &&
-           !select_->is_in_non_contiguous_selection_);
+           !is_in_non_contiguous_selection_);
       if (select_new_item)
         select_->active_selection_state_ = true;
       // If the anchor is uninitialized, or if we're going to deselect all
@@ -546,12 +549,12 @@ bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
       }
 
       select_->ScrollToOption(end_option);
-      if (select_new_item || select_->is_in_non_contiguous_selection_) {
+      if (select_new_item || is_in_non_contiguous_selection_) {
         if (select_new_item) {
           select_->UpdateListBoxSelection(deselect_others);
           select_->ListBoxOnChange();
         }
-        select_->UpdateMultiSelectListBoxFocus();
+        UpdateMultiSelectFocus();
       } else {
         select_->ScrollToSelection();
       }
@@ -572,7 +575,7 @@ bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
       return true;
     } else if (select_->is_multiple_ && key_code == ' ' &&
                (IsSpatialNavigationEnabled(select_->GetDocument().GetFrame()) ||
-                select_->is_in_non_contiguous_selection_)) {
+                is_in_non_contiguous_selection_)) {
       HTMLOptionElement* option = select_->active_selection_end_;
       // If there's no active selection,
       // act as if "ArrowDown" had been pressed.
@@ -587,6 +590,20 @@ bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
     return false;
   }
   return false;
+}
+
+void ListBoxSelectType::UpdateMultiSelectFocus() {
+  if (!select_->is_multiple_)
+    return;
+
+  for (auto* const option : select_->GetOptionList()) {
+    if (option->IsDisabledFormControl() || !option->GetLayoutObject())
+      continue;
+    bool is_focused = (option == select_->active_selection_end_) &&
+                      is_in_non_contiguous_selection_;
+    option->SetMultiSelectFocusedState(is_focused);
+  }
+  select_->ScrollToSelection();
 }
 
 // ============================================================================
@@ -623,5 +640,7 @@ const ComputedStyle* SelectType::OptionStyle() const {
   NOTREACHED();
   return nullptr;
 }
+
+void SelectType::UpdateMultiSelectFocus() {}
 
 }  // namespace blink
