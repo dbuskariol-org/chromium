@@ -138,11 +138,6 @@
     "expiry_milestone": 76
   },
   {
-    "name": "arc-boot-completed-broadcast",
-    "owners": [ "//components/arc/mojom/ARC_SECURITY_OWNERS" ],
-    "expiry_milestone": 76
-  },
-  {
     "name": "arc-custom-tabs-experiment",
     "owners": [ "hashimoto" ],
     "expiry_milestone": 76

@@ -2728,9 +2728,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kFillOnAccountSelectDescription, kOsAll,
      FEATURE_VALUE_TYPE(password_manager::features::kFillOnAccountSelect)},
 #if defined(OS_CHROMEOS)
-    {"arc-boot-completed-broadcast", flag_descriptions::kArcBootCompleted,
-     flag_descriptions::kArcBootCompletedDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(arc::kBootCompletedBroadcastFeature)},
     {"arc-custom-tabs-experiment",
      flag_descriptions::kArcCustomTabsExperimentName,
      flag_descriptions::kArcCustomTabsExperimentDescription, kOsCrOS,

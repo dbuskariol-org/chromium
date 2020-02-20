@@ -3016,10 +3016,6 @@ const char kArcApplicationZoomName[] = "Allow zooming of Android apps";
 const char kArcApplicationZoomDescription[] =
     "Allow Android apps to be zoomed in/out using ctrl+/-.";
 
-const char kArcBootCompleted[] = "Load Android apps automatically";
-const char kArcBootCompletedDescription[] =
-    "Allow Android apps to start automatically after signing in.";
-
 const char kArcCupsApiName[] = "ARC CUPS API";
 const char kArcCupsApiDescription[] =
     "Enables support of libcups APIs from ARC";
