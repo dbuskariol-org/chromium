@@ -3208,11 +3208,6 @@
     "expiry_milestone": 75
   },
   {
-    "name": "safe-browsing-use-local-blacklists-v2",
-    "owners": [ "vakh" ],
-    "expiry_milestone": 76
-  },
-  {
     "name": "safety-tips",
     "owners": [ "jdeblasio", "estark", "meacer" ],
     "expiry_milestone": 82
