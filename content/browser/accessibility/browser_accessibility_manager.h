@@ -235,6 +235,12 @@ class CONTENT_EXPORT BrowserAccessibilityManager : public ui::AXTreeObserver,
   // had focus.
   static void NeverSuppressOrDelayEventsForTesting();
 
+  // Extra mac nodes are temporarily disabled, except for in tests.
+  static void AllowExtraMacNodesForTesting();
+  // Are extra mac nodes allowed at all? Currently only allowed in tests.
+  // Even when returning true, platforms other than Mac OS do not enable them.
+  static bool GetExtraMacNodesAllowed();
+
   // Accessibility actions. All of these are implemented asynchronously
   // by sending a message to the renderer to perform the respective action
   // on the given node.  See the definition of |ui::AXActionData| for more
@@ -536,6 +542,17 @@ class CONTENT_EXPORT BrowserAccessibilityManager : public ui::AXTreeObserver,
   // flakiness. See NeverSuppressOrDelayEventsForTesting() for details.
   static bool never_suppress_or_delay_events_for_testing_;
 
+<<<<<<< HEAD
+=======
+  // Extra mac nodes are disabled even on mac currently, except for in tests.
+  static bool allow_extra_mac_nodes_for_testing_;
+
+  const ui::AXEventGenerator& event_generator() const {
+    return event_generator_;
+  }
+  ui::AXEventGenerator& event_generator() { return event_generator_; }
+
+>>>>>>> 3e33b99b8d0c... Temporarily disable extra mac nodes to fix table crashes
   // Stores the id of the last focused node across all frames, as well as the id
   // of the tree that contains it, so that when focus might have changed we can
   // figure out whether we need to fire a focus event.
