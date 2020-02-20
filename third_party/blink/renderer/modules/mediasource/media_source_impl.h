@@ -28,8 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_MEDIASOURCE_MEDIA_SOURCE_H_
-#define THIRD_PARTY_BLINK_RENDERER_MODULES_MEDIASOURCE_MEDIA_SOURCE_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_MEDIASOURCE_MEDIA_SOURCE_IMPL_H_
+#define THIRD_PARTY_BLINK_RENDERER_MODULES_MEDIASOURCE_MEDIA_SOURCE_IMPL_H_
 
 #include <memory>
 
@@ -37,7 +37,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/active_script_wrappable.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context_lifecycle_observer.h"
 #include "third_party/blink/renderer/core/fileapi/url_registry.h"
-#include "third_party/blink/renderer/core/html/media/html_media_source.h"
+#include "third_party/blink/renderer/core/html/media/media_source.h"
 #include "third_party/blink/renderer/core/html/time_ranges.h"
 #include "third_party/blink/renderer/modules/event_target_modules.h"
 #include "third_party/blink/renderer/modules/mediasource/source_buffer.h"
@@ -50,22 +50,22 @@ class EventQueue;
 class ExceptionState;
 class WebSourceBuffer;
 
-class MediaSource final : public EventTargetWithInlineData,
-                          public HTMLMediaSource,
-                          public ActiveScriptWrappable<MediaSource>,
-                          public ExecutionContextLifecycleObserver {
+class MediaSourceImpl final : public EventTargetWithInlineData,
+                              public MediaSource,
+                              public ActiveScriptWrappable<MediaSourceImpl>,
+                              public ExecutionContextLifecycleObserver {
   DEFINE_WRAPPERTYPEINFO();
-  USING_GARBAGE_COLLECTED_MIXIN(MediaSource);
+  USING_GARBAGE_COLLECTED_MIXIN(MediaSourceImpl);
 
  public:
   static const AtomicString& OpenKeyword();
   static const AtomicString& ClosedKeyword();
   static const AtomicString& EndedKeyword();
 
-  static MediaSource* Create(ExecutionContext*);
+  static MediaSourceImpl* Create(ExecutionContext*);
 
-  explicit MediaSource(ExecutionContext*);
-  ~MediaSource() override;
+  explicit MediaSourceImpl(ExecutionContext*);
+  ~MediaSourceImpl() override;
 
   static void LogAndThrowDOMException(ExceptionState&,
                                       DOMExceptionCode error,
@@ -93,7 +93,7 @@ class MediaSource final : public EventTargetWithInlineData,
 
   static bool isTypeSupported(const String& type);
 
-  // HTMLMediaSource
+  // html/media/MediaSource interface implementation
   bool AttachToElement(HTMLMediaElement*) override;
   void SetWebMediaSourceAndOpen(std::unique_ptr<WebMediaSource>) override;
   void Close() override;
@@ -152,8 +152,8 @@ class MediaSource final : public EventTargetWithInlineData,
   // Here, using Member, instead of Member, to keep
   // |attached_element_|, |source_buffers_|, |active_source_buffers_|, and their
   // wrappers from being collected if we are alive or traceable from a GC root.
-  // Activity by this MediaSource or on references to objects returned by
-  // exercising this MediaSource (such as an app manipulating a SourceBuffer
+  // Activity by this MediaSourceImpl or on references to objects returned by
+  // exercising this MediaSourceImpl (such as an app manipulating a SourceBuffer
   // retrieved via activeSourceBuffers()) may cause events to be dispatched by
   // these other objects.
   Member<HTMLMediaElement> attached_element_;
@@ -167,4 +167,4 @@ class MediaSource final : public EventTargetWithInlineData,
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_MEDIASOURCE_MEDIA_SOURCE_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_MEDIASOURCE_MEDIA_SOURCE_IMPL_H_

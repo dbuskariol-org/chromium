@@ -28,8 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_HTML_MEDIA_HTML_MEDIA_SOURCE_H_
-#define THIRD_PARTY_BLINK_RENDERER_CORE_HTML_MEDIA_HTML_MEDIA_SOURCE_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_HTML_MEDIA_MEDIA_SOURCE_H_
+#define THIRD_PARTY_BLINK_RENDERER_CORE_HTML_MEDIA_MEDIA_SOURCE_H_
 
 #include <memory>
 #include "third_party/blink/public/platform/web_time_range.h"
@@ -45,12 +45,12 @@ class HTMLMediaElement;
 class TimeRanges;
 class TrackBase;
 
-class CORE_EXPORT HTMLMediaSource : public URLRegistrable,
-                                    public GarbageCollectedMixin {
+class CORE_EXPORT MediaSource : public URLRegistrable,
+                                public GarbageCollectedMixin {
  public:
   static void SetRegistry(URLRegistry*);
-  static HTMLMediaSource* Lookup(const String& url) {
-    return registry_ ? static_cast<HTMLMediaSource*>(registry_->Lookup(url))
+  static MediaSource* Lookup(const String& url) {
+    return registry_ ? static_cast<MediaSource*>(registry_->Lookup(url))
                      : nullptr;
   }
 
@@ -87,4 +87,4 @@ class CORE_EXPORT HTMLMediaSource : public URLRegistrable,
 
 }  // namespace blink
 
-#endif
+#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_HTML_MEDIA_MEDIA_SOURCE_H_

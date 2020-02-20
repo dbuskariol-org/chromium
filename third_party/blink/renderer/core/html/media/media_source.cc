@@ -28,13 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "third_party/blink/renderer/core/html/media/html_media_source.h"
+#include "third_party/blink/renderer/core/html/media/media_source.h"
 
 namespace blink {
 
-URLRegistry* HTMLMediaSource::registry_ = nullptr;
+URLRegistry* MediaSource::registry_ = nullptr;
 
-void HTMLMediaSource::SetRegistry(URLRegistry* registry) {
+void MediaSource::SetRegistry(URLRegistry* registry) {
   DCHECK(!registry_);
   registry_ = registry;
 }
