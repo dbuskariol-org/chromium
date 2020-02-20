@@ -60,6 +60,7 @@ class TestRenderFrame : public RenderFrameImpl {
   void DeleteSurroundingText(int before, int after);
   void DeleteSurroundingTextInCodePoints(int before, int after);
   void CollapseSelection();
+  void SetAccessibilityMode(ui::AXMode new_mode);
   void SetCompositionFromExistingText(
       int start,
       int end,

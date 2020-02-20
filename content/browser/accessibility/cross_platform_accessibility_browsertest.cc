@@ -52,7 +52,7 @@ class CrossPlatformAccessibilityBrowserTest : public ContentBrowserTest {
       ui::AXMode accessibility_mode = ui::kAXModeComplete) {
     AccessibilityNotificationWaiter waiter(shell()->web_contents(),
                                            accessibility_mode,
-                                           ax::mojom::Event::kLoadComplete);
+                                           ax::mojom::Event::kLayoutComplete);
     waiter.WaitForNotification();
     return waiter.GetAXTree();
   }

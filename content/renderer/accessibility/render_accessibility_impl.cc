@@ -178,25 +178,40 @@ RenderAccessibilityImpl::RenderAccessibilityImpl(RenderFrameImpl* render_frame,
                                                  ui::AXMode mode)
     : RenderFrameObserver(render_frame),
       render_frame_(render_frame),
-      tree_source_(render_frame, ui::AXMode()),
+      tree_source_(render_frame, mode),
       serializer_(&tree_source_),
       plugin_tree_source_(nullptr),
       last_scroll_offset_(gfx::Size()),
       ack_pending_(false),
       reset_token_(0) {
   ack_token_ = g_next_ack_token++;
-
-#if defined(OS_ANDROID)
   WebView* web_view = render_frame_->GetRenderView()->GetWebView();
   WebSettings* settings = web_view->GetSettings();
 
+  SetAccessibilityCrashKey(mode);
+#if defined(OS_ANDROID)
   // Password values are only passed through on Android.
   settings->SetAccessibilityPasswordValuesEnabled(true);
 #endif
 
+#if !defined(OS_ANDROID)
+  // Inline text boxes can be enabled globally on all except Android.
+  // On Android they can be requested for just a specific node.
+  if (mode.has_mode(ui::AXMode::kInlineTextBoxes))
+    settings->SetInlineTextBoxAccessibilityEnabled(true);
+#endif
+
   const WebDocument& document = GetMainDocument();
-  if (!document.IsNull())
+  if (!document.IsNull()) {
     ax_context_ = std::make_unique<WebAXContext>(document);
+    StartOrStopLabelingImages(ui::AXMode(), mode);
+
+    // It's possible that the webview has already loaded a webpage without
+    // accessibility being enabled. Initialize the browser's cached
+    // accessibility tree by sending it a notification.
+    HandleAXEvent(WebAXObject::FromWebDocument(document),
+                  ax::mojom::Event::kLayoutComplete);
+  }
 
   image_annotation_debugging_ =
       base::CommandLine::ForCurrentProcess()->HasSwitch(
@@ -206,10 +221,6 @@ RenderAccessibilityImpl::RenderAccessibilityImpl(RenderFrameImpl* render_frame,
     render_frame_->render_view()->RegisterRendererPreferenceWatcher(
         pref_watcher_receiver_.BindNewPipeAndPassRemote());
   }
-
-  // Initialize the parts that depend  on the AX Mode from a single central
-  // point both to initialize this object and to update to further changes.
-  AccessibilityModeChanged(mode);
 }
 
 RenderAccessibilityImpl::~RenderAccessibilityImpl() = default;
@@ -228,7 +239,7 @@ void RenderAccessibilityImpl::DidCommitProvisionalLoad(
   // the one-shot image annotation (i.e. AXMode for image annotation is not
   // set).
   if (!ax_image_annotator_ ||
-      GetAccessibilityMode().has_mode(ui::AXMode::kLabelImages)) {
+      tree_source_.accessibility_mode().has_mode(ui::AXMode::kLabelImages)) {
     return;
   }
   tree_source_.RemoveImageAnnotator();
@@ -237,10 +248,9 @@ void RenderAccessibilityImpl::DidCommitProvisionalLoad(
 }
 
 void RenderAccessibilityImpl::AccessibilityModeChanged(const ui::AXMode& mode) {
-  ui::AXMode old_mode = GetAccessibilityMode();
+  ui::AXMode old_mode = tree_source_.accessibility_mode();
   if (old_mode == mode)
     return;
-
   tree_source_.SetAccessibilityMode(mode);
 
   SetAccessibilityCrashKey(mode);
@@ -1119,7 +1129,7 @@ void RenderAccessibilityImpl::Scroll(const ui::AXActionTarget* target,
 }
 
 void RenderAccessibilityImpl::RecordImageMetrics(AXContentTreeUpdate* update) {
-  if (!GetAccessibilityMode().has_mode(ui::AXMode::kScreenReader))
+  if (!render_frame_->accessibility_mode().has_mode(ui::AXMode::kScreenReader))
     return;
   float scale_factor = render_frame_->GetDeviceScaleFactor();
   for (size_t i = 0; i < update->nodes.size(); ++i) {

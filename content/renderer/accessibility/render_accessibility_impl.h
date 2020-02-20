@@ -104,10 +104,6 @@ class CONTENT_EXPORT RenderAccessibilityImpl
 
   RenderFrameImpl* render_frame() { return render_frame_; }
 
-  ui::AXMode GetAccessibilityMode() {
-    return tree_source_.accessibility_mode();
-  }
-
   // RenderAccessibility implementation.
   int GenerateAXID() override;
   void SetPluginTreeSource(PluginAXTreeSource* source) override;
@@ -260,11 +256,10 @@ class CONTENT_EXPORT RenderAccessibilityImpl
 
   friend class AXImageAnnotatorTest;
   friend class PluginActionHandlingTest;
-  friend class RenderAccessibilityImplTest;
 
   DISALLOW_COPY_AND_ASSIGN(RenderAccessibilityImpl);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_RENDERER_ACCESSIBILITY_RENDER_ACCESSIBILITY_IMPL_H_
+#endif  // CONTENT_RENDERER_ACCESSIBILITY_RENDERER_ACCESSIBILITY_H_

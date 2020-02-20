@@ -589,9 +589,6 @@ class AutofillAccessibilityTest : public AutofillTest {
 
 // Test that autofill available state is correctly set on accessibility node.
 IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutofillState) {
-  // Enable accessibility.
-  content::EnableAccessibilityForWebContents(web_contents());
-
   // Navigate to url.
   GURL url =
       embedded_test_server()->GetURL("/autofill/duplicate_profiles_test.html");
@@ -599,9 +596,11 @@ IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutofillState) {
   params.disposition = WindowOpenDisposition::NEW_FOREGROUND_TAB;
   ui_test_utils::NavigateToURL(&params);
 
-  content::AccessibilityNotificationWaiter load_waiter_one(
-      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLoadComplete);
-  load_waiter_one.WaitForNotification();
+  // Enable accessibility.
+  content::EnableAccessibilityForWebContents(web_contents());
+  content::AccessibilityNotificationWaiter layout_waiter_one(
+      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLayoutComplete);
+  layout_waiter_one.WaitForNotification();
 
   // Focus target form field.
   const std::string focus_name_first_js =
@@ -639,9 +638,9 @@ IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutofillState) {
 
   // Reload page.
   ui_test_utils::NavigateToURL(&params);
-  content::AccessibilityNotificationWaiter load_waiter_two(
-      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLoadComplete);
-  load_waiter_two.WaitForNotification();
+  content::AccessibilityNotificationWaiter layout_waiter_two(
+      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLayoutComplete);
+  layout_waiter_two.WaitForNotification();
 
   // Focus target form field.
   ASSERT_TRUE(content::ExecuteScript(web_contents(), focus_name_first_js));
@@ -662,9 +661,6 @@ IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutofillState) {
 // accessibility node. Test autocomplete in this file since it uses the same
 // infrastructure as autofill.
 IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutocompleteState) {
-  // Enable accessibility.
-  content::EnableAccessibilityForWebContents(web_contents());
-
   // Navigate to url.
   GURL url =
       embedded_test_server()->GetURL("/autofill/duplicate_profiles_test.html");
@@ -672,9 +668,11 @@ IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutocompleteState) {
   params.disposition = WindowOpenDisposition::NEW_FOREGROUND_TAB;
   ui_test_utils::NavigateToURL(&params);
 
-  content::AccessibilityNotificationWaiter load_waiter_one(
-      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLoadComplete);
-  load_waiter_one.WaitForNotification();
+  // Enable accessibility.
+  content::EnableAccessibilityForWebContents(web_contents());
+  content::AccessibilityNotificationWaiter layout_waiter_one(
+      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLayoutComplete);
+  layout_waiter_one.WaitForNotification();
 
   // Focus target form field.
   const std::string focus_name_first_js =
@@ -708,9 +706,9 @@ IN_PROC_BROWSER_TEST_F(AutofillAccessibilityTest, TestAutocompleteState) {
 
   // Reload page.
   ui_test_utils::NavigateToURL(&params);
-  content::AccessibilityNotificationWaiter load_waiter_two(
-      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLoadComplete);
-  load_waiter_two.WaitForNotification();
+  content::AccessibilityNotificationWaiter layout_waiter_two(
+      web_contents(), ui::kAXModeComplete, ax::mojom::Event::kLayoutComplete);
+  layout_waiter_two.WaitForNotification();
 
   // Focus target form field.
   ASSERT_TRUE(content::ExecuteScript(web_contents(), focus_name_first_js));

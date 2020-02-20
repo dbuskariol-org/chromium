@@ -3371,7 +3371,7 @@ bool PepperPluginInstanceImpl::IsTextureInUse(
 }
 
 void PepperPluginInstanceImpl::HandleAccessibilityChange() {
-  if (render_frame_ && render_frame_->GetRenderAccessibility() &&
+  if (render_frame_ && render_frame_->render_accessibility() &&
       LoadPdfInterface()) {
     plugin_pdf_interface_->EnableAccessibility(pp_instance());
   }
