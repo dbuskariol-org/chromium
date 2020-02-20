@@ -255,8 +255,7 @@ AppCacheUpdateJob::UrlToFetch::UrlToFetch(const GURL& url,
 
 AppCacheUpdateJob::UrlToFetch::UrlToFetch(const UrlToFetch& other) = default;
 
-AppCacheUpdateJob::UrlToFetch::~UrlToFetch() {
-}
+AppCacheUpdateJob::UrlToFetch::~UrlToFetch() = default;
 
 AppCacheUpdateJob::AppCacheUpdateJob(AppCacheServiceImpl* service,
                                      AppCacheGroup* group)
@@ -500,11 +499,15 @@ void AppCacheUpdateJob::HandleManifestFetchCompleted(URLFetcher* url_fetcher,
     manifest_data_ = manifest_fetcher->manifest_data();
     manifest_response_info_ =
         std::make_unique<net::HttpResponseInfo>(request->GetResponseInfo());
-    if (update_type_ == UPGRADE_ATTEMPT)
+    if (update_type_ == UPGRADE_ATTEMPT) {
       CheckIfManifestChanged();  // continues asynchronously
-    else
+    } else {
       ContinueHandleManifestFetchCompleted(true);
-  } else if (response_code == 304 && update_type_ == UPGRADE_ATTEMPT) {
+    }
+    return;
+  }
+
+  if (response_code == 304 && update_type_ == UPGRADE_ATTEMPT) {
     if (fetched_manifest_scope_ == cached_manifest_scope_) {
       ContinueHandleManifestFetchCompleted(false);
     } else {
@@ -513,20 +516,23 @@ void AppCacheUpdateJob::HandleManifestFetchCompleted(URLFetcher* url_fetcher,
       // response.
       ReadManifestFromCacheAndContinue();
     }
-  } else if ((response_code == 404 || response_code == 410) &&
-             update_type_ == UPGRADE_ATTEMPT) {
-    storage_->MakeGroupObsolete(group_, this, response_code);  // async
-  } else {
-    const char kFormatString[] = "Manifest fetch failed (%d) %s";
-    std::string message =
-        FormatUrlErrorMessage(kFormatString, manifest_url_,
-                              manifest_fetcher->result(), response_code);
-    HandleCacheFailure(
-        blink::mojom::AppCacheErrorDetails(
-            message, blink::mojom::AppCacheErrorReason::APPCACHE_MANIFEST_ERROR,
-            manifest_url_, response_code, false /*is_cross_origin*/),
-        manifest_fetcher->result(), GURL());
+    return;
   }
+
+  if ((response_code == 404 || response_code == 410) &&
+      update_type_ == UPGRADE_ATTEMPT) {
+    storage_->MakeGroupObsolete(group_, this, response_code);  // async
+    return;
+  }
+
+  const char kFormatString[] = "Manifest fetch failed (%d) %s";
+  std::string message = FormatUrlErrorMessage(
+      kFormatString, manifest_url_, manifest_fetcher->result(), response_code);
+  HandleCacheFailure(
+      blink::mojom::AppCacheErrorDetails(
+          message, blink::mojom::AppCacheErrorReason::APPCACHE_MANIFEST_ERROR,
+          manifest_url_, response_code, false /*is_cross_origin*/),
+      manifest_fetcher->result(), GURL());
 }
 
 void AppCacheUpdateJob::OnGroupMadeObsolete(AppCacheGroup* group,
