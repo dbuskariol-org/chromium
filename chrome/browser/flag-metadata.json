@@ -1224,8 +1224,8 @@
   },
   {
     "name": "enable-custom-mac-paper-sizes",
-    "owners": [ "thestig" ],
-    "expiry_milestone": 82
+    "owners": [ "thestig", "dhoss" ],
+    "expiry_milestone": 85
   },
   {
     "name": "enable-data-reduction-proxy-server-experiment",
