@@ -1422,12 +1422,12 @@ void HTMLSelectElement::DefaultEventHandler(Event& event) {
     return;
   }
 
-  if (event.type() == event_type_names::kKeypress && event.IsKeyboardEvent()) {
-    auto& keyboard_event = ToKeyboardEvent(event);
-    if (!keyboard_event.ctrlKey() && !keyboard_event.altKey() &&
-        !keyboard_event.metaKey() &&
-        WTF::unicode::IsPrintableChar(keyboard_event.charCode())) {
-      TypeAheadFind(keyboard_event);
+  auto* keyboard_event = DynamicTo<KeyboardEvent>(event);
+  if (event.type() == event_type_names::kKeypress && keyboard_event) {
+    if (!keyboard_event->ctrlKey() && !keyboard_event->altKey() &&
+        !keyboard_event->metaKey() &&
+        WTF::unicode::IsPrintableChar(keyboard_event->charCode())) {
+      TypeAheadFind(*keyboard_event);
       event.SetDefaultHandled();
       return;
     }

@@ -89,12 +89,12 @@ bool MenuListSelectType::DefaultEventHandler(const Event& event) {
   // some element to none which will cause a layout tree detach.
   select_->GetDocument().UpdateStyleAndLayoutTree();
 
+  const auto* key_event = DynamicTo<KeyboardEvent>(event);
   if (event.type() == event_type_names::kKeydown) {
-    if (!select_->GetLayoutObject() || !event.IsKeyboardEvent())
+    if (!select_->GetLayoutObject() || !key_event)
       return false;
 
-    const auto& key_event = ToKeyboardEvent(event);
-    if (select_->ShouldOpenPopupForKeyDownEvent(key_event))
+    if (select_->ShouldOpenPopupForKeyDownEvent(*key_event))
       return select_->HandlePopupOpenKeyboardEvent(event);
 
     // When using spatial navigation, we want to be able to navigate away
@@ -114,10 +114,10 @@ bool MenuListSelectType::DefaultEventHandler(const Event& event) {
     int ignore_modifiers = WebInputEvent::kShiftKey |
                            WebInputEvent::kControlKey | WebInputEvent::kAltKey |
                            WebInputEvent::kMetaKey;
-    if (key_event.GetModifiers() & ignore_modifiers)
+    if (key_event->GetModifiers() & ignore_modifiers)
       return false;
 
-    const String& key = key_event.key();
+    const String& key = key_event->key();
     bool handled = true;
     const HTMLSelectElement::ListItems& list_items = select_->GetListItems();
     HTMLOptionElement* option = select_->SelectedOption();
@@ -155,10 +155,10 @@ bool MenuListSelectType::DefaultEventHandler(const Event& event) {
   }
 
   if (event.type() == event_type_names::kKeypress) {
-    if (!select_->GetLayoutObject() || !event.IsKeyboardEvent())
+    if (!select_->GetLayoutObject() || !key_event)
       return false;
 
-    int key_code = ToKeyboardEvent(event).keyCode();
+    int key_code = key_event->keyCode();
     if (key_code == ' ' &&
         IsSpatialNavigationEnabled(select_->GetDocument().GetFrame())) {
       // Use space to toggle arrow key handling for selection change or
@@ -167,8 +167,7 @@ bool MenuListSelectType::DefaultEventHandler(const Event& event) {
       return true;
     }
 
-    const auto& key_event = ToKeyboardEvent(event);
-    if (select_->ShouldOpenPopupForKeyPressEvent(key_event))
+    if (select_->ShouldOpenPopupForKeyPressEvent(*key_event))
       return select_->HandlePopupOpenKeyboardEvent(event);
 
     if (!LayoutTheme::GetTheme().PopsMenuByReturnKey() && key_code == '\r') {
@@ -443,7 +442,7 @@ bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
   }
 
   if (event.type() == event_type_names::kKeydown) {
-    const auto* keyboard_event = ToKeyboardEventOrNull(event);
+    const auto* keyboard_event = DynamicTo<KeyboardEvent>(event);
     if (!keyboard_event)
       return false;
     const String& key = keyboard_event->key();
@@ -565,9 +564,10 @@ bool ListBoxSelectType::DefaultEventHandler(const Event& event) {
   }
 
   if (event.type() == event_type_names::kKeypress) {
-    if (!event.IsKeyboardEvent())
+    auto* keyboard_event = DynamicTo<KeyboardEvent>(event);
+    if (!keyboard_event)
       return false;
-    int key_code = ToKeyboardEvent(event).keyCode();
+    int key_code = keyboard_event->keyCode();
 
     if (key_code == '\r') {
       if (HTMLFormElement* form = select_->Form())
