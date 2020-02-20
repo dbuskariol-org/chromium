@@ -6303,28 +6303,6 @@
             ]
         }
     ],
-    "UnidoDeviceExpiration": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled_24",
-                    "params": {
-                        "SharingDeviceExpirationHours": "24"
-                    },
-                    "enable_features": [
-                        "SharingDeviceExpiration"
-                    ]
-                }
-            ]
-        }
-    ],
     "UnidoOnSignInV2": [
         {
             "platforms": [
