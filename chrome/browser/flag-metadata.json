@@ -3180,7 +3180,7 @@
   {
     "name": "reduced-referrer-granularity",
     "owners": [ "davidvc", "mkwst", "jochen" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 83
   },
   {
     "name": "release-notes",
