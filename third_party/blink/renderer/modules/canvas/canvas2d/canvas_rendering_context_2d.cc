@@ -907,11 +907,12 @@ void CanvasRenderingContext2D::DrawTextInternal(
   CanvasRenderingContext2DAutoRestoreSkCanvas state_restorer(this);
   if (use_max_width) {
     c->save();
-    c->translate(location.X(), location.Y());
     // We draw when fontWidth is 0 so compositing operations (eg, a "copy" op)
-    // still work.
-    c->scale((font_width > 0 ? clampTo<float>(width / font_width) : 0), 1);
-    location = FloatPoint();
+    // still work. As the width of canvas is scaled, so text can be scaled to
+    // match the given maxwidth, update text location so it appears on desired
+    // place.
+    c->scale(clampTo<float>(width / font_width), 1);
+    location.SetX(location.X() / clampTo<float>(width / font_width));
   }
 
   Draw(
