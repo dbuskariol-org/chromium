@@ -67996,6 +67996,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="WebSocketReceiveType">
+  <obsolete>
+    Deprecated as of 2020-02.
+  </obsolete>
   <int value="0" label="String"/>
   <int value="1" label="ArrayBuffer"/>
   <int value="2" label="Blob"/>
