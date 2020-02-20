@@ -1515,7 +1515,7 @@ java_group("chrome_public_base_module_java_for_test") {
     "//chrome/browser/subresource_filter:subresource_filter_java_test_support",
     "//chrome/browser/thumbnail:thumbnail_java_test_support",
     "//components/minidump_uploader:minidump_uploader_java",
-    "//components/paint_preview/player/android:javatests",
+    "//components/paint_preview/player/android:player_java_test_support",
     "//content/public/test/android:content_java_test_support",
   ]
 }
