@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_context_base.h"
+#include "components/permissions/permission_context_base.h"
 
 #include <stddef.h>
 
@@ -12,18 +12,13 @@
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/logging.h"
+#include "base/metrics/field_trial_params.h"
 #include "base/strings/stringprintf.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
-#include "chrome/browser/browser_process.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/browser/permissions/permission_decision_auto_blocker_factory.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/common/chrome_features.h"
-#include "chrome/common/pref_names.h"
-#include "chrome/common/url_constants.h"
 #include "components/content_settings/core/browser/content_settings_registry.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "components/permissions/features.h"
 #include "components/permissions/permission_decision_auto_blocker.h"
 #include "components/permissions/permission_request.h"
 #include "components/permissions/permission_request_id.h"
@@ -31,8 +26,7 @@
 #include "components/permissions/permission_request_manager.h"
 #include "components/permissions/permission_uma_util.h"
 #include "components/permissions/permission_util.h"
-#include "components/prefs/pref_service.h"
-#include "components/variations/variations_associated_data.h"
+#include "components/permissions/permissions_client.h"
 #include "content/public/browser/back_forward_cache.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/global_routing_id.h"
@@ -41,9 +35,9 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/origin_util.h"
-#include "extensions/common/constants.h"
 #include "url/gurl.h"
 
+namespace permissions {
 namespace {
 
 const char kPermissionBlockedKillSwitchMessage[] =
@@ -86,9 +80,8 @@ void LogPermissionBlockedMessage(content::WebContents* web_contents,
                                  ContentSettingsType type) {
   web_contents->GetMainFrame()->AddMessageToConsole(
       blink::mojom::ConsoleMessageLevel::kWarning,
-      base::StringPrintf(
-          message,
-          permissions::PermissionUtil::GetPermissionString(type).c_str()));
+      base::StringPrintf(message,
+                         PermissionUtil::GetPermissionString(type).c_str()));
 }
 
 }  // namespace
@@ -101,13 +94,13 @@ const char PermissionContextBase::kPermissionsKillSwitchBlockedValue[] =
     "blocked";
 
 PermissionContextBase::PermissionContextBase(
-    Profile* profile,
+    content::BrowserContext* browser_context,
     ContentSettingsType content_settings_type,
     blink::mojom::FeaturePolicyFeature feature_policy_feature)
-    : profile_(profile),
+    : browser_context_(browser_context),
       content_settings_type_(content_settings_type),
       feature_policy_feature_(feature_policy_feature) {
-  permissions::PermissionDecisionAutoBlocker::UpdateFromVariations();
+  PermissionDecisionAutoBlocker::UpdateFromVariations();
 }
 
 PermissionContextBase::~PermissionContextBase() {
@@ -116,7 +109,7 @@ PermissionContextBase::~PermissionContextBase() {
 
 void PermissionContextBase::RequestPermission(
     content::WebContents* web_contents,
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_frame,
     bool user_gesture,
     BrowserPermissionCallback callback) {
@@ -126,8 +119,8 @@ void PermissionContextBase::RequestPermission(
   GURL embedding_origin = web_contents->GetLastCommittedURL().GetOrigin();
 
   if (!requesting_origin.is_valid() || !embedding_origin.is_valid()) {
-    std::string type_name = permissions::PermissionUtil::GetPermissionString(
-        content_settings_type_);
+    std::string type_name =
+        PermissionUtil::GetPermissionString(content_settings_type_);
 
     DVLOG(1) << "Attempt to use " << type_name
              << " from an invalid URL: " << requesting_origin << ","
@@ -143,44 +136,43 @@ void PermissionContextBase::RequestPermission(
   // or if the origin is under embargo. If so, respect that decision.
   content::RenderFrameHost* rfh = content::RenderFrameHost::FromID(
       id.render_process_id(), id.render_frame_id());
-  permissions::PermissionResult result =
+  PermissionResult result =
       GetPermissionStatus(rfh, requesting_origin, embedding_origin);
 
   if (result.content_setting == CONTENT_SETTING_ALLOW ||
       result.content_setting == CONTENT_SETTING_BLOCK) {
     switch (result.source) {
-      case permissions::PermissionStatusSource::KILL_SWITCH:
+      case PermissionStatusSource::KILL_SWITCH:
         // Block the request and log to the developer console.
         LogPermissionBlockedMessage(web_contents,
                                     kPermissionBlockedKillSwitchMessage,
                                     content_settings_type_);
         std::move(callback).Run(CONTENT_SETTING_BLOCK);
         return;
-      case permissions::PermissionStatusSource::MULTIPLE_DISMISSALS:
+      case PermissionStatusSource::MULTIPLE_DISMISSALS:
         LogPermissionBlockedMessage(web_contents,
                                     kPermissionBlockedRepeatedDismissalsMessage,
                                     content_settings_type_);
         break;
-      case permissions::PermissionStatusSource::MULTIPLE_IGNORES:
+      case PermissionStatusSource::MULTIPLE_IGNORES:
         LogPermissionBlockedMessage(web_contents,
                                     kPermissionBlockedRepeatedIgnoresMessage,
                                     content_settings_type_);
         break;
-      case permissions::PermissionStatusSource::FEATURE_POLICY:
+      case PermissionStatusSource::FEATURE_POLICY:
         LogPermissionBlockedMessage(web_contents,
                                     kPermissionBlockedFeaturePolicyMessage,
                                     content_settings_type_);
         break;
-      case permissions::PermissionStatusSource::INSECURE_ORIGIN:
-      case permissions::PermissionStatusSource::UNSPECIFIED:
-      case permissions::PermissionStatusSource::VIRTUAL_URL_DIFFERENT_ORIGIN:
+      case PermissionStatusSource::INSECURE_ORIGIN:
+      case PermissionStatusSource::UNSPECIFIED:
+      case PermissionStatusSource::VIRTUAL_URL_DIFFERENT_ORIGIN:
         break;
     }
 
     // If we are under embargo, record the embargo reason for which we have
     // suppressed the prompt.
-    permissions::PermissionUmaUtil::RecordEmbargoPromptSuppressionFromSource(
-        result.source);
+    PermissionUmaUtil::RecordEmbargoPromptSuppressionFromSource(result.source);
     NotifyPermissionSet(id, requesting_origin, embedding_origin,
                         std::move(callback), false /* persist */,
                         result.content_setting);
@@ -197,45 +189,42 @@ void PermissionContextBase::RequestPermission(
   }
 
   // We are going to show a prompt now.
-  permissions::PermissionUmaUtil::PermissionRequested(content_settings_type_,
-                                                      requesting_origin);
-  permissions::PermissionUmaUtil::RecordEmbargoPromptSuppression(
-      permissions::PermissionEmbargoStatus::NOT_EMBARGOED);
+  PermissionUmaUtil::PermissionRequested(content_settings_type_,
+                                         requesting_origin);
+  PermissionUmaUtil::RecordEmbargoPromptSuppression(
+      PermissionEmbargoStatus::NOT_EMBARGOED);
 
   DecidePermission(web_contents, id, requesting_origin, embedding_origin,
                    user_gesture, std::move(callback));
 }
 
 void PermissionContextBase::UserMadePermissionDecision(
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_origin,
     const GURL& embedding_origin,
     ContentSetting content_setting) {}
 
-permissions::PermissionResult PermissionContextBase::GetPermissionStatus(
+PermissionResult PermissionContextBase::GetPermissionStatus(
     content::RenderFrameHost* render_frame_host,
     const GURL& requesting_origin,
     const GURL& embedding_origin) const {
   // If the permission has been disabled through Finch, block all requests.
   if (IsPermissionKillSwitchOn()) {
-    return permissions::PermissionResult(
-        CONTENT_SETTING_BLOCK,
-        permissions::PermissionStatusSource::KILL_SWITCH);
+    return PermissionResult(CONTENT_SETTING_BLOCK,
+                            PermissionStatusSource::KILL_SWITCH);
   }
 
   if (!IsPermissionAvailableToOrigins(requesting_origin, embedding_origin)) {
-    return permissions::PermissionResult(
-        CONTENT_SETTING_BLOCK,
-        permissions::PermissionStatusSource::INSECURE_ORIGIN);
+    return PermissionResult(CONTENT_SETTING_BLOCK,
+                            PermissionStatusSource::INSECURE_ORIGIN);
   }
 
   // Check whether the feature is enabled for the frame by feature policy. We
   // can only do this when a RenderFrameHost has been provided.
   if (render_frame_host &&
       !PermissionAllowedByFeaturePolicy(render_frame_host)) {
-    return permissions::PermissionResult(
-        CONTENT_SETTING_BLOCK,
-        permissions::PermissionStatusSource::FEATURE_POLICY);
+    return PermissionResult(CONTENT_SETTING_BLOCK,
+                            PermissionStatusSource::FEATURE_POLICY);
   }
 
   if (render_frame_host) {
@@ -256,9 +245,9 @@ permissions::PermissionResult PermissionContextBase::GetPermissionStatus(
           loaded_url.SchemeIsHTTPOrHTTPS() &&
           !url::Origin::Create(virtual_url)
                .IsSameOriginWith(url::Origin::Create(loaded_url))) {
-        return permissions::PermissionResult(
+        return PermissionResult(
             CONTENT_SETTING_BLOCK,
-            permissions::PermissionStatusSource::VIRTUAL_URL_DIFFERENT_ORIGIN);
+            PermissionStatusSource::VIRTUAL_URL_DIFFERENT_ORIGIN);
       }
     }
   }
@@ -267,12 +256,13 @@ permissions::PermissionResult PermissionContextBase::GetPermissionStatus(
       render_frame_host, requesting_origin, embedding_origin);
 
   if (content_setting != CONTENT_SETTING_ASK) {
-    return permissions::PermissionResult(
-        content_setting, permissions::PermissionStatusSource::UNSPECIFIED);
+    return PermissionResult(content_setting,
+                            PermissionStatusSource::UNSPECIFIED);
   }
 
-  permissions::PermissionResult result =
-      PermissionDecisionAutoBlockerFactory::GetForProfile(profile_)
+  PermissionResult result =
+      PermissionsClient::Get()
+          ->GetPermissionDecisionAutoBlocker(browser_context_)
           ->GetEmbargoResult(requesting_origin, content_settings_type_);
   DCHECK(result.content_setting == CONTENT_SETTING_ASK ||
          result.content_setting == CONTENT_SETTING_BLOCK);
@@ -289,18 +279,18 @@ bool PermissionContextBase::IsPermissionAvailableToOrigins(
     // TODO(raymes): We should check the entire chain of embedders here whenever
     // possible as this corresponds to the requirements of the secure contexts
     // spec and matches what is implemented in blink. Right now we just check
-    // the top level and requesting origins. Note: chrome-extension:// origins
-    // are currently exempt from checking the embedder chain. crbug.com/530507.
-    if (!requesting_origin.SchemeIs(extensions::kExtensionScheme) &&
-        !content::IsOriginSecure(embedding_origin))
+    // the top level and requesting origins.
+    if (!PermissionsClient::Get()->CanBypassEmbeddingOriginCheck(
+            requesting_origin, embedding_origin) &&
+        !content::IsOriginSecure(embedding_origin)) {
       return false;
+    }
   }
   return true;
 }
 
-permissions::PermissionResult
-PermissionContextBase::UpdatePermissionStatusWithDeviceStatus(
-    permissions::PermissionResult result,
+PermissionResult PermissionContextBase::UpdatePermissionStatusWithDeviceStatus(
+    PermissionResult result,
     const GURL& requesting_origin,
     const GURL& embedding_origin) const {
   return result;
@@ -312,16 +302,17 @@ void PermissionContextBase::ResetPermission(const GURL& requesting_origin,
           content_settings_type_)) {
     return;
   }
-  HostContentSettingsMapFactory::GetForProfile(profile_)
+  PermissionsClient::Get()
+      ->GetSettingsMap(browser_context_)
       ->SetContentSettingDefaultScope(requesting_origin, embedding_origin,
                                       content_settings_type_, std::string(),
                                       CONTENT_SETTING_DEFAULT);
 }
 
 bool PermissionContextBase::IsPermissionKillSwitchOn() const {
-  const std::string param = variations::GetVariationParamValue(
+  const std::string param = base::GetFieldTrialParamValue(
       kPermissionsKillSwitchFieldStudy,
-      permissions::PermissionUtil::GetPermissionString(content_settings_type_));
+      PermissionUtil::GetPermissionString(content_settings_type_));
 
   return param == kPermissionsKillSwitchBlockedValue;
 }
@@ -330,14 +321,15 @@ ContentSetting PermissionContextBase::GetPermissionStatusInternal(
     content::RenderFrameHost* render_frame_host,
     const GURL& requesting_origin,
     const GURL& embedding_origin) const {
-  return HostContentSettingsMapFactory::GetForProfile(profile_)
+  return PermissionsClient::Get()
+      ->GetSettingsMap(browser_context_)
       ->GetContentSetting(requesting_origin, embedding_origin,
                           content_settings_type_, std::string());
 }
 
 void PermissionContextBase::DecidePermission(
     content::WebContents* web_contents,
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_origin,
     const GURL& embedding_origin,
     bool user_gesture,
@@ -346,34 +338,30 @@ void PermissionContextBase::DecidePermission(
 
   // Under permission delegation, when we display a permission prompt, the
   // origin displayed in the prompt should never differ from the top-level
-  // origin. The New Tab Page is excluded from this check as its effective
-  // requesting origin may be the Default Search Engine origin. Extensions are
-  // also excluded as currently they can request permission from iframes when
-  // embedded in non-secure contexts (https://crbug.com/530507).
-  // Storage access API requests are also excluded as they are expected to
+  // origin. Storage access API requests are excluded as they are expected to
   // request permissions from the frame origin needing access.
   DCHECK(!base::FeatureList::IsEnabled(features::kPermissionDelegation) ||
-         embedding_origin == GURL(chrome::kChromeUINewTabURL).GetOrigin() ||
-         requesting_origin.SchemeIs(extensions::kExtensionScheme) ||
+         PermissionsClient::Get()->CanBypassEmbeddingOriginCheck(
+             requesting_origin, embedding_origin) ||
          requesting_origin == embedding_origin ||
          content_settings_type_ == ContentSettingsType::STORAGE_ACCESS);
 
-  permissions::PermissionRequestManager* permission_request_manager =
-      permissions::PermissionRequestManager::FromWebContents(web_contents);
+  PermissionRequestManager* permission_request_manager =
+      PermissionRequestManager::FromWebContents(web_contents);
   // TODO(felt): sometimes |permission_request_manager| is null. This check is
   // meant to prevent crashes. See crbug.com/457091.
   if (!permission_request_manager)
     return;
 
-  std::unique_ptr<permissions::PermissionRequest> request_ptr =
-      std::make_unique<permissions::PermissionRequestImpl>(
+  std::unique_ptr<PermissionRequest> request_ptr =
+      std::make_unique<PermissionRequestImpl>(
           requesting_origin, content_settings_type_, user_gesture,
           base::BindOnce(&PermissionContextBase::PermissionDecided,
                          weak_factory_.GetWeakPtr(), id, requesting_origin,
                          embedding_origin, std::move(callback)),
           base::BindOnce(&PermissionContextBase::CleanUpRequest,
                          weak_factory_.GetWeakPtr(), id));
-  permissions::PermissionRequest* request = request_ptr.get();
+  PermissionRequest* request = request_ptr.get();
 
   bool inserted =
       pending_requests_
@@ -384,7 +372,7 @@ void PermissionContextBase::DecidePermission(
 }
 
 void PermissionContextBase::PermissionDecided(
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_origin,
     const GURL& embedding_origin,
     BrowserPermissionCallback callback,
@@ -400,12 +388,12 @@ void PermissionContextBase::PermissionDecided(
                       std::move(callback), persist, content_setting);
 }
 
-Profile* PermissionContextBase::profile() const {
-  return profile_;
+content::BrowserContext* PermissionContextBase::browser_context() const {
+  return browser_context_;
 }
 
 void PermissionContextBase::NotifyPermissionSet(
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_origin,
     const GURL& embedding_origin,
     BrowserPermissionCallback callback,
@@ -425,8 +413,7 @@ void PermissionContextBase::NotifyPermissionSet(
   std::move(callback).Run(content_setting);
 }
 
-void PermissionContextBase::CleanUpRequest(
-    const permissions::PermissionRequestID& id) {
+void PermissionContextBase::CleanUpRequest(const PermissionRequestID& id) {
   size_t success = pending_requests_.erase(id.ToString());
   DCHECK(success == 1) << "Missing request " << id.ToString();
 }
@@ -442,7 +429,8 @@ void PermissionContextBase::UpdateContentSetting(
   DCHECK(!requesting_origin.SchemeIsFile());
   DCHECK(!embedding_origin.SchemeIsFile());
 
-  HostContentSettingsMapFactory::GetForProfile(profile_)
+  PermissionsClient::Get()
+      ->GetSettingsMap(browser_context_)
       ->SetContentSettingDefaultScope(requesting_origin, embedding_origin,
                                       content_settings_type_, std::string(),
                                       content_setting);
@@ -456,3 +444,5 @@ bool PermissionContextBase::PermissionAllowedByFeaturePolicy(
 
   return rfh->IsFeatureEnabled(feature_policy_feature_);
 }
+
+}  // namespace permissions
