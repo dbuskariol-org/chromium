@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_item_view.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_item_view.h"
 
 #include <memory>
 #include <vector>
 
-#include "ash/components/shortcut_viewer/keyboard_shortcut_item.h"
-#include "ash/components/shortcut_viewer/keyboard_shortcut_viewer_metadata.h"
-#include "ash/components/shortcut_viewer/vector_icons/vector_icons.h"
-#include "ash/components/shortcut_viewer/views/bubble_view.h"
-#include "ash/components/strings/grit/ash_components_strings.h"
+#include "ash/shortcut_viewer/keyboard_shortcut_item.h"
+#include "ash/shortcut_viewer/keyboard_shortcut_viewer_metadata.h"
+#include "ash/shortcut_viewer/strings/grit/ash_components_strings.h"
+#include "ash/shortcut_viewer/vector_icons/vector_icons.h"
+#include "ash/shortcut_viewer/views/bubble_view.h"
 #include "base/i18n/rtl.h"
 #include "base/no_destructor.h"
 #include "base/strings/utf_string_conversions.h"

@@ -2,19 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_view.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_view.h"
 
 #include <algorithm>
 #include <memory>
 #include <string>
 #include <utility>
 
-#include "ash/components/shortcut_viewer/keyboard_shortcut_viewer_metadata.h"
-#include "ash/components/shortcut_viewer/vector_icons/vector_icons.h"
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_item_list_view.h"
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_item_view.h"
-#include "ash/components/shortcut_viewer/views/ksv_search_box_view.h"
-#include "ash/components/strings/grit/ash_components_strings.h"
 #include "ash/display/privacy_screen_controller.h"
 #include "ash/public/cpp/app_list/internal_app_id_constants.h"
 #include "ash/public/cpp/app_types.h"
@@ -22,6 +16,12 @@
 #include "ash/public/cpp/shelf_item.h"
 #include "ash/public/cpp/window_properties.h"
 #include "ash/shell.h"
+#include "ash/shortcut_viewer/keyboard_shortcut_viewer_metadata.h"
+#include "ash/shortcut_viewer/strings/grit/ash_components_strings.h"
+#include "ash/shortcut_viewer/vector_icons/vector_icons.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_item_list_view.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_item_view.h"
+#include "ash/shortcut_viewer/views/ksv_search_box_view.h"
 #include "base/bind.h"
 #include "base/i18n/string_search.h"
 #include "base/metrics/histogram_macros.h"

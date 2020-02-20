@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_item_list_view.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_item_list_view.h"
 
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_item_view.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_item_view.h"
 #include "ui/base/default_style.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/gfx/canvas.h"

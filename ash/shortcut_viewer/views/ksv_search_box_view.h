@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_COMPONENTS_SHORTCUT_VIEWER_VIEWS_KSV_SEARCH_BOX_VIEW_H_
-#define ASH_COMPONENTS_SHORTCUT_VIEWER_VIEWS_KSV_SEARCH_BOX_VIEW_H_
+#ifndef ASH_SHORTCUT_VIEWER_VIEWS_KSV_SEARCH_BOX_VIEW_H_
+#define ASH_SHORTCUT_VIEWER_VIEWS_KSV_SEARCH_BOX_VIEW_H_
 
 #include "base/macros.h"
 #include "base/strings/string16.h"
@@ -46,4 +46,4 @@ class KSVSearchBoxView : public search_box::SearchBoxViewBase {
 
 }  // namespace keyboard_shortcut_viewer
 
-#endif  // ASH_COMPONENTS_SHORTCUT_VIEWER_VIEWS_KSV_SEARCH_BOX_VIEW_H_
+#endif  // ASH_SHORTCUT_VIEWER_VIEWS_KSV_SEARCH_BOX_VIEW_H_
