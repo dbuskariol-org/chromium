@@ -2989,11 +2989,6 @@
     "expiry_milestone": 76
   },
   {
-    "name": "out-of-blink-cors",
-    "owners": [ "toyoshim" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "overlay-new-layout",
     "owners": [ "donnd", "jinsukkim", "contextual-search-eng" ],
     "expiry_milestone": 81
