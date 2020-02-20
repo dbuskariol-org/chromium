@@ -7543,3 +7543,6 @@ crbug.com/1053903 [ Win ] external/wpt/webxr/events_referenceSpace_reset_inline.
 crbug.com/1006759 http/tests/devtools/agents-enable-disable.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/search/search-in-non-existing-resource.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/sources/debugger-breakpoints/debugger-set-breakpoint-regex.js [ Skip ]
+
+# DevTools roll
+crbug.com/1050549 http/tests/devtools/unit/string-util.js [ Skip ]
