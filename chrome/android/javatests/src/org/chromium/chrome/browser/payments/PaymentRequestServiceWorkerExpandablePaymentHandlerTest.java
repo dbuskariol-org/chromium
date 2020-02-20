@@ -1,4 +1,4 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -38,11 +38,11 @@ import java.util.concurrent.TimeoutException;
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE,
         // For all the tests in this file, we expect abort exception when there is no supported
         // payment apps instead of showing payment request UI.
-        "enable-features=" + ChromeFeatureList.STRICT_HAS_ENROLLED_AUTOFILL_INSTRUMENT,
+        "enable-features=" + ChromeFeatureList.STRICT_HAS_ENROLLED_AUTOFILL_INSTRUMENT + ","
+                + ChromeFeatureList.SCROLL_TO_EXPAND_PAYMENT_HANDLER,
         // Prevent crawling the web for real payment apps.
-        "disable-features=" + ChromeFeatureList.SERVICE_WORKER_PAYMENT_APPS + ","
-                + ChromeFeatureList.SCROLL_TO_EXPAND_PAYMENT_HANDLER})
-public class PaymentRequestServiceWorkerPaymentAppTest {
+        "disable-features=" + ChromeFeatureList.SERVICE_WORKER_PAYMENT_APPS})
+public class PaymentRequestServiceWorkerExpandablePaymentHandlerTest {
     // Disable animations to reduce flakiness.
     @ClassRule
     public static DisableAnimationsTestRule sNoAnimationsRule = new DisableAnimationsTestRule();

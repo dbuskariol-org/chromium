@@ -1,4 +1,4 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -28,9 +28,9 @@ import org.chromium.ui.test.util.DisableAnimationsTestRule;
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE,
         "enable-blink-features=PaymentMethodChangeEvent,PaymentHandlerChangePaymentMethod",
-        "disable-features=" + ChromeFeatureList.SCROLL_TO_EXPAND_PAYMENT_HANDLER})
+        "enable-features=" + ChromeFeatureList.SCROLL_TO_EXPAND_PAYMENT_HANDLER})
 @MediumTest
-public class PaymentHandlerChangePaymentMethodTest {
+public class ExpandablePaymentHandlerChangePaymentMethodTest {
     // Disable animations to reduce flakiness.
     @ClassRule
     public static DisableAnimationsTestRule sNoAnimationsRule = new DisableAnimationsTestRule();
