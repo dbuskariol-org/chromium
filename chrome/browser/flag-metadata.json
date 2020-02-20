@@ -1800,7 +1800,7 @@
   {
     "name": "enable-send-tab-to-self-when-signed-in",
     "owners": [ "//components/send_tab_to_self/OWNERS" ],
-    "expiry_milestone": 78
+    "expiry_milestone": 84
   },
   {
     "name": "enable-service-worker-imported-script-update-check",
@@ -3287,7 +3287,7 @@
   {
     "name": "sharing-qr-code-generator",
     "owners": [ "//components/send_tab_to_self/OWNERS" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 85
   },
   {
     "name": "sharing-rename-devices",
