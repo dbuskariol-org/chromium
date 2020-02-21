@@ -1351,7 +1351,7 @@
   {
     "name": "enable-experimental-fling-animation",
     "owners": [ "sarsha@microsoft.com" ],
-    "expiry_milestone": 81
+    "expiry_milestone": 89
   },
   {
     "name": "enable-experimental-kernel-vm-support",
@@ -2478,7 +2478,7 @@
   },
   {
     "name": "impulse-scroll-animations",
-    "owners": [ "maamert@microsoft.com", "dlibby@microsoft.com", "sarsha@microsoft.com" ],
+    "owners": [ "dlibby@microsoft.com", "sarsha@microsoft.com" ],
     "expiry_milestone": 89
   },
   {
@@ -3092,8 +3092,8 @@
   },
   {
     "name": "percent-based-scrolling",
-    "owners": [ "maamert@microsoft.com" ],
-    "expiry_milestone": 82
+    "owners": [ "dlibby@microsoft.com", "sarsha@microsoft.com" ],
+    "expiry_milestone": 89
   },
   {
     "name": "photo-picker-video-support",
