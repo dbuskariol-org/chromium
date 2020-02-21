@@ -6454,7 +6454,8 @@
     "UseSkiaRenderer": [
         {
             "platforms": [
-                "linux"
+                "linux",
+                "windows"
             ],
             "experiments": [
                 {
