@@ -253,6 +253,10 @@ iron-icon {
   display: none;
 }
 
+:host([files-ng]) #info-button[toogle] {
+  background-color: rgba(255, 255, 255, 12%);
+}
+
 :host([files-ng]) #info-button > .icon {
   -webkit-mask-image: url(../images/files/ui/info.svg);
 }

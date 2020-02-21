@@ -193,6 +193,11 @@ const FilesQuickView = Polymer({
 
     if (this.hasAttribute('files-ng')) {
       this.metadataBoxActive = !this.metadataBoxActive;
+      if (this.metadataBoxActive) {
+        event.target.setAttribute('toogle', '');
+      } else {
+        event.target.removeAttribute('toogle');
+      }
     }
   },
 
