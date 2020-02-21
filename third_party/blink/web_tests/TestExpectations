@@ -7290,7 +7290,7 @@ crbug.com/1043453 [ Release Win ] virtual/threaded/external/wpt/css/css-animatio
 crbug.com/1043453 [ Release Mac ] virtual/threaded/external/wpt/css/css-animations/idlharness.html [ Pass Timeout ]
 crbug.com/1043454 [ Release ] http/tests/devtools/console-xhr-logging-async.js [ Pass Timeout ]
 crbug.com/1043463 [ Release ] external/wpt/fetch/cross-origin-resource-policy/fetch.https.any.serviceworker.html [ Pass Timeout ]
-crbug.com/1043488 [ Release ] fast/forms/date/date-appearance-basic.html [ Pass Failure ]
+crbug.com/1043488 fast/forms/date/date-appearance-basic.html [ Pass Failure ]
 crbug.com/1043785 [ Release ] http/tests/devtools/elements/edit/switch-panels-while-editing-as-html.js [ Pass Timeout ]
 crbug.com/1043792 [ Release Win ] http/tests/devtools/template-content-inspect-crash.js [ Pass Timeout ]
 crbug.com/1043792 [ Release Mac ] http/tests/devtools/template-content-inspect-crash.js [ Pass Timeout ]
