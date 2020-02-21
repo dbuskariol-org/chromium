@@ -4871,6 +4871,8 @@
 
   "ReportDeviceTimezoneInfo": {},
 
+  "ReportDeviceMemoryInfo": {},
+
   "ReportUploadFrequency": {},
 
   "DeviceAllowNewUsers": {},
