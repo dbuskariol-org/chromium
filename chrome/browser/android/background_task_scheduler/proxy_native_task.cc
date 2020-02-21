@@ -5,6 +5,7 @@
 #include "chrome/browser/android/background_task_scheduler/proxy_native_task.h"
 
 #include "base/android/callback_android.h"
+#include "base/android/jni_string.h"
 #include "base/bind.h"
 #include "base/callback_forward.h"
 #include "chrome/android/chrome_jni_headers/ProxyNativeTask_jni.h"
@@ -17,12 +18,18 @@
 static jlong JNI_ProxyNativeTask_Init(JNIEnv* env,
                                       const JavaParamRef<jobject>& jobj,
                                       jint task_id,
+                                      const JavaParamRef<jstring>& jextras,
                                       const JavaParamRef<jobject>& jcallback) {
   std::unique_ptr<background_task::BackgroundTask> background_task =
       ChromeBackgroundTaskFactory::GetNativeBackgroundTaskFromTaskId(task_id);
 
   background_task::TaskParameters params;
   params.task_id = task_id;
+
+  if (!jextras.is_null()) {
+    params.extras = base::android::ConvertJavaStringToUTF8(
+        base::android::AttachCurrentThread(), jextras);
+  }
 
   background_task::TaskFinishedCallback finish_callback =
       base::BindOnce(&base::android::RunBooleanCallbackAndroid,

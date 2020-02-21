@@ -4,6 +4,7 @@
 
 #include "components/background_task_scheduler/internal/android/task_info_bridge.h"
 
+#include "base/android/jni_string.h"
 #include "components/background_task_scheduler/internal/jni_headers/TaskInfoBridge_jni.h"
 
 namespace background_task {
@@ -54,8 +55,9 @@ base::android::ScopedJavaLocalRef<jobject> TaskInfoBridge::CreateTaskInfo(
     j_timing_info = CreateExactInfo(env, task_info.exact_info.value());
   }
 
+  auto j_extras = base::android::ConvertUTF8ToJavaString(env, task_info.extras);
   return Java_TaskInfoBridge_createTaskInfo(env, task_info.task_id,
-                                            j_timing_info);
+                                            j_timing_info, j_extras);
 }
 
 }  // namespace background_task
