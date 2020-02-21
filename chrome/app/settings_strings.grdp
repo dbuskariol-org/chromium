@@ -194,25 +194,9 @@
     <message name="IDS_SETTINGS_ANDROID_SETTINGS_TITLE" desc="The title of Android settings section in case Play Store app is not available.">
       Android settings
     </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_LABEL" desc="The text associated with the primary section setting.">
-      Google Play Store
-    </message>
     <message name="IDS_SETTINGS_ANDROID_APPS_SUBTEXT" desc="Description for the section for enabling and managing Google Play Store (Android) apps.">
       Install apps and games from Google Play on your <ph name="DEVICE_TYPE">$1<ex>Chromebook</ex></ph>. &lt;a target="_blank" href="<ph name="URL">$2<ex>https://google.com/</ex></ph>"&gt;Learn more&lt;/a&gt;
     </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_MANAGE_APPS" desc="Label for launching Android apps settings.">
-      Manage Android preferences
-    </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_REMOVE" desc="Label for the control to open a dialog confirming removal of the Google Play Store.">
-      Remove Google Play Store
-    </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_REMOVE_BUTTON" desc="Label for the button for the removal of the Google Play Store">
-      Remove
-    </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_DISABLE_DIALOG_TITLE" desc="Title of the confirmation dialog for disabling android apps.">
-      Remove Android apps?
-    </message>
-
     <!-- TODO(jamescook): Use device type instead of "Chromebook", which may
          require changing ArcPlayTermsOfServiceConsent resource id handling. -->
     <message name="IDS_SETTINGS_ANDROID_APPS_DISABLE_DIALOG_MESSAGE" desc="Describes what will happen if the user opts out of android apps.">
@@ -221,12 +205,6 @@
       Content you’ve purchased such as movies, TV shows, music, books, or other in-app purchases may also be deleted.
       <ph name="LINE_BREAKS2">&lt;br&gt;&lt;br&gt;</ph>
       This doesn’t affect apps or content on other devices.
-    </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_DISABLE_DIALOG_REMOVE" desc="Label for confirmation button in the disable android apps dialog.">
-      Remove Android apps
-    </message>
-    <message name="IDS_SETTINGS_ANDROID_APPS_MANAGE_APP_LINKS" desc="Label for accessing app preferrences on ARC side.">
-      Manage Play app links
     </message>
 
     <!-- Apps Section Page -->
