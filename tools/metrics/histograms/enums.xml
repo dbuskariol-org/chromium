@@ -49503,6 +49503,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="1" label="Token request error"/>
   <int value="2" label="Hashing/encryption error"/>
   <int value="3" label="Invalid server response"/>
+  <int value="4" label="Network error"/>
 </enum>
 
 <enum name="PasswordLeakLookupResponseResult">
