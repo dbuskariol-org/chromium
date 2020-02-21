@@ -3805,6 +3805,8 @@ jumbo_static_library("ui") {
       "app_list/search/search_result_ranker/app_list_launch_recorder_util.h",
       "app_list/search/search_result_ranker/app_search_result_ranker.cc",
       "app_list/search/search_result_ranker/app_search_result_ranker.h",
+      "app_list/search/search_result_ranker/chip_ranker.cc",
+      "app_list/search/search_result_ranker/chip_ranker.h",
       "app_list/search/search_result_ranker/frecency_store.cc",
       "app_list/search/search_result_ranker/frecency_store.h",
       "app_list/search/search_result_ranker/histogram_util.cc",
