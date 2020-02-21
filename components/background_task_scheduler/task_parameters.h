@@ -18,9 +18,6 @@ struct TaskParameters {
 
   int task_id;
   // TODO(shaktisahu): Add support for extras.
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(TaskParameters);
 };
 
 }  // namespace background_task
