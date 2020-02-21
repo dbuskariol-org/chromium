@@ -7559,6 +7559,9 @@ crbug.com/1053903 [ Mac ] external/wpt/webxr/events_referenceSpace_reset_inline.
 crbug.com/1053903 [ Linux ] external/wpt/webxr/events_referenceSpace_reset_inline.https.html [ Pass Failure Timeout ]
 crbug.com/1053903 [ Win ] external/wpt/webxr/events_referenceSpace_reset_inline.https.html [ Pass Failure Timeout ]
 
+# Sheriff 2020-02-21
+crbug.com/1054977 [ Mac ] media/video-controls-rendering.html [ Pass Failure ]
+
 # DevTools roll
 crbug.com/1006759 http/tests/devtools/agents-enable-disable.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/search/search-in-non-existing-resource.js [ Skip ]
