@@ -899,5 +899,25 @@
   <message name="IDS_SETTINGS_BLUETOOTH_CONNECT_WRITE_NOT_PERMITTED">
     Write operation is not permitted on: "<ph name="DEVICE_NAME">$1<ex>Nexus 4</ex></ph>".
   </message>
+
+  <!-- Parental Controls -->
+  <message name="IDS_SETTINGS_PARENTAL_CONTROLS_PAGE_TITLE" desc="Name of the settings page which manages ChromeOS's parental controls.">
+    Parental controls
+  </message>
+  <message name="IDS_SETTINGS_PARENTAL_CONTROLS_PAGE_SET_UP_LABEL" desc="Label/description of the settings page which manages ChromeOS's parental controls.">
+    Set website restrictions &amp; screen time limits with Family Link
+  </message>
+  <message name="IDS_SETTINGS_PARENTAL_CONTROLS_PAGE_CONNECT_TO_INTERNET_LABEL" desc="Label/description shown when the Parental control setup can't be launched because there is no Internet Connection.">
+    Connect to the internet to set up parental controls
+  </message>
+  <message name="IDS_SETTINGS_PARENTAL_CONTROLS_PAGE_VIEW_SETTINGS_LABEL" desc="Label/description of the settings page which manages ChromeOS's parental controls.">
+    Open the Family Link app to see your supervision settings
+  </message>
+  <message name="IDS_SETTINGS_PARENTAL_CONTROLS_SET_UP_BUTTON_LABEL" desc="Label/description of the button which launches page which enables ChromeOS's parental controls.">
+    Set up
+  </message>
+  <message name="IDS_SETTINGS_PARENTAL_CONTROLS_SET_UP_BUTTON_ROLE" desc="Role description of the button which launches page which enables ChromeOS's parental controls. Spoken aloud by screen readers when the Set Up button is focused">
+    Set up button
+  </message>
 </if>
 </grit-part>
