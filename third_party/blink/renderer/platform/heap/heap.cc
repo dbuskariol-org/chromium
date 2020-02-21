@@ -347,14 +347,18 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
       if (!finished)
         break;
 
-      finished = DrainWorklistWithDeadline(
-          deadline, not_safe_to_concurrently_trace_worklist_.get(),
-          [visitor](const MarkingItem& item) {
-            item.callback(visitor, item.base_object_payload);
-          },
-          WorklistTaskId::MutatorThread);
-      if (!finished)
-        break;
+      {
+        ThreadHeapStatsCollector::EnabledScope bailout_scope(
+            stats_collector(), ThreadHeapStatsCollector::kMarkBailOutObjects);
+        finished = DrainWorklistWithDeadline(
+            deadline, not_safe_to_concurrently_trace_worklist_.get(),
+            [visitor](const MarkingItem& item) {
+              item.callback(visitor, item.base_object_payload);
+            },
+            WorklistTaskId::MutatorThread);
+        if (!finished)
+          break;
+      }
 
       finished = DrainWorklistWithDeadline(
           deadline, marking_worklist_.get(),
