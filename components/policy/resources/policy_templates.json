@@ -19519,7 +19519,7 @@
           },
           'reset_at': {
             'type': 'object',
-            'description' : '''The time of the day in UTC timezone when usage quota is renewed.''',
+            'description' : '''The time of the day in local time when usage quota is renewed.''',
             'properties': {
               'hour': {
                 'type': 'integer',
@@ -19532,7 +19532,11 @@
                 'maximum': 59
               }
             }
-          }
+          },
+          'activity_reporting_enabled' : {
+            'type': 'boolean',
+            'description': '''The value of app activity collection toggle. If set to true user app activity will be reported to the server with purpose of being displayed in child and parent <ph name="PRODUCT_NAME">$1<ex>Family Link</ex></ph> app. If set to false Per-app time limits feature will still work, but no data will be reported to the server and therefore displayed in <ph name="PRODUCT_NAME">$1<ex>Family Link</ex></ph>.'''
+          },
         }
       },
       'supported_on': ['chrome_os: 80-'],
@@ -19572,7 +19576,8 @@
         'reset_at': {
           'hour': 6,
           'minute': 0
-        }
+        },
+        'activity_reporting_enabled': False
       },
       'id': 641,
       'caption': '''Per-App Time Limits''',
