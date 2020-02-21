@@ -919,5 +919,43 @@
   <message name="IDS_SETTINGS_PARENTAL_CONTROLS_SET_UP_BUTTON_ROLE" desc="Role description of the button which launches page which enables ChromeOS's parental controls. Spoken aloud by screen readers when the Set Up button is focused">
     Set up button
   </message>
+
+  <!-- Device pointer page (OS settings) -->
+  <message name="IDS_SETTINGS_MOUSE_TITLE" desc="In Device Settings, the title of the mouse settings subpage.">
+    Mouse
+  </message>
+  <message name="IDS_SETTINGS_TOUCHPAD_TITLE" desc="In Device Settings, the title of the touchpad settings subpage.">
+    Touchpad
+  </message>
+    <message name="IDS_SETTINGS_TOUCHPAD_TAP_TO_CLICK_ENABLED_LABEL" desc="In Device Settings, the text next to the checkbox that allows tapping the touchpad to work as a click.">
+    Enable tap-to-click
+  </message>
+  <message name="IDS_SETTINGS_TOUCHPAD_SPEED_LABEL" desc="In Device Settings, the text next to the slider that sets the speed (sensitivity) of the touchpad.">
+    Touchpad speed
+  </message>
+  <message name="IDS_SETTINGS_POINTER_SPEED_SLOW_LABEL" desc="In Device Settings, the text under the left (less sensitive) side of the slider for the pointer (mouse/touch) speed (sensitivity).">
+    Slow
+  </message>
+  <message name="IDS_SETTINGS_POINTER_SPEED_FAST_LABEL" desc="In Device Settings, the text under the right (more sensitive) side of the slider for the pointer (mouse/touchpad) speed (sensitivity).">
+    Fast
+  </message>
+  <message name="IDS_SETTINGS_MOUSE_SPEED_LABEL" desc="In Device Settings, the text next to the slider that sets the speed (sensitivity) of the mouse.">
+    Mouse speed
+  </message>
+  <message name="IDS_SETTINGS_MOUSE_SWAP_BUTTONS_LABEL" desc="In Device Settings, the text next to the checkbox to set the primary mouse button to the right button instead of the left button.">
+    Swap primary mouse button
+  </message>
+  <message name="IDS_SETTINGS_MOUSE_REVERSE_SCROLL_LABEL" desc="In Device Settings, the text next to the checkbox to set reverse scrolling.">
+    Reverse scrolling
+  </message>
+  <message name="IDS_SETTINGS_MOUSE_ACCELERATION_LABEL" desc="In Device Settings, the text next to the checkbox to disable mouse acceleration.">
+    Enable mouse acceleration
+  </message>
+  <message name="IDS_SETTINGS_TOUCHPAD_ACCELERATION_LABEL" desc="In Device Settings, the text next to the checkbox to disable touchpad acceleration.">
+    Enable touchpad acceleration
+  </message>
+  <message name="IDS_SETTINGS_MOUSE_AND_TOUCHPAD_TITLE" desc="In Device Settings, the title of the mouse and touchpad settings subpage (when the user has both types of devices).">
+    Mouse and touchpad
+  </message>
 </if>
 </grit-part>
