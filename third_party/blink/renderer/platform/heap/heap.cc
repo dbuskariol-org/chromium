@@ -463,7 +463,7 @@ size_t ThreadHeap::ObjectPayloadSizeForTesting() {
   size_t object_payload_size = 0;
   thread_state_->SetGCPhase(ThreadState::GCPhase::kMarking);
   thread_state_->Heap().MakeConsistentForGC();
-  thread_state_->Heap().PrepareForSweep();
+  thread_state_->Heap().PrepareForSweep(BlinkGC::CollectionType::kMajor);
   for (int i = 0; i < BlinkGC::kNumberOfArenas; ++i)
     object_payload_size += arenas_[i]->ObjectPayloadSizeForTesting();
   MakeConsistentForMutator();
@@ -527,11 +527,11 @@ void ThreadHeap::Compact() {
   Compaction()->Finish();
 }
 
-void ThreadHeap::PrepareForSweep() {
+void ThreadHeap::PrepareForSweep(BlinkGC::CollectionType collection_type) {
   DCHECK(thread_state_->InAtomicMarkingPause());
   DCHECK(thread_state_->CheckThread());
   for (int i = 0; i < BlinkGC::kNumberOfArenas; i++)
-    arenas_[i]->PrepareForSweep();
+    arenas_[i]->PrepareForSweep(collection_type);
 }
 
 void ThreadHeap::RemoveAllPages() {
