@@ -364,7 +364,6 @@
   'components_unittests': {
     'remove_from': [
       'Fuchsia x64', # https://crbug.com/961457
-      'Fuchsia ARM64', # https://crbug.com/961457
       'android-code-coverage-native', # crbug/1018431
       'fuchsia-fyi-arm64-rel',  # https://crbug.com/961457
       'fuchsia-fyi-x64-dbg',  # https://crbug.com/961457
@@ -1039,7 +1038,6 @@
   'net_unittests': {
     'remove_from': [
       'chromeos-amd64-generic-rel',  # https://crbug.com/1053547
-      'Fuchsia ARM64',  # https://crbug.com/877248
       'fuchsia-fyi-arm64-rel',  # https://crbug.com/877248
       'fuchsia-fyi-x64-dbg',  # https://crbug.com/844416
     ],
