@@ -256,6 +256,31 @@ void MediaControllerImpl::HandleMediaPrevTrack() {
     client_->HandleMediaPrevTrack();
 }
 
+void MediaControllerImpl::HandleMediaSeekBackward() {
+  if (Shell::Get()->session_controller()->IsScreenLocked() &&
+      !AreLockScreenMediaKeysEnabled()) {
+    return;
+  }
+
+  ui::RecordMediaHardwareKeyAction(ui::MediaHardwareKeyAction::kSeekBackward);
+
+  // If the |client_| is force handling the keys then we should forward them.
+  if (client_ && force_media_client_key_handling_) {
+    client_->HandleMediaSeekBackward();
+    return;
+  }
+
+  // If media session media key handling is enabled. Seek backward with
+  // kDefaultSeekTime using the media session service.
+  if (ShouldUseMediaSession()) {
+    GetMediaSessionController()->Seek(kDefaultSeekTime * -1);
+    return;
+  }
+
+  if (client_)
+    client_->HandleMediaSeekBackward();
+}
+
 void MediaControllerImpl::HandleMediaSeekForward() {
   if (Shell::Get()->session_controller()->IsScreenLocked() &&
       !AreLockScreenMediaKeysEnabled()) {

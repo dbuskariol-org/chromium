@@ -151,6 +151,9 @@ TEST_F(MediaClientTest, HandleMediaAccelerators) {
       {ui::Accelerator(ui::VKEY_MEDIA_PREV_TRACK, ui::EF_NONE),
        base::BindRepeating(&MediaClientImpl::HandleMediaPrevTrack,
                            base::Unretained(client()))},
+      {ui::Accelerator(ui::VKEY_OEM_103, ui::EF_NONE),
+       base::BindRepeating(&MediaClientImpl::HandleMediaSeekBackward,
+                           base::Unretained(client()))},
       {ui::Accelerator(ui::VKEY_OEM_104, ui::EF_NONE),
        base::BindRepeating(&MediaClientImpl::HandleMediaSeekForward,
                            base::Unretained(client()))}};
