@@ -137,6 +137,8 @@ bool IsResponseProcessingV2Enabled();
 
 COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC) bool IsRoutinesEnabled();
 
+COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC) bool IsScreenContextQueryEnabled();
+
 COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC) bool IsStereoAudioInputEnabled();
 
 COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC) bool IsWarmerWelcomeEnabled();
