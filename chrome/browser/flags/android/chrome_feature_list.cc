@@ -212,6 +212,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kWebApkAdaptiveIcon,
     &net::features::kSameSiteByDefaultCookies,
     &net::features::kCookiesWithoutSameSiteMustBeSecure,
+    &paint_preview::kPaintPreviewCaptureExperiment,
     &paint_preview::kPaintPreviewTest,
     &payments::features::kAlwaysAllowJustInTimePaymentApp,
     &payments::features::kPaymentRequestSkipToGPay,
