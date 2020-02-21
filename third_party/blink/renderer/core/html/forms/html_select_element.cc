@@ -537,15 +537,11 @@ HTMLOptionElement* HTMLSelectElement::PreviousSelectableOption(
 }
 
 HTMLOptionElement* HTMLSelectElement::FirstSelectableOption() const {
-  // TODO(tkent): This is not efficient.  nextSlectableOption(nullptr) is
-  // faster.
-  return NextValidOption(GetListItems().size(), kSkipBackwards, INT_MAX);
+  return NextValidOption(-1, kSkipForwards, 1);
 }
 
 HTMLOptionElement* HTMLSelectElement::LastSelectableOption() const {
-  // TODO(tkent): This is not efficient.  previousSlectableOption(nullptr) is
-  // faster.
-  return NextValidOption(-1, kSkipForwards, INT_MAX);
+  return NextValidOption(GetListItems().size(), kSkipBackwards, 1);
 }
 
 // Returns the index of the next valid item one page away from |startIndex| in
