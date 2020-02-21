@@ -567,21 +567,7 @@ HTMLOptionElement* HTMLSelectElement::NextSelectableOptionPageAway(
 }
 
 void HTMLSelectElement::SelectAll() {
-  DCHECK(!UsesMenuList());
-  if (!GetLayoutObject() || !is_multiple_)
-    return;
-
-  // Save the selection so it can be compared to the new selectAll selection
-  // when dispatching change events.
-  SaveLastSelection();
-
-  active_selection_state_ = true;
-  SetActiveSelectionAnchor(NextSelectableOption(nullptr));
-  SetActiveSelectionEnd(PreviousSelectableOption(nullptr));
-
-  UpdateListBoxSelection(false, false);
-  ListBoxOnChange();
-  SetNeedsValidityCheck();
+  select_type_->SelectAll();
 }
 
 void HTMLSelectElement::SaveLastSelection() {
