@@ -4151,6 +4151,19 @@ void RenderFrameHostImpl::OnAccessibilitySnapshotResponse(
   }
 }
 
+bool RenderFrameHostImpl::HasSeenRecentXrOverlaySetup() {
+  static constexpr base::TimeDelta kMaxInterval =
+      base::TimeDelta::FromSeconds(1);
+  base::TimeDelta delta = base::TimeTicks::Now() - last_xr_overlay_setup_time_;
+  DVLOG(2) << __func__ << ": return " << (delta <= kMaxInterval);
+  return delta <= kMaxInterval;
+}
+
+void RenderFrameHostImpl::SetIsXrOverlaySetup() {
+  DVLOG(2) << __func__;
+  last_xr_overlay_setup_time_ = base::TimeTicks::Now();
+}
+
 // TODO(alexmos): When the allowFullscreen flag is known in the browser
 // process, use it to double-check that fullscreen can be entered here.
 void RenderFrameHostImpl::EnterFullscreen(
@@ -4168,6 +4181,7 @@ void RenderFrameHostImpl::EnterFullscreen(
   // TODO(lanwei): Investigate whether we can terminate the renderer when the
   // user activation has already been consumed.
   if (!delegate_->HasSeenRecentScreenOrientationChange() &&
+      !HasSeenRecentXrOverlaySetup() &&
       !GetContentClient()
            ->browser()
            ->CanEnterFullscreenWithoutUserActivation()) {
@@ -4175,7 +4189,7 @@ void RenderFrameHostImpl::EnterFullscreen(
         blink::mojom::UserActivationUpdateType::kConsumeTransientActivation);
     if (!is_consumed) {
       DLOG(ERROR) << "Cannot enter fullscreen because there is no transient "
-                  << "user activation and no orientation change.";
+                  << "user activation, orientation change, or XR overlay.";
       return;
     }
   }

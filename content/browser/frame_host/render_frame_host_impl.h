@@ -357,6 +357,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
       const std::string& relying_party_id) override;
   blink::mojom::AuthenticatorStatus PerformMakeCredentialWebAuthSecurityChecks(
       const std::string& relying_party_id) override;
+  void SetIsXrOverlaySetup() override;
 
   // Determines if a clipboard paste using |data| of type |data_type| is allowed
   // in this renderer frame.  The implementation delegates to
@@ -2068,6 +2069,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
                               bool success,
                               const base::string16& user_input);
 
+  // See |SetIsXrOverlaySetup()|
+  bool HasSeenRecentXrOverlaySetup();
+
   // The RenderViewHost that this RenderFrameHost is associated with.
   //
   // It is kept alive as long as any RenderFrameHosts or RenderFrameProxyHosts
@@ -2690,6 +2694,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   scoped_refptr<WebAuthRequestSecurityChecker>
       webauth_request_security_checker_;
+
+  // This time is used to record the last WebXR DOM Overlay setup request.
+  base::TimeTicks last_xr_overlay_setup_time_;
 
   // NOTE: This must be the last member.
   base::WeakPtrFactory<RenderFrameHostImpl> weak_ptr_factory_{this};
