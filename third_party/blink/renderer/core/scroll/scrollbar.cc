@@ -815,7 +815,8 @@ float Scrollbar::EffectiveZoom() const {
 bool Scrollbar::ContainerIsRightToLeft() const {
   if (::features::IsFormControlsRefreshEnabled() && style_source_ &&
       style_source_->GetLayoutObject()) {
-    TextDirection dir = style_source_->GetLayoutObject()->Style()->Direction();
+    base::i18n::TextDirection dir =
+        style_source_->GetLayoutObject()->Style()->Direction();
     return IsRtl(dir);
   }
   return false;
