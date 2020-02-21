@@ -41,18 +41,17 @@ namespace {
 const base::Feature kNavigationPredictorMultiplePrerenders{
     "NavigationPredictorMultiplePrerenders", base::FEATURE_ENABLED_BY_DEFAULT};
 
-std::string GetURLAsReferrerWithoutRefParams(const GURL& gurl) {
+std::string GetURLWithoutRefParams(const GURL& gurl) {
   url::Replacements<char> replacements;
   replacements.ClearRef();
-  return gurl.ReplaceComponents(replacements).GetAsReferrer().spec();
+  return gurl.ReplaceComponents(replacements).spec();
 }
 
 // Returns true if |a| and |b| are both valid HTTP/HTTPS URLs and have the
 // same scheme, host, path and query params. This method does not take into
-// account the ref params or fragments of the two URLs.
+// account the ref params of the two URLs.
 bool AreGURLsEqualExcludingRefParams(const GURL& a, const GURL& b) {
-  return GetURLAsReferrerWithoutRefParams(a) ==
-         GetURLAsReferrerWithoutRefParams(b);
+  return GetURLWithoutRefParams(a) == GetURLWithoutRefParams(b);
 }
 }  // namespace
 
@@ -653,8 +652,7 @@ void NavigationPredictor::MergeMetricsSameTargetUrl(
     // Skip ref params when merging the anchor elements. This ensures that two
     // anchor elements which differ only in the ref params are combined
     // together.
-    const std::string& key =
-        GetURLAsReferrerWithoutRefParams(metric->target_url);
+    const std::string& key = GetURLWithoutRefParams(metric->target_url);
     auto iter = metrics_map.find(key);
     if (iter == metrics_map.end()) {
       metrics_map[key] = std::move(metric);
