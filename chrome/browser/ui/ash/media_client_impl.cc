@@ -197,6 +197,10 @@ void MediaClientImpl::HandleMediaPrevTrack() {
   HandleMediaAction(ui::VKEY_MEDIA_PREV_TRACK);
 }
 
+void MediaClientImpl::HandleMediaSeekForward() {
+  HandleMediaAction(ui::VKEY_OEM_104);
+}
+
 void MediaClientImpl::RequestCaptureState() {
   base::flat_map<AccountId, MediaCaptureState> capture_states;
   for (user_manager::User* user :
@@ -308,10 +312,11 @@ void MediaClientImpl::HandleMediaAction(ui::KeyboardCode keycode) {
       router->NotifyTogglePlayState();
       break;
     // TODO(https://crbug.com/1053777): Handle media action for VKEY_MEDIA_PLAY,
-    // VKEY_MEDIA_PAUSE, and VKEY_MEDIA_STOP.
+    // VKEY_MEDIA_PAUSE, VKEY_MEDIA_STOP, and VKEY_OEM_104.
     case ui::VKEY_MEDIA_PLAY:
     case ui::VKEY_MEDIA_PAUSE:
     case ui::VKEY_MEDIA_STOP:
+    case ui::VKEY_OEM_104:  // KEYCODE_MEDIA_FAST_FORWARD
       break;
     default:
       break;

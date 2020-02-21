@@ -33,6 +33,10 @@ void TestMediaClient::HandleMediaPrevTrack() {
   ++handle_media_prev_track_count_;
 }
 
+void TestMediaClient::HandleMediaSeekForward() {
+  ++handle_media_seek_forward_count_;
+}
+
 void TestMediaClient::RequestCaptureState() {}
 
 void TestMediaClient::SuspendMediaSessions() {
