@@ -53,6 +53,7 @@ const FilesQuickView = Polymer({
   },
 
   listeners: {
+    'files-safe-media-tap-inside': 'tapInside',
     'files-safe-media-tap-outside': 'close',
     'files-safe-media-load-error': 'loaderror',
   },
@@ -127,6 +128,13 @@ const FilesQuickView = Polymer({
   close: function() {
     if (this.isOpened()) {
       this.$.dialog.close();
+    }
+  },
+
+  tapInside: function(e) {
+    if (this.type === 'image') {
+      const dialog = this.shadowRoot.querySelector('#dialog');
+      dialog.focus();
     }
   },
 
