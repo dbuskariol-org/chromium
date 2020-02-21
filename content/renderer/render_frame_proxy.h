@@ -42,7 +42,6 @@ class ChildFrameCompositingHelper;
 class RenderFrameImpl;
 class RenderViewImpl;
 class RenderWidget;
-struct FrameOwnerProperties;
 struct FrameReplicationState;
 
 // When a page's frames are rendered by multiple processes, each renderer has a
@@ -225,7 +224,6 @@ class CONTENT_EXPORT RenderFrameProxy : public IPC::Listener,
   void OnUpdateOpener(int opener_routing_id);
   void OnDidUpdateName(const std::string& name, const std::string& unique_name);
   void OnEnforceInsecureRequestPolicy(blink::WebInsecureRequestPolicy policy);
-  void OnSetFrameOwnerProperties(const FrameOwnerProperties& properties);
   void OnTransferUserActivationFrom(int32_t source_routing_id);
 
   // mojom::RenderFrameProxy implementation:
