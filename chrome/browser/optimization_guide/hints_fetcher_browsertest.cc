@@ -446,9 +446,7 @@ class HintsFetcherDisabledBrowserTest : public InProcessBrowserTest {
     for (const auto& host : hints_request.hosts())
       hosts_and_urls_requested.insert(host.host());
     for (const auto& url : hints_request.urls()) {
-      // TODO(crbug/1051365):  Remove normalization step once nav predictor
-      // provides predictable URLs.
-      hosts_and_urls_requested.insert(GURL(url.url()).GetAsReferrer().spec());
+      hosts_and_urls_requested.insert(url.url());
     }
 
     EXPECT_EQ(expect_hints_request_for_hosts_and_urls_.value().size(),
