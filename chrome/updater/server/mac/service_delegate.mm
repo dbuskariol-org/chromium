@@ -13,7 +13,7 @@
 #import "chrome/updater/server/mac/service_protocol.h"
 #include "chrome/updater/update_service.h"
 
-@interface UpdateCheckXPCServiceImpl : NSObject <UpdateChecking> {
+@interface CRUUpdateCheckXPCServiceImpl : NSObject <CRUUpdateChecking> {
   updater::UpdateService* _service;
 }
 
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation UpdateCheckXPCServiceImpl
+@implementation CRUUpdateCheckXPCServiceImpl
 
 - (instancetype)initWithUpdateService:(updater::UpdateService*)service {
   if (self = [super init]) {
@@ -35,7 +35,7 @@
 - (instancetype)init {
   // Unsupported, but we must override NSObject's designated initializer.
   DLOG(ERROR)
-      << "Plain init method not supported for UpdateCheckXPCServiceImpl.";
+      << "Plain init method not supported for CRUUpdateCheckXPCServiceImpl.";
   return [self initWithUpdateService:nullptr];
 }
 
@@ -51,7 +51,7 @@
 
 @end
 
-@implementation UpdateCheckXPCServiceDelegate
+@implementation CRUUpdateCheckXPCServiceDelegate
 
 - (instancetype)initWithUpdateService:
     (std::unique_ptr<updater::UpdateService>)service {
@@ -63,8 +63,8 @@
 
 - (instancetype)init {
   // Unsupported, but we must override NSObject's designated initializer.
-  DLOG(ERROR)
-      << "Plain init method not supported for UpdateCheckXPCServiceDelegate.";
+  DLOG(ERROR) << "Plain init method not supported for "
+                 "CRUUpdateCheckXPCServiceDelegate.";
   return [self initWithUpdateService:nullptr];
 }
 
@@ -73,9 +73,10 @@
   // Check to see if the other side of the connection is "okay";
   // if not, invalidate newConnection and return NO.
   newConnection.exportedInterface =
-      [NSXPCInterface interfaceWithProtocol:@protocol(UpdateChecking)];
-  base::scoped_nsobject<UpdateCheckXPCServiceImpl> object(
-      [[UpdateCheckXPCServiceImpl alloc] initWithUpdateService:_service.get()]);
+      [NSXPCInterface interfaceWithProtocol:@protocol(CRUUpdateChecking)];
+  base::scoped_nsobject<CRUUpdateCheckXPCServiceImpl> object(
+      [[CRUUpdateCheckXPCServiceImpl alloc]
+          initWithUpdateService:_service.get()]);
   newConnection.exportedObject = object.get();
   [newConnection resume];
   return YES;

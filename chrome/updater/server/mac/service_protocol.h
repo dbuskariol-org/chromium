@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 
 // Protocol for the XPC update checking service.
-@protocol UpdateChecking <NSObject>
+@protocol CRUUpdateChecking <NSObject>
 // Checks for updates and returns the result in the reply block.
 - (void)checkForUpdatesWithReply:(void (^_Nullable)(int rc))reply;
 @end
