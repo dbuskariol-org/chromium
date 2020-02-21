@@ -743,5 +743,40 @@
   <message name="IDS_SETTINGS_ANDROID_APPS_MANAGE_APP_LINKS" desc="Label for accessing app preferrences on ARC side.">
     Manage Play app links
   </message>
+  
+  <!-- Device Stylus (OS settings) -->
+  <message name="IDS_SETTINGS_STYLUS_TITLE" desc="Title of the stylus settings page.">
+    Stylus
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_ENABLE_STYLUS_TOOLS" desc="Toggle that lets the user enable or disable the stylus tools.">
+    Show stylus tools in the shelf
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_AUTO_OPEN_STYLUS_TOOLS" desc="Label that tells the user that the stylus tools will be automatically opened and closed when they insert or eject the stylus.">
+    Open stylus tools when the stylus is removed
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_FIND_MORE_APPS_PRIMARY" desc="Primary URL label that opens up the Play Store to a curated list of stylus applications.">
+    Find more stylus apps
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_FIND_MORE_APPS_SECONDARY" desc="Secondary (below the primary) URL label that opens up the Play Store to a curated list of stylus applications.">
+    Open Google Play
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_NOTE_TAKING_APP_LABEL" desc="Label describing a dropdown that lets the user pick their default note-taking applications. The dropdown contains a list of all available choices. The user can install additional apps, so the contents of the dropdown is dynamic.">
+    Note-taking app
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_NOTE_TAKING_APP_LOCK_SCREEN_CHECKBOX" desc="Label for a check box that enables note-taking by selected note-taking application when user session is locked (i.e. when lock screen is shown).">
+    Enable note-taking from lock screen
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_NOTE_TAKING_APP_KEEP_LATEST_NOTE" desc="Label for a check box that, when checked, indicates that the note-taking app should keep the latest note the user took while on the lock screen available to the user whenever the app is launched on the lock screen (i.e. if the active app window is closed, the note should be visible the next time the app is launched).">
+    Keep latest note on lock screen
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_LOCK_SCREEN_NOTES_TITLE" desc="In stylus settings, title of a section that contains settings for controlling note taking on the lock screen.">
+    Lock screen notes
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_NOTE_TAKING_APP_NONE_AVAILABLE" desc="Secondary label used when there are no note-taking applications available.">
+    None available
+  </message>
+  <message name="IDS_SETTINGS_STYLUS_NOTE_TAKING_APP_WAITING_FOR_ANDROID" desc="Secondary label used when the list of note-taking apps is not yet available, because the internal android container has not yet finished starting.">
+    Loading apps...
+  </message>
 </if>
 </grit-part>
