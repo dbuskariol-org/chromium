@@ -81,19 +81,19 @@ import java.net.URISyntaxException;
     @Override
     public void didFinishNavigation(NavigationHandle navigation) {
         if (!navigation.hasCommitted() || !navigation.isInMainFrame()) return;
-        mModel.set(PaymentHandlerToolbarProperties.PROGRESS_VISIBLE, false);
-    }
-
-    @Override
-    public void didStartNavigation(NavigationHandle navigation) {
-        if (!navigation.isInMainFrame() || navigation.isSameDocument()) return;
-        String url = navigation.getUrl();
+        String url = mWebContentsRef.getVisibleUrl().getSpec();
         try {
             mModel.set(PaymentHandlerToolbarProperties.URL, new URI(url));
         } catch (URISyntaxException e) {
             Log.e(TAG, "Failed to instantiate a URI with the url \"%s\".", url);
             mObserver.onToolbarError();
         }
+        mModel.set(PaymentHandlerToolbarProperties.PROGRESS_VISIBLE, false);
+    }
+
+    @Override
+    public void didStartNavigation(NavigationHandle navigation) {
+        if (!navigation.isInMainFrame() || navigation.isSameDocument()) return;
         mModel.set(PaymentHandlerToolbarProperties.SECURITY_ICON,
                 getSecurityIconResource(ConnectionSecurityLevel.NONE));
     }
