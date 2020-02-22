@@ -15,8 +15,6 @@
 
 namespace media {
 
-namespace mf {
-
 // Macros that contain return statements can make code harder to read. Only use
 // these when necessary, e.g. in places where we deal with a lot of Windows API
 // calls, for each of which we have to check the returned HRESULT.
@@ -82,8 +80,6 @@ class MF_INITIALIZER_EXPORT DXGIDeviceScopedHandle {
 
   HANDLE device_handle_ = INVALID_HANDLE_VALUE;
 };
-
-}  // namespace mf
 
 }  // namespace media
 
