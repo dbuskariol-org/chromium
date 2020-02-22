@@ -6192,6 +6192,29 @@ TEST_P(SplitViewOverviewSessionInClamshellTest,
   EXPECT_FALSE(GetDropTarget(1));
 }
 
+// Tests that Alt+[ and Alt+] do not start overview.
+TEST_P(SplitViewOverviewSessionInClamshellTest,
+       AltSquareBracketNotStartOverview) {
+  std::unique_ptr<aura::Window> window1 = CreateTestWindow();
+  std::unique_ptr<aura::Window> window2 = CreateTestWindow();
+  wm::ActivateWindow(window1.get());
+  EXPECT_FALSE(split_view_controller()->InSplitViewMode());
+  EXPECT_FALSE(InOverviewSession());
+  // Alt+[
+  const WMEvent alt_left_square_bracket(WM_EVENT_CYCLE_SNAP_LEFT);
+  WindowState* window1_state = WindowState::Get(window1.get());
+  window1_state->OnWMEvent(&alt_left_square_bracket);
+  EXPECT_EQ(WindowStateType::kLeftSnapped, window1_state->GetStateType());
+  EXPECT_FALSE(split_view_controller()->InSplitViewMode());
+  EXPECT_FALSE(InOverviewSession());
+  // Alt+]
+  const WMEvent alt_right_square_bracket(WM_EVENT_CYCLE_SNAP_RIGHT);
+  window1_state->OnWMEvent(&alt_right_square_bracket);
+  EXPECT_EQ(WindowStateType::kRightSnapped, window1_state->GetStateType());
+  EXPECT_FALSE(split_view_controller()->InSplitViewMode());
+  EXPECT_FALSE(InOverviewSession());
+}
+
 // Tests using Alt+[ on a left split view window.
 TEST_P(SplitViewOverviewSessionInClamshellTest,
        AltLeftSquareBracketOnLeftSplitViewWindow) {
