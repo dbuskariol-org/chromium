@@ -97,7 +97,10 @@ if (is_win || is_mac) {
     }
 
     if (is_mac) {
-      deps += [ "//chrome/updater/mac:network_fetcher_sources" ]
+      deps += [
+        "//chrome/updater/mac:network_fetcher_sources",
+        "//chrome/updater/mac:updater_setup_sources",
+      ]
     }
   }
 
