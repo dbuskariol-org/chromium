@@ -1438,5 +1438,37 @@
   <message name="IDS_SETTINGS_INTERNET_LOOKING_FOR_MOBILE_NETWORK" desc="Text shown when viewing the Mobile data page when there are no cellular or tether networks available.">
     Looking for a mobile network. <ph name="BEGIN_LINK">&lt;a target="_blank" href="$1"&gt;</ph>Learn more<ph name="END_LINK">&lt;/a&gt;</ph>
   </message>
+
+  <!-- Users Page (OS Settings) -->
+  <message name="IDS_SETTINGS_USERS_MODIFIED_BY_OWNER_LABEL" desc="Label saying settings may only be modified by the device owner.">
+    These settings may only be modified by the owner:
+  </message>
+  <message name="IDS_SETTINGS_USERS_MANAGED_LABEL" desc="Label saying settings is managed by enterprise and thus can't be modified.">
+    These settings are controlled by enterprise policy. Please contact your administrator for more information.
+  </message>
+  <message name="IDS_SETTINGS_USERS_GUEST_BROWSING_LABEL" desc="Label for the guest browsing setting.">
+    Enable Guest browsing
+  </message>
+  <message name="IDS_SETTINGS_USERS_SHOW_ON_SIGNIN_LABEL" desc="Label for the 'show users on sign-in screen' setting.">
+    Show usernames and photos on the sign-in screen
+  </message>
+  <message name="IDS_SETTINGS_USERS_RESTRICT_SIGNIN_LABEL" desc="Label for the setting for restricting sign in to specific users.">
+    Restrict sign-in to the following users:
+  </message>
+  <message name="IDS_SETTINGS_USERS_DEVICE_OWNER_LABEL" desc="Label for a user who is the device owner.">
+    <ph name="USER_NAME">$1<ex>John Smith</ex></ph> (owner)
+  </message>
+  <message name="IDS_SETTINGS_USERS_REMOVE_USER_TOOLTIP" desc="Tooltip for the button that removes a user from the list of restricted sign in users.">
+    Remove <ph name="USER_NAME">$1<ex>John Smith</ex></ph>
+  </message>
+  <message name="IDS_SETTINGS_USERS_ADD_USERS" desc="Label the dialog for adding users.">
+    Add user
+  </message>
+  <message name="IDS_SETTINGS_USERS_ADD_USERS_EMAIL" desc="Label for the email input field for adding users.">
+    Email address
+  </message>
+  <message name="IDS_SETTINGS_USER_EXISTS_ERROR" desc="Error message for attempting to add a user that already exists">
+    This user already exists
+  </message>
 </if>
 </grit-part>
