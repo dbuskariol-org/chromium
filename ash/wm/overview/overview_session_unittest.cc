@@ -4431,6 +4431,57 @@ TEST_P(SplitViewOverviewSessionTest, EmptyWindowsListNotExitOverview) {
   EXPECT_FALSE(overview_controller()->InOverviewSession());
 }
 
+// Tests using Alt+[ on a left snapped window, and Alt+] on a right snapped
+// window.
+TEST_P(SplitViewOverviewSessionTest, AltSquareBracketOnSameSideSnappedWindow) {
+  std::unique_ptr<aura::Window> window1 = CreateTestWindow();
+  std::unique_ptr<aura::Window> window2 = CreateTestWindow();
+  const auto test_unsnapping_window1 = [this,
+                                        &window1](WMEventType event_type) {
+    wm::ActivateWindow(window1.get());
+    WindowState* window1_state = WindowState::Get(window1.get());
+    const WMEvent event(event_type);
+    window1_state->OnWMEvent(&event);
+    EXPECT_TRUE(wm::IsActiveWindow(window1.get()));
+    EXPECT_EQ(WindowStateType::kMaximized, window1_state->GetStateType());
+    EXPECT_FALSE(split_view_controller()->InSplitViewMode());
+    EXPECT_FALSE(InOverviewSession());
+  };
+  // Test Alt+[ with active window snapped on left and overview on right.
+  ToggleOverview();
+  split_view_controller()->SnapWindow(window1.get(), SplitViewController::LEFT);
+  test_unsnapping_window1(WM_EVENT_CYCLE_SNAP_LEFT);
+  // Test Alt+] with active window snapped on right and overview on left.
+  ToggleOverview();
+  split_view_controller()->SnapWindow(window1.get(),
+                                      SplitViewController::RIGHT);
+  test_unsnapping_window1(WM_EVENT_CYCLE_SNAP_RIGHT);
+  // Test Alt+[ with active window snapped on left and other window snapped on
+  // right, if the left window is the default snapped window.
+  split_view_controller()->SnapWindow(window1.get(), SplitViewController::LEFT);
+  split_view_controller()->SnapWindow(window2.get(),
+                                      SplitViewController::RIGHT);
+  test_unsnapping_window1(WM_EVENT_CYCLE_SNAP_LEFT);
+  // Test Alt+[ with active window snapped on left and other window snapped on
+  // right, if the right window is the default snapped window.
+  split_view_controller()->SnapWindow(window2.get(),
+                                      SplitViewController::RIGHT);
+  split_view_controller()->SnapWindow(window1.get(), SplitViewController::LEFT);
+  test_unsnapping_window1(WM_EVENT_CYCLE_SNAP_LEFT);
+  // Test Alt+] with active window snapped on right and other window snapped on
+  // left, if the left window is the default snapped window.
+  split_view_controller()->SnapWindow(window2.get(), SplitViewController::LEFT);
+  split_view_controller()->SnapWindow(window1.get(),
+                                      SplitViewController::RIGHT);
+  test_unsnapping_window1(WM_EVENT_CYCLE_SNAP_RIGHT);
+  // Test Alt+] with active window snapped on right and other window snapped on
+  // left, if the right window is the default snapped window.
+  split_view_controller()->SnapWindow(window1.get(),
+                                      SplitViewController::RIGHT);
+  split_view_controller()->SnapWindow(window2.get(), SplitViewController::LEFT);
+  test_unsnapping_window1(WM_EVENT_CYCLE_SNAP_RIGHT);
+}
+
 // Test the overview window drag functionalities when screen rotates.
 TEST_P(SplitViewOverviewSessionTest, SplitViewRotationTest) {
   UpdateDisplay("807x407");
