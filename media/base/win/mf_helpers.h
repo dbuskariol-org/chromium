@@ -21,13 +21,14 @@ namespace media {
 // See discussion thread at:
 // https://groups.google.com/a/chromium.org/d/msg/cxx/zw5Xmcs--S4/r7Fwb-TsCAAJ
 
-#define RETURN_IF_FAILED(expr)                                \
-  do {                                                        \
-    HRESULT hresult = (expr);                                 \
-    if (FAILED(hresult)) {                                    \
-      DLOG(ERROR) << __func__ << ": failed with " << hresult; \
-      return hresult;                                         \
-    }                                                         \
+#define RETURN_IF_FAILED(expr)                                          \
+  do {                                                                  \
+    HRESULT hresult = (expr);                                           \
+    if (FAILED(hresult)) {                                              \
+      DLOG(ERROR) << __func__ << ": failed with \""                     \
+                  << logging::SystemErrorCodeToString(hresult) << "\""; \
+      return hresult;                                                   \
+    }                                                                   \
   } while (0)
 
 #define RETURN_ON_FAILURE(success, log, ret) \
@@ -38,9 +39,10 @@ namespace media {
     }                                        \
   } while (0)
 
-#define RETURN_ON_HR_FAILURE(hresult, log, ret) \
-  RETURN_ON_FAILURE(SUCCEEDED(hresult),         \
-                    log << ", HRESULT: 0x" << std::hex << hresult, ret);
+#define RETURN_ON_HR_FAILURE(hresult, log, ret)                               \
+  RETURN_ON_FAILURE(SUCCEEDED(hresult),                                       \
+                    log << ", " << logging::SystemErrorCodeToString(hresult), \
+                    ret);
 
 // Creates a Media Foundation sample with one buffer of length |buffer_length|
 // on a |align|-byte boundary. Alignment must be a perfect power of 2 or 0.
