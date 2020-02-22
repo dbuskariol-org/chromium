@@ -7572,3 +7572,5 @@ crbug.com/1050549 http/tests/devtools/unit/string-util.js [ Skip ]
 
 # Sheriff 2020-02-21
 crbug.com/1054916 [ Linux ] external/wpt/webxr/dom-overlay/ar_dom_overlay.https.html [ Pass Failure Timeout ]
+crbug.com/1055006 [ Linux ] external/wpt/std-toast/methods.html [ Pass Failure Timeout ]
+crbug.com/1055006 [ Linux ] external/wpt/std-toast/options.html [ Pass Failure Timeout ]
