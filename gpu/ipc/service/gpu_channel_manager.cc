@@ -392,7 +392,9 @@ void GpuChannelManager::DoWakeUpGpu() {
     stub = channel->GetOneStub();
     if (stub) {
       DCHECK(stub->decoder_context());
-      break;
+      // With Vulkan, Dawn, etc, RasterDecoders don't use GL.
+      if (stub->decoder_context()->GetGLContext())
+        break;
     }
   }
   if (!stub || !stub->decoder_context()->MakeCurrent())
