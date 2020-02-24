@@ -36,7 +36,6 @@
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/common/frame/frame_policy.h"
 #include "third_party/blink/public/common/navigation/triggering_event_info.h"
-#include "third_party/blink/public/mojom/security_context/insecure_request_policy.mojom.h"
 #include "third_party/blink/public/platform/url_conversion.h"
 #include "third_party/blink/public/platform/web_rect.h"
 #include "third_party/blink/public/platform/web_string.h"
@@ -429,7 +428,7 @@ void RenderFrameProxy::OnDidUpdateName(const std::string& name,
 }
 
 void RenderFrameProxy::OnEnforceInsecureRequestPolicy(
-    blink::mojom::InsecureRequestPolicy policy) {
+    blink::WebInsecureRequestPolicy policy) {
   web_frame_->SetReplicatedInsecureRequestPolicy(policy);
 }
 

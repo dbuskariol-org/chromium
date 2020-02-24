@@ -9,7 +9,6 @@
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/mojom/frame/frame_owner_properties.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/intrinsic_sizing_info.mojom-blink.h"
-#include "third_party/blink/public/mojom/security_context/insecure_request_policy.mojom-blink.h"
 #include "third_party/blink/public/platform/interface_registry.h"
 #include "third_party/blink/public/web/web_frame.h"
 #include "third_party/blink/public/web/web_view.h"
@@ -328,8 +327,7 @@ void RemoteFrame::SetReplicatedSandboxFlags(
   security_context_.ResetAndEnforceSandboxFlags(flags);
 }
 
-void RemoteFrame::SetInsecureRequestPolicy(
-    mojom::blink::InsecureRequestPolicy policy) {
+void RemoteFrame::SetInsecureRequestPolicy(WebInsecureRequestPolicy policy) {
   security_context_.SetInsecureRequestPolicy(policy);
 }
 
