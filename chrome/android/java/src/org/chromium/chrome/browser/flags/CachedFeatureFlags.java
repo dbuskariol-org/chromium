@@ -201,7 +201,6 @@ public class CachedFeatureFlags {
      */
     public static void cacheAdditionalNativeFlags() {
         cacheNightModeAvailable();
-        cacheNightModeDefaultToLight();
         cacheNetworkServiceWarmUpEnabled();
         cacheNativeTabSwitcherUiFlags();
         cacheReachedCodeProfilerTrialGroup();
@@ -305,46 +304,6 @@ public class CachedFeatureFlags {
     @VisibleForTesting
     public static void setNightModeAvailableForTesting(@Nullable Boolean available) {
         sBoolValuesReturned.put(ChromePreferenceKeys.FLAGS_CACHED_NIGHT_MODE_AVAILABLE, available);
-    }
-
-    /**
-     * Cache whether or not to default to the light theme when the night mode feature is enabled.
-     */
-    public static void cacheNightModeDefaultToLight() {
-        // Do not cache on Q (where defaulting to light theme does not apply) or if night mode is
-        // not enabled.
-        if (BuildInfo.isAtLeastQ()
-                || !ChromeFeatureList.isEnabled(ChromeFeatureList.ANDROID_NIGHT_MODE)) {
-            return;
-        }
-
-        String lightModeDefaultParam = "default_light_theme";
-        boolean lightModeAsDefault = ChromeFeatureList.getFieldTrialParamByFeatureAsBoolean(
-                ChromeFeatureList.ANDROID_NIGHT_MODE, lightModeDefaultParam, true);
-
-        SharedPreferencesManager.getInstance().writeBoolean(
-                ChromePreferenceKeys.FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT, lightModeAsDefault);
-    }
-
-    /**
-     * @return Whether or not to default to the light theme when the night mode feature is enabled.
-     */
-    public static boolean isNightModeDefaultToLight() {
-        if (BuildInfo.isAtLeastQ()) {
-            return false;
-        }
-        return getConsistentBooleanValue(
-                ChromePreferenceKeys.FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT, true);
-    }
-
-    /**
-     * Toggles whether the night mode experiment is enabled for testing. Should be reset back to
-     * null after the test has finished.
-     */
-    @VisibleForTesting
-    public static void setNightModeDefaultToLightForTesting(@Nullable Boolean available) {
-        sBoolValuesReturned.put(
-                ChromePreferenceKeys.FLAGS_CACHED_NIGHT_MODE_DEFAULT_TO_LIGHT, available);
     }
 
     /**
