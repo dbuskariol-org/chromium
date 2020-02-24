@@ -138,6 +138,7 @@ class NodeWrapper extends SAChildNode {
     switch (action) {
       case SAConstants.MenuAction.SELECT:
         this.baseNode_.doDefault();
+        return SAConstants.ActionResponse.CLOSE_MENU;
       case SAConstants.MenuAction.SCROLL_DOWN:
         ancestor = this.getScrollableAncestor_();
         if (ancestor.scrollable) {

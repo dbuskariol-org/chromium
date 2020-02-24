@@ -17,6 +17,7 @@ class SwitchAccess {
 
       BackButtonNode.findAutomationNode(desktop);
       Commands.initialize();
+      KeyboardRootNode.startWatchingVisibility();
       SwitchAccessPreferences.initialize();
     });
   }
