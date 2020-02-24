@@ -3721,7 +3721,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="6207282396926186323">Instalirajte <ph name="APP_NAME" /> (Linux aplikacija)</translation>
 <translation id="6207937957461833379">Zemlja / Regija</translation>
 <translation id="6208521041562685716">Aktiviranje prijenosa podataka na mobilnoj mreži</translation>
-<translation id="6209908325007204267">Vaš uređaj uključuje Nadogradnju za Chrome za poduzeća, no vaše korisničko ime nije povezano s računom tvrtke. Da biste izradili račun tvrtke, posjetite stranicu g.co/ChromeEnterpriseAccount na sekundarnom uređaju.</translation>
+<translation id="6209908325007204267">Vaš uređaj uključuje nadogradnju na poslovnu verziju Chromea, ali vaše korisničko ime nije povezano s računom preduzeća. Kreirajte račun preduzeća putem web lokacije g.co/ChromeEnterpriseAccount na sekundarnom uređaju.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: sinhronizacija ne funkcionira</translation>
 <translation id="6212039847102026977">Prikaži napredna svojstva mreže</translation>
 <translation id="6212168817037875041">Isključi ekran</translation>
@@ -4405,7 +4405,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="7186088072322679094">Drži u alatnoj traci</translation>
 <translation id="7187428571767585875">Unosi u registar koje treba ukloniti ili promijeniti:</translation>
 <translation id="7189234443051076392">Provjerite ima li na uređaju dovoljno slobodnog prostora</translation>
-<translation id="7189451821249468368">Nemate dovoljno nadogradnji za prijavu ovog uređaja. Obratite se prodaji da biste kupili više. Ako smatrate da vam se ova poruka prikazuje pogreškom, obratite se podršci.</translation>
+<translation id="7189451821249468368">Nemate dovoljno nadogradnji da prijavite ovaj uređaj. Kontaktirajte prodaju da kupite još licenci. Ako mislite da vam se ova poruka prikazuje greškom, kontaktirajte podršku.</translation>
 <translation id="7189965711416741966">Dodan je otisak prsta.</translation>
 <translation id="7191159667348037">Nepoznati štampač (USB)</translation>
 <translation id="7193051357671784796">Ovu aplikaciju je dodala vaša organizacija. Ponovo pokrenite aplikaciju da završite njeno instaliranje.</translation>

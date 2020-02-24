@@ -3404,7 +3404,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="5771816112378578655">Notiek iestatīšana...</translation>
 <translation id="5772265531560382923">{NUM_PAGES,plural, =1{Varat uzgaidīt, līdz lapa reaģēs, vai iziet no lapas.}zero{Varat uzgaidīt, līdz lapas reaģēs, vai iziet no lapām.}one{Varat uzgaidīt, līdz lapas reaģēs, vai iziet no lapām.}other{Varat uzgaidīt, līdz lapas reaģēs, vai iziet no lapām.}}</translation>
 <translation id="577322787686508614">Lasīšanas darbība nav atļauta šajā ierīcē: “<ph name="DEVICE_NAME" />”.</translation>
-<translation id="5774295353725270860">Atvērt lietotni Faili</translation>
+<translation id="5774295353725270860">Atvērt lietotni Files</translation>
 <translation id="5774515636230743468">Manifests:</translation>
 <translation id="577624874850706961">Meklēt sīkfailus</translation>
 <translation id="5777468213129569553">Atvērt Chrome</translation>
@@ -3721,6 +3721,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="6207282396926186323">Linux lietotnes <ph name="APP_NAME" /> instalēšana</translation>
 <translation id="6207937957461833379">Valsts/reģions</translation>
 <translation id="6208521041562685716">Tiek aktivizēti mobilie dati</translation>
+<translation id="6209908325007204267">Jūsu ierīces komplektācijā ir iekļauts Chrome uzņēmuma versijas jauninājums, taču jūsu lietotājvārds nav saistīts ar uzņēmuma kontu. Lūdzu, izveidojiet uzņēmuma kontu, otrā ierīcē apmeklējot vietni g.co/ChromeEnterpriseAccount.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: sinhronizācija nedarbojas</translation>
 <translation id="6212039847102026977">Rādīt tīkla papildu rekvizītus</translation>
 <translation id="6212168817037875041">Izslēgt displeju</translation>
@@ -4404,6 +4405,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="7186088072322679094">Saglabāšana rīkjoslā</translation>
 <translation id="7187428571767585875">Noņemamie vai maināmie reģistra ieraksti:</translation>
 <translation id="7189234443051076392">Ierīcē ir jābūt pietiekami daudz vietas.</translation>
+<translation id="7189451821249468368">Jums nav pietiekami daudz jauninātu licenču, lai reģistrētu šo ierīci. Lūdzu, sazinieties ar tirdzniecības nodaļu, lai iegādātos vairāk licenču. Ja uzskatāt, ka šis ziņojums tiek rādīts kļūdas dēļ, lūdzu, sazinieties ar atbalsta dienestu.</translation>
 <translation id="7189965711416741966">Pirksta nospiedums tika pievienots.</translation>
 <translation id="7191159667348037">Nezināms printeris (USB)</translation>
 <translation id="7193051357671784796">Šo lietotni pievienoja jūsu organizācija. Lai pabeigtu instalēšanu, restartējiet lietotni.</translation>

@@ -3719,7 +3719,7 @@
 <translation id="6207282396926186323">安裝 <ph name="APP_NAME" /> (Linux 應用程式)</translation>
 <translation id="6207937957461833379">國家/地區</translation>
 <translation id="6208521041562685716">正在啟用流動數據</translation>
-<translation id="6209908325007204267">您的裝置包含一項 Chrome Enterprise 升級，但您的使用者名稱並未連結企業賬戶。請透過另一部裝置前往 g.co/ChromeEnterpriseAccount 建立企業帳戶。</translation>
+<translation id="6209908325007204267">您的裝置包含一項 Chrome Enterprise 升級，但您的使用者名稱尚未連結企業賬戶。請透過另一部裝置前往 g.co/ChromeEnterpriseAccount 建立企業帳戶。</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />：同步處理無法正常運作</translation>
 <translation id="6212039847102026977">顯示進階網絡屬性</translation>
 <translation id="6212168817037875041">關閉螢幕</translation>

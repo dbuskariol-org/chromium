@@ -3721,6 +3721,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="6207282396926186323">Cài đặt <ph name="APP_NAME" /> (Ứng dụng Linux)</translation>
 <translation id="6207937957461833379">Quốc gia/vùng</translation>
 <translation id="6208521041562685716">Đang kích hoạt dữ liệu di động</translation>
+<translation id="6209908325007204267">Thiết bị của bạn có Bản nâng cấp Chrome Enterprise, nhưng tên người dùng lại chưa được liên kết với một tài khoản doanh nghiệp. Vui lòng truy cập vào g.co/ChromeEnterpriseAccount để tạo một tài khoản doanh nghiệp trên thiết bị phụ.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Tính năng đồng bộ hóa hiện không hoạt động</translation>
 <translation id="6212039847102026977">Hiển thị thuộc tính mạng nâng cao</translation>
 <translation id="6212168817037875041">Tắt màn hình</translation>
@@ -4404,6 +4405,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="7186088072322679094">Giữ trong thanh công cụ</translation>
 <translation id="7187428571767585875">Các mục sổ đăng ký sẽ bị xóa hoặc thay đổi:</translation>
 <translation id="7189234443051076392">Hãy đảm bảo thiết bị của bạn có đủ dung lượng</translation>
+<translation id="7189451821249468368">Bạn không có đủ bản nâng cấp để đăng ký thiết bị này. Vui lòng liên hệ với bộ phận bán hàng để mua thêm. Nếu bạn nhận được thư này do nhầm lẫn, vui lòng liên hệ với nhóm hỗ trợ.</translation>
 <translation id="7189965711416741966">Đã thêm vân tay.</translation>
 <translation id="7191159667348037">Máy in không xác định (USB)</translation>
 <translation id="7193051357671784796">Tổ chức của bạn đã thêm ứng dụng này. Hãy khởi động lại ứng dụng này để hoàn tất quá trình cài đặt.</translation>

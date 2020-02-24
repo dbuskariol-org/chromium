@@ -587,7 +587,6 @@ Dotaknite se poljubne besede, če želite ustvariti iskanje zanjo. Če želite p
 <translation id="5447765697759493033">To spletno mesto ne bo prevedeno</translation>
 <translation id="545042621069398927">Pospeševanje prenosa.</translation>
 <translation id="5456381639095306749">Prenos strani</translation>
-<translation id="5475862044948910901">Želite začeti sejo razširjene resničnosti?</translation>
 <translation id="548278423535722844">Odpiranje v aplikaciji z zemljevidi</translation>
 <translation id="5487521232677179737">Izbriši podatke</translation>
 <translation id="5494752089476963479">Blokiranje oglasov na spletnih mestih, ki prikazujejo vsiljive ali zavajajoče oglase</translation>
@@ -839,11 +838,6 @@ Za dalj časa pritisnite poljubno besedo, če želite ustvariti iskanje zanjo. �
 <translation id="7352939065658542140">VIDEOPOSNETEK</translation>
 <translation id="7353894246028566792">{NUM_SELECTED,plural, =1{Delitev 1 izbranega elementa z drugimi}one{Delitev # izbranega elementa z drugimi}two{Delitev # izbranih elementov z drugimi}few{Delitev # izbranih elementov z drugimi}other{Delitev # izbranih elementov z drugimi}}</translation>
 <translation id="7359002509206457351">Dostop do plačilnih sredstev</translation>
-<translation id="7365126855094612066">Med trajanjem seje lahko spletno mesto:
-• ustvari 3D-zemljevid okolja
-• spremlja premikanje kamere
-
-Spletno mesto NIMA dostopa do kamere. Posnetki kamere so vidni samo vam.</translation>
 <translation id="7375125077091615385">Vrsta:</translation>
 <translation id="7396940094317457632"><ph name="FILE_NAME" />.</translation>
 <translation id="7400418766976504921">URL</translation>

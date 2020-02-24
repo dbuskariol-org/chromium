@@ -3722,6 +3722,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="6207282396926186323"><ph name="APP_NAME" /> uygulamasını (Linux Uygulaması) yükleyin</translation>
 <translation id="6207937957461833379">Ülke/Bölge</translation>
 <translation id="6208521041562685716">Mobil veri etkinleştiriliyor</translation>
+<translation id="6209908325007204267">Cihazınız Chrome Enterprise Yükseltme içeriyor anca kullanıcı adınız kurumsal hesapla ilişkilendirilmemiş. Lütfen ikinci bir cihazda g.co/ChromeEnterpriseAccount adresini ziyaret ederek kurumsal bir hesap oluşturun.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Senkronizasyon çalışmıyor</translation>
 <translation id="6212039847102026977">Gelişmiş ağ özelliklerini göster</translation>
 <translation id="6212168817037875041">Ekranı kapat</translation>
@@ -4405,6 +4406,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="7186088072322679094">Araç Çubuğunda Tut</translation>
 <translation id="7187428571767585875">Kaldırılacak veya değiştirilecek kayıt defteri girişleri:</translation>
 <translation id="7189234443051076392">Cihazınızda yeterli alan bulunduğundan emin olun</translation>
+<translation id="7189451821249468368">Bu cihazı kaydetmek için yeterli yükseltmeye sahip değilsiniz. Daha fazla yazılım satın almak için lütfen satış birimiyle bağlantı kurun. Bu mesajın yanlışlıkla görüntülendiğini düşünüyorsanız lütfen destekle bağlantı kurun.</translation>
 <translation id="7189965711416741966">Parmak izi eklendi.</translation>
 <translation id="7191159667348037">Bilinmeyen Yazıcı (USB)</translation>
 <translation id="7193051357671784796">Bu uygulama kuruluşunuz tarafından eklendi. Yüklemeyi tamamlamak için uygulamayı yeniden başlatın.</translation>

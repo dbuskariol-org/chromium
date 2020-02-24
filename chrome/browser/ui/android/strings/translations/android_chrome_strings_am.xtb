@@ -587,7 +587,6 @@
 <translation id="5447765697759493033">ይህ ጣቢያ አይተረጎምም</translation>
 <translation id="545042621069398927">ውርድዎን በማፍጠን ላይ።</translation>
 <translation id="5456381639095306749">ገጽ አውርድ</translation>
-<translation id="5475862044948910901">የሚጨምር የእውነት ክፍለ ጊዜ ይጀመር?</translation>
 <translation id="548278423535722844">በካርታዎች መተግበሪያ ውስጥ ይክፈቱ</translation>
 <translation id="5487521232677179737">ውሂብን አጽዳ</translation>
 <translation id="5494752089476963479">ረባሽ ወይም አሳሳች ማስታወቂያዎችን ከሚያሳዩ ጣቢያዎች የሚመጡ ማስታወቂያዎችን አግድ</translation>
@@ -839,11 +838,6 @@
 <translation id="7352939065658542140">ቪድዮ</translation>
 <translation id="7353894246028566792">{NUM_SELECTED,plural, =1{1 የተመረጠ ንጥል አጋራ}one{# የተመረጡ ንጥሎችን አጋራ}other{# የተመረጡ ንጥሎችን አጋራ}}</translation>
 <translation id="7359002509206457351">የመዳረሻ መክፈያ ዘዴዎች</translation>
-<translation id="7365126855094612066">ለዚህ ወቅት ቆይታ ጊዜ ያህል፣ ጣቢያው የሚከተሉትን ማድረግ ይችላል፦
-• የእርስዎን አካባቢ የ 3D ካርታ መፍጠር
-• የካሜራን እንቅስቃሴ ዱካ መከታተል
-
-ይህ ጣቢያ ወደ ካሜራ መዳረሻ አያገኝም። የካሜራ ምስሎች ለእርስዎ ብቻ የሚታዩ ናቸው።</translation>
 <translation id="7375125077091615385">ዓይነት፦</translation>
 <translation id="7396940094317457632"><ph name="FILE_NAME" />።</translation>
 <translation id="7400418766976504921">URL</translation>

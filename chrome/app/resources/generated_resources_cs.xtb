@@ -3719,6 +3719,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="6207282396926186323">Instalace aplikace <ph name="APP_NAME" /> (aplikace pro Linux)</translation>
 <translation id="6207937957461833379">Země nebo oblast</translation>
 <translation id="6208521041562685716">Probíhá aktivace mobilních dat</translation>
+<translation id="6209908325007204267">Vaše zařízení obsahuje upgrade Chrome Enterprise, ale vaše uživatelské jméno není přidruženo k podnikovému účtu. V sekundárním zařízení přejděte na adresu g.co/ChromeEnterpriseAccount a vytvořte si podnikový účet.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Synchronizace nefunguje</translation>
 <translation id="6212039847102026977">Zobrazit rozšířené vlastnosti sítě</translation>
 <translation id="6212168817037875041">Vypnout displej</translation>
@@ -4402,6 +4403,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="7186088072322679094">Ponechat na liště</translation>
 <translation id="7187428571767585875">Záznamy v registru, které budou odstraněny nebo změněny:</translation>
 <translation id="7189234443051076392">V zařízení musí být dost místa</translation>
+<translation id="7189451821249468368">Nemáte dostatečný počet upgradů k registraci tohoto zařízení. Kontaktujte obchodní oddělení a kupte si další. Pokud se domníváte, že se jedná o chybu, kontaktujte podporu.</translation>
 <translation id="7189965711416741966">Otisk byl přidán.</translation>
 <translation id="7191159667348037">Neznámá tiskárna (USB)</translation>
 <translation id="7193051357671784796">Tuto aplikaci přidala vaše organizace. Chcete-li její instalaci dokončit, restartujte ji.</translation>

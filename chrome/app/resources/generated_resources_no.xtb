@@ -3716,6 +3716,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="6207282396926186323">Installer <ph name="APP_NAME" /> (Linux-app)</translation>
 <translation id="6207937957461833379">Land / region</translation>
 <translation id="6208521041562685716">Mobildata aktiveres</translation>
+<translation id="6209908325007204267">En Chrome Enterprise-oppgradering følger med enheten din, men brukernavnet ditt er ikke knyttet til noen bedriftskonto. Opprett en bedriftskonto ved å besøke g.co/ChromeEnterpriseAccount på en annen enhet.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Synkroniseringen fungerer ikke</translation>
 <translation id="6212039847102026977">Vis avanserte nettverksegenskaper</translation>
 <translation id="6212168817037875041">Slå av skjermen</translation>
@@ -4399,6 +4400,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="7186088072322679094">Behold i verktøyraden</translation>
 <translation id="7187428571767585875">Registeroppføringer som skal fjernes eller endres:</translation>
 <translation id="7189234443051076392">Sørg for at det er nok plass på enheten</translation>
+<translation id="7189451821249468368">Du har ikke tilstrekkelige oppgraderinger for å registrere denne enheten. Ta kontakt med salgsavdelingen for å kjøpe flere. Hvis du tror dette er en feil, kan du ta kontakt med brukerstøtten.</translation>
 <translation id="7189965711416741966">Fingeravtrykket er lagt til.</translation>
 <translation id="7191159667348037">Ukjent skriver (USB)</translation>
 <translation id="7193051357671784796">Denne appen er lagt til av organisasjonen din. Start appen på nytt for å fullføre installasjonen.</translation>

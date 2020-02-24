@@ -3720,6 +3720,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="6207282396926186323">Instal·la <ph name="APP_NAME" /> (aplicació de Linux)</translation>
 <translation id="6207937957461833379">País o regió</translation>
 <translation id="6208521041562685716">S'estan activant les dades mòbils</translation>
+<translation id="6209908325007204267">El teu dispositiu inclou una Actualització de Chrome Enterprise, però el teu nom d'usuari no està associat a un compte d'empresa. En un altre dispositiu, visita g.co/ChromeEnterpriseAccount i crea un compte d'empresa.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: la sincronització no funciona</translation>
 <translation id="6212039847102026977">Mostra les propietats de xarxa avançades</translation>
 <translation id="6212168817037875041">Desactiva la pantalla</translation>
@@ -4403,6 +4404,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="7186088072322679094">Conserva a la barra d'eines</translation>
 <translation id="7187428571767585875">Entrades del registre que se suprimiran o canviaran:</translation>
 <translation id="7189234443051076392">Comprova que hi hagi prou espai al dispositiu</translation>
+<translation id="7189451821249468368">No tens prou actualitzacions per inscriure aquest dispositiu. Contacta amb l'equip de vendes per comprar-ne més. Si creus que veus aquest missatge per error, posa't en contacte amb el servei d'assistència.</translation>
 <translation id="7189965711416741966">L'empremta digital s'ha afegit.</translation>
 <translation id="7191159667348037">Impressora desconeguda (USB)</translation>
 <translation id="7193051357671784796">La teva organització ha afegit aquesta aplicació. Reinicia-la perquè s'acabi d'instal·lar.</translation>

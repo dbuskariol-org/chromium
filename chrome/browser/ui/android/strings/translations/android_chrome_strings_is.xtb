@@ -587,7 +587,6 @@ Til að breyta þessari stillingu skaltu <ph name="BEGIN_LINK" />endurstilla sam
 <translation id="5447765697759493033">Þetta vefsvæði verður ekki þýtt</translation>
 <translation id="545042621069398927">Flýtir fyrir niðurhali.</translation>
 <translation id="5456381639095306749">Sækja síðu</translation>
-<translation id="5475862044948910901">Hefja lotu í auknum veruleika?</translation>
 <translation id="548278423535722844">Opna í kortaforriti</translation>
 <translation id="5487521232677179737">Hreinsa gögn</translation>
 <translation id="5494752089476963479">Útiloka auglýsingar á vefsvæðum sem birta ágengar eða villandi auglýsingar</translation>
@@ -839,11 +838,6 @@ Haltu fingri á hvaða orði sem er til að leita að því. Stilltu valið til 
 <translation id="7352939065658542140">MYNDSKEIÐ</translation>
 <translation id="7353894246028566792">{NUM_SELECTED,plural, =1{Deila 1 völdu atriði}one{Deila # völdu atriði}other{Deila # völdum atriðum}}</translation>
 <translation id="7359002509206457351">Fá aðgang að greiðslumátum</translation>
-<translation id="7365126855094612066">Á meðan á þessari lotu stendur mun vefsvæðið geta:
-• Búið til þrívíddarkort af umhverfi þínu
-• Fylgst með hreyfingu myndavélar
-
-Vefsvæðið fær EKKI aðgang að myndavélinni. Myndir frá myndavélinni eru aðeins sýnilegar þér.</translation>
 <translation id="7375125077091615385">Gerð:</translation>
 <translation id="7396940094317457632"><ph name="FILE_NAME" />.</translation>
 <translation id="7400418766976504921">Vefslóð</translation>

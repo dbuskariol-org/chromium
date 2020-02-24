@@ -587,7 +587,6 @@ Per cambiare questa impostazione, <ph name="BEGIN_LINK" />reimposta la sincroniz
 <translation id="5447765697759493033">Questo sito non verrà tradotto</translation>
 <translation id="545042621069398927">Accelerazione del download in corso.</translation>
 <translation id="5456381639095306749">Scarica la pagina</translation>
-<translation id="5475862044948910901">Vuoi avviare una sessione di realtà aumentata?</translation>
 <translation id="548278423535722844">Apri nell'app di mappe</translation>
 <translation id="5487521232677179737">Cancella dati</translation>
 <translation id="5494752089476963479">Blocca gli annunci su siti che mostrano annunci invasivi o fuorvianti</translation>
@@ -839,11 +838,6 @@ Premi a lungo qualsiasi parola per creare una ricerca associata. Per perfezionar
 <translation id="7352939065658542140">VIDEO</translation>
 <translation id="7353894246028566792">{NUM_SELECTED,plural, =1{Condividi 1 elemento selezionato}other{Condividi # elementi selezionati}}</translation>
 <translation id="7359002509206457351">Accedi ai metodi di pagamento</translation>
-<translation id="7365126855094612066">Per la durata di questa sessione, il sito potrà:
-• Creare una mappa 3D del tuo ambiente.
-• Monitorare il movimento della videocamera.
-
-Il sito NON ottiene l'accesso alla videocamera. Le immagini della videocamera sono visibili soltanto a te.</translation>
 <translation id="7375125077091615385">Tipo:</translation>
 <translation id="7396940094317457632"><ph name="FILE_NAME" />.</translation>
 <translation id="7400418766976504921">URL</translation>

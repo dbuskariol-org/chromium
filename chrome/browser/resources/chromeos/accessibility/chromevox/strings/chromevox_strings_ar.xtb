@@ -95,7 +95,7 @@
 <translation id="161042844686301425">سماوي</translation>
 <translation id="1611168825862729585">رأس العمود:</translation>
 <translation id="1611649489706141841">للأمام</translation>
-<translation id="1613476421962910979">‏تم تشغيل Earcons</translation>
+<translation id="1613476421962910979">‏تم تفعيل Earcons</translation>
 <translation id="1616111909442424068">قمحي</translation>
 <translation id="1618597272655350600">الإعلان عن وصف كامل للموضع الحالي</translation>
 <translation id="1627222324347828322">أبيض شاحب</translation>
@@ -142,7 +142,7 @@
 <translation id="1969092762068865084">تموز (يوليو)</translation>
 <translation id="1973886230221301399">ChromeVox</translation>
 <translation id="1990932729021763163">عنوان الصف:</translation>
-<translation id="2002895034995108595">إعادة تعيين مخطط المفاتيح الحالي</translation>
+<translation id="2002895034995108595">إعادة ضبط مخطط المفاتيح الحالي</translation>
 <translation id="2007545860310005685">{COUNT,plural, =1{قوس متوسط أيسر واحد}zero{# left brackets}two{قوسان متوسطان أيسران (#)}few{# أقواس متوسطة يسرى}many{# قوسًا متوسطًا أيسرًا}other{# من الأقواس اليسرى}}</translation>
 <translation id="2009187674653301682">ليست نصوصًا مرتفعة</translation>
 <translation id="2010555995361223825">‏قوائم ChromeVox</translation>
@@ -209,7 +209,7 @@
 <translation id="2497706219848005458">أصفر مخضر</translation>
 <translation id="2523609930580546572">‏برنامج ChromeVox التعليمي</translation>
 <translation id="2525706221823668172">‏اختصارات لوحة المفاتيح لـ Chromebook</translation>
-<translation id="2549392850788122959">تمت إعادة تعيين <ph name="KEY" />.</translation>
+<translation id="2549392850788122959">تمت إعادة ضبط <ph name="KEY" />.</translation>
 <translation id="2553108862507765288">خطأ نحوي</translation>
 <translation id="257674075312929031">مجموعة</translation>
 <translation id="2582407057977008361">جانبًا</translation>
@@ -1178,7 +1178,7 @@
 <translation id="8759334257841767240">ليس هناك رابط تالٍ.</translation>
 <translation id="8767968232364267681">عنوان المستوى الرابع التالي</translation>
 <translation id="8770473310765924354">خروج من المحتوى المنظم، مثل الجداول</translation>
-<translation id="8791025954632646584">تم تشغيل الدلالات</translation>
+<translation id="8791025954632646584">تم تفعيل الدلالات</translation>
 <translation id="8796411681063377102">عنوان المستوى الثالث التالي</translation>
 <translation id="8808582214901541005">آذار (مارس)</translation>
 <translation id="8825828890761629845">bnr</translation>

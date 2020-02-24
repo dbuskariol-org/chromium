@@ -3720,6 +3720,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="6207282396926186323">Inštalácia aplikácie <ph name="APP_NAME" /> (aplikácia pre Linux)</translation>
 <translation id="6207937957461833379">Krajina alebo oblasť</translation>
 <translation id="6208521041562685716">Mobilné dáta sa aktivujú</translation>
+<translation id="6209908325007204267">Vaše zariadenie zahŕňa inováciu Chrome Enterprise, ale vaše používateľské meno nie je spojené s účtom Enterprise. Vytvorte si účet Enterprise v druhom zariadení na g.co/ChromeEnterpriseAccount.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: synchronizácia nefunguje</translation>
 <translation id="6212039847102026977">Zobraziť rozšírené vlastnosti siete</translation>
 <translation id="6212168817037875041">Vypnúť obrazovku</translation>
@@ -4403,6 +4404,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="7186088072322679094">Ponechať na paneli s nástrojmi</translation>
 <translation id="7187428571767585875">Záznamy databázy Registry, ktoré sa majú odstrániť alebo zmeniť:</translation>
 <translation id="7189234443051076392">Uistite sa, či máte v zariadení dosť miesta</translation>
+<translation id="7189451821249468368">Nemáte dostatočný počet inovácií na registráciu tohto zariadenia. Kontaktujte obchodné oddelenie a kúpte si ďalšie. Ak sa domnievate, že ide o chybu, kontaktujte podporu.</translation>
 <translation id="7189965711416741966">Odtlačok prsta bol pridaný.</translation>
 <translation id="7191159667348037">Neznáma tlačiareň (USB)</translation>
 <translation id="7193051357671784796">Túto aplikáciu pridala vaša organizácia. Ak chcete dokončiť jej inštaláciu, reštartujte ju.</translation>

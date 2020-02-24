@@ -3721,6 +3721,7 @@ kasutades juhtpaneeli funktsiooni <ph name="CONTROL_PANEL_APPLET_NAME" />.
 <translation id="6207282396926186323">Installi <ph name="APP_NAME" /> (Linuxi rakendus)</translation>
 <translation id="6207937957461833379">Riik/regioon</translation>
 <translation id="6208521041562685716">Mobiilne andmeside aktiveeritakse</translation>
+<translation id="6209908325007204267">Teie seadmel on Chrome Enterprise'i täiendus, kuid teie kasutajanimi pole ettevõtte kontoga seotud. Looge ettevõtte konto, külastades teises seadmes saiti g.co/ChromeEnterpriseAccount.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: sünkroonimine ei tööta</translation>
 <translation id="6212039847102026977">Kuva täpsemad võrguatribuudid</translation>
 <translation id="6212168817037875041">Lülita ekraan välja</translation>
@@ -4404,6 +4405,7 @@ kasutades juhtpaneeli funktsiooni <ph name="CONTROL_PANEL_APPLET_NAME" />.
 <translation id="7186088072322679094">Tööriistaribale jätmine</translation>
 <translation id="7187428571767585875">Eemaldatavad või muudetavad registrikanded:</translation>
 <translation id="7189234443051076392">Veenduge, et seadmes oleks piisavalt ruumi</translation>
+<translation id="7189451821249468368">Teil ei ole piisavalt täiendusi selle seadme registreerimiseks. Täienduste ostmiseks võtke ühendust müügiosakonnaga. Kui arvate, et saite selle sõnumi ekslikult, võtke ühendust toega.</translation>
 <translation id="7189965711416741966">Sõrmejälg lisati.</translation>
 <translation id="7191159667348037">Tundmatu printer (USB)</translation>
 <translation id="7193051357671784796">Selle rakenduse lisas teie organisatsioon. Taaskäivitage rakendus, et selle installimine lõpule viia.</translation>

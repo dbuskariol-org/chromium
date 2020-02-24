@@ -3722,6 +3722,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="6207282396926186323">Installer <ph name="APP_NAME" /> (Linux-app)</translation>
 <translation id="6207937957461833379">Land/Region</translation>
 <translation id="6208521041562685716">Mobildata aktiveres</translation>
+<translation id="6209908325007204267">Din enhed inkluderer en Chrome Enterprise-opgradering, men dit brugernavn er ikke tilknyttet en virksomhedskonto. Du skal oprette en virksomhedskonto på g.co/ChromeEnterpriseAccount på en sekundær enhed.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Synkronisering fungerer ikke</translation>
 <translation id="6212039847102026977">Vis avancerede netværksegenskaber</translation>
 <translation id="6212168817037875041">Sluk skærmen</translation>
@@ -4405,6 +4406,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="7186088072322679094">Behold på værktøjslinjen</translation>
 <translation id="7187428571767585875">Registreringsposter, der skal fjernes eller ændres:</translation>
 <translation id="7189234443051076392">Sørg for, at der er nok ledig plads på din enhed</translation>
+<translation id="7189451821249468368">Du har ikke nok opgraderinger til at tilmelde denne enhed. Kontakt salgsafdelingen for at købe flere. Hvis du mener, at du får denne meddelelse ved en fejl, skal du kontakte support.</translation>
 <translation id="7189965711416741966">Fingeraftrykket er tilføjet.</translation>
 <translation id="7191159667348037">Ukendt printer (USB)</translation>
 <translation id="7193051357671784796">Din app blev tilføjet af din organisation. Genstart appen for at afslutte installationen.</translation>

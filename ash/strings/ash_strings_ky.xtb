@@ -250,7 +250,7 @@
 <translation id="4261870227682513959">Билдирмелердин жөндөөлөрүн көрсөтүү. Билдирмелер өчүк</translation>
 <translation id="4269883910223712419">Бул түзмөктүн администратору төмөнкүлөрдү аткара алат:</translation>
 <translation id="4279490309300973883">Чагылыштыруу</translation>
-<translation id="4296136865091727875"><ph name="COUNT" /> билдирменин баарын тазалоо</translation>
+<translation id="4296136865091727875"><ph name="COUNT" /> билдирменин баарын өчүрүү</translation>
 <translation id="4303223480529385476">Статус аймагын жайып көрсөтүү</translation>
 <translation id="4321179778687042513">Ctrl</translation>
 <translation id="4321776623976362024">Жогорку контрастты колдонуу үчүн тез баскычты бастыңыз. Ал күйгүзүлсүнбү?</translation>
@@ -392,7 +392,7 @@
 <translation id="639644700271529076">CAPS LOCK өчүк</translation>
 <translation id="6406704438230478924">altgr</translation>
 <translation id="6424520630891723617"><ph name="SECURITY_STATUS" />, Сигналдын күчү <ph name="SIGNAL_STRENGTH" /></translation>
-<translation id="642644398083277086">Бардык билдирмелерди тазалоо</translation>
+<translation id="642644398083277086">Бардык билдирмелерди өчүрүү</translation>
 <translation id="643147933154517414">Баары даяр</translation>
 <translation id="6445835306623867477"><ph name="RECEIVER_NAME" /> бөлмөсүндөгү <ph name="ROUTE_TITLE" /></translation>
 <translation id="6452181791372256707">Четке кагуу</translation>

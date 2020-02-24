@@ -3404,7 +3404,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="5771816112378578655">Instellen wordt uitgevoerd...</translation>
 <translation id="5772265531560382923">{NUM_PAGES,plural, =1{Je kunt wachten tot de pagina reageert of de pagina afsluiten.}other{Je kunt wachten tot de pagina's reageren of de pagina's afsluiten.}}</translation>
 <translation id="577322787686508614">Leesbewerking is niet toegestaan op: <ph name="DEVICE_NAME" />.</translation>
-<translation id="5774295353725270860">App Bestanden openen</translation>
+<translation id="5774295353725270860">Files-app openen</translation>
 <translation id="5774515636230743468">Manifest:</translation>
 <translation id="577624874850706961">Cookies zoeken</translation>
 <translation id="5777468213129569553">Chrome openen</translation>
@@ -3721,7 +3721,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="6207282396926186323"><ph name="APP_NAME" /> (Linux-app) installeren</translation>
 <translation id="6207937957461833379">Land/regio</translation>
 <translation id="6208521041562685716">Mobiele data activeren</translation>
-<translation id="6209908325007204267">Je apparaat omvat een Chrome Enterprise-upgrade, maar je gebruikersnaam is niet gekoppeld aan een Enterprise-account. Ga op een secundair apparaat naar g.co/ChromeEnterpriseAccount om een Enterprise-account te maken.</translation>
+<translation id="6209908325007204267">Je apparaat omvat een Chrome Enterprise Upgrade, maar je gebruikersnaam is niet gekoppeld aan een Enterprise-account. Ga op een secundair apparaat naar g.co/ChromeEnterpriseAccount om een Enterprise-account te maken.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: synchronisatie werkt niet</translation>
 <translation id="6212039847102026977">Geavanceerde netwerkeigenschappen weergeven</translation>
 <translation id="6212168817037875041">Scherm uitschakelen</translation>

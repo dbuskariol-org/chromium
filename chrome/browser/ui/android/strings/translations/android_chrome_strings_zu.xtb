@@ -587,7 +587,6 @@ Ukuze ushintshe lesi silungiselelo, <ph name="BEGIN_LINK" />setha kabusha ukuvum
 <translation id="5447765697759493033">Leli sayithi ngeke lihumushwe</translation>
 <translation id="545042621069398927">Isheshisa ukulanda kwakho.</translation>
 <translation id="5456381639095306749">Landa ikhasi</translation>
-<translation id="5475862044948910901">Qala iseshini ye-Augmented Reality?</translation>
 <translation id="548278423535722844">Uhlelo lokusebenza lokuvula kumamephu</translation>
 <translation id="5487521232677179737">Sula idatha</translation>
 <translation id="5494752089476963479">Vimbela izikhangiso kumasayithi abonisa izikhangiso ezisongelayo noma ezilahlekisayo</translation>
@@ -839,11 +838,6 @@ Cindezela isikhathi eside noma iliphi igama ukuze udale usesho lwalo. Ukuze wenz
 <translation id="7352939065658542140">IVIDIYO</translation>
 <translation id="7353894246028566792">{NUM_SELECTED,plural, =1{Yabelana ngento engu-1 ekhethiwe}one{Yabelana ngezinto ezingu-# ezikhethiwe}other{Yabelana ngezinto ezingu-# ezikhethiwe}}</translation>
 <translation id="7359002509206457351">Finyelela kuzindlela zokukhokha</translation>
-<translation id="7365126855094612066">Ngobude besikhathi bale seshini, isayithi lizokwazi:
-• ukudala imephu engu-3D yemvelo yakho
-• lilandelele ukunyakaza kwekhamera
-
-Isayithi ALITHOLI ukufinyelela kukhamera. Izithombe zekhamera zibonakala kuwe kuphela.</translation>
 <translation id="7375125077091615385">Uhlobo:</translation>
 <translation id="7396940094317457632"><ph name="FILE_NAME" />.</translation>
 <translation id="7400418766976504921">I-URL</translation>

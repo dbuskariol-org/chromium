@@ -781,6 +781,7 @@
 <translation id="2079053412993822885">உங்கள் சான்றிதழ்களில் ஒன்றை நீக்கினால், பின்னர் உங்களை அடையாளம் காட்டுவதற்கு அதைப் பயன்படுத்த முடியாது.</translation>
 <translation id="2079545284768500474">செயல்தவிர்</translation>
 <translation id="2080070583977670716">மேலும் அமைப்புகள்</translation>
+<translation id="2082187087049518845">குழுத் தாவல்</translation>
 <translation id="2087822576218954668">அச்சிடு: <ph name="PRINT_NAME" /></translation>
 <translation id="2088690981887365033">VPN நெட்வொர்க்</translation>
 <translation id="2089566709556890888">Google Chromeஐப் பயன்படுத்தி, பாதுகாப்பாக உலாவவும்</translation>
@@ -1215,6 +1216,7 @@
 <translation id="2653659639078652383">சமர்ப்பி</translation>
 <translation id="265390580714150011">புல மதிப்பு</translation>
 <translation id="2654166010170466751">பேமண்ட் ஹேண்ட்லர்களை நிறுவுவதற்குத் தளங்களை அனுமதிக்கும்</translation>
+<translation id="2654553774144920065">பிரிண்ட் செய்வதற்கான கோரிக்கை</translation>
 <translation id="2659381484350128933"><ph name="FOOTNOTE_POINTER" />சாதனத்திற்கேற்ப அம்சங்கள் மாறுபடலாம்</translation>
 <translation id="2660779039299703961">நிகழ்வு</translation>
 <translation id="266079277508604648">பிரிண்டருடன் இணைக்க முடியவில்லை. பிரிண்டர் இயக்கப்பட்டு, வைஃபை அல்லது USB மூலம் அது உங்கள் Chromebook உடன் இணைக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.</translation>
@@ -2723,6 +2725,7 @@
 <translation id="4808319664292298116"><ph name="DOMAIN" /> வழங்கும் VRரைப் பார்க்க விரும்புகிறீர்களா?</translation>
 <translation id="4808667324955055115">பாப்-அப்கள் தடுக்கப்பட்டுள்ளன</translation>
 <translation id="480990236307250886">முகப்புப் பக்கத்தைத் திற</translation>
+<translation id="4811503964269049987">தேர்ந்தெடுத்த தாவலைக் குழுவாக்கு</translation>
 <translation id="4813136279048157860">எனது படங்கள்</translation>
 <translation id="4813512666221746211">நெட்வொர்க் பிழை</translation>
 <translation id="4814378367953456825">இந்தக் கைரேகைக்கு ஒரு பெயரை உள்ளிடவும்</translation>
@@ -4158,6 +4161,7 @@
 <translation id="6843423766595476978">Ok Google அமைக்கப்பட்டுவிட்டது</translation>
 <translation id="6845038076637626672">பெரிதாக்கப்பட்டதை திற</translation>
 <translation id="6845325883481699275">Chromeமின் பாதுகாப்பை மேம்படுத்த உதவுக</translation>
+<translation id="6846178040388691741"><ph name="FILE_NAME" /> ஐ <ph name="PRINTER_NAME" /> பிரிண்டரில் அச்சிட "<ph name="EXTENSION_NAME" />" விரும்புகிறது.</translation>
 <translation id="6847125920277401289">தொடர, இடத்தைக் காலியாக்குங்கள்</translation>
 <translation id="6848388270925200958">தற்போது, இந்தச் சாதனத்தில் மட்டுமே பயன்படுத்தக்கூடிய சில கார்டுகள் உள்ளன</translation>
 <translation id="6850286078059909152">உரை வண்ணம்</translation>
@@ -5267,6 +5271,7 @@
 <translation id="8352772353338965963">பல உள்நுழைவுக்குக் கணக்கைச் சேர்க்கவும். உள்நுழைந்த அனைத்து கணக்குகளையும் கடவுச்சொல் இல்லாமலே அணுகலாம் என்பதால் இந்த அம்சத்தை நம்பகமான கணக்குகளுடன் மட்டுமே பயன்படுத்த வேண்டும்.</translation>
 <translation id="8353683614194668312">பயன்பாடு அணுகக்கூடியவை:</translation>
 <translation id="8356197132883132838"><ph name="TITLE" /> - <ph name="COUNT" /></translation>
+<translation id="8357388086258943206">Linuxஸை நிறுவும்போது பிழை</translation>
 <translation id="8358685469073206162">பக்கங்களை மீட்டெடுக்கவா?</translation>
 <translation id="8358912028636606457">இந்தச் சாதனத்தில் தாவல் ஆடியோவை அனுப்ப இயலாது.</translation>
 <translation id="8363095875018065315">நிலையானது</translation>

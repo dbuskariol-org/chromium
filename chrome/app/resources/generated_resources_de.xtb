@@ -3717,6 +3717,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="6207282396926186323"><ph name="APP_NAME" /> installieren (Linux-App)</translation>
 <translation id="6207937957461833379">Land/Region</translation>
 <translation id="6208521041562685716">Mobile Daten werden aktiviert</translation>
+<translation id="6209908325007204267">Ihr Gerät beinhaltet ein Chrome Enterprise-Upgrade, aber Ihr Nutzername ist nicht mit einem Enterprise-Konto verknüpft. Rufen Sie g.co/ChromeEnterpriseAccount auf einem Zweitgerät auf und erstellen Sie ein Enterprise-Konto.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Synchronisierung funktioniert nicht</translation>
 <translation id="6212039847102026977">Erweiterte Netzwerkeigenschaften anzeigen</translation>
 <translation id="6212168817037875041">Display deaktivieren</translation>
@@ -4400,6 +4401,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7186088072322679094">In Symbolleiste behalten</translation>
 <translation id="7187428571767585875">Registrierungseinträge, die entfernt oder geändert werden:</translation>
 <translation id="7189234443051076392">Achten Sie darauf, dass auf Ihrem Gerät ausreichend Speicherplatz vorhanden ist</translation>
+<translation id="7189451821249468368">Sie haben nicht genügend Upgrades zum Anmelden dieses Geräts. Weitere Upgrades können Sie beim Vertrieb erwerben. Wenn Sie glauben, dass Sie diese Meldung fälschlicherweise erhalten, kontaktieren Sie bitte den Support.</translation>
 <translation id="7189965711416741966">Fingerabdruck hinzugefügt.</translation>
 <translation id="7191159667348037">Unbekannter Drucker (USB)</translation>
 <translation id="7193051357671784796">Diese App wurde von Ihrer Organisation hinzugefügt. Starten Sie die App neu, um die Installation abzuschließen.</translation>

@@ -3718,6 +3718,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="6207282396926186323">Instalar <ph name="APP_NAME" /> (app de Linux)</translation>
 <translation id="6207937957461833379">País/Región</translation>
 <translation id="6208521041562685716">Se están activando los datos móviles</translation>
+<translation id="6209908325007204267">El dispositivo incluye una actualización de Chrome Enterprise, pero tu nombre de usuario no está asociado a una cuenta empresarial. Para crear una cuenta de este tipo, visita g.co/ChromeEnterpriseAccount en otro dispositivo.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: La sincronización no funciona</translation>
 <translation id="6212039847102026977">Mostrar las propiedades de red avanzadas</translation>
 <translation id="6212168817037875041">Apagar la pantalla</translation>
@@ -4401,6 +4402,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="7186088072322679094">Mantener en la barra de herramientas</translation>
 <translation id="7187428571767585875">Entradas de registro que se quitarán o cambiarán:</translation>
 <translation id="7189234443051076392">Asegúrate de que haya espacio suficiente en tu dispositivo</translation>
+<translation id="7189451821249468368">No tienes suficientes actualizaciones para inscribir este dispositivo. Comunícate con el departamento de ventas para adquirir más actualizaciones. Si crees que recibiste este mensaje por error, comunícate con el servicio de ayuda.</translation>
 <translation id="7189965711416741966">Se agregó una huella digital.</translation>
 <translation id="7191159667348037">Impresora desconocida (USB)</translation>
 <translation id="7193051357671784796">Tu organización agregó esta app. Para finalizar la instalación, restablece la app.</translation>

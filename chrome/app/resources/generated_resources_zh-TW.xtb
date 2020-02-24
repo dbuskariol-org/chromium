@@ -3719,6 +3719,7 @@
 <translation id="6207282396926186323">安裝「<ph name="APP_NAME" />」(Linux 應用程式)</translation>
 <translation id="6207937957461833379">國家/地區</translation>
 <translation id="6208521041562685716">正在啟用行動數據</translation>
+<translation id="6209908325007204267">你的裝置包含 Chrome Enterprise 升級版，但你的使用者名稱未申請企業版帳戶。請透過其他裝置前往 g.co/ChromeEnterpriseAccount 建立企業版帳戶。</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />：同步處理功能無法正常運作</translation>
 <translation id="6212039847102026977">顯示進階網路屬性</translation>
 <translation id="6212168817037875041">關閉螢幕</translation>
@@ -4402,6 +4403,7 @@
 <translation id="7186088072322679094">固定在工具列中</translation>
 <translation id="7187428571767585875">系統將移除或變更下列登錄檔項目：</translation>
 <translation id="7189234443051076392">確認你的裝置上有足夠空間</translation>
+<translation id="7189451821249468368">你的升級授權不足，無法註冊這個裝置。請與銷售人員聯絡以購買更多授權。如果你認為不應顯示這則訊息，請與支援小組聯絡。</translation>
 <translation id="7189965711416741966">指紋新增成功。</translation>
 <translation id="7191159667348037">不明的印表機 (USB)</translation>
 <translation id="7193051357671784796">這個應用程式是由貴機構新增。請重新啟動應用程式以完成安裝。</translation>
@@ -4660,7 +4662,7 @@
 <translation id="7551643184018910560">固定至檔案櫃</translation>
 <translation id="7552846755917812628">嘗試按照下列提示操作：</translation>
 <translation id="7553242001898162573">請輸入您的密碼</translation>
-<translation id="7554791636758816595">新增分頁</translation>
+<translation id="7554791636758816595">新分頁</translation>
 <translation id="7556033326131260574">Smart Lock 無法驗證您的帳戶，請輸入您的密碼。</translation>
 <translation id="7556242789364317684">很抱歉，<ph name="SHORT_PRODUCT_NAME" /> 無法復原你的設定。如要修正錯誤，<ph name="SHORT_PRODUCT_NAME" /> 必須透過 Powerwash 重設你的裝置。</translation>
 <translation id="7559719679815339381">請稍候.... Kiosk 應用程式正在進行更新，請勿移除 USB 隨身碟。</translation>

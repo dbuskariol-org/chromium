@@ -147,7 +147,7 @@
 <translation id="155039086686388498">Engineering-D</translation>
 <translation id="1555130319947370107">Көк</translation>
 <translation id="1559528461873125649">Мындай файл же каталог жок</translation>
-<translation id="1559572115229829303">&lt;p&gt;Түзмөгүңүздүн күнү жана убакыты (<ph name="DATE_AND_TIME" />) туура эмес болгондуктан <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> менен купуя туташуу мүмкүн болбой жатат.&lt;/p&gt;
+<translation id="1559572115229829303">&lt;p&gt;Түзмөгүңүздүн күнү жана убакыты (<ph name="DATE_AND_TIME" />) туура эмес болгондуктан, <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> менен купуя туташуу мүмкүн болбой жатат.&lt;/p&gt;
 
       &lt;p&gt;Күн менен убакытты &lt;strong&gt;Жөндөөлөр&lt;/strong&gt; колдонмосунун &lt;strong&gt;Жалпы&lt;/strong&gt; бөлүмүнөн тууралаңыз.&lt;/p&gt;</translation>
 <translation id="1569487616857761740">Насыя картасынын жарамдуулук мөөнөтүн киргизиңиз</translation>
@@ -517,7 +517,7 @@
 <translation id="3225919329040284222">Сервер кыналган күтүүлөргө дал келбеген тастыктама тапшырды. Бул күтүүлөр сиздин коопсуздугуңузду камсыз кылган ишенимдүү вебсайттарда камтылган.</translation>
 <translation id="3226128629678568754">Барактын жүктөлүшүнө талап кылынган дайындарды кайра тапшыруу үчүн кайра жүктөө баскычын басыңыз.</translation>
 <translation id="3227137524299004712">Микрофон</translation>
-<translation id="3228969707346345236">Баракча мурунтан эле <ph name="LANGUAGE" /> тилинде болгондуктан которулган жок.</translation>
+<translation id="3228969707346345236">Баракча мурунтан эле <ph name="LANGUAGE" /> тилинде болгондуктан, которулган жок.</translation>
 <translation id="3229041911291329567">Түзмөгүңүздүн жана серепчиңиздин версиясы тууралуу маалымат</translation>
 <translation id="323107829343500871"><ph name="CREDIT_CARD" /> карточкаңыз үчүн CVC кодун киргизиңиз</translation>
 <translation id="3234666976984236645">Бул сайттагы маанилүү мазмун ар дайым аныкталсын</translation>
@@ -1407,7 +1407,7 @@
 <translation id="7251437084390964440">Тармак конфигурациясы ONC стандартына туура келбейт. Конфигурациянын айрым бөлүктөрү импорттолбой калышы мүмкүн.
 Кошумча маалымат:
 <ph name="DEBUG_INFO" /></translation>
-<translation id="725866823122871198">Компьютериңиздин күнү жана убакыты (<ph name="DATE_AND_TIME" />) туура эмес болгондуктан <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> менен купуя туташуу мүмкүн болбой жатат.</translation>
+<translation id="725866823122871198">Компьютериңиздин күнү жана убакыты (<ph name="DATE_AND_TIME" />) туура эмес болгондуктан, <ph name="BEGIN_BOLD" /><ph name="DOMAIN" /><ph name="END_BOLD" /> менен купуя туташуу мүмкүн болбой жатат.</translation>
 <translation id="7260504762447901703">Мүмкүнчүлүктү жоюу</translation>
 <translation id="7275334191706090484">Башкарылган кыстармалар</translation>
 <translation id="7288778322931489286">Администраторуңуз серепчиңиздеги Enterprise Service Hooks кызматын иштетти. Бул илмектердин айрым маалыматыңызга кирүү мүмкүнчүлүктөрү бар.</translation>

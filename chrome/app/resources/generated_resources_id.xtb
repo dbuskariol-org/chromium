@@ -3719,6 +3719,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="6207282396926186323">Instal <ph name="APP_NAME" /> (Aplikasi Linux)</translation>
 <translation id="6207937957461833379">Negara/Wilayah</translation>
 <translation id="6208521041562685716">Data seluler sedang diaktifkan</translation>
+<translation id="6209908325007204267">Perangkat Anda mencakup Chrome Enterprise Upgrade, tetapi nama pengguna Anda tidak terkait dengan akun perusahaan. Buat akun perusahaan dengan membuka g.co/ChromeEnterpriseAccount di perangkat kedua.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Sinkronisasi tidak berfungsi</translation>
 <translation id="6212039847102026977">Tampilkan properti jaringan lanjutan</translation>
 <translation id="6212168817037875041">Matikan layar</translation>
@@ -4402,6 +4403,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="7186088072322679094">Tetap sematkan di Bilah Alat</translation>
 <translation id="7187428571767585875">Entri registry yang akan dihapus atau diubah:</translation>
 <translation id="7189234443051076392">Pastikan ruang di perangkat Anda mencukupi</translation>
+<translation id="7189451821249468368">Anda tidak memiliki cukup upgrade untuk mendaftarkan perangkat ini. Hubungi pihak penjualan untuk membeli yang lainnya. Jika Anda yakin Anda tidak seharusnya mendapatkan pesan ini, hubungi dukungan.</translation>
 <translation id="7189965711416741966">Sidik jari ditambahkan.</translation>
 <translation id="7191159667348037">Printer Tidak Dikenal (USB)</translation>
 <translation id="7193051357671784796">Aplikasi ini ditambahkan oleh organisasi Anda. Mulai ulang aplikasi untuk menyelesaikan penginstalannya.</translation>

@@ -3722,6 +3722,7 @@ Győződjön meg arról, hogy nem ad ki bizalmas adatokat.</translation>
 <translation id="6207282396926186323"><ph name="APP_NAME" /> telepítése (Linux-alkalmazás)</translation>
 <translation id="6207937957461833379">Ország/Régió</translation>
 <translation id="6208521041562685716">Mobiladatok aktiválása…</translation>
+<translation id="6209908325007204267">Eszközéhez Chrome Enterprise Upgrade licenc tartozik, de a felhasználóneve nincs vállalati fiókhoz társítva. Hozzon létre vállalati fiókot másodlagos eszközén a g.co/ChromeEnterpriseAccount címen.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: A szinkronizálás nem működik</translation>
 <translation id="6212039847102026977">Speciális hálózati tulajdonságok megjelenítése</translation>
 <translation id="6212168817037875041">A kijelző kikapcsol</translation>
@@ -4405,6 +4406,7 @@ Győződjön meg arról, hogy nem ad ki bizalmas adatokat.</translation>
 <translation id="7186088072322679094">Gomb megtartása az eszköztáron</translation>
 <translation id="7187428571767585875">Eltávolításra vagy módosításra kerülő beállításjegyzékbeli bejegyzések:</translation>
 <translation id="7189234443051076392">Győződjön meg arról, hogy elegendő tárhely áll rendelkezésre az eszközön</translation>
+<translation id="7189451821249468368">Ön nem rendelkezik elegendő bővítéssel az eszköz regisztrálásához. Kérjük, vegye fel a kapcsolatot az értékesítéssel továbbiak vásárlásához. Ha úgy gondolja, ezt az üzenetet tévesen kapta meg, forduljon az ügyfélszolgálathoz.</translation>
 <translation id="7189965711416741966">Ujjlenyomat hozzáadva.</translation>
 <translation id="7191159667348037">Ismeretlen nyomtató (USB)</translation>
 <translation id="7193051357671784796">Ezt az alkalmazást a szervezete adta hozzá. A telepítés befejezéséhez indítsa újra az alkalmazást.</translation>

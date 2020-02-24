@@ -3722,6 +3722,7 @@ Souhaitez-vous lancer <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="6207282396926186323">Installer <ph name="APP_NAME" /> (application Linux)</translation>
 <translation id="6207937957461833379">Pays/région</translation>
 <translation id="6208521041562685716">Activation des données cellulaires en cours…</translation>
+<translation id="6209908325007204267">Votre appareil comprend une mise à niveau de Chrome Enterprise, mais votre nom d'utilisateur n'est pas associé à un compte d'entreprise. Veuillez créer un compte d'entreprise en visitant g.co/ChromeEnterpriseAccount sur un autre appareil.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" /> : la synchronisation ne fonctionne pas</translation>
 <translation id="6212039847102026977">Afficher les propriétés de réseau avancées</translation>
 <translation id="6212168817037875041">Désactiver l'écran</translation>
@@ -4405,6 +4406,7 @@ Souhaitez-vous lancer <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="7186088072322679094">Garder dans la barre d'outils</translation>
 <translation id="7187428571767585875">Entrées du registre à supprimer ou à modifier :</translation>
 <translation id="7189234443051076392">Assurez-vous qu'il y a suffisamment d'espace sur votre appareil</translation>
+<translation id="7189451821249468368">Vous n'avez pas suffisamment de mises à niveau pour inscrire cet appareil. Veuillez communiquer avec le service commercial pour en acheter d'autres. Si vous pensez que ce message s'affiche par erreur, veuillez communiquer avec l'assistance technique.</translation>
 <translation id="7189965711416741966">Empreinte digitale ajoutée.</translation>
 <translation id="7191159667348037">Imprimante inconnue (USB)</translation>
 <translation id="7193051357671784796">Cette application a été ajoutée par votre organisation Redémarrez-la pour terminer l'installation.</translation>

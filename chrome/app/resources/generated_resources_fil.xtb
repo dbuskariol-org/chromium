@@ -3721,6 +3721,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="6207282396926186323">I-install ang <ph name="APP_NAME" /> (Linux App)</translation>
 <translation id="6207937957461833379">Bansa/Rehiyon</translation>
 <translation id="6208521041562685716">Ina-activate ang mobile data</translation>
+<translation id="6209908325007204267">Kabilang sa iyong device ang isang Chrome Enterprise Upgrade, pero hindi nauugnay ang username mo sa isang enterprise account. Gumawa ng enterprise account sa pamamagitan ng pagbisita sa g.co/ChromeEnterpriseAccount sa pangalawang device.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Hindi gumagana ang pag-sync</translation>
 <translation id="6212039847102026977">Ipakita ang mga advanced na property ng network</translation>
 <translation id="6212168817037875041">I-off ang display</translation>
@@ -4404,6 +4405,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="7186088072322679094">Panatilihin sa Toolbar</translation>
 <translation id="7187428571767585875">Mga aalisin o papalitang entry sa registry:</translation>
 <translation id="7189234443051076392">Tiyaking may sapat na espasyo sa iyong device</translation>
+<translation id="7189451821249468368">Wala kang sapat na mga upgrade para i-enroll ang device na ito. Makipag-ugnayan sa sales para bumili ng higit pa. Kung naniniwala kang nakikita mo ang mensaheng ito dahil sa error, makipag-ugnayan sa suporta.</translation>
 <translation id="7189965711416741966">Naidagdag ang fingerprint.</translation>
 <translation id="7191159667348037">Hindi Alam na Printer (USB)</translation>
 <translation id="7193051357671784796">Idinagdag ng iyong organisasyon ang app na ito. I-restart ang app para tapusin ang pag-install nito.</translation>

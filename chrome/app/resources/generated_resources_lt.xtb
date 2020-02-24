@@ -3722,6 +3722,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="6207282396926186323">Įdiegti programą „<ph name="APP_NAME" />“ („Linux“ programa)</translation>
 <translation id="6207937957461833379">Šalis / regionas</translation>
 <translation id="6208521041562685716">Aktyvinami mobilieji duomenys</translation>
+<translation id="6209908325007204267">Prie jūsų įrenginio yra pridėtas „Chrome“ įmonei skirtos versijos licencijos naujovinimas, bet jūsų naudotojo vardas nesusietas su įmonės paskyra. Sukurkite įmonės paskyrą antriniame įrenginyje apsilankę adresu g.co/ChromeEnterpriseAccount.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: sinchronizavimas neveikia</translation>
 <translation id="6212039847102026977">Rodyti išplėstines tinklo nuosavybes</translation>
 <translation id="6212168817037875041">Išjungti ekraną</translation>
@@ -4405,6 +4406,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="7186088072322679094">Laikyti įrankių juostoje</translation>
 <translation id="7187428571767585875">Registro vertės, kurios bus pašalintos arba pakeistos:</translation>
 <translation id="7189234443051076392">Įsitikinkite, kad įrenginyje yra pakankamai vietos</translation>
+<translation id="7189451821249468368">Neturite pakankamai licencijų naujovinimų, kad galėtumėte užregistruoti šį įrenginį. Susisiekite su pardavimo atstovu, kad įsigytumėte daugiau. Jei manote, kad šį pranešimą gavote per klaidą, susisiekite su palaikymo komanda.</translation>
 <translation id="7189965711416741966">Piršto antspaudas pridėtas.</translation>
 <translation id="7191159667348037">Nežinomas spausdintuvas (USB)</translation>
 <translation id="7193051357671784796">Šią programą pridėjo jūsų organizacija. Paleiskite programą iš naujo, kad baigtumėte ją diegti.</translation>

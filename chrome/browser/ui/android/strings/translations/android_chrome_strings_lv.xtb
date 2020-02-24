@@ -587,7 +587,6 @@ Lai mainītu šo iestatījumu, <ph name="BEGIN_LINK" />atiestatiet sinhronizāci
 <translation id="5447765697759493033">Šī vietne netiks tulkota</translation>
 <translation id="545042621069398927">Lejupielāde tiek paātrināta.</translation>
 <translation id="5456381639095306749">Lejupielādēt lapu</translation>
-<translation id="5475862044948910901">Vai sākt papildinātās realitātes sesiju?</translation>
 <translation id="548278423535722844">Atvērt karšu lietotnē</translation>
 <translation id="5487521232677179737">Notīrīt datus</translation>
 <translation id="5494752089476963479">Bloķēt reklāmas vietnēs, kurās tiek rādītas traucējošas vai maldinošas reklāmas</translation>
@@ -839,11 +838,6 @@ Turiet nospiestu jebkuru vārdu, lai izveidotu tā meklēšanas vienumu. Lai pre
 <translation id="7352939065658542140">VIDEOKLIPS</translation>
 <translation id="7353894246028566792">{NUM_SELECTED,plural, =1{Kopīgot 1 atlasīto vienumu}zero{Kopīgot # atlasītos vienumus}one{Kopīgot # atlasīto vienumu}other{Kopīgot # atlasītos vienumus}}</translation>
 <translation id="7359002509206457351">Piekļuve maksājumu veidiem</translation>
-<translation id="7365126855094612066">Šīs sesijas laikā vietne varēs:
-• izveidot jūsu vides 3D karti;
-• izsekot kameras kustību.
-
-Vietnei NAV piekļuves kamerai. Kameras attēli ir redzami tikai jums.</translation>
 <translation id="7375125077091615385">Veids:</translation>
 <translation id="7396940094317457632"><ph name="FILE_NAME" />.</translation>
 <translation id="7400418766976504921">URL</translation>

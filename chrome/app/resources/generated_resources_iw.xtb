@@ -3718,6 +3718,7 @@
 <translation id="6207282396926186323">‏התקנת <ph name="APP_NAME" /> (אפליקציית Linux)</translation>
 <translation id="6207937957461833379">מדינה/אזור</translation>
 <translation id="6208521041562685716">המערכת מפעילה את חבילת הגלישה</translation>
+<translation id="6209908325007204267">‏המכשיר כולל אפשרות שדרוג ל-Chrome Enterprise, אבל שם המשתמש שלך לא משויך לחשבון ארגוני. כדי ליצור חשבון ארגוני, יש להיכנס לכתובת g.co/ChromeEnterpriseAccount במכשיר אחר.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: הסינכרון לא פועל</translation>
 <translation id="6212039847102026977">הצג מאפייני רשת מתקדמים</translation>
 <translation id="6212168817037875041">כבה את הצג</translation>
@@ -4401,6 +4402,7 @@
 <translation id="7186088072322679094">השאר בסרגל הכלים</translation>
 <translation id="7187428571767585875">ערכים בקובץ הרישום שיש להסיר או לשנות:</translation>
 <translation id="7189234443051076392">צריך לוודא שיש מספיק מקום פנוי במכשיר</translation>
+<translation id="7189451821249468368">אין לך מספיק שדרוגים כדי לרשום את המכשיר הזה. ניתן לרכוש עוד שדרוגים דרך מחלקת המכירות. אם לדעתך ההודעה הזו מוצגת לך בטעות, אפשר לפנות לתמיכה.</translation>
 <translation id="7189965711416741966">טביעת האצבע נוספה.</translation>
 <translation id="7191159667348037">‏מדפסת לא ידועה (USB)</translation>
 <translation id="7193051357671784796">אפליקציה זו נוספה על-ידי הארגון שלך. עליך להפעיל מחדש את האפליקציה כדי לסיים את ההתקנה שלה.</translation>

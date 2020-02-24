@@ -3721,6 +3721,7 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="6207282396926186323">Setja upp <ph name="APP_NAME" /> (Linux-forrit)</translation>
 <translation id="6207937957461833379">Land/svæði</translation>
 <translation id="6208521041562685716">Verið er að virkja farsímagögn</translation>
+<translation id="6209908325007204267">Tækið þitt er með Chrome Enterprise uppfærslu en notandanafnið þitt er ekki tengt við fyrirtækisreikning. Stofnaðu fyrirtækisreikning með því að fara á g.co/ChromeEnterpriseAccount í öðru tæki.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Samstilling virkar ekki</translation>
 <translation id="6212039847102026977">Sýna ítarlega neteiginleika</translation>
 <translation id="6212168817037875041">Slökkva á skjá</translation>
@@ -4404,6 +4405,7 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="7186088072322679094">Halda á stikunni</translation>
 <translation id="7187428571767585875">Færslur í stýriskrá sem á að fjarlægja eða breyta:</translation>
 <translation id="7189234443051076392">Gakktu úr skugga um að það sé nóg pláss á tækinu</translation>
+<translation id="7189451821249468368">Þú ert ekki með tilskildar uppfærslur til að skrá þetta tæki. Hafðu samband við söludeild til að kaupa uppfærslur. Ef þú telur að þessi villuboð ættu ekki að birtast þér skaltu hafa samband við þjónustudeild.</translation>
 <translation id="7189965711416741966">Fingrafari bætt við.</translation>
 <translation id="7191159667348037">Óþekktur prentari (USB)</translation>
 <translation id="7193051357671784796">Fyrirtækið þitt bætti þessu forriti við. Endurræstu forritið til að ljúka uppsetningu þess.</translation>

@@ -289,7 +289,7 @@
 <translation id="1398853756734560583">Максимизирај</translation>
 <translation id="139911022479327130">Отклучете го телефонот и потврдете дека сте вие</translation>
 <translation id="1399511500114202393">Нема сертификат на корисник</translation>
-<translation id="1403519882106291341">Услови на користење на Google Chrome OS</translation>
+<translation id="1403519882106291341">Услови за користење на Google Chrome OS</translation>
 <translation id="140520891692800925"><ph name="PROFILE_DISPLAY_NAME" /> (надгледуван)</translation>
 <translation id="1405779994569073824">Падна.</translation>
 <translation id="1406500794671479665">Се проверува…</translation>
@@ -3079,7 +3079,7 @@
 <translation id="5311304534597152726">Се најавувате како</translation>
 <translation id="53116743016968120"><ph name="ERROR_MESSAGE" /> Обидете се повторно.</translation>
 <translation id="5313628438272378649">Ова прикачување ги прекршува безбедносните правила на вашата организација и не може да се заврши.</translation>
-<translation id="5314381603623123224">„Условите на користење“ на Chrome се менуваат на 31 март</translation>
+<translation id="5314381603623123224">„Условите за користење“ на Chrome се менуваат на 31 март</translation>
 <translation id="5315738755890845852">Вишок голема заграда: <ph name="ERROR_LINE" /></translation>
 <translation id="5315873049536339193">Идентитет</translation>
 <translation id="5317780077021120954">Зачувај</translation>
@@ -3721,6 +3721,7 @@
 <translation id="6207282396926186323">Инсталирајте ја <ph name="APP_NAME" /> (апликација на Linux)</translation>
 <translation id="6207937957461833379">Држава/Регион</translation>
 <translation id="6208521041562685716">Мобилниот интернет се активира</translation>
+<translation id="6209908325007204267">Вашиот уред содржи Chrome Enterprise Upgrade, но вашето корисничко име не е поврзано со сметка на организација. Создајте сметка на организација така што ќе отидете на g.co/ChromeEnterpriseAccount на втор уред.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: синхронизацијата не функционира</translation>
 <translation id="6212039847102026977">Покажи ги напредните својства на мрежата</translation>
 <translation id="6212168817037875041">Исклучи го екранот</translation>
@@ -3759,7 +3760,7 @@
 <translation id="624789221780392884">Ажурирањето е подготвено</translation>
 <translation id="6248988683584659830">Пребарување низ поставките</translation>
 <translation id="6251870443722440887">Рачки на ГДИ</translation>
-<translation id="6251889282623539337">Услови на користење на <ph name="DOMAIN" /></translation>
+<translation id="6251889282623539337">Услови за користење на <ph name="DOMAIN" /></translation>
 <translation id="6254503684448816922">Клучот е доведен во опасност</translation>
 <translation id="6257602895346497974">Вклучете синхронизација…</translation>
 <translation id="6259104249628300056">Откријте уреди на вашата локална мрежа</translation>
@@ -4404,6 +4405,7 @@
 <translation id="7186088072322679094">Чувај во алатник</translation>
 <translation id="7187428571767585875">Записи во регистарот што треба да се отстранат или променат:</translation>
 <translation id="7189234443051076392">Уверете се дека има доволно простор на уредот</translation>
+<translation id="7189451821249468368">Немате доволно надградби за да го регистрирате уредов. Контактирајте со службата за продажбата за да купите уште. Ако сметате дека не треба да ја гледате оваа порака, контактирајте со службата за поддршката.</translation>
 <translation id="7189965711416741966">Отпечатокот е додаден.</translation>
 <translation id="7191159667348037">Непознат печатач (USB)</translation>
 <translation id="7193051357671784796">Вашата организација ја додаде апликацијава. Рестартирајте ја апликацијата за да завршите со инсталацијата.</translation>
@@ -5884,7 +5886,7 @@
 <translation id="930268624053534560">Детални временски печати</translation>
 <translation id="932327136139879170">Дома</translation>
 <translation id="932508678520956232">Не можеше да започне печатење.</translation>
-<translation id="93343527085570547">Одете на <ph name="BEGIN_LINK1" />страницата „Правна помош“<ph name="END_LINK1" /> за да побарате промени на содржините од правни причини. Некои информации за сметката и системот можеби ќе се испратат до Google. Информациите што ни ги давате ќе ги користиме за да се справиме со техничките проблеми и за да ги подобриме нашите услуги, согласно нашите <ph name="BEGIN_LINK2" />Политика за приватност<ph name="END_LINK2" /> и <ph name="BEGIN_LINK3" />Услови на користење<ph name="END_LINK3" />.</translation>
+<translation id="93343527085570547">Одете на <ph name="BEGIN_LINK1" />страницата „Правна помош“<ph name="END_LINK1" /> за да побарате промени на содржините од правни причини. Некои информации за сметката и системот можеби ќе се испратат до Google. Информациите што ни ги давате ќе ги користиме за да се справиме со техничките проблеми и за да ги подобриме нашите услуги, согласно нашите <ph name="BEGIN_LINK2" />Политика за приватност<ph name="END_LINK2" /> и <ph name="BEGIN_LINK3" />Услови за користење<ph name="END_LINK3" />.</translation>
 <translation id="93393615658292258">Само лозинка</translation>
 <translation id="934244546219308557">Именувајте ја групава</translation>
 <translation id="934503638756687833">Ставките што не се наведени тука исто така ќе се отстранат ако е потребно. Дознајте повеќе за &lt;a href="<ph name="URL" />"&gt;заштита од несакан софтвер&lt;/a&gt; во белата книга за приватност на Chrome.</translation>

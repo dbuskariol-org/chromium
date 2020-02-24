@@ -3721,7 +3721,7 @@
 <translation id="6207282396926186323">ติดตั้ง <ph name="APP_NAME" /> (แอป Linux)</translation>
 <translation id="6207937957461833379">ประเทศ/เขตการปกครอง</translation>
 <translation id="6208521041562685716">กำลังเปิดใช้งานอินเทอร์เน็ตมือถือ</translation>
-<translation id="6209908325007204267">อุปกรณ์ของคุณมี Chrome Enterprise Upgrade แต่ชื่อผู้ใช้ของคุณไม่ตรงกับบัญชีองค์กร โปรดสร้างบัญชีองค์กรโดยไปที่ g.co/ChromeEnterpriseAccount ในอุปกรณ์รอง</translation>
+<translation id="6209908325007204267">อุปกรณ์ของคุณมี Chrome Enterprise Upgrade แต่ชื่อผู้ใช้ไม่ตรงกับบัญชีองค์กร โปรดสร้างบัญชีองค์กรโดยไปที่ g.co/ChromeEnterpriseAccount ในอุปกรณ์รอง</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: การซิงค์ไม่ทำงาน</translation>
 <translation id="6212039847102026977">แสดงคุณสมบัติเครือข่ายขั้นสูง</translation>
 <translation id="6212168817037875041">ปิดจอแสดงผล</translation>
