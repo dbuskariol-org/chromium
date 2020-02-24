@@ -274,8 +274,6 @@ void SetRuntimeFeaturesFromChromiumFeatures() {
           {wf::EnableSkipTouchEventFilter, features::kSkipTouchEventFilter,
            kUseFeatureState},
           {wf::EnableSmsReceiver, features::kSmsReceiver, kDisableOnly},
-          {wf::EnableDisplayLocking, blink::features::kDisplayLocking,
-           kUseFeatureState},
           {wf::EnableConsolidatedMovementXY, features::kConsolidatedMovementXY,
            kUseFeatureState},
           {wf::EnableCooperativeScheduling, features::kCooperativeScheduling,
@@ -548,7 +546,6 @@ void SetCustomizedRuntimeFeaturesFromCombinedArgs(
     WebRuntimeFeatures::EnableNetInfoDownlinkMax(true);
     WebRuntimeFeatures::EnableFetchMetadata(true);
     WebRuntimeFeatures::EnableFetchMetadataDestination(true);
-    WebRuntimeFeatures::EnableDisplayLocking(true);
   }
 
   WebRuntimeFeatures::EnableBackForwardCache(
