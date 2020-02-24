@@ -781,11 +781,11 @@ TEST_F(SystemPerfettoTest, EnabledOnDebugBuilds) {
   PerfettoTracedProcess::ReconstructForTesting(producer_socket_.c_str());
   if (base::android::BuildInfo::GetInstance()->is_debug_android()) {
     EXPECT_FALSE(PerfettoTracedProcess::Get()
-                     ->SystemProducerForTesting()
+                     ->system_producer()
                      ->IsDummySystemProducerForTesting());
   } else {
     EXPECT_TRUE(PerfettoTracedProcess::Get()
-                    ->SystemProducerForTesting()
+                    ->system_producer()
                     ->IsDummySystemProducerForTesting());
   }
 }
@@ -797,7 +797,7 @@ TEST_F(SystemPerfettoTest, RespectsFeatureList) {
     // The feature list is ignored on debug android builds so we should have a
     // real system producer so just bail out of this test.
     EXPECT_FALSE(PerfettoTracedProcess::Get()
-                     ->SystemProducerForTesting()
+                     ->system_producer()
                      ->IsDummySystemProducerForTesting());
     return;
   }
@@ -807,7 +807,7 @@ TEST_F(SystemPerfettoTest, RespectsFeatureList) {
     feature_list.InitAndEnableFeature(features::kEnablePerfettoSystemTracing);
     PerfettoTracedProcess::ReconstructForTesting(producer_socket_.c_str());
     EXPECT_FALSE(PerfettoTracedProcess::Get()
-                     ->SystemProducerForTesting()
+                     ->system_producer()
                      ->IsDummySystemProducerForTesting());
   }
   {
@@ -815,7 +815,7 @@ TEST_F(SystemPerfettoTest, RespectsFeatureList) {
     feature_list.InitAndDisableFeature(features::kEnablePerfettoSystemTracing);
     PerfettoTracedProcess::ReconstructForTesting(producer_socket_.c_str());
     EXPECT_TRUE(PerfettoTracedProcess::Get()
-                    ->SystemProducerForTesting()
+                    ->system_producer()
                     ->IsDummySystemProducerForTesting());
   }
 }
