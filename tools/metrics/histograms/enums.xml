@@ -49291,6 +49291,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="8"
       label="HTTP method or url scheme does not meet the requirement."/>
   <int value="9" label="Unknown range support from the response header."/>
+  <int value="10" label="Download is resumed without slices."/>
 </enum>
 
 <enum name="ParentAccessCodeAction">
