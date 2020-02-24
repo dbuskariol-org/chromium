@@ -367,13 +367,6 @@ public class CachedFeatureFlags {
         return isEnabled(ChromeFeatureList.COMMAND_LINE_ON_NON_ROOTED);
     }
 
-    /**
-     * @return Whether or not the download progress infobar is enabled.
-     */
-    public static boolean isDownloadProgressInfoBarEnabled() {
-        return ChromeFeatureList.isEnabled(ChromeFeatureList.DOWNLOAD_PROGRESS_INFOBAR);
-    }
-
     private static void cacheStartSurfaceVariation() {
         String feature = ChromeFeatureList.getFieldTrialParamByFeature(
                 ChromeFeatureList.START_SURFACE_ANDROID, "start_surface_variation");
