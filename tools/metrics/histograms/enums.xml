@@ -14566,6 +14566,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
 <enum name="DesksCreationRemovalSource">
   <int value="0" label="Button pressed"/>
   <int value="1" label="Keyboard shortcut"/>
+  <int value="2" label="Desks restore on first signin"/>
 </enum>
 
 <enum name="DesksMoveWindowFromActiveDeskSource">
