@@ -2746,13 +2746,13 @@ IndexedDBBackingStore::OpenObjectStoreCursor(
   if (!ObjectStoreCursorOptions(leveldb_transaction, database_id,
                                 object_store_id, range, direction,
                                 &cursor_options, s)) {
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
   }
   std::unique_ptr<ObjectStoreCursorImpl> cursor(
       std::make_unique<ObjectStoreCursorImpl>(transaction->AsWeakPtr(),
                                               database_id, cursor_options));
   if (!cursor->FirstSeek(s))
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
 
   return std::move(cursor);
 }
@@ -2775,13 +2775,13 @@ IndexedDBBackingStore::OpenObjectStoreKeyCursor(
   if (!ObjectStoreCursorOptions(leveldb_transaction, database_id,
                                 object_store_id, range, direction,
                                 &cursor_options, s)) {
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
   }
   std::unique_ptr<ObjectStoreKeyCursorImpl> cursor(
       std::make_unique<ObjectStoreKeyCursorImpl>(transaction->AsWeakPtr(),
                                                  database_id, cursor_options));
   if (!cursor->FirstSeek(s))
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
 
   return std::move(cursor);
 }
@@ -2804,12 +2804,12 @@ IndexedDBBackingStore::OpenIndexKeyCursor(
   cursor_options.mode = transaction->mode();
   if (!IndexCursorOptions(leveldb_transaction, database_id, object_store_id,
                           index_id, range, direction, &cursor_options, s))
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
   std::unique_ptr<IndexKeyCursorImpl> cursor(
       std::make_unique<IndexKeyCursorImpl>(transaction->AsWeakPtr(),
                                            database_id, cursor_options));
   if (!cursor->FirstSeek(s))
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
 
   return std::move(cursor);
 }
@@ -2831,11 +2831,11 @@ IndexedDBBackingStore::OpenIndexCursor(
   cursor_options.mode = transaction->mode();
   if (!IndexCursorOptions(leveldb_transaction, database_id, object_store_id,
                           index_id, range, direction, &cursor_options, s))
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
   std::unique_ptr<IndexCursorImpl> cursor(new IndexCursorImpl(
       transaction->AsWeakPtr(), database_id, cursor_options));
   if (!cursor->FirstSeek(s))
-    return std::unique_ptr<IndexedDBBackingStore::Cursor>();
+    return nullptr;
 
   return std::move(cursor);
 }
