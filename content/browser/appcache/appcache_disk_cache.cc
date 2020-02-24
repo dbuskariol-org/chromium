@@ -44,7 +44,8 @@ class AppCacheDiskCache::CreateBackendCallbackShim
  private:
   friend class base::RefCounted<CreateBackendCallbackShim>;
 
-  ~CreateBackendCallbackShim() = default;
+  ~CreateBackendCallbackShim() {
+  }
 
   AppCacheDiskCache* appcache_diskcache_;  // Unowned pointer.
 };

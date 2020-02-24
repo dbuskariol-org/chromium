@@ -10,7 +10,8 @@ MockAppCachePolicy::MockAppCachePolicy()
     : can_load_return_value_(true), can_create_return_value_(true) {
 }
 
-MockAppCachePolicy::~MockAppCachePolicy() = default;
+MockAppCachePolicy::~MockAppCachePolicy() {
+}
 
 bool MockAppCachePolicy::CanLoadAppCache(const GURL& manifest_url,
                                          const GURL& first_party) {

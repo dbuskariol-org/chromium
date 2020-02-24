@@ -171,7 +171,7 @@ class AppCacheStorageImpl::DatabaseTask
 
  protected:
   friend class base::RefCountedThreadSafe<DatabaseTask>;
-  virtual ~DatabaseTask() = default;
+  virtual ~DatabaseTask() {}
 
   AppCacheStorageImpl* storage_;
   AppCacheDatabase* const database_;
@@ -259,7 +259,7 @@ class AppCacheStorageImpl::InitTask : public DatabaseTask {
   void RunCompleted() override;
 
  protected:
-  ~InitTask() override = default;
+  ~InitTask() override {}
 
  private:
   base::FilePath db_file_path_;
@@ -325,7 +325,7 @@ class AppCacheStorageImpl::DisableDatabaseTask : public DatabaseTask {
   void Run() override { database_->Disable(); }
 
  protected:
-  ~DisableDatabaseTask() override = default;
+  ~DisableDatabaseTask() override {}
 };
 
 // GetAllInfoTask -------
@@ -341,7 +341,7 @@ class AppCacheStorageImpl::GetAllInfoTask : public DatabaseTask {
   void RunCompleted() override;
 
  protected:
-  ~GetAllInfoTask() override = default;
+  ~GetAllInfoTask() override {}
 
  private:
   scoped_refptr<AppCacheInfoCollection> info_collection_;
@@ -389,7 +389,7 @@ class AppCacheStorageImpl::StoreOrLoadTask : public DatabaseTask {
  protected:
   explicit StoreOrLoadTask(AppCacheStorageImpl* storage)
       : DatabaseTask(storage) {}
-  ~StoreOrLoadTask() override = default;
+  ~StoreOrLoadTask() override {}
 
   bool FindRelatedCacheRecords(int64_t cache_id);
   void CreateCacheAndGroupFromRecords(
@@ -499,7 +499,7 @@ class AppCacheStorageImpl::CacheLoadTask : public StoreOrLoadTask {
   void RunCompleted() override;
 
  protected:
-  ~CacheLoadTask() override = default;
+  ~CacheLoadTask() override {}
 
  private:
   int64_t cache_id_;
@@ -545,7 +545,7 @@ class AppCacheStorageImpl::GroupLoadTask : public StoreOrLoadTask {
   void RunCompleted() override;
 
  protected:
-  ~GroupLoadTask() override = default;
+  ~GroupLoadTask() override {}
 
  private:
   GURL manifest_url_;
@@ -605,7 +605,7 @@ class AppCacheStorageImpl::StoreGroupAndCacheTask : public StoreOrLoadTask {
   void CancelCompletion() override;
 
  protected:
-  ~StoreGroupAndCacheTask() override = default;
+  ~StoreGroupAndCacheTask() override {}
 
  private:
   scoped_refptr<AppCacheGroup> group_;
@@ -905,7 +905,7 @@ class AppCacheStorageImpl::FindMainResponseTask : public DatabaseTask {
   void RunCompleted() override;
 
  protected:
-  ~FindMainResponseTask() override = default;
+  ~FindMainResponseTask() override {}
 
  private:
   using NamespaceRecordPtrVector =
@@ -1105,7 +1105,7 @@ class AppCacheStorageImpl::MarkEntryAsForeignTask : public DatabaseTask {
   void RunCompleted() override;
 
  protected:
-  ~MarkEntryAsForeignTask() override = default;
+  ~MarkEntryAsForeignTask() override {}
 
  private:
   int64_t cache_id_;
@@ -1136,7 +1136,7 @@ class AppCacheStorageImpl::MakeGroupObsoleteTask : public DatabaseTask {
   void CancelCompletion() override;
 
  protected:
-  ~MakeGroupObsoleteTask() override = default;
+  ~MakeGroupObsoleteTask() override {}
 
  private:
   scoped_refptr<AppCacheGroup> group_;
@@ -1227,7 +1227,7 @@ class AppCacheStorageImpl::GetDeletableResponseIdsTask : public DatabaseTask {
   void RunCompleted() override;
 
  protected:
-  ~GetDeletableResponseIdsTask() override = default;
+  ~GetDeletableResponseIdsTask() override {}
 
  private:
   int64_t max_rowid_;
@@ -1259,7 +1259,7 @@ class AppCacheStorageImpl::InsertDeletableResponseIdsTask
   std::vector<int64_t> response_ids_;
 
  protected:
-  ~InsertDeletableResponseIdsTask() override = default;
+  ~InsertDeletableResponseIdsTask() override {}
 };
 
 void AppCacheStorageImpl::InsertDeletableResponseIdsTask::Run() {
@@ -1281,7 +1281,7 @@ class AppCacheStorageImpl::DeleteDeletableResponseIdsTask
   std::vector<int64_t> response_ids_;
 
  protected:
-  ~DeleteDeletableResponseIdsTask() override = default;
+  ~DeleteDeletableResponseIdsTask() override {}
 };
 
 void AppCacheStorageImpl::DeleteDeletableResponseIdsTask::Run() {
@@ -1305,7 +1305,7 @@ class AppCacheStorageImpl::LazyUpdateLastAccessTimeTask
   void RunCompleted() override;
 
  protected:
-  ~LazyUpdateLastAccessTimeTask() override = default;
+  ~LazyUpdateLastAccessTimeTask() override {}
 
  private:
   int64_t group_id_;
@@ -1325,7 +1325,7 @@ void AppCacheStorageImpl::LazyUpdateLastAccessTimeTask::RunCompleted() {
 class AppCacheStorageImpl::CommitLastAccessTimesTask
     : public DatabaseTask {
  public:
-  explicit CommitLastAccessTimesTask(AppCacheStorageImpl* storage)
+  CommitLastAccessTimesTask(AppCacheStorageImpl* storage)
       : DatabaseTask(storage) {}
 
   // DatabaseTask:
@@ -1334,7 +1334,7 @@ class AppCacheStorageImpl::CommitLastAccessTimesTask
   }
 
  protected:
-  ~CommitLastAccessTimesTask() override = default;
+  ~CommitLastAccessTimesTask() override {}
 };
 
 // UpdateEvictionTimes -------
@@ -1353,7 +1353,7 @@ class AppCacheStorageImpl::UpdateEvictionTimesTask
   void Run() override;
 
  protected:
-  ~UpdateEvictionTimesTask() override = default;
+  ~UpdateEvictionTimesTask() override {}
 
  private:
   int64_t group_id_;

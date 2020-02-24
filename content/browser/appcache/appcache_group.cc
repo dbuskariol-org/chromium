@@ -100,8 +100,9 @@ void AppCacheGroup::AddCache(AppCache* complete_cache) {
     // Update hosts of older caches to add a reference to the newest cache.
     // (This loop mutates |old_caches_| so a range-based for-loop cannot be
     // used, because it caches the end iterator.)
-    for (AppCache* old_cache : old_caches_) {
-      for (AppCacheHost* host : old_cache->associated_hosts())
+    for (auto it = old_caches_.begin(); it != old_caches_.end(); ++it) {
+      AppCache* cache = *it;
+      for (AppCacheHost* host : cache->associated_hosts())
         host->SetSwappableCache(this);
     }
   } else {

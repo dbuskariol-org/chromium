@@ -22,7 +22,7 @@ namespace content {
 
 class AppCacheDiskCacheTest : public testing::Test {
  public:
-  AppCacheDiskCacheTest() = default;
+  AppCacheDiskCacheTest() {}
 
   void SetUp() override {
     ASSERT_TRUE(directory_.CreateUniqueTempDir());

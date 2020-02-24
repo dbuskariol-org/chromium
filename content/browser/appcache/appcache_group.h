@@ -106,14 +106,16 @@ class CONTENT_EXPORT AppCacheGroup
 
   void AddCache(AppCache* complete_cache);
   void RemoveCache(AppCache* cache);
-  bool HasCache() const { return newest_complete_cache_ != nullptr; }
+  bool HasCache() const { return newest_complete_cache_ != NULL; }
 
   void AddNewlyDeletableResponseIds(std::vector<int64_t>* response_ids);
 
   UpdateAppCacheStatus update_status() const { return update_status_; }
 
   // Starts an update via update() javascript API.
-  void StartUpdate() { StartUpdateWithHost(nullptr); }
+  void StartUpdate() {
+    StartUpdateWithHost(NULL);
+  }
 
   // Starts an update for a doc loaded from an application cache.
   void StartUpdateWithHost(AppCacheHost* host)  {
