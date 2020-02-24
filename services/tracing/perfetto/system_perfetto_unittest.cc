@@ -315,8 +315,8 @@ TEST_F(SystemPerfettoTest, OneSystemSourceWithMultipleLocalSources) {
         }
       });
   auto local_producer_host = std::make_unique<MockProducerHost>(
-      kPerfettoProducerName, kPerfettoTestDataSourceName,
-      local_service()->GetService(), local_producer_client.get());
+      kPerfettoProducerName, kPerfettoTestDataSourceName, local_service(),
+      local_producer_client.get());
 
   system_consumer.WaitForAllDataSourcesStopped();
   system_data_source_disabled_runloop.Run();
@@ -390,8 +390,8 @@ TEST_F(SystemPerfettoTest, MultipleSystemSourceWithOneLocalSourcesLocalFirst) {
       local_data_source_enabled_runloop.QuitClosure(),
       local_data_source_disabled_runloop.QuitClosure());
   auto local_producer_host = std::make_unique<MockProducerHost>(
-      kPerfettoProducerName, kPerfettoTestDataSourceName,
-      local_service()->GetService(), local_producer_client.get());
+      kPerfettoProducerName, kPerfettoTestDataSourceName, local_service(),
+      local_producer_client.get());
 
   local_data_source_enabled_runloop.Run();
   local_consumer->WaitForAllDataSourcesStarted();
@@ -519,8 +519,8 @@ TEST_F(SystemPerfettoTest, MultipleSystemAndLocalSources) {
       local_data_source_enabled_runloop.QuitClosure(),
       local_data_source_disabled_runloop.QuitClosure());
   auto local_producer_host = std::make_unique<MockProducerHost>(
-      kPerfettoProducerName, kPerfettoTestDataSourceName,
-      local_service()->GetService(), local_producer_client.get());
+      kPerfettoProducerName, kPerfettoTestDataSourceName, local_service(),
+      local_producer_client.get());
   MockConsumer local_consumer(
       {kPerfettoTestDataSourceName,
        base::StrCat({kPerfettoTestDataSourceName, "1"}),
@@ -614,8 +614,8 @@ TEST_F(SystemPerfettoTest, MultipleSystemAndLocalSourcesLocalFirst) {
       local_data_source_enabled_runloop.QuitClosure(),
       local_data_source_disabled_runloop.QuitClosure());
   auto local_producer_host = std::make_unique<MockProducerHost>(
-      kPerfettoProducerName, kPerfettoTestDataSourceName,
-      local_service()->GetService(), local_producer_client.get());
+      kPerfettoProducerName, kPerfettoTestDataSourceName, local_service(),
+      local_producer_client.get());
   MockConsumer local_consumer(
       {kPerfettoTestDataSourceName,
        base::StrCat({kPerfettoTestDataSourceName, "1"}),
