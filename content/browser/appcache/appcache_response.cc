@@ -30,8 +30,6 @@ namespace content {
 
 namespace {
 
-using OnceCompletionCallback = base::OnceCallback<void(int)>;
-
 // Disk cache entry data indices.
 enum { kResponseInfoIndex, kResponseContentIndex, kResponseMetadataIndex };
 
@@ -114,7 +112,7 @@ void AppCacheResponseIO::InvokeUserCompletionCallback(int result) {
   // so the caller can schedule additional operations in the callback.
   buffer_ = nullptr;
   info_buffer_ = nullptr;
-  OnceCompletionCallback cb = std::move(callback_);
+  net::CompletionOnceCallback cb = std::move(callback_);
   callback_.Reset();
   std::move(cb).Run(result);
 }
@@ -198,7 +196,7 @@ AppCacheResponseReader::AppCacheResponseReader(
 AppCacheResponseReader::~AppCacheResponseReader() = default;
 
 void AppCacheResponseReader::ReadInfo(HttpResponseInfoIOBuffer* info_buf,
-                                      OnceCompletionCallback callback) {
+                                      net::CompletionOnceCallback callback) {
   DCHECK(!callback.is_null());
   DCHECK(!IsReadPending());
   DCHECK(info_buf);
@@ -224,7 +222,7 @@ void AppCacheResponseReader::ContinueReadInfo() {
 
 void AppCacheResponseReader::ReadData(net::IOBuffer* buf,
                                       int buf_len,
-                                      OnceCompletionCallback callback) {
+                                      net::CompletionOnceCallback callback) {
   DCHECK(!callback.is_null());
   DCHECK(!IsReadPending());
   DCHECK(buf);
@@ -329,7 +327,7 @@ AppCacheResponseWriter::AppCacheResponseWriter(
 AppCacheResponseWriter::~AppCacheResponseWriter() = default;
 
 void AppCacheResponseWriter::WriteInfo(HttpResponseInfoIOBuffer* info_buf,
-                                       OnceCompletionCallback callback) {
+                                       net::CompletionOnceCallback callback) {
   DCHECK(!callback.is_null());
   DCHECK(!IsWritePending());
   DCHECK(info_buf);
@@ -361,7 +359,7 @@ void AppCacheResponseWriter::ContinueWriteInfo() {
 
 void AppCacheResponseWriter::WriteData(net::IOBuffer* buf,
                                        int buf_len,
-                                       OnceCompletionCallback callback) {
+                                       net::CompletionOnceCallback callback) {
   DCHECK(!callback.is_null());
   DCHECK(!IsWritePending());
   DCHECK(buf);

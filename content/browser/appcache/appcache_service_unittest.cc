@@ -51,7 +51,7 @@ class MockResponseReader : public AppCacheResponseReader {
         data_(data),
         data_size_(data_size) {}
   void ReadInfo(HttpResponseInfoIOBuffer* info_buf,
-                OnceCompletionCallback callback) override {
+                net::CompletionOnceCallback callback) override {
     info_buffer_ = info_buf;
     callback_ = std::move(callback);  // Cleared on completion.
 
@@ -62,7 +62,7 @@ class MockResponseReader : public AppCacheResponseReader {
   }
   void ReadData(net::IOBuffer* buf,
                 int buf_len,
-                OnceCompletionCallback callback) override {
+                net::CompletionOnceCallback callback) override {
     buffer_ = buf;
     buffer_len_ = buf_len;
     callback_ = std::move(callback);  // Cleared on completion.
