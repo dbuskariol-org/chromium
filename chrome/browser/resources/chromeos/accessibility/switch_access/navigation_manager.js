@@ -25,7 +25,7 @@ class NavigationManager {
     this.groupStack_ = [];
 
     /** @private {!MenuManager} */
-    this.menuManager_ = new MenuManager(this, desktop);
+    this.menuManager_ = new MenuManager(this, this.desktop_);
 
     /** @private {!FocusRingManager} */
     this.focusRingManager_ = new FocusRingManager();
