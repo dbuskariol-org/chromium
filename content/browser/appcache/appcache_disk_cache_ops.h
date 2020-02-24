@@ -1,18 +1,13 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_APPCACHE_APPCACHE_RESPONSE_H_
-#define CONTENT_BROWSER_APPCACHE_APPCACHE_RESPONSE_H_
+#ifndef CONTENT_BROWSER_APPCACHE_APPCACHE_DISK_CACHE_OPS_H_
+#define CONTENT_BROWSER_APPCACHE_APPCACHE_DISK_CACHE_OPS_H_
 
-#include <stdint.h>
-
-#include <memory>
-
-#include "base/compiler_specific.h"
 #include "base/memory/ref_counted.h"
 #include "base/memory/weak_ptr.h"
-#include "content/common/appcache_interfaces.h"
+
 #include "content/common/content_export.h"
 #include "net/base/completion_once_callback.h"
 #include "net/http/http_response_info.h"
@@ -20,43 +15,14 @@
 
 namespace net {
 class IOBuffer;
-}
+}  // namespace net
 
 namespace content {
+
 class AppCacheDiskCache;
 class AppCacheDiskCacheEntry;
-class AppCacheStorage;
 
 static const int kUnknownResponseDataSize = -1;
-
-// Response info for a particular response id. Instances are tracked in
-// the working set.
-class CONTENT_EXPORT AppCacheResponseInfo
-    : public base::RefCounted<AppCacheResponseInfo> {
- public:
-  AppCacheResponseInfo(base::WeakPtr<AppCacheStorage> storage,
-                       const GURL& manifest_url,
-                       int64_t response_id,
-                       std::unique_ptr<net::HttpResponseInfo> http_info,
-                       int64_t response_data_size);
-
-  const GURL& manifest_url() const { return manifest_url_; }
-  int64_t response_id() const { return response_id_; }
-  const net::HttpResponseInfo& http_response_info() const {
-    return *http_response_info_;
-  }
-  int64_t response_data_size() const { return response_data_size_; }
-
- private:
-  friend class base::RefCounted<AppCacheResponseInfo>;
-  ~AppCacheResponseInfo();
-
-  const GURL manifest_url_;
-  const int64_t response_id_;
-  const std::unique_ptr<net::HttpResponseInfo> http_response_info_;
-  const int64_t response_data_size_;
-  base::WeakPtr<AppCacheStorage> storage_;
-};
 
 // A refcounted wrapper for HttpResponseInfo so we can apply the
 // refcounting semantics used with IOBuffer with these structures too.
@@ -134,7 +100,7 @@ class CONTENT_EXPORT AppCacheResponseReader : public AppCacheResponseIO {
   // the info data. The reader acquires a reference to the 'info_buf' until
   // completion at which time the callback is invoked with either a negative
   // error code or the number of bytes read. The 'info_buf' argument should
-  // contain a NULL http_info when ReadInfo is called. The 'callback' is a
+  // contain a null http_info when ReadInfo is called. The 'callback' is a
   // required parameter.
   // Should only be called where there is no Read operation in progress.
   // (virtual for testing)
@@ -290,4 +256,4 @@ class CONTENT_EXPORT AppCacheResponseMetadataWriter
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_APPCACHE_APPCACHE_RESPONSE_H_
+#endif  // CONTENT_BROWSER_APPCACHE_APPCACHE_DISK_CACHE_OPS_H_
