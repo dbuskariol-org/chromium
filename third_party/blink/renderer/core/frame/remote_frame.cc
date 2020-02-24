@@ -381,11 +381,6 @@ void RemoteFrame::SetFrameOwnerProperties(
   Frame::ApplyFrameOwnerProperties(std::move(properties));
 }
 
-void RemoteFrame::EnforceInsecureRequestPolicy(
-    mojom::blink::InsecureRequestPolicy policy) {
-  SetInsecureRequestPolicy(policy);
-}
-
 void RemoteFrame::SetReplicatedOrigin(
     const scoped_refptr<const SecurityOrigin>& origin,
     bool is_potentially_trustworthy_unique_origin) {
