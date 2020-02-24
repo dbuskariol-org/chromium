@@ -3621,7 +3621,7 @@
   {
     "name": "turn-off-streaming-media-caching",
     "owners": [ "shawnpi@microsoft.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "ui-disable-partial-swap",
