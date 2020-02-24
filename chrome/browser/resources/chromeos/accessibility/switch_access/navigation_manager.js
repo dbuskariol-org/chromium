@@ -16,7 +16,7 @@ class NavigationManager {
     this.desktop_ = desktop;
 
     /** @private {!SARootNode} */
-    this.group_ = RootNodeWrapper.buildDesktopTree(this.desktop_);
+    this.group_ = DesktopNode.build(this.desktop_);
 
     /** @private {!SAChildNode} */
     this.node_ = this.group_.firstChild;
@@ -113,8 +113,7 @@ class NavigationManager {
       return NavigationManager.instance.group_;
     }
 
-    const desktopRoot =
-        RootNodeWrapper.buildDesktopTree(NavigationManager.instance.desktop_);
+    const desktopRoot = DesktopNode.build(NavigationManager.instance.desktop_);
     console.log(desktopRoot.debugString(
         wholeTree, '', NavigationManager.instance.node_));
     return desktopRoot;
@@ -198,7 +197,7 @@ class NavigationManager {
     }
 
     // If there is no valid node in the group stack, go to the desktop.
-    navigator.setGroup_(RootNodeWrapper.buildDesktopTree(navigator.desktop_));
+    navigator.setGroup_(DesktopNode.build(navigator.desktop_));
     navigator.groupStack_ = [];
   }
 
@@ -333,7 +332,7 @@ class NavigationManager {
     }
 
     this.groupStack_ = [];
-    let group = RootNodeWrapper.buildDesktopTree(this.desktop_);
+    let group = DesktopNode.build(this.desktop_);
     while (ancestorList.length > 0) {
       const ancestor = ancestorList.pop();
       if (ancestor.role === chrome.automation.RoleType.DESKTOP) {
