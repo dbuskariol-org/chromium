@@ -1232,7 +1232,8 @@ void SkiaOutputSurfaceImplOnGpu::CopyOutput(
     }
 
     base::Optional<ScopedSurfaceToTexture> texture_mapper;
-    if (!from_fbo0 || dependency_->IsOffscreen()) {
+    if (!from_fbo0 || dependency_->IsOffscreen() ||
+        gl_surface_->IsSurfaceless()) {
       texture_mapper.emplace(context_provider_.get(), surface);
       gl_id = texture_mapper.value().client_id();
       internal_format = GL_RGBA;
