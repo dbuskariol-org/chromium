@@ -2513,20 +2513,6 @@
                     "disable_features": [
                         "HappinessTrackingSurveysForDesktopSettingsPrivacy"
                     ]
-                },
-                {
-                    "name": "Settings_Privacy",
-                    "params": {
-                        "en_site_id": "gjhdonsbcw64p5i2sfhrdetucq",
-                        "probability": "0.5",
-                        "survey": "settings-privacy"
-                    },
-                    "enable_features": [
-                        "HappinessTrackingSurveysForDesktopSettingsPrivacy"
-                    ],
-                    "disable_features": [
-                        "HappinessTrackingSurveysForDesktopSettings"
-                    ]
                 }
             ]
         }
