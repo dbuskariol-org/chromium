@@ -16355,6 +16355,10 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
     window.opener is cross origin but same site to the top frame of this
     download (e.g. google.com vs subdomain.google.com).
   </int>
+  <int value="3" label="Non HTTP or HTTPS">
+    Either window.opener or the top frame of this download is not an HTTP or
+    HTTPS URL (e.g. about:blank).
+  </int>
 </enum>
 
 <enum name="DownloadInProgressDBCountType">
