@@ -25,6 +25,7 @@
 #include "third_party/blink/renderer/core/svg/graphics/svg_image.h"
 #include "third_party/blink/renderer/core/timing/dom_window_performance.h"
 #include "third_party/blink/renderer/platform/geometry/int_rect.h"
+#include "third_party/blink/renderer/platform/graphics/bitmap_image.h"
 #include "third_party/blink/renderer/platform/graphics/image.h"
 #include "third_party/blink/renderer/platform/graphics/paint/float_clip_rect.h"
 #include "third_party/blink/renderer/platform/graphics/paint/geometry_mapper.h"
@@ -52,7 +53,7 @@ bool IsBackgroundImageContentful(const LayoutObject& object,
   }
   // Generated images are excluded here, as they are likely to serve for
   // background purpose.
-  if (!image.IsBitmapImage() && !image.IsStaticBitmapImage() &&
+  if (!IsA<BitmapImage>(image) && !image.IsStaticBitmapImage() &&
       !IsA<SVGImage>(image) && !image.IsPlaceholderImage())
     return false;
   return true;
