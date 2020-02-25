@@ -119,7 +119,7 @@ void LayoutSVGResourceClipper::RemoveAllClientsFromCache(
   MarkAllClientsForInvalidation(
       mark_for_invalidation ? SVGResourceClient::kLayoutInvalidation |
                                   SVGResourceClient::kBoundariesInvalidation
-                            : SVGResourceClient::kParentOnlyInvalidation);
+                            : 0);
 }
 
 base::Optional<Path> LayoutSVGResourceClipper::AsPath() {

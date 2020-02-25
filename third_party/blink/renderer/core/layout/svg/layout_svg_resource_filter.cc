@@ -74,7 +74,7 @@ void LayoutSVGResourceFilter::RemoveAllClientsFromCache(
   MarkAllClientsForInvalidation(
       mark_for_invalidation ? SVGResourceClient::kLayoutInvalidation |
                                   SVGResourceClient::kBoundariesInvalidation
-                            : SVGResourceClient::kParentOnlyInvalidation);
+                            : 0);
 }
 
 bool LayoutSVGResourceFilter::RemoveClientFromCache(SVGResourceClient& client) {

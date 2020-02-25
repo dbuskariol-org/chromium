@@ -43,7 +43,7 @@ void LayoutSVGResourceMasker::RemoveAllClientsFromCache(
   MarkAllClientsForInvalidation(
       mark_for_invalidation ? SVGResourceClient::kLayoutInvalidation |
                                   SVGResourceClient::kBoundariesInvalidation
-                            : SVGResourceClient::kParentOnlyInvalidation);
+                            : 0);
 }
 
 sk_sp<const PaintRecord> LayoutSVGResourceMasker::CreatePaintRecord(

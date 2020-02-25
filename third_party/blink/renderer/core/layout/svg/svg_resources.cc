@@ -700,15 +700,13 @@ void SVGElementResourceClient::ResourceContentChanged(
   LayoutObject* layout_object = element_->GetLayoutObject();
   if (!layout_object)
     return;
-  bool mark_for_invalidation =
-      invalidation_mask & ~SVGResourceClient::kParentOnlyInvalidation;
   if (layout_object->IsSVGResourceContainer()) {
     ToLayoutSVGResourceContainer(layout_object)
-        ->RemoveAllClientsFromCache(mark_for_invalidation);
+        ->RemoveAllClientsFromCache(invalidation_mask != 0);
     return;
   }
 
-  if (mark_for_invalidation) {
+  if (invalidation_mask) {
     LayoutSVGResourceContainer::MarkClientForInvalidation(*layout_object,
                                                           invalidation_mask);
   }

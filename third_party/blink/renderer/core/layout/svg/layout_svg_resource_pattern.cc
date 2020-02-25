@@ -57,8 +57,7 @@ void LayoutSVGResourcePattern::RemoveAllClientsFromCache(
   pattern_map_->clear();
   should_collect_pattern_attributes_ = true;
   MarkAllClientsForInvalidation(
-      mark_for_invalidation ? SVGResourceClient::kPaintInvalidation
-                            : SVGResourceClient::kParentOnlyInvalidation);
+      mark_for_invalidation ? SVGResourceClient::kPaintInvalidation : 0);
 }
 
 bool LayoutSVGResourcePattern::RemoveClientFromCache(
