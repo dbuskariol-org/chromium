@@ -6509,6 +6509,23 @@
             ]
         }
     ],
+    "WebUITabStrip": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "WebUITabStrip"
+                    ]
+                }
+            ]
+        }
+    ],
     "WebViewWakeMetricsService": [
         {
             "platforms": [
