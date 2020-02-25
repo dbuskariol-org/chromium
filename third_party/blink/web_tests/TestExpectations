@@ -3669,7 +3669,6 @@ crbug.com/828506 [ Win ] virtual/scroll_customization/fast/events/touch/scroll-w
 # Failure messages are unstable so we cannot create baselines.
 crbug.com/832071 external/wpt/service-workers/service-worker/worker-client-id.https.html [ Failure ]
 crbug.com/832071 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/worker-client-id.https.html [ Failure ]
-crbug.com/832071 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/worker-client-id.https.html [ Failure ]
 crbug.com/832071 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/worker-client-id.https.html [ Failure ]
 
 # failures in external/wpt/css/css-animations/ and web-animations/ from Mozilla tests
@@ -3921,9 +3920,6 @@ crbug.com/626703 [ Win ] virtual/cache-storage-sequence/external/wpt/service-wor
 crbug.com/626703 [ Linux ] virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
 crbug.com/626703 [ Mac ] virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
 crbug.com/626703 [ Win ] virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
-crbug.com/626703 [ Linux ] virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
-crbug.com/626703 [ Mac ] virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
-crbug.com/626703 [ Win ] virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/service-workers/service-worker/ready.https.window.html [ Timeout ]
@@ -4015,8 +4011,6 @@ crbug.com/626703 [ Mac10.11 ] external/wpt/shape-detection/idlharness.https.any.
 crbug.com/626703 [ Win7 ] external/wpt/pointerevents/pointerevent_touch-action-pan-y-css_touch.html [ Timeout ]
 crbug.com/626703 [ Win10 ] external/wpt/payment-request/payment-request-hasenrolledinstrument-method.tentative.https.html [ Failure Timeout ]
 crbug.com/626703 [ Win10 ] virtual/cascade/external/wpt/css/css-paint-api/color-custom-property-animation.https.html [ Failure ]
-crbug.com/626703 [ Mac10.11 ] virtual/omt-service-worker-startup/external/wpt/shape-detection/shapedetection-cross-origin.sub.https.html [ Timeout ]
-crbug.com/626703 [ Mac10.11 ] virtual/omt-service-worker-startup/external/wpt/shape-detection/detection-security-test.https.html [ Timeout ]
 crbug.com/626703 [ Win10 ] external/wpt/css/css-paint-api/color-custom-property-animation.https.html [ Failure ]
 crbug.com/626703 [ Retina ] virtual/cascade/external/wpt/css/css-paint-api/one-custom-property-animation.https.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/web-animations/timing-model/animation-effects/phases-and-states.html [ Crash ]
@@ -4078,7 +4072,6 @@ crbug.com/626703 external/wpt/mediacapture-streams/MediaStream-MediaElement-srcO
 crbug.com/626703 virtual/audio-service/external/wpt/mediacapture-streams/MediaStream-MediaElement-srcObject.https.html [ Timeout ]
 crbug.com/626703 virtual/feature-policy-permissions/external/wpt/mediacapture-streams/MediaStream-MediaElement-srcObject.https.html [ Timeout ]
 crbug.com/699040 external/wpt/svg/text/reftests/text-xml-space-001.svg [ Failure ]
-crbug.com/626703 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/ready.https.html [ Timeout ]
 crbug.com/626703 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/ready.https.html [ Timeout ]
 crbug.com/626703 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/ready.https.html [ Timeout ]
 crbug.com/626703 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/ready.https.html [ Timeout ]
@@ -5107,7 +5100,6 @@ crbug.com/910709 navigator_language/worker_navigator_language.html [ Timeout ]
 
 crbug.com/1002377 external/wpt/service-workers/service-worker/update-bytecheck.https.html [ Pass Timeout ]
 crbug.com/1002377 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/update-bytecheck.https.html [ Pass Timeout ]
-crbug.com/1002377 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/update-bytecheck.https.html [ Pass Timeout ]
 crbug.com/1002377 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/update-bytecheck.https.html [ Pass Timeout ]
 crbug.com/1002377 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/update-bytecheck.https.html [ Pass Timeout ]
 
@@ -5199,14 +5191,12 @@ crbug.com/1043151 http/tests/devtools/console/viewport-testing/console-runtime-r
 
 # This test requires a special browser flag and seems not suitable for a wpt test, see bug.
 crbug.com/691944 external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
-crbug.com/691944 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
 crbug.com/691944 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
 crbug.com/691944 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
 crbug.com/691944 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
 
 # These tests (erroneously) see a platform-specific User-Agent header
 crbug.com/595993 external/wpt/service-workers/service-worker/fetch-header-visibility.https.html [ Failure ]
-crbug.com/595993 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/fetch-header-visibility.https.html [ Failure ]
 crbug.com/595993 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/fetch-header-visibility.https.html [ Failure ]
 crbug.com/595993 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/fetch-header-visibility.https.html [ Failure ]
 crbug.com/595993 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/fetch-header-visibility.https.html [ Failure ]
@@ -5678,7 +5668,6 @@ crbug.com/745079 external/wpt/geolocation-API/PositionOptions.https.html [ Failu
 # Service worker updates need to handle redirect appropriately.
 crbug.com/889798 external/wpt/service-workers/service-worker/import-scripts-redirect.https.html [ Skip ]
 crbug.com/889798 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/import-scripts-redirect.https.html [ Skip ]
-crbug.com/889798 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/import-scripts-redirect.https.html [ Skip ]
 crbug.com/889798 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/import-scripts-redirect.https.html [ Skip ]
 crbug.com/889798 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/import-scripts-redirect.https.html [ Skip ]
 
@@ -6175,7 +6164,6 @@ crbug.com/861682 [ Win ] external/wpt/css/mediaqueries/device-aspect-ratio-003.h
 
 # S13N Sheriff 2018-7-11
 crbug.com/862643 http/tests/serviceworker/navigation_preload/use-counter.html [ Failure Pass ]
-crbug.com/862643 virtual/omt-service-worker-startup/http/tests/serviceworker/navigation_preload/use-counter.html [ Failure Pass ]
 
 # Sheriff 2018-7-13
 crbug.com/863599 [ Debug ] external/wpt/requestidlecallback/callback-iframe.html [ Pass Timeout ]
@@ -6451,7 +6439,6 @@ crbug.com/931646 [ Win7 ] http/tests/preload/meta-viewport-link-headers-imagesrc
 
 # These started failing when network service was enabled by default.
 crbug.com/933880 external/wpt/service-workers/service-worker/request-end-to-end.https.html [ Failure ]
-crbug.com/933880 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/request-end-to-end.https.html [ Failure ]
 crbug.com/933880 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/request-end-to-end.https.html [ Failure ]
 crbug.com/933880 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/request-end-to-end.https.html [ Failure ]
 crbug.com/933880 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/request-end-to-end.https.html [ Failure ]
@@ -7468,7 +7455,6 @@ crbug.com/995663 [ Linux ] http/tests/media/autoplay/document-user-activation-cr
 
 # Sheriff 2020-01-30
 crbug.com/1047164 [ Mac ] fast/scroll-snap/snaps-after-keyboard-scrolling.html [ Pass Failure ]
-crbug.com/1047208 virtual/omt-service-worker-startup/http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
 crbug.com/1047208 http/tests/serviceworker/update-served-from-cache.html [ Pass Failure ]
 crbug.com/1047293 [ Mac ] editing/pasteboard/pasteboard_with_unfocused_selection.html [ Pass Failure ]
 crbug.com/1047420 [ Mac ] http/tests/devtools/persistence/persistence-move-breakpoints-on-reload.js [ Pass Failure ]
