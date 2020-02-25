@@ -265,8 +265,7 @@ void AXEventGenerator::OnStringAttributeChanged(AXTree* tree,
 
       if (node->data().HasStringAttribute(
               ax::mojom::StringAttribute::kContainerLiveStatus)) {
-        FireLiveRegionEvents(node,
-                             AXLiveRegionTracker::ChangeType::kTextChanged);
+        FireLiveRegionEvents(node);
       }
       break;
     case ax::mojom::StringAttribute::kPlaceholder:
@@ -481,7 +480,7 @@ void AXEventGenerator::OnTreeDataChanged(AXTree* tree,
 
 void AXEventGenerator::OnNodeWillBeDeleted(AXTree* tree, AXNode* node) {
   if (live_region_tracker_->GetLiveRoot(node))
-    FireLiveRegionEvents(node, AXLiveRegionTracker::ChangeType::kNodeRemoved);
+    FireLiveRegionEvents(node);
   live_region_tracker_->OnNodeWillBeDeleted(node);
 
   DCHECK_EQ(tree_, tree);
@@ -530,25 +529,19 @@ void AXEventGenerator::OnAtomicUpdateFinished(
       continue;
     }
 
-    if (IsAlert(change.node->data().role)) {
+    if (IsAlert(change.node->data().role))
       AddEvent(change.node, Event::ALERT);
-    } else if (IsActiveLiveRegion(change)) {
+    else if (IsActiveLiveRegion(change))
       AddEvent(change.node, Event::LIVE_REGION_CREATED);
-    } else if (IsContainedInLiveRegion(change)) {
-      FireLiveRegionEvents(change.node,
-                           AXLiveRegionTracker::ChangeType::kNodeAdded);
-    }
+    else if (IsContainedInLiveRegion(change))
+      FireLiveRegionEvents(change.node);
   }
 
   FireActiveDescendantEvents();
-  if (should_compute_live_region_change_description_)
-    ComputeLiveRegionChangeDescription();
   live_region_tracker_->OnAtomicUpdateFinished();
 }
 
-void AXEventGenerator::FireLiveRegionEvents(
-    AXNode* node,
-    AXLiveRegionTracker::ChangeType type) {
+void AXEventGenerator::FireLiveRegionEvents(AXNode* node) {
   AXNode* live_root = live_region_tracker_->GetLiveRootIfNotBusy(node);
 
   // Note that |live_root| might be nullptr if a live region was just added,
@@ -561,42 +554,10 @@ void AXEventGenerator::FireLiveRegionEvents(
            .GetStringAttribute(ax::mojom::StringAttribute::kName)
            .empty()) {
     AddEvent(node, Event::LIVE_REGION_NODE_CHANGED);
-
-    if (should_compute_live_region_change_description_)
-      live_region_tracker_->ComputeTextForChangedNode(node, type);
   }
 
   // Fire LIVE_REGION_CHANGED on the root of the live region.
   AddEvent(live_root, Event::LIVE_REGION_CHANGED);
-}
-
-void AXEventGenerator::ComputeLiveRegionChangeDescription() {
-  std::map<AXNode*, std::string> live_region_change_description;
-  live_region_tracker_->ComputeLiveRegionChangeDescription(
-      &live_region_change_description);
-
-  for (auto& key_value : live_region_change_description) {
-    AXNode* live_root = key_value.first;
-    std::string text = key_value.second;
-
-    std::map<AXNode*, std::set<EventParams>>::iterator tree_events_iter =
-        tree_events_.find(live_root);
-    if (tree_events_iter == tree_events_.end())
-      continue;
-    std::set<EventParams>& live_root_events = tree_events_iter->second;
-    for (std::set<EventParams>::iterator event_params_iter =
-             live_root_events.begin();
-         event_params_iter != live_root_events.end(); ++event_params_iter) {
-      if (event_params_iter->event != Event::LIVE_REGION_CHANGED)
-        continue;
-
-      EventParams params = *event_params_iter;
-      live_root_events.erase(event_params_iter);
-      params.live_region_change_description = text;
-      live_root_events.insert(params);
-      break;
-    }
-  }
 }
 
 void AXEventGenerator::FireActiveDescendantEvents() {
