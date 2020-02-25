@@ -837,6 +837,8 @@ source_set("chromeos") {
     "child_accounts/time_limits/app_time_policy_helpers.h",
     "child_accounts/time_limits/app_types.cc",
     "child_accounts/time_limits/app_types.h",
+    "child_accounts/time_limits/persisted_app_info.cc",
+    "child_accounts/time_limits/persisted_app_info.h",
     "child_accounts/time_limits/web_time_activity_provider.cc",
     "child_accounts/time_limits/web_time_activity_provider.h",
     "child_accounts/time_limits/web_time_limit_enforcer.cc",
