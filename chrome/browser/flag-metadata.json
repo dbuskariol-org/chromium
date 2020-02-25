@@ -1403,11 +1403,6 @@
     "expiry_milestone": 83
   },
   {
-    "name": "enable-google-branded-context-menu",
-    "owners": [ "edwardjung@chromium.org" ],
-    "expiry_milestone": 76
-  },
-  {
     "name": "enable-gpu-rasterization",
     "owners": [ "enne", "vmiura", "ericrk" ],
     // A debugging flag intended for end-users where there may not be any other

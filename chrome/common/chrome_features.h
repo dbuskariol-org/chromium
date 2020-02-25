@@ -239,12 +239,6 @@ COMPONENT_EXPORT(CHROME_FEATURES) extern const base::Feature kGdiTextPrinting;
 
 COMPONENT_EXPORT(CHROME_FEATURES) extern const base::Feature kGeoLanguage;
 
-#if !defined(OS_ANDROID)
-// Only has an effect in branded builds.
-COMPONENT_EXPORT(CHROME_FEATURES)
-extern const base::Feature kGoogleBrandedContextMenu;
-#endif
-
 #if defined(OS_CHROMEOS)
 COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kHappinessTrackingSystem;
