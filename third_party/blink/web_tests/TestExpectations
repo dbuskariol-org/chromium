@@ -3190,8 +3190,8 @@ crbug.com/666657 external/wpt/css/css-text/hanging-punctuation/* [ Skip ]
 
 crbug.com/909597 external/wpt/css/css-ui/text-overflow-ruby.html [ Failure ]
 
-crbug.com/492664 external/wpt/css/css-writing-modes/inline-table-alignment-003.xht [ Failure ]
-crbug.com/492664 external/wpt/css/css-writing-modes/inline-table-alignment-005.xht [ Failure ]
+crbug.com/664386 external/wpt/css/css-writing-modes/inline-table-alignment-003.xht [ Failure ]
+crbug.com/664386 external/wpt/css/css-writing-modes/inline-table-alignment-005.xht [ Failure ]
 
 crbug.com/1005518 external/wpt/css/css-writing-modes/direction-upright-001.html [ Failure ]
 crbug.com/1005518 external/wpt/css/css-writing-modes/direction-upright-002.html [ Failure ]
