@@ -111,7 +111,7 @@ SubresourceRedirectObserver::SubresourceRedirectObserver(
 
 SubresourceRedirectObserver::~SubresourceRedirectObserver() = default;
 
-void SubresourceRedirectObserver::ReadyToCommitNavigation(
+void SubresourceRedirectObserver::DidFinishNavigation(
     content::NavigationHandle* navigation_handle) {
   DCHECK(navigation_handle);
   if (!navigation_handle->IsInMainFrame() ||
@@ -125,6 +125,8 @@ void SubresourceRedirectObserver::ReadyToCommitNavigation(
 
   content::RenderFrameHost* render_frame_host =
       navigation_handle->GetRenderFrameHost();
+  if (!render_frame_host || !render_frame_host->GetProcess())
+    return;
   optimization_guide_decider->CanApplyOptimizationAsync(
       navigation_handle, optimization_guide::proto::COMPRESS_PUBLIC_IMAGES,
       base::BindOnce(&OnReadyToSendResourceLoadingImageHints,
