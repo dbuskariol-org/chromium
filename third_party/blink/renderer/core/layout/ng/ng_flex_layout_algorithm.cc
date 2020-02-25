@@ -426,6 +426,11 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
         // We want the child's min/max size in its writing mode, not ours.
         // We'll only ever use it if the child's inline axis is our main axis.
         NGConstraintSpace child_space = BuildSpaceForIntrinsicBlockSize(child);
+        if (child.Style().OverflowBlockDirection() == EOverflow::kAuto) {
+          // Ensure this child has been laid out so its auto scrollbars are
+          // included in its intrinsic sizes.
+          IntrinsicBlockSizeFunc();
+        }
         min_max_size = child.ComputeMinMaxSize(
             child_style.GetWritingMode(),
             MinMaxSizeInput(content_box_size_.block_size), &child_space);
@@ -579,6 +584,8 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
 
     const Length& min = is_horizontal_flow_ ? child.Style().MinWidth()
                                             : child.Style().MinHeight();
+    // TODO(dgrogan): min.IsIntrinsic should enter this block when it's in the
+    // item's block direction.
     if (min.IsAuto()) {
       if (algorithm_->ShouldApplyMinSizeAutoForChild(*child.GetLayoutBox())) {
         // TODO(dgrogan): This should probably apply to column flexboxes also,
