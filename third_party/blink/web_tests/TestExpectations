@@ -7596,3 +7596,5 @@ crbug.com/v8/10126 external/wpt/wasm/webapi/invalid-code.any.html [ Skip ]
 crbug.com/v8/10126 external/wpt/wasm/webapi/invalid-code.any.serviceworker.html [ Skip ]
 crbug.com/v8/10126 external/wpt/wasm/webapi/invalid-code.any.sharedworker.html [ Skip ]
 crbug.com/v8/10126 external/wpt/wasm/webapi/invalid-code.any.worker.html [ Skip ]
+
+crbug.com/1048597 [ Linux Debug ] virtual/android/fullscreen/video-scrolled-iframe.html [ Pass Timeout ]
