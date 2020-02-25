@@ -453,17 +453,14 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
           LengthResolvePhase::kLayout);
       min_max_sizes_in_cross_axis_direction.max_size = ResolveMaxBlockLength(
           flex_basis_space, child_style, border_padding_in_child_writing_mode,
-          max_property_in_cross_axis, IntrinsicBlockSizeFunc,
-          LengthResolvePhase::kLayout);
+          max_property_in_cross_axis, LengthResolvePhase::kLayout);
       min_max_sizes_in_cross_axis_direction.min_size = ResolveMinBlockLength(
           flex_basis_space, child_style, border_padding_in_child_writing_mode,
-          min_property_in_cross_axis, IntrinsicBlockSizeFunc,
-          LengthResolvePhase::kLayout);
+          min_property_in_cross_axis, LengthResolvePhase::kLayout);
     } else {
       min_max_sizes_in_main_axis_direction.max_size = ResolveMaxBlockLength(
           flex_basis_space, child_style, border_padding_in_child_writing_mode,
-          max_property_in_main_axis, IntrinsicBlockSizeFunc,
-          LengthResolvePhase::kLayout);
+          max_property_in_main_axis, LengthResolvePhase::kLayout);
       min_max_sizes_in_cross_axis_direction.max_size = ResolveMaxInlineLength(
           flex_basis_space, child_style, border_padding_in_child_writing_mode,
           MinMaxSizeFunc, max_property_in_cross_axis,
@@ -678,7 +675,7 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
     } else {
       min_max_sizes_in_main_axis_direction.min_size = ResolveMinBlockLength(
           flex_basis_space, child_style, border_padding_in_child_writing_mode,
-          min, IntrinsicBlockSizeFunc, LengthResolvePhase::kLayout);
+          min, LengthResolvePhase::kLayout);
     }
     min_max_sizes_in_main_axis_direction -= main_axis_border_padding;
     DCHECK_GE(min_max_sizes_in_main_axis_direction.min_size, 0);
