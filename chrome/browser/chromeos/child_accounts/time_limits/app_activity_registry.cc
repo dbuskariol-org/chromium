@@ -291,6 +291,23 @@ AppState AppActivityRegistry::GetAppState(const AppId& app_id) const {
   return activity_registry_.at(app_id).activity.app_state();
 }
 
+std::vector<PauseAppInfo> AppActivityRegistry::GetPausedApps(
+    bool show_pause_dialog) const {
+  std::vector<PauseAppInfo> paused_apps;
+  for (const auto& info : activity_registry_) {
+    const AppId& app_id = info.first;
+    const AppDetails& details = info.second;
+    if (GetAppState(app_id) == AppState::kLimitReached) {
+      DCHECK(details.limit.has_value());
+      DCHECK(details.limit->daily_limit().has_value());
+      paused_apps.push_back(PauseAppInfo(
+          app_id, details.limit->daily_limit().value(), show_pause_dialog));
+    }
+  }
+
+  return paused_apps;
+}
+
 AppActivityReportInterface::ReportParams
 AppActivityRegistry::GenerateAppActivityReport(
     enterprise_management::ChildStatusReportRequest* report) const {

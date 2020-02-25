@@ -118,6 +118,9 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
 
   AppState GetAppState(const AppId& app_id) const;
 
+  // Returns the vector of paused applications.
+  std::vector<PauseAppInfo> GetPausedApps(bool show_pause_dialog) const;
+
   // Populates |report| with collected app activity. Returns whether any data
   // were reported.
   AppActivityReportInterface::ReportParams GenerateAppActivityReport(

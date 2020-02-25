@@ -100,6 +100,14 @@ class AppId {
   std::string app_id_;
 };
 
+struct PauseAppInfo {
+  PauseAppInfo(const AppId& app, base::TimeDelta limit, bool show_dialog);
+
+  AppId app_id;
+  base::TimeDelta daily_limit;
+  bool show_pause_dialog = true;
+};
+
 // Represents restriction that can be applied to an installed app.
 class AppLimit {
  public:

@@ -87,6 +87,11 @@ std::ostream& operator<<(std::ostream& out, const AppId& id) {
              << "]";
 }
 
+PauseAppInfo::PauseAppInfo(const AppId& app,
+                           base::TimeDelta limit,
+                           bool show_dialog)
+    : app_id(app), daily_limit(limit), show_pause_dialog(show_dialog) {}
+
 AppLimit::AppLimit(AppRestriction restriction,
                    base::Optional<base::TimeDelta> daily_limit,
                    base::Time last_updated)

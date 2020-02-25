@@ -308,6 +308,7 @@ extern const char kNetworkFileSharesPreconfiguredShares[];
 extern const char kMostRecentlyUsedNetworkFileShareURL[];
 extern const char kParentAccessCodeConfig[];
 extern const char kPerAppTimeLimitsAppActivities[];
+extern const char kPerAppTimeLimitsLastResetTime[];
 extern const char kPerAppTimeLimitsPolicy[];
 extern const char kPerAppTimeLimitsWhitelistPolicy[];
 extern const char kDeviceWallpaperImageFilePath[];
