@@ -8789,6 +8789,11 @@ be describing additional metrics about the same event.
       current event.
     </summary>
   </metric>
+  <metric name="IsCharging" enum="Boolean">
+    <summary>
+      Whether the device is being charged or not.
+    </summary>
+  </metric>
   <metric name="Month" enum="Month">
     <summary>
       Event's month (e.g. Jan-Dec) in local time zone. January is 1.
