@@ -1342,6 +1342,9 @@ extern const char kContentIndexingNTPDescription[];
 extern const char kContextMenuCopyImageName[];
 extern const char kContextMenuCopyImageDescription[];
 
+extern const char kContextMenuPerformanceInfoName[];
+extern const char kContextMenuPerformanceInfoDescription[];
+
 extern const char kContextualSearchDefinitionsName[];
 extern const char kContextualSearchDefinitionsDescription[];
 

@@ -4948,6 +4948,13 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPasswordChangeDescription, kOsAll,
      FEATURE_VALUE_TYPE(password_manager::features::kPasswordChange)},
 
+#if defined(OS_ANDROID)
+    {"context-menu-performance-info",
+     flag_descriptions::kContextMenuPerformanceInfoName,
+     flag_descriptions::kContextMenuPerformanceInfoDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kContextMenuPerformanceInfo)},
+#endif  // !defined(OS_ANDROID)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

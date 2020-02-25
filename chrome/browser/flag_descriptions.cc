@@ -2302,6 +2302,10 @@ const char kContextMenuCopyImageName[] = "Copy Image";
 const char kContextMenuCopyImageDescription[] =
     "Enable copying image to system clipboard via context menu.";
 
+const char kContextMenuPerformanceInfoName[] = "Context menu performance hints";
+const char kContextMenuPerformanceInfoDescription[] =
+    "Show link performance information in the context menu.";
+
 const char kContextualSearchDefinitionsName[] = "Contextual Search definitions";
 const char kContextualSearchDefinitionsDescription[] =
     "Enables touch-activated contextual definitions of words on a page to be "
