@@ -1902,6 +1902,9 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 # PLEASE DO NOT PUT ANYTHING INSIDE THIS SECTION!!
 # ======
 
+# -- Section 1
+# -- Section 1
+# -- Section 1
 crbug.com/1053725 [ Mac ] compositing/contents-opaque/control-layer.html [ Skip ]
 crbug.com/1053725 [ Mac ] compositing/gestures/gesture-tapHighlight-with-box-shadow.html [ Skip ]
 crbug.com/1053725 [ Mac ] compositing/overflow/do-not-paint-outline-into-composited-scrolling-contents.html [ Skip ]
@@ -2104,6 +2107,11 @@ crbug.com/1053725 [ Mac ] fast/css/rtl-ordering.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/css/text-overflow-ellipsis-button.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/css/text-overflow-input.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/css-grid-layout/preferred-width-computed-after-layout.html [ Skip ]
+
+# -- Section 2
+# -- Section 2
+# -- Section 2
+
 crbug.com/1053725 [ Mac ] fast/dom/52776.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/dom/focus-contenteditable.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/dom/HTMLMeterElement/meter-boundary-values.html [ Skip ]
@@ -2295,6 +2303,11 @@ crbug.com/1053725 [ Mac ] fast/forms/select/select-visual-hebrew.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/select/select-writing-direction-natural.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/select/selectlist-minsize.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/submit/submit-appearance-basic.html [ Skip ]
+
+# -- Section 3
+# -- Section 3
+# -- Section 3
+
 crbug.com/1053725 [ Mac ] fast/forms/suggestion-picker/date-suggestion-picker-appearance-rtl.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/suggestion-picker/date-suggestion-picker-appearance-with-scroll-bar.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/suggestion-picker/date-suggestion-picker-appearance.html [ Skip ]
@@ -2486,6 +2499,11 @@ crbug.com/1053725 [ Mac ] http/tests/devtools/editor/text-editor-goto-matching-b
 crbug.com/1053725 [ Mac ] http/tests/devtools/editor/text-editor-mark-clean.js [ Skip ]
 crbug.com/1053725 [ Mac ] http/tests/devtools/editor/text-editor-smart-braces.js [ Skip ]
 crbug.com/1053725 [ Mac ] http/tests/devtools/editor/text-editor-token-at-position.js [ Skip ]
+
+# -- Section 4
+# -- Section 4
+# -- Section 4
+
 crbug.com/1053725 [ Mac ] http/tests/devtools/elements/breadcrumb-updates.js [ Skip ]
 crbug.com/1053725 [ Mac ] http/tests/devtools/elements/dom-search-crash.js [ Skip ]
 crbug.com/1053725 [ Mac ] http/tests/devtools/elements/elements-child-node-count-mismatch.js [ Skip ]
@@ -2668,6 +2686,11 @@ crbug.com/1053725 [ Mac ] transforms/transformed-caret.html [ Skip ]
 crbug.com/1053725 [ Mac ] transforms/transformed-focused-text-input.html [ Skip ]
 crbug.com/1053725 [ Mac ] transforms/2d/zoom-menulist.html [ Skip ]
 crbug.com/1053725 [ Mac ] transforms/3d/general/perspective-non-layer.html [ Skip ]
+
+# -- Section 5
+# -- Section 5
+# -- Section 5
+
 crbug.com/1053725 [ Mac ] virtual/cascade/fast/forms/001.html [ Skip ]
 crbug.com/1053725 [ Mac ] virtual/cascade/fast/forms/button-style-color.html [ Skip ]
 crbug.com/1053725 [ Mac ] virtual/cascade/fast/forms/color/color-suggestion-picker-appearance.html [ Skip ]
