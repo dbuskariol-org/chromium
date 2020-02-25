@@ -846,10 +846,6 @@ const char kEnableWasmBaselineName[] = "WebAssembly baseline compiler";
 const char kEnableWasmBaselineDescription[] =
     "Enables WebAssembly baseline compilation and tier up.";
 
-const char kEnableWasmCodeCacheName[] = "WebAssembly compiled module cache";
-const char kEnableWasmCodeCacheDescription[] =
-    "Enables caching of compiled WebAssembly modules.";
-
 const char kEnableWasmCodeGCName[] = "WebAssembly code garbage collection";
 const char kEnableWasmCodeGCDescription[] =
     "Enables garbage collection of WebAssembly code.";

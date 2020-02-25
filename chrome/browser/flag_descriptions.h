@@ -496,9 +496,6 @@ extern const char kEnableWasmBaselineDescription[];
 extern const char kEnableWasmCodeGCName[];
 extern const char kEnableWasmCodeGCDescription[];
 
-extern const char kEnableWasmCodeCacheName[];
-extern const char kEnableWasmCodeCacheDescription[];
-
 extern const char kEnableWasmLazyCompilationName[];
 extern const char kEnableWasmLazyCompilationDescription[];
 
