@@ -701,15 +701,12 @@ void SVGElementResourceClient::ResourceContentChanged(
   if (!layout_object)
     return;
   if (layout_object->IsSVGResourceContainer()) {
-    ToLayoutSVGResourceContainer(layout_object)
-        ->RemoveAllClientsFromCache(invalidation_mask != 0);
+    ToLayoutSVGResourceContainer(layout_object)->RemoveAllClientsFromCache();
     return;
   }
 
-  if (invalidation_mask) {
-    LayoutSVGResourceContainer::MarkClientForInvalidation(*layout_object,
-                                                          invalidation_mask);
-  }
+  LayoutSVGResourceContainer::MarkClientForInvalidation(*layout_object,
+                                                        invalidation_mask);
 
   // Special case for filter invalidation.
   if (invalidation_mask & SVGResourceClient::kSkipAncestorInvalidation)
