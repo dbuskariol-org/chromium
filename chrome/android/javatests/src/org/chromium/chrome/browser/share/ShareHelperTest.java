@@ -120,7 +120,7 @@ public class ShareHelperTest {
         ShareHelper.generateUriFromData(
                 mActivityTestRule.getActivity(), TEST_IMAGE_DATA, imageCallback);
         imageCallback.waitForCallback(0, 1, WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        Clipboard.getInstance().setImage(imageCallback.getImageUri());
+        Clipboard.getInstance().setImageUri(imageCallback.getImageUri());
         return imageCallback.getImageUri();
     }
 
