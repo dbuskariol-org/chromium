@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMECAST_MEDIA_CMA_BASE_DECODER_BUFFER_BASE_H_
-#define CHROMECAST_MEDIA_CMA_BASE_DECODER_BUFFER_BASE_H_
+#ifndef CHROMECAST_MEDIA_API_DECODER_BUFFER_BASE_H_
+#define CHROMECAST_MEDIA_API_DECODER_BUFFER_BASE_H_
 
 #include <stdint.h>
 
@@ -17,8 +17,9 @@
 #include "chromecast/public/media/decrypt_context.h"
 
 namespace media {
+// TODO(qwp): remove this dependency
 class DecoderBuffer;
-}
+}  // namespace media
 
 namespace chromecast {
 namespace media {
@@ -56,11 +57,9 @@ class DecoderBufferBase : public CastDecoderBuffer,
   DISALLOW_COPY_AND_ASSIGN(DecoderBufferBase);
 };
 
-inline DecoderBufferBase::DecoderBufferBase() {
-}
+inline DecoderBufferBase::DecoderBufferBase() {}
 
-inline DecoderBufferBase::~DecoderBufferBase() {
-}
+inline DecoderBufferBase::~DecoderBufferBase() {}
 
 inline DecryptContext* DecoderBufferBase::decrypt_context() const {
   return decrypt_context_.get();
@@ -69,4 +68,4 @@ inline DecryptContext* DecoderBufferBase::decrypt_context() const {
 }  // namespace media
 }  // namespace chromecast
 
-#endif  // CHROMECAST_MEDIA_CMA_BASE_DECODER_BUFFER_BASE_H_
+#endif  // CHROMECAST_MEDIA_API_DECODER_BUFFER_BASE_H_

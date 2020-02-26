@@ -2,13 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMECAST_MEDIA_CMA_DECODER_CAST_AUDIO_DECODER_H_
-#define CHROMECAST_MEDIA_CMA_DECODER_CAST_AUDIO_DECODER_H_
+#ifndef CHROMECAST_MEDIA_API_CAST_AUDIO_DECODER_H_
+#define CHROMECAST_MEDIA_API_CAST_AUDIO_DECODER_H_
 
 #include <memory>
 
 #include "base/callback.h"
 #include "base/memory/ref_counted.h"
+#include "chromecast/media/api/decoder_buffer_base.h"
+#include "chromecast/public/media/decoder_config.h"
 
 namespace base {
 class SingleThreadTaskRunner;
@@ -16,8 +18,6 @@ class SingleThreadTaskRunner;
 
 namespace chromecast {
 namespace media {
-struct AudioConfig;
-class DecoderBufferBase;
 
 // Audio decoder interface.
 class CastAudioDecoder {
@@ -71,4 +71,4 @@ class CastAudioDecoder {
 }  // namespace media
 }  // namespace chromecast
 
-#endif  // CHROMECAST_MEDIA_CMA_DECODER_CAST_AUDIO_DECODER_H_
+#endif  // CHROMECAST_MEDIA_API_CAST_AUDIO_DECODER_H_
