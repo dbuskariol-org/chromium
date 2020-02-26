@@ -155,27 +155,22 @@ Polymer({
         this.updatesStatus_ = status;
         break;
       case SafetyCheckComponent.PASSWORDS:
-        this.passwordsStatus_ = status;
         this.passwordsCompromisedCount_ = event['passwordsCompromised'];
+        this.passwordsStatus_ = status;
         break;
       case SafetyCheckComponent.SAFE_BROWSING:
         this.safeBrowsingStatus_ = status;
         break;
       case SafetyCheckComponent.EXTENSIONS:
-        this.extensionsStatus_ = status;
         this.badExtensionsCount_ = event['badExtensions'];
+        this.extensionsStatus_ = status;
         break;
       default:
         assertNotReached();
     }
 
     // If all children elements received updates: update parent element.
-    if (this.updatesStatus_ != settings.SafetyCheckUpdatesStatus.CHECKING &&
-        this.passwordsStatus_ != settings.SafetyCheckPasswordsStatus.CHECKING &&
-        this.safeBrowsingStatus_ !=
-            settings.SafetyCheckSafeBrowsingStatus.CHECKING &&
-        this.extensionsStatus_ !=
-            settings.SafetyCheckExtensionsStatus.CHECKING) {
+    if (this.areAllChildrenStatesSet_()) {
       this.parentStatus_ = ParentStatus.AFTER;
     }
   },
@@ -184,7 +179,19 @@ Polymer({
    * @private
    * @return {boolean}
    */
-  showParentButton_: function() {
+  areAllChildrenStatesSet_: function() {
+    return this.updatesStatus_ != settings.SafetyCheckUpdatesStatus.CHECKING &&
+        this.passwordsStatus_ != settings.SafetyCheckPasswordsStatus.CHECKING &&
+        this.safeBrowsingStatus_ !=
+        settings.SafetyCheckSafeBrowsingStatus.CHECKING &&
+        this.extensionsStatus_ != settings.SafetyCheckExtensionsStatus.CHECKING;
+  },
+
+  /**
+   * @private
+   * @return {boolean}
+   */
+  shouldShowParentButton_: function() {
     return this.parentStatus_ == ParentStatus.BEFORE;
   },
 
@@ -192,7 +199,7 @@ Polymer({
    * @private
    * @return {boolean}
    */
-  showParentIconButton_: function() {
+  shouldShowParentIconButton_: function() {
     return this.parentStatus_ == ParentStatus.AFTER;
   },
 
@@ -254,11 +261,17 @@ Polymer({
       case ParentStatus.BEFORE:
       case ParentStatus.CHECKING:
         return 'icon-blue';
-      case ParentStatus.AFTER:
-        return '';
       default:
-        assertNotReached();
+        return '';
     }
+  },
+
+  /**
+   * @private
+   * @return {boolean}
+   */
+  shouldShowChildren_: function() {
+    return this.parentStatus_ != ParentStatus.BEFORE;
   },
 });
 })();
