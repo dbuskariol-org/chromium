@@ -295,6 +295,12 @@ const base::FeatureParam<std::string> kDnsOverHttpsTemplatesParam{
 const base::FeatureParam<bool> kDnsOverHttpsShowUiParam{&kDnsOverHttps,
                                                         "ShowUi", false};
 
+// Provides a mechanism to remove providers from the dropdown list in the
+// settings UI. Separate multiple provider ids with commas. See the
+// mapping in net/dns/dns_util.cc for provider ids.
+const base::FeatureParam<std::string> kDnsOverHttpsDisabledProvidersParam{
+    &kDnsOverHttps, "DisabledProviders", ""};
+
 #if defined(OS_ANDROID)
 // Enable changing default downloads storage location on Android.
 const base::Feature kDownloadsLocationChange{"DownloadsLocationChange",

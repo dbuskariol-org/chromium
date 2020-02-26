@@ -341,6 +341,9 @@
   <message name="IDS_SETTINGS_CLEAR" desc="Label used on a menu item or button to clear an item.">
     Clear
   </message>
+  <message name="IDS_SETTINGS_CUSTOM" desc="Label for a custom option in a dropdown menu.">
+    Custom
+  </message>
   <message name="IDS_SETTINGS_DELETE" desc="Label used on a menu item or button to delete an item.">
     Delete
   </message>
@@ -1871,7 +1874,13 @@
     Determines how to connect to websites over a secure connection
   </message>
   <message name="IDS_SETTINGS_AUTOMATIC_MODE_DESCRIPTION" desc="Text of the radio button that puts secure DNS in auto-upgrade mode">
-    When possible, with your current service provider
+    With your current service provider. Secure DNS may not be available all the time.
+  </message>
+  <message name="IDS_SETTINGS_SECURE_DROPDOWN_MODE_DESCRIPTION" desc="Text of the radio button that allows a secure resolver to be selected from a dropdown menu">
+    With
+  </message>
+  <message name="IDS_SETTINGS_SECURE_DROPDOWN_MODE_PRIVACY_POLICY" desc="Text that displays a link to the privacy policy of the resolver selected from a dropdown menu">
+    See this provider's <ph name="BEGIN_LINK">&lt;a target="_blank" href="$1<ex>https://google.com/</ex>"&gt;</ph>privacy policy<ph name="END_LINK">&lt;/a&gt;</ph>
   </message>
   <message name="IDS_SETTINGS_CONTENT_SETTINGS" desc="Text of the button that takes a user to settings page thats allows users to modify site settings. Also the title of that settings page.">
     Content settings
@@ -3153,9 +3162,6 @@
   </message>
   <message name="IDS_SETTINGS_VERY_LARGE_FONT" desc="The very large choice in the font size dropdown menu in settings.">
     Very large
-  </message>
-  <message name="IDS_SETTINGS_CUSTOM" desc="Label for the custom font size setting.">
-    Custom
   </message>
   <message name="IDS_SETTINGS_CUSTOMIZE_FONTS" desc="Label for the customize fonts button in settings.">
     Customize fonts
