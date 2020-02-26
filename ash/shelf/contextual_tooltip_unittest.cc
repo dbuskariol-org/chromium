@@ -114,6 +114,9 @@ TEST_P(ContextualTooltipTest, ShouldShowTimedDragHandleNudge) {
   clock()->Advance(contextual_tooltip::kMinInterval);
   EXPECT_FALSE(contextual_tooltip::ShouldShowNudge(GetPrefService(),
                                                    TooltipType::kDragHandle));
+  EXPECT_EQ(contextual_tooltip::GetNudgeTimeout(GetPrefService(),
+                                                TooltipType::kDragHandle),
+            contextual_tooltip::kNudgeShowDuration);
 }
 
 // Tests that if the user has successfully performed the gesture for at least
