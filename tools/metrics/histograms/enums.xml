@@ -22441,6 +22441,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="10" label="Delegated permissions prompt"/>
   <int value="11" label="Delegated bundle permissions prompt (deprecated)"/>
   <int value="12" label="Webstore widget prompt"/>
+  <int value="13" label="Extension request prompt"/>
+  <int value="14" label="Extension pending request prompt"/>
 </enum>
 
 <enum name="ExtensionInstallVerifierGetSignatureResult">
