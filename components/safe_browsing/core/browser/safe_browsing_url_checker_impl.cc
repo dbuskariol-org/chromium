@@ -8,6 +8,7 @@
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/metrics/histogram_macros_local.h"
+#include "base/strings/string_util.h"
 #include "base/task/post_task.h"
 #include "base/trace_event/trace_event.h"
 #include "components/safe_browsing/content/web_ui/safe_browsing_ui.h"
@@ -389,6 +390,10 @@ bool SafeBrowsingUrlCheckerImpl::CanPerformFullURLLookup(const GURL& url) {
 
   if (!RealTimePolicyEngine::CanPerformFullURLLookupForResourceType(
           resource_type_))
+    return false;
+
+  if (base::EndsWith(url.path_piece(), ".pdf",
+                         base::CompareCase::INSENSITIVE_ASCII))
     return false;
 
   auto* rt_lookup_service = database_manager_->GetRealTimeUrlLookupService();
