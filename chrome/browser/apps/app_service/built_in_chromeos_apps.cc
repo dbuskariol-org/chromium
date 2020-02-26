@@ -243,7 +243,8 @@ void BuiltInChromeOsApps::OpenNativeSettings(const std::string& app_id) {
 void BuiltInChromeOsApps::OnPreferredAppSet(
     const std::string& app_id,
     apps::mojom::IntentFilterPtr intent_filter,
-    apps::mojom::IntentPtr intent) {
+    apps::mojom::IntentPtr intent,
+    apps::mojom::ReplacedAppPreferencesPtr replaced_app_preferences) {
   NOTIMPLEMENTED();
 }
 

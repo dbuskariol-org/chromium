@@ -108,7 +108,9 @@ class FakePublisher : public apps::mojom::Publisher {
 
   void OnPreferredAppSet(const std::string& app_id,
                          apps::mojom::IntentFilterPtr intent_filter,
-                         apps::mojom::IntentPtr intent) override {}
+                         apps::mojom::IntentPtr intent,
+                         apps::mojom::ReplacedAppPreferencesPtr
+                             replaced_app_preferences) override {}
 
   void CallOnApps(apps::mojom::Subscriber* subscriber,
                   std::vector<std::string>& app_ids,

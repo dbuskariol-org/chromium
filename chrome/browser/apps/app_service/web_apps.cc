@@ -413,9 +413,11 @@ void WebApps::OpenNativeSettings(const std::string& app_id) {
   chrome::ShowSiteSettings(profile_, web_app->launch_url());
 }
 
-void WebApps::OnPreferredAppSet(const std::string& app_id,
-                                apps::mojom::IntentFilterPtr intent_filter,
-                                apps::mojom::IntentPtr intent) {
+void WebApps::OnPreferredAppSet(
+    const std::string& app_id,
+    apps::mojom::IntentFilterPtr intent_filter,
+    apps::mojom::IntentPtr intent,
+    apps::mojom::ReplacedAppPreferencesPtr replaced_app_preferences) {
   NOTIMPLEMENTED();
 }
 

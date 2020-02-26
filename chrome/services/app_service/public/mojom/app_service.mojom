@@ -179,13 +179,15 @@ interface Publisher {
       string app_id);
 
   // Indicates that the app identified by |app_id| has been set as a preferred
-  // app for |intent_fitler|. This method is used by the App Service to sync
-  // the change to publishers. |intent| is needed to set the preferred app
-  // in ARC.
+  // app for |intent_filter|, and the |replaced_app_preferences| is the apps
+  // that are no longer preferred apps for their corresponding |intent_filters|.
+  // This method is used by the App Service to sync the change to publishers.
+  // |intent| is needed to set the preferred app in ARC.
   OnPreferredAppSet(
       string app_id,
       IntentFilter intent_filter,
-      Intent intent);
+      Intent intent,
+      ReplacedAppPreferences replaced_app_preferences);
 };
 
 interface Subscriber {

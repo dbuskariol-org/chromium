@@ -252,9 +252,11 @@ void CrostiniApps::OpenNativeSettings(const std::string& app_id) {
   NOTIMPLEMENTED();
 }
 
-void CrostiniApps::OnPreferredAppSet(const std::string& app_id,
-                                     apps::mojom::IntentFilterPtr intent_filter,
-                                     apps::mojom::IntentPtr intent) {
+void CrostiniApps::OnPreferredAppSet(
+    const std::string& app_id,
+    apps::mojom::IntentFilterPtr intent_filter,
+    apps::mojom::IntentPtr intent,
+    apps::mojom::ReplacedAppPreferencesPtr replaced_app_preferences) {
   NOTIMPLEMENTED();
 }
 
