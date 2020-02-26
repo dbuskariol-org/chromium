@@ -425,6 +425,9 @@ void LayoutThemeMac::SystemFont(CSSValueID system_font_id,
 
 Color LayoutThemeMac::SystemColor(CSSValueID css_value_id,
                                   WebColorScheme color_scheme) const {
+  if (!Platform::Current()->GetSandboxSupport())
+    return LayoutTheme::SystemColor(css_value_id, color_scheme);
+
   switch (css_value_id) {
     case CSSValueID::kActiveborder:
       return GetSystemColor(MacSystemColorID::kKeyboardFocusIndicator,
@@ -1074,7 +1077,8 @@ scoped_refptr<LayoutTheme> LayoutThemeMac::Create() {
 }
 
 bool LayoutThemeMac::UsesTestModeFocusRingColor() const {
-  return WebTestSupport::IsRunningWebTest();
+  return WebTestSupport::IsRunningWebTest() ||
+         !Platform::Current()->GetSandboxSupport();
 }
 
 NSView* LayoutThemeMac::DocumentView() const {
