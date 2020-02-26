@@ -448,8 +448,17 @@
   <message name="IDS_SETTINGS_CHECK_PASSWORDS" desc="Name for the check passwords subsection and settings entry used to perform a password bulk check.">
     Check passwords
   </message>
+  <message name="IDS_SETTINGS_CHECKED_PASSWORDS" desc="Title above amount of found compromised passwords after password bulk check.">
+    Checked passwords
+  </message>
   <message name="IDS_SETTINGS_CHECK_PASSWORDS_DESCRIPTION" desc="Explanation of the passwords bulk check feature found within the password settings.">
     Keep your passwords safe from data breaches and other security issues
+  </message>
+  <message name="IDS_SETTINGS_LEAKED_PASSWORDS_COUNT" desc="Number of compromised passwords found during bulk check.">
+    <ph name="COUNT">$1<ex>5</ex></ph> compromised passwords
+  </message>
+  <message name="IDS_SETTINGS_CHECK_PASSWORDS_AGAIN" desc="Button to start bulk password check manually in passwords check section.">
+    Check again
   </message>
   <message name="IDS_SETTINGS_PASSWORDS_SAVE_PASSWORDS_TOGGLE_LABEL" desc="Label for a toggle that allows users to be prompted if they want to save their passwords when logging into webpages.">
     Offer to save passwords
