@@ -285,4 +285,8 @@ void BoundsAnimator::OnChildViewRemoved(views::View* observed_view,
   AnimationCanceled(iter->second.animation.get());
 }
 
+base::TimeDelta BoundsAnimator::GetAnimationDurationForReporting() const {
+  return GetAnimationDuration();
+}
+
 }  // namespace views

@@ -158,6 +158,7 @@ class VIEWS_EXPORT BoundsAnimator : public AnimationDelegateViews {
   void AnimationContainerEmpty(gfx::AnimationContainer* container) override;
   void OnChildViewRemoved(views::View* observed_view,
                           views::View* child) override;
+  base::TimeDelta GetAnimationDurationForReporting() const override;
 
   // Parent of all views being animated.
   View* parent_;
