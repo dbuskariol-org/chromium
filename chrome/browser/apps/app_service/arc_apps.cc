@@ -21,7 +21,6 @@
 #include "chrome/browser/apps/app_service/menu_util.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ui/app_list/arc/arc_app_dialog.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_icon.h"
 #include "chrome/browser/ui/app_list/arc/arc_app_utils.h"
 #include "chrome/common/chrome_features.h"
@@ -587,13 +586,6 @@ void ArcApps::SetPermission(const std::string& app_id,
                                              permission_type);
     }
   }
-}
-
-void ArcApps::PromptUninstall(const std::string& app_id) {
-  if (!profile_) {
-    return;
-  }
-  arc::ShowArcAppUninstallDialog(profile_, nullptr /* controller */, app_id);
 }
 
 void ArcApps::Uninstall(const std::string& app_id,

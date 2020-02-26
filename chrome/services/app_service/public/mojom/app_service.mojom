@@ -54,12 +54,6 @@ interface AppService {
       string app_id,
       Permission permission);
 
-  // Uninstall which invokes a specific dialog per app type. When the unified
-  // uninstall dialog is done, this interface will be removed.
-  PromptUninstall(
-      AppType app_type,
-      string app_id);
-
   // Directly uninstalls |app_id| without prompting the user.
   // |clear_site_data| is available for bookmark apps only. If true, any site
   // data associated with the app will be removed..
@@ -144,11 +138,6 @@ interface Publisher {
   SetPermission(
       string app_id,
       Permission permission);
-
-  // Uninstall which invokes a specific dialog per app type. When the unified
-  // uninstall dialog is done, this interface will be removed.
-  PromptUninstall(
-      string app_id);
 
   // Directly uninstalls |app_id| without prompting the user.
   // |clear_site_data| is available for bookmark apps only. If true, any site

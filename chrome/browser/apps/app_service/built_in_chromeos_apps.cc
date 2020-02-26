@@ -191,12 +191,6 @@ void BuiltInChromeOsApps::SetPermission(const std::string& app_id,
   NOTIMPLEMENTED();
 }
 
-void BuiltInChromeOsApps::PromptUninstall(const std::string& app_id) {
-  constexpr bool kClearSiteData = false;
-  constexpr bool kReportAbuse = false;
-  Uninstall(app_id, kClearSiteData, kReportAbuse);
-}
-
 void BuiltInChromeOsApps::Uninstall(const std::string& app_id,
                                     bool clear_site_data,
                                     bool report_abuse) {

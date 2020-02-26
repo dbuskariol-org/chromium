@@ -87,7 +87,6 @@ class ArcApps : public KeyedService,
                            int64_t display_id) override;
   void SetPermission(const std::string& app_id,
                      apps::mojom::PermissionPtr permission) override;
-  void PromptUninstall(const std::string& app_id) override;
   void Uninstall(const std::string& app_id,
                  bool clear_site_data,
                  bool report_abuse) override;
