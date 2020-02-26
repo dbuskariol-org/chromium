@@ -3795,28 +3795,6 @@
             ]
         }
     ],
-    "PauseBrowserInitiatedHeavyTrafficForP2P": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled_20190712",
-                    "params": {
-                        "throttled_traffic_annotation_tags": "727528,727478"
-                    },
-                    "enable_features": [
-                        "PauseBrowserInitiatedHeavyTrafficForP2P"
-                    ]
-                }
-            ]
-        }
-    ],
     "PaymentRequestAlwaysAllowJustInTimePaymentApp": [
         {
             "platforms": [
