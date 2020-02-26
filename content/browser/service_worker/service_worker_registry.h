@@ -60,7 +60,8 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   using GetUserDataForAllRegistrationsCallback = base::OnceCallback<void(
       const std::vector<std::pair<int64_t, std::string>>& user_data,
       blink::ServiceWorkerStatusCode status)>;
-  using StatusCallback = ServiceWorkerStorage::StatusCallback;
+  using StatusCallback =
+      base::OnceCallback<void(blink::ServiceWorkerStatusCode status)>;
 
   ServiceWorkerRegistry(
       const base::FilePath& user_data_directory,
@@ -269,24 +270,24 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   void DidGetRegistrationsForOrigin(
       GetRegistrationsCallback callback,
       const GURL& origin_filter,
-      blink::ServiceWorkerStatusCode status,
+      ServiceWorkerDatabase::Status database_status,
       std::unique_ptr<RegistrationList> registration_data_list,
       std::unique_ptr<std::vector<ResourceList>> resources_list);
   void DidGetAllRegistrations(
       GetRegistrationsInfosCallback callback,
-      blink::ServiceWorkerStatusCode status,
+      ServiceWorkerDatabase::Status database_status,
       std::unique_ptr<RegistrationList> registration_data_list);
 
   void DidStoreRegistration(
       const ServiceWorkerDatabase::RegistrationData& data,
       StatusCallback callback,
-      blink::ServiceWorkerStatusCode status,
+      ServiceWorkerDatabase::Status database_status,
       int64_t deleted_version_id,
       const std::vector<int64_t>& newly_purgeable_resources);
   void DidDeleteRegistration(
       int64_t registration_id,
       StatusCallback callback,
-      blink::ServiceWorkerStatusCode status,
+      ServiceWorkerDatabase::Status database_status,
       int64_t deleted_version_id,
       const std::vector<int64_t>& newly_purgeable_resources);
 
