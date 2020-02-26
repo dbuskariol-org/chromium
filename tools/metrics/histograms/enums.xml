@@ -54586,6 +54586,11 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="4" label="kJSONIsNotList"/>
 </enum>
 
+<enum name="ReaderModeEntryPoint">
+  <int value="0" label="Omnibox icon"/>
+  <int value="1" label="Menu option"/>
+</enum>
+
 <enum name="ReadingListContextMenuActions">
   <int value="0" label="New Tab"/>
   <int value="1" label="New Incognito Tab"/>
