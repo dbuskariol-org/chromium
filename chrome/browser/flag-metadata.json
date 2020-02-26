@@ -61,7 +61,7 @@
   {
     "name": "allow-insecure-localhost",
     "owners": [ "security-dev" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 87
   },
   {
     "name": "allow-popups-during-page-unload",
