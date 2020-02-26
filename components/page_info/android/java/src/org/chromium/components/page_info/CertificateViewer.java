@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.page_info;
+package org.chromium.components.page_info;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.http.SslCertificate;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -22,8 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.chromium.base.ApiCompatibilityUtils;
+import org.chromium.base.Log;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
 
 import java.io.ByteArrayInputStream;
 import java.security.MessageDigest;
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * UI component for displaying certificate information.
  */
-class CertificateViewer implements OnItemSelectedListener {
+public class CertificateViewer implements OnItemSelectedListener {
     private static final String X_509 = "X.509";
     private static final int SUBJECTALTERNATIVENAME_DNSNAME_ID = 2;
     private static final int SUBJECTALTERNATIVENAME_IPADDRESS_ID = 7;
@@ -77,9 +76,8 @@ class CertificateViewer implements OnItemSelectedListener {
             addCertificate(derData[i]);
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext,
-                android.R.layout.simple_spinner_item,
-                mTitles) {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                mContext, android.R.layout.simple_spinner_item, mTitles) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView view = (TextView) super.getView(position, convertView, parent);
@@ -136,8 +134,8 @@ class CertificateViewer implements OnItemSelectedListener {
             if (mCertificateFactory == null) {
                 mCertificateFactory = CertificateFactory.getInstance(X_509);
             }
-            Certificate cert = mCertificateFactory.generateCertificate(
-                    new ByteArrayInputStream(derData));
+            Certificate cert =
+                    mCertificateFactory.generateCertificate(new ByteArrayInputStream(derData));
             addCertificateDetails(cert, getDigest(derData, "SHA-256"), getDigest(derData, "SHA-1"));
         } catch (CertificateException e) {
             Log.e("CertViewer", "Error parsing certificate" + e.toString());
@@ -212,8 +210,7 @@ class CertificateViewer implements OnItemSelectedListener {
         t.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         t.setPadding(mPadding, mPadding / 2, mPadding, 0);
         t.setText(label);
-        ApiCompatibilityUtils.setTextAppearance(
-                t, R.style.TextAppearance_TextMediumThick_Primary);
+        ApiCompatibilityUtils.setTextAppearance(t, R.style.TextAppearance_TextMediumThick_Primary);
         certificateView.addView(t);
         return t;
     }
@@ -276,14 +273,12 @@ class CertificateViewer implements OnItemSelectedListener {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         for (int i = 0; i < mViews.size(); ++i) {
-            mViews.get(i).setVisibility(
-                    i == position ? LinearLayout.VISIBLE : LinearLayout.GONE);
+            mViews.get(i).setVisibility(i == position ? LinearLayout.VISIBLE : LinearLayout.GONE);
         }
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     @NativeMethods
     interface Natives {

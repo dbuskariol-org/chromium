@@ -4,22 +4,13 @@
 
 #include "base/android/jni_string.h"
 #include "base/logging.h"
-#include "chrome/android/chrome_jni_headers/CertificateViewer_jni.h"
-#include "chrome/browser/certificate_viewer.h"
-#include "chrome/grit/generated_resources.h"
-#include "net/cert/x509_certificate.h"
+#include "components/page_info/android/jni_headers/CertificateViewer_jni.h"
+#include "components/strings/grit/components_strings.h"
 #include "ui/base/l10n/l10n_util.h"
 
 using base::android::ConvertUTF8ToJavaString;
 using base::android::JavaParamRef;
 using base::android::ScopedJavaLocalRef;
-
-void ShowCertificateViewer(content::WebContents* web_contents,
-                           gfx::NativeWindow parent,
-                           net::X509Certificate* cert) {
-  // For Android, showing the certificate is always handled in Java.
-  NOTREACHED();
-}
 
 static ScopedJavaLocalRef<jstring> JNI_CertificateViewer_GetCertIssuedToText(
     JNIEnv* env) {
