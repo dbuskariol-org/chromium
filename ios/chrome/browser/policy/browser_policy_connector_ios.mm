@@ -39,6 +39,12 @@ BrowserPolicyConnectorIOS::BrowserPolicyConnectorIOS(
 
 BrowserPolicyConnectorIOS::~BrowserPolicyConnectorIOS() {}
 
+ConfigurationPolicyProvider* BrowserPolicyConnectorIOS::GetPlatformProvider() {
+  ConfigurationPolicyProvider* provider =
+      BrowserPolicyConnectorBase::GetPolicyProviderForTesting();
+  return provider ? provider : platform_provider_;
+}
+
 void BrowserPolicyConnectorIOS::Init(
     PrefService* local_state,
     scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory) {
@@ -76,10 +82,4 @@ BrowserPolicyConnectorIOS::CreatePlatformProvider() {
 
   return std::make_unique<AsyncPolicyProvider>(GetSchemaRegistry(),
                                                std::move(loader));
-}
-
-ConfigurationPolicyProvider* BrowserPolicyConnectorIOS::GetPlatformProvider() {
-  ConfigurationPolicyProvider* provider =
-      BrowserPolicyConnectorBase::GetPolicyProviderForTesting();
-  return provider ? provider : platform_provider_;
 }

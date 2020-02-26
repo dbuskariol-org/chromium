@@ -271,6 +271,12 @@ PrefProxyConfigTracker* TestChromeBrowserState::GetProxyConfigTracker() {
   return nullptr;
 }
 
+BrowserStatePolicyConnector* TestChromeBrowserState::GetPolicyConnector() {
+  // TODO(crbug.com/1055318): Determine what level of support is needed for
+  // unittesting and return a mock or fake here.
+  return nullptr;
+}
+
 PrefService* TestChromeBrowserState::GetPrefs() {
   return prefs_.get();
 }

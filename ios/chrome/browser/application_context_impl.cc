@@ -417,9 +417,14 @@ void ApplicationContextImpl::CreateLocalState() {
   // Register local state preferences.
   RegisterLocalStatePrefs(pref_registry.get());
 
-  local_state_ =
-      ::CreateLocalState(local_state_path, local_state_task_runner_.get(),
-                         pref_registry, GetBrowserPolicyConnector());
+  policy::BrowserPolicyConnector* browser_policy_connector =
+      GetBrowserPolicyConnector();
+  policy::PolicyService* policy_service =
+      browser_policy_connector ? browser_policy_connector->GetPolicyService()
+                               : nullptr;
+  local_state_ = ::CreateLocalState(
+      local_state_path, local_state_task_runner_.get(), pref_registry,
+      policy_service, browser_policy_connector);
   DCHECK(local_state_);
 
   sessions::SessionIdGenerator::GetInstance()->Init(local_state_.get());
