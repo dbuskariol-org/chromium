@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/common/highlight_button.h"
+#import "ios/chrome/common/ui/elements/highlight_button.h"
 
 #import "ios/chrome/common/material_timing.h"
 
