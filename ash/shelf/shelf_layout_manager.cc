@@ -530,6 +530,12 @@ void ShelfLayoutManager::UpdateVisibilityState() {
   SendA11yAlertForFullscreenWorkspaceState(window_state);
 }
 
+void ShelfLayoutManager::UpdateVisibilityStateForBackGesture() {
+  base::AutoReset<bool> back_gesture(&state_forced_by_back_gesture_, true);
+  SetState(SHELF_VISIBLE);
+  LayoutShelf(/*animate=*/true);
+}
+
 void ShelfLayoutManager::UpdateAutoHideState() {
   ShelfAutoHideState auto_hide_state =
       CalculateAutoHideState(state_.visibility_state);
@@ -1281,6 +1287,9 @@ HotseatState ShelfLayoutManager::CalculateHotseatState(
             return HotseatState::kHidden;
 
           if (in_overview)
+            return HotseatState::kExtended;
+
+          if (state_forced_by_back_gesture_)
             return HotseatState::kExtended;
 
           if (visibility_state == SHELF_AUTO_HIDE) {

@@ -122,6 +122,9 @@ class ASH_EXPORT ShelfLayoutManager
   // Updates the visibility state.
   void UpdateVisibilityState();
 
+  // Shows the shelf and hotseat for the back gesture.
+  void UpdateVisibilityStateForBackGesture();
+
   // Invoked by the shelf when the auto-hide state may have changed.
   void UpdateAutoHideState();
 
@@ -639,6 +642,10 @@ class ASH_EXPORT ShelfLayoutManager
 
   // Tracks whether the shelf is currently dimmed for inactivity.
   bool dimmed_for_inactivity_ = false;
+
+  // Tracks whether the shelf and hotseat have been asked to be shown and
+  // extended by the back gesture.
+  bool state_forced_by_back_gesture_ = false;
 
   // Callback to update the shelf's state when the visibility of system tray
   // changes.
