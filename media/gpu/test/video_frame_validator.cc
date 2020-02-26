@@ -57,11 +57,12 @@ std::unique_ptr<VideoFrameValidator> VideoFrameValidator::Create(
 }
 
 std::unique_ptr<VideoFrameValidator> VideoFrameValidator::Create(
-    const std::vector<scoped_refptr<const VideoFrame>> model_frames,
+    GetModelFrameCB get_model_frame_cb,
     const uint8_t tolerance,
     std::unique_ptr<VideoFrameProcessor> corrupt_frame_processor) {
-  auto video_frame_validator = base::WrapUnique(new VideoFrameValidator(
-      std::move(model_frames), tolerance, std::move(corrupt_frame_processor)));
+  auto video_frame_validator = base::WrapUnique(
+      new VideoFrameValidator(std::move(get_model_frame_cb), tolerance,
+                              std::move(corrupt_frame_processor)));
   if (!video_frame_validator->Initialize()) {
     LOG(ERROR) << "Failed to initialize VideoFrameValidator.";
     return nullptr;
@@ -86,11 +87,11 @@ VideoFrameValidator::VideoFrameValidator(
 }
 
 VideoFrameValidator::VideoFrameValidator(
-    const std::vector<scoped_refptr<const VideoFrame>> model_frames,
+    GetModelFrameCB get_model_frame_cb,
     const uint8_t tolerance,
     std::unique_ptr<VideoFrameProcessor> corrupt_frame_processor)
     : validate_mode_(ValidateMode::RAW),
-      model_frames_(std::move(model_frames)),
+      get_model_frame_cb_(get_model_frame_cb),
       tolerance_(tolerance),
       corrupt_frame_processor_(std::move(corrupt_frame_processor)),
       num_frames_validating_(0),
@@ -139,15 +140,21 @@ void VideoFrameValidator::ProcessVideoFrame(
     return;
   }
 
+  scoped_refptr<const VideoFrame> model_frame;
+  if (validate_mode_ != ValidateMode::MD5) {
+    model_frame = get_model_frame_cb_.Run(frame_index);
+    ASSERT_TRUE(model_frame);
+  }
+
   base::AutoLock auto_lock(frame_validator_lock_);
   num_frames_validating_++;
 
   // Unretained is safe here, as we should not destroy the validator while there
   // are still frames being validated.
   frame_validator_thread_.task_runner()->PostTask(
-      FROM_HERE,
-      base::BindOnce(&VideoFrameValidator::ProcessVideoFrameTask,
-                     base::Unretained(this), video_frame, frame_index));
+      FROM_HERE, base::BindOnce(&VideoFrameValidator::ProcessVideoFrameTask,
+                                base::Unretained(this), video_frame,
+                                model_frame, frame_index));
 }
 
 bool VideoFrameValidator::WaitUntilDone() {
@@ -168,6 +175,7 @@ bool VideoFrameValidator::WaitUntilDone() {
 
 void VideoFrameValidator::ProcessVideoFrameTask(
     const scoped_refptr<const VideoFrame> video_frame,
+    const scoped_refptr<const VideoFrame> model_frame,
     size_t frame_index) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(validator_thread_sequence_checker_);
 
@@ -208,7 +216,9 @@ void VideoFrameValidator::ProcessVideoFrameTask(
       break;
     }
     case ValidateMode::RAW:
-      mismatched_info = ValidateRaw(*validated_frame, frame_index);
+      ASSERT_TRUE(model_frame);
+      mismatched_info =
+          ValidateRaw(*validated_frame, *model_frame, frame_index);
       break;
   }
 
@@ -254,15 +264,12 @@ VideoFrameValidator::ValidateMD5(const VideoFrame& validated_frame,
 
 base::Optional<VideoFrameValidator::MismatchedFrameInfo>
 VideoFrameValidator::ValidateRaw(const VideoFrame& validated_frame,
+                                 const VideoFrame& model_frame,
                                  size_t frame_index) {
-  if (model_frames_.size() > 0) {
-    LOG_IF(FATAL, frame_index >= model_frames_.size())
-        << "Frame number is over than the number of given frames.";
-    size_t diff_cnt = CompareFramesWithErrorDiff(
-        validated_frame, *model_frames_[frame_index], tolerance_);
-    if (diff_cnt > 0)
-      return MismatchedFrameInfo{frame_index, diff_cnt};
-  }
+  size_t diff_cnt =
+      CompareFramesWithErrorDiff(validated_frame, model_frame, tolerance_);
+  if (diff_cnt > 0)
+    return MismatchedFrameInfo{frame_index, diff_cnt};
   return base::nullopt;
 }
 }  // namespace test
