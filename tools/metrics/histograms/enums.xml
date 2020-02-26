@@ -13487,6 +13487,9 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
 </enum>
 
 <enum name="CustomTabsDynamicModuleDestructionReason">
+  <obsolete>
+    Removed in February 2020
+  </obsolete>
   <int value="0" label="No caching enabled and the module is unused"/>
   <int value="1" label="Cached and severe memory pressure"/>
   <int value="2" label="Cached and mild memory pressure and time exceeded"/>
@@ -13495,6 +13498,9 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
 </enum>
 
 <enum name="CustomTabsDynamicModuleLoadResult">
+  <obsolete>
+    Removed in February 2020
+  </obsolete>
   <int value="0" label="Loaded new instance successfully"/>
   <int value="1" label="Used cached instance"/>
   <int value="2" label="Not loaded because the feature is disabled"/>
