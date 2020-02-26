@@ -24,11 +24,13 @@ import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.incognito.IncognitoUtils;
 import org.chromium.chrome.browser.tab.TabFeatureUtilities;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
+import org.chromium.chrome.browser.tasks.tab_management.TabUiFeatureUtilities;
 import org.chromium.chrome.browser.toolbar.IncognitoStateProvider;
 import org.chromium.chrome.browser.toolbar.IncognitoToggleTabLayout;
 import org.chromium.chrome.browser.toolbar.MenuButton;
 import org.chromium.chrome.browser.toolbar.NewTabButton;
 import org.chromium.chrome.browser.toolbar.TabCountProvider;
+import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarConfiguration;
 import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarVariationManager;
 import org.chromium.chrome.browser.ui.appmenu.AppMenuButtonHelper;
 import org.chromium.components.browser_ui.styles.ChromeColors;
@@ -136,7 +138,7 @@ public class TabSwitcherModeTTPhone extends OptimizedFrameLayout
         // TODO(twellington): Handle interrupted animations to avoid jumps to 1.0 or 0.f.
         setAlpha(inTabSwitcherMode ? 0.0f : 1.0f);
 
-        boolean showZoomingAnimation = CachedFeatureFlags.isGridTabSwitcherEnabled()
+        boolean showZoomingAnimation = TabUiFeatureUtilities.isGridTabSwitcherEnabled()
                 && TabFeatureUtilities.isTabToGtsAnimationEnabled();
         long duration = showZoomingAnimation
                 ? TopToolbarCoordinator.TAB_SWITCHER_MODE_GTS_ANIMATION_DURATION_MS
@@ -284,7 +286,7 @@ public class TabSwitcherModeTTPhone extends OptimizedFrameLayout
      */
     void onBottomToolbarVisibilityChanged(boolean isVisible) {
         mShouldShowNewTabButton = !isVisible
-                || (CachedFeatureFlags.isBottomToolbarEnabled()
+                || (BottomToolbarConfiguration.isBottomToolbarEnabled()
                         && !BottomToolbarVariationManager.isNewTabButtonOnBottom());
         setNewTabButtonVisibility(mShouldShowNewTabButton);
         // show tab switcher button on the top in landscape mode.
@@ -354,7 +356,7 @@ public class TabSwitcherModeTTPhone extends OptimizedFrameLayout
     private int getToolbarColorForCurrentState() {
         // TODO(huayinz): Split tab switcher background color from primary background color.
         if (DeviceClassManager.enableAccessibilityLayout()
-                || CachedFeatureFlags.isGridTabSwitcherEnabled()) {
+                || TabUiFeatureUtilities.isGridTabSwitcherEnabled()) {
             return ChromeColors.getPrimaryBackgroundColor(getResources(), mIsIncognito);
         }
 
@@ -410,7 +412,7 @@ public class TabSwitcherModeTTPhone extends OptimizedFrameLayout
      *         and incognito status.
      */
     private boolean shouldShowIncognitoToggle() {
-        return (usingHorizontalTabSwitcher() || CachedFeatureFlags.isGridTabSwitcherEnabled())
+        return (usingHorizontalTabSwitcher() || TabUiFeatureUtilities.isGridTabSwitcherEnabled())
                 && IncognitoUtils.isIncognitoModeEnabled();
     }
 }
