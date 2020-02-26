@@ -6044,7 +6044,7 @@ mojom::blink::PermissionService* Document::GetPermissionService(
   if (!permission_service_) {
     execution_context->GetBrowserInterfaceBroker().GetInterface(
         permission_service_.BindNewPipeAndPassReceiver(
-            execution_context->GetTaskRunner(TaskType::kMiscPlatformAPI)));
+            execution_context->GetTaskRunner(TaskType::kPermission)));
     permission_service_.set_disconnect_handler(WTF::Bind(
         &Document::PermissionServiceConnectionError, WrapWeakPersistent(this)));
   }
