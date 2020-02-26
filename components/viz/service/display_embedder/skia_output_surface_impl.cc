@@ -440,6 +440,8 @@ SkiaOutputSurfaceImpl::CreateImageContext(
 void SkiaOutputSurfaceImpl::SwapBuffers(OutputSurfaceFrame frame) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   DCHECK(!current_paint_);
+  DCHECK_EQ(!frame.sub_buffer_rect || !frame.sub_buffer_rect->IsEmpty(),
+            current_buffer_modified_);
 
   has_set_draw_rectangle_for_frame_ = false;
 
@@ -460,9 +462,8 @@ void SkiaOutputSurfaceImpl::SwapBuffers(OutputSurfaceFrame frame) {
     // change the current buffer index to the next buffer in the queue.
     if (++current_buffer_ == damage_of_buffers_.size())
       current_buffer_ = 0u;
-    current_buffer_modified_ = false;
   }
-
+  current_buffer_modified_ = false;
   // impl_on_gpu_ is released on the GPU thread by a posted task from
   // SkiaOutputSurfaceImpl::dtor. So it is safe to use base::Unretained.
   auto callback =
@@ -726,12 +727,8 @@ bool SkiaOutputSurfaceImpl::Initialize() {
   ScheduleGpuTask(std::move(callback), {});
   event.Wait();
 
-  if (capabilities_.preserve_buffer_content) {
-    // If buffer content is preserved after presenting, SkiaOutputSurfaceImpl
-    // can simulate partial swap with regular SwapBuffers(). It is because we
-    // track damaged area for every buffer and ask SkiaRenderer to redraw the
-    // damaged area to make sure the whole buffer is validated.
-    capabilities_.supports_post_sub_buffer = true;
+  if (capabilities_.preserve_buffer_content &&
+      capabilities_.supports_post_sub_buffer) {
     capabilities_.only_invalidates_damage_rect = false;
     damage_of_buffers_.resize(capabilities_.max_frames_pending + 1);
   }

@@ -1026,11 +1026,7 @@ void SkiaOutputSurfaceImplOnGpu::SwapBuffers(
       output_device_->CommitOverlayPlanes(buffer_presented_callback_,
                                           std::move(frame.latency_info));
     } else {
-      // Full swap can only be used to simulate PostSubBuffer(), if the buffer
-      // content is preserved after presenting.
-      DCHECK(capabilities().preserve_buffer_content);
-      output_device_->SwapBuffers(buffer_presented_callback_,
-                                  std::move(frame.latency_info));
+      NOTREACHED();
     }
   } else {
     output_device_->SwapBuffers(buffer_presented_callback_,
