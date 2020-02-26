@@ -2595,6 +2595,21 @@
             ]
         }
     ],
+    "IOSReloadSadTab": [
+        {
+            "platforms": [
+                "ios"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "ReloadSadTab"
+                    ]
+                }
+            ]
+        }
+    ],
     "IOSSSLCommittedInterstitials": [
         {
             "platforms": [
