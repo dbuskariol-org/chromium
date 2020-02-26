@@ -943,52 +943,6 @@
     </message>
   </if>
 
-  <!-- Kerberos tickets -->
-  <if expr="chromeos">
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_SUBMENU_LABEL" desc="Label of 'Kerberos tickets' submenu in Settings page.">
-      Kerberos tickets
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_PAGE_TITLE" desc="Title of 'Kerberos tickets' Settings page.">
-      Kerberos tickets
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_DESCRIPTION" desc="Description of the 'Kerberos tickets' Settings page. Shown just below the title of the page.">
-      Choose a ticket to use for authentication. <ph name="LINK_BEGIN">&lt;a target="_blank" href="$1<ex>https://google.com/</ex>"&gt;</ph>Learn more<ph name="LINK_END">&lt;/a&gt;</ph>
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_LIST_HEADER" desc="List header for the ticket list on 'Kerberos tickets' Settings page.">
-      Tickets
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_ADD_ACCOUNT_LABEL" desc="Label of the 'Add a ticket' button on 'Kerberos tickets' Settings page.">
-      Add a ticket
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_REFRESH_NOW_LABEL" desc="Label of the 'Refresh now' button on 'Kerberos tickets' Settings page.">
-      Refresh now
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_SET_AS_ACTIVE_ACCOUNT_LABEL" desc="Label of the 'Set as ticket ticket' button on 'Kerberos tickets' Settings page.">
-      Set as active ticket
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_REMOVE_ACCOUNT_LABEL" desc="Label of the 'Remove from this device' button on 'Kerberos tickets' Settings page.">
-      Remove from this device
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_ACCOUNT_REMOVED_TIP" desc="Tip shown when a Kerberos ticket was removed on 'Kerberos tickets' Settings page.">
-      Ticket removed
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_ACCOUNT_REFRESHED_TIP" desc="Tip shown when a Kerberos ticket was refreshed on 'Kerberos tickets' Settings page.">
-      Ticket refreshed
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_SIGNED_IN" desc="Text displayed if a Kerberos ticket is in signed-in state on 'Kerberos tickets' Settings page.">
-      Valid for <ph name="TICKET_TIME_LEFT">$1<ex>7 hours 12 minutes</ex></ph>
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_SIGNED_OUT" desc="Text displayed if a Kerberos ticket is in signed-out state on 'Kerberos tickets' Settings page.">
-      Expired
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_REAUTHENTICATION_LABEL" desc="Label of the re-authentication button on 'Kerberos tickets' Settings page.">
-      Refresh
-    </message>
-    <message name="IDS_SETTINGS_KERBEROS_ACCOUNTS_TICKET_ACTIVE" desc="Text displayed if a Kerberos ticket is selected to be the currently active ticket on 'Kerberos tickets' Settings page.">
-      Active
-    </message>
-  </if>
-
   <!-- Date/Time Page -->
   <if expr="chromeos">
     <message name="IDS_SETTINGS_DATE_TIME" desc="Name of the settings page which displays date and time preferences.">
