@@ -1,4 +1,4 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -7,7 +7,7 @@
  */
 
 Polymer({
-  is: 'oobe-update-md',
+  is: 'checking-downloading-update',
 
   behaviors: [OobeI18nBehavior, OobeDialogHostBehavior],
 
@@ -18,15 +18,6 @@ Polymer({
     checkingForUpdate: {
       type: Boolean,
       value: true,
-    },
-
-    /**
-     * Shows a warning to the user the update is about to proceed over a
-     * cellular network, and asks the user to confirm.
-     */
-    requiresPermissionForCellular: {
-      type: Boolean,
-      value: false,
     },
 
     /**
@@ -49,6 +40,7 @@ Polymer({
      */
     estimatedTimeLeftShown: {
       type: Boolean,
+      value: false,
     },
 
     /**
@@ -63,6 +55,7 @@ Polymer({
      */
     progressMessageShown: {
       type: Boolean,
+      value: false,
     },
 
     /**
@@ -83,12 +76,14 @@ Polymer({
     },
 
     /**
+     * ID of the localized string shown while checking for updates.
+     */
+    checkingForUpdatesMsg: String,
+
+    /**
      * ID of the localized string for update cancellation message.
      */
-    cancelHint: {
-      type: String,
-      value: 'cancelUpdateHint',
-    },
+    cancelHint: String,
   },
 
   onBeforeShow() {
@@ -98,11 +93,13 @@ Polymer({
     });
   },
 
-  onBackClicked_() {
-    chrome.send('login.UpdateScreen.userActed', ['update-reject-cellular']);
-  },
-
-  onNextClicked_() {
-    chrome.send('login.UpdateScreen.userActed', ['update-accept-cellular']);
+  /**
+   * Calculates visibility of UI element. Returns true if element is hidden.
+   * @param {Boolean} isAllowed Element flag that marks it visible.
+   * @param {Boolean} updateCompleted If update is completed and all
+   * intermediate status elements are hidden.
+   */
+  isNotAllowedOrUpdateCompleted_(isAllowed, updateCompleted) {
+    return !isAllowed || updateCompleted;
   },
 });
