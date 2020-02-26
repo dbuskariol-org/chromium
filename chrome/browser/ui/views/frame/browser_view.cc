@@ -2758,7 +2758,7 @@ void BrowserView::MaybeInitializeWebUITabStrip() {
           std::make_unique<WebUITabStripContainerView>(
               browser_.get(), contents_container_, top_container_));
       loading_bar_ = top_container_->AddChildView(
-          std::make_unique<TopContainerLoadingBar>());
+          std::make_unique<TopContainerLoadingBar>(browser_.get()));
       loading_bar_->SetWebContents(GetActiveWebContents());
     }
   } else if (webui_tab_strip_) {
