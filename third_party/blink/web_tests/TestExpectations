@@ -2073,8 +2073,6 @@ crbug.com/1053725 [ Mac ] external/wpt/css/css-pseudo/spelling-error-002-manual.
 crbug.com/1053725 [ Mac ] external/wpt/css/css-pseudo/spelling-error-003-manual.html [ Skip ]
 crbug.com/1053725 [ Mac ] external/wpt/css/css-tables/height-distribution/percentage-sizing-of-table-cell-children.html [ Skip ]
 crbug.com/1053725 [ Mac ] external/wpt/dom/events/Event-dispatch-redispatch.html [ Skip ]
-# Put back commented version at line 7066:
-crbug.com/1053725 [ Mac ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Skip ]
 crbug.com/1053725 [ Mac ] external/wpt/html/rendering/widgets/baseline-alignment-and-overflow.tentative.html [ Skip ]
 crbug.com/1053725 [ Mac ] external/wpt/html/rendering/widgets/button-layout/abspos.html [ Skip ]
 # Put back commented version at line 7275:
@@ -6992,11 +6990,8 @@ crbug.com/1015975 virtual/audio-service/media/video-currentTime.html [ Pass Fail
 
 # Sheriff 2019-10-21
 crbug.com/1016364 [ Linux Debug ] http/tests/devtools/console/console-search.js [ Pass Timeout ]
-#crbug.com/1016364 [ Mac Debug ] http/tests/devtools/console/console-search.js [ Pass Timeout ]
-crbug.com/1016457 [ Linux Debug ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
-#crbug.com/1016457 [ Mac Debug ] external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
-crbug.com/1016457 [ Linux Debug ] virtual/web-components-v0-disabled/external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
-crbug.com/1016457 [ Mac Debug ] virtual/web-components-v0-disabled/external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
+crbug.com/1016456 external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
+crbug.com/1016456 virtual/web-components-v0-disabled/external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
 
 # Sheriff 2019-10-24
 crbug.com/1017626 [ Linux ] external/wpt/compat/idlharness.window.html [ Pass Timeout ]
