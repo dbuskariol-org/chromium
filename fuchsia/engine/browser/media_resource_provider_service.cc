@@ -1,12 +1,11 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "fuchsia/engine/browser/web_engine_cdm_service.h"
+#include "fuchsia/engine/browser/media_resource_provider_service.h"
 
-#include <fuchsia/media/drm/cpp/fidl.h>
+#include <lib/fidl/cpp/interface_handle.h>
 #include <lib/sys/cpp/component_context.h>
-#include <string>
 
 #include "base/bind.h"
 #include "base/fuchsia/default_context.h"
@@ -16,56 +15,74 @@
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/storage_partition.h"
+#include "fuchsia/engine/browser/frame_impl.h"
 #include "fuchsia/engine/switches.h"
 #include "media/base/provision_fetcher.h"
 #include "media/fuchsia/cdm/service/fuchsia_cdm_manager.h"
-#include "media/fuchsia/mojom/fuchsia_cdm_provider.mojom.h"
 #include "third_party/widevine/cdm/widevine_cdm_common.h"
 
 namespace {
 
-class FuchsiaCdmProviderImpl
-    : public content::FrameServiceBase<media::mojom::FuchsiaCdmProvider> {
+class MediaResourceProviderImpl
+    : public content::FrameServiceBase<
+          media::mojom::FuchsiaMediaResourceProvider> {
  public:
-  FuchsiaCdmProviderImpl(
+  MediaResourceProviderImpl(
       media::FuchsiaCdmManager* cdm_manager,
-      media::CreateFetcherCB create_fetcher_cb,
       content::RenderFrameHost* render_frame_host,
-      mojo::PendingReceiver<media::mojom::FuchsiaCdmProvider> receiver);
-  ~FuchsiaCdmProviderImpl() final;
+      mojo::PendingReceiver<media::mojom::FuchsiaMediaResourceProvider>
+          receiver);
+  ~MediaResourceProviderImpl() final;
 
-  // media::mojom::FuchsiaCdmProvider implementation.
-  void CreateCdmInterface(
+  MediaResourceProviderImpl(const MediaResourceProviderImpl&) = delete;
+  MediaResourceProviderImpl& operator=(const MediaResourceProviderImpl&) =
+      delete;
+
+  // media::mojom::FuchsiaMediaResourceProvider implementation.
+  void CreateCdm(
       const std::string& key_system,
       fidl::InterfaceRequest<fuchsia::media::drm::ContentDecryptionModule>
           request) final;
+  void CreateAudioConsumer(
+      fidl::InterfaceRequest<fuchsia::media::AudioConsumer> request) final;
 
  private:
   media::FuchsiaCdmManager* const cdm_manager_;
-  const media::CreateFetcherCB create_fetcher_cb_;
-
-  DISALLOW_COPY_AND_ASSIGN(FuchsiaCdmProviderImpl);
 };
 
-FuchsiaCdmProviderImpl::FuchsiaCdmProviderImpl(
+MediaResourceProviderImpl::MediaResourceProviderImpl(
     media::FuchsiaCdmManager* cdm_manager,
-    media::CreateFetcherCB create_fetcher_cb,
     content::RenderFrameHost* render_frame_host,
-    mojo::PendingReceiver<media::mojom::FuchsiaCdmProvider> receiver)
+    mojo::PendingReceiver<media::mojom::FuchsiaMediaResourceProvider> receiver)
     : FrameServiceBase(render_frame_host, std::move(receiver)),
-      cdm_manager_(cdm_manager),
-      create_fetcher_cb_(std::move(create_fetcher_cb)) {
+      cdm_manager_(cdm_manager) {
   DCHECK(cdm_manager_);
 }
 
-FuchsiaCdmProviderImpl::~FuchsiaCdmProviderImpl() = default;
+MediaResourceProviderImpl::~MediaResourceProviderImpl() = default;
 
-void FuchsiaCdmProviderImpl::CreateCdmInterface(
+void MediaResourceProviderImpl::CreateCdm(
     const std::string& key_system,
     fidl::InterfaceRequest<fuchsia::media::drm::ContentDecryptionModule>
         request) {
-  cdm_manager_->CreateAndProvision(key_system, origin(), create_fetcher_cb_,
-                                   std::move(request));
+  scoped_refptr<network::SharedURLLoaderFactory> loader_factory =
+      content::BrowserContext::GetDefaultStoragePartition(
+          render_frame_host()->GetProcess()->GetBrowserContext())
+          ->GetURLLoaderFactoryForBrowserProcess();
+  media::CreateFetcherCB create_fetcher_cb = base::BindRepeating(
+      &content::CreateProvisionFetcher, std::move(loader_factory));
+  cdm_manager_->CreateAndProvision(
+      key_system, origin(), std::move(create_fetcher_cb), std::move(request));
+}
+
+void MediaResourceProviderImpl::CreateAudioConsumer(
+    fidl::InterfaceRequest<fuchsia::media::AudioConsumer> request) {
+  auto factory = base::fuchsia::ComponentContextForCurrentProcess()
+                     ->svc()
+                     ->Connect<fuchsia::media::SessionAudioConsumerFactory>();
+  factory->CreateAudioConsumer(
+      FrameImpl::FromRenderFrameHost(render_frame_host())->media_session_id(),
+      std::move(request));
 }
 
 class WidevineHandler : public media::FuchsiaCdmManager::KeySystemHandler {
@@ -114,7 +131,6 @@ class PlayreadyHandler : public media::FuchsiaCdmManager::KeySystemHandler {
   }
 };
 
-// Supported key systems:
 std::unique_ptr<media::FuchsiaCdmManager> CreateCdmManager() {
   media::FuchsiaCdmManager::KeySystemHandlerMap handlers;
 
@@ -136,24 +152,16 @@ std::unique_ptr<media::FuchsiaCdmManager> CreateCdmManager() {
 
 }  // namespace
 
-WebEngineCdmService::WebEngineCdmService() : cdm_manager_(CreateCdmManager()) {
-  DCHECK(cdm_manager_);
-}
+MediaResourceProviderService::MediaResourceProviderService()
+    : cdm_manager_(CreateCdmManager()) {}
 
-WebEngineCdmService::~WebEngineCdmService() = default;
+MediaResourceProviderService::~MediaResourceProviderService() = default;
 
-void WebEngineCdmService::BindFuchsiaCdmProvider(
+void MediaResourceProviderService::Bind(
     content::RenderFrameHost* frame_host,
-    mojo::PendingReceiver<media::mojom::FuchsiaCdmProvider> receiver) {
-  scoped_refptr<network::SharedURLLoaderFactory> loader_factory =
-      content::BrowserContext::GetDefaultStoragePartition(
-          frame_host->GetProcess()->GetBrowserContext())
-          ->GetURLLoaderFactoryForBrowserProcess();
-
+    mojo::PendingReceiver<media::mojom::FuchsiaMediaResourceProvider>
+        receiver) {
   // The object will delete itself when connection to the frame is broken.
-  new FuchsiaCdmProviderImpl(
-      cdm_manager_.get(),
-      base::BindRepeating(&content::CreateProvisionFetcher,
-                          std::move(loader_factory)),
-      frame_host, std::move(receiver));
+  new MediaResourceProviderImpl(cdm_manager_.get(), frame_host,
+                                std::move(receiver));
 }
