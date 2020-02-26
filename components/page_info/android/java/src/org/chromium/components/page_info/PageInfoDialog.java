@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.page_info;
+package org.chromium.components.page_info;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -22,7 +22,6 @@ import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 
-import org.chromium.components.page_info.PageInfoView;
 import org.chromium.ui.interpolators.BakedBezierInterpolator;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
 import org.chromium.ui.modaldialog.ModalDialogManager;
@@ -32,7 +31,7 @@ import org.chromium.ui.modelutil.PropertyModel;
 /**
  * Represents the dialog containing the page info view.
  */
-class PageInfoDialog {
+public class PageInfoDialog {
     private static final int ENTER_START_DELAY_MS = 100;
     private static final int ENTER_EXIT_DURATION_MS = 200;
     private static final int CLOSE_CLEANUP_DELAY_MS = 10;
@@ -146,7 +145,7 @@ class PageInfoDialog {
                         // onAnimationEnd is called during the final frame of the animation.
                         // Delay the cleanup by a tiny amount to give this frame a chance to
                         // be displayed before we destroy the dialog.
-                        mView.postDelayed(this ::superDismiss, CLOSE_CLEANUP_DELAY_MS);
+                        mView.postDelayed(this::superDismiss, CLOSE_CLEANUP_DELAY_MS);
                     }).start();
                 }
             }

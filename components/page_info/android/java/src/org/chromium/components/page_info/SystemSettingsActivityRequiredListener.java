@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.page_info;
+package org.chromium.components.page_info;
 
 import android.content.Intent;
 
 /**
  * Extracted to allow testing of PermissionParamsListBuilder.
  */
-interface SystemSettingsActivityRequiredListener {
+public interface SystemSettingsActivityRequiredListener {
     void onSystemSettingsActivityRequired(Intent intentOverride);
 }
