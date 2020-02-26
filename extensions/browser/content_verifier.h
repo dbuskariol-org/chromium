@@ -64,8 +64,9 @@ class ContentVerifier : public base::RefCountedThreadSafe<ContentVerifier>,
  public:
   class TestObserver {
    public:
-    virtual void OnFetchComplete(const std::string& extension_id,
-                                 bool success) = 0;
+    virtual void OnFetchComplete(
+        const scoped_refptr<const ContentHash>& content_hash,
+        bool did_hash_mismatch) = 0;
   };
 
   static void SetObserverForTests(TestObserver* observer);
