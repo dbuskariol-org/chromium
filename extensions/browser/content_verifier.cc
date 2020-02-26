@@ -70,13 +70,13 @@ base::FilePath NormalizeRelativePath(const base::FilePath& path) {
 }
 
 bool HasScriptFileExt(const base::FilePath& requested_path) {
-  return requested_path.Extension() == FILE_PATH_LITERAL(".js");
+  return requested_path.MatchesExtension(FILE_PATH_LITERAL(".js"));
 }
 
 bool HasPageFileExt(const base::FilePath& requested_path) {
   base::FilePath::StringType file_extension = requested_path.Extension();
-  return file_extension == FILE_PATH_LITERAL(".html") ||
-         file_extension == FILE_PATH_LITERAL(".htm");
+  return requested_path.MatchesExtension(FILE_PATH_LITERAL(".html")) ||
+         requested_path.MatchesExtension(FILE_PATH_LITERAL(".htm"));
 }
 
 std::unique_ptr<ContentVerifierIOData::ExtensionData> CreateIOData(
@@ -769,6 +769,14 @@ void ContentVerifier::ResetIODataForTesting(const Extension* extension) {
 base::FilePath ContentVerifier::NormalizeRelativePathForTesting(
     const base::FilePath& path) {
   return NormalizeRelativePath(path);
+}
+
+bool ContentVerifier::ShouldVerifyAnyPathsForTesting(
+    const std::string& extension_id,
+    const base::FilePath& extension_root,
+    const std::set<base::FilePath>& relative_unix_paths) {
+  return ShouldVerifyAnyPaths(extension_id, extension_root,
+                              relative_unix_paths);
 }
 
 }  // namespace extensions

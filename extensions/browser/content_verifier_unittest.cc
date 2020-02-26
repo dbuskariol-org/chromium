@@ -70,15 +70,15 @@ void TestContentVerifierDelegate::SetBrowserImagePaths(
 
 }  // namespace
 
-class ContentVerifierTest
-    : public ExtensionsTest,
-      public testing::WithParamInterface<BackgroundManifestType> {
+class ContentVerifierTest : public ExtensionsTest {
  public:
-  ContentVerifierTest() {}
+  ContentVerifierTest() = default;
+
+  ContentVerifierTest(const ContentVerifierTest&) = delete;
+  ContentVerifierTest& operator=(const ContentVerifierTest&) = delete;
 
   void SetUp() override {
     ExtensionsTest::SetUp();
-    background_manifest_type_ = GetParam();
 
     // Manually register handlers since the |ContentScriptsHandler| is not
     // usually registered in extensions_unittests.
@@ -116,15 +116,17 @@ class ContentVerifierTest
   }
 
   bool ShouldVerifySinglePath(const base::FilePath& path) {
-    std::set<base::FilePath> paths_to_verify;
-    paths_to_verify.insert(path);
-    return content_verifier_->ShouldVerifyAnyPaths(
-        extension_->id(), extension_->path(), paths_to_verify);
+    return content_verifier_->ShouldVerifyAnyPathsForTesting(
+        extension_->id(), extension_->path(), {path});
   }
 
   BackgroundManifestType GetBackgroundManifestType() {
     return background_manifest_type_;
   }
+
+ protected:
+  BackgroundManifestType background_manifest_type_ =
+      BackgroundManifestType::kNone;
 
  private:
   // Create a test extension with a content script and possibly a background
@@ -167,17 +169,28 @@ class ContentVerifierTest
     return extension;
   }
 
-  BackgroundManifestType background_manifest_type_;
   scoped_refptr<ContentVerifier> content_verifier_;
   scoped_refptr<Extension> extension_;
   TestContentVerifierDelegate* content_verifier_delegate_raw_;
+};
 
-  DISALLOW_COPY_AND_ASSIGN(ContentVerifierTest);
+class ContentVerifierTestWithBackgroundType
+    : public ContentVerifierTest,
+      public testing::WithParamInterface<BackgroundManifestType> {
+ public:
+  ContentVerifierTestWithBackgroundType() {
+    background_manifest_type_ = GetParam();
+  }
+
+  ContentVerifierTestWithBackgroundType(
+      const ContentVerifierTestWithBackgroundType&) = delete;
+  ContentVerifierTestWithBackgroundType& operator=(
+      const ContentVerifierTestWithBackgroundType&) = delete;
 };
 
 // Verifies that |ContentVerifier::ShouldVerifyAnyPaths| returns true for
 // some file paths even if those paths are specified as browser images.
-TEST_P(ContentVerifierTest, BrowserImagesShouldBeVerified) {
+TEST_P(ContentVerifierTestWithBackgroundType, BrowserImagesShouldBeVerified) {
   std::set<base::FilePath> files_to_be_verified = {
       kContentScriptPath, kScriptFilePath, kHTMLFilePath, kHTMFilePath};
   std::set<base::FilePath> files_not_to_be_verified{kIconPath,
@@ -213,12 +226,12 @@ TEST_P(ContentVerifierTest, BrowserImagesShouldBeVerified) {
 
 INSTANTIATE_TEST_SUITE_P(
     All,
-    ContentVerifierTest,
+    ContentVerifierTestWithBackgroundType,
     testing::Values(BackgroundManifestType::kNone,
                     BackgroundManifestType::kBackgroundScript,
                     BackgroundManifestType::kBackgroundPage));
 
-TEST(ContentVerifierTest, NormalizeRelativePath) {
+TEST_F(ContentVerifierTest, NormalizeRelativePath) {
 // This macro helps avoid wrapped lines in the test structs.
 #define FPL(x) FILE_PATH_LITERAL(x)
   struct TestData {
@@ -235,6 +248,27 @@ TEST(ContentVerifierTest, NormalizeRelativePath) {
     base::FilePath expected(test_case.expected);
     EXPECT_EQ(expected,
               ContentVerifier::NormalizeRelativePathForTesting(input));
+  }
+}
+
+// Tests that JavaScript and html/htm files are always verified, even if their
+// extension case isn't lower cased or even if they are specified as browser
+// image paths.
+TEST_F(ContentVerifierTest, JSAndHTMLAlwaysVerified) {
+  std::vector<std::string> paths = {
+      "a.js",  "b.html", "c.htm",  "a.JS",  "b.HTML",
+      "c.HTM", "a.Js",   "b.Html", "c.Htm",
+  };
+
+  for (const auto& path_str : paths) {
+    const base::FilePath path = base::FilePath().AppendASCII(path_str);
+    UpdateBrowserImagePaths({});
+    // |path| would be treated as unclassified resource, so it gets verified.
+    EXPECT_TRUE(ShouldVerifySinglePath(path)) << "for path " << path;
+    // Even if |path| was specified as browser image, as |path| is JS/html
+    // (sensitive) resource, it would still get verified.
+    UpdateBrowserImagePaths({path});
+    EXPECT_TRUE(ShouldVerifySinglePath(path)) << "for path " << path;
   }
 }
 
