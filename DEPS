@@ -30,6 +30,7 @@ gclient_gn_args_file = 'src/build/config/gclient_args.gni'
 gclient_gn_args = [
   'build_with_chromium',
   'checkout_android',
+  'checkout_android_prebuilts_build_tools',
   'checkout_android_native_support',
   'checkout_google_benchmark',
   'checkout_ios_webkit',
@@ -56,6 +57,9 @@ vars = {
   # variables.
   # TODO(ehmaldonado): Remove this once the bug in gclient is fixed.
   'checkout_android': False,
+
+  # Pull in Android prebuilts build tools so we can create Java xrefs
+  'checkout_android_prebuilts_build_tools': False,
 
   # Pull in Android native toolchain dependencies for Chrome OS too, so we can
   # build ARC++ support libraries.
@@ -1520,6 +1524,11 @@ deps = {
       ],
       'condition': 'checkout_android',
       'dep_type': 'cipd',
+  },
+
+  'src/third_party/android_prebuilts/build_tools': {
+      'url': Var('android_git') + '/platform/prebuilts/build-tools.git' + '@' + '5794e96eb8bae47bb48feee915d99583573b3887',
+      'condition': 'checkout_android_prebuilts_build_tools',
   },
 
   # === ANDROID_DEPS Generated Code Start ===
