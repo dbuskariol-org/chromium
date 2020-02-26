@@ -9672,6 +9672,9 @@ histogram as enum -->
 </enum>
 
 <enum name="ClickToCallDeviceState">
+  <obsolete>
+    Removed in M82 after collecting enough data. See https://crbug.com/1053140.
+  </obsolete>
   <int value="0" label="Screen off, in background"/>
   <int value="1" label="Screen on, in background"/>
   <int value="2" label="Screen off, in foreground"/>
