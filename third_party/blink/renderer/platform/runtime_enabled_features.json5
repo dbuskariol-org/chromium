@@ -1454,6 +1454,10 @@
       origin_trial_feature_name: "RTCQuicTransport",
       status: "experimental",
     },
+    // Enables the use of Insertable Streams.
+    {
+      name: "RTCInsertableStreams",
+    },
     // Enables the use of the RTCQuicTransport object.
     {
       name: "RTCQuicTransport",
