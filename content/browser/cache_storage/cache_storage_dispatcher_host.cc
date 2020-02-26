@@ -39,7 +39,7 @@ namespace {
 using blink::mojom::CacheStorageError;
 using blink::mojom::CacheStorageVerboseError;
 using network::CrossOriginResourcePolicy;
-using network::mojom::CrossOriginEmbedderPolicy;
+using network::mojom::CrossOriginEmbedderPolicyValue;
 using network::mojom::FetchResponseType;
 using network::mojom::RequestMode;
 
@@ -118,10 +118,10 @@ blink::mojom::MatchResultPtr EagerlyReadResponseBody(
 bool ResponseBlockedByCrossOriginResourcePolicy(
     const blink::mojom::FetchAPIResponse* response,
     const url::Origin& document_origin,
-    CrossOriginEmbedderPolicy document_coep) {
+    CrossOriginEmbedderPolicyValue document_coep) {
   // optional short-circuit to avoid parsing CORP again and again when no COEP
   // policy is defined.
-  if (document_coep == network::mojom::CrossOriginEmbedderPolicy::kNone)
+  if (document_coep == network::mojom::CrossOriginEmbedderPolicyValue::kNone)
     return false;
 
   // Cross-Origin-Resource-Policy is checked only for cross-origin responses
@@ -150,9 +150,10 @@ bool ResponseBlockedByCrossOriginResourcePolicy(
 class CacheStorageDispatcherHost::CacheImpl
     : public blink::mojom::CacheStorageCache {
  public:
-  explicit CacheImpl(CacheStorageCacheHandle cache_handle,
-                     const url::Origin& origin,
-                     CrossOriginEmbedderPolicy cross_origin_embedder_policy)
+  explicit CacheImpl(
+      CacheStorageCacheHandle cache_handle,
+      const url::Origin& origin,
+      CrossOriginEmbedderPolicyValue cross_origin_embedder_policy)
       : cache_handle_(std::move(cache_handle)),
         origin_(origin),
         cross_origin_embedder_policy_(cross_origin_embedder_policy) {}
@@ -183,7 +184,7 @@ class CacheStorageDispatcherHost::CacheImpl
         [](base::TimeTicks start_time, bool ignore_search,
            bool in_related_fetch_event, bool cache_initialized,
            int64_t trace_id, url::Origin origin,
-           CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+           CrossOriginEmbedderPolicyValue cross_origin_embedder_policy,
            blink::mojom::CacheStorageCache::MatchCallback callback,
            blink::mojom::CacheStorageError error,
            blink::mojom::FetchAPIResponsePtr response) {
@@ -282,7 +283,7 @@ class CacheStorageDispatcherHost::CacheImpl
 
     auto cb = base::BindOnce(
         [](base::TimeTicks start_time, int64_t trace_id, url::Origin origin,
-           CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+           CrossOriginEmbedderPolicyValue cross_origin_embedder_policy,
            blink::mojom::CacheStorageCache::MatchAllCallback callback,
            blink::mojom::CacheStorageError error,
            std::vector<blink::mojom::FetchAPIResponsePtr> responses) {
@@ -464,7 +465,7 @@ class CacheStorageDispatcherHost::CacheImpl
 
   CacheStorageCacheHandle cache_handle_;
   const url::Origin origin_;
-  const CrossOriginEmbedderPolicy cross_origin_embedder_policy_;
+  const CrossOriginEmbedderPolicyValue cross_origin_embedder_policy_;
   SEQUENCE_CHECKER(sequence_checker_);
   DISALLOW_COPY_AND_ASSIGN(CacheImpl);
 };
@@ -478,7 +479,7 @@ class CacheStorageDispatcherHost::CacheStorageImpl final
  public:
   CacheStorageImpl(CacheStorageDispatcherHost* owner,
                    const url::Origin& origin,
-                   CrossOriginEmbedderPolicy cross_origin_embedder_policy)
+                   CrossOriginEmbedderPolicyValue cross_origin_embedder_policy)
       : owner_(owner),
         origin_(origin),
         cross_origin_embedder_policy_(cross_origin_embedder_policy) {
@@ -623,7 +624,7 @@ class CacheStorageDispatcherHost::CacheStorageImpl final
     auto cb = BindOnce(
         [](base::TimeTicks start_time, bool match_all_caches,
            bool in_related_fetch_event, int64_t trace_id, url::Origin origin,
-           CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+           CrossOriginEmbedderPolicyValue cross_origin_embedder_policy,
            blink::mojom::CacheStorage::MatchCallback callback,
            CacheStorageError error,
            blink::mojom::FetchAPIResponsePtr response) {
@@ -718,7 +719,7 @@ class CacheStorageDispatcherHost::CacheStorageImpl final
     auto cb = base::BindOnce(
         [](base::WeakPtr<CacheStorageImpl> self, base::TimeTicks start_time,
            int64_t trace_id, url::Origin origin,
-           CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+           CrossOriginEmbedderPolicyValue cross_origin_embedder_policy,
            blink::mojom::CacheStorage::OpenCallback callback,
            CacheStorageCacheHandle cache_handle, CacheStorageError error) {
           if (!self)
@@ -780,7 +781,7 @@ class CacheStorageDispatcherHost::CacheStorageImpl final
   CacheStorageDispatcherHost* const owner_;
 
   const url::Origin origin_;
-  const CrossOriginEmbedderPolicy cross_origin_embedder_policy_;
+  const CrossOriginEmbedderPolicyValue cross_origin_embedder_policy_;
   CacheStorageHandle cache_storage_handle_;
 
   SEQUENCE_CHECKER(sequence_checker_);
@@ -800,7 +801,7 @@ void CacheStorageDispatcherHost::Init(CacheStorageContextImpl* context) {
 }
 
 void CacheStorageDispatcherHost::AddReceiver(
-    CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+    CrossOriginEmbedderPolicyValue cross_origin_embedder_policy,
     const url::Origin& origin,
     mojo::PendingReceiver<blink::mojom::CacheStorage> receiver) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);

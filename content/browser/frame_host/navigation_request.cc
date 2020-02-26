@@ -1742,16 +1742,16 @@ void NavigationRequest::OnResponseStarted(
     // https://mikewest.github.io/corpp/#process-navigation-response.
     if (GetParentFrame() &&
         GetParentFrame()->cross_origin_embedder_policy() ==
-            network::mojom::CrossOriginEmbedderPolicy::kRequireCorp) {
+            network::mojom::CrossOriginEmbedderPolicyValue::kRequireCorp) {
       // Some special URLs not loaded using the network are inheriting the
       // Cross-Origin-Embedder-Policy header from their parent.
       if (common_params_->url.SchemeIsBlob() ||
           common_params_->url.SchemeIs(url::kDataScheme)) {
         cross_origin_embedder_policy =
-            network::mojom::CrossOriginEmbedderPolicy::kRequireCorp;
+            network::mojom::CrossOriginEmbedderPolicyValue::kRequireCorp;
       }
       if (cross_origin_embedder_policy ==
-          network::mojom::CrossOriginEmbedderPolicy::kNone) {
+          network::mojom::CrossOriginEmbedderPolicyValue::kNone) {
         OnRequestFailedInternal(
             network::URLLoaderCompletionStatus(net::ERR_BLOCKED_BY_RESPONSE),
             false /* skip_throttles */, base::nullopt /* error_page_content */,

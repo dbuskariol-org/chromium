@@ -49,7 +49,7 @@ interface ControllerServiceWorker {
   // |cross_origin_embedder_policy| is the policy for the client which uses the
   // counterpart of |receiver|.
   Clone(pending_receiver<ControllerServiceWorker> receiver,
-        network.mojom.CrossOriginEmbedderPolicy cross_origin_embedder_policy);
+        network.mojom.CrossOriginEmbedderPolicyValue cross_origin_embedder_policy);
 };
 
 // A convenient struct that packs necessary information for a service worker

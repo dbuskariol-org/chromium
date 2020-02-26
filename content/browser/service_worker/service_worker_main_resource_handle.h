@@ -69,15 +69,16 @@ class CONTENT_EXPORT ServiceWorkerMainResourceHandle {
   void OnBeginNavigationCommit(
       int render_process_id,
       int render_frame_id,
-      network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+      network::mojom::CrossOriginEmbedderPolicyValue
+          cross_origin_embedder_policy,
       blink::mojom::ServiceWorkerProviderInfoForClientPtr* out_provider_info);
 
   // Similar to OnBeginNavigationCommit() for shared workers (and dedicated
   // workers when PlzDedicatedWorker is on).
   // |cross_origin_embedder_policy| is passed to the pre-created provider
   // host.
-  void OnBeginWorkerCommit(
-      network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy);
+  void OnBeginWorkerCommit(network::mojom::CrossOriginEmbedderPolicyValue
+                               cross_origin_embedder_policy);
 
   blink::mojom::ServiceWorkerProviderInfoForClientPtr TakeProviderInfo() {
     return std::move(provider_info_);

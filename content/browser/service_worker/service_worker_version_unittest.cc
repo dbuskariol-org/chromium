@@ -1220,7 +1220,7 @@ TEST_F(ServiceWorkerVersionTest,
   container_host->OnBeginNavigationCommit(
       version_->embedded_worker()->process_id(),
       /* render_frame_id = */ 1,
-      network::mojom::CrossOriginEmbedderPolicy::kNone);
+      network::mojom::CrossOriginEmbedderPolicyValue::kNone);
 
   // RenderProcessHost should be notified of foreground worker.
   base::RunLoop().RunUntilIdle();

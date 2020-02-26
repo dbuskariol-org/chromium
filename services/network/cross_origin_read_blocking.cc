@@ -847,7 +847,7 @@ CrossOriginReadBlocking::ResponseAnalyzer::ShouldBlockBasedOnHeaders(
       CrossOriginResourcePolicy::Verify(
           request_url, request_initiator, response, kOverreachingRequestMode,
           request_initiator_site_lock,
-          mojom::CrossOriginEmbedderPolicy::kNone)) {
+          mojom::CrossOriginEmbedderPolicyValue::kNone)) {
     // Ignore mime types and/or sniffing and have CORB block all responses with
     // COR*P* header.
     return kBlock;

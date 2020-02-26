@@ -43,7 +43,7 @@ void ServiceWorkerMainResourceHandle::OnCreatedProviderHost(
 void ServiceWorkerMainResourceHandle::OnBeginNavigationCommit(
     int render_process_id,
     int render_frame_id,
-    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+    network::mojom::CrossOriginEmbedderPolicyValue cross_origin_embedder_policy,
     blink::mojom::ServiceWorkerProviderInfoForClientPtr* out_provider_info) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   // We may have failed to pre-create the provider host.
@@ -59,7 +59,8 @@ void ServiceWorkerMainResourceHandle::OnBeginNavigationCommit(
 }
 
 void ServiceWorkerMainResourceHandle::OnBeginWorkerCommit(
-    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
+    network::mojom::CrossOriginEmbedderPolicyValue
+        cross_origin_embedder_policy) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   ServiceWorkerContextWrapper::RunOrPostTaskOnCoreThread(
       FROM_HERE,

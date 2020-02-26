@@ -326,17 +326,20 @@ template <typename WorkerHost, typename Interface>
 base::RepeatingCallback<void(const url::Origin&,
                              mojo::PendingReceiver<Interface>)>
 BindWorkerReceiverForOriginAndCOEP(
-    void (RenderProcessHost::*method)(network::mojom::CrossOriginEmbedderPolicy,
-                                      const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
+    void (RenderProcessHost::*method)(
+        network::mojom::CrossOriginEmbedderPolicyValue,
+        const url::Origin&,
+        mojo::PendingReceiver<Interface>),
     WorkerHost* host,
-    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
+    network::mojom::CrossOriginEmbedderPolicyValue
+        cross_origin_embedder_policy) {
   return base::BindRepeating(
       [](WorkerHost* host,
          void (RenderProcessHost::*method)(
-             network::mojom::CrossOriginEmbedderPolicy, const url::Origin&,
+             network::mojom::CrossOriginEmbedderPolicyValue, const url::Origin&,
              mojo::PendingReceiver<Interface>),
-         network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+         network::mojom::CrossOriginEmbedderPolicyValue
+             cross_origin_embedder_policy,
          const url::Origin& origin, mojo::PendingReceiver<Interface> receiver) {
         RenderProcessHost* process_host = host->GetProcessHost();
         if (process_host)
@@ -426,22 +429,25 @@ template <typename Interface>
 base::RepeatingCallback<void(const ServiceWorkerVersionInfo&,
                              mojo::PendingReceiver<Interface>)>
 BindServiceWorkerReceiverForOriginAndCOEP(
-    void (RenderProcessHost::*method)(network::mojom::CrossOriginEmbedderPolicy,
-                                      const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
+    void (RenderProcessHost::*method)(
+        network::mojom::CrossOriginEmbedderPolicyValue,
+        const url::Origin&,
+        mojo::PendingReceiver<Interface>),
     ServiceWorkerProviderHost* host,
-    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
+    network::mojom::CrossOriginEmbedderPolicyValue
+        cross_origin_embedder_policy) {
   return base::BindRepeating(
       [](ServiceWorkerProviderHost* host,
          void (RenderProcessHost::*method)(
-             network::mojom::CrossOriginEmbedderPolicy, const url::Origin&,
+             network::mojom::CrossOriginEmbedderPolicyValue, const url::Origin&,
              mojo::PendingReceiver<Interface>),
-         network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
+         network::mojom::CrossOriginEmbedderPolicyValue
+             cross_origin_embedder_policy,
          const ServiceWorkerVersionInfo& info,
          mojo::PendingReceiver<Interface> receiver) {
         auto origin = info.script_origin;
         RunOrPostTaskToBindServiceWorkerReceiver<
-            network::mojom::CrossOriginEmbedderPolicy, const url::Origin&,
+            network::mojom::CrossOriginEmbedderPolicyValue, const url::Origin&,
             mojo::PendingReceiver<Interface>>(host, method,
                                               cross_origin_embedder_policy,
                                               origin, std::move(receiver));
@@ -795,7 +801,7 @@ void PopulateBinderMapWithContext(
   // cache.match() for DedicatedWorker.
   map->Add<blink::mojom::CacheStorage>(BindWorkerReceiverForOriginAndCOEP(
       &RenderProcessHost::BindCacheStorage, host,
-      network::mojom::CrossOriginEmbedderPolicy::kNone));
+      network::mojom::CrossOriginEmbedderPolicyValue::kNone));
 }
 
 void PopulateBinderMap(DedicatedWorkerHost* host,
@@ -867,7 +873,7 @@ void PopulateBinderMapWithContext(
   // cache.match() for SharedWorker
   map->Add<blink::mojom::CacheStorage>(BindWorkerReceiverForOriginAndCOEP(
       &RenderProcessHost::BindCacheStorage, host,
-      network::mojom::CrossOriginEmbedderPolicy::kNone));
+      network::mojom::CrossOriginEmbedderPolicyValue::kNone));
 }
 
 void PopulateBinderMap(SharedWorkerHost* host,
@@ -974,7 +980,7 @@ void PopulateBinderMapWithContext(
   map->Add<blink::mojom::CacheStorage>(
       BindServiceWorkerReceiverForOriginAndCOEP(
           &RenderProcessHost::BindCacheStorage, host,
-          network::mojom::CrossOriginEmbedderPolicy::kNone));
+          network::mojom::CrossOriginEmbedderPolicyValue::kNone));
 }
 
 void PopulateBinderMap(ServiceWorkerProviderHost* host,

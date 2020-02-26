@@ -186,13 +186,13 @@ TEST(CrossOriginResourcePolicyTest, WithCOEP) {
               CrossOriginResourcePolicy::Verify(
                   destination, test_case.origin, *test_case.response_info,
                   test_case.request_mode, test_case.origin,
-                  mojom::CrossOriginEmbedderPolicy::kNone));
+                  mojom::CrossOriginEmbedderPolicyValue::kNone));
 
     EXPECT_EQ(test_case.expectation_with_coep_require_corp,
               CrossOriginResourcePolicy::Verify(
                   destination, test_case.origin, *test_case.response_info,
                   test_case.request_mode, test_case.origin,
-                  mojom::CrossOriginEmbedderPolicy::kRequireCorp));
+                  mojom::CrossOriginEmbedderPolicyValue::kRequireCorp));
   }
 }
 }  // namespace network

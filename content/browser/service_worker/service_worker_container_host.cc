@@ -756,7 +756,8 @@ blink::mojom::ServiceWorkerClientType ServiceWorkerContainerHost::client_type()
 void ServiceWorkerContainerHost::OnBeginNavigationCommit(
     int container_process_id,
     int container_frame_id,
-    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
+    network::mojom::CrossOriginEmbedderPolicyValue
+        cross_origin_embedder_policy) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   DCHECK_EQ(blink::mojom::ServiceWorkerContainerType::kForWindow, type());
 
@@ -794,7 +795,8 @@ void ServiceWorkerContainerHost::OnBeginNavigationCommit(
 }
 
 void ServiceWorkerContainerHost::CompleteWebWorkerPreparation(
-    network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy) {
+    network::mojom::CrossOriginEmbedderPolicyValue
+        cross_origin_embedder_policy) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   using ServiceWorkerContainerType = blink::mojom::ServiceWorkerContainerType;
   DCHECK(type_ == ServiceWorkerContainerType::kForDedicatedWorker ||

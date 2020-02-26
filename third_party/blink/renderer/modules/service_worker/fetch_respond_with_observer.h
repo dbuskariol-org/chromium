@@ -29,11 +29,12 @@ class FetchAPIRequest;
 // notifies the client.
 class MODULES_EXPORT FetchRespondWithObserver : public RespondWithObserver {
  public:
-  FetchRespondWithObserver(ExecutionContext*,
-                           int fetch_event_id,
-                           network::mojom::blink::CrossOriginEmbedderPolicy,
-                           const mojom::blink::FetchAPIRequest&,
-                           WaitUntilObserver*);
+  FetchRespondWithObserver(
+      ExecutionContext*,
+      int fetch_event_id,
+      network::mojom::blink::CrossOriginEmbedderPolicyValue,
+      const mojom::blink::FetchAPIRequest&,
+      WaitUntilObserver*);
   ~FetchRespondWithObserver() override = default;
 
   void OnResponseRejected(mojom::ServiceWorkerResponseError) override;
@@ -52,7 +53,7 @@ class MODULES_EXPORT FetchRespondWithObserver : public RespondWithObserver {
   const network::mojom::RedirectMode redirect_mode_;
   const mojom::RequestContextFrameType frame_type_;
   const mojom::RequestContextType request_context_;
-  const network::mojom::blink::CrossOriginEmbedderPolicy requestor_coep_;
+  const network::mojom::blink::CrossOriginEmbedderPolicyValue requestor_coep_;
   scoped_refptr<base::SingleThreadTaskRunner> task_runner_;
 };
 

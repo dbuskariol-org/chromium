@@ -41,10 +41,10 @@ class CacheStorageDispatcherHost {
   // BindingSet's context. This guarantees that the browser process uses the
   // origin of the client known at the binding time, instead of relying on the
   // client to provide its origin at every method call.
-  void AddReceiver(
-      network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
-      const url::Origin& origin,
-      mojo::PendingReceiver<blink::mojom::CacheStorage> receiver);
+  void AddReceiver(network::mojom::CrossOriginEmbedderPolicyValue
+                       cross_origin_embedder_policy,
+                   const url::Origin& origin,
+                   mojo::PendingReceiver<blink::mojom::CacheStorage> receiver);
 
  private:
   class CacheStorageImpl;

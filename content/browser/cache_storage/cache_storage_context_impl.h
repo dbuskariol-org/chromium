@@ -86,10 +86,10 @@ class CONTENT_EXPORT CacheStorageContextImpl
   void Shutdown();
 
   // Only callable on the UI thread.
-  void AddReceiver(
-      network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy,
-      const url::Origin& origin,
-      mojo::PendingReceiver<blink::mojom::CacheStorage> receiver);
+  void AddReceiver(network::mojom::CrossOriginEmbedderPolicyValue
+                       cross_origin_embedder_policy,
+                   const url::Origin& origin,
+                   mojo::PendingReceiver<blink::mojom::CacheStorage> receiver);
 
   // If called on the cache_storage target sequence the real manager will be
   // returned directly.  If called on any other sequence then a cross-sequence

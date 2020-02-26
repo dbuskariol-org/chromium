@@ -1249,12 +1249,12 @@ class CONTENT_EXPORT RenderFrameHostImpl
       mojo::PendingReceiver<blink::mojom::FeatureObserver> receiver);
 
   // https://mikewest.github.io/corpp/#initialize-embedder-policy-for-global
-  network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy()
+  network::mojom::CrossOriginEmbedderPolicyValue cross_origin_embedder_policy()
       const {
     return cross_origin_embedder_policy_;
   }
   void set_cross_origin_embedder_policy(
-      network::mojom::CrossOriginEmbedderPolicy policy) {
+      network::mojom::CrossOriginEmbedderPolicyValue policy) {
     cross_origin_embedder_policy_ = policy;
   }
 
@@ -2131,8 +2131,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Track this frame's last committed origin.
   url::Origin last_committed_origin_;
 
-  network::mojom::CrossOriginEmbedderPolicy cross_origin_embedder_policy_ =
-      network::mojom::CrossOriginEmbedderPolicy::kNone;
+  network::mojom::CrossOriginEmbedderPolicyValue cross_origin_embedder_policy_ =
+      network::mojom::CrossOriginEmbedderPolicyValue::kNone;
 
   network::mojom::CrossOriginOpenerPolicy cross_origin_opener_policy_ =
       network::mojom::CrossOriginOpenerPolicy::kUnsafeNone;
