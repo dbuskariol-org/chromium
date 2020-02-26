@@ -77,7 +77,6 @@ class Runner():
         tr = xcodebuild_runner.SimulatorParallelTestRunner(
             self.args.app,
             self.args.host_app,
-            self.args.iossim,
             self.args.xcode_build_version,
             self.args.version,
             self.args.platform,
@@ -94,7 +93,6 @@ class Runner():
         tr = wpr_runner.WprProxySimulatorTestRunner(
             self.args.app,
             self.args.host_app,
-            self.args.iossim,
             self.args.replay_path,
             self.args.platform,
             self.args.version,
@@ -110,10 +108,9 @@ class Runner():
             xcode_path=self.args.xcode_path,
             xctest=self.args.xctest,
         )
-      elif self.args.iossim and self.args.platform and self.args.version:
+      elif self.args.platform and self.args.version:
         tr = test_runner.SimulatorTestRunner(
             self.args.app,
-            self.args.iossim,
             self.args.platform,
             self.args.version,
             self.args.xcode_build_version,
@@ -231,12 +228,6 @@ class Runner():
         help='Compiled host .app to run.',
         default='NO_PATH',
         metavar='host_app',
-    )
-    parser.add_argument(
-        '-i',
-        '--iossim',
-        help='Compiled iossim to run the app on.',
-        metavar='iossim',
     )
     parser.add_argument(
         '-j',
@@ -372,12 +363,12 @@ class Runner():
       Runs argument validation
       """
       if (not (args.xcode_parallelization or args.xcodebuild_device_runner) and
-          (args.iossim or args.platform or args.version)):
-        # If any of --iossim, --platform, or --version
-        # are specified then they must all be specified.
-        if not (args.iossim and args.platform and args.version):
+          (args.platform or args.version)):
+        # If --platform or --version are specified then
+        # they must all be specified.
+        if not (args.platform and args.version):
           parser.error('must specify all or none of '
-                       '-i/--iossim, -p/--platform, -v/--version')
+                       '-p/--platform, -v/--version')
 
       if args.xcode_parallelization and not (args.platform and args.version):
         parser.error('--xcode-parallelization also requires '
