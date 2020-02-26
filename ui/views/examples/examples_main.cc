@@ -49,6 +49,10 @@
 #include "ui/base/win/scoped_ole_initializer.h"
 #endif
 
+#if defined(USE_OZONE)
+#include "ui/ozone/public/ozone_platform.h"
+#endif
+
 #if defined(USE_X11)
 #include "ui/gfx/x/x11_connection.h"  // nogncheck
 #endif
@@ -72,6 +76,12 @@ int main(int argc, char** argv) {
   base::AtExitManager at_exit;
 
   mojo::core::Init();
+
+#if defined(USE_OZONE)
+  ui::OzonePlatform::InitParams params;
+  params.single_process = true;
+  ui::OzonePlatform::InitializeForGPU(params);
+#endif
 
 #if defined(USE_X11)
   // This demo uses InProcessContextFactory which uses X on a separate Gpu
