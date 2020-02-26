@@ -25,6 +25,10 @@
 #include "third_party/blink/public/mojom/service_worker/service_worker_container_type.mojom.h"
 #include "third_party/blink/public/mojom/service_worker/service_worker_registration.mojom.h"
 
+namespace network {
+struct CrossOriginEmbedderPolicy;
+}
+
 namespace content {
 
 namespace service_worker_object_host_unittest {
@@ -260,10 +264,10 @@ class CONTENT_EXPORT ServiceWorkerContainerHost final
   // commit. Updates this host with information about the frame committed to.
   // After this is called, is_response_committed() and is_execution_ready()
   // return true.
-  void OnBeginNavigationCommit(int container_process_id,
-                               int container_frame_id,
-                               network::mojom::CrossOriginEmbedderPolicyValue
-                                   cross_origin_embedder_policy);
+  void OnBeginNavigationCommit(
+      int container_process_id,
+      int container_frame_id,
+      const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy);
 
   // For service worker clients that are shared workers or dedicated workers.
   // Called when the web worker main script resource has finished loading.
@@ -271,8 +275,7 @@ class CONTENT_EXPORT ServiceWorkerContainerHost final
   // After this is called, is_response_committed() and is_execution_ready()
   // return true.
   void CompleteWebWorkerPreparation(
-      network::mojom::CrossOriginEmbedderPolicyValue
-          cross_origin_embedder_policy);
+      const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy);
 
   // Sets |url_|, |site_for_cookies_| and |top_frame_origin_|. For service
   // worker clients, updates the client uuid if it's a cross-origin transition.
@@ -594,7 +597,7 @@ class CONTENT_EXPORT ServiceWorkerContainerHost final
 
   // For service worker clients. The embedder policy of the client. Set on
   // response commit.
-  base::Optional<network::mojom::CrossOriginEmbedderPolicyValue>
+  base::Optional<network::CrossOriginEmbedderPolicy>
       cross_origin_embedder_policy_;
 
   // TODO(yuzus): This bit will be unnecessary once ServiceWorkerContainerHost

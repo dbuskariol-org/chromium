@@ -12,11 +12,14 @@
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/unique_associated_receiver_set.h"
 #include "mojo/public/cpp/bindings/unique_receiver_set.h"
-#include "services/network/public/mojom/cross_origin_embedder_policy.mojom.h"
 #include "third_party/blink/public/mojom/cache_storage/cache_storage.mojom.h"
 
 namespace url {
 class Origin;
+}
+
+namespace network {
+struct CrossOriginEmbedderPolicy;
 }
 
 namespace content {
@@ -41,10 +44,10 @@ class CacheStorageDispatcherHost {
   // BindingSet's context. This guarantees that the browser process uses the
   // origin of the client known at the binding time, instead of relying on the
   // client to provide its origin at every method call.
-  void AddReceiver(network::mojom::CrossOriginEmbedderPolicyValue
-                       cross_origin_embedder_policy,
-                   const url::Origin& origin,
-                   mojo::PendingReceiver<blink::mojom::CacheStorage> receiver);
+  void AddReceiver(
+      const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy,
+      const url::Origin& origin,
+      mojo::PendingReceiver<blink::mojom::CacheStorage> receiver);
 
  private:
   class CacheStorageImpl;

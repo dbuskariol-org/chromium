@@ -2338,7 +2338,7 @@ RenderFrameHostManager::GetSiteInstanceForNavigationRequest(
       request->response() &&
       ShouldSwapBrowsingInstanceForCrossOriginOpenerPolicy(
           render_frame_host_->cross_origin_opener_policy(),
-          render_frame_host_->cross_origin_embedder_policy(),
+          render_frame_host_->cross_origin_embedder_policy().value,
           render_frame_host_->GetLastCommittedOrigin(),
           !render_frame_host_->has_committed_any_navigation(),
           request->response()->cross_origin_opener_policy,

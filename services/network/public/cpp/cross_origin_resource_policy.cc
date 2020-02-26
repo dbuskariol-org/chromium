@@ -175,7 +175,7 @@ CrossOriginResourcePolicy::VerificationResult CrossOriginResourcePolicy::Verify(
     const network::mojom::URLResponseHead& response,
     mojom::RequestMode request_mode,
     base::Optional<url::Origin> request_initiator_site_lock,
-    mojom::CrossOriginEmbedderPolicyValue embedder_policy) {
+    const CrossOriginEmbedderPolicy& embedder_policy) {
   // From https://fetch.spec.whatwg.org/#cross-origin-resource-policy-header:
   // > 1. If request’s mode is not "no-cors", then return allowed.
   if (request_mode != mojom::RequestMode::kNoCors)
@@ -192,7 +192,7 @@ CrossOriginResourcePolicy::VerificationResult CrossOriginResourcePolicy::Verify(
       ParseHeaderByHttpResponseHeaders(response.headers.get());
 
   return VerifyInternal(policy, request_url, request_initiator, request_mode,
-                        request_initiator_site_lock, embedder_policy);
+                        request_initiator_site_lock, embedder_policy.value);
 }
 
 // static
@@ -203,7 +203,7 @@ CrossOriginResourcePolicy::VerifyByHeaderValue(
     base::Optional<std::string> corp_header_value,
     mojom::RequestMode request_mode,
     base::Optional<url::Origin> request_initiator_site_lock,
-    mojom::CrossOriginEmbedderPolicyValue embedder_policy) {
+    const CrossOriginEmbedderPolicy& embedder_policy) {
   // From https://fetch.spec.whatwg.org/#cross-origin-resource-policy-header:
   // > 1. If request’s mode is not "no-cors", then return allowed.
   if (request_mode != mojom::RequestMode::kNoCors)
@@ -212,7 +212,7 @@ CrossOriginResourcePolicy::VerifyByHeaderValue(
   ParsedHeader policy = ParseHeaderByString(corp_header_value);
 
   return VerifyInternal(policy, request_url, request_initiator, request_mode,
-                        request_initiator_site_lock, embedder_policy);
+                        request_initiator_site_lock, embedder_policy.value);
 }
 
 // static

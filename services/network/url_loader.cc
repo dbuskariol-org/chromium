@@ -935,11 +935,12 @@ void URLLoader::OnReceivedRedirect(net::URLRequest* url_request,
 
   ReportFlaggedResponseCookies();
 
+  const CrossOriginEmbedderPolicy kEmpty;
   // Enforce the Cross-Origin-Resource-Policy (CORP) header.
-  const mojom::CrossOriginEmbedderPolicyValue cross_origin_embedder_policy =
+  const CrossOriginEmbedderPolicy& cross_origin_embedder_policy =
       factory_params_->client_security_state
           ? factory_params_->client_security_state->cross_origin_embedder_policy
-          : mojom::CrossOriginEmbedderPolicyValue::kNone;
+          : kEmpty;
   if (CrossOriginResourcePolicy::kBlock ==
       CrossOriginResourcePolicy::Verify(
           url_request_->url(), url_request_->initiator(), *response,
@@ -1096,10 +1097,11 @@ void URLLoader::OnResponseStarted(net::URLRequest* url_request, int net_error) {
                           base::Unretained(this)));
 
   // Enforce the Cross-Origin-Resource-Policy (CORP) header.
-  const mojom::CrossOriginEmbedderPolicyValue cross_origin_embedder_policy =
+  const CrossOriginEmbedderPolicy kEmpty;
+  const CrossOriginEmbedderPolicy& cross_origin_embedder_policy =
       factory_params_->client_security_state
           ? factory_params_->client_security_state->cross_origin_embedder_policy
-          : mojom::CrossOriginEmbedderPolicyValue::kNone;
+          : kEmpty;
   if (CrossOriginResourcePolicy::kBlock ==
       CrossOriginResourcePolicy::Verify(
           url_request_->url(), url_request_->initiator(), *response_,
