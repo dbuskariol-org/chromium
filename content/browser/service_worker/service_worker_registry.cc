@@ -353,6 +353,33 @@ void ServiceWorkerRegistry::UpdateToActiveState(int64_t registration_id,
                      weak_factory_.GetWeakPtr(), std::move(callback)));
 }
 
+void ServiceWorkerRegistry::UpdateLastUpdateCheckTime(
+    int64_t registration_id,
+    const GURL& origin,
+    base::Time last_update_check_time,
+    StatusCallback callback) {
+  storage()->UpdateLastUpdateCheckTime(
+      registration_id, origin, last_update_check_time, std::move(callback));
+}
+
+void ServiceWorkerRegistry::UpdateNavigationPreloadEnabled(
+    int64_t registration_id,
+    const GURL& origin,
+    bool enable,
+    StatusCallback callback) {
+  storage()->UpdateNavigationPreloadEnabled(registration_id, origin, enable,
+                                            std::move(callback));
+}
+
+void ServiceWorkerRegistry::UpdateNavigationPreloadHeader(
+    int64_t registration_id,
+    const GURL& origin,
+    const std::string& value,
+    StatusCallback callback) {
+  storage()->UpdateNavigationPreloadHeader(registration_id, origin, value,
+                                           std::move(callback));
+}
+
 void ServiceWorkerRegistry::StoreUncommittedResourceId(int64_t resource_id) {
   storage()->StoreUncommittedResourceId(
       resource_id,

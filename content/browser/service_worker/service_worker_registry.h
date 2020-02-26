@@ -175,6 +175,18 @@ class CONTENT_EXPORT ServiceWorkerRegistry {
   void UpdateToActiveState(int64_t registration_id,
                            const GURL& origin,
                            StatusCallback callback);
+  void UpdateLastUpdateCheckTime(int64_t registration_id,
+                                 const GURL& origin,
+                                 base::Time last_update_check_time,
+                                 StatusCallback callback);
+  void UpdateNavigationPreloadEnabled(int64_t registration_id,
+                                      const GURL& origin,
+                                      bool enable,
+                                      StatusCallback callback);
+  void UpdateNavigationPreloadHeader(int64_t registration_id,
+                                     const GURL& origin,
+                                     const std::string& value,
+                                     StatusCallback callback);
   void StoreUncommittedResourceId(int64_t resource_id);
   void DoomUncommittedResource(int64_t resource_id);
   void DoomUncommittedResources(const std::set<int64_t>& resource_ids);
