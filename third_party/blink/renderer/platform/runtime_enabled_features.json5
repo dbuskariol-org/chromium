@@ -1633,10 +1633,6 @@
       status: "test",
     },
     {
-      name: "StorageQuotaDetails",
-      status: "stable"
-    },
-    {
       name: "StrictMimeTypesForWorkers",
       status: "experimental"
     },
