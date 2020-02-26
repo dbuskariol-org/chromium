@@ -333,10 +333,8 @@ IN_PROC_BROWSER_TEST_F(ResetOobeTest, RequestAndCancleResetOnWelcomeScreen) {
 // TODO(http://crbug.com/990362): Times out on MSAN buildbots.
 #if defined(MEMORY_SANITIZER)
 #define MAYBE_PRE_ViewsLogic DISABLED_PRE_ViewsLogic
-#define MAYBE_ViewsLogic DISABLED_ViewsLogic
 #else
 #define MAYBE_PRE_ViewsLogic PRE_ViewsLogic
-#define MAYBE_ViewsLogic ViewsLogic
 #endif
 
 IN_PROC_BROWSER_TEST_F(ResetFirstAfterBootTest, MAYBE_PRE_ViewsLogic) {
@@ -346,7 +344,8 @@ IN_PROC_BROWSER_TEST_F(ResetFirstAfterBootTest, MAYBE_PRE_ViewsLogic) {
 }
 
 // See http://crbug.com/990362 for details.
-IN_PROC_BROWSER_TEST_F(ResetFirstAfterBootTest, MAYBE_ViewsLogic) {
+// TODO(crbug.com/1049789): Re-enable this test.
+IN_PROC_BROWSER_TEST_F(ResetFirstAfterBootTest, DISABLED_ViewsLogic) {
   PrefService* prefs = g_browser_process->local_state();
 
   // Rollback unavailable. Show and cancel.
