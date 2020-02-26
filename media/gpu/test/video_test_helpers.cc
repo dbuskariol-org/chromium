@@ -4,21 +4,12 @@
 
 #include "media/gpu/test/video_test_helpers.h"
 
-#include <utility>
+#include <limits>
 
-#include "base/bind.h"
-#include "base/callback_helpers.h"
-#include "base/files/file_util.h"
-#include "base/message_loop/message_pump_type.h"
-#include "base/strings/string_split.h"
-#include "base/threading/thread_task_runner_handle.h"
+#include "base/stl_util.h"
 #include "media/base/video_decoder_config.h"
-#include "media/gpu/macros.h"
 #include "media/video/h264_parser.h"
-
-#if defined(OS_CHROMEOS)
-#include "ui/ozone/public/ozone_gpu_test_helper.h"
-#endif
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace media {
 namespace test {

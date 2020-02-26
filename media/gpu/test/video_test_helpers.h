@@ -5,25 +5,13 @@
 #ifndef MEDIA_GPU_TEST_VIDEO_TEST_HELPERS_H_
 #define MEDIA_GPU_TEST_VIDEO_TEST_HELPERS_H_
 
-#include <memory>
 #include <string>
 #include <vector>
 
-#include "base/files/file_path.h"
-#include "base/macros.h"
-#include "base/memory/ref_counted.h"
 #include "base/memory/scoped_refptr.h"
-#include "base/single_thread_task_runner.h"
-#include "base/threading/thread.h"
-#include "base/threading/thread_checker.h"
+#include "base/optional.h"
 #include "media/base/decoder_buffer.h"
 #include "media/base/video_codecs.h"
-#include "media/base/video_frame.h"
-#include "media/base/video_types.h"
-#include "testing/gtest/include/gtest/gtest.h"
-#include "ui/gfx/geometry/size.h"
-#include "ui/gfx/gpu_memory_buffer.h"
-#include "ui/gfx/native_pixmap.h"
 
 namespace media {
 namespace test {

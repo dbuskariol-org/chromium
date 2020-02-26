@@ -17,6 +17,7 @@
 #include "media/gpu/test/video_test_helpers.h"
 #include "media/gpu/video_frame_mapper.h"
 #include "media/gpu/video_frame_mapper_factory.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace media {
 namespace test {

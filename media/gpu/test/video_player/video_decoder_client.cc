@@ -18,6 +18,7 @@
 #include "media/gpu/test/video_player/frame_renderer.h"
 #include "media/gpu/test/video_player/test_vda_video_decoder.h"
 #include "media/gpu/test/video_test_helpers.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 #if BUILDFLAG(USE_CHROMEOS_MEDIA_ACCELERATION)
 #include "media/gpu/chromeos/chromeos_video_decoder_factory.h"
