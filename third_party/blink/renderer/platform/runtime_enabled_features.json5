@@ -168,10 +168,6 @@
       status: "stable",
     },
     {
-      name: "AsyncClipboard",
-      status: "stable",
-    },
-    {
       name: "AudioOutputDevices",
       // Android does not yet support switching of audio output devices
       status: {"Android": "", "default": "stable"},
