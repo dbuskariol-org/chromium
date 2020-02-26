@@ -63299,6 +63299,7 @@ would be helpful to identify which type is being sent.
   <int value="26" label="Night light"/>
   <int value="27" label="Do not disturb"/>
   <int value="28" label="Language"/>
+  <int value="29" label="Privacy screen"/>
 </enum>
 
 <enum name="SystemNotificationActionType">

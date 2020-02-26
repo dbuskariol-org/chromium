@@ -949,6 +949,8 @@ component("ash") {
     "system/power/tray_power.h",
     "system/power/video_activity_notifier.cc",
     "system/power/video_activity_notifier.h",
+    "system/privacy_screen/privacy_screen_feature_pod_controller.cc",
+    "system/privacy_screen/privacy_screen_feature_pod_controller.h",
     "system/rotation/rotation_lock_feature_pod_controller.cc",
     "system/rotation/rotation_lock_feature_pod_controller.h",
     "system/screen_layout_observer.cc",
