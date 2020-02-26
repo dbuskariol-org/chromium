@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 The Chromium Authors. All rights reserved.
+eopyright 2017 The Chromium Authors. All rights reserved.
 Use of this source code is governed by a BSD-style license that can be
 found in the LICENSE file.
 -->
@@ -9717,6 +9717,14 @@ histogram as enum -->
   <int value="2" label="Classification cancelled"/>
   <int value="3" label="Forward/back transition"/>
   <int value="4" label="Invalid score"/>
+</enum>
+
+<enum name="ClientTagBasedModelTypeProcessorErrors">
+  <int value="0" label="Incomplete storage keys from loading metadata"/>
+  <int value="1" label="Incomplete storage keys from full update"/>
+  <int value="2" label="Duplicate storage key"/>
+  <int value="3" label="Empty storage key"/>
+  <int value="4" label="Storage key not found"/>
 </enum>
 
 <enum name="ClipboardAction">
