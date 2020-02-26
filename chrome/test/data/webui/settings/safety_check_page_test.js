@@ -70,4 +70,26 @@ suite('SafetyCheckUiTests', function() {
     // Collapse is opened.
     assertTrue(page.$$('#safetyCheckCollapse').opened);
   });
+
+  test('passwordsButtonVisibilityUiTest', function() {
+    // Iterate over all states
+    for (const state of Object.values(settings.SafetyCheckPasswordsStatus)) {
+      cr.webUIListenerCallback('safety-check-status-changed', {
+        safetyCheckComponent: 1, /* PASSWORDS */
+        newState: state,
+      });
+      Polymer.dom.flush();
+
+      // button is only visible in COMPROMISED and ERROR states
+      switch (state) {
+        case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+        case settings.SafetyCheckPasswordsStatus.ERROR:
+          assertTrue(!!page.$$('#safetyCheckPasswordsButton'));
+          break;
+        default:
+          assertFalse(!!page.$$('#safetyCheckPasswordsButton'));
+          break;
+      }
+    }
+  });
 });

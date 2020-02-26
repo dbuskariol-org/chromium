@@ -131,7 +131,7 @@ Polymer({
    * Triggers the safety check.
    * @private
    */
-  onRunSafetyCheckClick_: function() {
+  runSafetyCheck_: function() {
     // Update UI.
     this.parentStatus_ = ParentStatus.CHECKING;
     // Reset all children states.
@@ -266,12 +266,147 @@ Polymer({
     }
   },
 
+  /** @private */
+  onRunSafetyCheckClick_: function() {
+    this.runSafetyCheck_();
+  },
+
   /**
    * @private
    * @return {boolean}
    */
   shouldShowChildren_: function() {
     return this.parentStatus_ != ParentStatus.BEFORE;
+  },
+
+  /**
+   * @private
+   * @return {boolean}
+   */
+  shouldShowPasswordsButton_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+      case settings.SafetyCheckPasswordsStatus.ERROR:
+        return true;
+      default:
+        return false;
+    }
+  },
+
+  /**
+   * @private
+   * @return {string}
+   */
+  getPasswordsSubLabelText_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.CHECKING:
+        return '';
+      case settings.SafetyCheckPasswordsStatus.SAFE:
+        return this.i18n('safetyCheckPasswordsSubLabelSafe');
+      case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+        if (this.passwordsCompromisedCount_ == 1) {
+          return this.i18n('safetyCheckPasswordsSubLabelCompromisedSingular');
+        }
+        return this.i18n(
+            'safetyCheckPasswordsSubLabelCompromisedPlural',
+            this.passwordsCompromisedCount_);
+      case settings.SafetyCheckPasswordsStatus.OFFLINE:
+        return this.i18n('safetyCheckPasswordsSubLabelOffline');
+      case settings.SafetyCheckPasswordsStatus.NO_PASSWORDS:
+        return this.i18n('safetyCheckPasswordsSubLabelNoPasswords');
+      case settings.SafetyCheckPasswordsStatus.SIGNED_OUT:
+        return this.i18n('safetyCheckPasswordsSubLabelSignedOut');
+      case settings.SafetyCheckPasswordsStatus.QUOTA_LIMIT:
+        return this.i18n('safetyCheckPasswordsSubLabelQuotaLimit');
+      case settings.SafetyCheckPasswordsStatus.TOO_MANY_PASSWORDS:
+        return this.i18n('safetyCheckPasswordsSubLabelTooManyPasswords');
+      case settings.SafetyCheckPasswordsStatus.ERROR:
+        return this.i18n('safetyCheckPasswordsSubLabelError');
+      default:
+        assertNotReached();
+    }
+  },
+
+  /**
+   * @private
+   * @return {?string}
+   */
+  getPasswordsIcon_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.CHECKING:
+        return null;
+      case settings.SafetyCheckPasswordsStatus.SAFE:
+        return 'cr:check';
+      case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+        return 'cr:warning';
+      case settings.SafetyCheckPasswordsStatus.OFFLINE:
+      case settings.SafetyCheckPasswordsStatus.NO_PASSWORDS:
+      case settings.SafetyCheckPasswordsStatus.SIGNED_OUT:
+      case settings.SafetyCheckPasswordsStatus.QUOTA_LIMIT:
+      case settings.SafetyCheckPasswordsStatus.TOO_MANY_PASSWORDS:
+      case settings.SafetyCheckPasswordsStatus.ERROR:
+        return 'cr:info';
+      default:
+        assertNotReached();
+    }
+  },
+
+  /**
+   * @private
+   * @return {?string}
+   */
+  getPasswordsIconSrc_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.CHECKING:
+        return 'chrome://resources/images/throbber_small.svg';
+      default:
+        return null;
+    }
+  },
+
+  /**
+   * @private
+   * @return {string}
+   */
+  getPasswordsIconClass_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.CHECKING:
+      case settings.SafetyCheckPasswordsStatus.SAFE:
+        return 'icon-blue';
+      case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+        return 'icon-red';
+      default:
+        return '';
+    }
+  },
+
+  /**
+   * @private
+   * @return {?string}
+   */
+  getPasswordsButtonText_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+        return this.i18n('safetyCheckPasswordsButtonCompromised');
+      case settings.SafetyCheckPasswordsStatus.ERROR:
+        return this.i18n('safetyCheckPasswordsButtonError');
+      default:
+        return null;
+    }
+  },
+
+  /** @private */
+  onPasswordsButtonClick_: function() {
+    switch (this.passwordsStatus_) {
+      case settings.SafetyCheckPasswordsStatus.COMPROMISED:
+        // TODO(crbug.com/1010001): Implement once behavior has been agreed on.
+        break;
+      case settings.SafetyCheckPasswordsStatus.ERROR:
+        this.runSafetyCheck_();
+        break;
+      default:
+        break;
+    }
   },
 });
 })();

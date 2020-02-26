@@ -64,6 +64,26 @@
     </div>
     <iron-collapse id="safetyCheckCollapse"
         opened="[[shouldShowChildren_(parentStatus_)]]">
+      <div class="settings-box two-line">
+        <iron-icon icon="[[getPasswordsIcon_(passwordsStatus_)]]"
+            src="[[getPasswordsIconSrc_(passwordsStatus_)]]"
+            class$="[[getPasswordsIconClass_(passwordsStatus_)]]">
+        </iron-icon>
+        <div class="start settings-box-text">
+          <div>$i18n{safetyCheckPasswordsPrimaryLabel}</div>
+          <div class="secondary" no-search>
+            [[getPasswordsSubLabelText_(passwordsStatus_)]]
+          </div>
+        </div>
+        <template is="dom-if"
+            if="[[shouldShowPasswordsButton_(passwordsStatus_)]]" restamp>
+          <div class="separator"></div>
+          <cr-button id="safetyCheckPasswordsButton"
+              on-click="onPasswordsButtonClick_" no-search>
+            [[getPasswordsButtonText_(passwordsStatus_)]]
+          </cr-button>
+        </template>
+      </div>
     </iron-collapse>
   </template>
   <script src="safety_check_page.js"></script>
