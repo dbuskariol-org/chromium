@@ -14,6 +14,7 @@
 #include "base/strings/stringprintf.h"
 #include "base/system/sys_info.h"
 #include "base/task/post_task.h"
+#include "base/task/thread_pool.h"
 #include "components/policy/core/common/async_policy_provider.h"
 #include "components/policy/core/common/cloud/device_management_service.h"
 #include "components/policy/core/common/configuration_policy_provider.h"
@@ -69,9 +70,9 @@ BrowserPolicyConnectorIOS::CreatePolicyProviders() {
 
 std::unique_ptr<ConfigurationPolicyProvider>
 BrowserPolicyConnectorIOS::CreatePlatformProvider() {
-  std::unique_ptr<AsyncPolicyLoader> loader(new PolicyLoaderIOS(
-      base::CreateSequencedTaskRunner({base::ThreadPool(), base::MayBlock(),
-                                       base::TaskPriority::BEST_EFFORT})));
+  std::unique_ptr<AsyncPolicyLoader> loader(
+      new PolicyLoaderIOS(base::ThreadPool::CreateSequencedTaskRunner(
+          {base::MayBlock(), base::TaskPriority::BEST_EFFORT})));
 
   return std::make_unique<AsyncPolicyProvider>(GetSchemaRegistry(),
                                                std::move(loader));
