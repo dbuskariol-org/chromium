@@ -14,7 +14,7 @@
 #include "media/base/video_frame.h"
 #include "media/gpu/buildflags.h"
 #include "media/gpu/test/image_quality_metrics.h"
-#include "media/gpu/test/video_decode_accelerator_unittest_helpers.h"
+#include "media/gpu/test/video_test_helpers.h"
 #include "media/gpu/video_frame_mapper.h"
 #include "media/gpu/video_frame_mapper_factory.h"
 

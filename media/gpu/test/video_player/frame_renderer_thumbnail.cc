@@ -10,7 +10,7 @@
 #include "base/memory/ptr_util.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "build/build_config.h"
-#include "media/gpu/test/video_decode_accelerator_unittest_helpers.h"
+#include "media/gpu/test/video_test_helpers.h"
 #include "ui/gfx/codec/png_codec.h"
 #include "ui/gl/gl_context.h"
 #include "ui/gl/gl_surface_egl.h"
