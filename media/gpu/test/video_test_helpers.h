@@ -8,11 +8,14 @@
 #include <string>
 #include <vector>
 
+#include "base/bits.h"
 #include "base/containers/queue.h"
+#include "base/memory/aligned_memory.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/optional.h"
 #include "base/synchronization/condition_variable.h"
 #include "base/synchronization/lock.h"
+#include "build/build_config.h"
 #include "media/base/decoder_buffer.h"
 #include "media/base/video_codecs.h"
 
@@ -98,6 +101,53 @@ class EncodedDataHelper {
   VideoCodecProfile profile_;
   size_t next_pos_to_decode_ = 0;
   size_t num_skipped_fragments_ = 0;
+};
+
+#if defined(ARCH_CPU_ARM_FAMILY)
+// ARM performs CPU cache management with CPU cache line granularity. We thus
+// need to ensure our buffers are CPU cache line-aligned (64 byte-aligned).
+// Otherwise newer kernels will refuse to accept them, and on older kernels
+// we'll be treating ourselves to random corruption.
+// Moreover, some hardware codecs require 128-byte alignment for physical
+// buffers.
+constexpr size_t kPlatformBufferAlignment = 128;
+#else
+constexpr size_t kPlatformBufferAlignment = 8;
+#endif
+
+inline static size_t AlignToPlatformRequirements(size_t value) {
+  return base::bits::Align(value, kPlatformBufferAlignment);
+}
+
+// An aligned STL allocator.
+template <typename T, size_t ByteAlignment = kPlatformBufferAlignment>
+class AlignedAllocator : public std::allocator<T> {
+ public:
+  typedef size_t size_type;
+  typedef T* pointer;
+
+  template <class T1>
+  struct rebind {
+    typedef AlignedAllocator<T1, ByteAlignment> other;
+  };
+
+  AlignedAllocator() {}
+  explicit AlignedAllocator(const AlignedAllocator&) {}
+  template <class T1>
+  explicit AlignedAllocator(const AlignedAllocator<T1, ByteAlignment>&) {}
+  ~AlignedAllocator() {}
+
+  pointer allocate(size_type n, const void* = 0) {
+    return static_cast<pointer>(base::AlignedAlloc(n, ByteAlignment));
+  }
+
+  void deallocate(pointer p, size_type n) {
+    base::AlignedFree(static_cast<void*>(p));
+  }
+
+  size_type max_size() const {
+    return std::numeric_limits<size_t>::max() / sizeof(T);
+  }
 };
 
 }  // namespace test
