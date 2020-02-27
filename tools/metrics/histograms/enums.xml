@@ -10654,6 +10654,8 @@ Called by update_net_error_codes.py.-->
   <int value="4" label="file"/>
   <int value="5" label="chrome-extension"/>
   <int value="6" label="chrome-search"/>
+  <int value="7" label="chrome"/>
+  <int value="8" label="chrome-untrusted"/>
 </enum>
 
 <enum name="ContentSuggestionsBreakingNewsMessageAction">
