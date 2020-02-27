@@ -410,8 +410,8 @@ void UnifiedSystemTray::ClickedOutsideBubble() {
   CloseBubble();
 }
 
-void UnifiedSystemTray::UpdateAfterShelfChange() {
-  TrayBackgroundView::UpdateAfterShelfChange();
+void UnifiedSystemTray::UpdateLayout() {
+  TrayBackgroundView::UpdateLayout();
   time_view_->UpdateAlignmentForShelf(shelf());
 }
 

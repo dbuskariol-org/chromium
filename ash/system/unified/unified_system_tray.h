@@ -128,7 +128,7 @@ class ASH_EXPORT UnifiedSystemTray : public TrayBackgroundView,
   void HideBubble(const TrayBubbleView* bubble_view) override;
   void HideBubbleWithView(const TrayBubbleView* bubble_view) override;
   void ClickedOutsideBubble() override;
-  void UpdateAfterShelfChange() override;
+  void UpdateLayout() override;
   void UpdateAfterLoginStatusChange() override;
   bool ShouldEnableExtraKeyboardAccessibility() override;
   const char* GetClassName() const override;
