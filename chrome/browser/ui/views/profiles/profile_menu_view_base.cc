@@ -54,6 +54,7 @@ constexpr int kMenuWidth = 288;
 constexpr int kIdentityImageSize = 64;
 constexpr int kMaxImageSize = kIdentityImageSize;
 constexpr int kDefaultVerticalMargin = 8;
+constexpr int kBadgeSize = 16;
 
 // If the bubble is too large to fit on the screen, it still needs to be at
 // least this tall to show one row.
@@ -159,6 +160,81 @@ std::unique_ptr<views::Button> CreateCircularImageButton(
   return button;
 }
 
+// AvatarImageView is used to ensure avatar adornments are kept in sync with
+// current theme colors.
+class AvatarImageView : public views::ImageView {
+ public:
+  AvatarImageView(gfx::ImageSkia avatar_image,
+                  const ProfileMenuViewBase* root_view)
+      : avatar_image_(avatar_image), root_view_(root_view) {
+    SetBorder(views::CreateEmptyBorder(0, 0, kDefaultVerticalMargin, 0));
+  }
+
+  // views::ImageVIew:
+  void OnThemeChanged() override {
+    ImageView::OnThemeChanged();
+    // Fall back on |kUserAccountAvatarIcon| if |image| is empty. This can
+    // happen in tests and when the account image hasn't been fetched yet.
+    constexpr int kBadgePadding = 1;
+    const SkColor icon_color = GetNativeTheme()->GetSystemColor(
+        ui::NativeTheme::kColorId_DefaultIconColor);
+    gfx::ImageSkia sized_avatar_image =
+        avatar_image_.isNull()
+            ? gfx::CreateVectorIcon(kUserAccountAvatarIcon, kIdentityImageSize,
+                                    icon_color)
+            : CropCircle(SizeImage(avatar_image_, kIdentityImageSize));
+
+    const SkColor background_color = GetNativeTheme()->GetSystemColor(
+        ui::NativeTheme::kColorId_BubbleBackground);
+    gfx::ImageSkia sized_badge =
+        AddCircularBackground(SizeImage(root_view_->GetSyncIcon(), kBadgeSize),
+                              background_color, kBadgeSize + 2 * kBadgePadding);
+    gfx::ImageSkia sized_badge_with_shadow =
+        gfx::ImageSkiaOperations::CreateImageWithDropShadow(
+            sized_badge, gfx::ShadowValue::MakeMdShadowValues(/*elevation=*/1,
+                                                              SK_ColorBLACK));
+
+    gfx::ImageSkia badged_image = gfx::ImageSkiaOperations::CreateIconWithBadge(
+        sized_avatar_image, sized_badge_with_shadow);
+    SetImage(badged_image);
+  }
+
+ private:
+  gfx::ImageSkia avatar_image_;
+  const ProfileMenuViewBase* root_view_;
+};
+
+class SyncButton : public HoverButton {
+ public:
+  SyncButton(ProfileMenuViewBase* root_view,
+             const base::string16& clickable_text)
+      : HoverButton(root_view, clickable_text), root_view_(root_view) {}
+
+  // HoverButton:
+  void OnThemeChanged() override {
+    HoverButton::OnThemeChanged();
+    SetImage(STATE_NORMAL, SizeImage(root_view_->GetSyncIcon(), kBadgeSize));
+  }
+
+ private:
+  const ProfileMenuViewBase* root_view_;
+};
+
+class SyncImageView : public views::ImageView {
+ public:
+  explicit SyncImageView(const ProfileMenuViewBase* root_view)
+      : root_view_(root_view) {}
+
+  // views::ImageView:
+  void OnThemeChanged() override {
+    ImageView::OnThemeChanged();
+    SetImage(SizeImage(root_view_->GetSyncIcon(), kBadgeSize));
+  }
+
+ private:
+  const ProfileMenuViewBase* root_view_;
+};
+
 }  // namespace
 
 // ProfileMenuViewBase ---------------------------------------------------------
@@ -236,13 +312,16 @@ ProfileMenuViewBase::~ProfileMenuViewBase() {
   DCHECK(g_profile_bubble_ != this);
 }
 
+gfx::ImageSkia ProfileMenuViewBase::GetSyncIcon() const {
+  return gfx::ImageSkia();
+}
+
 void ProfileMenuViewBase::SetHeading(const base::string16& heading,
                                      const base::string16& tooltip_text,
                                      base::RepeatingClosure action) {
   constexpr int kInsidePadding = 8;
-  const SkColor kBackgroundColor =
-      ui::NativeTheme::GetInstanceForNativeUi()->GetSystemColor(
-          ui::NativeTheme::kColorId_HighlightedMenuItemBackgroundColor);
+  const SkColor kBackgroundColor = GetNativeTheme()->GetSystemColor(
+      ui::NativeTheme::kColorId_HighlightedMenuItemBackgroundColor);
 
   heading_container_->RemoveAllChildViews(/*delete_children=*/true);
   heading_container_->SetLayoutManager(std::make_unique<views::FillLayout>());
@@ -260,17 +339,11 @@ void ProfileMenuViewBase::SetHeading(const base::string16& heading,
 }
 
 void ProfileMenuViewBase::SetIdentityInfo(const gfx::ImageSkia& image,
-                                          const gfx::ImageSkia& badge,
                                           const base::string16& title,
                                           const base::string16& subtitle) {
   constexpr int kTopMargin = kMenuEdgeMargin;
   constexpr int kBottomMargin = kDefaultVerticalMargin;
   constexpr int kHorizontalMargin = kMenuEdgeMargin;
-  constexpr int kImageBottomMargin = kDefaultVerticalMargin;
-  constexpr int kBadgeSize = 16;
-  constexpr int kBadgePadding = 1;
-  const SkColor kBadgeBackgroundColor = GetNativeTheme()->GetSystemColor(
-      ui::NativeTheme::kColorId_BubbleBackground);
 
   identity_info_container_->RemoveAllChildViews(/*delete_children=*/true);
   identity_info_container_->SetLayoutManager(
@@ -279,27 +352,8 @@ void ProfileMenuViewBase::SetIdentityInfo(const gfx::ImageSkia& image,
                       gfx::Insets(kTopMargin, kHorizontalMargin, kBottomMargin,
                                   kHorizontalMargin)));
 
-  views::ImageView* image_view = identity_info_container_->AddChildView(
-      std::make_unique<views::ImageView>());
-  // Fall back on |kUserAccountAvatarIcon| if |image| is empty. This can happen
-  // in tests and when the account image hasn't been fetched yet.
-  gfx::ImageSkia sized_image =
-      image.isNull()
-          ? gfx::CreateVectorIcon(kUserAccountAvatarIcon, kIdentityImageSize,
-                                  GetDefaultIconColor())
-          : CropCircle(SizeImage(image, kIdentityImageSize));
-  gfx::ImageSkia sized_badge =
-      AddCircularBackground(SizeImage(badge, kBadgeSize), kBadgeBackgroundColor,
-                            kBadgeSize + 2 * kBadgePadding);
-  gfx::ImageSkia sized_badge_with_shadow =
-      gfx::ImageSkiaOperations::CreateImageWithDropShadow(
-          sized_badge,
-          gfx::ShadowValue::MakeMdShadowValues(/*elevation=*/1, SK_ColorBLACK));
-
-  gfx::ImageSkia badged_image = gfx::ImageSkiaOperations::CreateIconWithBadge(
-      sized_image, sized_badge_with_shadow);
-  image_view->SetImage(badged_image);
-  image_view->SetBorder(views::CreateEmptyBorder(0, 0, kImageBottomMargin, 0));
+  identity_info_container_->AddChildView(
+      std::make_unique<AvatarImageView>(image, this));
 
   if (!title.empty()) {
     identity_info_container_->AddChildView(std::make_unique<views::Label>(
@@ -313,12 +367,11 @@ void ProfileMenuViewBase::SetIdentityInfo(const gfx::ImageSkia& image,
 }
 
 void ProfileMenuViewBase::SetSyncInfo(
-    const gfx::ImageSkia& icon,
     const base::string16& description,
     const base::string16& clickable_text,
     SyncInfoContainerBackgroundState sync_background_state,
-    base::RepeatingClosure action) {
-  constexpr int kIconSize = 16;
+    base::RepeatingClosure action,
+    bool show_badge) {
   const int kDescriptionIconSpacing =
       ChromeLayoutProvider::Get()->GetDistanceMetric(
           views::DISTANCE_RELATED_LABEL_HORIZONTAL);
@@ -335,17 +388,18 @@ void ProfileMenuViewBase::SetSyncInfo(
       views::BoxLayout::Orientation::kVertical, gfx::Insets(), kInsidePadding));
 
   if (description.empty()) {
-    views::Button* button =
-        sync_info_container_->AddChildView(std::make_unique<HoverButton>(
-            this, SizeImage(icon, kIconSize), clickable_text));
-    RegisterClickAction(button, std::move(action));
+    views::Button* sync_button = sync_info_container_->AddChildView(
+        std::make_unique<SyncButton>(this, clickable_text));
+    RegisterClickAction(sync_button, std::move(action));
     return;
   }
 
+  const SkColor border_color = GetNativeTheme()->GetSystemColor(
+      ui::NativeTheme::kColorId_MenuSeparatorColor);
   // Add padding, rounded border and margins.
   sync_info_container_->SetBorder(views::CreatePaddedBorder(
       views::CreateRoundedRectBorder(kBorderThickness, kBorderCornerRadius,
-                                     GetDefaultSeparatorColor()),
+                                     border_color),
       gfx::Insets(kInsidePadding)));
   sync_info_container_->SetProperty(
       views::kMarginsKey, gfx::Insets(kDefaultVerticalMargin, kMenuEdgeMargin));
@@ -359,14 +413,12 @@ void ProfileMenuViewBase::SetSyncInfo(
               views::BoxLayout::Orientation::kHorizontal, gfx::Insets(),
               kDescriptionIconSpacing));
 
-  if (icon.isNull()) {
+  if (show_badge) {
+    description_container->AddChildView(std::make_unique<SyncImageView>(this));
+  } else {
     // If there is no image, the description is centered.
     description_layout->set_main_axis_alignment(
         views::BoxLayout::MainAxisAlignment::kCenter);
-  } else {
-    views::ImageView* icon_view = description_container->AddChildView(
-        std::make_unique<views::ImageView>());
-    icon_view->SetImage(SizeImage(icon, kIconSize));
   }
 
   views::Label* label = description_container->AddChildView(
@@ -513,8 +565,9 @@ void ProfileMenuViewBase::AddProfileManagementFeatureButton(
   RegisterClickAction(button, std::move(action));
 }
 
-gfx::ImageSkia ProfileMenuViewBase::ImageForMenu(const gfx::VectorIcon& icon,
-                                                 float icon_to_image_ratio) {
+gfx::ImageSkia ProfileMenuViewBase::ImageForMenu(
+    const gfx::VectorIcon& icon,
+    float icon_to_image_ratio) const {
   const int padding =
       static_cast<int>(kMaxImageSize * (1.0 - icon_to_image_ratio) / 2.0);
 
@@ -525,7 +578,7 @@ gfx::ImageSkia ProfileMenuViewBase::ImageForMenu(const gfx::VectorIcon& icon,
 
 gfx::ImageSkia ProfileMenuViewBase::ColoredImageForMenu(
     const gfx::VectorIcon& icon,
-    SkColor color) {
+    SkColor color) const {
   return gfx::CreateVectorIcon(icon, kMaxImageSize, color);
 }
 

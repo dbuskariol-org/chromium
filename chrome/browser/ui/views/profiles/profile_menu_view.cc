@@ -140,6 +140,43 @@ void ProfileMenuView::BuildMenu() {
   BuildProfileManagementFeatureButtons();
 }
 
+gfx::ImageSkia ProfileMenuView::GetSyncIcon() const {
+  Profile* profile = browser()->profile();
+
+  if (!profile->IsRegularProfile())
+    return gfx::ImageSkia();
+
+  if (!IdentityManagerFactory::GetForProfile(profile)->HasPrimaryAccount())
+    return ColoredImageForMenu(kSyncPausedCircleIcon, gfx::kGoogleGrey500);
+
+  const gfx::VectorIcon* icon = nullptr;
+  ui::NativeTheme::ColorId color_id;
+  int unused;
+  switch (
+      sync_ui_util::GetMessagesForAvatarSyncError(profile, &unused, &unused)) {
+    case sync_ui_util::NO_SYNC_ERROR:
+      icon = &kSyncCircleIcon;
+      color_id = ui::NativeTheme::kColorId_AlertSeverityLow;
+      break;
+    case sync_ui_util::AUTH_ERROR:
+      icon = &kSyncPausedCircleIcon;
+      color_id = ui::NativeTheme::kColorId_ProminentButtonColor;
+      break;
+    case sync_ui_util::MANAGED_USER_UNRECOVERABLE_ERROR:
+    case sync_ui_util::UNRECOVERABLE_ERROR:
+    case sync_ui_util::UPGRADE_CLIENT_ERROR:
+    case sync_ui_util::PASSPHRASE_ERROR:
+    case sync_ui_util::TRUSTED_VAULT_KEY_MISSING_FOR_EVERYTHING_ERROR:
+    case sync_ui_util::TRUSTED_VAULT_KEY_MISSING_FOR_PASSWORDS_ERROR:
+    case sync_ui_util::SETTINGS_UNCONFIRMED_ERROR:
+      icon = &kSyncPausedCircleIcon;
+      color_id = ui::NativeTheme::kColorId_AlertSeverityHigh;
+      break;
+  }
+  const SkColor image_color = GetNativeTheme()->GetSystemColor(color_id);
+  return ColoredImageForMenu(*icon, image_color);
+}
+
 base::string16 ProfileMenuView::GetAccessibleWindowTitle() const {
   return l10n_util::GetStringUTF16(
       IDS_PROFILES_PROFILE_BUBBLE_ACCESSIBLE_TITLE);
@@ -353,61 +390,22 @@ void ProfileMenuView::BuildIdentity() {
 
   if (account_info.has_value()) {
     SetIdentityInfo(
-        account_info.value().account_image.AsImageSkia(), GetSyncIcon(),
+        account_info.value().account_image.AsImageSkia(),
         base::UTF8ToUTF16(account_info.value().full_name),
         IsSyncPaused(profile)
             ? l10n_util::GetStringUTF16(IDS_PROFILES_LOCAL_PROFILE_STATE)
             : base::UTF8ToUTF16(account_info.value().email));
   } else {
     SetIdentityInfo(
-        profile_attributes->GetAvatarIcon().AsImageSkia(), GetSyncIcon(),
+        profile_attributes->GetAvatarIcon().AsImageSkia(),
         /*title=*/base::string16(),
         l10n_util::GetStringUTF16(IDS_PROFILES_LOCAL_PROFILE_STATE));
   }
 }
 
 void ProfileMenuView::BuildGuestIdentity() {
-  SetIdentityInfo(profiles::GetGuestAvatar(), GetSyncIcon(),
+  SetIdentityInfo(profiles::GetGuestAvatar(),
                   l10n_util::GetStringUTF16(IDS_GUEST_PROFILE_NAME));
-}
-
-gfx::ImageSkia ProfileMenuView::GetSyncIcon() {
-  Profile* profile = browser()->profile();
-  signin::IdentityManager* identity_manager =
-      IdentityManagerFactory::GetForProfile(profile);
-  ui::NativeTheme* native_theme = ui::NativeTheme::GetInstanceForNativeUi();
-
-  if (!profile->IsRegularProfile())
-    return gfx::ImageSkia();
-
-  if (!identity_manager->HasPrimaryAccount())
-    return ColoredImageForMenu(kSyncPausedCircleIcon, gfx::kGoogleGrey500);
-
-  const gfx::VectorIcon* icon = nullptr;
-  ui::NativeTheme::ColorId color_id;
-  int unused;
-  switch (
-      sync_ui_util::GetMessagesForAvatarSyncError(profile, &unused, &unused)) {
-    case sync_ui_util::NO_SYNC_ERROR:
-      icon = &kSyncCircleIcon;
-      color_id = ui::NativeTheme::kColorId_AlertSeverityLow;
-      break;
-    case sync_ui_util::AUTH_ERROR:
-      icon = &kSyncPausedCircleIcon;
-      color_id = ui::NativeTheme::kColorId_ProminentButtonColor;
-      break;
-    case sync_ui_util::MANAGED_USER_UNRECOVERABLE_ERROR:
-    case sync_ui_util::UNRECOVERABLE_ERROR:
-    case sync_ui_util::UPGRADE_CLIENT_ERROR:
-    case sync_ui_util::PASSPHRASE_ERROR:
-    case sync_ui_util::TRUSTED_VAULT_KEY_MISSING_FOR_EVERYTHING_ERROR:
-    case sync_ui_util::TRUSTED_VAULT_KEY_MISSING_FOR_PASSWORDS_ERROR:
-    case sync_ui_util::SETTINGS_UNCONFIRMED_ERROR:
-      icon = &kSyncPausedCircleIcon;
-      color_id = ui::NativeTheme::kColorId_AlertSeverityHigh;
-      break;
-  }
-  return ColoredImageForMenu(*icon, native_theme->GetSystemColor(color_id));
 }
 
 void ProfileMenuView::BuildAutofillButtons() {
@@ -450,7 +448,6 @@ void ProfileMenuView::BuildSyncInfo() {
 
     if (error == sync_ui_util::NO_SYNC_ERROR) {
       SetSyncInfo(
-          GetSyncIcon(),
           /*description=*/base::string16(),
           l10n_util::GetStringUTF16(IDS_PROFILES_OPEN_SYNC_SETTINGS_BUTTON),
           SyncInfoContainerBackgroundState::kNoError,
@@ -470,7 +467,7 @@ void ProfileMenuView::BuildSyncInfo() {
                                      : IDS_SYNC_ERROR_USER_MENU_TITLE;
 
       SetSyncInfo(
-          GetSyncIcon(), l10n_util::GetStringUTF16(description_string_id),
+          l10n_util::GetStringUTF16(description_string_id),
           l10n_util::GetStringUTF16(button_string_id),
           sync_paused ? SyncInfoContainerBackgroundState::kPaused
                       : SyncInfoContainerBackgroundState::kError,
@@ -489,19 +486,18 @@ void ProfileMenuView::BuildSyncInfo() {
 
   if (account_info.has_value()) {
     SetSyncInfo(
-        GetSyncIcon(),
         l10n_util::GetStringUTF16(IDS_PROFILES_DICE_NOT_SYNCING_TITLE),
         l10n_util::GetStringUTF16(IDS_PROFILES_DICE_SIGNIN_BUTTON),
         SyncInfoContainerBackgroundState::kNoPrimaryAccount,
         base::BindRepeating(&ProfileMenuView::OnSigninAccountButtonClicked,
                             base::Unretained(this), account_info.value()));
   } else {
-    SetSyncInfo(/*icon=*/gfx::ImageSkia(),
-                l10n_util::GetStringUTF16(IDS_PROFILES_DICE_SYNC_PROMO),
+    SetSyncInfo(l10n_util::GetStringUTF16(IDS_PROFILES_DICE_SYNC_PROMO),
                 l10n_util::GetStringUTF16(IDS_PROFILES_DICE_SIGNIN_BUTTON),
                 SyncInfoContainerBackgroundState::kNoPrimaryAccount,
                 base::BindRepeating(&ProfileMenuView::OnSigninButtonClicked,
-                                    base::Unretained(this)));
+                                    base::Unretained(this)),
+                /*show_badge=*/false);
   }
 }
 

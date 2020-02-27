@@ -49,7 +49,6 @@ void IncognitoMenuView::BuildMenu() {
 
   SetIdentityInfo(
       ColoredImageForMenu(kIncognitoProfileIcon, icon_color),
-      /*badge=*/gfx::ImageSkia(),
       l10n_util::GetStringUTF16(IDS_INCOGNITO_PROFILE_MENU_TITLE),
       incognito_window_count > 1
           ? l10n_util::GetPluralStringFUTF16(IDS_INCOGNITO_WINDOW_COUNT_MESSAGE,
