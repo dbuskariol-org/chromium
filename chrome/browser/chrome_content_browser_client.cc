@@ -3292,6 +3292,10 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
   // Apply system caption style.
   if (!style) {
     style = native_theme->GetSystemCaptionStyle();
+
+    base::UmaHistogramBoolean(
+        "Accessibility.CaptionSettingsLoadedFromSystemSettings",
+        style.has_value());
   }
 
   // Apply caption style from preferences if system caption style is undefined.
