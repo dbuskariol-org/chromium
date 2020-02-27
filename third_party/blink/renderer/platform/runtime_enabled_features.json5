@@ -619,10 +619,6 @@
       name: "EditingNG",
     },
     {
-      name: "EmbeddedVTTStylesheets",
-      status: "experimental",
-    },
-    {
       name: "EncryptedMediaEncryptionSchemeQuery",
       status: "stable",
     },
