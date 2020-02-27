@@ -42,8 +42,6 @@ if (is_win || is_mac) {
       "installer_win.cc",
       "patcher.cc",
       "patcher.h",
-      "persisted_data.cc",
-      "persisted_data.h",
       "prefs.cc",
       "prefs.h",
       "registration_data.cc",
@@ -130,20 +128,17 @@ if (is_win || is_mac) {
     testonly = true
 
     sources = [
-      "persisted_data_unittest.cc",
       "run_all_unittests.cc",
       "updater_unittest.cc",
     ]
 
     deps = [
-      ":base",
+      ":lib",
       ":updater",
       ":version_header",
       "//base",
       "//base/test:test_support",
       "//chrome/common:constants",
-      "//components/prefs:test_support",
-      "//components/update_client",
       "//testing/gtest",
     ]
 
