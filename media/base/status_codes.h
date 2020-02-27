@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_BASE_MEDIA_ERROR_CODES_H_
-#define MEDIA_BASE_MEDIA_ERROR_CODES_H_
+#ifndef MEDIA_BASE_STATUS_CODES_H_
+#define MEDIA_BASE_STATUS_CODES_H_
 
 namespace media {
 
@@ -16,7 +16,7 @@ namespace media {
 //     │ └─ group code
 //     └─ reserved for now
 // 256 groups is more than anyone will ever need on a computer.
-enum class ErrorCode : uint32_t {
+enum class StatusCode : int32_t {
   kOk = 0,
 
   // Decoder Errors: 0x01
@@ -34,10 +34,11 @@ enum class ErrorCode : uint32_t {
   kCouldNotPostTexture = 0x00000302,
   kCouldNotPostAcquireStream = 0x00000303,
 
-  kCodeOnlyForTesting = std::numeric_limits<uint32_t>::max(),
+  // Reserved errors
+  kCodeOnlyForTesting = std::numeric_limits<int32_t>::max(),
   kMaxValue = kCodeOnlyForTesting,
 };
 
 }  // namespace media
 
-#endif  // MEDIA_BASE_MEDIA_ERROR_CODES_H_
+#endif  // MEDIA_BASE_STATUS_CODES_H_
