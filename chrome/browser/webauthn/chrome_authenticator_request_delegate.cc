@@ -566,6 +566,13 @@ void ChromeAuthenticatorRequestDelegate::OnRetryUserVerification(int attempts) {
   weak_dialog_model_->OnRetryUserVerification(attempts);
 }
 
+void ChromeAuthenticatorRequestDelegate::OnInternalUserVerificationLocked() {
+  if (!weak_dialog_model_)
+    return;
+
+  weak_dialog_model_->set_internal_uv_locked();
+}
+
 void ChromeAuthenticatorRequestDelegate::SetMightCreateResidentCredential(
     bool v) {
   if (!weak_dialog_model_) {

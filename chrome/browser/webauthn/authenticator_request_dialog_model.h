@@ -419,6 +419,9 @@ class AuthenticatorRequestDialogModel {
     return ephemeral_state_.has_attempted_pin_entry_;
   }
   base::Optional<int> pin_attempts() const { return pin_attempts_; }
+
+  // Flags the authenticator's internal user verification as locked.
+  void set_internal_uv_locked() { uv_attempts_ = 0; }
   base::Optional<int> uv_attempts() const { return uv_attempts_; }
 
   void RequestAttestationPermission(base::OnceCallback<void(bool)> callback);
