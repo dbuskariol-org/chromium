@@ -22345,6 +22345,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="1445" label="AUTOTESTPRIVATE_WAITFOROVERVIEWSTATE"/>
   <int value="1446" label="AUTOTESTPRIVATE_GETSCROLLABLESHELFINFOFORSTATE"/>
   <int value="1447" label="ENTERPRISE_DEVICEATTRIBUTES_GETDEVICEHOSTNAME"/>
+  <int value="1448" label="AUTOFILLPRIVATE_GETUPIIDLIST"/>
 </enum>
 
 <enum name="ExtensionIconState">
