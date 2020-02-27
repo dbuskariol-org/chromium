@@ -5,10 +5,10 @@
 #ifndef UI_BASE_CURSOR_CURSOR_H_
 #define UI_BASE_CURSOR_CURSOR_H_
 
+#include "base/component_export.h"
 #include "build/build_config.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "ui/base/mojom/cursor_type.mojom-shared.h"
-#include "ui/base/ui_base_export.h"
 #include "ui/gfx/geometry/point.h"
 
 #if defined(OS_WIN)
@@ -28,7 +28,7 @@ typedef void* PlatformCursor;
 #endif
 
 // Ref-counted cursor that supports both default and custom cursors.
-class UI_BASE_EXPORT Cursor {
+class COMPONENT_EXPORT(UI_BASE_CURSOR) Cursor {
  public:
   Cursor();
 
