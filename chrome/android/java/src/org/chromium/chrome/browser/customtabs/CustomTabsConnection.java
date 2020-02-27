@@ -823,11 +823,12 @@ public class CustomTabsConnection {
      * @param webContents the WebContents of the new tab.
      */
     public void setClientDataHeaderForNewTab(
-            CustomTabsSessionToken session, WebContents webContents) {
-        String header = getClientDataHeaderValueForSession(session);
-        if (!TextUtils.isEmpty(header)) {
-            CustomTabsConnectionJni.get().setClientDataHeader(webContents, header);
-        }
+            CustomTabsSessionToken session, WebContents webContents) {}
+
+    protected void setClientDataHeader(WebContents webContents, String header) {
+        if (TextUtils.isEmpty(header)) return;
+
+        CustomTabsConnectionJni.get().setClientDataHeader(webContents, header);
     }
 
     private void maybePreconnectToRedirectEndpoint(
@@ -1046,13 +1047,6 @@ public class CustomTabsConnection {
      */
     void setSendNavigationInfoForSession(CustomTabsSessionToken session, boolean send) {
         mClientManager.setSendNavigationInfoForSession(session, send);
-    }
-
-    /**
-     * See {@link ClientManager#setClientDataHeaderValue}.
-     */
-    String getClientDataHeaderValueForSession(CustomTabsSessionToken session) {
-        return mClientManager.getClientDataHeaderValue(session);
     }
 
     /**
