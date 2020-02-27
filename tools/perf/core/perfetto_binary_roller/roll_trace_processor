@@ -11,7 +11,7 @@ from core import path_util
 path_util.AddPyUtilsToPath()
 path_util.AddTracingToPath()
 
-from core.results_processor.perfetto_binary_roller import binary_deps_manager
+from core.perfetto_binary_roller import binary_deps_manager
 from core.tbmv3 import trace_processor
 
 

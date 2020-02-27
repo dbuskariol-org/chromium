@@ -8,7 +8,7 @@ import shutil
 import tempfile
 import unittest
 
-from core.results_processor.perfetto_binary_roller import binary_deps_manager
+from core.perfetto_binary_roller import binary_deps_manager
 
 import mock
 
