@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_TABS_TAB_MODEL_SYNCED_WINDOW_DELEGATE_H_
-#define IOS_CHROME_BROWSER_TABS_TAB_MODEL_SYNCED_WINDOW_DELEGATE_H_
+#ifndef IOS_CHROME_BROWSER_TABS_SYNCED_WINDOW_DELEGATE_BROWSER_AGENT_H_
+#define IOS_CHROME_BROWSER_TABS_SYNCED_WINDOW_DELEGATE_BROWSER_AGENT_H_
 
-#include "base/macros.h"
 #include "components/sessions/core/session_id.h"
 #include "components/sync_sessions/synced_window_delegate.h"
+#include "ios/chrome/browser/main/browser_observer.h"
+#include "ios/chrome/browser/main/browser_user_data.h"
 #include "ios/chrome/browser/web_state_list/web_state_list_observer.h"
 
 class WebStateList;
@@ -18,12 +19,18 @@ class SyncedTabDelegate;
 
 // A TabModelSyncedWindowDelegate is the iOS-based implementation of
 // SyncedWindowDelegate.
-class TabModelSyncedWindowDelegate : public sync_sessions::SyncedWindowDelegate,
-                                     public WebStateListObserver {
+class SyncedWindowDelegateBrowserAgent
+    : public sync_sessions::SyncedWindowDelegate,
+      BrowserObserver,
+      public BrowserUserData<SyncedWindowDelegateBrowserAgent>,
+      public WebStateListObserver {
  public:
-  // This constructor does not add the constructed object as an observere of
-  // |web_state_list|; calling code is expected to do that.
-  explicit TabModelSyncedWindowDelegate(WebStateList* web_state_list);
+  // Not copyable or moveable
+  SyncedWindowDelegateBrowserAgent(const SyncedWindowDelegateBrowserAgent&) =
+      delete;
+  SyncedWindowDelegateBrowserAgent& operator=(
+      const SyncedWindowDelegateBrowserAgent&) = delete;
+  ~SyncedWindowDelegateBrowserAgent() override;
 
   // Return the tab id for the tab at |index|.
   SessionID GetTabIdAt(int index) const override;
@@ -51,13 +58,18 @@ class TabModelSyncedWindowDelegate : public sync_sessions::SyncedWindowDelegate,
                           int index) override;
 
  private:
+  explicit SyncedWindowDelegateBrowserAgent(Browser* browser);
+
+  friend class BrowserUserData<SyncedWindowDelegateBrowserAgent>;
+  BROWSER_USER_DATA_KEY_DECL();
+  // BrowserObserver
+  void BrowserDestroyed(Browser* browser) override;
+
   // Sets the window id of |web_state| to |session_id_|.
   void SetWindowIdForWebState(web::WebState* web_state);
 
   WebStateList* web_state_list_;
   SessionID session_id_;
-
-  DISALLOW_COPY_AND_ASSIGN(TabModelSyncedWindowDelegate);
 };
 
-#endif  // IOS_CHROME_BROWSER_TABS_TAB_MODEL_SYNCED_WINDOW_DELEGATE_H_
+#endif  // IOS_CHROME_BROWSER_TABS_SYNCED_WINDOW_DELEGATE_BROWSER_AGENT_H_

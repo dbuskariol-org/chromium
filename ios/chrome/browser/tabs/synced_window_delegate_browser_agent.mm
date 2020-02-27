@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/tabs/tab_model_synced_window_delegate.h"
+#include "ios/chrome/browser/tabs/synced_window_delegate_browser_agent.h"
 
 #include "base/logging.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
@@ -15,19 +15,26 @@
 #error "This file requires ARC support."
 #endif
 
-TabModelSyncedWindowDelegate::TabModelSyncedWindowDelegate(
-    WebStateList* web_state_list)
-    : web_state_list_(web_state_list), session_id_(SessionID::NewUnique()) {
+BROWSER_USER_DATA_KEY_IMPL(SyncedWindowDelegateBrowserAgent)
+
+SyncedWindowDelegateBrowserAgent::SyncedWindowDelegateBrowserAgent(
+    Browser* browser)
+    : web_state_list_(browser->GetWebStateList()),
+      session_id_(SessionID::NewUnique()) {
+  browser->AddObserver(this);
   for (int index = 0; index < web_state_list_->count(); ++index) {
     SetWindowIdForWebState(web_state_list_->GetWebStateAt(index));
   }
+  web_state_list_->AddObserver(this);
 }
 
-SessionID TabModelSyncedWindowDelegate::GetTabIdAt(int index) const {
+SyncedWindowDelegateBrowserAgent::~SyncedWindowDelegateBrowserAgent() {}
+
+SessionID SyncedWindowDelegateBrowserAgent::GetTabIdAt(int index) const {
   return GetTabAt(index)->GetSessionId();
 }
 
-bool TabModelSyncedWindowDelegate::IsSessionRestoreInProgress() const {
+bool SyncedWindowDelegateBrowserAgent::IsSessionRestoreInProgress() const {
   // On iOS, the WebStateList restoration is done in a batch operation on the
   // main thread.
   // * as this is in a batch operation, no event is forwarded to the sync engine
@@ -39,47 +46,47 @@ bool TabModelSyncedWindowDelegate::IsSessionRestoreInProgress() const {
   return false;
 }
 
-bool TabModelSyncedWindowDelegate::ShouldSync() const {
+bool SyncedWindowDelegateBrowserAgent::ShouldSync() const {
   return true;
 }
 
-bool TabModelSyncedWindowDelegate::HasWindow() const {
+bool SyncedWindowDelegateBrowserAgent::HasWindow() const {
   return true;
 }
 
-SessionID TabModelSyncedWindowDelegate::GetSessionId() const {
+SessionID SyncedWindowDelegateBrowserAgent::GetSessionId() const {
   return session_id_;
 }
 
-int TabModelSyncedWindowDelegate::GetTabCount() const {
+int SyncedWindowDelegateBrowserAgent::GetTabCount() const {
   return web_state_list_->count();
 }
 
-int TabModelSyncedWindowDelegate::GetActiveIndex() const {
+int SyncedWindowDelegateBrowserAgent::GetActiveIndex() const {
   DCHECK_NE(web_state_list_->active_index(), WebStateList::kInvalidIndex);
   return web_state_list_->active_index();
 }
 
-bool TabModelSyncedWindowDelegate::IsTypeNormal() const {
+bool SyncedWindowDelegateBrowserAgent::IsTypeNormal() const {
   return true;
 }
 
-bool TabModelSyncedWindowDelegate::IsTypePopup() const {
+bool SyncedWindowDelegateBrowserAgent::IsTypePopup() const {
   return false;
 }
 
-bool TabModelSyncedWindowDelegate::IsTabPinned(
+bool SyncedWindowDelegateBrowserAgent::IsTabPinned(
     const sync_sessions::SyncedTabDelegate* tab) const {
   return false;
 }
 
-sync_sessions::SyncedTabDelegate* TabModelSyncedWindowDelegate::GetTabAt(
+sync_sessions::SyncedTabDelegate* SyncedWindowDelegateBrowserAgent::GetTabAt(
     int index) const {
   return IOSChromeSyncedTabDelegate::FromWebState(
       web_state_list_->GetWebStateAt(index));
 }
 
-void TabModelSyncedWindowDelegate::WebStateInsertedAt(
+void SyncedWindowDelegateBrowserAgent::WebStateInsertedAt(
     WebStateList* web_state_list,
     web::WebState* web_state,
     int index,
@@ -88,7 +95,7 @@ void TabModelSyncedWindowDelegate::WebStateInsertedAt(
   SetWindowIdForWebState(web_state);
 }
 
-void TabModelSyncedWindowDelegate::WebStateReplacedAt(
+void SyncedWindowDelegateBrowserAgent::WebStateReplacedAt(
     WebStateList* web_state_list,
     web::WebState* old_web_state,
     web::WebState* new_web_state,
@@ -97,7 +104,12 @@ void TabModelSyncedWindowDelegate::WebStateReplacedAt(
   SetWindowIdForWebState(new_web_state);
 }
 
-void TabModelSyncedWindowDelegate::SetWindowIdForWebState(
+void SyncedWindowDelegateBrowserAgent::SetWindowIdForWebState(
     web::WebState* web_state) {
   IOSChromeSessionTabHelper::FromWebState(web_state)->SetWindowID(session_id_);
+}
+
+void SyncedWindowDelegateBrowserAgent::BrowserDestroyed(Browser* browser) {
+  web_state_list_->RemoveObserver(this);
+  browser->RemoveObserver(this);
 }
