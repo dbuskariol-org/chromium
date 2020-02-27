@@ -4,10 +4,14 @@
 
 #include "components/paint_preview/browser/file_manager.h"
 
+#include <memory>
+
 #include "base/files/file.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
 #include "base/files/scoped_temp_dir.h"
+#include "components/paint_preview/common/proto/paint_preview.pb.h"
+#include "components/paint_preview/common/test_utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "url/gurl.h"
 
@@ -185,6 +189,30 @@ TEST(FileManagerTest, TestDeleteAll) {
   manager.DeleteAll();
   EXPECT_FALSE(base::PathExists(cr_directory));
   EXPECT_FALSE(base::PathExists(w3_directory));
+}
+
+TEST(FileManagerTest, HandleProto) {
+  base::ScopedTempDir temp_dir;
+  ASSERT_TRUE(temp_dir.CreateUniqueTempDir());
+  FileManager manager(temp_dir.GetPath());
+  auto key = manager.CreateKey(1U);
+  base::FilePath path;
+  EXPECT_TRUE(manager.CreateOrGetDirectory(key, &path));
+
+  PaintPreviewProto original_proto;
+  auto* root_frame = original_proto.mutable_root_frame();
+  root_frame->set_embedding_token_low(0);
+  root_frame->set_embedding_token_high(0);
+  root_frame->set_is_main_frame(true);
+  root_frame->set_file_path(path.AppendASCII("0.skp").MaybeAsASCII());
+  auto* metadata = original_proto.mutable_metadata();
+  metadata->set_url(GURL("www.chromium.org").spec());
+
+  EXPECT_TRUE(manager.SerializePaintPreviewProto(key, original_proto));
+  EXPECT_TRUE(base::PathExists(path.AppendASCII("proto.pb")));
+  auto read_proto = manager.DeserializePaintPreviewProto(key);
+  EXPECT_NE(read_proto, nullptr);
+  EXPECT_THAT(*read_proto, EqualsProto(original_proto));
 }
 
 }  // namespace paint_preview

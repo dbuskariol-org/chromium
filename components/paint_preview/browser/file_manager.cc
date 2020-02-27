@@ -8,12 +8,14 @@
 #include "base/files/file_util.h"
 #include "base/hash/hash.h"
 #include "base/strings/string_number_conversions.h"
+#include "components/paint_preview/common/file_utils.h"
 #include "third_party/zlib/google/zip.h"
 
 namespace paint_preview {
 
 namespace {
 
+constexpr char kProtoName[] = "proto.pb";
 constexpr char kZipExt[] = ".zip";
 
 }  // namespace
@@ -162,6 +164,22 @@ void FileManager::DeleteArtifacts(const std::vector<DirectoryKey>& keys) {
 
 void FileManager::DeleteAll() {
   base::DeleteFileRecursively(root_directory_);
+}
+
+bool FileManager::SerializePaintPreviewProto(const DirectoryKey& key,
+                                             const PaintPreviewProto& proto) {
+  base::FilePath path;
+  if (!CreateOrGetDirectory(key, &path))
+    return false;
+  return WriteProtoToFile(path.AppendASCII(kProtoName), proto);
+}
+
+std::unique_ptr<PaintPreviewProto> FileManager::DeserializePaintPreviewProto(
+    const DirectoryKey& key) {
+  base::FilePath path;
+  if (!CreateOrGetDirectory(key, &path))
+    return nullptr;
+  return ReadProtoFromFile(path.AppendASCII(kProtoName));
 }
 
 FileManager::StorageType FileManager::GetPathForKey(const DirectoryKey& key,

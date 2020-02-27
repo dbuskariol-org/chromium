@@ -9,6 +9,7 @@
 
 #include "base/files/file_path.h"
 #include "base/time/time.h"
+#include "components/paint_preview/common/proto/paint_preview.pb.h"
 #include "url/gurl.h"
 
 namespace paint_preview {
@@ -62,6 +63,15 @@ class FileManager {
 
   // Deletes all stored paint previews stored in the |root_directory_|.
   void DeleteAll();
+
+  // Serializes |proto| to the directory for |key|. Returns true on success.
+  bool SerializePaintPreviewProto(const DirectoryKey& key,
+                                  const PaintPreviewProto& proto);
+
+  // Deserializes PaintPreviewProto stored in |key|. Will return nullptr if not
+  // found or the proto cannot be parsed.
+  std::unique_ptr<PaintPreviewProto> DeserializePaintPreviewProto(
+      const DirectoryKey& key);
 
  private:
   enum StorageType {
