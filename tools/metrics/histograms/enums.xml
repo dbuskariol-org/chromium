@@ -67366,6 +67366,21 @@ Full version information for the fingerprint enum values:
   <int value="4" label="Abandoned"/>
 </enum>
 
+<enum name="WebAuthenticationCableV1DiscoveryEvent">
+  <int value="0" label="Discovery started"/>
+  <int value="1" label="Adapter found"/>
+  <int value="2" label="Adapter already powered on"/>
+  <int value="3" label="Adapter powered on by Chrome"/>
+  <int value="4" label="Adapter powered on by user"/>
+  <int value="5" label="Adapter powered off during request"/>
+  <int value="6" label="Scanning for BLE advertisements"/>
+  <int value="7" label="BLE advertisment registered"/>
+  <int value="8" label="caBLE device found"/>
+  <int value="9" label="GATT connection established"/>
+  <int value="10" label="caBLE handshake completed"/>
+  <int value="11" label="caBLE device timed out"/>
+</enum>
+
 <enum name="WebAuthenticationCableV1Event">
   <int value="0" label="Flow started"/>
   <int value="1" label="BLE hardware found"/>
@@ -67373,8 +67388,7 @@ Full version information for the fingerprint enum values:
   <int value="3" label="User prompted to allow Chrome to power BLE"/>
   <int value="4" label="User prompted to enable BLE in settings"/>
   <int value="5"
-      label="Transmitting caBLE advert after prompting user to power on
-             device"/>
+      label="Powering a BLE adapter that was not already powered succeeded"/>
   <int value="6" label="Success"/>
   <int value="7" label="Timeout"/>
 </enum>

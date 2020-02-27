@@ -393,8 +393,6 @@ void ChromeAuthenticatorRequestDelegate::UpdateLastTransportUsed(
   if (!weak_dialog_model_)
     return;
 
-  weak_dialog_model_->OnSuccess(transport);
-
   // We already invoke AddFidoBleDeviceToPairedList() on
   // AuthenticatorRequestDialogModel::OnPairingSuccess(). We invoke the function
   // here once more to take into account the case when user pairs Bluetooth
