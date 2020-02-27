@@ -47,9 +47,9 @@ class MODULES_EXPORT UserMediaClient
                   scoped_refptr<base::SingleThreadTaskRunner> task_runner);
   virtual ~UserMediaClient();
 
-  void RequestUserMedia(UserMediaRequest* web_request);
-  void CancelUserMediaRequest(UserMediaRequest* web_request);
-  void ApplyConstraints(blink::ApplyConstraintsRequest* web_request);
+  void RequestUserMedia(UserMediaRequest* user_media_request);
+  void CancelUserMediaRequest(UserMediaRequest* user_media_request);
+  void ApplyConstraints(blink::ApplyConstraintsRequest* user_media_request);
   void StopTrack(const blink::WebMediaStreamTrack& web_track);
   void ContextDestroyed();
 
