@@ -46,9 +46,18 @@ void SafeBrowsingUrlCheckerImpl::OnRTLookupRequest(
 }
 
 void SafeBrowsingUrlCheckerImpl::OnRTLookupResponse(
+    bool is_rt_lookup_successful,
     std::unique_ptr<RTLookupResponse> response) {
   DCHECK(CurrentlyOnThread(ThreadID::IO));
   DCHECK_EQ(ResourceType::kMainFrame, resource_type_);
+
+  const GURL& url = urls_[next_index_].url;
+
+  // TODO(crbug.com/1050859): Add a metric to log is_rt_lookup_successful.
+  if (!is_rt_lookup_successful) {
+    PerformHashBasedCheck(url);
+    return;
+  }
 
   if (url_web_ui_token_ != -1) {
     // The following is to log this RTLookupResponse on any open
@@ -59,8 +68,6 @@ void SafeBrowsingUrlCheckerImpl::OnRTLookupResponse(
                        base::Unretained(WebUIInfoSingleton::GetInstance()),
                        url_web_ui_token_, *response));
   }
-
-  const GURL& url = urls_[next_index_].url;
 
   SBThreatType sb_threat_type = SB_THREAT_TYPE_SAFE;
   if (response && (response->threat_info_size() > 0)) {
