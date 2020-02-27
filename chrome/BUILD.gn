@@ -398,14 +398,6 @@ if (is_win) {
       configs += [ "//build/config/win:delayloads_not_for_child_dll" ]
     }
 
-    if (!is_component_build) {
-      # This is a large module that can't do incremental linking in some
-      # cases.
-      configs -= [ "//build/config/win:default_incremental_linking" ]
-      configs +=
-          [ "//build/config/win:default_large_module_incremental_linking" ]
-    }
-
     if (use_aura) {
       deps += [ "//ui/compositor" ]
     }
