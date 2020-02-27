@@ -35,6 +35,7 @@ import androidx.browser.trusted.TrustedWebActivityIntentBuilder;
 import androidx.browser.trusted.sharing.ShareData;
 import androidx.browser.trusted.sharing.ShareTarget;
 
+import org.chromium.base.IntentUtils;
 import org.chromium.base.Log;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
@@ -44,7 +45,6 @@ import org.chromium.chrome.browser.IntentHandler;
 import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.net.spdyproxy.DataReductionProxySettings;
-import org.chromium.chrome.browser.util.IntentUtils;
 import org.chromium.chrome.browser.util.UrlConstants;
 import org.chromium.components.browser_ui.styles.ChromeColors;
 import org.chromium.components.browser_ui.widget.TintedDrawable;
