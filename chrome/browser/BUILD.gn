@@ -2986,6 +2986,7 @@ jumbo_static_library("browser") {
       "//components/cdm/browser",
       "//components/content_capture/android",
       "//components/crash/android:crash_android",
+      "//components/embedder_support/android:util",
       "//components/embedder_support/android:web_contents_delegate",
       "//components/feed:buildflags",
       "//components/feed:feature_list",

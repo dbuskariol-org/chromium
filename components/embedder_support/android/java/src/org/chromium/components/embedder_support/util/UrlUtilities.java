@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.util;
+package org.chromium.components.embedder_support.util;
 
 import android.net.Uri;
 import android.text.TextUtils;
@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.CollectionUtil;
+import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.components.embedder_support.util.UrlConstants;
 import org.chromium.content_public.common.ContentUrlConstants;
 import org.chromium.url.GURL;
 
@@ -22,12 +22,11 @@ import java.util.HashSet;
  * Utilities for working with URIs (and URLs). These methods may be used in security-sensitive
  * contexts (after all, origins are the security boundary on the web), and so the correctness bar
  * must be high.
- * @deprecated Use the version in //components/embedder_support instead.
  *
  * Use ShadowUrlUtilities to mock out native-dependent methods in tests.
  * TODO(pshmakov): we probably should just make those methods non-static.
  */
-@Deprecated
+@JNINamespace("embedder_support")
 public class UrlUtilities {
     private static final String TAG = "UrlUtilities";
 
