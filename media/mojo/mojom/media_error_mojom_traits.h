@@ -20,15 +20,24 @@ struct StructTraits<media::mojom::MediaErrorDataView, media::MediaError> {
     return input.GetErrorCode();
   }
 
-  static const std::string& message(const media::MediaError& input) {
+  static base::Optional<std::string> message(const media::MediaError& input) {
+    if (input.IsOk())
+      return base::nullopt;
+    DCHECK(input.data_);
     return input.GetErrorMessage();
   }
 
   static base::span<base::Value> frames(const media::MediaError& input) {
+    if (input.IsOk())
+      return {};
+    DCHECK(input.data_);
     return input.data_->frames;
   }
 
   static base::span<media::MediaError> causes(const media::MediaError& input) {
+    if (input.IsOk())
+      return {};
+    DCHECK(input.data_);
     return input.data_->causes;
   }
 
