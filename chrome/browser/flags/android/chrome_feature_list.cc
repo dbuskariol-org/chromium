@@ -111,6 +111,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kCastDeviceFilter,
     &kCloseTabSuggestions,
     &kCCTBackgroundTab,
+    &kCCTClientDataHeader,
     &kCCTExternalLinkHandling,
     &kCCTIncognito,
     &kCCTModule,
@@ -327,6 +328,9 @@ const base::Feature kCloseTabSuggestions{"CloseTabSuggestions",
 
 const base::Feature kCCTBackgroundTab{"CCTBackgroundTab",
                                       base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kCCTClientDataHeader{"CCTClientDataHeader",
+                                         base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kCCTExternalLinkHandling{"CCTExternalLinkHandling",
                                              base::FEATURE_ENABLED_BY_DEFAULT};
