@@ -68,12 +68,12 @@ class CORE_EXPORT NGFragmentItemsBuilder {
   //
   // Once this method has been called, new items cannot be added.
   const Vector<std::unique_ptr<NGFragmentItem>>&
-  Items(WritingMode, base::i18n::TextDirection, const PhysicalSize& outer_size);
+  Items(WritingMode, TextDirection, const PhysicalSize& outer_size);
 
   // Build a |NGFragmentItems|. The builder cannot build twice because data set
   // to this builder may be cleared.
   void ToFragmentItems(WritingMode,
-                       base::i18n::TextDirection,
+                       TextDirection,
                        const PhysicalSize& outer_size,
                        void* data);
 
@@ -81,7 +81,7 @@ class CORE_EXPORT NGFragmentItemsBuilder {
   void AddItems(Child* child_begin, Child* child_end);
 
   void ConvertToPhysical(WritingMode writing_mode,
-                         base::i18n::TextDirection direction,
+                         TextDirection direction,
                          const PhysicalSize& outer_size);
 
   void AssociateNextForSameLayoutObject();
