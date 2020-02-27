@@ -1669,8 +1669,10 @@ CrSettingsEditDictionaryPageTest.prototype = {
   extraLibraries: CrSettingsBrowserTest.prototype.extraLibraries.concat([
     '../fake_chrome_event.js',
     'fake_settings_private.js',
+    'chromeos/fake_input_method_private.js',
     '../test_browser_proxy.js',
     'fake_language_settings_private.js',
+    'test_languages_browser_proxy.js',
     'edit_dictionary_page_test.js',
   ]),
 };
