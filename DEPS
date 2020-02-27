@@ -1620,7 +1620,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_annotation_annotation',
-              'version': 'version:1.1.0-cr0',
+              'version': 'version:1.0.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2072,28 +2072,6 @@ deps = {
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_test_core',
               'version': 'version:1.2.0-cr0',
-          },
-      ],
-      'condition': 'checkout_android',
-      'dep_type': 'cipd',
-  },
-
-  'src/third_party/android_deps/libs/androidx_test_espresso_espresso_core': {
-      'packages': [
-          {
-              'package': 'chromium/third_party/android_deps/libs/androidx_test_espresso_espresso_core',
-              'version': 'version:3.1.0-cr0',
-          },
-      ],
-      'condition': 'checkout_android',
-      'dep_type': 'cipd',
-  },
-
-  'src/third_party/android_deps/libs/androidx_test_espresso_espresso_idling_resource': {
-      'packages': [
-          {
-              'package': 'chromium/third_party/android_deps/libs/androidx_test_espresso_espresso_idling_resource',
-              'version': 'version:3.1.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3183,17 +3161,6 @@ deps = {
           {
               'package': 'chromium/third_party/android_deps/libs/com_squareup_javapoet',
               'version': 'version:1.11.1-cr0',
-          },
-      ],
-      'condition': 'checkout_android',
-      'dep_type': 'cipd',
-  },
-
-  'src/third_party/android_deps/libs/com_squareup_javawriter': {
-      'packages': [
-          {
-              'package': 'chromium/third_party/android_deps/libs/com_squareup_javawriter',
-              'version': 'version:2.1.1-cr0',
           },
       ],
       'condition': 'checkout_android',
