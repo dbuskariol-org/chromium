@@ -82,8 +82,9 @@ void CompressAndMeasureSize(const base::FilePath& root_dir,
                             FinishedCallback finished,
                             bool keep_zip) {
   FileManager manager(root_dir);
+  auto key = manager.CreateKey(url);
   base::FilePath path;
-  bool success = manager.CreateOrGetDirectoryFor(url, &path);
+  bool success = manager.CreateOrGetDirectory(key, &path);
   if (!success) {
     VLOG(1) << kPaintPreviewTestTag << "Failure: could not find url dir.";
     CleanupOnFailure(root_dir, std::move(finished));
@@ -93,8 +94,8 @@ void CompressAndMeasureSize(const base::FilePath& root_dir,
                   base::File::FLAG_CREATE_ALWAYS | base::File::FLAG_WRITE);
   std::string str_proto = proto->SerializeAsString();
   file.WriteAtCurrentPos(str_proto.data(), str_proto.size());
-  manager.CompressDirectoryFor(url);
-  metrics.compressed_size_bytes = manager.GetSizeOfArtifactsFor(url);
+  manager.CompressDirectory(key);
+  metrics.compressed_size_bytes = manager.GetSizeOfArtifacts(key);
 
   CleanupAndLogResult(path.AddExtensionASCII("zip"), metrics,
                       std::move(finished), keep_zip);
@@ -133,7 +134,7 @@ base::Optional<base::FilePath> CreateDirectoryForURL(
     const GURL& url) {
   base::FilePath url_path;
   FileManager manager(root_path);
-  if (!manager.CreateOrGetDirectoryFor(url, &url_path)) {
+  if (!manager.CreateOrGetDirectory(manager.CreateKey(url), &url_path)) {
     VLOG(1) << kPaintPreviewTestTag << "Failure: could not create output dir.";
     return base::nullopt;
   }
