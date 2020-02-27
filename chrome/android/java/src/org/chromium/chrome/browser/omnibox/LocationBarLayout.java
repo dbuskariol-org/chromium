@@ -1105,15 +1105,18 @@ public class LocationBarLayout
 
         // This will be called between inflation and initialization. For those calls, using a null
         // ColorStateList should have no visible impact to the user.
-        ColorStateList colorStateList = mAssistantVoiceSearchService == null
+        ColorStateList micColorStateList = mAssistantVoiceSearchService == null
                 ? null
                 : mAssistantVoiceSearchService.getMicButtonColorStateList(
                         primaryColor, getContext());
-        ApiCompatibilityUtils.setImageTintList(mMicButton, colorStateList);
-        ApiCompatibilityUtils.setImageTintList(mDeleteButton, colorStateList);
+        ApiCompatibilityUtils.setImageTintList(mMicButton, micColorStateList);
 
         final boolean useDarkColors =
                 !ColorUtils.shouldUseLightForegroundOnBackground(primaryColor);
+        ColorStateList colorStateList =
+                ChromeColors.getIconTint(getContext(), !useDarkColors);
+        ApiCompatibilityUtils.setImageTintList(mDeleteButton, colorStateList);
+
         // If the URL changed colors and is not focused, update the URL to account for the new
         // color scheme.
         if (mUrlCoordinator.setUseDarkTextColors(useDarkColors) && !mUrlBar.hasFocus()) {
