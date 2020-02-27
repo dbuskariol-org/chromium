@@ -603,6 +603,7 @@
     },
     {
       name: "DocumentPolicy",
+      origin_trial_feature_name: "DocumentPolicy",
       status: "experimental",
     },
     {
