@@ -8,13 +8,60 @@
 #include <string>
 #include <vector>
 
+#include "base/containers/queue.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/optional.h"
+#include "base/synchronization/condition_variable.h"
+#include "base/synchronization/lock.h"
 #include "media/base/decoder_buffer.h"
 #include "media/base/video_codecs.h"
 
 namespace media {
 namespace test {
+
+// Helper class allowing one thread to wait on a notification from another.
+// If notifications come in faster than they are Wait()'d for, they are
+// accumulated (so exactly as many Wait() calls will unblock as Notify() calls
+// were made, regardless of order).
+template <typename StateEnum>
+class ClientStateNotification {
+ public:
+  ClientStateNotification();
+  ~ClientStateNotification();
+
+  // Used to notify a single waiter of a ClientState.
+  void Notify(StateEnum state);
+  // Used by waiters to wait for the next ClientState Notification.
+  StateEnum Wait();
+
+ private:
+  base::Lock lock_;
+  base::ConditionVariable cv_;
+  base::queue<StateEnum> pending_states_for_notification_;
+};
+
+template <typename StateEnum>
+ClientStateNotification<StateEnum>::ClientStateNotification() : cv_(&lock_) {}
+
+template <typename StateEnum>
+ClientStateNotification<StateEnum>::~ClientStateNotification() {}
+
+template <typename StateEnum>
+void ClientStateNotification<StateEnum>::Notify(StateEnum state) {
+  base::AutoLock auto_lock(lock_);
+  pending_states_for_notification_.push(state);
+  cv_.Signal();
+}
+
+template <typename StateEnum>
+StateEnum ClientStateNotification<StateEnum>::Wait() {
+  base::AutoLock auto_lock(lock_);
+  while (pending_states_for_notification_.empty())
+    cv_.Wait();
+  StateEnum ret = pending_states_for_notification_.front();
+  pending_states_for_notification_.pop();
+  return ret;
+}
 
 class EncodedDataHelper {
  public:
