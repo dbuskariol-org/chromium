@@ -348,6 +348,52 @@ IN_PROC_BROWSER_TEST_P(PendingAppManagerImplBrowserTest, AlreadyRegistered) {
   }
 }
 
+IN_PROC_BROWSER_TEST_P(PendingAppManagerImplBrowserTest, CannotFetchManifest) {
+  // With a flaky network connection, clients may request an app whose manifest
+  // cannot currently be retrieved. The app display mode is then assumed to be
+  // 'browser'.
+  ASSERT_TRUE(embedded_test_server()->Start());
+  const GURL app_url(embedded_test_server()->GetURL(
+      "/banners/manifest_test_page.html?manifest=does_not_exist.json"));
+
+  std::vector<ExternalInstallOptions> desired_apps_install_options;
+  {
+    ExternalInstallOptions install_options(
+        app_url, DisplayMode::kStandalone,
+        ExternalInstallSource::kExternalPolicy);
+    install_options.add_to_applications_menu = false;
+    install_options.add_to_desktop = false;
+    install_options.add_to_quick_launch_bar = false;
+    install_options.require_manifest = false;
+    desired_apps_install_options.push_back(std::move(install_options));
+  }
+
+  base::RunLoop run_loop;
+  pending_app_manager().SynchronizeInstalledApps(
+      std::move(desired_apps_install_options),
+      ExternalInstallSource::kExternalPolicy,
+      base::BindLambdaForTesting(
+          [&run_loop, &app_url](
+              std::map<GURL, InstallResultCode> install_results,
+              std::map<GURL, bool> uninstall_results) {
+            EXPECT_TRUE(uninstall_results.empty());
+            EXPECT_EQ(install_results.size(), 1U);
+            EXPECT_EQ(install_results[app_url],
+                      InstallResultCode ::kSuccessNewInstall);
+            run_loop.Quit();
+          }));
+  run_loop.Run();
+
+  base::Optional<AppId> app_id = registrar().FindAppWithUrlInScope(app_url);
+  DCHECK(app_id.has_value());
+  EXPECT_EQ(registrar().GetAppDisplayMode(*app_id), DisplayMode::kBrowser);
+  EXPECT_EQ(registrar().GetAppUserDisplayMode(*app_id),
+            DisplayMode::kStandalone);
+  EXPECT_EQ(registrar().GetAppEffectiveDisplayMode(*app_id),
+            DisplayMode::kMinimalUi);
+  EXPECT_FALSE(registrar().GetAppThemeColor(*app_id).has_value());
+}
+
 IN_PROC_BROWSER_TEST_P(PendingAppManagerImplBrowserTest, RegistrationTimeout) {
   ASSERT_TRUE(embedded_test_server()->Start());
   PendingAppRegistrationTask::SetTimeoutForTesting(0);
