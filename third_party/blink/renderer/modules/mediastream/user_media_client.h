@@ -64,16 +64,14 @@ class MODULES_EXPORT UserMediaClient
  private:
   class Request final : public GarbageCollected<Request> {
    public:
-    explicit Request(UserMediaRequestInfo* request);
+    explicit Request(UserMediaRequest* request);
     explicit Request(blink::ApplyConstraintsRequest* request);
     explicit Request(const blink::WebMediaStreamTrack& request);
     ~Request();
 
-    UserMediaRequestInfo* MoveUserMediaRequest();
+    UserMediaRequest* MoveUserMediaRequest();
 
-    UserMediaRequestInfo* user_media_request() const {
-      return user_media_request_;
-    }
+    UserMediaRequest* user_media_request() const { return user_media_request_; }
     blink::ApplyConstraintsRequest* apply_constraints_request() const {
       return apply_constraints_request_;
     }
@@ -91,7 +89,7 @@ class MODULES_EXPORT UserMediaClient
     }
 
    private:
-    Member<UserMediaRequestInfo> user_media_request_;
+    Member<UserMediaRequest> user_media_request_;
     Member<blink::ApplyConstraintsRequest> apply_constraints_request_;
     blink::WebMediaStreamTrack web_track_to_stop_;
 

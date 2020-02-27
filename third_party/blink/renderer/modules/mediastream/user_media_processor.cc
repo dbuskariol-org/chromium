@@ -308,13 +308,6 @@ Vector<blink::VideoInputDeviceCapabilities> ToVideoInputDeviceCapabilities(
 
 }  // namespace
 
-UserMediaRequestInfo::UserMediaRequestInfo(int request_id,
-                                           UserMediaRequest* web_request,
-                                           bool is_processing_user_gesture)
-    : request_id(request_id),
-      web_request(web_request),
-      is_processing_user_gesture(is_processing_user_gesture) {}
-
 // Class for storing state of the the processing of getUserMedia requests.
 class UserMediaProcessor::RequestInfo final
     : public GarbageCollected<UserMediaProcessor::RequestInfo> {
@@ -329,7 +322,7 @@ class UserMediaProcessor::RequestInfo final
     GENERATED,
   };
 
-  explicit RequestInfo(UserMediaRequestInfo* request);
+  explicit RequestInfo(UserMediaRequest* request);
 
   void StartAudioTrack(const blink::WebMediaStreamTrack& track,
                        bool is_pending);
@@ -345,8 +338,8 @@ class UserMediaProcessor::RequestInfo final
                             MediaStreamRequestResult result,
                             const String& result_name);
 
-  UserMediaRequestInfo* request() { return request_; }
-  int request_id() const { return request_->request_id; }
+  UserMediaRequest* request() { return request_; }
+  int request_id() const { return request_->request_id(); }
 
   State state() const { return state_; }
   void set_state(State state) { state_ = state; }
@@ -408,12 +401,10 @@ class UserMediaProcessor::RequestInfo final
 
   blink::WebMediaStream* web_stream() { return &web_stream_; }
 
-  UserMediaRequest* web_request() const { return request_->web_request; }
-
   StreamControls* stream_controls() { return &stream_controls_; }
 
   bool is_processing_user_gesture() const {
-    return request_->is_processing_user_gesture;
+    return request_->has_transient_user_activation();
   }
 
   void Trace(Visitor* visitor) { visitor->Trace(request_); }
@@ -428,7 +419,7 @@ class UserMediaProcessor::RequestInfo final
   // that |this| might be deleted when the function returns.
   void CheckAllTracksStarted();
 
-  Member<UserMediaRequestInfo> request_;
+  Member<UserMediaRequest> request_;
   State state_ = State::NOT_SENT_FOR_GENERATION;
   blink::AudioCaptureSettings audio_capture_settings_;
   bool is_audio_content_capture_ = false;
@@ -449,14 +440,14 @@ class UserMediaProcessor::RequestInfo final
 
 // TODO(guidou): Initialize request_result_name_ as a null WTF::String.
 // https://crbug.com/764293
-UserMediaProcessor::RequestInfo::RequestInfo(UserMediaRequestInfo* request)
+UserMediaProcessor::RequestInfo::RequestInfo(UserMediaRequest* request)
     : request_(request), request_result_name_("") {}
 
 void UserMediaProcessor::RequestInfo::StartAudioTrack(
     const blink::WebMediaStreamTrack& track,
     bool is_pending) {
   DCHECK(track.Source().GetType() == blink::WebMediaStreamSource::kTypeAudio);
-  DCHECK(web_request()->Audio());
+  DCHECK(request()->Audio());
 #if DCHECK_IS_ON()
   DCHECK(audio_capture_settings_.HasValue());
 #endif
@@ -482,7 +473,7 @@ blink::WebMediaStreamTrack
 UserMediaProcessor::RequestInfo::CreateAndStartVideoTrack(
     const blink::WebMediaStreamSource& source) {
   DCHECK(source.GetType() == blink::WebMediaStreamSource::kTypeVideo);
-  DCHECK(web_request()->Video());
+  DCHECK(request()->Video());
   DCHECK(video_capture_settings_.HasValue());
   SendLogMessage(base::StringPrintf(
       "UMP::RI::CreateAndStartVideoTrack({request_id=%d})", request_id()));
@@ -560,24 +551,24 @@ UserMediaProcessor::~UserMediaProcessor() {
          !local_sources_.size());
 }
 
-UserMediaRequestInfo* UserMediaProcessor::CurrentRequest() {
+UserMediaRequest* UserMediaProcessor::CurrentRequest() {
   return current_request_info_ ? current_request_info_->request() : nullptr;
 }
 
-void UserMediaProcessor::ProcessRequest(UserMediaRequestInfo* request,
+void UserMediaProcessor::ProcessRequest(UserMediaRequest* request,
                                         base::OnceClosure callback) {
   DCHECK(!request_completed_cb_);
   DCHECK(!current_request_info_);
   request_completed_cb_ = std::move(callback);
   current_request_info_ = MakeGarbageCollected<RequestInfo>(request);
-  SendLogMessage(base::StringPrintf(
-      "ProcessRequest({request_id=%d}, {audio=%d}, "
-      "{video=%d})",
-      current_request_info_->request_id(),
-      current_request_info_->request()->web_request->Audio(),
-      current_request_info_->request()->web_request->Video()));
+  SendLogMessage(
+      base::StringPrintf("ProcessRequest({request_id=%d}, {audio=%d}, "
+                         "{video=%d})",
+                         current_request_info_->request_id(),
+                         current_request_info_->request()->Audio(),
+                         current_request_info_->request()->Video()));
   // TODO(guidou): Set up audio and video in parallel.
-  if (current_request_info_->web_request()->Audio()) {
+  if (current_request_info_->request()->Audio()) {
     SetupAudioInput();
     return;
   }
@@ -587,22 +578,22 @@ void UserMediaProcessor::ProcessRequest(UserMediaRequestInfo* request,
 void UserMediaProcessor::SetupAudioInput() {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   DCHECK(current_request_info_);
-  DCHECK(current_request_info_->web_request()->Audio());
+  DCHECK(current_request_info_->request()->Audio());
   SendLogMessage(
       base::StringPrintf("SetupAudioInput({request_id=%d}, {constraints=%s})",
                          current_request_info_->request_id(),
                          current_request_info_->request()
-                             ->web_request->AudioConstraints()
+                             ->AudioConstraints()
                              .ToString()
                              .Utf8()
                              .c_str()));
 
   auto& audio_controls = current_request_info_->stream_controls()->audio;
-  InitializeAudioTrackControls(current_request_info_->web_request(),
+  InitializeAudioTrackControls(current_request_info_->request(),
                                &audio_controls);
 
   if (audio_controls.stream_type == MediaStreamType::DISPLAY_AUDIO_CAPTURE) {
-    SelectAudioSettings(current_request_info_->web_request(),
+    SelectAudioSettings(current_request_info_->request(),
                         {blink::AudioDeviceCaptureCapability()});
     return;
   }
@@ -615,11 +606,11 @@ void UserMediaProcessor::SetupAudioInput() {
     GetMediaDevicesDispatcher()->GetAudioInputCapabilities(
         WTF::Bind(&UserMediaProcessor::SelectAudioDeviceSettings,
                   WrapWeakPersistent(this),
-                  WrapPersistent(current_request_info_->web_request())));
+                  WrapPersistent(current_request_info_->request())));
   } else {
     if (!blink::IsAudioInputMediaType(audio_controls.stream_type)) {
       String failed_constraint_name =
-          String(current_request_info_->web_request()
+          String(current_request_info_->request()
                      ->AudioConstraints()
                      .Basic()
                      .media_stream_source.GetName());
@@ -628,7 +619,7 @@ void UserMediaProcessor::SetupAudioInput() {
       GetUserMediaRequestFailed(result, failed_constraint_name);
       return;
     }
-    SelectAudioSettings(current_request_info_->web_request(),
+    SelectAudioSettings(current_request_info_->request(),
                         {blink::AudioDeviceCaptureCapability()});
   }
 }
@@ -711,7 +702,7 @@ void UserMediaProcessor::SelectAudioSettings(
 
 base::Optional<base::UnguessableToken>
 UserMediaProcessor::DetermineExistingAudioSessionId() {
-  DCHECK(current_request_info_->web_request()->Audio());
+  DCHECK(current_request_info_->request()->Audio());
 
   auto settings = current_request_info_->audio_capture_settings();
   auto device_id = settings.device_id();
@@ -747,7 +738,7 @@ void UserMediaProcessor::SetupVideoInput() {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   DCHECK(current_request_info_);
 
-  if (!current_request_info_->web_request()->Video()) {
+  if (!current_request_info_->request()->Video()) {
     base::Optional<base::UnguessableToken> audio_session_id =
         DetermineExistingAudioSessionId();
     GenerateStreamForCurrentRequestInfo(
@@ -760,23 +751,23 @@ void UserMediaProcessor::SetupVideoInput() {
       base::StringPrintf("SetupVideoInput. request_id=%d, video constraints=%s",
                          current_request_info_->request_id(),
                          current_request_info_->request()
-                             ->web_request->VideoConstraints()
+                             ->VideoConstraints()
                              .ToString()
                              .Utf8()
                              .c_str()));
 
   auto& video_controls = current_request_info_->stream_controls()->video;
-  InitializeVideoTrackControls(current_request_info_->web_request(),
+  InitializeVideoTrackControls(current_request_info_->request(),
                                &video_controls);
   if (blink::IsDeviceMediaType(video_controls.stream_type)) {
     GetMediaDevicesDispatcher()->GetVideoInputCapabilities(
         WTF::Bind(&UserMediaProcessor::SelectVideoDeviceSettings,
                   WrapWeakPersistent(this),
-                  WrapPersistent(current_request_info_->web_request())));
+                  WrapPersistent(current_request_info_->request())));
   } else {
     if (!blink::IsVideoInputMediaType(video_controls.stream_type)) {
       String failed_constraint_name =
-          String(current_request_info_->web_request()
+          String(current_request_info_->request()
                      ->VideoConstraints()
                      .Basic()
                      .media_stream_source.GetName());
@@ -831,7 +822,7 @@ void UserMediaProcessor::SelectVideoDeviceSettings(
   current_request_info_->SetVideoCaptureSettings(
       settings, false /* is_content_capture */);
 
-  if (current_request_info_->web_request()->Audio()) {
+  if (current_request_info_->request()->Audio()) {
     base::Optional<base::UnguessableToken> audio_session_id =
         DetermineExistingAudioSessionId();
     GenerateStreamForCurrentRequestInfo(
@@ -852,7 +843,7 @@ void UserMediaProcessor::SelectVideoContentSettings() {
   gfx::Size screen_size = GetScreenSize();
   blink::VideoCaptureSettings settings =
       blink::SelectSettingsVideoContentCapture(
-          current_request_info_->web_request()->VideoConstraints(),
+          current_request_info_->request()->VideoConstraints(),
           current_request_info_->stream_controls()->video.stream_type,
           screen_size.width(), screen_size.height());
   if (!settings.HasValue()) {
@@ -984,7 +975,7 @@ void UserMediaProcessor::OnStreamGenerated(
         video_device_id,
         WTF::Bind(&UserMediaProcessor::GotAllVideoInputFormatsForDevice,
                   WrapWeakPersistent(this),
-                  WrapPersistent(current_request_info_->web_request()), label,
+                  WrapPersistent(current_request_info_->request()), label,
                   video_device_id));
   }
 }
@@ -1102,7 +1093,7 @@ void UserMediaProcessor::OnStreamGenerationFailed(
                                     current_request_info_->request_id()));
 
   GetUserMediaRequestFailed(result);
-  DeleteWebRequest(current_request_info_->web_request());
+  DeleteWebRequest(current_request_info_->request());
 }
 
 void UserMediaProcessor::OnDeviceStopped(const MediaStreamDevice& device) {
@@ -1340,7 +1331,7 @@ UserMediaProcessor::CreateVideoSource(
 }
 
 void UserMediaProcessor::StartTracks(const String& label) {
-  DCHECK(current_request_info_->web_request());
+  DCHECK(current_request_info_->request());
   SendLogMessage(base::StringPrintf("StartTracks({request_id=%d}, {label=%s})",
                                     current_request_info_->request_id(),
                                     label.Utf8().c_str()));
@@ -1439,7 +1430,7 @@ void UserMediaProcessor::OnCreateNativeTracksCompleted(
       request_info->request_id(), label.Utf8().c_str()));
   if (result == MediaStreamRequestResult::OK) {
     GetUserMediaRequestSucceeded(*request_info->web_stream(),
-                                 request_info->web_request());
+                                 request_info->request());
     GetMediaStreamDispatcherHost()->OnStreamStarted(label);
   } else {
     GetUserMediaRequestFailed(result, constraint_name);
@@ -1459,7 +1450,7 @@ void UserMediaProcessor::OnCreateNativeTracksCompleted(
     }
   }
 
-  DeleteWebRequest(request_info->web_request());
+  DeleteWebRequest(request_info->request());
 }
 
 void UserMediaProcessor::GetUserMediaRequestSucceeded(
@@ -1513,7 +1504,7 @@ void UserMediaProcessor::GetUserMediaRequestFailed(
       FROM_HERE,
       WTF::Bind(&UserMediaProcessor::DelayedGetUserMediaRequestFailed,
                 WrapWeakPersistent(this), current_request_info_->request_id(),
-                WrapPersistent(current_request_info_->web_request()), result,
+                WrapPersistent(current_request_info_->request()), result,
                 constraint_name));
 }
 
@@ -1681,13 +1672,13 @@ bool UserMediaProcessor::IsCurrentRequestInfo(
     UserMediaRequest* web_request) const {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   return current_request_info_ &&
-         current_request_info_->web_request() == web_request;
+         current_request_info_->request() == web_request;
 }
 
 bool UserMediaProcessor::DeleteWebRequest(UserMediaRequest* web_request) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   if (current_request_info_ &&
-      current_request_info_->web_request() == web_request) {
+      current_request_info_->request() == web_request) {
     current_request_info_ = nullptr;
     std::move(request_completed_cb_).Run();
     return true;

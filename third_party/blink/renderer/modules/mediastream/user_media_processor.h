@@ -38,19 +38,6 @@ class WebMediaStreamDeviceObserver;
 class WebMediaStreamSource;
 class WebString;
 
-// TODO(guidou): Add |request_id| and |is_processing_user_gesture| to
-// blink::WebUserMediaRequest and remove this struct.
-struct UserMediaRequestInfo : public GarbageCollected<UserMediaRequestInfo> {
-  UserMediaRequestInfo(int request_id,
-                       UserMediaRequest* web_request,
-                       bool is_processing_user_gesture);
-  void Trace(Visitor* visitor) { visitor->Trace(web_request); }
-
-  const int request_id;
-  Member<UserMediaRequest> web_request;
-  const bool is_processing_user_gesture;
-};
-
 // UserMediaProcessor is responsible for processing getUserMedia() requests.
 // It also keeps tracks of all sources used by streams created with
 // getUserMedia().
@@ -73,14 +60,13 @@ class MODULES_EXPORT UserMediaProcessor
   // during the execution of a task on the main thread unless ProcessRequest or
   // DeleteWebRequest are invoked.
   // TODO(guidou): Remove this method. https://crbug.com/764293
-  UserMediaRequestInfo* CurrentRequest();
+  UserMediaRequest* CurrentRequest();
 
   // Starts processing |request| in order to create a new MediaStream. When
   // processing of |request| is complete, it notifies by invoking |callback|.
   // This method must be called only if there is no request currently being
   // processed.
-  void ProcessRequest(UserMediaRequestInfo* request,
-                      base::OnceClosure callback);
+  void ProcessRequest(UserMediaRequest* request, base::OnceClosure callback);
 
   // If |web_request| is the request currently being processed, stops processing
   // the request and returns true. Otherwise, performs no action and returns

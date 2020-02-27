@@ -47,8 +47,8 @@ void UpdateAPICount(UserMediaRequest::MediaType media_type) {
 
 }  // namespace
 
-UserMediaClient::Request::Request(UserMediaRequestInfo* request)
-    : user_media_request_(request) {
+UserMediaClient::Request::Request(UserMediaRequest* user_media_request)
+    : user_media_request_(user_media_request) {
   DCHECK(user_media_request_);
   DCHECK(!apply_constraints_request_);
   DCHECK(web_track_to_stop_.IsNull());
@@ -71,7 +71,7 @@ UserMediaClient::Request::Request(
 
 UserMediaClient::Request::~Request() = default;
 
-UserMediaRequestInfo* UserMediaClient::Request::MoveUserMediaRequest() {
+UserMediaRequest* UserMediaClient::Request::MoveUserMediaRequest() {
   auto user_media_request = user_media_request_;
   user_media_request_ = nullptr;
   return user_media_request;
@@ -166,9 +166,9 @@ void UserMediaClient::RequestUserMedia(UserMediaRequest* web_request) {
                                         ->GetFrame()
                                         ->Frame::HasTransientUserActivation();
   }
-  auto* request_info = MakeGarbageCollected<UserMediaRequestInfo>(
-      request_id, web_request, has_transient_user_activation);
-  pending_request_infos_.push_back(MakeGarbageCollected<Request>(request_info));
+  web_request->set_request_id(request_id);
+  web_request->set_has_transient_user_activation(has_transient_user_activation);
+  pending_request_infos_.push_back(MakeGarbageCollected<Request>(web_request));
   if (!is_processing_request_)
     MaybeProcessNextRequestInfo();
 }
@@ -240,10 +240,11 @@ void UserMediaClient::CancelUserMediaRequest(UserMediaRequest* web_request) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   {
     // TODO(guidou): Remove this conditional logging. https://crbug.com/764293
-    UserMediaRequestInfo* request = user_media_processor_->CurrentRequest();
-    if (request && request->web_request == web_request) {
-      blink::WebRtcLogMessage(base::StringPrintf(
-          "UMCI::CancelUserMediaRequest. request_id=%d", request->request_id));
+    UserMediaRequest* request = user_media_processor_->CurrentRequest();
+    if (request == web_request) {
+      blink::WebRtcLogMessage(
+          base::StringPrintf("UMCI::CancelUserMediaRequest. request_id=%d",
+                             request->request_id()));
     }
   }
 
@@ -253,8 +254,7 @@ void UserMediaClient::CancelUserMediaRequest(UserMediaRequest* web_request) {
   } else {
     for (auto it = pending_request_infos_.begin();
          it != pending_request_infos_.end(); ++it) {
-      if ((*it)->IsUserMedia() &&
-          (*it)->user_media_request()->web_request == web_request) {
+      if ((*it)->IsUserMedia() && (*it)->user_media_request() == web_request) {
         pending_request_infos_.erase(it);
         did_remove_request = true;
         break;
