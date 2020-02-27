@@ -107,29 +107,25 @@ class ProfileMenuViewBase : public content::WebContentsDelegate,
                    SyncInfoContainerBackgroundState background_state,
                    base::RepeatingClosure action,
                    bool show_badge = true);
-  void AddShortcutFeatureButton(const gfx::ImageSkia& icon,
+  void AddShortcutFeatureButton(const gfx::VectorIcon& icon,
                                 const base::string16& text,
                                 base::RepeatingClosure action);
-  void AddFeatureButton(const gfx::ImageSkia& icon,
-                        const base::string16& text,
-                        base::RepeatingClosure action);
+  void AddFeatureButton(const base::string16& text,
+                        base::RepeatingClosure action,
+                        const gfx::VectorIcon& icon = gfx::kNoneIcon,
+                        float icon_to_image_ratio = 1.0f);
   void SetProfileManagementHeading(const base::string16& heading);
   void AddSelectableProfile(const gfx::ImageSkia& image,
                             const base::string16& name,
                             bool is_guest,
                             base::RepeatingClosure action);
-  void AddProfileManagementShortcutFeatureButton(const gfx::ImageSkia& icon,
+  void AddProfileManagementShortcutFeatureButton(const gfx::VectorIcon& icon,
                                                  const base::string16& text,
                                                  base::RepeatingClosure action);
-  void AddProfileManagementFeatureButton(const gfx::ImageSkia& icon,
+  void AddProfileManagementFeatureButton(const gfx::VectorIcon& icon,
                                          const base::string16& text,
                                          base::RepeatingClosure action);
 
-  // 0 < |icon_to_image_ratio| <= 1 is the size ratio of |icon| in the returned
-  // image. E.g. a value of 0.8 means that |icon| only takes up 80% of the
-  // returned image, with the rest being padding around it.
-  gfx::ImageSkia ImageForMenu(const gfx::VectorIcon& icon,
-                              float icon_to_image_ratio = 1.0f) const;
   gfx::ImageSkia ColoredImageForMenu(const gfx::VectorIcon& icon,
                                      SkColor color) const;
   // Should be called inside each button/link action.

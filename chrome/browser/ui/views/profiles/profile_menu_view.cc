@@ -65,8 +65,6 @@ namespace {
 
 // Helpers --------------------------------------------------------------------
 
-constexpr float kShortcutIconToImageRatio = 9.0 / 16.0;
-
 ProfileAttributesEntry* GetProfileAttributesEntry(Profile* profile) {
   ProfileAttributesEntry* entry;
   CHECK(g_browser_process->profile_manager()
@@ -410,19 +408,18 @@ void ProfileMenuView::BuildGuestIdentity() {
 
 void ProfileMenuView::BuildAutofillButtons() {
   AddShortcutFeatureButton(
-      ImageForMenu(kKeyIcon, kShortcutIconToImageRatio),
-      l10n_util::GetStringUTF16(IDS_PROFILES_PASSWORDS_LINK),
+      kKeyIcon, l10n_util::GetStringUTF16(IDS_PROFILES_PASSWORDS_LINK),
       base::BindRepeating(&ProfileMenuView::OnPasswordsButtonClicked,
                           base::Unretained(this)));
 
   AddShortcutFeatureButton(
-      ImageForMenu(kCreditCardIcon, kShortcutIconToImageRatio),
+      kCreditCardIcon,
       l10n_util::GetStringUTF16(IDS_PROFILES_CREDIT_CARDS_LINK),
       base::BindRepeating(&ProfileMenuView::OnCreditCardsButtonClicked,
                           base::Unretained(this)));
 
   AddShortcutFeatureButton(
-      ImageForMenu(vector_icons::kLocationOnIcon, kShortcutIconToImageRatio),
+      vector_icons::kLocationOnIcon,
       l10n_util::GetStringUTF16(IDS_PROFILES_ADDRESSES_LINK),
       base::BindRepeating(&ProfileMenuView::OnAddressesButtonClicked,
                           base::Unretained(this)));
@@ -513,37 +510,42 @@ void ProfileMenuView::BuildFeatureButtons() {
       !is_guest && identity_manager->HasPrimaryAccount();
 
   if (has_unconsented_account && !IsSyncPaused(profile)) {
-    AddFeatureButton(
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-        // The Google G icon needs to be shrunk, so it won't look too big
-        // compared to the other icons.
-        ImageForMenu(kGoogleGLogoIcon, /*icon_to_image_ratio=*/0.75),
+    // The Google G icon needs to be shrunk, so it won't look too big compared
+    // to the other icons.
+    AddFeatureButton(
+        l10n_util::GetStringUTF16(IDS_SETTINGS_MANAGE_GOOGLE_ACCOUNT),
+        base::BindRepeating(
+            &ProfileMenuView::OnManageGoogleAccountButtonClicked,
+            base::Unretained(this)),
+        kGoogleGLogoIcon,
+        /*icon_to_image_ratio=*/0.75f);
 #else
-        gfx::ImageSkia(),
-#endif
+    AddFeatureButton(
         l10n_util::GetStringUTF16(IDS_SETTINGS_MANAGE_GOOGLE_ACCOUNT),
         base::BindRepeating(
             &ProfileMenuView::OnManageGoogleAccountButtonClicked,
             base::Unretained(this)));
+#endif
   }
 
   int window_count = CountBrowsersFor(profile);
   if (window_count > 1) {
     AddFeatureButton(
-        ImageForMenu(vector_icons::kCloseIcon),
         l10n_util::GetPluralStringFUTF16(IDS_PROFILES_CLOSE_X_WINDOWS_BUTTON,
                                          window_count),
         base::BindRepeating(&ProfileMenuView::OnExitProfileButtonClicked,
-                            base::Unretained(this)));
+                            base::Unretained(this)),
+        vector_icons::kCloseIcon);
   }
 
   // The sign-out button is always at the bottom.
   if (has_unconsented_account && !has_primary_account) {
     AddFeatureButton(
-        ImageForMenu(kSignOutIcon),
         l10n_util::GetStringUTF16(IDS_SCREEN_LOCK_SIGN_OUT),
         base::BindRepeating(&ProfileMenuView::OnSignoutButtonClicked,
-                            base::Unretained(this)));
+                            base::Unretained(this)),
+        kSignOutIcon);
   }
 }
 
@@ -585,7 +587,7 @@ void ProfileMenuView::BuildSelectableProfiles() {
 
 void ProfileMenuView::BuildProfileManagementFeatureButtons() {
   AddProfileManagementShortcutFeatureButton(
-      ImageForMenu(vector_icons::kSettingsIcon, kShortcutIconToImageRatio),
+      vector_icons::kSettingsIcon,
       l10n_util::GetStringUTF16(IDS_PROFILES_MANAGE_USERS_BUTTON),
       base::BindRepeating(&ProfileMenuView::OnManageProfilesButtonClicked,
                           base::Unretained(this)));
@@ -594,8 +596,7 @@ void ProfileMenuView::BuildProfileManagementFeatureButtons() {
   DCHECK(service);
   if (service->GetBoolean(prefs::kBrowserAddPersonEnabled)) {
     AddProfileManagementFeatureButton(
-        ImageForMenu(kAddIcon, /*icon_to_image_ratio=*/0.75),
-        l10n_util::GetStringUTF16(IDS_ADD),
+        kAddIcon, l10n_util::GetStringUTF16(IDS_ADD),
         base::BindRepeating(&ProfileMenuView::OnAddNewProfileButtonClicked,
                             base::Unretained(this)));
   }

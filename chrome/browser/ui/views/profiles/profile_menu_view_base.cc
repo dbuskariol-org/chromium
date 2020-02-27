@@ -28,6 +28,7 @@
 #include "ui/display/screen.h"
 #include "ui/gfx/image/canvas_image_source.h"
 #include "ui/gfx/image/image_skia_operations.h"
+#include "ui/gfx/vector_icon_types.h"
 #include "ui/views/accessibility/view_accessibility.h"
 #include "ui/views/controls/button/label_button.h"
 #include "ui/views/controls/button/md_text_button.h"
@@ -63,16 +64,6 @@ constexpr int kMinimumScrollableContentHeight = 40;
 // Spacing between the edge of the user menu and the top/bottom or left/right of
 // the menu items.
 constexpr int kMenuEdgeMargin = 16;
-
-SkColor GetDefaultIconColor() {
-  return ui::NativeTheme::GetInstanceForNativeUi()->GetSystemColor(
-      ui::NativeTheme::kColorId_DefaultIconColor);
-}
-
-SkColor GetDefaultSeparatorColor() {
-  return ui::NativeTheme::GetInstanceForNativeUi()->GetSystemColor(
-      ui::NativeTheme::kColorId_MenuSeparatorColor);
-}
 
 gfx::ImageSkia SizeImage(const gfx::ImageSkia& image, int size) {
   return gfx::ImageSkiaOperations::CreateResizedImage(
@@ -135,30 +126,98 @@ std::unique_ptr<views::BoxLayout> CreateBoxLayout(
   return layout;
 }
 
-std::unique_ptr<views::Button> CreateCircularImageButton(
-    views::ButtonListener* listener,
-    const gfx::ImageSkia& image,
-    const base::string16& text,
-    bool show_border = false) {
-  constexpr int kImageSize = 28;
-  const int kBorderThickness = show_border ? 1 : 0;
-  const SkScalar kButtonRadius = (kImageSize + 2 * kBorderThickness) / 2.0;
+const gfx::ImageSkia ImageForMenu(const gfx::VectorIcon& icon,
+                                  float icon_to_image_ratio,
+                                  SkColor color) {
+  const int padding =
+      static_cast<int>(kMaxImageSize * (1.0f - icon_to_image_ratio) / 2.0f);
 
-  auto button = std::make_unique<views::ImageButton>(listener);
-  button->SetImage(views::Button::STATE_NORMAL, SizeImage(image, kImageSize));
-  button->SetTooltipText(text);
-  button->SetInkDropMode(views::Button::InkDropMode::ON);
-  button->SetFocusForPlatform();
-  button->set_ink_drop_base_color(GetDefaultIconColor());
-  if (show_border) {
-    button->SetBorder(views::CreateRoundedRectBorder(
-        kBorderThickness, kButtonRadius, GetDefaultSeparatorColor()));
+  gfx::ImageSkia sized_icon =
+      gfx::CreateVectorIcon(icon, kMaxImageSize - 2 * padding, color);
+  return gfx::CanvasImageSource::CreatePadded(sized_icon, gfx::Insets(padding));
+}
+
+class CircularImageButton : public views::ImageButton {
+ public:
+  CircularImageButton(views::ButtonListener* listener,
+                      const gfx::VectorIcon& icon,
+                      const base::string16& text,
+                      bool show_border = false)
+      : ImageButton(listener), icon_(icon), show_border_(show_border) {
+    SetTooltipText(text);
+    SetInkDropMode(views::Button::InkDropMode::ON);
+    SetFocusForPlatform();
+
+    InstallCircleHighlightPathGenerator(this);
   }
 
-  InstallCircleHighlightPathGenerator(button.get());
+  // views::ImageButton:
+  void OnThemeChanged() override {
+    constexpr int kImageSize = 28;
+    constexpr float kShortcutIconToImageRatio = 9.0f / 16.0f;
+    const int kBorderThickness = show_border_ ? 1 : 0;
+    const SkScalar kButtonRadius = (kImageSize + 2 * kBorderThickness) / 2.0f;
+    const SkColor icon_color = GetNativeTheme()->GetSystemColor(
+        ui::NativeTheme::kColorId_DefaultIconColor);
 
-  return button;
-}
+    gfx::ImageSkia image =
+        ImageForMenu(icon_, kShortcutIconToImageRatio, icon_color);
+    SetImage(views::Button::STATE_NORMAL, SizeImage(image, kImageSize));
+    set_ink_drop_base_color(icon_color);
+
+    if (show_border_) {
+      const SkColor separator_color = GetNativeTheme()->GetSystemColor(
+          ui::NativeTheme::kColorId_MenuSeparatorColor);
+      SetBorder(views::CreateRoundedRectBorder(kBorderThickness, kButtonRadius,
+                                               separator_color));
+    }
+  }
+
+ private:
+  const gfx::VectorIcon& icon_;
+  bool show_border_;
+};
+
+class FeatureButtonIconView : public views::ImageView {
+ public:
+  FeatureButtonIconView(const gfx::VectorIcon& icon, float icon_to_image_ratio)
+      : icon_(icon), icon_to_image_ratio_(icon_to_image_ratio) {}
+  ~FeatureButtonIconView() override = default;
+
+  // views::ImageView:
+  void OnThemeChanged() override {
+    constexpr int kIconSize = 16;
+    const SkColor icon_color = GetNativeTheme()->GetSystemColor(
+        ui::NativeTheme::kColorId_DefaultIconColor);
+    gfx::ImageSkia image =
+        ImageForMenu(icon_, icon_to_image_ratio_, icon_color);
+    SetImage(SizeImage(ColorImage(image, icon_color), kIconSize));
+  }
+
+ private:
+  const gfx::VectorIcon& icon_;
+  const float icon_to_image_ratio_;
+};
+
+class ProfileManagementIconView : public views::ImageView {
+ public:
+  explicit ProfileManagementIconView(const gfx::VectorIcon& icon)
+      : icon_(icon) {}
+  ~ProfileManagementIconView() override = default;
+
+  // views::ImageView:
+  void OnThemeChanged() override {
+    constexpr float kIconToImageRatio = 0.75f;
+    constexpr int kIconSize = 20;
+    const SkColor icon_color = GetNativeTheme()->GetSystemColor(
+        ui::NativeTheme::kColorId_DefaultIconColor);
+    gfx::ImageSkia image = ImageForMenu(icon_, kIconToImageRatio, icon_color);
+    SetImage(SizeImage(image, kIconSize));
+  }
+
+ private:
+  const gfx::VectorIcon& icon_;
+};
 
 // AvatarImageView is used to ensure avatar adornments are kept in sync with
 // current theme colors.
@@ -433,7 +492,7 @@ void ProfileMenuViewBase::SetSyncInfo(
 }
 
 void ProfileMenuViewBase::AddShortcutFeatureButton(
-    const gfx::ImageSkia& icon,
+    const gfx::VectorIcon& icon,
     const base::string16& text,
     base::RepeatingClosure action) {
   const int kButtonSpacing = ChromeLayoutProvider::Get()->GetDistanceMetric(
@@ -452,26 +511,32 @@ void ProfileMenuViewBase::AddShortcutFeatureButton(
   }
 
   views::Button* button = shortcut_features_container_->AddChildView(
-      CreateCircularImageButton(this, icon, text, /*show_border=*/true));
+      std::make_unique<CircularImageButton>(this, icon, text,
+                                            /*show_border=*/true));
 
   RegisterClickAction(button, std::move(action));
 }
 
-void ProfileMenuViewBase::AddFeatureButton(const gfx::ImageSkia& icon,
-                                           const base::string16& text,
-                                           base::RepeatingClosure action) {
-  constexpr int kIconSize = 16;
-
+void ProfileMenuViewBase::AddFeatureButton(const base::string16& text,
+                                           base::RepeatingClosure action,
+                                           const gfx::VectorIcon& icon,
+                                           float icon_to_image_ratio) {
   // Initialize layout if this is the first time a button is added.
   if (!features_container_->GetLayoutManager()) {
     features_container_->SetLayoutManager(std::make_unique<views::BoxLayout>(
         views::BoxLayout::Orientation::kVertical));
   }
 
-  views::Button* button =
-      features_container_->AddChildView(std::make_unique<HoverButton>(
-          this, SizeImage(ColorImage(icon, GetDefaultIconColor()), kIconSize),
-          text));
+  views::View* button;
+  if (&icon == &gfx::kNoneIcon) {
+    button = features_container_->AddChildView(
+        std::make_unique<HoverButton>(this, text));
+  } else {
+    auto icon_view =
+        std::make_unique<FeatureButtonIconView>(icon, icon_to_image_ratio);
+    button = features_container_->AddChildView(
+        std::make_unique<HoverButton>(this, std::move(icon_view), text));
+  }
 
   RegisterClickAction(button, std::move(action));
 }
@@ -508,7 +573,7 @@ void ProfileMenuViewBase::AddSelectableProfile(const gfx::ImageSkia& image,
                                                const base::string16& name,
                                                bool is_guest,
                                                base::RepeatingClosure action) {
-  constexpr int kImageSize = 22;
+  constexpr int kImageSize = 20;
 
   // Initialize layout if this is the first time a button is added.
   if (!selectable_profiles_container_->GetLayoutManager()) {
@@ -528,7 +593,7 @@ void ProfileMenuViewBase::AddSelectableProfile(const gfx::ImageSkia& image,
 }
 
 void ProfileMenuViewBase::AddProfileManagementShortcutFeatureButton(
-    const gfx::ImageSkia& icon,
+    const gfx::VectorIcon& icon,
     const base::string16& text,
     base::RepeatingClosure action) {
   // Initialize layout if this is the first time a button is added.
@@ -541,17 +606,15 @@ void ProfileMenuViewBase::AddProfileManagementShortcutFeatureButton(
 
   views::Button* button =
       profile_mgmt_shortcut_features_container_->AddChildView(
-          CreateCircularImageButton(this, icon, text));
+          std::make_unique<CircularImageButton>(this, icon, text));
 
   RegisterClickAction(button, std::move(action));
 }
 
 void ProfileMenuViewBase::AddProfileManagementFeatureButton(
-    const gfx::ImageSkia& icon,
+    const gfx::VectorIcon& icon,
     const base::string16& text,
     base::RepeatingClosure action) {
-  constexpr int kIconSize = 22;
-
   // Initialize layout if this is the first time a button is added.
   if (!profile_mgmt_features_container_->GetLayoutManager()) {
     profile_mgmt_features_container_->SetLayoutManager(
@@ -559,21 +622,11 @@ void ProfileMenuViewBase::AddProfileManagementFeatureButton(
             views::BoxLayout::Orientation::kVertical));
   }
 
+  auto icon_button = std::make_unique<ProfileManagementIconView>(icon);
   views::Button* button = profile_mgmt_features_container_->AddChildView(
-      std::make_unique<HoverButton>(this, SizeImage(icon, kIconSize), text));
+      std::make_unique<HoverButton>(this, std::move(icon_button), text));
 
   RegisterClickAction(button, std::move(action));
-}
-
-gfx::ImageSkia ProfileMenuViewBase::ImageForMenu(
-    const gfx::VectorIcon& icon,
-    float icon_to_image_ratio) const {
-  const int padding =
-      static_cast<int>(kMaxImageSize * (1.0 - icon_to_image_ratio) / 2.0);
-
-  auto sized_icon = gfx::CreateVectorIcon(icon, kMaxImageSize - 2 * padding,
-                                          GetDefaultIconColor());
-  return gfx::CanvasImageSource::CreatePadded(sized_icon, gfx::Insets(padding));
 }
 
 gfx::ImageSkia ProfileMenuViewBase::ColoredImageForMenu(
@@ -714,7 +767,7 @@ void ProfileMenuViewBase::Reset() {
   columns->AddColumn(views::GridLayout::FILL, views::GridLayout::FILL,
                      views::GridLayout::kFixedSize, views::GridLayout::FIXED,
                      kMenuWidth, kMenuWidth);
-  layout->StartRow(1.0, 0);
+  layout->StartRow(1.0f, 0);
   layout->AddView(std::move(scroll_view));
 }
 
