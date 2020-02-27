@@ -205,6 +205,16 @@ void NGFragmentItemsBuilder::ConvertToPhysical(
   is_converted_to_physical_ = true;
 }
 
+base::Optional<LogicalOffset> NGFragmentItemsBuilder::LogicalOffsetFor(
+    const LayoutObject& layout_object) const {
+  DCHECK_EQ(items_.size(), offsets_.size());
+  for (const std::unique_ptr<NGFragmentItem>& item : items_) {
+    if (item->GetLayoutObject() == &layout_object)
+      return offsets_[&item - items_.begin()];
+  }
+  return base::nullopt;
+}
+
 void NGFragmentItemsBuilder::ToFragmentItems(
     WritingMode writing_mode,
     base::i18n::TextDirection direction,

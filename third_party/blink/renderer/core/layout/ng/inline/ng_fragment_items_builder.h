@@ -59,6 +59,9 @@ class CORE_EXPORT NGFragmentItemsBuilder {
   void AddListMarker(const NGPhysicalBoxFragment& marker_fragment,
                      const LogicalOffset& offset);
 
+  // Find |LogicalOffset| of the first |NGFragmentItem| for |LayoutObject|.
+  base::Optional<LogicalOffset> LogicalOffsetFor(const LayoutObject&) const;
+
   // Converts the |NGFragmentItem| vector to the physical coordinate space and
   // returns the result. This should only be used for determining the inline
   // containing block geometry for OOF-positioned nodes.
