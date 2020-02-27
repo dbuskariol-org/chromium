@@ -67675,7 +67675,6 @@ Full version information for the fingerprint enum values:
   <int value="33" label="kProxyConnection"/>
   <int value="34" label="kRange"/>
   <int value="35" label="kReferer"/>
-  <int value="36" label="kSecOriginPolicy"/>
   <int value="37" label="kTe"/>
   <int value="38" label="kTransferEncoding"/>
   <int value="39" label="kUpgrade"/>
