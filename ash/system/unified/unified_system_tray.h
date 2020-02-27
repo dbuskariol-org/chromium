@@ -29,6 +29,7 @@ class ImeModeView;
 class ManagedDeviceTrayItemView;
 class NotificationCounterView;
 class QuietModeView;
+class PrivacyScreenToastController;
 class UnifiedSliderBubbleController;
 class UnifiedSystemTrayBubble;
 class UnifiedSystemTrayModel;
@@ -175,6 +176,9 @@ class ASH_EXPORT UnifiedSystemTray : public TrayBackgroundView,
 
   const std::unique_ptr<UnifiedSliderBubbleController>
       slider_bubble_controller_;
+
+  const std::unique_ptr<PrivacyScreenToastController>
+      privacy_screen_toast_controller_;
 
   CurrentLocaleView* const current_locale_view_;
   ImeModeView* const ime_mode_view_;
