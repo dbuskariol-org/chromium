@@ -21,6 +21,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/system/sys_info.h"
 #include "base/task/post_task.h"
+#include "base/threading/thread_restrictions.h"
 #include "base/timer/timer.h"
 #include "chrome/browser/apps/app_service/app_launch_params.h"
 #include "chrome/browser/apps/launch_service/launch_service.h"
@@ -322,6 +323,26 @@ DemoSession* DemoSession::Get() {
 
 // static
 std::string DemoSession::GetScreensaverAppId() {
+  // Hack to support Kohaku's custom screensaver on M81 only. M82 and
+  // beyond goes thru chromeos-config. This change should only be
+  // applied on M81 branch.
+  static bool kohaku_probed = false;
+  static bool is_kohaku = false;
+
+  if (!kohaku_probed) {
+    base::ThreadRestrictions::ScopedAllowIO allow_io;
+    std::string smbios_name;
+    base::FilePath smbios_product_name_path("/sys/class/dmi/id/product_name");
+    if (base::ReadFileToString(smbios_product_name_path, &smbios_name) &&
+        smbios_name == "Kohaku\n") {
+      is_kohaku = true;
+    }
+    kohaku_probed = true;
+  }
+
+  if (is_kohaku)
+    return extension_misc::kScreensaverEveAppId;
+
   std::string board = GetBoardName();
   if (board == "eve")
     return extension_misc::kScreensaverEveAppId;
