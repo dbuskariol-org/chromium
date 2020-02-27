@@ -298,7 +298,7 @@ void AppLaunchController::OnNetworkConfigFinished() {
   DCHECK(network_config_requested_);
   network_config_requested_ = false;
   app_launch_splash_screen_view_->UpdateAppLaunchState(
-      AppLaunchSplashScreenView::APP_LAUNCH_STATE_PREPARING_NETWORK);
+      AppLaunchSplashScreenView::APP_LAUNCH_STATE_PREPARING_PROFILE);
   startup_app_launcher_->RestartLauncher();
 }
 
@@ -306,10 +306,11 @@ void AppLaunchController::OnNetworkStateChanged(bool online) {
   if (!waiting_for_network_)
     return;
 
-  if (online && !network_config_requested_)
+  // If the network timed out, we should exit network config dialog as soon as we are back online.
+  if (online && (network_wait_timedout_ || !showing_network_dialog_)) {
+    ClearNetworkWaitTimer();
     startup_app_launcher_->ContinueWithNetworkReady();
-  else if (network_wait_timedout_)
-    MaybeShowNetworkConfigureUI();
+  }
 }
 
 void AppLaunchController::OnDeletingSplashScreenView() {
@@ -466,8 +467,13 @@ void AppLaunchController::InitializeNetwork() {
       FROM_HERE, base::TimeDelta::FromSeconds(network_wait_time_in_seconds),
       this, &AppLaunchController::OnNetworkWaitTimedout);
 
+  // Regardless of the network state, we should notify the view that network
+  // connection is required.
   app_launch_splash_screen_view_->UpdateAppLaunchState(
       AppLaunchSplashScreenView::APP_LAUNCH_STATE_PREPARING_NETWORK);
+
+  if (app_launch_splash_screen_view_->IsNetworkReady())
+    OnNetworkStateChanged(/*online*/ true);
 }
 
 bool AppLaunchController::IsNetworkReady() {
@@ -486,7 +492,6 @@ void AppLaunchController::OnInstallingApp() {
   app_launch_splash_screen_view_->UpdateAppLaunchState(
       AppLaunchSplashScreenView::APP_LAUNCH_STATE_INSTALLING_APPLICATION);
 
-  ClearNetworkWaitTimer();
   app_launch_splash_screen_view_->ToggleNetworkConfig(false);
 
   // We have connectivity at this point, so we can skip the network
@@ -512,8 +517,6 @@ void AppLaunchController::OnReadyToLaunch() {
 
   if (splash_wait_timer_.IsRunning())
     return;
-
-  ClearNetworkWaitTimer();
 
   const int64_t time_taken_ms =
       (base::TimeTicks::Now() -
