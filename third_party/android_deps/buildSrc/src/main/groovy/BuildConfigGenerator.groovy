@@ -37,6 +37,8 @@ class BuildConfigGenerator extends DefaultTask {
     private static final def EXISTING_LIBS = [
         'junit_junit': '//third_party/junit:junit',
         'org_hamcrest_hamcrest_core': '//third_party/hamcrest:hamcrest_core_java',
+        'org_hamcrest_hamcrest_integration': '//third_party/hamcrest:hamcrest_integration_java',
+        'org_hamcrest_hamcrest_library': '//third_party/hamcrest:hamcrest_library_java',
     ]
 
 
