@@ -50,10 +50,10 @@ class UI_BASE_EXPORT Cursor {
   float device_scale_factor() const { return device_scale_factor_; }
   void set_device_scale_factor(float scale) { device_scale_factor_ = scale; }
 
-  SkBitmap GetBitmap() const;
+  const SkBitmap& custom_bitmap() const { return custom_bitmap_; }
   void set_custom_bitmap(const SkBitmap& bitmap) { custom_bitmap_ = bitmap; }
 
-  gfx::Point GetHotspot() const;
+  const gfx::Point& custom_hotspot() const { return custom_hotspot_; }
   void set_custom_hotspot(const gfx::Point& hotspot) {
     custom_hotspot_ = hotspot;
   }
@@ -68,11 +68,6 @@ class UI_BASE_EXPORT Cursor {
   void operator=(const Cursor& cursor);
 
  private:
-#if defined(USE_AURA)
-  SkBitmap GetDefaultBitmap() const;
-  gfx::Point GetDefaultHotspot() const;
-#endif
-
   // The basic cursor type.
   mojom::CursorType native_type_ = mojom::CursorType::kNull;
 

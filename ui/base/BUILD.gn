@@ -94,6 +94,8 @@ jumbo_component("base") {
     "cursor/cursor.cc",
     "cursor/cursor.h",
     "cursor/cursor_loader.h",
+    "cursor/cursor_lookup.cc",
+    "cursor/cursor_lookup.h",
     "cursor/cursor_size.h",
     "default_style.h",
     "device_form_factor.h",
