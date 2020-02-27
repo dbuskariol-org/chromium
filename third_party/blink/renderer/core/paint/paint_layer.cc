@@ -1093,7 +1093,8 @@ void PaintLayer::SetNeedsCompositingInputsUpdateInternal() {
     last_ancestor = current;
     current->child_needs_compositing_inputs_update_ = true;
     if (Compositor() &&
-        current->GetLayoutObject().ShouldApplyStrictContainment())
+        (current != initial_layer &&
+         current->GetLayoutObject().ShouldApplyStrictContainment()))
       break;
   }
 
