@@ -38627,6 +38627,7 @@ from previous Chrome versions.
   <int value="-181279574" label="NativeFilesystemAPI:enabled"/>
   <int value="-181093956" label="ScrollAnchoring:enabled"/>
   <int value="-180481252" label="CompositorThreadedScrollbarScrolling:enabled"/>
+  <int value="-177974995" label="CrostiniShowMicSetting:disabled"/>
   <int value="-175666252" label="Portals:disabled"/>
   <int value="-174829803" label="TabOutlinesInLowContrastThemes:enabled"/>
   <int value="-174706795"
@@ -39666,6 +39667,7 @@ from previous Chrome versions.
   <int value="1094506652" label="UseGoogleLocalNtp:enabled"/>
   <int value="1095061640" label="enable-prominent-url-app-flow"/>
   <int value="1096477444" label="AssistantVoiceMatch:enabled"/>
+  <int value="1097935876" label="CrostiniShowMicSetting:enabled"/>
   <int value="1098823967" label="ash-enable-window-cycle-ui"/>
   <int value="1100244809" label="MacSystemMediaPermissionsInfoUI:disabled"/>
   <int value="1101062411" label="Rar2Fs:disabled"/>
