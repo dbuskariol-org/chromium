@@ -395,7 +395,6 @@ TEST_F(ScrollbarLayerTest, UpdatePropertiesOfScrollBarWhenThumbRemoved) {
 
   root_layer->SetScrollOffset(gfx::ScrollOffset(0, 0));
   scrollbar_layer->SetBounds(gfx::Size(70, 10));
-  scrollbar_layer->SetScrollElementId(root_layer->element_id());
 
   // The track_rect should be relative to the scrollbar's origin.
   scrollbar_layer->fake_scrollbar()->set_track_rect(gfx::Rect(10, 10, 50, 10));
@@ -418,11 +417,11 @@ TEST_F(ScrollbarLayerTest, UpdatePropertiesOfScrollBarWhenThumbRemoved) {
 
 TEST_F(ScrollbarLayerTest, ThumbRect) {
   scoped_refptr<Layer> root_layer = Layer::Create();
+  root_layer->SetElementId(LayerIdToElementIdForTesting(root_layer->id()));
   scoped_refptr<Layer> content_layer = Layer::Create();
   scoped_refptr<FakePaintedScrollbarLayer> scrollbar_layer =
       FakePaintedScrollbarLayer::Create(false, true, root_layer->element_id());
 
-  root_layer->SetElementId(LayerIdToElementIdForTesting(root_layer->id()));
   // Give the root layer a size that will result in MaxScrollOffset = (80, 0).
   root_layer->SetScrollable(gfx::Size(20, 50));
   root_layer->SetBounds(gfx::Size(100, 50));
@@ -434,7 +433,6 @@ TEST_F(ScrollbarLayerTest, ThumbRect) {
 
   root_layer->SetScrollOffset(gfx::ScrollOffset(0, 0));
   scrollbar_layer->SetBounds(gfx::Size(70, 10));
-  scrollbar_layer->SetScrollElementId(root_layer->element_id());
 
   // The track_rect should be relative to the scrollbar's origin.
   scrollbar_layer->fake_scrollbar()->set_track_rect(gfx::Rect(10, 10, 50, 10));
@@ -505,7 +503,6 @@ TEST_F(ScrollbarLayerTest, ThumbRectForOverlayLeftSideVerticalScrollbar) {
 
   root_layer->SetScrollOffset(gfx::ScrollOffset(0, 0));
   scrollbar_layer->SetBounds(gfx::Size(10, 20));
-  scrollbar_layer->SetScrollElementId(root_layer->element_id());
   scrollbar_layer->fake_scrollbar()->set_track_rect(gfx::Rect(0, 0, 10, 20));
   scrollbar_layer->fake_scrollbar()->set_thumb_size(gfx::Size(10, 4));
   layer_tree_host_->UpdateLayers();
@@ -678,7 +675,6 @@ TEST_F(ScrollbarLayerTest, ScrollbarLayerOpacity) {
   scroll_layer->InsertChild(scrollbar_layer, 1);
   layer_tree_root->AddChild(scroll_layer);
   layer_tree_host_->SetRootLayer(layer_tree_root);
-  scrollbar_layer->SetScrollElementId(scroll_layer->element_id());
 
   // Choose layer bounds to give max_scroll_offset = (8, 8).
   layer_tree_root->SetBounds(gfx::Size(2, 2));
