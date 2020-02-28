@@ -1553,8 +1553,9 @@ bool TabStrip::ShouldHideCloseButtonForTab(Tab* tab) const {
 
 void TabStrip::SelectTab(Tab* tab, const ui::Event& event) {
   int model_index = GetModelIndexOf(tab);
+
   if (IsValidModelIndex(model_index)) {
-    if (tab->group().has_value())
+    if (tab->group().has_value() && !tab->IsActive())
       base::RecordAction(base::UserMetricsAction("TabGroups_SwitchGroupedTab"));
 
     // Report histogram metrics for the number of tab hover cards seen before
