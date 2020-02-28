@@ -26605,6 +26605,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3169" label="CssStyleSheetReplaceWithImport"/>
   <int value="3170" label="CryptoAlgorithmEd25519"/>
   <int value="3171" label="CryptoAlgorithmX25519"/>
+  <int value="3172" label="DisplayNames"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
