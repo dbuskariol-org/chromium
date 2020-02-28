@@ -143,8 +143,6 @@ std::unique_ptr<ResourceRequest> ResourceRequest::CreateRedirectRequest(
   request->SetKeepalive(GetKeepalive());
   request->SetPriority(Priority());
 
-  if (request->HttpMethod() == HttpMethod())
-    request->SetHttpBody(HttpBody());
   request->SetCorsPreflightPolicy(CorsPreflightPolicy());
   if (IsAdResource())
     request->SetIsAdResource();
