@@ -48570,11 +48570,11 @@ Called by update_net_trust_anchors.py.-->
     progress.
   </int>
   <int value="6"
-      label="Fetch race not attempted due to too many concurrent page
-             navigation fetches">
+      label="Deprecated: Fetch race not attempted due to too many concurrent
+             page navigation fetches">
     The fetch race was not attempted for the host and URL of the current
     navigation since there are too many page navigation fetches currently in
-    flight.
+    flight. Deprecated in 02/2020.
   </int>
 </enum>
 
