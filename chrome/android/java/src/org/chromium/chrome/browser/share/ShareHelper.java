@@ -164,8 +164,11 @@ public class ShareHelper {
 
         boolean anyChildKept = false;
         if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                anyChildKept |= deleteFiles(child, reservedFilepath);
+            File[] file_list = file.listFiles();
+            if (file_list != null) {
+                for (File child : file.listFiles()) {
+                    anyChildKept |= deleteFiles(child, reservedFilepath);
+                }
             }
         }
 
