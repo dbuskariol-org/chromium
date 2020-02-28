@@ -60,7 +60,7 @@ class ASH_EXPORT PrivacyScreenController
 
  private:
   // Called when the user pref for the status of PrivacyScreen is changed.
-  void OnEnabledPrefChanged();
+  void OnEnabledPrefChanged(bool notify_observers);
 
   // Called when a change to |active_user_pref_service_| is detected (i.e. when
   // OnActiveUserPrefServiceChanged() is called.
