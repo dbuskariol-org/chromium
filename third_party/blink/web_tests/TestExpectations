@@ -6699,3 +6699,8 @@ crbug.com/1055006 [ Linux ] external/wpt/std-toast/methods.html [ Pass Failure T
 crbug.com/1055006 [ Linux ] external/wpt/std-toast/options.html [ Pass Failure Timeout ]
 
 crbug.com/1048597 [ Linux Debug ] virtual/android/fullscreen/video-scrolled-iframe.html [ Pass Timeout ]
+
+crbug.com/1056022 [ Fuchsia ] http/tests/uri/escaped-entity.html [ Pass Timeout ]
+crbug.com/1056022 [ Fuchsia ] http/tests/uri/utf8-path.html [ Pass Timeout ]
+crbug.com/1056022 [ Fuchsia ] virtual/text-antialias/international/001.html [ Pass Timeout ]
+crbug.com/1056022 [ Fuchsia ] http/tests/eventsource/eventsource-bad-mime-type.html [ Pass Timeout ]
