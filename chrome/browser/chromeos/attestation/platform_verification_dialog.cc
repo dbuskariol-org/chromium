@@ -38,9 +38,8 @@ namespace {
 
 std::unique_ptr<views::ImageButton> CreateLearnMoreButton(
     views::ButtonListener* listener) {
-  auto learn_more_button = views::CreateVectorImageButton(listener);
-  views::SetImageFromVectorIcon(learn_more_button.get(),
-                                vector_icons::kHelpOutlineIcon);
+  auto learn_more_button = views::CreateVectorImageButtonWithNativeTheme(
+      listener, vector_icons::kHelpOutlineIcon);
   learn_more_button->SetAccessibleName(
       l10n_util::GetStringUTF16(IDS_CHROMEOS_ACC_LEARN_MORE));
   learn_more_button->SetFocusForPlatform();

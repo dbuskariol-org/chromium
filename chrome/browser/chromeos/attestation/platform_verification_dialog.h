@@ -50,10 +50,8 @@ class PlatformVerificationDialog : public views::DialogDelegateView,
                              const base::string16& domain,
                              ConsentCallback callback);
 
-  // views::WidgetDelegate:
+  // views::DialogDelegateView:
   ui::ModalType GetModalType() const override;
-
-  // views::View:
   gfx::Size CalculatePreferredSize() const override;
 
   // views::ButtonListener:
