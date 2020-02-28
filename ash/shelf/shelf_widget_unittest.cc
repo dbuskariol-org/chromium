@@ -13,7 +13,6 @@
 #include "ash/public/cpp/shelf_config.h"
 #include "ash/root_window_controller.h"
 #include "ash/screen_util.h"
-#include "ash/shelf/drag_handle.h"
 #include "ash/shelf/hotseat_transition_animator.h"
 #include "ash/shelf/login_shelf_view.h"
 #include "ash/shelf/shelf.h"
