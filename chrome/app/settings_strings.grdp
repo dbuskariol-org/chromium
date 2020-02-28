@@ -2838,9 +2838,6 @@
   <message name="IDS_SETTINGS_PEOPLE" desc="Name of the settings page which manages the user's relationship to Google.">
     You and Google
   </message>
-  <message name="IDS_SETTINGS_PEOPLE_MANAGE_OTHER_PEOPLE" desc="Label for the button that opens the multi-profile user manager.">
-    Manage other people
-  </message>
   <message name="IDS_SETTINGS_CHANGE_PICTURE_PROFILE_PHOTO" desc="The text on the Google profile photo of the user.">
     Google Profile photo
   </message>
@@ -2863,9 +2860,6 @@
     <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_MISMATCHED" desc="Message shown below the title that tells the user they have entered two different PIN values.">
       PINs do not match
     </message>
-    <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_FINGERPRINT_SUBPAGE_TITLE" desc="Title of the fingerprint subpage.">
-      Fingerprint
-    </message>
     <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_REGISTERED_FINGERPRINTS_LABEL" desc="Text above fingerprint list that tells users their registered fingerprints.">
       Saved fingerprints
     </message>
@@ -2874,12 +2868,6 @@
     </message>
     <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_FINGERPRINT_LESS_SECURE" desc="Text telling users that fingerprints might be less secure than strong PINs or passwords.">
       Note: Your fingerprint may be less secure than a strong password or PIN.
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_PAGE_TITLE" desc="Title of Account Manager Settings page.">
-      My accounts
-    </message>
-    <message name="IDS_SETTINGS_ACCOUNT_MANAGER_SUBMENU_LABEL" desc="Label of Account Manager submenu in Settings page.">
-      Google Accounts
     </message>
     <message name="IDS_SETTINGS_ACCOUNT_MANAGER_ACCOUNT_REMOVED_MESSAGE" desc="Notification message after account removal.">
       <ph name="EMAIL">$1<ex>abcd@google.com</ex></ph> was removed from this device
