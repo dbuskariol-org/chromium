@@ -114,7 +114,6 @@ public class CachedFeatureFlags {
     private static Map<String, Boolean> sBoolValuesReturned = new HashMap<>();
     private static Map<String, String> sStringValuesReturned = new HashMap<>();
     private static String sReachedCodeProfilerTrialGroup;
-    private static Boolean sEnabledTabThumbnailApsectRatioForTesting;
 
     /**
      * Checks if a cached feature flag is enabled.
@@ -328,23 +327,6 @@ public class CachedFeatureFlags {
         }
 
         return sReachedCodeProfilerTrialGroup;
-    }
-
-    /**
-     * @return Whether the thumbnail_aspect_ratio field trail is set.
-     */
-    public static boolean isTabThumbnailAspectRatioNotOne() {
-        if (sEnabledTabThumbnailApsectRatioForTesting != null) {
-            return sEnabledTabThumbnailApsectRatioForTesting;
-        }
-
-        double expectedAspectRatio = ChromeFeatureList.getFieldTrialParamByFeatureAsDouble(
-                ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID, "thumbnail_aspect_ratio", 1.0);
-        return Double.compare(1.0, expectedAspectRatio) != 0;
-    }
-
-    public static void enableTabThumbnailAspectRatioForTesting(Boolean enabled) {
-        sEnabledTabThumbnailApsectRatioForTesting = enabled;
     }
 
     static boolean getConsistentBooleanValue(String preferenceName, boolean defaultValue) {
