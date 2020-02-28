@@ -1892,7 +1892,7 @@ CrSettingsMainPageTest.prototype = {
 // Times out on Windows Tests (dbg). See https://crbug.com/651296.
 // Times out / crashes on chromium.linux/Linux Tests (dbg) crbug.com/667882
 // Times out on Linux CFI. See http://crbug.com/929288.
-GEN('#if !defined(NDEBUG) || defined(OS_LINUX)');
+GEN('#if !defined(NDEBUG) || (defined(OS_LINUX) && defined(IS_CFI))');
 GEN('#define MAYBE_MainPage DISABLED_MainPage');
 GEN('#else');
 GEN('#define MAYBE_MainPage MainPage');
