@@ -42,6 +42,8 @@ class ASH_EXPORT PrivacyScreenController
 
   // Whether or not the privacy screen feature is supported by the device.
   bool IsSupported() const;
+  // Whether or not the privacy screen feature is enforced by policy.
+  bool IsManaged() const;
   // Get the PrivacyScreen settings stored in the current active user prefs.
   bool GetEnabled() const;
   // Set the desired PrivacyScreen settings in the current active user prefs.

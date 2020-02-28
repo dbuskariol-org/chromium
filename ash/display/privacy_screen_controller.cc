@@ -37,6 +37,11 @@ bool PrivacyScreenController::IsSupported() const {
       ->IsPrivacyScreenSupportedOnInternalDisplay();
 }
 
+bool PrivacyScreenController::IsManaged() const {
+  return active_user_pref_service_->IsManagedPreference(
+      prefs::kDisplayPrivacyScreenEnabled);
+}
+
 bool PrivacyScreenController::GetEnabled() const {
   return active_user_pref_service_ && active_user_pref_service_->GetBoolean(
                                           prefs::kDisplayPrivacyScreenEnabled);
