@@ -13,6 +13,8 @@
 #include "third_party/blink/renderer/core/dom/scripted_animation_controller.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/loader/document_loader.h"
+#include "third_party/blink/renderer/core/timing/performance.h"
+#include "third_party/blink/renderer/core/timing/time_clamper.h"
 #include "third_party/blink/renderer/modules/video_raf/video_frame_request_callback_collection.h"
 #include "third_party/blink/renderer/platform/bindings/microtask.h"
 #include "third_party/blink/renderer/platform/wtf/functional.h"
@@ -115,16 +117,13 @@ void VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks(
   auto& time_converter =
       GetSupplementable()->GetDocument().Loader()->GetTiming();
 
-  metadata->setPresentationTime(time_converter
-                                    .MonotonicTimeToZeroBasedDocumentTime(
-                                        frame_metadata->presentation_time)
-                                    .InMillisecondsF());
+  metadata->setPresentationTime(GetClampedTimeInMillis(
+      time_converter.MonotonicTimeToZeroBasedDocumentTime(
+          frame_metadata->presentation_time)));
 
-  metadata->setExpectedPresentationTime(
-      time_converter
-          .MonotonicTimeToZeroBasedDocumentTime(
-              frame_metadata->expected_presentation_time)
-          .InMillisecondsF());
+  metadata->setExpectedPresentationTime(GetClampedTimeInMillis(
+      time_converter.MonotonicTimeToZeroBasedDocumentTime(
+          frame_metadata->expected_presentation_time)));
 
   metadata->setPresentedFrames(frame_metadata->presented_frames);
 
@@ -137,15 +136,14 @@ void VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks(
   base::TimeDelta elapsed;
   if (frame_metadata->metadata.GetTimeDelta(
           media::VideoFrameMetadata::PROCESSING_TIME, &elapsed)) {
-    metadata->setElapsedProcessingTime(elapsed.InSecondsF());
+    metadata->setElapsedProcessingTime(GetCoarseClampedTimeInSeconds(elapsed));
   }
 
-  base::TimeTicks time;
+  base::TimeTicks capture_time;
   if (frame_metadata->metadata.GetTimeTicks(
-          media::VideoFrameMetadata::CAPTURE_BEGIN_TIME, &time)) {
-    metadata->setCaptureTime(
-        time_converter.MonotonicTimeToZeroBasedDocumentTime(time)
-            .InMillisecondsF());
+          media::VideoFrameMetadata::CAPTURE_BEGIN_TIME, &capture_time)) {
+    metadata->setCaptureTime(GetClampedTimeInMillis(
+        time_converter.MonotonicTimeToZeroBasedDocumentTime(capture_time)));
   }
 
   double rtp_timestamp;
@@ -158,6 +156,28 @@ void VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks(
 
   callback_collection_->ExecuteFrameCallbacks(high_res_now_ms, metadata);
   pending_execution_ = false;
+}
+
+// static
+double VideoRequestAnimationFrameImpl::GetClampedTimeInMillis(
+    base::TimeDelta time) {
+  constexpr double kSecondsToMillis = 1000.0;
+  return Performance::ClampTimeResolution(time.InSecondsF()) * kSecondsToMillis;
+}
+
+// static
+double VideoRequestAnimationFrameImpl::GetCoarseClampedTimeInSeconds(
+    base::TimeDelta time) {
+  constexpr double kCoarseResolutionInSeconds = 100e-6;
+  // Add this assert, in case TimeClamper's resolution were to change to be
+  // stricter.
+  static_assert(kCoarseResolutionInSeconds >= TimeClamper::kResolutionSeconds,
+                "kCoarseResolutionInSeconds should be at least "
+                "as coarse as other clock resolutions");
+  double interval = floor(time.InSecondsF() / kCoarseResolutionInSeconds);
+  double clamped_time = interval * kCoarseResolutionInSeconds;
+
+  return clamped_time;
 }
 
 int VideoRequestAnimationFrameImpl::requestAnimationFrame(
