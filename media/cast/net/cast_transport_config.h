@@ -115,8 +115,8 @@ struct EncodedFrame {
   std::string data;
 };
 
-typedef base::Callback<void(std::unique_ptr<Packet> packet)>
-    PacketReceiverCallback;
+using PacketReceiverCallback =
+    base::RepeatingCallback<void(std::unique_ptr<Packet> packet)>;
 typedef base::Callback<bool(std::unique_ptr<Packet> packet)>
     PacketReceiverCallbackWithStatus;
 
