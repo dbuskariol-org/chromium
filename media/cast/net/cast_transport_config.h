@@ -117,8 +117,8 @@ struct EncodedFrame {
 
 using PacketReceiverCallback =
     base::RepeatingCallback<void(std::unique_ptr<Packet> packet)>;
-typedef base::Callback<bool(std::unique_ptr<Packet> packet)>
-    PacketReceiverCallbackWithStatus;
+using PacketReceiverCallbackWithStatus =
+    base::RepeatingCallback<bool(std::unique_ptr<Packet> packet)>;
 
 class PacketTransport {
  public:
@@ -134,7 +134,7 @@ class PacketTransport {
 
   // Start receiving packets. Pakets are submitted to |packet_receiver|.
   virtual void StartReceiving(
-      const PacketReceiverCallbackWithStatus& packet_receiver) = 0;
+      PacketReceiverCallbackWithStatus packet_receiver) = 0;
 
   // Stop receiving packets.
   virtual void StopReceiving() = 0;

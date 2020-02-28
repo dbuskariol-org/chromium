@@ -134,8 +134,8 @@ CastTransportImpl::CastTransportImpl(
                        weak_factory_.GetWeakPtr()),
         logging_flush_interval_);
   }
-  transport_->StartReceiving(
-      base::Bind(&CastTransportImpl::OnReceivedPacket, base::Unretained(this)));
+  transport_->StartReceiving(base::BindRepeating(
+      &CastTransportImpl::OnReceivedPacket, base::Unretained(this)));
 }
 
 CastTransportImpl::~CastTransportImpl() {
