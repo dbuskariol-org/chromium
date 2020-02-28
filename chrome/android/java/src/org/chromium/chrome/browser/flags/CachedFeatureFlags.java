@@ -293,16 +293,6 @@ public class CachedFeatureFlags {
     }
 
     /**
-     * Returns whether to use {@link Window#setFormat()} to undo opacity change caused by
-     * {@link Activity#convertFromTranslucent()}.
-     */
-    public static boolean isSwapPixelFormatToFixConvertFromTranslucentEnabled() {
-        return SharedPreferencesManager.getInstance().readBoolean(
-                ChromePreferenceKeys.FLAGS_CACHED_SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT,
-                true);
-    }
-
-    /**
      * Caches the trial group of the reached code profiler feature to be using on next startup.
      */
     private static void cacheReachedCodeProfilerTrialGroup() {
