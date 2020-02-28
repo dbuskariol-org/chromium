@@ -31,6 +31,7 @@ import org.chromium.base.Log;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.base.task.PostTask;
+import org.chromium.chrome.browser.ChromeFeatureList;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.flags.FeatureUtilities;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
@@ -61,6 +62,7 @@ import org.chromium.chrome.browser.util.UrlUtilities;
 import org.chromium.chrome.browser.widget.selection.SelectionDelegate;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.components.feature_engagement.FeatureConstants;
+import org.chromium.components.search_engines.TemplateUrlService;
 import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.content_public.browser.NavigationController;
 import org.chromium.content_public.browser.NavigationHandle;
@@ -250,6 +252,7 @@ class TabListMediator {
     private int mNextTabId = Tab.INVALID_TAB_ID;
     private boolean mTabRestoreCompleted;
     private @UiType int mUiType;
+    private int mSearchChipIconDrawableId;
 
     private final TabActionListener mTabSelectedListener = new TabActionListener() {
         @Override
@@ -369,6 +372,8 @@ class TabListMediator {
     };
 
     private final TabModelObserver mTabModelObserver;
+
+    private @Nullable TemplateUrlService.TemplateUrlServiceObserver mTemplateUrlObserver;
 
     private TabGroupTitleEditor mTabGroupTitleEditor;
 
@@ -751,6 +756,19 @@ class TabListMediator {
                 }
             };
         }
+
+        if (TabUiFeatureUtilities.isSearchTermChipEnabled()) {
+            mSearchChipIconDrawableId = getSearchChipIconDrawableId();
+            mTemplateUrlObserver = () -> {
+                mSearchChipIconDrawableId = getSearchChipIconDrawableId();
+                for (int i = 0; i < mModel.size(); i++) {
+                    mModel.get(i).model.set(
+                            TabProperties.SEARCH_CHIP_ICON_DRAWABLE_ID, mSearchChipIconDrawableId);
+                }
+            };
+            TemplateUrlServiceFactory.get().addObserver(mTemplateUrlObserver);
+        }
+
         mTabGridItemTouchHelperCallback =
                 new TabGridItemTouchHelperCallback(mModel, mTabModelSelector, mTabClosedListener,
                         mTabGridDialogHandler, mComponentName, mActionsOnAllRelatedTabs);
@@ -963,6 +981,8 @@ class TabListMediator {
             mModel.get(index).model.set(TabProperties.SEARCH_QUERY, getLastSearchTerm(tab));
             mModel.get(index).model.set(TabProperties.SEARCH_LISTENER,
                     SearchTermChipUtils.getSearchQueryListener(tab, mTabSelectedListener));
+            mModel.get(index).model.set(
+                    TabProperties.SEARCH_CHIP_ICON_DRAWABLE_ID, mSearchChipIconDrawableId);
         }
 
         updateFaviconForTab(tab, null);
@@ -1054,6 +1074,9 @@ class TabListMediator {
         if (mTabGroupTitleEditor != null) {
             mTabGroupTitleEditor.destroy();
         }
+        if (mTemplateUrlObserver != null) {
+            TemplateUrlServiceFactory.get().removeObserver(mTemplateUrlObserver);
+        }
     }
 
     private void addTabInfoToModel(final Tab tab, int index, boolean isSelected) {
@@ -1113,6 +1136,7 @@ class TabListMediator {
             tabInfo.set(TabProperties.SEARCH_QUERY, getLastSearchTerm(tab));
             tabInfo.set(TabProperties.SEARCH_LISTENER,
                     SearchTermChipUtils.getSearchQueryListener(tab, mTabSelectedListener));
+            tabInfo.set(TabProperties.SEARCH_CHIP_ICON_DRAWABLE_ID, mSearchChipIconDrawableId);
         }
 
         if (mUiType == UiType.SELECTABLE) {
@@ -1163,6 +1187,33 @@ class TabListMediator {
             return null;
         }
         return TabAttributeCache.getLastSearchTerm(tab.getId());
+    }
+
+    private int getSearchChipIconDrawableId() {
+        int iconDrawableId;
+        if (isSearchChipAdaptiveIconEnabled()) {
+            iconDrawableId = TemplateUrlServiceFactory.get().isDefaultSearchEngineGoogle()
+                    ? R.drawable.ic_logo_googleg_24dp
+                    : R.drawable.ic_search;
+        } else {
+            iconDrawableId = R.drawable.ic_search;
+        }
+        return iconDrawableId;
+    }
+
+    private boolean isSearchChipAdaptiveIconEnabled() {
+        if (SearchTermChipUtils.sIsSearchChipAdaptiveIconEnabledForTesting != null) {
+            return SearchTermChipUtils.sIsSearchChipAdaptiveIconEnabledForTesting;
+        }
+        if (!FeatureUtilities.isGridTabSwitcherEnabled() || !ChromeFeatureList.isInitialized()
+                || !TabUiFeatureUtilities.isSearchTermChipEnabled()
+                || !ChromeFeatureList
+                            .getFieldTrialParamByFeature(ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID,
+                                    "enable_search_term_chip_adaptive_icon")
+                            .equals("true")) {
+            return false;
+        }
+        return true;
     }
 
     private String getUrlForTab(Tab tab) {
@@ -1318,6 +1369,8 @@ class TabListMediator {
      */
     @VisibleForTesting
     static class SearchTermChipUtils {
+        static @VisibleForTesting Boolean sIsSearchChipAdaptiveIconEnabledForTesting;
+
         private static TabObserver sLazyNavigateToLastSearchQuery = new EmptyTabObserver() {
             @Override
             public void onPageLoadStarted(Tab tab, String url) {
@@ -1362,6 +1415,11 @@ class TabListMediator {
                 select.run(tabId);
                 navigateToLastSearchQuery(originalTab);
             };
+        }
+
+        @VisibleForTesting
+        static void setIsSearchChipAdaptiveIconEnabledForTesting(Boolean isEnabled) {
+            sIsSearchChipAdaptiveIconEnabledForTesting = isEnabled;
         }
     }
 }
