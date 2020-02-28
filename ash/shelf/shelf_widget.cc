@@ -569,15 +569,12 @@ ui::Layer* ShelfWidget::GetAnimatingDragHandle() {
   return delegate_view_->animating_drag_handle();
 }
 
-views::View* ShelfWidget::GetDragHandle() {
+DragHandle* ShelfWidget::GetDragHandle() {
   return delegate_view_->drag_handle();
 }
 
 void ShelfWidget::ShowDragHandleNudge() {
-  delegate_view_->drag_handle()->ShowDragHandleNudge(
-      contextual_tooltip::GetNudgeTimeout(
-          Shell::Get()->session_controller()->GetLastActiveUserPrefService(),
-          contextual_tooltip::TooltipType::kDragHandle));
+  delegate_view_->drag_handle()->ShowDragHandleNudge();
 }
 
 void ShelfWidget::HideDragHandleNudge() {
