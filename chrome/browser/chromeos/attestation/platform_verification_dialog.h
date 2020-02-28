@@ -65,7 +65,7 @@ class PlatformVerificationDialog : public views::DialogDelegateView,
 
   base::string16 domain_;
   ConsentCallback callback_;
-  views::ImageButton* learn_more_button_;
+  views::ImageButton* learn_more_button_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(PlatformVerificationDialog);
 };

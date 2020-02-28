@@ -93,8 +93,7 @@ PlatformVerificationDialog::PlatformVerificationDialog(
     ConsentCallback callback)
     : content::WebContentsObserver(web_contents),
       domain_(domain),
-      callback_(std::move(callback)),
-      learn_more_button_(nullptr) {
+      callback_(std::move(callback)) {
   DialogDelegate::set_button_label(
       ui::DIALOG_BUTTON_OK, l10n_util::GetStringUTF16(IDS_PERMISSION_ALLOW));
   DialogDelegate::set_button_label(
@@ -119,11 +118,11 @@ PlatformVerificationDialog::PlatformVerificationDialog(
       run_callback, base::Unretained(this), CONSENT_RESPONSE_NONE));
 
   // Explanation string.
-  views::Label* label = new views::Label(l10n_util::GetStringFUTF16(
+  auto label = std::make_unique<views::Label>(l10n_util::GetStringFUTF16(
       IDS_PLATFORM_VERIFICATION_DIALOG_HEADLINE, domain_));
   label->SetMultiLine(true);
   label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
-  AddChildView(label);
+  AddChildView(std::move(label));
   chrome::RecordDialogCreation(chrome::DialogIdentifier::PLATFORM_VERIFICATION);
 }
 
