@@ -367,6 +367,11 @@
 <translation id="381841723434055211">Telefonnummern</translation>
 <translation id="3819178904835489326"><ph name="NUMBER_OF_DOWNLOADS" /> Downloads gelöscht</translation>
 <translation id="3822502789641063741">Websitespeicher löschen?</translation>
+<translation id="3849365399446680203">Während Sie im AR-Modus sind, kann die Website möglicherweise:
+• eine dreidimensionale Karte Ihrer Umgebung erstellen
+• die Bewegung der Kamera verfolgen
+
+Nur Sie können sehen, auf was Ihre Kamera gerichtet ist. Die Website kann die Bilder Ihrer Kamera nicht sehen.</translation>
 <translation id="3859306556332390985">Nach vorne navigieren</translation>
 <translation id="388596076286380598">Erhalten Sie Artikel, Videos und weitere Inhalte von Websites, die Ihnen gefallen – auch offline oder bei schlechter Internetverbindung.</translation>
 <translation id="3894427358181296146">Ordner hinzufügen</translation>
@@ -719,6 +724,7 @@ Halten Sie ein Wort lange gedrückt, um eine Suche damit zu starten. Sie können
 <translation id="6395288395575013217">LINK</translation>
 <translation id="6404511346730675251">Lesezeichen bearbeiten</translation>
 <translation id="6406506848690869874">Synchronisierung</translation>
+<translation id="6410973561433500075">AR-Modus über <ph name="DOMAIN" /> aktivieren?</translation>
 <translation id="641643625718530986">Drucken...</translation>
 <translation id="6416782512398055893"><ph name="MBS" /> MB heruntergeladen</translation>
 <translation id="6427112570124116297">Das Web übersetzen</translation>

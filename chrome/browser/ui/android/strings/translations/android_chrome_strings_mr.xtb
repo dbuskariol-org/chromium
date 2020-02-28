@@ -367,6 +367,11 @@
 <translation id="381841723434055211">फोन नंबर</translation>
 <translation id="3819178904835489326"><ph name="NUMBER_OF_DOWNLOADS" /> डाउनलोड हटविले</translation>
 <translation id="3822502789641063741">साइट स्टोरेज साफ करायचे?</translation>
+<translation id="3849365399446680203">तुम्ही AR वापरत असताना ही साइट पुढील गोष्टी करू शकते:
+• तुमच्या परिसराचा 3D नकाशा तयार करणे
+• कॅमेरा मोशनचा मागोवा घेणे
+
+तुमच्या कॅमेऱ्यामधून जे दिसते ते फक्त तुम्ही पाहू शकता. तुमच्या कॅमेऱ्यामधील इमेज साइट पाहू शकत नाही.</translation>
 <translation id="3859306556332390985">पुढे शोधा</translation>
 <translation id="388596076286380598">तुम्ही ऑफलाइन असलात किंवा तुमचे कनेक्शन खराब असले तरीही, तुमच्या आवडीच्या साइटवरून लेख, व्हिडिओ आणि इतर आशय मिळवा.</translation>
 <translation id="3894427358181296146">फोल्डर जोडा</translation>
@@ -719,6 +724,7 @@
 <translation id="6395288395575013217">लिंक</translation>
 <translation id="6404511346730675251">बुकमार्क संपादित करा</translation>
 <translation id="6406506848690869874">Sync</translation>
+<translation id="6410973561433500075"><ph name="DOMAIN" /> मधून AR एंटर करायचे आहे का?</translation>
 <translation id="641643625718530986">प्रिंट करा...</translation>
 <translation id="6416782512398055893"><ph name="MBS" /> MB डाउनलोड केले</translation>
 <translation id="6427112570124116297">वेबचे भाषांतर करा</translation>

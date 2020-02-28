@@ -367,6 +367,11 @@
 <translation id="381841723434055211">Numrat e telefonit</translation>
 <translation id="3819178904835489326">U fshinë <ph name="NUMBER_OF_DOWNLOADS" /> shkarkime</translation>
 <translation id="3822502789641063741">Të pastrohet hapësira ruajtëse e sajtit?</translation>
+<translation id="3849365399446680203">Kur je në AR, ky sajt mund të arrijë:
+• të krijojë një hartë 3D të ambientit tënd
+• të gjurmojë lëvizjen e kamerës
+
+Vetëm ti mund të shohësh se çfarë po shikon kamera. Sajti nuk mund të shikojë imazhet e kamerës sate.</translation>
 <translation id="3859306556332390985">Kërko përpara</translation>
 <translation id="388596076286380598">Merr artikuj, video dhe përmbajtje të tjera nga sajtet që të pëlqejnë, edhe nëse je jashtë linje ose lidhja jote është e dobët.</translation>
 <translation id="3894427358181296146">Shto dosje</translation>
@@ -719,6 +724,7 @@ Kryej një shtypje të gjatë te një fjalë për të krijuar një kërkim për 
 <translation id="6395288395575013217">LIDHJA</translation>
 <translation id="6404511346730675251">Redakto faqeshënuesin</translation>
 <translation id="6406506848690869874">Sinkronizo</translation>
+<translation id="6410973561433500075">Do të hysh në AR nga <ph name="DOMAIN" />?</translation>
 <translation id="641643625718530986">Printo…</translation>
 <translation id="6416782512398055893">Janë shkarkuar <ph name="MBS" /> MB</translation>
 <translation id="6427112570124116297">Përkthe uebin</translation>

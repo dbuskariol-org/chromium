@@ -367,6 +367,11 @@
 <translation id="381841723434055211">Telefon numaraları</translation>
 <translation id="3819178904835489326">İndirilen <ph name="NUMBER_OF_DOWNLOADS" /> dosya silindi</translation>
 <translation id="3822502789641063741">Site depolama silinsin mi?</translation>
+<translation id="3849365399446680203">Bu site, siz artırılmış gerçeklik (AR) kullanırken şunları yapabilir:
+• çevrenizin 3D haritasını oluşturabilir
+• kamera hareketini takip edebilir
+
+Kameranızın neye baktığını yalnızca siz görebilirsiniz. Site, kameranızın çektiği resimleri göremez.</translation>
 <translation id="3859306556332390985">İleriye doğru git</translation>
 <translation id="388596076286380598">Çevrimdışıyken veya bağlantınız kötü olduğunda bile beğendiğiniz sitelerdeki makalelere, videolara ve diğer içeriklere ulaşabilirsiniz.</translation>
 <translation id="3894427358181296146">Klasör ekleyin</translation>
@@ -719,6 +724,7 @@ Herhangi bir kelimeye uzun basarak o kelime için arama oluşturun. Aramanızı 
 <translation id="6395288395575013217">BAĞLANTI</translation>
 <translation id="6404511346730675251">Yer işaretini düzenle</translation>
 <translation id="6406506848690869874">Senkronizasyon</translation>
+<translation id="6410973561433500075"><ph name="DOMAIN" /> üzerinden artırılmış gerçekliğe (AR) girilsin mi?</translation>
 <translation id="641643625718530986">Yazdır…</translation>
 <translation id="6416782512398055893"><ph name="MBS" /> MB indirildi</translation>
 <translation id="6427112570124116297">Web'i çevir</translation>

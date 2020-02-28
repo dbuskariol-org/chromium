@@ -367,6 +367,11 @@
 <translation id="381841723434055211">Telefonní čísla</translation>
 <translation id="3819178904835489326">Počet smazaných stažených souborů: <ph name="NUMBER_OF_DOWNLOADS" /></translation>
 <translation id="3822502789641063741">Vymazat úložiště webů?</translation>
+<translation id="3849365399446680203">V režimu rozšířené reality bude tento web moci:
+• vytvořit 3D mapu vašeho okolí,
+• sledovat pohyb kamery.
+
+Pouze vy uvidíte, na co se kamera zaměřuje. Web snímky z kamery neuvidí.</translation>
 <translation id="3859306556332390985">Přetočit dopředu</translation>
 <translation id="388596076286380598">Články, videa a další obsah z webů, které se vám líbí, může sledovat i v režimu offline nebo při nekvalitním připojení.</translation>
 <translation id="3894427358181296146">Přidat složku</translation>
@@ -719,6 +724,7 @@ Dlouhým stisknutím jakéhokoli slova z něj vytvoříte vyhledávací dotaz. 
 <translation id="6395288395575013217">ODKAZ</translation>
 <translation id="6404511346730675251">Upravit záložku</translation>
 <translation id="6406506848690869874">Synchronizace</translation>
+<translation id="6410973561433500075">Spustit rozšířenou realitu z webu <ph name="DOMAIN" />?</translation>
 <translation id="641643625718530986">Tisk…</translation>
 <translation id="6416782512398055893">Staženo: <ph name="MBS" /> MB</translation>
 <translation id="6427112570124116297">Přeložte si web</translation>

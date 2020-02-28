@@ -367,6 +367,11 @@
 <translation id="381841723434055211">ફોન નંબર</translation>
 <translation id="3819178904835489326"><ph name="NUMBER_OF_DOWNLOADS" /> ડાઉનલોડ કાઢી નાખ્યાં</translation>
 <translation id="3822502789641063741">સાઇટ સ્ટોરેજ સાફ કરીએ?</translation>
+<translation id="3849365399446680203">તમે AR મોડમાં હો, ત્યારે આ સાઇટ:
+• તમારી આસપાસનો 3D નકશો બનાવી શકે છે
+• કૅમેરા મોશનને ટ્રૅક કરી શકે છે
+
+તમારો કૅમેરા શું જોઈ રહ્યો છે તે માત્ર તમે જ જોઈ શકો છો. સાઇટ તમારા કૅમેરાની છબીઓને જોઈ શકતી નથી.</translation>
 <translation id="3859306556332390985">આગળ કરો</translation>
 <translation id="388596076286380598">તમારું ઇન્ટરનેટ કનેક્શન ઉપલબ્ધ ન હોય અથવા ધીમું હોય ત્યારે પણ તમને ગમતી સાઇટ તરફથી લેખ, વીડિયો અને અન્ય કન્ટેન્ટ મેળવો.</translation>
 <translation id="3894427358181296146">ફોલ્ડર ઉમેરો</translation>
@@ -719,6 +724,7 @@
 <translation id="6395288395575013217">લિંક</translation>
 <translation id="6404511346730675251">બુકમાર્કમાં ફેરફાર કરો</translation>
 <translation id="6406506848690869874">સમન્વયન</translation>
+<translation id="6410973561433500075"><ph name="DOMAIN" />માંથી ARમાં દાખલ થવું છે?</translation>
 <translation id="641643625718530986">પ્રિન્ટ…</translation>
 <translation id="6416782512398055893"><ph name="MBS" /> MB ડાઉનલોડ કર્યા</translation>
 <translation id="6427112570124116297">વેબનો અનુવાદ કરો</translation>
