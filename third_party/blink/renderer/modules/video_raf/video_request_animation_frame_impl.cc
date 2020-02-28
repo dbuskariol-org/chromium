@@ -7,12 +7,14 @@
 #include <memory>
 #include <utility>
 
+#include "media/base/media_switches.h"
 #include "third_party/blink/renderer/bindings/modules/v8/v8_video_frame_metadata.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/scripted_animation_controller.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/loader/document_loader.h"
 #include "third_party/blink/renderer/modules/video_raf/video_frame_request_callback_collection.h"
+#include "third_party/blink/renderer/platform/bindings/microtask.h"
 #include "third_party/blink/renderer/platform/wtf/functional.h"
 
 namespace blink {
@@ -69,12 +71,24 @@ void VideoRequestAnimationFrameImpl::OnRequestAnimationFrame() {
 
   if (!pending_execution_) {
     pending_execution_ = true;
-    GetSupplementable()
-        ->GetDocument()
-        .GetScriptedAnimationController()
-        .ScheduleVideoRafExecution(
-            WTF::Bind(&VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks,
-                      WrapWeakPersistent(this)));
+    if (base::FeatureList::IsEnabled(media::kUseMicrotaskForVideoRAF)) {
+      auto& time_converter =
+          GetSupplementable()->GetDocument().Loader()->GetTiming();
+      Microtask::EnqueueMicrotask(WTF::Bind(
+          &VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks,
+          WrapWeakPersistent(this),
+          // TODO(crbug.com/1012063): Now is probably not the right value.
+          time_converter
+              .MonotonicTimeToZeroBasedDocumentTime(base::TimeTicks::Now())
+              .InMillisecondsF()));
+    } else {
+      GetSupplementable()
+          ->GetDocument()
+          .GetScriptedAnimationController()
+          .ScheduleVideoRafExecution(
+              WTF::Bind(&VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks,
+                        WrapWeakPersistent(this)));
+    }
   }
 }
 
