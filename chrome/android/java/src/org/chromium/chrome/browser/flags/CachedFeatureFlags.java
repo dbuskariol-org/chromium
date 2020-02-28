@@ -276,15 +276,6 @@ public class CachedFeatureFlags {
     }
 
     /**
-     * @return Whether this device is running Android Go. This is assumed when we're running Android
-     * O or later and we're on a low-end device.
-     */
-    public static boolean isAndroidGo() {
-        return SysUtils.isLowEndDevice()
-                && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O;
-    }
-
-    /**
      * Cache whether warming up network service process is enabled, so that the value
      * can be made available immediately on next start up.
      */
