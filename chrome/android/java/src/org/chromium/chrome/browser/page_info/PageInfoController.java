@@ -583,7 +583,8 @@ public class PageInfoController implements ModalDialogProperties.Controller,
                     : PreviewPageState.INSECURE_PAGE_PREVIEW;
 
             PreviewsUma.recordPageInfoOpened(bridge.getPreviewsType(webContents));
-            Tracker tracker = TrackerFactory.getTrackerForProfile(Profile.getLastUsedProfile());
+            Tracker tracker =
+                    TrackerFactory.getTrackerForProfile(Profile.fromWebContents(webContents));
             tracker.notifyEvent(EventConstants.PREVIEWS_VERBOSE_STATUS_OPENED);
         }
 
