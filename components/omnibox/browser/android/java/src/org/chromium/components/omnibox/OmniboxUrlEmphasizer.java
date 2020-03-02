@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.omnibox;
+package org.chromium.components.omnibox;
 
 import android.content.res.Resources;
 import android.text.Spannable;
@@ -13,8 +13,6 @@ import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.components.embedder_support.util.UrlConstants;
 import org.chromium.components.security_state.ConnectionSecurityLevel;
 
@@ -26,7 +24,6 @@ import java.util.Locale;
  * in different colours depending on the scheme, host and connection.
  */
 public class OmniboxUrlEmphasizer {
-
     /**
      * Describes the components of a URL that should be emphasized.
      */
@@ -77,15 +74,16 @@ public class OmniboxUrlEmphasizer {
      * Parses the |text| passed in and determines the location of the scheme and
      * host components to be emphasized.
      *
-     * @param profile The profile to be used for parsing.
+     * @param autocompleteSchemeClassifier The autocomplete scheme classifier to be used for
+     *         parsing.
      * @param text The text to be parsed for emphasis components.
      * @return The response object containing the locations of the emphasis
      *         components.
      */
     public static EmphasizeComponentsResponse parseForEmphasizeComponents(
-            Profile profile, String text) {
-        int[] emphasizeValues =
-                OmniboxUrlEmphasizerJni.get().parseForEmphasizeComponents(profile, text);
+            String text, AutocompleteSchemeClassifier autocompleteSchemeClassifier) {
+        int[] emphasizeValues = OmniboxUrlEmphasizerJni.get().parseForEmphasizeComponents(
+                text, autocompleteSchemeClassifier);
         assert emphasizeValues != null;
         assert emphasizeValues.length == 4;
 
@@ -103,8 +101,8 @@ public class OmniboxUrlEmphasizer {
      * Used for emphasizing the URL text by changing the text color.
      */
     @VisibleForTesting
-    static class UrlEmphasisColorSpan extends ForegroundColorSpan
-            implements UrlEmphasisSpan {
+    public static class UrlEmphasisColorSpan
+            extends ForegroundColorSpan implements UrlEmphasisSpan {
         private int mEmphasisColor;
 
         /**
@@ -131,8 +129,8 @@ public class OmniboxUrlEmphasizer {
      * Used for emphasizing the URL text by striking through the https text.
      */
     @VisibleForTesting
-    static class UrlEmphasisSecurityErrorSpan extends StrikethroughSpan
-            implements UrlEmphasisSpan {
+    public static class UrlEmphasisSecurityErrorSpan
+            extends StrikethroughSpan implements UrlEmphasisSpan {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof UrlEmphasisSecurityErrorSpan;
@@ -147,7 +145,8 @@ public class OmniboxUrlEmphasizer {
      * @param url The URL spannable to add emphasis to. This variable is
      *            modified.
      * @param resources Resources for the given application context.
-     * @param profile The profile viewing the given URL.
+     * @param autocompleteSchemeClassifier The autocomplete scheme classifier used to emphasize the
+     *         given URL.
      * @param securityLevel A valid ConnectionSecurityLevel for the specified
      *                      web contents.
      * @param isInternalPage Whether this page is an internal Chrome page.
@@ -155,12 +154,12 @@ public class OmniboxUrlEmphasizer {
      *                      appropriate for use on a light background).
      * @param emphasizeScheme Whether the scheme should be emphasized.
      */
-    public static void emphasizeUrl(Spannable url, Resources resources, Profile profile,
-            int securityLevel, boolean isInternalPage, boolean useDarkColors,
-            boolean emphasizeScheme) {
+    public static void emphasizeUrl(Spannable url, Resources resources,
+            AutocompleteSchemeClassifier autocompleteSchemeClassifier, int securityLevel,
+            boolean isInternalPage, boolean useDarkColors, boolean emphasizeScheme) {
         String urlString = url.toString();
         EmphasizeComponentsResponse emphasizeResponse =
-                parseForEmphasizeComponents(profile, urlString);
+                parseForEmphasizeComponents(urlString, autocompleteSchemeClassifier);
 
         int nonEmphasizedColorId = R.color.url_emphasis_non_emphasized_text;
         if (!useDarkColors) {
@@ -216,16 +215,15 @@ public class OmniboxUrlEmphasizer {
                 }
             }
             span = new UrlEmphasisColorSpan(ApiCompatibilityUtils.getColor(resources, colorId));
-            url.setSpan(
-                    span, startSchemeIndex, endSchemeIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            url.setSpan(span, startSchemeIndex, endSchemeIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             // Highlight the portion of the URL visible between the scheme and the host,
             // typically :// or : depending on the scheme.
             if (emphasizeResponse.hasHost()) {
                 span = new UrlEmphasisColorSpan(
                         ApiCompatibilityUtils.getColor(resources, nonEmphasizedColorId));
-                url.setSpan(span, endSchemeIndex, startHostIndex,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                url.setSpan(
+                        span, endSchemeIndex, startHostIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
@@ -242,8 +240,8 @@ public class OmniboxUrlEmphasizer {
             if (endHostIndex < urlString.length()) {
                 span = new UrlEmphasisColorSpan(
                         ApiCompatibilityUtils.getColor(resources, nonEmphasizedColorId));
-                url.setSpan(span, endHostIndex, urlString.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                url.setSpan(
+                        span, endHostIndex, urlString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         } else if (UrlConstants.DATA_SCHEME.equals(emphasizeResponse.extractScheme(urlString))) {
             // Dim the remainder of the URL for anti-spoofing purposes.
@@ -314,12 +312,14 @@ public class OmniboxUrlEmphasizer {
      *               prevent calling parseForEmphasizeComponents() again.
      *
      * @param url The URL to find the last origin character in.
-     * @param profile The profile visiting this URL (used for parsing the URL).
+     * @param autocompleteSchemeClassifier The autocomplete scheme classifier used for parsing the
+     *         URL.
      * @return The index of the last character containing origin information.
      */
-    public static int getOriginEndIndex(String url, Profile profile) {
+    public static int getOriginEndIndex(
+            String url, AutocompleteSchemeClassifier autocompleteSchemeClassifier) {
         EmphasizeComponentsResponse emphasizeResponse =
-                parseForEmphasizeComponents(profile, url.toString());
+                parseForEmphasizeComponents(url.toString(), autocompleteSchemeClassifier);
         if (!emphasizeResponse.hasScheme()) return url.length();
 
         String scheme = emphasizeResponse.extractScheme(url);
@@ -335,6 +335,7 @@ public class OmniboxUrlEmphasizer {
 
     @NativeMethods
     interface Natives {
-        int[] parseForEmphasizeComponents(Profile profile, String text);
+        int[] parseForEmphasizeComponents(
+                String text, AutocompleteSchemeClassifier autocompleteSchemeClassifier);
     }
 }

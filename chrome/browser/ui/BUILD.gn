@@ -728,8 +728,6 @@ jumbo_static_library("ui") {
       "android/infobars/update_password_infobar.cc",
       "android/infobars/update_password_infobar.h",
       "android/login_handler_android.cc",
-      "android/omnibox/omnibox_url_emphasizer.cc",
-      "android/omnibox/omnibox_url_emphasizer.h",
       "android/omnibox/omnibox_view_util.cc",
       "android/omnibox/omnibox_view_util.h",
       "android/overlay/overlay_window_android.cc",
