@@ -1715,8 +1715,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_ShowPopup, OnShowPopup)
     IPC_MESSAGE_HANDLER(FrameHostMsg_HidePopup, OnHidePopup)
 #endif
-    IPC_MESSAGE_HANDLER(FrameHostMsg_RequestOverlayRoutingToken,
-                        OnRequestOverlayRoutingToken)
   IPC_END_MESSAGE_MAP()
 
   // No further actions here, since we may have been deleted.
@@ -4456,13 +4454,6 @@ void RenderFrameHostImpl::OnHidePopup() {
 }
 #endif
 
-void RenderFrameHostImpl::OnRequestOverlayRoutingToken() {
-  // Make sure that we have a token.
-  GetOverlayRoutingToken();
-
-  Send(new FrameMsg_SetOverlayRoutingToken(routing_id_, frame_token_));
-}
-
 void RenderFrameHostImpl::BindInterfaceProviderReceiver(
     mojo::PendingReceiver<service_manager::mojom::InterfaceProvider>
         interface_provider_receiver) {
@@ -4496,6 +4487,11 @@ void RenderFrameHostImpl::ShowCreatedWindow(int pending_widget_routing_id,
                                             bool user_gesture) {
   delegate_->ShowCreatedWindow(GetProcess()->GetID(), pending_widget_routing_id,
                                disposition, initial_rect, user_gesture);
+}
+
+void RenderFrameHostImpl::RequestOverlayRoutingToken(
+    RequestOverlayRoutingTokenCallback callback) {
+  std::move(callback).Run(frame_token_);
 }
 
 std::unique_ptr<blink::PendingURLLoaderFactoryBundle>

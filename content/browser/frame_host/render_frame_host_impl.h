@@ -1613,10 +1613,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
                                         mojo::ScopedMessagePipeHandle pipe);
 #endif
 
-  // Called when the frame would like an overlay routing token.  This will
-  // create one if needed.  Either way, it will send it to the frame.
-  void OnRequestOverlayRoutingToken();
-
   // mojom::FrameHost:
   void CreateNewWindow(mojom::CreateNewWindowParamsPtr params,
                        CreateNewWindowCallback callback) override;
@@ -1675,6 +1671,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
                          WindowOpenDisposition disposition,
                          const gfx::Rect& initial_rect,
                          bool user_gesture) override;
+  void RequestOverlayRoutingToken(
+      RequestOverlayRoutingTokenCallback callback) override;
 #if defined(OS_ANDROID)
   void UpdateUserGestureCarryoverInfo() override;
 #endif
