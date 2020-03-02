@@ -5706,7 +5706,7 @@ void RenderFrameHostImpl::CommitNavigation(
       // Keep DevTools proxy last, i.e. closest to the network.
       devtools_instrumentation::WillCreateURLLoaderFactory(
           this, false /* is_navigation */, false /* is_download */,
-          &factory_receiver);
+          &factory_receiver, nullptr /* factory_override */);
       factory.second->Clone(std::move(factory_receiver));
       subresource_loader_factories->pending_scheme_specific_factories().emplace(
           factory.first, std::move(pending_factory_proxy));
@@ -6484,7 +6484,7 @@ bool RenderFrameHostImpl::CreateNetworkServiceDefaultFactoryInternal(
   // Keep DevTools proxy last, i.e. closest to the network.
   devtools_instrumentation::WillCreateURLLoaderFactory(
       this, false /* is_navigation */, false /* is_download */,
-      &default_factory_receiver);
+      &default_factory_receiver, &params->factory_override);
 
   GetProcess()->CreateURLLoaderFactory(std::move(default_factory_receiver),
                                        std::move(params));
