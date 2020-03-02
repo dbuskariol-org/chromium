@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/safe_browsing/file_type_policies.h"
+#include "components/safe_browsing/core/file_type_policies.h"
 
 #include <string.h>
 
 #include <memory>
 
 #include "base/files/file_path.h"
+#include "build/build_config.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 

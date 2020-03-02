@@ -9,13 +9,14 @@ action("make_file_types_protobuf") {
   script = "gen_file_type_proto.py"
 
   # The output goes in $target_gen_dir since that's where
-  # chrome/browser/browser_resources.grd will look for it.
+  # components/resources/safe_browsing_resources.grdp will look for it.
 
   input_filename = "download_file_types.asciipb"
   output_dir = target_gen_dir
   output_basename = "download_file_types.pb"
   python_path_root = "$root_out_dir/pyproto"
-  python_path_safe_browsing = "$python_path_root/chrome/common/safe_browsing"
+  python_path_safe_browsing =
+      "$python_path_root/components/safe_browsing/core/proto"
 
   # Pick an architecture to generate for. These string match those
   # in the python script.
@@ -37,7 +38,7 @@ action("make_file_types_protobuf") {
   inputs = [ input_filename ]
 
   deps = [
-    "//chrome/common/safe_browsing:proto",
+    "//components/safe_browsing/core:download_file_types_proto",
     "//third_party/protobuf:py_proto",
   ]
 
@@ -69,12 +70,13 @@ action("make_all_file_types_protobuf") {
   output_dir = "$target_gen_dir/all"
   output_basename = "download_file_types.pb"
   python_path_root = "$root_build_dir/pyproto"
-  python_path_safe_browsing = "$python_path_root/chrome/common/safe_browsing"
+  python_path_safe_browsing =
+      "$python_path_root/components/safe_browsing/core/proto"
 
   inputs = [ input_filename ]
 
   deps = [
-    "//chrome/common/safe_browsing:proto",
+    "//components/safe_browsing/core:download_file_types_proto",
     "//third_party/protobuf:py_proto",
   ]
 

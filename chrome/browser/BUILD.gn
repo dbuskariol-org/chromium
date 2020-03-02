@@ -5596,11 +5596,6 @@ grit("resources") {
     ]
   }
 
-  if (safe_browsing_mode > 0) {
-    deps +=
-        [ "//chrome/browser/resources/safe_browsing:make_file_types_protobuf" ]
-  }
-
   if (safe_browsing_mode == 1) {
     deps += [ "//chrome/browser/ui/webui/reset_password:mojo_bindings_js" ]
   }

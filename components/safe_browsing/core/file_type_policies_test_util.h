@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_COMMON_SAFE_BROWSING_FILE_TYPE_POLICIES_TEST_UTIL_H_
-#define CHROME_COMMON_SAFE_BROWSING_FILE_TYPE_POLICIES_TEST_UTIL_H_
+#ifndef COMPONENTS_SAFE_BROWSING_CORE_FILE_TYPE_POLICIES_TEST_UTIL_H_
+#define COMPONENTS_SAFE_BROWSING_CORE_FILE_TYPE_POLICIES_TEST_UTIL_H_
 
-#include "chrome/common/safe_browsing/file_type_policies.h"
+#include "components/safe_browsing/core/file_type_policies.h"
 
 namespace safe_browsing {
 
@@ -38,4 +38,4 @@ class FileTypePoliciesTestOverlay {
 
 }  // namespace safe_browsing
 
-#endif  // CHROME_COMMON_SAFE_BROWSING_FILE_TYPE_POLICIES_TEST_UTIL_H_
+#endif  // COMPONENTS_SAFE_BROWSING_CORE_FILE_TYPE_POLICIES_TEST_UTIL_H_

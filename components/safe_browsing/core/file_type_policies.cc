@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/safe_browsing/file_type_policies.h"
+#include "components/safe_browsing/core/file_type_policies.h"
 
 #include "base/logging.h"
 #include "base/memory/singleton.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/strings/string_util.h"
-#include "chrome/grit/browser_resources.h"
+#include "components/grit/components_resources.h"
 #include "ui/base/resource/resource_bundle.h"
 
 namespace safe_browsing {
@@ -50,7 +50,7 @@ FileTypePolicies::~FileTypePolicies() {
 
 std::string FileTypePolicies::ReadResourceBundle() {
   ui::ResourceBundle& bundle = ui::ResourceBundle::GetSharedInstance();
-  return std::string(bundle.GetRawDataResource(IDR_DOWNLOAD_FILE_TYPES_PB));
+  return bundle.LoadDataResourceString(IDR_DOWNLOAD_FILE_TYPES_PB);
 }
 
 void FileTypePolicies::RecordUpdateMetrics(UpdateResult result,

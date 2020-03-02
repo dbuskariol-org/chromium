@@ -17,7 +17,7 @@ import sys
 
 
 DEST_BUCKET = 'gs://chrome-component-file-type-policies'
-RESOURCE_SUBDIR = 'chrome/browser/resources/safe_browsing'
+RESOURCE_SUBDIR = 'components/safe_browsing/core/resources'
 
 
 def main():
