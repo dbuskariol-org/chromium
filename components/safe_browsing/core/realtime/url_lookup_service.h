@@ -44,7 +44,8 @@ class RealTimeUrlLookupService : public KeyedService {
  public:
   RealTimeUrlLookupService(
       scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
-      VerdictCacheManager* cache_manager);
+      VerdictCacheManager* cache_manager,
+      signin::IdentityManager* identity_manager);
   ~RealTimeUrlLookupService() override;
 
   // Returns true if |url|'s scheme can be checked.
@@ -55,8 +56,6 @@ class RealTimeUrlLookupService : public KeyedService {
   // local hash-based method.
   bool IsInBackoffMode() const;
 
-  // TODO(crbug.com/1041912): |identity_manager_on_ui| is unused. It will
-  // be used to obtain access token in a follow up CL.
   // Start the full URL lookup for |url|, call |request_callback| on the same
   // thread when request is sent, call |response_callback| on the same thread
   // when response is received.
@@ -64,8 +63,7 @@ class RealTimeUrlLookupService : public KeyedService {
   // cache for |url|.
   void StartLookup(const GURL& url,
                    RTLookupRequestCallback request_callback,
-                   RTLookupResponseCallback response_callback,
-                   signin::IdentityManager* identity_manager_on_ui);
+                   RTLookupResponseCallback response_callback);
 
   // KeyedService:
   // Called before the actual deletion of the object.
@@ -147,6 +145,10 @@ class RealTimeUrlLookupService : public KeyedService {
 
   // Unowned object used for getting and storing real time url check cache.
   VerdictCacheManager* cache_manager_;
+
+  // Unowned object used for getting access token when real time url check with
+  // token is enabled.
+  signin::IdentityManager* identity_manager_;
 
   friend class RealTimeUrlLookupServiceTest;
 

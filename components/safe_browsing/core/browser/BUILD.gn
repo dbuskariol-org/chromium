@@ -22,7 +22,6 @@ jumbo_source_set("browser") {
     "//components/safe_browsing/core/realtime:url_lookup_service",
     "//components/safe_browsing/core/web_ui:constants",
     "//components/security_interstitials/core:unsafe_resource",
-    "//components/signin/public/identity_manager",
     "//net:extras",
     "//services/network/public/cpp",
   ]

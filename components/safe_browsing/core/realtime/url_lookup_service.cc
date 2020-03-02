@@ -51,14 +51,19 @@ GURL SanitizeURL(const GURL& url) {
 
 RealTimeUrlLookupService::RealTimeUrlLookupService(
     scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
-    VerdictCacheManager* cache_manager)
-    : url_loader_factory_(url_loader_factory), cache_manager_(cache_manager) {}
+    VerdictCacheManager* cache_manager,
+    signin::IdentityManager* identity_manager)
+    : url_loader_factory_(url_loader_factory),
+      cache_manager_(cache_manager),
+      identity_manager_(identity_manager) {
+  DCHECK(cache_manager_);
+  DCHECK(identity_manager_);
+}
 
 void RealTimeUrlLookupService::StartLookup(
     const GURL& url,
     RTLookupRequestCallback request_callback,
-    RTLookupResponseCallback response_callback,
-    signin::IdentityManager* identity_manager) {
+    RTLookupResponseCallback response_callback) {
   DCHECK(CurrentlyOnThread(ThreadID::UI));
   DCHECK(url.is_valid());
 
