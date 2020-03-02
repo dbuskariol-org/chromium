@@ -511,17 +511,19 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
     DirectoryTree, /* directory_tree.js */
     FilesAppBrowserTest,
-    ::testing::Values(TestCase("directoryTreeActiveDirectory"),
-                      TestCase("directoryTreeActiveDirectory").FilesNg(),
-                      TestCase("directoryTreeSelectedDirectory"),
-                      TestCase("directoryTreeSelectedDirectory").FilesNg(),
-                      TestCase("directoryTreeHorizontalScroll"),
-                      TestCase("directoryTreeExpandHorizontalScroll"),
-                      TestCase("directoryTreeExpandHorizontalScrollRTL"),
-                      TestCase("directoryTreeVerticalScroll"),
-                      TestCase("directoryTreeClippedWindowResize"),
-                      TestCase("directoryTreeExpandFolder"),
-                      TestCase("directoryTreeClippedSplitterResize")));
+    ::testing::Values(
+        TestCase("directoryTreeActiveDirectory"),
+        TestCase("directoryTreeActiveDirectory").FilesNg(),
+        TestCase("directoryTreeSelectedDirectory"),
+        TestCase("directoryTreeSelectedDirectory").FilesNg(),
+        TestCase("directoryTreeRecentsSubtypeScroll").EnableUnifiedMediaView(),
+        TestCase("directoryTreeHorizontalScroll"),
+        TestCase("directoryTreeExpandHorizontalScroll"),
+        TestCase("directoryTreeExpandHorizontalScrollRTL"),
+        TestCase("directoryTreeVerticalScroll"),
+        TestCase("directoryTreeClippedWindowResize"),
+        TestCase("directoryTreeExpandFolder"),
+        TestCase("directoryTreeClippedSplitterResize")));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
     DirectoryTreeContextMenu, /* directory_tree_context_menu.js */
