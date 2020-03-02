@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include "base/android/jni_android.h"
-#include "chrome/android/native_j_unittests_jni_headers/UrlUtilitiesUnitTest_jni.h"
+#include "components/embedder_support/android/native_j_unittests_jni_headers/UrlUtilitiesUnitTest_jni.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 using base::android::AttachCurrentThread;
