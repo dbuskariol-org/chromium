@@ -6756,3 +6756,4 @@ crbug.com/1057036 [ Mac ] virtual/controls-refresh/week-picker/week-picker-ax.ht
 crbug.com/1057138 [ Linux Debug ] virtual/not-site-per-process/http/tests/devtools/oopif/oopif-storage.js [ Pass Timeout ]
 crbug.com/1056879 [ Win7 ] external/wpt/webxr/xrSession_requestAnimationFrame_getViewerPose.https.html [ Pass Failure Timeout ]
 crbug.com/1053861 http/tests/devtools/network/network-initiator-chain.js [ Pass Failure ]
+crbug.com/1047648 external/wpt/offscreen-canvas/the-offscreen-canvas/offscreencanvas.resize.html [ Pass Failure ]
