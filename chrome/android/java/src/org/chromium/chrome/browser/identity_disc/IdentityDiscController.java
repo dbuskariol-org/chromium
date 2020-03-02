@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.toolbar;
+package org.chromium.chrome.browser.identity_disc;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,17 +10,26 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.DimenRes;
 import androidx.annotation.IntDef;
 
+import org.chromium.base.ObserverList;
 import org.chromium.base.metrics.RecordUserAction;
+import org.chromium.base.supplier.ObservableSupplier;
 import org.chromium.chrome.R;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeState;
 import org.chromium.chrome.browser.feature_engagement.TrackerFactory;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.NativeInitObserver;
+import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
 import org.chromium.chrome.browser.signin.IdentityServicesProvider;
 import org.chromium.chrome.browser.signin.ProfileDataCache;
 import org.chromium.chrome.browser.signin.SigninManager;
 import org.chromium.chrome.browser.sync.settings.SyncAndServicesSettings;
+import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.toolbar.ButtonData;
+import org.chromium.chrome.browser.toolbar.ButtonDataProvider;
+import org.chromium.chrome.browser.toolbar.bottom.BottomToolbarVariationManager;
+import org.chromium.chrome.browser.user_education.IPHCommandBuilder;
 import org.chromium.components.feature_engagement.EventConstants;
 import org.chromium.components.feature_engagement.FeatureConstants;
 import org.chromium.components.feature_engagement.Tracker;
@@ -34,8 +43,9 @@ import java.util.Collections;
  * Handles displaying IdentityDisc on toolbar depending on several conditions
  * (user sign-in state, whether NTP is shown)
  */
-class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Observer,
-                                        SigninManager.SignInStateObserver {
+public class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Observer,
+                                               SigninManager.SignInStateObserver,
+                                               ButtonDataProvider {
     // Visual state of Identity Disc.
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({IdentityDiscState.NONE, IdentityDiscState.SMALL, IdentityDiscState.LARGE})
@@ -53,9 +63,8 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
 
     // Context is used for fetching resources and launching preferences page.
     private final Context mContext;
-    // Toolbar manager exposes APIs for manipulating identity disc button.
-    private final ToolbarManager mToolbarManager;
     private ActivityLifecycleDispatcher mActivityLifecycleDispatcher;
+    private ObservableSupplier<Boolean> mBottomToolbarVisibilitySupplier;
 
     // We observe SigninManager to receive sign-in state change notifications.
     private SigninManager mSigninManager;
@@ -70,19 +79,41 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
     @IdentityDiscState
     private int mState = IdentityDiscState.NONE;
 
-    private boolean mShouldShowButton;
+    private ButtonData mButtonData;
+    private ObserverList<ButtonDataObserver> mObservers = new ObserverList<>();
+    private boolean mNativeIsInitialized;
 
     /**
-     * Creates IdentityDiscController object.
+     *
      * @param context The Context for retrieving resources, launching preference activiy, etc.
-     * @param toolbarManager The ToolbarManager where Identity Disc is displayed.
+     * @param activityLifecycleDispatcher Dispatcher for activity lifecycle events, e.g. native
+     *         initialization completing.
+     * @param bottomToolbarVisibilitySupplier Supplier that queries and updates the visibility of
+     *         the bottom toolbar.
      */
-    IdentityDiscController(Context context, ToolbarManager toolbarManager,
-            ActivityLifecycleDispatcher activityLifecycleDispatcher) {
+    public IdentityDiscController(Context context,
+            ActivityLifecycleDispatcher activityLifecycleDispatcher,
+            ObservableSupplier<Boolean> bottomToolbarVisibilitySupplier) {
         mContext = context;
-        mToolbarManager = toolbarManager;
         mActivityLifecycleDispatcher = activityLifecycleDispatcher;
+        mBottomToolbarVisibilitySupplier = bottomToolbarVisibilitySupplier;
         mActivityLifecycleDispatcher.register(this);
+        mBottomToolbarVisibilitySupplier.addObserver(
+                (bottomToolbarIsVisible)
+                        -> notifyObservers(
+                                ChromeSigninController.get().getSignedInAccountName() != null));
+
+        mButtonData = new ButtonData(false, null,
+                view
+                -> {
+                    recordIdentityDiscUsed();
+                    SettingsLauncher.getInstance().launchSettingsPage(
+                            mContext, SyncAndServicesSettings.class);
+                },
+                R.string.accessibility_toolbar_btn_identity_disc, false,
+                new IPHCommandBuilder(mContext.getResources(),
+                        FeatureConstants.IDENTITY_DISC_FEATURE, R.string.iph_identity_disc_text,
+                        R.string.iph_identity_disc_accessibility_text));
     }
 
     /**
@@ -92,47 +123,65 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
     public void onFinishNativeInitialization() {
         mActivityLifecycleDispatcher.unregister(this);
         mActivityLifecycleDispatcher = null;
+        mNativeIsInitialized = true;
 
         mSigninManager = IdentityServicesProvider.get().getSigninManager();
         mSigninManager.addSignInStateObserver(this);
     }
 
-    /**
-     * Shows/hides Identity Disc.
-     */
-    void updateButtonState() {
-        updateButtonState(mShouldShowButton);
+    @Override
+    public void addObserver(ButtonDataObserver obs) {
+        mObservers.addObserver(obs);
     }
 
-    /**
-     * @param shouldShowButton Whether to show the Identity Disc.
-     */
-    void updateButtonState(boolean shouldShowButton) {
-        mShouldShowButton = shouldShowButton;
+    @Override
+    public void removeObserver(ButtonDataObserver obs) {
+        mObservers.removeObserver(obs);
+    }
+
+    @Override
+    public ButtonData get(Tab tab) {
+        boolean isNtp = tab != null && tab.getNativePage() instanceof NewTabPage;
+        if (!isNtp) {
+            mButtonData.canShow = false;
+            return mButtonData;
+        }
+
+        calculateButtonData(mBottomToolbarVisibilitySupplier.get());
+        return mButtonData;
+    }
+
+    public ButtonData getForStartSurface(@OverviewModeState int overviewModeState) {
+        if (overviewModeState != OverviewModeState.SHOWN_HOMEPAGE) {
+            mButtonData.canShow = false;
+            return mButtonData;
+        }
+
+        calculateButtonData(false);
+        return mButtonData;
+    }
+
+    private void calculateButtonData(boolean bottomToolbarVisible) {
+        if (!mNativeIsInitialized) {
+            assert !mButtonData.canShow;
+            return;
+        }
+
         String accountName = ChromeSigninController.get().getSignedInAccountName();
-        boolean canShowIdentityDisc = mShouldShowButton && accountName != null;
-        @IdentityDiscState
-        int oldState = mState;
+        boolean canShowIdentityDisc = accountName != null;
+        boolean menuBottomOnBottom =
+                bottomToolbarVisible && BottomToolbarVariationManager.isMenuButtonOnBottom();
 
         mState = !canShowIdentityDisc
                 ? IdentityDiscState.NONE
-                : mToolbarManager.isBottomToolbarVisible() ? IdentityDiscState.LARGE
-                                                           : IdentityDiscState.SMALL;
-
-        if (mState != IdentityDiscState.NONE && mState != oldState) {
-            // When showing Identity Disc or updating its size fetch corresponding profile picture.
-            createProfileDataCache(accountName, mState);
-        }
+                : menuBottomOnBottom ? IdentityDiscState.LARGE : IdentityDiscState.SMALL;
+        ensureProfileDataCache(accountName, mState);
 
         if (mState != IdentityDiscState.NONE) {
-            if (oldState == IdentityDiscState.NONE) {
-                showIdentityDisc(accountName);
-                maybeShowIPH();
-            } else if (mState != oldState) {
-                mToolbarManager.updateIdentityDiscButtonImage(getProfileImage(accountName));
-            }
-        } else if (oldState != IdentityDiscState.NONE) {
-            mToolbarManager.hideIdentityDiscButton();
+            mButtonData.drawable = getProfileImage(accountName);
+            mButtonData.canShow = true;
+        } else {
+            mButtonData.canShow = false;
         }
     }
 
@@ -140,9 +189,8 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
      * Creates and initializes ProfileDataCache if it wasn't created previously. Subscribes
      * IdentityDiscController for profile data updates.
      */
-    private void createProfileDataCache(String accountName, @IdentityDiscState int state) {
-        assert state != IdentityDiscState.NONE;
-        if (mProfileDataCache[state] != null) return;
+    private void ensureProfileDataCache(String accountName, @IdentityDiscState int state) {
+        if (state == IdentityDiscState.NONE || mProfileDataCache[state] != null) return;
 
         @DimenRes
         int dimension_id =
@@ -164,21 +212,10 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
     }
 
     /**
-     * Triggers profile image fetch and displays Identity Disc on top toolbar.
-     */
-    private void showIdentityDisc(String accountName) {
-        mToolbarManager.showIdentityDiscButton(view -> {
-            recordIdentityDiscUsed();
-            SettingsLauncher.getInstance().launchSettingsPage(
-                    mContext, SyncAndServicesSettings.class);
-        }, getProfileImage(accountName), R.string.accessibility_toolbar_btn_identity_disc);
-    }
-
-    /**
      * Hides IdentityDisc and resets all ProfileDataCache objects. Used for flushing cached images
      * when sign-in state changes.
      */
-    private void resetIdentityDisc() {
+    private void resetIdentityDiscCache() {
         for (int i = 0; i < IdentityDiscState.MAX; i++) {
             if (mProfileDataCache[i] != null) {
                 assert i != IdentityDiscState.NONE;
@@ -186,9 +223,11 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
                 mProfileDataCache[i] = null;
             }
         }
-        if (mState != IdentityDiscState.NONE) {
-            mState = IdentityDiscState.NONE;
-            mToolbarManager.hideIdentityDiscButton();
+    }
+
+    private void notifyObservers(boolean hint) {
+        for (ButtonDataObserver observer : mObservers) {
+            observer.buttonDataChanged(hint);
         }
     }
 
@@ -202,26 +241,27 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
 
         String accountName = ChromeSigninController.get().getSignedInAccountName();
         if (accountId.equals(accountName)) {
-            mToolbarManager.updateIdentityDiscButtonImage(getProfileImage(accountName));
+            notifyObservers(true);
         }
     }
 
     // SigninManager.SignInStateObserver implementation.
     @Override
     public void onSignedIn() {
-        resetIdentityDisc();
-        updateButtonState();
+        resetIdentityDiscCache();
+        notifyObservers(true);
     }
 
     @Override
     public void onSignedOut() {
-        updateButtonState();
+        notifyObservers(false);
     }
 
     /**
      * Call to tear down dependencies.
      */
-    void destroy() {
+    @Override
+    public void destroy() {
         if (mActivityLifecycleDispatcher != null) {
             mActivityLifecycleDispatcher.unregister(this);
             mActivityLifecycleDispatcher = null;
@@ -237,19 +277,6 @@ class IdentityDiscController implements NativeInitObserver, ProfileDataCache.Obs
             mSigninManager.removeSignInStateObserver(this);
             mSigninManager = null;
         }
-    }
-
-    /**
-     * Shows a help bubble below Identity Disc if the In-Product Help conditions are met.
-     */
-    private void maybeShowIPH() {
-        Profile profile = Profile.getLastUsedProfile();
-        Tracker tracker = TrackerFactory.getTrackerForProfile(profile);
-        if (!tracker.shouldTriggerHelpUI(FeatureConstants.IDENTITY_DISC_FEATURE)) return;
-
-        mToolbarManager.showIPHOnIdentityDiscButton(R.string.iph_identity_disc_text,
-                R.string.iph_identity_disc_accessibility_text,
-                () -> { tracker.dismissed(FeatureConstants.IDENTITY_DISC_FEATURE); });
     }
 
     /**
