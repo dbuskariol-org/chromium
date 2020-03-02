@@ -55,7 +55,8 @@ KeyedService* RealTimeUrlLookupServiceFactory::BuildServiceInstanceFor(
   DCHECK(cache_manager);
   return new RealTimeUrlLookupService(
       network::SharedURLLoaderFactory::Create(std::move(url_loader_factory)),
-      cache_manager, IdentityManagerFactory::GetForProfile(profile));
+      cache_manager, IdentityManagerFactory::GetForProfile(profile),
+      profile->GetPrefs(), profile->IsOffTheRecord());
 }
 
 }  // namespace safe_browsing

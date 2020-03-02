@@ -39,7 +39,8 @@ class RealTimeUrlLookupServiceTest : public PlatformTest {
     signin::IdentityTestEnvironment identity_test_env;
     rt_service_ = std::make_unique<RealTimeUrlLookupService>(
         test_shared_loader_factory_, cache_manager_.get(),
-        identity_test_env.identity_manager());
+        identity_test_env.identity_manager(), &test_pref_service_,
+        /* is_off_the_record */ false);
   }
 
   void TearDown() override {

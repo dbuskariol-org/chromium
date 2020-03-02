@@ -27,6 +27,8 @@ namespace signin {
 class IdentityManager;
 }
 
+class PrefService;
+
 namespace safe_browsing {
 
 using RTLookupRequestCallback =
@@ -45,11 +47,18 @@ class RealTimeUrlLookupService : public KeyedService {
   RealTimeUrlLookupService(
       scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
       VerdictCacheManager* cache_manager,
-      signin::IdentityManager* identity_manager);
+      signin::IdentityManager* identity_manager,
+      PrefService* pref_service,
+      bool is_off_the_record);
   ~RealTimeUrlLookupService() override;
 
   // Returns true if |url|'s scheme can be checked.
   bool CanCheckUrl(const GURL& url) const;
+
+  // Returns true if real time URL lookup is enabled. The check is based on
+  // pref settings of the associated profile, whether the profile is an off the
+  // record profile and the finch flag.
+  bool CanPerformFullURLLookup() const;
 
   // Returns true if the real time lookups are currently in backoff mode due to
   // too many prior errors. If this happens, the checking falls back to
@@ -149,6 +158,13 @@ class RealTimeUrlLookupService : public KeyedService {
   // Unowned object used for getting access token when real time url check with
   // token is enabled.
   signin::IdentityManager* identity_manager_;
+
+  // Unowned object used for getting preference settings.
+  PrefService* pref_service_;
+
+  // A boolean indicates whether the profile associated with this
+  // |url_lookup_service| is an off the record profile.
+  bool is_off_the_record_;
 
   friend class RealTimeUrlLookupServiceTest;
 

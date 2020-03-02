@@ -159,11 +159,9 @@ BrowserURLLoaderThrottle::BrowserURLLoaderThrottle(
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
   // Decide whether to do real time URL lookups or not.
-  content::WebContents* web_contents = web_contents_getter.Run();
   bool real_time_lookup_enabled =
-      web_contents ? RealTimePolicyEngine::CanPerformFullURLLookup(
-                         web_contents->GetBrowserContext())
-                   : false;
+      url_lookup_service ? url_lookup_service->CanPerformFullURLLookup()
+                         : false;
 
   io_checker_ = std::make_unique<CheckerOnIO>(
       std::move(delegate_getter), frame_tree_node_id, web_contents_getter,
