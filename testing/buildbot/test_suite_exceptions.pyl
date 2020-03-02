@@ -1307,6 +1307,14 @@
       'Marshmallow Tablet Tester',
       'android-code-coverage-native', # https://crbug.com/1018780
     ],
+    'modifications': {
+      'android-pie-x86-fyi-rel': {
+        # https://crbug.com/1046059
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.chrome_public_test_apk.filter',
+        ],
+      },
+    },
   },
   'network_service_out_of_process_components_browsertests': {
     'remove_from': [
@@ -1336,7 +1344,15 @@
       'android-code-coverage-native', # crbug/1018434
     ],
     'modifications': {
+      'android-marshmallow-x86-fyi-rel': {
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.content_browsertests.filter',
+        ],
+      },
       'android-pie-x86-fyi-rel': {
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.content_browsertests.filter',
+        ],
         'swarming': {
           'shards': 10,
         },

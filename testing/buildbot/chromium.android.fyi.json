@@ -2337,7 +2337,8 @@
           "--disable-features=NetworkServiceInProcess",
           "--gs-results-bucket=chromium-result-details",
           "--recover-devices",
-          "--avd-config=../../tools/android/avd/proto/generic_android23.textpb"
+          "--avd-config=../../tools/android/avd/proto/generic_android23.textpb",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.content_browsertests.filter"
         ],
         "merge": {
           "args": [
@@ -6231,7 +6232,8 @@
           "--disable-features=NetworkServiceInProcess",
           "--gs-results-bucket=chromium-result-details",
           "--recover-devices",
-          "--avd-config=../../tools/android/avd/proto/generic_android28.textpb"
+          "--avd-config=../../tools/android/avd/proto/generic_android28.textpb",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.chrome_public_test_apk.filter"
         ],
         "merge": {
           "args": [
@@ -6529,7 +6531,8 @@
           "--disable-features=NetworkServiceInProcess",
           "--gs-results-bucket=chromium-result-details",
           "--recover-devices",
-          "--avd-config=../../tools/android/avd/proto/generic_android28.textpb"
+          "--avd-config=../../tools/android/avd/proto/generic_android28.textpb",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator.content_browsertests.filter"
         ],
         "merge": {
           "args": [
