@@ -484,8 +484,8 @@ test(() => {
     var controller;
     var stream = new ReadableStream({start: c => controller = c});
     stream.getReader();
-    assert_throws(TypeError(), () => new Response(stream),
-                  'Response constructor should throw TypeError');
+    assert_throws_js(TypeError, () => new Response(stream),
+                     'Response constructor should throw TypeError');
   }, 'Response constructed with a locked stream');
 
 promise_test(() => {

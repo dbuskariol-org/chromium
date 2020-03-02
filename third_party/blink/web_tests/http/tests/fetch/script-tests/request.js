@@ -158,7 +158,7 @@ test(function() {
           function(name) { return {cache: name}; }))
       .concat(INVALID_TOKENS.map(
           function(name) { return {redirect: name}; }))
-      .forEach((init) => assert_throws(TypeError(), () => new Request(URL, init)),
+      .forEach((init) => assert_throws_js(TypeError, () => new Request(URL, init)),
         'Invalid Request.{mode, credentials, cache, redirect} should throw a TypeError');
   }, 'Request invalid value test');
 
@@ -634,7 +634,7 @@ test(() => {
      {referrerPolicy: 'UNSAFE-URL'},
      {referrerPolicy: '\0'.repeat(100000)},
      {referrerPolicy: 'x'.repeat(100000)}]
-      .forEach((init) => assert_throws(TypeError(), () => new Request(URL, init)),
+      .forEach((init) => assert_throws_js(TypeError, () => new Request(URL, init)),
         'Invalid Request.referrerPolicy should throw a TypeError');
   }, 'Request invalid referrer policy test');
 
