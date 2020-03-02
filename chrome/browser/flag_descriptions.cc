@@ -276,12 +276,6 @@ const char kBackForwardCacheDescription[] =
     "will lead to various breakages, up to and including user data loss. "
     "Do not enable unless you work on this feature";
 
-const char kBundledConnectionHelpName[] = "Bundled Connection Help";
-const char kBundledConnectionHelpDescription[] =
-    "Enables or disables redirection to local help content for users who get "
-    "an interstitial after clicking the 'Learn More' link on a previous "
-    "interstitial.";
-
 const char kBypassAppBannerEngagementChecksName[] =
     "Bypass user engagement checks";
 const char kBypassAppBannerEngagementChecksDescription[] =

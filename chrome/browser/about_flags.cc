@@ -3348,10 +3348,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kUsePreferredIntervalForVideoDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kUsePreferredIntervalForVideo)},
 
-    {"BundledConnectionHelp", flag_descriptions::kBundledConnectionHelpName,
-     flag_descriptions::kBundledConnectionHelpDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kBundledConnectionHelpFeature)},
-
     {"enable-query-in-omnibox", flag_descriptions::kQueryInOmniboxName,
      flag_descriptions::kQueryInOmniboxDescription, kOsAll,
      FEATURE_VALUE_TYPE(omnibox::kQueryInOmnibox)},

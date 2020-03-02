@@ -169,9 +169,6 @@ extern const char kAutoScreenBrightnessDescription[];
 extern const char kBackForwardCacheName[];
 extern const char kBackForwardCacheDescription[];
 
-extern const char kBundledConnectionHelpName[];
-extern const char kBundledConnectionHelpDescription[];
-
 extern const char kBypassAppBannerEngagementChecksName[];
 extern const char kBypassAppBannerEngagementChecksDescription[];
 
