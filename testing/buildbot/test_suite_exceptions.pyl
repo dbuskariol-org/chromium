@@ -552,6 +552,18 @@
       'android-asan',  # https://crbug.com/964562
       'android-code-coverage-native', # crbug/1018434
     ],
+    'modifications': {
+      'android-marshmallow-x86-fyi-rel': {
+        'args': [
+          '--gtest_filter=-ContentViewScrollingTest.testFling',
+        ],
+      },
+      'android-pie-x86-fyi-rel': {
+        'args': [
+          '--gtest_filter=-ContentViewScrollingTest.testFling',
+        ],
+      },
+    },
   },
   'content_unittests': {
     'remove_from': [
@@ -1344,6 +1356,18 @@
       'Marshmallow Tablet Tester',
       'android-code-coverage-native', # crbug/1018434
     ],
+    'modifications': {
+      'android-marshmallow-x86-fyi-rel': {
+        'args': [
+          '--gtest_filter=-ContentViewScrollingTest.testFling',
+        ],
+      },
+      'android-pie-x86-fyi-rel': {
+        'args': [
+          '--gtest_filter=-ContentViewScrollingTest.testFling',
+        ],
+      },
+    },
   },
   'network_service_webview_instrumentation_test_apk': {
     # Only run these on the phone testers for now due to capacity.
