@@ -4745,10 +4745,6 @@ const FeatureEntry kFeatureEntries[] = {
     {"mix-browser-type-tabs", flag_descriptions::kMixBrowserTypeTabsName,
      flag_descriptions::kMixBrowserTypeTabsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kMixBrowserTypeTabs)},
-
-    {"mixed-content-setting", flag_descriptions::kMixedContentSiteSettingName,
-     flag_descriptions::kMixedContentSiteSettingDescription, kOsDesktop,
-     FEATURE_VALUE_TYPE(features::kMixedContentSiteSetting)},
 #endif  // !defined(OS_ANDROID)
 
     {"enable-desktop-minimal-ui", flag_descriptions::kDesktopMinimalUIName,

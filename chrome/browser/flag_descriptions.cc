@@ -1155,12 +1155,6 @@ const char kMixBrowserTypeTabsDescription[] =
     "Allows tabs to be dragged between any browsers that support tabs, "
     "including apps";
 
-const char kMixedContentSiteSettingName[] =
-    "Blockable mixed content switch as site setting";
-const char kMixedContentSiteSettingDescription[] =
-    "Removes the blockable mixed content shield, and adds an 'Insecure "
-    "Content' site setting to allow blockable mixed content.";
-
 const char kMobileIdentityConsistencyName[] = "Mobile identity consistency";
 const char kMobileIdentityConsistencyDescription[] =
     "Enables stronger identity consistency on mobile";

@@ -684,9 +684,6 @@ extern const char kMediaRouterCastAllowAllIPsDescription[];
 extern const char kMixBrowserTypeTabsName[];
 extern const char kMixBrowserTypeTabsDescription[];
 
-extern const char kMixedContentSiteSettingName[];
-extern const char kMixedContentSiteSettingDescription[];
-
 extern const char kMobileIdentityConsistencyName[];
 extern const char kMobileIdentityConsistencyDescription[];
 
