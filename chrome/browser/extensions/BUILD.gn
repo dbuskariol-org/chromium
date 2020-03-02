@@ -889,8 +889,6 @@ jumbo_static_library("extensions") {
     "//services/audio/public/cpp",
     "//services/data_decoder/public/cpp",
     "//services/device/public/mojom",
-    "//services/identity/public/cpp:cpp_types",
-    "//services/identity/public/mojom",
     "//services/network/public/mojom",
     "//services/service_manager/public/cpp",
     "//services/service_manager/public/mojom",
