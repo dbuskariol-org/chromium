@@ -5798,7 +5798,7 @@ String Document::cookie(ExceptionState& exception_state) const {
     if (IsSandboxed(mojom::blink::WebSandboxFlags::kOrigin))
       exception_state.ThrowSecurityError(
           "The document is sandboxed and lacks the 'allow-same-origin' flag.");
-    else if (Url().ProtocolIs("data"))
+    else if (Url().ProtocolIsData())
       exception_state.ThrowSecurityError(
           "Cookies are disabled inside 'data:' URLs.");
     else
@@ -5824,7 +5824,7 @@ void Document::setCookie(const String& value, ExceptionState& exception_state) {
     if (IsSandboxed(mojom::blink::WebSandboxFlags::kOrigin))
       exception_state.ThrowSecurityError(
           "The document is sandboxed and lacks the 'allow-same-origin' flag.");
-    else if (Url().ProtocolIs("data"))
+    else if (Url().ProtocolIsData())
       exception_state.ThrowSecurityError(
           "Cookies are disabled inside 'data:' URLs.");
     else
@@ -8665,6 +8665,15 @@ void Document::CountDeprecation(mojom::WebFeature feature) {
       CountUse(WebFeature::kDocumentRegisterElementOnReverseOriginTrials);
     }
   }
+
+  // Don't count or report usage of WebComponentsV0 for chrome:// URLs.
+  if (Url().ProtocolIs("chrome") &&
+      (feature == WebFeature::kHTMLImports ||
+       feature == WebFeature::kElementCreateShadowRoot ||
+       feature == WebFeature::kDocumentRegisterElement)) {
+    return;
+  }
+
   Deprecation::CountDeprecation(Loader(), feature);
 }
 
