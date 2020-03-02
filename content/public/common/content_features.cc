@@ -166,7 +166,13 @@ const base::Feature kDocumentPolicy{"DocumentPolicy",
 // device IDs will not be available.
 // TODO(crbug.com/1019176): remove the feature in M82.
 const base::Feature kEnumerateDevicesHideDeviceIDs{
-    "EnumerateDevicesHideDeviceIDs", base::FEATURE_ENABLED_BY_DEFAULT};
+  "EnumerateDevicesHideDeviceIDs",
+#if defined(OS_ANDROID)
+      base::FEATURE_DISABLED_BY_DEFAULT
+#else
+      base::FEATURE_ENABLED_BY_DEFAULT
+#endif
+};
 
 // When a screen reader is detected, allow users the option of letting
 // Google provide descriptions for unlabeled images.
