@@ -403,6 +403,12 @@ public final class TabImpl extends ITab.Stub {
         if (controller != null) controller.dismissTabModalOverlay();
     }
 
+    @Override
+    public void dispatchBeforeUnloadAndClose() {
+        StrictModeWorkaround.apply();
+        mWebContents.dispatchBeforeUnload(false);
+    }
+
     @CalledByNative
     private static RectF createRectF(float x, float y, float right, float bottom) {
         return new RectF(x, y, right, bottom);
