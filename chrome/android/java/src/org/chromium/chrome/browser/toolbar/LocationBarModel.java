@@ -289,15 +289,16 @@ public class LocationBarModel implements ToolbarDataProvider, ToolbarCommonPrope
 
     @Override
     public Profile getProfile() {
-        Profile lastUsedProfile = Profile.getLastUsedProfile();
+        Profile lastUsedRegularProfile = Profile.getLastUsedRegularProfile();
         if (mIsIncognito) {
             // When in overview mode with no open tabs, there has not been created an
             // OffTheRecordProfile yet. #getOffTheRecordProfile will create a profile if none
             // exists.
-            assert lastUsedProfile.hasOffTheRecordProfile() || isInOverviewAndShowingOmnibox();
-            return lastUsedProfile.getOffTheRecordProfile();
+            assert lastUsedRegularProfile.hasOffTheRecordProfile()
+                    || isInOverviewAndShowingOmnibox();
+            return lastUsedRegularProfile.getOffTheRecordProfile();
         }
-        return lastUsedProfile.getOriginalProfile();
+        return lastUsedRegularProfile;
     }
 
     public void setOverviewModeBehavior(OverviewModeBehavior overviewModeBehavior) {
