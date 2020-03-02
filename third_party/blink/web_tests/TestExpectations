@@ -1891,6 +1891,8 @@ crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharne
 
 # ====== Form Controls Refresh (chrome://flags/#form-controls-refresh) failures from here ======
 
+crbug.com/1057518 virtual/controls-refresh/month-picker/month-picker-appearance-step.html [ Skip ]
+
 # ======
 # From this point until the end of the Form Controls Refresh section, these are
 # in-progress rebaselines, tracked at crbug.com/1053725.
