@@ -10703,8 +10703,7 @@ class WebRemoteFrameVisibilityChangeTest : public WebFrameTest {
 
   void ExecuteScriptOnMainFrame(const WebScriptSource& script) {
     MainFrame()->ExecuteScript(script);
-    MainFrame()->View()->MainFrameWidget()->BeginFrame(base::TimeTicks::Now(),
-                                                       false);
+    MainFrame()->View()->MainFrameWidget()->BeginFrame(base::TimeTicks::Now());
     MainFrame()->View()->MainFrameWidget()->UpdateAllLifecyclePhases(
         DocumentUpdateReason::kTest);
     MainFrame()->View()->MainFrameWidget()->DidBeginFrame();
@@ -10798,8 +10797,7 @@ class WebLocalFrameVisibilityChangeTest
 
   void ExecuteScriptOnMainFrame(const WebScriptSource& script) {
     MainFrame()->ExecuteScript(script);
-    MainFrame()->View()->MainFrameWidget()->BeginFrame(base::TimeTicks::Now(),
-                                                       false);
+    MainFrame()->View()->MainFrameWidget()->BeginFrame(base::TimeTicks::Now());
     MainFrame()->View()->MainFrameWidget()->UpdateAllLifecyclePhases(
         DocumentUpdateReason::kTest);
     MainFrame()->View()->MainFrameWidget()->DidBeginFrame();
