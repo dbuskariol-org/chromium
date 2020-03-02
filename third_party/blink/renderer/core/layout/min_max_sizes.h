@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_MIN_MAX_SIZE_H_
-#define THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_MIN_MAX_SIZE_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_MIN_MAX_SIZES_H_
+#define THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_MIN_MAX_SIZES_H_
 
 #include <algorithm>
 
@@ -15,12 +15,12 @@ namespace blink {
 // A struct that holds a pair of two sizes, a "min" size and a "max" size.
 // Useful for holding a {min,max}-content size pair or a
 // {min,max}-{width,height}.
-struct CORE_EXPORT MinMaxSize {
+struct CORE_EXPORT MinMaxSizes {
   LayoutUnit min_size;
   LayoutUnit max_size;
 
   // Make sure that our min/max sizes are at least as large as |other|.
-  void Encompass(const MinMaxSize& other) {
+  void Encompass(const MinMaxSizes& other) {
     min_size = std::max(min_size, other.min_size);
     max_size = std::max(max_size, other.max_size);
   }
@@ -50,30 +50,30 @@ struct CORE_EXPORT MinMaxSize {
     return std::max(min_size, std::min(size, max_size));
   }
 
-  bool operator==(const MinMaxSize& other) const {
+  bool operator==(const MinMaxSizes& other) const {
     return min_size == other.min_size && max_size == other.max_size;
   }
 
   void operator=(LayoutUnit value) { min_size = max_size = value; }
-  MinMaxSize& operator+=(MinMaxSize extra) {
+  MinMaxSizes& operator+=(MinMaxSizes extra) {
     min_size += extra.min_size;
     max_size += extra.max_size;
     return *this;
   }
-  MinMaxSize& operator+=(const LayoutUnit length) {
+  MinMaxSizes& operator+=(const LayoutUnit length) {
     min_size += length;
     max_size += length;
     return *this;
   }
-  MinMaxSize& operator-=(const LayoutUnit length) {
+  MinMaxSizes& operator-=(const LayoutUnit length) {
     min_size -= length;
     max_size -= length;
     return *this;
   }
 };
 
-CORE_EXPORT std::ostream& operator<<(std::ostream&, const MinMaxSize&);
+CORE_EXPORT std::ostream& operator<<(std::ostream&, const MinMaxSizes&);
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_MIN_MAX_SIZE_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_MIN_MAX_SIZES_H_
