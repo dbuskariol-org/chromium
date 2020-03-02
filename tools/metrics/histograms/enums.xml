@@ -63308,6 +63308,14 @@ would be helpful to identify which type is being sent.
   <int value="5" label="CLEAR_SERVER_DATA"/>
 </enum>
 
+<enum name="SyncSetupSettignsDisplayedSwaaState">
+  <int value="0" label="On"/>
+  <int value="1" label="Off due to custom encryption"/>
+  <int value="2" label="Off due to history sync off"/>
+  <int value="3" label="Off due to sWAA disabled in web and app activity page"/>
+  <int value="4" label="Not displayed due to fetch failure"/>
+</enum>
+
 <enum name="SyncSharingMessageCommitErrorCode">
   <int value="0" label="Ok"/>
   <int value="1" label="Invalid argument"/>
