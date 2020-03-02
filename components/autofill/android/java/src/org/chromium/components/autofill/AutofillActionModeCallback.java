@@ -2,14 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.android_webview;
+package org.chromium.components.autofill;
 
 import android.content.Context;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import org.chromium.components.autofill.AutofillProvider;
 
 /**
  * The class to implement autofill context menu. To match the Android native view behavior, the
