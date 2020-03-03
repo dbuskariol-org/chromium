@@ -951,10 +951,6 @@
       // Enabled by features::kLegacyWindowsDWriteFontFallback;
     },
     {
-      name: "LinkSystemColors",
-      status: "stable",
-    },
-    {
       name:"ManualSlotting",
       status:"experimental",
     },
@@ -1127,10 +1123,6 @@
     // Not a web exposed feature, enabled from the command line.
     {
       name: "NewRemotePlaybackPipeline",
-    },
-    {
-      name: "NewSystemColors",
-      status: "stable",
     },
     {
       name: "NoIdleEncodingForWebTests",
