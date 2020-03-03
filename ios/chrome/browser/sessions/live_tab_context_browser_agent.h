@@ -2,33 +2,32 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_SESSIONS_TAB_RESTORE_SERVICE_DELEGATE_IMPL_IOS_H_
-#define IOS_CHROME_BROWSER_SESSIONS_TAB_RESTORE_SERVICE_DELEGATE_IMPL_IOS_H_
+#ifndef IOS_CHROME_BROWSER_SESSIONS_LIVE_TAB_CONTEXT_BROWSER_AGENT_H_
+#define IOS_CHROME_BROWSER_SESSIONS_LIVE_TAB_CONTEXT_BROWSER_AGENT_H_
 
 #include <string>
 #include <vector>
 
-#include "base/macros.h"
 #include "components/keyed_service/core/keyed_service.h"
 #include "components/sessions/core/live_tab_context.h"
-#include "components/tab_groups/tab_group_id.h"
-#include "components/tab_groups/tab_group_visual_data.h"
+#include "ios/chrome/browser/main/browser_observer.h"
+#include "ios/chrome/browser/main/browser_user_data.h"
 
-class ChromeBrowserState;
 class WebStateList;
 
 // Implementation of sessions::LiveTabContext which uses an instance
 // of TabModel in order to fulfil its duties.
-class TabRestoreServiceDelegateImplIOS : public sessions::LiveTabContext,
-                                         public KeyedService {
+class LiveTabContextBrowserAgent
+    : public sessions::LiveTabContext,
+      public BrowserUserData<LiveTabContextBrowserAgent> {
  public:
-  explicit TabRestoreServiceDelegateImplIOS(ChromeBrowserState* browser_state);
-  ~TabRestoreServiceDelegateImplIOS() override;
+  // Not copiable or movable.
+  LiveTabContextBrowserAgent(const LiveTabContextBrowserAgent&) = delete;
+  LiveTabContextBrowserAgent& operator=(const LiveTabContextBrowserAgent&) =
+      delete;
+  ~LiveTabContextBrowserAgent() override;
 
-  // Overridden from KeyedService:
-  void Shutdown() override {}
-
-  // Overridden from sessions::LiveTabContext:
+  // Sessions::LiveTabContext:
   void ShowBrowserWindow() override;
   SessionID GetSessionID() const override;
   int GetTabCount() const override;
@@ -70,13 +69,13 @@ class TabRestoreServiceDelegateImplIOS : public sessions::LiveTabContext,
   void CloseTab() override;
 
  private:
-  // Retrieves the current |WebStateList| corresponding to |browser_state_|;
-  WebStateList* GetWebStateList() const;
+  explicit LiveTabContextBrowserAgent(Browser* browser);
+  friend class BrowserUserData<LiveTabContextBrowserAgent>;
+  BROWSER_USER_DATA_KEY_DECL();
 
-  ChromeBrowserState* browser_state_;  // weak
+  ChromeBrowserState* browser_state_;
+  WebStateList* web_state_list_;
   SessionID session_id_;
-
-  DISALLOW_COPY_AND_ASSIGN(TabRestoreServiceDelegateImplIOS);
 };
 
-#endif  // IOS_CHROME_BROWSER_SESSIONS_TAB_RESTORE_SERVICE_DELEGATE_IMPL_IOS_H_
+#endif  // IOS_CHROME_BROWSER_SESSIONS_LIVE_TAB_CONTEXT_BROWSER_AGENT_H_

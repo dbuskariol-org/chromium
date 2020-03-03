@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/sessions/tab_restore_service_delegate_impl_ios.h"
+#include "ios/chrome/browser/sessions/live_tab_context_browser_agent.h"
 
 #include <memory>
 #include <utility>
@@ -15,8 +15,6 @@
 #include "components/tab_groups/tab_group_visual_data.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #include "ios/chrome/browser/sessions/session_util.h"
-#import "ios/chrome/browser/tabs/tab_model.h"
-#import "ios/chrome/browser/tabs/tab_model_list.h"
 #import "ios/chrome/browser/web_state_list/web_state_list.h"
 #import "ios/chrome/browser/web_state_list/web_state_opener.h"
 #import "ios/web/public/web_state.h"
@@ -25,62 +23,57 @@
 #error "This file requires ARC support."
 #endif
 
-TabRestoreServiceDelegateImplIOS::TabRestoreServiceDelegateImplIOS(
-    ChromeBrowserState* browser_state)
-    : browser_state_(browser_state), session_id_(SessionID::NewUnique()) {}
+BROWSER_USER_DATA_KEY_IMPL(LiveTabContextBrowserAgent)
 
-TabRestoreServiceDelegateImplIOS::~TabRestoreServiceDelegateImplIOS() {}
+LiveTabContextBrowserAgent::LiveTabContextBrowserAgent(Browser* browser)
+    : browser_state_(browser->GetBrowserState()),
+      web_state_list_(browser->GetWebStateList()),
+      session_id_(SessionID::NewUnique()) {}
 
-WebStateList* TabRestoreServiceDelegateImplIOS::GetWebStateList() const {
-  TabModel* tab_model =
-      TabModelList::GetLastActiveTabModelForChromeBrowserState(browser_state_);
-  DCHECK([tab_model webStateList]);
-  return [tab_model webStateList];
-}
+LiveTabContextBrowserAgent::~LiveTabContextBrowserAgent() {}
 
-void TabRestoreServiceDelegateImplIOS::ShowBrowserWindow() {
+void LiveTabContextBrowserAgent::ShowBrowserWindow() {
   // No need to do anything here, as the singleton browser "window" is already
   // shown.
 }
 
-SessionID TabRestoreServiceDelegateImplIOS::GetSessionID() const {
+SessionID LiveTabContextBrowserAgent::GetSessionID() const {
   return session_id_;
 }
 
-int TabRestoreServiceDelegateImplIOS::GetTabCount() const {
-  return GetWebStateList()->count();
+int LiveTabContextBrowserAgent::GetTabCount() const {
+  return web_state_list_->count();
 }
 
-int TabRestoreServiceDelegateImplIOS::GetSelectedIndex() const {
-  return GetWebStateList()->active_index();
+int LiveTabContextBrowserAgent::GetSelectedIndex() const {
+  return web_state_list_->active_index();
 }
 
-std::string TabRestoreServiceDelegateImplIOS::GetAppName() const {
+std::string LiveTabContextBrowserAgent::GetAppName() const {
   return std::string();
 }
 
-sessions::LiveTab* TabRestoreServiceDelegateImplIOS::GetLiveTabAt(
-    int index) const {
+sessions::LiveTab* LiveTabContextBrowserAgent::GetLiveTabAt(int index) const {
   return nullptr;
 }
 
-sessions::LiveTab* TabRestoreServiceDelegateImplIOS::GetActiveLiveTab() const {
+sessions::LiveTab* LiveTabContextBrowserAgent::GetActiveLiveTab() const {
   return nullptr;
 }
 
-bool TabRestoreServiceDelegateImplIOS::IsTabPinned(int index) const {
+bool LiveTabContextBrowserAgent::IsTabPinned(int index) const {
   // Not supported by iOS.
   return false;
 }
 
 base::Optional<tab_groups::TabGroupId>
-TabRestoreServiceDelegateImplIOS::GetTabGroupForTab(int index) const {
+LiveTabContextBrowserAgent::GetTabGroupForTab(int index) const {
   // Not supported by iOS.
   return base::nullopt;
 }
 
 const tab_groups::TabGroupVisualData*
-TabRestoreServiceDelegateImplIOS::GetVisualDataForGroup(
+LiveTabContextBrowserAgent::GetVisualDataForGroup(
     const tab_groups::TabGroupId& group) const {
   // Since we never return a group from GetTabGroupForTab(), this should never
   // be called.
@@ -88,28 +81,28 @@ TabRestoreServiceDelegateImplIOS::GetVisualDataForGroup(
   return nullptr;
 }
 
-void TabRestoreServiceDelegateImplIOS::SetVisualDataForGroup(
+void LiveTabContextBrowserAgent::SetVisualDataForGroup(
     const tab_groups::TabGroupId& group,
     const tab_groups::TabGroupVisualData& visual_data) {
   // Not supported on iOS.
 }
 
-const gfx::Rect TabRestoreServiceDelegateImplIOS::GetRestoredBounds() const {
+const gfx::Rect LiveTabContextBrowserAgent::GetRestoredBounds() const {
   // Not supported by iOS.
   return gfx::Rect();
 }
 
-ui::WindowShowState TabRestoreServiceDelegateImplIOS::GetRestoredState() const {
+ui::WindowShowState LiveTabContextBrowserAgent::GetRestoredState() const {
   // Not supported by iOS.
   return ui::SHOW_STATE_NORMAL;
 }
 
-std::string TabRestoreServiceDelegateImplIOS::GetWorkspace() const {
+std::string LiveTabContextBrowserAgent::GetWorkspace() const {
   // Not supported by iOS.
   return std::string();
 }
 
-sessions::LiveTab* TabRestoreServiceDelegateImplIOS::AddRestoredTab(
+sessions::LiveTab* LiveTabContextBrowserAgent::AddRestoredTab(
     const std::vector<sessions::SerializedNavigationEntry>& navigations,
     int tab_index,
     int selected_navigation,
@@ -122,8 +115,7 @@ sessions::LiveTab* TabRestoreServiceDelegateImplIOS::AddRestoredTab(
     const sessions::PlatformSpecificTabData* tab_platform_data,
     const std::string& user_agent_override) {
   // TODO(crbug.com/661636): Handle tab-switch animation somehow...
-  WebStateList* web_state_list = GetWebStateList();
-  web_state_list->InsertWebState(
+  web_state_list_->InsertWebState(
       tab_index,
       session_util::CreateWebStateWithNavigationEntries(
           browser_state_, selected_navigation, navigations),
@@ -132,7 +124,7 @@ sessions::LiveTab* TabRestoreServiceDelegateImplIOS::AddRestoredTab(
   return nullptr;
 }
 
-sessions::LiveTab* TabRestoreServiceDelegateImplIOS::ReplaceRestoredTab(
+sessions::LiveTab* LiveTabContextBrowserAgent::ReplaceRestoredTab(
     const std::vector<sessions::SerializedNavigationEntry>& navigations,
     base::Optional<tab_groups::TabGroupId> group,
     int selected_navigation,
@@ -140,17 +132,15 @@ sessions::LiveTab* TabRestoreServiceDelegateImplIOS::ReplaceRestoredTab(
     const std::string& extension_app_id,
     const sessions::PlatformSpecificTabData* tab_platform_data,
     const std::string& user_agent_override) {
-  WebStateList* web_state_list = GetWebStateList();
-  web_state_list->ReplaceWebStateAt(
-      web_state_list->active_index(),
+  web_state_list_->ReplaceWebStateAt(
+      web_state_list_->active_index(),
       session_util::CreateWebStateWithNavigationEntries(
           browser_state_, selected_navigation, navigations));
 
   return nullptr;
 }
 
-void TabRestoreServiceDelegateImplIOS::CloseTab() {
-  WebStateList* web_state_list = GetWebStateList();
-  web_state_list->CloseWebStateAt(web_state_list->active_index(),
-                                  WebStateList::CLOSE_USER_ACTION);
+void LiveTabContextBrowserAgent::CloseTab() {
+  web_state_list_->CloseWebStateAt(web_state_list_->active_index(),
+                                   WebStateList::CLOSE_USER_ACTION);
 }
