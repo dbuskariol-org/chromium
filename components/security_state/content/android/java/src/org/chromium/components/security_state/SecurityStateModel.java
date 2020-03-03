@@ -2,12 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ssl;
+package org.chromium.components.security_state;
 
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.components.security_state.ConnectionSecurityLevel;
 import org.chromium.content_public.browser.WebContents;
 
 /**
@@ -22,13 +21,17 @@ public class SecurityStateModel {
      *
      * @see ConnectionSecurityLevel
      */
-    public static int getSecurityLevelForWebContents(WebContents webContents) {
+    public static int getSecurityLevelForWebContents(
+            WebContents webContents, SecurityStateModelDelegate delegate) {
         if (webContents == null) return ConnectionSecurityLevel.NONE;
-        return SecurityStateModelJni.get().getSecurityLevelForWebContents(webContents);
+        return SecurityStateModelJni.get().getSecurityLevelForWebContents(
+                webContents, delegate.getNativePtr());
     }
 
-    public static boolean isContentDangerous(WebContents webContents) {
-        return getSecurityLevelForWebContents(webContents) == ConnectionSecurityLevel.DANGEROUS;
+    public static boolean isContentDangerous(
+            WebContents webContents, SecurityStateModelDelegate delegate) {
+        return getSecurityLevelForWebContents(webContents, delegate)
+                == ConnectionSecurityLevel.DANGEROUS;
     }
 
     /**
@@ -47,7 +50,7 @@ public class SecurityStateModel {
     @NativeMethods
     @VisibleForTesting
     public interface Natives {
-        int getSecurityLevelForWebContents(WebContents webContents);
+        int getSecurityLevelForWebContents(WebContents webContents, long delegate);
         boolean shouldShowDangerTriangleForWarningLevel();
     }
 }
