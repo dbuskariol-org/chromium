@@ -1508,6 +1508,10 @@
       name: "ScreenEnumeration",
       status: "experimental",
     },
+    {
+      name: "ScreenWakeLock",
+      status: "experimental",
+    },
     // WebSpeech API with both speech recognition and synthesis functionality
     // is not fully enabled on all platforms.
     {
@@ -1645,6 +1649,10 @@
       status: "stable",
     },
     {
+      name: "SystemWakeLock",
+      status: "experimental",
+    },
+    {
       name: "TextDetector",
       status: "experimental",
     },
@@ -1763,8 +1771,7 @@
     },
     {
       name: "WakeLock",
-      origin_trial_feature_name: "WakeLock",
-      status: "experimental",
+      implied_by: ['ScreenWakeLock', 'SystemWakeLock'],
     },
     {
       name: "WebAnimationsAPI",
