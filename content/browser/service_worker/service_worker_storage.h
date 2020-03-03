@@ -64,10 +64,11 @@ FORWARD_DECLARE_TEST(ServiceWorkerStorageTest, DisabledStorage);
 // See the toplevel description of ServiceWorkerRegistry.
 class CONTENT_EXPORT ServiceWorkerStorage {
  public:
-  using RegistrationList = std::vector<ServiceWorkerDatabase::RegistrationData>;
+  using RegistrationList =
+      std::vector<storage::mojom::ServiceWorkerRegistrationDataPtr>;
   using ResourceList = std::vector<ServiceWorkerDatabase::ResourceRecord>;
   using FindRegistrationDataCallback = base::OnceCallback<void(
-      std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+      storage::mojom::ServiceWorkerRegistrationDataPtr data,
       std::unique_ptr<ResourceList> resources,
       ServiceWorkerDatabase::Status status)>;
   using GetRegistrationsDataCallback = base::OnceCallback<void(
@@ -140,7 +141,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
 
   // Stores |registration_data| and |resources| on persistent storage.
   void StoreRegistrationData(
-      const ServiceWorkerDatabase::RegistrationData& registration_data,
+      storage::mojom::ServiceWorkerRegistrationDataPtr registration_data,
       const ResourceList& resources,
       StoreRegistrationDataCallback callback);
 
@@ -345,16 +346,14 @@ class CONTENT_EXPORT ServiceWorkerStorage {
                               ServiceWorkerDatabase::Status status)>;
   using WriteRegistrationCallback = base::OnceCallback<void(
       const GURL& origin,
-      const ServiceWorkerDatabase::RegistrationData& deleted_version_data,
-      const std::vector<int64_t>& newly_purgeable_resources,
+      const ServiceWorkerDatabase::DeletedVersion& deleted_version_data,
       ServiceWorkerDatabase::Status status)>;
   using DeleteRegistrationInDBCallback = base::OnceCallback<void(
       OriginState origin_state,
-      const ServiceWorkerDatabase::RegistrationData& deleted_version_data,
-      const std::vector<int64_t>& newly_purgeable_resources,
+      const ServiceWorkerDatabase::DeletedVersion& deleted_version_data,
       ServiceWorkerDatabase::Status status)>;
   using FindInDBCallback = base::OnceCallback<void(
-      std::unique_ptr<ServiceWorkerDatabase::RegistrationData> data,
+      storage::mojom::ServiceWorkerRegistrationDataPtr data,
       std::unique_ptr<ResourceList> resources,
       ServiceWorkerDatabase::Status status)>;
   using GetResourcesCallback =
@@ -384,10 +383,9 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       ServiceWorkerDatabase::Status status);
   void DidStoreRegistrationData(
       StoreRegistrationDataCallback callback,
-      const ServiceWorkerDatabase::RegistrationData& new_version,
+      uint64_t new_resources_total_size_bytes,
       const GURL& origin,
-      const ServiceWorkerDatabase::RegistrationData& deleted_version,
-      const std::vector<int64_t>& newly_purgeable_resources,
+      const ServiceWorkerDatabase::DeletedVersion& deleted_version,
       ServiceWorkerDatabase::Status status);
   void DidUpdateToActiveState(DatabaseStatusCallback callback,
                               const GURL& origin,
@@ -395,8 +393,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void DidDeleteRegistration(
       std::unique_ptr<DidDeleteRegistrationParams> params,
       OriginState origin_state,
-      const ServiceWorkerDatabase::RegistrationData& deleted_version,
-      const std::vector<int64_t>& newly_purgeable_resources,
+      const ServiceWorkerDatabase::DeletedVersion& deleted_version,
       ServiceWorkerDatabase::Status status);
   void DidWriteUncommittedResourceIds(DatabaseStatusCallback callback,
                                       const GURL& origin,
@@ -450,7 +447,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   static void WriteRegistrationInDB(
       ServiceWorkerDatabase* database,
       scoped_refptr<base::SequencedTaskRunner> original_task_runner,
-      const ServiceWorkerDatabase::RegistrationData& registration,
+      storage::mojom::ServiceWorkerRegistrationDataPtr registration,
       const ResourceList& resources,
       WriteRegistrationCallback callback);
   static void FindForClientUrlInDB(

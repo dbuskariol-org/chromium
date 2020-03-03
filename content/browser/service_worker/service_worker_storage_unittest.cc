@@ -59,7 +59,7 @@ using net::WrappedIOBuffer;
 namespace content {
 namespace service_worker_storage_unittest {
 
-using RegistrationData = ServiceWorkerDatabase::RegistrationData;
+using RegistrationData = storage::mojom::ServiceWorkerRegistrationData;
 using ResourceRecord = ServiceWorkerDatabase::ResourceRecord;
 
 // This is a sample public key for testing the API. The corresponding private
@@ -549,12 +549,10 @@ class ServiceWorkerStorageTest : public testing::Test {
     base::RunLoop loop;
     storage()->database_task_runner_->PostTask(
         FROM_HERE, base::BindLambdaForTesting([&]() {
-          RegistrationData deleted_version;
-          std::vector<int64_t> newly_purgeable_resources;
+          ServiceWorkerDatabase::DeletedVersion deleted_version;
           ASSERT_EQ(ServiceWorkerDatabase::Status::kOk,
-                    database_raw->WriteRegistration(
-                        registration, resources, &deleted_version,
-                        &newly_purgeable_resources));
+                    database_raw->WriteRegistration(registration, resources,
+                                                    &deleted_version));
           loop.Quit();
         }));
     loop.Run();
