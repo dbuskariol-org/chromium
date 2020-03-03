@@ -42048,6 +42048,7 @@ Called by update_use_counter_css.py.-->
   <int value="652" label="contain-intrinsic-width"/>
   <int value="653" label="render-subtree"/>
   <int value="654" label="origin-trial-test-property"/>
+  <int value="655" label="subtree-visibility"/>
 </enum>
 
 <enum name="MappedEditingCommands">
