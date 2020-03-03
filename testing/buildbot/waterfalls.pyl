@@ -708,6 +708,17 @@
   {
     'name': 'chromium.android.fyi',
     'machines': {
+      'Android WebLayer P FYI (rel)': {
+        'mixins': [
+          'pie_fleet',
+          'walleye',
+        ],
+        'test_suites': {
+          'isolated_scripts': 'weblayer_shell_wpt',
+        },
+        'use_swarming': True,
+        'os_type': 'android',
+      },
       'Android WebView P Blink-CORS FYI (rel)': {
         'mixins': [
           'pie_fleet',
