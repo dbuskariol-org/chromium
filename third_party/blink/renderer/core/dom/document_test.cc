@@ -1145,9 +1145,8 @@ TEST_F(DocumentTest, ElementFromPointWithPageZoom) {
 }
 
 TEST_F(DocumentTest, PrefersColorSchemeChanged) {
-  ColorSchemeHelper color_scheme_helper;
-  color_scheme_helper.SetPreferredColorScheme(GetDocument(),
-                                              PreferredColorScheme::kLight);
+  ColorSchemeHelper color_scheme_helper(GetDocument());
+  color_scheme_helper.SetPreferredColorScheme(PreferredColorScheme::kLight);
   UpdateAllLifecyclePhasesForTest();
 
   auto* list = GetDocument().GetMediaQueryMatcher().MatchMedia(
@@ -1157,8 +1156,7 @@ TEST_F(DocumentTest, PrefersColorSchemeChanged) {
 
   EXPECT_FALSE(listener->IsNotified());
 
-  color_scheme_helper.SetPreferredColorScheme(GetDocument(),
-                                              PreferredColorScheme::kDark);
+  color_scheme_helper.SetPreferredColorScheme(PreferredColorScheme::kDark);
 
   UpdateAllLifecyclePhasesForTest();
   GetDocument().ServiceScriptedAnimations(base::TimeTicks());
