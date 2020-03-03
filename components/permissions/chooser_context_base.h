@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_CHOOSER_CONTEXT_BASE_H_
-#define CHROME_BROWSER_PERMISSIONS_CHOOSER_CONTEXT_BASE_H_
+#ifndef COMPONENTS_PERMISSIONS_CHOOSER_CONTEXT_BASE_H_
+#define COMPONENTS_PERMISSIONS_CHOOSER_CONTEXT_BASE_H_
 
 #include <memory>
 #include <string>
@@ -19,7 +19,6 @@
 #include "url/gurl.h"
 
 class HostContentSettingsMap;
-class Profile;
 
 namespace url {
 class Origin;
@@ -64,9 +63,9 @@ class ChooserContextBase : public KeyedService {
   void AddObserver(PermissionObserver* observer);
   void RemoveObserver(PermissionObserver* observer);
 
-  ChooserContextBase(Profile* profile,
-                     ContentSettingsType guard_content_settings_type,
-                     ContentSettingsType data_content_settings_type);
+  ChooserContextBase(ContentSettingsType guard_content_settings_type,
+                     ContentSettingsType data_content_settings_type,
+                     HostContentSettingsMap* host_content_settings_map);
   ~ChooserContextBase() override;
 
   // Checks whether |requesting_origin| can request permission to access objects
@@ -143,4 +142,4 @@ class ChooserContextBase : public KeyedService {
   HostContentSettingsMap* const host_content_settings_map_;
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_CHOOSER_CONTEXT_BASE_H_
+#endif  // COMPONENTS_PERMISSIONS_CHOOSER_CONTEXT_BASE_H_

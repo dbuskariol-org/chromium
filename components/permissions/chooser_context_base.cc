@@ -2,26 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/chooser_context_base.h"
+#include "components/permissions/chooser_context_base.h"
 
 #include <utility>
 
 #include "base/values.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/browser/profiles/profile.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "url/origin.h"
 
 const char kObjectListKey[] = "chosen-objects";
 
 ChooserContextBase::ChooserContextBase(
-    Profile* profile,
     const ContentSettingsType guard_content_settings_type,
-    const ContentSettingsType data_content_settings_type)
+    const ContentSettingsType data_content_settings_type,
+    HostContentSettingsMap* host_content_settings_map)
     : guard_content_settings_type_(guard_content_settings_type),
       data_content_settings_type_(data_content_settings_type),
-      host_content_settings_map_(
-          HostContentSettingsMapFactory::GetForProfile(profile)) {
+      host_content_settings_map_(host_content_settings_map) {
   DCHECK(host_content_settings_map_);
 }
 
