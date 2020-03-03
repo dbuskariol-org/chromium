@@ -128,7 +128,7 @@ constexpr char kCreatePublicKeyTemplate[] =
     "    displayName: 'Avery A. Jones', "
     "    icon: '$8'},"
     "  pubKeyCredParams: [{ type: 'public-key', alg: '$4'}],"
-    "  timeout: _timeout_,"
+    "  timeout: 1000,"
     "  excludeCredentials: [],"
     "  authenticatorSelection: {"
     "     requireResidentKey: $1,"
@@ -150,7 +150,7 @@ constexpr char kCreatePublicKeyWithAbortSignalTemplate[] =
     "    displayName: 'Avery A. Jones', "
     "    icon: '$8'},"
     "  pubKeyCredParams: [{ type: 'public-key', alg: '$4'}],"
-    "  timeout: _timeout_,"
+    "  timeout: 1000,"
     "  excludeCredentials: [],"
     "  authenticatorSelection: {"
     "     requireResidentKey: $1,"
@@ -167,7 +167,6 @@ constexpr char kPlatform[] = "platform";
 constexpr char kCrossPlatform[] = "cross-platform";
 constexpr char kPreferredVerification[] = "preferred";
 constexpr char kRequiredVerification[] = "required";
-constexpr char kShortTimeout[] = "100";
 
 // Default values for kCreatePublicKeyTemplate.
 struct CreateParameters {
@@ -184,7 +183,6 @@ struct CreateParameters {
   // It can use the |PublicKeyCredential| object named |c| to extract useful
   // fields.
   const char* extra_ok_output = "''";
-  const char* timeout = "1000";
 };
 
 std::string BuildCreateCallWithParameters(const CreateParameters& parameters) {
@@ -198,26 +196,20 @@ std::string BuildCreateCallWithParameters(const CreateParameters& parameters) {
   substitutions.push_back(parameters.rp_icon);
   substitutions.push_back(parameters.user_icon);
 
-  std::string result;
   if (strlen(parameters.signal) == 0) {
     substitutions.push_back(parameters.extra_ok_output);
-    result = base::ReplaceStringPlaceholders(kCreatePublicKeyTemplate,
-                                             substitutions, nullptr);
-  } else {
-    substitutions.push_back(parameters.signal);
-    result = base::ReplaceStringPlaceholders(
-        kCreatePublicKeyWithAbortSignalTemplate, substitutions, nullptr);
+    return base::ReplaceStringPlaceholders(kCreatePublicKeyTemplate,
+                                           substitutions, nullptr);
   }
-
-  base::ReplaceFirstSubstringAfterOffset(&result, 0, "_timeout_",
-                                         parameters.timeout);
-  return result;
+  substitutions.push_back(parameters.signal);
+  return base::ReplaceStringPlaceholders(
+      kCreatePublicKeyWithAbortSignalTemplate, substitutions, nullptr);
 }
 
 constexpr char kGetPublicKeyTemplate[] =
     "navigator.credentials.get({ publicKey: {"
     "  challenge: new TextEncoder().encode('climb a mountain'),"
-    "  timeout: $4,"
+    "  timeout: 1000,"
     "  userVerification: '$1',"
     "  $2}"
     "}).then(c => window.domAutomationController.send('webauth: OK' + $3),"
@@ -227,10 +219,10 @@ constexpr char kGetPublicKeyTemplate[] =
 constexpr char kGetPublicKeyWithAbortSignalTemplate[] =
     "navigator.credentials.get({ publicKey: {"
     "  challenge: new TextEncoder().encode('climb a mountain'),"
-    "  timeout: $4,"
+    "  timeout: 1000,"
     "  userVerification: '$1',"
     "  $2},"
-    "  signal: $5"
+    "  signal: $4"
     "}).catch(c => window.domAutomationController.send("
     "                  'webauth: ' + c.toString()));";
 
@@ -242,7 +234,6 @@ struct GetParameters {
       "     id: new TextEncoder().encode('allowedCredential'),"
       "     transports: ['usb', 'nfc', 'ble']}]";
   const char* signal = "";
-  const char* timeout = "1000";
   // extra_ok_output is a Javascript expression which must evaluate to a string.
   // It can use the |PublicKeyCredential| object named |c| to extract useful
   // fields.
@@ -254,7 +245,6 @@ std::string BuildGetCallWithParameters(const GetParameters& parameters) {
   substitutions.push_back(parameters.user_verification);
   substitutions.push_back(parameters.allow_credentials);
   substitutions.push_back(parameters.extra_ok_output);
-  substitutions.push_back(parameters.timeout);
   if (strlen(parameters.signal) == 0) {
     return base::ReplaceStringPlaceholders(kGetPublicKeyTemplate, substitutions,
                                            nullptr);
@@ -868,7 +858,6 @@ IN_PROC_BROWSER_TEST_F(WebAuthJavascriptClientBrowserTest,
 
     CreateParameters parameters;
     parameters.user_verification = kRequiredVerification;
-    parameters.timeout = kShortTimeout;
     std::string result;
     ASSERT_TRUE(content::ExecuteScriptAndExtractString(
         shell()->web_contents()->GetMainFrame(),
@@ -906,7 +895,6 @@ IN_PROC_BROWSER_TEST_F(WebAuthJavascriptClientBrowserTest,
 
     CreateParameters parameters;
     parameters.algorithm_identifier = "123";
-    parameters.timeout = kShortTimeout;
     std::string result;
     ASSERT_TRUE(content::ExecuteScriptAndExtractString(
         shell()->web_contents()->GetMainFrame(),
@@ -926,7 +914,6 @@ IN_PROC_BROWSER_TEST_F(WebAuthJavascriptClientBrowserTest,
 
     CreateParameters parameters;
     parameters.authenticator_attachment = kPlatform;
-    parameters.timeout = kShortTimeout;
     std::string result;
     ASSERT_TRUE(content::ExecuteScriptAndExtractString(
         shell()->web_contents()->GetMainFrame(),
@@ -1028,7 +1015,6 @@ IN_PROC_BROWSER_TEST_F(WebAuthJavascriptClientBrowserTest,
       "  id: new TextEncoder().encode('allowedCredential'),"
       "  transports: ['carrierpigeon'],"
       "}]";
-  parameters.timeout = kShortTimeout;
   std::string result;
   ASSERT_TRUE(content::ExecuteScriptAndExtractString(
       shell()->web_contents()->GetMainFrame(),
