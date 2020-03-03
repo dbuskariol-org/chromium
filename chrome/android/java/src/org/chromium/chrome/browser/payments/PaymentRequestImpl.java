@@ -2561,6 +2561,12 @@ public class PaymentRequestImpl
         return this;
     }
 
+    // PaymentAppFactoryParams implementation.
+    @Override
+    public String getTotalAmountCurrency() {
+        return mRawTotal.amount.currency;
+    }
+
     // PaymentAppFactoryDelegate implementation.
     @Override
     public PaymentAppFactoryParams getParams() {
