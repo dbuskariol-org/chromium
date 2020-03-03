@@ -1382,8 +1382,8 @@ bool CompositedLayerMapping::UpdateScrollingLayers(
         scrolling_coordinator->ScrollableAreaScrollLayerDidChange(
             scrollable_area);
         const auto& object = GetLayoutObject();
-        if (object.IsLayoutView())
-          ToLayoutView(object).GetFrameView()->ScrollableAreasDidChange();
+        if (auto* layout_view = DynamicTo<LayoutView>(object))
+          layout_view->GetFrameView()->ScrollableAreasDidChange();
       }
     }
   } else if (scrolling_layer_) {
@@ -1394,8 +1394,8 @@ bool CompositedLayerMapping::UpdateScrollingLayers(
       scrolling_coordinator->ScrollableAreaScrollLayerDidChange(
           scrollable_area);
       const auto& object = GetLayoutObject();
-      if (object.IsLayoutView())
-        ToLayoutView(object).GetFrameView()->ScrollableAreasDidChange();
+      if (auto* layout_view = DynamicTo<LayoutView>(object))
+        layout_view->GetFrameView()->ScrollableAreasDidChange();
     }
   }
 
@@ -1459,8 +1459,9 @@ CompositedLayerMapping::PaintingPhaseForPrimaryLayer() const {
 Color CompositedLayerMapping::LayoutObjectBackgroundColor() const {
   const auto& object = GetLayoutObject();
   auto background_color = object.ResolveColor(GetCSSPropertyBackgroundColor());
-  if (object.IsLayoutView() && object.GetDocument().IsInMainFrame()) {
-    return ToLayoutView(object).GetFrameView()->BaseBackgroundColor().Blend(
+  auto* layout_view = DynamicTo<LayoutView>(object);
+  if (layout_view && object.GetDocument().IsInMainFrame()) {
+    return layout_view->GetFrameView()->BaseBackgroundColor().Blend(
         background_color);
   }
   return background_color;

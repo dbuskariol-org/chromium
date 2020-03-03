@@ -195,7 +195,7 @@ static bool IsMainFrameNotClippingContents(const PaintLayer& layer) {
   // If MainFrameClipsContent is false which means that WebPreferences::
   // record_whole_document is true, we should not cull the scrolling contents
   // of the main frame.
-  if (layer.GetLayoutObject().IsLayoutView()) {
+  if (IsA<LayoutView>(layer.GetLayoutObject())) {
     const auto* frame = layer.GetLayoutObject().GetFrame();
     if (frame && frame->IsMainFrame() && !frame->ClipsContent())
       return true;
