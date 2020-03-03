@@ -79,6 +79,7 @@
 #include "ash/root_window_controller.h"
 #include "ash/screenshot_delegate.h"
 #include "ash/session/session_controller_impl.h"
+#include "ash/shelf/contextual_tooltip.h"
 #include "ash/shelf/shelf.h"
 #include "ash/shelf/shelf_controller.h"
 #include "ash/shelf/shelf_window_watcher.h"
@@ -1319,6 +1320,10 @@ void Shell::OnFirstSessionStarted() {
   // Enable long press action to toggle spoken feedback with hotrod remote
   // which can't handle shortcuts.
   SpokenFeedbackToggler::SetEnabled(session_controller_->IsRunningInAppMode());
+
+  // Reset user prefs related to contextual tooltips.
+  if (switches::ContextualNudgesResetShownCount())
+    contextual_tooltip::ClearPrefs();
 }
 
 void Shell::OnSessionStateChanged(session_manager::SessionState state) {
