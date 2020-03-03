@@ -2253,7 +2253,7 @@
   {
     "name": "forced-colors",
     "owners": [ "weblayout@microsoft.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 85
   },
   {
     "name": "form-controls-refresh",
