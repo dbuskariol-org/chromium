@@ -54,15 +54,12 @@ Mac & Linux step-by-step:
 
 ```shell
 # Check out.
-export CLANG_REV=198831   # You must change this value (see above)
-rm -rf llvm
-rm -rf llvm-build
-mkdir llvm
-mkdir llvm-build
-svn co http://llvm.org/svn/llvm-project/llvm/trunk@$CLANG_REV llvm
-cd llvm/tools
-svn co http://llvm.org/svn/llvm-project/cfe/trunk@$CLANG_REV clang
-cd ../../llvm-build
+export CLANG_REV=56ac9d30d35632969baa39829ebc8465ed5937ef   # You must change this value (see above)
+git clone https://github.com/llvm/llvm-project
+cd llvm-project
+git checkout $CLANG_REV
+mkdir build
+cd build
 
 # On Mac, do the following:
 MACOSX_DEPLOYMENT_TARGET=10.9 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
@@ -70,12 +67,14 @@ MACOSX_DEPLOYMENT_TARGET=10.9 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
 time caffeinate ninja clang-format
 strip bin/clang-format
 
-#On Linux, do the following:
+# On Linux, do the following:
+# Note the relative paths that point to your local Chromium checkout.
 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
+    -DLLVM_ENABLE_PROJECTS=clang \
     -DLLVM_ENABLE_ASSERTIONS=NO -DLLVM_ENABLE_THREADS=NO \
-    -DCMAKE_C_COMPILER=$PWD/../chrome/src/third_party/llvm-build/Release+Asserts/bin/clang \
-    -DCMAKE_CXX_COMPILER=$PWD/../chrome/src/third_party/llvm-build/Release+Asserts/bin/clang++ \
-    -DCMAKE_ASM_COMPILER=$PWD/../chrome/src/third_party/llvm-build/Release+Asserts/bin/clang \
+    -DCMAKE_C_COMPILER=$PWD/../../chromium/src/third_party/llvm-build/Release+Asserts/bin/clang \
+    -DCMAKE_CXX_COMPILER=$PWD/../../chromium/src/third_party/llvm-build/Release+Asserts/bin/clang++ \
+    -DCMAKE_ASM_COMPILER=$PWD/../../chromium/src/third_party/llvm-build/Release+Asserts/bin/clang \
     -DLLVM_ENABLE_TERMINFO=OFF -DCMAKE_CXX_STANDARD_LIBRARIES="-static-libgcc -static-libstdc++" ../llvm/
 ninja clang-format
 strip bin/clang-format
