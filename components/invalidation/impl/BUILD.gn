@@ -133,8 +133,8 @@ static_library("test_support") {
     "invalidation_service_test_template.h",
     "invalidation_test_util.cc",
     "invalidation_test_util.h",
-    "object_id_invalidation_map_test_util.cc",
-    "object_id_invalidation_map_test_util.h",
+    "topic_invalidation_map_test_util.cc",
+    "topic_invalidation_map_test_util.h",
   ]
 
   public_deps = [

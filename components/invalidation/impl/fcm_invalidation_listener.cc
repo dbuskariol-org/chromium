@@ -131,21 +131,21 @@ void FCMInvalidationListener::TokenReceived(
   }
 }
 
-void FCMInvalidationListener::Acknowledge(const invalidation::ObjectId& id,
+void FCMInvalidationListener::Acknowledge(const Topic& topic,
                                           const syncer::AckHandle& handle) {
-  auto lookup = unacked_invalidations_map_.find(id.name());
+  auto lookup = unacked_invalidations_map_.find(topic);
   if (lookup == unacked_invalidations_map_.end()) {
-    DLOG(WARNING) << "Received acknowledgement for untracked object ID";
+    DLOG(WARNING) << "Received acknowledgement for untracked topic";
     return;
   }
   lookup->second.Acknowledge(handle);
 }
 
-void FCMInvalidationListener::Drop(const invalidation::ObjectId& id,
+void FCMInvalidationListener::Drop(const Topic& topic,
                                    const syncer::AckHandle& handle) {
-  auto lookup = unacked_invalidations_map_.find(id.name());
+  auto lookup = unacked_invalidations_map_.find(topic);
   if (lookup == unacked_invalidations_map_.end()) {
-    DLOG(WARNING) << "Received drop for untracked object ID";
+    DLOG(WARNING) << "Received drop for untracked topic";
     return;
   }
   lookup->second.Drop(handle);

@@ -192,9 +192,7 @@ void InvalidatorRegistrarWithMemory::DispatchInvalidationsToHandlers(
     if (topics_to_emit.Empty()) {
       continue;
     }
-    ObjectIdInvalidationMap object_ids_to_emit =
-        ConvertTopicInvalidationMapToObjectIdInvalidationMap(topics_to_emit);
-    handler_and_topics.first->OnIncomingInvalidation(object_ids_to_emit);
+    handler_and_topics.first->OnIncomingInvalidation(topics_to_emit);
   }
 }
 
