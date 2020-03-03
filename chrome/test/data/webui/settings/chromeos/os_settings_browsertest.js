@@ -447,6 +447,7 @@ var OSSettingsCrostiniPageTest = class extends OSSettingsBrowserTest {
   get extraLibraries() {
     return super.extraLibraries.concat([
       '//ui/webui/resources/js/promise_resolver.js',
+      BROWSER_SETTINGS_PATH + '../test_util.js',
       BROWSER_SETTINGS_PATH + '../test_browser_proxy.js',
       'test_crostini_browser_proxy.js',
       'crostini_page_test.js',

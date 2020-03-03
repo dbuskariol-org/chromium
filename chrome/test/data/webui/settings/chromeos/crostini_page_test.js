@@ -94,19 +94,6 @@ suite('CrostiniPageTests', function() {
     /** @type {?SettingsCrostiniSubPageElement} */
     let subpage;
 
-    /**
-     * Returns a new promise that resolves after a window 'popstate' event.
-     * @return {!Promise}
-     */
-    function whenPopState() {
-      return new Promise(function(resolve) {
-        window.addEventListener('popstate', function callback() {
-          window.removeEventListener('popstate', callback);
-          resolve();
-        });
-      });
-    }
-
     setup(function() {
       setCrostiniPrefs(true);
       loadTimeData.overrideValues({
@@ -398,7 +385,7 @@ suite('CrostiniPageTests', function() {
       assertEquals(
           1, crostiniBrowserProxy.getCallCount('requestRemoveCrostini'));
       setCrostiniPrefs(false);
-      return whenPopState().then(function() {
+      return test_util.eventToPromise('popstate', window).then(function() {
         assertEquals(
             settings.Router.getInstance().getCurrentRoute(),
             settings.routes.CROSTINI);
@@ -433,7 +420,7 @@ suite('CrostiniPageTests', function() {
           settings.Router.getInstance().getCurrentRoute(),
           settings.routes.CROSTINI_DETAILS);
       setCrostiniPrefs(false);
-      return whenPopState().then(function() {
+      return test_util.eventToPromise('popstate', window).then(function() {
         assertEquals(
             settings.Router.getInstance().getCurrentRoute(),
             settings.routes.CROSTINI);
