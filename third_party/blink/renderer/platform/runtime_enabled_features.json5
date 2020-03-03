@@ -721,14 +721,6 @@
       name: "FeaturePolicyVibrateFeature"
     },
     {
-      name: "FetchMetadata",
-      status: "stable"
-    },
-    {
-      name: "FetchMetadataDestination",
-      status: "experimental"
-    },
-    {
       // Also enabled when blink::features::kFileHandlingAPI is overridden
       // on the command line (or via chrome://flags).
       name: "FileHandling",
