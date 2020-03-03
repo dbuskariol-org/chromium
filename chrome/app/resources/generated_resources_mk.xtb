@@ -991,7 +991,7 @@
 <translation id="2350182423316644347">Се иницијализира апликација...</translation>
 <translation id="2350796302381711542">Ќе дозволите <ph name="HANDLER_HOSTNAME" /> да ги отвори сите <ph name="PROTOCOL" /> врски наместо <ph name="REPLACED_HANDLER_TITLE" />?</translation>
 <translation id="2351266942280602854">Јазик и внесување</translation>
-<translation id="2352662711729498748">&lt; 1 МБ</translation>
+<translation id="2352662711729498748">&lt; 1 MB</translation>
 <translation id="2352810082280059586">Белешките на заклучениот екран се зачувуваат автоматски во <ph name="LOCK_SCREEN_APP_NAME" />. Последната белешка ќе остане на заклучениот екран.</translation>
 <translation id="2353297238722298836">Камерата и микрофонот се дозволени</translation>
 <translation id="2356070529366658676">Прашај</translation>
@@ -1146,7 +1146,7 @@
 <translation id="2552966063069741410">Временска зона</translation>
 <translation id="2553340429761841190"><ph name="PRODUCT_NAME" /> не можеше да се поврзе на <ph name="NETWORK_ID" />. Изберете друга мрежа или обидете се повторно.</translation>
 <translation id="2553440850688409052">Сокриј го приклучокот</translation>
-<translation id="2554553592469060349">Избраната датотека е преголема (максимална големина: 3 МБ).</translation>
+<translation id="2554553592469060349">Избраната датотека е преголема (максимална големина: 3 MB).</translation>
 <translation id="2557378327156922632">Датотекава содржи чувствителни содржини.</translation>
 <translation id="255747371423522804">Додај во постојна група</translation>
 <translation id="2558896001721082624">Секогаш прикажувај опции за пристап во системското мени</translation>
@@ -3289,7 +3289,7 @@
 <translation id="5595152862129936745">Многу далеку</translation>
 <translation id="5595485650161345191">Измени адреса</translation>
 <translation id="5596627076506792578">Повеќе опции</translation>
-<translation id="5600706100022181951">Ажурирањето ќе се преземе со користење <ph name="UPDATE_SIZE_MB" /> МБ мобилен интернет. Дали сакате да продолжите?</translation>
+<translation id="5600706100022181951">Ажурирањето ќе се преземе со користење <ph name="UPDATE_SIZE_MB" /> MB мобилен интернет. Дали сакате да продолжите?</translation>
 <translation id="5601503069213153581">PIN</translation>
 <translation id="5602765853043467355">Исчисти обележувачи, историја, лозинки и друго од уредов</translation>
 <translation id="5605623530403479164">Други пребарувачи</translation>
