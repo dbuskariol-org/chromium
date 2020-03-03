@@ -6277,7 +6277,8 @@ crbug.com/1035309 http/tests/devtools/throttling/mobile-throttling.js [ Pass Fai
 
 # Enable scroll-snap tests on impl thread
 # These are currently failing on Mac which needs more investigation, snap-scrolls-visual-viewport seems flaky
-crbug.com/878878 [ Mac ] virtual/threaded/fast/scroll-snap/snaps-after-keyboard-scrolling.html [ Timeout ]
+crbug.com/878878 [ Mac ] virtual/threaded/fast/scroll-snap/snaps-after-keyboard-scrolling.html [ Pass Timeout ]
+crbug.com/878878 [ Win10 ] virtual/threaded/fast/scroll-snap/snaps-after-keyboard-scrolling.html [ Pass Timeout ]
 crbug.com/878878 [ Mac ] virtual/threaded/fast/scroll-snap/snaps-after-scrollbar-scrolling.html [ Timeout ]
 crbug.com/878878 [ Mac ] virtual/threaded/fast/scroll-snap/snaps-for-different-key-granularity.html [ Timeout ]
 
