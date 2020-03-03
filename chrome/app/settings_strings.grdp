@@ -2081,6 +2081,18 @@
   <message name="IDS_SETTINGS_SITE_SETTINGS_MOTION_SENSORS" desc="Label for the motion sensors permission in Site Settings. Motion sensors are accelerometers, gyroscopes and magnetometers.">
     Motion sensors
   </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_BLUETOOTH_DEVICES" desc="Label for Bluetooth devices in site settings.">
+    Bluetooth devices
+  </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_BLUETOOTH_DEVICES_ASK" desc="The ask label for Bluetooth devices in site settings.">
+    Ask when a site wants to access Bluetooth devices
+  </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_BLUETOOTH_DEVICES_ASK_RECOMMENDED" desc="The ask label for Bluetooth devices in site settings (with the 'recommended' suffix).">
+    Ask when a site wants to access Bluetooth devices (recommended)
+  </message>
+  <message name="IDS_SETTINGS_SITE_SETTINGS_BLUETOOTH_DEVICES_BLOCK" desc="The block label for Bluetooth devices in site settings.">
+    Do not allow any sites to access Bluetooth devices
+  </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_USB_DEVICES" desc="Label for USB devices in site settings.">
     USB devices
   </message>
@@ -2530,6 +2542,9 @@
     Do not allow any site to discover nearby Bluetooth devices
   </message>
 
+  <message name="IDS_SETTINGS_NO_BLUETOOTH_DEVICES_FOUND" desc="Explanation for not showing Bluetooth devices in site settings.">
+    No Bluetooth devices found
+  </message>
   <message name="IDS_SETTINGS_NO_USB_DEVICES_FOUND" desc="Explanation for not showing USB devices in site settings.">
     No USB devices found
   </message>
