@@ -2645,12 +2645,6 @@
     Google Profile photo
   </message>
   <if expr="chromeos">
-    <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_CHOOSE_PIN_TITLE" desc="Message shown below the title that tells the user to enter the initial PIN.">
-      Enter your PIN
-    </message>
-    <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_CONFIRM_PIN_TITLE" desc="Message shown below the title that tells the user to confirm their initial PIN entry.">
-      Confirm your PIN
-    </message>
     <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_WEAK_PIN" desc="Message shown below the title that warns the user they have entered a PIN that is easy to guess.">
       PIN may be easy to guess
     </message>
@@ -2663,20 +2657,8 @@
     <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_MISMATCHED" desc="Message shown below the title that tells the user they have entered two different PIN values.">
       PINs do not match
     </message>
-    <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_REGISTERED_FINGERPRINTS_LABEL" desc="Text above fingerprint list that tells users their registered fingerprints.">
-      Saved fingerprints
-    </message>
-    <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_ADD_FINGERPRINT_BUTTON" desc="Button that is used to add a new fingerprint.">
-      Add Fingerprint
-    </message>
-    <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_FINGERPRINT_LESS_SECURE" desc="Text telling users that fingerprints might be less secure than strong PINs or passwords.">
-      Note: Your fingerprint may be less secure than a strong password or PIN.
-    </message>
     <message name="IDS_SETTINGS_ACCOUNT_MANAGER_ACCOUNT_REMOVED_MESSAGE" desc="Notification message after account removal.">
       <ph name="EMAIL">$1<ex>abcd@google.com</ex></ph> was removed from this device
-    </message>
-    <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_TITLE" desc="Title of the add fingerprint dialog popup.">
-      Set up your fingerprint
     </message>
     <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_INSTRUCTION_LOCATE_SCANNER_POWER_BUTTON" desc="Text in the add fingerprint dialog telling users to place finger on the power button which is the sensor.">
       Touch the power button with your finger
@@ -2695,24 +2677,6 @@
     </message>
      <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_INSTRUCTION_LOCATE_SCANNER_KEYBOARD_TOP_RIGHT_ARIA_LABEL" desc="Aria label in the add fingerprint dialog telling users that the fingerprint sensor is in the top right corner of the keyboard. Only visible by screen reader software.">
       The fingerprint sensor is the top right-hand key on your keyboard. Touch it lightly with any finger.
-    </message>
-    <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_INSTRUCTION_READY" desc="Text in the add fingerprint dialog that confirms user's fingerprint scan was successful.">
-      Fingerprint added.
-    </message>
-    <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_LIFT_FINGER" desc="Warning text in the add fingerprint dialog to tell users to lift their finger and touch the sensor again.">
-      Lift then try again.
-    </message>
-    <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_TRY_AGAIN" desc="Warning text in the add fingerprint dialog to tell users to try again.">
-      Try again.
-    </message>
-    <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_FINGER_IMMOBILE" desc="Warning text in the add fingerprint dialog to tell users they should move their finger slightly to capture different parts of the fingerprint.">
-      Move slightly to capture a different part of the fingerprint.
-    </message>
-    <message name="IDS_SETTINGS_PEOPLE_PASSWORD_PROMPT_TITLE" desc="Title of the password prompt dialog popup.">
-      Confirm your password
-    </message>
-    <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_ADD_ANOTHER_BUTTON" desc="Text on the button in the fingerprint setup dialog which allows users to add another fingerprint once a fingerprint has been setup.">
-      Add another
     </message>
     <message name="IDS_SETTINGS_PEOPLE_PASSWORD_PROMPT_PASSWORD_LABEL" desc="An input box label that tells the user to enter their password in that input box.">
       Password

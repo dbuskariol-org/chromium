@@ -1766,7 +1766,7 @@
   <message name="IDS_SETTINGS_MULTIDEVICE_FORGET_THIS_DEVICE_DISCONNECT" desc="Text for the button that lets the user choose if their Chromebook should forget their phone. This means they will no longer have access to multidevice features.">
     Disconnect
   </message>
-    <message name="IDS_SETTINGS_MULTIDEVICE_SETUP_SUMMARY" desc="Tells the user to connect their Chromebook to their phone.">
+  <message name="IDS_SETTINGS_MULTIDEVICE_SETUP_SUMMARY" desc="Tells the user to connect their Chromebook to their phone.">
     Connect your <ph name="DEVICE_TYPE">$1<ex>Chromebook</ex></ph> with your phone. <ph name="LINK_BEGIN">&lt;a target="_blank" href="$2<ex>https://google.com/</ex>"&gt;</ph>Learn more<ph name="LINK_END">&lt;/a&gt;</ph>
   </message>
   <message name="IDS_SETTINGS_MULTIDEVICE_NO_ELIGIBLE_HOSTS" desc="Tells the user that there is no phone with their account on it that can connect to their Chromebook.">
@@ -2211,6 +2211,48 @@
   </message>
   <message name="IDS_SETTINGS_EASY_UNLOCK_UNLOCK_DEVICE_AND_ALLOW_SIGNIN" desc="This option lets the user unlock their Chromebook from their phone as well as log into their Chromebook without a password if their phone is nearby and unlocked.">
     Unlock device and sign in to Google Account
+  </message>
+  
+  <!-- Fingerprint Page (OS settings) -->
+  <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_ADD_FINGERPRINT_BUTTON" desc="Button that is used to add a new fingerprint.">
+    Add Fingerprint
+  </message>
+  <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_REGISTERED_FINGERPRINTS_LABEL" desc="Text above fingerprint list that tells users their registered fingerprints.">
+    Saved fingerprints
+  </message>
+  <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_FINGERPRINT_LESS_SECURE" desc="Text telling users that fingerprints might be less secure than strong PINs or passwords.">
+    Note: Your fingerprint may be less secure than a strong password or PIN.
+  </message>
+
+  <!-- Setup Pin dialog (OS settings) -->
+  <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_CHOOSE_PIN_TITLE" desc="Message shown below the title that tells the user to enter the initial PIN.">
+    Enter your PIN
+  </message>
+  <message name="IDS_SETTINGS_PEOPLE_CONFIGURE_PIN_CONFIRM_PIN_TITLE" desc="Message shown below the title that tells the user to confirm their initial PIN entry.">
+    Confirm your PIN
+  </message>
+  <message name="IDS_SETTINGS_PEOPLE_PASSWORD_PROMPT_TITLE" desc="Title of the password prompt dialog popup.">
+    Confirm your password
+  </message>
+
+  <!-- Setup fingerprint dialog (OS settings) -->
+  <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_TITLE" desc="Title of the add fingerprint dialog popup.">
+    Set up your fingerprint
+  </message>
+  <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_ADD_ANOTHER_BUTTON" desc="Text on the button in the fingerprint setup dialog which allows users to add another fingerprint once a fingerprint has been setup.">
+    Add another
+  </message>
+  <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_INSTRUCTION_READY" desc="Text in the add fingerprint dialog that confirms user's fingerprint scan was successful.">
+    Fingerprint added.
+  </message>
+  <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_LIFT_FINGER" desc="Warning text in the add fingerprint dialog to tell users to lift their finger and touch the sensor again.">
+    Lift then try again.
+  </message>
+  <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_TRY_AGAIN" desc="Warning text in the add fingerprint dialog to tell users to try again.">
+    Try again.
+  </message>
+  <message name="IDS_SETTINGS_ADD_FINGERPRINT_DIALOG_FINGER_IMMOBILE" desc="Warning text in the add fingerprint dialog to tell users they should move their finger slightly to capture different parts of the fingerprint.">
+    Move slightly to capture a different part of the fingerprint.
   </message>
 </if>
 </grit-part>
