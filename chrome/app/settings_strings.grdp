@@ -3052,6 +3052,9 @@
     <message name="IDS_SETTINGS_STORAGE_ITEM_AVAILABLE" desc="In Device Settings > Storage, label for the available storage size of Chrome OS internal storage.">
       Available
     </message>
+    <message name="IDS_SETTINGS_STORAGE_ITEM_SYSTEM" desc="In Device Settings > Storage, label for the total system size, difference between the size of the filesystem and the size of all items listed on the storage page.">
+      System
+    </message>
     <message name="IDS_SETTINGS_STORAGE_ITEM_MY_FILES" desc="In Device Settings > Storage, label for the size of My files root.">
       My files
     </message>
