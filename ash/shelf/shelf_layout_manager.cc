@@ -613,7 +613,7 @@ void ShelfLayoutManager::UpdateContextualNudges() {
     if (contextual_tooltip::ShouldShowNudge(
             Shell::Get()->session_controller()->GetLastActiveUserPrefService(),
             contextual_tooltip::TooltipType::kDragHandle)) {
-      shelf_widget_->ShowDragHandleNudge();
+      shelf_widget_->ScheduleShowDragHandleNudge();
     }
   } else {
     shelf_widget_->HideDragHandleNudge();
