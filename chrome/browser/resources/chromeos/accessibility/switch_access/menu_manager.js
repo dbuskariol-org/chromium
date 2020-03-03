@@ -508,14 +508,6 @@ class MenuManager {
    */
   performAction(action) {
     SwitchAccessMetrics.recordMenuAction(action);
-    // Some actions involve navigation events. Handle those explicitly.
-    if (action === SAConstants.MenuAction.SELECT &&
-        this.menuOriginNode_.isGroup()) {
-      NavigationManager.enterGroup();
-      this.exit_();
-      return;
-    }
-
     // Handle global actions.
     if (action === SAConstants.MenuAction.SETTINGS) {
       chrome.accessibilityPrivate.openSettingsSubpage(
