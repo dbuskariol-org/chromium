@@ -31632,6 +31632,8 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="7" label="Trigger string mismatch"/>
   <int value="8" label="Not regular browser"/>
   <int value="9" label="Incognito mode disabled"/>
+  <int value="10" label="Cookies are blocked"/>
+  <int value="11" label="Third-party cookies are blocked"/>
 </enum>
 
 <enum name="HeapProfilingMode">
