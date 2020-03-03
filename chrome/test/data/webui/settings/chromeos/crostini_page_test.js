@@ -9,13 +9,17 @@ let crostiniPage = null;
 let crostiniBrowserProxy = null;
 
 function setCrostiniPrefs(enabled, optional = {}) {
-  const {sharedPaths = {}, sharedUsbDevices = [], forwardedPorts = []} =
-      optional;
-
+  const {
+    sharedPaths = {},
+    sharedUsbDevices = [],
+    forwardedPorts = [],
+    micSharing = false
+  } = optional;
   crostiniPage.prefs = {
     crostini: {
       enabled: {value: enabled},
       port_forwarding: {ports: {value: forwardedPorts}},
+      mic_sharing: {value: micSharing},
     },
     guest_os: {
       paths_shared_to_vms: {value: sharedPaths},
@@ -95,6 +99,7 @@ suite('CrostiniPageTests', function() {
       loadTimeData.overrideValues({
         showCrostiniExportImport: true,
         showCrostiniPortForwarding: true,
+        showCrostiniMic: true,
       });
 
       const eventPromise = new Promise((resolve) => {
@@ -124,6 +129,7 @@ suite('CrostiniPageTests', function() {
       assertTrue(!!subpage.$$('#remove'));
       assertTrue(!!subpage.$$('#container-upgrade'));
       assertTrue(!!subpage.$$('#crostini-port-forwarding'));
+      assertTrue(!!subpage.$$('#crostini-mic-sharing'));
     });
 
     test('SharedPaths', async function() {
@@ -250,6 +256,21 @@ suite('CrostiniPageTests', function() {
           assertFalse(subpage.$$('#export cr-button').disabled);
           assertFalse(subpage.$$('#import cr-button').disabled);
         });
+
+    test('TogglecCrostiniMicSharing', function() {
+      assertTrue(!!subpage.$$('#crostini-mic-sharing'));
+      setCrostiniPrefs(true, {micSharing: true});
+      assertTrue(subpage.$$('#crostini-mic-sharing').checked);
+      assertTrue(subpage.$$('#crostini-mic-sharing').pref.value);
+
+      subpage.$$('#crostini-mic-sharing').click();
+      assertFalse(subpage.$$('#crostini-mic-sharing').checked);
+      assertFalse(subpage.$$('#crostini-mic-sharing').pref.value);
+
+      subpage.$$('#crostini-mic-sharing').click();
+      assertTrue(subpage.$$('#crostini-mic-sharing').checked);
+      assertTrue(subpage.$$('#crostini-mic-sharing').pref.value);
+    });
 
     suite('SubPagePortForwarding', function() {
       /** @type {?SettingsCrostiniPortForwarding} */
