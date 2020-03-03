@@ -61,9 +61,16 @@ class ChromeOSChildAccountReconcilorDelegate
       return;
     }
 
+    if (!GetIdentityManager()->HasAccountWithRefreshTokenInPersistentErrorState(
+            GetIdentityManager()->GetPrimaryAccountId(
+                signin::ConsentLevel::kNotRequired))) {
+      return;
+    }
+
     // Mark the account to require an online sign in.
     const user_manager::User* primary_user =
         user_manager::UserManager::Get()->GetPrimaryUser();
+    DCHECK(primary_user);
     user_manager::UserManager::Get()->SaveForceOnlineSignin(
         primary_user->GetAccountId(), true /* force_online_signin */);
 
