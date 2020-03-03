@@ -3058,6 +3058,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
 
   _contextMenuCoordinator = [[ContextMenuCoordinator alloc]
       initWithBaseViewController:self
+                         browser:self.browser
                            title:params.menu_title
                           inView:params.view
                       atLocation:params.location];

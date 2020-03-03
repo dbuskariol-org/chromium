@@ -1060,6 +1060,7 @@ const int kRecentlyClosedTabsSectionIndex = 0;
   // Present sheet/popover using controller that is added to view hierarchy.
   self.contextMenuCoordinator = [[ContextMenuCoordinator alloc]
       initWithBaseViewController:self
+                         browser:self.browser
                            title:nil
                           inView:self.tableView
                       atLocation:viewCoordinate];
