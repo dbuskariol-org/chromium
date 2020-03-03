@@ -1369,7 +1369,7 @@
   {
     "name": "enable-heavy-ad-intervention",
     "owners": [ "johnidel", "jkarlin" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 85
   },
   {
     "name": "enable-heuristic-stylus-palm-rejection",
@@ -2347,7 +2347,7 @@
   {
     "name": "heavy-ad-privacy-mitigations-opt-out",
     "owners": [ "johnidel", "jkarlin" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 85
   },
   {
     "name": "help-app",
