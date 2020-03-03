@@ -14,7 +14,6 @@
 #include "components/invalidation/impl/fcm_network_handler.h"
 #include "components/invalidation/impl/invalidation_prefs.h"
 #include "components/invalidation/public/invalidator_state.h"
-#include "components/invalidation/public/object_id_invalidation_map.h"
 #include "components/invalidation/public/topic_invalidation_map.h"
 #include "components/prefs/scoped_user_pref_update.h"
 
@@ -104,7 +103,7 @@ bool FCMInvalidationServiceBase::UpdateInterestedTopics(
   if (!invalidator_registrar_.UpdateRegisteredTopics(handler, topic_map))
     return false;
   DoUpdateSubscribedTopicsIfNeeded();
-  logger_.OnUpdateTopics(invalidator_registrar_.GetHandlerNameToTopicsMap());
+  logger_.OnUpdatedTopics(invalidator_registrar_.GetHandlerNameToTopicsMap());
   return true;
 }
 
@@ -151,8 +150,7 @@ void FCMInvalidationServiceBase::OnInvalidate(
     const syncer::TopicInvalidationMap& invalidation_map) {
   invalidator_registrar_.DispatchInvalidationsToHandlers(invalidation_map);
 
-  logger_.OnInvalidation(
-      ConvertTopicInvalidationMapToObjectIdInvalidationMap(invalidation_map));
+  logger_.OnInvalidation(invalidation_map);
 }
 
 void FCMInvalidationServiceBase::OnInvalidatorStateChange(
