@@ -7,6 +7,7 @@
 #include "base/optional.h"
 #include "third_party/blink/renderer/core/frame/local_frame_view.h"
 #include "third_party/blink/renderer/core/frame/settings.h"
+#include "third_party/blink/renderer/core/layout/layout_video.h"
 #include "third_party/blink/renderer/core/layout/layout_view.h"
 #include "third_party/blink/renderer/core/paint/clip_path_clipper.h"
 #include "third_party/blink/renderer/core/paint/compositing/composited_layer_mapping.h"
@@ -459,7 +460,7 @@ PaintResult PaintLayerPainter::PaintLayerContents(
     bool should_paint_normal_flow_and_pos_z_order_lists =
         is_painting_composited_foreground &&
         !is_painting_overlay_overflow_controls;
-    bool is_video = paint_layer_.GetLayoutObject().IsVideo();
+    bool is_video = IsA<LayoutVideo>(paint_layer_.GetLayoutObject());
 
     base::Optional<ScopedPaintChunkProperties>
         subsequence_forced_chunk_properties;

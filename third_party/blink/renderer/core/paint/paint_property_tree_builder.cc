@@ -20,6 +20,7 @@
 #include "third_party/blink/renderer/core/layout/layout_inline.h"
 #include "third_party/blink/renderer/core/layout/layout_table_row.h"
 #include "third_party/blink/renderer/core/layout/layout_table_section.h"
+#include "third_party/blink/renderer/core/layout/layout_video.h"
 #include "third_party/blink/renderer/core/layout/layout_view.h"
 #include "third_party/blink/renderer/core/layout/svg/layout_svg_resource_masker.h"
 #include "third_party/blink/renderer/core/layout/svg/layout_svg_root.h"
@@ -1612,7 +1613,7 @@ void FragmentPaintPropertyTreeBuilder::UpdateOverflowClip() {
         // here, before applying padding and corner rounding.
         PhysicalRect content_rect(context_.current.paint_offset,
                                   replaced.Size());
-        if (replaced.IsVideo()) {
+        if (IsA<LayoutVideo>(replaced)) {
           content_rect =
               LayoutReplaced::PreSnappedRectForPersistentSizing(content_rect);
         }

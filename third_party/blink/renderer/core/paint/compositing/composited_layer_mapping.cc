@@ -179,7 +179,7 @@ static bool NeedsDecorationOutlineLayer(const PaintLayer& paint_layer,
   bool could_obscure_decorations =
       (paint_layer.GetScrollableArea() &&
        paint_layer.GetScrollableArea()->UsesCompositedScrolling()) ||
-      layout_object.IsCanvas() || layout_object.IsVideo();
+      layout_object.IsCanvas() || IsA<LayoutVideo>(layout_object);
 
   return could_obscure_decorations && layout_object.StyleRef().HasOutline() &&
          layout_object.StyleRef().OutlineOffset() < -min_border_width;
@@ -445,7 +445,7 @@ bool CompositedLayerMapping::UpdateGraphicsLayerConfiguration(
     if (PaintLayerCompositor::AttachFrameContentLayersToIframeLayer(
             ToLayoutEmbeddedContent(layout_object)))
       layer_config_changed = true;
-  } else if (layout_object.IsVideo()) {
+  } else if (IsA<LayoutVideo>(layout_object)) {
     auto* media_element = To<HTMLMediaElement>(layout_object.GetNode());
     graphics_layer_->SetContentsToCcLayer(
         media_element->CcLayer(),
@@ -1001,7 +1001,7 @@ void CompositedLayerMapping::UpdateContentsRect() {
 
 void CompositedLayerMapping::UpdateDrawsContentAndPaintsHitTest() {
   bool in_overlay_fullscreen_video = false;
-  if (GetLayoutObject().IsVideo()) {
+  if (IsA<LayoutVideo>(GetLayoutObject())) {
     auto* video_element = To<HTMLVideoElement>(GetLayoutObject().GetNode());
     if (video_element->IsFullscreen() &&
         video_element->UsesOverlayFullscreenVideo())
@@ -1517,8 +1517,8 @@ bool CompositedLayerMapping::ContainsPaintedContent() const {
   // FIXME: we could optimize cases where the image, video or canvas is known to
   // fill the border box entirely, and set background color on the layer in that
   // case, instead of allocating backing store and painting.
-  if (layout_object.IsVideo() &&
-      ToLayoutVideo(layout_object).ShouldDisplayVideo())
+  auto* layout_video = DynamicTo<LayoutVideo>(layout_object);
+  if (layout_video && layout_video->ShouldDisplayVideo())
     return owning_layer_.HasBoxDecorationsOrBackground();
 
   if (layout_object.GetNode() && layout_object.GetNode()->IsDocumentNode()) {
