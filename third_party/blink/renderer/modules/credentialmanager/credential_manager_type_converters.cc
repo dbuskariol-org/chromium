@@ -25,21 +25,6 @@
 #include "third_party/blink/renderer/modules/credentialmanager/password_credential.h"
 #include "third_party/blink/renderer/modules/credentialmanager/public_key_credential.h"
 
-namespace {
-// Time to wait for an authenticator to successfully complete an operation.
-constexpr base::TimeDelta kAdjustedTimeoutLower =
-    base::TimeDelta::FromSeconds(10);
-constexpr base::TimeDelta kAdjustedTimeoutUpper =
-    base::TimeDelta::FromMinutes(10);
-
-base::TimeDelta AdjustTimeout(uint32_t timeout) {
-  base::TimeDelta adjusted_timeout;
-  adjusted_timeout = base::TimeDelta::FromMilliseconds(timeout);
-  return std::max(kAdjustedTimeoutLower,
-                  std::min(kAdjustedTimeoutUpper, adjusted_timeout));
-}
-}  // namespace
-
 namespace mojo {
 
 using blink::mojom::blink::AttestationConveyancePreference;
@@ -408,9 +393,8 @@ TypeConverter<PublicKeyCredentialCreationOptionsPtr,
 
   // Step 4 of https://w3c.github.io/webauthn/#createCredential
   if (options->hasTimeout()) {
-    mojo_options->adjusted_timeout = AdjustTimeout(options->timeout());
-  } else {
-    mojo_options->adjusted_timeout = kAdjustedTimeoutUpper;
+    mojo_options->timeout =
+        base::TimeDelta::FromMilliseconds(options->timeout());
   }
 
   // Steps 8 and 9 of
@@ -552,9 +536,8 @@ TypeConverter<PublicKeyCredentialRequestOptionsPtr,
   mojo_options->challenge = ConvertTo<Vector<uint8_t>>(options->challenge());
 
   if (options->hasTimeout()) {
-    mojo_options->adjusted_timeout = AdjustTimeout(options->timeout());
-  } else {
-    mojo_options->adjusted_timeout = kAdjustedTimeoutUpper;
+    mojo_options->timeout =
+        base::TimeDelta::FromMilliseconds(options->timeout());
   }
 
   mojo_options->relying_party_id = options->rpId();
