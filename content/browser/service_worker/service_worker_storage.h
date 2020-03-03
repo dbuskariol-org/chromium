@@ -66,7 +66,8 @@ class CONTENT_EXPORT ServiceWorkerStorage {
  public:
   using RegistrationList =
       std::vector<storage::mojom::ServiceWorkerRegistrationDataPtr>;
-  using ResourceList = std::vector<ServiceWorkerDatabase::ResourceRecord>;
+  using ResourceList =
+      std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>;
   using FindRegistrationDataCallback = base::OnceCallback<void(
       storage::mojom::ServiceWorkerRegistrationDataPtr data,
       std::unique_ptr<ResourceList> resources,
@@ -142,7 +143,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   // Stores |registration_data| and |resources| on persistent storage.
   void StoreRegistrationData(
       storage::mojom::ServiceWorkerRegistrationDataPtr registration_data,
-      const ResourceList& resources,
+      std::unique_ptr<ResourceList> resources,
       StoreRegistrationDataCallback callback);
 
   // Updates the state of the registration's stored version to active.
@@ -269,7 +270,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
   void GetNewVersionId(base::OnceCallback<void(int64_t version_id)> callback);
 
   // Returns a new resource id which is guaranteed to be unique in the storage.
-  // Returns ServiceWorkerConsts::kInvalidServiceWorkerResourceId if the storage
+  // Returns blink::mojom::kInvalidServiceWorkerResourceId if the storage
   // is disabled.
   // NOTE: Currently this method can return a new resource id synchronously
   // and doesn't have to take a callback. Using a callback is a preparation
@@ -448,7 +449,7 @@ class CONTENT_EXPORT ServiceWorkerStorage {
       ServiceWorkerDatabase* database,
       scoped_refptr<base::SequencedTaskRunner> original_task_runner,
       storage::mojom::ServiceWorkerRegistrationDataPtr registration,
-      const ResourceList& resources,
+      std::unique_ptr<ResourceList> resources,
       WriteRegistrationCallback callback);
   static void FindForClientUrlInDB(
       ServiceWorkerDatabase* database,

@@ -67,7 +67,7 @@ const base::FilePath::CharType kDiskCacheName[] =
 ServiceWorkerStorage::InitialData::InitialData()
     : next_registration_id(blink::mojom::kInvalidServiceWorkerRegistrationId),
       next_version_id(blink::mojom::kInvalidServiceWorkerVersionId),
-      next_resource_id(ServiceWorkerConsts::kInvalidServiceWorkerResourceId) {}
+      next_resource_id(blink::mojom::kInvalidServiceWorkerResourceId) {}
 
 ServiceWorkerStorage::InitialData::~InitialData() {
 }
@@ -311,7 +311,7 @@ void ServiceWorkerStorage::GetAllRegistrations(
 
 void ServiceWorkerStorage::StoreRegistrationData(
     storage::mojom::ServiceWorkerRegistrationDataPtr registration_data,
-    const ResourceList& resources,
+    std::unique_ptr<ResourceList> resources,
     StoreRegistrationDataCallback callback) {
   DCHECK_EQ(state_, STORAGE_STATE_INITIALIZED);
 
@@ -325,7 +325,7 @@ void ServiceWorkerStorage::StoreRegistrationData(
       base::BindOnce(
           &WriteRegistrationInDB, database_.get(),
           base::ThreadTaskRunnerHandle::Get(), std::move(registration_data),
-          resources,
+          std::move(resources),
           base::BindOnce(&ServiceWorkerStorage::DidStoreRegistrationData,
                          weak_factory_.GetWeakPtr(), std::move(callback),
                          resources_total_size_bytes)));
@@ -479,7 +479,7 @@ void ServiceWorkerStorage::StoreUncommittedResourceId(
     int64_t resource_id,
     const GURL& origin,
     DatabaseStatusCallback callback) {
-  DCHECK_NE(ServiceWorkerConsts::kInvalidServiceWorkerResourceId, resource_id);
+  DCHECK_NE(blink::mojom::kInvalidServiceWorkerResourceId, resource_id);
   DCHECK(STORAGE_STATE_INITIALIZED == state_ ||
          STORAGE_STATE_DISABLED == state_)
       << state_;
@@ -883,7 +883,7 @@ ServiceWorkerStorage::ServiceWorkerStorage(
     storage::SpecialStoragePolicy* special_storage_policy)
     : next_registration_id_(blink::mojom::kInvalidServiceWorkerRegistrationId),
       next_version_id_(blink::mojom::kInvalidServiceWorkerVersionId),
-      next_resource_id_(ServiceWorkerConsts::kInvalidServiceWorkerResourceId),
+      next_resource_id_(blink::mojom::kInvalidServiceWorkerResourceId),
       state_(STORAGE_STATE_UNINITIALIZED),
       expecting_done_with_disk_on_disable_(false),
       user_data_directory_(user_data_directory),
@@ -1130,7 +1130,7 @@ void ServiceWorkerStorage::StartPurgingResources(
     const ResourceList& resources) {
   DCHECK(has_checked_for_stale_resources_);
   for (const auto& resource : resources)
-    purgeable_resource_ids_.push_back(resource.resource_id);
+    purgeable_resource_ids_.push_back(resource->resource_id);
   ContinuePurgingResources();
 }
 
@@ -1243,7 +1243,7 @@ int64_t ServiceWorkerStorage::NewVersionId() {
 
 int64_t ServiceWorkerStorage::NewResourceId() {
   if (state_ == STORAGE_STATE_DISABLED)
-    return ServiceWorkerConsts::kInvalidServiceWorkerResourceId;
+    return blink::mojom::kInvalidServiceWorkerResourceId;
   DCHECK_EQ(STORAGE_STATE_INITIALIZED, state_);
   return next_resource_id_++;
 }
@@ -1353,12 +1353,13 @@ void ServiceWorkerStorage::WriteRegistrationInDB(
     ServiceWorkerDatabase* database,
     scoped_refptr<base::SequencedTaskRunner> original_task_runner,
     storage::mojom::ServiceWorkerRegistrationDataPtr registration,
-    const ResourceList& resources,
+    std::unique_ptr<ResourceList> resources,
     WriteRegistrationCallback callback) {
   DCHECK(database);
+  DCHECK(resources);
   ServiceWorkerDatabase::DeletedVersion deleted_version;
   ServiceWorkerDatabase::Status status =
-      database->WriteRegistration(*registration, resources, &deleted_version);
+      database->WriteRegistration(*registration, *resources, &deleted_version);
   original_task_runner->PostTask(
       FROM_HERE,
       base::BindOnce(std::move(callback), registration->script.GetOrigin(),

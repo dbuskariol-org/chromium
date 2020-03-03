@@ -61,35 +61,6 @@ class CONTENT_EXPORT ServiceWorkerDatabase {
       base::flat_map<std::string /* feature_name */,
                      std::vector<std::string /* token */>>;
 
-  struct ResourceRecord {
-    // Represents an error state. Each enum instance should be a negative
-    // value.  This is just temporary for debugging.
-    // TODO(hayato): Remove this once we fix crbug.com/946719.
-    enum class ErrorState : int64_t {
-      // We don't use -1 here to catch an untracked usage of -1 as an error
-      // code.
-      kStartedCaching = -2,
-      kFinishedCachingNoBytesWritten = -3,
-      kFinishedCachingNoContext = -4,
-    };
-
-    int64_t resource_id;
-    GURL url;
-    // Signed so we can store ErrorState. When stored to the database, this
-    // value should always be >= 0.
-    int64_t size_bytes;
-
-    ResourceRecord() : resource_id(-1), size_bytes(0) {}
-    ResourceRecord(int64_t id, GURL url, int64_t size_bytes)
-        : resource_id(id), url(url), size_bytes(size_bytes) {
-      DCHECK_GE(size_bytes, 0);
-    }
-    ResourceRecord(int64_t id, GURL url, ErrorState error_state)
-        : resource_id(id),
-          url(url),
-          size_bytes(static_cast<int64_t>(error_state)) {}
-  };
-
   // Contains information of a deleted service worker version. Used as an output
   // of WriteRegistration() and DeleteRegistration().
   struct CONTENT_EXPORT DeletedVersion {
@@ -121,7 +92,8 @@ class CONTENT_EXPORT ServiceWorkerDatabase {
       const GURL& origin,
       std::vector<storage::mojom::ServiceWorkerRegistrationDataPtr>*
           registrations,
-      std::vector<std::vector<ResourceRecord>>* opt_resources_list);
+      std::vector<std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>>*
+          opt_resources_list);
 
   // Reads all registrations from the database. Returns OK if successfully read
   // or not found. Otherwise, returns an error.
@@ -141,7 +113,7 @@ class CONTENT_EXPORT ServiceWorkerDatabase {
       int64_t registration_id,
       const GURL& origin,
       storage::mojom::ServiceWorkerRegistrationDataPtr* registration,
-      std::vector<ResourceRecord>* resources);
+      std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>* resources);
 
   // Looks up the origin for the registration with |registration_id|. Returns OK
   // if a registration was found and read successfully. Otherwise, returns an
@@ -158,7 +130,8 @@ class CONTENT_EXPORT ServiceWorkerDatabase {
   // Returns OK they are successfully written. Otherwise, returns an error.
   Status WriteRegistration(
       const storage::mojom::ServiceWorkerRegistrationData& registration,
-      const std::vector<ResourceRecord>& resources,
+      const std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>&
+          resources,
       DeletedVersion* deleted_version);
 
   // Updates a registration for |registration_id| to an active state. Returns OK
@@ -337,16 +310,17 @@ class CONTENT_EXPORT ServiceWorkerDatabase {
   // error.
   Status ReadResourceRecords(
       const storage::mojom::ServiceWorkerRegistrationData& registration,
-      std::vector<ResourceRecord>* resources);
+      std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>* resources);
 
   // Parses |serialized| as a ResourceRecord object and pushes it into |out|.
   ServiceWorkerDatabase::Status ParseResourceRecord(
       const std::string& serialized,
-      ResourceRecord* out);
+      storage::mojom::ServiceWorkerResourceRecordPtr* out);
 
-  void WriteResourceRecordInBatch(const ResourceRecord& resource,
-                                  int64_t version_id,
-                                  leveldb::WriteBatch* batch);
+  void WriteResourceRecordInBatch(
+      const storage::mojom::ServiceWorkerResourceRecord& resource,
+      int64_t version_id,
+      leveldb::WriteBatch* batch);
 
   // Deletes resource records for |version_id| from the database. Returns OK if
   // they are successfully deleted or not found in the database. Otherwise,

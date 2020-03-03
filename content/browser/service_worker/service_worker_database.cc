@@ -243,10 +243,11 @@ ServiceWorkerDatabase::Status LevelDBStatusToServiceWorkerDBStatus(
 }
 
 int64_t AccumulateResourceSizeInBytes(
-    const std::vector<ServiceWorkerDatabase::ResourceRecord>& resources) {
+    const std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>&
+        resources) {
   int64_t total_size_bytes = 0;
   for (const auto& resource : resources)
-    total_size_bytes += resource.size_bytes;
+    total_size_bytes += resource->size_bytes;
   return total_size_bytes;
 }
 
@@ -378,7 +379,8 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::GetRegistrationsForOrigin(
     const GURL& origin,
     std::vector<storage::mojom::ServiceWorkerRegistrationDataPtr>*
         registrations,
-    std::vector<std::vector<ResourceRecord>>* opt_resources_list) {
+    std::vector<std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>>*
+        opt_resources_list) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(registrations->empty());
 
@@ -430,7 +432,7 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::GetRegistrationsForOrigin(
   // database.
   if (opt_resources_list) {
     for (const auto& registration : *registrations) {
-      std::vector<ResourceRecord> resources;
+      std::vector<storage::mojom::ServiceWorkerResourceRecordPtr> resources;
       // NOTE: ReadResourceRecords already calls HandleReadResult() on its own,
       // so to avoid double-counting the UMA, don't call it again after this.
       status = ReadResourceRecords(*registration, &resources);
@@ -439,7 +441,7 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::GetRegistrationsForOrigin(
         opt_resources_list->clear();
         break;
       }
-      opt_resources_list->push_back(resources);
+      opt_resources_list->push_back(std::move(resources));
     }
   }
 
@@ -491,7 +493,7 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::ReadRegistration(
     int64_t registration_id,
     const GURL& origin,
     storage::mojom::ServiceWorkerRegistrationDataPtr* registration,
-    std::vector<ResourceRecord>* resources) {
+    std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>* resources) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(registration);
   DCHECK(resources);
@@ -553,7 +555,8 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::ReadRegistrationOrigin(
 
 ServiceWorkerDatabase::Status ServiceWorkerDatabase::WriteRegistration(
     const storage::mojom::ServiceWorkerRegistrationData& registration,
-    const std::vector<ResourceRecord>& resources,
+    const std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>&
+        resources,
     DeletedVersion* deleted_version) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(deleted_version);
@@ -582,22 +585,23 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::WriteRegistration(
   std::set<int64_t> pushed_resources;
   std::set<GURL> pushed_urls;
   for (auto itr = resources.begin(); itr != resources.end(); ++itr) {
-    if (!itr->url.is_valid())
+    if (!(*itr)->url.is_valid())
       return Status::kErrorFailed;
 
     // Duplicated resource id or url should not exist.
-    DCHECK(pushed_resources.insert(itr->resource_id).second);
-    DCHECK(pushed_urls.insert(itr->url).second);
+    DCHECK(pushed_resources.insert((*itr)->resource_id).second);
+    DCHECK(pushed_urls.insert((*itr)->url).second);
 
-    WriteResourceRecordInBatch(*itr, registration.version_id, &batch);
+    WriteResourceRecordInBatch(**itr, registration.version_id, &batch);
 
     // Delete a resource from the uncommitted list.
     batch.Delete(CreateResourceIdKey(
         service_worker_internals::kUncommittedResIdKeyPrefix,
-        itr->resource_id));
+        (*itr)->resource_id));
     // Delete from the purgeable list in case this version was once deleted.
-    batch.Delete(CreateResourceIdKey(
-        service_worker_internals::kPurgeableResIdKeyPrefix, itr->resource_id));
+    batch.Delete(
+        CreateResourceIdKey(service_worker_internals::kPurgeableResIdKeyPrefix,
+                            (*itr)->resource_id));
   }
 
   // Retrieve a previous version to sweep purgeable resources.
@@ -1637,7 +1641,7 @@ void ServiceWorkerDatabase::WriteRegistrationDataInBatch(
 
 ServiceWorkerDatabase::Status ServiceWorkerDatabase::ReadResourceRecords(
     const storage::mojom::ServiceWorkerRegistrationData& registration,
-    std::vector<ResourceRecord>* resources) {
+    std::vector<storage::mojom::ServiceWorkerResourceRecordPtr>* resources) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(resources->empty());
 
@@ -1658,19 +1662,19 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::ReadResourceRecords(
       if (!RemovePrefix(itr->key().ToString(), prefix, nullptr))
         break;
 
-      ResourceRecord resource;
+      storage::mojom::ServiceWorkerResourceRecordPtr resource;
       status = ParseResourceRecord(itr->value().ToString(), &resource);
       if (status != Status::kOk) {
         resources->clear();
         break;
       }
 
-      if (registration.script == resource.url) {
+      if (registration.script == resource->url) {
         DCHECK(!has_main_resource);
         has_main_resource = true;
       }
 
-      resources->push_back(resource);
+      resources->push_back(std::move(resource));
     }
   }
 
@@ -1686,7 +1690,7 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::ReadResourceRecords(
 
 ServiceWorkerDatabase::Status ServiceWorkerDatabase::ParseResourceRecord(
     const std::string& serialized,
-    ServiceWorkerDatabase::ResourceRecord* out) {
+    storage::mojom::ServiceWorkerResourceRecordPtr* out) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(out);
   ServiceWorkerResourceRecord record;
@@ -1704,14 +1708,15 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::ParseResourceRecord(
   }
 
   // Convert ServiceWorkerResourceRecord to ResourceRecord.
-  out->resource_id = record.resource_id();
-  out->url = url;
-  out->size_bytes = record.size_bytes();
+  *out = storage::mojom::ServiceWorkerResourceRecord::New();
+  (*out)->resource_id = record.resource_id();
+  (*out)->url = url;
+  (*out)->size_bytes = record.size_bytes();
   return Status::kOk;
 }
 
 void ServiceWorkerDatabase::WriteResourceRecordInBatch(
-    const ResourceRecord& resource,
+    const storage::mojom::ServiceWorkerResourceRecord& resource,
     int64_t version_id,
     leveldb::WriteBatch* batch) {
   DCHECK(batch);

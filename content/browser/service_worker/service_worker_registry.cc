@@ -300,10 +300,10 @@ void ServiceWorkerRegistry::StoreRegistration(
     data->used_features.push_back(feature);
   data->cross_origin_embedder_policy = version->cross_origin_embedder_policy();
 
-  ResourceList resources;
-  version->script_cache_map()->GetResources(&resources);
+  auto resources = std::make_unique<ResourceList>();
+  version->script_cache_map()->GetResources(resources.get());
 
-  if (resources.empty()) {
+  if (resources->empty()) {
     RunSoon(FROM_HERE,
             base::BindOnce(std::move(callback),
                            blink::ServiceWorkerStatusCode::kErrorFailed));
@@ -311,14 +311,14 @@ void ServiceWorkerRegistry::StoreRegistration(
   }
 
   uint64_t resources_total_size_bytes = 0;
-  for (const auto& resource : resources) {
-    DCHECK_GE(resource.size_bytes, 0);
-    resources_total_size_bytes += resource.size_bytes;
+  for (const auto& resource : *resources) {
+    DCHECK_GE(resource->size_bytes, 0);
+    resources_total_size_bytes += resource->size_bytes;
   }
   data->resources_total_size_bytes = resources_total_size_bytes;
 
   storage()->StoreRegistrationData(
-      std::move(data), resources,
+      std::move(data), std::move(resources),
       base::BindOnce(&ServiceWorkerRegistry::DidStoreRegistration,
                      weak_factory_.GetWeakPtr(), registration->id(),
                      resources_total_size_bytes, registration->scope(),
@@ -368,7 +368,7 @@ void ServiceWorkerRegistry::NotifyDoneInstallingRegistration(
 
     std::set<int64_t> resource_ids;
     for (const auto& resource : resources)
-      resource_ids.insert(resource.resource_id);
+      resource_ids.insert(resource->resource_id);
     DoomUncommittedResources(resource_ids);
   }
 }
