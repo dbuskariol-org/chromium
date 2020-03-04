@@ -187,7 +187,9 @@ class CrostiniManager::CrostiniRestarter
   void RunCallback(CrostiniResult result) {
     // Observer should not be called if we have completed.
     observer_list_.Clear();
-    std::move(completed_callback_).Run(result);
+    if (completed_callback_) {
+      std::move(completed_callback_).Run(result);
+    }
   }
 
   // crostini::VmShutdownObserver
@@ -204,7 +206,7 @@ class CrostiniManager::CrostiniRestarter
   void Abort(base::OnceClosure callback) {
     is_aborted_ = true;
     observer_list_.Clear();
-    abort_callback_ = std::move(callback);
+    abort_callbacks_.push_back(std::move(callback));
     result_ = CrostiniResult::RESTART_ABORTED;
     // Don't want to use FinishRestart here, because the next restarter in
     // line needs to run.
@@ -214,8 +216,14 @@ class CrostiniManager::CrostiniRestarter
   // If this method returns true, then |this| may have been deleted and it is
   // unsafe to refer to any member variables.
   bool ReturnEarlyIfAborted() {
-    if (is_aborted_ && abort_callback_) {
-      std::move(abort_callback_).Run();
+    if (is_aborted_ && !abort_callbacks_.empty()) {
+      // The abort callbacks may delete this, so move the callback vector out of
+      // the class.
+      std::vector<base::OnceClosure> abort_callbacks_safe =
+          std::move(abort_callbacks_);
+      for (auto& abort_callback : abort_callbacks_safe) {
+        std::move(abort_callback).Run();
+      }
       // The abort callback may delete this, so it's not safe to
       // refer to |is_aborted_| after this point.
       return true;
@@ -588,7 +596,7 @@ class CrostiniManager::CrostiniRestarter
   std::string source_path_;
   bool is_initial_install_ = false;
   CrostiniManager::CrostiniResultCallback completed_callback_;
-  base::OnceClosure abort_callback_;
+  std::vector<base::OnceClosure> abort_callbacks_;
   base::ObserverList<CrostiniManager::RestartObserver>::Unchecked
       observer_list_;
   CrostiniManager::RestartId restart_id_;
