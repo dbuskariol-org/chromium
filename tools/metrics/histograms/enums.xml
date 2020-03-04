@@ -7398,6 +7398,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Safe mode"/>
 </enum>
 
+<enum name="BooleanSaved">
+  <int value="0" label="Saved"/>
+  <int value="1" label="Reverted"/>
+</enum>
+
 <enum name="BooleanSecure">
   <int value="0" label="Insecure"/>
   <int value="1" label="Secure"/>
