@@ -36,6 +36,9 @@ using signin_metrics::PromoAction;
     UnifiedConsentCoordinator* unifiedConsentCoordinator;
 // Coordinator that handles adding a user account.
 @property(nonatomic, strong) SigninCoordinator* addAccountSigninCoordinator;
+// Coordinator that handles the advanced settings sign-in.
+@property(nonatomic, strong)
+    SigninCoordinator* advancedSettingsSigninCoordinator;
 // View controller that handles the sign-in UI.
 @property(nonatomic, strong) UserSigninViewController* viewController;
 // Mediator that handles the sign-in authentication state.
@@ -109,12 +112,12 @@ using signin_metrics::PromoAction;
 
 - (void)interruptWithAction:(SigninCoordinatorInterruptAction)action
                  completion:(ProceduralBlock)completion {
+  __weak UserSigninCoordinator* weakSelf = self;
   if (self.addAccountSigninCoordinator) {
     // |self.addAccountSigninCoordinator| needs to be interupted before
     // interrupting |self.viewController|.
     // The add account view should not be dismissed since the
     // |self.viewController| will take care of that according to |action|.
-    __weak UserSigninCoordinator* weakSelf = self;
     [self.addAccountSigninCoordinator
         interruptWithAction:SigninCoordinatorInterruptActionNoDismiss
                  completion:^{
@@ -127,6 +130,24 @@ using signin_metrics::PromoAction;
                                                   completion:completion];
                  }];
     return;
+  } else if (self.advancedSettingsSigninCoordinator) {
+    // |self.viewController| has already been dismissed. The interruption should
+    // be sent to |self.advancedSettingsSigninCoordinator|.
+    DCHECK(!self.viewController);
+    DCHECK(!self.mediator);
+    [self.advancedSettingsSigninCoordinator
+        interruptWithAction:action
+                 completion:^{
+                   // |self.advancedSettingsSigninCoordinator.signinCompletion|
+                   // is expected to be called before this block.
+                   // Therefore |weakSelf.advancedSettingsSigninCoordinator| is
+                   // expected to be nil.
+                   DCHECK(!weakSelf.advancedSettingsSigninCoordinator);
+                   if (completion) {
+                     completion();
+                   }
+                 }];
+    return;
   }
   [self interruptUserSigninUIWithAction:action completion:completion];
 }
@@ -135,7 +156,7 @@ using signin_metrics::PromoAction;
 
 - (void)unifiedConsentCoordinatorDidTapSettingsLink:
     (UnifiedConsentCoordinator*)coordinator {
-  // TODO(crbug.com/971989): Needs implementation.
+  [self startSigninFlow];
 }
 
 - (void)unifiedConsentCoordinatorDidReachBottom:
@@ -189,20 +210,7 @@ using signin_metrics::PromoAction;
 }
 
 - (void)userSigninViewControllerDidTapOnSignin {
-  DCHECK(self.unifiedConsentCoordinator.selectedIdentity);
-  // TODO(crbug.com/971989): Pass ShouldClearDataOption from main controller.
-  AuthenticationFlow* authenticationFlow = [[AuthenticationFlow alloc]
-               initWithBrowser:self.browser
-                      identity:self.unifiedConsentCoordinator.selectedIdentity
-               shouldClearData:SHOULD_CLEAR_DATA_USER_CHOICE
-              postSignInAction:POST_SIGNIN_ACTION_NONE
-      presentingViewController:self.viewController];
-  authenticationFlow.dispatcher = HandlerForProtocol(
-      self.browser->GetCommandDispatcher(), BrowsingDataCommands);
-
-  [self.mediator
-      authenticateWithIdentity:self.unifiedConsentCoordinator.selectedIdentity
-            authenticationFlow:authenticationFlow];
+  [self startSigninFlow];
 }
 
 #pragma mark - UserSigninMediatorDelegate
@@ -233,21 +241,16 @@ using signin_metrics::PromoAction;
 
 - (void)userSigninMediatorSigninFinishedWithResult:
     (SigninCoordinatorResult)signinResult {
+  BOOL settingsWasTapped = self.unifiedConsentCoordinator.settingsLinkWasTapped;
+  ChromeIdentity* identity = self.unifiedConsentCoordinator.selectedIdentity;
   [self recordSigninMetricsWithResult:signinResult];
-
   __weak UserSigninCoordinator* weakSelf = self;
   ProceduralBlock completion = ^void() {
-    [weakSelf
-        runCompletionCallbackWithSigninResult:signinResult
-                                     identity:weakSelf.unifiedConsentCoordinator
-                                                  .selectedIdentity];
+    [weakSelf viewControllerDismissedWithResult:signinResult
+                                       identity:identity
+                          settingsLinkWasTapped:settingsWasTapped];
   };
-
   [self.viewController dismissViewControllerAnimated:YES completion:completion];
-
-  self.unifiedConsentCoordinator.delegate = nil;
-  [self.unifiedConsentCoordinator stop];
-  self.unifiedConsentCoordinator = nil;
 }
 
 - (void)userSigninMediatorNeedPrimaryButtonUpdate {
@@ -255,6 +258,42 @@ using signin_metrics::PromoAction;
 }
 
 #pragma mark - Private
+
+// Called when |self.viewController| is dismissed. If |settingsWasTapped| is
+// NO, the sign-in is finished and
+// |runCompletionCallbackWithSigninResult:identity:| is called.
+// Otherwise, the advanced settings sign-in is presented.
+- (void)viewControllerDismissedWithResult:(SigninCoordinatorResult)signinResult
+                                 identity:(ChromeIdentity*)identity
+                    settingsLinkWasTapped:(BOOL)settingsWasTapped {
+  DCHECK(!self.addAccountSigninCoordinator);
+  DCHECK(!self.advancedSettingsSigninCoordinator);
+  DCHECK(self.unifiedConsentCoordinator);
+  DCHECK(self.mediator);
+  DCHECK(self.viewController);
+  [self.unifiedConsentCoordinator stop];
+  self.unifiedConsentCoordinator = nil;
+  self.mediator = nil;
+  self.viewController = nil;
+  if (!settingsWasTapped) {
+    [self runCompletionCallbackWithSigninResult:signinResult identity:identity];
+    return;
+  }
+  self.advancedSettingsSigninCoordinator = [SigninCoordinator
+      advancedSettingsSigninCoordinatorWithBaseViewController:
+          self.baseViewController
+                                                      browser:self.browser];
+  __weak UserSigninCoordinator* weakSelf = self;
+  self.advancedSettingsSigninCoordinator.signinCompletion = ^(
+      SigninCoordinatorResult advancedSigninResult,
+      ChromeIdentity* advancedSigninIdentity) {
+    [weakSelf
+        advancedSettingsSigninCoordinatorFinishedWithResult:advancedSigninResult
+                                                   identity:
+                                                       advancedSigninIdentity];
+  };
+  [self.advancedSettingsSigninCoordinator start];
+}
 
 // Records the metrics when the sign-in is finished.
 - (void)recordSigninMetricsWithResult:(SigninCoordinatorResult)signinResult {
@@ -282,7 +321,11 @@ using signin_metrics::PromoAction;
 // not been stopped before.
 - (void)interruptUserSigninUIWithAction:(SigninCoordinatorInterruptAction)action
                              completion:(ProceduralBlock)completion {
+  DCHECK(self.viewController);
+  DCHECK(self.mediator);
+  DCHECK(self.unifiedConsentCoordinator);
   DCHECK(!self.addAccountSigninCoordinator);
+  DCHECK(!self.advancedSettingsSigninCoordinator);
   [self.mediator cancelAndDismissAuthenticationFlow];
   __weak UserSigninCoordinator* weakSelf = self;
   ProceduralBlock runCompletionCallback = ^{
@@ -310,6 +353,38 @@ using signin_metrics::PromoAction;
       break;
     }
   }
+}
+
+// Triggers the sign-in workflow.
+- (void)startSigninFlow {
+  DCHECK(self.unifiedConsentCoordinator);
+  DCHECK(self.unifiedConsentCoordinator.selectedIdentity);
+  // TODO(crbug.com/971989): Pass ShouldClearDataOption from main controller.
+  AuthenticationFlow* authenticationFlow = [[AuthenticationFlow alloc]
+               initWithBrowser:self.browser
+                      identity:self.unifiedConsentCoordinator.selectedIdentity
+               shouldClearData:SHOULD_CLEAR_DATA_USER_CHOICE
+              postSignInAction:POST_SIGNIN_ACTION_NONE
+      presentingViewController:self.viewController];
+  authenticationFlow.dispatcher = HandlerForProtocol(
+      self.browser->GetCommandDispatcher(), BrowsingDataCommands);
+
+  [self.mediator
+      authenticateWithIdentity:self.unifiedConsentCoordinator.selectedIdentity
+            authenticationFlow:authenticationFlow];
+}
+
+// Triggers |self.signinCompletion| by calling
+// |runCompletionCallbackWithSigninResult:identity:| when
+// |self.advancedSettingsSigninCoordinator| is done.
+- (void)advancedSettingsSigninCoordinatorFinishedWithResult:
+            (SigninCoordinatorResult)signinResult
+                                                   identity:(ChromeIdentity*)
+                                                                identity {
+  DCHECK(self.advancedSettingsSigninCoordinator);
+  [self.advancedSettingsSigninCoordinator stop];
+  self.advancedSettingsSigninCoordinator = nil;
+  [self runCompletionCallbackWithSigninResult:signinResult identity:identity];
 }
 
 @end
