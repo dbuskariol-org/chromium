@@ -126,6 +126,8 @@ enum class CrostiniUISurface { kSettings = 0, kAppList = 1, kCount };
 // Shows the Crostini Uninstaller dialog.
 void ShowCrostiniUninstallerView(Profile* profile,
                                  CrostiniUISurface ui_surface);
+bool IsCrostiniRecoveryViewShowing();
+
 // Shows the Crostini App installer dialog.
 void ShowCrostiniAppInstallerView(Profile* profile,
                                   const LinuxPackageInfo& package_info);
@@ -158,6 +160,14 @@ void CloseCrostiniUpdateFilesystemView();
 // Show the Crostini Software Config dialog (for installing Ansible and
 // applying an Ansible playbook in the container).
 void ShowCrostiniAnsibleSoftwareConfigView(Profile* profile);
+
+// Show the Crostini Recovery dialog when Crostini is still running after a
+// Chrome crash. Returns false if recovery terminal can be launched.
+bool ShowCrostiniRecoveryView(Profile* profile,
+                              CrostiniUISurface ui_surface,
+                              const std::string& app_id,
+                              int64_t display_id,
+                              LaunchCrostiniAppCallback callback);
 
 // Returns App ID of the terminal app which is either the older crosh-based
 // terminal, or the new Terminal System App if the TerminalSystemApp feature

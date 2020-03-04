@@ -604,7 +604,7 @@ CrostiniManager::RestartId
     CrostiniManager::CrostiniRestarter::next_restart_id_ = 0;
 bool CrostiniManager::is_cros_termina_registered_ = false;
 // Unit tests need this initialized to true. In Browser tests and real life,
-// it is updated via MaybeUpgradeCrostini.
+// it is updated via MaybeUpdateCrostini.
 bool CrostiniManager::is_dev_kvm_present_ = true;
 
 void CrostiniManager::UpdateVmState(std::string vm_name, VmState vm_state) {
@@ -770,7 +770,7 @@ void CrostiniManager::ConfigureForArcSideload() {
 }
 
 const vm_tools::cicerone::OsRelease* CrostiniManager::GetContainerOsRelease(
-    const ContainerId& container_id) {
+    const ContainerId& container_id) const {
   auto it = container_os_releases_.find(container_id);
   if (it != container_os_releases_.end()) {
     return &it->second;
@@ -778,7 +778,8 @@ const vm_tools::cicerone::OsRelease* CrostiniManager::GetContainerOsRelease(
   return nullptr;
 }
 
-bool CrostiniManager::IsContainerUpgradeable(const ContainerId& container_id) {
+bool CrostiniManager::IsContainerUpgradeable(
+    const ContainerId& container_id) const {
   ContainerOsVersion version = ContainerOsVersion::kUnknown;
   const auto* os_release = GetContainerOsRelease(container_id);
   if (os_release) {
@@ -795,7 +796,7 @@ bool CrostiniManager::IsContainerUpgradeable(const ContainerId& container_id) {
 }
 
 bool CrostiniManager::ShouldPromptContainerUpgrade(
-    const ContainerId& container_id) {
+    const ContainerId& container_id) const {
   if (!CrostiniFeatures::Get()->IsContainerUpgradeUIAllowed(profile_)) {
     return false;
   }
@@ -813,6 +814,10 @@ bool CrostiniManager::ShouldPromptContainerUpgrade(
 
 void CrostiniManager::UpgradePromptShown(const ContainerId& container_id) {
   container_upgrade_prompt_shown_.insert(container_id);
+}
+
+bool CrostiniManager::IsUncleanStartup() const {
+  return is_unclean_startup_;
 }
 
 base::Optional<ContainerInfo> CrostiniManager::GetContainerInfo(
@@ -892,7 +897,7 @@ bool CrostiniManager::IsDevKvmPresent() {
   return is_dev_kvm_present_;
 }
 
-void CrostiniManager::MaybeUpgradeCrostini() {
+void CrostiniManager::MaybeUpdateCrostini() {
   auto* component_manager =
       g_browser_process->platform_part()->cros_component_manager();
   if (!component_manager) {
@@ -902,8 +907,22 @@ void CrostiniManager::MaybeUpgradeCrostini() {
   base::ThreadPool::PostTaskAndReply(
       FROM_HERE, {base::MayBlock()},
       base::BindOnce(CrostiniManager::CheckPathsAndComponents),
-      base::BindOnce(&CrostiniManager::MaybeUpgradeCrostiniAfterChecks,
+      base::BindOnce(&CrostiniManager::MaybeUpdateCrostiniAfterChecks,
                      weak_ptr_factory_.GetWeakPtr()));
+  // Probe Concierge - if it's still running after an unclean shutdown, a
+  // success response will be received.
+  if (profile_->GetLastSessionExitType() == Profile::EXIT_CRASHED) {
+    ListVmDisks(base::BindOnce(
+        [](base::WeakPtr<CrostiniManager> weak_this, CrostiniResult result,
+           int64_t total_size) {
+          if (weak_this) {
+            VLOG(1) << "Exit type: " << static_cast<int>(Profile::EXIT_CRASHED);
+            VLOG(1) << "ListVmDisks result: " << static_cast<int>(result);
+            weak_this->is_unclean_startup_ = result == CrostiniResult::SUCCESS;
+          }
+        },
+        weak_ptr_factory_.GetWeakPtr()));
+  }
 }
 
 // static
@@ -916,7 +935,7 @@ void CrostiniManager::CheckPathsAndComponents() {
       component_manager->IsRegistered(imageloader::kTerminaComponentName);
 }
 
-void CrostiniManager::MaybeUpgradeCrostiniAfterChecks() {
+void CrostiniManager::MaybeUpdateCrostiniAfterChecks() {
   if (!is_dev_kvm_present_) {
     return;
   }
@@ -2364,6 +2383,9 @@ void CrostiniManager::OnVmStoppedCleanup(const std::string& vm_name) {
   InvokeAndErasePendingCallbacks(
       &import_lxd_container_callbacks_, vm_name,
       CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED_VM_STOPPED);
+  // After we shut down a VM, we are no longer in a state where we need to
+  // prompt for user cleanup.
+  is_unclean_startup_ = false;
 }
 
 void CrostiniManager::OnGetTerminaVmKernelVersion(
