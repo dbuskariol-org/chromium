@@ -220,6 +220,8 @@ void FakeCrasAudioClient::SetPlayerIdentity(
 
 void FakeCrasAudioClient::SetPlayerPosition(const int64_t& position) {}
 
+void FakeCrasAudioClient::SetPlayerDuration(const int64_t& duration) {}
+
 void FakeCrasAudioClient::SetPlayerMetadata(
     const std::map<std::string, std::string>& metadata) {}
 
