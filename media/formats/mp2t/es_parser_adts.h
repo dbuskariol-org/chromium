@@ -39,7 +39,7 @@ class MEDIA_EXPORT EsParserAdts : public EsParser {
 #if BUILDFLAG(ENABLE_HLS_SAMPLE_AES)
   EsParserAdts(const NewAudioConfigCB& new_audio_config_cb,
                EmitBufferCB emit_buffer_cb,
-               const GetDecryptConfigCB& get_decrypt_config_cb,
+               GetDecryptConfigCB get_decrypt_config_cb,
                EncryptionScheme init_encryption_scheme,
                bool sbr_in_mimetype);
 #endif

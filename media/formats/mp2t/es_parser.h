@@ -30,7 +30,7 @@ class MEDIA_EXPORT EsParser {
  public:
   using EmitBufferCB =
       base::RepeatingCallback<void(scoped_refptr<StreamParserBuffer>)>;
-  using GetDecryptConfigCB = base::Callback<const DecryptConfig*()>;
+  using GetDecryptConfigCB = base::RepeatingCallback<const DecryptConfig*()>;
 
   EsParser();
   virtual ~EsParser();
