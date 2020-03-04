@@ -54,6 +54,8 @@ class COMPONENT_EXPORT(DBUS_AUDIO) FakeCrasAudioClient
   void SetPlayerPlaybackStatus(const std::string& playback_status) override;
   void SetPlayerIdentity(const std::string& playback_identity) override;
   void SetPlayerPosition(const int64_t& position) override;
+  void SetPlayerMetadata(
+      const std::map<std::string, std::string>& metadata) override;
   void WaitForServiceToBeAvailable(
       WaitForServiceToBeAvailableCallback callback) override;
 
