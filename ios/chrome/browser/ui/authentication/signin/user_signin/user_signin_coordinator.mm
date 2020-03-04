@@ -109,33 +109,26 @@ using signin_metrics::PromoAction;
 
 - (void)interruptWithAction:(SigninCoordinatorInterruptAction)action
                  completion:(ProceduralBlock)completion {
-  [self.mediator cancelAndDismissAuthenticationFlow];
-
-  ProceduralBlock runCompletionCallback = ^{
-    [self
-        runCompletionCallbackWithSigninResult:SigninCoordinatorResultInterrupted
-                                     identity:self.unifiedConsentCoordinator
-                                                  .selectedIdentity];
-    if (completion) {
-      completion();
-    }
-  };
-  switch (action) {
-    case SigninCoordinatorInterruptActionNoDismiss: {
-      runCompletionCallback();
-      break;
-    }
-    case SigninCoordinatorInterruptActionDismissWithAnimation: {
-      [self.viewController dismissViewControllerAnimated:YES
-                                              completion:runCompletionCallback];
-      break;
-    }
-    case SigninCoordinatorInterruptActionDismissWithoutAnimation: {
-      [self.viewController dismissViewControllerAnimated:NO
-                                              completion:runCompletionCallback];
-      break;
-    }
+  if (self.addAccountSigninCoordinator) {
+    // |self.addAccountSigninCoordinator| needs to be interupted before
+    // interrupting |self.viewController|.
+    // The add account view should not be dismissed since the
+    // |self.viewController| will take care of that according to |action|.
+    __weak UserSigninCoordinator* weakSelf = self;
+    [self.addAccountSigninCoordinator
+        interruptWithAction:SigninCoordinatorInterruptActionNoDismiss
+                 completion:^{
+                   // |self.addAccountSigninCoordinator.signinCompletion|
+                   // is expected to be called before this block.
+                   // Therefore |weakSelf.addAccountSigninCoordinator| is
+                   // expected to be nil.
+                   DCHECK(!weakSelf.addAccountSigninCoordinator);
+                   [weakSelf interruptUserSigninUIWithAction:action
+                                                  completion:completion];
+                 }];
+    return;
   }
+  [self interruptUserSigninUIWithAction:action completion:completion];
 }
 
 #pragma mark - UnifiedConsentCoordinatorDelegate
@@ -263,6 +256,7 @@ using signin_metrics::PromoAction;
 
 #pragma mark - Private
 
+// Records the metrics when the sign-in is finished.
 - (void)recordSigninMetricsWithResult:(SigninCoordinatorResult)signinResult {
   switch (signinResult) {
     case SigninCoordinatorResultSuccess: {
@@ -277,6 +271,42 @@ using signin_metrics::PromoAction;
     case SigninCoordinatorResultInterrupted: {
       // TODO(crbug.com/951145): Add metric when the sign-in has been
       // interrupted.
+      break;
+    }
+  }
+}
+
+// Interrupts the sign-in when |self.viewController| is presented, by dismissing
+// it if needed (according to |action|). Then |completion| is called.
+// This method should not be called if |self.addAccountSigninCoordinator| has
+// not been stopped before.
+- (void)interruptUserSigninUIWithAction:(SigninCoordinatorInterruptAction)action
+                             completion:(ProceduralBlock)completion {
+  DCHECK(!self.addAccountSigninCoordinator);
+  [self.mediator cancelAndDismissAuthenticationFlow];
+  __weak UserSigninCoordinator* weakSelf = self;
+  ProceduralBlock runCompletionCallback = ^{
+    [weakSelf
+        runCompletionCallbackWithSigninResult:SigninCoordinatorResultInterrupted
+                                     identity:self.unifiedConsentCoordinator
+                                                  .selectedIdentity];
+    if (completion) {
+      completion();
+    }
+  };
+  switch (action) {
+    case SigninCoordinatorInterruptActionNoDismiss: {
+      runCompletionCallback();
+      break;
+    }
+    case SigninCoordinatorInterruptActionDismissWithAnimation: {
+      [self.viewController dismissViewControllerAnimated:YES
+                                              completion:runCompletionCallback];
+      break;
+    }
+    case SigninCoordinatorInterruptActionDismissWithoutAnimation: {
+      [self.viewController dismissViewControllerAnimated:NO
+                                              completion:runCompletionCallback];
       break;
     }
   }
