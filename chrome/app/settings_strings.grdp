@@ -80,14 +80,6 @@
       <ph name="LINE_BREAKS2">&lt;br&gt;&lt;br&gt;</ph>
       This doesn’t affect apps or content on other devices.
     </message>
-
-    <!-- Apps Section Page -->
-    <message name="IDS_SETTINGS_APPS_TITLE" desc="The title of Apps section.">
-      Apps
-    </message>
-    <message name="IDS_SETTINGS_APPS_LINK_TEXT" desc="The label for the button which links to the App Management page.">
-      Manage your apps
-    </message>
   </if>
 
   <!-- Appearance Page -->

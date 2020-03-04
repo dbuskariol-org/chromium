@@ -2381,5 +2381,13 @@
   <message name="IDS_SETTINGS_KEYBOARD_SEND_FUNCTION_KEYS_DESCRIPTION" desc="In Device Settings, the label describing how to use the top-row keys' original actions when they are set to behave like function keys.">
     Hold the Search key to switch the behavior of the top-row keys
   </message>
+  
+  <!-- Apps Section Page -->
+  <message name="IDS_SETTINGS_APPS_TITLE" desc="The title of Apps section.">
+    Apps
+  </message>
+  <message name="IDS_SETTINGS_APPS_LINK_TEXT" desc="The label for the button which links to the App Management page.">
+    Manage your apps
+  </message>
 </if>
 </grit-part>
