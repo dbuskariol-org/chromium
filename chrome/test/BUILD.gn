@@ -5036,6 +5036,7 @@ test("unit_tests") {
       "../browser/safe_browsing/local_two_phase_testserver.h",
       "../browser/safe_browsing/safe_browsing_navigation_observer_unittest.cc",
       "../browser/safe_browsing/signature_evaluator_mac_unittest.cc",
+      "../browser/safe_browsing/verdict_cache_manager_factory_unittest.cc",
       "../common/safe_browsing/binary_feature_extractor_mac_unittest.cc",
       "../common/safe_browsing/binary_feature_extractor_unittest.cc",
       "../common/safe_browsing/binary_feature_extractor_win_unittest.cc",
