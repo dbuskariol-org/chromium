@@ -2,20 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/tracing/child/background_tracing_agent_impl.h"
+#include "services/tracing/public/cpp/background_tracing/background_tracing_agent_impl.h"
 
 #include "base/run_loop.h"
 
 #include "base/metrics/histogram_macros.h"
 #include "base/test/task_environment.h"
-#include "components/tracing/child/background_tracing_agent_provider_impl.h"
 #include "mojo/public/cpp/bindings/unique_receiver_set.h"
+#include "services/tracing/public/cpp/background_tracing/background_tracing_agent_provider_impl.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace tracing {
 
 class BackgroundTracingAgentClientRecorder
-    : public tracing::mojom::BackgroundTracingAgentClient {
+    : public mojom::BackgroundTracingAgentClient {
  public:
   void OnInitialized() override { ++on_initialized_count_; }
 

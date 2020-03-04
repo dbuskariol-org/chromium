@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/tracing/child/background_tracing_agent_provider_impl.h"
+#include "services/tracing/public/cpp/background_tracing/background_tracing_agent_provider_impl.h"
 
 #include <memory>
 
@@ -10,8 +10,8 @@
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "base/trace_event/memory_dump_manager.h"
 #include "base/trace_event/trace_event.h"
-#include "components/tracing/child/background_tracing_agent_impl.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
+#include "services/tracing/public/cpp/background_tracing/background_tracing_agent_impl.h"
 
 namespace tracing {
 

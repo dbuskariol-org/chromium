@@ -2,14 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/tracing/child/background_tracing_agent_impl.h"
+#include "services/tracing/public/cpp/background_tracing/background_tracing_agent_impl.h"
 
 #include <memory>
 
+#include "base/metrics/metrics_hashes.h"
 #include "base/metrics/statistics_recorder.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "base/trace_event/trace_event.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
+#include "services/tracing/public/cpp/perfetto/macros.h"
+#include "third_party/perfetto/protos/perfetto/trace/track_event/chrome_histogram_sample.pbzero.h"
 
 namespace tracing {
 namespace {
@@ -108,6 +111,13 @@ void BackgroundTracingAgentImpl::OnHistogramChanged(
     }
     return;
   }
+  TRACE_EVENT("toplevel", "HistogramSampleTrigger",
+              [&](perfetto::EventContext ctx) {
+                perfetto::protos::pbzero::ChromeHistogramSample* new_sample =
+                    ctx.event()->set_chrome_histogram_sample();
+                new_sample->set_name_hash(base::HashMetricName(histogram_name));
+                new_sample->set_sample(actual_value);
+              });
 
   task_runner->PostTask(
       FROM_HERE, base::BindOnce(&BackgroundTracingAgentImpl::SendTriggerMessage,

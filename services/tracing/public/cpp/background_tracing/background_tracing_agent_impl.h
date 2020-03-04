@@ -2,18 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_TRACING_CHILD_BACKGROUND_TRACING_AGENT_IMPL_H_
-#define COMPONENTS_TRACING_CHILD_BACKGROUND_TRACING_AGENT_IMPL_H_
+#ifndef SERVICES_TRACING_PUBLIC_CPP_BACKGROUND_TRACING_BACKGROUND_TRACING_AGENT_IMPL_H_
+#define SERVICES_TRACING_PUBLIC_CPP_BACKGROUND_TRACING_BACKGROUND_TRACING_AGENT_IMPL_H_
 
 #include <stdint.h>
 #include <string>
 
+#include "base/component_export.h"
 #include "base/macros.h"
 #include "base/metrics/histogram.h"
 #include "base/time/time.h"
-#include "components/tracing/common/background_tracing_agent.mojom.h"
-#include "components/tracing/tracing_export.h"
 #include "mojo/public/cpp/bindings/remote.h"
+#include "services/tracing/public/mojom/background_tracing_agent.mojom.h"
 
 namespace base {
 class SequencedTaskRunner;
@@ -22,7 +22,7 @@ class SequencedTaskRunner;
 namespace tracing {
 
 // This class sends and receives trace messages on child processes.
-class TRACING_EXPORT BackgroundTracingAgentImpl
+class COMPONENT_EXPORT(BACKGROUND_TRACING_CPP) BackgroundTracingAgentImpl
     : public mojom::BackgroundTracingAgent {
  public:
   explicit BackgroundTracingAgentImpl(
@@ -58,4 +58,4 @@ class TRACING_EXPORT BackgroundTracingAgentImpl
 
 }  // namespace tracing
 
-#endif  // COMPONENTS_TRACING_CHILD_BACKGROUND_TRACING_AGENT_IMPL_H_
+#endif  // SERVICES_TRACING_PUBLIC_CPP_BACKGROUND_TRACING_BACKGROUND_TRACING_AGENT_IMPL_H_
