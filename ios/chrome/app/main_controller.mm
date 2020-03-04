@@ -127,7 +127,6 @@
 #import "ios/chrome/browser/ui/promos/signin_promo_view_controller.h"
 #import "ios/chrome/browser/ui/settings/settings_navigation_controller.h"
 #include "ios/chrome/browser/ui/tab_grid/tab_grid_coordinator.h"
-#import "ios/chrome/browser/ui/tab_grid/tab_switcher.h"
 #import "ios/chrome/browser/ui/tab_grid/view_controller_swapping.h"
 #import "ios/chrome/browser/ui/ui_feature_flags.h"
 #include "ios/chrome/browser/ui/util/ui_util.h"
@@ -282,8 +281,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   // The object that drives the Chrome startup/shutdown logic.
   std::unique_ptr<IOSChromeMain> _chromeMain;
 
-  // TabSwitcher object -- the tab grid.
-  id<TabSwitcher> _tabSwitcher;
 
   // True if the current session began from a cold start. False if the app has
   // entered the background at least once since start up.
@@ -381,8 +378,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 - (void)scheduleDeleteTempPasswordsDirectory;
 // Returns whether or not the app can launch in incognito mode.
 - (BOOL)canLaunchInIncognito;
-// Determines which UI should be shown on startup, and shows it.
-- (void)createInitialUI:(ApplicationMode)launchMode;
 // Initializes the first run UI and presents it to the user.
 - (void)showFirstRunUI;
 // Schedules presentation of the first eligible promo found, if any.
@@ -642,8 +637,9 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   if (switchFromIncognito)
     startInIncognito = NO;
 
-  [self createInitialUI:(startInIncognito ? ApplicationMode::INCOGNITO
-                                          : ApplicationMode::NORMAL)];
+  [self.sceneController
+      createInitialUI:(startInIncognito ? ApplicationMode::INCOGNITO
+                                        : ApplicationMode::NORMAL)];
 
   [self.sceneController.browserViewWrangler updateDeviceSharingManager];
 
@@ -656,6 +652,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   }
 
   // End of per-window code.
+
+  CustomizeUIAppearance();
 
   [self scheduleStartupCleanupTasks];
   [MetricsMediator
@@ -1173,71 +1171,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   return ![self.otrTabModel isEmpty];
 }
 
-- (void)createInitialUI:(ApplicationMode)launchMode {
-  DCHECK(self.mainBrowserState);
-
-  // In order to correctly set the mode switch icon, we need to know how many
-  // tabs are in the other tab model. That means loading both models.  They
-  // may already be loaded.
-  // TODO(crbug.com/546203): Find a way to handle this that's closer to the
-  // point where it is necessary.
-  TabModel* mainTabModel = self.mainTabModel;
-  TabModel* otrTabModel = self.otrTabModel;
-
-  // MainCoordinator shouldn't have been initialized yet.
-  DCHECK(!_mainCoordinator);
-
-  // Enables UI initializations to query the keyWindow's size.
-  [self.window makeKeyAndVisible];
-
-  CustomizeUIAppearance();
-
-  // Lazy init of mainCoordinator.
-  [self.mainCoordinator start];
-
-  _tabSwitcher = self.mainCoordinator.tabSwitcher;
-  // Call -restoreInternalState so that the grid shows the correct panel.
-  [_tabSwitcher restoreInternalStateWithMainBrowser:self.mainBrowser
-                                         otrBrowser:self.otrBrowser
-                                      activeBrowser:self.currentBrowser];
-
-  // Decide if the First Run UI needs to run.
-  BOOL firstRun = (FirstRun::IsChromeFirstRun() ||
-                   experimental_flags::AlwaysDisplayFirstRun()) &&
-                  !tests_hook::DisableFirstRun();
-
-  [self.sceneController.browserViewWrangler switchGlobalStateToMode:launchMode];
-
-  TabModel* tabModel;
-  if (launchMode == ApplicationMode::INCOGNITO) {
-    tabModel = otrTabModel;
-    [self.sceneController
-        setCurrentInterfaceForMode:ApplicationMode::INCOGNITO];
-  } else {
-    tabModel = mainTabModel;
-    [self.sceneController setCurrentInterfaceForMode:ApplicationMode::NORMAL];
-  }
-  if (self.tabSwitcherIsActive) {
-    DCHECK(!self.dismissingTabSwitcher);
-    [self.sceneController
-        beginDismissingTabSwitcherWithCurrentModel:self.mainTabModel
-                                      focusOmnibox:NO];
-    [self.sceneController finishDismissingTabSwitcher];
-  }
-  if (firstRun ||
-      [self.sceneController shouldOpenNTPTabOnActivationOfTabModel:tabModel]) {
-    OpenNewTabCommand* command = [OpenNewTabCommand
-        commandWithIncognito:(self.currentBVC == self.otrBVC)];
-    command.userInitiated = NO;
-    [self.currentBVC.dispatcher openURLInNewTab:command];
-  }
-
-  if (firstRun) {
-    [self showFirstRunUI];
-    // Do not ever show the 'restore' infobar during first run.
-    self.restoreHelper = nil;
-  }
-}
 
 - (void)showFirstRunUI {
   // Register for notification when First Run is completed.
@@ -1512,11 +1445,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
           }));
 }
 
-#pragma mark - MainControllerGuts
-
-- (id<TabSwitcher>)tabSwitcher {
-  return _tabSwitcher;
-}
 
 @end
 
@@ -1535,7 +1463,11 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 }
 
 - (void)setTabSwitcher:(id<TabSwitcher>)switcher {
-  _tabSwitcher = switcher;
+  [self.sceneController setTabSwitcher:switcher];
+}
+
+- (id<TabSwitcher>)tabSwitcher {
+  return self.sceneController.tabSwitcher;
 }
 
 - (void)setTabSwitcherActive:(BOOL)active {
