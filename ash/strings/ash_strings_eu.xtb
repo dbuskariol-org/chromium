@@ -31,7 +31,7 @@
 <translation id="1293264513303784526">USB-C gailua (ezkerraldeko ataka)</translation>
 <translation id="1294929383540927798">Aldatu pantaila blokeatuaren jakinarazpen-ezarpenak</translation>
 <translation id="1301069673413256657">GSM</translation>
-<translation id="1302880136325416935">Erakutsi Bluetooth ezarpenak. <ph name="STATE_TEXT" /></translation>
+<translation id="1302880136325416935">Erakutsi Bluetooth-aren ezarpenak. <ph name="STATE_TEXT" /></translation>
 <translation id="1312604459020188865">Seinalearen indarra: <ph name="SIGNAL_STRENGTH" /></translation>
 <translation id="1316069254387866896">Erakutsi beti biltegia</translation>
 <translation id="1341651618736211726">Luzapena</translation>
@@ -318,7 +318,7 @@ Jarraitu ahal izateko, erabiltzaile guztiek saioa amaitu behar dute.</translatio
 <translation id="5283198616748585639">Gehitu 1 minutu</translation>
 <translation id="5286194356314741248">Bilatzen</translation>
 <translation id="5302048478445481009">Hizkuntza</translation>
-<translation id="5313326810920013265">Bluetooth ezarpenak</translation>
+<translation id="5313326810920013265">Bluetooth-aren ezarpenak</translation>
 <translation id="5331975486040154427">USB-C gailua (ezkerraldeko atzeko ataka)</translation>
 <translation id="5379115545237091094">Saiakera gehiegi egin dira</translation>
 <translation id="5397578532367286026">Kudeatzaileak (<ph name="MANAGER_EMAIL" />) erabiltzaile honen erabilera-datuak eta historia ikus ditzake manager chrome.com webgunean.</translation>
