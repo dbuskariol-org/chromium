@@ -68,7 +68,7 @@ GLFormatInfo GetGLFormatInfo(viz::ResourceFormat format) {
       // Technically we should use GL_RGB but CGLTexImageIOSurface2D() (and
       // OpenGL ES 3.0, for the case) support only GL_RGBA (the hardware ignores
       // the alpha channel anyway), see https://crbug.com/797347.
-    case viz::BGRX_1010102:
+    case viz::BGRA_1010102:
       info.format = GL_RGBA;
       info.internal_format = GL_RGBA;
       break;
