@@ -18,8 +18,9 @@ class Profile;
 
 // Test harness for how ChromeOS System Web Apps integrate with the System Web
 // App platform.
+// TODO(crbug.com/1058274): Inherit from SystemWebAppManagerBrowserTest.
 class SystemWebAppIntegrationTest
-    : public web_app::SystemWebAppManagerBrowserTest {
+    : public web_app::SystemWebAppManagerBrowserTestBase {
  public:
   SystemWebAppIntegrationTest();
   ~SystemWebAppIntegrationTest() override;
