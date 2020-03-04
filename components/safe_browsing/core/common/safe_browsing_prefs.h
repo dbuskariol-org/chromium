@@ -241,6 +241,23 @@ enum DelayDeliveryUntilVerdictValues {
   DELAY_UPLOADS_AND_DOWNLOADS = 3,
 };
 
+enum SafeBrowsingState {
+  // The user is not opted into Safe Browsing.
+  NO_SAFE_BROWSING = 0,
+  // The user selected standard protection.
+  STANDARD_PROTECTION = 1,
+  // The user selected enhanced protection.
+  ENHANCED_PROTECTION = 2,
+};
+
+SafeBrowsingState GetSafeBrowsingState(const PrefService& prefs);
+
+// Returns whether Safe Browsing is enabled for the user.
+bool IsSafeBrowsingEnabled(const PrefService& prefs);
+
+// Returns whether Safe Browsing Standard Protection is enabled for the user.
+bool IsStandardProtectionEnabled(const PrefService& prefs);
+
 // Returns whether Safe Browsing enhanced protection is enabled for the user.
 bool IsEnhancedProtectionEnabled(const PrefService& prefs);
 

@@ -137,8 +137,24 @@ const char kAdvancedProtectionDeepScanningEnabled[] =
 
 namespace safe_browsing {
 
+SafeBrowsingState GetSafeBrowsingState(const PrefService& prefs) {
+  if (IsEnhancedProtectionEnabled(prefs)) {
+    return ENHANCED_PROTECTION;
+  } else if (prefs.GetBoolean(prefs::kSafeBrowsingEnabled)) {
+    return STANDARD_PROTECTION;
+  } else {
+    return NO_SAFE_BROWSING;
+  }
+}
+
+bool IsSafeBrowsingEnabled(const PrefService& prefs) {
+  return prefs.GetBoolean(prefs::kSafeBrowsingEnabled) ||
+         IsEnhancedProtectionEnabled(prefs);
+}
+
 bool IsEnhancedProtectionEnabled(const PrefService& prefs) {
-  return prefs.GetBoolean(prefs::kSafeBrowsingEnhanced);
+  return prefs.GetBoolean(prefs::kSafeBrowsingEnhanced) &&
+         base::FeatureList::IsEnabled(kEnhancedProtection);
 }
 
 bool ExtendedReportingPrefExists(const PrefService& prefs) {
@@ -154,7 +170,8 @@ bool IsExtendedReportingOptInAllowed(const PrefService& prefs) {
 }
 
 bool IsExtendedReportingEnabled(const PrefService& prefs) {
-  return prefs.GetBoolean(prefs::kSafeBrowsingScoutReportingEnabled);
+  return prefs.GetBoolean(prefs::kSafeBrowsingScoutReportingEnabled) ||
+         IsEnhancedProtectionEnabled(prefs);
 }
 
 bool IsExtendedReportingPolicyManaged(const PrefService& prefs) {
