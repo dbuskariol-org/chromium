@@ -4440,6 +4440,7 @@
     ],
 
     'mojo_linux_gtests': [
+      'storage_service_gtests',
     ],
 
     'mojo_windows_gtests': [
