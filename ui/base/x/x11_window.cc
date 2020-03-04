@@ -143,7 +143,10 @@ XWindow::XWindow()
   DCHECK_NE(x_root_window_, x11::None);
 }
 
-XWindow::~XWindow() = default;
+XWindow::~XWindow() {
+  DCHECK_EQ(xwindow_, x11::None) << "XWindow destructed without calling "
+                                    "Close() to release allocated resources.";
+}
 
 void XWindow::Init(const Configuration& config) {
   activatable_ = config.activatable;
@@ -1367,9 +1370,8 @@ void XWindow::DispatchResize() {
     // WM doesn't support _NET_WM_SYNC_REQUEST.
     // Or we are too slow, so _NET_WM_SYNC_REQUEST is disabled by the
     // compositor.
-    delayed_resize_task_.Reset(base::BindOnce(&XWindow::DelayedResize,
-                                              weak_factory_.GetWeakPtr(),
-                                              bounds_in_pixels_));
+    delayed_resize_task_.Reset(base::BindOnce(
+        &XWindow::DelayedResize, base::Unretained(this), bounds_in_pixels_));
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE, delayed_resize_task_.callback());
     return;
