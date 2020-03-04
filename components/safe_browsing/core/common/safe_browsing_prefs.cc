@@ -130,8 +130,8 @@ const char kURLsToNotCheckForMalwareOfDownloadedContent[] =
     "safebrowsing.urls_to_not_check_for_malware_of_downloaded_content";
 const char kURLsToNotCheckComplianceOfUploadedContent[] =
     "policy.urls_to_not_check_compliance_of_uploaded_content";
-const char kAdvancedProtectionDeepScanningEnabled[] =
-    "safebrowsing.advanced_protection_deep_scanning_enabled";
+const char kAdvancedProtectionExtraSecurityAllowed[] =
+    "safebrowsing.advanced_protection_extra_security_allowed";
 
 }  // namespace prefs
 
@@ -220,7 +220,7 @@ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
                                 false);
   registry->RegisterIntegerPref(prefs::kSafeBrowsingSendFilesForMalwareCheck,
                                 DO_NOT_SCAN);
-  registry->RegisterBooleanPref(prefs::kAdvancedProtectionDeepScanningEnabled,
+  registry->RegisterBooleanPref(prefs::kAdvancedProtectionExtraSecurityAllowed,
                                 true);
 }
 
