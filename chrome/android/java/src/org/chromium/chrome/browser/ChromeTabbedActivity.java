@@ -1793,7 +1793,7 @@ public class ChromeTabbedActivity extends ChromeActivity implements Accessibilit
                 return true;
             }
         } else if (shouldCloseTab) {
-            getCurrentTabModel().closeTab(currentTab, true, false, false);
+            currentTab.getWebContents().dispatchBeforeUnload(false);
             return true;
         }
 
