@@ -28,7 +28,8 @@ namespace mp2t {
 
 class MEDIA_EXPORT EsParser {
  public:
-  using EmitBufferCB = base::Callback<void(scoped_refptr<StreamParserBuffer>)>;
+  using EmitBufferCB =
+      base::RepeatingCallback<void(scoped_refptr<StreamParserBuffer>)>;
   using GetDecryptConfigCB = base::Callback<const DecryptConfig*()>;
 
   EsParser();
