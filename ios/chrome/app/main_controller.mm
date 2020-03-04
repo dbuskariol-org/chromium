@@ -505,15 +505,14 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   [NSURLCache setSharedURLCache:[EmptyNSURLCache emptyNSURLCache]];
 }
 
-- (void)startUpBrowserForegroundInitialization {
+// This initialization must happen before any windows are created.
+// Returns YES iff there's a session restore available.
+- (BOOL)startUpBeforeFirstWindowCreatedAndPrepareForRestorationPostCrash:
+    (BOOL)isPostCrashLaunch {
   // Give tests a chance to prepare for testing.
   tests_hook::SetUpTestsIfPresent();
 
   GetApplicationContext()->OnAppEnterForeground();
-
-  // TODO(crbug.com/546171): Audit all the following code to see if some of it
-  // should move into BrowserMainParts or BrowserProcess.
-  NSUserDefaults* standardDefaults = [NSUserDefaults standardUserDefaults];
 
   // Although this duplicates some metrics_service startup logic also in
   // IOSChromeMain(), this call does additional work, checking for wifi-only
@@ -545,9 +544,8 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   // The CrashRestoreHelper must clean up the old browser state information
   // before the tabModels can be created.  |self.restoreHelper| must be kept
   // alive until the BVC receives the browser state and tab model.
-  BOOL postCrashLaunch = [self mustShowRestoreInfobar];
   BOOL needRestoration = NO;
-  if (postCrashLaunch) {
+  if (isPostCrashLaunch) {
     needRestoration = [CrashRestoreHelper
         moveAsideSessionInformationForBrowserState:chromeBrowserState];
   }
@@ -590,8 +588,36 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
         ->ClearAllCachedSuggestions();
   }
 
-  // This is per-window code.
+  return needRestoration;
+}
 
+// This initialization must only happen once there's at least one Chrome window
+// open.
+- (void)startUpAfterFirstWindowCreated {
+  CustomizeUIAppearance();
+
+  [self scheduleStartupCleanupTasks];
+  [MetricsMediator
+      logLaunchMetricsWithStartupInformation:self
+                           interfaceProvider:self.interfaceProvider];
+  if (self.isColdStart) {
+    [ContentSuggestionsSchedulerNotifications
+        notifyColdStart:self.mainBrowserState];
+    [ContentSuggestionsSchedulerNotifications
+        notifyForeground:self.mainBrowserState];
+  }
+
+  ios::GetChromeBrowserProvider()->GetOverridesProvider()->InstallOverrides();
+
+  [self scheduleLowPriorityStartupTasks];
+
+  // Now that everything is properly set up, run the tests.
+  tests_hook::RunTestsIfPresent();
+}
+
+// Starts up a single chrome window and its UI.
+- (void)startUpChromeUIPostCrash:(BOOL)isPostCrashLaunch
+                 needRestoration:(BOOL)needsRestoration {
   DCHECK(!self.sceneController.browserViewWrangler);
   DCHECK(self.sceneController.appURLLoadingService);
 
@@ -607,7 +633,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   // Only create the restoration helper if the browser state was backed up
   // successfully.
-  if (needRestoration) {
+  if (needsRestoration) {
     self.restoreHelper =
         [[CrashRestoreHelper alloc] initWithBrowser:self.mainBrowser];
   }
@@ -625,10 +651,11 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
   // Before bringing up the UI, make sure the launch mode is correct, and
   // check for previous crashes.
-  BOOL startInIncognito = [standardDefaults boolForKey:kIncognitoCurrentKey];
+  BOOL startInIncognito =
+      [[NSUserDefaults standardUserDefaults] boolForKey:kIncognitoCurrentKey];
   BOOL switchFromIncognito = startInIncognito && ![self canLaunchInIncognito];
 
-  if (postCrashLaunch || switchFromIncognito) {
+  if (isPostCrashLaunch || switchFromIncognito) {
     [self.sceneController clearIOSSpecificIncognitoData];
     if (switchFromIncognito)
       [self.sceneController.browserViewWrangler
@@ -650,28 +677,15 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
     [self.restoreHelper showRestorePrompt];
     self.restoreHelper = nil;
   }
+}
 
-  // End of per-window code.
-
-  CustomizeUIAppearance();
-
-  [self scheduleStartupCleanupTasks];
-  [MetricsMediator
-      logLaunchMetricsWithStartupInformation:self
-                           interfaceProvider:self.interfaceProvider];
-  if (self.isColdStart) {
-    [ContentSuggestionsSchedulerNotifications
-        notifyColdStart:self.mainBrowserState];
-    [ContentSuggestionsSchedulerNotifications
-        notifyForeground:self.mainBrowserState];
-  }
-
-  ios::GetChromeBrowserProvider()->GetOverridesProvider()->InstallOverrides();
-
-  [self scheduleLowPriorityStartupTasks];
-
-  // Now that everything is properly set up, run the tests.
-  tests_hook::RunTestsIfPresent();
+- (void)startUpBrowserForegroundInitialization {
+  BOOL postCrashLaunch = [self mustShowRestoreInfobar];
+  BOOL needRestore =
+      [self startUpBeforeFirstWindowCreatedAndPrepareForRestorationPostCrash:
+                postCrashLaunch];
+  [self startUpChromeUIPostCrash:postCrashLaunch needRestoration:needRestore];
+  [self startUpAfterFirstWindowCreated];
 }
 
 - (void)initializeBrowserState:(ChromeBrowserState*)browserState {
