@@ -124,6 +124,11 @@ import java.util.concurrent.TimeoutException;
         "disable-features=" + ChromeFeatureList.CONTEXTUAL_SEARCH_ML_TAP_SUPPRESSION})
 @Restriction(RESTRICTION_TYPE_NON_LOW_END_DEVICE)
 @RetryOnFailure
+//
+// NOTE -- THIS WHOLE TEST CLASS IS TEMPORARILY DISABLED:
+//
+@DisabledTest(message = "See https://crbug.com/1058362")
+//
 public class ContextualSearchManagerTest {
     @Rule
     public ChromeActivityTestRule<ChromeActivity> mActivityTestRule =
