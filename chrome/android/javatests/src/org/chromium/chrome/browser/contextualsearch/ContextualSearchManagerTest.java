@@ -66,6 +66,7 @@ import org.chromium.chrome.browser.contextualsearch.ContextualSearchFakeServer.F
 import org.chromium.chrome.browser.contextualsearch.ContextualSearchFakeServer.MutableResolvedSearchTerm;
 import org.chromium.chrome.browser.contextualsearch.ContextualSearchInternalStateController.InternalState;
 import org.chromium.chrome.browser.contextualsearch.ResolvedSearchTerm.CardTag;
+import org.chromium.chrome.browser.externalnav.ExternalNavigationDelegateImpl;
 import org.chromium.chrome.browser.externalnav.ExternalNavigationHandler;
 import org.chromium.chrome.browser.findinpage.FindToolbar;
 import org.chromium.chrome.browser.firstrun.FirstRunStatus;
@@ -2217,7 +2218,8 @@ public class ContextualSearchManagerTest {
     @Feature({"ContextualSearch"})
     public void testExternalNavigationWithUserGesture() {
         final ExternalNavigationHandler externalNavHandler =
-                new ExternalNavigationHandler(mActivityTestRule.getActivity().getActivityTab());
+                new ExternalNavigationHandler(new ExternalNavigationDelegateImpl(
+                        mActivityTestRule.getActivity().getActivityTab()));
         final NavigationParams navigationParams = new NavigationParams(
                 "intent://test/#Intent;scheme=test;package=com.chrome.test;end", "",
                 false /* isPost */, true /* hasUserGesture */, PageTransition.LINK,
@@ -2242,7 +2244,8 @@ public class ContextualSearchManagerTest {
     @Feature({"ContextualSearch"})
     public void testRedirectedExternalNavigationWithUserGesture() {
         final ExternalNavigationHandler externalNavHandler =
-                new ExternalNavigationHandler(mActivityTestRule.getActivity().getActivityTab());
+                new ExternalNavigationHandler(new ExternalNavigationDelegateImpl(
+                        mActivityTestRule.getActivity().getActivityTab()));
 
         final NavigationParams initialNavigationParams = new NavigationParams("http://test.com", "",
                 false /* isPost */, true /* hasUserGesture */, PageTransition.LINK,
@@ -2276,7 +2279,8 @@ public class ContextualSearchManagerTest {
     @Feature({"ContextualSearch"})
     public void testExternalNavigationWithoutUserGesture() {
         final ExternalNavigationHandler externalNavHandler =
-                new ExternalNavigationHandler(mActivityTestRule.getActivity().getActivityTab());
+                new ExternalNavigationHandler(new ExternalNavigationDelegateImpl(
+                        mActivityTestRule.getActivity().getActivityTab()));
         final NavigationParams navigationParams = new NavigationParams(
                 "intent://test/#Intent;scheme=test;package=com.chrome.test;end", "",
                 false /* isPost */, false /* hasUserGesture */, PageTransition.LINK,
