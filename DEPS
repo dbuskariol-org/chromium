@@ -944,7 +944,7 @@ deps = {
     Var('chromium_git') + '/codecs/libgav1.git' + '@' + 'fa1c3c4e673cf12ffa22b8fbe4a7c79314571f1b',
 
   'src/third_party/glslang/src':
-    Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + '8985fc91089f3117d338f0ebd683596a197b2d92',
+    Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + 'c40c4bc38a76fb597e7a5954a20313c1bd0d66c9',
 
   'src/third_party/google_toolbox_for_mac/src': {
       'url': Var('chromium_git') + '/external/github.com/google/google-toolbox-for-mac.git' + '@' + Var('google_toolbox_for_mac_revision'),
