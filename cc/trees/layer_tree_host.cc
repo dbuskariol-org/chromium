@@ -1111,7 +1111,7 @@ void LayerTreeHost::SetNonBlinkManagedRootLayer(
     scoped_refptr<Layer> root_layer) {
   SetRootLayer(std::move(root_layer));
 
-  DCHECK(root_layer_->children().empty());
+  DCHECK(!root_layer || root_layer_->children().empty());
   if (IsUsingLayerLists() && root_layer_)
     force_use_property_tree_builder_ = true;
 }

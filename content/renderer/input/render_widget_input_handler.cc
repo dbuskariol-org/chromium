@@ -445,7 +445,7 @@ void RenderWidgetInputHandler::HandleInputEvent(
     suppress_next_char_events_ = false;
     if (processed == WebInputEventResult::kNotHandled &&
         widget_->GetWebWidget()) {
-      if (!widget_->GetWebWidget()->IsPepperWidget() &&
+      if (delegate_->SupportsBufferedTouchEvents() &&
           WebInputEvent::IsTouchEventType(input_event.GetType()))
         processed = HandleTouchEvent(coalesced_event);
       else
