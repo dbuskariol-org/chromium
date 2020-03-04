@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "base/location.h"
+#include "base/memory/weak_ptr.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread_task_runner_handle.h"
@@ -144,6 +145,7 @@ XWindow::XWindow()
 }
 
 XWindow::~XWindow() {
+  CHECK(!resize_weak_factory_.HasWeakPtrs());
   DCHECK_EQ(xwindow_, x11::None) << "XWindow destructed without calling "
                                     "Close() to release allocated resources.";
 }
@@ -1392,6 +1394,8 @@ void XWindow::DispatchResize() {
 }
 
 void XWindow::DelayedResize(const gfx::Rect& bounds_in_pixels) {
+  base::WeakPtr<XWindow> alive(resize_weak_factory_.GetWeakPtr());
+
   if (configure_counter_value_is_extended_ &&
       (current_counter_value_ % 2) == 0) {
     // Increase the |extended_update_counter_|, so the compositor will know we
@@ -1402,6 +1406,13 @@ void XWindow::DelayedResize(const gfx::Rect& bounds_in_pixels) {
                    ++current_counter_value_);
   }
   NotifyBoundsChanged(bounds_in_pixels);
+
+  // TODO(crbug.com/1021490): Crashes during window re-attaching while dragging
+  // a tab points out to the XWindow instance being destroyed in the middle of
+  // DelayedResize closure execution. This + CHECK'ing weak references in dtor
+  // helps better identify such unexpected scenario.
+  if (!alive)
+    return;
   CancelResize();
 }
 

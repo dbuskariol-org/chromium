@@ -13,6 +13,7 @@
 #include "base/component_export.h"
 #include "base/containers/flat_set.h"
 #include "base/macros.h"
+#include "base/memory/weak_ptr.h"
 #include "base/optional.h"
 #include "base/strings/string16.h"
 #include "ui/gfx/geometry/insets.h"
@@ -375,6 +376,8 @@ class COMPONENT_EXPORT(UI_BASE_X) XWindow {
   // Keep track of barriers to confine cursor.
   bool has_pointer_barriers_ = false;
   std::array<XID, 4> pointer_barriers_;
+
+  base::WeakPtrFactory<XWindow> resize_weak_factory_{this};
 
   DISALLOW_COPY_AND_ASSIGN(XWindow);
 };
