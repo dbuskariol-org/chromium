@@ -267,4 +267,25 @@ void PasswordsPrivateGetPlaintextCompromisedPasswordFunction::GotCredential(
           *credential)));
 }
 
+// PasswordsPrivateChangeCompromisedCredentialFunction:
+PasswordsPrivateChangeCompromisedCredentialFunction::
+    ~PasswordsPrivateChangeCompromisedCredentialFunction() = default;
+
+ResponseAction PasswordsPrivateChangeCompromisedCredentialFunction::Run() {
+  auto parameters =
+      api::passwords_private::ChangeCompromisedCredential::Params::Create(
+          *args_);
+  EXTENSION_FUNCTION_VALIDATE(parameters);
+
+  if (!GetDelegate(browser_context())
+           ->ChangeCompromisedCredential(parameters->credential,
+                                         parameters->new_password)) {
+    return RespondNow(Error(
+        "Could not change the compromised credential. Either the user is not "
+        "authenticated or no matching password could be found."));
+  }
+
+  return RespondNow(NoArguments());
+}
+
 }  // namespace extensions

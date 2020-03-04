@@ -225,6 +225,19 @@ class PasswordsPrivateGetPlaintextCompromisedPasswordFunction
       base::Optional<api::passwords_private::CompromisedCredential> credential);
 };
 
+class PasswordsPrivateChangeCompromisedCredentialFunction
+    : public ExtensionFunction {
+ public:
+  DECLARE_EXTENSION_FUNCTION("passwordsPrivate.changeCompromisedCredential",
+                             PASSWORDSPRIVATE_CHANGECOMPROMISEDCREDENTIAL)
+
+ protected:
+  ~PasswordsPrivateChangeCompromisedCredentialFunction() override;
+
+  // ExtensionFunction overrides.
+  ResponseAction Run() override;
+};
+
 }  // namespace extensions
 
 #endif  // CHROME_BROWSER_EXTENSIONS_API_PASSWORDS_PRIVATE_PASSWORDS_PRIVATE_API_H_

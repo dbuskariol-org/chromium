@@ -223,6 +223,17 @@ chrome.passwordsPrivate.getPlaintextCompromisedPassword = function(
     credential, reason, callback) {};
 
 /**
+ * Requests to change the password of |credential| to |new_password|. Invokes
+ * |callback| or raises an error depending on whether the operation succeeded.
+ * @param {!chrome.passwordsPrivate.CompromisedCredential} credential The
+ *     credential whose password should be changed.
+ * @param {string} new_password The new password.
+ * @param {function():void=} callback The callback that gets invoked in the end.
+ */
+chrome.passwordsPrivate.changeCompromisedCredential = function(
+    credential, new_password, callback) {};
+
+/**
  * Fired when the saved passwords list has changed, meaning that an entry has
  * been added or removed.
  * @type {!ChromeEvent}

@@ -50,6 +50,12 @@ class PasswordCheckDelegate
   GetPlaintextCompromisedPassword(
       api::passwords_private::CompromisedCredential credential) const;
 
+  // Attempts to change the stored password of |credential| to |new_password|.
+  // Returns whether the change succeeded.
+  bool ChangeCompromisedCredential(
+      const api::passwords_private::CompromisedCredential& credential,
+      base::StringPiece new_password);
+
  private:
   // password_manager::CompromisedCredentialsProvider::Observer:
   // Invokes PasswordsPrivateEventRouter::OnCompromisedCredentialsInfoChanged if
@@ -57,6 +63,10 @@ class PasswordCheckDelegate
   void OnCompromisedCredentialsChanged(
       password_manager::CompromisedCredentialsProvider::CredentialsView
           credentials) override;
+
+  const password_manager::CredentialWithPassword*
+  FindMatchingCompromisedCredential(
+      const api::passwords_private::CompromisedCredential& credential) const;
 
   // Raw pointer to the underlying profile. Needs to outlive this instance.
   Profile* profile_ = nullptr;
