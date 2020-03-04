@@ -17,7 +17,7 @@
 #include "ui/aura/window.h"
 
 SystemWebAppIntegrationTest::SystemWebAppIntegrationTest()
-    : SystemWebAppManagerBrowserTestBase(false /* install_mock */) {}
+    : SystemWebAppManagerBrowserTest(false /* install_mock */) {}
 
 SystemWebAppIntegrationTest::~SystemWebAppIntegrationTest() = default;
 
