@@ -4399,6 +4399,14 @@
     Update account
   </message>
 
+  <!-- Strings for EDU login flow -->
+  <message name="IDS_EDU_LOGIN_BACK" desc="The name of the button that goes to the previous step in EDU login flow.">
+    Back
+  </message>
+  <message name="IDS_EDU_LOGIN_NEXT" desc="The name of the button that goes to the next step in EDU login flow.">
+    Next
+  </message>
+
   <!-- TPM firmware auto-update notifications -->
   <message name="IDS_TPM_AUTO_UPDATE_PLANNED_NOTIFICATION_TITLE" desc="Title for the notification informing the user that local data will be deleted.">
     Your local data will soon be deleted

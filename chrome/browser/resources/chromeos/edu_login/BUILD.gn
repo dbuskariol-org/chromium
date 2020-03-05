@@ -7,10 +7,28 @@ import("//tools/polymer/polymer.gni")
 
 js_type_check("closure_compile") {
   is_polymer3 = true
-  deps = [ ":app" ]
+  deps = [
+    ":app",
+    ":edu_login_button",
+    ":edu_login_template",
+  ]
 }
 
 js_library("app") {
+  deps = [
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+  ]
+}
+
+js_library("edu_login_button") {
+  deps = [
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/js:i18n_behavior.m",
+    "//ui/webui/resources/js:util.m",
+  ]
+}
+
+js_library("edu_login_template") {
   deps = [
     "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
   ]
@@ -22,6 +40,29 @@ polymer_modulizer("app") {
   html_type = "v3-ready"
 }
 
+polymer_modulizer("edu_login_button") {
+  js_file = "edu_login_button.js"
+  html_file = "edu_login_button.html"
+  html_type = "v3-ready"
+}
+
+polymer_modulizer("edu_login_template") {
+  js_file = "edu_login_template.js"
+  html_file = "edu_login_template.html"
+  html_type = "v3-ready"
+}
+
+polymer_modulizer("edu_login_css") {
+  js_file = "edu_login_css.js"
+  html_file = "edu_login_css.html"
+  html_type = "v3-ready"
+}
+
 group("polymer3_elements") {
-  deps = [ ":app_module" ]
+  deps = [
+    ":app_module",
+    ":edu_login_button_module",
+    ":edu_login_css_module",
+    ":edu_login_template_module",
+  ]
 }
