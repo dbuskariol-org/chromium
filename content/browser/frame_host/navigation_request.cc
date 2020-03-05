@@ -42,6 +42,7 @@
 #include "content/browser/loader/browser_initiated_resource_request.h"
 #include "content/browser/loader/cached_navigation_url_loader.h"
 #include "content/browser/loader/navigation_url_loader.h"
+#include "content/browser/net/cross_origin_embedder_policy_reporter.h"
 #include "content/browser/network_service_instance_impl.h"
 #include "content/browser/renderer_host/render_process_host_impl.h"
 #include "content/browser/renderer_host/render_view_host_delegate.h"
@@ -1466,6 +1467,19 @@ mojom::NavigationClient* NavigationRequest::GetCommitNavigationClient() {
 network::mojom::ClientSecurityStatePtr
 NavigationRequest::TakeClientSecurityState() {
   return std::move(client_security_state_);
+}
+
+void NavigationRequest::CreateCoepReporter(
+    StoragePartition* storage_partition) {
+  const auto& coep = client_security_state_->cross_origin_embedder_policy;
+  coep_reporter_ = std::make_unique<CrossOriginEmbedderPolicyReporter>(
+      storage_partition, common_params_->url, coep.reporting_endpoint,
+      coep.report_only_reporting_endpoint);
+}
+
+std::unique_ptr<CrossOriginEmbedderPolicyReporter>
+NavigationRequest::TakeCoepReporter() {
+  return std::move(coep_reporter_);
 }
 
 void NavigationRequest::OnRequestRedirected(
