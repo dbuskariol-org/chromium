@@ -51,7 +51,6 @@
 #include "third_party/blink/renderer/core/html/forms/html_opt_group_element.h"
 #include "third_party/blink/renderer/core/html/forms/html_option_element.h"
 #include "third_party/blink/renderer/core/html/forms/menu_list_inner_element.h"
-#include "third_party/blink/renderer/core/html/forms/popup_menu.h"
 #include "third_party/blink/renderer/core/html/forms/select_type.h"
 #include "third_party/blink/renderer/core/html/html_hr_element.h"
 #include "third_party/blink/renderer/core/html/html_slot_element.h"
@@ -1416,7 +1415,6 @@ void HTMLSelectElement::Trace(Visitor* visitor) {
   visitor->Trace(option_to_scroll_to_);
   visitor->Trace(suggested_option_);
   visitor->Trace(select_type_);
-  visitor->Trace(popup_);
   HTMLFormControlElementWithState::Trace(visitor);
 }
 
@@ -1580,6 +1578,10 @@ void HTMLSelectElement::ShowPopup() {
 
 void HTMLSelectElement::HidePopup() {
   select_type_->HidePopup();
+}
+
+PopupMenu* HTMLSelectElement::PopupForTesting() const {
+  return select_type_->PopupForTesting();
 }
 
 void HTMLSelectElement::DidRecalcStyle(const StyleRecalcChange change) {

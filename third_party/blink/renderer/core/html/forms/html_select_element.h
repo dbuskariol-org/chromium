@@ -171,7 +171,7 @@ class CORE_EXPORT HTMLSelectElement final
   const ComputedStyle* OptionStyle() const;
   void ShowPopup();
   void HidePopup();
-  PopupMenu* Popup() const { return popup_.Get(); }
+  PopupMenu* PopupForTesting() const;
 
   void ResetTypeAheadSessionForTesting();
 
@@ -307,7 +307,6 @@ class CORE_EXPORT HTMLSelectElement final
   bool is_autofilled_by_preview_;
 
   Member<SelectType> select_type_;
-  Member<PopupMenu> popup_;
   int index_to_select_on_cancel_;
   bool popup_is_visible_;
 

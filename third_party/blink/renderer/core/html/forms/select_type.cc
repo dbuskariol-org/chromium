@@ -89,6 +89,7 @@ class MenuListSelectType final : public SelectType {
   void ShowPopup() override;
   void HidePopup() override;
   void PopupDidHide() override;
+  PopupMenu* PopupForTesting() const override;
 
   void DidMutateSubtree();
 
@@ -103,6 +104,7 @@ class MenuListSelectType final : public SelectType {
   void ObserveTreeMutation();
   void UnobserveTreeMutation();
 
+  Member<PopupMenu> popup_;
   Member<PopupUpdater> popup_updater_;
   scoped_refptr<const ComputedStyle> option_style_;
   int ax_menulist_last_active_index_ = -1;
@@ -110,6 +112,7 @@ class MenuListSelectType final : public SelectType {
 };
 
 void MenuListSelectType::Trace(Visitor* visitor) {
+  visitor->Trace(popup_);
   visitor->Trace(popup_updater_);
   SelectType::Trace(visitor);
 }
@@ -290,24 +293,24 @@ void MenuListSelectType::ShowPopup() {
   if (select_->VisibleBoundsInVisualViewport().IsEmpty())
     return;
 
-  if (!select_->popup_) {
-    select_->popup_ = document.GetPage()->GetChromeClient().OpenPopupMenu(
+  if (!popup_) {
+    popup_ = document.GetPage()->GetChromeClient().OpenPopupMenu(
         *document.GetFrame(), *select_);
   }
-  if (!select_->popup_)
+  if (!popup_)
     return;
 
   select_->SetPopupIsVisible(true);
   ObserveTreeMutation();
 
-  select_->popup_->Show();
+  popup_->Show();
   if (AXObjectCache* cache = document.ExistingAXObjectCache())
     cache->DidShowMenuListPopup(select_->GetLayoutObject());
 }
 
 void MenuListSelectType::HidePopup() {
-  if (select_->popup_)
-    select_->popup_->Hide();
+  if (popup_)
+    popup_->Hide();
 }
 
 void MenuListSelectType::PopupDidHide() {
@@ -317,6 +320,10 @@ void MenuListSelectType::PopupDidHide() {
     if (auto* layout_object = select_->GetLayoutObject())
       cache->DidHideMenuListPopup(layout_object);
   }
+}
+
+PopupMenu* MenuListSelectType::PopupForTesting() const {
+  return popup_.Get();
 }
 
 void MenuListSelectType::DidSelectOption(
@@ -332,7 +339,7 @@ void MenuListSelectType::DidSelectOption(
   UpdateTextStyleAndContent();
   // PopupMenu::UpdateFromElement() posts an O(N) task.
   if (select_->PopupIsVisible() && should_update_popup)
-    select_->popup_->UpdateFromElement(PopupMenu::kBySelectionChange);
+    popup_->UpdateFromElement(PopupMenu::kBySelectionChange);
 
   SelectType::DidSelectOption(element, flags, should_update_popup);
 
@@ -372,14 +379,14 @@ void MenuListSelectType::DidBlur() {
 void MenuListSelectType::DidSetSuggestedOption(HTMLOptionElement*) {
   UpdateTextStyleAndContent();
   if (select_->PopupIsVisible())
-    select_->popup_->UpdateFromElement(PopupMenu::kBySelectionChange);
+    popup_->UpdateFromElement(PopupMenu::kBySelectionChange);
 }
 
 void MenuListSelectType::DidDetachLayoutTree() {
-  if (select_->popup_)
-    select_->popup_->DisconnectClient();
+  if (popup_)
+    popup_->DisconnectClient();
   select_->SetPopupIsVisible(false);
-  select_->popup_ = nullptr;
+  popup_ = nullptr;
   UnobserveTreeMutation();
 }
 
@@ -388,7 +395,7 @@ void MenuListSelectType::DidRecalcStyle(const StyleRecalcChange change) {
     return;
   UpdateTextStyle();
   if (select_->PopupIsVisible())
-    select_->popup_->UpdateFromElement(PopupMenu::kByStyleChange);
+    popup_->UpdateFromElement(PopupMenu::kByStyleChange);
 }
 
 String MenuListSelectType::UpdateTextStyleInternal() {
@@ -550,8 +557,8 @@ void MenuListSelectType::UnobserveTreeMutation() {
 
 void MenuListSelectType::DidMutateSubtree() {
   DCHECK(select_->PopupIsVisible());
-  DCHECK(select_->popup_);
-  select_->popup_->UpdateFromElement(PopupMenu::kByDOMChange);
+  DCHECK(popup_);
+  popup_->UpdateFromElement(PopupMenu::kByDOMChange);
 }
 
 // ============================================================================
@@ -936,6 +943,11 @@ void SelectType::HidePopup() {
 
 void SelectType::PopupDidHide() {
   NOTREACHED();
+}
+
+PopupMenu* SelectType::PopupForTesting() const {
+  NOTREACHED();
+  return nullptr;
 }
 
 // Returns the 1st valid OPTION |skip| items from |list_index| in direction
