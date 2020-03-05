@@ -1,0 +1,21 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//mojo/public/tools/bindings/mojom.gni")
+
+mojom_component("web_feature") {
+  output_prefix = "blink_web_feature_mojom"
+  macro_prefix = "BLINK_WEB_FEATURE_MOJOM"
+
+  sources = [ "web_feature.mojom" ]
+
+  # The Blink variant is linked directly into the private platform
+  # implementation and so it requires the corresponding export configuration to
+  # override the normal mojom_component() target exports.
+  export_class_attribute_blink = "PLATFORM_EXPORT"
+  export_define_blink = "BLINK_PLATFORM_IMPLEMENTATION=1"
+  export_header_blink = "third_party/blink/renderer/platform/platform_export.h"
+
+  generate_java = true
+}
