@@ -363,6 +363,7 @@ android_library("chrome_java") {
     "//third_party/android_deps:android_support_v7_appcompat_java",
     "//third_party/android_deps:androidx_annotation_annotation_java",
     "//third_party/android_deps:androidx_collection_collection_java",
+    "//third_party/android_deps:androidx_legacy_legacy_support_v13_java",
     "//third_party/android_deps:com_android_support_coordinatorlayout_java",
     "//third_party/android_deps:com_android_support_customview_java",
 
@@ -375,7 +376,6 @@ android_library("chrome_java") {
     "//third_party/android_deps:com_android_support_preference_v7_java",
     "//third_party/android_deps:com_android_support_recyclerview_v7_java",
     "//third_party/android_deps:com_android_support_support_compat_java",
-    "//third_party/android_deps:com_android_support_support_v13_java",
     "//third_party/android_deps:com_android_support_viewpager_java",
     "//third_party/android_deps:com_google_dagger_dagger_java",
     "//third_party/android_deps:com_google_guava_listenablefuture_java",
