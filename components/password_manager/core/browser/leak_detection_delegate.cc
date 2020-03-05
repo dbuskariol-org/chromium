@@ -80,45 +80,31 @@ void LeakDetectionDelegate::OnLeakDetectionDone(bool is_leaked,
     logger.LogBoolean(Logger::STRING_LEAK_DETECTION_FINISHED, is_leaked);
   }
 
-  password_manager::PasswordStore* password_store =
-      client_->GetProfilePasswordStore();
-  if (base::FeatureList::IsEnabled(
-          password_manager::features::kPasswordCheck) &&
-      is_leaked) {
-    password_store->AddCompromisedCredentials({GetSignonRealm(url), username,
-                                               base::Time::Now(),
-                                               CompromiseType::kLeaked});
-  }
-
   if (is_leaked) {
-    if (!client_->GetPasswordFeatureManager()
-             ->ShouldCheckReuseOnLeakDetection()) {
-      // If leaked password reuse should not be checked, then the
-      // |CredentialLeakType| needed to show the correct notification is already
-      // determined.
-      OnShowLeakDetectionNotification(
-          CreateLeakType(IsSaved(false), IsReused(false), IsSyncing(false)),
-          std::move(url), std::move(username));
-    } else {
       // Otherwise query the helper to asynchronously determine the
       // |CredentialLeakType|.
-      helper_ = std::make_unique<LeakDetectionDelegateHelper>(base::BindOnce(
-          &LeakDetectionDelegate::OnShowLeakDetectionNotification,
-          base::Unretained(this)));
-      helper_->GetCredentialLeakType(password_store, std::move(url),
-                                     std::move(username), std::move(password));
-    }
+      helper_ = std::make_unique<LeakDetectionDelegateHelper>(
+          client_->GetProfilePasswordStore(),
+          base::BindOnce(
+              &LeakDetectionDelegate::OnShowLeakDetectionNotification,
+              base::Unretained(this)));
+      helper_->ProcessLeakedPassword(std::move(url), std::move(username),
+                                     std::move(password));
   }
 }
 
 void LeakDetectionDelegate::OnShowLeakDetectionNotification(
-    CredentialLeakType leak_type,
+    IsSaved is_saved,
+    IsReused is_reused,
     GURL url,
     base::string16 username) {
   DCHECK(is_leaked_timer_);
   base::UmaHistogramTimes("PasswordManager.LeakDetection.NotifyIsLeakedTime",
                           std::exchange(is_leaked_timer_, nullptr)->Elapsed());
   helper_.reset();
+  CredentialLeakType leak_type = CreateLeakType(
+      is_saved, is_reused,
+      IsSyncing(client_->GetPasswordSyncState() == SYNCING_NORMAL_ENCRYPTION));
   client_->NotifyUserCredentialsWereLeaked(leak_type, url);
 }
 
