@@ -51,8 +51,7 @@ const breadCrumbTemplate = `
       min-width: 1.2em;
 
       /* elide wide text */
-      // TODO(crbug.com/1035691) Find out expected width.
-      max-width: 40em;
+      max-width: 200px;
       overflow: hidden;
       padding: calc(8px - 1px);
       /* text rendering debounce: center. */
