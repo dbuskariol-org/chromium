@@ -165,8 +165,8 @@ android_resources("chrome_app_java_resources") {
     "//content/public/android:content_java_resources",
     "//third_party/android_data_chart:android_data_chart_java_resources",
     "//third_party/android_deps:android_support_v7_appcompat_java",
+    "//third_party/android_deps:androidx_gridlayout_gridlayout_java",
     "//third_party/android_deps:com_android_support_design_java",
-    "//third_party/android_deps:com_android_support_gridlayout_v7_java",
     "//third_party/android_deps:com_android_support_preference_v7_java",
     "//third_party/android_deps:com_android_support_recyclerview_v7_java",
   ]
@@ -368,8 +368,8 @@ android_library("chrome_java") {
 
     # TODO(bjoyce): Change to AndroidX materials after
     # ClearBrowsingDataTabsFramgent.java is converted to AndroidX.
+    "//third_party/android_deps:androidx_gridlayout_gridlayout_java",
     "//third_party/android_deps:com_android_support_design_java",
-    "//third_party/android_deps:com_android_support_gridlayout_v7_java",
     "//third_party/android_deps:com_android_support_interpolator_java",
     "//third_party/android_deps:com_android_support_mediarouter_v7_java",
     "//third_party/android_deps:com_android_support_preference_v7_java",
