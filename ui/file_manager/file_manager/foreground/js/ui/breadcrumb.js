@@ -80,19 +80,24 @@ const breadCrumbTemplate = `
     }
 
     :host([checked]) #elided {
-      border: 1px solid gray;
       background-color: white;
+      border-radius: 2px;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 50%);
       display: block;
       margin-block-start: 0.2em;
       margin-inline-start: -0.2em;
       max-height: 40vh;
+      padding: 8px 0;
       position: absolute;
       overflow: hidden auto;
       z-index: 502;
     }
 
     :host([checked]) #elided button {
+      color: rgb(51, 51, 51);
       display: block;
+      font-family: 'Roboto';
+      font-size: 13px;
       min-width: 14em;  /* menu width */
       max-width: 14em;
       text-align: start;
