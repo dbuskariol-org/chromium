@@ -100,7 +100,7 @@ class ResizeShadowAndCursorTest : public AshTestBase {
   // Returns the current cursor type.
   ui::mojom::CursorType GetCurrentCursorType() const {
     CursorManagerTestApi test_api(Shell::Get()->cursor_manager());
-    return test_api.GetCurrentCursor().native_type();
+    return test_api.GetCurrentCursor().type();
   }
 
   // Called for each step of a scroll sequence initiated at the bottom right
