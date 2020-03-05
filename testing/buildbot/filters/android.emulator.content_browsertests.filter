@@ -5,6 +5,9 @@
 # crbug.com/1056878
 -BackForwardCacheBrowserTest.VideoSuspendAndResume
 
+# crbug.com/1058447
+-SitePerProcessBrowserTest.FrameViewportOffsetTestSimple
+
 # crbug.com/1056325
 -WebRtcAudioBrowserTest.EstablishAudioVideoCallAndVerifyLocalMutingWorks
 
