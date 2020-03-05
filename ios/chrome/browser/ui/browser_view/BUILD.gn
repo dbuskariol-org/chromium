@@ -95,6 +95,7 @@ source_set("browser_view") {
     "//ios/chrome/browser/ui/dialogs:dialogs_internal",
     "//ios/chrome/browser/ui/dialogs:feature_flags",
     "//ios/chrome/browser/ui/download",
+    "//ios/chrome/browser/ui/download:features",
     "//ios/chrome/browser/ui/elements:elements_internal",
     "//ios/chrome/browser/ui/find_bar",
     "//ios/chrome/browser/ui/first_run",
@@ -195,6 +196,7 @@ source_set("unit_tests") {
   configs += [ "//build/config/compiler:enable_arc" ]
   testonly = true
   sources = [
+    "browser_coordinator_unittest.mm",
     "browser_view_controller_helper_unittest.mm",
     "browser_view_controller_unittest.mm",
     "key_commands_provider_unittest.mm",
@@ -211,6 +213,7 @@ source_set("unit_tests") {
     "//ios/chrome/browser",
     "//ios/chrome/browser/bookmarks",
     "//ios/chrome/browser/browser_state:test_support",
+    "//ios/chrome/browser/download",
     "//ios/chrome/browser/favicon",
     "//ios/chrome/browser/main:test_support",
     "//ios/chrome/browser/search_engines",
@@ -224,6 +227,7 @@ source_set("unit_tests") {
     "//ios/chrome/browser/ui/alert_coordinator",
     "//ios/chrome/browser/ui/browser_container:ui",
     "//ios/chrome/browser/ui/commands",
+    "//ios/chrome/browser/ui/download:features",
     "//ios/chrome/browser/ui/toolbar/public",
     "//ios/chrome/browser/ui/toolbar/test",
     "//ios/chrome/browser/ui/util",
