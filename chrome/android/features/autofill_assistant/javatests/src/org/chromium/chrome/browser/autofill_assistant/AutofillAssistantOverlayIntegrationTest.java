@@ -72,6 +72,7 @@ public class AutofillAssistantOverlayIntegrationTest {
      */
     @Test
     @MediumTest
+    @DisabledTest(message = "Test is flaky. crbug.com/1058599")
     public void testShowCastOnDocumentElement() throws Exception {
         ElementReferenceProto element = (ElementReferenceProto) ElementReferenceProto.newBuilder()
                                                 .addSelectors("#touch_area_one")
@@ -117,6 +118,7 @@ public class AutofillAssistantOverlayIntegrationTest {
      */
     @Test
     @MediumTest
+    @DisabledTest(message = "Test is flaky. crbug.com/1058599")
     public void testShowCastOnDocumentElementInScrolledBrowserWindow() throws Exception {
         ElementReferenceProto element = (ElementReferenceProto) ElementReferenceProto.newBuilder()
                                                 .addSelectors("#touch_area_five")
