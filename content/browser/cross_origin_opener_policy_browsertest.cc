@@ -10,6 +10,7 @@
 #include "content/public/test/content_browser_test.h"
 #include "content/public/test/content_browser_test_utils.h"
 #include "content/shell/browser/shell.h"
+#include "content/test/content_browser_test_utils_internal.h"
 #include "net/dns/mock_host_resolver.h"
 #include "services/network/public/cpp/features.h"
 #include "services/network/public/mojom/cross_origin_opener_policy.mojom.h"
@@ -280,6 +281,34 @@ IN_PROC_BROWSER_TEST_F(CrossOriginOpenerPolicyBrowserTest,
   EXPECT_EQ(current_frame_host()->GetSiteInstance(), initial_site_instance);
   EXPECT_EQ(current_frame_host()->cross_origin_opener_policy(),
             network::mojom::CrossOriginOpenerPolicy::kUnsafeNone);
+}
+
+IN_PROC_BROWSER_TEST_F(CrossOriginOpenerPolicyBrowserTest,
+                       CoopIsIgnoredOnIframes) {
+  GURL starting_page(
+      https_server()->GetURL("a.com", "/cross_site_iframe_factory.html?a(b)"));
+  GURL iframe_navigation_url(https_server()->GetURL(
+      "b.com", "/cross-origin-opener-policy_same-origin.html"));
+  EXPECT_TRUE(NavigateToURL(shell(), starting_page));
+
+  RenderFrameHostImpl* main_rfh = current_frame_host();
+  FrameTreeNode* iframe_ftn = main_rfh->child_at(0);
+  RenderFrameHostImpl* iframe_rfh = iframe_ftn->current_frame_host();
+  SiteInstanceImpl* non_coop_iframe_site_instance =
+      iframe_rfh->GetSiteInstance();
+
+  // Navigate the iframe same-origin to a document with the COOP header. The
+  // header must be ignored in iframes.
+  NavigateFrameToURL(iframe_ftn, iframe_navigation_url);
+  iframe_rfh = iframe_ftn->current_frame_host();
+
+  // We expect the navigation to have used the same SiteInstance that was used
+  // in the first place since they are same origin and COOP is ignored.
+  EXPECT_EQ(iframe_rfh->GetLastCommittedURL(), iframe_navigation_url);
+  EXPECT_EQ(iframe_rfh->GetSiteInstance(), non_coop_iframe_site_instance);
+
+  EXPECT_EQ(iframe_rfh->cross_origin_opener_policy(),
+            network::mojom::CrossOriginOpenerPolicy::kSameOrigin);
 }
 
 }  // namespace content
