@@ -3048,6 +3048,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "prefetch-notification-scheduling-integration",
+    "owners": [ "hesen" ],
+    "expiry_milestone": 88
+  },
+  {
     "name": "prefetch-privacy-changes",
     "owners": [ "dom", "yhirano" ],
     "expiry_milestone": 85
