@@ -146,6 +146,7 @@ void AppActivityRegistry::RegisterProfilePrefs(PrefRegistrySimple* registry) {
   registry->RegisterListPref(prefs::kPerAppTimeLimitsAppActivities);
   registry->RegisterInt64Pref(prefs::kPerAppTimeLimitsLastSuccessfulReportTime,
                               0);
+  registry->RegisterInt64Pref(prefs::kPerAppTimeLimitsLatestLimitUpdateTime, 0);
 }
 
 AppActivityRegistry::AppActivityRegistry(
@@ -403,6 +404,7 @@ void AppActivityRegistry::OnSuccessfullyReported(base::Time timestamp) {
 
 void AppActivityRegistry::UpdateAppLimits(
     const std::map<AppId, AppLimit>& app_limits) {
+  base::Time latest_update = latest_app_limit_update_;
   for (auto& entry : activity_registry_) {
     const AppId& app_id = entry.first;
     base::Optional<AppLimit> new_limit;
@@ -421,7 +423,17 @@ void AppActivityRegistry::UpdateAppLimits(
     }
 
     SetAppLimit(app_id, new_limit);
+
+    if (new_limit && new_limit->last_updated() > latest_update)
+      latest_update = new_limit->last_updated();
   }
+
+  latest_app_limit_update_ = latest_update;
+
+  // Update the latest app limit update.
+  profile_->GetPrefs()->SetInt64(
+      prefs::kPerAppTimeLimitsLatestLimitUpdateTime,
+      latest_app_limit_update_.ToDeltaSinceWindowsEpoch().InMicroseconds());
 }
 
 void AppActivityRegistry::SetAppLimit(
@@ -841,6 +853,12 @@ void AppActivityRegistry::ShowLimitUpdatedNotificationIfNeeded(
   if (app_id.app_type() == apps::mojom::AppType::kWeb)
     return;
 
+  // Don't show notification if the time limit's update was older than the
+  // latest update.
+  if (new_limit && new_limit->last_updated() <= latest_app_limit_update_) {
+    return;
+  }
+
   const bool had_time_limit =
       old_limit && old_limit->restriction() == AppRestriction::kTimeLimit;
   const bool has_time_limit =
@@ -893,6 +911,19 @@ void AppActivityRegistry::WebTimeLimitReached(base::Time timestamp) {
 }
 
 void AppActivityRegistry::InitializeRegistryFromPref() {
+  PrefService* pref_service = profile_->GetPrefs();
+  DCHECK(pref_service);
+
+  int64_t last_limits_updates =
+      pref_service->GetInt64(prefs::kPerAppTimeLimitsLatestLimitUpdateTime);
+
+  latest_app_limit_update_ = base::Time::FromDeltaSinceWindowsEpoch(
+      base::TimeDelta::FromMicroseconds(last_limits_updates));
+
+  InitializeAppActivities();
+}
+
+void AppActivityRegistry::InitializeAppActivities() {
   PrefService* pref_service = profile_->GetPrefs();
   const base::Value* value =
       pref_service->GetList(prefs::kPerAppTimeLimitsAppActivities);
