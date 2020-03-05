@@ -867,19 +867,17 @@ void Mp2tStreamParser::UnregisterCat() {
 }
 
 void Mp2tStreamParser::RegisterCencPids(int ca_pid, int pssh_pid) {
-  std::unique_ptr<TsSectionCetsEcm> ecm_parser(
-      new TsSectionCetsEcm(base::BindRepeating(
-          &Mp2tStreamParser::RegisterNewKeyIdAndIv, base::Unretained(this))));
-  std::unique_ptr<PidState> ecm_pid_state(
-      new PidState(ca_pid, PidState::kPidCetsEcm, std::move(ecm_parser)));
+  auto ecm_parser = std::make_unique<TsSectionCetsEcm>(base::BindRepeating(
+      &Mp2tStreamParser::RegisterNewKeyIdAndIv, base::Unretained(this)));
+  auto ecm_pid_state = std::make_unique<PidState>(ca_pid, PidState::kPidCetsEcm,
+                                                  std::move(ecm_parser));
   ecm_pid_state->Enable();
   pids_.insert(std::make_pair(ca_pid, std::move(ecm_pid_state)));
 
-  std::unique_ptr<TsSectionCetsPssh> pssh_parser(
-      new TsSectionCetsPssh(base::Bind(&Mp2tStreamParser::RegisterPsshBoxes,
-                                       base::Unretained(this))));
-  std::unique_ptr<PidState> pssh_pid_state(
-      new PidState(pssh_pid, PidState::kPidCetsPssh, std::move(pssh_parser)));
+  auto pssh_parser = std::make_unique<TsSectionCetsPssh>(base::BindRepeating(
+      &Mp2tStreamParser::RegisterPsshBoxes, base::Unretained(this)));
+  auto pssh_pid_state = std::make_unique<PidState>(
+      pssh_pid, PidState::kPidCetsPssh, std::move(pssh_parser));
   pssh_pid_state->Enable();
   pids_.insert(std::make_pair(pssh_pid, std::move(pssh_pid_state)));
 }
