@@ -169,6 +169,7 @@
 #include "extensions/browser/api/runtime/runtime_api.h"
 #include "extensions/browser/extension_prefs.h"
 #if defined(OS_CHROMEOS)
+#include "chrome/browser/chromeos/extensions/extensions_permissions_tracker.h"
 #include "chrome/browser/chromeos/guest_os/guest_os_share_path.h"
 #include "chrome/browser/chromeos/kerberos/kerberos_credentials_manager.h"
 #include "chrome/browser/chromeos/login/easy_unlock/easy_unlock_service.h"
@@ -744,6 +745,7 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
   component_updater::MetadataTable::RegisterPrefs(registry);
   cryptauth::CryptAuthDeviceIdProviderImpl::RegisterLocalPrefs(registry);
   extensions::ExtensionAssetsManagerChromeOS::RegisterPrefs(registry);
+  extensions::ExtensionsPermissionsTracker::RegisterLocalStatePrefs(registry);
   extensions::lock_screen_data::LockScreenItemStorage::RegisterLocalState(
       registry);
   extensions::login_api::RegisterLocalStatePrefs(registry);
