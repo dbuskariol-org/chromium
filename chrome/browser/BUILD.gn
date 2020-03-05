@@ -3037,6 +3037,15 @@ jumbo_static_library("browser") {
       ]
       deps += [ "//chrome/android/modules/dev_ui/provider:native" ]
     }
+
+    if (enable_password_change_in_leaked_dialog) {
+      sources += [
+        "password_manager/credential_leak_password_change_controller_android.cc",
+        "password_manager/credential_leak_password_change_controller_android.h",
+      ]
+
+      defines += [ "ENABLE_PASSWORD_CHANGE" ]
+    }
   } else {  # !is_android
     sources += [
       "accessibility/caption_bubble.cc",

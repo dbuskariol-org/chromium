@@ -183,6 +183,15 @@ if (enable_vr) {
   }
 }
 
+# TODO (crbug/1058764) Unfork credential leak dialog password change when prototype is done.
+if (enable_password_change_in_leaked_dialog) {
+  android_resources("password_change_resources") {
+    resource_dirs = [ "//chrome/android/java/res_password_change" ]
+    deps = [ ":chrome_app_java_resources" ]
+    custom_package = "org.chromium.chrome.password_change"
+  }
+}
+
 # TODO(chouinard): Remove this wrapper target after downstream dependencies on it are replaced.
 android_resources("chrome_download_java_resources") {
   resource_dirs = []
@@ -471,6 +480,9 @@ android_library("chrome_java") {
     deps += [ ":chrome_vr_java_resources" ]
   }
 
+  if (enable_password_change_in_leaked_dialog) {
+    deps += [ ":password_change_resources" ]
+  }
   srcjar_deps += [ ":chrome_vr_android_java_enums_srcjar" ]
   if (enable_feed_in_chrome) {
     deps += [ "//chrome/android/feed:chrome_feed_java_resources" ]
@@ -2876,6 +2888,10 @@ generate_jni("chrome_jni_headers") {
 
   if (enable_vr) {
     sources += [ "java/src/org/chromium/chrome/browser/component_updater/VrAssetsComponentInstaller.java" ]
+  }
+
+  if (enable_password_change_in_leaked_dialog) {
+    sources += [ "java/src/org/chromium/chrome/browser/password_manager/CredentialLeakDialogPasswordChangeBridge.java" ]
   }
 }
 
