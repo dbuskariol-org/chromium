@@ -47,17 +47,38 @@ void LeakDetectionDelegate::StartLeakCheck(const autofill::PasswordForm& form) {
   if (client_->IsIncognito())
     return;
 
-  if (!client_->GetPrefs()->GetBoolean(
-          password_manager::prefs::kPasswordLeakDetectionEnabled)) {
+  bool is_leak_protection_on = client_->GetPrefs()->GetBoolean(
+      password_manager::prefs::kPasswordLeakDetectionEnabled);
+
+  // Leak detection can only start if:
+  // 1. The user has not opted out and Safe Browsing is turned on, or
+  // 2. The user is an enhanced protection user
+  // Safe Browsing is only available on non-IOS.
+#if defined(OS_IOS)
+  if (!is_leak_protection_on) {
     LogString(client_, Logger::STRING_LEAK_DETECTION_DISABLED_FEATURE);
     return;
   }
-#if !defined(OS_IOS)
-  if (!client_->GetPrefs()->GetBoolean(::prefs::kSafeBrowsingEnabled)) {
-    LogString(client_, Logger::STRING_LEAK_DETECTION_DISABLED_SAFE_BROWSING);
-    return;
+#else
+  safe_browsing::SafeBrowsingState sb_state =
+      safe_browsing::GetSafeBrowsingState(*client_->GetPrefs());
+  switch (sb_state) {
+    case safe_browsing::NO_SAFE_BROWSING:
+      LogString(client_, Logger::STRING_LEAK_DETECTION_DISABLED_SAFE_BROWSING);
+      return;
+    case safe_browsing::STANDARD_PROTECTION:
+      if (!is_leak_protection_on) {
+        LogString(client_, Logger::STRING_LEAK_DETECTION_DISABLED_FEATURE);
+        return;
+      }
+      // feature is on.
+      break;
+    case safe_browsing::ENHANCED_PROTECTION:
+      // feature is on.
+      break;
   }
 #endif
+
   if (form.username_value.empty())
     return;
 

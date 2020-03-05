@@ -22,6 +22,7 @@
 #include "components/prefs/pref_service.h"
 #include "components/prefs/testing_pref_service.h"
 #include "components/safe_browsing/core/common/safe_browsing_prefs.h"
+#include "components/safe_browsing/core/features.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -86,6 +87,8 @@ class LeakDetectionDelegateTest : public testing::Test {
 #if !defined(OS_IOS)
     pref_service_->registry()->RegisterBooleanPref(
         ::prefs::kSafeBrowsingEnabled, true);
+    pref_service_->registry()->RegisterBooleanPref(
+        ::prefs::kSafeBrowsingEnhanced, false);
 #endif
     ON_CALL(client_, GetPrefs()).WillByDefault(Return(pref_service()));
   }
@@ -99,6 +102,29 @@ class LeakDetectionDelegateTest : public testing::Test {
   PrefService* pref_service() { return pref_service_.get(); }
 
   void WaitForPasswordStore() { task_environment_.RunUntilIdle(); }
+
+  void SetSBState(safe_browsing::SafeBrowsingState state) {
+    switch (state) {
+      case safe_browsing::ENHANCED_PROTECTION:
+        pref_service_->SetBoolean(::prefs::kSafeBrowsingEnhanced, true);
+        pref_service_->SetBoolean(::prefs::kSafeBrowsingEnabled, true);
+        break;
+      case safe_browsing::STANDARD_PROTECTION:
+        pref_service_->SetBoolean(::prefs::kSafeBrowsingEnhanced, false);
+        pref_service_->SetBoolean(::prefs::kSafeBrowsingEnabled, true);
+        break;
+      case safe_browsing::NO_SAFE_BROWSING:
+      default:
+        pref_service_->SetBoolean(::prefs::kSafeBrowsingEnhanced, false);
+        pref_service_->SetBoolean(::prefs::kSafeBrowsingEnabled, false);
+        break;
+    }
+  }
+
+  void SetLeakDetectionEnabled(bool is_on) {
+    pref_service_->SetBoolean(
+        password_manager::prefs::kPasswordLeakDetectionEnabled, is_on);
+  }
 
  private:
   base::test::TaskEnvironment task_environment_{
@@ -115,17 +141,6 @@ class LeakDetectionDelegateTest : public testing::Test {
 TEST_F(LeakDetectionDelegateTest, InIncognito) {
   const autofill::PasswordForm form = CreateTestForm();
   EXPECT_CALL(client(), IsIncognito).WillOnce(Return(true));
-  EXPECT_CALL(factory(), TryCreateLeakCheck).Times(0);
-  delegate().StartLeakCheck(form);
-
-  EXPECT_FALSE(delegate().leak_check());
-}
-
-TEST_F(LeakDetectionDelegateTest, PrefIsFalse) {
-  const autofill::PasswordForm form = CreateTestForm();
-  pref_service()->SetBoolean(
-      password_manager::prefs::kPasswordLeakDetectionEnabled, false);
-
   EXPECT_CALL(factory(), TryCreateLeakCheck).Times(0);
   delegate().StartLeakCheck(form);
 
@@ -154,6 +169,7 @@ TEST_F(LeakDetectionDelegateTest, UsernameIsEmpty) {
 }
 
 TEST_F(LeakDetectionDelegateTest, StartCheck) {
+  SetLeakDetectionEnabled(true);
   const autofill::PasswordForm form = CreateTestForm();
   EXPECT_CALL(client(), IsIncognito).WillOnce(Return(false));
   auto check_instance = std::make_unique<MockLeakDetectionCheck>();
@@ -165,6 +181,76 @@ TEST_F(LeakDetectionDelegateTest, StartCheck) {
 
   EXPECT_TRUE(delegate().leak_check());
 }
+
+TEST_F(LeakDetectionDelegateTest, DoNotStartCheck) {
+  SetLeakDetectionEnabled(false);
+  const autofill::PasswordForm form = CreateTestForm();
+  EXPECT_CALL(client(), IsIncognito).WillOnce(Return(false));
+  auto check_instance = std::make_unique<MockLeakDetectionCheck>();
+  EXPECT_CALL(factory(), TryCreateLeakCheck).Times(0);
+  delegate().StartLeakCheck(form);
+
+  EXPECT_FALSE(delegate().leak_check());
+}
+
+#if !defined(OS_IOS)
+TEST_F(LeakDetectionDelegateTest, StartCheckWithStandardProtection) {
+  SetSBState(safe_browsing::STANDARD_PROTECTION);
+  SetLeakDetectionEnabled(true);
+  const autofill::PasswordForm form = CreateTestForm();
+  EXPECT_CALL(client(), IsIncognito).WillOnce(Return(false));
+  auto check_instance = std::make_unique<MockLeakDetectionCheck>();
+  EXPECT_CALL(*check_instance,
+              Start(form.origin, form.username_value, form.password_value));
+  EXPECT_CALL(factory(), TryCreateLeakCheck(&delegate(), _, _))
+      .WillOnce(Return(ByMove(std::move(check_instance))));
+  delegate().StartLeakCheck(form);
+
+  EXPECT_TRUE(delegate().leak_check());
+}
+
+TEST_F(LeakDetectionDelegateTest, StartCheckWithEnhancedProtection) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitAndEnableFeature(safe_browsing::kEnhancedProtection);
+
+  SetSBState(safe_browsing::ENHANCED_PROTECTION);
+  SetLeakDetectionEnabled(false);
+  const autofill::PasswordForm form = CreateTestForm();
+  EXPECT_CALL(client(), IsIncognito).WillOnce(Return(false));
+  auto check_instance = std::make_unique<MockLeakDetectionCheck>();
+  EXPECT_CALL(*check_instance,
+              Start(form.origin, form.username_value, form.password_value));
+  EXPECT_CALL(factory(), TryCreateLeakCheck(&delegate(), _, _))
+      .WillOnce(Return(ByMove(std::move(check_instance))));
+  delegate().StartLeakCheck(form);
+
+  EXPECT_TRUE(delegate().leak_check());
+}
+
+TEST_F(LeakDetectionDelegateTest, DoNotStartCheckWithoutSafeBrowsing) {
+  SetSBState(safe_browsing::NO_SAFE_BROWSING);
+  SetLeakDetectionEnabled(true);
+  const autofill::PasswordForm form = CreateTestForm();
+  EXPECT_CALL(client(), IsIncognito).WillOnce(Return(false));
+  auto check_instance = std::make_unique<MockLeakDetectionCheck>();
+  EXPECT_CALL(factory(), TryCreateLeakCheck).Times(0);
+  delegate().StartLeakCheck(form);
+
+  EXPECT_FALSE(delegate().leak_check());
+}
+
+TEST_F(LeakDetectionDelegateTest, DoNotStartLeakCheckIfLeakCheckIsOff) {
+  SetSBState(safe_browsing::STANDARD_PROTECTION);
+  SetLeakDetectionEnabled(false);
+  const autofill::PasswordForm form = CreateTestForm();
+  EXPECT_CALL(client(), IsIncognito).WillOnce(Return(false));
+  EXPECT_CALL(factory(), TryCreateLeakCheck).Times(0);
+  auto check_instance = std::make_unique<MockLeakDetectionCheck>();
+  delegate().StartLeakCheck(form);
+
+  EXPECT_FALSE(delegate().leak_check());
+}
+#endif
 
 TEST_F(LeakDetectionDelegateTest, LeakDetectionDoneWithFalseResult) {
   base::HistogramTester histogram_tester;
