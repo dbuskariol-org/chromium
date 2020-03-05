@@ -20,7 +20,7 @@ ui::PlatformCursor WebCursor::GetPlatformCursor(const ui::Cursor& cursor) {
     return platform_cursor_;
 
   platform_cursor_ = IconUtil::CreateCursorFromSkBitmap(
-                         GetCursorBitmap(cursor), GetCursorHotstop(cursor))
+                         GetCursorBitmap(cursor), GetCursorHotspot(cursor))
                          .release();
   return platform_cursor_;
 }
