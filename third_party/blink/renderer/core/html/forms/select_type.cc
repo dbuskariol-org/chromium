@@ -31,7 +31,10 @@
 
 #include "build/build_config.h"
 #include "third_party/blink/public/strings/grit/blink_strings.h"
+#include "third_party/blink/renderer/bindings/core/v8/v8_mutation_observer_init.h"
 #include "third_party/blink/renderer/core/accessibility/ax_object_cache.h"
+#include "third_party/blink/renderer/core/dom/mutation_observer.h"
+#include "third_party/blink/renderer/core/dom/mutation_record.h"
 #include "third_party/blink/renderer/core/dom/node_computed_style.h"
 #include "third_party/blink/renderer/core/events/gesture_event.h"
 #include "third_party/blink/renderer/core/events/keyboard_event.h"
@@ -53,6 +56,8 @@
 
 namespace blink {
 
+class PopupUpdater;
+
 namespace {
 
 HTMLOptionElement* EventTargetOption(const Event& event) {
@@ -64,6 +69,7 @@ HTMLOptionElement* EventTargetOption(const Event& event) {
 class MenuListSelectType final : public SelectType {
  public:
   explicit MenuListSelectType(HTMLSelectElement& select) : SelectType(select) {}
+  void Trace(Visitor* visitor) override;
 
   bool DefaultEventHandler(const Event& event) override;
   void DidSelectOption(HTMLOptionElement* element,
@@ -84,6 +90,8 @@ class MenuListSelectType final : public SelectType {
   void HidePopup() override;
   void PopupDidHide() override;
 
+  void DidMutateSubtree();
+
  private:
   bool ShouldOpenPopupForKeyDownEvent(const KeyboardEvent& event);
   bool ShouldOpenPopupForKeyPressEvent(const KeyboardEvent& event);
@@ -92,11 +100,19 @@ class MenuListSelectType final : public SelectType {
   void DispatchEventsIfSelectedOptionChanged();
   String UpdateTextStyleInternal();
   void DidUpdateActiveOption(HTMLOptionElement* option);
+  void ObserveTreeMutation();
+  void UnobserveTreeMutation();
 
+  Member<PopupUpdater> popup_updater_;
   scoped_refptr<const ComputedStyle> option_style_;
   int ax_menulist_last_active_index_ = -1;
   bool has_updated_menulist_active_option_ = false;
 };
+
+void MenuListSelectType::Trace(Visitor* visitor) {
+  visitor->Trace(popup_updater_);
+  SelectType::Trace(visitor);
+}
 
 bool MenuListSelectType::DefaultEventHandler(const Event& event) {
   // We need to make the layout tree up-to-date to have GetLayoutObject() give
@@ -282,7 +298,7 @@ void MenuListSelectType::ShowPopup() {
     return;
 
   select_->SetPopupIsVisible(true);
-  select_->ObserveTreeMutation();
+  ObserveTreeMutation();
 
   select_->popup_->Show();
   if (AXObjectCache* cache = document.ExistingAXObjectCache())
@@ -296,7 +312,7 @@ void MenuListSelectType::HidePopup() {
 
 void MenuListSelectType::PopupDidHide() {
   select_->SetPopupIsVisible(false);
-  select_->UnobserveTreeMutation();
+  UnobserveTreeMutation();
   if (AXObjectCache* cache = select_->GetDocument().ExistingAXObjectCache()) {
     if (auto* layout_object = select_->GetLayoutObject())
       cache->DidHideMenuListPopup(layout_object);
@@ -364,7 +380,7 @@ void MenuListSelectType::DidDetachLayoutTree() {
     select_->popup_->DisconnectClient();
   select_->SetPopupIsVisible(false);
   select_->popup_ = nullptr;
-  select_->UnobserveTreeMutation();
+  UnobserveTreeMutation();
 }
 
 void MenuListSelectType::DidRecalcStyle(const StyleRecalcChange change) {
@@ -458,6 +474,84 @@ void MenuListSelectType::DidUpdateActiveOption(HTMLOptionElement* option) {
 
   document.ExistingAXObjectCache()->HandleUpdateActiveMenuOption(
       select_->GetLayoutObject(), option_index);
+}
+
+// PopupUpdater notifies updates of the specified SELECT element subtree to
+// a PopupMenu object.
+class PopupUpdater : public MutationObserver::Delegate {
+ public:
+  explicit PopupUpdater(MenuListSelectType& select_type,
+                        HTMLSelectElement& select)
+      : select_type_(select_type),
+        select_(select),
+        observer_(MutationObserver::Create(this)) {
+    MutationObserverInit* init = MutationObserverInit::Create();
+    init->setAttributeOldValue(true);
+    init->setAttributes(true);
+    // Observe only attributes which affect popup content.
+    init->setAttributeFilter({"disabled", "label", "selected", "value"});
+    init->setCharacterData(true);
+    init->setCharacterDataOldValue(true);
+    init->setChildList(true);
+    init->setSubtree(true);
+    observer_->observe(select_, init, ASSERT_NO_EXCEPTION);
+  }
+
+  ExecutionContext* GetExecutionContext() const override {
+    return select_->GetDocument().ToExecutionContext();
+  }
+
+  void Deliver(const MutationRecordVector& records,
+               MutationObserver&) override {
+    // We disconnect the MutationObserver when a popup is closed.  However
+    // MutationObserver can call back after disconnection.
+    if (!select_->PopupIsVisible())
+      return;
+    for (const auto& record : records) {
+      if (record->type() == "attributes") {
+        const auto& element = *To<Element>(record->target());
+        if (record->oldValue() == element.getAttribute(record->attributeName()))
+          continue;
+      } else if (record->type() == "characterData") {
+        if (record->oldValue() == record->target()->nodeValue())
+          continue;
+      }
+      select_type_->DidMutateSubtree();
+      return;
+    }
+  }
+
+  void Dispose() { observer_->disconnect(); }
+
+  void Trace(Visitor* visitor) override {
+    visitor->Trace(select_type_);
+    visitor->Trace(select_);
+    visitor->Trace(observer_);
+    MutationObserver::Delegate::Trace(visitor);
+  }
+
+ private:
+  Member<MenuListSelectType> select_type_;
+  Member<HTMLSelectElement> select_;
+  Member<MutationObserver> observer_;
+};
+
+void MenuListSelectType::ObserveTreeMutation() {
+  DCHECK(!popup_updater_);
+  popup_updater_ = MakeGarbageCollected<PopupUpdater>(*this, *select_);
+}
+
+void MenuListSelectType::UnobserveTreeMutation() {
+  if (!popup_updater_)
+    return;
+  popup_updater_->Dispose();
+  popup_updater_ = nullptr;
+}
+
+void MenuListSelectType::DidMutateSubtree() {
+  DCHECK(select_->PopupIsVisible());
+  DCHECK(select_->popup_);
+  select_->popup_->UpdateFromElement(PopupMenu::kByDOMChange);
 }
 
 // ============================================================================
