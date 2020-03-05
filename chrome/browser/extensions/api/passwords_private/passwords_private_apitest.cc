@@ -15,6 +15,7 @@
 #include "base/numerics/safe_conversions.h"
 #include "base/observer_list.h"
 #include "base/optional.h"
+#include "base/stl_util.h"
 #include "base/strings/string16.h"
 #include "base/strings/string_piece_forward.h"
 #include "base/strings/utf_string_conversions.h"
@@ -218,6 +219,17 @@ class TestDelegate : public PasswordsPrivateDelegate {
                        [&credential](const auto& compromised_credential) {
                          return compromised_credential.id == credential.id;
                        });
+  }
+
+  // Fake implementation of RemoveCompromisedCredential. This succeeds if the
+  // delegate knows of a compromised credential with the same id.
+  bool RemoveCompromisedCredential(
+      const api::passwords_private::CompromisedCredential& credential)
+      override {
+    return base::EraseIf(compromised_credentials_,
+                         [&credential](const auto& compromised_credential) {
+                           return compromised_credential.id == credential.id;
+                         }) != 0;
   }
 
   void SetOptedInForAccountStorage(bool opted_in) {
@@ -439,6 +451,19 @@ IN_PROC_BROWSER_TEST_F(PasswordsPrivateApiTest,
                        ChangeCompromisedCredentialSucceeds) {
   AddCompromisedCredential(0);
   EXPECT_TRUE(RunPasswordsSubtest("changeCompromisedCredentialSucceeds"))
+      << message_;
+}
+
+IN_PROC_BROWSER_TEST_F(PasswordsPrivateApiTest,
+                       RemoveCompromisedCredentialFails) {
+  EXPECT_TRUE(RunPasswordsSubtest("removeCompromisedCredentialFails"))
+      << message_;
+}
+
+IN_PROC_BROWSER_TEST_F(PasswordsPrivateApiTest,
+                       RemoveCompromisedCredentialSucceeds) {
+  AddCompromisedCredential(0);
+  EXPECT_TRUE(RunPasswordsSubtest("removeCompromisedCredentialSucceeds"))
       << message_;
 }
 

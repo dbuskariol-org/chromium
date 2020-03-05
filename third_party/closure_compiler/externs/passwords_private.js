@@ -234,6 +234,15 @@ chrome.passwordsPrivate.changeCompromisedCredential = function(
     credential, new_password, callback) {};
 
 /**
+ * Requests to remove |credential| from the password store. Invokes |callback|
+ * on completion.
+ * @param {!chrome.passwordsPrivate.CompromisedCredential} credential
+ * @param {function():void=} callback
+ */
+chrome.passwordsPrivate.removeCompromisedCredential = function(
+    credential, callback) {};
+
+/**
  * Fired when the saved passwords list has changed, meaning that an entry has
  * been added or removed.
  * @type {!ChromeEvent}

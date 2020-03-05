@@ -433,6 +433,11 @@ bool PasswordsPrivateDelegateImpl::ChangeCompromisedCredential(
                                                               new_password);
 }
 
+bool PasswordsPrivateDelegateImpl::RemoveCompromisedCredential(
+    const api::passwords_private::CompromisedCredential& credential) {
+  return password_check_delegate_.RemoveCompromisedCredential(credential);
+}
+
 void PasswordsPrivateDelegateImpl::OnPasswordsExportProgress(
     password_manager::ExportProgressStatus status,
     const std::string& folder_name) {

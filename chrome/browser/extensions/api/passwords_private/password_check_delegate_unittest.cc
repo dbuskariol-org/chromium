@@ -422,4 +422,53 @@ TEST_F(PasswordCheckDelegateTest, ChangeCompromisedCredentialRemovesDupes) {
           store().stored_passwords().at(kExampleCom).at(0).password_value));
 }
 
+// Test that removing a compromised password fails if the ids don't match.
+TEST_F(PasswordCheckDelegateTest, RemoveCompromisedCredentialIdMismatch) {
+  store().AddLogin(MakeSavedPassword(kExampleCom, kUsername1));
+  store().AddCompromisedCredentials(MakeCompromised(kExampleCom, kUsername1));
+  RunUntilIdle();
+
+  api::passwords_private::CompromisedCredentialsInfo info =
+      delegate().GetCompromisedCredentialsInfo();
+  CompromisedCredential& credential = info.compromised_credentials.at(0);
+  EXPECT_EQ(0, credential.id);
+  credential.id = 1;
+
+  EXPECT_FALSE(delegate().RemoveCompromisedCredential(credential));
+}
+
+// Test that removing a compromised password fails if the underlying compromised
+// credential no longer exists.
+TEST_F(PasswordCheckDelegateTest, RemoveCompromisedCredentialStaleData) {
+  store().AddLogin(MakeSavedPassword(kExampleCom, kUsername1));
+  store().AddCompromisedCredentials(MakeCompromised(kExampleCom, kUsername1));
+  RunUntilIdle();
+
+  api::passwords_private::CompromisedCredentialsInfo info =
+      delegate().GetCompromisedCredentialsInfo();
+  const CompromisedCredential& credential = info.compromised_credentials.at(0);
+
+  store().RemoveLogin(MakeSavedPassword(kExampleCom, kUsername1));
+  RunUntilIdle();
+
+  EXPECT_FALSE(delegate().RemoveCompromisedCredential(credential));
+}
+
+// Test that removing a compromised password succeeds.
+TEST_F(PasswordCheckDelegateTest, RemoveCompromisedCredentialSuccess) {
+  store().AddLogin(MakeSavedPassword(kExampleCom, kUsername1, kPassword1));
+  store().AddCompromisedCredentials(MakeCompromised(kExampleCom, kUsername1));
+  RunUntilIdle();
+
+  api::passwords_private::CompromisedCredentialsInfo info =
+      delegate().GetCompromisedCredentialsInfo();
+  const CompromisedCredential& credential = info.compromised_credentials.at(0);
+  EXPECT_TRUE(delegate().RemoveCompromisedCredential(credential));
+  RunUntilIdle();
+  EXPECT_TRUE(store().IsEmpty());
+
+  // Expect another removal of the same credential to fail.
+  EXPECT_FALSE(delegate().RemoveCompromisedCredential(credential));
+}
+
 }  // namespace extensions

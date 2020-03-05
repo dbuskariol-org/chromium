@@ -17,6 +17,7 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/common/extensions/api/passwords_private.h"
 #include "chrome/grit/generated_resources.h"
+#include "components/autofill/core/common/password_form.h"
 #include "components/keyed_service/core/service_access_type.h"
 #include "components/password_manager/core/browser/android_affiliation/affiliation_utils.h"
 #include "components/password_manager/core/browser/ui/compromised_credentials_provider.h"
@@ -214,6 +215,28 @@ bool PasswordCheckDelegate::ChangeCompromisedCredential(
   // the store, so that observers of the presenter get notified of this event.
   return saved_passwords_presenter_.EditPassword(
       forms[0], base::UTF8ToUTF16(new_password));
+}
+
+bool PasswordCheckDelegate::RemoveCompromisedCredential(
+    const api::passwords_private::CompromisedCredential& credential) {
+  // Try to obtain the original CredentialWithPassword and try to find it in
+  // |credentials_to_forms_|. Return false if either one fails.
+  const CredentialWithPassword* compromised_credential =
+      FindMatchingCompromisedCredential(credential);
+  if (!compromised_credential)
+    return false;
+
+  auto it = credentials_to_forms_.find(*compromised_credential);
+  if (it == credentials_to_forms_.end())
+    return false;
+
+  // Erase all matching credentials from the store. Return whether any
+  // credentials were deleted.
+  SavedPasswordsView saved_passwords = it->second;
+  for (const autofill::PasswordForm& saved_password : saved_passwords)
+    password_store_->RemoveLogin(saved_password);
+
+  return !saved_passwords.empty();
 }
 
 void PasswordCheckDelegate::OnCompromisedCredentialsChanged(

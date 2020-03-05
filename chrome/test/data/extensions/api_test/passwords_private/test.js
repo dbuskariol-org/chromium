@@ -303,6 +303,42 @@ var availableTests = [
           chrome.test.succeed();
         });
   },
+
+  function removeCompromisedCredentialFails() {
+    chrome.passwordsPrivate.removeCompromisedCredential(
+        {
+          id: 0,
+          formattedOrigin: 'example.com',
+          signonRealm: 'https://example.com',
+          username: 'alice',
+          elapsedTimeSinceCompromise: '3 days ago',
+          compromiseType: 'LEAKED',
+        },
+        () => {
+          chrome.test.assertLastError(
+              'Could not remove the compromised credential. Probably no ' +
+              'matching password could be found.');
+          // Ensure that the callback is invoked.
+          chrome.test.succeed();
+        });
+  },
+
+  function removeCompromisedCredentialSucceeds() {
+    chrome.passwordsPrivate.removeCompromisedCredential(
+        {
+          id: 0,
+          formattedOrigin: 'example.com',
+          signonRealm: 'https://example.com',
+          username: 'alice',
+          elapsedTimeSinceCompromise: '3 days ago',
+          compromiseType: 'LEAKED',
+        },
+        () => {
+          chrome.test.assertNoLastError();
+          // Ensure that the callback is invoked.
+          chrome.test.succeed();
+        });
+  },
 ];
 
 var testToRun = window.location.search.substring(1);

@@ -288,4 +288,24 @@ ResponseAction PasswordsPrivateChangeCompromisedCredentialFunction::Run() {
   return RespondNow(NoArguments());
 }
 
+// PasswordsPrivateRemoveCompromisedCredentialFunction:
+PasswordsPrivateRemoveCompromisedCredentialFunction::
+    ~PasswordsPrivateRemoveCompromisedCredentialFunction() = default;
+
+ResponseAction PasswordsPrivateRemoveCompromisedCredentialFunction::Run() {
+  auto parameters =
+      api::passwords_private::RemoveCompromisedCredential::Params::Create(
+          *args_);
+  EXTENSION_FUNCTION_VALIDATE(parameters);
+
+  if (!GetDelegate(browser_context())
+           ->RemoveCompromisedCredential(parameters->credential)) {
+    return RespondNow(
+        Error("Could not remove the compromised credential. Probably no "
+              "matching password could be found."));
+  }
+
+  return RespondNow(NoArguments());
+}
+
 }  // namespace extensions

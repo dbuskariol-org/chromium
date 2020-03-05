@@ -131,6 +131,11 @@ class PasswordsPrivateDelegate : public KeyedService {
   virtual bool ChangeCompromisedCredential(
       const api::passwords_private::CompromisedCredential& credential,
       base::StringPiece new_password) = 0;
+
+  // Attempts to remove |credential| from the password store. Returns whether
+  // the remove succeeded.
+  virtual bool RemoveCompromisedCredential(
+      const api::passwords_private::CompromisedCredential& credential) = 0;
 };
 
 }  // namespace extensions
