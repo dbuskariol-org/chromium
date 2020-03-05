@@ -841,7 +841,7 @@
               'device_type': 'kevin',
               # Special pool is needed for the devices since they also run
               # swarmbucket builds.
-              'pool': 'chrome-cros-dut',
+              'pool': 'chrome-cros-dut.template',
             },
           ],
         },
@@ -1710,7 +1710,7 @@
               'device_type': 'kevin',
               # Special pool is needed for the devices since they also run
               # swarmbucket builds.
-              'pool': 'chrome-cros-dut',
+              'pool': 'chrome-cros-dut.template',
             },
           ],
         },
