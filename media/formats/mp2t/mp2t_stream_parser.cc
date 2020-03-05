@@ -551,12 +551,12 @@ void Mp2tStreamParser::RegisterPes(int pes_pid,
 
   // Create the PES state here.
   DVLOG(1) << "Create a new PES state";
-  std::unique_ptr<TsSection> pes_section_parser(
-      new TsSectionPes(std::move(es_parser), &timestamp_unroller_));
+  auto pes_section_parser = std::make_unique<TsSectionPes>(
+      std::move(es_parser), &timestamp_unroller_);
   PidState::PidType pid_type =
       is_audio ? PidState::kPidAudioPes : PidState::kPidVideoPes;
-  std::unique_ptr<PidState> pes_pid_state(
-      new PidState(pes_pid, pid_type, std::move(pes_section_parser)));
+  auto pes_pid_state = std::make_unique<PidState>(
+      pes_pid, pid_type, std::move(pes_section_parser));
   pids_.insert(std::make_pair(pes_pid, std::move(pes_pid_state)));
 
   // A new PES pid has been added, the PID filter might change.
@@ -670,7 +670,7 @@ void Mp2tStreamParser::OnAudioConfigChanged(
 std::unique_ptr<MediaTracks> GenerateMediaTrackInfo(
     const AudioDecoderConfig& audio_config,
     const VideoDecoderConfig& video_config) {
-  std::unique_ptr<MediaTracks> media_tracks(new MediaTracks());
+  auto media_tracks = std::make_unique<MediaTracks>();
   // TODO(servolk): Implement proper sourcing of media track info as described
   // in crbug.com/590085
   if (audio_config.IsValidConfig()) {
@@ -846,13 +846,13 @@ bool Mp2tStreamParser::EmitRemainingBuffers() {
 
 #if BUILDFLAG(ENABLE_HLS_SAMPLE_AES)
 std::unique_ptr<PidState> Mp2tStreamParser::MakeCatPidState() {
-  std::unique_ptr<TsSection> cat_section_parser(new TsSectionCat(
+  auto cat_section_parser = std::make_unique<TsSectionCat>(
       base::BindRepeating(&Mp2tStreamParser::RegisterCencPids,
                           base::Unretained(this)),
       base::BindRepeating(&Mp2tStreamParser::RegisterEncryptionScheme,
-                          base::Unretained(this))));
-  std::unique_ptr<PidState> cat_pid_state(new PidState(
-      TsSection::kPidCat, PidState::kPidCat, std::move(cat_section_parser)));
+                          base::Unretained(this)));
+  auto cat_pid_state = std::make_unique<PidState>(
+      TsSection::kPidCat, PidState::kPidCat, std::move(cat_section_parser));
   cat_pid_state->Enable();
   return cat_pid_state;
 }
