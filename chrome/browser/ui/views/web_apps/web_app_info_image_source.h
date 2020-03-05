@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_EXTENSIONS_WEB_APP_INFO_IMAGE_SOURCE_H_
-#define CHROME_BROWSER_UI_VIEWS_EXTENSIONS_WEB_APP_INFO_IMAGE_SOURCE_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_WEB_APPS_WEB_APP_INFO_IMAGE_SOURCE_H_
+#define CHROME_BROWSER_UI_VIEWS_WEB_APPS_WEB_APP_INFO_IMAGE_SOURCE_H_
 
 #include <map>
 
@@ -28,4 +28,4 @@ class WebAppInfoImageSource : public gfx::ImageSkiaSource {
   DISALLOW_COPY_AND_ASSIGN(WebAppInfoImageSource);
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_EXTENSIONS_WEB_APP_INFO_IMAGE_SOURCE_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_WEB_APPS_WEB_APP_INFO_IMAGE_SOURCE_H_

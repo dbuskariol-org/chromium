@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/extensions/web_app_confirmation_view.h"
+#include "chrome/browser/ui/views/web_apps/web_app_confirmation_view.h"
 
 #include <memory>
 #include <utility>
@@ -13,13 +13,13 @@
 #include "base/strings/string_util.h"
 #include "build/build_config.h"
 #include "chrome/browser/ui/views/chrome_layout_provider.h"
-#include "chrome/browser/ui/views/extensions/web_app_info_image_source.h"
+#include "chrome/browser/ui/views/web_apps/web_app_info_image_source.h"
+#include "chrome/browser/web_applications/components/web_app_constants.h"
 #include "chrome/common/chrome_features.h"
 #include "chrome/grit/generated_resources.h"
 #include "components/constrained_window/constrained_window_views.h"
 #include "components/strings/grit/components_strings.h"
 #include "content/public/browser/web_contents.h"
-#include "extensions/common/constants.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/resource/resource_bundle.h"
@@ -67,11 +67,10 @@ WebAppConfirmationView::WebAppConfirmationView(
                         textfield_width, 0);
 
   auto icon_image_view = std::make_unique<views::ImageView>();
-  gfx::Size image_size(extension_misc::EXTENSION_ICON_SMALL,
-                       extension_misc::EXTENSION_ICON_SMALL);
+  gfx::Size image_size(web_app::kWebAppIconSmall, web_app::kWebAppIconSmall);
   gfx::ImageSkia image(
-      std::make_unique<WebAppInfoImageSource>(
-          extension_misc::EXTENSION_ICON_SMALL, web_app_info_->icon_bitmaps),
+      std::make_unique<WebAppInfoImageSource>(web_app::kWebAppIconSmall,
+                                              web_app_info_->icon_bitmaps),
       image_size);
   icon_image_view->SetImageSize(image_size);
   icon_image_view->SetImage(image);

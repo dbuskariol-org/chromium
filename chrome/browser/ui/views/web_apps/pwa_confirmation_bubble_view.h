@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_EXTENSIONS_PWA_CONFIRMATION_BUBBLE_VIEW_H_
-#define CHROME_BROWSER_UI_VIEWS_EXTENSIONS_PWA_CONFIRMATION_BUBBLE_VIEW_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_WEB_APPS_PWA_CONFIRMATION_BUBBLE_VIEW_H_
+#define CHROME_BROWSER_UI_VIEWS_WEB_APPS_PWA_CONFIRMATION_BUBBLE_VIEW_H_
 
 #include "chrome/browser/ui/browser_dialogs.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_bubble_delegate_view.h"
@@ -37,4 +37,4 @@ class PWAConfirmationBubbleView : public LocationBarBubbleDelegateView {
   DISALLOW_COPY_AND_ASSIGN(PWAConfirmationBubbleView);
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_EXTENSIONS_PWA_CONFIRMATION_BUBBLE_VIEW_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_WEB_APPS_PWA_CONFIRMATION_BUBBLE_VIEW_H_

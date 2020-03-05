@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/extensions/pwa_confirmation_bubble_view.h"
+#include "chrome/browser/ui/views/web_apps/pwa_confirmation_bubble_view.h"
 
 #include "base/strings/string16.h"
 #include "base/strings/string_util.h"
@@ -10,14 +10,13 @@
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/views/chrome_layout_provider.h"
 #include "chrome/browser/ui/views/chrome_typography.h"
-#include "chrome/browser/ui/views/extensions/web_app_info_image_source.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
 #include "chrome/browser/ui/views/frame/toolbar_button_provider.h"
 #include "chrome/browser/ui/views/page_action/page_action_icon_view.h"
+#include "chrome/browser/ui/views/web_apps/web_app_info_image_source.h"
 #include "chrome/grit/generated_resources.h"
 #include "components/strings/grit/components_strings.h"
 #include "components/url_formatter/elide_url.h"
-#include "extensions/common/constants.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/gfx/image/image_skia.h"
 #include "ui/gfx/text_elider.h"
@@ -172,8 +171,8 @@ void ShowPWAInstallBubble(content::WebContents* web_contents,
       browser_view->toolbar_button_provider()->GetAnchorView(
           PageActionIconType::kPwaInstall);
   PageActionIconView* icon =
-      browser_view->toolbar_button_provider()
-          ->GetPageActionIconView(PageActionIconType::kPwaInstall);
+      browser_view->toolbar_button_provider()->GetPageActionIconView(
+          PageActionIconType::kPwaInstall);
 
   g_bubble_ = new PWAConfirmationBubbleView(
       anchor_view, icon, std::move(web_app_info), std::move(callback));
