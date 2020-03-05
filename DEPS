@@ -1280,6 +1280,9 @@ deps = {
   'src/third_party/pywebsocket/src':
     Var('chromium_git') + '/external/github.com/google/pywebsocket.git' + '@' + '2d7b73c3acbd0f41dcab487ae5c97c6feae06ce2',
 
+  'src/third_party/pywebsocket3/src':
+    Var('chromium_git') + '/external/github.com/GoogleChromeLabs/pywebsocket3.git' + '@' + '89c9228434100e4dabb19f61d0d4f55625940638',
+
   'src/third_party/qemu-linux-arm64': {
       'packages': [
           {
