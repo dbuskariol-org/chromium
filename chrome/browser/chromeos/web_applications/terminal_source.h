@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_CHROMEOS_TERMINAL_TERMINAL_SOURCE_H_
-#define CHROME_BROWSER_UI_WEBUI_CHROMEOS_TERMINAL_TERMINAL_SOURCE_H_
+// TODO(crbug.com/1057510): Move TerminalSource to chromeos/components
+
+#ifndef CHROME_BROWSER_CHROMEOS_WEB_APPLICATIONS_TERMINAL_SOURCE_H_
+#define CHROME_BROWSER_CHROMEOS_WEB_APPLICATIONS_TERMINAL_SOURCE_H_
 
 #include <string>
 
@@ -45,4 +47,4 @@ class TerminalSource : public content::URLDataSource {
   DISALLOW_COPY_AND_ASSIGN(TerminalSource);
 };
 
-#endif  // CHROME_BROWSER_UI_WEBUI_CHROMEOS_TERMINAL_TERMINAL_SOURCE_H_
+#endif  // CHROME_BROWSER_CHROMEOS_WEB_APPLICATIONS_TERMINAL_SOURCE_H_

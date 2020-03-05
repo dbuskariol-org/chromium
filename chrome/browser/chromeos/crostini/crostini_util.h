@@ -181,9 +181,10 @@ const std::string& GetDeletedTerminalId();
 // We use an arbitrary well-formed extension id for the Terminal app, this
 // is equal to GenerateId("Terminal").
 constexpr char kCrostiniTerminalId[] = "oajcgpnkmhaalajejhlfpacbiokdnnfe";
-// web_app::GenerateAppIdFromURL("chrome://terminal/html/terminal.html")
+// web_app::GenerateAppIdFromURL(
+//     GURL("chrome-untrusted://terminal/html/terminal.html"))
 constexpr char kCrostiniTerminalSystemAppId[] =
-    "oapmgeobaaddjmlgbbjbdhapidbomlgg";
+    "fhicihalidkgcimdmhpohldehjmcabcf";
 
 constexpr char kCrostiniDefaultVmName[] = "termina";
 constexpr char kCrostiniDefaultContainerName[] = "penguin";

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/chromeos/terminal/terminal_source.h"
+#include "chrome/browser/chromeos/web_applications/terminal_source.h"
 
 #include "base/containers/flat_map.h"
 #include "base/files/file_path.h"
@@ -87,7 +87,7 @@ TerminalSource::TerminalSource(Profile* profile) : profile_(profile) {}
 TerminalSource::~TerminalSource() = default;
 
 std::string TerminalSource::GetSource() {
-  return chrome::kChromeUITerminalHost;
+  return chrome::kChromeUIUntrustedTerminalURL;
 }
 
 #if !BUILDFLAG(OPTIMIZE_WEBUI)
