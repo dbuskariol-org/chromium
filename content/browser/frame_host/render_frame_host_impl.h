@@ -1413,6 +1413,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // blink::LocalMainFrameHost overrides:
   void ScaleFactorChanged(float scale) override;
+  void ContentsPreferredSizeChanged(const gfx::Size& pref_size) override;
 
  protected:
   friend class RenderFrameHostFactory;

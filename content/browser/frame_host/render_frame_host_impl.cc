@@ -3273,6 +3273,11 @@ void RenderFrameHostImpl::ScaleFactorChanged(float scale) {
   delegate_->OnPageScaleFactorChanged(this, scale);
 }
 
+void RenderFrameHostImpl::ContentsPreferredSizeChanged(
+    const gfx::Size& pref_size) {
+  render_view_host_->OnDidContentsPreferredSizeChange(pref_size);
+}
+
 void RenderFrameHostImpl::UpdateFaviconURL(
     std::vector<blink::mojom::FaviconURLPtr> favicon_urls) {
   delegate_->UpdateFaviconURL(this, std::move(favicon_urls));
