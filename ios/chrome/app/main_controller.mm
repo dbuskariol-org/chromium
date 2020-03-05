@@ -594,6 +594,14 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 // This initialization must only happen once there's at least one Chrome window
 // open.
 - (void)startUpAfterFirstWindowCreated {
+  // "Low priority" tasks
+  [_startupTasks registerForApplicationWillResignActiveNotification];
+  [self registerForOrientationChangeNotifications];
+
+  _launchOptions = nil;
+
+  [self scheduleTasksRequiringBVCWithBrowserState];
+
   CustomizeUIAppearance();
 
   [self scheduleStartupCleanupTasks];
@@ -638,16 +646,11 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
         [[CrashRestoreHelper alloc] initWithBrowser:self.mainBrowser];
   }
 
-  // "Low priority" tasks
-  [_startupTasks registerForApplicationWillResignActiveNotification];
-  [self registerForOrientationChangeNotifications];
-
   [self.sceneController openTabFromLaunchOptions:_launchOptions
                               startupInformation:self
                                         appState:self.appState];
-  _launchOptions = nil;
 
-  [self scheduleTasksRequiringBVCWithBrowserState];
+  [self scheduleShowPromo];
 
   // Before bringing up the UI, make sure the launch mode is correct, and
   // check for previous crashes.
@@ -1124,7 +1127,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
             base::TimeDelta::FromSeconds(kExternalFilesCleanupDelaySeconds),
             base::OnceClosure());
   }
-  [self scheduleShowPromo];
 }
 
 - (void)scheduleDeleteDownloadsDirectory {
