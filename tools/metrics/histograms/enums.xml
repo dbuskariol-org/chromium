@@ -10231,6 +10231,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="CompositorFrameSinkSubmitResult">
+  <obsolete>
+    Expired 2020-03-01.
+  </obsolete>
   <int value="0" label="Accepted"/>
   <int value="1" label="CopyOutputResults not allowed"/>
   <int value="2" label="Surface Invariants Violation (deprecated)"/>
