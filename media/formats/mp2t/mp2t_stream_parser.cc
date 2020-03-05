@@ -405,7 +405,7 @@ std::unique_ptr<EsParser> Mp2tStreamParser::CreateH264Parser(int pes_pid) {
 }
 
 std::unique_ptr<EsParser> Mp2tStreamParser::CreateAacParser(int pes_pid) {
-  auto on_audio_config_changed = base::Bind(
+  auto on_audio_config_changed = base::BindRepeating(
       &Mp2tStreamParser::OnAudioConfigChanged, base::Unretained(this), pes_pid);
   auto on_emit_audio_buffer = base::BindRepeating(
       &Mp2tStreamParser::OnEmitAudioBuffer, base::Unretained(this), pes_pid);
@@ -416,7 +416,7 @@ std::unique_ptr<EsParser> Mp2tStreamParser::CreateAacParser(int pes_pid) {
 
 std::unique_ptr<EsParser> Mp2tStreamParser::CreateMpeg1AudioParser(
     int pes_pid) {
-  auto on_audio_config_changed = base::Bind(
+  auto on_audio_config_changed = base::BindRepeating(
       &Mp2tStreamParser::OnAudioConfigChanged, base::Unretained(this), pes_pid);
   auto on_emit_audio_buffer = base::BindRepeating(
       &Mp2tStreamParser::OnEmitAudioBuffer, base::Unretained(this), pes_pid);
@@ -453,7 +453,7 @@ std::unique_ptr<EsParser> Mp2tStreamParser::CreateEncryptedH264Parser(
 std::unique_ptr<EsParser> Mp2tStreamParser::CreateEncryptedAacParser(
     int pes_pid,
     bool emit_clear_buffers) {
-  auto on_audio_config_changed = base::Bind(
+  auto on_audio_config_changed = base::BindRepeating(
       &Mp2tStreamParser::OnAudioConfigChanged, base::Unretained(this), pes_pid);
   auto on_emit_audio_buffer = base::BindRepeating(
       &Mp2tStreamParser::OnEmitAudioBuffer, base::Unretained(this), pes_pid);
