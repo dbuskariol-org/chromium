@@ -2870,14 +2870,6 @@
 
   <!-- Device Page -->
   <if expr="chromeos">
-    <message name="IDS_SETTINGS_DEVICE_TITLE" desc="Name of the settings page which displays device and peripheral settings.">
-      Device
-    </message>
-    <!-- Touchpad -->
-    <message name="IDS_SETTINGS_SCROLL_LABEL" desc="In Device Settings, the title above the radio buttons to choose the scrolling behavior.">
-      Scrolling
-    </message>
-
     <!-- Storage -->
     <message name="IDS_SETTINGS_STORAGE_TITLE" desc="In Device Settings, the title for storage management.">
       Storage management
