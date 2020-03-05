@@ -1416,7 +1416,6 @@ crbug.com/711709 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floa
 crbug.com/711709 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats-clear/floats-130.xht [ Skip ]
 crbug.com/711709 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats-clear/floats-131.xht [ Skip ]
 crbug.com/711709 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats-clear/floats-137.xht [ Skip ]
-crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/positioning/toogle-abspos-on-relpos-inline-child.html [ Failure ]
 crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/float-nowrap-7.html [ Failure ]
 crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/float-nowrap-8.html [ Failure ]
 crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/float-nowrap-9.html [ Failure ]
