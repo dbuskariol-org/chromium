@@ -281,18 +281,23 @@ class SharedImageRepresentationDawnIOSurface
   }
 
   WGPUTexture BeginAccess(WGPUTextureUsage usage) final {
-    WGPUTextureDescriptor desc;
-    desc.nextInChain = nullptr;
-    desc.format = wgpu_format_;
-    desc.usage = usage;
-    desc.dimension = WGPUTextureDimension_2D;
-    desc.size = {size().width(), size().height(), 1};
-    desc.arrayLayerCount = 1;
-    desc.mipLevelCount = 1;
-    desc.sampleCount = 1;
+    WGPUTextureDescriptor texture_descriptor;
+    texture_descriptor.nextInChain = nullptr;
+    texture_descriptor.format = wgpu_format_;
+    texture_descriptor.usage = usage;
+    texture_descriptor.dimension = WGPUTextureDimension_2D;
+    texture_descriptor.size = {size().width(), size().height(), 1};
+    texture_descriptor.arrayLayerCount = 1;
+    texture_descriptor.mipLevelCount = 1;
+    texture_descriptor.sampleCount = 1;
 
-    texture_ =
-        dawn_native::metal::WrapIOSurface(device_, &desc, io_surface_.get(), 0);
+    dawn_native::metal::ExternalImageDescriptorIOSurface descriptor;
+    descriptor.cTextureDescriptor = &texture_descriptor;
+    descriptor.isCleared = IsCleared();
+    descriptor.ioSurface = io_surface_.get();
+    descriptor.plane = 0;
+
+    texture_ = dawn_native::metal::WrapIOSurface(device_, &descriptor);
 
     if (texture_) {
       // Keep a reference to the texture so that it stays valid (its content
