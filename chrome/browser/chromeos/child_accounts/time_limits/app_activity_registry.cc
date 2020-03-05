@@ -190,8 +190,13 @@ void AppActivityRegistry::OnAppUninstalled(const AppId& app_id) {
 }
 
 void AppActivityRegistry::OnAppAvailable(const AppId& app_id) {
-  if (base::Contains(activity_registry_, app_id))
-    SetAppState(app_id, AppState::kAvailable);
+  if (!base::Contains(activity_registry_, app_id))
+    return;
+
+  if (GetAppState(app_id) == AppState::kLimitReached)
+    return;
+
+  SetAppState(app_id, AppState::kAvailable);
 }
 
 void AppActivityRegistry::OnAppBlocked(const AppId& app_id) {
@@ -204,6 +209,18 @@ void AppActivityRegistry::OnAppActive(const AppId& app_id,
                                       base::Time timestamp) {
   if (!base::Contains(activity_registry_, app_id))
     return;
+
+  // We are notified that a paused app is active. Notify observers to pause it.
+  if (GetAppState(app_id) == AppState::kLimitReached) {
+    for (auto& observer : app_state_observers_) {
+      const base::Optional<AppLimit>& limit =
+          activity_registry_.at(app_id).limit;
+      DCHECK(limit->daily_limit());
+      observer.OnAppLimitReached(app_id, limit->daily_limit().value(),
+                                 /* was_active */ true);
+    }
+    return;
+  }
 
   if (app_id == GetChromeAppId())
     return;
@@ -473,6 +490,11 @@ void AppActivityRegistry::OnChromeAppActivityChanged(
 
   bool is_active = (state == ChromeAppActivityState::kActive);
 
+  // No need to notify observers that limit has reached. They will be notified
+  // in AppActivityRegistry::OnAppActive.
+  if (GetAppState(chrome_app_id) == AppState::kLimitReached && is_active)
+    return;
+
   // No change in state.
   if (was_active == is_active)
     return;
@@ -622,7 +644,7 @@ void AppActivityRegistry::SetAppState(const AppId& app_id, AppState app_state) {
     if (app_activity.is_active()) {
       was_active = true;
       app_details.active_windows.clear();
-      app_activity.SetAppInactive(base::Time::Now());
+      SetAppInactive(app_id, base::Time::Now());
     }
 
     for (auto& observer : app_state_observers_) {
