@@ -58,10 +58,9 @@ class CastReceiver {
   // PacketReceiver.  Can be called from any thread.
   virtual void ReceivePacket(std::unique_ptr<Packet> packet) = 0;
 
-  // Polling interface to get audio and video frames from the CastReceiver.  The
+  // Polling interface to get audio and video frames from the CastReceiver. The
   // the RequestDecodedXXXXXFrame() methods utilize internal software-based
-  // decoding, while the RequestEncodedXXXXXFrame() methods provides
-  // still-encoded frames for use with external/hardware decoders.
+  // decoding.
   //
   // In all cases, the given |callback| is guaranteed to be run at some point in
   // the future, except for those requests still enqueued at destruction time.
@@ -69,12 +68,8 @@ class CastReceiver {
   // These methods should all be called on the CastEnvironment's MAIN thread.
   virtual void RequestDecodedAudioFrame(
       const AudioFrameDecodedCallback& callback) = 0;
-  virtual void RequestEncodedAudioFrame(
-      const ReceiveEncodedFrameCallback& callback) = 0;
   virtual void RequestDecodedVideoFrame(
       const VideoFrameDecodedCallback& callback) = 0;
-  virtual void RequestEncodedVideoFrame(
-      const ReceiveEncodedFrameCallback& callback) = 0;
 
   virtual ~CastReceiver() {}
 };
