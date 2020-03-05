@@ -45,6 +45,7 @@ using ::testing::Invoke;
 using ::testing::IsEmpty;
 using ::testing::NiceMock;
 using ::testing::Not;
+using ::testing::NotNull;
 using ::testing::Pair;
 using ::testing::Pointee;
 using ::testing::Property;
@@ -2104,6 +2105,18 @@ TEST_F(ControllerTest, SecondPromptActionShouldDefaultToExpandSheet) {
   EXPECT_TRUE(controller_->ShouldPromptActionExpandSheet());
   ASSERT_THAT(controller_->GetUserActions(), SizeIs(1));
   EXPECT_EQ(controller_->GetUserActions()[0].chip().text, "next");
+}
+
+TEST_F(ControllerTest, SetGenericUi) {
+  {
+    testing::InSequence seq;
+    EXPECT_CALL(mock_observer_, OnGenericUserInterfaceChanged(NotNull()));
+    EXPECT_CALL(mock_observer_, OnGenericUserInterfaceChanged(nullptr));
+  }
+  controller_->SetGenericUi(
+      std::make_unique<GenericUserInterfaceProto>(GenericUserInterfaceProto()),
+      base::DoNothing());
+  controller_->ClearGenericUi();
 }
 
 }  // namespace autofill_assistant
