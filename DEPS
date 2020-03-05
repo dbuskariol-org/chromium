@@ -4267,7 +4267,7 @@ hooks = [
       # enough to eject old toolchains from the cache.
       '--clear-sdk-cache',
       '--log-level=error',
-      'exit',
+      '--no-shell',
     ],
   },
   {
@@ -4284,7 +4284,7 @@ hooks = [
       '--board={cros_board}',
       '--cache-dir=src/build/cros_cache/',
       '--log-level=error',
-      'exit',
+      '--no-shell',
     ],
   },
 
