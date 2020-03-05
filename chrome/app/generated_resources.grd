@@ -3602,6 +3602,9 @@ are declared in tools/grit/grit_rule.gni.
           Profile Importer
         </message>
       </if>
+      <message name="IDS_UTILITY_PROCESS_QRCODE_GENERATOR_SERVICE_NAME" desc="The name of the utility process used for encoding QR codes.">
+        QR Code Generator
+      </message>
       <if expr="is_win">
         <message name="IDS_UTILITY_PROCESS_WIFI_CREDENTIALS_GETTER_NAME" desc="The name of the utility process used for getting the WiFi credentials">
           WiFi Credentials Getter
