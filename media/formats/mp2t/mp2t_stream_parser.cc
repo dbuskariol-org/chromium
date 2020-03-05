@@ -377,10 +377,10 @@ void Mp2tStreamParser::RegisterPmt(int program_number, int pmt_pid) {
 
   // Create the PMT state here if needed.
   DVLOG(1) << "Create a new PMT parser";
-  std::unique_ptr<TsSection> pmt_section_parser(new TsSectionPmt(
-      base::Bind(&Mp2tStreamParser::RegisterPes, base::Unretained(this))));
-  std::unique_ptr<PidState> pmt_pid_state(
-      new PidState(pmt_pid, PidState::kPidPmt, std::move(pmt_section_parser)));
+  auto pmt_section_parser = std::make_unique<TsSectionPmt>(base::BindRepeating(
+      &Mp2tStreamParser::RegisterPes, base::Unretained(this)));
+  auto pmt_pid_state = std::make_unique<PidState>(
+      pmt_pid, PidState::kPidPmt, std::move(pmt_section_parser));
   pmt_pid_state->Enable();
   pids_.insert(std::make_pair(pmt_pid, std::move(pmt_pid_state)));
 
