@@ -2,12 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//build/config/allocator.gni")
 import("//testing/test.gni")
 
 component("gc") {
   sources = [
     "core/gc.cc",
     "core/gc_export.h",
+    "public/platform.h",
   ]
 
   deps = []
@@ -15,13 +17,37 @@ component("gc") {
   defines = [ "GC_IMPLEMENTATION=1" ]
 }
 
+source_set("test_support") {
+  testonly = true
+
+  sources = []
+
+  if (use_partition_alloc) {
+    sources += [
+      "test/base_allocator.cc",
+      "test/base_allocator.h",
+    ]
+  }
+
+  deps = [
+    ":gc",
+    "//base",
+  ]
+}
+
 source_set("unit_tests") {
   testonly = true
 
   sources = []
 
+  if (use_partition_alloc) {
+    sources += [ "test/base_allocator_test.cc" ]
+  }
+
   deps = [
     ":gc",
+    ":test_support",
+    "//base",
     "//testing/gtest",
   ]
 }
