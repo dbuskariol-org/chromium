@@ -780,6 +780,7 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
                       TestCase("showGridViewDrive"),
                       TestCase("showGridViewButtonSwitches"),
                       TestCase("showGridViewKeyboardSelectionA11y"),
+                      TestCase("showGridViewTitles").FilesNg(),
                       TestCase("showGridViewMouseSelectionA11y")));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
