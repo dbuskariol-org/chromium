@@ -84,6 +84,8 @@ android_library("content_java") {
     "//third_party/blink/public/mojom:android_mojo_bindings_java",
     "//third_party/blink/public/mojom:mojom_core_java",
     "//third_party/blink/public/mojom:mojom_platform_java",
+    "//third_party/blink/public/mojom/blob:blob_java",
+    "//third_party/blink/public/mojom/native_file_system:native_file_system_java",
     "//third_party/jsr-305:jsr_305_javalib",
     "//ui/android:ui_java",
     "//ui/gfx/geometry/mojom:mojom_java",
