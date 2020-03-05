@@ -22,6 +22,14 @@ async function showGridView(rootPath, expectedSet) {
   // Open Files app on |rootPath|.
   const appId = await setupAndWaitUntilReady(rootPath);
 
+  // Dismiss the Drive banner so Grid View can display the all entries.
+  if (rootPath === RootPath.DRIVE) {
+    if (await isFilesNg(appId)) {
+      await remoteCall.waitAndClickElement(
+          appId, '.drive-welcome-wrapper .banner-close');
+    }
+  }
+
   // Click the grid view button.
   await remoteCall.waitForElement(appId, '#view-button');
   await remoteCall.callRemoteTestUtil(
