@@ -2105,7 +2105,7 @@
   {
     "name": "enable-zero-state-app-reinstall-suggestions",
     "owners": ["robsc", "napper", "jennyz"],
-    "expiry_milestone": 80
+    "expiry_milestone": 90
   },
   {
     "name": "enable-zero-state-suggestions",
