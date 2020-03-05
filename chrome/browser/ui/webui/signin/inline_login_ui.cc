@@ -72,6 +72,9 @@ content::WebUIDataSource* CreateWebUIDataSource() {
   source->AddResourcePath("edu_login_template.js",
                           IDR_EDU_LOGIN_EDU_LOGIN_TEMPLATE_JS);
   source->AddResourcePath("edu_login_css.js", IDR_EDU_LOGIN_EDU_LOGIN_CSS_JS);
+  source->AddResourcePath("browser_proxy.js", IDR_EDU_LOGIN_BROWSER_PROXY_JS);
+  source->AddResourcePath("edu_login_util.js", IDR_EDU_LOGIN_EDU_LOGIN_UTIL_JS);
+
   AddEduStrings(source);
 #endif
 

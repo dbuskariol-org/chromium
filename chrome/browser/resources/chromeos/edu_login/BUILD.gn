@@ -9,8 +9,10 @@ js_type_check("closure_compile") {
   is_polymer3 = true
   deps = [
     ":app",
+    ":browser_proxy",
     ":edu_login_button",
     ":edu_login_template",
+    ":edu_login_util",
   ]
 }
 
@@ -32,6 +34,17 @@ js_library("edu_login_template") {
   deps = [
     "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
   ]
+}
+
+js_library("browser_proxy") {
+  deps = [
+    ":edu_login_util",
+    "//ui/webui/resources/js:cr.m",
+  ]
+  externs_list = [ "$externs_path/chrome_send.js" ]
+}
+
+js_library("edu_login_util") {
 }
 
 polymer_modulizer("app") {
