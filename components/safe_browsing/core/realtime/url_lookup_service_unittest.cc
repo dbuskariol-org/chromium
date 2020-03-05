@@ -22,6 +22,7 @@ class RealTimeUrlLookupServiceTest : public PlatformTest {
  public:
   void SetUp() override {
     HostContentSettingsMap::RegisterProfilePrefs(test_pref_service_.registry());
+    safe_browsing::RegisterProfilePrefs(test_pref_service_.registry());
     task_environment_ = CreateTestTaskEnvironment(
         base::test::TaskEnvironment::TimeSource::MOCK_TIME);
     PlatformTest::SetUp();
@@ -104,6 +105,8 @@ TEST_F(RealTimeUrlLookupServiceTest, TestFillRequestProto) {
     auto result = FillRequestProto(url);
     EXPECT_EQ(sanitize_url_cases[i].expected_url, result->url());
     EXPECT_EQ(RTLookupRequest::NAVIGATION, result->lookup_type());
+    EXPECT_EQ(ChromeUserPopulation::SAFE_BROWSING,
+              result->population().user_population());
   }
 }
 
