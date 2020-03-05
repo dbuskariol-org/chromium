@@ -631,6 +631,16 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
     }
 
     /**
+     * Starts the autofill assistant with the given intent. Exists to allow tests to stub out this
+     * functionality.
+     */
+    protected void startAutofillAssistantWithIntent(
+            Intent targetIntent, String browserFallbackUrl) {
+        AutofillAssistantFacade.start(
+                ((TabImpl) mTab).getActivity(), targetIntent.getExtras(), browserFallbackUrl);
+    }
+
+    /**
      * @return Whether or not we have a valid {@link Tab} available.
      */
     private boolean hasValidTab() {
@@ -654,9 +664,8 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
                 && AutofillAssistantFacade.isAutofillAssistantByIntentTriggeringEnabled(
                         targetIntent)
                 && isSerpReferrer()) {
-            if (params.getTab() != null) {
-                AutofillAssistantFacade.start(((TabImpl) params.getTab()).getActivity(),
-                        targetIntent.getExtras(), browserFallbackUrl);
+            if (mTab != null) {
+                startAutofillAssistantWithIntent(targetIntent, browserFallbackUrl);
             }
             return true;
         }
