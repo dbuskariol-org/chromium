@@ -81,12 +81,11 @@ void CastReceiverImpl::RequestDecodedAudioFrame(
     const AudioFrameDecodedCallback& callback) {
   DCHECK(cast_environment_->CurrentlyOn(CastEnvironment::MAIN));
   DCHECK(!callback.is_null());
-  audio_receiver_.RequestEncodedFrame(base::Bind(
+  audio_receiver_.RequestEncodedFrame(base::BindRepeating(
       &CastReceiverImpl::DecodeEncodedAudioFrame,
       // Note: Use of Unretained is safe since this Closure is guaranteed to be
       // invoked or discarded by |audio_receiver_| before destruction of |this|.
-      base::Unretained(this),
-      callback));
+      base::Unretained(this), callback));
 }
 
 void CastReceiverImpl::RequestEncodedAudioFrame(
@@ -99,12 +98,11 @@ void CastReceiverImpl::RequestDecodedVideoFrame(
     const VideoFrameDecodedCallback& callback) {
   DCHECK(cast_environment_->CurrentlyOn(CastEnvironment::MAIN));
   DCHECK(!callback.is_null());
-  video_receiver_.RequestEncodedFrame(base::Bind(
+  video_receiver_.RequestEncodedFrame(base::BindRepeating(
       &CastReceiverImpl::DecodeEncodedVideoFrame,
       // Note: Use of Unretained is safe since this Closure is guaranteed to be
       // invoked or discarded by |video_receiver_| before destruction of |this|.
-      base::Unretained(this),
-      callback));
+      base::Unretained(this), callback));
 }
 
 void CastReceiverImpl::RequestEncodedVideoFrame(
