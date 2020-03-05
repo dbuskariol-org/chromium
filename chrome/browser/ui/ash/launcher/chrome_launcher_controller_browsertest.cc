@@ -9,6 +9,7 @@
 #include "ash/public/cpp/app_list/app_list_features.h"
 #include "ash/public/cpp/app_list/app_list_switches.h"
 #include "ash/public/cpp/app_menu_constants.h"
+#include "ash/public/cpp/ash_features.h"
 #include "ash/public/cpp/shelf_item_delegate.h"
 #include "ash/public/cpp/shelf_model.h"
 #include "ash/public/cpp/shelf_test_api.h"
@@ -2269,8 +2270,10 @@ class HotseatShelfAppBrowserTest : public ShelfAppBrowserTest {
 
   // ShelfAppBrowserTest:
   void SetUp() override {
-    scoped_feature_list_.InitAndEnableFeature(
-        chromeos::features::kShelfHotseat);
+    // Disable contextual nudges to prevent in-app to home nudge from being
+    // announced in the ChromeVox test.
+    scoped_feature_list_.InitWithFeatures({chromeos::features::kShelfHotseat},
+                                          {ash::features::kContextualNudges});
     ShelfAppBrowserTest::SetUp();
   }
 
