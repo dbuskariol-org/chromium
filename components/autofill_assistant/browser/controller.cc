@@ -1612,7 +1612,7 @@ void Controller::DidFinishNavigation(
     if (current_host != script_domain_ &&
         !IsSubdomainOf(current_host, script_domain_)) {
       OnScriptError(l10n_util::GetStringUTF8(IDS_AUTOFILL_ASSISTANT_GIVE_UP),
-                    Metrics::DropOutReason::NAVIGATION);
+                    Metrics::DropOutReason::DOMAIN_CHANGE_DURING_BROWSE_MODE);
     }
   }
 

@@ -3984,6 +3984,7 @@ Unknown properties are collapsed to zero. -->
   <int value="18" label="Get scripts unparsable"/>
   <int value="19" label="No initial scripts"/>
   <int value="20" label="Installing the feature module failed"/>
+  <int value="21" label="User navigation to a different domain in BROWSE mode"/>
 </enum>
 
 <enum name="AutofillAssistantFeatureModuleInstallation">

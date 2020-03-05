@@ -1371,7 +1371,9 @@ TEST_F(ControllerTest, BrowseStateStopsOnDifferentDomain) {
   EXPECT_EQ(AutofillAssistantState::BROWSE, controller_->GetState());
 
   // Shut down once the user moves to a different domain
-  EXPECT_CALL(fake_client_, Shutdown(Metrics::DropOutReason::NAVIGATION));
+  EXPECT_CALL(
+      fake_client_,
+      Shutdown(Metrics::DropOutReason::DOMAIN_CHANGE_DURING_BROWSE_MODE));
   SimulateNavigateToUrl(GURL("http://other-example.com/"));
 }
 
