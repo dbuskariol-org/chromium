@@ -4489,4 +4489,27 @@ You can manage this account’s settings by installing the Family Link app on yo
   <message name="IDS_SAML_SECURITY_TOKEN_PIN_DIALOG_TRY_AGAIN" desc="Message asking the user to try again in the security token PIN input dialog during the SAML sign-in.">
     Please try again.
   </message>
+
+  <!-- Powerwash request strings -->
+  <message name="IDS_POWERWASH_REQUEST_TITLE" desc="Title of a notification asking user to powerwash the device">
+    Update required
+  </message>
+  <message name="IDS_POWERWASH_REQUEST_MESSAGE_FOR_ARC" desc="Message of the notification for user trying to start ARC application">
+    To start Google Play, <ph name="ORGANIZATION_NAME">$1</ph> requires you to back up your data and reset this Chromebook to factory settings.
+  </message>
+  <message name="IDS_POWERWASH_REQUEST_MESSAGE_FOR_CROSTINI" desc="Message of the notification for user trying to start Crostini application">
+    To start Linux, <ph name="ORGANIZATION_NAME">$1</ph> requires you to back up your data and reset this Chromebook to factory settings.
+  </message>
+    <message name="IDS_POWERWASH_REQUEST_MESSAGE_BUTTON" desc="Name of the button appearing in the notification">
+    Learn more
+  </message>
+  <message name="IDS_POWERWASH_REQUEST_UNDEFINED_STATE_ERROR_TITLE" desc="Title of a notification asking user to try again because failed to determine powerwash status">
+    Error launching application
+  </message>
+  <message name="IDS_POWERWASH_REQUEST_UNDEFINED_STATE_ERROR_MESSAGE_FOR_ARC" desc="Message of the notification for user trying to start ARC application while powerwash state is not determined yet">
+    Please try to start Google Play again in a few moments.
+  </message>
+  <message name="IDS_POWERWASH_REQUEST_UNDEFINED_STATE_ERROR_MESSAGE_FOR_CROSTINI" desc="Message of the notification for user trying to start Crostini application while powerwash state is not determined yet">
+    Please try to start Linux again in a few moments.
+  </message>
 </grit-part>
