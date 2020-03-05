@@ -1793,7 +1793,7 @@ void NavigationRequest::OnResponseStarted(
       // The CORP check for nested navigation.
       if (base::Optional<network::BlockedByResponseReason> blocked_reason =
               network::CrossOriginResourcePolicy::IsNavigationBlocked(
-                  common_params_->url,
+                  common_params_->url, redirect_chain_[0],
                   GetParentFrame()->GetLastCommittedOrigin(), *response_head_,
                   GetParentFrame()->GetLastCommittedOrigin(),
                   cross_origin_embedder_policy)) {

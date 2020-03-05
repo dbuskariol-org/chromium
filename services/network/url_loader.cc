@@ -958,8 +958,9 @@ void URLLoader::OnReceivedRedirect(net::URLRequest* url_request,
 
   if (base::Optional<BlockedByResponseReason> blocked_reason =
           CrossOriginResourcePolicy::IsBlocked(
-              url_request_->url(), url_request_->initiator(), *response,
-              request_mode_, factory_params_->request_initiator_site_lock,
+              url_request_->url(), url_request_->original_url(),
+              url_request_->initiator(), *response, request_mode_,
+              factory_params_->request_initiator_site_lock,
               cross_origin_embedder_policy)) {
     CompleteBlockedResponse(net::ERR_BLOCKED_BY_RESPONSE, false,
                             blocked_reason);
@@ -1120,8 +1121,9 @@ void URLLoader::OnResponseStarted(net::URLRequest* url_request, int net_error) {
           : kEmpty;
   if (base::Optional<BlockedByResponseReason> blocked_reason =
           CrossOriginResourcePolicy::IsBlocked(
-              url_request_->url(), url_request_->initiator(), *response_,
-              request_mode_, factory_params_->request_initiator_site_lock,
+              url_request_->url(), url_request_->original_url(),
+              url_request_->initiator(), *response_, request_mode_,
+              factory_params_->request_initiator_site_lock,
               cross_origin_embedder_policy)) {
     CompleteBlockedResponse(net::ERR_BLOCKED_BY_RESPONSE, false,
                             blocked_reason);
