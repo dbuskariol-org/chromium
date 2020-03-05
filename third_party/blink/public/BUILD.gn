@@ -179,7 +179,6 @@ source_set("blink_headers") {
     "platform/web_crypto_key.h",
     "platform/web_crypto_key_algorithm.h",
     "platform/web_crypto_key_algorithm_params.h",
-    "platform/web_cursor_info.h",
     "platform/web_data.h",
     "platform/web_dedicated_worker.h",
     "platform/web_dedicated_worker_host_factory_client.h",
@@ -421,9 +420,9 @@ source_set("blink_headers") {
     "//skia",
     "//third_party/blink/public/common",
     "//ui/accessibility:ax_enums_mojo",
+    "//ui/base/cursor",
     "//ui/base/ime:text_input_types",
     "//ui/base/ime/mojom",
-    "//ui/base/mojom:cursor_type",
     "//url",
   ]
 
