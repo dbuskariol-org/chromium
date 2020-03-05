@@ -7,12 +7,14 @@ import("//testing/test.gni")
 
 component("gc") {
   sources = [
-    "core/gc.cc",
     "core/gc_export.h",
+    "core/globals.h",
+    "core/page_memory.cc",
+    "core/page_memory.h",
     "public/platform.h",
   ]
 
-  deps = []
+  deps = [ "//base" ]
 
   defines = [ "GC_IMPLEMENTATION=1" ]
 }
@@ -38,10 +40,13 @@ source_set("test_support") {
 source_set("unit_tests") {
   testonly = true
 
-  sources = []
+  sources = [ "core/page_memory_basic_test.cc" ]
 
   if (use_partition_alloc) {
-    sources += [ "test/base_allocator_test.cc" ]
+    sources += [
+      "core/page_memory_test.cc",
+      "test/base_allocator_test.cc",
+    ]
   }
 
   deps = [
