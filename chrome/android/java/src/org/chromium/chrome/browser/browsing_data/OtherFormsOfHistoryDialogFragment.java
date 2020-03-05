@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.privacy;
+package org.chromium.chrome.browser.browsing_data;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -30,9 +30,8 @@ import org.chromium.ui.text.SpanApplier;
 /**
  * Informs the user about the existence of other forms of browsing history.
  */
-public class OtherFormsOfHistoryDialogFragment extends DialogFragment implements
-        DialogInterface.OnClickListener {
-
+public class OtherFormsOfHistoryDialogFragment
+        extends DialogFragment implements DialogInterface.OnClickListener {
     private static final String TAG = "OtherFormsOfHistoryDialogFragment";
 
     /**

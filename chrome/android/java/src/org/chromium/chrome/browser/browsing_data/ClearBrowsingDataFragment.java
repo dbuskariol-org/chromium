@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.privacy;
+package org.chromium.chrome.browser.browsing_data;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -27,10 +27,7 @@ import androidx.collection.ArraySet;
 import org.chromium.base.CollectionUtil;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.chrome.R;
-import org.chromium.chrome.browser.browsing_data.BrowsingDataType;
-import org.chromium.chrome.browser.browsing_data.ClearBrowsingDataTab;
-import org.chromium.chrome.browser.browsing_data.CookieOrCacheDeletionChoice;
-import org.chromium.chrome.browser.browsing_data.TimePeriod;
+import org.chromium.chrome.browser.browsing_data.BrowsingDataCounterBridge.BrowsingDataCounterCallback;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.historyreport.AppIndexingReporter;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
@@ -38,7 +35,6 @@ import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.chrome.browser.settings.SpinnerPreference;
-import org.chromium.chrome.browser.settings.privacy.BrowsingDataCounterBridge.BrowsingDataCounterCallback;
 import org.chromium.ui.widget.ButtonCompat;
 
 import java.lang.annotation.Retention;

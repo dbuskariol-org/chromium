@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.privacy;
+package org.chromium.chrome.browser.browsing_data;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -53,8 +53,8 @@ import java.util.Set;
  * method) and onActivityResult return conventions.
  */
 public class ConfirmImportantSitesDialogFragment extends DialogFragment {
-    private class ClearBrowsingDataAdapter extends ArrayAdapter<String>
-            implements AdapterView.OnItemClickListener {
+    private class ClearBrowsingDataAdapter
+            extends ArrayAdapter<String> implements AdapterView.OnItemClickListener {
         private final String[] mDomains;
         private final int mFaviconSize;
         private RoundedIconGenerator mIconGenerator;
