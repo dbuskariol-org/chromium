@@ -376,8 +376,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 // Schedule the deletion of the temporary passwords files that might
 // be left over from incomplete export operations.
 - (void)scheduleDeleteTempPasswordsDirectory;
-// Returns whether or not the app can launch in incognito mode.
-- (BOOL)canLaunchInIncognito;
 // Initializes the first run UI and presents it to the user.
 - (void)showFirstRunUI;
 // Schedules presentation of the first eligible promo found, if any.
@@ -623,71 +621,13 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   tests_hook::RunTestsIfPresent();
 }
 
-// Starts up a single chrome window and its UI.
-- (void)startUpChromeUIPostCrash:(BOOL)isPostCrashLaunch
-                 needRestoration:(BOOL)needsRestoration {
-  DCHECK(!self.sceneController.browserViewWrangler);
-  DCHECK(self.sceneController.appURLLoadingService);
-
-  self.sceneController.browserViewWrangler = [[BrowserViewWrangler alloc]
-             initWithBrowserState:self.mainBrowserState
-             webStateListObserver:self.sceneController
-       applicationCommandEndpoint:self.sceneController
-      browsingDataCommandEndpoint:self
-             appURLLoadingService:self.sceneController.appURLLoadingService];
-
-  // Ensure the main tab model is created. This also creates the BVC.
-  [self.sceneController.browserViewWrangler createMainBrowser];
-
-  // Only create the restoration helper if the browser state was backed up
-  // successfully.
-  if (needsRestoration) {
-    self.restoreHelper =
-        [[CrashRestoreHelper alloc] initWithBrowser:self.mainBrowser];
-  }
-
-  [self.sceneController openTabFromLaunchOptions:_launchOptions
-                              startupInformation:self
-                                        appState:self.appState];
-
-  [self scheduleShowPromo];
-
-  // Before bringing up the UI, make sure the launch mode is correct, and
-  // check for previous crashes.
-  BOOL startInIncognito =
-      [[NSUserDefaults standardUserDefaults] boolForKey:kIncognitoCurrentKey];
-  BOOL switchFromIncognito = startInIncognito && ![self canLaunchInIncognito];
-
-  if (isPostCrashLaunch || switchFromIncognito) {
-    [self.sceneController clearIOSSpecificIncognitoData];
-    if (switchFromIncognito)
-      [self.sceneController.browserViewWrangler
-          switchGlobalStateToMode:ApplicationMode::NORMAL];
-  }
-  if (switchFromIncognito)
-    startInIncognito = NO;
-
-  [self.sceneController
-      createInitialUI:(startInIncognito ? ApplicationMode::INCOGNITO
-                                        : ApplicationMode::NORMAL)];
-
-  [self.sceneController.browserViewWrangler updateDeviceSharingManager];
-
-  if (!self.startupParameters) {
-    // The startup parameters may create new tabs or navigations. If the restore
-    // infobar is displayed now, it may be dismissed immediately and the user
-    // will never be able to restore the session.
-    [self.restoreHelper showRestorePrompt];
-    self.restoreHelper = nil;
-  }
-}
-
 - (void)startUpBrowserForegroundInitialization {
   BOOL postCrashLaunch = [self mustShowRestoreInfobar];
   BOOL needRestore =
       [self startUpBeforeFirstWindowCreatedAndPrepareForRestorationPostCrash:
                 postCrashLaunch];
-  [self startUpChromeUIPostCrash:postCrashLaunch needRestoration:needRestore];
+  [self.sceneController startUpChromeUIPostCrash:postCrashLaunch
+                                 needRestoration:needRestore];
   [self startUpAfterFirstWindowCreated];
 }
 
@@ -1337,11 +1277,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   DCHECK(self.interfaceProvider);
   return self.interfaceProvider.currentInterface.bvc;
 }
-
-
-
-
-
 
 - (TabModel*)currentTabModel {
   return self.currentBVC.tabModel;
