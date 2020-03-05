@@ -234,7 +234,7 @@ TEST_F(ExtendedDesktopTest, SystemModal) {
   EXPECT_EQ(root_windows[0], Shell::GetRootWindowForNewWindows());
 
   // Open system modal. Make sure it's on 2nd root window and active.
-  views::Widget* modal_widget = views::Widget::CreateWindowWithContextAndBounds(
+  views::Widget* modal_widget = views::Widget::CreateWindowWithContext(
       new ModalWidgetDelegate(), CurrentContext(),
       gfx::Rect(1200, 100, 100, 100));
   modal_widget->Show();
