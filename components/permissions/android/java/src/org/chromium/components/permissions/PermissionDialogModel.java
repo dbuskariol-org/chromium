@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.permissions;
+package org.chromium.components.permissions;
 
 import android.content.Context;
 import android.support.v4.widget.TextViewCompat;
@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import org.chromium.chrome.R;
+import org.chromium.components.browser_ui.modaldialog.R;
 import org.chromium.ui.modaldialog.ModalDialogProperties;
 import org.chromium.ui.modelutil.PropertyModel;
 
@@ -37,10 +37,8 @@ class PermissionDialogModel {
         return new PropertyModel.Builder(ModalDialogProperties.ALL_KEYS)
                 .with(ModalDialogProperties.CONTROLLER, controller)
                 .with(ModalDialogProperties.CUSTOM_VIEW, customView)
-                .with(ModalDialogProperties.POSITIVE_BUTTON_TEXT,
-                        delegate.getPrimaryButtonText())
-                .with(ModalDialogProperties.NEGATIVE_BUTTON_TEXT,
-                        delegate.getSecondaryButtonText())
+                .with(ModalDialogProperties.POSITIVE_BUTTON_TEXT, delegate.getPrimaryButtonText())
+                .with(ModalDialogProperties.NEGATIVE_BUTTON_TEXT, delegate.getSecondaryButtonText())
                 .with(ModalDialogProperties.CONTENT_DESCRIPTION, delegate.getMessageText())
                 .with(ModalDialogProperties.FILTER_TOUCH_FOR_SECURITY, true)
                 .build();

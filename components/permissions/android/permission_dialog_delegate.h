@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_DIALOG_DELEGATE_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_DIALOG_DELEGATE_H_
+#ifndef COMPONENTS_PERMISSIONS_ANDROID_PERMISSION_DIALOG_DELEGATE_H_
+#define COMPONENTS_PERMISSIONS_ANDROID_PERMISSION_DIALOG_DELEGATE_H_
 
 #include <memory>
 
 #include "base/android/scoped_java_ref.h"
 #include "base/callback.h"
 #include "base/macros.h"
-#include "chrome/browser/permissions/permission_prompt_android.h"
 #include "components/content_settings/core/common/content_settings_types.h"
+#include "components/permissions/android/permission_prompt_android.h"
 #include "components/permissions/permission_util.h"
 #include "content/public/browser/web_contents_observer.h"
 
@@ -20,6 +20,8 @@ using base::android::JavaParamRef;
 namespace content {
 class WebContents;
 }
+
+namespace permissions {
 
 // Delegate class for displaying a permission prompt as a modal dialog. Used as
 // the native to Java interface to allow Java to communicate the user's
@@ -68,4 +70,6 @@ class PermissionDialogDelegate : public content::WebContentsObserver {
   DISALLOW_COPY_AND_ASSIGN(PermissionDialogDelegate);
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_DIALOG_DELEGATE_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_ANDROID_PERMISSION_DIALOG_DELEGATE_H_

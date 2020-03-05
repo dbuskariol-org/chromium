@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.permissions;
+package org.chromium.components.permissions;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -204,8 +204,8 @@ public class PermissionDialogController
             // accept callback.
             mState = State.REQUEST_ANDROID_PERMISSIONS;
             if (!AndroidPermissionRequester.requestAndroidPermissions(mDialogDelegate.getWindow(),
-                        mDialogDelegate.getContentSettingsTypes(),
-                        PermissionDialogController.this)) {
+                        mDialogDelegate.getContentSettingsTypes(), PermissionDialogController.this,
+                        mDialogDelegate.getClient())) {
                 onAndroidPermissionAccepted();
             }
         } else {

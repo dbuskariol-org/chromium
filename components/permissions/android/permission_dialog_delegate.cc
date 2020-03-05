@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_dialog_delegate.h"
+#include "components/permissions/android/permission_dialog_delegate.h"
 
 #include <utility>
 
@@ -10,16 +10,18 @@
 #include "base/android/jni_string.h"
 #include "base/feature_list.h"
 #include "build/build_config.h"
-#include "chrome/android/chrome_jni_headers/PermissionDialogController_jni.h"
-#include "chrome/android/chrome_jni_headers/PermissionDialogDelegate_jni.h"
-#include "chrome/browser/android/resource_mapper.h"
-#include "chrome/grit/generated_resources.h"
+#include "components/permissions/android/jni/PermissionDialogController_jni.h"
+#include "components/permissions/android/jni/PermissionDialogDelegate_jni.h"
+#include "components/permissions/permissions_client.h"
+#include "components/strings/grit/components_strings.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/web_contents.h"
 #include "ui/android/window_android.h"
 #include "ui/base/l10n/l10n_util.h"
 
 using base::android::ConvertUTF16ToJavaString;
+
+namespace permissions {
 
 // static
 void PermissionDialogDelegate::Create(
@@ -57,9 +59,11 @@ void PermissionDialogDelegate::CreateJavaDelegate(
       env, reinterpret_cast<uintptr_t>(this),
       web_contents->GetTopLevelNativeWindow()->GetJavaObject(),
       base::android::ToJavaIntArray(env, content_settings_types),
-      ResourceMapper::MapToJavaDrawableId(permission_prompt_->GetIconId()),
+      PermissionsClient::Get()->MapToJavaDrawableId(
+          permission_prompt_->GetIconId()),
       ConvertUTF16ToJavaString(env, permission_prompt_->GetMessageText()),
-      primaryButtonText, secondaryButtonText));
+      primaryButtonText, secondaryButtonText,
+      PermissionsClient::Get()->GetJavaObject()));
 }
 
 void PermissionDialogDelegate::Accept(JNIEnv* env,
@@ -120,3 +124,5 @@ void PermissionDialogDelegate::DidFinishNavigation(
 void PermissionDialogDelegate::WebContentsDestroyed() {
   DismissDialog();
 }
+
+}  // namespace permissions

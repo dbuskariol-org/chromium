@@ -2,9 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.permissions;
+package org.chromium.components.permissions;
 
 import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.ui.base.WindowAndroid;
 
@@ -16,6 +17,7 @@ import org.chromium.ui.base.WindowAndroid;
  * the permission dialog, the decision is conveyed across the JNI so that the native code can
  * respond appropriately.
  */
+@JNINamespace("permissions")
 public class PermissionDialogDelegate {
     /** The native-side counterpart of this class */
     private long mNativeDelegatePtr;
@@ -37,6 +39,9 @@ public class PermissionDialogDelegate {
 
     /** Text shown on the secondary button, e.g. "Block". */
     private String mSecondaryButtonText;
+
+    /** Client to access embedder logic. */
+    private PermissionsClient mClient;
 
     /** The {@link ContentSettingsType}s requested in this dialog.  */
     private int[] mContentSettingsTypes;
@@ -63,6 +68,10 @@ public class PermissionDialogDelegate {
 
     public String getSecondaryButtonText() {
         return mSecondaryButtonText;
+    }
+
+    public PermissionsClient getClient() {
+        return mClient;
     }
 
     public void onAccept() {
@@ -114,9 +123,9 @@ public class PermissionDialogDelegate {
     @CalledByNative
     private static PermissionDialogDelegate create(long nativeDelegatePtr, WindowAndroid window,
             int[] contentSettingsTypes, int iconId, String message, String primaryButtonText,
-            String secondaryButtonText) {
+            String secondaryButtonText, PermissionsClient client) {
         return new PermissionDialogDelegate(nativeDelegatePtr, window, contentSettingsTypes, iconId,
-                message, primaryButtonText, secondaryButtonText);
+                message, primaryButtonText, secondaryButtonText, client);
     }
 
     /**
@@ -124,7 +133,7 @@ public class PermissionDialogDelegate {
      */
     private PermissionDialogDelegate(long nativeDelegatePtr, WindowAndroid window,
             int[] contentSettingsTypes, int iconId, String message, String primaryButtonText,
-            String secondaryButtonText) {
+            String secondaryButtonText, PermissionsClient client) {
         mNativeDelegatePtr = nativeDelegatePtr;
         mWindow = window;
         mContentSettingsTypes = contentSettingsTypes;
@@ -132,6 +141,7 @@ public class PermissionDialogDelegate {
         mMessageText = message;
         mPrimaryButtonText = primaryButtonText;
         mSecondaryButtonText = secondaryButtonText;
+        mClient = client;
     }
 
     @NativeMethods

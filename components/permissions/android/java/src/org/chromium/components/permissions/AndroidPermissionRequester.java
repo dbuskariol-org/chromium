@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.permissions;
+package org.chromium.components.permissions;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -12,11 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.StringRes;
 
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.metrics.WebApkUma;
-import org.chromium.chrome.browser.webapps.WebApkActivity;
 import org.chromium.components.content_settings.ContentSettingsType;
-import org.chromium.components.permissions.PermissionUtil;
 import org.chromium.ui.base.PermissionCallback;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
@@ -37,9 +33,9 @@ import java.util.Set;
  */
 public class AndroidPermissionRequester {
     /**
-    * An interface for classes which need to be informed of the outcome of asking a user to grant an
-    * Android permission.
-    */
+     * An interface for classes which need to be informed of the outcome of asking a user to grant
+     * an Android permission.
+     */
     public interface RequestDelegate {
         void onAndroidPermissionAccepted();
         void onAndroidPermissionCanceled();
@@ -89,7 +85,8 @@ public class AndroidPermissionRequester {
      * a dialog, running methods on the RequestDelegate when the user has made a decision.
      */
     public static boolean requestAndroidPermissions(final WindowAndroid windowAndroid,
-            final int[] contentSettingsTypes, final RequestDelegate delegate) {
+            final int[] contentSettingsTypes, final RequestDelegate delegate,
+            final PermissionsClient client) {
         if (windowAndroid == null) return false;
 
         final SparseArray<String[]> contentSettingsTypesToPermissionsMap =
@@ -117,10 +114,8 @@ public class AndroidPermissionRequester {
                 }
 
                 Activity activity = windowAndroid.getActivity().get();
-                if (activity instanceof WebApkActivity && deniedPermissions.size() > 0) {
-                    WebApkUma.recordAndroidRuntimePermissionDeniedInWebApk(
-                            deniedPermissions.toArray(new String[deniedPermissions.size()]));
-                }
+                client.onPermissionDenied(
+                        activity, deniedPermissions.toArray(new String[deniedPermissions.size()]));
 
                 if (allRequestable && !deniedContentSettings.isEmpty() && activity != null) {
                     int deniedStringId = -1;
@@ -153,7 +148,7 @@ public class AndroidPermissionRequester {
                     showMissingPermissionDialog(activity, deniedStringId,
                             ()
                                     -> requestAndroidPermissions(
-                                            windowAndroid, contentSettingsTypes, delegate),
+                                            windowAndroid, contentSettingsTypes, delegate, client),
                             delegate::onAndroidPermissionCanceled);
                 } else if (deniedContentSettings.isEmpty()) {
                     delegate.onAndroidPermissionAccepted();
@@ -171,9 +166,7 @@ public class AndroidPermissionRequester {
         String[] permissions =
                 permissionsToRequest.toArray(new String[permissionsToRequest.size()]);
         windowAndroid.requestPermissions(permissions, callback);
-        if (windowAndroid.getActivity().get() instanceof WebApkActivity) {
-            WebApkUma.recordAndroidRuntimePermissionPromptInWebApk(permissions);
-        }
+        client.onPermissionRequested(windowAndroid.getActivity().get(), permissions);
         return true;
     }
 
@@ -186,7 +179,8 @@ public class AndroidPermissionRequester {
      */
     public static void showMissingPermissionDialog(Activity activity, @StringRes int messageId,
             Runnable onPositiveButtonClicked, Runnable onCancelled) {
-        assert activity instanceof ModalDialogManagerHolder
+        assert activity
+                instanceof ModalDialogManagerHolder
             : "Activity should implement ModalDialogManagerHolder";
         final ModalDialogManager modalDialogManager =
                 ((ModalDialogManagerHolder) activity).getModalDialogManager();

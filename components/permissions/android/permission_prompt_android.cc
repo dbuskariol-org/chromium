@@ -2,21 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_prompt_android.h"
+#include "components/permissions/android/permission_prompt_android.h"
 
 #include <memory>
 
-#include "chrome/browser/android/android_theme_resources.h"
-#include "chrome/browser/infobars/infobar_service.h"
-#include "chrome/browser/permissions/grouped_permission_infobar_delegate_android.h"
-#include "chrome/browser/permissions/permission_dialog_delegate.h"
-#include "chrome/common/url_constants.h"
-#include "chrome/grit/generated_resources.h"
 #include "components/infobars/core/infobar.h"
+#include "components/infobars/core/infobar_manager.h"
+#include "components/permissions/android/permission_dialog_delegate.h"
+#include "components/permissions/android/theme_resources.h"
 #include "components/permissions/permission_request.h"
+#include "components/permissions/permissions_client.h"
 #include "components/strings/grit/components_strings.h"
 #include "components/url_formatter/elide_url.h"
 #include "ui/base/l10n/l10n_util.h"
+
+namespace permissions {
 
 PermissionPromptAndroid::PermissionPromptAndroid(
     content::WebContents* web_contents,
@@ -27,30 +27,31 @@ PermissionPromptAndroid::PermissionPromptAndroid(
       weak_factory_(this) {
   DCHECK(web_contents);
 
-  InfoBarService* infobar_service =
-      InfoBarService::FromWebContents(web_contents_);
-  if (infobar_service &&
-      GroupedPermissionInfoBarDelegate::ShouldShowMiniInfobar(
-          web_contents, GetContentSettingType(0u /* position */))) {
-    permission_infobar_ = GroupedPermissionInfoBarDelegate::Create(
-        weak_factory_.GetWeakPtr(), infobar_service);
-    infobar_service->AddObserver(this);
-    return;
+  infobars::InfoBarManager* infobar_manager =
+      PermissionsClient::Get()->GetInfoBarManager(web_contents_);
+  if (infobar_manager) {
+    permission_infobar_ = PermissionsClient::Get()->MaybeCreateInfoBar(
+        web_contents, GetContentSettingType(0u /* position */),
+        weak_factory_.GetWeakPtr());
+    if (permission_infobar_) {
+      infobar_manager->AddObserver(this);
+      return;
+    }
   }
 
   PermissionDialogDelegate::Create(web_contents_, this);
 }
 
 PermissionPromptAndroid::~PermissionPromptAndroid() {
-  InfoBarService* infobar_service =
-      InfoBarService::FromWebContents(web_contents_);
-  if (!infobar_service)
+  infobars::InfoBarManager* infobar_manager =
+      PermissionsClient::Get()->GetInfoBarManager(web_contents_);
+  if (!infobar_manager)
     return;
   // RemoveObserver before RemoveInfoBar to not get notified about the removal
   // of the `permission_infobar_` infobar.
-  infobar_service->RemoveObserver(this);
+  infobar_manager->RemoveObserver(this);
   if (permission_infobar_) {
-    infobar_service->RemoveInfoBar(permission_infobar_);
+    infobar_manager->RemoveInfoBar(permission_infobar_);
   }
 }
 
@@ -131,10 +132,10 @@ void PermissionPromptAndroid::OnInfoBarRemoved(infobars::InfoBar* infobar,
     return;
 
   permission_infobar_ = nullptr;
-  InfoBarService* infobar_service =
-      InfoBarService::FromWebContents(web_contents_);
-  if (infobar_service)
-    infobar_service->RemoveObserver(this);
+  infobars::InfoBarManager* infobar_manager =
+      PermissionsClient::Get()->GetInfoBarManager(web_contents_);
+  if (infobar_manager)
+    infobar_manager->RemoveObserver(this);
 }
 
 void PermissionPromptAndroid::OnManagerShuttingDown(
@@ -149,3 +150,5 @@ permissions::PermissionPrompt::Create(content::WebContents* web_contents,
                                       Delegate* delegate) {
   return std::make_unique<PermissionPromptAndroid>(web_contents, delegate);
 }
+
+}  // namespace permissions

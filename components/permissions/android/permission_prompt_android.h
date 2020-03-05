@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_PROMPT_ANDROID_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_PROMPT_ANDROID_H_
+#ifndef COMPONENTS_PERMISSIONS_ANDROID_PERMISSION_PROMPT_ANDROID_H_
+#define COMPONENTS_PERMISSIONS_ANDROID_PERMISSION_PROMPT_ANDROID_H_
 
 #include <memory>
 #include <vector>
@@ -20,6 +20,8 @@ class WebContents;
 namespace infobars {
 class InfoBar;
 }
+
+namespace permissions {
 
 class PermissionPromptAndroid : public permissions::PermissionPrompt,
                                 public infobars::InfoBarManager::Observer {
@@ -67,4 +69,6 @@ class PermissionPromptAndroid : public permissions::PermissionPrompt,
   DISALLOW_COPY_AND_ASSIGN(PermissionPromptAndroid);
 };
 
-#endif  // CHROME_BROWSER_PERMISSIONS_PERMISSION_PROMPT_ANDROID_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_ANDROID_PERMISSION_PROMPT_ANDROID_H_
