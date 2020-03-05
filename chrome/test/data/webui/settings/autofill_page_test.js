@@ -76,10 +76,10 @@ cr.define('settings_autofill_page', function() {
     /**
      * Creates PasswordManagerExpectations with the values expected after first
      * creating the element.
-     * @return {!PasswordManagerExpectations}
+     * @return {!autofill_test_util.PasswordManagerExpectations}
      */
     function basePasswordExpectations() {
-      const expected = new PasswordManagerExpectations();
+      const expected = new autofill_test_util.PasswordManagerExpectations();
       expected.requested.passwords = 1;
       expected.requested.exceptions = 1;
       expected.requested.accountStorageOptInState = 1;
@@ -92,10 +92,10 @@ cr.define('settings_autofill_page', function() {
     /**
      * Creates AutofillManagerExpectations with the values expected after first
      * creating the element.
-     * @return {!AutofillManagerExpectations}
+     * @return {!autofill_test_util.AutofillManagerExpectations}
      */
     function baseAutofillExpectations() {
-      const expected = new AutofillManagerExpectations();
+      const expected = new autofill_test_util.AutofillManagerExpectations();
       expected.requestedAddresses = 1;
       expected.listeningAddresses = 1;
       return expected;
@@ -104,10 +104,10 @@ cr.define('settings_autofill_page', function() {
     /**
      * Creates PaymentsManagerExpectations with the values expected after first
      * creating the element.
-     * @return {!PaymentsManagerExpectations}
+     * @return {!autofill_test_util.PaymentsManagerExpectations}
      */
     function basePaymentsExpectations() {
-      const expected = new PaymentsManagerExpectations();
+      const expected = new autofill_test_util.PaymentsManagerExpectations();
       expected.requestedCreditCards = 1;
       expected.listeningCreditCards = 1;
       return expected;
@@ -127,11 +127,11 @@ cr.define('settings_autofill_page', function() {
       PasswordManagerImpl.instance_ = passwordManager;
 
       // Override the AutofillManagerImpl for testing.
-      autofillManager = new TestAutofillManager();
+      autofillManager = new autofill_test_util.TestAutofillManager();
       settings.AutofillManagerImpl.instance_ = autofillManager;
 
       // Override the PaymentsManagerImpl for testing.
-      paymentsManager = new TestPaymentsManager();
+      paymentsManager = new autofill_test_util.TestPaymentsManager();
       settings.PaymentsManagerImpl.instance_ = paymentsManager;
     });
 
@@ -170,8 +170,10 @@ cr.define('settings_autofill_page', function() {
       return createPrefs(true, true).then(function(prefs) {
         const element = createAutofillElement(prefs);
 
-        const list =
-            [FakeDataMaker.passwordEntry(), FakeDataMaker.passwordEntry()];
+        const list = [
+          autofill_test_util.createPasswordEntry(),
+          autofill_test_util.createPasswordEntry()
+        ];
 
         passwordManager.lastCallback.addSavedPasswordListChangedListener(list);
         Polymer.dom.flush();
@@ -195,8 +197,10 @@ cr.define('settings_autofill_page', function() {
       return createPrefs(true, true).then(function(prefs) {
         const element = createAutofillElement(prefs);
 
-        const list =
-            [FakeDataMaker.exceptionEntry(), FakeDataMaker.exceptionEntry()];
+        const list = [
+          autofill_test_util.createExceptionEntry(),
+          autofill_test_util.createExceptionEntry()
+        ];
         passwordManager.lastCallback.addExceptionListChangedListener(list);
         Polymer.dom.flush();
 
@@ -216,10 +220,14 @@ cr.define('settings_autofill_page', function() {
       return createPrefs(true, true).then(function(prefs) {
         const element = createAutofillElement(prefs);
 
-        const addressList =
-            [FakeDataMaker.addressEntry(), FakeDataMaker.addressEntry()];
-        const cardList =
-            [FakeDataMaker.creditCardEntry(), FakeDataMaker.creditCardEntry()];
+        const addressList = [
+          autofill_test_util.createAddressEntry(),
+          autofill_test_util.createAddressEntry()
+        ];
+        const cardList = [
+          autofill_test_util.createCreditCardEntry(),
+          autofill_test_util.createCreditCardEntry()
+        ];
         autofillManager.lastCallback.setPersonalDataManagerListener(
             addressList, cardList);
         Polymer.dom.flush();
@@ -240,10 +248,14 @@ cr.define('settings_autofill_page', function() {
       return createPrefs(true, true).then(function(prefs) {
         const element = createAutofillElement(prefs);
 
-        const addressList =
-            [FakeDataMaker.addressEntry(), FakeDataMaker.addressEntry()];
-        const cardList =
-            [FakeDataMaker.creditCardEntry(), FakeDataMaker.creditCardEntry()];
+        const addressList = [
+          autofill_test_util.createAddressEntry(),
+          autofill_test_util.createAddressEntry()
+        ];
+        const cardList = [
+          autofill_test_util.createCreditCardEntry(),
+          autofill_test_util.createCreditCardEntry()
+        ];
         paymentsManager.lastCallback.setPersonalDataManagerListener(
             addressList, cardList);
         Polymer.dom.flush();
