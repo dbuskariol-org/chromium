@@ -3553,7 +3553,7 @@
   {
     "name": "treat-unsafe-downloads-as-active-content",
     "owners": [ "jdeblasio", "cthomp" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 87
   },
   {
     "name": "trim-on-all-frames-frozen",
