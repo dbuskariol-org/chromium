@@ -844,6 +844,12 @@
                  file="privacy_page/passwords_leak_detection_toggle.js"
                  type="chrome_html"
                  preprocess="true" />
+      <structure name="IDR_SETTINGS_COLLAPSE_RADIO_BUTTON_HTML"
+                 file="privacy_page/collapse_radio_button.html"
+                 type="chrome_html" />
+      <structure name="IDR_SETTINGS_COLLAPSE_RADIO_BUTTON_JS"
+                 file="privacy_page/collapse_radio_button.js"
+                 type="chrome_html" />
       <structure name="IDR_SETTINGS_SECURE_DNS_HTML"
                  file="privacy_page/secure_dns.html"
                  type="chrome_html" />
