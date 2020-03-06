@@ -234,7 +234,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
 
     private boolean mPartnerBrowserRefreshNeeded;
 
-    protected final IntentHandler mIntentHandler;
+    protected IntentHandler mIntentHandler;
 
     /** Set if {@link #postDeferredStartupIfNeeded()} is called before native has loaded. */
     private boolean mDeferredStartupQueued;
@@ -325,10 +325,6 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
 
     /** Controls tab reparenting for night mode. */
     NightModeReparentingController mNightModeReparentingController;
-
-    protected ChromeActivity() {
-        mIntentHandler = new IntentHandler(this, createIntentHandlerDelegate());
-    }
 
     @Override
     protected ActivityWindowAndroid createWindowAndroid() {
@@ -660,8 +656,8 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
      */
     protected StartupTabPreloader getStartupTabPreloader() {
         if (mStartupTabPreloader == null) {
-            mStartupTabPreloader = new StartupTabPreloader(this::getIntent,
-                    getLifecycleDispatcher(), getWindowAndroid(), this, mIntentHandler);
+            mStartupTabPreloader = new StartupTabPreloader(
+                    this::getIntent, getLifecycleDispatcher(), getWindowAndroid(), this);
         }
         return mStartupTabPreloader;
     }
@@ -758,15 +754,12 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
 
         IntentHandler.setTestIntentsEnabled(
                 CommandLine.getInstance().hasSwitch(ContentSwitches.ENABLE_TEST_INTENTS));
-<<<<<<< HEAD   (86e82e Reland "[Autofill Assistant] Hotfix for radio buttons in For)
         mIntentHandler = new IntentHandler(createIntentHandlerDelegate(), getPackageName());
 
         // This also ensures that subsequent native library and resource loading takes place
         // immediately, needed by restored tabs that use DFM.
         // TODO(https://crbug.com/1008162): Have the Module system register its own observer.
         Module.doDeferredNativeRegistrations();
-=======
->>>>>>> CHANGE (91ac1e Android: Speculative crash fix for DelayedScreenLockIntentHa)
     }
 
     @Override
@@ -997,7 +990,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         }
 
         super.onNewIntentWithNative(intent);
-        if (mIntentHandler.shouldIgnoreIntent(intent)) return;
+        if (IntentHandler.shouldIgnoreIntent(intent)) return;
 
         // We send this intent so that we can enter WebVr presentation mode if needed. This
         // call doesn't consume the intent because it also has the url that we need to load.
