@@ -166,7 +166,7 @@ public class ShareHelper {
         if (file.isDirectory()) {
             File[] file_list = file.listFiles();
             if (file_list != null) {
-                for (File child : file.listFiles()) {
+                for (File child : file_list) {
                     anyChildKept |= deleteFiles(child, reservedFilepath);
                 }
             }
