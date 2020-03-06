@@ -38,6 +38,9 @@ NamedLineCollection::NamedLineCollection(
   const NamedGridLinesMap& auto_repeat_grid_line_names =
       is_row_axis ? grid_container_style.AutoRepeatNamedGridColumnLines()
                   : grid_container_style.AutoRepeatNamedGridRowLines();
+  const NamedGridLinesMap& implicit_grid_line_names =
+      is_row_axis ? grid_container_style.ImplicitNamedGridColumnLines()
+                  : grid_container_style.ImplicitNamedGridRowLines();
 
   if (!grid_line_names.IsEmpty()) {
     auto it = grid_line_names.find(named_line);
@@ -50,6 +53,12 @@ NamedLineCollection::NamedLineCollection(
         it == auto_repeat_grid_line_names.end() ? nullptr : &it->value;
   }
 
+  if (!implicit_grid_line_names.IsEmpty()) {
+    auto it = implicit_grid_line_names.find(named_line);
+    implicit_named_lines_indexes_ =
+        it == implicit_grid_line_names.end() ? nullptr : &it->value;
+  }
+
   insertion_point_ =
       is_row_axis ? grid_container_style.GridAutoRepeatColumnsInsertionPoint()
                   : grid_container_style.GridAutoRepeatRowsInsertionPoint();
@@ -59,8 +68,12 @@ NamedLineCollection::NamedLineCollection(
                   : grid_container_style.GridAutoRepeatRows().size();
 }
 
-bool NamedLineCollection::HasNamedLines() {
+bool NamedLineCollection::HasExplicitNamedLines() {
   return named_lines_indexes_ || auto_repeat_named_lines_indexes_;
+}
+
+bool NamedLineCollection::HasNamedLines() {
+  return HasExplicitNamedLines() || implicit_named_lines_indexes_;
 }
 
 bool NamedLineCollection::Contains(size_t line) {
@@ -72,6 +85,9 @@ bool NamedLineCollection::Contains(size_t line) {
   auto find = [](const Vector<size_t>* indexes, size_t line) {
     return indexes && indexes->Find(line) != kNotFound;
   };
+
+  if (find(implicit_named_lines_indexes_, line))
+    return true;
 
   if (auto_repeat_track_list_length_ == 0LU || line < insertion_point_)
     return find(named_lines_indexes_, line);
@@ -101,14 +117,14 @@ bool NamedLineCollection::Contains(size_t line) {
               auto_repeat_index_in_first_repetition);
 }
 
-size_t NamedLineCollection::FirstPosition() {
-  CHECK(HasNamedLines());
+size_t NamedLineCollection::FirstExplicitPosition() {
+  DCHECK(HasExplicitNamedLines());
 
   size_t first_line = 0;
 
   // If there is no auto repeat(), there must be some named line outside, return
   // the 1st one. Also return it if it precedes the auto-repeat().
-  if (auto_repeat_total_tracks_ == 0 ||
+  if (auto_repeat_track_list_length_ == 0 ||
       (named_lines_indexes_ &&
        named_lines_indexes_->at(first_line) <= insertion_point_))
     return named_lines_indexes_->at(first_line);
@@ -119,6 +135,21 @@ size_t NamedLineCollection::FirstPosition() {
 
   // The 1st named line must be after the auto repeat().
   return named_lines_indexes_->at(first_line) + auto_repeat_total_tracks_ - 1;
+}
+
+size_t NamedLineCollection::FirstPosition() {
+  CHECK(HasNamedLines());
+
+  size_t first_line = 0;
+
+  if (!implicit_named_lines_indexes_)
+    return FirstExplicitPosition();
+
+  if (!HasExplicitNamedLines())
+    return implicit_named_lines_indexes_->at(first_line);
+
+  return std::min(FirstExplicitPosition(),
+                  implicit_named_lines_indexes_->at(first_line));
 }
 
 GridPositionSide GridPositionsResolver::InitialPositionSide(
