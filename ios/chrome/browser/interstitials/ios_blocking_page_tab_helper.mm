@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ssl/ios_ssl_error_tab_helper.h"
+#import "ios/chrome/browser/interstitials/ios_blocking_page_tab_helper.h"
 
 #include "base/values.h"
 #include "ios/chrome/browser/interstitials/ios_security_interstitial_page.h"
@@ -19,27 +19,29 @@ namespace {
 const char kCommandPrefix[] = "blockingPage";
 }  // namespace
 
-IOSSSLErrorTabHelper::IOSSSLErrorTabHelper(web::WebState* web_state)
+IOSBlockingPageTabHelper::IOSBlockingPageTabHelper(web::WebState* web_state)
     : web_state_(web_state), subscription_(nullptr), weak_factory_(this) {
   web_state_->AddObserver(this);
-  auto command_callback = base::Bind(
-      &IOSSSLErrorTabHelper::OnBlockingPageCommand, weak_factory_.GetWeakPtr());
+  auto command_callback =
+      base::Bind(&IOSBlockingPageTabHelper::OnBlockingPageCommand,
+                 weak_factory_.GetWeakPtr());
   subscription_ =
       web_state->AddScriptCommandCallback(command_callback, kCommandPrefix);
 }
 
-IOSSSLErrorTabHelper::~IOSSSLErrorTabHelper() = default;
+IOSBlockingPageTabHelper::~IOSBlockingPageTabHelper() = default;
 
 // static
-void IOSSSLErrorTabHelper::AssociateBlockingPage(
+void IOSBlockingPageTabHelper::AssociateBlockingPage(
     web::WebState* web_state,
     int64_t navigation_id,
     std::unique_ptr<IOSSecurityInterstitialPage> blocking_page) {
   // CreateForWebState() creates a tab helper if it doesn't exist for
   // |web_state| yet.
-  IOSSSLErrorTabHelper::CreateForWebState(web_state);
+  IOSBlockingPageTabHelper::CreateForWebState(web_state);
 
-  IOSSSLErrorTabHelper* helper = IOSSSLErrorTabHelper::FromWebState(web_state);
+  IOSBlockingPageTabHelper* helper =
+      IOSBlockingPageTabHelper::FromWebState(web_state);
   helper->SetBlockingPage(navigation_id, std::move(blocking_page));
 }
 
@@ -47,7 +49,7 @@ void IOSSSLErrorTabHelper::AssociateBlockingPage(
 // IOSSecurityInterstitialPage in a member variable so that it can handle
 // commands. Clean up the member variable when a subsequent navigation commits,
 // since the IOSSecurityInterstitialPage is no longer needed.
-void IOSSSLErrorTabHelper::DidFinishNavigation(
+void IOSBlockingPageTabHelper::DidFinishNavigation(
     web::WebState* web_state,
     web::NavigationContext* navigation_context) {
   DCHECK_EQ(web_state_, web_state);
@@ -74,19 +76,19 @@ void IOSSSLErrorTabHelper::DidFinishNavigation(
   web_state_->DidChangeVisibleSecurityState();
 }
 
-void IOSSSLErrorTabHelper::WebStateDestroyed(web::WebState* web_state) {
+void IOSBlockingPageTabHelper::WebStateDestroyed(web::WebState* web_state) {
   DCHECK_EQ(web_state_, web_state);
   web_state_->RemoveObserver(this);
   web_state_ = nullptr;
 }
 
-void IOSSSLErrorTabHelper::SetBlockingPage(
+void IOSBlockingPageTabHelper::SetBlockingPage(
     int64_t navigation_id,
     std::unique_ptr<IOSSecurityInterstitialPage> blocking_page) {
   blocking_pages_for_navigations_[navigation_id] = std::move(blocking_page);
 }
 
-void IOSSSLErrorTabHelper::OnBlockingPageCommand(
+void IOSBlockingPageTabHelper::OnBlockingPageCommand(
     const base::DictionaryValue& message,
     const GURL& url,
     bool user_is_interacting,
@@ -102,4 +104,4 @@ void IOSSSLErrorTabHelper::OnBlockingPageCommand(
   }
 }
 
-WEB_STATE_USER_DATA_KEY_IMPL(IOSSSLErrorTabHelper)
+WEB_STATE_USER_DATA_KEY_IMPL(IOSBlockingPageTabHelper)

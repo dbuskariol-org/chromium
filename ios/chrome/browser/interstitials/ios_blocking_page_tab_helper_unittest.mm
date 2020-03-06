@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ssl/ios_ssl_error_tab_helper.h"
+#import "ios/chrome/browser/interstitials/ios_blocking_page_tab_helper.h"
 
 #include "ios/chrome/browser/interstitials/ios_security_interstitial_page.h"
 #import "ios/web/public/test/fakes/fake_navigation_context.h"
@@ -42,11 +42,11 @@ class TestInterstitialPage : public IOSSecurityInterstitialPage {
   bool* destroyed_tracker_;
 };
 
-class IOSSSLErrorTabHelperTest : public web::WebTestWithWebState {
+class IOSBlockingPageTabHelperTest : public web::WebTestWithWebState {
  protected:
   void SetUp() override {
     web::WebTestWithWebState::SetUp();
-    IOSSSLErrorTabHelper::CreateForWebState(web_state());
+    IOSBlockingPageTabHelper::CreateForWebState(web_state());
   }
 
   std::unique_ptr<web::NavigationContext> CreateContext(bool committed,
@@ -59,12 +59,12 @@ class IOSSSLErrorTabHelperTest : public web::WebTestWithWebState {
   }
 
   // The lifetime of the blocking page is managed by the
-  // IOSSSLErrorTabHelper for the test's web_state.
+  // IOSBlockingPageTabHelper for the test's web_state.
   // |destroyed_tracker| will be set to true when the corresponding blocking
   // page is destroyed.
   void CreateAssociatedBlockingPage(web::NavigationContext* context,
                                     bool* destroyed_tracker) {
-    IOSSSLErrorTabHelper::AssociateBlockingPage(
+    IOSBlockingPageTabHelper::AssociateBlockingPage(
         web_state(), context->GetNavigationId(),
         std::make_unique<TestInterstitialPage>(web_state(), GURL(),
                                                destroyed_tracker));
@@ -73,14 +73,14 @@ class IOSSSLErrorTabHelperTest : public web::WebTestWithWebState {
 
 // Tests that the helper properly handles the lifetime of a single blocking
 // page, interleaved with other navigations.
-TEST_F(IOSSSLErrorTabHelperTest, SingleBlockingPage) {
+TEST_F(IOSBlockingPageTabHelperTest, SingleBlockingPage) {
   std::unique_ptr<web::NavigationContext> blocking_page_context =
       CreateContext(true, false);
   bool blocking_page_destroyed = false;
   CreateAssociatedBlockingPage(blocking_page_context.get(),
                                &blocking_page_destroyed);
-  IOSSSLErrorTabHelper* helper =
-      IOSSSLErrorTabHelper::FromWebState(web_state());
+  IOSBlockingPageTabHelper* helper =
+      IOSBlockingPageTabHelper::FromWebState(web_state());
 
   // Test that a same-document navigation doesn't destroy the blocking page if
   // its navigation hasn't committed yet.
@@ -110,7 +110,7 @@ TEST_F(IOSSSLErrorTabHelperTest, SingleBlockingPage) {
 
 // Tests that the helper properly handles the lifetime of multiple blocking
 // pages, committed in a different order than they are created.
-TEST_F(IOSSSLErrorTabHelperTest, MultipleBlockingPage) {
+TEST_F(IOSBlockingPageTabHelperTest, MultipleBlockingPage) {
   // Simulate associating the first interstitial.
   std::unique_ptr<web::NavigationContext> context1 = CreateContext(true, false);
   bool blocking_page1_destroyed = false;
@@ -118,8 +118,8 @@ TEST_F(IOSSSLErrorTabHelperTest, MultipleBlockingPage) {
 
   // We can directly retrieve the helper for testing once
   // CreateAssociatedBlockingPage() was called.
-  IOSSSLErrorTabHelper* helper =
-      IOSSSLErrorTabHelper::FromWebState(web_state());
+  IOSBlockingPageTabHelper* helper =
+      IOSBlockingPageTabHelper::FromWebState(web_state());
 
   // Simulate commiting the first interstitial.
   helper->DidFinishNavigation(web_state(), context1.get());
@@ -162,14 +162,14 @@ TEST_F(IOSSSLErrorTabHelperTest, MultipleBlockingPage) {
 
 // Tests that the helper properly handles a navigation that finishes without
 // committing.
-TEST_F(IOSSSLErrorTabHelperTest, NavigationDoesNotCommit) {
+TEST_F(IOSBlockingPageTabHelperTest, NavigationDoesNotCommit) {
   std::unique_ptr<web::NavigationContext> committed_context =
       CreateContext(true, false);
   bool committed_blocking_page_destroyed = false;
   CreateAssociatedBlockingPage(committed_context.get(),
                                &committed_blocking_page_destroyed);
-  IOSSSLErrorTabHelper* helper =
-      IOSSSLErrorTabHelper::FromWebState(web_state());
+  IOSBlockingPageTabHelper* helper =
+      IOSBlockingPageTabHelper::FromWebState(web_state());
   helper->DidFinishNavigation(web_state(), committed_context.get());
   EXPECT_FALSE(committed_blocking_page_destroyed);
 

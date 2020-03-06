@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_SSL_IOS_SSL_ERROR_TAB_HELPER_H_
-#define IOS_CHROME_BROWSER_SSL_IOS_SSL_ERROR_TAB_HELPER_H_
+#ifndef IOS_CHROME_BROWSER_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
+#define IOS_CHROME_BROWSER_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
 
 #include "ios/chrome/browser/interstitials/ios_security_interstitial_page.h"
 #include "ios/web/public/web_state_observer.h"
@@ -17,13 +17,13 @@ class WebState;
 // interstitial code. Stores an IOSSecurityInterstitialPage while an SSL error
 // is currently being shown, then cleans it up when the user navigates away
 // from the SSL error.
-class IOSSSLErrorTabHelper
+class IOSBlockingPageTabHelper
     : public web::WebStateObserver,
-      public web::WebStateUserData<IOSSSLErrorTabHelper> {
+      public web::WebStateUserData<IOSBlockingPageTabHelper> {
  public:
-  ~IOSSSLErrorTabHelper() override;
+  ~IOSBlockingPageTabHelper() override;
 
-  // Associates |blocking_page| with an IOSSSLErrorTabHelper to manage the
+  // Associates |blocking_page| with an IOSBlockingPageTabHelper to manage the
   // |blocking_page|'s lifetime.
   static void AssociateBlockingPage(
       web::WebState* web_state,
@@ -38,10 +38,10 @@ class IOSSSLErrorTabHelper
  private:
   WEB_STATE_USER_DATA_KEY_DECL();
 
-  explicit IOSSSLErrorTabHelper(web::WebState* web_state);
-  DISALLOW_COPY_AND_ASSIGN(IOSSSLErrorTabHelper);
+  explicit IOSBlockingPageTabHelper(web::WebState* web_state);
+  DISALLOW_COPY_AND_ASSIGN(IOSBlockingPageTabHelper);
 
-  friend class web::WebStateUserData<IOSSSLErrorTabHelper>;
+  friend class web::WebStateUserData<IOSBlockingPageTabHelper>;
 
   void SetBlockingPage(
       int64_t navigation_id,
@@ -72,7 +72,7 @@ class IOSSSLErrorTabHelper
 
   // Subscription for JS messages.
   std::unique_ptr<web::WebState::ScriptCommandSubscription> subscription_;
-  base::WeakPtrFactory<IOSSSLErrorTabHelper> weak_factory_{this};
+  base::WeakPtrFactory<IOSBlockingPageTabHelper> weak_factory_{this};
 };
 
-#endif  // IOS_CHROME_BROWSER_SSL_IOS_SSL_ERROR_TAB_HELPER_H_
+#endif  // IOS_CHROME_BROWSER_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
