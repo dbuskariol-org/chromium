@@ -6761,3 +6761,6 @@ crbug.com/1058203 [ Mac10.10 ] virtual/form-controls-refresh-disabled/fast/forms
 crbug.com/1058073 [ Retina ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Failure ]
 crbug.com/1058073 [ Mac10.14 ] accessibility/content-changed-notification-causes-crash.html [ Pass Failure ]
 crbug.com/1058073 [ Retina ] accessibility/content-changed-notification-causes-crash.html [ Pass Failure ]
+
+# Sheriff 2020-03-06
+crbug.com/1058203 [ Mac10.11 ] virtual/form-controls-refresh-disabled/fast/forms/autofocus-opera-008.html [ Pass Failure ]
