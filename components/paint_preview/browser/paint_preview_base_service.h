@@ -81,6 +81,11 @@ class PaintPreviewBaseService : public KeyedService {
       const DirectoryKey& key,
       OnReadProtoCallback on_read_proto_callback);
 
+  // Captures need to run on the Browser UI thread! Captures may involve child
+  // frames so the PaintPreviewClient (WebContentsObserver) must be stored as
+  // WebContentsUserData which is not thread safe and must only be accessible
+  // from a specific sequence i.e. the UI thread.
+  //
   // The following methods both capture a Paint Preview; however, their behavior
   // and intended use is different. The first method is intended for capturing
   // full page contents. Generally, this is what you should be using for most

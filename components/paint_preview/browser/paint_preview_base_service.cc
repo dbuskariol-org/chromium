@@ -20,6 +20,7 @@
 #include "components/paint_preview/browser/paint_preview_client.h"
 #include "components/paint_preview/browser/paint_preview_compositor_service_impl.h"
 #include "components/paint_preview/common/mojom/paint_preview_recorder.mojom.h"
+#include "content/public/browser/browser_thread.h"
 #include "content/public/browser/web_contents.h"
 #include "ui/gfx/geometry/rect.h"
 
@@ -73,6 +74,7 @@ void PaintPreviewBaseService::CapturePaintPreview(
     const base::FilePath& root_dir,
     gfx::Rect clip_rect,
     OnCapturedCallback callback) {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   if (policy_ && !policy_->SupportedForContents(web_contents)) {
     std::move(callback).Run(kContentUnsupported, nullptr);
     return;

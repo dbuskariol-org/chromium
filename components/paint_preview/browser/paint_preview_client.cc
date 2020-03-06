@@ -193,8 +193,6 @@ void PaintPreviewClient::RenderFrameDeleted(
 
 PaintPreviewClient::CreateResult PaintPreviewClient::CreateFileHandle(
     const base::FilePath& path) {
-  base::ScopedBlockingCall scoped_blocking_call(FROM_HERE,
-                                                base::BlockingType::MAY_BLOCK);
   base::File file(path,
                   base::File::FLAG_CREATE_ALWAYS | base::File::FLAG_WRITE);
   return CreateResult(std::move(file), file.error_details());
@@ -215,6 +213,7 @@ mojom::PaintPreviewCaptureParamsPtr PaintPreviewClient::CreateMojoParams(
 void PaintPreviewClient::CapturePaintPreviewInternal(
     const PaintPreviewParams& params,
     content::RenderFrameHost* render_frame_host) {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   // Use a frame's embedding token as its GUID. Note that we create a GUID for
   // the main frame so that we can treat it the same as other frames.
   auto token = render_frame_host->GetEmbeddingToken();
