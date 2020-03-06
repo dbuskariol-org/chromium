@@ -808,6 +808,12 @@
       <structure name="IDR_SETTINGS_OPEN_WINDOW_PROXY_JS"
                  file="open_window_proxy.js"
                  type="chrome_html" />
+      <structure name="IDR_SETTINGS_PLURAL_STRING_PROXY_HTML"
+                 file="plural_string_proxy.html"
+                 type="chrome_html" />
+      <structure name="IDR_SETTINGS_PLURAL_STRING_PROXY_JS"
+                 file="plural_string_proxy.js"
+                 type="chrome_html" />
       <structure name="IDR_SETTINGS_PAGE_VISIBILITY_HTML"
                  file="page_visibility.html"
                  type="chrome_html" />

@@ -137,6 +137,7 @@ js_type_check("settings_resources") {
     ":metrics_browser_proxy",
     ":open_window_proxy",
     ":page_visibility",
+    ":plural_string_proxy",
     ":route",
     ":router",
     ":search_settings",
@@ -170,6 +171,10 @@ js_library("metrics_browser_proxy") {
 }
 
 js_library("open_window_proxy") {
+  deps = [ "//ui/webui/resources/js:cr" ]
+}
+
+js_library("plural_string_proxy") {
   deps = [ "//ui/webui/resources/js:cr" ]
 }
 
@@ -474,6 +479,7 @@ js_modulizer("modulize") {
     "lifetime_browser_proxy.js",
     "metrics_browser_proxy.js",
     "open_window_proxy.js",
+    "plural_string_proxy.js",
     "page_visibility.js",
     "route.js",
     "router.js",
