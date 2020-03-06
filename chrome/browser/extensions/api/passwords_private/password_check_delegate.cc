@@ -129,6 +129,7 @@ PasswordCheckDelegate::PasswordCheckDelegate(Profile* profile)
       bulk_leak_check_service_adapter_(
           &saved_passwords_presenter_,
           BulkLeakCheckServiceFactory::GetForProfile(profile_)) {
+  observed_saved_passwords_presenter_.Add(&saved_passwords_presenter_);
   observed_compromised_credentials_provider_.Add(
       &compromised_credentials_provider_);
   observed_bulk_leak_check_service_.Add(
@@ -333,6 +334,13 @@ PasswordCheckDelegate::GetPasswordCheckStatus() const {
   return result;
 }
 
+void PasswordCheckDelegate::OnSavedPasswordsChanged(SavedPasswordsView) {
+  // A change in the saved passwords might result in leaving or entering the
+  // NO_PASSWORDS or TOO_MANY_PASSWORDS state, thus we need to trigger a
+  // notification.
+  NotifyPasswordCheckStatusChanged();
+}
+
 void PasswordCheckDelegate::OnCompromisedCredentialsChanged(
     CompromisedCredentialsView credentials) {
   credentials_to_forms_ = MapCompromisedCredentialsToSavedPasswords(
@@ -345,9 +353,11 @@ void PasswordCheckDelegate::OnCompromisedCredentialsChanged(
 }
 
 void PasswordCheckDelegate::OnStateChanged(
-    password_manager::BulkLeakCheckService::State state) {
-  NOTIMPLEMENTED();
-  // TODO(https://crbug.com/1047726): Implement.
+    password_manager::BulkLeakCheckService::State) {
+  // NotifyPasswordCheckStatusChanged() invokes GetPasswordCheckStatus()
+  // obtaining the relevant information. Thus there is no need to forward the
+  // arguments passed to OnStateChanged().
+  NotifyPasswordCheckStatusChanged();
 }
 
 void PasswordCheckDelegate::OnCredentialDone(
@@ -391,6 +401,13 @@ PasswordCheckDelegate::FindMatchingCompromisedCredential(
   }
 
   return compromised_credential;
+}
+
+void PasswordCheckDelegate::NotifyPasswordCheckStatusChanged() {
+  if (auto* event_router =
+          PasswordsPrivateEventRouterFactory::GetForProfile(profile_)) {
+    event_router->OnPasswordCheckStatusChanged(GetPasswordCheckStatus());
+  }
 }
 
 }  // namespace extensions

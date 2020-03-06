@@ -317,3 +317,9 @@ chrome.passwordsPrivate.onAccountStorageOptInStateChanged;
  * @type {!ChromeEvent}
  */
 chrome.passwordsPrivate.onCompromisedCredentialsInfoChanged;
+
+/**
+ * Fired when the status of the password check changes.
+ * @type {!ChromeEvent}
+ */
+chrome.passwordsPrivate.onPasswordCheckStatusChanged;

@@ -29,7 +29,8 @@ namespace extensions {
 // This class handles the part of the passwordsPrivate extension API that deals
 // with the bulk password check feature.
 class PasswordCheckDelegate
-    : public password_manager::CompromisedCredentialsProvider::Observer,
+    : public password_manager::SavedPasswordsPresenter::Observer,
+      public password_manager::CompromisedCredentialsProvider::Observer,
       public password_manager::BulkLeakCheckService::Observer {
  public:
   static constexpr size_t kTooManyPasswords = 1000;
@@ -78,6 +79,11 @@ class PasswordCheckDelegate
   api::passwords_private::PasswordCheckStatus GetPasswordCheckStatus() const;
 
  private:
+  // password_manager::SavedPasswordsPresenter::Observer:
+  void OnSavedPasswordsChanged(
+      password_manager::SavedPasswordsPresenter::SavedPasswordsView passwords)
+      override;
+
   // password_manager::CompromisedCredentialsProvider::Observer:
   // Invokes PasswordsPrivateEventRouter::OnCompromisedCredentialsInfoChanged if
   // a valid pointer can be obtained.
@@ -91,9 +97,20 @@ class PasswordCheckDelegate
   void OnCredentialDone(const password_manager::LeakCheckCredential& credential,
                         password_manager::IsLeaked is_leaked) override;
 
+  // Tries to find the matching CredentialWithPassword for |credential|. It
+  // performs a look-up in |compromised_credential_id_generator_| using
+  // |credential.id|. If a matching value exists it also verifies that signon
+  // realm, username and when possible password match.
+  // Returns a pointer to the matching CredentialWithPassword on success or
+  // nullptr otherwise.
   const password_manager::CredentialWithPassword*
   FindMatchingCompromisedCredential(
       const api::passwords_private::CompromisedCredential& credential) const;
+
+  // Tries to notify the PasswordsPrivateEventRouter that the password check
+  // status has changed. Invoked after OnSavedPasswordsChanged and
+  // OnStateChanged.
+  void NotifyPasswordCheckStatusChanged();
 
   // Raw pointer to the underlying profile. Needs to outlive this instance.
   Profile* profile_ = nullptr;
@@ -116,6 +133,11 @@ class PasswordCheckDelegate
 
   // Remembers whether the bulk leak check was explicitly canceled by the user.
   bool is_canceled_ = false;
+
+  // A scoped observer for |saved_passwords_presenter_|.
+  ScopedObserver<password_manager::SavedPasswordsPresenter,
+                 password_manager::SavedPasswordsPresenter::Observer>
+      observed_saved_passwords_presenter_{this};
 
   // A scoped observer for |compromised_credentials_provider_|.
   ScopedObserver<password_manager::CompromisedCredentialsProvider,

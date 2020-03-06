@@ -728,4 +728,50 @@ TEST_F(PasswordCheckDelegateTest, GetPasswordCheckStatusOther) {
             delegate().GetPasswordCheckStatus().state);
 }
 
+// Test that a change to the saved passwords notifies observers.
+TEST_F(PasswordCheckDelegateTest,
+       NotifyPasswordCheckStatusChangedAfterPasswordChange) {
+  const char* const kEventName =
+      api::passwords_private::OnPasswordCheckStatusChanged::kEventName;
+
+  // Verify that the event was not fired during construction.
+  EXPECT_FALSE(base::Contains(event_router_observer().events(), kEventName));
+
+  // Verify that the event gets fired once the saved passwords provider is
+  // initialized.
+  RunUntilIdle();
+  EXPECT_EQ(events::PASSWORDS_PRIVATE_ON_PASSWORD_CHECK_STATUS_CHANGED,
+            event_router_observer().events().at(kEventName)->histogram_value);
+  event_router_observer().ClearEvents();
+
+  // Verify that a subsequent call to AddLogin() results in the expected event.
+  store().AddLogin(MakeSavedPassword(kExampleCom, kUsername1));
+  RunUntilIdle();
+  EXPECT_EQ(events::PASSWORDS_PRIVATE_ON_PASSWORD_CHECK_STATUS_CHANGED,
+            event_router_observer().events().at(kEventName)->histogram_value);
+}
+
+// Test that a change to the bulk leak check notifies observers.
+TEST_F(PasswordCheckDelegateTest,
+       NotifyPasswordCheckStatusChangedAfterStateChange) {
+  const char* const kEventName =
+      api::passwords_private::OnPasswordCheckStatusChanged::kEventName;
+
+  // Verify that the event was not fired during construction.
+  EXPECT_FALSE(base::Contains(event_router_observer().events(), kEventName));
+
+  // Verify that the event gets fired once the saved passwords provider is
+  // initialized.
+  RunUntilIdle();
+  EXPECT_EQ(events::PASSWORDS_PRIVATE_ON_PASSWORD_CHECK_STATUS_CHANGED,
+            event_router_observer().events().at(kEventName)->histogram_value);
+  event_router_observer().ClearEvents();
+
+  // Verify that a subsequent call to StartPasswordCheck() results in the
+  // expected event.
+  delegate().StartPasswordCheck();
+  EXPECT_EQ(events::PASSWORDS_PRIVATE_ON_PASSWORD_CHECK_STATUS_CHANGED,
+            event_router_observer().events().at(kEventName)->histogram_value);
+}
+
 }  // namespace extensions

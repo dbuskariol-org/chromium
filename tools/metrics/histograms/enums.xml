@@ -20959,6 +20959,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="453"
       label="PASSWORDS_PRIVATE_ON_COMPROMISED_CREDENTIALS_INFO_CHANGED"/>
   <int value="454" label="TERMINAL_PRIVATE_ON_A11Y_STATUS_CHANGED"/>
+  <int value="455" label="PASSWORDS_PRIVATE_ON_PASSWORD_CHECK_STATUS_CHANGED"/>
 </enum>
 
 <enum name="ExtensionFileWriteResult">
