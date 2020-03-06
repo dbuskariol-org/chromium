@@ -63,44 +63,42 @@ bool NamedLineCollection::HasNamedLines() {
   return named_lines_indexes_ || auto_repeat_named_lines_indexes_;
 }
 
-size_t NamedLineCollection::Find(size_t line) {
-  if (line > last_line_)
-    return kNotFound;
-
-  if (!auto_repeat_named_lines_indexes_ || line < insertion_point_)
-    return named_lines_indexes_ ? named_lines_indexes_->Find(line) : kNotFound;
-
-  if (line <= (insertion_point_ + auto_repeat_total_tracks_)) {
-    size_t local_index = line - insertion_point_;
-
-    size_t index_in_first_repetition =
-        local_index % auto_repeat_track_list_length_;
-    if (index_in_first_repetition)
-      return auto_repeat_named_lines_indexes_->Find(index_in_first_repetition);
-
-    // The line names defined in the last line are also present in the first
-    // line of the next repetition (if any). Same for the line names defined in
-    // the first line.
-    if (local_index == auto_repeat_total_tracks_)
-      return auto_repeat_named_lines_indexes_->Find(
-          auto_repeat_track_list_length_);
-    size_t position =
-        auto_repeat_named_lines_indexes_->Find(static_cast<size_t>(0));
-    if (position != kNotFound)
-      return position;
-    return local_index == 0 ? kNotFound
-                            : auto_repeat_named_lines_indexes_->Find(
-                                  auto_repeat_track_list_length_);
-  }
-
-  return named_lines_indexes_ ? named_lines_indexes_->Find(
-                                    line - (auto_repeat_total_tracks_ - 1))
-                              : kNotFound;
-}
-
 bool NamedLineCollection::Contains(size_t line) {
   CHECK(HasNamedLines());
-  return Find(line) != kNotFound;
+
+  if (line > last_line_)
+    return false;
+
+  auto find = [](const Vector<size_t>* indexes, size_t line) {
+    return indexes && indexes->Find(line) != kNotFound;
+  };
+
+  if (auto_repeat_track_list_length_ == 0LU || line < insertion_point_)
+    return find(named_lines_indexes_, line);
+
+  DCHECK(auto_repeat_total_tracks_);
+
+  if (line > insertion_point_ + auto_repeat_total_tracks_)
+    return find(named_lines_indexes_, line - (auto_repeat_total_tracks_ - 1));
+
+  if (line == insertion_point_) {
+    return find(named_lines_indexes_, line) ||
+           find(auto_repeat_named_lines_indexes_, 0);
+  }
+
+  if (line == insertion_point_ + auto_repeat_total_tracks_) {
+    return find(auto_repeat_named_lines_indexes_,
+                auto_repeat_track_list_length_) ||
+           find(named_lines_indexes_, insertion_point_ + 1);
+  }
+
+  size_t auto_repeat_index_in_first_repetition =
+      (line - insertion_point_) % auto_repeat_track_list_length_;
+  if (!auto_repeat_index_in_first_repetition &&
+      find(auto_repeat_named_lines_indexes_, auto_repeat_track_list_length_))
+    return true;
+  return find(auto_repeat_named_lines_indexes_,
+              auto_repeat_index_in_first_repetition);
 }
 
 size_t NamedLineCollection::FirstPosition() {
