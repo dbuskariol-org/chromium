@@ -6913,6 +6913,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Has strong validators"/>
 </enum>
 
+<enum name="BooleanHasToken">
+  <int value="0" label="Lacks token"/>
+  <int value="1" label="Has token"/>
+</enum>
+
 <enum name="BooleanHasWithheldHosts">
   <int value="0" label="Does not have withheld hosts"/>
   <int value="1" label="Has withheld hosts"/>
