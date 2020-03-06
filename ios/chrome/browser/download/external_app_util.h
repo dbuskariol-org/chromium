@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_DOWNLOAD_GOOGLE_DRIVE_APP_UTIL_H_
-#define IOS_CHROME_BROWSER_DOWNLOAD_GOOGLE_DRIVE_APP_UTIL_H_
+#ifndef IOS_CHROME_BROWSER_DOWNLOAD_EXTERNAL_APP_UTIL_H_
+#define IOS_CHROME_BROWSER_DOWNLOAD_EXTERNAL_APP_UTIL_H_
 
 @class NSString;
 @class NSURL;
@@ -26,4 +26,8 @@ NSURL* GetGoogleDriveAppUrl();
 // Returns true if Google Drive app is installed.
 bool IsGoogleDriveAppInstalled();
 
-#endif  // IOS_CHROME_BROWSER_DOWNLOAD_GOOGLE_DRIVE_APP_UTIL_H_
+// Returns URL which can be used to open Chrome's directory in files.app.
+// Returns nil if it cannot get the directory.
+NSURL* GetFilesAppUrl();
+
+#endif  // IOS_CHROME_BROWSER_DOWNLOAD_EXTERNAL_APP_UTIL_H_
