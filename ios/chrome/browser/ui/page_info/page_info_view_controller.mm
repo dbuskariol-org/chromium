@@ -10,4 +10,12 @@
 
 @implementation PageInfoViewController
 
+#pragma mark - PageInfoConsumer
+
+- (void)pageInfoChanged:(PageInfoDescription*)pageInfoDescription {
+  // Show new page info in the UI.
+  // TODO(crbug.com/1038919): Implement this.
+  self.view.backgroundColor = [UIColor redColor];
+}
+
 @end
