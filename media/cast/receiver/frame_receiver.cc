@@ -245,8 +245,9 @@ void FrameReceiver::EmitAvailableEncodedFrames() {
           is_waiting_for_consecutive_frame_ = true;
           cast_environment_->PostDelayedTask(
               CastEnvironment::MAIN, FROM_HERE,
-              base::Bind(&FrameReceiver::EmitAvailableEncodedFramesAfterWaiting,
-                         AsWeakPtr()),
+              base::BindOnce(
+                  &FrameReceiver::EmitAvailableEncodedFramesAfterWaiting,
+                  AsWeakPtr()),
               playout_time - now);
         }
         return;
@@ -324,7 +325,7 @@ void FrameReceiver::ScheduleNextCastMessage() {
       time_to_send, base::TimeDelta::FromMilliseconds(kMinSchedulingDelayMs));
   cast_environment_->PostDelayedTask(
       CastEnvironment::MAIN, FROM_HERE,
-      base::Bind(&FrameReceiver::SendNextCastMessage, AsWeakPtr()),
+      base::BindOnce(&FrameReceiver::SendNextCastMessage, AsWeakPtr()),
       time_to_send);
 }
 
@@ -339,7 +340,7 @@ void FrameReceiver::ScheduleNextRtcpReport() {
 
   cast_environment_->PostDelayedTask(
       CastEnvironment::MAIN, FROM_HERE,
-      base::Bind(&FrameReceiver::SendNextRtcpReport, AsWeakPtr()),
+      base::BindOnce(&FrameReceiver::SendNextRtcpReport, AsWeakPtr()),
       base::TimeDelta::FromMilliseconds(kRtcpReportIntervalMs));
 }
 
