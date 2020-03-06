@@ -200,7 +200,7 @@ class MediaSourcePipelineIntegrationFuzzerTest
     source.set_do_eos_after_next_append(true);
 
     source.set_encrypted_media_init_data_cb(
-        base::Bind(&OnEncryptedMediaInitData, this));
+        base::BindRepeating(&OnEncryptedMediaInitData, this));
 
     // Allow parsing to either pass or fail without emitting a gtest failure
     // from TestMediaSource.
