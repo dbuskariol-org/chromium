@@ -141,11 +141,12 @@ void MultiStorePasswordSaveManager::MoveCredentialsToAccountStore() {
   // in both profile and account store.
   // 3. Moving credentials upon an update. FormFetch will have an outdated
   // credentials. Fix it if this turns out to be a product requirement.
+  // 4. Migrating federated matches if applicable.
 
   const std::vector<const PasswordForm*> account_store_matches =
-      AccountStoreMatches(form_fetcher_->GetBestMatches());
+      AccountStoreMatches(form_fetcher_->GetNonFederatedMatches());
   for (const PasswordForm* match :
-       ProfileStoreMatches(form_fetcher_->GetBestMatches())) {
+       ProfileStoreMatches(form_fetcher_->GetNonFederatedMatches())) {
     DCHECK(!match->IsUsingAccountStore());
     // Ignore credentials matches for other usernames.
     if (match->username_value != pending_credentials_.username_value)

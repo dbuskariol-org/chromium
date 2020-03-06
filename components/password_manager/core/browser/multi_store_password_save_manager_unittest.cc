@@ -492,4 +492,30 @@ TEST_F(
   password_save_manager()->MoveCredentialsToAccountStore();
 }
 
+TEST_F(MultiStorePasswordSaveManagerTest,
+       MovePSLMatchedCredentialsFromProfileToAccountStore) {
+  PasswordForm saved_match_in_profile_store(saved_match_);
+  saved_match_in_profile_store.in_store = PasswordForm::Store::kProfileStore;
+  PasswordForm psl_saved_match_in_profile_store(psl_saved_match_);
+  psl_saved_match_in_profile_store.in_store =
+      PasswordForm::Store::kProfileStore;
+  SetNonFederatedAndNotifyFetchCompleted(
+      {&saved_match_in_profile_store, &psl_saved_match_in_profile_store});
+
+  password_save_manager()->CreatePendingCredentials(
+      saved_match_in_profile_store, observed_form_, submitted_form_,
+      /*is_http_auth=*/false,
+      /*is_credential_api_save=*/false);
+
+  EXPECT_CALL(*mock_profile_form_saver(), Remove(saved_match_in_profile_store));
+  EXPECT_CALL(*mock_profile_form_saver(),
+              Remove(psl_saved_match_in_profile_store));
+  EXPECT_CALL(*mock_account_form_saver(),
+              Save(saved_match_in_profile_store, _, _));
+  EXPECT_CALL(*mock_account_form_saver(),
+              Save(psl_saved_match_in_profile_store, _, _));
+
+  password_save_manager()->MoveCredentialsToAccountStore();
+}
+
 }  // namespace password_manager
