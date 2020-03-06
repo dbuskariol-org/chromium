@@ -22,6 +22,7 @@
 #include "media/media_buildflags.h"
 #include "media/test/pipeline_integration_test_base.h"
 #include "media/test/test_media_source.h"
+#include "third_party/googletest/src/googletest/src/gtest-internal-inl.h"
 
 namespace {
 
@@ -247,6 +248,14 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
   FuzzerVariant variant = PIPELINE_FUZZER_VARIANT;
 
+  // These tests use GoogleTest assertions without using the GoogleTest
+  // framework. While this is the case, tell GoogleTest's stack trace getter
+  // that GoogleTest is being left now so that there is a basis for traces
+  // collected upon assertion failure. TODO(https://crbug.com/1039559): use
+  // RUN_ALL_TESTS() and remove this code.
+  ::testing::internal::GetUnitTestImpl()
+      ->os_stack_trace_getter()
+      ->UponLeavingGTest();
   if (variant == SRC) {
     media::ProgressivePipelineIntegrationFuzzerTest test;
     test.RunTest(data, size);
