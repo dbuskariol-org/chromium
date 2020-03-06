@@ -74,10 +74,9 @@ FrameReceiver::~FrameReceiver() {
   cast_environment_->logger()->Unsubscribe(&event_subscriber_);
 }
 
-void FrameReceiver::RequestEncodedFrame(
-    const ReceiveEncodedFrameCallback& callback) {
+void FrameReceiver::RequestEncodedFrame(ReceiveEncodedFrameCallback callback) {
   DCHECK(cast_environment_->CurrentlyOn(CastEnvironment::MAIN));
-  frame_request_queue_.push_back(callback);
+  frame_request_queue_.push_back(std::move(callback));
   EmitAvailableEncodedFrames();
 }
 
@@ -282,7 +281,7 @@ void FrameReceiver::EmitAvailableEncodedFrames() {
     cast_environment_->PostTask(
         CastEnvironment::MAIN, FROM_HERE,
         base::BindOnce(&FrameReceiver::EmitOneFrame, AsWeakPtr(),
-                       frame_request_queue_.front(),
+                       base::Passed(std::move(*frame_request_queue_.begin())),
                        base::Passed(&encoded_frame)));
     frame_request_queue_.pop_front();
   }
@@ -296,11 +295,11 @@ void FrameReceiver::EmitAvailableEncodedFramesAfterWaiting() {
 }
 
 void FrameReceiver::EmitOneFrame(
-    const ReceiveEncodedFrameCallback& callback,
+    ReceiveEncodedFrameCallback callback,
     std::unique_ptr<EncodedFrame> encoded_frame) const {
   DCHECK(cast_environment_->CurrentlyOn(CastEnvironment::MAIN));
   if (!callback.is_null())
-    callback.Run(std::move(encoded_frame));
+    std::move(callback).Run(std::move(encoded_frame));
 }
 
 base::TimeTicks FrameReceiver::GetPlayoutTime(const EncodedFrame& frame) const {
