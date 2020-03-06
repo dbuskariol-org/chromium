@@ -102,6 +102,7 @@ source_set("unit_tests") {
   testonly = true
 
   sources = [
+    "decorators/decorators_utils_unittest.cc",
     "decorators/page_live_state_decorator_unittest.cc",
     "decorators/page_load_tracker_decorator_unittest.cc",
     "frame_priority/boosting_vote_aggregator_unittest.cc",
