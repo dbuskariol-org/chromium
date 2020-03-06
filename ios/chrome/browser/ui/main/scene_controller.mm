@@ -165,6 +165,11 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 // in a modal dialog.
 @property(nonatomic, assign) BOOL presentingFirstRunUI;
 
+// The main coordinator, lazily created the first time it is accessed. Manages
+// the main view controller. This property should not be accessed before the
+// browser has started up to the FOREGROUND stage.
+@property(nonatomic, strong) TabGridCoordinator* mainCoordinator;
+
 @end
 
 @implementation SceneController
@@ -195,6 +200,20 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 }
 
 #pragma mark - Setters and getters
+
+- (TabGridCoordinator*)mainCoordinator {
+  if (!_mainCoordinator) {
+    // Lazily create the main coordinator.
+    TabGridCoordinator* tabGridCoordinator =
+        [[TabGridCoordinator alloc] initWithWindow:self.sceneState.window
+                        applicationCommandEndpoint:self
+                       browsingDataCommandEndpoint:self.mainController];
+    tabGridCoordinator.regularBrowser = self.mainInterface.browser;
+    tabGridCoordinator.incognitoBrowser = self.incognitoInterface.browser;
+    _mainCoordinator = tabGridCoordinator;
+  }
+  return _mainCoordinator;
+}
 
 - (id<BrowserInterface>)mainInterface {
   return self.mainController.interfaceProvider.mainInterface;
@@ -312,9 +331,9 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   [self.mainController.window makeKeyAndVisible];
 
   // Lazy init of mainCoordinator.
-  [self.mainController.mainCoordinator start];
+  [self.mainCoordinator start];
 
-  _tabSwitcher = self.mainController.mainCoordinator.tabSwitcher;
+  _tabSwitcher = self.mainCoordinator.tabSwitcher;
   // Call -restoreInternalState so that the grid shows the correct panel.
   [_tabSwitcher
       restoreInternalStateWithMainBrowser:self.mainInterface.browser
@@ -371,6 +390,12 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
   [self.historyCoordinator stop];
   self.historyCoordinator = nil;
+
+  [_mainCoordinator stop];
+  _mainCoordinator = nil;
+
+  [self.browserViewWrangler shutdown];
+  self.browserViewWrangler = nil;
 
   self.hasInitializedUI = NO;
 }
@@ -525,8 +550,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
                                     snapshotResult);
         });
   }
-  [self.mainController.mainCoordinator
-      prepareToShowTabSwitcher:self.tabSwitcher];
+  [self.mainCoordinator prepareToShowTabSwitcher:self.tabSwitcher];
 }
 
 - (void)displayTabSwitcher {
@@ -689,7 +713,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   DCHECK(!self.signinInteractionCoordinator.isSettingsViewPresented);
   if (!baseViewController) {
     DCHECK_EQ(self.mainController.currentBVC,
-              self.mainController.mainCoordinator.activeViewController);
+              self.mainCoordinator.activeViewController);
     baseViewController = self.mainController.currentBVC;
   }
 
@@ -718,7 +742,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   DCHECK(!self.signinInteractionCoordinator.isSettingsViewPresented);
   if (!baseViewController) {
     DCHECK_EQ(self.mainController.currentBVC,
-              self.mainController.mainCoordinator.activeViewController);
+              self.mainCoordinator.activeViewController);
     baseViewController = self.mainController.currentBVC;
   }
 
@@ -852,8 +876,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 }
 
 - (UIImage*)currentPageScreenshot {
-  UIView* lastView =
-      self.mainController.mainCoordinator.activeViewController.view;
+  UIView* lastView = self.mainCoordinator.activeViewController.view;
   DCHECK(lastView);
   CGFloat scale = 0.0;
   // For screenshots of the tab switcher we need to use a scale of 1.0 to avoid
@@ -945,7 +968,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   // The tab switcher dismissal animation runs
   // as part of the BVC presentation process.  The BVC is presented before the
   // animations begin, so it should be the current active VC at this point.
-  DCHECK_EQ(self.mainController.mainCoordinator.activeViewController,
+  DCHECK_EQ(self.mainCoordinator.activeViewController,
             self.mainController.currentBVC);
 
   if (self.modeToDisplayOnTabSwitcherDismissal ==
@@ -1161,9 +1184,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
     [self.signinInteractionCoordinator cancelAndDismiss];
     // History coordinator can be started on top of the tab grid. This is not
     // true of the other tab switchers.
-    DCHECK(self.mainController.mainCoordinator);
-    [self.mainController.mainCoordinator
-        stopChildCoordinatorsWithCompletion:completion];
+    DCHECK(self.mainCoordinator);
+    [self.mainCoordinator stopChildCoordinatorsWithCompletion:completion];
   };
 
   // As a top level rule, if the settings are showing, they need to be
@@ -1400,9 +1422,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
       [weakCurrentBVC.dispatcher focusOmnibox];
     };
   }
-  [self.mainController.mainCoordinator
-      showTabViewController:self.currentInterface.bvc
-                 completion:completion];
+  [self.mainCoordinator showTabViewController:self.currentInterface.bvc
+                                   completion:completion];
   [self.currentInterface.bvc.dispatcher
       setIncognitoContentVisible:(self.currentInterface ==
                                   self.incognitoInterface)];
@@ -1456,7 +1477,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   // TODO(crbug.com/754642): Implement TopPresentedViewControllerFrom()
   // privately.
   return top_view_controller::TopPresentedViewControllerFrom(
-      self.mainController.mainCoordinator.viewController);
+      self.mainCoordinator.viewController);
 }
 
 #pragma mark - WebStateListObserving
@@ -1570,7 +1591,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   self.mainController.tabSwitcherIsActive = YES;
   [self.tabSwitcher setDelegate:self];
 
-  [self.mainController.mainCoordinator showTabSwitcher:self.tabSwitcher];
+  [self.mainCoordinator showTabSwitcher:self.tabSwitcher];
 }
 
 // Destroys and rebuilds the incognito browser state.
