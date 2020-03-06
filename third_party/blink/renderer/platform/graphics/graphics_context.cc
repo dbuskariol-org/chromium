@@ -202,6 +202,17 @@ void GraphicsContext::SetInDrawingRecorder(bool val) {
   in_drawing_recorder_ = val;
 }
 
+void GraphicsContext::SetDOMNodeId(DOMNodeId new_node_id) {
+  if (canvas_)
+    canvas_->setNodeId(new_node_id);
+
+  dom_node_id_ = new_node_id;
+}
+
+DOMNodeId GraphicsContext::GetDOMNodeId() const {
+  return dom_node_id_;
+}
+
 void GraphicsContext::SetShadow(
     const FloatSize& offset,
     float blur,

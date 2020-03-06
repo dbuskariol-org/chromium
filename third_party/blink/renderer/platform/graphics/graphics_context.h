@@ -439,6 +439,12 @@ class PLATFORM_EXPORT GraphicsContext {
   void SetInDrawingRecorder(bool);
   bool InDrawingRecorder() const { return in_drawing_recorder_; }
 
+  // Set the DOM Node Id on the canvas. This is used to associate
+  // the drawing commands with the structure tree for the page when
+  // creating a tagged PDF. Callers are responsible for restoring it.
+  void SetDOMNodeId(DOMNodeId);
+  DOMNodeId GetDOMNodeId() const;
+
   static sk_sp<SkColorFilter> WebCoreColorFilterToSkiaColorFilter(ColorFilter);
 
  private:
@@ -554,6 +560,9 @@ class PLATFORM_EXPORT GraphicsContext {
   unsigned printing_ : 1;
   unsigned is_painting_preview_ : 1;
   unsigned in_drawing_recorder_ : 1;
+
+  // The current node ID, which is used for marked content in a tagged PDF.
+  DOMNodeId dom_node_id_ = kInvalidDOMNodeId;
 
   DISALLOW_COPY_AND_ASSIGN(GraphicsContext);
 };
