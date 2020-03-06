@@ -32,6 +32,8 @@ class PasswordCheckDelegate
     : public password_manager::CompromisedCredentialsProvider::Observer,
       public password_manager::BulkLeakCheckService::Observer {
  public:
+  static constexpr size_t kTooManyPasswords = 1000;
+
   using CredentialPasswordsMap =
       std::map<password_manager::CredentialWithPassword,
                std::vector<autofill::PasswordForm>,
@@ -72,6 +74,9 @@ class PasswordCheckDelegate
   // Stops checking for compromised passwords.
   void StopPasswordCheck();
 
+  // Returns the current status of the password check.
+  api::passwords_private::PasswordCheckStatus GetPasswordCheckStatus() const;
+
  private:
   // password_manager::CompromisedCredentialsProvider::Observer:
   // Invokes PasswordsPrivateEventRouter::OnCompromisedCredentialsInfoChanged if
@@ -105,6 +110,13 @@ class PasswordCheckDelegate
   password_manager::CompromisedCredentialsProvider
       compromised_credentials_provider_;
 
+  // Adapter used to start, monitor and stop a bulk leak check.
+  password_manager::BulkLeakCheckServiceAdapter
+      bulk_leak_check_service_adapter_;
+
+  // Remembers whether the bulk leak check was explicitly canceled by the user.
+  bool is_canceled_ = false;
+
   // A scoped observer for |compromised_credentials_provider_|.
   ScopedObserver<password_manager::CompromisedCredentialsProvider,
                  password_manager::CompromisedCredentialsProvider::Observer>
@@ -128,10 +140,6 @@ class PasswordCheckDelegate
               int,
               password_manager::PasswordCredentialLess>
       compromised_credential_id_generator_;
-
-  // Starts, monitors and stops a leaked credential check.
-  password_manager::BulkLeakCheckServiceAdapter
-      bulk_leak_check_service_adapter_;
 };
 
 }  // namespace extensions
