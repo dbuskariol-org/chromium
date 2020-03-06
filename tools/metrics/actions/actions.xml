@@ -14172,6 +14172,102 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="MobileWebContextMenuCopyImage">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Copy Image in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuCopyLink">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Copy Link in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuImageImpression">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user invokes context menu for web contents image. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuLinkImpression">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user invokes context menu for web contents link. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuOpenImage">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Open Image in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuOpenImageInNewTab">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Open Image In New Tab in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuOpenInIncognitoTab">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Open In Incognito Tab in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuOpenInNewTab">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Open In New Tab in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuOpenJS">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Open Java Script in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuReadLater">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Read Later in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuSaveImage">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Save Image in context menu. iOS only.
+  </description>
+</action>
+
+<action name="MobileWebContextMenuSearchByImage">
+  <owner>eugenebut@chromium.org</owner>
+  <owner>michaeldo@chromium.org</owner>
+  <description>
+    Recorded when user taps Search By Image in context menu. iOS only.
+  </description>
+</action>
+
 <action name="MobileWebsiteSettingsOpenedFromMenu">
   <owner>tedchoc@chromium.org</owner>
   <description>Page Info opened via the menu.</description>
