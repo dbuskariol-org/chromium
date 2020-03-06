@@ -1926,7 +1926,7 @@ SkColor TabStrip::GetTabBackgroundColor(
           : color_utils::HSLShift(
                 frame, tp->GetTint(ThemeProperties::TINT_BACKGROUND_TAB));
 
-  return color_utils::GetResultingPaintColor(background, frame);
+  return background;
 }
 
 SkColor TabStrip::GetTabForegroundColor(TabActive active,
