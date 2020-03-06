@@ -726,7 +726,6 @@
     "prefix": "legacy-client-hints-no-fp-delegation",
     "bases": [ "external/wpt/client-hints" ],
     "args": [ "--enable-features=AllowClientHintsToThirdParty",
-              "--disable-blink-features=FeaturePolicyForClientHints",
               "--disable-features=FeaturePolicyForClientHints" ]
   },
   {
