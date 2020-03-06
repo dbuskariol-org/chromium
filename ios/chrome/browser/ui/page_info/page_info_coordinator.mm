@@ -27,7 +27,9 @@
 #pragma mark - ChromeCoordinator
 
 - (void)start {
-  self.viewController = [[PageInfoViewController alloc] init];
+  self.viewController =
+      [[PageInfoViewController alloc] initWithStyle:UITableViewStylePlain];
+
   web::WebState* webState =
       self.browser->GetWebStateList()->GetActiveWebState();
   self.mediator = [[PageInfoMediator alloc] initWithWebState:webState];

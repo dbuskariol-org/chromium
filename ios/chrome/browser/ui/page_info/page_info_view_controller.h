@@ -8,9 +8,10 @@
 #import <UIKit/UIKit.h>
 
 #import "ios/chrome/browser/ui/page_info/page_info_consumer.h"
+#import "ios/chrome/browser/ui/table_view/chrome_table_view_controller.h"
 
 // View Controller for displaying the page info.
-@interface PageInfoViewController : UIViewController <PageInfoConsumer>
+@interface PageInfoViewController : ChromeTableViewController <PageInfoConsumer>
 
 @end
 
