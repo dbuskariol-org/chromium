@@ -29,7 +29,6 @@ class Profile;
 
 namespace safe_browsing {
 
-class BinaryUploadService;
 class DeepScanningDialogViews;
 
 // A tab modal dialog delegate that informs the user of a background deep
@@ -306,10 +305,6 @@ class DeepScanningDialogDelegate {
   // Updates |final_result_| following the precedence established by the
   // DeepScanningFinalResult enum.
   void UpdateFinalResult(DeepScanningFinalResult message);
-
-  // Returns the BinaryUploadService used to upload content for deep scanning.
-  // Virtual to override in tests.
-  virtual BinaryUploadService* GetBinaryUploadService();
 
   // The web contents that is attempting to access the data.
   content::WebContents* web_contents_ = nullptr;

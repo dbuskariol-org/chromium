@@ -176,8 +176,7 @@ DeepScanningDialogViews::DeepScanningDialogViews(
     content::WebContents* web_contents,
     DeepScanAccessPoint access_point,
     bool is_file_scan)
-    : content::WebContentsObserver(web_contents),
-      delegate_(std::move(delegate)),
+    : delegate_(std::move(delegate)),
       web_contents_(web_contents),
       access_point_(std::move(access_point)),
       is_file_scan_(is_file_scan) {
@@ -228,10 +227,6 @@ void DeepScanningDialogViews::DeleteDelegate() {
 
 ui::ModalType DeepScanningDialogViews::GetModalType() const {
   return ui::MODAL_TYPE_CHILD;
-}
-
-void DeepScanningDialogViews::WebContentsDestroyed() {
-  delete this;
 }
 
 void DeepScanningDialogViews::ShowResult(
