@@ -4225,8 +4225,8 @@ void RenderFrameImpl::DidCommitNavigation(
   for (auto& observer : observers_)
     observer.DidCreateNewDocument();
 
-  DLOG(INFO) << "Committed provisional load: "
-             << TrimURL(GetLoadingUrl().possibly_invalid_spec());
+  DVLOG(1) << "Committed provisional load: "
+           << TrimURL(GetLoadingUrl().possibly_invalid_spec());
   TRACE_EVENT2("navigation,rail", "RenderFrameImpl::didCommitProvisionalLoad",
                "id", routing_id_,
                "url", GetLoadingUrl().possibly_invalid_spec());
