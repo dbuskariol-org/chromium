@@ -12,6 +12,9 @@ source_set("page_info") {
     "page_info_consumer.h",
     "page_info_description.h",
     "page_info_description.mm",
+    "page_info_navigation_commands.h",
+    "page_info_site_security_view_controller.h",
+    "page_info_site_security_view_controller.mm",
     "page_info_view_controller.h",
     "page_info_view_controller.mm",
   ]

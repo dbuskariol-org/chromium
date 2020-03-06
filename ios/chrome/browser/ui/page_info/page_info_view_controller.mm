@@ -4,6 +4,7 @@
 
 #import "ios/chrome/browser/ui/page_info/page_info_view_controller.h"
 
+#import "ios/chrome/browser/ui/page_info/page_info_navigation_commands.h"
 #import "ios/chrome/browser/ui/table_view/cells/table_view_detail_icon_item.h"
 #include "ios/chrome/grit/ios_strings.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -53,6 +54,22 @@ typedef NS_ENUM(NSInteger, ItemType) {
        toSectionWithIdentifier:SectionIdentifierContent];
 
   [self.tableView reloadData];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView*)tableView
+    didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+  [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+  NSInteger itemType = [self.tableViewModel itemTypeForIndexPath:indexPath];
+  switch (itemType) {
+    case ItemTypeSecurity: {
+      [self.handler showSiteSecurityInfo];
+      break;
+    }
+    default:
+      break;
+  }
 }
 
 @end
