@@ -2746,7 +2746,7 @@ Node::InsertionNotificationRequest Element::InsertedInto(
   if (!insertion_point.IsInTreeScope())
     return kInsertionDone;
 
-  if (HasRareData()) {
+  if (isConnected() && HasRareData()) {
     ElementRareData* rare_data = GetElementRareData();
     if (ElementIntersectionObserverData* observer_data =
             rare_data->IntersectionObserverData()) {
@@ -2761,10 +2761,8 @@ Node::InsertionNotificationRequest Element::InsertedInto(
       }
     }
 
-    if (isConnected()) {
-      if (auto* context = rare_data->GetDisplayLockContext())
-        context->ElementConnected();
-    }
+    if (auto* context = rare_data->GetDisplayLockContext())
+      context->ElementConnected();
   }
 
   if (isConnected()) {
