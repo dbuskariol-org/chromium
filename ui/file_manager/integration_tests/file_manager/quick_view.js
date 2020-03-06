@@ -850,6 +850,52 @@
   };
 
   /**
+   * Tests opening Quick View containing an audio file.
+   */
+  testcase.openQuickViewAudioOnDrive = async () => {
+    const caller = getCaller();
+
+    /**
+     * The <webview> resides in the <files-safe-media type="audio"> shadow DOM,
+     * which is a child of the #quick-view shadow DOM.
+     */
+    const webView =
+        ['#quick-view', 'files-safe-media[type="audio"]', 'webview'];
+
+    // Open Files app on Downloads containing ENTRIES.beautiful song.
+    const appId =
+        await setupAndWaitUntilReady(RootPath.DRIVE, [], [ENTRIES.beautiful]);
+
+    // Open the file in Quick View.
+    await openQuickView(appId, ENTRIES.beautiful.nameText);
+
+    // Wait for the Quick View <webview> to load and display its content.
+    function checkWebViewAudioLoaded(elements) {
+      let haveElements = Array.isArray(elements) && elements.length === 1;
+      if (haveElements) {
+        haveElements = elements[0].styles.display.includes('block');
+      }
+      if (!haveElements || elements[0].attributes.loaded !== '') {
+        return pending(caller, 'Waiting for <webview> to load.');
+      }
+      return;
+    }
+    await repeatUntil(async () => {
+      return checkWebViewAudioLoaded(await remoteCall.callRemoteTestUtil(
+          'deepQueryAllElements', appId, [webView, ['display']]));
+    });
+
+    // Get the <webview> document.body backgroundColor style.
+    const getBackgroundStyle =
+        'window.getComputedStyle(document.body).backgroundColor';
+    const backgroundColor = await remoteCall.callRemoteTestUtil(
+        'deepExecuteScriptInWebView', appId, [webView, getBackgroundStyle]);
+
+    // Check: the <webview> body backgroundColor should be transparent black.
+    chrome.test.assertEq('rgba(0, 0, 0, 0)', backgroundColor[0]);
+  };
+
+  /**
    * Tests opening Quick View containing an audio file that has an album art
    * image in its metadata.
    */

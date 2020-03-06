@@ -470,6 +470,7 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
         TestCase("openQuickViewViaContextMenuSingleSelection"),
         TestCase("openQuickViewViaContextMenuCheckSelections"),
         TestCase("openQuickViewAudio"),
+        TestCase("openQuickViewAudioOnDrive"),
         TestCase("openQuickViewAudioWithImageMetadata"),
         TestCase("openQuickViewImage"),
         TestCase("openQuickViewImageExif"),
