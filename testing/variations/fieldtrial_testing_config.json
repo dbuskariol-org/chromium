@@ -2227,6 +2227,24 @@
             ]
         }
     ],
+    "FormControlsRefresh": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "FormControlsRefresh"
+                    ]
+                }
+            ]
+        }
+    ],
     "ForwardMemoryPressureEventsToGpuProcess": [
         {
             "platforms": [
