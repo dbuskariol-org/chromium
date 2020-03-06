@@ -7,7 +7,6 @@
 
 #include <array>
 
-#include "base/bind_helpers.h"
 #include "base/containers/span.h"
 #include "base/memory/ref_counted.h"
 #include "device/bluetooth/test/mock_bluetooth_adapter.h"

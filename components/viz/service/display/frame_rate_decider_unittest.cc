@@ -4,7 +4,6 @@
 
 #include "components/viz/service/display/frame_rate_decider.h"
 
-#include "base/callback_helpers.h"
 #include "components/viz/common/frame_sinks/begin_frame_source.h"
 #include "components/viz/common/surfaces/surface_info.h"
 #include "components/viz/service/surfaces/surface.h"

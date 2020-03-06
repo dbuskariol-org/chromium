@@ -6,7 +6,6 @@
 #include <memory>
 #include <utility>
 
-#include "base/bind_helpers.h"
 #include "base/callback.h"
 #include "base/strings/string16.h"
 #include "build/build_config.h"

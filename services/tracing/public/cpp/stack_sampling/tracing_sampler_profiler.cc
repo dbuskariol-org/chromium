@@ -7,7 +7,6 @@
 #include <limits>
 #include <set>
 
-#include "base/bind_helpers.h"
 #include "base/debug/leak_annotations.h"
 #include "base/hash/hash.h"
 #include "base/memory/ptr_util.h"

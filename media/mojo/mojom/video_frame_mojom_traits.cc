@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 
-#include "base/bind_helpers.h"
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "gpu/ipc/common/gpu_memory_buffer_support.h"

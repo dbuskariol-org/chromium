@@ -4,7 +4,6 @@
 
 #include "content/browser/scheduler/responsiveness/jank_monitor.h"
 
-#include "base/bind_helpers.h"
 #include "base/callback.h"
 #include "base/synchronization/waitable_event.h"
 #include "base/test/bind_test_util.h"

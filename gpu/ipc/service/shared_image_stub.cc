@@ -6,7 +6,6 @@
 
 #include <inttypes.h>
 
-#include "base/memory/ptr_util.h"
 #include "base/trace_event/memory_dump_manager.h"
 #include "base/trace_event/trace_event.h"
 #include "components/viz/common/features.h"

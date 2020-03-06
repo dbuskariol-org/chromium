@@ -5,7 +5,6 @@
 #include "third_party/blink/renderer/core/layout/grid.h"
 #include "third_party/blink/renderer/core/layout/layout_grid.h"
 
-#include "base/memory/ptr_util.h"
 #include "third_party/blink/renderer/core/testing/core_unit_test_helper.h"
 
 namespace blink {

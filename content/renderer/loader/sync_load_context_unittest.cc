@@ -4,7 +4,6 @@
 
 #include "content/renderer/loader/sync_load_context.h"
 #include "base/bind.h"
-#include "base/memory/ptr_util.h"
 #include "base/threading/thread.h"
 #include "content/renderer/loader/sync_load_response.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"

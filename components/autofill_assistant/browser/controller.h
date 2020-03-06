@@ -10,7 +10,6 @@
 #include <string>
 #include <vector>
 
-#include "base/bind_helpers.h"
 #include "base/macros.h"
 #include "base/optional.h"
 #include "components/autofill_assistant/browser/basic_interactions.h"

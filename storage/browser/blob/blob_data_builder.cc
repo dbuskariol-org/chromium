@@ -11,7 +11,6 @@
 #include <utility>
 
 #include "base/files/file.h"
-#include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/numerics/safe_conversions.h"
 #include "base/numerics/safe_math.h"

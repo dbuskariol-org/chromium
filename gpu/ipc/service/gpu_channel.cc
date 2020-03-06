@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #include "gpu/ipc/service/gpu_channel.h"
-#include "base/memory/ptr_util.h"
 
 #include <utility>
 

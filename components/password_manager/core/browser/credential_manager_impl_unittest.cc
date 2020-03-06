@@ -12,7 +12,6 @@
 #include <tuple>
 
 #include "base/bind.h"
-#include "base/bind_helpers.h"
 #include "base/macros.h"
 #include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"

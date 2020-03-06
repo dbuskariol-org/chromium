@@ -4,7 +4,6 @@
 
 #include "components/viz/service/display_embedder/skia_output_surface_dependency_impl.h"
 
-#include "base/callback_helpers.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "build/build_config.h"
 #include "components/viz/service/gl/gpu_service_impl.h"

@@ -5,7 +5,6 @@
 #include "chromeos/services/secure_channel/public/cpp/client/connection_attempt_impl.h"
 
 #include "base/bind.h"
-#include "base/memory/ptr_util.h"
 #include "base/no_destructor.h"
 #include "chromeos/services/secure_channel/public/cpp/client/client_channel_impl.h"
 

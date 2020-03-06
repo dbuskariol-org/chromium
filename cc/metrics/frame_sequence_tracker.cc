@@ -4,7 +4,6 @@
 
 #include "cc/metrics/frame_sequence_tracker.h"
 
-#include "base/memory/ptr_util.h"
 #include "base/metrics/histogram.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/stl_util.h"

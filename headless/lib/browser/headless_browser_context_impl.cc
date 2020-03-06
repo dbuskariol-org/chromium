@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "base/guid.h"
-#include "base/memory/ptr_util.h"
 #include "base/path_service.h"
 #include "base/task/post_task.h"
 #include "components/keyed_service/core/simple_key_map.h"

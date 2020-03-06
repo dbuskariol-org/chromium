@@ -4,7 +4,6 @@
 
 #include "content/browser/cache_storage/cache_storage_cache_entry_handler.h"
 
-#include "base/callback_helpers.h"
 #include "base/guid.h"
 #include "base/optional.h"
 #include "content/browser/background_fetch/storage/cache_entry_handler_impl.h"

@@ -34,7 +34,6 @@
 #include <memory>
 #include <string>
 
-#include "base/bind_helpers.h"
 #include "base/stl_util.h"
 #include "base/test/test_mock_time_task_runner.h"
 #include "base/time/time.h"

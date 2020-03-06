@@ -24,7 +24,6 @@
 #include "base/android/build_info.h"
 #include "base/android/memory_pressure_listener_android.h"
 #include "base/base_paths_android.h"
-#include "base/bind_helpers.h"
 #include "base/command_line.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"

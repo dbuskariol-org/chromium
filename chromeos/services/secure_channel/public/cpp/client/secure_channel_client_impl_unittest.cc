@@ -4,7 +4,6 @@
 
 #include "chromeos/services/secure_channel/public/cpp/client/secure_channel_client_impl.h"
 
-#include "base/memory/ptr_util.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/no_destructor.h"
 #include "base/optional.h"

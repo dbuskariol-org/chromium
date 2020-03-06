@@ -34,7 +34,6 @@
 #include <limits>
 #include <memory>
 
-#include "base/bind_helpers.h"
 #include "base/stl_util.h"
 #include "build/build_config.h"
 #include "cc/input/overscroll_behavior.h"
