@@ -4,6 +4,7 @@
 
 #import "ios/chrome/browser/ui/main/scene_controller.h"
 
+#include "base/bind_helpers.h"
 #import "base/logging.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
