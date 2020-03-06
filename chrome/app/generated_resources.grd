@@ -10596,6 +10596,11 @@ Please help our engineers fix this problem. Tell us what happened right before y
         Also clear browsing data (<ph name="URL">$1<ex>www.google.com</ex></ph>) which may sign you out of Google.com.
     </message>
 
+    <!-- Speech On-Device API -->
+    <message name="IDS_UTILITY_PROCESS_SODA_SERVICE_NAME" desc="The name of the service process used to interface with the Speech On-Demand API.">
+      SODA Service
+    </message>
+
     <!-- App pause prompt -->
     <message name="IDS_APP_PAUSE_PROMPT_TITLE" desc="Titlebar of the app pause prompt window">
       App paused
