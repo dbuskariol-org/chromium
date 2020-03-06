@@ -479,6 +479,7 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
         TestCase("openQuickViewBrokenImage"),
         TestCase("openQuickViewImageClick"),
         TestCase("openQuickViewVideo"),
+        TestCase("openQuickViewVideoOnDrive"),
         TestCase("openQuickViewPdf"),
         TestCase("openQuickViewPdfPreviewsDisabled"),
         TestCase("openQuickViewKeyboardUpDownChangesView"),

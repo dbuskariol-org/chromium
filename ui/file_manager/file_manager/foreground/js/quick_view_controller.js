@@ -517,7 +517,7 @@ class QuickViewController {
             volumeInfo.volumeType) >= 0;
 
     // Treat certain types on Drive as if they were local (try auto-play etc).
-    if (entryIsOnDrive && type === 'audio') {
+    if (entryIsOnDrive && (type === 'audio' || type === 'video')) {
       localFile = true;
     }
 
