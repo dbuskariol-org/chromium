@@ -1341,7 +1341,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   base::WeakPtr<RenderFrameHostImpl> GetWeakPtr();
 
   // blink::mojom::LocalFrameHost
-  void EnterFullscreen(blink::mojom::FullscreenOptionsPtr options) override;
+  void EnterFullscreen(blink::mojom::FullscreenOptionsPtr options,
+                       EnterFullscreenCallback callback) override;
   void ExitFullscreen() override;
   void FullscreenStateChanged(bool is_fullscreen) override;
   void RegisterProtocolHandler(const std::string& scheme,
