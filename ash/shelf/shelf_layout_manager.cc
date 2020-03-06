@@ -2576,10 +2576,8 @@ bool ShelfLayoutManager::MaybeStartDragWindowFromShelf(
   // If hotseat is hidden when drag starts, do not start drag window if hotseat
   // hasn't been fully dragged up.
   if (hotseat_state() == HotseatState::kHidden) {
-    ShelfConfig* shelf_config = ShelfConfig::Get();
     const int full_drag_amount =
-        -(shelf_config->shelf_size() + shelf_config->hotseat_bottom_padding() +
-          shelf_config->hotseat_size());
+        -ShelfConfig::Get()->GetHotseatFullDragAmount();
     if (drag_amount_ > full_drag_amount)
       return false;
   } else if (hotseat_state() == HotseatState::kExtended) {
