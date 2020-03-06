@@ -181,9 +181,6 @@ crbug.com/986110 external/wpt/css/css-transforms/perspective-transforms-equivale
 
 crbug.com/807395 fast/multicol/mixed-opacity-test.html [ Failure ]
 
-########## display-lock failures ##########
-wpt_internal/display-lock/css-subtree-visibility/subtree-visibility-047.html [ Failure ]
-
 ########## Ref tests can't be rebaselined ##########
 crbug.com/504613 crbug.com/524248 [ Mac ] paint/images/image-backgrounds-not-antialiased.html [ Failure ]
 
@@ -3172,7 +3169,6 @@ crbug.com/626703 [ Win ] external/wpt/webvtt/rendering/cues-with-video/processin
 crbug.com/626703 [ Linux ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
-crbug.com/626703 [ Mac10.13 ] wpt_internal/display-lock/rendersubtree/activation/selection.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
