@@ -13,6 +13,7 @@
 #include "gpu/command_buffer/service/scheduler.h"
 #include "gpu/command_buffer/service/shared_image_factory.h"
 #include "gpu/ipc/common/command_buffer_id.h"
+#include "gpu/ipc/common/gpu_peak_memory.h"
 #include "gpu/ipc/service/gpu_channel.h"
 #include "gpu/ipc/service/gpu_channel_manager.h"
 #include "gpu/ipc/service/gpu_memory_buffer_factory.h"
@@ -447,7 +448,9 @@ void SharedImageStub::TrackMemoryAllocatedChange(int64_t delta) {
   size_ += delta;
   channel_->gpu_channel_manager()
       ->peak_memory_monitor()
-      ->OnMemoryAllocatedChange(command_buffer_id_, old_size, size_);
+      ->OnMemoryAllocatedChange(
+          command_buffer_id_, old_size, size_,
+          GpuPeakMemoryAllocationSource::SHARED_IMAGE_STUB);
 }
 
 uint64_t SharedImageStub::GetSize() const {
