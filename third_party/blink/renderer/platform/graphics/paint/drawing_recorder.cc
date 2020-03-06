@@ -31,9 +31,6 @@ DrawingRecorder::DrawingRecorder(GraphicsContext& context,
           context_.GetPaintController().NewDisplayItemList().size())
 #endif
 {
-  if (context.GetPaintController().DisplayItemConstructionIsDisabled())
-    return;
-
   // Must check DrawingRecorder::UseCachedDrawingIfPossible before creating the
   // DrawingRecorder.
   DCHECK(RuntimeEnabledFeatures::PaintUnderInvalidationCheckingEnabled() ||
@@ -54,9 +51,6 @@ DrawingRecorder::DrawingRecorder(GraphicsContext& context,
 }
 
 DrawingRecorder::~DrawingRecorder() {
-  if (context_.GetPaintController().DisplayItemConstructionIsDisabled())
-    return;
-
   if (context_.Printing() && dom_node_id_to_restore_)
     context_.SetDOMNodeId(dom_node_id_to_restore_.value());
 

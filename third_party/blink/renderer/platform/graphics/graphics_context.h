@@ -70,14 +70,7 @@ class PLATFORM_EXPORT GraphicsContext {
   USING_FAST_MALLOC(GraphicsContext);
 
  public:
-  enum DisabledMode {
-    kNothingDisabled = 0,  // Run as normal.
-    kFullyDisabled = 1     // Do absolutely minimal work to remove the cost of
-                           // the context from performance tests.
-  };
-
   explicit GraphicsContext(PaintController&,
-                           DisabledMode = kNothingDisabled,
                            printing::MetafileSkia* = nullptr,
                            paint_preview::PaintPreviewTracker* = nullptr);
 
@@ -90,8 +83,6 @@ class PLATFORM_EXPORT GraphicsContext {
   const PaintController& GetPaintController() const {
     return paint_controller_;
   }
-
-  bool ContextDisabled() const { return disabled_state_; }
 
   const DarkModeSettings& dark_mode_settings() const {
     return dark_mode_filter_.settings();
@@ -500,9 +491,6 @@ class PLATFORM_EXPORT GraphicsContext {
 
   // Apply deferred paint state saves
   void RealizePaintSave() {
-    if (ContextDisabled())
-      return;
-
     if (paint_state_->SaveCount()) {
       paint_state_->DecrementSaveCount();
       ++paint_state_index_;
@@ -524,7 +512,9 @@ class PLATFORM_EXPORT GraphicsContext {
 
   class DarkModeFlags;
 
-  // null indicates painting is contextDisabled. Never delete this object.
+  // This is owned by paint_recorder_. Never delete this object.
+  // Drawing operations are allowed only after the first BeginRecording() which
+  // initializes this to not null.
   cc::PaintCanvas* canvas_;
 
   PaintController& paint_controller_;
@@ -549,8 +539,6 @@ class PLATFORM_EXPORT GraphicsContext {
   int layer_count_;
   bool disable_destruction_checks_;
 #endif
-
-  const DisabledMode disabled_state_;
 
   float device_scale_factor_;
 
