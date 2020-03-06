@@ -183,7 +183,6 @@ crbug.com/807395 fast/multicol/mixed-opacity-test.html [ Failure ]
 
 ########## display-lock failures ##########
 wpt_internal/display-lock/css-subtree-visibility/subtree-visibility-047.html [ Failure ]
-wpt_internal/display-lock/css-subtree-visibility/subtree-visibility-008.html [ Pass Failure Crash ]
 
 ########## Ref tests can't be rebaselined ##########
 crbug.com/504613 crbug.com/524248 [ Mac ] paint/images/image-backgrounds-not-antialiased.html [ Failure ]
