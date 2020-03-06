@@ -1416,6 +1416,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void ScaleFactorChanged(float scale) override;
   void ContentsPreferredSizeChanged(const gfx::Size& pref_size) override;
 
+  void ReportNoBinderForInterface(const std::string& error);
+
  protected:
   friend class RenderFrameHostFactory;
 

@@ -3350,6 +3350,10 @@ void RenderFrameHostImpl::DownloadURL(
   StartDownload(std::move(parameters), std::move(blob_url_token));
 }
 
+void RenderFrameHostImpl::ReportNoBinderForInterface(const std::string& error) {
+  broker_receiver_.ReportBadMessage(error + " for the frame/document scope");
+}
+
 void RenderFrameHostImpl::RequestTextSurroundingSelection(
     blink::mojom::LocalFrame::GetTextSurroundingSelectionCallback callback,
     int max_length) {
