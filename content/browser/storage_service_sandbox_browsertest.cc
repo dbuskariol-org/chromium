@@ -21,11 +21,14 @@
 namespace content {
 namespace {
 
-class StorageServiceRestartBrowserTest : public ContentBrowserTest {
+class StorageServiceSandboxBrowserTest : public ContentBrowserTest {
  public:
-  StorageServiceRestartBrowserTest() {
-    // These tests only make sense when the service is running out-of-process.
-    feature_list_.InitAndEnableFeature(features::kStorageServiceOutOfProcess);
+  StorageServiceSandboxBrowserTest() {
+    // These tests only make sense when the service is running out-of-process
+    // with sandboxing enabled.
+    feature_list_.InitWithFeatures({features::kStorageServiceOutOfProcess,
+                                    features::kStorageServiceSandbox},
+                                   {});
   }
 
   DOMStorageContextWrapper* dom_storage() {
@@ -37,7 +40,7 @@ class StorageServiceRestartBrowserTest : public ContentBrowserTest {
 
   void WaitForAnyLocalStorageDataAsync(base::OnceClosure callback) {
     dom_storage()->GetLocalStorageControl()->GetUsage(base::BindOnce(
-        [](StorageServiceRestartBrowserTest* test, base::OnceClosure callback,
+        [](StorageServiceSandboxBrowserTest* test, base::OnceClosure callback,
            std::vector<storage::mojom::LocalStorageUsageInfoPtr> usage) {
           if (!usage.empty()) {
             std::move(callback).Run();
@@ -46,7 +49,7 @@ class StorageServiceRestartBrowserTest : public ContentBrowserTest {
 
           base::SequencedTaskRunnerHandle::Get()->PostDelayedTask(
               FROM_HERE,
-              base::BindOnce(&StorageServiceRestartBrowserTest::
+              base::BindOnce(&StorageServiceSandboxBrowserTest::
                                  WaitForAnyLocalStorageDataAsync,
                              base::Unretained(test), std::move(callback)),
               base::TimeDelta::FromMilliseconds(50));
@@ -74,70 +77,33 @@ class StorageServiceRestartBrowserTest : public ContentBrowserTest {
     return test_api_;
   }
 
-  void CrashStorageServiceAndWaitForRestart() {
-    mojo::Remote<storage::mojom::StorageService>& service =
-        StoragePartitionImpl::GetStorageServiceForTesting();
-    base::RunLoop loop;
-    service.set_disconnect_handler(base::BindLambdaForTesting([&] {
-      loop.Quit();
-      service.reset();
-    }));
-    GetTestApi()->CrashNow();
-    loop.Run();
-    test_api_.reset();
-  }
-
  private:
   base::test::ScopedFeatureList feature_list_;
   mojo::Remote<storage::mojom::TestApi> test_api_;
 };
 
-IN_PROC_BROWSER_TEST_F(StorageServiceRestartBrowserTest, BasicReconnect) {
-  // Basic smoke test to ensure that we can force-crash the service and
-  // StoragePartitionImpl will internally re-establish a working connection to
-  // a new process.
-  GetTestApi().FlushForTesting();
-  EXPECT_TRUE(GetTestApi().is_connected());
-  CrashStorageServiceAndWaitForRestart();
+IN_PROC_BROWSER_TEST_F(StorageServiceSandboxBrowserTest, BasicLaunch) {
+  // Basic smoke test to ensure that we can launch the Storage Service in a
+  // sandboxed and it won't crash immediately.
   GetTestApi().FlushForTesting();
   EXPECT_TRUE(GetTestApi().is_connected());
 }
 
-IN_PROC_BROWSER_TEST_F(StorageServiceRestartBrowserTest,
-                       SessionStorageRecovery) {
-  // Tests that the Session Storage API can recover and continue normal
-  // operation after a Storage Service crash.
-  EXPECT_TRUE(
-      NavigateToURL(shell(), GetTestUrl("dom_storage", "crash_recovery.html")));
+IN_PROC_BROWSER_TEST_F(StorageServiceSandboxBrowserTest, PRE_DomStorage) {
+  EXPECT_TRUE(NavigateToURL(shell(), GetTestUrl(nullptr, "empty.html")));
   ignore_result(
-      EvalJs(shell()->web_contents(), R"(setSessionStorageValue("foo", 42))"));
-
-  // Note that for Session Storage we don't need to wait for a commit. This is
-  // racy, but that's the point: whether or not a commit happens in time, the
-  // renderer should always retain its local cache of stored values.
-
-  CrashStorageServiceAndWaitForRestart();
-  EXPECT_EQ("42", EvalJs(shell()->web_contents(),
-                         R"(getSessionStorageValue("foo"))"));
-}
-
-IN_PROC_BROWSER_TEST_F(StorageServiceRestartBrowserTest, LocalStorageRecovery) {
-  // Tests that the Local Storage API can recover and continue normal operation
-  // after a Storage Service crash.
-  EXPECT_TRUE(
-      NavigateToURL(shell(), GetTestUrl("dom_storage", "crash_recovery.html")));
-  ignore_result(
-      EvalJs(shell()->web_contents(), R"(setLocalStorageValue("foo", 42))"));
-
-  // We wait for the above storage request to be fully committed to disk. This
-  // ensures that renderer gets the correct value when recovering from the
-  // impending crash.
+      EvalJs(shell()->web_contents(), R"(window.localStorage.yeet = 42)"));
   WaitForAnyLocalStorageData();
   FlushLocalStorage();
+}
 
-  CrashStorageServiceAndWaitForRestart();
+IN_PROC_BROWSER_TEST_F(StorageServiceSandboxBrowserTest, DomStorage) {
+  // Tests that Local Storage data persists from the PRE test setup above,
+  // providing basic assurance that the sandboxed process is able to manipulate
+  // filesystem contents as needed.
+  EXPECT_TRUE(NavigateToURL(shell(), GetTestUrl(nullptr, "empty.html")));
   EXPECT_EQ("42",
-            EvalJs(shell()->web_contents(), R"(getLocalStorageValue("foo"))"));
+            EvalJs(shell()->web_contents(), R"(window.localStorage.yeet)"));
 }
 
 }  // namespace
