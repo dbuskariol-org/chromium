@@ -467,8 +467,6 @@ ParseResult IndexedRule::CreateIndexedRule(dnr_api::Rule parsed_rule,
   if (parsed_rule.condition.url_filter && parsed_rule.condition.regex_filter)
     return ParseResult::ERROR_MULTIPLE_FILTERS_SPECIFIED;
 
-  // TODO(crbug.com/974391): Implement limits on the number of regex rules an
-  // extension can specify.
   const bool is_regex_rule = !!parsed_rule.condition.regex_filter;
 
   if (!is_regex_rule && indexed_rule->regex_substitution)
