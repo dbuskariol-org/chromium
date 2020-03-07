@@ -1339,8 +1339,9 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
                 mManualFillingComponent.getKeyboardExtensionViewResizer());
 
         if (EphemeralTabCoordinator.isSupported()) {
-            mEphemeralTabCoordinator = new EphemeralTabCoordinator(
-                    this, getBottomSheetController(), getActivityTabProvider());
+            mEphemeralTabCoordinator = new EphemeralTabCoordinator(this, getWindowAndroid(),
+                    getWindow().getDecorView(), getActivityTabProvider(),
+                    this::getCurrentTabCreator, getBottomSheetController(), () -> !isCustomTab());
         }
 
         if (ChromeFeatureList.isEnabled(ChromeFeatureList.ANDROID_NIGHT_MODE_TAB_REPARENTING)) {
