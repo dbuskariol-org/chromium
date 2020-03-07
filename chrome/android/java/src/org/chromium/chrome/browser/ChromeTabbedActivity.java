@@ -1465,8 +1465,8 @@ public class ChromeTabbedActivity
 
     @Override
     protected RootUiCoordinator createRootUiCoordinator() {
-        return new TabbedRootUiCoordinator(
-                this, this::onOmniboxFocusChanged, mIntentWithEffect, getShareDelegateSupplier());
+        return new TabbedRootUiCoordinator(this, this::onOmniboxFocusChanged, mIntentWithEffect,
+                getShareDelegateSupplier(), getActivityTabProvider());
     }
 
     @Override
