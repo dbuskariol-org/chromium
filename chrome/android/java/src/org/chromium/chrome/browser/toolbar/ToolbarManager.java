@@ -47,7 +47,6 @@ import org.chromium.chrome.browser.compositor.layouts.SceneChangeObserver;
 import org.chromium.chrome.browser.feature_engagement.TrackerFactory;
 import org.chromium.chrome.browser.findinpage.FindToolbarManager;
 import org.chromium.chrome.browser.findinpage.FindToolbarObserver;
-import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.fullscreen.BrowserStateBrowserControlsVisibilityDelegate;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
@@ -111,6 +110,7 @@ import org.chromium.chrome.browser.util.AccessibilityUtil;
 import org.chromium.chrome.browser.widget.ScrimView;
 import org.chromium.chrome.browser.widget.ScrimView.ScrimObserver;
 import org.chromium.chrome.browser.widget.ScrimView.ScrimParams;
+import org.chromium.chrome.features.start_surface.StartSurfaceConfiguration;
 import org.chromium.components.browser_ui.styles.ChromeColors;
 import org.chromium.components.browser_ui.widget.textbubble.TextBubble;
 import org.chromium.components.embedder_support.util.UrlConstants;
@@ -630,7 +630,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             @Override
             public void onOverviewModeStateChanged(
                     @OverviewModeState int overviewModeState, boolean showTabSwitcherToolbar) {
-                assert CachedFeatureFlags.isStartSurfaceEnabled();
+                assert StartSurfaceConfiguration.isStartSurfaceEnabled();
                 mToolbar.updateTabSwitcherToolbarState(showTabSwitcherToolbar);
             }
 
@@ -837,7 +837,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
 
         mLocationBarModel.initializeWithNative();
         mLocationBarModel.setShouldShowOmniboxInOverviewMode(
-                CachedFeatureFlags.isStartSurfaceEnabled());
+                StartSurfaceConfiguration.isStartSurfaceEnabled());
 
         assert controlsVisibilityDelegate != null;
         mControlsVisibilityDelegate = controlsVisibilityDelegate;
