@@ -7,7 +7,6 @@
 <translation id="2048923169632968961">Beim Synchronisieren des Passworts Ihres Arbeitskontos mit Ihrem Windows-Profil ist ein Problem aufgetreten. Bitte wenden Sie sich an Ihren Administrator.</translation>
 <translation id="2515346402363002066">Ihre Sitzung ist abgelaufen. Melden Sie sich mit Ihrem Arbeitskonto an.</translation>
 <translation id="2844349213149998955">Die Anmeldung mit einem privaten Konto ist auf diesem Gerät nicht zulässig. Melden Sie sich bitte mit einem Arbeitskonto an.</translation>
-<translation id="2954423647682729023">Melden Sie sich mit Ihrem Arbeitskonto an.</translation>
 <translation id="3217145568844727893">Wenn Sie fortfahren, ohne Ihr aktuelles Windows-Passwort einzugeben, gehen möglicherweise Daten auf Ihrem Gerät verloren, die nicht wiederhergestellt werden können.</translation>
 <translation id="3285576391135346912">Sie können sich nur mit einer E-Mail-Adresse anmelden, die folgendermaßen endet: <ph name="EMAIL_DOMAINS" />. Versuchen Sie es noch einmal mit einem Arbeitskonto.</translation>
 <translation id="3306357053520292004">Ein Nutzer dieses Computers wurde bereits über dieses Konto hinzugefügt. Bitte melden Sie sich mit einem anderen Konto an.</translation>
@@ -30,11 +29,11 @@
 <translation id="7209941495304122410">Windows-Passwort eingeben</translation>
 <translation id="74122330823428762">Nur der Nutzer, der dieses Gerät gesperrt hat, kann sich anmelden</translation>
 <translation id="7536769223115622137">Arbeitskonto hinzufügen</translation>
+<translation id="7884688232028658212">Melden Sie sich mit Ihrem Arbeitskonto an</translation>
 <translation id="8109730953933509335">Versuchte Passwortänderung bei ungültigem Nutzer. Bitte wenden Sie sich an Ihren Administrator.</translation>
 <translation id="8448455363630347124">Ihr Konto wurde aufgrund zu vieler falscher Passworteingaben deaktiviert. Wenden Sie sich an Ihren Administrator, um Ihr Konto wieder zu aktivieren.</translation>
 <translation id="8453641970025433267">Ihr Administrator erlaubt Ihnen nicht, sich mit diesem Konto anzumelden. Versuchen Sie es mit einem anderen Konto.</translation>
 <translation id="8639729688781680518">Windows-Passwort vergessen</translation>
 <translation id="866458870819756755">Ein Nutzer konnte nicht erstellt werden.</translation>
-<translation id="8875753657315897487">Mit Ihrem Arbeitskonto anmelden</translation>
 <translation id="9055998212250844221">Nutzerkonto wurde vom Google-Anmeldeinformationsanbieter für Windows erstellt</translation>
 </translationbundle>

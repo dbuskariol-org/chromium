@@ -7,7 +7,6 @@
 <translation id="2048923169632968961">Kon nie jou werkrekening se wagwoord met jou Windows-profiel sinkroniseer nie. Kontak jou administrateur.</translation>
 <translation id="2515346402363002066">Jou sessie het verval. Meld met jou werkrekening aan</translation>
 <translation id="2844349213149998955">Aanmelding met 'n persoonlike rekening word nie op hierdie toestel toegelaat nie. Meld asseblief met 'n werkrekening aan.</translation>
-<translation id="2954423647682729023">Meld met jou werkrekening aan</translation>
 <translation id="3217145568844727893">As jy voortgaan sonder om jou huidige Windows-wagwoord in te voer, kan jy data op hierdie toestel dalk permanent verloor.</translation>
 <translation id="3285576391135346912">Jy kan net aanmeld met 'n e-posadres wat op die volgende eindig: <ph name="EMAIL_DOMAINS" />. Probeer weer met 'n werkrekening.</translation>
 <translation id="3306357053520292004">'n Gebruiker op hierdie rekenaar is reeds met hierdie rekening bygevoeg. Meld aan met 'n ander rekening.</translation>
@@ -30,11 +29,11 @@
 <translation id="7209941495304122410">Voer Windows-wagwoord in</translation>
 <translation id="74122330823428762">Net die gebruiker wat hierdie toestel gesluit het, kan aanmeld</translation>
 <translation id="7536769223115622137">Voeg werkrekening by</translation>
+<translation id="7884688232028658212">Meld met jou werkrekening aan</translation>
 <translation id="8109730953933509335">Wagwoordverandering is vir ongeldige gebruiker probeer. Kontak jou administrateur.</translation>
 <translation id="8448455363630347124">Jou rekening is gedeaktiveer vanweë te veel pogings met 'n verkeerde wagwoord. Kontak jou administrateur om jou rekening te aktiveer.</translation>
 <translation id="8453641970025433267">Jou administrateur laat jou nie toe om met hierdie rekening aan te meld nie. Probeer 'n ander rekening.</translation>
 <translation id="8639729688781680518">Het Windows-wagwoord vergeet</translation>
 <translation id="866458870819756755">'n Gebruiker kon nie geskep word nie.</translation>
-<translation id="8875753657315897487">Meld aan met jou werkrekening</translation>
 <translation id="9055998212250844221">Gebruikerrekening deur Google Eiebewysverskaffer vir Windows geskep</translation>
 </translationbundle>
