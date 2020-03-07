@@ -240,9 +240,14 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
      * @param controlContainer The container of the toolbar.
      * @param invalidator Handler for synchronizing invalidations across UI elements.
      * @param urlFocusChangedCallback The callback to be notified when the URL focus changes.
+     * @param themeColorProvider The ThemeColorProvider object.
+     * @param tabObscuringHandler Delegate object handling obscuring views.
+     * @param shareDelegateSupplier Supplier for ShareDelegate.
+     * @param bottomToolbarVisibilitySupplier
      * @param identityDiscController The controller that coordinates the state of the identity disc
      * @param buttonDataProviders The list of button data providers for the optional toolbar button
      *         in the browsing mode toolbar, given in precedence order.
+     * @param tabProvider The {@link ActivityTabProvider} for accessing current activity tab.
      */
     public ToolbarManager(ChromeActivity activity, ChromeFullscreenManager fullscreenManager,
             ToolbarControlContainer controlContainer, Invalidator invalidator,
@@ -251,7 +256,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             ObservableSupplier<ShareDelegate> shareDelegateSupplier,
             ObservableSupplierImpl<Boolean> bottomToolbarVisibilitySupplier,
             IdentityDiscController identityDiscController,
-            List<ButtonDataProvider> buttonDataProviders, ActivityTabProvider activityTabProvider) {
+            List<ButtonDataProvider> buttonDataProviders, ActivityTabProvider tabProvider) {
         mActivity = activity;
         mFullscreenManager = fullscreenManager;
         mActionBarDelegate = new ViewShiftingActionBarDelegate(activity, controlContainer);
@@ -338,6 +343,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         mAppThemeColorProvider = new AppThemeColorProvider(mActivity);
 
         mTabObscuringHandler = tabObscuringHandler;
+        mActivityTabProvider = tabProvider;
 
         mToolbar = new TopToolbarCoordinator(controlContainer, mActivity.findViewById(R.id.toolbar),
                 identityDiscController, mLocationBarModel, this, new UserEducationHelper(mActivity),
@@ -354,16 +360,15 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         mLocationBar.setDefaultTextEditActionModeCallback(
                 mActionModeController.getActionModeCallback());
         mLocationBar.initializeControls(new WindowDelegate(mActivity.getWindow()),
-                mActivity.getWindowAndroid(), mActivity.getActivityTabProvider());
+                mActivity.getWindowAndroid(), mActivityTabProvider);
         mLocationBar.addUrlFocusChangeListener(mLocationBarFocusObserver);
-        mProgressBarCoordinator = new LoadProgressCoordinator(
-                mActivity.getActivityTabProvider(), mToolbar.getProgressBar());
+        mProgressBarCoordinator =
+                new LoadProgressCoordinator(mActivityTabProvider, mToolbar.getProgressBar());
 
         mToolbar.addUrlExpansionObserver(activity.getStatusBarColorController());
 
         mOmniboxStartupMetrics = new OmniboxStartupMetrics(activity);
 
-        mActivityTabProvider = activityTabProvider;
         mActivityTabTabObserver = new ActivityTabProvider.ActivityTabTabObserver(
                 mActivityTabProvider) {
             @Override
@@ -736,8 +741,7 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
         }
 
         mBottomControlsCoordinator = new BottomControlsCoordinator(mFullscreenManager,
-                mActivity.findViewById(R.id.bottom_controls_stub),
-                mActivity.getActivityTabProvider(),
+                mActivity.findViewById(R.id.bottom_controls_stub), mActivityTabProvider,
                 mTabGroupPopupUi != null
                         ? mTabGroupPopupUi.getLongClickListenerForTriggering()
                         : BottomTabSwitcherActionMenuCoordinator.createOnLongClickListener(
