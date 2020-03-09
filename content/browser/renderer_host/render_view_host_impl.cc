@@ -701,12 +701,7 @@ void RenderViewHostImpl::DispatchRenderViewCreated() {
 void RenderViewHostImpl::ClosePage() {
   is_waiting_for_page_close_completion_ = true;
 
-  bool is_javascript_dialog_showing = delegate_->IsJavaScriptDialogShowing();
-
-  // If there is a JavaScript dialog up, don't bother sending the renderer the
-  // close event because it is known unresponsive, waiting for the reply from
-  // the dialog.
-  if (IsRenderViewLive() && !is_javascript_dialog_showing) {
+  if (IsRenderViewLive() && !SuddenTerminationAllowed()) {
     close_timeout_->Start(TimeDelta::FromMilliseconds(kUnloadTimeoutMS));
 
     // TODO(creis): Should this be moved to Shutdown?  It may not be called for
@@ -815,8 +810,14 @@ void RenderViewHostImpl::RenderWidgetDidFirstVisuallyNonEmptyPaint() {
   delegate_->DidFirstVisuallyNonEmptyPaint(this);
 }
 
-bool RenderViewHostImpl::SuddenTerminationAllowed() const {
-  return sudden_termination_allowed_;
+bool RenderViewHostImpl::SuddenTerminationAllowed() {
+  // If there is a JavaScript dialog up, don't bother sending the renderer the
+  // close event because it is known unresponsive, waiting for the reply from
+  // the dialog.
+  return sudden_termination_allowed_ ||
+         delegate_->IsJavaScriptDialogShowing() ||
+         static_cast<RenderFrameHostImpl*>(GetMainFrame())
+             ->BeforeUnloadTimedOut();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

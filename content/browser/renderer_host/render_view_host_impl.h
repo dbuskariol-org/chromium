@@ -186,7 +186,7 @@ class CONTENT_EXPORT RenderViewHostImpl
   // Tells the renderer view to focus the first (last if reverse is true) node.
   void SetInitialFocus(bool reverse);
 
-  bool SuddenTerminationAllowed() const;
+  bool SuddenTerminationAllowed();
   void set_sudden_termination_allowed(bool enabled) {
     sudden_termination_allowed_ = enabled;
   }
