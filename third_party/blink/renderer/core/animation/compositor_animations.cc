@@ -74,7 +74,7 @@ bool ConsiderAnimationAsIncompatible(const Animation& animation,
   if (&animation == &animation_to_add)
     return false;
 
-  if (animation.pending())
+  if (animation.PendingInternal())
     return true;
 
   switch (animation.CalculateAnimationPlayState()) {
