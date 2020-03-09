@@ -6774,3 +6774,8 @@ crbug.com/1058244 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/scr
 
 # Sheriff 2020-03-08
 crbug.com/1059645 [ Mac10.14 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
+
+# Sheriff 2020-03-09
+crbug.com/1059123 http/tests/origin_trials/webexposed/animationworklet-origin-trial-interfaces-worklet-scope.html [ Pass Failure ]
+crbug.com/1059123 virtual/omt-worker-fetch/http/tests/origin_trials/webexposed/animationworklet-origin-trial-interfaces-worklet-scope.html [ Pass Failure ]
+crbug.com/1059123 virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/animationworklet-origin-trial-interfaces-worklet-scope.html [ Pass Failure ]
