@@ -3459,7 +3459,7 @@ jumbo_static_library("ui") {
 
     allow_circular_includes_from += [ "//chrome/browser/ui/views" ]
 
-    if (enable_native_window_nav_buttons) {
+    if (is_desktop_linux) {
       sources += [
         "views/frame/desktop_linux_browser_frame_view.cc",
         "views/frame/desktop_linux_browser_frame_view.h",
