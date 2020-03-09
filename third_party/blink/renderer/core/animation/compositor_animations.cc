@@ -553,7 +553,8 @@ bool CompositorAnimations::ConvertTimingForCompositor(
     return false;
 
   if (!timing.iteration_duration || !timing.iteration_count ||
-      timing.iteration_duration->is_zero())
+      timing.iteration_duration->is_zero() ||
+      timing.iteration_duration->is_max())
     return false;
 
   // Compositor's time offset is positive for seeking into the animation.
