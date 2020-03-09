@@ -310,6 +310,7 @@ Polymer({
   /** @private */
   onRunSafetyCheckClick_: function() {
     this.runSafetyCheck_();
+    this.focusParent_();
   },
 
   /**
@@ -327,6 +328,21 @@ Polymer({
       default:
         assertNotReached();
     }
+  },
+
+  /**
+   * @private
+   * @return {string}
+   */
+  getParentAriaLabel_: function() {
+    return this.i18n('safetyCheckSectionTitle') + ': ' +
+        this.getParentPrimaryLabelText_();
+  },
+
+  /** @private */
+  focusParent_() {
+    const parent = /** @type {!Element} */ (this.$$('#safetyCheckParent'));
+    parent.focus();
   },
 
   /**
@@ -439,6 +455,15 @@ Polymer({
 
   /**
    * @private
+   * @return {string}
+   */
+  getUpdatesAriaLabel_: function() {
+    return this.i18n('safetyCheckUpdatesPrimaryLabel') + ': ' +
+        this.getUpdatesSubLabelText_();
+  },
+
+  /**
+   * @private
    * @return {boolean}
    */
   shouldShowPasswordsButton_: function() {
@@ -469,6 +494,15 @@ Polymer({
         assertNotReached();
     }
   },
+
+  /**
+   * @private
+   * @return {string}
+   */
+  getPasswordsAriaLabel_: function() {
+    return this.i18n('passwords') + ': ' + this.passwordsDisplayString_;
+  },
+
 
   /**
    * @private
@@ -598,6 +632,15 @@ Polymer({
     }
   },
 
+  /**
+   * @private
+   * @return {string}
+   */
+  getSafeBrowsingAriaLabel_: function() {
+    return this.i18n('safeBrowsingSectionLabel') + ': ' +
+        this.getSafeBrowsingSubLabelText_();
+  },
+
   /** @private */
   onSafeBrowsingButtonClick_: function() {
     settings.Router.getInstance().navigateTo(settings.routes.SECURITY);
@@ -690,6 +733,15 @@ Polymer({
       default:
         return '';
     }
+  },
+
+  /**
+   * @private
+   * @return {string}
+   */
+  getExtensionsAriaLabel_: function() {
+    return this.i18n('safetyCheckExtensionsPrimaryLabel') + ': ' +
+        this.extensionsDisplayString_;
   },
 
   /**
