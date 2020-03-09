@@ -2606,6 +2606,10 @@ body.files-ng.check-select #list-container list li[selected] .detail-thumbnail
 
 body.files-ng #list-container list li .detail-thumbnail > .thumbnail {
   border-radius: 50%;
+  height: 24px;
+  margin-inline-start: 4px;
+  margin-top: 4px;
+  width: 24px;
 }
 
 body.files-ng .table-row-cell > * {
