@@ -26,8 +26,11 @@
 
 #include "third_party/blink/renderer/core/dom/element.h"
 
+#include <algorithm>
 #include <bitset>
+#include <limits>
 #include <memory>
+#include <utility>
 
 #include "cc/input/snap_selection_strategy.h"
 #include "third_party/blink/public/mojom/scroll/scroll_into_view_params.mojom-blink.h"
@@ -171,7 +174,7 @@ namespace {
 
 class DisplayLockStyleScope {
  public:
-  DisplayLockStyleScope(Element* element) : element_(element) {
+  explicit DisplayLockStyleScope(Element* element) : element_(element) {
     // Note that we don't store context as a member of this scope, since it may
     // get created as part of element self style recalc.
     auto* context = element->GetDisplayLockContext();
@@ -4946,7 +4949,7 @@ String Element::TextFromChildren() {
     return g_empty_string;
 
   if (first_text_node && !found_multiple_text_nodes) {
-    first_text_node->MakeParkableOrAtomize();
+    first_text_node->MakeParkable();
     return first_text_node->data();
   }
 
