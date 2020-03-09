@@ -70,7 +70,11 @@ crbug.com/1050438 http/tests/workers/shared-worker-redirect.html [ Failure ]
 crbug.com/1050438 virtual/omt-worker-fetch/http/tests/workers/shared-worker-redirect.html [ Failure ]
 
 # XHRReplayData support for Blink CORS was dropped from m82.
-crbug.com/958524 http/tests/inspector-protocol/network/xhr-post-replay-cors.js [ Failure ]
+crbug.com/958524 http/tests/inspector-protocol/network/xhr-post-replay-cors.js [ Timeout ]
+
+# Added by https://chromium-review.googlesource.com/c/chromium/src/+/2054468 and
+# Blink CORS does not support.
+crbug.com/941297 http/tests/inspector-protocol/network/xhr-cors-preflight-redirect-failure.js [ Timeout ]
 
 # Started failing for unknown reasons. Bisect is needed before the next branch-cut.
 crbug.com/1059776 external/wpt/xhr/event-upload-progress-crossorigin.any.html [ Failure ]
