@@ -56390,6 +56390,14 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   </int>
 </enum>
 
+<enum name="ReportSchedulerReportTrigger">
+  <int value="0" label="kTriggerNone"/>
+  <int value="1" label="kTriggerTimer">
+    The scheduler's periodic timer expired
+  </int>
+  <int value="2" label="kTriggerUpdate">An update was detected</int>
+</enum>
+
 <enum name="RequestAction">
   <int value="0" label="CANCEL"/>
   <int value="1" label="REDIRECT"/>

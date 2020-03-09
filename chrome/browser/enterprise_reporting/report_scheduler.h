@@ -89,6 +89,9 @@ class ReportScheduler : public ProfileManagerObserver,
   // of another report.
   void RunPendingTriggers();
 
+  // Records that |trigger| was responsible for an upload attempt.
+  static void RecordUploadTrigger(ReportTrigger trigger);
+
   // Tracks profiles that miss at least one report.
   void TrackStaleProfiles();
 

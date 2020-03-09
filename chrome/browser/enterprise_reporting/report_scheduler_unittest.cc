@@ -37,13 +37,21 @@ using ::testing::WithArgs;
 namespace em = enterprise_management;
 
 namespace enterprise_reporting {
+
 namespace {
+
 constexpr char kDMToken[] = "dm_token";
 constexpr char kClientId[] = "client_id";
 constexpr char kStaleProfileCountMetricsName[] =
     "Enterprise.CloudReportingStaleProfileCount";
 constexpr base::TimeDelta kDefaultUploadInterval =
     base::TimeDelta::FromHours(24);
+
+#if !defined(OS_CHROMEOS)
+constexpr char kUploadTriggerMetricName[] =
+    "Enterprise.CloudReportingUploadTrigger";
+#endif
+
 }  // namespace
 
 ACTION_P(ScheduleGeneratorCallback, request_number) {
@@ -482,6 +490,8 @@ TEST_F(ReportSchedulerTest, OnUpdate) {
   // The timestamp should not have been updated, since a periodic report was not
   // generated/uploaded.
   ExpectLastUploadTimestampUpdated(false);
+
+  histogram_tester_.ExpectUniqueSample(kUploadTriggerMetricName, 2, 1);
 }
 
 // Tests that a full report is generated and uploaded following a basic report
@@ -531,6 +541,9 @@ TEST_F(ReportSchedulerTest, DeferredTimer) {
   task_environment_.RunUntilIdle();
   ::testing::Mock::VerifyAndClearExpectations(uploader_);
   ExpectLastUploadTimestampUpdated(true);
+
+  histogram_tester_.ExpectBucketCount(kUploadTriggerMetricName, 1, 1);
+  histogram_tester_.ExpectBucketCount(kUploadTriggerMetricName, 2, 1);
 }
 
 #endif  // !defined(OS_CHROMEOS)

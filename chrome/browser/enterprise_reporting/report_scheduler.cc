@@ -218,6 +218,7 @@ void ReportScheduler::OnReportGenerated(
     report_uploader_ =
         std::make_unique<ReportUploader>(cloud_policy_client_, kMaximumRetry);
   }
+  RecordUploadTrigger(active_trigger_);
   report_uploader_->SetRequestAndUpload(
       std::move(requests), base::BindOnce(&ReportScheduler::OnReportUploaded,
                                           base::Unretained(this)));
@@ -273,6 +274,30 @@ void ReportScheduler::TrackStaleProfiles() {
   } else {
     stale_profiles_->clear();
   }
+}
+
+// static
+void ReportScheduler::RecordUploadTrigger(ReportTrigger trigger) {
+  // These values are persisted to logs. Entries should not be renumbered and
+  // numeric values should never be reused.
+  enum class Sample {
+    kNone = 0,
+    kTimer = 1,
+    kUpdate = 2,
+    kMaxValue = kUpdate
+  } sample = Sample::kNone;
+  switch (trigger) {
+    case kTriggerNone:
+      break;
+    case kTriggerTimer:
+      sample = Sample::kTimer;
+      break;
+    case kTriggerUpdate:
+      sample = Sample::kUpdate;
+      break;
+  }
+  base::UmaHistogramEnumeration("Enterprise.CloudReportingUploadTrigger",
+                                sample);
 }
 
 void ReportScheduler::OnProfileAdded(Profile* profile) {
