@@ -228,6 +228,9 @@ interface LocalFrameHost {
   // Sent when the renderer changed the progress of a load.
   DidChangeLoadProgress(double load_progress);
 
+  // Notifies the browser that a frame finished loading.
+  DidFinishLoad(url.mojom.Url validated_url);
+
   // Dispatch a load event for this frame in the iframe element of an
   // out-of-process parent frame. Once handled, the browser process should
   // call RemoteFrame::DispatchLoadEventForFrameOwner() in the renderer.

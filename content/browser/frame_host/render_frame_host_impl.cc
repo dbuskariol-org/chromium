@@ -3826,6 +3826,10 @@ void RenderFrameHostImpl::DidChangeLoadProgress(double load_progress) {
   frame_tree_node_->DidChangeLoadProgress(load_progress);
 }
 
+void RenderFrameHostImpl::DidFinishLoad(const GURL& validated_url) {
+  delegate_->OnDidFinishLoad(this, validated_url);
+}
+
 void RenderFrameHostImpl::DispatchLoad() {
   TRACE_EVENT1("navigation", "RenderFrameHostImpl::DispatchLoad",
                "frame_tree_node", frame_tree_node_->frame_tree_node_id());

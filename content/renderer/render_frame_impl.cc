@@ -4526,9 +4526,6 @@ void RenderFrameImpl::DidFinishLoad() {
   for (auto& observer : observers_)
     observer.DidFinishLoad();
 
-  WebDocumentLoader* document_loader = frame_->GetDocumentLoader();
-  Send(new FrameHostMsg_DidFinishLoad(routing_id_, document_loader->GetUrl()));
-
   if (!RenderThreadImpl::current())
     return;
   RenderThreadImpl::RendererMemoryMetrics memory_metrics;
