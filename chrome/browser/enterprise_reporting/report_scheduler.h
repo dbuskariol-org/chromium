@@ -52,9 +52,10 @@ class ReportScheduler : public ProfileManagerObserver,
   // The trigger leading to report generation. Values are bitmasks in the
   // |pending_triggers_| bitfield.
   enum ReportTrigger : uint32_t {
-    kTriggerNone = 0,          // No trigger.
-    kTriggerTimer = 1U << 0,   // The periodic timer expired.
-    kTriggerUpdate = 1U << 1,  // An update was detected.
+    kTriggerNone = 0,              // No trigger.
+    kTriggerTimer = 1U << 0,       // The periodic timer expired.
+    kTriggerUpdate = 1U << 1,      // An update was detected.
+    kTriggerNewVersion = 1U << 2,  // A new version is running.
   };
 
   // Observes CloudReportingEnabled policy.

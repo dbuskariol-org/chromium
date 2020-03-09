@@ -56396,6 +56396,7 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
     The scheduler's periodic timer expired
   </int>
   <int value="2" label="kTriggerUpdate">An update was detected</int>
+  <int value="3" label="kTriggerNewVersion">A new version is running</int>
 </enum>
 
 <enum name="RequestAction">
