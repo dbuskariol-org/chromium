@@ -19,7 +19,7 @@
     ],
     "files": [
       "test.grd",
-      "unlisted.grd"
+      # Missing unlisted.grd.
     ],
   },
   # Grd files that contain <message> or <translations> elements, but that
