@@ -114,6 +114,10 @@ CryptAuthV2DeviceManagerImpl::~CryptAuthV2DeviceManagerImpl() {
 }
 
 void CryptAuthV2DeviceManagerImpl::Start() {
+  PA_LOG(VERBOSE)
+      << "Starting CryptAuth v2 device manager with device registry:\n"
+      << *device_registry_;
+
   scheduler_->StartDeviceSyncScheduling(
       scheduler_weak_ptr_factory_.GetWeakPtr());
 }
@@ -284,6 +288,7 @@ void CryptAuthV2DeviceManagerImpl::OnDeviceSyncFinished(
                << (device_sync_result.did_device_registry_change()
                        ? "changed."
                        : "did not change.");
+  PA_LOG(VERBOSE) << "Device registry:\n" << *device_registry_;
 
   current_client_metadata_.reset();
 
