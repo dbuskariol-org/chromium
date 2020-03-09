@@ -112,27 +112,16 @@ void ShadowRoot::SetSlotting(ShadowRootSlotting slotting) {
   slotting_ = static_cast<unsigned>(slotting);
 }
 
-String ShadowRoot::InnerHTMLAsString() const {
+String ShadowRoot::innerHTML() const {
   return CreateMarkup(this, kChildrenOnly);
 }
 
-String ShadowRoot::innerHTML() const {
-  return InnerHTMLAsString();
-}
-
-void ShadowRoot::SetInnerHTMLFromString(const String& markup,
-                                        ExceptionState& exception_state) {
+void ShadowRoot::setInnerHTML(const String& markup,
+                              ExceptionState& exception_state) {
   if (DocumentFragment* fragment = CreateFragmentForInnerOuterHTML(
           markup, &host(), kAllowScriptingContent, "innerHTML",
           exception_state))
     ReplaceChildrenWithFragment(this, fragment, exception_state);
-}
-
-void ShadowRoot::setInnerHTML(const String& string,
-                              ExceptionState& exception_state) {
-  if (!exception_state.HadException()) {
-    SetInnerHTMLFromString(string, exception_state);
-  }
 }
 
 void ShadowRoot::RecalcStyle(const StyleRecalcChange change) {

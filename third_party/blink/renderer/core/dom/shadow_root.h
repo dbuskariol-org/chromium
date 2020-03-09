@@ -138,10 +138,6 @@ class CORE_EXPORT ShadowRoot final : public DocumentFragment, public TreeScope {
 
   Element* ActiveElement() const;
 
-  String InnerHTMLAsString() const;
-  void SetInnerHTMLFromString(const String&,
-                              ExceptionState& = ASSERT_NO_EXCEPTION);
-
   String innerHTML() const;
   void setInnerHTML(const String&, ExceptionState& = ASSERT_NO_EXCEPTION);
 

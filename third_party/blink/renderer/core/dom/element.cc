@@ -4626,24 +4626,16 @@ void Element::DispatchFocusOutEvent(
       new_focused_element, source_capabilities));
 }
 
-String Element::InnerHTMLAsString() const {
+String Element::innerHTML() const {
   return CreateMarkup(this, kChildrenOnly);
 }
 
-String Element::OuterHTMLAsString() const {
+String Element::outerHTML() const {
   return CreateMarkup(this);
 }
 
-String Element::innerHTML() const {
-  return InnerHTMLAsString();
-}
-
-String Element::outerHTML() const {
-  return OuterHTMLAsString();
-}
-
-void Element::SetInnerHTMLFromString(const String& html,
-                                     ExceptionState& exception_state) {
+void Element::setInnerHTML(const String& html,
+                           ExceptionState& exception_state) {
   probe::BreakableLocation(GetDocument().ToExecutionContext(),
                            "Element.setInnerHTML");
   if (html.IsEmpty() && !HasNonInBodyInsertionMode()) {
@@ -4659,21 +4651,14 @@ void Element::SetInnerHTMLFromString(const String& html,
   }
 }
 
-void Element::setInnerHTML(const String& string,
-                           ExceptionState& exception_state) {
-  if (!exception_state.HadException()) {
-    SetInnerHTMLFromString(string, exception_state);
-  }
-}
-
 String Element::getInnerHTML(bool include_shadow_roots) const {
   return CreateMarkup(
       this, kChildrenOnly, kDoNotResolveURLs,
       include_shadow_roots ? kIncludeShadowRoots : kNoShadowRoots);
 }
 
-void Element::SetOuterHTMLFromString(const String& html,
-                                     ExceptionState& exception_state) {
+void Element::setOuterHTML(const String& html,
+                           ExceptionState& exception_state) {
   Node* p = parentNode();
   if (!p) {
     exception_state.ThrowDOMException(
@@ -4714,13 +4699,6 @@ void Element::SetOuterHTMLFromString(const String& html,
     MergeWithNextTextNode(prev_text, exception_state);
     if (exception_state.HadException())
       return;
-  }
-}
-
-void Element::setOuterHTML(const String& string,
-                           ExceptionState& exception_state) {
-  if (!exception_state.HadException()) {
-    SetOuterHTMLFromString(string, exception_state);
   }
 }
 

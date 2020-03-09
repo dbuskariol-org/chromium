@@ -695,11 +695,6 @@ class CORE_EXPORT Element : public ContainerNode, public Animatable {
   // The implementation of |innerText()| is found in "element_inner_text.cc".
   String innerText();
   String outerText();
-  String InnerHTMLAsString() const;
-  String OuterHTMLAsString() const;
-  void SetInnerHTMLFromString(const String& html,
-                              ExceptionState& = ASSERT_NO_EXCEPTION);
-  void SetOuterHTMLFromString(const String& html, ExceptionState&);
 
   Element* insertAdjacentElement(const String& where,
                                  Element* new_child,
