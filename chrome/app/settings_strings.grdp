@@ -332,6 +332,9 @@
   <message name="IDS_SETTINGS_CHECK_PASSWORDS_AGAIN" desc="Button to start bulk password check manually in passwords check section.">
     Check again
   </message>
+  <message name="IDS_SETTINGS_PASSWORDS_JUST_NOW" desc="Label shown when a compromised credential was found less than a minute ago">
+    Just now
+  </message>
   <message name="IDS_SETTINGS_COMPROMISED_PASSWORDS" desc="Title for list of compromised credentials after passwords bulk check.">
     Compromised passwords
   </message>
