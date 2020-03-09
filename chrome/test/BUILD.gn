@@ -2373,6 +2373,7 @@ if (!is_android) {
         "../browser/chromeos/system/tray_accessibility_browsertest.cc",
         "../browser/chromeos/web_applications/help_app_integration_browsertest.cc",
         "../browser/chromeos/web_applications/media_app_integration_browsertest.cc",
+        "../browser/chromeos/web_applications/print_management_app_integration_browsertest.cc",
         "../browser/chromeos/web_applications/system_web_app_integration_test.cc",
         "../browser/chromeos/web_applications/system_web_app_integration_test.h",
         "../browser/chromeos/wilco_dtc_supportd/wilco_dtc_supportd_web_request_service_browsertest.cc",
