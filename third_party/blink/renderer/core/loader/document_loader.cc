@@ -286,6 +286,11 @@ DocumentLoader::DocumentLoader(
 
   web_bundle_physical_url_ = params_->web_bundle_physical_url;
   base_url_override_for_web_bundle_ = params_->base_url_override_for_web_bundle;
+
+  force_enabled_origin_trials_.ReserveInitialCapacity(
+      SafeCast<wtf_size_t>(params_->force_enabled_origin_trials.size()));
+  for (const auto& trial : params_->force_enabled_origin_trials)
+    force_enabled_origin_trials_.push_back(trial);
 }
 
 FrameLoader& DocumentLoader::GetFrameLoader() const {
@@ -1687,6 +1692,10 @@ void DocumentLoader::CreateParserPostCommit() {
       document->GetOriginTrialContext()->AddFeature(
           OriginTrialFeature::kTouchEventFeatureDetection);
     }
+
+    // Enable any origin trials that have been force enabled for this commit.
+    document->GetOriginTrialContext()->AddForceEnabledTrials(
+        force_enabled_origin_trials_);
 
 #if defined(OS_CHROMEOS)
     // Enable Auto Picture-in-Picture feature for the built-in Chrome OS Video

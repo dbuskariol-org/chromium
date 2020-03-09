@@ -510,6 +510,12 @@ void FillNavigationParamsRequest(
       commit_params.web_bundle_physical_url;
   navigation_params->base_url_override_for_web_bundle =
       commit_params.base_url_override_for_web_bundle;
+
+  WebVector<WebString> web_origin_trials;
+  web_origin_trials.reserve(commit_params.force_enabled_origin_trials.size());
+  for (const auto& trial : commit_params.force_enabled_origin_trials)
+    web_origin_trials.emplace_back(WebString::FromASCII(trial));
+  navigation_params->force_enabled_origin_trials = web_origin_trials;
 }
 
 mojom::CommonNavigationParamsPtr MakeCommonNavigationParams(
