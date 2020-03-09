@@ -326,8 +326,11 @@
   <message name="IDS_SETTINGS_CHECK_PASSWORDS_DESCRIPTION" desc="Explanation of the passwords bulk check feature found within the password settings.">
     Keep your passwords safe from data breaches and other security issues
   </message>
-  <message name="IDS_SETTINGS_LEAKED_PASSWORDS_COUNT" desc="Number of compromised passwords found during bulk check.">
-    <ph name="COUNT">$1<ex>5</ex></ph> compromised passwords
+  <message name="IDS_SETTINGS_COMPROMISED_PASSWORDS_COUNT" desc="Number of compromised passwords present in the database">
+    {COUNT, plural,
+      =0 {No compromised passwords found}
+      =1 {{COUNT} compromised password}
+      other {{COUNT} compromised passwords}}
   </message>
   <message name="IDS_SETTINGS_CHECK_PASSWORDS_AGAIN" desc="Button to start bulk password check manually in passwords check section.">
     Check again

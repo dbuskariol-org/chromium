@@ -14,13 +14,13 @@ Polymer({
 
   properties: {
     /** @private */
-    passwordLeakCount_: {
-      type: Number,
-      value: 0,
-    },
-
-    /** @private */
     lastCompletedCheck_: String,
+
+    /**
+     * The number of compromised passwords as a formatted string.
+     * @private
+     */
+    compromisedPasswordsCount_: String,
 
     /**
      * An array of leaked passwords to display.
@@ -79,8 +79,13 @@ Polymer({
     const statusChangeListener = status => this.status_ = status;
     const setLeakedCredentialsListener = info => {
       this.leakedPasswords = info.compromisedCredentials;
-      this.passwordLeakCount_ = info.compromisedCredentials.length;
       this.lastCompletedCheck_ = info.elapsedTimeSinceLastCheck;
+
+      settings.PluralStringProxyImpl.getInstance()
+          .getPluralString('compromisedPasswords', this.leakedPasswords.length)
+          .then(count => {
+            this.compromisedPasswordsCount_ = count;
+          });
     };
 
     this.statusChangedListener_ = statusChangeListener;
@@ -117,14 +122,6 @@ Polymer({
     // TODO(https://crbug.com/1047726): By click on this button user should be
     // able to 'Cancel' current check.
     this.passwordManager_.startBulkPasswordCheck();
-  },
-
-  /**
-   * @return {string}
-   * @private
-   */
-  getLeakedPasswordsCount_() {
-    return this.i18n('checkPasswordLeakCount', this.passwordLeakCount_);
   },
 
   /**
