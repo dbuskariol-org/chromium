@@ -7,13 +7,11 @@ source_set("unit_tests") {
   sources = [
     "extractor_unittest.cc",
     "generate_schema_org_code_unittest.cc",
-    "validator_unittest.cc",
   ]
 
   deps = [
     ":extractor",
     ":generate_schema_org_code",
-    ":schema_org",
     ":schema_org_properties",
     "//base",
     "//components/schema_org/common:mojom",
@@ -67,20 +65,6 @@ static_library("extractor") {
   sources = [
     "extractor.cc",
     "extractor.h",
-  ]
-
-  deps = [
-    "//components/schema_org:generate_schema_org_code",
-    "//components/schema_org:schema_org",
-    "//components/schema_org:schema_org_properties",
-    "//components/schema_org/common:mojom",
-  ]
-}
-
-static_library("schema_org") {
-  sources = [
-    "validator.cc",
-    "validator.h",
   ]
 
   deps = [

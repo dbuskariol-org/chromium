@@ -8,8 +8,5 @@ mojom("mojom") {
   generate_java = true
   sources = [ "metadata.mojom" ]
 
-  public_deps = [
-    "//mojo/public/mojom/base",
-    "//url/mojom:url_mojom_gurl",
-  ]
+  public_deps = [ "//url/mojom:url_mojom_gurl" ]
 }
