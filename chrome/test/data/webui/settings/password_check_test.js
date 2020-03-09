@@ -5,6 +5,8 @@
 /** @fileoverview Runs the Polymer Check Password tests. */
 
 cr.define('settings_passwords_check', function() {
+  const PasswordCheckState = chrome.passwordsPrivate.PasswordCheckState;
+
   function createCheckPasswordSection() {
     // Create a passwords-section to use for testing.
     const passwordsSection =
@@ -146,6 +148,48 @@ cr.define('settings_passwords_check', function() {
             node.$.more.click();
             assertTrue(menu.open);
           });
+    });
+
+    // A changing status is immediately reflected in title, icon and banner.
+    test('testUpdatesNumberOfCheckedPasswordsWhileRunning', function() {
+      passwordManager.data.checkStatus =
+          autofill_test_util.makePasswordCheckStatus(
+              /*state=*/ PasswordCheckState.RUNNING,
+              /*checked=*/ 1,
+              /*remaining=*/ 1);
+      passwordManager.data.leakedCredentials =
+          autofill_test_util.makeCompromisedCredentialsInfo([], 'just now');
+
+      const section = createCheckPasswordSection();
+      return passwordManager.whenCalled('getPasswordCheckStatus').then(() => {
+        Polymer.dom.flush();
+        expectEquals(section.status_.state, PasswordCheckState.RUNNING);
+
+        // Change status from running to IDLE.
+        assert(!!passwordManager.lastCallback.addPasswordCheckStatusListener);
+        passwordManager.lastCallback.addPasswordCheckStatusListener(
+            autofill_test_util.makePasswordCheckStatus(
+                /*state=*/ PasswordCheckState.IDLE,
+                /*checked=*/ 2,
+                /*remaining=*/ 0));
+
+        Polymer.dom.flush();
+        expectEquals(section.status_.state, PasswordCheckState.IDLE);
+      });
+    });
+
+    // Tests that the status is queried right when the page loads.
+    test('testQueriesCheckedStatusImmediately', function() {
+      const data = passwordManager.data;
+      assertEquals(PasswordCheckState.IDLE, data.checkStatus.state);
+      assertEquals(0, data.leakedCredentials.compromisedCredentials.length);
+
+      const checkPasswordSection = createCheckPasswordSection();
+      return passwordManager.whenCalled('getPasswordCheckStatus').then(() => {
+        Polymer.dom.flush();
+        expectEquals(
+            checkPasswordSection.status_.state, PasswordCheckState.IDLE);
+      }, () => assert(false));
     });
   });
 });
