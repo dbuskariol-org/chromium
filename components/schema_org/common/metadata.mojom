@@ -4,12 +4,17 @@
 
 module schema_org.mojom;
 
+import "mojo/public/mojom/base/time.mojom";
+
 // Due to the restriction of AppIndexing, all elements should be of the
 // same type. Non-array values are converted to arrays of one element.
 union Values {
   array<bool> bool_values;
   array<int64> long_values;
   array<string> string_values;
+  array<double> double_values;
+  array<mojo_base.mojom.Time> date_time_values;
+  array<mojo_base.mojom.TimeDelta> time_values;
   array<Entity> entity_values;
 };
 
