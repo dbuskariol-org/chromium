@@ -14,6 +14,19 @@ cr.define('settings_passwords_check', function() {
     return passwordsSection;
   }
 
+  /**
+   * Helper method used to create a compromised list item.
+   * @param {!chrome.passwordsPrivate.CompromisedCredential} entry
+   * @return {!PasswordCheckListItemElement}
+   */
+  function createLeakedPasswordItem(entry) {
+    const leakedPasswordItem =
+        this.document.createElement('password-check-list-item');
+    leakedPasswordItem.item = entry;
+    document.body.appendChild(leakedPasswordItem);
+    Polymer.dom.flush();
+    return leakedPasswordItem;
+  }
 
   /**
    * Helper method that validates a that elements in the compromised credentials
@@ -96,6 +109,17 @@ cr.define('settings_passwords_check', function() {
             validateLeakedPasswordsList(
                 checkPasswordSection.$.leakedPasswordList, leakedPasswords);
           });
+    });
+
+    // Test verifies that credentials from mobile app shown correctly
+    test('testSomeCompromisedCredentials', function() {
+      const password = autofill_test_util.makeCompromisedCredentials(
+          'one.com', 'test4', 'LEAKED');
+      password.changePasswordUrl = null;
+
+      const checkPasswordSection = createLeakedPasswordItem(password);
+      assertEquals(checkPasswordSection.$$('changePasswordUrl'), null);
+      assert(checkPasswordSection.$$('#changePasswordInApp'));
     });
 
     // Verify that the More Actions menu opens when the button is clicked.

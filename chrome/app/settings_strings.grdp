@@ -341,6 +341,9 @@
   <message name="IDS_SETTINGS_CHANGE_PASSWORD_BUTTON" desc="Button inside password check section which opens url for changing leaked password.">
     Change password
   </message>
+  <message name="IDS_SETTINGS_CHANGE_PASSWORD_IN_APP_LABEL" desc="Label which is shown only if compromised credentials can't be fixed by visiting website (e.g. password from mobile app).">
+    Open the app to change your password
+  </message>
   <message name="IDS_SETTINGS_COMPROMISED_PASSWORD_REASON_LEAKED" desc="Password compromise reason shown when a password was found in a data breach.">
     Found in data breach
   </message>
