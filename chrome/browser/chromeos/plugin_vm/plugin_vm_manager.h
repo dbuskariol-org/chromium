@@ -37,7 +37,7 @@ class PluginVmManager : public KeyedService,
 
   // TODO(juwa): Don't allow launch/stop/uninstall to run simultaneously.
   void LaunchPluginVm();
-  void StopPluginVm(const std::string& name);
+  void StopPluginVm(const std::string& name, bool force);
   void UninstallPluginVm();
 
   // Seneschal server handle to use for path sharing.

@@ -158,10 +158,18 @@ void PluginVmManager::RemoveVmStartingObserver(
   vm_starting_observers_.RemoveObserver(observer);
 }
 
-void PluginVmManager::StopPluginVm(const std::string& name) {
+void PluginVmManager::StopPluginVm(const std::string& name, bool force) {
   vm_tools::plugin_dispatcher::StopVmRequest request;
   request.set_owner_id(owner_id_);
   request.set_vm_name_uuid(name);
+
+  if (force) {
+    request.set_stop_mode(
+        vm_tools::plugin_dispatcher::VmStopMode::VM_STOP_MODE_KILL);
+  } else {
+    request.set_stop_mode(
+        vm_tools::plugin_dispatcher::VmStopMode::VM_STOP_MODE_SHUTDOWN);
+  }
 
   // TODO(juwa): This may not work if the vm is STARTING|CONTINUING|RESUMING.
   chromeos::DBusThreadManager::Get()->GetVmPluginDispatcherClient()->StopVm(
@@ -469,6 +477,8 @@ void PluginVmManager::StopVmForUninstall() {
   vm_tools::plugin_dispatcher::StopVmRequest request;
   request.set_owner_id(owner_id_);
   request.set_vm_name_uuid(kPluginVmName);
+  request.set_stop_mode(
+      vm_tools::plugin_dispatcher::VmStopMode::VM_STOP_MODE_SHUTDOWN);
 
   chromeos::DBusThreadManager::Get()->GetVmPluginDispatcherClient()->StopVm(
       std::move(request), base::BindOnce(&PluginVmManager::OnStopVmForUninstall,
