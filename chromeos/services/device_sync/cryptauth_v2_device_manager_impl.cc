@@ -14,6 +14,7 @@
 #include "chromeos/services/device_sync/cryptauth_device_syncer_impl.h"
 #include "chromeos/services/device_sync/cryptauth_key_registry.h"
 #include "chromeos/services/device_sync/cryptauth_task_metrics_logger.h"
+#include "chromeos/services/device_sync/proto/cryptauth_logging.h"
 #include "chromeos/services/device_sync/public/cpp/client_app_metadata_provider.h"
 
 namespace chromeos {
