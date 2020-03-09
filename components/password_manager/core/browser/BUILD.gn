@@ -357,6 +357,7 @@ source_set("csv_unittests") {
   deps = [
     ":csv",
     "//base",
+    "//base/test:test_support",
     "//components/autofill/core/common",
     "//testing/gmock",
     "//testing/gtest",
