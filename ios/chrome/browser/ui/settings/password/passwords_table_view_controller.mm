@@ -10,6 +10,8 @@
 #include "base/logging.h"
 #include "base/mac/foundation_util.h"
 #include "base/metrics/histogram_macros.h"
+#include "base/metrics/user_metrics.h"
+#include "base/metrics/user_metrics_action.h"
 #include "base/numerics/safe_conversions.h"
 #include "base/strings/sys_string_conversions.h"
 #include "base/strings/utf_string_conversions.h"
@@ -405,6 +407,10 @@ std::vector<std::unique_ptr<autofill::PasswordForm>> CopyOf(
 }
 
 #pragma mark - SettingsControllerProtocol
+
+- (void)reportDismissalUserAction {
+  base::RecordAction(base::UserMetricsAction("MobilePasswordsSettingsClose"));
+}
 
 - (void)settingsWillBeDismissed {
   // Dismiss the search bar if presented, otherwise the VC will be retained by
@@ -1215,6 +1221,14 @@ std::vector<std::unique_ptr<autofill::PasswordForm>> CopyOf(
 
 - (void)chromeIdentityServiceWillBeDestroyed {
   _identityServiceObserver.reset();
+}
+
+#pragma mark - UIAdaptivePresentationControllerDelegate
+
+- (void)presentationControllerDidDismiss:
+    (UIPresentationController*)presentationController {
+  base::RecordAction(
+      base::UserMetricsAction("IOSPasswordsSettingsCloseWithSwipe"));
 }
 
 @end
