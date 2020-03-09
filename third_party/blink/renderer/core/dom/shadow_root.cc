@@ -27,7 +27,6 @@
 #include "third_party/blink/renderer/core/dom/shadow_root.h"
 
 #include "third_party/blink/public/platform/platform.h"
-#include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html.h"
 #include "third_party/blink/renderer/core/css/resolver/style_resolver.h"
 #include "third_party/blink/renderer/core/css/style_change_reason.h"
 #include "third_party/blink/renderer/core/css/style_engine.h"
@@ -117,8 +116,8 @@ String ShadowRoot::InnerHTMLAsString() const {
   return CreateMarkup(this, kChildrenOnly);
 }
 
-void ShadowRoot::innerHTML(StringOrTrustedHTML& result) const {
-  result.SetString(InnerHTMLAsString());
+String ShadowRoot::innerHTML() const {
+  return InnerHTMLAsString();
 }
 
 void ShadowRoot::SetInnerHTMLFromString(const String& markup,
@@ -129,12 +128,10 @@ void ShadowRoot::SetInnerHTMLFromString(const String& markup,
     ReplaceChildrenWithFragment(this, fragment, exception_state);
 }
 
-void ShadowRoot::setInnerHTML(const StringOrTrustedHTML& stringOrHtml,
+void ShadowRoot::setInnerHTML(const String& string,
                               ExceptionState& exception_state) {
-  String html =
-      TrustedTypesCheckForHTML(stringOrHtml, &GetDocument(), exception_state);
   if (!exception_state.HadException()) {
-    SetInnerHTMLFromString(html, exception_state);
+    SetInnerHTMLFromString(string, exception_state);
   }
 }
 

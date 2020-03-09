@@ -34,10 +34,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/dictionary.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_promise_resolver.h"
 #include "third_party/blink/renderer/bindings/core/v8/scroll_into_view_options_or_boolean.h"
-#include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html.h"
 #include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html_or_trusted_script_or_trusted_script_url.h"
-#include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_script.h"
-#include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_script_url.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_pointer_lock_options.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_scroll_into_view_options.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_scroll_to_options.h"
@@ -2257,11 +2254,6 @@ void Element::setAttribute(const AtomicString& local_name,
                        kNotInSynchronizationOfLazyAttribute);
 }
 
-void Element::setAttribute(const AtomicString& name,
-                           const AtomicString& value) {
-  setAttribute(name, value, ASSERT_NO_EXCEPTION);
-}
-
 void Element::setAttribute(const QualifiedName& name,
                            const AtomicString& value) {
   SynchronizeAttribute(name);
@@ -2358,33 +2350,10 @@ SpecificTrustedType Element::ExpectedTrustedTypeForAttribute(
 }
 
 void Element::setAttribute(const QualifiedName& name,
-                           const StringOrTrustedHTML& stringOrHTML,
+                           const String& string,
                            ExceptionState& exception_state) {
-  String valueString =
-      TrustedTypesCheckForHTML(stringOrHTML, &GetDocument(), exception_state);
-  if (!exception_state.HadException()) {
-    setAttribute(name, AtomicString(valueString));
-  }
-}
-
-void Element::setAttribute(const QualifiedName& name,
-                           const StringOrTrustedScript& stringOrScript,
-                           ExceptionState& exception_state) {
-  String valueString = TrustedTypesCheckForScript(
-      stringOrScript, GetDocument().ToExecutionContext(), exception_state);
-  if (!exception_state.HadException()) {
-    setAttribute(name, AtomicString(valueString));
-  }
-}
-
-void Element::setAttribute(const QualifiedName& name,
-                           const StringOrTrustedScriptURL& stringOrURL,
-                           ExceptionState& exception_state) {
-  String valueString = TrustedTypesCheckForScriptURL(
-      stringOrURL, GetDocument().ToExecutionContext(), exception_state);
-  if (!exception_state.HadException()) {
-    setAttribute(name, AtomicString(valueString));
-  }
+  // TODO(lyf): Removes |exception_state| because this function never throws.
+  setAttribute(name, AtomicString(string));
 }
 
 ALWAYS_INLINE void Element::SetAttributeInternal(
@@ -4662,12 +4631,12 @@ String Element::OuterHTMLAsString() const {
   return CreateMarkup(this);
 }
 
-void Element::innerHTML(StringOrTrustedHTML& result) const {
-  result.SetString(InnerHTMLAsString());
+String Element::innerHTML() const {
+  return InnerHTMLAsString();
 }
 
-void Element::outerHTML(StringOrTrustedHTML& result) const {
-  result.SetString(OuterHTMLAsString());
+String Element::outerHTML() const {
+  return OuterHTMLAsString();
 }
 
 void Element::SetInnerHTMLFromString(const String& html,
@@ -4687,28 +4656,17 @@ void Element::SetInnerHTMLFromString(const String& html,
   }
 }
 
-void Element::SetInnerHTMLFromString(const String& html) {
-  SetInnerHTMLFromString(html, ASSERT_NO_EXCEPTION);
-}
-
-void Element::setInnerHTML(const StringOrTrustedHTML& string_or_html,
+void Element::setInnerHTML(const String& string,
                            ExceptionState& exception_state) {
-  String html =
-      TrustedTypesCheckForHTML(string_or_html, &GetDocument(), exception_state);
   if (!exception_state.HadException()) {
-    SetInnerHTMLFromString(html, exception_state);
+    SetInnerHTMLFromString(string, exception_state);
   }
 }
 
-void Element::setInnerHTML(const StringOrTrustedHTML& string_or_html) {
-  setInnerHTML(string_or_html, ASSERT_NO_EXCEPTION);
-}
-
-void Element::getInnerHTML(bool include_shadow_roots,
-                           StringOrTrustedHTML& result) {
-  result.SetString(CreateMarkup(
+String Element::getInnerHTML(bool include_shadow_roots) const {
+  return CreateMarkup(
       this, kChildrenOnly, kDoNotResolveURLs,
-      include_shadow_roots ? kIncludeShadowRoots : kNoShadowRoots));
+      include_shadow_roots ? kIncludeShadowRoots : kNoShadowRoots);
 }
 
 void Element::SetOuterHTMLFromString(const String& html,
@@ -4756,12 +4714,10 @@ void Element::SetOuterHTMLFromString(const String& html,
   }
 }
 
-void Element::setOuterHTML(const StringOrTrustedHTML& string_or_html,
+void Element::setOuterHTML(const String& string,
                            ExceptionState& exception_state) {
-  String html =
-      TrustedTypesCheckForHTML(string_or_html, &GetDocument(), exception_state);
   if (!exception_state.HadException()) {
-    SetOuterHTMLFromString(html, exception_state);
+    SetOuterHTMLFromString(string, exception_state);
   }
 }
 
@@ -4913,16 +4869,6 @@ void Element::insertAdjacentHTML(const String& where,
   if (!fragment)
     return;
   InsertAdjacent(where, fragment, exception_state);
-}
-
-void Element::insertAdjacentHTML(const String& where,
-                                 const StringOrTrustedHTML& string_or_html,
-                                 ExceptionState& exception_state) {
-  String markup =
-      TrustedTypesCheckForHTML(string_or_html, &GetDocument(), exception_state);
-  if (!exception_state.HadException()) {
-    insertAdjacentHTML(where, markup, exception_state);
-  }
 }
 
 void Element::setPointerCapture(PointerId pointer_id,
@@ -5537,18 +5483,6 @@ KURL Element::GetURLAttribute(const QualifiedName& name) const {
 #endif
   return GetDocument().CompleteURL(
       StripLeadingAndTrailingHTMLSpaces(getAttribute(name)));
-}
-
-void Element::GetURLAttribute(const QualifiedName& name,
-                              StringOrTrustedScriptURL& result) const {
-  KURL url = GetURLAttribute(name);
-  result.SetString(url.GetString());
-}
-
-void Element::FastGetAttribute(const QualifiedName& name,
-                               StringOrTrustedHTML& result) const {
-  String html = FastGetAttribute(name);
-  result.SetString(html);
 }
 
 KURL Element::GetNonEmptyURLAttribute(const QualifiedName& name) const {

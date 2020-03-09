@@ -42,7 +42,6 @@ class Document;
 class ExceptionState;
 class ShadowRootV0;
 class SlotAssignment;
-class StringOrTrustedHTML;
 class WhitespaceAttacher;
 
 enum class ShadowRootType { V0, kOpen, kClosed, kUserAgent };
@@ -143,10 +142,8 @@ class CORE_EXPORT ShadowRoot final : public DocumentFragment, public TreeScope {
   void SetInnerHTMLFromString(const String&,
                               ExceptionState& = ASSERT_NO_EXCEPTION);
 
-  // TrustedTypes variants of the above.
-  // TODO(mkwst): Write a spec for these bits. https://crbug.com/739170
-  void innerHTML(StringOrTrustedHTML&) const;
-  void setInnerHTML(const StringOrTrustedHTML&, ExceptionState&);
+  String innerHTML() const;
+  void setInnerHTML(const String&, ExceptionState& = ASSERT_NO_EXCEPTION);
 
   Node* Clone(Document&, CloneChildrenFlag) const override;
 
