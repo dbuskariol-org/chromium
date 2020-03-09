@@ -12,8 +12,6 @@ namespace features {
 // All features in alphabetical order. The features should be documented
 // alongside the definition of their values in the .cc file.
 
-extern const base::Feature kLoadingPredictorUseLocalPredictions;
-
 extern const base::Feature kLoadingOnlyLearnHighPriorityResources;
 
 extern const base::Feature kLoadingPredictorTableConfig;
@@ -23,10 +21,6 @@ extern const base::Feature kLoadingPreconnectToRedirectTarget;
 extern const base::Feature kLoadingPredictorDisregardAlwaysAccessesNetwork;
 
 extern const base::Feature kLoadingPredictorUseOptimizationGuide;
-
-// Returns whether local predictions should be used to make preconnect
-// predictions.
-bool ShouldUseLocalPredictions();
 
 }  // namespace features
 
