@@ -69,6 +69,8 @@ api::passwords_private::PasswordCheckState ConvertPasswordCheckState(
       return api::passwords_private::PASSWORD_CHECK_STATE_IDLE;
     case BulkLeakCheckService::State::kRunning:
       return api::passwords_private::PASSWORD_CHECK_STATE_RUNNING;
+    case BulkLeakCheckService::State::kCanceled:
+      return api::passwords_private::PASSWORD_CHECK_STATE_CANCELED;
     case BulkLeakCheckService::State::kSignedOut:
       return api::passwords_private::PASSWORD_CHECK_STATE_SIGNED_OUT;
     case BulkLeakCheckService::State::kNetworkError:

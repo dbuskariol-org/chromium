@@ -206,7 +206,7 @@ TEST_F(BulkLeakCheckServiceAdapterTest, StopBulkLeakCheck) {
             adapter().GetBulkLeakCheckState());
 
   adapter().StopBulkLeakCheck();
-  EXPECT_EQ(BulkLeakCheckService::State::kIdle,
+  EXPECT_EQ(BulkLeakCheckService::State::kCanceled,
             adapter().GetBulkLeakCheckState());
 }
 

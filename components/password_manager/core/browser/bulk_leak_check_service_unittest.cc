@@ -192,10 +192,10 @@ TEST_F(BulkLeakCheckServiceTest, CancelSomething) {
 
   StrictMock<MockObserver> observer;
   service().AddObserver(&observer);
-  EXPECT_CALL(observer, OnStateChanged(BulkLeakCheckService::State::kIdle));
+  EXPECT_CALL(observer, OnStateChanged(BulkLeakCheckService::State::kCanceled));
   service().Cancel();
 
-  EXPECT_EQ(BulkLeakCheckService::State::kIdle, service().state());
+  EXPECT_EQ(BulkLeakCheckService::State::kCanceled, service().state());
   EXPECT_EQ(0u, service().GetPendingChecksCount());
 }
 

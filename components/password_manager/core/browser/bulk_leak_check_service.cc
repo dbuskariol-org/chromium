@@ -53,7 +53,7 @@ void BulkLeakCheckService::Cancel() {
     DCHECK_NE(State::kRunning, state_);
     return;
   }
-  state_ = State::kIdle;
+  state_ = State::kCanceled;
   bulk_leak_check_.reset();
   NotifyStateChanged();
 }
