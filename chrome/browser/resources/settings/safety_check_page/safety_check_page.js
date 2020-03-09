@@ -609,11 +609,11 @@ Polymer({
    */
   shouldShowExtensionsButton_: function() {
     switch (this.extensionsStatus_) {
-      case settings.SafetyCheckExtensionsStatus.BLACKLISTED_ALL_DISABLED:
+      case settings.SafetyCheckExtensionsStatus.BLOCKLISTED_ALL_DISABLED:
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_ALL_BY_USER:
+          .BLOCKLISTED_REENABLED_ALL_BY_USER:
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_SOME_BY_USER:
+          .BLOCKLISTED_REENABLED_SOME_BY_USER:
         return true;
       default:
         return false;
@@ -626,7 +626,7 @@ Polymer({
    */
   shouldShowExtensionsManagedIcon_: function() {
     return this.extensionsStatus_ ==
-        settings.SafetyCheckExtensionsStatus.BLACKLISTED_REENABLED_ALL_BY_ADMIN;
+        settings.SafetyCheckExtensionsStatus.BLOCKLISTED_REENABLED_ALL_BY_ADMIN;
   },
 
   /** @private */
@@ -644,15 +644,15 @@ Polymer({
         return null;
       case settings.SafetyCheckExtensionsStatus.ERROR:
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_ALL_BY_ADMIN:
+          .BLOCKLISTED_REENABLED_ALL_BY_ADMIN:
         return 'cr:info';
-      case settings.SafetyCheckExtensionsStatus.NO_BLACKLISTED_EXTENSIONS:
-      case settings.SafetyCheckExtensionsStatus.BLACKLISTED_ALL_DISABLED:
+      case settings.SafetyCheckExtensionsStatus.NO_BLOCKLISTED_EXTENSIONS:
+      case settings.SafetyCheckExtensionsStatus.BLOCKLISTED_ALL_DISABLED:
         return 'cr:check';
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_ALL_BY_USER:
+          .BLOCKLISTED_REENABLED_ALL_BY_USER:
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_SOME_BY_USER:
+          .BLOCKLISTED_REENABLED_SOME_BY_USER:
         return 'cr:warning';
       default:
         assertNotReached();
@@ -679,13 +679,13 @@ Polymer({
   getExtensionsIconClass_: function() {
     switch (this.extensionsStatus_) {
       case settings.SafetyCheckExtensionsStatus.CHECKING:
-      case settings.SafetyCheckExtensionsStatus.NO_BLACKLISTED_EXTENSIONS:
-      case settings.SafetyCheckExtensionsStatus.BLACKLISTED_ALL_DISABLED:
+      case settings.SafetyCheckExtensionsStatus.NO_BLOCKLISTED_EXTENSIONS:
+      case settings.SafetyCheckExtensionsStatus.BLOCKLISTED_ALL_DISABLED:
         return 'icon-blue';
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_ALL_BY_USER:
+          .BLOCKLISTED_REENABLED_ALL_BY_USER:
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_SOME_BY_USER:
+          .BLOCKLISTED_REENABLED_SOME_BY_USER:
         return 'icon-red';
       default:
         return '';
@@ -699,9 +699,9 @@ Polymer({
   getExtensionsButtonClass_: function() {
     switch (this.extensionsStatus_) {
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_ALL_BY_USER:
+          .BLOCKLISTED_REENABLED_ALL_BY_USER:
       case settings.SafetyCheckExtensionsStatus
-          .BLACKLISTED_REENABLED_SOME_BY_USER:
+          .BLOCKLISTED_REENABLED_SOME_BY_USER:
         return 'action-button';
       default:
         return '';
