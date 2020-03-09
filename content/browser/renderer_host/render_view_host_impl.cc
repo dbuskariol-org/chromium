@@ -400,9 +400,6 @@ bool RenderViewHostImpl::CreateRenderView(
 void RenderViewHostImpl::SetMainFrameRoutingId(int routing_id) {
   main_frame_routing_id_ = routing_id;
   GetWidget()->UpdatePriority();
-
-  if (enabled_preferred_size_mode_)
-    EnablePreferredSizeMode();
 }
 
 // TODO(https://crbug.com/1006814): Delete this.
@@ -998,7 +995,6 @@ void RenderViewHostImpl::EnablePreferredSizeMode() {
         ->GetAssociatedLocalMainFrame()
         ->EnablePreferredSizeChangedMode();
   }
-  enabled_preferred_size_mode_ = true;
 }
 
 void RenderViewHostImpl::ExecutePluginActionAtLocation(
