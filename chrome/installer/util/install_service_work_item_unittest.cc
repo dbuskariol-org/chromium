@@ -163,7 +163,7 @@ TEST_F(InstallServiceWorkItemTest, Do_ServiceName) {
           .c_str(),
       GetImpl(item.get())->GetCurrentServiceDisplayName().c_str());
 
-  EXPECT_EQ(ERROR_SUCCESS, key.DeleteValue(kServiceName));
+  EXPECT_EQ(ERROR_SUCCESS, key.DeleteKey(L""));
 }
 
 }  // namespace installer
