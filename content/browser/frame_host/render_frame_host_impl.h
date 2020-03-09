@@ -618,6 +618,15 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // RenderFrameProxy to replace the RenderFrame and set it to |is_loading|
   // state. The renderer process keeps the RenderFrameProxy object around as a
   // placeholder while the frame is rendered in a different process.
+  //
+  // There should always be a |proxy| to replace the old RenderFrameHost. If
+  // there are no remaining active views in the process, the proxy will be
+  // short-lived and will be deleted when the unload ACK is received.
+  //
+  // RenderDocument: After a local<->local swap, this function is called with a
+  // null |proxy|. It executes common cleanup and marks this RenderFrameHost to
+  // have completed its unload handler. The RenderFrameHost may be immediately
+  // deleted or deferred depending on its children's unload status.
   void Unload(RenderFrameProxyHost* proxy, bool is_loading);
 
   // Remove this frame and its children. This happens asynchronously, an IPC

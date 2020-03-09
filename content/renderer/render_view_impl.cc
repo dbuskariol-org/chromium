@@ -441,7 +441,7 @@ void RenderViewImpl::Initialize(
 #endif
 
   WebFrame* opener_frame =
-      RenderFrameImpl::ResolveOpener(params->opener_frame_route_id);
+      RenderFrameImpl::ResolveWebFrame(params->opener_frame_route_id);
 
   // The newly created webview_ is owned by this instance.
   webview_ = WebView::Create(this, params->hidden,
