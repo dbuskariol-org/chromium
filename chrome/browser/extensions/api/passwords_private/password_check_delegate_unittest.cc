@@ -773,6 +773,7 @@ TEST_F(PasswordCheckDelegateTest,
 
   // Verify that the event gets fired once the saved passwords provider is
   // initialized.
+  store().AddLogin(MakeSavedPassword(kExampleCom, kUsername1));
   RunUntilIdle();
   EXPECT_EQ(events::PASSWORDS_PRIVATE_ON_PASSWORD_CHECK_STATUS_CHANGED,
             event_router_observer().events().at(kEventName)->histogram_value);

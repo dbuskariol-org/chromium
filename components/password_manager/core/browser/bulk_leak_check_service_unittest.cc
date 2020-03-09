@@ -100,6 +100,15 @@ TEST_F(BulkLeakCheckServiceTest, OnCreation) {
   EXPECT_EQ(BulkLeakCheckService::State::kIdle, service().state());
 }
 
+TEST_F(BulkLeakCheckServiceTest, StartWithZeroPasswords) {
+  StrictMock<MockObserver> observer;
+  service().AddObserver(&observer);
+
+  service().CheckUsernamePasswordPairs({});
+  EXPECT_EQ(BulkLeakCheckService::State::kIdle, service().state());
+  EXPECT_EQ(0u, service().GetPendingChecksCount());
+}
+
 TEST_F(BulkLeakCheckServiceTest, Running) {
   StrictMock<MockObserver> observer;
   service().AddObserver(&observer);
