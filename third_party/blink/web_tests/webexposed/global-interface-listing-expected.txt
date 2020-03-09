@@ -8006,6 +8006,7 @@ interface ShadowRoot : DocumentFragment
     getter mode
     getter pictureInPictureElement
     getter pointerLockElement
+    getter slotAssignment
     getter styleSheets
     method constructor
     method elementFromPoint
