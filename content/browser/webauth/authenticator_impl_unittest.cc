@@ -3256,9 +3256,59 @@ TEST_F(AuthenticatorImplTest, ExcludeListBatching) {
   }
 }
 
+static constexpr char kTestPIN[] = "1234";
+
+class UVTestAuthenticatorClientDelegate
+    : public AuthenticatorRequestClientDelegate {
+ public:
+  explicit UVTestAuthenticatorClientDelegate(bool* collected_pin)
+      : collected_pin_(collected_pin) {
+    *collected_pin_ = false;
+  }
+
+  bool SupportsPIN() const override { return true; }
+
+  void CollectPIN(
+      base::Optional<int> attempts,
+      base::OnceCallback<void(std::string)> provide_pin_cb) override {
+    *collected_pin_ = true;
+    base::SequencedTaskRunnerHandle::Get()->PostTask(
+        FROM_HERE, base::BindOnce(std::move(provide_pin_cb), kTestPIN));
+  }
+
+  void FinishCollectToken() override {}
+
+ private:
+  bool* collected_pin_;
+};
+
+class UVTestAuthenticatorContentBrowserClient : public ContentBrowserClient {
+ public:
+  std::unique_ptr<AuthenticatorRequestClientDelegate>
+  GetWebAuthenticationRequestDelegate(
+      RenderFrameHost* render_frame_host) override {
+    return std::make_unique<UVTestAuthenticatorClientDelegate>(&collected_pin_);
+  }
+
+  bool collected_pin() { return collected_pin_; }
+
+ private:
+  bool collected_pin_;
+};
+
 class UVAuthenticatorImplTest : public AuthenticatorImplTest {
  public:
   UVAuthenticatorImplTest() = default;
+
+  void SetUp() override {
+    AuthenticatorImplTest::SetUp();
+    old_client_ = SetBrowserClientForTesting(&test_client_);
+  }
+
+  void TearDown() override {
+    SetBrowserClientForTesting(old_client_);
+    AuthenticatorImplTest::TearDown();
+  }
 
  protected:
   static PublicKeyCredentialCreationOptionsPtr make_credential_options(
@@ -3316,7 +3366,11 @@ class UVAuthenticatorImplTest : public AuthenticatorImplTest {
     return auth_data->obtained_user_verification();
   }
 
+  UVTestAuthenticatorContentBrowserClient test_client_;
+
  private:
+  ContentBrowserClient* old_client_ = nullptr;
+
   DISALLOW_COPY_AND_ASSIGN(UVAuthenticatorImplTest);
 };
 
@@ -3380,8 +3434,6 @@ class PINTestAuthenticatorContentBrowserClient : public ContentBrowserClient {
   PINList expected;
   base::Optional<InterestingFailureReason> failure_reason;
 };
-
-static constexpr char kTestPIN[] = "1234";
 
 class PINAuthenticatorImplTest : public UVAuthenticatorImplTest {
  public:
@@ -3735,15 +3787,52 @@ TEST_F(PINAuthenticatorImplTest, GetAssertionHardLock) {
 
 class InternalUVAuthenticatorImplTest : public UVAuthenticatorImplTest {
  public:
+  struct TestCase {
+    const bool fingerprints_enrolled;
+    const bool supports_pin;
+    const device::UserVerificationRequirement uv;
+  };
+
   InternalUVAuthenticatorImplTest() = default;
 
   void SetUp() override {
     UVAuthenticatorImplTest::SetUp();
+    NavigateAndCommit(GURL(kTestOrigin1));
+  }
+
+  std::vector<TestCase> GetTestCases() {
+    std::vector<TestCase> test_cases;
+    for (const bool fingerprints_enrolled : {true, false}) {
+      for (const bool supports_pin : {true, false}) {
+        // Avoid just testing for PIN.
+        if (!fingerprints_enrolled && supports_pin)
+          continue;
+        for (const auto uv : {device::UserVerificationRequirement::kDiscouraged,
+                              device::UserVerificationRequirement::kPreferred,
+                              device::UserVerificationRequirement::kRequired}) {
+          test_cases.push_back({fingerprints_enrolled, supports_pin, uv});
+        }
+      }
+    }
+    return test_cases;
+  }
+
+  void ConfigureDevice(const TestCase& test_case) {
     device::VirtualCtap2Device::Config config;
     config.internal_uv_support = true;
     config.u2f_support = true;
+    config.pin_support = test_case.supports_pin;
+    virtual_device_factory_->mutable_state()->pin = kTestPIN;
+    virtual_device_factory_->mutable_state()->pin_retries =
+        device::kMaxPinRetries;
+    virtual_device_factory_->mutable_state()->fingerprints_enrolled =
+        test_case.fingerprints_enrolled;
     virtual_device_factory_->SetCtap2Config(config);
-    NavigateAndCommit(GURL(kTestOrigin1));
+    SCOPED_TRACE(::testing::Message() << "fingerprints_enrolled="
+                                      << test_case.fingerprints_enrolled);
+    SCOPED_TRACE(::testing::Message()
+                 << "supports_pin=" << test_case.supports_pin);
+    SCOPED_TRACE(UVToString(test_case.uv));
   }
 
  private:
@@ -3754,38 +3843,29 @@ TEST_F(InternalUVAuthenticatorImplTest, MakeCredential) {
   mojo::Remote<blink::mojom::Authenticator> authenticator =
       ConnectToAuthenticator();
 
-  for (const auto fingerprints_enrolled : {false, true}) {
-    SCOPED_TRACE(::testing::Message()
-                 << "fingerprints_enrolled=" << fingerprints_enrolled);
-    virtual_device_factory_->mutable_state()->fingerprints_enrolled =
-        fingerprints_enrolled;
+  for (const auto test_case : GetTestCases()) {
+    ConfigureDevice(test_case);
 
-    for (const auto uv : {device::UserVerificationRequirement::kDiscouraged,
-                          device::UserVerificationRequirement::kPreferred,
-                          device::UserVerificationRequirement::kRequired}) {
-      SCOPED_TRACE(UVToString(uv));
+    auto options = make_credential_options(test_case.uv);
+    // UV cannot be satisfied without fingerprints.
+    const bool should_timeout =
+        !test_case.fingerprints_enrolled &&
+        test_case.uv == device::UserVerificationRequirement::kRequired;
+    if (should_timeout) {
+      options->timeout = base::TimeDelta::FromMilliseconds(100);
+    }
 
-      auto options = make_credential_options(uv);
-      // UV cannot be satisfied without fingerprints.
-      const bool should_timeout =
-          !fingerprints_enrolled &&
-          uv == device::UserVerificationRequirement::kRequired;
-      if (should_timeout) {
-        options->timeout = base::TimeDelta::FromMilliseconds(100);
-      }
+    TestMakeCredentialCallback callback_receiver;
+    authenticator->MakeCredential(std::move(options),
+                                  callback_receiver.callback());
+    callback_receiver.WaitForCallback();
 
-      TestMakeCredentialCallback callback_receiver;
-      authenticator->MakeCredential(std::move(options),
-                                    callback_receiver.callback());
-      callback_receiver.WaitForCallback();
-
-      if (should_timeout) {
-        EXPECT_EQ(AuthenticatorStatus::NOT_ALLOWED_ERROR,
-                  callback_receiver.status());
-      } else {
-        EXPECT_EQ(AuthenticatorStatus::SUCCESS, callback_receiver.status());
-        EXPECT_EQ(fingerprints_enrolled, HasUV(callback_receiver));
-      }
+    if (should_timeout) {
+      EXPECT_EQ(AuthenticatorStatus::NOT_ALLOWED_ERROR,
+                callback_receiver.status());
+    } else {
+      EXPECT_EQ(AuthenticatorStatus::SUCCESS, callback_receiver.status());
+      EXPECT_EQ(test_case.fingerprints_enrolled, HasUV(callback_receiver));
     }
   }
 }
@@ -3825,41 +3905,32 @@ TEST_F(InternalUVAuthenticatorImplTest, GetAssertion) {
       get_credential_options()->allow_credentials[0].id(),
       kTestRelyingPartyId));
 
-  for (const auto fingerprints_enrolled : {false, true}) {
-    SCOPED_TRACE(::testing::Message()
-                 << "fingerprints_enrolled=" << fingerprints_enrolled);
-    virtual_device_factory_->mutable_state()->fingerprints_enrolled =
-        fingerprints_enrolled;
+  for (const auto test_case : GetTestCases()) {
+    ConfigureDevice(test_case);
+    auto options = get_credential_options(test_case.uv);
+    // Without a fingerprint enrolled we assume that a UV=required request
+    // cannot be satisfied by an authenticator that cannot do UV. It is
+    // possible for a credential to be created without UV and then later
+    // asserted with UV=required, but that would be bizarre behaviour from
+    // an RP and we currently don't worry about it.
+    const bool should_be_unrecognized =
+        !test_case.fingerprints_enrolled &&
+        test_case.uv == device::UserVerificationRequirement::kRequired;
 
-    for (auto uv : {device::UserVerificationRequirement::kDiscouraged,
-                    device::UserVerificationRequirement::kPreferred,
-                    device::UserVerificationRequirement::kRequired}) {
-      SCOPED_TRACE(UVToString(uv));
+    TestGetAssertionCallback callback_receiver;
+    authenticator->GetAssertion(std::move(options),
+                                callback_receiver.callback());
+    callback_receiver.WaitForCallback();
 
-      auto options = get_credential_options(uv);
-      // Without a fingerprint enrolled we assume that a UV=required request
-      // cannot be satisfied by an authenticator that cannot do UV. It is
-      // possible for a credential to be created without UV and then later
-      // asserted with UV=required, but that would be bizarre behaviour from
-      // an RP and we currently don't worry about it.
-      const bool should_be_unrecognized =
-          !fingerprints_enrolled &&
-          uv == device::UserVerificationRequirement::kRequired;
-
-      TestGetAssertionCallback callback_receiver;
-      authenticator->GetAssertion(std::move(options),
-                                  callback_receiver.callback());
-      callback_receiver.WaitForCallback();
-
-      if (should_be_unrecognized) {
-        EXPECT_EQ(AuthenticatorStatus::NOT_ALLOWED_ERROR,
-                  callback_receiver.status());
-      } else {
-        EXPECT_EQ(AuthenticatorStatus::SUCCESS, callback_receiver.status());
-        EXPECT_EQ(fingerprints_enrolled &&
-                      uv != device::UserVerificationRequirement::kDiscouraged,
-                  HasUV(callback_receiver));
-      }
+    if (should_be_unrecognized) {
+      EXPECT_EQ(AuthenticatorStatus::NOT_ALLOWED_ERROR,
+                callback_receiver.status());
+    } else {
+      EXPECT_EQ(AuthenticatorStatus::SUCCESS, callback_receiver.status());
+      EXPECT_EQ(
+          test_case.fingerprints_enrolled &&
+              test_case.uv != device::UserVerificationRequirement::kDiscouraged,
+          HasUV(callback_receiver));
     }
   }
 }
@@ -3888,46 +3959,6 @@ TEST_F(InternalUVAuthenticatorImplTest, GetAssertionCryptotoken) {
   }
 }
 
-class UVTokenTestAuthenticatorClientDelegate
-    : public AuthenticatorRequestClientDelegate {
- public:
-  explicit UVTokenTestAuthenticatorClientDelegate(bool* collected_pin)
-      : collected_pin_(collected_pin) {
-    *collected_pin_ = false;
-  }
-
-  bool SupportsPIN() const override { return true; }
-
-  void CollectPIN(
-      base::Optional<int> attempts,
-      base::OnceCallback<void(std::string)> provide_pin_cb) override {
-    *collected_pin_ = true;
-    base::SequencedTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(std::move(provide_pin_cb), kTestPIN));
-  }
-
-  void FinishCollectToken() override {}
-
- private:
-  bool* collected_pin_;
-};
-
-class UVTokenTestAuthenticatorContentBrowserClient
-    : public ContentBrowserClient {
- public:
-  std::unique_ptr<AuthenticatorRequestClientDelegate>
-  GetWebAuthenticationRequestDelegate(
-      RenderFrameHost* render_frame_host) override {
-    return std::make_unique<UVTokenTestAuthenticatorClientDelegate>(
-        &collected_pin_);
-  }
-
-  bool collected_pin() { return collected_pin_; }
-
- private:
-  bool collected_pin_;
-};
-
 class UVTokenAuthenticatorImplTest : public UVAuthenticatorImplTest {
  public:
   UVTokenAuthenticatorImplTest() = default;
@@ -3935,24 +3966,12 @@ class UVTokenAuthenticatorImplTest : public UVAuthenticatorImplTest {
 
   void SetUp() override {
     UVAuthenticatorImplTest::SetUp();
-    old_client_ = SetBrowserClientForTesting(&test_client_);
     device::VirtualCtap2Device::Config config;
     config.internal_uv_support = true;
     config.uv_token_support = true;
     virtual_device_factory_->SetCtap2Config(config);
     NavigateAndCommit(GURL(kTestOrigin1));
   }
-
-  void TearDown() override {
-    SetBrowserClientForTesting(old_client_);
-    AuthenticatorImplTest::TearDown();
-  }
-
- protected:
-  UVTokenTestAuthenticatorContentBrowserClient test_client_;
-
- private:
-  ContentBrowserClient* old_client_ = nullptr;
 };
 
 TEST_F(UVTokenAuthenticatorImplTest, GetAssertionUVToken) {
