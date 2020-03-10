@@ -692,7 +692,7 @@ void V4L2VideoEncodeAccelerator::EncodeTask(scoped_refptr<VideoFrame> frame,
   }
 
   if (frame && !ReconfigureFormatIfNeeded(*frame)) {
-    NOTIFY_ERROR(kInvalidArgumentError);
+    NOTIFY_ERROR(kPlatformFailureError);
     encoder_state_ = kError;
     return;
   }
@@ -722,6 +722,7 @@ bool V4L2VideoEncodeAccelerator::ReconfigureFormatIfNeeded(
   }
 
   if (!input_buffer_map_.empty()) {
+    // TODO(crbug.com/1060057): Handle coded_size change.
     if (frame.coded_size() != input_frame_size_) {
       VLOGF(1) << "Input frame size is changed during encoding"
                << ", frame.coded_size()=" << frame.coded_size().ToString()
