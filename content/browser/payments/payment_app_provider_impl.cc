@@ -127,13 +127,11 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
       ServiceWorkerMetrics::EventType event_type,
       scoped_refptr<ServiceWorkerVersion> service_worker_version,
       PaymentAppProvider::InvokePaymentAppCallback callback)
-      : browser_context_(browser_context),
-        event_type_(event_type),
-        service_worker_version_(service_worker_version),
-        invoke_payment_app_callback_(std::move(callback)) {
-    request_id_ = service_worker_version->StartRequest(
-        event_type, base::BindOnce(&RespondWithCallbacks::OnErrorStatus,
-                                   weak_ptr_factory_.GetWeakPtr()));
+      : RespondWithCallbacks(browser_context,
+                             event_type,
+                             service_worker_version,
+                             /*invoke_callback=*/std::move(callback),
+                             PaymentAppProvider::PaymentEventResultCallback()) {
     InvokePaymentAppCallbackRepository::GetInstance()->SetCallback(
         browser_context, this);
   }
@@ -143,14 +141,11 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
       ServiceWorkerMetrics::EventType event_type,
       scoped_refptr<ServiceWorkerVersion> service_worker_version,
       PaymentAppProvider::PaymentEventResultCallback callback)
-      : browser_context_(browser_context),
-        event_type_(event_type),
-        service_worker_version_(service_worker_version),
-        payment_event_result_callback_(std::move(callback)) {
-    request_id_ = service_worker_version->StartRequest(
-        event_type, base::BindOnce(&RespondWithCallbacks::OnErrorStatus,
-                                   weak_ptr_factory_.GetWeakPtr()));
-  }
+      : RespondWithCallbacks(browser_context,
+                             event_type,
+                             service_worker_version,
+                             PaymentAppProvider::InvokePaymentAppCallback(),
+                             /*event_callback=*/std::move(callback)) {}
 
   // Disallow copy and assign.
   RespondWithCallbacks(const RespondWithCallbacks& other) = delete;
@@ -169,6 +164,22 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
   }
 
  private:
+  RespondWithCallbacks(
+      BrowserContext* browser_context,
+      ServiceWorkerMetrics::EventType event_type,
+      scoped_refptr<ServiceWorkerVersion> service_worker_version,
+      PaymentAppProvider::InvokePaymentAppCallback invoke_callback,
+      PaymentAppProvider::PaymentEventResultCallback event_callback)
+      : browser_context_(browser_context),
+        event_type_(event_type),
+        service_worker_version_(service_worker_version),
+        invoke_payment_app_callback_(std::move(invoke_callback)),
+        payment_event_result_callback_(std::move(event_callback)) {
+    request_id_ = service_worker_version->StartRequest(
+        event_type, base::BindOnce(&RespondWithCallbacks::OnErrorStatus,
+                                   weak_ptr_factory_.GetWeakPtr()));
+  }
+
   ~RespondWithCallbacks() override = default;
 
   void OnResponseForPaymentRequest(
