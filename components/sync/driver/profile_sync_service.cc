@@ -80,6 +80,21 @@ enum SyncInitialState {
   SYNC_INITIAL_STATE_LIMIT
 };
 
+// These values are persisted to logs. Entries should not be renumbered and
+// numeric values should never be reused. When adding values, be certain to also
+// update the corresponding definition in enums.xml.
+enum class LocalSyncTransportDataStartupState {
+  kValidData = 0,
+  kEmptyCacheGuid = 1,
+  kEmptyBirthday = 2,
+  kGaiaIdMismatch = 3,
+  kMaxValue = kGaiaIdMismatch
+};
+
+void LogSyncTransportDataState(LocalSyncTransportDataStartupState status) {
+  UMA_HISTOGRAM_ENUMERATION("Sync.LocalSyncTransportDataStartupState", status);
+}
+
 void RecordSyncInitialState(SyncService::DisableReasonSet disable_reasons,
                             bool first_setup_complete) {
   SyncInitialState sync_state = CAN_START;
@@ -169,6 +184,8 @@ bool IsLocalSyncTransportDataValid(const SyncPrefs& sync_prefs,
   // ShutdownReason::DISABLE_SYNC. Let's return false here anyway to make sure
   // all prefs are cleared and a new random cache GUID generated.
   if (sync_prefs.GetCacheGuid().empty()) {
+    LogSyncTransportDataState(
+        LocalSyncTransportDataStartupState::kEmptyCacheGuid);
     return false;
   }
 
@@ -179,6 +196,8 @@ bool IsLocalSyncTransportDataValid(const SyncPrefs& sync_prefs,
   // protocol violations (fetching updates requires that the request either has
   // a birthday, or there should be no progress marker).
   if (sync_prefs.GetBirthday().empty()) {
+    LogSyncTransportDataState(
+        LocalSyncTransportDataStartupState::kEmptyBirthday);
     return false;
   }
 
@@ -187,10 +206,13 @@ bool IsLocalSyncTransportDataValid(const SyncPrefs& sync_prefs,
   // (IsLocalSyncEnabled()), the authenticated account is always empty.
   if (sync_prefs.GetGaiaId() != core_account_info.gaia) {
     DLOG(WARNING) << "Found mismatching gaia ID in sync preferences";
+    LogSyncTransportDataState(
+        LocalSyncTransportDataStartupState::kGaiaIdMismatch);
     return false;
   }
 
   // All good: local sync data looks initialized and valid.
+  LogSyncTransportDataState(LocalSyncTransportDataStartupState::kValidData);
   return true;
 }
 
