@@ -27,8 +27,7 @@
           'chromiumos_preflight',
         ],
         'test_suites': {
-          'gtest_tests': 'chromeos_vm_gtests',
-          'isolated_scripts': 'chromeos_isolated_scripts',
+          'gtest_tests': 'chromeos_browser_integration_tests',
         },
         'swarming': {
           'dimension_sets': [
@@ -45,7 +44,8 @@
           'chromiumos_preflight',
         ],
         'test_suites': {
-          'gtest_tests': 'chromeos_browser_integration_tests',
+          'gtest_tests': 'chromeos_vm_gtests',
+          'isolated_scripts': 'chromeos_isolated_scripts',
         },
         'swarming': {
           'dimension_sets': [
