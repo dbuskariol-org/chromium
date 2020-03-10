@@ -3750,6 +3750,13 @@ be describing additional metrics about the same event.
     <summary>
       Marks a resource request from a website.
     </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
 </event>
 
