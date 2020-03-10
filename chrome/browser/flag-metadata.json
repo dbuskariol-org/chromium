@@ -2330,6 +2330,11 @@
     "expiry_milestone": -1
   },
   {
+    "name": "force-startup-signin-promo",
+    "owners": [ "jlebel" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "force-text-direction",
     "owners": [ "orinj", "pbos", "ellyjones" ],
     // This flag is used for developers who don't speak an RTL language to QA
