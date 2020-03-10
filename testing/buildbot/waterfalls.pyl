@@ -1775,15 +1775,19 @@
           'gtest_tests': 'ios_code_coverage_gtests',
         },
       },
-      'ios-simulator-cr-recipe': {
+      'ios13-beta-simulator': {
+        'additional_compile_targets': [
+          'all',
+        ],
         'mixins': [
-          'chrome-swarming-pool',
-          'host_mac_10.14',
+          'ios_swarming_account',
+          'mac_10.14',
+          'mac_toolchain',
+          'out_dir_arg',
           'xcode_11c29',
-          'xcode_parallelization',
         ],
         'test_suites': {
-          'gtest_tests': 'ios_simulator_cr_recipe_gtests',
+          'gtest_tests': 'ios13_beta_simulator_gtests'
         },
       },
       'linux-annotator-rel': {
