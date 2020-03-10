@@ -14,6 +14,7 @@
 #include "base/memory/ref_counted.h"
 #include "base/optional.h"
 #include "base/updateable_sequenced_task_runner.h"
+#include "chrome/browser/media/feeds/media_feeds_store.mojom.h"
 #include "chrome/browser/media/history/media_history_origin_table.h"
 #include "chrome/browser/media/history/media_history_playback_table.h"
 #include "chrome/browser/media/history/media_history_store.mojom.h"
@@ -72,6 +73,12 @@ class MediaHistoryStore {
   // debugging because it loads all rows in the table.
   void GetMediaHistoryPlaybackRowsForDebug(
       base::OnceCallback<void(std::vector<mojom::MediaHistoryPlaybackRowPtr>)>
+          callback);
+
+  // Returns all the rows in the media feeds table.  This is only used for
+  // debugging because it loads all rows in the table.
+  void GetMediaFeedsForDebug(
+      base::OnceCallback<void(std::vector<media_feeds::mojom::MediaFeedPtr>)>
           callback);
 
   // Gets the playback sessions from the media history store. The results will
