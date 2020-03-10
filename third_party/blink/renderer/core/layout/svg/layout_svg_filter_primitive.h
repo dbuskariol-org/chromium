@@ -24,34 +24,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_SVG_LAYOUT_SVG_RESOURCE_FILTER_PRIMITIVE_H_
-#define THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_SVG_LAYOUT_SVG_RESOURCE_FILTER_PRIMITIVE_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_SVG_LAYOUT_SVG_FILTER_PRIMITIVE_H_
+#define THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_SVG_LAYOUT_SVG_FILTER_PRIMITIVE_H_
 
-#include "third_party/blink/renderer/core/layout/svg/layout_svg_hidden_container.h"
+#include "third_party/blink/renderer/core/layout/layout_object.h"
 
 namespace blink {
 
-class LayoutSVGResourceFilterPrimitive final : public LayoutSVGHiddenContainer {
- public:
-  explicit LayoutSVGResourceFilterPrimitive(
-      SVGElement* filter_primitive_element)
-      : LayoutSVGHiddenContainer(filter_primitive_element) {}
+class SVGFilterPrimitiveStandardAttributes;
 
+class LayoutSVGFilterPrimitive final : public LayoutObject {
+ public:
+  explicit LayoutSVGFilterPrimitive(SVGFilterPrimitiveStandardAttributes*);
+
+ private:
   bool IsChildAllowed(LayoutObject*, const ComputedStyle&) const override {
     return false;
   }
 
   void StyleDidChange(StyleDifference, const ComputedStyle*) override;
+  void UpdateLayout() override;
 
-  const char* GetName() const override {
-    return "LayoutSVGResourceFilterPrimitive";
-  }
+  const char* GetName() const override { return "LayoutSVGFilterPrimitive"; }
   bool IsOfType(LayoutObjectType type) const override {
-    return type == kLayoutObjectSVGResourceFilterPrimitive ||
-           LayoutSVGHiddenContainer::IsOfType(type);
+    return type == kLayoutObjectSVG ||
+           type == kLayoutObjectSVGFilterPrimitive ||
+           LayoutObject::IsOfType(type);
+  }
+  FloatRect ObjectBoundingBox() const override { return FloatRect(); }
+  FloatRect VisualRectInLocalSVGCoordinates() const override {
+    return FloatRect();
+  }
+  FloatRect LocalBoundingBoxRectForAccessibility() const override {
+    return FloatRect();
   }
 };
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_SVG_LAYOUT_SVG_RESOURCE_FILTER_PRIMITIVE_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_LAYOUT_SVG_LAYOUT_SVG_FILTER_PRIMITIVE_H_

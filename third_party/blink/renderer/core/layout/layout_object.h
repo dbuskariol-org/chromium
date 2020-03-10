@@ -835,8 +835,8 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   bool IsSVGResourceContainer() const {
     return IsOfType(kLayoutObjectSVGResourceContainer);
   }
-  bool IsSVGResourceFilterPrimitive() const {
-    return IsOfType(kLayoutObjectSVGResourceFilterPrimitive);
+  bool IsSVGFilterPrimitive() const {
+    return IsOfType(kLayoutObjectSVGFilterPrimitive);
   }
 
   // FIXME: Those belong into a SVG specific base-class for all layoutObjects
@@ -2599,7 +2599,7 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
     kLayoutObjectSVGImage,
     kLayoutObjectSVGForeignObject,
     kLayoutObjectSVGResourceContainer,
-    kLayoutObjectSVGResourceFilterPrimitive,
+    kLayoutObjectSVGFilterPrimitive,
   };
   virtual bool IsOfType(LayoutObjectType type) const { return false; }
 

@@ -25,11 +25,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "third_party/blink/renderer/core/layout/svg/layout_svg_resource_filter_primitive.h"
+#include "third_party/blink/renderer/core/layout/svg/layout_svg_filter_primitive.h"
 
 #include "third_party/blink/renderer/core/svg/svg_filter_primitive_standard_attributes.h"
 
 namespace blink {
+
+LayoutSVGFilterPrimitive::LayoutSVGFilterPrimitive(
+    SVGFilterPrimitiveStandardAttributes* filter_primitive_element)
+    : LayoutObject(filter_primitive_element) {}
 
 static bool CurrentColorChanged(StyleDifference diff, const StyleColor& color) {
   return diff.TextDecorationOrColorChanged() && color.IsCurrentColor();
@@ -51,15 +55,11 @@ static void CheckForColorChange(SVGFilterPrimitiveStandardAttributes& element,
     element.PrimitiveAttributeChanged(attr_name);
 }
 
-void LayoutSVGResourceFilterPrimitive::StyleDidChange(
-    StyleDifference diff,
-    const ComputedStyle* old_style) {
-  LayoutSVGHiddenContainer::StyleDidChange(diff, old_style);
-
+void LayoutSVGFilterPrimitive::StyleDidChange(StyleDifference diff,
+                                              const ComputedStyle* old_style) {
   if (!old_style)
     return;
-  DCHECK(GetElement());
-  auto& element = To<SVGFilterPrimitiveStandardAttributes>(*GetElement());
+  auto& element = To<SVGFilterPrimitiveStandardAttributes>(*GetNode());
   const SVGComputedStyle& new_style = StyleRef().SvgStyle();
   if (IsA<SVGFEFloodElement>(element) || IsA<SVGFEDropShadowElement>(element)) {
     CheckForColorChange(element, svg_names::kFloodColorAttr, diff,
@@ -78,6 +78,10 @@ void LayoutSVGResourceFilterPrimitive::StyleDidChange(
     element.PrimitiveAttributeChanged(
         svg_names::kColorInterpolationFiltersAttr);
   }
+}
+
+void LayoutSVGFilterPrimitive::UpdateLayout() {
+  ClearNeedsLayout();
 }
 
 }  // namespace blink
