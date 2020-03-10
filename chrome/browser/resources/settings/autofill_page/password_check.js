@@ -199,7 +199,7 @@ Polymer({
    */
   getStatusIcon_(status, leakedPasswords) {
     if (!this.hasLeaksOrErrors_(status, leakedPasswords)) {
-      return 'cr:check';
+      return 'settings:check-circle';
     }
     if (this.hasLeakedCredentials_(leakedPasswords)) {
       return 'cr:warning';
