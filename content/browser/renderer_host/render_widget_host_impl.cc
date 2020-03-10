@@ -1637,8 +1637,8 @@ void RenderWidgetHostImpl::FilterDropData(DropData* drop_data) {
   }
 }
 
-void RenderWidgetHostImpl::SetCursor(const CursorInfo& cursor_info) {
-  SetCursor(WebCursor(cursor_info));
+void RenderWidgetHostImpl::SetCursor(const ui::Cursor& cursor) {
+  SetCursor(WebCursor(cursor));
 }
 
 RenderProcessHost::Priority RenderWidgetHostImpl::GetPriority() {

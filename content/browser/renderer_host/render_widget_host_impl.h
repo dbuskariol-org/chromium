@@ -259,7 +259,7 @@ class CONTENT_EXPORT RenderWidgetHostImpl
                          blink::WebDragOperation operation) override;
   void DragSourceSystemDragEnded() override;
   void FilterDropData(DropData* drop_data) override;
-  void SetCursor(const CursorInfo& cursor_info) override;
+  void SetCursor(const ui::Cursor& cursor) override;
 
   // RenderProcessHostImpl::PriorityClient implementation.
   RenderProcessHost::Priority GetPriority() override;
