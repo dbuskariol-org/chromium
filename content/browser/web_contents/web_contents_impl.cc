@@ -193,6 +193,11 @@ namespace {
 const int kMinimumDelayBetweenLoadingUpdatesMS = 100;
 const char kDotGoogleDotCom[] = ".google.com";
 
+// TODO(crbug.com/1059903): Clean up after the initial investigation.
+constexpr base::Feature kCheckWebContentsAccessFromNonCurrentFrame{
+    "CheckWebContentsAccessFromNonCurrentFrame",
+    base::FEATURE_DISABLED_BY_DEFAULT};
+
 base::LazyInstance<std::vector<
     WebContentsImpl::FriendWrapper::CreatedCallback>>::DestructorAtExit
     g_created_callbacks = LAZY_INSTANCE_INITIALIZER;
@@ -368,6 +373,11 @@ WebContents* WebContents::FromRenderViewHost(RenderViewHost* rvh) {
 WebContents* WebContents::FromRenderFrameHost(RenderFrameHost* rfh) {
   if (!rfh)
     return nullptr;
+  if (!rfh->IsCurrent() && base::FeatureList::IsEnabled(
+                               kCheckWebContentsAccessFromNonCurrentFrame)) {
+    // TODO(crbug.com/1059903): return nullptr here eventually.
+    base::debug::DumpWithoutCrashing();
+  }
   return static_cast<RenderFrameHostImpl*>(rfh)->delegate()->GetAsWebContents();
 }
 
