@@ -144,10 +144,10 @@
 #include "services/network/mock_mojo_dhcp_wpad_url_client.h"
 #endif  // defined(OS_CHROMEOS)
 
-#if !defined(OS_IOS)
+#if BUILDFLAG(IS_TRUST_TOKENS_SUPPORTED)
 #include "services/network/trust_tokens/trust_token_parameterization.h"
 #include "services/network/trust_tokens/trust_token_store.h"
-#endif  // !defined(OS_IOS)
+#endif  // BUILDFLAG(IS_TRUST_TOKENS_SUPPORTED)
 
 namespace network {
 
@@ -6900,7 +6900,7 @@ TEST_F(NetworkContextSplitCacheTest,
       true /* was_cached */, true /* is_navigation */);
 }
 
-#if !defined(OS_IOS)
+#if BUILDFLAG(IS_TRUST_TOKENS_SUPPORTED)
 TEST_F(NetworkContextTest, EnableTrustTokens) {
   base::test::ScopedFeatureList scoped_feature_list;
   scoped_feature_list.InitAndEnableFeature(features::kTrustTokens);
@@ -6967,7 +6967,7 @@ TEST_F(NetworkContextTest, DisableTrustTokens) {
 
   EXPECT_FALSE(network_context->trust_token_store());
 }
-#endif  // !defined(OS_IOS)
+#endif  // BUILDFLAG(IS_TRUST_TOKENS_SUPPORTED)
 
 }  // namespace
 
