@@ -3239,7 +3239,6 @@ crbug.com/626703 [ Mac10.13 ] external/wpt/preload/download-resources.html [ Fai
 crbug.com/626703 [ Retina ] external/wpt/preload/download-resources.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/preload/download-resources.html [ Failure Timeout ]
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-digits-001-manual.html [ Skip ]
-crbug.com/626703 external/wpt/web-animations/timing-model/timelines/update-and-send-events-replacement.html [ Timeout ]
 crbug.com/626703 external/wpt/webrtc/RTCRtpTransceiver.https.html [ Crash Timeout ]
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-all-001-manual.html [ Skip ]
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-digits-002-manual.html [ Skip ]
