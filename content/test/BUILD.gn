@@ -915,8 +915,6 @@ test("content_browsertests") {
     "../browser/idle/idle_browsertest.cc",
     "../browser/indexed_db/indexed_db_browsertest.cc",
     "../browser/indexed_db/indexed_db_feature_observer_browsertest.cc",
-    "../browser/indexed_db/mock_browsertest_indexed_db_class_factory.cc",
-    "../browser/indexed_db/mock_browsertest_indexed_db_class_factory.h",
     "../browser/isolated_origin_browsertest.cc",
     "../browser/keyboard_lock_browsertest.cc",
     "../browser/keyboard_lock_browsertest.h",
