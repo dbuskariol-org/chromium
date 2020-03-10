@@ -79,18 +79,6 @@ enum class MediaRouteProviderWakeup {
 
 class MediaRouterMojoMetrics {
  public:
-  // UMA histogram names.
-  static const char kHistogramProviderCreateRouteResult[];
-  static const char kHistogramProviderCreateRouteResultWiredDisplay[];
-  static const char kHistogramProviderJoinRouteResult[];
-  static const char kHistogramProviderJoinRouteResultWiredDisplay[];
-  static const char kHistogramProviderRouteControllerCreationOutcome[];
-  static const char kHistogramProviderTerminateRouteResult[];
-  static const char kHistogramProviderTerminateRouteResultWiredDisplay[];
-  static const char kHistogramProviderVersion[];
-  static const char kHistogramProviderWakeReason[];
-  static const char kHistogramProviderWakeup[];
-
   // Records the installed version of the Media Router component extension.
   static void RecordMediaRouteProviderVersion(
       const extensions::Extension& extension);
