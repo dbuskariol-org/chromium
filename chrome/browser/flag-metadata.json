@@ -1140,6 +1140,16 @@
     "expiry_milestone": 79
   },
   {
+    "name": "enable-clipboard-provider-image-suggestions",
+    "owners": [ "rkgibson" ],
+    "expiry_milestone": 86
+  },
+  {
+    "name": "enable-clipboard-provider-text-suggestions",
+    "owners": [ "rkgibson" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "enable-close-tab-suggestions",
     "owners": [ "memex-team@google.com" ],
     "expiry_milestone": 82
