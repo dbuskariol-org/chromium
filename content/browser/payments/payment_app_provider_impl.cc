@@ -124,11 +124,11 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
  public:
   static RespondWithCallbacks* CreateForInvoke(
       BrowserContext* browser_context,
-      ServiceWorkerMetrics::EventType event_type,
       scoped_refptr<ServiceWorkerVersion> service_worker_version,
       PaymentAppProvider::InvokePaymentAppCallback callback) {
     RespondWithCallbacks* callbacks = new RespondWithCallbacks(
-        browser_context, event_type, service_worker_version,
+        browser_context, ServiceWorkerMetrics::EventType::PAYMENT_REQUEST,
+        service_worker_version,
         /*invoke_callback=*/std::move(callback),
         PaymentAppProvider::PaymentEventResultCallback());
     InvokePaymentAppCallbackRepository::GetInstance()->SetCallback(
@@ -391,9 +391,8 @@ void DispatchPaymentRequestEvent(
   // This object self-deletes after either success or error callback is
   // invoked.
   RespondWithCallbacks* invocation_callbacks =
-      RespondWithCallbacks::CreateForInvoke(
-          browser_context, ServiceWorkerMetrics::EventType::PAYMENT_REQUEST,
-          active_version, std::move(callback));
+      RespondWithCallbacks::CreateForInvoke(browser_context, active_version,
+                                            std::move(callback));
 
   active_version->endpoint()->DispatchPaymentRequestEvent(
       std::move(event_data), invocation_callbacks->BindNewPipeAndPassRemote(),
