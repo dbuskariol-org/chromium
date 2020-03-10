@@ -3529,7 +3529,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
 }
 
 - (BOOL)shouldAllowOverscrollActions {
-  return YES;
+  return !self.toolbarAccessoryPresenter.presenting;
 }
 
 - (UIView*)headerView {
