@@ -32384,6 +32384,16 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="2" label="Ext4 Dir Encryption"/>
 </enum>
 
+<enum name="HomepageLocationType">
+  <int value="0" label="POLICY_NTP"/>
+  <int value="1" label="POLICY_OTHER"/>
+  <int value="2" label="PARTNER_PROVIDED_NTP"/>
+  <int value="3" label="PARTNER_PROVIDED_OTHER"/>
+  <int value="4" label="USER_CUSTOMIZED_NTP"/>
+  <int value="5" label="USER_CUSTOMIZED_OTHER"/>
+  <int value="6" label="DEFAULT_NTP"/>
+</enum>
+
 <enum name="HotseatInAppGesture">
   <int value="0" label="Swipe up the hotseat"/>
   <int value="1" label="Swipe down the hotseat"/>

@@ -19100,6 +19100,26 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="Settings.Homepage.LocationChanged">
+  <owner>wenyufu@chromium.org</owner>
+  <owner>twellington@chromium.org</owner>
+  <description>
+    Recorded when the user changes their homepage location in settings. Note
+    that this metric is only recorded on user action and does not capture
+    changes caused by enterprise policy. Recorded for Android only.
+  </description>
+</action>
+
+<action name="Settings.Homepage.Opened">
+  <owner>wenyufu@chromium.org</owner>
+  <owner>twellington@chromium.org</owner>
+  <description>
+    Recorded when the user opens homepage settings. Recored when the user
+    launches homepage settings either from the main settings screen or the
+    homepage button long-press menu. Recorded for Android only.
+  </description>
+</action>
+
 <action name="Settings.Searching">
   <owner>dschuyler@chromium.org</owner>
   <description>

@@ -28,11 +28,12 @@ import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
 import org.chromium.chrome.browser.partnercustomizations.HomepageManager;
-import org.chromium.chrome.browser.partnercustomizations.HomepageManager.HomeButtonPreferenceState;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.settings.ChromeSwitchPreference;
 import org.chromium.chrome.browser.settings.SettingsActivity;
+import org.chromium.chrome.browser.settings.homepage.HomepageMetricsEnums.HomeButtonPreferenceState;
+import org.chromium.chrome.browser.settings.homepage.HomepageMetricsEnums.HomepageLocationType;
 import org.chromium.chrome.browser.settings.homepage.HomepageSettings;
 import org.chromium.chrome.browser.toolbar.HomeButton;
 import org.chromium.chrome.browser.toolbar.ToolbarManager;
@@ -68,6 +69,7 @@ public class HomepagePolicyIntegrationTest {
     private static final String METRICS_HOME_BUTTON_STATE_ENUM =
             "Settings.ShowHomeButtonPreferenceStateManaged";
     private static final String METRICS_HOMEPAGE_IS_CUSTOMIZED = "Settings.HomePageIsCustomized";
+    private static final String METRICS_HOMEPAGE_LOCATION_TYPE = "Settings.Homepage.LocationType";
 
     private EmbeddedTestServer mTestServer;
 
@@ -126,6 +128,11 @@ public class HomepagePolicyIntegrationTest {
         Assert.assertEquals(1,
                 RecordHistogram.getHistogramValueCountForTesting(
                         METRICS_HOME_BUTTON_STATE_ENUM, HomeButtonPreferenceState.MANAGED_ENABLED));
+
+        // METRICS_HOMEPAGE_LOCATION_TYPE is recorded once in deferred start up tasks.
+        Assert.assertEquals("Settings.Homepage.LocationType should record POLICY_OTHER once.", 1,
+                RecordHistogram.getHistogramValueCountForTesting(
+                        METRICS_HOMEPAGE_LOCATION_TYPE, HomepageLocationType.POLICY_OTHER));
 
         // Start the page again. This time, the homepage should be set to what policy is.
         destroyAndRestartActivity();
