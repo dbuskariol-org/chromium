@@ -61963,6 +61963,9 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="SSLErrorLearnMoreNavigationResult">
+  <obsolete>
+    Removed March 2020. See crbug.com/1059826
+  </obsolete>
   <int value="0" label="Navigation Succeeded"/>
   <int value="1" label="Navigation Failed with Interstitial"/>
   <int value="2" label="Navigation Failed with Other Error"/>
