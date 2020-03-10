@@ -59,10 +59,11 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
 
     private final Handler mHandler;
     private final WebContents mWebContents;
-    private final Intent mPayIntent;
     private final Set<String> mMethodNames;
     private final boolean mIsIncognito;
-    private Intent mIsReadyToPayIntent;
+    private final String mPackageName;
+    private final String mPayActivityName;
+    private final String mIsReadyToPayServiceName;
     private IsReadyToPayCallback mIsReadyToPayCallback;
     private InstrumentDetailsCallback mInstrumentDetailsCallback;
     private ServiceConnection mServiceConnection;
@@ -94,14 +95,12 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
         mHandler = new Handler();
         mWebContents = webContents;
 
-        mPayIntent = new Intent();
-        mPayIntent.setClassName(packageName, activity);
-        mPayIntent.setAction(WebPaymentIntentHelper.ACTION_PAY);
+        mPackageName = packageName;
+        mPayActivityName = activity;
+        mIsReadyToPayServiceName = isReadyToPayService;
 
-        if (isReadyToPayService != null) {
+        if (mIsReadyToPayServiceName != null) {
             assert !isIncognito;
-            mIsReadyToPayIntent = new Intent();
-            mIsReadyToPayIntent.setClassName(packageName, isReadyToPayService);
         }
 
         mMethodNames = new HashSet<>();
@@ -133,7 +132,7 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
                 == null : "Have not responded to previous IS_READY_TO_PAY request";
 
         mIsReadyToPayCallback = callback;
-        if (mIsReadyToPayIntent == null) {
+        if (mIsReadyToPayServiceName == null) {
             respondToIsReadyToPayQuery(true);
             return;
         }
@@ -164,11 +163,10 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
             }
         };
 
-        mIsReadyToPayIntent.putExtras(WebPaymentIntentHelper.buildExtras(null /* id */,
-                null /* merchantName */, removeUrlScheme(origin), removeUrlScheme(iframeOrigin),
-                certificateChain,
-                WebPaymentIntentHelperTypeConverter.fromMojoPaymentMethodDataMap(methodDataMap),
-                null /* total */, null /* displayItems */, null /* modifiers */));
+        Intent isReadyToPayIntent = WebPaymentIntentHelper.createIsReadyToPayIntent(
+                /*packageName=*/mPackageName, /*serviceName=*/mIsReadyToPayServiceName,
+                removeUrlScheme(origin), removeUrlScheme(iframeOrigin), certificateChain,
+                WebPaymentIntentHelperTypeConverter.fromMojoPaymentMethodDataMap(methodDataMap));
 
         if (mBypassIsReadyToPayServiceInTest) {
             respondToIsReadyToPayQuery(true);
@@ -183,7 +181,7 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
             // connection."
             // https://developer.android.com/reference/android/content/Context.html#bindService(android.content.Intent,%20android.content.ServiceConnection,%20int)
             mIsServiceBindingInitiated = ContextUtils.getApplicationContext().bindService(
-                    mIsReadyToPayIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+                    isReadyToPayIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
         } catch (SecurityException e) {
             // Intentionally blank, so mIsServiceBindingInitiated is false.
         }
@@ -315,14 +313,14 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
             return;
         }
 
-        mPayIntent.putExtras(WebPaymentIntentHelper.buildExtras(id, merchantName, origin,
-                iframeOrigin, certificateChain,
+        Intent payIntent = WebPaymentIntentHelper.createPayIntent(mPackageName, mPayActivityName,
+                id, merchantName, origin, iframeOrigin, certificateChain,
                 WebPaymentIntentHelperTypeConverter.fromMojoPaymentMethodDataMap(methodDataMap),
                 WebPaymentIntentHelperTypeConverter.fromMojoPaymentItem(total),
                 WebPaymentIntentHelperTypeConverter.fromMojoPaymentItems(displayItems),
-                WebPaymentIntentHelperTypeConverter.fromMojoPaymentDetailsModifierMap(modifiers)));
+                WebPaymentIntentHelperTypeConverter.fromMojoPaymentDetailsModifierMap(modifiers));
         try {
-            if (!window.showIntent(mPayIntent, this, R.string.payments_android_app_error)) {
+            if (!window.showIntent(payIntent, this, R.string.payments_android_app_error)) {
                 notifyErrorInvokingPaymentApp(ErrorStrings.PAYMENT_APP_LAUNCH_FAIL);
             }
         } catch (SecurityException e) {
