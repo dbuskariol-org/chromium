@@ -868,7 +868,6 @@ RenderFrameHostImpl::RenderFrameHostImpl(
     FrameTree* frame_tree,
     FrameTreeNode* frame_tree_node,
     int32_t routing_id,
-    int32_t widget_routing_id,
     bool renderer_initiated_creation)
     : render_view_host_(std::move(render_view_host)),
       delegate_(delegate),
@@ -939,7 +938,12 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       base::BindRepeating(&RenderFrameHostImpl::BeforeUnloadTimeout,
                           weak_ptr_factory_.GetWeakPtr())));
 
-  if (widget_routing_id != MSG_ROUTING_NONE) {
+  // Local roots are:
+  // - main frames; or
+  // - subframes in a different SiteInstance from their parent.
+  //
+  // Local roots require a RenderWidget for input/layout/painting.
+  if (!parent_ || IsCrossProcessSubframe()) {
     mojo::PendingRemote<mojom::Widget> widget;
     GetRemoteInterfaces()->GetInterface(
         widget.InitWithNewPipeAndPassReceiver());
@@ -950,18 +954,17 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       // RenderWidgetHostImpl, the main render frame should probably start
       // owning the RenderWidgetHostImpl itself.
       DCHECK(GetLocalRenderWidgetHost());
-      DCHECK_EQ(GetLocalRenderWidgetHost()->GetRoutingID(), widget_routing_id);
       DCHECK(!GetLocalRenderWidgetHost()->owned_by_render_frame_host());
 
       // Make the RenderWidgetHostImpl able to call the mojo Widget interface
       // (implemented by the RenderWidgetImpl).
       GetLocalRenderWidgetHost()->SetWidget(std::move(widget));
     } else {
-      // For subframes, the RenderFrameHost directly creates and owns its
-      // RenderWidgetHost.
+      // For local child roots, the RenderFrameHost directly creates and owns
+      // its RenderWidgetHost.
+      int32_t widget_routing_id =
+          site_instance->GetProcess()->GetNextRoutingID();
       DCHECK_EQ(nullptr, GetLocalRenderWidgetHost());
-      DCHECK_EQ(nullptr, RenderWidgetHostImpl::FromID(GetProcess()->GetID(),
-                                                      widget_routing_id));
       owned_render_widget_host_ = RenderWidgetHostFactory::Create(
           frame_tree_->render_widget_delegate(), GetProcess(),
           widget_routing_id, std::move(widget), /*hidden=*/true);

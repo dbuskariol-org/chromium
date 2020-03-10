@@ -1446,7 +1446,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
                       FrameTree* frame_tree,
                       FrameTreeNode* frame_tree_node,
                       int32_t routing_id,
-                      int32_t widget_routing_id,
                       bool renderer_initiated_creation);
 
   // The SendCommit* functions below are wrappers for commit calls
