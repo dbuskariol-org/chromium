@@ -936,7 +936,6 @@ TabStrip::TabStrip(std::unique_ptr<TabStripController> controller)
       drag_context_(std::make_unique<TabDragContextImpl>(this)) {
   Init();
   SetEventTargeter(std::make_unique<views::ViewTargeter>(this));
-  md_observer_.Add(MD::GetInstance());
 }
 
 TabStrip::~TabStrip() {

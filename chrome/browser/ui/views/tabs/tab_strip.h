@@ -30,7 +30,6 @@
 #include "chrome/browser/ui/views/tabs/tab_group_views.h"
 #include "components/tab_groups/tab_group_visual_data.h"
 #include "ui/base/material_design/material_design_controller.h"
-#include "ui/base/material_design/material_design_controller_observer.h"
 #include "ui/gfx/color_palette.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/gfx/geometry/rect.h"
@@ -83,8 +82,7 @@ class TabStrip : public views::AccessiblePaneView,
                  public views::ViewTargeterDelegate,
                  public views::WidgetObserver,
                  public TabController,
-                 public BrowserRootView::DropTarget,
-                 public ui::MaterialDesignControllerObserver {
+                 public BrowserRootView::DropTarget {
  public:
   explicit TabStrip(std::unique_ptr<TabStripController> controller);
   ~TabStrip() override;
@@ -649,8 +647,7 @@ class TabStrip : public views::AccessiblePaneView,
   // views::WidgetObserver:
   void OnWidgetActivationChanged(views::Widget* widget, bool active) override;
 
-  // ui::MaterialDesignControllerObserver:
-  void OnTouchUiChanged() override;
+  void OnTouchUiChanged();
 
   // -- Member Variables ------------------------------------------------------
 
@@ -762,9 +759,10 @@ class TabStrip : public views::AccessiblePaneView,
 
   SkColor separator_color_ = gfx::kPlaceholderColor;
 
-  ScopedObserver<ui::MaterialDesignController,
-                 ui::MaterialDesignControllerObserver>
-      md_observer_{this};
+  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
+      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+          base::BindRepeating(&TabStrip::OnTouchUiChanged,
+                              base::Unretained(this)));
 
   std::unique_ptr<TabDragContextImpl> drag_context_;
 

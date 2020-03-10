@@ -75,8 +75,6 @@ AvatarToolbarButton::AvatarToolbarButton(Browser* browser,
   // the left and the (potential) user name on the right.
   SetHorizontalAlignment(gfx::ALIGN_LEFT);
 
-  md_observer_.Add(ui::MaterialDesignController::GetInstance());
-
   // TODO(crbug.com/922525): DCHECK(parent_) instead of the if, once we always
   // have a parent.
   if (parent_)
@@ -202,11 +200,6 @@ void AvatarToolbarButton::OnThemeChanged() {
   ToolbarButton::OnThemeChanged();
   UpdateIcon();
   UpdateText();
-}
-
-void AvatarToolbarButton::OnTouchUiChanged() {
-  SetInsets();
-  PreferredSizeChanged();
 }
 
 void AvatarToolbarButton::OnHighlightChanged() {

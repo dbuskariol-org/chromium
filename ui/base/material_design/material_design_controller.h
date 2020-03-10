@@ -7,8 +7,7 @@
 
 #include <string>
 
-#include "base/observer_list.h"
-#include "base/optional.h"
+#include "base/callback_list.h"
 #include "build/build_config.h"
 #include "ui/base/ui_base_export.h"
 
@@ -20,11 +19,12 @@ class SingletonHwndObserver;
 
 namespace ui {
 
-class MaterialDesignControllerObserver;
-
 // Central controller to handle material design modes.
 class UI_BASE_EXPORT MaterialDesignController {
  public:
+  using CallbackList = base::CallbackList<void()>;
+  using Subscription = CallbackList::Subscription;
+
   enum class TouchUiState {
     kDisabled,
     kAuto,
@@ -58,14 +58,13 @@ class UI_BASE_EXPORT MaterialDesignController {
            ((touch_ui_state_ == TouchUiState::kAuto) && tablet_mode_);
   }
 
-  void OnTabletModeToggled(bool enabled);
+  std::unique_ptr<Subscription> RegisterCallback(
+      const base::RepeatingClosure& closure);
 
-  void AddObserver(MaterialDesignControllerObserver* observer);
-  void RemoveObserver(MaterialDesignControllerObserver* observer);
+  void OnTabletModeToggled(bool enabled);
 
  private:
   TouchUiState SetTouchUiState(TouchUiState touch_ui_state);
-  void NotifyObservers() const;
 
   bool tablet_mode_ = false;
   TouchUiState touch_ui_state_;
@@ -74,7 +73,7 @@ class UI_BASE_EXPORT MaterialDesignController {
   std::unique_ptr<gfx::SingletonHwndObserver> singleton_hwnd_observer_;
 #endif
 
-  base::ObserverList<MaterialDesignControllerObserver> observers_;
+  CallbackList callback_list_;
 };
 
 }  // namespace ui

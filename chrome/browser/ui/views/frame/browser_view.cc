@@ -489,7 +489,6 @@ BrowserView::BrowserView(std::unique_ptr<Browser> browser)
     : views::ClientView(nullptr, nullptr), browser_(std::move(browser)) {
   browser_->tab_strip_model()->AddObserver(this);
   immersive_mode_controller_ = chrome::CreateImmersiveModeController();
-  md_observer_.Add(ui::MaterialDesignController::GetInstance());
 
   // Top container holds tab strip region and toolbar and lives at the front of
   // the view hierarchy.
@@ -3430,12 +3429,6 @@ void BrowserView::OnImmersiveFullscreenExited() {
 
 void BrowserView::OnImmersiveModeControllerDestroyed() {
   ReparentTopContainerForEndOfImmersive();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// BrowserView, ui::MaterialDesignControllerObserver implementation:
-void BrowserView::OnTouchUiChanged() {
-  MaybeInitializeWebUITabStrip();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

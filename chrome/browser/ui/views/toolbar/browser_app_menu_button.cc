@@ -143,8 +143,6 @@ BrowserAppMenuButton::BrowserAppMenuButton(ToolbarView* toolbar_view)
   SetHorizontalAlignment(gfx::ALIGN_RIGHT);
 
   set_ink_drop_visible_opacity(kToolbarInkDropVisibleOpacity);
-
-  md_observer_.Add(ui::MaterialDesignController::GetInstance());
 }
 
 BrowserAppMenuButton::~BrowserAppMenuButton() {}
@@ -277,12 +275,6 @@ void BrowserAppMenuButton::UpdateIcon() {
   }
 }
 
-void BrowserAppMenuButton::OnTouchUiChanged() {
-  UpdateIcon();
-  UpdateColorsAndInsets();
-  PreferredSizeChanged();
-}
-
 const char* BrowserAppMenuButton::GetClassName() const {
   return "BrowserAppMenuButton";
 }
@@ -373,4 +365,10 @@ base::string16 BrowserAppMenuButton::GetTooltipText(const gfx::Point& p) const {
     return base::string16();
 
   return AppMenuButton::GetTooltipText(p);
+}
+
+void BrowserAppMenuButton::OnTouchUiChanged() {
+  UpdateIcon();
+  UpdateColorsAndInsets();
+  PreferredSizeChanged();
 }

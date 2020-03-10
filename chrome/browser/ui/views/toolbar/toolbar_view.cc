@@ -152,7 +152,6 @@ ToolbarView::ToolbarView(Browser* browser, BrowserView* browser_view)
   chrome::AddCommandObserver(browser_, IDC_SHOW_AVATAR_MENU, this);
 
   UpgradeDetector::GetInstance()->AddObserver(this);
-  md_observer_.Add(ui::MaterialDesignController::GetInstance());
 
   if (display_mode_ == DisplayMode::NORMAL)
     SetBackground(std::make_unique<TopContainerBackground>(browser_view));
@@ -672,28 +671,6 @@ bool ToolbarView::SetPaneFocusAndFocusDefault() {
   return true;
 }
 
-// ui::MaterialDesignControllerObserver:
-void ToolbarView::OnTouchUiChanged() {
-  if (display_mode_ == DisplayMode::NORMAL) {
-    // Update the internal margins for touch layout.
-    // TODO(dfried): I think we can do better than this by making the touch UI
-    // code cleaner.
-    const int default_margin = GetLayoutConstant(TOOLBAR_ELEMENT_PADDING);
-    const int location_bar_margin = GetLayoutConstant(TOOLBAR_STANDARD_SPACING);
-    layout_manager_->SetDefault(views::kMarginsKey,
-                                gfx::Insets(0, default_margin));
-    location_bar_->SetProperty(views::kMarginsKey,
-                               gfx::Insets(0, location_bar_margin));
-    if (browser_actions_) {
-      browser_actions_->SetProperty(views::kInternalPaddingKey,
-                                    gfx::Insets(0, location_bar_margin));
-    }
-
-    LoadImages();
-    PreferredSizeChanged();
-  }
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // ToolbarView, private:
 
@@ -982,4 +959,25 @@ void ToolbarView::UpdateHomeButtonVisibility() {
   const bool show_home_button =
       show_home_button_.GetValue() || browser_->deprecated_is_app();
   home_->SetVisible(show_home_button);
+}
+
+void ToolbarView::OnTouchUiChanged() {
+  if (display_mode_ == DisplayMode::NORMAL) {
+    // Update the internal margins for touch layout.
+    // TODO(dfried): I think we can do better than this by making the touch UI
+    // code cleaner.
+    const int default_margin = GetLayoutConstant(TOOLBAR_ELEMENT_PADDING);
+    const int location_bar_margin = GetLayoutConstant(TOOLBAR_STANDARD_SPACING);
+    layout_manager_->SetDefault(views::kMarginsKey,
+                                gfx::Insets(0, default_margin));
+    location_bar_->SetProperty(views::kMarginsKey,
+                               gfx::Insets(0, location_bar_margin));
+    if (browser_actions_) {
+      browser_actions_->SetProperty(views::kInternalPaddingKey,
+                                    gfx::Insets(0, location_bar_margin));
+    }
+
+    LoadImages();
+    PreferredSizeChanged();
+  }
 }

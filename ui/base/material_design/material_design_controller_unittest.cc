@@ -6,30 +6,26 @@
 
 #include "base/macros.h"
 #include "base/scoped_observer.h"
+#include "base/test/bind_test_util.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "ui/base/material_design/material_design_controller.h"
-#include "ui/base/material_design/material_design_controller_observer.h"
 
 namespace ui {
 
 namespace {
 
-class TestObserver : public MaterialDesignControllerObserver {
+class TestObserver {
  public:
-  explicit TestObserver(MaterialDesignController* controller) {
-    observer_.Add(controller);
-  }
-  ~TestObserver() override = default;
+  explicit TestObserver(MaterialDesignController* controller)
+      : md_subscription_(controller->RegisterCallback(
+            base::BindLambdaForTesting([this]() { ++touch_ui_changes_; }))) {}
+  ~TestObserver() = default;
 
   int touch_ui_changes() const { return touch_ui_changes_; }
 
  private:
-  // MaterialDesignControllerObserver:
-  void OnTouchUiChanged() override { ++touch_ui_changes_; }
-
   int touch_ui_changes_ = 0;
-  ScopedObserver<MaterialDesignController, MaterialDesignControllerObserver>
-      observer_{this};
+  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_;
 };
 
 }  // namespace

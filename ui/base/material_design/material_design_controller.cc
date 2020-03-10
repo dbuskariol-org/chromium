@@ -8,19 +8,13 @@
 
 #include "base/bind.h"
 #include "base/command_line.h"
-#include "base/logging.h"
 #include "base/message_loop/message_loop_current.h"
 #include "base/no_destructor.h"
-#include "base/observer_list.h"
-#include "build/buildflag.h"
-#include "ui/base/buildflags.h"
-#include "ui/base/material_design/material_design_controller_observer.h"
 #include "ui/base/ui_base_switches.h"
 
 #if defined(OS_WIN)
 #include "base/win/win_util.h"
 #include "base/win/windows_version.h"
-#include "ui/base/win/hidden_window.h"
 #include "ui/gfx/win/singleton_hwnd.h"
 #include "ui/gfx/win/singleton_hwnd_observer.h"
 #endif
@@ -85,17 +79,13 @@ void MaterialDesignController::OnTabletModeToggled(bool enabled) {
   const bool was_touch_ui = touch_ui();
   tablet_mode_ = enabled;
   if (touch_ui() != was_touch_ui)
-    NotifyObservers();
+    callback_list_.Notify();
 }
 
-void MaterialDesignController::AddObserver(
-    MaterialDesignControllerObserver* observer) {
-  observers_.AddObserver(observer);
-}
-
-void MaterialDesignController::RemoveObserver(
-    MaterialDesignControllerObserver* observer) {
-  observers_.RemoveObserver(observer);
+std::unique_ptr<MaterialDesignController::Subscription>
+MaterialDesignController::RegisterCallback(
+    const base::RepeatingClosure& closure) {
+  return callback_list_.Add(closure);
 }
 
 MaterialDesignController::TouchUiState
@@ -103,13 +93,8 @@ MaterialDesignController::SetTouchUiState(TouchUiState touch_ui_state) {
   const bool was_touch_ui = touch_ui();
   const TouchUiState old_state = std::exchange(touch_ui_state_, touch_ui_state);
   if (touch_ui() != was_touch_ui)
-    NotifyObservers();
+    callback_list_.Notify();
   return old_state;
-}
-
-void MaterialDesignController::NotifyObservers() const {
-  for (auto& observer : observers_)
-    observer.OnTouchUiChanged();
 }
 
 }  // namespace ui

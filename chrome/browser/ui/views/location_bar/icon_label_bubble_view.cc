@@ -161,8 +161,6 @@ IconLabelBubbleView::IconLabelBubbleView(const gfx::FontList& font_list,
   alert_view->GetCustomData().role = ax::mojom::Role::kAlert;
   alert_virtual_view_ = alert_view.get();
   GetViewAccessibility().AddVirtualChildView(std::move(alert_view));
-
-  md_observer_.Add(MD::GetInstance());
 }
 
 IconLabelBubbleView::~IconLabelBubbleView() {}
@@ -246,6 +244,15 @@ bool IconLabelBubbleView::ShowBubble(const ui::Event& event) {
 
 bool IconLabelBubbleView::IsBubbleShowing() const {
   return false;
+}
+
+void IconLabelBubbleView::OnTouchUiChanged() {
+  UpdateBorder();
+
+  // PreferredSizeChanged() incurs an expensive layout of the location bar, so
+  // only call it when this view is showing.
+  if (GetVisible())
+    PreferredSizeChanged();
 }
 
 gfx::Size IconLabelBubbleView::CalculatePreferredSize() const {
@@ -386,15 +393,6 @@ void IconLabelBubbleView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
   LabelButton::GetAccessibleNodeData(node_data);
   if (GetAccessibleName().empty())
     node_data->SetNameExplicitlyEmpty();
-}
-
-void IconLabelBubbleView::OnTouchUiChanged() {
-  UpdateBorder();
-
-  // PreferredSizeChanged() incurs an expensive layout of the location bar, so
-  // only call it when this view is showing.
-  if (GetVisible())
-    PreferredSizeChanged();
 }
 
 void IconLabelBubbleView::SetImage(const gfx::ImageSkia& image_skia) {
