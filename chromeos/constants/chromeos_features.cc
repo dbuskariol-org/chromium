@@ -254,10 +254,6 @@ const base::Feature kScanningUI{"ScanningUI",
 const base::Feature kSessionManagerLongKillTimeout{
     "SessionManagerLongKillTimeout", base::FEATURE_DISABLED_BY_DEFAULT};
 
-// Enables or disables the scrollable shelf.
-const base::Feature kShelfScrollable{"ShelfScrollable",
-                                     base::FEATURE_ENABLED_BY_DEFAULT};
-
 // Enables or disables the shelf hotseat.
 const base::Feature kShelfHotseat{"ShelfHotseat",
                                   base::FEATURE_ENABLED_BY_DEFAULT};

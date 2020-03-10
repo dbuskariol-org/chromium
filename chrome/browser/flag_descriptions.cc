@@ -1718,11 +1718,6 @@ const char kShelfHoverPreviewsDescription[] =
     "Shows previews of the open windows for a given running app when hovering "
     "over the shelf.";
 
-const char kShelfScrollableName[] =
-    "Enable a scrollable list of apps on the shelf";
-const char kShelfScrollableDescription[] =
-    "Shows a list of applications that is scrollable by default on tablets.";
-
 const char kShowAndroidFilesInFilesAppName[] =
     "Show Android files in Files app";
 const char kShowAndroidFilesInFilesAppDescription[] =

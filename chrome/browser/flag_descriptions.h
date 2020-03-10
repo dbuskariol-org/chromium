@@ -995,9 +995,6 @@ extern const char kShelfHotseatDescription[];
 extern const char kShelfHoverPreviewsName[];
 extern const char kShelfHoverPreviewsDescription[];
 
-extern const char kShelfScrollableName[];
-extern const char kShelfScrollableDescription[];
-
 extern const char kShowAndroidFilesInFilesAppName[];
 extern const char kShowAndroidFilesInFilesAppDescription[];
 
