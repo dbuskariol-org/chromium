@@ -3249,9 +3249,10 @@ bool PepperPluginInstanceImpl::IsMouseLocked() {
 
 bool PepperPluginInstanceImpl::LockMouse(bool request_unadjusted_movement) {
   WebLocalFrame* requester_frame = container_->GetDocument().GetFrame();
-  return GetMouseLockDispatcher()->LockMouse(GetOrCreateLockTargetAdapter(),
-                                             requester_frame,
-                                             request_unadjusted_movement);
+  return GetMouseLockDispatcher()->LockMouse(
+      GetOrCreateLockTargetAdapter(), requester_frame,
+      base::OnceCallback<void(blink::mojom::PointerLockResult)>(),
+      request_unadjusted_movement);
 }
 
 MouseLockDispatcher::LockTarget*

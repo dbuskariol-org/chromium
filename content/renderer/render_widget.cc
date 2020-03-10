@@ -3418,18 +3418,13 @@ gfx::Point RenderWidget::ConvertWindowPointToViewport(const gfx::Point& point) {
   return gfx::ToRoundedPoint(ConvertWindowPointToViewport(gfx::PointF(point)));
 }
 
-bool RenderWidget::RequestPointerLock(WebLocalFrame* requester_frame,
-                                      bool request_unadjusted_movement) {
+bool RenderWidget::RequestPointerLock(
+    WebLocalFrame* requester_frame,
+    blink::WebWidgetClient::PointerLockCallback callback,
+    bool request_unadjusted_movement) {
   return mouse_lock_dispatcher_->LockMouse(webwidget_mouse_lock_target_.get(),
-                                           requester_frame,
+                                           requester_frame, std::move(callback),
                                            request_unadjusted_movement);
-}
-
-void RenderWidget::OnLockPointer(bool succeeded) {
-  if (succeeded)
-    webwidget_->DidAcquirePointerLock();
-  else
-    webwidget_->DidNotAcquirePointerLock();
 }
 
 void RenderWidget::PointerLockLost() {

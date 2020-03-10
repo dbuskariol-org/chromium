@@ -498,7 +498,8 @@ blink::mojom::DisplayMode Shell::GetDisplayMode(
 void Shell::RequestToLockMouse(WebContents* web_contents,
                                bool user_gesture,
                                bool last_unlocked_by_target) {
-  web_contents->GotResponseToLockMouseRequest(true);
+  web_contents->GotResponseToLockMouseRequest(
+      blink::mojom::PointerLockResult::kSuccess);
 }
 
 void Shell::CloseContents(WebContents* source) {

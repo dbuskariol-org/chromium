@@ -265,11 +265,12 @@ void CrossProcessFrameConnector::FocusRootView() {
     root_view->Focus();
 }
 
-bool CrossProcessFrameConnector::LockMouse(bool request_unadjusted_movement) {
+blink::mojom::PointerLockResult CrossProcessFrameConnector::LockMouse(
+    bool request_unadjusted_movement) {
   RenderWidgetHostViewBase* root_view = GetRootRenderWidgetHostView();
   if (root_view)
     return root_view->LockMouse(request_unadjusted_movement);
-  return false;
+  return blink::mojom::PointerLockResult::kWrongDocument;
 }
 
 void CrossProcessFrameConnector::UnlockMouse() {

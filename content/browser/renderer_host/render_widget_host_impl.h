@@ -527,7 +527,7 @@ class CONTENT_EXPORT RenderWidgetHostImpl
   // Called when the response to a pending mouse lock request has arrived.
   // Returns true if |allowed| is true and the mouse has been successfully
   // locked.
-  bool GotResponseToLockMouseRequest(bool allowed);
+  bool GotResponseToLockMouseRequest(blink::mojom::PointerLockResult result);
 
   void set_allow_privileged_mouse_lock(bool allow) {
     allow_privileged_mouse_lock_ = allow;
@@ -574,7 +574,8 @@ class CONTENT_EXPORT RenderWidgetHostImpl
   // or create it if it doesn't already exist.
   BrowserAccessibilityManager* GetOrCreateRootBrowserAccessibilityManager();
 
-  void RejectMouseLockOrUnlockIfNecessary();
+  void RejectMouseLockOrUnlockIfNecessary(
+      blink::mojom::PointerLockResult reason);
 
   void set_renderer_initialized(bool renderer_initialized) {
     renderer_initialized_ = renderer_initialized;

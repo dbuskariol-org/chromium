@@ -1652,9 +1652,10 @@ RenderWidgetHostViewAndroid::CreateBrowserAccessibilityManager(
       delegate);
 }
 
-bool RenderWidgetHostViewAndroid::LockMouse(bool request_unadjusted_movement) {
+blink::mojom::PointerLockResult RenderWidgetHostViewAndroid::LockMouse(
+    bool request_unadjusted_movement) {
   NOTIMPLEMENTED();
-  return false;
+  return blink::mojom::PointerLockResult::kUnsupportedOptions;
 }
 
 void RenderWidgetHostViewAndroid::UnlockMouse() {
