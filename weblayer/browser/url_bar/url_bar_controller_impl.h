@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef WEBLAYER_BROWSER_URLBAR_URL_BAR_CONTROLLER_IMPL_H_
-#define WEBLAYER_BROWSER_URLBAR_URL_BAR_CONTROLLER_IMPL_H_
+#ifndef WEBLAYER_BROWSER_URL_BAR_URL_BAR_CONTROLLER_IMPL_H_
+#define WEBLAYER_BROWSER_URL_BAR_URL_BAR_CONTROLLER_IMPL_H_
 
 #include "base/strings/string16.h"
 #include "build/build_config.h"
@@ -56,4 +56,4 @@ class UrlBarControllerImpl : public UrlBarController,
 
 }  // namespace weblayer
 
-#endif  // WEBLAYER_BROWSER_URLBAR_URL_BAR_CONTROLLER_IMPL_H_
+#endif  // WEBLAYER_BROWSER_URL_BAR_URL_BAR_CONTROLLER_IMPL_H_

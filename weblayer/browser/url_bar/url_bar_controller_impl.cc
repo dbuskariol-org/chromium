@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "weblayer/browser/urlbar/url_bar_controller_impl.h"
+#include "weblayer/browser/url_bar/url_bar_controller_impl.h"
 
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
@@ -14,7 +14,7 @@
 #include "content/public/common/content_constants.h"
 #include "weblayer/browser/browser_impl.h"
 #include "weblayer/browser/tab_impl.h"
-#include "weblayer/browser/urlbar/autocomplete_scheme_classifier_impl.h"
+#include "weblayer/browser/url_bar/autocomplete_scheme_classifier_impl.h"
 #include "weblayer/public/browser.h"
 #include "weblayer/public/navigation_controller.h"
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "weblayer/browser/urlbar/autocomplete_scheme_classifier_impl.h"
+#include "weblayer/browser/url_bar/autocomplete_scheme_classifier_impl.h"
 
 #include "base/strings/string_util.h"
 #include "content/public/common/url_constants.h"
