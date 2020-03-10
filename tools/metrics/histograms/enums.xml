@@ -32002,6 +32002,12 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="9" label="Incognito mode disabled"/>
   <int value="10" label="Cookies are blocked"/>
   <int value="11" label="Third-party cookies are blocked"/>
+  <int value="12" label="Survey not retrievable from server">
+    Fetching survey from the server encounters connection errors.
+  </int>
+  <int value="13" label="Survey over capacity">
+    The survey is over its capacity.
+  </int>
 </enum>
 
 <enum name="HasDiscreteGpu">
