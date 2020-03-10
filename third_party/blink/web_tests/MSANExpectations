@@ -119,6 +119,7 @@ crbug.com/856601 [ Linux ] external/wpt/IndexedDB/idlharness.https.any.servicewo
 crbug.com/856601 [ Linux ] external/wpt/IndexedDB/interfaces.any.html [ Pass Timeout ]
 crbug.com/856601 [ Linux ] external/wpt/appmanifest/idlharness.window.html [ Pass Timeout ]
 crbug.com/856601 [ Linux ] external/wpt/bluetooth/idl/idlharness.tentative.window.html [ Pass Timeout ]
+crbug.com/856601 [ Linux ] virtual/web-bluetooth-new-permissions-backend/external/wpt/bluetooth/idlharness.tentative.https.window.html [ Pass Timeout ]
 crbug.com/856601 [ Linux ] external/wpt/cookie-store/idlharness.tentative.https.html [ Pass Timeout ]
 crbug.com/856601 [ Linux ] external/wpt/css/css-animations/idlharness.html [ Pass Timeout ]
 crbug.com/856601 [ Linux ] external/wpt/css/css-font-loading/idlharness.https.html [ Pass Timeout ]
