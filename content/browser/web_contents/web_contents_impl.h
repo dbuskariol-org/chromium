@@ -706,6 +706,13 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   void OnPageScaleFactorChanged(RenderFrameHostImpl* source,
                                 float page_scale_factor) override;
   bool HasSeenRecentScreenOrientationChange() override;
+  void CreateNewWidget(int32_t render_process_id,
+                       int32_t route_id,
+                       mojo::PendingRemote<mojom::Widget> widget) override;
+  void CreateNewFullscreenWidget(
+      int32_t render_process_id,
+      int32_t widget_route_id,
+      mojo::PendingRemote<mojom::Widget> widget) override;
 
   // RenderViewHostDelegate ----------------------------------------------------
   RenderViewHostDelegateView* GetDelegateView() override;
@@ -737,14 +744,6 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   void OnIgnoredUIEvent() override;
   void Activate() override;
   void UpdatePreferredSize(const gfx::Size& pref_size) override;
-  void CreateNewWidget(int32_t render_process_id,
-                       int32_t route_id,
-                       mojo::PendingRemote<mojom::Widget> widget,
-                       RenderViewHostImpl* render_view_host) override;
-  void CreateNewFullscreenWidget(int32_t render_process_id,
-                                 int32_t widget_route_id,
-                                 mojo::PendingRemote<mojom::Widget> widget,
-                                 RenderViewHostImpl* render_view_host) override;
   void ShowCreatedWidget(int process_id,
                          int widget_route_id,
                          const gfx::Rect& initial_rect) override;
@@ -1475,8 +1474,7 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   void CreateNewWidget(int32_t render_process_id,
                        int32_t route_id,
                        bool is_fullscreen,
-                       mojo::PendingRemote<mojom::Widget> widget,
-                       RenderViewHostImpl* render_view_host);
+                       mojo::PendingRemote<mojom::Widget> widget);
 
   // Helper for ShowCreatedWidget/ShowCreatedFullscreenWidget.
   void ShowCreatedWidget(int process_id,

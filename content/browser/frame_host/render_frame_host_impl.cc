@@ -4841,6 +4841,24 @@ void RenderFrameHostImpl::AdoptPortal(
       portal->GetDevToolsFrameToken());
 }
 
+void RenderFrameHostImpl::CreateNewWidget(
+    mojo::PendingRemote<mojom::Widget> widget,
+    CreateNewWidgetCallback callback) {
+  int32_t widget_route_id = GetProcess()->GetNextRoutingID();
+  std::move(callback).Run(widget_route_id);
+  delegate_->CreateNewWidget(GetProcess()->GetID(), widget_route_id,
+                             std::move(widget));
+}
+
+void RenderFrameHostImpl::CreateNewFullscreenWidget(
+    mojo::PendingRemote<mojom::Widget> widget,
+    CreateNewFullscreenWidgetCallback callback) {
+  int32_t widget_route_id = GetProcess()->GetNextRoutingID();
+  std::move(callback).Run(widget_route_id);
+  delegate_->CreateNewFullscreenWidget(GetProcess()->GetID(), widget_route_id,
+                                       std::move(widget));
+}
+
 void RenderFrameHostImpl::IssueKeepAliveHandle(
     mojo::PendingReceiver<mojom::KeepAliveHandle> receiver) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);

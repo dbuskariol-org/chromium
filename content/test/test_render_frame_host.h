@@ -207,6 +207,9 @@ class TestRenderFrameHost : public RenderFrameHostImpl,
   // callbacks.
   void SimulateLoadingCompleted(LoadingScenario loading_scenario);
 
+  // Expose CreateNewFullscreenWidget for tests.
+  using RenderFrameHostImpl::CreateNewFullscreenWidget;
+
  protected:
   void SendCommitNavigation(
       mojom::NavigationClient* navigation_client,

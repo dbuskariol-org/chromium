@@ -571,8 +571,22 @@ class CONTENT_EXPORT RenderFrameHostDelegate {
   // decide if we should consume user activation when entering fullscreen.
   virtual bool HasSeenRecentScreenOrientationChange();
 
+  // The page is trying to open a new widget (e.g. a select popup). The
+  // widget should be created associated with the given |widget_route_id| in the
+  // process |render_process_id|, but it should not be shown yet. That should
+  // happen in response to ShowCreatedWidget.
+  virtual void CreateNewWidget(int32_t render_process_id,
+                               int32_t widget_route_id,
+                               mojo::PendingRemote<mojom::Widget> widget) {}
+
+  // Creates a full screen RenderWidget. Similar to above.
+  virtual void CreateNewFullscreenWidget(
+      int32_t render_process_id,
+      int32_t widget_route_id,
+      mojo::PendingRemote<mojom::Widget> widget) {}
+
  protected:
-  virtual ~RenderFrameHostDelegate() {}
+  virtual ~RenderFrameHostDelegate() = default;
 };
 
 }  // namespace content
