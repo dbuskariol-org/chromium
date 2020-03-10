@@ -3458,6 +3458,11 @@ const char kReleaseNotesDescription[] =
     "Creates release notes app in settings menu that shows a webview "
     "describing new OS features.";
 
+const char kScanningUIName[] = "Scanning UI";
+const char kScanningUIDescription[] =
+    "An experimental UI that allows users to interact with a connected "
+    "scanner.";
+
 const char kSchedulerConfigurationName[] = "Scheduler Configuration";
 const char kSchedulerConfigurationDescription[] =
     "Instructs the OS to use a specific scheduler configuration setting.";

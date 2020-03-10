@@ -38497,6 +38497,7 @@ from previous Chrome versions.
   <int value="-601384286" label="disable-contextual-search"/>
   <int value="-600792432" label="WebVrAutopresentFromIntent:disabled"/>
   <int value="-599932554" label="DoodlesOnLocalNtp:disabled"/>
+  <int value="-599005750" label="ScanningUI:disabled"/>
   <int value="-598050737" label="disable-es3-apis"/>
   <int value="-596337171" label="disable-ash-sidebar"/>
   <int value="-595819071"
@@ -38627,6 +38628,7 @@ from previous Chrome versions.
   <int value="-424701311" label="SignedHTTPExchange:disabled"/>
   <int value="-424134004" label="WebPaymentsExperimentalFeatures:disabled"/>
   <int value="-418868128" label="enable-experimental-web-platform-features"/>
+  <int value="-418676305" label="ScanningUI:enabled"/>
   <int value="-416660617" label="EnforceTLS13Downgrade:disabled"/>
   <int value="-415186532" label="AndroidSiteSettingsUIRefresh:enabled"/>
   <int value="-412736561" label="EnableZeroStateMixedTypesRanker:enabled"/>

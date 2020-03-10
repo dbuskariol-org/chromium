@@ -3339,6 +3339,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "scanning-ui",
+    "owners": [ "jschettler", "bmgordon" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "scheduler-configuration",
     "owners": [ "kerrnel", "mnissler" ],
     "expiry_milestone": 88

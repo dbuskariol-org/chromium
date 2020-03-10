@@ -2015,6 +2015,9 @@ extern const char kReduceDisplayNotificationsDescription[];
 extern const char kReleaseNotesName[];
 extern const char kReleaseNotesDescription[];
 
+extern const char kScanningUIName[];
+extern const char kScanningUIDescription[];
+
 extern const char kSchedulerConfigurationName[];
 extern const char kSchedulerConfigurationDescription[];
 extern const char kSchedulerConfigurationConservative[];

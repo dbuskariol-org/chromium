@@ -4934,6 +4934,12 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(media::kMediaFoundationVideoCapture)},
 #endif  // defined(OS_WIN)
 
+#if defined(OS_CHROMEOS)
+    {"scanning-ui", flag_descriptions::kScanningUIName,
+     flag_descriptions::kScanningUIDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kScanningUI)},
+#endif  // defined(OS_CHROMEOS)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
