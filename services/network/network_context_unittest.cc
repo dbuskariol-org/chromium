@@ -2029,10 +2029,11 @@ TEST_F(NetworkContextTest, ClearReportingCacheClients) {
       reporting_service.get());
 
   GURL domain("https://google.com");
-  reporting_cache->SetEndpointForTesting(url::Origin::Create(domain), "group",
-                                         domain, net::OriginSubdomains::DEFAULT,
-                                         base::Time::Max(), 1 /* priority */,
-                                         1 /* weight */);
+  net::ReportingEndpointGroupKey group_key(
+      net::NetworkIsolationKey(), url::Origin::Create(domain), "group");
+  reporting_cache->SetEndpointForTesting(
+      group_key, domain, net::OriginSubdomains::DEFAULT, base::Time::Max(),
+      1 /* priority */, 1 /* weight */);
 
   ASSERT_EQ(1u, reporting_cache->GetEndpointCount());
 
@@ -2058,15 +2059,17 @@ TEST_F(NetworkContextTest, ClearReportingCacheClientsWithFilter) {
       reporting_service.get());
 
   GURL domain1("https://google.com");
+  net::ReportingEndpointGroupKey group_key1(
+      net::NetworkIsolationKey(), url::Origin::Create(domain1), "group");
   reporting_cache->SetEndpointForTesting(
-      url::Origin::Create(domain1), "group", domain1,
-      net::OriginSubdomains::DEFAULT, base::Time::Max(), 1 /* priority */,
-      1 /* weight */);
+      group_key1, domain1, net::OriginSubdomains::DEFAULT, base::Time::Max(),
+      1 /* priority */, 1 /* weight */);
   GURL domain2("https://chromium.org");
+  net::ReportingEndpointGroupKey group_key2(
+      net::NetworkIsolationKey(), url::Origin::Create(domain2), "group");
   reporting_cache->SetEndpointForTesting(
-      url::Origin::Create(domain2), "group", domain2,
-      net::OriginSubdomains::DEFAULT, base::Time::Max(), 1 /* priority */,
-      1 /* weight */);
+      group_key2, domain2, net::OriginSubdomains::DEFAULT, base::Time::Max(),
+      1 /* priority */, 1 /* weight */);
 
   ASSERT_EQ(2u, reporting_cache->GetEndpointCount());
 
@@ -2080,10 +2083,8 @@ TEST_F(NetworkContextTest, ClearReportingCacheClientsWithFilter) {
   run_loop.Run();
 
   EXPECT_EQ(1u, reporting_cache->GetEndpointCount());
-  EXPECT_TRUE(reporting_cache->GetEndpointForTesting(
-      url::Origin::Create(domain2), "group", domain2));
-  EXPECT_FALSE(reporting_cache->GetEndpointForTesting(
-      url::Origin::Create(domain1), "group", domain1));
+  EXPECT_TRUE(reporting_cache->GetEndpointForTesting(group_key2, domain2));
+  EXPECT_FALSE(reporting_cache->GetEndpointForTesting(group_key1, domain1));
 }
 
 TEST_F(NetworkContextTest, ClearEmptyReportingCacheClients) {
