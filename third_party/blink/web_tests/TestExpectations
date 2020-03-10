@@ -7042,3 +7042,7 @@ crbug.com/1060175 [ Win ] wpt_internal/webxr/xr_view_projection_detached.https.h
 
 # Note: This is disabled on other platforms already.
 crbug.com/1060270 [ Mac ] http/tests/devtools/elements/styles-2/force-pseudo-state.js [ Failure ]
+
+# Temporarily disable to land https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/2090785
+crbug.com/1011811 third_party/blink/web_tests/http/tests/devtools/changes/changes-sidebar.js [ Pass Failure ]
+crbug.com/1011811 third_party/blink/web_tests/http/tests/devtools/search/search-in-static.js [ Pass Failure ]
