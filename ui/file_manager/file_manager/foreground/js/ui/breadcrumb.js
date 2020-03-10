@@ -33,7 +33,7 @@ const breadCrumbTemplate = `
     }
 
     :host-context(html[dir='rtl']) span.caret {
-      transform: rotate(-180deg);
+      transform: scaleX(-1);
     }
 
     button {
