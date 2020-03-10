@@ -1170,7 +1170,6 @@ class VolumeItem extends DirectoryItem {
     const onEntryResolved = (entry) => {
       // Changes directory to the model item's root directory if needed.
       if (!util.isSameEntry(directoryModel.getCurrentDirEntry(), entry)) {
-        metrics.recordUserAction('FolderShortcut.Navigate');
         directoryModel.changeDirectoryEntry(entry);
       }
       // In case of failure in resolveDisplayRoot() in the volume's constructor,
