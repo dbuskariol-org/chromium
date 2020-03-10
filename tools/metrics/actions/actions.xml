@@ -19273,6 +19273,14 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="SharingHubAndroid.BottomRowScrolled">
+  <owner>src/components/send_tab_to_self/OWNERS</owner>
+  <description>
+    The bottom row was horizontally scrolled. Recorded only once per open share
+    sheet.
+  </description>
+</action>
+
 <action name="SharingHubAndroid.CopyURLSelected">
   <owner>src/components/send_tab_to_self/OWNERS</owner>
   <description>
@@ -19301,6 +19309,27 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="SharingHubAndroid.SendTabToSelf.ChromeSettingsClicked">
+  <owner>src/components/send_tab_to_self/OWNERS</owner>
+  <description>
+    The user tapped the Chrome Settings button in the STTS dialog.
+  </description>
+</action>
+
+<action name="SharingHubAndroid.SendTabToSelf.NoTargetDevices">
+  <owner>src/components/send_tab_to_self/OWNERS</owner>
+  <description>
+    The user tapped STTS in the sharing hub with no target devices available.
+  </description>
+</action>
+
+<action name="SharingHubAndroid.SendTabToSelf.NotSyncing">
+  <owner>src/components/send_tab_to_self/OWNERS</owner>
+  <description>
+    The user tapped STTS in the sharing hub with sync disabled.
+  </description>
+</action>
+
 <action name="SharingHubAndroid.SendTabToSelfSelected">
   <owner>src/components/send_tab_to_self/OWNERS</owner>
   <description>
@@ -19312,6 +19341,14 @@ should be able to be added at any place in this file.
   <owner>src/components/send_tab_to_self/OWNERS</owner>
   <description>
     A third party option was selected in the sharing hub.
+  </description>
+</action>
+
+<action name="SharingHubAndroid.TopRowScrolled">
+  <owner>src/components/send_tab_to_self/OWNERS</owner>
+  <description>
+    The top row was horizontally scrolled. Recorded only once per open share
+    sheet.
   </description>
 </action>
 

@@ -59248,6 +59248,20 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="3" label="Error dialog"/>
 </enum>
 
+<enum name="SharingHubBottomRowIndex">
+  <summary>
+    Index of a third party app in the bottom row of the sharing hub on Android.
+  </summary>
+  <int value="0"/>
+  <int value="1"/>
+  <int value="2"/>
+  <int value="3"/>
+  <int value="4"/>
+  <int value="5"/>
+  <int value="6"/>
+  <int value="7"/>
+</enum>
+
 <enum name="SharingMajorVersionComparison">
   <int value="0" label="Unknown"/>
   <int value="1" label="Sender version is lower"/>
