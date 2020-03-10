@@ -3909,6 +3909,11 @@
     "expiry_milestone": 84
   },
   {
+    "name": "webpage-text-accessibility",
+    "owners": [ "rkgibson" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "webui-a11y-enhancements",
     "owners": [ "aee" ],
     "expiry_milestone": 82
