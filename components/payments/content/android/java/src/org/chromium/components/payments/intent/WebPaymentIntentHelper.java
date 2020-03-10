@@ -4,12 +4,15 @@
 
 package org.chromium.components.payments.intent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.JsonWriter;
 
 import androidx.annotation.Nullable;
 
+import org.chromium.components.payments.ErrorStrings;
 import org.chromium.components.payments.intent.WebPaymentIntentHelperType.PaymentCurrencyAmount;
 import org.chromium.components.payments.intent.WebPaymentIntentHelperType.PaymentDetailsModifier;
 import org.chromium.components.payments.intent.WebPaymentIntentHelperType.PaymentItem;
@@ -20,6 +23,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -51,7 +55,59 @@ public class WebPaymentIntentHelper {
     private static final String EXTRA_DEPRECATED_METHOD_NAME = "methodName";
     private static final String EXTRA_DEPRECATED_ORIGIN = "origin";
 
+    // Response from the payment app.
+    private static final String EXTRA_DEPRECATED_RESPONSE_INSTRUMENT_DETAILS = "instrumentDetails";
+    private static final String EXTRA_RESPONSE_DETAILS = "details";
+    private static final String EXTRA_RESPONSE_METHOD_NAME = "methodName";
+
     private static final String EMPTY_JSON_DATA = "{}";
+
+    /** Invoked to report error for {@link #parsePaymentResponse}. */
+    public interface PaymentErrorCallback {
+        /** @param errorString The string that explains the error. */
+        void onError(String errorString);
+    }
+
+    /** Invoked to receive parsed data for {@link #parsePaymentResponse}. */
+    public interface PaymentSuccessCallback {
+        /**
+         * @param methodName The method name parsed from the intent response.
+         * @param details The instrument details parsed from the intent response.
+         */
+        void onSuccess(String methodName, String details);
+    }
+
+    /**
+     * Parse the Payment Intent response.
+     * @param resultCode Result code of the requested intent.
+     * @param data The intent response data.
+     * @param errorCallback Callback to handle parsing errors. Invoked synchronously.
+     * @param successCallback Callback to receive the parsed data. Invoked synchronously.
+     **/
+    public static void parsePaymentResponse(int resultCode, Intent data,
+            PaymentErrorCallback errorCallback, PaymentSuccessCallback successCallback) {
+        if (data == null) {
+            errorCallback.onError(ErrorStrings.MISSING_INTENT_DATA);
+        } else if (data.getExtras() == null) {
+            errorCallback.onError(ErrorStrings.MISSING_INTENT_EXTRAS);
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            errorCallback.onError(ErrorStrings.RESULT_CANCELED);
+        } else if (resultCode != Activity.RESULT_OK) {
+            errorCallback.onError(String.format(
+                    Locale.US, ErrorStrings.UNRECOGNIZED_ACTIVITY_RESULT, resultCode));
+        } else {
+            String details = data.getExtras().getString(EXTRA_RESPONSE_DETAILS);
+            if (details == null) {
+                details = data.getExtras().getString(EXTRA_DEPRECATED_RESPONSE_INSTRUMENT_DETAILS);
+            }
+            if (details == null) details = EMPTY_JSON_DATA;
+            String methodName = data.getExtras().getString(EXTRA_RESPONSE_METHOD_NAME);
+            if (methodName == null) methodName = "";
+            // TODO(crbug.com/1026667): Support payer data delegation for native apps instead of
+            // returning empty PayerData.
+            successCallback.onSuccess(/*methodName=*/methodName, /*details=*/details);
+        }
+    }
 
     /**
      * Build the 'extra' property for an intent.

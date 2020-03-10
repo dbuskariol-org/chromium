@@ -4,7 +4,6 @@
 
 package org.chromium.chrome.browser.payments;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
@@ -42,7 +41,6 @@ import org.chromium.ui.base.WindowAndroid;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,11 +54,6 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
 
     /** The maximum number of milliseconds to wait for a connection to READY_TO_PAY service. */
     private static final long SERVICE_CONNECTION_TIMEOUT_MS = 1000;
-
-    // Response from the payment app.
-    private static final String EXTRA_DEPRECATED_RESPONSE_INSTRUMENT_DETAILS = "instrumentDetails";
-    private static final String EXTRA_RESPONSE_DETAILS = "details";
-    private static final String EXTRA_RESPONSE_METHOD_NAME = "methodName";
 
     private static final String EMPTY_JSON_DATA = "{}";
 
@@ -346,28 +339,12 @@ public class AndroidPaymentApp extends PaymentApp implements WindowAndroid.Inten
     public void onIntentCompleted(WindowAndroid window, int resultCode, Intent data) {
         ThreadUtils.assertOnUiThread();
         window.removeIntentCallback(this);
-        if (data == null) {
-            mInstrumentDetailsCallback.onInstrumentDetailsError(ErrorStrings.MISSING_INTENT_DATA);
-        } else if (data.getExtras() == null) {
-            mInstrumentDetailsCallback.onInstrumentDetailsError(ErrorStrings.MISSING_INTENT_EXTRAS);
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            mInstrumentDetailsCallback.onInstrumentDetailsError(ErrorStrings.RESULT_CANCELED);
-        } else if (resultCode != Activity.RESULT_OK) {
-            mInstrumentDetailsCallback.onInstrumentDetailsError(String.format(
-                    Locale.US, ErrorStrings.UNRECOGNIZED_ACTIVITY_RESULT, resultCode));
-        } else {
-            String details = data.getExtras().getString(EXTRA_RESPONSE_DETAILS);
-            if (details == null) {
-                details = data.getExtras().getString(EXTRA_DEPRECATED_RESPONSE_INSTRUMENT_DETAILS);
-            }
-            if (details == null) details = EMPTY_JSON_DATA;
-            String methodName = data.getExtras().getString(EXTRA_RESPONSE_METHOD_NAME);
-            if (methodName == null) methodName = "";
-            // TODO(crbug.com/1026667): Support payer data delegation for native apps instead of
-            // returning empty PayerData.
-            mInstrumentDetailsCallback.onInstrumentDetailsReady(
-                    methodName, details, new PayerData());
-        }
+        WebPaymentIntentHelper.parsePaymentResponse(resultCode, data,
+                (errorString)
+                        -> notifyErrorInvokingPaymentApp(errorString),
+                (methodName, details)
+                        -> mInstrumentDetailsCallback.onInstrumentDetailsReady(
+                                methodName, details, new PayerData()));
         mInstrumentDetailsCallback = null;
     }
 
