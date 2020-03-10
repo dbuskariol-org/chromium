@@ -319,6 +319,9 @@ ShelfAppButton::ShelfAppButton(ShelfView* shelf_view,
   // Do not make this interactive, so that events are sent to ShelfView.
   icon_view_->set_can_process_events_within_subtree(false);
 
+  indicator_->SetPaintToLayer();
+  indicator_->layer()->SetFillsBoundsOpaquely(false);
+
   AddChildView(indicator_);
   AddChildView(icon_view_);
   if (is_notification_indicator_enabled_) {
