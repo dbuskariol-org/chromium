@@ -5954,8 +5954,6 @@ void WebContentsImpl::RenderViewCreated(RenderViewHost* render_view_host) {
       Source<WebContents>(this),
       Details<RenderViewHost>(render_view_host));
 
-  view_->RenderViewCreated(render_view_host);
-
   for (auto& observer : observers_)
     observer.RenderViewCreated(render_view_host);
   if (delegate_)
