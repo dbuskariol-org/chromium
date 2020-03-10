@@ -1430,11 +1430,16 @@ bool V4L2VideoEncodeAccelerator::ApplyCrop() {
     visible_rect = crop.c;
   }
 
-  encoder_input_visible_rect_ =
-      gfx::Rect(visible_rect.left, visible_rect.top, visible_rect.width,
-                visible_rect.height);
-  VLOGF(2) << "After adjusted by driver, encoder_input_visible_rect_="
-           << encoder_input_visible_rect_.ToString();
+  const gfx::Rect adjusted_visible_rect(visible_rect.left, visible_rect.top,
+                                        visible_rect.width,
+                                        visible_rect.height);
+  if (encoder_input_visible_rect_ != adjusted_visible_rect) {
+    VLOGF(1) << "Unsupported visible rectangle: "
+             << encoder_input_visible_rect_.ToString()
+             << ", the rectangle adjusted by the driver: "
+             << adjusted_visible_rect.ToString();
+    return false;
+  }
   return true;
 }
 
