@@ -6308,8 +6308,8 @@ void RenderFrameImpl::BeginNavigationInternal(
       navigation_client_remote.InitWithNewEndpointAndPassReceiver());
   navigation_client_impl_->MarkWasInitiatedInThisFrame();
 
-  mojo::PendingRemote<blink::mojom::NavigationInitiator> navigation_initiator(
-      std::move(info->navigation_initiator_handle), 0);
+  mojo::PendingRemote<blink::mojom::NavigationInitiator> navigation_initiator =
+      std::move(info->navigation_initiator_remote);
 
   bool current_frame_has_download_sandbox_flag = !frame_->IsAllowedToDownload();
   bool has_download_sandbox_flag =
