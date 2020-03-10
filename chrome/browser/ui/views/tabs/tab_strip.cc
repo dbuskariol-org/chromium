@@ -267,7 +267,8 @@ TabDragController::EventSource EventSourceFromEvent(
 }
 
 int GetStackableTabWidth() {
-  return TabStyle::GetTabOverlap() + (MD::touch_ui() ? 136 : 102);
+  return TabStyle::GetTabOverlap() +
+         (MD::GetInstance()->touch_ui() ? 136 : 102);
 }
 
 }  // namespace
