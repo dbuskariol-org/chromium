@@ -1175,7 +1175,8 @@
                   '|third_party/libxslt/',
     },
     'linux_sandboxing': {
-      'filepath': 'sandbox/linux/',
+      'filepath': 'sandbox/linux/'\
+                  '|services/service_manager/sandbox/linux/',
     },
     'linux_seccomp_bpf': {
       'filepath': 'content/common/sandbox.*linux.cc',
@@ -2518,8 +2519,12 @@
                 'urvang@chromium.org'],
     'libxml_xslt': ['ail@google.com',
                     'dominicc+watchlist@chromium.org'],
-    'linux_sandboxing': ['jln+watch@chromium.org'],
-    'linux_seccomp_bpf': ['jln+watch@chromium.org'],
+    'linux_sandboxing': ['jln+watch@chromium.org',
+                         'mpdenton+watch@chromium.org',
+                         'rsesek+watch@chromium.org'],
+    'linux_seccomp_bpf': ['jln+watch@chromium.org',
+                          'mpdenton+watch@chromium.org',
+                          'rsesek+watch@chromium.org'],
     'mac' : ['mac-reviews@chromium.org'],
     'manifest': ['dominickn+watch-manifest@chromium.org',
                  'mlamouri+watch-manifest@chromium.org'],
