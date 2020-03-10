@@ -7039,3 +7039,6 @@ crbug.com/1060175 [ Win ] wpt_internal/storage/estimate-usage-details-filesystem
 crbug.com/1060175 [ Win ] wpt_internal/storage/estimate-usage-details-filesystem.https.tentative.any.worker.html [ Pass Failure ]
 crbug.com/1060175 [ Win ] wpt_internal/virtual-scroller/large-child-comment.html [ Pass Failure ]
 crbug.com/1060175 [ Win ] wpt_internal/webxr/xr_view_projection_detached.https.html [ Pass Failure ]
+
+# Note: This is disabled on other platforms already.
+crbug.com/1060270 [ Mac ] http/tests/devtools/elements/styles-2/force-pseudo-state.js [ Failure ]
