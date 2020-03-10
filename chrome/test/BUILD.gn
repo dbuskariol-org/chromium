@@ -1059,6 +1059,7 @@ if (!is_android) {
       "../browser/pdf/pdf_extension_test_util.h",
       "../browser/performance_manager/graph/page_node_impl_browsertest.cc",
       "../browser/performance_manager/page_load_tracker_decorator_browsertest.cc",
+      "../browser/performance_manager/tab_properties_decorator_browsertest.cc",
       "../browser/permissions/permission_delegation_browsertest.cc",
       "../browser/permissions/permission_manager_browsertest.cc",
       "../browser/permissions/permission_request_manager_browsertest.cc",
