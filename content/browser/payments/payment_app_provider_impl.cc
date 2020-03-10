@@ -82,6 +82,12 @@ class InvokePaymentAppCallbackRepository {
     return base::Singleton<InvokePaymentAppCallbackRepository>::get();
   }
 
+  // Disallow copy and assign.
+  InvokePaymentAppCallbackRepository(
+      const InvokePaymentAppCallbackRepository& other) = delete;
+  InvokePaymentAppCallbackRepository& operator=(
+      const InvokePaymentAppCallbackRepository& other) = delete;
+
   RespondWithCallbacks* GetCallback(BrowserContext* browser_context) {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
     auto it = invoke_callbacks_.find(browser_context);
@@ -103,8 +109,8 @@ class InvokePaymentAppCallbackRepository {
   }
 
  private:
-  InvokePaymentAppCallbackRepository() {}
-  ~InvokePaymentAppCallbackRepository() {}
+  InvokePaymentAppCallbackRepository() = default;
+  ~InvokePaymentAppCallbackRepository() = default;
 
   friend struct base::DefaultSingletonTraits<
       InvokePaymentAppCallbackRepository>;
@@ -145,6 +151,10 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
         event_type, base::BindOnce(&RespondWithCallbacks::OnErrorStatus,
                                    weak_ptr_factory_.GetWeakPtr()));
   }
+
+  // Disallow copy and assign.
+  RespondWithCallbacks(const RespondWithCallbacks& other) = delete;
+  RespondWithCallbacks& operator=(const RespondWithCallbacks& other) = delete;
 
   mojo::PendingRemote<PaymentHandlerResponseCallback>
   BindNewPipeAndPassRemote() {
@@ -239,7 +249,7 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
   }
 
  private:
-  ~RespondWithCallbacks() override {}
+  ~RespondWithCallbacks() override = default;
 
   void ClearCallbackRepositoryAndCloseWindow() {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
@@ -266,8 +276,6 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
   mojo::Receiver<PaymentHandlerResponseCallback> receiver_{this};
 
   base::WeakPtrFactory<RespondWithCallbacks> weak_ptr_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(RespondWithCallbacks);
 };
 
 void DidGetAllPaymentAppsOnCoreThread(
