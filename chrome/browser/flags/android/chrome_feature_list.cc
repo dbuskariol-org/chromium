@@ -204,6 +204,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kVideoPersistence,
     &kVrBrowsingFeedback,
     &kWebApkAdaptiveIcon,
+    &kPrefetchNotificationSchedulingIntegration,
     &net::features::kSameSiteByDefaultCookies,
     &net::features::kCookiesWithoutSameSiteMustBeSecure,
     &paint_preview::kPaintPreviewCaptureExperiment,
@@ -582,6 +583,10 @@ const base::Feature kUmaBackgroundSessions{"UMABackgroundSessions",
 
 const base::Feature kUpdateNotificationSchedulingIntegration{
     "UpdateNotificationSchedulingIntegration",
+    base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kPrefetchNotificationSchedulingIntegration{
+    "PrefetchNotificationSchedulingIntegration",
     base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kUpdateNotificationScheduleServiceImmediateShowOption{
