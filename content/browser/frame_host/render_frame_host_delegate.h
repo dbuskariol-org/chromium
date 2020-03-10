@@ -15,6 +15,7 @@
 #include "base/optional.h"
 #include "build/build_config.h"
 #include "components/viz/common/surfaces/surface_id.h"
+#include "content/browser/frame_host/file_chooser_impl.h"
 #include "content/browser/frame_host/render_frame_host_impl.h"
 #include "content/browser/webui/web_ui_impl.h"
 #include "content/common/content_export.h"
@@ -77,7 +78,6 @@ class ClipboardFormatType;
 }
 
 namespace content {
-class FileSelectListener;
 class FrameTreeNode;
 class InterstitialPage;
 class PageState;
@@ -183,21 +183,24 @@ class CONTENT_EXPORT RenderFrameHostDelegate {
       std::vector<blink::mojom::FaviconURLPtr> candidates) {}
 
   // Called when a file selection is to be done.
+  //
   // Overrides of this function must call either listener->FileSelected() or
   // listener->FileSelectionCanceled().
   virtual void RunFileChooser(
       RenderFrameHost* render_frame_host,
-      std::unique_ptr<content::FileSelectListener> listener,
+      std::unique_ptr<FileChooserImpl::FileSelectListenerImpl> listener,
       const blink::mojom::FileChooserParams& params);
 
   // Request to enumerate a directory.  This is equivalent to running the file
   // chooser in directory-enumeration mode and having the user select the given
   // directory.
+  //
   // Overrides of this function must call either listener->FileSelected() or
   // listener->FileSelectionCanceled().
-  virtual void EnumerateDirectory(RenderFrameHost* render_frame_host,
-                                  std::unique_ptr<FileSelectListener> listener,
-                                  const base::FilePath& directory_path);
+  virtual void EnumerateDirectory(
+      RenderFrameHost* render_frame_host,
+      std::unique_ptr<FileChooserImpl::FileSelectListenerImpl> listener,
+      const base::FilePath& directory_path);
 
   // The pending page load was canceled, so the address bar should be updated.
   virtual void DidCancelLoading() {}
