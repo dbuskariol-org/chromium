@@ -149,15 +149,6 @@ class IndexedDBBrowserTest : public ContentBrowserTest,
     EXPECT_EQ(expected_title16, title_watcher.WaitAndGetTitle());
   }
 
-  // TODO(enne): remove this in favor of GetControl below.
-  IndexedDBContextImpl* GetContext(Shell* browser = nullptr) {
-    if (!browser)
-      browser = shell();
-    StoragePartition* partition = BrowserContext::GetDefaultStoragePartition(
-        browser->web_contents()->GetBrowserContext());
-    return partition->GetIndexedDBContextImplForTesting();
-  }
-
   storage::mojom::IndexedDBControl& GetControl(Shell* browser = nullptr) {
     if (!browser)
       browser = shell();
