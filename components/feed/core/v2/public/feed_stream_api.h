@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_FEED_CORE_V2_FEED_STREAM_API_H_
-#define COMPONENTS_FEED_CORE_V2_FEED_STREAM_API_H_
+#ifndef COMPONENTS_FEED_CORE_V2_PUBLIC_FEED_STREAM_API_H_
+#define COMPONENTS_FEED_CORE_V2_PUBLIC_FEED_STREAM_API_H_
 
 namespace feed {
 
@@ -20,4 +20,4 @@ class FeedStreamApi {
 
 }  // namespace feed
 
-#endif  // COMPONENTS_FEED_CORE_V2_FEED_STREAM_API_H_
+#endif  // COMPONENTS_FEED_CORE_V2_PUBLIC_FEED_STREAM_API_H_
