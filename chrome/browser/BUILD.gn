@@ -1296,6 +1296,7 @@ jumbo_static_library("browser") {
     "predictors/predictor_database.h",
     "predictors/predictor_database_factory.cc",
     "predictors/predictor_database_factory.h",
+    "predictors/predictors_enums.h",
     "predictors/predictors_features.cc",
     "predictors/predictors_features.h",
     "predictors/proxy_lookup_client_impl.cc",

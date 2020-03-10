@@ -36900,6 +36900,13 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="3" label="Last item"/>
 </enum>
 
+<enum name="LoadingPredictorOptimizationHintsReceiveStatus">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Before navigation finish"/>
+  <int value="2" label="After navigation finish"/>
+  <int value="3" label="After redirect or next navigation started"/>
+</enum>
+
 <enum name="LoadLibraryResultCategory">
   <int value="0" label="LoadLibraryExW Succeeded"/>
   <int value="1" label="LoadLibraryExW Fail, LoadLibraryW Succeeded"/>
