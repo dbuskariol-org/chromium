@@ -2418,6 +2418,7 @@ if (!is_android) {
         "../browser/ui/browser_finder_chromeos_browsertest.cc",
         "../browser/ui/supervised_user/parent_permission_dialog_browsertest.cc",
         "../browser/ui/views/apps/app_dialog_view_browsertest.cc",
+        "../browser/ui/views/apps/app_uninstall_dialog_view_browsertest.cc",
         "../browser/ui/views/apps/chrome_native_app_window_views_aura_ash_browsertest.cc",
         "../browser/ui/views/arc_app_dialog_view_browsertest.cc",
         "../browser/ui/views/crostini/crostini_ansible_software_config_view_browsertest.cc",
