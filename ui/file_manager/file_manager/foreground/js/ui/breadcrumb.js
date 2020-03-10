@@ -73,13 +73,17 @@ const breadCrumbTemplate = `
     }
 
     span[elider] {
+      --tap-target-shift: -7px;
       -webkit-mask-image: url(../../images/files/ui/menu_ng.svg);
       -webkit-mask-position: center;
       -webkit-mask-repeat: no-repeat;
       background-color: currentColor;
-      height: 36px;
+      height: 48px;
+      margin-top: var(--tap-target-shift);
+      margin-inline-start: var(--tap-target-shift);
+      min-width: 48px;
+      position: relative;
       transform: rotate(90deg);
-      width: 36px;
     }
 
     button[elider] {
