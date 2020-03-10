@@ -471,6 +471,11 @@
     "expiry_milestone": 76
   },
   {
+    "name": "collections-card-presentation-style",
+    "owners": [ "sczs" ],
+    "expiry_milestone": 80
+  },
+  {
     "name": "composited-layer-borders",
     "owners": [ "ccameron" ],
     "expiry_milestone": 76
@@ -2281,6 +2286,11 @@
     "expiry_milestone": 87
   },
   {
+    "name": "find-in-page-iframe",
+    "owners": [ "thegreenfrog" ],
+    "expiry_milestone": 80
+  },
+  {
     "name": "focus-mode",
     "owners": [ "dfried", "pbos", "yiningwang@google.com" ],
     "expiry_milestone": 82
@@ -2489,6 +2499,11 @@
     // Previews is a baked-in feature of Chrome. This flag is used for frequent
     // testing and should not be removed.
     "expiry_milestone": -1
+  },
+  {
+    "name": "ignores-viewport-scale-limits",
+    "owners": [ "eugenebut" ],
+    "expiry_milestone": 80
   },
   {
     "name": "improved-cookie-controls",
@@ -3354,9 +3369,19 @@
     "expiry_milestone": 82
   },
   {
+    "name": "search-icon-toggle",
+    "owners": [ "gambard" ],
+    "expiry_milestone": 80
+  },
+  {
     "name": "security-interstitials-dark-mode",
     "owners": ["estark"],
     "expiry_milestone": 79
+  },
+  {
+    "name": "send-uma-cellular",
+    "owners": [ "thegreenfrog" ],
+    "expiry_milestone": 80
   },
   {
     "name": "set-market-url-for-testing",
@@ -3907,6 +3932,11 @@
     "name": "web-bundles",
     "owners": [ "toyoshim", "ksakamoto", "horo", "kinuko" ],
     "expiry_milestone": 83
+  },
+  {
+    "name": "web-clear-browsing-data",
+    "owners": [ "gambard" ],
+    "expiry_milestone": 80
   },
   {
     "name": "web-contents-occlusion",
