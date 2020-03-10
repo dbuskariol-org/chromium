@@ -436,6 +436,11 @@
     "expiry_milestone": 78
   },
   {
+    "name": "clear-synced-data",
+    "owners": [ "fernandex" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "click-to-call-context-menu-selected-text",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
     "expiry_milestone": 82
