@@ -161,6 +161,16 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
     return receiver_.BindNewPipeAndPassRemote();
   }
 
+  void AbortPaymentSinceOpennedWindowClosing(PaymentEventResponseType reason) {
+    DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+
+    service_worker_version_->FinishRequest(request_id_, false);
+    RespondWithErrorAndDeleteSelf(reason);
+  }
+
+ private:
+  ~RespondWithCallbacks() override = default;
+
   void OnResponseForPaymentRequest(
       PaymentHandlerResponsePtr response) override {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
@@ -238,18 +248,6 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
 
     RespondWithErrorAndDeleteSelf(response_type);
   }
-
-  int request_id() { return request_id_; }
-
-  void AbortPaymentSinceOpennedWindowClosing(PaymentEventResponseType reason) {
-    DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-
-    service_worker_version_->FinishRequest(request_id_, false);
-    RespondWithErrorAndDeleteSelf(reason);
-  }
-
- private:
-  ~RespondWithCallbacks() override = default;
 
   void ClearCallbackRepositoryAndCloseWindow() {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
