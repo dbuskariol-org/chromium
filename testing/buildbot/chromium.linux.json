@@ -3032,28 +3032,6 @@
         "test_target": "//content/test:content_browsertests"
       },
       {
-        "args": [
-          "--enable-features=UseSkiaRenderer",
-          "--test-launcher-filter-file=../../testing/buildbot/filters/skia_renderer.content_browsertests.filter"
-        ],
-        "isolate_coverage_data": true,
-        "merge": {
-          "args": [],
-          "script": "//testing/merge_scripts/standard_gtest_merge.py"
-        },
-        "name": "skia_renderer_content_browsertests",
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "dimension_sets": [
-            {
-              "os": "Ubuntu-16.04"
-            }
-          ]
-        },
-        "test": "content_browsertests",
-        "test_target": "//content/test:content_browsertests"
-      },
-      {
         "isolate_coverage_data": true,
         "merge": {
           "args": [],
@@ -4889,27 +4867,6 @@
             }
           ],
           "shards": 6
-        },
-        "test": "content_browsertests",
-        "test_target": "//content/test:content_browsertests"
-      },
-      {
-        "args": [
-          "--enable-features=UseSkiaRenderer",
-          "--test-launcher-filter-file=../../testing/buildbot/filters/skia_renderer.content_browsertests.filter"
-        ],
-        "merge": {
-          "args": [],
-          "script": "//testing/merge_scripts/standard_gtest_merge.py"
-        },
-        "name": "skia_renderer_content_browsertests",
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "dimension_sets": [
-            {
-              "os": "Ubuntu-16.04"
-            }
-          ]
         },
         "test": "content_browsertests",
         "test_target": "//content/test:content_browsertests"
@@ -6756,27 +6713,6 @@
             }
           ],
           "shards": 6
-        },
-        "test": "content_browsertests",
-        "test_target": "//content/test:content_browsertests"
-      },
-      {
-        "args": [
-          "--enable-features=UseSkiaRenderer",
-          "--test-launcher-filter-file=../../testing/buildbot/filters/skia_renderer.content_browsertests.filter"
-        ],
-        "merge": {
-          "args": [],
-          "script": "//testing/merge_scripts/standard_gtest_merge.py"
-        },
-        "name": "skia_renderer_content_browsertests",
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "dimension_sets": [
-            {
-              "os": "Ubuntu-14.04"
-            }
-          ]
         },
         "test": "content_browsertests",
         "test_target": "//content/test:content_browsertests"
