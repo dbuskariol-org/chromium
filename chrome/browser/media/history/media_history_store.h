@@ -96,13 +96,12 @@ class MediaHistoryStore {
 
   scoped_refptr<base::UpdateableSequencedTaskRunner> GetDBTaskRunnerForTest();
 
-  void EraseDatabaseAndCreateNew();
-  void DeleteAllOriginData(const std::set<url::Origin>& origins);
-
   void GetURLsInTableForTest(const std::string& table,
                              base::OnceCallback<void(std::set<GURL>)> callback);
 
   void PostTaskToDBForTest(base::OnceClosure callback);
+  void EraseDatabaseAndCreateNew();
+  void DeleteAllOriginData(const std::set<url::Origin>& origins);
 
  private:
   scoped_refptr<MediaHistoryStoreInternal> db_;
