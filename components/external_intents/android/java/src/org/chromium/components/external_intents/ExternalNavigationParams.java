@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.externalnav;
-
-import org.chromium.components.external_intents.RedirectHandler;
+package org.chromium.components.external_intents;
 
 /**
  * A container object for passing navigation parameters to {@link ExternalNavigationHandler}.
@@ -254,7 +252,8 @@ public class ExternalNavigationParams {
             return this;
         }
 
-        /** Sets whether the current tab should be closed when an URL load was overridden and an
+        /**
+         * Sets whether the current tab should be closed when an URL load was overridden and an
          * intent launched.
          */
         public Builder setShouldCloseContentsOnOverrideUrlLoadingAndLaunchIntent(boolean v) {
