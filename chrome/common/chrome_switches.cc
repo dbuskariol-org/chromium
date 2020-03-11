@@ -33,6 +33,13 @@ const char kAllowHttpScreenCapture[] = "allow-http-screen-capture";
 // Don't block outdated plugins.
 const char kAllowOutdatedPlugins[]          = "allow-outdated-plugins";
 
+// Allows profiles to be created outside of the user data dir.
+// TODO(https://crbug.com/1060366): Various places in Chrome assume that all
+// profiles are within the user data dir. Some tests need to violate that
+// assumption. The switch should be removed after this workaround is no longer
+// needed.
+const char kAllowProfilesOutsideUserDir[] = "allow-profiles-outside-user-dir";
+
 // By default, an https page cannot run JavaScript, CSS or plugins from http
 // URLs. This provides an override to get the old insecure behavior.
 const char kAllowRunningInsecureContent[]   = "allow-running-insecure-content";
