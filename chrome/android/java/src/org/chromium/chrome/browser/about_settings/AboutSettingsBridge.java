@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.about;
+package org.chromium.chrome.browser.about_settings;
 
 import org.chromium.base.annotations.NativeMethods;
 
