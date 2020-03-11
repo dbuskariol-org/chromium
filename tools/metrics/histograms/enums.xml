@@ -37848,6 +37848,7 @@ from previous Chrome versions.
   <int value="-1407769602" label="UsageStats:disabled"/>
   <int value="-1405349891" label="PictureInPictureAPI:enabled"/>
   <int value="-1405048637" label="OfflinePagesResourceBasedSnapshot:enabled"/>
+  <int value="-1404469375" label="RemoteCopyProgressNotification:enabled"/>
   <int value="-1399753480" label="disable-harfbuzz-rendertext"/>
   <int value="-1399419572" label="enable-app-list"/>
   <int value="-1398531606" label="AndroidSetupSearchEngine:disabled"/>
@@ -39456,6 +39457,7 @@ from previous Chrome versions.
   <int value="516603570" label="QuickAnswersRichUi:disabled"/>
   <int value="517429103" label="AutofillImportDynamicForms:enabled"/>
   <int value="517568645" label="AnimatedAppMenuIcon:disabled"/>
+  <int value="518419320" label="RemoteCopyProgressNotification:disabled"/>
   <int value="520982116" label="BuiltInModuleAll:enabled"/>
   <int value="530828403" label="AllowStartingServiceManagerOnly:disabled"/>
   <int value="533064367" label="WebRtcHideLocalIpsWithMdns:disabled"/>

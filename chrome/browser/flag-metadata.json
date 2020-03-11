@@ -3358,6 +3358,11 @@
     "expiry_milestone": 84
   },
   {
+    "name": "remote-copy-progress-notification",
+    "owners": [ "//chrome/browser/sharing/OWNERS" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "remote-copy-receiver",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
     "expiry_milestone": 83
