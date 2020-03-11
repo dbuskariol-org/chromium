@@ -1634,29 +1634,6 @@ void WebContentsImpl::NotifyNavigationStateChanged(
     GetOuterWebContents()->NotifyNavigationStateChanged(changed_flags);
 }
 
-void WebContentsImpl::NotifyVisibleViewportSizeChanged(
-    const gfx::Size& visible_viewport_size) {
-  // This viewport size is in screen coordinates, but will be handed to blink
-  // which expects coordinates including the device scale factor when
-  // UseZoomForDSF is enabled.
-  // TODO(danakj): This scaling should be done in the renderer where emulation
-  // may override the device scale factor.
-  gfx::Size visible_viewport_size_for_blink = visible_viewport_size;
-  if (IsUseZoomForDSFEnabled()) {
-    ScreenInfo info;
-    GetMainFrame()->GetRenderWidgetHost()->GetScreenInfo(&info);
-
-    visible_viewport_size_for_blink =
-        gfx::ScaleToCeiledSize(visible_viewport_size, info.device_scale_factor);
-  }
-
-  // TODO(danakj): This should be part of VisualProperties and walk down the
-  // RenderWidget tree like other VisualProperties do, in order to set the
-  // value in each WebView holds a part of the local frame tree.
-  SendPageMessage(new PageMsg_UpdatePageVisualProperties(
-      MSG_ROUTING_NONE, visible_viewport_size_for_blink));
-}
-
 RenderFrameHostImpl* WebContentsImpl::GetFocusedFrameFromFocusedDelegate() {
   FrameTreeNode* focused_node =
       GetFocusedWebContents()->frame_tree_.GetFocusedFrame();
@@ -3568,30 +3545,8 @@ void WebContentsImpl::ResizeDueToAutoResize(
   if (render_widget_host != GetRenderViewHost()->GetWidget())
     return;
 
-  auto_resize_size_ = new_size;
-
-  // Out-of-process iframe visible viewport sizes usually come from the
-  // top-level RenderWidgetHostView, but when auto-resize is enabled on the
-  // top frame then that size is used instead.
-  for (FrameTreeNode* node : frame_tree_.Nodes()) {
-    if (node->current_frame_host()->is_local_root()) {
-      RenderWidgetHostImpl* host =
-          node->current_frame_host()->GetRenderWidgetHost();
-      if (host != render_widget_host)
-        host->SynchronizeVisualProperties();
-    }
-  }
-
   if (delegate_)
     delegate_->ResizeDueToAutoResize(this, new_size);
-}
-
-gfx::Size WebContentsImpl::GetAutoResizeSize() {
-  return auto_resize_size_;
-}
-
-void WebContentsImpl::ResetAutoResizeSize() {
-  auto_resize_size_ = gfx::Size();
 }
 
 WebContents* WebContentsImpl::OpenURL(const OpenURLParams& params) {
