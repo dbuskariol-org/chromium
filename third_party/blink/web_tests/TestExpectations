@@ -5511,7 +5511,6 @@ crbug.com/922951 virtual/text-antialias/international/inline-plaintext-relayout-
 crbug.com/922951 http/tests/cache/subresource-fragment-identifier.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/devtools/tracing/timeline-network-received-data.js [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/history/back-to-post.html [ Failure Pass Timeout Crash ]
-crbug.com/922951 http/tests/images/document-policy-unoptimized-images-cached-image.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/security/offscreencanvas-placeholder-read-blocked-no-crossorigin.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/security/cookies/basic.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/webaudio/autoplay-crossorigin.html [ Failure Pass Timeout Crash ]
