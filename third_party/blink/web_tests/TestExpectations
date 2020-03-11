@@ -6586,7 +6586,7 @@ crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-top-left-s
 crbug.com/1048149 [ Mac ] virtual/controls-refresh/color/color-picker-zoom150-bottom-edge-no-nan.html [ Pass Crash ]
 # This used to be [ Pass Crash ], but as of crbug.com/1050039 it started flaking as well.
 crbug.com/1048149 crbug.com/1050121 [ Mac ] virtual/controls-refresh/month-picker/month-picker-appearance-zoom150.html [ Pass Failure Crash Failure ]
-crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-key-operations.html [ Pass Crash ]
+crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-key-operations.html [ Pass Crash Timeout ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-touch-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-type-change-onchange.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/date-picker-choose-default-value-after-set-value.html [ Pass Crash ]
@@ -6595,7 +6595,7 @@ crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/cale
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-appearance-step.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-appearance.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-choose-default-value-after-set-value.html [ Pass Crash ]
-crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-key-operations.html [ Pass Crash ]
+crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-key-operations.html [ Pass Crash Timeout ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-mouse-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/month-picker-touch-operations.html [ Pass Crash ]
 
@@ -6621,7 +6621,7 @@ crbug.com/1050039 [ Mac ] fast/events/onbeforeunload-focused-iframe.html [ Pass 
 crbug.com/1050039 [ Mac ] fast/forms/calendar-picker/calendar-picker-type-change-onchange.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-appearance.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/datetimelocal-picker-choose-default-value-after-set-value.html [ Pass Failure ]
-crbug.com/1050039 [ Mac ] virtual/not-site-per-process/http/tests/devtools/oopif/oopif-storage.js [ Pass Failure ]
+crbug.com/1050039 [ Mac ] virtual/not-site-per-process/http/tests/devtools/oopif/oopif-storage.js [ Pass Failure Timeout ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-01.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-02.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-03.html [ Pass Failure ]
@@ -7024,3 +7024,18 @@ crbug.com/1060270 [ Mac ] http/tests/devtools/elements/styles-2/force-pseudo-sta
 # Temporarily disable to land https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/2090785
 crbug.com/1011811 third_party/blink/web_tests/http/tests/devtools/changes/changes-sidebar.js [ Pass Failure ]
 crbug.com/1011811 third_party/blink/web_tests/http/tests/devtools/search/search-in-static.js [ Pass Failure ]
+
+# Sheriff 2020-03-12
+crbug.com/1060175 [ Mac ] css3/calc/simple-calcs-prefixed.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] css3/calc/simple-calcs.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] editing/selection/programmatic-selection-on-mac-is-directionless.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] fast/events/platform-wheelevent-paging-x-in-scrolling-div.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] fast/events/platform-wheelevent-paging-y-in-scrolling-div.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] http/tests/websocket/multiple-connections-throttled.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/controls-refresh/datetimelocal-picker/datetimelocal-month-switcher-buttons-invalid.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/week-picker-key-operations.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/datetimelocal-multiple-fields/datetimelocal-multiple-fields-ax-value-changed-notification.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/form-control-with-state-eager-tracing-crashTest.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/threaded/printing/page-count-with-one-word.html [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/web-components-v0-disabled/fast/dom/SelectorAPI/resig-SelectorsAPI-test.xhtml [ Pass Timeout ]
+crbug.com/1060175 [ Mac ] virtual/web-components-v0-disabled/fast/dom/zoom-scroll-page-test.html [ Pass Timeout ]
