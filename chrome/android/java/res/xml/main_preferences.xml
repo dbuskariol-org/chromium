@@ -91,7 +91,7 @@
         android:order="16"
         android:title="@string/data_reduction_title_lite_mode"/>
     <org.chromium.chrome.browser.settings.ChromeBasePreference
-        android:fragment="org.chromium.chrome.browser.settings.download.DownloadSettings"
+        android:fragment="org.chromium.chrome.browser.download.settings.DownloadSettings"
         android:key="downloads"
         android:order="17"
         android:title="@string/menu_downloads"/>

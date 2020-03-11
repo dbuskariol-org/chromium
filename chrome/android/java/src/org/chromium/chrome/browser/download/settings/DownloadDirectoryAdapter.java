@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.download;
+package org.chromium.chrome.browser.download.settings;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -233,11 +233,11 @@ public class DownloadDirectoryAdapter extends ArrayAdapter<Object> {
                     break;
                 case DirectoryOption.DownloadLocationDirectoryType.ADDITIONAL:
                     String directoryName = (numOtherAdditionalDirectories > 0)
-                            ? mContext.getString(org.chromium.chrome.R.string
-                                                         .downloads_location_sd_card_number,
-                                      numOtherAdditionalDirectories + 1)
+                            ? mContext.getString(
+                                    org.chromium.chrome.R.string.downloads_location_sd_card_number,
+                                    numOtherAdditionalDirectories + 1)
                             : mContext.getString(
-                                      org.chromium.chrome.R.string.downloads_location_sd_card);
+                                    org.chromium.chrome.R.string.downloads_location_sd_card);
                     directory.name = directoryName;
                     mAdditionalOptions.add(directory);
                     numOtherAdditionalDirectories++;
