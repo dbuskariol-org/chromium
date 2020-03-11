@@ -66077,6 +66077,7 @@ Full version information for the fingerprint enum values:
   <int value="1746181704" label="proxy_resolver.mojom.ProxyResolverFactory"/>
   <int value="1803540096" label="tap_visualizer_app"/>
   <int value="1882216268" label="patch.mojom.FilePatcher"/>
+  <int value="1893208764" label="chrome.mojom.UtilWin"/>
   <int value="1937572987" label="shortcut_viewer_app"/>
   <int value="1967189975" label="util_win"/>
   <int value="1968783712" label="quick_launch_app"/>
