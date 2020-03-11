@@ -67,6 +67,7 @@ class OmniboxResultsContentsView : public views::View {
   ~OmniboxResultsContentsView() override = default;
 
   void OnThemeChanged() override {
+    views::View::OnThemeChanged();
     const SkColor background_color =
         GetOmniboxColor(GetThemeProvider(), OmniboxPart::RESULTS_BACKGROUND);
     SetBackground(views::CreateSolidBackground(background_color));
@@ -81,6 +82,7 @@ class TopBackgroundView : public views::View {
       : location_bar_(location_bar) {}
 
   void OnThemeChanged() override {
+    views::View::OnThemeChanged();
     const SkColor background_color =
         GetOmniboxColor(GetThemeProvider(), OmniboxPart::RESULTS_BACKGROUND);
 
@@ -271,6 +273,7 @@ void RoundedOmniboxResultsFrame::OnMouseEvent(ui::MouseEvent* event) {
 #endif  // !USE_AURA
 
 void RoundedOmniboxResultsFrame::OnThemeChanged() {
+  views::View::OnThemeChanged();
   const SkColor background_color =
       GetOmniboxColor(GetThemeProvider(), OmniboxPart::RESULTS_BACKGROUND);
 

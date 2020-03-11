@@ -923,6 +923,7 @@ void WebAppFrameToolbarView::ChildPreferredSizeChanged(views::View* child) {
 }
 
 void WebAppFrameToolbarView::OnThemeChanged() {
+  views::AccessiblePaneView::OnThemeChanged();
   UpdateCaptionColors();
 }
 

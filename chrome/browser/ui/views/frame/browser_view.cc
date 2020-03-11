@@ -369,7 +369,10 @@ class OverlayViewTargeterDelegate : public views::ViewTargeterDelegate {
 class ContentsSeparator : public views::Separator {
  private:
   // views::View:
-  void OnThemeChanged() override { UpdateColor(); }
+  void OnThemeChanged() override {
+    views::Separator::OnThemeChanged();
+    UpdateColor();
+  }
   void AddedToWidget() override { UpdateColor(); }
 
   void UpdateColor() {
@@ -2720,6 +2723,7 @@ void BrowserView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
 }
 
 void BrowserView::OnThemeChanged() {
+  views::ClientView::OnThemeChanged();
   if (!initialized_)
     return;
 

@@ -453,6 +453,7 @@ class BookmarkBarView::ButtonSeparatorView : public views::Separator {
   ~ButtonSeparatorView() override = default;
 
   void OnThemeChanged() override {
+    views::Separator::OnThemeChanged();
     SetColor(GetThemeProvider()->GetColor(
         ThemeProperties::COLOR_TOOLBAR_VERTICAL_SEPARATOR));
   }
@@ -1061,6 +1062,7 @@ int BookmarkBarView::OnPerformDrop(const ui::DropTargetEvent& event) {
 }
 
 void BookmarkBarView::OnThemeChanged() {
+  views::AccessiblePaneView::OnThemeChanged();
   UpdateAppearanceForTheme();
 }
 

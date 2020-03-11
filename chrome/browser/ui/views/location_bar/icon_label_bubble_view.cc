@@ -78,6 +78,7 @@ void IconLabelBubbleView::SeparatorView::OnPaint(gfx::Canvas* canvas) {
 }
 
 void IconLabelBubbleView::SeparatorView::OnThemeChanged() {
+  views::View::OnThemeChanged();
   SchedulePaint();
 }
 
