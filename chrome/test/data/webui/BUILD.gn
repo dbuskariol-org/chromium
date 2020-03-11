@@ -24,7 +24,6 @@ js2gtest("interactive_ui_tests_js_webui") {
     "print_preview/print_preview_interactive_ui_tests.js",
     "settings/cr_settings_interactive_ui_tests.js",
     "settings/cr_settings_v3_interactive_ui_tests.js",
-    "settings/settings_ui_browsertest.js",
   ]
 
   gen_include_files = [
