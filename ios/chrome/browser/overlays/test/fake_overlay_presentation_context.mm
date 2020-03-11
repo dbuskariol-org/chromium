@@ -9,6 +9,10 @@
 #include "ios/chrome/browser/overlays/public/overlay_presentation_context_observer.h"
 #include "ios/chrome/browser/overlays/public/overlay_request_queue.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "This file requires ARC support."
+#endif
+
 FakeOverlayPresentationContext::FakeOverlayPresentationContext() = default;
 FakeOverlayPresentationContext::~FakeOverlayPresentationContext() = default;
 
@@ -88,6 +92,9 @@ bool FakeOverlayPresentationContext::IsShowingOverlayUI() const {
   return false;
 }
 
+void FakeOverlayPresentationContext::PrepareToShowOverlayUI(
+    OverlayRequest* request) {}
+
 void FakeOverlayPresentationContext::ShowOverlayUI(
     OverlayRequest* request,
     OverlayPresentationCallback presentation_callback,
@@ -102,8 +109,7 @@ void FakeOverlayPresentationContext::HideOverlayUI(OverlayRequest* request) {
   SimulateDismissalForRequest(request, OverlayDismissalReason::kHiding);
 }
 
-void FakeOverlayPresentationContext::CancelOverlayUI(
-    OverlayRequest* request) {
+void FakeOverlayPresentationContext::CancelOverlayUI(OverlayRequest* request) {
   FakeUIState& state = states_[request];
   if (state.presentation_state == PresentationState::kPresented) {
     SimulateDismissalForRequest(request, OverlayDismissalReason::kCancellation);
