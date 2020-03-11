@@ -3851,7 +3851,6 @@ test("unit_tests") {
       "//chrome/android:native_j_unittests_jni_headers",
       "//chrome/android:native_java_unittests_java",
       "//chrome/android/features/media_router:java",
-      "//chrome/browser/nfc/android:test_support",
       "//chrome/browser/optimization_guide/android:native_j_unittests_jni_headers",
       "//chrome/browser/optimization_guide/android:native_java_unittests",
       "//chrome/browser/thumbnail:unit_tests",
@@ -3862,6 +3861,7 @@ test("unit_tests") {
       "//components/gcm_driver/instance_id/android:instance_id_driver_java",
       "//components/gcm_driver/instance_id/android:instance_id_driver_test_support_java",
       "//components/module_installer/android:module_installer_java",
+      "//components/permissions/android:test_support",
       "//content/public/android:content_java",
     ]
     if (use_v8_context_snapshot) {

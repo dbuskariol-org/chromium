@@ -2,11 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/nfc/android/nfc_system_level_setting_impl.h"
+#include "components/permissions/android/nfc/nfc_system_level_setting_impl.h"
 
 #include "base/android/jni_android.h"
-#include "chrome/browser/nfc/android/jni_headers/NfcSystemLevelSetting_jni.h"
+#include "components/permissions/android/jni_headers/NfcSystemLevelSetting_jni.h"
 #include "content/public/browser/web_contents.h"
+
+namespace permissions {
 
 NfcSystemLevelSettingImpl::NfcSystemLevelSettingImpl() {}
 
@@ -36,6 +38,8 @@ void NfcSystemLevelSettingImpl::PromptToEnableNfcSystemLevelSetting(
       env, web_contents->GetJavaWebContents(),
       reinterpret_cast<jlong>(callback_ptr));
 }
+
+}  // namespace permissions
 
 static void JNI_NfcSystemLevelSetting_OnNfcSystemLevelPromptCompleted(
     JNIEnv* env,

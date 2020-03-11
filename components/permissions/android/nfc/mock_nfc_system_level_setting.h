@@ -2,11 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_NFC_ANDROID_MOCK_NFC_SYSTEM_LEVEL_SETTING_H_
-#define CHROME_BROWSER_NFC_ANDROID_MOCK_NFC_SYSTEM_LEVEL_SETTING_H_
+#ifndef COMPONENTS_PERMISSIONS_ANDROID_NFC_MOCK_NFC_SYSTEM_LEVEL_SETTING_H_
+#define COMPONENTS_PERMISSIONS_ANDROID_NFC_MOCK_NFC_SYSTEM_LEVEL_SETTING_H_
 
 #include "base/macros.h"
-#include "chrome/browser/nfc/android/nfc_system_level_setting.h"
+#include "components/permissions/android/nfc/nfc_system_level_setting.h"
+
+namespace permissions {
 
 // Mock implementation of NfcSystemLevelSetting for unit tests.
 class MockNfcSystemLevelSetting : public NfcSystemLevelSetting {
@@ -29,4 +31,6 @@ class MockNfcSystemLevelSetting : public NfcSystemLevelSetting {
   DISALLOW_COPY_AND_ASSIGN(MockNfcSystemLevelSetting);
 };
 
-#endif  // CHROME_BROWSER_NFC_ANDROID_MOCK_NFC_SYSTEM_LEVEL_SETTING_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_ANDROID_NFC_MOCK_NFC_SYSTEM_LEVEL_SETTING_H_

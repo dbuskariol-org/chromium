@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
-#define CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
+#ifndef COMPONENTS_PERMISSIONS_ANDROID_NFC_NFC_SYSTEM_LEVEL_SETTING_H_
+#define COMPONENTS_PERMISSIONS_ANDROID_NFC_NFC_SYSTEM_LEVEL_SETTING_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
@@ -11,6 +11,8 @@
 namespace content {
 class WebContents;
 }
+
+namespace permissions {
 
 // This class determines whether NFC is enabled system-wide on the device.
 class NfcSystemLevelSetting {
@@ -41,4 +43,6 @@ class NfcSystemLevelSetting {
       base::OnceClosure prompt_completed_callback) = 0;
 };
 
-#endif  // CHROME_BROWSER_NFC_ANDROID_NFC_SYSTEM_LEVEL_SETTING_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_ANDROID_NFC_NFC_SYSTEM_LEVEL_SETTING_H_

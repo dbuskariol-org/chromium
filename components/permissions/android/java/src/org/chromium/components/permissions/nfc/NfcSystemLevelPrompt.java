@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.nfc;
+package org.chromium.components.permissions.nfc;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.widget.TextViewCompat;
 
 import org.chromium.base.task.PostTask;
+import org.chromium.components.permissions.R;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;

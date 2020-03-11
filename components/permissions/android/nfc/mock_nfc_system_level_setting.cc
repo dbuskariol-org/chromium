@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/nfc/android/mock_nfc_system_level_setting.h"
+#include "components/permissions/android/nfc/mock_nfc_system_level_setting.h"
 
 namespace {
 
@@ -11,6 +11,8 @@ static bool is_nfc_setting_enabled_ = false;
 static bool has_shown_nfc_setting_prompt_ = false;
 
 }  // namespace
+
+namespace permissions {
 
 MockNfcSystemLevelSetting::MockNfcSystemLevelSetting()
     : NfcSystemLevelSetting() {}
@@ -48,3 +50,5 @@ void MockNfcSystemLevelSetting::PromptToEnableNfcSystemLevelSetting(
   has_shown_nfc_setting_prompt_ = true;
   std::move(prompt_completed_callback).Run();
 }
+
+}  // namespace permissions

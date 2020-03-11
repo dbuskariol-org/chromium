@@ -4089,12 +4089,6 @@ Only you can see what your camera is looking at. The site can't see your camera'
       </message>
 
       <!-- NFC prompt -->
-      <message name="IDS_NFC_DISABLED_ON_DEVICE_MESSAGE" desc="Text shown in a prompt to turn on NFC after user granted NFC permission to a website.">
-        To continue, turn on NFC in Android settings
-      </message>
-      <message name="IDS_NFC_PROMPT_TURN_ON" desc="Text on the positive button of the nfc prompt">
-        Turn on
-      </message>
       <message name="IDS_ANDROID_NFC_OFF_GLOBALLY" desc="The message to show when NFC has been turned off globally in Android. Contains a link to the settings menu to enable NFC.">
         NFC is off for this device. Turn it on in <ph name="BEGIN_LINK">&lt;link&gt;</ph>Android Settings<ph name="END_LINK">&lt;/link&gt;</ph>.
       </message>
