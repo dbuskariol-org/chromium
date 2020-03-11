@@ -219,19 +219,11 @@ java_cpp_template("vr_build_config") {
   }
 }
 
-# This prevents a cyclic dependency for features depending on the compositor.
-# TODO(crbug.com/846440): Move this to features/compositor when ready.
-android_library("chrome_public_java") {
-  sources = [ "//chrome/android/java/src/org/chromium/chrome/browser/compositor/CompositorViewResizer.java" ]
-  deps = [ "//third_party/android_deps:androidx_annotation_annotation_java" ]
-}
-
 android_library("chrome_java") {
   deps = [
     ":chrome_app_java_resources",
     ":chrome_public_android_manifest",
     ":chrome_public_apk_template_resources",
-    ":chrome_public_java",
     ":chrome_version_constants",
     ":partner_location_descriptor_proto_java",
     ":update_proto_java",
