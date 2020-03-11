@@ -3279,6 +3279,18 @@ const char kEnableNeuralStylusPalmRejectionDescription[] =
     "Experimental: Enable Neural Palm detection. Not compatible with all "
     "devices.";
 
+const char kEnablePalmOnMaxTouchMajorName[] =
+    "Enable Palm when Touch is Maximum";
+const char kEnablePalmOnMaxTouchMajorDescription[] =
+    "Experimental: Enable Palm detection when the touchscreen reports max "
+    "size. Not compatible with all devices.";
+
+const char kEnablePalmOnToolTypePalmName[] =
+    "Enable Palm when Tool Type is Palm";
+const char kEnablePalmOnToolTypePalmDescription[] =
+    "Experimental: Enable palm detection when touchscreen reports "
+    "TOOL_TYPE_PALM. Not compatible with all devices.";
+
 const char kEnableParentalControlsSettingsName[] =
     "Enable Parental controls settings";
 const char kEnableParentalControlsSettingsDescription[] =
