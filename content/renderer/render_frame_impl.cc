@@ -2619,8 +2619,8 @@ void RenderFrameImpl::OnPortalActivated(
     mojo::PendingAssociatedReceiver<blink::mojom::PortalClient> portal_client,
     blink::TransferableMessage data,
     OnPortalActivatedCallback callback) {
-  frame_->OnPortalActivated(portal_token, portal.PassHandle(),
-                            portal_client.PassHandle(), std::move(data),
+  frame_->OnPortalActivated(portal_token, std::move(portal),
+                            std::move(portal_client), std::move(data),
                             std::move(callback));
 }
 
