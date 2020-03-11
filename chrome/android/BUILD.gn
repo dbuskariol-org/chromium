@@ -331,6 +331,7 @@ android_library("chrome_java") {
     "//components/signin/core/browser/android:java",
     "//components/signin/public/android:java",
     "//components/spellcheck/browser/android:java",
+    "//components/subresource_filter/android:java",
     "//components/sync/android:sync_java",
     "//components/sync/protocol:protocol_java",
     "//components/url_formatter/android:url_formatter_java",

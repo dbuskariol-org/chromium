@@ -389,7 +389,6 @@ public abstract class ChromeFeatureList {
     public static final String START_SURFACE_ANDROID = "StartSurfaceAndroid";
     public static final String STRICT_HAS_ENROLLED_AUTOFILL_INSTRUMENT =
             "StrictHasEnrolledAutofillInstrument";
-    public static final String SUBRESOURCE_FILTER = "SubresourceFilter";
     public static final String SWAP_PIXEL_FORMAT_TO_FIX_CONVERT_FROM_TRANSLUCENT =
             "SwapPixelFormatToFixConvertFromTranslucent";
     public static final String SYNC_USE_SESSIONS_UNREGISTER_DELAY =
