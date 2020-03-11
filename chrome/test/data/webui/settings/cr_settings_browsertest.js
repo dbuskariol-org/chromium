@@ -982,7 +982,8 @@ TEST_F(
       mocha.run();
     });
 
-TEST_F('CrSettingsPrivacyPageTest', 'UMALoggingTests', function() {
+// TODO(sauski): Privacy page UMA changing, tests need updating/removal.
+TEST_F('CrSettingsPrivacyPageTest', 'DISABLED_UMALoggingTests', function() {
   settings_privacy_page.registerUMALoggingTests();
   mocha.run();
 });
@@ -1999,7 +2000,6 @@ CrCollapseRadioButtonTest.prototype = {
   browsePreload: 'chrome://settings/privacy_page/collapse_radio_button.html',
 
   extraLibraries: CrSettingsBrowserTest.prototype.extraLibraries.concat([
-    '../test_util.js',
     'collapse_radio_button_tests.js',
   ]),
 };
