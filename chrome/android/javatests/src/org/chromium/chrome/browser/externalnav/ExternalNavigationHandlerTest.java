@@ -59,8 +59,7 @@ import java.util.regex.Pattern;
 // clang-format off
 @DisableIf.Build(message = "Flaky on K - see https://crbug.com/851444",
         sdk_is_less_than = Build.VERSION_CODES.LOLLIPOP)
-@Features.EnableFeatures({ChromeFeatureList.CCT_EXTERNAL_LINK_HANDLING,
-        ChromeFeatureList.INTENT_BLOCK_EXTERNAL_FORM_REDIRECT_NO_GESTURE})
+@Features.EnableFeatures({ChromeFeatureList.CCT_EXTERNAL_LINK_HANDLING})
 public class ExternalNavigationHandlerTest {
     // clang-format on
     @Rule
@@ -140,7 +139,12 @@ public class ExternalNavigationHandlerTest {
 
     public ExternalNavigationHandlerTest() {
         mDelegate = new TestExternalNavigationDelegate();
-        mUrlHandler = new ExternalNavigationHandler(mDelegate);
+        mUrlHandler = new ExternalNavigationHandler(mDelegate) {
+            @Override
+            boolean blockExternalFormRedirectsWithoutGesture() {
+                return true;
+            }
+        };
     }
 
     @Before
