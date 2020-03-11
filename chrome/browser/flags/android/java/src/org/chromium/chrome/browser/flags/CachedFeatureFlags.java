@@ -66,6 +66,9 @@ public class CachedFeatureFlags {
             put(ChromeFeatureList.TAB_GROUPS_CONTINUATION_ANDROID, false);
             put(ChromeFeatureList.DUET_TABSTRIP_INTEGRATION_ANDROID, false);
             put(ChromeFeatureList.SHARE_BUTTON_IN_TOP_TOOLBAR, false);
+            put(ChromeFeatureList.CLOSE_TAB_SUGGESTIONS, false);
+            put(ChromeFeatureList.TAB_GROUPS_CONTINUATION_ANDROID, false);
+            put(ChromeFeatureList.TAB_TO_GTS_ANIMATION, false);
             put(ChromeFeatureList.TEST_DEFAULT_DISABLED, false);
             put(ChromeFeatureList.TEST_DEFAULT_ENABLED, true);
         }
@@ -348,6 +351,7 @@ public class CachedFeatureFlags {
             if (value != null) {
                 return Boolean.valueOf(value);
             }
+            return defaultValue;
         }
 
         Boolean flag = sBoolValuesReturned.get(preferenceName);
@@ -364,6 +368,7 @@ public class CachedFeatureFlags {
             if (stringValue != null) {
                 return stringValue;
             }
+            return defaultValue;
         }
 
         String value = sStringValuesReturned.get(preferenceName);
@@ -380,6 +385,7 @@ public class CachedFeatureFlags {
             if (stringValue != null) {
                 return Integer.valueOf(stringValue);
             }
+            return defaultValue;
         }
 
         Integer value = sIntValuesReturned.get(preferenceName);
@@ -396,6 +402,7 @@ public class CachedFeatureFlags {
             if (stringValue != null) {
                 return Double.valueOf(stringValue);
             }
+            return defaultValue;
         }
 
         Double value = sDoubleValuesReturned.get(preferenceName);
