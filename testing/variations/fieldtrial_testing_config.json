@@ -5805,11 +5805,6 @@
     "UmaAndUkmDemographics": [
         {
             "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows",
                 "ios"
             ],
             "experiments": [
