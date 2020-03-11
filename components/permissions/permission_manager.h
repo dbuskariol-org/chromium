@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERMISSIONS_PERMISSION_MANAGER_H_
-#define CHROME_BROWSER_PERMISSIONS_PERMISSION_MANAGER_H_
+#ifndef COMPONENTS_PERMISSIONS_PERMISSION_MANAGER_H_
+#define COMPONENTS_PERMISSIONS_PERMISSION_MANAGER_H_
 
 #include <unordered_map>
 
@@ -18,20 +18,24 @@
 #include "content/public/browser/permission_type.h"
 #include "url/origin.h"
 
+namespace content {
+class BrowserContext;
+}
+
 namespace permissions {
 class PermissionContextBase;
 struct PermissionResult;
-}
-
-class Profile;
 
 class PermissionManager : public KeyedService,
                           public content::PermissionControllerDelegate,
                           public content_settings::Observer {
  public:
-  static PermissionManager* Get(Profile* profile);
-
-  explicit PermissionManager(Profile* profile);
+  using PermissionContextMap =
+      std::unordered_map<ContentSettingsType,
+                         std::unique_ptr<PermissionContextBase>,
+                         ContentSettingsTypeHash>;
+  PermissionManager(content::BrowserContext* browser_context,
+                    PermissionContextMap permission_contexts);
   ~PermissionManager() override;
 
   // Converts from |url|'s actual origin to the "canonical origin" that should
@@ -66,10 +70,9 @@ class PermissionManager : public KeyedService,
       bool user_gesture,
       base::OnceCallback<void(const std::vector<ContentSetting>&)> callback);
 
-  permissions::PermissionResult GetPermissionStatus(
-      ContentSettingsType permission,
-      const GURL& requesting_origin,
-      const GURL& embedding_origin);
+  PermissionResult GetPermissionStatus(ContentSettingsType permission,
+                                       const GURL& requesting_origin,
+                                       const GURL& embedding_origin);
 
   // Returns the permission status for a given frame. This should be preferred
   // over GetPermissionStatus as additional checks can be performed when we know
@@ -77,7 +80,7 @@ class PermissionManager : public KeyedService,
   // TODO(raymes): Currently we still pass the |requesting_origin| as a separate
   // parameter because we can't yet guarantee that it matches the last committed
   // origin of the RenderFrameHost. See crbug.com/698985.
-  permissions::PermissionResult GetPermissionStatusForFrame(
+  PermissionResult GetPermissionStatusForFrame(
       ContentSettingsType permission,
       content::RenderFrameHost* render_frame_host,
       const GURL& requesting_origin);
@@ -133,10 +136,11 @@ class PermissionManager : public KeyedService,
   // KeyedService implementation
   void Shutdown() override;
 
+  PermissionContextBase* GetPermissionContextForTesting(
+      ContentSettingsType type);
+
  private:
   friend class PermissionManagerTest;
-  friend class GeolocationPermissionContextTests;
-  friend class NfcPermissionContextTests;
 
   class PendingRequest;
   using PendingRequestsMap = base::IDMap<std::unique_ptr<PendingRequest>>;
@@ -146,8 +150,7 @@ class PermissionManager : public KeyedService,
   struct Subscription;
   using SubscriptionsMap = base::IDMap<std::unique_ptr<Subscription>>;
 
-  permissions::PermissionContextBase* GetPermissionContext(
-      ContentSettingsType type);
+  PermissionContextBase* GetPermissionContext(ContentSettingsType type);
 
   // Called when a permission was decided for a given PendingRequest. The
   // PendingRequest is identified by its |request_id| and the permission is
@@ -165,7 +168,7 @@ class PermissionManager : public KeyedService,
                                ContentSettingsType content_type,
                                const std::string& resource_identifier) override;
 
-  permissions::PermissionResult GetPermissionStatusHelper(
+  PermissionResult GetPermissionStatusHelper(
       ContentSettingsType permission,
       content::RenderFrameHost* render_frame_host,
       const GURL& requesting_origin,
@@ -175,14 +178,11 @@ class PermissionManager : public KeyedService,
       const url::Origin& origin,
       ContentSettingsType permission);
 
-  Profile* profile_;
+  content::BrowserContext* browser_context_;
   PendingRequestsMap pending_requests_;
   SubscriptionsMap subscriptions_;
 
-  std::unordered_map<ContentSettingsType,
-                     std::unique_ptr<permissions::PermissionContextBase>,
-                     ContentSettingsTypeHash>
-      permission_contexts_;
+  PermissionContextMap permission_contexts_;
   using ContentSettingsTypeOverrides =
       base::flat_map<ContentSettingsType, ContentSetting>;
   std::map<url::Origin, ContentSettingsTypeOverrides>
@@ -193,4 +193,6 @@ class PermissionManager : public KeyedService,
   DISALLOW_COPY_AND_ASSIGN(PermissionManager);
 };
 
-#endif // CHROME_BROWSER_PERMISSIONS_PERMISSION_MANAGER_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_PERMISSION_MANAGER_H_

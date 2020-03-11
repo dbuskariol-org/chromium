@@ -2,59 +2,100 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/permissions/permission_manager.h"
+#include "components/permissions/permission_manager.h"
 
 #include <memory>
 
 #include "base/bind.h"
 #include "base/macros.h"
+#include "base/metrics/field_trial_params.h"
 #include "base/test/scoped_feature_list.h"
 #include "build/build_config.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/browser/permissions/permission_manager_factory.h"
-#include "chrome/browser/search_engines/ui_thread_search_terms_data.h"
-#include "chrome/common/url_constants.h"
-#include "chrome/common/webui_url_constants.h"
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
-#include "chrome/test/base/testing_profile.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/permissions/features.h"
 #include "components/permissions/permission_context_base.h"
 #include "components/permissions/permission_request_manager.h"
 #include "components/permissions/permission_result.h"
 #include "components/permissions/test/mock_permission_prompt_factory.h"
-#include "components/variations/variations_associated_data.h"
+#include "components/permissions/test/test_permissions_client.h"
 #include "content/public/browser/permission_type.h"
 #include "content/public/test/browser_task_environment.h"
 #include "content/public/test/navigation_simulator.h"
+#include "content/public/test/test_browser_context.h"
 #include "content/public/test/test_renderer_host.h"
-#include "device/vr/buildflags/buildflags.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom.h"
 
 #if defined(OS_ANDROID)
 #include "base/android/build_info.h"
-#include "chrome/browser/flags/android/chrome_feature_list.h"
-#include "chrome/browser/geolocation/android/mock_location_settings.h"
-#include "chrome/browser/geolocation/geolocation_permission_context_android.h"
 #endif  // defined(OS_ANDROID)
 
 using blink::mojom::PermissionStatus;
 using content::PermissionType;
 
+namespace permissions {
 namespace {
 
-class PermissionManagerTestingProfile final : public TestingProfile {
+class FakePermissionContext : public PermissionContextBase {
  public:
-  PermissionManagerTestingProfile() {}
-  ~PermissionManagerTestingProfile() override {}
+  FakePermissionContext(
+      content::BrowserContext* browser_context,
+      ContentSettingsType content_settings_type,
+      blink::mojom::FeaturePolicyFeature feature_policy_feature)
+      : PermissionContextBase(browser_context,
+                              content_settings_type,
+                              feature_policy_feature) {}
 
-  PermissionManager* GetPermissionControllerDelegate() override {
-    return PermissionManagerFactory::GetForProfile(this);
-  }
-
-  DISALLOW_COPY_AND_ASSIGN(PermissionManagerTestingProfile);
+  // PermissionContextBase:
+  bool IsRestrictedToSecureOrigins() const override { return true; }
 };
+
+class FakePermissionContextAlwaysAllow : public FakePermissionContext {
+ public:
+  FakePermissionContextAlwaysAllow(
+      content::BrowserContext* browser_context,
+      ContentSettingsType content_settings_type,
+      blink::mojom::FeaturePolicyFeature feature_policy_feature)
+      : FakePermissionContext(browser_context,
+                              content_settings_type,
+                              feature_policy_feature) {}
+
+  // PermissionContextBase:
+  ContentSetting GetPermissionStatusInternal(
+      content::RenderFrameHost* render_frame_host,
+      const GURL& requesting_origin,
+      const GURL& embedding_origin) const override {
+    return CONTENT_SETTING_ALLOW;
+  }
+};
+
+PermissionManager::PermissionContextMap CreatePermissionContexts(
+    content::BrowserContext* browser_context) {
+  PermissionManager::PermissionContextMap permission_contexts;
+  permission_contexts[ContentSettingsType::GEOLOCATION] =
+      std::make_unique<FakePermissionContext>(
+          browser_context, ContentSettingsType::GEOLOCATION,
+          blink::mojom::FeaturePolicyFeature::kGeolocation);
+  permission_contexts[ContentSettingsType::NOTIFICATIONS] =
+      std::make_unique<FakePermissionContext>(
+          browser_context, ContentSettingsType::NOTIFICATIONS,
+          blink::mojom::FeaturePolicyFeature::kNotFound);
+  permission_contexts[ContentSettingsType::MIDI_SYSEX] =
+      std::make_unique<FakePermissionContext>(
+          browser_context, ContentSettingsType::MIDI_SYSEX,
+          blink::mojom::FeaturePolicyFeature::kMidiFeature);
+  permission_contexts[ContentSettingsType::MIDI] =
+      std::make_unique<FakePermissionContextAlwaysAllow>(
+          browser_context, ContentSettingsType::MIDI,
+          blink::mojom::FeaturePolicyFeature::kMidiFeature);
+#if defined(OS_ANDROID)
+  permission_contexts[ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER] =
+      std::make_unique<FakePermissionContext>(
+          browser_context, ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER,
+          blink::mojom::FeaturePolicyFeature::kEncryptedMedia);
+#endif
+  return permission_contexts;
+}
 
 #if defined(OS_ANDROID)
 // See https://crbug.com/904883.
@@ -75,7 +116,7 @@ auto GetDefaultProtectedMediaIdentifierContentSetting() {
 
 }  // namespace
 
-class PermissionManagerTest : public ChromeRenderViewHostTestHarness {
+class PermissionManagerTest : public content::RenderViewHostTestHarness {
  public:
   void OnPermissionChange(PermissionStatus permission) {
     if (!quit_closure_.is_null())
@@ -92,24 +133,23 @@ class PermissionManagerTest : public ChromeRenderViewHostTestHarness {
         callback_result_(PermissionStatus::ASK) {}
 
   PermissionManager* GetPermissionControllerDelegate() {
-    return profile_->GetPermissionControllerDelegate();
+    return static_cast<PermissionManager*>(
+        browser_context_->GetPermissionControllerDelegate());
   }
 
   HostContentSettingsMap* GetHostContentSettingsMap() {
-    return HostContentSettingsMapFactory::GetForProfile(profile_.get());
+    return PermissionsClient::Get()->GetSettingsMap(browser_context_.get());
   }
 
-  void CheckPermissionStatus(PermissionType type,
-                             PermissionStatus expected) {
+  void CheckPermissionStatus(PermissionType type, PermissionStatus expected) {
     EXPECT_EQ(expected, GetPermissionControllerDelegate()->GetPermissionStatus(
                             type, url_.GetOrigin(), url_.GetOrigin()));
   }
 
-  void CheckPermissionResult(
-      ContentSettingsType type,
-      ContentSetting expected_status,
-      permissions::PermissionStatusSource expected_status_source) {
-    permissions::PermissionResult result =
+  void CheckPermissionResult(ContentSettingsType type,
+                             ContentSetting expected_status,
+                             PermissionStatusSource expected_status_source) {
+    PermissionResult result =
         GetPermissionControllerDelegate()->GetPermissionStatus(
             type, url_.GetOrigin(), url_.GetOrigin());
     EXPECT_EQ(expected_status, result.content_setting);
@@ -117,8 +157,8 @@ class PermissionManagerTest : public ChromeRenderViewHostTestHarness {
   }
 
   void SetPermission(ContentSettingsType type, ContentSetting value) {
-    HostContentSettingsMapFactory::GetForProfile(profile_.get())
-        ->SetContentSettingDefaultScope(url_, url_, type, std::string(), value);
+    GetHostContentSettingsMap()->SetContentSettingDefaultScope(
+        url_, url_, type, std::string(), value);
   }
 
   int RequestPermission(PermissionType type,
@@ -134,21 +174,11 @@ class PermissionManagerTest : public ChromeRenderViewHostTestHarness {
     return result;
   }
 
-  const GURL& url() const {
-    return url_;
-  }
+  const GURL& url() const { return url_; }
 
-  const GURL& other_url() const {
-    return other_url_;
-  }
+  const GURL& other_url() const { return other_url_; }
 
-  GURL google_base_url() const {
-    return GURL(UIThreadSearchTermsData().GoogleBaseURLValue());
-  }
-
-  bool callback_called() const {
-    return callback_called_;
-  }
+  bool callback_called() const { return callback_called_; }
 
   PermissionStatus callback_result() const { return callback_result_; }
 
@@ -188,25 +218,19 @@ class PermissionManagerTest : public ChromeRenderViewHostTestHarness {
 
  private:
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
-    profile_.reset(new PermissionManagerTestingProfile());
-#if defined(OS_ANDROID)
-    GeolocationPermissionContextAndroid* geolocation_permission_context_ =
-        static_cast<GeolocationPermissionContextAndroid*>(
-            GetPermissionControllerDelegate()->GetPermissionContext(
-                ContentSettingsType::GEOLOCATION));
-    geolocation_permission_context_->SetLocationSettingsForTesting(
-        std::unique_ptr<LocationSettings>(new MockLocationSettings()));
-    MockLocationSettings::SetLocationStatus(
-        true /* has_android_location_permission */,
-        true /* is_system_location_setting_enabled */);
-#endif
+    RenderViewHostTestHarness::SetUp();
+    browser_context_ = std::make_unique<content::TestBrowserContext>();
+    browser_context_->SetPermissionControllerDelegate(
+        std::make_unique<PermissionManager>(
+            browser_context_.get(),
+            CreatePermissionContexts(browser_context_.get())));
     NavigateAndCommit(url());
   }
 
   void TearDown() override {
-    profile_.reset();
-    ChromeRenderViewHostTestHarness::TearDown();
+    GetPermissionControllerDelegate()->Shutdown();
+    browser_context_ = nullptr;
+    RenderViewHostTestHarness::TearDown();
   }
 
   void SimulateNavigation(content::RenderFrameHost** rfh, const GURL& url) {
@@ -221,7 +245,8 @@ class PermissionManagerTest : public ChromeRenderViewHostTestHarness {
   bool callback_called_;
   PermissionStatus callback_result_;
   base::Closure quit_closure_;
-  std::unique_ptr<PermissionManagerTestingProfile> profile_;
+  std::unique_ptr<content::TestBrowserContext> browser_context_;
+  TestPermissionsClient client_;
 };
 
 TEST_F(PermissionManagerTest, GetPermissionStatusDefault) {
@@ -255,38 +280,38 @@ TEST_F(PermissionManagerTest, GetPermissionStatusAfterSet) {
 
 TEST_F(PermissionManagerTest, CheckPermissionResultDefault) {
   CheckPermissionResult(ContentSettingsType::MIDI_SYSEX, CONTENT_SETTING_ASK,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
   CheckPermissionResult(ContentSettingsType::NOTIFICATIONS, CONTENT_SETTING_ASK,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
   CheckPermissionResult(ContentSettingsType::GEOLOCATION, CONTENT_SETTING_ASK,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
 #if defined(OS_ANDROID)
   CheckPermissionResult(ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER,
                         GetDefaultProtectedMediaIdentifierContentSetting(),
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
 #endif
 }
 
 TEST_F(PermissionManagerTest, CheckPermissionResultAfterSet) {
   SetPermission(ContentSettingsType::GEOLOCATION, CONTENT_SETTING_ALLOW);
   CheckPermissionResult(ContentSettingsType::GEOLOCATION, CONTENT_SETTING_ALLOW,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
 
   SetPermission(ContentSettingsType::NOTIFICATIONS, CONTENT_SETTING_ALLOW);
   CheckPermissionResult(ContentSettingsType::NOTIFICATIONS,
                         CONTENT_SETTING_ALLOW,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
 
   SetPermission(ContentSettingsType::MIDI_SYSEX, CONTENT_SETTING_ALLOW);
   CheckPermissionResult(ContentSettingsType::MIDI_SYSEX, CONTENT_SETTING_ALLOW,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
 
 #if defined(OS_ANDROID)
   SetPermission(ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER,
                 CONTENT_SETTING_ALLOW);
   CheckPermissionResult(ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER,
                         CONTENT_SETTING_ALLOW,
-                        permissions::PermissionStatusSource::UNSPECIFIED);
+                        PermissionStatusSource::UNSPECIFIED);
 #endif
 }
 
@@ -307,7 +332,7 @@ TEST_F(PermissionManagerTest, SubscribeUnsubscribeAfterShutdown) {
                      base::Unretained(this)));
 
   // Simulate Keyed Services shutdown pass. Note: Shutdown will be called second
-  // time during profile destruction. This is ok for now: Shutdown is
+  // time during browser_context destruction. This is ok for now: Shutdown is
   // reenterant.
   GetPermissionControllerDelegate()->Shutdown();
 
@@ -571,16 +596,15 @@ TEST_F(PermissionManagerTest, SubscribeMIDIPermission) {
 
 TEST_F(PermissionManagerTest, PermissionIgnoredCleanup) {
   content::WebContents* contents = web_contents();
-  permissions::PermissionRequestManager::CreateForWebContents(contents);
-  permissions::PermissionRequestManager* manager =
-      permissions::PermissionRequestManager::FromWebContents(contents);
-  auto prompt_factory =
-      std::make_unique<permissions::MockPermissionPromptFactory>(manager);
+  PermissionRequestManager::CreateForWebContents(contents);
+  PermissionRequestManager* manager =
+      PermissionRequestManager::FromWebContents(contents);
+  auto prompt_factory = std::make_unique<MockPermissionPromptFactory>(manager);
 
   NavigateAndCommit(url());
 
   GetPermissionControllerDelegate()->RequestPermission(
-      PermissionType::VIDEO_CAPTURE, main_rfh(), url(), /*user_gesture=*/true,
+      PermissionType::GEOLOCATION, main_rfh(), url(), /*user_gesture=*/true,
       base::Bind(&PermissionManagerTest::OnPermissionChange,
                  base::Unretained(this)));
 
@@ -592,20 +616,19 @@ TEST_F(PermissionManagerTest, PermissionIgnoredCleanup) {
   EXPECT_TRUE(PendingRequestsEmpty());
 }
 
-// Check permissions::PermissionResult shows requests denied due to insecure
+// Check PermissionResult shows requests denied due to insecure
 // origins.
 TEST_F(PermissionManagerTest, InsecureOrigin) {
   GURL insecure_frame("http://www.example.com/geolocation");
   NavigateAndCommit(insecure_frame);
 
-  permissions::PermissionResult result =
+  PermissionResult result =
       GetPermissionControllerDelegate()->GetPermissionStatusForFrame(
           ContentSettingsType::GEOLOCATION, web_contents()->GetMainFrame(),
           insecure_frame);
 
   EXPECT_EQ(CONTENT_SETTING_BLOCK, result.content_setting);
-  EXPECT_EQ(permissions::PermissionStatusSource::INSECURE_ORIGIN,
-            result.source);
+  EXPECT_EQ(PermissionStatusSource::INSECURE_ORIGIN, result.source);
 
   GURL secure_frame("https://www.example.com/geolocation");
   NavigateAndCommit(secure_frame);
@@ -615,7 +638,7 @@ TEST_F(PermissionManagerTest, InsecureOrigin) {
       secure_frame);
 
   EXPECT_EQ(CONTENT_SETTING_ASK, result.content_setting);
-  EXPECT_EQ(permissions::PermissionStatusSource::UNSPECIFIED, result.source);
+  EXPECT_EQ(PermissionStatusSource::UNSPECIFIED, result.source);
 }
 
 TEST_F(PermissionManagerTest, InsecureOriginIsNotOverridable) {
@@ -652,111 +675,19 @@ TEST_F(PermissionManagerTest, KillSwitchOnIsNotOverridable) {
           PermissionType::GEOLOCATION, kLocalHost));
 
   // Turn on kill switch for GEOLOCATION.
-  variations::testing::ClearAllVariationParams();
   std::map<std::string, std::string> params;
-  params[permissions::PermissionUtil::GetPermissionString(
+  params[PermissionUtil::GetPermissionString(
       ContentSettingsType::GEOLOCATION)] =
-      permissions::PermissionContextBase::kPermissionsKillSwitchBlockedValue;
-  variations::AssociateVariationParams(
-      permissions::PermissionContextBase::kPermissionsKillSwitchFieldStudy,
-      "TestGroup", params);
+      PermissionContextBase::kPermissionsKillSwitchBlockedValue;
+  base::AssociateFieldTrialParams(
+      PermissionContextBase::kPermissionsKillSwitchFieldStudy, "TestGroup",
+      params);
   base::FieldTrialList::CreateFieldTrial(
-      permissions::PermissionContextBase::kPermissionsKillSwitchFieldStudy,
-      "TestGroup");
+      PermissionContextBase::kPermissionsKillSwitchFieldStudy, "TestGroup");
 
   EXPECT_FALSE(
       GetPermissionControllerDelegate()->IsPermissionOverridableByDevTools(
           PermissionType::GEOLOCATION, kLocalHost));
-
-  // Clean-up.
-  variations::testing::ClearAllVariationParams();
-}
-
-TEST_F(PermissionManagerTest, GetCanonicalOriginSearch) {
-  const GURL google_com("https://www.google.com");
-  const GURL google_de("https://www.google.de");
-  const GURL other_url("https://other.url");
-  const GURL google_base = google_base_url().GetOrigin();
-  const GURL local_ntp = GURL(chrome::kChromeSearchLocalNtpUrl).GetOrigin();
-  const GURL remote_ntp = GURL(std::string("chrome-search://") +
-                               chrome::kChromeSearchRemoteNtpHost);
-  const GURL other_chrome_search = GURL("chrome-search://not-local-ntp");
-  const GURL top_level_ntp(chrome::kChromeUINewTabURL);
-
-  // "Normal" URLs are not affected by GetCanonicalOrigin.
-  EXPECT_EQ(google_com,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, google_com, google_com));
-  EXPECT_EQ(google_de,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, google_de, google_de));
-  EXPECT_EQ(other_url,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, other_url, other_url));
-  EXPECT_EQ(google_base,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, google_base, google_base));
-
-  // The local NTP URL gets mapped to the Google base URL.
-  EXPECT_EQ(google_base,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, local_ntp, top_level_ntp));
-  // However, other chrome-search:// URLs, including the remote NTP URL, are
-  // not affected.
-  EXPECT_EQ(remote_ntp,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, remote_ntp, top_level_ntp));
-  EXPECT_EQ(google_com,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, google_com, top_level_ntp));
-  EXPECT_EQ(other_chrome_search,
-            GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                ContentSettingsType::GEOLOCATION, other_chrome_search,
-                top_level_ntp));
-}
-
-TEST_F(PermissionManagerTest, GetCanonicalOriginPermissionDelegation) {
-  const GURL requesting_origin("https://www.requesting.com");
-  const GURL embedding_origin("https://www.google.de");
-  const GURL extensions_requesting_origin(
-      "chrome-extension://abcdefghijklmnopqrstuvxyz");
-
-  {
-    base::test::ScopedFeatureList scoped_feature_list;
-    scoped_feature_list.InitAndDisableFeature(
-        permissions::features::kPermissionDelegation);
-    // Without permission delegation enabled the requesting origin should always
-    // be returned.
-    EXPECT_EQ(requesting_origin,
-              GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                  ContentSettingsType::GEOLOCATION, requesting_origin,
-                  embedding_origin));
-    EXPECT_EQ(extensions_requesting_origin,
-              GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                  ContentSettingsType::GEOLOCATION,
-                  extensions_requesting_origin, embedding_origin));
-  }
-
-  {
-    base::test::ScopedFeatureList scoped_feature_list;
-    scoped_feature_list.InitAndEnableFeature(
-        permissions::features::kPermissionDelegation);
-    // With permission delegation, the embedding origin should be returned
-    // except in the case of extensions; and except for notifications, for which
-    // permission delegation is always off.
-    EXPECT_EQ(embedding_origin,
-              GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                  ContentSettingsType::GEOLOCATION, requesting_origin,
-                  embedding_origin));
-    EXPECT_EQ(extensions_requesting_origin,
-              GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                  ContentSettingsType::GEOLOCATION,
-                  extensions_requesting_origin, embedding_origin));
-    EXPECT_EQ(requesting_origin,
-              GetPermissionControllerDelegate()->GetCanonicalOrigin(
-                  ContentSettingsType::NOTIFICATIONS, requesting_origin,
-                  embedding_origin));
-  }
 }
 
 TEST_F(PermissionManagerTest, GetPermissionStatusDelegation) {
@@ -764,8 +695,7 @@ TEST_F(PermissionManagerTest, GetPermissionStatusDelegation) {
   const char* kOrigin2 = "https://google.com";
 
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(
-      permissions::features::kPermissionDelegation);
+  scoped_feature_list.InitAndEnableFeature(features::kPermissionDelegation);
 
   NavigateAndCommit(GURL(kOrigin1));
   content::RenderFrameHost* parent = main_rfh();
@@ -798,13 +728,11 @@ TEST_F(PermissionManagerTest, GetPermissionStatusDelegation) {
 
   // When the child requests location a prompt should be displayed for the
   // parent.
-  permissions::PermissionRequestManager::CreateForWebContents(web_contents());
-  permissions::PermissionRequestManager* manager =
-      permissions::PermissionRequestManager::FromWebContents(web_contents());
-  auto prompt_factory =
-      std::make_unique<permissions::MockPermissionPromptFactory>(manager);
-  prompt_factory->set_response_type(
-      permissions::PermissionRequestManager::ACCEPT_ALL);
+  PermissionRequestManager::CreateForWebContents(web_contents());
+  PermissionRequestManager* manager =
+      PermissionRequestManager::FromWebContents(web_contents());
+  auto prompt_factory = std::make_unique<MockPermissionPromptFactory>(manager);
+  prompt_factory->set_response_type(PermissionRequestManager::ACCEPT_ALL);
   prompt_factory->DocumentOnLoadCompletedInMainFrame();
 
   RequestPermission(PermissionType::GEOLOCATION, child, GURL(kOrigin2));
@@ -862,8 +790,7 @@ TEST_F(PermissionManagerTest, SubscribeWithPermissionDelegation) {
   const char* kOrigin2 = "https://google.com";
 
   base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitAndEnableFeature(
-      permissions::features::kPermissionDelegation);
+  scoped_feature_list.InitAndEnableFeature(features::kPermissionDelegation);
 
   NavigateAndCommit(GURL(kOrigin1));
   content::RenderFrameHost* parent = main_rfh();
@@ -934,3 +861,5 @@ TEST_F(PermissionManagerTest, SubscribeWithPermissionDelegation) {
   GetPermissionControllerDelegate()->UnsubscribePermissionStatusChange(
       subscription_id);
 }
+
+}  // namespace permissions
