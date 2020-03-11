@@ -218,6 +218,9 @@ var availableTests = [
           chrome.test.assertEq(
               'example.com', compromisedCredential.formattedOrigin);
           chrome.test.assertEq(
+              'https://example.com', compromisedCredential.detailedOrigin);
+          chrome.test.assertFalse(compromisedCredential.isAndroidCredential);
+          chrome.test.assertEq(
               'https://example.com/change-password',
               compromisedCredential.changePasswordUrl);
           chrome.test.assertEq('alice', compromisedCredential.username);
@@ -235,6 +238,8 @@ var availableTests = [
     var compromisedCredential = {
       id: 0,
       formattedOrigin: 'example.com',
+      detailedOrigin: 'https://example.com',
+      isAndroidCredential: false,
       signonRealm: 'https://example.com',
       username: 'alice',
       compromiseTime: COMPROMISE_TIME,
@@ -254,6 +259,8 @@ var availableTests = [
     var compromisedCredential = {
       id: 0,
       formattedOrigin: 'example.com',
+      detailedOrigin: 'https://example.com',
+      isAndroidCredential: false,
       signonRealm: 'https://example.com',
       username: 'alice',
       compromiseTime: COMPROMISE_TIME,
@@ -277,6 +284,8 @@ var availableTests = [
         {
           id: 0,
           formattedOrigin: 'example.com',
+          detailedOrigin: 'https://example.com',
+          isAndroidCredential: false,
           signonRealm: 'https://example.com',
           username: 'alice',
           compromiseTime: COMPROMISE_TIME,
@@ -296,6 +305,8 @@ var availableTests = [
         {
           id: 0,
           formattedOrigin: 'example.com',
+          detailedOrigin: 'https://example.com',
+          isAndroidCredential: false,
           signonRealm: 'https://example.com',
           username: 'alice',
           compromiseTime: COMPROMISE_TIME,
@@ -313,6 +324,8 @@ var availableTests = [
         {
           id: 0,
           formattedOrigin: 'example.com',
+          detailedOrigin: 'https://example.com',
+          isAndroidCredential: false,
           signonRealm: 'https://example.com',
           username: 'alice',
           compromiseTime: COMPROMISE_TIME,
@@ -333,6 +346,8 @@ var availableTests = [
         {
           id: 0,
           formattedOrigin: 'example.com',
+          detailedOrigin: 'https://example.com',
+          isAndroidCredential: false,
           signonRealm: 'https://example.com',
           username: 'alice',
           compromiseTime: COMPROMISE_TIME,

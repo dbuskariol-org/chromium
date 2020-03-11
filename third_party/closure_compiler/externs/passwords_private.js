@@ -102,6 +102,8 @@ chrome.passwordsPrivate.PasswordExportProgress;
  * @typedef {{
  *   id: number,
  *   formattedOrigin: string,
+ *   detailedOrigin: string,
+ *   isAndroidCredential: boolean,
  *   changePasswordUrl: (string|undefined),
  *   signonRealm: string,
  *   username: string,

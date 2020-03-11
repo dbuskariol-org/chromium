@@ -179,6 +179,8 @@ class TestDelegate : public PasswordsPrivateDelegate {
     api::passwords_private::CompromisedCredential credential;
     credential.username = "alice";
     credential.formatted_origin = "example.com";
+    credential.detailed_origin = "https://example.com";
+    credential.is_android_credential = false;
     credential.change_password_url =
         std::make_unique<std::string>("https://example.com/change-password");
     credential.compromise_type = api::passwords_private::COMPROMISE_TYPE_LEAKED;

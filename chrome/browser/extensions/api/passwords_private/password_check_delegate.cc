@@ -31,6 +31,7 @@
 #include "components/password_manager/core/browser/ui/saved_passwords_presenter.h"
 #include "components/password_manager/core/common/password_manager_pref_names.h"
 #include "components/prefs/pref_service.h"
+#include "components/url_formatter/elide_url.h"
 #include "components/url_formatter/url_formatter.h"
 #include "net/base/escape.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -181,24 +182,28 @@ PasswordCheckDelegate::GetCompromisedCredentials() {
     auto facet = password_manager::FacetURI::FromPotentiallyInvalidSpec(
         credential.signon_realm);
     if (facet.IsValidAndroidFacetURI()) {
-      // |formatted_orgin| and |change_password_url| need special handling for
-      // Android. Here we use affiliation information instead of the
-      // signon_realm.
+      api_credential.is_android_credential = true;
+      // |formatted_orgin|, |detailed_origin| and |change_password_url| need
+      // special handling for Android. Here we use affiliation information
+      // instead of the signon_realm.
       const PasswordForm& android_form =
           credentials_to_forms_.at(credential).at(0);
-      api_credential.formatted_origin = android_form.app_display_name;
-      api_credential.change_password_url =
-          std::make_unique<std::string>(android_form.affiliated_web_realm);
-
-      // In case no affiliation information could be obtained show the formatted
-      // package name to the user. An empty change_password_url will be handled
-      // by the frontend, by not including a link in this case.
-      if (api_credential.formatted_origin.empty()) {
+      if (!android_form.app_display_name.empty()) {
+        api_credential.formatted_origin = android_form.app_display_name;
+        api_credential.detailed_origin = android_form.app_display_name;
+        api_credential.change_password_url =
+            std::make_unique<std::string>(android_form.affiliated_web_realm);
+      } else {
+        // In case no affiliation information could be obtained show the
+        // formatted package name to the user. An empty change_password_url will
+        // be handled by the frontend, by not including a link in this case.
         api_credential.formatted_origin = l10n_util::GetStringFUTF8(
             IDS_SETTINGS_PASSWORDS_ANDROID_APP,
             base::UTF8ToUTF16(facet.android_package_name()));
+        api_credential.detailed_origin = facet.android_package_name();
       }
     } else {
+      api_credential.is_android_credential = false;
       api_credential.formatted_origin =
           base::UTF16ToUTF8(url_formatter::FormatUrl(
               GURL(credential.signon_realm),
@@ -207,6 +212,9 @@ PasswordCheckDelegate::GetCompromisedCredentials() {
                   url_formatter::kFormatUrlOmitTrivialSubdomains |
                   url_formatter::kFormatUrlTrimAfterHost,
               net::UnescapeRule::SPACES, nullptr, nullptr, nullptr));
+      api_credential.detailed_origin =
+          base::UTF16ToUTF8(url_formatter::FormatUrlForSecurityDisplay(
+              GURL(credential.signon_realm)));
       api_credential.change_password_url =
           std::make_unique<std::string>(credential.signon_realm);
     }
