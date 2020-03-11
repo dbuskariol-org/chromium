@@ -428,33 +428,6 @@ BindServiceWorkerReceiverForOriginAndFrameId(
 }
 
 template <typename Interface>
-base::RepeatingCallback<void(const ServiceWorkerVersionInfo&,
-                             mojo::PendingReceiver<Interface>)>
-BindServiceWorkerReceiverForOriginAndCOEP(
-    void (RenderProcessHost::*method)(const network::CrossOriginEmbedderPolicy&,
-                                      const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
-    ServiceWorkerProviderHost* host,
-    const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy) {
-  return base::BindRepeating(
-      [](ServiceWorkerProviderHost* host,
-         void (RenderProcessHost::*method)(
-             const network::CrossOriginEmbedderPolicy&, const url::Origin&,
-             mojo::PendingReceiver<Interface>),
-         const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy,
-         const ServiceWorkerVersionInfo& info,
-         mojo::PendingReceiver<Interface> receiver) {
-        auto origin = info.script_origin;
-        RunOrPostTaskToBindServiceWorkerReceiver<
-            const network::CrossOriginEmbedderPolicy&, const url::Origin&,
-            mojo::PendingReceiver<Interface>>(host, method,
-                                              cross_origin_embedder_policy,
-                                              origin, std::move(receiver));
-      },
-      base::Unretained(host), method, cross_origin_embedder_policy);
-}
-
-template <typename Interface>
 void EmptyBinderForFrame(RenderFrameHost* host,
                          mojo::PendingReceiver<Interface> receiver) {
   DLOG(ERROR) << "Empty binder for interface " << Interface::Name_
@@ -943,6 +916,8 @@ void PopulateServiceWorkerBinders(ServiceWorkerProviderHost* host,
   map->Add<blink::mojom::QuicTransportConnector>(base::BindRepeating(
       &ServiceWorkerProviderHost::CreateQuicTransportConnector,
       base::Unretained(host)));
+  map->Add<blink::mojom::CacheStorage>(base::BindRepeating(
+      &ServiceWorkerProviderHost::BindCacheStorage, base::Unretained(host)));
   map->Add<blink::mojom::BadgeService>(
       base::BindRepeating(&BindBadgeServiceForServiceWorker, host));
 
@@ -1009,15 +984,6 @@ void PopulateBinderMapWithContext(
   map->Add<blink::mojom::QuotaDispatcherHost>(
       BindServiceWorkerReceiverForOriginAndFrameId(
           &RenderProcessHost::BindQuotaDispatcherHost, host));
-
-  // render process host bind taking a Cross-Origin-Embedder-Policy and an
-  // origin.
-  // TODO(https://crbug.com/1031542): Add support enforcing CORP in
-  // cache.match() for ServiceWorker
-  map->Add<blink::mojom::CacheStorage>(
-      BindServiceWorkerReceiverForOriginAndCOEP(
-          &RenderProcessHost::BindCacheStorage, host,
-          network::CrossOriginEmbedderPolicy()));
 }
 
 void PopulateBinderMap(ServiceWorkerProviderHost* host,
