@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.infobar;
+package org.chromium.chrome.browser.ui.messages.infobar;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -23,8 +23,7 @@ import androidx.annotation.StringRes;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Callback;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarMessageView;
+import org.chromium.chrome.ui.messages.R;
 import org.chromium.ui.text.NoUnderlineClickableSpan;
 
 /**
@@ -46,8 +45,10 @@ public class InfoBarCompactLayout extends LinearLayout implements View.OnClickLi
      * @param iconTintId The {@link ColorRes} used as tint for {@code iconResourceId}.
      * @param iconBitmap Bitmap for the icon to use, if {@code iconResourceId} is not set.
      */
-    InfoBarCompactLayout(Context context, InfoBarInteractionHandler infoBar, int iconResourceId,
-            @ColorRes int iconTintId, Bitmap iconBitmap) {
+    // TODO(crbug/1056346): ctor is made public to allow access from InfoBar. Once
+    // InfoBar is modularized, restore access to package private.
+    public InfoBarCompactLayout(Context context, InfoBarInteractionHandler infoBar,
+            int iconResourceId, @ColorRes int iconTintId, Bitmap iconBitmap) {
         super(context);
         mInfoBar = infoBar;
         mCompactInfoBarSize =
@@ -75,7 +76,9 @@ public class InfoBarCompactLayout extends LinearLayout implements View.OnClickLi
      * @param view   View to insert.
      * @param weight Weight to assign to it.
      */
-    protected void addContent(View view, float weight) {
+    // TODO(crbug/1056346): addContent is made public to allow access from InfoBar. Once
+    // InfoBar is modularized, restore access to protected.
+    public void addContent(View view, float weight) {
         LinearLayout.LayoutParams params;
         if (weight <= 0.0f) {
             params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, mCompactInfoBarSize);
@@ -181,7 +184,7 @@ public class InfoBarCompactLayout extends LinearLayout implements View.OnClickLi
             assert mMessage != null;
 
             final int messagePadding = mLayout.getResources().getDimensionPixelOffset(
-                    R.dimen.reader_mode_infobar_text_padding);
+                    R.dimen.infobar_compact_message_vertical_padding);
 
             SpannableStringBuilder builder = new SpannableStringBuilder();
             builder.append(mMessage);

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.infobar;
+package org.chromium.chrome.browser.ui.messages.infobar;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -27,8 +27,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 
 import org.chromium.base.ApiCompatibilityUtils;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarControlLayout;
+import org.chromium.chrome.ui.messages.R;
 import org.chromium.components.browser_ui.widget.DualControlLayout;
 import org.chromium.ui.UiUtils;
 import org.chromium.ui.text.NoUnderlineClickableSpan;
@@ -56,7 +55,6 @@ import java.util.List;
  * InfoBarInteractionHandler.
  */
 public final class InfoBarLayout extends ViewGroup implements View.OnClickListener {
-
     /**
      * Parameters used for laying out children.
      */
@@ -155,16 +153,20 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
 
     /**
      * Returns the {@link TextView} corresponding to the main infobar message.
+     * The returned view is a part of internal layout strucutre and shouldn't be accessed by InfoBar
+     * implementations.
      */
-    TextView getMessageTextView() {
+    public TextView getMessageTextView() {
         return mMessageTextView;
     }
 
     /**
      * Returns the {@link InfoBarControlLayout} containing the TextView showing the main infobar
      * message and associated controls, which is sandwiched between its icon and close button.
+     * The returned view is a part of internal layout strucutre and shouldn't be accessed by InfoBar
+     * implementations.
      */
-    InfoBarControlLayout getMessageLayout() {
+    public InfoBarControlLayout getMessageLayout() {
         return mMessageLayout;
     }
 
@@ -192,7 +194,7 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      * @param rangeStart Where the link starts.
      * @param rangeEnd   Where the link ends.
      */
-    void setInlineMessageLink(int rangeStart, int rangeEnd) {
+    public void setInlineMessageLink(int rangeStart, int rangeEnd) {
         mMessageInlineLinkRangeStart = rangeStart;
         mMessageInlineLinkRangeEnd = rangeEnd;
         mMessageTextView.setText(prepareMainMessageString());
@@ -243,8 +245,8 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      */
     public void setBottomViews(String primaryText, View secondaryView, int alignment) {
         assert !TextUtils.isEmpty(primaryText);
-        Button primaryButton = DualControlLayout.createButtonForLayout(
-                getContext(), true, primaryText, this);
+        Button primaryButton =
+                DualControlLayout.createButtonForLayout(getContext(), true, primaryText, this);
 
         assert mButtonRowLayout == null;
         mButtonRowLayout = new DualControlLayout(getContext(), null);
@@ -279,7 +281,8 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      * Returns the primary button, or null if it doesn't exist.
      */
     public ButtonCompat getPrimaryButton() {
-        return mButtonRowLayout == null ? null
+        return mButtonRowLayout == null
+                ? null
                 : (ButtonCompat) mButtonRowLayout.findViewById(R.id.button_primary);
     }
 
@@ -294,7 +297,9 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      * Must be called after the message, buttons, and custom content have been set, and before the
      * first call to onMeasure().
      */
-    void onContentCreated() {
+    // TODO(crbug/1056346): onContentCreated is made public to allow access from InfoBar. Once
+    // InfoBar is modularized, restore access to package private.
+    public void onContentCreated() {
         // Add the child views in the desired focus order.
         if (mIconView != null) addView(mIconView);
         addView(mMessageLayout);
@@ -355,8 +360,8 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        assert getLayoutParams().height == LayoutParams.WRAP_CONTENT
-                : "InfoBar heights cannot be constrained.";
+        assert getLayoutParams().height
+                == LayoutParams.WRAP_CONTENT : "InfoBar heights cannot be constrained.";
 
         // Apply the padding that surrounds all the infobar controls.
         final int layoutWidth = Math.max(MeasureSpec.getSize(widthMeasureSpec), mMinWidth);
@@ -395,8 +400,8 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
         // Control layouts are placed below the message layout and the close button.  The icon is
         // ignored for this particular calculation because the icon enforces a left margin on all of
         // the control layouts and won't be overlapped.
-        layoutBottom += Math.max(getChildHeightWithMargins(mMessageLayout),
-                getChildHeightWithMargins(mCloseButton));
+        layoutBottom += Math.max(
+                getChildHeightWithMargins(mMessageLayout), getChildHeightWithMargins(mCloseButton));
 
         // The other control layouts are constrained only by the icon's width.
         final int controlPaddedStart = paddedStart + iconWidth;
