@@ -112,7 +112,6 @@ js2gtest("browser_tests_js_webui") {
     "a11y/accessibility_test.js",
     "polymer_browser_test_base.js",
     "settings/a11y/settings_accessibility_test.js",
-    "settings/settings_page_browsertest.js",
     "//third_party/axe-core/axe.js",
   ]
 

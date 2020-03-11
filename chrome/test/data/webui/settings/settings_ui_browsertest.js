@@ -4,43 +4,44 @@
 
 /** @fileoverview Suite of tests for the Settings layout. */
 
-GEN_INCLUDE(['settings_page_browsertest.js']);
+// Polymer BrowserTest fixture.
+GEN_INCLUDE(['//chrome/test/data/webui/polymer_browser_test_base.js']);
 
 /**
  * @constructor
- * @extends {SettingsPageBrowserTest}
+ * @extends {PolymerTest}
  */
 function SettingsUIBrowserTest() {}
 
 SettingsUIBrowserTest.prototype = {
-  __proto__: SettingsPageBrowserTest.prototype,
+  __proto__: PolymerTest.prototype,
 
   /** @override */
-  extraLibraries: SettingsPageBrowserTest.prototype.extraLibraries.concat([
+  browsePreload: 'chrome://settings/settings_ui/settings_ui.html',
+
+  /** @override */
+  extraLibraries: [
+    ...PolymerTest.prototype.extraLibraries,
     '../test_util.js',
-  ]),
+  ],
 };
 
-// Times out on debug builders and may time out on memory bots because
-// the Settings page can take several seconds to load in a Release build
-// and several times that in a Debug build. See https://crbug.com/558434
-// and http://crbug.com/711256.
-
-// Disabling everywhere, see flaky failures at crbug.com/986985.
-TEST_F('SettingsUIBrowserTest', 'DISABLED_All', function() {
+TEST_F('SettingsUIBrowserTest', 'All', function() {
   suite('settings-ui', function() {
     let toolbar;
     let ui;
 
     suiteSetup(function() {
       testing.Test.disableAnimationsAndTransitions();
-      ui = assert(document.querySelector('settings-ui'));
-      ui.$.drawerTemplate.restamp = true;
     });
 
     setup(function() {
-      ui.$.drawerTemplate.if = false;
-      Polymer.dom.flush();
+      PolymerTest.clearBody();
+      ui = document.createElement('settings-ui');
+      document.body.appendChild(ui);
+      return CrSettingsPrefs.initialized.then(() => {
+        Polymer.dom.flush();
+      });
     });
 
     test('showing menu in toolbar is dependent on narrow mode', function() {
@@ -79,7 +80,9 @@ TEST_F('SettingsUIBrowserTest', 'DISABLED_All', function() {
           });
     });
 
-    test('app drawer closes when exiting narrow mode', async () => {
+    // TODO(rbpotter): Fix or delete this test. It is flaky (times out ~1 in 10
+    // runs) locally on a Linux non-optimized build.
+    test.skip('app drawer closes when exiting narrow mode', async () => {
       const drawer = ui.$.drawer;
       const toolbar = ui.$$('cr-toolbar');
 
