@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_PUBLIC_COMMON_CONTEXT_MENU_PARAMS_H_
-#define CONTENT_PUBLIC_COMMON_CONTEXT_MENU_PARAMS_H_
+#ifndef CONTENT_PUBLIC_COMMON_UNTRUSTWORTHY_CONTEXT_MENU_PARAMS_H_
+#define CONTENT_PUBLIC_COMMON_UNTRUSTWORTHY_CONTEXT_MENU_PARAMS_H_
 
 #include <stdint.h>
 
@@ -22,8 +22,6 @@
 #include "url/gurl.h"
 
 namespace content {
-
-class RenderFrameHostImpl;
 
 struct CONTENT_EXPORT CustomContextMenuContext {
   static const int32_t kCurrentRenderWidget;
@@ -152,38 +150,6 @@ struct CONTENT_EXPORT UntrustworthyContextMenuParams {
   int selection_start_offset;
 };
 
-// FIXME(beng): This would be more useful in the future and more efficient
-//              if the parameters here weren't so literally mapped to what
-//              they contain for the ContextMenu task. It might be better
-//              to make the string fields more generic so that this object
-//              could be used for more contextual actions.
-//
-// SECURITY NOTE: This struct should be populated by the browser process,
-// after validating the IPC payload from UntrustworthyContextMenuParams.
-// Note that the fields declared in ContextMenuParams can be populated based on
-// the trustworthy, browser-side data (i.e. don't need to be sent over IPC and
-// therefore don't need to be covered by UntrustworthyContextMenuParams).
-struct CONTENT_EXPORT ContextMenuParams
-    : public UntrustworthyContextMenuParams {
-  ContextMenuParams();
-  ContextMenuParams(const ContextMenuParams& other);
-  ~ContextMenuParams();
-
-  // This is the URL of the top level page that the context menu was invoked
-  // on.
-  GURL page_url;
-
-  // This is the URL of the subframe that the context menu was invoked on.
-  GURL frame_url;
-
- private:
-  // RenderFrameHostImpl is responsible for validating and sanitizing
-  // UntrustworthyContextMenuParams into ContextMenuParams and therefore is a
-  // friend.
-  friend class RenderFrameHostImpl;
-  explicit ContextMenuParams(const UntrustworthyContextMenuParams& other);
-};
-
 }  // namespace content
 
-#endif  // CONTENT_PUBLIC_COMMON_CONTEXT_MENU_PARAMS_H_
+#endif  // CONTENT_PUBLIC_COMMON_UNTRUSTWORTHY_CONTEXT_MENU_PARAMS_H_

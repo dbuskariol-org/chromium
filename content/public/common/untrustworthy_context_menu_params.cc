@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/public/common/context_menu_params.h"
+#include "content/public/common/untrustworthy_context_menu_params.h"
 
 namespace content {
 
@@ -11,8 +11,7 @@ const int32_t CustomContextMenuContext::kCurrentRenderWidget = INT32_MAX;
 CustomContextMenuContext::CustomContextMenuContext()
     : is_pepper_menu(false),
       request_id(0),
-      render_widget_id(kCurrentRenderWidget) {
-}
+      render_widget_id(kCurrentRenderWidget) {}
 
 UntrustworthyContextMenuParams::UntrustworthyContextMenuParams()
     : media_type(blink::ContextMenuDataMediaType::kNone),
@@ -38,13 +37,5 @@ UntrustworthyContextMenuParams::UntrustworthyContextMenuParams(
     const UntrustworthyContextMenuParams& other) = default;
 
 UntrustworthyContextMenuParams::~UntrustworthyContextMenuParams() = default;
-
-ContextMenuParams::ContextMenuParams() = default;
-ContextMenuParams::ContextMenuParams(const ContextMenuParams& other) = default;
-ContextMenuParams::~ContextMenuParams() = default;
-
-ContextMenuParams::ContextMenuParams(
-    const UntrustworthyContextMenuParams& other)
-    : UntrustworthyContextMenuParams(other) {}
 
 }  // namespace content
