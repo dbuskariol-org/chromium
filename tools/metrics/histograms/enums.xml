@@ -7562,11 +7562,6 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Unresponsive"/>
 </enum>
 
-<enum name="BooleanUpdateReceived">
-  <int value="0" label="No update"/>
-  <int value="1" label="Received update"/>
-</enum>
-
 <enum name="BooleanUpload">
   <int value="0" label="Download"/>
   <int value="1" label="Upload"/>
