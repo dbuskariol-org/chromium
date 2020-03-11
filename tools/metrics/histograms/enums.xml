@@ -68509,11 +68509,13 @@ Full version information for the fingerprint enum values:
   <int value="-1569772500" label="/manageAccessibility/tts"/>
   <int value="-1555301506" label="/content/notifications"/>
   <int value="-1484929503" label="/manageAccessibility/switchAccess"/>
+  <int value="-1381133263" label="/passwords/check"/>
   <int value="-1312744606" label="/knownNetworks"/>
   <int value="-1299234352" label="/pluginVm/details"/>
   <int value="-1297176639" label="/fonts"/>
   <int value="-1283080115" label="/content/backgroundSync"/>
   <int value="-1279337432" label="/power"/>
+  <int value="-1231761426" label="/content/ar"/>
   <int value="-1227595649" label="/all"/>
   <int value="-1204780990" label="/dateTime/timeZone"/>
   <int value="-1167413307" label="/inputMethods"/>
@@ -68558,16 +68560,20 @@ Full version information for the fingerprint enum values:
   <int value="-146134264" label="/content/protectedContent"/>
   <int value="-59332819" label="/accountManager"/>
   <int value="-44267040" label="/bluetoothDevices"/>
+  <int value="-23311755" label="/content/vr"/>
   <int value="-14666765" label="/accounts"/>
   <int value="8030578" label="/crostini/sharedUsbDevices"/>
   <int value="8530592" label="/syncSetup/advanced"/>
   <int value="16287984" label="/languages/details"/>
   <int value="60238454" label="/content/ads"/>
+  <int value="104900992" label="/content/insecureContent"/>
   <int value="223791833" label="/help/about"/>
+  <int value="254445609" label="/content/filesystem"/>
   <int value="273561147" label="/autofill"/>
   <int value="297583680" label="/device"/>
   <int value="334469894" label="/people"/>
   <int value="338873252" label="/passwords"/>
+  <int value="350639838" label="/cookies"/>
   <int value="408074355" label="/onStartup"/>
   <int value="463749620" label="/content/flash"/>
   <int value="537677705" label="/cookies/detail"/>
@@ -68577,6 +68583,8 @@ Full version information for the fingerprint enum values:
   <int value="682420978" label="/content/bluetoothScanning"/>
   <int value="683177973" label="/cupsPrinters"/>
   <int value="754547746" label="/help/details"/>
+  <int value="805959528" label="/security"/>
+  <int value="838443004" label="/safetyCheck"/>
   <int value="856943564" label="/content/siteDetails"/>
   <int value="868952532" label="/pointer-overlay"/>
   <int value="872535792" label="/parentalControls"/>
