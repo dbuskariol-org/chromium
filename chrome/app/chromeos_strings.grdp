@@ -4498,6 +4498,12 @@
   <message name="IDS_EDU_LOGIN_NEXT" desc="The name of the button that goes to the next step in EDU login flow.">
     Next
   </message>
+  <message name="IDS_EDU_LOGIN_WELCOME_TITLE" desc="Title for the welcome screen in EDU account addition flow.">
+    Get started with a school account
+  </message>
+  <message name="IDS_EDU_LOGIN_WELCOME_BODY" desc="Text on the welcome screen in EDU account addition flow informing user to ask their parent for permission to add the account.">
+    To add an account for access to educational resources, ask a parent to give you permission
+  </message>
 
   <!-- TPM firmware auto-update notifications -->
   <message name="IDS_TPM_AUTO_UPDATE_PLANNED_NOTIFICATION_TITLE" desc="Title for the notification informing the user that local data will be deleted.">
