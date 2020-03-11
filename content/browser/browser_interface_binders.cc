@@ -327,30 +327,6 @@ BindWorkerReceiverForOriginAndFrameId(
       base::Unretained(host), method);
 }
 
-template <typename WorkerHost, typename Interface>
-base::RepeatingCallback<void(const url::Origin&,
-                             mojo::PendingReceiver<Interface>)>
-BindWorkerReceiverForOriginAndCOEP(
-    void (RenderProcessHost::*method)(const network::CrossOriginEmbedderPolicy&,
-                                      const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
-    WorkerHost* host,
-    const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy) {
-  return base::BindRepeating(
-      [](WorkerHost* host,
-         void (RenderProcessHost::*method)(
-             const network::CrossOriginEmbedderPolicy&, const url::Origin&,
-             mojo::PendingReceiver<Interface>),
-         const network::CrossOriginEmbedderPolicy& cross_origin_embedder_policy,
-         const url::Origin& origin, mojo::PendingReceiver<Interface> receiver) {
-        RenderProcessHost* process_host = host->GetProcessHost();
-        if (process_host)
-          (process_host->*method)(cross_origin_embedder_policy, origin,
-                                  std::move(receiver));
-      },
-      base::Unretained(host), method, cross_origin_embedder_policy);
-}
-
 template <typename... Args>
 void RunOrPostTaskToBindServiceWorkerReceiver(
     ServiceWorkerProviderHost* host,
@@ -763,6 +739,8 @@ void PopulateDedicatedWorkerBinders(DedicatedWorkerHost* host,
   map->Add<blink::mojom::QuicTransportConnector>(
       base::BindRepeating(&DedicatedWorkerHost::CreateQuicTransportConnector,
                           base::Unretained(host)));
+  map->Add<blink::mojom::CacheStorage>(base::BindRepeating(
+      &DedicatedWorkerHost::BindCacheStorage, base::Unretained(host)));
 #if !defined(OS_ANDROID)
   map->Add<blink::mojom::SerialService>(base::BindRepeating(
       &DedicatedWorkerHost::BindSerialService, base::Unretained(host)));
@@ -798,12 +776,6 @@ void PopulateBinderMapWithContext(
   map->Add<blink::mojom::QuotaDispatcherHost>(
       BindWorkerReceiverForOriginAndFrameId(
           &RenderProcessHost::BindQuotaDispatcherHost, host));
-
-  // render process host binders taking a Cross-Origin-Embedder-Policy and an
-  // origin.
-  map->Add<blink::mojom::CacheStorage>(BindWorkerReceiverForOriginAndCOEP(
-      &RenderProcessHost::BindCacheStorage, host,
-      host->cross_origin_embedder_policy()));
 }
 
 void PopulateBinderMap(DedicatedWorkerHost* host,
@@ -839,6 +811,8 @@ void PopulateSharedWorkerBinders(SharedWorkerHost* host,
       &SharedWorkerHost::CreateAppCacheBackend, base::Unretained(host)));
   map->Add<blink::mojom::QuicTransportConnector>(base::BindRepeating(
       &SharedWorkerHost::CreateQuicTransportConnector, base::Unretained(host)));
+  map->Add<blink::mojom::CacheStorage>(base::BindRepeating(
+      &SharedWorkerHost::BindCacheStorage, base::Unretained(host)));
 
   // render process host binders
   map->Add<media::mojom::VideoDecodePerfHistory>(
@@ -872,14 +846,6 @@ void PopulateBinderMapWithContext(
   map->Add<blink::mojom::QuotaDispatcherHost>(
       BindWorkerReceiverForOriginAndFrameId(
           &RenderProcessHost::BindQuotaDispatcherHost, host));
-
-  // render process host binders taking a Cross-Origin-Embedder-Policy and an
-  // origin.
-  // TODO(https://crbug.com/1031542): Add support enforcing CORP in
-  // cache.match() for SharedWorker
-  map->Add<blink::mojom::CacheStorage>(BindWorkerReceiverForOriginAndCOEP(
-      &RenderProcessHost::BindCacheStorage, host,
-      network::CrossOriginEmbedderPolicy()));
 }
 
 void PopulateBinderMap(SharedWorkerHost* host,
