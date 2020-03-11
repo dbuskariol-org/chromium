@@ -144,6 +144,13 @@ FrameSequenceMetrics::~FrameSequenceMetrics() {
     ReportMetrics();
 }
 
+void FrameSequenceMetrics::SetScrollingThread(ThreadType scrolling_thread) {
+  DCHECK(type_ == FrameSequenceTrackerType::kTouchScroll ||
+         type_ == FrameSequenceTrackerType::kWheelScroll);
+  DCHECK_EQ(scrolling_thread_, ThreadType::kUnknown);
+  scrolling_thread_ = scrolling_thread;
+}
+
 void FrameSequenceMetrics::Merge(
     std::unique_ptr<FrameSequenceMetrics> metrics) {
   DCHECK_EQ(type_, metrics->type_);
@@ -186,6 +193,7 @@ void FrameSequenceMetrics::ReportMetrics() {
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kMain, type_),
       main_throughput_);
 
+  // Report for the 'slower thread' for the metrics where it makes sense.
   bool should_report_slower_thread =
       IsInteractionType(type_) || type_ == FrameSequenceTrackerType::kUniversal;
   if (should_report_slower_thread) {
@@ -215,6 +223,40 @@ void FrameSequenceMetrics::ReportMetrics() {
       throughput_ukm_reporter_->ReportThroughputUkm(
           slower_throughput_percent, impl_throughput_percent,
           main_throughput_percent, type_);
+    }
+  }
+
+  // Report for the 'scrolling thread' for the scrolling interactions.
+  if (scrolling_thread_ != ThreadType::kUnknown) {
+    base::Optional<int> scrolling_thread_throughput;
+    switch (scrolling_thread_) {
+      case ThreadType::kCompositor:
+        scrolling_thread_throughput = impl_throughput_percent;
+        break;
+      case ThreadType::kMain:
+        scrolling_thread_throughput = main_throughput_percent;
+        break;
+      case ThreadType::kSlower:
+      case ThreadType::kUnknown:
+        NOTREACHED();
+        break;
+    }
+    if (scrolling_thread_throughput.has_value()) {
+      // It's OK to use the UMA histogram in the following code while still
+      // using |GetThroughputHistogramName()| to get the name of the metric,
+      // since the input-params to the function never change at runtime.
+      if (type_ == FrameSequenceTrackerType::kWheelScroll) {
+        UMA_HISTOGRAM_PERCENTAGE(
+            GetThroughputHistogramName(FrameSequenceTrackerType::kWheelScroll,
+                                       "ScrollingThread"),
+            scrolling_thread_throughput.value());
+      } else {
+        DCHECK_EQ(type_, FrameSequenceTrackerType::kTouchScroll);
+        UMA_HISTOGRAM_PERCENTAGE(
+            GetThroughputHistogramName(FrameSequenceTrackerType::kTouchScroll,
+                                       "ScrollingThread"),
+            scrolling_thread_throughput.value());
+      }
     }
   }
 
@@ -253,18 +295,19 @@ FrameSequenceTrackerCollection::~FrameSequenceTrackerCollection() {
   removal_trackers_.clear();
 }
 
-void FrameSequenceTrackerCollection::StartSequence(
+FrameSequenceMetrics* FrameSequenceTrackerCollection::StartSequence(
     FrameSequenceTrackerType type) {
   if (is_single_threaded_)
-    return;
+    return nullptr;
   if (frame_trackers_.contains(type))
-    return;
+    return frame_trackers_[type]->metrics();
   auto tracker = base::WrapUnique(
       new FrameSequenceTracker(type, throughput_ukm_reporter_.get()));
   frame_trackers_[type] = std::move(tracker);
 
   if (compositor_frame_reporting_controller_)
     compositor_frame_reporting_controller_->AddActiveTracker(type);
+  return frame_trackers_[type]->metrics();
 }
 
 void FrameSequenceTrackerCollection::StopSequence(

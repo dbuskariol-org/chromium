@@ -4537,9 +4537,6 @@ void LayerTreeHostImpl::DidLatchToScroller(const ScrollState& scroll_state,
   last_latched_scroller_ = CurrentlyScrollingNode()->element_id;
   latched_scroll_type_ = type;
 
-  frame_trackers_.StartSequence(latched_scroll_type_ == ScrollInputType::kWheel
-                                    ? FrameSequenceTrackerType::kWheelScroll
-                                    : FrameSequenceTrackerType::kTouchScroll);
   client_->RenewTreePriority();
   RecordCompositorSlowScrollMetric(type, CC_THREAD);
 
@@ -4937,14 +4934,52 @@ void LayerTreeHostImpl::ScrollEnd(bool should_snap) {
   DCHECK(latched_scroll_type_.has_value());
 
   browser_controls_offset_manager_->ScrollEnd();
-  frame_trackers_.StopSequence(latched_scroll_type_ == ScrollInputType::kWheel
-                                   ? FrameSequenceTrackerType::kWheelScroll
-                                   : FrameSequenceTrackerType::kTouchScroll);
 
   ClearCurrentlyScrollingNode();
   deferred_scroll_end_ = false;
   scroll_gesture_did_end_ = true;
   client_->SetNeedsCommitOnImplThread();
+}
+
+void LayerTreeHostImpl::RecordScrollBegin(
+    ScrollInputType input_type,
+    ScrollBeginThreadState scroll_start_state) {
+  // TODO(crbug.com/1060717): Also report throughput separately for scrollbar.
+  if (input_type != ScrollInputType::kWheel &&
+      input_type != ScrollInputType::kTouchscreen)
+    return;
+
+  auto* metrics = frame_trackers_.StartSequence(
+      input_type == ScrollInputType::kWheel
+          ? FrameSequenceTrackerType::kWheelScroll
+          : FrameSequenceTrackerType::kTouchScroll);
+  if (!metrics)
+    return;
+
+  // The main-thread is the 'scrolling thread' if:
+  //   (1) the scroll is driven by the main thread, or
+  //   (2) the scroll is driven by the compositor, but blocked on the main
+  //       thread.
+  // Otherwise, the compositor-thread is the 'scrolling thread'.
+  // TODO(crbug.com/1060712): We should also count 'main thread' as the
+  // 'scrolling thread' if the layer being scrolled has scroll-event handlers.
+  FrameSequenceMetrics::ThreadType scrolling_thread;
+  switch (scroll_start_state) {
+    case ScrollBeginThreadState::kScrollingOnCompositor:
+      scrolling_thread = FrameSequenceMetrics::ThreadType::kCompositor;
+      break;
+    case ScrollBeginThreadState::kScrollingOnMain:
+    case ScrollBeginThreadState::kScrollingOnCompositorBlockedOnMain:
+      scrolling_thread = FrameSequenceMetrics::ThreadType::kMain;
+      break;
+  }
+  metrics->SetScrollingThread(scrolling_thread);
+}
+
+void LayerTreeHostImpl::RecordScrollEnd(ScrollInputType input_type) {
+  frame_trackers_.StopSequence(input_type == ScrollInputType::kWheel
+                                   ? FrameSequenceTrackerType::kWheelScroll
+                                   : FrameSequenceTrackerType::kTouchScroll);
 }
 
 InputHandlerPointerResult LayerTreeHostImpl::MouseDown(
