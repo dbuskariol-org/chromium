@@ -66,7 +66,7 @@
         android:order="11"
         android:title="@string/prefs_section_advanced"/>
     <Preference
-        android:fragment="org.chromium.chrome.browser.settings.privacy.PrivacySettings"
+        android:fragment="org.chromium.chrome.browser.privacy.settings.PrivacySettings"
         android:key="privacy"
         android:order="12"
         android:title="@string/prefs_privacy"/>
