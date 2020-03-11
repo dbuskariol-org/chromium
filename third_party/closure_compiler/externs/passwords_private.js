@@ -115,18 +115,10 @@ chrome.passwordsPrivate.CompromisedCredential;
 
 /**
  * @typedef {{
- *   compromisedCredentials:
- * !Array<!chrome.passwordsPrivate.CompromisedCredential>,
- *   elapsedTimeSinceLastCheck: (string|undefined)
- * }}
- */
-chrome.passwordsPrivate.CompromisedCredentialsInfo;
-
-/**
- * @typedef {{
  *   state: !chrome.passwordsPrivate.PasswordCheckState,
  *   alreadyProcessed: (number|undefined),
- *   remainingInQueue: (number|undefined)
+ *   remainingInQueue: (number|undefined),
+ *   elapsedTimeSinceLastCheck: (string|undefined)
  * }}
  */
 chrome.passwordsPrivate.PasswordCheckStatus;
@@ -230,11 +222,11 @@ chrome.passwordsPrivate.cancelExportPasswords = function() {};
 chrome.passwordsPrivate.isOptedInForAccountStorage = function(callback) {};
 
 /**
- * Requests the latest information about compromised credentials.
- * @param {function(!chrome.passwordsPrivate.CompromisedCredentialsInfo):void}
+ * Requests the latest compromised credentials.
+ * @param {function(!Array<!chrome.passwordsPrivate.CompromisedCredential>):void}
  *     callback
  */
-chrome.passwordsPrivate.getCompromisedCredentialsInfo = function(callback) {};
+chrome.passwordsPrivate.getCompromisedCredentials = function(callback) {};
 
 /**
  * Requests the plaintext password for |credential|. |callback| gets invoked
@@ -317,7 +309,7 @@ chrome.passwordsPrivate.onAccountStorageOptInStateChanged;
  * Fired when the compromised credentials changed.
  * @type {!ChromeEvent}
  */
-chrome.passwordsPrivate.onCompromisedCredentialsInfoChanged;
+chrome.passwordsPrivate.onCompromisedCredentialsChanged;
 
 /**
  * Fired when the status of the password check changes.
