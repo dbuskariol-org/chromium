@@ -553,7 +553,7 @@ const char kSSLVersionTLSv11[] = "tls1.1";
 // TLS 1.2 mode for |kSSLVersionMax| and |kSSLVersionMin| switches.
 const char kSSLVersionTLSv12[] = "tls1.2";
 
-// TLS 1.2 mode for |kSSLVersionMax| and |kSSLVersionMin| switches.
+// TLS 1.3 mode for |kSSLVersionMax| and |kSSLVersionMin| switches.
 const char kSSLVersionTLSv13[] = "tls1.3";
 
 // Starts the browser maximized, regardless of any previous settings.
