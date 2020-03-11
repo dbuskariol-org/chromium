@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_COMPONENTS_SHORTCUT_VIEWER_KEYBOARD_SHORTCUT_ITEM_H_
-#define ASH_COMPONENTS_SHORTCUT_VIEWER_KEYBOARD_SHORTCUT_ITEM_H_
+#ifndef ASH_SHORTCUT_VIEWER_KEYBOARD_SHORTCUT_ITEM_H_
+#define ASH_SHORTCUT_VIEWER_KEYBOARD_SHORTCUT_ITEM_H_
 
 #include <vector>
 
-#include "ash/components/shortcut_viewer/ksv_export.h"
+#include "ash/shortcut_viewer/ksv_export.h"
 #include "base/macros.h"
 #include "ui/events/keycodes/keyboard_codes.h"
 
@@ -103,4 +103,4 @@ struct KSV_EXPORT KeyboardShortcutItem {
 
 }  // namespace keyboard_shortcut_viewer
 
-#endif  // ASH_COMPONENTS_SHORTCUT_VIEWER_KEYBOARD_SHORTCUT_ITEM_H_
+#endif  // ASH_SHORTCUT_VIEWER_KEYBOARD_SHORTCUT_ITEM_H_

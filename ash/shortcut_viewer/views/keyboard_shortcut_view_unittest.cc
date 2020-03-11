@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_view.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_view.h"
 
 #include <set>
 
-#include "ash/components/shortcut_viewer/keyboard_shortcut_viewer_metadata.h"
-#include "ash/components/shortcut_viewer/views/keyboard_shortcut_item_view.h"
-#include "ash/components/shortcut_viewer/views/ksv_search_box_view.h"
+#include "ash/shortcut_viewer/keyboard_shortcut_viewer_metadata.h"
+#include "ash/shortcut_viewer/views/keyboard_shortcut_item_view.h"
+#include "ash/shortcut_viewer/views/ksv_search_box_view.h"
 #include "ash/test/ash_test_base.h"
 #include "base/bind.h"
 #include "base/test/metrics/histogram_tester.h"
