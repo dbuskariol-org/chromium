@@ -922,7 +922,6 @@ crbug.com/591099 [ Fuchsia ] tables/mozilla/core/bloomberg.html [ Failure Timeou
 crbug.com/591099 [ Fuchsia ] tables/mozilla_expected_failures/bugs/bug1010.html [ Failure ]
 crbug.com/591099 [ Fuchsia ] tables/mozilla_expected_failures/bugs/bug1055-2.html [ Failure ]
 crbug.com/591099 [ Fuchsia ] tables/mozilla_expected_failures/bugs/bug2479-5.html [ Failure ]
-crbug.com/591099 [ Win ] http/tests/images/document-policy-oversized-images-resize.html [ Skip ]
 crbug.com/591099 [ Mac ] css2.1/t1202-counter-09-b.html [ Failure ]
 crbug.com/591099 [ Mac ] css2.1/t1202-counters-09-b.html [ Failure ]
 crbug.com/591099 [ Mac ] external/wpt/css/CSS2/text/white-space-bidirectionality-001.xht [ Failure ]
@@ -959,8 +958,6 @@ crbug.com/591099 [ Mac ] paint/text/text-match-highlights-big-line-height.html [
 crbug.com/591099 [ Mac ] fast/css3-text/css3-text-decoration/text-underline-position/text-underline-position-auto.html [ Failure ]
 crbug.com/591099 [ Mac ] paint/invalidation/flexbox/remove-inline-block-descendant-of-flex.html [ Failure ]
 crbug.com/591099 [ Mac ] fast/replaced/input-radio-height-inside-auto-container.html [ Failure ]
-crbug.com/591099 [ Mac ] http/tests/images/document-policy-oversized-images-resize.html [ Failure ]
-crbug.com/974717 [ Linux ] http/tests/images/document-policy-oversized-images-resize.html [ Failure Pass ]
 crbug.com/591099 [ Mac10.11 ] virtual/audio-service/media/track/track-cue-rendering-position-auto-rtl.html [ Failure ]
 crbug.com/591099 [ Mac10.13 ] fast/dynamic/outerHTML-doc.html [ Failure ]
 
