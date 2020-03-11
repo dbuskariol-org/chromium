@@ -2184,6 +2184,9 @@ void AXLayoutObject::AddChildren() {
   AddValidationMessageChild();
   AddAccessibleNodeChildren();
 
+  for (const auto& owned_child : owned_children)
+    AddChild(owned_child);
+
   for (const auto& child : children_) {
     if (!is_continuation && !child->CachedParentObject()) {
       // Never set continuations as a parent object. The first layout object
@@ -2191,9 +2194,6 @@ void AXLayoutObject::AddChildren() {
       child->SetParent(this);
     }
   }
-
-  for (const auto& owned_child : owned_children)
-    AddChild(owned_child);
 }
 
 bool AXLayoutObject::CanHaveChildren() const {
