@@ -46,7 +46,7 @@
 #include "components/vector_icons/vector_icons.h"
 #include "third_party/blink/public/common/features.h"
 #include "ui/base/hit_test.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/base/window_open_disposition.h"
 #include "ui/compositor/layer_animation_element.h"
 #include "ui/compositor/layer_animation_sequence.h"
@@ -270,8 +270,7 @@ class WebAppFrameToolbarView::NavigationButtonContainer
     const SkColor disabled_color =
         SkColorSetA(icon_color_, gfx::kDisabledControlAlpha);
 
-    const bool touch_ui =
-        ui::MaterialDesignController::GetInstance()->touch_ui();
+    const bool touch_ui = ui::TouchUiController::Get()->touch_ui();
     const gfx::VectorIcon& back_image = GetBackImage(touch_ui);
     back_button_->SetImage(views::Button::STATE_NORMAL,
                            gfx::CreateVectorIcon(back_image, icon_color_));
@@ -309,11 +308,10 @@ class WebAppFrameToolbarView::NavigationButtonContainer
 
   SkColor icon_color_ = gfx::kPlaceholderColor;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
-          base::BindRepeating(
-              &NavigationButtonContainer::GenerateMinimalUIButtonImages,
-              base::Unretained(this)));
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(base::BindRepeating(
+          &NavigationButtonContainer::GenerateMinimalUIButtonImages,
+          base::Unretained(this)));
 
   // These members are owned by the views hierarchy.
   ToolbarButton* back_button_ = nullptr;

@@ -72,7 +72,7 @@
 #include "media/base/media_switches.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/l10n/l10n_util.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/base/theme_provider.h"
 #include "ui/base/window_open_disposition.h"
 #include "ui/compositor/layer.h"
@@ -899,7 +899,7 @@ void ToolbarView::LoadImages() {
         ThemeProperties::COLOR_TOOLBAR_VERTICAL_SEPARATOR));
   }
 
-  const bool touch_ui = ui::MaterialDesignController::GetInstance()->touch_ui();
+  const bool touch_ui = ui::TouchUiController::Get()->touch_ui();
 
   const gfx::VectorIcon& back_image =
       touch_ui ? kBackArrowTouchIcon : vector_icons::kBackArrowIcon;

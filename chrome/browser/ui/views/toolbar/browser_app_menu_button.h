@@ -14,7 +14,7 @@
 #include "chrome/browser/ui/toolbar/app_menu_icon_controller.h"
 #include "chrome/browser/ui/views/frame/app_menu_button.h"
 #include "components/feature_engagement/buildflags.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/views/view.h"
 
 class ToolbarView;
@@ -90,8 +90,8 @@ class BrowserAppMenuButton : public AppMenuButton {
   // The feature, if any, for which this button is anchoring a promo.
   base::Optional<InProductHelpFeature> promo_feature_;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&BrowserAppMenuButton::OnTouchUiChanged,
                               base::Unretained(this)));
 

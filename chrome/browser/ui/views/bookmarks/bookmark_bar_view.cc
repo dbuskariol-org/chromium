@@ -72,8 +72,8 @@
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/dragdrop/os_exchange_data.h"
 #include "ui/base/l10n/l10n_util.h"
-#include "ui/base/material_design/material_design_controller.h"
 #include "ui/base/page_transition_types.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/base/theme_provider.h"
 #include "ui/base/window_open_disposition.h"
@@ -1550,8 +1550,7 @@ void BookmarkBarView::ConfigureButton(const BookmarkNode* node,
     bool themify_icon = node->url().SchemeIs(content::kChromeUIScheme);
     gfx::ImageSkia favicon = model_->GetFavicon(node).AsImageSkia();
     if (favicon.isNull()) {
-      if (ui::MaterialDesignController::GetInstance()->touch_ui() &&
-          GetThemeProvider()) {
+      if (ui::TouchUiController::Get()->touch_ui() && GetThemeProvider()) {
         // This favicon currently does not match the default favicon icon used
         // elsewhere in the codebase.
         // See https://crbug/814447
@@ -1899,7 +1898,7 @@ void BookmarkBarView::UpdateAppearanceForTheme() {
 
   const SkColor overflow_color =
       theme_provider->GetColor(ThemeProperties::COLOR_TOOLBAR_BUTTON_ICON);
-  const bool touch_ui = ui::MaterialDesignController::GetInstance()->touch_ui();
+  const bool touch_ui = ui::TouchUiController::Get()->touch_ui();
   overflow_button_->SetImage(
       views::Button::STATE_NORMAL,
       gfx::CreateVectorIcon(

@@ -28,7 +28,7 @@
 #include "chrome/browser/ui/web_applications/app_browser_controller.h"
 #include "chrome/common/chrome_switches.h"
 #include "ui/base/hit_test.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/events/event_handler.h"
 #include "ui/gfx/font_list.h"
 #include "ui/native_theme/native_theme_dark_aura.h"

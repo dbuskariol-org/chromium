@@ -27,7 +27,7 @@
 #include "chrome/browser/ui/views/omnibox/omnibox_view_views.h"
 #include "chrome/browser/ui/views/page_action/page_action_icon_view.h"
 #include "components/security_state/core/security_state.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/gfx/animation/slide_animation.h"
 #include "ui/gfx/font.h"
 #include "ui/gfx/geometry/rect.h"
@@ -392,8 +392,8 @@ class LocationBarView : public LocationBar,
 
   bool is_initialized_ = false;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&LocationBarView::OnTouchUiChanged,
                               base::Unretained(this)));
 

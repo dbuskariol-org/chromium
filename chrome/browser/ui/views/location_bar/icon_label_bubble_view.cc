@@ -12,7 +12,7 @@
 #include "chrome/browser/ui/omnibox/omnibox_theme.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/l10n/l10n_util.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/compositor/layer_animator.h"
 #include "ui/compositor/scoped_layer_animation_settings.h"
 #include "ui/gfx/canvas.h"
@@ -32,8 +32,6 @@
 #include "ui/views/controls/highlight_path_generator.h"
 #include "ui/views/controls/image_view.h"
 #include "ui/views/widget/widget.h"
-
-using MD = ui::MaterialDesignController;
 
 namespace {
 
@@ -425,7 +423,8 @@ gfx::Size IconLabelBubbleView::GetSizeForLabelWidth(int label_width) const {
 int IconLabelBubbleView::GetInternalSpacing() const {
   if (image()->GetPreferredSize().IsEmpty())
     return 0;
-  return (MD::GetInstance()->touch_ui() ? 10 : 8) + GetExtraInternalSpacing();
+  return (ui::TouchUiController::Get()->touch_ui() ? 10 : 8) +
+         GetExtraInternalSpacing();
 }
 
 int IconLabelBubbleView::GetExtraInternalSpacing() const {

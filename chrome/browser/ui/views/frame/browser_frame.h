@@ -10,7 +10,7 @@
 #include "base/macros.h"
 #include "build/build_config.h"
 #include "content/public/browser/keyboard_event_processing_result.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/views/context_menu_controller.h"
 #include "ui/views/widget/widget.h"
 
@@ -149,8 +149,8 @@ class BrowserFrame : public views::Widget, public views::ContextMenuController {
   // NativeBrowserFrame::UsesNativeSystemMenu() returns false.
   std::unique_ptr<views::MenuRunner> menu_runner_;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&BrowserFrame::OnTouchUiChanged,
                               base::Unretained(this)));
 

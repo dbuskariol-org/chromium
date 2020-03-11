@@ -100,8 +100,6 @@
 #include "ui/aura/window.h"
 #endif
 
-using MD = ui::MaterialDesignController;
-
 namespace {
 
 // Distance from the next/previous stacked before before we consider the tab
@@ -268,7 +266,7 @@ TabDragController::EventSource EventSourceFromEvent(
 
 int GetStackableTabWidth() {
   return TabStyle::GetTabOverlap() +
-         (MD::GetInstance()->touch_ui() ? 136 : 102);
+         (ui::TouchUiController::Get()->touch_ui() ? 136 : 102);
 }
 
 }  // namespace

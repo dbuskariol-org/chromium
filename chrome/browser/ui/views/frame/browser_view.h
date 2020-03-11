@@ -42,8 +42,8 @@
 #include "chrome/common/buildflags.h"
 #include "components/infobars/core/infobar_container.h"
 #include "ui/base/accelerators/accelerator.h"
-#include "ui/base/material_design/material_design_controller.h"
 #include "ui/base/models/simple_menu_model.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/views/controls/button/button.h"
 #include "ui/views/controls/webview/unhandled_keyboard_event_handler.h"
@@ -856,8 +856,8 @@ class BrowserView : public BrowserWindow,
 
   std::unique_ptr<ImmersiveModeController> immersive_mode_controller_;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&BrowserView::MaybeInitializeWebUITabStrip,
                               base::Unretained(this)));
 

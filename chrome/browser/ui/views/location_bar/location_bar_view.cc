@@ -827,7 +827,7 @@ void LocationBarView::ButtonPressed(views::Button* sender,
 }
 
 void LocationBarView::RefreshClearAllButtonIcon() {
-  const bool touch_ui = ui::MaterialDesignController::GetInstance()->touch_ui();
+  const bool touch_ui = ui::TouchUiController::Get()->touch_ui();
   const gfx::VectorIcon& icon =
       touch_ui ? omnibox::kClearIcon : kTabCloseNormalIcon;
   SetImageFromVectorIcon(clear_all_button_, icon,

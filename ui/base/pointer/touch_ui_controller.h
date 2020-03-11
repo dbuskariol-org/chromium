@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_BASE_MATERIAL_DESIGN_MATERIAL_DESIGN_CONTROLLER_H_
-#define UI_BASE_MATERIAL_DESIGN_MATERIAL_DESIGN_CONTROLLER_H_
+#ifndef UI_BASE_POINTER_TOUCH_UI_CONTROLLER_H_
+#define UI_BASE_POINTER_TOUCH_UI_CONTROLLER_H_
 
 #include <string>
 
@@ -19,8 +19,8 @@ class SingletonHwndObserver;
 
 namespace ui {
 
-// Central controller to handle material design modes.
-class UI_BASE_EXPORT MaterialDesignController {
+// Central controller to handle touch UI modes.
+class UI_BASE_EXPORT TouchUiController {
  public:
   using CallbackList = base::CallbackList<void()>;
   using Subscription = CallbackList::Subscription;
@@ -33,25 +33,23 @@ class UI_BASE_EXPORT MaterialDesignController {
 
   class UI_BASE_EXPORT TouchUiScoperForTesting {
    public:
-    explicit TouchUiScoperForTesting(
-        bool enabled,
-        MaterialDesignController* controller = GetInstance());
+    explicit TouchUiScoperForTesting(bool enabled,
+                                     TouchUiController* controller = Get());
     TouchUiScoperForTesting(const TouchUiScoperForTesting&) = delete;
     TouchUiScoperForTesting& operator=(const TouchUiScoperForTesting&) = delete;
     ~TouchUiScoperForTesting();
 
    private:
-    MaterialDesignController* const controller_;
+    TouchUiController* const controller_;
     const TouchUiState old_state_;
   };
 
-  static MaterialDesignController* GetInstance();
+  static TouchUiController* Get();
 
-  explicit MaterialDesignController(
-      TouchUiState touch_ui_state = TouchUiState::kAuto);
-  MaterialDesignController(const MaterialDesignController&) = delete;
-  MaterialDesignController& operator=(const MaterialDesignController&) = delete;
-  ~MaterialDesignController();
+  explicit TouchUiController(TouchUiState touch_ui_state = TouchUiState::kAuto);
+  TouchUiController(const TouchUiController&) = delete;
+  TouchUiController& operator=(const TouchUiController&) = delete;
+  ~TouchUiController();
 
   bool touch_ui() const {
     return (touch_ui_state_ == TouchUiState::kEnabled) ||
@@ -78,4 +76,4 @@ class UI_BASE_EXPORT MaterialDesignController {
 
 }  // namespace ui
 
-#endif  // UI_BASE_MATERIAL_DESIGN_MATERIAL_DESIGN_CONTROLLER_H_
+#endif  // UI_BASE_POINTER_TOUCH_UI_CONTROLLER_H_

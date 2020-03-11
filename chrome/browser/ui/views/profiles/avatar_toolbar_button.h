@@ -11,7 +11,7 @@
 #include "base/scoped_observer.h"
 #include "chrome/browser/ui/views/toolbar/toolbar_button.h"
 #include "chrome/browser/ui/views/toolbar/toolbar_icon_container_view.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/events/event.h"
 
 class AvatarToolbarButtonDelegate;
@@ -86,8 +86,8 @@ class AvatarToolbarButton : public ToolbarButton,
   Browser* const browser_;
   ToolbarIconContainerView* const parent_;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&AvatarToolbarButton::SetInsets,
                               base::Unretained(this)));
 

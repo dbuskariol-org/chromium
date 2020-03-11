@@ -13,7 +13,7 @@
 #include "base/scoped_observer.h"
 #include "base/strings/string16.h"
 #include "third_party/skia/include/core/SkPath.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/gfx/geometry/insets.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/views/animation/ink_drop_host_view.h"
@@ -265,8 +265,8 @@ class IconLabelBubbleView : public views::InkDropObserver,
   // virtual child of this view.
   views::AXVirtualView* alert_virtual_view_;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&IconLabelBubbleView::OnTouchUiChanged,
                               base::Unretained(this)));
 

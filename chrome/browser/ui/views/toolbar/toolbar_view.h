@@ -26,7 +26,7 @@
 #include "chrome/browser/upgrade_detector/upgrade_observer.h"
 #include "components/prefs/pref_member.h"
 #include "ui/base/accelerators/accelerator.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 #include "ui/views/accessible_pane_view.h"
 #include "ui/views/animation/animation_delegate_views.h"
 #include "ui/views/controls/button/button.h"
@@ -288,8 +288,8 @@ class ToolbarView : public views::AccessiblePaneView,
   // The display mode used when laying out the toolbar.
   const DisplayMode display_mode_;
 
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_ =
-      ui::MaterialDesignController::GetInstance()->RegisterCallback(
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_ =
+      ui::TouchUiController::Get()->RegisterCallback(
           base::BindRepeating(&ToolbarView::OnTouchUiChanged,
                               base::Unretained(this)));
 

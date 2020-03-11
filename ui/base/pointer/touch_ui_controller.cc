@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 
 #include <string>
 
@@ -32,20 +32,20 @@ bool IsTabletMode() {
 }  // namespace
 #endif  // defined(OS_WIN)
 
-MaterialDesignController::TouchUiScoperForTesting::TouchUiScoperForTesting(
+TouchUiController::TouchUiScoperForTesting::TouchUiScoperForTesting(
     bool enabled,
-    MaterialDesignController* controller)
+    TouchUiController* controller)
     : controller_(controller),
       old_state_(controller_->SetTouchUiState(
           enabled ? TouchUiState::kEnabled : TouchUiState::kDisabled)) {}
 
-MaterialDesignController::TouchUiScoperForTesting::~TouchUiScoperForTesting() {
+TouchUiController::TouchUiScoperForTesting::~TouchUiScoperForTesting() {
   controller_->SetTouchUiState(old_state_);
 }
 
 // static
-MaterialDesignController* MaterialDesignController::GetInstance() {
-  static base::NoDestructor<MaterialDesignController> instance([] {
+TouchUiController* TouchUiController::Get() {
+  static base::NoDestructor<TouchUiController> instance([] {
     const std::string switch_value =
         base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII(
             switches::kTopChromeTouchUi);
@@ -57,7 +57,7 @@ MaterialDesignController* MaterialDesignController::GetInstance() {
   return instance.get();
 }
 
-MaterialDesignController::MaterialDesignController(TouchUiState touch_ui_state)
+TouchUiController::TouchUiController(TouchUiState touch_ui_state)
     : touch_ui_state_(touch_ui_state) {
 #if defined(OS_WIN)
   if (base::MessageLoopCurrentForUI::IsSet() &&
@@ -66,30 +66,29 @@ MaterialDesignController::MaterialDesignController(TouchUiState touch_ui_state)
         std::make_unique<gfx::SingletonHwndObserver>(base::BindRepeating(
             [](HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
               if (message == WM_SETTINGCHANGE)
-                GetInstance()->OnTabletModeToggled(IsTabletMode());
+                Get()->OnTabletModeToggled(IsTabletMode());
             }));
     tablet_mode_ = IsTabletMode();
   }
 #endif
 }
 
-MaterialDesignController::~MaterialDesignController() = default;
+TouchUiController::~TouchUiController() = default;
 
-void MaterialDesignController::OnTabletModeToggled(bool enabled) {
+void TouchUiController::OnTabletModeToggled(bool enabled) {
   const bool was_touch_ui = touch_ui();
   tablet_mode_ = enabled;
   if (touch_ui() != was_touch_ui)
     callback_list_.Notify();
 }
 
-std::unique_ptr<MaterialDesignController::Subscription>
-MaterialDesignController::RegisterCallback(
-    const base::RepeatingClosure& closure) {
+std::unique_ptr<TouchUiController::Subscription>
+TouchUiController::RegisterCallback(const base::RepeatingClosure& closure) {
   return callback_list_.Add(closure);
 }
 
-MaterialDesignController::TouchUiState
-MaterialDesignController::SetTouchUiState(TouchUiState touch_ui_state) {
+TouchUiController::TouchUiState TouchUiController::SetTouchUiState(
+    TouchUiState touch_ui_state) {
   const bool was_touch_ui = touch_ui();
   const TouchUiState old_state = std::exchange(touch_ui_state_, touch_ui_state);
   if (touch_ui() != was_touch_ui)

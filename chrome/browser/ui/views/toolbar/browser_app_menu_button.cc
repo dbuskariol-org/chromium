@@ -257,7 +257,7 @@ void BrowserAppMenuButton::OnThemeChanged() {
 }
 
 void BrowserAppMenuButton::UpdateIcon() {
-  bool touch_ui = ui::MaterialDesignController::GetInstance()->touch_ui();
+  bool touch_ui = ui::TouchUiController::Get()->touch_ui();
   if (base::FeatureList::IsEnabled(features::kUseTextForUpdateButton)) {
     const gfx::VectorIcon& icon =
         touch_ui ? kBrowserToolsTouchIcon : kBrowserToolsIcon;

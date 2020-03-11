@@ -8,7 +8,7 @@
 #include "base/scoped_observer.h"
 #include "base/test/bind_test_util.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "ui/base/material_design/material_design_controller.h"
+#include "ui/base/pointer/touch_ui_controller.h"
 
 namespace ui {
 
@@ -16,8 +16,8 @@ namespace {
 
 class TestObserver {
  public:
-  explicit TestObserver(MaterialDesignController* controller)
-      : md_subscription_(controller->RegisterCallback(
+  explicit TestObserver(TouchUiController* controller)
+      : subscription_(controller->RegisterCallback(
             base::BindLambdaForTesting([this]() { ++touch_ui_changes_; }))) {}
   ~TestObserver() = default;
 
@@ -25,43 +25,39 @@ class TestObserver {
 
  private:
   int touch_ui_changes_ = 0;
-  std::unique_ptr<ui::MaterialDesignController::Subscription> md_subscription_;
+  std::unique_ptr<ui::TouchUiController::Subscription> subscription_;
 };
 
 }  // namespace
 
 // Verifies that non-touch is the default.
-TEST(MaterialDesignControllerTest, DefaultIsNonTouch) {
-  MaterialDesignController controller;
+TEST(TouchUiControllerTest, DefaultIsNonTouch) {
+  TouchUiController controller;
   EXPECT_FALSE(controller.touch_ui());
 }
 
 // Verifies that kDisabled maps to non-touch.
-TEST(MaterialDesignControllerTest, DisabledIsNonTouch) {
-  MaterialDesignController controller(
-      MaterialDesignController::TouchUiState::kDisabled);
+TEST(TouchUiControllerTest, DisabledIsNonTouch) {
+  TouchUiController controller(TouchUiController::TouchUiState::kDisabled);
   EXPECT_FALSE(controller.touch_ui());
 }
 
 // Verifies that kAuto maps to non-touch (the default).
-TEST(MaterialDesignControllerTest, AutoIsNonTouch) {
-  MaterialDesignController controller(
-      MaterialDesignController::TouchUiState::kAuto);
+TEST(TouchUiControllerTest, AutoIsNonTouch) {
+  TouchUiController controller(TouchUiController::TouchUiState::kAuto);
   EXPECT_FALSE(controller.touch_ui());
 }
 
 // Verifies that kEnabled maps to touch.
-TEST(MaterialDesignControllerTest, EnabledIsNonTouch) {
-  MaterialDesignController controller(
-      MaterialDesignController::TouchUiState::kEnabled);
+TEST(TouchUiControllerTest, EnabledIsNonTouch) {
+  TouchUiController controller(TouchUiController::TouchUiState::kEnabled);
   EXPECT_TRUE(controller.touch_ui());
 }
 
 // Verifies that when the mode is set to non-touch and the tablet mode toggles,
 // the touch UI state does not change.
-TEST(MaterialDesignControllerTest, TabletToggledOnTouchUiDisabled) {
-  MaterialDesignController controller(
-      MaterialDesignController::TouchUiState::kDisabled);
+TEST(TouchUiControllerTest, TabletToggledOnTouchUiDisabled) {
+  TouchUiController controller(TouchUiController::TouchUiState::kDisabled);
   TestObserver observer(&controller);
 
   controller.OnTabletModeToggled(true);
@@ -75,9 +71,8 @@ TEST(MaterialDesignControllerTest, TabletToggledOnTouchUiDisabled) {
 
 // Verifies that when the mode is set to auto and the tablet mode toggles, the
 // touch UI state changes and the observer gets called back.
-TEST(MaterialDesignControllerTest, TabletToggledOnTouchUiAuto) {
-  MaterialDesignController controller(
-      MaterialDesignController::TouchUiState::kAuto);
+TEST(TouchUiControllerTest, TabletToggledOnTouchUiAuto) {
+  TouchUiController controller(TouchUiController::TouchUiState::kAuto);
   TestObserver observer(&controller);
 
   controller.OnTabletModeToggled(true);
