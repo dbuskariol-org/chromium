@@ -2055,20 +2055,8 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params) {
         ->PreventAssociationWithSpareProcess();
   }
 
-  // A main RenderFrameHost always has a RenderWidgetHost, since it is always a
-  // local root by definition.
-  // TODO(avi): Once RenderViewHostImpl has-a RenderWidgetHostImpl, it will no
-  // longer be necessary to eagerly grab a routing ID for the view.
-  // https://crbug.com/545684
-  int32_t view_routing_id = site_instance->GetProcess()->GetNextRoutingID();
-  int32_t main_frame_widget_routing_id =
-      site_instance->GetProcess()->GetNextRoutingID();
-
-  DCHECK_NE(view_routing_id, main_frame_widget_routing_id);
-
-  GetRenderManager()->Init(site_instance.get(), view_routing_id,
+  GetRenderManager()->Init(site_instance.get(),
                            /*frame_routing_id=*/MSG_ROUTING_NONE,
-                           main_frame_widget_routing_id,
                            params.renderer_initiated_creation);
 
   // blink::FrameTree::setName always keeps |unique_name| empty in case of a
