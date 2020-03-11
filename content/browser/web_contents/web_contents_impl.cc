@@ -2047,14 +2047,6 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params) {
   if (!params.last_active_time.is_null())
     last_active_time_ = params.last_active_time;
 
-  // The routing ids must either all be set or all be unset.
-  DCHECK((params.routing_id == MSG_ROUTING_NONE &&
-          params.main_frame_routing_id == MSG_ROUTING_NONE &&
-          params.main_frame_widget_routing_id == MSG_ROUTING_NONE) ||
-         (params.routing_id != MSG_ROUTING_NONE &&
-          params.main_frame_routing_id != MSG_ROUTING_NONE &&
-          params.main_frame_widget_routing_id != MSG_ROUTING_NONE));
-
   scoped_refptr<SiteInstance> site_instance = params.site_instance;
   if (!site_instance)
     site_instance = SiteInstance::Create(params.browser_context);
@@ -2068,19 +2060,16 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params) {
   // TODO(avi): Once RenderViewHostImpl has-a RenderWidgetHostImpl, it will no
   // longer be necessary to eagerly grab a routing ID for the view.
   // https://crbug.com/545684
-  int32_t view_routing_id = params.routing_id;
-  int32_t main_frame_widget_routing_id = params.main_frame_widget_routing_id;
-  if (main_frame_widget_routing_id == MSG_ROUTING_NONE) {
-    view_routing_id = site_instance->GetProcess()->GetNextRoutingID();
-    main_frame_widget_routing_id =
-        site_instance->GetProcess()->GetNextRoutingID();
-  }
+  int32_t view_routing_id = site_instance->GetProcess()->GetNextRoutingID();
+  int32_t main_frame_widget_routing_id =
+      site_instance->GetProcess()->GetNextRoutingID();
 
   DCHECK_NE(view_routing_id, main_frame_widget_routing_id);
 
-  GetRenderManager()->Init(
-      site_instance.get(), view_routing_id, params.main_frame_routing_id,
-      main_frame_widget_routing_id, params.renderer_initiated_creation);
+  GetRenderManager()->Init(site_instance.get(), view_routing_id,
+                           /*frame_routing_id=*/MSG_ROUTING_NONE,
+                           main_frame_widget_routing_id,
+                           params.renderer_initiated_creation);
 
   // blink::FrameTree::setName always keeps |unique_name| empty in case of a
   // main frame - let's do the same thing here.
@@ -2915,22 +2904,6 @@ RenderFrameHostDelegate* WebContentsImpl::CreateNewWindow(
   // objects.
   create_params.renderer_initiated_creation = !is_new_browsing_instance;
 
-  // If |is_new_browsing_instance| is true, defer routing_id allocation
-  // to the WebContentsImpl::Create() call. This is required because with
-  // a new browsing instance, WebContentsImpl::Create() may elect a different
-  // SiteInstance from |site_instance| (which happens if |site_instance| is
-  // nullptr for example).
-  //
-  // TODO(ajwong): This routing id allocation should be pushed down further
-  // into WebContentsImpl::Create().
-  if (!is_new_browsing_instance) {
-    create_params.routing_id = opener->GetProcess()->GetNextRoutingID();
-    create_params.main_frame_routing_id =
-        opener->GetProcess()->GetNextRoutingID();
-    create_params.main_frame_widget_routing_id =
-        opener->GetProcess()->GetNextRoutingID();
-  }
-
   std::unique_ptr<WebContentsImpl> new_contents;
   if (!is_guest) {
     create_params.context = view_->GetNativeView();
@@ -2973,9 +2946,10 @@ RenderFrameHostDelegate* WebContentsImpl::CreateNewWindow(
     // TODO(ajwong): This should be keyed off the RenderFrame routing id or the
     // FrameTreeNode id instead of the routing id of the Widget for the main
     // frame.  https://crbug.com/545684
-    DCHECK_NE(MSG_ROUTING_NONE, create_params.main_frame_routing_id);
-    GlobalRoutingID id(render_process_id,
-                       create_params.main_frame_widget_routing_id);
+    int32_t main_frame_routing_id = new_contents_impl->GetMainFrame()
+                                        ->GetRenderWidgetHost()
+                                        ->GetRoutingID();
+    GlobalRoutingID id(render_process_id, main_frame_routing_id);
     pending_contents_[id] = std::move(new_contents);
     AddDestructionObserver(new_contents_impl);
   }
