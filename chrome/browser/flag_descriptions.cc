@@ -3407,6 +3407,10 @@ const char kHideArcMediaNotificationsDescription[] =
     "Hides media notifications for ARC apps. Requires "
     "#enable-media-session-notifications to be enabled.";
 
+extern const char kImeAssistAutocorrectName[] = "Enable assistive autocorrect";
+extern const char kImeAssistAutocorrectDescription[] =
+    "Enable assistive auto-correct features for native IME";
+
 const char kImeAssistPersonalInfoName[] = "Enable assistive personal info";
 const char kImeAssistPersonalInfoDescription[] =
     "Enable auto-complete suggestions on personal infomation for native IME.";

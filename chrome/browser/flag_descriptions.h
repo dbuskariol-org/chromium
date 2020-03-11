@@ -1976,6 +1976,9 @@ extern const char kHelpAppDescription[];
 extern const char kHideArcMediaNotificationsName[];
 extern const char kHideArcMediaNotificationsDescription[];
 
+extern const char kImeAssistAutocorrectName[];
+extern const char kImeAssistAutocorrectDescription[];
+
 extern const char kImeAssistPersonalInfoName[];
 extern const char kImeAssistPersonalInfoDescription[];
 

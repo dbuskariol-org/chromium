@@ -1197,6 +1197,11 @@
     "expiry_milestone": 84
   },
   {
+    "name": "enable-cros-ime-assist-autocorrect",
+    "owners": [ "jopalmer", "essential-inputs-team@google.com" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "enable-cros-ime-assist-personal-info",
     "owners": [ "jiwan", "essential-inputs-team@google.com" ],
     "expiry_milestone": 90
