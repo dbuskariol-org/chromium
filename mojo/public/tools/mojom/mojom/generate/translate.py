@@ -13,7 +13,7 @@ import itertools
 import os
 import re
 
-import mojom.generate.module as mojom
+from mojom.generate import module as mojom
 from mojom.parse import ast
 
 
@@ -507,11 +507,11 @@ def _ResolveNumericEnumValues(enum_fields):
       prev_value += 1
 
     # Integral value (e.g: BEGIN = -0x1).
-    elif type(field.value) is str:
+    elif isinstance(field.value, str):
       prev_value = int(field.value, 0)
 
     # Reference to a previous enum value (e.g: INIT = BEGIN).
-    elif type(field.value) is mojom.EnumValue:
+    elif isinstance(field.value, mojom.EnumValue):
       prev_value = resolved_enum_values[field.value.mojom_name]
     else:
       raise Exception("Unresolved enum value.")

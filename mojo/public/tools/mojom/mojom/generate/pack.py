@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import mojom.generate.module as mojom
+from mojom.generate import module as mojom
 
 # This module provides a mechanism for determining the packed order and offsets
 # of a mojom.Struct.
@@ -195,23 +195,23 @@ class ByteInfo(object):
 def GetByteLayout(packed_struct):
   total_payload_size = GetPayloadSizeUpToField(
       packed_struct.packed_fields[-1] if packed_struct.packed_fields else None)
-  bytes = [ByteInfo() for i in range(total_payload_size)]
+  byte_info = [ByteInfo() for i in range(total_payload_size)]
 
   limit_of_previous_field = 0
   for packed_field in packed_struct.packed_fields:
     for i in range(limit_of_previous_field, packed_field.offset):
-      bytes[i].is_padding = True
-    bytes[packed_field.offset].packed_fields.append(packed_field)
+      byte_info[i].is_padding = True
+    byte_info[packed_field.offset].packed_fields.append(packed_field)
     limit_of_previous_field = packed_field.offset + packed_field.size
 
-  for i in range(limit_of_previous_field, len(bytes)):
-    bytes[i].is_padding = True
+  for i in range(limit_of_previous_field, len(byte_info)):
+    byte_info[i].is_padding = True
 
-  for byte in bytes:
+  for byte in byte_info:
     # A given byte cannot both be padding and have a fields packed into it.
     assert not (byte.is_padding and byte.packed_fields)
 
-  return bytes
+  return byte_info
 
 
 class VersionInfo(object):

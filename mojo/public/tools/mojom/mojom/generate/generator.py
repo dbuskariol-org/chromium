@@ -9,9 +9,9 @@ from functools import partial
 import os.path
 import re
 
-import mojom.generate.module as mojom
-import mojom.fileutil as fileutil
-import mojom.generate.pack as pack
+from mojom import fileutil
+from mojom.generate import module as mojom
+from mojom.generate import pack
 
 
 def ExpectedArraySize(kind):
@@ -114,7 +114,7 @@ def WriteFile(contents, full_path):
 
   # Dump the data to disk.
   with open(full_path, "wb") as f:
-    if type(contents) != bytes:
+    if not isinstance(contents, bytes):
       f.write(contents.encode('utf-8'))
     else:
       f.write(contents)

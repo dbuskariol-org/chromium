@@ -4,7 +4,8 @@
 """Resolves the values used for constants and enums."""
 
 from itertools import ifilter
-import mojom.generate.module as mojom
+
+from mojom.generate import module as mojom
 
 
 def ResolveConstants(module, expression_to_text):

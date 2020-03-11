@@ -7,11 +7,9 @@
 import os.path
 import sys
 
-_current_dir = os.path.dirname(os.path.realpath(__file__))
-# jinja2 is in chromium's third_party directory
-# Insert at front to override system libraries, and after path[0] == script dir
-sys.path.insert(
-    1, os.path.join(_current_dir, *([os.pardir] * 7 + ['third_party'])))
+from mojom import fileutil
+
+fileutil.EnsureModuleAvailable("jinja2")
 import jinja2
 
 

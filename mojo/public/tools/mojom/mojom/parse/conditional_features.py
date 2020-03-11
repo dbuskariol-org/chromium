@@ -3,8 +3,8 @@
 # found in the LICENSE file.
 """Helpers for processing conditionally enabled features in a mojom."""
 
-from . import ast
-from ..error import Error
+from mojom.error import Error
+from mojom.parse import ast
 
 
 class EnableIfError(Error):

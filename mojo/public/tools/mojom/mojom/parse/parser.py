@@ -6,15 +6,14 @@
 import os.path
 import sys
 
-_current_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(
-    1, os.path.join(_current_dir, *([os.pardir] * 7 + ['third_party'])))
+from mojom import fileutil
+from mojom.error import Error
+from mojom.parse import ast
+from mojom.parse.lexer import Lexer
+
+fileutil.EnsureModuleAvailable("ply")
 from ply import lex
 from ply import yacc
-
-from ..error import Error
-from . import ast
-from .lexer import Lexer
 
 _MAX_ORDINAL_VALUE = 0xffffffff
 _MAX_ARRAY_SIZE = 0xffffffff
