@@ -43526,6 +43526,19 @@ Called by update_use_counter_css.py.-->
   </int>
 </enum>
 
+<enum name="MirrorFailureType">
+  <int value="0" label="Capture Tab failed due to empty stream"/>
+  <int value="1" label="Capture Desktop failed due to timeout"/>
+  <int value="2" label="Capture Tab timed out"/>
+  <int value="3" label="Capture Desktop failed due to user cancel"/>
+  <int value="4" label="Answer not received"/>
+  <int value="5" label="Capture Tab failed due to timeout"/>
+  <int value="6" label="ICE connection closed"/>
+  <int value="7" label="Tab Media Stream Failure"/>
+  <int value="8" label="Desktop Media Stream Failure"/>
+  <int value="9" label="Unknown"/>
+</enum>
+
 <enum name="MirroringServiceErrorType">
   <int value="0" label="ANSWER_TIME_OUT"/>
   <int value="1" label="ANSWER_NOT_OK"/>
@@ -43540,6 +43553,12 @@ Called by update_use_counter_css.py.-->
   <int value="10" label="RTP_STREAM_ERROR"/>
   <int value="11" label="ENCODING_ERROR"/>
   <int value="12" label="CAST_TRANSPORT_ERROR"/>
+</enum>
+
+<enum name="MirrorType">
+  <int value="0" label="Tab"/>
+  <int value="1" label="Desktop"/>
+  <int value="2" label="Offscreen Tab"/>
 </enum>
 
 <enum name="MissingStartType">
