@@ -190,17 +190,6 @@ cr.define('settings', function() {
         },
         readOnly: true,
       },
-
-      /**
-       * True if the privacy settings redesign feature is enabled.
-       * @private
-       */
-      privacySettingsRedesignEnabled_: {
-        type: Boolean,
-        value() {
-          return loadTimeData.getBoolean('privacySettingsRedesignEnabled');
-        }
-      },
     },
 
     listeners: {
@@ -382,18 +371,6 @@ cr.define('settings', function() {
      */
     onMigrateCreditCardsClick_() {
       this.paymentsManager_.migrateCreditCards();
-    },
-
-    /**
-     * Records changes made to the "can a website check if you have saved
-     * payment methods" setting for logging, the logic of actually changing the
-     * setting is taken care of by the webUI pref.
-     * @private
-     */
-    onCanMakePaymentChange_() {
-      settings.MetricsBrowserProxyImpl.getInstance()
-          .recordSettingsPageHistogram(
-              settings.SettingsPageInteractions.PRIVACY_PAYMENT_METHOD);
     },
 
     /**

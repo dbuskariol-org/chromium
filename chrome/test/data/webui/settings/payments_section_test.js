@@ -594,40 +594,6 @@ cr.define('settings_payments_section', function() {
 
       assertEquals(0, upiRows.length);
     });
-
-    test('CanMakePaymentToggle_Visible', function() {
-      // The privacy settings redesign exposes the 'canMakePayment' toggle
-      // in the Payments section.
-      loadTimeData.overrideValues({'privacySettingsRedesignEnabled': true});
-      const section = createPaymentsSection(
-          /*creditCards=*/[], /*upiIds=*/[], /*prefValues=*/ {});
-      assertTrue(test_util.isVisible(section.$$('#canMakePaymentToggle')));
-    });
-
-    test('CanMakePaymentToggle_NotPresentBeforeRedesign', function() {
-      // Before the privacy settings redesign, the 'canMakePayment' toggle
-      // lived elsewhere.
-      loadTimeData.overrideValues({'privacySettingsRedesignEnabled': false});
-      const section = createPaymentsSection(
-          /*creditCards=*/[], /*upiIds=*/[], /*prefValues=*/ {});
-      assertFalse(!!section.$$('#canMakePaymentToggle'));
-    });
-
-    test('CanMakePaymentToggle_RecordsMetrics', async function() {
-      const testMetricsBrowserProxy = new TestMetricsBrowserProxy();
-      settings.MetricsBrowserProxyImpl.instance_ = testMetricsBrowserProxy;
-
-      loadTimeData.overrideValues({'privacySettingsRedesignEnabled': true});
-      const section = createPaymentsSection(
-          /*creditCards=*/[], /*upiIds=*/[], /*prefValues=*/ {});
-
-      section.$$('#canMakePaymentToggle').click();
-      result = await testMetricsBrowserProxy.whenCalled(
-          'recordSettingsPageHistogram');
-
-      assertEquals(
-          settings.SettingsPageInteractions.PRIVACY_PAYMENT_METHOD, result);
-    });
   });
   // #cr_define_end
 });

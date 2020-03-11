@@ -33,7 +33,6 @@ js_library("autofill_page") {
     ":autofill_section",
     ":passwords_section",
     ":payments_section",
-    "..:metrics_browser_proxy",
     "..:open_window_proxy",
     "..:route",
     "..:router",
