@@ -44423,7 +44423,8 @@ Called by update_use_counter_css.py.-->
   <int value="0" label="No Credentials."/>
   <int value="1" label="Username only."/>
   <int value="2" label="Username and password."/>
-  <int value="3" label="SSO kerberos."/>
+  <int value="3" label="SSO Kerberos AD."/>
+  <int value="4" label="SSO Kerberos Gaia."/>
 </enum>
 
 <enum name="NativeSmbFileShare_MountResult">
