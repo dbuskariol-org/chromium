@@ -1233,7 +1233,7 @@ deps = {
     Var('chromium_git') + '/external/github.com/cisco/openh264' + '@' + '6f26bce0b1c4e8ce0e13332f7c0083788def5fdf',
 
   'src/third_party/openscreen/src':
-    Var('chromium_git') + '/openscreen' + '@' + '066e6a62edccd732ebb7b7a727097e5a861d2e01',
+    Var('chromium_git') + '/openscreen' + '@' + 'dad31a0aa44041b9b0e1025073d95c680cfb43c6',
 
   'src/third_party/openxr/src': {
     'url': Var('chromium_git') + '/external/github.com/KhronosGroup/OpenXR-SDK' + '@' + '9e97b73e7dd2bfc07745489d728f6a36665c648f',
