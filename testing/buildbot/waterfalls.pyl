@@ -820,7 +820,7 @@
             {
               'kvm': '1',
               'os': 'Ubuntu-16.04',
-              'pool': 'chromium.tests.cros.vm',
+              'pool': 'chromium.tests.cros.vm.template',
             },
           ],
         },
@@ -1696,7 +1696,7 @@
             {
               'kvm': '1',
               'os': 'Ubuntu-16.04',
-              'pool': 'chromium.tests.cros.vm',
+              'pool': 'chromium.tests.cros.vm.template',
             },
           ],
           'hard_timeout': 3600,
