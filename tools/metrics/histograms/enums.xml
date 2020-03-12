@@ -32811,6 +32811,7 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="415" label="415: Unsupported Media Type"/>
   <int value="416" label="416: Requested Range Not Satisfiable"/>
   <int value="417" label="417: Expectation Failed"/>
+  <int value="429" label="429: Too Many Requests"/>
   <int value="500" label="500: Internal Server Error"/>
   <int value="501" label="501: Not Implemented"/>
   <int value="502" label="502: Bad Gateway"/>
