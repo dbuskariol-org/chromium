@@ -4674,24 +4674,12 @@ void RenderProcessHostImpl::UpdateProcessPriority() {
                "has_pending_views", priority.boost_for_pending_views);
   priority_ = priority;
 
-  bool allow_background_change = true;
-#if defined(OS_WIN)
-  // The cbstext.dll loads as a global GetMessage hook in the browser process
-  // and intercepts/unintercepts the kernel32 API SetPriorityClass in a
-  // background thread. If the UI thread invokes this API just when it is
-  // intercepted the stack is messed up on return from the interceptor
-  // which causes random crashes in the browser process. Our hack for now
-  // is to not invoke the SetPriorityClass API if the dll is loaded.
-  if (GetModuleHandle(L"cbstext.dll"))
-    allow_background_change = false;
-#endif  // OS_WIN
-
   // Control the background state from the browser process, otherwise the task
   // telling the renderer to "unbackground" itself may be preempted by other
   // tasks executing at lowered priority ahead of it or simply by not being
   // swiftly scheduled by the OS per the low process priority
   // (http://crbug.com/398103).
-  if (!run_renderer_in_process() && allow_background_change) {
+  if (!run_renderer_in_process()) {
     DCHECK(child_process_launcher_.get());
     DCHECK(!child_process_launcher_->IsStarting());
     // Make sure to keep the pid in the trace so we can tell which process is
@@ -4706,7 +4694,7 @@ void RenderProcessHostImpl::UpdateProcessPriority() {
 
   // When switching in/out of the background, update the time spent in the
   // background so the time spent backgrounded vs overall can be reported.
-  if (background_state_changed && allow_background_change) {
+  if (background_state_changed) {
     is_backgrounded_ = priority_.is_background();
     // Don't update backgrounding metrics until the render process finishes
     // initializing, at which point it will set |background_status_update_time_|
@@ -4722,8 +4710,7 @@ void RenderProcessHostImpl::UpdateProcessPriority() {
   }
 
   // Notify the child process of the change in state.
-  if ((background_state_changed && allow_background_change) ||
-      visibility_state_changed) {
+  if ((background_state_changed) || visibility_state_changed) {
     SendProcessStateToRenderer();
   }
 }
