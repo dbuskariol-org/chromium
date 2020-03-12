@@ -4,6 +4,7 @@
 
 assert(!is_ios)
 
+import("//build/config/compiler/compiler.gni")
 import("//build/config/jumbo.gni")
 import("//testing/test.gni")
 import("//third_party/blink/renderer/config.gni")
@@ -236,6 +237,11 @@ jumbo_component("wtf") {
     ]
   } else {
     sources -= [ "text/atomic_string_cf.cc" ]
+  }
+
+  if (!is_debug && !optimize_for_size) {
+    configs -= [ "//build/config/compiler:default_optimization" ]
+    configs += [ "//build/config/compiler:optimize_max" ]
   }
 
   configs -= [ "//build/config/compiler:default_symbols" ]
