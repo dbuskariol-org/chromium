@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.externalnav;
+package org.chromium.components.external_intents;
 
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -28,10 +28,6 @@ import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.components.embedder_support.util.UrlConstants;
 import org.chromium.components.embedder_support.util.UrlUtilities;
-import org.chromium.components.external_intents.ExternalIntentsFeatureList;
-import org.chromium.components.external_intents.ExternalIntentsSwitches;
-import org.chromium.components.external_intents.ExternalNavigationParams;
-import org.chromium.components.external_intents.RedirectHandler;
 import org.chromium.content_public.common.ContentUrlConstants;
 import org.chromium.ui.base.PageTransition;
 import org.chromium.url.URI;
@@ -63,12 +59,12 @@ public class ExternalNavigationHandler {
     private static final String PLAY_HOSTNAME = "play.google.com";
 
     @VisibleForTesting
-    static final String EXTRA_BROWSER_FALLBACK_URL = "browser_fallback_url";
+    public static final String EXTRA_BROWSER_FALLBACK_URL = "browser_fallback_url";
 
     // An extra that may be specified on an intent:// URL that contains an encoded value for the
     // referrer field passed to the market:// URL in the case where the app is not present.
     @VisibleForTesting
-    static final String EXTRA_MARKET_REFERRER = "market_referrer";
+    public static final String EXTRA_MARKET_REFERRER = "market_referrer";
 
     // These values are persisted in histograms. Please do not renumber. Append only.
     @IntDef({AiaIntent.FALLBACK_USED, AiaIntent.SERP, AiaIntent.OTHER})
@@ -120,7 +116,8 @@ public class ExternalNavigationHandler {
     }
 
     @VisibleForTesting
-    static final String INTENT_ACTION_HISTOGRAM = "Android.Intent.OverrideUrlLoadingIntentAction";
+    public static final String INTENT_ACTION_HISTOGRAM =
+            "Android.Intent.OverrideUrlLoadingIntentAction";
 
     private final ExternalNavigationDelegate mDelegate;
 
@@ -253,8 +250,8 @@ public class ExternalNavigationHandler {
                     new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
         }
         for (ResolveInfo info : infos) {
-            if (!containerSet.contains(new ComponentName(
-                    info.activityInfo.packageName, info.activityInfo.name))) {
+            if (!containerSet.contains(
+                        new ComponentName(info.activityInfo.packageName, info.activityInfo.name))) {
                 return false;
             }
         }
@@ -360,7 +357,7 @@ public class ExternalNavigationHandler {
 
     /** Wrapper of check against the feature to support overriding for testing. */
     @VisibleForTesting
-    boolean blockExternalFormRedirectsWithoutGesture() {
+    public boolean blockExternalFormRedirectsWithoutGesture() {
         return ExternalIntentsFeatureList.isEnabled(
                 ExternalIntentsFeatureList.INTENT_BLOCK_EXTERNAL_FORM_REDIRECT_NO_GESTURE);
     }
@@ -986,7 +983,8 @@ public class ExternalNavigationHandler {
         Pair<String, String> appInfo = maybeGetPlayStoreAppIdAndReferrer(browserFallbackUrl);
         if (appInfo != null) {
             String marketReferrer = TextUtils.isEmpty(appInfo.second)
-                    ? ContextUtils.getApplicationContext().getPackageName() : appInfo.second;
+                    ? ContextUtils.getApplicationContext().getPackageName()
+                    : appInfo.second;
             return sendIntentToMarket(appInfo.first, marketReferrer, params);
         }
 

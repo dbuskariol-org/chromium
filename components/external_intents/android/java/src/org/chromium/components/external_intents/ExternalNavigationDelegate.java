@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.externalnav;
+package org.chromium.components.external_intents;
 
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -10,8 +10,7 @@ import android.content.pm.ResolveInfo;
 import androidx.annotation.NonNull;
 
 import org.chromium.base.PackageManagerUtils;
-import org.chromium.chrome.browser.externalnav.ExternalNavigationHandler.OverrideUrlLoadingResult;
-import org.chromium.components.external_intents.ExternalNavigationParams;
+import org.chromium.components.external_intents.ExternalNavigationHandler.OverrideUrlLoadingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
  * A delegate for the class responsible for navigating to external applications from Chrome. Used
  * by {@link ExternalNavigationHandler}.
  */
-interface ExternalNavigationDelegate {
+public interface ExternalNavigationDelegate {
     /**
      * See {@link PackageManagerUtils#queryIntentActivities(Intent, int)}
      */
