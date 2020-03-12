@@ -1,6 +1,7 @@
 include_rules = [
-  "-chrome/browser/",
-  "+chrome/browser/android/crypto/",
+  "-chrome/android/java",
+  "-chrome/android/features",
+
   "-content/public/android",
   "+content/public/android/java/src/org/chromium/content_public",
 ]
