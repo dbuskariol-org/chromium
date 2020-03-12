@@ -2,22 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef FUCHSIA_ENGINE_BROWSER_WEB_ENGINE_PERMISSION_DELEGATE_H_
-#define FUCHSIA_ENGINE_BROWSER_WEB_ENGINE_PERMISSION_DELEGATE_H_
+#ifndef FUCHSIA_ENGINE_BROWSER_WEB_ENGINE_PERMISSION_MANAGER_H_
+#define FUCHSIA_ENGINE_BROWSER_WEB_ENGINE_PERMISSION_MANAGER_H_
 
+#include "base/macros.h"
 #include "content/public/browser/permission_controller_delegate.h"
 
-// PermissionControllerDelegate implementation for WebEngine. It redirects
-// permission redirects all calls to the appropriate FramePermissionController
-// instance.
-class WebEnginePermissionDelegate
+class WebEnginePermissionManager
     : public content::PermissionControllerDelegate {
  public:
-  WebEnginePermissionDelegate();
-  ~WebEnginePermissionDelegate() override;
-
-  WebEnginePermissionDelegate(WebEnginePermissionDelegate&) = delete;
-  WebEnginePermissionDelegate& operator=(WebEnginePermissionDelegate&) = delete;
+  WebEnginePermissionManager();
+  ~WebEnginePermissionManager() override;
 
   // content::PermissionControllerDelegate implementation:
   int RequestPermission(content::PermissionType permission,
@@ -52,6 +47,9 @@ class WebEnginePermissionDelegate
       base::RepeatingCallback<void(blink::mojom::PermissionStatus)> callback)
       override;
   void UnsubscribePermissionStatusChange(int subscription_id) override;
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(WebEnginePermissionManager);
 };
 
-#endif  // FUCHSIA_ENGINE_BROWSER_WEB_ENGINE_PERMISSION_DELEGATE_H_
+#endif  // FUCHSIA_ENGINE_BROWSER_WEB_ENGINE_PERMISSION_MANAGER_H_
