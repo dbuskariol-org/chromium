@@ -312,11 +312,13 @@
     chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
         'requestAnimationFrame', appId, []));
 
+    // Get the scroll limits: see crbug.com/721759 for RTL |scrollRight|.
     const scrolled = await remoteCall.waitForElementStyles(
         appId, directoryTree, ['scrollLeft']);
+    const scrollRight = scrolled.scrollWidth - scrolled.renderedWidth;
 
     // Check: the directory tree should not be horizontally scrolled.
-    const notScrolled = scrolled.scrollLeft === 0;
+    const notScrolled = scrolled.scrollLeft === scrollRight;
     chrome.test.assertTrue(notScrolled, 'Tree should not scroll right');
   };
 
