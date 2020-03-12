@@ -2180,10 +2180,9 @@ bool AXLayoutObject::ShouldUseDOMTraversal() const {
   if (!element)
     return false;
 
-  // Pseudo elements are not visited in layout tree builder traversal, used by
-  // AXDOMNode::AddChildren()
-  // TODO(aleventhal) Actually LayoutTreeBuilderTraversal does visit pseudo
-  // elements, so we should try removing this check and see if anything breaks.
+  // Pseudo elements often have text children that are not
+  // visited by the LayoutTreeBuilderTraversal class used in DOM traversal.
+  // Without this condition, list bullets would not have static text children.
   if (element->IsPseudoElement())
     return false;
 
