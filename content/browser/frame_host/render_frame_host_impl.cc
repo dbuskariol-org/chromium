@@ -5260,9 +5260,6 @@ void RenderFrameHostImpl::CommitNavigation(
     blink::mojom::ServiceWorkerProviderInfoForClientPtr provider_info,
     const base::UnguessableToken& devtools_navigation_token,
     std::unique_ptr<WebBundleHandle> web_bundle_handle) {
-  if (navigation_request) {
-    navigation_request->CreateCoepReporter(GetProcess()->GetStoragePartition());
-  }
   web_bundle_handle_ = std::move(web_bundle_handle);
 
   TRACE_EVENT2("navigation", "RenderFrameHostImpl::CommitNavigation",
