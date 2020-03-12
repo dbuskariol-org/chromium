@@ -667,4 +667,8 @@ void WebRuntimeFeatures::EnableAcceleratedSmallCanvases(bool enable) {
   RuntimeEnabledFeatures::SetAcceleratedSmallCanvasesEnabled(enable);
 }
 
+void WebRuntimeFeatures::EnableTrustTokens(bool enable) {
+  RuntimeEnabledFeatures::SetTrustTokensEnabled(enable);
+}
+
 }  // namespace blink

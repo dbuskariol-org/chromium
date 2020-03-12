@@ -1701,6 +1701,10 @@
       status: "experimental",
     },
     {
+      name: "TrustTokens",
+      status: "test",
+    },
+    {
       name: "UnclosedFormControlIsInvalid",
       status: "experimental",
     },

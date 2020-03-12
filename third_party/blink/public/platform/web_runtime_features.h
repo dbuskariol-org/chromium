@@ -238,6 +238,8 @@ class WebRuntimeFeatures {
   BLINK_PLATFORM_EXPORT static void EnableSurfaceEmbeddingFeatures(bool);
   BLINK_PLATFORM_EXPORT static void EnableAcceleratedSmallCanvases(bool);
 
+  BLINK_PLATFORM_EXPORT static void EnableTrustTokens(bool);
+
  private:
   WebRuntimeFeatures();
 };
