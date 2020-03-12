@@ -2166,10 +2166,8 @@ bool AXLayoutObject::ShouldUseDOMTraversal() const {
   if (IsA<HTMLRubyElement>(*node))
     return false;
 
-  // <table>: thead/tfoot move around
-  // This may mean a thead/tfoot in the middle will be bumped to the top/bottom.
-  // TODO(aleventhal): not sure about this, try to remove and see what breaks.
-  // Alternatively, we may decide to simply not support this, to simplify.
+  // <table>: a thead/tfoot in the middle are bumped to the top/bottom in
+  // the layout representation.
   if (IsA<HTMLTableElement>(*node))
     return false;
 
