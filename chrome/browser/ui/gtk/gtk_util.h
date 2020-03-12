@@ -83,7 +83,7 @@ class CairoSurface {
 
 // Returns true iff the runtime version of Gtk used meets
 // |major|.|minor|.|micro|.
-bool GtkVersionCheck(int major, int minor = 0, int micro = 0);
+bool GtkCheckVersion(int major, int minor = 0, int micro = 0);
 
 using ScopedStyleContext = ScopedGObject<GtkStyleContext>;
 using ScopedCssProvider = ScopedGObject<GtkCssProvider>;
@@ -102,7 +102,7 @@ inline void gtk::ScopedStyleContext::Unref() {
   while (context) {
     GtkStyleContext* parent = gtk_style_context_get_parent(context);
     if (parent && G_OBJECT(context)->ref_count == 1 &&
-        !gtk::GtkVersionCheck(3, 15, 4)) {
+        !gtk::GtkCheckVersion(3, 15, 4)) {
       g_object_ref(parent);
       gtk_style_context_set_parent(context, nullptr);
       g_object_unref(context);
