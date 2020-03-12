@@ -43,7 +43,7 @@ import java.util.UUID;
 class BLEHandler extends BluetoothGattServerCallback implements Closeable {
     // TODO: remove @TargetApi once 21 is the minimum, Clank-wide.
 
-    private static final String TAG = "AuthenticatorBLEHandler";
+    private static final String TAG = "CableBLEHandler";
     // These UUIDs are taken from the FIDO spec[1], save for the caBLE UUID
     // which is allocated to Google. See
     // https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html#ble
