@@ -36293,6 +36293,22 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="8" label="HandleUpdateOrigins Invalid"/>
 </enum>
 
+<enum name="LauncherRankingItemType">
+  <summary>
+    The type of a result in the Chrome OS launcher, simplified to fewer
+    categories for the purposes of ranking.
+  </summary>
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Ignored"/>
+  <int value="2" label="File"/>
+  <int value="3" label="App"/>
+  <int value="4" label="OmniboxGeneric"/>
+  <int value="5" label="ArcAppShortcut"/>
+  <int value="6" label="ZeroStateFile"/>
+  <int value="7" label="DriveQuickAccess"/>
+  <int value="8" label="Chip"/>
+</enum>
+
 <enum name="LaunchErrorCodes">
   <int value="0" label="SBOX_ALL_OK"/>
   <int value="1" label="SBOX_ERROR_GENERIC"/>
