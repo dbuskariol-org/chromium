@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/apps/app_block_dialog_view.h"
+#include "chrome/browser/ui/views/apps/app_dialog/app_block_dialog_view.h"
 
 #include "chrome/browser/apps/app_service/app_service_proxy.h"
 #include "chrome/browser/profiles/profile.h"

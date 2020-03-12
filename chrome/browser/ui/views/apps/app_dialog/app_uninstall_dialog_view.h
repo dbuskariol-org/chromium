@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_APPS_APP_UNINSTALL_DIALOG_VIEW_H_
-#define CHROME_BROWSER_UI_VIEWS_APPS_APP_UNINSTALL_DIALOG_VIEW_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_UNINSTALL_DIALOG_VIEW_H_
+#define CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_UNINSTALL_DIALOG_VIEW_H_
 
 #include <memory>
 
 #include "base/macros.h"
 #include "chrome/browser/apps/app_service/uninstall_dialog.h"
-#include "chrome/browser/ui/views/apps/app_dialog_view.h"
+#include "chrome/browser/ui/views/apps/app_dialog/app_dialog_view.h"
 #include "chrome/services/app_service/public/mojom/types.mojom-forward.h"
 #include "ui/views/bubble/bubble_dialog_delegate_view.h"
 
@@ -94,4 +94,4 @@ class AppUninstallDialogView : public apps::UninstallDialog::UiBase,
   DISALLOW_COPY_AND_ASSIGN(AppUninstallDialogView);
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_APPS_APP_UNINSTALL_DIALOG_VIEW_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_UNINSTALL_DIALOG_VIEW_H_

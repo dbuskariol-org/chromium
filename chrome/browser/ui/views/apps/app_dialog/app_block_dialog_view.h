@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_APPS_APP_BLOCK_DIALOG_VIEW_H_
-#define CHROME_BROWSER_UI_VIEWS_APPS_APP_BLOCK_DIALOG_VIEW_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_BLOCK_DIALOG_VIEW_H_
+#define CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_BLOCK_DIALOG_VIEW_H_
 
 #include <string>
 
-#include "chrome/browser/ui/views/apps/app_dialog_view.h"
+#include "chrome/browser/ui/views/apps/app_dialog/app_dialog_view.h"
 
 class Profile;
 
@@ -31,4 +31,4 @@ class AppBlockDialogView : public AppDialogView {
   base::string16 GetWindowTitle() const override;
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_APPS_APP_BLOCK_DIALOG_VIEW_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_BLOCK_DIALOG_VIEW_H_

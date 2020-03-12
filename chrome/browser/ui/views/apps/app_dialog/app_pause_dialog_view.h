@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_APPS_APP_PAUSE_DIALOG_VIEW_H_
-#define CHROME_BROWSER_UI_VIEWS_APPS_APP_PAUSE_DIALOG_VIEW_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_PAUSE_DIALOG_VIEW_H_
+#define CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_PAUSE_DIALOG_VIEW_H_
 
 #include "chrome/browser/apps/app_service/app_service_proxy.h"
-#include "chrome/browser/ui/views/apps/app_dialog_view.h"
+#include "chrome/browser/ui/views/apps/app_dialog/app_dialog_view.h"
 
 namespace gfx {
 class ImageSkia;
@@ -34,4 +34,4 @@ class AppPauseDialogView : public AppDialogView {
   apps::AppServiceProxy::OnPauseDialogClosedCallback closed_callback_;
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_APPS_APP_PAUSE_DIALOG_VIEW_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_APPS_APP_DIALOG_APP_PAUSE_DIALOG_VIEW_H_
