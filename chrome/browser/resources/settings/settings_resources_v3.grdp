@@ -452,6 +452,11 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/settings_page/settings_subpage.m.js"
            use_base_dir="false"
            type="BINDATA" />
+  <include name="IDR_SETTINGS_SETTINGS_UI_SETTINGS_UI_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/settings_ui/settings_ui.m.js"
+           use_base_dir="false"
+           type="BINDATA"
+           preprocess="true" />
   <include name="IDR_SETTINGS_SETTINGS_ROUTES_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/settings_routes.m.js"
            use_base_dir="false"

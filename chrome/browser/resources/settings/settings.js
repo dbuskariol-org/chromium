@@ -36,6 +36,7 @@ import './settings_main/settings_main.m.js';
 import './settings_menu/settings_menu.m.js';
 import './settings_page/settings_subpage.m.js';
 import './settings_page/settings_animated_pages.m.js';
+import './settings_ui/settings_ui.m.js';
 
 // <if expr="_google_chrome and is_win">
 import './incompatible_applications_page/incompatible_applications_page.m.js';

@@ -49,6 +49,7 @@ js_modulizer("modulize") {
     "settings_subpage_test.js",
     "settings_textarea_tests.js",
     "settings_toggle_button_tests.js",
+    "settings_ui_tests.js",
     "site_favicon_test.js",
     "startup_urls_page_test.js",
     "sync_test_util.js",
