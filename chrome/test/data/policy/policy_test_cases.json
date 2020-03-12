@@ -4847,18 +4847,6 @@
     ]
   },
 
-  "DeviceChromeVariations": {
-    "os": ["chromeos"],
-    "policy_pref_mapping_test": [
-      {
-        "policies": {
-          "DeviceChromeVariations": 1
-        },
-        "prefs": { "variations_restrictions_by_policy": { "local_state": true } }
-      }
-    ]
-  },
-
   "DeviceDisplayResolution": {
     "os": ["chromeos"],
     "can_be_recommended": false,
@@ -5068,7 +5056,7 @@
   "DeviceLoginScreenInputMethods": {},
 
   "DeviceLoginScreenSystemInfoEnforced": {},
-	
+
   "DeviceChromeVariations": {},
 
   "DeviceShowNumericKeyboardForPassword": {},
