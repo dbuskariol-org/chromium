@@ -5805,11 +5805,6 @@ crbug.com/963141 [ Mac ] virtual/audio-service/media/video-aspect-ratio.html [ P
 crbug.com/963141 [ Linux ] media/video-object-fit.html [ Pass Failure ]
 crbug.com/963141 [ Linux ] virtual/audio-service/media/video-object-fit.html [ Pass Failure ]
 
-# Allow failure until its appearance gets stable.
-crbug.com/972476 std-switch/switch-appearance.html [ Failure ]
-crbug.com/972476 std-switch/switch-appearance-customization.html [ Failure ]
-crbug.com/972476 std-switch/switch-appearance-theme.html [ Failure ]
-
 # Sheriff 2019-05-20
 crbug.com/965389 [ Mac ] media/track/track-cue-rendering-position-auto.html [ Pass Failure ]
 crbug.com/965389 [ Mac ] virtual/audio-service/media/track/track-cue-rendering-position-auto.html [ Pass Failure ]
@@ -6704,8 +6699,6 @@ crbug.com/1050549 http/tests/devtools/unit/string-util.js [ Skip ]
 
 # Sheriff 2020-02-21
 crbug.com/1054916 [ Linux ] external/wpt/webxr/dom-overlay/ar_dom_overlay.https.html [ Pass Failure Timeout ]
-crbug.com/1055006 [ Linux ] external/wpt/std-toast/methods.html [ Pass Failure Timeout ]
-crbug.com/1055006 [ Linux ] external/wpt/std-toast/options.html [ Pass Failure Timeout ]
 
 crbug.com/1048597 [ Linux Debug ] virtual/android/fullscreen/video-scrolled-iframe.html [ Pass Timeout ]
 
