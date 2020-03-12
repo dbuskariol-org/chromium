@@ -3467,10 +3467,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(chrome::android::kDuetTabStripIntegrationAndroid)},
 #endif  // OS_ANDROID
 
-    {"enable-built-in-module-all", flag_descriptions::kBuiltInModuleAllName,
-     flag_descriptions::kBuiltInModuleAllDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kBuiltInModuleAll)},
-
     {"enable-layout-ng", flag_descriptions::kEnableLayoutNGName,
      flag_descriptions::kEnableLayoutNGDescription, kOsAll,
      FEATURE_VALUE_TYPE(blink::features::kLayoutNG)},
@@ -4091,10 +4087,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kCCTTargetTranslateLanguageDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kCCTTargetTranslateLanguage)},
 #endif
-
-    {"enable-built-in-module-infra", flag_descriptions::kBuiltInModuleInfraName,
-     flag_descriptions::kBuiltInModuleInfraDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kBuiltInModuleInfra)},
 
     {"native-file-system-api", flag_descriptions::kNativeFileSystemAPIName,
      flag_descriptions::kNativeFileSystemAPIDescription, kOsDesktop,

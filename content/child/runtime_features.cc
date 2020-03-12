@@ -205,8 +205,6 @@ void SetRuntimeFeaturesFromChromiumFeatures() {
      kEnableOnly},
     {wf::EnableMediaCastOverlayButton, media::kMediaCastOverlayButton,
      kUseFeatureState},
-    {wf::EnableBuiltInModuleAll, features::kBuiltInModuleAll, kEnableOnly},
-    {wf::EnableBuiltInModuleInfra, features::kBuiltInModuleInfra, kEnableOnly},
     {wf::EnableLazyInitializeMediaControls,
      features::kLazyInitializeMediaControls, kUseFeatureState},
     {wf::EnableMediaEngagementBypassAutoplayPolicies,

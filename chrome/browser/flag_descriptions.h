@@ -370,12 +370,6 @@ extern const char kEnableCSSOMViewScrollCoordinatesDescription[];
 extern const char kEnableLitePageServerPreviewsName[];
 extern const char kEnableLitePageServerPreviewsDescription[];
 
-extern const char kBuiltInModuleAllName[];
-extern const char kBuiltInModuleAllDescription[];
-
-extern const char kBuiltInModuleInfraName[];
-extern const char kBuiltInModuleInfraDescription[];
-
 extern const char kEnableLayoutNGName[];
 extern const char kEnableLayoutNGDescription[];
 

@@ -4323,10 +4323,6 @@ crbug.com/826419 external/wpt/html/semantics/embedded-content/media-elements/tra
 crbug.com/825798 external/wpt/html/semantics/embedded-content/media-elements/track/track-element/track-webvtt-non-snap-to-lines.html [ Failure ]
 
 crbug.com/927477 external/wpt/import-maps/acquire-import-maps-flag/worker-request/* [ Skip ]
-crbug.com/927477 virtual/import-maps-without-builtin-modules/external/wpt/import-maps/acquire-import-maps-flag/worker-request/* [ Skip ]
-
-# Excludes tests that require built-in module supports.
-crbug.com/1010751 external/wpt/import-maps/imported/* [ Skip ]
 
 # Disabled temporarliy until eager evaluation is fixed/re-baselined in DevTools.
 crbug.com/1043151 http/tests/devtools/console/viewport-testing/console-runtime-result-below-prompt.js [ Pass Failure ]
