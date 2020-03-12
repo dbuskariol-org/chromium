@@ -413,6 +413,12 @@
   <message name="IDS_SETTINGS_COMPROMISED_PASSWORD_REMOVE" desc="Action menu item for a row which displays a compromised password. It will open a confirmation dialog for deleting the password.">
     Remove password
   </message>
+  <message name="IDS_SETTINGS_REMOVE_COMPROMISED_PASSWORD_CONFIRMATION_TITLE" desc="Compromised password remove dialog conformation title.">
+    Remove password?
+  </message>
+  <message name="IDS_SETTINGS_REMOVE_COMPROMISED_PASSWORD_CONFIRMATION_DESCRIPTION" desc="Compromised password remove dialog conformation description">
+    Removing this password will not delete your account on <ph name="DOMAIN">$1<ex>airbnb.com</ex></ph>. Change your password or delete your account on <ph name="DOMAIN">$1<ex>airbnb.com</ex></ph> to keep it safe from others.
+  </message>
   <message name="IDS_SETTINGS_PASSWORDS_SAVE_PASSWORDS_TOGGLE_LABEL" desc="Label for a toggle that allows users to be prompted if they want to save their passwords when logging into webpages.">
     Offer to save passwords
   </message>
