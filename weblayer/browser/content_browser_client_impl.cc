@@ -299,8 +299,8 @@ ContentBrowserClientImpl::CreateNetworkContext(
     const base::FilePath& relative_partition_path) {
   mojo::Remote<network::mojom::NetworkContext> network_context;
   network::mojom::NetworkContextParamsPtr context_params =
-      network::mojom::NetworkContextParams::New();
-  context_params->user_agent = GetUserAgent();
+      SystemNetworkContextManager::CreateDefaultNetworkContextParams(
+          GetUserAgent());
   context_params->accept_language = GetAcceptLangs(context);
   if (!context->IsOffTheRecord()) {
     base::FilePath cookie_path = context->GetPath();
