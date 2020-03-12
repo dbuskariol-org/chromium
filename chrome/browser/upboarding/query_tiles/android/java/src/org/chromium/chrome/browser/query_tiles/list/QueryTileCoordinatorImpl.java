@@ -9,19 +9,21 @@ import android.graphics.Bitmap;
 import android.view.View;
 
 import org.chromium.base.Callback;
+import org.chromium.chrome.browser.query_tiles.QueryTileCoordinator;
 import org.chromium.chrome.browser.query_tiles.Tile;
 import org.chromium.chrome.browser.query_tiles.TileProvider;
 
 /**
  * The top level coordinator for the query tiles UI.
  */
-public class QueryTileCoordinator {
+public class QueryTileCoordinatorImpl implements QueryTileCoordinator {
     private final TileListModel mModel;
     private final TileListView mView;
     private final TileProvider mTileProvider;
     private final Callback<Boolean> mVisibilityCallback;
 
-    public QueryTileCoordinator(
+    /** Constructor. */
+    public QueryTileCoordinatorImpl(
             Context context, TileProvider tileProvider, Callback<Boolean> visibilityCallback) {
         mTileProvider = tileProvider;
         mVisibilityCallback = visibilityCallback;
@@ -33,7 +35,7 @@ public class QueryTileCoordinator {
         onQueryTileClicked(null);
     }
 
-    /** @return The {@link View} that represents this coordinator. */
+    @Override
     public View getView() {
         return mView.getView();
     }
