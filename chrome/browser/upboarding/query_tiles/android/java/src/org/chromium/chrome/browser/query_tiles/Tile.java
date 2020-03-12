@@ -4,6 +4,8 @@
 
 package org.chromium.chrome.browser.query_tiles;
 
+import androidx.annotation.VisibleForTesting;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +30,8 @@ public class Tile {
     public final List<Tile> children;
 
     /** Constructor. */
-    private Tile(String id, String displayTitle, String accessibilityText, String queryText,
+    @VisibleForTesting
+    Tile(String id, String displayTitle, String accessibilityText, String queryText,
             List<Tile> children) {
         this.id = id;
         this.displayTitle = displayTitle;

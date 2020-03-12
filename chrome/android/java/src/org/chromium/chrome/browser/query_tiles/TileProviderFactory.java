@@ -26,6 +26,11 @@ public class TileProviderFactory {
         return sTileProvider;
     }
 
+    /** For testing only. */
+    public static void setTileProviderForTesting(TileProvider provider) {
+        sTileProvider = provider;
+    }
+
     @NativeMethods
     interface Natives {
         TileProvider getForProfile(Profile profile);
