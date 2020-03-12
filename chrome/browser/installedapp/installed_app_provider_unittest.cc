@@ -18,6 +18,10 @@ class InstalledAppProviderTest : public ::testing::Test {
     Java_InstalledAppProviderTest_setUp(AttachCurrentThread(), j_test_);
   }
 
+  void TearDown() override {
+    Java_InstalledAppProviderTest_tearDown(AttachCurrentThread(), j_test_);
+  }
+
   const base::android::ScopedJavaGlobalRef<jobject>& j_test() {
     return j_test_;
   }
