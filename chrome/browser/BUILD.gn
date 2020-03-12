@@ -5605,10 +5605,7 @@ grit("resources") {
   if (is_android) {
     deps +=
         [ "//chrome/browser/ui/webui/explore_sites_internals:mojo_bindings_js" ]
-  } else {
-    deps += [ "//chrome/browser/ui/webui/app_management:mojo_bindings_js" ]
   }
-
   if (is_chromeos) {
     deps += [
       "//chrome/browser/resources/chromeos/crostini_installer:polymer3_elements",
@@ -5618,6 +5615,7 @@ grit("resources") {
       "//chrome/browser/resources/chromeos/set_time_dialog:polymer3_elements",
       "//chrome/browser/resources/chromeos/smb_shares:polymer3_elements",
       "//chrome/browser/supervised_user:supervised_user_unscaled_resources",
+      "//chrome/browser/ui/webui/app_management:mojo_bindings_js",
       "//chrome/browser/ui/webui/chromeos/add_supervision:mojo_bindings_js",
       "//chrome/browser/ui/webui/chromeos/crostini_installer:mojo_bindings_js",
       "//chrome/browser/ui/webui/chromeos/crostini_upgrader:mojo_bindings_js",
