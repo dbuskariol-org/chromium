@@ -1488,6 +1488,10 @@ body.check-select #read-only-indicator {
   top: 40px;
 }
 
+body.files-ng .loading-indicator {
+    --paper-progress-active-color: var(--google-blue-600);
+}
+
 body.files-ng .list-view .loading-indicator {
   top: 48px;
 }
