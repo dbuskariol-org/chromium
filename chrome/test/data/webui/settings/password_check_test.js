@@ -153,9 +153,9 @@ cr.define('settings_passwords_check', function() {
       });
     });
 
-    // Test verifies that too many passwords don't prevent the user from
-    // starting the check. Additionally, display a link to account checkup.
-    test('testCheckupLinkForTooManyPasswordsWhenSyncing', function() {
+    // Test verifies that sync users see only the link to account checkup and no
+    // button to start the local leak check.
+    test('testOnlyCheckupLinkForTooManyPasswordsWhenSyncing', function() {
       passwordManager.data.checkStatus =
           autofill_test_util.makePasswordCheckStatus(
               /*state=*/ PasswordCheckState.TOO_MANY_PASSWORDS);
@@ -167,10 +167,7 @@ cr.define('settings_passwords_check', function() {
 
       return passwordManager.whenCalled('getPasswordCheckStatus').then(() => {
         expectTrue(isElementVisible(section.$.linkToGoogleAccount));
-        assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-        expectEquals(
-            section.i18n('checkPasswordsAgain'),
-            section.$.controlPasswordCheckButton.innerText);
+        expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
       });
     });
 
