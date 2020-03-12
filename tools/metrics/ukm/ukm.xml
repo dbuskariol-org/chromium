@@ -6785,6 +6785,13 @@ be describing additional metrics about the same event.
       applied on the page load.
     </summary>
   </metric>
+  <metric name="NavigationHintsFetchRequestLatency">
+    <summary>
+      The duration (in milliseconds) for how long it took from the request to go
+      out to when it was usable on the client. Only recorded if a fetch was
+      initiated for the navigation and the fetch was successful.
+    </summary>
+  </metric>
   <metric name="NavigationHostCovered"
       enum="OptimizationGuideNavigationHostCoveredStatus">
     <summary>
