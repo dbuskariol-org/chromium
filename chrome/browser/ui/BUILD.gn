@@ -1360,6 +1360,8 @@ jumbo_static_library("ui") {
       "webui/settings/extension_control_handler.h",
       "webui/settings/font_handler.cc",
       "webui/settings/font_handler.h",
+      "webui/settings/hats_handler.cc",
+      "webui/settings/hats_handler.h",
       "webui/settings/import_data_handler.cc",
       "webui/settings/import_data_handler.h",
       "webui/settings/languages_handler.cc",

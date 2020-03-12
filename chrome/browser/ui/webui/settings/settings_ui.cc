@@ -35,6 +35,7 @@
 #include "chrome/browser/ui/webui/settings/downloads_handler.h"
 #include "chrome/browser/ui/webui/settings/extension_control_handler.h"
 #include "chrome/browser/ui/webui/settings/font_handler.h"
+#include "chrome/browser/ui/webui/settings/hats_handler.h"
 #include "chrome/browser/ui/webui/settings/import_data_handler.h"
 #include "chrome/browser/ui/webui/settings/metrics_reporting_handler.h"
 #include "chrome/browser/ui/webui/settings/on_startup_handler.h"
@@ -197,6 +198,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
   AddSettingsPageUIHandler(std::make_unique<ExtensionControlHandler>());
   AddSettingsPageUIHandler(std::make_unique<FontHandler>(web_ui));
   AddSettingsPageUIHandler(std::make_unique<ImportDataHandler>());
+  AddSettingsPageUIHandler(std::make_unique<HatsHandler>());
 
 #if defined(OS_WIN) || defined(OS_CHROMEOS)
   AddSettingsPageUIHandler(std::make_unique<LanguagesHandler>(web_ui));
