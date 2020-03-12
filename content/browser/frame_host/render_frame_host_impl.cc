@@ -4502,6 +4502,10 @@ void RenderFrameHostImpl::CreateNewWindow(
       if (top_level_opener->cross_origin_opener_policy() ==
           network::mojom::CrossOriginOpenerPolicy::kSameOrigin) {
         params->opener_suppressed = true;
+        // The frame name should not be forwarded to a noopener popup.
+        // TODO(https://crbug.com/1060691) This should be applied to all
+        // popups opened with noopener.
+        params->frame_name.clear();
       }
     }
   }
