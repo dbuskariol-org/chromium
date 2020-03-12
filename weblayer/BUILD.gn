@@ -309,6 +309,8 @@ static_library("weblayer_lib") {
       "browser/android/metrics/uma_utils.h",
       "browser/android/metrics/weblayer_metrics_service_client.cc",
       "browser/android/metrics/weblayer_metrics_service_client.h",
+      "browser/android/resource_mapper.cc",
+      "browser/android/resource_mapper.h",
       "browser/content_view_render_view.cc",
       "browser/content_view_render_view.h",
       "browser/devtools_manager_delegate_android.cc",
