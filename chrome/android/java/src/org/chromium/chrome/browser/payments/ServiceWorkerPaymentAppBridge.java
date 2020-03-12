@@ -243,6 +243,8 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
                 @Nullable String accountBalance) {
             if (canMakePayment) mDelegate.onPaymentAppCreated(app);
             if (!TextUtils.isEmpty(errorMessage)) mDelegate.onPaymentAppCreationError(errorMessage);
+            app.setIsReadyForMinimalUI(readyForMinimalUI);
+            app.setAccountBalance(accountBalance);
 
             if (--mNumberOfPendingCanMakePaymentEvents == 0 && mAreAllPaymentAppsCreated) {
                 notifyFinished();
