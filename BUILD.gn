@@ -534,7 +534,7 @@ group("gn_all") {
       ]
     }
 
-    if (is_android && (target_cpu == "arm" || target_cpu == "arm64")) {
+    if (is_android) {
       deps += [ "//chrome/test/chromedriver:chromedriver($host_toolchain)" ]
     }
 
