@@ -157,7 +157,7 @@ bool FragmentRequiresLegacyFallback(const NGPhysicalFragment& fragment) {
   // Fallback to LayoutObject if this is a root of NG block layout.
   // If this box is for this painter, LayoutNGBlockFlow will call this back.
   // Otherwise it calls legacy painters.
-  return fragment.IsBlockFormattingContextRoot();
+  return fragment.IsFormattingContextRoot();
 }
 
 // Returns a vector of backplates that surround the paragraphs of text within
