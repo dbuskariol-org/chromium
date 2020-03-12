@@ -2,9 +2,57 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import("//build/config/android/config.gni")
-import("//build/config/android/rules.gni")
+if (is_android) {
+  import("//build/config/android/config.gni")
+  import("//build/config/android/rules.gni")
+}
 
-source_set("query_tiles") {
-  deps = [ "//chrome/browser/upboarding/query_tiles/internal" ]
+if (is_android) {
+  java_group("query_tiles_java") {
+    deps = [ ":public_java" ]
+  }
+}
+
+group("query_tiles") {
+  public_deps = [ ":public" ]
+
+  deps = [ "internal" ]
+}
+
+source_set("public") {
+  sources = []
+  deps = []
+
+  if (is_android) {
+    sources += [
+      "android/tile_provider_bridge.cc",
+      "android/tile_provider_bridge.h",
+    ]
+
+    deps += [ ":jni_headers" ]
+  }
+}
+
+if (is_android) {
+  android_library("public_java") {
+    sources = [
+      "android/java/src/org/chromium/chrome/browser/query_tiles/Tile.java",
+      "android/java/src/org/chromium/chrome/browser/query_tiles/TileProvider.java",
+      "android/java/src/org/chromium/chrome/browser/query_tiles/bridges/TileProviderBridge.java",
+      "android/java/src/org/chromium/chrome/browser/query_tiles/list/QueryTileCoordinator.java",
+    ]
+
+    deps = [
+      "//base:base_java",
+      "//base:jni_java",
+    ]
+
+    annotation_processor_deps = [ "//base/android/jni_generator:jni_processor" ]
+  }
+
+  generate_jni("jni_headers") {
+    visibility = [ ":*" ]
+
+    sources = [ "android/java/src/org/chromium/chrome/browser/query_tiles/bridges/TileProviderBridge.java" ]
+  }
 }
