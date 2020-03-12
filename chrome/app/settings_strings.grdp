@@ -1600,6 +1600,33 @@
   <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER" desc="A message shown on the top of the safety check feature, explaining to the user that it ran a moment ago.">
     Safety check ran a moment ago
   </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_MINS" desc="A message shown on the top of the safety check feature, explaining to the user that it ran minutes ago.">
+    {MINS, plural,
+     =1 {Safety check ran 1 minute ago}
+     other {Safety check ran # minutes ago}}
+  </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_HOURS" desc="A message shown on the top of the safety check feature, explaining to the user that it ran hours ago.">
+    {MINS, plural,
+     =1 {Safety check ran 1 hour ago}
+     other {Safety check ran # hours ago}}
+  </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_TIME" desc="A message shown on the top of the safety check feature, showing to the user at which time it ran.">
+    Safety check ran at <ph name="TIME">$1<ex>14:30</ex></ph>
+  </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_TODAY" desc="A message shown on the top of the safety check feature, showing to the user that it ran today.">
+    Safety check ran today
+  </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_YESTERDAY" desc="A message shown on the top of the safety check feature, showing to the user that it ran yesterday.">
+    Safety check ran yesterday
+  </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_DAYS" desc="A message shown on the top of the safety check feature, showing to the user how many days ago it ran.">
+    {NUM_DAYS, plural,
+     = 1 {Safety check ran 1 day ago}
+     other {Safety check ran # days ago}}
+  </message>
+  <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_DATE" desc="A message shown on the top of the safety check feature, showing to the user on which date it ran.">
+    Safety check ran on <ph name="DATE">$1<ex>April 1st, 2020</ex></ph>
+  </message>
   <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_BUTTON" desc="'Check' is a verb. By clicking this button, the user can quickly check whether their safety-related settings are fully protecting them.">
     Check now
   </message>
