@@ -60,6 +60,13 @@ using ServiceWorkerStartCallback =
     base::OnceCallback<void(scoped_refptr<ServiceWorkerVersion>,
                             blink::ServiceWorkerStatusCode)>;
 
+CanMakePaymentResponsePtr CreateBlankCanMakePaymentResponse(
+    CanMakePaymentEventResponseType response_type) {
+  return CanMakePaymentResponse::New(response_type, /*can_make_payment=*/false,
+                                     /*ready_for_minimal_ui=*/false,
+                                     /*account_balance=*/base::nullopt);
+}
+
 PaymentHandlerResponsePtr CreateBlankPaymentHandlerResponse(
     PaymentEventResponseType response_type) {
   return PaymentHandlerResponse::New(
@@ -173,11 +180,13 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
     return receiver_.BindNewPipeAndPassRemote();
   }
 
+  // Called only for "paymentrequest" event.
   void AbortPaymentSinceOpennedWindowClosing(PaymentEventResponseType reason) {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+    DCHECK_EQ(event_type_, ServiceWorkerMetrics::EventType::PAYMENT_REQUEST);
 
     service_worker_version_->FinishRequest(request_id_, false);
-    RespondWithErrorAndDeleteSelf(reason);
+    RespondToPaymentRequestWithErrorAndDeleteSelf(reason);
   }
 
  private:
@@ -220,7 +229,7 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
     service_worker_version_->FinishRequest(request_id_, false);
     RunOrPostTaskOnThread(FROM_HERE, BrowserThread::UI,
                           base::BindOnce(std::move(can_make_payment_callback_),
-                                         response->can_make_payment));
+                                         std::move(response)));
     delete this;
   }
 
@@ -235,48 +244,68 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
     delete this;
   }
 
-  void RespondWithErrorAndDeleteSelf(PaymentEventResponseType response_type) {
+  void RespondToCanMakePaymentWithErrorAndDeleteSelf(
+      CanMakePaymentEventResponseType response_type) {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+    DCHECK_EQ(event_type_, ServiceWorkerMetrics::EventType::CAN_MAKE_PAYMENT);
+    RunOrPostTaskOnThread(
+        FROM_HERE, BrowserThread::UI,
+        base::BindOnce(std::move(can_make_payment_callback_),
+                       CreateBlankCanMakePaymentResponse(response_type)));
+    delete this;
+  }
 
-    if (event_type_ == ServiceWorkerMetrics::EventType::CAN_MAKE_PAYMENT) {
-      RunOrPostTaskOnThread(
-          FROM_HERE, BrowserThread::UI,
-          base::BindOnce(std::move(can_make_payment_callback_), false));
-    } else if (event_type_ ==
-               ServiceWorkerMetrics::EventType::PAYMENT_REQUEST) {
-      RunOrPostTaskOnThread(
-          FROM_HERE, BrowserThread::UI,
-          base::BindOnce(std::move(invoke_payment_app_callback_),
-                         CreateBlankPaymentHandlerResponse(response_type)));
-    } else if (event_type_ == ServiceWorkerMetrics::EventType::ABORT_PAYMENT) {
-      RunOrPostTaskOnThread(FROM_HERE, BrowserThread::UI,
-                            base::BindOnce(std::move(abort_callback_), false));
-    }
+  void RespondToPaymentRequestWithErrorAndDeleteSelf(
+      PaymentEventResponseType response_type) {
+    DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+    DCHECK_EQ(event_type_, ServiceWorkerMetrics::EventType::PAYMENT_REQUEST);
+    RunOrPostTaskOnThread(
+        FROM_HERE, BrowserThread::UI,
+        base::BindOnce(std::move(invoke_payment_app_callback_),
+                       CreateBlankPaymentHandlerResponse(response_type)));
+    ClearCallbackRepositoryAndCloseWindow();
+    delete this;
+  }
 
-    if (event_type_ == ServiceWorkerMetrics::EventType::PAYMENT_REQUEST ||
-        event_type_ == ServiceWorkerMetrics::EventType::ABORT_PAYMENT) {
-      ClearCallbackRepositoryAndCloseWindow();
-    }
+  void RespondToAbortWithErrorAndDeleteSelf() {
+    DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
+    DCHECK_EQ(event_type_, ServiceWorkerMetrics::EventType::ABORT_PAYMENT);
+    RunOrPostTaskOnThread(FROM_HERE, BrowserThread::UI,
+                          base::BindOnce(std::move(abort_callback_), false));
+
+    ClearCallbackRepositoryAndCloseWindow();
     delete this;
   }
 
   void OnErrorStatus(blink::ServiceWorkerStatusCode service_worker_status) {
     DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-    DCHECK(service_worker_status != blink::ServiceWorkerStatusCode::kOk);
+    DCHECK_NE(service_worker_status, blink::ServiceWorkerStatusCode::kOk);
 
-    PaymentEventResponseType response_type =
+    PaymentEventResponseType invoke_response_type =
         PaymentEventResponseType::PAYMENT_EVENT_BROWSER_ERROR;
+    CanMakePaymentEventResponseType can_make_payment_response_type =
+        CanMakePaymentEventResponseType::BROWSER_ERROR;
     if (service_worker_status ==
         blink::ServiceWorkerStatusCode::kErrorEventWaitUntilRejected) {
-      response_type = PaymentEventResponseType::PAYMENT_EVENT_REJECT;
+      invoke_response_type = PaymentEventResponseType::PAYMENT_EVENT_REJECT;
+      can_make_payment_response_type = CanMakePaymentEventResponseType::REJECT;
     } else if (service_worker_status ==
                blink::ServiceWorkerStatusCode::kErrorTimeout) {
-      response_type = PaymentEventResponseType::PAYMENT_EVENT_TIMEOUT;
+      invoke_response_type = PaymentEventResponseType::PAYMENT_EVENT_TIMEOUT;
+      can_make_payment_response_type = CanMakePaymentEventResponseType::TIMEOUT;
       UMA_HISTOGRAM_BOOLEAN("PaymentRequest.ServiceWorkerStatusCodeTimeout",
                             true);
     }
 
-    RespondWithErrorAndDeleteSelf(response_type);
+    if (event_type_ == ServiceWorkerMetrics::EventType::CAN_MAKE_PAYMENT) {
+      RespondToCanMakePaymentWithErrorAndDeleteSelf(
+          can_make_payment_response_type);
+    } else if (event_type_ ==
+               ServiceWorkerMetrics::EventType::PAYMENT_REQUEST) {
+      RespondToPaymentRequestWithErrorAndDeleteSelf(invoke_response_type);
+    } else {
+      RespondToAbortWithErrorAndDeleteSelf();
+    }
   }
 
   void ClearCallbackRepositoryAndCloseWindow() {
@@ -305,7 +334,7 @@ class RespondWithCallbacks : public PaymentHandlerResponseCallback {
   mojo::Receiver<PaymentHandlerResponseCallback> receiver_{this};
 
   base::WeakPtrFactory<RespondWithCallbacks> weak_ptr_factory_{this};
-};
+};  // namespace
 
 void DidGetAllPaymentAppsOnCoreThread(
     PaymentAppProvider::GetAllPaymentAppsCallback callback,
@@ -361,8 +390,11 @@ void DispatchCanMakePaymentEvent(
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
 
   if (service_worker_status != blink::ServiceWorkerStatusCode::kOk) {
-    base::PostTask(FROM_HERE, {BrowserThread::UI},
-                   base::BindOnce(std::move(callback), false));
+    base::PostTask(
+        FROM_HERE, {BrowserThread::UI},
+        base::BindOnce(std::move(callback),
+                       CreateBlankCanMakePaymentResponse(
+                           CanMakePaymentEventResponseType::BROWSER_ERROR)));
     return;
   }
 
@@ -575,17 +607,22 @@ void OnResponseForCanMakePaymentOnUiThread(
     const url::Origin& sw_origin,
     const std::string& payment_request_id,
     PaymentAppProvider::CanMakePaymentCallback callback,
-    bool can_make_payment) {
+    CanMakePaymentResponsePtr response) {
+  // TODO(rouslan): Validate, log, and forward these fields from the renderer to
+  // the browser.
+  response->ready_for_minimal_ui = false;
+  response->account_balance.reset();
+
   auto* dev_tools = GetDevToolsForInstanceGroup(instance_group, sw_origin);
   if (dev_tools) {
     dev_tools->LogBackgroundServiceEvent(
         registration_id, sw_origin, DevToolsBackgroundService::kPaymentHandler,
         "Can make payment response",
         /*instance_id=*/payment_request_id,
-        {{"Can Make Payment", can_make_payment ? "true" : "false"}});
+        {{"Can Make Payment", response->can_make_payment ? "true" : "false"}});
   }
 
-  std::move(callback).Run(can_make_payment);
+  std::move(callback).Run(std::move(response));
 }
 
 void OnResponseForAbortPaymentOnUiThread(
