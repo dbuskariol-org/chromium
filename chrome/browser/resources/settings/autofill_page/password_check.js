@@ -186,13 +186,6 @@ Polymer({
   },
 
   /** @private */
-  onMenuShowPasswordClick_() {
-    this.$.moreActionsMenu.close();
-
-    // TODO(crbug.com/1047726) Implement dialog.
-  },
-
-  /** @private */
   onMenuEditPasswordClick_() {
     this.$.moreActionsMenu.close();
 
