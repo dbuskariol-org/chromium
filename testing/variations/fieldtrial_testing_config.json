@@ -2930,6 +2930,26 @@
             ]
         }
     ],
+    "LimitReferrerGranularity": [
+        {
+            "platforms": [
+                "android",
+                "android_webview",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "ReducedReferrerGranularity"
+                    ]
+                }
+            ]
+        }
+    ],
     "LoadingPredictorDisregardAlwaysAccessesNetwork": [
         {
             "platforms": [
@@ -4309,26 +4329,6 @@
                 },
                 {
                     "name": "Disabled"
-                }
-            ]
-        }
-    ],
-    "ReducedReferrerGranularity": [
-        {
-            "platforms": [
-                "android",
-                "android_webview",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "ReducedReferrerGranularity"
-                    ]
                 }
             ]
         }
