@@ -12,6 +12,10 @@
 #include "ui/native_theme/native_theme.h"
 #include "ui/views/window/frame_buttons.h"
 
+// Function availability can be tested by checking if the address of gtk_* is
+// not nullptr.
+#define WEAK_GTK_FN(x) extern "C" __attribute__((weak)) decltype(x) x
+
 typedef union _GdkEvent GdkEvent;
 
 namespace aura {
@@ -53,8 +57,6 @@ void ClearAuraTransientParent(GtkWidget* dialog);
 void ParseButtonLayout(const std::string& button_string,
                        std::vector<views::FrameButton>* leading_buttons,
                        std::vector<views::FrameButton>* trailing_buttons);
-
-void* GetGtkSharedLibrary();
 
 class CairoSurface {
  public:

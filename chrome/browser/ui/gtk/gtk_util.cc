@@ -35,6 +35,9 @@
 #include "ui/gfx/x/x11_types.h"                             // nogncheck
 #endif
 
+WEAK_GTK_FN(gtk_widget_path_iter_set_object_name);
+WEAK_GTK_FN(gtk_widget_path_iter_set_state);
+
 namespace {
 
 const char kAuraTransientParent[] = "aura-transient-parent";
@@ -203,14 +206,6 @@ float GetDeviceScaleFactor() {
 
 }  // namespace
 
-void* GetGtkSharedLibrary() {
-  std::string lib_name =
-      "libgtk-" + base::NumberToString(GTK_MAJOR_VERSION) + ".so.0";
-  static void* gtk_lib = dlopen(lib_name.c_str(), RTLD_LAZY);
-  DCHECK(gtk_lib);
-  return gtk_lib;
-}
-
 CairoSurface::CairoSurface(SkBitmap& bitmap)
     : surface_(cairo_image_surface_create_for_data(
           static_cast<unsigned char*>(bitmap.getAddr(0, 0)),
@@ -345,27 +340,25 @@ ScopedStyleContext AppendCssNodeToStyleContext(GtkStyleContext* context,
           NOTREACHED();
       }
     } else {
-      using GtkSetObjectName = void (*)(GtkWidgetPath*, gint, const char*);
-      static GtkSetObjectName _gtk_widget_path_iter_set_object_name =
-          reinterpret_cast<GtkSetObjectName>(dlsym(
-              GetGtkSharedLibrary(), "gtk_widget_path_iter_set_object_name"));
       switch (part_type) {
         case CSS_NAME:
           gtk_widget_path_iter_set_name(path, -1, t.token().c_str());
           break;
         case CSS_OBJECT_NAME:
-          if (GtkCheckVersion(3, 20))
-            _gtk_widget_path_iter_set_object_name(path, -1, t.token().c_str());
-          else
+          if (GtkCheckVersion(3, 20)) {
+            DCHECK(gtk_widget_path_iter_set_object_name);
+            gtk_widget_path_iter_set_object_name(path, -1, t.token().c_str());
+          } else {
             gtk_widget_path_iter_add_class(path, -1, t.token().c_str());
+          }
           break;
         case CSS_TYPE: {
           GType type = g_type_from_name(t.token().c_str());
           DCHECK(type);
           gtk_widget_path_append_type(path, type);
-          if (GtkCheckVersion(3, 20)) {
-            if (t.token() == "GtkLabel")
-              _gtk_widget_path_iter_set_object_name(path, -1, "label");
+          if (GtkCheckVersion(3, 20) && t.token() == "GtkLabel") {
+            DCHECK(gtk_widget_path_iter_set_object_name);
+            gtk_widget_path_iter_set_object_name(path, -1, "label");
           }
           break;
         }
@@ -394,12 +387,8 @@ ScopedStyleContext AppendCssNodeToStyleContext(GtkStyleContext* context,
   gtk_widget_path_iter_add_class(path, -1, "chromium");
 
   if (GtkCheckVersion(3, 14)) {
-    using GtkSetState = void (*)(GtkWidgetPath*, gint, GtkStateFlags);
-    static GtkSetState _gtk_widget_path_iter_set_state =
-        reinterpret_cast<GtkSetState>(
-            dlsym(GetGtkSharedLibrary(), "gtk_widget_path_iter_set_state"));
-    DCHECK(_gtk_widget_path_iter_set_state);
-    _gtk_widget_path_iter_set_state(path, -1, state);
+    DCHECK(gtk_widget_path_iter_set_state);
+    gtk_widget_path_iter_set_state(path, -1, state);
   }
 
   ScopedStyleContext child_context(gtk_style_context_new());
