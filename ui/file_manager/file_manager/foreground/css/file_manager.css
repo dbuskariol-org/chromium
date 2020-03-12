@@ -137,7 +137,8 @@ body.files-ng .dialog-navigation-list {
   top: 0;
 }
 
-html.col-resize #directory-tree {
+html.col-resize #directory-tree,
+html.breadcrumb-elider-expanded #directory-tree {
   overflow-y: hidden;
 }
 
