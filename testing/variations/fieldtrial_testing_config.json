@@ -1594,6 +1594,21 @@
             ]
         }
     ],
+    "CrostiniWebUIUpgrader": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "CrostiniWebUIUpgrader"
+                    ]
+                }
+            ]
+        }
+    ],
     "CryptAuthV2Enrollment": [
         {
             "platforms": [
