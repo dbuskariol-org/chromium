@@ -109,6 +109,12 @@ void DeepScanningBrowserTestBase::SetAllowPasswordProtectedFilesPolicy(
       prefs::kAllowPasswordProtectedFiles, state);
 }
 
+void DeepScanningBrowserTestBase::SetBlockUnsupportedFileTypesPolicy(
+    BlockUnsupportedFiletypesValues state) {
+  g_browser_process->local_state()->SetInteger(
+      prefs::kBlockUnsupportedFiletypes, state);
+}
+
 void DeepScanningBrowserTestBase::SetUpDelegate() {
   SetDMTokenForTesting(policy::DMToken::CreateValidTokenForTesting(kDmToken));
   DeepScanningDialogDelegate::SetFactoryForTesting(base::BindRepeating(

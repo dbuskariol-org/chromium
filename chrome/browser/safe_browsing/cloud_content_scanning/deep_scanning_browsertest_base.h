@@ -26,6 +26,8 @@ class DeepScanningBrowserTestBase : public InProcessBrowserTest {
   void SetWaitPolicy(DelayDeliveryUntilVerdictValues state);
   void SetAllowPasswordProtectedFilesPolicy(
       AllowPasswordProtectedFilesValues state);
+  void SetBlockUnsupportedFileTypesPolicy(
+      BlockUnsupportedFiletypesValues state);
 
   // Sets up a FakeDeepScanningDialogDelegate to use this class's StatusCallback
   // and EncryptionStatusCallback. Also sets up a test DM token.
