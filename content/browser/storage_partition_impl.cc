@@ -1399,17 +1399,19 @@ void StoragePartitionImpl::Initialize() {
   StorageNotificationService* storage_notification_service =
       browser_context_->GetStorageNotificationService();
   if (storage_notification_service) {
+    // base::Unretained is safe to use because the BrowserContext is guaranteed
+    // to outlive QuotaManager. This is because BrowserContext outlives this
+    // StoragePartitionImpl, which destroys the QuotaManager on teardown.
     base::RepeatingCallback<void(const url::Origin)>
         send_notification_function = base::BindRepeating(
-            [](scoped_refptr<base::SequencedTaskRunner> runner,
-               const base::RepeatingCallback<void(url::Origin)>& callback,
-               const url::Origin origin) {
+            [](StorageNotificationService* service, const url::Origin origin) {
               base::PostTask(FROM_HERE, {BrowserThread::UI},
-                             base::BindRepeating(callback, std::move(origin)));
+                             base::BindRepeating(
+                                 &StorageNotificationService::
+                                     MaybeShowStoragePressureNotification,
+                                 base::Unretained(service), std::move(origin)));
             },
-            base::CreateSingleThreadTaskRunner({BrowserThread::UI}),
-            storage_notification_service
-                ->GetStoragePressureNotificationClosure());
+            base::Unretained(storage_notification_service));
 
     quota_manager_->SetStoragePressureCallback(send_notification_function);
   }
