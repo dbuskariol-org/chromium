@@ -30,9 +30,9 @@ namespace sync_bookmarks {
 
 namespace {
 
-// Maximum number of bytes to allow in a title (must match sync's internal
-// limits; see write_node.cc).
-const int kTitleLimitBytes = 255;
+// Maximum number of bytes to allow in a legacy canonicalized title (must match
+// sync's internal limits; see write_node.cc).
+const int kLegacyCanonicalizedTitleLimitBytes = 255;
 
 // Used in metrics: "Sync.InvalidBookmarkSpecifics". These values are
 // persisted to logs. Entries should not be renumbered and numeric values
@@ -50,23 +50,6 @@ enum class InvalidBookmarkSpecificsError {
 
 void LogInvalidSpecifics(InvalidBookmarkSpecificsError error) {
   base::UmaHistogramEnumeration("Sync.InvalidBookmarkSpecifics", error);
-}
-
-base::string16 NodeTitleFromSpecificsTitle(const std::string& specifics_title) {
-  // Adjust the title for backward compatibility with legacy clients.
-  std::string node_title;
-  syncer::ServerNameToSyncAPIName(specifics_title, &node_title);
-  return base::UTF8ToUTF16(node_title);
-}
-
-std::string SpecificsTitleFromNodeTitle(const base::string16& node_title) {
-  // Adjust the title for backward compatibility with legacy clients.
-  std::string specifics_title;
-  syncer::SyncAPINameToServerName(base::UTF16ToUTF8(node_title),
-                                  &specifics_title);
-  base::TruncateUTF8ToByteSize(specifics_title, kTitleLimitBytes,
-                               &specifics_title);
-  return specifics_title;
 }
 
 void UpdateBookmarkSpecificsMetaInfo(
@@ -180,7 +163,27 @@ std::string InferGuidForLegacyBookmark(
   return guid;
 }
 
+base::string16 NodeTitleFromSpecifics(
+    const sync_pb::BookmarkSpecifics& specifics) {
+  if (specifics.has_full_title()) {
+    return base::UTF8ToUTF16(specifics.full_title());
+  }
+  std::string node_title;
+  syncer::ServerNameToSyncAPIName(specifics.legacy_canonicalized_title(),
+                                  &node_title);
+  return base::UTF8ToUTF16(node_title);
+}
+
 }  // namespace
+
+std::string FullTitleToLegacyCanonicalizedTitle(const std::string& node_title) {
+  // Adjust the title for backward compatibility with legacy clients.
+  std::string specifics_title;
+  syncer::SyncAPINameToServerName(node_title, &specifics_title);
+  base::TruncateUTF8ToByteSize(
+      specifics_title, kLegacyCanonicalizedTitleLimitBytes, &specifics_title);
+  return specifics_title;
+}
 
 sync_pb::EntitySpecifics CreateSpecificsFromBookmarkNode(
     const bookmarks::BookmarkNode* node,
@@ -201,8 +204,10 @@ sync_pb::EntitySpecifics CreateSpecificsFromBookmarkNode(
     bm_specifics->set_guid(node->guid());
   }
 
+  const std::string node_title = base::UTF16ToUTF8(node->GetTitle());
   bm_specifics->set_legacy_canonicalized_title(
-      SpecificsTitleFromNodeTitle(node->GetTitle()));
+      FullTitleToLegacyCanonicalizedTitle(node_title));
+  bm_specifics->set_full_title(node_title);
   bm_specifics->set_creation_time_us(
       node->date_added().ToDeltaSinceWindowsEpoch().InMicroseconds());
 
@@ -256,20 +261,17 @@ const bookmarks::BookmarkNode* CreateBookmarkNodeFromSpecifics(
       GetBookmarkMetaInfo(specifics);
   const bookmarks::BookmarkNode* node;
   if (is_folder) {
-    node = model->AddFolder(
-        parent, index,
-        NodeTitleFromSpecificsTitle(specifics.legacy_canonicalized_title()),
-        &metainfo, specifics.guid());
+    node = model->AddFolder(parent, index, NodeTitleFromSpecifics(specifics),
+                            &metainfo, specifics.guid());
   } else {
     const int64_t create_time_us = specifics.creation_time_us();
     base::Time create_time = base::Time::FromDeltaSinceWindowsEpoch(
         // Use FromDeltaSinceWindowsEpoch because create_time_us has
         // always used the Windows epoch.
         base::TimeDelta::FromMicroseconds(create_time_us));
-    node = model->AddURL(
-        parent, index,
-        NodeTitleFromSpecificsTitle(specifics.legacy_canonicalized_title()),
-        GURL(specifics.url()), &metainfo, create_time, specifics.guid());
+    node = model->AddURL(parent, index, NodeTitleFromSpecifics(specifics),
+                         GURL(specifics.url()), &metainfo, create_time,
+                         specifics.guid());
   }
   SetBookmarkFaviconFromSpecifics(specifics, node, favicon_service);
   return node;
@@ -295,8 +297,7 @@ void UpdateBookmarkNodeFromSpecifics(
     model->SetURL(node, GURL(specifics.url()));
   }
 
-  model->SetTitle(node, NodeTitleFromSpecificsTitle(
-                            specifics.legacy_canonicalized_title()));
+  model->SetTitle(node, NodeTitleFromSpecifics(specifics));
   model->SetNodeMetaInfoMap(node, GetBookmarkMetaInfo(specifics));
   SetBookmarkFaviconFromSpecifics(specifics, node, favicon_service);
 }
