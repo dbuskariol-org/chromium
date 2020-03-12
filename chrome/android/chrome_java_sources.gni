@@ -1484,6 +1484,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/site_settings/ContentSettingsResources.java",
   "java/src/org/chromium/chrome/browser/site_settings/CookieControlsBridge.java",
   "java/src/org/chromium/chrome/browser/site_settings/CookieControlsServiceBridge.java",
+  "java/src/org/chromium/chrome/browser/site_settings/FourStateCookieSettingsPreference.java",
   "java/src/org/chromium/chrome/browser/site_settings/LocalStorageInfo.java",
   "java/src/org/chromium/chrome/browser/site_settings/LocationCategory.java",
   "java/src/org/chromium/chrome/browser/site_settings/ManageSpaceActivity.java",
