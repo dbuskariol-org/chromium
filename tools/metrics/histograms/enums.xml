@@ -54955,6 +54955,27 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="2" label="Will retry"/>
 </enum>
 
+<enum name="ReasonToShowShelfNavigationButtons">
+  <int value="0" label="None"/>
+  <int value="1" label="Navigation buttons"/>
+  <int value="2" label="Spoken feedback"/>
+  <int value="3" label="Navigation buttons + spoken feedback"/>
+  <int value="4" label="Switch access enabled"/>
+  <int value="5" label="Navigation buttons + switch access"/>
+  <int value="6" label="Spoken feedback + switch access"/>
+  <int value="7" label="Navigation buttons + spoken feedback + switch acecss"/>
+  <int value="8" label="Auto-click"/>
+  <int value="9" label="Shelf navigation buttons + auto-click"/>
+  <int value="10" label="Spoken feedback + auto-click"/>
+  <int value="11" label="Navigation buttons + spoken feedback + auto-click"/>
+  <int value="12" label="Switch access + auto-click"/>
+  <int value="13" label="Navigation buttons + switch access + auto-click"/>
+  <int value="14" label="Spoken feedback + switch access + auto-click"/>
+  <int value="15"
+      label="Navigation buttons + spoken feedback + switch access +
+             auto-click"/>
+</enum>
+
 <enum name="RecentTabsAction">
   <int value="0" label="Local Session Tab"/>
   <int value="1" label="Other Device Tab"/>
