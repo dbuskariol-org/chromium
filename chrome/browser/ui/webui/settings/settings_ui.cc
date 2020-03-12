@@ -363,11 +363,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
       profile, std::make_unique<FaviconSource>(
                    profile, chrome::FaviconUrlFormat::kFavicon2));
 
-  base::SequencedTaskRunnerHandle::Get()->PostDelayedTask(
-      FROM_HERE,
-      base::BindOnce(&SettingsUI::LaunchSettingsSurveyIfAppropriate,
-                     weak_ptr_factory_.GetWeakPtr()),
-      base::TimeDelta::FromMilliseconds(hats_timeout_ms_));
+  TryShowHatsSurveyWithTimeout();
 }
 
 SettingsUI::~SettingsUI() = default;
@@ -420,14 +416,14 @@ void SettingsUI::AddSettingsPageUIHandler(
   web_ui()->AddMessageHandler(std::move(handler));
 }
 
-void SettingsUI::LaunchSettingsSurveyIfAppropriate() {
+void SettingsUI::TryShowHatsSurveyWithTimeout() {
   HatsService* hats_service =
       HatsServiceFactory::GetForProfile(Profile::FromWebUI(web_ui()),
                                         /* create_if_necessary = */ true);
-  auto* web_contents = web_ui()->GetWebContents();
-  if (web_contents->GetVisibility() == content::Visibility::VISIBLE &&
-      hats_service) {
-    hats_service->LaunchSurvey(kHatsSurveyTriggerSettings);
+  if (hats_service) {
+    hats_service->LaunchDelayedSurveyForWebContents(kHatsSurveyTriggerSettings,
+                                                    web_ui()->GetWebContents(),
+                                                    hats_timeout_ms_);
   }
 }
 
