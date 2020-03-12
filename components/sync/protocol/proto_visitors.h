@@ -181,7 +181,7 @@ VISIT_PROTO_FIELDS(const sync_pb::BookmarkSpecifics& proto) {
   VISIT(url);
   VISIT_BYTES(favicon);
   VISIT(guid);
-  VISIT(title);
+  VISIT(legacy_canonicalized_title);
   VISIT(creation_time_us);
   VISIT(icon_url);
   VISIT_REP(meta_info);

@@ -100,7 +100,7 @@ bool NodeSemanticsMatch(const bookmarks::BookmarkNode* local_node,
   const sync_pb::BookmarkSpecifics& specifics =
       remote_node.specifics.bookmark();
   const std::string local_title = base::UTF16ToUTF8(local_node->GetTitle());
-  const std::string remote_title = specifics.title();
+  const std::string remote_title = specifics.legacy_canonicalized_title();
   // Titles match if they are identical or the remote one is the canonical form
   // of the local one. The latter is the case when a legacy client has
   // canonicalized the same local title before committing it. Modern clients
@@ -161,8 +161,9 @@ UpdatesPerParentId GroupValidUpdatesByParentId(
     if (!syncer::UniquePosition::FromProto(update_entity.unique_position)
              .IsValid()) {
       // Ignore updates with invalid positions.
-      DLOG(ERROR) << "Remote update with invalid position: "
-                  << update_entity.specifics.bookmark().title();
+      DLOG(ERROR)
+          << "Remote update with invalid position: "
+          << update_entity.specifics.bookmark().legacy_canonicalized_title();
       continue;
     }
     if (!IsValidBookmarkSpecifics(update_entity.specifics.bookmark(),

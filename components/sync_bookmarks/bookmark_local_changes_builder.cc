@@ -69,7 +69,7 @@ syncer::CommitRequestDataList BookmarkLocalChangesBuilder::BuildCommitRequests(
       data->specifics = CreateSpecificsFromBookmarkNode(
           node, bookmark_model_, /*force_favicon_load=*/true,
           entity->final_guid_matches(node->guid()));
-      data->name = data->specifics.bookmark().title();
+      data->name = data->specifics.bookmark().legacy_canonicalized_title();
     }
 
     auto request = std::make_unique<syncer::CommitRequestData>();
