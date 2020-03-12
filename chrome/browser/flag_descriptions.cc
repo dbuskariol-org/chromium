@@ -699,9 +699,9 @@ const char kCorsForContentScriptsName[] = "CORS for content scripts";
 const char kCorsForContentScriptsDescription[] =
     "Prevent content scripts of Chrome Extensions from bypassing CORS.";
 
-const char kCrossOriginIsolationName[] = "Cross Origin Isolation";
-const char kCrossOriginIsolationDescription[] =
-    "Enable Cross Origin Opener Policy and Cross Origin Embedder Policy.";
+const char kCrossOriginOpenerPolicyName[] = "Cross Origin Opener Policy";
+const char kCrossOriginOpenerPolicyDescription[] =
+    "Enables Cross Origin Opener Policy.";
 
 const char kDisableKeepaliveFetchName[] = "Disable fetch with keepalive set";
 const char kDisableKeepaliveFetchDescription[] =

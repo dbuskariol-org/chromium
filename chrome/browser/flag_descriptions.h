@@ -400,8 +400,8 @@ extern const char kEnableNetworkServiceInProcessDescription[];
 extern const char kCorsForContentScriptsName[];
 extern const char kCorsForContentScriptsDescription[];
 
-extern const char kCrossOriginIsolationName[];
-extern const char kCrossOriginIsolationDescription[];
+extern const char kCrossOriginOpenerPolicyName[];
+extern const char kCrossOriginOpenerPolicyDescription[];
 
 extern const char kDisableKeepaliveFetchName[];
 extern const char kDisableKeepaliveFetchDescription[];

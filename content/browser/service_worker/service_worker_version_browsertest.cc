@@ -1603,10 +1603,10 @@ class ServiceWorkerVersionCoepTest : public ServiceWorkerVersionBrowserTest,
   ServiceWorkerVersionCoepTest() {
     if (IsCrossOriginIsolationEnabled()) {
       feature_list_.InitAndEnableFeature(
-          network::features::kCrossOriginIsolation);
+          network::features::kCrossOriginEmbedderPolicy);
     } else {
       feature_list_.InitAndDisableFeature(
-          network::features::kCrossOriginIsolation);
+          network::features::kCrossOriginEmbedderPolicy);
     }
   }
 

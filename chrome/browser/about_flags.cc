@@ -3136,9 +3136,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kCorsForContentScriptsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(network::features::kCorbAllowlistAlsoAppliesToOorCors)},
 
-    {"cross-origin-isolation", flag_descriptions::kCrossOriginIsolationName,
-     flag_descriptions::kCrossOriginIsolationDescription, kOsAll,
-     FEATURE_VALUE_TYPE(network::features::kCrossOriginIsolation)},
+    {"cross-origin-opener-policy",
+     flag_descriptions::kCrossOriginOpenerPolicyName,
+     flag_descriptions::kCrossOriginOpenerPolicyDescription, kOsAll,
+     FEATURE_VALUE_TYPE(network::features::kCrossOriginOpenerPolicy)},
 
     {"disable-keepalive-fetch", flag_descriptions::kDisableKeepaliveFetchName,
      flag_descriptions::kDisableKeepaliveFetchDescription, kOsAll,

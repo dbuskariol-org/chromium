@@ -4484,7 +4484,8 @@ void RenderFrameHostImpl::CreateNewWindow(
   network::mojom::CrossOriginOpenerPolicy popup_coop =
       network::mojom::CrossOriginOpenerPolicy::kUnsafeNone;
   network::CrossOriginEmbedderPolicy popup_coep;
-  if (base::FeatureList::IsEnabled(network::features::kCrossOriginIsolation)) {
+  if (base::FeatureList::IsEnabled(
+          network::features::kCrossOriginOpenerPolicy)) {
     // On popup creation, if the opener and the openers's top-level document
     // are same origin, then the popup's initial empty document inherits its
     // COOP policy from the opener's top-level document. See
