@@ -5,6 +5,8 @@
 #ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_MOJO_HEAP_MOJO_REMOTE_H_
 #define THIRD_PARTY_BLINK_RENDERER_PLATFORM_MOJO_HEAP_MOJO_REMOTE_H_
 
+#include <utility>
+
 #include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/renderer/platform/context_lifecycle_observer.h"
 #include "third_party/blink/renderer/platform/heap/heap.h"
@@ -22,7 +24,7 @@ class HeapMojoRemote {
   DISALLOW_NEW();
 
  public:
-  HeapMojoRemote(ContextLifecycleNotifier* notifier)
+  explicit HeapMojoRemote(ContextLifecycleNotifier* notifier)
       : wrapper_(MakeGarbageCollected<Wrapper>(notifier)) {}
 
   // Methods to redirect to mojo::Remote.
@@ -57,7 +59,7 @@ class HeapMojoRemote {
     USING_GARBAGE_COLLECTED_MIXIN(Wrapper);
 
    public:
-    Wrapper(ContextLifecycleNotifier* notifier) {
+    explicit Wrapper(ContextLifecycleNotifier* notifier) {
       SetContextLifecycleNotifier(notifier);
     }
 
