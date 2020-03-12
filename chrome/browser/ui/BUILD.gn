@@ -470,6 +470,7 @@ jumbo_static_library("ui") {
     "//components/keyed_service/core",
     "//components/language/core/browser",
     "//components/language/core/common",
+    "//components/lookalikes",
     "//components/metrics_services_manager",
     "//components/navigation_metrics",
     "//components/net_log",
