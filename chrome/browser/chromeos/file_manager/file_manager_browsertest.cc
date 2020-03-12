@@ -723,8 +723,6 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
     ::testing::Values(
         TestCase("tabindexSearchBoxFocus").FilesNg(),
         TestCase("tabindexSearchBoxFocus").DisableFilesNg(),
-        TestCase("tabindexFocusBody").DisableFilesNg(),
-        TestCase("tabindexFocusBody").FilesNg(),
         TestCase("tabindexFocus").DisableFilesNg(),
         TestCase("tabindexFocusDownloads").FilesNg(),
         TestCase("tabindexFocusDownloads").DisableFilesNg(),
