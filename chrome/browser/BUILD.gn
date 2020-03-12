@@ -5369,8 +5369,6 @@ jumbo_static_library("browser") {
   }
   if (enable_supervised_users && enable_extensions) {
     sources += [
-      "supervised_user/mature_extension_checker.cc",
-      "supervised_user/mature_extension_checker.h",
       "supervised_user/supervised_user_extensions_metrics_recorder.cc",
       "supervised_user/supervised_user_extensions_metrics_recorder.h",
       "supervised_user/supervised_user_service_management_api_delegate.cc",
