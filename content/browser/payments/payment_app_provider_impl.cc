@@ -681,15 +681,23 @@ void OnResponseForCanMakePaymentOnUiThread(
         CanMakePaymentEventResponseType::INVALID_ACCOUNT_BALANCE_VALUE);
   }
 
-  // TODO(rouslan): Log |ready_for_minimal_ui| and |account_balance| in Dev
-  // Tools.
   auto* dev_tools = GetDevToolsForInstanceGroup(instance_group, sw_origin);
   if (dev_tools) {
+    std::stringstream response_type;
+    response_type << response->response_type;
+    std::map<std::string, std::string> data = {
+        {"Type", response_type.str()},
+        {"Can Make Payment", response->can_make_payment ? "true" : "false"}};
+    if (base::FeatureList::IsEnabled(features::kWebPaymentsMinimalUI)) {
+      data["Ready for Minimal UI"] =
+          response->ready_for_minimal_ui ? "true" : "false";
+      data["Account Balance"] =
+          response->account_balance ? *response->account_balance : "";
+    }
     dev_tools->LogBackgroundServiceEvent(
         registration_id, sw_origin, DevToolsBackgroundService::kPaymentHandler,
         "Can make payment response",
-        /*instance_id=*/payment_request_id,
-        {{"Can Make Payment", response->can_make_payment ? "true" : "false"}});
+        /*instance_id=*/payment_request_id, data);
   }
 
   std::move(callback).Run(std::move(response));
