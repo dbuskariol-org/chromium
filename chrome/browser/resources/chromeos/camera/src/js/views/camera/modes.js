@@ -213,11 +213,11 @@ export class Modes {
         {
           aspectRatio: {ideal: videoMode ? 1.7777777778 : 1.3333333333},
           width: {min: 1280},
-          frameRate: {min: 24},
+          frameRate: {min: 20, ideal: 30},
         },
         {
           width: {min: 640},
-          frameRate: {min: 24},
+          frameRate: {min: 20, ideal: 30},
         },
       ].map((/** !MediaTrackConstraints */ constraint) => {
         if (deviceId) {

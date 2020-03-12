@@ -408,7 +408,7 @@ export class VideoConstraintsPreferrer extends ConstraintsPreferrer {
       audio: {echoCancellation: false},
       video: {
         deviceId: {exact: deviceId},
-        frameRate: fps ? {exact: fps} : {min: 24},
+        frameRate: fps ? {exact: fps} : {min: 20, ideal: 30},
         width,
         height,
       },
