@@ -163,5 +163,9 @@ const char kShippingAddressInvalid[] =
 const char kShippingOptionEmpty[] =
     "Payment app returned invalid response. Missing field \"shipping option\".";
 
+const char kCanMakePaymentEventInvalidAccountBalanceValue[] =
+    "Payment handler provided invalid account balance value in "
+    "CanMakePaymentEvent.respondWithMinimalUI().";
+
 }  // namespace errors
 }  // namespace payments

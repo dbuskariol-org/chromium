@@ -196,6 +196,9 @@ extern const char kShippingAddressInvalid[];
 // The payment handler responded with an empty "shipping option" field.
 extern const char kShippingOptionEmpty[];
 
+// The payment handler specified an invalid value for "accountBalance".
+extern const char kCanMakePaymentEventInvalidAccountBalanceValue[];
+
 }  // namespace errors
 }  // namespace payments
 
