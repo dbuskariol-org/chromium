@@ -6270,8 +6270,8 @@ http/tests/devtools/wasm-isolated-code-cache/wasm-cache-test.js [ Skip ]
 
 # Memory measurement tests are run as virtual tests.
 external/wpt/measure-memory/measure-memory.tentative.any.html [ Skip ]
-external/wpt/measure-memory/measure-memory.tentative.any.worker.html [ Skip ]
 external/wpt/measure-memory/measure-memory-cross-origin-iframe.tentative.window.html [ Skip ]
+external/wpt/measure-memory/measure-memory-cross-origin-redirecting-iframe.tentative.window.html [ Skip ]
 external/wpt/measure-memory/measure-memory-same-origin-iframe.tentative.window.html [ Skip ]
 
 # Assertion errors need to be fixed
