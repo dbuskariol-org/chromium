@@ -29,19 +29,6 @@ struct LayeredAPIResource {
 const LayeredAPIResource kLayeredAPIResources[] = {
     {"blank/index.mjs", IDR_LAYERED_API_BLANK_INDEX_MJS, Module::kBlank},
 
-    {"elements/virtual-scroller/find-element.mjs",
-     IDR_LAYERED_API_ELEMENTS_VIRTUAL_SCROLLER_FIND_ELEMENT_MJS,
-     Module::kElementsVirtualScroller},
-    {"elements/virtual-scroller/index.mjs",
-     IDR_LAYERED_API_ELEMENTS_VIRTUAL_SCROLLER_INDEX_MJS,
-     Module::kElementsVirtualScroller},
-    {"elements/virtual-scroller/sets.mjs",
-     IDR_LAYERED_API_ELEMENTS_VIRTUAL_SCROLLER_SETS_MJS,
-     Module::kElementsVirtualScroller},
-    {"elements/virtual-scroller/visibility-manager.mjs",
-     IDR_LAYERED_API_ELEMENTS_VIRTUAL_SCROLLER_VISIBILITY_MANAGER_MJS,
-     Module::kElementsVirtualScroller},
-
 };
 
 }  // namespace

@@ -73,8 +73,6 @@ bool ModulatorImplBase::BuiltInModuleEnabled(layered_api::Module module) const {
   switch (module) {
     case layered_api::Module::kBlank:
       return true;
-    case layered_api::Module::kElementsVirtualScroller:
-      return false;
   }
 }
 
@@ -82,7 +80,6 @@ bool ModulatorImplBase::BuiltInModuleRequireSecureContext(
     layered_api::Module module) {
   switch (module) {
     case layered_api::Module::kBlank:
-    case layered_api::Module::kElementsVirtualScroller:
       return false;
   }
 }
@@ -93,10 +90,6 @@ void ModulatorImplBase::BuiltInModuleUseCount(
   DCHECK(BuiltInModuleEnabled(module));
   switch (module) {
     case layered_api::Module::kBlank:
-      break;
-    case layered_api::Module::kElementsVirtualScroller:
-      UseCounter::Count(GetExecutionContext(),
-                        WebFeature::kBuiltInModuleVirtualScroller);
       break;
   }
 }
