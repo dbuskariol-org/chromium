@@ -2,13 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_URL_LOADING_URL_LOADING_NOTIFIER_H_
-#define IOS_CHROME_BROWSER_URL_LOADING_URL_LOADING_NOTIFIER_H_
+#ifndef IOS_CHROME_BROWSER_URL_LOADING_URL_LOADING_NOTIFIER_BROWSER_AGENT_H_
+#define IOS_CHROME_BROWSER_URL_LOADING_URL_LOADING_NOTIFIER_BROWSER_AGENT_H_
 
-#include "base/lazy_instance.h"
-#include "base/memory/ptr_util.h"
 #include "base/observer_list.h"
-#include "components/keyed_service/core/keyed_service.h"
+#include "ios/chrome/browser/main/browser_user_data.h"
 #include "ui/base/page_transition_types.h"
 #include "url/gurl.h"
 
@@ -16,11 +14,15 @@ class UrlLoadingObserverBridge;
 
 // A class containing static functions to notify observers of url loading
 // state change.
-class UrlLoadingNotifier : public KeyedService {
+class UrlLoadingNotifierBrowserAgent
+    : public BrowserUserData<UrlLoadingNotifierBrowserAgent> {
  public:
-  // Creates a UrlLoadingNotifier.
-  explicit UrlLoadingNotifier();
-  ~UrlLoadingNotifier() override;
+  // Not copyable or moveable
+  UrlLoadingNotifierBrowserAgent(const UrlLoadingNotifierBrowserAgent&) =
+      delete;
+  UrlLoadingNotifierBrowserAgent& operator=(
+      const UrlLoadingNotifierBrowserAgent&) = delete;
+  ~UrlLoadingNotifierBrowserAgent() override;
 
   // Adds |observer| to the list of observers.
   void AddObserver(UrlLoadingObserverBridge* observer);
@@ -64,9 +66,11 @@ class UrlLoadingNotifier : public KeyedService {
   void DidSwitchToTabWithUrl(const GURL& url, int new_web_state_index);
 
  private:
-  base::ObserverList<UrlLoadingObserverBridge>::Unchecked observers_;
+  explicit UrlLoadingNotifierBrowserAgent(Browser* browser);
+  friend class BrowserUserData<UrlLoadingNotifierBrowserAgent>;
+  BROWSER_USER_DATA_KEY_DECL();
 
-  DISALLOW_COPY_AND_ASSIGN(UrlLoadingNotifier);
+  base::ObserverList<UrlLoadingObserverBridge>::Unchecked observers_;
 };
 
-#endif  // IOS_CHROME_BROWSER_URL_LOADING_URL_LOADING_NOTIFIER_H_
+#endif  // IOS_CHROME_BROWSER_URL_LOADING_URL_LOADING_NOTIFIER_BROWSER_AGENT_H_
