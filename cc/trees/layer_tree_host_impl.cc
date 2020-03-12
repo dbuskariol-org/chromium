@@ -138,6 +138,20 @@ const float kMobileViewportWidthEpsilon = 0.15f;
 // kHitTestAsk after the threshold is reached.
 const size_t kAssumeOverlapThreshold = 100;
 
+FrameSequenceTrackerType GetTrackerTypeForScroll(ScrollInputType input_type) {
+  switch (input_type) {
+    case ScrollInputType::kWheel:
+      return FrameSequenceTrackerType::kWheelScroll;
+    case ScrollInputType::kTouchscreen:
+      return FrameSequenceTrackerType::kTouchScroll;
+    case ScrollInputType::kScrollbar:
+      return FrameSequenceTrackerType::kScrollbarScroll;
+    case ScrollInputType::kAutoscroll:
+    case ScrollInputType::kUnknown:
+      return FrameSequenceTrackerType::kMaxType;
+  }
+}
+
 bool HasFixedPageScale(LayerTreeImpl* active_tree) {
   return active_tree->min_page_scale_factor() ==
          active_tree->max_page_scale_factor();
@@ -4944,15 +4958,9 @@ void LayerTreeHostImpl::ScrollEnd(bool should_snap) {
 void LayerTreeHostImpl::RecordScrollBegin(
     ScrollInputType input_type,
     ScrollBeginThreadState scroll_start_state) {
-  // TODO(crbug.com/1060717): Also report throughput separately for scrollbar.
-  if (input_type != ScrollInputType::kWheel &&
-      input_type != ScrollInputType::kTouchscreen)
-    return;
-
-  auto* metrics = frame_trackers_.StartSequence(
-      input_type == ScrollInputType::kWheel
-          ? FrameSequenceTrackerType::kWheelScroll
-          : FrameSequenceTrackerType::kTouchScroll);
+  auto tracker_type = GetTrackerTypeForScroll(input_type);
+  DCHECK_NE(tracker_type, FrameSequenceTrackerType::kMaxType);
+  auto* metrics = frame_trackers_.StartSequence(tracker_type);
   if (!metrics)
     return;
 
@@ -4977,9 +4985,7 @@ void LayerTreeHostImpl::RecordScrollBegin(
 }
 
 void LayerTreeHostImpl::RecordScrollEnd(ScrollInputType input_type) {
-  frame_trackers_.StopSequence(input_type == ScrollInputType::kWheel
-                                   ? FrameSequenceTrackerType::kWheelScroll
-                                   : FrameSequenceTrackerType::kTouchScroll);
+  frame_trackers_.StopSequence(GetTrackerTypeForScroll(input_type));
 }
 
 InputHandlerPointerResult LayerTreeHostImpl::MouseDown(

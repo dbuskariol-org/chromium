@@ -51,7 +51,9 @@ const char* FrameSequenceTracker::GetFrameSequenceTrackerTypeName(
       return "Video";
     case FrameSequenceTrackerType::kWheelScroll:
       return "WheelScroll";
-    default:
+    case FrameSequenceTrackerType::kScrollbarScroll:
+      return "ScrollbarScroll";
+    case FrameSequenceTrackerType::kMaxType:
       return "";
   }
 }
@@ -62,7 +64,8 @@ namespace {
 // sufficient number of frames.
 constexpr int kMinFramesForThroughputMetric = 100;
 
-constexpr int kBuiltinSequenceNum = FrameSequenceTrackerType::kMaxType + 1;
+constexpr int kBuiltinSequenceNum =
+    static_cast<int>(FrameSequenceTrackerType::kMaxType) + 1;
 constexpr int kMaximumHistogramIndex = 3 * kBuiltinSequenceNum;
 
 int GetIndexForMetric(FrameSequenceMetrics::ThreadType thread_type,
@@ -70,8 +73,8 @@ int GetIndexForMetric(FrameSequenceMetrics::ThreadType thread_type,
   if (thread_type == FrameSequenceMetrics::ThreadType::kMain)
     return static_cast<int>(type);
   if (thread_type == FrameSequenceMetrics::ThreadType::kCompositor)
-    return static_cast<int>(type + kBuiltinSequenceNum);
-  return static_cast<int>(type + 2 * kBuiltinSequenceNum);
+    return static_cast<int>(type) + kBuiltinSequenceNum;
+  return static_cast<int>(type) + 2 * kBuiltinSequenceNum;
 }
 
 std::string GetCheckerboardingHistogramName(FrameSequenceTrackerType type) {
@@ -146,7 +149,8 @@ FrameSequenceMetrics::~FrameSequenceMetrics() {
 
 void FrameSequenceMetrics::SetScrollingThread(ThreadType scrolling_thread) {
   DCHECK(type_ == FrameSequenceTrackerType::kTouchScroll ||
-         type_ == FrameSequenceTrackerType::kWheelScroll);
+         type_ == FrameSequenceTrackerType::kWheelScroll ||
+         type_ == FrameSequenceTrackerType::kScrollbarScroll);
   DCHECK_EQ(scrolling_thread_, ThreadType::kUnknown);
   scrolling_thread_ = scrolling_thread;
 }
@@ -250,11 +254,16 @@ void FrameSequenceMetrics::ReportMetrics() {
             GetThroughputHistogramName(FrameSequenceTrackerType::kWheelScroll,
                                        "ScrollingThread"),
             scrolling_thread_throughput.value());
-      } else {
-        DCHECK_EQ(type_, FrameSequenceTrackerType::kTouchScroll);
+      } else if (type_ == FrameSequenceTrackerType::kTouchScroll) {
         UMA_HISTOGRAM_PERCENTAGE(
             GetThroughputHistogramName(FrameSequenceTrackerType::kTouchScroll,
                                        "ScrollingThread"),
+            scrolling_thread_throughput.value());
+      } else {
+        DCHECK_EQ(type_, FrameSequenceTrackerType::kScrollbarScroll);
+        UMA_HISTOGRAM_PERCENTAGE(
+            GetThroughputHistogramName(
+                FrameSequenceTrackerType::kScrollbarScroll, "ScrollingThread"),
             scrolling_thread_throughput.value());
       }
     }
@@ -265,8 +274,9 @@ void FrameSequenceMetrics::ReportMetrics() {
     const int checkerboarding_percent = static_cast<int>(
         100 * frames_checkerboarded_ / impl_throughput_.frames_expected);
     STATIC_HISTOGRAM_POINTER_GROUP(
-        GetCheckerboardingHistogramName(type_), type_,
-        FrameSequenceTrackerType::kMaxType, Add(checkerboarding_percent),
+        GetCheckerboardingHistogramName(type_), static_cast<int>(type_),
+        static_cast<int>(FrameSequenceTrackerType::kMaxType),
+        Add(checkerboarding_percent),
         base::LinearHistogram::FactoryGet(
             GetCheckerboardingHistogramName(type_), 1, 100, 101,
             base::HistogramBase::kUmaTargetedHistogramFlag));
@@ -1008,8 +1018,10 @@ base::Optional<int> FrameSequenceMetrics::ThroughputData::ReportHistogram(
   DCHECK_LT(sequence_type, FrameSequenceTrackerType::kMaxType);
 
   STATIC_HISTOGRAM_POINTER_GROUP(
-      GetFrameSequenceLengthHistogramName(sequence_type), sequence_type,
-      FrameSequenceTrackerType::kMaxType, Add(data.frames_expected),
+      GetFrameSequenceLengthHistogramName(sequence_type),
+      static_cast<int>(sequence_type),
+      static_cast<int>(FrameSequenceTrackerType::kMaxType),
+      Add(data.frames_expected),
       base::Histogram::FactoryGet(
           GetFrameSequenceLengthHistogramName(sequence_type), 1, 1000, 50,
           base::HistogramBase::kUmaTargetedHistogramFlag));
