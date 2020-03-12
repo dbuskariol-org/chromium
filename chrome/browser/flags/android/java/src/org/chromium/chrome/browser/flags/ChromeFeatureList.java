@@ -310,6 +310,7 @@ public abstract class ChromeFeatureList {
             "ImprovedCookieControlsForThirdPartyCookieBlocking";
     public static final String INLINE_UPDATE_FLOW = "InlineUpdateFlow";
     public static final String INSTALLABLE_AMBIENT_BADGE_INFOBAR = "InstallableAmbientBadgeInfoBar";
+    public static final String INSTANT_START = "InstantStart";
     public static final String INTEREST_FEED_CONTENT_SUGGESTIONS = "InterestFeedContentSuggestions";
     public static final String INTEREST_FEED_FEEDBACK = "InterestFeedFeedback";
     public static final String KITKAT_SUPPORTED = "KitKatSupported";
