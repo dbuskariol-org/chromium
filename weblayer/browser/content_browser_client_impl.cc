@@ -78,7 +78,6 @@
 #include "ui/base/resource/resource_bundle_android.h"
 #include "weblayer/browser/android_descriptors.h"
 #include "weblayer/browser/devtools_manager_delegate_android.h"
-#include "weblayer/browser/java/jni/ExternalNavigationHandler_jni.h"
 #include "weblayer/browser/safe_browsing/safe_browsing_service.h"
 #endif
 
@@ -589,9 +588,9 @@ bool ContentBrowserClientImpl::ShouldOverrideUrlLoading(
   base::android::ScopedJavaLocalRef<jstring> jurl =
       base::android::ConvertUTF16ToJavaString(env, url);
 
-  *ignore_navigation = Java_ExternalNavigationHandler_shouldOverrideUrlLoading(
-      env, TabImpl::FromWebContents(web_contents)->GetJavaTab(), jurl,
-      has_user_gesture, is_redirect, is_main_frame);
+  TabImpl* tab_impl = TabImpl::FromWebContents(web_contents);
+  *ignore_navigation = tab_impl->ShouldOverrideUrlLoading(
+      env, jurl, has_user_gesture, is_redirect, is_main_frame);
 
   if (base::android::HasException(env)) {
     // Tell the chromium message loop to not perform any tasks after the

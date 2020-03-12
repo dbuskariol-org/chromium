@@ -501,6 +501,13 @@ public final class TabImpl extends ITab.Stub {
         }
     }
 
+    @CalledByNative
+    private boolean shouldOverrideUrlLoading(
+            String url, boolean hasUserGesture, boolean isRedirect, boolean isMainFrame) {
+        return ExternalNavigationHandler.shouldOverrideUrlLoading(
+                this, url, hasUserGesture, isRedirect, isMainFrame);
+    }
+
     public void destroy() {
         if (mTabCallbackProxy != null) {
             mTabCallbackProxy.destroy();
