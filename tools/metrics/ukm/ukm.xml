@@ -8438,6 +8438,18 @@ be describing additional metrics about the same event.
       popup opener's URL (not the URL of the popup).
     </summary>
   </metric>
+  <metric name="NumActivationInteractions">
+    <summary>
+      Integer value representing how many mouse down, touch start user, or raw
+      key down interactions the popup had. This is capped at 50.
+    </summary>
+  </metric>
+  <metric name="NumGestureScrollBeginInteractions">
+    <summary>
+      Integer value representing how many gesture scroll begin user interactions
+      the popup had. This is capped at 50.
+    </summary>
+  </metric>
   <metric name="NumInteractions">
     <summary>
       Integer value representing how many user interactions the popup had. This
