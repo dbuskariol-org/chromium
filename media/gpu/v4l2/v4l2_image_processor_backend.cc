@@ -284,9 +284,10 @@ V4L2ImageProcessorBackend::CreateWithOutputMode(
     return nullptr;
   }
 
-  const v4l2_memory output_memory_type = output_mode == OutputMode::ALLOCATE
-                                             ? V4L2_MEMORY_MMAP
-                                             : V4L2_MEMORY_DMABUF;
+  const v4l2_memory output_memory_type =
+      output_mode == OutputMode::ALLOCATE
+          ? V4L2_MEMORY_MMAP
+          : InputStorageTypeToV4L2Memory(output_storage_type);
 
   if (!device->IsImageProcessingSupported()) {
     VLOGF(1) << "V4L2ImageProcessorBackend not supported in this platform";
