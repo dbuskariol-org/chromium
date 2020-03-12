@@ -5514,9 +5514,9 @@ void RenderFrameHostImpl::CommitNavigation(
       DCHECK(web_bundle_handle_->navigation_info());
       commit_params->web_bundle_physical_url =
           web_bundle_handle_->navigation_info()->source().url();
-      if (web_bundle_handle_->base_url_override().is_valid()) {
-        commit_params->base_url_override_for_web_bundle =
-            web_bundle_handle_->base_url_override();
+      if (web_bundle_handle_->claimed_url().is_valid()) {
+        commit_params->web_bundle_claimed_url =
+            web_bundle_handle_->claimed_url();
       }
     }
 
