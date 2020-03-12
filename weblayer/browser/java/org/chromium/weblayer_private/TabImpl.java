@@ -417,12 +417,6 @@ public final class TabImpl extends ITab.Stub {
     }
 
     @Override
-    public void dismissTabModalOverlay() {
-        BrowserViewController controller = getViewController();
-        if (controller != null) controller.dismissTabModalOverlay();
-    }
-
-    @Override
     public void dispatchBeforeUnloadAndClose() {
         StrictModeWorkaround.apply();
         mWebContents.dispatchBeforeUnload(false);
