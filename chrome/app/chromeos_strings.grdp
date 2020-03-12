@@ -4292,8 +4292,8 @@
   <message name="IDS_OOBE_GESTURE_NAVIGATION_BACK_TITLE" desc="The title in the gesture navigation education back OOBE screen shown on the first user login.">
     Go Back
   </message>
-  <message name="IDS_OOBE_GESTURE_NAVIGATION_BACK_DESCRIPTION" desc="The description for the gesture navigation education back OOBE screen shown on the first user login.">
-    To return to the previous screen, swipe from the side.
+  <message name="IDS_OOBE_GESTURE_NAVIGATION_BACK_DESCRIPTION" desc="The description for the gesture navigation education back OOBE screen shown on the first user login. This string should say to swipe from the right side in RTL languages.">
+    To return to the previous screen, swipe from the left side.
   </message>
   <message name="IDS_OOBE_GESTURE_NAVIGATION_OVERVIEW_TITLE" desc="The title in the gesture navigation education overview OOBE screen shown on the first user login.">
     Switch to open apps
