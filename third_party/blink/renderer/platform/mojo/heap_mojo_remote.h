@@ -11,7 +11,7 @@
 
 namespace blink {
 
-// HeapMojoRemote is a wrapper for mojo::Receiver to be owned by a
+// HeapMojoRemote is a wrapper for mojo::Remote to be owned by a
 // garbage-collected object. Blink is expected to use HeapMojoRemote by
 // default. HeapMojoRemote must be associated with context.
 // HeapMojoRemote's constructor takes context as a mandatory parameter.
@@ -22,14 +22,13 @@ class HeapMojoRemote {
   DISALLOW_NEW();
 
  public:
-  using ImplPointerType = typename mojo::Receiver<Interface>::ImplPointerType;
-
   HeapMojoRemote(ContextLifecycleNotifier* notifier)
       : wrapper_(MakeGarbageCollected<Wrapper>(notifier)) {}
 
-  // Methods to redirect to mojo::Receiver:
-  ImplPointerType operator->() const { return get(); }
-  ImplPointerType get() const { return wrapper_->remote().get(); }
+  // Methods to redirect to mojo::Remote.
+  using Proxy = typename Interface::Proxy_;
+  Proxy* operator->() const { return get(); }
+  Proxy* get() const { return wrapper_->remote().get(); }
   bool is_bound() const { return wrapper_->remote().is_bound(); }
   bool is_connected() const { return wrapper_->remote().is_connected(); }
   void reset() { wrapper_->remote().reset(); }
