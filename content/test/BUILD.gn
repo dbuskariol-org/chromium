@@ -229,6 +229,8 @@ jumbo_static_library("test_support") {
     "../public/test/unittest_test_suite.h",
     "../public/test/url_loader_interceptor.cc",
     "../public/test/url_loader_interceptor.h",
+    "../public/test/url_loader_monitor.cc",
+    "../public/test/url_loader_monitor.h",
     "../public/test/web_contents_receiver_set_test_binder.h",
     "../public/test/web_contents_tester.cc",
     "../public/test/web_contents_tester.h",
