@@ -32,10 +32,6 @@ bool NativeInit(base::android::LibraryProcessType library_process_type) {
 // Most of the initialization is done in LibraryLoadedOnMainThread(), not here.
 JNI_EXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
   base::android::InitVM(vm);
-#if defined(WEBVIEW_INCLUDES_WEBLAYER)
-  if (!weblayer::RegisterMinimalNatives())
-    return -1;
-#endif
   base::android::SetNativeInitializationHook(&NativeInit);
   return JNI_VERSION_1_4;
 }

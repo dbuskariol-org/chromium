@@ -32,18 +32,6 @@ java_cpp_enum("generated_enums") {
   ]
 }
 
-_webview_compat_sources =
-    [ "org/chromium/weblayer_private/WebViewCompatibilityHelperImpl.java" ]
-
-android_library("webview_compat_java") {
-  sources = _webview_compat_sources
-  deps = [
-    "//base:base_java",
-    "//base:jni_java",
-  ]
-  annotation_processor_deps = [ "//base/android/jni_generator:jni_processor" ]
-}
-
 android_library("java") {
   sources = [
     "org/chromium/weblayer_private/ActionModeCallback.java",
@@ -87,7 +75,6 @@ android_library("java") {
     ":gms_bridge_java",
     ":interfaces_java",
     ":weblayer_resources",
-    ":webview_compat_java",
     "//base:base_java",
     "//base:jni_java",
     "//components/autofill/android:provider_java",
@@ -130,20 +117,6 @@ android_library("java") {
       "//third_party/android_sdk:public_framework_system_java"
 }
 
-generate_jni_registration("weblayer_jni_registration") {
-  targets = [ ":java" ]
-  header_output = "$target_gen_dir/$target_name.h"
-  sources_blacklist = _webview_compat_sources
-  namespace = "weblayer"
-}
-
-generate_jni_registration("weblayer_minimal_jni_registration") {
-  targets = [ ":webview_compat_java" ]
-  header_output = "$target_gen_dir/$target_name.h"
-  namespace = "weblayer_minimal"
-  no_transitive_deps = true
-}
-
 android_resources("weblayer_test_resources") {
   resource_dirs = [ "res_test" ]
   custom_package = "org.chromium.weblayer_private.test"
@@ -180,7 +153,6 @@ generate_jni("jni") {
     "org/chromium/weblayer_private/UrlBarControllerImpl.java",
     "org/chromium/weblayer_private/WebLayerExceptionFilter.java",
     "org/chromium/weblayer_private/WebLayerImpl.java",
-    "org/chromium/weblayer_private/WebViewCompatibilityHelperImpl.java",
     "org/chromium/weblayer_private/metrics/MetricsServiceClient.java",
     "org/chromium/weblayer_private/metrics/UmaUtils.java",
     "org/chromium/weblayer_private/resources/ResourceMapper.java",

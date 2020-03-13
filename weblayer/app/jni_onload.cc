@@ -9,7 +9,6 @@
 #include "content/public/app/content_jni_onload.h"
 #include "content/public/app/content_main.h"
 #include "weblayer/app/content_main_delegate_impl.h"
-#include "weblayer/browser/java/weblayer_minimal_jni_registration.h"
 
 namespace weblayer {
 
@@ -33,11 +32,6 @@ bool OnJNIOnLoadInit() {
   content::SetContentMainDelegate(
       new weblayer::ContentMainDelegateImpl(params));
   return true;
-}
-
-bool RegisterMinimalNatives() {
-  return weblayer_minimal::RegisterMainDexNatives(
-      base::android::AttachCurrentThread());
 }
 
 }  // namespace weblayer
