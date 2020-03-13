@@ -7,17 +7,13 @@
       "backgroundColor": "#FFFFFF"
     },
     {
-      "name": "LayoutNGBlockFlow DIV",
-      "bounds": [200, 200],
-      "contentsOpaque": true,
-      "backgroundColor": "#FA8072",
-      "transform": 1
-    },
-    {
-      "name": "LayoutNGBlockFlow (positioned) DIV",
-      "position": [8, 8],
+      "name": "LayoutNGBlockFlow DIV id='target'",
       "bounds": [100, 100],
-      "drawsContent": false
+      "backgroundColor": "#0000FF",
+      "invalidations": [
+        [0, 30, 50, 50]
+      ],
+      "transform": 1
     }
   ],
   "transforms": [
