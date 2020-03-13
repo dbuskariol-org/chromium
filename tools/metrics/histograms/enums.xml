@@ -59867,6 +59867,9 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="SigninDiceMigrationStatus">
+  <obsolete>
+    Removed 03/2020.
+  </obsolete>
   <int value="0" label="Enabled"/>
   <int value="1" label="Disabled, ready for migration"/>
   <int value="2" label="Disabled, not ready for migration"/>
