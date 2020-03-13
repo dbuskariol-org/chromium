@@ -7055,3 +7055,6 @@ crbug.com/1061131 [ Linux ] virtual/threaded/external/wpt/animation-worklet/work
 crbug.com/1061131 [ Linux ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Crash ]
 crbug.com/1061131 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/middle-click-autoscroll-latching-clicked-node.html [ Pass Failure Timeout ]
 crbug.com/1061131 [ Mac ] virtual/threaded/external/wpt/scroll-animations/two-animations-attach-to-same-scroll-timeline-cancel-one.html [ Pass Failure ]
+
+# Sheriff 2020-03-13
+crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Failure ]
