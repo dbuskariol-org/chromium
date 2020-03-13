@@ -99,13 +99,6 @@ IPC_STRUCT_END()
 // AccessibilityHostMsg_EventBundle.
 IPC_MESSAGE_ROUTED1(AccessibilityMsg_EventBundle_ACK, int /* ack_token */)
 
-// Request a one-time snapshot of the accessibility tree without
-// enabling accessibility if it wasn't already enabled. The passed id
-// will be returned in the AccessibilityHostMsg_SnapshotResponse message.
-IPC_MESSAGE_ROUTED2(AccessibilityMsg_SnapshotTree,
-                    int /* callback id */,
-                    ui::AXMode /* ax_mode */)
-
 // Messages sent from the renderer to the browser.
 
 // Sent to notify the browser about renderer accessibility events.
@@ -132,12 +125,5 @@ IPC_MESSAGE_ROUTED5(AccessibilityHostMsg_ChildFrameHitTestResult,
                     int /* routing id of child frame */,
                     int /* browser plugin instance id of child frame */,
                     ax::mojom::Event /* event to fire */)
-
-// Sent in response to AccessibilityMsg_SnapshotTree. The callback id that was
-// passed to the request will be returned in |callback_id|, along with
-// a standalone snapshot of the accessibility tree.
-IPC_MESSAGE_ROUTED2(AccessibilityHostMsg_SnapshotResponse,
-                    int /* callback_id */,
-                    content::AXContentTreeUpdate)
 
 #endif  // CONTENT_COMMON_ACCESSIBILITY_MESSAGES_H_

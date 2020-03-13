@@ -1607,8 +1607,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
       int child_frame_routing_id,
       int child_frame_browser_plugin_instance_id,
       ax::mojom::Event event_to_fire);
-  void OnAccessibilitySnapshotResponse(int callback_id,
-                                       const AXContentTreeUpdate& snapshot);
   void OnDidStopLoading();
   void OnSelectionChanged(const base::string16& text,
                           uint32_t offset,
@@ -1796,6 +1794,13 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Convert the content-layer-specific AXContentTreeData to a general-purpose
   // AXTreeData structure.
   void AXContentTreeDataToAXTreeData(ui::AXTreeData* dst);
+
+  // Callback that will be called as a response to the call to the method
+  // content::mojom::RenderAccessibility::SnapshotAccessibilityTree(). The
+  // |callback| passed will be invoked after the renderer has responded with a
+  // standalone snapshot of the accessibility tree as |snapshot|.
+  void RequestAXTreeSnapshotCallback(AXTreeSnapshotCallback callback,
+                                     const AXContentTreeUpdate& snapshot);
 
   // Returns the RenderWidgetHostView used for accessibility. For subframes,
   // this function will return the platform view on the main frame; for main
@@ -2304,10 +2309,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // The AX tree ID of the embedder, if this is a browser plugin guest.
   ui::AXTreeID browser_plugin_embedder_ax_tree_id_;
-
-  // The mapping from callback id to corresponding callback for pending
-  // accessibility tree snapshot calls created by RequestAXTreeSnapshot.
-  std::map<int, AXTreeSnapshotCallback> ax_tree_snapshot_callbacks_;
 
   // Samsung Galaxy Note-specific "smart clip" stylus text getter.
 #if defined(OS_ANDROID)
