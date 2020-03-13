@@ -72,6 +72,10 @@ bool PasswordManagerClient::WasLastNavigationHTTPError() const {
   return false;
 }
 
+bool PasswordManagerClient::WasCredentialLeakDialogShown() const {
+  return false;
+}
+
 net::CertStatus PasswordManagerClient::GetMainFrameCertStatus() const {
   return 0;
 }
