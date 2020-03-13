@@ -549,13 +549,14 @@ void ChromePasswordManagerClient::AutofillHttpAuth(
 
 void ChromePasswordManagerClient::NotifyUserCredentialsWereLeaked(
     password_manager::CredentialLeakType leak_type,
-    const GURL& origin) {
+    const GURL& origin,
+    const base::string16& username) {
 #if defined(OS_ANDROID)
   HideSavePasswordInfobar(web_contents());
 #if defined(ENABLE_PASSWORD_CHANGE)
   was_leak_warning_shown_ = true;
   (new CredentialLeakPasswordChangeControllerAndroid(
-       leak_type, origin, web_contents()->GetTopLevelNativeWindow()))
+       leak_type, origin, username, web_contents()->GetTopLevelNativeWindow()))
       ->ShowDialog();
 #else
   (new CredentialLeakControllerAndroid(

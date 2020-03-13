@@ -62,8 +62,10 @@ class MockPasswordManagerClient : public StubPasswordManagerClient {
 
   MOCK_CONST_METHOD0(IsIncognito, bool());
   MOCK_CONST_METHOD0(GetPrefs, PrefService*());
-  MOCK_METHOD2(NotifyUserCredentialsWereLeaked,
-               void(password_manager::CredentialLeakType, const GURL&));
+  MOCK_METHOD3(NotifyUserCredentialsWereLeaked,
+               void(password_manager::CredentialLeakType,
+                    const GURL&,
+                    const base::string16& username));
   MOCK_CONST_METHOD0(GetProfilePasswordStore, PasswordStore*());
 };
 
@@ -293,7 +295,7 @@ TEST_F(LeakDetectionDelegateTest, LeakDetectionDoneWithTrueResult) {
               NotifyUserCredentialsWereLeaked(
                   password_manager::CreateLeakType(
                       IsSaved(false), IsReused(false), IsSyncing(false)),
-                  form.origin));
+                  form.origin, form.username_value));
   delegate_interface->OnLeakDetectionDone(
       /*is_leaked=*/true, form.origin, form.username_value,
       form.password_value);
@@ -317,7 +319,8 @@ TEST_F(LeakDetectionDelegateTest, LeakHistoryAddCredentials) {
           Return(ByMove(std::make_unique<NiceMock<MockLeakDetectionCheck>>())));
   delegate().StartLeakCheck(form);
 
-  EXPECT_CALL(client(), NotifyUserCredentialsWereLeaked(_, form.origin));
+  EXPECT_CALL(client(), NotifyUserCredentialsWereLeaked(_, form.origin,
+                                                        form.username_value));
   delegate_interface->OnLeakDetectionDone(
       /*is_leaked=*/true, form.origin, form.username_value,
       form.password_value);

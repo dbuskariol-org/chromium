@@ -131,7 +131,8 @@ class ChromePasswordManagerClient
       const password_manager::PasswordFormManagerForUI* form_manager) override;
   void NotifyUserCredentialsWereLeaked(
       password_manager::CredentialLeakType leak_type,
-      const GURL& origin) override;
+      const GURL& origin,
+      const base::string16& username) override;
   void TriggerReauthForAccount(
       const CoreAccountId& account_id,
       base::OnceCallback<void(ReauthSucceeded)> reauth_callback) override;

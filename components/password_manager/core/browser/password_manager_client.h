@@ -232,7 +232,8 @@ class PasswordManagerClient {
 
   // Informs the embedder that user credentials were leaked.
   virtual void NotifyUserCredentialsWereLeaked(CredentialLeakType leak_type,
-                                               const GURL& origin);
+                                               const GURL& origin,
+                                               const base::string16& username);
 
   // Requests a reauth for the given |account_id| and triggers the
   // |reauth_callback| with ReauthSucceeded(true) if reauthentication succeeded.
