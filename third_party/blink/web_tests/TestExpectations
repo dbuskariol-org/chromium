@@ -7061,3 +7061,4 @@ crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Fa
 crbug.com/1061118 fast/loader/subframe-removes-itself.html [ Pass Failure ]
 crbug.com/1061043 fast/plugins/keypress-event.html [ Pass Failure ]
 crbug.com/1061328 http/tests/loading/onreadystatechange-detach.html [ Pass Failure ]
+crbug.com/1061097 http/tests/security/promise-access-control-allow.htm [ Pass Failure ]
