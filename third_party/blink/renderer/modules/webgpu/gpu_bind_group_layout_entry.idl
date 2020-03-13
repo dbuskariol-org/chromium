@@ -4,7 +4,7 @@
 
 // https://gpuweb.github.io/gpuweb/
 
-dictionary GPUBindGroupLayoutBinding {
+dictionary GPUBindGroupLayoutEntry {
     required unsigned long binding;
     required GPUShaderStageFlags visibility;
     required GPUBindingType type;
