@@ -21,19 +21,23 @@ using syncer::UserSelectableTypeSet;
 namespace {
 
 #if defined(OS_CHROMEOS)
+
+// These tests test only the new Web Apps system with next generation sync.
+// (BMO flag is always enabled). WEB_APPS and WebAppSyncBridge are always on.
+//
 // Chrome OS syncs apps as an OS type.
-class SingleClientWebAppsOsSyncTest : public OsSyncTest {
+class SingleClientWebAppsBmoOsSyncTest : public OsSyncTest {
  public:
-  SingleClientWebAppsOsSyncTest() : OsSyncTest(SINGLE_CLIENT) {
+  SingleClientWebAppsBmoOsSyncTest() : OsSyncTest(SINGLE_CLIENT) {
     features_.InitAndEnableFeature(features::kDesktopPWAsWithoutExtensions);
   }
-  ~SingleClientWebAppsOsSyncTest() override = default;
+  ~SingleClientWebAppsBmoOsSyncTest() override = default;
 
  private:
   base::test::ScopedFeatureList features_;
 };
 
-IN_PROC_BROWSER_TEST_F(SingleClientWebAppsOsSyncTest,
+IN_PROC_BROWSER_TEST_F(SingleClientWebAppsBmoOsSyncTest,
                        DisablingOsSyncFeatureDisablesDataType) {
   ASSERT_TRUE(chromeos::features::IsSplitSettingsSyncEnabled());
   ASSERT_TRUE(SetupSync());
@@ -50,19 +54,22 @@ IN_PROC_BROWSER_TEST_F(SingleClientWebAppsOsSyncTest,
 
 #else   // !defined(OS_CHROMEOS)
 
-// See also TwoClientWebAppsSyncTest.
-class SingleClientWebAppsSyncTest : public SyncTest {
+// These tests test only the new Web Apps system with next generation sync.
+// (BMO flag is always enabled). WEB_APPS and WebAppSyncBridge are always on.
+//
+// See also TwoClientWebAppsBmoSyncTest.
+class SingleClientWebAppsBmoSyncTest : public SyncTest {
  public:
-  SingleClientWebAppsSyncTest() : SyncTest(SINGLE_CLIENT) {
+  SingleClientWebAppsBmoSyncTest() : SyncTest(SINGLE_CLIENT) {
     features_.InitAndEnableFeature(features::kDesktopPWAsWithoutExtensions);
   }
-  ~SingleClientWebAppsSyncTest() override = default;
+  ~SingleClientWebAppsBmoSyncTest() override = default;
 
  private:
   base::test::ScopedFeatureList features_;
 };
 
-IN_PROC_BROWSER_TEST_F(SingleClientWebAppsSyncTest,
+IN_PROC_BROWSER_TEST_F(SingleClientWebAppsBmoSyncTest,
                        DisablingSelectedTypeDisablesModelType) {
   ASSERT_TRUE(SetupSync());
   syncer::ProfileSyncService* service = GetSyncService(0);
