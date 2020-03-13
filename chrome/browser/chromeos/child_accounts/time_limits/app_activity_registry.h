@@ -170,6 +170,15 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
       AppRestriction restriction) const;
 
  private:
+  struct SystemNotification {
+    SystemNotification(base::Optional<base::TimeDelta> app_time_limit,
+                       AppNotification app_notification);
+    SystemNotification(const SystemNotification&);
+    SystemNotification& operator=(const SystemNotification&);
+    base::Optional<base::TimeDelta> time_limit = base::nullopt;
+    AppNotification notification = AppNotification::kUnknown;
+  };
+
   // Bundles detailed data stored for a specific app.
   struct AppDetails {
     AppDetails();
@@ -204,6 +213,16 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
     // Timer set up for when the app time limit is expected to be reached and
     // preceding notifications.
     std::unique_ptr<base::OneShotTimer> app_limit_timer;
+
+    // Boolean to specify if OnAppInstalled call has been received for this
+    // particular application.
+    bool received_app_installed_ = false;
+
+    // At the beginning of a session, we may want to send system notifications
+    // for applications. This may happen if there is an update in
+    // PerAppTimeLimits policy while the user was logged out. In these
+    // scenarios, we have to wait until the application is installed.
+    std::vector<SystemNotification> pending_notifications_;
   };
 
   // Removes data older than |timestamp| from the registry.
@@ -260,6 +279,13 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   // Returns true if the last successfully reported time is earlier than 30 days
   // from base::Time::Now();
   bool ShouldCleanUpStoredPref();
+
+  // Sends system notification for the application.
+  void SendSystemNotificationsForApp(const AppId& app_id);
+
+  // Shows notification or queues it to be shown later.
+  void MaybeShowSystemNotification(const AppId& app_id,
+                                   const SystemNotification& notification);
 
   Profile* const profile_;
 

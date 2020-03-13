@@ -874,6 +874,9 @@ TEST_F(AppActivityRegistryTest, AvoidReduntantNotifications) {
   // Reinitialized the registry. We don't expect redundant time limit updatese
   // will result in notifications.
   ReInitializeRegistry();
+  registry().OnAppInstalled(GetChromeAppId());
+  registry().OnAppInstalled(kApp1);
+  registry().OnAppInstalled(kApp2);
 
   EXPECT_CALL(notification_delegate_mock(),
               ShowAppTimeLimitNotification(
@@ -906,6 +909,38 @@ TEST_F(AppActivityRegistryTest, AvoidReduntantNotifications) {
                   chromeos::app_time::AppNotification::kTimeLimitChanged))
       .Times(0);
   registry().UpdateAppLimits(app_limits);
+}
+
+TEST_F(AppActivityRegistryTest, NoNotification) {
+  AppLimit app1_limit(AppRestriction::kTimeLimit,
+                      base::TimeDelta::FromMinutes(30), base::Time::Now());
+  std::map<AppId, AppLimit> app_limits = {{kApp1, app1_limit}};
+
+  EXPECT_CALL(notification_delegate_mock(),
+              ShowAppTimeLimitNotification(
+                  kApp1, app1_limit.daily_limit(),
+                  chromeos::app_time::AppNotification::kTimeLimitChanged))
+      .Times(0);
+  registry().SaveAppActivity();
+  ReInitializeRegistry();
+  registry().UpdateAppLimits(app_limits);
+}
+
+TEST_F(AppActivityRegistryTest, NotificationAfterAppInstall) {
+  AppLimit app1_limit(AppRestriction::kTimeLimit,
+                      base::TimeDelta::FromMinutes(30), base::Time::Now());
+  std::map<AppId, AppLimit> app_limits = {{kApp1, app1_limit}};
+
+  EXPECT_CALL(notification_delegate_mock(),
+              ShowAppTimeLimitNotification(
+                  kApp1, app1_limit.daily_limit(),
+                  chromeos::app_time::AppNotification::kTimeLimitChanged))
+      .Times(1);
+
+  registry().SaveAppActivity();
+  ReInitializeRegistry();
+  registry().UpdateAppLimits(app_limits);
+  registry().OnAppInstalled(kApp1);
 }
 
 TEST_F(AppActivityRegistryTest, AvoidRedundantCallsToPauseApp) {
