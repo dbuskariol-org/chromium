@@ -68,6 +68,14 @@ class WindowsAccessibilityEnabler
     }
   }
 
+  void OnUIAutomationUsed() override {
+    // UI Automation insulates providers from knowing about the client(s) asking
+    // for information. When UI Automation is requested, assume the presence of
+    // a full-fledged accessibility technology and enable full support.
+    BrowserAccessibilityStateImpl::GetInstance()->AddAccessibilityModeFlags(
+        ui::kAXModeComplete);
+  }
+
   bool screen_reader_honeypot_queried_ = false;
   bool acc_name_called_ = false;
 };

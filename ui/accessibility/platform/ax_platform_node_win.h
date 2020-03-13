@@ -320,6 +320,7 @@ class AX_EXPORT WinAccessibilityAPIUsageObserver {
   virtual void OnIAccessible2Used() = 0;
   virtual void OnScreenReaderHoneyPotQueried() = 0;
   virtual void OnAccNameCalled() = 0;
+  virtual void OnUIAutomationUsed() = 0;
 };
 
 // Get an observer list that allows modules across the codebase to

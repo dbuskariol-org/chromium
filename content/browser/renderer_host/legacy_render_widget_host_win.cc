@@ -210,14 +210,6 @@ LRESULT LegacyRenderWidgetHostHWND::OnGetObject(UINT message,
   if ((is_uia_request &&
        ::switches::IsExperimentalAccessibilityPlatformUIAEnabled()) ||
       is_msaa_request) {
-    if (is_uia_request) {
-      // UIA, by design, insulates providers from knowing about the client(s)
-      // asking for information. When UIA interface is requested, the presence
-      // of a full-fledged accessibility technology is assumed and all support
-      // is enabled.
-      BrowserAccessibilityStateImpl::GetInstance()->EnableAccessibility();
-    }
-
     gfx::NativeViewAccessible root =
         GetOrCreateWindowRootAccessible(is_uia_request);
 
