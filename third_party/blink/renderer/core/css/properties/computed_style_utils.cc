@@ -737,6 +737,22 @@ CSSValue* ComputedStyleUtils::ValueForLineHeight(const ComputedStyle& style) {
       style);
 }
 
+CSSValue* ComputedStyleUtils::ComputedValueForLineHeight(
+    const ComputedStyle& style) {
+  const Length& length = style.LineHeight();
+  if (length.IsNegative())
+    return CSSIdentifierValue::Create(CSSValueID::kNormal);
+
+  if (length.IsPercent()) {
+    return CSSNumericLiteralValue::Create(length.GetFloatValue() / 100.0,
+                                          CSSPrimitiveValue::UnitType::kNumber);
+  } else {
+    return ZoomAdjustedPixelValue(
+        FloatValueForLength(length, style.GetFontDescription().ComputedSize()),
+        style);
+  }
+}
+
 CSSValueID IdentifierForFamily(const AtomicString& family) {
   if (family == font_family_names::kWebkitCursive)
     return CSSValueID::kCursive;

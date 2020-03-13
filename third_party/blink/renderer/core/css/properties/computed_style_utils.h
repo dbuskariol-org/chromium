@@ -99,6 +99,7 @@ class ComputedStyleUtils {
   ValueForContentPositionAndDistributionWithOverflowAlignment(
       const StyleContentAlignmentData&);
   static CSSValue* ValueForLineHeight(const ComputedStyle&);
+  static CSSValue* ComputedValueForLineHeight(const ComputedStyle&);
   static CSSValueList* ValueForFontFamily(const ComputedStyle&);
   static CSSPrimitiveValue* ValueForFontSize(const ComputedStyle&);
   static CSSPrimitiveValue* ValueForFontStretch(const ComputedStyle&);
