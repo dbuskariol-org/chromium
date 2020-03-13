@@ -1008,7 +1008,7 @@ bool AXTree::Unserialize(const AXTreeUpdate& update) {
         for (auto* child : cleared_node->children())
           DestroySubtree(child, &update_state);
         std::vector<AXNode*> children;
-        cleared_node->SwapChildren(children);
+        cleared_node->SwapChildren(&children);
         update_state.pending_nodes.insert(cleared_node->id());
       }
     }
@@ -1468,7 +1468,7 @@ bool AXTree::UpdateNode(const AXNodeData& src,
   std::vector<AXNode*> new_children;
   bool success = CreateNewChildVector(
       node, src.child_ids, &new_children, update_state);
-  node->SwapChildren(new_children);
+  node->SwapChildren(&new_children);
 
   // Update the root of the tree if needed.
   if (is_new_root) {
