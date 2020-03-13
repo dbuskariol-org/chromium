@@ -7044,3 +7044,4 @@ crbug.com/1061328 http/tests/loading/onreadystatechange-detach.html [ Pass Failu
 crbug.com/1061097 http/tests/security/promise-access-control-allow.htm [ Pass Failure ]
 crbug.com/1061539 [ Mac ] http/tests/images/document-policy-oversized-images-resize.html [ Pass Failure ]
 crbug.com/1061539 [ Linux ] http/tests/images/document-policy-oversized-images-resize.html [ Pass Failure ]
+crbug.com/1061131 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/middle-click-autoscroll-latching-clicked-node.html [ Pass Timeout ]
