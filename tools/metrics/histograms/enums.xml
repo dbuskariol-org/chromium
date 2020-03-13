@@ -53329,6 +53329,11 @@ Called by update_net_trust_anchors.py.-->
   <int value="25" label="FIT_TO_PAPER"/>
 </enum>
 
+<enum name="PriorityChangeStatus">
+  <int value="0" label="NoPriorityChange"/>
+  <int value="1" label="PriorityChanged"/>
+</enum>
+
 <enum name="PrivetNotificationsEvent">
   <int value="0" label="PRIVET_SERVICE_STARTED"/>
   <int value="1" label="PRIVET_LISTER_STARTED"/>
