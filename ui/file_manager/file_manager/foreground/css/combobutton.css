@@ -60,7 +60,7 @@ html[dir='rtl'] .dialog-header .combobutton > .button > .action {
 }
 
 .dialog-header.files-ng .combobutton > .button > .trigger {
-  left: 6px;
+  left: 2px;
   position: relative;
   right: 2px;
 }
