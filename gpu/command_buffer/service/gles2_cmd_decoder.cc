@@ -18637,6 +18637,8 @@ void GLES2DecoderImpl::TexStorageImpl(GLenum target,
         GL_INVALID_VALUE, function_name, "dimensions out of range");
     return;
   }
+  // glTexStorage generates GL_INVALID_OPERATION for out of bounds level
+  // which is a bit different from other GL calls generating GL_INVALID_VALUE
   if (TextureManager::ComputeMipMapCount(target, width, height, depth) <
       levels) {
     LOCAL_SET_GL_ERROR(GL_INVALID_OPERATION, function_name, "too many levels");
