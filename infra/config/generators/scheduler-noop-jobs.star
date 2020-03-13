@@ -2,9 +2,9 @@
 load('@stdlib//internal/luci/proto.star', 'scheduler_pb')
 
 _GPU_NOOP_JOBS = [scheduler_pb.Job(
-    id = '{}-{}'.format(bucket, builder),
+    id = builder,
     schedule = 'triggered',
-    acl_sets = [bucket],
+    acl_sets = ['ci'],
     acls = [scheduler_pb.Acl(
         role = scheduler_pb.Acl.TRIGGERER,
         granted_to = 'chromium-ci-gpu-builder@chops-service-accounts.iam.gserviceaccount.com',
@@ -26,10 +26,6 @@ _GPU_NOOP_JOBS = [scheduler_pb.Job(
     'Optional Win10 x64 Release (Intel HD 630)',
     'Optional Win10 x64 Release (NVIDIA)',
     'Win7 ANGLE Tryserver (AMD)',
-) for bucket in (
-    'ci',
-    'ci-beta',
-    'ci-stable',
 )]
 
 # Android testers which are triggered by Android arm Builder (dbg)
