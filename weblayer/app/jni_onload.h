@@ -11,6 +11,10 @@ namespace weblayer {
 
 bool OnJNIOnLoadInit();
 
+// Registers the minimal set of natives needed to later register the full set of
+// natives if WebView compatibility is needed.
+bool RegisterMinimalNatives();
+
 }  // namespace weblayer
 
 #endif  // WEBLAYER_APP_JNI_ONLOAD_H_
