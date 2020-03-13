@@ -29,9 +29,6 @@ virtual/web-components-v0-disabled/* [ Skip ]
 # Can't rebaseline because the file path is too long.
 virtual/compositor_threaded_scrollbar_scrolling/paint/invalidation/scroll/sticky/invalidate-after-composited-scroll-with-sticky.html [ Skip ]
 
-# This test doesn't apply to CompositeAfterPaint.
-compositing/squashing/do-not-squash-scroll-child-with-composited-descendants.html [ Skip ]
-
 # Fail before CompositeAfterPaint but pass with it.
 crbug.com/802915 css3/blending/isolation-should-include-non-local-background.html [ Pass ]
 crbug.com/918155 virtual/prefer_compositing_to_lcd_text/scrollbars/overlay-scrollbar-over-child-layer-nested-2.html [ Pass ]
