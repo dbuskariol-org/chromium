@@ -4,7 +4,7 @@
 
 // https://w3c.github.io/payment-request/#dom-addressinit
 
-dictionary PaymentAddressInit {
+dictionary AddressInit {
     DOMString country;
     sequence<DOMString> addressLine;
     DOMString region;

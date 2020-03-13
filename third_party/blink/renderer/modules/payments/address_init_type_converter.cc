@@ -2,15 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/payments/payment_address_init_type_converter.h"
+#include "third_party/blink/renderer/modules/payments/address_init_type_converter.h"
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 
 namespace mojo {
 
-payments::mojom::blink::PaymentAddressPtr TypeConverter<
-    payments::mojom::blink::PaymentAddressPtr,
-    blink::PaymentAddressInit*>::Convert(const blink::PaymentAddressInit*
-                                             input) {
+payments::mojom::blink::PaymentAddressPtr
+TypeConverter<payments::mojom::blink::PaymentAddressPtr,
+              blink::AddressInit*>::Convert(const blink::AddressInit* input) {
   payments::mojom::blink::PaymentAddressPtr output =
       payments::mojom::blink::PaymentAddress::New();
   output->country = input->hasCountry() ? input->country() : g_empty_string;
