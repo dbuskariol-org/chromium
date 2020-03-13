@@ -661,10 +661,15 @@
       },
       'android-lollipop-arm-rel': {
         'mixins': [
-          # TODO(crbug.com/1032336): Pin to an exact L version.
-          'lollipop',
           'hammerhead',
         ],
+        'swarming': {
+          'dimension_sets': [
+            {
+              'device_os': 'LMY48M',
+            },
+          ],
+        },
         'additional_compile_targets': [
           'cronet_test_instrumentation_apk',
           'monochrome_static_initializers',
