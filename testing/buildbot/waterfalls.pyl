@@ -1822,7 +1822,7 @@
           'xcode_11c29'
         ],
         'test_suites': {
-          'gtest_tests': 'ios_code_coverage_gtests',
+          'isolated_scripts': 'ios_code_coverage_tests',
         },
       },
       'ios13-beta-simulator': {
@@ -1837,7 +1837,7 @@
           'xcode_11c29',
         ],
         'test_suites': {
-          'gtest_tests': 'ios13_beta_simulator_gtests'
+          'isolated_scripts': 'ios13_beta_simulator_tests'
         },
       },
       'linux-annotator-rel': {
