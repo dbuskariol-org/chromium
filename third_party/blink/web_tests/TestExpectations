@@ -7059,3 +7059,4 @@ crbug.com/1061131 [ Mac ] virtual/threaded/external/wpt/scroll-animations/two-an
 # Sheriff 2020-03-13
 crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Failure ]
 crbug.com/1061118 fast/loader/subframe-removes-itself.html [ Pass Failure ]
+crbug.com/1061043 fast/plugins/keypress-event.html [ Pass Failure ]
