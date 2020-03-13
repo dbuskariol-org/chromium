@@ -199,8 +199,11 @@ void AppActivityRegistry::OnAppInstalled(const AppId& app_id) {
     // First send the system notifications for the application.
     SendSystemNotificationsForApp(app_id);
 
-    if (GetAppState(app_id) == AppState::kLimitReached)
+    if (GetAppState(app_id) == AppState::kLimitReached) {
       NotifyLimitReached(app_id, /* was_active */ false);
+    } else if (GetAppState(app_id) == AppState::kUninstalled) {
+      OnAppReinstalled(app_id);
+    }
   }
 }
 
@@ -215,8 +218,16 @@ void AppActivityRegistry::OnAppAvailable(const AppId& app_id) {
   if (!base::Contains(activity_registry_, app_id))
     return;
 
-  if (GetAppState(app_id) == AppState::kLimitReached)
+  AppState prev_state = GetAppState(app_id);
+
+  if (prev_state == AppState::kLimitReached)
     return;
+
+  // This may happen in the scenario where the application is uninstalled and
+  // reinstalled in the same session.
+  if (prev_state == AppState::kUninstalled) {
+    OnAppReinstalled(app_id);
+  }
 
   SetAppState(app_id, AppState::kAvailable);
 }
@@ -496,6 +507,12 @@ bool AppActivityRegistry::SetAppLimit(
     const AppId& app_id,
     const base::Optional<AppLimit>& app_limit) {
   DCHECK(base::Contains(activity_registry_, app_id));
+
+  // If an application is not installed but present in the registry return
+  // early.
+  if (!IsAppInstalled(app_id))
+    return false;
+
   AppDetails& details = activity_registry_.at(app_id);
 
   // Limit 'data' are considered equal if only the |last_updated_| is different.
@@ -547,6 +564,12 @@ bool AppActivityRegistry::SetAppLimit(
   }
 
   return updated;
+}
+
+void AppActivityRegistry::SetAppWhitelisted(const AppId& app_id) {
+  if (!base::Contains(activity_registry_, app_id))
+    return;
+  SetAppState(app_id, AppState::kAlwaysAvailable);
 }
 
 void AppActivityRegistry::OnChromeAppActivityChanged(
@@ -686,8 +709,7 @@ void AppActivityRegistry::CleanRegistry(base::Time timestamp) {
     info->RemoveActiveTimeEarlierThan(timestamp);
     info->UpdateAppActivityPreference(&entry, /* replace */ true);
 
-    if (info->app_state() == AppState::kUninstalled &&
-        info->active_times().size() == 0) {
+    if (info->ShouldRemoveApp()) {
       // Remove entry in |activity_registry_| if it is present.
       activity_registry_.erase(info->app_id());
 
@@ -702,6 +724,20 @@ void AppActivityRegistry::CleanRegistry(base::Time timestamp) {
   }
 
   *list_value = base::ListValue(std::move(list_storage));
+}
+
+void AppActivityRegistry::OnAppReinstalled(const AppId& app_id) {
+  DCHECK(base::Contains(activity_registry_, app_id));
+  AppDetails& details = activity_registry_.at(app_id);
+  if (details.IsLimitReached()) {
+    SetAppState(app_id, AppState::kLimitReached);
+  } else {
+    SetAppState(app_id, AppState::kAvailable);
+  }
+
+  // Notify observers.
+  for (auto& observer : app_state_observers_)
+    observer.OnAppInstalled(app_id);
 }
 
 void AppActivityRegistry::Add(const AppId& app_id) {
@@ -1017,8 +1053,9 @@ void AppActivityRegistry::InitializeAppActivities() {
   for (const auto& app_info : applications_info) {
     DCHECK(!base::Contains(activity_registry_, app_info.app_id()));
 
-    // Don't restore uninstalled application's data.
-    if (app_info.app_state() == AppState::kUninstalled)
+    // Don't restore uninstalled application's if its running active time is
+    // zero.
+    if (!app_info.ShouldRestoreApp())
       continue;
 
     activity_registry_[app_info.app_id()].activity =

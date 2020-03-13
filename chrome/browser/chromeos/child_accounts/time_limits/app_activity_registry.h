@@ -155,6 +155,9 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   bool SetAppLimit(const AppId& app_id,
                    const base::Optional<AppLimit>& app_limit);
 
+  // Sets the app identified with |app_id| as being always available.
+  void SetAppWhitelisted(const AppId& app_id);
+
   // Reset time has been reached at |timestamp|.
   void OnResetTimeReached(base::Time timestamp);
 
@@ -227,6 +230,10 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
     // scenarios, we have to wait until the application is installed.
     std::vector<SystemNotification> pending_notifications_;
   };
+
+  // OnAppReinstalled is called when an application has been uninstalled and
+  // then installed again before being removed from app registry.
+  void OnAppReinstalled(const AppId& app_id);
 
   // Removes data older than |timestamp| from the registry.
   // Removes entries for uninstalled apps if there is no more relevant activity
