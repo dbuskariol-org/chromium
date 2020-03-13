@@ -652,6 +652,8 @@ html[dir='rtl'] .dialog-header button.icon-button > files-toggle-ripple {
 
 .dialog-header.files-ng #tasks {
   border-radius: 4px;
+  height: 32px;
+  padding: 0 12px;
 }
 
 .dialog-header.files-ng cr-button > .icon,
