@@ -1,6 +1,7 @@
 # Don't make a habit of this - it isn't public API
 load('@stdlib//internal/luci/proto.star', 'scheduler_pb')
 
+# TODO(https://crbug.com/1024644) On branch day, create no-op jobs for branch buckets
 _GPU_NOOP_JOBS = [scheduler_pb.Job(
     id = builder,
     schedule = 'triggered',
