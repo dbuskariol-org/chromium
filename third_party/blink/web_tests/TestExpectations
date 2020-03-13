@@ -1403,8 +1403,8 @@ crbug.com/829028 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/mult
 crbug.com/829028 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-span-all-children-height-001.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/border-radius-clipped-layer-second-column.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/composited-relpos-in-clipped.html [ Failure ]
-crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/flipped-blocks-hit-test.html [ Failure ]
-crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/float-truncation.html [ Failure ]
+crbug.com/1061423 virtual/layout_ng_block_frag/fast/multicol/flipped-blocks-hit-test.html [ Failure ]
+crbug.com/1061423 virtual/layout_ng_block_frag/fast/multicol/float-truncation.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/nested-balanced-inner-with-many-breaks.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/paginate-block-replaced.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/relpos-inside-inline-block.html [ Failure ]
@@ -1422,8 +1422,8 @@ crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/newmulticol/hide-box
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/span/height-increase.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/span/remaining-space-in-last-column.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/span/spanner-first.html [ Failure ]
-crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/vertical-lr/float-truncation.html [ Failure ]
-crbug.com/829028 virtual/layout_ng_block_frag/fast/multicol/vertical-rl/float-truncation.html [ Failure ]
+crbug.com/1061423 virtual/layout_ng_block_frag/fast/multicol/vertical-lr/float-truncation.html [ Failure ]
+crbug.com/1061423 virtual/layout_ng_block_frag/fast/multicol/vertical-rl/float-truncation.html [ Failure ]
 crbug.com/829028 virtual/layout_ng_block_frag/fragmentation/transformed-clip-before-second-column.html [ Failure ]
 
 ### With LayoutNGFragmentTraversal (and LayoutNGFragmentItem) enabled:
