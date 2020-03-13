@@ -7,24 +7,9 @@ import os.path
 import sys
 import unittest
 
-
-def _GetDirAbove(dirname):
-  """Returns the directory "above" this file containing |dirname| (which must
-  also be "above" this file)."""
-  path = os.path.abspath(__file__)
-  while True:
-    path, tail = os.path.split(path)
-    assert tail
-    if tail == dirname:
-      return path
-
-
-try:
-  imp.find_module("mojom")
-except ImportError:
-  sys.path.append(os.path.join(_GetDirAbove("pylib"), "pylib"))
+from mojom.generate import module as mojom
+from mojom.generate import translate
 from mojom.parse import ast
-from mojom.parse import translate
 
 
 class TranslateTest(unittest.TestCase):
@@ -56,29 +41,28 @@ class TranslateTest(unittest.TestCase):
                 ast.UnionField("b", None, None, "string")
             ]))
     ])
-    expected = [{
-        "name":
-        "SomeUnion",
-        "fields": [{
-            "kind": "i32",
-            "name": "a"
-        }, {
-            "kind": "s",
-            "name": "b"
-        }]
-    }]
-    actual = translate.Translate(tree, "mojom_tree")
-    self.assertEquals(actual["unions"], expected)
 
-  def testMapTreeForTypeRaisesWithDuplicate(self):
+    translation = translate.OrderedModule(tree, "mojom_tree", [])
+    self.assertEqual(1, len(translation.unions))
+
+    union = translation.unions[0]
+    self.assertTrue(isinstance(union, mojom.Union))
+    self.assertEqual("SomeUnion", union.mojom_name)
+    self.assertEqual(2, len(union.fields))
+    self.assertEqual("a", union.fields[0].mojom_name)
+    self.assertEqual(mojom.INT32.spec, union.fields[0].kind.spec)
+    self.assertEqual("b", union.fields[1].mojom_name)
+    self.assertEqual(mojom.STRING.spec, union.fields[1].kind.spec)
+
+  def testMapKindRaisesWithDuplicate(self):
     """Verifies _MapTreeForType() raises when passed two values with the same
        name."""
     methods = [
         ast.Method('dup', None, None, ast.ParameterList(), None),
         ast.Method('dup', None, None, ast.ParameterList(), None)
     ]
-    self.assertRaises(Exception, translate._MapTreeForType,
-                      (lambda x: x, methods, '', 'scope'))
+    with self.assertRaises(Exception):
+      translate._ElemsOfType(methods, ast.Method, 'scope')
 
   def testAssociatedKinds(self):
     """Tests type spec translation of associated interfaces and requests."""
@@ -87,7 +71,3 @@ class TranslateTest(unittest.TestCase):
         translate._MapKind("asso<SomeInterface>?"), "?asso:x:SomeInterface")
     self.assertEquals(
         translate._MapKind("asso<SomeInterface&>?"), "?asso:r:x:SomeInterface")
-
-
-if __name__ == "__main__":
-  unittest.main()

@@ -9,22 +9,6 @@ import sys
 import tempfile
 import unittest
 
-
-def _GetDirAbove(dirname):
-  """Returns the directory "above" this file containing |dirname| (which must
-  also be "above" this file)."""
-  path = os.path.abspath(__file__)
-  while True:
-    path, tail = os.path.split(path)
-    assert tail
-    if tail == dirname:
-      return path
-
-
-try:
-  imp.find_module("mojom")
-except ImportError:
-  sys.path.append(os.path.join(_GetDirAbove("pylib"), "pylib"))
 from mojom import fileutil
 
 

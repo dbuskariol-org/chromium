@@ -7,25 +7,9 @@ import os.path
 import sys
 import unittest
 
-
-def _GetDirAbove(dirname):
-  """Returns the directory "above" this file containing |dirname| (which must
-  also be "above" this file)."""
-  path = os.path.abspath(__file__)
-  while True:
-    path, tail = os.path.split(path)
-    assert tail
-    if tail == dirname:
-      return path
-
-
-try:
-  imp.find_module("mojom")
-except ImportError:
-  sys.path.append(os.path.join(_GetDirAbove("pylib"), "pylib"))
-import mojom.parse.ast as ast
-import mojom.parse.lexer as lexer
-import mojom.parse.parser as parser
+from mojom.parse import ast
+from mojom.parse import lexer
+from mojom.parse import parser
 
 
 class ParserTest(unittest.TestCase):
@@ -354,16 +338,6 @@ class ParserTest(unittest.TestCase):
 
   def testInvalidEnumInitializers(self):
     """Tests that invalid enum initializers are correctly detected."""
-
-    # No values.
-    source1 = """\
-        enum MyEnum {
-        };
-        """
-    with self.assertRaisesRegexp(
-        parser.ParseError, r"^my_file\.mojom:2: Error: Unexpected '}':\n"
-        r" *};$"):
-      parser.Parse(source1, "my_file.mojom")
 
     # Floating point value.
     source2 = "enum MyEnum { VALUE = 0.123 };"
