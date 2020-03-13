@@ -5284,10 +5284,6 @@ crbug.com/615885 external/wpt/content-security-policy/securitypolicyviolation/im
 crbug.com/850358 http/tests/devtools/editor/text-editor-enter-behaviour.js [ Pass Failure Timeout ]
 crbug.com/849978 http/tests/devtools/elements/styles-4/stylesheet-source-url-comment.js [ Pass Failure Timeout ]
 
-# Origin Policy: Skip tests that rely on --feature-enabled=OriginPolicy, so
-#   they can be run via virtual/origin-policy instead.
-crbug.com/751996 external/wpt/origin-policy/* [ Skip ]
-
 crbug.com/854538 [ Win7 ] http/tests/security/contentSecurityPolicy/1.1/form-action-src-default-ignored-with-redirect.html [ Skip ]
 
 # Sheriff 2018-06-21
