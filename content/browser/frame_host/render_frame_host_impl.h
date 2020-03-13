@@ -144,7 +144,6 @@
 
 class GURL;
 struct AccessibilityHostMsg_EventBundleParams;
-struct AccessibilityHostMsg_LocationChangeParams;
 struct FrameHostMsg_OpenURL_Params;
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)
 struct FrameHostMsg_ShowPopup_Params;
@@ -226,6 +225,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
     : public RenderFrameHost,
       public base::SupportsUserData,
       public mojom::FrameHost,
+      public mojom::RenderAccessibilityHost,
       public BrowserAccessibilityDelegate,
       public RenderProcessHostObserver,
       public SiteInstanceImpl::Observer,
@@ -1599,8 +1599,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
       const AccessibilityHostMsg_EventBundleParams& params,
       int reset_token,
       int ack_token);
-  void OnAccessibilityLocationChanges(
-      const std::vector<AccessibilityHostMsg_LocationChangeParams>& params);
   void OnAccessibilityChildFrameHitTestResult(
       int action_request_id,
       const gfx::Point& point,
@@ -1701,6 +1699,10 @@ class CONTENT_EXPORT RenderFrameHostImpl
 #if defined(OS_ANDROID)
   void UpdateUserGestureCarryoverInfo() override;
 #endif
+
+  // mojom::RenderAccessibilityHost:
+  void HandleAXLocationChanges(
+      std::vector<mojom::LocationChangesPtr> changes) override;
 
   // Registers Mojo interfaces that this frame host makes available.
   void RegisterMojoInterfaces();
@@ -2556,6 +2558,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // be connected (i.e. bound) to the other endpoint in the renderer while there
   // is an accessibility mode that includes |kWebContents|.
   mojo::AssociatedRemote<mojom::RenderAccessibility> render_accessibility_;
+
+  mojo::AssociatedReceiver<mojom::RenderAccessibilityHost>
+      render_accessibility_host_receiver_{this};
 
   std::unique_ptr<KeepAliveHandleFactory> keep_alive_handle_factory_;
   base::TimeDelta keep_alive_timeout_;

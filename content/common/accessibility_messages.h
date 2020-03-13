@@ -19,7 +19,6 @@
 #include "ui/accessibility/ax_event.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/accessibility/ax_param_traits.h"
-#include "ui/accessibility/ax_relative_bounds.h"
 #include "ui/accessibility/ax_tree_update.h"
 #include "ui/gfx/transform.h"
 
@@ -83,14 +82,6 @@ IPC_STRUCT_BEGIN(AccessibilityHostMsg_EventBundleParams)
   IPC_STRUCT_MEMBER(std::vector<ui::AXEvent>, events)
 IPC_STRUCT_END()
 
-IPC_STRUCT_BEGIN(AccessibilityHostMsg_LocationChangeParams)
-  // ID of the object whose location is changing.
-  IPC_STRUCT_MEMBER(int, id)
-
-  // The object's new location info.
-  IPC_STRUCT_MEMBER(ui::AXRelativeBounds, new_location)
-IPC_STRUCT_END()
-
 // Messages sent from the browser to the renderer.
 
 // Tells the render view that a AccessibilityHostMsg_EventBundle
@@ -112,11 +103,6 @@ IPC_MESSAGE_ROUTED3(AccessibilityHostMsg_EventBundle,
                     AccessibilityHostMsg_EventBundleParams /* params */,
                     int /* reset_token */,
                     int /* ack_token */)
-
-// Sent to update the browser of the location of accessibility objects.
-IPC_MESSAGE_ROUTED1(
-    AccessibilityHostMsg_LocationChanges,
-    std::vector<AccessibilityHostMsg_LocationChangeParams>)
 
 // Sent in response to PerformAction with parameter kHitTest.
 IPC_MESSAGE_ROUTED5(AccessibilityHostMsg_ChildFrameHitTestResult,

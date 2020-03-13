@@ -1536,8 +1536,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFrameOwnerProperties,
                         OnDidChangeFrameOwnerProperties)
     IPC_MESSAGE_HANDLER(AccessibilityHostMsg_EventBundle, OnAccessibilityEvents)
-    IPC_MESSAGE_HANDLER(AccessibilityHostMsg_LocationChanges,
-                        OnAccessibilityLocationChanges)
     IPC_MESSAGE_HANDLER(AccessibilityHostMsg_ChildFrameHitTestResult,
                         OnAccessibilityChildFrameHitTestResult)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidStopLoading, OnDidStopLoading)
@@ -3939,37 +3937,6 @@ void RenderFrameHostImpl::EvictFromBackForwardCacheWithReasons(
   controller->GetBackForwardCache().PostTaskToDestroyEvictedFrames();
 }
 
-void RenderFrameHostImpl::OnAccessibilityLocationChanges(
-    const std::vector<AccessibilityHostMsg_LocationChangeParams>& params) {
-  if (accessibility_reset_token_ || !is_active())
-    return;
-
-  RenderWidgetHostViewBase* view = static_cast<RenderWidgetHostViewBase*>(
-      render_view_host_->GetWidget()->GetView());
-  if (view) {
-    ui::AXMode accessibility_mode = delegate_->GetAccessibilityMode();
-    if (accessibility_mode.has_mode(ui::AXMode::kNativeAPIs)) {
-      BrowserAccessibilityManager* manager =
-          GetOrCreateBrowserAccessibilityManager();
-      if (manager)
-        manager->OnLocationChanges(params);
-    }
-
-    // Send the updates to the automation extension API.
-    std::vector<AXLocationChangeNotificationDetails> details;
-    details.reserve(params.size());
-    for (size_t i = 0; i < params.size(); ++i) {
-      const AccessibilityHostMsg_LocationChangeParams& param = params[i];
-      AXLocationChangeNotificationDetails detail;
-      detail.id = param.id;
-      detail.ax_tree_id = GetAXTreeID();
-      detail.new_location = param.new_location;
-      details.push_back(detail);
-    }
-    delegate_->AccessibilityLocationChangesReceived(details);
-  }
-}
-
 void RenderFrameHostImpl::OnAccessibilityChildFrameHitTestResult(
     int action_request_id,
     const gfx::Point& point,
@@ -4765,6 +4732,36 @@ void RenderFrameHostImpl::ResourceLoadComplete(
   }
   delegate_->ResourceLoadComplete(this, global_request_id,
                                   std::move(resource_load_info));
+}
+
+void RenderFrameHostImpl::HandleAXLocationChanges(
+    std::vector<mojom::LocationChangesPtr> changes) {
+  if (accessibility_reset_token_ || !is_active())
+    return;
+
+  RenderWidgetHostViewBase* view = static_cast<RenderWidgetHostViewBase*>(
+      render_view_host_->GetWidget()->GetView());
+  if (view) {
+    ui::AXMode accessibility_mode = delegate_->GetAccessibilityMode();
+    if (accessibility_mode.has_mode(ui::AXMode::kNativeAPIs)) {
+      BrowserAccessibilityManager* manager =
+          GetOrCreateBrowserAccessibilityManager();
+      if (manager)
+        manager->OnLocationChanges(changes);
+    }
+
+    // Send the updates to the automation extension API.
+    std::vector<AXLocationChangeNotificationDetails> details;
+    details.reserve(changes.size());
+    for (auto& change : changes) {
+      AXLocationChangeNotificationDetails detail;
+      detail.id = change->id;
+      detail.ax_tree_id = GetAXTreeID();
+      detail.new_location = change->new_location;
+      details.push_back(detail);
+    }
+    delegate_->AccessibilityLocationChangesReceived(details);
+  }
 }
 
 void RenderFrameHostImpl::RegisterMojoInterfaces() {
@@ -5855,6 +5852,15 @@ void RenderFrameHostImpl::SetUpMojoIfNeeded() {
         },
         base::Unretained(this)));
   }
+
+  associated_registry_->AddInterface(base::BindRepeating(
+      [](RenderFrameHostImpl* impl,
+         mojo::PendingAssociatedReceiver<mojom::RenderAccessibilityHost>
+             receiver) {
+        impl->render_accessibility_host_receiver_.Bind(std::move(receiver));
+      },
+      base::Unretained(this)));
+
   RegisterMojoInterfaces();
   mojo::PendingRemote<mojom::FrameFactory> frame_factory;
   GetProcess()->BindReceiver(frame_factory.InitWithNewPipeAndPassReceiver());
@@ -5897,6 +5903,7 @@ void RenderFrameHostImpl::InvalidateMojoConnection() {
   geolocation_service_.reset();
   sensor_provider_proxy_.reset();
 
+  render_accessibility_host_receiver_.reset();
   local_frame_host_receiver_.reset();
   local_main_frame_host_receiver_.reset();
   associated_registry_.reset();
