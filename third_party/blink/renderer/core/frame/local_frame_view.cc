@@ -1024,8 +1024,9 @@ FloatSize LocalFrameView::ViewportSizeForViewportUnits() const {
       // zoom factor when use-zoom-for-dsf is enabled on Android. Confirm this
       // works correctly when that's turned on. https://crbug.com/737777.
       float page_scale_at_layout_width = viewport_width / layout_size.Width();
-      layout_size.Expand(
-          0, browser_controls.TotalHeight() / page_scale_at_layout_width);
+      layout_size.Expand(0, (browser_controls.TotalHeight() -
+                             browser_controls.TotalMinHeight()) /
+                                page_scale_at_layout_width);
     }
   }
 
