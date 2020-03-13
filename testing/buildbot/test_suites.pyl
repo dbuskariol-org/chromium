@@ -2183,6 +2183,18 @@
       }
     },
 
+    'gpu_skia_renderer_dawn_gtests': {
+      'cc_unittests': {
+        'linux_args': ['--no-xvfb'],
+      },
+      'viz_unittests': {
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/gpu.skiarenderer_dawn_viz_unittests.filter',
+        ],
+        'linux_args': ['--no-xvfb'],
+      },
+    },
+
     'gpu_skia_renderer_egl_telemetry_tests': {
       'egl_pixel_skia': {
         'name': 'egl_pixel_skia_gold_test',

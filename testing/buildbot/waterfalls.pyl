@@ -3035,7 +3035,7 @@
           'linux_intel_hd_630',
         ],
         'test_suites': {
-          'gpu_telemetry_tests': 'gpu_noop_sleep_telemetry_test',
+          'gtest_tests': 'gpu_skia_renderer_dawn_gtests',
         },
       },
       'Linux FYI SkiaRenderer Vulkan (Intel HD 630)': {
