@@ -1811,6 +1811,7 @@
       },
       'ios-simulator-code-coverage': {
         'mixins': [
+          'code-coverage',
           'ios_swarming_account',
           'mac_10.14',
           'mac_toolchain',
