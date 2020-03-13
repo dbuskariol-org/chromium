@@ -6284,7 +6284,6 @@ crbug.com/1036626 http/tests/devtools/tracing/tracing-record-input-events.js [ P
 crbug.com/1036626 virtual/threaded/http/tests/devtools/tracing/tracing-record-input-events.js [ Pass Failure ]
 crbug.com/1034789 [ Mac10.13 ] virtual/threaded/fast/scroll-snap/snap-to-area-with-fractional-offset.html [ Pass Timeout ]
 crbug.com/1034789 [ Retina ] virtual/threaded/fast/scroll-snap/snap-to-area-with-fractional-offset.html [ Pass Timeout ]
-crbug.com/1033381 synthetic_gestures/smooth-scroll-tiny-delta.html [ Pass Crash ]
 
 # Sheriff 2019-12-27
 crbug.com/1038091 virtual/gpu-rasterization/images/jpeg-yuv-image-decoding.html [ Pass Failure ]
