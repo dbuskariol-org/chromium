@@ -437,17 +437,6 @@ deps = {
     'dep_type': 'cipd',
   },
 
-  'src/chrome/test/chromedriver/cipd': {
-    'packages': [
-      {
-        'package': 'chromium/chrome/test/chromedriver/cipd',
-        'version': 'JvTGvPUc-qPtmBqyJhvc-1i28yILiGeTjqGi-BvjiN4C',
-      }
-    ],
-    'condition': 'checkout_android',
-    'dep_type': 'cipd',
-  },
-
   'src/chrome/test/data/autofill/captured_sites': {
     'packages': [
       {
