@@ -1037,6 +1037,7 @@
       # Used on an internal builder.
       'ToTLinuxOfficial': {
         'mixins': [
+          'chrome-tester-service-account',
           'linux-xenial',
         ],
         'test_suites': {
@@ -1091,12 +1092,16 @@
       },
       # Used on an internal builder.
       'ToTMacOfficial': {
+        'mixins': [
+          'chrome-tester-service-account',
+        ],
         'test_suites': {
           'gtest_tests': 'chromium_mac_gtests',
           'isolated_scripts': 'chromium_mac_rel_isolated_scripts',
         },
       },
       'ToTWin': {
+        'mixins': ['chrome-tester-service-account'],
         'test_suites': {
           'gtest_tests': 'chromium_win_gtests',
           'isolated_scripts': 'win_specific_isolated_scripts',
@@ -1117,8 +1122,9 @@
       },
       'ToTWin64': {
         'mixins': [
-          'x86-64',
+          'chrome-tester-service-account',
           'win10',
+          'x86-64',
         ],
         'test_suites': {
           'gtest_tests': 'chromium_win_gtests',
@@ -1158,12 +1164,18 @@
         },
       },
       'ToTWinOfficial': {
+        'mixins': [
+          'chrome-tester-service-account',
+        ],
         'test_suites': {
           'gtest_tests': 'chromium_win_gtests',
           'isolated_scripts': 'win_specific_isolated_scripts',
         },
       },
       'ToTWinThinLTO64': {
+        'mixins': [
+          'chrome-tester-service-account',
+        ],
         'test_suites': {
           'gtest_tests': 'chromium_win_gtests',
           'isolated_scripts': 'win_specific_isolated_scripts',
