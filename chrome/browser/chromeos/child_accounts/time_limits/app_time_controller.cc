@@ -341,9 +341,11 @@ void AppTimeController::TimeLimitsPolicyUpdated(const std::string& pref_name) {
     LOG(WARNING) << "Invalid PerAppTimeLimits policy.";
     return;
   }
-
   bool updated =
       app_registry_->UpdateAppLimits(policy::AppLimitsFromDict(*policy));
+
+  app_registry_->SetReportingEnabled(
+      policy::ActivityReportingEnabledFromDict(*policy));
 
   base::Optional<base::TimeDelta> new_reset_time =
       policy::ResetTimeFromDict(*policy);

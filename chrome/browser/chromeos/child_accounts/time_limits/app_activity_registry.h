@@ -131,6 +131,9 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   // Will return nullopt if there is no limit set.
   base::Optional<base::TimeDelta> GetTimeLimit(const AppId& app_id) const;
 
+  // Reporting enablement is set if |enabled| has value.
+  void SetReportingEnabled(base::Optional<bool> enabled);
+
   // Populates |report| with collected app activity. Returns whether any data
   // were reported.
   AppActivityReportInterface::ReportParams GenerateAppActivityReport(
@@ -309,6 +312,9 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
 
   // This records the timestamp of the latest set app limit.
   base::Time latest_app_limit_update_;
+
+  // Boolean to capture if app activity data reporting is enabled.
+  bool activity_reporting_enabled_ = true;
 };
 
 }  // namespace app_time

@@ -378,10 +378,26 @@ base::Optional<base::TimeDelta> AppActivityRegistry::GetTimeLimit(
   return limit->daily_limit();
 }
 
+void AppActivityRegistry::SetReportingEnabled(base::Optional<bool> value) {
+  if (value.has_value())
+    activity_reporting_enabled_ = value.value();
+}
+
 AppActivityReportInterface::ReportParams
 AppActivityRegistry::GenerateAppActivityReport(
     enterprise_management::ChildStatusReportRequest* report) {
+  // Calling SaveAppActivity is beneficial even if this method is returning
+  // early due to reporting not being enabled. This is because it helps move the
+  // ActiveTimes information from AppActivityRegistry to the stored pref data
+  // which will then be cleaned in the direct CleanRegistry() call below.
   SaveAppActivity();
+
+  // If app activity reporting is not enabled, simply return.
+  if (!activity_reporting_enabled_) {
+    base::Time timestamp = base::Time::Now();
+    CleanRegistry(timestamp);
+    return AppActivityReportInterface::ReportParams{timestamp, false};
+  }
 
   PrefService* pref_service = profile_->GetPrefs();
   const base::Value* value =
@@ -1025,9 +1041,15 @@ PersistedAppInfo AppActivityRegistry::GetPersistedAppInfoForApp(
   // |timestamp|.
   details.activity.CaptureOngoingActivity(timestamp);
 
+  std::vector<AppActivity::ActiveTime> activity =
+      details.activity.TakeActiveTimes();
+
+  // If reporting is not enabled, don't save unnecessary data.
+  if (!activity_reporting_enabled_)
+    activity.clear();
+
   return PersistedAppInfo(app_id, details.activity.app_state(),
-                          running_active_time,
-                          details.activity.TakeActiveTimes());
+                          running_active_time, std::move(activity));
 }
 
 bool AppActivityRegistry::ShouldCleanUpStoredPref() {
