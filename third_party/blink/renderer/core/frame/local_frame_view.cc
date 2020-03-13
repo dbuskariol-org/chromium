@@ -4438,9 +4438,7 @@ void LocalFrameView::UpdateLayerDebugInfoEnabled() {
   DCHECK(frame_->IsLocalRoot());
 #if DCHECK_IS_ON()
   DCHECK(layer_debug_info_enabled_);
-  return;
-#endif
-
+#else
   bool should_enable =
       cc::frame_viewer_instrumentation::IsTracingLayerTreeSnapshots() ||
       WebTestSupport::IsRunningWebTest() ||
@@ -4449,6 +4447,7 @@ void LocalFrameView::UpdateLayerDebugInfoEnabled() {
     layer_debug_info_enabled_ = should_enable;
     SetPaintArtifactCompositorNeedsUpdate();
   }
+#endif
 }
 
 OverlayInterstitialAdDetector&
