@@ -676,6 +676,7 @@ html[dir='rtl'] .dialog-header button.icon-button > files-toggle-ripple {
 }
 
 .dialog-header.files-ng #search-wrapper.has-cursor,
+.dialog-header.files-ng #search-wrapper.has-text,
 .dialog-header.files-ng #search-wrapper.hide-pending {
   background-color: var(--google-grey-100);
   margin-inline-end: 16px;
