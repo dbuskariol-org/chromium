@@ -2174,7 +2174,6 @@ if (!is_android) {
         "../browser/chromeos/login/active_directory_login_browsertest.cc",
         "../browser/chromeos/login/arc_terms_of_service_browsertest.cc",
         "../browser/chromeos/login/auto_launched_kiosk_browsertest.cc",
-        "../browser/chromeos/login/challenge_response_auth_keys_loader_browsertest.cc",
         "../browser/chromeos/login/configuration_based_oobe_browsertest.cc",
         "../browser/chromeos/login/crash_restore_browsertest.cc",
         "../browser/chromeos/login/demo_mode/demo_app_launcher_browsertest.cc",
