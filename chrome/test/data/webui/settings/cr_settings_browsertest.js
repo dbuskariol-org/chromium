@@ -62,7 +62,7 @@ CrSettingsCheckboxTest.prototype = {
   ]),
 };
 
-TEST_F('CrSettingsCheckboxTest', 'All', function() {
+TEST_F('CrSettingsCheckboxTest', 'DISABLED_All', function() {
   mocha.run();
 });
 
