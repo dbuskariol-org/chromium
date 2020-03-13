@@ -347,6 +347,7 @@ cr.define('cr.ui', () => {
               // focus is on another button or cr-input element.
               if (!(document.hasFocus() &&
                     (document.activeElement.tagName === 'BUTTON' ||
+                     document.activeElement.tagName === 'CR-BUTTON' ||
                      document.activeElement.tagName === 'CR-INPUT'))) {
                 e.preventDefault();
               }
