@@ -1185,6 +1185,26 @@
             ]
         }
     ],
+    "CSSOMViewScrollCoordinates": [
+        {
+            "platforms": [
+                "android",
+                "android_webview",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "EnableCSSOMViewScrollCoordinates",
+                    "enable_features": [
+                        "CSSOMViewScrollCoordinates"
+                    ]
+                }
+            ]
+        }
+    ],
     "CacheStorageEagerReading": [
         {
             "platforms": [
