@@ -28,16 +28,14 @@ static bool g_nvda = false;
 static bool g_supernova = false;
 static bool g_zoomtext = false;
 
-// Enables accessibility based on three possible clues that indicate
-// accessibility API usage.
-//
-// TODO(dmazzoni): Rename IAccessible2UsageObserver to something more general.
-class WindowsAccessibilityEnabler : public ui::IAccessible2UsageObserver {
+// Enables accessibility based on clues that indicate accessibility API usage.
+class WindowsAccessibilityEnabler
+    : public ui::WinAccessibilityAPIUsageObserver {
  public:
   WindowsAccessibilityEnabler() {}
 
  private:
-  // IAccessible2UsageObserver
+  // WinAccessibilityAPIUsageObserver
   void OnIAccessible2Used() override {
     // When IAccessible2 APIs have been used elsewhere in the codebase,
     // enable basic web accessibility support. (Full screen reader support is
@@ -87,7 +85,7 @@ void OnWndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
 }  // namespace
 
 void BrowserAccessibilityStateImpl::PlatformInitialize() {
-  ui::GetIAccessible2UsageObserverList().AddObserver(
+  ui::GetWinAccessibilityAPIUsageObserverList().AddObserver(
       new WindowsAccessibilityEnabler());
 
   singleton_hwnd_observer_.reset(
