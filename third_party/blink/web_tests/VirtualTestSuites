@@ -506,6 +506,11 @@
              "--force-high-contrast"]
   },
   {
+    "prefix": "use-common-select-popup",
+    "bases": ["virtual/controls-refresh/color-scheme/select"],
+    "args": ["--enable-features=UseCommonSelectPopup"]
+  },
+  {
     "prefix": "legacy-samesite",
     "bases": ["external/wpt/cookies/samesite"],
     "args": ["--disable-features=SameSiteByDefaultCookies",
