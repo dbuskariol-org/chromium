@@ -549,8 +549,20 @@ void FragmentPaintPropertyTreeBuilder::UpdateStickyTranslation() {
       //   DCHECK_EQ(scroller_properties->Scroll(), context_.current.scroll);
       // However there is a bug that AncestorOverflowLayer() may be computed
       // incorrectly with clip escaping involved.
-      if (scroller_properties &&
-          scroller_properties->Scroll() == context_.current.scroll) {
+      bool nearest_scroller_is_clip =
+          scroller_properties &&
+          scroller_properties->Scroll() == context_.current.scroll;
+
+      // Additionally, we also want to make sure that the nearest scroller
+      // actually translates this node. If it doesn't (e.g. a position fixed
+      // node in a scrolling document), there's no point in adding a constraint
+      // since scrolling won't affect it. Indeed, if we do add it, the
+      // compositor assumes scrolling does affect it and produces incorrect
+      // results.
+      bool translates_with_nearest_scroller =
+          context_.current.transform->NearestScrollTranslationNode()
+              .ScrollNode() == context_.current.scroll;
+      if (nearest_scroller_is_clip && translates_with_nearest_scroller) {
         const StickyPositionScrollingConstraints& layout_constraint =
             layer->AncestorOverflowLayer()
                 ->GetScrollableArea()
