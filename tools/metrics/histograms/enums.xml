@@ -30588,6 +30588,11 @@ Called by update_feature_policy_enum.py.-->
   <int value="1" label="Rejected"/>
 </enum>
 
+<enum name="GenericEnum">
+<!-- Generic enums where the label is just the raw number -->
+
+</enum>
+
 <enum name="GeolocationAuthorizationAction">
   <int value="0" label="Location authorized"/>
   <int value="1" label="Location permanently denied (Don't Allow)"/>
