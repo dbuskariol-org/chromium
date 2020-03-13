@@ -2185,8 +2185,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
                         OnSnapshotAccessibilityTree)
     IPC_MESSAGE_HANDLER(FrameMsg_UpdateOpener, OnUpdateOpener)
     IPC_MESSAGE_HANDLER(FrameMsg_AdvanceFocus, OnAdvanceFocus)
-    IPC_MESSAGE_HANDLER(FrameMsg_SetTextTrackSettings,
-                        OnTextTrackSettingsChanged)
     IPC_MESSAGE_HANDLER(FrameMsg_GetSavableResourceLinks,
                         OnGetSavableResourceLinks)
     IPC_MESSAGE_HANDLER(FrameMsg_GetSerializedHtmlWithLocalLinks,
@@ -2696,35 +2694,6 @@ void RenderFrameImpl::OnAdvanceFocus(blink::mojom::FocusType type,
 
   render_view_->GetWebView()->AdvanceFocusAcrossFrames(
       type, source_frame->web_frame(), frame_);
-}
-
-void RenderFrameImpl::OnTextTrackSettingsChanged(
-    const FrameMsg_TextTrackSettings_Params& params) {
-  DCHECK(!frame_->Parent());
-  if (!render_view_->GetWebView())
-    return;
-
-  if (params.text_tracks_enabled) {
-    render_view_->GetWebView()->GetSettings()->SetTextTrackKindUserPreference(
-        WebSettings::TextTrackKindUserPreference::kCaptions);
-  } else {
-    render_view_->GetWebView()->GetSettings()->SetTextTrackKindUserPreference(
-        WebSettings::TextTrackKindUserPreference::kDefault);
-  }
-  render_view_->GetWebView()->GetSettings()->SetTextTrackBackgroundColor(
-      WebString::FromUTF8(params.text_track_background_color));
-  render_view_->GetWebView()->GetSettings()->SetTextTrackFontFamily(
-      WebString::FromUTF8(params.text_track_font_family));
-  render_view_->GetWebView()->GetSettings()->SetTextTrackFontStyle(
-      WebString::FromUTF8(params.text_track_font_style));
-  render_view_->GetWebView()->GetSettings()->SetTextTrackFontVariant(
-      WebString::FromUTF8(params.text_track_font_variant));
-  render_view_->GetWebView()->GetSettings()->SetTextTrackTextColor(
-      WebString::FromUTF8(params.text_track_text_color));
-  render_view_->GetWebView()->GetSettings()->SetTextTrackTextShadow(
-      WebString::FromUTF8(params.text_track_text_shadow));
-  render_view_->GetWebView()->GetSettings()->SetTextTrackTextSize(
-      WebString::FromUTF8(params.text_track_text_size));
 }
 
 void RenderFrameImpl::PostMessageEvent(int32_t source_routing_id,

@@ -716,6 +716,13 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
   settings->SetPresentationRequiresUserGesture(
       prefs.user_gesture_required_for_presentation);
 
+  if (prefs.text_tracks_enabled) {
+    settings->SetTextTrackKindUserPreference(
+        WebSettings::TextTrackKindUserPreference::kCaptions);
+  } else {
+    settings->SetTextTrackKindUserPreference(
+        WebSettings::TextTrackKindUserPreference::kDefault);
+  }
   settings->SetTextTrackBackgroundColor(
       WebString::FromASCII(prefs.text_track_background_color));
   settings->SetTextTrackTextColor(
@@ -726,6 +733,8 @@ void RenderView::ApplyWebPreferences(const WebPreferences& prefs,
       WebString::FromASCII(prefs.text_track_text_shadow));
   settings->SetTextTrackFontFamily(
       WebString::FromASCII(prefs.text_track_font_family));
+  settings->SetTextTrackFontStyle(
+      WebString::FromASCII(prefs.text_track_font_style));
   settings->SetTextTrackFontVariant(
       WebString::FromASCII(prefs.text_track_font_variant));
   settings->SetTextTrackMarginPercentage(prefs.text_track_margin_percentage);

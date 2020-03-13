@@ -413,32 +413,6 @@ IPC_STRUCT_BEGIN(FrameHostMsg_OpenURL_Params)
   IPC_STRUCT_MEMBER(content::NavigationDownloadPolicy, download_policy)
 IPC_STRUCT_END()
 
-IPC_STRUCT_BEGIN(FrameMsg_TextTrackSettings_Params)
-  // Text tracks on/off state
-  IPC_STRUCT_MEMBER(bool, text_tracks_enabled)
-
-  // Background color of the text track.
-  IPC_STRUCT_MEMBER(std::string, text_track_background_color)
-
-  // Font family of the text track text.
-  IPC_STRUCT_MEMBER(std::string, text_track_font_family)
-
-  // Font style of the text track text.
-  IPC_STRUCT_MEMBER(std::string, text_track_font_style)
-
-  // Font variant of the text track text.
-  IPC_STRUCT_MEMBER(std::string, text_track_font_variant)
-
-  // Color of the text track text.
-  IPC_STRUCT_MEMBER(std::string, text_track_text_color)
-
-  // Text shadow (edge style) of the text track text.
-  IPC_STRUCT_MEMBER(std::string, text_track_text_shadow)
-
-  // Size of the text track text.
-  IPC_STRUCT_MEMBER(std::string, text_track_text_size)
-IPC_STRUCT_END()
-
 IPC_STRUCT_TRAITS_BEGIN(content::SavableSubframe)
   IPC_STRUCT_TRAITS_MEMBER(original_url)
   IPC_STRUCT_TRAITS_MEMBER(routing_id)
@@ -556,11 +530,6 @@ IPC_MESSAGE_ROUTED0(FrameMsg_Reload)
 IPC_MESSAGE_ROUTED2(FrameMsg_DidUpdateName,
                     std::string /* name */,
                     std::string /* unique_name */)
-
-// Send to the RenderFrame to set text tracks state and style settings.
-// Sent for top-level frames.
-IPC_MESSAGE_ROUTED1(FrameMsg_SetTextTrackSettings,
-                    FrameMsg_TextTrackSettings_Params /* params */)
 
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)
 #if defined(OS_MACOSX)

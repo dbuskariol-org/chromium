@@ -146,7 +146,6 @@ class GURL;
 struct AccessibilityHostMsg_EventBundleParams;
 struct AccessibilityHostMsg_LocationChangeParams;
 struct FrameHostMsg_OpenURL_Params;
-struct FrameMsg_TextTrackSettings_Params;
 #if BUILDFLAG(USE_EXTERNAL_POPUP_MENU)
 struct FrameHostMsg_ShowPopup_Params;
 #endif
@@ -761,9 +760,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void set_browser_plugin_embedder_ax_tree_id(ui::AXTreeID ax_tree_id) {
     browser_plugin_embedder_ax_tree_id_ = ax_tree_id;
   }
-
-  // Send a message to the render process to change text track style settings.
-  void SetTextTrackSettings(const FrameMsg_TextTrackSettings_Params& params);
 
   // Access the BrowserAccessibilityManager if it already exists.
   BrowserAccessibilityManager* browser_accessibility_manager() const {

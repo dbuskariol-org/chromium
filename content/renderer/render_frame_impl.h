@@ -117,7 +117,6 @@
 #endif
 
 struct FrameMsg_MixedContentFound_Params;
-struct FrameMsg_TextTrackSettings_Params;
 
 namespace blink {
 class WebComputedAXTree;
@@ -1043,8 +1042,6 @@ class CONTENT_EXPORT RenderFrameImpl
   void OnSnapshotAccessibilityTree(int callback_id, ui::AXMode ax_mode);
   void OnUpdateOpener(int opener_routing_id);
   void OnAdvanceFocus(blink::mojom::FocusType type, int32_t source_routing_id);
-  void OnTextTrackSettingsChanged(
-      const FrameMsg_TextTrackSettings_Params& params);
   void OnGetSavableResourceLinks();
   void OnGetSerializedHtmlWithLocalLinks(
       const std::map<GURL, base::FilePath>& url_to_local_path,
