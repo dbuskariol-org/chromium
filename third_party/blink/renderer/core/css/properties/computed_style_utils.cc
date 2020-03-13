@@ -162,11 +162,10 @@ const CSSValue* ComputedStyleUtils::ValueForFillSize(
     return ZoomAdjustedPixelValueForLength(fill_size.size.Width(), style);
   }
 
-  CSSValueList* list = CSSValueList::CreateSpaceSeparated();
-  list->Append(*ZoomAdjustedPixelValueForLength(fill_size.size.Width(), style));
-  list->Append(
-      *ZoomAdjustedPixelValueForLength(fill_size.size.Height(), style));
-  return list;
+  return MakeGarbageCollected<CSSValuePair>(
+      ZoomAdjustedPixelValueForLength(fill_size.size.Width(), style),
+      ZoomAdjustedPixelValueForLength(fill_size.size.Height(), style),
+      CSSValuePair::kKeepIdenticalValues);
 }
 
 const CSSValue* ComputedStyleUtils::BackgroundImageOrWebkitMaskSize(
@@ -1687,13 +1686,13 @@ CSSValueList* ComputedStyleUtils::ValuesForBorderRadiusCorner(
   return list;
 }
 
-const CSSValue& ComputedStyleUtils::ValueForBorderRadiusCorner(
+CSSValue* ComputedStyleUtils::ValueForBorderRadiusCorner(
     const LengthSize& radius,
     const ComputedStyle& style) {
-  CSSValueList& list = *ValuesForBorderRadiusCorner(radius, style);
-  if (list.Item(0) == list.Item(1))
-    return list.Item(0);
-  return list;
+  return MakeGarbageCollected<CSSValuePair>(
+      ZoomAdjustedPixelValueForLength(radius.Width(), style),
+      ZoomAdjustedPixelValueForLength(radius.Height(), style),
+      CSSValuePair::kDropIdenticalValues);
 }
 
 CSSFunctionValue* ValueForMatrixTransform(
