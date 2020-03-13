@@ -641,15 +641,6 @@ IPC_MESSAGE_ROUTED2(
 IPC_MESSAGE_ROUTED1(FrameHostMsg_DomOperationResponse,
                     std::string  /* json_string */)
 
-// Message sent from renderer to the browser when focus changes inside the
-// frame. The first parameter says whether the newly focused element needs
-// keyboard input (true for textfields, text areas and content editable divs).
-// The second parameter is the node bounds relative to local root's
-// RenderWidgetHostView.
-IPC_MESSAGE_ROUTED2(FrameHostMsg_FocusedNodeChanged,
-                    bool /* is_editable_node */,
-                    gfx::Rect /* node_bounds */)
-
 #if BUILDFLAG(ENABLE_PLUGINS)
 // Notification sent from a renderer to the browser that a Pepper plugin
 // instance is created in the DOM.

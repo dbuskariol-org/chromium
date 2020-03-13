@@ -341,10 +341,6 @@ class CONTENT_EXPORT RenderFrameImpl
   // gone, and clean up code that depends on it.
   bool in_frame_tree() { return in_frame_tree_; }
 
-  // The focused element changed to |element|. If focus was lost from this
-  // frame, |element| will be null.
-  void FocusedElementChanged(const blink::WebElement& element);
-
   // A RenderView opened by this RenderFrame needs to be shown.
   void ShowCreatedWindow(bool opened_by_user_gesture,
                          RenderWidget* render_widget_to_show,
@@ -724,6 +720,7 @@ class CONTENT_EXPORT RenderFrameImpl
   bool HandleCurrentKeyboardEvent() override;
   void ShowContextMenu(const blink::WebContextMenuData& data) override;
   void FrameRectsChanged(const blink::WebRect& frame_rect) override;
+  void FocusedElementChanged(const blink::WebElement& element) override;
   void OnMainFrameDocumentIntersectionChanged(
       const blink::WebRect& intersect_rect) override;
   void WillSendRequest(blink::WebURLRequest& request) override;

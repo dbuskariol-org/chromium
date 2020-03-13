@@ -1578,23 +1578,6 @@ void RenderViewImpl::FocusPrevious() {
   Send(new ViewHostMsg_TakeFocus(GetRoutingID(), true));
 }
 
-void RenderViewImpl::FocusedElementChanged(const WebElement& from_element,
-                                           const WebElement& to_element) {
-  RenderFrameImpl* previous_frame = nullptr;
-  if (!from_element.IsNull())
-    previous_frame =
-        RenderFrameImpl::FromWebFrame(from_element.GetDocument().GetFrame());
-  RenderFrameImpl* new_frame = nullptr;
-  if (!to_element.IsNull())
-    new_frame =
-        RenderFrameImpl::FromWebFrame(to_element.GetDocument().GetFrame());
-
-  if (previous_frame && previous_frame != new_frame)
-    previous_frame->FocusedElementChanged(WebElement());
-  if (new_frame)
-    new_frame->FocusedElementChanged(to_element);
-}
-
 void RenderViewImpl::DidUpdateMainFrameLayout() {
   for (auto& observer : observers_)
     observer.DidUpdateMainFrameLayout();

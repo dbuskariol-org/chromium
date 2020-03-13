@@ -1422,6 +1422,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void UpdateFaviconURL(
       std::vector<blink::mojom::FaviconURLPtr> favicon_urls) override;
   void DownloadURL(blink::mojom::DownloadURLParamsPtr params) override;
+  void FocusedElementChanged(bool is_editable_element,
+                             const gfx::Rect& bounds_in_frame_widget) override;
 
   // blink::LocalMainFrameHost overrides:
   void ScaleFactorChanged(float scale) override;
@@ -1611,8 +1613,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void OnSelectionChanged(const base::string16& text,
                           uint32_t offset,
                           const gfx::Range& range);
-  void OnFocusedNodeChanged(bool is_editable_element,
-                            const gfx::Rect& bounds_in_frame_widget);
   void OnSetNeedsOcclusionTracking(bool needs_tracking);
   void OnFrameDidCallFocus();
   void OnSaveImageFromDataURL(const std::string& url_str);

@@ -5536,18 +5536,8 @@ void RenderFrameImpl::NotifyAccessibilityModeChange(ui::AXMode new_mode) {
     observer.AccessibilityModeChanged(new_mode);
 }
 
-void RenderFrameImpl::FocusedElementChanged(const WebElement& element) {
+void RenderFrameImpl::FocusedElementChanged(const blink::WebElement& element) {
   has_scrolled_focused_editable_node_into_rect_ = false;
-  bool is_editable = false;
-  gfx::Rect node_bounds;
-  if (!element.IsNull()) {
-    blink::WebRect rect = element.BoundsInViewport();
-    GetLocalRootRenderWidget()->ConvertViewportToWindow(&rect);
-    is_editable = element.IsEditable();
-    node_bounds = gfx::Rect(rect);
-  }
-  Send(new FrameHostMsg_FocusedNodeChanged(routing_id_, is_editable,
-                                           node_bounds));
   // Ensures that further text input state can be sent even when previously
   // focused input and the newly focused input share the exact same state.
   GetLocalRootRenderWidget()->ClearTextInputState();
