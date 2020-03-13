@@ -246,7 +246,7 @@
     },
     {
       name: "BlockingDownloadsInSandbox",
-      status: "test",
+      status: "stable",
     },
     {
       name: "BlockingFocusWithoutUserActivation",
