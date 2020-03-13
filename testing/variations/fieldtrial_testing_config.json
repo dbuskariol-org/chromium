@@ -5390,26 +5390,6 @@
             ]
         }
     ],
-    "SyncUssPasswords'": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "ios",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "SyncUSSPasswords"
-                    ]
-                }
-            ]
-        }
-    ],
     "TabGridLayoutAndroid": [
         {
             "platforms": [

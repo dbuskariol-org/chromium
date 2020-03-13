@@ -77,7 +77,7 @@ class MockLeakDetectionCheck : public LeakDetectionCheck {
 class LeakDetectionDelegateTest : public testing::Test {
  public:
   LeakDetectionDelegateTest() {
-    mock_store_->Init(syncer::SyncableService::StartSyncFlare(), nullptr);
+    mock_store_->Init(nullptr);
     auto mock_factory =
         std::make_unique<testing::StrictMock<MockLeakDetectionCheckFactory>>();
     mock_factory_ = mock_factory.get();

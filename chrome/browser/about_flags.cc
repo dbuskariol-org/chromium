@@ -4058,10 +4058,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kDisableBestEffortTasksName,
      flag_descriptions::kDisableBestEffortTasksDescription, kOsAll,
      SINGLE_VALUE_TYPE(switches::kDisableBestEffortTasks)},
-    {"enable-sync-uss-passwords",
-     flag_descriptions::kEnableSyncUSSPasswordsName,
-     flag_descriptions::kEnableSyncUSSPasswordsDescription, kOsAll,
-     FEATURE_VALUE_TYPE(switches::kSyncUSSPasswords)},
 
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_CHROMEOS)
     {"web-contents-occlusion", flag_descriptions::kWebContentsOcclusionName,
