@@ -3882,15 +3882,19 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kSharingDeriveVapidKeyDescription, kOsAll,
      FEATURE_VALUE_TYPE(kSharingDeriveVapidKey)},
 
+#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
+    defined(OS_CHROMEOS)
     {"sharing-peer-connection-receiver",
      flag_descriptions::kSharingPeerConnectionReceiverName,
-     flag_descriptions::kSharingPeerConnectionReceiverDescription, kOsAll,
+     flag_descriptions::kSharingPeerConnectionReceiverDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(kSharingPeerConnectionReceiver)},
 
     {"sharing-peer-connection-sender",
      flag_descriptions::kSharingPeerConnectionSenderName,
-     flag_descriptions::kSharingPeerConnectionSenderDescription, kOsAll,
+     flag_descriptions::kSharingPeerConnectionSenderDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(kSharingPeerConnectionSender)},
+#endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) ||
+        // defined(OS_CHROMEOS)
 
     {"sharing-qr-code-generator",
      flag_descriptions::kSharingQRCodeGeneratorName,
