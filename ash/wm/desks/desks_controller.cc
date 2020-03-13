@@ -596,6 +596,7 @@ bool DesksController::ActivateAdjacentDesk(bool going_left,
 bool DesksController::MoveWindowFromActiveDeskTo(
     aura::Window* window,
     Desk* target_desk,
+    aura::Window* target_root,
     DesksMoveWindowFromActiveDeskSource source) {
   DCHECK_NE(active_desk_, target_desk);
 
@@ -609,7 +610,7 @@ bool DesksController::MoveWindowFromActiveDeskTo(
   auto* overview_controller = Shell::Get()->overview_controller();
   const bool in_overview = overview_controller->InOverviewSession();
 
-  active_desk_->MoveWindowToDesk(window, target_desk);
+  active_desk_->MoveWindowToDesk(window, target_desk, target_root);
 
   Shell::Get()
       ->accessibility_controller()
