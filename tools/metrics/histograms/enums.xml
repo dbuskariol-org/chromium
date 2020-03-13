@@ -26818,6 +26818,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3187" label="V8Document_GetAnimations_Method"/>
   <int value="3188" label="V8ShadowRoot_GetAnimations_Method"/>
   <int value="3189" label="ClientHintsUAFullVersion"/>
+  <int value="3190" label="SchedulerCurrentTaskSignal"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
