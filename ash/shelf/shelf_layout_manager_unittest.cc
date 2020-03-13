@@ -102,6 +102,7 @@
 #include "ui/events/types/event_type.h"
 #include "ui/views/view.h"
 #include "ui/views/widget/widget.h"
+#include "ui/wm/core/coordinate_conversion.h"
 #include "ui/wm/core/window_util.h"
 
 namespace ash {
@@ -1115,6 +1116,41 @@ TEST_P(ShelfLayoutManagerTest, SetAlignment) {
   EXPECT_EQ(0, display.bounds().right() - display.work_area().right());
   EXPECT_EQ(stable_work_area,
             GetPrimaryWorkAreaInsets()->ComputeStableWorkArea());
+}
+
+// Verifies that the shelf looks the way it should after an alignment change.
+// See crbug/1051824 .
+TEST_P(ShelfLayoutManagerTest, ShelfWidgetLayoutUpdatedAfterAlignmentChange) {
+  Shelf* shelf = GetPrimaryShelf();
+  ShelfLayoutManager* layout_manager = GetShelfLayoutManager();
+  ShelfWidget* shelf_widget = shelf->shelf_widget();
+
+  shelf->SetAutoHideBehavior(ShelfAutoHideBehavior::kNever);
+  shelf->SetAlignment(ShelfAlignment::kLeft);
+  layout_manager->LayoutShelf();
+  EXPECT_EQ(SHELF_VISIBLE, shelf->GetVisibilityState());
+  gfx::Rect opaque_background_bounds =
+      shelf->shelf_widget()->GetOpaqueBackground()->bounds();
+  ::wm::ConvertRectToScreen(shelf_widget->GetNativeWindow(),
+                            &opaque_background_bounds);
+  int cross_axis_visible_pixels =
+      opaque_background_bounds.right() - display::Screen::GetScreen()
+                                             ->GetPrimaryDisplay()
+                                             .bounds()
+                                             .left_center()
+                                             .x();
+  EXPECT_EQ(ShelfConfig::Get()->shelf_size(), cross_axis_visible_pixels);
+
+  shelf->SetAlignment(ShelfAlignment::kRight);
+  layout_manager->LayoutShelf();
+  opaque_background_bounds =
+      shelf->shelf_widget()->GetOpaqueBackground()->bounds();
+  ::wm::ConvertRectToScreen(shelf_widget->GetNativeWindow(),
+                            &opaque_background_bounds);
+  cross_axis_visible_pixels =
+      display::Screen::GetScreen()->GetPrimaryDisplay().bounds().right() -
+      opaque_background_bounds.left_center().x();
+  EXPECT_EQ(ShelfConfig::Get()->shelf_size(), cross_axis_visible_pixels);
 }
 
 TEST_P(ShelfLayoutManagerTest, GestureDrag) {
