@@ -79,7 +79,7 @@ js_library("site_settings_page.m") {
 import("//tools/polymer/polymer.gni")
 
 group("polymer3_elements") {
-  deps = [
+  public_deps = [
     ":site_settings_list_module",
     ":site_settings_page_module",
   ]

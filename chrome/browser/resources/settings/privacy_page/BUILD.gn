@@ -309,7 +309,7 @@ js_library("security_page.m") {
 import("//tools/polymer/polymer.gni")
 
 group("polymer3_elements") {
-  deps = [
+  public_deps = [
     ":modulize",
     ":passwords_leak_detection_toggle_module",
     ":personalization_options_module",
