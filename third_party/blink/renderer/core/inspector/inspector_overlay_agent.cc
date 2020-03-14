@@ -295,7 +295,7 @@ class InspectorOverlayAgent::InspectorOverlayChromeClient final
     EmptyChromeClient::Trace(visitor);
   }
 
-  void SetCursor(const Cursor& cursor, LocalFrame* local_root) override {
+  void SetCursor(const ui::Cursor& cursor, LocalFrame* local_root) override {
     client_->SetCursorOverridden(false);
     client_->SetCursor(cursor, overlay_->GetFrame());
     client_->SetCursorOverridden(true);
