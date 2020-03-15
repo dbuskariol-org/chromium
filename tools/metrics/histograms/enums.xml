@@ -56227,13 +56227,13 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="1044427386" label="blink.mojom.SmsManager"/>
   <int value="1048723358" label="content.mojom.InputInjector"/>
   <int value="1049460515" label="translate.mojom.ContentTranslateDriver"/>
-  <int value="1071268620" label="blink.mojom.QuotaDispatcherHost"/>
+  <int value="1071268620" label="blink.mojom.QuotaManagerHost"/>
   <int value="1100311626" label="blink.mojom.TextSuggestionHost"/>
   <int value="1102158904" label="chrome.mojom.PrerenderCanceler"/>
   <int value="1116085333"
       label="content.mojom.RendererAudioOutputStreamFactory"/>
   <int value="1117840258" label="media.mojom.InterfaceFactory"/>
-  <int value="1123228604" label="blink.mojom.QuotaDispatcherHost"/>
+  <int value="1123228604" label="blink.mojom.QuotaManagerHost"/>
   <int value="1144764995" label="network.mojom.WebSocket"/>
   <int value="1144778719" label="ui.mojom.Gpu"/>
   <int value="1148580579" label="blink.mojom.LockManager"/>

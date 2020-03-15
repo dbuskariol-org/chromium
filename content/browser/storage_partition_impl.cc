@@ -53,6 +53,7 @@
 #include "content/browser/native_file_system/native_file_system_manager_impl.h"
 #include "content/browser/network_context_client_base_impl.h"
 #include "content/browser/notifications/platform_notification_context_impl.h"
+#include "content/browser/quota/quota_context.h"
 #include "content/browser/service_worker/service_worker_context_wrapper.h"
 #include "content/browser/ssl/ssl_client_auth_handler.h"
 #include "content/browser/ssl/ssl_error_handler.h"
@@ -1387,12 +1388,12 @@ void StoragePartitionImpl::Initialize() {
   // QuotaManager prior to the QuotaManager being used. We do them
   // all together here prior to handing out a reference to anything
   // that utilizes the QuotaManager.
-  quota_manager_ = base::MakeRefCounted<storage::QuotaManager>(
+  quota_context_ = base::MakeRefCounted<QuotaContext>(
       is_in_memory_, partition_path_,
-      base::CreateSingleThreadTaskRunner({BrowserThread::IO}).get(),
       browser_context_->GetSpecialStoragePolicy(),
       base::BindRepeating(&StoragePartitionImpl::GetQuotaSettings,
                           weak_factory_.GetWeakPtr()));
+  quota_manager_ = quota_context_->quota_manager();
   scoped_refptr<storage::QuotaManagerProxy> quota_manager_proxy =
       quota_manager_->proxy();
 
@@ -1704,6 +1705,11 @@ NativeFileSystemEntryFactory*
 StoragePartitionImpl::GetNativeFileSystemEntryFactory() {
   DCHECK(initialized_);
   return native_file_system_manager_.get();
+}
+
+QuotaContext* StoragePartitionImpl::GetQuotaContext() {
+  DCHECK(initialized_);
+  return quota_context_.get();
 }
 
 CacheStorageContextImpl* StoragePartitionImpl::GetCacheStorageContext() {
