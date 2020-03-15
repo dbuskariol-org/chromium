@@ -24,7 +24,7 @@
           "can_use_on_swarming_builders": true,
           "dimension_sets": [
             {
-              "device_os": "KOT49H",
+              "device_os": "M4B30Z",
               "device_os_flavor": "google",
               "device_type": "hammerhead",
               "os": "Android",
