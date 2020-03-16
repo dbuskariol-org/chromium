@@ -1390,6 +1390,9 @@ deps = {
   'src/third_party/snappy/src':
     Var('chromium_git') + '/external/github.com/google/snappy.git' + '@' + 'f5acee902c4d2110f671455460172cb6d3bf5b73',
 
+  'src/third_party/sqlite/src':
+    Var('chromium_git') + '/chromium/deps/sqlite.git' + '@' + '3d3ac5e6f58a5bc28e96e621909b594e7f950e53',
+
   'src/third_party/sqlite4java': {
       'packages': [
           {
