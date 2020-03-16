@@ -150,8 +150,8 @@ void CrostiniUpgrader::Backup(const ContainerId& container_id,
   }
   base::FilePath default_path =
       CrostiniExportImport::GetForProfile(profile_)->GetDefaultBackupPath();
-  base::PostTaskAndReplyWithResult(
-      FROM_HERE, {base::ThreadPool(), base::MayBlock()},
+  base::ThreadPool::PostTaskAndReplyWithResult(
+      FROM_HERE, {base::MayBlock()},
       base::BindOnce(&base::PathExists, default_path),
       base::BindOnce(&CrostiniUpgrader::OnBackupPathChecked,
                      weak_ptr_factory_.GetWeakPtr(), container_id, web_contents,
@@ -282,8 +282,8 @@ void CrostiniUpgrader::Restore(const ContainerId& container_id,
         container_id, web_contents, MakeFactory());
     return;
   }
-  base::PostTaskAndReplyWithResult(
-      FROM_HERE, {base::ThreadPool(), base::MayBlock()},
+  base::ThreadPool::PostTaskAndReplyWithResult(
+      FROM_HERE, {base::MayBlock()},
       base::BindOnce(&base::PathExists, *backup_path_),
       base::BindOnce(&CrostiniUpgrader::OnRestorePathChecked,
                      weak_ptr_factory_.GetWeakPtr(), container_id, web_contents,

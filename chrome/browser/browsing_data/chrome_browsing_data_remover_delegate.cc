@@ -1187,10 +1187,8 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
   // Remove data for this profile contained in any snapshots.
   if (remove_mask &&
       filter_builder->GetMode() == BrowsingDataFilterBuilder::BLACKLIST) {
-    base::PostTaskAndReply(
-        FROM_HERE,
-        {base::ThreadPool(), base::TaskPriority::USER_VISIBLE,
-         base::MayBlock()},
+    base::ThreadPool::PostTaskAndReply(
+        FROM_HERE, {base::TaskPriority::USER_VISIBLE, base::MayBlock()},
         base::BindOnce(&downgrade::RemoveDataForProfile, delete_begin_,
                        profile_->GetPath(), remove_mask),
         CreateTaskCompletionClosure(TracingDataType::kUserDataSnapshot));
