@@ -3445,7 +3445,6 @@ test("unit_tests") {
     "../browser/ui/autofill/popup_view_common_unittest.cc",
     "../browser/ui/autofill/popup_view_test_helpers.cc",
     "../browser/ui/autofill/popup_view_test_helpers.h",
-    "../browser/ui/autofill/sms_client_impl_unittest.cc",
     "../browser/ui/blocked_content/popup_opener_tab_helper_unittest.cc",
     "../browser/ui/blocked_content/safe_browsing_triggered_popup_blocker_unittest.cc",
     "../browser/ui/chrome_select_file_policy_unittest.cc",
