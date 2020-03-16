@@ -681,6 +681,12 @@ void NGBoxFragmentPainter::PaintFloatingChildren(
       }
     }
 
+    // The selection paint traversal is special. We will visit all fragments
+    // (including floats) in the normal paint traversal. There isn't any point
+    // performing the special float traversal here.
+    if (paint_info.phase == PaintPhase::kSelection)
+      continue;
+
     const auto* child_container =
         DynamicTo<NGPhysicalContainerFragment>(&child_fragment);
     if (!child_container || !child_container->HasFloatingDescendantsForPaint())
