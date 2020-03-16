@@ -771,7 +771,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
     return;
   }
   CGFloat level = [UIDevice currentDevice].batteryLevel;
-  if (level < web::features::kLowBatteryLevelThreshold) {
+  if (level < web::features::kHalfBatteryLevelThreshold) {
     if (!_animationDisabled) {
       _animationDisabled = YES;
       [UIView setAnimationsEnabled:NO];

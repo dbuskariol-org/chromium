@@ -52,9 +52,9 @@ extern const base::Feature kUseDefaultUserAgentInWebClient;
 // of properties using hard coded logic.
 extern const base::Feature kPreserveScrollViewProperties;
 
-// Level at which battery power is considered low, and some cosmetic features
-// can be turned off.
-const float kLowBatteryLevelThreshold = 0.2;
+// Level at which battery power is considered as half. Reasonable condition for
+// running certain Page Load Time experiments.
+const float kHalfBatteryLevelThreshold = 0.5;
 
 }  // namespace features
 }  // namespace web
