@@ -2,14 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/content_settings/web_site_settings_uma_util.h"
+#include "components/content_settings/core/browser/uma_util.h"
 
 #include <stddef.h>
 
 #include "base/metrics/histogram_macros.h"
 
-void WebSiteSettingsUmaUtil::LogPermissionChange(ContentSettingsType type,
-                                                 ContentSetting setting) {
+namespace content_settings {
+
+void LogWebSiteSettingsPermissionChange(ContentSettingsType type,
+                                        ContentSetting setting) {
   size_t num_values;
   int histogram_value = ContentSettingTypeToHistogramValue(type, &num_values);
   UMA_HISTOGRAM_EXACT_LINEAR("WebsiteSettings.Menu.PermissionChanged",
@@ -37,3 +39,5 @@ void WebSiteSettingsUmaUtil::LogPermissionChange(ContentSettingsType type,
                  << static_cast<int32_t>(type) << " to " << setting;
   }
 }
+
+}  // namespace content_settings

@@ -377,8 +377,6 @@ jumbo_static_library("browser") {
     "content_settings/sound_content_setting_observer.h",
     "content_settings/tab_specific_content_settings.cc",
     "content_settings/tab_specific_content_settings.h",
-    "content_settings/web_site_settings_uma_util.cc",
-    "content_settings/web_site_settings_uma_util.h",
     "crash_upload_list/crash_upload_list.cc",
     "crash_upload_list/crash_upload_list.h",
     "crash_upload_list/crash_upload_list_android.cc",
