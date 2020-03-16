@@ -449,6 +449,11 @@
       status: "experimental",
     },
     {
+      name: "CSSMathStyle",
+      status: "experimental",
+      implied_by: ["MathMLCore"],
+    },
+    {
       name: "CSSModules",
       status: "experimental",
     },
