@@ -68643,6 +68643,8 @@ Full version information for the fingerprint enum values:
   <int value="35" label="WakeLock"/>
   <int value="36" label="WebShare"/>
   <int value="37" label="RequestedStorageAccessGrant"/>
+  <int value="38" label="WebNfc"/>
+  <int value="39" label="WebFileSystem"/>
 </enum>
 
 <enum name="WebShareMethod">
