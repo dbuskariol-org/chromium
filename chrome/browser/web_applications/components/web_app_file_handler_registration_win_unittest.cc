@@ -8,19 +8,18 @@
 #include <string>
 
 #include "base/files/file_util.h"
+#include "base/files/scoped_temp_dir.h"
 #include "base/path_service.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/task/thread_pool/thread_pool_instance.h"
-#include "base/test/scoped_path_override.h"
 #include "base/test/test_reg_util_win.h"
 #include "base/test/test_timeouts.h"
 #include "base/win/windows_version.h"
 #include "chrome/browser/profiles/profile_attributes_storage.h"
 #include "chrome/browser/profiles/profile_manager.h"
-#include "chrome/browser/web_applications/components/web_app_shortcut_win.h"
+#include "chrome/browser/web_applications/chrome_pwa_launcher/chrome_pwa_launcher_util.h"
 #include "chrome/browser/web_applications/test/test_file_handler_manager.h"
 #include "chrome/common/chrome_constants.h"
-#include "chrome/common/chrome_paths.h"
 #include "chrome/installer/util/shell_util.h"
 #include "chrome/test/base/testing_browser_process.h"
 #include "chrome/test/base/testing_profile.h"
@@ -29,48 +28,6 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace web_app {
-
-class UpdateChromeExePathTest : public testing::Test {
- protected:
-  UpdateChromeExePathTest() : user_data_dir_override_(chrome::DIR_USER_DATA) {}
-
-  void SetUp() override {
-    ASSERT_TRUE(base::PathService::Get(chrome::DIR_USER_DATA, &user_data_dir_));
-    ASSERT_FALSE(user_data_dir_.empty());
-    last_browser_file_ = user_data_dir_.Append(kLastBrowserFile);
-  }
-
-  static base::FilePath GetCurrentExePath() {
-    base::FilePath current_exe_path;
-    EXPECT_TRUE(base::PathService::Get(base::FILE_EXE, &current_exe_path));
-    return current_exe_path;
-  }
-
-  base::FilePath GetLastBrowserPathFromFile() const {
-    std::string last_browser_file_data;
-    EXPECT_TRUE(
-        base::ReadFileToString(last_browser_file_, &last_browser_file_data));
-    base::FilePath::StringPieceType last_browser_path(
-        reinterpret_cast<const base::FilePath::CharType*>(
-            last_browser_file_data.data()),
-        last_browser_file_data.size() / sizeof(base::FilePath::CharType));
-    return base::FilePath(last_browser_path);
-  }
-
-  const base::FilePath& user_data_dir() const { return user_data_dir_; }
-
- private:
-  // Redirect |chrome::DIR_USER_DATA| to a temporary directory during testing.
-  base::ScopedPathOverride user_data_dir_override_;
-
-  base::FilePath user_data_dir_;
-  base::FilePath last_browser_file_;
-};
-
-TEST_F(UpdateChromeExePathTest, UpdateChromeExePath) {
-  UpdateChromeExePath(user_data_dir());
-  EXPECT_EQ(GetLastBrowserPathFromFile(), GetCurrentExePath());
-}
 
 constexpr char kAppName[] = "app name";
 
@@ -84,10 +41,14 @@ class WebAppFileHandlerRegistrationWinTest : public testing::Test {
         registry_override_.OverrideRegistry(HKEY_LOCAL_MACHINE));
     ASSERT_NO_FATAL_FAILURE(
         registry_override_.OverrideRegistry(HKEY_CURRENT_USER));
-    // Until the CL to create the PWA launcher is submitted, create it by
-    // hand. TODO(davidbienvenu): Remove this once cl/1815220 lands.
-    base::File pwa_launcher(GetChromePwaLauncherPath(),
-                            base::File::FLAG_CREATE);
+
+    // Create a mock chrome_pwa_launcher.exe in a mock Chrome version directory,
+    // where the file-registration code expects it to be.
+    const base::FilePath pwa_launcher_path = GetChromePwaLauncherPath();
+    ASSERT_TRUE(temp_version_dir_.Set(pwa_launcher_path.DirName()));
+    ASSERT_TRUE(
+        base::File(pwa_launcher_path, base::File::FLAG_CREATE).IsValid());
+
     testing_profile_manager_ = std::make_unique<TestingProfileManager>(
         TestingBrowserProcess::GetGlobal());
     ASSERT_TRUE(testing_profile_manager_->SetUp());
@@ -186,6 +147,7 @@ class WebAppFileHandlerRegistrationWinTest : public testing::Test {
 
  private:
   registry_util::RegistryOverrideManager registry_override_;
+  base::ScopedTempDir temp_version_dir_;
   content::BrowserTaskEnvironment task_environment_{
       content::BrowserTaskEnvironment::IO_MAINLOOP};
   TestingProfile* profile_ = nullptr;
