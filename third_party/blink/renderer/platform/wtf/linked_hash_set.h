@@ -354,11 +354,12 @@ class LinkedHashSet {
   }
 
   template <typename VisitorDispatcher>
-  void Trace(VisitorDispatcher visitor) {
+  void Trace(VisitorDispatcher visitor) const {
     impl_.Trace(visitor);
     // Should the underlying table be moved by GC, register a callback
     // that fixes up the interior pointers that the (Heap)LinkedHashSet keeps.
-    auto* table = AsAtomicPtr(&impl_.table_)->load(std::memory_order_relaxed);
+    const auto* table =
+        AsAtomicPtr(&impl_.table_)->load(std::memory_order_relaxed);
     if (table) {
       Allocator::RegisterBackingStoreCallback(
           visitor, table,
@@ -492,10 +493,14 @@ struct LinkedHashSetTraits
   }
 
   template <typename HashTable>
-  static void MoveBackingCallback(void* from, void* to, size_t size) {
+  static void MoveBackingCallback(const void* const_from,
+                                  const void* const_to,
+                                  size_t size) {
     // Note: the hash table move may have been overlapping; linearly scan the
     // entire table and fixup interior pointers into the old region with
     // correspondingly offset ones into the new.
+    void* from = const_cast<void*>(const_from);
+    void* to = const_cast<void*>(const_to);
     const size_t table_size = size / sizeof(Node);
     Node* table = reinterpret_cast<Node*>(to);
     NodeBase* from_start = reinterpret_cast<NodeBase*>(from);
