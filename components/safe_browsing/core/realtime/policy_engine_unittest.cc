@@ -191,6 +191,11 @@ TEST_F(RealTimePolicyEngineTest,
   EXPECT_FALSE(CanPerformFullURLLookupWithToken(/* is_off_the_record */ false,
                                                 &sync_service));
 
+  // Sync is enabled.
+  sync_service.SetDisableReasons({});
+  sync_service.SetTransportState(syncer::SyncService::TransportState::ACTIVE);
+  EXPECT_TRUE(CanPerformFullURLLookupWithToken(/* is_off_the_record */ false,
+                                               &sync_service));
 
   // History sync is disabled.
   sync_service.GetUserSettings()->SetSelectedTypes(
