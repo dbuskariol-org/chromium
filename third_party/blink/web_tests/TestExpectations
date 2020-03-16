@@ -1518,8 +1518,6 @@ virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/text/* [ Skip ]
 # Flexbox in NG
 #
 # Fail in NG flex, pass in legacy flex.
-crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/hittest-overlapping-margin.html [ Failure ]
-crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/hittest-overlapping-order.html [ Failure ]
 crbug.com/845235 virtual/layout_ng_flex_box/external/wpt/css/css-flexbox/quirks-auto-block-size-with-percentage-item.html [ Pass Failure ]
 crbug.com/846557 [ Mac ] virtual/layout_ng_flex_box/css3/flexbox/button.html [ Failure ]
 
