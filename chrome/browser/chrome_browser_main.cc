@@ -236,6 +236,7 @@
 #include "base/win/win_util.h"
 #include "chrome/browser/chrome_browser_main_win.h"
 #include "chrome/browser/first_run/upgrade_util_win.h"
+#include "chrome/browser/notifications/win/notification_launch_id.h"
 #include "chrome/browser/ui/network_profile_bubble.h"
 #include "chrome/browser/ui/views/try_chrome_dialog_win/try_chrome_dialog.h"
 #include "chrome/browser/win/browser_util.h"
@@ -349,10 +350,10 @@ Profile* CreatePrimaryProfile(const content::MainFunctionParams& parameters,
 // notification, the profile id encoded in the notification launch id should
 // be chosen over all others.
 #if defined(OS_WIN)
-  if (parsed_command_line.HasSwitch(switches::kNotificationLaunchId)) {
-    profiles::SetLastUsedProfile(
-        base::UTF16ToUTF8(parsed_command_line.GetSwitchValueNative(
-            switches::kNotificationLaunchId)));
+  std::string last_used_profile_id =
+      NotificationLaunchId::GetNotificationLaunchProfileId(parsed_command_line);
+  if (!last_used_profile_id.empty()) {
+    profiles::SetLastUsedProfile(last_used_profile_id);
     set_last_used_profile = true;
   }
 #endif  // defined(OS_WIN)
