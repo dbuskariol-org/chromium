@@ -104,7 +104,7 @@ android_library("java") {
     "//components/version_info/android:version_constants_java",
     "//content/public/android:content_java",
     "//net/android:net_java",
-    "//third_party/android_deps:com_android_support_support_compat_java",
+    "//third_party/android_deps:androidx_core_core_java",
     "//ui/android:ui_full_java",
     "//ui/android:ui_java",
   ]
