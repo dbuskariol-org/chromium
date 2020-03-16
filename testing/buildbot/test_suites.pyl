@@ -1242,6 +1242,9 @@
         'args': [
           '--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.cc_unittests.filter',
         ],
+        'swarming': {
+          'shards': 2,
+        },
       },
       'components_unittests': {
         'args': [
