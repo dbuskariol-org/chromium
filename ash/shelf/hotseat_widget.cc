@@ -510,6 +510,10 @@ void HotseatWidget::UpdateLayout(bool animate) {
   }
 }
 
+void HotseatWidget::UpdateTargetBoundsForGesture(int shelf_position) {
+  // TODO(manucornet): Move work being done in the shelf layout manager here.
+}
+
 gfx::Size HotseatWidget::GetTranslucentBackgroundSize() const {
   DCHECK(scrollable_shelf_view_);
   return scrollable_shelf_view_->GetHotseatBackgroundBounds().size();
