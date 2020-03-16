@@ -226,7 +226,7 @@ ExecutionContext* ExecutionContextFromV8Wrappable(
 }
 
 ExecutionContext* ExecutionContextFromV8Wrappable(const Node* node) {
-  return node->GetExecutionContext();
+  return node->GetDocument().ToExecutionContext();
 }
 
 ExecutionContext* ExecutionContextFromV8Wrappable(const Range* range) {

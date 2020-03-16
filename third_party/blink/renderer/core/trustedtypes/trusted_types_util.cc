@@ -273,7 +273,7 @@ String TrustedTypesCheckForHTML(const String& html,
                                 const Document* document,
                                 ExceptionState& exception_state) {
   return TrustedTypesCheckForHTML(
-      html, document ? document->GetExecutionContext() : nullptr,
+      html, document ? document->ToExecutionContext() : nullptr,
       exception_state);
 }
 
