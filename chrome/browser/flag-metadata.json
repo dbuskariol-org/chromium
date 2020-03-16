@@ -3397,6 +3397,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "split-partially-occluded-quads",
+    "owners": [ "dcastagna", "sashamcintosh", "gildekel" ],
+    "expiry_milestone": 84
+  },
+  {
     "name": "split-settings-sync",
     "owners": [ "jamescook", "cros-system-services@google.com" ],
     "expiry_milestone": 84

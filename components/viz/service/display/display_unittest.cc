@@ -11,9 +11,11 @@
 #include "base/test/bind_test_util.h"
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/null_task_runner.h"
+#include "base/test/scoped_feature_list.h"
 #include "cc/base/math_util.h"
 #include "cc/base/region.h"
 #include "cc/test/scheduler_test_common.h"
+#include "components/viz/common/features.h"
 #include "components/viz/common/frame_sinks/begin_frame_source.h"
 #include "components/viz/common/frame_sinks/copy_output_request.h"
 #include "components/viz/common/frame_sinks/copy_output_result.h"
@@ -3969,6 +3971,9 @@ TEST_F(DisplayTest, DrawOcclusionWithRoundedCornerDoesOcclude) {
 }
 
 TEST_F(DisplayTest, DrawOcclusionSplit) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(features::kSplitPartiallyOccludedQuads);
+
   SetUpGpuDisplay(RendererSettings());
 
   StubDisplayClient client;

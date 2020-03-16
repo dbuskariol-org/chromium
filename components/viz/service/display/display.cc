@@ -18,6 +18,7 @@
 #include "cc/base/simple_enclosed_region.h"
 #include "cc/benchmarks/benchmark_instrumentation.h"
 #include "components/viz/common/display/renderer_settings.h"
+#include "components/viz/common/features.h"
 #include "components/viz/common/frame_sinks/begin_frame_source.h"
 #include "components/viz/common/quads/compositor_frame.h"
 #include "components/viz/common/quads/draw_quad.h"
@@ -170,9 +171,8 @@ bool CanSplitQuad(const DrawQuad::Material m,
                   const cc::Region& visible_region,
                   const int quad_split_limit,
                   const int minimum_fragments_reduced,
-                  const int device_scale_factor,
-                  const bool enable_quad_splitting) {
-  return enable_quad_splitting && !base::Contains(kNonSplittableMaterials, m) &&
+                  const float device_scale_factor) {
+  return !base::Contains(kNonSplittableMaterials, m) &&
          visible_region.GetRegionComplexity() < quad_split_limit &&
          (visible_region.bounds().size().GetArea() -
           ComputeRegionArea(visible_region)) *
@@ -237,6 +237,8 @@ Display::Display(
   DCHECK(frame_sink_id_.is_valid());
   if (scheduler_)
     scheduler_->SetClient(this);
+  enable_quad_splitting_ = features::ShouldSplitPartiallyOccludedQuads() &&
+                           !overlay_processor_->DisableSplittingQuads();
 }
 
 Display::~Display() {
@@ -1037,10 +1039,11 @@ void Display::RemoveOverdrawQuads(CompositorFrame* frame) {
 
         // Split quad into multiple draw quads when area can be reduce by
         // more than X fragments.
-        const bool should_split_quads = CanSplitQuad(
-            quad->material, visible_region, settings_.quad_split_limit,
-            settings_.minimum_fragments_reduced, device_scale_factor_,
-            !overlay_processor_->DisableSplittingQuads());
+        const bool should_split_quads =
+            enable_quad_splitting_ &&
+            CanSplitQuad(
+                quad->material, visible_region, settings_.quad_split_limit,
+                settings_.minimum_fragments_reduced, device_scale_factor_);
         if (should_split_quads) {
           auto new_quad = pass->quad_list.InsertCopyBeforeDrawQuad(
               quad, visible_region.GetRegionComplexity() - 1);
