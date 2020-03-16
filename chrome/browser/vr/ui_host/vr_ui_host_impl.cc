@@ -151,14 +151,6 @@ VRUiHostImpl::~VRUiHostImpl() {
     SetWebXRWebContents(nullptr);
 }
 
-// static
-std::unique_ptr<VRUiHost> VRUiHostImpl::Create(
-    device::mojom::XRDeviceId device_id,
-    mojo::PendingRemote<device::mojom::XRCompositorHost> compositor) {
-  DVLOG(1) << __func__;
-  return std::make_unique<VRUiHostImpl>(device_id, std::move(compositor));
-}
-
 bool IsValidInfo(device::mojom::VRDisplayInfoPtr& info) {
   // Numeric properties are validated elsewhere, but we expect a stereo headset.
   if (!info)
