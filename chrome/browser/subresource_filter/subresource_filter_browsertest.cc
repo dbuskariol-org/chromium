@@ -658,6 +658,50 @@ IN_PROC_BROWSER_TEST_F(SubresourceFilterBrowserTest,
   observer.Wait();
 }
 
+// Test that resources in frames with an aborted initial load due to a doc.write
+// are still tagged as ads.
+IN_PROC_BROWSER_TEST_F(SubresourceFilterBrowserTest,
+                       FrameWithDocWriteAbortedLoad_StillTaggedAsAd) {
+  ASSERT_NO_FATAL_FAILURE(
+      SetRulesetWithRules({testing::CreateSuffixRule("ad=true")}));
+  // Block ad resources.
+  Configuration config(subresource_filter::mojom::ActivationLevel::kEnabled,
+                       subresource_filter::ActivationScope::ALL_SITES);
+  ResetConfiguration(std::move(config));
+
+  content::TitleWatcher title_watcher(web_contents(),
+                                      base::ASCIIToUTF16("failed"));
+  title_watcher.AlsoWaitForTitle(base::ASCIIToUTF16("loaded"));
+
+  ui_test_utils::NavigateToURL(
+      browser(), embedded_test_server()->GetURL(
+                     "/subresource_filter/docwrite_loads_ad_resource.html"));
+  // Check the load was blocked.
+  EXPECT_EQ(base::ASCIIToUTF16("failed"), title_watcher.WaitAndGetTitle());
+}
+
+// Test that resources in frames with an aborted initial load due to a
+// window.stop are still tagged as ads.
+IN_PROC_BROWSER_TEST_F(SubresourceFilterBrowserTest,
+                       FrameWithWindowStopAbortedLoad_StillTaggedAsAd) {
+  ASSERT_NO_FATAL_FAILURE(
+      SetRulesetWithRules({testing::CreateSuffixRule("ad=true")}));
+  // Block ad resources.
+  Configuration config(subresource_filter::mojom::ActivationLevel::kEnabled,
+                       subresource_filter::ActivationScope::ALL_SITES);
+  ResetConfiguration(std::move(config));
+
+  content::TitleWatcher title_watcher(web_contents(),
+                                      base::ASCIIToUTF16("failed"));
+  title_watcher.AlsoWaitForTitle(base::ASCIIToUTF16("loaded"));
+
+  ui_test_utils::NavigateToURL(
+      browser(), embedded_test_server()->GetURL(
+                     "/subresource_filter/window_stop_loads_ad_resource.html"));
+  // Check the load was blocked.
+  EXPECT_EQ(base::ASCIIToUTF16("failed"), title_watcher.WaitAndGetTitle());
+}
+
 // Tests checking how histograms are recorded. ---------------------------------
 
 namespace {
