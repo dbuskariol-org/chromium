@@ -38,8 +38,8 @@ namespace extensions {
 
 class LocalExtensionCacheTest : public testing::Test {
  public:
-  LocalExtensionCacheTest() {}
-  ~LocalExtensionCacheTest() override {}
+  LocalExtensionCacheTest() = default;
+  ~LocalExtensionCacheTest() override = default;
 
   base::FilePath CreateCacheDir() {
     EXPECT_TRUE(cache_dir_.CreateUniqueTempDir());
@@ -67,7 +67,8 @@ class LocalExtensionCacheTest : public testing::Test {
                   size_t size,
                   const base::Time& timestamp) {
     std::string data(size, 0);
-    EXPECT_EQ(base::WriteFile(file, data.data(), data.size()), int(size));
+    EXPECT_EQ(base::WriteFile(file, data.data(), data.size()),
+              static_cast<int>(size));
     EXPECT_TRUE(base::TouchFile(file, timestamp, timestamp));
   }
 
@@ -91,7 +92,8 @@ class LocalExtensionCacheTest : public testing::Test {
         GetExtensionFileName(dir, id, version, hex_hash);
     if (filename)
       *filename = file;
-    EXPECT_EQ(base::WriteFile(file, data.data(), data.size()), int(size));
+    EXPECT_EQ(base::WriteFile(file, data.data(), data.size()),
+              static_cast<int>(size));
     EXPECT_TRUE(base::TouchFile(file, timestamp, timestamp));
 
     return hex_hash;
