@@ -6321,14 +6321,6 @@ crbug.com/963183 http/tests/devtools/jump-to-previous-editing-location.js [ Pass
 # Sheriff 2020-01-09
 crbug.com/1040270 http/tests/devtools/elements/styles-1/disable-property-workingcopy-update.js [ Pass Timeout ]
 
-# Popup and no-opener may crash WPTs: crrev.com/c/1984306
-crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-unsafe-none.https.html [ Pass Crash ]
-crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-same-origin.https.html [ Pass Crash ]
-crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups-to-same-origin.https.html [ Pass Crash ]
-crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-unsafe-none-to-same-origin.https.html [ Pass Crash ]
-crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-allow-popups-to-same-origin-allow-popups.https.html [ Pass Crash ]
-crbug.com/1040059 external/wpt/html/cross-origin-opener-policy/popup-redirect-cache.https.html [ Pass Crash ]
-
 # COOP timeout failure.
 crbug.com/1046698 external/wpt/html/cross-origin-opener-policy/coep-blob-popup.https.html [ Timeout ]
 
