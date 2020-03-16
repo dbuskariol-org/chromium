@@ -4877,8 +4877,15 @@ jumbo_static_library("browser") {
       "android/feed/feed_scheduler_bridge.h",
       "android/feed/history/feed_history_helper.cc",
       "android/feed/history/feed_history_helper.h",
+      "android/feed/v2/feed_service_bridge.cc",
+      "android/feed/v2/feed_service_bridge.h",
+      "android/feed/v2/feed_service_factory.cc",
+      "android/feed/v2/feed_service_factory.h",
     ]
-    deps += [ "//components/feed/content:feed_content" ]
+    deps += [
+      "//components/feed/content:feed_content",
+      "//components/feed/core/v2:feed_core_v2",
+    ]
   }
 
   if (enable_library_cdms) {
