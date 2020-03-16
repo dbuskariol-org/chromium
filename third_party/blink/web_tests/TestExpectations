@@ -6549,10 +6549,6 @@ crbug.com/944449 virtual/threaded/external/wpt/scroll-animations/animation-with-
 # Sheriff 2020-02-10
 crbug.com/1050306 [ Fuchsia ] virtual/gpu/fast/canvas/canvas-filter-frameless-document.html [ Crash Pass Timeout ]
 
-# Imperative Shadow DOM Slot API - WIP
-crbug.com/869308 external/wpt/shadow-dom/slots-imperative-slot-api.tentative.html [ Failure ]
-crbug.com/869308 virtual/web-components-v0-disabled/external/wpt/shadow-dom/slots-imperative-slot-api.tentative.html [ Failure ]
-
 # Swiftshader issue.
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-innerwidth.html [ Crash Timeout ]
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-screeny.html [ Crash Timeout ]
