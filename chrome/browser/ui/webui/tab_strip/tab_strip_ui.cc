@@ -5,7 +5,6 @@
 #include "chrome/browser/ui/webui/tab_strip/tab_strip_ui.h"
 
 #include "base/feature_list.h"
-#include "chrome/browser/extensions/extension_tab_util.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/themes/theme_properties.h"
 #include "chrome/browser/themes/theme_service.h"
