@@ -90,8 +90,7 @@ void FileHandlerManager::EnableAndRegisterOsFileHandlers(const AppId& app_id) {
   }
 
   std::string app_name = registrar_->GetAppShortName(app_id);
-  const std::vector<apps::FileHandlerInfo>* file_handlers =
-      GetAllFileHandlers(app_id);
+  const apps::FileHandlers* file_handlers = GetAllFileHandlers(app_id);
   if (!file_handlers)
     return;
   std::set<std::string> file_extensions =
@@ -147,8 +146,8 @@ void FileHandlerManager::DisableForceEnabledFileHandlingOriginTrial(
   }
 }
 
-const std::vector<apps::FileHandlerInfo>*
-FileHandlerManager::GetEnabledFileHandlers(const AppId& app_id) {
+const apps::FileHandlers* FileHandlerManager::GetEnabledFileHandlers(
+    const AppId& app_id) {
   if (AreFileHandlersEnabled(app_id) && IsFileHandlingAPIAvailable(app_id))
     return GetAllFileHandlers(app_id);
 
@@ -236,53 +235,54 @@ const base::Optional<GURL> FileHandlerManager::GetMatchingFileHandlerURL(
   if (!IsFileHandlingAPIAvailable(app_id))
     return base::nullopt;
 
-  const std::vector<apps::FileHandlerInfo>* file_handlers =
-      GetAllFileHandlers(app_id);
+  const apps::FileHandlers* file_handlers = GetAllFileHandlers(app_id);
   if (!file_handlers || launch_files.empty())
     return base::nullopt;
 
-  // Leading `.` for each file extension must be removed to match those given by
-  // FileHandlerInfo.extensions below.
-  std::set<std::string> file_extensions;
+  std::set<std::string> launch_file_extensions;
   for (const auto& file_path : launch_files) {
-    std::string extension =
+    std::string file_extension =
         base::FilePath(file_path.Extension()).AsUTF8Unsafe();
-    if (extension.length() <= 1)
+    if (file_extension.length() <= 1)
       return base::nullopt;
-    file_extensions.insert(extension.substr(1));
+    launch_file_extensions.insert(file_extension);
   }
 
   for (const auto& file_handler : *file_handlers) {
-    bool all_extensions_supported = true;
-    for (const auto& extension : file_extensions) {
-      if (!file_handler.extensions.count(extension)) {
-        all_extensions_supported = false;
+    bool all_launch_file_extensions_supported = true;
+    std::set<std::string> supported_file_extensions =
+        GetFileExtensionsFromFileHandlers({file_handler});
+    for (const auto& file_extension : launch_file_extensions) {
+      if (!supported_file_extensions.count(file_extension)) {
+        all_launch_file_extensions_supported = false;
         break;
       }
     }
-    if (all_extensions_supported)
-      return GURL(file_handler.id);
+
+    if (all_launch_file_extensions_supported)
+      return file_handler.action;
   }
 
   return base::nullopt;
 }
 
 std::set<std::string> GetFileExtensionsFromFileHandlers(
-    const std::vector<apps::FileHandlerInfo>& file_handlers) {
+    const apps::FileHandlers& file_handlers) {
   std::set<std::string> file_extensions;
   for (const auto& file_handler : file_handlers) {
-    for (const auto& file_ext : file_handler.extensions)
-      file_extensions.insert(file_ext);
+    for (const auto& accept_entry : file_handler.accept)
+      file_extensions.insert(accept_entry.file_extensions.begin(),
+                             accept_entry.file_extensions.end());
   }
   return file_extensions;
 }
 
 std::set<std::string> GetMimeTypesFromFileHandlers(
-    const std::vector<apps::FileHandlerInfo>& file_handlers) {
+    const apps::FileHandlers& file_handlers) {
   std::set<std::string> mime_types;
   for (const auto& file_handler : file_handlers) {
-    for (const auto& mime_type : file_handler.types)
-      mime_types.insert(mime_type);
+    for (const auto& accept_entry : file_handler.accept)
+      mime_types.insert(accept_entry.mime_type);
   }
   return mime_types;
 }
