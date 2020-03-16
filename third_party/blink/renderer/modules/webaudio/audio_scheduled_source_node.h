@@ -30,7 +30,6 @@
 #define THIRD_PARTY_BLINK_RENDERER_MODULES_WEBAUDIO_AUDIO_SCHEDULED_SOURCE_NODE_H_
 
 #include <atomic>
-#include "base/memory/weak_ptr.h"
 #include "third_party/blink/renderer/bindings/core/v8/active_script_wrappable.h"
 #include "third_party/blink/renderer/modules/webaudio/audio_node.h"
 
@@ -39,9 +38,7 @@ namespace blink {
 class BaseAudioContext;
 class AudioBus;
 
-class AudioScheduledSourceHandler
-    : public AudioHandler,
-      public base::SupportsWeakPtr<AudioScheduledSourceHandler> {
+class AudioScheduledSourceHandler : public AudioHandler {
  public:
   // These are the possible states an AudioScheduledSourceNode can be in:
   //

@@ -250,7 +250,7 @@ void AudioScheduledSourceHandler::Finish() {
   PostCrossThreadTask(
       *task_runner_, FROM_HERE,
       CrossThreadBindOnce(&AudioScheduledSourceHandler::NotifyEnded,
-                          AsWeakPtr()));
+                          WrapRefCounted(this)));
 }
 
 void AudioScheduledSourceHandler::NotifyEnded() {
