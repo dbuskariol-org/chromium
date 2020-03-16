@@ -155,6 +155,7 @@
         'args': [
           '--debug',
         ],
+        'shards': 25,
       },
       'V8 Blink Linux Debug': {
         'args': [
