@@ -41,6 +41,7 @@
 #import "ios/chrome/browser/ui/ui_feature_flags.h"
 #import "ios/chrome/browser/ui/util/uikit_ui_util.h"
 #import "ios/chrome/browser/web/features.h"
+#import "ios/chrome/browser/web/font_size_tab_helper.h"
 #import "ios/chrome/browser/web_state_list/web_state_list.h"
 #import "ios/chrome/browser/web_state_list/web_state_list_observer_bridge.h"
 #include "ios/chrome/grit/ios_strings.h"
@@ -537,8 +538,7 @@ PopupMenuToolsItem* CreateTableViewItem(int titleID,
   [self updateBookmarkItem];
   self.translateItem.enabled = [self isTranslateEnabled];
   self.findInPageItem.enabled = [self isFindInPageEnabled];
-  self.textZoomItem.enabled =
-      !self.webContentAreaShowingOverlay && [self isCurrentURLWebURL];
+  self.textZoomItem.enabled = [self isTextZoomEnabled];
   self.siteInformationItem.enabled = [self currentWebPageSupportsSiteInfo];
   self.requestDesktopSiteItem.enabled =
       [self userAgentType] == web::UserAgentType::MOBILE;
@@ -648,6 +648,19 @@ PopupMenuToolsItem* CreateTableViewItem(int titleID,
   auto* helper = FindTabHelper::FromWebState(self.webState);
   return (helper && helper->CurrentPageSupportsFindInPage() &&
           !helper->IsFindUIActive());
+}
+
+// Whether or not text zoom is enabled
+- (BOOL)isTextZoomEnabled {
+  if (self.webContentAreaShowingOverlay || ![self isCurrentURLWebURL]) {
+    return NO;
+  }
+
+  if (!self.webState) {
+    return NO;
+  }
+  FontSizeTabHelper* helper = FontSizeTabHelper::FromWebState(self.webState);
+  return helper && !helper->IsTextZoomUIActive();
 }
 
 // Whether the page is currently loading.
