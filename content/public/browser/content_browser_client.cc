@@ -89,6 +89,10 @@ bool ContentBrowserClient::AllowGpuLaunchRetryOnIOThread() {
   return true;
 }
 
+bool ContentBrowserClient::CanShutdownGpuProcessNowOnIOThread() {
+  return false;
+}
+
 GURL ContentBrowserClient::GetEffectiveURL(BrowserContext* browser_context,
                                            const GURL& url) {
   DCHECK(browser_context);

@@ -274,6 +274,15 @@ class CONTENT_EXPORT ContentBrowserClient {
   // Allow embedder control GPU process launch retry on failure behavior.
   virtual bool AllowGpuLaunchRetryOnIOThread();
 
+  // Called when GPU process is not used for compositing. Allow embedder to
+  // control whether to shut down the GPU process to save memory, at the cost
+  // of slower start up the next time GPU process is needed.
+  // Note this only ensures the GPU process is not used for compositing. It is
+  // the embedder's responsibility to ensure there are no other services hosted
+  // by the GPU process being used; examples include accelerated media decoders
+  // and encoders.
+  virtual bool CanShutdownGpuProcessNowOnIOThread();
+
   // Notifies that a render process will be created. This is called before
   // the content layer adds its own BrowserMessageFilters, so that the
   // embedder's IPC filters have priority.
