@@ -1671,9 +1671,7 @@ void ShelfLayoutManager::UpdateTargetBoundsForGesture(
     if (!IsHotseatEnabled()) {
       shelf_->shelf_widget()->UpdateTargetBoundsForGesture(shelf_position);
       shelf_->navigation_widget()->UpdateTargetBoundsForGesture(shelf_position);
-      gfx::Rect hotseat_bounds = shelf_->hotseat_widget()->GetTargetBounds();
-      hotseat_bounds.set_y(baseline + translate);
-      shelf_->hotseat_widget()->set_target_bounds(hotseat_bounds);
+      shelf_->hotseat_widget()->UpdateTargetBoundsForGesture(shelf_position);
       shelf_->status_area_widget()->UpdateTargetBoundsForGesture(
           shelf_position);
       return;
@@ -1729,9 +1727,7 @@ void ShelfLayoutManager::UpdateTargetBoundsForGesture(
 
   shelf_->shelf_widget()->UpdateTargetBoundsForGesture(shelf_position);
   shelf_->navigation_widget()->UpdateTargetBoundsForGesture(shelf_position);
-  gfx::Rect hotseat_bounds = shelf_->hotseat_widget()->GetTargetBounds();
-  hotseat_bounds.set_x(shelf_position);
-  shelf_->hotseat_widget()->set_target_bounds(hotseat_bounds);
+  shelf_->hotseat_widget()->UpdateTargetBoundsForGesture(shelf_position);
   shelf_->status_area_widget()->UpdateTargetBoundsForGesture(shelf_position);
 }
 

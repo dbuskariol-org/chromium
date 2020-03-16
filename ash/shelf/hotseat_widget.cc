@@ -511,7 +511,10 @@ void HotseatWidget::UpdateLayout(bool animate) {
 }
 
 void HotseatWidget::UpdateTargetBoundsForGesture(int shelf_position) {
-  // TODO(manucornet): Move work being done in the shelf layout manager here.
+  if (shelf_->IsHorizontalAlignment())
+    target_bounds_.set_y(shelf_position);
+  else
+    target_bounds_.set_x(shelf_position);
 }
 
 gfx::Size HotseatWidget::GetTranslucentBackgroundSize() const {
