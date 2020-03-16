@@ -1052,6 +1052,9 @@ bool ContentBrowserClient::CanEnterFullscreenWithoutUserActivation() {
   return false;
 }
 
+void ContentBrowserClient::LogUkmEventForCrossOriginFetchFromContentScript3(
+    const std::string& isolated_world_host) {}
+
 #if BUILDFLAG(ENABLE_PLUGINS)
 bool ContentBrowserClient::ShouldAllowPluginCreation(
     const url::Origin& embedder_origin,
