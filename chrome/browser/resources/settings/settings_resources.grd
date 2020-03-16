@@ -946,6 +946,12 @@
                  file="site_settings/protocol_handlers.js"
                  preprocess="true"
                  type="chrome_html" />
+      <structure name="IDR_SETTINGS_HATS_BROWSER_PROXY_HTML"
+                 file="hats_browser_proxy.html"
+                 type="chrome_html" />
+      <structure name="IDR_SETTINGS_HATS_BROWSER_PROXY_JS"
+                 file="hats_browser_proxy.js"
+                 type="chrome_html" />
       <structure name="IDR_SETTINGS_METRICS_BROWSER_PROXY_HTML"
                  file="metrics_browser_proxy.html"
                  type="chrome_html" />
