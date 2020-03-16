@@ -977,7 +977,6 @@ void Display::RemoveOverdrawQuads(CompositorFrame* frame) {
                   SafeConvertRectForRegion(rect_in_content));
             }
           }
-          DCHECK(!occlusion_in_quad_content_space.IsEmpty());
         }
       }
 
