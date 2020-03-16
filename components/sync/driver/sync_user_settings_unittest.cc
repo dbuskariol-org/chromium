@@ -177,7 +177,6 @@ TEST_F(SyncUserSettingsTest, PreferredTypesNotKeepEverythingSynced) {
     // GetPreferredUserTypes() returns ModelTypes, which includes both browser
     // and OS types. However, this test exercises browser UserSelectableTypes,
     // so disable OS selectable types.
-    // This test only exercises browser types, so disable all OS types.
     sync_user_settings->SetSelectedOsTypes(/*sync_all_os_types=*/false,
                                            UserSelectableOsTypeSet());
   }
