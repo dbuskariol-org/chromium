@@ -1224,8 +1224,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/paint_preview/PaintPreviewTabHelper.java",
   "java/src/org/chromium/chrome/browser/paint_preview/services/PaintPreviewDemoService.java",
   "java/src/org/chromium/chrome/browser/paint_preview/services/PaintPreviewDemoServiceFactory.java",
-  "java/src/org/chromium/chrome/browser/paint_preview/services/PaintPreviewTabService.java",
-  "java/src/org/chromium/chrome/browser/paint_preview/services/PaintPreviewTabServiceFactory.java",
   "java/src/org/chromium/chrome/browser/partnerbookmarks/PartnerBookmark.java",
   "java/src/org/chromium/chrome/browser/partnerbookmarks/PartnerBookmarksFaviconThrottle.java",
   "java/src/org/chromium/chrome/browser/partnerbookmarks/PartnerBookmarksProviderIterator.java",

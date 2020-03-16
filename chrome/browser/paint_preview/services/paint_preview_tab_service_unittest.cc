@@ -65,20 +65,6 @@ std::vector<base::FilePath> ListDir(const base::FilePath& path) {
   return files;
 }
 
-bool CaptureExists(PaintPreviewTabService* service, int tab_id) {
-  bool out = false;
-  base::RunLoop loop;
-  service->HasCaptureForTab(
-      tab_id, base::BindOnce(
-                  [](base::OnceClosure quit, bool* out, bool success) {
-                    *out = success;
-                    std::move(quit).Run();
-                  },
-                  loop.QuitClosure(), &out));
-  loop.Run();
-  return out;
-}
-
 }  // namespace
 
 class PaintPreviewTabServiceTest : public ChromeRenderViewHostTestHarness {
@@ -135,8 +121,6 @@ TEST_F(PaintPreviewTabServiceTest, CaptureTab) {
           loop.QuitClosure()));
   loop.Run();
 
-  EXPECT_TRUE(CaptureExists(service, kTabId));
-
   auto file_manager = service->GetFileManager();
   auto key = file_manager->CreateKey(kTabId);
   service->GetTaskRunner()->PostTaskAndReplyWithResult(
@@ -146,7 +130,6 @@ TEST_F(PaintPreviewTabServiceTest, CaptureTab) {
   content::RunAllTasksUntilIdle();
 
   service->TabClosed(kTabId);
-  EXPECT_FALSE(CaptureExists(service, kTabId));
   content::RunAllTasksUntilIdle();
   service->GetTaskRunner()->PostTaskAndReplyWithResult(
       FROM_HERE,
