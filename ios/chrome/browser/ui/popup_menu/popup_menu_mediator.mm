@@ -725,11 +725,7 @@ PopupMenuToolsItem* CreateTableViewItem(int titleID,
         @"popup_menu_paste_and_go", kToolsMenuPasteAndGo);
   }
   if (copiedContentItem) {
-    if (base::FeatureList::IsEnabled(kToolbarNewTabButton)) {
-      [items addObject:@[ copiedContentItem ]];
-    } else {
-      [items addObject:copiedContentItem];
-    }
+    [items addObject:@[ copiedContentItem ]];
   }
 
   PopupMenuToolsItem* QRCodeSearch = CreateTableViewItem(
@@ -745,20 +741,10 @@ PopupMenuToolsItem* CreateTableViewItem(int titleID,
       IDS_IOS_TOOLS_MENU_NEW_INCOGNITO_SEARCH, PopupMenuActionIncognitoSearch,
       @"popup_menu_new_incognito_tab", kToolsMenuIncognitoSearch);
 
-  if (base::FeatureList::IsEnabled(kToolbarNewTabButton)) {
-    [items addObject:@[
-      newSearch, newIncognitoSearch, voiceSearch, QRCodeSearch
-    ]];
-  } else {
-    [items addObject:QRCodeSearch];
-    [items addObject:voiceSearch];
-  }
+  [items
+      addObject:@[ newSearch, newIncognitoSearch, voiceSearch, QRCodeSearch ]];
 
-  if (base::FeatureList::IsEnabled(kToolbarNewTabButton)) {
-    self.items = items;
-  } else {
-    self.items = @[ items ];
-  }
+  self.items = items;
 }
 
 // Creates the menu items for the tools menu.
