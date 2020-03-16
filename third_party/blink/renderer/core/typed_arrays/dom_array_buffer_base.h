@@ -22,6 +22,9 @@ class CORE_EXPORT DOMArrayBufferBase : public ScriptWrappable {
   const void* Data() const { return Buffer()->Data(); }
   void* Data() { return Buffer()->Data(); }
 
+  const void* DataMaybeShared() const { return Buffer()->DataMaybeShared(); }
+  void* DataMaybeShared() { return Buffer()->DataMaybeShared(); }
+
   size_t ByteLengthAsSizeT() const { return Buffer()->ByteLengthAsSizeT(); }
 
   // This function is deprecated and should not be used. Use {ByteLengthAsSizeT}

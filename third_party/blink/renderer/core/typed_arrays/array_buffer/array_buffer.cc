@@ -26,7 +26,6 @@
 #include "third_party/blink/renderer/core/typed_arrays/array_buffer/array_buffer.h"
 
 #include "base/memory/scoped_refptr.h"
-#include "third_party/blink/renderer/core/typed_arrays/array_buffer/array_buffer_view.h"
 
 namespace blink {
 
