@@ -791,4 +791,32 @@ IN_PROC_BROWSER_TEST_F(SubresourceFilterBrowserTest,
                            static_cast<int>(ActivationDecision::ACTIVATED), 2);
 }
 
+// If no ruleset is available, the VerifiedRulesetDealer considers it a
+// "invalid" or "corrupt" case, and any VerifiedRuleset::Handle's vended from it
+// will be useless for their entire lifetime.
+//
+// At first glance, this will be a problem, since the throttle manager attempts
+// to keep its handle in scope for as long as possible (to avoid un-mapping and
+// re-mapping the underlying file).
+//
+// However, in reality the throttle manager is robust to this. After every
+// navigation we destroy the handle if it is "no longer in use". Since a corrupt
+// or invalid ruleset will never be "in use" (i.e. activate any frame), we
+// destroy the handle after every navigation / frame destruction.
+IN_PROC_BROWSER_TEST_F(SubresourceFilterBrowserTest,
+                       NewRulesetSameTab_ActivatesSuccessfully) {
+  GURL a_url(embedded_test_server()->GetURL(
+      "a.com", "/subresource_filter/frame_cross_site_set.html"));
+  ConfigureAsPhishingURL(a_url);
+  ui_test_utils::NavigateToURL(browser(), a_url);
+  ExpectParsedScriptElementLoadedStatusInFrames(
+      std::vector<const char*>{"b", "d"}, {true, true});
+
+  ASSERT_NO_FATAL_FAILURE(
+      SetRulesetToDisallowURLsWithPathSuffix("included_script.js"));
+  ui_test_utils::NavigateToURL(browser(), a_url);
+  ExpectParsedScriptElementLoadedStatusInFrames(
+      std::vector<const char*>{"b", "d"}, {false, false});
+}
+
 }  // namespace subresource_filter
