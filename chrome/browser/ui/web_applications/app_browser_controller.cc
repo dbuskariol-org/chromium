@@ -111,8 +111,7 @@ AppBrowserController::AppBrowserController(
                                         ->system_web_app_manager()
                                         .GetSystemAppTypeForAppId(GetAppId())
                                   : base::nullopt),
-      // Show tabs for Terminals only.
-      // TODO(crbug.com/846546): Generalise has_tab_strip_ as a SystemWebApp
+      // TODO(crbug.com/1061822): Generalise has_tab_strip_ as a SystemWebApp
       // capability.
       has_tab_strip_(
           system_app_type_ == SystemAppType::TERMINAL ||
@@ -211,7 +210,7 @@ bool AppBrowserController::has_tab_strip() const {
 
 bool AppBrowserController::HasTitlebarToolbar() const {
   // Show titlebar toolbar for Terminal System App, but not other system apps.
-  // TODO(crbug.com/846546): Generalise this as a SystemWebApp capability.
+  // TODO(crbug.com/1061822): Generalise this as a SystemWebApp capability.
   if (is_for_system_web_app())
     return system_app_type_ == web_app::SystemAppType::TERMINAL &&
            // SWA terminal has a setting window, which has browser type "app
@@ -270,6 +269,8 @@ void AppBrowserController::UpdateCustomTabBarVisibility(bool animate) const {
 }
 
 gfx::Rect AppBrowserController::GetDefaultBounds() const {
+  // TODO(crbug.com/1061822): Generalise default bounds as a SystemWebApp
+  // capability.
   if (system_app_type_ == SystemAppType::TERMINAL) {
     // Terminal settings is centered.
     if (browser()->is_type_app_popup()) {
