@@ -1102,9 +1102,16 @@ class NewLinkedHashSet {
   template <typename IncomingValueType>
   AddResult PrependOrMoveToFirst(IncomingValueType&&);
 
-  // TODO(keinakashima): implement functions related to erase
+  void erase(ValuePeekInType);
+  void erase(const_iterator);
+  void RemoveFirst();
+  void pop_back();
 
-  // TODO(keinakashima): implement clear (,RemoveAll, Trace)
+  void clear() {
+    value_to_index_.clear();
+    list_.clear();
+  }
+  // TODO(keinakashima): implement Trace
 
  private:
   template <typename IncomingValueType>
@@ -1193,6 +1200,31 @@ template <typename IncomingValueType>
 typename NewLinkedHashSet<T>::AddResult
 NewLinkedHashSet<T>::PrependOrMoveToFirst(IncomingValueType&& value) {
   return InsertOrMoveBefore(begin(), std::forward<IncomingValueType>(value));
+}
+
+template <typename T>
+inline void NewLinkedHashSet<T>::erase(ValuePeekInType value) {
+  erase(find(value));
+}
+
+template <typename T>
+inline void NewLinkedHashSet<T>::erase(const_iterator it) {
+  if (it == end())
+    return;
+  value_to_index_.erase(*it);
+  list_.erase(it);
+}
+
+template <typename T>
+inline void NewLinkedHashSet<T>::RemoveFirst() {
+  DCHECK(!IsEmpty());
+  erase(begin());
+}
+
+template <typename T>
+inline void NewLinkedHashSet<T>::pop_back() {
+  DCHECK(!IsEmpty());
+  erase(--end());
 }
 
 template <typename T>
