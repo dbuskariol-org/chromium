@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/geolocation/android/mock_location_settings.h"
+#include "components/location/android/mock_location_settings.h"
 
 #include "base/lazy_instance.h"
 
@@ -24,7 +24,7 @@ static base::LazyInstance<
 
 MockLocationSettings::MockLocationSettings() : LocationSettings() {}
 
-MockLocationSettings::~MockLocationSettings() {}
+MockLocationSettings::~MockLocationSettings() = default;
 
 void MockLocationSettings::SetLocationStatus(
     bool has_android_location_permission,
@@ -67,7 +67,7 @@ bool MockLocationSettings::HasAndroidLocationPermission() {
 }
 
 bool MockLocationSettings::CanPromptForAndroidLocationPermission(
-    content::WebContents* web_contents) {
+    ui::WindowAndroid* window) {
   return can_prompt_for_android_location_permission_;
 }
 
@@ -81,7 +81,7 @@ bool MockLocationSettings::CanPromptToEnableSystemLocationSetting() {
 
 void MockLocationSettings::PromptToEnableSystemLocationSetting(
     const LocationSettingsDialogContext prompt_context,
-    content::WebContents* web_contents,
+    ui::WindowAndroid* window,
     LocationSettingsDialogOutcomeCallback callback) {
   has_shown_location_settings_dialog_ = true;
 

@@ -2,30 +2,30 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_H_
-#define CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_H_
+#ifndef COMPONENTS_LOCATION_ANDROID_LOCATION_SETTINGS_H_
+#define COMPONENTS_LOCATION_ANDROID_LOCATION_SETTINGS_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
 #include "components/location/android/location_settings_dialog_context.h"
 #include "components/location/android/location_settings_dialog_outcome.h"
 
-namespace content {
-class WebContents;
+namespace ui {
+class WindowAndroid;
 }
 
 // This class determines whether Chrome can access the device's location,
 // i.e. whether location is enabled system-wide on the device.
 class LocationSettings {
  public:
-  virtual ~LocationSettings() {}
+  virtual ~LocationSettings() = default;
 
   // Returns true if Chrome has location permission.
   virtual bool HasAndroidLocationPermission() = 0;
 
   // Returns true if Chrome can prompt to get location permission.
   virtual bool CanPromptForAndroidLocationPermission(
-      content::WebContents* web_contents) = 0;
+      ui::WindowAndroid* window) = 0;
 
   // Returns true if the system location is enabled.
   virtual bool IsSystemLocationSettingEnabled() = 0;
@@ -55,8 +55,8 @@ class LocationSettings {
   // accessing it to prevent crashes, e.g. by using weak pointer semantics.
   virtual void PromptToEnableSystemLocationSetting(
       const LocationSettingsDialogContext prompt_context,
-      content::WebContents* web_contents,
+      ui::WindowAndroid* window,
       LocationSettingsDialogOutcomeCallback callback) = 0;
 };
 
-#endif  // CHROME_BROWSER_GEOLOCATION_ANDROID_LOCATION_SETTINGS_H_
+#endif  // COMPONENTS_LOCATION_ANDROID_LOCATION_SETTINGS_H_

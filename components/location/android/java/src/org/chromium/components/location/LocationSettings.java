@@ -2,17 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.geolocation;
+package org.chromium.components.location;
 
 import android.Manifest;
 
 import org.chromium.base.Callback;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.components.location.LocationSettingsDialogContext;
-import org.chromium.components.location.LocationSettingsDialogOutcome;
-import org.chromium.components.location.LocationUtils;
-import org.chromium.content_public.browser.WebContents;
 import org.chromium.ui.base.WindowAndroid;
 
 /**
@@ -27,10 +23,7 @@ public class LocationSettings {
     }
 
     @CalledByNative
-    private static boolean canPromptForAndroidLocationPermission(WebContents webContents) {
-        WindowAndroid windowAndroid = webContents.getTopLevelNativeWindow();
-        if (windowAndroid == null) return false;
-
+    private static boolean canPromptForAndroidLocationPermission(WindowAndroid windowAndroid) {
         return windowAndroid.canRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
@@ -46,14 +39,8 @@ public class LocationSettings {
 
     @CalledByNative
     private static void promptToEnableSystemLocationSetting(
-            @LocationSettingsDialogContext int promptContext, WebContents webContents,
+            @LocationSettingsDialogContext int promptContext, WindowAndroid window,
             final long nativeCallback) {
-        WindowAndroid window = webContents.getTopLevelNativeWindow();
-        if (window == null) {
-            LocationSettingsJni.get().onLocationSettingsDialogOutcome(
-                    nativeCallback, LocationSettingsDialogOutcome.NO_PROMPT);
-            return;
-        }
         LocationUtils.getInstance().promptToEnableSystemLocationSetting(
                 promptContext, window, new Callback<Integer>() {
                     @Override
