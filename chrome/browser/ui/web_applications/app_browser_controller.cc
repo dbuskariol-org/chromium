@@ -36,12 +36,20 @@
 #include "extensions/common/constants.h"
 #include "net/base/escape.h"
 #include "third_party/skia/include/core/SkBitmap.h"
+#include "ui/display/display.h"
+#include "ui/display/screen.h"
 #include "ui/gfx/color_palette.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/favicon_size.h"
 #include "url/gurl.h"
 
 namespace web_app {
+
+namespace {
+constexpr gfx::Rect TERMINAL_DEFAULT_BOUNDS(gfx::Point(64, 64),
+                                            gfx::Size(652, 484));
+constexpr gfx::Size TERMINAL_SETTINGS_DEFAULT_SIZE(768, 512);
+}  // namespace
 
 // static
 std::unique_ptr<AppBrowserController>
@@ -259,6 +267,20 @@ void AppBrowserController::Uninstall() {
 void AppBrowserController::UpdateCustomTabBarVisibility(bool animate) const {
   browser()->window()->UpdateCustomTabBarVisibility(ShouldShowCustomTabBar(),
                                                     animate);
+}
+
+gfx::Rect AppBrowserController::GetDefaultBounds() const {
+  if (system_app_type_ == SystemAppType::TERMINAL) {
+    // Terminal settings is centered.
+    if (browser()->is_type_app_popup()) {
+      gfx::Rect bounds =
+          display::Screen::GetScreen()->GetDisplayForNewWindows().work_area();
+      bounds.ClampToCenteredSize(TERMINAL_SETTINGS_DEFAULT_SIZE);
+      return bounds;
+    }
+    return TERMINAL_DEFAULT_BOUNDS;
+  }
+  return gfx::Rect();
 }
 
 void AppBrowserController::DidStartNavigation(
