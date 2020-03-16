@@ -63,7 +63,7 @@ TabStripUI::TabStripUI(content::WebUI* web_ui)
       ThemeService::GetThemeProviderForProfile(profile);
   html_source->AddString("frameColor",
                          color_utils::SkColorToRgbaString(
-                             tp.GetColor(ThemeProperties::COLOR_FRAME)));
+                             tp.GetColor(ThemeProperties::COLOR_FRAME_ACTIVE)));
 
   html_source->AddBoolean(
       "showDemoOptions",
