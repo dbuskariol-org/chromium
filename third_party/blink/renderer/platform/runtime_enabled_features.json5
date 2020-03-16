@@ -906,7 +906,7 @@
     },
     {
       name: "LayoutNGFragmentItem",
-      implied_by: ["LayoutNGFragmentTraversal"],
+      implied_by: ["LayoutNGBlockFragmentation", "LayoutNGFragmentTraversal"],
     },
     {
       name: "LayoutNGFragmentPaint",
