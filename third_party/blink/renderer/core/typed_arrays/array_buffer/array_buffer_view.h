@@ -54,7 +54,6 @@ class CORE_EXPORT ArrayBufferView : public RefCounted<ArrayBufferView> {
     kTypeDataView
   };
   virtual ViewType GetType() const = 0;
-  const char* TypeName();
 
   ArrayBuffer* Buffer() const { return buffer_.get(); }
 
@@ -76,7 +75,12 @@ class CORE_EXPORT ArrayBufferView : public RefCounted<ArrayBufferView> {
   virtual ~ArrayBufferView() = default;
 
  protected:
-  ArrayBufferView(scoped_refptr<ArrayBuffer>, size_t byte_offset);
+  ArrayBufferView(scoped_refptr<ArrayBuffer> buffer, size_t byte_offset)
+      : raw_byte_offset_(byte_offset), buffer_(std::move(buffer)) {
+    raw_base_address_ =
+        buffer_ ? (static_cast<char*>(buffer_->DataMaybeShared()) + byte_offset)
+                : nullptr;
+  }
 
   bool IsDetached() const { return !buffer_ || buffer_->IsDetached(); }
 

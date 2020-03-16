@@ -54,7 +54,48 @@ class CORE_EXPORT DOMArrayBufferView : public ScriptWrappable {
   ArrayBufferView* View() { return buffer_view_.get(); }
 
   ViewType GetType() const { return View()->GetType(); }
-  const char* TypeName() { return View()->TypeName(); }
+
+  const char* TypeName() {
+    switch (GetType()) {
+      case ArrayBufferView::kTypeInt8:
+        return "Int8";
+        break;
+      case ArrayBufferView::kTypeUint8:
+        return "UInt8";
+        break;
+      case ArrayBufferView::kTypeUint8Clamped:
+        return "UInt8Clamped";
+        break;
+      case ArrayBufferView::kTypeInt16:
+        return "Int16";
+        break;
+      case ArrayBufferView::kTypeUint16:
+        return "UInt16";
+        break;
+      case ArrayBufferView::kTypeInt32:
+        return "Int32";
+        break;
+      case ArrayBufferView::kTypeUint32:
+        return "Uint32";
+        break;
+      case ArrayBufferView::kTypeBigInt64:
+        return "BigInt64";
+        break;
+      case ArrayBufferView::kTypeBigUint64:
+        return "BigUint64";
+        break;
+      case ArrayBufferView::kTypeFloat32:
+        return "Float32";
+        break;
+      case ArrayBufferView::kTypeFloat64:
+        return "Float64";
+        break;
+      case ArrayBufferView::kTypeDataView:
+        return "DataView";
+        break;
+    }
+  }
+
   void* BaseAddress() const { return View()->BaseAddress(); }
   size_t byteOffsetAsSizeT() const { return View()->ByteOffset(); }
   // This function is deprecated and should not be used. Use {byteOffsetAsSizeT}
