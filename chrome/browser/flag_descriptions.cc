@@ -1732,10 +1732,10 @@ const char kShowOverdrawFeedbackDescription[] =
     "Visualize overdraw by color-coding elements based on if they have other "
     "elements drawn underneath.";
 
-const char kSkiaRendererName[] = "Skia API for OOP-D compositing";
+const char kSkiaRendererName[] = "Skia API for compositing";
 const char kSkiaRendererDescription[] =
     "If enabled, the display compositor will use Skia as the graphics API "
-    "instead of OpenGL ES. Requires Viz Display Compositor (OOP-D).";
+    "instead of OpenGL ES.";
 
 const char kHistoryManipulationIntervention[] =
     "History Manipulation Intervention";
