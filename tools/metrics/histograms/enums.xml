@@ -68696,6 +68696,35 @@ Full version information for the fingerprint enum values:
   <int value="6" label="Enter Site Details"/>
 </enum>
 
+<enum name="WebSocketCloseCode">
+  <int value="0" label="Normal Closure">1000</int>
+  <int value="1" label="Going Away">1001</int>
+  <int value="2" label="Protocol error">1002</int>
+  <int value="3" label="Unsupported Data">1003</int>
+  <int value="4" label="Reserved">1004</int>
+  <int value="5" label="No Status Rcvd">1005</int>
+  <int value="6" label="Abnormal Closure">1006</int>
+  <int value="7" label="Invalid frame payload data">1007</int>
+  <int value="8" label="Policy Violation">1008</int>
+  <int value="9" label="Message Too Big">1009</int>
+  <int value="10" label="Mandatory Ext.">1010</int>
+  <int value="11" label="Internal Error">1011</int>
+  <int value="12" label="Service Restart">1012</int>
+  <int value="13" label="Try Again Later">1013</int>
+  <int value="14" label="Bad Gateway">
+    1014. &quot;The server was acting as a gateway or proxy and received an
+    invalid response from the upstream server. This is similar to 502 HTTP
+    Status Code.&quot;
+  </int>
+  <int value="15" label="TLS handshake">1015</int>
+  <int value="16" label="Other value in 1000 range">1016-1999</int>
+  <int value="17" label="2000 range">2000-2999</int>
+  <int value="18" label="3000 range">3000-3999</int>
+  <int value="19" label="4000 range">4000-4999</int>
+  <int value="20" label="Under 1000">0-999</int>
+  <int value="21" label="5000 and over">5000-65535</int>
+</enum>
+
 <enum name="WebSocketHandshakeResult">
   <int value="0" label="Incomplete"/>
   <int value="1" label="Normal"/>
