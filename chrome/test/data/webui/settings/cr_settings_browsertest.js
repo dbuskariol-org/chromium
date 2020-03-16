@@ -451,6 +451,7 @@ CrSettingsPaymentsSectionTest.prototype = {
     '../test_browser_proxy.js',
     'passwords_and_autofill_fake_data.js',
     'sync_test_util.js',
+    'test_metrics_browser_proxy.js',
     'test_sync_browser_proxy.js',
     '../test_util.js',
     'payments_section_test.js',

@@ -66,7 +66,7 @@ js_library("payments_section") {
   deps = [
     ":credit_card_edit_dialog",
     ":payments_list",
-    "../people_page:sync_browser_proxy",
+    "..:metrics_browser_proxy",
     "//ui/webui/resources/cr_elements/cr_action_menu:cr_action_menu",
     "//ui/webui/resources/js:assert",
     "//ui/webui/resources/js:load_time_data",
@@ -392,6 +392,7 @@ js_library("payments_section.m") {
     ":autofill_section.m",
     ":credit_card_edit_dialog.m",
     ":payments_list.m",
+    "..:metrics_browser_proxy.m",
     "//ui/webui/resources/cr_elements/cr_action_menu:cr_action_menu.m",
     "//ui/webui/resources/js:assert.m",
     "//ui/webui/resources/js:cr.m",
@@ -592,6 +593,7 @@ polymer_modulizer("payments_section") {
   html_type = "dom-module"
   auto_imports = settings_auto_imports + [
                    "chrome/browser/resources/settings/autofill_page/autofill_section.html|AutofillManager",
+                   "chrome/browser/resources/settings/metrics_browser_proxy.html|MetricsBrowserProxyImpl,PrivacyElementInteractions",
                    "ui/webui/resources/html/assert.html|assert",
                    "ui/webui/resources/html/cr.html|addSingletonGetter",
                  ]
