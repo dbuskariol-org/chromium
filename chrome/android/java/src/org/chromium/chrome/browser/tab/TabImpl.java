@@ -743,7 +743,7 @@ public class TabImpl implements Tab, TabObscuringHandler.Observer {
      * Certain functionalities will not work until it is attached to an activity
      * with {@link ReparentingTask#finish}.
      */
-    public static boolean isDetached(Tab tab) {
+    static boolean isDetached(Tab tab) {
         if (tab.getWebContents() == null) return true;
         // Should get WindowAndroid from WebContents since the one from |getWindowAndroid()|
         // is always non-null even when the tab is in detached state. See the comment in |detach()|.
