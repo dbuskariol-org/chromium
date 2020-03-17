@@ -68,7 +68,7 @@ class MODULES_EXPORT MediaDevices final
   void ContextDestroyed() override;
 
   // mojom::blink::MediaDevicesListener implementation.
-  void OnDevicesChanged(mojom::blink::MediaDeviceType,
+  void OnDevicesChanged(MediaDeviceType,
                         Vector<mojom::blink::MediaDeviceInfoPtr>) override;
 
   // Callback for testing only.

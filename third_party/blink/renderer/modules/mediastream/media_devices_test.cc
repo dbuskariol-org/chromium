@@ -184,9 +184,8 @@ class MediaDevicesTest : public testing::Test {
 
   void SimulateDeviceChange() {
     DCHECK(listener());
-    listener()->OnDevicesChanged(
-        mojom::blink::MediaDeviceType::MEDIA_AUDIO_INPUT,
-        Vector<MediaDeviceInfoPtr>());
+    listener()->OnDevicesChanged(MEDIA_DEVICE_TYPE_AUDIO_INPUT,
+                                 Vector<MediaDeviceInfoPtr>());
   }
 
   void DevicesEnumerated(const MediaDeviceInfoVector& device_infos) {

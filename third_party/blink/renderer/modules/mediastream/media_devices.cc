@@ -200,7 +200,7 @@ void MediaDevices::ContextDestroyed() {
 }
 
 void MediaDevices::OnDevicesChanged(
-    mojom::blink::MediaDeviceType type,
+    blink::MediaDeviceType type,
     Vector<mojom::blink::MediaDeviceInfoPtr> device_infos) {
   Document* document = Document::From(GetExecutionContext());
   DCHECK(document);

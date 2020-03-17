@@ -13,4 +13,7 @@ traits_headers = [
   "//third_party/blink/public/common/mediastream/media_devices_mojom_traits.h",
 ]
 
-type_mappings = [ "blink.mojom.FacingMode=::media::VideoFacingMode" ]
+type_mappings = [
+  "blink.mojom.MediaDeviceType=::blink::MediaDeviceType",
+  "blink.mojom.FacingMode=::media::VideoFacingMode",
+]
