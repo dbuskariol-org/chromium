@@ -106,6 +106,12 @@ void CrostiniUpgrader::StatusTracker::SetStatusRunningUI(int progress_percent) {
   } else {
     upgrader_->OnRestoreProgress(progress_percent);
   }
+  if (has_notified_start_)
+    return;
+  for (auto& observer : upgrader_->upgrader_observers_) {
+    observer.OnBackupMaybeStarted(/*did_start=*/true);
+  }
+  has_notified_start_ = true;
 }
 
 void CrostiniUpgrader::StatusTracker::SetStatusDoneUI() {
@@ -123,6 +129,9 @@ void CrostiniUpgrader::StatusTracker::SetStatusCancelledUI() {
     upgrader_->OnBackup(CrostiniResult::SUCCESS, base::nullopt);
   } else {
     upgrader_->OnRestore(CrostiniResult::SUCCESS);
+  }
+  for (auto& observer : upgrader_->upgrader_observers_) {
+    observer.OnBackupMaybeStarted(/*did_start=*/false);
   }
 }
 
