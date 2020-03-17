@@ -470,12 +470,16 @@ cr.define('settings', function() {
 
     /** @private */
     onClearBrowsingDataTap_() {
+      this.tryShowHatsSurvey_();
+
       settings.Router.getInstance().navigateTo(
           settings.routes.CLEAR_BROWSER_DATA);
     },
 
     /** @private */
     onCookiesClick_() {
+      this.tryShowHatsSurvey_();
+
       settings.Router.getInstance().navigateTo(settings.routes.COOKIES);
     },
 
@@ -488,6 +492,8 @@ cr.define('settings', function() {
 
     /** @private */
     onPermissionsPageClick_() {
+      this.tryShowHatsSurvey_();
+
       settings.Router.getInstance().navigateTo(settings.routes.SITE_SETTINGS);
     },
 
@@ -498,6 +504,8 @@ cr.define('settings', function() {
 
     /** @private */
     onSecurityPageClick_() {
+      this.tryShowHatsSurvey_();
+
       settings.Router.getInstance().navigateTo(settings.routes.SECURITY);
     },
 
@@ -512,6 +520,11 @@ cr.define('settings', function() {
       return value ?
           this.i18n('siteSettingsProtectedContentEnableIdentifiers') :
           this.i18n('siteSettingsBlocked');
+    },
+
+    /** @private */
+    tryShowHatsSurvey_() {
+      settings.HatsBrowserProxyImpl.getInstance().tryShowSurvey();
     },
   });
 
