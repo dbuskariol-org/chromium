@@ -363,7 +363,6 @@
     },
     {
       name: "CorsRFC1918",
-      depends_on: ["AddressSpace"],
     },
     {
       name: "CSS3Text",
