@@ -3,6 +3,9 @@
 # found in the LICENSE file.
 
 import("//third_party/closure_compiler/compile_js.gni")
+import("//tools/polymer/polymer.gni")
+import("//ui/webui/resources/tools/js_modulizer.gni")
+import("../settings.gni")
 
 js_type_check("closure_compile") {
   deps = [
@@ -292,38 +295,41 @@ js_library("zoom_levels") {
 }
 
 # TODO(crbug.com/1026426): Fix and enable.
-#js_type_check("closure_compile_module") {
-#  is_polymer3 = true
-#  deps = [
-#    ":add_site_dialog.m",
-#    ":all_sites.m",
-#    ":all_sites_icons.m",
-#    ":android_info_browser_proxy.m",
-#    ":category_default_setting.m",
-#    ":category_setting_exceptions.m",
-#    ":chooser_exception_list.m",
-#    ":chooser_exception_list_entry.m",
-#    ":constants.m",
-#    ":cookie_info.m",
-#    ":edit_exception_dialog.m",
-#    ":local_data_browser_proxy.m",
-#    ":media_picker.m",
-#    ":pdf_documents.m",
-#    ":protocol_handlers.m",
-#    ":site_data.m",
-#    ":site_data_details_subpage.m",
-#    ":site_data_entry.m",
-#    ":site_details.m",
-#    ":site_details_permission.m",
-#    ":site_entry.m",
-#    ":site_list.m",
-#    ":site_list_entry.m",
-#    ":site_settings_behavior.m",
-#    ":site_settings_prefs_browser_proxy.m",
-#    ":website_usage_private_api.m",
-#    ":zoom_levels.m",
-#  ]
-#}
+js_type_check("closure_compile_module") {
+  is_polymer3 = true
+  deps = [
+    #    ":add_site_dialog.m",
+    #    ":all_sites.m",
+    #    ":all_sites_icons.m",
+    #    ":android_info_browser_proxy.m",
+    #    ":category_default_setting.m",
+    #    ":category_setting_exceptions.m",
+    #    ":chooser_exception_list.m",
+    #    ":chooser_exception_list_entry.m",
+    #    ":constants.m",
+    ":cookie_info.m",
+
+    #    ":edit_exception_dialog.m",
+    ":local_data_browser_proxy.m",
+
+    #    ":media_picker.m",
+    #    ":pdf_documents.m",
+    #    ":protocol_handlers.m",
+    #    ":site_data.m",
+    ":site_data_details_subpage.m",
+
+    #    ":site_data_entry.m",
+    #    ":site_details.m",
+    #    ":site_details_permission.m",
+    #    ":site_entry.m",
+    #    ":site_list.m",
+    #    ":site_list_entry.m",
+    #    ":site_settings_behavior.m",
+    #    ":site_settings_prefs_browser_proxy.m",
+    #    ":website_usage_private_api.m",
+    #    ":zoom_levels.m",
+  ]
+}
 
 js_library("add_site_dialog.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/add_site_dialog.m.js" ]
@@ -399,9 +405,7 @@ js_library("constants.m") {
 
 js_library("cookie_info.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/cookie_info.m.js" ]
-  deps = [
-    # TODO: Fill those in.
-  ]
+  deps = [ "//ui/webui/resources/js:load_time_data.m" ]
   extra_deps = [ ":modulize" ]
 }
 
@@ -416,7 +420,8 @@ js_library("edit_exception_dialog.m") {
 js_library("local_data_browser_proxy.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/local_data_browser_proxy.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":cookie_info.m",
+    "//ui/webui/resources/js:cr.m",
   ]
   extra_deps = [ ":modulize" ]
 }
@@ -456,7 +461,12 @@ js_library("site_data.m") {
 js_library("site_data_details_subpage.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/site_data_details_subpage.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":local_data_browser_proxy.m",
+    "..:route.m",
+    "..:router.m",
+    "//third_party/polymer/v3_0/components-chromium/iron-list:iron-list",
+    "//ui/webui/resources/js:load_time_data.m",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
   extra_deps = [ ":site_data_details_subpage_module" ]
 }
@@ -540,8 +550,6 @@ js_library("zoom_levels.m") {
   ]
   extra_deps = [ ":zoom_levels_module" ]
 }
-
-import("//tools/polymer/polymer.gni")
 
 group("polymer3_elements") {
   public_deps = [
@@ -653,6 +661,13 @@ polymer_modulizer("site_data_details_subpage") {
   js_file = "site_data_details_subpage.js"
   html_file = "site_data_details_subpage.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [
+                   "chrome/browser/resources/settings/route.html|routes",
+                   "chrome/browser/resources/settings/router.html|Route,Router,RouteObserverBehavior",
+                   "chrome/browser/resources/settings/site_settings/cookie_info.html|CookieDataForDisplay,CookieDetails,getCookieData",
+                   "chrome/browser/resources/settings/site_settings/local_data_browser_proxy.html|CookieList,LocalDataBrowserProxy,LocalDataBrowserProxyImpl",
+                 ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("site_data_entry") {
@@ -703,8 +718,6 @@ polymer_modulizer("zoom_levels") {
   html_type = "dom-module"
 }
 
-import("//ui/webui/resources/tools/js_modulizer.gni")
-
 js_modulizer("modulize") {
   input_files = [
     "constants.js",
@@ -714,4 +727,5 @@ js_modulizer("modulize") {
     "site_settings_behavior.js",
     "site_settings_prefs_browser_proxy.js",
   ]
+  namespace_rewrites = settings_namespace_rewrites
 }

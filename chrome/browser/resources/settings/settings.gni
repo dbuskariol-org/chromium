@@ -31,6 +31,7 @@ settings_namespace_rewrites = [
   "settings.IncompatibleApplication|IncompatibleApplication",
   "settings.LanguagesBrowserProxy|LanguagesBrowserProxy",
   "settings.LifetimeBrowserProxy|LifetimeBrowserProxy",
+  "settings.LocalDataBrowserProxy|LocalDataBrowserProxy",
   "settings.MainPageBehavior|MainPageBehavior",
   "settings.MetricsBrowserProxy|MetricsBrowserProxy",
   "settings.MinimumRoutes|MinimumRoutes",
