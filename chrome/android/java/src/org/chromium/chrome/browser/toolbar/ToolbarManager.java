@@ -585,14 +585,17 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             public void onControlsOffsetChanged(int topOffset, int topControlsMinHeightOffset,
                     int bottomOffset, int bottomControlsMinHeightOffset, boolean needsAnimate) {
                 // For now, this is only useful for the offline indicator v2 feature.
-                if (ChromeFeatureList.isInitialized()
-                        && !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
+                if (!ChromeFeatureList.isInitialized()
+                        || !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
                     return;
                 }
 
                 // If the browser controls can't be animated, we shouldn't listen for the offset
                 // changes.
-                if (!mCanAnimateNativeBrowserControls.get()) return;
+                if (mCanAnimateNativeBrowserControls == null
+                        || !mCanAnimateNativeBrowserControls.get()) {
+                    return;
+                }
 
                 // Controls need to be offset to match the composited layer, which is
                 // anchored at the bottom of the controls container.
@@ -603,15 +606,18 @@ public class ToolbarManager implements ScrimObserver, ToolbarTabController, UrlF
             public void onTopControlsHeightChanged(
                     int topControlsHeight, int topControlsMinHeight) {
                 // For now, this is only useful for the offline indicator v2 feature.
-                if (ChromeFeatureList.isInitialized()
-                        && !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
+                if (!ChromeFeatureList.isInitialized()
+                        || !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
                     return;
                 }
 
                 // If the browser controls can be animated, we shouldn't set the extra offset here.
                 // Instead, that should happen when the animation starts (i.e. we get new offsets)
                 // to prevent the Android view from jumping before the animation starts.
-                if (mCanAnimateNativeBrowserControls.get()) return;
+                if (mCanAnimateNativeBrowserControls == null
+                        || mCanAnimateNativeBrowserControls.get()) {
+                    return;
+                }
 
                 // Controls need to be offset to match the composited layer, which is
                 // anchored at the bottom of the controls container.
