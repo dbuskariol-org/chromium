@@ -1,6 +1,3 @@
 file://base/metrics/OWNERS
 
-# A "bot" used for updating data such as histogram expiry dates.
-chrome-metrics-team+robot@google.com
-
 # COMPONENT: Internals>Metrics
