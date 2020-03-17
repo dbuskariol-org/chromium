@@ -73,16 +73,11 @@ class AccountInfoRetriever : public ProfileDownloaderDelegate {
         .get();
   }
 
-  std::string GetCachedPictureURL() const override {
-    return std::string();
-  }
+  std::string GetCachedPictureURL() const override { return std::string(); }
 
-  bool IsPreSignin() const override {
-    return is_pre_signin_;
-  }
+  bool IsPreSignin() const override { return is_pre_signin_; }
 
-  void OnProfileDownloadSuccess(
-      ProfileDownloader* downloader) override {
+  void OnProfileDownloadSuccess(ProfileDownloader* downloader) override {
     base::string16 full_name = downloader->GetProfileFullName();
     base::string16 given_name = downloader->GetProfileGivenName();
     SkBitmap bitmap = downloader->GetProfilePicture();
@@ -137,8 +132,9 @@ JNI_ProfileDownloader_GetCachedFullNameForPrimaryAccount(
 
   base::string16 name;
   ProfileAttributesEntry* entry;
-  if (g_browser_process->profile_manager()->GetProfileAttributesStorage().
-          GetProfileAttributesWithPath(profile->GetPath(), &entry)) {
+  if (g_browser_process->profile_manager()
+          ->GetProfileAttributesStorage()
+          .GetProfileAttributesWithPath(profile->GetPath(), &entry)) {
     name = entry->GetGAIAName();
   }
 
@@ -154,8 +150,9 @@ JNI_ProfileDownloader_GetCachedGivenNameForPrimaryAccount(
 
   base::string16 name;
   ProfileAttributesEntry* entry;
-  if (g_browser_process->profile_manager()->GetProfileAttributesStorage().
-          GetProfileAttributesWithPath(profile->GetPath(), &entry)) {
+  if (g_browser_process->profile_manager()
+          ->GetProfileAttributesStorage()
+          .GetProfileAttributesWithPath(profile->GetPath(), &entry)) {
     name = entry->GetGAIAGivenName();
   }
 
@@ -171,8 +168,9 @@ JNI_ProfileDownloader_GetCachedAvatarForPrimaryAccount(
 
   ScopedJavaLocalRef<jobject> jbitmap;
   ProfileAttributesEntry* entry;
-  if (g_browser_process->profile_manager()->GetProfileAttributesStorage().
-          GetProfileAttributesWithPath(profile->GetPath(), &entry)) {
+  if (g_browser_process->profile_manager()
+          ->GetProfileAttributesStorage()
+          .GetProfileAttributesWithPath(profile->GetPath(), &entry)) {
     gfx::Image avatar_image = entry->GetAvatarIcon();
     if (!avatar_image.IsEmpty() &&
         avatar_image.Width() > profiles::kAvatarIconSize &&
@@ -193,8 +191,7 @@ void JNI_ProfileDownloader_StartFetchingAccountInfoFor(
     jint image_side_pixels,
     jboolean is_pre_signin) {
   Profile* profile = ProfileAndroid::FromProfileAndroid(jprofile);
-  const std::string email =
-      base::android::ConvertJavaStringToUTF8(env, jemail);
+  const std::string email = base::android::ConvertJavaStringToUTF8(env, jemail);
 
   auto maybe_account_info =
       IdentityManagerFactory::GetForProfile(profile)
