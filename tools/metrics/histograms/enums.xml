@@ -26912,6 +26912,7 @@ Called by update_feature_policy_enum.py.-->
   <int value="69" label="ClientHintUAMobile"/>
   <int value="70" label="StorageAccessAPI"/>
   <int value="71" label="ClientHintUAFullVersion"/>
+  <int value="72" label="TrustTokenRedemption"/>
 </enum>
 
 <enum name="FeaturePolicyImageCompressionFormat">
