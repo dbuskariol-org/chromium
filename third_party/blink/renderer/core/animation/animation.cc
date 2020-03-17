@@ -1851,7 +1851,7 @@ void Animation::cancel() {
   SetOutdated();
 
   // Force dispatch of canceled event.
-  ForceServiceOnNextFrame();
+  Update(kTimingUpdateOnDemand);
 
   // Notify of change to canceled state.
   NotifyProbe();

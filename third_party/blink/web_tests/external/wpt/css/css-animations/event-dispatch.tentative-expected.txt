@@ -21,7 +21,7 @@ PASS Redundant change, active -> after, then back
 PASS Redundant change, after -> before, then back
 PASS Redundant change, after -> active, then back
 FAIL Call Animation.cancel after canceling animation. assert_true: Timed out waiting for animationcancel expected true got false
-FAIL Restart animation after canceling animation immediately. assert_true: Timed out waiting for animationcancel, animationstart expected true got false
+FAIL Restart animation after canceling animation immediately. assert_equals: Expected animationcancel event, but got animationstart event instead expected "animationcancel" but got "animationstart"
 FAIL Call Animation.cancel after restarting animation immediately. assert_true: Timed out waiting for animationcancel expected true got false
 FAIL Set timeline and play transition after clearing the timeline. promise_test: Unhandled rejection with value: object "TypeError: Cannot assign to read only property 'timeline' of object '#<CSSAnimation>'"
 FAIL Set null target effect after canceling the animation. assert_true: Timed out waiting for animationcancel expected true got false
