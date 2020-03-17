@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/browser_xr_runtime.h"
+#include "chrome/browser/vr/service/browser_xr_runtime_impl.h"
 
 #include <algorithm>
 #include <memory>
@@ -236,7 +236,7 @@ content::WebContents* GetWebContents(int render_process_id,
 #endif
 }  // anonymous namespace
 
-BrowserXRRuntime::BrowserXRRuntime(
+BrowserXRRuntimeImpl::BrowserXRRuntimeImpl(
     device::mojom::XRDeviceId id,
     mojo::PendingRemote<device::mojom::XRRuntime> runtime,
     device::mojom::VRDisplayInfoPtr display_info)
@@ -248,11 +248,11 @@ BrowserXRRuntime::BrowserXRRuntime(
   // so we won't be called after runtime_ is destroyed.
   runtime_->ListenToDeviceChanges(
       receiver_.BindNewEndpointAndPassRemote(),
-      base::BindOnce(&BrowserXRRuntime::OnDisplayInfoChanged,
+      base::BindOnce(&BrowserXRRuntimeImpl::OnDisplayInfoChanged,
                      base::Unretained(this)));
 
   // TODO(crbug.com/1031622): Convert this to a query for the client off of
-  // ContentBrowserClient once BrowserXrRuntime moves to content.
+  // ContentBrowserClient once BrowserXRRuntimeImpl moves to content.
   auto* integration_client = ChromeXrIntegrationClient::GetInstance();
 
   if (integration_client)
@@ -270,7 +270,7 @@ BrowserXRRuntime::BrowserXRRuntime(
 #endif
 }
 
-BrowserXRRuntime::~BrowserXRRuntime() {
+BrowserXRRuntimeImpl::~BrowserXRRuntimeImpl() {
   DVLOG(2) << __func__ << ": id=" << id_;
 
   if (install_finished_callback_) {
@@ -278,7 +278,7 @@ BrowserXRRuntime::~BrowserXRRuntime() {
   }
 }
 
-void BrowserXRRuntime::ExitActiveImmersiveSession() {
+void BrowserXRRuntimeImpl::ExitActiveImmersiveSession() {
   DVLOG(2) << __func__;
   auto* service = GetServiceWithActiveImmersiveSession();
   if (service) {
@@ -286,7 +286,7 @@ void BrowserXRRuntime::ExitActiveImmersiveSession() {
   }
 }
 
-bool BrowserXRRuntime::SupportsFeature(
+bool BrowserXRRuntimeImpl::SupportsFeature(
     device::mojom::XRSessionFeature feature) const {
   switch (id_) {
     // Test/fake devices support all features.
@@ -334,7 +334,7 @@ bool BrowserXRRuntime::SupportsFeature(
   NOTREACHED();
 }
 
-bool BrowserXRRuntime::SupportsAllFeatures(
+bool BrowserXRRuntimeImpl::SupportsAllFeatures(
     const std::vector<device::mojom::XRSessionFeature>& features) const {
   for (const auto& feature : features) {
     if (!SupportsFeature(feature))
@@ -344,7 +344,7 @@ bool BrowserXRRuntime::SupportsAllFeatures(
   return true;
 }
 
-bool BrowserXRRuntime::SupportsCustomIPD() const {
+bool BrowserXRRuntimeImpl::SupportsCustomIPD() const {
   switch (id_) {
     case device::mojom::XRDeviceId::ARCORE_DEVICE_ID:
     case device::mojom::XRDeviceId::WEB_TEST_DEVICE_ID:
@@ -373,7 +373,7 @@ bool BrowserXRRuntime::SupportsCustomIPD() const {
   NOTREACHED();
 }
 
-bool BrowserXRRuntime::SupportsNonEmulatedHeight() const {
+bool BrowserXRRuntimeImpl::SupportsNonEmulatedHeight() const {
   switch (id_) {
     case device::mojom::XRDeviceId::ARCORE_DEVICE_ID:
     case device::mojom::XRDeviceId::WEB_TEST_DEVICE_ID:
@@ -399,7 +399,7 @@ bool BrowserXRRuntime::SupportsNonEmulatedHeight() const {
   NOTREACHED();
 }
 
-void BrowserXRRuntime::OnDisplayInfoChanged(
+void BrowserXRRuntimeImpl::OnDisplayInfoChanged(
     device::mojom::VRDisplayInfoPtr vr_device_info) {
   bool had_display_info = !!display_info_;
   display_info_ = ValidateVRDisplayInfo(vr_device_info.get(), id_);
@@ -410,12 +410,12 @@ void BrowserXRRuntime::OnDisplayInfoChanged(
   }
 
   // Notify observers of the new display info.
-  for (BrowserXRRuntimeObserver& observer : observers_) {
+  for (Observer& observer : observers_) {
     observer.SetVRDisplayInfo(display_info_.Clone());
   }
 }
 
-void BrowserXRRuntime::StopImmersiveSession(
+void BrowserXRRuntimeImpl::StopImmersiveSession(
     VRServiceImpl::ExitPresentCallback on_exited) {
   DVLOG(2) << __func__;
   if (immersive_session_controller_) {
@@ -425,14 +425,14 @@ void BrowserXRRuntime::StopImmersiveSession(
       presenting_service_ = nullptr;
     }
 
-    for (BrowserXRRuntimeObserver& observer : observers_) {
+    for (Observer& observer : observers_) {
       observer.SetWebXRWebContents(nullptr);
     }
   }
   std::move(on_exited).Run();
 }
 
-void BrowserXRRuntime::OnExitPresent() {
+void BrowserXRRuntimeImpl::OnExitPresent() {
   DVLOG(2) << __func__;
   if (presenting_service_) {
     presenting_service_->OnExitPresent();
@@ -440,19 +440,19 @@ void BrowserXRRuntime::OnExitPresent() {
   }
 }
 
-void BrowserXRRuntime::OnVisibilityStateChanged(
+void BrowserXRRuntimeImpl::OnVisibilityStateChanged(
     device::mojom::XRVisibilityState visibility_state) {
   for (VRServiceImpl* service : services_) {
     service->OnVisibilityStateChanged(visibility_state);
   }
 }
 
-void BrowserXRRuntime::OnServiceAdded(VRServiceImpl* service) {
+void BrowserXRRuntimeImpl::OnServiceAdded(VRServiceImpl* service) {
   DVLOG(2) << __func__ << ": id=" << id_;
   services_.insert(service);
 }
 
-void BrowserXRRuntime::OnServiceRemoved(VRServiceImpl* service) {
+void BrowserXRRuntimeImpl::OnServiceRemoved(VRServiceImpl* service) {
   DVLOG(2) << __func__ << ": id=" << id_;
   DCHECK(service);
   services_.erase(service);
@@ -461,28 +461,28 @@ void BrowserXRRuntime::OnServiceRemoved(VRServiceImpl* service) {
   }
 }
 
-void BrowserXRRuntime::ExitPresent(
+void BrowserXRRuntimeImpl::ExitPresent(
     VRServiceImpl* service,
     VRServiceImpl::ExitPresentCallback on_exited) {
   DVLOG(2) << __func__ << ": id=" << id_ << " service=" << service
            << " presenting_service_=" << presenting_service_;
   if (service == presenting_service_) {
     runtime_->ShutdownSession(
-        base::BindOnce(&BrowserXRRuntime::StopImmersiveSession,
+        base::BindOnce(&BrowserXRRuntimeImpl::StopImmersiveSession,
                        weak_ptr_factory_.GetWeakPtr(), std::move(on_exited)));
   }
 }
 
-void BrowserXRRuntime::SetFramesThrottled(const VRServiceImpl* service,
-                                          bool throttled) {
+void BrowserXRRuntimeImpl::SetFramesThrottled(const VRServiceImpl* service,
+                                              bool throttled) {
   if (service == presenting_service_) {
-    for (BrowserXRRuntimeObserver& observer : observers_) {
+    for (Observer& observer : observers_) {
       observer.SetFramesThrottled(throttled);
     }
   }
 }
 
-void BrowserXRRuntime::RequestSession(
+void BrowserXRRuntimeImpl::RequestSession(
     VRServiceImpl* service,
     const device::mojom::XRRuntimeSessionOptionsPtr& options,
     RequestSessionCallback callback) {
@@ -491,12 +491,12 @@ void BrowserXRRuntime::RequestSession(
   // destroyed.
   runtime_->RequestSession(
       options->Clone(),
-      base::BindOnce(&BrowserXRRuntime::OnRequestSessionResult,
+      base::BindOnce(&BrowserXRRuntimeImpl::OnRequestSessionResult,
                      base::Unretained(this), service->GetWeakPtr(),
                      options->Clone(), std::move(callback)));
 }
 
-void BrowserXRRuntime::OnRequestSessionResult(
+void BrowserXRRuntimeImpl::OnRequestSessionResult(
     base::WeakPtr<VRServiceImpl> service,
     device::mojom::XRRuntimeSessionOptionsPtr options,
     RequestSessionCallback callback,
@@ -509,12 +509,13 @@ void BrowserXRRuntime::OnRequestSessionResult(
       presenting_service_ = service.get();
       immersive_session_controller_.Bind(
           std::move(immersive_session_controller));
-      immersive_session_controller_.set_disconnect_handler(base::BindOnce(
-          &BrowserXRRuntime::OnImmersiveSessionError, base::Unretained(this)));
+      immersive_session_controller_.set_disconnect_handler(
+          base::BindOnce(&BrowserXRRuntimeImpl::OnImmersiveSessionError,
+                         base::Unretained(this)));
 
       // Notify observers that we have started presentation.
       content::WebContents* web_contents = service->GetWebContents();
-      for (BrowserXRRuntimeObserver& observer : observers_) {
+      for (Observer& observer : observers_) {
         observer.SetWebXRWebContents(web_contents);
       }
     }
@@ -532,7 +533,7 @@ void BrowserXRRuntime::OnRequestSessionResult(
   }
 }
 
-void BrowserXRRuntime::ShowConsentPrompt(
+void BrowserXRRuntimeImpl::ShowConsentPrompt(
     int render_process_id,
     int render_frame_id,
     XrConsentPromptLevel consent_level,
@@ -554,7 +555,7 @@ void BrowserXRRuntime::ShowConsentPrompt(
 #endif
 }
 
-void BrowserXRRuntime::EnsureInstalled(
+void BrowserXRRuntimeImpl::EnsureInstalled(
     int render_process_id,
     int render_frame_id,
     base::OnceCallback<void(bool)> install_callback) {
@@ -580,22 +581,35 @@ void BrowserXRRuntime::EnsureInstalled(
 
   install_helper_->EnsureInstalled(
       render_process_id, render_frame_id,
-      base::BindOnce(&BrowserXRRuntime::OnInstallFinished,
+      base::BindOnce(&BrowserXRRuntimeImpl::OnInstallFinished,
                      weak_ptr_factory_.GetWeakPtr()));
 }
 
-void BrowserXRRuntime::OnInstallFinished(bool succeeded) {
+void BrowserXRRuntimeImpl::OnInstallFinished(bool succeeded) {
   DCHECK(install_finished_callback_);
 
   std::move(install_finished_callback_).Run(succeeded);
 }
 
-void BrowserXRRuntime::OnImmersiveSessionError() {
+void BrowserXRRuntimeImpl::OnImmersiveSessionError() {
   DVLOG(2) << __func__ << ": id=" << id_;
   StopImmersiveSession(base::DoNothing());
 }
 
-void BrowserXRRuntime::BeforeRuntimeRemoved() {
+void BrowserXRRuntimeImpl::AddObserver(Observer* observer) {
+  observers_.AddObserver(observer);
+  observer->SetVRDisplayInfo(display_info_.Clone());
+}
+
+void BrowserXRRuntimeImpl::RemoveObserver(Observer* observer) {
+  observers_.RemoveObserver(observer);
+}
+
+void BrowserXRRuntimeImpl::SetInlinePosesEnabled(bool enabled) {
+  runtime_->SetInlinePosesEnabled(enabled);
+}
+
+void BrowserXRRuntimeImpl::BeforeRuntimeRemoved() {
   DVLOG(1) << __func__ << ": id=" << id_;
 
   // If the device process crashes or otherwise gets removed, it's a race as to

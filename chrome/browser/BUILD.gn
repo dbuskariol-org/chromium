@@ -5414,8 +5414,8 @@ jumbo_static_library("browser") {
     sources += [
       "component_updater/vr_assets_component_installer.cc",
       "component_updater/vr_assets_component_installer.h",
-      "vr/service/browser_xr_runtime.cc",
-      "vr/service/browser_xr_runtime.h",
+      "vr/service/browser_xr_runtime_impl.cc",
+      "vr/service/browser_xr_runtime_impl.h",
       "vr/service/chrome_xr_integration_client.cc",
       "vr/service/chrome_xr_integration_client.h",
       "vr/service/vr_service_impl.cc",

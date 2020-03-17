@@ -15,7 +15,6 @@
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/usb/usb_tab_helper.h"
-#include "chrome/browser/vr/service/browser_xr_runtime.h"
 #include "chrome/browser/vr/service/xr_runtime_manager.h"
 #include "chrome/browser/vr/vr_tab_helper.h"
 #include "chrome/browser/vr/win/vr_browser_renderer_thread_win.h"
@@ -131,7 +130,7 @@ VRUiHostImpl::VRUiHostImpl(
 
   auto* runtime_manager = XRRuntimeManager::GetInstanceIfCreated();
   DCHECK(runtime_manager != nullptr);
-  BrowserXRRuntime* runtime = runtime_manager->GetRuntime(device_id);
+  BrowserXRRuntimeImpl* runtime = runtime_manager->GetRuntime(device_id);
   if (runtime) {
     runtime->AddObserver(this);
   }
@@ -144,9 +143,9 @@ VRUiHostImpl::~VRUiHostImpl() {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   DVLOG(1) << __func__;
 
-  // We don't call BrowserXRRuntime::RemoveObserver, because if we are being
+  // We don't call BrowserXRRuntimeImpl::RemoveObserver, because if we are being
   // destroyed, it means the corresponding device has been removed from
-  // XRRuntimeManager, and the BrowserXRRuntime has been destroyed.
+  // XRRuntimeManager, and the BrowserXRRuntimeImpl has been destroyed.
   if (web_contents_)
     SetWebXRWebContents(nullptr);
 }

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_H_
-#define CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_H_
+#ifndef CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
+#define CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
 
 #include <set>
 #include <vector>
@@ -12,6 +12,7 @@
 #include "base/observer_list_types.h"
 #include "chrome/browser/vr/service/vr_service_impl.h"
 #include "chrome/browser/vr/service/xr_consent_helper.h"
+#include "content/public/browser/browser_xr_runtime.h"
 #include "content/public/browser/render_frame_host.h"
 #include "device/vr/public/mojom/isolated_xr_service.mojom-forward.h"
 #include "device/vr/public/mojom/vr_service.mojom-forward.h"
@@ -21,43 +22,24 @@
 #include "mojo/public/cpp/bindings/remote.h"
 
 namespace content {
-class WebContents;
 class XrInstallHelper;
-}
+}  // namespace content
 
 namespace vr {
-
-// This interface is implemented by classes that wish to observer the state of
-// the XR service for a particular runtime.  In particular, observers may
-// currently know when the browser considers a WebContents presenting to an
-// immersive headset.  Implementers of this interface will be called on the main
-// browser thread.  Currently this is used on Windows to drive overlays.
-class BrowserXRRuntimeObserver : public base::CheckedObserver {
- public:
-  virtual void SetVRDisplayInfo(
-      device::mojom::VRDisplayInfoPtr display_info) = 0;
-
-  // The parameter |contents| is set when a page starts an immersive WebXR
-  // session. There can only be at most one active immersive session for the
-  // XRRuntime. Set to null when there is no active immersive session.
-  virtual void SetWebXRWebContents(content::WebContents* contents) = 0;
-
-  virtual void SetFramesThrottled(bool throttled) = 0;
-};
-
 // This class wraps a physical device's interfaces, and registers for events.
-// There is one BrowserXRRuntime per physical device runtime.  It manages
+// There is one BrowserXRRuntimeImpl per physical device runtime.  It manages
 // browser-side handling of state, like which VRServiceImpl is listening for
 // device activation.
-class BrowserXRRuntime : public device::mojom::XRRuntimeEventListener {
+class BrowserXRRuntimeImpl : public content::BrowserXRRuntime,
+                             public device::mojom::XRRuntimeEventListener {
  public:
   using RequestSessionCallback =
       base::OnceCallback<void(device::mojom::XRSessionPtr)>;
-  explicit BrowserXRRuntime(
+  explicit BrowserXRRuntimeImpl(
       device::mojom::XRDeviceId id,
       mojo::PendingRemote<device::mojom::XRRuntime> runtime,
       device::mojom::VRDisplayInfoPtr info);
-  ~BrowserXRRuntime() override;
+  ~BrowserXRRuntimeImpl() override;
 
   void ExitActiveImmersiveSession();
   bool SupportsFeature(device::mojom::XRSessionFeature feature) const;
@@ -93,15 +75,12 @@ class BrowserXRRuntime : public device::mojom::XRRuntimeEventListener {
     return display_info_.Clone();
   }
 
-  // Methods called to support metrics/overlays on Windows.
-  void AddObserver(BrowserXRRuntimeObserver* observer) {
-    observers_.AddObserver(observer);
-    observer->SetVRDisplayInfo(display_info_.Clone());
-  }
-  void RemoveObserver(BrowserXRRuntimeObserver* observer) {
-    observers_.RemoveObserver(observer);
-  }
   device::mojom::XRDeviceId GetId() const { return id_; }
+
+  // BrowserXRRuntime
+  void AddObserver(Observer* observer) override;
+  void RemoveObserver(Observer* observer) override;
+  void SetInlinePosesEnabled(bool enabled) override;
 
   // Called to allow the runtime to conduct any cleanup it needs to do before it
   // is removed.
@@ -139,14 +118,14 @@ class BrowserXRRuntime : public device::mojom::XRRuntimeEventListener {
   mojo::AssociatedReceiver<device::mojom::XRRuntimeEventListener> receiver_{
       this};
 
-  base::ObserverList<BrowserXRRuntimeObserver> observers_;
+  base::ObserverList<Observer> observers_;
   std::unique_ptr<XrConsentHelper> consent_helper_;
   std::unique_ptr<content::XrInstallHelper> install_helper_;
   base::OnceCallback<void(bool)> install_finished_callback_;
 
-  base::WeakPtrFactory<BrowserXRRuntime> weak_ptr_factory_{this};
+  base::WeakPtrFactory<BrowserXRRuntimeImpl> weak_ptr_factory_{this};
 };
 
 }  // namespace vr
 
-#endif  // CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_H_
+#endif  // CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
