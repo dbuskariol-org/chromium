@@ -155,7 +155,9 @@
         'args': [
           '--debug',
         ],
-        'shards': 25,
+        'swarming': {
+          'shards': 25,
+        },
       },
       'V8 Blink Linux Debug': {
         'args': [
@@ -450,6 +452,11 @@
               'cores': '8',
             }
           ],
+          'shards': 20,
+        },
+      },
+      'Mac10.13 Tests (dbg)': {
+        'swarming': {
           'shards': 20,
         },
       },
