@@ -81,6 +81,10 @@ void UpdateServiceOutOfProcess::Update(const std::string& app_id,
   NOTREACHED();
 }
 
+void UpdateServiceOutOfProcess::Uninitialize() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+}
+
 void UpdateServiceOutOfProcess::UpdateAllOnSTA(
     base::OnceCallback<void(Result)> callback) {
   DCHECK(com_task_runner_->BelongsToCurrentThread());
