@@ -13,7 +13,6 @@
 #include "third_party/blink/renderer/core/svg/svg_filter_element.h"
 #include "third_party/blink/renderer/platform/graphics/filters/filter.h"
 #include "third_party/blink/renderer/platform/graphics/filters/source_graphic.h"
-#include "third_party/blink/renderer/platform/graphics/paint/drawing_recorder.h"
 
 namespace blink {
 
@@ -46,32 +45,6 @@ sk_sp<PaintRecord> SVGFilterRecordingContext::EndContent() {
   return content;
 }
 
-static void PaintFilteredContent(GraphicsContext& context,
-                                 const LayoutObject& object,
-                                 const DisplayItemClient& display_item_client,
-                                 FilterData* filter_data) {
-  if (DrawingRecorder::UseCachedDrawingIfPossible(context, display_item_client,
-                                                  DisplayItem::kSVGFilter))
-    return;
-
-  DrawingRecorder recorder(context, display_item_client,
-                           DisplayItem::kSVGFilter);
-  sk_sp<PaintFilter> image_filter = filter_data->CreateFilter();
-  context.Save();
-
-  // Clip drawing of filtered image to the minimum required paint rect.
-  const FloatRect object_bounds = object.StrokeBoundingBox();
-  const FloatRect paint_rect = filter_data->MapRect(object_bounds);
-  context.ClipRect(paint_rect);
-
-  // Use the union of the pre-image and the post-image as the layer bounds.
-  const FloatRect layer_bounds = UnionRect(object_bounds, paint_rect);
-  context.BeginLayer(1, SkBlendMode::kSrcOver, &layer_bounds, kColorFilterNone,
-                     std::move(image_filter));
-  context.EndLayer();
-  context.Restore();
-}
-
 FilterData* SVGFilterPainter::PrepareEffect(const LayoutObject& object) {
   SVGElementResourceClient* client = SVGResources::GetClient(object);
   if (FilterData* filter_data = client->GetFilterData()) {
@@ -97,24 +70,6 @@ FilterData* SVGFilterPainter::PrepareEffect(const LayoutObject& object) {
   // TODO(pdr): Can this be moved out of painter?
   client->SetFilterData(filter_data);
   return filter_data;
-}
-
-void SVGFilterPainter::FinishEffect(
-    const LayoutObject& object,
-    const DisplayItemClient& display_item_client,
-    SVGFilterRecordingContext& recording_context) {
-  FilterData* filter_data = SVGResources::GetClient(object)->GetFilterData();
-  DCHECK(filter_data);
-  if (!filter_data->UpdateStateOnFinish())
-    return;
-
-  // Check for RecordingContent here because we may can be re-painting
-  // without re-recording the contents to be filtered.
-  if (filter_data->ContentNeedsUpdate())
-    filter_data->UpdateContent(recording_context.EndContent());
-
-  PaintFilteredContent(recording_context.PaintingContext(), object,
-                       display_item_client, filter_data);
 }
 
 }  // namespace blink

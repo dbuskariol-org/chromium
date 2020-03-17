@@ -37,7 +37,6 @@ namespace blink {
 
 class FilterData;
 class LayoutObject;
-class LayoutSVGResourceFilter;
 class LayoutSVGResourceMasker;
 class SVGResources;
 
@@ -90,7 +89,6 @@ class ScopedSVGPaintState {
       : object_(object),
         paint_info_(paint_info),
         display_item_client_(display_item_client),
-        filter_(nullptr),
         filter_data_(nullptr),
         masker_(nullptr) {}
 
@@ -120,7 +118,6 @@ class ScopedSVGPaintState {
   PaintInfo paint_info_;
   const DisplayItemClient& display_item_client_;
   std::unique_ptr<PaintInfo> filter_paint_info_;
-  LayoutSVGResourceFilter* filter_;
   FilterData* filter_data_;
   LayoutSVGResourceMasker* masker_;
   base::Optional<ClipPathClipper> clip_path_clipper_;
