@@ -43,6 +43,7 @@
 #include "chrome/browser/ui/location_bar/location_bar.h"
 #include "chrome/browser/ui/omnibox/clipboard_utils.h"
 #include "chrome/browser/ui/search/ntp_user_data_logger.h"
+#include "chrome/browser/ui/search/omnibox_utils.h"
 #include "chrome/browser/ui/search/search_ipc_router_policy_impl.h"
 #include "chrome/browser/ui/tab_contents/core_tab_helper.h"
 #include "chrome/browser/ui/tab_modal_confirm_dialog.h"
@@ -303,30 +304,7 @@ void SearchTabHelper::MostVisitedInfoChanged(
 }
 
 void SearchTabHelper::FocusOmnibox(bool focus) {
-  OmniboxView* omnibox_view = GetOmniboxView();
-  if (!omnibox_view)
-    return;
-
-  if (focus) {
-    // This is an invisible focus to support "realbox" implementations on NTPs
-    // (including other search providers). We shouldn't consider it as the user
-    // explicitly focusing the omnibox.
-    omnibox_view->SetFocus(/*is_user_initiated=*/false);
-    omnibox_view->model()->SetCaretVisibility(false);
-    // If the user clicked on the fakebox, any text already in the omnibox
-    // should get cleared when they start typing. Selecting all the existing
-    // text is a convenient way to accomplish this. It also gives a slight
-    // visual cue to users who really understand selection state about what
-    // will happen if they start typing.
-    omnibox_view->SelectAll(false);
-    omnibox_view->ShowVirtualKeyboardIfEnabled();
-  } else {
-    // Remove focus only if the popup is closed. This will prevent someone
-    // from changing the omnibox value and closing the popup without user
-    // interaction.
-    if (!omnibox_view->model()->popup_model()->IsOpen())
-      web_contents()->Focus();
-  }
+  search::FocusOmnibox(focus, web_contents_);
 }
 
 void SearchTabHelper::OnDeleteMostVisitedItem(const GURL& url) {
@@ -424,30 +402,7 @@ void SearchTabHelper::OnLogMostVisitedNavigation(
 }
 
 void SearchTabHelper::PasteIntoOmnibox(const base::string16& text) {
-  OmniboxView* omnibox_view = GetOmniboxView();
-  if (!omnibox_view)
-    return;
-  // The first case is for right click to paste, where the text is retrieved
-  // from the clipboard already sanitized. The second case is needed to handle
-  // drag-and-drop value and it has to be sanitazed before setting it into the
-  // omnibox.
-  base::string16 text_to_paste = text.empty()
-                                     ? GetClipboardText()
-                                     : omnibox_view->SanitizeTextForPaste(text);
-
-  if (text_to_paste.empty())
-    return;
-
-  if (!omnibox_view->model()->has_focus()) {
-    // Pasting into a "realbox" should not be considered the user explicitly
-    // focusing the omnibox.
-    omnibox_view->SetFocus(/*is_user_initiated=*/false);
-  }
-
-  omnibox_view->OnBeforePossibleChange();
-  omnibox_view->model()->OnPaste();
-  omnibox_view->SetUserText(text_to_paste);
-  omnibox_view->OnAfterPossibleChange(true);
+  search::PasteIntoOmnibox(text, web_contents_);
 }
 
 void SearchTabHelper::OnSetCustomBackgroundInfo(
@@ -576,14 +531,6 @@ void SearchTabHelper::OnSelectLocalBackgroundImage() {
   select_file_dialog_->SelectFile(
       ui::SelectFileDialog::SELECT_OPEN_FILE, base::string16(), directory,
       &file_types, 0, base::FilePath::StringType(), parent_window, nullptr);
-}
-
-const OmniboxView* SearchTabHelper::GetOmniboxView() const {
-  Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);
-  if (!browser)
-    return nullptr;
-
-  return browser->window()->GetLocationBar()->GetOmniboxView();
 }
 
 void SearchTabHelper::OnBlocklistSearchSuggestion(int task_version,
@@ -937,19 +884,12 @@ void SearchTabHelper::OpenAutocompleteMatch(
   // May delete us.
 }
 
-OmniboxView* SearchTabHelper::GetOmniboxView() {
-  return const_cast<OmniboxView*>(
-      const_cast<const SearchTabHelper*>(this)->GetOmniboxView());
-}
-
 Profile* SearchTabHelper::profile() const {
   return Profile::FromBrowserContext(web_contents_->GetBrowserContext());
 }
 
 bool SearchTabHelper::IsInputInProgress() const {
-  const OmniboxView* omnibox_view = GetOmniboxView();
-  return omnibox_view && omnibox_view->model()->user_input_in_progress() &&
-         omnibox_view->model()->focus_state() == OMNIBOX_FOCUS_VISIBLE;
+  return search::IsOmniboxInputInProgress(web_contents_);
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(SearchTabHelper)

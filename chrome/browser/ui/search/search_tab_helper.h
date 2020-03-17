@@ -42,7 +42,6 @@ struct LoadCommittedDetails;
 class AutocompleteController;
 class GURL;
 class InstantService;
-class OmniboxView;
 class Profile;
 class SearchIPCRouterTest;
 class SearchSuggestService;
@@ -176,9 +175,6 @@ class SearchTabHelper : public content::WebContentsObserver,
   void OnBitmapFetched(int match_index,
                        const std::string& image_url,
                        const SkBitmap& bitmap);
-
-  OmniboxView* GetOmniboxView();
-  const OmniboxView* GetOmniboxView() const;
 
   Profile* profile() const;
 
