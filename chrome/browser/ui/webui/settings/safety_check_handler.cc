@@ -174,6 +174,12 @@ void SafetyCheckHandler::CheckPasswords() {
   observed_leak_check_.RemoveAll();
   observed_leak_check_.Add(leak_service_);
   passwords_delegate_->StartPasswordCheck();
+  // In the case of no passwords, there is no state transition and no callback.
+  // Because of that, it is necessary to check the state synchronously.
+  if (leak_service_->state() !=
+      password_manager::BulkLeakCheckService::State::kRunning) {
+    OnStateChanged(leak_service_->state());
+  }
 }
 
 void SafetyCheckHandler::CheckExtensions() {
