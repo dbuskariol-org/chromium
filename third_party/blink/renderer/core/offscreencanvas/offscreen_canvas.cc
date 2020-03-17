@@ -424,6 +424,7 @@ CanvasResourceProvider* OffscreenCanvas::GetOrCreateResourceProvider() {
       base::UmaHistogramEnumeration("Blink.Canvas.ResourceProviderType",
                                     ResourceProvider()->GetType());
       ResourceProvider()->Clear();
+      DidDraw();
 
       if (needs_matrix_clip_restore_) {
         needs_matrix_clip_restore_ = false;
