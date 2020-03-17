@@ -67,6 +67,8 @@ source_set("message_port") {
 
 source_set("legacymetrics") {
   sources = [
+    "legacymetrics_histogram_flattener.cc",
+    "legacymetrics_histogram_flattener.h",
     "legacymetrics_user_event_recorder.cc",
     "legacymetrics_user_event_recorder.h",
   ]
@@ -116,6 +118,7 @@ source_set("test_support") {
 test("cr_fuchsia_base_unittests") {
   sources = [
     "agent_impl_unittests.cc",
+    "legacymetrics_histogram_flattener_unittest.cc",
     "legacymetrics_user_event_recorder_unittest.cc",
   ]
   deps = [
