@@ -311,52 +311,6 @@ Polymer({
     return this.parentStatus_ == ParentStatus.AFTER;
   },
 
-  /**
-   * @private
-   * @return {?string}
-   */
-  getParentIcon_: function() {
-    switch (this.parentStatus_) {
-      case ParentStatus.BEFORE:
-      case ParentStatus.AFTER:
-        return 'settings:assignment';
-      case ParentStatus.CHECKING:
-        return null;
-      default:
-        assertNotReached();
-    }
-  },
-
-  /**
-   * @private
-   * @return {?string}
-   */
-  getParentIconSrc_: function() {
-    switch (this.parentStatus_) {
-      case ParentStatus.BEFORE:
-      case ParentStatus.AFTER:
-        return null;
-      case ParentStatus.CHECKING:
-        return 'chrome://resources/images/throbber_small.svg';
-      default:
-        assertNotReached();
-    }
-  },
-
-  /**
-   * @private
-   * @return {string}
-   */
-  getParentIconClass_: function() {
-    switch (this.parentStatus_) {
-      case ParentStatus.BEFORE:
-      case ParentStatus.CHECKING:
-        return 'icon-blue';
-      default:
-        return '';
-    }
-  },
-
   /** @private */
   onRunSafetyCheckClick_: function() {
     settings.HatsBrowserProxyImpl.getInstance().tryShowSurvey();
