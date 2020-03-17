@@ -32802,6 +32802,7 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="415" label="415: Unsupported Media Type"/>
   <int value="416" label="416: Requested Range Not Satisfiable"/>
   <int value="417" label="417: Expectation Failed"/>
+  <int value="429" label="429: Too Many Requests"/>
   <int value="500" label="500: Internal Server Error"/>
   <int value="501" label="501: Not Implemented"/>
   <int value="502" label="502: Bad Gateway"/>
@@ -49913,6 +49914,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Hashing/encryption error"/>
   <int value="3" label="Invalid server response"/>
   <int value="4" label="Network error"/>
+  <int value="5" label="Quota limit"/>
 </enum>
 
 <enum name="PasswordLeakLookupResponseResult">
