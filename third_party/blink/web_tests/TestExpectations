@@ -48,6 +48,10 @@ crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.sh
 crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.worker.html [ Skip ]
 crbug.com/1048761 external/wpt/infrastructure/server/wpt-server-http.sub.html [ Skip ]
 
+# Favicon is not supported by run_web_tests.
+external/wpt/fetch/metadata/favicon.https.sub.html [ Skip ]
+virtual/omt-worker-fetch/external/wpt/fetch/metadata/favicon.https.sub.html [ Skip ]
+
 crbug.com/807686 crbug.com/24182 jquery/manipulation.html [ Timeout Pass ]
 
 # The following tests need to remove the assumption that user activation isvirtual/text-antialias/firstline/capitalize-transform.html
