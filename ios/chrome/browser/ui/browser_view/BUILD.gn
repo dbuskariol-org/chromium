@@ -159,6 +159,7 @@ source_set("browser_view") {
     "//ios/chrome/browser/url_loading",
     "//ios/chrome/browser/voice:voice",
     "//ios/chrome/browser/web",
+    "//ios/chrome/browser/web:feature_flags",
     "//ios/chrome/browser/web:page_placeholder",
     "//ios/chrome/browser/web:tab_helper_delegates",
     "//ios/chrome/browser/web:web_internal",
