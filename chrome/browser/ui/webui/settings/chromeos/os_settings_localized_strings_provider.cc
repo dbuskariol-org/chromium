@@ -694,7 +694,9 @@ void AddCrostiniStrings(content::WebUIDataSource* html_source,
       {"crostiniDiskResizeResizingError",
        IDS_SETTINGS_CROSTINI_DISK_RESIZE_RESIZING_ERROR},
       {"crostiniDiskResizeDone", IDS_SETTINGS_CROSTINI_DISK_RESIZE_DONE},
-      {"enableCrostiniMicTitle", IDS_SETTINGS_CROSTINI_MIC_TITLE},
+      {"crostiniMicTitle", IDS_SETTINGS_CROSTINI_MIC_TITLE},
+      {"crostiniMicDialogTitle", IDS_SETTINGS_CROSTINI_MIC_DIALOG_TITLE},
+      {"crostiniMicDialogLabel", IDS_SETTINGS_CROSTINI_MIC_DIALOG_LABEL},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
   html_source->AddString(

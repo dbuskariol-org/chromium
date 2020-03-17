@@ -44,6 +44,7 @@
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/common/chrome_features.h"
+#include "chrome/common/pref_names.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/dbus/anomaly_detector_client.h"
 #include "chromeos/dbus/concierge_client.h"
@@ -118,6 +119,16 @@ void InvokeAndErasePendingContainerCallbacks(
     std::move(it->second).Run(result);
   }
   container_callbacks->erase(range.first, range.second);
+}
+
+bool IsMicSharingEnabled(Profile* profile) {
+  if (base::FeatureList::IsEnabled(
+          chromeos::features::kCrostiniShowMicSetting) &&
+      profile->GetPrefs()->GetBoolean(::prefs::kAudioCaptureAllowed) &&
+      profile->GetPrefs()->GetBoolean(crostini::prefs::kCrostiniMicSharing)) {
+    return true;
+  }
+  return false;
 }
 
 }  // namespace
@@ -1253,6 +1264,9 @@ void CrostiniManager::StartTerminaVm(std::string name,
   request.set_owner_id(owner_id_);
   if (base::FeatureList::IsEnabled(chromeos::features::kCrostiniGpuSupport))
     request.set_enable_gpu(true);
+  if (IsMicSharingEnabled(profile_)) {
+    request.set_enable_audio_capture(true);
+  }
   const int32_t cpus = base::SysInfo::NumberOfProcessors() - num_cores_disabled;
   DCHECK_LT(0, cpus);
   request.set_cpus(cpus);
