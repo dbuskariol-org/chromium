@@ -925,19 +925,27 @@ void CrostiniManager::MaybeUpdateCrostini() {
   // Probe Concierge - if it's still running after an unclean shutdown, a
   // success response will be received.
   if (profile_->GetLastSessionExitType() == Profile::EXIT_CRASHED) {
-    ListVmDisks(base::BindOnce(
-        [](base::WeakPtr<CrostiniManager> weak_this, CrostiniResult result,
-           int64_t total_size) {
-          if (weak_this) {
-            VLOG(1) << "Exit type: " << static_cast<int>(Profile::EXIT_CRASHED);
-            VLOG(1) << "ListVmDisks result: " << static_cast<int>(result);
-            weak_this->is_unclean_startup_ = result == CrostiniResult::SUCCESS;
-            if (weak_this->is_unclean_startup_) {
-              weak_this->RemoveUncleanSshfsMounts();
-            }
-          }
-        },
-        weak_ptr_factory_.GetWeakPtr()));
+    vm_tools::concierge::GetVmInfoRequest concierge_request;
+    concierge_request.set_owner_id(owner_id_);
+    concierge_request.set_name(kCrostiniDefaultVmName);
+    GetConciergeClient()->GetVmInfo(
+        std::move(concierge_request),
+        base::BindOnce(
+            [](base::WeakPtr<CrostiniManager> weak_this,
+               base::Optional<vm_tools::concierge::GetVmInfoResponse> reply) {
+              if (weak_this) {
+                VLOG(1) << "Exit type: "
+                        << static_cast<int>(Profile::EXIT_CRASHED);
+                VLOG(1) << "GetVmInfo result: "
+                        << (reply.has_value() && reply->success());
+                weak_this->is_unclean_startup_ =
+                    reply.has_value() && reply->success();
+                if (weak_this->is_unclean_startup_) {
+                  weak_this->RemoveUncleanSshfsMounts();
+                }
+              }
+            },
+            weak_ptr_factory_.GetWeakPtr()));
   }
 }
 
