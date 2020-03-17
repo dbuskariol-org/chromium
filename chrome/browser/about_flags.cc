@@ -4374,6 +4374,9 @@ const FeatureEntry kFeatureEntries[] = {
     {"smart-dim-model-v3", flag_descriptions::kSmartDimModelV3Name,
      flag_descriptions::kSmartDimModelV3Description, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kSmartDimModelV3)},
+    {"smart-dim-new-ml-agent", flag_descriptions::kSmartDimNewMlAgentName,
+     flag_descriptions::kSmartDimNewMlAgentDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kSmartDimNewMlAgent)},
 #endif  // defined(OS_CHROMEOS)
 
     {"privacy-settings-redesign",

@@ -3621,6 +3621,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "smart-dim-new-ml-agent",
+    "owners": [ "alanlxl", "amoylan" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "smart-text-selection",
     "owners": [ "djacobo", "linben" ],
     "expiry_milestone": 76
