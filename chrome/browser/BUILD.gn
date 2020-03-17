@@ -5561,7 +5561,7 @@ grit("resources") {
   source = "browser_resources.grd"
 
   # Required due to flattenhtml="true" on a generated file.
-  source_is_generated = true
+  enable_input_discovery_for_gn_analyze = false
 
   use_brotli = true
 
