@@ -26820,6 +26820,11 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3188" label="V8ShadowRoot_GetAnimations_Method"/>
   <int value="3189" label="ClientHintsUAFullVersion"/>
   <int value="3190" label="SchedulerCurrentTaskSignal"/>
+  <int value="3191" label="ThirdPartyFileSystem"/>
+  <int value="3192" label="ThirdPartyIndexedDb"/>
+  <int value="3193" label="ThirdPartyCacheStorage"/>
+  <int value="3194" label="ThirdPartyLocalStorage"/>
+  <int value="3195" label="ThirdPartySessionStorage"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
