@@ -362,9 +362,6 @@
       =1 {{COUNT} compromised password}
       other {{COUNT} compromised passwords}}
   </message>
-  <message name="IDS_SETTINGS_LEAKED_PASSWORDS_COUNT" desc="Number of compromised passwords found during bulk check.">
-    <ph name="COUNT">$1<ex>5</ex></ph> compromised passwords
-  </message>
   <message name="IDS_SETTINGS_CHECK_PASSWORDS_AGAIN" desc="Button to start bulk password check manually in passwords check section.">
     Check again
   </message>
