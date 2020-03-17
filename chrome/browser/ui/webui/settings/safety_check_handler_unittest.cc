@@ -760,3 +760,33 @@ TEST_F(SafetyCheckHandlerTest, CheckExtensions_Error) {
   VerifyDisplayString(event,
                       "Browser can't check your extensions. Try again later.");
 }
+
+TEST_F(SafetyCheckHandlerTest, CheckParentRanDisplayString) {
+  // 1 second before midnight, so that -(24h-1s) is still on the same day.
+  const base::Time systemTime =
+      base::Time::Now().LocalMidnight() - base::TimeDelta::FromSeconds(1);
+  // Display strings for given time deltas in seconds.
+  std::vector<std::tuple<std::string, int>> tuples{
+      std::make_tuple("Safety check ran a moment ago", 1),
+      std::make_tuple("Safety check ran a moment ago", 59),
+      std::make_tuple("Safety check ran 1 minute ago", 60),
+      std::make_tuple("Safety check ran 2 minutes ago", 60 * 2),
+      std::make_tuple("Safety check ran 59 minutes ago", 60 * 60 - 1),
+      std::make_tuple("Safety check ran 1 hour ago", 60 * 60),
+      std::make_tuple("Safety check ran 2 hours ago", 60 * 60 * 2),
+      std::make_tuple("Safety check ran 23 hours ago", 60 * 60 * 23),
+      std::make_tuple("Safety check ran yesterday", 60 * 60 * 24),
+      std::make_tuple("Safety check ran yesterday", 60 * 60 * 24 * 2 - 1),
+      std::make_tuple("Safety check ran 2 days ago", 60 * 60 * 24 * 2),
+      std::make_tuple("Safety check ran 2 days ago", 60 * 60 * 24 * 3 - 1),
+      std::make_tuple("Safety check ran 3 days ago", 60 * 60 * 24 * 3),
+      std::make_tuple("Safety check ran 3 days ago", 60 * 60 * 24 * 4 - 1)};
+  // Test that above time deltas produce the corresponding display strings.
+  for (auto tuple : tuples) {
+    const base::Time time =
+        systemTime - base::TimeDelta::FromSeconds(std::get<1>(tuple));
+    const base::string16 displayString = safety_check_->GetStringForParentRan(
+        time.ToJsTimeIgnoringNull(), systemTime);
+    EXPECT_EQ(base::UTF8ToUTF16(std::get<0>(tuple)), displayString);
+  }
+}

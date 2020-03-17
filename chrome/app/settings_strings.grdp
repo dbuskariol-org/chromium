@@ -1621,7 +1621,7 @@
      other {Safety check ran # minutes ago}}
   </message>
   <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_HOURS" desc="A message shown on the top of the safety check feature, explaining to the user that it ran hours ago.">
-    {MINS, plural,
+    {HOURS, plural,
      =1 {Safety check ran 1 hour ago}
      other {Safety check ran # hours ago}}
   </message>
@@ -1635,8 +1635,8 @@
     Safety check ran yesterday
   </message>
   <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_DAYS" desc="A message shown on the top of the safety check feature, showing to the user how many days ago it ran.">
-    {NUM_DAYS, plural,
-     = 1 {Safety check ran 1 day ago}
+    {DAYS, plural,
+     =1 {Safety check ran 1 day ago}
      other {Safety check ran # days ago}}
   </message>
   <message name="IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_DATE" desc="A message shown on the top of the safety check feature, showing to the user on which date it ran.">
