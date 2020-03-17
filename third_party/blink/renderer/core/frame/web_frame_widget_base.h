@@ -10,9 +10,12 @@
 #include "cc/input/layer_selection_bound.h"
 #include "cc/input/overscroll_behavior.h"
 #include "cc/trees/layer_tree_host.h"
+#include "mojo/public/cpp/bindings/associated_receiver.h"
+#include "mojo/public/cpp/bindings/associated_remote.h"
 #include "services/network/public/mojom/referrer_policy.mojom-blink-forward.h"
 #include "third_party/blink/public/common/input/web_gesture_device.h"
 #include "third_party/blink/public/mojom/page/widget.mojom-blink.h"
+#include "third_party/blink/public/platform/cross_variant_mojo_util.h"
 #include "third_party/blink/public/platform/web_coalesced_input_event.h"
 #include "third_party/blink/public/platform/web_drag_data.h"
 #include "third_party/blink/public/web/web_frame_widget.h"
@@ -23,7 +26,6 @@
 #include "third_party/blink/renderer/platform/heap/member.h"
 #include "third_party/blink/renderer/platform/timer.h"
 #include "third_party/blink/renderer/platform/widget/frame_widget.h"
-#include "third_party/blink/renderer/platform/widget/widget_base.h"
 #include "third_party/blink/renderer/platform/widget/widget_base_client.h"
 #include "third_party/blink/renderer/platform/wtf/casting.h"
 
@@ -41,6 +43,7 @@ class PageWidgetEventHandler;
 class PaintWorkletPaintDispatcher;
 class WebLocalFrameImpl;
 class WebViewImpl;
+class WidgetBase;
 struct IntrinsicSizingInfo;
 
 class CORE_EXPORT WebFrameWidgetBase
@@ -161,9 +164,13 @@ class CORE_EXPORT WebFrameWidgetBase
   void DidLosePointerLock() override;
   void ShowContextMenu(WebMenuSourceType) override;
   void BeginFrame(base::TimeTicks frame_time) final;
+  void SetCompositorVisible(bool visible) override;
+  void UpdateVisualState() override;
+  void WillBeginCompositorFrame() final;
 
   // WidgetBaseClient methods.
   void DispatchRafAlignedInput(base::TimeTicks frame_time) override;
+  void RecordTimeToFirstActivePaint(base::TimeDelta duration) override;
 
   // mojom::blink::FrameWidget methods.
   void DragSourceSystemDragEnded() override;
@@ -232,10 +239,6 @@ class CORE_EXPORT WebFrameWidgetBase
   cc::LayerTreeDebugState GetLayerTreeDebugState();
   void SetLayerTreeDebugState(const cc::LayerTreeDebugState& state);
 
-  // Returns if we should gather main frame metrics. If there is no compositor
-  // thread this returns false.
-  static bool ShouldRecordMainFrameMetrics();
-
  protected:
   enum DragAction { kDragEnter, kDragOver };
 
@@ -282,7 +285,7 @@ class CORE_EXPORT WebFrameWidgetBase
 
   // Base functionality all widgets have. This is a member as to avoid
   // complicated inheritance structures.
-  WidgetBase widget_base_;
+  std::unique_ptr<WidgetBase> widget_base_;
 
  private:
   void CancelDrag();

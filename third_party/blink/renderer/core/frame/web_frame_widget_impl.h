@@ -89,7 +89,6 @@ class WebFrameWidgetImpl final : public WebFrameWidgetBase,
   void Resize(const WebSize&) override;
   void DidEnterFullscreen() override;
   void DidExitFullscreen() override;
-  void SetSuppressFrameRequestsWorkaroundFor704763Only(bool) final;
   void DidBeginFrame() override;
   void BeginUpdateLayers() override;
   void EndUpdateLayers() override;
@@ -144,6 +143,7 @@ class WebFrameWidgetImpl final : public WebFrameWidgetBase,
 
   // WidgetBaseClient overrides:
   void BeginMainFrame(base::TimeTicks last_frame_time) override;
+  void SetSuppressFrameRequestsWorkaroundFor704763Only(bool) final;
 
   void UpdateMainFrameLayoutSize();
 

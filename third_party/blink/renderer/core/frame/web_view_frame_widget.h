@@ -59,7 +59,6 @@ class CORE_EXPORT WebViewFrameWidget : public WebFrameWidgetBase {
   void Resize(const WebSize&) override;
   void DidEnterFullscreen() override;
   void DidExitFullscreen() override;
-  void SetSuppressFrameRequestsWorkaroundFor704763Only(bool) final;
   void DidBeginFrame() override;
   void BeginUpdateLayers() override;
   void EndUpdateLayers() override;
@@ -106,6 +105,7 @@ class CORE_EXPORT WebViewFrameWidget : public WebFrameWidgetBase {
 
   // WidgetBaseClient overrides:
   void BeginMainFrame(base::TimeTicks last_frame_time) override;
+  void SetSuppressFrameRequestsWorkaroundFor704763Only(bool) final;
 
   void Trace(Visitor*) override;
 
