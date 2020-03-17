@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/apps/app_shim/extension_app_shim_handler_mac.h"
+#include "chrome/browser/apps/app_shim/app_shim_manager_mac.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <Security/Security.h>
@@ -21,11 +21,11 @@
 #include "base/mac/scoped_cftyperef.h"
 #include "base/macros.h"
 #include "base/stl_util.h"
-#include "chrome/browser/apps/app_shim/app_shim_handler_delegate_mac.h"
 #include "chrome/browser/apps/app_shim/app_shim_host_bootstrap_mac.h"
 #include "chrome/browser/apps/app_shim/app_shim_host_mac.h"
 #include "chrome/browser/apps/app_shim/app_shim_listener.h"
 #include "chrome/browser/apps/app_shim/app_shim_termination_manager.h"
+#include "chrome/browser/apps/app_shim/extension_app_shim_manager_delegate_mac.h"
 #include "chrome/browser/apps/platform_apps/app_shim_registry_mac.h"
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/browser_process_platform_part.h"
@@ -142,15 +142,15 @@ namespace apps {
 
 // The state for an individual (app, Profile) pair. This includes the
 // AppShimHost.
-struct ExtensionAppShimHandler::ProfileState {
-  ProfileState(ExtensionAppShimHandler::AppState* in_app_state,
+struct AppShimManager::ProfileState {
+  ProfileState(AppShimManager::AppState* in_app_state,
                std::unique_ptr<AppShimHost> in_single_profile_host);
   ~ProfileState() = default;
 
   AppShimHost* GetHost() const;
 
   // Weak, owns |this|.
-  ExtensionAppShimHandler::AppState* const app_state;
+  AppShimManager::AppState* const app_state;
 
   // The AppShimHost for apps that are not multi-profile.
   const std::unique_ptr<AppShimHost> single_profile_host;
@@ -164,7 +164,7 @@ struct ExtensionAppShimHandler::ProfileState {
 
 // The state for an individual app. This includes the state for all
 // profiles that are using the app.
-struct ExtensionAppShimHandler::AppState {
+struct AppShimManager::AppState {
   AppState(const web_app::AppId& app_id,
            std::unique_ptr<AppShimHost> multi_profile_host)
       : app_id(app_id), multi_profile_host(std::move(multi_profile_host)) {}
@@ -188,8 +188,8 @@ struct ExtensionAppShimHandler::AppState {
   DISALLOW_COPY_AND_ASSIGN(AppState);
 };
 
-ExtensionAppShimHandler::ProfileState::ProfileState(
-    ExtensionAppShimHandler::AppState* in_app_state,
+AppShimManager::ProfileState::ProfileState(
+    AppShimManager::AppState* in_app_state,
     std::unique_ptr<AppShimHost> in_single_profile_host)
     : app_state(in_app_state),
       single_profile_host(std::move(in_single_profile_host)) {
@@ -198,17 +198,17 @@ ExtensionAppShimHandler::ProfileState::ProfileState(
   DCHECK_NE(!!single_profile_host, !!app_state->multi_profile_host);
 }
 
-AppShimHost* ExtensionAppShimHandler::ProfileState::GetHost() const {
+AppShimHost* AppShimManager::ProfileState::GetHost() const {
   if (app_state->multi_profile_host)
     return app_state->multi_profile_host.get();
   return single_profile_host.get();
 }
 
-bool ExtensionAppShimHandler::AppState::IsMultiProfile() const {
+bool AppShimManager::AppState::IsMultiProfile() const {
   return multi_profile_host.get();
 }
 
-void ExtensionAppShimHandler::AppState::SaveLastActiveProfiles() const {
+void AppShimManager::AppState::SaveLastActiveProfiles() const {
   if (!IsMultiProfile())
     return;
   std::set<base::FilePath> last_active_profile_paths;
@@ -219,8 +219,8 @@ void ExtensionAppShimHandler::AppState::SaveLastActiveProfiles() const {
   AppShimRegistry::Get()->OnAppQuit(app_id, last_active_profile_paths);
 }
 
-ExtensionAppShimHandler::ExtensionAppShimHandler()
-    : delegate_(new AppShimHandlerDelegate), weak_factory_(this) {
+AppShimManager::AppShimManager()
+    : delegate_(new ExtensionAppShimManagerDelegate), weak_factory_(this) {
   // This is instantiated in BrowserProcessImpl::PreMainMessageLoopRun with
   // AppShimListener. Since PROFILE_CREATED is not fired until
   // ProfileManager::GetLastUsedProfile/GetLastOpenedProfiles, this should catch
@@ -232,12 +232,12 @@ ExtensionAppShimHandler::ExtensionAppShimHandler()
   BrowserList::AddObserver(this);
 }
 
-ExtensionAppShimHandler::~ExtensionAppShimHandler() {
+AppShimManager::~AppShimManager() {
   BrowserList::RemoveObserver(this);
 }
 
-AppShimHost* ExtensionAppShimHandler::FindHost(Profile* profile,
-                                               const web_app::AppId& app_id) {
+AppShimHost* AppShimManager::FindHost(Profile* profile,
+                                      const web_app::AppId& app_id) {
   auto found_app = apps_.find(app_id);
   if (found_app == apps_.end())
     return nullptr;
@@ -249,8 +249,7 @@ AppShimHost* ExtensionAppShimHandler::FindHost(Profile* profile,
   return profile_state->GetHost();
 }
 
-AppShimHost* ExtensionAppShimHandler::GetHostForRemoteCocoaBrowser(
-    Browser* browser) {
+AppShimHost* AppShimManager::GetHostForRemoteCocoaBrowser(Browser* browser) {
   const std::string app_id =
       web_app::GetAppIdFromApplicationName(browser->app_name());
   if (!delegate_->AppUsesRemoteCocoa(browser->profile(), app_id))
@@ -261,7 +260,7 @@ AppShimHost* ExtensionAppShimHandler::GetHostForRemoteCocoaBrowser(
   return profile_state->GetHost();
 }
 
-void ExtensionAppShimHandler::OnShimLaunchRequested(
+void AppShimManager::OnShimLaunchRequested(
     AppShimHost* host,
     bool recreate_shims,
     apps::ShimLaunchedCallback launched_callback,
@@ -286,7 +285,7 @@ void ExtensionAppShimHandler::OnShimLaunchRequested(
                         std::move(terminated_callback));
 }
 
-void ExtensionAppShimHandler::OnShimProcessConnected(
+void AppShimManager::OnShimProcessConnected(
     std::unique_ptr<AppShimHostBootstrap> bootstrap) {
   DCHECK(crx_file::id_util::IdIsValid(bootstrap->GetAppId()));
   switch (bootstrap->GetLaunchType()) {
@@ -299,7 +298,7 @@ void ExtensionAppShimHandler::OnShimProcessConnected(
   }
 }
 
-void ExtensionAppShimHandler::OnShimProcessConnectedForRegisterOnly(
+void AppShimManager::OnShimProcessConnectedForRegisterOnly(
     std::unique_ptr<AppShimHostBootstrap> bootstrap) {
   const web_app::AppId& app_id = bootstrap->GetAppId();
   DCHECK_EQ(bootstrap->GetLaunchType(),
@@ -338,7 +337,7 @@ void ExtensionAppShimHandler::OnShimProcessConnectedForRegisterOnly(
       std::move(bootstrap));
 }
 
-void ExtensionAppShimHandler::OnShimProcessConnectedForLaunch(
+void AppShimManager::OnShimProcessConnectedForLaunch(
     std::unique_ptr<AppShimHostBootstrap> bootstrap) {
   const web_app::AppId& app_id = bootstrap->GetAppId();
   DCHECK_EQ(bootstrap->GetLaunchType(),
@@ -366,7 +365,7 @@ void ExtensionAppShimHandler::OnShimProcessConnectedForLaunch(
   // they're loaded (or have failed to load), call
   // OnShimProcessConnectedAndProfilesToLaunchLoaded.
   base::OnceClosure callback = base::BindOnce(
-      &ExtensionAppShimHandler::OnShimProcessConnectedAndProfilesToLaunchLoaded,
+      &AppShimManager::OnShimProcessConnectedAndProfilesToLaunchLoaded,
       weak_factory_.GetWeakPtr(), std::move(bootstrap),
       profile_paths_to_launch);
   {
@@ -382,7 +381,7 @@ void ExtensionAppShimHandler::OnShimProcessConnectedForLaunch(
           base::BindOnce([](base::OnceClosure callback_to_wrap,
                             Profile*) { std::move(callback_to_wrap).Run(); },
                          std::move(callback));
-      callback = base::BindOnce(&ExtensionAppShimHandler::LoadProfileAndApp,
+      callback = base::BindOnce(&AppShimManager::LoadProfileAndApp,
                                 weak_factory_.GetWeakPtr(), profile_path,
                                 app_id, std::move(callback_wrapped));
     }
@@ -390,7 +389,7 @@ void ExtensionAppShimHandler::OnShimProcessConnectedForLaunch(
   std::move(callback).Run();
 }
 
-void ExtensionAppShimHandler::OnShimProcessConnectedAndProfilesToLaunchLoaded(
+void AppShimManager::OnShimProcessConnectedAndProfilesToLaunchLoaded(
     std::unique_ptr<AppShimHostBootstrap> bootstrap,
     const std::vector<base::FilePath>& profile_paths_to_launch) {
   // The the profile specified in |bootstrap| (even if it's empty) should be the
@@ -475,7 +474,7 @@ void ExtensionAppShimHandler::OnShimProcessConnectedAndProfilesToLaunchLoaded(
                                            launch_result, std::move(bootstrap));
 }
 
-void ExtensionAppShimHandler::OnShimProcessConnectedAndAllLaunchesDone(
+void AppShimManager::OnShimProcessConnectedAndAllLaunchesDone(
     ProfileState* profile_state,
     chrome::mojom::AppShimLaunchResult result,
     std::unique_ptr<AppShimHostBootstrap> bootstrap) {
@@ -522,17 +521,17 @@ void ExtensionAppShimHandler::OnShimProcessConnectedAndAllLaunchesDone(
 }
 
 // static
-ExtensionAppShimHandler* ExtensionAppShimHandler::Get() {
+AppShimManager* AppShimManager::Get() {
   // This will only return nullptr in certain unit tests that do not initialize
   // the app shim host manager.
   auto* shim_host_manager =
       g_browser_process->platform_part()->app_shim_listener();
   if (shim_host_manager)
-    return shim_host_manager->extension_app_shim_handler();
+    return shim_host_manager->app_shim_manager();
   return nullptr;
 }
 
-void ExtensionAppShimHandler::CloseShimsForProfile(Profile* profile) {
+void AppShimManager::CloseShimsForProfile(Profile* profile) {
   for (auto iter_app = apps_.begin(); iter_app != apps_.end();) {
     AppState* app_state = iter_app->second.get();
     app_state->profiles.erase(profile);
@@ -543,8 +542,8 @@ void ExtensionAppShimHandler::CloseShimsForProfile(Profile* profile) {
   }
 }
 
-void ExtensionAppShimHandler::CloseShimForApp(Profile* profile,
-                                              const web_app::AppId& app_id) {
+void AppShimManager::CloseShimForApp(Profile* profile,
+                                     const web_app::AppId& app_id) {
   auto found_app = apps_.find(app_id);
   if (found_app == apps_.end())
     return;
@@ -560,26 +559,24 @@ void ExtensionAppShimHandler::CloseShimForApp(Profile* profile,
   }
 }
 
-void ExtensionAppShimHandler::LoadProfileAndApp(
-    const base::FilePath& profile_path,
-    const web_app::AppId& app_id,
-    LoadProfileAppCallback callback) {
+void AppShimManager::LoadProfileAndApp(const base::FilePath& profile_path,
+                                       const web_app::AppId& app_id,
+                                       LoadProfileAppCallback callback) {
   Profile* profile = delegate_->ProfileForPath(profile_path);
   if (profile) {
     OnProfileLoaded(profile_path, app_id, std::move(callback), profile);
   } else {
     delegate_->LoadProfileAsync(
-        profile_path, base::BindOnce(&ExtensionAppShimHandler::OnProfileLoaded,
+        profile_path, base::BindOnce(&AppShimManager::OnProfileLoaded,
                                      weak_factory_.GetWeakPtr(), profile_path,
                                      app_id, std::move(callback)));
   }
 }
 
-void ExtensionAppShimHandler::OnProfileLoaded(
-    const base::FilePath& profile_path,
-    const web_app::AppId& app_id,
-    LoadProfileAppCallback callback,
-    Profile* profile) {
+void AppShimManager::OnProfileLoaded(const base::FilePath& profile_path,
+                                     const web_app::AppId& app_id,
+                                     LoadProfileAppCallback callback,
+                                     Profile* profile) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   if (!profile) {
     // User may have deleted the profile this shim was originally created for.
@@ -599,23 +596,23 @@ void ExtensionAppShimHandler::OnProfileLoaded(
   } else {
     delegate_->EnableExtension(
         profile, app_id,
-        base::BindOnce(&ExtensionAppShimHandler::OnAppEnabled,
+        base::BindOnce(&AppShimManager::OnAppEnabled,
                        weak_factory_.GetWeakPtr(), profile_path, app_id,
                        std::move(callback)));
   }
 }
 
-void ExtensionAppShimHandler::OnAppEnabled(const base::FilePath& profile_path,
-                                           const web_app::AppId& app_id,
-                                           LoadProfileAppCallback callback) {
+void AppShimManager::OnAppEnabled(const base::FilePath& profile_path,
+                                  const web_app::AppId& app_id,
+                                  LoadProfileAppCallback callback) {
   std::move(callback).Run(delegate_->ProfileForPath(profile_path));
 }
 
-bool ExtensionAppShimHandler::IsAcceptablyCodeSigned(pid_t pid) const {
+bool AppShimManager::IsAcceptablyCodeSigned(pid_t pid) const {
   return IsAcceptablyCodeSignedInternal(pid);
 }
 
-void ExtensionAppShimHandler::OnShimProcessDisconnected(AppShimHost* host) {
+void AppShimManager::OnShimProcessDisconnected(AppShimHost* host) {
   const std::string app_id = host->GetAppId();
 
   auto found_app = apps_.find(app_id);
@@ -656,7 +653,7 @@ void ExtensionAppShimHandler::OnShimProcessDisconnected(AppShimHost* host) {
     delegate_->CloseAppWindows(profile, app_id);
 }
 
-void ExtensionAppShimHandler::OnShimFocus(AppShimHost* host) {
+void AppShimManager::OnShimFocus(AppShimHost* host) {
   // This path is only for legacy apps (which are perforce single-profile).
   if (host->UsesRemoteViews())
     return;
@@ -674,7 +671,7 @@ void ExtensionAppShimHandler::OnShimFocus(AppShimHost* host) {
                        std::vector<base::FilePath>());
 }
 
-void ExtensionAppShimHandler::OnShimOpenedFiles(
+void AppShimManager::OnShimOpenedFiles(
     AppShimHost* host,
     const std::vector<base::FilePath>& files) {
   auto found_app = apps_.find(host->GetAppId());
@@ -692,17 +689,15 @@ void ExtensionAppShimHandler::OnShimOpenedFiles(
   delegate_->LaunchApp(profile, host->GetAppId(), files);
 }
 
-void ExtensionAppShimHandler::OnShimSelectedProfile(
-    AppShimHost* host,
-    const base::FilePath& profile_path) {
+void AppShimManager::OnShimSelectedProfile(AppShimHost* host,
+                                           const base::FilePath& profile_path) {
   LoadProfileAndApp(
       profile_path, host->GetAppId(),
-      base::BindOnce(
-          &ExtensionAppShimHandler::OnShimSelectedProfileAndAppLoaded,
-          weak_factory_.GetWeakPtr(), host->GetAppId()));
+      base::BindOnce(&AppShimManager::OnShimSelectedProfileAndAppLoaded,
+                     weak_factory_.GetWeakPtr(), host->GetAppId()));
 }
 
-void ExtensionAppShimHandler::OnShimSelectedProfileAndAppLoaded(
+void AppShimManager::OnShimSelectedProfileAndAppLoaded(
     const web_app::AppId& app_id,
     Profile* profile) {
   if (!delegate_->AppIsInstalled(profile, app_id))
@@ -727,14 +722,13 @@ void ExtensionAppShimHandler::OnShimSelectedProfileAndAppLoaded(
   }
 }
 
-void ExtensionAppShimHandler::set_delegate(Delegate* delegate) {
+void AppShimManager::set_delegate(Delegate* delegate) {
   delegate_.reset(delegate);
 }
 
-void ExtensionAppShimHandler::Observe(
-    int type,
-    const content::NotificationSource& source,
-    const content::NotificationDetails& details) {
+void AppShimManager::Observe(int type,
+                             const content::NotificationSource& source,
+                             const content::NotificationDetails& details) {
   switch (type) {
     case chrome::NOTIFICATION_PROFILE_CREATED: {
       Profile* profile = content::Source<Profile>(source).ptr();
@@ -762,11 +756,11 @@ void ExtensionAppShimHandler::Observe(
   }
 }
 
-void ExtensionAppShimHandler::OnAppStart(content::BrowserContext* context,
-                                         const std::string& app_id) {}
+void AppShimManager::OnAppStart(content::BrowserContext* context,
+                                const std::string& app_id) {}
 
-void ExtensionAppShimHandler::OnAppActivated(content::BrowserContext* context,
-                                             const std::string& app_id) {
+void AppShimManager::OnAppActivated(content::BrowserContext* context,
+                                    const std::string& app_id) {
   Profile* profile = Profile::FromBrowserContext(context);
   if (!delegate_->AppIsInstalled(profile, app_id))
     return;
@@ -774,17 +768,17 @@ void ExtensionAppShimHandler::OnAppActivated(content::BrowserContext* context,
     profile_state->GetHost()->LaunchShim();
 }
 
-void ExtensionAppShimHandler::OnAppDeactivated(content::BrowserContext* context,
-                                               const std::string& app_id) {
+void AppShimManager::OnAppDeactivated(content::BrowserContext* context,
+                                      const std::string& app_id) {
   CloseShimForApp(static_cast<Profile*>(context), app_id);
   if (apps_.empty())
     delegate_->MaybeTerminate();
 }
 
-void ExtensionAppShimHandler::OnAppStop(content::BrowserContext* context,
-                                        const std::string& app_id) {}
+void AppShimManager::OnAppStop(content::BrowserContext* context,
+                               const std::string& app_id) {}
 
-void ExtensionAppShimHandler::OnBrowserAdded(Browser* browser) {
+void AppShimManager::OnBrowserAdded(Browser* browser) {
   Profile* profile = browser->profile();
   const std::string app_id =
       web_app::GetAppIdFromApplicationName(browser->app_name());
@@ -797,7 +791,7 @@ void ExtensionAppShimHandler::OnBrowserAdded(Browser* browser) {
   }
 }
 
-void ExtensionAppShimHandler::OnBrowserRemoved(Browser* browser) {
+void AppShimManager::OnBrowserRemoved(Browser* browser) {
   const std::string app_id =
       web_app::GetAppIdFromApplicationName(browser->app_name());
   auto found_app = apps_.find(app_id);
@@ -820,7 +814,7 @@ void ExtensionAppShimHandler::OnBrowserRemoved(Browser* browser) {
   }
 }
 
-void ExtensionAppShimHandler::OnBrowserSetLastActive(Browser* browser) {
+void AppShimManager::OnBrowserSetLastActive(Browser* browser) {
   // Rebuild the profile menu items (to ensure that the checkmark in the menu
   // is next to the new-active item).
   if (avatar_menu_)
@@ -828,7 +822,7 @@ void ExtensionAppShimHandler::OnBrowserSetLastActive(Browser* browser) {
   UpdateAllProfileMenus();
 }
 
-void ExtensionAppShimHandler::UpdateAllProfileMenus() {
+void AppShimManager::UpdateAllProfileMenus() {
   RebuildProfileMenuItemsFromAvatarMenu();
   for (auto& iter_app : apps_) {
     AppState* app_state = iter_app.second.get();
@@ -837,7 +831,7 @@ void ExtensionAppShimHandler::UpdateAllProfileMenus() {
   }
 }
 
-void ExtensionAppShimHandler::RebuildProfileMenuItemsFromAvatarMenu() {
+void AppShimManager::RebuildProfileMenuItemsFromAvatarMenu() {
   if (!avatar_menu_) {
     ProfileManager* profile_manager = g_browser_process->profile_manager();
     avatar_menu_ = std::make_unique<AvatarMenu>(
@@ -858,14 +852,14 @@ void ExtensionAppShimHandler::RebuildProfileMenuItemsFromAvatarMenu() {
   }
 }
 
-void ExtensionAppShimHandler::OnAvatarMenuChanged(AvatarMenu* menu) {
+void AppShimManager::OnAvatarMenuChanged(AvatarMenu* menu) {
   // Rebuild the profile menu to reflect changes (e.g, added or removed
   // profiles).
   DCHECK_EQ(avatar_menu_.get(), menu);
   UpdateAllProfileMenus();
 }
 
-void ExtensionAppShimHandler::UpdateAppProfileMenu(AppState* app_state) {
+void AppShimManager::UpdateAppProfileMenu(AppState* app_state) {
   DCHECK(app_state->IsMultiProfile());
   // Include in |items| the profiles from |profile_menu_items_| for which this
   // app is installed, sorted by |menu_index|.
@@ -888,9 +882,9 @@ void ExtensionAppShimHandler::UpdateAppProfileMenu(AppState* app_state) {
       std::move(items));
 }
 
-ExtensionAppShimHandler::ProfileState*
-ExtensionAppShimHandler::GetOrCreateProfileState(Profile* profile,
-                                                 const web_app::AppId& app_id) {
+AppShimManager::ProfileState* AppShimManager::GetOrCreateProfileState(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   if (web_app::AppShimLaunchDisabled())
     return nullptr;
 

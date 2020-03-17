@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_APPS_APP_SHIM_EXTENSION_APP_SHIM_HANDLER_MAC_H_
-#define CHROME_BROWSER_APPS_APP_SHIM_EXTENSION_APP_SHIM_HANDLER_MAC_H_
+#ifndef CHROME_BROWSER_APPS_APP_SHIM_APP_SHIM_MANAGER_MAC_H_
+#define CHROME_BROWSER_APPS_APP_SHIM_APP_SHIM_MANAGER_MAC_H_
 
 #include <map>
 #include <memory>
@@ -38,12 +38,12 @@ namespace apps {
 
 // This app shim handler that handles events for app shims that correspond to an
 // extension.
-class ExtensionAppShimHandler : public AppShimHostBootstrap::Client,
-                                public AppShimHost::Client,
-                                public content::NotificationObserver,
-                                public AppLifetimeMonitor::Observer,
-                                public BrowserListObserver,
-                                public AvatarMenuObserver {
+class AppShimManager : public AppShimHostBootstrap::Client,
+                       public AppShimHost::Client,
+                       public content::NotificationObserver,
+                       public AppLifetimeMonitor::Observer,
+                       public BrowserListObserver,
+                       public AvatarMenuObserver {
  public:
   class Delegate {
    public:
@@ -135,10 +135,10 @@ class ExtensionAppShimHandler : public AppShimHostBootstrap::Client,
 
   // Helper function to get the instance on the browser process. This will be
   // non-null except for tests.
-  static ExtensionAppShimHandler* Get();
+  static AppShimManager* Get();
 
-  ExtensionAppShimHandler();
-  ~ExtensionAppShimHandler() override;
+  AppShimManager();
+  ~AppShimManager() override;
 
   // Get the host corresponding to a profile and app id, or null if there is
   // none.
@@ -285,11 +285,11 @@ class ExtensionAppShimHandler : public AppShimHostBootstrap::Client,
   // The avatar menu instance used by all app shims.
   std::unique_ptr<AvatarMenu> avatar_menu_;
 
-  base::WeakPtrFactory<ExtensionAppShimHandler> weak_factory_;
+  base::WeakPtrFactory<AppShimManager> weak_factory_;
 
-  DISALLOW_COPY_AND_ASSIGN(ExtensionAppShimHandler);
+  DISALLOW_COPY_AND_ASSIGN(AppShimManager);
 };
 
 }  // namespace apps
 
-#endif  // CHROME_BROWSER_APPS_APP_SHIM_EXTENSION_APP_SHIM_HANDLER_MAC_H_
+#endif  // CHROME_BROWSER_APPS_APP_SHIM_APP_SHIM_MANAGER_MAC_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/apps/app_shim/app_shim_handler_delegate_mac.h"
+#include "chrome/browser/apps/app_shim/extension_app_shim_manager_delegate_mac.h"
 
 #include "apps/launcher.h"
 #include "chrome/browser/apps/app_shim/app_shim_termination_manager.h"
@@ -89,10 +89,10 @@ const Extension* MaybeGetAppExtension(content::BrowserContext* context,
 
 }  // namespace
 
-AppShimHandlerDelegate::AppShimHandlerDelegate() = default;
-AppShimHandlerDelegate::~AppShimHandlerDelegate() = default;
+ExtensionAppShimManagerDelegate::ExtensionAppShimManagerDelegate() = default;
+ExtensionAppShimManagerDelegate::~ExtensionAppShimManagerDelegate() = default;
 
-Profile* AppShimHandlerDelegate::ProfileForPath(
+Profile* ExtensionAppShimManagerDelegate::ProfileForPath(
     const base::FilePath& full_path) {
   ProfileManager* profile_manager = g_browser_process->profile_manager();
   Profile* profile = profile_manager->GetProfileByPath(full_path);
@@ -102,20 +102,21 @@ Profile* AppShimHandlerDelegate::ProfileForPath(
                                                              : nullptr;
 }
 
-void AppShimHandlerDelegate::LoadProfileAsync(
+void ExtensionAppShimManagerDelegate::LoadProfileAsync(
     const base::FilePath& full_path,
     base::OnceCallback<void(Profile*)> callback) {
   ProfileManager* profile_manager = g_browser_process->profile_manager();
   profile_manager->LoadProfileByPath(full_path, false, std::move(callback));
 }
 
-bool AppShimHandlerDelegate::IsProfileLockedForPath(
+bool ExtensionAppShimManagerDelegate::IsProfileLockedForPath(
     const base::FilePath& full_path) {
   return profiles::IsProfileLocked(full_path);
 }
 
-bool AppShimHandlerDelegate::ShowAppWindows(Profile* profile,
-                                            const web_app::AppId& app_id) {
+bool ExtensionAppShimManagerDelegate::ShowAppWindows(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   AppWindowList windows =
       AppWindowRegistry::Get(profile)->GetAppWindowsForApp(app_id);
   for (auto it = windows.rbegin(); it != windows.rend(); ++it) {
@@ -125,8 +126,9 @@ bool AppShimHandlerDelegate::ShowAppWindows(Profile* profile,
   return !windows.empty();
 }
 
-void AppShimHandlerDelegate::CloseAppWindows(Profile* profile,
-                                             const web_app::AppId& app_id) {
+void ExtensionAppShimManagerDelegate::CloseAppWindows(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   AppWindowList windows =
       AppWindowRegistry::Get(profile)->GetAppWindowsForApp(app_id);
   for (auto it = windows.begin(); it != windows.end(); ++it) {
@@ -135,14 +137,16 @@ void AppShimHandlerDelegate::CloseAppWindows(Profile* profile,
   }
 }
 
-bool AppShimHandlerDelegate::AppIsInstalled(Profile* profile,
-                                            const web_app::AppId& app_id) {
+bool ExtensionAppShimManagerDelegate::AppIsInstalled(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   const Extension* extension = MaybeGetAppExtension(profile, app_id);
   return profile && extension;
 }
 
-bool AppShimHandlerDelegate::AppCanCreateHost(Profile* profile,
-                                              const web_app::AppId& app_id) {
+bool ExtensionAppShimManagerDelegate::AppCanCreateHost(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   const Extension* extension = MaybeGetAppExtension(profile, app_id);
   if (!profile || !extension)
     return false;
@@ -156,23 +160,25 @@ bool AppShimHandlerDelegate::AppCanCreateHost(Profile* profile,
   return true;
 }
 
-bool AppShimHandlerDelegate::AppIsMultiProfile(Profile* profile,
-                                               const web_app::AppId& app_id) {
+bool ExtensionAppShimManagerDelegate::AppIsMultiProfile(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   const Extension* extension = MaybeGetAppExtension(profile, app_id);
   if (!profile || !extension)
     return false;
   return extension->from_bookmark();
 }
 
-bool AppShimHandlerDelegate::AppUsesRemoteCocoa(Profile* profile,
-                                                const web_app::AppId& app_id) {
+bool ExtensionAppShimManagerDelegate::AppUsesRemoteCocoa(
+    Profile* profile,
+    const web_app::AppId& app_id) {
   const Extension* extension = MaybeGetAppExtension(profile, app_id);
   if (!profile || !extension)
     return false;
   return extension->is_hosted_app() && extension->from_bookmark();
 }
 
-std::unique_ptr<AppShimHost> AppShimHandlerDelegate::CreateHost(
+std::unique_ptr<AppShimHost> ExtensionAppShimManagerDelegate::CreateHost(
     AppShimHost::Client* client,
     const base::FilePath& profile_path,
     const web_app::AppId& app_id,
@@ -181,7 +187,7 @@ std::unique_ptr<AppShimHost> AppShimHandlerDelegate::CreateHost(
                                        use_remote_cocoa);
 }
 
-void AppShimHandlerDelegate::EnableExtension(
+void ExtensionAppShimManagerDelegate::EnableExtension(
     Profile* profile,
     const web_app::AppId& app_id,
     base::OnceCallback<void()> callback) {
@@ -192,7 +198,7 @@ void AppShimHandlerDelegate::EnableExtension(
     (new EnableViaPrompt(profile, app_id, std::move(callback)))->Run();
 }
 
-void AppShimHandlerDelegate::LaunchApp(
+void ExtensionAppShimManagerDelegate::LaunchApp(
     Profile* profile,
     const web_app::AppId& app_id,
     const std::vector<base::FilePath>& files) {
@@ -219,7 +225,7 @@ void AppShimHandlerDelegate::LaunchApp(
   }
 }
 
-void AppShimHandlerDelegate::OpenAppURLInBrowserWindow(
+void ExtensionAppShimManagerDelegate::OpenAppURLInBrowserWindow(
     const base::FilePath& profile_path,
     const GURL& url) {
   Profile* profile =
@@ -237,7 +243,7 @@ void AppShimHandlerDelegate::OpenAppURLInBrowserWindow(
   Navigate(&params);
 }
 
-void AppShimHandlerDelegate::LaunchShim(
+void ExtensionAppShimManagerDelegate::LaunchShim(
     Profile* profile,
     const web_app::AppId& app_id,
     bool recreate_shims,
@@ -269,12 +275,12 @@ void AppShimHandlerDelegate::LaunchShim(
   }
 }
 
-void AppShimHandlerDelegate::LaunchUserManager() {
+void ExtensionAppShimManagerDelegate::LaunchUserManager() {
   UserManager::Show(base::FilePath(),
                     profiles::USER_MANAGER_SELECT_PROFILE_NO_ACTION);
 }
 
-void AppShimHandlerDelegate::MaybeTerminate() {
+void ExtensionAppShimManagerDelegate::MaybeTerminate() {
   apps::AppShimTerminationManager::Get()->MaybeTerminate();
 }
 

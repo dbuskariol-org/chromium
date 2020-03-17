@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_APPS_APP_SHIM_APP_SHIM_HANDLER_DELEGATE_MAC_H_
-#define CHROME_BROWSER_APPS_APP_SHIM_APP_SHIM_HANDLER_DELEGATE_MAC_H_
+#ifndef CHROME_BROWSER_APPS_APP_SHIM_EXTENSION_APP_SHIM_MANAGER_DELEGATE_MAC_H_
+#define CHROME_BROWSER_APPS_APP_SHIM_EXTENSION_APP_SHIM_MANAGER_DELEGATE_MAC_H_
 
-#include "chrome/browser/apps/app_shim/extension_app_shim_handler_mac.h"
+#include "chrome/browser/apps/app_shim/app_shim_manager_mac.h"
 
 namespace apps {
 
-class AppShimHandlerDelegate : public ExtensionAppShimHandler::Delegate {
+class ExtensionAppShimManagerDelegate : public AppShimManager::Delegate {
  public:
-  AppShimHandlerDelegate();
-  ~AppShimHandlerDelegate() override;
+  ExtensionAppShimManagerDelegate();
+  ~ExtensionAppShimManagerDelegate() override;
 
   // Return the profile for |path|, only if it is already loaded.
   Profile* ProfileForPath(const base::FilePath& path) override;
@@ -95,4 +95,4 @@ class AppShimHandlerDelegate : public ExtensionAppShimHandler::Delegate {
 
 }  // namespace apps
 
-#endif  // CHROME_BROWSER_APPS_APP_SHIM_APP_SHIM_HANDLER_DELEGATE_MAC_H_
+#endif  // CHROME_BROWSER_APPS_APP_SHIM_EXTENSION_APP_SHIM_MANAGER_DELEGATE_MAC_H_
