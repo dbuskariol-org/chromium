@@ -98,6 +98,18 @@ void AppActivityRegistry::TestApi::SaveAppActivity() {
   registry_->SaveAppActivity();
 }
 
+AppActivityRegistry::SystemNotification::SystemNotification(
+    base::Optional<base::TimeDelta> app_time_limit,
+    AppNotification app_notification)
+    : time_limit(app_time_limit), notification(app_notification) {}
+
+AppActivityRegistry::SystemNotification::SystemNotification(
+    const SystemNotification&) = default;
+
+AppActivityRegistry::SystemNotification&
+AppActivityRegistry::SystemNotification::operator=(const SystemNotification&) =
+    default;
+
 AppActivityRegistry::AppDetails::AppDetails() = default;
 
 AppActivityRegistry::AppDetails::AppDetails(const AppActivity& activity)
@@ -181,8 +193,14 @@ void AppActivityRegistry::OnAppInstalled(const AppId& app_id) {
   // sessions and app service does not. Make sure not to override cached state.
   if (!base::Contains(activity_registry_, app_id)) {
     Add(app_id);
-  } else if (GetAppState(app_id) == AppState::kLimitReached) {
-    NotifyLimitReached(app_id, /* was_active */ false);
+  } else {
+    activity_registry_.at(app_id).received_app_installed_ = true;
+
+    // First send the system notifications for the application.
+    SendSystemNotificationsForApp(app_id);
+
+    if (GetAppState(app_id) == AppState::kLimitReached)
+      NotifyLimitReached(app_id, /* was_active */ false);
   }
 }
 
@@ -672,6 +690,7 @@ void AppActivityRegistry::CleanRegistry(base::Time timestamp) {
 
 void AppActivityRegistry::Add(const AppId& app_id) {
   activity_registry_[app_id].activity = AppActivity(AppState::kAvailable);
+  activity_registry_[app_id].received_app_installed_ = true;
   newly_installed_apps_.push_back(app_id);
   for (auto& observer : app_state_observers_)
     observer.OnAppInstalled(app_id);
@@ -859,34 +878,31 @@ void AppActivityRegistry::CheckTimeLimitForApp(const AppId& app_id) {
 
   if (time_left <= kFiveMinutes && time_left > kOneMinute &&
       last_notification != AppNotification::kFiveMinutes) {
-    notification_delegate_->ShowAppTimeLimitNotification(
-        app_id, time_limit, AppNotification::kFiveMinutes);
-    details.activity.set_last_notification(AppNotification::kFiveMinutes);
+    MaybeShowSystemNotification(
+        app_id, SystemNotification(time_limit, AppNotification::kFiveMinutes));
     ScheduleTimeLimitCheckForApp(app_id);
     return;
   }
 
   if (time_left <= kOneMinute && time_left > kZeroMinutes &&
       last_notification != AppNotification::kOneMinute) {
-    notification_delegate_->ShowAppTimeLimitNotification(
-        app_id, time_limit, AppNotification::kOneMinute);
-    details.activity.set_last_notification(AppNotification::kOneMinute);
+    MaybeShowSystemNotification(
+        app_id, SystemNotification(time_limit, AppNotification::kOneMinute));
     ScheduleTimeLimitCheckForApp(app_id);
     return;
   }
 
   if (time_left == kZeroMinutes &&
       last_notification != AppNotification::kTimeLimitReached) {
-    details.activity.set_last_notification(AppNotification::kTimeLimitReached);
+    MaybeShowSystemNotification(
+        app_id,
+        SystemNotification(time_limit, AppNotification::kTimeLimitReached));
 
     if (ContributesToWebTimeLimit(app_id, GetAppState(app_id))) {
       WebTimeLimitReached(base::Time::Now());
     } else {
       SetAppState(app_id, AppState::kLimitReached);
     }
-
-    notification_delegate_->ShowAppTimeLimitNotification(
-        app_id, time_limit, AppNotification::kTimeLimitReached);
   }
 }
 
@@ -910,16 +926,18 @@ bool AppActivityRegistry::ShowLimitUpdatedNotificationIfNeeded(
 
   // Time limit was removed.
   if (!has_time_limit && had_time_limit) {
-    notification_delegate_->ShowAppTimeLimitNotification(
-        app_id, base::nullopt, AppNotification::kTimeLimitChanged);
+    MaybeShowSystemNotification(
+        app_id,
+        SystemNotification(base::nullopt, AppNotification::kTimeLimitChanged));
     return true;
   }
 
   // Time limit was set or value changed.
   if (has_time_limit && (!had_time_limit || old_limit->daily_limit() !=
                                                 new_limit->daily_limit())) {
-    notification_delegate_->ShowAppTimeLimitNotification(
-        app_id, new_limit->daily_limit(), AppNotification::kTimeLimitChanged);
+    MaybeShowSystemNotification(
+        app_id, SystemNotification(new_limit->daily_limit(),
+                                   AppNotification::kTimeLimitChanged));
     return true;
   }
 
@@ -1023,6 +1041,42 @@ bool AppActivityRegistry::ShouldCleanUpStoredPref() {
       base::TimeDelta::FromMicroseconds(last_time));
 
   return time < base::Time::Now() - base::TimeDelta::FromDays(30);
+}
+
+void AppActivityRegistry::SendSystemNotificationsForApp(const AppId& app_id) {
+  DCHECK(base::Contains(activity_registry_, app_id));
+
+  AppDetails& app_details = activity_registry_.at(app_id);
+  DCHECK(app_details.received_app_installed_);
+
+  // TODO(yilkal): Filter out the notifications to show. For example don't show
+  // 5 min and 1 min left notifications at the same time here. However, time
+  // limit changed and 1 min left notifications can be shown at the same time.
+  for (const auto& elem : app_details.pending_notifications_) {
+    notification_delegate_->ShowAppTimeLimitNotification(
+        app_id, elem.time_limit, elem.notification);
+  }
+  app_details.pending_notifications_.clear();
+}
+
+void AppActivityRegistry::MaybeShowSystemNotification(
+    const AppId& app_id,
+    const SystemNotification& notification) {
+  DCHECK(base::Contains(activity_registry_, app_id));
+
+  AppDetails& app_details = activity_registry_.at(app_id);
+  app_details.activity.set_last_notification(notification.notification);
+
+  // AppActivityRegistry has not yet received OnAppInstalled call from
+  // AppService. Add notification to |AppDetails::pending_notifications_|.
+  if (!app_details.received_app_installed_) {
+    app_details.pending_notifications_.push_back(notification);
+    return;
+  }
+
+  // Otherwise, just show the notification.
+  notification_delegate_->ShowAppTimeLimitNotification(
+      app_id, notification.time_limit, notification.notification);
 }
 
 }  // namespace app_time
