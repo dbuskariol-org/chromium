@@ -6955,6 +6955,9 @@ crbug.com/1060175 [ Win ] wpt_internal/webxr/xr_view_projection_detached.https.h
 crbug.com/1011811 http/tests/devtools/changes/changes-sidebar.js [ Pass Failure ]
 crbug.com/1011811 http/tests/devtools/search/search-in-static.js [ Pass Failure ]
 
+# Temporarily disabled to land https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/2101972
+crbug.com/174309 http/tests/devtools/quick-open/command-menu.js [ Pass Failure ]
+
 # Sheriff 2020-03-12
 crbug.com/1060175 [ Mac ] css3/calc/simple-calcs-prefixed.html [ Pass Timeout ]
 crbug.com/1060175 [ Mac ] css3/calc/simple-calcs.html [ Pass Timeout ]
