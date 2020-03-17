@@ -888,7 +888,7 @@ void StyleEngine::FontsNeedUpdate(FontSelector*) {
         StyleChangeReasonForTracing::Create(style_change_reason::kFonts));
   }
 
-  probe::FontsUpdated(document_->ToExecutionContext(), nullptr, String(),
+  probe::FontsUpdated(document_->GetExecutionContext(), nullptr, String(),
                       nullptr);
 }
 
