@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+cr.define('cr.png', function() {
 /**
  * @fileoverview
  * 'CrPngBehavior' is a behavior to convert image sequences into APNG (animated
@@ -128,15 +129,13 @@ const PNG_CRC_TABLE = [
  */
 let CrPngState;
 
-/** @polymerBehavior */
-const CrPngBehavior = {
   /**
    * Returns a data URL for an animated PNG image that is created
    * from a sequence of images.
    * @param {!Array<string>} images The data URLs for each image.
    * @return {string} A data URL for an animated PNG image.
    */
-  convertImageSequenceToPng(images) {
+  function convertImageSequenceToPng(images) {
     const png =
         /** @type {!CrPngState} */ ({frames: 0, sequences: 0, chunks: []});
 
@@ -155,14 +154,14 @@ const CrPngBehavior = {
      * Interlace method    1 byte
      */
     const IHDR = new Uint8Array(12 + 13);
-    this.writeUInt32_(IHDR, 13, 0);
-    this.writeFourCC_(IHDR, 'IHDR', 4);
+    writeUInt32(IHDR, 13, 0);
+    writeFourCC(IHDR, 'IHDR', 4);
     /** Write size at the end when known. */
-    this.writeUInt8_(IHDR, PNG_BIT_DEPTH, 16);
+    writeUInt8(IHDR, PNG_BIT_DEPTH, 16);
     /** Write colour at the end when known. */
-    this.writeUInt8_(IHDR, PNG_COMPRESSION_METHOD, 18);
-    this.writeUInt8_(IHDR, PNG_FILTER_METHOD, 19);
-    this.writeUInt8_(IHDR, PNG_INTERLACE_METHOD, 20);
+    writeUInt8(IHDR, PNG_COMPRESSION_METHOD, 18);
+    writeUInt8(IHDR, PNG_FILTER_METHOD, 19);
+    writeUInt8(IHDR, PNG_INTERLACE_METHOD, 20);
     /** Write CRC at the end when size and colour is known. */
     png.chunks.push(IHDR);
 
@@ -173,31 +172,31 @@ const CrPngBehavior = {
      * Number of times to loop  4 bytes
      */
     const acTL = new Uint8Array(12 + 8);
-    this.writeUInt32_(acTL, 8, 0);
-    this.writeFourCC_(acTL, 'acTL', 4);
-    this.writeUInt32_(acTL, images.length, 8);
-    this.writeUInt32_(acTL, 0, 12);
-    this.writeUInt32_(acTL, this.getCRC_(acTL, 4, 16), 16);
+    writeUInt32(acTL, 8, 0);
+    writeFourCC(acTL, 'acTL', 4);
+    writeUInt32(acTL, images.length, 8);
+    writeUInt32(acTL, 0, 12);
+    writeUInt32(acTL, getCRC(acTL, 4, 16), 16);
     png.chunks.push(acTL);
 
     /** Append each image as a PNG frame. */
     for (let i = 0; i < images.length; ++i) {
-      this.appendFrameFromDataURL_(images[i], png);
+      appendFrameFromDataURL(images[i], png);
     }
 
     /** Update IHDR now that size and colour is known. */
-    this.writeUInt32_(IHDR, png.width, 8);
-    this.writeUInt32_(IHDR, png.height, 12);
-    this.writeUInt8_(IHDR, png.colour, 17);
-    this.writeUInt32_(IHDR, this.getCRC_(IHDR, 4, 8 + 13), 8 + 13);
+    writeUInt32(IHDR, png.width, 8);
+    writeUInt32(IHDR, png.height, 12);
+    writeUInt8(IHDR, png.colour, 17);
+    writeUInt32(IHDR, getCRC(IHDR, 4, 8 + 13), 8 + 13);
 
     /**
      * http://www.w3.org/TR/2003/REC-PNG-20031110/#11IEND
      */
     const IEND = new Uint8Array(12);
-    this.writeUInt32_(IEND, 0, 0);
-    this.writeFourCC_(IEND, 'IEND', 4);
-    this.writeUInt32_(IEND, this.getCRC_(IEND, 4, 8), 8);
+    writeUInt32(IEND, 0, 0);
+    writeFourCC(IEND, 'IEND', 4);
+    writeUInt32(IEND, getCRC(IEND, 4, 8), 8);
     png.chunks.push(IEND);
 
     return 'data:image/png;base64,' +
@@ -206,7 +205,7 @@ const CrPngBehavior = {
                    return String.fromCharCode.apply(null, chunk);
                  })
                  .join(''));
-  },
+  }
 
   /**
    * Returns true if the data URL is an animated PNG image.  If the PNG is
@@ -218,22 +217,21 @@ const CrPngBehavior = {
    * @param {string} url An btoa encoded data URL for a PNG image.
    * @return {boolean} True if data URL is an animated PNG image.
    */
-  isEncodedPngDataUrlAnimated(url) {
+  function isEncodedPngDataUrlAnimated(url) {
     const decoded = atob(url.substr('data:image/png;base64,'.length));
     return decoded.substr(37, 4) === 'acTL';
-  },
+  }
 
   /**
    * Reads Uint32 from buffer.
    * @param {!Uint8Array} buffer Buffer to read UInt32 from.
    * @param {number} offset Offset in buffer to read UInt32 at.
    * @return {number} The value read.
-   * @private
    */
-  readUInt32_(buffer, offset) {
+  function readUInt32(buffer, offset) {
     return (buffer[offset + 0] << 24) + (buffer[offset + 1] << 16) +
         (buffer[offset + 2] << 8) + (buffer[offset + 3] << 0);
-  },
+  }
 
   /**
    * Reads string from buffer.
@@ -241,92 +239,85 @@ const CrPngBehavior = {
    * @param {number} offset Offset in buffer to read string at.
    * @param {number} length Length of string to read.
    * @return {string} The value read.
-   * @private
    */
-  readString_(buffer, offset, length) {
+  function readString(buffer, offset, length) {
     let str = '';
     for (let i = 0; i < length; i++) {
       str += String.fromCharCode(buffer[offset + i]);
     }
     return str;
-  },
+  }
 
   /**
    * Write bytes to buffer.
    * @param {!Uint8Array} buffer Buffer to write bytes to.
    * @param {!Uint8Array} bytes Array of bytes to be written.
    * @param {number} offset Offset in buffer to write bytes at.
-   * @private
    */
-  writeBytes_(buffer, bytes, offset) {
+  function writeBytes(buffer, bytes, offset) {
     for (let i = 0; i < bytes.length; i++) {
       buffer[offset + i] = bytes[i] & 0xFF;
     }
-  },
+  }
 
   /**
    * Write UInt8 to buffer.
    * @param {!Uint8Array} buffer Buffer to write UInt8 to.
    * @param {number} u8 UInt8 to be written.
    * @param {number} offset Offset in buffer to write UInt8 at.
-   * @private
    */
-  writeUInt8_(buffer, u8, offset) {
+  function writeUInt8(buffer, u8, offset) {
     buffer[offset] = u8 & 0xFF;
-  },
+  }
 
   /**
    * Write UInt16 to buffer.
    * @param {!Uint8Array} buffer Buffer to write UInt16 to.
    * @param {number} u16 UInt16 to be written.
    * @param {number} offset Offset in buffer to write UInt16 at.
-   * @private
    */
-  writeUInt16_(buffer, u16, offset) {
+  function writeUInt16(buffer, u16, offset) {
     buffer[offset + 0] = (u16 >> 8) & 0xFF;
     buffer[offset + 1] = (u16 >> 0) & 0xFF;
-  },
+  }
 
   /**
    * Write UInt32 to buffer.
    * @param {!Uint8Array} buffer Buffer to write UInt32 to.
    * @param {number} u32 UInt32 to be written.
    * @param {number} offset Offset in buffer to write UInt32 at.
-   * @private
    */
-  writeUInt32_(buffer, u32, offset) {
+  function writeUInt32(buffer, u32, offset) {
     buffer[offset + 0] = (u32 >> 24) & 0xFF;
     buffer[offset + 1] = (u32 >> 16) & 0xFF;
     buffer[offset + 2] = (u32 >> 8) & 0xFF;
     buffer[offset + 3] = (u32 >> 0) & 0xFF;
-  },
+  }
 
   /**
    * Write string to buffer.
    * @param {!Uint8Array} buffer Buffer to write string to.
    * @param {string} string String to be written.
    * @param {number} offset Offset in buffer to write string at.
-   * @private
    */
-  writeString_(buffer, string, offset) {
+  function writeString(buffer, string, offset) {
     for (let i = 0; i < string.length; i++) {
       buffer[offset + i] = string.charCodeAt(i);
     }
-  },
+  }
 
   /**
    * Write FourCC code to buffer.
    * @param {!Uint8Array} buffer Buffer to write FourCC code to.
    * @param {string} fourcc FourCC code to be written.
    * @param {number} offset Offset in buffer to write FourCC code at.
-   * @private
    */
-  writeFourCC_(buffer, fourcc, offset) {
+  function writeFourCC(buffer, fourcc, offset) {
     buffer[offset + 0] = fourcc.charCodeAt(0);
     buffer[offset + 1] = fourcc.charCodeAt(1);
     buffer[offset + 2] = fourcc.charCodeAt(2);
     buffer[offset + 3] = fourcc.charCodeAt(3);
-  },
+  }
 
   /**
    * Compute CRC from buffer data.
@@ -334,28 +325,26 @@ const CrPngBehavior = {
    * @param {number} start Start index in buffer.
    * @param {number} end End index in buffer.
    * @return {number} The computed CRC.
-   * @private
    */
-  getCRC_(buffer, start, end) {
+  function getCRC(buffer, start, end) {
     let crc = 0xFFFFFFFF;
     for (let i = start; i < end; i++) {
       const crcTableIndex = (crc ^ (buffer[i])) & 0xFF;
       crc = PNG_CRC_TABLE[crcTableIndex] ^ (crc >>> 8);
     }
     return crc ^ 0xFFFFFFFF;
-  },
+  }
 
   /**
    * Append frame from data URL to PNG object.
    * @param {string} dataURL Data URL for frame.
    * @param {!CrPngState} png PNG object to add frame to.
-   * @private
    */
-  appendFrameFromDataURL_(dataURL, png) {
+  function appendFrameFromDataURL(dataURL, png) {
     /** Convert data URL to Uint8Array. */
     const byteString = atob(dataURL.split(',')[1]);
     const bytes = new Uint8Array(byteString.length);
-    this.writeString_(bytes, byteString, 0);
+    writeString(bytes, byteString, 0);
 
     /** Check signature. */
     const signature = bytes.subarray(0, PNG_SIGNATURE.length);
@@ -377,16 +366,16 @@ const CrPngBehavior = {
      * Blend op                 1 bytes
      */
     const fcTL = new Uint8Array(12 + 26);
-    this.writeUInt32_(fcTL, 26, 0);
-    this.writeFourCC_(fcTL, 'fcTL', 4);
-    this.writeUInt32_(fcTL, png.sequences, 8);
+    writeUInt32(fcTL, 26, 0);
+    writeFourCC(fcTL, 'fcTL', 4);
+    writeUInt32(fcTL, png.sequences, 8);
     /** Write size at the end when known. */
-    this.writeUInt32_(fcTL, 0, 20);
-    this.writeUInt32_(fcTL, 0, 24);
-    this.writeUInt16_(fcTL, PNG_FRAME_DELAY_NUMERATOR, 28);
-    this.writeUInt16_(fcTL, PNG_FRAME_DELAY_DENOMINATOR, 30);
-    this.writeUInt8_(fcTL, 0, 32);
-    this.writeUInt8_(fcTL, 0, 33);
+    writeUInt32(fcTL, 0, 20);
+    writeUInt32(fcTL, 0, 24);
+    writeUInt16(fcTL, PNG_FRAME_DELAY_NUMERATOR, 28);
+    writeUInt16(fcTL, PNG_FRAME_DELAY_DENOMINATOR, 30);
+    writeUInt8(fcTL, 0, 32);
+    writeUInt8(fcTL, 0, 33);
     /** Write CRC at the end when size is known. */
     png.sequences += 1;
     png.chunks.push(fcTL);
@@ -402,8 +391,8 @@ const CrPngBehavior = {
        * chunk  =  length bytes
        * crc    =  4      bytes
        */
-      const length = this.readUInt32_(bytes, i);
-      const type = this.readString_(bytes, i + 4, 4);
+      const length = readUInt32(bytes, i);
+      const type = readString(bytes, i + 4, 4);
       const chunk = bytes.subarray(i + 8, i + 8 + length);
 
       /** We should have enough bytes left for length. */
@@ -424,8 +413,8 @@ const CrPngBehavior = {
            * Filter method       1 byte
            * Interlace method    1 byte
            */
-          const width = this.readUInt32_(chunk, 0);
-          const height = this.readUInt32_(chunk, 4);
+          const width = readUInt32(chunk, 0);
+          const height = readUInt32(chunk, 4);
           const depth = chunk[8];
           const colour = chunk[9];
           const compression = chunk[10];
@@ -471,11 +460,11 @@ const CrPngBehavior = {
              * Data                     X bytes
              */
             const IDAT = new Uint8Array(12 + length);
-            this.writeUInt32_(IDAT, length, 0);
-            this.writeFourCC_(IDAT, 'IDAT', 4);
-            this.writeBytes_(IDAT, chunk, 8);
-            this.writeUInt32_(
-                IDAT, this.getCRC_(IDAT, 4, 8 + length), 8 + length);
+            writeUInt32(IDAT, length, 0);
+            writeFourCC(IDAT, 'IDAT', 4);
+            writeBytes(IDAT, chunk, 8);
+            writeUInt32(
+                IDAT, getCRC(IDAT, 4, 8 + length), 8 + length);
             png.chunks.push(IDAT);
           } else {
             /**
@@ -485,12 +474,12 @@ const CrPngBehavior = {
              * Frame data               X bytes
              */
             const fdAT = new Uint8Array(12 + 4 + length);
-            this.writeUInt32_(fdAT, 4 + length, 0);
-            this.writeFourCC_(fdAT, 'fdAT', 4);
-            this.writeUInt32_(fdAT, png.sequences, 8);
-            this.writeBytes_(fdAT, chunk, 12);
-            this.writeUInt32_(
-                fdAT, this.getCRC_(fdAT, 4, 12 + length), 12 + length);
+            writeUInt32(fdAT, 4 + length, 0);
+            writeFourCC(fdAT, 'fdAT', 4);
+            writeUInt32(fdAT, png.sequences, 8);
+            writeBytes(fdAT, chunk, 12);
+            writeUInt32(
+                fdAT, getCRC(fdAT, 4, 12 + length), 12 + length);
             png.sequences += 1;
             png.chunks.push(fdAT);
           }
@@ -502,18 +491,18 @@ const CrPngBehavior = {
            * Palette data        X bytes
            */
           const PLTE = new Uint8Array(12 + length);
-          this.writeUInt32_(PLTE, length, 0);
-          this.writeFourCC_(PLTE, 'PLTE', 4);
-          this.writeBytes_(PLTE, chunk, 8);
-          this.writeUInt32_(
-              PLTE, this.getCRC_(PLTE, 4, 8 + length), 8 + length);
+          writeUInt32(PLTE, length, 0);
+          writeFourCC(PLTE, 'PLTE', 4);
+          writeBytes(PLTE, chunk, 8);
+          writeUInt32(
+              PLTE, getCRC(PLTE, 4, 8 + length), 8 + length);
           png.chunks.push(PLTE);
           break;
         case 'IEND':
           /** Update fcTL now that size is known. */
-          this.writeUInt32_(fcTL, png.width, 12);
-          this.writeUInt32_(fcTL, png.height, 16);
-          this.writeUInt32_(fcTL, this.getCRC_(fcTL, 4, 34), 34);
+          writeUInt32(fcTL, png.width, 12);
+          writeUInt32(fcTL, png.height, 16);
+          writeUInt32(fcTL, getCRC(fcTL, 4, 34), 34);
           png.frames += 1;
           return;
       }
@@ -522,5 +511,10 @@ const CrPngBehavior = {
       i += 12 + length;
     }
     console.error('Unexpectedly reached end of file');
-  },
-};
+  }
+
+  return {
+    convertImageSequenceToPng,
+    isEncodedPngDataUrlAnimated,
+  };
+});

@@ -39,4 +39,5 @@ js_library("cr_picture_types") {
 }
 
 js_library("cr_png_behavior") {
+  deps = [ "//ui/webui/resources/js:cr" ]
 }
