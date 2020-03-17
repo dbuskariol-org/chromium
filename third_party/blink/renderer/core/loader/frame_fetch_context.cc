@@ -271,8 +271,8 @@ ResourceFetcher* FrameFetchContext::CreateFetcherForCommittedDocument(
       frame.GetTaskRunner(TaskType::kNetworking),
       MakeGarbageCollected<LoaderFactoryForFrame>(frame_or_imported_document));
   init.use_counter = MakeGarbageCollected<DetachableUseCounter>(&document);
-  init.console_logger =
-      MakeGarbageCollected<DetachableConsoleLogger>(&document);
+  init.console_logger = MakeGarbageCollected<DetachableConsoleLogger>(
+      document.GetExecutionContext());
   // Frame loading should normally start with |kTight| throttling, as the
   // frame will be in layout-blocking state until the <body> tag is inserted
   init.initial_throttling_policy =
@@ -307,7 +307,8 @@ ResourceFetcher* FrameFetchContext::CreateFetcherForImportedDocument(
       document->GetTaskRunner(blink::TaskType::kNetworking),
       MakeGarbageCollected<LoaderFactoryForFrame>(frame_or_imported_document));
   init.use_counter = MakeGarbageCollected<DetachableUseCounter>(document);
-  init.console_logger = MakeGarbageCollected<DetachableConsoleLogger>(document);
+  init.console_logger = MakeGarbageCollected<DetachableConsoleLogger>(
+      document->GetExecutionContext());
   init.frame_scheduler = frame.GetFrameScheduler();
   auto* fetcher = MakeGarbageCollected<ResourceFetcher>(init);
   fetcher->SetResourceLoadObserver(

@@ -7235,15 +7235,6 @@ void Document::AddConsoleMessage(ConsoleMessage* message,
     domWindow()->AddConsoleMessage(message, discard_duplicates);
 }
 
-void Document::AddConsoleMessageImpl(mojom::ConsoleMessageSource source,
-                                     mojom::ConsoleMessageLevel level,
-                                     const String& message,
-                                     bool discard_duplicates) {
-  AddConsoleMessage(
-      MakeGarbageCollected<ConsoleMessage>(source, level, message),
-      discard_duplicates);
-}
-
 void Document::AddInspectorIssue(InspectorIssue* issue) {
   Page* page = GetPage();
 
