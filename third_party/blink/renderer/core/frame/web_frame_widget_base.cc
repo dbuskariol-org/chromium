@@ -387,19 +387,27 @@ bool WebFrameWidgetBase::ShouldRecordMainFrameMetrics() {
 }
 
 void WebFrameWidgetBase::SetNeedsRecalculateRasterScales() {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->SetNeedsRecalculateRasterScales();
 }
 
 void WebFrameWidgetBase::SetBackgroundColor(SkColor color) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->set_background_color(color);
 }
 
 void WebFrameWidgetBase::SetOverscrollBehavior(
     const cc::OverscrollBehavior& overscroll_behavior) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->SetOverscrollBehavior(overscroll_behavior);
 }
 
 void WebFrameWidgetBase::RegisterSelection(cc::LayerSelection selection) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->RegisterSelection(selection);
 }
 
@@ -413,10 +421,14 @@ void WebFrameWidgetBase::StartPageScaleAnimation(
 }
 
 void WebFrameWidgetBase::RequestBeginMainFrameNotExpected(bool request) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->RequestBeginMainFrameNotExpected(request);
 }
 
 int WebFrameWidgetBase::GetLayerTreeId() {
+  if (!View()->does_composite())
+    return 0;
   return widget_base_.LayerTreeHost()->GetId();
 }
 
@@ -438,11 +450,15 @@ cc::EventListenerProperties WebFrameWidgetBase::EventListenerProperties(
 }
 
 void WebFrameWidgetBase::StartDeferringCommits(base::TimeDelta timeout) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->StartDeferringCommits(timeout);
 }
 
 void WebFrameWidgetBase::StopDeferringCommits(
     cc::PaintHoldingCommitTrigger triggger) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->StopDeferringCommits(triggger);
 }
 
@@ -763,9 +779,18 @@ class ReportTimeSwapPromise : public cc::SwapPromise {
   DISALLOW_COPY_AND_ASSIGN(ReportTimeSwapPromise);
 };
 
+void WebFrameWidgetBase::NotifySwapAndPresentationTimeInBlink(
+    WebReportTimeCallback swap_time_callback,
+    WebReportTimeCallback presentation_time_callback) {
+  NotifySwapAndPresentationTime(std::move(swap_time_callback),
+                                std::move(presentation_time_callback));
+}
+
 void WebFrameWidgetBase::NotifySwapAndPresentationTime(
     WebReportTimeCallback swap_time_callback,
     WebReportTimeCallback presentation_time_callback) {
+  if (!View()->does_composite())
+    return;
   widget_base_.LayerTreeHost()->QueueSwapPromise(
       std::make_unique<ReportTimeSwapPromise>(
           std::move(swap_time_callback), std::move(presentation_time_callback),

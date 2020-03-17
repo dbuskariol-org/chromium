@@ -200,17 +200,7 @@ class PagePopupChromeClient final : public EmptyChromeClient {
   }
 
   void SetTouchAction(LocalFrame* frame, TouchAction touch_action) override {
-    DCHECK(frame);
-    WebLocalFrameImpl* web_frame = WebLocalFrameImpl::FromFrame(frame);
-    // TODO(https://crbug.com/844547): check if we are setting touch action on
-    // pop up window or not.
-    if (!web_frame)
-      return;
-    WebFrameWidget* widget = web_frame->LocalRoot()->FrameWidget();
-    if (!widget)
-      return;
-    if (WebWidgetClient* client = To<WebFrameWidgetBase>(widget)->Client())
-      client->SetTouchAction(static_cast<WebTouchAction>(touch_action));
+    // Touch action is not used in the compositor for WebPagePopup.
   }
 
   void AttachRootLayer(scoped_refptr<cc::Layer> layer,
