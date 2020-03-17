@@ -91,14 +91,8 @@ void FileHandlerManager::EnableAndRegisterOsFileHandlers(const AppId& app_id) {
 
   std::string app_name = registrar_->GetAppShortName(app_id);
   const apps::FileHandlers* file_handlers = GetAllFileHandlers(app_id);
-  if (!file_handlers)
-    return;
-  std::set<std::string> file_extensions =
-      apps::GetFileExtensionsFromFileHandlers(*file_handlers);
-  std::set<std::string> mime_types =
-      apps::GetMimeTypesFromFileHandlers(*file_handlers);
-  RegisterFileHandlersWithOs(app_id, app_name, profile(), file_extensions,
-                             mime_types);
+  if (file_handlers)
+    RegisterFileHandlersWithOs(app_id, app_name, profile(), *file_handlers);
 }
 
 void FileHandlerManager::DisableAndUnregisterOsFileHandlers(

@@ -4,7 +4,6 @@
 
 #include "chrome/browser/web_applications/components/web_app_file_handler_registration_win.h"
 
-#include <algorithm>
 #include <iterator>
 #include <set>
 #include <string>
@@ -29,6 +28,7 @@
 #include "chrome/common/chrome_switches.h"
 #include "chrome/install_static/install_util.h"
 #include "chrome/installer/util/shell_util.h"
+#include "components/services/app_service/public/cpp/file_handler.h"
 #include "net/base/filename_util.h"
 
 namespace {
@@ -210,8 +210,7 @@ void ReRegisterFileHandlersWithOs(
 void RegisterFileHandlersWithOs(const AppId& app_id,
                                 const std::string& app_name,
                                 Profile* profile,
-                                const std::set<std::string>& file_extensions,
-                                const std::set<std::string>& mime_types) {
+                                const apps::FileHandlers& file_handlers) {
   base::string16 app_name_extension;
   base::FilePath only_profile_with_app_installed;
   // Determine if there is exactly one other profile with the
@@ -220,12 +219,14 @@ void RegisterFileHandlersWithOs(const AppId& app_id,
                                             &only_profile_with_app_installed))
     app_name_extension = GetAppNameExtensionForProfile(profile->GetPath());
 
+  std::set<std::string> file_extensions =
+      apps::GetFileExtensionsFromFileHandlers(file_handlers);
   std::set<base::string16> file_extensions16;
-  // Copy |file_extensions| to a string16 set in O(n) time by hinting that
-  // the appended elements should go at the end of the set.
-  std::transform(file_extensions.begin(), file_extensions.end(),
-                 std::inserter(file_extensions16, file_extensions16.end()),
-                 [](const std::string& ext) { return base::UTF8ToUTF16(ext); });
+  for (const auto& file_extension : file_extensions) {
+    // The file extensions in apps::FileHandler include a '.' prefix, which must
+    // be removed.
+    file_extensions16.insert(base::UTF8ToUTF16(file_extension.substr(1)));
+  }
 
   base::ThreadPool::PostTask(
       FROM_HERE,
