@@ -94,9 +94,9 @@ void FileHandlerManager::EnableAndRegisterOsFileHandlers(const AppId& app_id) {
   if (!file_handlers)
     return;
   std::set<std::string> file_extensions =
-      GetFileExtensionsFromFileHandlers(*file_handlers);
+      apps::GetFileExtensionsFromFileHandlers(*file_handlers);
   std::set<std::string> mime_types =
-      GetMimeTypesFromFileHandlers(*file_handlers);
+      apps::GetMimeTypesFromFileHandlers(*file_handlers);
   RegisterFileHandlersWithOs(app_id, app_name, profile(), file_extensions,
                              mime_types);
 }
@@ -251,7 +251,7 @@ const base::Optional<GURL> FileHandlerManager::GetMatchingFileHandlerURL(
   for (const auto& file_handler : *file_handlers) {
     bool all_launch_file_extensions_supported = true;
     std::set<std::string> supported_file_extensions =
-        GetFileExtensionsFromFileHandlers({file_handler});
+        apps::GetFileExtensionsFromFileHandlers({file_handler});
     for (const auto& file_extension : launch_file_extensions) {
       if (!supported_file_extensions.count(file_extension)) {
         all_launch_file_extensions_supported = false;
@@ -264,27 +264,6 @@ const base::Optional<GURL> FileHandlerManager::GetMatchingFileHandlerURL(
   }
 
   return base::nullopt;
-}
-
-std::set<std::string> GetFileExtensionsFromFileHandlers(
-    const apps::FileHandlers& file_handlers) {
-  std::set<std::string> file_extensions;
-  for (const auto& file_handler : file_handlers) {
-    for (const auto& accept_entry : file_handler.accept)
-      file_extensions.insert(accept_entry.file_extensions.begin(),
-                             accept_entry.file_extensions.end());
-  }
-  return file_extensions;
-}
-
-std::set<std::string> GetMimeTypesFromFileHandlers(
-    const apps::FileHandlers& file_handlers) {
-  std::set<std::string> mime_types;
-  for (const auto& file_handler : file_handlers) {
-    for (const auto& accept_entry : file_handler.accept)
-      mime_types.insert(accept_entry.mime_type);
-  }
-  return mime_types;
 }
 
 }  // namespace web_app

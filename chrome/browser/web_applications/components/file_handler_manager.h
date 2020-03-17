@@ -142,14 +142,6 @@ class FileHandlerManager : public AppRegistrarObserver {
   DISALLOW_COPY_AND_ASSIGN(FileHandlerManager);
 };
 
-// Compute the set of file extensions specified in |file_handlers|.
-std::set<std::string> GetFileExtensionsFromFileHandlers(
-    const apps::FileHandlers& file_handlers);
-
-// Compute the set of mime types specified in |file_handlers|.
-std::set<std::string> GetMimeTypesFromFileHandlers(
-    const apps::FileHandlers& file_handlers);
-
 }  // namespace web_app
 
 #endif  // CHROME_BROWSER_WEB_APPLICATIONS_COMPONENTS_FILE_HANDLER_MANAGER_H_
