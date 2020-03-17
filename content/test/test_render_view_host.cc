@@ -275,6 +275,15 @@ bool TestRenderViewHost::CreateRenderView(
     main_frame->BindInterfaceProviderReceiver(
         stub_interface_provider_remote.InitWithNewPipeAndPassReceiver());
     main_frame->SetRenderFrameCreated(true);
+
+    mojo::AssociatedRemote<blink::mojom::FrameWidgetHost> frame_widget_host;
+    auto frame_widget_host_receiver =
+        frame_widget_host.BindNewEndpointAndPassDedicatedReceiverForTesting();
+    mojo::AssociatedRemote<blink::mojom::FrameWidget> frame_widget;
+    auto frame_widget_receiver =
+        frame_widget.BindNewEndpointAndPassDedicatedReceiverForTesting();
+    GetWidget()->BindFrameWidgetInterfaces(
+        std::move(frame_widget_host_receiver), frame_widget.Unbind());
   }
 
   return true;

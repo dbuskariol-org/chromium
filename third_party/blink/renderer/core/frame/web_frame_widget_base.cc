@@ -263,6 +263,16 @@ void WebFrameWidgetBase::DragSourceSystemDragEnded() {
   CancelDrag();
 }
 
+void WebFrameWidgetBase::SetBackgroundOpaque(bool opaque) {
+  if (opaque) {
+    View()->ClearBaseBackgroundColorOverride();
+    View()->ClearBackgroundColorOverride();
+  } else {
+    View()->SetBaseBackgroundColorOverride(SK_ColorTRANSPARENT);
+    View()->SetBackgroundColorOverride(SK_ColorTRANSPARENT);
+  }
+}
+
 void WebFrameWidgetBase::CancelDrag() {
   // It's possible for this to be called while we're not doing a drag if
   // it's from a previous page that got unloaded.

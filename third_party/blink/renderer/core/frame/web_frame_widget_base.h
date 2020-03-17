@@ -174,6 +174,7 @@ class CORE_EXPORT WebFrameWidgetBase
 
   // mojom::blink::FrameWidget methods.
   void DragSourceSystemDragEnded() override;
+  void SetBackgroundOpaque(bool opaque) override;
 
   // Called when the FrameView for this Widget's local root is created.
   virtual void DidCreateLocalRootView() {}
