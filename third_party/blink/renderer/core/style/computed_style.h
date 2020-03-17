@@ -1944,10 +1944,15 @@ class ComputedStyle : public ComputedStyleBase,
         LengthSize(Length::Fixed(s.Width()), Length::Fixed(s.Height())));
   }
 
+  FloatRoundedRect GetBorderFor(const LayoutRect& border_rect) const;
+
   FloatRoundedRect GetRoundedBorderFor(
       const LayoutRect& border_rect,
       bool include_logical_left_edge = true,
       bool include_logical_right_edge = true) const;
+
+  FloatRoundedRect GetInnerBorderFor(const LayoutRect& border_rect) const;
+
   FloatRoundedRect GetRoundedInnerBorderFor(
       const LayoutRect& border_rect,
       bool include_logical_left_edge = true,
