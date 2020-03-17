@@ -6,6 +6,7 @@
 
 // clang-format off
 // #import {PasswordManagerImpl} from 'chrome://settings/settings.js';
+// #import 'chrome://settings/lazy_load.js';
 // #import {makeCompromisedCredential,  makePasswordCheckStatus} from 'chrome://test/settings/passwords_and_autofill_fake_data.m.js';
 // #import {getSyncAllPrefs,simulateSyncStatus} from 'chrome://test/settings/sync_test_util.m.js';
 // #import {flush} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';

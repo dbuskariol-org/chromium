@@ -5,6 +5,7 @@
 # Common namespace rewrites for all polymer_modulizer() or js_modulizer()
 # targets in Settings.
 settings_namespace_rewrites = [
+  "// #polymer3 |",
   "cr_slider.SliderTick|SliderTick",
   "settings.address.CountryDetailManager|CountryDetailManager",
   "settings.AboutPageBrowserProxy|AboutPageBrowserProxy",
