@@ -66043,6 +66043,17 @@ Full version information for the fingerprint enum values:
   <int value="1" label="Was used in draw"/>
 </enum>
 
+<enum name="UsedMimeTypeHandler">
+  <summary>
+    Reports the default MIME type handler that is being used to display a file.
+  </summary>
+  <int value="0" label="PdfExtension"/>
+  <int value="1" label="QuickOfficeComponentExtension"/>
+  <int value="2" label="QuickOfficeInternalExtension"/>
+  <int value="3" label="QuickOfficeExtension"/>
+  <int value="4" label="TestExtension"/>
+</enum>
+
 <enum name="UsedOmnibox">
   <int value="0" label="Used Omnibox"/>
 </enum>
