@@ -6843,7 +6843,7 @@ bool AXPlatformNodeWin::IsUIAControl() const {
   const ui::AXNodeData& data = GetData();
   return !((IsReadOnlySupported(data.role) && data.IsReadOnlyOrDisabled()) ||
            data.HasState(ax::mojom::State::kInvisible) ||
-           data.role == ax::mojom::Role::kIgnored);
+           (data.IsIgnored() && !data.HasState(ax::mojom::State::kFocusable)));
 }
 
 base::Optional<LONG> AXPlatformNodeWin::ComputeUIALandmarkType() const {
