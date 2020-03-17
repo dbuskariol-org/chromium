@@ -95,8 +95,7 @@ external/wpt/css/compositing/root-element-background-transparency.html [ Failure
 crbug.com/665058 http/tests/local/drag-over-remote-content.html [ Crash Timeout ]
 crbug.com/771003 http/tests/security/mixedContent/insecure-iframe-in-main-frame.html [ Failure ]
 
-crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag/cross-https.swap-scheme.https.html [ Timeout ]
-crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag/same-https.swap-scheme.https.html [ Timeout ]
+crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.https.html [ Timeout ]
 
 # Tests temporarily disabled with Site Isolation - uninvestigated bugs:
 # TODO(lukasza, alexmos): Burn down this list.
@@ -6588,18 +6587,8 @@ crbug.com/1006759 http/tests/devtools/elements/styles-1/edit-value-url-with-colo
 crbug.com/1006759 http/tests/devtools/sources/css-outline-dialog.js [ Skip ]
 
 #Mixed content autoupgrades make these tests not applicable, since they check for mixed content audio/video
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag/cross-http.keep-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag/cross-http.no-redirect.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag/cross-http.swap-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag/same-http.keep-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag/same-http.no-redirect.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag/same-http.swap-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag/cross-http.keep-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag/cross-http.no-redirect.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag/cross-http.swap-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag/same-http.keep-scheme.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag/same-http.no-redirect.https.html [ Failure ]
-crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag/same-http.swap-scheme.https.html [ Failure ]
+crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/audio-tag.https.html [ Failure ]
+crbug.com/1025274 external/wpt/mixed-content/gen/top.meta/unset/video-tag.https.html [ Failure ]
 crbug.com/1025274 http/tests/security/mixedContent/insecure-audio-video-in-main-frame.html [ Failure ]
 
 #Mixed content autoupgrade tests that can be re-enabled once image autoupgrades launch
