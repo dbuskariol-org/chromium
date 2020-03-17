@@ -57,6 +57,9 @@ const char kModeUnknownValue[] = "unknown";
 const base::TimeDelta kHostDiscoveryInterval = base::TimeDelta::FromSeconds(60);
 // -3 is chosen because -1 and -2 have special meaning in smbprovider.
 const int32_t kInvalidMountId = -3;
+// Maximum number of smbfs shares to be mounted at the same time, only enforced
+// on user-initiated mount requests.
+const size_t kMaxSmbFsShares = 16;
 
 net::NetworkInterfaceList GetInterfaces() {
   net::NetworkInterfaceList list;
@@ -270,6 +273,12 @@ void SmbService::Mount(const file_system_provider::MountOptions& options,
     // Prevent a share from being mounted twice. Although technically possible,
     // the UX when doing so is incomplete.
     std::move(callback).Run(SmbMountResult::kMountExists);
+    return;
+  }
+
+  if (IsSmbFsEnabled() && smbfs_shares_.size() >= kMaxSmbFsShares) {
+    // Prevent users from mounting an excessive number of shares.
+    std::move(callback).Run(SmbMountResult::kTooManyOpened);
     return;
   }
 
