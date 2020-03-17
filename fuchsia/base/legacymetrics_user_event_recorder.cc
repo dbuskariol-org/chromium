@@ -31,11 +31,10 @@ LegacyMetricsUserActionRecorder::TakeEvents() {
   return std::move(events_);
 }
 
-void LegacyMetricsUserActionRecorder::OnUserAction(
-    const std::string& event_name,
-    base::TimeTicks time) {
+void LegacyMetricsUserActionRecorder::OnUserAction(const std::string& action,
+                                                   base::TimeTicks time) {
   fuchsia::legacymetrics::UserActionEvent fidl_event;
-  fidl_event.set_name(event_name);
+  fidl_event.set_name(action);
   fidl_event.set_time(time.ToZxTime());
   events_.push_back(std::move(fidl_event));
 }

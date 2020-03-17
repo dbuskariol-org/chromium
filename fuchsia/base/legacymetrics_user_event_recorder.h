@@ -29,8 +29,8 @@ class LegacyMetricsUserActionRecorder {
   std::vector<fuchsia::legacymetrics::UserActionEvent> TakeEvents();
 
  private:
-  // base::UserActionCallback implementation.
-  void OnUserAction(const std::string& event_name, base::TimeTicks time);
+  // base::ActionCallback implementation.
+  void OnUserAction(const std::string& action, base::TimeTicks time);
 
   std::vector<fuchsia::legacymetrics::UserActionEvent> events_;
   const base::ActionCallback on_event_callback_;

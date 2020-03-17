@@ -11,45 +11,54 @@
 namespace cr_fuchsia {
 namespace {
 
-TEST(LegacyMetricsUserActionRecorderTest, ProduceAndConsume) {
+class LegacyMetricsUserActionRecorderTest : public testing::Test {
+ public:
+  LegacyMetricsUserActionRecorderTest() = default;
+  ~LegacyMetricsUserActionRecorderTest() override = default;
+
+  void SetUp() override {
+    base::SetRecordActionTaskRunner(base::ThreadTaskRunnerHandle::Get());
+  }
+
+ private:
+  base::test::SingleThreadTaskEnvironment task_environment;
+};
+
+TEST_F(LegacyMetricsUserActionRecorderTest, ProduceAndConsume) {
   constexpr char kExpectedUserAction1[] = "Hello";
   constexpr char kExpectedUserAction2[] = "There";
 
-  base::test::SingleThreadTaskEnvironment task_environment;
-  base::SetRecordActionTaskRunner(base::ThreadTaskRunnerHandle::Get());
-
   zx_time_t time_start = base::TimeTicks::Now().ToZxTime();
-  auto buffer = std::make_unique<LegacyMetricsUserActionRecorder>();
+  LegacyMetricsUserActionRecorder buffer;
   base::RecordComputedAction(kExpectedUserAction1);
-  EXPECT_TRUE(buffer->HasEvents());
+  EXPECT_TRUE(buffer.HasEvents());
   base::RecordComputedAction(kExpectedUserAction2);
 
-  auto events = buffer->TakeEvents();
-  EXPECT_FALSE(buffer->HasEvents());
+  auto events = buffer.TakeEvents();
+  EXPECT_FALSE(buffer.HasEvents());
   EXPECT_EQ(2u, events.size());
 
+  // Verify the contents of the buffer are as expected.
   EXPECT_EQ(kExpectedUserAction1, events[0].name());
   EXPECT_GE(events[0].time(), time_start);
-
   EXPECT_EQ(kExpectedUserAction2, events[1].name());
   EXPECT_GE(events[1].time(), time_start);
-
   EXPECT_GE(events[1].time(), events[0].time());
 
-  EXPECT_TRUE(buffer->TakeEvents().empty());
+  // Verify that the buffer is now empty.
+  EXPECT_TRUE(buffer.TakeEvents().empty());
 
+  // Add more data to the buffer, and then verify it, to ensure that recording
+  // continues to work.
   base::RecordComputedAction(kExpectedUserAction2);
-  EXPECT_TRUE(buffer->HasEvents());
-  events = buffer->TakeEvents();
-  EXPECT_FALSE(buffer->HasEvents());
+  EXPECT_TRUE(buffer.HasEvents());
+  events = buffer.TakeEvents();
+  EXPECT_FALSE(buffer.HasEvents());
   EXPECT_EQ(1u, events.size());
   EXPECT_EQ(kExpectedUserAction2, events[0].name());
 }
 
-TEST(LegacyMetricsUserActionRecorderTest, RecorderDeleted) {
-  base::test::SingleThreadTaskEnvironment task_environment;
-  base::SetRecordActionTaskRunner(base::ThreadTaskRunnerHandle::Get());
-
+TEST_F(LegacyMetricsUserActionRecorderTest, RecorderDeleted) {
   auto buffer = std::make_unique<LegacyMetricsUserActionRecorder>();
   buffer.reset();
 
@@ -58,11 +67,9 @@ TEST(LegacyMetricsUserActionRecorderTest, RecorderDeleted) {
   base::RecordComputedAction("NoCrashingPlz");
 }
 
-TEST(LegacyMetricsUserActionRecorderTest, EmptyBuffer) {
-  base::test::SingleThreadTaskEnvironment task_environment;
-  base::SetRecordActionTaskRunner(base::ThreadTaskRunnerHandle::Get());
-  auto buffer = std::make_unique<LegacyMetricsUserActionRecorder>();
-  EXPECT_FALSE(buffer->HasEvents());
+TEST_F(LegacyMetricsUserActionRecorderTest, EmptyBuffer) {
+  LegacyMetricsUserActionRecorder buffer;
+  EXPECT_FALSE(buffer.HasEvents());
 }
 
 }  // namespace
