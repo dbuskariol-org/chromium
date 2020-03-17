@@ -187,26 +187,16 @@ SearchTabHelper::SearchTabHelper(content::WebContents* web_contents)
 
   chrome_colors_service_ =
       chrome_colors::ChromeColorsFactory::GetForProfile(profile());
+
+  OmniboxTabHelper::CreateForWebContents(web_contents);
+  OmniboxTabHelper::FromWebContents(web_contents_)->AddObserver(this);
 }
 
 SearchTabHelper::~SearchTabHelper() {
   if (instant_service_)
     instant_service_->RemoveObserver(this);
-}
-
-void SearchTabHelper::OmniboxInputStateChanged() {
-  ipc_router_.SetInputInProgress(IsInputInProgress());
-}
-
-void SearchTabHelper::OmniboxFocusChanged(OmniboxFocusState state,
-                                          OmniboxFocusChangeReason reason) {
-  ipc_router_.OmniboxFocusChanged(state, reason);
-
-  // Don't send oninputstart/oninputend updates in response to focus changes
-  // if there's a navigation in progress. This prevents Chrome from sending
-  // a spurious oninputend when the user accepts a match in the omnibox.
-  if (web_contents_->GetController().GetPendingEntry() == nullptr)
-    ipc_router_.SetInputInProgress(IsInputInProgress());
+  if (auto* helper = OmniboxTabHelper::FromWebContents(web_contents_))
+    helper->RemoveObserver(this);
 }
 
 void SearchTabHelper::OnTabActivated() {
@@ -533,6 +523,21 @@ void SearchTabHelper::OnResultChanged(bool default_result_changed) {
                                          weak_factory_.GetWeakPtr(),
                                          match_index, match.ImageUrl().spec()));
   }
+}
+
+void SearchTabHelper::OnOmniboxInputStateChanged() {
+  ipc_router_.SetInputInProgress(IsInputInProgress());
+}
+
+void SearchTabHelper::OnOmniboxFocusChanged(OmniboxFocusState state,
+                                            OmniboxFocusChangeReason reason) {
+  ipc_router_.OmniboxFocusChanged(state, reason);
+
+  // Don't send oninputstart/oninputend updates in response to focus changes
+  // if there's a navigation in progress. This prevents Chrome from sending
+  // a spurious oninputend when the user accepts a match in the omnibox.
+  if (web_contents_->GetController().GetPendingEntry() == nullptr)
+    ipc_router_.SetInputInProgress(IsInputInProgress());
 }
 
 void SearchTabHelper::OnBitmapFetched(int match_index,
