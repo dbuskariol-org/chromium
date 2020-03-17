@@ -58,7 +58,8 @@ void SVGContainerPainter::Paint(const PaintInfo& paint_info) {
     base::Optional<ScopedPaintChunkProperties> scoped_paint_chunk_properties;
     if (layout_svg_container_.IsSVGViewportContainer() &&
         SVGLayoutSupport::IsOverflowHidden(layout_svg_container_)) {
-      const auto* fragment = paint_info.FragmentToPaint(layout_svg_container_);
+      const auto* fragment =
+          paint_info_before_filtering.FragmentToPaint(layout_svg_container_);
       if (!fragment)
         return;
       const auto* properties = fragment->PaintProperties();
@@ -67,9 +68,9 @@ void SVGContainerPainter::Paint(const PaintInfo& paint_info) {
       // properties are ready.
       if (properties && properties->OverflowClip()) {
         scoped_paint_chunk_properties.emplace(
-            paint_info.context.GetPaintController(),
+            paint_info_before_filtering.context.GetPaintController(),
             *properties->OverflowClip(), layout_svg_container_,
-            paint_info.DisplayItemTypeForClipping());
+            paint_info_before_filtering.DisplayItemTypeForClipping());
       }
     }
 
