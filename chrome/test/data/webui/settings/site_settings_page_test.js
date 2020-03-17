@@ -70,6 +70,10 @@ suite('SiteSettingsPage', function() {
   });
 
   test('CookiesLinkRowSublabel', function() {
+    loadTimeData.overrideValues({
+      privacySettingsRedesignEnabled: false,
+    });
+    setupPage();
     const allSettingsList = page.$$('#allSettingsList');
     assertEquals(
         allSettingsList.$$('#cookies').subLabel,
