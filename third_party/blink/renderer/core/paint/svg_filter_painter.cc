@@ -46,12 +46,6 @@ sk_sp<PaintRecord> SVGFilterRecordingContext::EndContent() {
   return content;
 }
 
-void SVGFilterRecordingContext::Abort() {
-  if (!paint_controller_)
-    return;
-  EndContent();
-}
-
 static void PaintFilteredContent(GraphicsContext& context,
                                  const LayoutObject& object,
                                  const DisplayItemClient& display_item_client,
@@ -78,18 +72,14 @@ static void PaintFilteredContent(GraphicsContext& context,
   context.Restore();
 }
 
-GraphicsContext* SVGFilterPainter::PrepareEffect(
-    const LayoutObject& object,
-    SVGFilterRecordingContext& recording_context) {
-  filter_.ClearInvalidationMask();
-
+FilterData* SVGFilterPainter::PrepareEffect(const LayoutObject& object) {
   SVGElementResourceClient* client = SVGResources::GetClient(object);
   if (FilterData* filter_data = client->GetFilterData()) {
     // If the filterData already exists we do not need to record the content
     // to be filtered. This can occur if the content was previously recorded
     // or we are in a cycle.
     filter_data->UpdateStateOnPrepare();
-    return nullptr;
+    return filter_data;
   }
 
   auto* node_map = MakeGarbageCollected<SVGFilterGraphNodeMap>();
@@ -106,24 +96,15 @@ GraphicsContext* SVGFilterPainter::PrepareEffect(
       MakeGarbageCollected<FilterData>(filter->LastEffect(), node_map);
   // TODO(pdr): Can this be moved out of painter?
   client->SetFilterData(filter_data);
-  return recording_context.BeginContent();
+  return filter_data;
 }
 
 void SVGFilterPainter::FinishEffect(
     const LayoutObject& object,
     const DisplayItemClient& display_item_client,
     SVGFilterRecordingContext& recording_context) {
-  SVGElementResourceClient* client = SVGResources::GetClient(object);
-  FilterData* filter_data = client->GetFilterData();
-  if (!filter_data) {
-    // Our state was torn down while we were being painted (selection style for
-    // <text> can have this effect), or it was never created (invalid filter.)
-    // In the former case we may have been in the process of recording content,
-    // so make sure we put recording state into a consistent state.
-    recording_context.Abort();
-    return;
-  }
-
+  FilterData* filter_data = SVGResources::GetClient(object)->GetFilterData();
+  DCHECK(filter_data);
   if (!filter_data->UpdateStateOnFinish())
     return;
 
