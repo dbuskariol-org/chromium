@@ -88,6 +88,10 @@ const base::Feature kPromptAppForDeepScanning{
 const base::Feature kRealTimeUrlLookupEnabled{
     "SafeBrowsingRealTimeUrlLookupEnabled", base::FEATURE_DISABLED_BY_DEFAULT};
 
+const base::Feature kRealTimeUrlLookupEnabledForEP{
+    "SafeBrowsingRealTimeUrlLookupEnabledForEP",
+    base::FEATURE_ENABLED_BY_DEFAULT};
+
 const base::Feature kRealTimeUrlLookupEnabledWithToken{
     "SafeBrowsingRealTimeUrlLookupEnabledWithToken",
     base::FEATURE_DISABLED_BY_DEFAULT};
@@ -136,6 +140,7 @@ constexpr struct {
     {&kPasswordProtectionForSignedInUsers, true},
     {&kPromptAppForDeepScanning, true},
     {&kRealTimeUrlLookupEnabled, true},
+    {&kRealTimeUrlLookupEnabledForEP, true},
     {&kRealTimeUrlLookupEnabledWithToken, true},
     {&kSafeBrowsingAvailableOnIOS, true},
     {&kSafeBrowsingSeparateNetworkContexts, true},
