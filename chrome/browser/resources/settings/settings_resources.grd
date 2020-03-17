@@ -709,6 +709,12 @@
                  file="autofill_page/passwords_export_dialog.js"
                  type="chrome_html"
                  preprocess="true" />
+      <structure name="IDR_SETTINGS_PASSWORD_REMOVE_CONFIRMATION_DIALOG_HTML"
+                 file="autofill_page/password_remove_confirmation_dialog.html"
+                 type="chrome_html" />
+       <structure name="IDR_SETTINGS_PASSWORD_REMOVE_CONFIRMATION_DIALOG_JS"
+                 file="autofill_page/password_remove_confirmation_dialog.js"
+                 type="chrome_html" />
       <structure name="IDR_SETTINGS_PAYMENTS_SECTION_HTML"
                  file="autofill_page/payments_section.html"
                  type="chrome_html" />
