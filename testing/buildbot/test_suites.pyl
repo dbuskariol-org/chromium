@@ -2621,7 +2621,12 @@
     'gpu_webgpu_integration_isolated_scripts': {
       'webgpu_blink_web_tests': {
         'name': 'webgpu_blink_web_tests',
-        'args': [ '--driver-logging' ],
+        'args': [
+          '--driver-logging',
+          # Disable parallel jobs to work around consistent test timeout flakes.
+          # TODO(crbug.com/953991): Solve this and remove the workaround.
+          '--jobs=1',
+        ],
         'win_args': [ '--additional-driver-flag=--disable-gpu-sandbox' ],
         'win64_args': [ '--target=Release_x64' ],
         'mac_args': [
