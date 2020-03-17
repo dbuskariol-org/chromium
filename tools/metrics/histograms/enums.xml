@@ -38276,6 +38276,7 @@ from previous Chrome versions.
   <int value="-1001837588" label="EnableAppReinstallZeroState:enabled"/>
   <int value="-1000671573" label="TemporaryUnexpireFlagsM80:enabled"/>
   <int value="-998731974" label="WinUseBrowserSpellChecker:enabled"/>
+  <int value="-998310305" label="OmniboxContextMenuShowFullUrls:disabled"/>
   <int value="-998255750" label="ExperimentalKeyboardLockUI:enabled"/>
   <int value="-996868396" label="SmartDimNewMlAgent:enabled"/>
   <int value="-996673716" label="enable-web-app-frame"/>
@@ -40771,6 +40772,7 @@ from previous Chrome versions.
   <int value="1995322219" label="EmojiHandwritingVoiceInput:enabled"/>
   <int value="1996125159" label="AutoplayMutedVideos:enabled"/>
   <int value="1997047666" label="NTPSnippetsIncreasedVisibility:disabled"/>
+  <int value="1997931863" label="OmniboxContextMenuShowFullUrls:enabled"/>
   <int value="2000091128" label="enable-touch-hover"/>
   <int value="2001505416" label="CorbAllowlistAlsoAppliesToOorCors:enabled"/>
   <int value="2001562962"

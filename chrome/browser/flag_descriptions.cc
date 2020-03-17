@@ -290,6 +290,11 @@ const char kContextMenuSearchWithGoogleLensDescription[] =
     "Replaces default image search with an intent to Google Lens when "
     "supported.";
 
+const char kOmniboxContextMenuShowFullUrlsName[] =
+    "Context menu show full URLs";
+const char kOmniboxContextMenuShowFullUrlsDescription[] =
+    "Provides an omnibox context menu option that prevents URL elisions.";
+
 const char kClickToOpenPDFName[] = "Click to open embedded PDFs";
 const char kClickToOpenPDFDescription[] =
     "When the PDF plugin is unavailable, show a click-to-open placeholder for "
