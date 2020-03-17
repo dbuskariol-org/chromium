@@ -1224,7 +1224,16 @@
     'fuchsia_gpu_telemetry_tests': {
       'hardware_accelerated_feature': {
         'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
-      }
+      },
+      'info_collection': {
+        'args': [
+          '--expected-vendor-id',
+          '${gpu_vendor_id}',
+          '--expected-device-id',
+          '${gpu_device_id}',
+        ],
+        'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
+      },
     },
 
     'fuchsia_gtests': {
