@@ -306,7 +306,7 @@ js_type_check("closure_compile_module") {
     #    ":category_setting_exceptions.m",
     #    ":chooser_exception_list.m",
     #    ":chooser_exception_list_entry.m",
-    #    ":constants.m",
+    ":constants.m",
     ":cookie_info.m",
 
     #    ":edit_exception_dialog.m",
@@ -323,9 +323,10 @@ js_type_check("closure_compile_module") {
     #    ":site_details_permission.m",
     #    ":site_entry.m",
     #    ":site_list.m",
-    #    ":site_list_entry.m",
-    #    ":site_settings_behavior.m",
-    #    ":site_settings_prefs_browser_proxy.m",
+    ":site_list_entry.m",
+    ":site_settings_behavior.m",
+    ":site_settings_prefs_browser_proxy.m",
+
     #    ":website_usage_private_api.m",
     #    ":zoom_levels.m",
   ]
@@ -397,9 +398,6 @@ js_library("chooser_exception_list_entry.m") {
 
 js_library("constants.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/constants.m.js" ]
-  deps = [
-    # TODO: Fill those in.
-  ]
   extra_deps = [ ":modulize" ]
 }
 
@@ -465,6 +463,7 @@ js_library("site_data_details_subpage.m") {
     "..:route.m",
     "..:router.m",
     "//third_party/polymer/v3_0/components-chromium/iron-list:iron-list",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
     "//ui/webui/resources/js:load_time_data.m",
     "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
@@ -514,7 +513,13 @@ js_library("site_list.m") {
 js_library("site_list_entry.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/site_list_entry.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":constants.m",
+    ":site_settings_behavior.m",
+    "..:route.m",
+    "..:router.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/cr_elements/policy:cr_policy_pref_indicator",
+    "//ui/webui/resources/js/cr/ui:focus_row_behavior.m",
   ]
   extra_deps = [ ":site_list_entry_module" ]
 }
@@ -522,7 +527,11 @@ js_library("site_list_entry.m") {
 js_library("site_settings_behavior.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/site_settings_behavior.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":constants.m",
+    ":site_settings_prefs_browser_proxy.m",
+    "//ui/webui/resources/js:assert.m",
+    "//ui/webui/resources/js:icon.m",
+    "//ui/webui/resources/js:load_time_data.m",
   ]
   extra_deps = [ ":modulize" ]
 }
@@ -530,7 +539,8 @@ js_library("site_settings_behavior.m") {
 js_library("site_settings_prefs_browser_proxy.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":constants.m",
+    "//ui/webui/resources/js:cr.m",
   ]
   extra_deps = [ ":modulize" ]
 }
@@ -704,6 +714,15 @@ polymer_modulizer("site_list_entry") {
   js_file = "site_list_entry.js"
   html_file = "site_list_entry.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [
+                   "chrome/browser/resources/settings/route.html|routes",
+                   "chrome/browser/resources/settings/router.html|Router",
+                   "chrome/browser/resources/settings/site_settings/constants.html|ChooserType,ContentSettingsTypes,SITE_EXCEPTION_WILDCARD",
+                   "chrome/browser/resources/settings/site_settings/site_settings_behavior.html|SiteSettingsBehavior",
+                   "chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.html|SiteException",
+                   "ui/webui/resources/html/assert.html|assert",
+                 ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("website_usage_private_api") {
