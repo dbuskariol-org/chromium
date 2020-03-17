@@ -71451,6 +71451,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="XRRuntimeAvailable">
+  <obsolete>
+    Removed 03/2020
+  </obsolete>
   <int value="0" label="None"/>
   <int value="1" label="OpenVR"/>
 </enum>
