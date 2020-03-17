@@ -2621,13 +2621,7 @@
     'gpu_webgpu_integration_isolated_scripts': {
       'webgpu_blink_web_tests': {
         'name': 'webgpu_blink_web_tests',
-        'args': [
-          '--additional-driver-flag=--enable-unsafe-webgpu',
-          '--driver-logging',
-          '--ignore-default-expectations',
-          '--additional-expectations=../../third_party/blink/web_tests/WebGPUExpectations',
-          '--isolated-script-test-filter=wpt_internal/webgpu/*',
-        ],
+        'args': [ '--driver-logging' ],
         'win_args': [ '--additional-driver-flag=--disable-gpu-sandbox' ],
         'win64_args': [ '--target=Release_x64' ],
         'mac_args': [
@@ -2645,7 +2639,7 @@
           ],
           'script': '//third_party/blink/tools/merge_web_test_results.py',
         },
-        'isolate_name': 'blink_web_tests',
+        'isolate_name': 'webgpu_blink_web_tests',
       },
     },
 
