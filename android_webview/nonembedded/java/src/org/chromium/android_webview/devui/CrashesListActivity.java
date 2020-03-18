@@ -273,7 +273,7 @@ public class CrashesListActivity extends Activity {
                                         + " Do you want to proceed?")
                                 .setPositiveButton("Upload",
                                         (dialog, id) -> attemptUploadCrash(crashInfo.localId))
-                                .setNegativeButton("Cancel", (dialog, id) -> finish())
+                                .setNegativeButton("Cancel", (dialog, id) -> dialog.dismiss())
                                 .create()
                                 .show();
                     } else {
