@@ -147,7 +147,7 @@ void LayoutListMarker::UpdateLayout() {
   } else {
     const SimpleFontData* font_data = StyleRef().GetFont().PrimaryFont();
     DCHECK(font_data);
-    SetLogicalWidth(MinPreferredLogicalWidth());
+    SetLogicalWidth(PreferredLogicalWidths().min_size);
     SetLogicalHeight(
         LayoutUnit(font_data ? font_data->GetFontMetrics().Height() : 0));
   }
@@ -171,7 +171,7 @@ void LayoutListMarker::ImageChanged(WrappedImagePtr o, CanDeferInvalidation) {
 }
 
 void LayoutListMarker::UpdateMarginsAndContent() {
-  UpdateMargins(MinPreferredLogicalWidth());
+  UpdateMargins(PreferredLogicalWidths().min_size);
 }
 
 void LayoutListMarker::UpdateContent() {

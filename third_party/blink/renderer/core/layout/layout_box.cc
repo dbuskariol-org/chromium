@@ -146,8 +146,9 @@ LayoutUnit FileUploadControlIntrinsicInlineSize(const HTMLInputElement& input,
       font, label, box.StyleRef(), TextRun::kAllowTrailingExpansion));
   if (HTMLInputElement* button = input.UploadButton()) {
     if (LayoutObject* button_layout_object = button->GetLayoutObject()) {
-      default_label_width += button_layout_object->MaxPreferredLogicalWidth() +
-                             LayoutFileUploadControl::kAfterButtonSpacing;
+      default_label_width +=
+          button_layout_object->PreferredLogicalWidths().max_size +
+          LayoutFileUploadControl::kAfterButtonSpacing;
     }
   }
   return LayoutUnit(
@@ -1489,24 +1490,11 @@ bool LayoutBox::ApplyBoxClips(
 }
 
 MinMaxSizes LayoutBox::ComputeIntrinsicLogicalWidths() const {
-  return {MinPreferredLogicalWidth(), MaxPreferredLogicalWidth()};
-}
-
-LayoutUnit LayoutBox::MinPreferredLogicalWidth() const {
-  if (PreferredLogicalWidthsDirty()) {
-#if DCHECK_IS_ON()
-    SetLayoutNeededForbiddenScope layout_forbidden_scope(
-        const_cast<LayoutBox&>(*this));
-#endif
-    const_cast<LayoutBox*>(this)->ComputePreferredLogicalWidths();
-    DCHECK(!PreferredLogicalWidthsDirty());
-  }
-
-  return min_preferred_logical_width_;
+  return PreferredLogicalWidths();
 }
 
 DISABLE_CFI_PERF
-LayoutUnit LayoutBox::MaxPreferredLogicalWidth() const {
+MinMaxSizes LayoutBox::PreferredLogicalWidths() const {
   if (PreferredLogicalWidthsDirty()) {
 #if DCHECK_IS_ON()
     SetLayoutNeededForbiddenScope layout_forbidden_scope(
@@ -1516,7 +1504,7 @@ LayoutUnit LayoutBox::MaxPreferredLogicalWidth() const {
     DCHECK(!PreferredLogicalWidthsDirty());
   }
 
-  return max_preferred_logical_width_;
+  return {min_preferred_logical_width_, max_preferred_logical_width_};
 }
 
 LayoutUnit LayoutBox::OverrideLogicalWidth() const {
@@ -3238,7 +3226,7 @@ void LayoutBox::ComputeLogicalWidth(
     if (treat_as_replaced) {
       computed_values.extent_ = std::max(
           ComputeReplacedLogicalWidth() + BorderAndPaddingLogicalWidth(),
-          MinPreferredLogicalWidth());
+          PreferredLogicalWidths().min_size);
     }
     return;
   }
@@ -3413,9 +3401,9 @@ LayoutUnit LayoutBox::ComputeLogicalWidthUsing(
     // TODO(crbug.com/710026): Remove const_cast
     LayoutUnit w = LogicalWidth();
     const_cast<LayoutBox*>(this)->SetLogicalWidth(LayoutUnit());
+    MinMaxSizes preferred_logical_widths = PreferredLogicalWidths();
     LayoutUnit result =
-        std::max(MinPreferredLogicalWidth(),
-                 std::min(MaxPreferredLogicalWidth(), logical_width_result));
+        preferred_logical_widths.ClampSizeToMinAndMax(logical_width_result);
     const_cast<LayoutBox*>(this)->SetLogicalWidth(w);
     return result;
   }
@@ -4825,13 +4813,9 @@ void LayoutBox::ComputeLogicalLeftPositionedOffset(
 LayoutUnit LayoutBox::ShrinkToFitLogicalWidth(
     LayoutUnit available_logical_width,
     LayoutUnit borders_plus_padding) const {
-  LayoutUnit preferred_logical_width =
-      MaxPreferredLogicalWidth() - borders_plus_padding;
-  LayoutUnit preferred_min_logical_width =
-      MinPreferredLogicalWidth() - borders_plus_padding;
-  return std::min(
-      std::max(preferred_min_logical_width, available_logical_width),
-      preferred_logical_width);
+  MinMaxSizes sizes = PreferredLogicalWidths();
+  sizes -= borders_plus_padding;
+  return sizes.ShrinkToFit(available_logical_width);
 }
 
 void LayoutBox::ComputePositionedLogicalWidthUsing(

@@ -1656,8 +1656,10 @@ void LayoutBlock::ComputeChildPreferredLogicalWidths(
         ToLayoutBox(child).ComputeLogicalHeightWithoutLayout();
     return;
   }
-  min_preferred_logical_width = child.MinPreferredLogicalWidth();
-  max_preferred_logical_width = child.MaxPreferredLogicalWidth();
+
+  MinMaxSizes child_preferred_logical_widths = child.PreferredLogicalWidths();
+  min_preferred_logical_width = child_preferred_logical_widths.min_size;
+  max_preferred_logical_width = child_preferred_logical_widths.max_size;
 
   // For non-replaced blocks if the inline size is min|max-content or a definite
   // size the min|max-content contribution is that size plus border, padding and

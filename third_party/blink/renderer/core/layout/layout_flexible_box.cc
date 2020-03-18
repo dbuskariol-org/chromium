@@ -642,9 +642,9 @@ LayoutUnit LayoutFlexibleBox::ComputeMainAxisExtentForChild(
   // that here. (Compare code in LayoutBlock::computePreferredLogicalWidths)
   if (child.StyleRef().LogicalWidth().IsAuto() && !HasAspectRatio(child)) {
     if (size.IsMinContent())
-      return child.MinPreferredLogicalWidth() - border_and_padding;
+      return child.PreferredLogicalWidths().min_size - border_and_padding;
     if (size.IsMaxContent())
-      return child.MaxPreferredLogicalWidth() - border_and_padding;
+      return child.PreferredLogicalWidths().max_size - border_and_padding;
   }
   return child.ComputeLogicalWidthUsing(size_type, size, ContentLogicalWidth(),
                                         this) -
@@ -828,7 +828,7 @@ void LayoutFlexibleBox::CacheChildMainSize(const LayoutBox& child) {
                                      DisplayLockLifecycleTarget::kChildren));
   LayoutUnit main_size;
   if (MainAxisIsInlineAxis(child)) {
-    main_size = child.MaxPreferredLogicalWidth();
+    main_size = child.PreferredLogicalWidths().max_size;
   } else {
     if (FlexBasisForChild(child).IsPercentOrCalc() &&
         !MainAxisLengthIsDefinite(child, FlexBasisForChild(child))) {
@@ -915,7 +915,7 @@ LayoutUnit LayoutFlexibleBox::ComputeInnerFlexBaseSizeForChild(
   if (MainAxisIsInlineAxis(child)) {
     // We don't need to add ScrollbarLogicalWidth here because the preferred
     // width includes the scrollbar, even for overflow: auto.
-    main_axis_extent = child.MaxPreferredLogicalWidth();
+    main_axis_extent = child.PreferredLogicalWidths().max_size;
   } else {
     // The needed value here is the logical height. This value does not include
     // the border/scrollbar/padding size, so we have to add the scrollbar.

@@ -329,12 +329,10 @@ MinMaxSizes LayoutDeprecatedFlexibleBox::ComputeIntrinsicLogicalWidths() const {
     if (child->IsOutOfFlowPositioned())
       continue;
 
-    LayoutUnit margin = MarginWidthForChild(child);
-    LayoutUnit width = child->MinPreferredLogicalWidth() + margin;
-    sizes.min_size = std::max(width, sizes.min_size);
+    MinMaxSizes child_sizes = child->PreferredLogicalWidths();
+    child_sizes += MarginWidthForChild(child);
 
-    width = child->MaxPreferredLogicalWidth() + margin;
-    sizes.max_size = std::max(width, sizes.max_size);
+    sizes.Encompass(child_sizes);
   }
 
   sizes.max_size = std::max(sizes.min_size, sizes.max_size);
