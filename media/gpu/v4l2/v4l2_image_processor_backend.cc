@@ -65,10 +65,6 @@ void FillV4L2BufferByGpuMemoryBufferHandle(
       gmb_handle.native_pixmap_handle.planes;
 
   for (size_t i = 0; i < num_planes; ++i) {
-    const int bytes_used =
-        VideoFrame::PlaneSize(fourcc.ToVideoPixelFormat(), i, coded_size)
-            .GetArea();
-
     if (fourcc.IsMultiPlanar()) {
       // TODO(crbug.com/901264): The way to pass an offset within a DMA-buf
       // is not defined in V4L2 specification, so we abuse data_offset for
@@ -80,10 +76,10 @@ void FillV4L2BufferByGpuMemoryBufferHandle(
       buffer->SetPlaneSize(i, planes[i].size + planes[i].offset);
       // Workaround: filling length should not be needed. This is a bug of
       // videobuf2 library.
-      buffer->SetPlaneBytesUsed(i, bytes_used + planes[i].offset);
+      buffer->SetPlaneBytesUsed(i, planes[i].size + planes[i].offset);
     } else {
       // There is no need of filling data_offset for a single-planar format.
-      buffer->SetPlaneBytesUsed(i, bytes_used);
+      buffer->SetPlaneBytesUsed(i, planes[i].size);
     }
   }
 }
