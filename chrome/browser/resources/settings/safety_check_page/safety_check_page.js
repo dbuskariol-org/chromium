@@ -65,6 +65,7 @@ let UpdatesChangedEvent;
  * @typedef {{
  *   newState: settings.SafetyCheckPasswordsStatus,
  *   displayString: string,
+ *   buttonString: string,
  * }}
  */
 let PasswordsChangedEvent;
@@ -168,6 +169,12 @@ Polymer({
      * @private
      */
     extensionsDisplayString_: String,
+
+    /**
+     * UI string to display in the password button.
+     * @private
+     */
+    passwordsButtonString_: String,
   },
 
   /** @private {settings.SafetyCheckBrowserProxy} */
@@ -271,6 +278,7 @@ Polymer({
    */
   onSafetyCheckPasswordsChanged_: function(event) {
     this.passwordsDisplayString_ = event.displayString;
+    this.passwordsButtonString_ = event.buttonString;
     this.passwordsStatus_ = event.newState;
     this.updateParentFromChildren_();
   },
