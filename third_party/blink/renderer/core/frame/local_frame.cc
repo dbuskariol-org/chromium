@@ -770,7 +770,7 @@ void LocalFrame::SetPrinting(bool printing,
                                      maximum_shrink_ratio);
   } else {
     if (LayoutView* layout_view = View()->GetLayoutView()) {
-      layout_view->SetPreferredLogicalWidthsDirty();
+      layout_view->SetIntrinsicLogicalWidthsDirty();
       layout_view->SetNeedsLayout(layout_invalidation_reason::kPrintingChanged);
       layout_view->SetShouldDoFullPaintInvalidationForViewAndAllDescendants();
     }

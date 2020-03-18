@@ -3085,7 +3085,7 @@ void LocalFrameView::ForceLayoutForPagination(
         static_cast<LayoutUnit>(page_logical_height);
     layout_view->SetLogicalWidth(floored_page_logical_width);
     layout_view->SetPageLogicalHeight(floored_page_logical_height);
-    layout_view->SetNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
+    layout_view->SetNeedsLayoutAndIntrinsicWidthsRecalcAndFullPaintInvalidation(
         layout_invalidation_reason::kPrintingChanged);
     UpdateLayout();
 
@@ -3121,8 +3121,9 @@ void LocalFrameView::ForceLayoutForPagination(
           static_cast<LayoutUnit>(page_logical_height);
       layout_view->SetLogicalWidth(floored_page_logical_width);
       layout_view->SetPageLogicalHeight(floored_page_logical_height);
-      layout_view->SetNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-          layout_invalidation_reason::kPrintingChanged);
+      layout_view
+          ->SetNeedsLayoutAndIntrinsicWidthsRecalcAndFullPaintInvalidation(
+              layout_invalidation_reason::kPrintingChanged);
       UpdateLayout();
 
       PhysicalRect updated_document_rect(layout_view->DocumentRect());
