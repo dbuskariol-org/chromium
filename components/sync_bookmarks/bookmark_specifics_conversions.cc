@@ -201,7 +201,8 @@ sync_pb::EntitySpecifics CreateSpecificsFromBookmarkNode(
     bm_specifics->set_guid(node->guid());
   }
 
-  bm_specifics->set_title(SpecificsTitleFromNodeTitle(node->GetTitle()));
+  bm_specifics->set_legacy_canonicalized_title(
+      SpecificsTitleFromNodeTitle(node->GetTitle()));
   bm_specifics->set_creation_time_us(
       node->date_added().ToDeltaSinceWindowsEpoch().InMicroseconds());
 
@@ -255,9 +256,10 @@ const bookmarks::BookmarkNode* CreateBookmarkNodeFromSpecifics(
       GetBookmarkMetaInfo(specifics);
   const bookmarks::BookmarkNode* node;
   if (is_folder) {
-    node = model->AddFolder(parent, index,
-                            NodeTitleFromSpecificsTitle(specifics.title()),
-                            &metainfo, specifics.guid());
+    node = model->AddFolder(
+        parent, index,
+        NodeTitleFromSpecificsTitle(specifics.legacy_canonicalized_title()),
+        &metainfo, specifics.guid());
   } else {
     const int64_t create_time_us = specifics.creation_time_us();
     base::Time create_time = base::Time::FromDeltaSinceWindowsEpoch(
@@ -265,7 +267,8 @@ const bookmarks::BookmarkNode* CreateBookmarkNodeFromSpecifics(
         // always used the Windows epoch.
         base::TimeDelta::FromMicroseconds(create_time_us));
     node = model->AddURL(
-        parent, index, NodeTitleFromSpecificsTitle(specifics.title()),
+        parent, index,
+        NodeTitleFromSpecificsTitle(specifics.legacy_canonicalized_title()),
         GURL(specifics.url()), &metainfo, create_time, specifics.guid());
   }
   SetBookmarkFaviconFromSpecifics(specifics, node, favicon_service);
@@ -292,7 +295,8 @@ void UpdateBookmarkNodeFromSpecifics(
     model->SetURL(node, GURL(specifics.url()));
   }
 
-  model->SetTitle(node, NodeTitleFromSpecificsTitle(specifics.title()));
+  model->SetTitle(node, NodeTitleFromSpecificsTitle(
+                            specifics.legacy_canonicalized_title()));
   model->SetNodeMetaInfoMap(node, GetBookmarkMetaInfo(specifics));
   SetBookmarkFaviconFromSpecifics(specifics, node, favicon_service);
 }

@@ -79,7 +79,7 @@ TEST(BookmarkSpecificsConversionsTest, ShouldCreateSpecificsFromBookmarkNode) {
       node, model.get(), /*force_favicon_load=*/false, /*include_guid=*/true);
   const sync_pb::BookmarkSpecifics& bm_specifics = specifics.bookmark();
   EXPECT_THAT(bm_specifics.guid(), Eq(node->guid()));
-  EXPECT_THAT(bm_specifics.title(), Eq(kTitle));
+  EXPECT_THAT(bm_specifics.legacy_canonicalized_title(), Eq(kTitle));
   EXPECT_THAT(GURL(bm_specifics.url()), Eq(kUrl));
   EXPECT_THAT(
       base::Time::FromDeltaSinceWindowsEpoch(
@@ -109,7 +109,7 @@ TEST(BookmarkSpecificsConversionsTest,
   sync_pb::EntitySpecifics specifics = CreateSpecificsFromBookmarkNode(
       node, model.get(), /*force_favicon_load=*/false, /*include_guid=*/false);
   const sync_pb::BookmarkSpecifics& bm_specifics = specifics.bookmark();
-  ASSERT_THAT(bm_specifics.title(), Eq(kTitle));
+  ASSERT_THAT(bm_specifics.legacy_canonicalized_title(), Eq(kTitle));
   ASSERT_THAT(GURL(bm_specifics.url()), Eq(kUrl));
   EXPECT_FALSE(bm_specifics.has_guid());
 }
@@ -130,7 +130,8 @@ TEST(BookmarkSpecificsConversionsTest,
     sync_pb::EntitySpecifics specifics = CreateSpecificsFromBookmarkNode(
         node, model.get(), /*force_favicon_load=*/false, /*include_guid=*/true);
     // Legacy clients append a space to illegal titles.
-    EXPECT_THAT(specifics.bookmark().title(), Eq(illegal_title + " "));
+    EXPECT_THAT(specifics.bookmark().legacy_canonicalized_title(),
+                Eq(illegal_title + " "));
   }
 }
 
@@ -208,7 +209,7 @@ TEST(BookmarkSpecificsConversionsTest, ShouldCreateBookmarkNodeFromSpecifics) {
   bm_specifics->set_guid(kGuid);
   bm_specifics->set_icon_url(kIconUrl.spec());
   bm_specifics->set_favicon("PNG");
-  bm_specifics->set_title(kTitle);
+  bm_specifics->set_legacy_canonicalized_title(kTitle);
   bm_specifics->set_creation_time_us(
       kTime.ToDeltaSinceWindowsEpoch().InMicroseconds());
   sync_pb::MetaInfo* meta_info1 = bm_specifics->add_meta_info();
@@ -257,7 +258,7 @@ TEST(BookmarkSpecificsConversionsTest,
     bm_specifics->set_url("http://www.url.com");
     bm_specifics->set_guid(base::GenerateGUID());
     // Legacy clients append an extra space to illegal clients.
-    bm_specifics->set_title(illegal_title + " ");
+    bm_specifics->set_legacy_canonicalized_title(illegal_title + " ");
     const bookmarks::BookmarkNode* node = CreateBookmarkNodeFromSpecifics(
         *bm_specifics,
         /*parent=*/model->bookmark_bar_node(), index++,
@@ -280,7 +281,7 @@ TEST(BookmarkSpecificsConversionsTest,
   bm_specifics->set_url(kUrl.spec());
   bm_specifics->set_guid(kGuid);
   bm_specifics->set_favicon("PNG");
-  bm_specifics->set_title(kTitle);
+  bm_specifics->set_legacy_canonicalized_title(kTitle);
 
   std::unique_ptr<bookmarks::BookmarkModel> model =
       bookmarks::TestBookmarkClient::CreateModel();
@@ -327,7 +328,7 @@ TEST(BookmarkSpecificsConversionsTest, ShouldUpdateBookmarkNodeFromSpecifics) {
   bm_specifics->set_guid(node->guid());
   bm_specifics->set_icon_url(kNewIconUrl.spec());
   bm_specifics->set_favicon("PNG");
-  bm_specifics->set_title(kNewTitle);
+  bm_specifics->set_legacy_canonicalized_title(kNewTitle);
   bm_specifics->set_creation_time_us(
       kTime.ToDeltaSinceWindowsEpoch().InMicroseconds());
   sync_pb::MetaInfo* meta_info1 = bm_specifics->add_meta_info();

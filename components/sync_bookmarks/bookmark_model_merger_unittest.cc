@@ -72,7 +72,7 @@ syncer::UpdateResponseData CreateUpdateResponseData(
   sync_pb::BookmarkSpecifics* bookmark_specifics =
       data.specifics.mutable_bookmark();
   bookmark_specifics->set_guid(*guid);
-  bookmark_specifics->set_title(title);
+  bookmark_specifics->set_legacy_canonicalized_title(title);
   bookmark_specifics->set_url(url);
   bookmark_specifics->set_icon_url(icon_url);
   bookmark_specifics->set_favicon(icon_data);
