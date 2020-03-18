@@ -170,13 +170,12 @@ template <typename NodeType, typename... Args>
 std::unique_ptr<NodeType> PerformanceManagerImpl::CreateNodeImpl(
     base::OnceCallback<void(NodeType*)> creation_callback,
     Args&&... constructor_args) {
-  std::unique_ptr<NodeType> new_node = std::make_unique<NodeType>(
-      &graph_, std::forward<Args>(constructor_args)...);
-  GetTaskRunner()->PostTask(
-      FROM_HERE, base::BindOnce(&AddNodeAndInvokeCreationCallback<NodeType>,
-                                std::move(creation_callback),
-                                base::Unretained(new_node.get()),
-                                base::Unretained(&graph_)));
+  std::unique_ptr<NodeType> new_node =
+      std::make_unique<NodeType>(std::forward<Args>(constructor_args)...);
+  CallOnGraphImpl(FROM_HERE,
+                  base::BindOnce(&AddNodeAndInvokeCreationCallback<NodeType>,
+                                 std::move(creation_callback),
+                                 base::Unretained(new_node.get())));
   return new_node;
 }
 
