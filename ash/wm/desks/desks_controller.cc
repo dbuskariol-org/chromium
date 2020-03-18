@@ -39,8 +39,8 @@ namespace ash {
 
 namespace {
 
-constexpr char kNewDeskHistogramName[] = "Ash.Desks.NewDesk";
-constexpr char kDesksCountHistogramName[] = "Ash.Desks.DesksCount";
+constexpr char kNewDeskHistogramName[] = "Ash.Desks.NewDesk2";
+constexpr char kDesksCountHistogramName[] = "Ash.Desks.DesksCount2";
 constexpr char kRemoveDeskHistogramName[] = "Ash.Desks.RemoveDesk";
 constexpr char kDeskSwitchHistogramName[] = "Ash.Desks.DesksSwitch";
 constexpr char kMoveWindowFromActiveDeskHistogramName[] =
@@ -408,7 +408,9 @@ DesksController::DesksController() {
   for (int id : desks_util::GetDesksContainersIds())
     available_container_ids_.push(id);
 
-  // There's always one default desk.
+  // There's always one default desk. The DesksCreationRemovalSource used here
+  // doesn't matter, since UMA reporting will be skipped for the first ever
+  // default desk.
   NewDesk(DesksCreationRemovalSource::kButton);
   active_desk_ = desks_.back().get();
   active_desk_->Activate(/*update_window_activation=*/true);
@@ -474,7 +476,8 @@ void DesksController::NewDesk(DesksCreationRemovalSource source) {
 
   base::AutoReset<bool> in_progress(&are_desks_being_modified_, true);
 
-  // The first default desk should not overwrite any desks restore data.
+  // The first default desk should not overwrite any desks restore data, nor
+  // should it trigger any UMA stats reports.
   const bool is_first_ever_desk = desks_.empty();
 
   desks_.push_back(std::make_unique<Desk>(available_container_ids_.front()));
@@ -483,8 +486,6 @@ void DesksController::NewDesk(DesksCreationRemovalSource source) {
   new_desk->SetName(GetDeskDefaultName(desks_.size() - 1),
                     /*set_by_user=*/false);
 
-  UMA_HISTOGRAM_ENUMERATION(kNewDeskHistogramName, source);
-  ReportDesksCountHistogram();
   Shell::Get()
       ->accessibility_controller()
       ->TriggerAccessibilityAlertWithMessage(l10n_util::GetStringFUTF8(
@@ -494,8 +495,11 @@ void DesksController::NewDesk(DesksCreationRemovalSource source) {
   for (auto& observer : observers_)
     observer.OnDeskAdded(new_desk);
 
-  if (!is_first_ever_desk)
+  if (!is_first_ever_desk) {
     desks_restore_util::UpdatePrimaryUserDesksPrefs();
+    UMA_HISTOGRAM_ENUMERATION(kNewDeskHistogramName, source);
+    ReportDesksCountHistogram();
+  }
 }
 
 void DesksController::RemoveDesk(const Desk* desk,
