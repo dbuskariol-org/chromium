@@ -439,10 +439,10 @@ void LayoutTable::UpdateLogicalWidth() {
 LayoutUnit LayoutTable::ConvertStyleLogicalWidthToComputedWidth(
     const Length& style_logical_width,
     LayoutUnit available_width) const {
-  if (style_logical_width.IsIntrinsic())
-    return ComputeIntrinsicLogicalWidthUsing(
-        style_logical_width, available_width,
-        BordersPaddingAndSpacingInRowDirection());
+  if (style_logical_width.IsIntrinsic()) {
+    return ComputeIntrinsicLogicalWidthUsing(style_logical_width,
+                                             available_width);
+  }
 
   // HTML tables' width styles already include borders and paddings, but CSS
   // tables' width styles do not.
@@ -1089,38 +1089,36 @@ void LayoutTable::PaintMask(const PaintInfo& paint_info,
   TablePainter(*this).PaintMask(paint_info, paint_offset);
 }
 
-void LayoutTable::ComputeIntrinsicLogicalWidths(LayoutUnit& min_width,
-                                                LayoutUnit& max_width) const {
+MinMaxSizes LayoutTable::ComputeIntrinsicLogicalWidths() const {
   RecalcSectionsIfNeeded();
   // FIXME: Restructure the table layout code so that we can make this method
   // const.
+  MinMaxSizes sizes;
   const_cast<LayoutTable*>(this)->table_layout_->ComputeIntrinsicLogicalWidths(
-      min_width, max_width);
+      sizes.min_size, sizes.max_size);
 
   // FIXME: We should include captions widths here like we do in
   // computePreferredLogicalWidths.
+  sizes += LayoutUnit(BordersPaddingAndSpacingInRowDirection().ToInt());
+  return sizes;
 }
 
 void LayoutTable::ComputePreferredLogicalWidths() {
   DCHECK(PreferredLogicalWidthsDirty());
 
-  ComputeIntrinsicLogicalWidths(min_preferred_logical_width_,
-                                max_preferred_logical_width_);
+  MinMaxSizes sizes = ComputeIntrinsicLogicalWidths();
 
-  int borders_padding_and_spacing =
-      BordersPaddingAndSpacingInRowDirection().ToInt();
-  min_preferred_logical_width_ += borders_padding_and_spacing;
-  max_preferred_logical_width_ += borders_padding_and_spacing;
+  table_layout_->ApplyPreferredLogicalWidthQuirks(sizes.min_size,
+                                                  sizes.max_size);
+  min_preferred_logical_width_ = sizes.min_size;
+  max_preferred_logical_width_ = sizes.max_size;
 
-  table_layout_->ApplyPreferredLogicalWidthQuirks(min_preferred_logical_width_,
-                                                  max_preferred_logical_width_);
-
-  for (unsigned i = 0; i < captions_.size(); i++) {
+  for (const auto* caption : captions_) {
     min_preferred_logical_width_ = std::max(
-        min_preferred_logical_width_, captions_[i]->MinPreferredLogicalWidth());
+        min_preferred_logical_width_, caption->MinPreferredLogicalWidth());
     // Note: using captions' min-width is intentional here:
     max_preferred_logical_width_ = std::max(
-        max_preferred_logical_width_, captions_[i]->MinPreferredLogicalWidth());
+        max_preferred_logical_width_, caption->MinPreferredLogicalWidth());
   }
 
   const ComputedStyle& style_to_use = StyleRef();
@@ -1130,11 +1128,11 @@ void LayoutTable::ComputePreferredLogicalWidths() {
       style_to_use.LogicalMinWidth().Value() > 0) {
     max_preferred_logical_width_ =
         std::max(max_preferred_logical_width_,
-                 AdjustContentBoxLogicalWidthForBoxSizing(
+                 AdjustBorderBoxLogicalWidthForBoxSizing(
                      style_to_use.LogicalMinWidth().Value()));
     min_preferred_logical_width_ =
         std::max(min_preferred_logical_width_,
-                 AdjustContentBoxLogicalWidthForBoxSizing(
+                 AdjustBorderBoxLogicalWidthForBoxSizing(
                      style_to_use.LogicalMinWidth().Value()));
   }
 
@@ -1145,7 +1143,7 @@ void LayoutTable::ComputePreferredLogicalWidths() {
     // least the size of its min-content, regardless of 'max-width'.
     max_preferred_logical_width_ =
         std::min(max_preferred_logical_width_,
-                 AdjustContentBoxLogicalWidthForBoxSizing(
+                 AdjustBorderBoxLogicalWidthForBoxSizing(
                      style_to_use.LogicalMaxWidth().Value()));
   }
 

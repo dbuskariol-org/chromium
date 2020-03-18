@@ -1607,7 +1607,7 @@ class CORE_EXPORT LayoutBox : public LayoutBoxModelObject {
   // logical widths for this layout box.
   //
   // intrinsicWidth is defined as:
-  //     intrinsic size of content (without our border and padding) +
+  //     intrinsic size of content (with our border and padding) +
   //     scrollbarWidth.
   //
   // preferredWidth is defined as:
@@ -1615,9 +1615,7 @@ class CORE_EXPORT LayoutBox : public LayoutBoxModelObject {
   //     Note: fixedWidth includes border and padding and scrollbarWidth.
   //
   // This is public only for use by LayoutNG. Do not call this elsewhere.
-  virtual void ComputeIntrinsicLogicalWidths(
-      LayoutUnit& min_logical_width,
-      LayoutUnit& max_logical_width) const;
+  virtual MinMaxSizes ComputeIntrinsicLogicalWidths() const;
 
   // Make it public.
   using LayoutObject::BackgroundIsKnownToBeObscured;
@@ -1658,8 +1656,7 @@ class CORE_EXPORT LayoutBox : public LayoutBoxModelObject {
 
   LayoutUnit ComputeIntrinsicLogicalWidthUsing(
       const Length& logical_width_length,
-      LayoutUnit available_logical_width,
-      LayoutUnit border_and_padding) const;
+      LayoutUnit available_logical_width) const;
   LayoutUnit ComputeIntrinsicLogicalContentHeightUsing(
       const Length& logical_height_length,
       LayoutUnit intrinsic_content_height,
