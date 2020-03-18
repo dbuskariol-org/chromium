@@ -430,7 +430,6 @@ Polymer({
       case settings.SafetyCheckPasswordsStatus.NO_PASSWORDS:
       case settings.SafetyCheckPasswordsStatus.SIGNED_OUT:
       case settings.SafetyCheckPasswordsStatus.QUOTA_LIMIT:
-      case settings.SafetyCheckPasswordsStatus.TOO_MANY_PASSWORDS:
       case settings.SafetyCheckPasswordsStatus.ERROR:
         return 'cr:info';
       default:

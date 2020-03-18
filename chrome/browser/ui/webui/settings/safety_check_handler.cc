@@ -363,9 +363,6 @@ base::string16 SafetyCheckHandler::GetStringForPasswords(PasswordsStatus status,
     case PasswordsStatus::kQuotaLimit:
       return l10n_util::GetStringUTF16(
           IDS_SETTINGS_SAFETY_CHECK_PASSWORDS_QUOTA_LIMIT);
-    case PasswordsStatus::kTooManyPasswords:
-      return l10n_util::GetStringUTF16(
-          IDS_SETTINGS_SAFETY_CHECK_PASSWORDS_TOO_MANY_PASSWORDS);
     case PasswordsStatus::kError:
       return l10n_util::GetStringUTF16(
           IDS_SETTINGS_SAFETY_CHECK_PASSWORDS_ERROR);
