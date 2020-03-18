@@ -127,7 +127,6 @@ class CORE_EXPORT HTMLSelectElement final
 
   bool CanSelectAll() const;
   void SelectAll();
-  void ListBoxOnChange();
   int ActiveSelectionEndListIndex() const;
   HTMLOptionElement* ActiveSelectionEnd() const;
   void SetActiveSelectionAnchor(HTMLOptionElement*);
