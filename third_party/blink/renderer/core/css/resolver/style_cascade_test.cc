@@ -99,7 +99,7 @@ class TestCascade {
   void Add(String block, CascadeOrigin origin = CascadeOrigin::kAuthor) {
     CSSParserMode mode =
         origin == CascadeOrigin::kUserAgent ? kUASheetMode : kHTMLStandardMode;
-    Add(ParseDeclarationBlock(block, mode), origin);
+    Add(ParseDeclarationBlock(block, mode), origin, CSSSelector::kMatchAll);
   }
 
   void Add(String name, String value, CascadeOrigin origin = Origin::kAuthor) {
@@ -107,11 +107,12 @@ class TestCascade {
   }
 
   void Add(const CSSPropertyValueSet* set,
-           CascadeOrigin origin = CascadeOrigin::kAuthor) {
+           CascadeOrigin origin = CascadeOrigin::kAuthor,
+           unsigned link_match_type = CSSSelector::kMatchAll) {
     DCHECK_LE(origin, CascadeOrigin::kAuthor) << "Animations not supported";
     DCHECK_LE(current_origin_, origin) << "Please add declarations in order";
     EnsureAtLeast(origin);
-    match_result_.AddMatchedProperties(set);
+    match_result_.AddMatchedProperties(set, link_match_type);
   }
 
   void Apply(CascadeFilter filter = CascadeFilter()) {
@@ -1748,6 +1749,68 @@ TEST_F(StyleCascadeTest, AnimateStandardShorthand) {
   EXPECT_EQ("15px", cascade.ComputedValue("margin-right"));
   EXPECT_EQ("15px", cascade.ComputedValue("margin-bottom"));
   EXPECT_EQ("15px", cascade.ComputedValue("margin-left"));
+}
+
+TEST_F(StyleCascadeTest, AnimatedVisitedImportantOverride) {
+  AppendSheet(R"HTML(
+     @keyframes test {
+        from { background-color: rgb(100, 100, 100); }
+        to { background-color: rgb(200, 200, 200); }
+     }
+    )HTML");
+
+  TestCascade cascade(GetDocument());
+  cascade.State().Style()->SetInsideLink(EInsideLink::kInsideVisitedLink);
+
+  cascade.Add(ParseDeclarationBlock("background-color:red !important"),
+              CascadeOrigin::kAuthor, CSSSelector::kMatchVisited);
+  cascade.Add("animation-name:test");
+  cascade.Add("animation-duration:10s");
+  cascade.Add("animation-timing-function:linear");
+  cascade.Add("animation-delay:-5s");
+  cascade.Apply();
+
+  cascade.AnalyzeAnimations();
+  cascade.Apply();
+  EXPECT_EQ("rgb(150, 150, 150)", cascade.ComputedValue("background-color"));
+
+  auto style = cascade.TakeStyle();
+
+  style->SetInsideLink(EInsideLink::kInsideVisitedLink);
+  EXPECT_EQ(Color(255, 0, 0),
+            style->VisitedDependentColor(GetCSSPropertyBackgroundColor()));
+
+  style->SetInsideLink(EInsideLink::kNotInsideLink);
+  EXPECT_EQ(Color(150, 150, 150),
+            style->VisitedDependentColor(GetCSSPropertyBackgroundColor()));
+}
+
+TEST_F(StyleCascadeTest, AnimatedVisitedHighPrio) {
+  AppendSheet(R"HTML(
+     @keyframes test {
+        from { color: rgb(100, 100, 100); }
+        to { color: rgb(200, 200, 200); }
+     }
+    )HTML");
+
+  TestCascade cascade(GetDocument());
+  cascade.Add("color:red");
+  cascade.Add("animation:test 10s -5s linear");
+  cascade.Apply();
+
+  cascade.AnalyzeAnimations();
+  cascade.Apply();
+  EXPECT_EQ("rgb(150, 150, 150)", cascade.ComputedValue("color"));
+
+  auto style = cascade.TakeStyle();
+
+  style->SetInsideLink(EInsideLink::kInsideVisitedLink);
+  EXPECT_EQ(Color(150, 150, 150),
+            style->VisitedDependentColor(GetCSSPropertyColor()));
+
+  style->SetInsideLink(EInsideLink::kNotInsideLink);
+  EXPECT_EQ(Color(150, 150, 150),
+            style->VisitedDependentColor(GetCSSPropertyColor()));
 }
 
 TEST_F(StyleCascadeTest, AnimatePendingSubstitutionValue) {
