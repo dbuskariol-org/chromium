@@ -817,6 +817,54 @@ TEST_F(AXTreeSourceArcTest, StateComputations) {
   EXPECT_TRUE(data->HasState(ax::mojom::State::kExpanded));
 }
 
+TEST_F(AXTreeSourceArcTest, RoleComputationEditText) {
+  auto event = AXEventData::New();
+  event->source_id = 1;
+  event->task_id = 1;
+  event->event_type = AXEventType::VIEW_FOCUSED;
+  event->node_data.push_back(AXNodeInfoData::New());
+  AXNodeInfoData* root = event->node_data.back().get();
+  SetProperty(root, AXIntListProperty::CHILD_NODE_IDS, std::vector<int>({2}));
+  root->id = 1;
+
+  event->window_data = std::vector<mojom::AccessibilityWindowInfoDataPtr>();
+  event->window_data->push_back(AXWindowInfoData::New());
+  AXWindowInfoData* root_window = event->window_data->back().get();
+  root_window->window_id = 100;
+  root_window->root_node_id = 1;
+
+  // Add a child node.
+  event->node_data.push_back(AXNodeInfoData::New());
+  AXNodeInfoData* node = event->node_data.back().get();
+  node->id = 2;
+
+  CallNotifyAccessibilityEvent(event.get());
+  std::unique_ptr<ui::AXNodeData> data;
+
+  // Editable node is textField.
+  SetProperty(node, AXStringProperty::CLASS_NAME, ui::kAXEditTextClassname);
+  SetProperty(node, AXBooleanProperty::EDITABLE, true);
+  CallSerializeNode(node, &data);
+  EXPECT_EQ(ax::mojom::Role::kTextField, data->role);
+
+  // Non-editable node is not textField even if it has EditTextClassname.
+  // When it has text and no children, it is staticText. Otherwise, it's
+  // genericContainer.
+  SetProperty(node, AXBooleanProperty::EDITABLE, false);
+  SetProperty(node, AXStringProperty::TEXT, "text");
+  CallSerializeNode(node, &data);
+  EXPECT_EQ(ax::mojom::Role::kStaticText, data->role);
+
+  // Add a child.
+  SetProperty(node, AXIntListProperty::CHILD_NODE_IDS, std::vector<int>({3}));
+  event->node_data.push_back(AXNodeInfoData::New());
+  AXNodeInfoData* child = event->node_data.back().get();
+  child->id = 3;
+
+  CallSerializeNode(node, &data);
+  EXPECT_EQ(ax::mojom::Role::kGenericContainer, data->role);
+}
+
 TEST_F(AXTreeSourceArcTest, ComplexTreeStructure) {
   int tree_size = 4;
   int num_trees = 3;
