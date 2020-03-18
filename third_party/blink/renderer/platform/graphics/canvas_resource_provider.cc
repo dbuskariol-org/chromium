@@ -625,11 +625,6 @@ enum class CanvasResourceType {
 
 const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
     CanvasResourceProvider::ResourceUsage usage) {
-  static const Vector<CanvasResourceType> kAcceleratedFallbackList({
-      CanvasResourceType::kSharedImage,
-      // Fallback to software
-      CanvasResourceType::kBitmap,
-  });
 
   static const Vector<CanvasResourceType> kCompositedFallbackList({
       CanvasResourceType::kSharedImage,
@@ -669,14 +664,14 @@ const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
 
   static const Vector<CanvasResourceType> kEmptyList;
   switch (usage) {
+    case CanvasResourceProvider::ResourceUsage::kAcceleratedResourceUsage:
     case CanvasResourceProvider::ResourceUsage::kSoftwareResourceUsage:
       NOTREACHED();
       return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
         kSoftwareCompositedResourceUsage:
       return kCompositedFallbackList;
-    case CanvasResourceProvider::ResourceUsage::kAcceleratedResourceUsage:
-      return kAcceleratedFallbackList;
+
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedCompositedResourceUsage:
       return kCompositedFallbackList;
