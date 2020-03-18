@@ -161,13 +161,13 @@ class TestCascade {
         &GetDocument().EnsureStyleResolver());
   }
 
-  void AnalyzeAnimations() {
+  void AnalyzeAnimations(CascadeFilter filter = CascadeFilter()) {
     CalculateAnimationUpdate();
-    cascade_.Analyze(GetInterpolations(), CascadeFilter());
+    cascade_.Analyze(GetInterpolations(), filter);
   }
-  void AnalyzeTransitions() {
+  void AnalyzeTransitions(CascadeFilter filter = CascadeFilter()) {
     CalculateTransitionUpdate();
-    cascade_.Analyze(GetInterpolations(), CascadeFilter());
+    cascade_.Analyze(GetInterpolations(), filter);
   }
 
  private:
@@ -1416,6 +1416,49 @@ TEST_F(StyleCascadeTest, ValidEnvInUsedFallback) {
   cascade.Apply();
 
   EXPECT_EQ("rgb(255, 0, 0)", cascade.ComputedValue("background-color"));
+}
+
+TEST_F(StyleCascadeTest, AnimationAnalyzeFilter) {
+  AppendSheet(R"HTML(
+     @keyframes test {
+        from { color: white; background-color: white; }
+        to { color: gray; background-color: gray; }
+     }
+    )HTML");
+
+  TestCascade cascade(GetDocument());
+
+  cascade.Add("animation: test 1s");
+  cascade.Apply();
+
+  cascade.AnalyzeAnimations(CascadeFilter(CSSProperty::kInherited, true));
+
+  EXPECT_EQ(CascadeOrigin::kAnimation, cascade.GetOrigin("background-color"));
+  EXPECT_EQ(CascadeOrigin::kNone, cascade.GetOrigin("color"));
+}
+
+TEST_F(StyleCascadeTest, TransitionAnalyzeFilter) {
+  TestCascade cascade1(GetDocument());
+  cascade1.Add("background-color: white");
+  cascade1.Add("color: white");
+  cascade1.Add("transition: all 1s");
+  cascade1.Apply();
+
+  // Set the old style on the element, so that the transition
+  // update detects it.
+  GetDocument().body()->SetComputedStyle(cascade1.TakeStyle());
+
+  // Now simulate a new style, with new color values.
+  TestCascade cascade2(GetDocument());
+  cascade2.Add("background-color: gray");
+  cascade2.Add("color: gray");
+  cascade2.Add("transition: all 1s");
+  cascade2.Apply();
+
+  cascade2.AnalyzeTransitions(CascadeFilter(CSSProperty::kInherited, true));
+
+  EXPECT_EQ(CascadeOrigin::kTransition, cascade2.GetOrigin("background-color"));
+  EXPECT_EQ(CascadeOrigin::kAuthor, cascade2.GetOrigin("color"));
 }
 
 TEST_F(StyleCascadeTest, PendingKeyframeAnimation) {

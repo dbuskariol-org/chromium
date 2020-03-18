@@ -112,7 +112,16 @@ void StyleCascade::Analyze(const CascadeInterpolations& interpolations,
       uint32_t position = EncodeInterpolationPosition(
           i, active_interpolation.key.IsPresentationAttribute());
       CascadePriority priority(entries[i].origin, false, 0, position);
-      map_.Add(active_interpolation.key.GetCSSPropertyName(), priority);
+
+      auto name = active_interpolation.key.GetCSSPropertyName();
+      CSSPropertyRef ref(name, GetDocument());
+      DCHECK(ref.IsValid());
+      const CSSProperty& property = ref.GetProperty();
+
+      if (filter.Rejects(property))
+        continue;
+
+      map_.Add(name, priority);
     }
   }
 }
