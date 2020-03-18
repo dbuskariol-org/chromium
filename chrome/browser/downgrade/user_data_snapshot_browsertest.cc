@@ -39,6 +39,7 @@
 #include "components/version_info/version_info.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/referrer.h"
+#include "content/public/test/browser_test_utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "ui/base/page_transition_types.h"
@@ -399,10 +400,13 @@ class TabsSnapshotTest : public UserDataSnapshotBrowserTestBase {
       ASSERT_EQ(tab_strip->count(), 2);
     } else {
       ASSERT_EQ(tab_strip->count(), 3);
+      content::WaitForLoadStop(tab_strip->GetWebContentsAt(2));
       EXPECT_EQ(tab_strip->GetWebContentsAt(2)->GetURL(), GURL("about:blank"));
     }
     // embedded_test_server() might return a different hostname.
+    content::WaitForLoadStop(tab_strip->GetWebContentsAt(0));
     EXPECT_EQ(tab_strip->GetWebContentsAt(0)->GetURL().path(), "/title1.html");
+    content::WaitForLoadStop(tab_strip->GetWebContentsAt(1));
     EXPECT_EQ(tab_strip->GetWebContentsAt(1)->GetURL().path(), "/title2.html");
   }
 };
