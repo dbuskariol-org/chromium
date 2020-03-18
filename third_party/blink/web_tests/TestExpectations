@@ -5266,7 +5266,7 @@ crbug.com/854910 [ Mac ] virtual/scroll_customization/fast/scroll-behavior/smoot
 crbug.com/855816 [ Win ] virtual/stable/http/tests/navigation/rename-subframe-goback.html [ Pass Timeout ]
 
 # User Activation
-crbug.com/736415 external/wpt/html/user-activation/activation-api-iframe.tenative.html [ Failure ]
+crbug.com/736415 external/wpt/html/user-activation/activation-api-iframe.tentative.html [ Failure ]
 crbug.com/978620 external/wpt/html/user-activation/activation-hierarchy-crossorigin-parent-manual.sub.html [ Timeout ]
 crbug.com/978620 external/wpt/html/user-activation/activation-hierarchy-sameorigin-parent-manual.html [ Timeout ]
 
