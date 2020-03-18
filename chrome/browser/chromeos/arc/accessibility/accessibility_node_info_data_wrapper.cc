@@ -66,6 +66,10 @@ bool AccessibilityNodeInfoDataWrapper::IsVisibleToUser() const {
   return GetProperty(AXBooleanProperty::VISIBLE_TO_USER);
 }
 
+bool AccessibilityNodeInfoDataWrapper::IsVirtualNode() const {
+  return node_ptr_->is_virtual_node;
+}
+
 bool AccessibilityNodeInfoDataWrapper::CanBeAccessibilityFocused() const {
   // An important node with a non-generic role and:
   // - actionable nodes

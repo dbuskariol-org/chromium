@@ -1188,7 +1188,7 @@ TEST_F(AXTreeSourceArcTest, SerializeAndUnserialize) {
   EXPECT_EQ(1U, tree()->GetFromId(10)->GetUnignoredChildCount());
 }
 
-TEST_F(AXTreeSourceArcTest, SerializeWebView) {
+TEST_F(AXTreeSourceArcTest, SerializeVirtualNode) {
   auto event = AXEventData::New();
   event->source_id = 10;
   event->task_id = 1;
@@ -1219,6 +1219,7 @@ TEST_F(AXTreeSourceArcTest, SerializeWebView) {
   AXNodeInfoData* button1 = event->node_data.back().get();
   button1->id = 2;
   button1->bounds_in_screen = gfx::Rect(0, 0, 50, 50);
+  button1->is_virtual_node = true;
   SetProperty(button1, AXStringProperty::CLASS_NAME, ui::kAXButtonClassname);
   SetProperty(button1, AXBooleanProperty::VISIBLE_TO_USER, true);
   SetProperty(
@@ -1231,6 +1232,7 @@ TEST_F(AXTreeSourceArcTest, SerializeWebView) {
   AXNodeInfoData* button2 = event->node_data.back().get();
   button2->id = 3;
   button2->bounds_in_screen = gfx::Rect(0, 0, 100, 100);
+  button2->is_virtual_node = true;
   SetProperty(button2, AXStringProperty::CLASS_NAME, ui::kAXButtonClassname);
   SetProperty(button2, AXBooleanProperty::VISIBLE_TO_USER, true);
   SetProperty(
