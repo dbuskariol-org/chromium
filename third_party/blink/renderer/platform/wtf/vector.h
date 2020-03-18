@@ -108,7 +108,7 @@ template <typename T>
 struct VectorUnusedSlotClearer<true, T> {
   STATIC_ONLY(VectorUnusedSlotClearer);
   static void Clear(T* begin, T* end) {
-    memset(reinterpret_cast<void*>(begin), 0, sizeof(T) * (end - begin));
+    AtomicMemzero(reinterpret_cast<void*>(begin), sizeof(T) * (end - begin));
   }
 
 #if DCHECK_IS_ON()
