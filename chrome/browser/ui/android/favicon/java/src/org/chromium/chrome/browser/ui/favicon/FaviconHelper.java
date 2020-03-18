@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.favicon;
+package org.chromium.chrome.browser.ui.favicon;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -19,10 +19,11 @@ import androidx.annotation.ColorInt;
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.profiles.Profile;
+import org.chromium.components.embedder_support.util.UrlUtilities;
+import org.chromium.components.url_formatter.UrlFormatter;
 import org.chromium.content_public.browser.WebContents;
+import org.chromium.url.GURL;
 
 /**
  * This is a helper class to use favicon_service.cc's functionality.
@@ -33,7 +34,6 @@ import org.chromium.content_public.browser.WebContents;
  * requirement.
  */
 public class FaviconHelper {
-
     private long mNativeFaviconHelper;
 
     /**
@@ -72,7 +72,7 @@ public class FaviconHelper {
         private Bitmap mDefaultLightBitmap;
 
         private int getResourceId(String url) {
-            return NewTabPage.isNTPUrl(url) ? R.drawable.chromelogo16 : R.drawable.default_favicon;
+            return isInternalScheme(url) ? R.drawable.chromelogo16 : R.drawable.default_favicon;
         }
 
         private Bitmap createBitmap(Resources resources, String url, boolean useDarkIcon) {
@@ -98,14 +98,14 @@ public class FaviconHelper {
          */
         public Bitmap getDefaultFaviconBitmap(
                 Resources resources, String url, boolean useDarkIcon) {
-            boolean isNtp = NewTabPage.isNTPUrl(url);
-            Bitmap bitmap = isNtp ? (useDarkIcon ? mChromeDarkBitmap : mChromeLightBitmap)
-                                  : (useDarkIcon ? mDefaultDarkBitmap : mDefaultLightBitmap);
+            boolean isInternal = isInternalScheme(url);
+            Bitmap bitmap = isInternal ? (useDarkIcon ? mChromeDarkBitmap : mChromeLightBitmap)
+                                       : (useDarkIcon ? mDefaultDarkBitmap : mDefaultLightBitmap);
             if (bitmap != null) return bitmap;
             bitmap = createBitmap(resources, url, useDarkIcon);
-            if (isNtp && useDarkIcon) {
+            if (isInternal && useDarkIcon) {
                 mChromeDarkBitmap = bitmap;
-            } else if (isNtp) {
+            } else if (isInternal) {
                 mChromeLightBitmap = bitmap;
             } else if (useDarkIcon) {
                 mDefaultDarkBitmap = bitmap;
@@ -163,9 +163,8 @@ public class FaviconHelper {
      *         that this callback is not called if this method returns false.
      * @return True if GetLocalFaviconImageForURL is successfully called.
      */
-    public boolean getLocalFaviconImageForURL(
-            Profile profile, String pageUrl, int desiredSizeInPixel,
-            FaviconImageCallback faviconImageCallback) {
+    public boolean getLocalFaviconImageForURL(Profile profile, String pageUrl,
+            int desiredSizeInPixel, FaviconImageCallback faviconImageCallback) {
         assert mNativeFaviconHelper != 0;
         return FaviconHelperJni.get().getLocalFaviconImageForURL(
                 mNativeFaviconHelper, profile, pageUrl, desiredSizeInPixel, faviconImageCallback);
@@ -213,6 +212,12 @@ public class FaviconHelper {
      */
     public void touchOnDemandFavicon(Profile profile, String iconUrl) {
         FaviconHelperJni.get().touchOnDemandFavicon(mNativeFaviconHelper, profile, iconUrl);
+    }
+
+    private static boolean isInternalScheme(String url) {
+        GURL gurl = UrlFormatter.fixupUrl(url);
+        if (!gurl.isValid()) return false;
+        return UrlUtilities.isInternalScheme(gurl);
     }
 
     @NativeMethods
