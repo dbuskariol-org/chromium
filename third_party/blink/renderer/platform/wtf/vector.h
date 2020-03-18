@@ -583,7 +583,7 @@ class VectorBuffer<T, 0, Allocator> : protected VectorBufferBase<T, Allocator> {
                         OffsetRange other_hole) {
     static_assert(VectorTraits<T>::kCanSwapUsingCopyOrMove,
                   "Cannot swap using copy or move.");
-    std::swap(buffer_, other.buffer_);
+    AtomicWriteSwap(buffer_, other.buffer_);
     std::swap(capacity_, other.capacity_);
     std::swap(size_, other.size_);
     Allocator::BackingWriteBarrier(&buffer_);

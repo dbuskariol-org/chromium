@@ -341,6 +341,14 @@ ALWAYS_INLINE void AtomicMemzero<3 * sizeof(size_t)>(void* buf) {
       ->store(0, std::memory_order_relaxed);
 }
 
+// Swaps values using atomic writes.
+template <typename T>
+ALWAYS_INLINE void AtomicWriteSwap(T& lhs, T& rhs) {
+  T tmp_val = rhs;
+  AsAtomicPtr(&rhs)->store(lhs, std::memory_order_relaxed);
+  AsAtomicPtr(&lhs)->store(tmp_val, std::memory_order_relaxed);
+}
+
 }  // namespace WTF
 
 // This version of placement new omits a 0 check.
