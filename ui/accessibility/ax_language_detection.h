@@ -133,8 +133,8 @@ class AX_EXPORT AXLanguageInfoStats {
   // We consider the language we labelled the node with, the language the author
   // assigned, and whether or not we assigned our highest confidence detection
   // result.
-  void RecordLabelStatistics(std::string labelled_lang,
-                             std::string author_lang,
+  void RecordLabelStatistics(const std::string& labelled_lang,
+                             const std::string& author_lang,
                              bool labelled_with_first_result);
 
   // Update metrics to reflect we attempted to detect language for a node.
