@@ -583,25 +583,25 @@ StyleDifference ComputedStyle::VisualInvalidationDiff(
     diff = svg_style_->Diff(*other.svg_style_);
 
   if ((!diff.NeedsReshape() || !diff.NeedsFullLayout() ||
-       !diff.NeedsFullPaintInvalidation()) &&
+       !diff.NeedsPaintInvalidation()) &&
       DiffNeedsReshapeAndFullLayoutAndPaintInvalidation(*this, other)) {
     diff.SetNeedsReshape();
     diff.SetNeedsFullLayout();
-    diff.SetNeedsPaintInvalidationObject();
+    diff.SetNeedsPaintInvalidation();
   }
 
   if ((!diff.NeedsCollectInlines() || !diff.NeedsFullLayout() ||
-       !diff.NeedsFullPaintInvalidation()) &&
+       !diff.NeedsPaintInvalidation()) &&
       DiffNeedsCollectInlinesAndFullLayoutAndPaintInvalidation(*this, other)) {
     diff.SetNeedsCollectInlines();
     diff.SetNeedsFullLayout();
-    diff.SetNeedsPaintInvalidationObject();
+    diff.SetNeedsPaintInvalidation();
   }
 
-  if ((!diff.NeedsFullLayout() || !diff.NeedsFullPaintInvalidation()) &&
+  if ((!diff.NeedsFullLayout() || !diff.NeedsPaintInvalidation()) &&
       DiffNeedsFullLayoutAndPaintInvalidation(other)) {
     diff.SetNeedsFullLayout();
-    diff.SetNeedsPaintInvalidationObject();
+    diff.SetNeedsPaintInvalidation();
   }
 
   if (!diff.NeedsFullLayout() && DiffNeedsFullLayout(document, other))
@@ -626,10 +626,7 @@ StyleDifference ComputedStyle::VisualInvalidationDiff(
       diff.SetNeedsPositionedMovementLayout();
   }
 
-  if (DiffNeedsPaintInvalidationSubtree(other))
-    diff.SetNeedsPaintInvalidationSubtree();
-  else
-    AdjustDiffForNeedsPaintInvalidationObject(other, diff, document);
+  AdjustDiffForNeedsPaintInvalidation(other, diff, document);
 
   if (DiffNeedsVisualRectUpdate(other))
     diff.SetNeedsVisualRectUpdate();
@@ -786,30 +783,24 @@ bool ComputedStyle::DiffNeedsFullLayoutForLayoutCustomChild(
   return false;
 }
 
-bool ComputedStyle::DiffNeedsPaintInvalidationSubtree(
-    const ComputedStyle& other) const {
-  return ComputedStyleBase::DiffNeedsPaintInvalidationSubtree(*this, other);
-}
-
-void ComputedStyle::AdjustDiffForNeedsPaintInvalidationObject(
+void ComputedStyle::AdjustDiffForNeedsPaintInvalidation(
     const ComputedStyle& other,
     StyleDifference& diff,
     const Document& document) const {
-  if (ComputedStyleBase::DiffNeedsPaintInvalidationObject(*this, other) ||
+  if (ComputedStyleBase::DiffNeedsPaintInvalidation(*this, other) ||
       !BorderVisuallyEqual(other) || !RadiiEqual(other))
-    diff.SetNeedsPaintInvalidationObject();
+    diff.SetNeedsPaintInvalidation();
 
   AdjustDiffForBackgroundVisuallyEqual(other, diff);
 
-  if (diff.NeedsPaintInvalidationObject())
+  if (diff.NeedsPaintInvalidation())
     return;
 
   if (PaintImagesInternal()) {
     for (const auto& image : *PaintImagesInternal()) {
       DCHECK(image);
-      if (DiffNeedsPaintInvalidationObjectForPaintImage(*image, other,
-                                                        document)) {
-        diff.SetNeedsPaintInvalidationObject();
+      if (DiffNeedsPaintInvalidationForPaintImage(*image, other, document)) {
+        diff.SetNeedsPaintInvalidation();
         return;
       }
     }
@@ -820,7 +811,7 @@ void ComputedStyle::AdjustDiffForBackgroundVisuallyEqual(
     const ComputedStyle& other,
     StyleDifference& diff) const {
   if (BackgroundColorInternal() != other.BackgroundColorInternal()) {
-    diff.SetNeedsPaintInvalidationObject();
+    diff.SetNeedsPaintInvalidation();
     if (BackgroundColorInternal().HasAlpha() !=
         other.BackgroundColorInternal().HasAlpha()) {
       diff.SetHasAlphaChanged();
@@ -828,14 +819,14 @@ void ComputedStyle::AdjustDiffForBackgroundVisuallyEqual(
     }
   }
   if (!BackgroundInternal().VisuallyEqual(other.BackgroundInternal())) {
-    diff.SetNeedsPaintInvalidationObject();
+    diff.SetNeedsPaintInvalidation();
     // Changes of background fill layers, such as images, may have
     // changed alpha.
     diff.SetHasAlphaChanged();
   }
 }
 
-bool ComputedStyle::DiffNeedsPaintInvalidationObjectForPaintImage(
+bool ComputedStyle::DiffNeedsPaintInvalidationForPaintImage(
     const StyleImage& image,
     const ComputedStyle& other,
     const Document& document) const {
@@ -932,7 +923,7 @@ void ComputedStyle::UpdatePropertySpecificDifferences(
                                                                          other))
     diff.SetBackdropFilterChanged();
 
-  if (!diff.NeedsFullPaintInvalidation() &&
+  if (!diff.NeedsPaintInvalidation() &&
       ComputedStyleBase::UpdatePropertySpecificDifferencesTextDecorationOrColor(
           *this, other)) {
     diff.SetTextDecorationOrColorChanged();
