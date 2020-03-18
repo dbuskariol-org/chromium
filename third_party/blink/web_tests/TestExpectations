@@ -6949,10 +6949,6 @@ crbug.com/1060175 [ Win ] wpt_internal/storage/estimate-usage-details-filesystem
 crbug.com/1060175 [ Win ] wpt_internal/virtual-scroller/large-child-comment.html [ Pass Failure ]
 crbug.com/1060175 [ Win ] wpt_internal/webxr/xr_view_projection_detached.https.html [ Pass Failure ]
 
-# Temporarily disable to land https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/2097337
-crbug.com/1011811 http/tests/devtools/changes/changes-sidebar.js [ Pass Failure ]
-crbug.com/1011811 http/tests/devtools/search/search-in-static.js [ Pass Failure ]
-
 # Temporarily disabled to land https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/2101972
 crbug.com/174309 http/tests/devtools/quick-open/command-menu.js [ Pass Failure ]
 
