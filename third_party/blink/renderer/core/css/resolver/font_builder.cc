@@ -319,8 +319,7 @@ void FontBuilder::UpdateAdjustedSize(FontDescription& font_description,
   // FontDescription::EffectiveFontSize.
   font_description.SetAdjustedSize(font_description.ComputedSize());
 
-  Font font(font_description);
-  font.Update(font_selector);
+  Font font(font_description, font_selector);
 
   const SimpleFontData* font_data = font.PrimaryFont();
 
