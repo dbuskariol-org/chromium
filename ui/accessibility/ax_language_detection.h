@@ -115,6 +115,11 @@ class AX_EXPORT AXLanguageInfoStats {
   AXLanguageInfoStats();
   ~AXLanguageInfoStats();
 
+  // Each AXLanguageInfoStats is tied to a specific AXTree, copying is safe but
+  // logically doesn't make sense.
+  AXLanguageInfoStats(const AXLanguageInfoStats&) = delete;
+  AXLanguageInfoStats& operator=(const AXLanguageInfoStats&) = delete;
+
   // Adjust our statistics to add provided detected languages.
   void Add(const std::vector<std::string>& languages);
 
@@ -197,8 +202,6 @@ class AX_EXPORT AXLanguageInfoStats {
   // Set of top language detected for every node, used to generate the unique
   // number of detected languages metric (LangsPerPage).
   std::unordered_set<std::string> unique_top_lang_detected_;
-
-  DISALLOW_COPY_AND_ASSIGN(AXLanguageInfoStats);
 };
 
 // AXLanguageDetectionObserver is registered as a change observer on an AXTree
@@ -222,6 +225,11 @@ class AX_EXPORT AXLanguageDetectionObserver : public ui::AXTreeObserver {
   // Observer destructor will remove itself as an observer from the AXTree.
   ~AXLanguageDetectionObserver() override;
 
+  // AXLanguageDetectionObserver contains a pointer so copying is non-trivial.
+  AXLanguageDetectionObserver(const AXLanguageDetectionObserver&) = delete;
+  AXLanguageDetectionObserver& operator=(const AXLanguageDetectionObserver&) =
+      delete;
+
  private:
   void OnAtomicUpdateFinished(ui::AXTree* tree,
                               bool root_changed,
@@ -229,8 +237,6 @@ class AX_EXPORT AXLanguageDetectionObserver : public ui::AXTreeObserver {
 
   // Non-owning pointer to AXTree, used to de-register observer on destruction.
   AXTree* const tree_;
-
-  DISALLOW_COPY_AND_ASSIGN(AXLanguageDetectionObserver);
 };
 
 // AXLanguageDetectionManager manages all of the context needed for language
@@ -238,8 +244,13 @@ class AX_EXPORT AXLanguageDetectionObserver : public ui::AXTreeObserver {
 class AX_EXPORT AXLanguageDetectionManager {
  public:
   // Construct an AXLanguageDetectionManager for the specified tree.
-  AXLanguageDetectionManager(AXTree* tree);
+  explicit AXLanguageDetectionManager(AXTree* tree);
   ~AXLanguageDetectionManager();
+
+  // AXLanguageDetectionManager contains pointers so copying is non-trivial.
+  AXLanguageDetectionManager(const AXLanguageDetectionManager&) = delete;
+  AXLanguageDetectionManager& operator=(const AXLanguageDetectionManager&) =
+      delete;
 
   // Detect languages for each node in the tree managed by this manager.
   // This is the first pass in detection and labelling.
@@ -296,8 +307,6 @@ class AX_EXPORT AXLanguageDetectionManager {
   AXTree* tree_;
 
   AXLanguageInfoStats lang_info_stats_;
-
-  DISALLOW_COPY_AND_ASSIGN(AXLanguageDetectionManager);
 };
 
 }  // namespace ui
