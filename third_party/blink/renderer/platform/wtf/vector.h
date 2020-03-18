@@ -1299,8 +1299,15 @@ class Vector
   // or copy-initialize all the elements.
   //
   // Fill(value) is a synonym for Fill(value, size()).
-  void Fill(const T&, wtf_size_t);
-  void Fill(const T& val) { Fill(val, size()); }
+  //
+  // The implementation of Fill uses std::fill which is not yet supported for
+  // garbage collected vectors.
+  template <typename A = Allocator>
+  std::enable_if_t<!A::kIsGarbageCollected> Fill(const T&, wtf_size_t);
+  template <typename A = Allocator>
+  std::enable_if_t<!A::kIsGarbageCollected> Fill(const T& val) {
+    Fill(val, size());
+  }
 
   // Swap two vectors quickly.
   void swap(Vector& other) {
@@ -1594,8 +1601,9 @@ wtf_size_t Vector<T, inlineCapacity, Allocator>::ReverseFind(
 }
 
 template <typename T, wtf_size_t inlineCapacity, typename Allocator>
-void Vector<T, inlineCapacity, Allocator>::Fill(const T& val,
-                                                wtf_size_t new_size) {
+template <typename A>
+std::enable_if_t<!A::kIsGarbageCollected>
+Vector<T, inlineCapacity, Allocator>::Fill(const T& val, wtf_size_t new_size) {
   if (size() > new_size) {
     Shrink(new_size);
   } else if (new_size > capacity()) {
