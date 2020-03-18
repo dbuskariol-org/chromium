@@ -1240,16 +1240,16 @@ void HTMLSelectElement::FinishParsingChildren() {
     cache->ListboxActiveIndexChanged(this);
 }
 
-bool HTMLSelectElement::AnonymousIndexedSetter(
+IndexedPropertySetterResult HTMLSelectElement::AnonymousIndexedSetter(
     unsigned index,
     HTMLOptionElement* value,
     ExceptionState& exception_state) {
   if (!value) {  // undefined or null
     remove(index);
-    return true;
+    return IndexedPropertySetterResult::kIntercepted;
   }
   SetOption(index, value, exception_state);
-  return true;
+  return IndexedPropertySetterResult::kIntercepted;
 }
 
 bool HTMLSelectElement::IsInteractiveContent() const {

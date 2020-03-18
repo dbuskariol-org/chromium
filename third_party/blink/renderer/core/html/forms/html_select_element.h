@@ -136,7 +136,9 @@ class CORE_EXPORT HTMLSelectElement final
   void OptionSelectionStateChanged(HTMLOptionElement*, bool option_is_selected);
   void OptionInserted(HTMLOptionElement&, bool option_is_selected);
   void OptionRemoved(HTMLOptionElement&);
-  bool AnonymousIndexedSetter(unsigned, HTMLOptionElement*, ExceptionState&);
+  IndexedPropertySetterResult AnonymousIndexedSetter(unsigned,
+                                                     HTMLOptionElement*,
+                                                     ExceptionState&);
 
   void OptGroupInsertedOrRemoved(HTMLOptGroupElement&);
   void HrInsertedOrRemoved(HTMLHRElement&);
