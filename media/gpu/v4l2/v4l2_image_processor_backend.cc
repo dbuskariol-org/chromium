@@ -97,6 +97,22 @@ struct v4l2_rect ToV4L2Rect(const gfx::Rect& visible_rect) {
   return rect;
 }
 
+bool AllocateV4L2Buffers(V4L2Queue* queue,
+                         size_t num_buffers,
+                         v4l2_memory memory_type) {
+  DCHECK(queue);
+  if (queue->AllocateBuffers(num_buffers, memory_type) == 0u)
+    return false;
+
+  if (queue->AllocatedBuffersCount() != num_buffers) {
+    VLOGF(1) << "Failed to allocate buffers. Allocated number="
+             << queue->AllocatedBuffersCount()
+             << ", Requested number=" << num_buffers;
+    return false;
+  }
+
+  return true;
+}
 }  // namespace
 
 V4L2ImageProcessorBackend::JobRecord::JobRecord()
@@ -626,20 +642,8 @@ bool V4L2ImageProcessorBackend::CreateInputBuffers() {
   }
 
   input_queue_ = device_->GetQueue(V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-  if (!input_queue_)
-    return false;
-
-  if (input_queue_->AllocateBuffers(num_buffers_, input_memory_type_) == 0u)
-    return false;
-
-  if (input_queue_->AllocatedBuffersCount() != num_buffers_) {
-    VLOGF(1) << "Failed to allocate the required number of input buffers. "
-             << "Requested " << num_buffers_ << ", got "
-             << input_queue_->AllocatedBuffersCount() << ".";
-    return false;
-  }
-
-  return true;
+  return input_queue_ && AllocateV4L2Buffers(input_queue_.get(), num_buffers_,
+                                             input_memory_type_);
 }
 
 bool V4L2ImageProcessorBackend::CreateOutputBuffers() {
@@ -648,11 +652,6 @@ bool V4L2ImageProcessorBackend::CreateOutputBuffers() {
   DCHECK_EQ(output_queue_, nullptr);
 
   struct v4l2_rect visible_rect = ToV4L2Rect(output_config_.visible_rect);
-
-  output_queue_ = device_->GetQueue(V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-  if (!output_queue_)
-    return false;
-
   struct v4l2_selection selection_arg;
   memset(&selection_arg, 0, sizeof(selection_arg));
   selection_arg.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -667,17 +666,9 @@ bool V4L2ImageProcessorBackend::CreateOutputBuffers() {
     IOCTL_OR_ERROR_RETURN_FALSE(VIDIOC_S_CROP, &crop);
   }
 
-  if (output_queue_->AllocateBuffers(num_buffers_, output_memory_type_) == 0)
-    return false;
-
-  if (output_queue_->AllocatedBuffersCount() != num_buffers_) {
-    VLOGF(1) << "Failed to allocate output buffers. Allocated number="
-             << output_queue_->AllocatedBuffersCount()
-             << ", Requested number=" << num_buffers_;
-    return false;
-  }
-
-  return true;
+  output_queue_ = device_->GetQueue(V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+  return output_queue_ && AllocateV4L2Buffers(output_queue_.get(), num_buffers_,
+                                              output_memory_type_);
 }
 
 void V4L2ImageProcessorBackend::DevicePollTask(bool poll_device) {
