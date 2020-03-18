@@ -209,6 +209,7 @@
 <translation id="3513798432020909783"><ph name="MANAGER_EMAIL" /> ले व्यवस्थापन गरेको खाता</translation>
 <translation id="3573179567135747900">पुन: "<ph name="FROM_LOCALE" />" मा परिवर्तन गर्नुहोस् (फेरि सुरु गर्न आवश्यक छ)</translation>
 <translation id="3576141592585647168">समय क्षेत्र परिवर्तन गर्नुहोस्</translation>
+<translation id="3593646411856133110">खुला रहेका अनुप्रयोगहरू हेर्न माथितिर स्वाइप गरी थिचिरहनुहोस्</translation>
 <translation id="3595596368722241419">ब्यटरी पूर्ण</translation>
 <translation id="3604801046548457007">डेस्क <ph name="DESK_TITILE" /> सिर्जना गरियो</translation>
 <translation id="3606978283550408104">ब्रेल प्रदर्शन जडित छ।</translation>
@@ -244,13 +245,13 @@
 <translation id="3995138139523574647">USB-C यन्त्र (दायाँ भागको पछाडिको पोर्ट)</translation>
 <translation id="4017989525502048489">लेजर प्वाइन्टर</translation>
 <translation id="4021716437419160885">तलतिर स्क्रोल गर्नुहोस्</translation>
-<translation id="402772165574991617">एउटा अनुप्रयोगबाट तुरुन्तै अर्को अनुप्रयोगमा जान‌ र ट्याब्लेट मोडमा आफ्नो chromebook प्रयोग गर्न इसाराहरूको प्रयोग गर्नुहोस्।</translation>
 <translation id="4028481283645788203">थप सुरक्षाका लागि पासवर्ड चाहिन्छ</translation>
 <translation id="4042660782729322247">तपाईं आफ्नो स्क्रिन आदान प्रदान गर्दै हुनुहुन्छ</translation>
 <translation id="4065525899979931964">{NUM_APPS,plural, =1{एउटा अनुप्रयोगमा निष्क्रिय}other{# अनुप्रयोगहरूमा निष्क्रिय}}</translation>
 <translation id="4072264167173457037">मध्यम सिग्नल</translation>
 <translation id="4112140312785995938">पछाडि जानुहोस्</translation>
 <translation id="4129129681837227511">आफ्नो लक स्क्रिनमा सूचनाहरू हेर्नका लागि सेटिङहरू परिवर्तन गर्न अनलक गर्नुहोस्</translation>
+<translation id="4144413954005649103">दायाँ क्लिक गर्दा वा लङ प्रेस गर्दा सहायकले तपाईंलाई आफूले स्क्रिनमा चयन गरेको कुरासँग सम्बन्धित जानकारी देखाउँछ।</translation>
 <translation id="4146833061457621061">सङ्गीत प्ले गर्नुहोस्</translation>
 <translation id="4149156641122542261"><ph name="DOMAIN" /> ले व्यवस्थित गरेको<ph name="DEVICE_TYPE" /></translation>
 <translation id="4181841719683918333">भाषाहरू</translation>
@@ -365,6 +366,7 @@
 <translation id="5745612484876805746">रात्रि प्रकाश सूर्यास्तको बेला स्वतः सक्रिय हुन्छ</translation>
 <translation id="5750765938512549687">ब्लुटुथ निष्क्रिय छ</translation>
 <translation id="576453121877257266">रात्रि प्रकाश सक्रिय छ।</translation>
+<translation id="5769373120130404283">गोपनीयताको स्क्रिन</translation>
 <translation id="5777841717266010279">स्क्रिन साझा गर्ने रोक्ने?</translation>
 <translation id="5820394555380036790">Chromium OS</translation>
 <translation id="5837036133683224804"><ph name="RECEIVER_NAME" /> मा <ph name="ROUTE_TITLE" /> बन्द गर्नुहोस्</translation>
@@ -397,6 +399,7 @@
 <translation id="615957422585914272">अन-स्क्रिन कुञ्जीपाटी देखाउनुहोस्</translation>
 <translation id="6164005077879661055">यस पर्यवेक्षित प्रयोगकर्तालाई हटाइसकेपछि पर्यवेक्षित प्रयोगकर्तासँग सम्बन्धित सबै फाइलहरू र स्थानीय डाटालाई स्थायी रूपमा मेटाइनेछ। भ्रमण गरिएका वेबसाइटहरू र यस पर्यवेक्षित प्रयोगकर्ताको सेटिङहरूलाई व्यवस्थापकले अझै पनि <ph name="MANAGEMENT_URL" /> मा देख्न सक्छ।</translation>
 <translation id="6165508094623778733">थप जान्नुहोस्</translation>
+<translation id="6236290670123303279">सेटिङहरूको व्यवस्थापन गर्नुहोस्</translation>
 <translation id="6237231532760393653">1X</translation>
 <translation id="6254629735336163724">तेर्सो अवस्थामा लक गरियो</translation>
 <translation id="6259254695169772643">चयन गर्न आफ्नो स्टाइलस प्रयोग गर्नुहोस्</translation>
@@ -406,6 +409,7 @@
 <translation id="6297287540776456956">कुनै क्षेत्रलाई चयन गर्न स्टाइलसको प्रयोग गर्नुहोस्</translation>
 <translation id="6310121235600822547"><ph name="DISPLAY_NAME" /> लाई <ph name="ROTATION" /> मा घुमाइएको थियो</translation>
 <translation id="6376931439017688372">ब्लुटुथ सक्रिय छ</translation>
+<translation id="6381109794406942707">यो यन्त्र अनलक गर्न आफ्नो PIN प्रविष्टि गर्नुहोस्।</translation>
 <translation id="639644700271529076">CAPS LOCK बन्द छ</translation>
 <translation id="6406704438230478924">altgr</translation>
 <translation id="6424520630891723617"><ph name="SECURITY_STATUS" />, सिग्नलको क्षमता <ph name="SIGNAL_STRENGTH" /></translation>
@@ -437,6 +441,7 @@
 <translation id="6669268301501499730">सक्रिय छ</translation>
 <translation id="6670153871843998651">डेस्क ३</translation>
 <translation id="6691659475504239918">Search+Shift+H</translation>
+<translation id="6692996468359469499">आफ्नो चयनसँग सम्बन्धित जानकारी प्राप्त गर्नुहोस्</translation>
 <translation id="6696025732084565524">तपाईंको अलग्याउन मिल्ने किबोर्डलाई महत्त्वपूर्ण अद्यावधिक आवश्यक छ</translation>
 <translation id="6700713906295497288">IME सम्बन्धी मेनुको बटन</translation>
 <translation id="6713285437468012787">ब्लुतुथ यन्त्र "<ph name="DEVICE_NAME" />" लाई जोडा मिलाइएको छ र अब सबै प्रयोगकर्ताहरूको लागि उपलब्ध छ। तपाइँले सेटिङहरू प्रयोग ग्रदै यस जोडालाई हटाउन सक्नुहुनेछ।</translation>
@@ -525,13 +530,13 @@
 <translation id="79341161159229895"><ph name="FIRST_PARENT_EMAIL" /> र <ph name="SECOND_PARENT_EMAIL" /> ले व्यवस्थापन गरेको खाता</translation>
 <translation id="7955885781510802139">उच्च कन्ट्रास्ट मोड</translation>
 <translation id="7977927628060636163">मोबाइल नेटवर्कहरू खोज्दै...</translation>
+<translation id="7980780401175799550">Chrome OS नेभिगेसन गर्ने नयाँ तरिकाहरू प्रयोग गरी हेर्नुहोस्</translation>
 <translation id="7982789257301363584">सञ्जाल</translation>
 <translation id="7984197416080286869">फिंगरप्रिन्टमार्फत अनलक गर्ने अत्यधिक प्रयासहरू गरिए</translation>
 <translation id="7994370417837006925">बहु साइन-इन</translation>
 <translation id="8000066093800657092">कुनै नेटवर्क छैन</translation>
 <translation id="8029629653277878342">थप सुरक्षाका लागि PIN वा पासवर्ड चाहिन्छ</translation>
 <translation id="8030169304546394654">जडान विच्छेद भयो</translation>
-<translation id="8042024183333293953">इसारामार्फत गरिने नेभिगेसनका नयाँ सुविधाहरू प्रयोग गरी हेर्नुहोस्</translation>
 <translation id="8048123526339889627">ब्लुटुथका सेटिङहरू</translation>
 <translation id="8054466585765276473">ब्याटरि समय हिसाब गर्दै।</translation>
 <translation id="8061464966246066292">उच्च कन्ट्रास्ट</translation>
@@ -547,6 +552,7 @@
 <translation id="8167567890448493835"><ph name="LOCALE_NAME" /> प्रयोग गर्दै</translation>
 <translation id="8190698733819146287">भाषा तथा इन्पुट आफू अनुकूल गर्नुहोस् ...</translation>
 <translation id="8192202700944119416">सूचनाहरू लुकाइन्छन्।</translation>
+<translation id="8196787716797768628">एउटा अनुप्रयोगबाट तुरुन्तै अर्को अनुप्रयोगमा जान र आफ्नो Chromebook ट्याब्लेट मोडमा प्रयोग गर्न इसाराहरूको प्रयोग गर्नुहोस्।</translation>
 <translation id="8203795194971602413">दायाँ क्लिक गर्नुहोस्</translation>
 <translation id="8236042855478648955">आराम गर्ने समय भयो</translation>
 <translation id="8247060538831475781"><ph name="CONNECTION_STATUS" />, सिग्नलको क्षमता <ph name="SIGNAL_STRENGTH" />, फोनको ब्याट्री <ph name="BATTERY_STATUS" /></translation>
@@ -620,6 +626,7 @@
 <translation id="9072519059834302790">ब्याट्री पूरै सकिन <ph name="TIME_LEFT" /> बाँकी छ।</translation>
 <translation id="9074739597929991885">ब्लुटुथ</translation>
 <translation id="9079731690316798640">Wi-Fi: <ph name="ADDRESS" /></translation>
+<translation id="9080132581049224423">गृहपृष्ठमा जान माथितिर स्वाइप गर्नुहोस्</translation>
 <translation id="9080206825613744995">माइक्रोफोन प्रयोगमा छ।</translation>
 <translation id="9084606467167974638">मेनुको अवस्था टगल गर्नुहोस्</translation>
 <translation id="9089416786594320554">आगत विधिहरू</translation>

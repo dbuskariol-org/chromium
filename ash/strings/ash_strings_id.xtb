@@ -245,13 +245,13 @@
 <translation id="3995138139523574647">Perangkat USB-C (port belakang sebelah kanan)</translation>
 <translation id="4017989525502048489">Penunjuk laser</translation>
 <translation id="4021716437419160885">Scroll ke bawah</translation>
-<translation id="402772165574991617">Gunakan gestur untuk beralih di antara aplikasi dengan cepat dan berinteraksi dengan Chromebook dalam mode tablet.</translation>
 <translation id="4028481283645788203">Perlu sandi untuk keamanan tambahan</translation>
 <translation id="4042660782729322247">Anda membagikan layar Anda</translation>
 <translation id="4065525899979931964">{NUM_APPS,plural, =1{Nonaktif untuk 1 aplikasi}other{Nonaktif untuk # aplikasi}}</translation>
 <translation id="4072264167173457037">Sinyal sedang</translation>
 <translation id="4112140312785995938">Cari Mundur</translation>
 <translation id="4129129681837227511">Untuk melihat notifikasi di layar kunci, buka kunci untuk mengubah setelan</translation>
+<translation id="4144413954005649103">Klik kanan atau tekan lama agar Asisten menampilkan info terkait konten yang Anda pilih di layar.</translation>
 <translation id="4146833061457621061">Putar musik</translation>
 <translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> dikelola oleh <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Bahasa</translation>
@@ -399,6 +399,7 @@
 <translation id="615957422585914272">Tampilkan keyboard di layar</translation>
 <translation id="6164005077879661055">Semua file dan data lokal yang terkait dengan pengguna yang dilindungi akan dihapus secara permanen setelah pengguna yang dilindungi ini dihapus. Situs web yang dikunjungi dan setelan untuk pengguna yang dilindungi ini mungkin tetap dapat dilihat oleh pengelola di <ph name="MANAGEMENT_URL" />.</translation>
 <translation id="6165508094623778733">Pelajari lebih lanjut</translation>
+<translation id="6236290670123303279">Kelola Setelan</translation>
 <translation id="6237231532760393653">1X</translation>
 <translation id="6254629735336163724">Terkunci ke horizontal</translation>
 <translation id="6259254695169772643">Gunakan stilus untuk memilih</translation>
@@ -440,6 +441,7 @@
 <translation id="6669268301501499730">Aktif</translation>
 <translation id="6670153871843998651">Halaman kerja 3</translation>
 <translation id="6691659475504239918">Search+Shift+H</translation>
+<translation id="6692996468359469499">Dapatkan info terkait pilihan Anda</translation>
 <translation id="6696025732084565524">Keyboard yang dapat dilepas memerlukan update penting</translation>
 <translation id="6700713906295497288">Tombol menu IME</translation>
 <translation id="6713285437468012787">Perangkat Bluetooth "<ph name="DEVICE_NAME" />" telah disandingkan dan kini tersedia bagi semua pengguna. Anda dapat menghapus penyandingan ini menggunakan Setelan.</translation>
@@ -528,13 +530,13 @@
 <translation id="79341161159229895">Akun dikelola oleh <ph name="FIRST_PARENT_EMAIL" /> dan <ph name="SECOND_PARENT_EMAIL" /></translation>
 <translation id="7955885781510802139">Mode kontras tinggi</translation>
 <translation id="7977927628060636163">Menelusuri jaringan seluler...</translation>
+<translation id="7980780401175799550">Coba cara baru untuk menjelajahi Chrome OS</translation>
 <translation id="7982789257301363584">Jaringan</translation>
 <translation id="7984197416080286869">Terlalu banyak percobaan sidik jari</translation>
 <translation id="7994370417837006925">Fitur masuk banyak akun</translation>
 <translation id="8000066093800657092">Tidak ada jaringan</translation>
 <translation id="8029629653277878342">Perlu PIN atau sandi untuk keamanan tambahan</translation>
 <translation id="8030169304546394654">Diputuskan</translation>
-<translation id="8042024183333293953">Coba navigasi gestur baru</translation>
 <translation id="8048123526339889627">Setelan Bluetooth</translation>
 <translation id="8054466585765276473">Menghitung masa pakai baterai.</translation>
 <translation id="8061464966246066292">Kontras tinggi</translation>
@@ -550,6 +552,7 @@
 <translation id="8167567890448493835">Menggunakan <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Sesuaikan bahasa dan masukan...</translation>
 <translation id="8192202700944119416">Notifikasi disembunyikan.</translation>
+<translation id="8196787716797768628">Gunakan gestur untuk beralih di antara aplikasi dengan cepat dan berinteraksi dengan Chromebook dalam mode tablet.</translation>
 <translation id="8203795194971602413">Klik kanan</translation>
 <translation id="8236042855478648955">Waktunya beristirahat</translation>
 <translation id="8247060538831475781"><ph name="CONNECTION_STATUS" />, Kekuatan Sinyal <ph name="SIGNAL_STRENGTH" />, Baterai Ponsel <ph name="BATTERY_STATUS" /></translation>

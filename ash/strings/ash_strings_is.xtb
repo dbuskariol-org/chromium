@@ -245,13 +245,13 @@
 <translation id="3995138139523574647">USB-C tæki (tengi hægra megin að aftan)</translation>
 <translation id="4017989525502048489">Laser-bendill</translation>
 <translation id="4021716437419160885">Fletta niður</translation>
-<translation id="402772165574991617">Notaðu bendingar til að skipta hratt á milli forrita og nota Chromebook í spjaldtölvustillingu.</translation>
 <translation id="4028481283645788203">Krafa er um aðgangsorð fyrir aukið öryggi</translation>
 <translation id="4042660782729322247">Þú ert að deila skjánum þínum</translation>
 <translation id="4065525899979931964">{NUM_APPS,plural, =1{Slökkt á fyrir forrit}one{Slökkt á fyrir # forrit}other{Slökkt á fyrir # forrit}}</translation>
 <translation id="4072264167173457037">Miðlungssendistyrkur</translation>
 <translation id="4112140312785995938">Spóla til baka</translation>
 <translation id="4129129681837227511">Ef þú vilt sjá tilkynningar á lásskjánum skaltu taka úr lás til að breyta stillingunni</translation>
+<translation id="4144413954005649103">Þegar þú hægrismellir eða heldur inni sýnir hjálparinn þér upplýsingar í tengslum við það sem þú velur á skjánum.</translation>
 <translation id="4146833061457621061">Spila tónlist</translation>
 <translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> er stjórnað af <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Tungumál</translation>
@@ -399,6 +399,7 @@
 <translation id="615957422585914272">Sýna skjályklaborðið</translation>
 <translation id="6164005077879661055">Öllum skrám og staðbundnum gögnum sem tengjast stýrða notandanum verður eytt fyrir fullt og allt þegar stýrði notandinn er fjarlægður. Heimsótt vefsvæði og stillingar þessa stýrða notanda verða hugsanlega áfram sýnileg stjórnandanum á <ph name="MANAGEMENT_URL" />.</translation>
 <translation id="6165508094623778733">Frekari upplýsingar</translation>
+<translation id="6236290670123303279">Stjórna stillingum</translation>
 <translation id="6237231532760393653">1X</translation>
 <translation id="6254629735336163724">Læst á lárétt</translation>
 <translation id="6259254695169772643">Notaðu pennann þinn til að velja</translation>
@@ -440,6 +441,7 @@
 <translation id="6669268301501499730">Kveikt</translation>
 <translation id="6670153871843998651">Skrifborð 3</translation>
 <translation id="6691659475504239918">Leitarhnappur+Shift+H</translation>
+<translation id="6692996468359469499">Fá upplýsingar í tengslum við val þitt</translation>
 <translation id="6696025732084565524">Lausa lyklaborðið þarf að fá áríðandi uppfærslu</translation>
 <translation id="6700713906295497288">IME-valmyndarhnappur</translation>
 <translation id="6713285437468012787">Bluetooth-tækið „<ph name="DEVICE_NAME" />“ var parað og er nú aðgengilegt öllum notendum. Þú getur fjarlægt þessa pörun í stillingum.</translation>
@@ -528,13 +530,13 @@
 <translation id="79341161159229895"><ph name="FIRST_PARENT_EMAIL" /> og <ph name="SECOND_PARENT_EMAIL" /> stjórna þessum reikningi</translation>
 <translation id="7955885781510802139">Mikil birtuskil</translation>
 <translation id="7977927628060636163">Leitar að farsímakerfum...</translation>
+<translation id="7980780401175799550">Prófaðu nýjar leiðir við að nota Chrome OS</translation>
 <translation id="7982789257301363584">Símkerfi</translation>
 <translation id="7984197416080286869">Of margar tilraunir til að nota fingrafar</translation>
 <translation id="7994370417837006925">Innskráning á marga reikninga</translation>
 <translation id="8000066093800657092">Ekkert net</translation>
 <translation id="8029629653277878342">Krafa er um PIN-númer eða aðgangsorð fyrir aukið öryggi</translation>
 <translation id="8030169304546394654">Aftengt</translation>
-<translation id="8042024183333293953">Prófaðu nýja bendingastjórnun</translation>
 <translation id="8048123526339889627">Bluetooth-stillingar</translation>
 <translation id="8054466585765276473">Reiknar rafhlöðuendingu.</translation>
 <translation id="8061464966246066292">Mikil birtuskil</translation>
@@ -550,6 +552,7 @@
 <translation id="8167567890448493835">Notar <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Sérsníða tungumál og innslátt...</translation>
 <translation id="8192202700944119416">Tilkynningar eru faldar.</translation>
+<translation id="8196787716797768628">Notaðu bendingar til að skipta hratt á milli forrita og nota Chromebook í spjaldtölvustillingu.</translation>
 <translation id="8203795194971602413">Hægrismella</translation>
 <translation id="8236042855478648955">Tími til að taka sér hlé</translation>
 <translation id="8247060538831475781"><ph name="CONNECTION_STATUS" />, <ph name="SIGNAL_STRENGTH" /> sendistyrkur, <ph name="BATTERY_STATUS" /> hleðsla á rafhlöðu símans</translation>

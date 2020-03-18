@@ -645,6 +645,7 @@
 <translation id="3784372983762739446">Устройства Bluetooth</translation>
 <translation id="3787705759683870569">Срок действия: до <ph name="EXPIRATION_MONTH" />/<ph name="EXPIRATION_YEAR" /></translation>
 <translation id="3789155188480882154">Размер: 16</translation>
+<translation id="3793574014653384240">Количество недавних сбоев и их причины</translation>
 <translation id="3797522431967816232">Prc3 (конверт)</translation>
 <translation id="3799805948399000906">Шрифт запрошен</translation>
 <translation id="3807366285948165054">Смещение изображения по оси X</translation>
@@ -1045,7 +1046,7 @@
 <translation id="549333378215107354">Размер: 3</translation>
 <translation id="5509762909502811065">B0</translation>
 <translation id="5509780412636533143">Управляемые закладки</translation>
-<translation id="5510481203689988000">Этот параметр можно задать в настройках файлов cookie</translation>
+<translation id="5510481203689988000">Этот параметр можно изменить в настройках файлов cookie</translation>
 <translation id="5510766032865166053">Возможно, он был перемещен или удален.</translation>
 <translation id="5523118979700054094">Название правила</translation>
 <translation id="55293785478302737">Скобы по краю</translation>

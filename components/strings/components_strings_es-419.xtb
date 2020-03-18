@@ -651,6 +651,7 @@ De lo contrario, la configuración de privacidad bloqueará esta acción. Esto p
 <translation id="3784372983762739446">Dispositivos Bluetooth</translation>
 <translation id="3787705759683870569">Vencimiento: <ph name="EXPIRATION_MONTH" />/<ph name="EXPIRATION_YEAR" /></translation>
 <translation id="3789155188480882154">Tamaño 16</translation>
+<translation id="3793574014653384240">Cantidad y causas de los errores que se produjeron recientemente</translation>
 <translation id="3797522431967816232">Prc3 (Envelope)</translation>
 <translation id="3799805948399000906">Se necesita la fuente</translation>
 <translation id="3807366285948165054">Cambio en el eje X de la imagen</translation>
@@ -814,7 +815,7 @@ De lo contrario, la configuración de privacidad bloqueará esta acción. Esto p
 <translation id="4466881336512663640">Se perderán los cambios del formulario. ¿Confirmas que deseas continuar?</translation>
 <translation id="4477350412780666475">Siguiente pista</translation>
 <translation id="4482953324121162758">Este sitio no se traducirá.</translation>
-<translation id="4486757593530038591">Si se activa esta opción, los sitios web no podrán usar tu actividad de navegación en diferentes sitios para personalizar anuncios. Es posible que las funciones de algunos sitios no se desempeñen según lo previsto.</translation>
+<translation id="4486757593530038591">Si se activa esta opción, los sitios web no podrán usar tu actividad de navegación en diferentes sitios para personalizar anuncios. Es posible que las características de algunos sitios no funcionen adecuadamente.</translation>
 <translation id="4490717597759821841">A7</translation>
 <translation id="4492519888999857993">Estas funciones están inhabilitadas de forma predeterminada. No estarán disponibles en futuras versiones de Chrome.</translation>
 <translation id="4493480324863638523">La URL no es válida. Debe ser una URL con un esquema estándar, p. ej., http://ejemplo.com o https://ejemplo.com.</translation>

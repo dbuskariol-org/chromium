@@ -245,13 +245,13 @@
 <translation id="3995138139523574647">USB-C-Gerät (Port hinten rechts)</translation>
 <translation id="4017989525502048489">Laserpointer</translation>
 <translation id="4021716437419160885">Nach unten scrollen</translation>
-<translation id="402772165574991617">Mit Touch-Gesten können Sie im Tablet-Modus schnell zwischen Apps wechseln und Ihr Chromebook bedienen.</translation>
 <translation id="4028481283645788203">Für mehr Sicherheit ist ein Passwort erforderlich</translation>
 <translation id="4042660782729322247">Sie geben Ihren Bildschirm frei</translation>
 <translation id="4065525899979931964">{NUM_APPS,plural, =1{Für eine App deaktiviert}other{Für # Apps deaktiviert}}</translation>
 <translation id="4072264167173457037">Durchschnittliches Signal</translation>
 <translation id="4112140312785995938">Zurück springen</translation>
 <translation id="4129129681837227511">Wenn Sie Benachrichtigungen auf dem Sperrbildschirm sehen möchten, entsperren Sie das Gerät, um die Einstellung zu ändern</translation>
+<translation id="4144413954005649103">Wenn Sie mit der rechten Maustaste klicken oder lange drücken, zeigt Ihnen Assistant Informationen zu dem ausgewählten Element auf dem Display.</translation>
 <translation id="4146833061457621061">Musik abspielen</translation>
 <translation id="4149156641122542261"><ph name="DEVICE_TYPE" /> verwaltet von <ph name="DOMAIN" /></translation>
 <translation id="4181841719683918333">Sprachen</translation>
@@ -399,6 +399,7 @@
 <translation id="615957422585914272">Bildschirmtastatur anzeigen</translation>
 <translation id="6164005077879661055">Durch das Entfernen des betreuten Nutzers werden alle mit ihm verknüpften Dateien und lokalen Daten endgültig gelöscht. Besuchte Websites und Einstellungen des betreuten Nutzers kann der Manager möglicherweise weiterhin unter <ph name="MANAGEMENT_URL" /> einsehen.</translation>
 <translation id="6165508094623778733">Weitere Informationen</translation>
+<translation id="6236290670123303279">Einstellungen verwalten</translation>
 <translation id="6237231532760393653">1X</translation>
 <translation id="6254629735336163724">Nur horizontale Ausrichtung</translation>
 <translation id="6259254695169772643">Verwenden Sie den Eingabestift, um Ihre Auswahl zu treffen</translation>
@@ -440,6 +441,7 @@
 <translation id="6669268301501499730">An</translation>
 <translation id="6670153871843998651">Desktop 3</translation>
 <translation id="6691659475504239918">Suche + Umschalttaste + H</translation>
+<translation id="6692996468359469499">Informationen zu Ihrer Auswahl erhalten</translation>
 <translation id="6696025732084565524">Wichtiges Update für Ihre abnehmbare Tastatur</translation>
 <translation id="6700713906295497288">IME-Menüschaltfläche</translation>
 <translation id="6713285437468012787">Das Bluetooth-Gerät "<ph name="DEVICE_NAME" />" wurde gekoppelt und ist nun für alle Nutzer verfügbar. Sie können es unter "Einstellungen" wieder entkoppeln.</translation>
@@ -528,13 +530,13 @@
 <translation id="79341161159229895">Konto verwaltet von <ph name="FIRST_PARENT_EMAIL" /> und <ph name="SECOND_PARENT_EMAIL" /></translation>
 <translation id="7955885781510802139">Modus mit hohem Kontrast</translation>
 <translation id="7977927628060636163">Nach Mobilfunknetzen wird gesucht…</translation>
+<translation id="7980780401175799550">Neue Navigationsoptionen für Chrome OS</translation>
 <translation id="7982789257301363584">Netzwerk</translation>
 <translation id="7984197416080286869">Zu viele Entsperrversuche mit Fingerabdruck</translation>
 <translation id="7994370417837006925">Mehrfachanmeldung</translation>
 <translation id="8000066093800657092">Nicht verbunden</translation>
 <translation id="8029629653277878342">Für mehr Sicherheit ist das Passwort oder die PIN erforderlich</translation>
 <translation id="8030169304546394654">Verbindung getrennt</translation>
-<translation id="8042024183333293953">Jetzt die neue Bedienung über Gesten testen</translation>
 <translation id="8048123526339889627">Bluetooth-Einstellungen</translation>
 <translation id="8054466585765276473">Akku-Laufzeit wird berechnet.</translation>
 <translation id="8061464966246066292">Hoher Kontrast</translation>
@@ -550,6 +552,7 @@
 <translation id="8167567890448493835">"<ph name="LOCALE_NAME" />" wird verwendet</translation>
 <translation id="8190698733819146287">Sprache und Eingabe anpassen...</translation>
 <translation id="8192202700944119416">Benachrichtigungen sind ausgeblendet.</translation>
+<translation id="8196787716797768628">Mit Touch-Gesten können Sie im Tablet-Modus schnell zwischen Apps wechseln und Ihr Chromebook bedienen.</translation>
 <translation id="8203795194971602413">Rechtsklick</translation>
 <translation id="8236042855478648955">Zeit für eine Pause</translation>
 <translation id="8247060538831475781"><ph name="CONNECTION_STATUS" />, Signalstärke bei <ph name="SIGNAL_STRENGTH" />, Smartphone-Akku bei <ph name="BATTERY_STATUS" /></translation>

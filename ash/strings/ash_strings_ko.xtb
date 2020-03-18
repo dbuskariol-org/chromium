@@ -245,13 +245,13 @@
 <translation id="3995138139523574647">USB-C 기기(우측 후면 포트)</translation>
 <translation id="4017989525502048489">레이저 포인터</translation>
 <translation id="4021716437419160885">아래로 스크롤</translation>
-<translation id="402772165574991617">태블릿 모드에서 동작을 사용하여 앱 간에 빠르게 전환하고 Chromebook과 상호작용하세요.</translation>
 <translation id="4028481283645788203">보안 강화를 위해 비밀번호가 필요합니다.</translation>
 <translation id="4042660782729322247">화면 공유 중</translation>
 <translation id="4065525899979931964">{NUM_APPS,plural, =1{앱 1개에서 사용 중지됨}other{앱 #개에서 사용 중지됨}}</translation>
 <translation id="4072264167173457037">신호 보통</translation>
 <translation id="4112140312785995938">뒤로 탐색</translation>
 <translation id="4129129681837227511">잠금 화면에 알림이 표시되도록 하려면 잠금을 해제하여 설정을 변경하세요.</translation>
+<translation id="4144413954005649103">마우스 오른쪽 버튼으로 클릭하거나 길게 누르면 어시스턴트가 화면에서 선택한 내용과 관련된 정보를 표시합니다.</translation>
 <translation id="4146833061457621061">음악을 틀어 줘</translation>
 <translation id="4149156641122542261"><ph name="DOMAIN" />에서 관리하는 <ph name="DEVICE_TYPE" /></translation>
 <translation id="4181841719683918333">언어</translation>
@@ -399,6 +399,7 @@
 <translation id="615957422585914272">터치 키보드 표시</translation>
 <translation id="6164005077879661055">관리 대상 사용자를 제거하면 해당 관리 대상 사용자와 연결되어 있는 모든 파일 및 로컬 데이터가 영구적으로 삭제됩니다. 하지만 관리자는 관리 대상 사용자의 방문한 웹사이트 및 설정을 <ph name="MANAGEMENT_URL" /> 페이지에서 계속 볼 수 있습니다.</translation>
 <translation id="6165508094623778733">자세히 알아보기</translation>
+<translation id="6236290670123303279">설정 관리</translation>
 <translation id="6237231532760393653">1X</translation>
 <translation id="6254629735336163724">가로로 잠김</translation>
 <translation id="6259254695169772643">스타일러스로 선택하세요.</translation>
@@ -440,6 +441,7 @@
 <translation id="6669268301501499730">사용</translation>
 <translation id="6670153871843998651">데스크 3</translation>
 <translation id="6691659475504239918">Search+Shift+H</translation>
+<translation id="6692996468359469499">선택 항목과 관련된 정보 얻기</translation>
 <translation id="6696025732084565524">분리식 키보드에 중요 업데이트 필요</translation>
 <translation id="6700713906295497288">IME 메뉴 버튼</translation>
 <translation id="6713285437468012787">블루투스 기기 '<ph name="DEVICE_NAME" />'이(가) 페어링되어 이제 모든 사용자가 사용할 수 있습니다. 설정에서 이 페어링을 삭제할 수 있습니다.</translation>
@@ -528,13 +530,13 @@
 <translation id="79341161159229895">계정 관리자: <ph name="FIRST_PARENT_EMAIL" /> 및 <ph name="SECOND_PARENT_EMAIL" /></translation>
 <translation id="7955885781510802139">고대비 모드</translation>
 <translation id="7977927628060636163">모바일 네트워크 검색 중...</translation>
+<translation id="7980780401175799550">Chrome OS의 새로운 탐색 방법 사용해 보기</translation>
 <translation id="7982789257301363584">네트워크</translation>
 <translation id="7984197416080286869">지문 인식을 너무 많이 시도함</translation>
 <translation id="7994370417837006925">멀티 로그인</translation>
 <translation id="8000066093800657092">네트워크 없음</translation>
 <translation id="8029629653277878342">보안 강화를 위해 PIN 또는 비밀번호가 필요합니다.</translation>
 <translation id="8030169304546394654">연결 끊김</translation>
-<translation id="8042024183333293953">새로운 동작 탐색 사용해 보기</translation>
 <translation id="8048123526339889627">블루투스 설정</translation>
 <translation id="8054466585765276473">배터리 시간 계산 중</translation>
 <translation id="8061464966246066292">고대비</translation>
@@ -550,6 +552,7 @@
 <translation id="8167567890448493835"><ph name="LOCALE_NAME" /> 사용 중</translation>
 <translation id="8190698733819146287">언어 및 입력 설정...</translation>
 <translation id="8192202700944119416">알림이 숨겨져 있음</translation>
+<translation id="8196787716797768628">태블릿 모드에서 동작을 사용하여 앱 간에 빠르게 전환하고 Chromebook과 상호작용하세요.</translation>
 <translation id="8203795194971602413">오른쪽 클릭</translation>
 <translation id="8236042855478648955">휴식 시간</translation>
 <translation id="8247060538831475781"><ph name="CONNECTION_STATUS" />, 신호 강도 <ph name="SIGNAL_STRENGTH" />, 휴대전화 배터리 <ph name="BATTERY_STATUS" /></translation>
