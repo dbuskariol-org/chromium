@@ -12,15 +12,14 @@
 // #import {flush} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 // #import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
 // #import {TestPasswordManagerProxy} from 'chrome://test/settings/test_password_manager_proxy.m.js';
-// clang-format-on
+// clang-format on
 
 cr.define('settings_passwords_check', function() {
   const PasswordCheckState = chrome.passwordsPrivate.PasswordCheckState;
 
   function createCheckPasswordSection() {
     // Create a passwords-section to use for testing.
-    const passwordsSection =
-        document.createElement('settings-password-check');
+    const passwordsSection = document.createElement('settings-password-check');
     document.body.appendChild(passwordsSection);
     Polymer.dom.flush();
     return passwordsSection;
@@ -93,8 +92,8 @@ cr.define('settings_passwords_check', function() {
    * passwordList The expected data.
    * @private
    */
-  function validateLeakedPasswordsList(checkPasswordSection,
-      compromisedCredentials) {
+  function validateLeakedPasswordsList(
+      checkPasswordSection, compromisedCredentials) {
     const listElements = checkPasswordSection.$.leakedPasswordList;
     assertEquals(listElements.items.length, compromisedCredentials.length);
     const nodes = checkPasswordSection.shadowRoot.querySelectorAll(
@@ -287,10 +286,9 @@ cr.define('settings_passwords_check', function() {
           autofill_test_util.makePasswordCheckStatus(
               /*state=*/ PasswordCheckState.NO_PASSWORDS);
       const section = createCheckPasswordSection();
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
-          });
+      return passwordManager.whenCalled('getPasswordCheckStatus').then(() => {
+        expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
+      });
     });
 
     // Test verifies that 'Try again' visible and working when users encounter a
@@ -378,15 +376,15 @@ cr.define('settings_passwords_check', function() {
     // proxy function.
     test('testRemovePasswordConfirmationDialog', function() {
       const entry = autofill_test_util.makeCompromisedCredential(
-                    'one.com', 'test4', 'LEAKED', 0);
+          'one.com', 'test4', 'LEAKED', 0);
       const removeDialog = createRemovePasswordDialog(entry);
       removeDialog.$.remove.click();
       return passwordManager.whenCalled('removeCompromisedCredential')
-        .then(({id, username, formattedOrigin}) => {
-          assertEquals(0 , id);
-          assertEquals('test4', username);
-          assertEquals('one.com', formattedOrigin);
-        });
+          .then(({id, username, formattedOrigin}) => {
+            assertEquals(0, id);
+            assertEquals('test4', username);
+            assertEquals('one.com', formattedOrigin);
+          });
     });
 
     // A changing status is immediately reflected in title, icon and banner.
@@ -610,8 +608,8 @@ cr.define('settings_passwords_check', function() {
         const subtitle = section.$.subtitle;
         assertTrue(isElementVisible(title));
         assertFalse(isElementVisible(subtitle));
-        expectEquals(section.i18n('checkPasswordsDescription'),
-                     title.innerText);
+        expectEquals(
+            section.i18n('checkPasswordsDescription'), title.innerText);
       });
     });
 
@@ -832,8 +830,8 @@ cr.define('settings_passwords_check', function() {
           /*state=*/ PasswordCheckState.RUNNING, /*checked=*/ 1,
           /*remaining=*/ 5);
       data.leakedCredentials = [
-          autofill_test_util.makeCompromisedCredential(
-              'one.com', 'test4', 'LEAKED'),
+        autofill_test_util.makeCompromisedCredential(
+            'one.com', 'test4', 'LEAKED'),
       ];
 
       const checkPasswordSection = createCheckPasswordSection();
@@ -849,8 +847,8 @@ cr.define('settings_passwords_check', function() {
       data.checkStatus = autofill_test_util.makePasswordCheckStatus(
           /*state=*/ PasswordCheckState.IDLE);
       data.leakedCredentials = [
-          autofill_test_util.makeCompromisedCredential(
-              'one.com', 'test4', 'LEAKED'),
+        autofill_test_util.makeCompromisedCredential(
+            'one.com', 'test4', 'LEAKED'),
       ];
 
       const checkPasswordSection = createCheckPasswordSection();
@@ -866,8 +864,8 @@ cr.define('settings_passwords_check', function() {
       data.checkStatus = autofill_test_util.makePasswordCheckStatus(
           /*state=*/ PasswordCheckState.CANCELED);
       data.leakedCredentials = [
-          autofill_test_util.makeCompromisedCredential(
-              'one.com', 'test4', 'LEAKED'),
+        autofill_test_util.makeCompromisedCredential(
+            'one.com', 'test4', 'LEAKED'),
       ];
 
       const checkPasswordSection = createCheckPasswordSection();
@@ -954,7 +952,7 @@ cr.define('settings_passwords_check', function() {
             // Verify that the edit dialog has become visible.
             Polymer.dom.flush();
             assertTrue(!!checkPasswordSection.$$(
-              'settings-password-check-edit-dialog'));
+                'settings-password-check-edit-dialog'));
           });
     });
 
@@ -984,8 +982,8 @@ cr.define('settings_passwords_check', function() {
       editDialog.$.passwordInput.value = 'yadhtribym';
       editDialog.$.cancel.click();
 
-      assertEquals(0,
-                   passwordManager.getCallCount('changeCompromisedCredential'));
+      assertEquals(
+          0, passwordManager.getCallCount('changeCompromisedCredential'));
     });
   });
   // #cr_define_end
