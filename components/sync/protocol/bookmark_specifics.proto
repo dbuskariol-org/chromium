@@ -47,4 +47,7 @@ message BookmarkSpecifics {
   // If not present, the value can be safely inferred using the very same
   // methods listed above.
   optional string guid = 10;
+  // Contains full title as is. |legacy_canonicalized_title| is a prefix of
+  // |full_title| with escaped symbols.
+  optional string full_title = 11;
 }

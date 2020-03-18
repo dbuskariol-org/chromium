@@ -185,6 +185,7 @@ VISIT_PROTO_FIELDS(const sync_pb::BookmarkSpecifics& proto) {
   VISIT(creation_time_us);
   VISIT(icon_url);
   VISIT_REP(meta_info);
+  VISIT(full_title);
 }
 
 VISIT_PROTO_FIELDS(const sync_pb::ChromiumExtensionsActivity& proto) {
