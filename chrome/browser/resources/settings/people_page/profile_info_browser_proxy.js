@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// clang-format off
+// #import {addSingletonGetter, sendWithPromise} from 'chrome://resources/js/cr.m.js';
+// clang-format on
+
 cr.define('settings', function() {
   /**
    * An object describing the profile.
@@ -30,7 +34,7 @@ cr.define('settings', function() {
   /**
    * @implements {ProfileInfoBrowserProxy}
    */
-  class ProfileInfoBrowserProxyImpl {
+  /* #export */ class ProfileInfoBrowserProxyImpl {
     /** @override */
     getProfileInfo() {
       return cr.sendWithPromise('getProfileInfo');

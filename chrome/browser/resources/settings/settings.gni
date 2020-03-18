@@ -47,6 +47,8 @@ settings_namespace_rewrites = [
   "Settings.PrefUtil.stringToPrefValue|stringToPrefValue",
   "settings.PrintingBrowserProxy|PrintingBrowserProxy",
   "settings.PrivacyElementInteractions|PrivacyElementInteractions",
+  "settings.ProfileInfoBrowserProxy|ProfileInfoBrowserProxy",
+  "settings.ProfileInfo|ProfileInfo",
   "settings.ResetBrowserProxy|ResetBrowserProxy",
   "settings.Route|Route",
   "settings.routes|routes",
