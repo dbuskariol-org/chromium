@@ -108,6 +108,9 @@ void TimeZoneController::Init() {
   if (!CanInitializeMojo())
     return;
 
+  // monitor must not use HeapMojoRemote. TimeZoneController is not managed by
+  // Oilpan. monitor is only used to bind receiver_ here and never used
+  // again.
   mojo::Remote<device::mojom::blink::TimeZoneMonitor> monitor;
   Platform::Current()->GetBrowserInterfaceBroker()->GetInterface(
       monitor.BindNewPipeAndPassReceiver());
