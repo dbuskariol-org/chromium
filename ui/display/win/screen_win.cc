@@ -574,7 +574,7 @@ int ScreenWin::GetSystemMetricsForMonitor(HMONITOR monitor, int metric) {
   float scale_factor = GetMonitorScaleFactor(monitor, include_accessibility);
 
   // We'll then pull up the system metrics scaled by the appropriate amount.
-  return GetSystemMetricsForScaleFactor(scale_factor, metric);
+  return g_instance->GetSystemMetricsForScaleFactor(scale_factor, metric);
 }
 
 // static
@@ -582,7 +582,7 @@ int ScreenWin::GetSystemMetricsInDIP(int metric) {
   if (!g_instance)
     return ::GetSystemMetrics(metric);
 
-  return GetSystemMetricsForScaleFactor(1.0f, metric);
+  return g_instance->GetSystemMetricsForScaleFactor(1.0f, metric);
 }
 
 // static
@@ -912,8 +912,8 @@ ScreenWinDisplay ScreenWin::GetScreenWinDisplayVia(Getter getter,
   return (g_instance->*getter)(value);
 }
 
-// static
-int ScreenWin::GetSystemMetricsForScaleFactor(float scale_factor, int metric) {
+int ScreenWin::GetSystemMetricsForScaleFactor(float scale_factor,
+                                              int metric) const {
   if (base::win::IsProcessPerMonitorDpiAware()) {
     using GetSystemMetricsForDpiPtr = decltype(&::GetSystemMetricsForDpi);
     static const auto get_system_metrics_for_dpi =
@@ -927,11 +927,8 @@ int ScreenWin::GetSystemMetricsForScaleFactor(float scale_factor, int metric) {
 
   // Windows 8.1 doesn't support GetSystemMetricsForDpi(), yet does support
   // per-process dpi awareness.
-  Display primary_display(g_instance->GetPrimaryDisplay());
-  int system_metrics_result = g_instance->GetSystemMetrics(metric);
-
-  return int{std::round(system_metrics_result * scale_factor /
-                        primary_display.device_scale_factor())};
+  return int{std::round(GetSystemMetrics(metric) * scale_factor /
+                        GetPrimaryDisplay().device_scale_factor())};
 }
 
 void ScreenWin::RecordDisplayScaleFactors() const {

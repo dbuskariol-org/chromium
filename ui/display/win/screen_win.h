@@ -226,7 +226,7 @@ class DISPLAY_EXPORT ScreenWin : public Screen,
 
   // Returns the result of GetSystemMetrics for |metric| scaled to the specified
   // |scale_factor|.
-  static int GetSystemMetricsForScaleFactor(float scale_factor, int metric);
+  int GetSystemMetricsForScaleFactor(float scale_factor, int metric) const;
 
   void RecordDisplayScaleFactors() const;
 
