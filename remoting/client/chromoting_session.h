@@ -64,7 +64,7 @@ class ChromotingSession : public ClientInputInjector {
     // invoked.
     virtual void FetchSecret(
         bool pairing_supported,
-        const protocol::SecretFetchedCallback& secret_fetched_callback) = 0;
+        protocol::SecretFetchedCallback secret_fetched_callback) = 0;
 
     // Pops up a third party login page to fetch token required for
     // authentication.
@@ -72,8 +72,7 @@ class ChromotingSession : public ClientInputInjector {
         const std::string& token_url,
         const std::string& client_id,
         const std::string& scopes,
-        const protocol::ThirdPartyTokenFetchedCallback&
-            token_fetched_callback) = 0;
+        protocol::ThirdPartyTokenFetchedCallback token_fetched_callback) = 0;
 
     // Pass on the set of negotiated capabilities to the client.
     virtual void SetCapabilities(const std::string& capabilities) = 0;

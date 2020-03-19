@@ -208,8 +208,10 @@ int PseudoTcpAdapter::Core::Connect(net::CompletionOnceCallback callback) {
 
   // Start the connection attempt.
   int result = pseudo_tcp_.Connect();
-  if (result < 0)
+  if (result < 0) {
+    std::move(callback).Run(net::ERR_FAILED);
     return net::ERR_FAILED;
+  }
 
   AdjustClock();
 

@@ -39,13 +39,12 @@ PseudoTcpChannelFactory::~PseudoTcpChannelFactory() {
   DCHECK(pending_sockets_.empty());
 }
 
-void PseudoTcpChannelFactory::CreateChannel(
-    const std::string& name,
-    const ChannelCreatedCallback& callback) {
+void PseudoTcpChannelFactory::CreateChannel(const std::string& name,
+                                            ChannelCreatedCallback callback) {
   datagram_channel_factory_->CreateChannel(
-      name,
-      base::Bind(&PseudoTcpChannelFactory::OnDatagramChannelCreated,
-                 base::Unretained(this), name, callback));
+      name, base::BindOnce(&PseudoTcpChannelFactory::OnDatagramChannelCreated,
+                           base::Unretained(this), name,
+                           base::Passed(std::move(callback))));
 }
 
 void PseudoTcpChannelFactory::CancelChannelCreation(const std::string& name) {
@@ -60,7 +59,7 @@ void PseudoTcpChannelFactory::CancelChannelCreation(const std::string& name) {
 
 void PseudoTcpChannelFactory::OnDatagramChannelCreated(
     const std::string& name,
-    const ChannelCreatedCallback& callback,
+    ChannelCreatedCallback callback,
     std::unique_ptr<P2PDatagramSocket> datagram_socket) {
   PseudoTcpAdapter* adapter = new PseudoTcpAdapter(std::move(datagram_socket));
   pending_sockets_[name] = adapter;
@@ -75,16 +74,14 @@ void PseudoTcpChannelFactory::OnDatagramChannelCreated(
   if (name == kVideoChannelName)
     adapter->SetWriteWaitsForSend(true);
 
-  int result = adapter->Connect(
-      base::Bind(&PseudoTcpChannelFactory::OnPseudoTcpConnected,
-                 base::Unretained(this), name, callback));
-  if (result != net::ERR_IO_PENDING)
-    OnPseudoTcpConnected(name, callback, result);
+  adapter->Connect(
+      base::BindOnce(&PseudoTcpChannelFactory::OnPseudoTcpConnected,
+                     base::Unretained(this), name, std::move(callback)));
 }
 
 void PseudoTcpChannelFactory::OnPseudoTcpConnected(
     const std::string& name,
-    const ChannelCreatedCallback& callback,
+    ChannelCreatedCallback callback,
     int result) {
   auto it = pending_sockets_.find(name);
   DCHECK(it != pending_sockets_.end());
@@ -94,7 +91,7 @@ void PseudoTcpChannelFactory::OnPseudoTcpConnected(
   if (result != net::OK)
     socket.reset();
 
-  callback.Run(std::move(socket));
+  std::move(callback).Run(std::move(socket));
 }
 
 }  // namespace protocol

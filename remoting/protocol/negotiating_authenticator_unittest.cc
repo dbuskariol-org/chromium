@@ -110,8 +110,8 @@ class NegotiatingAuthenticatorTest : public AuthenticatorTestBase {
       const std::string& client_secret,
       bool pairing_supported,
       bool pairing_expected,
-      const protocol::SecretFetchedCallback& secret_fetched_callback) {
-    secret_fetched_callback.Run(client_secret);
+      protocol::SecretFetchedCallback secret_fetched_callback) {
+    std::move(secret_fetched_callback).Run(client_secret);
     ASSERT_EQ(pairing_supported, pairing_expected);
   }
 

@@ -102,10 +102,7 @@ void MessageReader::OnDataReceived(net::IOBuffer* data, int data_size) {
 
   // Get list of all new messages first, and then call the callback
   // for all of them.
-  while (true) {
-    CompoundBuffer* buffer = message_decoder_.GetNextMessage();
-    if (!buffer)
-      break;
+  while (CompoundBuffer* buffer = message_decoder_.GetNextMessage()) {
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(&MessageReader::RunCallback, weak_factory_.GetWeakPtr(),

@@ -171,12 +171,12 @@ void NegotiatingClientAuthenticator::CreateAuthenticatorForCurrentMethod(
     case Method::SHARED_SECRET_PLAIN_SPAKE2_P224:
     case Method::SHARED_SECRET_SPAKE2_P224:
     case Method::SHARED_SECRET_SPAKE2_CURVE25519:
-      config_.fetch_secret_callback.Run(
-          false,
-          base::Bind(
-              &NegotiatingClientAuthenticator::CreateSharedSecretAuthenticator,
-              weak_factory_.GetWeakPtr(), preferred_initial_state,
-              base::Passed(std::move(resume_callback))));
+      std::move(config_.fetch_secret_callback)
+          .Run(false,
+               base::Bind(&NegotiatingClientAuthenticator::
+                              CreateSharedSecretAuthenticator,
+                          weak_factory_.GetWeakPtr(), preferred_initial_state,
+                          base::Passed(std::move(resume_callback))));
       break;
   }
 }

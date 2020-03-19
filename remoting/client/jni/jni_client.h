@@ -56,7 +56,7 @@ class JniClient : public ChromotingSession::Delegate {
   // authentication attempt is put on hold until |callback| is invoked.
   void FetchSecret(
       bool pairing_supported,
-      const protocol::SecretFetchedCallback& secret_fetched_callback) override;
+      protocol::SecretFetchedCallback secret_fetched_callback) override;
 
   // Pops up a third party login page to fetch token required for
   // authentication. Call on UI thread.

@@ -375,10 +375,9 @@ class ProtocolPerfTest
                    transport_context, kHostJid, std::string());
   }
 
-  void FetchPin(
-      bool pairing_supported,
-      const protocol::SecretFetchedCallback& secret_fetched_callback) {
-    secret_fetched_callback.Run(kHostPin);
+  void FetchPin(bool pairing_supported,
+                protocol::SecretFetchedCallback secret_fetched_callback) {
+    std::move(secret_fetched_callback).Run(kHostPin);
   }
 
   void MeasureTotalLatency(bool use_webrtc);

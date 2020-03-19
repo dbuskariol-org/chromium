@@ -206,11 +206,11 @@ void FtlSignalingPlayground::OnClientSignalingConnected() {
 
 void FtlSignalingPlayground::FetchSecret(
     bool pairing_supported,
-    const protocol::SecretFetchedCallback& secret_fetched_callback) {
+    protocol::SecretFetchedCallback secret_fetched_callback) {
   std::string pin =
       test::ReadStringFromCommandLineOrStdin(kSwitchNamePin, "Pin: ");
   HOST_LOG << "Using PIN: " << pin;
-  secret_fetched_callback.Run(pin);
+  std::move(secret_fetched_callback).Run(pin);
 }
 
 void FtlSignalingPlayground::SetUpSignaling() {

@@ -50,9 +50,8 @@ class FtlSignalingPlayground final : public SignalStrategy::Listener,
 
   void ConnectToHost(base::OnceClosure on_done);
   void OnClientSignalingConnected();
-  void FetchSecret(
-      bool pairing_supported,
-      const protocol::SecretFetchedCallback& secret_fetched_callback);
+  void FetchSecret(bool pairing_supported,
+                   protocol::SecretFetchedCallback secret_fetched_callback);
 
   void SetUpSignaling();
   void TearDownSignaling();

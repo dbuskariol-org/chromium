@@ -49,11 +49,11 @@ class ThirdPartyAuthenticatorTest : public AuthenticatorTestBase {
     void FetchThirdPartyToken(
         const std::string& token_url,
         const std::string& scope,
-        const ThirdPartyTokenFetchedCallback& token_fetched_callback) {
+        ThirdPartyTokenFetchedCallback token_fetched_callback) {
       ASSERT_EQ(token_url, kTokenUrl);
       ASSERT_EQ(scope, kTokenScope);
       ASSERT_FALSE(token_fetched_callback.is_null());
-      on_token_fetched_ = token_fetched_callback;
+      on_token_fetched_ = std::move(token_fetched_callback);
     }
 
     void OnTokenFetched(const std::string& token,
