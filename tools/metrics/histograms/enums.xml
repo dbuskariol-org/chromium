@@ -15665,6 +15665,15 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="2" label="Same Site Different Scheme Script"/>
 </enum>
 
+<enum name="DohProviderId">
+  <int value="0" label="CUSTOM"/>
+  <int value="1" label="CLEANBROWSING_FAMILY"/>
+  <int value="2" label="CLOUDFLARE"/>
+  <int value="3" label="GOOGLE"/>
+  <int value="4" label="IIJ"/>
+  <int value="5" label="QUAD9_SECURE"/>
+</enum>
+
 <enum name="DomainBoundCerts.DBLoadStatus">
   <obsolete>
     Feature was removed (crbug.com/875053).
