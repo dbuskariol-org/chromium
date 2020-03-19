@@ -1779,11 +1779,9 @@ void ComputedStyle::UpdateFontOrientation() {
   FontOrientation orientation = ComputeFontOrientation();
   if (GetFontDescription().Orientation() == orientation)
     return;
-  FontSelector* current_font_selector = GetFont().GetFontSelector();
   FontDescription font_description = GetFontDescription();
   font_description.SetOrientation(orientation);
   SetFontDescription(font_description);
-  GetFont().Update(current_font_selector);
 }
 
 TextDecoration ComputedStyle::TextDecorationsInEffect() const {
@@ -1959,7 +1957,7 @@ const CSSValue* ComputedStyle::GetVariableValue(
 
 bool ComputedStyle::SetFontDescription(const FontDescription& v) {
   if (FontInternal().GetFontDescription() != v) {
-    SetFontInternal(Font(v));
+    SetFontInternal(Font(v, FontInternal().GetFontSelector()));
     return true;
   }
   return false;
@@ -2020,19 +2018,15 @@ LayoutUnit ComputedStyle::ComputedLineHeightAsFixed() const {
 }
 
 void ComputedStyle::SetWordSpacing(float word_spacing) {
-  FontSelector* current_font_selector = GetFont().GetFontSelector();
   FontDescription desc(GetFontDescription());
   desc.SetWordSpacing(word_spacing);
   SetFontDescription(desc);
-  GetFont().Update(current_font_selector);
 }
 
 void ComputedStyle::SetLetterSpacing(float letter_spacing) {
-  FontSelector* current_font_selector = GetFont().GetFontSelector();
   FontDescription desc(GetFontDescription());
   desc.SetLetterSpacing(letter_spacing);
   SetFontDescription(desc);
-  GetFont().Update(current_font_selector);
 }
 
 void ComputedStyle::SetTextAutosizingMultiplier(float multiplier) {
@@ -2046,7 +2040,6 @@ void ComputedStyle::SetTextAutosizingMultiplier(float multiplier) {
   else
     size = std::min(kMaximumAllowedFontSize, size);
 
-  FontSelector* current_font_selector = GetFont().GetFontSelector();
   FontDescription desc(GetFontDescription());
   desc.SetSpecifiedSize(size);
 
@@ -2057,7 +2050,6 @@ void ComputedStyle::SetTextAutosizingMultiplier(float multiplier) {
   desc.SetComputedSize(std::min(kMaximumAllowedFontSize, autosized_font_size));
 
   SetFontDescription(desc);
-  GetFont().Update(current_font_selector);
 }
 
 void ComputedStyle::AddAppliedTextDecoration(
