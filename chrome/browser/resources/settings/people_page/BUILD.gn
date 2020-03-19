@@ -165,10 +165,11 @@ js_library("sync_encryption_options") {
 js_type_check("closure_compile_module") {
   is_polymer3 = true
   deps = [
-    #    ":account_manager_browser_proxy.m",
+    ":account_manager_browser_proxy.m",
+
     #    ":manage_profile.m",
     #    ":manage_profile_browser_proxy.m",
-    #    ":people_page.m",
+    ":people_page.m",
     ":profile_info_browser_proxy.m",
     ":signout_dialog.m",
 
@@ -189,9 +190,7 @@ js_type_check("closure_compile_module") {
 
 js_library("account_manager_browser_proxy.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/people_page/account_manager_browser_proxy.m.js" ]
-  deps = [
-    # TODO: Fill those in.
-  ]
+  deps = [ "//ui/webui/resources/js:cr.m" ]
   extra_deps = [ ":modulize" ]
 }
 
@@ -236,7 +235,21 @@ js_library("manage_profile_browser_proxy.m") {
 js_library("people_page.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/people_page/people_page.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":account_manager_browser_proxy.m",
+    ":profile_info_browser_proxy.m",
+    ":sync_browser_proxy.m",
+    "..:i18n_setup.m",
+    "..:open_window_proxy.m",
+    "..:page_visibility.m",
+    "..:route.m",
+    "..:router.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/cr_elements/chromeos/cr_picture:png.m",
+    "//ui/webui/resources/cr_elements/cr_toast:cr_toast.m",
+    "//ui/webui/resources/js:cr.m",
+    "//ui/webui/resources/js:i18n_behavior.m",
+    "//ui/webui/resources/js:icon.m",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
   extra_deps = [ ":people_page_module" ]
 }
@@ -325,6 +338,25 @@ polymer_modulizer("people_page") {
   js_file = "people_page.js"
   html_file = "people_page.html"
   html_type = "dom-module"
+  ignore_imports = [
+    "chrome/browser/resources/settings/people_page/manage_profile.html",
+    "chrome/browser/resources/settings/people_page/sync_controls.html",
+    "chrome/browser/resources/settings/people_page/sync_page.html",
+  ]
+  namespace_rewrites = settings_namespace_rewrites
+  auto_imports = settings_auto_imports + [
+                   "chrome/browser/resources/settings/route.html|routes",
+                   "chrome/browser/resources/settings/open_window_proxy.html|OpenWindowProxyImpl",
+                   "chrome/browser/resources/settings/router.html|Router,RouteObserverBehavior",
+                   "ui/webui/resources/cr_elements/chromeos/cr_picture/png.html|convertImageSequenceToPng",
+                   "ui/webui/resources/html/assert.html|assert",
+                   "ui/webui/resources/html/cr.html|isChromeOS",
+                   "ui/webui/resources/html/icon.html|getImage",
+                   "chrome/browser/resources/settings/page_visibility.html|PageVisibility",
+                   "chrome/browser/resources/settings/people_page/account_manager_browser_proxy.html|AccountManagerBrowserProxyImpl",
+                   "chrome/browser/resources/settings/people_page/profile_info_browser_proxy.html|ProfileInfoBrowserProxyImpl,ProfileInfoBrowserProxy,ProfileInfo",
+                   "chrome/browser/resources/settings/people_page/sync_browser_proxy.html|SyncBrowserProxyImpl,SyncBrowserProxy,SyncStatus,StoredAccount",
+                 ]
 }
 
 polymer_modulizer("signout_dialog") {
@@ -368,6 +400,5 @@ js_modulizer("modulize") {
     input_files += [ "import_data_browser_proxy.js" ]
   }
 
-  namespace_rewrites =
-      settings_namespace_rewrites + [ "settings.StoredAccount|StoredAccount" ]
+  namespace_rewrites = settings_namespace_rewrites
 }

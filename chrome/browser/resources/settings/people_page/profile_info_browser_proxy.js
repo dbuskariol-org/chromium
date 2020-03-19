@@ -14,10 +14,10 @@ cr.define('settings', function() {
    *   iconUrl: string
    * }}
    */
-  let ProfileInfo;
+  /* #export */ let ProfileInfo;
 
   /** @interface */
-  class ProfileInfoBrowserProxy {
+  /* #export */ class ProfileInfoBrowserProxy {
     /**
      * Returns a Promise for the profile info.
      * @return {!Promise<!settings.ProfileInfo>}
@@ -32,7 +32,7 @@ cr.define('settings', function() {
   }
 
   /**
-   * @implements {ProfileInfoBrowserProxy}
+   * @implements {settings.ProfileInfoBrowserProxy}
    */
   /* #export */ class ProfileInfoBrowserProxyImpl {
     /** @override */
@@ -49,5 +49,9 @@ cr.define('settings', function() {
   cr.addSingletonGetter(ProfileInfoBrowserProxyImpl);
 
   // #cr_define_end
-  return {ProfileInfo, ProfileInfoBrowserProxyImpl};
+  return {
+    ProfileInfo,
+    ProfileInfoBrowserProxy,
+    ProfileInfoBrowserProxyImpl,
+  };
 });
