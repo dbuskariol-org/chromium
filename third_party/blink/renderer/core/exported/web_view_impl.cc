@@ -1476,8 +1476,12 @@ void WebViewImpl::DidExitFullscreen() {
   fullscreen_controller_->DidExitFullscreen();
 }
 
-void WebViewImpl::SetWebFrameWidget(WebFrameWidget* widget) {
+void WebViewImpl::SetMainFrameWidgetBase(WebFrameWidgetBase* widget) {
   web_widget_ = widget;
+}
+
+WebFrameWidgetBase* WebViewImpl::MainFrameWidgetBase() {
+  return web_widget_;
 }
 
 void WebViewImpl::SetSuppressFrameRequestsWorkaroundFor704763Only(

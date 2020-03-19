@@ -94,6 +94,7 @@ class WebLocalFrameImpl;
 class WebRemoteFrame;
 class WebSettingsImpl;
 class WebViewClient;
+class WebFrameWidgetBase;
 
 struct WebTextAutosizerPageInfo;
 
@@ -428,7 +429,8 @@ class CORE_EXPORT WebViewImpl final : public WebView,
   void DidEnterFullscreen();
   void DidExitFullscreen();
 
-  void SetWebFrameWidget(WebFrameWidget* widget);
+  void SetMainFrameWidgetBase(WebFrameWidgetBase* widget);
+  WebFrameWidgetBase* MainFrameWidgetBase();
 
  private:
   FRIEND_TEST_ALL_PREFIXES(WebFrameTest, DivScrollIntoEditableTest);
@@ -715,7 +717,7 @@ class CORE_EXPORT WebViewImpl final : public WebView,
 
   // The WebWidget for the main frame. This is expected to be unset when the
   // WebWidget destroys itself.
-  WebFrameWidget* web_widget_ = nullptr;
+  WeakPersistent<WebFrameWidgetBase> web_widget_;
 
   // We defer commits when transitioning to a new page. ChromeClientImpl calls
   // StopDeferringCommits() to release this when a new page is loaded.
