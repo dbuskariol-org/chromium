@@ -15,7 +15,7 @@ Polymer({
   properties: {
     /**
      * Alias for allowing Polymer bindings to settings.routes.
-     * @type {?OsSettingsRoutes}
+     * @type {?SettingsRoutes}
      */
     routes: {
       type: Object,

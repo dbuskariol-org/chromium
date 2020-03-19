@@ -202,6 +202,7 @@ Polymer({
     this.addFocusConfig_(
         r.MANAGE_SWITCH_ACCESS_SETTINGS, '#switchAccessSubpageButton');
     this.addFocusConfig_(r.DISPLAY, '#displaySubpageButton');
+    this.addFocusConfig_(r.APPEARANCE, '#appearanceSubpageButton');
     this.addFocusConfig_(r.KEYBOARD, '#keyboardSubpageButton');
     this.addFocusConfig_(r.POINTERS, '#pointerSubpageButton');
   },

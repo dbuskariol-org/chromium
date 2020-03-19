@@ -5,10 +5,10 @@
 cr.define('settings', function() {
   /**
    * Creates Route objects for each path corresponding to CrOS settings content.
-   * @return {!OsSettingsRoutes}
+   * @return {!SettingsRoutes}
    */
   function createOSSettingsRoutes() {
-    const r = /** @type {!OsSettingsRoutes} */ ({});
+    const r = /** @type {!SettingsRoutes} */ ({});
 
     // Root pages.
     r.BASIC = new settings.Route('/');
@@ -189,7 +189,7 @@ cr.define('settings', function() {
 
   // TODO(dpapad): Change to 'get routes() {}' in export when we fix a bug in
   // ChromePass that limits the syntax of what can be returned from cr.define().
-  const routes = /** @type {!OsSettingsRoutes} */ (
+  const routes = /** @type {!SettingsRoutes} */ (
       settings.Router.getInstance().getRoutes());
 
   return {
