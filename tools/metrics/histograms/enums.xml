@@ -65694,6 +65694,8 @@ Full version information for the fingerprint enum values:
   <int value="10" label="Can not close extracted file (Deprecated)"/>
   <int value="11" label="Can not create file memory mapping"/>
   <int value="12" label="File CRC mismatch"/>
+  <int value="13" label="There is not enough space on the disk."/>
+  <int value="14" label="I/O device error."/>
 </enum>
 
 <enum name="UnsupportedContainers">
