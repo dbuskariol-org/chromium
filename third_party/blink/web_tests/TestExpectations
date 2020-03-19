@@ -2987,6 +2987,8 @@ crbug.com/641245 external/wpt/css/motion/offset-path-ray-contain-005.html [ Fail
 
 crbug.com/1053965 external/wpt/css/css-values/ex-unit-004.html [ Failure ]
 
+crbug.com/947951 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Pass Timeout ]
+
 # ====== New tests from wpt-importer added here ======
 crbug.com/626703 [ Linux ] external/wpt/css/css-text/line-break/line-break-strict-015.xht [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-text/line-break/line-break-strict-015.xht [ Failure ]
@@ -3088,7 +3090,6 @@ crbug.com/626703 [ Mac10.12 ] external/wpt/html/dom/idlharness.https.html?exclud
 crbug.com/626703 [ Mac10.10 ] external/wpt/WebCryptoAPI/derive_bits_keys/hkdf.https.any.html?1001-2000 [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/mathml/relations/html5-tree/math-global-event-handlers.tentative.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] virtual/web-components-v0-disabled/external/wpt/html/dom/idlharness.https.html?include=HTML.\* [ Failure Timeout ]
-crbug.com/626703 [ Win7 ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/object-src/object-src-no-url-allowed.html [ Timeout ]
 crbug.com/626703 [ Win7 ] external/wpt/content-security-policy/plugin-types/plugintypes-nourl-allowed.html [ Timeout ]
 crbug.com/626703 [ Mac10.11 ] virtual/cascade/external/wpt/css/css-paint-api/parse-input-arguments-018.https.html [ Failure ]
