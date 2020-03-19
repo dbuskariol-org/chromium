@@ -2540,6 +2540,14 @@ const char kRecoverFromNeverSaveAndroidDescription[] =
     "Enables showing UI which allows for easy reverting of the decision to "
     "never save passwords on a certain webiste";
 
+const char kRelatedSearchesName[] =
+    "Enables an experiment for Related Searches on Android";
+const char kRelatedSearchesDescription[] =
+    "Enables displaying related searches in a UI surface for experimentation "
+    "purposes.  This may have privacy implications so do not enable unless "
+    "you have no privacy worries about sending page content and URLs to "
+    "Google!";
+
 const char kSafeBrowsingUseLocalBlacklistsV2Name[] =
     "Use local Safe Browsing blacklists";
 const char kSafeBrowsingUseLocalBlacklistsV2Description[] =

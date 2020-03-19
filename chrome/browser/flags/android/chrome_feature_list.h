@@ -94,6 +94,7 @@ extern const base::Feature kQueryTiles;
 extern const base::Feature kReachedCodeProfiler;
 extern const base::Feature kReorderBookmarks;
 extern const base::Feature kReaderModeInCCT;
+extern const base::Feature kRelatedSearches;
 extern const base::Feature kRevampedContextMenu;
 extern const base::Feature kScrollToExpandPaymentHandler;
 extern const base::Feature kSearchEnginePromoExistingDevice;

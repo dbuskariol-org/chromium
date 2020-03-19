@@ -37957,6 +37957,7 @@ from previous Chrome versions.
       label="ServiceWorkerImportedScriptUpdateCheck:disabled"/>
   <int value="-1365503870" label="enable-simplified-fullscreen-ui"/>
   <int value="-1363709707" label="MaterialDesignHistory:disabled"/>
+  <int value="-1362431915" label="RelatedSearches:disabled"/>
   <int value="-1361493814" label="FCMInvalidations:disabled"/>
   <int value="-1358669137" label="enable-supervised-user-blacklist"/>
   <int value="-1357778876" label="ExplicitLanguageAsk:enabled"/>
@@ -38565,6 +38566,7 @@ from previous Chrome versions.
   <int value="-679500267" label="UseXpsForPrinting:disabled"/>
   <int value="-674804217" label="SoleIntegration:enabled"/>
   <int value="-673804828" label="EnablePlayStoreAppSearch:disabled"/>
+  <int value="-673149604" label="RelatedSearches:enabled"/>
   <int value="-671992446" label="TranslateRankerEnforcement:disabled"/>
   <int value="-670188266" label="enable-zip-archiver-unpacker"/>
   <int value="-669761849" label="SplitSettings:disabled"/>

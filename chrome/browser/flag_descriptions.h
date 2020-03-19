@@ -1464,6 +1464,9 @@ extern const char kReaderModeInCCTDescription[];
 extern const char kRecoverFromNeverSaveAndroidName[];
 extern const char kRecoverFromNeverSaveAndroidDescription[];
 
+extern const char kRelatedSearchesName[];
+extern const char kRelatedSearchesDescription[];
+
 extern const char kSafeBrowsingUseLocalBlacklistsV2Name[];
 extern const char kSafeBrowsingUseLocalBlacklistsV2Description[];
 

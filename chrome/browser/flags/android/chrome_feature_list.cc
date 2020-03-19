@@ -172,6 +172,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kReachedCodeProfiler,
     &kReaderModeInCCT,
     &kReorderBookmarks,
+    &kRelatedSearches,
     &kRevampedContextMenu,
     &kScrollToExpandPaymentHandler,
     &kSearchEnginePromoExistingDevice,
@@ -513,6 +514,9 @@ const base::Feature kReaderModeInCCT{"ReaderModeInCCT",
 
 const base::Feature kReorderBookmarks{"ReorderBookmarks",
                                       base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kRelatedSearches{"RelatedSearches",
+                                     base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kRevampedContextMenu{"RevampedContextMenu",
                                          base::FEATURE_ENABLED_BY_DEFAULT};

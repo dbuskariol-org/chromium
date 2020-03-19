@@ -3378,6 +3378,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "related-searches",
+    "owners": [ "ayman", "donnd" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "release-notes",
     "owners": [ "yulunwu" ],
     "expiry_milestone": 79
