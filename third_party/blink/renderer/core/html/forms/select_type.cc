@@ -551,7 +551,7 @@ class PopupUpdater : public MutationObserver::Delegate {
   }
 
   ExecutionContext* GetExecutionContext() const override {
-    return select_->GetDocument().ToExecutionContext();
+    return select_->GetExecutionContext();
   }
 
   void Deliver(const MutationRecordVector& records,
