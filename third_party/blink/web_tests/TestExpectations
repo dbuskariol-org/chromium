@@ -6975,9 +6975,7 @@ crbug.com/1061226 [ Fuchsia ] external/wpt/mediacapture-streams/MediaStream-idl.
 
 # Sheriff 2020-03-13
 crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Failure ]
-crbug.com/1061118 fast/loader/subframe-removes-itself.html [ Pass Failure ]
 crbug.com/1061043 fast/plugins/keypress-event.html [ Pass Failure ]
-crbug.com/1061328 http/tests/loading/onreadystatechange-detach.html [ Pass Failure ]
 crbug.com/1061097 http/tests/security/promise-access-control-allow.htm [ Pass Failure ]
 crbug.com/1061539 [ Mac ] http/tests/images/document-policy-oversized-images-resize.html [ Pass Failure ]
 crbug.com/1061539 [ Linux ] http/tests/images/document-policy-oversized-images-resize.html [ Pass Failure ]
@@ -6990,6 +6988,5 @@ crbug.com/1061131 [ Mac ] editing/selection/replaced-boundaries-1.html [ Pass Fa
 # Sheriff 2020-03-16
 crbug.com/1061029 [ Win ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
 crbug.com/1061029 [ Mac ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
-crbug.com/1061180 http/tests/loading/onbeforeunload-detach.html [ Pass Failure ]
 crbug.com/1060175 [ Linux ] http/tests/security/promise-access-control-allow.html [ Pass Failure Timeout ]
 crbug.com/1060175 [ Win ] http/tests/security/promise-access-control-allow.html [ Pass Failure Timeout ]
