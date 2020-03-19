@@ -296,8 +296,7 @@ TEST_F(SplitViewDragIndicatorsTest,
   ToggleOverview();
 
   // Start dragging from overview.
-  OverviewItem* item =
-      GetOverviewItemForWindow(window1.get(), /*is_touch_dragging=*/false);
+  OverviewItem* item = GetOverviewItemForWindow(window1.get());
   gfx::PointF start_location(item->target_bounds().CenterPoint());
   overview_session_->InitiateDrag(item, start_location,
                                   /*is_touch_dragging=*/false);
