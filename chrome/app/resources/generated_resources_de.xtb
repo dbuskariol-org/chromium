@@ -2973,7 +2973,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5158983316805876233">Denselben Proxy für alle Protokolle verwenden</translation>
 <translation id="5160857336552977725">Auf Ihrem <ph name="DEVICE_TYPE" /> anmelden</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> ist veraltet und wurde blockiert</translation>
-<translation id="5170568018924773124">In Ordner anzeigen</translation>
+<translation id="5170568018924773124">In Ordner zeigen</translation>
 <translation id="5171045022955879922">Suchen oder URL eingeben</translation>
 <translation id="5171343362375269016">Swap-Speicher</translation>
 <translation id="5173668317844998239">Auf Ihrem Sicherheitsschlüssel gespeicherte Fingerabdrücke hinzufügen oder löschen</translation>
@@ -3105,7 +3105,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5355926466126177564">Die Erweiterung <ph name="EXTENSION_NAME" /> hat die Seite geändert, die bei der Suche über die Omnibox angezeigt wird.</translation>
 <translation id="5359910752122114278">1 Ergebnis</translation>
 <translation id="5360150013186312835">In Symbolleiste anzeigen</translation>
-<translation id="5362741141255528695">Private Schlüsseldatei auswählen</translation>
+<translation id="5362741141255528695">Datei mit privatem Schlüssel wählen</translation>
 <translation id="5363109466694494651">Powerwash durchführen und zurücksetzen</translation>
 <translation id="5365881113273618889">Der ausgewählte Ordner enthält vertrauliche Dateien. Möchten Sie <ph name="APP_NAME" /> wirklich dauerhaft Schreibzugriff auf diesen Ordner gewähren?</translation>
 <translation id="5367091008316207019">Datei wird gelesen...</translation>
