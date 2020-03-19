@@ -3,34 +3,34 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview Provides language-switching services for ChromeVox, which
- * uses language detection information to automatically change the TTS voice.
+ * @fileoverview Provides locale output services for ChromeVox, which
+ * uses language information to automatically change the TTS voice.
  * Please note: we use the term 'locale' to refer to language codes e.g.
  * 'en-US'. For more information on locales:
  * https://en.wikipedia.org/wiki/Locale_(computer_software)
  */
 
-goog.provide('LanguageSwitching');
+goog.provide('LocaleOutputHelper');
 
 goog.require('StringUtil');
 
-LanguageSwitching = class {
+LocaleOutputHelper = class {
   /** @private */
   constructor() {
     /**
      * @const
      * @private {string}
      */
-    LanguageSwitching.BROWSER_UI_LOCALE_ =
+    LocaleOutputHelper.BROWSER_UI_LOCALE_ =
         chrome.i18n.getUILanguage().toLowerCase();
     /** @private {string} */
-    this.currentLocale_ = LanguageSwitching.BROWSER_UI_LOCALE_ || '';
+    this.currentLocale_ = LocaleOutputHelper.BROWSER_UI_LOCALE_ || '';
     /**
      * Confidence threshold to meet before assigning sub-node language.
      * @const
      * @private {number}
      */
-    LanguageSwitching.PROBABILITY_THRESHOLD_ = 0.9;
+    LocaleOutputHelper.PROBABILITY_THRESHOLD_ = 0.9;
     /**
      * Set to false as default, since sub-node language detection is still
      * experimental.
@@ -58,9 +58,9 @@ LanguageSwitching = class {
   }
 
   /**
-   * Main entry point for language switching logic. Routes arguments to either
-   * |atNodeLevel_| or |atSubNodeLevel_| depending on which kind of language
-   * switching the user has specified.
+   * Main entry point. Routes arguments to either |atNodeLevel_| or
+   * |atSubNodeLevel_| depending on the kind of locale switching the user
+   * has specified.
    * @param {AutomationNode} node
    * @param {string} stringAttribute The string attribute whose value we want
    * to output.
@@ -102,7 +102,7 @@ LanguageSwitching = class {
     const languageAnnotation =
         node.languageAnnotationForStringAttribute(stringAttribute);
     if (!languageAnnotation || languageAnnotation.length === 0) {
-      appendWithLocaleCallback(text, LanguageSwitching.BROWSER_UI_LOCALE_);
+      appendWithLocaleCallback(text, LocaleOutputHelper.BROWSER_UI_LOCALE_);
       return;
     }
 
@@ -158,11 +158,11 @@ LanguageSwitching = class {
       }
     } else {
       // Alert the user that no voice is available for |newLocale|.
-      this.setCurrentLocale_(LanguageSwitching.BROWSER_UI_LOCALE_);
+      this.setCurrentLocale_(LocaleOutputHelper.BROWSER_UI_LOCALE_);
       const displayLanguage =
           chrome.accessibilityPrivate.getDisplayNameForLocale(
               newLocale /* Locale to translate */,
-              LanguageSwitching.BROWSER_UI_LOCALE_ /* Target locale */);
+              LocaleOutputHelper.BROWSER_UI_LOCALE_ /* Target locale */);
       outputString =
           Msgs.getMsg('voice_unavailable_for_language', [displayLanguage]);
     }
@@ -182,16 +182,16 @@ LanguageSwitching = class {
    * @private
    */
   computeNewLocale_(nodeLocale, subNodeLocale, subNodeProbability) {
-    if (subNodeProbability > LanguageSwitching.PROBABILITY_THRESHOLD_) {
+    if (subNodeProbability > LocaleOutputHelper.PROBABILITY_THRESHOLD_) {
       return subNodeLocale;
     }
 
     nodeLocale = nodeLocale.toLowerCase();
-    if (LanguageSwitching.isValidLocale_(nodeLocale)) {
+    if (LocaleOutputHelper.isValidLocale_(nodeLocale)) {
       return nodeLocale;
     }
 
-    return LanguageSwitching.BROWSER_UI_LOCALE_;
+    return LocaleOutputHelper.BROWSER_UI_LOCALE_;
   }
 
   // TODO(akihiroota): http://crbug.com/1061222
@@ -239,7 +239,7 @@ LanguageSwitching = class {
    * @private
    */
   setCurrentLocale_(locale) {
-    if (LanguageSwitching.isValidLocale_(locale)) {
+    if (LocaleOutputHelper.isValidLocale_(locale)) {
       this.currentLocale_ = locale;
     }
   }
@@ -247,27 +247,27 @@ LanguageSwitching = class {
   // =============== Static Methods ==============
 
   /**
-   * Creates a singleton instance of LanguageSwitching.
+   * Creates a singleton instance of LocaleOutputHelper.
    * @private
    */
   static init() {
-    if (LanguageSwitching.instance_ !== undefined) {
+    if (LocaleOutputHelper.instance_ !== undefined) {
       console.error(
-          'LanguageSwitching is a singleton, can only call |init| once');
+          'LocaleOutputHelper is a singleton, can only call |init| once');
       return;
     }
 
-    LanguageSwitching.instance_ = new LanguageSwitching();
+    LocaleOutputHelper.instance_ = new LocaleOutputHelper();
   }
 
   /**
-   * @return {!LanguageSwitching}
+   * @return {!LocaleOutputHelper}
    */
   static get instance() {
-    if (!LanguageSwitching.instance_) {
-      LanguageSwitching.init();
+    if (!LocaleOutputHelper.instance_) {
+      LocaleOutputHelper.init();
     }
-    return LanguageSwitching.instance_;
+    return LocaleOutputHelper.instance_;
   }
 
   /**

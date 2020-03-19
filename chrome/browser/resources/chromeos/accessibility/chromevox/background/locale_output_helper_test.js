@@ -7,9 +7,9 @@ GEN_INCLUDE(['../testing/chromevox_next_e2e_test_base.js']);
 GEN_INCLUDE(['../testing/mock_feedback.js']);
 
 /**
- * Test fixture for ChromeVox LanguageSwitching.
+ * Test fixture for LocaleOutputHelper.
  */
-ChromeVoxLanguageSwitchingTest = class extends ChromeVoxNextE2ETest {
+ChromeVoxLocaleOutputHelperTest = class extends ChromeVoxNextE2ETest {
   /** @override */
   testGenCppIncludes() {
     GEN(`
@@ -87,11 +87,11 @@ ChromeVoxLanguageSwitchingTest = class extends ChromeVoxNextE2ETest {
 
   /**
    * Calls mock version of chrome.tts.getVoices() to populate
-   * LanguageSwitching's available voice list with a specific set of voices.
+   * LocaleOutputHelper's available voice list with a specific set of voices.
    */
   setAvailableVoices() {
     chrome.tts.getVoices(function(voices) {
-      LanguageSwitching.instance.availableVoices_ = voices;
+      LocaleOutputHelper.instance.availableVoices_ = voices;
     });
   }
 
@@ -203,7 +203,7 @@ ChromeVoxLanguageSwitchingTest = class extends ChromeVoxNextE2ETest {
 
 
 // Overview:
-// The naming scheme of the language switching tests is as follows:
+// The naming scheme of ChromeVoxLocaleOutputHelperTests tests is as follows:
 // <switching_behavior>_<test_document>_Test.
 // <switching_behavior>: Whether the test is testing node-level or
 // sub-node-level switching. <test_document>: The name of the document the test
@@ -212,206 +212,206 @@ ChromeVoxLanguageSwitchingTest = class extends ChromeVoxNextE2ETest {
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_MultipleLanguagesLabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.multipleLanguagesLabeledDoc, function() {
         // Turn on language switching.
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage('es', 'español: Hola.');
+            .expectSpeechWithLocale('es', 'español: Hola.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('en', 'English: Hello.');
+            .expectSpeechWithLocale('en', 'English: Hello.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('fr', 'français: Salut.');
+            .expectSpeechWithLocale('fr', 'français: Salut.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('it', 'italiano: Ciao amico.');
+            .expectSpeechWithLocale('it', 'italiano: Ciao amico.');
         mockFeedback.replay();
       });
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_MultipleLanguagesLabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.multipleLanguagesLabeledDoc, function() {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
         // Disable sub-node-level switching.
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage('es', 'español: Hola.');
+            .expectSpeechWithLocale('es', 'español: Hola.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('en', 'English: Hello.');
+            .expectSpeechWithLocale('en', 'English: Hello.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('fr', 'français: Salut.');
+            .expectSpeechWithLocale('fr', 'français: Salut.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('it', 'italiano: Ciao amico.');
+            .expectSpeechWithLocale('it', 'italiano: Ciao amico.');
         mockFeedback.replay();
       });
     });
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_NestedLanguagesLabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.nestedLanguagesLabeledDoc, function() {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         // We should be able to switch languages when each component is labeled
         // with a language.
         mockFeedback
             .call(doCmd('jumpToTop'))
-            // LanguageSwitching.instance_.currentLanguage_ is initialized to
+            // LocaleOutputHelper.instance_.currentLanguage_ is initialized to
             // 'en'. Do not prepend 'English' because language does not switch.
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'In the morning, I sometimes eat breakfast.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'fr', 'français: Dans l\'apres-midi, je dejeune.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'English: Hello it\'s a pleasure to meet you. ');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('fr', 'français: Comment ca va?');
+            .expectSpeechWithLocale('fr', 'français: Comment ca va?');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'English: Switching back to English. ');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('es', 'español: Hola.');
+            .expectSpeechWithLocale('es', 'español: Hola.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('en', 'English: Goodbye.');
+            .expectSpeechWithLocale('en', 'English: Goodbye.');
         mockFeedback.replay();
       });
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_NestedLanguagesLabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.nestedLanguagesLabeledDoc, function() {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
         // Disable sub-node-switching.
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'In the morning, I sometimes eat breakfast.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'fr', 'français: Dans l\'apres-midi, je dejeune.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'English: Hello it\'s a pleasure to meet you. ');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('fr', 'français: Comment ca va?');
+            .expectSpeechWithLocale('fr', 'français: Comment ca va?');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'English: Switching back to English. ');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('es', 'español: Hola.');
+            .expectSpeechWithLocale('es', 'español: Hola.');
         mockFeedback.call(doCmd('nextLine'))
-            .expectSpeechWithLanguage('en', 'English: Goodbye.');
+            .expectSpeechWithLocale('en', 'English: Goodbye.');
         mockFeedback.replay();
       });
     });
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_ButtonAndLinkDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.buttonAndLinkDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         mockFeedback
             .call(doCmd('jumpToTop'))
             // Sub-node language detection is able to label this as 'en' and
             // overwrite the author-provided language of 'es'.
-            // LanguageSwitching.instance_.currentLanguage_ is initialized to
+            // LocaleOutputHelper.instance_.currentLanguage_ is initialized to
             // 'en'. Do not prepend 'English' because language does not switch.
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'This is a paragraph, written in English.')
             .call(doCmd('nextObject'))
             // CLD3 is able to determine, with high confidence, that this is
             // English text.
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'This is a button, written in English.')
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 undefined, 'Button', 'Press Search+Space to activate')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage('es', 'español: Este es un enlace.')
-            .expectSpeechWithLanguage(undefined, 'Link');
+            .expectSpeechWithLocale('es', 'español: Este es un enlace.')
+            .expectSpeechWithLocale(undefined, 'Link');
         mockFeedback.replay();
       });
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_ButtonAndLinkDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.buttonAndLinkDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
         // Disable sub-node-switching.
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         mockFeedback
             .call(doCmd('jumpToTop'))
             // Sub-node language detection is disabled, so we are not able to
             // detect + switch to English on any of these nodes. Instead, we use
             // the author-provided language of 'es'.
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'es', 'español: This is a paragraph, written in English.')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'es', 'This is a button, written in English.')
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 undefined, 'Button', 'Press Search+Space to activate')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage('es', 'Este es un enlace.')
-            .expectSpeechWithLanguage(undefined, 'Link');
+            .expectSpeechWithLocale('es', 'Este es un enlace.')
+            .expectSpeechWithLocale(undefined, 'Link');
         mockFeedback.replay();
       });
     });
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_JapaneseAndEnglishUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(
           this.japaneseAndEnglishUnlabeledDoc, function(root) {
             localStorage['languageSwitching'] = 'true';
             this.setAvailableVoices();
-            LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+            LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
             // We are able to separate out English and Japanese because they use
             // different scripts.
             mockFeedback
                 .call(doCmd('jumpToTop'))
-                // LanguageSwitching.instance_.currentLanguage_ is initialized
+                // LocaleOutputHelper.instance_.currentLanguage_ is initialized
                 // to 'en'. Do not prepend 'English' because language does not
                 // switch.
-                .expectSpeechWithLanguage('en', 'Hello, my name is ')
-                .expectSpeechWithLanguage('ja', '日本語: 太田あきひろ. ')
+                .expectSpeechWithLocale('en', 'Hello, my name is ')
+                .expectSpeechWithLocale('ja', '日本語: 太田あきひろ. ')
                 // Expect 'en-us' because sub-node language of 'en' doesn't come
                 // with high enough probability. We fall back on node-level
                 // detected language, which is 'en-us'.
-                .expectSpeechWithLanguage(
+                .expectSpeechWithLocale(
                     'en-us',
                     'English (United States): It\'s a pleasure to meet you. ')
-                .expectSpeechWithLanguage(
+                .expectSpeechWithLocale(
                     'ja', '日本語: どうぞよろしくお願いします.');
             mockFeedback.replay();
           });
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_JapaneseAndEnglishUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(
@@ -419,7 +419,7 @@ TEST_F(
             localStorage['languageSwitching'] = 'true';
             this.setAvailableVoices();
             // Disable sub-node-switching.
-            LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+            LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
             mockFeedback
                 .call(doCmd('jumpToTop'))
                 // Expect the node's contents to be read in one language
@@ -428,7 +428,7 @@ TEST_F(
                 // the one in this test, we are falling back on the UI language
                 // of the browser, which is en-US. Please see testGenPreamble
                 // for more details.
-                .expectSpeechWithLanguage(
+                .expectSpeechWithLocale(
                     'en-us',
                     'Hello, my name is 太田あきひろ. It\'s a pleasure to meet' +
                         ' you. どうぞよろしくお願いします.');
@@ -438,41 +438,41 @@ TEST_F(
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_EnglishAndKoreanUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.englishAndKoreanUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         // We are able to separate out English and Korean because they use
         // different scripts.
         mockFeedback
             .call(doCmd('jumpToTop'))
-            // LanguageSwitching.instance_.currentLanguage_ is initialized to
+            // LocaleOutputHelper.instance_.currentLanguage_ is initialized to
             // 'en'. Do not prepend 'English' because language does not switch.
-            .expectSpeechWithLanguage('en', 'This text is written in English. ')
-            .expectSpeechWithLanguage('ko', '한국어: 차에 한하여 중임할 수. ')
+            .expectSpeechWithLocale('en', 'This text is written in English. ')
+            .expectSpeechWithLocale('ko', '한국어: 차에 한하여 중임할 수. ')
             // Expect 'en-us' because sub-node language of 'en' doesn't come
             // with high enough probability. We fall back on node-level detected
             // language, which is 'en-us'.
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en', 'English: This text is also written in English.');
         mockFeedback.replay();
       });
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_EnglishAndKoreanUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.englishAndKoreanUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
         // Disable sub-node-switching
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en-us',
                 'This text is written in English. 차에 한하여 중임할 수.' +
                     ' This text is also written in English.');
@@ -482,19 +482,19 @@ TEST_F(
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_EnglishAndFrenchUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.englishAndFrenchUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         // Unable to separate out English and French when unlabeled.
         mockFeedback
             .call(doCmd('jumpToTop'))
-            // LanguageSwitching.instance_.currentLanguage_ is initialized to
+            // LocaleOutputHelper.instance_.currentLanguage_ is initialized to
             // 'en'. Do not prepend 'English' because language does not switch.
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en',
                 'This entire object should be read in English, even' +
                     ' the following French passage: salut mon ami! Ca va? Bien, et toi? It\'s hard to' +
@@ -504,15 +504,15 @@ TEST_F(
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_EnglishAndFrenchUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.englishAndFrenchUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en',
                 'This entire object should be read in English, even' +
                     ' the following French passage: salut mon ami! Ca va? Bien, et toi? It\'s hard to' +
@@ -523,51 +523,51 @@ TEST_F(
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_JapaneseCharacterUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(
           this.japaneseCharacterUnlabeledDoc, function(root) {
             localStorage['languageSwitching'] = 'true';
             this.setAvailableVoices();
-            LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+            LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
             // We are able to detect and switch at the character level if the
             // character is unique to a certain script. In this case, 'ど' only
             // appears in Japanese, and therefore we can confidently switch
             // languages.
             mockFeedback.call(doCmd('jumpToTop'))
-                .expectSpeechWithLanguage('ja', '日本語: ど');
+                .expectSpeechWithLocale('ja', '日本語: ど');
             mockFeedback.replay();
           });
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_JapaneseCharacterUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(
           this.japaneseCharacterUnlabeledDoc, function(root) {
             localStorage['languageSwitching'] = 'true';
             this.setAvailableVoices();
-            LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+            LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
             mockFeedback.call(doCmd('jumpToTop'))
-                .expectSpeechWithLanguage('en-us', 'ど');
+                .expectSpeechWithLocale('en-us', 'ど');
             mockFeedback.replay();
           });
     });
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_JapaneseAndChineseUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.japaneseAndChineseUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         // Unable to separate out Japanese and Chinese if unlabeled.
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'ja',
                 '日本語: 天気はいいですね. 右万諭全中結社原済権人点掲年難出面者会追');
         mockFeedback.replay();
@@ -575,15 +575,15 @@ TEST_F(
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_JapaneseAndChineseUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.japaneseAndChineseUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'en-us',
                 '天気はいいですね. 右万諭全中結社原済権人点掲年難出面者会追');
         mockFeedback.replay();
@@ -591,7 +591,7 @@ TEST_F(
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_JapaneseAndChineseLabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       // Only difference between doc used in this test and
@@ -606,9 +606,9 @@ TEST_F(
           function(root) {
             localStorage['languageSwitching'] = 'true';
             this.setAvailableVoices();
-            LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+            LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
             mockFeedback.call(doCmd('jumpToTop'))
-                .expectSpeechWithLanguage(
+                .expectSpeechWithLocale(
                     'zh',
                     '中文: 天気はいいですね. 右万諭全中結社原済権人点掲年難出面者会追');
             mockFeedback.replay();
@@ -617,16 +617,16 @@ TEST_F(
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_JapaneseAndKoreanUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.japaneseAndKoreanUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         // Unable to separate out Japanese and Korean if unlabeled.
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'ko',
                 '한국어: 私は. 법률이 정하는 바에 의하여 대법관이 아닌 법관을 둘 수 있다');
         mockFeedback.replay();
@@ -634,17 +634,17 @@ TEST_F(
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_JapaneseAndKoreanUnlabeledDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.japaneseAndKoreanUnlabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = false;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = false;
         // Node-level language detection runs and assigns language of 'ko' to
         // the node.
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'ko',
                 '한국어: 私は. 법률이 정하는 바에 의하여 대법관이 아닌 법관을 둘 수' +
                     ' 있다');
@@ -654,17 +654,17 @@ TEST_F(
 
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'SubNodeLevelSwitching_AsturianAndJapaneseDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.asturianAndJapaneseDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance.subNodeSwitchingEnabled_ = true;
+        LocaleOutputHelper.instance.subNodeSwitchingEnabled_ = true;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage('ja', '日本語: ど')
+            .expectSpeechWithLocale('ja', '日本語: ど')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'ast',
                 'asturianu: Pretend that this text is Asturian. Testing' +
                     ' three-letter language code logic.');
@@ -673,17 +673,17 @@ TEST_F(
     });
 
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest',
+    'ChromeVoxLocaleOutputHelperTest',
     'NodeLevelSwitching_AsturianAndJapaneseDoc_Test', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.asturianAndJapaneseDoc, function(root) {
         localStorage['languageSwitching'] = 'true';
         this.setAvailableVoices();
-        LanguageSwitching.instance_.sub_node_level_switching_enabled_ = false;
+        LocaleOutputHelper.instance_.sub_node_level_switching_enabled_ = false;
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage('ja', '日本語: ど')
+            .expectSpeechWithLocale('ja', '日本語: ど')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage(
+            .expectSpeechWithLocale(
                 'ast',
                 'asturianu: Pretend that this text is Asturian. Testing' +
                     ' three-letter language code logic.');
@@ -695,55 +695,58 @@ TEST_F(
 // This does not need partner tests because no language switching behavior is
 // tested.
 TEST_F(
-    'ChromeVoxLanguageSwitchingTest', 'LanguageSwitchingOffTest', function() {
+    'ChromeVoxLocaleOutputHelperTest', 'LocaleOutputHelperOffTest', function() {
       const mockFeedback = this.createMockFeedback();
       this.runWithLoadedTree(this.multipleLanguagesLabeledDoc, function(root) {
         localStorage['languageSwitching'] = 'false';
         this.setAvailableVoices();
         // Language should not be set if the language switching feature is off.
         mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(undefined, 'Hola.')
+            .expectSpeechWithLocale(undefined, 'Hola.')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage(undefined, 'Hello.')
+            .expectSpeechWithLocale(undefined, 'Hello.')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage(undefined, 'Salut.')
+            .expectSpeechWithLocale(undefined, 'Salut.')
             .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage(undefined, 'Ciao amico.');
+            .expectSpeechWithLocale(undefined, 'Ciao amico.');
         mockFeedback.replay();
       });
     });
 
-TEST_F('ChromeVoxLanguageSwitchingTest', 'DefaultToUILanguageTest', function() {
-  const mockFeedback = this.createMockFeedback();
-  this.runWithLoadedTree(
-      this.japaneseAndInvalidLanguagesLabeledDoc, function(root) {
-        localStorage['languageSwitching'] = 'true';
-        this.setAvailableVoices();
-        LanguageSwitching.instance_.sub_node_level_switching_enabled_ = false;
-        // Default to browser UI language, 'en-us', instead of defaulting to the
-        // language we last switched to.
-        mockFeedback.call(doCmd('jumpToTop'))
-            .expectSpeechWithLanguage(
-                'ja', '日本語: どうぞよろしくお願いします')
-            .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage('en-us', 'English (United States): Test')
-            .call(doCmd('nextObject'))
-            .expectSpeechWithLanguage('en-us', 'Yikes');
-        mockFeedback.replay();
-      });
-});
+TEST_F(
+    'ChromeVoxLocaleOutputHelperTest', 'DefaultToUILanguageTest', function() {
+      const mockFeedback = this.createMockFeedback();
+      this.runWithLoadedTree(
+          this.japaneseAndInvalidLanguagesLabeledDoc, function(root) {
+            localStorage['languageSwitching'] = 'true';
+            this.setAvailableVoices();
+            LocaleOutputHelper.instance_.sub_node_level_switching_enabled_ =
+                false;
+            // Default to browser UI language, 'en-us', instead of defaulting to
+            // the language we last switched to.
+            mockFeedback.call(doCmd('jumpToTop'))
+                .expectSpeechWithLocale(
+                    'ja', '日本語: どうぞよろしくお願いします')
+                .call(doCmd('nextObject'))
+                .expectSpeechWithLocale(
+                    'en-us', 'English (United States): Test')
+                .call(doCmd('nextObject'))
+                .expectSpeechWithLocale('en-us', 'Yikes');
+            mockFeedback.replay();
+          });
+    });
 
-TEST_F('ChromeVoxLanguageSwitchingTest', 'NoAvailableVoicesTest', function() {
+TEST_F('ChromeVoxLocaleOutputHelperTest', 'NoAvailableVoicesTest', function() {
   const mockFeedback = this.createMockFeedback();
   this.runWithLoadedTree(this.vietnameseAndUrduLabeledDoc, function(root) {
     localStorage['languageSwitching'] = 'true';
     this.setAvailableVoices();
-    LanguageSwitching.instance_.sub_node_level_switching_enabled_ = false;
+    LocaleOutputHelper.instance_.sub_node_level_switching_enabled_ = false;
     mockFeedback.call(doCmd('jumpToTop'))
-        .expectSpeechWithLanguage(
+        .expectSpeechWithLocale(
             'en-us', 'No voice available for language: Vietnamese')
         .call(doCmd('nextObject'))
-        .expectSpeechWithLanguage(
+        .expectSpeechWithLocale(
             'en-us', 'No voice available for language: Urdu');
     mockFeedback.replay();
   });
