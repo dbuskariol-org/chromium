@@ -222,10 +222,10 @@ Polymer({
     this.safeBrowsingStatus_ = settings.SafetyCheckSafeBrowsingStatus.CHECKING;
     this.extensionsStatus_ = settings.SafetyCheckExtensionsStatus.CHECKING;
     // Display running-status for safety check elements.
-    this.updatesDisplayString_ = this.i18n('safetyCheckRunning');
-    this.passwordsDisplayString_ = this.i18n('safetyCheckRunning');
-    this.safeBrowsingDisplayString_ = this.i18n('safetyCheckRunning');
-    this.extensionsDisplayString_ = this.i18n('safetyCheckRunning');
+    this.updatesDisplayString_ = '';
+    this.passwordsDisplayString_ = '';
+    this.safeBrowsingDisplayString_ = '';
+    this.extensionsDisplayString_ = '';
     // Trigger safety check.
     this.safetyCheckBrowserProxy_.runSafetyCheck();
   },
