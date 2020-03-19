@@ -113,7 +113,7 @@ class PerformanceManagerImpl : public PerformanceManager {
 
   // Indicates whether or not the caller is currently running on the PM task
   // runner.
-  bool OnPMTaskRunnerForTesting() const {
+  static bool OnPMTaskRunnerForTesting() {
     return GetTaskRunner()->RunsTasksInCurrentSequence();
   }
 

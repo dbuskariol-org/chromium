@@ -132,11 +132,10 @@ TEST_F(PerformanceManagerImplTest, CallOnGraphImpl) {
                                             GURL(), false, false);
   base::RunLoop run_loop;
   base::OnceClosure quit_closure = run_loop.QuitClosure();
-  EXPECT_FALSE(performance_manager()->OnPMTaskRunnerForTesting());
+  EXPECT_FALSE(PerformanceManagerImpl::OnPMTaskRunnerForTesting());
   PerformanceManagerImpl::GraphImplCallback graph_callback =
       base::BindLambdaForTesting([&](GraphImpl* graph) {
-        EXPECT_TRUE(
-            PerformanceManagerImpl::GetInstance()->OnPMTaskRunnerForTesting());
+        EXPECT_TRUE(PerformanceManagerImpl::OnPMTaskRunnerForTesting());
         EXPECT_EQ(page_node.get()->graph(), graph);
         std::move(quit_closure).Run();
       });
@@ -154,11 +153,10 @@ TEST_F(PerformanceManagerImplTest, CallOnGraphAndReplyWithResult) {
                                             GURL(), false, false);
   base::RunLoop run_loop;
 
-  EXPECT_FALSE(performance_manager()->OnPMTaskRunnerForTesting());
+  EXPECT_FALSE(PerformanceManagerImpl::OnPMTaskRunnerForTesting());
   base::OnceCallback<int(GraphImpl*)> task =
       base::BindLambdaForTesting([&](GraphImpl* graph) {
-        EXPECT_TRUE(
-            PerformanceManagerImpl::GetInstance()->OnPMTaskRunnerForTesting());
+        EXPECT_TRUE(PerformanceManagerImpl::OnPMTaskRunnerForTesting());
         EXPECT_EQ(page_node.get()->graph(), graph);
         return 1;
       });
