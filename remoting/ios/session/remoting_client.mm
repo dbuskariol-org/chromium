@@ -284,11 +284,12 @@ static void ResolveFeedbackDataCallback(
   info.Save();
 }
 
-- (void)fetchSecretWithPairingSupported:(BOOL)pairingSupported
-                               callback:
-                                   (remoting::protocol::SecretFetchedCallback)
-                                       secretFetchedCallback {
-  _secretFetchedCallback = std::move(secretFetchedCallback);
+- (void)
+fetchSecretWithPairingSupported:(BOOL)pairingSupported
+                       callback:
+                           (const remoting::protocol::SecretFetchedCallback&)
+                               secretFetchedCallback {
+  _secretFetchedCallback = secretFetchedCallback;
   _sessionDetails.state = SessionPinPrompt;
 
   // Clear pairing credentials if they exist (which are no longer valid).
@@ -303,17 +304,16 @@ static void ResolveFeedbackDataCallback(
                   }];
 }
 
-- (void)
-    fetchThirdPartyTokenForUrl:(NSString*)tokenUrl
-                      clientId:(NSString*)clientId
-                        scopes:(NSString*)scopes
-                      callback:
-                          (remoting::protocol::ThirdPartyTokenFetchedCallback)
-                              tokenFetchedCallback {
+- (void)fetchThirdPartyTokenForUrl:(NSString*)tokenUrl
+                          clientId:(NSString*)clientId
+                            scopes:(NSString*)scopes
+                          callback:(const remoting::protocol::
+                                        ThirdPartyTokenFetchedCallback&)
+                                       tokenFetchedCallback {
   // Not supported for iOS yet.
   _sessionDetails.state = SessionFailed;
   _sessionDetails.error = SessionErrorThirdPartyAuthNotSupported;
-  std::move(tokenFetchedCallback).Run("", "");
+  tokenFetchedCallback.Run("", "");
 }
 
 - (void)setCapabilities:(NSString*)capabilities {

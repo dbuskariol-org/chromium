@@ -31,18 +31,18 @@ class SecureChannelFactory : public StreamChannelFactory {
 
   // StreamChannelFactory interface.
   void CreateChannel(const std::string& name,
-                     ChannelCreatedCallback callback) override;
+                     const ChannelCreatedCallback& callback) override;
   void CancelChannelCreation(const std::string& name) override;
 
  private:
   typedef std::map<std::string, ChannelAuthenticator*> AuthenticatorMap;
 
   void OnBaseChannelCreated(const std::string& name,
-                            ChannelCreatedCallback callback,
+                            const ChannelCreatedCallback& callback,
                             std::unique_ptr<P2PStreamSocket> socket);
 
   void OnSecureChannelCreated(const std::string& name,
-                              ChannelCreatedCallback callback,
+                              const ChannelCreatedCallback& callback,
                               int error,
                               std::unique_ptr<P2PStreamSocket> socket);
 

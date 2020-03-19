@@ -29,7 +29,7 @@ class ChannelMultiplexer : public StreamChannelFactory {
 
   // StreamChannelFactory interface.
   void CreateChannel(const std::string& name,
-                     ChannelCreatedCallback callback) override;
+                     const ChannelCreatedCallback& callback) override;
   void CancelChannelCreation(const std::string& name) override;
 
  private:

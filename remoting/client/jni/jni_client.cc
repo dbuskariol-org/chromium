@@ -90,11 +90,11 @@ void JniClient::CommitPairingCredentials(const std::string& host,
 
 void JniClient::FetchSecret(
     bool pairing_supported,
-    protocol::SecretFetchedCallback secret_fetched_callback) {
+    const protocol::SecretFetchedCallback& secret_fetched_callback) {
   DCHECK(runtime_->ui_task_runner()->BelongsToCurrentThread());
   DCHECK(!secret_fetched_callback_);
 
-  secret_fetched_callback_ = std::move(secret_fetched_callback);
+  secret_fetched_callback_ = secret_fetched_callback;
 
   // Delete pairing credentials if they exist.
   CommitPairingCredentials(host_id_, std::string(), std::string());
@@ -106,11 +106,11 @@ void JniClient::FetchThirdPartyToken(
     const std::string& token_url,
     const std::string& client_id,
     const std::string& scopes,
-    protocol::ThirdPartyTokenFetchedCallback callback) {
+    const protocol::ThirdPartyTokenFetchedCallback& callback) {
   DCHECK(runtime_->ui_task_runner()->BelongsToCurrentThread());
   DCHECK(!third_party_token_fetched_callback_);
 
-  third_party_token_fetched_callback_ = std::move(callback);
+  third_party_token_fetched_callback_ = callback;
   JNIEnv* env = base::android::AttachCurrentThread();
 
   ScopedJavaLocalRef<jstring> j_url = ConvertUTF8ToJavaString(env, token_url);

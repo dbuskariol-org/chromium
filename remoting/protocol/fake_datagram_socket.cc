@@ -148,7 +148,7 @@ FakeDatagramSocket* FakeDatagramChannelFactory::GetFakeChannel(
 
 void FakeDatagramChannelFactory::CreateChannel(
     const std::string& name,
-    ChannelCreatedCallback callback) {
+    const ChannelCreatedCallback& callback) {
   EXPECT_FALSE(channels_[name]);
 
   std::unique_ptr<FakeDatagramSocket> channel(new FakeDatagramSocket());
@@ -168,18 +168,18 @@ void FakeDatagramChannelFactory::CreateChannel(
         FROM_HERE,
         base::BindOnce(&FakeDatagramChannelFactory::NotifyChannelCreated,
                        weak_factory_.GetWeakPtr(), std::move(channel), name,
-                       std::move(callback)));
+                       callback));
   } else {
-    NotifyChannelCreated(std::move(channel), name, std::move(callback));
+    NotifyChannelCreated(std::move(channel), name, callback);
   }
 }
 
 void FakeDatagramChannelFactory::NotifyChannelCreated(
     std::unique_ptr<FakeDatagramSocket> owned_socket,
     const std::string& name,
-    ChannelCreatedCallback callback) {
+    const ChannelCreatedCallback& callback) {
   if (channels_.find(name) != channels_.end())
-    std::move(callback).Run(std::move(owned_socket));
+    callback.Run(std::move(owned_socket));
 }
 
 void FakeDatagramChannelFactory::CancelChannelCreation(

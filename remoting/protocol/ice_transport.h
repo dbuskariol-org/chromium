@@ -56,7 +56,7 @@ class IceTransport : public Transport,
 
   // DatagramChannelFactory interface.
   void CreateChannel(const std::string& name,
-                     ChannelCreatedCallback callback) override;
+                     const ChannelCreatedCallback& callback) override;
   void CancelChannelCreation(const std::string& name) override;
 
   // Passes transport info to a new |channel| in case it was received before the

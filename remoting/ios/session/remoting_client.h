@@ -69,18 +69,18 @@ extern NSString* const kHostSessionPin;
                                      id:(NSString*)id
                                  secret:(NSString*)secret;
 
-- (void)fetchSecretWithPairingSupported:(BOOL)pairingSupported
-                               callback:
-                                   (remoting::protocol::SecretFetchedCallback)
-                                       secretFetchedCallback;
-
 - (void)
-    fetchThirdPartyTokenForUrl:(NSString*)tokenUrl
-                      clientId:(NSString*)clinetId
-                        scopes:(NSString*)scopes
-                      callback:
-                          (remoting::protocol::ThirdPartyTokenFetchedCallback)
-                              tokenFetchedCallback;
+fetchSecretWithPairingSupported:(BOOL)pairingSupported
+                       callback:
+                           (const remoting::protocol::SecretFetchedCallback&)
+                               secretFetchedCallback;
+
+- (void)fetchThirdPartyTokenForUrl:(NSString*)tokenUrl
+                          clientId:(NSString*)clinetId
+                            scopes:(NSString*)scopes
+                          callback:(const remoting::protocol::
+                                        ThirdPartyTokenFetchedCallback&)
+                                       tokenFetchedCallback;
 
 - (void)setCapabilities:(NSString*)capabilities;
 

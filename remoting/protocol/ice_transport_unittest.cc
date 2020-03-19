@@ -54,7 +54,7 @@ class MockChannelCreatedCallback {
 
 class TestTransportEventHandler : public IceTransport::EventHandler {
  public:
-  typedef base::RepeatingCallback<void(ErrorCode error)> ErrorCallback;
+  typedef base::Callback<void(ErrorCode error)> ErrorCallback;
 
   TestTransportEventHandler() = default;
   ~TestTransportEventHandler() = default;

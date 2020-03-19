@@ -48,24 +48,24 @@ void RemotingClientSessonDelegate::CommitPairingCredentials(
 
 void RemotingClientSessonDelegate::FetchSecret(
     bool pairing_supported,
-    protocol::SecretFetchedCallback secret_fetched_callback) {
+    const protocol::SecretFetchedCallback& secret_fetched_callback) {
   DCHECK(runtime_->ui_task_runner()->BelongsToCurrentThread());
 
   [client_ fetchSecretWithPairingSupported:pairing_supported
-                                  callback:std::move(secret_fetched_callback)];
+                                  callback:secret_fetched_callback];
 }
 
 void RemotingClientSessonDelegate::FetchThirdPartyToken(
     const std::string& token_url,
     const std::string& client_id,
     const std::string& scopes,
-    protocol::ThirdPartyTokenFetchedCallback callback) {
+    const protocol::ThirdPartyTokenFetchedCallback& callback) {
   DCHECK(runtime_->ui_task_runner()->BelongsToCurrentThread());
 
   [client_ fetchThirdPartyTokenForUrl:SysUTF8ToNSString(token_url)
                              clientId:SysUTF8ToNSString(client_id)
                                scopes:SysUTF8ToNSString(scopes)
-                             callback:std::move(callback)];
+                             callback:callback];
 }
 
 void RemotingClientSessonDelegate::SetCapabilities(

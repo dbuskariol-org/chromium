@@ -27,13 +27,14 @@ SecureChannelFactory::~SecureChannelFactory() {
   DCHECK(channel_authenticators_.empty());
 }
 
-void SecureChannelFactory::CreateChannel(const std::string& name,
-                                         ChannelCreatedCallback callback) {
+void SecureChannelFactory::CreateChannel(
+    const std::string& name,
+    const ChannelCreatedCallback& callback) {
   DCHECK(!callback.is_null());
   channel_factory_->CreateChannel(
-      name, base::BindOnce(&SecureChannelFactory::OnBaseChannelCreated,
-                           base::Unretained(this), name,
-                           base::Passed(std::move(callback))));
+      name,
+      base::Bind(&SecureChannelFactory::OnBaseChannelCreated,
+                 base::Unretained(this), name, callback));
 }
 
 void SecureChannelFactory::CancelChannelCreation(
@@ -49,10 +50,10 @@ void SecureChannelFactory::CancelChannelCreation(
 
 void SecureChannelFactory::OnBaseChannelCreated(
     const std::string& name,
-    ChannelCreatedCallback callback,
+    const ChannelCreatedCallback& callback,
     std::unique_ptr<P2PStreamSocket> socket) {
   if (!socket) {
-    std::move(callback).Run(nullptr);
+    callback.Run(nullptr);
     return;
   }
 
@@ -62,13 +63,12 @@ void SecureChannelFactory::OnBaseChannelCreated(
   channel_authenticator->SecureAndAuthenticate(
       std::move(socket),
       base::Bind(&SecureChannelFactory::OnSecureChannelCreated,
-                 base::Unretained(this), name,
-                 base::Passed(std::move(callback))));
+                 base::Unretained(this), name, callback));
 }
 
 void SecureChannelFactory::OnSecureChannelCreated(
     const std::string& name,
-    ChannelCreatedCallback callback,
+    const ChannelCreatedCallback& callback,
     int error,
     std::unique_ptr<P2PStreamSocket> socket) {
   DCHECK((socket && error == net::OK) || (!socket && error != net::OK));
@@ -78,7 +78,7 @@ void SecureChannelFactory::OnSecureChannelCreated(
   delete it->second;
   channel_authenticators_.erase(it);
 
-  std::move(callback).Run(std::move(socket));
+  callback.Run(std::move(socket));
 }
 
 }  // namespace protocol

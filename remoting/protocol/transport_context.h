@@ -43,7 +43,7 @@ class TransportContext : public base::RefCountedThreadSafe<TransportContext> {
   };
   static const int kNumRelayModes = RelayMode::LAST_RELAYMODE + 1;
 
-  typedef base::OnceCallback<void(const IceConfig& ice_config)>
+  typedef base::Callback<void(const IceConfig& ice_config)>
       GetIceConfigCallback;
 
   static scoped_refptr<TransportContext> ForTests(TransportRole role);
@@ -76,7 +76,7 @@ class TransportContext : public base::RefCountedThreadSafe<TransportContext> {
   void Prepare();
 
   // Requests fresh STUN and TURN information.
-  void GetIceConfig(GetIceConfigCallback callback);
+  void GetIceConfig(const GetIceConfigCallback& callback);
 
   PortAllocatorFactory* port_allocator_factory() {
     return port_allocator_factory_.get();

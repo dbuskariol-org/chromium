@@ -29,12 +29,12 @@ class RemotingClientSessonDelegate : public ChromotingSession::Delegate {
                                 const std::string& secret) override;
   void FetchSecret(
       bool pairing_supported,
-      protocol::SecretFetchedCallback secret_fetched_callback) override;
+      const protocol::SecretFetchedCallback& secret_fetched_callback) override;
   void FetchThirdPartyToken(
       const std::string& token_url,
       const std::string& client_id,
       const std::string& scopes,
-      protocol::ThirdPartyTokenFetchedCallback callback) override;
+      const protocol::ThirdPartyTokenFetchedCallback& callback) override;
   void SetCapabilities(const std::string& capabilities) override;
   void HandleExtensionMessage(const std::string& type,
                               const std::string& message) override;

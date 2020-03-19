@@ -71,7 +71,7 @@ IceTransportChannel::~IceTransportChannel() {
 
 void IceTransportChannel::Connect(const std::string& name,
                                   Delegate* delegate,
-                                  ConnectedCallback callback) {
+                                  const ConnectedCallback& callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!name.empty());
   DCHECK(delegate);
@@ -80,7 +80,7 @@ void IceTransportChannel::Connect(const std::string& name,
   DCHECK(name_.empty());
   name_ = name;
   delegate_ = delegate;
-  callback_ = std::move(callback);
+  callback_ = callback;
 
   port_allocator_ =
       transport_context_->port_allocator_factory()->CreatePortAllocator(
@@ -178,7 +178,7 @@ const std::string& IceTransportChannel::name() const {
 
 bool IceTransportChannel::is_connected() const {
   DCHECK(thread_checker_.CalledOnValidThread());
-  return std::move(callback_).is_null();
+  return callback_.is_null();
 }
 
 void IceTransportChannel::OnCandidateGathered(

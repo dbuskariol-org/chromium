@@ -55,8 +55,10 @@ class PendingPacket {
 const char ChannelMultiplexer::kMuxChannelName[] = "mux";
 
 struct ChannelMultiplexer::PendingChannel {
-  PendingChannel(const std::string& name, ChannelCreatedCallback callback)
-      : name(name), callback(std::move(callback)) {}
+  PendingChannel(const std::string& name,
+                 const ChannelCreatedCallback& callback)
+      : name(name), callback(callback) {
+  }
   std::string name;
   ChannelCreatedCallback callback;
 };
@@ -323,17 +325,17 @@ ChannelMultiplexer::~ChannelMultiplexer() {
 }
 
 void ChannelMultiplexer::CreateChannel(const std::string& name,
-                                       ChannelCreatedCallback callback) {
+                                       const ChannelCreatedCallback& callback) {
   if (base_channel_.get()) {
     // Already have |base_channel_|. Create new multiplexed channel
     // synchronously.
-    std::move(callback).Run(GetOrCreateChannel(name)->CreateSocket());
+    callback.Run(GetOrCreateChannel(name)->CreateSocket());
   } else if (!base_channel_.get() && !base_channel_factory_) {
     // Fail synchronously if we failed to create |base_channel_|.
-    std::move(callback).Run(nullptr);
+    callback.Run(nullptr);
   } else {
     // Still waiting for the |base_channel_|.
-    pending_channels_.push_back(PendingChannel(name, std::move(callback)));
+    pending_channels_.push_back(PendingChannel(name, callback));
 
     // If this is the first multiplexed channel then create the base channel.
     if (pending_channels_.size() == 1U) {
@@ -388,12 +390,12 @@ void ChannelMultiplexer::DoCreatePendingChannels() {
       FROM_HERE, base::BindOnce(&ChannelMultiplexer::DoCreatePendingChannels,
                                 weak_factory_.GetWeakPtr()));
 
-  PendingChannel c = std::move(pending_channels_.front());
+  PendingChannel c = pending_channels_.front();
   pending_channels_.erase(pending_channels_.begin());
   std::unique_ptr<P2PStreamSocket> socket;
   if (base_channel_.get())
     socket = GetOrCreateChannel(c.name)->CreateSocket();
-  std::move(c.callback).Run(std::move(socket));
+  c.callback.Run(std::move(socket));
 }
 
 ChannelMultiplexer::MuxChannel* ChannelMultiplexer::GetOrCreateChannel(

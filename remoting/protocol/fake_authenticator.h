@@ -21,7 +21,7 @@ class FakeChannelAuthenticator : public ChannelAuthenticator {
 
   // ChannelAuthenticator interface.
   void SecureAndAuthenticate(std::unique_ptr<P2PStreamSocket> socket,
-                             DoneCallback done_callback) override;
+                             const DoneCallback& done_callback) override;
 
  private:
   void OnAuthBytesWritten(int result);

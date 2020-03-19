@@ -154,9 +154,10 @@ class ChromotingSession::Core : public ClientUserInterface,
   void LogPerfStats();
 
   // Pops up a UI to fetch the PIN.
-  void FetchSecret(bool pairing_supported,
-                   protocol::SecretFetchedCallback secret_fetched_callback);
-  void HandleOnSecretFetched(protocol::SecretFetchedCallback callback,
+  void FetchSecret(
+      bool pairing_supported,
+      const protocol::SecretFetchedCallback& secret_fetched_callback);
+  void HandleOnSecretFetched(const protocol::SecretFetchedCallback& callback,
                              const std::string secret);
 
   // Pops up a UI to fetch the third party token.
@@ -164,9 +165,9 @@ class ChromotingSession::Core : public ClientUserInterface,
       const std::string& host_public_key,
       const std::string& token_url,
       const std::string& scopes,
-      protocol::ThirdPartyTokenFetchedCallback token_fetched_callback);
+      const protocol::ThirdPartyTokenFetchedCallback& token_fetched_callback);
   void HandleOnThirdPartyTokenFetched(
-      const protocol::ThirdPartyTokenFetchedCallback callback,
+      const protocol::ThirdPartyTokenFetchedCallback& callback,
       const std::string& token,
       const std::string& shared_secret);
 
@@ -581,78 +582,76 @@ void ChromotingSession::Core::LogPerfStats() {
 
 void ChromotingSession::Core::FetchSecret(
     bool pairing_supported,
-    protocol::SecretFetchedCallback secret_fetched_callback) {
+    const protocol::SecretFetchedCallback& secret_fetched_callback) {
   DCHECK(network_task_runner()->BelongsToCurrentThread());
 
-  auto secret_fetched_callback_for_ui_thread = base::BindOnce(
+  // TODO(yuweih): Use bindOnce once SecretFetchedCallback becomes OnceCallback.
+  auto secret_fetched_callback_for_ui_thread = base::BindRepeating(
       [](scoped_refptr<AutoThreadTaskRunner> network_task_runner,
          base::WeakPtr<ChromotingSession::Core> core,
-         protocol::SecretFetchedCallback callback, const std::string& secret) {
+         const protocol::SecretFetchedCallback& callback,
+         const std::string& secret) {
         DCHECK(!network_task_runner->BelongsToCurrentThread());
         network_task_runner->PostTask(
             FROM_HERE,
             base::BindOnce(&ChromotingSession::Core::HandleOnSecretFetched,
-                           core, base::Passed(std::move(callback)), secret));
+                           core, callback, secret));
       },
-      network_task_runner(), GetWeakPtr(),
-      base::Passed(std::move(secret_fetched_callback)));
+      network_task_runner(), GetWeakPtr(), secret_fetched_callback);
   ui_task_runner()->PostTask(
-      FROM_HERE,
-      base::BindOnce(
-          &ChromotingSession::Delegate::FetchSecret, session_context_->delegate,
-          pairing_supported,
-          base::Passed(std::move(secret_fetched_callback_for_ui_thread))));
+      FROM_HERE, base::BindOnce(&ChromotingSession::Delegate::FetchSecret,
+                                session_context_->delegate, pairing_supported,
+                                secret_fetched_callback_for_ui_thread));
 }
 
 void ChromotingSession::Core::HandleOnSecretFetched(
-    protocol::SecretFetchedCallback callback,
+    const protocol::SecretFetchedCallback& callback,
     const std::string secret) {
   DCHECK(network_task_runner()->BelongsToCurrentThread());
 
   logger_->SetAuthMethod(ChromotingEvent::AuthMethod::PIN);
 
-  std::move(callback).Run(secret);
+  callback.Run(secret);
 }
 
 void ChromotingSession::Core::FetchThirdPartyToken(
     const std::string& host_public_key,
     const std::string& token_url,
     const std::string& scopes,
-    protocol::ThirdPartyTokenFetchedCallback token_fetched_callback) {
+    const protocol::ThirdPartyTokenFetchedCallback& token_fetched_callback) {
   DCHECK(network_task_runner()->BelongsToCurrentThread());
 
-  auto token_fetched_callback_for_ui_thread = base::BindOnce(
+  // TODO(yuweih): Use bindOnce once SecretFetchedCallback becomes OnceCallback.
+  auto token_fetched_callback_for_ui_thread = base::BindRepeating(
       [](scoped_refptr<AutoThreadTaskRunner> network_task_runner,
          base::WeakPtr<ChromotingSession::Core> core,
-         protocol::ThirdPartyTokenFetchedCallback callback,
+         const protocol::ThirdPartyTokenFetchedCallback& callback,
          const std::string& token, const std::string& shared_secret) {
         DCHECK(!network_task_runner->BelongsToCurrentThread());
         network_task_runner->PostTask(
             FROM_HERE,
             base::BindOnce(
                 &ChromotingSession::Core::HandleOnThirdPartyTokenFetched, core,
-                base::Passed(std::move(callback)), token, shared_secret));
+                callback, token, shared_secret));
       },
-      network_task_runner(), GetWeakPtr(),
-      base::Passed(std::move(token_fetched_callback)));
+      network_task_runner(), GetWeakPtr(), token_fetched_callback);
 
   ui_task_runner()->PostTask(
       FROM_HERE,
-      base::BindOnce(
-          &ChromotingSession::Delegate::FetchThirdPartyToken,
-          session_context_->delegate, token_url, host_public_key, scopes,
-          base::Passed(std::move(token_fetched_callback_for_ui_thread))));
+      base::BindOnce(&ChromotingSession::Delegate::FetchThirdPartyToken,
+                     session_context_->delegate, token_url, host_public_key,
+                     scopes, token_fetched_callback_for_ui_thread));
 }
 
 void ChromotingSession::Core::HandleOnThirdPartyTokenFetched(
-    protocol::ThirdPartyTokenFetchedCallback callback,
+    const protocol::ThirdPartyTokenFetchedCallback& callback,
     const std::string& token,
     const std::string& shared_secret) {
   DCHECK(network_task_runner()->BelongsToCurrentThread());
 
   logger_->SetAuthMethod(ChromotingEvent::AuthMethod::THIRD_PARTY);
 
-  std::move(callback).Run(token, shared_secret);
+  callback.Run(token, shared_secret);
 }
 
 // ChromotingSession implementation.
