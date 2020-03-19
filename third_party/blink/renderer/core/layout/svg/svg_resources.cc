@@ -58,6 +58,14 @@ SVGElementResourceClient* SVGResources::GetClient(const LayoutObject& object) {
 
 FloatRect SVGResources::ReferenceBoxForEffects(
     const LayoutObject& layout_object) {
+  // For SVG foreign objects, remove the position part of the bounding box. The
+  // position is already baked into the transform, and we don't want to re-apply
+  // the offset when, e.g., using "objectBoundingBox" for clipPathUnits.
+  if (layout_object.IsSVGForeignObject()) {
+    FloatRect rect = layout_object.ObjectBoundingBox();
+    return FloatRect(FloatPoint::Zero(), rect.Size());
+  }
+
   // Text "sub-elements" (<tspan>, <textpath>, <a>) should use the entire
   // <text>s object bounding box rather then their own.
   // https://svgwg.org/svg2-draft/text.html#ObjectBoundingBoxUnitsTextObjects
