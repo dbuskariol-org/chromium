@@ -54571,6 +54571,9 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="QueryWebAndAppActivityState">
+  <obsolete>
+    Removed March 2020.
+  </obsolete>
   <int value="0" label="History recording enabled"/>
   <int value="1" label="History recording disabled"/>
   <int value="2" label="Request failed"/>
@@ -63938,6 +63941,9 @@ would be helpful to identify which type is being sent.
 </enum>
 
 <enum name="SyncSetupSettignsDisplayedSwaaState">
+  <obsolete>
+    Removed March 2020.
+  </obsolete>
   <int value="0" label="On"/>
   <int value="1" label="Off due to custom encryption"/>
   <int value="2" label="Off due to history sync off"/>
