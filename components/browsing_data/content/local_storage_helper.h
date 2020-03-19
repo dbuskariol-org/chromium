@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_BROWSING_DATA_BROWSING_DATA_LOCAL_STORAGE_HELPER_H_
-#define CHROME_BROWSER_BROWSING_DATA_BROWSING_DATA_LOCAL_STORAGE_HELPER_H_
+#ifndef COMPONENTS_BROWSING_DATA_CONTENT_LOCAL_STORAGE_HELPER_H_
+#define COMPONENTS_BROWSING_DATA_CONTENT_LOCAL_STORAGE_HELPER_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -21,17 +21,20 @@
 #include "content/public/browser/storage_usage_info.h"
 #include "url/origin.h"
 
-class Profile;
+namespace content {
+class BrowserContext;
+}
+
+namespace browsing_data {
 
 // This class fetches local storage information and provides a
 // means to delete the data associated with an origin.
-class BrowsingDataLocalStorageHelper
-    : public base::RefCounted<BrowsingDataLocalStorageHelper> {
+class LocalStorageHelper : public base::RefCounted<LocalStorageHelper> {
  public:
   using FetchCallback =
       base::OnceCallback<void(const std::list<content::StorageUsageInfo>&)>;
 
-  explicit BrowsingDataLocalStorageHelper(Profile* profile);
+  explicit LocalStorageHelper(content::BrowserContext* context);
 
   // Starts the fetching process, which will notify its completion via
   // callback. This must be called only in the UI thread.
@@ -44,22 +47,21 @@ class BrowsingDataLocalStorageHelper
                             base::OnceClosure callback);
 
  protected:
-  friend class base::RefCounted<BrowsingDataLocalStorageHelper>;
-  virtual ~BrowsingDataLocalStorageHelper();
+  friend class base::RefCounted<LocalStorageHelper>;
+  virtual ~LocalStorageHelper();
 
-  content::DOMStorageContext* dom_storage_context_;  // Owned by the profile
+  content::DOMStorageContext* dom_storage_context_;  // Owned by the context
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(BrowsingDataLocalStorageHelper);
+  DISALLOW_COPY_AND_ASSIGN(LocalStorageHelper);
 };
 
-// This class is a thin wrapper around BrowsingDataLocalStorageHelper that does
+// This class is a thin wrapper around LocalStorageHelper that does
 // not fetch its information from the local storage context, but gets them
 // passed by a call when accessed.
-class CannedBrowsingDataLocalStorageHelper
-    : public BrowsingDataLocalStorageHelper {
+class CannedLocalStorageHelper : public LocalStorageHelper {
  public:
-  explicit CannedBrowsingDataLocalStorageHelper(Profile* profile);
+  explicit CannedLocalStorageHelper(content::BrowserContext* context);
 
   // Add a local storage to the set of canned local storages that is returned
   // by this helper.
@@ -77,17 +79,19 @@ class CannedBrowsingDataLocalStorageHelper
   // Returns the set of origins that use local storage.
   const std::set<url::Origin>& GetOrigins() const;
 
-  // BrowsingDataLocalStorageHelper implementation.
+  // LocalStorageHelper implementation.
   void StartFetching(FetchCallback callback) override;
   void DeleteOrigin(const url::Origin& origin,
                     base::OnceClosure callback) override;
 
  private:
-  ~CannedBrowsingDataLocalStorageHelper() override;
+  ~CannedLocalStorageHelper() override;
 
   std::set<url::Origin> pending_origins_;
 
-  DISALLOW_COPY_AND_ASSIGN(CannedBrowsingDataLocalStorageHelper);
+  DISALLOW_COPY_AND_ASSIGN(CannedLocalStorageHelper);
 };
 
-#endif  // CHROME_BROWSER_BROWSING_DATA_BROWSING_DATA_LOCAL_STORAGE_HELPER_H_
+}  // namespace browsing_data
+
+#endif  // COMPONENTS_BROWSING_DATA_CONTENT_LOCAL_STORAGE_HELPER_H_

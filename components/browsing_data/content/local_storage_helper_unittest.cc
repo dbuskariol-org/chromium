@@ -2,12 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/browsing_data/browsing_data_local_storage_helper.h"
+#include "components/browsing_data/content/local_storage_helper.h"
 
 #include "base/bind_helpers.h"
-#include "chrome/test/base/testing_profile.h"
 #include "content/public/test/browser_task_environment.h"
+#include "content/public/test/test_browser_context.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "url/gurl.h"
+
+namespace browsing_data {
 
 namespace {
 
@@ -16,12 +19,12 @@ class CannedBrowsingDataLocalStorageTest : public testing::Test {
 };
 
 TEST_F(CannedBrowsingDataLocalStorageTest, Empty) {
-  TestingProfile profile;
+  content::TestBrowserContext context;
 
   const GURL origin("http://host1:1/");
 
-  scoped_refptr<CannedBrowsingDataLocalStorageHelper> helper(
-      new CannedBrowsingDataLocalStorageHelper(&profile));
+  scoped_refptr<CannedLocalStorageHelper> helper(
+      new CannedLocalStorageHelper(&context));
 
   ASSERT_TRUE(helper->empty());
   helper->Add(url::Origin::Create(origin));
@@ -31,14 +34,14 @@ TEST_F(CannedBrowsingDataLocalStorageTest, Empty) {
 }
 
 TEST_F(CannedBrowsingDataLocalStorageTest, Delete) {
-  TestingProfile profile;
+  content::TestBrowserContext context;
 
   const GURL origin1("http://host1:9000");
   const GURL origin2("http://example.com");
   const GURL origin3("http://foo.example.com");
 
-  scoped_refptr<CannedBrowsingDataLocalStorageHelper> helper(
-      new CannedBrowsingDataLocalStorageHelper(&profile));
+  scoped_refptr<CannedLocalStorageHelper> helper(
+      new CannedLocalStorageHelper(&context));
 
   EXPECT_TRUE(helper->empty());
   helper->Add(url::Origin::Create(origin1));
@@ -52,13 +55,13 @@ TEST_F(CannedBrowsingDataLocalStorageTest, Delete) {
 }
 
 TEST_F(CannedBrowsingDataLocalStorageTest, IgnoreExtensionsAndDevTools) {
-  TestingProfile profile;
+  content::TestBrowserContext context;
 
   const GURL origin1("chrome-extension://abcdefghijklmnopqrstuvwxyz/");
   const GURL origin2("devtools://abcdefghijklmnopqrstuvwxyz/");
 
-  scoped_refptr<CannedBrowsingDataLocalStorageHelper> helper(
-      new CannedBrowsingDataLocalStorageHelper(&profile));
+  scoped_refptr<CannedLocalStorageHelper> helper(
+      new CannedLocalStorageHelper(&context));
 
   ASSERT_TRUE(helper->empty());
   helper->Add(url::Origin::Create(origin1));
@@ -68,3 +71,5 @@ TEST_F(CannedBrowsingDataLocalStorageTest, IgnoreExtensionsAndDevTools) {
 }
 
 }  // namespace
+
+}  // namespace browsing_data
