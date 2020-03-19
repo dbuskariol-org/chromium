@@ -66,6 +66,7 @@ StoragePressureBubbleView::StoragePressureBubbleView(
           IDS_SETTINGS_STORAGE_PRESSURE_BUBBLE_VIEW_BUTTON_LABEL));
   DialogDelegate::SetAcceptCallback(base::BindOnce(
       &StoragePressureBubbleView::OnDialogAccepted, base::Unretained(this)));
+  set_close_on_deactivate(false);
 }
 
 base::string16 StoragePressureBubbleView::GetWindowTitle() const {
@@ -107,4 +108,8 @@ void StoragePressureBubbleView::Init() {
           ChromeDistanceMetric::DISTANCE_BUBBLE_PREFERRED_WIDTH) -
       margins().width());
   AddChildView(std::move(text_label));
+}
+
+bool StoragePressureBubbleView::ShouldShowCloseButton() const {
+  return true;
 }

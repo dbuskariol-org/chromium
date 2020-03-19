@@ -27,6 +27,7 @@ class StoragePressureBubbleView : public views::BubbleDialogDelegateView {
 
   // views::BubbleDialogDelegateView:
   void Init() override;
+  bool ShouldShowCloseButton() const override;
 
   Browser* const browser_;
   const GURL all_sites_url_ = GURL("chrome://settings/content/all");
