@@ -4112,7 +4112,7 @@ void RenderFrameImpl::FrameDetached(DetachType type) {
       CHECK_EQ(routing_id_, proxy->provisional_frame_routing_id());
       proxy->set_provisional_frame_routing_id(MSG_ROUTING_NONE);
     } else
-      CHECK(IsRenderDocumentEnabled());
+      CHECK(CreateNewHostForSameSiteSubframe());
   }
 
   delete this;
