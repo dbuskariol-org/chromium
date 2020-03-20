@@ -22,7 +22,6 @@
 #include "chrome/android/chrome_jni_headers/WebsitePreferenceBridge_jni.h"
 #include "chrome/browser/android/search_permissions/search_permissions_service.h"
 #include "chrome/browser/engagement/important_sites_util.h"
-#include "chrome/browser/media/android/cdm/media_drm_license_manager.h"
 #include "chrome/browser/notifications/notification_permission_context.h"
 #include "chrome/browser/permissions/quiet_notification_permission_ui_state.h"
 #include "chrome/browser/profiles/profile.h"
@@ -33,6 +32,7 @@
 #include "chrome/browser/usb/usb_chooser_context_factory.h"
 #include "chrome/common/pref_names.h"
 #include "components/browsing_data/content/local_storage_helper.h"
+#include "components/cdm/browser/media_drm_storage_impl.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/browser/uma_util.h"
@@ -858,9 +858,9 @@ static void JNI_WebsitePreferenceBridge_ClearMediaLicenses(
   Profile* profile = ProfileManager::GetActiveUserProfile();
   url::Origin origin =
       url::Origin::Create(GURL(ConvertJavaStringToUTF8(env, jorigin)));
-  ClearMediaDrmLicenses(profile->GetPrefs(), base::Time(), base::Time::Max(),
-                        base::BindRepeating(&OriginMatcher, origin),
-                        base::DoNothing());
+  cdm::MediaDrmStorageImpl::ClearMatchingLicenses(
+      profile->GetPrefs(), base::Time(), base::Time::Max(),
+      base::BindRepeating(&OriginMatcher, origin), base::DoNothing());
 }
 
 static jboolean JNI_WebsitePreferenceBridge_IsPermissionControlledByDSE(

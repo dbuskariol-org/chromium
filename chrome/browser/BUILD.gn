@@ -2841,8 +2841,6 @@ jumbo_static_library("browser") {
       "installable/installed_webapp_provider.h",
       "lifetime/application_lifetime_android.cc",
       "lifetime/application_lifetime_android.h",
-      "media/android/cdm/media_drm_license_manager.cc",
-      "media/android/cdm/media_drm_license_manager.h",
       "media/android/cdm/media_drm_origin_id_manager.cc",
       "media/android/cdm/media_drm_origin_id_manager.h",
       "media/android/cdm/media_drm_origin_id_manager_factory.cc",
