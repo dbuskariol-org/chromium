@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Callback;
 import org.chromium.base.TraceEvent;
 import org.chromium.base.metrics.RecordUserAction;
@@ -53,6 +54,7 @@ import org.chromium.chrome.browser.vr.VrModuleProvider;
 import org.chromium.chrome.browser.widget.ScrimView;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.components.browser_ui.widget.MenuOrKeyboardActionController;
+import org.chromium.components.browser_ui.widget.scrim.ScrimCoordinator;
 import org.chromium.ui.base.DeviceFormFactor;
 import org.chromium.ui.modaldialog.ModalDialogManager.ModalDialogManagerObserver;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -106,6 +108,7 @@ public class RootUiCoordinator
     private SnackbarManager mBottomSheetSnackbarManager;
 
     private ScrimView mScrimView;
+    private ScrimCoordinator mScrimCoordinator;
     private DirectActionInitializer mDirectActionInitializer;
     private List<ButtonDataProvider> mButtonDataProviders;
     private IdentityDiscController mIdentityDiscController;
@@ -210,6 +213,13 @@ public class RootUiCoordinator
         ViewGroup coordinator = mActivity.findViewById(R.id.coordinator);
         mScrimView = new ScrimView(mActivity,
                 mActivity.getStatusBarColorController().getStatusBarScrimDelegate(), coordinator);
+        mScrimCoordinator = new ScrimCoordinator(mActivity,
+                (fraction) -> mActivity.getStatusBarColorController()
+                       .getStatusBarScrimDelegate()
+                       .setStatusBarScrimFraction(fraction),
+                coordinator,
+                ApiCompatibilityUtils.getColor(coordinator.getResources(),
+                        R.color.omnibox_focused_fading_background_color));
 
         mTabThemeColorProvider = new TabThemeColorProvider(mActivity);
         mTabThemeColorProvider.setActivityTabProvider(mActivity.getActivityTabProvider());
@@ -529,10 +539,11 @@ public class RootUiCoordinator
         Supplier<OverlayPanelManager> panelManagerSupplier = ()
                 -> mActivity.getCompositorViewHolder().getLayoutManager().getOverlayPanelManager();
 
-        mBottomSheetController = new BottomSheetController(mActivity.getLifecycleDispatcher(),
-                mActivityTabProvider, this::getScrim, sheetViewSupplier, panelManagerSupplier,
-                mActivity.getFullscreenManager(), mActivity.getWindow(),
-                mActivity.getWindowAndroid().getKeyboardDelegate());
+        mBottomSheetController =
+                new BottomSheetController(mActivity.getLifecycleDispatcher(), mActivityTabProvider,
+                        () -> mScrimCoordinator, sheetViewSupplier, panelManagerSupplier,
+                        mActivity.getFullscreenManager(), mActivity.getWindow(),
+                        mActivity.getWindowAndroid().getKeyboardDelegate());
 
         mBottomSheetManager = new BottomSheetManager(mBottomSheetController, mActivityTabProvider,
                 mActivity::getFullscreenManager, mActivity::getModalDialogManager,
@@ -577,5 +588,10 @@ public class RootUiCoordinator
     @VisibleForTesting
     public AppMenuCoordinator getAppMenuCoordinatorForTesting() {
         return mAppMenuCoordinator;
+    }
+
+    @VisibleForTesting
+    public ScrimCoordinator getScrimCoordinatorForTesting() {
+        return mScrimCoordinator;
     }
 }
