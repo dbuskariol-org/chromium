@@ -26449,6 +26449,9 @@
         "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
+        "args": [
+          "--no-sandbox"
+        ],
         "isolate_coverage_data": true,
         "merge": {
           "args": [],
@@ -26633,6 +26636,9 @@
         "test_target": "//ui/compositor:compositor_unittests"
       },
       {
+        "args": [
+          "--no-sandbox"
+        ],
         "isolate_coverage_data": true,
         "merge": {
           "args": [],
@@ -27714,6 +27720,24 @@
         },
         "test": "vr_pixeltests",
         "test_target": "//chrome/browser/vr:vr_pixeltests"
+      },
+      {
+        "isolate_coverage_data": true,
+        "merge": {
+          "args": [],
+          "script": "//testing/merge_scripts/standard_gtest_merge.py"
+        },
+        "swarming": {
+          "can_use_on_swarming_builders": true,
+          "dimension_sets": [
+            {
+              "os": "Ubuntu-16.04"
+            }
+          ],
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+        },
+        "test": "weblayer_browsertests",
+        "test_target": "//weblayer/test:weblayer_browsertests"
       },
       {
         "isolate_coverage_data": true,
