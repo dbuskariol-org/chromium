@@ -153,8 +153,8 @@
         <template is="dom-if"
             if="[[shouldShowSafeBrowsingManagedIcon_(safeBrowsingStatus_)]]"
             restamp>
-          <iron-icon id="safetyCheckSafeBrowsingManagedIcon" icon="cr20:domain"
-              aria-hidden="true">
+          <iron-icon id="safetyCheckSafeBrowsingManagedIcon" aria-hidden="true"
+              icon="[[getSafeBrowsingManagedIcon_(safeBrowsingStatus_)]]">
           </iron-icon>
         </template>
       </div>

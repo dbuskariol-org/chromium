@@ -500,12 +500,21 @@ Polymer({
    * @return {boolean}
    */
   shouldShowSafeBrowsingManagedIcon_: function() {
+    return this.getSafeBrowsingManagedIcon_() != null;
+  },
+
+  /**
+   * @private
+   * @return {?string}
+   */
+  getSafeBrowsingManagedIcon_: function() {
     switch (this.safeBrowsingStatus_) {
       case settings.SafetyCheckSafeBrowsingStatus.DISABLED_BY_ADMIN:
+        return 'cr20:domain';
       case settings.SafetyCheckSafeBrowsingStatus.DISABLED_BY_EXTENSION:
-        return true;
+        return 'cr:extension';
       default:
-        return false;
+        return null;
     }
   },
 
