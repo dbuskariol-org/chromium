@@ -76,9 +76,6 @@ PaintResult PaintLayerPainter::Paint(
   if (paint_layer_.GetLayoutObject().GetFrameView()->ShouldThrottleRendering())
     return kFullyPainted;
 
-  // https://code.google.com/p/chromium/issues/detail?id=343772
-  DisableCompositingQueryAsserts disabler;
-
   // Non self-painting layers without self-painting descendants don't need to be
   // painted as their layoutObject() should properly paint itself.
   if (!paint_layer_.IsSelfPaintingLayer() &&
@@ -128,7 +125,8 @@ static bool ShouldCreateSubsequence(
   // CachedDisplayItemList.  This also avoids conflict of
   // PaintLayer::previousXXX() when paintLayer is composited scrolling and is
   // painted twice for GraphicsLayers of container and scrolling contents.
-  if (paint_layer.GetCompositingState() == kPaintsIntoOwnBacking)
+  if (!RuntimeEnabledFeatures::CompositeAfterPaintEnabled() &&
+      paint_layer.GetCompositingState() == kPaintsIntoOwnBacking)
     return false;
 
   // Don't create subsequence during special painting to avoid cache conflict
@@ -357,7 +355,8 @@ PaintResult PaintLayerPainter::PaintLayerContents(
       paint_layer_.GetLayoutObject().StyleRef().HasOutline();
 
   PhysicalOffset subpixel_accumulation =
-      paint_layer_.GetCompositingState() == kPaintsIntoOwnBacking
+      (!RuntimeEnabledFeatures::CompositeAfterPaintEnabled() &&
+       paint_layer_.GetCompositingState() == kPaintsIntoOwnBacking)
           ? paint_layer_.SubpixelAccumulation()
           : painting_info.sub_pixel_accumulation;
 
