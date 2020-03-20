@@ -322,6 +322,11 @@ PaintResult PaintLayerPainter::PaintLayerContents(
     return kMayBeClippedByCullRect;
   }
 
+  bool selection_drag_image_only = painting_info_arg.GetGlobalPaintFlags() &
+                                   kGlobalPaintSelectionDragImageOnly;
+  if (selection_drag_image_only && !paint_layer_.GetLayoutObject().IsSelected())
+    return result;
+
   base::Optional<IgnorePaintTimingScope> ignore_paint_timing;
   if (PaintedOutputInvisible(paint_layer_.GetLayoutObject().StyleRef()))
     ignore_paint_timing.emplace();
@@ -439,9 +444,6 @@ PaintResult PaintLayerPainter::PaintLayerContents(
         result = kMayBeClippedByCullRect;
     }
   }
-
-  bool selection_drag_image_only = local_painting_info.GetGlobalPaintFlags() &
-                                   kGlobalPaintSelectionDragImageOnly;
 
   {  // Begin block for the lifetime of any filter.
     bool is_painting_root_layer = (&paint_layer_) == painting_info.root_layer;
