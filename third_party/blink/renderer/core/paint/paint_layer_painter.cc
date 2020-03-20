@@ -441,13 +441,13 @@ PaintResult PaintLayerPainter::PaintLayerContents(
     }
   }
 
-  bool selection_only =
-      local_painting_info.GetGlobalPaintFlags() & kGlobalPaintSelectionOnly;
+  bool selection_drag_image_only = local_painting_info.GetGlobalPaintFlags() &
+                                   kGlobalPaintSelectionDragImageOnly;
 
   {  // Begin block for the lifetime of any filter.
     bool is_painting_root_layer = (&paint_layer_) == painting_info.root_layer;
     bool should_paint_background =
-        should_paint_content && !selection_only &&
+        should_paint_content && !selection_drag_image_only &&
         (is_painting_composited_background ||
          (is_painting_root_layer &&
           !(paint_flags & kPaintLayerPaintingSkipRootBackground)));
@@ -491,8 +491,14 @@ PaintResult PaintLayerPainter::PaintLayerContents(
                                             paint_layer_,
                                             DisplayItem::kLayerChunkForeground);
       }
-      PaintForegroundForFragments(layer_fragments, context, local_painting_info,
-                                  selection_only, paint_flags);
+      if (selection_drag_image_only) {
+        PaintForegroundForFragmentsWithPhase(PaintPhase::kSelectionDragImage,
+                                             layer_fragments, context,
+                                             local_painting_info, paint_flags);
+      } else {
+        PaintForegroundForFragments(layer_fragments, context,
+                                    local_painting_info, paint_flags);
+      }
     }
 
     if (!is_video && should_paint_self_outline) {
@@ -525,7 +531,7 @@ PaintResult PaintLayerPainter::PaintLayerContents(
 
   bool should_paint_mask = is_painting_mask && should_paint_content &&
                            paint_layer_.GetLayoutObject().HasMask() &&
-                           !selection_only;
+                           !selection_drag_image_only;
   if (should_paint_mask) {
     PaintMaskForFragments(layer_fragments, context, local_painting_info,
                           paint_flags);
@@ -738,40 +744,33 @@ void PaintLayerPainter::PaintForegroundForFragments(
     const PaintLayerFragments& layer_fragments,
     GraphicsContext& context,
     const PaintLayerPaintingInfo& local_painting_info,
-    bool selection_only,
     PaintLayerFlags paint_flags) {
-  if (selection_only) {
-    PaintForegroundForFragmentsWithPhase(PaintPhase::kSelection,
+  PaintForegroundForFragmentsWithPhase(
+      PaintPhase::kDescendantBlockBackgroundsOnly, layer_fragments, context,
+      local_painting_info, paint_flags);
+
+  if (paint_layer_.GetLayoutObject().GetDocument().InForcedColorsMode()) {
+    PaintForegroundForFragmentsWithPhase(PaintPhase::kForcedColorsModeBackplate,
                                          layer_fragments, context,
                                          local_painting_info, paint_flags);
-  } else {
-    PaintForegroundForFragmentsWithPhase(
-        PaintPhase::kDescendantBlockBackgroundsOnly, layer_fragments, context,
-        local_painting_info, paint_flags);
+  }
 
-    if (paint_layer_.GetLayoutObject().GetDocument().InForcedColorsMode()) {
-      PaintForegroundForFragmentsWithPhase(
-          PaintPhase::kForcedColorsModeBackplate, layer_fragments, context,
-          local_painting_info, paint_flags);
-    }
+  if (RuntimeEnabledFeatures::PaintUnderInvalidationCheckingEnabled() ||
+      paint_layer_.NeedsPaintPhaseFloat()) {
+    PaintForegroundForFragmentsWithPhase(PaintPhase::kFloat, layer_fragments,
+                                         context, local_painting_info,
+                                         paint_flags);
+  }
 
-    if (RuntimeEnabledFeatures::PaintUnderInvalidationCheckingEnabled() ||
-        paint_layer_.NeedsPaintPhaseFloat()) {
-      PaintForegroundForFragmentsWithPhase(PaintPhase::kFloat, layer_fragments,
-                                           context, local_painting_info,
-                                           paint_flags);
-    }
+  PaintForegroundForFragmentsWithPhase(PaintPhase::kForeground, layer_fragments,
+                                       context, local_painting_info,
+                                       paint_flags);
 
-    PaintForegroundForFragmentsWithPhase(PaintPhase::kForeground,
+  if (RuntimeEnabledFeatures::PaintUnderInvalidationCheckingEnabled() ||
+      paint_layer_.NeedsPaintPhaseDescendantOutlines()) {
+    PaintForegroundForFragmentsWithPhase(PaintPhase::kDescendantOutlinesOnly,
                                          layer_fragments, context,
                                          local_painting_info, paint_flags);
-
-    if (RuntimeEnabledFeatures::PaintUnderInvalidationCheckingEnabled() ||
-        paint_layer_.NeedsPaintPhaseDescendantOutlines()) {
-      PaintForegroundForFragmentsWithPhase(PaintPhase::kDescendantOutlinesOnly,
-                                           layer_fragments, context,
-                                           local_painting_info, paint_flags);
-    }
   }
 }
 
