@@ -4303,6 +4303,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAllowDisableMouseAccelerationDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kAllowDisableMouseAcceleration)},
 
+    {"allow-scroll-settings", flag_descriptions::kAllowScrollSettingsName,
+     flag_descriptions::kAllowScrollSettingsDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(features::kAllowScrollSettings)},
+
     {"enable-streamlined-usb-printer-setup",
      flag_descriptions::kStreamlinedUsbPrinterSetupName,
      flag_descriptions::kStreamlinedUsbPrinterSetupDescription, kOsCrOS,

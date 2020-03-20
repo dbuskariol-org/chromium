@@ -1705,6 +1705,9 @@ extern const char kAggregatedMlSearchRankingDescription[];
 extern const char kAllowDisableMouseAccelerationName[];
 extern const char kAllowDisableMouseAccelerationDescription[];
 
+extern const char kAllowScrollSettingsName[];
+extern const char kAllowScrollSettingsDescription[];
+
 extern const char kAppServiceInstanceRegistryName[];
 extern const char kAppServiceInstanceRegistryDescription[];
 

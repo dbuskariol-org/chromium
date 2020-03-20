@@ -2969,6 +2969,12 @@ const char kAllowDisableMouseAccelerationName[] =
 const char kAllowDisableMouseAccelerationDescription[] =
     "Shows a setting to disable mouse acceleration.";
 
+const char kAllowScrollSettingsName[] =
+    "Allow changes to scroll acceleration/sensitivity for mice/touchpads.";
+const char kAllowScrollSettingsDescription[] =
+    "Shows settings to enable/disable scroll acceleration and to adjust the "
+    "sensitivity for scrolling.";
+
 const char kAppServiceInstanceRegistryName[] = "App Service Instance Registry";
 const char kAppServiceInstanceRegistryDescription[] =
     "Use the App Service to provide app instance information, such as the "

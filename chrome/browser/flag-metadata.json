@@ -76,6 +76,11 @@
     "expiry_milestone": -1
   },
   {
+    "name": "allow-scroll-settings",
+    "owners": [ "khorimoto", "zentaro" ],
+    "expiry_milestone": 84
+  },
+  {
     "name": "allow-sxg-certs-without-extension",
     "owners": [ "//content/browser/web_package/OWNERS" ],
     // Used by developers for testing signed exchange loading using normal
