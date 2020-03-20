@@ -143,6 +143,10 @@ def _Collect(spawn_result):
   with open(json_file) as f:
     task_json = json.load(f)
   task_ids = [task['task_id'] for task in task_json['tasks']]
+
+  for t in task_ids:
+    print('Task {}: https://chromium-swarm.appspot.com/task?id={}'.format(
+        index, t))
   p = subprocess.Popen(
       [
           'tools/luci-go/swarming',
