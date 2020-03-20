@@ -5315,9 +5315,6 @@ crbug.com/869492 external/wpt/feature-policy/experimental-features/lazyload/load
 crbug.com/869492 virtual/threaded/external/wpt/feature-policy/experimental-features/lazyload/loading-frame-default-eager-disabled-tentative.sub.html [ Failure ]
 crbug.com/869492 virtual/unified-autoplay/external/wpt/feature-policy/experimental-features/lazyload/loading-frame-default-eager-disabled-tentative.sub.html [ Failure ]
 
-# Sheriff 2018-09-18
-crbug.com/884445 virtual/unified-autoplay/external/wpt/feature-policy/feature-policy-nested-header-policy-disallowed-for-all.https.sub.html [ Pass Timeout ]
-
 # Sheriff 2018-09-19
 crbug.com/662010 [ Win7 ] http/tests/csspaint/invalidation-background-image.html [ Skip ]
 crbug.com/886566 [ Win10 ] http/tests/csspaint/invalidation-background-image.html [ Pass Timeout ]
