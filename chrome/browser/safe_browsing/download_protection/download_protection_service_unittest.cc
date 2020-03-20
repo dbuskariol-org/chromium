@@ -39,6 +39,7 @@
 #include "chrome/browser/history/history_service_factory.h"
 #include "chrome/browser/password_manager/password_store_factory.h"
 #include "chrome/browser/safe_browsing/cloud_content_scanning/binary_upload_service.h"
+#include "chrome/browser/safe_browsing/cloud_content_scanning/binary_upload_service_factory.h"
 #include "chrome/browser/safe_browsing/cloud_content_scanning/test_binary_upload_service.h"
 #include "chrome/browser/safe_browsing/dm_token_utils.h"
 #include "chrome/browser/safe_browsing/download_protection/check_native_file_system_write_request.h"
@@ -62,6 +63,7 @@
 #include "components/download/public/common/download_danger_type.h"
 #include "components/download/public/common/mock_download_item.h"
 #include "components/history/core/browser/history_service.h"
+#include "components/keyed_service/content/browser_context_keyed_service_factory.h"
 #include "components/password_manager/core/browser/password_manager_test_utils.h"
 #include "components/password_manager/core/browser/test_password_store.h"
 #include "components/prefs/pref_service.h"
@@ -140,6 +142,11 @@ class MockSafeBrowsingDatabaseManager : public TestSafeBrowsingDatabaseManager {
   DISALLOW_COPY_AND_ASSIGN(MockSafeBrowsingDatabaseManager);
 };
 
+std::unique_ptr<KeyedService> CreateTestBinaryUploadService(
+    content::BrowserContext* browser_context) {
+  return std::make_unique<TestBinaryUploadService>();
+}
+
 class FakeSafeBrowsingService : public TestSafeBrowsingService {
  public:
   explicit FakeSafeBrowsingService(Profile* profile)
@@ -148,7 +155,8 @@ class FakeSafeBrowsingService : public TestSafeBrowsingService {
                 &test_url_loader_factory_)),
         download_report_count_(0) {
     services_delegate_ = ServicesDelegate::CreateForTest(this, this);
-    services_delegate_->CreateBinaryUploadService(profile);
+    BinaryUploadServiceFactory::GetInstance()->SetTestingFactory(
+        profile, base::BindRepeating(&CreateTestBinaryUploadService));
     mock_database_manager_ = new MockSafeBrowsingDatabaseManager();
   }
 
@@ -2969,7 +2977,7 @@ TEST_P(DeepScanningDownloadTest, PasswordProtectedArchivesBlockedByPreference) {
 
   TestBinaryUploadService* test_upload_service =
       static_cast<TestBinaryUploadService*>(
-          sb_service_->GetBinaryUploadService(profile()));
+          BinaryUploadServiceFactory::GetForProfile(profile()));
   test_upload_service->SetResponse(BinaryUploadService::Result::FILE_ENCRYPTED,
                                    DeepScanningClientResponse());
 
@@ -3031,7 +3039,7 @@ TEST_P(DeepScanningDownloadTest, LargeFileBlockedByPreference) {
 
   TestBinaryUploadService* test_upload_service =
       static_cast<TestBinaryUploadService*>(
-          sb_service_->GetBinaryUploadService(profile()));
+          BinaryUploadServiceFactory::GetForProfile(profile()));
   test_upload_service->SetResponse(BinaryUploadService::Result::FILE_TOO_LARGE,
                                    DeepScanningClientResponse());
 
@@ -3090,7 +3098,7 @@ TEST_P(DeepScanningDownloadTest, UnsupportedFiletypeBlockedByPreference) {
 
   TestBinaryUploadService* test_upload_service =
       static_cast<TestBinaryUploadService*>(
-          sb_service_->GetBinaryUploadService(profile()));
+          BinaryUploadServiceFactory::GetForProfile(profile()));
   test_upload_service->SetResponse(
       BinaryUploadService::Result::UNSUPPORTED_FILE_TYPE,
       DeepScanningClientResponse());
@@ -3738,7 +3746,7 @@ TEST_P(DeepScanningDownloadTest, PolicyEnabled) {
 
   TestBinaryUploadService* test_upload_service =
       static_cast<TestBinaryUploadService*>(
-          sb_service_->GetBinaryUploadService(profile()));
+          BinaryUploadServiceFactory::GetForProfile(profile()));
 
   {
     PrepareResponse(ClientDownloadResponse::SAFE, net::HTTP_OK, net::OK);
@@ -3785,7 +3793,7 @@ TEST_P(DeepScanningDownloadTest, PolicyDisabled) {
 
   TestBinaryUploadService* test_upload_service =
       static_cast<TestBinaryUploadService*>(
-          sb_service_->GetBinaryUploadService(profile()));
+          BinaryUploadServiceFactory::GetForProfile(profile()));
 
   {
     PrepareResponse(ClientDownloadResponse::SAFE, net::HTTP_OK, net::OK);
