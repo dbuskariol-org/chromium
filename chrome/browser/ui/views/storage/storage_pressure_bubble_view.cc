@@ -5,6 +5,8 @@
 #include "chrome/browser/ui/views/storage/storage_pressure_bubble_view.h"
 
 #include "base/feature_list.h"
+#include "base/metrics/histogram_functions.h"
+#include "base/metrics/histogram_macros.h"
 #include "chrome/browser/ui/browser_list.h"
 #include "chrome/browser/ui/bubble_anchor_util.h"
 #include "chrome/browser/ui/views/chrome_layout_provider.h"
@@ -21,6 +23,19 @@ namespace {
 
 const char kAllSitesContentSettingsUrl[] =
     "chrome://settings/content/all?sort=data-stored";
+
+// These values are persisted to logs. Entries should not be renumbered and
+// numeric values should never be reused.
+enum class StoragePressureBubbleHistogramValue {
+  kShown = 0,
+  kIgnored = 1,
+  kOpenedAllSites = 2,
+  kMaxValue = kOpenedAllSites,
+};
+
+void RecordBubbleHistogramValue(StoragePressureBubbleHistogramValue value) {
+  base::UmaHistogramEnumeration("Storage.StoragePressure.Bubble", value);
+}
 
 }  // namespace
 
@@ -44,6 +59,8 @@ void StoragePressureBubbleView::ShowBubble(const url::Origin origin) {
           ->GetAppMenuButton(),
       gfx::Rect(), browser, std::move(origin));
   views::BubbleDialogDelegateView::CreateBubble(bubble)->Show();
+
+  RecordBubbleHistogramValue(StoragePressureBubbleHistogramValue::kShown);
 }
 
 StoragePressureBubbleView::StoragePressureBubbleView(
@@ -53,7 +70,8 @@ StoragePressureBubbleView::StoragePressureBubbleView(
     const url::Origin origin)
     : BubbleDialogDelegateView(anchor_view, views::BubbleBorder::TOP_RIGHT),
       browser_(browser),
-      origin_(std::move(origin)) {
+      origin_(std::move(origin)),
+      ignored_(true) {
   if (!anchor_view) {
     SetAnchorRect(anchor_rect);
     set_parent_window(
@@ -69,12 +87,21 @@ StoragePressureBubbleView::StoragePressureBubbleView(
   set_close_on_deactivate(false);
 }
 
+StoragePressureBubbleView::~StoragePressureBubbleView() {
+  if (ignored_) {
+    RecordBubbleHistogramValue(StoragePressureBubbleHistogramValue::kIgnored);
+  }
+}
+
 base::string16 StoragePressureBubbleView::GetWindowTitle() const {
   return l10n_util::GetStringUTF16(
       IDS_SETTINGS_STORAGE_PRESSURE_BUBBLE_VIEW_TITLE);
 }
 
 void StoragePressureBubbleView::OnDialogAccepted() {
+  ignored_ = false;
+  RecordBubbleHistogramValue(
+      StoragePressureBubbleHistogramValue::kOpenedAllSites);
   // TODO(ellyjones): What is this doing here? The widget's about to close
   // anyway?
   GetWidget()->Close();
