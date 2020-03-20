@@ -107,10 +107,6 @@ class PerformanceManagerImpl : public PerformanceManager {
   // in topological order and destroying them.
   static void BatchDeleteNodes(std::vector<std::unique_ptr<NodeBase>> nodes);
 
-  // Returns the performance manager TaskRunner.
-  // TODO(chrisha): Hide this after the last consumer stops using it!
-  static scoped_refptr<base::SequencedTaskRunner> GetTaskRunner();
-
   // Indicates whether or not the caller is currently running on the PM task
   // runner.
   static bool OnPMTaskRunnerForTesting() {
@@ -121,6 +117,9 @@ class PerformanceManagerImpl : public PerformanceManager {
   friend class PerformanceManager;
 
   PerformanceManagerImpl();
+
+  // Returns the performance manager TaskRunner.
+  static scoped_refptr<base::SequencedTaskRunner> GetTaskRunner();
 
   template <typename NodeType, typename... Args>
   static std::unique_ptr<NodeType> CreateNodeImpl(
