@@ -1661,6 +1661,16 @@ const FeatureEntry::Choice kEnableCrOSActionRecorderChoices[] = {
 };
 #endif  // defined(OS_CHROMEOS)
 
+#if defined(OS_ANDROID)
+const FeatureEntry::Choice kWebOtpBackendChoices[] = {
+    {flags_ui::kGenericExperimentChoiceDefault, "", ""},
+    {flag_descriptions::kWebOtpBackendSmsVerification, switches::kWebOtpBackend,
+     switches::kWebOtpBackendSmsVerification},
+    {flag_descriptions::kWebOtpBackendUserConsent, switches::kWebOtpBackend,
+     switches::kWebOtpBackendUserConsent},
+};
+#endif  // defined(OS_ANDROID)
+
 // RECORDING USER METRICS FOR FLAGS:
 // -----------------------------------------------------------------------------
 // The first line of the entry is the internal name.
@@ -4722,6 +4732,10 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kWebBundles)},
 
 #if defined(OS_ANDROID)
+    {"web-otp-backend", flag_descriptions::kWebOtpBackendName,
+     flag_descriptions::kWebOtpBackendDescription, kOsAndroid,
+     MULTI_VALUE_TYPE(kWebOtpBackendChoices)},
+
     {"darken-websites-checkbox-in-themes-setting",
      flag_descriptions::kDarkenWebsitesCheckboxInThemesSettingName,
      flag_descriptions::kDarkenWebsitesCheckboxInThemesSettingDescription,
