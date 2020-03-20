@@ -6651,8 +6651,6 @@ crbug.com/1058403 external/wpt/webaudio/the-audio-api/the-audioworklet-interface
 
 crbug.com/1057020 [ Fuchsia ] http/tests/streams/chromium/get-reader-byob.html [ Pass Timeout ]
 
-crbug.com/1062667 [ Mac ] external/wpt/server-timing/idlharness.https.any.html [ Pass Timeout ]
-
 # Sheriff 2020-03-05
 crbug.com/1058073 [ Retina ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Failure ]
 crbug.com/1058073 [ Mac10.14 ] accessibility/content-changed-notification-causes-crash.html [ Pass Failure ]
