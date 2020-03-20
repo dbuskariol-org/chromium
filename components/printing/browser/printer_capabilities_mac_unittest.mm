@@ -204,15 +204,14 @@ TEST(PrinterCapabilitiesMacTest, SortMacCustomPaperSizes) {
                        .AppendASCII("printing")
                        .AppendASCII("unsorted_custompapers.plist");
 
-  // TODO(crbug.com/1062179): Sort the list.
   auto papers = internal::GetMacCustomPaperSizesFromFile(unsorted_plist);
   ASSERT_EQ(6u, papers.size());
-  EXPECT_EQ("Custom 11x11", papers[0].display_name);
+  EXPECT_EQ("123", papers[0].display_name);
   EXPECT_EQ("Another Size", papers[1].display_name);
-  EXPECT_EQ("Size 3", papers[2].display_name);
-  EXPECT_EQ("\xC3\xA1nother size", papers[3].display_name);
-  EXPECT_EQ("123", papers[4].display_name);
-  EXPECT_EQ("size 3", papers[5].display_name);
+  EXPECT_EQ("Custom 11x11", papers[2].display_name);
+  EXPECT_EQ("Size 3", papers[3].display_name);
+  EXPECT_EQ("size 3", papers[4].display_name);
+  EXPECT_EQ("\xC3\xA1nother size", papers[5].display_name);
 }
 
 }  // namespace printing
