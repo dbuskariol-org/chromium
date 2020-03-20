@@ -362,13 +362,10 @@ Polymer({
     settings.HatsBrowserProxyImpl.getInstance().tryShowSurvey();
 
     this.runSafetyCheck_();
-    this.focusParent_();
-  },
 
-  /** @private */
-  focusParent_() {
-    const parent = /** @type {!Element} */ (this.$$('#safetyCheckParent'));
-    parent.focus();
+    // TODO(crbug.com/1015841): Prevent the focus from getting lost, once it
+    // has been decided which element to focus after the safety check
+    // parent button got clicked, and, as a result, disappeared.
   },
 
   /**
