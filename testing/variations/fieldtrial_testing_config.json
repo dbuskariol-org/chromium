@@ -4184,7 +4184,10 @@
             ],
             "experiments": [
                 {
-                    "name": "Enabled",
+                    "name": "EnabledWithCrossSiteReuseProcess",
+                    "params": {
+                        "level": "CrossSiteReuseProcess"
+                    },
                     "enable_features": [
                         "ProactivelySwapBrowsingInstance"
                     ]
