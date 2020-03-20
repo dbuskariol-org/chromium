@@ -138,8 +138,7 @@ public class TabSwitcherCoordinator
             mTabGridDialogCoordinator = new TabGridDialogCoordinator(context, tabModelSelector,
                     tabContentManager, tabCreatorManager,
                     ((ChromeTabbedActivity) context).getCompositorViewHolder(), this, mMediator,
-                    this::getTabGridDialogAnimationSourceView,
-                    mTabListCoordinator.getTabGroupTitleEditor(), shareDelegateSupplier);
+                    this::getTabGridDialogAnimationSourceView, shareDelegateSupplier);
 
             mUndoGroupSnackbarController =
                     new UndoGroupSnackbarController(context, tabModelSelector, snackbarManageable);
@@ -198,11 +197,12 @@ public class TabSwitcherCoordinator
                 context, mContainer, mTabModelSelector, tabContentManager, null);
         mMediator.initWithNative(mTabSelectionEditorCoordinator.getController());
 
+        mTabListCoordinator.initWithNative(dynamicResourceLoader);
         if (mTabGridDialogCoordinator != null) {
-            mTabGridDialogCoordinator.initWithNative(context, mTabModelSelector, tabContentManager);
+            mTabGridDialogCoordinator.initWithNative(context, mTabModelSelector, tabContentManager,
+                    mTabListCoordinator.getTabGroupTitleEditor());
         }
 
-        mTabListCoordinator.initWithNative(dynamicResourceLoader);
         mMultiThumbnailCardProvider.initWithNative();
 
         if (mMode == TabListCoordinator.TabListMode.GRID) {
