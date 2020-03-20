@@ -3475,7 +3475,7 @@ const FeatureEntry kFeatureEntries[] = {
 
     {"use-preferred-interval-for-video",
      flag_descriptions::kUsePreferredIntervalForVideoName,
-     flag_descriptions::kUsePreferredIntervalForVideoDescription, kOsCrOS,
+     flag_descriptions::kUsePreferredIntervalForVideoDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kUsePreferredIntervalForVideo)},
 
     {"split-partially-occluded-quads",
