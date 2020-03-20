@@ -6967,3 +6967,6 @@ crbug.com/1061029 [ Win ] external/wpt/html/cross-origin-embedder-policy/cache-s
 crbug.com/1061029 [ Mac ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
 crbug.com/1060175 [ Linux ] http/tests/security/promise-access-control-allow.html [ Pass Failure Timeout ]
 crbug.com/1060175 [ Win ] http/tests/security/promise-access-control-allow.html [ Pass Failure Timeout ]
+
+### external/wpt/pointerevents/
+crbug.com/1063163 external/wpt/pointerevents/pointerevent_lostpointercapture_for_disconnected_node_in_shadow_dom.html [ Failure ]
