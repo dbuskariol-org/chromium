@@ -4814,10 +4814,6 @@ const FeatureEntry kFeatureEntries[] = {
                                     "BackForwardCache")},
 
 #if defined(OS_ANDROID)
-    {"android-setup-search-engine",
-     flag_descriptions::kAndroidSetupSearchEngineName,
-     flag_descriptions::kAndroidSetupSearchEngineDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(chrome::android::kAndroidSetupSearchEngine)},
     {"omnibox-remove-suggestions-from-clipboard",
      flag_descriptions::kOmniboxRemoveSuggestionsFromClipboardName,
      flag_descriptions::kOmniboxRemoveSuggestionsFromClipboardDescription,
