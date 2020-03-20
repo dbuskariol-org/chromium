@@ -115,14 +115,6 @@ def _Spawn(args):
       vpython_native_pkg,
       '--cipd-package',
       vpython_pkg,
-      '--env-prefix',
-      'PATH=.swarming_module',
-      '--env-prefix',
-      'PATH=.swarming_module/bin',
-      '--env-prefix',
-      'VPYTHON_VIRTUALENV_ROOT=.swarming_module_cache/vpython',
-  ]
-  trigger_args += [
       '--',
       '--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json',
       '--system-log-file=${ISOLATED_OUTDIR}/system_log']
