@@ -3212,23 +3212,6 @@ void WebMediaPlayerImpl::FinishMemoryUsageReport(int64_t demuxer_memory_usage) {
   const int64_t delta = current_memory_usage - last_reported_memory_usage_;
   last_reported_memory_usage_ = current_memory_usage;
   adjust_allocated_memory_cb_.Run(delta);
-
-  if (HasAudio()) {
-    UMA_HISTOGRAM_MEMORY_KB("Media.WebMediaPlayerImpl.Memory.Audio",
-                            stats.audio_memory_usage / 1024);
-  }
-  if (HasVideo()) {
-    UMA_HISTOGRAM_MEMORY_KB("Media.WebMediaPlayerImpl.Memory.Video",
-                            video_memory_usage / 1024);
-  }
-  if (data_source_) {
-    UMA_HISTOGRAM_MEMORY_KB("Media.WebMediaPlayerImpl.Memory.DataSource",
-                            data_source_memory_usage / 1024);
-  }
-  if (demuxer_) {
-    UMA_HISTOGRAM_MEMORY_KB("Media.WebMediaPlayerImpl.Memory.Demuxer",
-                            demuxer_memory_usage / 1024);
-  }
 }
 
 void WebMediaPlayerImpl::OnMainThreadMemoryDump(
