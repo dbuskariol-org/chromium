@@ -79,8 +79,11 @@ public class TabGridDialogCoordinator implements TabGridDialogMediator.DialogCon
 
         TabSelectionEditorCoordinator.TabSelectionEditorController controller = null;
         if (TabUiFeatureUtilities.isTabGroupsAndroidContinuationEnabled()) {
-            mTabSelectionEditorCoordinator = new TabSelectionEditorCoordinator(
-                    context, mContainerView, tabModelSelector, tabContentManager, mParentLayout);
+            @TabListCoordinator.TabListMode
+            int mode = SysUtils.isLowEndDevice() ? TabListCoordinator.TabListMode.LIST
+                                                 : TabListCoordinator.TabListMode.GRID;
+            mTabSelectionEditorCoordinator = new TabSelectionEditorCoordinator(context,
+                    mContainerView, tabModelSelector, tabContentManager, mParentLayout, mode);
 
             controller = mTabSelectionEditorCoordinator.getController();
         } else {

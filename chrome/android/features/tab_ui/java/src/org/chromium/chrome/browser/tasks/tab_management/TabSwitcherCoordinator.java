@@ -194,7 +194,7 @@ public class TabSwitcherCoordinator
     public void initWithNative(Context context, TabContentManager tabContentManager,
             DynamicResourceLoader dynamicResourceLoader) {
         mTabSelectionEditorCoordinator = new TabSelectionEditorCoordinator(
-                context, mContainer, mTabModelSelector, tabContentManager, null);
+                context, mContainer, mTabModelSelector, tabContentManager, null, mMode);
         mMediator.initWithNative(mTabSelectionEditorCoordinator.getController());
 
         mTabListCoordinator.initWithNative(dynamicResourceLoader);
