@@ -685,9 +685,7 @@ var CrSettingsSiteListV3Test = class extends CrSettingsV3BrowserTest {
   }
 };
 
-// Copied from Polymer 2 test:
-// TODO(crbug.com/929455): flaky, fix.
-TEST_F('CrSettingsSiteListV3Test', 'DISABLED_SiteList', function() {
+TEST_F('CrSettingsSiteListV3Test', 'SiteList', function() {
   runMochaSuite('SiteList');
 });
 
@@ -708,12 +706,9 @@ var CrSettingsSiteListChromeOSV3Test = class extends CrSettingsV3BrowserTest {
   }
 };
 
-// Copied from Polymer 2 test:
-// TODO(crbug.com/929455): flaky, fix.
-TEST_F(
-    'CrSettingsSiteListChromeOSV3Test', 'DISABLED_AndroidSmsInfo', function() {
-      mocha.run();
-    });
+TEST_F('CrSettingsSiteListChromeOSV3Test', 'AndroidSmsInfo', function() {
+  mocha.run();
+});
 GEN('#endif  // defined(OS_CHROMEOS)');
 
 // eslint-disable-next-line no-var
