@@ -521,6 +521,10 @@ const char kEnableRemovingAllThirdPartyCookiesDescription[] =
     "Enables UI on chrome://settings/siteData to remove all third-party "
     "cookies and site data.";
 
+const char kColorProviderRedirectionName[] = "Color Provider Redirection";
+const char kColorProviderRedirectionDescription[] =
+    "Redirects color requests to the color provider where possible.";
+
 const char kDataReductionProxyServerAlternative1[] = "Use alt. server config 1";
 const char kDataReductionProxyServerAlternative2[] = "Use alt. server config 2";
 const char kDataReductionProxyServerAlternative3[] = "Use alt. server config 3";

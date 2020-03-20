@@ -5102,6 +5102,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kOmniboxContextMenuShowFullUrlsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(omnibox::kOmniboxContextMenuShowFullUrls)},
 
+    {"color-provider-redirection",
+     flag_descriptions::kColorProviderRedirectionName,
+     flag_descriptions::kColorProviderRedirectionDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(features::kColorProviderRedirection)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

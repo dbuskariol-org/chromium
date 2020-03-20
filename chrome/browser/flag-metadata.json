@@ -491,6 +491,11 @@
     "expiry_milestone": 80
   },
   {
+    "name": "color-provider-redirection",
+    "owners": [ "//ui/color/OWNERS" ],
+    "expiry_milestone": 88
+  },
+  {
     "name": "composited-layer-borders",
     "owners": [ "ccameron" ],
     "expiry_milestone": 76

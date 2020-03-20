@@ -37735,6 +37735,7 @@ from previous Chrome versions.
   <int value="-1684773837" label="TabEngagementReportingAndroid:disabled"/>
   <int value="-1684123448" label="disable-best-effort-tasks"/>
   <int value="-1682843294" label="DataReductionProxyDecidesTransform:enabled"/>
+  <int value="-1679829698" label="ColorProviderRedirection:disabled"/>
   <int value="-1679624666" label="NtpRealbox:enabled"/>
   <int value="-1677715989" label="UnifiedConsent:disabled"/>
   <int value="-1676256979"
@@ -40504,6 +40505,7 @@ from previous Chrome versions.
   <int value="1617187093" label="enable-improved-a2hs"/>
   <int value="1618633341" label="MashOopViz:enabled"/>
   <int value="1619516032" label="GamesHub:disabled"/>
+  <int value="1619842095" label="ColorProviderRedirection:enabled"/>
   <int value="1620369597" label="enable-unsafe-webgpu"/>
   <int value="1621298798" label="VrBrowserKeyboard:enabled"/>
   <int value="1622131033" label="ozone-test-single-overlay-support"/>
