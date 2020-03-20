@@ -306,7 +306,7 @@ js_type_check("closure_compile_module") {
 
     #    ":category_default_setting.m",
     #    ":category_setting_exceptions.m",
-    #    ":chooser_exception_list.m",
+    ":chooser_exception_list.m",
     ":chooser_exception_list_entry.m",
     ":constants.m",
     ":cookie_info.m",
@@ -387,8 +387,15 @@ js_library("category_setting_exceptions.m") {
 js_library("chooser_exception_list.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/chooser_exception_list.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":chooser_exception_list_entry.m",
+    ":site_settings_behavior.m",
+    ":site_settings_prefs_browser_proxy.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/js:i18n_behavior.m",
+    "//ui/webui/resources/js:list_property_update_behavior.m",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
+  externs_list = [ "$externs_path/settings_private.js" ]
   extra_deps = [ ":chooser_exception_list_module" ]
 }
 
@@ -398,6 +405,7 @@ js_library("chooser_exception_list_entry.m") {
     ":site_list_entry.m",
     ":site_settings_behavior.m",
     ":site_settings_prefs_browser_proxy.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
   ]
   externs_list = [ "$externs_path/settings_private.js" ]
   extra_deps = [ ":chooser_exception_list_entry_module" ]
@@ -650,6 +658,11 @@ polymer_modulizer("chooser_exception_list") {
   js_file = "chooser_exception_list.js"
   html_file = "chooser_exception_list.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [
+                   "chrome/browser/resources/settings/site_settings/constants.html|ChooserType,ContentSettingsTypes",
+                   "chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.html|ChooserException,RawChooserException",
+                 ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("chooser_exception_list_entry") {

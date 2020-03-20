@@ -109,7 +109,7 @@ let RecentSitePermissions;
  *            object: Object,
  *            sites: Array<!RawSiteException>}}
  */
-let RawChooserException;
+/* #export */ let RawChooserException;
 
 /**
  * The chooser exception after it has been converted/filtered for UI use.
