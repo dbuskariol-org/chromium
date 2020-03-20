@@ -527,8 +527,6 @@ TEST_F(NigoriModelTypeProcessorTest, ShouldResetDataOnCacheGuidMismatch) {
   processor()->OnSyncStarting(request, base::DoNothing());
 
   EXPECT_FALSE(processor()->IsTrackingMetadata());
-  EXPECT_EQ(processor()->GetModelTypeStateForTest().cache_guid(),
-            kOtherCacheGuid);
 
   EXPECT_FALSE(ProcessorHasEntity());
 
