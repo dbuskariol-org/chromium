@@ -117,15 +117,13 @@ DownloadProtectionService::DownloadProtectionService(
     SafeBrowsingService* sb_service)
     : sb_service_(sb_service),
       navigation_observer_manager_(nullptr),
-      url_loader_factory_(sb_service ? sb_service->GetURLLoaderFactory()
-                                     : nullptr),
       enabled_(false),
       binary_feature_extractor_(new BinaryFeatureExtractor()),
       download_request_timeout_ms_(kDownloadRequestTimeoutMs),
       feedback_service_(new DownloadFeedbackService(
-          url_loader_factory_,
-          base::ThreadPool::CreateSequencedTaskRunner(
-              {base::MayBlock(), base::TaskPriority::BEST_EFFORT})
+          sb_service_ ? sb_service_->GetURLLoaderFactory() : nullptr,
+          base::CreateSequencedTaskRunner({base::ThreadPool(), base::MayBlock(),
+                                           base::TaskPriority::BEST_EFFORT})
               .get())),
       whitelist_sample_rate_(kWhitelistDownloadSampleRate),
       weak_ptr_factory_(this) {
@@ -610,6 +608,13 @@ void DownloadProtectionService::UploadForDeepScanning(
       std::make_pair(request_raw, std::move(request)));
   DCHECK(insertion_result.second);
   insertion_result.first->second->Start();
+}
+
+scoped_refptr<network::SharedURLLoaderFactory>
+DownloadProtectionService::GetURLLoaderFactory(
+    content::BrowserContext* browser_context) {
+  return sb_service_->GetURLLoaderFactory(
+      Profile::FromBrowserContext(browser_context));
 }
 
 void DownloadProtectionService::RequestFinished(DeepScanningRequest* request) {
