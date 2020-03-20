@@ -1260,21 +1260,24 @@ DXVAVideoDecodeAccelerator::GetSupportedProfiles(
   // 1920 x 1088. We use 1088 to account for 16x16 macroblocks.
   ResolutionPair max_h264_resolutions(gfx::Size(1920, 1088), gfx::Size());
 
-  // VP9 has no default resolutions since it may not even be supported.
+  // VP8/VP9 has no default resolutions since it may not even be supported.
+  ResolutionPair max_vp8_resolutions;
   ResolutionPair max_vp9_profile0_resolutions;
   ResolutionPair max_vp9_profile2_resolutions;
 
-  GetResolutionsForDecoders(
-      {DXVA2_ModeH264_E, DXVA2_Intel_ModeH264_E},
-      gl::QueryD3D11DeviceObjectFromANGLE(), workarounds, &max_h264_resolutions,
-      &max_vp9_profile0_resolutions, &max_vp9_profile2_resolutions);
+  GetResolutionsForDecoders({DXVA2_ModeH264_E, DXVA2_Intel_ModeH264_E},
+                            gl::QueryD3D11DeviceObjectFromANGLE(), workarounds,
+                            &max_h264_resolutions, &max_vp8_resolutions,
+                            &max_vp9_profile0_resolutions,
+                            &max_vp9_profile2_resolutions);
 
   for (const auto& supported_profile : kSupportedProfiles) {
     const bool is_h264 = supported_profile >= H264PROFILE_MIN &&
                          supported_profile <= H264PROFILE_MAX;
     const bool is_vp9 = supported_profile >= VP9PROFILE_MIN &&
                         supported_profile <= VP9PROFILE_MAX;
-    DCHECK(is_h264 || is_vp9);
+    const bool is_vp8 = supported_profile == VP8PROFILE_ANY;
+    DCHECK(is_h264 || is_vp9 || is_vp8);
 
     ResolutionPair max_resolutions;
     if (is_h264) {
@@ -1283,10 +1286,12 @@ DXVAVideoDecodeAccelerator::GetSupportedProfiles(
       max_resolutions = max_vp9_profile0_resolutions;
     } else if (supported_profile == VP9PROFILE_PROFILE2) {
       max_resolutions = max_vp9_profile2_resolutions;
+    } else if (is_vp8) {
+      max_resolutions = max_vp8_resolutions;
     }
 
-    // Skip adding VP9 profiles if it's not supported or disabled.
-    if (is_vp9 && max_resolutions.first.IsEmpty())
+    // Skip adding VPx profiles if it's not supported or disabled.
+    if ((is_vp9 || is_vp8) && max_resolutions.first.IsEmpty())
       continue;
 
     // Windows Media Foundation H.264 decoding does not support decoding videos
