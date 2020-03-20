@@ -591,7 +591,7 @@ void PaintLayerScrollableArea::UpdateScrollOffset(
 
   if (IsExplicitScrollType(scroll_type)) {
     if (scroll_type != mojom::blink::ScrollType::kCompositor)
-      ShowOverlayScrollbars();
+      ShowNonMacOverlayScrollbars();
     GetScrollAnchor()->Clear();
   }
   if (ContentCaptureManager* manager =
@@ -715,7 +715,7 @@ IntSize PaintLayerScrollableArea::MaximumScrollOffsetInt() const {
 }
 
 void PaintLayerScrollableArea::VisibleSizeChanged() {
-  ShowOverlayScrollbars();
+  ShowNonMacOverlayScrollbars();
 }
 
 PhysicalRect PaintLayerScrollableArea::LayoutContentRect(
