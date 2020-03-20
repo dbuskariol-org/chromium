@@ -32,7 +32,7 @@ void BindProcessNode(
       performance_manager::RenderProcessUserData::GetForRenderProcessHost(
           render_process_host);
 
-  DCHECK(performance_manager::PerformanceManagerImpl::GetInstance());
+  DCHECK(performance_manager::PerformanceManagerImpl::IsAvailable());
   performance_manager::PerformanceManagerImpl::CallOnGraphImpl(
       FROM_HERE,
       base::BindOnce(

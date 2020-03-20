@@ -55,12 +55,6 @@ class PerformanceManagerImpl : public PerformanceManager {
       base::OnceCallback<TaskReturnType(GraphImpl*)> task,
       base::OnceCallback<void(TaskReturnType)> reply);
 
-  // Retrieves the currently registered instance. Calls must not race with
-  // Create() or Destroy(). The returned pointer must not be used after
-  // Destroy(). This function can be called from any sequence with those
-  // caveats.
-  static PerformanceManagerImpl* GetInstance();
-
   // Creates, initializes and registers an instance.
   // Invokes |on_start| on the PM sequence.
   static std::unique_ptr<PerformanceManagerImpl> Create(
@@ -120,6 +114,12 @@ class PerformanceManagerImpl : public PerformanceManager {
 
   // Returns the performance manager TaskRunner.
   static scoped_refptr<base::SequencedTaskRunner> GetTaskRunner();
+
+  // Retrieves the currently registered instance. Calls must not race with
+  // Create() or Destroy(). The returned pointer must not be used after
+  // Destroy(). This function can be called from any sequence with those
+  // caveats.
+  static PerformanceManagerImpl* GetInstance();
 
   template <typename NodeType, typename... Args>
   static std::unique_ptr<NodeType> CreateNodeImpl(
