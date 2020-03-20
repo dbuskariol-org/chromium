@@ -201,10 +201,9 @@ public class StartSurfaceLayoutTest {
     @Feature({"RenderTest"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
-    @DisableIf.Build(message = "crbug.com/1024608", sdk_is_less_than = Build.VERSION_CODES.N)
     public void testRenderGrid_3WebTabs() throws InterruptedException, IOException {
         // clang-format on
-        prepareTabs(3, 0, mUrl);
+        prepareTabs(3, 0, "about:blank");
         ChromeTabUtils.switchTabInCurrentTabModel(mActivityTestRule.getActivity(), 0);
         enterGTSWithThumbnailChecking();
         mRenderTestRule.render(
@@ -216,10 +215,9 @@ public class StartSurfaceLayoutTest {
     @Feature({"RenderTest"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
-    @DisableIf.Build(message = "crbug.com/1024608", sdk_is_less_than = Build.VERSION_CODES.N)
     public void testRenderGrid_10WebTabs() throws InterruptedException, IOException {
         // clang-format on
-        prepareTabs(10, 0, mUrl);
+        prepareTabs(10, 0, "about:blank");
         ChromeTabUtils.switchTabInCurrentTabModel(mActivityTestRule.getActivity(), 0);
         enterGTSWithThumbnailChecking();
         mRenderTestRule.render(
@@ -231,10 +229,9 @@ public class StartSurfaceLayoutTest {
     @Feature({"RenderTest"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
-    @DisableIf.Build(message = "crbug.com/1024608", sdk_is_less_than = Build.VERSION_CODES.N)
     public void testRenderGrid_10WebTabs_InitialScroll() throws InterruptedException, IOException {
         // clang-format on
-        prepareTabs(10, 0, mUrl);
+        prepareTabs(10, 0, "about:blank");
         ChromeTabUtils.switchTabInCurrentTabModel(mActivityTestRule.getActivity(), 9);
         enterGTSWithThumbnailChecking();
         // Make sure the grid tab switcher is scrolled down to show the selected tab.
@@ -247,11 +244,10 @@ public class StartSurfaceLayoutTest {
     @Feature({"RenderTest"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
-    @DisableIf.Build(message = "crbug.com/1024608", sdk_is_less_than = Build.VERSION_CODES.N)
     public void testRenderGrid_Incognito() throws InterruptedException, IOException {
         // clang-format on
         // Prepare some incognito tabs and enter tab switcher.
-        prepareTabs(1, 3, mUrl);
+        prepareTabs(1, 3, "about:blank");
         assertTrue(mActivityTestRule.getActivity().getCurrentTabModel().isIncognito());
         ChromeTabUtils.switchTabInCurrentTabModel(mActivityTestRule.getActivity(), 0);
         enterGTSWithThumbnailChecking();
@@ -264,7 +260,6 @@ public class StartSurfaceLayoutTest {
     @Feature({"RenderTest"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
-    @DisableIf.Build(message = "crbug.com/1023299", sdk_is_less_than = Build.VERSION_CODES.N)
     public void testRenderGrid_3NativeTabs() throws InterruptedException, IOException {
         // clang-format on
         // Prepare some incognito native tabs and enter tab switcher.
