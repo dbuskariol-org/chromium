@@ -30,7 +30,9 @@ import './site_settings/site_data_details_subpage.m.js';
 
 // <if expr="not chromeos">
 import './people_page/manage_profile.m.js';
+import './people_page/import_data_dialog.m.js';
 // </if>
+import './people_page/signout_dialog.m.js';
 // import './people_page/sync_account_control.m.js';
 
 // <if expr="use_nss_certs">
@@ -91,6 +93,7 @@ export {SiteSettingsPrefsBrowserProxyImpl} from './site_settings/site_settings_p
 
 // <if expr="not chromeos">
 export {SystemPageBrowserProxyImpl} from './system_page/system_page_browser_proxy.m.js';
+export {ImportDataBrowserProxyImpl, ImportDataStatus} from './people_page/import_data_browser_proxy.m.js';
 export {ProfileShortcutStatus, ManageProfileBrowserProxyImpl} from './people_page/manage_profile_browser_proxy.m.js';
 // </if>
 
