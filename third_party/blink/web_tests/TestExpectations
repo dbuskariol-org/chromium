@@ -6124,13 +6124,6 @@ crbug.com/1011466 http/tests/devtools/tracing/timeline-network/timeline-network-
 crbug.com/1011466 virtual/threaded/http/tests/devtools/tracing/timeline-misc/timeline-aggregated-details.js [ Pass Failure ]
 crbug.com/1011466 virtual/threaded/http/tests/devtools/tracing/timeline-network/timeline-network-resource-details.js [ Pass Failure ]
 
-# Temporarily disabled for landing a DevTools change.
-crbug.com/1056588 http/tests/devtools/elements/bidi-dom-tree.js [ Pass Failure ]
-crbug.com/1056588 http/tests/devtools/elements/edit/delete-from-document.js [ Pass Failure ]
-crbug.com/1056588 http/tests/devtools/elements/elements-panel-correct-case.js [ Pass Failure ]
-crbug.com/1056588 http/tests/devtools/elements/elements-panel-structure.js [ Pass Failure ]
-crbug.com/1056588 http/tests/devtools/elements/user-properties.js [ Pass Failure ]
-
 # Tests that json modules load correctly within the context of service workers
 crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/json-module/json-module-service-worker-test.https.tentative.html [ Failure ]
 crbug.com/967018 virtual/streaming-preload/external/wpt/html/semantics/scripting-1/the-script-element/json-module/json-module-service-worker-test.https.tentative.html [ Failure ]
