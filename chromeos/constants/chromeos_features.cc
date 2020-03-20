@@ -34,6 +34,10 @@ const base::Feature kArcManagedAdbSideloadingSupport{
 const base::Feature kAutoScreenBrightness{"AutoScreenBrightness",
                                           base::FEATURE_ENABLED_BY_DEFAULT};
 
+// Controls whether to enable assistive autocorrect.
+const base::Feature kAssistAutoCorrect{"AssistAutoCorrect",
+                                       base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Controls whether to enable assist personal information.
 const base::Feature kAssistPersonalInfo{"AssistPersonalInfo",
                                         base::FEATURE_DISABLED_BY_DEFAULT};

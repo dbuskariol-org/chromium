@@ -2727,7 +2727,7 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-cros-ime-assist-autocorrect",
      flag_descriptions::kImeAssistAutocorrectName,
      flag_descriptions::kImeAssistAutocorrectDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(chromeos::features::kAssistPersonalInfo)},
+     FEATURE_VALUE_TYPE(chromeos::features::kAssistAutoCorrect)},
     {"enable-cros-ime-assist-personal-info",
      flag_descriptions::kImeAssistPersonalInfoName,
      flag_descriptions::kImeAssistPersonalInfoDescription, kOsCrOS,
