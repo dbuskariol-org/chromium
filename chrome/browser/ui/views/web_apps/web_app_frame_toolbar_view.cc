@@ -453,6 +453,10 @@ class WebAppFrameToolbarView::ToolbarButtonContainer
   }
 
   // PageActionIconView::Delegate:
+  int GetPageActionIconSize() const override {
+    return GetLayoutConstant(WEB_APP_PAGE_ACTION_ICON_SIZE);
+  }
+
   gfx::Insets GetPageActionIconInsets(
       const PageActionIconView* icon_view) const override {
     const int icon_size =
@@ -634,7 +638,6 @@ WebAppFrameToolbarView::ToolbarButtonContainer::ToolbarButtonContainer(
   params.types_enabled.push_back(PageActionIconType::kCookieControls);
   params.types_enabled.push_back(PageActionIconType::kLocalCardMigration);
   params.types_enabled.push_back(PageActionIconType::kSaveCard);
-  params.icon_size = GetLayoutConstant(WEB_APP_PAGE_ACTION_ICON_SIZE);
   params.icon_color = gfx::kPlaceholderColor;
   params.between_icon_spacing =
       HorizontalPaddingBetweenPageActionsAndAppMenuButtons();
