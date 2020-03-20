@@ -2988,9 +2988,6 @@ crbug.com/626703 [ Win ] external/wpt/css/css-text/line-break/line-break-strict-
 crbug.com/626703 [ Linux ] external/wpt/css/css-text/line-break/line-break-normal-015.xht [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-text/line-break/line-break-normal-015.xht [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-text/line-break/line-break-normal-015.xht [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/cssom/CSSStyleSheet-constructable-disallow-import.tentative.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/css/cssom/CSSStyleSheet-constructable-disallow-import.tentative.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/css/cssom/CSSStyleSheet-constructable-disallow-import.tentative.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/css/css-layout-api/auto-block-size/absolute.https.html [ Failure ]
 crbug.com/626703 [ Mac10.11 ] external/wpt/css/css-layout-api/auto-block-size/absolute.https.html [ Failure ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/css/css-layout-api/edges/all.https.html [ Failure ]
@@ -4173,6 +4170,11 @@ crbug.com/888470 virtual/omt-worker-fetch/external/wpt/referrer-policy/css-integ
 crbug.com/805756 external/wpt/html/semantics/tabular-data/processing-model-1/span-limits.html [ Pass Timeout ]
 
 crbug.com/666993 [ Debug ] external/wpt/requestidlecallback/callback-idle-periods.html [ Pass Timeout ]
+
+# Doesn't match the new spec
+crbug.com/1055943 [ Linux ] external/wpt/css/cssom/CSSStyleSheet-constructable-disallow-import.tentative.html [ Timeout ]
+crbug.com/1055943 [ Mac ] external/wpt/css/cssom/CSSStyleSheet-constructable-disallow-import.tentative.html [ Timeout ]
+crbug.com/1055943 [ Win ] external/wpt/css/cssom/CSSStyleSheet-constructable-disallow-import.tentative.html [ Timeout ]
 
 # Crashes with DCHECK enabled, but not on normal Release builds.
 crbug.com/809935 external/wpt/css/css-fonts/variations/font-style-interpolation.html [ Timeout ]
