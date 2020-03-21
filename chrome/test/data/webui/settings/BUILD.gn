@@ -15,6 +15,7 @@ js_modulizer("modulize") {
     "autofill_section_test.js",
     "basic_page_test.js",
     "category_default_setting_tests.js",
+    "category_setting_exceptions_tests.js",
     "checkbox_tests.js",
     "chooser_exception_list_entry_tests.js",
     "chooser_exception_list_tests.js",
