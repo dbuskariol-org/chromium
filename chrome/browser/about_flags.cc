@@ -1368,6 +1368,12 @@ const FeatureEntry::FeatureVariation kTabGridLayoutAndroidVariations[] = {
 const FeatureEntry::FeatureParam kStartSurfaceAndroid_SingleSurface[] = {
     {"start_surface_variation", "single"}};
 
+const FeatureEntry::FeatureParam
+    kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles[] = {
+        {"start_surface_variation", "single"},
+        {"exclude_mv_tiles", "true"},
+        {"hide_switch_when_no_incognito_tabs", "true"}};
+
 const FeatureEntry::FeatureParam kStartSurfaceAndroid_TwoPanesSurface[] = {
     {"start_surface_variation", "twopanes"}};
 
@@ -1375,11 +1381,15 @@ const FeatureEntry::FeatureParam kStartSurfaceAndroid_TasksOnly[] = {
     {"start_surface_variation", "tasksonly"}};
 
 const FeatureEntry::FeatureParam kStartSurfaceAndroid_OmniboxOnly[] = {
-    {"start_surface_variation", "omniboxonly"}};
+    {"start_surface_variation", "omniboxonly"},
+    {"hide_switch_when_no_incognito_tabs", "true"}};
 
 const FeatureEntry::FeatureVariation kStartSurfaceAndroidVariations[] = {
     {"Single Surface", kStartSurfaceAndroid_SingleSurface,
      base::size(kStartSurfaceAndroid_SingleSurface), nullptr},
+    {"Single Surface without MV Tiles",
+     kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles,
+     base::size(kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles), nullptr},
     {"Two Panes Surface", kStartSurfaceAndroid_TwoPanesSurface,
      base::size(kStartSurfaceAndroid_TwoPanesSurface), nullptr},
     {"Tasks Only", kStartSurfaceAndroid_TasksOnly,
