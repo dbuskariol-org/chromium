@@ -222,10 +222,8 @@ IN_PROC_BROWSER_TEST_F(GalleryBrowserTest, ResizeImageOnDrive) {
   StartTest();
 }
 
-// Disabled due to flakiness. https://crbug.com/1063358
-IN_PROC_BROWSER_TEST_F(
-    GalleryBrowserTest,
-    DISABLED_EnableDisableOverwriteOriginalCheckboxOnDownloads) {
+IN_PROC_BROWSER_TEST_F(GalleryBrowserTest,
+                       EnableDisableOverwriteOriginalCheckboxOnDownloads) {
   set_test_case_name("enableDisableOverwriteOriginalCheckboxOnDownloads");
   StartTest();
 }
