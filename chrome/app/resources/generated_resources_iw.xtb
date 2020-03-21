@@ -741,7 +741,7 @@
 <translation id="1990512225220753005">לא להציג קיצורי דרך בדף הזה</translation>
 <translation id="1992397118740194946">לא מוגדר</translation>
 <translation id="1994173015038366702">כתובת אתר</translation>
-<translation id="1995916364271252349">בדף הזה אפשר לשלוט על המידע שאתרים יכולים להשתמש בו ולהציג אותו (מיקום, מצלמה, חלונות נפתחים ועוד)</translation>
+<translation id="1995916364271252349">בדף הזה אפשר לשלוט על המידע שאתרים יכולים להשתמש בו ולהציג אותו (מיקום, מצלמה, חלונות קופצים ועוד)</translation>
 <translation id="1997484222658892567"><ph name="URL" /> רוצה לאחסן כמות גדולה של נתונים במחשב המקומי שלך באופן קבוע</translation>
 <translation id="1997616988432401742">האישורים שלך</translation>
 <translation id="1999115740519098545">בעת ההפעלה</translation>
@@ -2516,7 +2516,7 @@
 <translation id="4354073718307267720">תוצג שאלה כשאתר ירצה ליצור מפה בתלת ממד של הסביבה שלך או לעקוב אחר מיקום המצלמה</translation>
 <translation id="4354344420232759511">אתרים שבהם ביקרת יופיעו כאן</translation>
 <translation id="435527878592612277">בחירת התמונה שלך</translation>
-<translation id="4355456985296417737">{COUNT,plural, =0{‏קובצי ה-cookie חסומים.}=1{‏קובצי ה-cookie חסומים, חריג אחד}two{‏קובצי ה-cookie חסומים, # חריגות}many{‏קובצי ה-cookie חסומים, # חריגות}other{‏קובצי ה-cookie חסומים, # חריגות}}</translation>
+<translation id="4355456985296417737">{COUNT,plural, =0{‏קובצי ה-cookie חסומים.}=1{‏קובצי ה-cookie חסומים, חריג אחד}two{‏קובצי ה-cookie חסומים, # חריגים}many{‏קובצי ה-cookie חסומים, # חריגים}other{‏קובצי ה-cookie חסומים, # חריגים}}</translation>
 <translation id="4358313196493694334">ייצוב מיקום הקליק</translation>
 <translation id="4359408040881008151">הותקן מפני שיש תוספים התלויים בו.</translation>
 <translation id="4359717112757026264">נוף עירוני</translation>
@@ -6055,7 +6055,7 @@
 <translation id="9101691533782776290">הפעל את היישום</translation>
 <translation id="9102610709270966160">הפעל תוסף</translation>
 <translation id="9103868373786083162">לחץ כדי לחזור אחורה, תפריט הקשר כדי לראות היסטוריה</translation>
-<translation id="9108808586816295166">‏ייתכן שה-DNS המאובטח לא יהיה זמין כל העת</translation>
+<translation id="9108808586816295166">‏ה-DNS המאובטח לא יהיה בהכרח זמין תמיד</translation>
 <translation id="9109122242323516435">כדי לפנות שטח, מחק קבצים מאחסון המכשיר.</translation>
 <translation id="9109283579179481106">חיבור לרשת סלולרית</translation>
 <translation id="9111102763498581341">בטל נעילה</translation>

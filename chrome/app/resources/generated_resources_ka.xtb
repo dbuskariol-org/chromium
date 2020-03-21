@@ -113,6 +113,7 @@
 <translation id="1147991416141538220">წვდომის მოთხოვნით მიმართეთ ამ მოწყობილობის ადმინისტრატორს.</translation>
 <translation id="1149401351239820326">ვადის გასვლის თვე</translation>
 <translation id="1150565364351027703">მზის სათვალე</translation>
+<translation id="1151841030700667295">თქვენ გამოხვალთ ყველა საიტებიდან, მათ შორის, გახსნილ ჩანართებზეც.</translation>
 <translation id="1151917987301063366"><ph name="HOST" />-ისთვის სენსორებზე წვდომის ყოველთვის დაშვება</translation>
 <translation id="1153356358378277386">დაწყვილებული მოწყობილობები</translation>
 <translation id="1153636665119721804">Google-ის დამატებითი დაცვის პროგრამა</translation>
@@ -525,7 +526,7 @@
 <translation id="1700079447639026019">საიტები, რომლებსაც არასოდეს შეუძლია ქუქი-ჩანაწერების გამოყენება</translation>
 <translation id="1701062906490865540">ამ მომხმარებლის ამოშლა</translation>
 <translation id="1703331064825191675">ნუღარ ინერვიულებთ თქვენს პაროლებზე</translation>
-<translation id="1704970325597567340">უსაფრთხოების შემოწმება შესრულდა <ph name="DATE" />-ს</translation>
+<translation id="1704970325597567340">უსაფრთხოების შემოწმება შესრულდა <ph name="DATE" />-ში</translation>
 <translation id="1706586824377653884">დამატებულია თქვენი ადმინისტრატორის მიერ</translation>
 <translation id="1706625117072057435">მასშტაბირების დონეები</translation>
 <translation id="1708338024780164500">(არააქტიური)</translation>
@@ -698,6 +699,7 @@
 <translation id="1921050530041573580">დააწყვილეთ თქვენი ტელეფონი და Messages</translation>
 <translation id="1921584744613111023"><ph name="DPI" /> dpi</translation>
 <translation id="192494336144674234">გახსნა აპლიკაციით</translation>
+<translation id="1925017091976104802">ჩასასმელად დააჭირეთ <ph name="MODIFIER_KEY_DESCRIPTION" />-ს</translation>
 <translation id="1925021887439448749">შეიყვანეთ მორგებული ვებ-მისამართი</translation>
 <translation id="1925124445985510535">უსაფრთხოების შემოწმება შესრულდა <ph name="TIME" />-ზე</translation>
 <translation id="1926339101652878330">ეს პარამეტრები საწარმოს წესების მიერაა მართული. დამატებითი ინფორმაციისთვის, გთხოვთ, დაუკავშირდეთ თქვენს ადმინისტრატორს.</translation>
@@ -1048,6 +1050,7 @@
 <translation id="2392369802118427583">გააქტიურება</translation>
 <translation id="2394566832561516196">პარამეტრები გასუფთავდება შემდეგი ჩატვირთვისას.</translation>
 <translation id="2395616325548404795">თქვენი <ph name="DEVICE_TYPE" /> წარმატებით დარეგისტრირდა კორპორატიული მართვისთვის, თუმცა მისი საინვენტარო და მდებარეობის ინფორმაცია ვერ გაიგზავნა. გთხოვთ, ხელით შეიყვანოთ ეს ინფორმაცია ამ მოწყობილობის ადმინისტრატორის კონსოლიდან.</translation>
+<translation id="2396387085693598316">თქვენმა ადმინისტრატორმა დაბლოკა „<ph name="EXTENSION_NAME" />“</translation>
 <translation id="2396783860772170191">შეიყვანეთ 4-ციფრიანი PIN-კოდი (0000-9999)</translation>
 <translation id="2399939490305346086">უსაფრთხოების გასაღების სისტემაში შესვლის მონაცემები</translation>
 <translation id="2400664245143453337">საჭიროა გადაუდებელი განახლება</translation>
@@ -1243,6 +1246,7 @@
 <translation id="2641065435954454414">მიმდინარეობს ჩამოსატვირთად მომზადება</translation>
 <translation id="2642111877055905627">ფეხბურთის ბურთი</translation>
 <translation id="2643698698624765890">მართეთ თქვენი გაფართოებები, ფანჯრის მენიუში „გაფართოებებზე“ დაწკაპუნებით.</translation>
+<translation id="2644808917805344063">{HOURS,plural, =1{უსაფრთხოების შემოწმება შესრულდა 1 საათის წინ}other{უსაფრთხოების შემოწმება შესრულდა # საათის წინ}}</translation>
 <translation id="264810637653812429">თავსებადი მოწყობილობები ვერ მოიძებნა.</translation>
 <translation id="2649045351178520408">Base64-დაშიფრული ASCII, სერტიფიკატების ჯაჭვი</translation>
 <translation id="2653033005692233957">ძიება ვერ შესრულდა</translation>
@@ -1337,6 +1341,7 @@
 <translation id="2753677631968972007">საიტების ნებართვების ხელით მართვა.</translation>
 <translation id="2755367719610958252">მარტივი წვდომის ფუნქციების მართვა</translation>
 <translation id="275662540872599901">ეკრანი გამორთულია</translation>
+<translation id="2757338480560142065">დარწმუნდით, რომ პაროლი, რომლის შენახვასაც აპირებთ, ემთხვევა <ph name="WEBSITE" />-ის პაროლს</translation>
 <translation id="2762441749940182211">კამერა დაბლოკილია</translation>
 <translation id="2765217105034171413">პატარა</translation>
 <translation id="2766161002040448006">მშობლისთვის თხოვნა</translation>
@@ -1593,6 +1598,7 @@
 <translation id="3101709781009526431">თარიღი და დრო</translation>
 <translation id="3103941660000130485">Linux-ის ახალ ვერსიაზე გადასვლისას მოხდა შეცდომა</translation>
 <translation id="310671807099593501">საიტი იყენებს Bluetooth-კავშირს</translation>
+<translation id="3111331670660357211">{DAYS,plural, =1{უსაფრთხოების შემოწმება შესრულდა 1 დღის წინ}other{უსაფრთხოების შემოწმება შესრულდა # დღის წინ}}</translation>
 <translation id="3115147772012638511">ქეშის ლოდინი…</translation>
 <translation id="3115580024857770654">ყველას ჩაკეცვა</translation>
 <translation id="3117362587799608430">სამაგრი არ არის სრულად თავსებადი</translation>
@@ -1664,6 +1670,7 @@
 <translation id="3201422919974259695">აქ გამოჩნდება ხელმისაწვდომი USB-მოწყობილობები.</translation>
 <translation id="3202131003361292969">მდებარეობა</translation>
 <translation id="3202173864863109533">ამ ჩანართის აუდიო გამორთულია.</translation>
+<translation id="3208321278970793882">აპი</translation>
 <translation id="3208584281581115441">ახლავე შემოწმება</translation>
 <translation id="3208703785962634733">დაუდასტურებელი</translation>
 <translation id="32101887417650595">პრინტერთან დაკავშირება ვერ მოხერხდა</translation>
@@ -1770,6 +1777,7 @@
 <translation id="3356580349448036450">დასრულებულია</translation>
 <translation id="3359256513598016054">სერტიფიკატის პოლიტიკის შეზღუდვები</translation>
 <translation id="3360297538363969800">ბეჭდვა ვერ მოხერხდა. შეამოწმეთ პრინტერი და ხელახლა სცადეთ.</translation>
+<translation id="3364986687961713424">თქვენი ადმინისტრატორისგან: <ph name="ADMIN_MESSAGE" /></translation>
 <translation id="3365598184818502391">გამოიყენეთ Ctrl ან Alt</translation>
 <translation id="3367047597842238025">დააყენეთ თქვენი <ph name="DEVICE_TYPE" /> ისე, როგორც გსურთ, და აღმოაჩინეთ მისი ყველა გასაოცარი შესაძლებლობა.</translation>
 <translation id="3368922792935385530">დაკავშირებული</translation>
@@ -3229,6 +3237,7 @@
 <translation id="5353252989841766347">პაროლების ექსპორტი Chrome-იდან</translation>
 <translation id="5355099869024327351">ასისტენტისთვის შეტყობინებების ჩვენების დაშვება</translation>
 <translation id="5355926466126177564">გაფართოებამ „<ph name="EXTENSION_NAME" />“ თქვენ მიერ Omnibox-ში ძიებისას ნაჩვენები გვერდი შეცვალა.</translation>
+<translation id="535911077628776608"><ph name="FILE_NAME" /> შეიძლება სახიფათო იყოს. გსურთ, სკანირებისთვის Google-ის დამატებით დაცვას გაუგზავნოთ? ჩამოტვირთვების ზოლის არეზე გადასასვლელად დააჭირეთ კლავიშთა შემდეგ კომბინაციას: Shift+F6.</translation>
 <translation id="5359910752122114278">1 შედეგი</translation>
 <translation id="5360150013186312835">ხელსაწყოთა ზოლში ჩვენება</translation>
 <translation id="5362741141255528695">აირჩიეთ პირადი გასაღების ფაილი.</translation>
@@ -3485,6 +3494,7 @@
 <translation id="5691511426247308406">ოჯახი</translation>
 <translation id="5691772641933328258">თითის ანაბეჭდის ამოცნობა ვერ მოხერხდა</translation>
 <translation id="5692183275898619210">ბეჭდვა დასრულდა</translation>
+<translation id="5692875591060376599">არჩეული ფაილი უცნობია და შეიძლება სახიფათო იყოს. გსურთ, სკანირებისთვის Google-ის დამატებით დაცვას გაუგზავნოთ?</translation>
 <translation id="569425414730375234">მიმდინარე ინკოგნიტო სესია: <ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /></translation>
 <translation id="5696143504434933566">„<ph name="EXTENSION_NAME" />“-ის მხრიდან დარღვევის შესახებ შეტყობინება</translation>
 <translation id="5696679855467848181">ამჟამად გამოყენებული PPD ფაილი: <ph name="PPD_NAME" /></translation>
@@ -5650,6 +5660,7 @@
 <translation id="8608618451198398104">Kerberos ბილეთის დამატება</translation>
 <translation id="8609465669617005112">გადაადგილება ზემოთ</translation>
 <translation id="8610103157987623234">ფორმატი არასწორია, ცადეთ ხელახლა</translation>
+<translation id="8612935480510351790"><ph name="FILE_NAME" /> შეიძლება სახიფათო იყოს. გსურთ, სკანირებისთვის Google-ის დამატებით დაცვას გაუგზავნოთ?</translation>
 <translation id="8613164732773110792">გამოიყენეთ მხოლოდ არამთავრული სიმბოლოები, ციფრები, ქვედახაზები ან დეფისები</translation>
 <translation id="8615618338313291042">ინკოგნიტო პროგრამა: <ph name="APP_NAME" /></translation>
 <translation id="8619803522055190423">დაშვებული ჩრდილი</translation>
@@ -5677,6 +5688,7 @@
 <translation id="8641606876632989680">Chrome შეგატყობინებთ, როცა სისტემაში გატეხილი პაროლით შეხვალთ</translation>
 <translation id="8642900771896232685">2 წამი</translation>
 <translation id="8642947597466641025">ტექსტის გადიდება</translation>
+<translation id="8643443571868262066"><ph name="FILE_NAME" /> შეიძლება სახიფათო იყოს. გსურთ, სკანირებისთვის Google-ის დამატებით დაცვას გაუგზავნოთ?</translation>
 <translation id="8644655801811752511">უსაფრთხოების ამ გასაღების გადაყენება ვერ მოხერხდა. ცადეთ მისი გადაყენება მიერთებისთანავე.</translation>
 <translation id="8645354835496065562">სენსორებზე წვდომის დაშვების გაგრძელება</translation>
 <translation id="8645920082661222035">პროგნოზირებს სახიფათო მოვლენებს და გაგაფრთხილებთ მათ შესახებ</translation>

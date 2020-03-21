@@ -113,6 +113,7 @@
 <translation id="1147991416141538220">액세스 권한을 요청하려면 기기 관리자에게 문의하세요.</translation>
 <translation id="1149401351239820326">유효기간 월</translation>
 <translation id="1150565364351027703">선글라스</translation>
+<translation id="1151841030700667295">열려 있는 탭을 포함한 모든 사이트에서 로그아웃됩니다.</translation>
 <translation id="1151917987301063366"><ph name="HOST" />에서 센서에 액세스하도록 항상 허용</translation>
 <translation id="1153356358378277386">페어링된 기기</translation>
 <translation id="1153636665119721804">Google 고급 보호 프로그램</translation>
@@ -698,6 +699,7 @@
 <translation id="1921050530041573580">메시지와 휴대전화 페어링</translation>
 <translation id="1921584744613111023"><ph name="DPI" />dpi</translation>
 <translation id="192494336144674234">연결 프로그램</translation>
+<translation id="1925017091976104802"><ph name="MODIFIER_KEY_DESCRIPTION" />을(를) 눌러 붙여넣기</translation>
 <translation id="1925021887439448749">맞춤 웹 주소 입력</translation>
 <translation id="1925124445985510535">안전 확인이 <ph name="TIME" />에 실행됨</translation>
 <translation id="1926339101652878330">이러한 설정은 엔터프라이즈 정책에 의해 관리됩니다. 자세한 정보는 관리자에게 문의하세요.</translation>
@@ -1048,6 +1050,7 @@
 <translation id="2392369802118427583">활성화</translation>
 <translation id="2394566832561516196">새로고침하면 설정이 삭제됩니다.</translation>
 <translation id="2395616325548404795"><ph name="DEVICE_TYPE" /> 기기가 엔터프라이즈 관리용으로 등록되었지만 애셋과 위치 정보를 전송하지 못했습니다. 기기의 관리 콘솔에서 애셋과 위치 정보를 직접 입력하세요.</translation>
+<translation id="2396387085693598316">관리자가 ‘<ph name="EXTENSION_NAME" />’ 확장 프로그램을 차단함</translation>
 <translation id="2396783860772170191">4자리 PIN(0000~9999) 입력</translation>
 <translation id="2399939490305346086">보안 키 로그인 데이터</translation>
 <translation id="2400664245143453337">즉시 업데이트 필요</translation>
@@ -1244,6 +1247,7 @@
 <translation id="2641065435954454414">다운로드 준비 중</translation>
 <translation id="2642111877055905627">축구공</translation>
 <translation id="2643698698624765890">창 메뉴에서 확장 프로그램을 클릭하여 확장 프로그램을 관리할 수 있습니다.</translation>
+<translation id="2644808917805344063">{HOURS,plural, =1{안전 확인이 1시간 전에 실행됨}other{안전 확인이 #시간 전에 실행됨}}</translation>
 <translation id="264810637653812429">호환되는 기기가 없습니다.</translation>
 <translation id="2649045351178520408">Base64-인코딩 ASCII, 인증서 체인</translation>
 <translation id="2653033005692233957">검색 실패</translation>
@@ -1338,6 +1342,7 @@
 <translation id="2753677631968972007">사이트 권한을 수동으로 관리합니다.</translation>
 <translation id="2755367719610958252">접근성 기능 관리</translation>
 <translation id="275662540872599901">화면 꺼짐</translation>
+<translation id="2757338480560142065">저장하려는 비밀번호가 <ph name="WEBSITE" />의 비밀번호와 일치하는지 확인하세요.</translation>
 <translation id="2762441749940182211">카메라 차단됨</translation>
 <translation id="2765217105034171413">작게</translation>
 <translation id="2766161002040448006">부모님에게 묻기</translation>
@@ -1594,6 +1599,7 @@
 <translation id="3101709781009526431">날짜 및 시간</translation>
 <translation id="3103941660000130485">Linux 업그레이드 중 오류 발생</translation>
 <translation id="310671807099593501">사이트에서 블루투스를 사용하고 있습니다.</translation>
+<translation id="3111331670660357211">{DAYS,plural, =1{안전 확인이 1일 전에 실행됨}other{안전 확인이 #일 전에 실행됨}}</translation>
 <translation id="3115147772012638511">캐시를 기다리는 중...</translation>
 <translation id="3115580024857770654">모두 접기</translation>
 <translation id="3117362587799608430">도크가 완전히 호환되지 않음</translation>
@@ -1665,6 +1671,7 @@
 <translation id="3201422919974259695">사용 가능한 USB 기기가 여기에 표시됩니다.</translation>
 <translation id="3202131003361292969">경로</translation>
 <translation id="3202173864863109533">이 탭의 오디오가 음소거됩니다.</translation>
+<translation id="3208321278970793882">앱</translation>
 <translation id="3208584281581115441">지금 확인</translation>
 <translation id="3208703785962634733">미확인</translation>
 <translation id="32101887417650595">프린터에 연결할 수 없음</translation>
@@ -1771,6 +1778,7 @@
 <translation id="3356580349448036450">완료</translation>
 <translation id="3359256513598016054">인증서 정책 제약조건</translation>
 <translation id="3360297538363969800">인쇄에 실패했습니다. 프린터를 확인한 후 다시 시도해 주세요.</translation>
+<translation id="3364986687961713424">관리자의 메시지: <ph name="ADMIN_MESSAGE" /></translation>
 <translation id="3365598184818502391">Ctrl 또는 Alt 키 중에 하나만 사용하세요</translation>
 <translation id="3367047597842238025"><ph name="DEVICE_TYPE" />을(를) 원하는 대로 설정하고 놀라운 기능을 간편하게 이용해 보세요.</translation>
 <translation id="3368922792935385530">연결됨</translation>
@@ -2023,7 +2031,7 @@
 <translation id="3688526734140524629">채널 변경</translation>
 <translation id="3688578402379768763">최신</translation>
 <translation id="3688794912214798596">언어 변경...</translation>
-<translation id="3690369331356918524">정보 유출로 인해 비밀번호가 노출된 경우 알림</translation>
+<translation id="3690369331356918524">데이터 유출로 인해 비밀번호가 노출된 경우 알립니다.</translation>
 <translation id="3691231116639905343">키보드 앱</translation>
 <translation id="3691267899302886494"><ph name="HOST" />에서 화면을 공유하려고 합니다</translation>
 <translation id="369135240373237088">학교 계정으로 다시 로그인하세요</translation>
@@ -3228,6 +3236,7 @@
 <translation id="5353252989841766347">Chrome에서 비밀번호 내보내기</translation>
 <translation id="5355099869024327351">어시스턴트에서 알림을 표시할 수 있도록 허용</translation>
 <translation id="5355926466126177564">검색주소창에서 검색하면 표시되는 페이지가 '<ph name="EXTENSION_NAME" />' 확장 프로그램으로 인해 변경되었습니다.</translation>
+<translation id="535911077628776608"><ph name="FILE_NAME" /> 파일은 위험할 수 있습니다. 검사를 위해 Google 고급 보호 프로그램에 전송하시겠습니까? 다운로드바 영역으로 이동하려면 Shift+F6을 누르세요.</translation>
 <translation id="5359910752122114278">검색결과 1개</translation>
 <translation id="5360150013186312835">툴바에서 보기</translation>
 <translation id="5362741141255528695">비공개 키 파일을 선택합니다.</translation>
@@ -3484,6 +3493,7 @@
 <translation id="5691511426247308406">가족</translation>
 <translation id="5691772641933328258">지문을 인식할 수 없음</translation>
 <translation id="5692183275898619210">인쇄 완료</translation>
+<translation id="5692875591060376599">선택한 파일은 알 수 없는 파일이므로 위험할 수 있습니다. 검사를 위해 Google 고급 보호 프로그램에 전송할까요?</translation>
 <translation id="569425414730375234">현재 시크릿 세션: <ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /></translation>
 <translation id="5696143504434933566">'<ph name="EXTENSION_NAME" />'의 악용사례 신고</translation>
 <translation id="5696679855467848181">현재 사용 중인 PPD 파일: <ph name="PPD_NAME" /></translation>
@@ -4411,7 +4421,7 @@
 <translation id="6965382102122355670">확인</translation>
 <translation id="6965648386495488594">포트</translation>
 <translation id="6965978654500191972">기기</translation>
-<translation id="6966201992886493384">사이트에서 사용자의 로그인 상태를 유지하거나 장바구니에 담긴 항목을 기억하는 등 탐색 환경을 개선하기 위해 쿠키를 사용할 수 있습니다.</translation>
+<translation id="6966201992886493384">사이트에서 사용자의 로그인 상태를 유지하거나 장바구니에 담긴 상품을 기억하는 등 탐색 환경을 개선하기 위해 쿠키를 사용할 수 있습니다.</translation>
 <translation id="696780070563539690">사이트에서 사용자의 다양한 사이트 탐색 활동 정보를 이용해 광고 맞춤설정 등의 작업을 하기 위해 쿠키를 사용할 수 없습니다.</translation>
 <translation id="6968288415730398122">비밀번호를 입력하여 화면 잠금을 설정하세요.</translation>
 <translation id="6970480684834282392">시작 유형</translation>
@@ -5651,6 +5661,7 @@
 <translation id="8608618451198398104">Kerberos 티켓 추가</translation>
 <translation id="8609465669617005112">위로 이동</translation>
 <translation id="8610103157987623234">잘못된 형식입니다. 다시 시도하세요.</translation>
+<translation id="8612935480510351790"><ph name="FILE_NAME" /> 파일은 위험할 수 있습니다. 검사를 위해 Google 고급 보호 프로그램에 전송하시겠습니까?</translation>
 <translation id="8613164732773110792">소문자, 숫자, 밑줄 및 대시만 사용할 수 있습니다.</translation>
 <translation id="8615618338313291042">시크릿 모드 애플리케이션:<ph name="APP_NAME" /></translation>
 <translation id="8619803522055190423">그림자</translation>
@@ -5678,6 +5689,7 @@
 <translation id="8641606876632989680">유출된 비밀번호로 로그인하면 Chrome에서 알림을 표시함</translation>
 <translation id="8642900771896232685">2초</translation>
 <translation id="8642947597466641025">텍스트 확대</translation>
+<translation id="8643443571868262066"><ph name="FILE_NAME" /> 파일은 위험할 수 있습니다. 검사를 위해 Google 고급 보호 프로그램에 전송할까요?</translation>
 <translation id="8644655801811752511">보안 키를 재설정할 수 없습니다. 보안 키를 삽입한 직후 키를 재설정해 보세요.</translation>
 <translation id="8645354835496065562">계속해서 센서 액세스 허용</translation>
 <translation id="8645920082661222035">위험한 이벤트가 발생하기 전에 이를 예측하여 알립니다.</translation>
