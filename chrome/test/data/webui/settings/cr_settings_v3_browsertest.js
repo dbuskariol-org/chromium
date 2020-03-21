@@ -736,3 +736,16 @@ var CrSettingsChooserExceptionListV3Test =
 TEST_F('CrSettingsChooserExceptionListV3Test', 'All', function() {
   mocha.run();
 });
+
+// eslint-disable-next-line no-var
+var CrSettingsCategoryDefaultSettingV3Test =
+    class extends CrSettingsV3BrowserTest {
+  /** @override */
+  get browsePreload() {
+    return 'chrome://settings/test_loader.html?module=settings/category_default_setting_tests.m.js';
+  }
+};
+
+TEST_F('CrSettingsCategoryDefaultSettingV3Test', 'All', function() {
+  mocha.run();
+});

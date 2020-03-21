@@ -18,7 +18,7 @@
  * should be treated as 'default'.
  * @enum {string}
  */
-const ContentSettingProvider = {
+/* #export */ const ContentSettingProvider = {
   POLICY: 'policy',
   SUPERVISED_USER: 'supervised_user',
   EXTENSION: 'extension',
@@ -125,7 +125,7 @@ let RecentSitePermissions;
  * @typedef {{setting: !settings.ContentSetting,
  *            source: !ContentSettingProvider}}
  */
-let DefaultContentSetting;
+/* #export */ let DefaultContentSetting;
 
 /**
  * @typedef {{name: string,

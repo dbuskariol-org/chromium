@@ -18,7 +18,7 @@ import './search_engines_page/search_engines_page.m.js';
 // import './site_settings/all_sites.m.js';
 import './site_settings/site_data_details_subpage.m.js';
 // import './site_settings_page/site_settings_page.m.js';
-// import './site_settings/category_default_setting.m.js';
+import './site_settings/category_default_setting.m.js';
 // import './site_settings/category_setting_exceptions.m.js';
 import './site_settings/chooser_exception_list.m.js';
 // import './site_settings/media_picker.m.js';
@@ -90,7 +90,7 @@ export {ChooserType,ContentSetting,ContentSettingsTypes,SiteSettingSource,SITE_E
 export {cookieInfo} from './site_settings/cookie_info.m.js';
 export {kControlledByLookup} from './site_settings/site_settings_behavior.m.js';
 export {LocalDataBrowserProxyImpl} from './site_settings/local_data_browser_proxy.m.js';
-export {SiteSettingsPrefsBrowserProxyImpl} from './site_settings/site_settings_prefs_browser_proxy.m.js';
+export {ContentSettingProvider,SiteSettingsPrefsBrowserProxyImpl} from './site_settings/site_settings_prefs_browser_proxy.m.js';
 
 // <if expr="not chromeos">
 export {SystemPageBrowserProxyImpl} from './system_page/system_page_browser_proxy.m.js';
