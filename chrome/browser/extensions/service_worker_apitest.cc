@@ -1946,8 +1946,11 @@ IN_PROC_BROWSER_TEST_F(ServiceWorkerBasedBackgroundTest,
 // PendingTasks correctly. Also tests that subsequent tasks are properly
 // cleared.
 // Regression test for https://crbug.com/1019161.
+//
+// Flaky (https://crbug.com/1063476): Fails DCHECK(version_ptr) in
+// ServiceWorkerContextWrapper.
 IN_PROC_BROWSER_TEST_F(ServiceWorkerBasedBackgroundTest,
-                       WorkerStartFailureClearsPendingTasks) {
+                       DISABLED_WorkerStartFailureClearsPendingTasks) {
   content::StoragePartition* storage_partition =
       content::BrowserContext::GetDefaultStoragePartition(browser()->profile());
   content::ServiceWorkerContext* context =
