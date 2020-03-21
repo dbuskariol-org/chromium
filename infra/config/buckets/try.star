@@ -439,6 +439,10 @@ try_.chromium_linux_builder(
 )
 
 try_.chromium_linux_builder(
+    name = 'linux-layout-tests-edit-ng',
+)
+
+try_.chromium_linux_builder(
     name = 'linux-layout-tests-fragment-item',
 )
 

@@ -325,6 +325,11 @@
           'shards': 20,
         },
       },
+      'linux-layout-tests-edit-ng': {
+        'args': [
+          '--additional-driver-flag=--enable-blink-features=EditingNGruntime',
+        ],
+      },
       'linux-layout-tests-fragment-item': {
         'args': [
           '--additional-driver-flag=--enable-blink-features=LayoutNGFragmentItem',
