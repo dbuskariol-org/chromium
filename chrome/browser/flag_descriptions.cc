@@ -3071,8 +3071,7 @@ const char kArcNativeBridgeToggleDescription[] =
 const char kArcPrintSpoolerExperimentName[] =
     "Enable print spooler experiment for ARC";
 const char kArcPrintSpoolerExperimentDescription[] =
-    "Enables using Chrome OS print system and print preview in ARC."
-    "This feature only works on the Canary and Dev channels.";
+    "Enables using the Chrome OS print system and print preview in ARC.";
 
 const char kArcUsbHostName[] = "Enable ARC USB host integration";
 const char kArcUsbHostDescription[] =
