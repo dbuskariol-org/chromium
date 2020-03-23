@@ -3717,7 +3717,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="6207282396926186323"><ph name="APP_NAME" /> installieren (Linux-App)</translation>
 <translation id="6207937957461833379">Land/Region</translation>
 <translation id="6208521041562685716">Mobile Daten werden aktiviert</translation>
-<translation id="6209908325007204267">Ihr Gerät beinhaltet ein Chrome Enterprise-Upgrade, aber Ihr Nutzername ist nicht mit einem Enterprise-Konto verknüpft. Rufen Sie g.co/ChromeEnterpriseAccount auf einem Zweitgerät auf und erstellen Sie ein Enterprise-Konto.</translation>
+<translation id="6209908325007204267">Ihr Gerät beinhaltet ein Chrome Enterprise-Upgrade, aber Ihr Nutzername ist nicht mit einem Unternehmenskonto verknüpft. Rufen Sie g.co/ChromeEnterpriseAccount auf einem Zweitgerät auf und erstellen Sie ein Unternehmenskonto.</translation>
 <translation id="6211495400987308581"><ph name="PROFILE_NAME" />: Synchronisierung funktioniert nicht</translation>
 <translation id="6212039847102026977">Erweiterte Netzwerkeigenschaften anzeigen</translation>
 <translation id="6212168817037875041">Display deaktivieren</translation>

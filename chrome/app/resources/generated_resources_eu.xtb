@@ -3293,7 +3293,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5601503069213153581">PIN kodea</translation>
 <translation id="5602765853043467355">Ezabatu gailu honetako laster-markak, historia, pasahitzak eta beste</translation>
 <translation id="5605623530403479164">Beste bilatzaile batzuk</translation>
-<translation id="5605758115928394442">Jakinarazpen bat bidali dizugu telefonora zu zarela berresteko.</translation>
+<translation id="5605758115928394442">Jakinarazpen bat bidali dizugu telefonora zeu zarela berresteko.</translation>
 <translation id="5608580678041221894">Sakatu tekla hauek ebaki beharreko eremua doitzeko edo mugitzeko</translation>
 <translation id="5609231933459083978">Dirudienez, aplikazioak ez du balio.</translation>
 <translation id="5610038042047936818">Aldatu kamera modura</translation>
@@ -4130,7 +4130,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="680572642341004180">Gaitu RLZ jarraipena <ph name="SHORT_PRODUCT_OS_NAME" /> sisteman.</translation>
 <translation id="6808039367995747522">Aurrera egiteko, sartu segurtasun-giltza eta saka ezazu</translation>
 <translation id="6808193438228982088">Azeria</translation>
-<translation id="6810613314571580006">Hasi saioa automatikoki webguneetan gordetako kredentzialekin. Eginbidea desgaituta badago, zu zarela berresteko eskatuko dizu webguneak saioa hasten duzun bakoitzean.</translation>
+<translation id="6810613314571580006">Hasi saioa automatikoki webguneetan gordetako kredentzialekin. Eginbidea desgaituta badago, zeu zarela berresteko eskatuko dizu webguneak saioa hasten duzun bakoitzean.</translation>
 <translation id="6810768462515084623">Pasahitza iraungi egin da. Berri ezazu beste gailu batean eta saiatu berriro.</translation>
 <translation id="6811034713472274749">Orria ikusteko prest dago</translation>
 <translation id="6812349420832218321">Ezin da <ph name="PRODUCT_NAME" /> erro gisa exekutatu.</translation>
@@ -4211,7 +4211,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="6920989436227028121">Ireki ohiko fitxa gisa</translation>
 <translation id="6921104647315081813">Garbitu jarduerak</translation>
 <translation id="692114467174262153">Ezin izan da ireki <ph name="ALTERNATIVE_BROWSER_NAME" /></translation>
-<translation id="6922128026973287222">Aurreztu datuak eta arakatu bizkorrago Google datu-aurrezlea erabilita. Informazio gehiago lortzeko, egin klik hemen.</translation>
+<translation id="6922128026973287222">Aurreztu datuak eta arakatu bizkorrago Google-ren datu-aurrezlea erabilita. Informazio gehiago lortzeko, egin klik hemen.</translation>
 <translation id="6922745772873733498">Inprimatzeko, idatzi PIN kodea</translation>
 <translation id="6923132443355966645">Gora edo behera egitea / Sakatzea</translation>
 <translation id="6923633482430812883">Errore bat gertatu da fitxategiak partekatzeko sareko gailua muntatzean. Ziurtatu konektatu nahi duzun zerbitzariak SMBv2 edo bertsio berriagoak onartzen dituela.</translation>
@@ -4270,7 +4270,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="7000206553895739324"><ph name="PRINTER_NAME" /> konektatu da baina konfiguratu egin behar da</translation>
 <translation id="7000347579424117903">Erabili Ktrl, Alt edo bilaketa-tekla</translation>
 <translation id="7001036685275644873">Linux aplikazioen eta fitxategien babeskopia egiten</translation>
-<translation id="7002055706763150362">Chromebook-erako Smart Lock konfiguratzeko, zu zarela ziurtatu behar du Google-k. Eginbidea erabiltzen hasteko, idatzi pasahitza.</translation>
+<translation id="7002055706763150362">Chromebook-erako Smart Lock konfiguratzeko, zeu zarela ziurtatu behar du Google-k. Eginbidea erabiltzen hasteko, idatzi pasahitza.</translation>
 <translation id="7003339318920871147">Webguneetako datu-baseak</translation>
 <translation id="7003723821785740825">Konfiguratu gailua desblokeatzeko modu bizkorrago bat</translation>
 <translation id="7003844668372540529"><ph name="VENDOR_NAME" /> saltzailearen <ph name="PRODUCT_ID" /> produktu ezezaguna</translation>
@@ -4640,7 +4640,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="7506541170099744506">Erregistratu duzu <ph name="DEVICE_TYPE" /> enpresak kudeatzeko.</translation>
 <translation id="7507930499305566459">Egoera-erantzulearen ziurtagiria</translation>
 <translation id="7508054832109420082">Eman sarbidea inprimagailuei</translation>
-<translation id="7513029293694390567">Hasi saioa automatikoki webguneetan gordetako kredentzialekin. Eginbidea desgaituta badago, zu zarela berresteko eskatuko dizu webgune batean saioa hasten duzun bakoitzean.</translation>
+<translation id="7513029293694390567">Hasi saioa automatikoki webguneetan gordetako kredentzialekin. Eginbidea desgaituta badago, zeu zarela berresteko eskatuko dizu webgune batean saioa hasten duzun bakoitzean.</translation>
 <translation id="7514239104543605883">Kopiatu zure gailuan</translation>
 <translation id="7514365320538308">Deskargatu</translation>
 <translation id="7520766081042531487">Ezkutuko moduaren ataria: <ph name="SUBFRAME_SITE" /></translation>
