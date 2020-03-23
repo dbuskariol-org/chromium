@@ -104,4 +104,11 @@ public class AssistantViewInteractions {
         ((TextView) view).setText(text);
         return true;
     }
+
+    @CalledByNative
+    private static void setViewVisibility(View view, AssistantValue visible) {
+        if (visible.getBooleans() != null && visible.getBooleans().length == 1) {
+            view.setVisibility(visible.getBooleans()[0] ? View.VISIBLE : View.GONE);
+        }
+    }
 }
