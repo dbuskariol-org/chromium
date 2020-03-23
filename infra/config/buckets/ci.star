@@ -1015,6 +1015,11 @@ ci.fyi_ios_builder(
 
 ci.fyi_ios_builder(
     name = 'ios-webkit-tot',
+    caches = [xcode_cache.x11c505wk],
+    executable = 'recipe:chromium',
+    properties = {
+        'xcode_build_version': '11c505wk'
+    },
     schedule = '0 1-23/6 * * *',
     triggered_by = [],
 )

@@ -241,6 +241,7 @@
       'ios-simulator-code-coverage': 'clang_code_coverage_ios',
       'ios-simulator-cr-recipe': 'ios_simulator_debug_static_bot',
       'ios-simulator-cronet': 'ios_cronet',
+      'ios-webkit-tot': 'ios_simulator_debug_static_bot',
       'linux-annotator-rel': 'release_bot',
       'linux-autofill-captured-sites-rel': 'release_bot',
       'linux-bfcache-rel': 'release_bot',

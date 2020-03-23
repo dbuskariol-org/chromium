@@ -1886,6 +1886,19 @@
         ],
         'test_suites': {
           'isolated_scripts': 'ios_simulator_cronet_tests',
+        }
+      },
+      'ios-webkit-tot': {
+        'mixins': [
+          'ios_custom_webkit',
+          'ios_swarming_account',
+          'mac_10.14',
+          'mac_toolchain',
+          'out_dir_arg',
+          'xcode_11c29'
+        ],
+        'test_suites': {
+          'isolated_scripts': 'ios_webkit_tot_tests',
         },
       },
       'ios13-beta-simulator': {
