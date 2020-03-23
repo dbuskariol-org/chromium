@@ -5846,6 +5846,9 @@ crbug.com/985811 [ Win ] http/tests/devtools/elements/edit/edit-dom-actions-2.js
 crbug.com/985869 [ Linux ] http/tests/security/contentSecurityPolicy/object-src-no-url-allowed.html [ Pass Failure ]
 crbug.com/985869 [ Win7 ] http/tests/security/contentSecurityPolicy/object-src-no-url-allowed.html [ Pass Failure ]
 
+# ecosystem-infra sheriff 2019-07-22
+crbug.com/986477 [ Win ] external/wpt/cookies/path/match.html [ Pass Timeout ]
+
 crbug.com/987269 [ Linux ] virtual/audio-service/http/tests/media/autoplay/document-user-activation-cross-origin-feature-policy-disabled.html [ Pass Failure ]
 crbug.com/987269 [ Linux ] virtual/audio-service/http/tests/media/autoplay/document-user-activation-cross-origin-feature-policy-header.html [ Pass Failure ]
 # Sheriff 2019-07-24
