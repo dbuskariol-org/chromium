@@ -516,7 +516,9 @@ if (is_android) {
 
   android_resources("components_browsertests_resources") {
     testonly = true
-    resource_dirs = [ "//components/test/android/browsertests_apk/res" ]
+    sources = [
+      "//components/test/android/browsertests_apk/res/layout/test_activity.xml",
+    ]
     custom_package = "org.chromium.components_browsertests_apk"
   }
 }
