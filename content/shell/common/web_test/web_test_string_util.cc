@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/shell/test_runner/test_common.h"
+#include "content/shell/common/web_test/web_test_string_util.h"
 
 #include <stddef.h>
 
@@ -12,7 +12,7 @@
 #include "third_party/blink/public/web/web_navigation_policy.h"
 #include "url/gurl.h"
 
-namespace test_runner {
+namespace web_test_string_util {
 
 namespace {
 
@@ -39,7 +39,7 @@ std::string NormalizeWebTestURL(const std::string& url) {
   std::string result = url;
   size_t pos;
   if (!url.find(file_url_pattern) &&
-             ((pos = url.find(web_tests_pattern)) != std::string::npos)) {
+      ((pos = url.find(web_tests_pattern)) != std::string::npos)) {
     // adjust file URLs to match upstream results.
     result.replace(0, pos + web_tests_pattern_size, file_test_prefix);
   } else if (!url.find(data_url_pattern)) {
@@ -84,4 +84,4 @@ blink::WebString V8StringToWebString(v8::Isolate* isolate,
   return blink::WebString::FromUTF8(chars.get());
 }
 
-}  // namespace test_runner
+}  // namespace web_test_string_util
