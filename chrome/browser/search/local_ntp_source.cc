@@ -623,6 +623,10 @@ class LocalNtpSource::SearchConfigurationProvider
               omnibox::kOmniboxSuggestionTransparencyOptions));
     }
 
+    config_data.SetBoolean(
+        "doodleNotifierEnabled",
+        base::FeatureList::IsEnabled(ntp_features::kDoodleNotifier));
+
     // Serialize the dictionary.
     std::string js_text;
     JSONStringValueSerializer serializer(&js_text);
