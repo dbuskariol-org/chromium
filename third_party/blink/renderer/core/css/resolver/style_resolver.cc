@@ -119,6 +119,8 @@ void SetAnimationUpdateIfNeeded(StyleResolverState& state, Element& element) {
         state.AnimationUpdate());
     if (state.HasImportantOverrides())
       element_animations.SetHasImportantOverrides();
+    if (state.HasFontAffectingAnimation())
+      element_animations.SetHasFontAffectingAnimation();
   }
 }
 

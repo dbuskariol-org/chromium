@@ -141,6 +141,15 @@ class CORE_EXPORT StyleResolverState {
   bool HasImportantOverrides() const { return has_important_overrides_; }
   void SetHasImportantOverrides() { has_important_overrides_ = true; }
 
+  // This flag is set when applying an animation (or transition) for a font
+  // affecting property. When such properties are animated, font-relative
+  // units (e.g. em, ex) in the base style must respond to the animation.
+  // Therefore we can't use the base computed style optimization in such cases.
+  bool HasFontAffectingAnimation() const {
+    return has_font_affecting_animation_;
+  }
+  void SetHasFontAffectingAnimation() { has_font_affecting_animation_ = true; }
+
   const Element* GetAnimatingElement() const;
 
   void SetParentStyle(scoped_refptr<const ComputedStyle>);
@@ -240,6 +249,7 @@ class CORE_EXPORT StyleResolverState {
   bool is_animation_interpolation_map_ready_;
   bool is_animating_custom_properties_;
   bool has_important_overrides_ = false;
+  bool has_font_affecting_animation_ = false;
 
   bool has_dir_auto_attribute_;
 
