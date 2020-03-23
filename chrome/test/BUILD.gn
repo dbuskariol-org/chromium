@@ -3139,7 +3139,7 @@ test("unit_tests") {
     "../browser/external_protocol/external_protocol_handler_unittest.cc",
     "../browser/file_select_helper_unittest.cc",
     "../browser/font_pref_change_notifier_unittest.cc",
-    "../browser/geolocation/geolocation_permission_context_unittest.cc",
+    "../browser/geolocation/geolocation_permission_context_delegate_unittest.cc",
     "../browser/global_keyboard_shortcuts_mac_unittest.mm",
     "../browser/google/google_search_domain_mixing_metrics_emitter_factory_unittest.cc",
     "../browser/google/google_search_domain_mixing_metrics_emitter_unittest.cc",

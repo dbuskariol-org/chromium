@@ -1,16 +1,14 @@
-// Copyright 2012 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_GEOLOCATION_GEOLOCATION_PERMISSION_CONTEXT_H_
-#define CHROME_BROWSER_GEOLOCATION_GEOLOCATION_PERMISSION_CONTEXT_H_
+#ifndef CHROME_BROWSER_GEOLOCATION_GEOLOCATION_PERMISSION_CONTEXT_DELEGATE_H_
+#define CHROME_BROWSER_GEOLOCATION_GEOLOCATION_PERMISSION_CONTEXT_DELEGATE_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
 #include "chrome/browser/geolocation/geolocation_permission_context_extensions.h"
-#include "components/permissions/permission_context_base.h"
-#include "mojo/public/cpp/bindings/remote.h"
-#include "services/device/public/mojom/geolocation_control.mojom.h"
+#include "components/permissions/contexts/geolocation_permission_context.h"
 
 namespace content {
 class WebContents;
@@ -20,37 +18,33 @@ namespace permissions {
 class PermissionRequestID;
 }
 
-class GeolocationPermissionContext : public permissions::PermissionContextBase {
+class GeolocationPermissionContextDelegate
+    : public permissions::GeolocationPermissionContext::Delegate {
  public:
-  explicit GeolocationPermissionContext(
+  explicit GeolocationPermissionContextDelegate(
       content::BrowserContext* browser_context);
-  ~GeolocationPermissionContext() override;
+  ~GeolocationPermissionContextDelegate() override;
 
   // In addition to the base class flow the geolocation permission decision
   // checks that it is only code from valid iframes.
   // It also adds special logic when called through an extension.
-  void DecidePermission(
+  bool DecidePermission(
       content::WebContents* web_contents,
       const permissions::PermissionRequestID& id,
       const GURL& requesting_origin,
-      const GURL& embedding_origin,
       bool user_gesture,
-      permissions::BrowserPermissionCallback callback) override;
+      permissions::BrowserPermissionCallback* callback,
+      permissions::GeolocationPermissionContext* context) override;
 
  private:
   void UpdateTabContext(const permissions::PermissionRequestID& id,
                         const GURL& requesting_frame,
                         bool allowed) override;
-  bool IsRestrictedToSecureOrigins() const override;
-
-  device::mojom::GeolocationControl* GetGeolocationControl();
 
   // This must only be accessed from the UI thread.
   GeolocationPermissionContextExtensions extensions_context_;
 
-  mojo::Remote<device::mojom::GeolocationControl> geolocation_control_;
-
-  DISALLOW_COPY_AND_ASSIGN(GeolocationPermissionContext);
+  DISALLOW_COPY_AND_ASSIGN(GeolocationPermissionContextDelegate);
 };
 
-#endif  // CHROME_BROWSER_GEOLOCATION_GEOLOCATION_PERMISSION_CONTEXT_H_
+#endif  // CHROME_BROWSER_GEOLOCATION_GEOLOCATION_PERMISSION_CONTEXT_DELEGATE_H_
