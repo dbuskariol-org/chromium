@@ -40,6 +40,7 @@
 #include "ios/chrome/browser/system_flags.h"
 #import "ios/chrome/browser/tabs/tab_model.h"
 #import "ios/chrome/browser/ui/authentication/signed_in_accounts_view_controller.h"
+#import "ios/chrome/browser/ui/authentication/signin/signin_utils.h"
 #import "ios/chrome/browser/ui/browser_view/browser_view_controller.h"
 #import "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/commands/command_dispatcher.h"
@@ -488,9 +489,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
     return;
 
   // Show the sign-in promo if needed
-  if ([SigninPromoViewController
-          shouldBePresentedForBrowserState:self.mainController
-                                               .mainBrowserState]) {
+  if (SigninShouldPresentUserSigninUpgrade(
+          self.mainController.mainBrowserState)) {
     Browser* browser = self.mainInterface.browser;
     UIViewController* promoController = [[SigninPromoViewController alloc]
         initWithBrowser:browser
