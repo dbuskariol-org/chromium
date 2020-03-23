@@ -249,7 +249,6 @@ async function testRenameFolder(path, treeItem) {
   await waitForDirectoryTreeItem(appId, 'bbq photos');
 }
 
-
 /**
  * Tests renaming a file.
  *
@@ -319,6 +318,31 @@ testcase.renameNewFolderDownloads = () => {
 
 testcase.renameNewFolderDrive = () => {
   return testRenameFolder(RootPath.DRIVE, TREEITEM_DRIVE);
+};
+
+/**
+ * Tests that the root html element .pointer-active class is added and removed
+ * for mouse interaction.
+ */
+testcase.keyboardFocusOutlineVisibleMouse = async () => {
+  // Open Files app.
+  const appId =
+      await setupAndWaitUntilReady(RootPath.DOWNLOADS, [ENTRIES.hello], []);
+
+  // Send a 'mousedown' to the toolbar 'delete' button.
+  chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
+      'fakeEvent', appId, ['#delete-button', 'mousedown']));
+
+  // Check: the html element should have a pointer-active class: note use an
+  // inverted query with waitForElementLost here for speed.
+  await remoteCall.waitForElementLost(appId, ['html:not(.pointer-active)']);
+
+  // Send a 'mouseup' to the toolbar 'delete' button.
+  chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
+      'fakeEvent', appId, ['#delete-button', 'mouseup']));
+
+  // Check: html element pointer-active class should be removed.
+  await remoteCall.waitForElementLost(appId, ['html.pointer-active']);
 };
 
 /**
