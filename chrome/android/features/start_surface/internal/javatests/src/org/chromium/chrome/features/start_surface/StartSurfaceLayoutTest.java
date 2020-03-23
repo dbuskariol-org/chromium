@@ -986,6 +986,9 @@ public class StartSurfaceLayoutTest {
         enterGTSWithThumbnailChecking();
         CriteriaHelper.pollUiThread(TabSwitcherCoordinator::hasAppendedMessagesForTesting);
 
+        // Force portrait mode since the device can be wrongly in landscape. See crbug/1063639.
+        rotateDeviceToOrientation(cta, Configuration.ORIENTATION_PORTRAIT);
+
         onView(withId(R.id.tab_list_view))
                 .check(MessageCardWidthAssertion.checkMessageItemSpanSize(3, 2));
 
