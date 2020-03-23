@@ -1247,7 +1247,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="2641065435954454414">Preparando descarga</translation>
 <translation id="2642111877055905627">Balón de fútbol</translation>
 <translation id="2643698698624765890">Para administrar tus extensiones, haz clic en la opción Extensiones del menú Ventana.</translation>
-<translation id="2644808917805344063">{HOURS,plural, =1{La comprobación de seguridad se realizó hace 1 hora}other{La comprobación de seguridad se realizó hace # horas}}</translation>
+<translation id="2644808917805344063">{HOURS,plural, =1{La comprobación de seguridad se realizó hace 1 hora}other{La comprobación de seguridad se realizó hace # horas}}</translation>
 <translation id="264810637653812429">No se han podido encontrar dispositivos compatibles.</translation>
 <translation id="2649045351178520408">ASCII codificado en Base64, cadena de certificados</translation>
 <translation id="2653033005692233957">No se ha podido completar la búsqueda</translation>
@@ -1599,7 +1599,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="3101709781009526431">Fecha y hora</translation>
 <translation id="3103941660000130485">No se ha podido actualizar Linux</translation>
 <translation id="310671807099593501">El sitio web está usando el Bluetooth</translation>
-<translation id="3111331670660357211">{DAYS,plural, =1{La comprobación de seguridad se realizó hace 1 día}other{La comprobación de seguridad se realizó hace # días}}</translation>
+<translation id="3111331670660357211">{DAYS,plural, =1{La comprobación de seguridad se realizó hace 1 día}other{La comprobación de seguridad se realizó hace # días}}</translation>
 <translation id="3115147772012638511">Esperando caché...</translation>
 <translation id="3115580024857770654">Ocultar todo</translation>
 <translation id="3117362587799608430">La base no es totalmente compatible</translation>
