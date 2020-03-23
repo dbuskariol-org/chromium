@@ -60,6 +60,8 @@ class BrowserContextImpl : public content::BrowserContext {
 
   ProfileImpl* profile_impl() const { return profile_impl_; }
 
+  PrefService* pref_service() const { return user_pref_service_.get(); }
+
  private:
   class WebLayerVariationsClient;
 

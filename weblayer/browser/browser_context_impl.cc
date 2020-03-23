@@ -30,6 +30,7 @@
 
 #if defined(OS_ANDROID)
 #include "base/android/path_utils.h"
+#include "components/permissions/contexts/geolocation_permission_context_android.h"
 #elif defined(OS_WIN)
 #include <KnownFolders.h>
 #include <shlobj.h>
@@ -236,6 +237,10 @@ void BrowserContextImpl::RegisterPrefs(
   StatefulSSLHostStateDelegate::RegisterProfilePrefs(pref_registry);
   HostContentSettingsMap::RegisterProfilePrefs(pref_registry);
   safe_browsing::RegisterProfilePrefs(pref_registry);
+#if defined(OS_ANDROID)
+  permissions::GeolocationPermissionContextAndroid::RegisterProfilePrefs(
+      pref_registry);
+#endif
 }
 
 class BrowserContextImpl::WebLayerVariationsClient
