@@ -849,6 +849,7 @@
 <translation id="467662567472608290">このサーバーが <ph name="DOMAIN" /> であることを確認できませんでした。このサーバーのセキュリティ証明書にはエラーがあります。原因としては、不適切な設定や、悪意のあるユーザーによる接続妨害が考えられます。</translation>
 <translation id="4677585247300749148"><ph name="URL" /> から、ユーザー補助機能のイベントに応答する許可を求められています</translation>
 <translation id="467809019005607715">Google スライド</translation>
+<translation id="4680804919228900307">偽のサイトでパスワードを入力しました。<ph name="WEBSITE_1" />、<ph name="WEBSITE_2" />、<ph name="WEBSITE_3" /> のほか、このパスワードを使用しているサイトで、保存したパスワードを今すぐ確認することをおすすめします。</translation>
 <translation id="4690462567478992370">無効な証明書の使用をやめる</translation>
 <translation id="4691835149146451662">Architecture-A（封筒）</translation>
 <translation id="4701488924964507374"><ph name="SENTENCE1" /> <ph name="SENTENCE2" /></translation>
@@ -1426,6 +1427,7 @@
 <translation id="7219179957768738017">この接続には <ph name="SSL_VERSION" /> を使用しています。</translation>
 <translation id="7220786058474068424">処理しています</translation>
 <translation id="7221855153210829124">通知の表示</translation>
+<translation id="7229659723041939809">偽のサイトでパスワードを入力しました。<ph name="WEBSITE_1" />、<ph name="WEBSITE_2" />、<ph name="WEBSITE_3" /> のほか、このパスワードを使用しているサイトで、保存したパスワードを今すぐ確認することをおすすめします。</translation>
 <translation id="7233592378249864828">確認シートの印刷</translation>
 <translation id="7238585580608191973">SHA-256 指紋</translation>
 <translation id="7240120331469437312">証明書のサブジェクトの代替名</translation>
@@ -1493,6 +1495,7 @@
 <translation id="7485870689360869515">データが見つかりません。</translation>
 <translation id="7495290002932347110">サイトまたはアプリでのデータ侵害により、パスワード情報が漏洩しました。保存したパスワードを確認し、<ph name="ORIGIN" /> のパスワードを今すぐ変更することをおすすめします。</translation>
 <translation id="7498234416455752244">編集を続ける</translation>
+<translation id="7503664977220660814">偽のサイトでパスワードを入力しました。<ph name="WEBSITE_1" />、<ph name="WEBSITE_2" /> のほか、このパスワードを使用しているサイトで、保存したパスワードを今すぐ確認することをおすすめします。</translation>
 <translation id="7508255263130623398">返されたポリシーのデバイス ID が空であるか、現在のデバイス ID と一致しません</translation>
 <translation id="7508870219247277067">アボカド グリーン</translation>
 <translation id="7511955381719512146">ご利用の Wi-Fi では、<ph name="BEGIN_BOLD" /><ph name="LOGIN_URL" /><ph name="END_BOLD" /> へのアクセスが必要な可能性があります。</translation>
@@ -1588,6 +1591,7 @@
 <translation id="7855695075675558090"><ph name="TOTAL_LABEL" /> <ph name="FORMATTED_TOTAL_AMOUNT" /> <ph name="CURRENCY_CODE" /></translation>
 <translation id="7862185352068345852">このサイトを離れますか？</translation>
 <translation id="7865448901209910068">最高速度</translation>
+<translation id="7874263914261512992">偽のサイトでパスワードを入力しました。<ph name="WEBSITE_1" />、<ph name="WEBSITE_2" /> のほか、このパスワードを使用しているサイトで、保存したパスワードを今すぐ確認することをおすすめします。</translation>
 <translation id="7878562273885520351">パスワードが不正使用される可能性があります</translation>
 <translation id="7882421473871500483">茶</translation>
 <translation id="7887683347370398519">CVC を確認してからもう一度お試しください</translation>
@@ -1724,6 +1728,7 @@
 <translation id="8474910779563686872">デベロッパーの詳細を表示</translation>
 <translation id="8479754468255770962">ステープル（左下）</translation>
 <translation id="8483780878231876732">Google アカウントに保存したカードを使用するには Chrome にログインしてください</translation>
+<translation id="8485393050551136813">偽のサイトでパスワードを入力しました。<ph name="WEBSITE_1" /> のほか、このパスワードを使用しているサイトで、保存したパスワードを今すぐ確認することをおすすめします。</translation>
 <translation id="8488350697529856933">適用先</translation>
 <translation id="8490137692873530638">スタッカー 10</translation>
 <translation id="8498891568109133222"><ph name="HOST_NAME" /> からの応答時間が長すぎます。</translation>
@@ -1774,6 +1779,7 @@
 <translation id="87601671197631245">このサイトでは古いセキュリティ設定を使用しています。このサイトにパスワード、メッセージ、クレジット カードなどの情報を送信すると流出する恐れがあります。</translation>
 <translation id="8761567432415473239"><ph name="SITE" /> では最近、Google セーフ ブラウジングにより<ph name="BEGIN_LINK" />有害なプログラムが検出<ph name="END_LINK" />されました。</translation>
 <translation id="8763927697961133303">USB デバイス</translation>
+<translation id="8774457497170244317">偽のサイトでパスワードを入力しました。<ph name="WEBSITE_1" /> のほか、このパスワードを使用しているサイトで、保存したパスワードを今すぐ確認することをおすすめします。</translation>
 <translation id="877985182522063539">A4</translation>
 <translation id="8790007591277257123">削除のやり直し（&amp;R）</translation>
 <translation id="8792621596287649091"><ph name="ORG_NAME" /> アカウントにアクセスできなくなったり、個人情報が盗まれたりする可能性があります。今すぐパスワードを変更することをおすすめします。</translation>

@@ -113,6 +113,7 @@
 <translation id="1147991416141538220">アクセスをリクエストするには、このデバイスの管理者にご連絡ください。</translation>
 <translation id="1149401351239820326">有効期限（月）</translation>
 <translation id="1150565364351027703">サングラス</translation>
+<translation id="1151841030700667295">開いているすべてのタブで、すべてのサイトからログアウトします。</translation>
 <translation id="1151917987301063366"><ph name="HOST" /> によるセンサーへのアクセスを常に許可する</translation>
 <translation id="1153356358378277386">ペア設定されたデバイス</translation>
 <translation id="1153636665119721804">Google の高度な保護機能プログラム</translation>
@@ -698,6 +699,7 @@
 <translation id="1921050530041573580">スマートフォンとメッセージのペア設定</translation>
 <translation id="1921584744613111023"><ph name="DPI" /> dpi</translation>
 <translation id="192494336144674234">アプリケーションで開く</translation>
+<translation id="1925017091976104802">貼り付けるには、<ph name="MODIFIER_KEY_DESCRIPTION" /> キーを押してください</translation>
 <translation id="1925021887439448749">カスタムのウェブアドレスを入力</translation>
 <translation id="1925124445985510535">安全確認を <ph name="TIME" /> に実行しました</translation>
 <translation id="1926339101652878330">これらの設定は会社のポリシーによって制御されています。詳しくは管理者にお尋ねください。</translation>
@@ -1048,6 +1050,7 @@
 <translation id="2392369802118427583">有効にする</translation>
 <translation id="2394566832561516196">設定は次の再読み込みで消去されます。</translation>
 <translation id="2395616325548404795">この <ph name="DEVICE_TYPE" /> は組織の管理対象として登録されましたが、アセットと位置情報を送信できませんでした。このデバイスの管理コンソールで、この情報を手動で入力してください。</translation>
+<translation id="2396387085693598316">「<ph name="EXTENSION_NAME" />」は管理者によってブロックされています</translation>
 <translation id="2396783860772170191">4 桁の PIN（0000～9999）を入力してください</translation>
 <translation id="2399939490305346086">セキュリティ キーのログインデータ</translation>
 <translation id="2400664245143453337">今すぐ更新が必要です</translation>
@@ -1244,6 +1247,7 @@
 <translation id="2641065435954454414">ダウンロードを準備しています</translation>
 <translation id="2642111877055905627">サッカーボール</translation>
 <translation id="2643698698624765890">[ウィンドウ] メニューの [拡張機能] をクリックして拡張機能を管理できます。</translation>
+<translation id="2644808917805344063">{HOURS,plural, =1{安全確認を 1 時間前に実行しました}other{安全確認を # 時間前に実行しました}}</translation>
 <translation id="264810637653812429">対応デバイスが見つかりませんでした。</translation>
 <translation id="2649045351178520408">Base64 エンコード ASCII 形式の証明書チェーン</translation>
 <translation id="2653033005692233957">検索できませんでした</translation>
@@ -1338,6 +1342,7 @@
 <translation id="2753677631968972007">サイトの権限を手動で管理します。</translation>
 <translation id="2755367719610958252">ユーザー補助機能の管理</translation>
 <translation id="275662540872599901">画面オフ</translation>
+<translation id="2757338480560142065">保存するパスワードが <ph name="WEBSITE" /> のパスワードと一致していることを確認してください</translation>
 <translation id="2762441749940182211">カメラがブロックされています</translation>
 <translation id="2765217105034171413">小</translation>
 <translation id="2766161002040448006">保護者に聞く</translation>
@@ -1594,6 +1599,7 @@
 <translation id="3101709781009526431">日時</translation>
 <translation id="3103941660000130485">Linux のアップグレード中にエラーが発生しました</translation>
 <translation id="310671807099593501">サイトで Bluetooth が使用されています</translation>
+<translation id="3111331670660357211">{DAYS,plural, =1{安全確認を 1 日前に実行しました}other{安全確認を # 日前に実行しました}}</translation>
 <translation id="3115147772012638511">キャッシュを待機しています...</translation>
 <translation id="3115580024857770654">すべて折りたたむ</translation>
 <translation id="3117362587799608430">サポートされていないドックです</translation>
@@ -1665,6 +1671,7 @@
 <translation id="3201422919974259695">使用可能な USB デバイスがここに表示されます。</translation>
 <translation id="3202131003361292969">パス</translation>
 <translation id="3202173864863109533">このタブの音声はミュートされています。</translation>
+<translation id="3208321278970793882">アプリ</translation>
 <translation id="3208584281581115441">今すぐ確認</translation>
 <translation id="3208703785962634733">未確認</translation>
 <translation id="32101887417650595">プリンタに接続できません</translation>
@@ -1771,6 +1778,7 @@
 <translation id="3356580349448036450">完了</translation>
 <translation id="3359256513598016054">証明書ポリシーの制約</translation>
 <translation id="3360297538363969800">印刷できませんでした。プリンタを確認してもう一度お試しください。</translation>
+<translation id="3364986687961713424">管理者からのメッセージ: <ph name="ADMIN_MESSAGE" /></translation>
 <translation id="3365598184818502391">Ctrl キーまたは Alt キーのいずれかを使用してください</translation>
 <translation id="3367047597842238025"><ph name="DEVICE_TYPE" /> を自分好みにセットアップして、多彩な機能を思いのままにご活用ください。</translation>
 <translation id="3368922792935385530">接続済み</translation>
@@ -3230,6 +3238,7 @@
 <translation id="5353252989841766347">Chrome からパスワードをエクスポート</translation>
 <translation id="5355099869024327351">アシスタントによる通知の表示を許可する</translation>
 <translation id="5355926466126177564">拡張機能「<ph name="EXTENSION_NAME" />」により、アドレスバーから検索したときに表示されるページが変更されました。</translation>
+<translation id="535911077628776608"><ph name="FILE_NAME" /> は危害を及ぼす可能性があります。Google の高度な保護機能に送信してスキャンしますか？ダウンロード バーの領域に切り替えるには Shift+F6 キーを押してください。</translation>
 <translation id="5359910752122114278">検索結果 1 件</translation>
 <translation id="5360150013186312835">ツールバーに表示</translation>
 <translation id="5362741141255528695">秘密鍵ファイルを選択します。</translation>
@@ -3486,6 +3495,7 @@
 <translation id="5691511426247308406">ファミリー</translation>
 <translation id="5691772641933328258">指紋を認識できません</translation>
 <translation id="5692183275898619210">印刷完了</translation>
+<translation id="5692875591060376599">選択したファイルは不明で、危害を及ぼす可能性があります。Google の高度な保護機能に送信してスキャンしますか？</translation>
 <translation id="569425414730375234">現在のシークレット モード セッション: <ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /></translation>
 <translation id="5696143504434933566">「<ph name="EXTENSION_NAME" />」の不正行為を報告する</translation>
 <translation id="5696679855467848181">現在使用中の PPD ファイル: <ph name="PPD_NAME" /></translation>
@@ -5653,6 +5663,7 @@
 <translation id="8608618451198398104">Kerberos チケットの追加</translation>
 <translation id="8609465669617005112">上に移動</translation>
 <translation id="8610103157987623234">無効な形式です。もう一度お試しください</translation>
+<translation id="8612935480510351790"><ph name="FILE_NAME" /> は危害を及ぼす可能性があります。Google の高度な保護機能に送信してスキャンしますか？</translation>
 <translation id="8613164732773110792">英小文字、数字、アンダースコア、ダッシュのみ</translation>
 <translation id="8615618338313291042">シークレット モード アプリ: <ph name="APP_NAME" /></translation>
 <translation id="8619803522055190423">ドロップ シャドウ</translation>
@@ -5680,6 +5691,7 @@
 <translation id="8641606876632989680">不正使用されたパスワードでログインした場合、Chrome で通知します</translation>
 <translation id="8642900771896232685">2秒</translation>
 <translation id="8642947597466641025">テキストを拡大する</translation>
+<translation id="8643443571868262066"><ph name="FILE_NAME" /> は危害を及ぼす可能性があります。Google の高度な保護機能に送信してスキャンしますか？</translation>
 <translation id="8644655801811752511">このセキュリティ キーをリセットできません。キーの挿入直後にリセットしてみてください。</translation>
 <translation id="8645354835496065562">センサーへのアクセスを引き続き許可する</translation>
 <translation id="8645920082661222035">危険なイベントの発生を予測して警告します</translation>
