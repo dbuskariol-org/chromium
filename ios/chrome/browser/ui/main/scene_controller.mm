@@ -737,6 +737,25 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
                                  completion:nil];
 }
 
+#if !defined(NDEBUG)
+- (void)openNewWindow {
+  if (!IsMultiwindowSupported())
+    return;  // silent no-op.
+
+  if (@available(iOS 13, *)) {
+    UISceneActivationRequestOptions* options =
+        [[UISceneActivationRequestOptions alloc] init];
+    options.requestingScene = self.sceneState.scene;
+
+    [UIApplication.sharedApplication
+        requestSceneSessionActivation:nil /* make a new scene */
+                         userActivity:nil
+                              options:options
+                         errorHandler:nil];
+  }
+}
+#endif  // !defined(NDEBUG)
+
 #pragma mark - ApplicationSettingsCommands
 
 // TODO(crbug.com/779791) : Remove show settings from MainController.
