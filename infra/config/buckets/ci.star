@@ -17,10 +17,9 @@ ci.defaults.swarming_tags.set(['vpython:native-python-wrapper'])
 
 # Execute the versioned files to define all of the per-branch entities
 # (bucket, builders, console, poller, etc.)
-exec('//versioned/branches/beta/buckets/ci.star')
-exec('//versioned/branches/stable/buckets/ci.star')
 exec('//versioned/trunk/buckets/ci.star')
 exec('//versioned/milestones/m80/buckets/ci.star')
+exec('//versioned/milestones/m81/buckets/ci.star')
 
 
 # *** After this point everything is trunk only ***
