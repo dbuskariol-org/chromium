@@ -321,6 +321,28 @@ testcase.renameNewFolderDrive = () => {
 };
 
 /**
+ * Tests that the root html element .focus-outline-visible class appears for
+ * user keyboard interaction and is removed on mouse interaction.
+ */
+testcase.keyboardFocusOutlineVisible = async () => {
+  // Open Files app.
+  const appId =
+      await setupAndWaitUntilReady(RootPath.DOWNLOADS, [ENTRIES.hello], []);
+
+  // Check: the html element should have a focus-outline-visible class. Note
+  // use an inverted query with waitForElementLost here for speed.
+  await remoteCall.waitForElementLost(
+      appId, ['html:not(.focus-outline-visible)']);
+
+  // Send a 'mousedown' to the toolbar 'delete' button.
+  chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
+      'fakeEvent', appId, ['#delete-button', 'mousedown']));
+
+  // Check: html element focus-outline-visible class should be removed.
+  await remoteCall.waitForElementLost(appId, ['html.focus-outline-visible']);
+};
+
+/**
  * Tests that the root html element .pointer-active class is added and removed
  * for mouse interaction.
  */
@@ -333,9 +355,12 @@ testcase.keyboardFocusOutlineVisibleMouse = async () => {
   chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
       'fakeEvent', appId, ['#delete-button', 'mousedown']));
 
-  // Check: the html element should have a pointer-active class: note use an
+  // Check: the html element should have a pointer-active class. Note use an
   // inverted query with waitForElementLost here for speed.
   await remoteCall.waitForElementLost(appId, ['html:not(.pointer-active)']);
+
+  // Check: html element should not have focus-outline-visible class.
+  await remoteCall.waitForElementLost(appId, ['html.focus-outline-visible']);
 
   // Send a 'mouseup' to the toolbar 'delete' button.
   chrome.test.assertTrue(await remoteCall.callRemoteTestUtil(
