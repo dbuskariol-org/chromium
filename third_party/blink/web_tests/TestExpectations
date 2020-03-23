@@ -1400,7 +1400,7 @@ crbug.com/829028 virtual/layout_ng_block_frag/fragmentation/transformed-clip-bef
 ### With LayoutNGFragmentTraversal (and LayoutNGFragmentItem) enabled:
 
 crbug.com/626703 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/float-nowrap-3-ref.html [ Crash ]
-crbug.com/626703 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/float-nowrap-4.html [ Crash ]
+crbug.com/1051773 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/float-nowrap-4.html [ Timeout Crash ]
 crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/floats-rule3-outside-left-002.xht [ Failure ]
 crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/floats-rule3-outside-right-002.xht [ Failure ]
 crbug.com/982194 virtual/layout_ng_fragment_traversal/external/wpt/css/CSS2/floats/floats-rule7-outside-left-001.xht [ Failure ]
@@ -4040,7 +4040,7 @@ crbug.com/626703 [ Win10 ] external/wpt/preload/delaying-onload-link-preload-aft
 crbug.com/626703 [ Win ] external/wpt/css/css-writing-modes/box-offsets-rel-pos-vlr-005.xht [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-writing-modes/box-offsets-rel-pos-vrl-004.xht [ Failure ]
 crbug.com/626703 external/wpt/css/CSS2/floats/float-nowrap-3-ref.html [ Crash ]
-crbug.com/626703 external/wpt/css/CSS2/floats/float-nowrap-4.html [ Crash ]
+crbug.com/1051773 external/wpt/css/CSS2/floats/float-nowrap-4.html [ Timeout Crash ]
 crbug.com/626703 external/wpt/html/dom/elements/global-attributes/dir_auto-N-EN-ref.html [ Failure ]
 crbug.com/626703 virtual/web-components-v0-disabled/external/wpt/html/dom/elements/global-attributes/dir_auto-N-EN-ref.html [ Failure ]
 
