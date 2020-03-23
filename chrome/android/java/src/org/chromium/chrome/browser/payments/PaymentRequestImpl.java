@@ -60,7 +60,6 @@ import org.chromium.components.payments.CurrencyFormatter;
 import org.chromium.components.payments.ErrorStrings;
 import org.chromium.components.payments.MethodStrings;
 import org.chromium.components.payments.OriginSecurityChecker;
-import org.chromium.components.payments.PayerData;
 import org.chromium.components.payments.PaymentDetailsConverter;
 import org.chromium.components.payments.PaymentHandlerHost;
 import org.chromium.components.payments.PaymentHandlerHost.PaymentHandlerHostDelegate;
