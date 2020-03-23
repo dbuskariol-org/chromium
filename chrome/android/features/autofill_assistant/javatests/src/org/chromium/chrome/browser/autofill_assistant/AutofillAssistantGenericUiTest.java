@@ -1004,12 +1004,14 @@ public class AutofillAssistantGenericUiTest {
     @MediumTest
     public void testCalendarPopup() {
         List<ModelProto.ModelValue> modelValues = new ArrayList<>();
-        modelValues.add(
-                (ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
-                        .setIdentifier("date")
-                        .setValue(ValueProto.newBuilder().setDates(DateList.newBuilder().addValues(
-                                DateProto.newBuilder().setYear(2020).setMonth(4).setDay(15))))
-                        .build());
+        modelValues.add((ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
+                                .setIdentifier("date")
+                                .build());
+        modelValues.add((ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
+                                .setIdentifier("date_string")
+                                .setValue(ValueProto.newBuilder().setStrings(
+                                        StringList.newBuilder().addValues("date not set")))
+                                .build());
         modelValues.add(
                 (ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
                         .setIdentifier("min_date")
@@ -1114,9 +1116,16 @@ public class AutofillAssistantGenericUiTest {
                 new AutofillAssistantTestService(Collections.singletonList(script));
         startAutofillAssistant(mTestRule.getActivity(), testService);
 
-        waitUntilViewMatchesCondition(withText("Wed, Apr 15, 2020"), isCompletelyDisplayed());
+        waitUntilViewMatchesCondition(withText("date not set"), isCompletelyDisplayed());
 
-        onView(withText("Wed, Apr 15, 2020")).perform(click());
+        onView(withText("date not set")).perform(click());
+        onView(withClassName(equalTo(DatePicker.class.getName())))
+                .inRoot(isDialog())
+                .perform(setDate(2020, 6, 7));
+        onView(withText(R.string.date_picker_dialog_set)).inRoot(isDialog()).perform(click());
+        waitUntilViewMatchesCondition(withText("Sun, Jun 7, 2020"), isCompletelyDisplayed());
+
+        onView(withText("Sun, Jun 7, 2020")).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName())))
                 .inRoot(isDialog())
                 .perform(setDate(2020, 7, 13));

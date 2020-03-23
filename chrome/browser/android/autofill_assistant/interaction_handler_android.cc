@@ -17,6 +17,7 @@
 #include "components/autofill_assistant/browser/interactions.pb.h"
 #include "components/autofill_assistant/browser/ui_delegate.h"
 #include "components/autofill_assistant/browser/user_model.h"
+#include "components/autofill_assistant/browser/value_util.h"
 
 namespace autofill_assistant {
 
@@ -186,7 +187,13 @@ void ShowCalendarPopup(base::WeakPtr<UserModel> user_model,
 
   JNIEnv* env = base::android::AttachCurrentThread();
   auto initial_date = user_model->GetValue(proto.date_model_identifier());
-  if (initial_date.has_value() && initial_date->dates().values_size() != 1) {
+  if (!initial_date.has_value()) {
+    DVLOG(2) << "Failed to show calendar popup: "
+             << proto.date_model_identifier() << " not found in model";
+    return;
+  }
+  if (*initial_date != ValueProto() &&
+      initial_date->dates().values().size() != 1) {
     DVLOG(2) << "Failed to show calendar popup: date_model_identifier must be "
                 "empty or contain single date, but was "
              << *initial_date;
@@ -194,7 +201,7 @@ void ShowCalendarPopup(base::WeakPtr<UserModel> user_model,
   }
 
   auto min_date = user_model->GetValue(proto.min_date_model_identifier());
-  if (!min_date.has_value() || min_date->dates().values_size() != 1) {
+  if (!min_date.has_value() || min_date->dates().values().size() != 1) {
     DVLOG(2) << "Failed to show calendar popup: min_date not found or invalid "
                 "in user model at "
              << proto.min_date_model_identifier();
@@ -202,7 +209,7 @@ void ShowCalendarPopup(base::WeakPtr<UserModel> user_model,
   }
 
   auto max_date = user_model->GetValue(proto.max_date_model_identifier());
-  if (!max_date.has_value() || max_date->dates().values_size() != 1) {
+  if (!max_date.has_value() || max_date->dates().values().size() != 1) {
     DVLOG(2) << "Failed to show calendar popup: max_date not found or invalid "
                 "in user model at "
              << proto.max_date_model_identifier();
@@ -211,7 +218,7 @@ void ShowCalendarPopup(base::WeakPtr<UserModel> user_model,
 
   jboolean jsuccess = Java_AssistantViewInteractions_showCalendarPopup(
       env, jcontext,
-      initial_date.has_value()
+      *initial_date != ValueProto()
           ? ui_controller_android_utils::ToJavaValue(env, *initial_date)
           : nullptr,
       ui_controller_android_utils::ToJavaValue(env, *min_date),
