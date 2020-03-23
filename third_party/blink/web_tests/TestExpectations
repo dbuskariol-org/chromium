@@ -1869,7 +1869,6 @@ crbug.com/791529 virtual/cascade/external/wpt/css/css-variables/variable-transit
 crbug.com/791529 virtual/cascade/external/wpt/css/css-variables/variable-transitions-to-no-value.html [ Skip ]
 crbug.com/791529 virtual/cascade/external/wpt/css/css-variables/variable-transitions-transition-property-variable-before-value.html [ Skip ]
 crbug.com/791529 virtual/cascade/external/wpt/css/css-variables/variable-transitions-value-before-transition-property-variable.html [ Skip ]
-crbug.com/552085 virtual/cascade/external/wpt/css/css-cascade/important-prop.html [ Failure ]
 crbug.com/989123 virtual/cascade/external/wpt/css/css-typed-om/the-stylepropertymap/computed/get-auto-min-size.html [ Failure ]
 
 # This is for some reason WontFix'd in the main expectations (see NeverFixTests).
@@ -2812,8 +2811,6 @@ crbug.com/849859 external/wpt/css/css-animations/Element-getAnimations-dynamic-c
 crbug.com/849859 virtual/threaded/external/wpt/css/css-animations/Element-getAnimations-dynamic-changes.tentative.html [ Failure ]
 
 crbug.com/332189 external/wpt/css/css-transitions/no-transition-from-ua-to-blocking-stylesheet.html [ Pass Failure ]
-
-crbug.com/552085 external/wpt/css/css-cascade/important-prop.html [ Failure ]
 
 # Some control characters still not visible
 crbug.com/893490 [ Mac ] external/wpt/css/css-text/white-space/control-chars-001.html [ Failure ]
