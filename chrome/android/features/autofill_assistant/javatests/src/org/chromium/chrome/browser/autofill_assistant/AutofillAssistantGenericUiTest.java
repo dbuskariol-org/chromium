@@ -6,6 +6,7 @@ package org.chromium.chrome.browser.autofill_assistant;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.PositionAssertions.isLeftAlignedWith;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -92,6 +93,7 @@ import org.chromium.chrome.browser.autofill_assistant.proto.ShowListPopupProto;
 import org.chromium.chrome.browser.autofill_assistant.proto.StringList;
 import org.chromium.chrome.browser.autofill_assistant.proto.SupportedScriptProto;
 import org.chromium.chrome.browser.autofill_assistant.proto.SupportedScriptProto.PresentationProto;
+import org.chromium.chrome.browser.autofill_assistant.proto.TextInputViewProto;
 import org.chromium.chrome.browser.autofill_assistant.proto.TextViewProto;
 import org.chromium.chrome.browser.autofill_assistant.proto.ToStringProto;
 import org.chromium.chrome.browser.autofill_assistant.proto.ToggleUserActionProto;
@@ -1481,5 +1483,115 @@ public class AutofillAssistantGenericUiTest {
 
         onView(withText("toggle view")).perform(click());
         onView(withText("text view")).check(matches(not(isDisplayed())));
+    }
+
+    /**
+     * Displays a text input widget and interacts with it.
+     */
+    @Test
+    @MediumTest
+    public void testTextInput() {
+        List<ModelProto.ModelValue> modelValues = new ArrayList<>();
+        modelValues.add((ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
+                                .setIdentifier("text_value")
+                                .setValue(ValueProto.newBuilder().setStrings(
+                                        StringList.newBuilder().addValues("")))
+                                .build());
+        modelValues.add(
+                (ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
+                        .setIdentifier("chips")
+                        .setValue(ValueProto.newBuilder().setUserActions(
+                                UserActionList.newBuilder().addValues(
+                                        UserActionProto.newBuilder()
+                                                .setChip(ChipProto.newBuilder()
+                                                                 .setText("Done")
+                                                                 .setType(ChipType.NORMAL_ACTION))
+                                                .setIdentifier("done_chip"))))
+                        .build());
+
+        List<InteractionProto> interactions = new ArrayList<>();
+        interactions.add(
+                (InteractionProto) InteractionProto.newBuilder()
+                        .setTriggerEvent(EventProto.newBuilder().setOnValueChanged(
+                                OnModelValueChangedEventProto.newBuilder().setModelIdentifier(
+                                        "text_value")))
+                        .addCallbacks(CallbackProto.newBuilder().setSetText(
+                                SetTextProto.newBuilder()
+                                        .setViewIdentifier("text_view")
+                                        .setModelIdentifier("text_value")))
+                        .build());
+        interactions.add(
+                (InteractionProto) InteractionProto.newBuilder()
+                        .setTriggerEvent(EventProto.newBuilder().setOnValueChanged(
+                                OnModelValueChangedEventProto.newBuilder().setModelIdentifier(
+                                        "chips")))
+                        .addCallbacks(CallbackProto.newBuilder().setSetUserActions(
+                                SetUserActionsProto.newBuilder().setModelIdentifier("chips")))
+                        .build());
+        interactions.add((InteractionProto) InteractionProto.newBuilder()
+                                 .setTriggerEvent(EventProto.newBuilder().setOnUserActionCalled(
+                                         OnUserActionCalled.newBuilder().setUserActionIdentifier(
+                                                 "done_chip")))
+                                 .addCallbacks(CallbackProto.newBuilder().setEndAction(
+                                         EndActionProto.newBuilder().setStatus(
+                                                 ProcessedActionStatusProto.ACTION_APPLIED)))
+                                 .build());
+
+        GenericUserInterfaceProto genericUserInterface =
+                (GenericUserInterfaceProto) GenericUserInterfaceProto.newBuilder()
+                        .setRootView(ViewProto.newBuilder()
+                                             .setIdentifier("text_view")
+                                             .setTextInputView(
+                                                     TextInputViewProto.newBuilder()
+                                                             .setHint("Type here")
+                                                             .setType(TextInputViewProto
+                                                                              .InputTypeHint.NONE)
+                                                             .setModelIdentifier("text_value")))
+                        .setInteractions(
+                                InteractionsProto.newBuilder().addAllInteractions(interactions))
+                        .setModel(ModelProto.newBuilder().addAllValues(modelValues))
+                        .build();
+
+        ArrayList<ActionProto> list = new ArrayList<>();
+        list.add((ActionProto) ActionProto.newBuilder()
+                         .setShowGenericUi(ShowGenericUiProto.newBuilder()
+                                                   .setGenericUserInterface(genericUserInterface)
+                                                   .addOutputModelIdentifiers("text_value"))
+                         .build());
+        AutofillAssistantTestScript script = new AutofillAssistantTestScript(
+                (SupportedScriptProto) SupportedScriptProto.newBuilder()
+                        .setPath("form_target_website.html")
+                        .setPresentation(PresentationProto.newBuilder().setAutostart(true).setChip(
+                                ChipProto.newBuilder().setText("Autostart")))
+                        .build(),
+                list);
+
+        AutofillAssistantTestService testService =
+                new AutofillAssistantTestService(Collections.singletonList(script));
+        startAutofillAssistant(mTestRule.getActivity(), testService);
+
+        waitUntilViewMatchesCondition(withContentDescription("Type here"), isCompletelyDisplayed());
+        onView(withContentDescription("Type here")).perform(replaceText("test 1"));
+        onView(withText("test 1")).check(matches(isDisplayed()));
+        onView(withContentDescription("Type here")).perform(replaceText("test 2"));
+        onView(withText("test 2")).check(matches(isDisplayed()));
+
+        int numNextActionsCalled = testService.getNextActionsCounter();
+        onView(withContentDescription("Done")).perform(click());
+        testService.waitUntilGetNextActions(numNextActionsCalled + 1);
+
+        List<ProcessedActionProto> processedActions = testService.getProcessedActions();
+        assertThat(processedActions, iterableWithSize(1));
+        assertThat(
+                processedActions.get(0).getStatus(), is(ProcessedActionStatusProto.ACTION_APPLIED));
+        ShowGenericUiProto.Result result = processedActions.get(0).getShowGenericUiResult();
+        List<ModelProto.ModelValue> resultModelValues = result.getModel().getValuesList();
+        assertThat(resultModelValues, iterableWithSize(1));
+        assertThat(resultModelValues.get(0),
+                is((ModelProto.ModelValue) ModelProto.ModelValue.newBuilder()
+                                .setIdentifier("text_value")
+                                .setValue(ValueProto.newBuilder().setStrings(
+                                        StringList.newBuilder().addValues("test 2")))
+                                .build()));
     }
 }

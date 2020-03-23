@@ -224,7 +224,7 @@ void ShowCalendarPopup(base::WeakPtr<UserModel> user_model,
   }
 }
 
-void SetTextViewText(
+void SetViewText(
     base::WeakPtr<UserModel> user_model,
     const SetTextProto& proto,
     std::map<std::string, base::android::ScopedJavaGlobalRef<jobject>>* views) {
@@ -253,7 +253,7 @@ void SetTextViewText(
   }
 
   JNIEnv* env = base::android::AttachCurrentThread();
-  Java_AssistantViewInteractions_setTextViewText(
+  Java_AssistantViewInteractions_setViewText(
       env, jview->second,
       base::android::ConvertUTF8ToJavaString(env, text->strings().values(0)));
 }
@@ -408,7 +408,7 @@ CreateInteractionCallbackFromProto(
         return base::nullopt;
       }
       return base::Optional<InteractionHandlerAndroid::InteractionCallback>(
-          base::BindRepeating(&SetTextViewText, user_model->GetWeakPtr(),
+          base::BindRepeating(&SetViewText, user_model->GetWeakPtr(),
                               proto.set_text(), views));
     case CallbackProto::kToggleUserAction:
       if (proto.toggle_user_action().user_actions_model_identifier().empty()) {
