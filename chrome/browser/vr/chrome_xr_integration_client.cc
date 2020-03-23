@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/chrome_xr_integration_client.h"
+#include "chrome/browser/vr/chrome_xr_integration_client.h"
 
 #include "build/build_config.h"
 #include "content/public/browser/xr_install_helper.h"
