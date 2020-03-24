@@ -752,7 +752,7 @@ class LocalNtpSource::DesktopLogoObserver {
     if (!observing()) {
       ++version_started_;
     }
-    service->GetLogo(std::move(callbacks));
+    service->GetLogo(std::move(callbacks), /*for_webui_ntp=*/false);
   }
 
   bool observing() const {

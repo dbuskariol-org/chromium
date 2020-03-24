@@ -285,7 +285,7 @@ void NewTabPageHandler::GetDoodle(GetDoodleCallback callback) {
   }
   // This will trigger re-downloading the doodle and caching it. This means that
   // in regular mode a new doodle will be returned on subsequent NTP loads.
-  logo_service_->GetLogo(std::move(callbacks));
+  logo_service_->GetLogo(std::move(callbacks), /*for_webui_ntp=*/true);
 }
 
 void NewTabPageHandler::NtpThemeChanged(const NtpTheme& ntp_theme) {
