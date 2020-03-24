@@ -107,7 +107,7 @@ bool PdfMetafileCg::InitFromData(const void* src_buffer,
 
 void PdfMetafileCg::StartPage(const gfx::Size& page_size,
                               const gfx::Rect& content_area,
-                              const float& scale_factor) {
+                              float scale_factor) {
   DCHECK(context_.get());
   DCHECK(!page_is_open_);
 

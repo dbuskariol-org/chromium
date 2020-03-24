@@ -127,7 +127,7 @@ class PRINTING_EXPORT Metafile : public MetafilePlayer {
   // in points (=1/72 in).
   virtual void StartPage(const gfx::Size& page_size,
                          const gfx::Rect& content_area,
-                         const float& scale_factor) = 0;
+                         float scale_factor) = 0;
 
   // Closes the current page and destroys the context used in rendering that
   // page. The results of current page will be appended into the underlying
