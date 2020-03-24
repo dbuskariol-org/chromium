@@ -27,6 +27,7 @@ const breadCrumbTemplate = `
       -webkit-mask-position: center;
       -webkit-mask-repeat: no-repeat;
       background-color: currentColor;
+      cursor: default;
       display: inline-flex;
       height: 20px;
       padding: 8px 0;
