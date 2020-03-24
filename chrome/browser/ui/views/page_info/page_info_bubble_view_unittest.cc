@@ -203,7 +203,6 @@ class PageInfoBubbleViewTest : public testing::Test {
     parent_window_->Init(std::move(parent_params));
 
     content::WebContents* web_contents = web_contents_helper_.web_contents();
-    TabSpecificContentSettings::CreateForWebContents(web_contents);
     api_ = std::make_unique<test::PageInfoBubbleViewTestApi>(
         parent_window_->GetNativeView(), web_contents_helper_.profile(),
         web_contents);
