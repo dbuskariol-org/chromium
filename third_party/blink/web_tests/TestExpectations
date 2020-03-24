@@ -5540,6 +5540,7 @@ crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-op
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-pseudo-element-display.html [ Pass Failure ]
 crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-pseudo-element-display.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-pseudo-element-opacity.html [ Pass Failure ]
+crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-pseudo-element-opacity.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/border-image.html [ Pass Failure ]
 crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/border-image.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-video-poster.html [ Pass Failure ]
