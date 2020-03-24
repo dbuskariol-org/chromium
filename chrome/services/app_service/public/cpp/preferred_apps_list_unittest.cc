@@ -187,3 +187,33 @@ TEST_F(PreferredAppListTest, OverwritePreferredApp) {
 
   EXPECT_EQ(kAppId2, preferred_apps_.FindPreferredAppForUrl(filter_url));
 }
+
+// Test that when overlap happens, the previous setting will be removed.
+TEST_F(PreferredAppListTest, OverlapPreferredApp) {
+  GURL filter_url_1 = GURL("https://www.google.com/abc");
+  GURL filter_url_2 = GURL("http://www.google.com.au/abc");
+  auto intent_filter_1 = apps_util::CreateIntentFilterForUrlScope(filter_url_1);
+  intent_filter_1->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.scheme(),
+                                    apps::mojom::PatternMatchType::kNone));
+  intent_filter_1->conditions[1]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.host(),
+                                    apps::mojom::PatternMatchType::kNone));
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter_1);
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url_1));
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url_2));
+
+  GURL filter_url_3 = GURL("https://www.abc.com/abc");
+  auto intent_filter_2 = apps_util::CreateIntentFilterForUrlScope(filter_url_3);
+  intent_filter_2->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.scheme(),
+                                    apps::mojom::PatternMatchType::kNone));
+  intent_filter_2->conditions[1]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.host(),
+                                    apps::mojom::PatternMatchType::kNone));
+  preferred_apps_.AddPreferredApp(kAppId2, intent_filter_2);
+  EXPECT_EQ(base::nullopt,
+            preferred_apps_.FindPreferredAppForUrl(filter_url_1));
+  EXPECT_EQ(kAppId2, preferred_apps_.FindPreferredAppForUrl(filter_url_2));
+  EXPECT_EQ(kAppId2, preferred_apps_.FindPreferredAppForUrl(filter_url_3));
+}
