@@ -280,7 +280,7 @@ http://codereview.chromium.org/7200040/diff/1/webkit/plugins/ppapi/ppapi_plugin_
 */
 bool MetafileSkia::RenderPage(unsigned int page_number,
                               CGContextRef context,
-                              const CGRect rect,
+                              const CGRect& rect,
                               const MacRenderPageParams& params) const {
   DCHECK_GT(GetDataSize(), 0U);
   if (data_->pdf_cg.GetDataSize() == 0) {

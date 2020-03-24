@@ -61,7 +61,7 @@ class PRINTING_EXPORT MetafileSkia : public Metafile {
 #elif defined(OS_MACOSX)
   bool RenderPage(unsigned int page_number,
                   printing::NativeDrawingContext context,
-                  const CGRect rect,
+                  const CGRect& rect,
                   const MacRenderPageParams& params) const override;
 #endif
 

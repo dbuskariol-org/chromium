@@ -10,13 +10,7 @@
 #include <stdint.h>
 
 #include "base/mac/scoped_cftyperef.h"
-#include "base/macros.h"
 #include "printing/metafile.h"
-
-namespace gfx {
-class Rect;
-class Size;
-}
 
 namespace printing {
 
@@ -24,6 +18,8 @@ namespace printing {
 class PRINTING_EXPORT PdfMetafileCg : public Metafile {
  public:
   PdfMetafileCg();
+  PdfMetafileCg(const PdfMetafileCg&) = delete;
+  PdfMetafileCg& operator=(const PdfMetafileCg&) = delete;
   ~PdfMetafileCg() override;
 
   // Metafile methods.
@@ -47,7 +43,7 @@ class PRINTING_EXPORT PdfMetafileCg : public Metafile {
 
   bool RenderPage(unsigned int page_number,
                   printing::NativeDrawingContext context,
-                  const CGRect rect,
+                  const CGRect& rect,
                   const MacRenderPageParams& params) const override;
 
  private:
@@ -64,9 +60,7 @@ class PRINTING_EXPORT PdfMetafileCg : public Metafile {
   mutable base::ScopedCFTypeRef<CGPDFDocumentRef> pdf_doc_;
 
   // Whether or not a page is currently open.
-  bool page_is_open_;
-
-  DISALLOW_COPY_AND_ASSIGN(PdfMetafileCg);
+  bool page_is_open_ = false;
 };
 
 }  // namespace printing
