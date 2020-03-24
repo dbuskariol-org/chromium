@@ -172,7 +172,7 @@ public class TabSwitcherCoordinator
             }
         }
 
-        if (TabUiFeatureUtilities.isSearchTermChipEnabled()
+        if (TabUiFeatureUtilities.ENABLE_SEARCH_CHIP.getValue()
                 && mode != TabListCoordinator.TabListMode.CAROUSEL) {
             mTabAttributeCache = new TabAttributeCache(mTabModelSelector);
         }
