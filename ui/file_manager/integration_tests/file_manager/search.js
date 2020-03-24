@@ -172,7 +172,7 @@
     // Open Files app on Downloads.
     const appId = await setupAndWaitUntilReady(RootPath.DOWNLOADS, [entry], []);
 
-    // Measure the width of the search box when it's collapsed.
+    // Search box should start collapsed.
     await remoteCall.waitForElement(appId, '#search-wrapper[collapsed]');
 
     // Click the toolbar search button.
