@@ -98,10 +98,6 @@ const breadCrumbTemplate = `
       width: 36px;
     }
 
-    :host([checked]) button[elider] {
-      background-color: rgba(0, 0, 0, 12%);
-    }
-
     button:not([disabled]):not(:active):hover {
       background-color: rgba(0, 0, 0, 4%);
     }
@@ -116,7 +112,11 @@ const breadCrumbTemplate = `
       border: 1px solid var(--google-blue-600);
     }
 
-    button[id]:active, button[elider]:active {
+    :host([checked]) button[elider] {
+      background-color: rgba(0, 0, 0, 12%);
+    }
+
+    button:active {
       background-color: rgba(0, 0, 0, 12%);
     }
 
@@ -138,10 +138,6 @@ const breadCrumbTemplate = `
 
     #elider-menu button:focus {
       background-color: rgba(0, 0, 0, 12%);
-    }
-
-    #elider-menu button:active {
-      background-color: rgba(0, 0, 0, 20%);
     }
   </style>
 
