@@ -3778,6 +3778,8 @@
         'additional_compile_targets': [
           'all',
         ],
+        'browser_config': 'web-engine-shell',
+        'os_type': 'linux',
         'mixins': [
           'fuchsia_aemu',
           'linux-xenial',
@@ -3792,6 +3794,7 @@
         'test_suites': {
           'gtest_tests': 'fuchsia_gtests',
           'isolated_scripts': 'chromium_webkit_isolated_scripts',
+          'gpu_telemetry_tests': 'fuchsia_gpu_telemetry_tests',
         },
       },
       'Leak Detection Linux': {
