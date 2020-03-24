@@ -13,6 +13,7 @@
 #include "base/bind_helpers.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/numerics/ranges.h"
+#include "base/optional.h"
 #include "base/stl_util.h"
 #include "base/win/win_util.h"
 #include "base/win/windows_version.h"
@@ -40,9 +41,9 @@ namespace {
 ScreenWin* g_instance = nullptr;
 
 // Gets the DPI for a particular monitor.
-int GetPerMonitorDPI(HMONITOR monitor) {
+base::Optional<int> GetPerMonitorDPI(HMONITOR monitor) {
   if (!base::win::IsProcessPerMonitorDpiAware())
-    return 0;
+    return base::nullopt;
 
   static auto get_dpi_for_monitor_func = []() {
     const HMODULE shcore_dll = ::LoadLibrary(L"shcore.dll");
@@ -54,7 +55,7 @@ int GetPerMonitorDPI(HMONITOR monitor) {
   if (!get_dpi_for_monitor_func ||
       !SUCCEEDED(
           get_dpi_for_monitor_func(monitor, MDT_EFFECTIVE_DPI, &dpi_x, &dpi_y)))
-    return 0;
+    return base::nullopt;
 
   DCHECK_EQ(dpi_x, dpi_y);
   return int{dpi_x};
@@ -77,8 +78,9 @@ float GetMonitorScaleFactor(HMONITOR monitor,
   if (Display::HasForceDeviceScaleFactor())
     return Display::GetForcedDeviceScaleFactor();
 
-  const int dpi = GetPerMonitorDPI(monitor);
-  return dpi ? GetScaleFactorForDPI(dpi, include_accessibility) : GetDPIScale();
+  const auto dpi = GetPerMonitorDPI(monitor);
+  return dpi ? GetScaleFactorForDPI(dpi.value(), include_accessibility)
+             : GetDPIScale();
 }
 
 std::vector<DISPLAYCONFIG_PATH_INFO> GetPathInfos() {
@@ -102,12 +104,12 @@ std::vector<DISPLAYCONFIG_PATH_INFO> GetPathInfos() {
   return {};
 }
 
-bool GetPathInfo(HMONITOR monitor, DISPLAYCONFIG_PATH_INFO* path_info) {
+base::Optional<DISPLAYCONFIG_PATH_INFO> GetPathInfo(HMONITOR monitor) {
   // Get the monitor name.
   MONITORINFOEX monitor_info = {};
   monitor_info.cbSize = sizeof(monitor_info);
   if (!GetMonitorInfo(monitor, &monitor_info))
-    return false;
+    return base::nullopt;
 
   // Look for a path info with a matching name.
   std::vector<DISPLAYCONFIG_PATH_INFO> path_infos = GetPathInfos();
@@ -118,22 +120,19 @@ bool GetPathInfo(HMONITOR monitor, DISPLAYCONFIG_PATH_INFO* path_info) {
     device_name.header.adapterId = info.sourceInfo.adapterId;
     device_name.header.id = info.sourceInfo.id;
     if ((DisplayConfigGetDeviceInfo(&device_name.header) == ERROR_SUCCESS) &&
-        (wcscmp(monitor_info.szDevice, device_name.viewGdiDeviceName) == 0)) {
-      *path_info = info;
-      return true;
-    }
+        (wcscmp(monitor_info.szDevice, device_name.viewGdiDeviceName) == 0))
+      return info;
   }
-  return false;
+  return base::nullopt;
 }
 
 float GetMonitorSDRWhiteLevel(HMONITOR monitor) {
-  DISPLAYCONFIG_PATH_INFO path_info = {};
-  if (GetPathInfo(monitor, &path_info)) {
+  if (auto path_info = GetPathInfo(monitor)) {
     DISPLAYCONFIG_SDR_WHITE_LEVEL white_level = {};
     white_level.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_SDR_WHITE_LEVEL;
     white_level.header.size = sizeof(white_level);
-    white_level.header.adapterId = path_info.targetInfo.adapterId;
-    white_level.header.id = path_info.targetInfo.id;
+    white_level.header.adapterId = path_info->targetInfo.adapterId;
+    white_level.header.id = path_info->targetInfo.id;
     if (DisplayConfigGetDeviceInfo(&white_level.header) == ERROR_SUCCESS)
       return white_level.SDRWhiteLevel * 80.0 / 1000.0;
   }
@@ -156,17 +155,17 @@ Display::Rotation OrientationToRotation(DWORD orientation) {
   }
 }
 
-void GetDisplaySettingsForDevice(const wchar_t* device_name,
-                                 Display::Rotation* rotation,
-                                 int* frequency) {
-  *rotation = Display::ROTATE_0;
-  *frequency = 0;
+struct DisplaySettings {
+  Display::Rotation rotation;
+  int frequency;
+};
+DisplaySettings GetDisplaySettingsForDevice(const wchar_t* device_name) {
   DEVMODE mode = {};
   mode.dmSize = sizeof(mode);
   if (!::EnumDisplaySettings(device_name, ENUM_CURRENT_SETTINGS, &mode))
-    return;
-  *rotation = OrientationToRotation(mode.dmDisplayOrientation);
-  *frequency = mode.dmDisplayFrequency;
+    return {Display::ROTATE_0, 0};
+  return {OrientationToRotation(mode.dmDisplayOrientation),
+          mode.dmDisplayFrequency};
 }
 
 std::vector<DisplayInfo> FindAndRemoveTouchingDisplayInfos(
@@ -334,14 +333,15 @@ MONITORINFOEX MonitorInfoFromHMONITOR(HMONITOR monitor) {
   return monitor_info;
 }
 
-gfx::Vector2dF GetPixelsPerInchForPointerDevice(HANDLE source_device) {
+base::Optional<gfx::Vector2dF> GetPixelsPerInchForPointerDevice(
+    HANDLE source_device) {
   static const auto get_pointer_device_rects =
       reinterpret_cast<decltype(&::GetPointerDeviceRects)>(
           base::win::GetUser32FunctionPointer("GetPointerDeviceRects"));
   RECT device_rect, screen_rect;
   if (!get_pointer_device_rects ||
       !get_pointer_device_rects(source_device, &device_rect, &screen_rect))
-    return gfx::Vector2dF();
+    return base::nullopt;
 
   const gfx::RectF device{gfx::Rect(device_rect)};
   const gfx::RectF screen{gfx::Rect(screen_rect)};
@@ -358,28 +358,28 @@ gfx::Vector2dF GetDefaultMonitorPhysicalPixelsPerInch() {
   return gfx::Vector2dF(default_dpi, default_dpi);
 }
 
-// Retrieve PPI for |monitor| based on touch pointer device handles.
-gfx::Vector2dF GetMonitorPixelsPerInch(HMONITOR monitor) {
+// Retrieves PPI for |monitor| based on touch pointer device handles.  Returns
+// nullopt if a pointer device for |monitor| can't be found.
+base::Optional<gfx::Vector2dF> GetMonitorPixelsPerInch(HMONITOR monitor) {
   static const auto get_pointer_devices =
       reinterpret_cast<decltype(&::GetPointerDevices)>(
           base::win::GetUser32FunctionPointer("GetPointerDevices"));
-  gfx::Vector2dF pixels_per_inch = GetDefaultMonitorPhysicalPixelsPerInch();
   uint32_t pointer_device_count = 0;
   if (!get_pointer_devices ||
       !get_pointer_devices(&pointer_device_count, nullptr) ||
       (pointer_device_count == 0))
-    return pixels_per_inch;
+    return base::nullopt;
 
   std::vector<POINTER_DEVICE_INFO> pointer_devices(pointer_device_count);
   if (!get_pointer_devices(&pointer_device_count, pointer_devices.data()))
-    return pixels_per_inch;
+    return base::nullopt;
 
   for (const auto& device : pointer_devices) {
     if (device.pointerDeviceType == POINTER_DEVICE_TYPE_TOUCH &&
         device.monitor == monitor)
       return GetPixelsPerInchForPointerDevice(device.device);
   }
-  return pixels_per_inch;
+  return base::nullopt;
 }
 
 BOOL CALLBACK EnumMonitorForDisplayInfoCallback(HMONITOR monitor,
@@ -387,17 +387,18 @@ BOOL CALLBACK EnumMonitorForDisplayInfoCallback(HMONITOR monitor,
                                                 LPRECT rect,
                                                 LPARAM data) {
   const MONITORINFOEX monitor_info = MonitorInfoFromHMONITOR(monitor);
-  Display::Rotation rotation;
-  int display_frequency;
-  GetDisplaySettingsForDevice(monitor_info.szDevice, &rotation,
-                              &display_frequency);
-  gfx::Vector2dF pixels_per_inch = GetMonitorPixelsPerInch(monitor);
+  const auto display_settings =
+      GetDisplaySettingsForDevice(monitor_info.szDevice);
+  const gfx::Vector2dF pixels_per_inch =
+      GetMonitorPixelsPerInch(monitor).value_or(
+          GetDefaultMonitorPhysicalPixelsPerInch());
 
   auto* display_infos = reinterpret_cast<std::vector<DisplayInfo>*>(data);
   DCHECK(display_infos);
   display_infos->emplace_back(monitor_info, GetMonitorScaleFactor(monitor),
-                              GetMonitorSDRWhiteLevel(monitor), rotation,
-                              display_frequency, pixels_per_inch);
+                              GetMonitorSDRWhiteLevel(monitor),
+                              display_settings.rotation,
+                              display_settings.frequency, pixels_per_inch);
   return TRUE;
 }
 
@@ -571,8 +572,8 @@ int ScreenWin::GetDPIForHWND(HWND hwnd) {
     return GetDPIFromScalingFactor(Display::GetForcedDeviceScaleFactor());
 
   const HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-  int dpi = GetPerMonitorDPI(monitor);
-  return dpi ? dpi : display::win::internal::GetDefaultSystemDPI();
+  return GetPerMonitorDPI(monitor).value_or(
+      display::win::internal::GetDefaultSystemDPI());
 }
 
 // static
