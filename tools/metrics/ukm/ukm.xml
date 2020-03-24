@@ -4925,6 +4925,19 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="MainFrameNavigation" singular="True">
+  <owner>thegreenfrog@chromium.org</owner>
+  <summary>
+    Metric associated with a main frame navigation. Currently implemented only
+    on iOS.
+  </summary>
+  <metric name="DidCommit" enum="Boolean">
+    <summary>
+      Set to 1 if the navigation successfully commited.
+    </summary>
+  </metric>
+</event>
+
 <event name="Media.Autoplay.Attempt">
   <owner>mlamouri@chromium.org</owner>
   <owner>media-dev@chromium.org</owner>
@@ -6964,11 +6977,6 @@ be describing additional metrics about the same event.
     <summary>
       Amount of CPU wall time over the duration of a page load, while the page
       is in the foreground. Measured in milliseconds.
-    </summary>
-  </metric>
-  <metric name="DidCommit">
-    <summary>
-      Set to 1 if the navigation successfully commited.
     </summary>
   </metric>
   <metric name="DocumentTiming.NavigationToDOMContentLoadedEventFired">
