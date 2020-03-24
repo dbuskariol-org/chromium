@@ -377,6 +377,9 @@
       status: "stable",
     },
     {
+      name: "CSSAspectRatioProperty",
+    },
+    {
       name: "CSSCalcAsInt",
       status: "test",
     },
