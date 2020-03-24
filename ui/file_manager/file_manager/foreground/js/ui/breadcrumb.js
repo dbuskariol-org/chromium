@@ -57,6 +57,7 @@ const breadCrumbTemplate = `
 
       /* elide wide text */
       max-width: 200px;
+      outline: none;
       overflow: hidden;
       padding: 0px 8px;
 
@@ -110,16 +111,13 @@ const breadCrumbTemplate = `
       cursor: default;
     }
 
-    button[id]:focus, button[elider]:focus {
+    :host-context(:root.focus-outline-visible) > button:focus {
       background-color: unset;
       border: 1px solid var(--google-blue-600);
-      outline: none;
     }
 
     button[id]:active, button[elider]:active {
       background-color: rgba(0, 0, 0, 12%);
-      border: 1px solid transparent;
-      outline: none;
     }
 
     /**
@@ -136,7 +134,6 @@ const breadCrumbTemplate = `
       min-width: 14em;  /* menu width */
       max-width: 14em;
       text-align: start;
-      outline: none;
     }
 
     #elider-menu button:focus {
