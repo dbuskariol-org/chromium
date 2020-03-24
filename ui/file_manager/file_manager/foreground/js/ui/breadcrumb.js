@@ -136,8 +136,12 @@ const breadCrumbTemplate = `
       text-align: start;
     }
 
-    #elider-menu button:focus {
-      background-color: rgba(0, 0, 0, 12%);
+    :host-context(:root.focus-outline-visible) #elider-menu button:hover {
+      background-color: unset;
+    }
+
+    :host-context(:root.focus-outline-visible) #elider-menu button:focus {
+      background-color: rgba(0, 0, 0, 4%);
     }
   </style>
 
