@@ -9,12 +9,15 @@ if (is_android) {
 
 source_set("internal") {
   sources = [
+    "cached_image_loader.cc",
+    "cached_image_loader.h",
     "image_data_store.cc",
     "image_data_store.h",
     "image_decoder.cc",
     "image_decoder.h",
     "image_info_store.cc",
     "image_info_store.h",
+    "image_loader.h",
     "proto_conversion.cc",
     "proto_conversion.h",
     "query_tile_store.cc",
@@ -26,6 +29,7 @@ source_set("internal") {
     "//base",
     "//chrome/browser/upboarding/query_tiles:public",
     "//chrome/browser/upboarding/query_tiles/proto",
+    "//components/image_fetcher/core",
     "//components/leveldb_proto",
     "//services/data_decoder/public/cpp",
     "//skia",
@@ -38,6 +42,7 @@ source_set("unit_tests") {
   visibility = [ "//chrome/browser/upboarding/query_tiles:unit_tests" ]
 
   sources = [
+    "cached_image_loader_unittest.cc",
     "image_decoder_unittest.cc",
     "proto_conversion_unittest.cc",
     "query_tile_store_unittest.cc",
@@ -50,6 +55,7 @@ source_set("unit_tests") {
     "//chrome/browser/upboarding/query_tiles:public",
     "//chrome/browser/upboarding/query_tiles/internal",
     "//chrome/browser/upboarding/query_tiles/proto",
+    "//components/image_fetcher/core:test_support",
     "//components/leveldb_proto",
     "//components/leveldb_proto:test_support",
     "//services/data_decoder/public/cpp:test_support",
