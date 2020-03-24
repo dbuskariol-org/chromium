@@ -255,9 +255,8 @@ void PluginVmInstallerView::OnDlcDownloadCompleted() {
 // TODO(timloh): Cancelling the installation immediately closes the dialog, but
 // getting back to a clean state could take several seconds. If a user then
 // re-opens the dialog, it could cause it to fail unexpectedly. We should make
-// use of these callback to avoid this (and possibly merge them into a single
-// callback).
-void PluginVmInstallerView::OnDlcDownloadCancelled() {
+// use of these callback to avoid this.
+void PluginVmInstallerView::OnCancelFinished() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 }
 
@@ -281,10 +280,6 @@ void PluginVmInstallerView::OnDownloadCompleted() {
 
   state_ = State::IMPORTING;
   OnStateUpdated();
-}
-
-void PluginVmInstallerView::OnDownloadCancelled() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 }
 
 void PluginVmInstallerView::OnDownloadFailed(
@@ -311,10 +306,6 @@ void PluginVmInstallerView::OnImportProgressUpdated(
   DCHECK_EQ(state_, State::IMPORTING);
 
   UpdateOperationProgress(percent_completed, 100.0, elapsed_time);
-}
-
-void PluginVmInstallerView::OnImportCancelled() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 }
 
 void PluginVmInstallerView::OnImportFailed(

@@ -76,7 +76,6 @@ class MockObserver : public PluginVmInstaller::Observer {
   MOCK_METHOD2(OnDlcDownloadProgressUpdated,
                void(double progress, base::TimeDelta elapsed_time));
   MOCK_METHOD0(OnDlcDownloadCompleted, void());
-  MOCK_METHOD0(OnDlcDownloadCancelled, void());
   MOCK_METHOD1(OnDlcDownloadFailed,
                void(plugin_vm::PluginVmInstaller::FailureReason));
   MOCK_METHOD3(OnDownloadProgressUpdated,
@@ -84,16 +83,15 @@ class MockObserver : public PluginVmInstaller::Observer {
                     int64_t content_length,
                     base::TimeDelta elapsed_time));
   MOCK_METHOD0(OnDownloadCompleted, void());
-  MOCK_METHOD0(OnDownloadCancelled, void());
   MOCK_METHOD1(OnDownloadFailed,
                void(plugin_vm::PluginVmInstaller::FailureReason));
   MOCK_METHOD2(OnImportProgressUpdated,
                void(int percent_completed, base::TimeDelta elapsed_time));
   MOCK_METHOD0(OnCreated, void());
   MOCK_METHOD0(OnImported, void());
-  MOCK_METHOD0(OnImportCancelled, void());
   MOCK_METHOD1(OnImportFailed,
                void(plugin_vm::PluginVmInstaller::FailureReason));
+  MOCK_METHOD0(OnCancelFinished, void());
 };
 
 // We are inheriting from DummyDriveService instead of DriveServiceInterface
@@ -490,7 +488,7 @@ TEST_F(PluginVmInstallerDownloadServiceTest,
 
 TEST_F(PluginVmInstallerDownloadServiceTest, CancelledDownloadTest) {
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
-  EXPECT_CALL(*observer_, OnDownloadCancelled());
+  EXPECT_CALL(*observer_, OnCancelFinished());
 
   StartAndRunUntilDownloading();
   installer_->Cancel();
@@ -527,7 +525,7 @@ TEST_F(PluginVmInstallerDownloadServiceTest, CancelledImportTest) {
   EXPECT_CALL(*observer_, OnImported()).Times(0);
   EXPECT_CALL(*observer_, OnCreated()).Times(0);
   EXPECT_CALL(*observer_, OnImportFailed(_)).Times(0);
-  EXPECT_CALL(*observer_, OnImportCancelled());
+  EXPECT_CALL(*observer_, OnCancelFinished());
 
   StartAndRunUntilImporting();
   installer_->Cancel();
@@ -621,6 +619,7 @@ TEST_F(PluginVmInstallerDriveTest, CancelledDriveDownloadTest) {
 
   EXPECT_CALL(*observer_, OnDlcDownloadCompleted());
   EXPECT_CALL(*observer_, OnDownloadProgressUpdated(5, 100, _));
+  EXPECT_CALL(*observer_, OnCancelFinished());
 
   StartAndRunToCompletion();
 
