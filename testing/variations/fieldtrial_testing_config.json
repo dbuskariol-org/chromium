@@ -382,6 +382,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -446,6 +447,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -1189,6 +1191,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -1455,6 +1458,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -1475,6 +1479,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -1735,6 +1740,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -1767,6 +1773,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -1806,6 +1813,7 @@
                 "chromeos",
                 "linux",
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -2281,6 +2289,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -2383,6 +2392,7 @@
                 "chromeos",
                 "linux",
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -2479,6 +2489,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -2936,6 +2947,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -3019,6 +3031,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -3745,6 +3758,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "ios",
@@ -4272,6 +4286,7 @@
     "ProtoDBSharedMigration": [
         {
             "platforms": [
+                "android_weblayer",
                 "android_webview",
                 "android",
                 "chromeos",
@@ -4316,6 +4331,7 @@
     "QUIC": [
         {
             "platforms": [
+                "android_weblayer",
                 "android_webview",
                 "android",
                 "chromeos",
@@ -4750,6 +4766,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -4977,6 +4994,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -5113,6 +5131,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -5262,6 +5281,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -5642,6 +5662,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "linux",
@@ -5874,6 +5895,7 @@
                 "linux",
                 "mac",
                 "windows",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -6074,6 +6096,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "ios",
                 "chromeos",
@@ -6141,6 +6164,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "ios"
             ],
@@ -6436,6 +6460,7 @@
                 "linux",
                 "ios",
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -6454,6 +6479,7 @@
                 "linux",
                 "ios",
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -6472,6 +6498,7 @@
                 "linux",
                 "ios",
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -6574,6 +6601,7 @@
                 "chromeos",
                 "linux",
                 "android",
+                "android_weblayer",
                 "android_webview"
             ],
             "experiments": [
@@ -6587,6 +6615,7 @@
         {
             "platforms": [
                 "android",
+                "android_weblayer",
                 "android_webview",
                 "chromeos",
                 "ios",
