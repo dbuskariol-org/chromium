@@ -88,15 +88,8 @@ void PluginVmInstaller::Start() {
     return;
   }
 
-  // If there's an existing VM, we can complete without running the install
-  // flow.
   state_ = State::kInstalling;
-  installing_state_ = InstallingState::kCheckingForExistingVm;
-  PluginVmManager::GetForProfile(profile_)->UpdateVmState(
-      base::BindOnce(&PluginVmInstaller::OnUpdateVmState,
-                     weak_ptr_factory_.GetWeakPtr()),
-      base::BindOnce(&PluginVmInstaller::StartDlcDownload,
-                     weak_ptr_factory_.GetWeakPtr()));
+  StartDlcDownload();
 }
 
 void PluginVmInstaller::Cancel() {
@@ -131,13 +124,22 @@ void PluginVmInstaller::OnUpdateVmState(bool default_vm_exists) {
 
   if (default_vm_exists) {
     if (observer_)
-      observer_->OnVmExists();
+      observer_->OnExistingVmCheckCompleted(/*has_vm=*/true);
     profile_->GetPrefs()->SetBoolean(plugin_vm::prefs::kPluginVmImageExists,
                                      true);
     InstallFinished();
     return;
   }
-  StartDlcDownload();
+
+  if (observer_)
+    observer_->OnExistingVmCheckCompleted(/*has_vm=*/false);
+  StartDownload();
+}
+
+void PluginVmInstaller::OnUpdateVmStateFailed() {
+  // Either the dispatcher failed to start or ListVms didn't work.
+  // PluginVmManager logs the details.
+  OnDownloadFailed(FailureReason::DISPATCHER_NOT_AVAILABLE);
 }
 
 void PluginVmInstaller::StartDlcDownload() {
@@ -220,7 +222,12 @@ void PluginVmInstaller::OnDlcDownloadCompleted(
     RecordPluginVmDlcUseResultHistogram(PluginVmDlcUseResult::kDlcSuccess);
     if (observer_)
       observer_->OnDlcDownloadCompleted();
-    StartDownload();
+
+    PluginVmManager::GetForProfile(profile_)->UpdateVmState(
+        base::BindOnce(&PluginVmInstaller::OnUpdateVmState,
+                       weak_ptr_factory_.GetWeakPtr()),
+        base::BindOnce(&PluginVmInstaller::OnUpdateVmStateFailed,
+                       weak_ptr_factory_.GetWeakPtr()));
     return;
   }
 
@@ -333,21 +340,7 @@ void PluginVmInstaller::DetectImageType() {
 }
 
 void PluginVmInstaller::OnImageTypeDetected() {
-  VLOG(1) << "Starting PluginVm dispatcher service";
-  chromeos::DBusThreadManager::Get()
-      ->GetDebugDaemonClient()
-      ->StartPluginVmDispatcher(
-          chromeos::ProfileHelper::GetUserIdHashFromProfile(profile_),
-          base::BindOnce(&PluginVmInstaller::OnPluginVmDispatcherStarted,
-                         weak_ptr_factory_.GetWeakPtr()));
-}
-
-void PluginVmInstaller::OnPluginVmDispatcherStarted(bool success) {
-  if (!success) {
-    LOG(ERROR) << "Failed to start PluginVm dispatcher service";
-    OnImported(FailureReason::DISPATCHER_NOT_AVAILABLE);
-    return;
-  }
+  VLOG(1) << "Waiting for Concierge to be available";
   GetConciergeClient()->WaitForServiceToBeAvailable(
       base::BindOnce(&PluginVmInstaller::OnConciergeAvailable,
                      weak_ptr_factory_.GetWeakPtr()));

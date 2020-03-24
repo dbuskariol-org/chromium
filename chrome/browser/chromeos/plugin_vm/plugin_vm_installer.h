@@ -69,8 +69,8 @@ class PluginVmInstaller : public KeyedService,
 
   enum class InstallingState {
     kInactive,
-    kCheckingForExistingVm,
     kDownloadingDlc,
+    kCheckingForExistingVm,
     kDownloadingImage,
     kImporting,
   };
@@ -80,12 +80,13 @@ class PluginVmInstaller : public KeyedService,
    public:
     virtual ~Observer() = default;
 
-    // If a VM already exists, we call this and abort the installation process.
-    virtual void OnVmExists() = 0;
-
     virtual void OnDlcDownloadProgressUpdated(double progress,
                                               base::TimeDelta elapsed_time) = 0;
     virtual void OnDlcDownloadCompleted() = 0;
+
+    // If |has_vm| is true, the install is done.
+    virtual void OnExistingVmCheckCompleted(bool has_vm) = 0;
+
     virtual void OnDownloadProgressUpdated(uint64_t bytes_downloaded,
                                            int64_t content_length,
                                            base::TimeDelta elapsed_time) = 0;
@@ -146,6 +147,7 @@ class PluginVmInstaller : public KeyedService,
 
  private:
   void OnUpdateVmState(bool default_vm_exists);
+  void OnUpdateVmStateFailed();
   void StartDlcDownload();
   void StartDownload();
   void DetectImageType();
@@ -199,13 +201,8 @@ class PluginVmInstaller : public KeyedService,
                        download::DownloadParams::StartResult start_result);
 
   // Callback when image type has been detected. This will make call to
-  // start PluginVm dispatcher.
+  // concierge's ImportDiskImage.
   void OnImageTypeDetected();
-
-  // Callback when PluginVm dispatcher is started (together with supporting
-  // services such as concierge). This will then make the call to concierge's
-  // ImportDiskImage.
-  void OnPluginVmDispatcherStarted(bool success);
 
   // Callback which is called once we know if concierge is available.
   void OnConciergeAvailable(bool success);
