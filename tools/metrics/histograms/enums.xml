@@ -28554,6 +28554,12 @@ Called by update_feature_policy_enum.py.-->
   <int value="3" label="Only normal priority frames seen."/>
 </enum>
 
+<enum name="FrameReportType">
+  <int value="0" label="Presented Frame"/>
+  <int value="1" label="Missed Deadline Frame"/>
+  <int value="2" label="Dropped Frame"/>
+</enum>
+
 <enum name="FrameSiteInstanceProcessRelationship">
   <summary>
     Used to describe the relationship between frames hosted in a process,
