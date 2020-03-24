@@ -5,10 +5,10 @@
 #ifndef IOS_CHROME_BROWSER_UI_PAGE_INFO_PAGE_INFO_COOKIES_VIEW_CONTROLLER_H_
 #define IOS_CHROME_BROWSER_UI_PAGE_INFO_PAGE_INFO_COOKIES_VIEW_CONTROLLER_H_
 
-#import <UIKit/UIKit.h>
+#import "ios/chrome/browser/ui/table_view/chrome_table_view_controller.h"
 
-// View Controller for displaying the cookies information.
-@interface PageInfoCookiesViewController : UIViewController
+// View Controller for displaying Cookies information.
+@interface PageInfoCookiesViewController : ChromeTableViewController
 
 @end
 

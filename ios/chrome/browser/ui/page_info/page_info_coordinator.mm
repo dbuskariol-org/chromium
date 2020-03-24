@@ -103,7 +103,8 @@
 
 - (void)showCookiesInfo {
   PageInfoCookiesViewController* viewController =
-      [[PageInfoCookiesViewController alloc] init];
+      [[PageInfoCookiesViewController alloc]
+          initWithStyle:UITableViewStylePlain];
   [self.navigationController pushViewController:viewController animated:YES];
 }
 
