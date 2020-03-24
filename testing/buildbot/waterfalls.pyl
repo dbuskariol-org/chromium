@@ -1916,6 +1916,11 @@
           'isolated_scripts': 'ios13_beta_simulator_tests'
         },
       },
+      'ios13-sdk-device': {
+        'additional_compile_targets': [
+          'all',
+        ],
+      },
       'ios13-sdk-simulator': {
         'additional_compile_targets': [
           'all',
