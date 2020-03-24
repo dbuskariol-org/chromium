@@ -37,7 +37,7 @@ class GamepadSharedMemoryReader
   ~GamepadSharedMemoryReader() override;
   void Trace(Visitor*);
 
-  void SampleGamepads(device::Gamepads& gamepads);
+  void SampleGamepads(device::Gamepads* gamepads);
   void Start(blink::GamepadListener* listener);
   void Stop();
 

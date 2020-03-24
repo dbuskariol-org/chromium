@@ -72,7 +72,7 @@ void GamepadSharedMemoryReader::Stop() {
   SendStopMessage();
 }
 
-void GamepadSharedMemoryReader::SampleGamepads(device::Gamepads& gamepads) {
+void GamepadSharedMemoryReader::SampleGamepads(device::Gamepads* gamepads) {
   // Blink should have started observing at this point.
   CHECK(listener_);
 
@@ -112,7 +112,7 @@ void GamepadSharedMemoryReader::SampleGamepads(device::Gamepads& gamepads) {
   }
 
   // New data was read successfully, copy it into the output buffer.
-  memcpy(&gamepads, &read_into, sizeof(gamepads));
+  memcpy(gamepads, &read_into, sizeof(*gamepads));
 
   if (!ever_interacted_with_) {
     // Clear the connected flag if the user hasn't interacted with any of the
@@ -120,7 +120,7 @@ void GamepadSharedMemoryReader::SampleGamepads(device::Gamepads& gamepads) {
     // WebKit will only copy out data into the JS buffers for connected
     // gamepads so this is sufficient.
     for (size_t i = 0; i < device::Gamepads::kItemsLengthCap; i++)
-      gamepads.items[i].connected = false;
+      gamepads->items[i].connected = false;
   }
 }
 
