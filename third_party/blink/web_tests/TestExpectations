@@ -5576,6 +5576,8 @@ crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-gr
 crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-canvas-context.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-invisible-3d-rotate-descendant.html [ Pass Failure ]
 crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-invisible-3d-rotate-descendant.html [ Pass Failure ]
+crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-whitespace.html [ Pass Failure ]
+crbug.com/1062984 virtual/paint-timing/external/wpt/paint-timing/fcp-only/fcp-whitespace.html [ Pass Failure ]
 
 # Sheriff 2019-03-01
 crbug.com/937416 http/tests/devtools/resource-tree/resource-tree-htmlimports.js [ Pass Failure ]
