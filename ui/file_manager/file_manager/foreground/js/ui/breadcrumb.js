@@ -101,8 +101,13 @@ const breadCrumbTemplate = `
       background-color: rgba(0, 0, 0, 12%);
     }
 
-    button:not([disabled]):hover {
+    button:not([disabled]):not(:active):hover {
       background-color: rgba(0, 0, 0, 4%);
+    }
+
+    :host-context(:root.pointer-active) button:not(:active):hover {
+      background-color: unset;
+      cursor: default;
     }
 
     button[id]:focus, button[elider]:focus {
