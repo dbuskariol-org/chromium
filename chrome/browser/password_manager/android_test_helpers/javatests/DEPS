@@ -1,6 +1,4 @@
 include_rules = [
-  "+components/browser_ui/widget/android",
-  "+chrome/browser/password_manager/android_test_helpers",
   "-content/public/android",
   "+content/public/android/java/src/org/chromium/content_public/browser",
 ]
