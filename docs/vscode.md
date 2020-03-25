@@ -208,11 +208,17 @@ disable the Maven for Java extension so it stops nagging you as we won't need
 it.
 
 #### Setting up code completion/reference finding/etc.
-You'll need to locate the .classpath file redhat generates for you. Its
-location will depend on whether you're doing local or remote development.
-Local path on linux will look something like:
+You'll need to generate a placeholder .classpath file and locate it. In order
+to generate it, right click on any Java source folder in the left panel and
+choose "Add folder to java source path". Its location will depend on whether
+you're doing local or remote development. Local path on linux will look
+something like:
 
 `~/.vscode/data/User/workspaceStorage/<hash>/redhat.java/jdt_ws/<project>/.classpath`
+
+You might find multiple folders when looking for `<project>`. Choose anything except
+`jdt.ls-java-project`. If you only see `jdt.ls-java-project`, try using the
+"Add folder to java source path" option again.
 
 If doing remote development, the file will be under `~/.vscode-server/` on your
 remote machine.
