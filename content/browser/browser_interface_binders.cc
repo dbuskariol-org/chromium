@@ -274,13 +274,15 @@ void BindTextSuggestionHostForFrame(
 template <typename WorkerHost, typename Interface>
 base::RepeatingCallback<void(mojo::PendingReceiver<Interface>)>
 BindWorkerReceiver(
-    void (RenderProcessHost::*method)(mojo::PendingReceiver<Interface>),
+    void (RenderProcessHostImpl::*method)(mojo::PendingReceiver<Interface>),
     WorkerHost* host) {
   return base::BindRepeating(
       [](WorkerHost* host,
-         void (RenderProcessHost::*method)(mojo::PendingReceiver<Interface>),
+         void (RenderProcessHostImpl::*method)(
+             mojo::PendingReceiver<Interface>),
          mojo::PendingReceiver<Interface> receiver) {
-        RenderProcessHost* process_host = host->GetProcessHost();
+        auto* process_host =
+            static_cast<RenderProcessHostImpl*>(host->GetProcessHost());
         if (process_host)
           (process_host->*method)(std::move(receiver));
       },
@@ -291,15 +293,16 @@ template <typename WorkerHost, typename Interface>
 base::RepeatingCallback<void(const url::Origin&,
                              mojo::PendingReceiver<Interface>)>
 BindWorkerReceiverForOrigin(
-    void (RenderProcessHost::*method)(const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
+    void (RenderProcessHostImpl::*method)(const url::Origin&,
+                                          mojo::PendingReceiver<Interface>),
     WorkerHost* host) {
   return base::BindRepeating(
       [](WorkerHost* host,
-         void (RenderProcessHost::*method)(const url::Origin&,
-                                           mojo::PendingReceiver<Interface>),
+         void (RenderProcessHostImpl::*method)(
+             const url::Origin&, mojo::PendingReceiver<Interface>),
          const url::Origin& origin, mojo::PendingReceiver<Interface> receiver) {
-        RenderProcessHost* process_host = host->GetProcessHost();
+        auto* process_host =
+            static_cast<RenderProcessHostImpl*>(host->GetProcessHost());
         if (process_host)
           (process_host->*method)(origin, std::move(receiver));
       },
@@ -310,16 +313,17 @@ template <typename WorkerHost, typename Interface>
 base::RepeatingCallback<void(const url::Origin&,
                              mojo::PendingReceiver<Interface>)>
 BindWorkerReceiverForOriginAndFrameId(
-    void (RenderProcessHost::*method)(int,
-                                      const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
+    void (RenderProcessHostImpl::*method)(int,
+                                          const url::Origin&,
+                                          mojo::PendingReceiver<Interface>),
     WorkerHost* host) {
   return base::BindRepeating(
       [](WorkerHost* host,
-         void (RenderProcessHost::*method)(int, const url::Origin&,
-                                           mojo::PendingReceiver<Interface>),
+         void (RenderProcessHostImpl::*method)(
+             int, const url::Origin&, mojo::PendingReceiver<Interface>),
          const url::Origin& origin, mojo::PendingReceiver<Interface> receiver) {
-        RenderProcessHost* process_host = host->GetProcessHost();
+        auto* process_host =
+            static_cast<RenderProcessHostImpl*>(host->GetProcessHost());
         if (process_host)
           (process_host->*method)(MSG_ROUTING_NONE, origin,
                                   std::move(receiver));
@@ -330,15 +334,16 @@ BindWorkerReceiverForOriginAndFrameId(
 template <typename... Args>
 void RunOrPostTaskToBindServiceWorkerReceiver(
     ServiceWorkerProviderHost* host,
-    void (RenderProcessHost::*method)(Args...),
+    void (RenderProcessHostImpl::*method)(Args...),
     Args... args) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   content::RunOrPostTaskOnThread(
       FROM_HERE, BrowserThread::UI,
       base::BindOnce(
-          [](int worker_process_id, void (RenderProcessHost::*method)(Args...),
-             Args... args) {
-            auto* process_host = RenderProcessHost::FromID(worker_process_id);
+          [](int worker_process_id,
+             void (RenderProcessHostImpl::*method)(Args...), Args... args) {
+            auto* process_host = static_cast<RenderProcessHostImpl*>(
+                RenderProcessHost::FromID(worker_process_id));
             if (process_host)
               (process_host->*method)(std::forward<Args>(args)...);
           },
@@ -348,11 +353,12 @@ void RunOrPostTaskToBindServiceWorkerReceiver(
 template <typename Interface>
 base::RepeatingCallback<void(mojo::PendingReceiver<Interface>)>
 BindServiceWorkerReceiver(
-    void (RenderProcessHost::*method)(mojo::PendingReceiver<Interface>),
+    void (RenderProcessHostImpl::*method)(mojo::PendingReceiver<Interface>),
     ServiceWorkerProviderHost* host) {
   return base::BindRepeating(
       [](ServiceWorkerProviderHost* host,
-         void (RenderProcessHost::*method)(mojo::PendingReceiver<Interface>),
+         void (RenderProcessHostImpl::*method)(
+             mojo::PendingReceiver<Interface>),
          mojo::PendingReceiver<Interface> receiver) {
         RunOrPostTaskToBindServiceWorkerReceiver(host, method,
                                                  std::move(receiver));
@@ -364,13 +370,13 @@ template <typename Interface>
 base::RepeatingCallback<void(const ServiceWorkerVersionInfo&,
                              mojo::PendingReceiver<Interface>)>
 BindServiceWorkerReceiverForOrigin(
-    void (RenderProcessHost::*method)(const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
+    void (RenderProcessHostImpl::*method)(const url::Origin&,
+                                          mojo::PendingReceiver<Interface>),
     ServiceWorkerProviderHost* host) {
   return base::BindRepeating(
       [](ServiceWorkerProviderHost* host,
-         void (RenderProcessHost::*method)(const url::Origin&,
-                                           mojo::PendingReceiver<Interface>),
+         void (RenderProcessHostImpl::*method)(
+             const url::Origin&, mojo::PendingReceiver<Interface>),
          const ServiceWorkerVersionInfo& info,
          mojo::PendingReceiver<Interface> receiver) {
         auto origin = info.script_origin;
@@ -385,14 +391,14 @@ template <typename Interface>
 base::RepeatingCallback<void(const ServiceWorkerVersionInfo&,
                              mojo::PendingReceiver<Interface>)>
 BindServiceWorkerReceiverForOriginAndFrameId(
-    void (RenderProcessHost::*method)(int,
-                                      const url::Origin&,
-                                      mojo::PendingReceiver<Interface>),
+    void (RenderProcessHostImpl::*method)(int,
+                                          const url::Origin&,
+                                          mojo::PendingReceiver<Interface>),
     ServiceWorkerProviderHost* host) {
   return base::BindRepeating(
       [](ServiceWorkerProviderHost* host,
-         void (RenderProcessHost::*method)(int, const url::Origin&,
-                                           mojo::PendingReceiver<Interface>),
+         void (RenderProcessHostImpl::*method)(
+             int, const url::Origin&, mojo::PendingReceiver<Interface>),
          const ServiceWorkerVersionInfo& info,
          mojo::PendingReceiver<Interface> receiver) {
         auto origin = info.script_origin;
@@ -402,7 +408,6 @@ BindServiceWorkerReceiverForOriginAndFrameId(
       },
       base::Unretained(host), method);
 }
-
 template <typename Interface>
 void EmptyBinderForFrame(RenderFrameHost* host,
                          mojo::PendingReceiver<Interface> receiver) {
@@ -749,8 +754,8 @@ void PopulateDedicatedWorkerBinders(DedicatedWorkerHost* host,
 #endif  // !defined(OS_ANDROID)
 
   // render process host binders
-  map->Add<media::mojom::VideoDecodePerfHistory>(
-      BindWorkerReceiver(&RenderProcessHost::BindVideoDecodePerfHistory, host));
+  map->Add<media::mojom::VideoDecodePerfHistory>(BindWorkerReceiver(
+      &RenderProcessHostImpl::BindVideoDecodePerfHistory, host));
 }
 
 void PopulateBinderMapWithContext(
@@ -758,26 +763,26 @@ void PopulateBinderMapWithContext(
     service_manager::BinderMapWithContext<const url::Origin&>* map) {
   // render process host binders taking an origin
   map->Add<payments::mojom::PaymentManager>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreatePaymentManagerForOrigin, host));
+      &RenderProcessHostImpl::CreatePaymentManagerForOrigin, host));
   map->Add<blink::mojom::PermissionService>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreatePermissionService, host));
+      &RenderProcessHostImpl::CreatePermissionService, host));
   map->Add<blink::mojom::FileSystemManager>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::BindFileSystemManager, host));
+      &RenderProcessHostImpl::BindFileSystemManager, host));
   if (base::FeatureList::IsEnabled(blink::features::kNativeFileSystemAPI)) {
     map->Add<blink::mojom::NativeFileSystemManager>(BindWorkerReceiverForOrigin(
-        &RenderProcessHost::BindNativeFileSystemManager, host));
+        &RenderProcessHostImpl::BindNativeFileSystemManager, host));
   }
   map->Add<blink::mojom::NotificationService>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreateNotificationService, host));
+      &RenderProcessHostImpl::CreateNotificationService, host));
   map->Add<blink::mojom::IDBFactory>(
-      BindWorkerReceiverForOrigin(&RenderProcessHost::BindIndexedDB, host));
+      BindWorkerReceiverForOrigin(&RenderProcessHostImpl::BindIndexedDB, host));
 
   // render process host binders taking a frame id and an origin
   map->Add<blink::mojom::LockManager>(BindWorkerReceiverForOriginAndFrameId(
-      &RenderProcessHost::CreateLockManager, host));
+      &RenderProcessHostImpl::CreateLockManager, host));
   map->Add<blink::mojom::QuotaManagerHost>(
       BindWorkerReceiverForOriginAndFrameId(
-          &RenderProcessHost::BindQuotaManagerHost, host));
+          &RenderProcessHostImpl::BindQuotaManagerHost, host));
 }
 
 void PopulateBinderMap(DedicatedWorkerHost* host,
@@ -817,8 +822,8 @@ void PopulateSharedWorkerBinders(SharedWorkerHost* host,
       &SharedWorkerHost::BindCacheStorage, base::Unretained(host)));
 
   // render process host binders
-  map->Add<media::mojom::VideoDecodePerfHistory>(
-      BindWorkerReceiver(&RenderProcessHost::BindVideoDecodePerfHistory, host));
+  map->Add<media::mojom::VideoDecodePerfHistory>(BindWorkerReceiver(
+      &RenderProcessHostImpl::BindVideoDecodePerfHistory, host));
 }
 
 void PopulateBinderMapWithContext(
@@ -826,28 +831,28 @@ void PopulateBinderMapWithContext(
     service_manager::BinderMapWithContext<const url::Origin&>* map) {
   // render process host binders taking an origin
   map->Add<blink::mojom::FileSystemManager>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::BindFileSystemManager, host));
+      &RenderProcessHostImpl::BindFileSystemManager, host));
   map->Add<payments::mojom::PaymentManager>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreatePaymentManagerForOrigin, host));
+      &RenderProcessHostImpl::CreatePaymentManagerForOrigin, host));
   map->Add<blink::mojom::PermissionService>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreatePermissionService, host));
+      &RenderProcessHostImpl::CreatePermissionService, host));
   if (base::FeatureList::IsEnabled(blink::features::kNativeFileSystemAPI)) {
     map->Add<blink::mojom::NativeFileSystemManager>(BindWorkerReceiverForOrigin(
-        &RenderProcessHost::BindNativeFileSystemManager, host));
+        &RenderProcessHostImpl::BindNativeFileSystemManager, host));
   }
   map->Add<blink::mojom::NotificationService>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreateNotificationService, host));
+      &RenderProcessHostImpl::CreateNotificationService, host));
   map->Add<blink::mojom::WebSocketConnector>(BindWorkerReceiverForOrigin(
-      &RenderProcessHost::CreateWebSocketConnector, host));
+      &RenderProcessHostImpl::CreateWebSocketConnector, host));
   map->Add<blink::mojom::IDBFactory>(
-      BindWorkerReceiverForOrigin(&RenderProcessHost::BindIndexedDB, host));
+      BindWorkerReceiverForOrigin(&RenderProcessHostImpl::BindIndexedDB, host));
 
   // render process host binders taking a frame id and an origin
   map->Add<blink::mojom::LockManager>(BindWorkerReceiverForOriginAndFrameId(
-      &RenderProcessHost::CreateLockManager, host));
+      &RenderProcessHostImpl::CreateLockManager, host));
   map->Add<blink::mojom::QuotaManagerHost>(
       BindWorkerReceiverForOriginAndFrameId(
-          &RenderProcessHost::BindQuotaManagerHost, host));
+          &RenderProcessHostImpl::BindQuotaManagerHost, host));
 }
 
 void PopulateBinderMap(SharedWorkerHost* host,
@@ -891,7 +896,7 @@ void PopulateServiceWorkerBinders(ServiceWorkerProviderHost* host,
 
   // render process host binders
   map->Add<media::mojom::VideoDecodePerfHistory>(BindServiceWorkerReceiver(
-      &RenderProcessHost::BindVideoDecodePerfHistory, host));
+      &RenderProcessHostImpl::BindVideoDecodePerfHistory, host));
 }
 
 void PopulateBinderMapWithContext(
@@ -924,33 +929,33 @@ void PopulateBinderMapWithContext(
 
   // render process host binders taking an origin
   map->Add<payments::mojom::PaymentManager>(BindServiceWorkerReceiverForOrigin(
-      &RenderProcessHost::CreatePaymentManagerForOrigin, host));
+      &RenderProcessHostImpl::CreatePaymentManagerForOrigin, host));
   map->Add<blink::mojom::PermissionService>(BindServiceWorkerReceiverForOrigin(
-      &RenderProcessHost::CreatePermissionService, host));
+      &RenderProcessHostImpl::CreatePermissionService, host));
   if (base::FeatureList::IsEnabled(blink::features::kNativeFileSystemAPI)) {
     map->Add<blink::mojom::NativeFileSystemManager>(
         BindServiceWorkerReceiverForOrigin(
-            &RenderProcessHost::BindNativeFileSystemManager, host));
+            &RenderProcessHostImpl::BindNativeFileSystemManager, host));
   }
   map->Add<blink::mojom::NotificationService>(
       BindServiceWorkerReceiverForOrigin(
-          &RenderProcessHost::CreateNotificationService, host));
+          &RenderProcessHostImpl::CreateNotificationService, host));
   map->Add<blink::mojom::WebSocketConnector>(BindServiceWorkerReceiverForOrigin(
-      &RenderProcessHost::CreateWebSocketConnector, host));
+      &RenderProcessHostImpl::CreateWebSocketConnector, host));
   map->Add<network::mojom::RestrictedCookieManager>(
       BindServiceWorkerReceiverForOrigin(
-          &RenderProcessHost::BindRestrictedCookieManagerForServiceWorker,
+          &RenderProcessHostImpl::BindRestrictedCookieManagerForServiceWorker,
           host));
   map->Add<blink::mojom::IDBFactory>(BindServiceWorkerReceiverForOrigin(
-      &RenderProcessHost::BindIndexedDB, host));
+      &RenderProcessHostImpl::BindIndexedDB, host));
 
   // render process host binders taking a frame id and an origin
   map->Add<blink::mojom::LockManager>(
       BindServiceWorkerReceiverForOriginAndFrameId(
-          &RenderProcessHost::CreateLockManager, host));
+          &RenderProcessHostImpl::CreateLockManager, host));
   map->Add<blink::mojom::QuotaManagerHost>(
       BindServiceWorkerReceiverForOriginAndFrameId(
-          &RenderProcessHost::BindQuotaManagerHost, host));
+          &RenderProcessHostImpl::BindQuotaManagerHost, host));
 }
 
 void PopulateBinderMap(ServiceWorkerProviderHost* host,
