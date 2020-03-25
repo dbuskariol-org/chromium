@@ -69,9 +69,9 @@ const char kExpectedHashedExtensionId[] =
 
 using CORBAction = network::CrossOriginReadBlocking::Action;
 
-class CrossOriginReadBlockingExtensionTest : public ExtensionBrowserTest {
+class CorbAndCorsExtensionTestBase : public ExtensionBrowserTest {
  public:
-  CrossOriginReadBlockingExtensionTest() = default;
+  CorbAndCorsExtensionTestBase() = default;
 
   void SetUpOnMainThread() override {
     ExtensionBrowserTest::SetUpOnMainThread();
@@ -80,159 +80,14 @@ class CrossOriginReadBlockingExtensionTest : public ExtensionBrowserTest {
     content::SetupCrossSiteRedirector(embedded_test_server());
   }
 
- protected:
-  content::WebContents* active_web_contents() {
-    return browser()->tab_strip_model()->GetActiveWebContents();
-  }
-
-  const Extension* InstallExtension(
-      GURL resource_to_fetch_from_declarative_content_script = GURL()) {
-    bool use_declarative_content_script =
-        resource_to_fetch_from_declarative_content_script.is_valid();
-    const char kContentScriptManifestEntry[] = R"(
-          "content_scripts": [{
-            "all_frames": true,
-            "match_about_blank": true,
-            "matches": ["*://fetch-initiator.com/*"],
-            "js": ["content_script.js"]
-          }],
+  std::string CreateFetchScript(const GURL& resource) {
+    const char kFetchScriptTemplate[] = R"(
+      fetch($1)
+        .then(response => response.text())
+        .then(text => domAutomationController.send(text))
+        .catch(err => domAutomationController.send('error: ' + err));
     )";
-
-    const char kManifestTemplate[] = R"(
-        {
-          "name": "CrossOriginReadBlockingTest - Extension",
-          "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjzv7dI7Ygyh67VHE1DdidudpYf8PFfv8iucWvzO+3xpF/Dm5xNo7aQhPNiEaNfHwJQ7lsp4gc+C+4bbaVewBFspTruoSJhZc5uEfqxwovJwN+v1/SUFXTXQmQBv6gs0qZB4gBbl4caNQBlqrFwAMNisnu1V6UROna8rOJQ90D7Nv7TCwoVPKBfVshpFjdDOTeBg4iLctO3S/06QYqaTDrwVceSyHkVkvzBY6tc6mnYX0RZu78J9iL8bdqwfllOhs69cqoHHgrLdI6JdOyiuh6pBP6vxMlzSKWJ3YTNjaQTPwfOYaLMuzdl0v+YdzafIzV9zwe4Xiskk+5JNGt8b2rQIDAQAB",
-          "version": "1.0",
-          "manifest_version": 2,
-          "permissions": [
-              "tabs",
-              "*://fetch-initiator.com/*",
-              "*://127.0.0.1/*",  // Initiator in AppCache tests.
-              "*://cross-site.com/*",
-              "*://other-with-permission.com/*"
-              // This list intentionally does NOT include
-              // other-without-permission.com.
-          ],
-          %s
-          "background": {"scripts": ["background_script.js"]}
-        } )";
-    dir_.WriteManifest(base::StringPrintf(
-        kManifestTemplate,
-        use_declarative_content_script ? kContentScriptManifestEntry : ""));
-
-    dir_.WriteFile(FILE_PATH_LITERAL("background_script.js"), "");
-    dir_.WriteFile(FILE_PATH_LITERAL("page.html"), "<body>Hello World!</body>");
-
-    if (use_declarative_content_script) {
-      dir_.WriteFile(
-          FILE_PATH_LITERAL("content_script.js"),
-          CreateFetchScript(resource_to_fetch_from_declarative_content_script));
-    }
-    extension_ = LoadExtension(dir_.UnpackedPath());
-    return extension_;
-  }
-
-  const Extension* InstallApp() {
-    const char kManifest[] = R"(
-        {
-          "name": "CrossOriginReadBlockingTest - App",
-          "version": "1.0",
-          "manifest_version": 2,
-          "permissions": ["*://*/*", "webview"],
-          "app": {
-            "background": {
-              "scripts": ["background_script.js"]
-            }
-          }
-        } )";
-    dir_.WriteManifest(kManifest);
-
-    const char kBackgroungScript[] = R"(
-        chrome.app.runtime.onLaunched.addListener(function() {
-          chrome.app.window.create('page.html', {}, function () {});
-        });
-    )";
-    dir_.WriteFile(FILE_PATH_LITERAL("background_script.js"),
-                   kBackgroungScript);
-
-    const char kPage[] = R"(
-        <div id="webview-tag-container"></div>
-    )";
-    dir_.WriteFile(FILE_PATH_LITERAL("page.html"), kPage);
-
-    extension_ = LoadExtension(dir_.UnpackedPath());
-    return extension_;
-  }
-
-  bool RegisterServiceWorkerForExtension(
-      const std::string& service_worker_script) {
-    const char kServiceWorkerPath[] = "service_worker.js";
-    dir_.WriteFile(base::FilePath::FromUTF8Unsafe(kServiceWorkerPath).value(),
-                   service_worker_script);
-
-    const char kRegistrationScript[] = R"(
-        navigator.serviceWorker.register($1).then(function() {
-          // Wait until the service worker is active.
-          return navigator.serviceWorker.ready;
-        }).then(function(r) {
-          window.domAutomationController.send('SUCCESS');
-        }).catch(function(err) {
-          window.domAutomationController.send('ERROR: ' + err.message);
-        }); )";
-    std::string registration_script =
-        content::JsReplace(kRegistrationScript, kServiceWorkerPath);
-
-    std::string result = browsertest_util::ExecuteScriptInBackgroundPage(
-        browser()->profile(), extension_->id(), registration_script);
-    if (result != "SUCCESS") {
-      ADD_FAILURE() << "Failed to register the service worker: " << result;
-      return false;
-    }
-    return !::testing::Test::HasFailure();
-  }
-
-  // Injects (into |web_contents|) a content_script that performs a fetch of
-  // |url|. Returns the body of the response.
-  //
-  // The method below uses "programmatic" (rather than "declarative") way to
-  // inject a content script, but the behavior and permissions of the conecnt
-  // script should be the same in both cases.  See also
-  // https://developer.chrome.com/extensions/content_scripts#programmatic.
-  std::string FetchViaContentScript(const GURL& url,
-                                    content::WebContents* web_contents) {
-    return FetchHelper(
-        url, base::BindOnce(
-                 &CrossOriginReadBlockingExtensionTest::ExecuteContentScript,
-                 base::Unretained(this), base::Unretained(web_contents)));
-  }
-
-  // Performs a fetch of |url| from the background page of the test extension.
-  // Returns the body of the response.
-  std::string FetchViaBackgroundPage(const GURL& url) {
-    return FetchHelper(
-        url, base::BindOnce(
-                 &browsertest_util::ExecuteScriptInBackgroundPageNoWait,
-                 base::Unretained(browser()->profile()), extension_->id()));
-  }
-
-  // Performs a fetch of |url| from |web_contents| (directly, without going
-  // through content scripts).  Returns the body of the response.
-  std::string FetchViaWebContents(const GURL& url,
-                                  content::WebContents* web_contents) {
-    return FetchHelper(
-        url, base::BindOnce(
-                 &CrossOriginReadBlockingExtensionTest::ExecuteRegularScript,
-                 base::Unretained(this), base::Unretained(web_contents)));
-  }
-
-  // Performs a fetch of |url| from a srcdoc subframe added to |parent_frame|
-  // and executing a script via <script> tag.  Returns the body of the response.
-  std::string FetchViaSrcDocFrame(GURL url,
-                                  content::RenderFrameHost* parent_frame) {
-    return FetchHelper(
-        url, base::BindOnce(
-                 &CrossOriginReadBlockingExtensionTest::ExecuteInSrcDocFrame,
-                 base::Unretained(this), base::Unretained(parent_frame)));
+    return content::JsReplace(kFetchScriptTemplate, resource);
   }
 
   std::string PopString(content::DOMMessageQueue* message_queue) {
@@ -245,133 +100,17 @@ class CrossOriginReadBlockingExtensionTest : public ExtensionBrowserTest {
     return result;
   }
 
-  GURL GetExtensionResource(const std::string& relative_path) {
-    return extension_->GetResourceURL(relative_path);
-  }
-
-  url::Origin GetExtensionOrigin() {
-    return url::Origin::Create(extension_->url());
-  }
-
-  GURL GetTestPageUrl(const std::string& hostname) {
-    // Using the page below avoids a network fetch of /favicon.ico which helps
-    // avoid extra synchronization hassles in the tests.
-    return embedded_test_server()->GetURL(
-        hostname, "/favicon/title1_with_data_uri_icon.html");
-  }
-
-  const Extension* extension() { return extension_; }
-
-  std::string CreateFetchScript(const GURL& resource) {
-    const char kFetchScriptTemplate[] = R"(
-      fetch($1)
-        .then(response => response.text())
-        .then(text => domAutomationController.send(text))
-        .catch(err => domAutomationController.send('error: ' + err));
-    )";
-    return content::JsReplace(kFetchScriptTemplate, resource);
-  }
-
-  // Asks the test |extension_| to inject |content_script| into |web_contents|.
-  //
-  // This is an implementation of FetchCallback.
-  // Returns true if the content script execution started succeessfully.
-  bool ExecuteContentScript(content::WebContents* web_contents,
-                            const std::string& content_script) {
-    int tab_id = ExtensionTabUtil::GetTabId(web_contents);
-    std::string background_script = content::JsReplace(
-        "chrome.tabs.executeScript($1, { code: $2 });", tab_id, content_script);
-    return browsertest_util::ExecuteScriptInBackgroundPageNoWait(
-        browser()->profile(), extension_->id(), background_script);
-  }
-
- private:
-  // Executes |regular_script| in |web_contents|.
-  //
-  // This is an implementation of FetchCallback.
-  // Returns true if the script execution started succeessfully.
-  bool ExecuteRegularScript(content::WebContents* web_contents,
-                            const std::string& regular_script) {
-    content::ExecuteScriptAsync(web_contents, regular_script);
-
-    // Report artificial success to meet FetchCallback's requirements.
-    return true;
-  }
-
-  // Injects into |parent_frame| an "srcdoc" subframe that contains/executes
-  // |script_to_run_in_subframe| via <script> tag.
-  //
-  // This function is useful to exercise a scenario when a <script> tag may
-  // execute before the browser gets a chance to see the a frame/navigation
-  // commit is happening.
-  //
-  // This is an implementation of FetchCallback.
-  // Returns true if the script execution started succeessfully.
-  bool ExecuteInSrcDocFrame(content::RenderFrameHost* parent_frame,
-                            const std::string& script_to_run_in_subframe) {
-    static int sequence_id = 0;
-    sequence_id++;
-    std::string filename =
-        base::StringPrintf("srcdoc_script_%d.js", sequence_id);
-    dir_.WriteFile(base::FilePath::FromUTF8Unsafe(filename).value(),
-                   script_to_run_in_subframe);
-
-    // Using <script src=...></script> instead of <script>...</script> to avoid
-    // extensions CSP which forbids inline scripts.
-    const char kScriptTemplate[] = R"(
-        var subframe = document.createElement('iframe');
-        subframe.srcdoc = '<script src=' + $1 + '></script>';
-        document.body.appendChild(subframe); )";
-    std::string subframe_injection_script =
-        content::JsReplace(kScriptTemplate, filename);
-    content::ExecuteScriptAsync(parent_frame, subframe_injection_script);
-
-    // Report artificial success to meet FetchCallback's requirements.
-    return true;
-  }
-
-  // FetchCallback represents a function that executes |fetch_script|.
-  //
-  // |fetch_script| will include calls to |domAutomationController.send| and
-  // therefore instances of FetchCallback should not inject their own calls to
-  // |domAutomationController.send| (e.g. this constraint rules out
-  // browsertest_util::ExecuteScriptInBackgroundPage and/or
-  // content::ExecuteScript).
-  //
-  // The function should return true if script execution started successfully.
-  //
-  // Currently used "implementations":
-  // - CrossOriginReadBlockingExtensionTest::ExecuteContentScript(web_contents)
-  // - CrossOriginReadBlockingExtensionTest::ExecuteRegularScript(web_contents)
-  // - browsertest_util::ExecuteScriptInBackgroundPageNoWait(profile, ext_id)
-  using FetchCallback =
-      base::OnceCallback<bool(const std::string& fetch_script)>;
-
-  // Returns response body of a fetch of |url| initiated via |fetch_callback|.
-  std::string FetchHelper(const GURL& url, FetchCallback fetch_callback) {
-    content::DOMMessageQueue message_queue;
-
-    // Inject a content script that performs a cross-origin fetch to
-    // cross-site.com.
-    EXPECT_TRUE(std::move(fetch_callback).Run(CreateFetchScript(url)));
-
-    // Wait until the message comes back and extract result from the message.
-    return PopString(&message_queue);
-  }
-
+ protected:
   TestExtensionDir dir_;
-  const Extension* extension_ = nullptr;
-
-  DISALLOW_COPY_AND_ASSIGN(CrossOriginReadBlockingExtensionTest);
 };
 
-class CrossOriginReadBlockingExtensionAllowlistingTest
-    : public CrossOriginReadBlockingExtensionTest,
+class CorbAndCorsExtensionBrowserTest
+    : public CorbAndCorsExtensionTestBase,
       public ::testing::WithParamInterface<TestParam> {
  public:
-  using Base = CrossOriginReadBlockingExtensionTest;
+  using Base = CorbAndCorsExtensionTestBase;
 
-  CrossOriginReadBlockingExtensionAllowlistingTest() {
+  CorbAndCorsExtensionBrowserTest() {
     std::vector<base::Feature> disabled_features;
     std::vector<base::test::ScopedFeatureList::FeatureAndParams>
         enabled_features;
@@ -431,8 +170,48 @@ class CrossOriginReadBlockingExtensionAllowlistingTest
 
   const Extension* InstallExtension(
       GURL resource_to_fetch_from_declarative_content_script = GURL()) {
-    const Extension* extension = Base::InstallExtension(
-        resource_to_fetch_from_declarative_content_script);
+    bool use_declarative_content_script =
+        resource_to_fetch_from_declarative_content_script.is_valid();
+    const char kContentScriptManifestEntry[] = R"(
+          "content_scripts": [{
+            "all_frames": true,
+            "match_about_blank": true,
+            "matches": ["*://fetch-initiator.com/*"],
+            "js": ["content_script.js"]
+          }],
+    )";
+
+    const char kManifestTemplate[] = R"(
+        {
+          "name": "CrossOriginReadBlockingTest - Extension",
+          "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjzv7dI7Ygyh67VHE1DdidudpYf8PFfv8iucWvzO+3xpF/Dm5xNo7aQhPNiEaNfHwJQ7lsp4gc+C+4bbaVewBFspTruoSJhZc5uEfqxwovJwN+v1/SUFXTXQmQBv6gs0qZB4gBbl4caNQBlqrFwAMNisnu1V6UROna8rOJQ90D7Nv7TCwoVPKBfVshpFjdDOTeBg4iLctO3S/06QYqaTDrwVceSyHkVkvzBY6tc6mnYX0RZu78J9iL8bdqwfllOhs69cqoHHgrLdI6JdOyiuh6pBP6vxMlzSKWJ3YTNjaQTPwfOYaLMuzdl0v+YdzafIzV9zwe4Xiskk+5JNGt8b2rQIDAQAB",
+          "version": "1.0",
+          "manifest_version": 2,
+          "permissions": [
+              "tabs",
+              "*://fetch-initiator.com/*",
+              "*://127.0.0.1/*",  // Initiator in AppCache tests.
+              "*://cross-site.com/*",
+              "*://other-with-permission.com/*"
+              // This list intentionally does NOT include
+              // other-without-permission.com.
+          ],
+          %s
+          "background": {"scripts": ["background_script.js"]}
+        } )";
+    dir_.WriteManifest(base::StringPrintf(
+        kManifestTemplate,
+        use_declarative_content_script ? kContentScriptManifestEntry : ""));
+
+    dir_.WriteFile(FILE_PATH_LITERAL("background_script.js"), "");
+    dir_.WriteFile(FILE_PATH_LITERAL("page.html"), "<body>Hello World!</body>");
+
+    if (use_declarative_content_script) {
+      dir_.WriteFile(
+          FILE_PATH_LITERAL("content_script.js"),
+          CreateFetchScript(resource_to_fetch_from_declarative_content_script));
+    }
+    extension_ = LoadExtension(dir_.UnpackedPath());
 
     // The allowlist is populated via
     // 1. Field trial param (only if ShouldAllowlistAlsoApplyToOorCors)
@@ -442,18 +221,18 @@ class CrossOriginReadBlockingExtensionAllowlistingTest
     // modify the hardcoded list via Add/RemoveExtensionFromAllowlistForTesting.
     if (!ShouldAllowlistAlsoApplyToOorCors()) {
       if (IsExtensionAllowlisted()) {
-        URLLoaderFactoryManager::AddExtensionToAllowlistForTesting(*extension);
+        URLLoaderFactoryManager::AddExtensionToAllowlistForTesting(*extension_);
       } else {
         URLLoaderFactoryManager::RemoveExtensionFromAllowlistForTesting(
-            *extension);
+            *extension_);
       }
     }
 
     // Sanity check that the field trial param (which has to be registered via
     // ScopedFeatureList early) uses the right extension id hash.
-    EXPECT_EQ(kExpectedHashedExtensionId, extension->hashed_id().value());
+    EXPECT_EQ(kExpectedHashedExtensionId, extension_->hashed_id().value());
 
-    return extension;
+    return extension_;
   }
 
   bool AreContentScriptFetchesExpectedToBeBlocked() {
@@ -578,13 +357,192 @@ class CrossOriginReadBlockingExtensionAllowlistingTest
     }
   }
 
+  content::WebContents* active_web_contents() {
+    return browser()->tab_strip_model()->GetActiveWebContents();
+  }
+
+  bool RegisterServiceWorkerForExtension(
+      const std::string& service_worker_script) {
+    const char kServiceWorkerPath[] = "service_worker.js";
+    dir_.WriteFile(base::FilePath::FromUTF8Unsafe(kServiceWorkerPath).value(),
+                   service_worker_script);
+
+    const char kRegistrationScript[] = R"(
+        navigator.serviceWorker.register($1).then(function() {
+          // Wait until the service worker is active.
+          return navigator.serviceWorker.ready;
+        }).then(function(r) {
+          window.domAutomationController.send('SUCCESS');
+        }).catch(function(err) {
+          window.domAutomationController.send('ERROR: ' + err.message);
+        }); )";
+    std::string registration_script =
+        content::JsReplace(kRegistrationScript, kServiceWorkerPath);
+
+    std::string result = browsertest_util::ExecuteScriptInBackgroundPage(
+        browser()->profile(), extension_->id(), registration_script);
+    if (result != "SUCCESS") {
+      ADD_FAILURE() << "Failed to register the service worker: " << result;
+      return false;
+    }
+    return !::testing::Test::HasFailure();
+  }
+
+  // Injects (into |web_contents|) a content_script that performs a fetch of
+  // |url|. Returns the body of the response.
+  //
+  // The method below uses "programmatic" (rather than "declarative") way to
+  // inject a content script, but the behavior and permissions of the conecnt
+  // script should be the same in both cases.  See also
+  // https://developer.chrome.com/extensions/content_scripts#programmatic.
+  std::string FetchViaContentScript(const GURL& url,
+                                    content::WebContents* web_contents) {
+    return FetchHelper(
+        url,
+        base::BindOnce(&CorbAndCorsExtensionBrowserTest::ExecuteContentScript,
+                       base::Unretained(this), base::Unretained(web_contents)));
+  }
+
+  // Performs a fetch of |url| from the background page of the test extension.
+  // Returns the body of the response.
+  std::string FetchViaBackgroundPage(const GURL& url) {
+    return FetchHelper(
+        url, base::BindOnce(
+                 &browsertest_util::ExecuteScriptInBackgroundPageNoWait,
+                 base::Unretained(browser()->profile()), extension_->id()));
+  }
+
+  // Performs a fetch of |url| from |web_contents| (directly, without going
+  // through content scripts).  Returns the body of the response.
+  std::string FetchViaWebContents(const GURL& url,
+                                  content::WebContents* web_contents) {
+    return FetchHelper(
+        url,
+        base::BindOnce(&CorbAndCorsExtensionBrowserTest::ExecuteRegularScript,
+                       base::Unretained(this), base::Unretained(web_contents)));
+  }
+
+  // Performs a fetch of |url| from a srcdoc subframe added to |parent_frame|
+  // and executing a script via <script> tag.  Returns the body of the response.
+  std::string FetchViaSrcDocFrame(GURL url,
+                                  content::RenderFrameHost* parent_frame) {
+    return FetchHelper(
+        url,
+        base::BindOnce(&CorbAndCorsExtensionBrowserTest::ExecuteInSrcDocFrame,
+                       base::Unretained(this), base::Unretained(parent_frame)));
+  }
+
+  GURL GetExtensionResource(const std::string& relative_path) {
+    return extension_->GetResourceURL(relative_path);
+  }
+
+  url::Origin GetExtensionOrigin() {
+    return url::Origin::Create(extension_->url());
+  }
+
+  GURL GetTestPageUrl(const std::string& hostname) {
+    // Using the page below avoids a network fetch of /favicon.ico which helps
+    // avoid extra synchronization hassles in the tests.
+    return embedded_test_server()->GetURL(
+        hostname, "/favicon/title1_with_data_uri_icon.html");
+  }
+
+  const Extension* extension() { return extension_; }
+
+  // Asks the test |extension_| to inject |content_script| into |web_contents|.
+  //
+  // This is an implementation of FetchCallback.
+  // Returns true if the content script execution started succeessfully.
+  bool ExecuteContentScript(content::WebContents* web_contents,
+                            const std::string& content_script) {
+    int tab_id = ExtensionTabUtil::GetTabId(web_contents);
+    std::string background_script = content::JsReplace(
+        "chrome.tabs.executeScript($1, { code: $2 });", tab_id, content_script);
+    return browsertest_util::ExecuteScriptInBackgroundPageNoWait(
+        browser()->profile(), extension_->id(), background_script);
+  }
+
  private:
+  // Executes |regular_script| in |web_contents|.
+  //
+  // This is an implementation of FetchCallback.
+  // Returns true if the script execution started succeessfully.
+  bool ExecuteRegularScript(content::WebContents* web_contents,
+                            const std::string& regular_script) {
+    content::ExecuteScriptAsync(web_contents, regular_script);
+
+    // Report artificial success to meet FetchCallback's requirements.
+    return true;
+  }
+
+  // Injects into |parent_frame| an "srcdoc" subframe that contains/executes
+  // |script_to_run_in_subframe| via <script> tag.
+  //
+  // This function is useful to exercise a scenario when a <script> tag may
+  // execute before the browser gets a chance to see the a frame/navigation
+  // commit is happening.
+  //
+  // This is an implementation of FetchCallback.
+  // Returns true if the script execution started succeessfully.
+  bool ExecuteInSrcDocFrame(content::RenderFrameHost* parent_frame,
+                            const std::string& script_to_run_in_subframe) {
+    static int sequence_id = 0;
+    sequence_id++;
+    std::string filename =
+        base::StringPrintf("srcdoc_script_%d.js", sequence_id);
+    dir_.WriteFile(base::FilePath::FromUTF8Unsafe(filename).value(),
+                   script_to_run_in_subframe);
+
+    // Using <script src=...></script> instead of <script>...</script> to avoid
+    // extensions CSP which forbids inline scripts.
+    const char kScriptTemplate[] = R"(
+        var subframe = document.createElement('iframe');
+        subframe.srcdoc = '<script src=' + $1 + '></script>';
+        document.body.appendChild(subframe); )";
+    std::string subframe_injection_script =
+        content::JsReplace(kScriptTemplate, filename);
+    content::ExecuteScriptAsync(parent_frame, subframe_injection_script);
+
+    // Report artificial success to meet FetchCallback's requirements.
+    return true;
+  }
+
+  // FetchCallback represents a function that executes |fetch_script|.
+  //
+  // |fetch_script| will include calls to |domAutomationController.send| and
+  // therefore instances of FetchCallback should not inject their own calls to
+  // |domAutomationController.send| (e.g. this constraint rules out
+  // browsertest_util::ExecuteScriptInBackgroundPage and/or
+  // content::ExecuteScript).
+  //
+  // The function should return true if script execution started successfully.
+  //
+  // Currently used "implementations":
+  // - CorbAndCorsExtensionBrowserTest::ExecuteContentScript(web_contents)
+  // - CorbAndCorsExtensionBrowserTest::ExecuteRegularScript(web_contents)
+  // - browsertest_util::ExecuteScriptInBackgroundPageNoWait(profile, ext_id)
+  using FetchCallback =
+      base::OnceCallback<bool(const std::string& fetch_script)>;
+
+  // Returns response body of a fetch of |url| initiated via |fetch_callback|.
+  std::string FetchHelper(const GURL& url, FetchCallback fetch_callback) {
+    content::DOMMessageQueue message_queue;
+
+    // Inject a content script that performs a cross-origin fetch to
+    // cross-site.com.
+    EXPECT_TRUE(std::move(fetch_callback).Run(CreateFetchScript(url)));
+
+    // Wait until the message comes back and extract result from the message.
+    return PopString(&message_queue);
+  }
+
+  const Extension* extension_ = nullptr;
   base::test::ScopedFeatureList scoped_feature_list_;
 
-  DISALLOW_COPY_AND_ASSIGN(CrossOriginReadBlockingExtensionAllowlistingTest);
+  DISALLOW_COPY_AND_ASSIGN(CorbAndCorsExtensionBrowserTest);
 };
 
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromDeclarativeContentScript_NoSniffXml) {
   ASSERT_TRUE(embedded_test_server()->Start());
   GURL cross_site_resource(
@@ -646,7 +604,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 // behavior) where a content script injected by an extension can bypass
 // CORS (and CORB) for any hosts the extension has access to.
 // See also https://crbug.com/846346.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_NoSniffXml) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -675,7 +633,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 
 // Tests that extension permission to bypass CORS is revoked after the extension
 // is unloaded.  See also https://crbug.com/843381.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_UnloadedExtension) {
   ASSERT_TRUE(embedded_test_server()->Start());
   const extensions::Extension* extension = InstallExtension();
@@ -772,7 +730,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 // behavior) where a content script injected by an extension can bypass
 // CORS (and CORB) for any hosts the extension has access to.
 // See also https://crbug.com/1034408 and https://crbug.com/846346.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_RedirectToNoSniffXml) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -804,7 +762,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 
 // Test that verifies CORS-allowed fetches work for targets that are not
 // covered by the extension permissions.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_NoPermissionToTarget) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -833,7 +791,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 // Tests that same-origin fetches (same-origin relative to the webpage the
 // content script is injected into) are allowed.  See also
 // https://crbug.com/918660.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_SameOrigin) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -865,7 +823,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 
 // Test that responses that would have been allowed by CORB anyway are not
 // reported to LogInitiatorSchemeBypassingDocumentBlocking.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_AllowedTextResource) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -920,7 +878,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 
 // Test that responses that would have been allowed by CORB after sniffing are
 // included in the AllowedByCorbButNotCors UMA.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_AllowedAfterSniffing) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -971,7 +929,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 
 // Test that responses are blocked by CORB, but have empty response body are not
 // reported to LogInitiatorSchemeBypassingDocumentBlocking.
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromProgrammaticContentScript_EmptyAndBlocked) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1000,7 +958,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 
 // Test that LogInitiatorSchemeBypassingDocumentBlocking exits early for
 // requests that aren't from content scripts.
-IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromBackgroundPage_NoSniffXml) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1017,7 +975,7 @@ IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
 
 // Test that requests from a extension page hosted in a foreground tab use
 // relaxed CORB processing.
-IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromForegroundPage_NoSniffXml) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1059,7 +1017,7 @@ IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
 // relaxed CORB processing (both in the case of requests that 1) are initiated
 // by the service worker and/or 2) are ignored by the service worker and fall
 // back to the network).
-IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        FromServiceWorker_NoSniffXml) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1170,7 +1128,7 @@ class ReadyToCommitWaiter : public content::WebContentsObserver {
   DISALLOW_COPY_AND_ASSIGN(ReadyToCommitWaiter);
 };
 
-IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        ProgrammaticContentScriptVsWebUI) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1266,7 +1224,7 @@ IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
   EXPECT_EQ("LOADED", result);
 }
 
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        ProgrammaticContentScriptVsAppCache) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1361,12 +1319,36 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
                             content::JsReplace(kScriptTemplate, "logo3.png")));
 }
 
-IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
-                       WebViewContentScript) {
+using CorbAndCorsAppBrowserTest = CorbAndCorsExtensionTestBase;
+
+IN_PROC_BROWSER_TEST_F(CorbAndCorsAppBrowserTest, WebViewContentScript) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   // Load the test app.
-  const Extension* app = InstallApp();
+  const char kManifest[] = R"(
+      {
+        "name": "CrossOriginReadBlockingTest - App",
+        "version": "1.0",
+        "manifest_version": 2,
+        "permissions": ["*://*/*", "webview"],
+        "app": {
+          "background": {
+            "scripts": ["background_script.js"]
+          }
+        }
+      } )";
+  dir_.WriteManifest(kManifest);
+  const char kBackgroungScript[] = R"(
+      chrome.app.runtime.onLaunched.addListener(function() {
+        chrome.app.window.create('page.html', {}, function () {});
+      });
+  )";
+  dir_.WriteFile(FILE_PATH_LITERAL("background_script.js"), kBackgroungScript);
+  const char kPage[] = R"(
+      <div id="webview-tag-container"></div>
+  )";
+  dir_.WriteFile(FILE_PATH_LITERAL("page.html"), kPage);
+  const Extension* app = LoadExtension(dir_.UnpackedPath());
   ASSERT_TRUE(app);
 
   // Launch the test app and grab its WebContents.
@@ -1420,10 +1402,9 @@ IN_PROC_BROWSER_TEST_F(CrossOriginReadBlockingExtensionTest,
   }
 }
 
-using OriginHeaderExtensionAllowlistingTest =
-    CrossOriginReadBlockingExtensionAllowlistingTest;
+using OriginHeaderExtensionBrowserTest = CorbAndCorsExtensionBrowserTest;
 
-IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionBrowserTest,
                        OriginHeaderInCrossOriginGetRequest) {
   const char kResourcePath[] = "/simulated-resource";
   net::test_server::ControllableHttpResponse http_request(
@@ -1476,7 +1457,7 @@ IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionAllowlistingTest,
               ::testing::Not(::testing::HasSubstr("chrome-extension")));
 }
 
-IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionBrowserTest,
                        OriginHeaderInCrossOriginPostRequest) {
   const char kResourcePath[] = "/simulated-resource";
   net::test_server::ControllableHttpResponse http_request(
@@ -1523,7 +1504,7 @@ IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionAllowlistingTest,
               ::testing::Not(::testing::HasSubstr("chrome-extension")));
 }
 
-IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionBrowserTest,
                        OriginHeaderInSameOriginPostRequest) {
   ASSERT_TRUE(embedded_test_server()->Start());
   ASSERT_TRUE(InstallExtension());
@@ -1564,7 +1545,7 @@ IN_PROC_BROWSER_TEST_P(OriginHeaderExtensionAllowlistingTest,
               ::testing::Not(::testing::HasSubstr("Origin: chrome-extension")));
 }
 
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        RequestHeaders_InSameOriginFetch_FromContentScript) {
   // Sec-Fetch-Site only works on secure origins - setting up a https test
   // server to help with this.
@@ -1605,7 +1586,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
                              testing::Pair("Sec-Fetch-Site", "same-origin")}));
 }
 
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest,
                        RequestHeaders_InSameOriginXhr_FromContentScript) {
   // Sec-Fetch-Site only works on secure origins - setting up a https test
   // server to help with this.
@@ -1648,8 +1629,7 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
                              testing::Pair("Sec-Fetch-Site", "same-origin")}));
 }
 
-IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
-                       CorsFromContentScript) {
+IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest, CorsFromContentScript) {
   std::string cors_resource_path = "/cors-subresource-to-intercept";
   net::test_server::ControllableHttpResponse cors_request(
       embedded_test_server(), cors_resource_path);
@@ -1719,64 +1699,64 @@ IN_PROC_BROWSER_TEST_P(CrossOriginReadBlockingExtensionAllowlistingTest,
 }
 
 INSTANTIATE_TEST_SUITE_P(Allowlisted_AllowlistForCors,
-                         CrossOriginReadBlockingExtensionAllowlistingTest,
+                         CorbAndCorsExtensionBrowserTest,
                          ::testing::Values(TestParam::kAllowlisted |
                                            TestParam::kOutOfBlinkCors |
                                            TestParam::kAllowlistForCors));
 INSTANTIATE_TEST_SUITE_P(NotAllowlisted_AllowlistForCors,
-                         CrossOriginReadBlockingExtensionAllowlistingTest,
+                         CorbAndCorsExtensionBrowserTest,
                          ::testing::Values(TestParam::kOutOfBlinkCors |
                                            TestParam::kAllowlistForCors));
 INSTANTIATE_TEST_SUITE_P(Allowlisted_OorCors,
-                         CrossOriginReadBlockingExtensionAllowlistingTest,
+                         CorbAndCorsExtensionBrowserTest,
                          ::testing::Values(TestParam::kAllowlisted |
                                            TestParam::kOutOfBlinkCors));
 INSTANTIATE_TEST_SUITE_P(NotAllowlisted_OorCors,
-                         CrossOriginReadBlockingExtensionAllowlistingTest,
+                         CorbAndCorsExtensionBrowserTest,
                          ::testing::Values(TestParam::kOutOfBlinkCors));
 INSTANTIATE_TEST_SUITE_P(Allowlisted_InBlinkCors,
-                         CrossOriginReadBlockingExtensionAllowlistingTest,
+                         CorbAndCorsExtensionBrowserTest,
                          ::testing::Values(TestParam::kAllowlisted));
 INSTANTIATE_TEST_SUITE_P(NotAllowlisted_InBlinkCors,
-                         CrossOriginReadBlockingExtensionAllowlistingTest,
+                         CorbAndCorsExtensionBrowserTest,
                          ::testing::Values(0));
 
 INSTANTIATE_TEST_SUITE_P(
     Allowlisted_LegacyOriginHeaderBehavior_AllowlistForCors,
-    OriginHeaderExtensionAllowlistingTest,
+    OriginHeaderExtensionBrowserTest,
     ::testing::Values(TestParam::kAllowlisted | TestParam::kAllowlistForCors |
                       TestParam::kOutOfBlinkCors));
 INSTANTIATE_TEST_SUITE_P(Allowlisted_NewOriginHeaderBehavior_AllowlistForCors,
-                         OriginHeaderExtensionAllowlistingTest,
+                         OriginHeaderExtensionBrowserTest,
                          ::testing::Values(TestParam::kAllowlisted |
                                            TestParam::kAllowlistForCors |
                                            TestParam::kOutOfBlinkCors |
                                            TestParam::kDeriveOriginFromUrl));
 INSTANTIATE_TEST_SUITE_P(
     NotAllowlisted_LegacyOriginHeaderBehavior_AllowlistForCors,
-    OriginHeaderExtensionAllowlistingTest,
+    OriginHeaderExtensionBrowserTest,
     ::testing::Values(TestParam::kOutOfBlinkCors |
                       TestParam::kAllowlistForCors));
 INSTANTIATE_TEST_SUITE_P(
     NotAllowlisted_NewOriginHeaderBehavior_AllowlistForCors,
-    OriginHeaderExtensionAllowlistingTest,
+    OriginHeaderExtensionBrowserTest,
     ::testing::Values(TestParam::kOutOfBlinkCors |
                       TestParam::kAllowlistForCors |
                       TestParam::kDeriveOriginFromUrl));
 INSTANTIATE_TEST_SUITE_P(Allowlisted_LegacyOriginHeaderBehavior,
-                         OriginHeaderExtensionAllowlistingTest,
+                         OriginHeaderExtensionBrowserTest,
                          ::testing::Values(TestParam::kAllowlisted |
                                            TestParam::kOutOfBlinkCors));
 INSTANTIATE_TEST_SUITE_P(Allowlisted_NewOriginHeaderBehavior,
-                         OriginHeaderExtensionAllowlistingTest,
+                         OriginHeaderExtensionBrowserTest,
                          ::testing::Values(TestParam::kAllowlisted |
                                            TestParam::kOutOfBlinkCors |
                                            TestParam::kDeriveOriginFromUrl));
 INSTANTIATE_TEST_SUITE_P(NotAllowlisted_LegacyOriginHeaderBehavior,
-                         OriginHeaderExtensionAllowlistingTest,
+                         OriginHeaderExtensionBrowserTest,
                          ::testing::Values(TestParam::kOutOfBlinkCors));
 INSTANTIATE_TEST_SUITE_P(NotAllowlisted_NewOriginHeaderBehavior,
-                         OriginHeaderExtensionAllowlistingTest,
+                         OriginHeaderExtensionBrowserTest,
                          ::testing::Values(TestParam::kOutOfBlinkCors |
                                            TestParam::kDeriveOriginFromUrl));
 
