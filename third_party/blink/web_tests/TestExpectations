@@ -6579,6 +6579,7 @@ crbug.com/1006759 http/tests/devtools/profiler/agents-disabled-check.js [ Skip ]
 
 # DevTools roll
 crbug.com/1052111 http/tests/devtools/a11y-axe-core/audits-start-view-a11y-test.js [ Skip ]
+crbug.com/1051822 http/tests/devtools/a11y-axe-core/settings/locations-a11y-test.js [ Pass Failure ]
 
 # Sheriff 2020-02-18
 crbug.com/1050893 [ Fuchsia ] virtual/gpu/fast/canvas/feimage-with-foreignobject-taint-canvas-2.html [ Timeout Pass ]
