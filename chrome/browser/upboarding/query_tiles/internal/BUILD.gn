@@ -22,7 +22,10 @@ source_set("internal") {
     "proto_conversion.h",
     "query_tile_store.cc",
     "query_tile_store.h",
+    "query_tile_types.h",
     "store.h",
+    "tile_info_fetcher.cc",
+    "tile_info_fetcher.h",
   ]
 
   deps = [
@@ -31,7 +34,9 @@ source_set("internal") {
     "//chrome/browser/upboarding/query_tiles/proto",
     "//components/image_fetcher/core",
     "//components/leveldb_proto",
+    "//net",
     "//services/data_decoder/public/cpp",
+    "//services/network/public/cpp",
     "//skia",
     "//url",
   ]
@@ -46,6 +51,7 @@ source_set("unit_tests") {
     "image_decoder_unittest.cc",
     "proto_conversion_unittest.cc",
     "query_tile_store_unittest.cc",
+    "tile_info_fetcher_unittest.cc",
   ]
 
   deps = [
