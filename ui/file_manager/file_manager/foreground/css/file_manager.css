@@ -1087,6 +1087,7 @@ body.check-select #search-box {
 .dialog-header.files-ng #search-box.has-cursor cr-input,
 .dialog-header.files-ng #search-box.has-text cr-input,
 .dialog-header.files-ng #search-box.hide-pending cr-input {
+  --cr-input-width: calc(288px - 80px);
   width: calc(288px - 60px);
 }
 
