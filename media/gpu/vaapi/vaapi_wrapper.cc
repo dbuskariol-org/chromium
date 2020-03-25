@@ -2366,10 +2366,9 @@ void VaapiWrapper::TryToSetVADisplayAttributeToLocalGPU() {
 
 // Check the support for low-power encode
 bool VaapiWrapper::IsLowPowerEncSupported(VAProfile va_profile) const {
-  // Enabled only for H264/AVC & VP9 Encoders
+  // Only enabled for H264/AVC
   if (va_profile != VAProfileH264ConstrainedBaseline &&
-      va_profile != VAProfileH264Main && va_profile != VAProfileH264High &&
-      va_profile != VAProfileVP9Profile0 && va_profile != VAProfileVP9Profile1)
+      va_profile != VAProfileH264Main && va_profile != VAProfileH264High)
     return false;
 
   constexpr VAEntrypoint kLowPowerEncEntryPoint = VAEntrypointEncSliceLP;
