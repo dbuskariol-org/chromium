@@ -24,7 +24,6 @@ import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.components.payments.MethodStrings;
-import org.chromium.components.payments.PayerData;
 import org.chromium.components.payments.PaymentHandlerHost;
 import org.chromium.content_public.browser.NavigationHandle;
 import org.chromium.content_public.browser.RenderFrameHost;
@@ -606,9 +605,7 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
     @CalledByNative
     private static Object createPayerData(String payerName, String payerPhone, String payerEmail,
             Object shippingAddress, String selectedShippingOptionId) {
-        return new PayerData(payerName, payerPhone, payerEmail,
-                PaymentAddressTypeConverter.convertPaymentAddressFromMojo(
-                        (PaymentAddress) shippingAddress),
+        return new PayerData(payerName, payerPhone, payerEmail, (PaymentAddress) shippingAddress,
                 selectedShippingOptionId);
     }
 
