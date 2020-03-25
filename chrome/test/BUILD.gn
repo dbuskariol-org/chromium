@@ -5938,7 +5938,6 @@ if (!is_android) {
       # excluded from builds with sanitizer. See https://crbug.com/1057868.
       if (!using_sanitizer) {
         sources += [
-          "../browser/ui/ash/drag_to_overview_interactive_uitest.cc",
           "../browser/ui/ash/homescreen_interactive_uitest.cc",
           "../browser/ui/ash/launcher_animations_interactive_uitest.cc",
           "../browser/ui/ash/launcher_drag_interactive_uitest.cc",
