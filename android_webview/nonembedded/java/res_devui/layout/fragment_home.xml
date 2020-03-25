@@ -7,21 +7,14 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_home"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/persistent_error_message"
-        android:id="@+id/webview_package_error"/>
-
-    <include
-        layout="@layout/persistent_error_message"
-        android:id="@+id/crash_consent_error"/>
-
-    <FrameLayout
-        android:id="@+id/content_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+  <ListView
+      android:id="@+id/main_info_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
 </LinearLayout>
