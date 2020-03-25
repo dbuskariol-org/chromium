@@ -402,3 +402,57 @@ TEST_F(PreferredAppListTest, DeleteForNotCompletedFilter) {
 
   EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url));
 }
+
+// Test that when there are more than one entry has overlap filter.
+TEST_F(PreferredAppListTest, DeleteOverlapFilters) {
+  GURL filter_url_1 = GURL("https://www.google.com/abc");
+  GURL filter_url_2 = GURL("http://www.google.com.au/abc");
+  GURL filter_url_3 = GURL("https://www.abc.com/abc");
+  GURL filter_url_4 = GURL("http://www.example.com/abc");
+
+  // Filter 1 handles url 1 and 2.
+  auto intent_filter_1 = apps_util::CreateIntentFilterForUrlScope(filter_url_1);
+  intent_filter_1->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.scheme(),
+                                    apps::mojom::PatternMatchType::kNone));
+  intent_filter_1->conditions[1]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.host(),
+                                    apps::mojom::PatternMatchType::kNone));
+
+  // Filter 2 handles url 2 and 3.
+  auto intent_filter_2 = apps_util::CreateIntentFilterForUrlScope(filter_url_3);
+  intent_filter_2->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.scheme(),
+                                    apps::mojom::PatternMatchType::kNone));
+  intent_filter_2->conditions[1]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_2.host(),
+                                    apps::mojom::PatternMatchType::kNone));
+
+  // Filter 3 handles url 3 and 4.
+  auto intent_filter_3 = apps_util::CreateIntentFilterForUrlScope(filter_url_3);
+  intent_filter_3->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_4.scheme(),
+                                    apps::mojom::PatternMatchType::kNone));
+  intent_filter_3->conditions[1]->condition_values.push_back(
+      apps_util::MakeConditionValue(filter_url_4.host(),
+                                    apps::mojom::PatternMatchType::kNone));
+
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter_1);
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter_3);
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url_1));
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url_2));
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url_3));
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url_4));
+
+  // Filter 2 has overlap with both filter 1 and 3, delete this should remove
+  // all entries.
+  preferred_apps_.DeletePreferredApp(kAppId1, intent_filter_2);
+  EXPECT_EQ(base::nullopt,
+            preferred_apps_.FindPreferredAppForUrl(filter_url_1));
+  EXPECT_EQ(base::nullopt,
+            preferred_apps_.FindPreferredAppForUrl(filter_url_2));
+  EXPECT_EQ(base::nullopt,
+            preferred_apps_.FindPreferredAppForUrl(filter_url_3));
+  EXPECT_EQ(base::nullopt,
+            preferred_apps_.FindPreferredAppForUrl(filter_url_4));
+}
