@@ -1197,6 +1197,8 @@ jumbo_static_library("ui") {
       "tabs/tab_group_controller.h",
       "tabs/tab_group_model.cc",
       "tabs/tab_group_model.h",
+      "tabs/tab_group_theme.cc",
+      "tabs/tab_group_theme.h",
       "tabs/tab_menu_model.cc",
       "tabs/tab_menu_model.h",
       "tabs/tab_menu_model_factory.cc",
