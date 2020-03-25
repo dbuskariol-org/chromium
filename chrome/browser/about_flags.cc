@@ -3942,10 +3942,6 @@ const FeatureEntry kFeatureEntries[] = {
      MULTI_VALUE_TYPE(kUseAngleChoices)},
 #endif
 #if defined(OS_ANDROID)
-    {"android-site-settings-ui-refresh",
-     flag_descriptions::kAndroidSiteSettingsUIRefreshName,
-     flag_descriptions::kAndroidSiteSettingsUIRefreshDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(chrome::android::kAndroidSiteSettingsUIRefresh)},
     {"draw-vertically-edge-to-edge",
      flag_descriptions::kDrawVerticallyEdgeToEdgeName,
      flag_descriptions::kDrawVerticallyEdgeToEdgeDescription, kOsAndroid,

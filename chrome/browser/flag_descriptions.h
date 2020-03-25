@@ -96,9 +96,6 @@ extern const char kUseMessagesStagingUrlDescription[];
 extern const char kAndroidPictureInPictureAPIName[];
 extern const char kAndroidPictureInPictureAPIDescription[];
 
-extern const char kAndroidSiteSettingsUIRefreshName[];
-extern const char kAndroidSiteSettingsUIRefreshDescription[];
-
 extern const char kAutofillAlwaysReturnCloudTokenizedCardName[];
 extern const char kAutofillAlwaysReturnCloudTokenizedCardDescription[];
 

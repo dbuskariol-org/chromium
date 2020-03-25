@@ -115,12 +115,6 @@ const char kAndroidPictureInPictureAPIName[] =
 const char kAndroidPictureInPictureAPIDescription[] =
     "Enable Picture-in-Picture Web API for Android";
 
-const char kAndroidSiteSettingsUIRefreshName[] =
-    "Android Site Settings UI changes.";
-const char kAndroidSiteSettingsUIRefreshDescription[] =
-    "Enable the new UI "
-    "changes in Site Settings in Android.";
-
 const char kDnsHttpssvcName[] = "Support for HTTPSSVC records in DNS.";
 const char kDnsHttpssvcDescription[] =
     "When enabled, Chrome may query a configured DoH server for HTTPSSVC "
