@@ -1167,9 +1167,13 @@ CrSettingsSafetyCheckPageTest.prototype = {
   /** @override */
   browsePreload: 'chrome://settings/safety_check_page/safety_check_page.html',
 
+  featureList: {enabled: ['password_manager::features::kPasswordCheck']},
+
   /** @override */
   extraLibraries: CrSettingsBrowserTest.prototype.extraLibraries.concat([
     '../test_browser_proxy.js',
+    'passwords_and_autofill_fake_data.js',
+    'test_password_manager_proxy.js',
     'safety_check_page_test.js',
     'test_hats_browser_proxy.js',
   ]),

@@ -49997,6 +49997,13 @@ Called by update_net_trust_anchors.py.-->
   <int value="5" label="Remove password"/>
 </enum>
 
+<enum name="PasswordCheckReferrer">
+  <int value="0" label="Safety Check"/>
+  <int value="1" label="Password Settings"/>
+  <int value="2" label="Phish Guard Dialog"/>
+  <int value="3" label="Password Breach Dialog"/>
+</enum>
+
 <enum name="PasswordDecryptionResult">
   <int value="0" label="Failed"/>
   <int value="1" label="Succeeded"/>
