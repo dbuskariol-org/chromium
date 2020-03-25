@@ -8,6 +8,7 @@
 #include "base/strings/stringprintf.h"
 #include "base/updateable_sequenced_task_runner.h"
 #include "chrome/browser/media/feeds/media_feeds.pb.h"
+#include "chrome/browser/media/feeds/media_feeds_utils.h"
 #include "chrome/browser/media/history/media_history_store.h"
 #include "services/media_session/public/cpp/media_image.h"
 #include "sql/statement.h"
@@ -19,19 +20,6 @@ namespace {
 
 // The maximum number of logos to allow.
 const int kMaxLogoCount = 5;
-
-void FillImage(media_feeds::Image* proto,
-               const media_session::MediaImage& image) {
-  proto->set_url(image.src.spec());
-
-  if (image.sizes.empty())
-    return;
-
-  DCHECK_EQ(1u, image.sizes.size());
-
-  proto->set_width(image.sizes[0].width());
-  proto->set_height(image.sizes[0].height());
-}
 
 }  // namespace
 
@@ -180,27 +168,15 @@ MediaHistoryFeedsTable::GetRows() {
     }
 
     if (statement.GetColumnType(11) == sql::ColumnType::kBlob) {
-      media_feeds::Logos logos;
-      if (!GetProto(statement, 11, logos)) {
+      media_feeds::ImageSet image_set;
+      if (!GetProto(statement, 11, image_set)) {
         base::UmaHistogramEnumeration(kFeedReadResultHistogramName,
                                       FeedReadResult::kBadLogo);
 
         continue;
       }
 
-      for (auto& logo : logos.logo()) {
-        media_session::MediaImage image;
-        image.src = GURL(logo.url());
-
-        if (logo.width() > 0 && logo.height() > 0)
-          image.sizes.push_back(gfx::Size(logo.width(), logo.height()));
-
-        if (image.src.is_valid())
-          feed->logos.push_back(image);
-
-        if (feed->logos.size() >= kMaxLogoCount)
-          break;
-      }
+      feed->logos = media_feeds::ProtoToMediaImages(image_set, kMaxLogoCount);
     }
 
     base::UmaHistogramEnumeration(kFeedReadResultHistogramName,
@@ -284,22 +260,15 @@ bool MediaHistoryFeedsTable::UpdateFeedFromFetch(
   statement.BindInt64(6, item_content_types);
 
   if (!logos.empty()) {
-    media_feeds::Logos proto_logos;
-
-    for (auto& logo : logos) {
-      FillImage(proto_logos.add_logo(), logo);
-
-      if (proto_logos.logo().size() >= kMaxLogoCount)
-        break;
-    }
-
-    BindProto(statement, 7, proto_logos);
+    BindProto(statement, 7,
+              media_feeds::MediaImagesToProto(logos, kMaxLogoCount));
   } else {
     statement.BindNull(7);
   }
 
   statement.BindString(8, display_name);
   statement.BindInt64(9, feed_id);
+
   return statement.Run() && DB()->GetLastChangeCount() == 1;
 }
 

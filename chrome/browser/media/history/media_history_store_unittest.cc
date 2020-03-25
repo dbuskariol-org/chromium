@@ -654,6 +654,20 @@ class MediaHistoryStoreFeedsTest : public MediaHistoryStoreUnitTest {
       item->play_next_candidate->action->url = GURL("https://www.example.com");
       item->play_next_candidate->identifiers.push_back(CreateIdentifier(
           media_feeds::mojom::Identifier::Type::kTMSId, "TEST4"));
+
+      {
+        media_session::MediaImage image;
+        image.src = GURL("https://www.example.org/image1.png");
+        item->images.push_back(image);
+      }
+
+      {
+        media_session::MediaImage image;
+        image.src = GURL("https://www.example.org/image2.png");
+        image.sizes.push_back(gfx::Size(10, 10));
+        item->images.push_back(image);
+      }
+
       items.push_back(std::move(item));
     }
 
@@ -1281,6 +1295,78 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_CheckLogoMax) {
 
     // The OTR service should have the same data.
     EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+  }
+}
+
+TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_CheckImageMax) {
+  service()->DiscoverMediaFeed(GURL("https://www.google.com/feed"));
+  WaitForDB();
+
+  // If we are read only we should use -1 as a placeholder feed id because the
+  // feed will not have been stored. This is so we can run the rest of the test
+  // to ensure a no-op.
+  const int feed_id = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
+
+  auto item = media_feeds::mojom::MediaFeedItem::New();
+  item->name = base::ASCIIToUTF16("The Movie");
+  item->type = media_feeds::mojom::MediaFeedItemType::kMovie;
+
+  {
+    media_session::MediaImage image;
+    image.src = GURL("https://www.example.org/image1.png");
+    item->images.push_back(image);
+  }
+
+  {
+    media_session::MediaImage image;
+    image.src = GURL("https://www.example.org/image2.png");
+    item->images.push_back(image);
+  }
+
+  {
+    media_session::MediaImage image;
+    image.src = GURL("https://www.example.org/image3.png");
+    item->images.push_back(image);
+  }
+
+  {
+    media_session::MediaImage image;
+    image.src = GURL("https://www.example.org/image4.png");
+    item->images.push_back(image);
+  }
+
+  {
+    media_session::MediaImage image;
+    image.src = GURL("https://www.example.org/image5.png");
+    item->images.push_back(image);
+  }
+
+  {
+    media_session::MediaImage image;
+    image.src = GURL("https://www.example.org/image6.png");
+    item->images.push_back(image);
+  }
+
+  std::vector<media_feeds::mojom::MediaFeedItemPtr> items;
+  items.push_back(std::move(item));
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id, std::move(items), media_feeds::mojom::FetchResult::kSuccess,
+      base::Time::Now(), GetExpectedLogos(), kExpectedDisplayName);
+  WaitForDB();
+
+  {
+    // The item should have at most 5 images.
+    auto items = GetItemsForMediaFeedSync(service(), feed_id);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(items.empty());
+    } else {
+      EXPECT_EQ(5u, items[0]->images.size());
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
   }
 }
 
