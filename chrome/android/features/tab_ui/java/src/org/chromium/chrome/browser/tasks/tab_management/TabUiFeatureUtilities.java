@@ -64,7 +64,7 @@ public class TabUiFeatureUtilities {
     public static final String MIN_SDK_PARAM = "zooming-min-sdk-version";
     public static final IntCachedFieldTrialParameter ZOOMING_MIN_SDK =
             new IntCachedFieldTrialParameter(
-                    ChromeFeatureList.TAB_TO_GTS_ANIMATION, MIN_SDK_PARAM, Build.VERSION_CODES.O);
+                    ChromeFeatureList.TAB_TO_GTS_ANIMATION, MIN_SDK_PARAM, Build.VERSION_CODES.M);
     // Field trial parameter for the minimum physical memory size to enable zooming animation.
     public static final String MIN_MEMORY_MB_PARAM = "zooming-min-memory-mb";
     public static final IntCachedFieldTrialParameter ZOOMING_MIN_MEMORY =
