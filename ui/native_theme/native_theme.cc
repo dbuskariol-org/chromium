@@ -116,6 +116,8 @@ NativeThemeColorIdToColorIdMap() {
            kColorTextfieldDisabledBackground},
           {NTCID::kColorId_TextfieldReadOnlyColor,
            kColorTextfieldDisabledForeground},
+          {NTCID::kColorId_TextfieldPlaceholderColor,
+           kColorTextfieldPlaceholderForeground},
           {NTCID::kColorId_TextfieldDefaultColor, kColorTextfieldForeground},
           {NTCID::kColorId_TextfieldSelectionBackgroundFocused,
            kColorTextfieldSelectionBackground},
