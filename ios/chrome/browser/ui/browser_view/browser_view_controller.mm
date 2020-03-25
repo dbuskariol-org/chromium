@@ -2195,8 +2195,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
 
   _sadTabCoordinator = [[SadTabCoordinator alloc]
       initWithBaseViewController:self.browserContainerViewController
-                    browserState:self.browserState];
-  _sadTabCoordinator.dispatcher = self.dispatcher;
+                         browser:self.browser];
   _sadTabCoordinator.overscrollDelegate = self;
 
   // If there are any existing SadTabHelpers in
