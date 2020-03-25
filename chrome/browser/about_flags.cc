@@ -1987,6 +1987,10 @@ const FeatureEntry kFeatureEntries[] = {
      SINGLE_VALUE_TYPE(switches::kEnableUseHDRTransferFunction)},
 #endif  // OS_CHROMEOS
 #if defined(OS_CHROMEOS)
+    {"ash-limit-alt-tab-to-active-desk",
+     flag_descriptions::kLimitAltTabToActiveDeskName,
+     flag_descriptions::kLimitAltTabToActiveDeskDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(ash::features::kLimitAltTabToActiveDesk)},
     {"ash-enable-unified-desktop",
      flag_descriptions::kAshEnableUnifiedDesktopName,
      flag_descriptions::kAshEnableUnifiedDesktopDescription, kOsCrOS,
