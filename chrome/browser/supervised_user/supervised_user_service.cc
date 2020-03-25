@@ -64,7 +64,6 @@
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
-#include "base/metrics/histogram_functions.h"
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/extension_util.h"
 #include "extensions/browser/extension_prefs.h"
@@ -87,43 +86,6 @@ const char kBlacklistURL[] =
     "https://www.gstatic.com/chrome/supervised_user/blacklist-20141001-1k.bin";
 // The filename under which we'll store the blacklist (in the user data dir).
 const char kBlacklistFilename[] = "su-blacklist.bin";
-
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-// Temporary allowlist to enable supervised users to install Google-approved
-// extensions during the COVID-19 crisis.
-// TODO(crbug/1063104): Remove this allowlist after the crisis stabilizes or
-// we launch the parent permissions dialog, whichever comes sooner.
-constexpr char const* kAllowlistExtensionIds[] = {
-    "hmbjbjdpkobdjplfobhljndfdfdipjhg",  // Zoom.
-    "kbfnbcaeplbcioakkpcpgfkobkghlhen",  // Gammarly.
-    "inoeonmfapjbbkmdafoankkfajkcphgd",  // Read&Write.
-    "pflionopdgpjckjkafnlamfmonjhccdh",  // WeDo 2.0 LEGO.
-    "beocnjecphbmhnpbfafnfikebnpmjdmp",  // Time4Learning.
-    "jgfbgkjjlonelmpenhpfeeljjlcgnkpe",  // Classlink Oneclick.
-    "nopfnnpnopgmcnkjchnlpomggcdjfepo",  // Clever.
-    "mgijmajocgfcbeboacabfgobmjgjcoja",  // Google dictionary.
-    "imilikhegdfjlcbgakjieeecgdnomiel",  // Wikipedia.
-    "iabeihobmhlgpkcgjiloemdbofjbdcic",  // Bitly.
-    "jfiakckbklmccchjegnnojbalafebakb",  // Memorize.
-    "cdnapgfjopgaggbmfgbiinmmbdcglnam",  // OpenDyslexic Font.
-    "pjnefijmagpdjfhhkpljicbbpicelgko",  // Voice in Voice Typing.
-    "klejemegaoblahjdpcajmpcnjjmkmkkf",  // Noisli.
-    "dnkdpcbijfnmekbkchfjapfneigjomhh",  // Auto Highlight.
-    "lpcaoilgpobajbkiamaojipjddpkkida",  // Alphatext.
-    "lhpbckonakppajdgicbjdfokagjofnob",  // Visor.
-    "lijhjhlnfifgoabbihoobnfapogkcjgk",  // Scribble Toolbar.
-    "apboafhkiegglekeafbckfjldecefkhn",  // Lucidchart Diagrams.
-    // For testing ExtensionWebstorePrivateApiTestChild.InstallAllowlisted.
-    "iladmdjkfniedhfhcfoefgojhgaiaccc", "enfkhcelefdadlmkffamgdlgplcionje",
-
-    // We can add more here. You can find the extension id in the URL of the
-    // extension's detail page in Chrome Web Store.
-};
-
-constexpr char kAllowlistHistogramName[] =
-    "SupervisedUsers.ExtensionsAllowlist";
-
-#endif  // BUILDFLAG(ENABLE_EXTENSIONS)
 
 const char* const kCustodianInfoPrefs[] = {
     prefs::kSupervisedUserCustodianName,
@@ -802,24 +764,6 @@ SupervisedUserService::ExtensionState SupervisedUserService::GetExtensionState(
       extension.is_theme() || extension.from_bookmark() ||
       extension.is_shared_module() || was_installed_by_default) {
     return ExtensionState::ALLOWED;
-  }
-
-  if (base::FeatureList::IsEnabled(
-          supervised_users::kSupervisedUserAllowlistExtensionInstall)) {
-    if (base::Contains(kAllowlistExtensionIds, extension.id())) {
-      base::UmaHistogramEnumeration(kAllowlistHistogramName,
-                                    UmaExtensionStateAllowlist::kAllowlistHit);
-      // Provides parents a way to block extensions, even if they are
-      // allowlisted.
-      if (ShouldBlockExtension(extension.id())) {
-        return ExtensionState::BLOCKED;
-      }
-      return ExtensionState::ALLOWED;
-    }
-    LOG(WARNING) << "Allowlist miss: extension_id=" << extension.id()
-                 << " extension_name='" << extension.name() << "'";
-    base::UmaHistogramEnumeration(kAllowlistHistogramName,
-                                  UmaExtensionStateAllowlist::kAllowlistMiss);
   }
 
   // Feature flag for gating new behavior.
