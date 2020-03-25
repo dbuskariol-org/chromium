@@ -6699,6 +6699,3 @@ crbug.com/1061131 [ Mac ] editing/selection/replaced-boundaries-1.html [ Pass Fa
 # Sheriff 2020-03-16
 crbug.com/1061029 [ Win ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
 crbug.com/1061029 [ Mac ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
-
-### external/wpt/pointerevents/
-crbug.com/1063163 external/wpt/pointerevents/pointerevent_lostpointercapture_for_disconnected_node_in_shadow_dom.html [ Failure ]
