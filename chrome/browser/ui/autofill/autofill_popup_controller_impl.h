@@ -94,7 +94,7 @@ class AutofillPopupControllerImpl : public AutofillPopupController {
   const gfx::RectF& element_bounds() const override;
   void SetElementBounds(const gfx::RectF& bounds);
   bool IsRTL() const override;
-  const std::vector<Suggestion> GetSuggestions() override;
+  std::vector<Suggestion> GetSuggestions() const override;
 
   // AutofillPopupController implementation.
   void OnSuggestionsChanged() override;

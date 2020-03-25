@@ -307,7 +307,7 @@ bool AutofillPopupControllerImpl::IsRTL() const {
   return controller_common_.text_direction == base::i18n::RIGHT_TO_LEFT;
 }
 
-const std::vector<Suggestion> AutofillPopupControllerImpl::GetSuggestions() {
+std::vector<Suggestion> AutofillPopupControllerImpl::GetSuggestions() const {
   return suggestions_;
 }
 
