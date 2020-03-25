@@ -4400,8 +4400,8 @@ jumbo_static_library("browser") {
       "//chrome/app/chrome_crash_reporter_client.h",
     ]
     deps += [
-      "//components/crash/content/app",
       "//components/crash/content/browser",
+      "//components/crash/core/app",
       "//components/version_info:generate_version_info",
     ]
   }
