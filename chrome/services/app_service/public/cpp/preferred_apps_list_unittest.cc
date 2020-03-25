@@ -295,3 +295,110 @@ TEST_F(PreferredAppListTest, ReplacedAppPreference) {
   EXPECT_TRUE(entry != replaced_app_preferences->replaced_preference.end());
   EXPECT_EQ(1u, entry->second.size());
 }
+
+// Test that for a single preferred app with URL filter, we can delete
+// the preferred app id.
+TEST_F(PreferredAppListTest, DeletePreferredAppForURL) {
+  GURL filter_url = GURL("https://www.google.com/abc");
+  auto intent_filter = apps_util::CreateIntentFilterForUrlScope(filter_url);
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter);
+
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url));
+
+  // If try to delete with wrong ID, won't delete.
+  preferred_apps_.DeletePreferredApp(kAppId2, intent_filter);
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(filter_url));
+
+  preferred_apps_.DeletePreferredApp(kAppId1, intent_filter);
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(filter_url));
+}
+
+// Test for preferred app with filter that does not have all condition
+// types. E.g. delete preferred app with intent filter that only have scheme.
+TEST_F(PreferredAppListTest, DeleteForTopLayerFilters) {
+  auto intent_filter = apps_util::CreateSchemeOnlyFilter("tel");
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter);
+
+  GURL url_in_scope = GURL("tel://1234556/");
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(url_in_scope));
+
+  preferred_apps_.DeletePreferredApp(kAppId1, intent_filter);
+  EXPECT_EQ(base::nullopt,
+            preferred_apps_.FindPreferredAppForUrl(url_in_scope));
+}
+
+// Test that we can properly delete for filters that has multiple
+// condition values for a condition type.
+TEST_F(PreferredAppListTest, DeleteMultipleConditionValues) {
+  auto intent_filter =
+      apps_util::CreateIntentFilterForUrlScope(GURL("https://www.google.com/"));
+  intent_filter->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue("http",
+                                    apps::mojom::PatternMatchType::kNone));
+
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter);
+
+  GURL url_https = GURL("https://www.google.com/");
+  GURL url_http = GURL("http://www.google.com/");
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(url_https));
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(url_http));
+
+  preferred_apps_.DeletePreferredApp(kAppId1, intent_filter);
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url_https));
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url_http));
+}
+
+// Test for more than one pattern available, we can delete the filter.
+TEST_F(PreferredAppListTest, DeleteDifferentPatterns) {
+  auto intent_filter_literal =
+      CreatePatternFilter("/bc", apps::mojom::PatternMatchType::kLiteral);
+  auto intent_filter_prefix =
+      CreatePatternFilter("/a", apps::mojom::PatternMatchType::kPrefix);
+  auto intent_filter_glob =
+      CreatePatternFilter("/c.*d", apps::mojom::PatternMatchType::kGlob);
+
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter_literal);
+  preferred_apps_.AddPreferredApp(kAppId2, intent_filter_prefix);
+  preferred_apps_.AddPreferredApp(kAppId3, intent_filter_glob);
+
+  GURL url_1 = GURL("https://www.google.com/bc");
+  GURL url_2 = GURL("https://www.google.com/abbb");
+  GURL url_3 = GURL("https://www.google.com/ccccccd");
+
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(url_1));
+  EXPECT_EQ(kAppId2, preferred_apps_.FindPreferredAppForUrl(url_2));
+  EXPECT_EQ(kAppId3, preferred_apps_.FindPreferredAppForUrl(url_3));
+
+  preferred_apps_.DeletePreferredApp(kAppId1, intent_filter_literal);
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url_1));
+  EXPECT_EQ(kAppId2, preferred_apps_.FindPreferredAppForUrl(url_2));
+  EXPECT_EQ(kAppId3, preferred_apps_.FindPreferredAppForUrl(url_3));
+  preferred_apps_.DeletePreferredApp(kAppId2, intent_filter_prefix);
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url_2));
+  EXPECT_EQ(kAppId3, preferred_apps_.FindPreferredAppForUrl(url_3));
+  preferred_apps_.DeletePreferredApp(kAppId3, intent_filter_glob);
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url_3));
+}
+
+// Test that can delete properly for super set filters. E.g. the filter
+// to delete has more condition values compare with filter that was set.
+TEST_F(PreferredAppListTest, DeleteForNotCompletedFilter) {
+  auto intent_filter_set =
+      apps_util::CreateIntentFilterForUrlScope(GURL("https://www.google.com/"));
+
+  auto intent_filter_to_delete =
+      apps_util::CreateIntentFilterForUrlScope(GURL("http://www.google.com/"));
+  intent_filter_to_delete->conditions[0]->condition_values.push_back(
+      apps_util::MakeConditionValue("https",
+                                    apps::mojom::PatternMatchType::kNone));
+
+  preferred_apps_.AddPreferredApp(kAppId1, intent_filter_set);
+
+  GURL url = GURL("https://www.google.com/");
+
+  EXPECT_EQ(kAppId1, preferred_apps_.FindPreferredAppForUrl(url));
+
+  preferred_apps_.DeletePreferredApp(kAppId1, intent_filter_to_delete);
+
+  EXPECT_EQ(base::nullopt, preferred_apps_.FindPreferredAppForUrl(url));
+}
