@@ -6661,3 +6661,8 @@ crbug.com/1058888 [ Linux ] virtual/threaded-no-composited-antialiasing/animatio
 # Sheriff 2020-03-16
 crbug.com/1061029 [ Win ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
 crbug.com/1061029 [ Mac ] external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting.https.html [ Pass Failure ]
+
+# [virtual/...]external/wpt/web-animation test flakes
+crbug.com/1064065 virtual/threaded/external/wpt/css/css-animations/event-dispatch.tentative.html [ Pass Failure ]
+crbug.com/1064127 virtual/threaded/external/wpt/web-animations/timing-model/animations/update-playback-rate-slow.html [ Pass Failure ]
+crbug.com/1064463 external/wpt/web-animations/interfaces/Animation/style-change-events.html [ Pass Failure ]
