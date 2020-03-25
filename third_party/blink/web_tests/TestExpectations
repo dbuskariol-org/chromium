@@ -4264,9 +4264,6 @@ crbug.com/825798 external/wpt/html/semantics/embedded-content/media-elements/tra
 
 crbug.com/927477 external/wpt/import-maps/acquire-import-maps-flag/worker-request/* [ Skip ]
 
-# Disabled temporarliy until eager evaluation is fixed/re-baselined in DevTools.
-crbug.com/1043151 http/tests/devtools/console/viewport-testing/console-runtime-result-below-prompt.js [ Pass Failure ]
-
 # This test requires a special browser flag and seems not suitable for a wpt test, see bug.
 crbug.com/691944 external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
 crbug.com/691944 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/update-after-oneday.https.html [ Skip ]
