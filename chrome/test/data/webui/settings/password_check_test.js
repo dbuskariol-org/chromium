@@ -5,12 +5,14 @@
 /** @fileoverview Runs the Polymer Check Password tests. */
 
 // clang-format off
-// #import {PasswordManagerImpl, routes, Router} from 'chrome://settings/settings.js';
+// #import {isChromeOS} from 'chrome://resources/js/cr.m.js';
+// #import {OpenWindowProxyImpl, PasswordManagerProxy, PasswordManagerImpl, routes, Router} from 'chrome://settings/settings.js';
 // #import 'chrome://settings/lazy_load.js';
 // #import {makeCompromisedCredential,  makePasswordCheckStatus} from 'chrome://test/settings/passwords_and_autofill_fake_data.m.js';
 // #import {getSyncAllPrefs,simulateSyncStatus} from 'chrome://test/settings/sync_test_util.m.js';
 // #import {flush} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 // #import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
+// #import {TestOpenWindowProxy} from 'chrome://test/settings/test_open_window_proxy.m.js';
 // #import {TestPasswordManagerProxy} from 'chrome://test/settings/test_password_manager_proxy.m.js';
 // clang-format on
 
@@ -130,7 +132,7 @@ cr.define('settings_passwords_check', function() {
 
     // Test verifies that clicking 'Check again' make proper function call to
     // password manager
-    test('testCheckAgainButtonWhenIdleAfterFirstRun', function() {
+    test('testCheckAgainButtonWhenIdleAfterFirstRun', async function() {
       const data = passwordManager.data;
       data.checkStatus = autofill_test_util.makePasswordCheckStatus(
           /*state=*/ PasswordCheckState.IDLE,
@@ -138,52 +140,61 @@ cr.define('settings_passwords_check', function() {
           /*remaining=*/ undefined,
           /*lastCheck=*/ 'Just now');
       const section = createCheckPasswordSection();
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-            expectEquals(
-                section.i18n('checkPasswordsAgain'),
-                section.$.controlPasswordCheckButton.innerText);
-            section.$.controlPasswordCheckButton.click();
-          })
-          .then(() => passwordManager.whenCalled('startBulkPasswordCheck'));
+      await passwordManager.whenCalled('getPasswordCheckStatus');
+      assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
+      expectEquals(
+          section.i18n('checkPasswordsAgain'),
+          section.$.controlPasswordCheckButton.innerText);
+      section.$.controlPasswordCheckButton.click();
+      await passwordManager.whenCalled('startBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.START_CHECK_MANUALLY,
+          interaction);
     });
 
     // Test verifies that clicking 'Start Check' make proper function call to
     // password manager
-    test('testStartCheckButtonWhenIdle', function() {
+    test('testStartCheckButtonWhenIdle', async function() {
       assertEquals(
           PasswordCheckState.IDLE, passwordManager.data.checkStatus.state);
       const section = createCheckPasswordSection();
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-            expectEquals(
-                section.i18n('checkPasswords'),
-                section.$.controlPasswordCheckButton.innerText);
-            section.$.controlPasswordCheckButton.click();
-          })
-          .then(() => passwordManager.whenCalled('startBulkPasswordCheck'));
+      await passwordManager.whenCalled('getPasswordCheckStatus');
+      assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
+      expectEquals(
+          section.i18n('checkPasswords'),
+          section.$.controlPasswordCheckButton.innerText);
+      section.$.controlPasswordCheckButton.click();
+      await passwordManager.whenCalled('startBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.START_CHECK_MANUALLY,
+          interaction);
     });
 
     // Test verifies that clicking 'Check again' make proper function call to
     // password manager
-    test('testStopButtonWhenRunning', function() {
+    test('testStopButtonWhenRunning', async function() {
       passwordManager.data.checkStatus =
           autofill_test_util.makePasswordCheckStatus(
               /*state=*/ PasswordCheckState.RUNNING,
               /*checked=*/ 0,
               /*remaining=*/ 2);
       const section = createCheckPasswordSection();
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-            expectEquals(
-                section.i18n('checkPasswordsStop'),
-                section.$.controlPasswordCheckButton.innerText);
-            section.$.controlPasswordCheckButton.click();
-          })
-          .then(() => passwordManager.whenCalled('stopBulkPasswordCheck'));
+      await passwordManager.whenCalled('getPasswordCheckStatus');
+      assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
+      expectEquals(
+          section.i18n('checkPasswordsStop'),
+          section.$.controlPasswordCheckButton.innerText);
+      section.$.controlPasswordCheckButton.click();
+      await passwordManager.whenCalled('stopBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.STOP_CHECK,
+          interaction);
     });
 
     // Test verifies that sync users see only the link to account checkup and no
@@ -245,52 +256,55 @@ cr.define('settings_passwords_check', function() {
 
     // Test verifies that 'Try again' visible and working when users encounter a
     // generic error.
-    test('testShowRetryAfterGenericError', function() {
+    test('testShowRetryAfterGenericError', async function() {
       passwordManager.data.checkStatus =
           autofill_test_util.makePasswordCheckStatus(
               /*state=*/ PasswordCheckState.OTHER_ERROR);
       const section = createCheckPasswordSection();
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-            expectEquals(
-                section.i18n('checkPasswordsAgainAfterError'),
-                section.$.controlPasswordCheckButton.innerText);
-            section.$.controlPasswordCheckButton.click();
-          })
-          .then(() => passwordManager.whenCalled('startBulkPasswordCheck'));
+      await passwordManager.whenCalled('getPasswordCheckStatus');
+      assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
+      expectEquals(
+          section.i18n('checkPasswordsAgainAfterError'),
+          section.$.controlPasswordCheckButton.innerText);
+      section.$.controlPasswordCheckButton.click();
+      await passwordManager.whenCalled('startBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.START_CHECK_MANUALLY,
+          interaction);
     });
 
     // Test verifies that 'Try again' is hidden when users encounter a
     // not-signed-in error.
-    test('testHideRetryAfterSignOutErrorUntilSignedInAgain', function() {
+    test('testHideRetryAfterSignOutErrorUntilSignedInAgain', async function() {
       passwordManager.data.checkStatus =
           autofill_test_util.makePasswordCheckStatus(
               /*state=*/ PasswordCheckState.SIGNED_OUT);
       const section = createCheckPasswordSection();
       cr.webUIListenerCallback('stored-accounts-updated', []);
-      // <if expr="chromeos">
-      sync_test_util.simulateSyncStatus({signedIn: false});
-      // </if>
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            Polymer.dom.flush();
-            expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
-            cr.webUIListenerCallback(
-                'stored-accounts-updated', [{email: 'foo@bar.com'}]);
-            // <if expr="chromeos">
-            sync_test_util.simulateSyncStatus(
-                {signedIn: true, hasError: false});
-            // </if>
-          })
-          .then(() => {
-            assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-            expectEquals(
-                section.i18n('checkPasswordsAgainAfterError'),
-                section.$.controlPasswordCheckButton.innerText);
-            section.$.controlPasswordCheckButton.click();
-          })
-          .then(() => passwordManager.whenCalled('startBulkPasswordCheck'));
+      if (cr.isChromeOS) {
+        sync_test_util.simulateSyncStatus({signedIn: false});
+      }
+      await passwordManager.whenCalled('getPasswordCheckStatus');
+      Polymer.dom.flush();
+      expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
+      cr.webUIListenerCallback(
+          'stored-accounts-updated', [{email: 'foo@bar.com'}]);
+      if (cr.isChromeOS) {
+        sync_test_util.simulateSyncStatus({signedIn: true, hasError: false});
+      }
+      assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
+      expectEquals(
+          section.i18n('checkPasswordsAgainAfterError'),
+          section.$.controlPasswordCheckButton.innerText);
+      section.$.controlPasswordCheckButton.click();
+      await passwordManager.whenCalled('startBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.START_CHECK_MANUALLY,
+          interaction);
     });
 
     // Test verifies that 'Try again' is hidden when users encounter a
@@ -307,20 +321,23 @@ cr.define('settings_passwords_check', function() {
 
     // Test verifies that 'Try again' visible and working when users encounter a
     // connection error.
-    test('testShowRetryAfterNoConnectionError', function() {
+    test('testShowRetryAfterNoConnectionError', async function() {
       passwordManager.data.checkStatus =
           autofill_test_util.makePasswordCheckStatus(
               /*state=*/ PasswordCheckState.OFFLINE);
       const section = createCheckPasswordSection();
-      return passwordManager.whenCalled('getPasswordCheckStatus')
-          .then(() => {
-            assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
-            expectEquals(
-                section.i18n('checkPasswordsAgainAfterError'),
-                section.$.controlPasswordCheckButton.innerText);
-            section.$.controlPasswordCheckButton.click();
-          })
-          .then(() => passwordManager.whenCalled('startBulkPasswordCheck'));
+      await passwordManager.whenCalled('getPasswordCheckStatus');
+      assertTrue(isElementVisible(section.$.controlPasswordCheckButton));
+      expectEquals(
+          section.i18n('checkPasswordsAgainAfterError'),
+          section.$.controlPasswordCheckButton.innerText);
+      section.$.controlPasswordCheckButton.click();
+      await passwordManager.whenCalled('startBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.START_CHECK_MANUALLY,
+          interaction);
     });
 
     // Test verifies that if no compromised credentials found than list is not
@@ -382,6 +399,26 @@ cr.define('settings_passwords_check', function() {
       assertTrue(!!checkPasswordSection.$$('#changePasswordInApp'));
     });
 
+    // Verify that a click on "Change password" opens the expected URL and
+    // records a corresponding user action.
+    test('testChangePasswordOpensUrlAndRecordsAction', async function() {
+      const testOpenWindowProxy = new TestOpenWindowProxy();
+      settings.OpenWindowProxyImpl.instance_ = testOpenWindowProxy;
+
+      const password = autofill_test_util.makeCompromisedCredential(
+          'one.com', 'test4', 'LEAKED');
+      const passwordCheckListItem = createLeakedPasswordItem(password);
+      passwordCheckListItem.$$('#changePasswordButton').click();
+
+      const url = await testOpenWindowProxy.whenCalled('openURL');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals('http://one.com/', url);
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.CHANGE_PASSWORD,
+          interaction);
+    });
+
     // Verify that the More Actions menu opens when the button is clicked.
     test('testMoreActionsMenu', function() {
       const leakedPasswords = [
@@ -407,17 +444,22 @@ cr.define('settings_passwords_check', function() {
 
     // Test verifies that clicking remove button is calling proper
     // proxy function.
-    test('testRemovePasswordConfirmationDialog', function() {
+    test('testRemovePasswordConfirmationDialog', async function() {
       const entry = autofill_test_util.makeCompromisedCredential(
           'one.com', 'test4', 'LEAKED', 0);
       const removeDialog = createRemovePasswordDialog(entry);
       removeDialog.$.remove.click();
-      return passwordManager.whenCalled('removeCompromisedCredential')
-          .then(({id, username, formattedOrigin}) => {
-            assertEquals(0, id);
-            assertEquals('test4', username);
-            assertEquals('one.com', formattedOrigin);
-          });
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      const {id, username, formattedOrigin} =
+          await passwordManager.whenCalled('removeCompromisedCredential');
+
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.REMOVE_PASSWORD,
+          interaction);
+      assertEquals(0, id);
+      assertEquals('test4', username);
+      assertEquals('one.com', formattedOrigin);
     });
 
     // A changing status is immediately reflected in title, icon and banner.
@@ -1049,7 +1091,7 @@ cr.define('settings_passwords_check', function() {
           });
     });
 
-    test('testEditDialogChangePassword', function() {
+    test('testEditDialogChangePassword', async function() {
       const leakedPassword = autofill_test_util.makeCompromisedCredential(
           'google.com', 'jdoerrie', 'LEAKED');
       leakedPassword.password = 'mybirthday';
@@ -1059,10 +1101,14 @@ cr.define('settings_passwords_check', function() {
       editDialog.$.passwordInput.value = 'yadhtribym';
       editDialog.$.save.click();
 
-      return passwordManager.whenCalled('changeCompromisedCredential')
-          .then(({newPassword}) => {
-            assertEquals('yadhtribym', newPassword);
-          });
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      const {newPassword} =
+          await passwordManager.whenCalled('changeCompromisedCredential');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction.EDIT_PASSWORD,
+          interaction);
+      assertEquals('yadhtribym', newPassword);
     });
 
     test('testEditDialogCancel', function() {
@@ -1079,11 +1125,17 @@ cr.define('settings_passwords_check', function() {
           0, passwordManager.getCallCount('changeCompromisedCredential'));
     });
 
-    test('startEqualsTrueSearchParameterStartsCheck', function() {
+    test('startEqualsTrueSearchParameterStartsCheck', async function() {
       settings.Router.getInstance().navigateTo(
           settings.routes.CHECK_PASSWORDS, new URLSearchParams('start=true'));
       createCheckPasswordSection();
-      return passwordManager.whenCalled('startBulkPasswordCheck');
+      await passwordManager.whenCalled('startBulkPasswordCheck');
+      const interaction =
+          await passwordManager.whenCalled('recordPasswordCheckInteraction');
+      assertEquals(
+          PasswordManagerProxy.PasswordCheckInteraction
+              .START_CHECK_AUTOMATICALLY,
+          interaction);
     });
   });
   // #cr_define_end

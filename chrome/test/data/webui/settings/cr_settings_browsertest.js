@@ -403,6 +403,7 @@ CrSettingsPasswordsCheckTest.prototype = {
     '../test_browser_proxy.js',
     'passwords_and_autofill_fake_data.js',
     'sync_test_util.js',
+    'test_open_window_proxy.js',
     'test_password_manager_proxy.js',
     'password_check_test.js',
   ]),

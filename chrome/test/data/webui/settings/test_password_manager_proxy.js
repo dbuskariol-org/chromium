@@ -25,6 +25,7 @@
       'getPlainttextCompromisedPassword',
       'changeCompromisedCredential',
       'removeCompromisedCredential',
+      'recordPasswordCheckInteraction',
     ]);
 
     this.actual_ = new autofill_test_util.PasswordManagerExpectations();
@@ -216,5 +217,10 @@
   /** @override */
   removeCompromisedCredential(compromisedCredential) {
     this.methodCalled('removeCompromisedCredential', compromisedCredential);
+  }
+
+  /** override */
+  recordPasswordCheckInteraction(interaction) {
+    this.methodCalled('recordPasswordCheckInteraction', interaction);
   }
 }
