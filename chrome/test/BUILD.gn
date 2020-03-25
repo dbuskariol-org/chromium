@@ -446,17 +446,10 @@ group("telemetry_gpu_integration_test") {
     "//media/test/data/bear-1280x720.mp4",
   ]
 
-  # For pixel_test and maps_pixel_test. Because this links to a CIPD
-  # dependency, which is a symlink on Unix platforms, refer to the
-  # actual executable rather than the whole directory; copying the
-  # whole directory doesn't work, at least with "mb.py zip".
-  if (is_win) {
-    data += [ "//tools/skia_goldctl/win/goldctl.exe" ]
-  } else if (is_mac) {
-    data += [ "//tools/skia_goldctl/mac/goldctl" ]
-  } else {
-    data += [ "//tools/skia_goldctl/linux/goldctl" ]
-  }
+  data_deps = [
+    # For anything using Skia Gold (pixel, maps).
+    "//ui/base:goldctl",
+  ]
 }
 
 if (is_win) {
@@ -2049,18 +2042,6 @@ if (!is_android) {
     if (is_chrome_branded) {
       data +=
           [ "//chrome/browser/internal/resources/signin/test_accounts.json" ]
-    }
-
-    # For pixel tests. Because this links to a CIPD
-    # dependency, which is a symlink on Unix platforms, refer to the
-    # actual executable rather than the whole directory; copying the
-    # whole directory doesn't work, at least with "mb.py zip".
-    if (is_win) {
-      data += [ "//tools/skia_goldctl/win/goldctl.exe" ]
-    } else if (is_mac) {
-      data += [ "//tools/skia_goldctl/mac/goldctl" ]
-    } else {
-      data += [ "//tools/skia_goldctl/linux/goldctl" ]
     }
 
     if (is_chromeos) {
@@ -6736,12 +6717,8 @@ if (is_win) {
     deps = [
       ":browser_tests_runner",
       ":test_support",
+      "//ui/base:pixel_diff_test_support",
     ]
-    if (is_win) {
-      data = [ "//tools/skia_goldctl/goldctl.exe" ]
-    } else {
-      data = [ "//tools/skia_goldctl/goldctl" ]
-    }
     if (!is_mac) {
       data_deps = [ "//chrome:packed_resources" ]
     }
