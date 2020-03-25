@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 
 #import "ios/chrome/browser/ui/overscroll_actions/overscroll_actions_view.h"
-#import "ios/chrome/browser/ui/util/relaxed_bounds_constraints_hittest.h"
 #import "ios/web/public/ui/crw_web_view_scroll_view_proxy.h"
 
 class ChromeBrowserState;
@@ -50,7 +49,7 @@ extern NSString* const kOverscrollActionsDidEnd;
 // revealing the actions.
 - (UIView*)toolbarSnapshotView;
 // The header view over which the overscroll action view will be added.
-- (UIView<RelaxedBoundsConstraintsHitTestSupport>*)headerView;
+- (UIView*)headerView;
 // Called to retrieve the top inset added to the scrollview for the header.
 - (CGFloat)overscrollActionsControllerHeaderInset:
     (OverscrollActionsController*)controller;

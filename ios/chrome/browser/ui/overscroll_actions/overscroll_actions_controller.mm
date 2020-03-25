@@ -230,8 +230,6 @@ NSString* const kOverscrollActionsDidEnd = @"OverscrollActionsDidStop";
 - (void)setup;
 // Resets scroll view's top content inset to |self.initialContentInset|.
 - (void)resetScrollViewTopContentInset;
-// Access the headerView from the delegate.
-- (UIView<RelaxedBoundsConstraintsHitTestSupport>*)headerView;
 // Locking/unlocking methods used to disable/enable the overscroll actions
 // with a reference count.
 - (void)incrementOverscrollActionLockForNotification:
@@ -661,10 +659,6 @@ NSString* const kOverscrollActionsDidEnd = @"OverscrollActionsDidStop";
   [self setScrollViewContentInset:insets];
 }
 
-- (UIView<RelaxedBoundsConstraintsHitTestSupport>*)headerView {
-  return [self.delegate headerView];
-}
-
 - (void)incrementOverscrollActionLockForNotification:(NSNotification*)notif {
   if (![_lockIncrementNotifications containsObject:notif.name]) {
     [_lockIncrementNotifications addObject:notif.name];
@@ -759,11 +753,6 @@ NSString* const kOverscrollActionsDidEnd = @"OverscrollActionsDidStop";
   [UIView beginAnimations:@"backgroundColor" context:NULL];
   switch (self.overscrollState) {
     case OverscrollState::NO_PULL_STARTED: {
-      UIView<RelaxedBoundsConstraintsHitTestSupport>* headerView =
-          [self headerView];
-      if ([headerView
-              respondsToSelector:@selector(setHitTestBoundsContraintRelaxed:)])
-        [headerView setHitTestBoundsContraintRelaxed:NO];
       [self.overscrollActionView removeFromSuperview];
       SetViewFrameHeight(
           self.overscrollActionView,
@@ -782,6 +771,8 @@ NSString* const kOverscrollActionsDidEnd = @"OverscrollActionsDidStop";
     } break;
     case OverscrollState::STARTED_PULLING: {
       if (!self.overscrollActionView.superview && self.scrollViewDragged) {
+        UIView* headerView = [self.delegate headerView];
+        DCHECK(headerView);
         if (previousOverscrollState == OverscrollState::NO_PULL_STARTED) {
           UIView* view = [self.delegate toolbarSnapshotView];
           [self.overscrollActionView addSnapshotView:view];
@@ -795,14 +786,7 @@ NSString* const kOverscrollActionsDidEnd = @"OverscrollActionsDidStop";
         self.overscrollActionView.backgroundView.alpha = 1;
         [self.overscrollActionView updateWithVerticalOffset:0];
         [self.overscrollActionView updateWithHorizontalOffset:0];
-        self.overscrollActionView.frame = [self headerView].bounds;
-        DCHECK([self headerView]);
-        UIView<RelaxedBoundsConstraintsHitTestSupport>* headerView =
-            [self headerView];
-        if ([headerView
-                respondsToSelector:@selector(
-                                       setHitTestBoundsContraintRelaxed:)])
-          [headerView setHitTestBoundsContraintRelaxed:YES];
+        self.overscrollActionView.frame = headerView.bounds;
         [headerView addSubview:self.overscrollActionView];
         [CATransaction commit];
       }
