@@ -6096,14 +6096,6 @@ crbug.com/1024976 virtual/audio-service/media/video-no-audio.html [ Pass Failure
 # Sheriff 2019-10-31
 crbug.com/1020036 [ Debug ] external/wpt/lifecycle/freeze.html [ Failure Pass ]
 
-# Temporarily disabled for landing productregistry removal in devtools
-crbug.com/1011466 http/tests/devtools/console/console-format-classes.js [ Pass Failure ]
-crbug.com/1011466 http/tests/devtools/modules-load-initial.js [ Pass Failure ]
-crbug.com/1011466 http/tests/devtools/tracing/timeline-misc/timeline-aggregated-details.js [ Pass Failure ]
-crbug.com/1011466 http/tests/devtools/tracing/timeline-network/timeline-network-resource-details.js [ Pass Failure ]
-crbug.com/1011466 virtual/threaded/http/tests/devtools/tracing/timeline-misc/timeline-aggregated-details.js [ Pass Failure ]
-crbug.com/1011466 virtual/threaded/http/tests/devtools/tracing/timeline-network/timeline-network-resource-details.js [ Pass Failure ]
-
 # Tests that json modules load correctly within the context of service workers
 crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/json-module/json-module-service-worker-test.https.tentative.html [ Failure ]
 crbug.com/967018 virtual/streaming-preload/external/wpt/html/semantics/scripting-1/the-script-element/json-module/json-module-service-worker-test.https.tentative.html [ Failure ]
