@@ -3648,7 +3648,6 @@
                         "NtpRealboxMatchOmniboxTheme",
                         "OmniboxDisplayTitleForCurrentUrl",
                         "OmniboxDocumentProvider",
-                        "OmniboxLocalEntitySuggestions",
                         "OmniboxMaxURLMatches",
                         "OmniboxOnFocusSuggestions",
                         "OmniboxRemoveSuggestionsFromClipboard",
@@ -3688,6 +3687,25 @@
                 {
                     "name": "iOSExperiments",
                     "enable_features": []
+                }
+            ]
+        }
+    ],
+    "OmniboxLocalEntities": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows",
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "DesktopAndAndroidExperiments",
+                    "enable_features": [
+                        "OmniboxLocalEntitySuggestions"
+                    ]
                 }
             ]
         }
