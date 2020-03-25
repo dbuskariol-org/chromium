@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/xr_session_request_consent_manager_impl.h"
+#include "chrome/browser/vr/consent/xr_session_request_consent_manager_impl.h"
 
 #include <memory>
 #include <utility>
@@ -22,8 +22,9 @@ XRSessionRequestConsentManagerImpl::~XRSessionRequestConsentManagerImpl() =
 TabModalConfirmDialog*
 XRSessionRequestConsentManagerImpl::ShowDialogAndGetConsent(
     content::WebContents* web_contents,
-    XrConsentPromptLevel consent_level,
-    base::OnceCallback<void(XrConsentPromptLevel, bool)> response_callback) {
+    content::XrConsentPromptLevel consent_level,
+    base::OnceCallback<void(content::XrConsentPromptLevel, bool)>
+        response_callback) {
   auto delegate = std::make_unique<XrSessionRequestConsentDialogDelegate>(
       web_contents, consent_level, std::move(response_callback));
   delegate->OnShowDialog();

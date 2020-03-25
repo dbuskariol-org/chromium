@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/xr_session_request_consent_manager.h"
+#include "chrome/browser/vr/consent/xr_session_request_consent_manager.h"
 
 namespace vr {
 namespace {

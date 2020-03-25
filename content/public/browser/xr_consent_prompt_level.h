@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_SERVICE_XR_CONSENT_PROMPT_LEVEL_H_
-#define CHROME_BROWSER_VR_SERVICE_XR_CONSENT_PROMPT_LEVEL_H_
-namespace vr {
+#ifndef CONTENT_PUBLIC_BROWSER_XR_CONSENT_PROMPT_LEVEL_H_
+#define CONTENT_PUBLIC_BROWSER_XR_CONSENT_PROMPT_LEVEL_H_
+namespace content {
 
 // Consent levels are incremental, granting consent for a higher level
 // automatically grants consent for all levels below it.  For that reason,
 // these levels should not be used in histograms so that new levels can be
 // added in between the existing levels.
-// GENERATED_JAVA_ENUM_PACKAGE: org.chromium.chrome.browser.vr
+// GENERATED_JAVA_ENUM_PACKAGE: org.chromium.content_public.browser
 enum class XrConsentPromptLevel : int {
   // No consent is needed, typically this is due to the fact that no sensitive
   // information is exposed (all sensitive information is emulated, or not
@@ -34,5 +34,5 @@ enum class XrConsentPromptLevel : int {
   kVRFloorPlan = 3
 };
 
-}  // namespace vr
-#endif  // CHROME_BROWSER_VR_SERVICE_XR_CONSENT_PROMPT_LEVEL_H_
+}  // namespace content
+#endif  // CONTENT_PUBLIC_BROWSER_XR_CONSENT_PROMPT_LEVEL_H_
