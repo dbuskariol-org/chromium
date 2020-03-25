@@ -26,6 +26,8 @@ source_set("internal") {
     "store.h",
     "tile_info_fetcher.cc",
     "tile_info_fetcher.h",
+    "tile_service_impl.cc",
+    "tile_service_impl.h",
   ]
 
   deps = [

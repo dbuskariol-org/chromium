@@ -29,7 +29,7 @@ source_set("public") {
     "tile_service.h",
   ]
 
-  deps = []
+  deps = [ "//ui/gfx" ]
 
   public_deps = [
     "//base",
