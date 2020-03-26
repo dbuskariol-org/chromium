@@ -9,6 +9,7 @@
 #include "base/callback_helpers.h"
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
+#include "base/strings/string_number_conversions.h"
 #include "chrome/browser/android/autofill_assistant/generic_ui_controller_android.h"
 #include "chrome/browser/android/autofill_assistant/generic_ui_events_android.h"
 #include "chrome/browser/android/autofill_assistant/generic_ui_interactions_android.h"
@@ -46,7 +47,7 @@ base::Optional<EventHandler::EventKey> CreateEventKeyFromProto(
     case EventProto::kOnViewClicked: {
       auto jview = views->find(proto.on_view_clicked().view_identifier());
       if (jview == views->end()) {
-        VLOG(1) << "Invalid click event, no view with id='"
+        VLOG(1) << "Invalid OnViewClickedEventProto: no view with id='"
                 << proto.on_view_clicked().view_identifier() << "' found";
         return base::nullopt;
       }
@@ -55,11 +56,18 @@ base::Optional<EventHandler::EventKey> CreateEventKeyFromProto(
       return base::Optional<EventHandler::EventKey>(
           {proto.kind_case(), proto.on_view_clicked().view_identifier()});
     }
-    case EventProto::kOnUserActionCalled: {
+    case EventProto::kOnUserActionCalled:
       return base::Optional<EventHandler::EventKey>(
           {proto.kind_case(),
            proto.on_user_action_called().user_action_identifier()});
-    }
+    case EventProto::kOnTextLinkClicked:
+      if (!proto.on_text_link_clicked().has_text_link()) {
+        VLOG(1) << "Invalid OnTextLinkClickedProto: no text_link specified";
+        return base::nullopt;
+      }
+      return base::Optional<EventHandler::EventKey>(
+          {proto.kind_case(),
+           base::NumberToString(proto.on_text_link_clicked().text_link())});
     case EventProto::KIND_NOT_SET:
       VLOG(1) << "Error creating event: kind not set";
       return base::nullopt;
@@ -156,8 +164,8 @@ CreateInteractionCallbackFromProto(
       }
       return base::Optional<InteractionHandlerAndroid::InteractionCallback>(
           base::BindRepeating(&android_interactions::SetViewText,
-                              user_model->GetWeakPtr(), proto.set_text(),
-                              views));
+                              user_model->GetWeakPtr(), proto.set_text(), views,
+                              jdelegate));
     case CallbackProto::kToggleUserAction:
       if (proto.toggle_user_action().user_actions_model_identifier().empty()) {
         VLOG(1) << "Error creating ToggleUserAction interaction: "

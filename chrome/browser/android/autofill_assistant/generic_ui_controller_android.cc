@@ -93,6 +93,7 @@ base::android::ScopedJavaLocalRef<jobject> CreateJavaViewContainer(
 base::android::ScopedJavaLocalRef<jobject> CreateJavaTextView(
     JNIEnv* env,
     const base::android::ScopedJavaLocalRef<jobject>& jcontext,
+    const base::android::ScopedJavaGlobalRef<jobject>& jdelegate,
     const base::android::ScopedJavaLocalRef<jstring>& jidentifier,
     const TextViewProto& proto) {
   base::android::ScopedJavaLocalRef<jstring> jtext_appearance = nullptr;
@@ -101,7 +102,7 @@ base::android::ScopedJavaLocalRef<jobject> CreateJavaTextView(
         base::android::ConvertUTF8ToJavaString(env, proto.text_appearance());
   }
   return Java_AssistantViewFactory_createTextView(
-      env, jcontext, jidentifier,
+      env, jcontext, jdelegate, jidentifier,
       base::android::ConvertUTF8ToJavaString(env, proto.text()),
       jtext_appearance);
 }
@@ -129,7 +130,8 @@ base::android::ScopedJavaGlobalRef<jobject> CreateJavaView(
                                       proto.view_container());
       break;
     case ViewProto::kTextView:
-      jview = CreateJavaTextView(env, jcontext, jidentifier, proto.text_view());
+      jview = CreateJavaTextView(env, jcontext, jdelegate, jidentifier,
+                                 proto.text_view());
       break;
     case ViewProto::kDividerView:
       jview = Java_AssistantViewFactory_createDividerView(env, jcontext,
