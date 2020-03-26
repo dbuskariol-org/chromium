@@ -6690,3 +6690,6 @@ crbug.com/1061029 [ Mac ] external/wpt/html/cross-origin-embedder-policy/cache-s
 crbug.com/1064065 virtual/threaded/external/wpt/css/css-animations/event-dispatch.tentative.html [ Pass Failure ]
 crbug.com/1064127 virtual/threaded/external/wpt/web-animations/timing-model/animations/update-playback-rate-slow.html [ Pass Failure ]
 crbug.com/1064463 external/wpt/web-animations/interfaces/Animation/style-change-events.html [ Pass Failure ]
+
+# Sheriff 2020-03-26
+crbug.com/1064839 fast/hidpi/image-srcset-svg-canvas-2x.html [ Pass Failure ]
