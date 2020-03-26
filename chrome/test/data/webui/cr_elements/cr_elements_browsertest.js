@@ -94,6 +94,7 @@ CrElementsToolbarSearchFieldTest.prototype = {
 
   /** @override */
   extraLibraries: CrElementsBrowserTest.prototype.extraLibraries.concat([
+    '../test_util.js',
     'cr_toolbar_search_field_tests.js',
   ]),
 };
