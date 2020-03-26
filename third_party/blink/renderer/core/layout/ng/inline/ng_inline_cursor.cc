@@ -1076,12 +1076,14 @@ void NGInlineCursor::MoveToLastChild() {
 }
 
 void NGInlineCursor::MoveToLastForSameLayoutObject() {
-  NGInlineCursor last;
-  while (IsNotNull()) {
-    last = *this;
+  if (!Current())
+    return;
+  NGInlineCursorPosition last;
+  do {
+    last = Current();
     MoveToNextForSameLayoutObject();
-  }
-  *this = last;
+  } while (Current());
+  MoveTo(last);
 }
 
 void NGInlineCursor::MoveToLastLogicalLeaf() {
