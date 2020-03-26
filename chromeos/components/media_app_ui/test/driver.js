@@ -56,7 +56,7 @@ class FakeWritableFileStream {
   }
   /** @override */
   async seek(offset) {
-    throw new Error('seek() not implemented.')
+    throw new Error('seek() not implemented.');
   }
 }
 
@@ -86,7 +86,7 @@ class FakeFileSystemFileHandle extends FakeFileSystemHandle {
   }
   /** @override */
   createWriter(options) {
-    throw new Error('createWriter() deprecated.')
+    throw new Error('createWriter() deprecated.');
   }
   /** @override */
   async createWritable(options) {

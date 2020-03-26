@@ -15,6 +15,8 @@ const GUEST_ORIGIN = 'chrome://media-app-guest';
 
 let driver = null;
 
+// js2gtest fixtures require var here (https://crbug.com/1033337).
+// eslint-disable-next-line no-var
 var MediaAppUIBrowserTest = class extends testing.Test {
   /** @override */
   get browsePreload() {
@@ -108,7 +110,7 @@ TEST_F('MediaAppUIBrowserTest', 'LoadFile', async () => {
 // Tests that chrome://media-app can successfully send a request to open the
 // feedback dialog and recieve a response.
 TEST_F('MediaAppUIBrowserTest', 'CanOpenFeedbackDialog', async () => {
-  const result = await media_app.handler.openFeedbackDialog();
+  const result = await mediaAppPageHandler.openFeedbackDialog();
 
   assertEquals(result.errorMessage, '');
   testDone();

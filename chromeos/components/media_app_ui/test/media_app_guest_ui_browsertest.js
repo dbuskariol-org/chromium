@@ -8,6 +8,8 @@
 
 GEN('#include "chromeos/constants/chromeos_features.h"');
 
+// js2gtest fixtures require var here (https://crbug.com/1033337).
+// eslint-disable-next-line no-var
 var MediaAppGuestUIBrowserTest = class extends testing.Test {
   /** @override */
   get browsePreload() {

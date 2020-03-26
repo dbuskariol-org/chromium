@@ -73,7 +73,7 @@ function installTestHandlers() {
   loadFiles = async (/** !ReceivedFileList */ fileList) => {
     lastReceivedFileList = fileList;
     realLoadFiles(fileList);
-  }
+  };
 }
 
 // Ensure content and all scripts have loaded before installing test handlers.

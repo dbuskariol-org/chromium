@@ -43,7 +43,7 @@ let currentDirectoryHandle = null;
 const guestMessagePipe = new MessagePipe('chrome://media-app-guest');
 
 guestMessagePipe.registerHandler(Message.OPEN_FEEDBACK_DIALOG, () => {
-  let response = media_app.handler.openFeedbackDialog();
+  let response = mediaAppPageHandler.openFeedbackDialog();
   if (response === null) {
     response = {errorMessage: 'Null response received'};
   }
@@ -148,7 +148,7 @@ async function setCurrentDirectory(directory, focusFile) {
       currentFiles.push({token: -1, file: asFile.file, handle: asFile.handle});
     }
   }
-  entryIndex = currentFiles.findIndex(i => i.file.name == focusFile.name);
+  entryIndex = currentFiles.findIndex(i => i.file.name === focusFile.name);
   currentDirectoryHandle = directory;
   sendFilesToGuest();
 }
@@ -183,9 +183,9 @@ async function advance(direction) {
   sendFilesToGuest();
 }
 
-document.getElementById('prev-container')
+document.querySelector('#prev-container')
     .addEventListener('click', () => advance(-1));
-document.getElementById('next-container')
+document.querySelector('#next-container')
     .addEventListener('click', () => advance(1));
 
 // Wait for 'load' (and not DOMContentLoaded) to ensure the subframe has been
