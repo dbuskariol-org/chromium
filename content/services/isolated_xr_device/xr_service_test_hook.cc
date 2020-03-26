@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/services/isolated_xr_device/xr_service_test_hook.h"
+#include "content/services/isolated_xr_device/xr_service_test_hook.h"
 
 #include "base/bind.h"
 #include "base/process/process.h"
-#include "chrome/services/isolated_xr_device/xr_test_hook_wrapper.h"
+#include "content/services/isolated_xr_device/xr_test_hook_wrapper.h"
 #include "device/vr/buildflags/buildflags.h"
 
 #if BUILDFLAG(ENABLE_OPENVR)

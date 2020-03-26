@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_SERVICES_ISOLATED_XR_DEVICE_XR_DEVICE_SERVICE_H_
-#define CHROME_SERVICES_ISOLATED_XR_DEVICE_XR_DEVICE_SERVICE_H_
+#ifndef CONTENT_SERVICES_ISOLATED_XR_DEVICE_XR_DEVICE_SERVICE_H_
+#define CONTENT_SERVICES_ISOLATED_XR_DEVICE_XR_DEVICE_SERVICE_H_
 
 #include "device/vr/public/mojom/browser_test_interfaces.mojom.h"
 #include "device/vr/public/mojom/isolated_xr_service.mojom.h"
@@ -33,4 +33,4 @@ class XrDeviceService : public mojom::XRDeviceService {
 
 }  // namespace device
 
-#endif  // CHROME_SERVICES_ISOLATED_XR_DEVICE_XR_DEVICE_SERVICE_H_
+#endif  // CONTENT_SERVICES_ISOLATED_XR_DEVICE_XR_DEVICE_SERVICE_H_

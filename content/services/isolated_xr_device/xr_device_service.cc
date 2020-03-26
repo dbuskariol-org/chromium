@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/services/isolated_xr_device/xr_device_service.h"
+#include "content/services/isolated_xr_device/xr_device_service.h"
 
 #include "build/build_config.h"
-#include "chrome/services/isolated_xr_device/xr_runtime_provider.h"
-#include "chrome/services/isolated_xr_device/xr_service_test_hook.h"
+#include "content/services/isolated_xr_device/xr_runtime_provider.h"
+#include "content/services/isolated_xr_device/xr_service_test_hook.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
 
 #if defined(OS_WIN)

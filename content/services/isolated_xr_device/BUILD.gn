@@ -16,12 +16,15 @@ source_set("lib") {
     "xr_test_hook_wrapper.h",
   ]
 
+  configs += [ "//content:content_implementation" ]
+
   if (enable_openxr) {
     configs += [ "//third_party/openxr:config" ]
   }
 
   deps = [
     "//base",
+    "//content/public/common:common_sources",
     "//device/base",
     "//device/vr:vr",
     "//device/vr/public/mojom",

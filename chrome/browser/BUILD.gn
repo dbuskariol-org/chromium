@@ -5453,7 +5453,10 @@ jumbo_static_library("browser") {
       "vr/xr_runtime_manager_statics.h",
     ]
 
-    deps += [ "//chrome/browser/vr:vr_common" ]
+    deps += [
+      "//chrome/browser/vr:vr_common",
+      "//device/vr",
+    ]
   }
 
   if (enable_wayland_server) {

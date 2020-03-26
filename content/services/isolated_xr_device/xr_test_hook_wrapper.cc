@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/services/isolated_xr_device/xr_test_hook_wrapper.h"
+#include "content/services/isolated_xr_device/xr_test_hook_wrapper.h"
 
 namespace device {
 
