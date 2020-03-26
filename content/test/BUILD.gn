@@ -440,6 +440,7 @@ jumbo_static_library("test_support") {
     "//ui/gfx:test_support",
     "//ui/gl",
     "//ui/gl:test_support",
+    "//ui/native_theme",
     "//ui/resources",
     "//ui/shell_dialogs:shell_dialogs",
     "//ui/surface",
