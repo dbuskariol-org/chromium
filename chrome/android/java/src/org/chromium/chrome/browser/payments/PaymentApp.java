@@ -351,4 +351,11 @@ public abstract class PaymentApp extends EditableOption {
     public Set<String> getApplicationIdentifiersThatHideThisApp() {
         return null;
     }
+
+    /**
+     * @return The ukm source id assigned to the payment app.
+     */
+    public long getUkmSourceId() {
+        return 0;
+    }
 }

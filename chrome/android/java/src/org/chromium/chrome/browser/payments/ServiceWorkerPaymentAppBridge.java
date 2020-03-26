@@ -460,6 +460,15 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
                 webContents, PaymentEventResponseType.PAYMENT_HANDLER_WINDOW_CLOSING);
     }
 
+    /**
+     * Get the ukm source id for the invoked payment app.
+     * @param swScope The scope of the invoked payment app.
+     */
+    public static long getSourceIdForPaymentAppFromScope(URI swScope) {
+        return ServiceWorkerPaymentAppBridgeJni.get().getSourceIdForPaymentAppFromScope(
+                swScope.toString());
+    }
+
     @CalledByNative
     private static String getSupportedMethodFromMethodData(PaymentMethodData data) {
         return data.supportedMethod;
@@ -685,5 +694,6 @@ public class ServiceWorkerPaymentAppBridge implements PaymentAppFactoryInterface
                 PaymentDetailsModifier[] modifiers, String currency, PaymentHandlerFinder callback,
                 ServiceWorkerPaymentApp app);
         void onClosingPaymentAppWindow(WebContents webContents, int reason);
+        long getSourceIdForPaymentAppFromScope(String swScope);
     }
 }

@@ -1380,8 +1380,15 @@ public class PaymentRequestImpl
         mPaymentHandlerUi = new PaymentHandlerCoordinator();
         ChromeActivity chromeActivity = ChromeActivity.fromWebContents(mWebContents);
         if (chromeActivity == null) return false;
-        return mPaymentHandlerUi.show(chromeActivity, url, mIsIncognito,
+
+        boolean success = mPaymentHandlerUi.show(chromeActivity, url, mIsIncognito,
                 paymentHandlerWebContentsObserver, /*uiObserver=*/this);
+        if (success) {
+            // UKM for payment app origin should get recorded only when the origin of the invoked
+            // payment app is shown to the user.
+            mJourneyLogger.setPaymentAppUkmSourceId(mInvokedPaymentApp.getUkmSourceId());
+        }
+        return success;
     }
 
     @Override
