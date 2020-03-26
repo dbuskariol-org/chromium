@@ -49,7 +49,7 @@ class LoggedInSpokenFeedbackTest : public InProcessBrowserTest {
   void PressRepeatedlyUntilUtterance(ui::KeyboardCode key,
                                      const std::string& expected_utterance);
 
-  SpeechMonitor sm_;
+  SpeechMonitor speech_monitor_;
 
  private:
   StubBrailleController braille_controller_;

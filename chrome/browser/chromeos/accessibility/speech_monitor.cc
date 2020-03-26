@@ -161,8 +161,7 @@ double SpeechMonitor::GetDelayForLastUtteranceMS() {
   return delay_for_last_utterance_ms_;
 }
 
-void SpeechMonitor::ExpectSpeech(const std::string& text,
-                                 const base::Location& location) {
+SpeechMonitor& SpeechMonitor::ExpectSpeech(const std::string& text) {
   CHECK(!replay_loop_runner_.get());
   replay_queue_.push_back({[this, text]() {
                              for (auto it = utterance_queue_.begin();
@@ -177,12 +176,11 @@ void SpeechMonitor::ExpectSpeech(const std::string& text,
                              }
                              return false;
                            },
-                           "ExpectSpeech(\"" + text + "\") " +
-                               location.ToString()});
+                           "ExpectSpeech(\"" + text + "\")"});
+  return *this;
 }
 
-void SpeechMonitor::ExpectSpeechPattern(const std::string& pattern,
-                                        const base::Location& location) {
+SpeechMonitor& SpeechMonitor::ExpectSpeechPattern(const std::string& pattern) {
   CHECK(!replay_loop_runner_.get());
   replay_queue_.push_back({[this, pattern]() {
                              for (auto it = utterance_queue_.begin();
@@ -197,31 +195,30 @@ void SpeechMonitor::ExpectSpeechPattern(const std::string& pattern,
                              }
                              return false;
                            },
-                           "ExpectSpeechPattern(\"" + pattern + "\") " +
-                               location.ToString()});
+                           "ExpectSpeechPattern(\"" + pattern + "\")"});
+  return *this;
 }
 
-void SpeechMonitor::ExpectNextSpeechIsNot(const std::string& text,
-                                          const base::Location& location) {
+SpeechMonitor& SpeechMonitor::ExpectNextSpeechIsNot(const std::string& text) {
   CHECK(!replay_loop_runner_.get());
-  replay_queue_.push_back(
-      {[this, text]() {
-         if (utterance_queue_.empty())
-           return false;
+  replay_queue_.push_back({[this, text]() {
+                             if (utterance_queue_.empty())
+                               return false;
 
-         return text != utterance_queue_.front().text;
-       },
-       "ExpectNextSpeechIsNot(\"" + text + "\") " + location.ToString()});
+                             return text != utterance_queue_.front().text;
+                           },
+                           "ExpectNextSpeechIsNot(\"" + text + "\")"});
+  return *this;
 }
 
-void SpeechMonitor::Call(std::function<void()> func,
-                         const base::Location& location) {
+SpeechMonitor& SpeechMonitor::Call(std::function<void()> func) {
   CHECK(!replay_loop_runner_.get());
   replay_queue_.push_back({[func]() {
                              func();
                              return true;
                            },
-                           "Call() " + location.ToString()});
+                           "Call()"});
+  return *this;
 }
 
 void SpeechMonitor::Replay() {
@@ -269,15 +266,9 @@ void SpeechMonitor::MaybePrintExpectations() {
   for (const auto& pair : replay_queue_)
     replay_queue_descriptions.push_back(pair.second);
 
-  std::vector<std::string> utterance_queue_descriptions;
-  for (const auto& item : utterance_queue_)
-    utterance_queue_descriptions.push_back("\"" + item.text + "\"");
-
   LOG(ERROR) << "Still waiting for expectation(s).\n"
              << "Unsatisfied expectations...\n"
-             << base::JoinString(replay_queue_descriptions, "\n") << "\n\n"
-             << "pending speech utterances...\n"
-             << base::JoinString(utterance_queue_descriptions, "\n") << "\n\n"
+             << base::JoinString(replay_queue_descriptions, "\n") << "\n\n\n"
              << "Satisfied expectations...\n"
              << base::JoinString(replayed_queue_, "\n");
 }
