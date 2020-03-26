@@ -6831,8 +6831,8 @@ group("closure_compile") {
   testonly = true
 
   deps = [
+    "base:closure_compile",
     "data:closure_compile",
-    # TODO(crbug/1000989): Add a dep for base/js2gtest.js.
   ]
 }
 
