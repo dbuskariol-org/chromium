@@ -625,6 +625,14 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/local_data_browser_proxy.m.js"
            use_base_dir="false"
            type="BINDATA" />
+  <include name="IDR_SETTINGS_SITE_SETTINGS_MEDIA_PICKER_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/media_picker.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
+  <include name="IDR_SETTINGS_SITE_SETTINGS_PDF_DOCUMENTS_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/pdf_documents.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
   <include name="IDR_SETTINGS_SITE_SETTINGS_SITE_DATA_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/site_data.m.js"
            use_base_dir="false"
@@ -672,6 +680,10 @@
            preprocess="true" />
   <include name="IDR_SETTINGS_SITE_SETTINGS_WEBSITE_USAGE_BROWSER_PROXY_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/website_usage_browser_proxy.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
+  <include name="IDR_SETTINGS_SITE_SETTINGS_ZOOM_LEVELS_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/zoom_levels.m.js"
            use_base_dir="false"
            type="BINDATA" />
   <if expr="not chromeos">

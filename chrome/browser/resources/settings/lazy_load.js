@@ -21,12 +21,12 @@ import './site_settings/site_data_details_subpage.m.js';
 import './site_settings/category_default_setting.m.js';
 import './site_settings/category_setting_exceptions.m.js';
 import './site_settings/chooser_exception_list.m.js';
-// import './site_settings/media_picker.m.js';
-// import './site_settings/pdf_documents.m.js';
+import './site_settings/media_picker.m.js';
+import './site_settings/pdf_documents.m.js';
 // import './site_settings/protocol_handlers.m.js';
 import './site_settings/site_data.m.js';
 import './site_settings/site_details.m.js';
-// import './site_settings/zoom_levels.m.js';
+import './site_settings/zoom_levels.m.js';
 
 // <if expr="not chromeos">
 import './people_page/import_data_dialog.m.js';

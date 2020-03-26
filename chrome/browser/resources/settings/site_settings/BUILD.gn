@@ -310,9 +310,9 @@ js_type_check("closure_compile_module") {
     ":cookie_info.m",
     ":edit_exception_dialog.m",
     ":local_data_browser_proxy.m",
+    ":media_picker.m",
+    ":pdf_documents.m",
 
-    #    ":media_picker.m",
-    #    ":pdf_documents.m",
     #    ":protocol_handlers.m",
     ":site_data.m",
     ":site_data_details_subpage.m",
@@ -325,8 +325,7 @@ js_type_check("closure_compile_module") {
     ":site_settings_behavior.m",
     ":site_settings_prefs_browser_proxy.m",
     ":website_usage_browser_proxy.m",
-
-    #    ":zoom_levels.m",
+    ":zoom_levels.m",
   ]
 }
 
@@ -445,7 +444,10 @@ js_library("local_data_browser_proxy.m") {
 js_library("media_picker.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/media_picker.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":site_settings_behavior.m",
+    ":site_settings_prefs_browser_proxy.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
   extra_deps = [ ":media_picker_module" ]
 }
@@ -453,7 +455,7 @@ js_library("media_picker.m") {
 js_library("pdf_documents.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/pdf_documents.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
   ]
   extra_deps = [ ":pdf_documents_module" ]
 }
@@ -475,6 +477,7 @@ js_library("site_data.m") {
     ":site_settings_behavior.m",
     "..:global_scroll_target_behavior.m",
     "..:route.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
     "//ui/webui/resources/cr_elements/cr_search_field:cr_search_field.m",
     "//ui/webui/resources/js:assert.m",
     "//ui/webui/resources/js:cr.m",
@@ -626,7 +629,11 @@ js_library("website_usage_browser_proxy.m") {
 js_library("zoom_levels.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/zoom_levels.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":site_settings_behavior.m",
+    ":site_settings_prefs_browser_proxy.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/js:list_property_update_behavior.m",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
   extra_deps = [ ":zoom_levels_module" ]
 }
@@ -741,6 +748,8 @@ polymer_modulizer("media_picker") {
   js_file = "media_picker.js"
   html_file = "media_picker.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [ "chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.html|MediaPickerEntry" ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("pdf_documents") {
@@ -863,6 +872,8 @@ polymer_modulizer("zoom_levels") {
   js_file = "zoom_levels.js"
   html_file = "zoom_levels.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [ "chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.html|ZoomLevelEntry" ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 js_modulizer("modulize") {
