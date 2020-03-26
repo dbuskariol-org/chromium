@@ -11,7 +11,6 @@
 #include "base/optional.h"
 #include "base/strings/string_number_conversions.h"
 #include "chrome/browser/android/autofill_assistant/generic_ui_controller_android.h"
-#include "chrome/browser/android/autofill_assistant/generic_ui_events_android.h"
 #include "chrome/browser/android/autofill_assistant/generic_ui_interactions_android.h"
 #include "components/autofill_assistant/browser/basic_interactions.h"
 #include "components/autofill_assistant/browser/interactions.pb.h"
@@ -42,21 +41,27 @@ base::Optional<EventHandler::EventKey> CreateEventKeyFromProto(
     base::android::ScopedJavaGlobalRef<jobject> jdelegate) {
   switch (proto.kind_case()) {
     case EventProto::kOnValueChanged:
-      return base::Optional<EventHandler::EventKey>(
-          {proto.kind_case(), proto.on_value_changed().model_identifier()});
-    case EventProto::kOnViewClicked: {
-      auto jview = views->find(proto.on_view_clicked().view_identifier());
-      if (jview == views->end()) {
-        VLOG(1) << "Invalid OnViewClickedEventProto: no view with id='"
-                << proto.on_view_clicked().view_identifier() << "' found";
+      if (proto.on_value_changed().model_identifier().empty()) {
+        VLOG(1) << "Invalid OnValueChangedEventProto: no model_identifier "
+                   "specified";
         return base::nullopt;
       }
-      android_events::SetOnClickListener(env, jview->second, jdelegate,
-                                         proto.on_view_clicked());
+      return base::Optional<EventHandler::EventKey>(
+          {proto.kind_case(), proto.on_value_changed().model_identifier()});
+    case EventProto::kOnViewClicked:
+      if (proto.on_view_clicked().view_identifier().empty()) {
+        VLOG(1) << "Invalid OnViewClickedEventProto: no view_identifier "
+                   "specified";
+        return base::nullopt;
+      }
       return base::Optional<EventHandler::EventKey>(
           {proto.kind_case(), proto.on_view_clicked().view_identifier()});
-    }
     case EventProto::kOnUserActionCalled:
+      if (proto.on_user_action_called().user_action_identifier().empty()) {
+        VLOG(1) << "Invalid OnUserActionCalled: no user_action_identifier "
+                   "specified";
+        return base::nullopt;
+      }
       return base::Optional<EventHandler::EventKey>(
           {proto.kind_case(),
            proto.on_user_action_called().user_action_identifier()});
@@ -85,8 +90,8 @@ CreateInteractionCallbackFromProto(
   switch (proto.kind_case()) {
     case CallbackProto::kSetValue:
       if (proto.set_value().model_identifier().empty()) {
-        VLOG(1)
-            << "Error creating SetValue interaction: model_identifier not set";
+        VLOG(1) << "Error creating SetValue interaction: model_identifier "
+                   "not set";
         return base::nullopt;
       }
       return base::Optional<InteractionHandlerAndroid::InteractionCallback>(

@@ -7,6 +7,7 @@
 #include "chrome/android/features/autofill_assistant/jni_headers/AssistantDrawable_jni.h"
 #include "chrome/android/features/autofill_assistant/jni_headers/AssistantViewFactory_jni.h"
 #include "chrome/browser/android/autofill_assistant/assistant_generic_ui_delegate.h"
+#include "chrome/browser/android/autofill_assistant/generic_ui_events_android.h"
 #include "chrome/browser/android/autofill_assistant/interaction_handler_android.h"
 #include "chrome/browser/android/autofill_assistant/ui_controller_android_utils.h"
 #include "components/autofill_assistant/browser/event_handler.h"
@@ -210,6 +211,10 @@ base::android::ScopedJavaGlobalRef<jobject> CreateJavaView(
       break;
     }
     case ViewProto::kTextInputView:
+      if (proto.text_input_view().model_identifier().empty()) {
+        VLOG(1) << "Failed to create text input view: model_identifier not set";
+        return nullptr;
+      }
       jview = Java_AssistantViewFactory_createTextInputView(
           env, jcontext, jdelegate, jidentifier,
           static_cast<int>(proto.text_input_view().type()),
@@ -308,11 +313,17 @@ GenericUiControllerAndroid::CreateFromProto(
                            jdelegate, proto.root_view(), views.get())
           : nullptr;
 
-  // Create interactions.
+  // Create proto interactions (i.e., native -> java).
   auto interaction_handler = std::make_unique<InteractionHandlerAndroid>(
       event_handler, user_model, basic_interactions, views.get(), jcontext,
       jdelegate);
   if (!interaction_handler->AddInteractionsFromProto(proto.interactions())) {
+    return nullptr;
+  }
+
+  // Create java listeners (i.e., java -> native).
+  if (!android_events::CreateJavaListenersFromProto(env, views.get(), jdelegate,
+                                                    proto.interactions())) {
     return nullptr;
   }
 
