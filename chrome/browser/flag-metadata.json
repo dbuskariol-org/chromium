@@ -3904,6 +3904,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "trust-tokens",
+    "owners": [ "davidvc", "privacy-sandbox-dev" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "try-supported-channel-layouts",
     "owners": [ "dalecurtis" ],
     "expiry_milestone": 76

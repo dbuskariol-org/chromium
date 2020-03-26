@@ -1992,6 +1992,11 @@ const char kTreatUnsafeDownloadsAsActiveDescription[] =
     "code), where the final download origin or any origin in the redirect "
     "chain is insecure if the originating page is secure.";
 
+const char kTrustTokensName[] = "Enable Trust Tokens";
+const char kTrustTokensDescription[] =
+    "Enables the prototype Trust Token API "
+    "(https://github.com/wicg/trust-token-api).";
+
 const char kTrySupportedChannelLayoutsName[] =
     "Causes audio output streams to check if channel layouts other than the "
     "default hardware layout are available.";

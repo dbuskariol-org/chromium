@@ -37408,6 +37408,7 @@ from previous Chrome versions.
   <int value="-2080657940" label="DirectActions:disabled"/>
   <int value="-2080504230" label="TabHoverCards:disabled"/>
   <int value="-2077268643" label="disable-device-enumeration"/>
+  <int value="-2076313806" label="TrustTokens:disabled"/>
   <int value="-2075870708" label="MediaRemotingEncrypted:disabled"/>
   <int value="-2075807193" label="enable-webusb-on-any-origin"/>
   <int value="-2075725205" label="disable-new-zip-unpacker"/>
@@ -38063,6 +38064,7 @@ from previous Chrome versions.
   <int value="-1331831950" label="site-isolation-for-password-sites:enabled"/>
   <int value="-1330409814" label="ContextMenuCopyImage:enabled"/>
   <int value="-1327676774" label="disable-accelerated-mjpeg-decode"/>
+  <int value="-1326671705" label="TrustTokens:enabled"/>
   <int value="-1326463296" label="SSLCommittedInterstitials:disabled"/>
   <int value="-1325887476" label="NewPrintPreview:enabled"/>
   <int value="-1324634193" label="EnablePalmOnMaxTouchMajor:disabled"/>

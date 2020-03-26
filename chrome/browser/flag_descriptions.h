@@ -1151,6 +1151,9 @@ extern const char kTreatInsecureOriginAsSecureDescription[];
 extern const char kTreatUnsafeDownloadsAsActiveName[];
 extern const char kTreatUnsafeDownloadsAsActiveDescription[];
 
+extern const char kTrustTokensName[];
+extern const char kTrustTokensDescription[];
+
 extern const char kTrySupportedChannelLayoutsName[];
 extern const char kTrySupportedChannelLayoutsDescription[];
 

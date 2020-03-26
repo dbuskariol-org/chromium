@@ -5130,11 +5130,14 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kColorProviderRedirectionDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kColorProviderRedirection)},
 
+    {"trust-tokens", flag_descriptions::kTrustTokensName,
+     flag_descriptions::kTrustTokensDescription, kOsAll,
+     FEATURE_VALUE_TYPE(network::features::kTrustTokens)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
     // AboutFlagsHistogramTest unit test to verify this process).
-
 };
 
 class FlagsStateSingleton : public flags_ui::FlagsState::Delegate {
