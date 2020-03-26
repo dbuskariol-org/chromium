@@ -1003,17 +1003,17 @@ CrSettingsPersonalizationOptionsTest.prototype = {
 };
 
 TEST_F('CrSettingsPersonalizationOptionsTest', 'AllBuilds', function() {
-  mocha.grep('PersonalizationOptionsTests_AllBuilds').run();
+  runMochaSuite('PersonalizationOptionsTests_AllBuilds');
 });
 
 GEN('#if BUILDFLAG(GOOGLE_CHROME_BRANDING)');
 TEST_F('CrSettingsPersonalizationOptionsTest', 'OfficialBuild', function() {
-  mocha.grep('PersonalizationOptionsTests_OfficialBuild').run();
+  runMochaSuite('PersonalizationOptionsTests_OfficialBuild');
 });
 GEN('#endif');
 
 TEST_F('CrSettingsPersonalizationOptionsTest', 'AllBuildsOld', function() {
-  mocha.grep('PersonalizationOptionsTests_AllBuilds_Old').run();
+  runMochaSuite('PersonalizationOptionsTests_AllBuilds_Old');
 });
 
 /**
