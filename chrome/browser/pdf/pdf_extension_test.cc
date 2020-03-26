@@ -22,6 +22,8 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/synchronization/lock.h"
 #include "base/task/post_task.h"
+#include "base/test/metrics/histogram_tester.h"
+#include "base/test/metrics/user_action_tester.h"
 #include "base/test/test_timeouts.h"
 #include "base/thread_annotations.h"
 #include "base/threading/thread_restrictions.h"
@@ -31,6 +33,7 @@
 #include "chrome/browser/extensions/component_loader.h"
 #include "chrome/browser/extensions/extension_apitest.h"
 #include "chrome/browser/extensions/extension_service.h"
+#include "chrome/browser/metrics/subprocess_metrics_provider.h"
 #include "chrome/browser/pdf/pdf_extension_test_util.h"
 #include "chrome/browser/pdf/pdf_extension_util.h"
 #include "chrome/browser/plugins/plugin_prefs.h"
@@ -2342,6 +2345,32 @@ IN_PROC_BROWSER_TEST_F(PDFExtensionTest,
   // fails to load.
   GURL test_pdf_url(embedded_test_server()->GetURL("/pdf/test.pdf"));
   ASSERT_TRUE(LoadPdf(test_pdf_url));
+}
+
+IN_PROC_BROWSER_TEST_F(PDFExtensionTest, Metrics) {
+  base::HistogramTester histograms;
+  base::UserActionTester actions;
+
+  GURL test_pdf_url(embedded_test_server()->GetURL("/pdf/combobox_form.pdf"));
+  WebContents* guest_contents = LoadPdfGetGuestContents(test_pdf_url);
+  ASSERT_TRUE(guest_contents);
+
+  SubprocessMetricsProvider::MergeHistogramDeltasForTesting();
+
+  // Histograms.
+  // Duplicating some constants to avoid reaching into pdf/ internals.
+  constexpr int kLoadedDocument = 0;
+  constexpr int kAcroForm = 1;
+  histograms.ExpectUniqueSample("PDF.DocumentFeature", kLoadedDocument, 1);
+  histograms.ExpectUniqueSample("PDF.FormType", kAcroForm, 1);
+  histograms.ExpectUniqueSample("PDF.IsTagged", 0, 1);
+  histograms.ExpectUniqueSample("PDF.HasAttachment", 0, 1);
+
+  // Custom histograms.
+  histograms.ExpectUniqueSample("PDF.PageCount", 1, 1);
+
+  // User actions.
+  EXPECT_EQ(1, actions.GetActionCount("PDF.LoadSuccess"));
 }
 
 // This test suite does a simple text-extraction based on the accessibility
