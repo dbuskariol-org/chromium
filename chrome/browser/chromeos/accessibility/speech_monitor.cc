@@ -230,6 +230,10 @@ void SpeechMonitor::Replay() {
 }
 
 void SpeechMonitor::MaybeContinueReplay() {
+  // This method can be called prior to Replay() being called.
+  if (!replay_called_)
+    return;
+
   auto it = replay_queue_.begin();
   while (it != replay_queue_.end()) {
     if (it->first()) {
@@ -240,7 +244,7 @@ void SpeechMonitor::MaybeContinueReplay() {
     }
   }
 
-  if (replay_queue_.size() > 0) {
+  if (!replay_queue_.empty()) {
     base::PostDelayedTask(
         FROM_HERE, {content::BrowserThread::UI},
         base::BindOnce(&SpeechMonitor::MaybePrintExpectations,
