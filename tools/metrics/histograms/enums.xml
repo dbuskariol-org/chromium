@@ -14941,6 +14941,9 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="33" label="Network panel film strip started recording"/>
   <int value="34" label="Coverage report was filtered"/>
   <int value="35" label="Coverage started (per block)"/>
+  <int value="36" label="Settings opened via gear icon"/>
+  <int value="37" label="Settings opened via menu"/>
+  <int value="38" label="Settings opened via command menu"/>
 </enum>
 
 <enum name="DevToolsBackgroundService">
@@ -15008,6 +15011,14 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="26" label="Drawer - Live Heap Profile"/>
   <int value="27" label="Drawer - Quick source"/>
   <int value="28" label="Drawer - Request blocking"/>
+  <int value="29" label="Settings - Preferences"/>
+  <int value="30" label="Settings - Workspace"/>
+  <int value="31" label="Settings - Experiments"/>
+  <int value="32" label="Settings - Blackbox"/>
+  <int value="33" label="Settings - Devices"/>
+  <int value="34" label="Settings - Throttling Conditions"/>
+  <int value="35" label="Settings - Emulation Geolocations"/>
+  <int value="36" label="Settings - Shortcuts"/>
 </enum>
 
 <enum name="DevToolsSetting">
