@@ -36,7 +36,6 @@ void TryRunConditionalCallback(
 
 base::Optional<EventHandler::EventKey> CreateEventKeyFromProto(
     const EventProto& proto,
-    JNIEnv* env,
     std::map<std::string, base::android::ScopedJavaGlobalRef<jobject>>* views,
     base::android::ScopedJavaGlobalRef<jobject> jdelegate) {
   switch (proto.kind_case()) {
@@ -243,39 +242,33 @@ void InteractionHandlerAndroid::StopListening() {
 }
 
 bool InteractionHandlerAndroid::AddInteractionsFromProto(
-    const InteractionsProto& proto) {
+    const InteractionProto& proto) {
   if (is_listening_) {
     NOTREACHED() << "Interactions can not be added while listening to events!";
     return false;
   }
-  JNIEnv* env = base::android::AttachCurrentThread();
-  for (const auto& interaction_proto : proto.interactions()) {
-    auto key = CreateEventKeyFromProto(interaction_proto.trigger_event(), env,
-                                       views_, jdelegate_);
-    if (!key) {
-      VLOG(1) << "Invalid trigger event for interaction";
+  auto key = CreateEventKeyFromProto(proto.trigger_event(), views_, jdelegate_);
+  if (!key) {
+    VLOG(1) << "Invalid trigger event for interaction";
+    return false;
+  }
+
+  for (const auto& callback_proto : proto.callbacks()) {
+    auto callback = CreateInteractionCallbackFromProto(
+        callback_proto, user_model_, basic_interactions_, views_, jcontext_,
+        jdelegate_);
+    if (!callback) {
+      VLOG(1) << "Invalid callback for interaction";
       return false;
     }
-
-    for (const auto& callback_proto : interaction_proto.callbacks()) {
-      auto callback = CreateInteractionCallbackFromProto(
-          callback_proto, user_model_, basic_interactions_, views_, jcontext_,
-          jdelegate_);
-      if (!callback) {
-        VLOG(1) << "Invalid callback for interaction";
-        return false;
-      }
-      // Wrap callback in condition handler if necessary.
-      if (callback_proto.has_condition_model_identifier()) {
-        callback =
-            base::Optional<InteractionHandlerAndroid::InteractionCallback>(
-                base::BindRepeating(&TryRunConditionalCallback,
-                                    basic_interactions_->GetWeakPtr(),
-                                    callback_proto.condition_model_identifier(),
-                                    *callback));
-      }
-      AddInteraction(*key, *callback);
+    // Wrap callback in condition handler if necessary.
+    if (callback_proto.has_condition_model_identifier()) {
+      callback = base::Optional<InteractionHandlerAndroid::InteractionCallback>(
+          base::BindRepeating(
+              &TryRunConditionalCallback, basic_interactions_->GetWeakPtr(),
+              callback_proto.condition_model_identifier(), *callback));
     }
+    AddInteraction(*key, *callback);
   }
   return true;
 }

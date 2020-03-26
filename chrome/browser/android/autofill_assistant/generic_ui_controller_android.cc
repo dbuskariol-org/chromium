@@ -18,13 +18,19 @@ namespace autofill_assistant {
 
 namespace {
 
-// Forward declaration to allow recursive calls.
+// Forward declarations to allow recursive calls.
 base::android::ScopedJavaGlobalRef<jobject> CreateJavaView(
     JNIEnv* env,
     const base::android::ScopedJavaLocalRef<jobject>& jcontext,
     const base::android::ScopedJavaGlobalRef<jobject>& jdelegate,
     const ViewProto& proto,
     std::map<std::string, base::android::ScopedJavaGlobalRef<jobject>>* views);
+
+// Creates all implicit interactions for the views defined in |proto|. Returns
+// true on success, false on failure.
+bool CreateImplicitInteractionsForView(
+    const ViewProto& proto,
+    InteractionHandlerAndroid* interaction_handler);
 
 base::android::ScopedJavaLocalRef<jobject> CreateJavaDrawable(
     JNIEnv* env,
@@ -210,9 +216,10 @@ base::android::ScopedJavaGlobalRef<jobject> CreateJavaView(
                                          proto.vertical_expander_view(), views);
       break;
     }
-    case ViewProto::kTextInputView:
+    case ViewProto::kTextInputView: {
       if (proto.text_input_view().model_identifier().empty()) {
-        VLOG(1) << "Failed to create text input view: model_identifier not set";
+        VLOG(1) << "Failed to create text input view '" << proto.identifier()
+                << "': model_identifier not set";
         return nullptr;
       }
       jview = Java_AssistantViewFactory_createTextInputView(
@@ -223,6 +230,7 @@ base::android::ScopedJavaGlobalRef<jobject> CreateJavaView(
           base::android::ConvertUTF8ToJavaString(
               env, proto.text_input_view().model_identifier()));
       break;
+    }
     case ViewProto::VIEW_NOT_SET:
       NOTREACHED();
       return nullptr;
@@ -277,6 +285,72 @@ base::android::ScopedJavaGlobalRef<jobject> CreateJavaView(
   return jview_global_ref;
 }
 
+bool CreateImplicitInteractionsForView(
+    const ViewProto& proto,
+    InteractionHandlerAndroid* interaction_handler) {
+  switch (proto.view_case()) {
+    case ViewProto::kTextInputView: {
+      // Auto-update the text of the view whenever the corresponding value in
+      // the model changes.
+      InteractionProto implicit_set_text_interaction;
+      implicit_set_text_interaction.mutable_trigger_event()
+          ->mutable_on_value_changed()
+          ->set_model_identifier(proto.text_input_view().model_identifier());
+      SetTextProto set_text_callback;
+      set_text_callback.set_model_identifier(
+          proto.text_input_view().model_identifier());
+      set_text_callback.set_view_identifier(proto.identifier());
+      *implicit_set_text_interaction.add_callbacks()->mutable_set_text() =
+          set_text_callback;
+
+      if (!interaction_handler->AddInteractionsFromProto(
+              implicit_set_text_interaction)) {
+        VLOG(1) << "Failed to create implicit SetText interaction for "
+                << proto.identifier();
+        return false;
+      }
+      break;
+    }
+    case ViewProto::kVerticalExpanderView:
+      if (proto.vertical_expander_view().has_title_view() &&
+          !CreateImplicitInteractionsForView(
+              proto.vertical_expander_view().title_view(),
+              interaction_handler)) {
+        return false;
+      }
+      if (proto.vertical_expander_view().has_collapsed_view() &&
+          !CreateImplicitInteractionsForView(
+              proto.vertical_expander_view().collapsed_view(),
+              interaction_handler)) {
+        return false;
+      }
+      if (proto.vertical_expander_view().has_expanded_view() &&
+          !CreateImplicitInteractionsForView(
+              proto.vertical_expander_view().expanded_view(),
+              interaction_handler)) {
+        return false;
+      }
+      break;
+    case ViewProto::kViewContainer:
+      for (const auto& child : proto.view_container().views()) {
+        if (!CreateImplicitInteractionsForView(child, interaction_handler)) {
+          return false;
+        }
+      }
+      break;
+    case ViewProto::kTextView:
+    case ViewProto::kDividerView:
+    case ViewProto::kImageView:
+      // Nothing to do, no implicit interactions necessary.
+      break;
+    case ViewProto::VIEW_NOT_SET:
+      NOTREACHED();
+      return false;
+  }
+
+  return true;
+}
+
 }  // namespace
 
 GenericUiControllerAndroid::GenericUiControllerAndroid(
@@ -303,9 +377,9 @@ GenericUiControllerAndroid::CreateFromProto(
     UserModel* user_model,
     BasicInteractions* basic_interactions) {
   // Create view layout.
-  JNIEnv* env = base::android::AttachCurrentThread();
   auto views = std::make_unique<
       std::map<std::string, base::android::ScopedJavaGlobalRef<jobject>>>();
+  JNIEnv* env = base::android::AttachCurrentThread();
   auto jroot_view =
       proto.has_root_view()
           ? CreateJavaView(env,
@@ -313,12 +387,21 @@ GenericUiControllerAndroid::CreateFromProto(
                            jdelegate, proto.root_view(), views.get())
           : nullptr;
 
-  // Create proto interactions (i.e., native -> java).
+  // Create implicit interactions.
   auto interaction_handler = std::make_unique<InteractionHandlerAndroid>(
       event_handler, user_model, basic_interactions, views.get(), jcontext,
       jdelegate);
-  if (!interaction_handler->AddInteractionsFromProto(proto.interactions())) {
+  if (proto.has_root_view() &&
+      !CreateImplicitInteractionsForView(proto.root_view(),
+                                         interaction_handler.get())) {
     return nullptr;
+  }
+
+  // Create proto interactions (i.e., native -> java).
+  for (const auto& interaction : proto.interactions().interactions()) {
+    if (!interaction_handler->AddInteractionsFromProto(interaction)) {
+      return nullptr;
+    }
   }
 
   // Create java listeners (i.e., java -> native).
