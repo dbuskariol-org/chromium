@@ -337,7 +337,7 @@
       'Chromium Linux Goma Staging': 'release_bot',
       'Chromium Mac Goma Staging': 'release_bot',
       'CrWinGomaStaging': 'release_bot_x86_minimal_symbols',
-      'Chromium iOS Goma RBE ToT': 'ios_error',
+      'Chromium iOS Goma RBE ToT': 'ios_device_release_bot_compile_only',
       'Chromium Linux Goma RBE ToT': 'release_bot',
       'Chromium Linux Goma RBE ToT (ATS)': 'release_bot',
       'Chromium Linux Goma RBE Staging (clobber)': 'release_bot',
@@ -1826,6 +1826,10 @@
       'ios_device', 'ios_disable_code_signing', 'release_bot',
     ],
 
+    'ios_device_release_bot_compile_only': [
+      'ios_release_device', 'compile_only'
+    ],
+
     'ios_simulator_debug_static_bot': [
         'ios_simulator', 'debug_static_bot',
     ],
@@ -2469,6 +2473,10 @@
     'ios_simulator': {
       'mixins': ['ios', 'ios_use_goma_rbe'],
       'gn_args': 'target_cpu="x64"',
+    },
+
+    'ios_release_device': {
+      'mixins': ['ios_device', 'ios_disable_code_signing', 'release_bot'],
     },
 
     'ios_use_goma_rbe': {
