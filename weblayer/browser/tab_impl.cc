@@ -34,7 +34,6 @@
 #include "weblayer/browser/navigation_controller_impl.h"
 #include "weblayer/browser/persistence/browser_persister.h"
 #include "weblayer/browser/profile_impl.h"
-#include "weblayer/public/download_delegate.h"
 #include "weblayer/public/fullscreen_delegate.h"
 #include "weblayer/public/new_tab_delegate.h"
 #include "weblayer/public/tab_observer.h"
@@ -242,10 +241,6 @@ TabImpl* TabImpl::FromWebContents(content::WebContents* web_contents) {
   return reinterpret_cast<UserData*>(
              web_contents->GetUserData(&kWebContentsUserDataKey))
       ->controller;
-}
-
-void TabImpl::SetDownloadDelegate(DownloadDelegate* delegate) {
-  download_delegate_ = delegate;
 }
 
 void TabImpl::SetErrorPageDelegate(ErrorPageDelegate* delegate) {
