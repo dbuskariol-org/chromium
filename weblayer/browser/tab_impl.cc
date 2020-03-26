@@ -229,7 +229,9 @@ TabImpl::~TabImpl() {
 
   // Destruct WebContents now to avoid it calling back when this object is
   // partially destructed. DidFinishNavigation can be called while destroying
-  // WebContents, so stop observing first.
+  // WebContents, so stop observing first. Similarly WebContents destructor
+  // can callback to delegate such as NavigationStateChanged, so clear its
+  // Delegate as well.
   Observe(nullptr);
   web_contents_->SetDelegate(nullptr);
   web_contents_.reset();
