@@ -7,12 +7,11 @@
       "backgroundColor": "#FFFFFF"
     },
     {
-      "name": "LayoutNGBlockFlow DIV id='target'",
-      "bounds": [600, 400],
+      "name": "LayoutNGBlockFlow (positioned) DIV id='target'",
+      "bounds": [100, 100],
+      "contentsOpaque": true,
       "backfaceVisibility": "hidden",
-      "invalidations": [
-        [520, 0, 80, 340]
-      ],
+      "backgroundColor": "#008000",
       "transform": 1
     }
   ],
@@ -23,7 +22,7 @@
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
-        [8, 8, 0, 1]
+        [100, 200, 0, 1]
       ]
     }
   ]

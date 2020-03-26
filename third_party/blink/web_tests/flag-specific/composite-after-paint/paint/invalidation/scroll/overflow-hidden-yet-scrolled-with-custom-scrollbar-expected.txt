@@ -7,11 +7,11 @@
       "backgroundColor": "#FFFFFF"
     },
     {
-      "name": "LayoutNGBlockFlow DIV id='target'",
-      "bounds": [600, 400],
+      "name": "LayoutNGBlockFlow DIV id='scroller'",
+      "bounds": [302, 302],
       "backfaceVisibility": "hidden",
       "invalidations": [
-        [520, 0, 80, 340]
+        [1, 201, 100, 100]
       ],
       "transform": 1
     }
