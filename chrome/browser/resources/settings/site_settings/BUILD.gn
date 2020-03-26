@@ -314,10 +314,9 @@ js_type_check("closure_compile_module") {
     #    ":media_picker.m",
     #    ":pdf_documents.m",
     #    ":protocol_handlers.m",
-    #    ":site_data.m",
+    ":site_data.m",
     ":site_data_details_subpage.m",
-
-    #    ":site_data_entry.m",
+    ":site_data_entry.m",
     ":site_details.m",
     ":site_details_permission.m",
     ":site_entry.m",
@@ -470,7 +469,19 @@ js_library("protocol_handlers.m") {
 js_library("site_data.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/site_data.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":cookie_info.m",
+    ":local_data_browser_proxy.m",
+    ":site_data_entry.m",
+    ":site_settings_behavior.m",
+    "..:global_scroll_target_behavior.m",
+    "..:route.m",
+    "//ui/webui/resources/cr_elements/cr_search_field:cr_search_field.m",
+    "//ui/webui/resources/js:assert.m",
+    "//ui/webui/resources/js:cr.m",
+    "//ui/webui/resources/js:i18n_behavior.m",
+    "//ui/webui/resources/js:list_property_update_behavior.m",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
+    "//ui/webui/resources/js/cr/ui:focus_without_ink.m",
   ]
   extra_deps = [ ":site_data_module" ]
 }
@@ -492,7 +503,11 @@ js_library("site_data_details_subpage.m") {
 js_library("site_data_entry.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/site_data_entry.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":cookie_info.m",
+    ":local_data_browser_proxy.m",
+    "//ui/webui/resources/js:i18n_behavior.m",
+    "//ui/webui/resources/js:icon.m",
+    "//ui/webui/resources/js/cr/ui:focus_row_behavior.m",
   ]
   extra_deps = [ ":site_data_entry_module" ]
 }
@@ -744,6 +759,14 @@ polymer_modulizer("site_data") {
   js_file = "site_data.js"
   html_file = "site_data.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [
+                   "chrome/browser/resources/settings/global_scroll_target_behavior.html|GlobalScrollTargetBehavior,GlobalScrollTargetBehaviorImpl",
+                   "chrome/browser/resources/settings/route.html|routes",
+                   "chrome/browser/resources/settings/router.html|Route,Router,RouteObserverBehavior",
+                   "chrome/browser/resources/settings/site_settings/local_data_browser_proxy.html|LocalDataBrowserProxy,LocalDataBrowserProxyImpl",
+                   "chrome/browser/resources/settings/site_settings/site_data_entry.html|CookieDataSummaryItem",
+                 ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("site_data_details_subpage") {
@@ -763,6 +786,8 @@ polymer_modulizer("site_data_entry") {
   js_file = "site_data_entry.js"
   html_file = "site_data_entry.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [ "chrome/browser/resources/settings/site_settings/local_data_browser_proxy.html|LocalDataBrowserProxy,LocalDataBrowserProxyImpl" ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("site_details") {

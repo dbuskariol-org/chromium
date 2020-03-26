@@ -1761,6 +1761,7 @@ CrSettingsSiteDataTest.prototype = {
   ]),
 };
 
+// Disabled for flakiness, see https://crbug.com/1061249
 TEST_F('CrSettingsSiteDataTest', 'DISABLED_All', function() {
   mocha.run();
 });

@@ -625,8 +625,16 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/local_data_browser_proxy.m.js"
            use_base_dir="false"
            type="BINDATA" />
+  <include name="IDR_SETTINGS_SITE_SETTINGS_SITE_DATA_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/site_data.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
   <include name="IDR_SETTINGS_SITE_SETTINGS_SITE_DATA_DETAILS_SUBPAGE_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/site_data_details_subpage.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
+  <include name="IDR_SETTINGS_SITE_SETTINGS_SITE_DATA_ENTRY_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/site_data_entry.m.js"
            use_base_dir="false"
            type="BINDATA" />
   <include name="IDR_SETTINGS_SITE_SETTINGS_SITE_DETAILS_M_JS"
