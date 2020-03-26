@@ -29,11 +29,6 @@
 
 [
   {
-    "name": "accessibility-internals-page-improvements",
-    "owners": [ "abigailbklein@google.com" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "account-consistency",
     "owners": [ "droger", "msarda" ],
     "expiry_milestone": 80

@@ -4815,14 +4815,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          content_settings::kImprovedCookieControlsForThirdPartyCookieBlocking)},
 
-#if !defined(OS_ANDROID)
-    {"accessibility-internals-page-improvements",
-     flag_descriptions::kAccessibilityInternalsPageImprovementsName,
-     flag_descriptions::kAccessibilityInternalsPageImprovementsDescription,
-     kOsDesktop,
-     FEATURE_VALUE_TYPE(features::kAccessibilityInternalsPageImprovements)},
-#endif
-
     {"autofill-always-return-cloud-tokenized-card",
      flag_descriptions::kAutofillAlwaysReturnCloudTokenizedCardName,
      flag_descriptions::kAutofillAlwaysReturnCloudTokenizedCardDescription,
