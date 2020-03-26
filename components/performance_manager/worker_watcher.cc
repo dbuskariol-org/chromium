@@ -20,15 +20,13 @@ namespace {
 // Helper function to add |worker_node| as a child to |frame_node| on the PM
 // sequence.
 void AddWorkerToFrameNode(FrameNodeImpl* frame_node,
-                          WorkerNodeImpl* worker_node,
-                          GraphImpl* graph) {
+                          WorkerNodeImpl* worker_node) {
   worker_node->AddClientFrame(frame_node);
 }
 
 // Helper function to remove |worker_node| from |frame_node| on the PM sequence.
 void RemoveWorkerFromFrameNode(FrameNodeImpl* frame_node,
-                               WorkerNodeImpl* worker_node,
-                               GraphImpl* graph) {
+                               WorkerNodeImpl* worker_node) {
   worker_node->RemoveClientFrame(frame_node);
 }
 
@@ -36,8 +34,7 @@ void RemoveWorkerFromFrameNode(FrameNodeImpl* frame_node,
 // sequence.
 void RemoveWorkersFromFrameNode(
     FrameNodeImpl* frame_node,
-    const base::flat_set<WorkerNodeImpl*>& worker_nodes,
-    GraphImpl* graph) {
+    const base::flat_set<WorkerNodeImpl*>& worker_nodes) {
   for (auto* worker_node : worker_nodes)
     worker_node->RemoveClientFrame(frame_node);
 }
@@ -46,12 +43,8 @@ void RemoveWorkersFromFrameNode(
 // OnFinalResponseURLDetermined() on |worker_node|.
 void SetFinalResponseURL(WorkerNodeImpl* worker_node, const GURL& url) {
   PerformanceManagerImpl::CallOnGraphImpl(
-      FROM_HERE,
-      base::BindOnce(
-          [](WorkerNodeImpl* worker_node, const GURL& url, GraphImpl* graph) {
-            worker_node->OnFinalResponseURLDetermined(url);
-          },
-          worker_node, url));
+      FROM_HERE, base::BindOnce(&WorkerNodeImpl::OnFinalResponseURLDetermined,
+                                base::Unretained(worker_node), url));
 }
 
 }  // namespace
