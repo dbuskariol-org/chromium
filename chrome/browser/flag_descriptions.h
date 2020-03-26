@@ -2016,6 +2016,9 @@ extern const char kImeInputLogicHmmDescription[];
 extern const char kImeNativeDecoderName[];
 extern const char kImeNativeDecoderDescription[];
 
+extern const char kLimitAltTabToActiveDeskName[];
+extern const char kLimitAltTabToActiveDeskDescription[];
+
 extern const char kListAllDisplayModesName[];
 extern const char kListAllDisplayModesDescription[];
 

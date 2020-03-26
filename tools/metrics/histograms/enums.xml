@@ -39202,6 +39202,7 @@ from previous Chrome versions.
   <int value="867512869" label="mark-non-secure-as"/>
   <int value="868009556" label="AutofillUpstream:enabled"/>
   <int value="869531646" label="enable-session-crashed-bubble"/>
+  <int value="870568550" label="LimitAltTabToActiveDesk:disabled"/>
   <int value="870664435" label="DownloadProgressInfoBar:disabled"/>
   <int value="871435095" label="EnableAggregatedMlAppRanking:disabled"/>
   <int value="871713352" label="ImprovedLanguageSettings:enabled"/>
@@ -39775,6 +39776,7 @@ from previous Chrome versions.
   <int value="1579084737" label="TemporaryUnexpireFlagsM80:disabled"/>
   <int value="1579461102" label="MemoryCoordinator:disabled"/>
   <int value="1581002467" label="enable-explicit-dma-fences"/>
+  <int value="1584536816" label="LimitAltTabToActiveDesk:enabled"/>
   <int value="1585660881"
       label="enable-experimental-accessibility-chromevox-sub-node-language-switching"/>
   <int value="1586022426" label="AutofillCreditCardAssist:enabled"/>

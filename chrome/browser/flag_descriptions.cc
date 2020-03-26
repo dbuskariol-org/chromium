@@ -3456,6 +3456,12 @@ const char kImeNativeDecoderName[] = "Enable native decoders in IME Service";
 const char kImeNativeDecoderDescription[] =
     "Enable native decoders in IME service to deprecate NaCl decoders";
 
+const char kLimitAltTabToActiveDeskName[] =
+    "Limit Alt-Tab windows to active desk";
+const char kLimitAltTabToActiveDeskDescription[] =
+    "Limits the windows listed in Alt-Tab to the ones in the currently active "
+    "virtual desk";
+
 const char kListAllDisplayModesName[] = "List all display modes";
 const char kListAllDisplayModesDescription[] =
     "Enables listing all external displays' modes in the display settings.";
