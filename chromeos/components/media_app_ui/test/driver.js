@@ -2,6 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+/**
+ * Promise that signals the guest is ready to receive test messages (in addition
+ * to messages handled by receiver.js).
+ * @type {!Promise<undefined>}
+ */
+const testMessageHandlersReady = new Promise(resolve => {
+  window.addEventListener('DOMContentLoaded', () => {
+    guestMessagePipe.registerHandler('test-handlers-ready', resolve);
+  });
+});
+
 /** Host-side of web-driver like controller for sandboxed guest frames. */
 class GuestDriver {
   /**
@@ -17,12 +28,23 @@ class GuestDriver {
   async waitForElementInGuest(query, opt_property, opt_commands = {}) {
     /** @type {TestMessageQueryData} */
     const message = {testQuery: query, property: opt_property};
-
+    await testMessageHandlersReady;
     const result = /** @type {TestMessageResponseData} */ (
         await guestMessagePipe.sendMessage(
             'test', {...message, ...opt_commands}));
     return result.testQueryResult;
   }
+}
+
+/**
+ * Runs the given `testCase` in the guest context.
+ * @param {string} testCase
+ */
+async function runTestInGuest(testCase) {
+  /** @type {TestMessageRunTestCase} */
+  const message = {testCase};
+  await testMessageHandlersReady;
+  await guestMessagePipe.sendMessage('run-test-case', message);
 }
 
 /** @implements FileSystemWritableFileStream */

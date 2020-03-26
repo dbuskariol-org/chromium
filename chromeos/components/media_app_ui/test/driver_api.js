@@ -16,3 +16,6 @@ let TestMessageResponseData;
  * }}
  */
 let TestMessageQueryData;
+
+/** @typedef {{testCase: string}} */
+let TestMessageRunTestCase;

@@ -40,7 +40,7 @@ let currentlyWritableFile = null;
 let currentDirectoryHandle = null;
 
 /** A pipe through which we can send messages to the guest frame. */
-const guestMessagePipe = new MessagePipe('chrome://media-app-guest');
+const guestMessagePipe = new MessagePipe('chrome-untrusted://media-app');
 
 guestMessagePipe.registerHandler(Message.OPEN_FEEDBACK_DIALOG, () => {
   let response = mediaAppPageHandler.openFeedbackDialog();
