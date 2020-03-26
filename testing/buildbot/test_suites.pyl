@@ -3556,6 +3556,13 @@
       },
     },
 
+    'upload_perfetto': {
+      'upload_perfetto_script': {
+        'script':
+            '//tools/perf/core/perfetto_binary_roller/upload_trace_processor',
+      },
+    },
+
     'vr_platform_specific_chromium_gtests': {
       # Only run on platforms that intend to support WebVR in the near
       # future.
