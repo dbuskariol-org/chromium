@@ -261,7 +261,6 @@ jumbo_static_library("test_support") {
     "fake_renderer_compositor_frame_sink.h",
     "frame_host_interceptor.cc",
     "frame_host_interceptor.h",
-    "gmock_util.h",
     "gpu_browsertest_helpers.cc",
     "gpu_browsertest_helpers.h",
     "io_thread_shared_url_loader_factory_owner.cc",
