@@ -1784,8 +1784,6 @@ crbug.com/1012289 external/wpt/css/css-lists/list-style-type-string-005b.html [ 
 crbug.com/995106 external/wpt/css/css-pseudo/first-letter-exclude-inline-marker.html [ Failure ]
 crbug.com/995106 external/wpt/css/css-pseudo/first-letter-exclude-inline-child-marker.html [ Failure ]
 
-crbug.com/1054509 external/wpt/css/css-transitions/non-rendered-element-004.tentative.html [ Skip ]
-
 crbug.com/1058822 virtual/dark-color-scheme/external/wpt/css/css-color-adjust/rendering/dark-color-scheme/color-scheme-iframe-background-mismatch-alpha.html [ Failure ]
 crbug.com/1058822 virtual/dark-color-scheme/external/wpt/css/css-color-adjust/rendering/dark-color-scheme/color-scheme-iframe-background-mismatch-opaque.html [ Failure ]
 
@@ -3285,7 +3283,6 @@ crbug.com/626703 external/wpt/css/css-sizing/image-min-max-content-intrinsic-siz
 crbug.com/626703 external/wpt/css/css-lists/li-list-item-counter.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-sizing/image-min-max-content-intrinsic-size-change-006.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-sizing/image-min-max-content-intrinsic-size-change-004.html [ Failure ]
-crbug.com/626703 virtual/threaded/external/wpt/css/css-animations/animationevent-marker-pseudoelement.html [ Timeout ]
 crbug.com/626703 external/wpt/css/css-sizing/image-min-max-content-intrinsic-size-change-007.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-lists/counter-set-001.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-text/text-transform/text-transform-multiple-001.html [ Failure ]
