@@ -1725,7 +1725,7 @@ IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest, CorsFromContentScript) {
 
   // Verify the request headers (e.g. Origin and Sec-Fetch-Site headers).
   cors_request.WaitForRequest();
-  if (IsExtensionAllowlisted()) {
+  if (IsExtensionAllowlisted() || !ShouldAllowlistAlsoApplyToOorCors()) {
     // Content scripts of allowlisted extensions should be exempted from CORS,
     // based on the websites the extension has permission for, via extension
     // manifest.  Therefore, there should be no "Origin" header.
@@ -1733,9 +1733,6 @@ IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest, CorsFromContentScript) {
         cors_request.http_request()->headers,
         testing::Not(testing::Contains(testing::Pair("Origin", testing::_))));
   } else {
-#if 0
-    // TODO(lukasza): https://crbug.com/920638:
-    //
     // Content scripts of non-allowlisted extensions should participate in
     // regular CORS, just as if the request was issued from the webpage that the
     // content script got injected into.  Therefore we should expect the Origin
@@ -1743,7 +1740,6 @@ IN_PROC_BROWSER_TEST_P(CorbAndCorsExtensionBrowserTest, CorsFromContentScript) {
     EXPECT_THAT(
         cors_request.http_request()->headers,
         testing::Contains(testing::Pair("Origin", page_origin_string.c_str())));
-#endif
   }
 
   // Respond with Access-Control-Allow-Origin that matches the origin of the web
