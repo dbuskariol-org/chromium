@@ -2457,7 +2457,7 @@
     },
 
     'ios_device': {
-      'mixins': ['ios'],
+      'mixins': ['ios', 'ios_use_goma_rbe' ],
       'gn_args': 'target_cpu="arm64"',
     },
 
