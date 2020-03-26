@@ -81,6 +81,7 @@ settings_namespace_rewrites = [
   "settings.SyncStatus|SyncStatus",
   "settings.SystemPageBrowserProxy|SystemPageBrowserProxy",
   "settings.RouteObserverBehavior|RouteObserverBehavior",
+  "settings.WebsiteUsageBrowserProxy|WebsiteUsageBrowserProxy",
 
   "action_link.m.js|action_link.js",
 
