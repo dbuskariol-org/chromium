@@ -116,8 +116,7 @@ var CrSettingsMainPageV3Test = class extends CrSettingsV3BrowserTest {
 // Copied from Polymer 2 version of tests:
 // Times out on Windows Tests (dbg). See https://crbug.com/651296.
 // Times out / crashes on chromium.linux/Linux Tests (dbg) crbug.com/667882
-// Times out on Linux CFI. See http://crbug.com/929288.
-GEN('#if !defined(NDEBUG) || (defined(OS_LINUX) && defined(IS_CFI))');
+GEN('#if !defined(NDEBUG)');
 GEN('#define MAYBE_MainPageV3 DISABLED_MainPageV3');
 GEN('#else');
 GEN('#define MAYBE_MainPageV3 MainPageV3');
