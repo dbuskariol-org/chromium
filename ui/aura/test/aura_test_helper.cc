@@ -99,8 +99,8 @@ AuraTestHelper::AuraTestHelper(ui::ContextFactory* context_factory,
 }
 
 AuraTestHelper::~AuraTestHelper() {
-  CHECK(setup_called_) << "AuraTestHelper::SetUp() never called.";
-  CHECK(teardown_called_) << "AuraTestHelper::TearDown() never called.";
+  if (g_instance)
+    TearDown();
 }
 
 // static
@@ -109,8 +109,6 @@ AuraTestHelper* AuraTestHelper::GetInstance() {
 }
 
 void AuraTestHelper::SetUp() {
-  setup_called_ = true;
-
   display::Screen* screen = display::Screen::GetScreen();
   gfx::Size host_size(screen ? screen->GetPrimaryDisplay().GetSizeInPixel()
                              : gfx::Size(800, 600));
@@ -139,8 +137,6 @@ void AuraTestHelper::SetUp() {
 }
 
 void AuraTestHelper::TearDown() {
-  teardown_called_ = true;
-
   g_instance = nullptr;
 
   if (test_screen_ && (display::Screen::GetScreen() == GetTestScreen()))

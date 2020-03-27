@@ -51,7 +51,8 @@ class AuraTestHelper {
   // Creates and initializes (shows and sizes) the RootWindow for use in tests.
   void SetUp();
 
-  // Destroys the window, Env, and most other objects.
+  // Destroys the window, Env, and most other objects.  This will be called
+  // automatically on destruction if it is not called manually earlier.
   void TearDown();
 
   // Flushes message loop.
@@ -70,8 +71,6 @@ class AuraTestHelper {
   ui::ContextFactory* GetContextFactory();
 
  private:
-  bool setup_called_ = false;
-  bool teardown_called_ = false;
   std::unique_ptr<wm::WMState> wm_state_ = std::make_unique<wm::WMState>();
   std::unique_ptr<ui::ScopedAnimationDurationScaleMode> zero_duration_mode_;
   std::unique_ptr<Env> env_;

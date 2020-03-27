@@ -117,7 +117,7 @@ class SnapshotAuraTest : public testing::TestWithParam<bool> {
     test_window_.reset();
     delegate_.reset();
     helper_->RunAllPendingInMessageLoop();
-    helper_->TearDown();
+    helper_.reset();
     context_factories_.reset();
     task_environment_.reset();
     testing::Test::TearDown();
