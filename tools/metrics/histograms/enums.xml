@@ -38867,6 +38867,7 @@ from previous Chrome versions.
   <int value="-426815606" label="HomepageTile:enabled"/>
   <int value="-424701311" label="SignedHTTPExchange:disabled"/>
   <int value="-424134004" label="WebPaymentsExperimentalFeatures:disabled"/>
+  <int value="-419733676" label="IsolatePrerendersMustProbeOrigin:disabled"/>
   <int value="-418868128" label="enable-experimental-web-platform-features"/>
   <int value="-418676305" label="ScanningUI:enabled"/>
   <int value="-416660617" label="EnforceTLS13Downgrade:disabled"/>
@@ -39930,6 +39931,7 @@ from previous Chrome versions.
   <int value="857445869" label="enable-captive-portal-bypass-proxy"/>
   <int value="860336036" label="ChromeModernDesign:enabled"/>
   <int value="862453793" label="TranslateUI2016Q2:enabled"/>
+  <int value="864024033" label="IsolatePrerendersMustProbeOrigin:enabled"/>
   <int value="867512869" label="mark-non-secure-as"/>
   <int value="868009556" label="AutofillUpstream:enabled"/>
   <int value="869531646" label="enable-session-crashed-bubble"/>
