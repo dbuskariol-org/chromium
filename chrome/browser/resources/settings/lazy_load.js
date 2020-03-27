@@ -23,7 +23,7 @@ import './site_settings/category_setting_exceptions.m.js';
 import './site_settings/chooser_exception_list.m.js';
 import './site_settings/media_picker.m.js';
 import './site_settings/pdf_documents.m.js';
-// import './site_settings/protocol_handlers.m.js';
+import './site_settings/protocol_handlers.m.js';
 import './site_settings/site_data.m.js';
 import './site_settings/site_details.m.js';
 import './site_settings/zoom_levels.m.js';
