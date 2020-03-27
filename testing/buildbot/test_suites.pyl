@@ -2130,6 +2130,17 @@
         'linux_args': [ '--no-xvfb' ],
         'test': 'content_browsertests',
       },
+      'vulkan_tests': {
+        'args': [
+          '--enable-gpu',
+          '--test-launcher-bot-mode',
+          '--test-launcher-jobs=1',
+          '--disable-headless-mode',
+        ],
+        'linux_args': [ '--no-xvfb' ],
+        'test': 'vulkan_tests',
+      },
+
     },
 
     'gpu_fyi_vulkan_swiftshader_gtests': {
