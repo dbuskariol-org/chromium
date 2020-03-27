@@ -11,12 +11,6 @@
 #include "ui/aura/test/aura_test_helper.h"
 #include "ui/views/test/views_test_helper.h"
 
-namespace aura {
-namespace client {
-class ScreenPositionClient;
-}
-}  // namespace aura
-
 namespace views {
 
 class ViewsTestHelperAura : public ViewsTestHelper {
@@ -29,7 +23,6 @@ class ViewsTestHelperAura : public ViewsTestHelper {
 
  private:
   aura::test::AuraTestHelper aura_test_helper_;
-  std::unique_ptr<aura::client::ScreenPositionClient> screen_position_client_;
 
   DISALLOW_COPY_AND_ASSIGN(ViewsTestHelperAura);
 };

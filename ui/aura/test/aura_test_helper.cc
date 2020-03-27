@@ -29,6 +29,7 @@
 #include "ui/compositor/test/test_context_factories.h"
 #include "ui/display/screen.h"
 #include "ui/wm/core/default_activation_client.h"
+#include "ui/wm/core/default_screen_position_client.h"
 #include "ui/wm/core/wm_state.h"
 
 #if defined(OS_LINUX)
@@ -126,6 +127,8 @@ void AuraTestHelper::SetUp(ui::ContextFactory* context_factory) {
   focus_client_ = std::make_unique<TestFocusClient>(root_window);
   capture_client_ = std::make_unique<client::DefaultCaptureClient>(root_window);
   parenting_client_ = std::make_unique<TestWindowParentingClient>(root_window);
+  screen_position_client_ =
+      std::make_unique<wm::DefaultScreenPositionClient>(root_window);
 
   root_window->Show();
   // Ensure width != height so tests won't confuse them.
@@ -137,6 +140,7 @@ void AuraTestHelper::SetUp(ui::ContextFactory* context_factory) {
 void AuraTestHelper::TearDown() {
   g_instance = nullptr;
   teardown_called_ = true;
+  screen_position_client_.reset();
   parenting_client_.reset();
   capture_client_.reset();
   focus_client_.reset();

@@ -4,9 +4,7 @@
 
 #include "ui/views/test/views_test_helper_aura.h"
 
-#include "ui/aura/client/screen_position_client.h"
 #include "ui/wm/core/capture_controller.h"
-#include "ui/wm/core/default_screen_position_client.h"
 
 namespace views {
 
@@ -17,12 +15,6 @@ std::unique_ptr<ViewsTestHelper> ViewsTestHelper::Create() {
 
 ViewsTestHelperAura::ViewsTestHelperAura() {
   aura_test_helper_.SetUp();
-
-  gfx::NativeWindow root_window = GetContext();
-  if (root_window && !aura::client::GetScreenPositionClient(root_window)) {
-    screen_position_client_ =
-        std::make_unique<wm::DefaultScreenPositionClient>(root_window);
-  }
 }
 
 ViewsTestHelperAura::~ViewsTestHelperAura() {
@@ -37,7 +29,6 @@ ViewsTestHelperAura::~ViewsTestHelperAura() {
     DCHECK(root_window->children().empty()) << "Not all windows were closed.";
   }
 
-  screen_position_client_.reset();
   aura_test_helper_.TearDown();
 
   const wm::CaptureController* const controller = wm::CaptureController::Get();

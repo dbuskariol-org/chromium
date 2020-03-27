@@ -31,6 +31,7 @@ namespace client {
 class CaptureClient;
 class DefaultCaptureClient;
 class FocusClient;
+class ScreenPositionClient;
 }
 namespace test {
 class TestWindowParentingClient;
@@ -77,6 +78,7 @@ class AuraTestHelper {
   std::unique_ptr<ui::TestContextFactories> context_factories_;
   std::unique_ptr<WindowTreeHost> host_;
   std::unique_ptr<TestWindowParentingClient> parenting_client_;
+  std::unique_ptr<client::ScreenPositionClient> screen_position_client_;
   std::unique_ptr<client::DefaultCaptureClient> capture_client_;
   std::unique_ptr<client::FocusClient> focus_client_;
   std::unique_ptr<TestScreen> test_screen_;
