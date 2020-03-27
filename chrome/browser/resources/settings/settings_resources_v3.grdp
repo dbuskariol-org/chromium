@@ -607,6 +607,10 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/add_site_dialog.m.js"
            use_base_dir="false"
            type="BINDATA" />
+  <include name="IDR_SETTINGS_SITE_SETTINGS_ALL_SITES_M_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/all_sites.m.js"
+           use_base_dir="false"
+           type="BINDATA" />
   <include name="IDR_SETTINGS_SITE_SETTINGS_ALL_SITES_ICONS_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/site_settings/all_sites_icons.m.js"
            use_base_dir="false"

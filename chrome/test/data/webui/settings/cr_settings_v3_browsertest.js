@@ -276,7 +276,8 @@ TEST_F('CrSettingsPersonalizationOptionsV3Test', 'AllBuildsOld', function() {
   runMochaSuite('PersonalizationOptionsTests_AllBuilds_Old');
 });
 
-[['AppearanceFontsPage', 'appearance_fonts_page_test.m.js'],
+[['AllSites', 'all_sites_tests.m.js'],
+ ['AppearanceFontsPage', 'appearance_fonts_page_test.m.js'],
  ['AppearancePage', 'appearance_page_test.m.js'],
  ['AutofillPage', 'autofill_page_test.m.js'],
  ['BasicPage', 'basic_page_test.m.js'],

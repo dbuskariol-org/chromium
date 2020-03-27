@@ -294,13 +294,11 @@ js_library("zoom_levels") {
   ]
 }
 
-# TODO(crbug.com/1026426): Fix and enable.
 js_type_check("closure_compile_module") {
   is_polymer3 = true
   deps = [
     ":add_site_dialog.m",
-
-    #    ":all_sites.m",
+    ":all_sites.m",
     ":android_info_browser_proxy.m",
     ":category_default_setting.m",
     ":category_setting_exceptions.m",
@@ -344,8 +342,18 @@ js_library("add_site_dialog.m") {
 js_library("all_sites.m") {
   sources = [ "$root_gen_dir/chrome/browser/resources/settings/site_settings/all_sites.m.js" ]
   deps = [
-    # TODO: Fill those in.
+    ":constants.m",
+    ":local_data_browser_proxy.m",
+    ":site_settings_behavior.m",
+    ":site_settings_prefs_browser_proxy.m",
+    "..:global_scroll_target_behavior.m",
+    "..:router.m",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/js:i18n_behavior.m",
+    "//ui/webui/resources/js:load_time_data.m",
+    "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
+  externs_list = [ "$externs_path/settings_private.js" ]
   extra_deps = [ ":all_sites_module" ]
 }
 
@@ -685,6 +693,16 @@ polymer_modulizer("all_sites") {
   js_file = "all_sites.js"
   html_file = "all_sites.html"
   html_type = "dom-module"
+  auto_imports = settings_auto_imports + [
+                   "chrome/browser/resources/settings/global_scroll_target_behavior.html|GlobalScrollTargetBehavior,GlobalScrollTargetBehaviorImpl",
+                   "chrome/browser/resources/settings/route.html|routes",
+                   "chrome/browser/resources/settings/router.html|Route,Router,RouteObserverBehavior",
+                   "chrome/browser/resources/settings/site_settings/constants.html|ALL_SITES_DIALOG,AllSitesAction2,ContentSetting,ContentSettingsTypes,SortMethod",
+                   "chrome/browser/resources/settings/site_settings/local_data_browser_proxy.html|LocalDataBrowserProxy,LocalDataBrowserProxyImpl",
+                   "chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.html|SiteGroup",
+                   "ui/webui/resources/html/polymer.html|afterNextRender,html,Polymer",
+                 ]
+  namespace_rewrites = settings_namespace_rewrites
 }
 
 polymer_modulizer("all_sites_icons") {
