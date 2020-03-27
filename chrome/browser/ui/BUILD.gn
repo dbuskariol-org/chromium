@@ -2691,6 +2691,7 @@ jumbo_static_library("ui") {
         "views/frame/browser_desktop_window_tree_host_linux.cc",
         "views/frame/browser_desktop_window_tree_host_linux.h",
       ]
+      deps += [ "//ui/platform_window/extensions" ]
     }
     if (use_gtk) {
       # This is the only component that can interact with gtk.
