@@ -147,6 +147,8 @@ if (enable_vulkan) {
         "//gpu/vulkan/init",
         "//testing/gmock",
         "//testing/gtest",
+        "//ui/events/platform",
+        "//ui/events/platform/x11",
         "//ui/gfx",
         "//ui/gfx:native_widget_types",
         "//ui/gfx/geometry",
