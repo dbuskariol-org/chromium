@@ -28,6 +28,7 @@ source_set("url_loading") {
     "//components/search_engines",
     "//components/sessions",
     "//ios/chrome/app:mode",
+    "//ios/chrome/app/application_delegate:tab_opening",
     "//ios/chrome/browser",
     "//ios/chrome/browser/browser_state",
     "//ios/chrome/browser/feature_engagement",

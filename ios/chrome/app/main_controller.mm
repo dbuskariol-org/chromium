@@ -645,7 +645,7 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 #pragma mark - Property implementation.
 
 - (id<BrowserInterfaceProvider>)interfaceProvider {
-  return self.sceneController.browserViewWrangler;
+  return self.appState.connectedScenes[0].interfaceProvider;
 }
 
 - (BOOL)isFirstLaunchAfterUpgrade {
