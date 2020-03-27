@@ -238,6 +238,9 @@ TabImpl::~TabImpl() {
 
 // static
 TabImpl* TabImpl::FromWebContents(content::WebContents* web_contents) {
+  if (!web_contents)
+    return nullptr;
+
   return reinterpret_cast<UserData*>(
              web_contents->GetUserData(&kWebContentsUserDataKey))
       ->controller;
