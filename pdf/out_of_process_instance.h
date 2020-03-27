@@ -235,6 +235,13 @@ class OutOfProcessInstance : public pp::Instance,
   // Send a notification that the print preview has loaded.
   void SendPrintPreviewLoadedNotification();
 
+  // Send document metadata. (e.g. PDF title and bookmarks.)
+  void SendDocumentMetadata();
+
+  // Send the loading progress, where |percentage| represents the progress, or
+  // -1 for loading error.
+  void SendLoadingProgress(double percentage);
+
   // Bound the given scroll offset to the document.
   pp::FloatPoint BoundScrollOffsetToDocument(
       const pp::FloatPoint& scroll_offset);

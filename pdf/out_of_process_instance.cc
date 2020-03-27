@@ -1670,27 +1670,8 @@ void OutOfProcessInstance::DocumentLoadComplete(
     OnGeometryChanged(0, 0);
   }
 
-  pp::VarDictionary metadata_message;
-  metadata_message.Set(pp::Var(kType), pp::Var(kJSMetadataType));
-  const DocumentMetadata& metadata = engine_->GetDocumentMetadata();
-  HistogramEnumeration("PDF.Version", metadata.version);
-
-  const std::string& title = metadata.title;
-  if (!base::TrimWhitespace(base::UTF8ToUTF16(title), base::TRIM_ALL).empty())
-    metadata_message.Set(pp::Var(kJSTitle), pp::Var(title));
-
-  metadata_message.Set(
-      pp::Var(kJSCanSerializeDocument),
-      pp::Var(IsSaveDataSizeValid(engine_->GetLoadedByteSize())));
-
-  pp::VarArray bookmarks = engine_->GetBookmarks();
-  metadata_message.Set(pp::Var(kJSBookmarks), bookmarks);
-  PostMessage(metadata_message);
-
-  pp::VarDictionary progress_message;
-  progress_message.Set(pp::Var(kType), pp::Var(kJSLoadProgressType));
-  progress_message.Set(pp::Var(kJSProgressPercentage), pp::Var(100));
-  PostMessage(progress_message);
+  SendDocumentMetadata();
+  SendLoadingProgress(/*percentage=*/100);
 
   if (accessibility_state_ == ACCESSIBILITY_STATE_PENDING)
     LoadAccessibility();
@@ -1723,6 +1704,7 @@ void OutOfProcessInstance::DocumentLoadComplete(
   HistogramEnumerationDeprecated(
       "PDF.FormType", static_cast<int32_t>(document_features.form_type),
       static_cast<int32_t>(PDFEngine::FormType::kCount));
+  HistogramEnumeration("PDF.Version", engine_->GetDocumentMetadata().version);
 }
 
 void OutOfProcessInstance::RotateClockwise() {
@@ -1779,10 +1761,7 @@ void OutOfProcessInstance::DocumentLoadFailed() {
   paint_manager_.InvalidateRect(pp::Rect(pp::Point(), plugin_size_));
 
   // Send a progress value of -1 to indicate a failure.
-  pp::VarDictionary message;
-  message.Set(pp::Var(kType), pp::Var(kJSLoadProgressType));
-  message.Set(pp::Var(kJSProgressPercentage), pp::Var(-1));
-  PostMessage(message);
+  SendLoadingProgress(-1);
 }
 
 void OutOfProcessInstance::PreviewDocumentLoadFailed() {
@@ -1844,10 +1823,7 @@ void OutOfProcessInstance::DocumentLoadProgress(uint32_t available,
   // Avoid sending too many progress messages over PostMessage.
   if (progress > last_progress_sent_ + 1) {
     last_progress_sent_ = progress;
-    pp::VarDictionary message;
-    message.Set(pp::Var(kType), pp::Var(kJSLoadProgressType));
-    message.Set(pp::Var(kJSProgressPercentage), pp::Var(progress));
-    PostMessage(message);
+    SendLoadingProgress(progress);
   }
 }
 
@@ -2015,6 +1991,32 @@ void OutOfProcessInstance::SendPrintPreviewLoadedNotification() {
   pp::VarDictionary loaded_message;
   loaded_message.Set(pp::Var(kType), pp::Var(kJSPreviewLoadedType));
   PostMessage(loaded_message);
+}
+
+void OutOfProcessInstance::SendDocumentMetadata() {
+  pp::VarDictionary metadata_message;
+  metadata_message.Set(pp::Var(kType), pp::Var(kJSMetadataType));
+
+  const std::string& title = engine_->GetDocumentMetadata().title;
+  if (!base::TrimWhitespace(base::UTF8ToUTF16(title), base::TRIM_ALL).empty())
+    metadata_message.Set(pp::Var(kJSTitle), pp::Var(title));
+
+  pp::VarArray bookmarks = engine_->GetBookmarks();
+  metadata_message.Set(pp::Var(kJSBookmarks), bookmarks);
+
+  metadata_message.Set(
+      pp::Var(kJSCanSerializeDocument),
+      pp::Var(IsSaveDataSizeValid(engine_->GetLoadedByteSize())));
+
+  PostMessage(metadata_message);
+}
+
+void OutOfProcessInstance::SendLoadingProgress(double percentage) {
+  DCHECK(percentage == -1 || (percentage >= 0 && percentage <= 100));
+  pp::VarDictionary progress_message;
+  progress_message.Set(pp::Var(kType), pp::Var(kJSLoadProgressType));
+  progress_message.Set(pp::Var(kJSProgressPercentage), pp::Var(percentage));
+  PostMessage(progress_message);
 }
 
 void OutOfProcessInstance::UserMetricsRecordAction(const std::string& action) {
