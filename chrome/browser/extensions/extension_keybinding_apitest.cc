@@ -56,8 +56,6 @@ const char kAltShiftG[] = "Alt+Shift+G";
 
 // Name of the command for the "basics" test extension.
 const char kBasicsShortcutCommandName[] = "toggle-feature";
-// Name of the command for the overwrite_bookmark_shortcut test extension.
-const char kOverwriteBookmarkShortcutCommandName[] = "send message";
 
 #if defined(OS_MACOSX)
 const char kBookmarkKeybinding[] = "Command+D";
@@ -533,31 +531,6 @@ IN_PROC_BROWSER_TEST_F(CommandsApiTest, DontOverwriteSystemShortcuts) {
     EXPECT_TRUE(alt_shift_f_listener.WaitUntilSatisfied());
     EXPECT_FALSE(ctrl_f_listener.was_satisfied());
   }
-}
-
-// This test validates that an extension can override the Chrome bookmark
-// shortcut if it has requested to do so.
-IN_PROC_BROWSER_TEST_F(CommandsApiTest, OverwriteBookmarkShortcut) {
-  ASSERT_TRUE(embedded_test_server()->Start());
-
-  ASSERT_TRUE(ui_test_utils::BringBrowserWindowToFront(browser()));
-
-  // This functionality requires a feature flag.
-  base::CommandLine::ForCurrentProcess()->AppendSwitchASCII(
-      "--enable-override-bookmarks-ui", "1");
-
-  ASSERT_TRUE(RunExtensionTest("keybinding/overwrite_bookmark_shortcut"))
-      << message_;
-
-  ui_test_utils::NavigateToURL(
-      browser(), embedded_test_server()->GetURL("/extensions/test_file.txt"));
-
-  // Activate the shortcut (Ctrl+D) to send a test message.
-  ExtensionTestMessageListener test_listener(false);  // Won't reply.
-  ASSERT_TRUE(SendBookmarkKeyPressSync(browser()));
-  EXPECT_TRUE(test_listener.WaitUntilSatisfied());
-  EXPECT_EQ(std::string(kOverwriteBookmarkShortcutCommandName),
-            test_listener.message());
 }
 
 // This test validates that an extension override of the Chrome bookmark
