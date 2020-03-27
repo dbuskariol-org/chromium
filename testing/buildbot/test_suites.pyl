@@ -4763,6 +4763,16 @@
           'SIM_IPHONE_X_13_3',
         ],
       },
+      'ios_eg2_tests': {
+        'variants': [
+          'SIM_IPHONE_X_13_3',
+        ],
+      },
+      'ios_screen_size_dependent_tests': {
+        'variants': [
+          'SIM_IPHONE_X_13_3',
+        ],
+      },
     },
 
     'ios_simulator_cronet_tests': {
