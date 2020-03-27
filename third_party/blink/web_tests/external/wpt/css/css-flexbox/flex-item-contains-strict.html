@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-
+<title>CSS Flexbox: 'contain' property strict value</title>
+<link rel="help" href="https://drafts.csswg.org/css-contain/#contain-property">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-containers">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-direction-property">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#align-items-property">
+<meta name="assert" content="This test ensures that the strict value of the 'contain'
+property in combination with mixing of 'display' inline-flex value, 'align-items' flex-start
+value, column direction works properly.">
 <style>
 .inline-flex {
   display: inline-flex;
@@ -8,9 +15,9 @@
 }
 </style>
 
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 
 <body onload="checkLayout('.inline-flex')">
 <p>Stretched:</p>
