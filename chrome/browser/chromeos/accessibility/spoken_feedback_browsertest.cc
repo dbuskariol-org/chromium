@@ -117,6 +117,12 @@ void LoggedInSpokenFeedbackTest::SendKeyPressWithSearchAndControlAndShift(
       nullptr, key, true, true, false, true)));
 }
 
+void LoggedInSpokenFeedbackTest::SendStickyKeyCommand() {
+  // To avoid flakes in sending keys, execute the command directly in js.
+  RunJavaScriptInChromeVoxBackgroundPage(
+      "CommandHandler.onCommand('toggleStickyMode');");
+}
+
 void LoggedInSpokenFeedbackTest::SendMouseMoveTo(const gfx::Point& location) {
   ASSERT_NO_FATAL_FAILURE(
       ASSERT_TRUE(ui_controls::SendMouseMove(location.x(), location.y())));
@@ -128,7 +134,7 @@ void LoggedInSpokenFeedbackTest::RunJavaScriptInChromeVoxBackgroundPage(
       extensions::ProcessManager::Get(browser()->profile())
           ->GetBackgroundHostForExtension(
               extension_misc::kChromeVoxExtensionId);
-  CHECK(content::ExecuteScript(host->host_contents(), script));
+  content::ExecuteScriptAsync(host->host_contents(), script);
 }
 
 void LoggedInSpokenFeedbackTest::SimulateTouchScreenInChromeVox() {
@@ -566,7 +572,7 @@ IN_PROC_BROWSER_TEST_P(SpokenFeedbackTest, ChromeVoxNavigateAndSelect) {
   sm_.Replay();
 }
 
-IN_PROC_BROWSER_TEST_P(SpokenFeedbackTest, DISABLED_ChromeVoxStickyMode) {
+IN_PROC_BROWSER_TEST_P(SpokenFeedbackTest, ChromeVoxStickyMode) {
   EnableChromeVox();
 
   ui_test_utils::NavigateToURL(
@@ -576,34 +582,14 @@ IN_PROC_BROWSER_TEST_P(SpokenFeedbackTest, DISABLED_ChromeVoxStickyMode) {
   sm_.ExpectSpeech("Click me");
 
   // Press the sticky-key sequence: Search Search.
-  sm_.Call([this]() {
-    SendKeyPress(ui::VKEY_LWIN);
-
-    // Sticky key has a minimum 100 ms check to prevent key repeat from toggling
-    // it.
-    base::PostDelayedTask(
-        FROM_HERE, {content::BrowserThread::UI},
-        base::BindOnce(&LoggedInSpokenFeedbackTest::SendKeyPress,
-                       base::Unretained(this), ui::VKEY_LWIN),
-        base::TimeDelta::FromMilliseconds(200));
-  });
+  sm_.Call([this]() { SendStickyKeyCommand(); });
 
   sm_.ExpectSpeech("Sticky mode enabled");
 
   sm_.Call([this]() { SendKeyPress(ui::VKEY_H); });
   sm_.ExpectSpeech("No next heading");
 
-  sm_.Call([this]() {
-    SendKeyPress(ui::VKEY_LWIN);
-
-    // Sticky key has a minimum 100 ms check to prevent key repeat from toggling
-    // it.
-    base::PostDelayedTask(
-        FROM_HERE, {content::BrowserThread::UI},
-        base::BindOnce(&LoggedInSpokenFeedbackTest::SendKeyPress,
-                       base::Unretained(this), ui::VKEY_LWIN),
-        base::TimeDelta::FromMilliseconds(200));
-  });
+  sm_.Call([this]() { SendStickyKeyCommand(); });
   sm_.ExpectSpeech("Sticky mode disabled");
 
   sm_.Replay();
@@ -827,6 +813,60 @@ IN_PROC_BROWSER_TEST_P(SpokenFeedbackTest, ResetTtsSettings) {
   sm_.ExpectSpeech("Rate 19 percent");
   sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_OEM_6); });
   sm_.ExpectSpeech("Pitch 50 percent");
+  sm_.Replay();
+}
+
+IN_PROC_BROWSER_TEST_P(SpokenFeedbackTest, SmartStickyMode) {
+  EnableChromeVox();
+  ui_test_utils::NavigateToURL(browser(),
+                               GURL("data:text/html,<p>start</p><input "
+                                    "autofocus type='text'><p>end</p>"));
+
+  // The input is autofocused.
+  sm_.ExpectSpeech("Edit text");
+
+  // First, navigate with sticky mode on.
+  sm_.Call([this]() { SendStickyKeyCommand(); });
+  sm_.ExpectSpeech("Sticky mode enabled");
+
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_RIGHT); });
+  sm_.ExpectNextSpeechIsNotPattern("Sticky mode *abled");
+  sm_.ExpectSpeech("end");
+
+  // Jump to beginning.
+  sm_.Call([this]() { SendKeyPressWithSearchAndControl(ui::VKEY_LEFT); });
+  sm_.ExpectNextSpeechIsNotPattern("Sticky mode *abled");
+  sm_.ExpectSpeech("start");
+
+  // The nextEditText command is explicitly excluded from toggling.
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_E); });
+  sm_.ExpectNextSpeechIsNotPattern("Sticky mode *abled");
+  sm_.ExpectSpeech("Edit text");
+
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_RIGHT); });
+  sm_.ExpectNextSpeechIsNotPattern("Sticky mode *abled");
+  sm_.ExpectSpeech("end");
+
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_LEFT); });
+  sm_.ExpectSpeech("Sticky mode disabled");
+  sm_.ExpectSpeech("Edit text");
+
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_LEFT); });
+  sm_.ExpectSpeech("Sticky mode enabled");
+  sm_.ExpectSpeech("start");
+
+  // Now, navigate with sticky mode off.
+  sm_.Call([this]() { SendStickyKeyCommand(); });
+  sm_.ExpectSpeech("Sticky mode disabled");
+
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_RIGHT); });
+  sm_.ExpectNextSpeechIsNotPattern("Sticky mode *abled");
+  sm_.ExpectSpeech("Edit text");
+
+  sm_.Call([this]() { SendKeyPressWithSearch(ui::VKEY_RIGHT); });
+  sm_.ExpectNextSpeechIsNotPattern("Sticky mode *abled");
+  sm_.ExpectSpeech("end");
+
   sm_.Replay();
 }
 

@@ -214,6 +214,21 @@ void SpeechMonitor::ExpectNextSpeechIsNot(const std::string& text,
        "ExpectNextSpeechIsNot(\"" + text + "\") " + location.ToString()});
 }
 
+void SpeechMonitor::ExpectNextSpeechIsNotPattern(
+    const std::string& pattern,
+    const base::Location& location) {
+  CHECK(!replay_loop_runner_.get());
+  replay_queue_.push_back({[this, pattern]() {
+                             if (utterance_queue_.empty())
+                               return false;
+
+                             return !base::MatchPattern(
+                                 utterance_queue_.front().text, pattern);
+                           },
+                           "ExpectNextSpeechIsNotPattern(\"" + pattern +
+                               "\") " + location.ToString()});
+}
+
 void SpeechMonitor::Call(std::function<void()> func,
                          const base::Location& location) {
   CHECK(!replay_loop_runner_.get());

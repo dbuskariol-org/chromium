@@ -35,6 +35,8 @@ class LoggedInSpokenFeedbackTest : public InProcessBrowserTest {
   void SendKeyPressWithSearchAndControl(ui::KeyboardCode key);
   void SendKeyPressWithSearchAndControlAndShift(ui::KeyboardCode key);
 
+  void SendStickyKeyCommand();
+
   void SendMouseMoveTo(const gfx::Point& location);
 
   void RunJavaScriptInChromeVoxBackgroundPage(const std::string& script);
