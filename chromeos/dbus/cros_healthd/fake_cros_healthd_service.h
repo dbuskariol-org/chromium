@@ -66,6 +66,10 @@ class FakeCrosHealthdService final
       RunNvmeWearLevelRoutineCallback callback) override;
   void RunNvmeSelfTestRoutine(mojom::NvmeSelfTestTypeEnum nvme_self_test_type,
                               RunNvmeSelfTestRoutineCallback callback) override;
+  void RunDiskReadRoutine(mojom::DiskReadRoutineTypeEnum type,
+                          uint32_t length_seconds,
+                          uint32_t file_size_mb,
+                          RunDiskReadRoutineCallback callback) override;
 
   // CrosHealthdProbeService overrides:
   void ProbeTelemetryInfo(
