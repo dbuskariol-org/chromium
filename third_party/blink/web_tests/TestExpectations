@@ -5507,7 +5507,6 @@ crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-opacity-descendant.html
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-opacity.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-out-of-bounds.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-out-of-bounds-translate.html [ Pass Failure ]
-crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-overflow.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-pseudo-element-display.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-pseudo-element-image.html [ Pass Failure ]
 crbug.com/1062984 external/wpt/paint-timing/fcp-only/fcp-pseudo-element-opacity.html [ Pass Failure ]
