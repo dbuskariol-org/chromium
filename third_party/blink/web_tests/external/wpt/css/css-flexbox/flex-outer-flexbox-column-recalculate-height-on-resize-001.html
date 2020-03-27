@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<html>
+<title>CSS Flexbox: height resizing with flex-direction: column</title>
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-direction-property">
+<link rel="help" href="https://crbug.com/527039">
+<meta name="assert" content="This test checks that resizing the height of a layout with two nested flexboxes using 'flex-direction: column' correctly recalculates the outer box's height." />
+
 <style>
 body,
 html {
@@ -24,9 +30,9 @@ html {
 }
 </style>
 
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 
 <body onload="update()">
 
@@ -64,3 +70,5 @@ function update() {
   checkLayout('.OuterFlexbox');
 }
 </script>
+</body>
+</html>
