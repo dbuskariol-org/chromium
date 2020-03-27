@@ -2128,6 +2128,8 @@ crbug.com/944583 [ Mac ] fast/scrolling/percentage-mousewheel-scroll-on-iframe.h
 crbug.com/944583 [ Mac ] fast/scrolling/percentage-mousewheel-scroll.html [ Pass Failure ]
 crbug.com/944583 [ Mac ] virtual/scroll_customization/fast/scrolling/percentage-mousewheel-scroll-on-iframe.html [ Pass Failure ]
 crbug.com/944583 [ Mac ] virtual/scroll_customization/fast/scrolling/percentage-mousewheel-scroll.html [ Pass Failure ]
+crbug.com/944583 [ Mac ] fast/events/platform-wheelevent-paging-x-in-scrolling-page.html [ Pass Failure Timeout ]
+crbug.com/944583 [ Mac ] fast/events/platform-wheelevent-paging-y-in-scrolling-page.html [ Pass Failure Timeout ]
 
 # In external/wpt/html/, we prefer checking in failure
 # expectation files. The following tests with [ Failure ] don't have failure
