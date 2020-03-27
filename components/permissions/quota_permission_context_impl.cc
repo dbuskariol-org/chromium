@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chrome_quota_permission_context.h"
+#include "components/permissions/quota_permission_context_impl.h"
 
 #include <stdint.h>
 
@@ -11,41 +11,50 @@
 #include "base/bind.h"
 #include "base/compiler_specific.h"
 #include "base/macros.h"
-#include "base/strings/utf_string_conversions.h"
 #include "base/task/post_task.h"
 #include "build/build_config.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/tab_contents/tab_util.h"
-#include "chrome/grit/generated_resources.h"
 #include "components/permissions/permission_request.h"
 #include "components/permissions/permission_request_manager.h"
+#include "components/strings/grit/components_strings.h"
 #include "components/url_formatter/elide_url.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_details.h"
+#include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/web_contents.h"
 #include "third_party/blink/public/mojom/quota/quota_types.mojom.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "url/gurl.h"
 
 #if defined(OS_ANDROID)
-#include "chrome/browser/android/android_theme_resources.h"
+#include "components/permissions/android/theme_resources.h"
 #else
 #include "components/vector_icons/vector_icons.h"
 #endif
 
+namespace permissions {
 namespace {
 
 // On Android, if the site requested larger quota than this threshold, show a
 // different message to the user.
 const int64_t kRequestLargeQuotaThreshold = 5 * 1024 * 1024;
 
+// TODO(sky): move this to content and remove the one in tab_util.
+content::WebContents* GetWebContentsByFrameID(int render_process_id,
+                                              int render_frame_id) {
+  content::RenderFrameHost* render_frame_host =
+      content::RenderFrameHost::FromID(render_process_id, render_frame_id);
+  if (!render_frame_host)
+    return nullptr;
+  return content::WebContents::FromRenderFrameHost(render_frame_host);
+}
+
 // QuotaPermissionRequest ---------------------------------------------
 
-class QuotaPermissionRequest : public permissions::PermissionRequest {
+class QuotaPermissionRequest : public PermissionRequest {
  public:
   QuotaPermissionRequest(
-      ChromeQuotaPermissionContext* context,
+      QuotaPermissionContextImpl* context,
       const GURL& origin_url,
       bool is_large_quota_request,
       content::QuotaPermissionContext::PermissionCallback callback);
@@ -53,7 +62,7 @@ class QuotaPermissionRequest : public permissions::PermissionRequest {
   ~QuotaPermissionRequest() override;
 
  private:
-  // permissions::PermissionRequest:
+  // PermissionRequest:
   IconId GetIconId() const override;
 #if defined(OS_ANDROID)
   base::string16 GetMessageText() const override;
@@ -64,9 +73,9 @@ class QuotaPermissionRequest : public permissions::PermissionRequest {
   void PermissionDenied() override;
   void Cancelled() override;
   void RequestFinished() override;
-  permissions::PermissionRequestType GetPermissionRequestType() const override;
+  PermissionRequestType GetPermissionRequestType() const override;
 
-  const scoped_refptr<ChromeQuotaPermissionContext> context_;
+  const scoped_refptr<QuotaPermissionContextImpl> context_;
   const GURL origin_url_;
   const bool is_large_quota_request_;
   content::QuotaPermissionContext::PermissionCallback callback_;
@@ -75,7 +84,7 @@ class QuotaPermissionRequest : public permissions::PermissionRequest {
 };
 
 QuotaPermissionRequest::QuotaPermissionRequest(
-    ChromeQuotaPermissionContext* context,
+    QuotaPermissionContextImpl* context,
     const GURL& origin_url,
     bool is_large_quota_request,
     content::QuotaPermissionContext::PermissionCallback callback)
@@ -89,8 +98,7 @@ QuotaPermissionRequest::QuotaPermissionRequest(
 
 QuotaPermissionRequest::~QuotaPermissionRequest() {}
 
-permissions::PermissionRequest::IconId QuotaPermissionRequest::GetIconId()
-    const {
+PermissionRequest::IconId QuotaPermissionRequest::GetIconId() const {
 #if defined(OS_ANDROID)
   return IDR_ANDROID_INFOBAR_FOLDER;
 #else
@@ -129,8 +137,7 @@ void QuotaPermissionRequest::PermissionDenied() {
       content::QuotaPermissionContext::QUOTA_PERMISSION_RESPONSE_DISALLOW);
 }
 
-void QuotaPermissionRequest::Cancelled() {
-}
+void QuotaPermissionRequest::Cancelled() {}
 
 void QuotaPermissionRequest::RequestFinished() {
   if (callback_) {
@@ -142,20 +149,17 @@ void QuotaPermissionRequest::RequestFinished() {
   delete this;
 }
 
-permissions::PermissionRequestType
-QuotaPermissionRequest::GetPermissionRequestType() const {
-  return permissions::PermissionRequestType::QUOTA;
+PermissionRequestType QuotaPermissionRequest::GetPermissionRequestType() const {
+  return PermissionRequestType::QUOTA;
 }
 
 }  // namespace
 
+// QuotaPermissionContextImpl -----------------------------------------------
 
-// ChromeQuotaPermissionContext -----------------------------------------------
+QuotaPermissionContextImpl::QuotaPermissionContextImpl() {}
 
-ChromeQuotaPermissionContext::ChromeQuotaPermissionContext() {
-}
-
-void ChromeQuotaPermissionContext::RequestQuotaPermission(
+void QuotaPermissionContextImpl::RequestQuotaPermission(
     const content::StorageQuotaParams& params,
     int render_process_id,
     PermissionCallback callback) {
@@ -169,13 +173,13 @@ void ChromeQuotaPermissionContext::RequestQuotaPermission(
   if (!content::BrowserThread::CurrentlyOn(content::BrowserThread::UI)) {
     base::PostTask(
         FROM_HERE, {content::BrowserThread::UI},
-        base::BindOnce(&ChromeQuotaPermissionContext::RequestQuotaPermission,
+        base::BindOnce(&QuotaPermissionContextImpl::RequestQuotaPermission,
                        this, params, render_process_id, std::move(callback)));
     return;
   }
 
-  content::WebContents* web_contents = tab_util::GetWebContentsByFrameID(
-      render_process_id, params.render_frame_id);
+  content::WebContents* web_contents =
+      GetWebContentsByFrameID(render_process_id, params.render_frame_id);
   if (!web_contents) {
     // The tab may have gone away or the request may not be from a tab.
     LOG(WARNING) << "Attempt to request quota tabless renderer: "
@@ -185,8 +189,8 @@ void ChromeQuotaPermissionContext::RequestQuotaPermission(
     return;
   }
 
-  permissions::PermissionRequestManager* permission_request_manager =
-      permissions::PermissionRequestManager::FromWebContents(web_contents);
+  PermissionRequestManager* permission_request_manager =
+      PermissionRequestManager::FromWebContents(web_contents);
   if (permission_request_manager) {
     bool is_large_quota_request =
         params.requested_size > kRequestLargeQuotaThreshold;
@@ -202,7 +206,7 @@ void ChromeQuotaPermissionContext::RequestQuotaPermission(
                              QUOTA_PERMISSION_RESPONSE_CANCELLED);
 }
 
-void ChromeQuotaPermissionContext::DispatchCallbackOnIOThread(
+void QuotaPermissionContextImpl::DispatchCallbackOnIOThread(
     PermissionCallback callback,
     QuotaPermissionResponse response) {
   DCHECK(callback);
@@ -210,13 +214,14 @@ void ChromeQuotaPermissionContext::DispatchCallbackOnIOThread(
   if (!content::BrowserThread::CurrentlyOn(content::BrowserThread::IO)) {
     base::PostTask(
         FROM_HERE, {content::BrowserThread::IO},
-        base::BindOnce(
-            &ChromeQuotaPermissionContext::DispatchCallbackOnIOThread, this,
-            std::move(callback), response));
+        base::BindOnce(&QuotaPermissionContextImpl::DispatchCallbackOnIOThread,
+                       this, std::move(callback), response));
     return;
   }
 
   std::move(callback).Run(response);
 }
 
-ChromeQuotaPermissionContext::~ChromeQuotaPermissionContext() {}
+QuotaPermissionContextImpl::~QuotaPermissionContextImpl() {}
+
+}  // namespace permissions

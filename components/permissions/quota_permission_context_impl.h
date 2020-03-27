@@ -2,15 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROME_QUOTA_PERMISSION_CONTEXT_H_
-#define CHROME_BROWSER_CHROME_QUOTA_PERMISSION_CONTEXT_H_
+#ifndef COMPONENTS_PERMISSIONS_QUOTA_PERMISSION_CONTEXT_IMPL_H_
+#define COMPONENTS_PERMISSIONS_QUOTA_PERMISSION_CONTEXT_IMPL_H_
 
-#include "base/compiler_specific.h"
 #include "content/public/browser/quota_permission_context.h"
 
-class ChromeQuotaPermissionContext : public content::QuotaPermissionContext {
+namespace permissions {
+
+class QuotaPermissionContextImpl : public content::QuotaPermissionContext {
  public:
-  ChromeQuotaPermissionContext();
+  QuotaPermissionContextImpl();
 
   // The callback will be dispatched on the IO thread.
   void RequestQuotaPermission(const content::StorageQuotaParams& params,
@@ -21,7 +22,9 @@ class ChromeQuotaPermissionContext : public content::QuotaPermissionContext {
                                   QuotaPermissionResponse response);
 
  private:
-  ~ChromeQuotaPermissionContext() override;
+  ~QuotaPermissionContextImpl() override;
 };
 
-#endif  // CHROME_BROWSER_CHROME_QUOTA_PERMISSION_CONTEXT_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_QUOTA_PERMISSION_CONTEXT_IMPL_H_

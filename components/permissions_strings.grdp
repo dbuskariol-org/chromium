@@ -112,4 +112,25 @@ This will otherwise be blocked by your privacy settings. This will allow the con
   <message name="IDS_PERMISSION_DENY" desc="Label on button to deny a permissions request.">
     Block
   </message>
+
+  <!-- Quota messages -->
+  <if expr="is_android">
+    <message name="IDS_REQUEST_QUOTA_INFOBAR_TEXT" desc="Mobile: For Android device. Text requesting permission for a site to use a new (larger) quota to persistently store data on the device (e.g. for persistent-type filesystem).">
+      <ph name="URL">$1<ex>html5rocks.com</ex></ph> wants to permanently store data on your device
+    </message>
+    <message name="IDS_REQUEST_LARGE_QUOTA_INFOBAR_TEXT" desc="Mobile: For Android device. Text requesting permission for a site to use a new (larger) quota to persistently store large data on the user's device (e.g. for persistent-type filesystem).">
+      <ph name="URL">$1<ex>html5rocks.com</ex></ph> wants to permanently store large data on your device
+    </message>
+  </if>
+  <if expr="not is_android">
+    <message name="IDS_REQUEST_QUOTA_INFOBAR_TEXT" desc="Text requesting permission for a site to use a new (larger) quota to persistently store data on the user's local computer (e.g. for persistent-type filesystem).">
+      <ph name="URL">$1<ex>html5rocks.com</ex></ph> wants to permanently store data on your local computer
+    </message>
+    <message name="IDS_REQUEST_LARGE_QUOTA_INFOBAR_TEXT" desc="Text requesting permission for a site to use a new (larger) quota to persistently store large data on the user's local computer (e.g. for persistent-type filesystem).">
+      <ph name="URL">$1<ex>html5rocks.com</ex></ph> wants to permanently store large data on your local computer
+    </message>
+  </if>
+  <message name="IDS_REQUEST_QUOTA_PERMISSION_FRAGMENT" desc="Permission fragment presented in the permission bubble when the webapp requests new larger quota to persistently store data on the device. Follows a 'This site would like to:' prompt.">
+    Store files on this device
+  </message>
 </grit-part>
