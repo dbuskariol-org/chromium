@@ -586,9 +586,8 @@ html.pointer-active .dialog-header.files-ng button:not([menu-shown]):not(:active
   background-color: rgba(0, 0, 0, 12%);
 }
 
-/* TODO(adanilo): put the :focus at the end for consistency. */
-.dialog-header.files-ng cr-button:focus:not(:active),
-.dialog-header.files-ng button:focus:not(:active) {
+html.focus-outline-visible .dialog-header.files-ng cr-button:not(:active):focus,
+html.focus-outline-visible .dialog-header.files-ng button:not(:active):focus {
   border: 1px solid var(--google-blue-600);
 }
 
@@ -618,7 +617,12 @@ body.check-select .dialog-header button paper-ripple {
 
 /** Avoid highlighting if element doesn't have focus by tab (tabindex=-1)
  *  or if focusing during mouse click event ":active" pseudo-selector. */
-.dialog-header
+html:not(.files-ng) .dialog-header
+    .menu-button:focus:not([tabindex='-1']):not(:active) {
+  background-color: rgba(255, 255, 255, 20%);
+}
+
+html.focus-outline-visible.files-ng .dialog-header
     .menu-button:focus:not([tabindex='-1']):not(:active) {
   background-color: rgba(255, 255, 255, 20%);
 }
