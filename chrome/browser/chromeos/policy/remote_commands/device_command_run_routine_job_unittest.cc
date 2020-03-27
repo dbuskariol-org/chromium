@@ -67,6 +67,10 @@ constexpr char kNvmeSelfTestTypeFieldName[] = "nvmeSelfTestType";
 constexpr char kTypeFieldName[] = "type";
 constexpr char kFileSizeMbFieldName[] = "fileSizeMb";
 
+// String constants identifying the parameter fields for the prime search
+// routine
+constexpr char kMaxNumFieldName[] = "maxNum";
+
 // Dummy values to populate cros_healthd's RunRoutineResponse.
 constexpr uint32_t kId = 11;
 constexpr chromeos::cros_healthd::mojom::DiagnosticRoutineStatusEnum kStatus =
@@ -1386,6 +1390,151 @@ TEST_F(DeviceCommandRunRoutineJobTest, RunDiskReadRoutineInvalidFileSizeMb) {
                 /*terminate_upon_input=*/false,
                 chromeos::cros_healthd::mojom::DiagnosticRoutineEnum::kDiskRead,
                 std::move(params_dict));
+  base::RunLoop run_loop;
+  bool success =
+      job->Run(base::Time::Now(), base::TimeTicks::Now(),
+               base::BindLambdaForTesting([&]() {
+                 EXPECT_EQ(job->status(), RemoteCommandJob::FAILED);
+                 std::unique_ptr<std::string> payload = job->GetResultPayload();
+                 EXPECT_TRUE(payload);
+                 EXPECT_EQ(CreateInvalidParametersFailurePayload(), *payload);
+                 run_loop.Quit();
+               }));
+  EXPECT_TRUE(success);
+  run_loop.Run();
+}
+
+TEST_F(DeviceCommandRunRoutineJobTest, RunPrimeSearchRoutineSuccess) {
+  // Test that the routine succeeds with all parameters specified.
+  auto run_routine_response =
+      chromeos::cros_healthd::mojom::RunRoutineResponse::New(kId, kStatus);
+  chromeos::cros_healthd::FakeCrosHealthdClient::Get()
+      ->SetRunRoutineResponseForTesting(run_routine_response);
+  base::Value params_dict(base::Value::Type::DICTIONARY);
+  params_dict.SetIntKey(kLengthSecondsFieldName,
+                        /*length_seconds=*/2342);
+  params_dict.SetIntKey(kMaxNumFieldName,
+                        /*max_num=*/100000);
+  std::unique_ptr<RemoteCommandJob> job =
+      std::make_unique<DeviceCommandRunRoutineJob>();
+  InitializeJob(
+      job.get(), kUniqueID, test_start_time_, base::TimeDelta::FromSeconds(30),
+      /*terminate_upon_input=*/false,
+      chromeos::cros_healthd::mojom::DiagnosticRoutineEnum::kPrimeSearch,
+      std::move(params_dict));
+  base::RunLoop run_loop;
+  bool success =
+      job->Run(base::Time::Now(), base::TimeTicks::Now(),
+               base::BindLambdaForTesting([&]() {
+                 EXPECT_EQ(job->status(), RemoteCommandJob::SUCCEEDED);
+                 std::unique_ptr<std::string> payload = job->GetResultPayload();
+                 EXPECT_TRUE(payload);
+                 EXPECT_EQ(CreateSuccessPayload(kId, kStatus), *payload);
+                 run_loop.Quit();
+               }));
+  EXPECT_TRUE(success);
+  run_loop.Run();
+}
+
+TEST_F(DeviceCommandRunRoutineJobTest,
+       RunPrimeSearchRoutineMissingLengthSeconds) {
+  // Test that leaving out the length_seconds parameter causes the routine to
+  // fail.
+  base::Value params_dict(base::Value::Type::DICTIONARY);
+  params_dict.SetIntKey(kMaxNumFieldName,
+                        /*max_num=*/100000);
+  std::unique_ptr<RemoteCommandJob> job =
+      std::make_unique<DeviceCommandRunRoutineJob>();
+  InitializeJob(
+      job.get(), kUniqueID, test_start_time_, base::TimeDelta::FromSeconds(30),
+      /*terminate_upon_input=*/false,
+      chromeos::cros_healthd::mojom::DiagnosticRoutineEnum::kPrimeSearch,
+      std::move(params_dict));
+  base::RunLoop run_loop;
+  bool success =
+      job->Run(base::Time::Now(), base::TimeTicks::Now(),
+               base::BindLambdaForTesting([&]() {
+                 EXPECT_EQ(job->status(), RemoteCommandJob::FAILED);
+                 std::unique_ptr<std::string> payload = job->GetResultPayload();
+                 EXPECT_TRUE(payload);
+                 EXPECT_EQ(CreateInvalidParametersFailurePayload(), *payload);
+                 run_loop.Quit();
+               }));
+  EXPECT_TRUE(success);
+  run_loop.Run();
+}
+
+TEST_F(DeviceCommandRunRoutineJobTest, RunPrimeSearchRoutineMissingMaxNum) {
+  // Test that leaving out the max_num parameter causes the routine to fail.
+  base::Value params_dict(base::Value::Type::DICTIONARY);
+  params_dict.SetIntKey(kLengthSecondsFieldName,
+                        /*length_seconds=*/2342);
+  std::unique_ptr<RemoteCommandJob> job =
+      std::make_unique<DeviceCommandRunRoutineJob>();
+  InitializeJob(
+      job.get(), kUniqueID, test_start_time_, base::TimeDelta::FromSeconds(30),
+      /*terminate_upon_input=*/false,
+      chromeos::cros_healthd::mojom::DiagnosticRoutineEnum::kPrimeSearch,
+      std::move(params_dict));
+  base::RunLoop run_loop;
+  bool success =
+      job->Run(base::Time::Now(), base::TimeTicks::Now(),
+               base::BindLambdaForTesting([&]() {
+                 EXPECT_EQ(job->status(), RemoteCommandJob::FAILED);
+                 std::unique_ptr<std::string> payload = job->GetResultPayload();
+                 EXPECT_TRUE(payload);
+                 EXPECT_EQ(CreateInvalidParametersFailurePayload(), *payload);
+                 run_loop.Quit();
+               }));
+  EXPECT_TRUE(success);
+  run_loop.Run();
+}
+
+TEST_F(DeviceCommandRunRoutineJobTest,
+       RunPrimeSearchRoutineInvalidLengthSeconds) {
+  // Test that an invalid value for the length_seconds parameter causes the
+  // routine to fail.
+  base::Value params_dict(base::Value::Type::DICTIONARY);
+  params_dict.SetIntKey(kLengthSecondsFieldName,
+                        /*length_seconds=*/-1);
+  params_dict.SetIntKey(kMaxNumFieldName,
+                        /*max_num=*/100000);
+  std::unique_ptr<RemoteCommandJob> job =
+      std::make_unique<DeviceCommandRunRoutineJob>();
+  InitializeJob(
+      job.get(), kUniqueID, test_start_time_, base::TimeDelta::FromSeconds(30),
+      /*terminate_upon_input=*/false,
+      chromeos::cros_healthd::mojom::DiagnosticRoutineEnum::kPrimeSearch,
+      std::move(params_dict));
+  base::RunLoop run_loop;
+  bool success =
+      job->Run(base::Time::Now(), base::TimeTicks::Now(),
+               base::BindLambdaForTesting([&]() {
+                 EXPECT_EQ(job->status(), RemoteCommandJob::FAILED);
+                 std::unique_ptr<std::string> payload = job->GetResultPayload();
+                 EXPECT_TRUE(payload);
+                 EXPECT_EQ(CreateInvalidParametersFailurePayload(), *payload);
+                 run_loop.Quit();
+               }));
+  EXPECT_TRUE(success);
+  run_loop.Run();
+}
+
+TEST_F(DeviceCommandRunRoutineJobTest, RunPrimeSearchRoutineInvalidMaxNum) {
+  // Test that an invalid value for the max_num parameter causes the
+  // routine to fail.
+  base::Value params_dict(base::Value::Type::DICTIONARY);
+  params_dict.SetIntKey(kLengthSecondsFieldName,
+                        /*length_seconds=*/2342);
+  params_dict.SetIntKey(kMaxNumFieldName,
+                        /*max_num=*/-1);
+  std::unique_ptr<RemoteCommandJob> job =
+      std::make_unique<DeviceCommandRunRoutineJob>();
+  InitializeJob(
+      job.get(), kUniqueID, test_start_time_, base::TimeDelta::FromSeconds(30),
+      /*terminate_upon_input=*/false,
+      chromeos::cros_healthd::mojom::DiagnosticRoutineEnum::kPrimeSearch,
+      std::move(params_dict));
   base::RunLoop run_loop;
   bool success =
       job->Run(base::Time::Now(), base::TimeTicks::Now(),

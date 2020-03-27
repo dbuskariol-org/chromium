@@ -70,6 +70,9 @@ class FakeCrosHealthdService final
                           uint32_t length_seconds,
                           uint32_t file_size_mb,
                           RunDiskReadRoutineCallback callback) override;
+  void RunPrimeSearchRoutine(uint32_t length_seconds,
+                             uint64_t max_num,
+                             RunPrimeSearchRoutineCallback callback) override;
 
   // CrosHealthdProbeService overrides:
   void ProbeTelemetryInfo(

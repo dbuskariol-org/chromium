@@ -385,6 +385,21 @@ TEST_F(CrosHealthdServiceConnectionTest, RunDiskReadRoutine) {
   run_loop.Run();
 }
 
+TEST_F(CrosHealthdServiceConnectionTest, RunPrimeSearchRoutine) {
+  // Test that we can run the prime search routine.
+  auto response = MakeRunRoutineResponse();
+  FakeCrosHealthdClient::Get()->SetRunRoutineResponseForTesting(response);
+  base::RunLoop run_loop;
+  base::TimeDelta exec_duration = base::TimeDelta().FromSeconds(10);
+  ServiceConnection::GetInstance()->RunPrimeSearchRoutine(
+      /*exec_duration=*/exec_duration, /*max_num=*/1000000,
+      base::BindLambdaForTesting([&](mojom::RunRoutineResponsePtr response) {
+        EXPECT_EQ(response, MakeRunRoutineResponse());
+        run_loop.Quit();
+      }));
+  run_loop.Run();
+}
+
 TEST_F(CrosHealthdServiceConnectionTest, ProbeTelemetryInfo) {
   // Test that we can send a request without categories.
   auto empty_info = mojom::TelemetryInfo::New();

@@ -108,6 +108,13 @@ void FakeCrosHealthdService::RunDiskReadRoutine(
   std::move(callback).Run(run_routine_response_.Clone());
 }
 
+void FakeCrosHealthdService::RunPrimeSearchRoutine(
+    uint32_t length_seconds,
+    uint64_t max_num,
+    RunPrimeSearchRoutineCallback callback) {
+  std::move(callback).Run(run_routine_response_.Clone());
+}
+
 void FakeCrosHealthdService::ProbeTelemetryInfo(
     const std::vector<mojom::ProbeCategoryEnum>& categories,
     ProbeTelemetryInfoCallback callback) {
