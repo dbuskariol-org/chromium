@@ -17659,6 +17659,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="5" label="ANGLE OpenGL"/>
   <int value="6" label="ANGLE OpenGL ES"/>
   <int value="13" label="Angle D3D11on12"/>
+  <int value="15" label="Angle OpenGL EGL"/>
+  <int value="16" label="Angle OpenGL ES EGL"/>
 </enum>
 
 <enum name="EmbeddedWorkerStartingPhase">
