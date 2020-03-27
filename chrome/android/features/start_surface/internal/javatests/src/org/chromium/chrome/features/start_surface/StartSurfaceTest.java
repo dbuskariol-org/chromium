@@ -89,7 +89,7 @@ public class StartSurfaceTest {
     @MediumTest
     @Feature({"StartSurface"})
     @CommandLineFlags.Add({BASE_PARAMS + "/tasksonly"})
-    public void testShowAndHideTasksOnlySurface() {
+    public void testShowAndHide_TasksOnlySurface() {
         TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
 
         onView(withId(org.chromium.chrome.start_surface.R.id.primary_tasks_surface_view))
@@ -110,7 +110,7 @@ public class StartSurfaceTest {
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS + "/omniboxonly" +
             "/hide_switch_when_no_incognito_tabs/true"})
-    public void testShowAndHideOmniboxOnlySurface() {
+    public void testShowAndHide_OmniboxOnlySurface() {
         // clang-format on
         final ChromeTabbedActivity cta = mActivityTestRule.getActivity();
         TabUiTestHelper.enterTabSwitcher(cta);
@@ -147,17 +147,8 @@ public class StartSurfaceTest {
     @MediumTest
     @Feature({"StartSurface"})
     @CommandLineFlags.Add({BASE_PARAMS + "/single"})
-    public void testShowAndHideHomePageInSingleSurface() {
-        // TODO(crbug.com/1025296): Set cached flag before starting the activity and mimic clicking
-        // the 'home' button to show the single start surface home page.
-        TestThreadUtils.runOnUiThreadBlocking(
-                ()
-                        -> mActivityTestRule.getActivity()
-                                   .getStartSurface()
-                                   .getController()
-                                   .setOverviewState(OverviewModeState.SHOWING_HOMEPAGE));
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().getLayoutManager().showOverview(false));
+    public void testShowAndHide_HomePageInSingleSurface() {
+        onView(withId(org.chromium.chrome.tab_ui.R.id.home_button)).perform(click());
         assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
 
         onView(withId(org.chromium.chrome.start_surface.R.id.primary_tasks_surface_view))
@@ -210,7 +201,7 @@ public class StartSurfaceTest {
     @MediumTest
     @Feature({"StartSurface"})
     @CommandLineFlags.Add({BASE_PARAMS + "/single"})
-    public void testShowAndHideTabSwitcherInSingleSurface() {
+    public void testShowAndHide_TabSwitcherInSingleSurface() {
         TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
 
         onView(withId(org.chromium.chrome.start_surface.R.id.secondary_tasks_surface_view))
@@ -229,16 +220,7 @@ public class StartSurfaceTest {
     @Feature({"StartSurface"})
     @CommandLineFlags.Add({BASE_PARAMS + "/single"})
     public void testSearchInSingleSurface() {
-        // TODO(crbug.com/1025296): Set cached flag before starting the activity and mimic clicking
-        // the 'home' button to show the single start surface home page.
-        TestThreadUtils.runOnUiThreadBlocking(
-                ()
-                        -> mActivityTestRule.getActivity()
-                                   .getStartSurface()
-                                   .getController()
-                                   .setOverviewState(OverviewModeState.SHOWING_HOMEPAGE));
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().getLayoutManager().showOverview(false));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.home_button)).perform(click());
         assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
         assertThat(
                 mActivityTestRule.getActivity().getTabModelSelector().getCurrentModel().getCount(),
@@ -261,15 +243,9 @@ public class StartSurfaceTest {
     @Feature({"StartSurface"})
     @CommandLineFlags.Add({BASE_PARAMS + "/single"})
     public void testSearchInIncognitoSingleSurface() {
-        TestThreadUtils.runOnUiThreadBlocking(
-                ()
-                        -> mActivityTestRule.getActivity()
-                                   .getStartSurface()
-                                   .getController()
-                                   .setOverviewState(OverviewModeState.SHOWING_HOMEPAGE));
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().getLayoutManager().showOverview(false));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.home_button)).perform(click());
         assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+
         onView(withId(org.chromium.chrome.start_surface.R.id.incognito_switch)).perform(click());
         assertTrue(mActivityTestRule.getActivity().getTabModelSelector().isIncognitoSelected());
 
@@ -339,18 +315,9 @@ public class StartSurfaceTest {
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS + "/single" +
             "/exclude_mv_tiles/true/hide_switch_when_no_incognito_tabs/true"})
-    public void testShowAndHideHomePageInSingleSurfaceWithNoMVTiles() {
+    public void testShowAndHide_HomePageInSingleSurface_WithNoMVTiles() {
         // clang-format on
-        // TODO(crbug.com/1025296): Set cached flag before starting the activity and mimic clicking
-        // the 'home' button to show the single start surface home page.
-        TestThreadUtils.runOnUiThreadBlocking(
-                ()
-                        -> mActivityTestRule.getActivity()
-                                   .getStartSurface()
-                                   .getController()
-                                   .setOverviewState(OverviewModeState.SHOWING_HOMEPAGE));
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().getLayoutManager().showOverview(false));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.home_button)).perform(click());
         assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
 
         onView(withId(org.chromium.chrome.start_surface.R.id.primary_tasks_surface_view))
@@ -406,16 +373,9 @@ public class StartSurfaceTest {
     @MediumTest
     @Feature({"StartSurface"})
     @CommandLineFlags.Add({BASE_PARAMS + "/twopanes"})
-    public void testShowAndHideTwoPanesSurface() {
-        TestThreadUtils.runOnUiThreadBlocking(
-                ()
-                        -> mActivityTestRule.getActivity()
-                                   .getStartSurface()
-                                   .getController()
-                                   .setOverviewState(OverviewModeState.SHOWING_TABSWITCHER));
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().getLayoutManager().showOverview(false));
-        assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+    public void testShowAndHide_TwoPanesSurface() {
+        final ChromeTabbedActivity cta = mActivityTestRule.getActivity();
+        TabUiTestHelper.enterTabSwitcher(cta);
 
         onView(withId(org.chromium.chrome.start_surface.R.id.primary_tasks_surface_view))
                 .check(matches(isDisplayed()));
