@@ -4,9 +4,16 @@
 
 #include "ui/views/test/views_test_helper_aura.h"
 
+#include "ui/views/test/test_views_delegate.h"
 #include "ui/wm/core/capture_controller.h"
 
 namespace views {
+
+namespace {
+
+ViewsTestHelperAura* g_instance = nullptr;
+
+}  // namespace
 
 // static
 std::unique_ptr<ViewsTestHelper> ViewsTestHelper::Create() {
@@ -14,7 +21,10 @@ std::unique_ptr<ViewsTestHelper> ViewsTestHelper::Create() {
 }
 
 ViewsTestHelperAura::ViewsTestHelperAura() {
-  aura_test_helper_.SetUp();
+  DCHECK(!g_instance);
+  g_instance = this;
+
+  aura_test_helper_ = std::make_unique<aura::test::AuraTestHelper>();
 }
 
 ViewsTestHelperAura::~ViewsTestHelperAura() {
@@ -29,14 +39,36 @@ ViewsTestHelperAura::~ViewsTestHelperAura() {
     DCHECK(root_window->children().empty()) << "Not all windows were closed.";
   }
 
-  aura_test_helper_.TearDown();
+  aura_test_helper_->TearDown();
 
   const wm::CaptureController* const controller = wm::CaptureController::Get();
   CHECK(!controller || !controller->is_active());
+
+  g_instance = nullptr;
+}
+
+std::unique_ptr<TestViewsDelegate>
+ViewsTestHelperAura::GetFallbackTestViewsDelegate() {
+  // The factory delegate takes priority over the parent default.
+  return factory_.is_null() ? ViewsTestHelper::GetFallbackTestViewsDelegate()
+                            : std::move(factory_).Run();
+}
+
+void ViewsTestHelperAura::SetUp() {
+  aura_test_helper_->SetUp();
 }
 
 gfx::NativeWindow ViewsTestHelperAura::GetContext() {
-  return aura_test_helper_.GetContext();
+  return aura_test_helper_->GetContext();
+}
+
+// static
+void ViewsTestHelperAura::SetFallbackTestViewsDelegateFactory(
+    TestViewsDelegateFactory factory) {
+  if (g_instance) {
+    DCHECK(g_instance->factory_.is_null());
+    g_instance->factory_ = std::move(factory);
+  }
 }
 
 }  // namespace views
