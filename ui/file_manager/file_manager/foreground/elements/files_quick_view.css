@@ -254,7 +254,7 @@ iron-icon {
   display: none;
 }
 
-:host([files-ng]) #info-button[toogle] {
+:host([files-ng]) #info-button[aria-pressed=true] {
   background-color: rgba(255, 255, 255, 12%);
 }
 
