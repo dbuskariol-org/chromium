@@ -26859,6 +26859,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3193" label="ThirdPartyCacheStorage"/>
   <int value="3194" label="ThirdPartyLocalStorage"/>
   <int value="3195" label="ThirdPartySessionStorage"/>
+  <int value="3196" label="DeclarativeShadowRoot"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
