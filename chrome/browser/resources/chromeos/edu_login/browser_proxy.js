@@ -5,7 +5,7 @@
 import {addSingletonGetter, sendWithPromise} from 'chrome://resources/js/cr.m.js';
 
 import {AuthCompletedCredentials} from '../../gaia_auth_host/authenticator.m.js';
-import {ParentAccount} from './edu_login_util.js';
+import {EduLoginParams, ParentAccount} from './edu_login_util.js';
 
 /** @interface */
 export class EduAccountLoginBrowserProxy {
@@ -45,8 +45,9 @@ export class EduAccountLoginBrowserProxy {
   /**
    * Send 'completeLogin' message to complete login.
    * @param {!AuthCompletedCredentials} credentials
+   * @param {!EduLoginParams} eduLoginParams
    */
-  completeLogin(credentials) {}
+  completeLogin(credentials, eduLoginParams) {}
 
   /** Send 'dialogClose' message to close the login dialog. */
   dialogClose() {}
@@ -82,8 +83,8 @@ export class EduAccountLoginBrowserProxyImpl {
   }
 
   /** @override */
-  completeLogin(credentials) {
-    chrome.send('completeLogin', [credentials]);
+  completeLogin(credentials, eduLoginParams) {
+    chrome.send('completeLogin', [credentials, eduLoginParams]);
   }
 
   /** @override */
