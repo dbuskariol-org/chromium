@@ -8,6 +8,7 @@
 #include "base/run_loop.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/test/metrics/histogram_tester.h"
+#include "base/test/scoped_feature_list.h"
 #include "build/build_config.h"
 #include "chrome/browser/dom_distiller/dom_distiller_service_factory.h"
 #include "chrome/browser/dom_distiller/tab_utils.h"
@@ -16,7 +17,10 @@
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/test/base/in_process_browser_test.h"
 #include "chrome/test/base/ui_test_utils.h"
+#include "components/dom_distiller/content/browser/distillable_page_utils.h"
 #include "components/dom_distiller/content/browser/distiller_javascript_utils.h"
+#include "components/dom_distiller/content/browser/test_distillability_observer.h"
+#include "components/dom_distiller/core/dom_distiller_features.h"
 #include "components/dom_distiller/core/dom_distiller_service.h"
 #include "components/dom_distiller/core/dom_distiller_switches.h"
 #include "components/dom_distiller/core/task_tracker.h"
@@ -185,6 +189,10 @@ class DomDistillerTabUtilsBrowserTest : public InProcessBrowserTest {
   }
 
  protected:
+  DomDistillerTabUtilsBrowserTest() {
+    feature_list_.InitAndEnableFeature(dom_distiller::kReaderMode);
+  }
+
   void SetUpInProcessBrowserTestFixture() override {
     https_server_.reset(
         new net::EmbeddedTestServer(net::EmbeddedTestServer::TYPE_HTTPS));
@@ -201,6 +209,7 @@ class DomDistillerTabUtilsBrowserTest : public InProcessBrowserTest {
   std::unique_ptr<net::EmbeddedTestServer> https_server_;
 
  private:
+  base::test::ScopedFeatureList feature_list_;
   GURL article_url_;
 };
 
@@ -208,9 +217,16 @@ IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest,
                        DistillCurrentPageSwapsWebContents) {
   content::WebContents* initial_web_contents =
       browser()->tab_strip_model()->GetActiveWebContents();
+  TestDistillabilityObserver distillability_observer(initial_web_contents);
+  DistillabilityResult expected_result;
+  expected_result.is_distillable = true;
+  expected_result.is_last = false;
+  expected_result.is_mobile_friendly = false;
 
   // This blocks until the navigation has completely finished.
   ui_test_utils::NavigateToURL(browser(), article_url());
+  // This blocks until the page is found to be distillable.
+  distillability_observer.WaitForResult(expected_result);
 
   DistillCurrentPageAndView(initial_web_contents);
 
@@ -235,9 +251,16 @@ IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest, UMATimesAreLogged) {
 
   content::WebContents* initial_web_contents =
       browser()->tab_strip_model()->GetActiveWebContents();
+  TestDistillabilityObserver distillability_observer(initial_web_contents);
+  DistillabilityResult expected_result;
+  expected_result.is_distillable = true;
+  expected_result.is_last = false;
+  expected_result.is_mobile_friendly = false;
 
   // This blocks until the navigation has completely finished.
   ui_test_utils::NavigateToURL(browser(), article_url());
+  // This blocks until the page is found to be distillable.
+  distillability_observer.WaitForResult(expected_result);
 
   // No UMA logged for distillable or distilled yet.
   histogram_tester.ExpectTotalCount(kDistillablePageHistogram, 0);
@@ -331,8 +354,15 @@ IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest,
   int frame_routing_id = main_frame->GetRoutingID();
   GURL url2(https_server_->GetURL("/title1.html"));
 
+  TestDistillabilityObserver distillability_observer(initial_web_contents);
+  DistillabilityResult expected_result;
+  expected_result.is_distillable = true;
+  expected_result.is_last = false;
+  expected_result.is_mobile_friendly = false;
+
   // Navigate to the page
   ui_test_utils::NavigateToURL(browser(), url1);
+  distillability_observer.WaitForResult(expected_result);
 
   DistillCurrentPageAndView(initial_web_contents);
 
@@ -347,7 +377,13 @@ IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest,
 IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest, SecurityStateIsNone) {
   content::WebContents* initial_web_contents =
       browser()->tab_strip_model()->GetActiveWebContents();
+  TestDistillabilityObserver distillability_observer(initial_web_contents);
+  DistillabilityResult expected_result;
+  expected_result.is_distillable = true;
+  expected_result.is_last = false;
+  expected_result.is_mobile_friendly = false;
   ui_test_utils::NavigateToURL(browser(), article_url());
+  distillability_observer.WaitForResult(expected_result);
 
   // Check security state is not NONE.
   SecurityStateTabHelper* helper =
@@ -368,9 +404,20 @@ IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest,
                        FaviconFromOriginalPage) {
   content::WebContents* initial_web_contents =
       browser()->tab_strip_model()->GetActiveWebContents();
+
+  TestDistillabilityObserver distillability_observer(initial_web_contents);
+  DistillabilityResult expected_result;
+  expected_result.is_distillable = true;
+  expected_result.is_last = false;
+  expected_result.is_mobile_friendly = false;
   FaviconUpdateWaiter waiter(initial_web_contents);
+
   ui_test_utils::NavigateToURL(browser(), article_url());
+  // Ensure the favicon is loaded and the distillability result has also
+  // loaded before proceeding with the test.
   waiter.Wait();
+  distillability_observer.WaitForResult(expected_result);
+
   gfx::Image article_favicon = browser()->GetCurrentPageIcon();
   // Remove the FaviconUpdateWaiter because we are done with
   // initial_web_contents.
