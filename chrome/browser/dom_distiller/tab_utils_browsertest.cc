@@ -22,6 +22,8 @@
 #include "components/dom_distiller/core/task_tracker.h"
 #include "components/dom_distiller/core/url_constants.h"
 #include "components/dom_distiller/core/url_utils.h"
+#include "components/favicon/content/content_favicon_driver.h"
+#include "components/favicon/core/favicon_driver_observer.h"
 #include "components/security_state/core/security_state.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
@@ -29,10 +31,12 @@
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/common/isolated_world_ids.h"
 #include "content/public/test/back_forward_cache_util.h"
+#include "content/public/test/browser_test.h"
 #include "content/public/test/browser_test_utils.h"
 #include "content/public/test/test_utils.h"
 #include "net/test/embedded_test_server/embedded_test_server.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "ui/gfx/image/image_unittest_util.h"
 
 namespace dom_distiller {
 namespace {
@@ -123,6 +127,47 @@ class DistilledPageObserver : public NavigationObserver {
       new_url_loaded_runner_.QuitClosure().Run();
     }
   }
+};
+
+// FaviconUpdateWaiter waits for favicons to be changed after navigation.
+// TODO(1064318): Combine with FaviconUpdateWaiter in
+// chrome/browser/chrome_service_worker_browsertest.cc.
+class FaviconUpdateWaiter : public favicon::FaviconDriverObserver {
+ public:
+  explicit FaviconUpdateWaiter(content::WebContents* web_contents) {
+    scoped_observer_.Add(
+        favicon::ContentFaviconDriver::FromWebContents(web_contents));
+  }
+  ~FaviconUpdateWaiter() override = default;
+
+  void Wait() {
+    if (updated_)
+      return;
+
+    base::RunLoop run_loop;
+    quit_closure_ = run_loop.QuitClosure();
+    run_loop.Run();
+  }
+
+  void StopObserving() { scoped_observer_.RemoveAll(); }
+
+ private:
+  void OnFaviconUpdated(favicon::FaviconDriver* favicon_driver,
+                        NotificationIconType notification_icon_type,
+                        const GURL& icon_url,
+                        bool icon_url_changed,
+                        const gfx::Image& image) override {
+    updated_ = true;
+    if (!quit_closure_.is_null())
+      std::move(quit_closure_).Run();
+  }
+
+  bool updated_ = false;
+  ScopedObserver<favicon::FaviconDriver, favicon::FaviconDriverObserver>
+      scoped_observer_{this};
+  base::OnceClosure quit_closure_;
+
+  DISALLOW_COPY_AND_ASSIGN(FaviconUpdateWaiter);
 };
 
 class DomDistillerTabUtilsBrowserTest : public InProcessBrowserTest {
@@ -317,6 +362,28 @@ IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest, SecurityStateIsNone) {
   // Now security state should be NONE.
   helper = SecurityStateTabHelper::FromWebContents(after_web_contents);
   ASSERT_EQ(security_state::NONE, helper->GetSecurityLevel());
+}
+
+IN_PROC_BROWSER_TEST_F(DomDistillerTabUtilsBrowserTest,
+                       FaviconFromOriginalPage) {
+  content::WebContents* initial_web_contents =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  FaviconUpdateWaiter waiter(initial_web_contents);
+  ui_test_utils::NavigateToURL(browser(), article_url());
+  waiter.Wait();
+  gfx::Image article_favicon = browser()->GetCurrentPageIcon();
+  // Remove the FaviconUpdateWaiter because we are done with
+  // initial_web_contents.
+  waiter.StopObserving();
+
+  DistillCurrentPageAndView(initial_web_contents);
+  content::WebContents* after_web_contents =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  ASSERT_NE(after_web_contents, nullptr);
+  DistilledPageObserver(after_web_contents).WaitUntilFinishedLoading();
+
+  gfx::Image distilled_favicon = browser()->GetCurrentPageIcon();
+  EXPECT_TRUE(gfx::test::AreImagesEqual(article_favicon, distilled_favicon));
 }
 
 }  // namespace
