@@ -47,6 +47,7 @@ js_modulizer("modulize") {
     "prefs_test_cases.js",
     "prefs_tests.js",
     "pref_util_tests.js",
+    "protocol_handlers_tests.js",
     "reset_page_test.js",
     "search_engines_page_test.js",
     "search_page_test.js",
