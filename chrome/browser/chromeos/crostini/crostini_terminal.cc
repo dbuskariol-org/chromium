@@ -37,6 +37,9 @@ const size_t kSettingPrefixSize = base::size(kSettingPrefix) - 1;
 constexpr char kSettingBackgroundColor[] =
     "/hterm/profiles/default/background-color";
 constexpr char kDefaultBackgroundColor[] = "#101010";
+
+constexpr char kSettingPassCtrlW[] = "/hterm/profiles/default/pass-ctrl-w";
+constexpr bool kDefaultPassCtrlW = false;
 }  // namespace
 
 namespace crostini {
@@ -245,6 +248,12 @@ std::string GetTerminalSettingBackgroundColor(Profile* profile) {
       crostini::prefs::kCrostiniTerminalSettings);
   const std::string* result = value->FindStringKey(kSettingBackgroundColor);
   return result ? *result : kDefaultBackgroundColor;
+}
+
+bool GetTerminalSettingPassCtrlW(Profile* profile) {
+  const base::DictionaryValue* value = profile->GetPrefs()->GetDictionary(
+      crostini::prefs::kCrostiniTerminalSettings);
+  return value->FindBoolKey(kSettingPassCtrlW).value_or(kDefaultPassCtrlW);
 }
 
 }  // namespace crostini
