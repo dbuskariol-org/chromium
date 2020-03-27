@@ -77,7 +77,6 @@
 #include "ios/chrome/browser/system_flags.h"
 #import "ios/chrome/browser/tabs/tab_model.h"
 #import "ios/chrome/browser/ui/appearance/appearance_customization.h"
-#import "ios/chrome/browser/ui/browser_view/browser_view_controller.h"
 #import "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/first_run/first_run_util.h"
 #import "ios/chrome/browser/ui/first_run/welcome_to_chrome_view_controller.h"
@@ -1093,11 +1092,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 
 #pragma mark - Helper methods backed by interfaces.
 
-- (BrowserViewController*)mainBVC {
-  DCHECK(self.interfaceProvider);
-  return self.interfaceProvider.mainInterface.bvc;
-}
-
 - (Browser*)mainBrowser {
   DCHECK(self.interfaceProvider);
   return self.interfaceProvider.mainInterface.browser;
@@ -1108,11 +1102,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   return self.interfaceProvider.mainInterface.tabModel;
 }
 
-- (BrowserViewController*)otrBVC {
-  DCHECK(self.interfaceProvider);
-  return self.interfaceProvider.incognitoInterface.bvc;
-}
-
 - (TabModel*)otrTabModel {
   DCHECK(self.interfaceProvider);
   return self.interfaceProvider.incognitoInterface.tabModel;
@@ -1121,15 +1110,6 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 - (Browser*)otrBrowser {
   DCHECK(self.interfaceProvider);
   return self.interfaceProvider.incognitoInterface.browser;
-}
-
-- (BrowserViewController*)currentBVC {
-  DCHECK(self.interfaceProvider);
-  return self.interfaceProvider.currentInterface.bvc;
-}
-
-- (TabModel*)currentTabModel {
-  return self.currentBVC.tabModel;
 }
 
 - (Browser*)currentBrowser {
@@ -1206,41 +1186,58 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
     disableWebUsageDuringRemoval = NO;
   }
 
-  if (disableWebUsageDuringRemoval) {
-    // Disables browsing and purges web views.
-    // Must be called only on the main thread.
-    DCHECK([NSThread isMainThread]);
-    self.interfaceProvider.mainInterface.userInteractionEnabled = NO;
-    self.interfaceProvider.incognitoInterface.userInteractionEnabled = NO;
-  } else if (showActivityIndicator) {
-    // Show activity overlay so users know that clear browsing data is in
-    // progress.
-    [self.mainBVC.dispatcher showActivityOverlay:YES];
+  for (SceneState* sceneState in self.appState.connectedScenes) {
+    // Assumes all scenes share |browserState|.
+    id<BrowserInterfaceProvider> sceneInterface = sceneState.interfaceProvider;
+    if (disableWebUsageDuringRemoval) {
+      // Disables browsing and purges web views.
+      // Must be called only on the main thread.
+      DCHECK([NSThread isMainThread]);
+      sceneInterface.mainInterface.userInteractionEnabled = NO;
+      sceneInterface.incognitoInterface.userInteractionEnabled = NO;
+    } else if (showActivityIndicator) {
+      // Show activity overlay so users know that clear browsing data is in
+      // progress.
+      // TODO(crbug.com/1045047): Use HandlerForProtocol after commands protocol
+      // clean up.
+      id<BrowserCommands> handler = static_cast<id<BrowserCommands>>(
+          sceneInterface.mainInterface.browser->GetCommandDispatcher());
+      [handler showActivityOverlay:YES];
+    }
   }
 
+  auto removalCompletion = ^{
+    // Activates browsing and enables web views.
+    // Must be called only on the main thread.
+    DCHECK([NSThread isMainThread]);
+    for (SceneState* sceneState in self.appState.connectedScenes) {
+      // Assumes all scenes share |browserState|.
+      id<BrowserInterfaceProvider> sceneInterface =
+          sceneState.interfaceProvider;
+
+      if (showActivityIndicator) {
+        // User interaction still needs to be disabled as a way to
+        // force reload all the web states and to reset NTPs.
+        sceneInterface.mainInterface.userInteractionEnabled = NO;
+        sceneInterface.incognitoInterface.userInteractionEnabled = NO;
+
+        // TODO(crbug.com/1045047): Use HandlerForProtocol after commands
+        // protocol clean up.
+        id<BrowserCommands> handler = static_cast<id<BrowserCommands>>(
+            sceneInterface.mainInterface.browser->GetCommandDispatcher());
+        [handler showActivityOverlay:NO];
+      }
+      sceneInterface.mainInterface.userInteractionEnabled = YES;
+      sceneInterface.incognitoInterface.userInteractionEnabled = YES;
+      [sceneInterface.currentInterface setPrimary:YES];
+    }
+    // |completionBlock is run once, not once per scene.
+    if (completionBlock)
+      completionBlock();
+  };
+
   BrowsingDataRemoverFactory::GetForBrowserState(browserState)
-      ->Remove(
-          timePeriod, removeMask, base::BindOnce(^{
-            // Activates browsing and enables web views.
-            // Must be called only on the main thread.
-            DCHECK([NSThread isMainThread]);
-            if (showActivityIndicator) {
-              // User interaction still needs to be disabled as a way to
-              // force reload all the web states and to reset NTPs.
-              self.interfaceProvider.mainInterface.userInteractionEnabled = NO;
-              self.interfaceProvider.incognitoInterface.userInteractionEnabled =
-                  NO;
-
-              [self.mainBVC.dispatcher showActivityOverlay:NO];
-            }
-            self.interfaceProvider.mainInterface.userInteractionEnabled = YES;
-            self.interfaceProvider.incognitoInterface.userInteractionEnabled =
-                YES;
-            [self.currentBVC setPrimary:YES];
-
-            if (completionBlock)
-              completionBlock();
-          }));
+      ->Remove(timePeriod, removeMask, base::BindOnce(removalCompletion));
 }
 
 

@@ -1655,7 +1655,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
   self.interfaceProvider.mainInterface.userInteractionEnabled = YES;
   self.interfaceProvider.incognitoInterface.userInteractionEnabled = YES;
-  [self.currentInterface.bvc setPrimary:YES];
+  [self.currentInterface setPrimary:YES];
 }
 
 - (void)showTabSwitcher {
