@@ -2051,11 +2051,6 @@ void RenderFrameHostImpl::SetRenderFrameCreated(bool created) {
       GetRemoteAssociatedInterfaces()->GetInterface(&frame_bindings_control_);
     frame_bindings_control_->AllowBindings(enabled_bindings_);
   }
-
-  // Clear all the user data associated with this RenderFrameHost in case if
-  // the renderer crashes and the RenderFrameHost still stays alive.
-  if (!created)
-    document_associated_data_.ClearAllUserData();
 }
 
 void RenderFrameHostImpl::Init() {
@@ -7516,7 +7511,8 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
   accessibility_reset_count_ = 0;
   appcache_handle_ = navigation_request->TakeAppCacheHandle();
 
-  if (navigation_request->IsInMainFrame() && !is_same_document_navigation &&
+  if (navigation_request->IsInMainFrame() &&
+      !navigation_request->IsSameDocument() &&
       !navigation_request->IsServedFromBackForwardCache()) {
     render_view_host_->ResetPerPageState();
   }
@@ -7534,14 +7530,6 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
       navigation_request->TakeClientSecurityState();
   std::unique_ptr<CrossOriginEmbedderPolicyReporter> coep_reporter =
       navigation_request->TakeCoepReporter();
-
-  // Clear all the user data associated with the non speculative RenderFrameHost
-  // when the navigation is a cross-document navigation not served from the
-  // back-forward cache.
-  if (!is_same_document_navigation &&
-      !navigation_request->IsServedFromBackForwardCache() && IsCurrent()) {
-    document_associated_data_.ClearAllUserData();
-  }
 
   frame_tree_node()->navigator()->DidNavigate(this, *params,
                                               std::move(navigation_request),

@@ -10,9 +10,9 @@
 #include "base/bind.h"
 #include "base/stl_util.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/usb/frame_usb_services.h"
 #include "chrome/browser/usb/usb_blocklist.h"
 #include "chrome/browser/usb/usb_chooser_context_factory.h"
+#include "chrome/browser/usb/usb_tab_helper.h"
 #include "content/public/browser/browser_thread.h"
 #include "media/mojo/mojom/remoting_common.mojom.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
@@ -181,14 +181,18 @@ void WebUsbServiceImpl::OnDeviceManagerConnectionError() {
 // device::mojom::UsbDeviceClient implementation:
 void WebUsbServiceImpl::OnDeviceOpened() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  FrameUsbServices::GetForCurrentDocument(render_frame_host_)
-      ->IncrementConnectionCount();
+  content::WebContents* web_contents =
+      content::WebContents::FromRenderFrameHost(render_frame_host_);
+  UsbTabHelper* tab_helper = UsbTabHelper::FromWebContents(web_contents);
+  tab_helper->IncrementConnectionCount(render_frame_host_);
 }
 
 void WebUsbServiceImpl::OnDeviceClosed() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  FrameUsbServices::GetForCurrentDocument(render_frame_host_)
-      ->DecrementConnectionCount();
+  content::WebContents* web_contents =
+      content::WebContents::FromRenderFrameHost(render_frame_host_);
+  UsbTabHelper* tab_helper = UsbTabHelper::FromWebContents(web_contents);
+  tab_helper->DecrementConnectionCount(render_frame_host_);
 }
 
 void WebUsbServiceImpl::OnConnectionError() {
