@@ -239,16 +239,20 @@ class OutOfProcessInstance : public pp::Instance,
   pp::FloatPoint BoundScrollOffsetToDocument(
       const pp::FloatPoint& scroll_offset);
 
+  // Add a sample to an enumerated histogram and filter out print preview usage.
+  template <typename T>
+  void HistogramEnumeration(const char* name, T sample);
+
   // Wrappers for |uma_| so histogram reporting only occurs when the PDF Viewer
   // is not being used for print preview.
-  void HistogramCustomCounts(const std::string& name,
-                             int32_t sample,
-                             int32_t min,
-                             int32_t max,
-                             uint32_t bucket_count);
-  void HistogramEnumeration(const std::string& name,
-                            int32_t sample,
-                            int32_t boundary_value);
+  void HistogramCustomCountsDeprecated(const std::string& name,
+                                       int32_t sample,
+                                       int32_t min,
+                                       int32_t max,
+                                       uint32_t bucket_count);
+  void HistogramEnumerationDeprecated(const std::string& name,
+                                      int32_t sample,
+                                      int32_t boundary_value);
 
   pp::ImageData image_data_;
   // Used when the plugin is embedded in a page and we have to create the loader

@@ -51325,6 +51325,20 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Foreground XFA (XFAF)"/>
 </enum>
 
+<enum name="PDFVersion">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="PDF 1.0"/>
+  <int value="2" label="PDF 1.1"/>
+  <int value="3" label="PDF 1.2"/>
+  <int value="4" label="PDF 1.3"/>
+  <int value="5" label="PDF 1.4"/>
+  <int value="6" label="PDF 1.5"/>
+  <int value="7" label="PDF 1.6"/>
+  <int value="8" label="PDF 1.7"/>
+  <int value="9" label="PDF 1.8"/>
+  <int value="10" label="PDF 2.0"/>
+</enum>
+
 <enum name="PeerConnectionAnswererState">
   <int value="0" label="NotStarted"/>
   <int value="1" label="SetRemoteOfferPending"/>

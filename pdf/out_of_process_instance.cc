@@ -14,6 +14,7 @@
 
 #include "base/feature_list.h"
 #include "base/logging.h"
+#include "base/metrics/histogram_functions.h"
 #include "base/numerics/ranges.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_split.h"
@@ -1663,7 +1664,8 @@ void OutOfProcessInstance::DocumentLoadComplete(
   DCHECK_EQ(LOAD_STATE_LOADING, document_load_state_);
   document_load_state_ = LOAD_STATE_COMPLETE;
   UserMetricsRecordAction("PDF.LoadSuccess");
-  HistogramEnumeration("PDF.DocumentFeature", LOADED_DOCUMENT, FEATURES_COUNT);
+  HistogramEnumerationDeprecated("PDF.DocumentFeature", LOADED_DOCUMENT,
+                                 FEATURES_COUNT);
 
   // Note: If we are in print preview mode the scroll location is retained
   // across document loads so we don't want to scroll again and override it.
@@ -1680,11 +1682,16 @@ void OutOfProcessInstance::DocumentLoadComplete(
 
   pp::VarDictionary metadata_message;
   metadata_message.Set(pp::Var(kType), pp::Var(kJSMetadataType));
-  const std::string& title = engine_->GetDocumentMetadata().title;
+  const DocumentMetadata& metadata = engine_->GetDocumentMetadata();
+  HistogramEnumeration("PDF.Version", metadata.version);
+
+  const std::string& title = metadata.title;
   if (!base::TrimWhitespace(base::UTF8ToUTF16(title), base::TRIM_ALL).empty()) {
     metadata_message.Set(pp::Var(kJSTitle), pp::Var(title));
-    HistogramEnumeration("PDF.DocumentFeature", HAS_TITLE, FEATURES_COUNT);
+    HistogramEnumerationDeprecated("PDF.DocumentFeature", HAS_TITLE,
+                                   FEATURES_COUNT);
   }
+
   metadata_message.Set(
       pp::Var(kJSCanSerializeDocument),
       pp::Var(IsSaveDataSizeValid(engine_->GetLoadedByteSize())));
@@ -1692,7 +1699,8 @@ void OutOfProcessInstance::DocumentLoadComplete(
   pp::VarArray bookmarks = engine_->GetBookmarks();
   metadata_message.Set(pp::Var(kJSBookmarks), bookmarks);
   if (bookmarks.GetLength() > 0)
-    HistogramEnumeration("PDF.DocumentFeature", HAS_BOOKMARKS, FEATURES_COUNT);
+    HistogramEnumerationDeprecated("PDF.DocumentFeature", HAS_BOOKMARKS,
+                                   FEATURES_COUNT);
   PostMessage(metadata_message);
 
   pp::VarDictionary progress_message;
@@ -1722,14 +1730,15 @@ void OutOfProcessInstance::DocumentLoadComplete(
   }
 
   pp::PDF::SetContentRestriction(this, content_restrictions);
-  HistogramCustomCounts("PDF.PageCount", document_features.page_count, 1,
-                        1000000, 50);
-  HistogramEnumeration("PDF.HasAttachment",
-                       document_features.has_attachments ? 1 : 0, 2);
-  HistogramEnumeration("PDF.IsTagged", document_features.is_tagged ? 1 : 0, 2);
-  HistogramEnumeration("PDF.FormType",
-                       static_cast<int32_t>(document_features.form_type),
-                       static_cast<int32_t>(PDFEngine::FormType::kCount));
+  HistogramCustomCountsDeprecated("PDF.PageCount", document_features.page_count,
+                                  1, 1000000, 50);
+  HistogramEnumerationDeprecated("PDF.HasAttachment",
+                                 document_features.has_attachments ? 1 : 0, 2);
+  HistogramEnumerationDeprecated("PDF.IsTagged",
+                                 document_features.is_tagged ? 1 : 0, 2);
+  HistogramEnumerationDeprecated(
+      "PDF.FormType", static_cast<int32_t>(document_features.form_type),
+      static_cast<int32_t>(PDFEngine::FormType::kCount));
 }
 
 void OutOfProcessInstance::RotateClockwise() {
@@ -2042,20 +2051,29 @@ pp::FloatPoint OutOfProcessInstance::BoundScrollOffsetToDocument(
   return pp::FloatPoint(x, y);
 }
 
-void OutOfProcessInstance::HistogramCustomCounts(const std::string& name,
-                                                 int32_t sample,
-                                                 int32_t min,
-                                                 int32_t max,
-                                                 uint32_t bucket_count) {
+template <typename T>
+void OutOfProcessInstance::HistogramEnumeration(const char* name, T sample) {
+  if (IsPrintPreview())
+    return;
+  base::UmaHistogramEnumeration(name, sample);
+}
+
+void OutOfProcessInstance::HistogramCustomCountsDeprecated(
+    const std::string& name,
+    int32_t sample,
+    int32_t min,
+    int32_t max,
+    uint32_t bucket_count) {
   if (IsPrintPreview())
     return;
 
   uma_.HistogramCustomCounts(name, sample, min, max, bucket_count);
 }
 
-void OutOfProcessInstance::HistogramEnumeration(const std::string& name,
-                                                int32_t sample,
-                                                int32_t boundary_value) {
+void OutOfProcessInstance::HistogramEnumerationDeprecated(
+    const std::string& name,
+    int32_t sample,
+    int32_t boundary_value) {
   if (IsPrintPreview())
     return;
   uma_.HistogramEnumeration(name, sample, boundary_value);
