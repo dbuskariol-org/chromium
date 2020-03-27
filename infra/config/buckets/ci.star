@@ -489,8 +489,15 @@ ci.clang_builder(
     ssd=True
 )
 
-ci.clang_ios_builder(
+ci.clang_builder(
     name = 'ToTiOSDevice',
+    caches = [xcode_cache.x11c29],
+    cores = None,
+    os = os.MAC_10_14,
+    properties = {
+        'xcode_build_version': '11c29'
+    },
+    ssd=True
 )
 
 

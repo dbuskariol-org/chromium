@@ -149,6 +149,7 @@
       'ToTWinCFI64': 'clang_tot_win_cfi_full_cfi_diag_thin_lto_release_static_dcheck_always_on',
       'ToTWinThinLTO64': 'clang_tot_win_official_full_symbols_thin_lto_static',
       'ToTiOS': 'ios_clang_tot',
+      'ToTiOSDevice': 'ios_clang_device_tot',
       'UBSanVptr Linux': 'ubsan_vptr_release_bot',
     },
 
@@ -1821,6 +1822,10 @@
 
     'ios_clang_tot': [
       'clang_tot', 'ios_device', 'ios_disable_code_signing', 'release', 'static',
+    ],
+
+    'ios_clang_device_tot': [
+      'clang_tot', 'ios_device', 'release',
     ],
 
     'ios_cronet': [
