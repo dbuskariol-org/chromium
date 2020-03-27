@@ -16,7 +16,7 @@
  * }}
  * @see chrome/browser/ui/webui/settings/chromeos/android_apps_handler.cc
  */
-/* #export */ let AndroidAppsInfo;
+let AndroidAppsInfo;
 
 cr.define('settings', function() {
   /**

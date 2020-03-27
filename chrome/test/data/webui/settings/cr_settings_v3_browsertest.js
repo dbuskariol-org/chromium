@@ -300,7 +300,6 @@ TEST_F('CrSettingsPersonalizationOptionsV3Test', 'AllBuildsOld', function() {
  ['PeoplePageSyncPage', 'people_page_sync_page_test.m.js'],
  ['Prefs', 'prefs_tests.m.js'],
  ['PrefUtil', 'pref_util_tests.m.js'],
- ['ProtocolHandlers', 'protocol_handlers_tests.m.js'],
  ['ResetPage', 'reset_page_test.m.js'],
  ['SearchEngines', 'search_engines_page_test.m.js'],
  ['SearchPage', 'search_page_test.m.js'],
