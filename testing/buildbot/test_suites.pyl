@@ -2740,6 +2740,26 @@
       },
     },
 
+    'ios_clang_tests': {
+      'base_unittests': {},
+      'boringssl_crypto_tests': {},
+      'boringssl_ssl_tests': {},
+      'components_unittests': {},
+      'crypto_unittests': {},
+      'gfx_unittests': {},
+      'google_apis_unittests': {},
+      'ios_chrome_unittests': {},
+      'ios_net_unittests': {},
+      'ios_web_inttests': {},
+      'ios_web_unittests': {},
+      'ios_web_view_inttests': {},
+      'net_unittests': {},
+      'skia_unittests': {},
+      'sql_unittests': {},
+      'ui_base_unittests': {},
+      'url_unittests': {},
+    },
+
     'ios_common_tests': {
       'boringssl_crypto_tests': {},
       'boringssl_ssl_tests': {},
@@ -4754,6 +4774,14 @@
           'SIM_IPAD_AIR_2_12_4',
         ],
       },
+    },
+
+    'ios_clang_tot_sim_tests': {
+      'ios_clang_tests': {
+        'variants': [
+          'SIM_IPHONE_6S_13_3',
+        ]
+      }
     },
 
     'ios_code_coverage_tests': {

@@ -148,7 +148,7 @@
       'ToTWinCFI': 'clang_tot_win_cfi_full_cfi_diag_thin_lto_release_static_dcheck_always_on_x86',
       'ToTWinCFI64': 'clang_tot_win_cfi_full_cfi_diag_thin_lto_release_static_dcheck_always_on',
       'ToTWinThinLTO64': 'clang_tot_win_official_full_symbols_thin_lto_static',
-      'ToTiOS': 'ios_error',
+      'ToTiOS': 'ios_clang_tot',
       'UBSanVptr Linux': 'ubsan_vptr_release_bot',
     },
 
@@ -1818,6 +1818,10 @@
     # It is an error to actually use one of these configs to generate the
     # build files.
     'ios_error': [ 'error'],
+
+    'ios_clang_tot': [
+      'clang_tot', 'ios_device', 'ios_disable_code_signing', 'release', 'static',
+    ],
 
     'ios_cronet': [
       'additional_target_cpus_x86', 'cronet_ios', 'debug_static_bot',

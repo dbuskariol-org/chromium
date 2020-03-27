@@ -1200,6 +1200,20 @@
           'isolated_scripts': 'win_specific_isolated_scripts',
         },
       },
+      'ToTiOS': {
+        'additional_compile_targets': [
+          'all'
+        ],
+        'mixins': [
+          'mac_10.14',
+          'mac_toolchain',
+          'out_dir_arg',
+          'xcode_11c29',
+        ],
+        'test_suites': {
+          'isolated_scripts': 'ios_clang_tot_sim_tests'
+        }
+      },
       'UBSanVptr Linux': {
         'mixins': [
           'linux-xenial',
