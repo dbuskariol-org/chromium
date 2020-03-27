@@ -1093,15 +1093,19 @@ float GtkUi::GetRawDeviceScaleFactor() {
     return display::Display::GetForcedDeviceScaleFactor();
 
   GdkScreen* screen = gdk_screen_get_default();
-  gint scale = gtk_widget_get_scale_factor(fake_window_);
-  DCHECK_GT(scale, 0);
-  gdouble resolution = gdk_screen_get_resolution(screen);
-  const float scale_factor =
-      resolution <= 0 ? scale : resolution * scale / kDefaultDPI;
+  float scale = gtk_widget_get_scale_factor(fake_window_);
+  DCHECK_GT(scale, 0.0);
 
-  // Blacklist scaling factors <120% (crbug.com/484400) and round
-  // to 1 decimal to prevent rendering problems (crbug.com/485183).
-  return scale_factor < 1.2f ? 1.0f : roundf(scale_factor * 10) / 10;
+  gdouble resolution = gdk_screen_get_resolution(screen);
+  // TODO(https://crbug.com/1033552): Remove this hack once the Trusty bots are
+  // fixed to have a resolution of 96, or when the Trusty bots are removed
+  // altogether.
+  if (std::abs(resolution - 95.8486) < 0.001)
+    resolution = 96;
+  if (resolution > 0)
+    scale *= resolution / kDefaultDPI;
+
+  return scale;
 }
 
 void GtkUi::UpdateDeviceScaleFactor() {
