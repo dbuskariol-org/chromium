@@ -182,6 +182,7 @@ public class AwContentsClientFullScreenTest {
     @Test
     @MediumTest
     @Feature({"AndroidWebView"})
+    @DisabledTest(message = "crbug.com/1065092")
     public void testOnShowCustomViewAndPlayWithHtmlControl_video() throws Throwable {
         doTestOnShowCustomViewAndPlayWithHtmlControl(VIDEO_TEST_URL);
     }
