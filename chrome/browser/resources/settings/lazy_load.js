@@ -13,7 +13,7 @@ import './search_engines_page/search_engines_page.m.js';
 // TODO(https://crbug.com/1026426): Uncomment these imports once the pages have
 // been migrated to Polymer 3.
 // import './privacy_page/cookies_page.m.js';
-// import './privacy_page/security_keys_subpage.m.js';
+import './privacy_page/security_keys_subpage.m.js';
 // import './privacy_page/security_page.m.js';
 // import './site_settings/all_sites.m.js';
 import './site_settings/site_data_details_subpage.m.js';
@@ -94,6 +94,11 @@ export {cookieInfo} from './site_settings/cookie_info.m.js';
 export {kControlledByLookup} from './site_settings/site_settings_behavior.m.js';
 export {LocalDataBrowserProxyImpl} from './site_settings/local_data_browser_proxy.m.js';
 export {ContentSettingProvider,SiteSettingsPrefsBrowserProxyImpl} from './site_settings/site_settings_prefs_browser_proxy.m.js';
+export {SecurityKeysResetBrowserProxyImpl, SecurityKeysPINBrowserProxyImpl, SecurityKeysCredentialBrowserProxyImpl, SecurityKeysBioEnrollProxyImpl, SampleStatus, Ctap2Status} from './privacy_page/security_keys_browser_proxy.m.js';
+export {ResetDialogPage} from './privacy_page/security_keys_reset_dialog.m.js';
+export {SetPINDialogPage} from './privacy_page/security_keys_set_pin_dialog.m.js';
+export {CredentialManagementDialogPage} from './privacy_page/security_keys_credential_management_dialog.m.js';
+export {BioEnrollDialogPage} from './privacy_page/security_keys_bio_enroll_dialog.m.js';
 export {WebsiteUsageBrowserProxyImpl} from './site_settings/website_usage_browser_proxy.m.js';
 
 // <if expr="not chromeos">

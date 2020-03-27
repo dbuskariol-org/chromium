@@ -303,6 +303,7 @@ TEST_F('CrSettingsPersonalizationOptionsV3Test', 'AllBuildsOld', function() {
  ['SearchEngines', 'search_engines_page_test.m.js'],
  ['SearchPage', 'search_page_test.m.js'],
  ['Search', 'search_settings_test.m.js'],
+ ['SecurityKeysSubpage', 'security_keys_subpage_test.m.js'],
  // Copied from P2 test: Disabled for flakiness, see https://crbug.com/1061249
  ['SiteData', 'site_data_test.m.js', 'DISABLED_All'],
  ['SiteDataDetails', 'site_data_details_subpage_tests.m.js'],
