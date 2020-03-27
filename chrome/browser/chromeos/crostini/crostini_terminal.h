@@ -92,7 +92,9 @@ enum class TerminalSetting {
   kUserCss = 68,
   kUserCssText = 69,
   kAllowImagesInline = 70,
-  kMaxValue = kAllowImagesInline,
+  kTheme = 71,
+  kThemeVariations = 72,
+  kMaxValue = kThemeVariations,
 };
 
 // Generate the URL for Crostini terminal application.

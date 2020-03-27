@@ -224,6 +224,8 @@ void RecordTerminalSettingsChangesUMAs(Profile* profile) {
           {"user-css", TerminalSetting::kUserCss},
           {"user-css-text", TerminalSetting::kUserCssText},
           {"allow-images-inline", TerminalSetting::kAllowImagesInline},
+          {"theme", TerminalSetting::kTheme},
+          {"theme-variations", TerminalSetting::kThemeVariations},
       });
 
   const base::DictionaryValue* settings = profile->GetPrefs()->GetDictionary(
