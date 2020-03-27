@@ -1089,6 +1089,14 @@ bool BrowserAccessibility::IsClickable() const {
   return GetData().IsClickable();
 }
 
+bool BrowserAccessibility::IsTextField() const {
+  return IsPlainTextField() || IsRichTextField();
+}
+
+bool BrowserAccessibility::IsPasswordField() const {
+  return IsTextField() && HasState(ax::mojom::State::kProtected);
+}
+
 bool BrowserAccessibility::IsPlainTextField() const {
   return GetData().IsPlainTextField();
 }
@@ -1206,18 +1214,17 @@ base::string16 BrowserAccessibility::GetHypertext() const {
 }
 
 base::string16 BrowserAccessibility::GetInnerText() const {
-  base::string16 value =
-      GetString16Attribute(ax::mojom::StringAttribute::kValue);
-  if (!value.empty())
-    return value;
-
-  if (IsTextOnlyObject())
+  if (!InternalChildCount()) {
+    if (IsTextField())
+      return GetString16Attribute(ax::mojom::StringAttribute::kValue);
     return GetString16Attribute(ax::mojom::StringAttribute::kName);
+  }
 
   base::string16 text;
   for (InternalChildIterator it = InternalChildrenBegin();
-       it != InternalChildrenEnd(); ++it)
+       it != InternalChildrenEnd(); ++it) {
     text += (*it).GetInnerText();
+  }
   return text;
 }
 

@@ -388,17 +388,38 @@ class CONTENT_EXPORT BrowserAccessibility : public ui::AXPlatformNodeDelegate {
   bool IsWebAreaForPresentationalIframe() const;
 
   virtual bool IsClickable() const;
+
+  // A text field is any widget in which the user should be able to enter and
+  // edit text.
+  //
+  // Examples include <input type="text">, <input type="password">, <textarea>,
+  // <div contenteditable="true">, <div role="textbox">, <div role="searchbox">
+  // and <div role="combobox">. Note that when an ARIA role that indicates that
+  // the widget is editable is used, such as "role=textbox", the element doesn't
+  // need to be contenteditable for this method to return true, as in theory
+  // JavaScript could be used to implement editing functionality. In practice,
+  // this situation should be rare.
+  bool IsTextField() const;
+
+  // A text field that is used for entering passwords.
+  bool IsPasswordField() const;
+
+  // A text field that doesn't accept rich text content, such as text with
+  // special formatting or styling.
   bool IsPlainTextField() const;
+
+  // A text field that accepts rich text content, such as text with special
+  // formatting or styling.
   bool IsRichTextField() const;
 
   // Return true if the accessible name was explicitly set to "" by the author
   bool HasExplicitlyEmptyName() const;
 
-  // If an object is focusable but has no accessible name, use this
-  // to compute a name from its descendants.
+  // TODO(nektar): Remove this method and use GetInnerText instead.
   std::string ComputeAccessibleNameFromDescendants() const;
 
-  // Get text to announce for a live region change if AT does not implement.
+  // Get text to announce for a live region change if an AT does not implement
+  // this functionality.
   std::string GetLiveRegionText() const;
 
   // Creates a text position rooted at this object. Does not conver to a
