@@ -5,6 +5,7 @@
 #include "chrome/browser/usb/usb_tab_helper.h"
 
 #include "chrome/browser/resource_coordinator/local_site_characteristics_data_unittest_utils.h"
+#include "chrome/browser/usb/frame_usb_services.h"
 #include "chrome/browser/usb/usb_chooser_context.h"
 #include "chrome/browser/usb/usb_chooser_context_factory.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
@@ -45,9 +46,14 @@ class UsbTabHelperTest
 TEST_F(UsbTabHelperTest, IncrementDecrementConnectionCount) {
   mojo::Remote<blink::mojom::WebUsbService> remote;
 
+  FrameUsbServices::CreateFrameUsbServices(main_rfh(),
+                                           remote.BindNewPipeAndPassReceiver());
+  FrameUsbServices* frame_usb_services =
+      FrameUsbServices::GetForCurrentDocument(main_rfh());
+
   UsbTabHelper* helper =
       UsbTabHelper::GetOrCreateForWebContents(web_contents());
-  helper->CreateWebUsbService(main_rfh(), remote.BindNewPipeAndPassReceiver());
+
   EXPECT_FALSE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
@@ -57,7 +63,7 @@ TEST_F(UsbTabHelperTest, IncrementDecrementConnectionCount) {
 
   // Increment the USB connection count. Expect USBTabHelper and
   // PerformanceManager to indicate that the tab is attached to USB.
-  helper->IncrementConnectionCount(main_rfh());
+  frame_usb_services->IncrementConnectionCount();
   EXPECT_TRUE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
@@ -67,7 +73,7 @@ TEST_F(UsbTabHelperTest, IncrementDecrementConnectionCount) {
 
   // Increment the USB connection count again. State shouldn't change in
   // USBTabHelper and in the PerformanceManager.
-  helper->IncrementConnectionCount(main_rfh());
+  frame_usb_services->IncrementConnectionCount();
   EXPECT_TRUE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
@@ -77,7 +83,7 @@ TEST_F(UsbTabHelperTest, IncrementDecrementConnectionCount) {
 
   // Decrement the USB connection count. State shouldn't change in USBTabHelper
   // and in the PerformanceManager as one connection remains.
-  helper->DecrementConnectionCount(main_rfh());
+  frame_usb_services->DecrementConnectionCount();
   EXPECT_TRUE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
@@ -87,7 +93,7 @@ TEST_F(UsbTabHelperTest, IncrementDecrementConnectionCount) {
 
   // Decrement the USB connection count again. Expect USBTabHelper and
   // PerformanceManager to indicate that the tab is *not* attached to USB.
-  helper->DecrementConnectionCount(main_rfh());
+  frame_usb_services->DecrementConnectionCount();
   EXPECT_FALSE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
@@ -99,9 +105,14 @@ TEST_F(UsbTabHelperTest, IncrementDecrementConnectionCount) {
 TEST_F(UsbTabHelperTest, Navigate) {
   mojo::Remote<blink::mojom::WebUsbService> remote;
 
+  FrameUsbServices::CreateFrameUsbServices(main_rfh(),
+                                           remote.BindNewPipeAndPassReceiver());
+  FrameUsbServices* frame_usb_services =
+      FrameUsbServices::GetForCurrentDocument(main_rfh());
+
   UsbTabHelper* helper =
       UsbTabHelper::GetOrCreateForWebContents(web_contents());
-  helper->CreateWebUsbService(main_rfh(), remote.BindNewPipeAndPassReceiver());
+
   EXPECT_FALSE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
@@ -111,7 +122,7 @@ TEST_F(UsbTabHelperTest, Navigate) {
 
   // Increment the USB connection count. Expect USBTabHelper and
   // PerformanceManager to indicate that the tab is attached to USB.
-  helper->IncrementConnectionCount(main_rfh());
+  frame_usb_services->IncrementConnectionCount();
   EXPECT_TRUE(helper->IsDeviceConnected());
   performance_manager::testing::TestPageNodePropertyOnPMSequence(
       web_contents(),
