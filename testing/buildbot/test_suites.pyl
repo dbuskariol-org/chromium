@@ -3493,9 +3493,6 @@
           '--test-launcher-batch-limit=512',
           '--test-launcher-retry-limit=0',
         ],
-        'swarming': {
-          'shards': 2,
-        },
       },
       'angle_deqp_gles2_tests': {
         'args': [
@@ -3504,7 +3501,7 @@
           '--test-launcher-retry-limit=0',
         ],
         'swarming': {
-          'shards': 3,
+          'shards': 2,
         },
       },
       'angle_deqp_gles31_tests': {
@@ -3514,7 +3511,7 @@
           '--test-launcher-retry-limit=0',
         ],
         'swarming': {
-          'shards': 4,
+          'shards': 3,
         },
       },
       'angle_deqp_gles3_tests': {
@@ -3524,10 +3521,17 @@
           '--test-launcher-retry-limit=0',
         ],
         'swarming': {
-          'shards': 9,
+          'shards': 6,
         },
       },
       'angle_deqp_khr_gles2_tests': {
+        'args': [
+          '--deqp-egl-display-type=angle-swiftshader',
+          '--test-launcher-batch-limit=512',
+          '--test-launcher-retry-limit=0',
+        ],
+      },
+      'angle_deqp_khr_gles31_tests': {
         'args': [
           '--deqp-egl-display-type=angle-swiftshader',
           '--test-launcher-batch-limit=512',
