@@ -44,9 +44,14 @@ class WebviewClient : public exo::wayland::clients::ClientBase {
   using WebviewRequestResponseClient =
       ::grpc::ClientReaderWriterInterface<chromecast::webview::WebviewRequest,
                                           chromecast::webview::WebviewResponse>;
-  void SendNavigationRequest(const std::string& URL);
+  void SendNavigationRequest(const std::vector<std::string>& tokens);
+  void SendResizeRequest(const std::vector<std::string>& tokens);
   void TakeExclusiveAccess();
   void WlDisplayCallback();
+
+  gfx::Size webview_size_ = gfx::Size(256, 256);
+  int32_t drm_format_ = 0;
+  int32_t bo_usage_ = 0;
 
   std::unique_ptr<wl_callback> frame_callback_;
   std::unique_ptr<wl_callback> subsurface_frame_callback_;

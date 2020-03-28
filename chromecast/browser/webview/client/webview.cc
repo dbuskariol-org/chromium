@@ -10,6 +10,7 @@
 #include "base/files/file_descriptor_watcher_posix.h"
 #include "base/logging.h"
 #include "base/run_loop.h"
+#include "base/strings/string_split.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "chromecast/browser/webview/proto/webview.pb.h"
 #include "third_party/grpc/src/include/grpcpp/grpcpp.h"
@@ -23,6 +24,9 @@ namespace {
 
 constexpr int kGrpcMaxReconnectBackoffMs = 1000;
 constexpr int kWebviewId = 10;
+
+constexpr char kNavigateCommand[] = "navigate";
+constexpr char kResizeCommand[] = "resize";
 
 void FrameCallback(void* data, wl_callback* callback, uint32_t time) {
   WebviewClient* webview_client = static_cast<WebviewClient*>(data);
@@ -59,6 +63,8 @@ bool WebviewClient::HasAvailableBuffer() {
 
 void WebviewClient::Run(const InitParams& params,
                         const std::string& channel_directory) {
+  drm_format_ = params.drm_format;
+  bo_usage_ = params.bo_usage;
   webview_surface_.reset(static_cast<wl_surface*>(
       wl_compositor_create_surface(globals_.compositor.get())));
 
@@ -113,7 +119,7 @@ void WebviewClient::Run(const InitParams& params,
     return;
   }
 
-  std::cout << "Enter URL, q to quit: ";
+  std::cout << "Enter command: ";
   std::cout.flush();
   task_runner_->PostTask(
       FROM_HERE, base::BindOnce(&WebviewClient::Paint, base::Unretained(this)));
@@ -157,6 +163,7 @@ void WebviewClient::HandleMode(void* data,
     return;
 
   size_.SetSize(width, height);
+  webview_size_.SetSize(width, height);
   switch (transform_) {
     case WL_OUTPUT_TRANSFORM_NORMAL:
     case WL_OUTPUT_TRANSFORM_180:
@@ -187,15 +194,25 @@ void WebviewClient::HandleMode(void* data,
 
 void WebviewClient::InputCallback() {
   std::string request;
-  std::cin >> request;
+  getline(std::cin, request);
 
   if (request == "q") {
     run_loop_.Quit();
     return;
   }
 
-  SendNavigationRequest(request);
-  std::cout << "Enter URL, q to quit: ";
+  std::vector<std::string> tokens = SplitString(
+      request, " ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+
+  if (tokens.size() == 0)
+    return;
+
+  if (tokens[0] == kNavigateCommand)
+    SendNavigationRequest(tokens);
+  else if (tokens[0] == kResizeCommand)
+    SendResizeRequest(tokens);
+
+  std::cout << "Enter command: ";
   std::cout.flush();
 }
 
@@ -237,13 +254,40 @@ void WebviewClient::SchedulePaint() {
       FROM_HERE, base::BindOnce(&WebviewClient::Paint, base::Unretained(this)));
 }
 
-void WebviewClient::SendNavigationRequest(const std::string& URL) {
+void WebviewClient::SendNavigationRequest(
+    const std::vector<std::string>& tokens) {
+  if (tokens.size() != 2) {
+    LOG(ERROR) << "Usage: navigate [URL]";
+    return;
+  }
   WebviewRequest load_url_request;
-  load_url_request.mutable_navigate()->set_url(URL);
+  load_url_request.mutable_navigate()->set_url(tokens[1]);
 
   if (!client_->Write(load_url_request)) {
     LOG(ERROR) << ("Navigation request send failed");
   }
+}
+
+void WebviewClient::SendResizeRequest(const std::vector<std::string>& tokens) {
+  if (tokens.size() != 3) {
+    LOG(ERROR) << "Usage: resize [WIDTH] [HEIGHT]";
+    return;
+  }
+  int width, height;
+  std::istringstream(tokens[1]) >> width;
+  std::istringstream(tokens[2]) >> height;
+  WebviewRequest resize_request;
+  resize_request.mutable_resize()->set_width(width);
+  resize_request.mutable_resize()->set_height(height);
+
+  if (!client_->Write(resize_request)) {
+    LOG(ERROR) << ("Resize request failed");
+    return;
+  }
+
+  webview_size_.set_width(width);
+  webview_size_.set_height(height);
+  webview_buffer_ = CreateBuffer(webview_size_, drm_format_, bo_usage_);
 }
 
 void WebviewClient::TakeExclusiveAccess() {
