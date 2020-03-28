@@ -112,12 +112,13 @@ class AccessibilityWinBrowserTest : public AccessibilityBrowserTest {
                                           const std::wstring& expected_name,
                                           int32_t depth,
                                           bool* found);
-  static void CheckTextAtOffset(Microsoft::WRL::ComPtr<IAccessibleText>& object,
-                                LONG offset,
-                                IA2TextBoundaryType boundary_type,
-                                LONG expected_start_offset,
-                                LONG expected_end_offset,
-                                const std::wstring& expected_text);
+  static void CheckTextAtOffset(
+      const Microsoft::WRL::ComPtr<IAccessibleText>& object,
+      LONG offset,
+      IA2TextBoundaryType boundary_type,
+      LONG expected_start_offset,
+      LONG expected_end_offset,
+      const std::wstring& expected_text);
   static std::vector<base::win::ScopedVariant> GetAllAccessibleChildren(
       IAccessible* element);
 
@@ -466,8 +467,8 @@ BrowserAccessibility* AccessibilityWinBrowserTest::FindNodeInSubtree(
     const std::string& name_or_value) {
   const std::string& name =
       node.GetStringAttribute(ax::mojom::StringAttribute::kName);
-  // Note that "BrowserAccessibility::GetValue" has the
-  // added functionality of computing the value of an ARIA text box from its
+  // Note that in the case of a text field, "BrowserAccessibility::GetValue" has
+  // the added functionality of computing the value of an ARIA text box from its
   // inner text.
   //
   // <div contenteditable="true" role="textbox">Hello world.</div>
@@ -573,7 +574,7 @@ void AccessibilityWinBrowserTest::FindNodeInAccessibilityTree(
 // Ensures that the text and the start and end offsets retrieved using
 // get_textAtOffset match the expected values.
 void AccessibilityWinBrowserTest::CheckTextAtOffset(
-    Microsoft::WRL::ComPtr<IAccessibleText>& object,
+    const Microsoft::WRL::ComPtr<IAccessibleText>& object,
     LONG offset,
     IA2TextBoundaryType boundary_type,
     LONG expected_start_offset,

@@ -13,6 +13,7 @@
 #include "base/no_destructor.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
+#include "base/strings/utf_string_conversions.h"
 #include "content/browser/accessibility/browser_accessibility_manager.h"
 #include "content/browser/accessibility/browser_accessibility_state_impl.h"
 #include "content/public/common/content_client.h"
@@ -395,7 +396,7 @@ BrowserAccessibility* BrowserAccessibility::InternalDeepestLastChild() const {
 }
 
 uint32_t BrowserAccessibility::InternalChildCount() const {
-  if (!node_ || !manager_)
+  if (!instance_active())
     return 0;
   return node_->GetUnignoredChildCount();
 }
@@ -404,7 +405,7 @@ BrowserAccessibility* BrowserAccessibility::InternalGetChild(
     uint32_t child_index) const {
   if (!node_ || !manager_)
     return nullptr;
-  auto* child_node = node_->GetUnignoredChildAtIndex(child_index);
+  ui::AXNode* child_node = node_->GetUnignoredChildAtIndex(child_index);
   if (!child_node)
     return nullptr;
 
@@ -414,7 +415,7 @@ BrowserAccessibility* BrowserAccessibility::InternalGetChild(
 BrowserAccessibility* BrowserAccessibility::InternalGetParent() const {
   if (!node_ || !manager_)
     return nullptr;
-  auto* child_node = node_->GetUnignoredParent();
+  ui::AXNode* child_node = node_->GetUnignoredParent();
   if (!child_node)
     return nullptr;
 
@@ -426,7 +427,7 @@ BrowserAccessibility* BrowserAccessibility::InternalGetFirstChild() const {
 }
 
 BrowserAccessibility* BrowserAccessibility::InternalGetLastChild() const {
-  auto* child_node = node_->GetLastUnignoredChild();
+  ui::AXNode* child_node = node_->GetLastUnignoredChild();
   if (!child_node)
     return nullptr;
 
@@ -434,7 +435,7 @@ BrowserAccessibility* BrowserAccessibility::InternalGetLastChild() const {
 }
 
 BrowserAccessibility* BrowserAccessibility::InternalGetNextSibling() const {
-  auto* child_node = node_->GetNextUnignoredSibling();
+  ui::AXNode* child_node = node_->GetNextUnignoredSibling();
   if (!child_node)
     return nullptr;
 
@@ -442,7 +443,7 @@ BrowserAccessibility* BrowserAccessibility::InternalGetNextSibling() const {
 }
 
 BrowserAccessibility* BrowserAccessibility::InternalGetPreviousSibling() const {
-  auto* child_node = node_->GetPreviousUnignoredSibling();
+  ui::AXNode* child_node = node_->GetPreviousUnignoredSibling();
   if (!child_node)
     return nullptr;
 
@@ -1519,7 +1520,7 @@ int BrowserAccessibility::GetChildCount() {
 }
 
 gfx::NativeViewAccessible BrowserAccessibility::ChildAtIndex(int index) {
-  auto* child = PlatformGetChild(index);
+  BrowserAccessibility* child = PlatformGetChild(index);
   if (!child)
     return nullptr;
 
@@ -1527,7 +1528,7 @@ gfx::NativeViewAccessible BrowserAccessibility::ChildAtIndex(int index) {
 }
 
 gfx::NativeViewAccessible BrowserAccessibility::GetFirstChild() {
-  auto* child = PlatformGetFirstChild();
+  BrowserAccessibility* child = PlatformGetFirstChild();
   if (!child)
     return nullptr;
 
@@ -1535,7 +1536,7 @@ gfx::NativeViewAccessible BrowserAccessibility::GetFirstChild() {
 }
 
 gfx::NativeViewAccessible BrowserAccessibility::GetLastChild() {
-  auto* child = PlatformGetLastChild();
+  BrowserAccessibility* child = PlatformGetLastChild();
   if (!child)
     return nullptr;
 
@@ -1543,7 +1544,7 @@ gfx::NativeViewAccessible BrowserAccessibility::GetLastChild() {
 }
 
 gfx::NativeViewAccessible BrowserAccessibility::GetNextSibling() {
-  auto* sibling = PlatformGetNextSibling();
+  BrowserAccessibility* sibling = PlatformGetNextSibling();
   if (!sibling)
     return nullptr;
 
@@ -1551,7 +1552,7 @@ gfx::NativeViewAccessible BrowserAccessibility::GetNextSibling() {
 }
 
 gfx::NativeViewAccessible BrowserAccessibility::GetPreviousSibling() {
-  auto* sibling = PlatformGetPreviousSibling();
+  BrowserAccessibility* sibling = PlatformGetPreviousSibling();
   if (!sibling)
     return nullptr;
 
@@ -2236,7 +2237,7 @@ ui::TextAttributeMap BrowserAccessibility::ComputeTextAttributeMap(
   int start_offset = 0;
   for (BrowserAccessibility::PlatformChildIterator it = PlatformChildrenBegin();
        it != PlatformChildrenEnd(); ++it) {
-    auto* child = it.get();
+    BrowserAccessibility* child = it.get();
     DCHECK(child);
     ui::TextAttributeList attributes(child->ComputeTextAttributes());
 
