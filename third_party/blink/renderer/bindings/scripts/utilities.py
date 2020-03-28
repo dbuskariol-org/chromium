@@ -354,7 +354,7 @@ def write_pickle_file(pickle_filename, data):
             except Exception:
                 # If trouble unpickling, overwrite
                 pass
-    with open(pickle_filename, 'w') as pickle_file:
+    with open(pickle_filename, 'wb') as pickle_file:
         pickle.dump(data, pickle_file)
 
 
