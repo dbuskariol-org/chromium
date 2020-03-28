@@ -57334,6 +57334,12 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="5" label="Failed to get token"/>
 </enum>
 
+<enum name="SafeBrowsingDelayedWarningEvent">
+  <int value="0" label="User loaded a page with a delayed warning"/>
+  <int value="1" label="User left the page and the warning was never shown"/>
+  <int value="2" label="The warning is shown because the user pressed a key"/>
+</enum>
+
 <enum name="SafeBrowsingParseV4HashResult">
   <int value="0" label="PARSE_FROM_STRING_ERROR"/>
   <int value="1" label="UNEXPECTED_THREAT_ENTRY_TYPE_ERROR"/>
