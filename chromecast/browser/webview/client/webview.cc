@@ -10,6 +10,7 @@
 #include "base/files/file_descriptor_watcher_posix.h"
 #include "base/logging.h"
 #include "base/run_loop.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/string_split.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "chromecast/browser/webview/proto/webview.pb.h"
@@ -23,8 +24,10 @@ namespace client {
 namespace {
 
 constexpr int kGrpcMaxReconnectBackoffMs = 1000;
-constexpr int kWebviewId = 10;
 
+constexpr char kCreateCommand[] = "create";
+constexpr char kDestroyCommand[] = "destroy";
+constexpr char kListCommand[] = "list";
 constexpr char kNavigateCommand[] = "navigate";
 constexpr char kResizeCommand[] = "resize";
 constexpr char kPositionCommand[] = "position";
@@ -47,6 +50,10 @@ void BufferReleaseCallback(void* data, wl_buffer* /* buffer */) {
 using chromecast::webview::WebviewRequest;
 using chromecast::webview::WebviewResponse;
 
+WebviewClient::Webview::Webview() {}
+
+WebviewClient::Webview::~Webview() {}
+
 WebviewClient::WebviewClient()
     : task_runner_(base::ThreadTaskRunnerHandle::Get()),
       file_descriptor_watcher_(task_runner_) {}
@@ -66,8 +73,6 @@ void WebviewClient::Run(const InitParams& params,
                         const std::string& channel_directory) {
   drm_format_ = params.drm_format;
   bo_usage_ = params.bo_usage;
-  webview_surface_.reset(static_cast<wl_surface*>(
-      wl_compositor_create_surface(globals_.compositor.get())));
 
   // Roundtrip to wait for display configuration.
   wl_display_roundtrip(display_.get());
@@ -79,46 +84,6 @@ void WebviewClient::Run(const InitParams& params,
   stub_ = chromecast::webview::PlatformViewsService::NewStub(
       ::grpc::CreateCustomChannel(std::string("unix:" + channel_directory),
                                   ::grpc::InsecureChannelCredentials(), args));
-  std::unique_ptr<::grpc::ClientContext> context =
-      std::make_unique<::grpc::ClientContext>();
-  client_ = stub_->CreateWebview(context.get());
-  WebviewRequest request;
-
-  request.mutable_create()->set_webview_id(kWebviewId);
-  request.mutable_create()->set_window_id(kWebviewId);
-
-  if (!client_->Write(request)) {
-    LOG(ERROR) << ("Failed to create webview");
-    return;
-  }
-
-  WebviewResponse response;
-  if (!client_->Read(&response)) {
-    LOG(ERROR) << "Failed to read webview creation response";
-    return;
-  }
-
-  wl_webview_surface_.reset(wl_subcompositor_get_subsurface(
-      globals_.subcompositor.get(), webview_surface_.get(), surface_.get()));
-  wl_subsurface_set_sync(wl_webview_surface_.get());
-  aura_surface.reset(zaura_shell_get_aura_surface(globals_.aura_shell.get(),
-                                                  webview_surface_.get()));
-
-  if (!aura_surface) {
-    LOG(ERROR) << "No aura surface";
-    return;
-  }
-
-  zaura_surface_set_client_surface_id(aura_surface.get(), kWebviewId);
-
-  WebviewRequest resize_request;
-  resize_request.mutable_resize()->set_width(size_.height());
-  resize_request.mutable_resize()->set_height(size_.width());
-
-  if (!client_->Write(resize_request)) {
-    LOG(ERROR) << ("Resize request failed");
-    return;
-  }
 
   std::cout << "Enter command: ";
   std::cout.flush();
@@ -151,7 +116,70 @@ void WebviewClient::AllocateBuffers(const InitParams& params) {
     buffer_callbacks_.push_back(std::move(buffer_callback));
     buffers_.push_back(std::move(buffer));
   }
-  webview_buffer_ = CreateBuffer(size_, params.drm_format, params.bo_usage);
+}
+
+void WebviewClient::CreateWebview(const std::vector<std::string>& tokens) {
+  if (tokens.size() != 2) {
+    LOG(ERROR) << "Usage: create [ID]";
+    return;
+  }
+
+  int id;
+  if (!base::StringToInt(tokens[1], &id)) {
+    LOG(ERROR) << "ID is not an int";
+    return;
+  } else if (webviews_.find(id) != webviews_.end()) {
+    LOG(ERROR) << "Webview with ID " << tokens[1] << " already exists";
+    return;
+  }
+
+  std::unique_ptr<Webview> webview = std::make_unique<Webview>();
+
+  webview->buffer = CreateBuffer(gfx::Size(1, 1), drm_format_, bo_usage_);
+
+  webview->surface.reset(static_cast<wl_surface*>(
+      wl_compositor_create_surface(globals_.compositor.get())));
+
+  webview->context = std::make_unique<::grpc::ClientContext>();
+  webview->client = stub_->CreateWebview(webview->context.get());
+
+  WebviewRequest request;
+  request.mutable_create()->set_webview_id(id);
+  request.mutable_create()->set_window_id(id);
+  if (!webview->client->Write(request)) {
+    LOG(ERROR) << ("Failed to create webview");
+    return;
+  }
+
+  WebviewResponse response;
+  if (!webview->client->Read(&response)) {
+    LOG(ERROR) << "Failed to read webview creation response";
+    return;
+  }
+
+  webview->subsurface.reset(wl_subcompositor_get_subsurface(
+      globals_.subcompositor.get(), webview->surface.get(), surface_.get()));
+  wl_subsurface_set_sync(webview->subsurface.get());
+
+  std::unique_ptr<zaura_surface> aura_surface;
+  aura_surface.reset(zaura_shell_get_aura_surface(globals_.aura_shell.get(),
+                                                  webview->surface.get()));
+  if (!aura_surface) {
+    LOG(ERROR) << "No aura surface";
+    return;
+  }
+  zaura_surface_set_client_surface_id(aura_surface.get(), id);
+
+  webviews_[id] = std::move(webview);
+}
+
+void WebviewClient::DestroyWebview(const std::vector<std::string>& tokens) {
+  int id;
+  if (tokens.size() != 2 || !base::StringToInt(tokens[1], &id)) {
+    LOG(ERROR) << "Usage: destroy [ID]";
+    return;
+  }
+  webviews_.erase(id);
 }
 
 void WebviewClient::HandleMode(void* data,
@@ -164,7 +192,6 @@ void WebviewClient::HandleMode(void* data,
     return;
 
   size_.SetSize(width, height);
-  webview_size_.SetSize(width, height);
   switch (transform_) {
     case WL_OUTPUT_TRANSFORM_NORMAL:
     case WL_OUTPUT_TRANSFORM_180:
@@ -208,15 +235,26 @@ void WebviewClient::InputCallback() {
   if (tokens.size() == 0)
     return;
 
-  if (tokens[0] == kNavigateCommand)
+  if (tokens[0] == kCreateCommand)
+    CreateWebview(tokens);
+  else if (tokens[0] == kDestroyCommand)
+    DestroyWebview(tokens);
+  else if (tokens[0] == kListCommand)
+    ListActiveWebviews();
+  else if (tokens[1] == kNavigateCommand)
     SendNavigationRequest(tokens);
-  else if (tokens[0] == kResizeCommand)
+  else if (tokens[1] == kResizeCommand)
     SendResizeRequest(tokens);
-  else if (tokens[0] == kPositionCommand)
+  else if (tokens[1] == kPositionCommand)
     SetPosition(tokens);
 
   std::cout << "Enter command: ";
   std::cout.flush();
+}
+
+void WebviewClient::ListActiveWebviews() {
+  for (const auto& pair : webviews_)
+    std::cout << pair.first << std::endl;
 }
 
 void WebviewClient::Paint() {
@@ -236,18 +274,21 @@ void WebviewClient::Paint() {
                     surface_size_.height());
   wl_surface_attach(surface_.get(), buffer->buffer.get(), 0, 0);
 
-  wl_surface_set_buffer_scale(webview_surface_.get(), scale_);
-  wl_surface_damage(webview_surface_.get(), 0, 0, surface_size_.width(),
-                    surface_size_.height());
-  wl_surface_attach(webview_surface_.get(), webview_buffer_->buffer.get(), 0,
-                    0);
-
   // Set up frame callbacks.
   frame_callback_.reset(wl_surface_frame(surface_.get()));
   static wl_callback_listener frame_listener = {FrameCallback};
   wl_callback_add_listener(frame_callback_.get(), &frame_listener, this);
 
-  wl_surface_commit(webview_surface_.get());
+  for (const auto& pair : webviews_) {
+    Webview* webview = pair.second.get();
+    wl_surface_set_buffer_scale(webview->surface.get(), scale_);
+    wl_surface_damage(webview->surface.get(), 0, 0, surface_size_.width(),
+                      surface_size_.height());
+    wl_surface_attach(webview->surface.get(), webview->buffer->buffer.get(), 0,
+                      0);
+    wl_surface_commit(webview->surface.get());
+  }
+
   wl_surface_commit(surface_.get());
   wl_display_flush(display_.get());
 }
@@ -259,49 +300,54 @@ void WebviewClient::SchedulePaint() {
 
 void WebviewClient::SendNavigationRequest(
     const std::vector<std::string>& tokens) {
-  if (tokens.size() != 2) {
-    LOG(ERROR) << "Usage: navigate [URL]";
+  int id;
+  if (tokens.size() != 3 || !base::StringToInt(tokens[0], &id) ||
+      webviews_.find(id) == webviews_.end()) {
+    LOG(ERROR) << "Usage: [ID] navigate [URL]";
     return;
   }
-  WebviewRequest load_url_request;
-  load_url_request.mutable_navigate()->set_url(tokens[1]);
 
-  if (!client_->Write(load_url_request)) {
+  const auto& webview = webviews_[id];
+  WebviewRequest load_url_request;
+  load_url_request.mutable_navigate()->set_url(tokens[2]);
+  if (!webview->client->Write(load_url_request)) {
     LOG(ERROR) << ("Navigation request send failed");
   }
 }
 
 void WebviewClient::SendResizeRequest(const std::vector<std::string>& tokens) {
-  if (tokens.size() != 3) {
-    LOG(ERROR) << "Usage: resize [WIDTH] [HEIGHT]";
+  int id, width, height;
+  if (tokens.size() != 4 || !base::StringToInt(tokens[0], &id) ||
+      webviews_.find(id) == webviews_.end() ||
+      !base::StringToInt(tokens[2], &width) ||
+      !base::StringToInt(tokens[3], &height)) {
+    LOG(ERROR) << "Usage: [ID] resize [WIDTH] [HEIGHT]";
     return;
   }
-  int width, height;
-  std::istringstream(tokens[1]) >> width;
-  std::istringstream(tokens[2]) >> height;
+
+  const auto& webview = webviews_[id];
   WebviewRequest resize_request;
   resize_request.mutable_resize()->set_width(width);
   resize_request.mutable_resize()->set_height(height);
-
-  if (!client_->Write(resize_request)) {
+  if (!webview->client->Write(resize_request)) {
     LOG(ERROR) << ("Resize request failed");
     return;
   }
-
-  webview_size_.set_width(width);
-  webview_size_.set_height(height);
-  webview_buffer_ = CreateBuffer(webview_size_, drm_format_, bo_usage_);
+  webview->buffer =
+      CreateBuffer(gfx::Size(width, height), drm_format_, bo_usage_);
 }
 
 void WebviewClient::SetPosition(const std::vector<std::string>& tokens) {
-  if (tokens.size() != 3) {
-    LOG(ERROR) << "Usage: position [X] [Y]";
+  int id, x, y;
+  if (tokens.size() != 4 || !base::StringToInt(tokens[0], &id) ||
+      webviews_.find(id) == webviews_.end() ||
+      !base::StringToInt(tokens[2], &x) || !base::StringToInt(tokens[3], &y)) {
+    LOG(ERROR) << "Usage: [ID] position [X] [Y]";
     return;
   }
-  int x, y;
-  std::istringstream(tokens[1]) >> x;
-  std::istringstream(tokens[2]) >> y;
-  wl_subsurface_set_position(wl_webview_surface_.get(), x, y);
+
+  const auto& webview = webviews_[id];
+  wl_subsurface_set_position(webview->subsurface.get(), x, y);
 }
 
 void WebviewClient::TakeExclusiveAccess() {
