@@ -286,6 +286,7 @@ TEST_F('CrSettingsPersonalizationOptionsV3Test', 'AllBuildsOld', function() {
  ['Checkbox', 'checkbox_tests.m.js'],
  ['ChooserExceptionList', 'chooser_exception_list_tests.m.js'],
  ['ChooserExceptionListEntry', 'chooser_exception_list_entry_tests.m.js'],
+ ['CollapseRadioButton', 'collapse_radio_button_tests.m.js'],
  ['ControlledButton', 'controlled_button_tests.m.js'],
  ['ControlledRadioButton', 'controlled_radio_button_tests.m.js'],
  ['DoNotTrackToggle', 'do_not_track_toggle_test.m.js'],
@@ -309,6 +310,7 @@ TEST_F('CrSettingsPersonalizationOptionsV3Test', 'AllBuildsOld', function() {
  ['SearchPage', 'search_page_test.m.js'],
  ['Search', 'search_settings_test.m.js'],
  ['SecurityKeysSubpage', 'security_keys_subpage_test.m.js'],
+ ['SecurityPage', 'security_page_test.m.js'],
  ['SecureDns', 'secure_dns_test.m.js'],
  // Copied from P2 test: Disabled for flakiness, see https://crbug.com/1061249
  ['SiteData', 'site_data_test.m.js', 'DISABLED_All'],
