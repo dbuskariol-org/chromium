@@ -42811,6 +42811,13 @@ Called by update_use_counter_css.py.-->
   <int value="5" label="Play/Pause"/>
 </enum>
 
+<enum name="MediaHistoryInitResult">
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed due to no foreign key support"/>
+  <int value="2" label="Failed since database is too new"/>
+  <int value="3" label="Failed to create tables"/>
+</enum>
+
 <enum name="MediaKeyError">
   <int value="1" label="kUnknownError"/>
   <int value="2" label="kClientError"/>
