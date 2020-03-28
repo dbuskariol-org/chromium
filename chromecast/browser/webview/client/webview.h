@@ -46,6 +46,7 @@ class WebviewClient : public exo::wayland::clients::ClientBase {
                                           chromecast::webview::WebviewResponse>;
   void SendNavigationRequest(const std::vector<std::string>& tokens);
   void SendResizeRequest(const std::vector<std::string>& tokens);
+  void SetPosition(const std::vector<std::string>& tokens);
   void TakeExclusiveAccess();
   void WlDisplayCallback();
 

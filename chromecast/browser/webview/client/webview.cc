@@ -27,6 +27,7 @@ constexpr int kWebviewId = 10;
 
 constexpr char kNavigateCommand[] = "navigate";
 constexpr char kResizeCommand[] = "resize";
+constexpr char kPositionCommand[] = "position";
 
 void FrameCallback(void* data, wl_callback* callback, uint32_t time) {
   WebviewClient* webview_client = static_cast<WebviewClient*>(data);
@@ -211,6 +212,8 @@ void WebviewClient::InputCallback() {
     SendNavigationRequest(tokens);
   else if (tokens[0] == kResizeCommand)
     SendResizeRequest(tokens);
+  else if (tokens[0] == kPositionCommand)
+    SetPosition(tokens);
 
   std::cout << "Enter command: ";
   std::cout.flush();
@@ -288,6 +291,17 @@ void WebviewClient::SendResizeRequest(const std::vector<std::string>& tokens) {
   webview_size_.set_width(width);
   webview_size_.set_height(height);
   webview_buffer_ = CreateBuffer(webview_size_, drm_format_, bo_usage_);
+}
+
+void WebviewClient::SetPosition(const std::vector<std::string>& tokens) {
+  if (tokens.size() != 3) {
+    LOG(ERROR) << "Usage: position [X] [Y]";
+    return;
+  }
+  int x, y;
+  std::istringstream(tokens[1]) >> x;
+  std::istringstream(tokens[2]) >> y;
+  wl_subsurface_set_position(wl_webview_surface_.get(), x, y);
 }
 
 void WebviewClient::TakeExclusiveAccess() {
