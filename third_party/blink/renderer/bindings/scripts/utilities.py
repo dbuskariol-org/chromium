@@ -7,12 +7,16 @@ Design doc: http://www.chromium.org/developers/design-documents/idl-build
 """
 
 import os
-import cPickle as pickle
 import re
 import shlex
 import string
 import subprocess
 import sys
+
+if sys.version_info.major == 2:
+    import cPickle as pickle
+else:
+    import pickle
 
 sys.path.append(
     os.path.join(os.path.dirname(__file__), '..', '..', 'build', 'scripts'))
