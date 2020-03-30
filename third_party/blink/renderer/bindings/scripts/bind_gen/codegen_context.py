@@ -26,6 +26,23 @@ class CodeGenContext(object):
     NON_MAIN_WORLDS = "other"
     ALL_WORLDS = "all"
 
+    # "v8_callback_type" attribute values
+    #
+    # void (*)(const v8::FunctionCallbackInfo<v8::Value>&)
+    V8_FUNCTION_CALLBACK = "v8::FunctionCallback"
+    # void (*)(v8::Local<v8::Name>,
+    #          const v8::PropertyCallbackInfo<v8::Value>&)
+    V8_ACCESSOR_NAME_GETTER_CALLBACK = "v8::AccessorNameGetterCallback"
+    # void (*)(v8::Local<v8::Name>, v8::Local<v8::Value>,
+    #          const v8::PropertyCallbackInfo<void>&)
+    V8_ACCESSOR_NAME_SETTER_CALLBACK = "v8::AccessorNameSetterCallback"
+    # void (*)(v8::Local<v8::Name>, v8::Local<v8::Value>,
+    #          const v8::PropertyCallbackInfo<v8::Value>&)
+    V8_GENERIC_NAMED_PROPERTY_SETTER_CALLBACK = (
+        "v8::GenericNamedPropertySetterCallback")
+    # Others
+    V8_OTHER_CALLBACK = "other callback type"
+
     @classmethod
     def init(cls):
         """Initialize the class.  Must be called exactly once."""
@@ -70,7 +87,13 @@ class CodeGenContext(object):
             "class_name": None,
 
             # Main world or all worlds
+            # Used via [PerWorldBindings] to optimize the code path of the main
+            # world.
             "for_world": cls.ALL_WORLDS,
+
+            # Type of V8 callback function which implements IDL attribute,
+            # IDL operation, etc.
+            "v8_callback_type": cls.V8_FUNCTION_CALLBACK
         }
 
         # List of computational attribute names
