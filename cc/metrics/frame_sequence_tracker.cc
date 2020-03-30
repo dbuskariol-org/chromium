@@ -559,10 +559,6 @@ void FrameSequenceTracker::ScheduleTerminate() {
   }
 }
 
-void FrameSequenceTracker::ReportMetricsForTesting() {
-  metrics_->ReportMetrics();
-}
-
 void FrameSequenceTracker::ReportBeginImplFrame(
     const viz::BeginFrameArgs& args) {
   if (termination_status_ != TerminationStatus::kActive)

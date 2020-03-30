@@ -357,8 +357,6 @@ class CC_EXPORT FrameSequenceTracker {
 
   bool ShouldIgnoreSequence(uint64_t sequence_number) const;
 
-  void ReportMetricsForTesting();
-
   const FrameSequenceTrackerType type_;
 
   TerminationStatus termination_status_ = TerminationStatus::kActive;
