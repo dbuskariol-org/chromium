@@ -25,7 +25,6 @@
 #include "ui/events/event.h"
 #include "ui/events/event_utils.h"
 #include "ui/views/controls/native/native_view_host.h"
-#include "ui/views/test/test_views_delegate.h"
 #include "ui/views/test/widget_test.h"
 
 #if defined(USE_AURA)
@@ -146,7 +145,6 @@ class WebViewUnitTest : public views::test::WidgetTest {
     scoped_web_contents_creator_ =
         std::make_unique<views::WebView::ScopedWebContentsCreatorForTesting>(
             creator);
-    set_views_delegate(base::WrapUnique(new views::TestViewsDelegate));
     browser_context_ = std::make_unique<content::TestBrowserContext>();
     WidgetTest::SetUp();
     // Set the test content browser client to avoid pulling in needless
