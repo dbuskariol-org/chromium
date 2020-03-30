@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="resources/flexbox.css">
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<title>CSS Flexbox: multiline flexbox and line breaks.</title>
+<link rel="stylesheet" href="support/flexbox.css" >
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#algo-main-item">
+<meta name="assert" content="This test ensures that multiline flexbox uses min/max constraints when finding line breaks."/>
 <style>
 .flexbox {
   width: 600px;
@@ -42,6 +42,9 @@
     background-color: purple;
 }
 </style>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 </head>
 <body onload="checkLayout('.flexbox')">
 <div id=log></div>
