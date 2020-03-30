@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ACCESSIBILITY_CAPTION_BUBBLE_H_
-#define CHROME_BROWSER_ACCESSIBILITY_CAPTION_BUBBLE_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_ACCESSIBILITY_CAPTION_BUBBLE_H_
+#define CHROME_BROWSER_UI_VIEWS_ACCESSIBILITY_CAPTION_BUBBLE_H_
 
 #include <string>
 
@@ -22,6 +22,8 @@ class CaptionBubble : public views::BubbleDialogDelegateView {
  public:
   explicit CaptionBubble(views::View* anchor);
   ~CaptionBubble() override;
+  CaptionBubble(const CaptionBubble&) = delete;
+  CaptionBubble& operator=(const CaptionBubble&) = delete;
 
   // Create and show the caption bubble.
   static void CreateAndShow(views::View* anchor);
@@ -36,11 +38,9 @@ class CaptionBubble : public views::BubbleDialogDelegateView {
       views::Widget* widget) override;
 
  private:
-  views::Label* label_;
-
-  DISALLOW_COPY_AND_ASSIGN(CaptionBubble);
+  views::Label label_;
 };
 
 }  // namespace captions
 
-#endif  // CHROME_BROWSER_ACCESSIBILITY_CAPTION_BUBBLE_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_ACCESSIBILITY_CAPTION_BUBBLE_H_
