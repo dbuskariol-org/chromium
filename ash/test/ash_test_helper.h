@@ -107,8 +107,6 @@ class AshTestHelper {
   // window will be showing.
   void SetUp(InitParams init_params);
 
-  PrefService* GetLocalStatePrefService();
-
   display::Display GetSecondaryDisplay() const;
 
   TestSessionControllerClient* test_session_controller_client() {
@@ -138,9 +136,11 @@ class AshTestHelper {
     return assistant_service_.get();
   }
 
-  void reset_commandline() { command_line_.reset(); }
-
  private:
+  // Scoping objects to manage init/teardown of services.
+  class BluezDBusManagerInitializer;
+  class PowerPolicyControllerInitializer;
+
   ConfigType config_type_;
   ui::ContextFactory* context_factory_;
   std::unique_ptr<::wm::WMState> wm_state_;
@@ -155,8 +155,9 @@ class AshTestHelper {
   std::unique_ptr<TestSystemTrayClient> system_tray_client_;
   std::unique_ptr<TestPhotoController> photo_controller_;
   std::unique_ptr<AppListTestHelper> app_list_test_helper_;
-  bool bluez_dbus_manager_initialized_ = false;
-  bool power_policy_controller_initialized_ = false;
+  std::unique_ptr<BluezDBusManagerInitializer> bluez_dbus_manager_initializer_;
+  std::unique_ptr<PowerPolicyControllerInitializer>
+      power_policy_controller_initializer_;
   std::unique_ptr<TestNewWindowDelegate> new_window_delegate_;
   std::unique_ptr<views::TestViewsDelegate> test_views_delegate_;
   std::unique_ptr<TestSessionControllerClient> session_controller_client_;

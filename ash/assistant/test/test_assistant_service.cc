@@ -243,18 +243,14 @@ TestAssistantService::current_interaction() {
   return current_interaction_subscriber_->current_interaction();
 }
 
-void TestAssistantService ::StartEditReminderInteraction(
-    const std::string& client_id) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+void TestAssistantService::StartEditReminderInteraction(
+    const std::string& client_id) {}
 
-void TestAssistantService ::StartScreenContextInteraction(
+void TestAssistantService::StartScreenContextInteraction(
     ax::mojom::AssistantStructurePtr assistant_structure,
-    const std::vector<uint8_t>& assistant_screenshot) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+    const std::vector<uint8_t>& assistant_screenshot) {}
 
-void TestAssistantService ::StartTextInteraction(
+void TestAssistantService::StartTextInteraction(
     const std::string& query,
     chromeos::assistant::mojom::AssistantQuerySource source,
     bool allow_tts) {
@@ -263,19 +259,17 @@ void TestAssistantService ::StartTextInteraction(
     SendInteractionResponse();
 }
 
-void TestAssistantService ::StartVoiceInteraction() {
+void TestAssistantService::StartVoiceInteraction() {
   StartInteraction(AssistantInteractionType::kVoice);
   if (interaction_response_)
     SendInteractionResponse();
 }
 
-void TestAssistantService ::StartWarmerWelcomeInteraction(
+void TestAssistantService::StartWarmerWelcomeInteraction(
     int num_warmer_welcome_triggered,
-    bool allow_tts) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+    bool allow_tts) {}
 
-void TestAssistantService ::StopActiveInteraction(bool cancel_conversation) {
+void TestAssistantService::StopActiveInteraction(bool cancel_conversation) {
   if (!running_active_interaction_)
     return;
 
@@ -286,45 +280,34 @@ void TestAssistantService ::StopActiveInteraction(bool cancel_conversation) {
   }
 }
 
-void TestAssistantService ::AddAssistantInteractionSubscriber(
+void TestAssistantService::AddAssistantInteractionSubscriber(
     mojo::PendingRemote<AssistantInteractionSubscriber> subscriber) {
   interaction_subscribers_.Add(
       mojo::Remote<AssistantInteractionSubscriber>(std::move(subscriber)));
 }
 
-void TestAssistantService ::RetrieveNotification(
+void TestAssistantService::RetrieveNotification(
     chromeos::assistant::mojom::AssistantNotificationPtr notification,
-    int action_index) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+    int action_index) {}
 
-void TestAssistantService ::DismissNotification(
-    chromeos::assistant::mojom::AssistantNotificationPtr notification) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+void TestAssistantService::DismissNotification(
+    chromeos::assistant::mojom::AssistantNotificationPtr notification) {}
 
-void TestAssistantService ::OnAccessibilityStatusChanged(
-    bool spoken_feedback_enabled) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+void TestAssistantService::OnAccessibilityStatusChanged(
+    bool spoken_feedback_enabled) {}
 
-void TestAssistantService ::SendAssistantFeedback(
-    chromeos::assistant::mojom::AssistantFeedbackPtr feedback) {
-  NOTIMPLEMENTED_LOG_ONCE();
-}
+void TestAssistantService::SendAssistantFeedback(
+    chromeos::assistant::mojom::AssistantFeedbackPtr feedback) {}
 
 void TestAssistantService::NotifyEntryIntoAssistantUi(
     chromeos::assistant::mojom::AssistantEntryPoint entry_point) {
-  NOTIMPLEMENTED_LOG_ONCE();
 }
 
 void TestAssistantService::AddTimeToTimer(const std::string& id,
                                           base::TimeDelta duration) {
-  NOTIMPLEMENTED_LOG_ONCE();
 }
 
 void TestAssistantService::StopAlarmTimerRinging() {
-  NOTIMPLEMENTED_LOG_ONCE();
 }
 
 void TestAssistantService::StartInteraction(
