@@ -301,8 +301,9 @@ void PasswordSaveManagerImpl::GeneratedPasswordAccepted(
     PasswordForm parsed_form,
     base::WeakPtr<PasswordManagerDriver> driver) {
   generation_manager_ = std::make_unique<PasswordGenerationManager>(client_);
-  generation_manager_->GeneratedPasswordAccepted(std::move(parsed_form),
-                                                 *form_fetcher_, driver);
+  generation_manager_->GeneratedPasswordAccepted(
+      std::move(parsed_form), form_fetcher_->GetNonFederatedMatches(),
+      form_fetcher_->GetFederatedMatches(), driver);
 }
 
 void PasswordSaveManagerImpl::PasswordNoLongerGenerated() {
