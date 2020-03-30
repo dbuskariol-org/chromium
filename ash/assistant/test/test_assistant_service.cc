@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "ash/assistant/assistant_interaction_controller.h"
+#include "base/unguessable_token.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -19,6 +20,8 @@ using chromeos::assistant::mojom::AssistantInteractionMetadataPtr;
 using chromeos::assistant::mojom::AssistantInteractionResolution;
 using chromeos::assistant::mojom::AssistantInteractionSubscriber;
 using chromeos::assistant::mojom::AssistantInteractionType;
+using chromeos::assistant::mojom::AssistantSuggestion;
+using chromeos::assistant::mojom::AssistantSuggestionPtr;
 
 // Subscriber that will ensure the LibAssistant contract is enforced.
 // More specifically, it will ensure that:
@@ -197,6 +200,27 @@ class TextResponse : public InteractionResponse::Response {
   DISALLOW_COPY_AND_ASSIGN(TextResponse);
 };
 
+class SuggestionsResponse : public InteractionResponse::Response {
+ public:
+  explicit SuggestionsResponse(const std::string& text) : text_(text) {}
+  SuggestionsResponse(const SuggestionsResponse&) = delete;
+  SuggestionsResponse& operator=(const SuggestionsResponse&) = delete;
+  ~SuggestionsResponse() override = default;
+
+  void SendTo(chromeos::assistant::mojom::AssistantInteractionSubscriber*
+                  receiver) override {
+    std::vector<AssistantSuggestionPtr> suggestions;
+    suggestions.emplace_back(AssistantSuggestion::New());
+    auto& suggestion = suggestions.back();
+    suggestion->text = text_;
+    suggestion->id = base::UnguessableToken::Create();
+    receiver->OnSuggestionsResponse(std::move(suggestions));
+  }
+
+ private:
+  std::string text_;
+};
+
 class ResolutionResponse : public InteractionResponse::Response {
  public:
   using Resolution = InteractionResponse::Resolution;
@@ -338,6 +362,12 @@ InteractionResponse::~InteractionResponse() = default;
 InteractionResponse* InteractionResponse::AddTextResponse(
     const std::string& text) {
   AddResponse(std::make_unique<TextResponse>(text));
+  return this;
+}
+
+InteractionResponse* InteractionResponse::AddSuggestionChip(
+    const std::string& text) {
+  AddResponse(std::make_unique<SuggestionsResponse>(text));
   return this;
 }
 
