@@ -112,7 +112,7 @@ class CodeGenContext(object):
         )
 
         # Define public readonly properties of this class.
-        for attr in cls._context_attrs.iterkeys():
+        for attr in cls._context_attrs.keys():
 
             def make_get():
                 _attr = cls._internal_attr(attr)
@@ -131,11 +131,11 @@ class CodeGenContext(object):
     def __init__(self, **kwargs):
         assert CodeGenContext._was_initialized
 
-        for arg in kwargs.iterkeys():
+        for arg in kwargs.keys():
             assert arg in self._context_attrs, "Unknown argument: {}".format(
                 arg)
 
-        for attr, default_value in self._context_attrs.iteritems():
+        for attr, default_value in self._context_attrs.items():
             value = kwargs[attr] if attr in kwargs else default_value
             assert (default_value is None
                     or type(value) is type(default_value)), (
@@ -147,13 +147,13 @@ class CodeGenContext(object):
         Returns a copy of this context applying the updates given as the
         arguments.
         """
-        for arg in kwargs.iterkeys():
+        for arg in kwargs.keys():
             assert arg in self._context_attrs, "Unknown argument: {}".format(
                 arg)
 
         new_object = copy.copy(self)
 
-        for attr, new_value in kwargs.iteritems():
+        for attr, new_value in kwargs.items():
             old_value = getattr(self, attr)
             assert old_value is None or type(new_value) is type(old_value), (
                 "Type mismatch at argument: {}".format(attr))
@@ -170,7 +170,7 @@ class CodeGenContext(object):
         """
         bindings = {}
 
-        for attr in self._context_attrs.iterkeys():
+        for attr in self._context_attrs.keys():
             value = getattr(self, attr)
             if value is None:
                 value = NonRenderable(attr)

@@ -3612,7 +3612,7 @@ def make_install_properties(cg_context, function_name, class_name,
                     TextNode(installer_call_text),
                 ]))
             body.append(EmptyNode())
-        for conditional, entries in conditional_to_entries.iteritems():
+        for conditional, entries in conditional_to_entries.items():
             body.append(
                 CxxUnlikelyIfNode(
                     cond=conditional,
