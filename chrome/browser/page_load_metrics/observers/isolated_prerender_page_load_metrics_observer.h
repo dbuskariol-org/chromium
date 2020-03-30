@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PAGE_LOAD_METRICS_OBSERVERS_SUBRESOURCE_LOADING_PAGE_LOAD_METRICS_OBSERVER_H_
-#define CHROME_BROWSER_PAGE_LOAD_METRICS_OBSERVERS_SUBRESOURCE_LOADING_PAGE_LOAD_METRICS_OBSERVER_H_
+#ifndef CHROME_BROWSER_PAGE_LOAD_METRICS_OBSERVERS_ISOLATED_PRERENDER_PAGE_LOAD_METRICS_OBSERVER_H_
+#define CHROME_BROWSER_PAGE_LOAD_METRICS_OBSERVERS_ISOLATED_PRERENDER_PAGE_LOAD_METRICS_OBSERVER_H_
 
 #include <stdint.h>
 #include <vector>
@@ -24,12 +24,13 @@ class BrowserContext;
 class NavigationHandle;
 }  // namespace content
 
-// Records metrics related to loading of subresources on a page.
-class SubresourceLoadingPageLoadMetricsObserver
+// Records metrics related to loading of Isolated Prerender. See
+// //chrome/browser/prerender/isolated/.
+class IsolatedPrerenderPageLoadMetricsObserver
     : public page_load_metrics::PageLoadMetricsObserver {
  public:
-  SubresourceLoadingPageLoadMetricsObserver();
-  ~SubresourceLoadingPageLoadMetricsObserver() override;
+  IsolatedPrerenderPageLoadMetricsObserver();
+  ~IsolatedPrerenderPageLoadMetricsObserver() override;
 
  protected:
   // Used as a callback for history service query results. Protected for
@@ -103,10 +104,10 @@ class SubresourceLoadingPageLoadMetricsObserver
 
   SEQUENCE_CHECKER(sequence_checker_);
 
-  base::WeakPtrFactory<SubresourceLoadingPageLoadMetricsObserver> weak_factory_{
+  base::WeakPtrFactory<IsolatedPrerenderPageLoadMetricsObserver> weak_factory_{
       this};
 
-  DISALLOW_COPY_AND_ASSIGN(SubresourceLoadingPageLoadMetricsObserver);
+  DISALLOW_COPY_AND_ASSIGN(IsolatedPrerenderPageLoadMetricsObserver);
 };
 
-#endif  // CHROME_BROWSER_PAGE_LOAD_METRICS_OBSERVERS_SUBRESOURCE_LOADING_PAGE_LOAD_METRICS_OBSERVER_H_
+#endif  // CHROME_BROWSER_PAGE_LOAD_METRICS_OBSERVERS_ISOLATED_PRERENDER_PAGE_LOAD_METRICS_OBSERVER_H_

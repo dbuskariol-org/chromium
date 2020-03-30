@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/page_load_metrics/observers/subresource_loading_page_load_metrics_observer.h"
+#include "chrome/browser/page_load_metrics/observers/isolated_prerender_page_load_metrics_observer.h"
 
 #include <algorithm>
 
@@ -44,14 +44,14 @@ bool IsCSSOrJS(const std::string& mime_type) {
 
 }  // namespace
 
-SubresourceLoadingPageLoadMetricsObserver::
-    SubresourceLoadingPageLoadMetricsObserver() = default;
+IsolatedPrerenderPageLoadMetricsObserver::
+    IsolatedPrerenderPageLoadMetricsObserver() = default;
 
-SubresourceLoadingPageLoadMetricsObserver::
-    ~SubresourceLoadingPageLoadMetricsObserver() = default;
+IsolatedPrerenderPageLoadMetricsObserver::
+    ~IsolatedPrerenderPageLoadMetricsObserver() = default;
 
 page_load_metrics::PageLoadMetricsObserver::ObservePolicy
-SubresourceLoadingPageLoadMetricsObserver::OnStart(
+IsolatedPrerenderPageLoadMetricsObserver::OnStart(
     content::NavigationHandle* navigation_handle,
     const GURL& currently_committed_url,
     bool started_in_foreground) {
@@ -63,7 +63,7 @@ SubresourceLoadingPageLoadMetricsObserver::OnStart(
 }
 
 page_load_metrics::PageLoadMetricsObserver::ObservePolicy
-SubresourceLoadingPageLoadMetricsObserver::OnRedirect(
+IsolatedPrerenderPageLoadMetricsObserver::OnRedirect(
     content::NavigationHandle* navigation_handle) {
   CheckForCookiesOnURL(navigation_handle->GetWebContents()->GetBrowserContext(),
                        navigation_handle->GetURL());
@@ -71,7 +71,7 @@ SubresourceLoadingPageLoadMetricsObserver::OnRedirect(
 }
 
 page_load_metrics::PageLoadMetricsObserver::ObservePolicy
-SubresourceLoadingPageLoadMetricsObserver::OnCommit(
+IsolatedPrerenderPageLoadMetricsObserver::OnCommit(
     content::NavigationHandle* navigation_handle,
     ukm::SourceId source_id) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
@@ -111,7 +111,7 @@ SubresourceLoadingPageLoadMetricsObserver::OnCommit(
         url.GetOrigin(), base::Time() /* before_time */,
         navigation_start_ /* end_time */,
         base::BindOnce(
-            &SubresourceLoadingPageLoadMetricsObserver::OnOriginLastVisitResult,
+            &IsolatedPrerenderPageLoadMetricsObserver::OnOriginLastVisitResult,
             weak_factory_.GetWeakPtr(), base::Time::Now()),
         &task_tracker_);
   }
@@ -119,7 +119,7 @@ SubresourceLoadingPageLoadMetricsObserver::OnCommit(
   return CONTINUE_OBSERVING;
 }
 
-void SubresourceLoadingPageLoadMetricsObserver::OnOriginLastVisitResult(
+void IsolatedPrerenderPageLoadMetricsObserver::OnOriginLastVisitResult(
     base::Time query_start_time,
     history::HistoryLastVisitToHostResult result) {
   history_query_times_.push_back(base::Time::Now() - query_start_time);
@@ -143,7 +143,7 @@ void SubresourceLoadingPageLoadMetricsObserver::OnOriginLastVisitResult(
   }
 }
 
-void SubresourceLoadingPageLoadMetricsObserver::CheckForCookiesOnURL(
+void IsolatedPrerenderPageLoadMetricsObserver::CheckForCookiesOnURL(
     content::BrowserContext* browser_context,
     const GURL& url) {
   content::StoragePartition* partition =
@@ -151,11 +151,11 @@ void SubresourceLoadingPageLoadMetricsObserver::CheckForCookiesOnURL(
 
   partition->GetCookieManagerForBrowserProcess()->GetCookieList(
       url, net::CookieOptions::MakeAllInclusive(),
-      base::BindOnce(&SubresourceLoadingPageLoadMetricsObserver::OnCookieResult,
+      base::BindOnce(&IsolatedPrerenderPageLoadMetricsObserver::OnCookieResult,
                      weak_factory_.GetWeakPtr(), base::Time::Now()));
 }
 
-void SubresourceLoadingPageLoadMetricsObserver::OnCookieResult(
+void IsolatedPrerenderPageLoadMetricsObserver::OnCookieResult(
     base::Time query_start_time,
     const net::CookieStatusList& cookies,
     const net::CookieStatusList& excluded_cookies) {
@@ -164,7 +164,7 @@ void SubresourceLoadingPageLoadMetricsObserver::OnCookieResult(
       mainframe_had_cookies_.value_or(false) || !cookies.empty();
 }
 
-void SubresourceLoadingPageLoadMetricsObserver::OnResourceDataUseObserved(
+void IsolatedPrerenderPageLoadMetricsObserver::OnResourceDataUseObserved(
     content::RenderFrameHost* rfh,
     const std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr>&
         resources) {
@@ -190,7 +190,7 @@ void SubresourceLoadingPageLoadMetricsObserver::OnResourceDataUseObserved(
   }
 }
 
-void SubresourceLoadingPageLoadMetricsObserver::RecordMetrics() {
+void IsolatedPrerenderPageLoadMetricsObserver::RecordMetrics() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   task_tracker_.TryCancelAll();
@@ -271,7 +271,7 @@ void SubresourceLoadingPageLoadMetricsObserver::RecordMetrics() {
 }
 
 page_load_metrics::PageLoadMetricsObserver::ObservePolicy
-SubresourceLoadingPageLoadMetricsObserver::OnHidden(
+IsolatedPrerenderPageLoadMetricsObserver::OnHidden(
     const page_load_metrics::mojom::PageLoadTiming& timing) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   RecordMetrics();
@@ -279,14 +279,14 @@ SubresourceLoadingPageLoadMetricsObserver::OnHidden(
 }
 
 page_load_metrics::PageLoadMetricsObserver::ObservePolicy
-SubresourceLoadingPageLoadMetricsObserver::FlushMetricsOnAppEnterBackground(
+IsolatedPrerenderPageLoadMetricsObserver::FlushMetricsOnAppEnterBackground(
     const page_load_metrics::mojom::PageLoadTiming& timing) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   RecordMetrics();
   return STOP_OBSERVING;
 }
 
-void SubresourceLoadingPageLoadMetricsObserver::OnComplete(
+void IsolatedPrerenderPageLoadMetricsObserver::OnComplete(
     const page_load_metrics::mojom::PageLoadTiming& timing) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   RecordMetrics();

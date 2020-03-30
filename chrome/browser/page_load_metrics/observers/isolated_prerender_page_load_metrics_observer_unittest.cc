@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/page_load_metrics/observers/subresource_loading_page_load_metrics_observer.h"
+#include "chrome/browser/page_load_metrics/observers/isolated_prerender_page_load_metrics_observer.h"
 
 #include <memory>
 
@@ -35,8 +35,8 @@ page_load_metrics::mojom::ResourceDataUpdatePtr CreateBaseResource(
 
 }  // namespace
 
-class TestSubresourceLoadingPageLoadMetricsObserver
-    : public SubresourceLoadingPageLoadMetricsObserver {
+class TestIsolatedPrerenderPageLoadMetricsObserver
+    : public IsolatedPrerenderPageLoadMetricsObserver {
  public:
   void CallOnOriginLastVisitResult(
       history::HistoryLastVisitToHostResult result) {
@@ -44,12 +44,12 @@ class TestSubresourceLoadingPageLoadMetricsObserver
   }
 };
 
-class SubresourceLoadingPageLoadMetricsObserverTest
+class IsolatedPrerenderPageLoadMetricsObserverTest
     : public page_load_metrics::PageLoadMetricsObserverTestHarness {
  public:
-  SubresourceLoadingPageLoadMetricsObserverTest() = default;
+  IsolatedPrerenderPageLoadMetricsObserverTest() = default;
 
-  TestSubresourceLoadingPageLoadMetricsObserver* plm_observer() {
+  TestIsolatedPrerenderPageLoadMetricsObserver* plm_observer() {
     return plm_observer_;
   }
   void set_navigation_url(const GURL& url) { navigation_url_ = url; }
@@ -131,8 +131,8 @@ class SubresourceLoadingPageLoadMetricsObserverTest
 
  protected:
   void RegisterObservers(page_load_metrics::PageLoadTracker* tracker) override {
-    std::unique_ptr<TestSubresourceLoadingPageLoadMetricsObserver> observer =
-        std::make_unique<TestSubresourceLoadingPageLoadMetricsObserver>();
+    std::unique_ptr<TestIsolatedPrerenderPageLoadMetricsObserver> observer =
+        std::make_unique<TestIsolatedPrerenderPageLoadMetricsObserver>();
     plm_observer_ = observer.get();
     tracker->AddObserver(std::move(observer));
   }
@@ -150,16 +150,16 @@ class SubresourceLoadingPageLoadMetricsObserverTest
     PopulateRequiredTimingFields(&timing_);
   }
 
-  TestSubresourceLoadingPageLoadMetricsObserver* plm_observer_ = nullptr;
+  TestIsolatedPrerenderPageLoadMetricsObserver* plm_observer_ = nullptr;
   page_load_metrics::mojom::PageLoadTiming timing_;
 
   GURL navigation_url_ = TestUrl();
   bool in_main_frame_ = true;
 
-  DISALLOW_COPY_AND_ASSIGN(SubresourceLoadingPageLoadMetricsObserverTest);
+  DISALLOW_COPY_AND_ASSIGN(IsolatedPrerenderPageLoadMetricsObserverTest);
 };
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_CSS) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_CSS) {
   StartTest(true /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -194,7 +194,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_CSS) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 3);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_JS) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_JS) {
   StartTest(true /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -229,7 +229,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_JS) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 3);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_Other) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_Other) {
   StartTest(true /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -264,7 +264,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_Other) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 0);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_NotComplete) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_NotComplete) {
   StartTest(true /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -299,7 +299,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_NotComplete) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 0);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_Subframe) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_Subframe) {
   StartTest(true /* data_saver_enabled */);
   set_in_main_frame(false);
 
@@ -335,7 +335,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_Subframe) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 0);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, AfterFCP) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, AfterFCP) {
   StartTest(true /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -370,7 +370,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, AfterFCP) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 0);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_MaxUKM) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_MaxUKM) {
   StartTest(true /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -422,7 +422,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_MaxUKM) {
   VerifyUKMEntry(UkmEntry::kcount_css_js_loaded_cache_before_fcpName, 10);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_NoUKM) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, BeforeFCP_NoUKM) {
   StartTest(false /* data_saver_enabled */);
 
   std::vector<page_load_metrics::mojom::ResourceDataUpdatePtr> resources;
@@ -445,7 +445,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, BeforeFCP_NoUKM) {
   VerifyNoUKM();
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, DontRecordForNonHttp) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, DontRecordForNonHttp) {
   set_navigation_url(GURL("chrome://version"));
 
   StartTest(true /* data_saver_enabled */);
@@ -479,7 +479,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, DontRecordForNonHttp) {
   VerifyNoUKM();
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_None) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, LastVisitToHost_None) {
   StartTest(true /* data_saver_enabled */);
 
   tester()->NavigateToUntrackedUrl();
@@ -495,7 +495,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_None) {
   VerifyUKMEntry(UkmEntry::kdays_since_last_visit_to_originName, base::nullopt);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_Fail) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, LastVisitToHost_Fail) {
   StartTest(true /* data_saver_enabled */);
   plm_observer()->CallOnOriginLastVisitResult(
       {false /* success */, base::Time()});
@@ -512,8 +512,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_Fail) {
   VerifyUKMEntry(UkmEntry::kdays_since_last_visit_to_originName, base::nullopt);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest,
-       LastVisitToHost_NullTime) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, LastVisitToHost_NullTime) {
   StartTest(true /* data_saver_enabled */);
   plm_observer()->CallOnOriginLastVisitResult(
       {true /* success */, base::Time()});
@@ -530,7 +529,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest,
   VerifyUKMEntry(UkmEntry::kdays_since_last_visit_to_originName, -1);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_Today) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, LastVisitToHost_Today) {
   StartTest(true /* data_saver_enabled */);
   plm_observer()->CallOnOriginLastVisitResult(
       {true /* success */, base::Time::Now()});
@@ -548,7 +547,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_Today) {
   VerifyUKMEntry(UkmEntry::kdays_since_last_visit_to_originName, 0);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest,
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest,
        LastVisitToHost_Yesterday) {
   StartTest(true /* data_saver_enabled */);
   plm_observer()->CallOnOriginLastVisitResult(
@@ -567,7 +566,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest,
   VerifyUKMEntry(UkmEntry::kdays_since_last_visit_to_originName, 1);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_MaxUKM) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, LastVisitToHost_MaxUKM) {
   StartTest(true /* data_saver_enabled */);
   plm_observer()->CallOnOriginLastVisitResult(
       {true /* success */, base::Time::Now() - base::TimeDelta::FromDays(181)});
@@ -586,7 +585,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_MaxUKM) {
                  /*ukm::GetExponentialBucketMin(180,1.70)=*/119);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_NoUKM) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, LastVisitToHost_NoUKM) {
   StartTest(false /* data_saver_enabled */);
   plm_observer()->CallOnOriginLastVisitResult(
       {true /* success */, base::Time::Now() - base::TimeDelta::FromDays(1)});
@@ -604,8 +603,8 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, LastVisitToHost_NoUKM) {
 }
 
 // The rest of cookie testing is done in
-// SubresourceLoadingPageLoadMetricsObserverBrowserTest.
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, HadCookies_None) {
+// IsolatedPrerenderPageLoadMetricsObserverBrowserTest.
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, HadCookies_None) {
   StartTest(true /* data_saver_enabled */);
 
   tester()->NavigateToUntrackedUrl();
@@ -619,7 +618,7 @@ TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, HadCookies_None) {
   VerifyUKMEntry(UkmEntry::kmainpage_request_had_cookiesName, base::nullopt);
 }
 
-TEST_F(SubresourceLoadingPageLoadMetricsObserverTest, HadCookies_NoUKM) {
+TEST_F(IsolatedPrerenderPageLoadMetricsObserverTest, HadCookies_NoUKM) {
   StartTest(false /* data_saver_enabled */);
 
   tester()->NavigateToUntrackedUrl();

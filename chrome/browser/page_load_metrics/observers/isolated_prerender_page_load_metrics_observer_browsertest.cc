@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/page_load_metrics/observers/subresource_loading_page_load_metrics_observer.h"
+#include "chrome/browser/page_load_metrics/observers/isolated_prerender_page_load_metrics_observer.h"
 
 #include <memory>
 
@@ -25,11 +25,11 @@
 #include "services/metrics/public/cpp/ukm_source.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-class SubresourceLoadingPageLoadMetricsObserverBrowserTest
+class IsolatedPrerenderPageLoadMetricsObserverBrowserTest
     : public InProcessBrowserTest {
  public:
-  SubresourceLoadingPageLoadMetricsObserverBrowserTest() = default;
-  ~SubresourceLoadingPageLoadMetricsObserverBrowserTest() override = default;
+  IsolatedPrerenderPageLoadMetricsObserverBrowserTest() = default;
+  ~IsolatedPrerenderPageLoadMetricsObserverBrowserTest() override = default;
 
   void EnableDataSaver() {
     base::CommandLine::ForCurrentProcess()->AppendSwitch(
@@ -99,7 +99,7 @@ class SubresourceLoadingPageLoadMetricsObserverBrowserTest
   std::unique_ptr<ukm::TestAutoSetUkmRecorder> ukm_recorder_;
 };
 
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        BeforeFCPPlumbing) {
   base::HistogramTester histogram_tester;
   NavigateToOriginPath("/index.html");
@@ -116,7 +116,7 @@ IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
 #else
 #define MAYBE_HistoryPlumbing HistoryPlumbing
 #endif
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        MAYBE_HistoryPlumbing) {
   base::HistogramTester histogram_tester;
   NavigateToOriginPath("/index.html");
@@ -142,7 +142,7 @@ IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
       "PageLoad.Clients.SubresourceLoading.HistoryQueryTime", 2);
 }
 
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        MainFrameHadCookies_NoUKM) {
   base::HistogramTester histogram_tester;
   NavigateToOriginPath("/index.html");
@@ -156,7 +156,7 @@ IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
   VerifyNoUKM();
 }
 
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        MainFrameHadCookies_None) {
   EnableDataSaver();
   base::HistogramTester histogram_tester;
@@ -173,7 +173,7 @@ IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
   VerifyUKMEntry(UkmEntry::kmainpage_request_had_cookiesName, 0);
 }
 
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        MainFrameHadCookies_CookiesOnNextPageLoad) {
   NavigateToOriginPath("/set_cookies.html");
   base::HistogramTester histogram_tester;
@@ -193,7 +193,7 @@ IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
       "PageLoad.Clients.SubresourceLoading.CookiesQueryTime", 2);
 }
 
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        MainFrameHadCookies_CookiesOnRedirect) {
   NavigateToOriginPath("/set_cookies.html");
   base::HistogramTester histogram_tester;
@@ -229,7 +229,7 @@ std::unique_ptr<net::test_server::HttpResponse> HandleRedirectRequest(
 }  // namespace
 
 // Regression test for crbug.com/1029959.
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        MainFrameHadCookies_CrossOriginCookiesOnRedirect) {
   net::EmbeddedTestServer redirect_server(net::EmbeddedTestServer::TYPE_HTTP);
   redirect_server.RegisterRequestHandler(
@@ -260,7 +260,7 @@ IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
       "PageLoad.Clients.SubresourceLoading.CookiesQueryTime", 3);
 }
 
-IN_PROC_BROWSER_TEST_F(SubresourceLoadingPageLoadMetricsObserverBrowserTest,
+IN_PROC_BROWSER_TEST_F(IsolatedPrerenderPageLoadMetricsObserverBrowserTest,
                        RecordNothingOnUntrackedPage) {
   EnableDataSaver();
   base::HistogramTester histogram_tester;
