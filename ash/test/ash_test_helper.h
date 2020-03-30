@@ -61,12 +61,6 @@ class TestPhotoController;
 // root window and an ash::Shell instance with a test delegate.
 class AshTestHelper {
  public:
-  // Instantiates/destroys an AshTestHelper. This can happen in a
-  // single-threaded phase without a backing task environment. As such, the vast
-  // majority of initialization/tear down will be done in SetUp()/TearDown().
-  AshTestHelper();
-  ~AshTestHelper();
-
   enum ConfigType {
     // The configuration for shell executable.
     kShell,
@@ -87,22 +81,30 @@ class AshTestHelper {
     bool start_session = true;
     // If this is not set, a TestShellDelegate will be used automatically.
     std::unique_ptr<ShellDelegate> delegate;
-    ui::ContextFactory* context_factory = nullptr;
     PrefService* local_state = nullptr;
-    ConfigType config_type = kUnitTest;
   };
 
-  // Creates the ash::Shell and performs associated initialization according
-  // to |init_params|.
-  void SetUp(InitParams init_params = InitParams());
+  // Instantiates/destroys an AshTestHelper. This can happen in a
+  // single-threaded phase without a backing task environment or ViewsDelegate,
+  // and must not create those lest the caller wish to do so.
+  explicit AshTestHelper(ConfigType config_type = kUnitTest,
+                         ui::ContextFactory* context_factory = nullptr);
+  ~AshTestHelper();
 
-  // Destroys the ash::Shell and performs associated cleanup.
+  // Calls through to SetUp() below, see comments there.
+  void SetUp();
+
+  // Tears down everything but the Screen instance, which some tests access
+  // after this point.
   void TearDown();
 
-  // Returns a root Window. Usually this is the active root Window, but that
-  // method can return NULL sometimes, and in those cases, we fall back on the
-  // primary root Window.
   aura::Window* GetContext();
+
+  // Creates the ash::Shell and performs associated initialization according
+  // to |init_params|.  When this function returns it guarantees a task
+  // environment and ViewsDelegate will exist, the shell will be started, and a
+  // window will be showing.
+  void SetUp(InitParams init_params);
 
   PrefService* GetLocalStatePrefService();
 
@@ -138,6 +140,8 @@ class AshTestHelper {
   void reset_commandline() { command_line_.reset(); }
 
  private:
+  ConfigType config_type_;
+  ui::ContextFactory* context_factory_;
   std::unique_ptr<::wm::WMState> wm_state_;
   std::unique_ptr<ui::ScopedAnimationDurationScaleMode> zero_duration_mode_;
   std::unique_ptr<ui::TestContextFactories> context_factories_;
