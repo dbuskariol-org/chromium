@@ -513,9 +513,9 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
      * Called by native code to process a makeCredential request.
      */
     @CalledByNative
-    void makeCredential(long client, byte[] clientDataHash, String rpId, byte[] userId,
+    void makeCredential(long client, String origin, String rpId, byte[] challenge, byte[] userId,
             int[] algorithms, byte[][] excludedCredentialIds, boolean residentKeyRequired) {
-        mAuthenticator.makeCredential(client, clientDataHash, rpId, userId, algorithms,
+        mAuthenticator.makeCredential(client, origin, rpId, challenge, userId, algorithms,
                 excludedCredentialIds, residentKeyRequired);
     }
 
@@ -524,10 +524,11 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
      * makeCredential request.
      */
     public void onAuthenticatorAttestationResponse(
-            long client, int ctapStatus, byte[] attestationObject) {
-        mTaskRunner.postTask(()
-                                     -> BLEHandlerJni.get().onAuthenticatorAttestationResponse(
-                                             client, ctapStatus, attestationObject));
+            long client, int ctapStatus, byte[] clientDataJSON, byte[] attestationObject) {
+        mTaskRunner.postTask(
+                ()
+                        -> BLEHandlerJni.get().onAuthenticatorAttestationResponse(
+                                client, ctapStatus, clientDataJSON, attestationObject));
     }
 
     @NativeMethods
@@ -557,6 +558,6 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
          * Called to alert native code of a response to a makeCredential request.
          */
         void onAuthenticatorAttestationResponse(
-                long client, int ctapStatus, byte[] attestationObject);
+                long client, int ctapStatus, byte[] clientDataJSON, byte[] attestationObject);
     }
 }

@@ -44,7 +44,6 @@ class CableAuthenticator {
     private static final String TAG = "CableAuthenticator";
     private static final String FIDO2_KEY_CREDENTIAL_EXTRA = "FIDO2_CREDENTIAL_EXTRA";
     private static final int FIDO2_REGISTER_INTENT_CODE = 1;
-    private static final int CLIENT_DATA_HASH_LENGTH = 32;
 
     private static final int CTAP2_OK = 0;
     private static final int CTAP2_ERR_OPERATION_DENIED = 0x27;
@@ -66,12 +65,11 @@ class CableAuthenticator {
         }
     }
 
-    public void makeCredential(long clientAddress, byte[] clientDataHash, String rpId,
+    public void makeCredential(long clientAddress, String origin, String rpId, byte[] challenge,
             byte[] userId, int[] algorithms, byte[][] excludedCredentialIds,
             boolean residentKeyRequired) {
         // TODO: handle concurrent requests
         assert mClientAddress == 0;
-        assert clientDataHash.length == CLIENT_DATA_HASH_LENGTH;
         mClientAddress = clientAddress;
         Fido2PrivilegedApiClient client = Fido.getFido2PrivilegedApiClient(mContext);
         if (client == null) {
@@ -103,7 +101,7 @@ class CableAuthenticator {
                 new PublicKeyCredentialCreationOptions.Builder()
                         .setRp(new PublicKeyCredentialRpEntity(rpId, "", ""))
                         .setUser(new PublicKeyCredentialUserEntity(userId, "", null, ""))
-                        .setChallenge(clientDataHash)
+                        .setChallenge(challenge)
                         .setParameters(parameters)
                         .setTimeoutSeconds(Double.valueOf(20))
                         .setExcludeList(excludeCredentials)
@@ -113,7 +111,7 @@ class CableAuthenticator {
         BrowserPublicKeyCredentialCreationOptions browserRequestOptions =
                 new BrowserPublicKeyCredentialCreationOptions.Builder()
                         .setPublicKeyCredentialCreationOptions(credentialCreationOptions)
-                        .setOrigin(Uri.parse("https://" + rpId))
+                        .setOrigin(Uri.parse(origin))
                         .build();
         Task<PendingIntent> result = client.getRegisterPendingIntent(browserRequestOptions);
         result.addOnSuccessListener(pedingIntent -> {
@@ -141,7 +139,7 @@ class CableAuthenticator {
             Log.e(TAG, "Received a null intent.");
             // The user cancelled the request.
             mBleHandler.onAuthenticatorAttestationResponse(
-                    mClientAddress, CTAP2_ERR_OPERATION_DENIED, null);
+                    mClientAddress, CTAP2_ERR_OPERATION_DENIED, null, null);
             return;
         }
 
@@ -151,7 +149,7 @@ class CableAuthenticator {
                             ? "CANCELED."
                             : "Failed with result code" + resultCode);
             mBleHandler.onAuthenticatorAttestationResponse(
-                    mClientAddress, CTAP2_ERR_OPERATION_DENIED, null);
+                    mClientAddress, CTAP2_ERR_OPERATION_DENIED, null, null);
             return;
         }
         Log.e(TAG, "OK.");
@@ -168,7 +166,8 @@ class CableAuthenticator {
                                 + "and FIDO2_KEY_CREDENTIAL_EXTRA.");
             }
             // TODO: figure out what error to return here
-            mBleHandler.onAuthenticatorAttestationResponse(mClientAddress, CTAP2_ERR_OTHER, null);
+            mBleHandler.onAuthenticatorAttestationResponse(
+                    mClientAddress, CTAP2_ERR_OTHER, null, null);
             return;
         }
 
@@ -193,20 +192,22 @@ class CableAuthenticator {
                     ctap_status = CTAP2_ERR_OTHER;
                     break;
             }
-            mBleHandler.onAuthenticatorAttestationResponse(mClientAddress, ctap_status, null);
+            mBleHandler.onAuthenticatorAttestationResponse(mClientAddress, ctap_status, null, null);
             return;
         }
         if (!(response instanceof AuthenticatorAttestationResponse)) {
             Log.i(TAG, "unknown response");
-            mBleHandler.onAuthenticatorAttestationResponse(mClientAddress, CTAP2_ERR_OTHER, null);
+            mBleHandler.onAuthenticatorAttestationResponse(
+                    mClientAddress, CTAP2_ERR_OTHER, null, null);
             return;
         }
 
         Log.i(TAG, "attestation response");
         AuthenticatorAttestationResponse attestation_response =
                 (AuthenticatorAttestationResponse) response;
-        mBleHandler.onAuthenticatorAttestationResponse(
-                mClientAddress, CTAP2_OK, attestation_response.getAttestationObject());
+        mBleHandler.onAuthenticatorAttestationResponse(mClientAddress, CTAP2_OK,
+                attestation_response.getClientDataJSON(),
+                attestation_response.getAttestationObject());
     }
 
     public void onQRCode(String value) {
