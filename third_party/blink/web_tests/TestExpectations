@@ -5715,19 +5715,6 @@ crbug.com/954998 [ Mac ] http/tests/devtools/tracing/timeline-js/timeline-js-lin
 # Sheriff 2019-04-25
 crbug.com/956736 virtual/gpu-rasterization/images/imagemap-focus-ring-outline-color-not-inherited-from-map.html [ Pass Failure ]
 
-crbug.com/946534 [ Mac10.10 ] external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.11 ] external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.10 ] external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-root-scroller.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.11 ] external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-root-scroller.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.10 ] external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-and-display-none.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.11 ] external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-and-display-none.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.10 ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.11 ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.10 ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-root-scroller.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.11 ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-root-scroller.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.10 ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-and-display-none.https.html [ Pass Failure ]
-crbug.com/946534 [ Mac10.11 ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-and-display-none.https.html [ Pass Failure ]
-
 crbug.com/1065059 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/animationworklet/scroll-timeline-non-scrollable.html [ Pass Crash ]
 crbug.com/1065059 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/animationworklet/playback-rate-scroll-timeline-accelerated-property.html [ Pass Crash ]
 crbug.com/1065059 [ Linux ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Crash ]
