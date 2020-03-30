@@ -1267,6 +1267,9 @@ extern const char kEnableVulkanDescription[];
 extern const char kAndroidAutofillAccessibilityName[];
 extern const char kAndroidAutofillAccessibilityDescription[];
 
+extern const char kAndroidPartnerCustomizationPhenotypeName[];
+extern const char kAndroidPartnerCustomizationPhenotypeDescription[];
+
 extern const char kAppNotificationStatusMessagingName[];
 extern const char kAppNotificationStatusMessagingDescription[];
 

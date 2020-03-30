@@ -37843,6 +37843,8 @@ from previous Chrome versions.
   <int value="-1613583483" label="UseNewAcceptLanguageHeader:enabled"/>
   <int value="-1611758030" label="AndroidWebContentsDarkMode:disabled"/>
   <int value="-1611305202" label="KeepPrefetchedContentSuggestions:disabled"/>
+  <int value="-1607953813"
+      label="AndroidPartnerCustomizationPhenotype:enabled"/>
   <int value="-1607691647" label="MojoVideoEncodeAccelerator:disabled"/>
   <int value="-1607297082" label="ash-enable-persistent-window-bounds"/>
   <int value="-1605567628" label="disable-overlay-scrollbar"/>
@@ -39533,6 +39535,7 @@ from previous Chrome versions.
   <int value="372460068" label="QuickUnlockFingerprint:disabled"/>
   <int value="373177941" label="DockedMagnifier:enabled"/>
   <int value="373193557" label="LongPressBackNewDesign:enabled"/>
+  <int value="373275338" label="AndroidPartnerCustomizationPhenotype:disabled"/>
   <int value="375485858" label="EnableZeroStateMixedTypesRanker:disabled"/>
   <int value="375785554" label="UserActivationV2:disabled"/>
   <int value="375934458" label="PortalsCrossOrigin:enabled"/>

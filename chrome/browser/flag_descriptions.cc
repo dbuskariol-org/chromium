@@ -2499,6 +2499,12 @@ const char kOffliningRecentPagesDescription[] =
     "Enable storing recently visited pages locally for offline use. Requires "
     "Offline Pages to be enabled.";
 
+const char kAndroidPartnerCustomizationPhenotypeName[] =
+    "Use homepage and bookmarks from partner customization";
+const char kAndroidPartnerCustomizationPhenotypeDescription[] =
+    "This flag loads a new configuration source of the default homepage and "
+    "bookmarks.";
+
 const char kPasswordManagerOnboardingAndroidName[] =
     "Password manager onboarding experience";
 const char kPasswordManagerOnboardingAndroidDescription[] =

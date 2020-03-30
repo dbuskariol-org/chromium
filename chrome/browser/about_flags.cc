@@ -5184,6 +5184,15 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kTrustTokensDescription, kOsAll,
      FEATURE_VALUE_TYPE(network::features::kTrustTokens)},
 
+#if defined(OS_ANDROID)
+    {"android-partner-customization-phenotype",
+     flag_descriptions::kAndroidPartnerCustomizationPhenotypeName,
+     flag_descriptions::kAndroidPartnerCustomizationPhenotypeDescription,
+     kOsAndroid,
+     FEATURE_VALUE_TYPE(
+         chrome::android::kAndroidPartnerCustomizationPhenotype)},
+#endif  // defined(OS_ANDROID)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
