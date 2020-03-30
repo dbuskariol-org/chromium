@@ -95,7 +95,8 @@ class AshTestHelper {
   void SetUp();
 
   // Tears down everything but the Screen instance, which some tests access
-  // after this point.
+  // after this point.  This will be called automatically on destruction if it
+  // is not called manually earlier.
   void TearDown();
 
   aura::Window* GetContext();

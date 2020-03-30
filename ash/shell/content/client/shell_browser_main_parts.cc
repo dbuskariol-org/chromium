@@ -153,7 +153,6 @@ void ShellBrowserMainParts::PostMainMessageLoopRun() {
   example_app_list_client_.reset();
   example_session_controller_client_.reset();
 
-  ash_test_helper_->TearDown();
   ash_test_helper_.reset();
 
   views_delegate_.reset();

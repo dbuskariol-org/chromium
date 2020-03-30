@@ -151,6 +151,9 @@ AshTestHelper::AshTestHelper(ConfigType config_type,
 }
 
 AshTestHelper::~AshTestHelper() {
+  if (app_list_test_helper_)
+    TearDown();
+
   // Ensure the next test starts with a null display::Screen.  This must be done
   // here instead of in TearDown() since some tests test access to the Screen
   // after the shell shuts down (which they use TearDown() to trigger).
