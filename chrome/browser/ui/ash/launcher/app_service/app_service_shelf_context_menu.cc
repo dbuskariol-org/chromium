@@ -207,12 +207,13 @@ bool AppServiceShelfContextMenu::IsCommandIdChecked(int command_id) const {
     case apps::mojom::AppType::kWeb: {
       auto* provider = web_app::WebAppProvider::Get(controller()->profile());
       DCHECK(provider);
-      if (command_id == ash::LAUNCH_TYPE_TABBED_WINDOW) {
-        return provider->registrar().IsInExperimentalTabbedWindowMode(
-            item().id.app_id);
-      }
-      if (command_id >= ash::LAUNCH_TYPE_PINNED_TAB &&
-          command_id <= ash::LAUNCH_TYPE_WINDOW) {
+      if ((command_id >= ash::LAUNCH_TYPE_PINNED_TAB &&
+           command_id <= ash::LAUNCH_TYPE_WINDOW) ||
+          command_id == ash::LAUNCH_TYPE_TABBED_WINDOW) {
+        if (provider->registrar().IsInExperimentalTabbedWindowMode(
+                item().id.app_id)) {
+          return command_id == ash::LAUNCH_TYPE_TABBED_WINDOW;
+        }
         web_app::DisplayMode effective_display_mode =
             provider->registrar().GetAppEffectiveDisplayMode(item().id.app_id);
         return effective_display_mode != web_app::DisplayMode::kUndefined &&
