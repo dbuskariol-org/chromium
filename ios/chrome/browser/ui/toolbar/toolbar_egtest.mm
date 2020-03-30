@@ -133,13 +133,15 @@ using chrome_test_util::SystemSelectionCalloutCopyButton;
 // Tests whether input mode in an omnibox can be canceled via tapping the typing
 // shield and asserts it doesn't commit the omnibox contents if the input is
 // canceled.
-// TODO(crbug.com/753098): Re-enable this test on iPad once grey_typeText
-// works on iOS 11.
-- (void)DISABLED_testToolbarOmniboxTypingShield {
+- (void)testToolbarOmniboxTypingShield {
   // Tablet only (handset keyboard does not have "hide keyboard" button).
   if (![ChromeEarlGrey isIPadIdiom]) {
     EARL_GREY_TEST_SKIPPED(@"Test not support on iPhone");
   }
+
+  // TODO(crbug.com/753098): Re-enable this test on iPad once grey_typeText
+  // works on iOS 11.
+  EARL_GREY_TEST_DISABLED(@"Test disabled on iPad.");
 
   const GURL URL = web::test::HttpServer::MakeUrl("http://origin");
 
@@ -201,9 +203,11 @@ using chrome_test_util::SystemSelectionCalloutCopyButton;
 }
 
 // Verifies that copying and pasting a URL includes the hidden protocol prefix.
-// TODO(crbug.com/834345): Enable this test when long press on the steady
-// location bar is supported.
-- (void)DISABLED_testCopyPasteURL {
+- (void)testCopyPasteURL {
+  // TODO(crbug.com/834345): Enable this test when long press on the steady
+  // location bar is supported.
+  EARL_GREY_TEST_SKIPPED(@"Test not supported yet in UI Refresh.");
+
   // Clear generalPasteboard before and after the test.
   [UIPasteboard generalPasteboard].string = @"";
   [self setTearDownHandler:^{

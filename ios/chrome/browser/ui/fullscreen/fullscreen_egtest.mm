@@ -116,14 +116,11 @@ void AssertURLIs(const GURL& expectedURL) {
 
 // Verifies that the toolbar is not hidden when scrolling a short pdf, as the
 // entire document is visible without hiding the toolbar.
-#if defined(CHROME_EARL_GREY_2)
+- (void)testSmallWidePDFScroll {
 // TODO(crbug.com/1022029): Enable this test.
-#define MAYBE_testSmallWidePDFScroll DISABLED_testSmallWidePDFScroll
-#else
-#define MAYBE_testSmallWidePDFScroll testSmallWidePDFScroll
-#endif
-- (void)MAYBE_testSmallWidePDFScroll {
-#if defined(CHROME_EARL_GREY_1)
+#if defined(CHROME_EARL_GREY_2)
+  EARL_GREY_TEST_DISABLED(@"Fails with EG2");
+#elif defined(CHROME_EARL_GREY_1)
   // TODO(crbug.com/1036221): EG1 Test fails on iOS 12.
   if (!base::ios::IsRunningOnIOS13OrLater()) {
     EARL_GREY_TEST_DISABLED(@"EG1 Fails on iOS 12.");
