@@ -108,13 +108,15 @@ bool ShouldReportForAnimation(FrameSequenceTrackerType sequence_type,
   return false;
 }
 
-bool ShouldReportForInteraction(FrameSequenceTrackerType sequence_type,
+bool ShouldReportForInteraction(FrameSequenceMetrics* metrics,
                                 FrameSequenceMetrics::ThreadType thread_type) {
+  const auto sequence_type = metrics->type();
+
   // For touch/wheel scroll, the slower thread is the one we want to report. For
   // pinch-zoom, it's the compositor-thread.
   if (sequence_type == FrameSequenceTrackerType::kTouchScroll ||
       sequence_type == FrameSequenceTrackerType::kWheelScroll)
-    return thread_type == FrameSequenceMetrics::ThreadType::kSlower;
+    return thread_type == metrics->GetEffectiveThread();
 
   if (sequence_type == FrameSequenceTrackerType::kPinchZoom)
     return thread_type == FrameSequenceMetrics::ThreadType::kCompositor;
@@ -232,11 +234,11 @@ void FrameSequenceMetrics::ReportMetrics() {
 
   // Report the throughput metrics.
   base::Optional<int> impl_throughput_percent = ThroughputData::ReportHistogram(
-      throughput_ukm_reporter_, type_, ThreadType::kCompositor,
+      this, ThreadType::kCompositor,
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kCompositor, type_),
       impl_throughput_);
   base::Optional<int> main_throughput_percent = ThroughputData::ReportHistogram(
-      throughput_ukm_reporter_, type_, ThreadType::kMain,
+      this, ThreadType::kMain,
       GetIndexForMetric(FrameSequenceMetrics::ThreadType::kMain, type_),
       main_throughput_);
 
@@ -246,7 +248,7 @@ void FrameSequenceMetrics::ReportMetrics() {
   base::Optional<int> aggregated_throughput_percent;
   if (should_report_slower_thread) {
     aggregated_throughput_percent = ThroughputData::ReportHistogram(
-        throughput_ukm_reporter_, type_, ThreadType::kSlower,
+        this, ThreadType::kSlower,
         GetIndexForMetric(FrameSequenceMetrics::ThreadType::kSlower, type_),
         aggregated_throughput_);
     if (aggregated_throughput_percent.has_value() && throughput_ukm_reporter_) {
@@ -1092,11 +1094,11 @@ std::unique_ptr<FrameSequenceMetrics> FrameSequenceTracker::TakeMetrics() {
 }
 
 base::Optional<int> FrameSequenceMetrics::ThroughputData::ReportHistogram(
-    ThroughputUkmReporter* ukm_reporter,
-    FrameSequenceTrackerType sequence_type,
+    FrameSequenceMetrics* metrics,
     ThreadType thread_type,
     int metric_index,
     const ThroughputData& data) {
+  const auto sequence_type = metrics->type();
   DCHECK_LT(sequence_type, FrameSequenceTrackerType::kMaxType);
 
   STATIC_HISTOGRAM_POINTER_GROUP(
@@ -1120,8 +1122,9 @@ base::Optional<int> FrameSequenceMetrics::ThroughputData::ReportHistogram(
 
   const bool is_animation =
       ShouldReportForAnimation(sequence_type, thread_type);
-  const bool is_interaction =
-      ShouldReportForInteraction(sequence_type, thread_type);
+  const bool is_interaction = ShouldReportForInteraction(metrics, thread_type);
+
+  ThroughputUkmReporter* const ukm_reporter = metrics->ukm_reporter();
 
   if (is_animation) {
     UMA_HISTOGRAM_PERCENTAGE(

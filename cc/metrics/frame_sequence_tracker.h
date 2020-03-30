@@ -71,12 +71,10 @@ class CC_EXPORT FrameSequenceMetrics {
 
     // Returns the throughput in percent, a return value of base::nullopt
     // indicates that no throughput metric is reported.
-    static base::Optional<int> ReportHistogram(
-        ThroughputUkmReporter* ukm_reporter,
-        FrameSequenceTrackerType sequence_type,
-        ThreadType thread_type,
-        int metric_index,
-        const ThroughputData& data);
+    static base::Optional<int> ReportHistogram(FrameSequenceMetrics* metrics,
+                                               ThreadType thread_type,
+                                               int metric_index,
+                                               const ThroughputData& data);
 
     void Merge(const ThroughputData& data) {
       frames_expected += data.frames_expected;
@@ -127,6 +125,11 @@ class CC_EXPORT FrameSequenceMetrics {
     frames_checkerboarded_ += frames;
   }
   uint32_t frames_checkerboarded() const { return frames_checkerboarded_; }
+
+  FrameSequenceTrackerType type() const { return type_; }
+  ThroughputUkmReporter* ukm_reporter() const {
+    return throughput_ukm_reporter_;
+  }
 
  private:
   void ComputeAggregatedThroughput();
