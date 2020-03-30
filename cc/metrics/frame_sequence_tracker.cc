@@ -53,6 +53,8 @@ const char* FrameSequenceTracker::GetFrameSequenceTrackerTypeName(
       return "WheelScroll";
     case FrameSequenceTrackerType::kScrollbarScroll:
       return "ScrollbarScroll";
+    case FrameSequenceTrackerType::kCustom:
+      return "Custom";
     case FrameSequenceTrackerType::kMaxType:
       return "";
   }
@@ -178,6 +180,7 @@ FrameSequenceMetrics::ThreadType FrameSequenceMetrics::GetEffectiveThread()
     case FrameSequenceTrackerType::kUniversal:
       return ThreadType::kSlower;
 
+    case FrameSequenceTrackerType::kCustom:
     case FrameSequenceTrackerType::kMaxType:
       NOTREACHED();
   }
@@ -229,6 +232,11 @@ void FrameSequenceMetrics::ReportMetrics() {
       "cc,benchmark", "FrameSequenceTracker", TRACE_ID_LOCAL(this), "args",
       ThroughputData::ToTracedValue(impl_throughput_, main_throughput_),
       "checkerboard", frames_checkerboarded_);
+
+  // Data for kCustom typed tracker is handled by caller instead being
+  // reported here.
+  if (type_ == FrameSequenceTrackerType::kCustom)
+    return;
 
   ComputeAggregatedThroughput();
 
@@ -337,6 +345,8 @@ FrameSequenceTrackerCollection::~FrameSequenceTrackerCollection() {
 
 FrameSequenceMetrics* FrameSequenceTrackerCollection::StartSequence(
     FrameSequenceTrackerType type) {
+  DCHECK_NE(FrameSequenceTrackerType::kCustom, type);
+
   if (is_single_threaded_)
     return nullptr;
   if (frame_trackers_.contains(type))
@@ -352,6 +362,8 @@ FrameSequenceMetrics* FrameSequenceTrackerCollection::StartSequence(
 
 void FrameSequenceTrackerCollection::StopSequence(
     FrameSequenceTrackerType type) {
+  DCHECK_NE(FrameSequenceTrackerType::kCustom, type);
+
   if (!frame_trackers_.contains(type))
     return;
 
@@ -366,8 +378,30 @@ void FrameSequenceTrackerCollection::StopSequence(
   removal_trackers_.push_back(std::move(tracker));
 }
 
+void FrameSequenceTrackerCollection::StartCustomSequence(int sequence_id) {
+  DCHECK(!base::Contains(custom_frame_trackers_, sequence_id));
+
+  custom_frame_trackers_[sequence_id] = base::WrapUnique(
+      new FrameSequenceTracker(FrameSequenceTrackerType::kCustom,
+                               /*throughput_ukm_reporter=*/nullptr,
+                               /*custom_sequence_id=*/sequence_id));
+}
+
+void FrameSequenceTrackerCollection::StopCustomSequence(int sequence_id) {
+  auto it = custom_frame_trackers_.find(sequence_id);
+  // This happens when an animation is aborted before starting.
+  if (it == custom_frame_trackers_.end())
+    return;
+
+  std::unique_ptr<FrameSequenceTracker> tracker = std::move(it->second);
+  custom_frame_trackers_.erase(it);
+  tracker->ScheduleTerminate();
+  removal_trackers_.push_back(std::move(tracker));
+}
+
 void FrameSequenceTrackerCollection::ClearAll() {
   frame_trackers_.clear();
+  custom_frame_trackers_.clear();
   removal_trackers_.clear();
 }
 
@@ -376,11 +410,15 @@ void FrameSequenceTrackerCollection::NotifyBeginImplFrame(
   RecreateTrackers(args);
   for (auto& tracker : frame_trackers_)
     tracker.second->ReportBeginImplFrame(args);
+  for (auto& tracker : custom_frame_trackers_)
+    tracker.second->ReportBeginImplFrame(args);
 }
 
 void FrameSequenceTrackerCollection::NotifyBeginMainFrame(
     const viz::BeginFrameArgs& args) {
   for (auto& tracker : frame_trackers_)
+    tracker.second->ReportBeginMainFrame(args);
+  for (auto& tracker : custom_frame_trackers_)
     tracker.second->ReportBeginMainFrame(args);
 }
 
@@ -388,24 +426,30 @@ void FrameSequenceTrackerCollection::NotifyMainFrameProcessed(
     const viz::BeginFrameArgs& args) {
   for (auto& tracker : frame_trackers_)
     tracker.second->ReportMainFrameProcessed(args);
+  for (auto& tracker : custom_frame_trackers_)
+    tracker.second->ReportMainFrameProcessed(args);
 }
 
 void FrameSequenceTrackerCollection::NotifyImplFrameCausedNoDamage(
     const viz::BeginFrameAck& ack) {
-  for (auto& tracker : frame_trackers_) {
+  for (auto& tracker : frame_trackers_)
     tracker.second->ReportImplFrameCausedNoDamage(ack);
-  }
+  for (auto& tracker : custom_frame_trackers_)
+    tracker.second->ReportImplFrameCausedNoDamage(ack);
 }
 
 void FrameSequenceTrackerCollection::NotifyMainFrameCausedNoDamage(
     const viz::BeginFrameArgs& args) {
-  for (auto& tracker : frame_trackers_) {
+  for (auto& tracker : frame_trackers_)
     tracker.second->ReportMainFrameCausedNoDamage(args);
-  }
+  for (auto& tracker : custom_frame_trackers_)
+    tracker.second->ReportMainFrameCausedNoDamage(args);
 }
 
 void FrameSequenceTrackerCollection::NotifyPauseFrameProduction() {
   for (auto& tracker : frame_trackers_)
+    tracker.second->PauseFrameProduction();
+  for (auto& tracker : custom_frame_trackers_)
     tracker.second->PauseFrameProduction();
 }
 
@@ -418,20 +462,27 @@ void FrameSequenceTrackerCollection::NotifySubmitFrame(
     tracker.second->ReportSubmitFrame(frame_token, has_missing_content, ack,
                                       origin_args);
   }
+  for (auto& tracker : custom_frame_trackers_) {
+    tracker.second->ReportSubmitFrame(frame_token, has_missing_content, ack,
+                                      origin_args);
+  }
 }
 
 void FrameSequenceTrackerCollection::NotifyFrameEnd(
     const viz::BeginFrameArgs& args,
     const viz::BeginFrameArgs& main_args) {
-  for (auto& tracker : frame_trackers_) {
+  for (auto& tracker : frame_trackers_)
     tracker.second->ReportFrameEnd(args, main_args);
-  }
+  for (auto& tracker : custom_frame_trackers_)
+    tracker.second->ReportFrameEnd(args, main_args);
 }
 
 void FrameSequenceTrackerCollection::NotifyFramePresented(
     uint32_t frame_token,
     const gfx::PresentationFeedback& feedback) {
   for (auto& tracker : frame_trackers_)
+    tracker.second->ReportFramePresented(frame_token, feedback);
+  for (auto& tracker : custom_frame_trackers_)
     tracker.second->ReportFramePresented(frame_token, feedback);
 
   for (auto& tracker : removal_trackers_)
@@ -440,12 +491,23 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
   for (auto& tracker : removal_trackers_) {
     if (tracker->termination_status() ==
         FrameSequenceTracker::TerminationStatus::kReadyForTermination) {
-      // The tracker is ready to be terminated. Take the metrics from the
-      // tracker, merge with any outstanding metrics from previous trackers of
-      // the same type. If there are enough frames to report the metrics, then
-      // report the metrics and destroy it. Otherwise, retain it to be merged
-      // with follow-up sequences.
+      // The tracker is ready to be terminated.
+      // For non kCustom typed trackers, take the metrics from the tracker.
+      // merge with any outstanding metrics from previous trackers of the same
+      // type. If there are enough frames to report the metrics, then report the
+      // metrics and destroy it. Otherwise, retain it to be merged with
+      // follow-up sequences.
+      // For kCustom typed trackers, put its result in |custom_tracker_results_|
+      // to be picked up by caller.
       auto metrics = tracker->TakeMetrics();
+      if (tracker->type() == FrameSequenceTrackerType::kCustom) {
+        custom_tracker_results_[tracker->custom_sequence_id()] =
+            metrics->main_throughput();
+        // |custom_tracker_results_| should be picked up timely.
+        DCHECK_LT(custom_tracker_results_.size(), 500u);
+        continue;
+      }
+
       auto key = std::make_pair(tracker->type(), metrics->GetEffectiveThread());
       if (accumulated_metrics_.contains(key)) {
         metrics->Merge(std::move(accumulated_metrics_[key]));
@@ -514,6 +576,11 @@ FrameSequenceTrackerCollection::FrameSequenceTrackerActiveTypes() {
   return encoded_types;
 }
 
+CustomTrackerResults
+FrameSequenceTrackerCollection::TakeCustomTrackerResults() {
+  return std::move(custom_tracker_results_);
+}
+
 FrameSequenceTracker* FrameSequenceTrackerCollection::GetTrackerForTesting(
     FrameSequenceTrackerType type) {
   if (!frame_trackers_.contains(type))
@@ -534,16 +601,19 @@ void FrameSequenceTrackerCollection::SetUkmManager(UkmManager* manager) {
 
 FrameSequenceTracker::FrameSequenceTracker(
     FrameSequenceTrackerType type,
-    ThroughputUkmReporter* throughput_ukm_reporter)
+    ThroughputUkmReporter* throughput_ukm_reporter,
+    int custom_sequence_id)
     : type_(type),
+      custom_sequence_id_(custom_sequence_id),
       metrics_(std::make_unique<FrameSequenceMetrics>(type,
                                                       throughput_ukm_reporter)),
       trace_data_(metrics_.get()) {
   DCHECK_LT(type_, FrameSequenceTrackerType::kMaxType);
+  DCHECK(type_ != FrameSequenceTrackerType::kCustom ||
+         custom_sequence_id_ >= 0);
 }
 
-FrameSequenceTracker::~FrameSequenceTracker() {
-}
+FrameSequenceTracker::~FrameSequenceTracker() = default;
 
 void FrameSequenceTracker::ScheduleTerminate() {
   termination_status_ = TerminationStatus::kScheduledForTermination;

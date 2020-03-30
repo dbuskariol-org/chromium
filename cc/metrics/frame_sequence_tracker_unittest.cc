@@ -233,6 +233,9 @@ class FrameSequenceTrackerTest : public testing::Test {
   unsigned NumberOfTrackers() const {
     return collection_.frame_trackers_.size();
   }
+  unsigned NumberOfCustomTrackers() const {
+    return collection_.custom_frame_trackers_.size();
+  }
   unsigned NumberOfRemovalTrackers() const {
     return collection_.removal_trackers_.size();
   }
@@ -1221,6 +1224,56 @@ TEST_F(FrameSequenceTrackerTest, TrackerTypeEncoding) {
   ActiveFrameSequenceTrackers active_encoded =
       collection_.FrameSequenceTrackerActiveTypes();
   EXPECT_EQ(active_encoded, 16);  // 1 << 4
+}
+
+TEST_F(FrameSequenceTrackerTest, CustomTrackers) {
+  // Start custom tracker 1.
+  collection_.StartCustomSequence(1);
+  EXPECT_EQ(1u, NumberOfCustomTrackers());
+
+  // No reports.
+  uint32_t frame_token = 1u;
+  collection_.NotifyFramePresented(frame_token, {});
+  auto results = collection_.TakeCustomTrackerResults();
+  EXPECT_EQ(0u, results.size());
+
+  // Start custom tracker 2 and 3 in addition to 1.
+  collection_.StartCustomSequence(2);
+  collection_.StartCustomSequence(3);
+  EXPECT_EQ(3u, NumberOfCustomTrackers());
+
+  // All custom trackers are running. No reports.
+  collection_.NotifyFramePresented(frame_token, {});
+  results = collection_.TakeCustomTrackerResults();
+  EXPECT_EQ(0u, results.size());
+
+  // Tracker 2 is stopped and scheduled to terminate.
+  collection_.StopCustomSequence(2);
+  EXPECT_EQ(2u, NumberOfCustomTrackers());
+
+  // Tracker 2 should report with no data.
+  collection_.NotifyFramePresented(frame_token, {});
+  results = collection_.TakeCustomTrackerResults();
+  EXPECT_EQ(1u, results.size());
+  EXPECT_EQ(0u, results[2].frames_expected);
+
+  // Simple sequence of one frame.
+  const char sequence[] = "b(1)B(0,1)s(1)S(1)e(1,0)P(1)";
+  GenerateSequence(sequence);
+
+  // Stop all custom trackers.
+  collection_.StopCustomSequence(1);
+  collection_.StopCustomSequence(3);
+  EXPECT_EQ(0u, NumberOfCustomTrackers());
+
+  // Tracker 1 and 3 and should report.
+  collection_.NotifyFramePresented(frame_token, {});
+  results = collection_.TakeCustomTrackerResults();
+  EXPECT_EQ(2u, results.size());
+  EXPECT_EQ(1u, results[1].frames_produced);
+  EXPECT_EQ(1u, results[1].frames_expected);
+  EXPECT_EQ(1u, results[3].frames_produced);
+  EXPECT_EQ(1u, results[3].frames_expected);
 }
 
 }  // namespace cc
