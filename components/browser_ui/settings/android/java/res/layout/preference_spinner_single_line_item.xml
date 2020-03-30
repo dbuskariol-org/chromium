@@ -9,7 +9,7 @@
     android:id="@android:id/text1"
     style="?android:attr/spinnerItemStyle"
     android:maxLines="1"
-    android:textSize="16sp"
+    android:textAppearance="@style/TextAppearance.TextLarge.Primary"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"

@@ -31,10 +31,10 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.browserservices.permissiondelegation.TrustedWebActivityPermissionManager;
 import org.chromium.chrome.browser.notifications.channels.SiteChannelsManager;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.settings.ChromeImageViewPreference;
 import org.chromium.chrome.browser.settings.ChromeManagedPreferenceDelegate;
-import org.chromium.chrome.browser.settings.ManagedPreferencesUtils;
-import org.chromium.chrome.browser.settings.SettingsUtils;
+import org.chromium.components.browser_ui.settings.ChromeImageViewPreference;
+import org.chromium.components.browser_ui.settings.ManagedPreferencesUtils;
+import org.chromium.components.browser_ui.settings.SettingsUtils;
 import org.chromium.components.content_settings.ContentSettingsType;
 import org.chromium.components.embedder_support.util.Origin;
 

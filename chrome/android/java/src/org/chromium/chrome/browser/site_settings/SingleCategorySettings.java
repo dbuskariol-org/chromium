@@ -4,8 +4,8 @@
 
 package org.chromium.chrome.browser.site_settings;
 
-import static org.chromium.chrome.browser.settings.SearchUtils.handleSearchNavigation;
 import static org.chromium.chrome.browser.site_settings.WebsitePreferenceBridge.SITE_WILDCARD;
+import static org.chromium.components.browser_ui.settings.SearchUtils.handleSearchNavigation;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,16 +44,16 @@ import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.settings.ChromeBaseCheckBoxPreference;
-import org.chromium.chrome.browser.settings.ChromeBasePreference;
 import org.chromium.chrome.browser.settings.ChromeManagedPreferenceDelegate;
-import org.chromium.chrome.browser.settings.ChromeSwitchPreference;
-import org.chromium.chrome.browser.settings.ExpandablePreferenceGroup;
-import org.chromium.chrome.browser.settings.ManagedPreferencesUtils;
-import org.chromium.chrome.browser.settings.SearchUtils;
-import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.chrome.browser.site_settings.FourStateCookieSettingsPreference.CookieSettingsState;
 import org.chromium.chrome.browser.site_settings.Website.StoredDataClearedCallback;
+import org.chromium.components.browser_ui.settings.ChromeBaseCheckBoxPreference;
+import org.chromium.components.browser_ui.settings.ChromeBasePreference;
+import org.chromium.components.browser_ui.settings.ChromeSwitchPreference;
+import org.chromium.components.browser_ui.settings.ExpandablePreferenceGroup;
+import org.chromium.components.browser_ui.settings.ManagedPreferencesUtils;
+import org.chromium.components.browser_ui.settings.SearchUtils;
+import org.chromium.components.browser_ui.settings.SettingsUtils;
 import org.chromium.components.content_settings.ContentSettingsType;
 import org.chromium.components.content_settings.CookieControlsMode;
 import org.chromium.components.embedder_support.util.UrlUtilities;

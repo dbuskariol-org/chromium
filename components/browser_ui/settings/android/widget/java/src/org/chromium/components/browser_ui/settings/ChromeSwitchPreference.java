@@ -2,25 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings;
+package org.chromium.components.browser_ui.settings;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
-import androidx.preference.CheckBoxPreference;
 import androidx.preference.PreferenceViewHolder;
+import androidx.preference.SwitchPreferenceCompat;
 
 /**
- * Contains the basic functionality that should be shared by all CheckBoxPreference in Chrome.
+ * A Chrome switch preference that supports managed preferences.
  */
-public class ChromeBaseCheckBoxPreference extends CheckBoxPreference {
+public class ChromeSwitchPreference extends SwitchPreferenceCompat {
     private ManagedPreferenceDelegate mManagedPrefDelegate;
 
-    /**
-     * Constructor for inflating from XML.
-     */
-    public ChromeBaseCheckBoxPreference(Context context, AttributeSet attrs) {
+    public ChromeSwitchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -35,7 +34,18 @@ public class ChromeBaseCheckBoxPreference extends CheckBoxPreference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        ((TextView) holder.findViewById(android.R.id.title)).setSingleLine(false);
+
+        TextView title = (TextView) holder.findViewById(android.R.id.title);
+        title.setSingleLine(false);
+
+        // Use summary as title if title is empty.
+        if (TextUtils.isEmpty(getTitle())) {
+            TextView summary = (TextView) holder.findViewById(android.R.id.summary);
+            title.setText(summary.getText());
+            title.setVisibility(View.VISIBLE);
+            summary.setVisibility(View.GONE);
+        }
+
         ManagedPreferencesUtils.onBindViewToPreference(mManagedPrefDelegate, this, holder.itemView);
     }
 

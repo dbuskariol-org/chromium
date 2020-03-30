@@ -31,6 +31,7 @@ import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.init.ChromeBrowserInitializer;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.profiles.ProfileManagerUtils;
+import org.chromium.components.browser_ui.settings.SettingsUtils;
 import org.chromium.ui.UiUtils;
 import org.chromium.ui.util.ColorUtils;
 

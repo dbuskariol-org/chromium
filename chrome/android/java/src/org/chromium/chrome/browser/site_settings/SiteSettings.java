@@ -13,8 +13,8 @@ import org.chromium.base.CommandLine;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
-import org.chromium.chrome.browser.settings.SettingsUtils;
 import org.chromium.chrome.browser.site_settings.SiteSettingsCategory.Type;
+import org.chromium.components.browser_ui.settings.SettingsUtils;
 import org.chromium.content_public.browser.ContentFeatureList;
 import org.chromium.content_public.common.ContentSwitches;
 

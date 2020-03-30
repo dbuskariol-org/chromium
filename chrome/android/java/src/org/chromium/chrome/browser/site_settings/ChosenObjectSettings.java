@@ -25,9 +25,9 @@ import org.chromium.base.annotations.RemovableInRelease;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.settings.ChromeImageViewPreference;
 import org.chromium.chrome.browser.settings.ChromeManagedPreferenceDelegate;
-import org.chromium.chrome.browser.settings.ManagedPreferencesUtils;
+import org.chromium.components.browser_ui.settings.ChromeImageViewPreference;
+import org.chromium.components.browser_ui.settings.ManagedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
