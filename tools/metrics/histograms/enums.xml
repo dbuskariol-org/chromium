@@ -26913,7 +26913,7 @@ Called by update_feature_policy_enum.py.-->
   <int value="28" label="DocumentWrite"/>
   <int value="29" label="LazyLoad"/>
   <int value="30" label="LayoutAnimations"/>
-  <int value="31" label="WakeLock"/>
+  <int value="31" label="ScreenWakeLock"/>
   <int value="32" label="FontDisplay"/>
   <int value="33" label="TopNavigation"/>
   <int value="34" label="FormSubmission"/>
