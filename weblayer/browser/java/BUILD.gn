@@ -7,7 +7,10 @@ import("//build/config/android/rules.gni")
 import("//weblayer/variables.gni")
 
 android_resources("weblayer_resources") {
-  sources = [ "res/layout/weblayer_url_bar.xml" ]
+  sources = [
+    "res/layout/weblayer_url_bar.xml",
+    "res/values/dimens.xml",
+  ]
   custom_package = "org.chromium.weblayer_private"
   deps = [
     "//components/browser_ui/strings/android:browser_ui_strings_grd",
