@@ -2022,7 +2022,6 @@ crbug.com/613672 [ Mac ] virtual/threaded/synthetic_gestures/synthetic-pinch-zoo
 crbug.com/613672 [ Mac ] virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-zoom-in-slow-desktop.html [ Skip ]
 crbug.com/613672 [ Mac ] virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-desktop.html [ Skip ]
 
-crbug.com/652536 fast/events/mouse-cursor-change-after-image-load.html [ Failure Pass Crash ]
 crbug.com/520188 [ Win ] http/tests/local/fileapi/file-last-modified-after-delete.html [ Failure Pass ]
 crbug.com/520611 [ Debug ] fast/filesystem/workers/file-writer-events-shared-worker.html [ Failure Pass ]
 crbug.com/520194 http/tests/xmlhttprequest/timeout/xmlhttprequest-timeout-worker-overridesexpires.html [ Failure Pass ]
