@@ -10,10 +10,102 @@
 
 namespace WTF {
 
-TEST(NewLinkedHashSetTest, Construct) {
-  NewLinkedHashSet<int> test;
-  EXPECT_EQ(test.size(), 0u);
-  EXPECT_TRUE(test.IsEmpty());
+TEST(NewLinkedHashSetTest, CopyConstructAndAssignInt) {
+  NewLinkedHashSet<int> set1;
+  EXPECT_EQ(set1.size(), 0u);
+  EXPECT_TRUE(set1.IsEmpty());
+  set1.insert(1);
+  set1.insert(2);
+  set1.insert(3);
+  EXPECT_EQ(set1.size(), 3u);
+  NewLinkedHashSet<int> set2(set1);
+  EXPECT_EQ(set2.size(), 3u);
+  NewLinkedHashSet<int> set3;
+  EXPECT_EQ(set3.size(), 0u);
+  set3 = set2;
+  EXPECT_EQ(set3.size(), 3u);
+  auto it1 = set1.begin();
+  auto it2 = set2.begin();
+  auto it3 = set3.begin();
+  for (int i = 0; i < 3; i++) {
+    EXPECT_EQ(*it1, i + 1);
+    EXPECT_EQ(*it2, i + 1);
+    EXPECT_EQ(*it3, i + 1);
+    ++it1;
+    ++it2;
+    ++it3;
+  }
+}
+
+TEST(NewLinkedHashSetTest, CopyConstructAndAssignIntPtr) {
+  NewLinkedHashSet<int*> set1;
+  EXPECT_EQ(set1.size(), 0u);
+  EXPECT_TRUE(set1.IsEmpty());
+  std::unique_ptr<int> int1 = std::make_unique<int>(1);
+  std::unique_ptr<int> int2 = std::make_unique<int>(2);
+  std::unique_ptr<int> int3 = std::make_unique<int>(3);
+  set1.insert(int1.get());
+  set1.insert(int2.get());
+  set1.insert(int3.get());
+  EXPECT_EQ(set1.size(), 3u);
+  NewLinkedHashSet<int*> set2(set1);
+  EXPECT_EQ(set2.size(), 3u);
+  NewLinkedHashSet<int*> set3;
+  EXPECT_EQ(set3.size(), 0u);
+  set3 = set2;
+  EXPECT_EQ(set3.size(), 3u);
+  auto it1 = set1.begin();
+  auto it2 = set2.begin();
+  auto it3 = set3.begin();
+  for (int i = 0; i < 3; i++) {
+    EXPECT_EQ(**it1, i + 1);
+    EXPECT_EQ(**it2, i + 1);
+    EXPECT_EQ(**it3, i + 1);
+    ++it1;
+    ++it2;
+    ++it3;
+  }
+
+  for (int* ptr : set1)
+    *ptr += 1000;
+  it1 = set1.begin();
+  it2 = set2.begin();
+  it3 = set3.begin();
+  for (int i = 0; i < 3; i++) {
+    EXPECT_EQ(**it1, i + 1001);
+    EXPECT_EQ(**it2, i + 1001);
+    EXPECT_EQ(**it3, i + 1001);
+    ++it1;
+    ++it2;
+    ++it3;
+  }
+}
+
+TEST(NewLinkedHashSetTest, CopyConstructAndAssignString) {
+  NewLinkedHashSet<String> set1;
+  EXPECT_EQ(set1.size(), 0u);
+  EXPECT_TRUE(set1.IsEmpty());
+  set1.insert("1");
+  set1.insert("2");
+  set1.insert("3");
+  EXPECT_EQ(set1.size(), 3u);
+  NewLinkedHashSet<String> set2(set1);
+  EXPECT_EQ(set2.size(), 3u);
+  NewLinkedHashSet<String> set3;
+  EXPECT_EQ(set3.size(), 0u);
+  set3 = set2;
+  EXPECT_EQ(set3.size(), 3u);
+  auto it1 = set1.begin();
+  auto it2 = set2.begin();
+  auto it3 = set3.begin();
+  for (int i = 0; i < 3; i++) {
+    EXPECT_EQ(*it1, String(Vector<UChar>({'1' + i})));
+    EXPECT_EQ(*it2, String(Vector<UChar>({'1' + i})));
+    EXPECT_EQ(*it3, String(Vector<UChar>({'1' + i})));
+    ++it1;
+    ++it2;
+    ++it3;
+  }
 }
 
 TEST(NewLinkedHashSetTest, Iterator) {

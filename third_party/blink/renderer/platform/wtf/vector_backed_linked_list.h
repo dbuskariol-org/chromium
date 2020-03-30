@@ -44,13 +44,10 @@ class VectorBackedLinkedListNode {
         next_index_(next_index),
         value_(std::move(value)) {}
 
-  VectorBackedLinkedListNode(const VectorBackedLinkedListNode& other) = delete;
-
+  VectorBackedLinkedListNode(const VectorBackedLinkedListNode& other) = default;
   VectorBackedLinkedListNode(VectorBackedLinkedListNode&& other) = default;
-
   VectorBackedLinkedListNode& operator=(
-      const VectorBackedLinkedListNode& other) = delete;
-
+      const VectorBackedLinkedListNode& other) = default;
   VectorBackedLinkedListNode& operator=(VectorBackedLinkedListNode&& other) =
       default;
 
@@ -119,8 +116,9 @@ class VectorBackedLinkedList {
 
   VectorBackedLinkedList();
 
-  // TODO(keinakashima): implement copy constructor & copy assignment operator
+  VectorBackedLinkedList(const VectorBackedLinkedList&) = default;
   VectorBackedLinkedList(VectorBackedLinkedList&&);
+  VectorBackedLinkedList& operator=(const VectorBackedLinkedList&) = default;
   VectorBackedLinkedList& operator=(VectorBackedLinkedList&&);
 
   ~VectorBackedLinkedList() = default;
