@@ -2,23 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/gtk_event_loop_x11.h"
-
-#include "ui/gfx/x/x11.h"
+#include "ui/gtk/gtk_event_loop_x11.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
 #include "base/memory/singleton.h"
-#include "chrome/browser/ui/gtk/gtk_util.h"
 #include "ui/events/platform/x11/x11_event_source.h"
-#include "ui/gfx/x/x11_types.h"
+#include "ui/gfx/x/x11.h"
 
-namespace gtk {
+namespace ui {
+
+namespace {
+
+int BuildXkbStateFromGdkEvent(unsigned int state, unsigned char group) {
+  return state | ((group & 0x3) << 13);
+}
+
+}  // namespace
 
 // static
-GtkEventLoopX11* GtkEventLoopX11::GetInstance() {
+GtkEventLoopX11* GtkEventLoopX11::EnsureInstance() {
   return base::Singleton<GtkEventLoopX11>::get();
 }
 
@@ -83,4 +88,4 @@ void GtkEventLoopX11::ProcessGdkEventKey(const GdkEventKey& gdk_event_key) {
     XPutBackEvent(x_event.xkey.display, &x_event);
 }
 
-}  // namespace gtk
+}  // namespace ui
