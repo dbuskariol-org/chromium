@@ -44,6 +44,7 @@
 #include "content/shell/common/web_test/web_test_switches.h"
 #include "content/shell/renderer/web_test/blink_test_helpers.h"
 #include "content/test/data/mojo_web_test_helper_test.mojom.h"
+#include "content/test/mock_badge_service.h"
 #include "content/test/mock_clipboard_host.h"
 #include "content/test/mock_platform_notification_service.h"
 #include "device/bluetooth/public/mojom/test/fake_bluetooth.mojom.h"
@@ -376,6 +377,8 @@ void WebTestContentBrowserClient::RegisterBrowserInterfaceBindersForFrame(
   map->Add<mojom::MojoWebTestHelper>(base::BindRepeating(&BindWebTestHelper));
   map->Add<blink::mojom::ClipboardHost>(base::BindRepeating(
       &WebTestContentBrowserClient::BindClipboardHost, base::Unretained(this)));
+  map->Add<blink::mojom::BadgeService>(base::BindRepeating(
+      &WebTestContentBrowserClient::BindBadgeService, base::Unretained(this)));
 }
 
 bool WebTestContentBrowserClient::CanAcceptUntrustedExchangesIfNeeded() {
@@ -412,6 +415,14 @@ void WebTestContentBrowserClient::BindClipboardHost(
   if (!mock_clipboard_host_)
     mock_clipboard_host_ = std::make_unique<MockClipboardHost>();
   mock_clipboard_host_->Bind(std::move(receiver));
+}
+
+void WebTestContentBrowserClient::BindBadgeService(
+    RenderFrameHost* render_frame_host,
+    mojo::PendingReceiver<blink::mojom::BadgeService> receiver) {
+  if (!mock_badge_service_)
+    mock_badge_service_ = std::make_unique<MockBadgeService>();
+  mock_badge_service_->Bind(std::move(receiver));
 }
 
 std::unique_ptr<LoginDelegate> WebTestContentBrowserClient::CreateLoginDelegate(

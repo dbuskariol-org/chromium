@@ -18,6 +18,7 @@
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "services/service_manager/public/cpp/binder_map.h"
 #include "services/service_manager/public/cpp/binder_registry.h"
+#include "third_party/blink/public/mojom/badging/badging.mojom.h"
 #include "third_party/blink/public/mojom/clipboard/clipboard.mojom.h"
 #include "third_party/blink/public/mojom/permissions/permission_automation.mojom-forward.h"
 
@@ -37,6 +38,7 @@ namespace content {
 class FakeBluetoothChooser;
 class FakeBluetoothChooserFactory;
 class FakeBluetoothDelegate;
+class MockBadgeService;
 class MockClipboardHost;
 class MockPlatformNotificationService;
 class WebTestBrowserContext;
@@ -123,6 +125,10 @@ class WebTestContentBrowserClient : public ShellContentBrowserClient {
       RenderFrameHost* render_frame_host,
       mojo::PendingReceiver<blink::mojom::ClipboardHost> receiver);
 
+  void BindBadgeService(
+      RenderFrameHost* render_frame_host,
+      mojo::PendingReceiver<blink::mojom::BadgeService> receiver);
+
   void BindClientHintsControllerDelegate(
       mojo::PendingReceiver<client_hints::mojom::ClientHints> receiver);
 
@@ -148,6 +154,7 @@ class WebTestContentBrowserClient : public ShellContentBrowserClient {
   std::unique_ptr<FakeBluetoothChooserFactory> fake_bluetooth_chooser_factory_;
   std::unique_ptr<FakeBluetoothDelegate> fake_bluetooth_delegate_;
   std::unique_ptr<MockClipboardHost> mock_clipboard_host_;
+  std::unique_ptr<MockBadgeService> mock_badge_service_;
 };
 
 }  // namespace content
