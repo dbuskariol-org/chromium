@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/settings/privacy_table_view_controller.h"
+#import "ios/chrome/browser/ui/settings/privacy/privacy_table_view_controller.h"
 
 #include "base/logging.h"
 #import "base/mac/foundation_util.h"
@@ -20,7 +20,7 @@
 #import "ios/chrome/browser/ui/settings/cells/settings_switch_item.h"
 #import "ios/chrome/browser/ui/settings/clear_browsing_data/clear_browsing_data_table_view_controller.h"
 #import "ios/chrome/browser/ui/settings/clear_browsing_data/clear_browsing_data_ui_delegate.h"
-#import "ios/chrome/browser/ui/settings/handoff_table_view_controller.h"
+#import "ios/chrome/browser/ui/settings/privacy/handoff_table_view_controller.h"
 #import "ios/chrome/browser/ui/settings/settings_navigation_controller.h"
 #import "ios/chrome/browser/ui/settings/settings_table_view_controller_constants.h"
 #import "ios/chrome/browser/ui/table_view/cells/table_view_detail_icon_item.h"
@@ -189,8 +189,8 @@ const char kGoogleServicesSettingsURL[] = "settings://open_google_services";
 
 - (UIView*)tableView:(UITableView*)tableView
     viewForFooterInSection:(NSInteger)section {
-  UIView* footerView =
-      [super tableView:tableView viewForFooterInSection:section];
+  UIView* footerView = [super tableView:tableView
+                 viewForFooterInSection:section];
   TableViewLinkHeaderFooterView* footer =
       base::mac::ObjCCast<TableViewLinkHeaderFooterView>(footerView);
   if (footer) {

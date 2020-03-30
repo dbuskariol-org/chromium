@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/settings/handoff_table_view_controller.h"
+#import "ios/chrome/browser/ui/settings/privacy/handoff_table_view_controller.h"
 
 #import "base/mac/foundation_util.h"
 #include "components/handoff/pref_names_ios.h"
@@ -93,8 +93,8 @@ typedef NS_ENUM(NSInteger, ItemType) {
 
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath {
-  UITableViewCell* cell =
-      [super tableView:tableView cellForRowAtIndexPath:indexPath];
+  UITableViewCell* cell = [super tableView:tableView
+                     cellForRowAtIndexPath:indexPath];
 
   ItemType itemType = static_cast<ItemType>(
       [self.tableViewModel itemTypeForIndexPath:indexPath]);
