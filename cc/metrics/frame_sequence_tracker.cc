@@ -156,9 +156,36 @@ void FrameSequenceMetrics::SetScrollingThread(ThreadType scrolling_thread) {
   scrolling_thread_ = scrolling_thread;
 }
 
+FrameSequenceMetrics::ThreadType FrameSequenceMetrics::GetEffectiveThread()
+    const {
+  switch (type_) {
+    case FrameSequenceTrackerType::kCompositorAnimation:
+    case FrameSequenceTrackerType::kPinchZoom:
+      return ThreadType::kCompositor;
+
+    case FrameSequenceTrackerType::kMainThreadAnimation:
+    case FrameSequenceTrackerType::kRAF:
+    case FrameSequenceTrackerType::kVideo:
+      return ThreadType::kMain;
+
+    case FrameSequenceTrackerType::kTouchScroll:
+    case FrameSequenceTrackerType::kScrollbarScroll:
+    case FrameSequenceTrackerType::kWheelScroll:
+      return scrolling_thread_;
+
+    case FrameSequenceTrackerType::kUniversal:
+      return ThreadType::kSlower;
+
+    case FrameSequenceTrackerType::kMaxType:
+      NOTREACHED();
+  }
+  return ThreadType::kUnknown;
+}
+
 void FrameSequenceMetrics::Merge(
     std::unique_ptr<FrameSequenceMetrics> metrics) {
   DCHECK_EQ(type_, metrics->type_);
+  DCHECK_EQ(GetEffectiveThread(), metrics->GetEffectiveThread());
   impl_throughput_.Merge(metrics->impl_throughput_);
   main_throughput_.Merge(metrics->main_throughput_);
   aggregated_throughput_.Merge(metrics->aggregated_throughput_);
@@ -417,9 +444,10 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
       // report the metrics and destroy it. Otherwise, retain it to be merged
       // with follow-up sequences.
       auto metrics = tracker->TakeMetrics();
-      if (accumulated_metrics_.contains(tracker->type())) {
-        metrics->Merge(std::move(accumulated_metrics_[tracker->type()]));
-        accumulated_metrics_.erase(tracker->type());
+      auto key = std::make_pair(tracker->type(), metrics->GetEffectiveThread());
+      if (accumulated_metrics_.contains(key)) {
+        metrics->Merge(std::move(accumulated_metrics_[key]));
+        accumulated_metrics_.erase(key);
       }
 
 #if DCHECK_IS_ON()
@@ -443,7 +471,7 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
       if (metrics->HasEnoughDataForReporting())
         metrics->ReportMetrics();
       if (metrics->HasDataLeftForReporting())
-        accumulated_metrics_[tracker->type()] = std::move(metrics);
+        accumulated_metrics_[key] = std::move(metrics);
     }
   }
 

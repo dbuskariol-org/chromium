@@ -43,6 +43,23 @@ TEST(FrameSequenceMetricsTest, MergeMetrics) {
   EXPECT_TRUE(first.HasEnoughDataForReporting());
 }
 
+#if DCHECK_IS_ON()
+TEST(FrameSequenceMetricsTest, ScrollingThreadMergeMetrics) {
+  FrameSequenceMetrics first(FrameSequenceTrackerType::kTouchScroll, nullptr);
+  first.SetScrollingThread(FrameSequenceMetrics::ThreadType::kCompositor);
+  first.impl_throughput().frames_expected = 20;
+  first.impl_throughput().frames_produced = 10;
+
+  auto second = std::make_unique<FrameSequenceMetrics>(
+      FrameSequenceTrackerType::kTouchScroll, nullptr);
+  second->SetScrollingThread(FrameSequenceMetrics::ThreadType::kMain);
+  second->main_throughput().frames_expected = 50;
+  second->main_throughput().frames_produced = 10;
+
+  ASSERT_DEATH(first.Merge(std::move(second)), "");
+}
+#endif  // DCHECK_IS_ON()
+
 TEST(FrameSequenceMetricsTest, AllMetricsReported) {
   base::HistogramTester histograms;
 

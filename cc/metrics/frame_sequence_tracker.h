@@ -107,6 +107,10 @@ class CC_EXPORT FrameSequenceMetrics {
 
   void SetScrollingThread(ThreadType thread);
 
+  // Returns the 'effective thread' for the metrics (i.e. the thread most
+  // relevant for this metric).
+  ThreadType GetEffectiveThread() const;
+
   void Merge(std::unique_ptr<FrameSequenceMetrics> metrics);
   bool HasEnoughDataForReporting() const;
   bool HasDataLeftForReporting() const;
@@ -219,8 +223,9 @@ class CC_EXPORT FrameSequenceTrackerCollection {
   // The reporter takes throughput data and connect to UkmManager to report it.
   std::unique_ptr<ThroughputUkmReporter> throughput_ukm_reporter_;
 
-  base::flat_map<FrameSequenceTrackerType,
-                 std::unique_ptr<FrameSequenceMetrics>>
+  base::flat_map<
+      std::pair<FrameSequenceTrackerType, FrameSequenceMetrics::ThreadType>,
+      std::unique_ptr<FrameSequenceMetrics>>
       accumulated_metrics_;
 };
 
