@@ -15,11 +15,28 @@
 
 namespace {
 
-using ArchivableCredentialStoreTest = PlatformTest;
+using base::test::ios::WaitUntilConditionOrTimeout;
+using base::test::ios::kWaitForFileOperationTimeout;
 
 NSURL* testStorageFileURL() {
-  return nil;
+  NSURL* temporaryDirectory = [NSURL fileURLWithPath:NSTemporaryDirectory()];
+  NSURL* URL = [temporaryDirectory URLByAppendingPathComponent:@"credentials"];
+  return URL;
 }
+
+class ArchivableCredentialStoreTest : public PlatformTest {
+ protected:
+  void SetUp() override {
+    PlatformTest::SetUp();
+    [[NSFileManager defaultManager] removeItemAtURL:testStorageFileURL()
+                                              error:nil];
+  }
+  void TearDown() override {
+    PlatformTest::TearDown();
+    [[NSFileManager defaultManager] removeItemAtURL:testStorageFileURL()
+                                              error:nil];
+  }
+};
 
 ArchivableCredential* TestCredential() {
   return [[ArchivableCredential alloc] initWithFavicon:@"favicon"
@@ -87,4 +104,31 @@ TEST_F(ArchivableCredentialStoreTest, remove) {
   EXPECT_EQ(0u, credentialStore.credentials.count);
 }
 
+// Tests that ArchivableCredentialStore can save and retrieve from URLs.
+TEST_F(ArchivableCredentialStoreTest, persist) {
+  ArchivableCredentialStore* credentialStore =
+      [[ArchivableCredentialStore alloc] initWithFileURL:testStorageFileURL()];
+  EXPECT_TRUE(credentialStore);
+
+  ArchivableCredential* credential = TestCredential();
+  [credentialStore addCredential:credential];
+  EXPECT_EQ(1u, credentialStore.credentials.count);
+
+  __block BOOL blockWaitCompleted = false;
+  [credentialStore saveDataWithCompletion:^(NSError* error) {
+    EXPECT_FALSE(error);
+    blockWaitCompleted = true;
+  }];
+  EXPECT_TRUE(WaitUntilConditionOrTimeout(kWaitForFileOperationTimeout, ^bool {
+    return blockWaitCompleted;
+  }));
+
+  ArchivableCredentialStore* freshCredentialStore =
+      [[ArchivableCredentialStore alloc] initWithFileURL:testStorageFileURL()];
+  EXPECT_TRUE(freshCredentialStore);
+  EXPECT_TRUE(freshCredentialStore.credentials);
+  EXPECT_EQ(1u, freshCredentialStore.credentials.count);
+  EXPECT_TRUE(
+      [credential isEqual:freshCredentialStore.credentials.firstObject]);
+}
 }

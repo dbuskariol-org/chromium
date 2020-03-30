@@ -74,7 +74,25 @@
 }
 
 - (void)saveDataWithCompletion:(void (^)(NSError* error))completion {
-  // TODO(crbug.com/1045456): Implement.
+  dispatch_barrier_async(self.workingQueue, ^{
+    if (!self.fileURL) {
+      return;
+    }
+    NSError* error = nil;
+    NSData* data =
+        [NSKeyedArchiver archivedDataWithRootObject:self.memoryStorage
+                              requiringSecureCoding:YES
+                                              error:&error];
+    DCHECK(!error) << error.debugDescription.UTF8String;
+    if (error) {
+      completion(error);
+      return;
+    }
+
+    [data writeToURL:self.fileURL options:NSDataWritingAtomic error:&error];
+    DCHECK(!error) << error.debugDescription.UTF8String;
+    completion(error);
+  });
 }
 
 #pragma mark - Getters
@@ -93,8 +111,33 @@
 
 // Loads the store from disk.
 - (NSMutableDictionary<NSString*, ArchivableCredential*>*)loadStorage {
-  // TODO(crbug.com/1045456): Implement.
-  return [[NSMutableDictionary alloc] init];
+#if !defined(NDEBUG)
+  dispatch_assert_queue(self.workingQueue);
+#endif  // !defined(NDEBUG)
+  if (!self.fileURL) {
+    return [[NSMutableDictionary alloc] init];
+  }
+  NSError* error = nil;
+  [self.fileURL checkResourceIsReachableAndReturnError:&error];
+  if (error) {
+    if (error.code == NSFileReadNoSuchFileError) {
+      // File has not been created, return a fresh mutable set.
+      return [[NSMutableDictionary alloc] init];
+    }
+    NOTREACHED();
+  }
+  NSData* data = [NSData dataWithContentsOfURL:self.fileURL
+                                       options:0
+                                         error:&error];
+  DCHECK(!error) << error.debugDescription.UTF8String;
+  NSSet* classes = [NSSet setWithObjects:[ArchivableCredential class],
+                                         [NSMutableDictionary class], nil];
+  NSMutableDictionary<NSString*, ArchivableCredential*>* dictionary =
+      [NSKeyedUnarchiver unarchivedObjectOfClasses:classes
+                                          fromData:data
+                                             error:&error];
+  DCHECK(!error) << error.debugDescription.UTF8String;
+  return dictionary;
 }
 
 @end
