@@ -256,6 +256,7 @@ public class Profile {
         }
 
         @Override
+        // Deprecated, implementations past 83 call IWebLayerClient.createIntent instead.
         public Intent createIntent() {
             StrictModeWorkaround.apply();
             // Intent objects need to be created in the client library so they can refer to the
