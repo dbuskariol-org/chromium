@@ -1,6 +1,8 @@
 (async function(testRunner) {
-  var {page, session, dp} = await testRunner.startBlank('Tests we properly emit Page.downloadWillBegin.');
-
+  var {page, session, dp} = await testRunner.startBlank('Tests download is canceled when behavior is set to deny.');
+  await dp.Browser.setDownloadBehavior({
+    behavior: 'deny'
+  });
   dp.Page.onDownloadWillBegin(event => {
     testRunner.log(event);
   });
@@ -13,7 +15,7 @@
           return;
         visitedStates.add(event.params.state);
         testRunner.log(event);
-        if (event.params.state === 'completed')
+        if (event.params.state === 'completed' || event.params.state === 'canceled')
           resolve();
       });
     });

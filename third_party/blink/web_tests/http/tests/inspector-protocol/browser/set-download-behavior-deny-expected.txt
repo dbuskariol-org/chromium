@@ -1,4 +1,4 @@
-Tests we properly emit Page.downloadWillBegin.
+Tests download is canceled when behavior is set to deny.
 Downloading via a navigation: 
 {
     method : Page.downloadWillBegin
@@ -24,7 +24,7 @@ Downloading via a navigation:
     params : {
         guid : <string>
         receivedBytes : <number>
-        state : completed
+        state : canceled
         totalBytes : 11
     }
     sessionId : <string>
@@ -54,7 +54,7 @@ Downloading by clicking a link:
     params : {
         guid : <string>
         receivedBytes : <number>
-        state : completed
+        state : canceled
         totalBytes : 11
     }
     sessionId : <string>
