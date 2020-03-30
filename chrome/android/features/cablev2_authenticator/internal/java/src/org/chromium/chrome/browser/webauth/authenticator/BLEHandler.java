@@ -452,7 +452,7 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
     @CalledByNative
     public void sendBLEAdvert(byte[] dataUuidBytes) {
         assert mTaskRunner.belongsToCurrentThread();
-        Log.i(TAG, "sendBLEAdvert " + dataUuidBytes.length);
+        Log.i(TAG, "sendBLEAdvert " + hex(dataUuidBytes));
 
         maybeStopAdvertising();
 
@@ -520,8 +520,16 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
     }
 
     /**
-     * Called by CableAuthenticator to notify native code of an attestation response to a
-     * makeCredential request.
+     * Called by native code to process a getAssertion request.
+     */
+    @CalledByNative
+    void getAssertion(long client, String origin, String rpId, byte[] challenge,
+            byte[][] allowedCredentialIds) {
+        mAuthenticator.getAssertion(client, origin, rpId, challenge, allowedCredentialIds);
+    }
+
+    /**
+     * Called by CableAuthenticator to notify native code of a response to a makeCredential request.
      */
     public void onAuthenticatorAttestationResponse(
             long client, int ctapStatus, byte[] clientDataJSON, byte[] attestationObject) {
@@ -529,6 +537,17 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
                 ()
                         -> BLEHandlerJni.get().onAuthenticatorAttestationResponse(
                                 client, ctapStatus, clientDataJSON, attestationObject));
+    }
+
+    /**
+     * Called by CableAuthenticator to notify native code of a response to a getAssertion request.
+     */
+    public void onAuthenticatorAssertionResponse(long client, int ctapStatus, byte[] clientDataJSON,
+            byte[] credentialID, byte[] authenticatorData, byte[] signature) {
+        mTaskRunner.postTask(
+                ()
+                        -> BLEHandlerJni.get().onAuthenticatorAssertionResponse(client, ctapStatus,
+                                clientDataJSON, credentialID, authenticatorData, signature));
     }
 
     @NativeMethods
@@ -559,5 +578,10 @@ class BLEHandler extends BluetoothGattServerCallback implements Closeable {
          */
         void onAuthenticatorAttestationResponse(
                 long client, int ctapStatus, byte[] clientDataJSON, byte[] attestationObject);
+        /**
+         * Called to alert native code of a response to a getAssertion request.
+         */
+        void onAuthenticatorAssertionResponse(long client, int ctapStatus, byte[] clientDataJSON,
+                byte[] credentialID, byte[] authenticatorData, byte[] signature);
     }
 }
