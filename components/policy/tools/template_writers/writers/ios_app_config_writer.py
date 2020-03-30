@@ -40,7 +40,8 @@ class IOSAppConfigWriter(xml_formatted_writer.XMLFormattedWriter):
 
   def WritePolicy(self, policy):
     element_type = self.policy_type_to_xml_tag[policy['type']]
-    self.AddElement(self._policies, element_type, {'keyName': policy['name']})
+    if element_type:
+      self.AddElement(self._policies, element_type, {'keyName': policy['name']})
 
   def Init(self):
     self._doc = self.CreateDocument()
@@ -53,6 +54,7 @@ class IOSAppConfigWriter(xml_formatted_writer.XMLFormattedWriter):
         'string-enum-list': 'stringArray',
         'main': 'boolean',
         'list': 'stringArray',
+        'dict': None,
     }
 
   def GetTemplateText(self):
