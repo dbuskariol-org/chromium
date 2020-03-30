@@ -6284,6 +6284,7 @@ void RenderFrameImpl::BeginNavigationInternal(
           GetWebURLRequestHeadersAsString(info->url_request), load_flags,
           info->url_request.GetSkipServiceWorker(),
           GetRequestContextTypeForWebURLRequest(info->url_request),
+          GetRequestDestinationForWebURLRequest(info->url_request),
           GetMixedContentContextTypeForWebURLRequest(info->url_request),
           is_form_submission, was_initiated_by_link_click, searchable_form_url,
           searchable_form_encoding, client_side_redirect_url,
