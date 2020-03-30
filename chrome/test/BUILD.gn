@@ -2231,6 +2231,7 @@ if (!is_android) {
         "../browser/chromeos/login/screens/mock_wrong_hwid_screen.cc",
         "../browser/chromeos/login/screens/mock_wrong_hwid_screen.h",
         "../browser/chromeos/login/screens/network_screen_browsertest.cc",
+        "../browser/chromeos/login/screens/packaged_license_screen_browsertest.cc",
         "../browser/chromeos/login/screens/recommend_apps/scoped_test_recommend_apps_fetcher_factory.cc",
         "../browser/chromeos/login/screens/recommend_apps/scoped_test_recommend_apps_fetcher_factory.h",
         "../browser/chromeos/login/screens/recommend_apps_screen_browsertest.cc",
