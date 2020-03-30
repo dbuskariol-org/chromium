@@ -117,9 +117,9 @@ class VectorBackedLinkedList {
   VectorBackedLinkedList();
 
   VectorBackedLinkedList(const VectorBackedLinkedList&) = default;
-  VectorBackedLinkedList(VectorBackedLinkedList&&);
+  VectorBackedLinkedList(VectorBackedLinkedList&&) = default;
   VectorBackedLinkedList& operator=(const VectorBackedLinkedList&) = default;
-  VectorBackedLinkedList& operator=(VectorBackedLinkedList&&);
+  VectorBackedLinkedList& operator=(VectorBackedLinkedList&&) = default;
 
   ~VectorBackedLinkedList() = default;
 
@@ -466,20 +466,6 @@ VectorBackedLinkedList<T, Allocator>::VectorBackedLinkedList() {
   // First inserts anchor, which serves as the beginning and the end of
   // the used list.
   nodes_.push_back(Node(anchor_index_, anchor_index_));
-}
-
-template <typename T, typename Allocator>
-inline VectorBackedLinkedList<T, Allocator>::VectorBackedLinkedList(
-    VectorBackedLinkedList&& other) {
-  swap(other);
-}
-
-template <typename T, typename Allocator>
-inline VectorBackedLinkedList<T, Allocator>&
-VectorBackedLinkedList<T, Allocator>::operator=(
-    VectorBackedLinkedList&& other) {
-  swap(other);
-  return *this;
 }
 
 template <typename T, typename Allocator>

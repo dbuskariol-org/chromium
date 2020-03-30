@@ -992,9 +992,9 @@ class NewLinkedHashSet {
 
   NewLinkedHashSet();
   NewLinkedHashSet(const NewLinkedHashSet&) = default;
-  NewLinkedHashSet(NewLinkedHashSet&&);
+  NewLinkedHashSet(NewLinkedHashSet&&) = default;
   NewLinkedHashSet& operator=(const NewLinkedHashSet&) = default;
-  NewLinkedHashSet& operator=(NewLinkedHashSet&&);
+  NewLinkedHashSet& operator=(NewLinkedHashSet&&) = default;
 
   ~NewLinkedHashSet() = default;
 
@@ -1078,19 +1078,6 @@ inline NewLinkedHashSet<T, Allocator>::NewLinkedHashSet() {
                 "Cannot put raw pointers to garbage-collected classes into "
                 "an off-heap NewLinkedHashSet. Use "
                 "HeapNewLinkedHashSet<Member<T>> instead.");
-}
-
-template <typename T, typename Allocator>
-inline NewLinkedHashSet<T, Allocator>::NewLinkedHashSet(
-    NewLinkedHashSet&& other) {
-  Swap(other);
-}
-
-template <typename T, typename Allocator>
-inline NewLinkedHashSet<T, Allocator>& NewLinkedHashSet<T, Allocator>::
-operator=(NewLinkedHashSet&& other) {
-  Swap(other);
-  return *this;
 }
 
 template <typename T, typename Allocator>
