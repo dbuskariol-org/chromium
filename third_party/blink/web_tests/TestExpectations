@@ -4715,11 +4715,7 @@ crbug.com/791529 external/wpt/css/css-variables/variable-transitions-transition-
 crbug.com/791529 external/wpt/css/css-variables/variable-transitions-value-before-transition-property-variable.html [ Skip ]
 
 # Feature Policy changes fullscreen behaviour, tests need updating
-crbug.com/718155 fullscreen/full-screen-iframe-not-allowed.html [ Failure ]
 crbug.com/718155 fullscreen/full-screen-restrictions.html [ Failure Timeout ]
-crbug.com/718155 media/video-controls-fullscreen-iframe-not-allowed.html [ Failure ]
-crbug.com/718155 virtual/audio-service/media/video-controls-fullscreen-iframe-not-allowed.html [ Failure ]
-crbug.com/718155 virtual/android/fullscreen/full-screen-iframe-not-allowed.html [ Failure ]
 crbug.com/718155 virtual/android/fullscreen/full-screen-restrictions.html [ Failure Timeout ]
 
 crbug.com/852645 gamepad/full-screen-gamepad.html [ Timeout ]
