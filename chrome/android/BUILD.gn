@@ -1918,7 +1918,9 @@ if (public_android_sdk) {
       include_64_bit_webview = true
     }
   }
+}
 
+if (define_upstream_webview_targets) {
   trichrome_library_apk_tmpl("trichrome_library_apk") {
     apk_name = "TrichromeLibrary"
     android_manifest = trichrome_library_android_manifest
