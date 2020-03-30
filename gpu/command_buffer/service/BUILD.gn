@@ -5,6 +5,7 @@
 import("//build/config/jumbo.gni")
 import("//build/config/ui.gni")
 import("//gpu/vulkan/features.gni")
+import("//media/gpu/args.gni")
 import("//skia/features.gni")
 import("//third_party/protobuf/proto_library.gni")
 import("//ui/gl/features.gni")
@@ -304,6 +305,7 @@ target(link_target_type, "gles2_sources") {
     "//gpu/config",
     "//gpu/ipc/common",
     "//gpu/vulkan:buildflags",
+    "//media/gpu:buildflags",
     "//skia:buildflags",
     "//third_party/angle:angle_image_util",
     "//third_party/angle:commit_id",
@@ -350,6 +352,9 @@ target(link_target_type, "gles2_sources") {
         "shared_image_representation_gl_ozone.cc",
         "shared_image_representation_gl_ozone.h",
       ]
+      if (use_vaapi) {
+        deps += [ "//media/gpu/vaapi:common" ]
+      }
     }
 
     if (is_linux && use_dawn) {

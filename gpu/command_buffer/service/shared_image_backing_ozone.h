@@ -21,10 +21,18 @@
 #include "gpu/command_buffer/service/shared_image_manager.h"
 #include "gpu/command_buffer/service/shared_image_representation.h"
 #include "gpu/ipc/common/surface_handle.h"
+#include "media/gpu/buildflags.h"
 #include "ui/gfx/color_space.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/gpu_fence.h"
 #include "ui/gfx/native_pixmap.h"
+
+#if BUILDFLAG(USE_VAAPI)
+namespace media {
+class VaapiWrapper;
+class VASurface;
+}  // namespace media
+#endif
 
 namespace gpu {
 
@@ -66,6 +74,11 @@ class SharedImageBackingOzone final : public ClearTrackingSharedImageBacking {
   std::unique_ptr<SharedImageRepresentationOverlay> ProduceOverlay(
       SharedImageManager* manager,
       MemoryTypeTracker* tracker) override;
+#if BUILDFLAG(USE_VAAPI)
+  std::unique_ptr<SharedImageRepresentationVaapi> ProduceVASurface(
+      SharedImageManager* manager,
+      MemoryTypeTracker* tracker) override;
+#endif
 
  private:
   SharedImageBackingOzone(
@@ -80,6 +93,15 @@ class SharedImageBackingOzone final : public ClearTrackingSharedImageBacking {
 
   scoped_refptr<gfx::NativePixmap> pixmap_;
   scoped_refptr<base::RefCountedData<DawnProcTable>> dawn_procs_;
+
+#if BUILDFLAG(USE_VAAPI)
+  // Cached VA-API wrapper used to call the VA-API.
+  scoped_refptr<media::VaapiWrapper> vaapi_wrapper_;
+
+  // Cached VASurface that should be created once, and passed to all
+  // representations produced by this backing.
+  scoped_refptr<media::VASurface> surface_;
+#endif
 
   DISALLOW_COPY_AND_ASSIGN(SharedImageBackingOzone);
 };

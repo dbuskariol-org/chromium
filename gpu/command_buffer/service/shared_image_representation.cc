@@ -7,6 +7,10 @@
 #include "gpu/command_buffer/service/texture_manager.h"
 #include "third_party/skia/include/core/SkPromiseImageTexture.h"
 
+#if BUILDFLAG(USE_VAAPI)
+#include "media/gpu/vaapi/va_surface.h"
+#endif
+
 namespace gpu {
 
 SharedImageRepresentation::SharedImageRepresentation(
@@ -212,5 +216,37 @@ SharedImageRepresentationDawn::BeginScopedAccess(
 SharedImageRepresentationFactoryRef::~SharedImageRepresentationFactoryRef() {
   backing()->MarkForDestruction();
 }
+
+#if BUILDFLAG(USE_VAAPI)
+SharedImageRepresentationVaapi::SharedImageRepresentationVaapi(
+    SharedImageManager* manager,
+    SharedImageBacking* backing,
+    MemoryTypeTracker* tracker,
+    scoped_refptr<media::VASurface> va_surface)
+    : SharedImageRepresentation(manager, backing, tracker),
+      va_surface_(std::move(va_surface)) {}
+
+SharedImageRepresentationVaapi::~SharedImageRepresentationVaapi() = default;
+
+SharedImageRepresentationVaapi::ScopedWriteAccess::ScopedWriteAccess(
+    util::PassKey<SharedImageRepresentationVaapi> /* pass_key */,
+    SharedImageRepresentationVaapi* representation)
+    : ScopedAccessBase(representation) {}
+
+SharedImageRepresentationVaapi::ScopedWriteAccess::~ScopedWriteAccess() {
+  representation()->EndAccess();
+}
+
+const media::VASurface*
+SharedImageRepresentationVaapi::ScopedWriteAccess::va_surface() const {
+  return representation()->va_surface_.get();
+}
+
+std::unique_ptr<SharedImageRepresentationVaapi::ScopedWriteAccess>
+SharedImageRepresentationVaapi::BeginScopedWriteAccess() {
+  return std::make_unique<ScopedWriteAccess>(
+      util::PassKey<SharedImageRepresentationVaapi>(), this);
+}
+#endif
 
 }  // namespace gpu

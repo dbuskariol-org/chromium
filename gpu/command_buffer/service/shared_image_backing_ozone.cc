@@ -8,6 +8,7 @@
 #include <vulkan/vulkan.h>
 
 #include <memory>
+#include <utility>
 
 #include "base/logging.h"
 #include "base/memory/ptr_util.h"
@@ -41,6 +42,10 @@
 #if BUILDFLAG(USE_DAWN)
 #include "gpu/command_buffer/service/shared_image_representation_dawn_ozone.h"
 #endif  // BUILDFLAG(USE_DAWN)
+
+#if BUILDFLAG(USE_VAAPI)
+#include "media/gpu/vaapi/vaapi_wrapper.h"
+#endif  // BUILDFLAG(USE_VAAPI)
 
 namespace gpu {
 namespace {
@@ -95,7 +100,11 @@ std::unique_ptr<SharedImageBackingOzone> SharedImageBackingOzone::Create(
       std::move(pixmap), std::move(dawn_procs)));
 }
 
-SharedImageBackingOzone::~SharedImageBackingOzone() = default;
+SharedImageBackingOzone::~SharedImageBackingOzone() {
+#if BUILDFLAG(USE_VAAPI)
+  DCHECK(surface_->HasOneRef());
+#endif
+}
 
 void SharedImageBackingOzone::Update(std::unique_ptr<gfx::GpuFence> in_fence) {
   NOTIMPLEMENTED_LOG_ONCE();
@@ -172,6 +181,34 @@ SharedImageBackingOzone::ProduceOverlay(SharedImageManager* manager,
   NOTIMPLEMENTED_LOG_ONCE();
   return nullptr;
 }
+
+#if BUILDFLAG(USE_VAAPI)
+std::unique_ptr<SharedImageRepresentationVaapi>
+SharedImageBackingOzone::ProduceVASurface(SharedImageManager* manager,
+                                          MemoryTypeTracker* tracker) {
+  DCHECK(pixmap_);
+
+  // We will only use |vaapi_wrapper_| to import surfaces and do
+  // synchronization, so the mode and profile is irrelevant.
+
+  // TODO(pwarren): Add a UMA callback to report VA-API errors.
+  if (!vaapi_wrapper_) {
+    DCHECK(!surface_);
+    vaapi_wrapper_ = media::VaapiWrapper::Create(
+        media::VaapiWrapper::CodecMode::kDecode, VAProfile::VAProfileNone,
+        /*report_error_to_uma_cb=*/base::DoNothing());
+
+    // We reuse the surface in subsequent calls to ProduceVASurface.
+    // |surface_| is self-cleaning. When all references are gone,
+    // VaapiWrapper::DestroySurface() is called for us.
+    surface_ = vaapi_wrapper_->CreateVASurfaceForPixmap(pixmap_);
+  }
+  DCHECK(surface_);
+
+  return std::make_unique<SharedImageRepresentationVaapi>(manager, this,
+                                                          tracker, surface_);
+}
+#endif
 
 SharedImageBackingOzone::SharedImageBackingOzone(
     const Mailbox& mailbox,
