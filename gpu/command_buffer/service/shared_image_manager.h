@@ -14,7 +14,6 @@
 #include "gpu/command_buffer/common/mailbox.h"
 #include "gpu/command_buffer/service/shared_image_backing.h"
 #include "gpu/gpu_gles2_export.h"
-#include "media/gpu/buildflags.h"
 
 namespace gpu {
 class SharedImageRepresentationFactoryRef;
@@ -64,11 +63,6 @@ class GPU_GLES2_EXPORT SharedImageManager {
   std::unique_ptr<SharedImageRepresentationOverlay> ProduceOverlay(
       const Mailbox& mailbox,
       MemoryTypeTracker* ref);
-#if BUILDFLAG(USE_VAAPI)
-  std::unique_ptr<SharedImageRepresentationVaapi> ProduceVASurface(
-      const Mailbox& mailbox,
-      MemoryTypeTracker* ref);
-#endif
 
   // Called by SharedImageRepresentation in the destructor.
   void OnRepresentationDestroyed(const Mailbox& mailbox,

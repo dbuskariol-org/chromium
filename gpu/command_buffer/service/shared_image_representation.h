@@ -15,7 +15,6 @@
 #include "gpu/command_buffer/service/shared_image_backing.h"
 #include "gpu/command_buffer/service/shared_image_manager.h"
 #include "gpu/gpu_gles2_export.h"
-#include "media/gpu/buildflags.h"
 #include "third_party/skia/include/core/SkSurface.h"
 #include "ui/gfx/color_space.h"
 #include "ui/gfx/geometry/rect.h"
@@ -28,12 +27,6 @@ class SkPromiseImageTexture;
 namespace gl {
 class GLImage;
 }
-
-#if BUILDFLAG(USE_VAAPI)
-namespace media {
-class VASurface;
-}
-#endif
 
 namespace gpu {
 class TextureBase;
@@ -101,7 +94,7 @@ class GPU_GLES2_EXPORT SharedImageRepresentation {
       representation_->has_scoped_access_ = false;
     }
 
-    RepresentationClass* representation() const { return representation_; }
+    RepresentationClass* representation() { return representation_; }
 
    private:
     RepresentationClass* const representation_;
@@ -380,52 +373,6 @@ class GPU_GLES2_EXPORT SharedImageRepresentationOverlay
   // Get the backing as GLImage for GLSurface::ScheduleOverlayPlane.
   virtual gl::GLImage* GetGLImage() = 0;
 };
-
-// Representation of a SharedImageBacking as a VA-API surface.
-// This representation is currently only supported by SharedImageBackingOzone.
-//
-// Synchronized access is currently not required in this representation because:
-//
-// For reads:
-// We will be using this for the destination of decoding work, so no read access
-// synchronization is needed from the point of view of the VA-API.
-//
-// For writes:
-// Because of the design of the current video pipeline, we don't start the
-// decoding work until we're sure that the destination buffer is not being used
-// by the rest of the pipeline. However, we still need to keep track of write
-// accesses so that other representations can synchronize with the decoder.
-//
-// TODO(pwarren): create subclass SharedImageRepresentationVaapiOzone that
-// implements EndAccess.
-#if BUILDFLAG(USE_VAAPI)
-class GPU_GLES2_EXPORT SharedImageRepresentationVaapi
-    : public SharedImageRepresentation {
- public:
-  class GPU_GLES2_EXPORT ScopedWriteAccess
-      : public ScopedAccessBase<SharedImageRepresentationVaapi> {
-   public:
-    ScopedWriteAccess(util::PassKey<SharedImageRepresentationVaapi> pass_key,
-                      SharedImageRepresentationVaapi* representation);
-
-    ~ScopedWriteAccess();
-
-    const media::VASurface* va_surface() const;
-  };
-  SharedImageRepresentationVaapi(SharedImageManager* manager,
-                                 SharedImageBacking* backing,
-                                 MemoryTypeTracker* tracker,
-                                 scoped_refptr<media::VASurface> va_surface);
-  ~SharedImageRepresentationVaapi() override;
-
-  std::unique_ptr<ScopedWriteAccess> BeginScopedWriteAccess();
-
- private:
-  scoped_refptr<media::VASurface> va_surface_;
-  // TODO(pwarren): Make EndAccess purely virtual.
-  virtual void EndAccess() {}
-};
-#endif
 
 }  // namespace gpu
 

@@ -271,31 +271,6 @@ SharedImageManager::ProduceOverlay(const gpu::Mailbox& mailbox,
   return representation;
 }
 
-#if BUILDFLAG(USE_VAAPI)
-std::unique_ptr<SharedImageRepresentationVaapi>
-SharedImageManager::ProduceVASurface(const Mailbox& mailbox,
-                                     MemoryTypeTracker* tracker) {
-  CALLED_ON_VALID_THREAD();
-
-  AutoLock autolock(this);
-  auto found = images_.find(mailbox);
-  if (found == images_.end()) {
-    LOG(ERROR) << "SharedImageManager::ProduceVASurface: Trying to produce a "
-                  "VA-API representation from a non-existent mailbox.";
-    return nullptr;
-  }
-
-  auto representation = (*found)->ProduceVASurface(this, tracker);
-
-  if (!representation) {
-    LOG(ERROR) << "SharedImageManager::ProduceVASurface: Trying to produce a "
-                  "VA-API representation from an incompatible mailbox.";
-    return nullptr;
-  }
-  return representation;
-}
-#endif
-
 void SharedImageManager::OnRepresentationDestroyed(
     const Mailbox& mailbox,
     SharedImageRepresentation* representation) {

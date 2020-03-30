@@ -17,7 +17,6 @@
 #include "components/viz/common/resources/resource_format.h"
 #include "gpu/command_buffer/common/mailbox.h"
 #include "gpu/gpu_gles2_export.h"
-#include "media/gpu/buildflags.h"
 #include "ui/gfx/color_space.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
@@ -44,7 +43,6 @@ class SharedImageRepresentationGLTexturePassthrough;
 class SharedImageRepresentationSkia;
 class SharedImageRepresentationDawn;
 class SharedImageRepresentationOverlay;
-class SharedImageRepresentationVaapi;
 class MemoryTypeTracker;
 
 // Represents the actual storage (GL texture, VkImage, GMB) for a SharedImage.
@@ -141,11 +139,6 @@ class GPU_GLES2_EXPORT SharedImageBacking {
   virtual std::unique_ptr<SharedImageRepresentationOverlay> ProduceOverlay(
       SharedImageManager* manager,
       MemoryTypeTracker* tracker);
-#if BUILDFLAG(USE_VAAPI)
-  virtual std::unique_ptr<SharedImageRepresentationVaapi> ProduceVASurface(
-      SharedImageManager* manager,
-      MemoryTypeTracker* tracker);
-#endif
 
   // Used by subclasses during destruction.
   bool have_context() const EXCLUSIVE_LOCKS_REQUIRED(lock_);
