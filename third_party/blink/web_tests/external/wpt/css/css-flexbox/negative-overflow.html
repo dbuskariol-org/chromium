@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="resources/flexbox.css" rel="stylesheet">
+<title>CSS Flexbox: align-items: center/flex-end and bottom padding.</title>
+<link rel="stylesheet" href="support/flexbox.css" >
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#align-items-property">
+<meta name="assert" content="This test ensures that flexbox containers with 'align-items: center|flex-end' and 'overflow: auto/scroll' have no extra bottom padding."/>
 <style>
 .flexbox {
     overflow: auto;
@@ -28,9 +31,9 @@
     background-color: green;
 }
 </style>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 <script>
 window.onload = function() {
     checkLayout('.flexbox');
