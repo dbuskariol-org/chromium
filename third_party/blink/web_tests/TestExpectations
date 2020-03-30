@@ -6659,8 +6659,6 @@ crbug.com/1061226 [ Fuchsia ] external/wpt/mediacapture-streams/MediaStream-idl.
 crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Failure ]
 crbug.com/1061043 fast/plugins/keypress-event.html [ Pass Failure ]
 crbug.com/1061097 http/tests/security/promise-access-control-allow.htm [ Pass Failure ]
-crbug.com/1061539 [ Mac ] http/tests/images/document-policy-oversized-images-resize.html [ Pass Failure ]
-crbug.com/1061539 [ Linux ] http/tests/images/document-policy-oversized-images-resize.html [ Pass Failure ]
 crbug.com/1061131 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/middle-click-autoscroll-latching-clicked-node.html [ Pass Timeout ]
 crbug.com/1061131 [ Win ] fast/canvas/toBlob-in-detached-document.html [ Pass Crash ]
 crbug.com/1061131 [ Mac ] fast/canvas/toBlob-in-detached-document.html [ Pass Crash ]
