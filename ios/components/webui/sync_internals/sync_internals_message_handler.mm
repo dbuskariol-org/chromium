@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/ui/webui/sync_internals/sync_internals_message_handler.h"
+#include "ios/components/webui/sync_internals/sync_internals_message_handler.h"
 
 #include <utility>
 #include <vector>
@@ -21,11 +21,13 @@
 #include "components/sync/engine/cycle/update_counters.h"
 #include "components/sync/engine/events/protocol_event.h"
 #include "components/sync/js/js_event_details.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
-#include "ios/chrome/browser/sync/profile_sync_service_factory.h"
-#include "ios/chrome/common/channel_info.h"
+#include "ios/components/webui/web_ui_provider.h"
 #include "ios/web/public/thread/web_thread.h"
 #include "ios/web/public/webui/web_ui_ios.h"
+
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "This file requires ARC support."
+#endif
 
 namespace {
 
@@ -326,16 +328,13 @@ void SyncInternalsMessageHandler::SendAboutInfo() {
   syncer::SyncService* sync_service = GetSyncService();
   std::unique_ptr<base::DictionaryValue> value =
       syncer::sync_ui_util::ConstructAboutInformation(sync_service,
-                                                      GetChannel());
+                                                      web_ui::GetChannel());
   DispatchEvent(syncer::sync_ui_util::kOnAboutInfoUpdated, *value);
 }
 
 // Gets the SyncService of the underlying original profile. May return null.
 syncer::SyncService* SyncInternalsMessageHandler::GetSyncService() {
-  ChromeBrowserState* browser_state =
-      ChromeBrowserState::FromWebUIIOS(web_ui());
-  return ProfileSyncServiceFactory::GetForBrowserState(
-      browser_state->GetOriginalChromeBrowserState());
+  return web_ui::GetSyncServiceForWebUI(web_ui());
 }
 
 void SyncInternalsMessageHandler::DispatchEvent(

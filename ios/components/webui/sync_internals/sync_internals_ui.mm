@@ -2,23 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/ui/webui/sync_internals/sync_internals_ui.h"
+#include "ios/components/webui/sync_internals/sync_internals_ui.h"
 
 #include <memory>
 
 #include "components/grit/sync_driver_resources.h"
 #include "components/sync/driver/about_sync_util.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
-#include "ios/chrome/browser/chrome_url_constants.h"
-#include "ios/chrome/browser/ui/webui/sync_internals/sync_internals_message_handler.h"
+#include "ios/components/webui/sync_internals/sync_internals_message_handler.h"
+#include "ios/web/public/browser_state.h"
+#include "ios/web/public/web_state.h"
 #include "ios/web/public/webui/web_ui_ios.h"
 #include "ios/web/public/webui/web_ui_ios_data_source.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "This file requires ARC support."
+#endif
+
 namespace {
 
-web::WebUIIOSDataSource* CreateSyncInternalsHTMLSource() {
-  web::WebUIIOSDataSource* source =
-      web::WebUIIOSDataSource::Create(kChromeUISyncInternalsHost);
+web::WebUIIOSDataSource* CreateSyncInternalsHTMLSource(
+    const std::string& host) {
+  web::WebUIIOSDataSource* source = web::WebUIIOSDataSource::Create(host);
 
   source->UseStringsJs();
   source->AddResourcePath(syncer::sync_ui_util::kSyncIndexJS,
@@ -51,10 +55,10 @@ web::WebUIIOSDataSource* CreateSyncInternalsHTMLSource() {
 
 }  // namespace
 
-SyncInternalsUI::SyncInternalsUI(web::WebUIIOS* web_ui)
+SyncInternalsUI::SyncInternalsUI(web::WebUIIOS* web_ui, const std::string& host)
     : web::WebUIIOSController(web_ui) {
-  web::WebUIIOSDataSource::Add(ChromeBrowserState::FromWebUIIOS(web_ui),
-                               CreateSyncInternalsHTMLSource());
+  web::WebUIIOSDataSource::Add(web_ui->GetWebState()->GetBrowserState(),
+                               CreateSyncInternalsHTMLSource(host));
   web_ui->AddMessageHandler(std::make_unique<SyncInternalsMessageHandler>());
 }
 

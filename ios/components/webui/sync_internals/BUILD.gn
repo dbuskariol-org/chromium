@@ -1,13 +1,14 @@
-# Copyright 2016 The Chromium Authors. All rights reserved.
+# Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 source_set("sync_internals") {
+  configs += [ "//build/config/compiler:enable_arc" ]
   sources = [
-    "sync_internals_message_handler.cc",
     "sync_internals_message_handler.h",
-    "sync_internals_ui.cc",
+    "sync_internals_message_handler.mm",
     "sync_internals_ui.h",
+    "sync_internals_ui.mm",
   ]
   deps = [
     "//base",
@@ -15,11 +16,10 @@ source_set("sync_internals") {
     "//components/resources",
     "//components/sync",
     "//components/sync/driver:resources",
-    "//ios/chrome/browser",
-    "//ios/chrome/browser/browser_state",
-    "//ios/chrome/browser/signin",
-    "//ios/chrome/browser/sync",
-    "//ios/chrome/common",
+    "//components/version_info:version_info",
+    "//ios/components/webui:provider",
+    "//ios/web/public",
+    "//ios/web/public/thread",
     "//ios/web/public/webui",
   ]
 }

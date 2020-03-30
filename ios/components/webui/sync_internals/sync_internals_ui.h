@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_WEBUI_SYNC_INTERNALS_SYNC_INTERNALS_UI_H_
-#define IOS_CHROME_BROWSER_UI_WEBUI_SYNC_INTERNALS_SYNC_INTERNALS_UI_H_
+#ifndef IOS_COMPONENTS_WEBUI_SYNC_INTERNALS_SYNC_INTERNALS_UI_H_
+#define IOS_COMPONENTS_WEBUI_SYNC_INTERNALS_SYNC_INTERNALS_UI_H_
+
+#include <string>
 
 #include "base/macros.h"
 #include "ios/web/public/webui/web_ui_ios_controller.h"
@@ -15,11 +17,11 @@ class WebUIIOS;
 // The implementation for the chrome://sync-internals page.
 class SyncInternalsUI : public web::WebUIIOSController {
  public:
-  explicit SyncInternalsUI(web::WebUIIOS* web_ui);
+  explicit SyncInternalsUI(web::WebUIIOS* web_ui, const std::string& host);
   ~SyncInternalsUI() override;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(SyncInternalsUI);
 };
 
-#endif  // IOS_CHROME_BROWSER_UI_WEBUI_SYNC_INTERNALS_SYNC_INTERNALS_UI_H_
+#endif  // IOS_COMPONENTS_WEBUI_SYNC_INTERNALS_SYNC_INTERNALS_UI_H_
