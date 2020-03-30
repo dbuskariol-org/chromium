@@ -48,6 +48,7 @@ android_library("java") {
     "org/chromium/weblayer_private/ChildProcessServiceImpl.java",
     "org/chromium/weblayer_private/ContentView.java",
     "org/chromium/weblayer_private/ContentViewRenderView.java",
+    "org/chromium/weblayer_private/CookieManagerImpl.java",
     "org/chromium/weblayer_private/CrashReporterControllerImpl.java",
     "org/chromium/weblayer_private/DownloadCallbackProxy.java",
     "org/chromium/weblayer_private/DownloadImpl.java",
@@ -169,6 +170,7 @@ generate_jni("jni") {
   sources = [
     "org/chromium/weblayer_private/BrowserImpl.java",
     "org/chromium/weblayer_private/ContentViewRenderView.java",
+    "org/chromium/weblayer_private/CookieManagerImpl.java",
     "org/chromium/weblayer_private/DownloadCallbackProxy.java",
     "org/chromium/weblayer_private/DownloadImpl.java",
     "org/chromium/weblayer_private/ErrorPageCallbackProxy.java",
@@ -246,6 +248,7 @@ android_aidl("aidl") {
     "org/chromium/weblayer_private/interfaces/IChildProcessService.aidl",
     "org/chromium/weblayer_private/interfaces/IClientDownload.aidl",
     "org/chromium/weblayer_private/interfaces/IClientNavigation.aidl",
+    "org/chromium/weblayer_private/interfaces/ICookieManager.aidl",
     "org/chromium/weblayer_private/interfaces/ICrashReporterController.aidl",
     "org/chromium/weblayer_private/interfaces/ICrashReporterControllerClient.aidl",
     "org/chromium/weblayer_private/interfaces/IDownload.aidl",
