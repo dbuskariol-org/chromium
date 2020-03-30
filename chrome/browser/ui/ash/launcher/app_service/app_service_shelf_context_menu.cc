@@ -15,6 +15,7 @@
 #include "chrome/browser/chromeos/crostini/crostini_manager.h"
 #include "chrome/browser/chromeos/crostini/crostini_registry_service.h"
 #include "chrome/browser/chromeos/crostini/crostini_registry_service_factory.h"
+#include "chrome/browser/chromeos/crostini/crostini_shelf_utils.h"
 #include "chrome/browser/chromeos/crostini/crostini_terminal.h"
 #include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_manager.h"
@@ -86,8 +87,7 @@ AppServiceShelfContextMenu::AppServiceShelfContextMenu(
       apps::AppServiceProxyFactory::GetForProfile(controller->profile());
   DCHECK(proxy);
 
-  if (base::StartsWith(item->id.app_id, crostini::kCrostiniAppIdPrefix,
-                       base::CompareCase::SENSITIVE)) {
+  if (crostini::IsUnmatchedCrostiniShelfAppId(item->id.app_id)) {
     // For Crostini app_id with the prefix "crostini:", set app_type as Unknown
     // to skip the ArcAppShelfId valid. App type can't be set as Crostini,
     // because the pin item should not be added for it.
@@ -306,8 +306,7 @@ void AppServiceShelfContextMenu::OnGetMenuModel(
   // When Crostini generates shelf id with the prefix "crostini:", AppService
   // can't generate the menu items, because the app_id doesn't match, so add the
   // menu items at UI side, based on the app running status.
-  if (base::StartsWith(item().id.app_id, crostini::kCrostiniAppIdPrefix,
-                       base::CompareCase::SENSITIVE)) {
+  if (crostini::IsUnmatchedCrostiniShelfAppId(item().id.app_id)) {
     BuildCrostiniAppMenu(menu_model.get());
   }
 
