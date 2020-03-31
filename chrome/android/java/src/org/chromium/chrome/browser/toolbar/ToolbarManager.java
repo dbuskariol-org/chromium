@@ -47,7 +47,6 @@ import org.chromium.chrome.browser.compositor.layouts.SceneChangeObserver;
 import org.chromium.chrome.browser.feature_engagement.TrackerFactory;
 import org.chromium.chrome.browser.findinpage.FindToolbarManager;
 import org.chromium.chrome.browser.findinpage.FindToolbarObserver;
-import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.fullscreen.BrowserStateBrowserControlsVisibilityDelegate;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
 import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager.FullscreenListener;
@@ -619,12 +618,6 @@ public class ToolbarManager implements ToolbarTabController, UrlFocusChangeListe
             @Override
             public void onControlsOffsetChanged(int topOffset, int topControlsMinHeightOffset,
                     int bottomOffset, int bottomControlsMinHeightOffset, boolean needsAnimate) {
-                // For now, this is only useful for the offline indicator v2 feature.
-                if (!ChromeFeatureList.isInitialized()
-                        || !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
-                    return;
-                }
-
                 // If the browser controls can't be animated, we shouldn't listen for the offset
                 // changes.
                 if (mCanAnimateNativeBrowserControls == null
@@ -640,12 +633,6 @@ public class ToolbarManager implements ToolbarTabController, UrlFocusChangeListe
             @Override
             public void onTopControlsHeightChanged(
                     int topControlsHeight, int topControlsMinHeight) {
-                // For now, this is only useful for the offline indicator v2 feature.
-                if (!ChromeFeatureList.isInitialized()
-                        || !ChromeFeatureList.isEnabled(ChromeFeatureList.OFFLINE_INDICATOR_V2)) {
-                    return;
-                }
-
                 // If the browser controls can be animated, we shouldn't set the extra offset here.
                 // Instead, that should happen when the animation starts (i.e. we get new offsets)
                 // to prevent the Android view from jumping before the animation starts.
