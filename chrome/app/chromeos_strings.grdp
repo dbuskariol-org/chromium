@@ -4292,7 +4292,7 @@
     Go Home
   </message>
   <message name="IDS_OOBE_GESTURE_NAVIGATION_HOME_DESCRIPTION" desc="The description for the gesture navigation education home OOBE screen shown on the first user login.">
-    To get to the Homescreen at any time, swipe up from the bottom.
+    To get to the Home screen at any time, swipe up from the bottom.
   </message>
   <message name="IDS_OOBE_GESTURE_NAVIGATION_BACK_TITLE" desc="The title in the gesture navigation education back OOBE screen shown on the first user login.">
     Go Back
