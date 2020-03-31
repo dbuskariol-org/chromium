@@ -3391,6 +3391,11 @@ void RenderWidget::UseSynchronousResizeModeForTesting(bool enable) {
   synchronous_resize_mode_for_testing_ = enable;
 }
 
+blink::WebHitTestResult RenderWidget::GetHitTestResultAtPoint(
+    const gfx::PointF& point) {
+  return input_handler_->GetHitTestResultAtPoint(point);
+}
+
 void RenderWidget::SetDeviceScaleFactorForTesting(float factor) {
   DCHECK_GT(factor, 0.f);
 
