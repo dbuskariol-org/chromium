@@ -407,6 +407,21 @@ TEST_F(CrosHealthdServiceConnectionTest, RunPrimeSearchRoutine) {
   run_loop.Run();
 }
 
+TEST_F(CrosHealthdServiceConnectionTest, RunBatteryDischargeRoutine) {
+  // Test that we can run the battery discharge routine.
+  auto response = MakeRunRoutineResponse();
+  FakeCrosHealthdClient::Get()->SetRunRoutineResponseForTesting(response);
+  base::RunLoop run_loop;
+  ServiceConnection::GetInstance()->RunBatteryDischargeRoutine(
+      /*exec_duration=*/base::TimeDelta::FromSeconds(12),
+      /*maximum_discharge_percent_allowed=*/99,
+      base::BindLambdaForTesting([&](mojom::RunRoutineResponsePtr response) {
+        EXPECT_EQ(response, MakeRunRoutineResponse());
+        run_loop.Quit();
+      }));
+  run_loop.Run();
+}
+
 TEST_F(CrosHealthdServiceConnectionTest, ProbeTelemetryInfo) {
   // Test that we can send a request without categories.
   auto empty_info = mojom::TelemetryInfo::New();
