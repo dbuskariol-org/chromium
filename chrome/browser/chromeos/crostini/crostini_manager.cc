@@ -1094,7 +1094,15 @@ void CrostiniManager::OnInstallTerminaComponent(
   if (!is_successful) {
     if (error ==
         component_updater::CrOSComponentManager::Error::UPDATE_IN_PROGRESS) {
-      result = CrostiniResult::LOAD_COMPONENT_UPDATE_IN_PROGRESS;
+      // Something else triggered an update that we have to wait on. We don't
+      // know what, or when they will be finished, so just retry every 5 seconds
+      // until we get a different result.
+      base::PostDelayedTask(
+          FROM_HERE, {content::BrowserThread::UI},
+          base::BindOnce(&CrostiniManager::InstallTerminaComponent,
+                         weak_ptr_factory_.GetWeakPtr(), std::move(callback)),
+          base::TimeDelta::FromSeconds(5));
+      return;
     } else {
       result = CrostiniResult::LOAD_COMPONENT_FAILED;
     }
