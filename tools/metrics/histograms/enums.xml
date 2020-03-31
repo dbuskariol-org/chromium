@@ -26862,6 +26862,10 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3194" label="ThirdPartyLocalStorage"/>
   <int value="3195" label="ThirdPartySessionStorage"/>
   <int value="3196" label="DeclarativeShadowRoot"/>
+  <int value="3197" label="CrossOriginOpenerPolicySameOrigin"/>
+  <int value="3198" label="CrossOriginOpenerPolicySameOriginAllowPopups"/>
+  <int value="3199" label="CrossOriginEmbedderPolicyRequireCorp"/>
+  <int value="3200" label="CoopAndCoepIsolated"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
