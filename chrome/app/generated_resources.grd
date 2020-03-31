@@ -4097,9 +4097,6 @@ are declared in tools/grit/grit_rule.gni.
         <message name="IDS_EXTENSION_PROMPT_WARNING_SCREENLOCK_PRIVATE" desc="Permission string for locking an unlocking the screen.">
           Lock and unlock the screen
         </message>
-        <message name="IDS_EXTENSION_PROMPT_WARNING_OVERRIDE_BOOKMARKS_UI" desc="Permission string for overriding elements of the bookmarks user interface.">
-          Change the bookmarks user interface
-        </message>
         <message name="IDS_EXTENSION_PROMPT_WARNING_ACTIVITY_LOG_PRIVATE" desc="Permission string for the observing other extensions' API calls">
           Monitor the behavior of other extensions, including visited URLs
         </message>

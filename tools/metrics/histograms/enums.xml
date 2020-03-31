@@ -23094,7 +23094,7 @@ Called by update_extension_histograms.py.-->
   <int value="182" label="kMediaGalleriesAllGalleriesDelete"/>
   <int value="183" label="kMediaGalleriesAllGalleriesRead"/>
   <int value="184" label="kNetworkState"/>
-  <int value="185" label="kOverrideBookmarksUI"/>
+  <int value="185" label="kDeleted_OverrideBookmarksUI"/>
   <int value="186" label="kShouldWarnAllHosts"/>
   <int value="187" label="kSocketAnyHost"/>
   <int value="188" label="kSocketDomainHosts"/>
