@@ -3405,6 +3405,8 @@ jumbo_static_library("browser") {
       "performance_manager/persistence/site_data/tab_visibility.h",
       "permissions/attestation_permission_request.cc",
       "permissions/attestation_permission_request.h",
+      "policy/device_account_initializer.cc",
+      "policy/device_account_initializer.h",
       "policy/local_sync_policy_handler.cc",
       "policy/local_sync_policy_handler.h",
       "process_singleton_modal_dialog_lock.cc",

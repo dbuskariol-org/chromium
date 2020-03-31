@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_POLICY_DEVICE_ACCOUNT_INITIALIZER_H_
-#define CHROME_BROWSER_CHROMEOS_POLICY_DEVICE_ACCOUNT_INITIALIZER_H_
+#ifndef CHROME_BROWSER_POLICY_DEVICE_ACCOUNT_INITIALIZER_H_
+#define CHROME_BROWSER_POLICY_DEVICE_ACCOUNT_INITIALIZER_H_
 
 #include <memory>
 #include <string>
@@ -14,7 +14,6 @@
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
-#include "chromeos/dbus/authpolicy/authpolicy_client.h"
 #include "components/policy/core/common/cloud/cloud_policy_client.h"
 #include "components/policy/core/common/cloud/cloud_policy_constants.h"
 #include "components/policy/core/common/cloud/cloud_policy_store.h"
@@ -115,4 +114,4 @@ class DeviceAccountInitializer : public CloudPolicyClient::Observer,
 
 }  // namespace policy
 
-#endif  // CHROME_BROWSER_CHROMEOS_POLICY_DEVICE_ACCOUNT_INITIALIZER_H_
+#endif  // CHROME_BROWSER_POLICY_DEVICE_ACCOUNT_INITIALIZER_H_
