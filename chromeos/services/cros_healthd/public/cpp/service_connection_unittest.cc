@@ -138,6 +138,13 @@ base::Optional<std::vector<mojom::BacklightInfoPtr>> MakeBacklightInfo() {
   return backlight_info;
 }
 
+base::Optional<std::vector<mojom::FanInfoPtr>> MakeFanInfo() {
+  std::vector<mojom::FanInfoPtr> fan_info;
+  fan_info.push_back(mojom::FanInfo::New(1200 /* speed_rpm */));
+  fan_info.push_back(mojom::FanInfo::New(2650 /* speed_rpm */));
+  return fan_info;
+}
+
 mojom::TelemetryInfoPtr MakeTelemetryInfo() {
   return mojom::TelemetryInfo::New(
       MakeBatteryInfo() /* battery_info */,
@@ -145,7 +152,7 @@ mojom::TelemetryInfoPtr MakeTelemetryInfo() {
       MakeCachedVpdInfo() /* vpd_info */, MakeCpuInfo() /* cpu_info */,
       MakeTimezoneInfo() /* timezone_info */,
       MakeMemoryInfo() /* memory_info */,
-      MakeBacklightInfo() /* backlight_info */
+      MakeBacklightInfo() /* backlight_info */, MakeFanInfo() /* fan_info */
   );
 }
 
@@ -424,7 +431,12 @@ TEST_F(CrosHealthdServiceConnectionTest, ProbeTelemetryInfo) {
   const std::vector<mojom::ProbeCategoryEnum> categories_to_test = {
       mojom::ProbeCategoryEnum::kBattery,
       mojom::ProbeCategoryEnum::kNonRemovableBlockDevices,
-      mojom::ProbeCategoryEnum::kCachedVpdData, mojom::ProbeCategoryEnum::kCpu};
+      mojom::ProbeCategoryEnum::kCachedVpdData,
+      mojom::ProbeCategoryEnum::kCpu,
+      mojom::ProbeCategoryEnum::kTimezone,
+      mojom::ProbeCategoryEnum::kMemory,
+      mojom::ProbeCategoryEnum::kBacklight,
+      mojom::ProbeCategoryEnum::kFan};
   callback_done = false;
   ServiceConnection::GetInstance()->ProbeTelemetryInfo(
       categories_to_test,

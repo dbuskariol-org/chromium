@@ -487,7 +487,8 @@ void GetFakeCrosHealthdData(
   chromeos::cros_healthd::mojom::TelemetryInfo fake_info(
       battery_info.Clone(), std::move(block_device_info),
       cached_vpd_info.Clone(), std::move(cpu_vector), timezone_info.Clone(),
-      memory_info.Clone(), std::move(backlight_vector));
+      memory_info.Clone(), std::move(backlight_vector),
+      base::nullopt /* fan_info */);
 
   // Create fake SampledData.
   em::CPUTempInfo fake_cpu_temp_sample;
