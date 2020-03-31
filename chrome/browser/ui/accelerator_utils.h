@@ -15,8 +15,6 @@ namespace chrome {
 // Chrome.
 bool IsChromeAccelerator(const ui::Accelerator& accelerator);
 
-ui::Accelerator GetPrimaryChromeAcceleratorForBookmarkTab();
-
 }  // namespace chrome
 
 #endif  // CHROME_BROWSER_UI_ACCELERATOR_UTILS_H_
