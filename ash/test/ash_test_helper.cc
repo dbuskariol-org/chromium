@@ -11,18 +11,15 @@
 #include "ash/assistant/test/test_assistant_service.h"
 #include "ash/display/display_configuration_controller_test_api.h"
 #include "ash/display/screen_ash.h"
+#include "ash/host/ash_window_tree_host.h"
 #include "ash/keyboard/keyboard_controller_impl.h"
 #include "ash/keyboard/test_keyboard_ui.h"
 #include "ash/public/cpp/ash_switches.h"
 #include "ash/public/cpp/test/test_keyboard_controller_observer.h"
 #include "ash/public/cpp/test/test_new_window_delegate.h"
-#include "ash/public/cpp/test/test_photo_controller.h"
-#include "ash/public/cpp/test/test_system_tray_client.h"
-#include "ash/session/test_pref_service_provider.h"
 #include "ash/session/test_session_controller_client.h"
 #include "ash/shell.h"
 #include "ash/shell_init_params.h"
-#include "ash/system/message_center/test_notifier_settings_controller.h"
 #include "ash/system/model/system_tray_model.h"
 #include "ash/system/screen_layout_observer.h"
 #include "ash/test/ash_test_views_delegate.h"
@@ -30,24 +27,16 @@
 #include "ash/wallpaper/wallpaper_controller_impl.h"
 #include "ash/wm/overview/overview_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
-#include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/run_loop.h"
 #include "base/system/sys_info.h"
 #include "chromeos/audio/cras_audio_handler.h"
 #include "chromeos/dbus/audio/cras_audio_client.h"
 #include "chromeos/dbus/power/power_policy_controller.h"
-#include "chromeos/system/fake_statistics_provider.h"
 #include "device/bluetooth/bluetooth_adapter_factory.h"
 #include "device/bluetooth/dbus/bluez_dbus_manager.h"
-#include "ui/aura/env.h"
-#include "ui/aura/test/env_test_helper.h"
-#include "ui/aura/test/event_generator_delegate_aura.h"
 #include "ui/aura/test/test_windows.h"
 #include "ui/aura/window.h"
-#include "ui/base/ime/init/input_method_initializer.h"
-#include "ui/compositor/scoped_animation_duration_scale_mode.h"
-#include "ui/compositor/test/test_context_factories.h"
 #include "ui/display/display.h"
 #include "ui/display/display_switches.h"
 #include "ui/display/manager/display_manager.h"
@@ -56,7 +45,7 @@
 #include "ui/views/test/views_test_helper_aura.h"
 #include "ui/wm/core/capture_controller.h"
 #include "ui/wm/core/cursor_manager.h"
-#include "ui/wm/core/wm_state.h"
+#include "ui/wm/core/focus_controller.h"
 
 namespace ash {
 
@@ -92,46 +81,8 @@ class AshTestHelper::PowerPolicyControllerInitializer {
 
 AshTestHelper::AshTestHelper(ConfigType config_type,
                              ui::ContextFactory* context_factory)
-    : config_type_(config_type), context_factory_(context_factory) {
-  // Aura-general construction ------------------------------------------------
-
-  wm_state_ = std::make_unique<::wm::WMState>();
-
-  if (config_type_ != kShell) {
-    ui::test::EnableTestConfigForPlatformWindows();
-    ui::InitializeInputMethodForTesting();
-  }
-
-  ui::test::EventGeneratorDelegate::SetFactoryFunction(
-      base::BindRepeating(&aura::test::EventGeneratorDelegateAura::Create));
-
-  if (config_type_ == kUnitTest) {
-    zero_duration_mode_.reset(new ui::ScopedAnimationDurationScaleMode(
-        ui::ScopedAnimationDurationScaleMode::ZERO_DURATION));
-  }
-
-  if (!context_factory_) {
-    context_factories_ = std::make_unique<ui::TestContextFactories>(false);
-    context_factory_ = context_factories_->GetContextFactory();
-  }
-
-  // Reset aura::Env to eliminate test dependency (https://crbug.com/586514).
-  aura::test::EnvTestHelper env_helper(aura::Env::GetInstance());
-  env_helper.ResetEnvForTesting();
-  env_helper.SetInputStateLookup(nullptr);
-
-  // Ash-specific construction ------------------------------------------------
-
-  command_line_ = std::make_unique<base::test::ScopedCommandLine>();
-  statistics_provider_ =
-      std::make_unique<chromeos::system::ScopedFakeStatisticsProvider>();
-  prefs_provider_ = std::make_unique<TestPrefServiceProvider>();
-  notifier_settings_controller_ =
-      std::make_unique<TestNotifierSettingsController>();
-  assistant_service_ = std::make_unique<TestAssistantService>();
-  system_tray_client_ = std::make_unique<TestSystemTrayClient>();
-  photo_controller_ = std::make_unique<TestPhotoController>();
-
+    : AuraTestHelper(context_factory, config_type == kUnitTest),
+      config_type_(config_type) {
   views::ViewsTestHelperAura::SetFallbackTestViewsDelegateFactory(
       base::BindOnce(&MakeDelegate));
 
@@ -183,8 +134,6 @@ void AshTestHelper::SetUp() {
 }
 
 void AshTestHelper::TearDown() {
-  // Ash-specific teardown ----------------------------------------------------
-
   // The AppListTestHelper holds a pointer to the AppListController the Shell
   // owns, so shut the test helper down first.
   app_list_test_helper_.reset();
@@ -219,22 +168,7 @@ void AshTestHelper::TearDown() {
   statistics_provider_.reset();
   command_line_.reset();
 
-  // Aura-general teardown ----------------------------------------------------
-
-  ui::ShutdownInputMethodForTesting();
-
-  // Context factory referenced by Env is now destroyed. Reset Env's members in
-  // case some other test tries to use it. This matters if someone else created
-  // Env (such as the test suite) and is long lived.
-  if (aura::Env::HasInstance())
-    aura::Env::GetInstance()->set_context_factory(nullptr);
-
-  ui::test::EventGeneratorDelegate::SetFactoryFunction(
-      ui::test::EventGeneratorDelegate::FactoryFunction());
-
-  context_factories_.reset();
-  zero_duration_mode_.reset();
-  wm_state_.reset();
+  AuraTestHelper::TearDown();
 }
 
 aura::Window* AshTestHelper::GetContext() {
@@ -243,6 +177,28 @@ aura::Window* AshTestHelper::GetContext() {
     root_window = Shell::GetPrimaryRootWindow();
   DCHECK(root_window);
   return root_window;
+}
+
+aura::WindowTreeHost* AshTestHelper::GetHost() {
+  auto* manager = Shell::Get()->window_tree_host_manager();
+  const int64_t id = manager->GetPrimaryDisplayId();
+  return manager->GetAshWindowTreeHostForDisplayId(id)->AsWindowTreeHost();
+}
+
+aura::TestScreen* AshTestHelper::GetTestScreen() {
+  // If a test needs this, we may need to refactor TestScreen such that its
+  // methods can operate atop some sort of real screen/host/display, and hook
+  // them to the ones provided by the shell.  For now, not bothering.
+  NOTIMPLEMENTED();
+  return nullptr;
+}
+
+aura::client::FocusClient* AshTestHelper::GetFocusClient() {
+  return Shell::Get()->focus_controller();
+}
+
+aura::client::CaptureClient* AshTestHelper::GetCaptureClient() {
+  return wm::CaptureController::Get();
 }
 
 void AshTestHelper::SetUp(InitParams init_params) {
@@ -267,7 +223,7 @@ void AshTestHelper::SetUp(InitParams init_params) {
   shell_init_params.delegate = std::move(init_params.delegate);
   if (!shell_init_params.delegate)
     shell_init_params.delegate = std::make_unique<TestShellDelegate>();
-  shell_init_params.context_factory = context_factory_;
+  shell_init_params.context_factory = GetContextFactory();
   shell_init_params.local_state = init_params.local_state;
   shell_init_params.keyboard_ui_factory =
       std::make_unique<TestKeyboardUIFactory>();
