@@ -1266,9 +1266,12 @@ void CrostiniManager::StartTerminaVm(std::string name,
   request.set_owner_id(owner_id_);
   if (base::FeatureList::IsEnabled(chromeos::features::kCrostiniGpuSupport))
     request.set_enable_gpu(true);
-  if (IsMicSharingEnabled(profile_)) {
+  bool is_mic_sharing_enabled = IsMicSharingEnabled(profile_);
+  if (is_mic_sharing_enabled) {
     request.set_enable_audio_capture(true);
   }
+  profile_->GetPrefs()->SetBoolean(
+      crostini::prefs::kCrostiniMicSharingAtLastLaunch, is_mic_sharing_enabled);
   const int32_t cpus = base::SysInfo::NumberOfProcessors() - num_cores_disabled;
   DCHECK_LT(0, cpus);
   request.set_cpus(cpus);

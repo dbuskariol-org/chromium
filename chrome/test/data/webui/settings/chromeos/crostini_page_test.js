@@ -269,6 +269,8 @@ suite('CrostiniPageTests', function() {
           });
 
       test('ToggleCrostiniMicSharing', async function() {
+        // Testing under the premise that Crostini is currently running and the
+        // mic is being shared with Crostini.
         assertTrue(!!subpage.$$('#crostini-mic-sharing'));
         assertFalse(!!subpage.$$('settings-crostini-mic-sharing-dialog'));
         setCrostiniPrefs(true, {micSharing: true});
@@ -279,14 +281,21 @@ suite('CrostiniPageTests', function() {
         await flushAsync();
         assertTrue(!!subpage.$$('settings-crostini-mic-sharing-dialog'));
         const dialog = subpage.$$('settings-crostini-mic-sharing-dialog');
+        const dialogClosedPromise = test_util.eventToPromise('close', dialog);
         dialog.$$('cr-dialog cr-button').click();
-        await flushAsync();
+        await Promise.all([dialogClosedPromise, flushAsync()]);
+        assertFalse(!!subpage.$$('settings-crostini-mic-sharing-dialog'));
         assertFalse(subpage.$$('#crostini-mic-sharing').checked);
         assertFalse(subpage.$$('#crostini-mic-sharing').pref.value);
 
         subpage.$$('#crostini-mic-sharing').click();
         assertTrue(subpage.$$('#crostini-mic-sharing').checked);
         assertTrue(subpage.$$('#crostini-mic-sharing').pref.value);
+        await flushAsync();
+        // Dialog should only appear when a restart is required, as the setting
+        // was initiated as true, changing the setting back to true does not
+        // require a restart.
+        assertFalse(!!subpage.$$('settings-crostini-mic-sharing-dialog'));
       });
 
       test('Remove', async function() {
