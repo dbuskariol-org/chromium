@@ -418,6 +418,13 @@ IN_PROC_BROWSER_TEST_F(IsolatedPrerenderBrowserTest,
   // This run loop will quit when a valid CONNECT request is made to the proxy
   // server.
   run_loop.Run();
+
+  // The embedded test server will return a 400 for all CONNECT requests by
+  // default. Ensure that the request didn't fallback to a direct connection.
+  IsolatedPrerenderTabHelper* tab_helper =
+      IsolatedPrerenderTabHelper::FromWebContents(GetWebContents());
+  EXPECT_EQ(tab_helper->metrics().prefetch_attempted_count, 1U);
+  EXPECT_EQ(tab_helper->metrics().prefetch_successful_count, 0U);
 }
 
 class ProbingEnabledIsolatedPrerenderBrowserTest

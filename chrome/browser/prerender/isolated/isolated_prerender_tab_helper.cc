@@ -281,6 +281,9 @@ void IsolatedPrerenderTabHelper::OnPrefetchComplete(
       page_->url_loader_->ResponseInfo()) {
     network::mojom::URLResponseHeadPtr head =
         page_->url_loader_->ResponseInfo()->Clone();
+
+    DCHECK(!head->proxy_server.is_direct());
+
     HandlePrefetchResponse(url, key, std::move(head), std::move(body));
   }
   Prefetch();
