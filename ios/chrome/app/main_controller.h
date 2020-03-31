@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ios/chrome/app/application_delegate/app_state.h"
 #import "ios/chrome/app/application_delegate/browser_launcher.h"
 #import "ios/chrome/app/application_delegate/startup_information.h"
 #import "ios/chrome/app/main_controller_guts.h"
@@ -30,7 +31,8 @@
 @interface MainController : NSObject <BrowserLauncher,
                                       MainControllerGuts,
                                       StartupInformation,
-                                      BrowsingDataCommands>
+                                      BrowsingDataCommands,
+                                      AppStateObserver>
 
 // The application window.
 @property(nonatomic, strong) UIWindow* window;
