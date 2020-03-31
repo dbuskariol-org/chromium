@@ -982,9 +982,7 @@ const char kGlobalMediaControlsPictureInPictureDescription[] =
     "#global-media-controls to also be enabled.";
 
 const char kGpuRasterizationName[] = "GPU rasterization";
-const char kGpuRasterizationDescription[] =
-    "Use GPU to rasterize web content. Requires impl-side painting.";
-const char kForceGpuRasterization[] = "Force-enabled for all layers";
+const char kGpuRasterizationDescription[] = "Use GPU to rasterize web content.";
 
 const char kGooglePasswordManagerName[] = "Google Password Manager UI";
 const char kGooglePasswordManagerDescription[] =

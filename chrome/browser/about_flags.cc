@@ -511,8 +511,6 @@ const FeatureEntry::Choice kEnableGpuRasterizationChoices[] = {
      switches::kEnableGpuRasterization, ""},
     {flags_ui::kGenericExperimentChoiceDisabled,
      switches::kDisableGpuRasterization, ""},
-    {flag_descriptions::kForceGpuRasterization,
-     switches::kForceGpuRasterization, ""},
 };
 
 const FeatureEntry::Choice kEnableOopRasterizationChoices[] = {
