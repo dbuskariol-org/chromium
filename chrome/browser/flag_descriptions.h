@@ -1556,9 +1556,6 @@ extern const char kNtpWebUIDescription[];
 extern const char kEnableReaderModeName[];
 extern const char kEnableReaderModeDescription[];
 
-extern const char kEnterpriseReportingInBrowserName[];
-extern const char kEnterpriseReportingInBrowserDescription[];
-
 extern const char kHappinessTrackingSurveysForDesktopName[];
 extern const char kHappinessTrackingSurveysForDesktopDescription[];
 
