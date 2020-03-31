@@ -52557,6 +52557,44 @@ Called by update_net_trust_anchors.py.-->
   </int>
 </enum>
 
+<enum name="PowerMLSmartDimComponentLoadComponentEvent">
+  <int value="0" label="Success">
+    Smart dim component is loaded successfully.
+  </int>
+  <int value="1" label="ReadComponentFilesError">
+    Failed to read component files to strings.
+  </int>
+  <int value="2" label="LoadPreprocessorError">
+    Failed to load preprocessor from proto.
+  </int>
+  <int value="3" label="LoadMetadataError">
+    Failed to load meta data from JSON.
+  </int>
+</enum>
+
+<enum name="PowerMLSmartDimComponentVersionType">
+  <int value="0" label="Default">
+    Use default component version, or experimental component version (specified
+    in Finch config) that is equal to the default.
+  </int>
+  <int value="1" label="Experimental">
+    Use experimental component version specified in Finch config.
+  </int>
+  <int value="2" label="Empty">
+    Expected version is empty. This should never happen.
+  </int>
+</enum>
+
+<enum name="PowerMLSmartDimComponentWorkerType">
+  <int value="0" label="BuiltinWorker">
+    Use built-in worker (initialized from built-in model and preprocessor config
+    files).
+  </int>
+  <int value="1" label="DownloadWorker">
+    Use downloaded worker (initialized from downloaded smart dim component).
+  </int>
+</enum>
+
 <enum name="PowerMLSmartDimModelResult">
   <int value="0" label="Success">
     Inactivity score was calculated successfully.
