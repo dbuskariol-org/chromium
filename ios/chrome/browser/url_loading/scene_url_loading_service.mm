@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/url_loading/app_url_loading_service.h"
+#import "ios/chrome/browser/url_loading/scene_url_loading_service.h"
 
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #import "ios/chrome/browser/main/browser.h"
@@ -16,14 +16,14 @@
 #error "This file requires ARC support."
 #endif
 
-AppUrlLoadingService::AppUrlLoadingService() {}
+SceneUrlLoadingService::SceneUrlLoadingService() {}
 
-void AppUrlLoadingService::SetDelegate(
-    id<AppURLLoadingServiceDelegate> delegate) {
+void SceneUrlLoadingService::SetDelegate(
+    id<SceneURLLoadingServiceDelegate> delegate) {
   delegate_ = delegate;
 }
 
-void AppUrlLoadingService::LoadUrlInNewTab(const UrlLoadParams& params) {
+void SceneUrlLoadingService::LoadUrlInNewTab(const UrlLoadParams& params) {
   DCHECK(delegate_);
 
   Browser* browser = delegate_.currentBrowserForURLLoading;
@@ -80,6 +80,6 @@ void AppUrlLoadingService::LoadUrlInNewTab(const UrlLoadParams& params) {
   }
 }
 
-Browser* AppUrlLoadingService::GetCurrentBrowser() {
+Browser* SceneUrlLoadingService::GetCurrentBrowser() {
   return [delegate_ currentBrowserForURLLoading];
 }

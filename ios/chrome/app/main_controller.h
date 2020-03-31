@@ -16,7 +16,6 @@
 
 @class AppState;
 @class MetricsMediator;
-@protocol AppURLLoadingServiceDelegate;
 @protocol BrowsingDataCommands;
 @protocol SceneControllerGuts;
 @protocol TabOpening;
@@ -48,7 +47,6 @@
 // For temporary plumbing only.
 @property(nonatomic, weak) id<ApplicationCommands,
                               TabSwitcherDelegate,
-                              AppURLLoadingServiceDelegate,
                               SceneControllerGuts,
                               TabOpening>
     sceneController;

@@ -2,24 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_URL_LOADING_TEST_APP_URL_LOADING_SERVICE_H_
-#define IOS_CHROME_BROWSER_URL_LOADING_TEST_APP_URL_LOADING_SERVICE_H_
+#ifndef IOS_CHROME_BROWSER_URL_LOADING_TEST_SCENE_URL_LOADING_SERVICE_H_
+#define IOS_CHROME_BROWSER_URL_LOADING_TEST_SCENE_URL_LOADING_SERVICE_H_
 
-#include "ios/chrome/browser/url_loading/app_url_loading_service.h"
+#include "ios/chrome/browser/url_loading/scene_url_loading_service.h"
 #import "ios/chrome/browser/url_loading/url_loading_params.h"
 
 class Browser;
 
 // Service used to manage url loading at application level.
-class TestAppUrlLoadingService : public AppUrlLoadingService {
+class TestSceneUrlLoadingService : public SceneUrlLoadingService {
  public:
-  TestAppUrlLoadingService();
-  ~TestAppUrlLoadingService() override {}
+  TestSceneUrlLoadingService();
+  ~TestSceneUrlLoadingService() override {}
 
   // Opens a url based on |command| in a new tab.
   void LoadUrlInNewTab(const UrlLoadParams& params) override;
 
-  // Returns the current browser state.
+  // Returns the current browser.
   Browser* GetCurrentBrowser() override;
 
   // These are the last parameters passed to |LoadUrlInNewTab|.

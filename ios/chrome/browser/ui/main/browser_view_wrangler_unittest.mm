@@ -40,8 +40,7 @@ TEST_F(BrowserViewWranglerTest, TestInitNilObserver) {
     BrowserViewWrangler* wrangler = [[BrowserViewWrangler alloc]
                initWithBrowserState:chrome_browser_state_.get()
          applicationCommandEndpoint:(id<ApplicationCommands>)nil
-        browsingDataCommandEndpoint:nil
-               appURLLoadingService:nil];
+        browsingDataCommandEndpoint:nil];
     [wrangler createMainBrowser];
     // Test that BVC is created on demand.
     BrowserViewController* bvc = wrangler.mainInterface.bvc;
@@ -70,8 +69,7 @@ TEST_F(BrowserViewWranglerTest, TestBrowserList) {
   BrowserViewWrangler* wrangler = [[BrowserViewWrangler alloc]
              initWithBrowserState:chrome_browser_state_.get()
        applicationCommandEndpoint:nil
-      browsingDataCommandEndpoint:nil
-             appURLLoadingService:nil];
+      browsingDataCommandEndpoint:nil];
 
   // After creating the main browser, it should have been added to the browser
   // list.

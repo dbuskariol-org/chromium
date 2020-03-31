@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_URL_LOADING_APP_URL_LOADING_SERVICE_H_
-#define IOS_CHROME_BROWSER_URL_LOADING_APP_URL_LOADING_SERVICE_H_
+#ifndef IOS_CHROME_BROWSER_URL_LOADING_SCENE_URL_LOADING_SERVICE_H_
+#define IOS_CHROME_BROWSER_URL_LOADING_SCENE_URL_LOADING_SERVICE_H_
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -16,8 +16,8 @@
 class Browser;
 struct UrlLoadParams;
 
-// Objective-C delegate for AppUrlLoadingService.
-@protocol AppURLLoadingServiceDelegate
+// Objective-C delegate for SceneUrlLoadingService.
+@protocol SceneURLLoadingServiceDelegate
 
 // Sets the current interface to |ApplicationMode::INCOGNITO| or
 // |ApplicationMode::NORMAL|.
@@ -53,12 +53,12 @@ struct UrlLoadParams;
 @end
 
 // Service used to manage url loading at application level.
-class AppUrlLoadingService {
+class SceneUrlLoadingService {
  public:
-  AppUrlLoadingService();
-  virtual ~AppUrlLoadingService() = default;
+  SceneUrlLoadingService();
+  virtual ~SceneUrlLoadingService() = default;
 
-  void SetDelegate(id<AppURLLoadingServiceDelegate> delegate);
+  void SetDelegate(id<SceneURLLoadingServiceDelegate> delegate);
 
   // Opens a url based on |params| in a new tab.
   virtual void LoadUrlInNewTab(const UrlLoadParams& params);
@@ -67,7 +67,7 @@ class AppUrlLoadingService {
   virtual Browser* GetCurrentBrowser();
 
  private:
-  __weak id<AppURLLoadingServiceDelegate> delegate_;
+  __weak id<SceneURLLoadingServiceDelegate> delegate_;
 };
 
-#endif  // IOS_CHROME_BROWSER_URL_LOADING_APP_URL_LOADING_SERVICE_H_
+#endif  // IOS_CHROME_BROWSER_URL_LOADING_SCENE_URL_LOADING_SERVICE_H_

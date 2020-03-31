@@ -61,7 +61,7 @@
 #import "ios/chrome/browser/ui/util/multi_window_support.h"
 #import "ios/chrome/browser/ui/util/top_view_controller.h"
 #import "ios/chrome/browser/ui/util/uikit_ui_util.h"
-#import "ios/chrome/browser/url_loading/app_url_loading_service.h"
+#import "ios/chrome/browser/url_loading/scene_url_loading_service.h"
 #import "ios/chrome/browser/url_loading/url_loading_browser_agent.h"
 #import "ios/chrome/browser/url_loading/url_loading_params.h"
 #import "ios/chrome/browser/web_state_list/web_state_list.h"
@@ -116,6 +116,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 @interface SceneController () <UserFeedbackDataSource,
                                SettingsNavigationControllerDelegate,
+                               SceneURLLoadingServiceDelegate,
                                WebStateListObserving> {
   std::unique_ptr<WebStateListObserverBridge> _webStateListForwardingObserver;
 }
@@ -126,7 +127,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 // The scene level component for url loading. Is passed down to
 // browser state level UrlLoadingService instances.
-@property(nonatomic, assign) AppUrlLoadingService* appURLLoadingService;
+@property(nonatomic, assign) SceneUrlLoadingService* sceneURLLoadingService;
 
 // A flag that keeps track of the UI initialization for the controlled scene.
 @property(nonatomic, assign) BOOL hasInitializedUI;
@@ -196,8 +197,6 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 @end
 
 @implementation SceneController
-@synthesize appURLLoadingService =
-    _appURLLoadingService;  //< From SceneControllerGuts
 
 - (instancetype)initWithSceneState:(SceneState*)sceneState {
   self = [super init];
@@ -212,8 +211,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
       self.sceneState.window = [[ChromeOverlayWindow alloc]
           initWithFrame:[[UIScreen mainScreen] bounds]];
     }
-    _appURLLoadingService = new AppUrlLoadingService();
-    _appURLLoadingService->SetDelegate(self);
+    _sceneURLLoadingService = new SceneUrlLoadingService();
+    _sceneURLLoadingService->SetDelegate(self);
 
     _webStateListForwardingObserver =
         std::make_unique<WebStateListObserverBridge>(self);
@@ -302,15 +301,14 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 - (void)startUpChromeUIPostCrash:(BOOL)isPostCrashLaunch
                  needRestoration:(BOOL)needsRestoration {
   DCHECK(!self.browserViewWrangler);
-  DCHECK(self.appURLLoadingService);
+  DCHECK(self.sceneURLLoadingService);
   DCHECK(self.mainController);
   DCHECK(self.mainController.mainBrowserState);
 
   self.browserViewWrangler = [[BrowserViewWrangler alloc]
              initWithBrowserState:self.mainController.mainBrowserState
        applicationCommandEndpoint:self
-      browsingDataCommandEndpoint:self.mainController
-             appURLLoadingService:self.appURLLoadingService];
+      browsingDataCommandEndpoint:self.mainController];
 
   // Ensure the main browser is created. This also creates the BVC.
   [self.browserViewWrangler createMainBrowser];
@@ -360,14 +358,13 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 - (void)createInitialUI:(ApplicationMode)launchMode {
   DCHECK(self.mainController.mainBrowserState);
 
-  // In order to correctly set the mode switch icon, we need to know how many
-  // tabs are in the other tab model. That means loading both models.  They
-  // may already be loaded.
-  // TODO(crbug.com/546203): Find a way to handle this that's closer to the
-  // point where it is necessary.
-  TabModel* mainTabModel = self.mainInterface.tabModel;
-  TabModel* otrTabModel = self.incognitoInterface.tabModel;
-
+  // Set the Scene application URL loader on the URL loading browser interface
+  // for the regular and incognito interfaces. This will lazily instantiate the
+  // incognito interface if it isn't already created.
+  UrlLoadingBrowserAgent::FromBrowser(self.mainInterface.browser)
+      ->SetSceneService(self.sceneURLLoadingService);
+  UrlLoadingBrowserAgent::FromBrowser(self.incognitoInterface.browser)
+      ->SetSceneService(self.sceneURLLoadingService);
   // Observe the web state lists for both browsers.
   self.mainInterface.browser->GetWebStateList()->AddObserver(
       _webStateListForwardingObserver.get());
@@ -380,7 +377,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   // Lazy init of mainCoordinator.
   [self.mainCoordinator start];
 
-  _tabSwitcher = self.mainCoordinator.tabSwitcher;
+  self.tabSwitcher = self.mainCoordinator.tabSwitcher;
   // Call -restoreInternalState so that the grid shows the correct panel.
   [_tabSwitcher
       restoreInternalStateWithMainBrowser:self.mainInterface.browser
@@ -396,10 +393,10 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
   TabModel* tabModel;
   if (launchMode == ApplicationMode::INCOGNITO) {
-    tabModel = otrTabModel;
+    tabModel = self.incognitoInterface.tabModel;
     [self setCurrentInterfaceForMode:ApplicationMode::INCOGNITO];
   } else {
-    tabModel = mainTabModel;
+    tabModel = self.mainInterface.tabModel;
     [self setCurrentInterfaceForMode:ApplicationMode::NORMAL];
   }
   if (self.tabSwitcherIsActive) {
@@ -685,7 +682,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   params.from_chrome = command.fromChrome;
   params.user_initiated = command.userInitiated;
   params.should_focus_omnibox = command.shouldFocusOmnibox;
-  self.appURLLoadingService->LoadUrlInNewTab(params);
+  self.sceneURLLoadingService->LoadUrlInNewTab(params);
 }
 
 // TODO(crbug.com/779791) : Do not pass |baseViewController| through dispatcher.
@@ -1188,9 +1185,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 - (BOOL)shouldOpenNTPTabOnActivationOfTabModel:(TabModel*)tabModel {
   if (self.tabSwitcherIsActive) {
-    TabModel* mainTabModel = self.browserViewWrangler.mainInterface.tabModel;
-    TabModel* otrTabModel =
-        self.browserViewWrangler.incognitoInterface.tabModel;
+    TabModel* mainTabModel = self.mainInterface.tabModel;
+    TabModel* otrTabModel = self.incognitoInterface.tabModel;
     // Only attempt to dismiss the tab switcher and open a new tab if:
     // - there are no tabs open in either tab model, and
     // - the tab switcher controller is not directly or indirectly presenting
@@ -1216,7 +1212,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
              ![tabModel browserState] -> IsOffTheRecord();
 }
 
-#pragma mark - AppURLLoadingServiceDelegate
+#pragma mark - SceneURLLoadingServiceDelegate
 
 // Note that the current tab of |browserCoordinator|'s BVC will normally be
 // reloaded by this method. If a new tab is about to be added, call
@@ -1712,6 +1708,10 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   self.incognitoInterface.browser->GetWebStateList()->RemoveObserver(
       _webStateListForwardingObserver.get());
   [self.browserViewWrangler destroyAndRebuildIncognitoBrowser];
+  // There should be a new URL loading browser agent for the incognito browser,
+  // so set the scene URL loading service on it.
+  UrlLoadingBrowserAgent::FromBrowser(self.incognitoInterface.browser)
+      ->SetSceneService(self.sceneURLLoadingService);
   self.incognitoInterface.browser->GetWebStateList()->AddObserver(
       _webStateListForwardingObserver.get());
 
