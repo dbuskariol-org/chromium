@@ -1260,8 +1260,6 @@ jumbo_static_library("browser") {
     "policy/homepage_location_policy_handler.h",
     "policy/javascript_policy_handler.cc",
     "policy/javascript_policy_handler.h",
-    "policy/managed_bookmarks_policy_handler.cc",
-    "policy/managed_bookmarks_policy_handler.h",
     "policy/network_prediction_policy_handler.cc",
     "policy/network_prediction_policy_handler.h",
     "policy/profile_policy_connector.cc",

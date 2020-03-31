@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_POLICY_MANAGED_BOOKMARKS_POLICY_HANDLER_H_
-#define CHROME_BROWSER_POLICY_MANAGED_BOOKMARKS_POLICY_HANDLER_H_
+#ifndef COMPONENTS_BOOKMARKS_MANAGED_MANAGED_BOOKMARKS_POLICY_HANDLER_H_
+#define COMPONENTS_BOOKMARKS_MANAGED_MANAGED_BOOKMARKS_POLICY_HANDLER_H_
 
 #include "base/macros.h"
 #include "components/policy/core/browser/configuration_policy_handler.h"
@@ -12,16 +12,17 @@ namespace base {
 class ListValue;
 }
 
-namespace policy {
+namespace bookmarks {
 
 // Handles the ManagedBookmarks policy.
-class ManagedBookmarksPolicyHandler : public SchemaValidatingPolicyHandler {
+class ManagedBookmarksPolicyHandler
+    : public policy::SchemaValidatingPolicyHandler {
  public:
-  explicit ManagedBookmarksPolicyHandler(Schema chrome_schema);
+  explicit ManagedBookmarksPolicyHandler(policy::Schema chrome_schema);
   ~ManagedBookmarksPolicyHandler() override;
 
   // ConfigurationPolicyHandler methods:
-  void ApplyPolicySettings(const PolicyMap& policies,
+  void ApplyPolicySettings(const policy::PolicyMap& policies,
                            PrefValueMap* prefs) override;
 
  private:
@@ -31,6 +32,6 @@ class ManagedBookmarksPolicyHandler : public SchemaValidatingPolicyHandler {
   DISALLOW_COPY_AND_ASSIGN(ManagedBookmarksPolicyHandler);
 };
 
-}  // namespace policy
+}  // namespace bookmarks
 
-#endif  // CHROME_BROWSER_POLICY_MANAGED_BOOKMARKS_POLICY_HANDLER_H_
+#endif  // COMPONENTS_BOOKMARKS_MANAGED_MANAGED_BOOKMARKS_POLICY_HANDLER_H_

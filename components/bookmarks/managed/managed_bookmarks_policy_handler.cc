@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/policy/managed_bookmarks_policy_handler.h"
+#include "components/bookmarks/managed/managed_bookmarks_policy_handler.h"
 
 #include <utility>
 
@@ -18,19 +18,19 @@
 
 using bookmarks::ManagedBookmarksTracker;
 
-namespace policy {
+namespace bookmarks {
 
 ManagedBookmarksPolicyHandler::ManagedBookmarksPolicyHandler(
-    Schema chrome_schema)
+    policy::Schema chrome_schema)
     : SchemaValidatingPolicyHandler(
-          key::kManagedBookmarks,
-          chrome_schema.GetKnownProperty(key::kManagedBookmarks),
-          SCHEMA_ALLOW_UNKNOWN) {}
+          policy::key::kManagedBookmarks,
+          chrome_schema.GetKnownProperty(policy::key::kManagedBookmarks),
+          policy::SCHEMA_ALLOW_UNKNOWN) {}
 
 ManagedBookmarksPolicyHandler::~ManagedBookmarksPolicyHandler() = default;
 
 void ManagedBookmarksPolicyHandler::ApplyPolicySettings(
-    const PolicyMap& policies,
+    const policy::PolicyMap& policies,
     PrefValueMap* prefs) {
   std::unique_ptr<base::Value> value;
   if (!CheckAndGetValue(policies, nullptr, &value))
@@ -40,15 +40,14 @@ void ManagedBookmarksPolicyHandler::ApplyPolicySettings(
   if (!value || !value->GetAsList(&list))
     return;
 
-  prefs->SetString(bookmarks::prefs::kManagedBookmarksFolderName,
-                   GetFolderName(*list));
+  prefs->SetString(prefs::kManagedBookmarksFolderName, GetFolderName(*list));
   FilterBookmarks(list);
-  prefs->SetValue(bookmarks::prefs::kManagedBookmarks,
+  prefs->SetValue(prefs::kManagedBookmarks,
                   base::Value::FromUniquePtrValue(std::move(value)));
 }
 
-std::string
-ManagedBookmarksPolicyHandler::GetFolderName(const base::ListValue& list) {
+std::string ManagedBookmarksPolicyHandler::GetFolderName(
+    const base::ListValue& list) {
   // Iterate over the list, and try to find the FolderName.
   for (const auto& el : list) {
     const base::DictionaryValue* dict = nullptr;
@@ -106,4 +105,4 @@ void ManagedBookmarksPolicyHandler::FilterBookmarks(base::ListValue* list) {
   }
 }
 
-}  // namespace policy
+}  // namespace bookmarks
