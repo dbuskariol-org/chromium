@@ -827,6 +827,10 @@ crbug.com/762679 external/wpt/css/css-flexbox/gap-008-ltr.html [ Failure ]
 crbug.com/762679 external/wpt/css/css-flexbox/gap-009-ltr.html [ Failure ]
 crbug.com/762679 external/wpt/css/css-flexbox/gap-010-ltr.html [ Failure ]
 
+# [css-lists]
+crbug.com/1066577 external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
+crbug.com/1066577 external/wpt/css/css-lists/li-value-reversed-004.html [ Failure ]
+crbug.com/1066577 external/wpt/css/css-lists/li-value-reversed-003.html [ Failure ]
 
 # ====== Layout team owned tests to here ======
 
@@ -3191,15 +3195,6 @@ crbug.com/626703 [ Win ] external/wpt/webvtt/rendering/cues-with-video/processin
 crbug.com/626703 [ Linux ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/shadow-dom/directionality-002.tentative.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
-crbug.com/626703 [ Win ] external/wpt/css/css-lists/li-value-reversed-005.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/css-lists/li-value-reversed-004.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-lists/li-value-reversed-004.html [ Failure ]
-crbug.com/626703 [ Win ] external/wpt/css/css-lists/li-value-reversed-004.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/css-lists/li-value-reversed-003.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-lists/li-value-reversed-003.html [ Failure ]
-crbug.com/626703 [ Win ] external/wpt/css/css-lists/li-value-reversed-003.html [ Failure ]
 crbug.com/626703 [ Mac10.13 ] external/wpt/webaudio/the-audio-api/the-mediastreamaudiosourcenode-interface/mediastreamaudiosourcenode-routing.html [ Timeout ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/webaudio/the-audio-api/the-mediastreamaudiosourcenode-interface/mediastreamaudiosourcenode-routing.html [ Timeout ]
 crbug.com/626703 [ Retina ] external/wpt/webaudio/the-audio-api/the-mediastreamaudiosourcenode-interface/mediastreamaudiosourcenode-routing.html [ Timeout ]
