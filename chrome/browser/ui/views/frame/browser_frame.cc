@@ -77,8 +77,7 @@ void BrowserFrame::InitBrowserFrame() {
   params.name = "BrowserFrame";
   params.delegate = browser_view_;
   if (browser_view_->browser()->is_type_normal() ||
-      browser_view_->browser()->is_type_devtools() ||
-      browser_view_->browser()->is_type_app()) {
+      browser_view_->browser()->is_type_devtools()) {
     // Typed panel/popup can only return a size once the widget has been
     // created.
     // DevTools counts as a popup, but DevToolsWindow::CreateDevToolsBrowser
