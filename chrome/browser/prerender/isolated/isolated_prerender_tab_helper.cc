@@ -111,9 +111,6 @@ void IsolatedPrerenderTabHelper::DidStartNavigation(
   if (!navigation_handle->IsInMainFrame()) {
     return;
   }
-  if (navigation_handle->IsSameDocument()) {
-    return;
-  }
 
   // User is navigating, don't bother prefetching further.
   page_->url_loader_.reset();
@@ -123,9 +120,6 @@ void IsolatedPrerenderTabHelper::DidFinishNavigation(
     content::NavigationHandle* navigation_handle) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!navigation_handle->IsInMainFrame()) {
-    return;
-  }
-  if (navigation_handle->IsSameDocument()) {
     return;
   }
   if (!navigation_handle->HasCommitted()) {
