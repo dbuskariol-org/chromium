@@ -15,7 +15,7 @@
 
 namespace chrome {
 
-bool IsChromeAccelerator(const ui::Accelerator& accelerator, Profile* profile) {
+bool IsChromeAccelerator(const ui::Accelerator& accelerator) {
   NSUInteger modifiers = (accelerator.IsCtrlDown() ? NSControlKeyMask : 0) |
                          (accelerator.IsCmdDown() ? NSCommandKeyMask : 0) |
                          (accelerator.IsAltDown() ? NSAlternateKeyMask : 0) |
