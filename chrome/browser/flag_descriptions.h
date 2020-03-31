@@ -1977,11 +1977,6 @@ extern const char
 extern const char kExperimentalAccessibilityChromeVoxSearchMenusName[];
 extern const char kExperimentalAccessibilityChromeVoxSearchMenusDescription[];
 
-extern const char
-    kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingName[];
-extern const char
-    kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingDescription[];
-
 extern const char kExperimentalAccessibilitySwitchAccessName[];
 extern const char kExperimentalAccessibilitySwitchAccessDescription[];
 

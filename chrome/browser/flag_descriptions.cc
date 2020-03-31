@@ -3406,16 +3406,6 @@ const char kExperimentalAccessibilityChromeVoxSearchMenusName[] =
 const char kExperimentalAccessibilityChromeVoxSearchMenusDescription[] =
     "Allows users to search for items in the ChromeVox menu.";
 
-const char kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingName[] =
-    "Enable experimental ChromeVox sub-node (word-level) language "
-    "switching.";
-const char
-    kExperimentalAccessibilityChromeVoxSubNodeLanguageSwitchingDescription[] =
-        "Enable ChromeVox language switching at the sub-node level, "
-        "which changes ChromeVox's output language upon detection of a new "
-        "language. This type of switching is more granular than the ChromeVox"
-        "node-level language switching.";
-
 const char kExperimentalAccessibilitySwitchAccessName[] =
     "Experimental feature Switch Access";
 const char kExperimentalAccessibilitySwitchAccessDescription[] =
