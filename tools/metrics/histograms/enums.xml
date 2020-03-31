@@ -42824,6 +42824,22 @@ Called by update_use_counter_css.py.-->
   <int value="3" label="Failed to create tables"/>
 </enum>
 
+<enum name="MediaHistoryPlaybackWriteResult">
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed to establish DB transaction"/>
+  <int value="2" label="Failed to write origin"/>
+  <int value="3" label="Failed to write playback"/>
+  <int value="4" label="Failed to increment aggregated watchtime"/>
+</enum>
+
+<enum name="MediaHistorySessionWriteResult">
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed to establish DB transaction"/>
+  <int value="2" label="Failed to write origin"/>
+  <int value="3" label="Failed to write session"/>
+  <int value="4" label="Failed to write image"/>
+</enum>
+
 <enum name="MediaKeyError">
   <int value="1" label="kUnknownError"/>
   <int value="2" label="kClientError"/>
