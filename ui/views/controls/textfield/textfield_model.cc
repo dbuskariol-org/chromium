@@ -432,6 +432,10 @@ bool TextfieldModel::MoveCursorTo(const gfx::SelectionModel& cursor) {
   return render_text_->SetSelection(cursor);
 }
 
+bool TextfieldModel::MoveCursorTo(size_t pos) {
+  return MoveCursorTo(gfx::SelectionModel(pos, gfx::CURSOR_FORWARD));
+}
+
 bool TextfieldModel::MoveCursorTo(const gfx::Point& point, bool select) {
   if (HasCompositionText())
     ConfirmCompositionText();
