@@ -167,13 +167,16 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       ui::AXNodeData** previous_on_line_node);
   float GetDeviceScaleFactor() const;
   content::RenderAccessibility* GetRenderAccessibility();
-  gfx::Transform* MakeTransformFromViewInfo();
+  std::unique_ptr<gfx::Transform> MakeTransformFromViewInfo() const;
   void AddWordStartsAndEnds(ui::AXNodeData* inline_text_box);
 
   ui::AXTreeData tree_data_;
   ui::AXTree tree_;
-  content::RendererPpapiHost* host_;
-  PP_Instance instance_;
+
+  // Unowned. Must outlive |this|.
+  content::RendererPpapiHost* const host_;
+
+  const PP_Instance instance_;
   // |zoom_| signifies the zoom level set in for the browser content.
   // |scale_| signifies the scale level set by user. Scale is applied
   // by the OS while zoom is applied by the application. Higher scale

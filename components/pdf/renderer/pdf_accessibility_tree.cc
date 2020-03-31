@@ -2,13 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "components/pdf/renderer/pdf_accessibility_tree.h"
+
 #include <algorithm>
+#include <utility>
 
 #include "base/i18n/break_iterator.h"
 #include "base/memory/ptr_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversion_utils.h"
-#include "components/pdf/renderer/pdf_accessibility_tree.h"
 #include "components/pdf/renderer/pdf_ax_action_target.h"
 #include "components/strings/grit/components_strings.h"
 #include "content/public/renderer/pepper_plugin_instance.h"
@@ -362,8 +364,7 @@ void PdfAccessibilityTree::SetAccessibilityViewportInfo(
   if (render_accessibility && tree_.size() > 1) {
     ui::AXNode* root = tree_.root();
     ui::AXNodeData root_data = root->data();
-    root_data.relative_bounds.transform =
-        base::WrapUnique(MakeTransformFromViewInfo());
+    root_data.relative_bounds.transform = MakeTransformFromViewInfo();
     root->SetData(root_data);
     UpdateAXTreeDataFromSelection();
     render_accessibility->OnPluginRootNodeUpdated();
@@ -691,8 +692,7 @@ void PdfAccessibilityTree::AddRemainingAnnotations(
 }
 
 void PdfAccessibilityTree::Finish() {
-  doc_node_->relative_bounds.transform =
-      base::WrapUnique(MakeTransformFromViewInfo());
+  doc_node_->relative_bounds.transform = MakeTransformFromViewInfo();
 
   ui::AXTreeUpdate update;
   update.root_id = doc_node_->id;
@@ -813,19 +813,20 @@ ui::AXNodeData* PdfAccessibilityTree::CreateNode(
   content::RenderAccessibility* render_accessibility = GetRenderAccessibility();
   DCHECK(render_accessibility);
 
-  ui::AXNodeData* node = new ui::AXNodeData();
+  auto node = std::make_unique<ui::AXNodeData>();
   node->id = render_accessibility->GenerateAXID();
   node->role = role;
   node->SetRestriction(restriction);
 
   // All nodes other than the first one have coordinates relative to
   // the first node.
-  if (nodes_.size() > 0)
+  if (!nodes_.empty())
     node->relative_bounds.offset_container_id = nodes_[0]->id;
 
-  nodes_.push_back(base::WrapUnique(node));
+  ui::AXNodeData* node_ptr = node.get();
+  nodes_.push_back(std::move(node));
 
-  return node;
+  return node_ptr;
 }
 
 ui::AXNodeData* PdfAccessibilityTree::CreateParagraphNode(
@@ -1057,10 +1058,11 @@ content::RenderAccessibility* PdfAccessibilityTree::GetRenderAccessibility() {
   return render_accessibility;
 }
 
-gfx::Transform* PdfAccessibilityTree::MakeTransformFromViewInfo() {
+std::unique_ptr<gfx::Transform>
+PdfAccessibilityTree::MakeTransformFromViewInfo() const {
   double applicable_scale_factor =
       content::RenderThread::Get()->IsUseZoomForDSF() ? scale_ : 1;
-  gfx::Transform* transform = new gfx::Transform();
+  auto transform = std::make_unique<gfx::Transform>();
   // |scroll_| represents the x offset from which PDF content starts. It is the
   // width of the PDF toolbar in pixels. Size of PDF toolbar does not change
   // with zoom.
