@@ -265,6 +265,7 @@ jumbo_source_set("internal") {
         "policy_loader_ios.mm",
       ]
       configs += [ "//build/config/compiler:enable_arc" ]
+      frameworks += [ "Foundation.framework" ]
     }
   }
 }
@@ -351,6 +352,15 @@ source_set("common_constants") {
     "policy_switches.h",
     "policy_types.h",
   ]
+
+  if (is_ios) {
+    sources += [
+      "policy_loader_ios_constants.h",
+      "policy_loader_ios_constants.mm",
+    ]
+    configs += [ "//build/config/compiler:enable_arc" ]
+    frameworks = [ "Foundation.framework" ]
+  }
 }
 
 source_set("unit_tests") {
@@ -432,6 +442,7 @@ source_set("unit_tests") {
   }
 
   deps = [
+    ":common_constants",
     ":test_support",
     "//base",
     "//base/test:test_support",

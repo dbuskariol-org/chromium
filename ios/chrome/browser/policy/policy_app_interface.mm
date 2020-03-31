@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/policy/policy_egtest_app_interface.h"
+#import "ios/chrome/browser/policy/policy_app_interface.h"
 
 #include "base/json/json_string_value_serializer.h"
 #include "base/strings/sys_string_conversions.h"
@@ -42,7 +42,7 @@ NSString* SerializedValue(const base::Value* value) {
 
 }
 
-@implementation PolicyEGTestAppInterface
+@implementation PolicyAppInterface
 
 + (NSString*)valueForPlatformPolicy:(NSString*)policyKey {
   const std::string key = base::SysNSStringToUTF8(policyKey);
