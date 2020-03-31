@@ -13,6 +13,8 @@ class Browser;
 // The accessibility identifier of the privacy settings collection view.
 extern NSString* const kPrivacyTableViewId;
 
+@protocol PrivacyNavigationCommands;
+
 // Delegate for presentation events related to
 // PrivacyTableViewController.
 @protocol PrivacyTableViewControllerPresentationDelegate
@@ -33,6 +35,9 @@ extern NSString* const kPrivacyTableViewId;
 - (instancetype)initWithBrowser:(Browser*)browser NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
+
+// Handler used to navigate inside the privacy.
+@property(nonatomic, weak) id<PrivacyNavigationCommands> handler;
 
 @end
 

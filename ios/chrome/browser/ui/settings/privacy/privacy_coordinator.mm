@@ -5,7 +5,11 @@
 #import "ios/chrome/browser/ui/settings/privacy/privacy_coordinator.h"
 
 #include "ios/chrome/browser/main/browser.h"
+#import "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/commands/command_dispatcher.h"
+#import "ios/chrome/browser/ui/settings/clear_browsing_data/clear_browsing_data_table_view_controller.h"
+#import "ios/chrome/browser/ui/settings/privacy/handoff_table_view_controller.h"
+#import "ios/chrome/browser/ui/settings/privacy/privacy_navigation_commands.h"
 #import "ios/chrome/browser/ui/settings/privacy/privacy_table_view_controller.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -13,8 +17,10 @@
 #endif
 
 @interface PrivacyCoordinator () <
+    PrivacyNavigationCommands,
     PrivacyTableViewControllerPresentationDelegate>
 
+@property(nonatomic, strong) CommandDispatcher* dispatcher;
 @property(nonatomic, strong) PrivacyTableViewController* viewController;
 
 @end
@@ -35,10 +41,12 @@
 #pragma mark - ChromeCoordinator
 
 - (void)start {
+  self.dispatcher = self.browser->GetCommandDispatcher();
   self.viewController =
       [[PrivacyTableViewController alloc] initWithBrowser:self.browser];
 
   DCHECK(self.baseNavigationController);
+  self.viewController.handler = self;
   [self.baseNavigationController pushViewController:self.viewController
                                            animated:YES];
   self.viewController.presentationDelegate = self;
@@ -57,6 +65,26 @@
     (PrivacyTableViewController*)controller {
   DCHECK_EQ(self.viewController, controller);
   [self.delegate privacyCoordinatorViewControllerWasRemoved:self];
+}
+
+#pragma mark - PrivacyNavigationCommands
+
+- (void)showHandoff {
+  HandoffTableViewController* viewController =
+      [[HandoffTableViewController alloc]
+          initWithBrowserState:self.browserState];
+  viewController.dispatcher = self.viewController.dispatcher;
+  [self.baseNavigationController pushViewController:viewController
+                                           animated:YES];
+}
+
+- (void)showClearBrowsingData {
+  ClearBrowsingDataTableViewController* viewController =
+      [[ClearBrowsingDataTableViewController alloc]
+          initWithBrowser:self.browser];
+  viewController.dispatcher = self.viewController.dispatcher;
+  [self.baseNavigationController pushViewController:viewController
+                                           animated:YES];
 }
 
 @end

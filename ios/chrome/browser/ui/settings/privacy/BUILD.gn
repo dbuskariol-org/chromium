@@ -9,6 +9,7 @@ source_set("privacy") {
     "handoff_table_view_controller.mm",
     "privacy_coordinator.h",
     "privacy_coordinator.mm",
+    "privacy_navigation_commands.h",
     "privacy_table_view_controller.h",
     "privacy_table_view_controller.mm",
   ]
