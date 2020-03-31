@@ -67393,6 +67393,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VideoFrameColorSpaceUMA">
+  <obsolete>
+    Removed 03/2020 in https://crbug.com/1053032.
+  </obsolete>
   <int value="0" label="Unknown"/>
   <int value="1" label="UnknownRGB"/>
   <int value="2" label="UnknownHDR"/>
