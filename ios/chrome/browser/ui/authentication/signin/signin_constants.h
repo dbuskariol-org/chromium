@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_AUTHENTICATION_SIGNIN_SIGNIN_ENUMS_H_
-#define IOS_CHROME_BROWSER_UI_AUTHENTICATION_SIGNIN_SIGNIN_ENUMS_H_
+#ifndef IOS_CHROME_BROWSER_UI_AUTHENTICATION_SIGNIN_SIGNIN_CONSTANTS_H_
+#define IOS_CHROME_BROWSER_UI_AUTHENTICATION_SIGNIN_SIGNIN_CONSTANTS_H_
 
 #import <Foundation/Foundation.h>
 
@@ -28,4 +28,7 @@ typedef NS_ENUM(NSUInteger, SigninCoordinatorInterruptAction) {
   SigninCoordinatorInterruptActionDismissWithAnimation,
 };
 
-#endif  // IOS_CHROME_BROWSER_UI_AUTHENTICATION_SIGNIN_SIGNIN_ENUMS_H_
+// Name of notification sent when the user has attempted a sign-in.
+extern NSString* const kUserSigninAttemptedNotification;
+
+#endif  // IOS_CHROME_BROWSER_UI_AUTHENTICATION_SIGNIN_SIGNIN_CONSTANTS_H_
