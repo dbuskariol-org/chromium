@@ -137,6 +137,14 @@ bool StandardManagementPolicyProvider::UserMayLoad(
   if (installation_mode == ExtensionManagement::INSTALLATION_BLOCKED ||
       installation_mode == ExtensionManagement::INSTALLATION_REMOVED) {
 #if BUILDFLAG(ENABLE_SUPERVISED_USERS)
+    if (base::FeatureList::IsEnabled(
+            supervised_users::kSupervisedUserAllowlistExtensionInstall) &&
+        settings_->is_child() && settings_->BlacklistedByDefault() &&
+        extension->is_theme()) {
+      // Themes should always be allowed, to maintain current functionality that
+      // supervised users already possess.
+      return true;
+    }
     RecordAllowlistExtensionUmaMetrics(
         UmaExtensionStateAllowlist::kAllowlistMiss, extension);
 #endif  // BUILDFLAG(ENABLE_SUPERVISED_USERS)
