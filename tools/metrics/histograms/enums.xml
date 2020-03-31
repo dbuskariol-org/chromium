@@ -43975,6 +43975,10 @@ Called by update_use_counter_css.py.-->
 </enum>
 
 <enum name="MobileFreLinkTappedStatus">
+  <obsolete>
+    Removed 04/2020 because the Privacy Notice is removed from FRE. (See
+    crbug.com/1065912)
+  </obsolete>
   <int value="0" label="Link successfully loaded."/>
   <int value="1" label="Link failed to load."/>
   <int value="2" label="Link load did not complete."/>
