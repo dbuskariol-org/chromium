@@ -1737,6 +1737,8 @@ jumbo_source_set("browser") {
     "service_worker/service_worker_single_script_update_checker.h",
     "service_worker/service_worker_storage.cc",
     "service_worker/service_worker_storage.h",
+    "service_worker/service_worker_storage_control_impl.cc",
+    "service_worker/service_worker_storage_control_impl.h",
     "service_worker/service_worker_type_converters.cc",
     "service_worker/service_worker_type_converters.h",
     "service_worker/service_worker_unregister_job.cc",
