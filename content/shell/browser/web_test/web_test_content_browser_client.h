@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include "build/build_config.h"
 #include "content/public/common/client_hints.mojom.h"
 #include "content/shell/browser/shell_content_browser_client.h"
 #include "content/shell/common/blink_test.mojom-forward.h"
@@ -101,8 +102,6 @@ class WebTestContentBrowserClient : public ShellContentBrowserClient {
   content::TtsControllerDelegate* GetTtsControllerDelegate() override;
   content::TtsPlatform* GetTtsPlatform() override;
   bool CanEnterFullscreenWithoutUserActivation() override;
-
-  // ShellContentBrowserClient overrides.
   std::unique_ptr<LoginDelegate> CreateLoginDelegate(
       const net::AuthChallengeInfo& auth_info,
       content::WebContents* web_contents,
@@ -112,6 +111,10 @@ class WebTestContentBrowserClient : public ShellContentBrowserClient {
       scoped_refptr<net::HttpResponseHeaders> response_headers,
       bool first_auth_attempt,
       LoginAuthRequiredCallback auth_required_callback) override;
+#if defined(OS_WIN)
+  bool PreSpawnRenderer(sandbox::TargetPolicy* policy,
+                        RendererSpawnFlags flags) override;
+#endif
 
  private:
   // ShellContentBrowserClient overrides.

@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/shell/app/blink_test_platform_support.h"
+#include "content/shell/browser/web_test/web_test_browser_main_platform_support.h"
 
-#include <windows.h>
 #include <stddef.h>
+#include <windows.h>
 #include <iostream>
 #include <list>
 #include <string>
@@ -40,7 +40,7 @@ void SetupFonts() {
 
 }  // namespace
 
-bool CheckLayoutSystemDeps() {
+bool WebTestBrowserCheckLayoutSystemDeps() {
   std::list<std::string> errors;
 
   // This metric will be 17 when font size is "Normal".
@@ -50,11 +50,11 @@ bool CheckLayoutSystemDeps() {
 
   NONCLIENTMETRICS metrics = {0};
   metrics.cbSize = sizeof(NONCLIENTMETRICS);
-  bool success = !!::SystemParametersInfo(
-      SPI_GETNONCLIENTMETRICS, metrics.cbSize, &metrics, 0);
+  bool success = !!::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,
+                                          metrics.cbSize, &metrics, 0);
   PCHECK(success);
-  LOGFONTW* system_fonts[] =
-      {&metrics.lfStatusFont, &metrics.lfMenuFont, &metrics.lfSmCaptionFont};
+  LOGFONTW* system_fonts[] = {&metrics.lfStatusFont, &metrics.lfMenuFont,
+                              &metrics.lfSmCaptionFont};
   const wchar_t required_font[] = L"Segoe UI";
   int required_font_size = -12;
   for (size_t i = 0; i < base::size(system_fonts); ++i) {
@@ -70,7 +70,7 @@ bool CheckLayoutSystemDeps() {
   return errors.empty();
 }
 
-void BlinkTestPlatformInitialize() {
+void WebTestBrowserPlatformInitialize() {
   SetupFonts();
 }
 
