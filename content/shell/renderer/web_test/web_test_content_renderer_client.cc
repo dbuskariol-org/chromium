@@ -27,7 +27,6 @@
 #include "content/shell/renderer/web_test/web_test_render_frame_observer.h"
 #include "content/shell/renderer/web_test/web_test_render_thread_observer.h"
 #include "content/shell/test_runner/web_frame_test_proxy.h"
-#include "content/shell/test_runner/web_test_interfaces.h"
 #include "content/shell/test_runner/web_test_runner.h"
 #include "media/base/audio_latency.h"
 #include "media/base/mime_util.h"
