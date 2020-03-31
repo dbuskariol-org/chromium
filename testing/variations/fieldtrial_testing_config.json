@@ -4134,6 +4134,21 @@
             ]
         }
     ],
+    "PlayStoreAppSearch": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "PlayStoreAppSearch",
+                    "enable_features": [
+                        "EnablePlayStoreAppSearch"
+                    ]
+                }
+            ]
+        }
+    ],
     "PolicyAtomicGroup": [
         {
             "platforms": [
