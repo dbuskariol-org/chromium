@@ -840,8 +840,11 @@ void Animation::setEffect(AnimationEffect* new_effect) {
   NotifyProbe();
 
   // The effect is no longer associated with CSS properties.
-  if (new_effect)
+  if (new_effect) {
     new_effect->SetIgnoreCssTimingProperties();
+    if (KeyframeEffect* keyframe_effect = DynamicTo<KeyframeEffect>(new_effect))
+      keyframe_effect->SetIgnoreCSSKeyframes();
+  }
 
   // The remaining steps are for handling CSS animation and transition events.
   // Both use an event delegate to dispatch events, which must be reattached to
