@@ -103,7 +103,7 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
   void FindNodeOffset(uint32_t page_index,
                       uint32_t page_char_index,
                       int32_t* out_node_id,
-                      int32_t* out_node_char_index);
+                      int32_t* out_node_char_index) const;
 
   // Called after the data for all pages in the PDF have been received.
   // Finishes assembling a complete accessibility tree and grafts it
@@ -126,16 +126,6 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       base::span<const ppapi::PdfAccessibilityTextFieldInfo> text_fields,
       ui::AXNodeData* para_node);
 
-  std::string GetTextRunCharsAsUTF8(
-      const ppapi::PdfAccessibilityTextRunInfo& text_run,
-      const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
-      int char_index);
-  std::vector<int32_t> GetTextRunCharOffsets(
-      const ppapi::PdfAccessibilityTextRunInfo& text_run,
-      const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
-      int char_index);
-  gfx::Vector2dF ToVector2dF(const PP_Point& p);
-  gfx::RectF ToRectF(const PP_Rect& r);
   ui::AXNodeData* CreateNode(ax::mojom::Role role,
                              ax::mojom::Restriction restriction);
   ui::AXNodeData* CreateParagraphNode(float font_size,
@@ -165,7 +155,6 @@ class PdfAccessibilityTree : public content::PluginAXTreeSource {
       const std::vector<uint32_t>& text_run_start_indices,
       ui::AXNodeData* ax_node,
       ui::AXNodeData** previous_on_line_node);
-  float GetDeviceScaleFactor() const;
   content::RenderAccessibility* GetRenderAccessibility();
   std::unique_ptr<gfx::Transform> MakeTransformFromViewInfo() const;
   void AddWordStartsAndEnds(ui::AXNodeData* inline_text_box);

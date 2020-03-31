@@ -47,8 +47,16 @@ const float kHeadingFontSizeRatio = 1.2f;
 // page for that line spacing to be considered a paragraph break.
 const float kParagraphLineSpacingRatio = 1.2f;
 
-gfx::RectF ToGfxRectF(const PP_FloatRect& r) {
+gfx::RectF PpFloatRectToGfxRectF(const PP_FloatRect& r) {
   return gfx::RectF(r.point.x, r.point.y, r.size.width, r.size.height);
+}
+
+gfx::RectF PPRectToGfxRectF(const PP_Rect& r) {
+  return gfx::RectF(r.point.x, r.point.y, r.size.width, r.size.height);
+}
+
+gfx::Vector2dF PpPointToVector2dF(const PP_Point& p) {
+  return gfx::Vector2dF(p.x, p.y);
 }
 
 // This class is used as part of our heuristic to determine which text runs live
@@ -236,6 +244,31 @@ ui::AXNode* GetStaticTextNodeFromNode(ui::AXNode* node) {
   return nullptr;
 }
 
+std::string GetTextRunCharsAsUTF8(
+    const ppapi::PdfAccessibilityTextRunInfo& text_run,
+    const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
+    int char_index) {
+  std::string chars_utf8;
+  for (uint32_t i = 0; i < text_run.len; ++i) {
+    base::WriteUnicodeCharacter(chars[char_index + i].unicode_character,
+                                &chars_utf8);
+  }
+  return chars_utf8;
+}
+
+std::vector<int32_t> GetTextRunCharOffsets(
+    const ppapi::PdfAccessibilityTextRunInfo& text_run,
+    const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
+    int char_index) {
+  std::vector<int32_t> char_offsets(text_run.len);
+  double offset = 0.0;
+  for (uint32_t i = 0; i < text_run.len; ++i) {
+    offset += chars[char_index + i].char_width;
+    char_offsets[i] = floor(offset);
+  }
+  return char_offsets;
+}
+
 template <typename T>
 bool CompareTextRuns(const T& a, const T& b) {
   return a.text_run_index < b.text_run_index;
@@ -352,8 +385,8 @@ void PdfAccessibilityTree::SetAccessibilityViewportInfo(
   scale_ = viewport_info.scale;
   CHECK_GT(zoom_, 0);
   CHECK_GT(scale_, 0);
-  scroll_ = ToVector2dF(viewport_info.scroll);
-  offset_ = ToVector2dF(viewport_info.offset);
+  scroll_ = PpPointToVector2dF(viewport_info.scroll);
+  offset_ = PpPointToVector2dF(viewport_info.offset);
 
   selection_start_page_index_ = viewport_info.selection_start_page_index;
   selection_start_char_index_ = viewport_info.selection_start_char_index;
@@ -421,7 +454,7 @@ void PdfAccessibilityTree::SetAccessibilityPageInfo(
   page_node->AddBoolAttribute(ax::mojom::BoolAttribute::kIsPageBreakingObject,
                               true);
 
-  gfx::RectF page_bounds = ToRectF(page_info.bounds);
+  gfx::RectF page_bounds = PPRectToGfxRectF(page_info.bounds);
   page_node->relative_bounds.bounds = page_bounds;
   doc_node_->relative_bounds.bounds.Union(page_node->relative_bounds.bounds);
   doc_node_->child_ids.push_back(page_node->id);
@@ -728,7 +761,7 @@ void PdfAccessibilityTree::UpdateAXTreeDataFromSelection() {
 void PdfAccessibilityTree::FindNodeOffset(uint32_t page_index,
                                           uint32_t page_char_index,
                                           int32_t* out_node_id,
-                                          int32_t* out_node_char_index) {
+                                          int32_t* out_node_char_index) const {
   *out_node_id = -1;
   *out_node_char_index = 0;
   ui::AXNode* root = tree_.root();
@@ -772,39 +805,6 @@ bool PdfAccessibilityTree::FindCharacterOffset(
   page_char_index->char_index = iter->second.char_index + char_offset_in_node;
   page_char_index->page_index = iter->second.page_index;
   return true;
-}
-
-std::string PdfAccessibilityTree::GetTextRunCharsAsUTF8(
-    const ppapi::PdfAccessibilityTextRunInfo& text_run,
-    const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
-    int char_index) {
-  std::string chars_utf8;
-  for (uint32_t i = 0; i < text_run.len; ++i) {
-    base::WriteUnicodeCharacter(chars[char_index + i].unicode_character,
-                                &chars_utf8);
-  }
-  return chars_utf8;
-}
-
-std::vector<int32_t> PdfAccessibilityTree::GetTextRunCharOffsets(
-    const ppapi::PdfAccessibilityTextRunInfo& text_run,
-    const std::vector<PP_PrivateAccessibilityCharInfo>& chars,
-    int char_index) {
-  std::vector<int32_t> char_offsets(text_run.len);
-  double offset = 0.0;
-  for (uint32_t j = 0; j < text_run.len; ++j) {
-    offset += chars[char_index + j].char_width;
-    char_offsets[j] = floor(offset);
-  }
-  return char_offsets;
-}
-
-gfx::Vector2dF PdfAccessibilityTree::ToVector2dF(const PP_Point& p) {
-  return gfx::Vector2dF(p.x, p.y);
-}
-
-gfx::RectF PdfAccessibilityTree::ToRectF(const PP_Rect& r) {
-  return gfx::RectF(r.point.x, r.point.y, r.size.width, r.size.height);
 }
 
 ui::AXNodeData* PdfAccessibilityTree::CreateNode(
@@ -890,7 +890,7 @@ ui::AXNodeData* PdfAccessibilityTree::CreateInlineTextBoxNode(
   }
 
   inline_text_box_node->relative_bounds.bounds =
-      ToGfxRectF(text_run.bounds) + page_bounds.OffsetFromOrigin();
+      PpFloatRectToGfxRectF(text_run.bounds) + page_bounds.OffsetFromOrigin();
   std::vector<int32_t> char_offsets =
       GetTextRunCharOffsets(text_run, chars, page_char_index.char_index);
   inline_text_box_node->AddIntListAttribute(
@@ -910,7 +910,7 @@ ui::AXNodeData* PdfAccessibilityTree::CreateLinkNode(
   link_node->AddStringAttribute(ax::mojom::StringAttribute::kUrl, link.url);
   link_node->AddStringAttribute(ax::mojom::StringAttribute::kName,
                                 std::string());
-  link_node->relative_bounds.bounds = ToGfxRectF(link.bounds);
+  link_node->relative_bounds.bounds = PpFloatRectToGfxRectF(link.bounds);
   node_id_to_annotation_info_.emplace(
       link_node->id, AnnotationInfo(page_index, link.index_in_page));
 
@@ -930,7 +930,7 @@ ui::AXNodeData* PdfAccessibilityTree::CreateImageNode(
     image_node->AddStringAttribute(ax::mojom::StringAttribute::kName,
                                    image.alt_text);
   }
-  image_node->relative_bounds.bounds = ToGfxRectF(image.bounds);
+  image_node->relative_bounds.bounds = PpFloatRectToGfxRectF(image.bounds);
   return image_node;
 }
 
@@ -945,7 +945,8 @@ ui::AXNodeData* PdfAccessibilityTree::CreateHighlightNode(
       l10n_util::GetStringUTF8(IDS_AX_ROLE_DESCRIPTION_PDF_HIGHLIGHT));
   highlight_node->AddStringAttribute(ax::mojom::StringAttribute::kName,
                                      std::string());
-  highlight_node->relative_bounds.bounds = ToGfxRectF(highlight.bounds);
+  highlight_node->relative_bounds.bounds =
+      PpFloatRectToGfxRectF(highlight.bounds);
   highlight_node->AddIntAttribute(ax::mojom::IntAttribute::kBackgroundColor,
                                   highlight.color);
 
@@ -971,7 +972,8 @@ ui::AXNodeData* PdfAccessibilityTree::CreateTextFieldNode(
     text_field_node->AddState(ax::mojom::State::kProtected);
   if (!text_field.is_read_only)
     text_field_node->AddState(ax::mojom::State::kEditable);
-  text_field_node->relative_bounds.bounds = ToGfxRectF(text_field.bounds);
+  text_field_node->relative_bounds.bounds =
+      PpFloatRectToGfxRectF(text_field.bounds);
   return text_field_node;
 }
 
@@ -1030,13 +1032,6 @@ void PdfAccessibilityTree::AddTextToAXNode(
   ax_node->AddStringAttribute(ax::mojom::StringAttribute::kName, ax_name);
   ax_static_text_node->AddStringAttribute(ax::mojom::StringAttribute::kName,
                                           ax_name);
-}
-
-float PdfAccessibilityTree::GetDeviceScaleFactor() const {
-  content::RenderFrame* render_frame =
-      host_->GetRenderFrameForInstance(instance_);
-  DCHECK(render_frame);
-  return render_frame->GetDeviceScaleFactor();
 }
 
 content::RenderAccessibility* PdfAccessibilityTree::GetRenderAccessibility() {
