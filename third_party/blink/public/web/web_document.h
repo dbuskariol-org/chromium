@@ -132,7 +132,7 @@ class WebDocument : public WebNode {
   BLINK_EXPORT void SetShowBeforeUnloadDialog(bool show_dialog);
 
   // See cc/paint/element_id.h for the definition of these id.
-  BLINK_EXPORT uint64_t GetVisualViewportScrollingElementId();
+  BLINK_EXPORT uint64_t GetVisualViewportScrollingElementIdForTesting();
 
 #if INSIDE_BLINK
   BLINK_EXPORT WebDocument(Document*);

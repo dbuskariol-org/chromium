@@ -238,7 +238,9 @@ TEST_F(RenderWidgetTest, CompositorIdHitTestAPIWithImplicitRootScroller) {
         height:50px; background:white;'>some more content</div>
       )HTML");
   // Hit sibling of a implicit root scroller node
-  EXPECT_EQ(GetMainFrame()->GetDocument().GetVisualViewportScrollingElementId(),
+  EXPECT_EQ(GetMainFrame()
+                ->GetDocument()
+                .GetVisualViewportScrollingElementIdForTesting(),
             widget()
                 ->GetHitTestResultAtPoint(GetCenterPointOfElement("white"))
                 .GetScrollableContainerId());

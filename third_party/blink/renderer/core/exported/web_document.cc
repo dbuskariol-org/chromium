@@ -276,7 +276,7 @@ void WebDocument::SetShowBeforeUnloadDialog(bool show_dialog) {
   doc->SetShowBeforeUnloadDialog(show_dialog);
 }
 
-uint64_t WebDocument::GetVisualViewportScrollingElementId() {
+uint64_t WebDocument::GetVisualViewportScrollingElementIdForTesting() {
   return blink::To<Document>(private_.Get())
       ->GetPage()
       ->GetVisualViewport()
