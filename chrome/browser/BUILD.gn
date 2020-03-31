@@ -3004,6 +3004,7 @@ jumbo_static_library("browser") {
       "//chrome/browser/notifications/scheduler/public",
       "//chrome/browser/offline_pages/prefetch/notifications",
       "//chrome/browser/optimization_guide/android:jni_headers",
+      "//chrome/browser/payments/android:jni_headers",
       "//chrome/browser/share",
       "//chrome/browser/upboarding",
       "//chrome/browser/updates",
