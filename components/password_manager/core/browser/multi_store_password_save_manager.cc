@@ -157,6 +157,8 @@ void MultiStorePasswordSaveManager::PermanentlyBlacklist(
           PasswordForm::Store::kAccountStore) {
     account_store_form_saver_->PermanentlyBlacklist(form_digest);
   } else {
+    // For users who aren't yet opted-in to the account storage, we store their
+    // blacklisted entries in the profile store.
     form_saver_->PermanentlyBlacklist(form_digest);
   }
 }
