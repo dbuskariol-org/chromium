@@ -666,6 +666,9 @@ extern const char kMarkHttpAsDangerous[];
 extern const char kMarkHttpAsWarning[];
 extern const char kMarkHttpAsWarningAndDangerousOnFormEdits[];
 
+extern const char kMediaHistoryName[];
+extern const char kMediaHistoryDescription[];
+
 extern const char kMediaInspectorLoggingName[];
 extern const char kMediaInspectorLoggingDescription[];
 

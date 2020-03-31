@@ -5169,6 +5169,10 @@ const FeatureEntry kFeatureEntries[] = {
          chrome::android::kAndroidPartnerCustomizationPhenotype)},
 #endif  // defined(OS_ANDROID)
 
+    {"media-history", flag_descriptions::kMediaHistoryName,
+     flag_descriptions::kMediaHistoryDescription, kOsAll,
+     FEATURE_VALUE_TYPE(media::kUseMediaHistoryStore)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
