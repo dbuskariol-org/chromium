@@ -286,6 +286,7 @@ void ContentBrowserClientImpl::OverrideWebkitPrefs(
       content::WebContents::FromRenderViewHost(render_view_host);
   TabImpl* tab = TabImpl::FromWebContents(web_contents);
   prefs->fullscreen_supported = tab && tab->fullscreen_delegate();
+  prefs->password_echo_enabled = tab && tab->GetPasswordEchoEnabled();
 }
 
 mojo::Remote<network::mojom::NetworkContext>
