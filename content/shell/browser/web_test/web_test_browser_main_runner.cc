@@ -111,6 +111,13 @@ void WebTestBrowserMainRunner::Initialize() {
 
   command_line.AppendSwitch(switches::kIgnoreCertificateErrors);
 
+  // Disable occlusion tracking. In a headless shell WebContents would always
+  // behave as if they were occluded, i.e. would not render frames and would
+  // not receive input events. For non-headless mode we do not want tests
+  // running in parallel to trigger occlusion tracking.
+  command_line.AppendSwitch(
+      switches::kDisableBackgroundingOccludedWindowsForTesting);
+
   // Always disable the unsandbox GPU process for DX12 and Vulkan Info
   // collection to avoid interference. This GPU process is launched 120
   // seconds after chrome starts.
