@@ -299,6 +299,9 @@ public class ToolbarManager implements ToolbarTabController, UrlFocusChangeListe
             /** The params used to control how the scrim behaves when shown for the omnibox. */
             private PropertyModel mScrimModel;
 
+            /** Whether the scrim was shown on focus. */
+            private boolean mScrimShown;
+
             /** The light color to use for the scrim on the NTP. */
             private int mLightScrimColor;
 
@@ -353,8 +356,10 @@ public class ToolbarManager implements ToolbarTabController, UrlFocusChangeListe
 
                 if (hasFocus && !showScrimAfterAnimationCompletes()) {
                     mScrimCoordinator.showScrim(mScrimModel);
-                } else if (!hasFocus) {
+                    mScrimShown = true;
+                } else if (!hasFocus && mScrimShown) {
                     mScrimCoordinator.hideScrim(true);
+                    mScrimShown = false;
                 }
             }
 
@@ -362,6 +367,7 @@ public class ToolbarManager implements ToolbarTabController, UrlFocusChangeListe
             public void onUrlAnimationFinished(boolean hasFocus) {
                 if (hasFocus && showScrimAfterAnimationCompletes()) {
                     mScrimCoordinator.showScrim(mScrimModel);
+                    mScrimShown = true;
                 }
             }
 
