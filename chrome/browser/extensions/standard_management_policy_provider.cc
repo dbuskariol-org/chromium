@@ -137,6 +137,12 @@ bool StandardManagementPolicyProvider::UserMayLoad(
   if (installation_mode == ExtensionManagement::INSTALLATION_BLOCKED ||
       installation_mode == ExtensionManagement::INSTALLATION_REMOVED) {
 #if BUILDFLAG(ENABLE_SUPERVISED_USERS)
+    if (IsSupervisedUserAllowlistExtensionInstallActive() &&
+        extension->is_theme()) {
+      // Themes should always be allowed, to maintain current functionality
+      // that supervised users already possess.
+      return true;
+    }
     RecordAllowlistExtensionUmaMetrics(
         UmaExtensionStateAllowlist::kAllowlistMiss, extension);
 #endif  // BUILDFLAG(ENABLE_SUPERVISED_USERS)
@@ -248,12 +254,17 @@ bool StandardManagementPolicyProvider::ReturnLoadError(
 }
 
 #if BUILDFLAG(ENABLE_SUPERVISED_USERS)
+bool StandardManagementPolicyProvider::
+    IsSupervisedUserAllowlistExtensionInstallActive() const {
+  return base::FeatureList::IsEnabled(
+             supervised_users::kSupervisedUserAllowlistExtensionInstall) &&
+         settings_->is_child() && settings_->BlacklistedByDefault();
+}
+
 void StandardManagementPolicyProvider::RecordAllowlistExtensionUmaMetrics(
     UmaExtensionStateAllowlist state,
     const Extension* extension) const {
-  if (base::FeatureList::IsEnabled(
-          supervised_users::kSupervisedUserAllowlistExtensionInstall) &&
-      settings_->IsChild() && settings_->BlacklistedByDefault()) {
+  if (IsSupervisedUserAllowlistExtensionInstallActive()) {
     // If extensions are blacklisted by default, then all extension installs
     // must go through the ExtensionInstallWhitelist. Record the whitelist hit
     // rate here.
