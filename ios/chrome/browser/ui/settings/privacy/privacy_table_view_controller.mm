@@ -113,6 +113,14 @@ const char kGoogleServicesSettingsURL[] = "settings://open_google_services";
   [self loadModel];
 }
 
+- (void)didMoveToParentViewController:(UIViewController*)parent {
+  [super didMoveToParentViewController:parent];
+  if (!parent) {
+    [self.presentationDelegate
+        privacyTableViewControllerViewControllerWasRemoved:self];
+  }
+}
+
 #pragma mark - ChromeTableViewController
 
 - (void)loadModel {
