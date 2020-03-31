@@ -44,6 +44,7 @@
 
 - (instancetype)initWithCoordinator:(BrowserCoordinator*)coordinator {
   if (self = [super init]) {
+    DCHECK(coordinator.browser);
     _coordinator = coordinator;
   }
   return self;
@@ -58,7 +59,7 @@
 }
 
 - (TabModel*)tabModel {
-  return self.coordinator.browser->GetTabModel();
+  return self.browser->GetTabModel();
 }
 
 - (Browser*)browser {
@@ -66,7 +67,7 @@
 }
 
 - (ChromeBrowserState*)browserState {
-  return self.coordinator.viewController.browserState;
+  return self.browser->GetBrowserState();
 }
 
 - (BOOL)userInteractionEnabled {
