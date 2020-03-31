@@ -425,9 +425,8 @@ class ProbingEnabledIsolatedPrerenderBrowserTest
  public:
   void SetFeatures() override {
     IsolatedPrerenderBrowserTest::SetFeatures();
-    scoped_feature_list_.InitAndEnableFeatureWithParameters(
-        features::kIsolatePrerendersMustProbeOrigin,
-        {{"probe_timeout_ms", "100"}});
+    scoped_feature_list_.InitAndEnableFeature(
+        features::kIsolatePrerendersMustProbeOrigin);
   }
 
  private:
