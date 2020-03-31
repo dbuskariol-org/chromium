@@ -198,7 +198,11 @@ class IsolatedPrerenderBrowserTest
   void MakeNavigationPrediction(const GURL& doc_url,
                                 const std::vector<GURL>& predicted_urls) {
     NavigationPredictorKeyedServiceFactory::GetForProfile(browser()->profile())
-        ->OnPredictionUpdated(GetWebContents(), doc_url, predicted_urls);
+        ->OnPredictionUpdated(
+            GetWebContents(), doc_url,
+            NavigationPredictorKeyedService::PredictionSource::
+                kAnchorElementsParsedFromWebPage,
+            predicted_urls);
   }
 
   std::unique_ptr<prerender::PrerenderHandle> StartPrerender(const GURL& url) {
