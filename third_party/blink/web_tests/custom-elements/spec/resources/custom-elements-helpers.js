@@ -97,8 +97,5 @@ function assert_reports_js(w, expected_error, func, description) {
     w.onerror = old_onerror;
   }
   assert_equals(errors.length, 1, 'only one error should have been reported');
-  assert_true(
-      typeof errors[0] === 'object' && errors[0] !== null,
-      'got something other than an error');
-  assert_equals(expected_error.name, errors[0].name);
+  assert_throws_js(expected_error, () => { throw errors[0]; });
 }

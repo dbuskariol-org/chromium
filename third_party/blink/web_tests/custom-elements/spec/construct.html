@@ -146,7 +146,7 @@ test_with_window((w) => {
   }
   w.customElements.define('a-a', A);
   let d = w.document.createElement('div');
-  assert_reports_js(window, TypeError, () => {
+  assert_reports_js(window, w.TypeError, () => {
     d.innerHTML = '<a-a>';
   }, 'Creating an element that is already constructed marker should report ' +
      'InvalidStateError');
