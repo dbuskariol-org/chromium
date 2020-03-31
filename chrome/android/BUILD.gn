@@ -339,6 +339,7 @@ android_library("chrome_java") {
     "//components/external_intents/android:java",
     "//components/feature_engagement:feature_engagement_java",
     "//components/feed/core/proto:proto_java",
+    "//components/feed/core/proto:proto_java_v2",
     "//components/find_in_page/android:java",
     "//components/gcm_driver/android:gcm_driver_java",
     "//components/gcm_driver/instance_id/android:instance_id_driver_java",
@@ -2978,6 +2979,7 @@ generate_jni("chrome_jni_headers") {
       "feed/core/java/src/org/chromium/chrome/browser/feed/FeedOfflineBridge.java",
       "feed/core/java/src/org/chromium/chrome/browser/feed/FeedSchedulerBridge.java",
       "feed/core/java/src/org/chromium/chrome/browser/feed/v2/FeedServiceBridge.java",
+      "feed/core/java/src/org/chromium/chrome/browser/feed/v2/FeedStreamSurface.java",
     ]
   }
 
