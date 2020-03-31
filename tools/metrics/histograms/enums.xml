@@ -27922,6 +27922,9 @@ Called by update_feature_policy_enum.py.-->
 </enum>
 
 <enum name="FFmpegColorRanges">
+  <obsolete>
+    Removed 03/2020 in https://crbug.com/1053030.
+  </obsolete>
   <int value="0" label="UNSPECIFIED"/>
   <int value="1" label="MPEG"/>
   <int value="2" label="JPEG"/>
