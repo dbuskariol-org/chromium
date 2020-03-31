@@ -28,8 +28,6 @@ class SystemHealthInfiniteScroll(system_health.MobileCommonSystemHealth):
                     self).CreateCoreTimelineBasedMeasurementOptions()
     options.ExtendTraceCategoryFilter(['benchmark', 'cc', 'input'])
     options.SetTimelineBasedMetrics([
-        'tbmv3:scroll_jank_metric',
-        'tbmv3:janky_scroll_periods',
         'tbmv3:janky_time_per_scroll_processing_time',
     ])
     return options
