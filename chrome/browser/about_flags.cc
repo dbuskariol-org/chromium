@@ -3265,11 +3265,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription,
      kOsAll, FEATURE_VALUE_TYPE(omnibox::kHideSteadyStateUrlPathQueryAndRef)},
 
-    {"omnibox-ui-one-click-unelide",
-     flag_descriptions::kOmniboxUIOneClickUnelideName,
-     flag_descriptions::kOmniboxUIOneClickUnelideDescription, kOsAll,
-     FEATURE_VALUE_TYPE(omnibox::kOneClickUnelide)},
-
     {"omnibox-ui-max-autocomplete-matches",
      flag_descriptions::kOmniboxUIMaxAutocompleteMatchesName,
      flag_descriptions::kOmniboxUIMaxAutocompleteMatchesDescription,

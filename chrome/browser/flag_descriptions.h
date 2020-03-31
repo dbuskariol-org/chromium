@@ -778,9 +778,6 @@ extern const char kOmniboxUIHideSteadyStateUrlTrivialSubdomainsDescription[];
 extern const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefName[];
 extern const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription[];
 
-extern const char kOmniboxUIOneClickUnelideName[];
-extern const char kOmniboxUIOneClickUnelideDescription[];
-
 extern const char kOmniboxUIMaxAutocompleteMatchesName[];
 extern const char kOmniboxUIMaxAutocompleteMatchesDescription[];
 

@@ -50,10 +50,6 @@ const base::Feature kHideSteadyStateUrlPathQueryAndRef {
 #endif
 };
 
-// Feature used to undo all omnibox elisions on a single click or focus action.
-const base::Feature kOneClickUnelide{"OmniboxOneClickUnelide",
-                                     base::FEATURE_DISABLED_BY_DEFAULT};
-
 // Feature used to enable local entity suggestions. Similar to rich entities but
 // but location specific. E.g., typing 'starbucks near' could display the local
 // entity suggestion 'starbucks near disneyland \n starbucks * Anaheim, CA'.

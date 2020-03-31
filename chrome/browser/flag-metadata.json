@@ -3149,11 +3149,6 @@
     "expiry_milestone": 85
   },
   {
-    "name": "omnibox-ui-one-click-unelide",
-    "owners": [ "tommycli", "chrome-omnibox-team@google.com" ],
-    "expiry_milestone": 76
-  },
-  {
     "name": "omnibox-ui-swap-title-and-url",
     "owners": [ "tommycli", "chrome-omnibox-team@google.com" ],
     "expiry_milestone": 76

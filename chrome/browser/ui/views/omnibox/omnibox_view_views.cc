@@ -359,11 +359,8 @@ void OmniboxViewViews::Update() {
 
     // Only select all when we have focus.  If we don't have focus, selecting
     // all is unnecessary since the selection will change on regaining focus.
-    if (model()->has_focus()) {
-      // Treat this select-all as resulting from a user gesture, since most
-      // URL updates result from a user gesture or navigation.
-      SelectAllForUserGesture();
-    }
+    if (model()->has_focus())
+      SelectAll(true);
   } else {
     // If the text is unchanged, we still need to re-emphasize the text, as the
     // security state may be different from before the Update.
@@ -908,17 +905,6 @@ void OmniboxViewViews::SetAccessibilityLabel(const base::string16& display_text,
 #endif
 }
 
-void OmniboxViewViews::SelectAllForUserGesture() {
-  if (base::FeatureList::IsEnabled(omnibox::kOneClickUnelide) &&
-      UnapplySteadyStateElisions(UnelisionGesture::OTHER)) {
-    TextChanged();
-  }
-
-  // Select all in the reverse direction so as not to scroll the caret
-  // into view and shift the contents jarringly.
-  SelectAll(true);
-}
-
 bool OmniboxViewViews::UnapplySteadyStateElisions(UnelisionGesture gesture) {
   // If everything is selected, the user likely does not intend to edit the URL.
   // But if the Home key is pressed, the user probably does want to interact
@@ -1219,7 +1205,9 @@ void OmniboxViewViews::OnMouseReleased(const ui::MouseEvent& event) {
   // When the user has clicked and released to give us focus, select all.
   if ((event.IsOnlyLeftMouseButton() || event.IsOnlyRightMouseButton()) &&
       select_all_on_mouse_release_) {
-    SelectAllForUserGesture();
+    // Select all in the reverse direction so as not to scroll the caret
+    // into view and shift the contents jarringly.
+    SelectAll(true);
   }
   select_all_on_mouse_release_ = false;
 
@@ -1250,7 +1238,9 @@ void OmniboxViewViews::OnGestureEvent(ui::GestureEvent* event) {
   views::Textfield::OnGestureEvent(event);
 
   if (select_all_on_gesture_tap_ && event->type() == ui::ET_GESTURE_TAP) {
-    SelectAllForUserGesture();
+    // Select all in the reverse direction so as not to scroll the caret
+    // into view and shift the contents jarringly.
+    SelectAll(true);
   }
 
   if (event->type() == ui::ET_GESTURE_TAP ||
@@ -1783,7 +1773,7 @@ bool OmniboxViewViews::HandleKeyEvent(views::Textfield* textfield,
     // begins to type without releasing the mouse button, the subsequent release
     // will delete any newly typed characters due to the SelectAll happening on
     // mouse-up. If we detect this state, do the select-all immediately.
-    SelectAllForUserGesture();
+    SelectAll(true);
     select_all_on_mouse_release_ = false;
   }
 
