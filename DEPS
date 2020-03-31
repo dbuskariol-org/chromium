@@ -1447,6 +1447,16 @@ deps = {
   'src/third_party/webgpu-cts/src':
     Var('chromium_git') + '/external/github.com/gpuweb/cts.git' + '@' + '84ee597cdeae08bb26e578fc66a35bcf35f633f4',
 
+  'src/third_party/blink/web_tests/wpt_internal/webgpu/third_party/glslang_js': {
+    'packages': [
+      {
+        'package': 'chromium/third_party/glslang_js',
+        'version': 'IB6pL73YKdgoiK7Ea7U5Uw_XjzXGZJCB0I3LhaiYY-sC',
+      },
+    ],
+    'dep_type': 'cipd',
+  },
+
   'src/third_party/webrtc':
     Var('webrtc_git') + '/src.git' + '@' + '4b425aeef9cded872488aea32aa5d711be43b935',
 
