@@ -149,8 +149,10 @@ class CC_EXPORT CompositorFrameReporter {
 
   void OnFinishImplFrame(base::TimeTicks timestamp);
   void OnAbortBeginMainFrame(base::TimeTicks timestamp);
+  void OnDidNotProduceFrame();
   bool did_finish_impl_frame() const { return did_finish_impl_frame_; }
   bool did_abort_main_frame() const { return did_abort_main_frame_; }
+  bool did_not_produce_frame() const { return did_not_produce_frame_; }
   base::TimeTicks impl_frame_finish_time() const {
     return impl_frame_finish_time_;
   }
@@ -229,6 +231,8 @@ class CC_EXPORT CompositorFrameReporter {
   bool did_finish_impl_frame_ = false;
   // Indicates if main frame is aborted after begin.
   bool did_abort_main_frame_ = false;
+  // Flag indicating if DidNotProduceFrame is called for this reporter
+  bool did_not_produce_frame_ = false;
   // The time that work on Impl frame is finished. It's only valid if the
   // reporter is in a stage other than begin impl frame.
   base::TimeTicks impl_frame_finish_time_;

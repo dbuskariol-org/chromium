@@ -203,8 +203,14 @@ void CompositorFrameReportingController::DidNotProduceFrame(
     const viz::BeginFrameId& id) {
   for (auto& stage_reporter : reporters_) {
     if (stage_reporter && stage_reporter->frame_id_ == id) {
-      stage_reporter->TerminateFrame(
-          FrameTerminationStatus::kDidNotProduceFrame, Now());
+      // The reporter will be flagged and terminated when replaced by another
+      // reporter. The reporter is not terminated immediately here because it
+      // can still end up producing a frame afterwards. For example, if the
+      // compositor does not have any updates, and the main-thread takes too
+      // long, then DidNotProduceFrame() is called for the reporter in the
+      // BeginMain stage, but the main-thread can make updates, which can be
+      // submitted with the next frame.
+      stage_reporter->OnDidNotProduceFrame();
       return;
     }
   }
@@ -262,8 +268,12 @@ void CompositorFrameReportingController::AdvanceReporterStage(
     PipelineStage start,
     PipelineStage target) {
   if (reporters_[target]) {
-    reporters_[target]->TerminateFrame(
-        FrameTerminationStatus::kReplacedByNewReporter, Now());
+    if (reporters_[target]->did_not_produce_frame())
+      reporters_[target]->TerminateFrame(
+          FrameTerminationStatus::kDidNotProduceFrame, Now());
+    else
+      reporters_[target]->TerminateFrame(
+          FrameTerminationStatus::kReplacedByNewReporter, Now());
   }
   reporters_[target] = std::move(reporters_[start]);
 }

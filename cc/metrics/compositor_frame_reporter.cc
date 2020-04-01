@@ -287,6 +287,10 @@ void CompositorFrameReporter::OnAbortBeginMainFrame(base::TimeTicks timestamp) {
   // stage
 }
 
+void CompositorFrameReporter::OnDidNotProduceFrame() {
+  did_not_produce_frame_ = true;
+}
+
 void CompositorFrameReporter::SetBlinkBreakdown(
     std::unique_ptr<BeginMainFrameMetrics> blink_breakdown,
     base::TimeTicks begin_main_start) {
