@@ -577,6 +577,7 @@ try_.chromium_mac_ios_builder(
     use_clang_coverage = True,
     properties = {
         'coverage_test_types': ['unit'],
+        'xcode_build_version': '11c29',
     },
 )
 
