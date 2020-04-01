@@ -1542,12 +1542,16 @@ void PaintLayer::UpdateScrollableArea() {
     if (Compositor()) {
       Compositor()->SetNeedsCompositingUpdate(kCompositingUpdateRebuildTree);
     }
+    GetLayoutObject().SetNeedsPaintPropertyUpdate();
   } else if (!RequiresScrollableArea() && scrollable_area_) {
     scrollable_area_->Dispose();
     scrollable_area_.Clear();
     if (Compositor()) {
       Compositor()->SetNeedsCompositingUpdate(kCompositingUpdateRebuildTree);
     }
+    GetLayoutObject().SetBackgroundPaintLocation(
+        kBackgroundPaintInGraphicsLayer);
+    GetLayoutObject().SetNeedsPaintPropertyUpdate();
   }
 }
 
