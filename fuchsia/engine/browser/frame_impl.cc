@@ -7,6 +7,7 @@
 #include <fuchsia/ui/gfx/cpp/fidl.h>
 #include <lib/sys/cpp/component_context.h>
 #include <lib/ui/scenic/cpp/view_ref_pair.h>
+#include <limits>
 
 #include "base/bind_helpers.h"
 #include "base/fuchsia/default_context.h"
@@ -23,6 +24,9 @@
 #include "content/public/browser/navigation_entry.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/permission_controller_delegate.h"
+#include "content/public/browser/render_view_host.h"
+#include "content/public/browser/render_widget_host.h"
+#include "content/public/browser/render_widget_host_view.h"
 #include "content/public/browser/renderer_preferences_util.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/was_activated_option.mojom.h"
@@ -1023,4 +1027,21 @@ void FrameImpl::ReadyToCommitNavigation(
 void FrameImpl::DidFinishLoad(content::RenderFrameHost* render_frame_host,
                               const GURL& validated_url) {
   context_->devtools_controller()->OnFrameLoaded(web_contents_.get());
+}
+
+void FrameImpl::RenderViewCreated(content::RenderViewHost* render_view_host) {
+  render_view_host->GetWidget()->GetView()->SetBackgroundColor(
+      SK_AlphaTRANSPARENT);
+}
+
+void FrameImpl::RenderViewReady() {
+  web_contents_->GetRenderViewHost()
+      ->GetWidget()
+      ->GetView()
+      ->SetBackgroundColor(SK_AlphaTRANSPARENT);
+
+  // Setting the background color doesn't necessarily apply it right away, so
+  // request a redraw if there is a view connected to this Frame.
+  if (window_tree_host_)
+    window_tree_host_->compositor()->ScheduleDraw();
 }
