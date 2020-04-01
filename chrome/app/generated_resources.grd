@@ -251,6 +251,7 @@ are declared in tools/grit/grit_rule.gni.
     <file path="resources/generated_resources_sl.xtb" lang="sl" />
     <file path="resources/generated_resources_sq.xtb" lang="sq" />
     <file path="resources/generated_resources_sr.xtb" lang="sr" />
+    <file path="resources/generated_resources_sr-Latn.xtb" lang="sr-Latn" />
     <file path="resources/generated_resources_sv.xtb" lang="sv" />
     <file path="resources/generated_resources_sw.xtb" lang="sw" />
     <file path="resources/generated_resources_ta.xtb" lang="ta" />
