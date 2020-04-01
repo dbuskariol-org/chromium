@@ -15,7 +15,6 @@
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_time_notification_delegate.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_time_policy_helpers.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/persisted_app_info.h"
-#include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_list.h"
 #include "chrome/browser/ui/browser_window.h"
@@ -164,14 +163,14 @@ void AppActivityRegistry::RegisterProfilePrefs(PrefRegistrySimple* registry) {
 AppActivityRegistry::AppActivityRegistry(
     AppServiceWrapper* app_service_wrapper,
     AppTimeNotificationDelegate* notification_delegate,
-    Profile* profile)
-    : profile_(profile),
+    PrefService* pref_service)
+    : pref_service_(pref_service),
       app_service_wrapper_(app_service_wrapper),
       notification_delegate_(notification_delegate),
       save_data_to_pref_service_(base::DefaultTickClock::GetInstance()) {
   DCHECK(app_service_wrapper_);
   DCHECK(notification_delegate_);
-  DCHECK(profile_);
+  DCHECK(pref_service_);
 
   if (ShouldCleanUpStoredPref())
     CleanRegistry(base::Time::Now() - base::TimeDelta::FromDays(30));
@@ -410,9 +409,8 @@ AppActivityRegistry::GenerateAppActivityReport(
     return AppActivityReportInterface::ReportParams{timestamp, false};
   }
 
-  PrefService* pref_service = profile_->GetPrefs();
   const base::Value* value =
-      pref_service->GetList(prefs::kPerAppTimeLimitsAppActivities);
+      pref_service_->GetList(prefs::kPerAppTimeLimitsAppActivities);
   DCHECK(value);
 
   const std::vector<PersistedAppInfo> applications_info =
@@ -461,7 +459,7 @@ void AppActivityRegistry::OnSuccessfullyReported(base::Time timestamp) {
   CleanRegistry(timestamp);
 
   // Update last successful report time.
-  profile_->GetPrefs()->SetInt64(
+  pref_service_->SetInt64(
       prefs::kPerAppTimeLimitsLastSuccessfulReportTime,
       timestamp.ToDeltaSinceWindowsEpoch().InMicroseconds());
 }
@@ -496,7 +494,7 @@ bool AppActivityRegistry::UpdateAppLimits(
   latest_app_limit_update_ = latest_update;
 
   // Update the latest app limit update.
-  profile_->GetPrefs()->SetInt64(
+  pref_service_->SetInt64(
       prefs::kPerAppTimeLimitsLatestLimitUpdateTime,
       latest_app_limit_update_.ToDeltaSinceWindowsEpoch().InMicroseconds());
 
@@ -621,8 +619,7 @@ void AppActivityRegistry::OnTimeLimitWhitelistChanged(
 
 void AppActivityRegistry::SaveAppActivity() {
   {
-    ListPrefUpdate update(profile_->GetPrefs(),
-                          prefs::kPerAppTimeLimitsAppActivities);
+    ListPrefUpdate update(pref_service_, prefs::kPerAppTimeLimitsAppActivities);
     base::ListValue* list_value = update.Get();
 
     const base::Time now = base::Time::Now();
@@ -654,7 +651,7 @@ void AppActivityRegistry::SaveAppActivity() {
   }
 
   // Ensure that the app activity is persisted.
-  profile_->GetPrefs()->CommitPendingWrite();
+  pref_service_->CommitPendingWrite();
 }
 
 std::vector<AppId> AppActivityRegistry::GetAppsWithAppRestriction(
@@ -693,8 +690,7 @@ void AppActivityRegistry::OnResetTimeReached(base::Time timestamp) {
 }
 
 void AppActivityRegistry::CleanRegistry(base::Time timestamp) {
-  ListPrefUpdate update(profile_->GetPrefs(),
-                        prefs::kPerAppTimeLimitsAppActivities);
+  ListPrefUpdate update(pref_service_, prefs::kPerAppTimeLimitsAppActivities);
 
   base::ListValue* list_value = update.Get();
 
@@ -1027,11 +1023,10 @@ void AppActivityRegistry::WebTimeLimitReached(base::Time timestamp) {
 }
 
 void AppActivityRegistry::InitializeRegistryFromPref() {
-  PrefService* pref_service = profile_->GetPrefs();
-  DCHECK(pref_service);
+  DCHECK(pref_service_);
 
   int64_t last_limits_updates =
-      pref_service->GetInt64(prefs::kPerAppTimeLimitsLatestLimitUpdateTime);
+      pref_service_->GetInt64(prefs::kPerAppTimeLimitsLatestLimitUpdateTime);
 
   latest_app_limit_update_ = base::Time::FromDeltaSinceWindowsEpoch(
       base::TimeDelta::FromMicroseconds(last_limits_updates));
@@ -1040,9 +1035,8 @@ void AppActivityRegistry::InitializeRegistryFromPref() {
 }
 
 void AppActivityRegistry::InitializeAppActivities() {
-  PrefService* pref_service = profile_->GetPrefs();
   const base::Value* value =
-      pref_service->GetList(prefs::kPerAppTimeLimitsAppActivities);
+      pref_service_->GetList(prefs::kPerAppTimeLimitsAppActivities);
   DCHECK(value);
 
   const std::vector<PersistedAppInfo> applications_info =
@@ -1090,8 +1084,8 @@ PersistedAppInfo AppActivityRegistry::GetPersistedAppInfoForApp(
 }
 
 bool AppActivityRegistry::ShouldCleanUpStoredPref() {
-  int64_t last_time = profile_->GetPrefs()->GetInt64(
-      prefs::kPerAppTimeLimitsLastSuccessfulReportTime);
+  int64_t last_time =
+      pref_service_->GetInt64(prefs::kPerAppTimeLimitsLastSuccessfulReportTime);
 
   if (last_time == 0)
     return false;

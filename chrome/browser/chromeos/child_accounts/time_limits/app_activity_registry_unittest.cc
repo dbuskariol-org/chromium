@@ -99,7 +99,7 @@ class AppActivityRegistryTest : public ChromeViewsTestBase {
   AppTimeNotificationDelegateMock& notification_delegate_mock() {
     return notification_delegate_mock_;
   }
-  Profile& profile() { return profile_; }
+  PrefService* prefs() { return profile_.GetPrefs(); }
 
   void CreateAppActivityForApp(const AppId& app_id,
                                base::TimeDelta activity_length);
@@ -154,7 +154,7 @@ void AppActivityRegistryTest::SetAppLimit(
 
 void AppActivityRegistryTest::ReInitializeRegistry() {
   registry_ = std::make_unique<AppActivityRegistry>(
-      &wrapper_, &notification_delegate_mock_, &profile_);
+      &wrapper_, &notification_delegate_mock_, prefs());
 
   registry_test_ =
       std::make_unique<AppActivityRegistry::TestApi>(registry_.get());
@@ -663,7 +663,7 @@ TEST_F(AppActivityRegistryTest, RestoredApplicationInformation) {
 
   // Now let's test that the app activity are stored appropriately.
   const base::Value* value =
-      profile().GetPrefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
+      prefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
 
   const std::vector<PersistedAppInfo> app_infos =
       PersistedAppInfo::PersistedAppInfosFromList(
@@ -705,7 +705,7 @@ TEST_F(AppActivityRegistryTest, RemoveUninstalledApplications) {
 
   // Now let's test that the app activity are stored appropriately.
   const base::Value* value =
-      profile().GetPrefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
+      prefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
 
   const std::vector<PersistedAppInfo> app_infos =
       PersistedAppInfo::PersistedAppInfosFromList(
@@ -722,7 +722,7 @@ TEST_F(AppActivityRegistryTest, RemoveUninstalledApplications) {
   registry().OnSuccessfullyReported(base::Time::Now());
 
   const base::Value* new_value =
-      profile().GetPrefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
+      prefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
 
   const std::vector<PersistedAppInfo> final_app_infos =
       PersistedAppInfo::PersistedAppInfosFromList(
@@ -742,9 +742,8 @@ TEST_F(AppActivityRegistryTest, RemoveOldEntries) {
   CreateAppActivityForApp(kApp1, base::TimeDelta::FromHours(1));
   CreateAppActivityForApp(kApp2, base::TimeDelta::FromHours(1));
 
-  profile().GetPrefs()->SetInt64(
-      prefs::kPerAppTimeLimitsLastSuccessfulReportTime,
-      start_time.ToDeltaSinceWindowsEpoch().InMicroseconds());
+  prefs()->SetInt64(prefs::kPerAppTimeLimitsLastSuccessfulReportTime,
+                    start_time.ToDeltaSinceWindowsEpoch().InMicroseconds());
 
   task_environment()->FastForwardBy(base::TimeDelta::FromDays(30));
 
@@ -753,7 +752,7 @@ TEST_F(AppActivityRegistryTest, RemoveOldEntries) {
 
   // Now let's test that the app activity are stored appropriately.
   const base::Value* value =
-      profile().GetPrefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
+      prefs()->GetList(prefs::kPerAppTimeLimitsAppActivities);
 
   const std::vector<PersistedAppInfo> app_infos =
       PersistedAppInfo::PersistedAppInfosFromList(

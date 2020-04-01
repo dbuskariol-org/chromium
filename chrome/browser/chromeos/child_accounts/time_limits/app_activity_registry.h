@@ -27,7 +27,7 @@ class ChildStatusReportRequest;
 }  // namespace enterprise_management
 
 class PrefRegistrySimple;
-class Profile;
+class PrefService;
 
 namespace chromeos {
 namespace app_time {
@@ -82,7 +82,7 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
 
   AppActivityRegistry(AppServiceWrapper* app_service_wrapper,
                       AppTimeNotificationDelegate* notification_delegate,
-                      Profile* profile);
+                      PrefService* pref_service);
   AppActivityRegistry(const AppActivityRegistry&) = delete;
   AppActivityRegistry& operator=(const AppActivityRegistry&) = delete;
   ~AppActivityRegistry() override;
@@ -297,7 +297,7 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   void MaybeShowSystemNotification(const AppId& app_id,
                                    const SystemNotification& notification);
 
-  Profile* const profile_;
+  PrefService* const pref_service_;
 
   // Owned by AppTimeController.
   AppServiceWrapper* const app_service_wrapper_;
