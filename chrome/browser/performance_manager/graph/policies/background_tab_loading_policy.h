@@ -69,6 +69,10 @@ class BackgroundTabLoadingPolicy : public GraphOwned,
 
   // The set of PageNodes that are currently loading.
   std::vector<const PageNode*> page_nodes_loading_;
+
+  // The number of simultaneous tab loads that are permitted by policy. This
+  // is computed based on the number of cores on the machine.
+  size_t simultaneous_tab_loads_;
 };
 
 }  // namespace policies

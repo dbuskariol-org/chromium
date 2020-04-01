@@ -4,6 +4,8 @@
 
 #include "chrome/browser/performance_manager/graph/policies/background_tab_loading_policy.h"
 
+#include "base/system/sys_info.h"
+#include "chrome/browser/performance_manager/graph/policies/background_tab_loading_policy_helpers.h"
 #include "chrome/browser/performance_manager/mechanisms/page_loader.h"
 #include "components/performance_manager/public/decorators/tab_properties_decorator.h"
 #include "components/performance_manager/public/graph/policies/background_tab_loading_policy.h"
@@ -14,7 +16,21 @@ namespace performance_manager {
 namespace policies {
 
 namespace {
+
+// Pointer to the instance of itself.
 BackgroundTabLoadingPolicy* g_background_tab_loading_policy = nullptr;
+
+// Lower bound for the maximum number of tabs to load simultaneously.
+uint32_t kMinSimultaneousTabLoads = 1;
+
+// Upper bound for the maximum number of tabs to load simultaneously.
+// Setting to zero means no upper bound is applied.
+uint32_t kMaxSimultaneousTabLoads = 4;
+
+// The number of CPU cores required per permitted simultaneous tab
+// load. Setting to zero means no CPU core limit applies.
+uint32_t kCoresPerSimultaneousTabLoad = 2;
+
 }  // namespace
 
 void ScheduleLoadForRestoredTabs(
@@ -48,6 +64,9 @@ BackgroundTabLoadingPolicy::BackgroundTabLoadingPolicy()
     : page_loader_(std::make_unique<mechanism::PageLoader>()) {
   DCHECK(!g_background_tab_loading_policy);
   g_background_tab_loading_policy = this;
+  simultaneous_tab_loads_ = CalculateMaxSimultaneousTabLoads(
+      kMinSimultaneousTabLoads, kMaxSimultaneousTabLoads,
+      kCoresPerSimultaneousTabLoad, base::SysInfo::NumberOfProcessors());
 }
 
 BackgroundTabLoadingPolicy::~BackgroundTabLoadingPolicy() {
