@@ -18,20 +18,24 @@ using ::testing::Return;
 
 class MockBrowserSkiaGoldPixelDiff : public BrowserSkiaGoldPixelDiff {
  public:
-  MockBrowserSkiaGoldPixelDiff() {}
-  MOCK_CONST_METHOD2(UploadToSkiaGoldServer,
-                     bool(const base::FilePath&, const std::string&));
+  MockBrowserSkiaGoldPixelDiff() = default;
+  MOCK_CONST_METHOD1(LaunchProcess, int(const base::CommandLine&));
   bool GrabWindowSnapshotInternal(gfx::NativeWindow window,
                                   const gfx::Rect& snapshot_bounds,
-                                  gfx::Image* image) const {
+                                  gfx::Image* image) const override {
     SkBitmap bitmap;
     bitmap.allocN32Pixels(10, 10);
     *image = gfx::Image::CreateFrom1xBitmap(bitmap);
     return true;
   }
-  int LaunchProcess(const base::CommandLine& cmdline) const override {
-    return 0;
-  }
+};
+
+class MockBrowserSkiaGoldPixelDiffMockUpload
+    : public MockBrowserSkiaGoldPixelDiff {
+ public:
+  MockBrowserSkiaGoldPixelDiffMockUpload() = default;
+  MOCK_CONST_METHOD2(UploadToSkiaGoldServer,
+                     bool(const base::FilePath&, const std::string&));
 };
 
 class BrowserSkiaGoldPixelDiffTest : public views::test::WidgetTest {
@@ -47,10 +51,24 @@ class BrowserSkiaGoldPixelDiffTest : public views::test::WidgetTest {
 
 TEST_F(BrowserSkiaGoldPixelDiffTest, CompareScreenshotByView) {
   views::View view;
-  MockBrowserSkiaGoldPixelDiff mock_pixel;
+  MockBrowserSkiaGoldPixelDiffMockUpload mock_pixel;
   EXPECT_CALL(mock_pixel, UploadToSkiaGoldServer(_, "Prefix_Demo"))
       .Times(1)
       .WillOnce(Return(true));
+  views::Widget* widget = CreateTopLevelNativeWidget();
+  mock_pixel.Init(widget, "Prefix");
+  bool ret = mock_pixel.CompareScreenshot("Demo", &view);
+  EXPECT_TRUE(ret);
+  widget->CloseNow();
+}
+
+TEST_F(BrowserSkiaGoldPixelDiffTest, BypassSkiaGoldFunctionality) {
+  base::CommandLine::ForCurrentProcess()->AppendSwitch(
+      "bypass-skia-gold-functionality");
+
+  views::View view;
+  MockBrowserSkiaGoldPixelDiff mock_pixel;
+  EXPECT_CALL(mock_pixel, LaunchProcess(_)).Times(0);
   views::Widget* widget = CreateTopLevelNativeWidget();
   mock_pixel.Init(widget, "Prefix");
   bool ret = mock_pixel.CompareScreenshot("Demo", &view);
