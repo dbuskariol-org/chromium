@@ -37,12 +37,12 @@ const char* kSkiaGoldCtl = "tools/skia_goldctl/mac/goldctl";
 const char* kSkiaGoldCtl = "tools/skia_goldctl/linux/goldctl";
 #endif
 
-const char* kBuildRevisionKey = "build-revision";
+const char* kBuildRevisionKey = "git-revision";
 
 // The switch keys for tryjob.
-const char* kIssueKey = "issue";
-const char* kPatchSetKey = "patchset";
-const char* kJobIdKey = "jobid";
+const char* kIssueKey = "gerrit-issue";
+const char* kPatchSetKey = "gerrit-patchset";
+const char* kJobIdKey = "buildbucket-id";
 
 const char* kNoLuciAuth = "no-luci-auth";
 const char* kBypassSkiaGoldFunctionality = "bypass-skia-gold-functionality";

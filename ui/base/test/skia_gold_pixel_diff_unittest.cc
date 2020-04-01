@@ -29,7 +29,7 @@ class SkiaGoldPixelDiffTest : public ::testing::Test {
  public:
   SkiaGoldPixelDiffTest() {
     auto* cmd_line = base::CommandLine::ForCurrentProcess();
-    cmd_line->AppendSwitchASCII("build-revision", "test");
+    cmd_line->AppendSwitchASCII("git-revision", "test");
   }
 
   ~SkiaGoldPixelDiffTest() override {}

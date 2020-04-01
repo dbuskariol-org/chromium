@@ -42,7 +42,7 @@ class BrowserSkiaGoldPixelDiffTest : public views::test::WidgetTest {
  public:
   BrowserSkiaGoldPixelDiffTest() {
     auto* cmd_line = base::CommandLine::ForCurrentProcess();
-    cmd_line->AppendSwitchASCII("build-revision", "test");
+    cmd_line->AppendSwitchASCII("git-revision", "test");
   }
 
  private:
