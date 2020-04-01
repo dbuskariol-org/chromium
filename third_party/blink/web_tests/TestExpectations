@@ -2283,6 +2283,10 @@ crbug.com/1052717 external/wpt/css/css-text/line-break/line-break-loose-hyphens-
 crbug.com/1052717 external/wpt/css/css-text/line-break/line-break-normal-hyphens-002.html [ Failure ]
 crbug.com/1052717 external/wpt/css/css-text/line-break/line-break-strict-hyphens-002.html [ Failure ]
 
+# Link event firing
+crbug.com/922618 external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-error-events.html [ Timeout ]
+crbug.com/922618 external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
+
 # Sheriff 2020-02-06
 # Flaking on Linux Leak
 crbug.com/1049599 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/events/overscroll-event-fired-to-element-with-overscroll-behavior.html [ Pass Failure Timeout ]
@@ -3115,12 +3119,6 @@ crbug.com/626703 [ Mac ] external/wpt/css/css-fonts/standard-font-family.html [ 
 crbug.com/626703 [ Mac10.13 ] external/wpt/screen-capture/getdisplaymedia.https.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/screen-capture/getdisplaymedia.https.html [ Failure Timeout ]
 crbug.com/626703 [ Retina ] external/wpt/screen-capture/getdisplaymedia.https.html [ Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-error-events.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-error-events.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-error-events.html [ Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
 crbug.com/626703 external/wpt/streams/readable-byte-streams/construct-byob-request.any.sharedworker.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/window-iframe-messagechannel.https.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/window-iframe-messagechannel.https.html [ Timeout ]
