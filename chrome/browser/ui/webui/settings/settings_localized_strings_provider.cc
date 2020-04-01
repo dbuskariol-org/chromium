@@ -1240,8 +1240,15 @@ void AddPrivacyStrings(content::WebUIDataSource* html_source,
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 
+  html_source->AddString("cookiesSettingsHelpCenterURL",
+                         chrome::kCookiesSettingsHelpCenterURL);
+
+  html_source->AddString("safeBrowsingHelpCenterURL",
+                         chrome::kSafeBrowsingHelpCenterURL);
+
   html_source->AddString("syncAndGoogleServicesLearnMoreURL",
                          chrome::kSyncAndGoogleServicesLearnMoreURL);
+
   html_source->AddString(
       "doNotTrackDialogMessage",
       l10n_util::GetStringFUTF16(
