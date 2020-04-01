@@ -1617,9 +1617,9 @@ public class TabsTest {
                     }
                 });
 
-        int callLayouChangeCount = staticLayoutCallbackHelper.getCallCount();
+        int callLayoutChangeCount = staticLayoutCallbackHelper.getCallCount();
         performToolbarSideSwipe(direction);
-        staticLayoutCallbackHelper.waitForCallback(callLayouChangeCount, 1);
+        staticLayoutCallbackHelper.waitForCallback(callLayoutChangeCount, 1);
 
         if (expectsSelection) selectCallback.waitForCallback(tabSelectedCallCount, 1);
         TestThreadUtils.runOnUiThreadBlocking(() -> observer.destroy());
@@ -1631,7 +1631,7 @@ public class TabsTest {
     private void performToolbarSideSwipe(@ScrollDirection int direction) {
         Assert.assertTrue("Unexpected direction for side swipe " + direction,
                 direction == ScrollDirection.LEFT || direction == ScrollDirection.RIGHT);
-        final View toolbar = mActivityTestRule.getActivity().findViewById(R.id.toolbar);
+        final View toolbar = mActivityTestRule.getActivity().getToolbarManager().getToolbarView();
         int[] toolbarPos = new int[2];
         toolbar.getLocationOnScreen(toolbarPos);
         final int width = toolbar.getWidth();
@@ -1640,12 +1640,16 @@ public class TabsTest {
         final int fromX = toolbarPos[0] + width / 2;
         final int toX = toolbarPos[0] + (direction == ScrollDirection.LEFT ? 0 : width);
         final int y = toolbarPos[1] + height / 2;
-        final int stepCount = 10;
+        final int stepCount = 25;
 
+        View toolbarRoot = mActivityTestRule.getActivity()
+                                   .getFullscreenManager()
+                                   .getControlContainer()
+                                   .getView();
         long downTime = SystemClock.uptimeMillis();
-        TouchCommon.dragStart(mActivityTestRule.getActivity(), fromX, y, downTime);
-        TouchCommon.dragTo(mActivityTestRule.getActivity(), fromX, toX, y, y, stepCount, downTime);
-        TouchCommon.dragEnd(mActivityTestRule.getActivity(), toX, y, downTime);
+        TouchCommon.dragStart(toolbarRoot, fromX, y, downTime);
+        TouchCommon.dragTo(toolbarRoot, fromX, toX, y, y, stepCount, downTime);
+        TouchCommon.dragEnd(toolbarRoot, toX, y, downTime);
     }
 
     /**
