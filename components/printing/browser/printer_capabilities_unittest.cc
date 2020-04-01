@@ -106,11 +106,11 @@ class PrinterCapabilitiesTest : public testing::Test {
 TEST_F(PrinterCapabilitiesTest, NonNullForMissingPrinter) {
   std::string printer_name = "missing_printer";
   PrinterBasicInfo basic_info;
-  PrinterSemanticCapsAndDefaults::Papers no_additional_papers;
+  PrinterSemanticCapsAndDefaults::Papers no_user_defined_papers;
 
   base::Value settings_dictionary =
       GetSettingsOnBlockingTaskRunnerAndWaitForResults(printer_name, basic_info,
-                                                       no_additional_papers);
+                                                       no_user_defined_papers);
 
   ASSERT_FALSE(settings_dictionary.DictEmpty());
 }
@@ -118,7 +118,7 @@ TEST_F(PrinterCapabilitiesTest, NonNullForMissingPrinter) {
 TEST_F(PrinterCapabilitiesTest, ProvidedCapabilitiesUsed) {
   std::string printer_name = "test_printer";
   PrinterBasicInfo basic_info;
-  PrinterSemanticCapsAndDefaults::Papers no_additional_papers;
+  PrinterSemanticCapsAndDefaults::Papers no_user_defined_papers;
 
   // Set a capability and add a valid printer.
   auto caps = std::make_unique<PrinterSemanticCapsAndDefaults>();
@@ -127,7 +127,7 @@ TEST_F(PrinterCapabilitiesTest, ProvidedCapabilitiesUsed) {
 
   base::Value settings_dictionary =
       GetSettingsOnBlockingTaskRunnerAndWaitForResults(printer_name, basic_info,
-                                                       no_additional_papers);
+                                                       no_user_defined_papers);
 
   // Verify settings were created.
   ASSERT_FALSE(settings_dictionary.DictEmpty());
@@ -150,14 +150,14 @@ TEST_F(PrinterCapabilitiesTest, ProvidedCapabilitiesUsed) {
 TEST_F(PrinterCapabilitiesTest, NullCapabilitiesExcluded) {
   std::string printer_name = "test_printer";
   PrinterBasicInfo basic_info;
-  PrinterSemanticCapsAndDefaults::Papers no_additional_papers;
+  PrinterSemanticCapsAndDefaults::Papers no_user_defined_papers;
 
   // Return false when attempting to retrieve capabilities.
   print_backend()->AddValidPrinter(printer_name, nullptr);
 
   base::Value settings_dictionary =
       GetSettingsOnBlockingTaskRunnerAndWaitForResults(printer_name, basic_info,
-                                                       no_additional_papers);
+                                                       no_user_defined_papers);
 
   // Verify settings were created.
   ASSERT_FALSE(settings_dictionary.DictEmpty());
@@ -169,7 +169,7 @@ TEST_F(PrinterCapabilitiesTest, NullCapabilitiesExcluded) {
   EXPECT_TRUE(caps_dict->DictEmpty());
 }
 
-TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
+TEST_F(PrinterCapabilitiesTest, UserDefinedPapers) {
   std::string printer_name = "test_printer";
   PrinterBasicInfo basic_info;
 
@@ -180,13 +180,13 @@ TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
   print_backend()->AddValidPrinter(printer_name, std::move(caps));
 
   // Add some more paper sizes.
-  PrinterSemanticCapsAndDefaults::Papers additional_papers;
-  additional_papers.push_back({"foo", "vendor", {200, 300}});
-  additional_papers.push_back({"bar", "vendor", {600, 600}});
+  PrinterSemanticCapsAndDefaults::Papers user_defined_papers;
+  user_defined_papers.push_back({"foo", "vendor", {200, 300}});
+  user_defined_papers.push_back({"bar", "vendor", {600, 600}});
 
   base::Value settings_dictionary =
       GetSettingsOnBlockingTaskRunnerAndWaitForResults(printer_name, basic_info,
-                                                       additional_papers);
+                                                       user_defined_papers);
 
   // Verify settings were created.
   ASSERT_FALSE(settings_dictionary.DictEmpty());
@@ -209,7 +209,7 @@ TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
   ASSERT_EQ(3U, list.size());
 
   // Verify the 3 paper sizes are the ones in |caps->papers|, followed by the
-  // ones in |additional_papers|.
+  // ones in |user_defined_papers|.
   VerifyPaper(list[0], "printer_foo", "printer_vendor", {100, 234});
   VerifyPaper(list[1], "foo", "vendor", {200, 300});
   VerifyPaper(list[2], "bar", "vendor", {600, 600});
@@ -219,7 +219,7 @@ TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
 TEST_F(PrinterCapabilitiesTest, HasNotSecureProtocol) {
   std::string printer_name = "test_printer";
   PrinterBasicInfo basic_info;
-  PrinterSemanticCapsAndDefaults::Papers no_additional_papers;
+  PrinterSemanticCapsAndDefaults::Papers no_user_defined_papers;
 
   // Set a capability and add a valid printer.
   auto caps = std::make_unique<PrinterSemanticCapsAndDefaults>();
@@ -228,7 +228,7 @@ TEST_F(PrinterCapabilitiesTest, HasNotSecureProtocol) {
 
   base::Value settings_dictionary =
       GetSettingsOnBlockingTaskRunnerAndWaitForResults(printer_name, basic_info,
-                                                       no_additional_papers);
+                                                       no_user_defined_papers);
 
   // Verify settings were created.
   ASSERT_FALSE(settings_dictionary.DictEmpty());

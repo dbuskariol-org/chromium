@@ -95,7 +95,7 @@ void PopulateAdvancedCapsLocalization(
 // an empty dictionary if a dictionary could not be generated.
 base::Value GetPrinterCapabilitiesOnBlockingTaskRunner(
     const std::string& device_name,
-    const PrinterSemanticCapsAndDefaults::Papers& additional_papers,
+    const PrinterSemanticCapsAndDefaults::Papers& user_defined_papers,
     bool has_secure_protocol,
     scoped_refptr<PrintBackend> backend) {
   DCHECK(!device_name.empty());
@@ -126,8 +126,8 @@ base::Value GetPrinterCapabilitiesOnBlockingTaskRunner(
     PopulateAllPaperDisplayNames(&info);
 #endif  // BUILDFLAG(PRINT_MEDIA_L10N_ENABLED)
 
-  info.papers.insert(info.papers.end(), additional_papers.begin(),
-                     additional_papers.end());
+  info.papers.insert(info.papers.end(), user_defined_papers.begin(),
+                     user_defined_papers.end());
 
 #if defined(OS_CHROMEOS)
   if (!has_secure_protocol)
@@ -166,7 +166,7 @@ std::string GetUserFriendlyName(const std::string& printer_name) {
 base::Value GetSettingsOnBlockingTaskRunner(
     const std::string& device_name,
     const PrinterBasicInfo& basic_info,
-    const PrinterSemanticCapsAndDefaults::Papers& additional_papers,
+    const PrinterSemanticCapsAndDefaults::Papers& user_defined_papers,
     bool has_secure_protocol,
     scoped_refptr<PrintBackend> print_backend) {
   SCOPED_UMA_HISTOGRAM_TIMER("Printing.PrinterCapabilities");
@@ -193,10 +193,10 @@ base::Value GetSettingsOnBlockingTaskRunner(
 
   base::Value printer_info_capabilities(base::Value::Type::DICTIONARY);
   printer_info_capabilities.SetKey(kPrinter, std::move(printer_info));
-  printer_info_capabilities.SetKey(
-      kSettingCapabilities,
-      GetPrinterCapabilitiesOnBlockingTaskRunner(
-          device_name, additional_papers, has_secure_protocol, print_backend));
+  printer_info_capabilities.SetKey(kSettingCapabilities,
+                                   GetPrinterCapabilitiesOnBlockingTaskRunner(
+                                       device_name, user_defined_papers,
+                                       has_secure_protocol, print_backend));
   return printer_info_capabilities;
 }
 
