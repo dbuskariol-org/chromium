@@ -53957,6 +53957,19 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="4" label="Auto-created after deleting last user"/>
 </enum>
 
+<enum name="ProfileAllAccountsCategories">
+  <int value="0" label="Either consumer or enterprise, not both"/>
+  <int value="1" label="Both consumer and enterprise (no sync)"/>
+  <int value="2" label="Both consumer and enterprise (consumer syncing)"/>
+  <int value="3" label="Both consumer and enterprise (enterprise syncing)"/>
+</enum>
+
+<enum name="ProfileAllAccountsNames">
+  <int value="0" label="At most one name (or a rare hash collision)"/>
+  <int value="1" label="Multiple names (no sync)"/>
+  <int value="2" label="Multiple names (sync enabled for one of them)"/>
+</enum>
+
 <enum name="ProfileAndroidAccountManagementMenu">
   <int value="0" label="Opened Menu">
     User arrived at the Account management screen.
