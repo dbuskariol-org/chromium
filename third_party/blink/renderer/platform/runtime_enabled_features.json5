@@ -926,6 +926,11 @@
       status: "experimental",
     },
     {
+      name: "LayoutNGForControls",
+      depends_on: ["LayoutNG"],
+      status: "experimental",
+    },
+    {
       name: "LayoutNGFragmentItem",
       implied_by: ["LayoutNGBlockFragmentation", "LayoutNGFragmentTraversal"],
     },
