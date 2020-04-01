@@ -987,7 +987,7 @@ bool V4L2VideoDecodeAccelerator::AdvanceFrameFragment(const uint8_t* data,
   DCHECK(decoder_thread_.task_runner()->BelongsToCurrentThread());
 
   for (auto& workaround : workarounds_) {
-    auto result = workaround->Apply(data, size, endpos);
+    auto result = workaround->Apply(data, size);
     if (result == V4L2StatefulWorkaround::Result::NotifyError) {
       LOG(ERROR) << "Failed doing a workaround";
       NOTIFY_ERROR(PLATFORM_FAILURE);
