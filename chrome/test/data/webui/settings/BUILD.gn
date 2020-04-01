@@ -94,6 +94,7 @@ js_modulizer("modulize") {
     "test_privacy_page_browser_proxy.js",
     "test_profile_info_browser_proxy.js",
     "test_reset_browser_proxy.js",
+    "test_safe_browsing_browser_proxy.js",
     "test_search_engines_browser_proxy.js",
     "test_site_settings_prefs_browser_proxy.js",
     "test_sync_browser_proxy.js",
