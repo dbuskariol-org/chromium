@@ -5,8 +5,6 @@
 #ifndef IOS_CHROME_CREDENTIAL_PROVIDER_EXTENSION_UI_CREDENTIAL_LIST_CONSUMER_H_
 #define IOS_CHROME_CREDENTIAL_PROVIDER_EXTENSION_UI_CREDENTIAL_LIST_CONSUMER_H_
 
-#include "ios/chrome/common/credential_provider/credential.h"
-
 @class UIButton;
 
 @protocol CredentialListConsumerDelegate <NSObject>
@@ -23,10 +21,6 @@
 
 // The delegate for the actions in the consumer.
 @property(nonatomic, weak) id<CredentialListConsumerDelegate> delegate;
-
-// Tells the consumer to show the passed in suggested and all passwords.
-- (void)presentSuggestedPasswords:(NSArray<id<Credential>>*)suggested
-                     allPasswords:(NSArray<id<Credential>>*)all;
 
 @end
 
