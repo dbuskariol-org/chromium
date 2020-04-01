@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/ui/util/dynamic_type_util.h"
+#include "ios/components/ui_util/dynamic_type_util.h"
 
 #import <UIKit/UIKit.h>
 
@@ -14,6 +14,8 @@
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
 #endif
+
+namespace ui_util {
 
 // Test fixture for DynamicTypeUtil class.
 class DynamicTypeUtilTest : public PlatformTest {
@@ -118,3 +120,5 @@ TEST_F(DynamicTypeUtilTest, TestClampedFontSize) {
       SystemSuggestedFontSizeMultiplier(UIContentSizeCategoryExtraExtraLarge),
       multiplier);
 }
+
+}  // namespace ui_util
