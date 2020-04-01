@@ -2088,7 +2088,7 @@
       },
       'linux-upload-perfetto': {
         'test_suites': {
-          'gtest_tests': 'upload_perfetto',
+          'isolated_scripts': 'upload_perfetto',
         },
         'use_swarming': False,
       },
