@@ -34,6 +34,25 @@ void GetSettingsDone(base::OnceClosure done_closure,
   std::move(done_closure).Run();
 }
 
+void VerifyPaper(const Value& paper_dict,
+                 const std::string& expected_name,
+                 const std::string& expected_vendor,
+                 const gfx::Size& expected_size) {
+  ASSERT_TRUE(paper_dict.is_dict());
+  const std::string* name = paper_dict.FindStringKey("custom_display_name");
+  ASSERT_TRUE(name);
+  EXPECT_EQ(expected_name, *name);
+  const std::string* vendor = paper_dict.FindStringKey("vendor_id");
+  ASSERT_TRUE(vendor);
+  EXPECT_EQ(expected_vendor, *vendor);
+  base::Optional<int> width = paper_dict.FindIntKey("width_microns");
+  ASSERT_TRUE(width.has_value());
+  EXPECT_EQ(expected_size.width(), width.value());
+  base::Optional<int> height = paper_dict.FindIntKey("height_microns");
+  ASSERT_TRUE(height.has_value());
+  EXPECT_EQ(expected_size.height(), height.value());
+}
+
 }  // namespace
 
 class PrinterCapabilitiesTest : public testing::Test {
@@ -156,6 +175,7 @@ TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
 
   // Set a capability and add a valid printer.
   auto caps = std::make_unique<PrinterSemanticCapsAndDefaults>();
+  caps->papers.push_back({"printer_foo", "printer_vendor", {100, 234}});
   caps->dpis = {{600, 600}};
   print_backend()->AddValidPrinter(printer_name, std::move(caps));
 
@@ -178,7 +198,7 @@ TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
   const Value* printer = cdd->FindKeyOfType(kPrinter, Value::Type::DICTIONARY);
   ASSERT_TRUE(printer);
 
-  // Verify there are 2 paper sizes.
+  // Verify there are 3 paper sizes.
   const Value* media_size =
       printer->FindKeyOfType("media_size", Value::Type::DICTIONARY);
   ASSERT_TRUE(media_size);
@@ -186,41 +206,13 @@ TEST_F(PrinterCapabilitiesTest, AdditionalPapers) {
       media_size->FindKeyOfType("option", Value::Type::LIST);
   ASSERT_TRUE(media_option);
   const auto& list = media_option->GetList();
-  ASSERT_EQ(2U, list.size());
-  ASSERT_TRUE(list[0].is_dict());
-  ASSERT_TRUE(list[1].is_dict());
+  ASSERT_EQ(3U, list.size());
 
-  // Verify the 2 paper sizes are the ones in |additional_papers|.
-  const Value* name;
-  const Value* vendor;
-  const Value* width;
-  const Value* height;
-
-  name = list[0].FindKeyOfType("custom_display_name", Value::Type::STRING);
-  ASSERT_TRUE(name);
-  EXPECT_EQ("foo", name->GetString());
-  vendor = list[0].FindKeyOfType("vendor_id", Value::Type::STRING);
-  ASSERT_TRUE(vendor);
-  EXPECT_EQ("vendor", vendor->GetString());
-  width = list[0].FindKeyOfType("width_microns", Value::Type::INTEGER);
-  ASSERT_TRUE(width);
-  EXPECT_EQ(200, width->GetInt());
-  height = list[0].FindKeyOfType("height_microns", Value::Type::INTEGER);
-  ASSERT_TRUE(height);
-  EXPECT_EQ(300, height->GetInt());
-
-  name = list[1].FindKeyOfType("custom_display_name", Value::Type::STRING);
-  ASSERT_TRUE(name);
-  EXPECT_EQ("bar", name->GetString());
-  vendor = list[1].FindKeyOfType("vendor_id", Value::Type::STRING);
-  ASSERT_TRUE(vendor);
-  EXPECT_EQ("vendor", vendor->GetString());
-  width = list[1].FindKeyOfType("width_microns", Value::Type::INTEGER);
-  ASSERT_TRUE(width);
-  EXPECT_EQ(600, width->GetInt());
-  height = list[1].FindKeyOfType("height_microns", Value::Type::INTEGER);
-  ASSERT_TRUE(height);
-  EXPECT_EQ(600, height->GetInt());
+  // Verify the 3 paper sizes are the ones in |caps->papers|, followed by the
+  // ones in |additional_papers|.
+  VerifyPaper(list[0], "printer_foo", "printer_vendor", {100, 234});
+  VerifyPaper(list[1], "foo", "vendor", {200, 300});
+  VerifyPaper(list[2], "bar", "vendor", {600, 600});
 }
 
 #if defined(OS_CHROMEOS)
