@@ -302,7 +302,7 @@ AXCoordinateSystem AtkCoordTypeToAXCoordinateSystem(
     AtkCoordType coordinate_type) {
   switch (coordinate_type) {
     case ATK_XY_SCREEN:
-      return AXCoordinateSystem::kScreen;
+      return AXCoordinateSystem::kScreenDIPs;
     case ATK_XY_WINDOW:
       return AXCoordinateSystem::kRootFrame;
 #if defined(ATK_230)
@@ -312,7 +312,7 @@ AXCoordinateSystem AtkCoordTypeToAXCoordinateSystem(
       return AXCoordinateSystem::kFrame;
 #endif
     default:
-      return AXCoordinateSystem::kScreen;
+      return AXCoordinateSystem::kScreenDIPs;
   }
 }
 
@@ -4049,7 +4049,7 @@ gfx::Vector2d AXPlatformNodeAuraLinux::GetParentOriginInScreenCoordinates()
     return gfx::Vector2d();
 
   return parent_node->GetDelegate()
-      ->GetBoundsRect(AXCoordinateSystem::kScreen,
+      ->GetBoundsRect(AXCoordinateSystem::kScreenDIPs,
                       AXClippingBehavior::kUnclipped)
       .OffsetFromOrigin();
 }
@@ -4066,14 +4066,14 @@ gfx::Vector2d AXPlatformNodeAuraLinux::GetParentFrameOriginInScreenCoordinates()
     return gfx::Vector2d();
 
   return frame_node->GetDelegate()
-      ->GetBoundsRect(AXCoordinateSystem::kScreen,
+      ->GetBoundsRect(AXCoordinateSystem::kScreenDIPs,
                       AXClippingBehavior::kUnclipped)
       .OffsetFromOrigin();
 }
 
 gfx::Rect AXPlatformNodeAuraLinux::GetExtentsRelativeToAtkCoordinateType(
     AtkCoordType coord_type) const {
-  gfx::Rect extents = delegate_->GetBoundsRect(AXCoordinateSystem::kScreen,
+  gfx::Rect extents = delegate_->GetBoundsRect(AXCoordinateSystem::kScreenDIPs,
                                                AXClippingBehavior::kUnclipped);
   switch (coord_type) {
     case ATK_XY_SCREEN:
@@ -4565,7 +4565,7 @@ void AXPlatformNodeAuraLinux::ScrollNodeRectIntoView(
 
 void AXPlatformNodeAuraLinux::ScrollNodeIntoView(
     AtkScrollType atk_scroll_type) {
-  gfx::Rect rect = GetDelegate()->GetBoundsRect(AXCoordinateSystem::kScreen,
+  gfx::Rect rect = GetDelegate()->GetBoundsRect(AXCoordinateSystem::kScreenDIPs,
                                                 AXClippingBehavior::kUnclipped);
   rect -= rect.OffsetFromOrigin();
   ScrollNodeRectIntoView(rect, atk_scroll_type);
@@ -4590,7 +4590,7 @@ AXPlatformNodeAuraLinux::GetUnclippedHypertextRangeBoundsRect(int start_offset,
 
   return GetDelegate()->GetHypertextRangeBoundsRect(
       UnicodeToUTF16OffsetInText(start_offset),
-      UnicodeToUTF16OffsetInText(end_offset), AXCoordinateSystem::kScreen,
+      UnicodeToUTF16OffsetInText(end_offset), AXCoordinateSystem::kScreenDIPs,
       AXClippingBehavior::kUnclipped);
 }
 
@@ -4605,7 +4605,7 @@ bool AXPlatformNodeAuraLinux::ScrollSubstringIntoView(
 
   gfx::Rect rect = *optional_rect;
   gfx::Rect node_rect = GetDelegate()->GetBoundsRect(
-      AXCoordinateSystem::kScreen, AXClippingBehavior::kUnclipped);
+      AXCoordinateSystem::kScreenDIPs, AXClippingBehavior::kUnclipped);
   rect -= node_rect.OffsetFromOrigin();
   ScrollNodeRectIntoView(rect, atk_scroll_type);
 
@@ -4625,7 +4625,7 @@ bool AXPlatformNodeAuraLinux::ScrollSubstringToPoint(
 
   gfx::Rect rect = *optional_rect;
   gfx::Rect node_rect = GetDelegate()->GetBoundsRect(
-      AXCoordinateSystem::kScreen, AXClippingBehavior::kUnclipped);
+      AXCoordinateSystem::kScreenDIPs, AXClippingBehavior::kUnclipped);
   ScrollToPoint(atk_coord_type, x - (rect.x() - node_rect.x()),
                 y - (rect.y() - node_rect.y()));
 
