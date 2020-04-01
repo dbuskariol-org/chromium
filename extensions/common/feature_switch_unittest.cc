@@ -13,12 +13,13 @@ namespace {
 
 const char kSwitchName[] = "test-switch";
 
-template<FeatureSwitch::DefaultValue T>
+template <FeatureSwitch::DefaultValue T>
 class FeatureSwitchTest : public testing::Test {
  public:
   FeatureSwitchTest()
       : command_line_(base::CommandLine::NO_PROGRAM),
         feature_(&command_line_, kSwitchName, T) {}
+
  protected:
   base::CommandLine command_line_;
   FeatureSwitch feature_;
