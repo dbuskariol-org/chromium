@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_CROSTINI_CROSTINI_REGISTRY_SERVICE_H_
-#define CHROME_BROWSER_CHROMEOS_CROSTINI_CROSTINI_REGISTRY_SERVICE_H_
+#ifndef CHROME_BROWSER_CHROMEOS_GUEST_OS_GUEST_OS_REGISTRY_SERVICE_H_
+#define CHROME_BROWSER_CHROMEOS_GUEST_OS_GUEST_OS_REGISTRY_SERVICE_H_
 
 #include <map>
 #include <set>
@@ -33,9 +33,9 @@ class ApplicationList;
 }  // namespace apps
 }  // namespace vm_tools
 
-namespace crostini {
+namespace guest_os {
 
-// The CrostiniRegistryService stores information about Desktop Entries (apps)
+// The GuestOsRegistryService  stores information about Desktop Entries (apps)
 // in Crostini. We store this in prefs so that it is readily available even when
 // the VM isn't running. The registrations here correspond to .desktop files,
 // which are detailed in the spec:
@@ -63,7 +63,7 @@ namespace crostini {
 // of the registry can treat it as a regular app that is always installed.
 // Internal to the registry, the pref entry only contains the last launch time
 // so some care is required.
-class CrostiniRegistryService : public KeyedService {
+class GuestOsRegistryService : public KeyedService {
  public:
   class Registration {
    public:
@@ -114,7 +114,7 @@ class CrostiniRegistryService : public KeyedService {
     // apps which have been updated, removed, and inserted. Not called when the
     // last_launch_time field is updated.
     virtual void OnRegistryUpdated(
-        CrostiniRegistryService* registry_service,
+        guest_os::GuestOsRegistryService* registry_service,
         const std::vector<std::string>& updated_apps,
         const std::vector<std::string>& removed_apps,
         const std::vector<std::string>& inserted_apps) {}
@@ -128,17 +128,17 @@ class CrostiniRegistryService : public KeyedService {
     virtual ~Observer() = default;
   };
 
-  explicit CrostiniRegistryService(Profile* profile);
-  ~CrostiniRegistryService() override;
+  explicit GuestOsRegistryService(Profile* profile);
+  ~GuestOsRegistryService() override;
 
-  base::WeakPtr<CrostiniRegistryService> GetWeakPtr();
+  base::WeakPtr<GuestOsRegistryService> GetWeakPtr();
 
   // Return all installed apps. This always includes the Terminal app.
-  std::map<std::string, CrostiniRegistryService::Registration>
+  std::map<std::string, GuestOsRegistryService::Registration>
   GetRegisteredApps() const;
 
   // Return null if |app_id| is not found in the registry.
-  base::Optional<CrostiniRegistryService::Registration> GetRegistration(
+  base::Optional<GuestOsRegistryService::Registration> GetRegistration(
       const std::string& app_id) const;
 
   // Constructs path to app icon for specific scale factor.
@@ -189,7 +189,7 @@ class CrostiniRegistryService : public KeyedService {
   void OnContainerAppIcon(const std::string& app_id,
                           ui::ScaleFactor scale_factor,
                           bool success,
-                          const std::vector<Icon>& icons);
+                          const std::vector<crostini::Icon>& icons);
   // Callback for our internal call for saving out icon data.
   void OnIconInstalled(const std::string& app_id,
                        ui::ScaleFactor scale_factor,
@@ -228,11 +228,11 @@ class CrostiniRegistryService : public KeyedService {
   std::map<std::string, uint32_t> active_icon_requests_;
   std::map<std::string, uint32_t> retry_icon_requests_;
 
-  base::WeakPtrFactory<CrostiniRegistryService> weak_ptr_factory_{this};
+  base::WeakPtrFactory<GuestOsRegistryService> weak_ptr_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(CrostiniRegistryService);
+  DISALLOW_COPY_AND_ASSIGN(GuestOsRegistryService);
 };
 
-}  // namespace crostini
+}  // namespace guest_os
 
-#endif  // CHROME_BROWSER_CHROMEOS_CROSTINI_CROSTINI_REGISTRY_SERVICE_H_
+#endif  // CHROME_BROWSER_CHROMEOS_GUEST_OS_GUEST_OS_REGISTRY_SERVICE_H_

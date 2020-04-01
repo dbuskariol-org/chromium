@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/crostini/crostini_registry_service.h"
+#include "chrome/browser/chromeos/guest_os/guest_os_registry_service.h"
 
 #include <utility>
 
@@ -34,7 +34,7 @@
 
 using vm_tools::apps::App;
 
-namespace crostini {
+namespace guest_os {
 
 namespace {
 
@@ -139,7 +139,7 @@ base::Value AppPrefRegistrationFromApp(
   return pref_registration;
 }
 
-// This is the companion to CrostiniRegistryService::SetCurrentTime().
+// This is the companion to GuestOsRegistryService::SetCurrentTime().
 base::Time GetTime(const base::Value& pref, const char* key) {
   if (!pref.is_dict())
     return base::Time();
@@ -276,17 +276,17 @@ static std::string Join(const List& list) {
 
 }  // namespace
 
-CrostiniRegistryService::Registration::Registration(const base::Value* pref,
-                                                    bool is_terminal_app)
+GuestOsRegistryService::Registration::Registration(const base::Value* pref,
+                                                   bool is_terminal_app)
     : is_terminal_app_(is_terminal_app) {
   DCHECK(pref || is_terminal_app);
   if (pref)
     pref_ = pref->Clone();
 }
 
-CrostiniRegistryService::Registration::~Registration() = default;
+GuestOsRegistryService::Registration::~Registration() = default;
 
-std::string CrostiniRegistryService::Registration::DesktopFileId() const {
+std::string GuestOsRegistryService::Registration::DesktopFileId() const {
   if (is_terminal_app_)
     return std::string();
   return pref_
@@ -295,34 +295,34 @@ std::string CrostiniRegistryService::Registration::DesktopFileId() const {
       ->GetString();
 }
 
-std::string CrostiniRegistryService::Registration::VmName() const {
+std::string GuestOsRegistryService::Registration::VmName() const {
   if (is_terminal_app_)
-    return kCrostiniDefaultVmName;
+    return crostini::kCrostiniDefaultVmName;
   return pref_
       .FindKeyOfType(guest_os::prefs::kAppVmNameKey, base::Value::Type::STRING)
       ->GetString();
 }
 
-std::string CrostiniRegistryService::Registration::ContainerName() const {
+std::string GuestOsRegistryService::Registration::ContainerName() const {
   if (is_terminal_app_)
-    return kCrostiniDefaultContainerName;
+    return crostini::kCrostiniDefaultContainerName;
   return pref_
       .FindKeyOfType(guest_os::prefs::kAppContainerNameKey,
                      base::Value::Type::STRING)
       ->GetString();
 }
 
-std::string CrostiniRegistryService::Registration::Name() const {
+std::string GuestOsRegistryService::Registration::Name() const {
   if (is_terminal_app_)
     return l10n_util::GetStringUTF8(IDS_CROSTINI_TERMINAL_APP_NAME);
   return LocalizedString(guest_os::prefs::kAppNameKey);
 }
 
-std::string CrostiniRegistryService::Registration::Comment() const {
+std::string GuestOsRegistryService::Registration::Comment() const {
   return LocalizedString(guest_os::prefs::kAppCommentKey);
 }
 
-std::string CrostiniRegistryService::Registration::ExecutableFileName() const {
+std::string GuestOsRegistryService::Registration::ExecutableFileName() const {
   if (pref_.is_none())
     return std::string();
   const base::Value* executable_file_name = pref_.FindKeyOfType(
@@ -332,14 +332,14 @@ std::string CrostiniRegistryService::Registration::ExecutableFileName() const {
   return executable_file_name->GetString();
 }
 
-std::set<std::string> CrostiniRegistryService::Registration::MimeTypes() const {
+std::set<std::string> GuestOsRegistryService::Registration::MimeTypes() const {
   if (pref_.is_none())
     return {};
   return ListToStringSet(pref_.FindKeyOfType(guest_os::prefs::kAppMimeTypesKey,
                                              base::Value::Type::LIST));
 }
 
-std::set<std::string> CrostiniRegistryService::Registration::Keywords() const {
+std::set<std::string> GuestOsRegistryService::Registration::Keywords() const {
   if (is_terminal_app_) {
     std::set<std::string> result = {"linux", "terminal", "crostini"};
     result.insert(
@@ -349,7 +349,7 @@ std::set<std::string> CrostiniRegistryService::Registration::Keywords() const {
   return LocalizedList(guest_os::prefs::kAppKeywordsKey);
 }
 
-bool CrostiniRegistryService::Registration::NoDisplay() const {
+bool GuestOsRegistryService::Registration::NoDisplay() const {
   if (pref_.is_none())
     return false;
   const base::Value* no_display = pref_.FindKeyOfType(
@@ -359,7 +359,7 @@ bool CrostiniRegistryService::Registration::NoDisplay() const {
   return false;
 }
 
-std::string CrostiniRegistryService::Registration::PackageId() const {
+std::string GuestOsRegistryService::Registration::PackageId() const {
   if (is_terminal_app_)
     return std::string();
   if (pref_.is_none())
@@ -371,7 +371,7 @@ std::string CrostiniRegistryService::Registration::PackageId() const {
   return package_id->GetString();
 }
 
-bool CrostiniRegistryService::Registration::CanUninstall() const {
+bool GuestOsRegistryService::Registration::CanUninstall() const {
   if (pref_.is_none())
     return false;
   // We can uninstall if and only if there is a package that owns the
@@ -391,15 +391,15 @@ bool CrostiniRegistryService::Registration::CanUninstall() const {
   return false;
 }
 
-base::Time CrostiniRegistryService::Registration::InstallTime() const {
+base::Time GuestOsRegistryService::Registration::InstallTime() const {
   return GetTime(pref_, guest_os::prefs::kAppInstallTimeKey);
 }
 
-base::Time CrostiniRegistryService::Registration::LastLaunchTime() const {
+base::Time GuestOsRegistryService::Registration::LastLaunchTime() const {
   return GetTime(pref_, guest_os::prefs::kAppLastLaunchTimeKey);
 }
 
-bool CrostiniRegistryService::Registration::IsScaled() const {
+bool GuestOsRegistryService::Registration::IsScaled() const {
   if (pref_.is_none())
     return false;
   const base::Value* scaled = pref_.FindKeyOfType(
@@ -412,7 +412,7 @@ bool CrostiniRegistryService::Registration::IsScaled() const {
 // We store in prefs all the localized values for given fields (formatted with
 // undescores, e.g. 'fr' or 'en_US'), but users of the registry don't need to
 // deal with this.
-std::string CrostiniRegistryService::Registration::LocalizedString(
+std::string GuestOsRegistryService::Registration::LocalizedString(
     base::StringPiece key) const {
   if (pref_.is_none())
     return std::string();
@@ -437,7 +437,7 @@ std::string CrostiniRegistryService::Registration::LocalizedString(
   return std::string();
 }
 
-std::set<std::string> CrostiniRegistryService::Registration::LocalizedList(
+std::set<std::string> GuestOsRegistryService::Registration::LocalizedList(
     base::StringPiece key) const {
   if (pref_.is_none())
     return {};
@@ -462,7 +462,7 @@ std::set<std::string> CrostiniRegistryService::Registration::LocalizedList(
   return {};
 }
 
-CrostiniRegistryService::CrostiniRegistryService(Profile* profile)
+GuestOsRegistryService::GuestOsRegistryService(Profile* profile)
     : profile_(profile),
       prefs_(profile->GetPrefs()),
       base_icon_path_(profile->GetPath().AppendASCII(kCrostiniIconFolder)),
@@ -471,39 +471,39 @@ CrostiniRegistryService::CrostiniRegistryService(Profile* profile)
   MigrateTerminal();
 }
 
-CrostiniRegistryService::~CrostiniRegistryService() = default;
+GuestOsRegistryService::~GuestOsRegistryService() = default;
 
-base::WeakPtr<CrostiniRegistryService> CrostiniRegistryService::GetWeakPtr() {
+base::WeakPtr<GuestOsRegistryService> GuestOsRegistryService::GetWeakPtr() {
   return weak_ptr_factory_.GetWeakPtr();
 }
 
-std::map<std::string, CrostiniRegistryService::Registration>
-CrostiniRegistryService::GetRegisteredApps() const {
+std::map<std::string, GuestOsRegistryService::Registration>
+GuestOsRegistryService::GetRegisteredApps() const {
   const base::DictionaryValue* apps =
       prefs_->GetDictionary(guest_os::prefs::kGuestOsRegistry);
-  std::map<std::string, CrostiniRegistryService::Registration> result;
+  std::map<std::string, GuestOsRegistryService::Registration> result;
   for (const auto& item : apps->DictItems()) {
     result.emplace(item.first,
                    Registration(&item.second, /*is_terminal_app=*/item.first ==
-                                                  GetTerminalId()));
+                                                  crostini::GetTerminalId()));
   }
   // TODO(crbug.com/1028898): Register Terminal as a System App rather than a
   // crostini app.
-  if (!apps->FindKey(GetTerminalId())) {
-    result.emplace(GetTerminalId(),
+  if (!apps->FindKey(crostini::GetTerminalId())) {
+    result.emplace(crostini::GetTerminalId(),
                    Registration(nullptr, /*is_terminal_app=*/true));
   }
   return result;
 }
 
-base::Optional<CrostiniRegistryService::Registration>
-CrostiniRegistryService::GetRegistration(const std::string& app_id) const {
+base::Optional<GuestOsRegistryService::Registration>
+GuestOsRegistryService::GetRegistration(const std::string& app_id) const {
   const base::DictionaryValue* apps =
       prefs_->GetDictionary(guest_os::prefs::kGuestOsRegistry);
   const base::Value* pref_registration =
       apps->FindKeyOfType(app_id, base::Value::Type::DICTIONARY);
 
-  if (app_id == GetTerminalId())
+  if (app_id == crostini::GetTerminalId())
     return base::make_optional<Registration>(pref_registration, true);
 
   if (!pref_registration)
@@ -511,17 +511,17 @@ CrostiniRegistryService::GetRegistration(const std::string& app_id) const {
   return base::make_optional<Registration>(pref_registration, false);
 }
 
-void CrostiniRegistryService::RecordStartupMetrics() {
+void GuestOsRegistryService::RecordStartupMetrics() {
   const base::DictionaryValue* apps =
       prefs_->GetDictionary(guest_os::prefs::kGuestOsRegistry);
 
-  if (!CrostiniFeatures::Get()->IsEnabled(profile_))
+  if (!crostini::CrostiniFeatures::Get()->IsEnabled(profile_))
     return;
 
   size_t num_apps = 0;
 
   for (const auto& item : apps->DictItems()) {
-    if (item.first == GetTerminalId())
+    if (item.first == crostini::GetTerminalId())
       continue;
 
     const base::Value* no_display = item.second.FindKeyOfType(
@@ -534,12 +534,12 @@ void CrostiniRegistryService::RecordStartupMetrics() {
   UMA_HISTOGRAM_COUNTS_1000(kCrostiniAppsInstalledHistogram, num_apps);
 }
 
-base::FilePath CrostiniRegistryService::GetAppPath(
+base::FilePath GuestOsRegistryService::GetAppPath(
     const std::string& app_id) const {
   return base_icon_path_.AppendASCII(app_id);
 }
 
-base::FilePath CrostiniRegistryService::GetIconPath(
+base::FilePath GuestOsRegistryService::GetIconPath(
     const std::string& app_id,
     ui::ScaleFactor scale_factor) const {
   const base::FilePath app_path = GetAppPath(app_id);
@@ -568,8 +568,8 @@ base::FilePath CrostiniRegistryService::GetIconPath(
   }
 }
 
-void CrostiniRegistryService::MaybeRequestIcon(const std::string& app_id,
-                                               ui::ScaleFactor scale_factor) {
+void GuestOsRegistryService::MaybeRequestIcon(const std::string& app_id,
+                                              ui::ScaleFactor scale_factor) {
   // First check to see if this request is already in process or not.
   const auto active_iter = active_icon_requests_.find(app_id);
   if (active_iter != active_icon_requests_.end()) {
@@ -588,7 +588,7 @@ void CrostiniRegistryService::MaybeRequestIcon(const std::string& app_id,
   RequestIcon(app_id, scale_factor);
 }
 
-void CrostiniRegistryService::ClearApplicationList(
+void GuestOsRegistryService::ClearApplicationList(
     const std::string& vm_name,
     const std::string& container_name) {
   std::vector<std::string> removed_apps;
@@ -598,7 +598,7 @@ void CrostiniRegistryService::ClearApplicationList(
     base::DictionaryValue* apps = update.Get();
 
     for (const auto& item : apps->DictItems()) {
-      if (item.first == GetTerminalId())
+      if (item.first == crostini::GetTerminalId())
         continue;
       if (item.second.FindKey(guest_os::prefs::kAppVmNameKey)->GetString() ==
               vm_name &&
@@ -621,7 +621,7 @@ void CrostiniRegistryService::ClearApplicationList(
     obs.OnRegistryUpdated(this, updated_apps, removed_apps, inserted_apps);
 }
 
-void CrostiniRegistryService::UpdateApplicationList(
+void GuestOsRegistryService::UpdateApplicationList(
     const vm_tools::apps::ApplicationList& app_list) {
   VLOG(1) << "Received ApplicationList : " << ToString(app_list);
 
@@ -697,7 +697,7 @@ void CrostiniRegistryService::UpdateApplicationList(
     }
 
     for (const auto& item : apps->DictItems()) {
-      if (item.first == GetTerminalId())
+      if (item.first == crostini::GetTerminalId())
         continue;
       if (item.second.FindKey(guest_os::prefs::kAppVmNameKey)->GetString() ==
               app_list.vm_name() &&
@@ -734,7 +734,7 @@ void CrostiniRegistryService::UpdateApplicationList(
   }
 }
 
-void CrostiniRegistryService::RemoveAppData(const std::string& app_id) {
+void GuestOsRegistryService::RemoveAppData(const std::string& app_id) {
   // Remove any pending requests we have for this icon.
   active_icon_requests_.erase(app_id);
   retry_icon_requests_.erase(app_id);
@@ -745,21 +745,21 @@ void CrostiniRegistryService::RemoveAppData(const std::string& app_id) {
       base::BindOnce(&DeleteIconFolderFromFileThread, GetAppPath(app_id)));
 }
 
-void CrostiniRegistryService::AddObserver(Observer* observer) {
+void GuestOsRegistryService::AddObserver(Observer* observer) {
   observers_.AddObserver(observer);
 }
 
-void CrostiniRegistryService::RemoveObserver(Observer* observer) {
+void GuestOsRegistryService::RemoveObserver(Observer* observer) {
   observers_.RemoveObserver(observer);
 }
 
-void CrostiniRegistryService::AppLaunched(const std::string& app_id) {
+void GuestOsRegistryService::AppLaunched(const std::string& app_id) {
   DictionaryPrefUpdate update(prefs_, guest_os::prefs::kGuestOsRegistry);
   base::DictionaryValue* apps = update.Get();
 
   base::Value* app = apps->FindKey(app_id);
   if (!app) {
-    DCHECK_EQ(app_id, GetTerminalId());
+    DCHECK_EQ(app_id, crostini::GetTerminalId());
     base::Value pref(base::Value::Type::DICTIONARY);
     SetCurrentTime(&pref, guest_os::prefs::kAppLastLaunchTimeKey);
     apps->SetKey(app_id, std::move(pref));
@@ -769,16 +769,16 @@ void CrostiniRegistryService::AppLaunched(const std::string& app_id) {
   SetCurrentTime(app, guest_os::prefs::kAppLastLaunchTimeKey);
 }
 
-void CrostiniRegistryService::SetCurrentTime(base::Value* dictionary,
-                                             const char* key) const {
+void GuestOsRegistryService::SetCurrentTime(base::Value* dictionary,
+                                            const char* key) const {
   DCHECK(dictionary);
   int64_t time = clock_->Now().ToDeltaSinceWindowsEpoch().InMicroseconds();
   dictionary->SetKey(key, base::Value(base::NumberToString(time)));
 }
 
-void CrostiniRegistryService::SetAppScaled(const std::string& app_id,
-                                           bool scaled) {
-  DCHECK_NE(app_id, GetTerminalId());
+void GuestOsRegistryService::SetAppScaled(const std::string& app_id,
+                                          bool scaled) {
+  DCHECK_NE(app_id, crostini::GetTerminalId());
 
   DictionaryPrefUpdate update(prefs_, guest_os::prefs::kGuestOsRegistry);
   base::DictionaryValue* apps = update.Get();
@@ -793,10 +793,10 @@ void CrostiniRegistryService::SetAppScaled(const std::string& app_id,
   app->SetKey(guest_os::prefs::kAppScaledKey, base::Value(scaled));
 }
 
-void CrostiniRegistryService::RequestIcon(const std::string& app_id,
-                                          ui::ScaleFactor scale_factor) {
+void GuestOsRegistryService::RequestIcon(const std::string& app_id,
+                                         ui::ScaleFactor scale_factor) {
   // Ignore requests for app_id that isn't registered.
-  base::Optional<CrostiniRegistryService::Registration> registration =
+  base::Optional<GuestOsRegistryService::Registration> registration =
       GetRegistration(app_id);
   if (!registration) {
     VLOG(2) << "Request to load icon for non-registered app: " << app_id;
@@ -831,15 +831,15 @@ void CrostiniRegistryService::RequestIcon(const std::string& app_id,
   crostini::CrostiniManager::GetForProfile(profile_)->GetContainerAppIcons(
       registration->VmName(), registration->ContainerName(), desktop_file_ids,
       ash::AppListConfig::instance().grid_icon_dimension(), icon_scale,
-      base::BindOnce(&CrostiniRegistryService::OnContainerAppIcon,
+      base::BindOnce(&GuestOsRegistryService::OnContainerAppIcon,
                      weak_ptr_factory_.GetWeakPtr(), app_id, scale_factor));
 }
 
-void CrostiniRegistryService::OnContainerAppIcon(
+void GuestOsRegistryService::OnContainerAppIcon(
     const std::string& app_id,
     ui::ScaleFactor scale_factor,
     bool success,
-    const std::vector<Icon>& icons) {
+    const std::vector<crostini::Icon>& icons) {
   if (!success) {
     // Add this to the list of retryable icon requests so we redo this when
     // we get feedback from the container that it's available.
@@ -853,13 +853,13 @@ void CrostiniRegistryService::OnContainerAppIcon(
   base::ThreadPool::PostTaskAndReplyWithResult(
       FROM_HERE, {base::MayBlock(), base::TaskPriority::BEST_EFFORT},
       base::BindOnce(&InstallIconFromFileThread, icon_path, icons[0].content),
-      base::BindOnce(&CrostiniRegistryService::OnIconInstalled,
+      base::BindOnce(&GuestOsRegistryService::OnIconInstalled,
                      weak_ptr_factory_.GetWeakPtr(), app_id, scale_factor));
 }
 
-void CrostiniRegistryService::OnIconInstalled(const std::string& app_id,
-                                              ui::ScaleFactor scale_factor,
-                                              bool success) {
+void GuestOsRegistryService::OnIconInstalled(const std::string& app_id,
+                                             ui::ScaleFactor scale_factor,
+                                             bool success) {
   if (!success)
     return;
 
@@ -867,12 +867,12 @@ void CrostiniRegistryService::OnIconInstalled(const std::string& app_id,
     obs.OnAppIconUpdated(app_id, scale_factor);
 }
 
-void CrostiniRegistryService::MigrateTerminal() const {
+void GuestOsRegistryService::MigrateTerminal() const {
   // Remove the old terminal from the registry.
   DictionaryPrefUpdate update(profile_->GetPrefs(),
                               guest_os::prefs::kGuestOsRegistry);
   base::DictionaryValue* apps = update.Get();
-  apps->RemoveKey(GetDeletedTerminalId());
+  apps->RemoveKey(crostini::GetDeletedTerminalId());
 
   // Transfer item attributes from old terminal to new, and delete old terminal
   // once AppListSyncableService is initialized.
@@ -894,4 +894,4 @@ void CrostiniRegistryService::MigrateTerminal() const {
           base::Unretained(app_list_syncable_service)));
 }
 
-}  // namespace crostini
+}  // namespace guest_os
