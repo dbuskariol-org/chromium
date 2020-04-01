@@ -324,8 +324,17 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
   // above.
   html_source->AddResourcePath("images/cookies_banner.svg",
                                IDR_SETTINGS_IMAGES_COOKIES_BANNER_SVG);
+  html_source->AddResourcePath("images/cookies_banner_dark.svg",
+                               IDR_SETTINGS_IMAGES_COOKIES_BANNER_DARK_SVG);
+  html_source->AddResourcePath("images/permissions_banner.svg",
+                               IDR_SETTINGS_IMAGES_PERMISSIONS_BANNER_SVG);
+  html_source->AddResourcePath("images/permissions_banner_dark.svg",
+                               IDR_SETTINGS_IMAGES_PERMISSIONS_BANNER_DARK_SVG);
   html_source->AddResourcePath("images/safe_browsing_banner.svg",
                                IDR_SETTINGS_IMAGES_SAFE_BROWSING_BANNER_SVG);
+  html_source->AddResourcePath(
+      "images/safe_browsing_banner_dark.svg",
+      IDR_SETTINGS_IMAGES_SAFE_BROWSING_BANNER_DARK_SVG);
   html_source->AddResourcePath("images/sync_banner.svg",
                                IDR_SETTINGS_IMAGES_SYNC_BANNER_SVG);
   html_source->AddResourcePath("images/sync_banner_dark.svg",

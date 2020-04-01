@@ -44,9 +44,15 @@
         padding-inline-start: var(--cr-button-edge-spacing);
       }
     </style>
-    <img src="chrome://settings/images/safe_browsing_banner.svg">
+    <picture>
+      <source
+          srcset="chrome://settings/images/safe_browsing_banner_dark.svg"
+          media="(prefers-color-scheme: dark">
+      <img id="banner" alt=""
+          src="chrome://settings/images/safe_browsing_banner.svg">
+    </picture>
     <div class="settings-box block first">
-      <h2 class="first">$i18n{safeBrowsingSectionLabel}</h2>
+      <h2>$i18n{safeBrowsingSectionLabel}</h2>
       <cr-radio-group id="safeBrowsingRadio"
           selected="[[selectSafeBrowsingRadio_]]"
           selectable-elements="cr-radio-button, settings-collapse-radio-button"
