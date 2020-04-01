@@ -3829,6 +3829,11 @@ void AXPlatformNodeAuraLinux::OnInvalidStatusChanged() {
       GetData().GetInvalidState() != ax::mojom::InvalidState::kFalse);
 }
 
+void AXPlatformNodeAuraLinux::OnAlertShown() {
+  atk_object_notify_state_change(ATK_OBJECT(GetOrCreateAtkObject()),
+                                 ATK_STATE_SHOWING, TRUE);
+}
+
 void AXPlatformNodeAuraLinux::NotifyAccessibilityEvent(
     ax::mojom::Event event_type) {
   if (!GetOrCreateAtkObject())
@@ -3903,6 +3908,9 @@ void AXPlatformNodeAuraLinux::NotifyAccessibilityEvent(
       // ensure we still fire the event, though, we also pay attention to
       // kLoadComplete.
       OnDocumentTitleChanged();
+      break;
+    case ax::mojom::Event::kAlert:
+      OnAlertShown();
       break;
     default:
       break;
