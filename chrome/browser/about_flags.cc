@@ -4364,7 +4364,7 @@ const FeatureEntry kFeatureEntries[] = {
 
     {"allow-scroll-settings", flag_descriptions::kAllowScrollSettingsName,
      flag_descriptions::kAllowScrollSettingsDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(features::kAllowScrollSettings)},
+     FEATURE_VALUE_TYPE(chromeos::features::kAllowScrollSettings)},
 
     {"enable-streamlined-usb-printer-setup",
      flag_descriptions::kStreamlinedUsbPrinterSetupName,

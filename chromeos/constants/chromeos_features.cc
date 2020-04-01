@@ -16,6 +16,11 @@ const base::Feature kInstantTetheringBackgroundAdvertisementSupport{
 
 }  // namespace
 
+// Shows settings for adjusting scroll acceleration/sensitivity for
+// mouse/touchpad.
+const base::Feature kAllowScrollSettings{"AllowScrollSettings",
+                                         base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Controls whether to enable Ambient mode feature.
 const base::Feature kAmbientModeFeature{"ChromeOSAmbientMode",
                                         base::FEATURE_DISABLED_BY_DEFAULT};
