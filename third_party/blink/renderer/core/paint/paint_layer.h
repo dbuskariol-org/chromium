@@ -981,24 +981,6 @@ class CORE_EXPORT PaintLayer : public DisplayItemClient {
       const PhysicalOffset* offset_from_root = nullptr,
       const PhysicalOffset& sub_pixel_accumulation = PhysicalOffset()) const;
 
-  enum TransparencyClipBoxBehavior {
-    kPaintingTransparencyClipBox,
-    kHitTestingTransparencyClipBox
-  };
-
-  enum TransparencyClipBoxMode {
-    kDescendantsOfTransparencyClipBox,
-    kRootOfTransparencyClipBox
-  };
-
-  static PhysicalRect TransparencyClipBox(
-      const PaintLayer*,
-      const PaintLayer* root_layer,
-      TransparencyClipBoxBehavior transparency_behavior,
-      TransparencyClipBoxMode transparency_mode,
-      const PhysicalOffset& sub_pixel_accumulation,
-      GlobalPaintFlags = kGlobalPaintNormalPhase);
-
   bool SelfNeedsRepaint() const { return self_needs_repaint_; }
   bool DescendantNeedsRepaint() const { return descendant_needs_repaint_; }
   bool SelfOrDescendantNeedsRepaint() const {
