@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.settings.homepage;
+package org.chromium.chrome.browser.homepage.settings;
 
 import android.support.test.filters.SmallTest;
 
@@ -94,6 +94,13 @@ public class HomepageSettingsFragmentWithEditorTest {
 
         Assert.assertNotNull("Switch preference is Null", mSwitch);
         Assert.assertNotNull("Homepage Edit is Null", mHomepageEditor);
+
+        try {
+            Assert.assertEquals("HomepageEditor does not hold a valid fragment.",
+                    Class.forName(mHomepageEditor.getFragment()), HomepageEditor.class);
+        } catch (ClassNotFoundException e) {
+            throw new AssertionError("Fragment class for HomepageEditor is not found.");
+        }
     }
 
     @Test
