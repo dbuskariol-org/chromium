@@ -11162,6 +11162,7 @@ interface XMLHttpRequest : XMLHttpRequestEventTarget
     method overrideMimeType
     method send
     method setRequestHeader
+    method setTrustToken
     setter onreadystatechange
     setter responseType
     setter timeout
