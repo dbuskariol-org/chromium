@@ -1436,6 +1436,10 @@ public class WebContentsAccessibilityImpl extends AccessibilityNodeProvider
             addAction(node, ACTION_SET_TEXT);
             addAction(node, AccessibilityNodeInfo.ACTION_PASTE);
 
+            if (ACTION_IME_ENTER != 0) {
+                addAction(node, ACTION_IME_ENTER);
+            }
+
             if (hasNonEmptyValue) {
                 addAction(node, AccessibilityNodeInfo.ACTION_SET_SELECTION);
                 addAction(node, AccessibilityNodeInfo.ACTION_CUT);
@@ -1499,10 +1503,6 @@ public class WebContentsAccessibilityImpl extends AccessibilityNodeProvider
 
         if (isRangeType) {
             addAction(node, ACTION_SET_PROGRESS);
-        }
-
-        if (isForm && ACTION_IME_ENTER != 0) {
-            addAction(node, ACTION_IME_ENTER);
         }
     }
 
