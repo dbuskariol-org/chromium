@@ -112,11 +112,13 @@ bool ParseStringValue(const std::string& property_type,
     }
   }
   if (prop_config.boolean) {
-    if (value == "https://schema.org/True" || value == "true") {
+    if (value == "https://schema.org/True" ||
+        value == "http://schema.org/True" || value == "true") {
       values->bool_values.push_back(true);
       return true;
     }
-    if (value == "https://schema.org/False" || value == "false") {
+    if (value == "https://schema.org/False" ||
+        value == "http://schema.org/False" || value == "false") {
       values->bool_values.push_back(false);
       return true;
     }
