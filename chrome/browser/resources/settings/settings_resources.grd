@@ -661,6 +661,12 @@
       <structure name="IDR_SETTINGS_PASSWORD_CHECK_JS"
                  file="autofill_page/password_check.js"
                  type="chrome_html" />
+      <structure name="IDR_SETTINGS_PASSWORD_CHECK_BEHAVIOR_HTML"
+                 file="autofill_page/password_check_behavior.html"
+                 type="chrome_html" />
+      <structure name="IDR_SETTINGS_PASSWORD_CHECK_BEHAVIOR_JS"
+                 file="autofill_page/password_check_behavior.js"
+                 type="chrome_html" />
       <structure name="IDR_SETTINGS_PASSWORD_CHECK_EDIT_DIALOG_HTML"
                  file="autofill_page/password_check_edit_dialog.html"
                  type="chrome_html" />

@@ -293,6 +293,7 @@ js2gtest("browser_tests_js_webui") {
     "$root_gen_dir/chrome/test/data/webui/settings/test_lifetime_browser_proxy.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/test_open_window_proxy.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/test_password_manager_proxy.m.js",
+    "$root_gen_dir/chrome/test/data/webui/settings/test_plural_string_proxy.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/test_privacy_page_browser_proxy.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/test_profile_info_browser_proxy.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/test_reset_browser_proxy.m.js",

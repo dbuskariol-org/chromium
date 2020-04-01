@@ -275,6 +275,7 @@ CrSettingsAutofillPageTest.prototype = {
     'passwords_and_autofill_fake_data.js',
     'test_open_window_proxy.js',
     'test_password_manager_proxy.js',
+    'test_plural_string_proxy.js',
     'autofill_page_test.js',
   ]),
 };
