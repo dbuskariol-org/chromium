@@ -317,6 +317,13 @@ try_.chromium_linux_builder(
 )
 
 try_.chromium_linux_builder(
+    name = 'fuchsia-compile-x64-dbg',
+    tryjob = try_.job(
+        experiment_percentage = 50,
+    ),
+)
+
+try_.chromium_linux_builder(
     name = 'fuchsia-fyi-arm64-rel',
 )
 
@@ -371,6 +378,13 @@ try_.chromium_linux_builder(
 try_.chromium_linux_builder(
     name = 'linux-gcc-rel',
     goma_backend = None,
+)
+
+try_.chromium_linux_builder(
+    name = 'linux-ozone-x11-and-wayland-rel',
+    tryjob = try_.job(
+        experiment_percentage = 1,
+    ),
 )
 
 try_.chromium_linux_builder(
@@ -479,6 +493,13 @@ try_.chromium_linux_builder(
     executable = 'recipe:tricium_metrics',
 )
 
+
+try_.chromium_mac_builder(
+    name = 'mac-coverage-rel',
+    use_clang_coverage = True,
+    goma_jobs = goma.jobs.J150,
+    tryjob = try_.job(experiment_percentage = 3)
+)
 
 try_.chromium_mac_builder(
     name = 'mac-osxbeta-rel',
@@ -598,6 +619,15 @@ try_.chromium_win_builder(
         'pool_size': 20,
         'tests': '*',
     },
+)
+
+try_.chromium_win_builder(
+    name = 'win10_chromium_x64_coverage_rel_ng',
+    os = os.WINDOWS_10,
+    use_clang_coverage = True,
+    goma_jobs = goma.jobs.J150,
+    ssd = True,
+    tryjob = try_.job(experiment_percentage = 3),
 )
 
 try_.chromium_win_builder(
