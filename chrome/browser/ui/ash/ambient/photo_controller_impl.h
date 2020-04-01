@@ -24,18 +24,16 @@ class PhotoControllerImpl : public ash::PhotoController {
 
   // ash::PhotoController:
   void GetNextImage(PhotoDownloadCallback callback) override;
-  void GetSettings(GetSettingsCallback callback) override;
-  void UpdateSettings(int topic_source,
-                      UpdateSettingsCallback callback) override;
 
  private:
   void OnNextImageInfoFetched(
       PhotoDownloadCallback callback,
+      bool success,
       const base::Optional<ash::PhotoController::Topic>& topic);
 
   std::unique_ptr<PhotoClient> photo_client_;
 
-  base::WeakPtrFactory<PhotoControllerImpl> weak_factory_{this};
+  base::WeakPtrFactory<PhotoControllerImpl> weak_factory_;
 
   DISALLOW_COPY_AND_ASSIGN(PhotoControllerImpl);
 };
