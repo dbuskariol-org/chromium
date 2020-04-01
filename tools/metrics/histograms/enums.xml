@@ -48710,6 +48710,14 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="NTP omnibox tapped."/>
   <int value="3" label="NTP omnibox long-pressed (from paste action)."/>
   <int value="4" label="Accelerator tapped."/>
+  <int value="5" label="Tab switcher omnibox tapped (obsolete)."/>
+  <int value="6" label="Tasks surface fake box tapped."/>
+  <int value="7" label="Tasks surface fake box long pressed."/>
+  <int value="8" label="Default with hardware keyboard."/>
+  <int value="9" label="Search query."/>
+  <int value="10" label="Launched new incognito tab."/>
+  <int value="11" label="Menu or keyboard action."/>
+  <int value="12" label="Unfocus."/>
 </enum>
 
 <enum name="OmniboxInputType">
