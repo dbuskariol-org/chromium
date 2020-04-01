@@ -48,11 +48,6 @@ COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kShow10_9ObsoleteInfobar;
 #endif  // defined(OS_MACOSX)
 
-#if defined(OS_ANDROID)
-COMPONENT_EXPORT(CHROME_FEATURES)
-extern const base::Feature kAppNotificationStatusMessaging;
-#endif  // defined(OS_ANDROID)
-
 #if !defined(OS_ANDROID)
 COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kAppServiceContextMenu;

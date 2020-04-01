@@ -178,6 +178,7 @@
 #if defined(OS_ANDROID)
 #include "chrome/browser/android/explore_sites/explore_sites_feature.h"
 #include "chrome/browser/flags/android/chrome_feature_list.h"
+#include "components/browser_ui/site_settings/android/features.h"
 #include "components/external_intents/android/external_intents_feature_list.h"
 #else  // OS_ANDROID
 #include "chrome/browser/media/router/media_router_feature.h"
@@ -1969,7 +1970,7 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-app-notification-status-messaging",
      flag_descriptions::kAppNotificationStatusMessagingName,
      flag_descriptions::kAppNotificationStatusMessagingDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(features::kAppNotificationStatusMessaging)},
+     FEATURE_VALUE_TYPE(browser_ui::kAppNotificationStatusMessaging)},
 #endif  // OS_ANDROID
     {"silent-debugger-extension-api",
      flag_descriptions::kSilentDebuggerExtensionApiName,
