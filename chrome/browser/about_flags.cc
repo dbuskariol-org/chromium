@@ -2121,6 +2121,9 @@ const FeatureEntry kFeatureEntries[] = {
     {"message-center-redesign", flag_descriptions::kMessageCenterRedesignName,
      flag_descriptions::kMessageCenterRedesignDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(ash::features::kUnifiedMessageCenterRefactor)},
+    {"system-tray-mic-gain", flag_descriptions::kSystemTrayMicGainName,
+     flag_descriptions::kSystemTrayMicGainDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(ash::features::kSystemTrayMicGainSetting)},
 #endif  // OS_CHROMEOS
     {
         "disable-accelerated-video-decode",
