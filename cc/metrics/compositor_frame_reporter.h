@@ -123,7 +123,8 @@ class CC_EXPORT CompositorFrameReporter {
       const base::flat_set<FrameSequenceTrackerType>* active_trackers,
       const viz::BeginFrameId& id,
       const base::TimeTicks frame_deadline,
-      LatencyUkmReporter* latency_ukm_reporter);
+      LatencyUkmReporter* latency_ukm_reporter,
+      bool should_report_metrics);
   ~CompositorFrameReporter();
 
   CompositorFrameReporter(const CompositorFrameReporter& reporter) = delete;
@@ -196,6 +197,8 @@ class CC_EXPORT CompositorFrameReporter {
                                const base::TimeTicks end_time) const;
 
   void ReportAllTraceEvents(const char* termination_status_str) const;
+
+  const bool should_report_metrics_;
 
   StageData current_stage_;
   BeginMainFrameMetrics blink_breakdown_;

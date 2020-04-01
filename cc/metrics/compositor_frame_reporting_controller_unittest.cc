@@ -28,7 +28,8 @@ MATCHER(IsWhitelisted,
 class TestCompositorFrameReportingController
     : public CompositorFrameReportingController {
  public:
-  TestCompositorFrameReportingController() = default;
+  TestCompositorFrameReportingController()
+      : CompositorFrameReportingController(/*should_report_metrics=*/true) {}
 
   TestCompositorFrameReportingController(
       const TestCompositorFrameReportingController& controller) = delete;
