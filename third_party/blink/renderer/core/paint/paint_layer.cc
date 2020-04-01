@@ -865,19 +865,6 @@ void PaintLayer::UpdateSizeAndScrollingAfterLayout() {
   }
 }
 
-TransformationMatrix PaintLayer::PerspectiveTransform() const {
-  if (!GetLayoutObject().HasTransformRelatedProperty())
-    return TransformationMatrix();
-
-  const ComputedStyle& style = GetLayoutObject().StyleRef();
-  if (!style.HasPerspective())
-    return TransformationMatrix();
-
-  TransformationMatrix t;
-  t.ApplyPerspective(style.Perspective());
-  return t;
-}
-
 FloatPoint PaintLayer::PerspectiveOrigin() const {
   if (!GetLayoutObject().HasTransformRelatedProperty())
     return FloatPoint();
