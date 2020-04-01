@@ -210,7 +210,9 @@ cr.define('settings_passwords_check', function() {
       sync_test_util.simulateSyncStatus({signedIn: true});
 
       await passwordManager.whenCalled('getPasswordCheckStatus');
-      expectTrue(isElementVisible(section.$.linkToGoogleAccount));
+      expectEquals(
+          section.i18n('checkPasswordsErrorQuotaGoogleAccount'),
+          section.$.title.innerText);
       expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
     });
 
@@ -228,7 +230,8 @@ cr.define('settings_passwords_check', function() {
 
       await passwordManager.whenCalled('getPasswordCheckStatus');
       Polymer.dom.flush();
-      expectFalse(isElementVisible(section.$.linkToGoogleAccount));
+      expectEquals(
+          section.i18n('checkPasswordsErrorQuota'), section.$.title.innerText);
       expectFalse(isElementVisible(section.$.controlPasswordCheckButton));
     });
 
@@ -247,7 +250,8 @@ cr.define('settings_passwords_check', function() {
 
       await passwordManager.whenCalled('getPasswordCheckStatus');
       Polymer.dom.flush();
-      expectFalse(isElementVisible(section.$.linkToGoogleAccount));
+      expectEquals(
+          section.i18n('checkPasswordsErrorQuota'), section.$.title.innerText);
       assertFalse(isElementVisible(section.$.controlPasswordCheckButton));
     });
 
@@ -699,12 +703,12 @@ cr.define('settings_passwords_check', function() {
       const section = createCheckPasswordSection();
       await passwordManager.whenCalled('getPasswordCheckStatus');
       Polymer.dom.flush();
-      const title = section.$.title;
+      const titleRow = section.$.titleRow;
       const subtitle = section.$.subtitle;
-      assertTrue(isElementVisible(title));
+      assertTrue(isElementVisible(titleRow));
       assertTrue(isElementVisible(subtitle));
       expectEquals(
-          section.i18n('checkedPasswords') + ' • Just now', title.innerText);
+          section.i18n('checkedPasswords') + ' • Just now', titleRow.innerText);
     });
 
     // When offline, only show an error.

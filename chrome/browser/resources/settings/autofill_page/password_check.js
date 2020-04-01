@@ -17,17 +17,6 @@ Polymer({
 
   properties: {
     /**
-     * This URL redirects to the passwords check for sync users.
-     * @type {!string}
-     * @private
-     */
-    passwordCheckUrl_: {
-      type: String,
-      value:
-          'https://passwords.google.com/checkup/start?utm_source=chrome&utm_medium=desktop&utm_campaign=leak_dialog&hideExplanation=true',
-    },
-
-    /**
      * The number of compromised passwords as a formatted string.
      * @private
      */
@@ -63,15 +52,20 @@ Polymer({
     },
 
     /** @private */
-    suppressCheckupLink_: {
-      type: Boolean,
-      computed: 'suppressesCheckupLink_(status_, syncPrefs_, syncStatus_)',
+    title_: {
+      type: String,
+      computed: 'computeTitle_(status_, canUsePasswordCheckup_)',
     },
 
     /** @private */
     isSignedOut_: {
       type: Boolean,
       computed: 'computeIsSignedOut_(syncStatus_, storedAccounts_)',
+    },
+
+    canUsePasswordCheckup_: {
+      type: Boolean,
+      computed: 'computeCanUsePasswordCheckup_(syncPrefs_, syncStatus_)',
     },
 
     /** @private */
@@ -101,8 +95,8 @@ Polymer({
     /** @private */
     showNoCompromisedPasswordsLabel_: {
       type: Boolean,
-      computed:
-          'computeShowNoCompromisedPasswordsLabel(syncStatus_, prefs.*, status_, leakedPasswords)',
+      computed: 'computeShowNoCompromisedPasswordsLabel(' +
+          'syncStatus_, prefs.*, status_, leakedPasswords)',
     },
 
     /** @private */
@@ -344,7 +338,7 @@ Polymer({
    * @return {string}
    * @private
    */
-  getTitle_() {
+  computeTitle_() {
     switch (this.status_.state) {
       case CheckState.IDLE:
         return this.waitsForFirstCheck_() ?
@@ -367,7 +361,12 @@ Polymer({
       case CheckState.NO_PASSWORDS:
         return this.i18n('checkPasswordsErrorNoPasswords');
       case CheckState.QUOTA_LIMIT:
-        return this.i18n('checkPasswordsErrorQuota');
+        // Note: For the checkup case we embed the link as HTML, thus we need to
+        // use i18nAdvanced() here as well as the `inner-h-t-m-l` attribute in
+        // the DOM.
+        return this.canUsePasswordCheckup_ ?
+            this.i18nAdvanced('checkPasswordsErrorQuotaGoogleAccount') :
+            this.i18n('checkPasswordsErrorQuota');
       case CheckState.OTHER_ERROR:
         return this.i18n('checkPasswordsErrorGeneric');
     }
@@ -554,20 +553,13 @@ Polymer({
   },
 
   /**
-   * Returns true iff the user cannot retry the password check in their account.
-   * Either because they are syncing or because they use a custom passphrase.
+   * Returns whether the user can use the online Password Checkup.
    * @return {boolean}
    * @private
    */
-  suppressesCheckupLink_() {
-    if (this.status_.state != CheckState.QUOTA_LIMIT) {
-      return true;  // Never show the retry link for other states.
-    }
-    if (!this.syncStatus_ || !this.syncStatus_.signedIn) {
-      return true;  // Never show the retry link for signed-out users.
-    }
-    // Show the retry link only, if user data is unencrypted.
-    return !!this.syncPrefs_ && !!this.syncPrefs_.encryptAllData;
+  computeCanUsePasswordCheckup_() {
+    return !!this.syncStatus_ && !!this.syncStatus_.signedIn &&
+        (!this.syncPrefs_ || !this.syncPrefs_.encryptAllData);
   },
 
   /**
