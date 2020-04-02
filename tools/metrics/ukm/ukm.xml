@@ -6906,7 +6906,8 @@ be describing additional metrics about the same event.
     <summary>
       The duration (in milliseconds) for how long it took from the request to go
       out to when it was usable on the client. Only recorded if a fetch was
-      initiated for the navigation and the fetch was successful.
+      initiated for the navigation. Will be recorded as INT64_MAX if the request
+      did not complete successfully.
     </summary>
   </metric>
   <metric name="NavigationHostCovered"
