@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "base/macros.h"
+#include "base/threading/thread.h"
 #include "chrome/browser/chromeos/app_mode/kiosk_app_manager_base.h"
 #include "chrome/browser/chromeos/app_mode/web_app/web_kiosk_app_data.h"
 #include "components/account_id/account_id.h"
