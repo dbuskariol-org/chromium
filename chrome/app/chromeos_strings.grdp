@@ -900,7 +900,7 @@
     Show navigation buttons
   </message>
   <message name="IDS_MARKETING_OPT_IN_ACCESSIBILITY_NAV_BUTTON_SETTING_DESCRIPTION" desc="The descripton of the accessibility option that forces shelf navigation buttons (button to go home, back, or the active apps overview) to be always shown. These buttons are hidden by default when the device is in tablet mode.">
-    Show Launcher, Back, Overview buttons in Shelf in tablet mode.
+    Navigate home, back, and switch apps with buttons in tablet mode.
   </message>
   <message name="IDS_MARKETING_OPT_IN_ACCESSIBILITY_DONE_BUTTON" desc="The label for the button on the accessibility page that is part of the the marketing opt in dialog screen, the last OOBE screen shown to the user on their first login to the Chrome OS device. The button closes the screen, and ends the OOBE (which will start the user session).">
     Done
