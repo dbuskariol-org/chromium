@@ -2682,7 +2682,8 @@ body.files-ng .table-label-container > span {
   text-overflow: ellipsis;
 }
 
-body.files-ng .table-header-label .sorted .sort-icon:hover {
+html:not(.pointer-active) body.files-ng .table-header-label .sorted
+.sort-icon:hover {
   background-color: rgba(0, 0, 0, 4%);
 }
 
