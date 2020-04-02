@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.partnercustomizations;
+package org.chromium.chrome.browser.homepage;
 
 import android.text.TextUtils;
 
@@ -14,10 +14,10 @@ import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.homepage.HomepagePolicyManager;
 import org.chromium.chrome.browser.homepage.settings.HomepageMetricsEnums.HomeButtonPreferenceState;
 import org.chromium.chrome.browser.homepage.settings.HomepageMetricsEnums.HomepageLocationType;
 import org.chromium.chrome.browser.ntp.NewTabPage;
+import org.chromium.chrome.browser.partnercustomizations.PartnerBrowserCustomizations;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.components.embedder_support.util.UrlConstants;
@@ -27,8 +27,8 @@ import org.chromium.components.embedder_support.util.UrlConstants;
  *
  * This class serves as a single homepage logic gateway.
  */
-public class HomepageManager implements HomepagePolicyManager.HomepagePolicyStateListener {
-
+public class HomepageManager implements HomepagePolicyManager.HomepagePolicyStateListener,
+                                        PartnerBrowserCustomizations.PartnerHomepageListener {
     /**
      * An interface to use for getting homepage related updates.
      */
@@ -48,6 +48,7 @@ public class HomepageManager implements HomepagePolicyManager.HomepagePolicyStat
         mSharedPreferencesManager = SharedPreferencesManager.getInstance();
         mHomepageStateListeners = new ObserverList<>();
         HomepagePolicyManager.getInstance().addListener(this);
+        PartnerBrowserCustomizations.getInstance().setPartnerHomepageListener(this);
     }
 
     /**
@@ -134,8 +135,8 @@ public class HomepageManager implements HomepagePolicyManager.HomepagePolicyStat
      *         if the homepage button is force enabled via flag.
      */
     public static String getDefaultHomepageUri() {
-        if (PartnerBrowserCustomizations.isHomepageProviderAvailableAndEnabled()) {
-            return PartnerBrowserCustomizations.getHomePageUrl();
+        if (PartnerBrowserCustomizations.getInstance().isHomepageProviderAvailableAndEnabled()) {
+            return PartnerBrowserCustomizations.getInstance().getHomePageUrl();
         }
         return UrlConstants.NTP_NON_NATIVE_URL;
     }
@@ -301,11 +302,12 @@ public class HomepageManager implements HomepagePolicyManager.HomepagePolicyStat
             return HomepageLocationType.USER_CUSTOMIZED_NTP;
         }
         if (getPrefHomepageUseDefaultUri()) {
-            if (!PartnerBrowserCustomizations.isHomepageProviderAvailableAndEnabled()) {
+            if (!PartnerBrowserCustomizations.getInstance()
+                            .isHomepageProviderAvailableAndEnabled()) {
                 return HomepageLocationType.DEFAULT_NTP;
             }
 
-            return NewTabPage.isNTPUrl(PartnerBrowserCustomizations.getHomePageUrl())
+            return NewTabPage.isNTPUrl(PartnerBrowserCustomizations.getInstance().getHomePageUrl())
                     ? HomepageLocationType.PARTNER_PROVIDED_NTP
                     : HomepageLocationType.PARTNER_PROVIDED_OTHER;
         }
@@ -323,5 +325,10 @@ public class HomepageManager implements HomepagePolicyManager.HomepagePolicyStat
         if (isPolicyEnabled) {
             recordHomepageIsCustomized(false);
         }
+    }
+
+    @Override
+    public void onHomepageUpdate() {
+        notifyHomepageUpdated();
     }
 }
