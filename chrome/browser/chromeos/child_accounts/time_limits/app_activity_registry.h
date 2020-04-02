@@ -297,6 +297,10 @@ class AppActivityRegistry : public AppServiceWrapper::EventListener {
   void MaybeShowSystemNotification(const AppId& app_id,
                                    const SystemNotification& notification);
 
+  // Called by AppActivityRegistry::SetAppLimit after the application's limit
+  // has been updated.
+  void AppLimitUpdated(const AppId& app_id);
+
   PrefService* const pref_service_;
 
   // Owned by AppTimeController.

@@ -1034,5 +1034,69 @@ TEST_F(AppActivityRegistryTest, AppReinstallations) {
   registry().OnAppAvailable(kApp1);
 }
 
+TEST_F(AppActivityRegistryTest, LimitSetAfterActivity) {
+  AppStateObserverMock state_observer_mock;
+  registry().AddAppStateObserver(&state_observer_mock);
+
+  const AppId kApp3(apps::mojom::AppType::kWeb, "l");
+  registry().OnAppInstalled(kApp3);
+  registry().OnAppAvailable(kApp3);
+
+  CreateAppActivityForApp(kApp3, base::TimeDelta::FromHours(1));
+
+  registry().OnAppActive(kApp3, CreateWindowForApp(kApp3), base::Time::Now());
+
+  const AppLimit web_limit(AppRestriction::kTimeLimit,
+                           base::TimeDelta::FromMinutes(20), base::Time::Now());
+  EXPECT_CALL(
+      state_observer_mock,
+      OnAppLimitReached(GetChromeAppId(), web_limit.daily_limit().value(),
+                        /* was_active */ false))
+      .Times(1);
+  EXPECT_CALL(state_observer_mock,
+              OnAppLimitReached(kApp2, web_limit.daily_limit().value(),
+                                /* was_active */ false))
+      .Times(1);
+  EXPECT_CALL(state_observer_mock,
+              OnAppLimitReached(kApp3, web_limit.daily_limit().value(),
+                                /* was_active */ true))
+      .Times(1);
+  const std::map<AppId, AppLimit> limits{{GetChromeAppId(), web_limit}};
+  registry().UpdateAppLimits(limits);
+}
+
+TEST_F(AppActivityRegistryTest, WebAppInstalled) {
+  AppStateObserverMock state_observer_mock;
+  registry().AddAppStateObserver(&state_observer_mock);
+  const AppLimit web_limit(AppRestriction::kTimeLimit,
+                           base::TimeDelta::FromHours(2), base::Time::Now());
+  const std::map<AppId, AppLimit> limits{{GetChromeAppId(), web_limit}};
+  registry().UpdateAppLimits(limits);
+
+  registry().OnAppActive(kApp2, CreateWindowForApp(kApp2), base::Time::Now());
+  task_environment()->FastForwardBy(base::TimeDelta::FromHours(1));
+
+  // Now a new application is installed.
+  const AppId kApp3(apps::mojom::AppType::kWeb, "l");
+
+  registry().OnAppInstalled(kApp3);
+  registry().OnAppAvailable(kApp3);
+
+  EXPECT_CALL(
+      state_observer_mock,
+      OnAppLimitReached(GetChromeAppId(), web_limit.daily_limit().value(),
+                        /* was_active */ false))
+      .Times(1);
+  EXPECT_CALL(state_observer_mock,
+              OnAppLimitReached(kApp2, web_limit.daily_limit().value(),
+                                /* was_active */ true))
+      .Times(1);
+  EXPECT_CALL(state_observer_mock,
+              OnAppLimitReached(kApp3, web_limit.daily_limit().value(),
+                                /* was_active */ false))
+      .Times(1);
+  task_environment()->FastForwardBy(base::TimeDelta::FromHours(1));
+}
+
 }  // namespace app_time
 }  // namespace chromeos

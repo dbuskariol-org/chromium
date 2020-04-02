@@ -470,17 +470,19 @@ bool AppActivityRegistry::UpdateAppLimits(
   bool policy_updated = false;
   for (auto& entry : activity_registry_) {
     const AppId& app_id = entry.first;
-    base::Optional<AppLimit> new_limit;
+
+    // Web time limits are updated when chrome's time limit is updated. Return.
+    if (app_id.app_type() == apps::mojom::AppType::kWeb)
+      continue;
+
+    base::Optional<AppLimit> new_limit = base::nullopt;
     if (base::Contains(app_limits, app_id))
       new_limit = app_limits.at(app_id);
 
-    bool is_web = ContributesToWebTimeLimit(app_id, GetAppState(app_id));
-    if (is_web && base::Contains(app_limits, GetChromeAppId()))
-      new_limit = app_limits.at(GetChromeAppId());
-
+    // If chrome is installed, update chrome's and web apps' time limit.
     // In Family Link app Chrome on Chrome OS is combined together with Android
     // Chrome. Therefore, use Android Chrome's time limit.
-    if (is_web && !base::Contains(app_limits, GetChromeAppId()) &&
+    if (app_id == GetChromeAppId() &&
         base::Contains(app_limits, GetAndroidChromeAppId())) {
       new_limit = app_limits.at(GetAndroidChromeAppId());
     }
@@ -512,7 +514,6 @@ bool AppActivityRegistry::SetAppLimit(
     return false;
 
   AppDetails& details = activity_registry_.at(app_id);
-
   // Limit 'data' are considered equal if only the |last_updated_| is different.
   // Update the limit to store new |last_updated_| value.
   bool did_change = !details.IsLimitEqual(app_limit);
@@ -534,31 +535,23 @@ bool AppActivityRegistry::SetAppLimit(
     return false;
   }
 
-  // Limit for the active app changed - adjust the timers.
-  // Handling of active app is different, because ongoing activity needs to be
-  // taken into account.
-  if (IsAppActive(app_id)) {
-    details.ResetTimeCheck();
-    ScheduleTimeLimitCheckForApp(app_id);
+  if (app_id != GetChromeAppId() &&
+      app_id.app_type() != apps::mojom::AppType::kWeb) {
+    AppLimitUpdated(app_id);
     return updated;
   }
 
-  // Inactive available app reached the limit - update the state.
-  // If app is in any other state than |kAvailable| the limit does not take
-  // effect.
-  if (IsAppAvailable(app_id) && details.IsLimitReached()) {
-    SetAppInactive(app_id, base::Time::Now());
-    SetAppState(app_id, AppState::kLimitReached);
-    return updated;
+  for (auto& entry : activity_registry_) {
+    const AppId& app_id = entry.first;
+    AppDetails& details = entry.second;
+    if (ContributesToWebTimeLimit(app_id, GetAppState(app_id)))
+      details.limit = app_limit;
   }
 
-  // Paused inactive app is below the limit again - update the state.
-  // This can happen if the limit was removed or new limit is greater the the
-  // previous one. We know that the state should be available, because app can
-  // only reach the limit if it is available.
-  if (IsAppTimeLimitReached(app_id) && !details.IsLimitReached()) {
-    SetAppState(app_id, AppState::kAvailable);
-    return updated;
+  for (auto& entry : activity_registry_) {
+    const AppId& app_id = entry.first;
+    if (ContributesToWebTimeLimit(app_id, GetAppState(app_id)))
+      AppLimitUpdated(app_id);
   }
 
   return updated;
@@ -739,6 +732,14 @@ void AppActivityRegistry::OnAppReinstalled(const AppId& app_id) {
 void AppActivityRegistry::Add(const AppId& app_id) {
   activity_registry_[app_id].activity = AppActivity(AppState::kAvailable);
   activity_registry_[app_id].received_app_installed_ = true;
+
+  if (app_id.app_type() == apps::mojom::AppType::kWeb &&
+      base::Contains(activity_registry_, GetChromeAppId())) {
+    activity_registry_[app_id].limit = GetWebTimeLimit();
+    activity_registry_[app_id].activity.SetAppState(
+        GetAppState(GetChromeAppId()));
+  }
+
   newly_installed_apps_.push_back(app_id);
   for (auto& observer : app_state_observers_)
     observer.OnAppInstalled(app_id);
@@ -1130,6 +1131,36 @@ void AppActivityRegistry::MaybeShowSystemNotification(
   // Otherwise, just show the notification.
   notification_delegate_->ShowAppTimeLimitNotification(
       app_id, notification.time_limit, notification.notification);
+}
+
+void AppActivityRegistry::AppLimitUpdated(const AppId& app_id) {
+  DCHECK(base::Contains(activity_registry_, app_id));
+  AppDetails& details = activity_registry_.at(app_id);
+
+  // Limit for the active app changed - adjust the timers.
+  // Handling of active app is different, because ongoing activity needs to be
+  // taken into account.
+  if (IsAppActive(app_id)) {
+    details.ResetTimeCheck();
+    ScheduleTimeLimitCheckForApp(app_id);
+    return;
+  }
+
+  // Inactive available app reached the limit - update the state.
+  // If app is in any other state than |kAvailable| the limit does not take
+  // effect.
+  if (IsAppAvailable(app_id) && details.IsLimitReached()) {
+    SetAppInactive(app_id, base::Time::Now());
+    SetAppState(app_id, AppState::kLimitReached);
+    return;
+  }
+
+  // Paused inactive app is below the limit again - update the state.
+  // This can happen if the limit was removed or new limit is greater the the
+  // previous one. We know that the state should be available, because app can
+  // only reach the limit if it is available.
+  if (IsAppTimeLimitReached(app_id) && !details.IsLimitReached())
+    SetAppState(app_id, AppState::kAvailable);
 }
 
 }  // namespace app_time
