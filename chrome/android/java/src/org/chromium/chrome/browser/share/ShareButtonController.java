@@ -103,7 +103,7 @@ public class ShareButtonController implements ButtonDataProvider {
         mContext.registerComponentCallbacks(mComponentCallbacks);
 
         mButtonData = new ButtonData(false,
-                AppCompatResources.getDrawable(mContext, R.drawable.ic_toolbar_share_24dp),
+                AppCompatResources.getDrawable(mContext, R.drawable.ic_toolbar_share_offset_24dp),
                 mOnClickListener, R.string.share, true, null);
 
         mScreenWidthDp = mContext.getResources().getConfiguration().screenWidthDp;
