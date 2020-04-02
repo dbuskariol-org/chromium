@@ -1958,9 +1958,11 @@ bool RTCPeerConnectionHandler::RemoveTrackPlanB(
     return false;
   if (!(*it)->RemoveFromPeerConnection(native_peer_connection_.get()))
     return false;
-  track_metrics_.RemoveTrack(MediaStreamTrackMetrics::Direction::kSend,
-                             MediaStreamTrackMetricsKind(web_track),
-                             web_track.Id().Utf8());
+  if (web_track) {
+    track_metrics_.RemoveTrack(MediaStreamTrackMetrics::Direction::kSend,
+                               MediaStreamTrackMetricsKind(web_track),
+                               web_track.Id().Utf8());
+  }
   if (peer_connection_tracker_) {
     auto sender_only_transceiver =
         std::make_unique<blink::RTCRtpSenderOnlyTransceiver>(
