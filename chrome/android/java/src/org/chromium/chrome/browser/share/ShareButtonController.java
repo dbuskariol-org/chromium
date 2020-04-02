@@ -93,7 +93,11 @@ public class ShareButtonController implements ButtonDataProvider {
                 int newOrientation = configuration.orientation;
                 if (newOrientation == mCurrentOrientation) return;
                 mCurrentOrientation = newOrientation;
-                mScreenWidthDp = configuration.screenWidthDp;
+                if (mCurrentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    mScreenWidthDp = Integer.MAX_VALUE;
+                } else {
+                    mScreenWidthDp = configuration.screenWidthDp;
+                }
                 updateButtonVisibility(mTabProvider.get());
                 notifyObservers(mButtonData.canShow);
             }
