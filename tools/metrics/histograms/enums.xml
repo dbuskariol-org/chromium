@@ -33109,10 +33109,12 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="-2111503073" label="/windows-1258-html.cnv"/>
   <int value="-2110345586" label="/macintosh-html.cnv"/>
   <int value="-2034479209" label="/confusables.cfu"/>
+  <int value="-1917305109" label="brkitr/thaidict.dict"/>
   <int value="-1873162436" label="/x-mac-cyrillic-html.cnv"/>
   <int value="-1780009268" label="/windows-1250-html.cnv"/>
   <int value="-1759448336" label="brkitr/line_normal.brk"/>
   <int value="-1697710168" label="/iso-8859-16-html.cnv"/>
+  <int value="-1687120246" label="brkitr/line_loose_cj.brk"/>
   <int value="-1504981961" label="/koi8-r-html.cnv"/>
   <int value="-1364734694" label="/iso-8859-7-html.cnv"/>
   <int value="-1327619847" label="/iso-8859-3-html.cnv"/>
@@ -33121,13 +33123,24 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="-1078901331" label="/cnvalias.icu"/>
   <int value="-1055927650" label="/ISO-2022-KR.cnv"/>
   <int value="-1052227072" label="/shift_jis-html.cnv"/>
+  <int value="-1052125062" label="/nfkc.nrm"/>
   <int value="-1047426245" label="/ISO-2022-CN.cnv"/>
+  <int value="-1014217346" label="brkitr/line.brk"/>
+  <int value="-840844187" label="brkitr/sent.brk"/>
   <int value="-834793818" label="/HZ-GB-2312.cnv"/>
   <int value="-737609096" label="/windows-1256-html.cnv"/>
+  <int value="-727059472" label="brkitr/laodict.dict"/>
+  <int value="-716747528" label="brkitr/khmerdict.dict"/>
   <int value="-524379715" label="/windows-1257-html.cnv"/>
+  <int value="-279661608" label="/ulayout.icu"/>
+  <int value="-194101744" label="/nfkc_cf.nrm"/>
+  <int value="-116865252" label="/uts46.nrm"/>
+  <int value="-52152166" label="brkitr/line_loose.brk"/>
+  <int value="-25592431" label="brkitr/burmesedict.dict"/>
   <int value="17625259" label="/iso-8859-4-html.cnv"/>
   <int value="143580007" label="/iso-8859-5-html.cnv"/>
   <int value="335235069" label="/unames.icu"/>
+  <int value="385770370" label="brkitr/line_normal_cj.brk"/>
   <int value="457714494" label="/windows-936-2000.cnv"/>
   <int value="516825216" label="/iso-8859-2-html.cnv"/>
   <int value="521388409" label="/windows-1252-html.cnv"/>
@@ -33138,16 +33151,19 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="815707934" label="/windows-1253-html.cnv"/>
   <int value="824383969" label="/windows-1255-html.cnv"/>
   <int value="828722545" label="/iso-8859-8-html.cnv"/>
+  <int value="855391538" label="brkitr/title.brk"/>
   <int value="1069381207" label="/windows-1251-html.cnv"/>
   <int value="1077119420" label="/iso-8859-15-html.cnv"/>
   <int value="1107452641" label="/iso-8859-6-html.cnv"/>
   <int value="1110127155" label="/euc-jp-html.cnv"/>
+  <int value="1169621536" label="brkitr/cjdict.dict"/>
   <int value="1197891648" label="/windows-874-html.cnv"/>
   <int value="1263030766" label="/euc-kr-html.cnv"/>
   <int value="1593431589" label="/ISO-2022-CN-EXT.cnv"/>
   <int value="1611823660" label="/windows-1254-html.cnv"/>
   <int value="1721050252" label="/iso-8859-14-html.cnv"/>
   <int value="1743955546" label="brkitr/char.brk"/>
+  <int value="1764849685" label="brkitr/sent_el.brk"/>
   <int value="1993636507" label="/gb18030.cnv"/>
   <int value="1998603597" label="/ibm866-html.cnv"/>
 </enum>
