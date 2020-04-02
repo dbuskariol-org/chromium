@@ -175,8 +175,9 @@ enum ChromePage {
   PLUGINVMSHAREDPATHS,
   OSRESET,
   OSACCESSIBILITY,
+  OSSEARCH,
 
-  LAST = OSACCESSIBILITY,
+  LAST = OSSEARCH,
 };
 
 // Describes an unique chrome app.

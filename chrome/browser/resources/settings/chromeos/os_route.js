@@ -17,7 +17,7 @@ cr.define('settings', function() {
     r.SIGN_OUT = r.BASIC.createChild('/signOut');
     r.SIGN_OUT.isNavigableDialog = true;
 
-    r.SEARCH = r.BASIC.createSection('/search', 'search');
+    r.OS_SEARCH = r.BASIC.createSection('/osSearch', 'osSearch');
     if (!loadTimeData.getBoolean('isGuest')) {
       r.PEOPLE = r.BASIC.createSection('/people', 'people');
       r.SYNC = r.PEOPLE.createChild('/syncSetup');
@@ -93,7 +93,7 @@ cr.define('settings', function() {
           r.PLUGIN_VM.createChild('/pluginVm/sharedPaths');
     }
 
-    r.GOOGLE_ASSISTANT = r.SEARCH.createChild('/googleAssistant');
+    r.GOOGLE_ASSISTANT = r.OS_SEARCH.createChild('/googleAssistant');
 
     r.ADVANCED = new settings.Route('/advanced');
 

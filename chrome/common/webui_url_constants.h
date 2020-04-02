@@ -387,6 +387,7 @@ extern const char kNetworkDetailSubPage[];
 extern const char kNetworksSubPage[];
 extern const char kOsAccessibilitySubPage[];
 extern const char kOsResetSubPage[];
+extern const char kOsSearchSubPage[];
 extern const char kPluginVmDetailsSubPage[];
 extern const char kPluginVmSharedPathsSubPage[];
 extern const char kPointerOverlaySubPage[];

@@ -119,6 +119,7 @@ constexpr std::pair<arc::mojom::ChromePage, const char*> kOSSettingsMapping[] =
      {ChromePage::PLUGINVMSHAREDPATHS, chrome::kPluginVmSharedPathsSubPage},
      {ChromePage::OSACCESSIBILITY, chrome::kOsAccessibilitySubPage},
      {ChromePage::OSRESET, chrome::kOsResetSubPage},
+     {ChromePage::OSSEARCH, chrome::kOsSearchSubPage},
      {ChromePage::POINTEROVERLAY, chrome::kPointerOverlaySubPage},
      {ChromePage::POWER, chrome::kPowerSubPage},
      {ChromePage::SMARTLOCKSETTINGS, chrome::kSmartLockSettingsSubPage},
