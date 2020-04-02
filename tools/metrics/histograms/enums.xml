@@ -49049,6 +49049,20 @@ Called by update_net_trust_anchors.py.-->
   </int>
 </enum>
 
+<enum name="OptimizationGuideOptimizationGuideDecision">
+  <int value="0" label="Unknown">
+    The necessary information needed to make the decision is not yet available.
+  </int>
+  <int value="1" label="True">
+    The necessary information needed to make the decision is available and the
+    decision is affirmative.
+  </int>
+  <int value="2" label="False">
+    The necessary information needed to make the decision is available and the
+    decision is negative.
+  </int>
+</enum>
+
 <enum name="OptimizationGuideOptimizationTargetDecision">
   <int value="0" label="Unknown">
     There was no model for the optimization target evaluated, so the target
