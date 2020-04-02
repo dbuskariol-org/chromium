@@ -2289,6 +2289,7 @@ test("ash_ui_perftests") {
     "//base/test:test_support",
     "//cc/base",
     "//chromeos/constants:constants",
+    "//content/shell:content_shell_app",
     "//content/shell:content_shell_lib",
     "//content/test:browsertest_support",
     "//content/test:test_support",
