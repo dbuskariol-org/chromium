@@ -315,6 +315,7 @@ extern const char kChromeUITabStripURL[];
 extern const char kChromeUIWebRtcLogsHost[];
 
 // Settings sub-pages.
+extern const char kAccessibilitySubPage[];
 extern const char kAddressesSubPage[];
 extern const char kAppearanceSubPage[];
 extern const char kAutofillSubPage[];
@@ -378,6 +379,7 @@ extern const char kMultideviceSubPage[];
 extern const char kNativePrintingSettingsSubPage[];
 extern const char kNetworkDetailSubPage[];
 extern const char kNetworksSubPage[];
+extern const char kOsAccessibilitySubPage[];
 extern const char kOsResetSubPage[];
 extern const char kPluginVmDetailsSubPage[];
 extern const char kPluginVmSharedPathsSubPage[];

@@ -361,6 +361,7 @@ const char kChromeUIWebRtcLogsHost[] = "webrtc-logs";
 // chrome_autocomplete_provider_client.cc to be listed by the built-in
 // AutocompleteProvider.
 
+const char kAccessibilitySubPage[] = "accessibility";
 const char kAddressesSubPage[] = "addresses";
 const char kAppearanceSubPage[] = "appearance";
 const char kAutofillSubPage[] = "autofill";
@@ -390,7 +391,6 @@ const char kTriggeredResetProfileSettingsSubPage[] =
 
 #if defined(OS_CHROMEOS)
 // NOTE: Add new OS settings to IsOSSettingsSubPage() below.
-const char kAccessibilitySubPage[] = "accessibility";
 const char kAccountManagerSubPage[] = "accountManager";
 const char kAccountSubPage[] = "accounts";
 const char kAmbientModeSubPage[] = "ambientMode";
@@ -424,6 +424,7 @@ const char kMultideviceSubPage[] = "multidevice";
 const char kNativePrintingSettingsSubPage[] = "cupsPrinters";
 const char kNetworkDetailSubPage[] = "networkDetail";
 const char kNetworksSubPage[] = "networks";
+const char kOsAccessibilitySubPage[] = "osAccessibility";
 const char kOsResetSubPage[] = "osReset";
 const char kPluginVmDetailsSubPage[] = "pluginVm/details";
 const char kPluginVmSharedPathsSubPage[] = "pluginVm/sharedPaths";
@@ -444,7 +445,6 @@ const char kCellularSettingsSubPage[] = "networks?type=Cellular";
 // Any changes here need to be kept in sync with chrome_new_window_client.cc
 bool IsOSSettingsSubPage(const std::string& sub_page) {
   static const char* const kSubPages[] = {
-      kAccessibilitySubPage,
       kAccountManagerSubPage,
       kAccountSubPage,
       kAmbientModeSubPage,
@@ -481,6 +481,7 @@ bool IsOSSettingsSubPage(const std::string& sub_page) {
       kNetworksSubPage,
       kPluginVmDetailsSubPage,
       kPluginVmSharedPathsSubPage,
+      kOsAccessibilitySubPage,
       kOsResetSubPage,
       kPointerOverlaySubPage,
       kPowerSubPage,
