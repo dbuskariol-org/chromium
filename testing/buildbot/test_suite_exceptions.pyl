@@ -520,14 +520,6 @@
         'args': [
           '--test-launcher-filter-file=../../testing/buildbot/filters/chromeos.browser_tests.filter',
         ],
-        # TODO(https://crbug.com/1039746): Move this back to the main pool.
-        'swarming': {
-          'dimension_sets': [
-            {
-              'pool': 'chrome.tests.browser_tests_killer',
-            },
-          ],
-        },
       },
       'linux-chromeos-code-coverage': {
         'swarming': {
