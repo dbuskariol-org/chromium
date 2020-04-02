@@ -629,7 +629,7 @@ class MediaHistoryStoreFeedsTest : public MediaHistoryStoreUnitTest {
       item->is_family_friendly = true;
       item->action_status =
           media_feeds::mojom::MediaFeedItemActionStatus::kPotential;
-      item->genre = base::ASCIIToUTF16("test");
+      item->genre.push_back("test");
       item->duration = base::TimeDelta::FromSeconds(30);
       item->live = media_feeds::mojom::LiveDetails::New();
       item->live->start_time = base::Time::FromDeltaSinceWindowsEpoch(

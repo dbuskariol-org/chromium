@@ -5,6 +5,7 @@
 #include "chrome/browser/media/history/media_history_feed_items_table.h"
 
 #include "base/metrics/histogram_functions.h"
+#include "base/strings/utf_string_conversions.h"
 #include "base/updateable_sequenced_task_runner.h"
 #include "chrome/browser/media/feeds/media_feeds.pb.h"
 #include "chrome/browser/media/feeds/media_feeds_utils.h"
@@ -17,7 +18,9 @@ namespace media_history {
 namespace {
 
 // The maximum number of images to allow.
-const int kMaxImageCount = 5;
+constexpr int kMaxImageCount = 5;
+// The maximum number of genres to allow.
+constexpr int kMaxGenres = 3;
 
 media_feeds::InteractionCounter_Type Convert(
     const media_feeds::mojom::InteractionCounterType& type) {
@@ -139,7 +142,7 @@ sql::InitStatus MediaHistoryFeedItemsTable::CreateTableIfNonExistent() {
       "action BLOB, "
       "interaction_counters BLOB, "
       "content_rating BLOB, "
-      "genre TEXT,"
+      "genre BLOB,"
       "duration_s INTEGER,"
       "is_live INTEGER,"
       "live_start_time_s INTEGER,"
@@ -197,8 +200,16 @@ bool MediaHistoryFeedItemsTable::SaveItem(
   statement.BindBool(4, item->is_family_friendly);
   statement.BindInt64(5, static_cast<int>(item->action_status));
 
-  if (item->genre.has_value()) {
-    statement.BindString16(6, *item->genre);
+  if (!item->genre.empty()) {
+    media_feeds::GenreSet genres;
+
+    for (auto& entry : item->genre) {
+      genres.add_genre(entry);
+
+      if (genres.genre_size() >= kMaxGenres)
+        break;
+    }
+    BindProto(statement, 6, genres);
   } else {
     statement.BindNull(6);
   }
@@ -535,8 +546,23 @@ MediaHistoryFeedItemsTable::GetItemsForFeed(const int64_t feed_id) {
         base::TimeDelta::FromSeconds(statement.ColumnInt64(2)));
     item->is_family_friendly = statement.ColumnBool(3);
 
-    if (statement.GetColumnType(5) == sql::ColumnType::kText)
-      item->genre = statement.ColumnString16(5);
+    if (statement.GetColumnType(5) == sql::ColumnType::kBlob) {
+      media_feeds::GenreSet genre_set;
+      if (!GetProto(statement, 5, genre_set)) {
+        base::UmaHistogramEnumeration(
+            MediaHistoryFeedItemsTable::kFeedItemReadResultHistogramName,
+            FeedItemReadResult::kBadGenres);
+
+        continue;
+      }
+
+      for (auto& genre : genre_set.genre()) {
+        item->genre.push_back(genre);
+
+        if (item->genre.size() >= kMaxGenres)
+          break;
+      }
+    }
 
     if (statement.GetColumnType(6) == sql::ColumnType::kInteger)
       item->duration = base::TimeDelta::FromSeconds(statement.ColumnInt64(6));
