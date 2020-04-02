@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/password_manager/core/browser/gaia_id_hash.h"
+#include "components/autofill/core/common/gaia_id_hash.h"
 
 #include "base/base64.h"
 #include "crypto/sha2.h"
 
-namespace password_manager {
+namespace autofill {
 
 // static
 GaiaIdHash GaiaIdHash::FromGaiaId(const std::string& gaia_id) {
@@ -59,4 +59,4 @@ bool operator!=(const GaiaIdHash& lhs, const GaiaIdHash& rhs) {
   return !(lhs == rhs);
 }
 
-}  // namespace password_manager
+}  // namespace autofill

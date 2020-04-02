@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_GAIA_ID_HASH_H_
-#define COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_GAIA_ID_HASH_H_
+#ifndef COMPONENTS_AUTOFILL_CORE_COMMON_GAIA_ID_HASH_H_
+#define COMPONENTS_AUTOFILL_CORE_COMMON_GAIA_ID_HASH_H_
 
 #include <string>
 
-namespace password_manager {
+namespace autofill {
 
 // Represents the hash of the Gaia ID of a signed-in user. This is useful for
 // storing Gaia-keyed information without storing sensitive information (like
@@ -41,6 +41,6 @@ class GaiaIdHash {
   const std::string gaia_id_hash_;
 };
 
-}  // namespace password_manager
+}  // namespace autofill
 
-#endif  // COMPONENTS_PASSWORD_MANAGER_CORE_BROWSER_GAIA_ID_HASH_H_
+#endif  // COMPONENTS_AUTOFILL_CORE_COMMON_GAIA_ID_HASH_H_
