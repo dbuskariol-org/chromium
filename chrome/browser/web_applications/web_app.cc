@@ -167,16 +167,6 @@ void WebApp::SetAdditionalSearchTerms(
   additional_search_terms_ = std::move(additional_search_terms);
 }
 
-void WebApp::SetShortcutInfos(
-    std::vector<WebApplicationShortcutInfo> shortcut_infos) {
-  shortcut_infos_ = std::move(shortcut_infos);
-}
-
-void WebApp::SetDownloadedShortcutIconsSizes(
-    std::vector<std::vector<SquareSizePx>> sizes) {
-  downloaded_shortcut_icons_sizes_ = std::move(sizes);
-}
-
 void WebApp::SetSyncData(SyncData sync_data) {
   sync_data_ = std::move(sync_data);
 }

@@ -20,13 +20,6 @@ WebApplicationIconInfo& WebApplicationIconInfo::operator=(
 WebApplicationIconInfo& WebApplicationIconInfo::operator=(
     WebApplicationIconInfo&&) = default;
 
-WebApplicationShortcutInfo::WebApplicationShortcutInfo() = default;
-
-WebApplicationShortcutInfo::WebApplicationShortcutInfo(
-    const WebApplicationShortcutInfo& other) = default;
-
-WebApplicationShortcutInfo::~WebApplicationShortcutInfo() = default;
-
 WebApplicationInfo::WebApplicationInfo()
     : mobile_capable(MOBILE_CAPABLE_UNSPECIFIED),
       generated_icon_color(SK_ColorTRANSPARENT),

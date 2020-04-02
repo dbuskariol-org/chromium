@@ -338,9 +338,6 @@ extern const char kDesktopPWAsLocalUpdatingDescription[];
 extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceName[];
 extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[];
 
-extern const char kDesktopPWAsQuickLaunchBarShortcutsMenuName[];
-extern const char kDesktopPWAsQuickLaunchBarShortcutsMenuDescription[];
-
 extern const char kDesktopPWAsTabStripName[];
 extern const char kDesktopPWAsTabStripDescription[];
 

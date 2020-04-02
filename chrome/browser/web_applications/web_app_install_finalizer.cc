@@ -8,10 +8,8 @@
 
 #include "base/bind.h"
 #include "base/callback.h"
-#include "base/feature_list.h"
 #include "base/logging.h"
 #include "base/metrics/histogram_macros.h"
-#include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/values.h"
@@ -20,12 +18,10 @@
 #include "chrome/browser/web_applications/components/web_app_helpers.h"
 #include "chrome/browser/web_applications/components/web_app_icon_generator.h"
 #include "chrome/browser/web_applications/components/web_app_prefs_utils.h"
-#include "chrome/browser/web_applications/components/web_app_shortcuts_menu.h"
 #include "chrome/browser/web_applications/web_app.h"
 #include "chrome/browser/web_applications/web_app_icon_manager.h"
 #include "chrome/browser/web_applications/web_app_registry_update.h"
 #include "chrome/browser/web_applications/web_app_sync_bridge.h"
-#include "chrome/common/chrome_features.h"
 #include "chrome/common/web_application_info.h"
 #include "components/services/app_service/public/cpp/file_handler.h"
 #include "content/public/browser/browser_thread.h"
@@ -207,7 +203,6 @@ void WebAppInstallFinalizer::FinalizeFallbackInstallAfterSync(
 
   icon_manager_->WriteData(
       std::move(app_id), std::move(icon_bitmaps),
-      std::vector<std::map<SquareSizePx, SkBitmap>>(),
       base::BindOnce(&WebAppInstallFinalizer::OnIconsDataWritten,
                      weak_ptr_factory_.GetWeakPtr(),
                      std::move(fallback_install_callback), std::move(web_app),
@@ -318,11 +313,6 @@ void WebAppInstallFinalizer::UninstallWebApp(const AppId& app_id,
       app_id, base::BindOnce(&WebAppInstallFinalizer::OnIconsDataDeleted,
                              weak_ptr_factory_.GetWeakPtr(), app_id,
                              std::move(callback)));
-  if (base::FeatureList::IsEnabled(
-          features::kDesktopPWAsQuickLaunchBarShortcutsMenu) &&
-      ShouldRegisterShortcutsMenuWithOs()) {
-    UnregisterShortcutsMenuWithOs(app_id, profile_->GetPath());
-  }
 }
 
 void WebAppInstallFinalizer::UninstallWebAppOrRemoveSource(
@@ -371,27 +361,12 @@ void WebAppInstallFinalizer::SetWebAppManifestFieldsAndWriteData(
   web_app->SetIconInfos(web_app_info.icon_infos);
   web_app->SetDownloadedIconSizes(GetSquareSizePxs(web_app_info.icon_bitmaps));
 
-  web_app->SetShortcutInfos(web_app_info.shortcut_infos);
-  std::vector<std::vector<SquareSizePx>> downloaded_shortcut_icons_sizes;
-  for (const auto& shortcut : web_app_info.shortcut_infos) {
-    downloaded_shortcut_icons_sizes.push_back(
-        GetSquareSizePxs(shortcut.shortcut_icon_bitmaps));
-  }
-  web_app->SetDownloadedShortcutIconsSizes(
-      std::move(downloaded_shortcut_icons_sizes));
-
   SetWebAppFileHandlers(web_app_info.file_handlers, web_app.get());
 
   AppId app_id = web_app->app_id();
 
-  std::vector<std::map<SquareSizePx, SkBitmap>> shortcut_icons_bitmaps;
-  for (const auto& shortcut : web_app_info.shortcut_infos) {
-    shortcut_icons_bitmaps.push_back(std::move(shortcut.shortcut_icon_bitmaps));
-  }
-
   icon_manager_->WriteData(
       std::move(app_id), web_app_info.icon_bitmaps,
-      std::move(shortcut_icons_bitmaps),
       base::BindOnce(&WebAppInstallFinalizer::OnIconsDataWritten,
                      weak_ptr_factory_.GetWeakPtr(), std::move(callback),
                      std::move(web_app), is_new_install));

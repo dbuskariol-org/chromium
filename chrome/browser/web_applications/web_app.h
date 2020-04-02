@@ -72,18 +72,6 @@ class WebApp {
     return downloaded_icon_sizes_;
   }
 
-  // Represents the "shortcuts" field in the manifest.
-  const std::vector<WebApplicationShortcutInfo>& shortcut_infos() const {
-    return shortcut_infos_;
-  }
-
-  // Represents which shortcut icon sizes we successfully downloaded from the
-  // shortcut_infos.
-  const std::vector<std::vector<SquareSizePx>>&
-  downloaded_shortcut_icons_sizes() const {
-    return downloaded_shortcut_icons_sizes_;
-  }
-
   const apps::FileHandlers& file_handlers() const { return file_handlers_; }
 
   const std::vector<std::string>& additional_search_terms() const {
@@ -134,9 +122,6 @@ class WebApp {
   void SetIconInfos(std::vector<WebApplicationIconInfo> icon_infos);
   // Performs sorting of |sizes| vector. Must be called rarely.
   void SetDownloadedIconSizes(std::vector<SquareSizePx> sizes);
-  void SetShortcutInfos(std::vector<WebApplicationShortcutInfo> shortcut_infos);
-  void SetDownloadedShortcutIconsSizes(
-      std::vector<std::vector<SquareSizePx>> icon_sizes);
   void SetFileHandlers(apps::FileHandlers file_handlers);
   void SetAdditionalSearchTerms(
       std::vector<std::string> additional_search_terms);
@@ -169,9 +154,6 @@ class WebApp {
   bool is_in_sync_install_ = false;
   std::vector<WebApplicationIconInfo> icon_infos_;
   std::vector<SquareSizePx> downloaded_icon_sizes_;
-  // TODO(rahsin@microsoft.com): Serialize these fields in WebAppDataBase.
-  std::vector<WebApplicationShortcutInfo> shortcut_infos_;
-  std::vector<std::vector<SquareSizePx>> downloaded_shortcut_icons_sizes_;
   apps::FileHandlers file_handlers_;
   std::vector<std::string> additional_search_terms_;
 

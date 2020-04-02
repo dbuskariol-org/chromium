@@ -26,9 +26,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/time/time.h"
 #include "base/values.h"
-#include "build/build_config.h"
 #include "chrome/browser/web_applications/components/web_app_helpers.h"
-#include "chrome/common/chrome_features.h"
 #include "chrome/common/chrome_paths.h"
 #include "chrome/common/extensions/api/url_handlers/url_handlers_parser.h"
 #include "chrome/common/extensions/manifest_handlers/app_theme_color_info.h"
@@ -57,7 +55,6 @@ namespace keys = manifest_keys;
 namespace {
 const char kIconsDirName[] = "icons";
 const char kScopeUrlHandlerId[] = "scope";
-const char kShortcutIconsDirName[] = "shortcut_icons";
 
 bool IsValidFileExtension(const std::string& file_extension) {
   return !file_extension.empty() && file_extension[0] == '.';
@@ -304,39 +301,6 @@ scoped_refptr<Extension> ConvertWebAppToExtension(
   root->Set(keys::kIcons, std::move(icons));
   root->Set(keys::kLinkedAppIcons, std::move(linked_icons));
 
-  // Add shortcut icons and linked shortcut icon information.
-  if (base::FeatureList::IsEnabled(
-          features::kDesktopPWAsQuickLaunchBarShortcutsMenu)) {
-    auto linked_shortcut_icons = std::make_unique<base::ListValue>();
-    auto shortcuts = std::make_unique<base::DictionaryValue>();
-    for (const auto& shortcut : web_app.shortcut_infos) {
-      for (const auto& icon : shortcut.shortcut_icon_infos) {
-        auto linked_shortcut_icon = std::make_unique<base::DictionaryValue>();
-        linked_shortcut_icon->SetString(keys::kLinkedShortcutItemName,
-                                        shortcut.name);
-        linked_shortcut_icon->SetInteger(keys::kLinkedShortcutItemIndex,
-                                         shortcuts->size());
-        linked_shortcut_icon->SetString(keys::kLinkedShortcutIconURL,
-                                        icon.url.spec());
-        linked_shortcut_icon->SetInteger(keys::kLinkedShortcutIconSize,
-                                         icon.square_size_px);
-        linked_shortcut_icons->Append(std::move(linked_shortcut_icon));
-      }
-      auto shortcut_icons = std::make_unique<base::DictionaryValue>();
-      std::string curr_icon = base::NumberToString(shortcuts->size());
-      for (const auto& icon : shortcut.shortcut_icon_bitmaps) {
-        std::string size = base::NumberToString(icon.first);
-        std::string icon_path =
-            base::StringPrintf("%s/%s/%s.png", kShortcutIconsDirName,
-                               curr_icon.c_str(), size.c_str());
-        shortcut_icons->SetString(size, icon_path);
-      }
-      shortcuts->SetDictionary(curr_icon, std::move(shortcut_icons));
-    }
-    root->Set(keys::kShortcutIcons, std::move(shortcuts));
-    root->Set(keys::kLinkedShortcutIcons, std::move(linked_shortcut_icons));
-  }
-
   // Write the manifest.
   base::FilePath manifest_path = temp_dir.GetPath().Append(kManifestFilename);
   JSONFileValueSerializer serializer(manifest_path);
@@ -368,48 +332,6 @@ scoped_refptr<Extension> ConvertWebAppToExtension(
     if (base::WriteFile(icon_file, image_data_ptr, size) != size) {
       LOG(ERROR) << "Could not write icon file.";
       return nullptr;
-    }
-  }
-
-  // Write the shortcut icon files.
-  if (base::FeatureList::IsEnabled(
-          features::kDesktopPWAsQuickLaunchBarShortcutsMenu)) {
-    base::FilePath shortcut_icons_dir =
-        temp_dir.GetPath().AppendASCII(kShortcutIconsDirName);
-    int shortcut_index = -1;
-    for (const auto& shortcut_item : web_app.shortcut_infos) {
-      ++shortcut_index;
-      auto size_map = shortcut_item.shortcut_icon_bitmaps;
-      if (size_map.empty())
-        continue;
-
-      base::FilePath icon_dir = shortcut_icons_dir.AppendASCII(
-          base::StringPrintf("%i", shortcut_index));
-      if (!base::CreateDirectory(icon_dir)) {
-        LOG(ERROR) << "Could not create shortcut icons directory.";
-        return nullptr;
-      }
-
-      for (const std::pair<const SquareSizePx, SkBitmap>& icon : size_map) {
-        DCHECK_NE(icon.second.colorType(), kUnknown_SkColorType);
-
-        base::FilePath icon_file =
-            icon_dir.AppendASCII(base::StringPrintf("%i.png", icon.first));
-        std::vector<unsigned char> image_data;
-        if (!gfx::PNGCodec::EncodeBGRASkBitmap(icon.second, false,
-                                               &image_data)) {
-          LOG(ERROR) << "Could not create shortcut icon file.";
-          return nullptr;
-        }
-
-        const char* image_data_ptr =
-            reinterpret_cast<const char*>(&image_data[0]);
-        int size = base::checked_cast<int>(image_data.size());
-        if (base::WriteFile(icon_file, image_data_ptr, size) != size) {
-          LOG(ERROR) << "Could not write shortcut icon file.";
-          return nullptr;
-        }
-      }
     }
   }
 

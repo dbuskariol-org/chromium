@@ -141,15 +141,6 @@ void BookmarkAppIconManager::ReadAllIcons(const web_app::AppId& app_id,
                      std::move(callback));
 }
 
-void BookmarkAppIconManager::ReadAllShortcutIcons(
-    const web_app::AppId& app_id,
-    ReadShortcutIconsCallback callback) const {
-  // TODO(crbug.com/926083): This needs to be implemented to properly support
-  // Manifest update.
-  NOTIMPLEMENTED();
-  std::move(callback).Run(std::vector<std::map<SquareSizePx, SkBitmap>>());
-}
-
 void BookmarkAppIconManager::ReadSmallestIcon(const web_app::AppId& app_id,
                                               SquareSizePx icon_size_in_px,
                                               ReadIconCallback callback) const {

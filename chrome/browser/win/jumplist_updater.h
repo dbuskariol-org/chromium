@@ -125,8 +125,6 @@ class JumpListUpdater {
   bool AddCustomCategory(const base::string16& category_name,
                          const ShellLinkItemList& link_items,
                          size_t max_items);
-  // Removes the JumpList from Windows.
-  bool DeleteJumpList();
 
  private:
   // The app ID.

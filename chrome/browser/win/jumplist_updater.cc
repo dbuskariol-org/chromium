@@ -242,19 +242,3 @@ bool JumpListUpdater::AddCustomCategory(const base::string16& category_name,
   return SUCCEEDED(destination_list_->AppendCategory(category_name.c_str(),
                                                      object_array.Get()));
 }
-
-bool JumpListUpdater::DeleteJumpList() {
-  // Create an ICustomDestinationList object and attach it to our application.
-  HRESULT result =
-      ::CoCreateInstance(CLSID_DestinationList, nullptr, CLSCTX_INPROC_SERVER,
-                         IID_PPV_ARGS(&destination_list_));
-  if (FAILED(result))
-    return false;
-
-  // Remove the Custom Jumplist for the given app_user_model_id.
-  result = destination_list_->DeleteList(app_user_model_id_.c_str());
-  if (FAILED(result))
-    return false;
-
-  return true;
-}
