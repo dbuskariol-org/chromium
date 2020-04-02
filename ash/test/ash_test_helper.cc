@@ -28,7 +28,6 @@
 #include "ash/wallpaper/wallpaper_controller_impl.h"
 #include "ash/wm/overview/overview_controller.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
-#include "base/bind_helpers.h"
 #include "base/run_loop.h"
 #include "base/system/sys_info.h"
 #include "chromeos/audio/cras_audio_handler.h"
@@ -54,7 +53,7 @@
 namespace ash {
 
 namespace {
-std::unique_ptr<views::TestViewsDelegate> MakeDelegate() {
+std::unique_ptr<views::TestViewsDelegate> MakeTestViewsDelegate() {
   return std::make_unique<AshTestViewsDelegate>();
 }
 }  // namespace
@@ -88,7 +87,7 @@ AshTestHelper::AshTestHelper(ConfigType config_type,
     : AuraTestHelper(context_factory, config_type == kUnitTest),
       config_type_(config_type) {
   views::ViewsTestHelperAura::SetFallbackTestViewsDelegateFactory(
-      base::BindOnce(&MakeDelegate));
+      &MakeTestViewsDelegate);
 
   // TODO(jamescook): Can we do this without changing command line?
   // Use the origin (1,1) so that it doesn't overlap with the native mouse
@@ -133,8 +132,7 @@ AshTestHelper::~AshTestHelper() {
   // This should never have a meaningful effect, since either there is no
   // ViewsTestHelperAura instance or the instance is currently in its
   // destructor.
-  views::ViewsTestHelperAura::SetFallbackTestViewsDelegateFactory(
-      base::NullCallback());
+  views::ViewsTestHelperAura::SetFallbackTestViewsDelegateFactory(nullptr);
 }
 
 void AshTestHelper::SetUp() {
@@ -225,7 +223,7 @@ void AshTestHelper::SetUp(InitParams init_params) {
   if (!NewWindowDelegate::GetInstance())
     new_window_delegate_ = std::make_unique<TestNewWindowDelegate>();
   if (!views::ViewsDelegate::GetInstance())
-    test_views_delegate_ = MakeDelegate();
+    test_views_delegate_ = MakeTestViewsDelegate();
 
   ShellInitParams shell_init_params;
   shell_init_params.delegate = std::move(init_params.delegate);

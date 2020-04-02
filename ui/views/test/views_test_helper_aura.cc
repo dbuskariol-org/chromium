@@ -10,7 +10,7 @@ namespace views {
 
 namespace {
 
-ViewsTestHelperAura* g_instance = nullptr;
+ViewsTestHelperAura::TestViewsDelegateFactory g_delegate_factory = nullptr;
 
 }  // namespace
 
@@ -20,9 +20,6 @@ std::unique_ptr<ViewsTestHelper> ViewsTestHelper::Create() {
 }
 
 ViewsTestHelperAura::ViewsTestHelperAura() {
-  DCHECK(!g_instance);
-  g_instance = this;
-
   aura_test_helper_ = std::make_unique<aura::test::AuraTestHelper>();
 }
 
@@ -37,15 +34,13 @@ ViewsTestHelperAura::~ViewsTestHelperAura() {
     // before they hit the CQ on other platforms.
     DCHECK(root_window->children().empty()) << "Not all windows were closed.";
   }
-
-  g_instance = nullptr;
 }
 
 std::unique_ptr<TestViewsDelegate>
 ViewsTestHelperAura::GetFallbackTestViewsDelegate() {
   // The factory delegate takes priority over the parent default.
-  return factory_.is_null() ? ViewsTestHelper::GetFallbackTestViewsDelegate()
-                            : std::move(factory_).Run();
+  return g_delegate_factory ? (*g_delegate_factory)()
+                            : ViewsTestHelper::GetFallbackTestViewsDelegate();
 }
 
 void ViewsTestHelperAura::SetUp() {
@@ -59,10 +54,8 @@ gfx::NativeWindow ViewsTestHelperAura::GetContext() {
 // static
 void ViewsTestHelperAura::SetFallbackTestViewsDelegateFactory(
     TestViewsDelegateFactory factory) {
-  if (g_instance) {
-    DCHECK(g_instance->factory_.is_null());
-    g_instance->factory_ = std::move(factory);
-  }
+  DCHECK_NE(g_delegate_factory == nullptr, factory == nullptr);
+  g_delegate_factory = factory;
 }
 
 }  // namespace views
