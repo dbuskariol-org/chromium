@@ -6174,7 +6174,7 @@ crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-multiple-r
 crbug.com/1006759 inspector-protocol/heap-profiler/heap-snapshot-with-no-detached-iframe.js [ Pass Failure ]
 
 # Sheriff 2019-12-13
-crbug.com/1032451 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/idlharness.https.window.html [ Failure Timeout Pass ]
+crbug.com/1032451 [ Win7 ] virtual/webrtc-wpt-plan-b/external/wpt/webrtc/idlharness.https.window.html [ Failure Pass ]
 crbug.com/1033852 [ Win7 ] virtual/omt-worker-fetch/external/wpt/fetch/api/idlharness.any.sharedworker.html [ Failure ]
 crbug.com/1033387 [ Mac ] http/tests/portals/crbug-1031677.html [ Pass Timeout Crash ]
 
