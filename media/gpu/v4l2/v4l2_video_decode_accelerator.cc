@@ -673,17 +673,9 @@ void V4L2VideoDecodeAccelerator::ImportBufferForPictureTask(
   if (output_mode_ == Config::OutputMode::IMPORT) {
     DCHECK_GT(handle.planes.size(), 0u);
     DCHECK(!iter->output_frame);
-
-    auto layout = VideoFrameLayout::Create(
-        egl_image_format_fourcc_->ToVideoPixelFormat(), egl_image_size_);
-    if (!layout) {
-      LOG(ERROR) << "Cannot create layout!";
-      NOTIFY_ERROR(INVALID_ARGUMENT);
-      return;
-    }
-
     // Duplicate the buffer FDs for the VideoFrame instance.
     std::vector<base::ScopedFD> duped_fds;
+    std::vector<ColorPlaneLayout> color_planes;
     for (const gfx::NativePixmapPlane& plane : handle.planes) {
       duped_fds.emplace_back(HANDLE_EINTR(dup(plane.fd.get())));
       if (!duped_fds.back().is_valid()) {
@@ -691,6 +683,18 @@ void V4L2VideoDecodeAccelerator::ImportBufferForPictureTask(
         NOTIFY_ERROR(PLATFORM_FAILURE);
         return;
       }
+      color_planes.push_back(
+          ColorPlaneLayout(base::checked_cast<int32_t>(plane.stride),
+                           base::checked_cast<size_t>(plane.offset),
+                           base::checked_cast<size_t>(plane.size)));
+    }
+    auto layout = VideoFrameLayout::CreateWithPlanes(
+        egl_image_format_fourcc_->ToVideoPixelFormat(), egl_image_size_,
+        std::move(color_planes));
+    if (!layout) {
+      LOG(ERROR) << "Cannot create layout!";
+      NOTIFY_ERROR(INVALID_ARGUMENT);
+      return;
     }
 
     iter->output_frame = VideoFrame::WrapExternalDmabufs(
