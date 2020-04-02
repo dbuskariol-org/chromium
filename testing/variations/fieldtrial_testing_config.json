@@ -5497,7 +5497,7 @@
                 {
                     "name": "Enabled",
                     "params": {
-                        "enable_lite_page_redirect": "false"
+                        "enable_subresource_server_redirect": "false"
                     },
                     "enable_features": [
                         "SubresourceRedirect"
