@@ -66,7 +66,6 @@
 <translation id="1690731385917361335">Sen elementos</translation>
 <translation id="1692118695553449118">A sincronización está activada</translation>
 <translation id="1700629756560807968"><ph name="NUMBER_OF_SELECTED_BOOKMARKS" /> seleccionados</translation>
-<translation id="1727016672946926483">Compartir como código QR</translation>
 <translation id="1740468249224277719">Toca dúas veces para instalar.</translation>
 <translation id="1746815479209538200">Para navegar pola web, engade unha nova pestana.</translation>
 <translation id="1752547299766512813">Gardar contras.</translation>
@@ -486,7 +485,6 @@ Os teus datos encriptáronse co teu contrasinal de sincronización o <ph name="T
 <translation id="734758817008927353">Opcións para gardar unha tarxeta</translation>
 <translation id="7348502496356775519">Marcador</translation>
 <translation id="7383797227493018512">Lista de lectura</translation>
-<translation id="7392048574806661116">Pechar sesión e borrar datos sincronizados</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7409985198648820906"><ph name="UNREAD_COUNT" /> artigos non lidos.</translation>
 <translation id="7425346204213733349">Os cambios nos marcadores, no historial, nos contrasinais e noutras opcións de configuración deixarán de sincronizarse coa túa conta de Google. Non obstante, os teus datos actuais permanecerán almacenados na túa conta de Google.</translation>

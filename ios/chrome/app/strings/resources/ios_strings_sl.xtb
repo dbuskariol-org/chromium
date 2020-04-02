@@ -66,7 +66,6 @@
 <translation id="1690731385917361335">Ni elementov</translation>
 <translation id="1692118695553449118">Sinhroniziranje je vklopljeno</translation>
 <translation id="1700629756560807968">Št. izbranih: <ph name="NUMBER_OF_SELECTED_BOOKMARKS" /></translation>
-<translation id="1727016672946926483">Deli z drugimi kot kodo QR</translation>
 <translation id="1740468249224277719">Dvakrat se dotaknite, če želite namestiti.</translation>
 <translation id="1746815479209538200">Če želite brskati po spletu, dodajte nov zavihek.</translation>
 <translation id="1752547299766512813">Shranjena gesla</translation>
@@ -486,7 +485,6 @@ Podatki so bili šifrirani z vašim geslom za sinhronizacijo <ph name="TIME" />.
 <translation id="734758817008927353">Možnosti za shranjevanje kartic</translation>
 <translation id="7348502496356775519">Zaznamuj</translation>
 <translation id="7383797227493018512">Seznam za branje</translation>
-<translation id="7392048574806661116">Odjava in izbris sinhroniziranih podatkov</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7409985198648820906">Št. neprebranih člankov: <ph name="UNREAD_COUNT" />.</translation>
 <translation id="7425346204213733349">Spremembe zaznamkov, zgodovine, gesel in drugih nastavitev ne bodo več sinhronizirane z Google Računom. Obstoječi podatki bodo še naprej shranjeni v Google Računu.</translation>

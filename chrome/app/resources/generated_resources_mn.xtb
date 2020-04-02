@@ -843,7 +843,6 @@
 <translation id="2135787500304447609">&amp; Сэргээн үргэлжүүлэх</translation>
 <translation id="2136372518715274136">Шинэ нууц үг оруулна уу</translation>
 <translation id="2136476978468204130">Таны оруулсан нэвтрэх үг буруу байна</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{Күүкиг блоклосон.}=1{1-ээс бусад күүкиг блоклосон}other{{COUNT}-с бусад күүкиг блоклосон}}</translation>
 <translation id="2138398485845393913">"<ph name="DEVICE_NAME" />" руу холбогдож байна</translation>
 <translation id="2139545522194199494">Сүлжээ: <ph name="NETWORK_COUNT" />-н <ph name="NETWORK_INDEX" />, <ph name="NETWORK_NAME" />, дохионы хүч <ph name="SIGNAL_STRENGTH" />%, таны администратор удирддаг, холбогдох</translation>
 <translation id="2139919072249842737">Тохируулах товчлуур</translation>
@@ -1201,7 +1200,6 @@
 <translation id="2586672484245266891">Богино URL оруулна уу</translation>
 <translation id="2587922766792651800">Завсарласан</translation>
 <translation id="2588636910004461974"><ph name="VENDOR_NAME" />-н төхөөрөмжүүд</translation>
-<translation id="2593594315333286814">Навигацийн хандалтын тохиргоо</translation>
 <translation id="2594999711683503743">Google-с хайх эсвэл URL бичих</translation>
 <translation id="2602501489742255173">Эхлүүлэхийн тулд дээш шударна уу</translation>
 <translation id="2603115962224169880">Компьютерийг цэвэрлэх</translation>
@@ -2211,7 +2209,6 @@
 <translation id="3873423927483480833">ПИН харуулах</translation>
 <translation id="3873915545594852654">ARC++-д асуудал гарлаа.</translation>
 <translation id="3879748587602334249">Таталтын менежер</translation>
-<translation id="3881321138433527084">Аюулгүй хайлт унтраалттай байна. Вэб дээр аюулгүй байхын тулд түүнийг асаана уу.</translation>
 <translation id="3882165008614329320">Камер эсвэл файлд байгаа видео</translation>
 <translation id="3886446263141354045">Таны энэ сайтад нэвтрэх хүсэлтийг <ph name="NAME" />-д илгээсэн</translation>
 <translation id="3888550877729210209"><ph name="LOCK_SCREEN_APP_NAME" />-р тэмдэглэл бичиж байна</translation>

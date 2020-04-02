@@ -847,7 +847,6 @@ Poți gestiona setările contului dacă instalezi aplicația Family Link pe disp
 <translation id="2135787500304447609">&amp;Reia</translation>
 <translation id="2136372518715274136">Introdu noua parolă</translation>
 <translation id="2136476978468204130">Expresia de acces pe care ai introdus-o nu este corectă</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{Cookie-urile sunt blocate.}=1{Cookie-urile sunt blocate, cu o excepție}few{Cookie-urile sunt blocate, cu {COUNT} excepții}other{Cookie-urile sunt blocate, cu {COUNT} de excepții}}</translation>
 <translation id="2138398485845393913">Încă se conectează la „<ph name="DEVICE_NAME" />”</translation>
 <translation id="2139545522194199494">Rețeaua <ph name="NETWORK_INDEX" /> din <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, puterea semnalului: <ph name="SIGNAL_STRENGTH" /> %, gestionată de administratorul tău, conectează-te</translation>
 <translation id="2139919072249842737">Butonul Configurează</translation>
@@ -1206,7 +1205,6 @@ Poți gestiona setările contului dacă instalezi aplicația Family Link pe disp
 <translation id="2586672484245266891">Introdu o adresă URL mai scurtă</translation>
 <translation id="2587922766792651800">A expirat</translation>
 <translation id="2588636910004461974">Dispozitive de la <ph name="VENDOR_NAME" /></translation>
-<translation id="2593594315333286814">Setări de accesibilitate pentru navigare</translation>
 <translation id="2594999711683503743">Caută pe Google sau introdu adresa URL</translation>
 <translation id="2602501489742255173">Glisează în sus pentru a începe</translation>
 <translation id="2603115962224169880">Curăță computerul</translation>
@@ -2216,7 +2214,6 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="3873423927483480833">Afișează codurile PIN</translation>
 <translation id="3873915545594852654">A apărut o eroare la ARC++.</translation>
 <translation id="3879748587602334249">Manager de descărcări</translation>
-<translation id="3881321138433527084">Navigarea sigură este dezactivată. Activeaz-o ca să te protejezi pe web.</translation>
 <translation id="3882165008614329320">Videoclip existent din camera foto sau din fișier</translation>
 <translation id="3886446263141354045">Solicitarea de a accesa acest site a fost trimisă către <ph name="NAME" /></translation>
 <translation id="3888550877729210209">Scriere de notițe cu <ph name="LOCK_SCREEN_APP_NAME" /></translation>

@@ -847,7 +847,6 @@
 <translation id="2135787500304447609">&amp;გაგრძელება</translation>
 <translation id="2136372518715274136">შეიყვანეთ ახალი პაროლი</translation>
 <translation id="2136476978468204130">თქვენ მიერ შეყვანილი საიდუმლო ფრაზა არასწორია</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{ქუქი-ჩანაწერები დაბლოკილია.}=1{ქუქი-ჩანაწერები დაბლოკილია, 1 გამონაკლისი}other{ქუქი-ჩანაწერები დაბლოკილია, {COUNT} გამონაკლისი}}</translation>
 <translation id="2138398485845393913">„<ph name="DEVICE_NAME" />“-თან დაკავშირება ჯერ კიდევ მიმდინარეობს</translation>
 <translation id="2139545522194199494">ქსელი <ph name="NETWORK_INDEX" />/<ph name="NETWORK_COUNT" />-დან, <ph name="NETWORK_NAME" />, სიგნალის სიძლიერე: <ph name="SIGNAL_STRENGTH" />%, მართავს თქვენი ადმინისტრატორი, დაკავშირება</translation>
 <translation id="2139919072249842737">დაყენების ღილაკი</translation>
@@ -1205,7 +1204,6 @@
 <translation id="2586672484245266891">გთხოვთ, შეიყვანოთ უფრო მოკლე URL.</translation>
 <translation id="2587922766792651800">მოლოდინის დრო ამოიწურა</translation>
 <translation id="2588636910004461974"><ph name="VENDOR_NAME" />-ის მოწყობილობები</translation>
-<translation id="2593594315333286814">ნავიგაციასთან დაკავშირებული მარტივი წვდომის პარამეტრები</translation>
 <translation id="2594999711683503743">მოიძიეთ Google-ში, ან აკრიფეთ URL</translation>
 <translation id="2602501489742255173">დასაწყებად გადაფურცლეთ ზემოთ</translation>
 <translation id="2603115962224169880">კომპიუტერის გასუფთავება</translation>
@@ -2215,7 +2213,6 @@
 <translation id="3873423927483480833">PIN-კოდების ჩვენება</translation>
 <translation id="3873915545594852654">წარმოიქმნა ARC++-თან დაკავშირებული პრობლემა.</translation>
 <translation id="3879748587602334249">ჩამოტვირთვის მენეჯერი</translation>
-<translation id="3881321138433527084">Safe Browsing გამორთულია. ვების უსაფრთხოდ დასათვალიერებლად ჩართეთ ის.</translation>
 <translation id="3882165008614329320">არსებული ვიდეო კამერიდან ან ფაილიდან</translation>
 <translation id="3886446263141354045">ამ საიტზე წვდომის მოთხოვნა გაეგზავნა <ph name="NAME" />-ს</translation>
 <translation id="3888550877729210209">ჩანიშვნა <ph name="LOCK_SCREEN_APP_NAME" />-ის მეშვეობით</translation>

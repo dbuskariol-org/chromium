@@ -847,7 +847,6 @@
 <translation id="2135787500304447609">បន្ត</translation>
 <translation id="2136372518715274136">បញ្ចូល​ពាក្យសម្ងាត់​ថ្មី</translation>
 <translation id="2136476978468204130">ឃ្លាសម្ងាត់​ដែល​អ្នកបាន​បញ្ចូល​គឺមិន​ត្រឹមត្រូវ​ទេ</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{បាន​ទប់ស្កាត់​ខូគី​។}=1{បាន​ទប់ស្កាត់​ខូគី ដោយមាន​ការលើកលែង 1}other{បាន​ទប់ស្កាត់​ខូគី ដោយមាន​ការលើកលែង {COUNT}}}</translation>
 <translation id="2138398485845393913">ការ​តភ្ជាប់​ទៅ "<ph name="DEVICE_NAME" />" កំពុង​ដំណើរការ​នៅ​ឡើយ</translation>
 <translation id="2139545522194199494">បណ្ដាញ <ph name="NETWORK_INDEX" /> នៃ <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, កម្លាំង​រលកសញ្ញា <ph name="SIGNAL_STRENGTH" />%, គ្រប់គ្រងដោយ​អ្នកគ្រប់គ្រង​របស់អ្នក, ភ្ជាប់</translation>
 <translation id="2139919072249842737">ប៊ូតុង​រៀបចំ</translation>
@@ -1206,7 +1205,6 @@
 <translation id="2586672484245266891">សូម​បញ្ចូល URL ខ្លីជាង​នេះ</translation>
 <translation id="2587922766792651800">អស់ម៉ោង​ហើយ</translation>
 <translation id="2588636910004461974">ឧបករណ៍​ពី <ph name="VENDOR_NAME" /></translation>
-<translation id="2593594315333286814">ការកំណត់​ភាពងាយស្រួល​សម្រាប់​ការរុករក</translation>
 <translation id="2594999711683503743">ស្វែងរក​តាម Google ឬ​វាយបញ្ចូល URL</translation>
 <translation id="2602501489742255173">អូស​ឡើងលើ ដើម្បី​ចាប់ផ្ដើម</translation>
 <translation id="2603115962224169880">សម្អាត​កុំព្យូទ័រ</translation>
@@ -2216,7 +2214,6 @@
 <translation id="3873423927483480833">បង្ហាញកូដ PIN</translation>
 <translation id="3873915545594852654">ARC++ មាន​បញ្ហា។</translation>
 <translation id="3879748587602334249">កម្មវិធីគ្រប់គ្រងការ​ទាញ​យក</translation>
-<translation id="3881321138433527084">ការរុករក​ដោយសុវត្ថិភាព​ត្រូវបានបិទ។ ដើម្បីរក្សាសុវត្ថិភាពនៅលើអ៊ីនធឺណិត សូមបើកមុខងារនេះ។</translation>
 <translation id="3882165008614329320">វីដេអូដែល​មានស្រាប់​ពីកាមេរ៉ា ឬឯកសារ</translation>
 <translation id="3886446263141354045">សំណើរបស់អ្នកដើម្បីចូលទៅកាន់ទំព័រនេះត្រូវបានផ្ញើទៅ <ph name="NAME" /></translation>
 <translation id="3888550877729210209">កត់ត្រាចំណាំដោយប្រើ <ph name="LOCK_SCREEN_APP_NAME" /></translation>

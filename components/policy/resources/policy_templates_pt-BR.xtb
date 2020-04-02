@@ -179,17 +179,6 @@
       Se esta política não é configurada, a frequência padrão é de três horas. A frequência
       mínima permitida é de 60 segundos.</translation>
 <translation id="1204263402976895730">Impressoras empresariais ativadas</translation>
-<translation id="1216890727647348501">Ativa o recurso "Proteção melhorada para a navegação segura" do <ph name="PRODUCT_NAME" /> e impede que os usuários alterem essa configuração.
-
-      Se você ativar essa configuração, o "Proteção melhorada para a navegação segura" ficará sempre ativado.
-
-      Se você desativar essa configuração, o "Proteção melhorada para a navegação segura" nunca ficará ativado.
-
-      Se você definir essa política como obrigatória, os usuários não poderão mudar ou substituir a configuração "Ativar proteção contra phishing e malware" no <ph name="PRODUCT_NAME" />.
-
-      Se essa política não for definida, o "Proteção melhorada para a navegação segura" ficará desativado por padrão, mas o usuário poderá ativá-lo.
-
-      Consulte https://developers.google.com/safe-browsing para ver mais informações sobre o Navegação segura.</translation>
 <translation id="1216919699175573511">Ativa a compatibilidade com Signed HTTP Exchange (SXG)</translation>
 <translation id="1219695476179627719">Especifica se o dispositivo deve ser revertido para a versão definida por <ph name="DEVICE_TARGET_VERSION_PREFIX_POLICY_NAME" /> se ele já estiver executando uma versão posterior.
 
@@ -288,7 +277,6 @@
           Se esta política não for definida, o comportamento das políticas mais específicas não será afetado.</translation>
 <translation id="1384459581748403878">Referência: <ph name="REFERENCE_URL" /></translation>
 <translation id="138847842893090358">Informar o status de atualização do SO</translation>
-<translation id="1388918874748125262">Ativar "Proteção melhorada para a navegação segura"</translation>
 <translation id="1393485621820363363">Impressoras empresariais ativadas</translation>
 <translation id="1397855852561539316">URL sugerido do provedor de pesquisa padrão</translation>
 <translation id="1404043648050567997">O serviço Navegação segura mostra uma página de aviso quando os usuários navegam em sites que são sinalizados como potencialmente mal-intencionados. A ativação dessa configuração impede que os usuários prossigam da página de aviso para o site.
@@ -303,19 +291,6 @@
 <translation id="1426170570389588560">Define a duração, em dias, do armazenamento de metadados de trabalhos de impressão</translation>
 <translation id="1426410128494586442">Sim</translation>
 <translation id="1427655258943162134">Endereço ou URL do servidor proxy</translation>
-<translation id="1431272318313028342">Ativa o recurso "Navegação segura" do <ph name="PRODUCT_NAME" /> e impede que os usuários alterem essa configuração.
-
-      Se você ativar essa configuração, o "Navegação segura" ficará sempre ativado.
-
-      Se você desativar essa configuração, o "Navegação segura" nunca ficará ativado.
-
-      Se você ativar ou desativar essa configuração, os usuários não poderão alterar ou modificar a definição "Ativar proteção contra phishing e malware" no <ph name="PRODUCT_NAME" />.
-
-      Se a política não for definida, a configuração ficará ativada, mas o usuário poderá alterá-la.
-
-      Consulte https://developers.google.com/safe-browsing para ver mais informações sobre o recurso "Navegação segura".
-
-      Esta política está disponível apenas em instâncias do Windows associadas a um domínio <ph name="MS_AD_NAME" /> ou instâncias do Windows 10 Pro ou Enterprise inscritas no gerenciamento de dispositivos.</translation>
 <translation id="1435659902881071157">Configuração de rede em nível de dispositivo</translation>
 <translation id="1438739959477268107">Configuração padrão de geração de chaves</translation>
 <translation id="1455804070656338445">Configura o URL de alteração de senha (somente para esquemas HTTP e HTTPS). O serviço de proteção de senhas encaminhará os usuários a esse URL para que alterem a própria senha após receberem um aviso no navegador.
@@ -719,7 +694,7 @@ Se esta configuração for deixada sem definição, os usuários poderão optar 
 <translation id="2024476116966025075">Configurar o nome de domínio obrigatório para clientes de acesso remoto</translation>
 <translation id="2030905906517501646">Palavra-chave do provedor de pesquisa padrão</translation>
 <translation id="203096360153626918">Esta política não tem nenhum efeito sobre os apps Android. Eles poderão entrar no modo de tela cheia mesmo se a política estiver definida como <ph name="FALSE" />.</translation>
-<translation id="2042881179131103248">Configura a câmera e o recurso das configurações que será desativado</translation>
+<translation id="2042881179131103248">Configura a câmera e o recurso das configurações que serão desativados</translation>
 <translation id="2043749682619281558">Ativa o destaque de cursor na tela de login</translation>
 <translation id="2043770014371753404">Impressoras empresariais desativadas</translation>
 <translation id="2050629715135525072">Controla a habilidade de um usuário de transferir arquivos entre o cliente e o host quando ele está conectado a um host de acesso remoto. Isso não se aplica a conexões de assistência remota, que não são compatíveis com transferência de arquivos.
@@ -2117,6 +2092,15 @@ Observe que esta política não se aplica ao modo de navegação anônima.</tran
 <translation id="402759845255257575">Não permitir que nenhum site execute o JavaScript</translation>
 <translation id="4027608872760987929">Ativar o provedor de pesquisa padrão</translation>
 <translation id="4039085364173654945">Controla se o subconteúdo de terceiros em uma página pode acionar pop-up de uma caixa de diálogo básica de autorização HTTP. Normalmente, esta função é desativada como proteção contra phishing. Se esta política não estiver definida, a função é desativada e o subconteúdo de terceiros não terá permissão para acionar pop-up de uma caixa de diálogo básica de autorização HTTP.</translation>
+<translation id="4044054366426171256">Configura os nomes de domínio de host necessários que serão impostos em hosts de acesso remoto e impede que os usuários façam modificações.
+
+          Se esta configuração for ativada e definida para um ou mais domínios, os hosts poderão ser compartilhados apenas por meio de contas registradas em um dos nomes de domínio especificados.
+
+          Se a configuração for desativada, não for definida ou for definida como uma lista vazia, os hosts poderão ser compartilhados por meio de qualquer conta.
+
+          Esta configuração modificará a política RemoteAccessHostDomain, se ela estiver presente.
+
+          Veja também RemoteAccessHostClientDomainList.</translation>
 <translation id="4056910949759281379">Desativar o protocolo SPDY</translation>
 <translation id="4061590579642538878">Enviar informações sobre relatórios de erros.</translation>
 <translation id="4075675819066819571">Posicionar a estante no lado esquerdo da tela</translation>
@@ -3805,6 +3789,7 @@ Se esta configuração estiver desativada ou se nenhum valor for definido, o Mod
 <translation id="6734521799274931721">Controla o compartilhamento de arquivos de rede para disponibilidade do Chrome OS</translation>
 <translation id="6735701345096330595">Forçar a ativação da correção ortográfica de idiomas</translation>
 <translation id="6757613329154374267">Backup e restauração ativados</translation>
+<translation id="6758659208493449452">Esta política controla se os usuários inscritos no Programa Proteção Avançada recebem segurança extra. Alguns desses recursos podem envolver o compartilhamento de dados com o Google. Por exemplo, usuários do Proteção Avançada poderão enviar os downloads ao Google para verificação de malware. Se a política for definida como "verdadeira" ou não for configurada, os usuários inscritos receberão proteções extras. Se for definida como "falsa", os usuários do Proteção Avançada receberão apenas os recursos padrão do consumidor.</translation>
 <translation id="6762235610019366960">Permite que você controle a apresentação de conteúdo promocional e/ou educativo em guia cheia no <ph name="PRODUCT_NAME" />.
 
       Se esta política não for configurada ou ativada (configurada como verdadeira), o <ph name="PRODUCT_NAME" /> poderá exibir conteúdo em guia cheia para os usuários para fornecer informações de produtos.
@@ -4271,6 +4256,15 @@ Essas políticas são ignoradas se a Área de trabalho remota do Google Chrome n
           Se esta política não for definida ou for definida como "Ativada", o Google Chrome aceitará conteúdos da Web exibidos como Signed HTTP Exchanges.
 
           Se esta política for definida como "Desativada", as Signed HTTP Exchanges não poderão ser carregadas.</translation>
+<translation id="7506758875409719208">Configura os nomes de domínio de cliente necessários que serão impostos aos clientes de acesso remoto e impede os usuários de modificá-los.
+
+          Se a configuração for ativada e definida para um ou mais domínios, apenas clientes de um dos domínios especificados poderão se conectar ao host.
+
+          Se a configuração for desativada, não for definida ou for definida como uma lista vazia, a política padrão do tipo de conexão será aplicada. Para assistência remota, isso permite que clientes de qualquer domínio se conectem ao host. Para acesso remoto a qualquer momento, apenas o dono do host pode se conectar.
+
+          Esta configuração modificará RemoteAccessHostClientDomain, se ela estiver presente.
+
+          Veja também RemoteAccessHostDomainList.</translation>
 <translation id="7509496865303347769">Configura o URL padrão da página inicial no <ph name="PRODUCT_NAME" /> e impede que os usuários o modifiquem.
 
           A página inicial é aquela aberta pelo botão "Página inicial". No computador, as páginas que são abertas na inicialização são controladas pelas políticas RestoreOnStartup.

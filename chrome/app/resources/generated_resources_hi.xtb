@@ -847,7 +847,6 @@
 <translation id="2135787500304447609">&amp;फिर से शुरू करें</translation>
 <translation id="2136372518715274136">नया पासवर्ड डालें</translation>
 <translation id="2136476978468204130">आपने जो 'पासफ़्रेज़' डाला है, वह गलत है</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{कुकी ब्लॉक की गई हैं.}=1{कुकी ब्लॉक की गई हैं, 1 अपवाद}one{कुकी ब्लॉक की गई हैं, {COUNT} अपवाद}other{कुकी ब्लॉक की गई हैं, {COUNT} अपवाद}}</translation>
 <translation id="2138398485845393913">"<ph name="DEVICE_NAME" />" से कनेक्शन अब भी प्रगति में है</translation>
 <translation id="2139545522194199494"><ph name="NETWORK_COUNT" /> में से <ph name="NETWORK_INDEX" /> नेटवर्क, <ph name="NETWORK_NAME" />, सिग्नल की क्षमता <ph name="SIGNAL_STRENGTH" />%, आपका एडमिन प्रबंधित करता है, कनेक्ट करें</translation>
 <translation id="2139919072249842737">'सेट अप करें' बटन</translation>
@@ -1206,7 +1205,6 @@
 <translation id="2586672484245266891">कृपया थोड़ा छोटा यूआरएल लिखें</translation>
 <translation id="2587922766792651800">समय खत्म</translation>
 <translation id="2588636910004461974"><ph name="VENDOR_NAME" /> की ओर से डिवाइस</translation>
-<translation id="2593594315333286814">नेविगेशन के लिए सुलभता सेटिंग</translation>
 <translation id="2594999711683503743">Google पर खोजें या URL टाइप करें</translation>
 <translation id="2602501489742255173">शुरू करने के लिए ऊपर की ओर स्वाइप करें</translation>
 <translation id="2603115962224169880">कंप्यूटर साफ़ करें</translation>
@@ -2216,7 +2214,6 @@
 <translation id="3873423927483480833">पिन दिखाएं</translation>
 <translation id="3873915545594852654">एआरसी++ के साथ कोई समस्या हुई.</translation>
 <translation id="3879748587602334249">डाउनलोड मैनेजर</translation>
-<translation id="3881321138433527084">सुरक्षित ब्राउज़िंग की सुविधा बंद है. वेब पर सुरक्षित तरीके से काम करने के लिए, इसे चालू करें.</translation>
 <translation id="3882165008614329320">कैमरा या फ़ाइल से मौजूदा वीडियो</translation>
 <translation id="3886446263141354045">यह साइट एक्सेस करने का आपका अनुरोध <ph name="NAME" /> को भेज दिया गया है</translation>
 <translation id="3888550877729210209"><ph name="LOCK_SCREEN_APP_NAME" /> से नोट लेना</translation>

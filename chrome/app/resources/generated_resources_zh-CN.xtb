@@ -844,7 +844,6 @@
 <translation id="2135787500304447609">继续(&amp;R)</translation>
 <translation id="2136372518715274136">输入新密码</translation>
 <translation id="2136476978468204130">您输入的密码不正确</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{已阻止 Cookie。}=1{已阻止 Cookie，但有 1 项例外情况}other{已阻止 Cookie，但有 {COUNT} 项例外情况}}</translation>
 <translation id="2138398485845393913">仍在连接“<ph name="DEVICE_NAME" />”</translation>
 <translation id="2139545522194199494">第 <ph name="NETWORK_INDEX" /> 个网络（共 <ph name="NETWORK_COUNT" /> 个），<ph name="NETWORK_NAME" />，信号强度为 <ph name="SIGNAL_STRENGTH" />%，由您的管理员管理，连接</translation>
 <translation id="2139919072249842737">设置按钮</translation>
@@ -1202,7 +1201,6 @@
 <translation id="2586672484245266891">请输入一个较短的网址</translation>
 <translation id="2587922766792651800">已超时</translation>
 <translation id="2588636910004461974">来自<ph name="VENDOR_NAME" />的设备</translation>
-<translation id="2593594315333286814">与导航有关的无障碍设置</translation>
 <translation id="2594999711683503743">使用 Google 执行搜索，或者输入网址</translation>
 <translation id="2602501489742255173">向上滑动即可开始使用</translation>
 <translation id="2603115962224169880">清理计算机</translation>
@@ -2209,7 +2207,6 @@
 <translation id="3873423927483480833">显示 PIN 码</translation>
 <translation id="3873915545594852654">ARC++ 出问题了。</translation>
 <translation id="3879748587602334249">下载管理器</translation>
-<translation id="3881321138433527084">“安全浏览”功能已关闭。若想安全使用网络，请开启此功能。</translation>
 <translation id="3882165008614329320">来自摄像头或文件的现有视频</translation>
 <translation id="3886446263141354045">系统已将您想访问此网站的请求发送给<ph name="NAME" /></translation>
 <translation id="3888550877729210209">使用“<ph name="LOCK_SCREEN_APP_NAME" />”创建记事</translation>

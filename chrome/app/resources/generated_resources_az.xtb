@@ -843,7 +843,6 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="2135787500304447609">Davam edin</translation>
 <translation id="2136372518715274136">Yeni parol daxil edin</translation>
 <translation id="2136476978468204130">Daxil etdiyiniz parol söz yanlışdır</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{Kukilər bloklanıb.}=1{Kukilər bloklanıb, 1 istisna var}other{Kukilər bloklanıb, {COUNT} istisna var}}</translation>
 <translation id="2138398485845393913">Hələ də "<ph name="DEVICE_NAME" />" cihazına qoşulur</translation>
 <translation id="2139545522194199494"><ph name="NETWORK_INDEX" />/<ph name="NETWORK_COUNT" /> şəbəkə, <ph name="NETWORK_NAME" />, Siqnal Gücü <ph name="SIGNAL_STRENGTH" />%, Administratorunuz tərəfindən idarə olunur, Qoşulun</translation>
 <translation id="2139919072249842737">Ayarlayın düyməsi</translation>
@@ -1201,7 +1200,6 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="2586672484245266891">Qısa link daxil edin</translation>
 <translation id="2587922766792651800">Vaxt bitdi</translation>
 <translation id="2588636910004461974"><ph name="VENDOR_NAME" /> vendorundan cihazlar</translation>
-<translation id="2593594315333286814">Naviqasiya üçün əlçatımlılıq ayarları</translation>
 <translation id="2594999711683503743">Google'da axtarın və ya link yazın</translation>
 <translation id="2602501489742255173">Başlamaq üçün yuxarı sürüşdürün</translation>
 <translation id="2603115962224169880">Kompüteri təmizləyin</translation>
@@ -2211,7 +2209,6 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="3873423927483480833">PIN-ləri göstərin</translation>
 <translation id="3873915545594852654">ARC++ ilə bağlı problem yarandı.</translation>
 <translation id="3879748587602334249">Endirmə meneceri</translation>
-<translation id="3881321138433527084">Təhlükəsiz Baxış qeyri-aktivdir. Vebdə təhlükəsizliyinizi təmin etmək üçün onu aktiv edin.</translation>
 <translation id="3882165008614329320">Kamera və ya fayldan mövcud video</translation>
 <translation id="3886446263141354045">Bu sayta giriş sorğunuz <ph name="NAME" /> ünvanına göndərilib</translation>
 <translation id="3888550877729210209"><ph name="LOCK_SCREEN_APP_NAME" /> ilə qeyd götürmə</translation>

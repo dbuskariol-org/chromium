@@ -843,7 +843,6 @@
 <translation id="2135787500304447609">&amp;ପୁନରାରମ୍ଭ କରନ୍ତୁ</translation>
 <translation id="2136372518715274136">ନୂଆ ପାସ୍‌ୱର୍ଡ ଲେଖନ୍ତୁ</translation>
 <translation id="2136476978468204130">ଆପଣ ଲେଖିଥିବା ପାସ୍‌ଫ୍ରେଜ୍‌ ଭୁଲ୍‌ ଅଟେ।</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{କୁକୀଗୁଡ଼ିକୁ ବ୍ଲକ୍ କରାଯାଇଛି।}=1{କୁକୀଗୁଡ଼ିକୁ ବ୍ଲକ୍ କରାଯାଇଛି, 1ଟି ବ୍ୟତିକ୍ରମ}other{କୁକୀଗୁଡ଼ିକୁ ବ୍ଲକ୍ କରାଯାଇଛି, {COUNT}ଟି ବ୍ୟତିକ୍ରମ}}</translation>
 <translation id="2138398485845393913">"<ph name="DEVICE_NAME" />"କୁ ସଂଯୋଗ ଏବେ ମଧ୍ୟ ଅଗ୍ରଗତିରେ ଅଛି</translation>
 <translation id="2139545522194199494"><ph name="NETWORK_COUNT" />ଟିର <ph name="NETWORK_INDEX" /> ନେଟ୍‌ୱାର୍କ, <ph name="NETWORK_NAME" />, ସିଗ୍‍ନାଲ୍‍ର କ୍ଷମତା <ph name="SIGNAL_STRENGTH" />% ଆପଣଙ୍କର ଆଡ୍‍ମିନିଷ୍ଟ୍ରେଟର୍‍ଙ୍କ ଦ୍ୱାରା ପରିଚାଳିତ, ସଂଯୋଗ କରନ୍ତୁ</translation>
 <translation id="2139919072249842737">ସେଟ୍ ଅପ୍ ବଟନ୍</translation>
@@ -1201,7 +1200,6 @@
 <translation id="2586672484245266891">ଦୟାକରି ଏକ ଛୋଟ URL ଲେଖନ୍ତୁ</translation>
 <translation id="2587922766792651800">ସମୟ ସୀମା ସମାପ୍ତ ହୋଇଛି</translation>
 <translation id="2588636910004461974"><ph name="VENDOR_NAME" />ର ଡିଭାଇସ୍‌ଗୁଡ଼ିକ</translation>
-<translation id="2593594315333286814">ନାଭିଗେସନ୍ ପାଇଁ ଆକ୍ସେସିବିଲିଟୀ ସେଟିଂସ୍</translation>
 <translation id="2594999711683503743">Googleରେ ସନ୍ଧାନ କରନ୍ତୁ କିମ୍ବା URL ଟାଇପ୍ କରନ୍ତୁ</translation>
 <translation id="2602501489742255173">ଆରମ୍ଭ କରିବା ପାଇଁ ଉପରକୁ ସ୍ୱାଇପ୍ କରନ୍ତୁ</translation>
 <translation id="2603115962224169880">କମ୍ପ୍ୟୁଟର୍ ଖାଲି କରନ୍ତୁ</translation>
@@ -2208,7 +2206,6 @@
 <translation id="3873423927483480833">PIN ଦେଖାନ୍ତୁ</translation>
 <translation id="3873915545594852654">ARC++ ସହିତ ଏକ ସମସ୍ୟା ହୋ‍ଇଛି।</translation>
 <translation id="3879748587602334249">ଡାଉନ୍‌ଲୋଡ୍ ପରିଚାଳକ</translation>
-<translation id="3881321138433527084">ସେଫ୍ ବ୍ରାଉଜିଂ ବନ୍ଦ ଅଛି। ୱେବରେ ସୁରକ୍ଷିତ ରହିବା ପାଇଁ ଏହାକୁ ଚାଲୁ କରନ୍ତୁ।</translation>
 <translation id="3882165008614329320">କ୍ୟାମେରା କିମ୍ବା ଫାଇଲ୍‌ରେ ପୂର୍ବରୁ ଥିବା ଭିଡିଓ</translation>
 <translation id="3886446263141354045">ଏହି ସାଇଟ୍‌କୁ ଆକ୍ସେସ୍‌ କରିବାକୁ ଆପଣଙ୍କର ଅନୁରୋଧ <ph name="NAME" />ଙ୍କୁ ପଠାଯାଇଛି</translation>
 <translation id="3888550877729210209"><ph name="LOCK_SCREEN_APP_NAME" />ରୁ ନୋଟ୍‌ ନେବା</translation>

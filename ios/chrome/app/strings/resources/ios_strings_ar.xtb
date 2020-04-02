@@ -66,7 +66,6 @@
 <translation id="1690731385917361335">لا توجد عناصر</translation>
 <translation id="1692118695553449118">المزامنة ممكنة</translation>
 <translation id="1700629756560807968">تم تحديد <ph name="NUMBER_OF_SELECTED_BOOKMARKS" /></translation>
-<translation id="1727016672946926483">المشاركة كرمز استجابة سريعة</translation>
 <translation id="1740468249224277719">انقر مرّتين للتثبيت.</translation>
 <translation id="1746815479209538200">لتصفُّح الويب، يمكنك إضافة علامة تبويب جديدة.</translation>
 <translation id="1752547299766512813">حفظ كلمات المرور</translation>
@@ -486,7 +485,6 @@
 <translation id="734758817008927353">خيارات حفظ البطاقة</translation>
 <translation id="7348502496356775519">إشارة مرجعية</translation>
 <translation id="7383797227493018512">قائمة القراءة</translation>
-<translation id="7392048574806661116">تسجيل الخروج ومحو البيانات المتزامنة</translation>
 <translation id="7400418766976504921">‏عنوان URL</translation>
 <translation id="7409985198648820906"><ph name="UNREAD_COUNT" /> مقالة غير مقروءة</translation>
 <translation id="7425346204213733349">‏لن تتم بعد الآن مزامنة التغييرات التي تطرأ على الإشارات المرجعية والسجلّ وكلمات المرور وغيرها من الإعدادات مع حسابك على Google، ولكن ستظل بياناتك الحالية مخزّنة في حسابك على Google.</translation>

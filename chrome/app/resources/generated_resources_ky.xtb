@@ -847,7 +847,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="2135787500304447609">&amp;Улантуу</translation>
 <translation id="2136372518715274136">Жаңы сырсөз киргизүү</translation>
 <translation id="2136476978468204130">Киргизилген купуя сөз айкашы туура эмес</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{Cookie файлдары бөгөттөлдү.}=1{Cookie файлдары бөгөттөлдү. 1 өзгөчө учур бар}other{Cookie файлдары бөгөттөлдү. {COUNT} өзгөчө учур бар}}</translation>
 <translation id="2138398485845393913">Дагы эле "<ph name="DEVICE_NAME" />" түзмөгүнө туташып жатат</translation>
 <translation id="2139545522194199494"><ph name="NETWORK_COUNT" /> ичинен <ph name="NETWORK_INDEX" />-тармак, <ph name="NETWORK_NAME" />, Сигналдын күчү <ph name="SIGNAL_STRENGTH" />%, Администраторуңуз башкарат, Туташуу</translation>
 <translation id="2139919072249842737">Жөндөө баскычы</translation>
@@ -1206,7 +1205,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="2586672484245266891">Кыскараак URL киргизиңиз</translation>
 <translation id="2587922766792651800">Күтүү убакыты аяктады</translation>
 <translation id="2588636910004461974">Камсыздоочунун (<ph name="VENDOR_NAME" />) түзмөктөрү</translation>
-<translation id="2593594315333286814">Чабыттоо үчүн Атайын мүмкүнчүлүктөр жөндөөсү</translation>
 <translation id="2594999711683503743">Google'дан издеңиз же URL'ди териңиз</translation>
 <translation id="2602501489742255173">Баштоо үчүн, өйдө серпип коюңуз</translation>
 <translation id="2603115962224169880">Компьютерди тазалоо</translation>
@@ -2216,7 +2214,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="3873423927483480833">PIN-коддорду көрсөтүү</translation>
 <translation id="3873915545594852654">Төмөнкүнү иштетүүдө ката кетти: ARC++.</translation>
 <translation id="3879748587602334249">Жүктөп алгыч</translation>
-<translation id="3881321138433527084">Коопсуз серептөө өчүк. Интернетти коопсуз колдонуу үчүн аны күйгүзүңүз.</translation>
 <translation id="3882165008614329320">Камерадагы же файлдагы учурдагы видео</translation>
 <translation id="3886446263141354045">Бул сайтка кирүү өтүнүчүңүз <ph name="NAME" /> деген колдонуучуга жөнөтүлдү</translation>
 <translation id="3888550877729210209"><ph name="LOCK_SCREEN_APP_NAME" /> колдонмосунда жазылууда</translation>

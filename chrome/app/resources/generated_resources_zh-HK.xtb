@@ -847,7 +847,6 @@
 <translation id="2135787500304447609">繼續(&amp;R)</translation>
 <translation id="2136372518715274136">輸入新密碼</translation>
 <translation id="2136476978468204130">您輸入的密碼短語不正確</translation>
-<translation id="2137122615728646911">{COUNT,plural, =0{已封鎖 Cookie。}=1{已封鎖 Cookie，有 1 個例外情況}other{已封鎖 Cookie，有 {COUNT} 個例外情況}}</translation>
 <translation id="2138398485845393913">仍在連線至「<ph name="DEVICE_NAME" />」</translation>
 <translation id="2139545522194199494">第 <ph name="NETWORK_INDEX" /> 個網絡，一共有 <ph name="NETWORK_COUNT" /> 個網絡，<ph name="NETWORK_NAME" />，訊號強度係 <ph name="SIGNAL_STRENGTH" />%，由管理員管理，連接</translation>
 <translation id="2139919072249842737">設定按鈕</translation>
@@ -1205,7 +1204,6 @@
 <translation id="2586672484245266891">請輸入較短的網址</translation>
 <translation id="2587922766792651800">已逾時</translation>
 <translation id="2588636910004461974">來自 <ph name="VENDOR_NAME" /> 的裝置</translation>
-<translation id="2593594315333286814">導覽的無障礙功能設定</translation>
 <translation id="2594999711683503743">搜尋 Google 或輸入網址</translation>
 <translation id="2602501489742255173">向上滑動即可開始</translation>
 <translation id="2603115962224169880">清理電腦</translation>
@@ -2214,7 +2212,6 @@
 <translation id="3873423927483480833">顯示 PIN</translation>
 <translation id="3873915545594852654">ARC++ 發生問題。</translation>
 <translation id="3879748587602334249">下載管理員</translation>
-<translation id="3881321138433527084">「安全瀏覽」功能已停用。請啟用此功能以確保網絡安全。</translation>
 <translation id="3882165008614329320">相機或檔案中的現有影片</translation>
 <translation id="3886446263141354045">您想存取此網站的要求已傳送至<ph name="NAME" /></translation>
 <translation id="3888550877729210209">正在使用「<ph name="LOCK_SCREEN_APP_NAME" />」寫筆記</translation>

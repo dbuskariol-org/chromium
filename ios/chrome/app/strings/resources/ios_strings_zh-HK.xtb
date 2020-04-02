@@ -66,7 +66,6 @@
 <translation id="1690731385917361335">沒有任何項目</translation>
 <translation id="1692118695553449118">同步處理已開啟</translation>
 <translation id="1700629756560807968">已選取 <ph name="NUMBER_OF_SELECTED_BOOKMARKS" /> 個項目</translation>
-<translation id="1727016672946926483">分享為二維條碼</translation>
 <translation id="1740468249224277719">輕按兩下即可安裝。</translation>
 <translation id="1746815479209538200">如要瀏覽網頁，請開啟新分頁。</translation>
 <translation id="1752547299766512813">儲存密碼</translation>
@@ -486,7 +485,6 @@
 <translation id="734758817008927353">付款卡儲存選項</translation>
 <translation id="7348502496356775519">加入書籤</translation>
 <translation id="7383797227493018512">閱讀清單</translation>
-<translation id="7392048574806661116">登出並清除已同步處理的資料</translation>
 <translation id="7400418766976504921">網址</translation>
 <translation id="7409985198648820906"><ph name="UNREAD_COUNT" /> 篇未讀嘅文章。</translation>
 <translation id="7425346204213733349">系統不會將您變更的書籤、記錄、密碼和其他設定繼續同步至您的 Google 帳戶，但 Google 帳戶內現有的資料仍會保留。</translation>
