@@ -301,9 +301,15 @@ void SetupBoxLayoutExtraInput(const NGConstraintSpace& space,
 }
 
 bool CanUseCachedIntrinsicInlineSizes(const MinMaxSizesInput& input,
-                                      const LayoutBox& box) {
+                                      const NGBlockNode& node,
+                                      bool is_orthogonal_flow_root) {
+  const auto& box = *node.GetLayoutBox();
+
   // Obviously can't use the cache if our intrinsic logical widths are dirty.
   if (box.IntrinsicLogicalWidthsDirty())
+    return false;
+
+  if (is_orthogonal_flow_root)
     return false;
 
   // We don't store the float inline sizes for comparison, always skip the
@@ -312,15 +318,31 @@ bool CanUseCachedIntrinsicInlineSizes(const MinMaxSizesInput& input,
     return false;
 
   // Check if we have any percentage inline padding.
-  const auto& style = box.StyleRef();
+  const auto& style = node.Style();
   if (style.MayHavePadding() && (style.PaddingStart().IsPercentOrCalc() ||
                                  style.PaddingEnd().IsPercentOrCalc()))
     return false;
 
   // Check if the %-block-size matches.
   if (input.percentage_resolution_block_size !=
-      box.IntrinsicLogicalWidthsPercentageResolutionBlockSize())
-    return false;
+      box.IntrinsicLogicalWidthsPercentageResolutionBlockSize()) {
+    // Miss the cache if our children use our %-block-size.
+    if (node.UseParentPercentageResolutionBlockSizeForChildren())
+      return false;
+
+    // OOF-positioned nodes have the %-block-size computed for their children
+    // up front.
+    if (node.IsOutOfFlowPositioned())
+      return false;
+
+    if (node.IsTable())
+      return false;
+
+    if (style.LogicalHeight().IsPercentOrCalc() ||
+        style.LogicalMinHeight().IsPercentOrCalc() ||
+        style.LogicalMaxHeight().IsPercentOrCalc())
+      return false;
+  }
 
   return true;
 }
@@ -660,7 +682,7 @@ MinMaxSizes NGBlockNode::ComputeMinMaxSizes(
   bool is_orthogonal_flow_root =
       !IsParallelWritingMode(container_writing_mode, Style().GetWritingMode());
 
-  if (CanUseCachedIntrinsicInlineSizes(input, *box_))
+  if (CanUseCachedIntrinsicInlineSizes(input, *this, is_orthogonal_flow_root))
     return box_->IntrinsicLogicalWidths();
 
   box_->SetIntrinsicLogicalWidthsDirty();
