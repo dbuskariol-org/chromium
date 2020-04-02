@@ -4220,6 +4220,20 @@
           'all',
         ],
       },
+      'ios-simulator': {
+        'additional_compile_targets': [
+          'all',
+        ],
+        'mixins': [
+          'mac_10.14',
+          'mac_toolchain',
+          'out_dir_arg',
+          'xcode_11c29',
+        ],
+        'test_suites': {
+          'isolated_scripts': 'ios_simulator_tests',
+        }
+      },
     },
   },
   {

@@ -4733,6 +4733,29 @@
       }
     },
 
+    'ios_simulator_tests': {
+      'ios_common_tests': {
+        'variants': [
+          'SIM_IPHONE_6S_12_4',
+          'SIM_IPHONE_6S_13_3',
+        ]
+      },
+      'ios_eg_cq_tests': {
+        'variants': [
+          'SIM_IPHONE_6S_12_4',
+          'SIM_IPHONE_6S_13_3',
+        ]
+      },
+      'ios_screen_size_dependent_tests': {
+        'variants': [
+          'SIM_IPHONE_6S_PLUS_13_3',
+          'SIM_IPHONE_6S_13_3',
+          'SIM_IPHONE_SE_13_3',
+          'SIM_IPAD_AIR_2_13_3'
+        ]
+      }
+    },
+
     'ios_webkit_tot_tests': {
       'ios_common_tests': {
         'variants': [
