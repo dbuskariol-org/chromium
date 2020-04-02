@@ -12,6 +12,7 @@
 namespace blink {
 
 class NativeFileSystemHandle;
+class RTCEncodedVideoFrame;
 class WebCryptoKey;
 
 // Extends V8ScriptValueSerializer with support for modules/ types.
@@ -32,6 +33,7 @@ class MODULES_EXPORT V8ScriptValueSerializerForModules final
   bool WriteNativeFileSystemHandle(
       SerializationTag tag,
       NativeFileSystemHandle* native_file_system_handle);
+  bool WriteRTCEncodedVideoFrame(RTCEncodedVideoFrame*);
 };
 
 }  // namespace blink

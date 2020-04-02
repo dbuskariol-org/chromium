@@ -102,6 +102,7 @@ enum SerializationTag {
   //                     namedCurve:uint32_t
   kRTCCertificateTag = 'k',  // length:uint32_t, pemPrivateKey:WebCoreString,
                              // pemCertificate:WebCoreString
+  kRTCEncodedVideoFrameTag = 'V',  // uint32_t -> transferred video frame ID
 
   // The following tags were used by the Shape Detection API implementation
   // between M71 and M81. During these milestones, the API was always behind
