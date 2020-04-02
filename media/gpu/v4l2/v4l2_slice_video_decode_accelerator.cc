@@ -36,6 +36,7 @@
 #include "media/base/scopedfd_helper.h"
 #include "media/base/unaligned_shared_memory.h"
 #include "media/base/video_types.h"
+#include "media/base/video_util.h"
 #include "media/gpu/chromeos/fourcc.h"
 #include "media/gpu/chromeos/platform_video_frame_utils.h"
 #include "media/gpu/macros.h"
@@ -590,7 +591,7 @@ bool V4L2SliceVideoDecodeAccelerator::CreateImageProcessor() {
 
   image_processor_ = v4l2_vda_helpers::CreateImageProcessor(
       *output_format_fourcc_, *gl_image_format_fourcc_, coded_size_,
-      gl_image_size_, decoder_->GetVisibleRect().size(),
+      gl_image_size_, GetRectSizeFromOrigin(decoder_->GetVisibleRect()),
       output_buffer_map_.size(), image_processor_device_,
       image_processor_output_mode,
       // Unretained(this) is safe for ErrorCB because |decoder_thread_| is owned
@@ -692,7 +693,7 @@ bool V4L2SliceVideoDecodeAccelerator::CreateOutputBuffers() {
   if (image_processor_device_) {
     // Try to get an image size as close as possible to the final one (i.e.
     // coded_size_ may include padding required by the decoder).
-    gl_image_size_ = decoder_->GetVisibleRect().size();
+    gl_image_size_ = GetRectSizeFromOrigin(decoder_->GetVisibleRect());
     size_t planes_count;
     if (!V4L2ImageProcessorBackend::TryOutputFormat(
             output_format_fourcc_->ToV4L2PixFmt(),
@@ -1273,7 +1274,7 @@ void V4L2SliceVideoDecodeAccelerator::AssignPictureBuffersTask(
   const gfx::Size pic_size_received_from_client = buffers[0].size();
   const gfx::Size pic_size_expected_from_client =
       output_mode_ == Config::OutputMode::ALLOCATE
-          ? decoder_->GetVisibleRect().size()
+          ? GetRectSizeFromOrigin(decoder_->GetVisibleRect())
           : coded_size_;
   if (output_mode_ == Config::OutputMode::ALLOCATE &&
       pic_size_expected_from_client != pic_size_received_from_client) {
@@ -1609,7 +1610,8 @@ void V4L2SliceVideoDecodeAccelerator::ImportBufferForPictureTask(
         base::BindOnce(&V4L2SliceVideoDecodeAccelerator::CreateGLImageFor,
                        weak_this_, device_, index, picture_buffer_id,
                        std::move(handle), iter->client_texture_id,
-                       iter->texture_id, decoder_->GetVisibleRect().size(),
+                       iter->texture_id,
+                       GetRectSizeFromOrigin(decoder_->GetVisibleRect()),
                        *gl_image_format_fourcc_));
   }
 
@@ -2273,7 +2275,8 @@ void V4L2SliceVideoDecodeAccelerator::FrameProcessed(
             ip_output_record.picture_id,
             CreateGpuMemoryBufferHandle(frame.get()).native_pixmap_handle,
             ip_output_record.client_texture_id, ip_output_record.texture_id,
-            decoder_->GetVisibleRect().size(), *gl_image_format_fourcc_));
+            GetRectSizeFromOrigin(decoder_->GetVisibleRect()),
+            *gl_image_format_fourcc_));
   }
 
   DCHECK(!surfaces_at_ip_.empty());
