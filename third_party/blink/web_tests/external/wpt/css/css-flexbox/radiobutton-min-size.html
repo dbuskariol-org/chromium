@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<title>CSS Flexbox: minimum size of the radio button</title>
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-property">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#min-size-auto">
+<meta name="assert" content="This test ensures that radio buttons used as flex items do not shrink below their default sizes.">
 <style>
 .flex {
   display: flex;
@@ -12,8 +15,8 @@
 }
 </style>
 
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 
 <p>You should see two identical-looking lines, both with a radio button at the
 beginning.</p>
