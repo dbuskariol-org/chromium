@@ -38,7 +38,7 @@ std::pair<std::string, std::string> GetPrinterNameAndDescription(
 base::Value GetSettingsOnBlockingTaskRunner(
     const std::string& device_name,
     const PrinterBasicInfo& basic_info,
-    const PrinterSemanticCapsAndDefaults::Papers& user_defined_papers,
+    PrinterSemanticCapsAndDefaults::Papers user_defined_papers,
     bool has_secure_protocol,
     scoped_refptr<PrintBackend> print_backend);
 
