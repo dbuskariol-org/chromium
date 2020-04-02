@@ -2847,7 +2847,8 @@
       'aura_unittests': {},
       'gpu_unittests': {},
       'ui_touch_selection_unittests': {},
-      'views_unittests': {}
+      'views_unittests': {},
+      'viz_unittests': {},
     },
 
     'linux_ozone_x11_only_gtests': {
