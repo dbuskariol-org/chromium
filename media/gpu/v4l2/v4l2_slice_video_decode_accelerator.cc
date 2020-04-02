@@ -681,6 +681,12 @@ bool V4L2SliceVideoDecodeAccelerator::CreateOutputBuffers() {
   DCHECK_EQ(coded_size_.width() % 16, 0);
   DCHECK_EQ(coded_size_.height() % 16, 0);
 
+  if (!gfx::Rect(coded_size_).Contains(decoder_->GetVisibleRect())) {
+    VLOGF(1) << "The visible rectangle is not contained in the coded size";
+    NOTIFY_ERROR(UNREADABLE_INPUT);
+    return false;
+  }
+
   // Now that we know the desired buffers resolution, ask the image processor
   // what it supports so we can request the correct picture buffers.
   if (image_processor_device_) {
