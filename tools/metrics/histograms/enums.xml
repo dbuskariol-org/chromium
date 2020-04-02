@@ -10983,6 +10983,8 @@ Called by update_net_error_codes.py.-->
   <int value="3" label="Out of Date"/>
   <int value="4" label="Search by Image Unavailable"/>
   <int value="5" label="OS Below Android O"/>
+  <int value="6" label="Invalid Package"/>
+  <int value="7" label="Image Format Not Support"/>
 </enum>
 
 <enum name="ContextMenuOption">
