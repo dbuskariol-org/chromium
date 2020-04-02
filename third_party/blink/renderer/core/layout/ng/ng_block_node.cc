@@ -11,6 +11,7 @@
 #include "third_party/blink/renderer/core/html/html_marquee_element.h"
 #include "third_party/blink/renderer/core/input_type_names.h"
 #include "third_party/blink/renderer/core/layout/box_layout_extra_input.h"
+#include "third_party/blink/renderer/core/layout/intrinsic_sizing_info.h"
 #include "third_party/blink/renderer/core/layout/layout_block_flow.h"
 #include "third_party/blink/renderer/core/layout/layout_fieldset.h"
 #include "third_party/blink/renderer/core/layout/layout_inline.h"
@@ -1178,14 +1179,23 @@ bool NGBlockNode::HasAspectRatio() const {
   if (!layout_object->IsImage() && !IsA<LayoutVideo>(layout_object) &&
       !layout_object->IsCanvas())
     return false;
-  base::Optional<LayoutUnit> computed_inline_size;
-  base::Optional<LayoutUnit> computed_block_size;
-  LogicalSize aspect_ratio;
 
   // Retrieving this and throwing it away is wasteful. We could make this method
   // return Optional<LogicalSize> that returns the aspect_ratio if there is one.
-  IntrinsicSize(&computed_inline_size, &computed_block_size, &aspect_ratio);
-  return !aspect_ratio.IsEmpty();
+  return !GetAspectRatio().IsEmpty();
+}
+
+LogicalSize NGBlockNode::GetAspectRatio() const {
+  base::Optional<LayoutUnit> computed_inline_size;
+  base::Optional<LayoutUnit> computed_block_size;
+  GetOverrideIntrinsicSize(&computed_inline_size, &computed_block_size);
+  if (computed_inline_size && computed_block_size)
+    return LogicalSize(*computed_inline_size, *computed_block_size);
+
+  IntrinsicSizingInfo legacy_sizing_info;
+  ToLayoutReplaced(box_)->ComputeIntrinsicSizingInfo(legacy_sizing_info);
+  return LogicalSize(LayoutUnit(legacy_sizing_info.aspect_ratio.Width()),
+                     LayoutUnit(legacy_sizing_info.aspect_ratio.Height()));
 }
 
 bool NGBlockNode::UseLogicalBottomMarginEdgeForInlineBlockBaseline() const {

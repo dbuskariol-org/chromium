@@ -303,12 +303,7 @@ bool NGFlexLayoutAlgorithm::WillChildCrossSizeBeContainerCrossSize(
 double NGFlexLayoutAlgorithm::GetMainOverCrossAspectRatio(
     const NGBlockNode& child) const {
   DCHECK(child.HasAspectRatio());
-  base::Optional<LayoutUnit> computed_inline_size;
-  base::Optional<LayoutUnit> computed_block_size;
-  LogicalSize aspect_ratio;
-
-  child.IntrinsicSize(&computed_inline_size, &computed_block_size,
-                      &aspect_ratio);
+  LogicalSize aspect_ratio = child.GetAspectRatio();
 
   DCHECK_GT(aspect_ratio.inline_size, 0);
   DCHECK_GT(aspect_ratio.block_size, 0);
@@ -629,11 +624,8 @@ void NGFlexLayoutAlgorithm::ConstructAndAppendFlexItems() {
             if (child.HasAspectRatio()) {
               base::Optional<LayoutUnit> computed_inline_size;
               base::Optional<LayoutUnit> computed_block_size;
-              LogicalSize aspect_ratio;
-              child.IntrinsicSize(&computed_inline_size, &computed_block_size,
-                                  &aspect_ratio);
-              DCHECK_GT(aspect_ratio.inline_size, 0);
-              DCHECK_GT(aspect_ratio.block_size, 0);
+              child.IntrinsicSize(&computed_inline_size, &computed_block_size);
+
               // The 150 is for elements that have an aspect ratio but no size,
               // which SVG can have (maybe others?).
               intrinsic_block_size =
