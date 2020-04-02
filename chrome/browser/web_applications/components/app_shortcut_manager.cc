@@ -4,12 +4,27 @@
 
 #include "chrome/browser/web_applications/components/app_shortcut_manager.h"
 
+#include <utility>
+
 #include "base/callback.h"
 #include "build/build_config.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/web_applications/components/app_shortcut_observer.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
+namespace {
+
+void OnShortcutsInfoRetrievedRegisterShortcutsMenuWithOs(
+    const std::vector<WebApplicationShortcutInfo>& shortcuts,
+    std::unique_ptr<web_app::ShortcutInfo> shortcut_info) {
+  base::FilePath shortcut_data_dir =
+      web_app::internals::GetShortcutDataDir(*shortcut_info);
+  web_app::RegisterShortcutsMenuWithOs(
+      std::move(shortcut_data_dir), std::move(shortcut_info->extension_id),
+      std::move(shortcut_info->profile_path), shortcuts);
+}
+
+}  // namespace
 
 #if defined(OS_MACOSX)
 #include "chrome/browser/web_applications/components/app_shim_registry_mac.h"
@@ -122,6 +137,19 @@ void AppShortcutManager::CreateShortcuts(const AppId& app_id,
                   base::BindOnce(&AppShortcutManager::OnShortcutsCreated,
                                  weak_ptr_factory_.GetWeakPtr(), app_id,
                                  std::move(callback))));
+}
+
+void AppShortcutManager::RegisterShortcutsMenuWithOs(
+    const std::vector<WebApplicationShortcutInfo>& shortcuts,
+    const AppId& app_id) {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  if (!web_app::ShouldRegisterShortcutsMenuWithOs())
+    return;
+
+  GetShortcutInfoForApp(
+      app_id,
+      base::BindOnce(&OnShortcutsInfoRetrievedRegisterShortcutsMenuWithOs,
+                     shortcuts));
 }
 
 void AppShortcutManager::OnShortcutsCreated(const AppId& app_id,

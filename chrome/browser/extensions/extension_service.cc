@@ -15,6 +15,7 @@
 #include "base/command_line.h"
 #include "base/debug/alias.h"
 #include "base/debug/dump_without_crashing.h"
+#include "base/feature_list.h"
 #include "base/location.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
@@ -63,7 +64,9 @@
 #include "chrome/browser/ui/webui/theme_source.h"
 #include "chrome/browser/upgrade_detector/upgrade_detector.h"
 #include "chrome/browser/web_applications/components/externally_installed_web_app_prefs.h"
+#include "chrome/browser/web_applications/components/web_app_shortcuts_menu.h"
 #include "chrome/common/buildflags.h"
+#include "chrome/common/chrome_features.h"
 #include "chrome/common/chrome_switches.h"
 #include "chrome/common/crash_keys.h"
 #include "chrome/common/extensions/extension_constants.h"
@@ -755,7 +758,12 @@ bool ExtensionService::UninstallExtension(
                                                          reason);
 
   delayed_installs_.Remove(extension->id());
-
+  if (base::FeatureList::IsEnabled(
+          features::kDesktopPWAsQuickLaunchBarShortcutsMenu) &&
+      web_app::ShouldRegisterShortcutsMenuWithOs()) {
+    web_app::UnregisterShortcutsMenuWithOs(extension->id(),
+                                           profile_->GetPath());
+  }
   extension_prefs_->OnExtensionUninstalled(
       extension->id(), extension->location(), external_uninstall);
 
@@ -771,6 +779,7 @@ void ExtensionService::UninstallExtensionOnFileThread(
     Profile* profile,
     const base::FilePath& install_dir,
     const base::FilePath& extension_path) {
+  // TODO(rahsin): Add test to ensure shortcut icons directory gets deleted.
   ExtensionAssetsManager* assets_manager =
       ExtensionAssetsManager::GetInstance();
   assets_manager->UninstallExtension(id, profile, install_dir, extension_path);

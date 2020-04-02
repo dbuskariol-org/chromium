@@ -2496,6 +2496,11 @@ const FeatureEntry kFeatureEntries[] = {
      kOsDesktop,
      FEATURE_VALUE_TYPE(
          features::kDesktopPWAsLocalUpdatingThrottlePersistence)},
+    {"enable-desktop-pwas-quick-launch-bar-shortcuts-menu",
+     flag_descriptions::kDesktopPWAsQuickLaunchBarShortcutsMenuName,
+     flag_descriptions::kDesktopPWAsQuickLaunchBarShortcutsMenuDescription,
+     kOsWin,
+     FEATURE_VALUE_TYPE(features::kDesktopPWAsQuickLaunchBarShortcutsMenu)},
     {"enable-desktop-pwas-tab-strip",
      flag_descriptions::kDesktopPWAsTabStripName,
      flag_descriptions::kDesktopPWAsTabStripDescription, kOsDesktop,

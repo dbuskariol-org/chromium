@@ -39051,6 +39051,8 @@ from previous Chrome versions.
   <int value="-234687894"
       label="NonValidatingReloadOnRefreshContentV2:disabled"/>
   <int value="-234231190" label="SharingDeviceRegistration:enabled"/>
+  <int value="-232590466"
+      label="DesktopPWAsQuickLaunchBarShortcutsMenu:enabled"/>
   <int value="-231967261" label="AutofillUpdatedCardUnmaskPromptUi:disabled"/>
   <int value="-231922000" label="enable-renderer-mojo-channel"/>
   <int value="-231426350" label="AutofillEnableToolbarStatusChip:enabled"/>
@@ -39995,6 +39997,8 @@ from previous Chrome versions.
   <int value="908523940" label="PassiveEventListenersDueToFling:disabled"/>
   <int value="909439558" label="disable-device-discovery"/>
   <int value="909525364" label="ExtensionsCheckup:enabled"/>
+  <int value="910504448"
+      label="DesktopPWAsQuickLaunchBarShortcutsMenu:disabled"/>
   <int value="910725730" label="WebRtcHWVP9Encoding:disabled"/>
   <int value="912119426" label="InfiniteSessionRestore:disabled"/>
   <int value="913138924" label="RecurrentInterstitialFeature:disabled"/>

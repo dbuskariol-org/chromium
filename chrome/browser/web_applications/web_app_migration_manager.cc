@@ -117,6 +117,7 @@ void WebAppMigrationManager::OnBookmarkAppIconsRead(
 
   web_app_icon_manager_->WriteData(
       app_id, std::move(icon_bitmaps),
+      std::vector<std::map<SquareSizePx, SkBitmap>>(),
       base::BindOnce(&WebAppMigrationManager::OnWebAppIconsWritten,
                      weak_ptr_factory_.GetWeakPtr()));
 }
