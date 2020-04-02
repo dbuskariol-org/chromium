@@ -38,7 +38,7 @@
 #if BUILDFLAG(ENABLE_SUPERVISED_USERS)
 #include "chrome/browser/supervised_user/supervised_user_service.h"
 #include "chrome/browser/supervised_user/supervised_user_service_factory.h"
-#include "chrome/common/pref_names.h"
+#include "chrome/browser/supervised_user/supervised_user_test_util.h"
 #include "extensions/browser/disable_reason.h"
 #endif
 
@@ -860,12 +860,8 @@ class ManagementApiSupervisedUserTest : public ManagementApiUnitTest {
   void SetUp() override {
     ManagementApiUnitTest::SetUp();
 
-    // Ensure the child has a custodian.
-    PrefService* prefs = browser()->profile()->GetPrefs();
-    prefs->SetString(prefs::kSupervisedUserCustodianEmail,
-                     "test_parent_0@google.com");
-    prefs->SetString(prefs::kSupervisedUserCustodianObfuscatedGaiaId,
-                     "239029320");
+    // Set up custodians (parents) for the child.
+    supervised_user_test_util::AddCustodians(browser()->profile());
 
     // Set the pref to allow the child to request extension install.
     SupervisedUserServiceFactory::GetForProfile(profile())
