@@ -4,6 +4,8 @@
 
 #include "ui/views/test/views_test_helper_aura.h"
 
+#include "base/logging.h"
+#include "ui/aura/window.h"
 #include "ui/views/test/test_views_delegate.h"
 
 namespace views {
@@ -37,9 +39,14 @@ ViewsTestHelperAura::~ViewsTestHelperAura() {
   //
   // So, although it shouldn't matter for this helper, check for unclosed
   // windows to complain about faulty tests early.
+#if DCHECK_IS_ON()
   gfx::NativeWindow root_window = GetContext();
-  if (root_window)
-    DCHECK(root_window->children().empty()) << "Not all windows were closed.";
+  if (root_window) {
+    DCHECK(root_window->children().empty())
+        << "Not all windows were closed:\n"
+        << root_window->GetWindowHierarchy(0);
+  }
+#endif
 }
 
 std::unique_ptr<TestViewsDelegate>
