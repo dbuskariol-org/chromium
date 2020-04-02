@@ -7,8 +7,10 @@
 #include <algorithm>
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <utility>
 
+#include "base/stl_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "build/branding_buildflags.h"
 #include "build/build_config.h"
@@ -25,6 +27,7 @@
 #include "components/autofill/core/browser/ui/suggestion.h"
 #include "components/omnibox/browser/vector_icons.h"
 #include "components/strings/grit/components_strings.h"
+#include "components/vector_icons/vector_icons.h"
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -72,6 +75,14 @@ constexpr int kAdjacentLabelsVerticalSpacing = 2;
 // Default sice for icons in the autofill popup.
 constexpr int kIconSize = 16;
 
+// Popup footer items that use a leading icon instead of a trailing one.
+constexpr autofill::PopupItemId kItemTypesUsingLeadingIcons[] = {
+    autofill::PopupItemId::POPUP_ITEM_ID_SHOW_ACCOUNT_CARDS,
+    autofill::PopupItemId::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY,
+    autofill::PopupItemId::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPT_IN,
+    autofill::PopupItemId::
+        POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPT_IN_AND_GENERATE};
+
 int GetContentsVerticalPadding() {
   return ChromeLayoutProvider::Get()->GetDistanceMetric(
       DISTANCE_CONTENT_LIST_VERTICAL_MULTI);
@@ -116,6 +127,10 @@ gfx::ImageSkia GetIconImageByName(const std::string& icon_str) {
   }
   if (icon_str == "globeIcon") {
     return gfx::CreateVectorIcon(kGlobeIcon, kIconSize, gfx::kChromeIconGrey);
+  }
+  if (icon_str == "settingsIcon") {
+    return gfx::CreateVectorIcon(vector_icons::kSettingsIcon, kIconSize,
+                                 gfx::kChromeIconGrey);
   }
   if (icon_str == "google") {
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
@@ -359,32 +374,6 @@ class AutofillPopupSeparatorView : public AutofillPopupRowView {
   DISALLOW_COPY_AND_ASSIGN(AutofillPopupSeparatorView);
 };
 
-// Draws a loading throbber into the dropdown.
-class AutofillPopupLoadingSpinnerView : public AutofillPopupRowView {
- public:
-  ~AutofillPopupLoadingSpinnerView() override = default;
-
-  static AutofillPopupLoadingSpinnerView* Create(
-      AutofillPopupViewNativeViews* popup_view,
-      int line_number);
-
-  // views::View:
-  void GetAccessibleNodeData(ui::AXNodeData* node_data) override;
-  void OnMouseEntered(const ui::MouseEvent& event) override {}
-  void OnMouseExited(const ui::MouseEvent& event) override {}
-  void OnMouseReleased(const ui::MouseEvent& event) override {}
-
- protected:
-  // AutofillPopupRowView:
-  void CreateContent() override;
-  void RefreshStyle() override;
-  std::unique_ptr<views::Background> CreateBackground() override;
-
- private:
-  AutofillPopupLoadingSpinnerView(AutofillPopupViewNativeViews* popup_view,
-                                  int line_number);
-};
-
 // Draws a row which contains a warning message.
 class AutofillPopupWarningView : public AutofillPopupRowView {
  public:
@@ -445,9 +434,7 @@ void AutofillPopupItemView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
   int pos_in_set = line_number() + 1;
   for (int i = 0; i < controller->GetLineCount(); ++i) {
     if (controller->GetSuggestionAt(i).frontend_id ==
-            autofill::POPUP_ITEM_ID_SEPARATOR ||
-        controller->GetSuggestionAt(i).frontend_id ==
-            autofill::POPUP_ITEM_ID_LOADING_SPINNER) {
+        autofill::POPUP_ITEM_ID_SEPARATOR) {
       if (i < line_number())
         --pos_in_set;
     } else {
@@ -568,7 +555,13 @@ void AutofillPopupItemView::RefreshStyle() {
   for (views::Label* label : inner_labels_) {
     label->SetAutoColorReadabilityEnabled(false);
     label->SetBackgroundColor(bk_color);
-    label->SetEnabledColor(fg_color);
+    // Set style depending on current state since the style isn't automatically
+    // adjusted after creation of the label.
+    label->SetEnabledColor(
+        label->GetEnabled()
+            ? fg_color
+            : views::style::GetColor(*this, label->GetTextContext(),
+                                     views::style::STYLE_DISABLED));
   }
   SchedulePaint();
 }
@@ -779,18 +772,19 @@ void AutofillPopupFooterView::CreateContent() {
           gfx::Insets(0, GetHorizontalMargin())));
 
   layout_manager->set_cross_axis_alignment(
-      views::BoxLayout::CrossAxisAlignment::kStretch);
+      views::BoxLayout::CrossAxisAlignment::kCenter);
 
-  const gfx::ImageSkia icon =
-      GetIconImage(controller->GetSuggestions()[line_number()]);
+  const Suggestion suggestion = controller->GetSuggestions()[line_number()];
+  const gfx::ImageSkia icon = GetIconImage(suggestion);
 
-  // A FooterView shows an icon, if any, on the trailing (right in LTR) side,
-  // but the Show Account Cards context is an anomaly. Its icon is on the
-  // leading (left in LTR) side.
   const bool use_leading_icon =
-      frontend_id() == autofill::PopupItemId::POPUP_ITEM_ID_SHOW_ACCOUNT_CARDS;
+      base::Contains(kItemTypesUsingLeadingIcons, frontend_id());
 
-  if (!icon.isNull() && use_leading_icon) {
+  if (suggestion.is_loading) {
+    SetEnabled(false);
+    AddChildView(std::make_unique<views::Throbber>())->Start();
+    AddSpacerWithSize(GetHorizontalMargin(), /*resize=*/false, layout_manager);
+  } else if (!icon.isNull() && use_leading_icon) {
     AddIcon(icon);
     AddSpacerWithSize(GetHorizontalMargin(), /*resize=*/false, layout_manager);
   }
@@ -802,6 +796,7 @@ void AutofillPopupFooterView::CreateContent() {
       AutofillPopupBaseView::GetCornerRadius());
 
   ViewWithLabel value_label = CreateValueLabel();
+  value_label.first->SetEnabled(!suggestion.is_loading);
   AddChildView(std::move(value_label.first));
   KeepLabel(value_label.second);
   AddSpacerWithSize(
@@ -885,59 +880,6 @@ AutofillPopupSeparatorView::CreateBackground() {
 }
 
 AutofillPopupSeparatorView::AutofillPopupSeparatorView(
-    AutofillPopupViewNativeViews* popup_view,
-    int line_number)
-    : AutofillPopupRowView(popup_view, line_number) {
-  SetFocusBehavior(FocusBehavior::NEVER);
-}
-
-/************** AutofillPopupLoadingSpinnerView **************/
-
-// static
-AutofillPopupLoadingSpinnerView* AutofillPopupLoadingSpinnerView::Create(
-    AutofillPopupViewNativeViews* popup_view,
-    int line_number) {
-  AutofillPopupLoadingSpinnerView* result =
-      new AutofillPopupLoadingSpinnerView(popup_view, line_number);
-  result->Init();
-  return result;
-}
-
-void AutofillPopupLoadingSpinnerView::GetAccessibleNodeData(
-    ui::AXNodeData* node_data) {
-  // Spinners are not selectable.
-  node_data->role = ax::mojom::Role::kSplitter;
-}
-
-void AutofillPopupLoadingSpinnerView::CreateContent() {
-  // Add a flex layout that positions the spinner in it's center.
-  auto layout = std::make_unique<views::FlexLayout>();
-  layout->SetOrientation(views::LayoutOrientation::kHorizontal);
-  layout->SetMainAxisAlignment(views::LayoutAlignment::kCenter);
-  layout->SetCrossAxisAlignment(views::LayoutAlignment::kCenter);
-  SetLayoutManager(std::move(layout));
-
-  // Add a throbber that fills the height of the row (minus its margins).
-  SetBorder(views::CreateEmptyBorder(gfx::Insets(
-      /*top=*/0, /*left=*/GetHorizontalMargin(),
-      ChromeLayoutProvider::Get()->GetDistanceMetric(
-          views::DISTANCE_RELATED_CONTROL_VERTICAL),
-      /*right=*/GetHorizontalMargin())));
-  auto throbber = std::make_unique<views::Throbber>();
-  throbber->Start();
-  AddChildView(std::move(throbber));
-}
-
-void AutofillPopupLoadingSpinnerView::RefreshStyle() {
-  SchedulePaint();
-}
-
-std::unique_ptr<views::Background>
-AutofillPopupLoadingSpinnerView::CreateBackground() {
-  return nullptr;
-}
-
-AutofillPopupLoadingSpinnerView::AutofillPopupLoadingSpinnerView(
     AutofillPopupViewNativeViews* popup_view,
     int line_number)
     : AutofillPopupRowView(popup_view, line_number) {
@@ -1057,7 +999,7 @@ AutofillPopupViewNativeViews::AutofillPopupViewNativeViews(
   CreateChildViews();
 }
 
-AutofillPopupViewNativeViews::~AutofillPopupViewNativeViews() {}
+AutofillPopupViewNativeViews::~AutofillPopupViewNativeViews() = default;
 
 void AutofillPopupViewNativeViews::GetAccessibleNodeData(
     ui::AXNodeData* node_data) {
@@ -1176,11 +1118,6 @@ void AutofillPopupViewNativeViews::CreateChildViews() {
 
       case autofill::PopupItemId::POPUP_ITEM_ID_SEPARATOR:
         rows_.push_back(AutofillPopupSeparatorView::Create(this, line_number));
-        break;
-
-      case autofill::PopupItemId::POPUP_ITEM_ID_LOADING_SPINNER:
-        rows_.push_back(
-            AutofillPopupLoadingSpinnerView::Create(this, line_number));
         break;
 
       case autofill::PopupItemId::
