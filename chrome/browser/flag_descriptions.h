@@ -467,6 +467,9 @@ extern const char kEnableResourceLoadingHintsDescription[];
 extern const char kEnableSubresourceRedirectName[];
 extern const char kEnableSubresourceRedirectDescription[];
 
+extern const char kEnableSyncTrustedVaultName[];
+extern const char kEnableSyncTrustedVaultDescription[];
+
 extern const char kEnableSyncUSSNigoriName[];
 extern const char kEnableSyncUSSNigoriDescription[];
 

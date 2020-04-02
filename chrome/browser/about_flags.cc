@@ -118,6 +118,7 @@
 #include "components/spellcheck/common/spellcheck_features.h"
 #include "components/spellcheck/spellcheck_buildflags.h"
 #include "components/sync/driver/sync_driver_switches.h"
+#include "components/sync/engine/sync_engine_switches.h"
 #include "components/tracing/common/tracing_switches.h"
 #include "components/translate/core/browser/translate_prefs.h"
 #include "components/translate/core/browser/translate_ranker_impl.h"
@@ -4627,6 +4628,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAutofillTouchToFillDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(autofill::features::kAutofillTouchToFill)},
 #endif  // defined(OS_ANDROID)
+
+    {"enable-sync-trusted-vault",
+     flag_descriptions::kEnableSyncTrustedVaultName,
+     flag_descriptions::kEnableSyncTrustedVaultDescription, kOsAll,
+     FEATURE_VALUE_TYPE(switches::kSyncSupportTrustedVaultPassphrase)},
 
     {"enable-sync-uss-nigori", flag_descriptions::kEnableSyncUSSNigoriName,
      flag_descriptions::kEnableSyncUSSNigoriDescription, kOsAll,

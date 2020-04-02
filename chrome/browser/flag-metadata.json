@@ -2008,6 +2008,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "enable-sync-trusted-vault",
+    "owners": [ "mastiz@chromium.org", "//components/sync/OWNERS" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "enable-sync-uss-nigori",
     "owners": [ "mmoskvitin@google.com", "//components/sync/OWNERS" ],
     "expiry_milestone": 83

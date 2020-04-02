@@ -389,11 +389,6 @@ COMPONENT_EXPORT(CHROME_FEATURES) extern const base::Feature kSmbFs;
 COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kSoundContentSetting;
 
-#if !defined(OS_ANDROID)
-COMPONENT_EXPORT(CHROME_FEATURES)
-extern const base::Feature kSyncEncryptionKeysWebApi;
-#endif  // !defined(OS_ANDROID)
-
 #if defined(OS_CHROMEOS)
 COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kSysInternals;
