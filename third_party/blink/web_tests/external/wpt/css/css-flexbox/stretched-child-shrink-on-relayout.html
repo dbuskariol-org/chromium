@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<title>CSS Flexbox: Shrink stretched child on relayout</title>
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-property">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-flow-property">
+<meta name="assert" content="This ensures that flexbox shrinks stretched children after removing a sibling, in various writing-modes and flows.">
 <style>
 .flexbox {
     display: flex;
@@ -33,9 +37,9 @@
 }
 </style>
 </head>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 <body onload="checkLayout('.flexbox')">
 <div id=log></div>
 
