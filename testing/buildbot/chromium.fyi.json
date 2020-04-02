@@ -14697,7 +14697,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -19705,7 +19706,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -19744,7 +19746,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -19783,7 +19786,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -19822,7 +19826,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -19861,7 +19866,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -26130,7 +26136,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
@@ -26169,7 +26176,8 @@
               "path": "Xcode.app"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 2
         },
         "test_target": "//ios/chrome/test/earl_grey2:ios_chrome_integration_eg2tests_module"
       },
