@@ -30,6 +30,7 @@
 #include "components/signin/public/identity_manager/access_token_info.h"
 #include "components/signin/public/identity_manager/accounts_in_cookie_jar_info.h"
 #include "components/signin/public/identity_manager/scope_set.h"
+#include "components/version_info/version_info.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "extensions/common/extension_l10n_util.h"
@@ -65,6 +66,10 @@ const char* const kExtensionsIdentityAPIOAuthConsumerName =
 
 bool IsBrowserSigninAllowed(Profile* profile) {
   return profile->GetPrefs()->GetBoolean(prefs::kSigninAllowed);
+}
+
+std::string GetOAuth2MintTokenFlowVersion() {
+  return version_info::GetMajorVersionNumber();
 }
 
 }  // namespace
@@ -924,12 +929,12 @@ IdentityGetAuthTokenFunction::CreateMintTokenFlow() {
   std::string signin_scoped_device_id =
       GetSigninScopedDeviceIdForProfile(GetProfile());
   auto mint_token_flow = std::make_unique<OAuth2MintTokenFlow>(
-      this,
-      OAuth2MintTokenFlow::Parameters(
-          extension()->id(), oauth2_client_id_,
-          std::vector<std::string>(token_key_.scopes.begin(),
-                                   token_key_.scopes.end()),
-          signin_scoped_device_id, consent_result_, gaia_mint_token_mode_));
+      this, OAuth2MintTokenFlow::Parameters(
+                extension()->id(), oauth2_client_id_,
+                std::vector<std::string>(token_key_.scopes.begin(),
+                                         token_key_.scopes.end()),
+                signin_scoped_device_id, consent_result_,
+                GetOAuth2MintTokenFlowVersion(), gaia_mint_token_mode_));
   return mint_token_flow;
 }
 
