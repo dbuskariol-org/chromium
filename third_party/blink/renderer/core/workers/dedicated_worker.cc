@@ -394,7 +394,8 @@ DedicatedWorker::CreateGlobalScopeCreationParams(
     auto* frame = document->GetFrame();
     if (frame) {
       parent_devtools_token = frame->GetDevToolsFrameToken();
-      ua_metadata = frame->Loader().UserAgentMetadata();
+      ua_metadata = frame->Loader().UserAgentMetadata().value_or(
+          blink::UserAgentMetadata());
     }
     settings = std::make_unique<WorkerSettings>(document->GetSettings());
   } else {
