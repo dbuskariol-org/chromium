@@ -4135,9 +4135,6 @@ crbug.com/626703 external/wpt/css/css-ui/text-overflow-011.html [ Failure Crash 
 crbug.com/626703 external/wpt/html/rendering/non-replaced-elements/margin-collapsing-quirks/multicol-quirks-mode.html [ Pass Crash ]
 crbug.com/626703 external/wpt/html/rendering/non-replaced-elements/margin-collapsing-quirks/multicol-standards-mode.html [ Pass Crash Failure ]
 
-# Other untriaged test failures, timeouts and crashes from newly-imported WPT tests.
-crbug.com/626703 external/wpt/html/browsers/history/the-location-interface/location-protocol-setter-non-broken.html [ Failure Pass ]
-
 # Underline offset and thickness are not implemented yet.
 crbug.com/785230 external/wpt/css/css-text-decor/text-underline-offset-001.html [ Skip ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-underline-offset-scroll-001.html [ Skip ]
