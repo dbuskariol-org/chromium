@@ -52,6 +52,40 @@ void CreateAndPostKeyEvent(int keycode,
   }
 }
 
+// Must be called on UI thread.
+void PostMouseEvent(int32_t x,
+                    int32_t y,
+                    bool left_down,
+                    bool right_down,
+                    bool middle_down) {
+  // We use the deprecated CGPostMouseEvent API because we receive low-level
+  // mouse events, whereas CGEventCreateMouseEvent is for injecting higher-level
+  // events. For example, the deprecated APIs will detect double-clicks or drags
+  // in a way that is consistent with how they would be generated using a local
+  // mouse, whereas the new APIs expect us to inject these higher-level events
+  // directly.
+  //
+  // See crbug.com/677857 for more details.
+  CGPoint position = CGPointMake(x, y);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  CGError error =
+      CGPostMouseEvent(position, true, 3, left_down, right_down, middle_down);
+#pragma clang diagnostic pop
+  if (error != kCGErrorSuccess)
+    LOG(WARNING) << "CGPostMouseEvent error " << error;
+}
+
+// Must be called on UI thread.
+void CreateAndPostScrollWheelEvent(int32_t delta_x, int32_t delta_y) {
+  base::ScopedCFTypeRef<CGEventRef> eventRef(CGEventCreateScrollWheelEvent(
+      nullptr, kCGScrollEventUnitPixel, 2, delta_y, delta_x));
+  if (eventRef) {
+    CGEventPost(kCGSessionEventTap, eventRef);
+  }
+}
+
 // This value is not defined. Give it the obvious name so that if it is ever
 // added there will be a handy compilation error to remind us to remove this
 // definition.
@@ -289,37 +323,22 @@ void InputInjectorMac::Core::InjectMouseEvent(const MouseEvent& event) {
       VLOG(1) << "Unknown mouse button: " << event.button();
     }
   }
-  // We use the deprecated CGPostMouseEvent API because we receive low-level
-  // mouse events, whereas CGEventCreateMouseEvent is for injecting higher-level
-  // events. For example, the deprecated APIs will detect double-clicks or drags
-  // in a way that is consistent with how they would be generated using a local
-  // mouse, whereas the new APIs expect us to inject these higher-level events
-  // directly.
-  //
-  // See crbug.com/677857 for more details.
-  CGPoint position = CGPointMake(mouse_pos_.x(), mouse_pos_.y());
   enum {
     LeftBit = 1 << (MouseEvent::BUTTON_LEFT - 1),
     MiddleBit = 1 << (MouseEvent::BUTTON_MIDDLE - 1),
     RightBit = 1 << (MouseEvent::BUTTON_RIGHT - 1)
   };
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  CGError error = CGPostMouseEvent(position, true, 3,
-                                   (mouse_button_state_ & LeftBit) != 0,
-                                   (mouse_button_state_ & RightBit) != 0,
-                                   (mouse_button_state_ & MiddleBit) != 0);
-#pragma clang diagnostic pop
-  if (error != kCGErrorSuccess)
-    LOG(WARNING) << "CGPostMouseEvent error " << error;
+  ui_thread_task_runner_->PostTask(
+      FROM_HERE, base::BindOnce(PostMouseEvent, mouse_pos_.x(), mouse_pos_.y(),
+                                (mouse_button_state_ & LeftBit) != 0,
+                                (mouse_button_state_ & RightBit) != 0,
+                                (mouse_button_state_ & MiddleBit) != 0));
 
   if (event.has_wheel_delta_x() && event.has_wheel_delta_y()) {
-    int delta_x = static_cast<int>(event.wheel_delta_x());
-    int delta_y = static_cast<int>(event.wheel_delta_y());
-    base::ScopedCFTypeRef<CGEventRef> event(CGEventCreateScrollWheelEvent(
-        nullptr, kCGScrollEventUnitPixel, 2, delta_y, delta_x));
-    if (event)
-      CGEventPost(kCGSessionEventTap, event);
+    ui_thread_task_runner_->PostTask(
+        FROM_HERE,
+        base::BindOnce(CreateAndPostScrollWheelEvent, event.wheel_delta_x(),
+                       event.wheel_delta_y()));
   }
 }
 
