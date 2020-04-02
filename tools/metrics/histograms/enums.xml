@@ -50089,6 +50089,9 @@ Called by update_net_trust_anchors.py.-->
   <int value="6" label="Opened automatically / Auto-signin toast"/>
   <int value="7" label="Opened manually / Offering a password to update"/>
   <int value="8" label="Opened automatically / Offering a password to update"/>
+  <int value="9"
+      label="Opened automatically / Offering to save unsynced passwords
+             locally"/>
 </enum>
 
 <enum name="PasswordBubbleSignInPromoDismissalReason">
