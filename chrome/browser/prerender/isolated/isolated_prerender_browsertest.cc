@@ -16,6 +16,7 @@
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_feature_list.h"
 #include "build/build_config.h"
+#include "chrome/browser/chrome_notification_types.h"
 #include "chrome/browser/data_reduction_proxy/data_reduction_proxy_chrome_settings.h"
 #include "chrome/browser/data_reduction_proxy/data_reduction_proxy_chrome_settings_factory.h"
 #include "chrome/browser/navigation_predictor/navigation_predictor_keyed_service.h"
@@ -44,11 +45,14 @@
 #include "components/data_reduction_proxy/proto/client_config.pb.h"
 #include "components/ukm/test_ukm_recorder.h"
 #include "content/public/browser/browser_task_traits.h"
+#include "content/public/browser/navigation_controller.h"
 #include "content/public/browser/navigation_entry.h"
 #include "content/public/browser/network_service_instance.h"
+#include "content/public/browser/notification_observer.h"
 #include "content/public/common/network_service_util.h"
 #include "content/public/test/browser_test_base.h"
 #include "content/public/test/browser_test_utils.h"
+#include "content/public/test/test_utils.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
@@ -114,6 +118,31 @@ class TestCustomProxyConfigClient
   base::OnceClosure update_closure_;
 };
 
+class AuthChallengeObserver : public content::NotificationObserver {
+ public:
+  explicit AuthChallengeObserver(content::WebContents* web_contents) {
+    registrar_.Add(this, chrome::NOTIFICATION_AUTH_NEEDED,
+                   content::Source<content::NavigationController>(
+                       &web_contents->GetController()));
+  }
+  ~AuthChallengeObserver() override = default;
+
+  bool GotAuthChallenge() const { return got_auth_challenge_; }
+
+  void Reset() { got_auth_challenge_ = false; }
+
+  // content::NotificationObserver:
+  void Observe(int type,
+               const content::NotificationSource& source,
+               const content::NotificationDetails& details) override {
+    got_auth_challenge_ |= type == chrome::NOTIFICATION_AUTH_NEEDED;
+  }
+
+ private:
+  content::NotificationRegistrar registrar_;
+  bool got_auth_challenge_ = false;
+};
+
 }  // namespace
 
 // Occasional flakes on Windows (https://crbug.com/1045971).
@@ -139,9 +168,9 @@ class IsolatedPrerenderBrowserTest
     proxy_server_ = std::make_unique<net::EmbeddedTestServer>(
         net::EmbeddedTestServer::TYPE_HTTPS);
     proxy_server_->ServeFilesFromSourceDirectory("chrome/test/data");
-    proxy_server_->RegisterRequestMonitor(base::BindRepeating(
-        &IsolatedPrerenderBrowserTest::MonitorProxyResourceRequest,
-        base::Unretained(this)));
+    proxy_server_->RegisterRequestHandler(
+        base::BindRepeating(&IsolatedPrerenderBrowserTest::HandleProxyRequest,
+                            base::Unretained(this)));
     EXPECT_TRUE(proxy_server_->Start());
 
     config_server_ = std::make_unique<net::EmbeddedTestServer>(
@@ -316,6 +345,14 @@ class IsolatedPrerenderBrowserTest
     if (request.GetURL().spec().find("favicon") != std::string::npos)
       return nullptr;
 
+    if (request.relative_url == "/auth_challenge") {
+      std::unique_ptr<net::test_server::BasicHttpResponse> resp =
+          std::make_unique<net::test_server::BasicHttpResponse>();
+      resp->set_code(net::HTTP_UNAUTHORIZED);
+      resp->AddCustomHeader("www-authenticate", "Basic realm=\"test\"");
+      return resp;
+    }
+
     // If the badprobe origin is being requested, (which has to be checked using
     // the Host header since the request URL is always 127.0.0.1), check if this
     // is a probe request. The probe only requests "/" whereas the navigation
@@ -330,14 +367,25 @@ class IsolatedPrerenderBrowserTest
     return nullptr;
   }
 
-  void MonitorProxyResourceRequest(
+  std::unique_ptr<net::test_server::HttpResponse> HandleProxyRequest(
       const net::test_server::HttpRequest& request) {
+    if (request.all_headers.find("CONNECT auth_challenge.com:443") !=
+        std::string::npos) {
+      std::unique_ptr<net::test_server::BasicHttpResponse> resp =
+          std::make_unique<net::test_server::BasicHttpResponse>();
+      resp->set_code(net::HTTP_UNAUTHORIZED);
+      resp->AddCustomHeader("www-authenticate", "Basic realm=\"test\"");
+      return resp;
+    }
+
     // This method is called on embedded test server thread. Post the
     // information on UI thread.
     base::PostTask(FROM_HERE, {content::BrowserThread::UI},
                    base::BindOnce(&IsolatedPrerenderBrowserTest::
                                       MonitorProxyResourceRequestOnUIThread,
                                   base::Unretained(this), request));
+
+    return nullptr;
   }
 
   void MonitorProxyResourceRequestOnUIThread(
@@ -436,6 +484,37 @@ IN_PROC_BROWSER_TEST_F(IsolatedPrerenderBrowserTest,
   auto client_config = WaitForUpdatedCustomProxyConfig();
   VerifyProxyConfig(std::move(client_config));
 }
+
+IN_PROC_BROWSER_TEST_F(
+    IsolatedPrerenderBrowserTest,
+    DISABLE_ON_WIN_MAC_CHROMEOS(NoAuthChallenges_FromProxy)) {
+  SetDataSaverEnabled(true);
+  ui_test_utils::NavigateToURL(browser(), GURL("about:blank"));
+  WaitForUpdatedCustomProxyConfig();
+
+  std::unique_ptr<AuthChallengeObserver> auth_observer =
+      std::make_unique<AuthChallengeObserver>(GetWebContents());
+
+  // Do a positive test first to make sure we get an auth challenge under these
+  // circumstances.
+  ui_test_utils::NavigateToURL(browser(),
+                               GetOriginServerURL("/auth_challenge"));
+  base::RunLoop().RunUntilIdle();
+  EXPECT_TRUE(auth_observer->GotAuthChallenge());
+
+  // Test that a proxy auth challenge does not show a dialog.
+  auth_observer->Reset();
+  ui_test_utils::NavigateToURL(browser(), GURL("about:blank"));
+  GURL doc_url("https://www.google.com/search?q=test");
+  MakeNavigationPrediction(doc_url, {GURL("https://auth_challenge.com/")});
+  base::RunLoop().RunUntilIdle();
+
+  EXPECT_FALSE(auth_observer->GotAuthChallenge());
+}
+
+// TODO(crbug/1067300): Add the following tests:
+// * No auth challenge dialog from origin server.
+// * Successfully loaded proxy origin response body.
 
 IN_PROC_BROWSER_TEST_F(IsolatedPrerenderBrowserTest,
                        DISABLE_ON_WIN_MAC_CHROMEOS(ConnectProxyEndtoEnd)) {

@@ -269,8 +269,6 @@ void IsolatedPrerenderTabHelper::Prefetch() {
             policy_exception_justification: "Not implemented."
         })");
 
-  // TODO(crbug/1023485): Disallow auth challenges.
-
   page_->url_loader_ =
       network::SimpleURLLoader::Create(std::move(request), traffic_annotation);
 
