@@ -1474,25 +1474,6 @@
             ]
         }
     ],
-    "ClipboardMaximumAge": [
-        {
-            "platforms": [
-                "android",
-                "android_weblayer"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "params": {
-                        "UIClipboardMaximumAge": "600"
-                    },
-                    "enable_features": [
-                        "ClipboardMaximumAge"
-                    ]
-                }
-            ]
-        }
-    ],
     "CompositeCrossOriginIframes": [
         {
             "platforms": [
@@ -3692,12 +3673,14 @@
                 {
                     "name": "AndroidExperiments",
                     "params": {
+                        "UIClipboardMaximumAge": "600",
                         "ZeroSuggestVariant:1:*": "Local",
                         "ZeroSuggestVariant:7:*": "Local",
                         "ZeroSuggestVariant:8:*": "Local",
                         "rounded_edges": "true"
                     },
                     "enable_features": [
+                        "ClipboardMaximumAge",
                         "OmniboxDisableInstantExtendedLimit",
                         "OmniboxOnFocusSuggestions"
                     ]
