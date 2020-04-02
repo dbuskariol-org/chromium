@@ -64,6 +64,12 @@ public class AndroidPaymentAppFinder implements ManifestVerifyCallback {
             "org.chromium.default_payment_method_name";
 
     /**
+     * Meta data name of an app's supported delegations' list.
+     */
+    /* package */ static final String META_DATA_NAME_OF_SUPPORTED_DELEGATIONS =
+            "org.chromium.payment_supported_delegations";
+
+    /*
      * The ignored payment method identifiers. Payment apps with this payment method identifier are
      * ignored.
      */
@@ -597,12 +603,20 @@ public class AndroidPaymentAppFinder implements ManifestVerifyCallback {
             app = new AndroidPaymentApp(mDelegate.getParams().getWebContents(), packageName,
                     resolveInfo.activityInfo.name, mIsReadyToPayServices.get(packageName),
                     label.toString(), mPackageManagerDelegate.getAppIcon(resolveInfo), mIsIncognito,
-                    webAppIdCanDeduped);
+                    webAppIdCanDeduped, getAppsSupportedDelegations(resolveInfo.activityInfo));
             mValidApps.put(packageName, app);
         }
 
         // The same method may be added multiple times.
         app.addMethodName(methodName);
+    }
+
+    private SupportedDelegations getAppsSupportedDelegations(ActivityInfo activityInfo) {
+        if (activityInfo.metaData == null) return new SupportedDelegations();
+
+        String[] supportedDelegationNames =
+                activityInfo.metaData.getStringArray(META_DATA_NAME_OF_SUPPORTED_DELEGATIONS);
+        return SupportedDelegations.createFromStringArray(supportedDelegationNames);
     }
 
     @Override
