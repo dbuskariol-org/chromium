@@ -414,7 +414,7 @@
     Remove password?
   </message>
   <message name="IDS_SETTINGS_REMOVE_COMPROMISED_PASSWORD_CONFIRMATION_DESCRIPTION" desc="Compromised password remove dialog conformation description">
-    Removing this password will not delete your account on <ph name="DOMAIN">$1<ex>airbnb.com</ex></ph>. Change your password or delete your account on <ph name="DOMAIN">$1<ex>airbnb.com</ex></ph> to keep it safe from others.
+    Removing this password will not delete your account on <ph name="DOMAIN">$1<ex>airbnb.com</ex></ph>. Change your password or delete your account on <ph name="DOMAIN_LINK">$2<ex>&lt;a href="https://airbnb.com" target="_blank"&gt;airbnb.com&lt;/a&gt;</ex></ph> to keep it safe from others.
   </message>
   <message name="IDS_SETTINGS_COMPROMISED_EDIT_PASSWORD_TITLE" desc="The title for a dialog, which allows a user to edit a password, which have been found to be compromised. This dialog includes other details, such as username and website.">
     Edit password
