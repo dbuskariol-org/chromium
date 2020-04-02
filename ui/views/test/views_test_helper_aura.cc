@@ -24,16 +24,22 @@ ViewsTestHelperAura::ViewsTestHelperAura() {
 }
 
 ViewsTestHelperAura::~ViewsTestHelperAura() {
+  // Ensure all Widgets (and Windows) are closed in unit tests.
+  //
+  // Most tests do not try to create desktop Aura Widgets, and on most platforms
+  // will thus create Widgets that are owned by the RootWindow.  These will
+  // automatically be destroyed when the RootWindow is torn down (during
+  // destruction of the AuraTestHelper).  However, on Mac there are only desktop
+  // widgets, so any unclosed widgets will remain unowned, holding a Compositor,
+  // and will cause UAFs if closed (e.g. by the test freeing a
+  // unique_ptr<Widget> with WIDGET_OWNS_NATIVE_WIDGET) after the ContextFactory
+  // is destroyed by our owner.
+  //
+  // So, although it shouldn't matter for this helper, check for unclosed
+  // windows to complain about faulty tests early.
   gfx::NativeWindow root_window = GetContext();
-  if (root_window) {
-    // Ensure all Widgets (and windows) are closed in unit tests. This is done
-    // automatically when the RootWindow is torn down, but is an error on
-    // platforms that must ensure no Compositors are alive when the
-    // ContextFactory is torn down.
-    // So, although it's optional, check the root window to detect failures
-    // before they hit the CQ on other platforms.
+  if (root_window)
     DCHECK(root_window->children().empty()) << "Not all windows were closed.";
-  }
 }
 
 std::unique_ptr<TestViewsDelegate>
