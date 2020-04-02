@@ -88,6 +88,7 @@ const char kChromeUIInterstitialURL[] = "chrome://interstitials/";
 const char kChromeUIInterventionsInternalsHost[] = "interventions-internals";
 const char kChromeUIInvalidationsHost[] = "invalidations";
 const char kChromeUIKaleidoscopeHost[] = "kaleidoscope";
+const char kChromeUIKaleidoscopeURL[] = "chrome://kaleidoscope";
 const char kChromeUIKaleidoscopeContentHost[] = "kaleidoscope-content";
 const char kChromeUIKaleidoscopeContentURL[] = "chrome://kaleidoscope-content";
 const char kChromeUIKillHost[] = "kill";
