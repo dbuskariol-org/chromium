@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/storage/storage_info_fetcher.h"
+#include "components/browser_ui/site_settings/android/storage_info_fetcher.h"
 
 #include "base/bind.h"
 #include "base/task/post_task.h"
-#include "chrome/browser/profiles/profile.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
@@ -16,18 +15,20 @@
 using content::BrowserContext;
 using content::BrowserThread;
 
-StorageInfoFetcher::StorageInfoFetcher(Profile* profile) {
-  quota_manager_ = content::BrowserContext::GetDefaultStoragePartition(
-      profile)->GetQuotaManager();
+namespace browser_ui {
+
+StorageInfoFetcher::StorageInfoFetcher(content::BrowserContext* context) {
+  quota_manager_ = content::BrowserContext::GetDefaultStoragePartition(context)
+                       ->GetQuotaManager();
 }
 
 StorageInfoFetcher::~StorageInfoFetcher() = default;
 
-void StorageInfoFetcher::FetchStorageInfo(const FetchCallback& fetch_callback) {
+void StorageInfoFetcher::FetchStorageInfo(FetchCallback fetch_callback) {
   // Balanced in OnFetchCompleted.
   AddRef();
 
-  fetch_callback_ = fetch_callback;
+  fetch_callback_ = std::move(fetch_callback);
 
   // QuotaManager must be called on IO thread, but the callback must then be
   // called on the UI thread.
@@ -40,11 +41,11 @@ void StorageInfoFetcher::FetchStorageInfo(const FetchCallback& fetch_callback) {
 
 void StorageInfoFetcher::ClearStorage(const std::string& host,
                                       blink::mojom::StorageType type,
-                                      const ClearCallback& clear_callback) {
+                                      ClearCallback clear_callback) {
   // Balanced in OnUsageCleared.
   AddRef();
 
-  clear_callback_ = clear_callback;
+  clear_callback_ = std::move(clear_callback);
   type_to_delete_ = type;
 
   base::PostTask(
@@ -73,7 +74,7 @@ void StorageInfoFetcher::OnGetUsageInfoInternal(
 void StorageInfoFetcher::OnFetchCompleted() {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
-  fetch_callback_.Run(entries_);
+  std::move(fetch_callback_).Run(entries_);
 
   Release();
 }
@@ -92,7 +93,9 @@ void StorageInfoFetcher::OnUsageClearedInternal(
 void StorageInfoFetcher::OnClearCompleted(blink::mojom::QuotaStatusCode code) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
-  clear_callback_.Run(code);
+  std::move(clear_callback_).Run(code);
 
   Release();
 }
+
+}  // namespace browser_ui

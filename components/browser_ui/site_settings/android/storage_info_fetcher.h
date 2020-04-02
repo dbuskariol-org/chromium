@@ -2,37 +2,41 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_STORAGE_STORAGE_INFO_FETCHER_H_
-#define CHROME_BROWSER_STORAGE_STORAGE_INFO_FETCHER_H_
+#ifndef COMPONENTS_BROWSER_UI_SITE_SETTINGS_ANDROID_STORAGE_INFO_FETCHER_H_
+#define COMPONENTS_BROWSER_UI_SITE_SETTINGS_ANDROID_STORAGE_INFO_FETCHER_H_
 
 #include "base/memory/ref_counted.h"
 #include "storage/browser/quota/quota_callbacks.h"
 #include "third_party/blink/public/mojom/quota/quota_types.mojom-forward.h"
 
+namespace content {
+class BrowserContext;
+}
+
 namespace storage {
 class QuotaManager;
 }
 
-class Profile;
+namespace browser_ui {
 
 // Asynchronously fetches the amount of storage used by websites.
-class StorageInfoFetcher :
-    public base::RefCountedThreadSafe<StorageInfoFetcher> {
+class StorageInfoFetcher
+    : public base::RefCountedThreadSafe<StorageInfoFetcher> {
  public:
   using FetchCallback =
-      base::Callback<void(const storage::UsageInfoEntries&)>;
+      base::OnceCallback<void(const storage::UsageInfoEntries&)>;
   using ClearCallback =
-      base::Callback<void(blink::mojom::QuotaStatusCode code)>;
+      base::OnceCallback<void(blink::mojom::QuotaStatusCode code)>;
 
-  explicit StorageInfoFetcher(Profile* profile);
+  explicit StorageInfoFetcher(content::BrowserContext* context);
 
   // Asynchronously fetches the StorageInfo.
-  void FetchStorageInfo(const FetchCallback& fetch_callback);
+  void FetchStorageInfo(FetchCallback fetch_callback);
 
   // Asynchronously clears storage for the given host.
   void ClearStorage(const std::string& host,
                     blink::mojom::StorageType type,
-                    const ClearCallback& clear_callback);
+                    ClearCallback clear_callback);
 
  private:
   virtual ~StorageInfoFetcher();
@@ -72,4 +76,6 @@ class StorageInfoFetcher :
   DISALLOW_COPY_AND_ASSIGN(StorageInfoFetcher);
 };
 
-#endif  // CHROME_BROWSER_STORAGE_STORAGE_INFO_FETCHER_H_
+}  // namespace browser_ui
+
+#endif  // COMPONENTS_BROWSER_UI_SITE_SETTINGS_ANDROID_STORAGE_INFO_FETCHER_H_
