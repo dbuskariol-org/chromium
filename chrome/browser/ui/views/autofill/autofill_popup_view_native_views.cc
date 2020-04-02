@@ -5,7 +5,6 @@
 #include "chrome/browser/ui/views/autofill/autofill_popup_view_native_views.h"
 
 #include <algorithm>
-#include <memory>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -18,7 +17,7 @@
 #include "chrome/browser/platform_util.h"
 #include "chrome/browser/ui/autofill/autofill_popup_controller.h"
 #include "chrome/browser/ui/autofill/autofill_popup_controller_utils.h"
-#include "chrome/browser/ui/autofill/popup_view_common.h"
+#include "chrome/browser/ui/views/autofill/autofill_popup_view_utils.h"
 #include "chrome/browser/ui/views/chrome_layout_provider.h"
 #include "chrome/browser/ui/views/chrome_typography.h"
 #include "chrome/browser/ui/views/chrome_typography_provider.h"
@@ -923,13 +922,6 @@ void AutofillPopupWarningView::CreateContent() {
       ChromeTextContext::CONTEXT_BODY_TEXT_LARGE, ChromeTextStyle::STYLE_RED);
   text_label->SetEnabledColor(popup_view()->GetWarningColor());
   text_label->SetMultiLine(true);
-  int max_width =
-      std::min(kAutofillPopupMaxWidth,
-               PopupViewCommon().CalculateMaxWidth(
-                   gfx::ToEnclosingRect(controller->element_bounds()),
-                   controller->container_view()));
-  max_width -= 2 * horizontal_margin;
-  text_label->SetMaximumWidth(max_width);
   text_label->SetHorizontalAlignment(gfx::HorizontalAlignment::ALIGN_LEFT);
 
   AddChildView(std::move(text_label));
@@ -1231,8 +1223,10 @@ int AutofillPopupViewNativeViews::AdjustWidth(int width) const {
 }
 
 void AutofillPopupViewNativeViews::DoUpdateBoundsAndRedrawPopup() {
-  gfx::Size size = CalculatePreferredSize();
+  gfx::Size preferred_size = CalculatePreferredSize();
   gfx::Rect popup_bounds;
+
+  const gfx::Rect window_bounds = GetWindowBounds();
 
   // When a bubble border is shown, the contents area (inside the shadow) is
   // supposed to be aligned with input element boundaries.
@@ -1243,15 +1237,14 @@ void AutofillPopupViewNativeViews::DoUpdateBoundsAndRedrawPopup() {
   // look too close to the element.
   element_bounds.Inset(/*horizontal=*/0, /*vertical=*/-kElementBorderPadding);
 
-  PopupViewCommon().CalculatePopupVerticalBounds(size.height(), element_bounds,
-                                                 controller_->container_view(),
-                                                 &popup_bounds);
+  CalculatePopupYAndHeight(preferred_size.height(), window_bounds,
+                           element_bounds, &popup_bounds);
 
   // Adjust the width to compensate for a scroll bar, if necessary, and for
   // other rules.
   int scroll_width = 0;
-  if (size.height() > popup_bounds.height()) {
-    size.set_height(popup_bounds.height());
+  if (preferred_size.height() > popup_bounds.height()) {
+    preferred_size.set_height(popup_bounds.height());
 
     // Because the preferred size is greater than the bounds available, the
     // contents will have to scroll. The scroll bar will steal width from the
@@ -1259,13 +1252,12 @@ void AutofillPopupViewNativeViews::DoUpdateBoundsAndRedrawPopup() {
     // compensate.
     scroll_width = scroll_view_->GetScrollBarLayoutWidth();
   }
-  size.set_width(AdjustWidth(size.width() + scroll_width));
+  preferred_size.set_width(AdjustWidth(preferred_size.width() + scroll_width));
 
-  PopupViewCommon().CalculatePopupHorizontalBounds(
-      size.width(), element_bounds, controller_->container_view(),
-      controller_->IsRTL(), &popup_bounds);
+  CalculatePopupXAndWidth(preferred_size.width(), window_bounds, element_bounds,
+                          controller_->IsRTL(), &popup_bounds);
 
-  SetSize(size);
+  SetSize(preferred_size);
 
   popup_bounds.Inset(-GetWidget()->GetRootView()->border()->GetInsets());
   GetWidget()->SetBounds(popup_bounds);

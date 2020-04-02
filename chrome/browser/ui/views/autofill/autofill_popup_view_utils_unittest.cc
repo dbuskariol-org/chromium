@@ -1,37 +1,18 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/autofill/popup_view_common.h"
-
-#include <stddef.h>
-
-#include <memory>
+#include "chrome/browser/ui/views/autofill/autofill_popup_view_utils.h"
 
 #include "base/stl_util.h"
-#include "chrome/browser/ui/autofill/popup_view_test_helpers.h"
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
-#include "content/public/browser/web_contents.h"
-#include "ui/display/display.h"
-#include "ui/gfx/geometry/rect.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
-namespace autofill {
-
-class PopupViewCommonTest : public ChromeRenderViewHostTestHarness {
- public:
-  PopupViewCommonTest() {}
-  ~PopupViewCommonTest() override {}
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(PopupViewCommonTest);
-};
-
-TEST_F(PopupViewCommonTest, CalculatePopupBounds) {
-  int desired_width = 40;
-  int desired_height = 16;
+TEST(AutofillPopupViewUtilsTest, CalculatePopupBounds) {
+  constexpr int desired_width = 40;
+  constexpr int desired_height = 16;
 
   gfx::Rect window_bounds(0, 0, 2 * desired_width, 2 * desired_height);
-  MockPopupViewCommonForUnitTesting view_common(window_bounds);
+  gfx::Size preferred_size(desired_width, desired_height);
 
   struct {
     gfx::Rect element_bounds;
@@ -68,16 +49,16 @@ TEST_F(PopupViewCommonTest, CalculatePopupBounds) {
   };
 
   for (size_t i = 0; i < base::size(test_cases); ++i) {
-    gfx::Rect actual_popup_bounds = view_common.CalculatePopupBounds(
-        desired_width, desired_height, test_cases[i].element_bounds,
-        web_contents()->GetNativeView(), /* is_rtl= */ false);
+    gfx::Rect actual_popup_bounds =
+        CalculatePopupBounds(preferred_size, window_bounds,
+                             test_cases[i].element_bounds, /* is_rtl= */ false);
     EXPECT_EQ(test_cases[i].expected_popup_bounds_ltr.ToString(),
               actual_popup_bounds.ToString())
         << "Popup bounds failed to match for ltr test " << i;
 
-    actual_popup_bounds = view_common.CalculatePopupBounds(
-        desired_width, desired_height, test_cases[i].element_bounds,
-        web_contents()->GetNativeView(), /* is_rtl= */ true);
+    actual_popup_bounds =
+        CalculatePopupBounds(preferred_size, window_bounds,
+                             test_cases[i].element_bounds, /* is_rtl= */ true);
     gfx::Rect expected_popup_bounds = test_cases[i].expected_popup_bounds_rtl;
     if (expected_popup_bounds.IsEmpty())
       expected_popup_bounds = test_cases[i].expected_popup_bounds_ltr;
@@ -85,5 +66,3 @@ TEST_F(PopupViewCommonTest, CalculatePopupBounds) {
         << "Popup bounds failed to match for rtl test " << i;
   }
 }
-
-}  // namespace autofill
