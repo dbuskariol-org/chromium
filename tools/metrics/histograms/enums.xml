@@ -44912,6 +44912,9 @@ Called by update_use_counter_css.py.-->
   <int value="6"
       label="A navigation suggestion is found using edit distance against an
              engaged site"/>
+  <int value="7"
+      label="A navigation suggestion is found using target embedding against
+             a top domain"/>
 </enum>
 
 <enum name="NavigationURLScheme">
