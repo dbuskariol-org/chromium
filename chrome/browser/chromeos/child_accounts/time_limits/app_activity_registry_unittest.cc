@@ -745,7 +745,8 @@ TEST_F(AppActivityRegistryTest, RemoveOldEntries) {
   prefs()->SetInt64(prefs::kPerAppTimeLimitsLastSuccessfulReportTime,
                     start_time.ToDeltaSinceWindowsEpoch().InMicroseconds());
 
-  task_environment()->FastForwardBy(base::TimeDelta::FromDays(30));
+  task_environment()->AdvanceClock(base::TimeDelta::FromDays(30));
+  task_environment()->RunUntilIdle();
 
   // Now let's recreate AppActivityRegistry. Its state should be restored.
   ReInitializeRegistry();
