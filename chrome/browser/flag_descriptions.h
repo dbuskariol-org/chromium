@@ -1099,6 +1099,9 @@ extern const char kTabGroupsDescription[];
 extern const char kTabGroupsCollapseName[];
 extern const char kTabGroupsCollapseDescription[];
 
+extern const char kTabGroupsFeedbackName[];
+extern const char kTabGroupsFeedbackDescription[];
+
 extern const char kTabHoverCardsName[];
 extern const char kTabHoverCardsDescription[];
 
