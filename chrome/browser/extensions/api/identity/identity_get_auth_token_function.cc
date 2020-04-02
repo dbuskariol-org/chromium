@@ -144,7 +144,8 @@ ExtensionFunction::ResponseAction IdentityGetAuthTokenFunction::Run() {
   if (gaia_id.empty()) {
     gaia_id = IdentityAPI::GetFactoryInstance()
                   ->Get(GetProfile())
-                  ->GetGaiaIdForExtension(token_key_.extension_id);
+                  ->GetGaiaIdForExtension(token_key_.extension_id)
+                  .value_or("");
   }
 
   // From here on out, results must be returned asynchronously.
@@ -327,7 +328,6 @@ void IdentityGetAuthTokenFunction::StartSigninFlow() {
   IdentityAPI* id_api =
       extensions::IdentityAPI::GetFactoryInstance()->Get(GetProfile());
   id_api->EraseAllCachedTokens();
-  id_api->EraseAllGaiaIds();
 
   // If the signin flow fails, don't display the login prompt again.
   should_prompt_for_signin_ = false;
