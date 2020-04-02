@@ -51,6 +51,7 @@ class ColorPickerViewTest : public ChromeViewsTestBase {
     color_picker->SizeToPreferredSize();
     color_picker_ = color_picker.get();
     widget_->SetContentsView(color_picker.release());
+    widget_->Show();
   }
 
   void TearDown() override {

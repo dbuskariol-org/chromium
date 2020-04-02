@@ -40,6 +40,7 @@ class ChooserDialogViewTest : public ChromeViewsTestBase {
     widget_ = views::DialogDelegate::CreateDialogWidget(dialog_, GetContext(),
                                                         parent);
     widget_->SetVisibilityChangedAnimationsEnabled(false);
+    widget_->Show();
 #if defined(OS_MACOSX)
     // Necessary for Mac. On other platforms this happens in the focus
     // manager, but it's disabled for Mac due to crbug.com/650859.
