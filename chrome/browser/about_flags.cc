@@ -34,7 +34,8 @@
 #include "cc/base/switches.h"
 #include "chrome/browser/browser_features.h"
 #include "chrome/browser/flag_descriptions.h"
-#include "chrome/browser/net/dns_util.h"
+#include "chrome/browser/net/stub_resolver_config_reader.h"
+#include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/notifications/scheduler/public/features.h"
 #include "chrome/browser/performance_manager/graph/policies/policy_features.h"
 #include "chrome/browser/permissions/quiet_notification_permission_ui_config.h"
@@ -5260,7 +5261,8 @@ bool SkipConditionalFeatureEntry(const FeatureEntry& entry) {
 #endif  // OS_WIN
 
   if (!strcmp("dns-over-https", entry.internal_name) &&
-      (chrome_browser_net::ShouldDisableDohForManaged() ||
+      (SystemNetworkContextManager::GetStubResolverConfigReader()->
+          ShouldDisableDohForManaged() ||
        features::kDnsOverHttpsShowUiParam.Get())) {
     return true;
   }

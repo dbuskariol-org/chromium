@@ -941,6 +941,8 @@ jumbo_static_library("browser") {
     "net/secure_dns_policy_handler.h",
     "net/service_providers_win.cc",
     "net/service_providers_win.h",
+    "net/stub_resolver_config_reader.cc",
+    "net/stub_resolver_config_reader.h",
     "net/system_network_context_manager.cc",
     "net/system_network_context_manager.h",
     "net_benchmarking.cc",
