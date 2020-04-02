@@ -573,14 +573,6 @@ void IdentityGetAuthTokenFunction::OnIssueAdviceSuccess(
 
 void IdentityGetAuthTokenFunction::OnRemoteConsentSuccess(
     const RemoteConsentResolutionData& resolution_data) {
-  if (!base::FeatureList::IsEnabled(switches::kOAuthRemoteConsent)) {
-    // Fallback to the issue advice flow.
-    // TODO(https://crbug.com/1026237): Remove the fallback after making sure
-    // that the new flow works correctly.
-    OnIssueAdviceSuccess(IssueAdviceInfo());
-    return;
-  }
-
   TRACE_EVENT_NESTABLE_ASYNC_INSTANT0("identity", "OnRemoteConsentSuccess",
                                       this);
 
