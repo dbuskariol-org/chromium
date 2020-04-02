@@ -404,6 +404,7 @@ TEST_F(
  ['Subpage', 'settings_subpage_test.m.js'],
  ['Textarea', 'settings_textarea_tests.m.js'],
  ['ToggleButton', 'settings_toggle_button_tests.m.js'],
+ ['ZoomLevels', 'zoom_levels_tests.m.js'],
 ].forEach(test => registerTest(...test));
 
 GEN('#if defined(OS_CHROMEOS)');
@@ -432,6 +433,10 @@ GEN('#if defined(OS_WIN) && BUILDFLAG(GOOGLE_CHROME_BRANDING)');
  ['IncompatibleApplicationsPage', 'incompatible_applications_page_test.m.js'],
 ].forEach(test => registerTest(...test));
 GEN('#endif  // defined(OS_WIN) && BUILDFLAG(GOOGLE_CHROME_BRANDING)');
+
+GEN('#if BUILDFLAG(GOOGLE_CHROME_BRANDING) && !defined(OS_CHROMEOS)');
+registerTest('MetricsReporting', 'metrics_reporting_tests.m.js');
+GEN('#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING) && !defined(OS_CHROMEOS)');
 
 function registerTest(testName, module, caseName) {
   const className = `CrSettings${testName}V3Test`;
