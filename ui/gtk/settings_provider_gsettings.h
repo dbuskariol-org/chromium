@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_GTK_SETTINGS_PROVIDER_GSETTINGS_H_
-#define CHROME_BROWSER_UI_GTK_SETTINGS_PROVIDER_GSETTINGS_H_
+#ifndef UI_GTK_SETTINGS_PROVIDER_GSETTINGS_H_
+#define UI_GTK_SETTINGS_PROVIDER_GSETTINGS_H_
 
 #include <gio/gio.h>
 
 #include <string>
 
 #include "base/macros.h"
-#include "chrome/browser/ui/gtk/settings_provider.h"
 #include "ui/base/glib/glib_signal.h"
+#include "ui/gtk/settings_provider.h"
 
 namespace gtk {
 class GtkUi;
@@ -54,4 +54,4 @@ class SettingsProviderGSettings : public SettingsProvider {
 
 }  // namespace gtk
 
-#endif  // CHROME_BROWSER_UI_GTK_SETTINGS_PROVIDER_GSETTINGS_H_
+#endif  // UI_GTK_SETTINGS_PROVIDER_GSETTINGS_H_

@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/nav_button_provider_gtk.h"
+#include "ui/gtk/nav_button_provider_gtk.h"
 
 #include <gtk/gtk.h>
 
-#include "chrome/browser/ui/gtk/gtk_util.h"
 #include "ui/base/glib/scoped_gobject.h"
 #include "ui/gfx/image/image_skia.h"
 #include "ui/gfx/image/image_skia_source.h"
+#include "ui/gtk/gtk_util.h"
 #include "ui/views/widget/widget.h"
 
 namespace gtk {

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_GTK_PRINTING_GTK_UTIL_H_
-#define CHROME_BROWSER_UI_GTK_PRINTING_GTK_UTIL_H_
+#ifndef UI_GTK_PRINTING_GTK_UTIL_H_
+#define UI_GTK_PRINTING_GTK_UTIL_H_
 
 #include "ui/gfx/geometry/size.h"
 
@@ -24,4 +24,4 @@ void InitPrintSettingsGtk(GtkPrintSettings* settings,
                           GtkPageSetup* page_setup,
                           printing::PrintSettings* print_settings);
 
-#endif  // CHROME_BROWSER_UI_GTK_PRINTING_GTK_UTIL_H_
+#endif  // UI_GTK_PRINTING_GTK_UTIL_H_

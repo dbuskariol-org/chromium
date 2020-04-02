@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/gtk_key_bindings_handler.h"
+#include "ui/gtk/gtk_key_bindings_handler.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <stddef.h>
@@ -12,9 +12,9 @@
 #include "base/logging.h"
 #include "base/stl_util.h"
 #include "base/strings/string_util.h"
-#include "chrome/browser/ui/gtk/gtk_util.h"
 #include "ui/base/ime/text_edit_commands.h"
 #include "ui/events/event.h"
+#include "ui/gtk/gtk_util.h"
 
 using ui::TextEditCommand;
 

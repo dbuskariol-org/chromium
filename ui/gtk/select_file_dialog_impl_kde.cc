@@ -25,10 +25,10 @@
 #include "base/task/task_traits.h"
 #include "base/task/thread_pool.h"
 #include "base/threading/thread_restrictions.h"
-#include "chrome/browser/ui/gtk/select_file_dialog_impl.h"
 #include "ui/aura/window_tree_host.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/gfx/x/x11.h"
+#include "ui/gtk/select_file_dialog_impl.h"
 #include "ui/strings/grit/ui_strings.h"
 
 namespace {

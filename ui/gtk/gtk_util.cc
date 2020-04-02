@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/gtk_util.h"
+#include "ui/gtk/gtk_util.h"
 
 #include <dlfcn.h>
 #include <gdk/gdk.h>
@@ -19,7 +19,6 @@
 #include "base/strings/string_split.h"
 #include "base/strings/string_tokenizer.h"
 #include "base/strings/string_util.h"
-#include "chrome/browser/ui/gtk/gtk_ui.h"
 #include "ui/aura/window_tree_host.h"
 #include "ui/base/accelerators/accelerator.h"
 #include "ui/events/event.h"
@@ -28,6 +27,7 @@
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/native_widget_types.h"
+#include "ui/gtk/gtk_ui.h"
 #include "ui/gtk/gtk_ui_delegate.h"
 #include "ui/ozone/public/ozone_platform.h"
 #include "ui/views/linux_ui/linux_ui.h"

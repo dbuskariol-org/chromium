@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/gtk_ui.h"
+#include "ui/gtk/gtk_ui.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
@@ -24,15 +24,6 @@
 #include "base/strings/string_split.h"
 #include "base/strings/stringprintf.h"
 #include "chrome/browser/themes/theme_properties.h"
-#include "chrome/browser/ui/gtk/gtk_key_bindings_handler.h"
-#include "chrome/browser/ui/gtk/gtk_util.h"
-#include "chrome/browser/ui/gtk/input_method_context_impl_gtk.h"
-#include "chrome/browser/ui/gtk/native_theme_gtk.h"
-#include "chrome/browser/ui/gtk/nav_button_provider_gtk.h"
-#include "chrome/browser/ui/gtk/print_dialog_gtk.h"
-#include "chrome/browser/ui/gtk/printing_gtk_util.h"
-#include "chrome/browser/ui/gtk/select_file_dialog_impl.h"
-#include "chrome/browser/ui/gtk/settings_provider_gtk.h"
 #include "printing/buildflags/buildflags.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "third_party/skia/include/core/SkCanvas.h"
@@ -54,7 +45,16 @@
 #include "ui/gfx/image/image_skia_source.h"
 #include "ui/gfx/skbitmap_operations.h"
 #include "ui/gfx/skia_util.h"
+#include "ui/gtk/gtk_key_bindings_handler.h"
 #include "ui/gtk/gtk_ui_delegate.h"
+#include "ui/gtk/gtk_util.h"
+#include "ui/gtk/input_method_context_impl_gtk.h"
+#include "ui/gtk/native_theme_gtk.h"
+#include "ui/gtk/nav_button_provider_gtk.h"
+#include "ui/gtk/print_dialog_gtk.h"
+#include "ui/gtk/printing_gtk_util.h"
+#include "ui/gtk/select_file_dialog_impl.h"
+#include "ui/gtk/settings_provider_gtk.h"
 #include "ui/native_theme/native_theme.h"
 #include "ui/shell_dialogs/select_file_policy.h"
 #include "ui/views/controls/button/button.h"
@@ -65,7 +65,7 @@
 #include "ui/views/linux_ui/window_button_order_observer.h"
 
 #if defined(USE_GIO)
-#include "chrome/browser/ui/gtk/settings_provider_gsettings.h"
+#include "ui/gtk/settings_provider_gsettings.h"
 #endif
 
 #if defined(USE_OZONE)

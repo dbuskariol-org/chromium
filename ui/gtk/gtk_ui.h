@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_GTK_GTK_UI_H_
-#define CHROME_BROWSER_UI_GTK_GTK_UI_H_
+#ifndef UI_GTK_GTK_UI_H_
+#define UI_GTK_GTK_UI_H_
 
 #include <map>
 #include <memory>
@@ -222,4 +222,4 @@ class GtkUi : public views::LinuxUI {
 COMPONENT_EXPORT(GTK)
 views::LinuxUI* BuildGtkUi(ui::GtkUiDelegate* delegate);
 
-#endif  // CHROME_BROWSER_UI_GTK_GTK_UI_H_
+#endif  // UI_GTK_GTK_UI_H_

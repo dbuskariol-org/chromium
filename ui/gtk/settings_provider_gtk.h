@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_GTK_SETTINGS_PROVIDER_GTK_H_
-#define CHROME_BROWSER_UI_GTK_SETTINGS_PROVIDER_GTK_H_
+#ifndef UI_GTK_SETTINGS_PROVIDER_GTK_H_
+#define UI_GTK_SETTINGS_PROVIDER_GTK_H_
 
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "base/macros.h"
-#include "chrome/browser/ui/gtk/settings_provider.h"
 #include "ui/base/glib/glib_signal.h"
+#include "ui/gtk/settings_provider.h"
 #include "ui/views/linux_ui/linux_ui.h"
 
 typedef struct _GParamSpec GParamSpec;
@@ -78,4 +78,4 @@ class SettingsProviderGtk : public SettingsProvider {
 
 }  // namespace gtk
 
-#endif  // CHROME_BROWSER_UI_GTK_SETTINGS_PROVIDER_GTK_H_
+#endif  // UI_GTK_SETTINGS_PROVIDER_GTK_H_

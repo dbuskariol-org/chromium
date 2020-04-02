@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_GTK_PRINT_DIALOG_GTK_H_
-#define CHROME_BROWSER_UI_GTK_PRINT_DIALOG_GTK_H_
+#ifndef UI_GTK_PRINT_DIALOG_GTK_H_
+#define UI_GTK_PRINT_DIALOG_GTK_H_
 
 #include <gtk/gtk.h>
 #include <gtk/gtkunixprint.h>
@@ -89,4 +89,4 @@ class PrintDialogGtk : public printing::PrintDialogGtkInterface,
   DISALLOW_COPY_AND_ASSIGN(PrintDialogGtk);
 };
 
-#endif  // CHROME_BROWSER_UI_GTK_PRINT_DIALOG_GTK_H_
+#endif  // UI_GTK_PRINT_DIALOG_GTK_H_

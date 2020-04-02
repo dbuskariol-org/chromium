@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_GTK_GTK_KEY_BINDINGS_HANDLER_H_
-#define CHROME_BROWSER_UI_GTK_GTK_KEY_BINDINGS_HANDLER_H_
+#ifndef UI_GTK_GTK_KEY_BINDINGS_HANDLER_H_
+#define UI_GTK_GTK_KEY_BINDINGS_HANDLER_H_
 
 #include <gtk/gtk.h>
 
@@ -139,4 +139,4 @@ class GtkKeyBindingsHandler {
 
 }  // namespace gtk
 
-#endif  // CHROME_BROWSER_UI_GTK_GTK_KEY_BINDINGS_HANDLER_H_
+#endif  // UI_GTK_GTK_KEY_BINDINGS_HANDLER_H_

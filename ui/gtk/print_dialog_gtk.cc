@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/print_dialog_gtk.h"
+#include "ui/gtk/print_dialog_gtk.h"
 
 #include <gtk/gtkunixprint.h>
 
@@ -24,14 +24,14 @@
 #include "base/task/thread_pool.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "base/values.h"
-#include "chrome/browser/ui/gtk/gtk_ui.h"
-#include "chrome/browser/ui/gtk/gtk_util.h"
-#include "chrome/browser/ui/gtk/printing_gtk_util.h"
 #include "printing/metafile.h"
 #include "printing/print_job_constants.h"
 #include "printing/print_settings.h"
 #include "ui/aura/window.h"
+#include "ui/gtk/gtk_ui.h"
 #include "ui/gtk/gtk_ui_delegate.h"
+#include "ui/gtk/gtk_util.h"
+#include "ui/gtk/printing_gtk_util.h"
 
 using printing::PageRanges;
 using printing::PrintSettings;

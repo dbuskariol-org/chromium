@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/settings_provider_gtk.h"
+#include "ui/gtk/settings_provider_gtk.h"
 
 #include "base/strings/string_split.h"
-#include "chrome/browser/ui/gtk/gtk_ui.h"
-#include "chrome/browser/ui/gtk/gtk_util.h"
+#include "ui/gtk/gtk_ui.h"
+#include "ui/gtk/gtk_util.h"
 
 namespace gtk {
 

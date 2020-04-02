@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/native_theme_gtk.h"
+#include "ui/gtk/native_theme_gtk.h"
 
 #include <gtk/gtk.h>
 
-#include "chrome/browser/ui/gtk/gtk_util.h"
 #include "ui/gfx/color_palette.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/skbitmap_operations.h"
 #include "ui/gfx/skia_util.h"
+#include "ui/gtk/gtk_util.h"
 
 namespace gtk {
 

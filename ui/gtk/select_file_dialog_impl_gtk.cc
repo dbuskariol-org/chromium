@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/gtk/select_file_dialog_impl_gtk.h"
+#include "ui/gtk/select_file_dialog_impl_gtk.h"
 
 #include <gtk/gtk.h>
 #include <stddef.h>
@@ -22,12 +22,12 @@
 #include "base/strings/utf_string_conversions.h"
 #include "base/threading/thread.h"
 #include "base/threading/thread_restrictions.h"
-#include "chrome/browser/ui/gtk/gtk_ui.h"
-#include "chrome/browser/ui/gtk/gtk_util.h"
-#include "chrome/browser/ui/gtk/select_file_dialog_impl.h"
 #include "ui/aura/window_observer.h"
 #include "ui/base/l10n/l10n_util.h"
+#include "ui/gtk/gtk_ui.h"
 #include "ui/gtk/gtk_ui_delegate.h"
+#include "ui/gtk/gtk_util.h"
+#include "ui/gtk/select_file_dialog_impl.h"
 #include "ui/shell_dialogs/select_file_dialog.h"
 #include "ui/strings/grit/ui_strings.h"
 #include "ui/views/widget/desktop_aura/desktop_window_tree_host_linux.h"
