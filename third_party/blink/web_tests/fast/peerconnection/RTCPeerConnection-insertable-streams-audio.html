@@ -8,9 +8,6 @@
 </script></head>
 <body>
 <script>
-// TODO(crbug.com/1058021): Move this test to external/wpt/webrtc/ once the
-// Insertable Streams spec is mature enough.
-
 function areArrayBuffersEqual(buffer1, buffer2)
 {
     if (buffer1.byteLength != buffer2.byteLength)
@@ -25,8 +22,7 @@ function areArrayBuffersEqual(buffer1, buffer2)
 }
 
 function areFrameInfosEqual(frame1, frame2) {
-  return frame1.timestamp == frame2.timestamp &&
-         areArrayBuffersEqual(frame1.data, frame2.data);
+  return areArrayBuffersEqual(frame1.data, frame2.data);
 }
 
 async function doInverseSignalingHandshake(pc1, pc2) {
@@ -39,18 +35,18 @@ async function doInverseSignalingHandshake(pc1, pc2) {
   await pc1.setLocalDescription(answer);
 }
 
-async function testVideoFlow(t, negotiationFunction) {
-  const caller = new RTCPeerConnection({forceEncodedVideoInsertableStreams:true});
+async function testAudioFlow(t, negotiationFunction) {
+  const caller = new RTCPeerConnection({forceEncodedAudioInsertableStreams:true});
   t.add_cleanup(() => caller.close());
-  const callee = new RTCPeerConnection({forceEncodedVideoInsertableStreams:true});
+  const callee = new RTCPeerConnection({forceEncodedAudioInsertableStreams:true});
   t.add_cleanup(() => callee.close());
 
-  const stream = await navigator.mediaDevices.getUserMedia({video:true});
-  const videoTrack = stream.getVideoTracks()[0];
-  t.add_cleanup(() => videoTrack.stop());
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  const audioTrack = stream.getAudioTracks()[0];
+  t.add_cleanup(() => audioTrack.stop());
 
-  const videoSender = caller.addTrack(videoTrack)
-  const senderStreams = videoSender.createEncodedVideoStreams();
+  const audioSender = caller.addTrack(audioTrack)
+  const senderStreams = audioSender.createEncodedAudioStreams();
   const senderReader = senderStreams.readableStream.getReader();
   const senderWriter = senderStreams.writableStream.getWriter();
 
@@ -62,18 +58,18 @@ async function testVideoFlow(t, negotiationFunction) {
 
   const ontrackPromise = new Promise(resolve => {
     callee.ontrack = t.step_func(() => {
-      const videoReceiver = callee.getReceivers().find(r => r.track.kind === 'video');
-      assert_true(videoReceiver !== undefined);
+      const audioReceiver = callee.getReceivers().find(r => r.track.kind === 'audio');
+      assert_true(audioReceiver !== undefined);
 
       const receiverStreams =
-          videoReceiver.createEncodedVideoStreams();
+          audioReceiver.createEncodedAudioStreams();
       const receiverReader = receiverStreams.readableStream.getReader();
       const receiverWriter = receiverStreams.writableStream.getWriter();
 
       // The WebRTC stack may occassionally deliver duplicate frames on the
       // receiver side, therefore start twice as many read attempts as sent
       // frames to account for this.
-      const maxFramesToReceive = numFramesToSend * 2;
+      const maxFramesToReceive = numFramesToSend * 20;
       let numVerifiedFrames = 0;
       for (let i = 0; i < maxFramesToReceive; i++) {
         receiverReader.read().then(t.step_func(result => {
@@ -91,7 +87,7 @@ async function testVideoFlow(t, negotiationFunction) {
 
           if (numVerifiedFrames == numFramesToSend)
             resolve();
-        }));
+        })).catch(e=>console.error(e));
       }
     });
   });
@@ -102,7 +98,7 @@ async function testVideoFlow(t, negotiationFunction) {
   // Pass frames as they come from the encoder.
   for (let i = 0; i < numFramesPassthrough; i++) {
     const result = await senderReader.read()
-    frameInfos.push({timestamp: result.value.timestamp, data: result.value.data});
+    frameInfos.push({data: result.value.data});
     senderWriter.write(result.value);
   }
 
@@ -115,7 +111,7 @@ async function testVideoFlow(t, negotiationFunction) {
     int8View.fill(i);
 
     result.value.data = buffer;
-    frameInfos.push({timestamp: result.value.timestamp, data: result.value.data});
+    frameInfos.push({data: result.value.data});
     senderWriter.write(result.value);
   }
 
@@ -125,7 +121,7 @@ async function testVideoFlow(t, negotiationFunction) {
     const int8View = new Int8Array(result.value.data);
     int8View.fill(i);
 
-    frameInfos.push({timestamp: result.value.timestamp, data: result.value.data});
+    frameInfos.push({data: result.value.data});
     senderWriter.write(result.value);
   }
 
@@ -133,11 +129,11 @@ async function testVideoFlow(t, negotiationFunction) {
 }
 
 promise_test(async t => {
-  return testVideoFlow(t, doSignalingHandshake);
+  return testAudioFlow(t, doSignalingHandshake);
 }, 'Frames flow correctly using insertable streams');
 
 promise_test(async t => {
-  return testVideoFlow(t, doInverseSignalingHandshake);
+  return testAudioFlow(t, doInverseSignalingHandshake);
 }, 'Frames flow correctly using insertable streams when receiver starts negotiation');
 
 promise_test(async t => {
@@ -145,32 +141,32 @@ promise_test(async t => {
   t.add_cleanup(() => caller.close());
   const callee = new RTCPeerConnection();
   t.add_cleanup(() => callee.close());
-  const stream = await navigator.mediaDevices.getUserMedia({video:true});
-  const videoTrack = stream.getVideoTracks()[0];
-  t.add_cleanup(() => videoTrack.stop());
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  const audioTrack = stream.getAudioTracks()[0];
+  t.add_cleanup(() => audioTrack.stop());
 
   exchangeIceCandidates(caller, callee);
   await doSignalingHandshake(caller, callee);
 
-  const videoSender = caller.addTrack(videoTrack);
-  assert_throws_dom("InvalidStateError", () => videoSender.createEncodedVideoStreams());
-}, 'RTCRtpSender.createEncodedVideoStream() throws if not requested in PC configuration');
+  const audioSender = caller.addTrack(audioTrack);
+  assert_throws_dom("InvalidStateError", () => audioSender.createEncodedAudioStreams());
+}, 'RTCRtpSender.createEncodedAudioStream() throws if not requested in PC configuration');
 
 promise_test(async t => {
   const caller = new RTCPeerConnection();
   t.add_cleanup(() => caller.close());
   const callee = new RTCPeerConnection();
   t.add_cleanup(() => callee.close());
-  const stream = await navigator.mediaDevices.getUserMedia({video:true});
-  const videoTrack = stream.getVideoTracks()[0];
-  t.add_cleanup(() => videoTrack.stop());
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  const audioTrack = stream.getAudioTracks()[0];
+  t.add_cleanup(() => audioTrack.stop());
 
-  const videoSender = caller.addTrack(videoTrack);
+  const audioSender = caller.addTrack(audioTrack);
   const ontrackPromise = new Promise(resolve => {
     callee.ontrack = t.step_func(() => {
-      const videoReceiver = callee.getReceivers().find(r => r.track.kind === 'video');
-      assert_true(videoReceiver !== undefined);
-      assert_throws_dom("InvalidStateError", () => videoReceiver.createEncodedVideoStreams());
+      const audioReceiver = callee.getReceivers().find(r => r.track.kind === 'audio');
+      assert_true(audioReceiver !== undefined);
+      assert_throws_dom("InvalidStateError", () => audioReceiver.createEncodedAudioStreams());
       resolve();
     });
   });
@@ -178,20 +174,20 @@ promise_test(async t => {
   exchangeIceCandidates(caller, callee);
   await doSignalingHandshake(caller, callee);
   return ontrackPromise;
-}, 'RTCRtpReceiver.createEncodedVideoStream() throws if not requested in PC configuration');
+}, 'RTCRtpReceiver.createEncodedAudioStream() throws if not requested in PC configuration');
 
 promise_test(async t => {
-  const caller = new RTCPeerConnection({forceEncodedVideoInsertableStreams:true});
+  const caller = new RTCPeerConnection({forceEncodedAudioInsertableStreams:true});
   t.add_cleanup(() => caller.close());
   const callee = new RTCPeerConnection();
   t.add_cleanup(() => callee.close());
 
-  const stream = await navigator.mediaDevices.getUserMedia({video:true});
-  const videoTrack = stream.getVideoTracks()[0];
-  t.add_cleanup(() => videoTrack.stop());
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  const track = stream.getTracks()[0];
+  t.add_cleanup(() => track.stop());
 
-  const videoSender = caller.addTrack(videoTrack)
-  const senderStreams = videoSender.createEncodedVideoStreams();
+  const sender = caller.addTrack(track)
+  const senderStreams = sender.createEncodedAudioStreams();
 
   const senderWorker = new Worker('RTCPeerConnection-sender-worker-single-frame.js')
   senderWorker.postMessage(
@@ -203,12 +199,12 @@ promise_test(async t => {
   let numVerifiedFrames = 0;
   const onmessagePromise = new Promise(resolve => {
     senderWorker.onmessage = t.step_func(message => {
-      if (!(message.data instanceof RTCEncodedVideoFrame)) {
+      if (!(message.data instanceof RTCEncodedAudioFrame)) {
         // This is the first message sent from the Worker to the test.
-        // It contains an object (not an RTCEncodedVideoFrame) with the same
-        // fields as the RTCEncodedVideoFrame to be sent in follow-up messages.
+        // It contains an object (not an RTCEncodedAudioFrame) with the same
+        // fields as the RTCEncodedAudioFrame to be sent in follow-up messages.
         // These serve as expected values to validate that the
-        // RTCEncodedVideoFrame is sent correctly back to the test in the next
+        // RTCEncodedAudioFrame is sent correctly back to the test in the next
         // message.
         expectedFrameData = message.data;
       } else {
@@ -218,7 +214,6 @@ promise_test(async t => {
         assert_equals(message.data.type, expectedFrameData.type);
         assert_equals(message.data.timestamp, expectedFrameData.timestamp);
         assert_true(areArrayBuffersEqual(message.data.data, expectedFrameData.data));
-        assert_true(areArrayBuffersEqual(message.data.additionalData, expectedFrameData.additionalData));
         if (++numVerifiedFrames == 2)
           resolve();
       }
@@ -229,7 +224,7 @@ promise_test(async t => {
   await doSignalingHandshake(caller, callee);
 
   return onmessagePromise;
-}, 'RTCRtpSender readable stream transferred to a Worker and the Worker sends an RTCEncodedVideoFrame back');
+}, 'RTCRtpSender readable stream transferred to a Worker and the Worker sends an RTCEncodedAudioFrame back');
 
 </script>
 </body>
