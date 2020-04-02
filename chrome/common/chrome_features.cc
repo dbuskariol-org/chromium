@@ -5,6 +5,7 @@
 #include "chrome/common/chrome_features.h"
 
 #include "base/command_line.h"
+#include "base/feature_list.h"
 #include "base/strings/string_split.h"
 #include "build/build_config.h"
 #include "chrome/common/chrome_switches.h"
@@ -723,6 +724,10 @@ const base::Feature kQuickUnlockPin{"QuickUnlockPin",
 // Enables pin on the login screen.
 const base::Feature kQuickUnlockPinSignin{"QuickUnlockPinSignin",
                                           base::FEATURE_DISABLED_BY_DEFAULT};
+
+// Enables or disables the marketing opt-in screen in OOBE
+const base::Feature kOobeMarketingScreen{"OobeMarketingScreen",
+                                         base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Enables or disables fingerprint quick unlock.
 const base::Feature kQuickUnlockFingerprint{"QuickUnlockFingerprint",

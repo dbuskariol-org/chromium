@@ -267,9 +267,6 @@ const char kEnableHoudini[] = "enable-houdini";
 // Enables the use of Houdini 64-bit library for ARM binary translation.
 const char kEnableHoudini64[] = "enable-houdini64";
 
-// Enables the marketing opt-in screen in OOBE.
-const char kEnableMarketingOptInScreen[] = "enable-market-opt-in";
-
 // Enables the use of NDK translation library for ARM binary translation.
 const char kEnableNdkTranslation[] = "enable-ndk-translation";
 
