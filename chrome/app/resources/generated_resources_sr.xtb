@@ -1665,7 +1665,7 @@
 <translation id="3202173864863109533">Звук ове картице је искључен.</translation>
 <translation id="3208321278970793882">Апликација</translation>
 <translation id="3208584281581115441">Проверите</translation>
-<translation id="3208640652501208439">Ресурси за рад у школи можда неће бити доступни или аутоматски учитани
+<translation id="3208640652501208439">Ресурси за школски рад можда неће бити доступни или аутоматски учитани
     Дете можда неће имати приступ:
     <ph name="BEGIN_LIST" />
       <ph name="LIST_ITEM" />апликацијама и додацима које је школа инсталирала
@@ -1675,7 +1675,7 @@
     Да би имало потпуни доживљај школе на овом уређају, дете треба:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />да се одјави са налога којим се управља помоћу Family Link-а
-      <ph name="OLIST_ITEM" />да се пријави помоћу G Suite for Education налога на екрану за пријављивање. Међутим, имајте на уму да то значи да ће смернице школе, укључујући подешавања приступа за апликације и веб-сајтове, важити за Family Link функције надзора (на пример, администратори за школу могу да дозволе YouTube ако је неопходан за домаћи задатак, ограничења времена испред екрана се неће примењивати итд)
+      <ph name="OLIST_ITEM" />да се пријави помоћу G Suite for Education налога на екрану за пријављивање. Међутим, имајте на уму да то значи да ће смернице школе, укључујући подешавања приступа за апликације и веб-сајтове, важити за функције надзора Family Link-а (на пример, администратори за школу могу да дозволе YouTube ако је неопходан за домаћи задатак, ограничења времена испред екрана се неће примењивати итд)
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Непотврђено</translation>
 <translation id="32101887417650595">Повезивање са штампачем није успело</translation>
@@ -1876,6 +1876,7 @@
 <translation id="3479552764303398839">Не сада</translation>
 <translation id="3479685872808224578">Откривање сервера за штампање није успело. Проверите адресу и пробајте поново.</translation>
 <translation id="3481268647794498892">Отвара се у прегледачу <ph name="ALTERNATIVE_BROWSER_NAME" /> за <ph name="COUNTDOWN_SECONDS" /> сек</translation>
+<translation id="3482719661246593752"><ph name="ORIGIN" /> може да прегледа следеће датотеке</translation>
 <translation id="3484273680291419129">Штетан софтвер се уклања...</translation>
 <translation id="3484869148456018791">Набави нови сертификат</translation>
 <translation id="3487007233252413104">анонимна функција</translation>
@@ -1938,6 +1939,7 @@
 <translation id="3564848315152754834">USB безбедносни кључ</translation>
 <translation id="3566721612727112615">Ниједан сајт није додат</translation>
 <translation id="3569382839528428029">Да ли желите да <ph name="APP_NAME" /> дели екран?</translation>
+<translation id="3569682580018832495"><ph name="ORIGIN" /> може да прегледа датотеке и директоријуме у наставку</translation>
 <translation id="3571734092741541777">Подеси</translation>
 <translation id="3574210789297084292">пријави ме</translation>
 <translation id="3574917942258583917">Желите ли да ипак изађете из режима без архивирања?</translation>
@@ -1947,6 +1949,7 @@
 <translation id="3578594933904494462">Садржај ове картице се дели.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; жели да дели штампач &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; са групом чији сте власник: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Ако прихватите, сви чланови групе ће моћи да штампају помоћу штампача.</translation>
 <translation id="357889014807611375">Wi-Fi са ограничењем</translation>
+<translation id="3582057310199111521">Унето на обмањујућем сајту и пронађено при упаду у податке</translation>
 <translation id="3584169441612580296">Читање слика, музике и других медија са рачунара и мењање тих медија</translation>
 <translation id="3586806079541226322">Отварање ове датотеке није успело</translation>
 <translation id="3586931643579894722">Сакриј детаље</translation>
@@ -3079,6 +3082,7 @@
 <translation id="5117930984404104619">Праћење понашања других додатака, укључујући посећене URL-ове</translation>
 <translation id="5119173345047096771">Mozilla Firefox</translation>
 <translation id="5121130586824819730">Хард-диск је пун. Сачувајте на другу локацију или направите више простора на хард-диску.</translation>
+<translation id="5122384452788334261">На уређају понестаје простора. Препоручује се бар <ph name="RECOMMENDED_SPACE" /> слободног простора за коришћење Plugin VM-а. Да бисте ослободили простор, избришите датотеке из меморијског простора уређаја.</translation>
 <translation id="5123433949759960244">Кошаркашка лопта</translation>
 <translation id="5125751979347152379">Неважећа URL адреса.</translation>
 <translation id="5126611267288187364">Прегледајте промене</translation>
@@ -5175,6 +5179,7 @@
 <translation id="7915471803647590281">Реците нам шта се дешава пре него што пошаљете повратне информације.</translation>
 <translation id="7918257978052780342">Пријави ме</translation>
 <translation id="7919210519031517829"><ph name="DURATION" /> сек</translation>
+<translation id="7920363873148656176"><ph name="ORIGIN" /> може да прегледа <ph name="FILENAME" /></translation>
 <translation id="7924358170328001543">Грешка при прослеђивању порта</translation>
 <translation id="792514962475806987">Ниво зумирања монтиране лупе екрана:</translation>
 <translation id="7925247922861151263">Провера потврде идентитета, овлашћења и приступа није успела</translation>
@@ -5338,6 +5343,7 @@
 <translation id="8118488170956489476">Организација <ph name="BEGIN_LINK" />управља прегледачем<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">Управљање преузимањима</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />, <ph name="RECENT_PERMISSIONS_CHANGE_1" />, <ph name="RECENT_PERMISSIONS_CHANGE_2" /> и друго</translation>
+<translation id="8120715633374652536">На уређају понестаје простора. Треба вам бар <ph name="MINIMUM_SPACE" /> слободног простора да бисте користили Plugin VM, а препоручује се више од <ph name="RECOMMENDED_SPACE" />. Да бисте ослободили простор, избришите датотеке из меморијског простора уређаја.</translation>
 <translation id="8123590694679414600">Подаци су шифровани помоћу приступне фразе за синхронизацију
           <ph name="TIME" />. То не обухвата начине плаћања и адресе из Google Pay-а.</translation>
 <translation id="81238879832906896">Жути и бели цвет</translation>
@@ -5387,7 +5393,6 @@
 <translation id="8186609076106987817">Сервер није могао да пронађе датотеку.</translation>
 <translation id="8188389033983459049">Проверите подешавања уређаја и укључите га да бисте наставили</translation>
 <translation id="8190193592390505034">Повезивање са мрежом <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Проверите на Google налогу.</translation>
 <translation id="8191230140820435481">Управљање апликацијама, додацима и темама</translation>
 <translation id="8195027750202970175">Величина на диску</translation>
 <translation id="8198323535106903877">Инсталираћемо вам те апликације (<ph name="NUMBER_OF_APPS" />)</translation>

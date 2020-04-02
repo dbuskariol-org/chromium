@@ -1874,6 +1874,7 @@
 <translation id="3479552764303398839">Одоо биш</translation>
 <translation id="3479685872808224578">Хэвлэх серверийг илрүүлж чадсангүй. Хаягийг шалгаад дахин оролдоно уу.</translation>
 <translation id="3481268647794498892"><ph name="ALTERNATIVE_BROWSER_NAME" />-г <ph name="COUNTDOWN_SECONDS" /> секундийн дараа нээх гэж байна</translation>
+<translation id="3482719661246593752"><ph name="ORIGIN" /> нь дараах файлуудыг үзэх боломжтой</translation>
 <translation id="3484273680291419129">Аюултай програмыг устгаж байна...</translation>
 <translation id="3484869148456018791">Шинэ гэрчилгээ авах</translation>
 <translation id="3487007233252413104">Нэрээ нууцалсан үйлдэл</translation>
@@ -1936,6 +1937,7 @@
 <translation id="3564848315152754834">USB аюулгүй байдлын түлхүүр</translation>
 <translation id="3566721612727112615">Нэмсэн сайт алга</translation>
 <translation id="3569382839528428029">Та <ph name="APP_NAME" />-ийг таны дэлгэцийг хуваалцахыг хүсэж байна уу?</translation>
+<translation id="3569682580018832495"><ph name="ORIGIN" /> дараах файл болон фолдерыг үзэх боломжтой</translation>
 <translation id="3571734092741541777">Тохиргоо хийх.</translation>
 <translation id="3574210789297084292">-д нэвтрэх</translation>
 <translation id="3574917942258583917">Нууцлалын горимоос гарах уу?</translation>
@@ -1945,6 +1947,7 @@
 <translation id="3578594933904494462">Энэ цонхны кентентыг хуваалцаж байна.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; принтерийг танай бүлгэмтэй <ph name="GROUP_NAME" /> хуваалцахыг хүсэж байна. Хэрвээ та зөвшөөрвөл, танай бүлгэмийн бүх гишүүд тус принтерийг ашиглах боломжтой болно.</translation>
 <translation id="357889014807611375">хязгаартай Wi-Fi</translation>
+<translation id="3582057310199111521">Сэжигтэй сайтад оруулсан, өгөгдлийн зөрчилд олдсон</translation>
 <translation id="3584169441612580296">Компьютероосоо зураг, хөгжим болон бусад медиагаа уншуулах эсвэл өөрчлөх</translation>
 <translation id="3586806079541226322">Энэ файлыг нээх боломжгүй байна</translation>
 <translation id="3586931643579894722">Дэлгэрэнгүй мэдээлийг нуух</translation>
@@ -3076,6 +3079,7 @@
 <translation id="5117930984404104619">Хандаж орсон URL гэх мэт бусад өргөтгөлийн хэлбэр, чанарт хяналт тавих</translation>
 <translation id="5119173345047096771">Mozilla Firefox</translation>
 <translation id="5121130586824819730">Таны хатуу диск дүүрэн байна. Өөр газарт хадгалах эсвэл хатуу дискнийхээ зайг суллана уу.</translation>
+<translation id="5122384452788334261">Таны төхөөрөмжийн хадгалах сангийн зай бага байна. Plugin VM-г ашиглахын тулд хамгийн багадаа <ph name="RECOMMENDED_SPACE" /> сул зайтай байхыг зөвлөдөг. Сул зай гаргахын тулд төхөөрөмжийн хадгалах сангаас файл устгана уу.</translation>
 <translation id="5123433949759960244">Сагсан бөмбөг</translation>
 <translation id="5125751979347152379">Хүчингүй холбоос</translation>
 <translation id="5126611267288187364">Өөрчлөлтийг харах</translation>
@@ -5170,6 +5174,7 @@
 <translation id="7915471803647590281">Санал илгээхээсээ өмнө юу болж байгааг бидэнд хэлнэ үү.</translation>
 <translation id="7918257978052780342">Хамрагдах</translation>
 <translation id="7919210519031517829"><ph name="DURATION" />сек</translation>
+<translation id="7920363873148656176"><ph name="ORIGIN" /> нь <ph name="FILENAME" />-г үзэх боломжтой</translation>
 <translation id="7924358170328001543">Порт дамжуулахад алдаа гарлаа</translation>
 <translation id="792514962475806987">Суурилуулсан томруулалтын түвшин:</translation>
 <translation id="7925247922861151263">AAA шалгалт амжилтгүй боллоо</translation>
@@ -5331,6 +5336,7 @@
 <translation id="8118488170956489476">Танай байгууллага таны <ph name="BEGIN_LINK" />хөтчийг удирддаг<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">Татаж авсан файлуудаа удирдана уу</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />, <ph name="RECENT_PERMISSIONS_CHANGE_1" />, <ph name="RECENT_PERMISSIONS_CHANGE_2" /> болон бусад</translation>
+<translation id="8120715633374652536">Таны төхөөрөмжийн хадгалах сангийн зай бага байна. Plugin VM-г ашиглахын тулд хамгийн багадаа <ph name="MINIMUM_SPACE" /> сул зайтай байх шаардлагатай бөгөөд <ph name="RECOMMENDED_SPACE" />-с илүү сул зайтай байхыг зөвлөдөг. Сул зай гаргахын тулд төхөөрөмжийн хадгалах сангаас файл устгана уу.</translation>
 <translation id="8123590694679414600">Өгөгөдлийг таны синкийн нэвтрэх үгтэй <ph name="TIME" />-д шифрлэсэн байна. Үүнд Google Pay-н төлбөрийн хэрэгслүүд болон хаягуудыг агуулдаггүй.</translation>
 <translation id="81238879832906896">Шар, цагаан цэцэг</translation>
 <translation id="8124313775439841391">Managed ONC</translation>
@@ -5379,7 +5385,6 @@
 <translation id="8186609076106987817">Сервер файлыг олж чадсангүй.</translation>
 <translation id="8188389033983459049">Төхөөрөмжийнхөө тохиргоог шалгаад үргэлжлүүлэх бол асаана уу</translation>
 <translation id="8190193592390505034"><ph name="PROVIDER_NAME" /> руу холбогдож байна</translation>
-<translation id="8190310225494289459">Google Бүртгэлд шалгана уу.</translation>
 <translation id="8191230140820435481">Програм, өргөтгөл, theme-дээ тохиргоо хийх</translation>
 <translation id="8195027750202970175">Дискийн хэмжээ</translation>
 <translation id="8198323535106903877">Бид эдгээр <ph name="NUMBER_OF_APPS" /> аппыг танд зориулан суулгах болно</translation>

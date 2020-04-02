@@ -1343,7 +1343,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="2762441749940182211">Kamera je blokirana</translation>
 <translation id="2765217105034171413">Malo</translation>
 <translation id="2766161002040448006">Pitaj roditelja</translation>
-<translation id="2767127727915954024"><ph name="ORIGIN" /> će moći uređivati <ph name="FILENAME" /> dok ne zatvorite sve kartice za ovu web lokaciju</translation>
+<translation id="2767127727915954024"><ph name="ORIGIN" /> će moći uređivati fajl <ph name="FILENAME" /> dok ne zatvorite sve kartice za ovu web lokaciju</translation>
 <translation id="276969039800130567">Prijavljeni ste s računom <ph name="USER_EMAIL_ADDRESS" />.</translation>
 <translation id="2770465223704140727">Ukloni sa spiska</translation>
 <translation id="2770690685823456775">Izvezite svoje lozinke u drugi folder</translation>
@@ -1677,8 +1677,8 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
     <ph name="END_LIST" />
     Za potpuno školsko iskustvo na ovom uređaju, vaše dijete bi trebalo:
     <ph name="BEGIN_OLIST" />
-      <ph name="OLIST_ITEM" />odjaviti se sa svog računa upravljanjog putem Family Link-a
-      <ph name="OLIST_ITEM" />prijaviti se na ekranu za prijavu pomoću računa za G Suite za obrazovanje. Međutim, imajte na umu da će to značiti da će pravila škole, uključujući postavke pristupa aplikacijama i web lokacijama, biti na snazi umjesto vaših funkcija nadzora putem Family Linka (naprimjer, administratori škole mogu dozvoliti YouTube ako je neophodan za zadaću, neće se primjenjivati vrijeme korištenja uređaja itd.)
+      <ph name="OLIST_ITEM" />odjaviti se sa svog računa upravljanjog putem Family Linka
+      <ph name="OLIST_ITEM" />prijaviti se na ekranu za prijavu pomoću računa G Suite for Education. Međutim, imajte na umu da će to značiti da će pravila škole, uključujući postavke pristupa aplikacijama i web lokacijama, biti na snazi umjesto vaših funkcija nadzora putem Family Linka (naprimjer, administratori škole mogu dozvoliti YouTube ako je neophodan za zadaću, neće se primjenjivati vrijeme korištenja uređaja itd.)
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Nepotvrđeno</translation>
 <translation id="32101887417650595">Nije moguće povezati se sa štampačem</translation>
@@ -2785,7 +2785,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="4689235506267737042">Odaberite postavke demonstracije</translation>
 <translation id="4689421377817139245">Sinhronizirajte ovu oznaku na svoj iPhone</translation>
 <translation id="4690091457710545971">&lt;Intel Wi-Fi firmver je izradio četiri fajla: csr.lst, fh_regs.lst, radio_reg.lst, monitor.lst.sysmon.  Prva tri fajla su binarna i sadrže snimke dinamičkog dijela registra, a Intel potvrđuje da ne sadrže informacije kojima se mogu identificirati identitet osobe ili uređaj.  Posljednji fajl je izvršni obrazac za praćenje iz Intelovog firmvera. Iz njega su izbačene sve informacije kojima se mogu identificirati osoba ili uređaj, ali je previše velik za prikazivanje ovdje.  Ti fajlovi su izrađeni kao reakcija na nedavne probleme s WiFi-jem na vašem uređaju i dijelit će se s Intelom radi rješavanja tih problema.&gt;</translation>
-<translation id="4691791363716065510"><ph name="ORIGIN" /> će moći pregledavati <ph name="FILENAME" /> dok ne zatvorite sve kartice za ovu web lokaciju</translation>
+<translation id="4691791363716065510"><ph name="ORIGIN" /> će moći pregledavati fajl <ph name="FILENAME" /> dok ne zatvorite sve kartice za ovu web lokaciju</translation>
 <translation id="4692623383562244444">Pretraživači</translation>
 <translation id="4693155481716051732">Suši</translation>
 <translation id="4694024090038830733">Administrator upravlja konfiguracijom štampača.</translation>
@@ -5395,7 +5395,6 @@ Fajl ključa: <ph name="KEY_FILE" />
 <translation id="8186609076106987817">Server nije mogao pronaći fajl.</translation>
 <translation id="8188389033983459049">Pregledajte postavke uređaja i uključite ga da biste nastavili</translation>
 <translation id="8190193592390505034">Povezivanje na mrežu <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Provjerite Google račun.</translation>
 <translation id="8191230140820435481">Upravljajte aplikacijama, ekstenzijama i temama</translation>
 <translation id="8195027750202970175">Veličina na disku</translation>
 <translation id="8198323535106903877">Instalirat ćemo sljedeći broj aplikacija za vas: <ph name="NUMBER_OF_APPS" /></translation>
@@ -6067,7 +6066,7 @@ Fajl ključa: <ph name="KEY_FILE" />
 <translation id="9055636786322918818">Nametni RC4 šifriranje. Koristeći ovu opciju povećavate rizik jer je RCR4 šifriranje nesigurno.</translation>
 <translation id="9056810968620647706">Nije pronađeno nijedno podudaranje.</translation>
 <translation id="9057354806206861646">Ažuriranje rasporeda</translation>
-<translation id="9058976525724291037">Vaše dijete želi dodati drugi Google račun na ovaj uređaj. Na uređaje kojima se upravlja putem Family Linka mogu se dodati samo računi G Suitea za obrazovanje.</translation>
+<translation id="9058976525724291037">Vaše dijete želi dodati drugi Google račun na ovaj uređaj. Na uređaje kojima se upravlja putem Family Linka mogu se dodati samo računi G Suitea za obrazovanje.</translation>
 <translation id="9062065967472365419">Iznenadi me</translation>
 <translation id="9062468308252555888">14 x</translation>
 <translation id="9063208415146866933">Pogreška od <ph name="ERROR_LINE_START" />. do <ph name="ERROR_LINE_END" />. retka</translation>

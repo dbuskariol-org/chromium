@@ -1674,7 +1674,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
     Ihr Kind sollte Folgendes ausführen, um alle Funktionen auf diesem Gerät nutzen zu können:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />Von seinem mit Family Link verwalteten Konto abmelden
-      <ph name="OLIST_ITEM" />Mit seinem G Suite for Education-Konto auf dem Anmeldebildschirm anmelden. Beachten Sie jedoch, dass die Richtlinien der Bildungseinrichtung, wie Zugriffseinstellungen für Apps und Websites, Vorrang vor Ihren Family Link-Funktionen der Elternaufsicht haben. Beispielsweise können Schuladministratoren YouTube erlauben, wenn es für die Hausaufgaben nötig ist, oder die begrenzte Gerätenutzungsdauer wird nicht durchgesetzt.
+      <ph name="OLIST_ITEM" />Mit seinem G Suite for Education-Konto auf dem Anmeldebildschirm anmelden. Beachten Sie jedoch, dass die Richtlinien der Bildungseinrichtung, wie Zugriffseinstellungen für Apps und Websites, dann Vorrang vor Ihren Family Link-Funktionen der Elternaufsicht haben. Beispielsweise können Schuladministratoren YouTube erlauben, wenn es für die Hausaufgaben nötig ist, oder die begrenzte Gerätenutzungsdauer wird nicht durchgesetzt.
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Nicht bestätigt</translation>
 <translation id="32101887417650595">Keine Verbindung zum Drucker möglich</translation>
@@ -4571,7 +4571,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7131040479572660648">Ihre Daten auf <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> und <ph name="WEBSITE_3" /> lesen</translation>
 <translation id="713122686776214250">&amp;Seite hinzufügen...</translation>
 <translation id="7133578150266914903">Ihr Administrator setzt dieses Gerät zurück (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271"><ph name="DONE" />/<ph name="TOTAL" /> Passwörtern geprüft…</translation>
+<translation id="7133728868075973271"><ph name="DONE" /> von <ph name="TOTAL" /> Passwörtern geprüft…</translation>
 <translation id="7134098520442464001">Schrift verkleinern</translation>
 <translation id="7135729336746831607">Bluetooth aktivieren?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> erfordert, dass das <ph name="DEVICE_TYPE" /> sofort aktualisiert wird.</translation>
@@ -5384,7 +5384,6 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="8186609076106987817">Die Datei konnte nicht gefunden werden.</translation>
 <translation id="8188389033983459049">Überprüfen Sie Ihre Geräteeinstellungen und aktivieren Sie Bluetooth, um fortzufahren</translation>
 <translation id="8190193592390505034">Verbindung zu <ph name="PROVIDER_NAME" /> wird hergestellt.</translation>
-<translation id="8190310225494289459">Im Google-Konto prüfen.</translation>
 <translation id="8191230140820435481">Apps, Erweiterungen und Designs verwalten</translation>
 <translation id="8195027750202970175">Dateigröße</translation>
 <translation id="8198323535106903877"><ph name="NUMBER_OF_APPS" /> Apps werden installiert</translation>
@@ -6055,7 +6054,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="9053893665344928494">Meine Auswahl merken</translation>
 <translation id="9055636786322918818">RC4-Verschlüsselung durchsetzen. Mit dieser Option ist ein höheres Risiko verbunden, da RC4-Verschlüsselungen nicht sicher sind.</translation>
 <translation id="9056810968620647706">Keine Übereinstimmungen gefunden.</translation>
-<translation id="9057354806206861646">Zeitplan aktualisieren</translation>
+<translation id="9057354806206861646">Aktualisierungszeitplan</translation>
 <translation id="9058976525724291037">Ihr Kind möchte auf diesem Gerät ein weiteres Google-Konto hinzufügen. Zu mit Family Link verwalteten Geräten können nur G Suite for Education-Konten hinzugefügt werden.</translation>
 <translation id="9062065967472365419">Zufällig</translation>
 <translation id="9062468308252555888">14-fach</translation>

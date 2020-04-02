@@ -73,7 +73,7 @@
 <translation id="1093457606523402488">Görünür Ağlar:</translation>
 <translation id="1094607894174825014">Şu cihazda geçersiz bir ofset değeriyle okuma veya yazma işlemi istendi: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="1097658378307015415">Oturum açmadan önce <ph name="NETWORK_ID" /> ağını etkinleştirmek için lütfen Misafir olarak giriş yapın</translation>
-<translation id="1099962274138857708">Resim <ph name="DEVICE_NAME" /> adlı cihazdan kopyalandı</translation>
+<translation id="1099962274138857708">Resim, <ph name="DEVICE_NAME" /> cihazından kopyalandı</translation>
 <translation id="1103523840287552314"><ph name="LANGUAGE" /> dilini daima çevir</translation>
 <translation id="1104038495841596279">SIM kartınız algılanamadı</translation>
 <translation id="1108600514891325577">D&amp;urdur</translation>
@@ -562,7 +562,7 @@
 <translation id="1744108098763830590">arka plan sayfası</translation>
 <translation id="1745520510852184940">Bunu Her Zaman Yap</translation>
 <translation id="1750172676754093297">Güvenlik anahtarınız parmak izlerinizi depolayamaz</translation>
-<translation id="1751262127955453661"><ph name="ORIGIN" />, siz bu site için tüm sekmeleri kapatana kadar <ph name="FOLDERNAME" /> klasöründeki dosyaları düzenleyebilecek</translation>
+<translation id="1751262127955453661"><ph name="ORIGIN" />, siz bu siteye ait tüm sekmeleri kapatana kadar <ph name="FOLDERNAME" /> klasöründeki dosyaları düzenleyebilecek</translation>
 <translation id="175196451752279553">&amp;Kapatılan sekmeyi yeniden aç</translation>
 <translation id="1753067873202720523">Chromebook'unuz açıkken şarj olmayabilir.</translation>
 <translation id="1753905327828125965">En Çok Ziyaret Edilenler</translation>
@@ -1343,7 +1343,7 @@ Cihazınızda Family Link uygulamasını yükleyerek bu hesabın ayarlarını y�
 <translation id="2762441749940182211">Kamera engellendi</translation>
 <translation id="2765217105034171413">Küçük</translation>
 <translation id="2766161002040448006">Ebeveyninize sorun</translation>
-<translation id="2767127727915954024"><ph name="ORIGIN" />, siz bu site için tüm sekmeleri kapatana kadar <ph name="FILENAME" /> dosyasını düzenleyebilecek</translation>
+<translation id="2767127727915954024"><ph name="ORIGIN" />, siz bu siteye ait tüm sekmeleri kapatana kadar <ph name="FILENAME" /> dosyasını düzenleyebilecek</translation>
 <translation id="276969039800130567"><ph name="USER_EMAIL_ADDRESS" /> olarak oturum açıldı.</translation>
 <translation id="2770465223704140727">Listeden kaldır</translation>
 <translation id="2770690685823456775">Şifrelerinizi başka bir klasöre dışa aktarın</translation>
@@ -1668,17 +1668,17 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="3202173864863109533">Bu sekmenin sesi kapatılıyor.</translation>
 <translation id="3208321278970793882">Uygulama</translation>
 <translation id="3208584281581115441">Şimdi denetle</translation>
-<translation id="3208640652501208439">Okul çalışması için kaynaklar kullanılamayabilir veya otomatik olarak yüklenmeyebilir
+<translation id="3208640652501208439">Okul çalışması kaynakları kullanılamıyor veya otomatik olarak yüklenmiyor olabilir
     Çocuğunuzun şunlara erişimi olmayabilir:
     <ph name="BEGIN_LIST" />
       <ph name="LIST_ITEM" />Okul tarafından yüklenmiş uygulamalar ve uzantılar
-      <ph name="LIST_ITEM" />Bir okul Chromebook'undan yer işaretleri
-      <ph name="LIST_ITEM" />Eğitim sitelerinde şifrelerin otomatik olarak doldurulması
+      <ph name="LIST_ITEM" />Okul Chromebook'unda bulunan yer işaretleri
+      <ph name="LIST_ITEM" />Eğitim sitelerine giriş için kullanılan otomatik girilen şifreler
     <ph name="END_LIST" />
     Bu cihazda okul deneyimini eksiksiz olarak almak için çocuğunuzun yapması gerekenler:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />Family Link tarafından yönetilen hesabının oturumunu kapatmak
-      <ph name="OLIST_ITEM" />Oturum açma ekranında Eğitim için G Suite hesabıyla oturum açmak. Ancak bu durumun, uygulama ve web sitesi erişim ayarları gibi okul politikalarının Family Link gözetim özelliklerinin yerini alacağını (örneğin, okul yöneticilerinin ev ödevi için uygun görmeleri halinde YouTube'a izin verebilmeleri, ekran zamanıyla ilgili zorunluluk olmaması vb.) unutmayın.
+      <ph name="OLIST_ITEM" />Oturum açma ekranında Eğitim için G Suite hesabıyla oturum açmak. Ancak bu değişikliklerin, uygulama ve web sitesi erişim ayarları gibi okul politikalarının Family Link gözetim özelliklerinin yerini alacağını (örneğin, okul yöneticilerinin ev ödevi için uygun görmeleri halinde YouTube'a izin verebilmeleri, ekran zamanıyla ilgili zorunluluk olmaması vb.) unutmayın.
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Onaylanmayan</translation>
 <translation id="32101887417650595">Yazıcıya bağlanılamıyor</translation>
@@ -2782,7 +2782,7 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="4689235506267737042">Demo tercihlerinizi belirleyin</translation>
 <translation id="4689421377817139245">Bu yer işaretini iPhone'unuzla senkronize edin</translation>
 <translation id="4690091457710545971">&lt;Intel Kablosuz donanım yazılımı tarafından dört dosya oluşturuldu: csr.lst, fh_regs.lst, radio_reg.lst, monitor.lst.sysmon. İlk üç dosya, kayıt dökümlerini içeren ikili dosyalardır ve Intel, bu dosyalarda kimlik veya cihaz bilgilerini tanımlayan bilgilerin yer almadığını teyit etmektedir. Son dosya, Intel donanım yazılımındaki bir yürütme izidir. Bu dosyadaki kimlik ve cihaz bilgileri temizlenmiştir, ancak dosya burada görüntülenemeyecek kadar büyüktür. Bu dosyalar, cihazınızla ilgili son kablosuz bağlantı sorunlarına yanıt olarak oluşturulmuştur ve bu sorunların giderilmesinde yardımcı olması için Intel ile paylaşılacaktır.&gt;</translation>
-<translation id="4691791363716065510"><ph name="ORIGIN" />, siz bu site için tüm sekmeleri kapatana kadar <ph name="FILENAME" /> dosyasını görüntüleyebilecek</translation>
+<translation id="4691791363716065510"><ph name="ORIGIN" />, siz bu siteye ait tüm sekmeleri kapatana kadar <ph name="FILENAME" /> dosyasını görüntüleyebilecek</translation>
 <translation id="4692623383562244444">Arama motorları</translation>
 <translation id="4693155481716051732">Suşi</translation>
 <translation id="4694024090038830733">Yazıcı yapılandırması yönetici tarafından gerçekleştirilir.</translation>
@@ -3821,7 +3821,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="6097480669505687979">Yer açmazsanız kullanıcılar ve veriler otomatik olarak kaldırılabilir.</translation>
 <translation id="6097600385983390082">Sesli arama kapalı</translation>
 <translation id="6098793583803863900">Bilinmeyen bir dosya, tehlikeli içerikler için taranıyor.</translation>
-<translation id="609942571968311933">Metin, <ph name="DEVICE_NAME" /> adlı cihazdan kopyalandı</translation>
+<translation id="609942571968311933">Metin, <ph name="DEVICE_NAME" /> cihazından kopyalandı</translation>
 <translation id="6100736666660498114">Başlat menüsü</translation>
 <translation id="6101226222197207147">Yeni uygulama eklendi (<ph name="EXTENSION_NAME" />)</translation>
 <translation id="6102043788063419338">Bu dosya Gelişmiş Koruma tarafından engellendi.</translation>
@@ -5389,7 +5389,6 @@ Anahtar dosyanızı güvenli bir yerde saklayın. Uzantınızın yeni sürümler
 <translation id="8186609076106987817">Sunucu dosyayı bulamadı.</translation>
 <translation id="8188389033983459049">Cihaz ayarlarınızı kontrol edin ve devam etmek için açın</translation>
 <translation id="8190193592390505034"><ph name="PROVIDER_NAME" /> ağına bağlanılıyor</translation>
-<translation id="8190310225494289459">Google Hesabı'nda kontrol edin.</translation>
 <translation id="8191230140820435481">Uygulamalarınızı, uzantılarınızı ve temalarınızı yönetme</translation>
 <translation id="8195027750202970175">Diskteki boyut</translation>
 <translation id="8198323535106903877">Bu <ph name="NUMBER_OF_APPS" /> uygulamayı sizin için yükleyeceğiz</translation>

@@ -1668,17 +1668,17 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="3202173864863109533">Zvuk ove kartice isključen je.</translation>
 <translation id="3208321278970793882">Aplikacija</translation>
 <translation id="3208584281581115441">Provjeri sad</translation>
-<translation id="3208640652501208439">Izvori za školsku zadaću možda neće biti odmah dostupni ili se neće automatski učitati
+<translation id="3208640652501208439">Resursi za školske aktivnosti možda neće biti odmah dostupni ili se neće automatski učitati
     Vaše dijete možda neće imati pristup:
     <ph name="BEGIN_LIST" />
       <ph name="LIST_ITEM" />aplikacijama i proširenjima koje je instalirala škola
-      <ph name="LIST_ITEM" />oznakama iz školskog Chromebooka
-      <ph name="LIST_ITEM" />zaporkama za Automatsko popunjavanje za obrazovne web-lokacije
+      <ph name="LIST_ITEM" />oznakama sa školskog Chromebooka
+      <ph name="LIST_ITEM" />zaporkama za automatsko popunjavanje za obrazovne web-lokacije.
     <ph name="END_LIST" />
-    Da bi vaše dijete imalo potpuni doživljaj škole na ovom uređaju, dijete se treba:
+    Da bi vaše dijete imalo pristup svim školskim resursima na ovom uređaju, potrebno je da se:
     <ph name="BEGIN_OLIST" />
-      <ph name="OLIST_ITEM" />odjaviti s upravljanog računa Family Linka
-      <ph name="OLIST_ITEM" />prijaviti se računom za G Suite for Education na zaslonu za prijavu. Imajte na umu da će pravila za škole, uključujući pristup postavkama aplikacija i web-lokacija, početi vrijediti putem značajki nadzora Family Linka (na primjer školski administratori mogu dopustiti YouTube ako je potreban za domaću zadaću, neće se postaviti ograničenje vremena upotrebe itd.)
+      <ph name="OLIST_ITEM" />odjavi s upravljanog računa Family Linka
+      <ph name="OLIST_ITEM" />prijavi računom za G Suite for Education na zaslonu za prijavu. No napominjemo da to znači da će pravila škole, uključujući postavke pristupa aplikacijama i web-lokacijama, imati prednost u odnosu na značajke nadzora Family Linka (na primjer školski administratori mogu dopustiti YouTube ako je potreban za domaću zadaću, neće se postaviti ograničenje vremena upotrebe itd.)
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Nepotvrđeno</translation>
 <translation id="32101887417650595">Povezivanje s pisačem nije uspjelo</translation>
@@ -5395,7 +5395,6 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="8186609076106987817">Poslužitelj nije mogao pronaći datoteku.</translation>
 <translation id="8188389033983459049">Pregledajte postavke uređaja i uključite ga da biste nastavili</translation>
 <translation id="8190193592390505034">Povezivanje s mrežom <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Provjerite na Google računu.</translation>
 <translation id="8191230140820435481">upravljati vašim aplikacijama, proširenjima i temama</translation>
 <translation id="8195027750202970175">Veličina na disku</translation>
 <translation id="8198323535106903877">Instalirat ćemo te aplikacije za vas (njih <ph name="NUMBER_OF_APPS" />)</translation>

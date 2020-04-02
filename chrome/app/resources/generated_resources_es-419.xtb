@@ -1675,7 +1675,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
     Para obtener la experiencia completa de la institución educativa en este dispositivo, tu hijo debe hacer lo siguiente:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />Salir de la cuenta administrada por Family Link
-      <ph name="OLIST_ITEM" />Acceder con su cuenta de G Suite for Education en la pantalla de acceso Sin embargo, hay que tener en cuenta que las políticas de la institución educativa, incluidas las opciones de configuración de acceso a las apps y sitios web, tendrán precedencia sobre las funciones de supervisión de Family Link (p. ej., los administradores de la institución educativa permitirán el acceso a YouTube si es necesario para realizar una tarea o se eliminarán las limitaciones del tiempo de uso).
+      <ph name="OLIST_ITEM" />Acceder con su cuenta de G Suite for Education en la pantalla de acceso. Sin embargo, hay que tener en cuenta que las políticas de la institución educativa, incluidas las opciones de configuración de acceso a las apps y sitios web, sustituirán las funciones de supervisión de Family Link (p. ej., los administradores de la institución educativa permitirán el acceso a YouTube si es necesario para realizar una tarea o se eliminarán las limitaciones del tiempo de uso).
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Sin confirmar</translation>
 <translation id="32101887417650595">No es posible establecer conexión con la impresora</translation>
@@ -5386,7 +5386,6 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
 <translation id="8186609076106987817">El servidor no pudo encontrar el archivo.</translation>
 <translation id="8188389033983459049">Revisa la configuración del dispositivo y activa la conexión Bluetooth para continuar</translation>
 <translation id="8190193592390505034">Estableciendo conexión con <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Revisa la Cuenta de Google.</translation>
 <translation id="8191230140820435481">Administrar tus aplicaciones, extensiones y temas</translation>
 <translation id="8195027750202970175">Tamaño en disco</translation>
 <translation id="8198323535106903877">Instalaremos las <ph name="NUMBER_OF_APPS" /> apps por ti</translation>

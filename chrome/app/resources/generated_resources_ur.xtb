@@ -1881,6 +1881,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="3479552764303398839">ابھی نہیں</translation>
 <translation id="3479685872808224578">پرنٹ سرور کا پتا نہیں لگ سکا۔ براہ کرم پتہ چیک کریں اور دوبارہ کوشش کریں۔</translation>
 <translation id="3481268647794498892"><ph name="ALTERNATIVE_BROWSER_NAME" /> میں <ph name="COUNTDOWN_SECONDS" /> سیکنڈ میں کھل رہا ہے</translation>
+<translation id="3482719661246593752"><ph name="ORIGIN" /> درج ذیل فائلز کو دیکھ سکتا ہے</translation>
 <translation id="3484273680291419129">نقصان دہ سافٹ ویئر ہٹایا جا رہا ہے...</translation>
 <translation id="3484869148456018791">نیا سرٹیفکیٹ حاصل کریں</translation>
 <translation id="3487007233252413104">گمنام فنکشن</translation>
@@ -1943,6 +1944,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="3564848315152754834">‏USB سیکیورٹی کلید</translation>
 <translation id="3566721612727112615">کوئی سائٹس شامل نہیں کی گئیں</translation>
 <translation id="3569382839528428029">کیا آپ چاہتے ہیں کہ <ph name="APP_NAME" /> آپ کی اسکرین کا اشتراک کرے؟</translation>
+<translation id="3569682580018832495"><ph name="ORIGIN" /> مندرجہ ذیل فائلز اور فولڈرز کو دیکھ سکتا ہے</translation>
 <translation id="3571734092741541777">ترتیب دیں</translation>
 <translation id="3574210789297084292">سائن ان کریں</translation>
 <translation id="3574917942258583917">بہر حال پوشیدگی وضع سے باہر نکلیں؟</translation>
@@ -1952,6 +1954,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="3578594933904494462">اس ٹیب کے مواد کا اشتراک کیا جا رہا ہے۔</translation>
 <translation id="357886715122934472">‏&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; آپ کی زیر ملکیت ایک گروپ: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt; کے ساتھ ایک پرنٹر &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; کا اشتراک کرنا چاہتا ہے۔ اگر آپ قبول کرتے ہیں تو گروپ کے سبھی ممبرز پرنٹر پر پرنٹ کر سکیں گے۔</translation>
 <translation id="357889014807611375">‏میٹرڈ Wi-Fi</translation>
+<translation id="3582057310199111521">فریب والی سائٹ پر درج کیا گیا اور ڈیٹا کی خلاف ورزی میں پایا گیا</translation>
 <translation id="3584169441612580296">اپنے کمپیوٹر سے تصاویر، موسیقی اور دیگر میڈیا پڑھیں اور تبدیل کریں</translation>
 <translation id="3586806079541226322">یہ فائل نہیں کھول سکتے</translation>
 <translation id="3586931643579894722">تفصیلات چھپائیں</translation>
@@ -3084,6 +3087,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="5117930984404104619">‏ملاحظہ کردہ URLs سمیت دیگر ایکسٹینشنز کے رویے کو مانیٹر کریں</translation>
 <translation id="5119173345047096771">Mozilla Firefox</translation>
 <translation id="5121130586824819730">آپ کی ہارڈ ڈسک بھری ہوئی ہے۔  براہ کرم کسی دوسرے مقام میں محفوظ کریں یا ہارڈ ڈسک پر مزید جگہ بنائیں۔</translation>
+<translation id="5122384452788334261">‏آپ کے آلے میں اسٹوریج کی جگہ کم ہے۔ Plugin VM کا استعمال کرنے کے لیے کم از کم <ph name="RECOMMENDED_SPACE" /> خالی جگہ کی تجویز پیش کی جاتی ہے۔ جگہ خالی کرنے کیلئے، آلہ کے اسٹوریج سے فائلیں حذف کریں۔</translation>
 <translation id="5123433949759960244">باسکٹ بال</translation>
 <translation id="5125751979347152379">‏غلط URL۔</translation>
 <translation id="5126611267288187364">تبدیلیاں دیکھیں</translation>
@@ -5180,6 +5184,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="7915471803647590281">براہ کرم تاثرات بھیجنے سے پہلے ہمیں بتائیں کہ کیا ہو رہا ہے</translation>
 <translation id="7918257978052780342">اندراج کریں</translation>
 <translation id="7919210519031517829"><ph name="DURATION" /> سیکنڈ</translation>
+<translation id="7920363873148656176"><ph name="ORIGIN" /> <ph name="FILENAME" /> دیکھ سکتا ہے</translation>
 <translation id="7924358170328001543">پورٹ فارورڈ کرنے میں خرابی</translation>
 <translation id="792514962475806987">ڈاک کردہ زوم کی سطح:</translation>
 <translation id="7925247922861151263">‏AAA چیک ناکام ہوگیا</translation>
@@ -5342,6 +5347,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="8118488170956489476">آپ کا ادارہ آپ کے <ph name="BEGIN_LINK" />براؤزر کا نظم کرتا ہے<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">اپنے ڈاؤن لوڈز کا نظم کریں</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />، <ph name="RECENT_PERMISSIONS_CHANGE_1" />، <ph name="RECENT_PERMISSIONS_CHANGE_2" /> اور مزید</translation>
+<translation id="8120715633374652536">‏آپ کے آلے میں اسٹوریج کی جگہ کم ہے۔ Plugin VM استعمال کرنے کے لیے کم از کم <ph name="MINIMUM_SPACE" /> خالی جگہ درکار ہے اور <ph name="RECOMMENDED_SPACE" /> سے زیادہ خالی جگہ کی تجویز پیش کی جاتی ہے۔ جگہ خالی کرنے کیلئے، آلہ کے اسٹوریج سے فائلیں حذف کریں۔</translation>
 <translation id="8123590694679414600">‏ڈيٹا کی مرموزکاری بوقت <ph name="TIME" /> آپ کے مطابقت پذیر پاس فریز کے ساتھ کر دی گئی۔
           اس میں Google Pay سے ادائیگی کے طریقے اور پتے شامل نہیں ہوتے ہیں۔</translation>
 <translation id="81238879832906896">زرد اور سفید پھول</translation>
@@ -5391,7 +5397,6 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="8186609076106987817">سرور فائل کو تلاش نہیں کر سکا۔</translation>
 <translation id="8188389033983459049">اپنے آلے کی ترتیبات چیک کریں اور جاری رکھنے کیلئے اسے آن کریں</translation>
 <translation id="8190193592390505034"><ph name="PROVIDER_NAME" /> سے منسلک کیا جا رہا ہے</translation>
-<translation id="8190310225494289459">‏Google اکاؤنٹ میں چیک کریں۔</translation>
 <translation id="8191230140820435481">اپنی ایپس، ایکسٹینشنز اور تھیمز کا نظم کریں</translation>
 <translation id="8195027750202970175">ڈسک پر سائز</translation>
 <translation id="8198323535106903877">ہم آپ کے لیے وہ <ph name="NUMBER_OF_APPS" /> ایپس انسٹال کریں گے</translation>

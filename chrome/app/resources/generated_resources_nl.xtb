@@ -1673,7 +1673,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
     <ph name="BEGIN_LIST" />
       <ph name="LIST_ITEM" />Apps en extensies die door de school zijn geïnstalleerd
       <ph name="LIST_ITEM" />Bookmarks van een Chromebook van school
-      <ph name="LIST_ITEM" />Wachtwoorden van educatieve sites automatisch aanvullen
+      <ph name="LIST_ITEM" />De functie 'Automatisch aanvullen' voor wachtwoorden van educatieve sites automatisch
     <ph name="END_LIST" />
     Je kind moet het volgende doen voor volledige functionaliteit voor school op dit apparaat:
     <ph name="BEGIN_OLIST" />
@@ -5388,7 +5388,6 @@ Bewaar je sleutelbestand op een veilige plaats. Je hebt het bestand nodig om nie
 <translation id="8186609076106987817">De server kan het bestand niet vinden.</translation>
 <translation id="8188389033983459049">Controleer de instellingen van je apparaat en schakel je apparaat in om door te gaan</translation>
 <translation id="8190193592390505034">Verbinding maken met <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Controleren in Google-account.</translation>
 <translation id="8191230140820435481">Je apps, extensies en thema's beheren</translation>
 <translation id="8195027750202970175">Grootte op schijf</translation>
 <translation id="8198323535106903877">We installeren deze <ph name="NUMBER_OF_APPS" /> apps voor je</translation>

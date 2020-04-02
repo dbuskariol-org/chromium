@@ -1677,7 +1677,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
     Per poter sfruttare completamente l'esperienza scolastica su questo dispositivo, tuo figlio dovrebbe:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />Uscire dall'account gestito di Family Link
-      <ph name="OLIST_ITEM" />Accedere con il suo account G Suite for Education nella schermata di accesso. Tuttavia, tieni presente che le norme scolastiche, come anche le impostazioni di accesso di siti web e app, avranno la priorità sulle funzionalità di supervisione di Family Link, ad esempio gli amministratori scolastici potrebbero consentire l'accesso a YouTube se necessario per svolgere i compiti, il tempo di utilizzo potrebbe non essere applicato e così via.
+      <ph name="OLIST_ITEM" />Accedere con il suo account G Suite for Education nella schermata di accesso. Tuttavia, tieni presente che i criteri definiti dalla scuola, come anche le impostazioni di accesso di siti web e app, avranno la priorità sulle funzionalità di supervisione di Family Link. Ad esempio, gli amministratori scolastici potrebbero consentire l'accesso a YouTube se necessario per svolgere i compiti, il tempo di utilizzo potrebbe non essere applicato e così via.
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Non confermato</translation>
 <translation id="32101887417650595">Impossibile collegarsi alla stampante</translation>
@@ -5387,7 +5387,6 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="8186609076106987817">Impossibile trovare il file sul server.</translation>
 <translation id="8188389033983459049">Controlla le impostazioni sul dispositivo e attivalo per continuare</translation>
 <translation id="8190193592390505034">Connessione a <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Verifica nella pagina dell'Account Google.</translation>
 <translation id="8191230140820435481">Gestire applicazioni, estensioni e temi</translation>
 <translation id="8195027750202970175">Dimensioni su disco</translation>
 <translation id="8198323535106903877">Le <ph name="NUMBER_OF_APPS" /> app verranno installate automaticamente</translation>
@@ -6059,7 +6058,7 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="9055636786322918818">Applica la crittografia RC4. Se scegli di utilizzare quest'opzione vai incontro a un rischio maggiore, in quanto le crittografie RC4 non sono sicure.</translation>
 <translation id="9056810968620647706">Nessuna corrispondenza trovata.</translation>
 <translation id="9057354806206861646">Aggiorna programmazione</translation>
-<translation id="9058976525724291037">Tuo figlio vuole aggiungere un altro Account Google a questo dispositivo. Ai dispositivi gestiti di Family Link puoi aggiungere solo account G Suite for Education.</translation>
+<translation id="9058976525724291037">Tuo figlio vuole aggiungere un altro Account Google a questo dispositivo. Ai dispositivi gestiti di Family Link è possibile aggiungere solo account G Suite for Education.</translation>
 <translation id="9062065967472365419">Sorprendimi</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Errore dalla riga <ph name="ERROR_LINE_START" /> alla riga <ph name="ERROR_LINE_END" /></translation>

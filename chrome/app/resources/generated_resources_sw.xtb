@@ -1675,7 +1675,7 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
     Ili kupata vipengele vyote vya shuleni kwenye kifaa hiki, mtoto wako anapaswa:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />Kuondoka katika akaunti yake inayodhibitiwa na Family Link
-      <ph name="OLIST_ITEM" />Kuingia akitumia akaunti yake ya G Suite for Education kwenye skrini ya kuingia katika akaunti. Kumbuka: Hata hivyo, hali hii itamaanisha kuwa sera za shule, zikiwemo mipangilio ya uwezo wa kufikia programu na tovuti, zitaanza kutumika kwenye vipengele vyako vya usimamizi katika Family Link (kwa mfano, huenda wasimamizi wa shule wakaruhusu YouTube iwapo itahitajika ili kukamilisha kazi ya nyumbani, sera ya muda wa kutumia kifaa haitatekelezwa nk.)
+      <ph name="OLIST_ITEM" />Kuingia akitumia akaunti yake ya G Suite for Education kwenye skrini ya kuingia katika akaunti. Kumbuka: Hata hivyo, hali hii itamaanisha kuwa sera za shule, zikiwemo mipangilio ya uwezo wa kufikia programu na tovuti, zitaanza kutumika badala ya vipengele vyako vya usimamizi katika Family Link (kwa mfano, huenda wasimamizi wa shule wakaruhusu YouTube iwapo itahitajika ili kukamilisha kazi ambazo watoto wanapewa shuleni, mipangilio ya muda wa kutumia kifaa haitatekelezwa nk.)
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Haijathibitishwa</translation>
 <translation id="32101887417650595">Imeshindwa kuunganisha kwenye printa</translation>
@@ -5392,7 +5392,6 @@ Sidhani tovuti hii inapaswa kuzuiwa!</translation>
 <translation id="8186609076106987817">Seva hii haikuweza kupata faili.</translation>
 <translation id="8188389033983459049">Angalia mipangilio ya kifaa chako na uiwashe ili uendelee</translation>
 <translation id="8190193592390505034">Inaunganisha kwenye <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Kagua katika Akaunti ya Google.</translation>
 <translation id="8191230140820435481">Kudhibiti programu, viendelezi na mandhari yako</translation>
 <translation id="8195027750202970175">Ukubwa kwenye diski</translation>
 <translation id="8198323535106903877">Tutakusakinishia programu hizo <ph name="NUMBER_OF_APPS" /></translation>

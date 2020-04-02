@@ -1665,7 +1665,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3202173864863109533">Zvuk ove kartice je isključen.</translation>
 <translation id="3208321278970793882">Aplikacija</translation>
 <translation id="3208584281581115441">Proverite</translation>
-<translation id="3208640652501208439">Resursi za rad u školi možda neće biti dostupni ili automatski učitani
+<translation id="3208640652501208439">Resursi za školski rad možda neće biti dostupni ili automatski učitani
     Dete možda neće imati pristup:
     <ph name="BEGIN_LIST" />
       <ph name="LIST_ITEM" />aplikacijama i dodacima koje je škola instalirala
@@ -1675,7 +1675,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
     Da bi imalo potpuni doživljaj škole na ovom uređaju, dete treba:
     <ph name="BEGIN_OLIST" />
       <ph name="OLIST_ITEM" />da se odjavi sa naloga kojim se upravlja pomoću Family Link-a
-      <ph name="OLIST_ITEM" />da se prijavi pomoću G Suite for Education naloga na ekranu za prijavljivanje. Međutim, imajte na umu da to znači da će smernice škole, uključujući podešavanja pristupa za aplikacije i veb-sajtove, važiti za Family Link funkcije nadzora (na primer, administratori za školu mogu da dozvole YouTube ako je neophodan za domaći zadatak, ograničenja vremena ispred ekrana se neće primenjivati itd)
+      <ph name="OLIST_ITEM" />da se prijavi pomoću G Suite for Education naloga na ekranu za prijavljivanje. Međutim, imajte na umu da to znači da će smernice škole, uključujući podešavanja pristupa za aplikacije i veb-sajtove, važiti za funkcije nadzora Family Link-a (na primer, administratori za školu mogu da dozvole YouTube ako je neophodan za domaći zadatak, ograničenja vremena ispred ekrana se neće primenjivati itd)
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">Nepotvrđeno</translation>
 <translation id="32101887417650595">Povezivanje sa štampačem nije uspelo</translation>
@@ -1876,6 +1876,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3479552764303398839">Ne sada</translation>
 <translation id="3479685872808224578">Otkrivanje servera za štampanje nije uspelo. Proverite adresu i probajte ponovo.</translation>
 <translation id="3481268647794498892">Otvara se u pregledaču <ph name="ALTERNATIVE_BROWSER_NAME" /> za <ph name="COUNTDOWN_SECONDS" /> sek</translation>
+<translation id="3482719661246593752"><ph name="ORIGIN" /> može da pregleda sledeće datoteke</translation>
 <translation id="3484273680291419129">Štetan softver se uklanja...</translation>
 <translation id="3484869148456018791">Nabavi novi sertifikat</translation>
 <translation id="3487007233252413104">anonimna funkcija</translation>
@@ -1938,6 +1939,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3564848315152754834">USB bezbednosni ključ</translation>
 <translation id="3566721612727112615">Nijedan sajt nije dodat</translation>
 <translation id="3569382839528428029">Da li želite da <ph name="APP_NAME" /> deli ekran?</translation>
+<translation id="3569682580018832495"><ph name="ORIGIN" /> može da pregleda datoteke i direktorijume u nastavku</translation>
 <translation id="3571734092741541777">Podesi</translation>
 <translation id="3574210789297084292">prijavi me</translation>
 <translation id="3574917942258583917">Želite li da ipak izađete iz režima bez arhiviranja?</translation>
@@ -1947,6 +1949,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3578594933904494462">Sadržaj ove kartice se deli.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; želi da deli štampač &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; sa grupom čiji ste vlasnik: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Ako prihvatite, svi članovi grupe će moći da štampaju pomoću štampača.</translation>
 <translation id="357889014807611375">Wi-Fi sa ograničenjem</translation>
+<translation id="3582057310199111521">Uneto na obmanjujućem sajtu i pronađeno pri upadu u podatke</translation>
 <translation id="3584169441612580296">Čitanje slika, muzike i drugih medija sa računara i menjanje tih medija</translation>
 <translation id="3586806079541226322">Otvaranje ove datoteke nije uspelo</translation>
 <translation id="3586931643579894722">Sakrij detalje</translation>
@@ -3079,6 +3082,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="5117930984404104619">Praćenje ponašanja drugih dodataka, uključujući posećene URL-ove</translation>
 <translation id="5119173345047096771">Mozilla Firefox</translation>
 <translation id="5121130586824819730">Hard-disk je pun. Sačuvajte na drugu lokaciju ili napravite više prostora na hard-disku.</translation>
+<translation id="5122384452788334261">Na uređaju ponestaje prostora. Preporučuje se bar <ph name="RECOMMENDED_SPACE" /> slobodnog prostora za korišćenje Plugin VM-a. Da biste oslobodili prostor, izbrišite datoteke iz memorijskog prostora uređaja.</translation>
 <translation id="5123433949759960244">Košarkaška lopta</translation>
 <translation id="5125751979347152379">Nevažeća URL adresa.</translation>
 <translation id="5126611267288187364">Pregledajte promene</translation>
@@ -5175,6 +5179,7 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="7915471803647590281">Recite nam šta se dešava pre nego što pošaljete povratne informacije.</translation>
 <translation id="7918257978052780342">Prijavi me</translation>
 <translation id="7919210519031517829"><ph name="DURATION" /> sek</translation>
+<translation id="7920363873148656176"><ph name="ORIGIN" /> može da pregleda <ph name="FILENAME" /></translation>
 <translation id="7924358170328001543">Greška pri prosleđivanju porta</translation>
 <translation id="792514962475806987">Nivo zumiranja montirane lupe ekrana:</translation>
 <translation id="7925247922861151263">Provera potvrde identiteta, ovlašćenja i pristupa nije uspela</translation>
@@ -5338,6 +5343,7 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="8118488170956489476">Organizacija <ph name="BEGIN_LINK" />upravlja pregledačem<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">Upravljanje preuzimanjima</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />, <ph name="RECENT_PERMISSIONS_CHANGE_1" />, <ph name="RECENT_PERMISSIONS_CHANGE_2" /> i drugo</translation>
+<translation id="8120715633374652536">Na uređaju ponestaje prostora. Treba vam bar <ph name="MINIMUM_SPACE" /> slobodnog prostora da biste koristili Plugin VM, a preporučuje se više od <ph name="RECOMMENDED_SPACE" />. Da biste oslobodili prostor, izbrišite datoteke iz memorijskog prostora uređaja.</translation>
 <translation id="8123590694679414600">Podaci su šifrovani pomoću pristupne fraze za sinhronizaciju
           <ph name="TIME" />. To ne obuhvata načine plaćanja i adrese iz Google Pay-a.</translation>
 <translation id="81238879832906896">Žuti i beli cvet</translation>
@@ -5387,7 +5393,6 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="8186609076106987817">Server nije mogao da pronađe datoteku.</translation>
 <translation id="8188389033983459049">Proverite podešavanja uređaja i uključite ga da biste nastavili</translation>
 <translation id="8190193592390505034">Povezivanje sa mrežom <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">Proverite na Google nalogu.</translation>
 <translation id="8191230140820435481">Upravljanje aplikacijama, dodacima i temama</translation>
 <translation id="8195027750202970175">Veličina na disku</translation>
 <translation id="8198323535106903877">Instaliraćemo vam te aplikacije (<ph name="NUMBER_OF_APPS" />)</translation>

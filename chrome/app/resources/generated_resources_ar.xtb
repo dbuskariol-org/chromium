@@ -1668,8 +1668,8 @@
 <translation id="3202173864863109533">تم كتم صوت علامة التبويب.</translation>
 <translation id="3208321278970793882">التطبيق</translation>
 <translation id="3208584281581115441">التحقّق الآن</translation>
-<translation id="3208640652501208439">‏قد يتعذّر تحميل مصادر للأعمال المدرسية تلقائيًا أو توفّرها.
-وقد لا يتمكن طفلك من الوصول إلى ما يلي:
+<translation id="3208640652501208439">‏مصادر الأعمال المدرسية قد لا تكون متوفرة أو لم يتم تحميلها تلقائيًا.
+    قد لا يتمكّن طفلك من الوصول إلى ما يلي:
 <ph name="BEGIN_LIST" />
 <ph name="LIST_ITEM" />التطبيقات والإضافات التي ثبّتتها المدرسة
 <ph name="LIST_ITEM" />الإشارات المرجعية من جهاز Chromebook الخاص بالمدرسة
@@ -1678,7 +1678,7 @@
 للاستفادة من التجربة المدرسية الكاملة على هذا الجهاز، يجب على طفلك إجراء ما يلي:
 <ph name="BEGIN_OLIST" />
 <ph name="OLIST_ITEM" />تسجيل الخروج من حسابه المُدار من خلال Family Link
-<ph name="OLIST_ITEM" />تسجيل الدخول باستخدام حساب "G Suite للتعليم" على شاشة تسجيل الدخول. ومع ذلك، يُرجى ملاحظة أن هذا يعني أن سياسات المدرسة بما في ذلك إعدادات الوصول للموقع الإلكتروني والتطبيق ستكون لها الأولوية على ميزات إشراف Family Link (على سبيل المثال قد يسمح مشرفو المدرسة بالوصول إلى YouTube إذا كان ضروريًا للواجب المنزلي، وعدم تحديد وقت للشاشة، وغيرها).
+<ph name="OLIST_ITEM" />تسجيل الدخول باستخدام حساب "G Suite للتعليم" على شاشة تسجيل الدخول. ويُرجى ملاحظة أن هذا يعني أن سياسات المدرسة التي تتضمّن إعدادات الوصول للمواقع الإلكترونية والتطبيقات ستكون لها الأولوية على ميزات إشراف Family Link (على سبيل المثال، قد يسمح مشرفو المدرسة بالوصول إلى YouTube إذا كان ضروريًا لأداء الواجبات المنزلية، ولن يتم فرض قيود على وقت النظر إلى الشاشة وما إلى ذلك).
     <ph name="END_OLIST" /></translation>
 <translation id="3208703785962634733">لم يتم تأكيده</translation>
 <translation id="32101887417650595">يتعذّر الاتصال بالطباعة</translation>
@@ -1758,7 +1758,7 @@
 <translation id="3312424061798279731">اللغات التي تم تفعيلها</translation>
 <translation id="3313622045786997898">قيمة توقيع الشهادة</translation>
 <translation id="3315158641124845231">إخفاء <ph name="PRODUCT_NAME" /></translation>
-<translation id="3317284582048881482">معلومات حساب المدرسة للوالدَين</translation>
+<translation id="3317284582048881482">معلومات عن حساب المدرسة للوالدَين</translation>
 <translation id="3317459757438853210">طباعة على الجانبين</translation>
 <translation id="3317678681329786349">تم حظر استخدام الكاميرا والميكروفون</translation>
 <translation id="3319048459796106952">نافذة &amp; جديدة للتصفح المتخفي</translation>
@@ -1879,6 +1879,7 @@
 <translation id="3479552764303398839">ليس الآن</translation>
 <translation id="3479685872808224578">تعذّر العثور على خادم الطباعة. يُرجى التحقّق من العنوان وإعادة المحاولة.</translation>
 <translation id="3481268647794498892">جارٍ الفتح في <ph name="ALTERNATIVE_BROWSER_NAME" /> خلال <ph name="COUNTDOWN_SECONDS" /> ثانية</translation>
+<translation id="3482719661246593752">بإمكان <ph name="ORIGIN" /> عرض الملفات التالية:</translation>
 <translation id="3484273680291419129">جارٍ إزالة البرامج الضارة...</translation>
 <translation id="3484869148456018791">الحصول على شهادة جديدة</translation>
 <translation id="3487007233252413104">وظيفة مجهولة</translation>
@@ -1941,6 +1942,7 @@
 <translation id="3564848315152754834">‏مفتاح أمان USB</translation>
 <translation id="3566721612727112615">لم تتم إضافة أي مواقع</translation>
 <translation id="3569382839528428029">هل تريد من <ph name="APP_NAME" /> مشاركة شاشتك؟</translation>
+<translation id="3569682580018832495">بإمكان <ph name="ORIGIN" /> عرض الملفات والمجلدات التالية:</translation>
 <translation id="3571734092741541777">إعداد</translation>
 <translation id="3574210789297084292">تسجيل الدخول</translation>
 <translation id="3574917942258583917">هل تريد الخروج من وضع التصفح المتخفي على أي حال؟</translation>
@@ -1950,6 +1952,7 @@
 <translation id="3578594933904494462">تجري مشاركة محتوى علامة التبويب هذه.</translation>
 <translation id="357886715122934472">‏يريد &lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; مشاركة طابعة &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; مع مجموعة تمتلكها: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. في حال موافقتك، سيتمكن جميع أعضاء المجموعة من الطباعة بهذه الطابعة.</translation>
 <translation id="357889014807611375">‏شبكة Wi-Fi ذات السعة المحدودة</translation>
+<translation id="3582057310199111521">تم إدخال كلمة المرور على موقع إلكتروني مريب وتبيّن أنها مستخدَمة في عملية اختراق البيانات.</translation>
 <translation id="3584169441612580296">التعرّف على الصور، والموسيقى، والوسائط الأخرى من الكمبيوتر وتغييرها</translation>
 <translation id="3586806079541226322">يتعذّر فتح هذا الملف</translation>
 <translation id="3586931643579894722">إخفاء التفاصيل</translation>
@@ -3079,6 +3082,7 @@
 <translation id="5117930984404104619">‏مراقبة سلوك الإضافات الأخرى، بما في ذلك عناوين URL التي تم الانتقال إليها</translation>
 <translation id="5119173345047096771">موزيلا فايرفوكس</translation>
 <translation id="5121130586824819730">القرص الصلب ممتلئ. يُرجى الحفظ في مكان آخر أو توفير مساحة أكبر على القرص الصلب.</translation>
+<translation id="5122384452788334261">‏مساحة التخزين على الجهاز منخفضة. يُنصَح بتوفير <ph name="RECOMMENDED_SPACE" /> على الأقل من المساحة الخالية لاستخدام Plugin VM. لتوفير مساحة، يمكنك حذف الملفات من مساحة تخزين الجهاز.</translation>
 <translation id="5123433949759960244">كرة السلة</translation>
 <translation id="5125751979347152379">‏عنوان URL غير صالح.</translation>
 <translation id="5126611267288187364">عرض التغييرات</translation>
@@ -5176,6 +5180,7 @@
 <translation id="7915471803647590281">يُرجى إخبارنا بما يحدث قبل إرسال التعليقات.</translation>
 <translation id="7918257978052780342">تسجيل</translation>
 <translation id="7919210519031517829"><ph name="DURATION" /> ثوانٍ</translation>
+<translation id="7920363873148656176">بإمكان <ph name="ORIGIN" /> عرض الملف <ph name="FILENAME" />.</translation>
 <translation id="7924358170328001543">خطأ في إعادة توجيه المنفذ</translation>
 <translation id="792514962475806987">مستوى التكبير الذي تم إرساؤه:</translation>
 <translation id="7925247922861151263">‏تعذّر فحص AAA</translation>
@@ -5339,6 +5344,7 @@
 <translation id="8118488170956489476">تعمل مؤسستك على <ph name="BEGIN_LINK" />إدارة متصفِّحك<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">إدارة عمليات التنزيل</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /> و<ph name="RECENT_PERMISSIONS_CHANGE_1" /> و<ph name="RECENT_PERMISSIONS_CHANGE_2" /> والمزيد</translation>
+<translation id="8120715633374652536">‏مساحة التخزين على الجهاز منخفضة. يجب توفّر <ph name="MINIMUM_SPACE" /> على الأقل من المساحة الخالية لاستخدام Plugin VM، ويُنصَح بأن تكون المساحة الخالية أكثر من <ph name="RECOMMENDED_SPACE" />. لتوفير مساحة، يمكنك حذف الملفات من مساحة تخزين الجهاز.</translation>
 <translation id="8123590694679414600">‏تم ترميز بياناتك باستخدام عبارة مرور المزامنة في
           <ph name="TIME" />. لا يتضمّن ذلك طرق الدفع والعناوين من Google Pay.</translation>
 <translation id="81238879832906896">زهرة صفراء وبيضاء</translation>
@@ -5388,7 +5394,6 @@
 <translation id="8186609076106987817">تعذر على الخادم العثور على الملف.</translation>
 <translation id="8188389033983459049">التحقُّق من إعدادات جهازك وتفعيلها للاستمرار</translation>
 <translation id="8190193592390505034">جارٍ الاتصال بـ <ph name="PROVIDER_NAME" /></translation>
-<translation id="8190310225494289459">‏إجراء عملية التحقّق في حساب Google</translation>
 <translation id="8191230140820435481">إدارة التطبيقات والإضافات والمظاهر</translation>
 <translation id="8195027750202970175">الحجم على القرص</translation>
 <translation id="8198323535106903877">سنعمل على تثبيت <ph name="NUMBER_OF_APPS" /> من هذه التطبيقات من أجلك</translation>
@@ -6060,7 +6065,7 @@
 <translation id="9055636786322918818">‏فرض ترميز RC4: يؤدي استخدام هذا الخيار إلى زيادة المخاطر، لأن رموز RC4 غير آمنة.</translation>
 <translation id="9056810968620647706">لم يتم العثور على نتائج مطابقة.</translation>
 <translation id="9057354806206861646">تعديل الجدول الزمني</translation>
-<translation id="9058976525724291037">‏يريد طفلك إضافة "حساب Google" آخر إلى هذا الجهاز. وغير مسموح بإضافة حسابات سوى حسابات "G Suite للتعليم" إلى الأجهزة التي تُدار من خلال Family Link.</translation>
+<translation id="9058976525724291037">‏يريد طفلك إضافة حساب Google آخر إلى هذا الجهاز. لا يُسمح بإضافة حسابات إلا حسابات "G Suite للتعليم" على الأجهزة المُدراة من خلال Family Link.</translation>
 <translation id="9062065967472365419">مفاجأة</translation>
 <translation id="9062468308252555888">14 ضعفًا</translation>
 <translation id="9063208415146866933">خطأ من السطر رقم <ph name="ERROR_LINE_START" /> إلى <ph name="ERROR_LINE_END" /></translation>
