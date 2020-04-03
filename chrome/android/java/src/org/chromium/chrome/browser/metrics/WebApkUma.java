@@ -4,13 +4,11 @@
 
 package org.chromium.chrome.browser.metrics;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.text.format.DateUtils;
 
 import androidx.annotation.IntDef;
@@ -97,19 +95,6 @@ public class WebApkUma {
         int REQUSET_FAILED_RESOLVE_ERROR = 14;
         int REQUEST_FAILED_NOT_GOOGLE_SIGNED = 15;
         int NUM_ENTRIES = 16;
-    }
-
-    // This enum is used to back UMA histograms, and should therefore be treated as append-only.
-    @IntDef({Permission.OTHER, Permission.LOCATION, Permission.MICROPHONE, Permission.CAMERA,
-            Permission.STORAGE})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Permission {
-        int OTHER = 0;
-        int LOCATION = 1;
-        int MICROPHONE = 2;
-        int CAMERA = 3;
-        int STORAGE = 4;
-        int NUM_ENTRIES = 5;
     }
 
     public static final String HISTOGRAM_UPDATE_REQUEST_SENT =
@@ -280,51 +265,6 @@ public class WebApkUma {
             default:
                 return "Other";
         }
-    }
-
-    /**
-     * Records the requests of Android runtime permissions which haven't been granted to Chrome when
-     * Chrome is running in WebAPK runtime.
-     */
-    public static void recordAndroidRuntimePermissionPromptInWebApk(final String[] permissions) {
-        recordPermissionUma("WebApk.Permission.ChromeWithoutPermission", permissions);
-    }
-
-    /**
-     * Records the amount of requests that WekAPK runtime permissions access is deined because
-     * Chrome does not have that permission.
-     */
-    public static void recordAndroidRuntimePermissionDeniedInWebApk(final String[] permissions) {
-        recordPermissionUma("WebApk.Permission.ChromePermissionDenied2", permissions);
-    }
-
-    private static void recordPermissionUma(String permissionUmaName, final String[] permissions) {
-        Set<Integer> permissionGroups = new HashSet<Integer>();
-        for (String permission : permissions) {
-            permissionGroups.add(getPermissionGroup(permission));
-        }
-        for (@Permission Integer permission : permissionGroups) {
-            RecordHistogram.recordEnumeratedHistogram(
-                    permissionUmaName, permission, Permission.NUM_ENTRIES);
-        }
-    }
-
-    private static @Permission int getPermissionGroup(String permission) {
-        if (TextUtils.equals(permission, Manifest.permission.ACCESS_COARSE_LOCATION)
-                || TextUtils.equals(permission, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            return Permission.LOCATION;
-        }
-        if (TextUtils.equals(permission, Manifest.permission.RECORD_AUDIO)) {
-            return Permission.MICROPHONE;
-        }
-        if (TextUtils.equals(permission, Manifest.permission.CAMERA)) {
-            return Permission.CAMERA;
-        }
-        if (TextUtils.equals(permission, Manifest.permission.READ_EXTERNAL_STORAGE)
-                || TextUtils.equals(permission, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            return Permission.STORAGE;
-        }
-        return Permission.OTHER;
     }
 
     /**
