@@ -1873,17 +1873,31 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
     : public InProcessBrowserTest,
       public testing::WithParamInterface<
           testing::tuple<bool /* IsolateAllSitesForTesting */,
-                         bool /* Committed interstitials enabled */>> {
+                         bool /* Committed interstitials enabled */,
+                         bool /* Show warning on mouse click */>> {
  public:
   SafeBrowsingBlockingPageDelayedWarningBrowserTest() {
-    if (testing::get<1>(GetParam())) {
-      scoped_feature_list_.InitWithFeatures(
-          /*enabled_features=*/{kDelayedWarnings, kCommittedSBInterstitials},
-          /*disabled_features=*/{});
+    if (warning_on_mouse_click_enabled()) {
+      const std::map<std::string, std::string> parameters{{"mouse", "true"}};
+      std::vector<base::test::ScopedFeatureList::FeatureAndParams>
+          enabled_features{base::test::ScopedFeatureList::FeatureAndParams(
+              kDelayedWarnings, parameters)};
+      if (committed_interstitials_enabled()) {
+        enabled_features.push_back(
+            base::test::ScopedFeatureList::FeatureAndParams(
+                kCommittedSBInterstitials, {}));
+      }
+      scoped_feature_list_.InitWithFeaturesAndParameters(enabled_features, {});
     } else {
-      scoped_feature_list_.InitWithFeatures(
-          /*enabled_features=*/{kDelayedWarnings},
-          /*disabled_features=*/{});
+      if (committed_interstitials_enabled()) {
+        scoped_feature_list_.InitWithFeatures(
+            /*enabled_features=*/{kDelayedWarnings, kCommittedSBInterstitials},
+            /*disabled_features=*/{});
+      } else {
+        scoped_feature_list_.InitWithFeatures(
+            /*enabled_features=*/{kDelayedWarnings},
+            /*disabled_features=*/{});
+      }
     }
   }
 
@@ -1928,6 +1942,31 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
     return WaitForReady(browser);
   }
 
+  static void MouseClick(Browser* browser) {
+    blink::WebMouseEvent event(
+        blink::WebInputEvent::kMouseDown, blink::WebInputEvent::kNoModifiers,
+        blink::WebInputEvent::GetStaticTimeStampForTests());
+    event.button = blink::WebMouseEvent::Button::kLeft;
+    event.SetPositionInWidget(100, 100);
+    event.click_count = 1;
+    content::WebContents* contents =
+        browser->tab_strip_model()->GetActiveWebContents();
+    content::RenderWidgetHost* rwh = contents->GetRenderViewHost()->GetWidget();
+    rwh->ForwardMouseEvent(event);
+  }
+
+  static bool MouseClickAndWaitForInterstitial(Browser* browser) {
+    content::WebContents* contents =
+        browser->tab_strip_model()->GetActiveWebContents();
+    content::TestNavigationObserver observer(contents);
+    MouseClick(browser);
+    if (AreCommittedInterstitialsEnabled()) {
+      observer.WaitForNavigationFinished();
+    }
+    return WaitForReady(browser);
+  }
+
+ protected:
   void NavigateAndAssertNoInterstitial() {
     const GURL url = embedded_test_server()->GetURL("/empty.html");
     SetURLThreatType(url, SB_THREAT_TYPE_URL_PHISHING);
@@ -1935,8 +1974,12 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
     AssertNoInterstitial(browser(), true);
   }
 
- protected:
-  TestThreatDetailsFactory details_factory_;
+  bool committed_interstitials_enabled() const {
+    return testing::get<1>(GetParam());
+  }
+  bool warning_on_mouse_click_enabled() const {
+    return testing::get<2>(GetParam());
+  }
 
  private:
   void SetURLThreatType(const GURL& url, SBThreatType threat_type) {
@@ -1951,12 +1994,28 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
   base::test::ScopedFeatureList scoped_feature_list_;
   TestSafeBrowsingServiceFactory factory_;
   TestSafeBrowsingBlockingPageFactory blocking_page_factory_;
+  TestThreatDetailsFactory details_factory_;
 
   DISALLOW_COPY_AND_ASSIGN(SafeBrowsingBlockingPageDelayedWarningBrowserTest);
 };
 
 IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
-                       DelayedWarningShown) {
+                       NoInteraction_WarningNotShown) {
+  base::HistogramTester histograms;
+  NavigateAndAssertNoInterstitial();
+
+  // Navigate away without interacting with the page.
+  ui_test_utils::NavigateToURL(browser(), GURL(url::kAboutBlankURL));
+
+  histograms.ExpectTotalCount(kDelayedWarningsHistogram, 2);
+  histograms.ExpectBucketCount(kDelayedWarningsHistogram,
+                               DelayedWarningEvent::kPageLoaded, 1);
+  histograms.ExpectBucketCount(kDelayedWarningsHistogram,
+                               DelayedWarningEvent::kWarningNotShown, 1);
+}
+
+IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
+                       KeyPress_WarningShown) {
   base::HistogramTester histograms;
   NavigateAndAssertNoInterstitial();
 
@@ -1975,19 +2034,58 @@ IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
                                DelayedWarningEvent::kWarningShownOnKeypress, 1);
 }
 
+// The user clicks on the page. Feature isn't configured to show a warning on
+// mouse clicks. We should record that the user interacted with the page, but
+// shouldn't shown an interstitial.
 IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
-                       DelayedWarningNotShown) {
+                       MouseClick_WarningNotShown) {
+  if (warning_on_mouse_click_enabled()) {
+    return;
+  }
   base::HistogramTester histograms;
   NavigateAndAssertNoInterstitial();
 
-  // Navigate away without interacting with the page.
+  // Click on the page. An interstitial shouldn't be shown because the feature
+  // parameter is off.
+  MouseClick(browser());
+  AssertNoInterstitial(browser(), false);
+
+  // Navigate away to "flush" the metrics.
   ui_test_utils::NavigateToURL(browser(), GURL(url::kAboutBlankURL));
+
+  histograms.ExpectTotalCount(kDelayedWarningsHistogram, 3);
+  histograms.ExpectBucketCount(kDelayedWarningsHistogram,
+                               DelayedWarningEvent::kPageLoaded, 1);
+  histograms.ExpectBucketCount(kDelayedWarningsHistogram,
+                               DelayedWarningEvent::kWarningNotShown, 1);
+  histograms.ExpectBucketCount(
+      kDelayedWarningsHistogram,
+      DelayedWarningEvent::kWarningNotTriggeredOnMouseClick, 1);
+}
+
+IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
+                       MouseClick_WarningShown) {
+  if (!warning_on_mouse_click_enabled()) {
+    return;
+  }
+  base::HistogramTester histograms;
+  NavigateAndAssertNoInterstitial();
+
+  // Click on the page. An interstitial should be shown because the feature
+  // parameter is on.
+  EXPECT_TRUE(MouseClickAndWaitForInterstitial(browser()));
+
+  EXPECT_TRUE(ClickAndWaitForDetach(browser(), "primary-button"));
+  AssertNoInterstitial(browser(), false);  // Assert the interstitial is gone
+  EXPECT_EQ(GURL(url::kAboutBlankURL),     // Back to "about:blank"
+            browser()->tab_strip_model()->GetActiveWebContents()->GetURL());
 
   histograms.ExpectTotalCount(kDelayedWarningsHistogram, 2);
   histograms.ExpectBucketCount(kDelayedWarningsHistogram,
                                DelayedWarningEvent::kPageLoaded, 1);
   histograms.ExpectBucketCount(kDelayedWarningsHistogram,
-                               DelayedWarningEvent::kWarningNotShown, 1);
+                               DelayedWarningEvent::kWarningShownOnMouseClick,
+                               1);
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -1995,7 +2093,8 @@ INSTANTIATE_TEST_SUITE_P(
     SafeBrowsingBlockingPageDelayedWarningBrowserTest,
     testing::Combine(
         testing::Values(false, true), /* IsolateAllSitesForTesting */
-        testing::Values(false, true) /* Committed interstitials enabled */));
+        testing::Values(false, true), /* Committed interstitials enabled */
+        testing::Values(false, true) /* Show warning on mouse click */));
 
 // Test that SafeBrowsingBlockingPage properly decodes IDN URLs that are
 // displayed.

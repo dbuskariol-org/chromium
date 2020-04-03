@@ -57603,6 +57603,10 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="0" label="User loaded a page with a delayed warning"/>
   <int value="1" label="User left the page and the warning was never shown"/>
   <int value="2" label="The warning is shown because the user pressed a key"/>
+  <int value="3"
+      label="User clicked on the page at least once but the feature isn't
+             configured to show warnings on mouse clicks."/>
+  <int value="4" label="User clicked on the page and the warning was shown."/>
 </enum>
 
 <enum name="SafeBrowsingParseV4HashResult">
