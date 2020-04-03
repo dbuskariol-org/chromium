@@ -796,8 +796,12 @@ void AddPluginVmStrings(content::WebUIDataSource* html_source,
       {"pluginVmRemoveButton", IDS_SETTINGS_PLUGIN_VM_REMOVE_BUTTON},
       {"pluginVmRemoveConfirmationDialogMessage",
        IDS_SETTINGS_PLUGIN_VM_CONFIRM_REMOVE_DIALOG_BODY},
+      {"pluginVmCameraAccessTitle", IDS_SETTINGS_PLUGIN_VM_CAMERA_ACCESS_TITLE},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
+  html_source->AddBoolean("showPluginVmCamera",
+                          base::FeatureList::IsEnabled(
+                              chromeos::features::kPluginVmShowCameraSetting));
 }
 
 void AddAndroidAppStrings(content::WebUIDataSource* html_source) {
