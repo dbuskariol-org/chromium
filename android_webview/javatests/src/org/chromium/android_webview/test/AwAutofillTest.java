@@ -194,12 +194,13 @@ public class AwAutofillTest {
 
         @Override
         public Bundle getExtras() {
-            return null;
+            if (mBundle == null) mBundle = new Bundle();
+            return mBundle;
         }
 
         @Override
         public boolean hasExtras() {
-            return false;
+            return mBundle != null;
         }
 
         @Override
@@ -443,6 +444,7 @@ public class AwAutofillTest {
         private Rect mDimensRect;
         private int mDimensScrollX;
         private int mDimensScrollY;
+        private Bundle mBundle;
     }
 
     // crbug.com/776230: On Android L, declaring variables of unsupported classes causes an error.
@@ -752,8 +754,8 @@ public class AwAutofillTest {
                     public AutofillProvider createAutofillProvider(
                             Context context, ViewGroup containerView) {
                         mTestAutofillManagerWrapper = new TestAutofillManagerWrapper(context);
-                        return new AutofillProviderImpl(
-                                containerView, mTestAutofillManagerWrapper, context);
+                        return new AutofillProviderImpl(containerView, mTestAutofillManagerWrapper,
+                                context, "AwAutofillTest");
                     }
                 });
         mAwContents = mTestContainerView.getAwContents();
@@ -851,6 +853,10 @@ public class AwAutofillTest {
             assertEquals(webDomain, viewStructure.getWebDomain());
             // WebView shouldn't set class name.
             assertNull(viewStructure.getClassName());
+            Bundle extras = viewStructure.getExtras();
+            assertEquals(
+                    "AwAutofillTest", extras.getCharSequence("VIRTUAL_STRUCTURE_PROVIDER_NAME"));
+            assertTrue(0 < extras.getCharSequence("VIRTUAL_STRUCTURE_PROVIDER_VERSION").length());
             TestViewStructure.AwHtmlInfo htmlInfoForm = viewStructure.getHtmlInfo();
             assertEquals("form", htmlInfoForm.getTag());
             assertEquals("formname", htmlInfoForm.getAttribute("name"));
