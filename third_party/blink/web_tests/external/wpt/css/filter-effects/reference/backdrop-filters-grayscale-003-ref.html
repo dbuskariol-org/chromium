@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style> 
-
+<style>
 div {
   width: 100px;
   height: 100px;
-  position :absolute;
+  position: absolute;
 }
 
 .background_object {
@@ -15,16 +14,17 @@ div {
   background: orange;
 }
 
-.grayscale_backdrop {
+.grayscale {
   left: 60px;
   top: 60px;
-  backdrop-filter: grayscale(100%);
+  width: 50px;
+  height: 50px;
+  background: #ACACAC;
 }
-
 </style>
 </head>
 <body>
   <div class="background_object"></div>
-  <div class="grayscale_backdrop"></div>
+  <div class="grayscale"></div>
 </body>
 </html>
