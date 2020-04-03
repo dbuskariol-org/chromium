@@ -1093,7 +1093,7 @@ VISIT_PROTO_FIELDS(const sync_pb::WifiConfigurationSpecifics& proto) {
   VISIT_ENUM(is_preferred);
   VISIT(proxy_configuration);
   VISIT_REP(custom_dns);
-  VISIT(last_update_timestamp);
+  VISIT(last_connected_timestamp);
 }
 
 }  // namespace syncer
