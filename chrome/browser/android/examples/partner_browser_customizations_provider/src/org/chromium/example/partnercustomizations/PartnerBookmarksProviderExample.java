@@ -68,9 +68,8 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
             new HashMap<String, String>();
 
     // Default sort order for unsync'd bookmarks
-    private static final String DEFAULT_BOOKMARKS_SORT_ORDER =
-            PartnerBookmarksContract.Bookmarks.ID + " DESC, "
-            + PartnerBookmarksContract.Bookmarks.ID + " ASC";
+    private static final String DEFAULT_BOOKMARKS_SORT_ORDER = PartnerBookmarksContract.Bookmarks.ID
+            + " DESC, " + PartnerBookmarksContract.Bookmarks.ID + " ASC";
 
     // Initial bookmark id when for getResources() importing
     // Make sure to fix tests if you are changing this
@@ -87,18 +86,14 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
         matcher.addURI(authority, "bookmarks/#", URI_MATCH_BOOKMARKS_ID);
         matcher.addURI(authority, "bookmarks/folder", URI_MATCH_BOOKMARKS_FOLDER);
         matcher.addURI(authority, "bookmarks/folder/#", URI_MATCH_BOOKMARKS_FOLDER_ID);
-        matcher.addURI(authority, "bookmarks/folder/id",
-                URI_MATCH_BOOKMARKS_PARTNER_BOOKMARKS_FOLDER_ID);
+        matcher.addURI(
+                authority, "bookmarks/folder/id", URI_MATCH_BOOKMARKS_PARTNER_BOOKMARKS_FOLDER_ID);
         // Projection maps
         Map<String, String> map = BOOKMARKS_PROJECTION_MAP;
-        map.put(PartnerBookmarksContract.Bookmarks.ID,
-                PartnerBookmarksContract.Bookmarks.ID);
-        map.put(PartnerBookmarksContract.Bookmarks.TITLE,
-                PartnerBookmarksContract.Bookmarks.TITLE);
-        map.put(PartnerBookmarksContract.Bookmarks.URL,
-                PartnerBookmarksContract.Bookmarks.URL);
-        map.put(PartnerBookmarksContract.Bookmarks.TYPE,
-                PartnerBookmarksContract.Bookmarks.TYPE);
+        map.put(PartnerBookmarksContract.Bookmarks.ID, PartnerBookmarksContract.Bookmarks.ID);
+        map.put(PartnerBookmarksContract.Bookmarks.TITLE, PartnerBookmarksContract.Bookmarks.TITLE);
+        map.put(PartnerBookmarksContract.Bookmarks.URL, PartnerBookmarksContract.Bookmarks.URL);
+        map.put(PartnerBookmarksContract.Bookmarks.TYPE, PartnerBookmarksContract.Bookmarks.TYPE);
         map.put(PartnerBookmarksContract.Bookmarks.PARENT,
                 PartnerBookmarksContract.Bookmarks.PARENT);
         map.put(PartnerBookmarksContract.Bookmarks.FAVICON,
@@ -116,13 +111,12 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
-            mSharedPreferences = context.getSharedPreferences(
-                    PREFERENCES_FILENAME, Context.MODE_PRIVATE);
+            mSharedPreferences =
+                    context.getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
         }
 
         private String getConfigSignature(Configuration config) {
-            return "mmc=" + Integer.toString(config.mcc)
-                    + "-mnc=" + Integer.toString(config.mnc)
+            return "mmc=" + Integer.toString(config.mcc) + "-mnc=" + Integer.toString(config.mnc)
                     + "-loc=" + config.locale.toString();
         }
 
@@ -148,20 +142,14 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
 
         private void createTable(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE " + TABLE_BOOKMARKS + "("
-                    + PartnerBookmarksContract.Bookmarks.ID
-                    + " INTEGER NOT NULL DEFAULT 0,"
-                    + PartnerBookmarksContract.Bookmarks.TITLE
-                    + " TEXT,"
-                    + PartnerBookmarksContract.Bookmarks.URL
-                    + " TEXT,"
-                    + PartnerBookmarksContract.Bookmarks.TYPE
-                    + " INTEGER NOT NULL DEFAULT 0,"
-                    + PartnerBookmarksContract.Bookmarks.PARENT
-                    + " INTEGER,"
-                    + PartnerBookmarksContract.Bookmarks.FAVICON
-                    + " BLOB,"
-                    + PartnerBookmarksContract.Bookmarks.TOUCHICON
-                    + " BLOB" + ");");
+                    + PartnerBookmarksContract.Bookmarks.ID + " INTEGER NOT NULL DEFAULT 0,"
+                    + PartnerBookmarksContract.Bookmarks.TITLE + " TEXT,"
+                    + PartnerBookmarksContract.Bookmarks.URL + " TEXT,"
+                    + PartnerBookmarksContract.Bookmarks.TYPE + " INTEGER NOT NULL DEFAULT 0,"
+                    + PartnerBookmarksContract.Bookmarks.PARENT + " INTEGER,"
+                    + PartnerBookmarksContract.Bookmarks.FAVICON + " BLOB,"
+                    + PartnerBookmarksContract.Bookmarks.TOUCHICON + " BLOB"
+                    + ");");
         }
 
         private void dropTable(SQLiteDatabase db) {
@@ -202,13 +190,13 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
                         Log.i(TAG, "bookmarks_folder_name was not specified; bailing out");
                         return false;
                     }
-                    if (!addRootFolder(db,
-                            FIXED_ID_PARTNER_BOOKMARKS_ROOT, bookmarksFolderName.toString())) {
+                    if (!addRootFolder(db, FIXED_ID_PARTNER_BOOKMARKS_ROOT,
+                                bookmarksFolderName.toString())) {
                         Log.i(TAG, "failed to insert root folder; bailing out");
                         return false;
                     }
-                    if (!addDefaultBookmarks(db,
-                            FIXED_ID_PARTNER_BOOKMARKS_ROOT, FIXED_ID_PARTNER_BOOKMARKS_ROOT + 1)) {
+                    if (!addDefaultBookmarks(db, FIXED_ID_PARTNER_BOOKMARKS_ROOT,
+                                FIXED_ID_PARTNER_BOOKMARKS_ROOT + 1)) {
                         Log.i(TAG, "failed to insert bookmarks; bailing out");
                         return false;
                     }
@@ -224,8 +212,7 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
         private boolean addRootFolder(SQLiteDatabase db, long id, String bookmarksFolderName) {
             ContentValues values = new ContentValues();
             values.put(PartnerBookmarksContract.Bookmarks.ID, id);
-            values.put(PartnerBookmarksContract.Bookmarks.TITLE,
-                    bookmarksFolderName);
+            values.put(PartnerBookmarksContract.Bookmarks.TITLE, bookmarksFolderName);
             values.put(PartnerBookmarksContract.Bookmarks.PARENT,
                     PartnerBookmarksContract.Bookmarks.BOOKMARK_PARENT_ROOT_ID);
             values.put(PartnerBookmarksContract.Bookmarks.TYPE,
@@ -233,8 +220,8 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
             return db.insertOrThrow(TABLE_BOOKMARKS, null, values) != -1;
         }
 
-        private boolean addDefaultBookmarks(SQLiteDatabase db, long parentId,
-                long firstBookmarkId) {
+        private boolean addDefaultBookmarks(
+                SQLiteDatabase db, long parentId, long firstBookmarkId) {
             long bookmarkId = firstBookmarkId;
             Resources res = getContext().getResources();
             final CharSequence[] bookmarks = res.getTextArray(R.array.bookmarks);
@@ -243,20 +230,20 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
             DatabaseUtils.InsertHelper insertHelper = null;
             try {
                 insertHelper = new DatabaseUtils.InsertHelper(db, TABLE_BOOKMARKS);
-                final int idColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.ID);
-                final int titleColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.TITLE);
-                final int urlColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.URL);
-                final int typeColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.TYPE);
-                final int parentColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.PARENT);
-                final int faviconColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.FAVICON);
-                final int touchiconColumn = insertHelper.getColumnIndex(
-                        PartnerBookmarksContract.Bookmarks.TOUCHICON);
+                final int idColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.ID);
+                final int titleColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.TITLE);
+                final int urlColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.URL);
+                final int typeColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.TYPE);
+                final int parentColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.PARENT);
+                final int faviconColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.FAVICON);
+                final int touchiconColumn =
+                        insertHelper.getColumnIndex(PartnerBookmarksContract.Bookmarks.TOUCHICON);
 
                 for (int i = 0; i + 1 < size; i = i + 2) {
                     CharSequence bookmarkDestination = bookmarks[i + 1];
@@ -285,8 +272,8 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
                     insertHelper.bind(idColumn, bookmarkId);
                     insertHelper.bind(titleColumn, bookmarkTitle);
                     insertHelper.bind(urlColumn, bookmarkUrl);
-                    insertHelper.bind(typeColumn,
-                            PartnerBookmarksContract.Bookmarks.BOOKMARK_TYPE_BOOKMARK);
+                    insertHelper.bind(
+                            typeColumn, PartnerBookmarksContract.Bookmarks.BOOKMARK_TYPE_BOOKMARK);
                     insertHelper.bind(parentColumn, parentId);
                     if (favicon != null) {
                         insertHelper.bind(faviconColumn, favicon);
@@ -340,8 +327,8 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection,
-            String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+            String sortOrder) {
         final int match = URI_MATCHER.match(uri);
         mOpenHelper.prepareForConfiguration(getContext().getResources().getConfiguration());
         final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
@@ -355,17 +342,16 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
                 if (match == URI_MATCH_BOOKMARKS_ID) {
                     // Tack on the ID of the specific bookmark requested
                     selection = DatabaseUtils.concatenateWhere(selection,
-                            TABLE_BOOKMARKS + "."
-                            + PartnerBookmarksContract.Bookmarks.ID + "=?");
-                    selectionArgs = DatabaseUtils.appendSelectionArgs(selectionArgs,
-                            new String[] { Long.toString(ContentUris.parseId(uri)) });
+                            TABLE_BOOKMARKS + "." + PartnerBookmarksContract.Bookmarks.ID + "=?");
+                    selectionArgs = DatabaseUtils.appendSelectionArgs(
+                            selectionArgs, new String[] {Long.toString(ContentUris.parseId(uri))});
                 } else if (match == URI_MATCH_BOOKMARKS_FOLDER_ID) {
                     // Tack on the ID of the specific folder requested
                     selection = DatabaseUtils.concatenateWhere(selection,
-                            TABLE_BOOKMARKS + "."
-                            + PartnerBookmarksContract.Bookmarks.PARENT + "=?");
-                    selectionArgs = DatabaseUtils.appendSelectionArgs(selectionArgs,
-                            new String[] { Long.toString(ContentUris.parseId(uri)) });
+                            TABLE_BOOKMARKS + "." + PartnerBookmarksContract.Bookmarks.PARENT
+                                    + "=?");
+                    selectionArgs = DatabaseUtils.appendSelectionArgs(
+                            selectionArgs, new String[] {Long.toString(ContentUris.parseId(uri))});
                 }
                 // Set a default sort order if one isn't specified
                 if (TextUtils.isEmpty(sortOrder)) {
@@ -386,8 +372,8 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
                 }
                 qb.setProjectionMap(BOOKMARKS_PROJECTION_MAP);
                 String where = PartnerBookmarksContract.Bookmarks.PARENT + "=?";
-                where = DatabaseUtils.concatenateWhere(where, selection);
-                args = new String[] { Long.toString(FIXED_ID_PARTNER_BOOKMARKS_ROOT) };
+                        where = DatabaseUtils.concatenateWhere(where, selection);
+                args = new String[] {Long.toString(FIXED_ID_PARTNER_BOOKMARKS_ROOT)};
                 if (selectionArgs != null) {
                     args = DatabaseUtils.appendSelectionArgs(args, selectionArgs);
                 }
@@ -397,8 +383,8 @@ public class PartnerBookmarksProviderExample extends ContentProvider {
             }
 
             case URI_MATCH_BOOKMARKS_PARTNER_BOOKMARKS_FOLDER_ID: {
-                MatrixCursor c = new MatrixCursor(
-                        new String[] {PartnerBookmarksContract.Bookmarks.ID});
+                MatrixCursor c =
+                        new MatrixCursor(new String[] {PartnerBookmarksContract.Bookmarks.ID});
                 c.newRow().add(FIXED_ID_PARTNER_BOOKMARKS_ROOT);
                 return c;
             }
