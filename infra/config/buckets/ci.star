@@ -1045,15 +1045,6 @@ ci.fyi_ios_builder(
 )
 
 ci.fyi_ios_builder(
-    name = 'ios-simulator-cronet',
-    executable = 'recipe:chromium',
-    notifies = ['cronet'],
-    properties = {
-        'xcode_build_version': '11c29',
-    },
-)
-
-ci.fyi_ios_builder(
     name = 'ios-webkit-tot',
     caches = [xcode_cache.x11c505wk],
     executable = 'recipe:chromium',
@@ -1641,11 +1632,6 @@ ci.mac_ios_builder(
 )
 
 ci.mac_ios_builder(
-    name = 'ios-simulator-full-configs',
-    executable = 'recipe:chromium',
-)
-
-ci.mac_ios_builder(
     name = 'ios-simulator-noncq',
 )
 
@@ -1695,15 +1681,6 @@ ci.memory_builder(
 ci.memory_builder(
     name = 'Linux MSan Tests',
     triggered_by = ['Linux MSan Builder'],
-)
-
-ci.memory_builder(
-    name = 'Linux TSan Builder',
-)
-
-ci.memory_builder(
-    name = 'Linux TSan Tests',
-    triggered_by = ['Linux TSan Builder'],
 )
 
 ci.memory_builder(
