@@ -26899,6 +26899,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3198" label="CrossOriginOpenerPolicySameOriginAllowPopups"/>
   <int value="3199" label="CrossOriginEmbedderPolicyRequireCorp"/>
   <int value="3200" label="CoopAndCoepIsolated"/>
+  <int value="3201" label="WrongBaselineOfButtonElement"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
