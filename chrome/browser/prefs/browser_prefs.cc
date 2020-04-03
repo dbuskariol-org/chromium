@@ -554,6 +554,11 @@ const char kInvalidatorClientId[] = "invalidator.client_id";
 const char kInvalidatorInvalidationState[] = "invalidator.invalidation_state";
 const char kInvalidatorSavedInvalidations[] = "invalidator.saved_invalidations";
 
+#if defined(OS_CHROMEOS)
+// Deprecated 4/2020
+const char kAmbientModeTopicSource[] = "settings.ambient_mode.topic_source";
+#endif  // defined(OS_CHROMEOS)
+
 // Register prefs used only for migration (clearing or moving to a new key).
 void RegisterProfilePrefsForMigration(
     user_prefs::PrefRegistrySyncable* registry) {
@@ -652,6 +657,10 @@ void RegisterProfilePrefsForMigration(
   registry->RegisterStringPref(kInvalidatorClientId, std::string());
 
   chrome_browser_net::RegisterDNSProbesSettingBackupPref(registry);
+
+#if defined(OS_CHROMEOS)
+  registry->RegisterIntegerPref(kAmbientModeTopicSource, 0);
+#endif  // defined(OS_CHROMEOS)
 }
 
 }  // namespace
@@ -1326,4 +1335,9 @@ void MigrateObsoleteProfilePrefs(Profile* profile) {
   // Added 3/2020.
   profile_prefs->ClearPref(kDataReductionNetworkProperties);
   chrome_browser_net::MigrateDNSProbesSettingToOrFromBackup(profile_prefs);
+
+#if defined(OS_CHROMEOS)
+  // Added 4/2020.
+  profile_prefs->ClearPref(kAmbientModeTopicSource);
+#endif
 }
