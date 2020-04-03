@@ -5557,6 +5557,7 @@ crbug.com/942134 [ Win ] virtual/exotic-color-space/images/feature-policy-oversi
 crbug.com/943388 [ Win ] http/tests/devtools/network/network-recording-after-reload-with-screenshots-enabled.js [ Pass Failure ]
 
 # Sheriff 2019-03-20
+crbug.com/732103 [ Mac10.11 ] http/tests/shapedetection/shapedetection-cross-origin.html [ Timeout Pass ]
 crbug.com/943969 [ Win ] inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
 crbug.com/943969 [ Mac10.10 ] inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
 crbug.com/943969 [ Mac10.11 ] inspector-protocol/css/css-get-media-queries.js [ Pass Failure ]
