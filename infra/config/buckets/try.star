@@ -590,10 +590,12 @@ try_.chromium_mac_ios_builder(
 
 try_.chromium_mac_ios_builder(
     name = 'ios13-beta-simulator',
+    executable = 'recipe:chromium_trybot',
 )
 
 try_.chromium_mac_ios_builder(
     name = 'ios13-sdk-simulator',
+    executable = 'recipe:chromium_trybot',
 )
 
 try_.chromium_win_builder(
