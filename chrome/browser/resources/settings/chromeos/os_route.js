@@ -105,7 +105,7 @@ cr.define('settings', function() {
     r.OS_LANGUAGES_INPUT_METHODs =
         r.OS_LANGUAGES.createChild('/osLanguages/inputMethods');
 
-    r.PRINTING = r.ADVANCED.createSection('/printing', 'printing');
+    r.OS_PRINTING = r.ADVANCED.createSection('/osPrinting', 'osPrinting');
 
     r.OS_ACCESSIBILITY = r.ADVANCED.createSection('/osAccessibility', 'a11y');
 
@@ -150,7 +150,7 @@ cr.define('settings', function() {
     r.DATETIME = r.ADVANCED.createSection('/dateTime', 'dateTime');
     r.DATETIME_TIMEZONE_SUBPAGE = r.DATETIME.createChild('/dateTime/timeZone');
 
-    r.CUPS_PRINTERS = r.PRINTING.createChild('/cupsPrinters');
+    r.CUPS_PRINTERS = r.OS_PRINTING.createChild('/cupsPrinters');
 
     r.MANAGE_ACCESSIBILITY =
         r.OS_ACCESSIBILITY.createChild('/manageAccessibility');

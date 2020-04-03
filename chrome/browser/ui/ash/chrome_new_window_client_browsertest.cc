@@ -280,6 +280,8 @@ void TestAllOSSettingPages(const GURL& base_url) {
                      base_url.Resolve(chrome::kManageAccessibilitySubPage));
   TestOpenChromePage(ChromePage::NETWORKSTYPEVPN,
                      base_url.Resolve(chrome::kVPNSettingsSubPage));
+  TestOpenChromePage(ChromePage::OSPRINTING,
+                     base_url.Resolve(chrome::kOsPrintingSubPage));
   TestOpenChromePage(ChromePage::POINTEROVERLAY,
                      base_url.Resolve(chrome::kPointerOverlaySubPage));
   TestOpenChromePage(ChromePage::OSRESET,
@@ -363,6 +365,8 @@ void TestAllBrowserSettingPages(const GURL& base_url) {
                      base_url.Resolve(chrome::kPasswordManagerSubPage));
   TestOpenChromePage(ChromePage::RESET,
                      base_url.Resolve(chrome::kResetSubPage));
+  TestOpenChromePage(ChromePage::PRINTING,
+                     base_url.Resolve(chrome::kPrintingSettingsSubPage));
   TestOpenChromePage(ChromePage::SEARCH,
                      base_url.Resolve(chrome::kSearchSubPage));
   TestOpenChromePage(ChromePage::SYNCSETUP,

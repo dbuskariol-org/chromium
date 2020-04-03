@@ -389,6 +389,7 @@ extern const char kOsAccessibilitySubPage[];
 extern const char kOsLanguagesSubPage[];
 extern const char kOsLanguagesDetailsSubPage[];
 extern const char kOsLanguagesInputMethodsSubPage[];
+extern const char kOsPrintingSubPage[];
 extern const char kOsResetSubPage[];
 extern const char kOsSearchSubPage[];
 extern const char kPluginVmDetailsSubPage[];
