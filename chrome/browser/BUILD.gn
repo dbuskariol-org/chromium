@@ -682,6 +682,8 @@ jumbo_static_library("browser") {
     "media/cast_remoting_connector.h",
     "media/feeds/media_feeds_contents_observer.cc",
     "media/feeds/media_feeds_contents_observer.h",
+    "media/feeds/media_feeds_converter.cc",
+    "media/feeds/media_feeds_converter.h",
     "media/feeds/media_feeds_fetcher.cc",
     "media/feeds/media_feeds_fetcher.h",
     "media/feeds/media_feeds_service.cc",
