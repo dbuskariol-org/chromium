@@ -2272,8 +2272,8 @@ const FeatureEntry kFeatureEntries[] = {
      ENABLE_DISABLE_VALUE_TYPE(switches::kEnableZeroCopy,
                                switches::kDisableZeroCopy)},
     {"enable-vulkan", flag_descriptions::kEnableVulkanName,
-     flag_descriptions::kEnableVulkanDescription, kOsLinux | kOsAndroid,
-     FEATURE_VALUE_TYPE(features::kVulkan)},
+     flag_descriptions::kEnableVulkanDescription,
+     kOsWin | kOsLinux | kOsAndroid, FEATURE_VALUE_TYPE(features::kVulkan)},
 #if defined(OS_MACOSX)
     {"disable-hosted-app-shim-creation",
      flag_descriptions::kHostedAppShimCreationName,
