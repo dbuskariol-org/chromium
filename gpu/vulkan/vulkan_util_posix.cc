@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "gpu/vulkan/vulkan_posix_util.h"
+#include "gpu/vulkan/vulkan_util.h"
 
 #include "gpu/vulkan/vulkan_function_pointers.h"
 
 namespace gpu {
 
-VkSemaphore ImportVkSemaphoreHandlePosix(VkDevice vk_device,
-                                         SemaphoreHandle handle) {
+VkSemaphore ImportVkSemaphoreHandle(VkDevice vk_device,
+                                    SemaphoreHandle handle) {
   auto handle_type = handle.vk_handle_type();
   if (!handle.is_valid() ||
       (handle_type != VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT &&
@@ -44,7 +44,7 @@ VkSemaphore ImportVkSemaphoreHandlePosix(VkDevice vk_device,
   return semaphore;
 }
 
-SemaphoreHandle GetVkSemaphoreHandlePosix(
+SemaphoreHandle GetVkSemaphoreHandle(
     VkDevice vk_device,
     VkSemaphore vk_semaphore,
     VkExternalSemaphoreHandleTypeFlagBits handle_type) {
