@@ -33,26 +33,23 @@
 
 - (void)prepareCredentialListForServiceIdentifiers:
     (NSArray<ASCredentialServiceIdentifier*>*)serviceIdentifiers {
-  self.listCoordinator = [[CredentialListCoordinator alloc]
-      initWithBaseViewController:self
-                         context:self.extensionContext
-              serviceIdentifiers:serviceIdentifiers];
-  [self.listCoordinator start];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
-
-  // TODO(crbug.com/1045455): Remove, this is for testing purpose only.
   [self reauthenticateIfNeededWithCompletionHandler:^(
             ReauthenticationResult result) {
-    // TODO(crbug.com/1045455): Check result before cancelling.
-    [self.extensionContext
-        cancelRequestWithError:
-            [[NSError alloc]
-                initWithDomain:ASExtensionErrorDomain
-                          code:ASExtensionErrorCode::ASExtensionErrorCodeFailed
-                      userInfo:nil]];
+    if (result != ReauthenticationResult::kFailure) {
+      self.listCoordinator = [[CredentialListCoordinator alloc]
+          initWithBaseViewController:self
+                             context:self.extensionContext
+                  serviceIdentifiers:serviceIdentifiers];
+      [self.listCoordinator start];
+
+    } else {
+      [self.extensionContext
+          cancelRequestWithError:
+              [[NSError alloc] initWithDomain:ASExtensionErrorDomain
+                                         code:ASExtensionErrorCode::
+                                                  ASExtensionErrorCodeFailed
+                                     userInfo:nil]];
+    }
   }];
 }
 
