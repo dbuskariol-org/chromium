@@ -1647,6 +1647,7 @@ test("content_unittests") {
     "../browser/content_index/content_index_service_impl_unittest.cc",
     "../browser/conversions/conversion_host_unittest.cc",
     "../browser/conversions/conversion_policy_unittest.cc",
+    "../browser/conversions/conversion_storage_delegate_impl_unittest.cc",
     "../browser/conversions/conversion_storage_sql_unittest.cc",
     "../browser/conversions/conversion_storage_unittest.cc",
     "../browser/cookie_store/cookie_store_manager_unittest.cc",
