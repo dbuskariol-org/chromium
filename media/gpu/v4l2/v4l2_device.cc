@@ -47,6 +47,10 @@ namespace {
 // Maximum number of requests that can be created.
 constexpr size_t kMaxNumRequests = 32;
 
+gfx::Rect V4L2RectToGfxRect(const v4l2_rect& rect) {
+  return gfx::Rect(rect.left, rect.top, rect.width, rect.height);
+}
+
 }  // namespace
 
 V4L2ExtCtrl::V4L2ExtCtrl(uint32_t id) {
@@ -890,6 +894,46 @@ std::pair<base::Optional<struct v4l2_format>, int> V4L2Queue::GetFormat() {
   }
 
   return std::make_pair(format, 0);
+}
+
+base::Optional<gfx::Rect> V4L2Queue::GetVisibleRect() {
+  // Some drivers prior to 4.13 only accept the non-MPLANE variant when using
+  // VIDIOC_G_SELECTION. This block can be removed once we stop supporting
+  // kernels < 4.13.
+  // For details, see the note at
+  // https://www.kernel.org/doc/html/latest/media/uapi/v4l/vidioc-g-selection.html
+  enum v4l2_buf_type compose_type;
+  switch (type_) {
+    case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+      compose_type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+      break;
+    case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+      compose_type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+      break;
+    default:
+      compose_type = type_;
+      break;
+  }
+
+  struct v4l2_selection selection = {};
+  selection.type = compose_type;
+  selection.target = V4L2_SEL_TGT_COMPOSE;
+  if (device_->Ioctl(VIDIOC_G_SELECTION, &selection) == 0) {
+    DVQLOGF(3) << "VIDIOC_G_SELECTION is supported";
+    return V4L2RectToGfxRect(selection.r);
+  }
+
+  // TODO(acourbot) using VIDIOC_G_CROP is considered legacy and can be
+  // removed once no active devices use it anymore.
+  DVQLOGF(3) << "Fallback to VIDIOC_G_CROP";
+  struct v4l2_crop crop = {};
+  crop.type = type_;
+  if (device_->Ioctl(VIDIOC_G_CROP, &crop) == 0) {
+    return V4L2RectToGfxRect(crop.c);
+  }
+
+  VQLOGF(1) << "Failed to get visible rect";
+  return base::nullopt;
 }
 
 size_t V4L2Queue::AllocateBuffers(size_t count, enum v4l2_memory memory) {

@@ -309,6 +309,10 @@ class MEDIA_GPU_EXPORT V4L2Queue
   // is one or not.
   std::pair<base::Optional<struct v4l2_format>, int> GetFormat();
 
+  // Codec-specific method to get the visible rectangle of the queue, using the
+  // VIDIOC_G_SELECTION ioctl if available, or VIDIOC_G_CROP as a fallback.
+  base::Optional<gfx::Rect> GetVisibleRect();
+
   // Allocate |count| buffers for the current format of this queue, with a
   // specific |memory| allocation, and returns the number of buffers allocated
   // or zero if an error occurred, or if references to any previously allocated
