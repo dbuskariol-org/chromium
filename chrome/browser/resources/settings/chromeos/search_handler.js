@@ -32,6 +32,7 @@ cr.define('settings', function() {
     return settingsSearchHandler;
   }
 
+  // #cr_define_end
   return {
     setSearchHandlerForTesting,
     getSearchHandler,
