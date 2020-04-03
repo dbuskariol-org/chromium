@@ -115,6 +115,7 @@
 #include "chrome/grit/generated_resources.h"
 #include "chrome/installer/util/google_update_settings.h"
 #include "components/device_event_log/device_event_log.h"
+#include "components/embedder_support/switches.h"
 #include "components/flags_ui/pref_service_flags_storage.h"
 #include "components/google/core/common/google_util.h"
 #include "components/language/content/browser/geo_language_provider.h"
@@ -580,16 +581,17 @@ void ChromeBrowserMainParts::RecordBrowserStartupTime() {
 void ChromeBrowserMainParts::SetupOriginTrialsCommandLine(
     PrefService* local_state) {
   base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-  if (!command_line->HasSwitch(switches::kOriginTrialPublicKey)) {
+  if (!command_line->HasSwitch(embedder_support::kOriginTrialPublicKey)) {
     std::string new_public_key =
         local_state->GetString(prefs::kOriginTrialPublicKey);
     if (!new_public_key.empty()) {
       command_line->AppendSwitchASCII(
-          switches::kOriginTrialPublicKey,
+          embedder_support::kOriginTrialPublicKey,
           local_state->GetString(prefs::kOriginTrialPublicKey));
     }
   }
-  if (!command_line->HasSwitch(switches::kOriginTrialDisabledFeatures)) {
+  if (!command_line->HasSwitch(
+          embedder_support::kOriginTrialDisabledFeatures)) {
     const base::ListValue* override_disabled_feature_list =
         local_state->GetList(prefs::kOriginTrialDisabledFeatures);
     if (override_disabled_feature_list) {
@@ -603,12 +605,13 @@ void ChromeBrowserMainParts::SetupOriginTrialsCommandLine(
       if (!disabled_features.empty()) {
         const std::string override_disabled_features =
             base::JoinString(disabled_features, "|");
-        command_line->AppendSwitchASCII(switches::kOriginTrialDisabledFeatures,
-                                        override_disabled_features);
+        command_line->AppendSwitchASCII(
+            embedder_support::kOriginTrialDisabledFeatures,
+            override_disabled_features);
       }
     }
   }
-  if (!command_line->HasSwitch(switches::kOriginTrialDisabledTokens)) {
+  if (!command_line->HasSwitch(embedder_support::kOriginTrialDisabledTokens)) {
     const base::ListValue* disabled_token_list =
         local_state->GetList(prefs::kOriginTrialDisabledTokens);
     if (disabled_token_list) {
@@ -622,8 +625,9 @@ void ChromeBrowserMainParts::SetupOriginTrialsCommandLine(
       if (!disabled_tokens.empty()) {
         const std::string disabled_token_switch =
             base::JoinString(disabled_tokens, "|");
-        command_line->AppendSwitchASCII(switches::kOriginTrialDisabledTokens,
-                                        disabled_token_switch);
+        command_line->AppendSwitchASCII(
+            embedder_support::kOriginTrialDisabledTokens,
+            disabled_token_switch);
       }
     }
   }

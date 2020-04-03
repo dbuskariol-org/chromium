@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/origin_trials/chrome_origin_trial_policy.h"
+#include "components/embedder_support/origin_trials/origin_trial_policy_impl.h"
 
 #include <stdint.h>
-
 #include <vector>
 
 #include "base/base64.h"
@@ -13,9 +12,11 @@
 #include "base/feature_list.h"
 #include "base/stl_util.h"
 #include "base/strings/string_split.h"
-#include "chrome/common/chrome_switches.h"
+#include "components/embedder_support/switches.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/origin_util.h"
+
+namespace embedder_support {
 
 // This is the default public key used for validating signatures.
 static const uint8_t kDefaultPublicKey[] = {
@@ -24,7 +25,7 @@ static const uint8_t kDefaultPublicKey[] = {
     0x51, 0x14, 0x66, 0xaa, 0x02, 0x53, 0x4e, 0x33, 0xa1, 0x15,
 };
 
-ChromeOriginTrialPolicy::ChromeOriginTrialPolicy() {
+OriginTrialPolicyImpl::OriginTrialPolicyImpl() {
   public_keys_.push_back(
       std::string(reinterpret_cast<const char*>(kDefaultPublicKey),
                   base::size(kDefaultPublicKey)));
@@ -34,28 +35,28 @@ ChromeOriginTrialPolicy::ChromeOriginTrialPolicy() {
   // will remain active.
   if (base::CommandLine::InitializedForCurrentProcess()) {
     base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-    if (command_line->HasSwitch(switches::kOriginTrialPublicKey)) {
+    if (command_line->HasSwitch(kOriginTrialPublicKey)) {
       SetPublicKeysFromASCIIString(
-        command_line->GetSwitchValueASCII(switches::kOriginTrialPublicKey));
+          command_line->GetSwitchValueASCII(kOriginTrialPublicKey));
     }
-    if (command_line->HasSwitch(switches::kOriginTrialDisabledFeatures)) {
-      SetDisabledFeatures(command_line->GetSwitchValueASCII(
-          switches::kOriginTrialDisabledFeatures));
+    if (command_line->HasSwitch(kOriginTrialDisabledFeatures)) {
+      SetDisabledFeatures(
+          command_line->GetSwitchValueASCII(kOriginTrialDisabledFeatures));
     }
-    if (command_line->HasSwitch(switches::kOriginTrialDisabledTokens)) {
-      SetDisabledTokens(command_line->GetSwitchValueASCII(
-          switches::kOriginTrialDisabledTokens));
+    if (command_line->HasSwitch(kOriginTrialDisabledTokens)) {
+      SetDisabledTokens(
+          command_line->GetSwitchValueASCII(kOriginTrialDisabledTokens));
     }
   }
 }
 
-ChromeOriginTrialPolicy::~ChromeOriginTrialPolicy() {}
+OriginTrialPolicyImpl::~OriginTrialPolicyImpl() = default;
 
-bool ChromeOriginTrialPolicy::IsOriginTrialsSupported() const {
+bool OriginTrialPolicyImpl::IsOriginTrialsSupported() const {
   return true;
 }
 
-std::vector<base::StringPiece> ChromeOriginTrialPolicy::GetPublicKeys() const {
+std::vector<base::StringPiece> OriginTrialPolicyImpl::GetPublicKeys() const {
   std::vector<base::StringPiece> casted_public_keys;
   for (auto const& key : public_keys_) {
     casted_public_keys.push_back(base::StringPiece(key));
@@ -63,25 +64,24 @@ std::vector<base::StringPiece> ChromeOriginTrialPolicy::GetPublicKeys() const {
   return casted_public_keys;
 }
 
-bool ChromeOriginTrialPolicy::IsFeatureDisabled(
-    base::StringPiece feature) const {
+bool OriginTrialPolicyImpl::IsFeatureDisabled(base::StringPiece feature) const {
   return disabled_features_.count(feature.as_string()) > 0;
 }
 
-bool ChromeOriginTrialPolicy::IsTokenDisabled(
+bool OriginTrialPolicyImpl::IsTokenDisabled(
     base::StringPiece token_signature) const {
   return disabled_tokens_.count(token_signature.as_string()) > 0;
 }
 
-bool ChromeOriginTrialPolicy::IsOriginSecure(const GURL& url) const {
+bool OriginTrialPolicyImpl::IsOriginSecure(const GURL& url) const {
   return content::IsOriginSecure(url);
 }
 
-bool ChromeOriginTrialPolicy::SetPublicKeysFromASCIIString(
+bool OriginTrialPolicyImpl::SetPublicKeysFromASCIIString(
     const std::string& ascii_public_keys) {
   std::vector<std::string> new_public_keys;
-  const auto public_keys = base::SplitString(ascii_public_keys, ",",
-      base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+  const auto public_keys = base::SplitString(
+      ascii_public_keys, ",", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
   for (const auto& ascii_public_key : public_keys) {
     // Base64-decode the incoming string. Set the key if it is correctly
     // formatted
@@ -99,7 +99,7 @@ bool ChromeOriginTrialPolicy::SetPublicKeysFromASCIIString(
   return false;
 }
 
-bool ChromeOriginTrialPolicy::SetDisabledFeatures(
+bool OriginTrialPolicyImpl::SetDisabledFeatures(
     const std::string& disabled_feature_list) {
   std::set<std::string> new_disabled_features;
   const std::vector<std::string> features =
@@ -111,7 +111,7 @@ bool ChromeOriginTrialPolicy::SetDisabledFeatures(
   return true;
 }
 
-bool ChromeOriginTrialPolicy::SetDisabledTokens(
+bool OriginTrialPolicyImpl::SetDisabledTokens(
     const std::string& disabled_token_list) {
   std::set<std::string> new_disabled_tokens;
   const std::vector<std::string> tokens =
@@ -128,3 +128,5 @@ bool ChromeOriginTrialPolicy::SetDisabledTokens(
   disabled_tokens_.swap(new_disabled_tokens);
   return true;
 }
+
+}  // namespace embedder_support

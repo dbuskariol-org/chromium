@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/origin_trials/chrome_origin_trial_policy.h"
+#include "components/embedder_support/origin_trials/origin_trial_policy_impl.h"
 
 #include <memory>
 
@@ -11,8 +11,10 @@
 #include "base/stl_util.h"
 #include "base/strings/string_piece.h"
 #include "base/strings/string_util.h"
-#include "chrome/common/chrome_switches.h"
+#include "components/embedder_support/switches.h"
 #include "testing/gtest/include/gtest/gtest.h"
+
+namespace embedder_support {
 
 const uint8_t kTestPublicKey[] = {
     0x75, 0x10, 0xac, 0xf9, 0x3a, 0x1c, 0xb8, 0xa9, 0x28, 0x70, 0xd2,
@@ -25,16 +27,16 @@ const char kTestPublicKeyString[] =
     "dRCs+TocuKkocNKa0AtZ4awrt9XKH2SQCI6o4FY6BNA=";
 
 const uint8_t kTwoTestPublicKeys[][32] = {
-{
-    0x75, 0x10, 0xac, 0xf9, 0x3a, 0x1c, 0xb8, 0xa9, 0x28, 0x70, 0xd2,
-    0x9a, 0xd0, 0x0b, 0x59, 0xe1, 0xac, 0x2b, 0xb7, 0xd5, 0xca, 0x1f,
-    0x64, 0x90, 0x08, 0x8e, 0xa8, 0xe0, 0x56, 0x3a, 0x04, 0xd0,
-},
-{
-    0x50, 0x07, 0x4d, 0x76, 0x55, 0x56, 0x42, 0x17, 0x2d, 0x8a, 0x9c,
-    0x47, 0x96, 0x25, 0xda, 0x70, 0xaa, 0xb9, 0xfd, 0x53, 0x5d, 0x51,
-    0x3e, 0x16, 0xab, 0xb4, 0x86, 0xea, 0xf3, 0x35, 0xc6, 0xca,
-}};
+    {
+        0x75, 0x10, 0xac, 0xf9, 0x3a, 0x1c, 0xb8, 0xa9, 0x28, 0x70, 0xd2,
+        0x9a, 0xd0, 0x0b, 0x59, 0xe1, 0xac, 0x2b, 0xb7, 0xd5, 0xca, 0x1f,
+        0x64, 0x90, 0x08, 0x8e, 0xa8, 0xe0, 0x56, 0x3a, 0x04, 0xd0,
+    },
+    {
+        0x50, 0x07, 0x4d, 0x76, 0x55, 0x56, 0x42, 0x17, 0x2d, 0x8a, 0x9c,
+        0x47, 0x96, 0x25, 0xda, 0x70, 0xaa, 0xb9, 0xfd, 0x53, 0x5d, 0x51,
+        0x3e, 0x16, 0xab, 0xb4, 0x86, 0xea, 0xf3, 0x35, 0xc6, 0xca,
+    }};
 const int kTwoTestPublicKeysSize = 2;
 
 // Comma-separated Base64 encodings of the above sample public keys.
@@ -100,9 +102,9 @@ const char kToken3SignatureEncoded[] =
     "mhktqL2v3xCA==";
 const char kTokenSeparator[] = "|";
 
-class ChromeOriginTrialPolicyTest : public testing::Test {
+class OriginTrialPolicyImplTest : public testing::Test {
  protected:
-  ChromeOriginTrialPolicyTest()
+  OriginTrialPolicyImplTest()
       : token1_signature_(
             std::string(reinterpret_cast<const char*>(kToken1Signature),
                         base::size(kToken1Signature))),
@@ -119,7 +121,7 @@ class ChromeOriginTrialPolicyTest : public testing::Test {
             base::JoinString({kToken1SignatureEncoded, kToken2SignatureEncoded,
                               kToken3SignatureEncoded},
                              kTokenSeparator)),
-        manager_(base::WrapUnique(new ChromeOriginTrialPolicy())),
+        manager_(base::WrapUnique(new OriginTrialPolicyImpl())),
         default_keys_(manager_->GetPublicKeys()) {
     test_keys_.push_back(
         base::StringPiece(reinterpret_cast<const char*>(kTestPublicKey),
@@ -131,7 +133,7 @@ class ChromeOriginTrialPolicyTest : public testing::Test {
     }
   }
 
-  ChromeOriginTrialPolicy* manager() { return manager_.get(); }
+  OriginTrialPolicyImpl* manager() { return manager_.get(); }
   std::vector<base::StringPiece> default_keys() { return default_keys_; }
   std::vector<base::StringPiece> test_keys() { return test_keys_; }
   std::vector<base::StringPiece> test_keys2() { return test_keys2_; }
@@ -142,13 +144,13 @@ class ChromeOriginTrialPolicyTest : public testing::Test {
   std::string three_disabled_tokens_;
 
  private:
-  std::unique_ptr<ChromeOriginTrialPolicy> manager_;
+  std::unique_ptr<OriginTrialPolicyImpl> manager_;
   std::vector<base::StringPiece> default_keys_;
   std::vector<base::StringPiece> test_keys_;
   std::vector<base::StringPiece> test_keys2_;
 };
 
-TEST_F(ChromeOriginTrialPolicyTest, DefaultConstructor) {
+TEST_F(OriginTrialPolicyImplTest, DefaultConstructor) {
   // We don't specify here what the keys should be, but make sure those are
   // returned, valid and consistent.
   for (base::StringPiece key : manager()->GetPublicKeys()) {
@@ -157,79 +159,79 @@ TEST_F(ChromeOriginTrialPolicyTest, DefaultConstructor) {
   EXPECT_EQ(default_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DefaultKeysAreConsistent) {
-  ChromeOriginTrialPolicy manager2;
+TEST_F(OriginTrialPolicyImplTest, DefaultKeysAreConsistent) {
+  OriginTrialPolicyImpl manager2;
   EXPECT_EQ(manager()->GetPublicKeys(), manager2.GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverridePublicKeys) {
+TEST_F(OriginTrialPolicyImplTest, OverridePublicKeys) {
   EXPECT_TRUE(manager()->SetPublicKeysFromASCIIString(kTestPublicKeyString));
   EXPECT_EQ(test_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverridePublicKeysWithTwoKeys) {
+TEST_F(OriginTrialPolicyImplTest, OverridePublicKeysWithTwoKeys) {
   EXPECT_TRUE(
       manager()->SetPublicKeysFromASCIIString(kTwoTestPublicKeysString));
   EXPECT_EQ(test_keys2(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverrideKeysNotBase64) {
+TEST_F(OriginTrialPolicyImplTest, OverrideKeysNotBase64) {
   EXPECT_FALSE(
       manager()->SetPublicKeysFromASCIIString(kBadEncodingPublicKeyString));
   EXPECT_EQ(default_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverrideKeysTooShort) {
+TEST_F(OriginTrialPolicyImplTest, OverrideKeysTooShort) {
   EXPECT_FALSE(
       manager()->SetPublicKeysFromASCIIString(kTooShortPublicKeyString));
   EXPECT_EQ(default_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverrideKeysTooLong) {
+TEST_F(OriginTrialPolicyImplTest, OverrideKeysTooLong) {
   EXPECT_FALSE(
       manager()->SetPublicKeysFromASCIIString(kTooLongPublicKeyString));
   EXPECT_EQ(default_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverridePublicKeysWithBadAndGoodKey) {
+TEST_F(OriginTrialPolicyImplTest, OverridePublicKeysWithBadAndGoodKey) {
   EXPECT_FALSE(
       manager()->SetPublicKeysFromASCIIString(kTwoPublicKeysString_BadAndGood));
   EXPECT_EQ(default_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, OverridePublicKeysWithTwoBadKeys) {
+TEST_F(OriginTrialPolicyImplTest, OverridePublicKeysWithTwoBadKeys) {
   EXPECT_FALSE(
       manager()->SetPublicKeysFromASCIIString(kTwoBadPublicKeysString));
   EXPECT_EQ(default_keys(), manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, NoDisabledFeatures) {
+TEST_F(OriginTrialPolicyImplTest, NoDisabledFeatures) {
   EXPECT_FALSE(manager()->IsFeatureDisabled("A"));
   EXPECT_FALSE(manager()->IsFeatureDisabled("B"));
   EXPECT_FALSE(manager()->IsFeatureDisabled("C"));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableOneFeature) {
+TEST_F(OriginTrialPolicyImplTest, DisableOneFeature) {
   EXPECT_TRUE(manager()->SetDisabledFeatures(kOneDisabledFeature));
   EXPECT_TRUE(manager()->IsFeatureDisabled("A"));
   EXPECT_FALSE(manager()->IsFeatureDisabled("B"));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableTwoFeatures) {
+TEST_F(OriginTrialPolicyImplTest, DisableTwoFeatures) {
   EXPECT_TRUE(manager()->SetDisabledFeatures(kTwoDisabledFeatures));
   EXPECT_TRUE(manager()->IsFeatureDisabled("A"));
   EXPECT_TRUE(manager()->IsFeatureDisabled("B"));
   EXPECT_FALSE(manager()->IsFeatureDisabled("C"));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableThreeFeatures) {
+TEST_F(OriginTrialPolicyImplTest, DisableThreeFeatures) {
   EXPECT_TRUE(manager()->SetDisabledFeatures(kThreeDisabledFeatures));
   EXPECT_TRUE(manager()->IsFeatureDisabled("A"));
   EXPECT_TRUE(manager()->IsFeatureDisabled("B"));
   EXPECT_TRUE(manager()->IsFeatureDisabled("C"));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableFeatureWithSpace) {
+TEST_F(OriginTrialPolicyImplTest, DisableFeatureWithSpace) {
   EXPECT_TRUE(manager()->SetDisabledFeatures(kSpacesInDisabledFeatures));
   EXPECT_TRUE(manager()->IsFeatureDisabled("A"));
   EXPECT_TRUE(manager()->IsFeatureDisabled("B C"));
@@ -237,26 +239,26 @@ TEST_F(ChromeOriginTrialPolicyTest, DisableFeatureWithSpace) {
   EXPECT_FALSE(manager()->IsFeatureDisabled("C"));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, NoDisabledTokens) {
+TEST_F(OriginTrialPolicyImplTest, NoDisabledTokens) {
   EXPECT_FALSE(manager()->IsTokenDisabled(token1_signature_));
   EXPECT_FALSE(manager()->IsTokenDisabled(token2_signature_));
   EXPECT_FALSE(manager()->IsTokenDisabled(token3_signature_));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableOneToken) {
+TEST_F(OriginTrialPolicyImplTest, DisableOneToken) {
   EXPECT_TRUE(manager()->SetDisabledTokens(kToken1SignatureEncoded));
   EXPECT_TRUE(manager()->IsTokenDisabled(token1_signature_));
   EXPECT_FALSE(manager()->IsTokenDisabled(token2_signature_));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableTwoTokens) {
+TEST_F(OriginTrialPolicyImplTest, DisableTwoTokens) {
   EXPECT_TRUE(manager()->SetDisabledTokens(two_disabled_tokens_));
   EXPECT_TRUE(manager()->IsTokenDisabled(token1_signature_));
   EXPECT_TRUE(manager()->IsTokenDisabled(token2_signature_));
   EXPECT_FALSE(manager()->IsTokenDisabled(token3_signature_));
 }
 
-TEST_F(ChromeOriginTrialPolicyTest, DisableThreeTokens) {
+TEST_F(OriginTrialPolicyImplTest, DisableThreeTokens) {
   EXPECT_TRUE(manager()->SetDisabledTokens(three_disabled_tokens_));
   EXPECT_TRUE(manager()->IsTokenDisabled(token1_signature_));
   EXPECT_TRUE(manager()->IsTokenDisabled(token2_signature_));
@@ -264,53 +266,54 @@ TEST_F(ChromeOriginTrialPolicyTest, DisableThreeTokens) {
 }
 
 // Tests for initialization from command line
-class ChromeOriginTrialPolicyInitializationTest
-    : public ChromeOriginTrialPolicyTest {
+class OriginTrialPolicyImplInitializationTest
+    : public OriginTrialPolicyImplTest {
  protected:
-  ChromeOriginTrialPolicyInitializationTest() {}
+  OriginTrialPolicyImplInitializationTest() {}
 
-  ChromeOriginTrialPolicy* initialized_manager() {
+  OriginTrialPolicyImpl* initialized_manager() {
     return initialized_manager_.get();
   }
 
   void SetUp() override {
-    ChromeOriginTrialPolicyTest::SetUp();
+    OriginTrialPolicyImplTest::SetUp();
 
     base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-    ASSERT_FALSE(command_line->HasSwitch(switches::kOriginTrialPublicKey));
-    ASSERT_FALSE(
-        command_line->HasSwitch(switches::kOriginTrialDisabledFeatures));
-    ASSERT_FALSE(command_line->HasSwitch(switches::kOriginTrialDisabledTokens));
+    ASSERT_FALSE(command_line->HasSwitch(kOriginTrialPublicKey));
+    ASSERT_FALSE(command_line->HasSwitch(kOriginTrialDisabledFeatures));
+    ASSERT_FALSE(command_line->HasSwitch(kOriginTrialDisabledTokens));
 
     // Setup command line with various updated values
     // New public key
-    command_line->AppendSwitchASCII(switches::kOriginTrialPublicKey,
+    command_line->AppendSwitchASCII(kOriginTrialPublicKey,
                                     kTestPublicKeyString);
     // One disabled feature
-    command_line->AppendSwitchASCII(switches::kOriginTrialDisabledFeatures,
+    command_line->AppendSwitchASCII(kOriginTrialDisabledFeatures,
                                     kOneDisabledFeature);
     // One disabled token
-    command_line->AppendSwitchASCII(switches::kOriginTrialDisabledTokens,
+    command_line->AppendSwitchASCII(kOriginTrialDisabledTokens,
                                     kToken1SignatureEncoded);
 
-    initialized_manager_ = base::WrapUnique(new ChromeOriginTrialPolicy());
+    initialized_manager_ = base::WrapUnique(new OriginTrialPolicyImpl());
   }
 
  private:
-  std::unique_ptr<ChromeOriginTrialPolicy> initialized_manager_;
+  std::unique_ptr<OriginTrialPolicyImpl> initialized_manager_;
 };
 
-TEST_F(ChromeOriginTrialPolicyInitializationTest, PublicKeyInitialized) {
+TEST_F(OriginTrialPolicyImplInitializationTest, PublicKeyInitialized) {
   EXPECT_NE(default_keys(), initialized_manager()->GetPublicKeys());
   EXPECT_EQ(test_keys(), initialized_manager()->GetPublicKeys());
 }
 
-TEST_F(ChromeOriginTrialPolicyInitializationTest, DisabledFeaturesInitialized) {
+TEST_F(OriginTrialPolicyImplInitializationTest, DisabledFeaturesInitialized) {
   EXPECT_TRUE(initialized_manager()->IsFeatureDisabled("A"));
   EXPECT_FALSE(initialized_manager()->IsFeatureDisabled("B"));
 }
 
-TEST_F(ChromeOriginTrialPolicyInitializationTest, DisabledTokensInitialized) {
+TEST_F(OriginTrialPolicyImplInitializationTest, DisabledTokensInitialized) {
   EXPECT_TRUE(initialized_manager()->IsTokenDisabled(token1_signature_));
   EXPECT_FALSE(initialized_manager()->IsTokenDisabled(token2_signature_));
 }
+
+}  // namespace embedder_support
