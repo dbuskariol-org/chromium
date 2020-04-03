@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/browser_xr_runtime_impl.h"
+#include "content/browser/xr/service/browser_xr_runtime_impl.h"
 
 #include <algorithm>
 #include <memory>
@@ -11,8 +11,8 @@
 #include "base/bind_helpers.h"
 #include "base/numerics/ranges.h"
 #include "build/build_config.h"
-#include "chrome/browser/vr/chrome_xr_integration_client.h"
-#include "chrome/browser/vr/service/vr_service_impl.h"
+#include "content/browser/xr/service/vr_service_impl.h"
+#include "content/browser/xr/xr_utils.h"
 #include "content/public/browser/xr_install_helper.h"
 #include "content/public/browser/xr_integration_client.h"
 #include "content/public/common/content_features.h"
@@ -22,8 +22,7 @@
 #include "ui/gfx/transform.h"
 #include "ui/gfx/transform_util.h"
 
-namespace vr {
-
+namespace content {
 namespace {
 bool IsValidTransform(const gfx::Transform& transform,
                       float max_translate_meters) {
@@ -226,7 +225,7 @@ BrowserXRRuntimeImpl::BrowserXRRuntimeImpl(
 
   // TODO(crbug.com/1031622): Convert this to a query for the client off of
   // ContentBrowserClient once BrowserXRRuntimeImpl moves to content.
-  auto* integration_client = ChromeXrIntegrationClient::GetInstance();
+  auto* integration_client = GetXrIntegrationClient();
 
   if (integration_client) {
     install_helper_ = integration_client->GetInstallHelper(id_);
@@ -578,4 +577,4 @@ void BrowserXRRuntimeImpl::BeforeRuntimeRemoved() {
   StopImmersiveSession(base::DoNothing());
 }
 
-}  // namespace vr
+}  // namespace content

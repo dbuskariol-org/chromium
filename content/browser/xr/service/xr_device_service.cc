@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/xr_device_service.h"
+#include "content/browser/xr/service/xr_device_service.h"
 
 #include "base/no_destructor.h"
 #include "build/build_config.h"
-#include "chrome/browser/vr/xr_test_utils.h"
 #include "content/public/browser/service_process_host.h"
 
-namespace vr {
+namespace content {
 
 namespace {
 
@@ -51,9 +50,9 @@ const mojo::Remote<device::mojom::XRDeviceService>& GetXRDeviceService() {
   return *remote;
 }
 
-void SetXRDeviceServiceStartupCallbackForTesting(
+void SetXRDeviceServiceStartupCallbackForTestingInternal(
     base::RepeatingClosure callback) {
   GetStartupCallback() = std::move(callback);
 }
 
-}  // namespace vr
+}  // namespace content

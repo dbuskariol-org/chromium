@@ -2,17 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/isolated_device_provider.h"
+#include "content/browser/xr/service/isolated_device_provider.h"
 
 #include "base/bind.h"
-#include "chrome/browser/vr/chrome_xr_integration_client.h"
-#include "chrome/browser/vr/service/xr_device_service.h"
+#include "content/browser/xr/service/xr_device_service.h"
+#include "content/browser/xr/xr_utils.h"
+#include "content/public/browser/xr_integration_client.h"
 
 namespace {
 constexpr int kMaxRetries = 3;
 }
 
-namespace vr {
+namespace content {
 
 void IsolatedVRDeviceProvider::Initialize(
     base::RepeatingCallback<void(device::mojom::XRDeviceId,
@@ -39,7 +40,7 @@ void IsolatedVRDeviceProvider::OnDeviceAdded(
     device::mojom::XRDeviceId device_id) {
   add_device_callback_.Run(device_id, nullptr, std::move(device));
 
-  auto* integration_client = ChromeXrIntegrationClient::GetInstance();
+  auto* integration_client = GetXrIntegrationClient();
   if (!integration_client)
     return;
 
@@ -107,4 +108,4 @@ IsolatedVRDeviceProvider::IsolatedVRDeviceProvider() = default;
 // Default destructor handles renderer_host_map_ cleanup.
 IsolatedVRDeviceProvider::~IsolatedVRDeviceProvider() = default;
 
-}  // namespace vr
+}  // namespace content

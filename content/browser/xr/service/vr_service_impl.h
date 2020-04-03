@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_SERVICE_VR_SERVICE_IMPL_H_
-#define CHROME_BROWSER_VR_SERVICE_VR_SERVICE_IMPL_H_
+#ifndef CONTENT_BROWSER_XR_SERVICE_VR_SERVICE_IMPL_H_
+#define CONTENT_BROWSER_XR_SERVICE_VR_SERVICE_IMPL_H_
 
 #include <map>
 #include <memory>
@@ -13,8 +13,8 @@
 #include "base/macros.h"
 #include "base/util/type_safety/pass_key.h"
 #include "build/build_config.h"
-#include "chrome/browser/vr/metrics/session_metrics_helper.h"
-#include "components/content_settings/core/common/content_settings.h"
+#include "content/browser/xr/metrics/session_metrics_helper.h"
+#include "content/common/content_export.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/xr_consent_helper.h"
 #include "content/public/browser/xr_consent_prompt_level.h"
@@ -25,13 +25,13 @@
 #include "mojo/public/cpp/bindings/remote.h"
 #include "mojo/public/cpp/bindings/remote_set.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
-
+#include "third_party/blink/public/mojom/permissions/permission_status.mojom-forward.h"
 namespace content {
 class RenderFrameHost;
 class WebContents;
 }  // namespace content
 
-namespace vr {
+namespace content {
 
 class XRRuntimeManagerImpl;
 class XRRuntimeManagerTest;
@@ -39,8 +39,8 @@ class BrowserXRRuntimeImpl;
 
 // Browser process implementation of the VRService mojo interface. Instantiated
 // through Mojo once the user loads a page containing WebXR.
-class VRServiceImpl : public device::mojom::VRService,
-                      content::WebContentsObserver {
+class CONTENT_EXPORT VRServiceImpl : public device::mojom::VRService,
+                                     content::WebContentsObserver {
  public:
   explicit VRServiceImpl(content::RenderFrameHost* render_frame_host);
 
@@ -140,7 +140,7 @@ class VRServiceImpl : public device::mojom::VRService,
                        bool is_consent_granted);
   void OnPermissionResult(SessionRequestData request,
                           content::XrConsentPromptLevel consent_level,
-                          ContentSetting setting_value);
+                          blink::mojom::PermissionStatus permission_status);
 
   void EnsureRuntimeInstalled(SessionRequestData request,
                               BrowserXRRuntimeImpl* runtime);
@@ -184,6 +184,6 @@ class VRServiceImpl : public device::mojom::VRService,
   DISALLOW_COPY_AND_ASSIGN(VRServiceImpl);
 };
 
-}  // namespace vr
+}  // namespace content
 
-#endif  // CHROME_BROWSER_VR_SERVICE_VR_SERVICE_IMPL_H_
+#endif  // CONTENT_BROWSER_XR_SERVICE_VR_SERVICE_IMPL_H_

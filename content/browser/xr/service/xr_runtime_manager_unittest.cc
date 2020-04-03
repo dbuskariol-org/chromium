@@ -10,9 +10,10 @@
 #include "base/callback.h"
 #include "base/macros.h"
 #include "base/memory/ptr_util.h"
-#include "chrome/browser/vr/service/vr_service_impl.h"
-#include "chrome/browser/vr/service/xr_runtime_manager_impl.h"
-#include "chrome/browser/vr/xr_runtime_manager_statics.h"
+#include "base/test/task_environment.h"
+#include "content/browser/xr/service/vr_service_impl.h"
+#include "content/browser/xr/service/xr_runtime_manager_impl.h"
+#include "content/public/browser/xr_runtime_manager.h"
 #include "device/vr/public/mojom/vr_service.mojom.h"
 #include "device/vr/test/fake_vr_device.h"
 #include "device/vr/test/fake_vr_device_provider.h"
@@ -21,7 +22,7 @@
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-namespace vr {
+namespace content {
 
 class XRRuntimeManagerTest : public testing::Test {
  protected:
@@ -38,20 +39,25 @@ class XRRuntimeManagerTest : public testing::Test {
 
   void TearDown() override {
     DropRuntimeManagerRef();
-    EXPECT_EQ(XRRuntimeManagerStatics::GetInstanceIfCreated(), nullptr);
+    EXPECT_EQ(XRRuntimeManager::GetInstanceIfCreated(), nullptr);
   }
 
   std::unique_ptr<VRServiceImpl> BindService() {
+    // The mojom bindings that get run as part of adding a device need to run on
+    // a single thread.
+    base::test::SingleThreadTaskEnvironment task_environment;
     mojo::PendingRemote<device::mojom::VRServiceClient> proxy;
     device::FakeVRServiceClient client(proxy.InitWithNewPipeAndPassReceiver());
     auto service =
         std::make_unique<VRServiceImpl>(util::PassKey<XRRuntimeManagerTest>());
     service->SetClient(std::move(proxy));
+    base::RunLoop run_loop;
+    run_loop.RunUntilIdle();
     return service;
   }
 
   scoped_refptr<XRRuntimeManagerImpl> GetRuntimeManager() {
-    EXPECT_NE(XRRuntimeManagerStatics::GetInstanceIfCreated(), nullptr);
+    EXPECT_NE(XRRuntimeManager::GetInstanceIfCreated(), nullptr);
     return XRRuntimeManagerImpl::GetOrCreateInstance();
   }
 
@@ -65,7 +71,7 @@ class XRRuntimeManagerTest : public testing::Test {
   }
 
   device::FakeVRDeviceProvider* Provider() {
-    EXPECT_NE(XRRuntimeManagerStatics::GetInstanceIfCreated(), nullptr);
+    EXPECT_NE(XRRuntimeManager::GetInstanceIfCreated(), nullptr);
     return provider_;
   }
 
@@ -116,7 +122,7 @@ TEST_F(XRRuntimeManagerTest, DeviceManagerRegistration) {
   service_2.reset();
 
   DropRuntimeManagerRef();
-  EXPECT_EQ(XRRuntimeManagerStatics::GetInstanceIfCreated(), nullptr);
+  EXPECT_EQ(XRRuntimeManager::GetInstanceIfCreated(), nullptr);
 }
 
 // Ensure that devices added and removed are reflected in calls to request
@@ -125,9 +131,15 @@ TEST_F(XRRuntimeManagerTest, AddRemoveDevices) {
   auto service = BindService();
   EXPECT_EQ(1u, ServiceCount());
   EXPECT_TRUE(Provider()->Initialized());
+
+  // The mojom bindings that get run as part of adding a device need to run on
+  // a single thread.
+  base::test::SingleThreadTaskEnvironment task_environment;
+  base::RunLoop run_loop;
   device::FakeVRDevice* device = new device::FakeVRDevice(
       device::mojom::XRDeviceId::ORIENTATION_DEVICE_ID);
   Provider()->AddDevice(base::WrapUnique(device));
+  run_loop.RunUntilIdle();
 
   device::mojom::XRSessionOptions options = {};
   options.mode = device::mojom::XRSessionMode::kInline;
@@ -136,4 +148,4 @@ TEST_F(XRRuntimeManagerTest, AddRemoveDevices) {
   EXPECT_TRUE(!GetRuntimeManager()->GetRuntimeForOptions(&options));
 }
 
-}  // namespace vr
+}  // namespace content

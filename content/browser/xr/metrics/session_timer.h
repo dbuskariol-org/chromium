@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_METRICS_SESSION_TIMER_H_
-#define CHROME_BROWSER_VR_METRICS_SESSION_TIMER_H_
+#ifndef CONTENT_BROWSER_XR_METRICS_SESSION_TIMER_H_
+#define CONTENT_BROWSER_XR_METRICS_SESSION_TIMER_H_
 
 #include "base/time/time.h"
 
-namespace vr {
+namespace content {
 
 // SessionTimer will monitor the time between calls to StartSession and
 // StopSession.  It will combine multiple segments into a single session if they
@@ -49,6 +49,6 @@ class SessionTimer {
   base::TimeDelta minimum_duration_;
 };
 
-}  // namespace vr
+}  // namespace content
 
-#endif  // CHROME_BROWSER_VR_METRICS_SESSION_TIMER_H_
+#endif  // CONTENT_BROWSER_XR_METRICS_SESSION_TIMER_H_

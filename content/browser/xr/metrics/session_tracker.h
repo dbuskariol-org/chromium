@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_METRICS_SESSION_TRACKER_H_
-#define CHROME_BROWSER_VR_METRICS_SESSION_TRACKER_H_
+#ifndef CONTENT_BROWSER_XR_METRICS_SESSION_TRACKER_H_
+#define CONTENT_BROWSER_XR_METRICS_SESSION_TRACKER_H_
 
 #include <memory>
 #include <utility>
@@ -12,7 +12,7 @@
 #include "base/time/time.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
 
-namespace vr {
+namespace content {
 
 // SessionTracker tracks UKM data for sessions and sends the data upon request.
 template <class T>
@@ -64,6 +64,6 @@ class SessionTracker {
   base::Time stop_time_;
 };
 
-}  // namespace vr
+}  // namespace content
 
-#endif  // CHROME_BROWSER_VR_METRICS_SESSION_TRACKER_H_
+#endif  // CONTENT_BROWSER_XR_METRICS_SESSION_TRACKER_H_
