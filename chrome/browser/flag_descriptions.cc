@@ -1156,6 +1156,10 @@ const char kNativeFileSystemAPIDescription[] =
     "Enables the experimental Native File System API, giving websites access "
     "to the native file system";
 
+const char kNearbySharingName[] = "Nearby Sharing";
+const char kNearbySharingDescription[] =
+    "Enables Nearby Sharing for sharing content between devices.";
+
 const char kNewUsbBackendName[] = "Enable new USB backend";
 const char kNewUsbBackendDescription[] =
     "Enables the new experimental USB backend for Windows.";

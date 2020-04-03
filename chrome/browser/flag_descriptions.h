@@ -690,6 +690,9 @@ extern const char kMouseSubframeNoImplicitCaptureDescription[];
 extern const char kNativeFileSystemAPIName[];
 extern const char kNativeFileSystemAPIDescription[];
 
+extern const char kNearbySharingName[];
+extern const char kNearbySharingDescription[];
+
 extern const char kUsernameFirstFlowName[];
 extern const char kUsernameFirstFlowDescription[];
 

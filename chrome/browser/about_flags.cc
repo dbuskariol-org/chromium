@@ -5198,6 +5198,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kMediaHistoryDescription, kOsAll,
      FEATURE_VALUE_TYPE(media::kUseMediaHistoryStore)},
 
+#if !defined(OS_ANDROID)
+    {"nearby-sharing", flag_descriptions::kNearbySharingName,
+     flag_descriptions::kNearbySharingDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(features::kNearbySharing)},
+#endif  // !defined(OS_ANDROID)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

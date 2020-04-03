@@ -2824,6 +2824,11 @@
     "expiry_milestone":  84
   },
   {
+    "name": "nearby-sharing",
+    "owners": [ "vecore@google.com", "cros-system-services@google.com", "cross-device-team@google.com"],
+    "expiry_milestone":  90
+  },
+  {
     "name": "network-service-in-process",
     "owners": [ "network-service-dev" ],
     "expiry_milestone": 84
