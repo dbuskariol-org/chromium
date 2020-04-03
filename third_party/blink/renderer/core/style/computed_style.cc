@@ -1072,7 +1072,7 @@ void ComputedStyle::UpdateIsStackingContext(bool is_document_element,
 }
 
 void ComputedStyle::AddCallbackSelector(const String& selector) {
-  if (!CallbackSelectorsInternal().Contains(selector))
+  if (!CallbackSelectors().Contains(selector))
     MutableCallbackSelectorsInternal().push_back(selector);
 }
 

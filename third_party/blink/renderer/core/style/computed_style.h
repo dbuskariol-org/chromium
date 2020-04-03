@@ -1256,9 +1256,6 @@ class ComputedStyle : public ComputedStyleBase,
   CSSTransitionData& AccessTransitions();
 
   // Callback selectors.
-  const Vector<String>& CallbackSelectors() const {
-    return CallbackSelectorsInternal();
-  }
   void AddCallbackSelector(const String& selector);
 
   // Non-property flags.
