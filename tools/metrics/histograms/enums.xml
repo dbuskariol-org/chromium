@@ -33106,6 +33106,23 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="20" label="Duplicate entry"/>
 </enum>
 
+<enum name="ICUCreateInstanceCode">
+  <summary>Recorded when ICU create instance of key objects.</summary>
+  <int value="0" label="Character Break Iterator"/>
+  <int value="1" label="Word Break Iterator"/>
+  <int value="2" label="Line Break Iterator"/>
+  <int value="3" label="Line Break Iterator (type=loose)"/>
+  <int value="4" label="Line Break Iterator (type=normal)"/>
+  <int value="5" label="Line Break Iterator (type=strict)"/>
+  <int value="6" label="Sentence Break Iterator"/>
+  <int value="7" label="Title Break Iterator"/>
+  <int value="8" label="Thai Break Engine"/>
+  <int value="9" label="Lao Break Engine"/>
+  <int value="10" label="Burmese Break Engine"/>
+  <int value="11" label="Khmer Break Engine"/>
+  <int value="12" label="Chinese/Japanese Break Engine"/>
+</enum>
+
 <enum name="ICUDataFileCode">
   <summary>
     Hash values for strings of the ICU built-in data file names.
