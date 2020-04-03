@@ -89,6 +89,7 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   extensions::DeveloperPrivateAPI::GetFactoryInstance();
   extensions::ExtensionActionAPI::GetFactoryInstance();
   extensions::ExtensionGarbageCollectorFactory::GetInstance();
+  extensions::ExtensionGCMAppHandler::GetFactoryInstance();
   extensions::ExtensionSystemFactory::GetInstance();
   extensions::ExtensionWebUIOverrideRegistrar::GetFactoryInstance();
   extensions::FontSettingsAPI::GetFactoryInstance();
@@ -133,7 +134,6 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   extensions::WebNavigationAPI::GetFactoryInstance();
   extensions::WebrtcAudioPrivateEventService::GetFactoryInstance();
   ToolbarActionsModelFactory::GetInstance();
-  extensions::ExtensionGCMAppHandler::GetFactoryInstance();
 }
 
 }  // namespace chrome_extensions

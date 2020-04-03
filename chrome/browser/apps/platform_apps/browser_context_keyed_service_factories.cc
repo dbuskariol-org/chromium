@@ -13,9 +13,10 @@ namespace chrome_apps {
 
 void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   apps::EnsureBrowserContextKeyedServiceFactoriesBuilt();
-  AppTerminationObserver::GetFactoryInstance();
-  AppShortcutManagerFactory::GetInstance();
+
   apps::AppLoadServiceFactory::GetInstance();
+  AppShortcutManagerFactory::GetInstance();
+  AppTerminationObserver::GetFactoryInstance();
 }
 
 }  // namespace chrome_apps

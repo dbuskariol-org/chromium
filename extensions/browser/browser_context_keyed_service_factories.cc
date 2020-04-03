@@ -30,9 +30,6 @@
 #include "extensions/browser/api/sockets_udp/udp_socket_event_dispatcher.h"
 #include "extensions/browser/api/storage/storage_frontend.h"
 #include "extensions/browser/api/system_info/system_info_api.h"
-#if defined(OS_CHROMEOS)
-#include "extensions/browser/api/system_power_source/system_power_source_api.h"
-#endif
 #include "extensions/browser/api/usb/usb_device_manager.h"
 #include "extensions/browser/api/usb/usb_device_resource.h"
 #include "extensions/browser/api/web_request/web_request_api.h"
@@ -42,6 +39,10 @@
 #include "extensions/browser/extension_prefs_factory.h"
 #include "extensions/browser/process_manager_factory.h"
 #include "extensions/browser/renderer_startup_helper.h"
+
+#if defined(OS_CHROMEOS)
+#include "extensions/browser/api/system_power_source/system_power_source_api.h"
+#endif
 
 namespace extensions {
 
@@ -81,8 +82,6 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   StorageFrontend::GetFactoryInstance();
   SystemInfoAPI::GetFactoryInstance();
 #if defined(OS_CHROMEOS)
-  // TODO(devlin): Remove dependency on ShellApiTest and move this call out to
-  // chrome/browser/chromeos/browser_context_keyed_service_factories.cc.
   SystemPowerSourceAPI::GetFactoryInstance();
 #endif
   UsbDeviceManager::GetFactoryInstance();

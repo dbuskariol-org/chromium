@@ -47,28 +47,27 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   android_sms::AndroidSmsServiceFactory::GetInstance();
   arc::ArcAccessibilityHelperBridge::CreateFactory();
   bluetooth::DebugLogsManagerFactory::GetInstance();
-  guest_os::GuestOsRegistryServiceFactory::GetInstance();
-  CupsPrintJobManagerFactory::GetInstance();
-  CupsPrintersManagerFactory::GetInstance();
 #if defined(USE_CUPS)
   CupsProxyServiceManagerFactory::GetInstance();
 #endif
+  CupsPrintersManagerFactory::GetInstance();
+  CupsPrintJobManagerFactory::GetInstance();
   EasyUnlockServiceFactory::GetInstance();
-
   extensions::ClipboardAPI::GetFactoryInstance();
   extensions::InputMethodAPI::GetFactoryInstance();
   extensions::MediaPlayerAPI::GetFactoryInstance();
   extensions::NetworkingConfigServiceFactory::GetInstance();
-  extensions::SessionStateChangedEventDispatcher::GetFactoryInstance();
 #if defined(USE_CUPS)
   extensions::PrintingAPIHandler::GetFactoryInstance();
 #endif
   extensions::PrintJobFinishedEventDispatcher::GetFactoryInstance();
+  extensions::SessionStateChangedEventDispatcher::GetFactoryInstance();
   extensions::TerminalPrivateAPI::GetFactoryInstance();
   extensions::VerifyTrustAPI::GetFactoryInstance();
   extensions::VirtualKeyboardAPI::GetFactoryInstance();
   extensions::WebcamPrivateAPI::GetFactoryInstance();
   file_manager::EventRouterFactory::GetInstance();
+  guest_os::GuestOsRegistryServiceFactory::GetInstance();
   KerberosCredentialsManagerFactory::GetInstance();
   OwnerSettingsServiceChromeOSFactory::GetInstance();
   plugin_vm::PluginVmEngagementMetricsService::Factory::GetInstance();
