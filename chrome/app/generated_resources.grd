@@ -6251,12 +6251,6 @@ the Bookmarks menu.">
       <message name="IDS_PICTURE_IN_PICTURE_BACK_TO_TAB_CONTROL_TEXT" desc="Text label of the back to tab control button. The button appears when the user hovers over the Picture-in-Picture window.">
         Back to tab
       </message>
-      <message name="IDS_PICTURE_IN_PICTURE_MUTE_CONTROL_TEXT" desc="Text label of the mute control button. The button appears when the user hovers over the Picture-in-Picture window and the video is currently unmuted.">
-        Mute
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_UNMUTE_CONTROL_TEXT" desc="Text label of the mute control button. The button appears when the user hovers over the Picture-in-Picture window and the video is currently muted.">
-        Unmute
-      </message>
       <message name="IDS_PICTURE_IN_PICTURE_SKIP_AD_CONTROL_TEXT" desc="Text label of the skip ad control button. The button appears when the user hovers over the Picture-in-Picture window.">
         Skip Ad
       </message>
@@ -6274,24 +6268,6 @@ the Bookmarks menu.">
       </message>
       <message name="IDS_PICTURE_IN_PICTURE_PREVIOUS_TRACK_CONTROL_ACCESSIBLE_TEXT" desc="Accessible text label used for the controls button in the Picture-in-Picture window. The button invokes previous track action.">
         Previous track
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_CONFIRM_CLOSE_TITLE" desc="Text label of the title for the confirmation dialog. This dialog appears when the user tries to close a tab / window while in Picture-in-Picture mode.">
-        Are you sure you want to close this tab?
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_CONFIRM_LEAVE_TITLE" desc="Text label of the description for the confirmation dialog. This dialog appears when the user tries to leave a page while in Picture-in-Picture mode.">
-        Are you sure you want to leave this page?
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_CONFIRM_DESCRIPTION" desc="Text label of the description for the confirmation dialog. This dialog appears when the user tries to close a tab / window or leave a page while in Picture-in-Picture mode.">
-        The video in picture-in-picture mode will stop playing.
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_CONFIRM_CLOSE_TEXT" desc="Text label of the close button. The button appears in the confirmation dialog when the user tries to close a tab or window while in Picture-in-Picture mode.">
-        Close
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_CONFIRM_LEAVE_TEXT" desc="Text label of the leave button. The button appears in the confirmation dialog when the user tries to leave a page while in Picture-in-Picture mode.">
-        Leave
-      </message>
-      <message name="IDS_PICTURE_IN_PICTURE_CANCEL_TEXT" desc="Text label of the cancel button. The button appears in the confirmation dialog when the user tries to close a tab / window or leave a page while in Picture-in-Picture mode.">
-        Cancel
       </message>
 
       <!-- Load State -->
