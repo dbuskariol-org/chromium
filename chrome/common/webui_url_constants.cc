@@ -374,6 +374,7 @@ const char kDeprecatedExtensionsSubPage[] = "extensions";
 const char kDownloadsSubPage[] = "downloads";
 const char kHandlerSettingsSubPage[] = "handlers";
 const char kImportDataSubPage[] = "importData";
+const char kLanguagesSubPage[] = "languages/details";
 const char kLanguageOptionsSubPage[] = "languages";
 const char kOnStartupSubPage[] = "onStartup";
 const char kPasswordCheckSubPage[] = "passwords/check?start=true";
@@ -417,7 +418,9 @@ const char kInternetSubPage[] = "internet";
 const char kKerberosAccountsSubPage[] = "kerberosAccounts";
 const char kKeyboardOverlaySubPage[] = "keyboard-overlay";
 const char kKnownNetworksSubPage[] = "knownNetworks";
-const char kLanguageSubPage[] = "languages/details";
+const char kOsLanguagesSubPage[] = "osLanguages";
+const char kOsLanguagesDetailsSubPage[] = "osLanguages/details";
+const char kOsLanguagesInputMethodsSubPage[] = "osLanguages/inputMethods";
 const char kLockScreenSubPage[] = "lockScreen";
 const char kManageAccessibilitySubPage[] = "manageAccessibility";
 const char kManageAccessibilityTtsSubPage[] = "manageAccessibility/tts";
@@ -472,8 +475,6 @@ bool IsOSSettingsSubPage(const std::string& sub_page) {
       kKerberosAccountsSubPage,
       kKeyboardOverlaySubPage,
       kKnownNetworksSubPage,
-      // language is both an OS and browser sub page, but prefer the OS version
-      kLanguageSubPage,
       kLockScreenSubPage,
       kManageAccessibilitySubPage,
       kManageAccessibilityTtsSubPage,
@@ -484,6 +485,9 @@ bool IsOSSettingsSubPage(const std::string& sub_page) {
       kPluginVmDetailsSubPage,
       kPluginVmSharedPathsSubPage,
       kOsAccessibilitySubPage,
+      kOsLanguagesSubPage,
+      kOsLanguagesDetailsSubPage,
+      kOsLanguagesInputMethodsSubPage,
       kOsResetSubPage,
       kOsSearchSubPage,
       kPointerOverlaySubPage,

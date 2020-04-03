@@ -268,8 +268,12 @@ void TestAllOSSettingPages(const GURL& base_url) {
                      base_url.Resolve(chrome::kNativePrintingSettingsSubPage));
   TestOpenChromePage(ChromePage::KEYBOARDOVERLAY,
                      base_url.Resolve(chrome::kKeyboardOverlaySubPage));
-  TestOpenChromePage(ChromePage::LANGUAGES,
-                     base_url.Resolve(chrome::kLanguageSubPage));
+  TestOpenChromePage(ChromePage::OSLANGUAGES,
+                     base_url.Resolve(chrome::kOsLanguagesSubPage));
+  TestOpenChromePage(ChromePage::OSLANGUAGESDETAILS,
+                     base_url.Resolve(chrome::kOsLanguagesDetailsSubPage));
+  TestOpenChromePage(ChromePage::OSLANGUAGESINPUTMETHODS,
+                     base_url.Resolve(chrome::kOsLanguagesInputMethodsSubPage));
   TestOpenChromePage(ChromePage::LOCKSCREEN,
                      base_url.Resolve(chrome::kLockScreenSubPage));
   TestOpenChromePage(ChromePage::MANAGEACCESSIBILITY,
@@ -363,6 +367,8 @@ void TestAllBrowserSettingPages(const GURL& base_url) {
                      base_url.Resolve(chrome::kSearchSubPage));
   TestOpenChromePage(ChromePage::SYNCSETUP,
                      base_url.Resolve(chrome::kSyncSetupSubPage));
+  TestOpenChromePage(ChromePage::LANGUAGES,
+                     base_url.Resolve(chrome::kLanguagesSubPage));
 }
 
 void TestAllAboutPages() {

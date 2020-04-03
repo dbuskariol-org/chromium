@@ -100,10 +100,10 @@ cr.define('settings', function() {
     r.PRIVACY = r.ADVANCED.createSection('/privacy', 'privacy');
 
     // Languages and input
-    r.LANGUAGES = r.ADVANCED.createSection('/languages', 'languages');
-    r.LANGUAGES_DETAILS = r.LANGUAGES.createChild('/languages/details');
-    r.INPUT_METHODS =
-        r.LANGUAGES_DETAILS.createChild('/languages/inputMethods');
+    r.OS_LANGUAGES = r.ADVANCED.createSection('/osLanguages', 'osLanguages');
+    r.OS_LANGUAGES_DETAILs = r.OS_LANGUAGES.createChild('/osLanguages/details');
+    r.OS_LANGUAGES_INPUT_METHODs =
+        r.OS_LANGUAGES.createChild('/osLanguages/inputMethods');
 
     r.PRINTING = r.ADVANCED.createSection('/printing', 'printing');
 

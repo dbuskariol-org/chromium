@@ -107,7 +107,10 @@ constexpr std::pair<arc::mojom::ChromePage, const char*> kOSSettingsMapping[] =
      {ChromePage::KERBEROSACCOUNTS, chrome::kKerberosAccountsSubPage},
      {ChromePage::KEYBOARDOVERLAY, chrome::kKeyboardOverlaySubPage},
      {ChromePage::KNOWNNETWORKS, chrome::kKnownNetworksSubPage},
-     {ChromePage::LANGUAGES, chrome::kLanguageSubPage},
+     {ChromePage::OSLANGUAGES, chrome::kOsLanguagesSubPage},
+     {ChromePage::OSLANGUAGESDETAILS, chrome::kOsLanguagesDetailsSubPage},
+     {ChromePage::OSLANGUAGESINPUTMETHODS,
+      chrome::kOsLanguagesInputMethodsSubPage},
      {ChromePage::LOCKSCREEN, chrome::kLockScreenSubPage},
      {ChromePage::MAIN, ""},
      {ChromePage::MANAGEACCESSIBILITY, chrome::kManageAccessibilitySubPage},
@@ -142,7 +145,9 @@ constexpr std::pair<arc::mojom::ChromePage, const char*>
         {ChromePage::PRIVACY, chrome::kPrivacySubPage},
         {ChromePage::RESET, chrome::kResetSubPage},
         {ChromePage::SEARCH, chrome::kSearchSubPage},
-        {ChromePage::SYNCSETUP, chrome::kSyncSetupSubPage}};
+        {ChromePage::SYNCSETUP, chrome::kSyncSetupSubPage},
+        {ChromePage::LANGUAGES, chrome::kLanguagesSubPage},
+};
 
 constexpr std::pair<arc::mojom::ChromePage, const char*> kAboutPagesMapping[] =
     {{ChromePage::ABOUTBLANK, url::kAboutBlankURL},
