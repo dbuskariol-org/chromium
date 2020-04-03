@@ -419,7 +419,9 @@ class SystemWebAppManagerLaunchDirectoryBrowserTest
     content::TestNavigationObserver navigation_observer(launch_url);
     navigation_observer.StartWatchingNewWebContents();
     content::WebContents* web_contents =
-        apps::LaunchService::Get(browser()->profile())->OpenApplication(params);
+        apps::AppServiceProxyFactory::GetForProfile(browser()->profile())
+            ->BrowserAppLauncher()
+            .LaunchAppWithParams(params);
     navigation_observer.Wait();
 
     // Launch directories and files passed to system web apps should
