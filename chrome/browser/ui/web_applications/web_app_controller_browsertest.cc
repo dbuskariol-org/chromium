@@ -5,9 +5,7 @@
 #include "chrome/browser/ui/web_applications/web_app_controller_browsertest.h"
 
 #include "chrome/browser/apps/app_service/app_launch_params.h"
-#include "chrome/browser/apps/app_service/app_service_proxy.h"
-#include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
-#include "chrome/browser/apps/app_service/browser_app_launcher.h"
+#include "chrome/browser/apps/launch_service/launch_service.h"
 #include "chrome/browser/banners/test_app_banner_manager_desktop.h"
 #include "chrome/browser/extensions/browsertest_util.h"
 #include "chrome/browser/predictors/loading_predictor_config.h"
@@ -136,9 +134,7 @@ content::WebContents* WebAppControllerBrowserTest::OpenApplication(
       WindowOpenDisposition::NEW_WINDOW,
       apps::mojom::AppLaunchSource::kSourceTest);
   content::WebContents* contents =
-      apps::AppServiceProxyFactory::GetForProfile(profile())
-          ->BrowserAppLauncher()
-          .LaunchAppWithParams(params);
+      apps::LaunchService::Get(profile())->OpenApplication(params);
   url_observer.Wait();
   return contents;
 }
