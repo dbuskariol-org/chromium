@@ -41994,7 +41994,7 @@ Called by update_use_counter_css.py.-->
   <int value="172" label="alias-webkit-animation-name"/>
   <int value="173" label="alias-webkit-animation-play-state"/>
   <int value="174" label="alias-webkit-animation-timing-function"/>
-  <int value="175" label="webkit-appearance"/>
+  <int value="175" label="alias-webkit-appearance"/>
   <int value="176" label="webkit-aspect-ratio"/>
   <int value="177" label="alias-webkit-backface-visibility"/>
   <int value="178" label="alias-webkit-background-clip"/>
@@ -42477,6 +42477,7 @@ Called by update_use_counter_css.py.-->
   <int value="655" label="subtree-visibility"/>
   <int value="656" label="math-style"/>
   <int value="657" label="aspect-ratio"/>
+  <int value="658" label="appearance"/>
 </enum>
 
 <enum name="MappedEditingCommands">
