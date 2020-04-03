@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * This class provides methods to write/read most visited sites related info to devices.
  */
-public class MostVisitedSitesUtils {
+public class MostVisitedSitesMetadataUtils {
     private static final String TAG = "TopSites";
     /** Prevents two state directories from getting created simultaneously. */
     private static final Object DIR_CREATION_LOCK = new Object();
@@ -55,7 +55,7 @@ public class MostVisitedSitesUtils {
                 try {
                     byte[] listData = serializeTopSitesData(topSitesInfo);
                     saveSuggestionListsToFile(
-                            getOrCreateTopSitesStateDirectory(), sStateFileName, listData);
+                            getOrCreateTopSitesDirectory(), sStateFileName, listData);
                 } catch (IOException e) {
                     Log.e(TAG, "Fail to save file.");
                 }
@@ -80,8 +80,8 @@ public class MostVisitedSitesUtils {
     public static List<SiteSuggestion> restoreFileToSuggestionLists() throws IOException {
         try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
             List<SiteSuggestion> suggestions;
-            byte[] listData = restoreFileToSuggestionLists(
-                    getOrCreateTopSitesStateDirectory(), sStateFileName);
+            byte[] listData =
+                    restoreFileToSuggestionLists(getOrCreateTopSitesDirectory(), sStateFileName);
             suggestions = deserializeTopSitesData(listData);
 
             return suggestions;
@@ -102,6 +102,7 @@ public class MostVisitedSitesUtils {
 
         // Save top sites.
         for (int i = 0; i < topSitesCount; i++) {
+            stream.writeInt(topSitesInfo.get(i).faviconId);
             stream.writeUTF(topSitesInfo.get(i).title);
             stream.writeUTF(topSitesInfo.get(i).url);
             stream.writeUTF(topSitesInfo.get(i).whitelistIconPath);
@@ -133,6 +134,7 @@ public class MostVisitedSitesUtils {
         // Restore top sites.
         List<SiteSuggestion> suggestions = new ArrayList<>();
         for (int i = 0; i < count; i++) {
+            int faviconId = stream.readInt();
             String title = stream.readUTF();
             String url = stream.readUTF();
             String whitelistIconPath = stream.readUTF();
@@ -140,8 +142,10 @@ public class MostVisitedSitesUtils {
             int source = stream.readInt();
             int sectionType = stream.readInt();
             dataGenerationTime = new Date(stream.readLong());
-            suggestions.add(new SiteSuggestion(title, url, whitelistIconPath, titleSource, source,
-                    sectionType, dataGenerationTime));
+            SiteSuggestion newSite = new SiteSuggestion(title, url, whitelistIconPath, titleSource,
+                    source, sectionType, dataGenerationTime);
+            newSite.faviconId = faviconId;
+            suggestions.add(newSite);
         }
         Log.d(TAG, "Deserializing top sites lists finished");
         return suggestions;
@@ -194,13 +198,15 @@ public class MostVisitedSitesUtils {
         return data;
     }
 
-    protected static File getOrCreateTopSitesStateDirectory() {
-        synchronized (DIR_CREATION_LOCK) {
-            if (sStateDirectory == null) {
-                sStateDirectory = ContextUtils.getApplicationContext().getDir(
-                        sStateDirName, Context.MODE_PRIVATE);
+    protected static File getOrCreateTopSitesDirectory() {
+        try (StrictModeContext ignored = StrictModeContext.allowDiskWrites()) {
+            synchronized (DIR_CREATION_LOCK) {
+                if (sStateDirectory == null) {
+                    sStateDirectory = ContextUtils.getApplicationContext().getDir(
+                            sStateDirName, Context.MODE_PRIVATE);
+                }
             }
+            return sStateDirectory;
         }
-        return sStateDirectory;
     }
 }

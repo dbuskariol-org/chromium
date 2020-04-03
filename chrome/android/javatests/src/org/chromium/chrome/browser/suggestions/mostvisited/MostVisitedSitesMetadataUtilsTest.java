@@ -30,11 +30,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Instrumentation tests for {@link MostVisitedSitesUtils}.
+ * Instrumentation tests for {@link MostVisitedSitesMetadataUtils}.
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE})
-public class MostVisitedSitesUtilsTest {
+public class MostVisitedSitesMetadataUtilsTest {
     @Rule
     public ChromeTabbedActivityTestRule mTestSetupRule = new ChromeTabbedActivityTestRule();
 
@@ -51,16 +51,16 @@ public class MostVisitedSitesUtilsTest {
         mExpectedSiteSuggestions = createFakeSiteSuggestions();
 
         // Get old file and ensure to delete it.
-        File oldFile = MostVisitedSitesUtils.getOrCreateTopSitesStateDirectory();
+        File oldFile = MostVisitedSitesMetadataUtils.getOrCreateTopSitesDirectory();
         assertTrue(oldFile.delete() && !oldFile.exists());
 
         // Save suggestion lists to file.
-        MostVisitedSitesUtils.saveSuggestionListsToFile(mExpectedSiteSuggestions, () -> {
+        MostVisitedSitesMetadataUtils.saveSuggestionListsToFile(mExpectedSiteSuggestions, () -> {
             // Restore list from file after saving finished.
             List<SiteSuggestion> sitesAfterRestore = null;
 
             try {
-                sitesAfterRestore = MostVisitedSitesUtils.restoreFileToSuggestionLists();
+                sitesAfterRestore = MostVisitedSitesMetadataUtils.restoreFileToSuggestionLists();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -74,11 +74,11 @@ public class MostVisitedSitesUtilsTest {
     @SmallTest
     public void testRestoreException() throws IOException {
         // Get old file and ensure to delete it.
-        File oldFile = MostVisitedSitesUtils.getOrCreateTopSitesStateDirectory();
+        File oldFile = MostVisitedSitesMetadataUtils.getOrCreateTopSitesDirectory();
         assertTrue(oldFile.delete() || !oldFile.exists());
 
         // Call restore function and ensure it throws an IOException.
-        MostVisitedSitesUtils.restoreFileToSuggestionLists();
+        MostVisitedSitesMetadataUtils.restoreFileToSuggestionLists();
     }
 
     private static List<SiteSuggestion> createFakeSiteSuggestions() {
@@ -89,6 +89,7 @@ public class MostVisitedSitesUtilsTest {
         siteSuggestions.add(new SiteSuggestion("1 WHITELIST", "https://www.bar.com", "",
                 TileTitleSource.UNKNOWN, TileSource.WHITELIST, TileSectionType.PERSONALIZED,
                 new Date()));
+        siteSuggestions.get(1).faviconId = 1;
         return siteSuggestions;
     }
 }
