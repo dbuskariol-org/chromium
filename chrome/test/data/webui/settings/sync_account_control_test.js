@@ -12,8 +12,6 @@
 // #import {isChildVisible, isVisible} from 'chrome://test/test_util.m.js';
 // clang-format on
 
-// TODO(https://crbug.com/1063530): Remove all ignores in this file, once
-// i18nPolymer works correctly in Polymer 3.
 cr.define('settings_sync_account_control', function() {
 
   suite('SyncAccountControl', function() {
@@ -172,10 +170,10 @@ cr.define('settings_sync_account_control', function() {
       // Avatar row shows the right account.
       assertTrue(test_util.isChildVisible(testElement, '#promo-header'));
       assertTrue(test_util.isChildVisible(testElement, '#avatar-row'));
-      /* #ignore */ assertTrue(userInfo.textContent.includes('fooName'));
-      /* #ignore */ assertTrue(userInfo.textContent.includes('foo@foo.com'));
-      /* #ignore */ assertFalse(userInfo.textContent.includes('barName'));
-      /* #ignore */ assertFalse(userInfo.textContent.includes('bar@bar.com'));
+      assertTrue(userInfo.textContent.includes('fooName'));
+      assertTrue(userInfo.textContent.includes('foo@foo.com'));
+      assertFalse(userInfo.textContent.includes('barName'));
+      assertFalse(userInfo.textContent.includes('bar@bar.com'));
 
       // Menu contains the right items.
       assertTrue(!!testElement.$$('#menu'));
@@ -213,13 +211,10 @@ cr.define('settings_sync_account_control', function() {
             // email.
             items[1].click();
             Polymer.dom.flush();
-            /* #ignore */ assertFalse(
-                /* #ignore */ userInfo.textContent.includes('fooName'));
-            /* #ignore */ assertFalse(
-                /* #ignore */ userInfo.textContent.includes('foo@foo.com'));
-            /* #ignore */ assertTrue(userInfo.textContent.includes('barName'));
-            /* #ignore */ assertTrue(
-                /* #ignore */ userInfo.textContent.includes('bar@bar.com'));
+            assertFalse(userInfo.textContent.includes('fooName'));
+            assertFalse(userInfo.textContent.includes('foo@foo.com'));
+            assertTrue(userInfo.textContent.includes('barName'));
+            assertTrue(userInfo.textContent.includes('bar@bar.com'));
             assertTrue(test_util.isVisible(syncButton));
 
             browserProxy.resetResolver('startSyncingWithEmail');
@@ -263,10 +258,10 @@ cr.define('settings_sync_account_control', function() {
       }
 
       const userInfo = testElement.$$('#user-info');
-      /* #ignore */ assertTrue(userInfo.textContent.includes('barName'));
-      /* #ignore */ assertTrue(userInfo.textContent.includes('bar@bar.com'));
-      /* #ignore */ assertFalse(userInfo.textContent.includes('fooName'));
-      /* #ignore */ assertFalse(userInfo.textContent.includes('foo@foo.com'));
+      assertTrue(userInfo.textContent.includes('barName'));
+      assertTrue(userInfo.textContent.includes('bar@bar.com'));
+      assertFalse(userInfo.textContent.includes('fooName'));
+      assertFalse(userInfo.textContent.includes('foo@foo.com'));
 
       assertFalse(test_util.isChildVisible(testElement, '#sync-button'));
       assertTrue(test_util.isChildVisible(testElement, '#turn-off'));
@@ -298,9 +293,9 @@ cr.define('settings_sync_account_control', function() {
       assertTrue(!!testElement.$$('[icon="settings:sync-problem"]'));
       let displayedText =
           userInfo.querySelector('span:not([hidden])').textContent;
-      /* #ignore */ assertFalse(displayedText.includes('barName'));
-      /* #ignore */ assertFalse(displayedText.includes('fooName'));
-      /* #ignore */ assertTrue(displayedText.includes('Sync isn\'t working'));
+      assertFalse(displayedText.includes('barName'));
+      assertFalse(displayedText.includes('fooName'));
+      assertTrue(displayedText.includes('Sync isn\'t working'));
       // The sync error button is shown to resolve the error.
       assertTrue(test_util.isChildVisible(testElement, '#sync-error-button'));
 
@@ -317,9 +312,9 @@ cr.define('settings_sync_account_control', function() {
                      .classList.contains('sync-paused'));
       assertTrue(!!testElement.$$('[icon=\'settings:sync-disabled\']'));
       displayedText = userInfo.querySelector('span:not([hidden])').textContent;
-      /* #ignore */ assertFalse(displayedText.includes('barName'));
-      /* #ignore */ assertFalse(displayedText.includes('fooName'));
-      /* #ignore */ assertTrue(displayedText.includes('Sync is paused'));
+      assertFalse(displayedText.includes('barName'));
+      assertFalse(displayedText.includes('fooName'));
+      assertTrue(displayedText.includes('Sync is paused'));
       // The sync error button is shown to resolve the error.
       assertTrue(test_util.isChildVisible(testElement, '#sync-error-button'));
 
@@ -337,9 +332,9 @@ cr.define('settings_sync_account_control', function() {
                      .classList.contains('sync-disabled'));
       assertTrue(!!testElement.$$('[icon=\'cr:sync\']'));
       displayedText = userInfo.querySelector('span:not([hidden])').textContent;
-      /* #ignore */ assertFalse(displayedText.includes('barName'));
-      /* #ignore */ assertFalse(displayedText.includes('fooName'));
-      /* #ignore */ assertTrue(displayedText.includes('Sync disabled'));
+      assertFalse(displayedText.includes('barName'));
+      assertFalse(displayedText.includes('fooName'));
+      assertTrue(displayedText.includes('Sync disabled'));
       assertFalse(test_util.isChildVisible(testElement, '#sync-error-button'));
 
       testElement.syncStatus = {
@@ -355,9 +350,9 @@ cr.define('settings_sync_account_control', function() {
                      .classList.contains('sync-problem'));
       assertTrue(!!testElement.$$('[icon="settings:sync-problem"]'));
       displayedText = userInfo.querySelector('span:not([hidden])').textContent;
-      /* #ignore */ assertFalse(displayedText.includes('barName'));
-      /* #ignore */ assertFalse(displayedText.includes('fooName'));
-      /* #ignore */ assertTrue(displayedText.includes('Sync isn\'t working'));
+      assertFalse(displayedText.includes('barName'));
+      assertFalse(displayedText.includes('fooName'));
+      assertTrue(displayedText.includes('Sync isn\'t working'));
 
       testElement.syncStatus = {
         firstSetupInProgress: false,
@@ -373,11 +368,10 @@ cr.define('settings_sync_account_control', function() {
                      .classList.contains('sync-problem'));
       assertTrue(!!testElement.$$('[icon="settings:sync-problem"]'));
       displayedText = userInfo.querySelector('span:not([hidden])').textContent;
-      /* #ignore */ assertFalse(displayedText.includes('barName'));
-      /* #ignore */ assertFalse(displayedText.includes('fooName'));
-      /* #ignore */ assertFalse(displayedText.includes('Sync isn\'t working'));
-      /* #ignore */ assertTrue(
-          /* #ignore */ displayedText.includes('Error syncing passwords'));
+      assertFalse(displayedText.includes('barName'));
+      assertFalse(displayedText.includes('fooName'));
+      assertFalse(displayedText.includes('Sync isn\'t working'));
+      assertTrue(displayedText.includes('Error syncing passwords'));
       // The sync error button is shown to resolve the error.
       assertTrue(test_util.isChildVisible(testElement, '#sync-error-button'));
       assertTrue(test_util.isChildVisible(testElement, '#turn-off'));
@@ -398,9 +392,8 @@ cr.define('settings_sync_account_control', function() {
       const userInfo = testElement.$$('#user-info');
       const setupButtons = testElement.$$('#setup-buttons');
 
-      /* #ignore */ assertTrue(userInfo.textContent.includes('barName'));
-      /* #ignore */ assertTrue(
-          /* #ignore */ userInfo.textContent.includes('Setup in progress...'));
+      assertTrue(userInfo.textContent.includes('barName'));
+      assertTrue(userInfo.textContent.includes('Setup in progress...'));
       assertTrue(test_util.isVisible(setupButtons));
     });
 
