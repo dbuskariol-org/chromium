@@ -43,6 +43,7 @@ class CORE_EXPORT CSSCustomPropertyDeclaration : public CSSValue {
     return value_id_ == CSSValueID::kInitial ||
            (!is_inherited_property && value_id_ == CSSValueID::kUnset);
   }
+  bool IsRevert() const { return value_id_ == CSSValueID::kRevert; }
 
   String CustomCSSText() const;
 

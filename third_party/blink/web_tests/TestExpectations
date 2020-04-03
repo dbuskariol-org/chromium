@@ -1841,10 +1841,6 @@ crbug.com/791529 virtual/cascade/external/wpt/css/css-variables/variable-transit
 crbug.com/791529 virtual/cascade/external/wpt/css/css-variables/variable-transitions-value-before-transition-property-variable.html [ Skip ]
 crbug.com/989123 virtual/cascade/external/wpt/css/css-typed-om/the-stylepropertymap/computed/get-auto-min-size.html [ Failure ]
 
-# This is for some reason WontFix'd in the main expectations (see NeverFixTests).
-# That seems wrong, as we should support 'revert' eventually.
-crbug.com/579788 virtual/cascade/external/wpt/css/css-cascade/revert-val-001.html [ Skip ]
-
 # Flaky tests:
 crbug.com/987224 virtual/cascade/external/wpt/css/css-typed-om/interfaces.html [ Pass Timeout ]
 crbug.com/987224 [ IOS ] virtual/cascade/external/wpt/css/css-paint-api/idlharness.html [ Pass Timeout ]
@@ -2745,7 +2741,6 @@ crbug.com/713587 external/wpt/css/css-ui/caret-color-006.html [ Skip ]
 #crbug.com/626703 [ Win ] external/wpt/css/css-flexbox/flex-minimum-width-flex-items-001.xht [ Failure ]
 #crbug.com/626703 [ Win ] external/wpt/css/css-flexbox/flex-minimum-width-flex-items-003.xht [ Failure ]
 #crbug.com/626703 [ Win ] external/wpt/css/css-flexbox/flexbox_flex-natural-mixed-basis-auto.html [ Failure ]
-#crbug.com/626703 external/wpt/css/css-cascade/revert-val-001.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-writing-modes/sizing-orthog-htb-in-vrl-013.xht [ Failure ]
 crbug.com/626703 external/wpt/css/css-writing-modes/sizing-orthog-vlr-in-htb-008.xht [ Failure ]
 crbug.com/626703 external/wpt/css/css-writing-modes/sizing-orthog-vlr-in-htb-020.xht [ Failure ]
