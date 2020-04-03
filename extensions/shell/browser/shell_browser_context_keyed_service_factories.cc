@@ -4,7 +4,6 @@
 
 #include "extensions/shell/browser/shell_browser_context_keyed_service_factories.h"
 
-#include "extensions/browser/updater/update_service_factory.h"
 #include "extensions/shell/browser/shell_extension_system_factory.h"
 
 namespace extensions {
@@ -12,7 +11,6 @@ namespace shell {
 
 void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   ShellExtensionSystemFactory::GetInstance();
-  UpdateServiceFactory::GetInstance();
 }
 
 }  // namespace shell

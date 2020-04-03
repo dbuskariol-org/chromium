@@ -4,7 +4,6 @@
 
 #include "chrome/browser/apps/platform_apps/browser_context_keyed_service_factories.h"
 
-#include "apps/browser_context_keyed_service_factories.h"
 #include "chrome/browser/apps/platform_apps/app_load_service_factory.h"
 #include "chrome/browser/apps/platform_apps/app_termination_observer.h"
 #include "chrome/browser/apps/platform_apps/shortcut_manager_factory.h"
@@ -12,8 +11,6 @@
 namespace chrome_apps {
 
 void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
-  apps::EnsureBrowserContextKeyedServiceFactoriesBuilt();
-
   apps::AppLoadServiceFactory::GetInstance();
   AppShortcutManagerFactory::GetInstance();
   AppTerminationObserver::GetFactoryInstance();

@@ -33,15 +33,22 @@
 #include "extensions/browser/api/usb/usb_device_manager.h"
 #include "extensions/browser/api/usb/usb_device_resource.h"
 #include "extensions/browser/api/web_request/web_request_api.h"
+#include "extensions/browser/app_window/app_window_geometry_cache.h"
 #include "extensions/browser/declarative_user_script_manager_factory.h"
 #include "extensions/browser/event_router_factory.h"
 #include "extensions/browser/extension_message_filter.h"
 #include "extensions/browser/extension_prefs_factory.h"
 #include "extensions/browser/process_manager_factory.h"
 #include "extensions/browser/renderer_startup_helper.h"
+#include "extensions/browser/updater/update_service_factory.h"
 
 #if defined(OS_CHROMEOS)
+#include "extensions/browser/api/clipboard/clipboard_api.h"
+#include "extensions/browser/api/networking_config/networking_config_service_factory.h"
 #include "extensions/browser/api/system_power_source/system_power_source_api.h"
+#include "extensions/browser/api/virtual_keyboard_private/virtual_keyboard_private_api.h"
+#include "extensions/browser/api/vpn_provider/vpn_service_factory.h"
+#include "extensions/browser/api/webcam_private/webcam_private_api.h"
 #endif
 
 namespace extensions {
@@ -54,10 +61,14 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   ApiResourceManager<SerialConnection>::GetFactoryInstance();
   ApiResourceManager<Socket>::GetFactoryInstance();
   ApiResourceManager<UsbDeviceResource>::GetFactoryInstance();
+  AppWindowGeometryCache::Factory::GetInstance();
   AudioAPI::GetFactoryInstance();
   BluetoothAPI::GetFactoryInstance();
   BluetoothPrivateAPI::GetFactoryInstance();
   CastChannelAPI::GetFactoryInstance();
+#if defined(OS_CHROMEOS)
+  ClipboardAPI::GetFactoryInstance();
+#endif
   api::BluetoothSocketEventDispatcher::GetFactoryInstance();
   api::TCPServerSocketEventDispatcher::GetFactoryInstance();
   api::TCPSocketEventDispatcher::GetFactoryInstance();
@@ -72,6 +83,9 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
   HidDeviceManager::GetFactoryInstance();
   IdleManagerFactory::GetInstance();
   ManagementAPI::GetFactoryInstance();
+#if defined(OS_CHROMEOS)
+  NetworkingConfigServiceFactory::GetInstance();
+#endif
 #if defined(OS_LINUX) || defined(OS_WIN) || defined(OS_MACOSX)
   NetworkingPrivateEventRouterFactory::GetInstance();
 #endif
@@ -84,7 +98,13 @@ void EnsureBrowserContextKeyedServiceFactoriesBuilt() {
 #if defined(OS_CHROMEOS)
   SystemPowerSourceAPI::GetFactoryInstance();
 #endif
+  UpdateServiceFactory::GetInstance();
   UsbDeviceManager::GetFactoryInstance();
+#if defined(OS_CHROMEOS)
+  VirtualKeyboardAPI::GetFactoryInstance();
+  chromeos::VpnServiceFactory::GetInstance();
+  WebcamPrivateAPI::GetFactoryInstance();
+#endif
   WebRequestAPI::GetFactoryInstance();
 }
 

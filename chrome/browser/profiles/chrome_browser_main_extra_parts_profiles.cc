@@ -81,6 +81,7 @@
 #include "chrome/browser/ui/find_bar/find_bar_state_factory.h"
 #include "chrome/browser/ui/prefs/prefs_tab_helper.h"
 #include "chrome/browser/ui/tabs/pinned_tab_service_factory.h"
+#include "chrome/browser/ui/toolbar/toolbar_actions_model_factory.h"
 #include "chrome/browser/ui/webui/ntp/ntp_resource_cache_factory.h"
 #include "chrome/browser/ui/webui/signin/login_ui_service_factory.h"
 #include "chrome/browser/undo/bookmark_undo_service_factory.h"
@@ -137,7 +138,6 @@
 #include "chrome/browser/apps/platform_apps/api/browser_context_keyed_service_factories.h"
 #include "chrome/browser/apps/platform_apps/browser_context_keyed_service_factories.h"
 #include "chrome/browser/extensions/browser_context_keyed_service_factories.h"
-#include "chrome/browser/extensions/extension_management.h"
 #include "chrome/browser/ui/web_applications/web_app_metrics_factory.h"
 #include "chrome/browser/web_applications/web_app_provider_factory.h"
 #include "extensions/browser/browser_context_keyed_service_factories.h"
@@ -246,9 +246,6 @@ void ChromeBrowserMainExtraPartsProfiles::
 #if defined(OS_ANDROID)
   explore_sites::ExploreSitesServiceFactory::GetInstance();
 #endif
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-  extensions::ExtensionManagementFactory::GetInstance();
-#endif
   FaviconServiceFactory::GetInstance();
 #if BUILDFLAG(ENABLE_LEGACY_DESKTOP_IN_PRODUCT_HELP)
   feature_engagement::BookmarkTrackerFactory::GetInstance();
@@ -354,6 +351,9 @@ void ChromeBrowserMainExtraPartsProfiles::
   TemplateURLServiceFactory::GetInstance();
 #if !defined(OS_ANDROID)
   ThemeServiceFactory::GetInstance();
+#endif
+#if BUILDFLAG(ENABLE_EXTENSIONS)
+  ToolbarActionsModelFactory::GetInstance();
 #endif
   TopSitesFactory::GetInstance();
   translate::TranslateRankerFactory::GetInstance();
