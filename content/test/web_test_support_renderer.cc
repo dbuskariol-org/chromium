@@ -2,19 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/public/test/web_test_support.h"
+#include "content/public/test/web_test_support_renderer.h"
 
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "base/callback.h"
-#include "build/build_config.h"
-#include "content/browser/bluetooth/bluetooth_device_chooser_controller.h"
-#include "content/browser/renderer_host/render_widget_host_impl.h"
 #include "content/common/renderer.mojom.h"
 #include "content/common/unique_name_helper.h"
-#include "content/public/browser/storage_partition.h"
 #include "content/renderer/input/render_widget_input_handler_delegate.h"
 #include "content/renderer/loader/request_extra_data.h"
 #include "content/renderer/loader/web_worker_fetch_context_impl.h"
@@ -40,15 +36,6 @@
 #include "ui/gfx/geometry/vector2d.h"
 #include "ui/gfx/icc_profile.h"
 #include "ui/gfx/test/icc_profiles.h"
-
-#if defined(OS_MACOSX)
-#include "content/browser/frame_host/popup_menu_helper_mac.h"
-#include "content/browser/sandbox_parameters_mac.h"
-#include "net/test/test_data_directory.h"
-#endif
-
-using blink::WebRect;
-using blink::WebSize;
 
 namespace content {
 
@@ -131,17 +118,6 @@ void EnableRendererWebTestMode() {
   UniqueNameHelper::PreserveStableUniqueNameForTesting();
 }
 
-void EnableBrowserWebTestMode() {
-#if defined(OS_MACOSX)
-  PopupMenuHelper::DontShowPopupMenuForTesting();
-
-  // Expand the network service sandbox to allow reading the test TLS
-  // certificates.
-  SetNetworkTestCertsDirectoryForTesting(net::GetTestCertsDirectory());
-#endif
-  RenderWidgetHostImpl::DisableResizeAckCheckForTesting();
-}
-
 int GetLocalSessionHistoryLength(RenderView* render_view) {
   return static_cast<RenderViewImpl*>(render_view)
       ->GetLocalSessionHistoryLengthForTesting();
@@ -152,7 +128,8 @@ void SetFocusAndActivate(RenderView* render_view, bool enable) {
       ->SetFocusAndActivateForTesting(enable);
 }
 
-void ForceResizeRenderView(RenderView* render_view, const WebSize& new_size) {
+void ForceResizeRenderView(RenderView* render_view,
+                           const blink::WebSize& new_size) {
   RenderViewImpl* render_view_impl = static_cast<RenderViewImpl*>(render_view);
   RenderFrameImpl* main_frame = render_view_impl->GetMainRenderFrame();
   if (!main_frame)
@@ -233,21 +210,6 @@ void SetDeviceColorSpace(RenderView* render_view,
   render_widget->SetDeviceColorSpaceForTesting(color_space);
 }
 
-void SetTestBluetoothScanDuration(BluetoothTestScanDurationSetting setting) {
-  switch (setting) {
-    case BluetoothTestScanDurationSetting::kImmediateTimeout:
-      BluetoothDeviceChooserController::SetTestScanDurationForTesting(
-          BluetoothDeviceChooserController::TestScanDurationSetting::
-              IMMEDIATE_TIMEOUT);
-      break;
-    case BluetoothTestScanDurationSetting::kNeverTimeout:
-      BluetoothDeviceChooserController::SetTestScanDurationForTesting(
-          BluetoothDeviceChooserController::TestScanDurationSetting::
-              NEVER_TIMEOUT);
-      break;
-  }
-}
-
 void UseSynchronousResizeMode(RenderView* render_view, bool enable) {
   RenderViewImpl* render_view_impl = static_cast<RenderViewImpl*>(render_view);
   RenderFrameImpl* main_frame = render_view_impl->GetMainRenderFrame();
@@ -258,8 +220,8 @@ void UseSynchronousResizeMode(RenderView* render_view, bool enable) {
 }
 
 void EnableAutoResizeMode(RenderView* render_view,
-                          const WebSize& min_size,
-                          const WebSize& max_size) {
+                          const blink::WebSize& min_size,
+                          const blink::WebSize& max_size) {
   RenderViewImpl* render_view_impl = static_cast<RenderViewImpl*>(render_view);
   RenderFrameImpl* main_frame = render_view_impl->GetMainRenderFrame();
   if (!main_frame)
@@ -268,7 +230,8 @@ void EnableAutoResizeMode(RenderView* render_view,
   render_widget->EnableAutoResizeForTesting(min_size, max_size);
 }
 
-void DisableAutoResizeMode(RenderView* render_view, const WebSize& new_size) {
+void DisableAutoResizeMode(RenderView* render_view,
+                           const blink::WebSize& new_size) {
   RenderViewImpl* render_view_impl = static_cast<RenderViewImpl*>(render_view);
   RenderFrameImpl* main_frame = render_view_impl->GetMainRenderFrame();
   if (!main_frame)

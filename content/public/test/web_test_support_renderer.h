@@ -1,9 +1,9 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+// Copyright 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_PUBLIC_TEST_WEB_TEST_SUPPORT_H_
-#define CONTENT_PUBLIC_TEST_WEB_TEST_SUPPORT_H_
+#ifndef CONTENT_PUBLIC_TEST_WEB_TEST_SUPPORT_RENDERER_H_
+#define CONTENT_PUBLIC_TEST_WEB_TEST_SUPPORT_RENDERER_H_
 
 #include <stddef.h>
 
@@ -35,12 +35,6 @@ namespace content {
 
 class RenderFrame;
 class RenderView;
-
-// Turn the browser process into web test mode.
-void EnableBrowserWebTestMode();
-
-///////////////////////////////////////////////////////////////////////////////
-// The following methods are meant to be used from a renderer.
 
 // Turn a renderer into web test mode.
 void EnableRendererWebTestMode();
@@ -91,13 +85,6 @@ gfx::ColorSpace GetTestingColorSpace(const std::string& name);
 void SetDeviceColorSpace(RenderView* render_view,
                          const gfx::ColorSpace& color_space);
 
-// Sets the scan duration to reflect the given setting.
-enum class BluetoothTestScanDurationSetting {
-  kImmediateTimeout,  // Set the scan duration to 0 seconds.
-  kNeverTimeout,  // Set the scan duration to base::TimeDelta::Max() seconds.
-};
-void SetTestBluetoothScanDuration(BluetoothTestScanDurationSetting setting);
-
 // Enables or disables synchronous resize mode. When enabled, all window-sizing
 // machinery is short-circuited inside the renderer. This mode is necessary for
 // some tests that were written before browsers had multi-process architecture
@@ -127,4 +114,4 @@ void SetWorkerRewriteURLFunction(RewriteURLFunction rewrite_url_function);
 
 }  // namespace content
 
-#endif  // CONTENT_PUBLIC_TEST_WEB_TEST_SUPPORT_H_
+#endif  // CONTENT_PUBLIC_TEST_WEB_TEST_SUPPORT_RENDERER_H_
