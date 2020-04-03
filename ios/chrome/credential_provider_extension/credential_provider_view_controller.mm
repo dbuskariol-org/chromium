@@ -59,13 +59,19 @@
 #pragma mark - Properties
 
 - (ReauthenticationHandler*)reauthenticationHandler {
-  if (!self.reauthenticationModule) {
-    self.reauthenticationModule = [[ReauthenticationModule alloc]
-        initWithSuccessfulReauthTimeAccessor:self];
-    self.reauthenticationHandler = [[ReauthenticationHandler alloc]
+  if (!_reauthenticationHandler) {
+    _reauthenticationHandler = [[ReauthenticationHandler alloc]
         initWithReauthenticationModule:self.reauthenticationModule];
   }
   return _reauthenticationHandler;
+}
+
+- (ReauthenticationModule*)reauthenticationModule {
+  if (!_reauthenticationModule) {
+    _reauthenticationModule = [[ReauthenticationModule alloc]
+        initWithSuccessfulReauthTimeAccessor:self];
+  }
+  return _reauthenticationModule;
 }
 
 #pragma mark - Private
