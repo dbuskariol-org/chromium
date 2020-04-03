@@ -111,8 +111,12 @@ public class ManageSyncSettingsTest {
         ChromeSwitchPreference syncEverything = getSyncEverything(fragment);
         Map<Integer, CheckBoxPreference> dataTypes = getDataTypes(fragment);
 
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         assertSyncOnState(fragment);
         mSyncTestRule.togglePreference(syncEverything);
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        Assert.assertFalse(syncEverything.isChecked());
         for (CheckBoxPreference dataType : dataTypes.values()) {
             Assert.assertTrue(dataType.isChecked());
             Assert.assertTrue(dataType.isEnabled());
