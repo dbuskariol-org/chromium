@@ -2,23 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_MEDIA_WEBRTC_MEDIA_STREAM_DEVICES_CONTROLLER_H_
-#define CHROME_BROWSER_MEDIA_WEBRTC_MEDIA_STREAM_DEVICES_CONTROLLER_H_
+#ifndef COMPONENTS_WEBRTC_MEDIA_STREAM_DEVICES_CONTROLLER_H_
+#define COMPONENTS_WEBRTC_MEDIA_STREAM_DEVICES_CONTROLLER_H_
 
 #include <map>
 #include <string>
 
 #include "base/callback.h"
-#include "base/macros.h"
 #include "build/build_config.h"
 #include "components/content_settings/core/common/content_settings.h"
+#include "components/webrtc/media_stream_device_enumerator_impl.h"
 #include "content/public/browser/media_stream_request.h"
 #include "third_party/blink/public/common/mediastream/media_stream_request.h"
 #include "third_party/blink/public/mojom/mediastream/media_stream.mojom-shared.h"
-
-class MediaStreamDevicesController;
-class Profile;
-class TabSpecificContentSettings;
 
 namespace permissions {
 enum class PermissionStatusSource;
@@ -28,22 +24,38 @@ namespace content {
 class WebContents;
 }
 
-namespace user_prefs {
-class PrefRegistrySyncable;
-}
+namespace webrtc {
 
-namespace policy {
-class MediaStreamDevicesControllerBrowserTest;
-}
+class MediaStreamDeviceEnumerator;
 
-namespace test {
-class MediaStreamDevicesControllerTestApi;
-}
-
+// A class that provides logic for microphone/camera requests originating in the
+// renderer.
 class MediaStreamDevicesController {
  public:
+  typedef base::OnceCallback<void(const blink::MediaStreamDevices& devices,
+                                  blink::mojom::MediaStreamRequestResult result,
+                                  bool blocked_by_feature_policy,
+                                  ContentSetting audio_setting,
+                                  ContentSetting video_setting)>
+      ResultCallback;
+
+  // Requests the mic/camera permissions described in |request|, using
+  // |enumerator| to list the system's devices. The result of the request is
+  // synchronously or asynchronously returned via |callback|.
   static void RequestPermissions(const content::MediaStreamRequest& request,
-                                 content::MediaResponseCallback callback);
+                                 MediaStreamDeviceEnumerator* enumerator,
+                                 ResultCallback callback);
+
+  ~MediaStreamDevicesController();
+
+ private:
+  MediaStreamDevicesController(content::WebContents* web_contents,
+                               MediaStreamDeviceEnumerator* enumerator,
+                               const content::MediaStreamRequest& request,
+                               ResultCallback callback);
+  MediaStreamDevicesController(const MediaStreamDevicesController&) = delete;
+  MediaStreamDevicesController& operator=(MediaStreamDevicesController&) =
+      delete;
 
   static void RequestAndroidPermissionsIfNeeded(
       content::WebContents* web_contents,
@@ -59,24 +71,6 @@ class MediaStreamDevicesController {
       std::vector<ContentSetting> responses,
       bool android_prompt_granted);
 #endif  // defined(OS_ANDROID)
-
-  // Registers the prefs backing the audio and video policies.
-  static void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry);
-
-  ~MediaStreamDevicesController();
-
-  // Called when a permission prompt is answered through the PermissionManager.
-  void PromptAnsweredGroupedRequest(
-      const std::vector<ContentSetting>& responses);
-
- private:
-  friend class MediaStreamDevicesControllerTest;
-  friend class test::MediaStreamDevicesControllerTestApi;
-  friend class policy::MediaStreamDevicesControllerBrowserTest;
-
-  MediaStreamDevicesController(content::WebContents* web_contents,
-                               const content::MediaStreamRequest& request,
-                               content::MediaResponseCallback callback);
 
   // Returns true if audio/video should be requested through the
   // PermissionManager. We won't try to request permission if the request is
@@ -111,6 +105,13 @@ class MediaStreamDevicesController {
       ContentSettingsType content_type,
       permissions::PermissionStatusSource reason) const;
 
+  // Called when a permission prompt is answered through the PermissionManager.
+  void PromptAnsweredGroupedRequest(
+      const std::vector<ContentSetting>& responses);
+
+  bool HasAvailableDevices(ContentSettingsType content_type,
+                           const std::string& device_id) const;
+
   // The current state of the audio/video content settings which may be updated
   // through the lifetime of the request.
   ContentSetting audio_setting_;
@@ -119,24 +120,21 @@ class MediaStreamDevicesController {
 
   content::WebContents* web_contents_;
 
-  // The owner of this class needs to make sure it does not outlive the profile.
-  Profile* profile_;
+  // The object which lists available devices.
+  MediaStreamDeviceEnumerator* enumerator_;
 
-  // Weak pointer to the tab specific content settings of the tab for which the
-  // MediaStreamDevicesController was created. The tab specific content
-  // settings are associated with a the web contents of the tab. The
-  // MediaStreamDeviceController must not outlive the web contents for which it
-  // was created.
-  TabSpecificContentSettings* content_settings_;
+  // This enumerator is used as |enumerator_| when the instance passed into the
+  // constructor is null.
+  MediaStreamDeviceEnumeratorImpl owned_enumerator_;
 
   // The original request for access to devices.
   const content::MediaStreamRequest request_;
 
-  // The callback that needs to be Run to notify WebRTC of whether access to
+  // The callback that needs to be run to notify WebRTC of whether access to
   // audio/video devices was granted or not.
-  content::MediaResponseCallback callback_;
-
-  DISALLOW_COPY_AND_ASSIGN(MediaStreamDevicesController);
+  ResultCallback callback_;
 };
 
-#endif  // CHROME_BROWSER_MEDIA_WEBRTC_MEDIA_STREAM_DEVICES_CONTROLLER_H_
+}  // namespace webrtc
+
+#endif  // COMPONENTS_WEBRTC_MEDIA_STREAM_DEVICES_CONTROLLER_H_

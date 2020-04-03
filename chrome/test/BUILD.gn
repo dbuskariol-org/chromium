@@ -688,6 +688,7 @@ if (!is_android) {
       "//components/sync:test_support_model",
       "//components/sync_device_info:test_support",
       "//components/translate/core/common",
+      "//components/webrtc",
       "//content/test:test_support",
       "//crypto:platform",
       "//crypto:test_support",
