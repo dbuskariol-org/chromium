@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="resources/flexbox.css">
+<title>CSS Flexbox: Stretch input form controls in flexbox column</title>
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-property">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#align-items-property">
+<link rel="match" href="reference/stretch-input-in-column-ref.html">
+<link href="support/flexbox.css" rel="stylesheet">
+<meta name="assert" content="This test ensures that input form controls that are stretched in
+a column flexbox should not overflow the flexbox.">
 <style>
 .flexbox {
     background-color: grey;
 }
 </style>
 <body>
-<p>Form controls that are stretched in a column flexbox should not overflow the flexbox.</p>
+<p>This test passes if none of the form controls overflow.</p>
 <div class="flexbox column">
     <input>
 </div>
