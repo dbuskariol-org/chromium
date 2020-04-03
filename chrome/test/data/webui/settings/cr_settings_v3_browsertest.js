@@ -386,6 +386,7 @@ TEST_F(
  ['RecentSitePermissions', 'recent_site_permissions_test.m.js'],
  ['ResetPage', 'reset_page_test.m.js'],
  ['ResetProfileBanner', 'reset_profile_banner_test.m.js'],
+ ['Route', 'route_tests.m.js'],
  ['SearchEngines', 'search_engines_page_test.m.js'],
  ['SearchPage', 'search_page_test.m.js'],
  ['Search', 'search_settings_test.m.js'],

@@ -2,6 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// clang-format off
+// #import {buildRouter, pageVisibility, routes, Route, Router, setPageVisibilityForTesting} from 'chrome://settings/settings.js';
+// #import {isChromeOS} from 'chrome://resources/js/cr.m.js';
+// clang-format on
+
 suite('route', function() {
   /**
    * Returns a new promise that resolves after a window 'popstate' event.
@@ -214,13 +219,13 @@ suite('route', function() {
   });
 
   test('pageVisibility affects route availability', function() {
-    settings.pageVisibility = {
+    settings.setPageVisibilityForTesting({
       appearance: false,
       autofill: false,
       defaultBrowser: false,
       onStartup: false,
       reset: false,
-    };
+    });
     loadTimeData.overrideValues({showOSSettings: false});
 
     const router = settings.buildRouterForTesting();

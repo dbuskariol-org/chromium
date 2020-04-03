@@ -262,6 +262,7 @@ js2gtest("browser_tests_js_webui") {
     "$root_gen_dir/chrome/test/data/webui/settings/recent_site_permissions_test.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/reset_page_test.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/reset_profile_banner_test.m.js",
+    "$root_gen_dir/chrome/test/data/webui/settings/route_tests.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/safety_check_page_test.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/search_engines_page_test.m.js",
     "$root_gen_dir/chrome/test/data/webui/settings/search_page_test.m.js",
