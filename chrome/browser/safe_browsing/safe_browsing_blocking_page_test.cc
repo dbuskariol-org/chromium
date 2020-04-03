@@ -1968,9 +1968,14 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
 
  protected:
   void NavigateAndAssertNoInterstitial() {
-    const GURL url = embedded_test_server()->GetURL("/empty.html");
-    SetURLThreatType(url, SB_THREAT_TYPE_URL_PHISHING);
-    ui_test_utils::NavigateToURL(browser(), url);
+    // Use a page that contains an iframe so that we can test both top frame
+    // and subresource warnings.
+    const GURL top_frame = embedded_test_server()->GetURL("/iframe.html");
+    SetURLThreatType(top_frame, SB_THREAT_TYPE_URL_PHISHING);
+    const GURL iframe = embedded_test_server()->GetURL("/title1.html");
+    SetURLThreatType(iframe, SB_THREAT_TYPE_URL_PHISHING);
+
+    ui_test_utils::NavigateToURL(browser(), top_frame);
     AssertNoInterstitial(browser(), true);
   }
 
@@ -1981,7 +1986,6 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
     return testing::get<2>(GetParam());
   }
 
- private:
   void SetURLThreatType(const GURL& url, SBThreatType threat_type) {
     TestSafeBrowsingService* service = factory_.test_safe_browsing_service();
     ASSERT_TRUE(service);
@@ -1991,6 +1995,7 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
         ->SetURLThreatType(url, threat_type);
   }
 
+ private:
   base::test::ScopedFeatureList scoped_feature_list_;
   TestSafeBrowsingServiceFactory factory_;
   TestSafeBrowsingBlockingPageFactory blocking_page_factory_;
@@ -2012,6 +2017,22 @@ IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
                                DelayedWarningEvent::kPageLoaded, 1);
   histograms.ExpectBucketCount(kDelayedWarningsHistogram,
                                DelayedWarningEvent::kWarningNotShown, 1);
+}
+
+IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
+                       NotPhishing_WarningNotDelayed) {
+  base::HistogramTester histograms;
+
+  // Navigate to a non-phishing page. The warning should not be delayed.
+  const GURL url = embedded_test_server()->GetURL("/empty.html");
+  SetURLThreatType(url, SB_THREAT_TYPE_URL_MALWARE);
+  ui_test_utils::NavigateToURL(browser(), url);
+  EXPECT_TRUE(WaitForReady(browser()));
+
+  // Navigate to about:blank to "flush" metrics, if any.
+  ui_test_utils::NavigateToURL(browser(), GURL(url::kAboutBlankURL));
+
+  histograms.ExpectTotalCount(kDelayedWarningsHistogram, 0);
 }
 
 IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,

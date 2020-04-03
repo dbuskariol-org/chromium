@@ -78,7 +78,13 @@ void SafeBrowsingUserInteractionObserver::CreateForWebContents(
     const security_interstitials::UnsafeResource& resource,
     bool is_main_frame,
     scoped_refptr<SafeBrowsingUIManager> ui_manager) {
-  DCHECK(!FromWebContents(web_contents));
+  // This method is called for all unsafe resources on |web_contents|. Only
+  // create an observer if there isn't one.
+  // TODO(crbug.com/1057157): The observer should observe all unsafe resources
+  // instead of the first one only.
+  if (FromWebContents(web_contents)) {
+    return;
+  }
   auto observer = std::make_unique<SafeBrowsingUserInteractionObserver>(
       web_contents, resource, is_main_frame, ui_manager);
   web_contents->SetUserData(kWebContentsUserDataKey, std::move(observer));
