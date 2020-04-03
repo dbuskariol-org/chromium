@@ -4737,6 +4737,25 @@
       }
     },
 
+    'ios_simulator_full_configs_test': {
+      'ios_eg_tests': {
+        'variants': [
+          'SIM_IPAD_AIR_2_12_4',
+          'SIM_IPHONE_X_12_4',
+          'SIM_IPHONE_7_13_3',
+          'SIM_IPAD_AIR_2_13_3',
+          'SIM_IPHONE_X_13_3',
+        ]
+      },
+      'ios_eg_cq_tests': {
+        'variants': [
+          'SIM_IPAD_AIR_2_12_4',
+          'SIM_IPHONE_7_13_3',
+          'SIM_IPAD_AIR_2_13_3',
+        ]
+      }
+    },
+
     'ios_simulator_tests': {
       'ios_common_tests': {
         'variants': [

@@ -474,7 +474,7 @@
       'Mac Builder (dbg)': 'gpu_tests_debug_bot',
       'ios-device': 'ios_device_release_rbe_compile_only',
       'ios-simulator': 'ios_simulator_debug_static_rbe_bot',
-      'ios-simulator-full-configs': 'ios_error',
+      'ios-simulator-full-configs': 'ios_simulator_debug_static_bot',
       'WebKit Mac10.13 (retina)': 'release_bot',
     },
 
@@ -888,7 +888,7 @@
       'gpu-try-mac-intel-dbg': 'gpu_tests_debug_bot',
       'ios-device': 'ios_device_release_rbe_compile_only',
       'ios-simulator': 'ios_simulator_debug_static_rbe_bot',
-      'ios-simulator-full-configs': 'ios_error',
+      'ios-simulator-full-configs': 'ios_simulator_debug_static_bot',
       'ios-simulator-cronet': 'ios_cronet',
       'ios-simulator-code-coverage': 'clang_code_coverage_ios',
       'ios-simulator-cr-recipe': 'ios_simulator_debug_static_bot',

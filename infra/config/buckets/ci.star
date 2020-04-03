@@ -1642,6 +1642,7 @@ ci.mac_ios_builder(
 
 ci.mac_ios_builder(
     name = 'ios-simulator-full-configs',
+    executable = 'recipe:chromium',
 )
 
 ci.mac_ios_builder(
