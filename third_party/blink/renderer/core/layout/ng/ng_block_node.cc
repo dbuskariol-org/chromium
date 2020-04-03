@@ -33,6 +33,7 @@
 #include "third_party/blink/renderer/core/layout/ng/mathml/ng_math_layout_utils.h"
 #include "third_party/blink/renderer/core/layout/ng/mathml/ng_math_row_layout_algorithm.h"
 #include "third_party/blink/renderer/core/layout/ng/mathml/ng_math_space_layout_algorithm.h"
+#include "third_party/blink/renderer/core/layout/ng/mathml/ng_math_under_over_layout_algorithm.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_block_break_token.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_block_layout_algorithm.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_box_fragment.h"
@@ -55,6 +56,7 @@
 #include "third_party/blink/renderer/core/mathml/mathml_element.h"
 #include "third_party/blink/renderer/core/mathml/mathml_fraction_element.h"
 #include "third_party/blink/renderer/core/mathml/mathml_space_element.h"
+#include "third_party/blink/renderer/core/mathml/mathml_under_over_element.h"
 #include "third_party/blink/renderer/core/paint/paint_layer_scrollable_area.h"
 #include "third_party/blink/renderer/platform/runtime_enabled_features.h"
 #include "third_party/blink/renderer/platform/text/writing_mode.h"
@@ -104,6 +106,9 @@ NOINLINE void DetermineMathMLAlgorithmAndRun(
   else if (IsA<MathMLFractionElement>(element) &&
            IsValidMathMLFraction(params.node))
     CreateAlgorithmAndRun<NGMathFractionLayoutAlgorithm>(params, callback);
+  else if (IsA<MathMLUnderOverElement>(element) &&
+           IsValidMathMLUnderOver(params.node))
+    CreateAlgorithmAndRun<NGMathUnderOverLayoutAlgorithm>(params, callback);
   else
     CreateAlgorithmAndRun<NGMathRowLayoutAlgorithm>(params, callback);
 }
