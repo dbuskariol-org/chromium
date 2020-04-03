@@ -50,6 +50,7 @@ export {OnStartupBrowserProxy, OnStartupBrowserProxyImpl} from './on_startup_pag
 export {EDIT_STARTUP_URL_EVENT} from './on_startup_page/startup_url_entry.m.js';
 export {StartupUrlsPageBrowserProxy, StartupUrlsPageBrowserProxyImpl} from './on_startup_page/startup_urls_page_browser_proxy.m.js';
 export {OpenWindowProxyImpl} from './open_window_proxy.m.js';
+export {MAX_SIGNIN_PROMO_IMPRESSION} from './people_page/sync_account_control.m.js';
 export {PageStatus, StatusAction, SyncBrowserProxyImpl} from './people_page/sync_browser_proxy.m.js';
 export {ProfileInfoBrowserProxyImpl} from './people_page/profile_info_browser_proxy.m.js';
 export {pageVisibility, setPageVisibilityForTesting} from './page_visibility.m.js';
