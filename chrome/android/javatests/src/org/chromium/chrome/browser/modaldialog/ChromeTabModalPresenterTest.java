@@ -38,7 +38,6 @@ import org.junit.runner.RunWith;
 
 import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.base.test.util.CommandLineFlags;
-import org.chromium.base.test.util.DisabledTest;
 import org.chromium.base.test.util.Feature;
 import org.chromium.base.test.util.Restriction;
 import org.chromium.chrome.R;
@@ -127,14 +126,11 @@ public class ChromeTabModalPresenterTest {
                 createDialog(mActivity, mActivity.getModalDialogManager(), "1", null);
         showDialog(mManager, dialog1, ModalDialogType.TAB);
 
-        ChromeTabModalPresenter presenter =
-                (ChromeTabModalPresenter) mManager.getPresenterForTest(ModalDialogType.TAB);
-        final View dialogContainer = presenter.getDialogContainerForTest();
+        final View dialogContainer = mTabModalPresenter.getDialogContainerForTest();
         final View controlContainer = mActivity.findViewById(R.id.control_container);
-        final ViewGroup containerParent = presenter.getContainerParentForTest();
+        final ViewGroup containerParent = mTabModalPresenter.getContainerParentForTest();
 
-        CriteriaHelper.pollUiThread(
-                Criteria.equals(View.VISIBLE, () -> dialogContainer.getVisibility()));
+        ensureDialogContainerVisible();
 
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             Assert.assertThat(containerParent.indexOfChild(dialogContainer),
@@ -220,6 +216,7 @@ public class ChromeTabModalPresenterTest {
         mTestObserver.onTabInteractabilityChangedCallback.waitForCallback(callCount);
 
         checkPendingSize(mManager, ModalDialogType.TAB, 1);
+        ensureDialogContainerVisible();
         onView(withId(R.id.tab_modal_dialog_container))
                 .check(matches(
                         allOf(hasDescendant(withText("1")), not(hasDescendant(withText("2"))))));
@@ -260,6 +257,7 @@ public class ChromeTabModalPresenterTest {
         // Add a tab modal dialog available for showing.
         showDialog(mManager, dialog1, ModalDialogType.TAB);
         checkPendingSize(mManager, ModalDialogType.TAB, 0);
+        ensureDialogContainerVisible();
         onView(withId(R.id.tab_modal_dialog_container))
                 .check(matches(hasDescendant(withText("1"))));
         checkBrowserControls(true);
@@ -283,7 +281,6 @@ public class ChromeTabModalPresenterTest {
     @SmallTest
     @Feature({"ModalDialog"})
     @Restriction(UiRestriction.RESTRICTION_TYPE_PHONE)
-    @DisabledTest(message = "Flaky. crbug.com/1030683")
     public void testSuspend_TabClosed() throws Exception {
         PropertyModel dialog1 =
                 createDialog(mActivity, mActivity.getModalDialogManager(), "1", null);
@@ -303,6 +300,7 @@ public class ChromeTabModalPresenterTest {
         showDialog(mManager, dialog1, ModalDialogType.TAB);
         checkPendingSize(mManager, ModalDialogType.APP, 0);
         checkPendingSize(mManager, ModalDialogType.TAB, 0);
+        ensureDialogContainerVisible();
         onView(withId(R.id.tab_modal_dialog_container))
                 .check(matches(hasDescendant(withText("1"))));
         checkBrowserControls(true);
@@ -340,7 +338,6 @@ public class ChromeTabModalPresenterTest {
     @Test
     @SmallTest
     @Feature({"ModalDialog"})
-    @DisabledTest(message = "Flaky. crbug.com/1030903")
     public void testDismiss_SwitchTab() throws Exception {
         PropertyModel dialog1 =
                 createDialog(mActivity, mActivity.getModalDialogManager(), "1", null);
@@ -359,6 +356,7 @@ public class ChromeTabModalPresenterTest {
         // Add a tab modal dialog available for showing.
         showDialog(mManager, dialog1, ModalDialogType.TAB);
         checkPendingSize(mManager, ModalDialogType.TAB, 0);
+        ensureDialogContainerVisible();
         onView(withId(R.id.tab_modal_dialog_container))
                 .check(matches(hasDescendant(withText("1"))));
         checkBrowserControls(true);
@@ -373,6 +371,7 @@ public class ChromeTabModalPresenterTest {
         // Open a tab modal dialog in the current tab. The dialog should be shown.
         showDialog(mManager, dialog2, ModalDialogType.TAB);
         checkPendingSize(mManager, ModalDialogType.TAB, 0);
+        ensureDialogContainerVisible();
         onView(withId(R.id.tab_modal_dialog_container))
                 .check(matches(hasDescendant(withText("2"))));
         checkBrowserControls(true);
@@ -566,5 +565,11 @@ public class ChromeTabModalPresenterTest {
             Assert.assertFalse("Tabs shouldn't be obscured", isViewObscuringAllTabs);
             assertTrue("Menu is incorrectly disabled.", isMenuEnabled);
         }
+    }
+
+    private void ensureDialogContainerVisible() {
+        final View dialogContainer = mTabModalPresenter.getDialogContainerForTest();
+        CriteriaHelper.pollUiThread(
+                Criteria.equals(View.VISIBLE, () -> dialogContainer.getVisibility()));
     }
 }
