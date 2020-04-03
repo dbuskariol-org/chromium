@@ -1038,6 +1038,7 @@ crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/mult
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-nested-margin-004.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-nested-margin-005.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-overflow-000.xht [ Failure ]
+crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-overflow-clip.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-overflowing-001.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-reduce-000.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-rule-000.xht [ Failure ]
