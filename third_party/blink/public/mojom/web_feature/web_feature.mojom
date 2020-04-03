@@ -2225,7 +2225,7 @@ enum WebFeature {
   kV8RTCRtpReceiver_JitterBufferDelayHint_AttributeGetter = 2886,
   kV8RTCRtpReceiver_JitterBufferDelayHint_AttributeSetter = 2887,
   kMediaCapabilitiesDecodingInfoWithKeySystemConfig = 2888,
-  kRevertInCustomIdent = 2889,
+  kOBSOLETE_RevertInCustomIdent = 2889,
   kUnoptimizedImagePolicies = 2890,
   kVTTCueParser = 2891,
   kMediaElementTextTrackContainer = 2892,

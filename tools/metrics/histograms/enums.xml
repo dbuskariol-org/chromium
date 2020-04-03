@@ -26576,7 +26576,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="2887"
       label="V8RTCRtpReceiver_JitterBufferDelayHint_AttributeSetter"/>
   <int value="2888" label="MediaCapabilitiesDecodingInfoWithKeySystemConfig"/>
-  <int value="2889" label="RevertInCustomIdent"/>
+  <int value="2889" label="OBSOLETE_RevertInCustomIdent"/>
   <int value="2890" label="UnoptimizedImagePolicies"/>
   <int value="2891" label="VTTCueParser"/>
   <int value="2892" label="MediaElementTextTrackContainer"/>
