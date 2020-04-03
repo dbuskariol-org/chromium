@@ -886,6 +886,11 @@ void LayoutBox::UpdateAfterLayout() {
   // Legacy, then NG again, NG won't use a stale layout result.
   if (IsOutOfFlowPositioned() && !IsLayoutNGObject())
     ClearLayoutResults();
+
+  Document& document = GetDocument();
+  document.IncLayoutCallsCounter();
+  if (IsLayoutNGObject())
+    document.IncLayoutCallsCounterNG();
 }
 
 bool LayoutBox::HasOverrideIntrinsicContentWidth() const {
