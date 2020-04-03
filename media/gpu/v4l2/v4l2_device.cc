@@ -881,6 +881,17 @@ base::Optional<struct v4l2_format> V4L2Queue::SetFormat(uint32_t fourcc,
   return current_format_;
 }
 
+std::pair<base::Optional<struct v4l2_format>, int> V4L2Queue::GetFormat() {
+  struct v4l2_format format = {};
+  format.type = type_;
+  if (device_->Ioctl(VIDIOC_G_FMT, &format) != 0) {
+    VPQLOGF(2) << "Failed to get format";
+    return std::make_pair(base::nullopt, errno);
+  }
+
+  return std::make_pair(format, 0);
+}
+
 size_t V4L2Queue::AllocateBuffers(size_t count, enum v4l2_memory memory) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(!free_buffers_);
@@ -906,13 +917,12 @@ size_t V4L2Queue::AllocateBuffers(size_t count, enum v4l2_memory memory) {
   // This should not be required, but Tegra's VIDIOC_QUERYBUF will fail on
   // output buffers if the number of specified planes does not exactly match the
   // format.
-  struct v4l2_format format = {.type = type_};
-  int ret = device_->Ioctl(VIDIOC_G_FMT, &format);
-  if (ret) {
-    VPQLOGF(1) << "VIDIOC_G_FMT failed";
+  base::Optional<v4l2_format> format = GetFormat().first;
+  if (!format) {
+    VQLOGF(1) << "Cannot get format.";
     return 0;
   }
-  planes_count_ = format.fmt.pix_mp.num_planes;
+  planes_count_ = format->fmt.pix_mp.num_planes;
   DCHECK_LE(planes_count_, static_cast<size_t>(VIDEO_MAX_PLANES));
 
   struct v4l2_requestbuffers reqbufs = {};
@@ -921,7 +931,7 @@ size_t V4L2Queue::AllocateBuffers(size_t count, enum v4l2_memory memory) {
   reqbufs.memory = memory;
   DVQLOGF(3) << "Requesting " << count << " buffers.";
 
-  ret = device_->Ioctl(VIDIOC_REQBUFS, &reqbufs);
+  int ret = device_->Ioctl(VIDIOC_REQBUFS, &reqbufs);
   if (ret) {
     VPQLOGF(1) << "VIDIOC_REQBUFS failed";
     return 0;
@@ -934,7 +944,7 @@ size_t V4L2Queue::AllocateBuffers(size_t count, enum v4l2_memory memory) {
 
   // Now query all buffer information.
   for (size_t i = 0; i < reqbufs.count; i++) {
-    auto buffer = V4L2Buffer::Create(device_, type_, memory_, format, i);
+    auto buffer = V4L2Buffer::Create(device_, type_, memory_, *format, i);
 
     if (!buffer) {
       DeallocateBuffers();

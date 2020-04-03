@@ -2084,18 +2084,19 @@ bool V4L2VideoDecodeAccelerator::GetFormatInfo(struct v4l2_format* format,
   DCHECK(decoder_thread_.task_runner()->BelongsToCurrentThread());
 
   *again = false;
-  memset(format, 0, sizeof(*format));
-  format->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-  if (device_->Ioctl(VIDIOC_G_FMT, format) != 0) {
-    if (errno == EINVAL) {
+
+  auto ret = output_queue_->GetFormat();
+  switch (ret.second) {
+    case 0:
+      *format = *ret.first;
+      break;
+    case EINVAL:
       // EINVAL means we haven't seen sufficient stream to decode the format.
       *again = true;
       return true;
-    } else {
-      PLOG(ERROR) << "ioctl() failed: VIDIOC_G_FMT";
+    default:
       NOTIFY_ERROR(PLATFORM_FAILURE);
       return false;
-    }
   }
 
   // Make sure we are still getting the format we set on initialization.
