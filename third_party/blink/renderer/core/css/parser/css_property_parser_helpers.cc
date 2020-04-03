@@ -1868,7 +1868,9 @@ CSSValue* ConsumeImage(CSSParserTokenRange& range,
 bool IsCSSWideKeyword(StringView keyword) {
   return EqualIgnoringASCIICase(keyword, "initial") ||
          EqualIgnoringASCIICase(keyword, "inherit") ||
-         EqualIgnoringASCIICase(keyword, "unset");
+         EqualIgnoringASCIICase(keyword, "unset") ||
+         (RuntimeEnabledFeatures::CSSRevertEnabled() &&
+          EqualIgnoringASCIICase(keyword, "revert"));
 }
 
 // https://drafts.csswg.org/css-cascade/#default

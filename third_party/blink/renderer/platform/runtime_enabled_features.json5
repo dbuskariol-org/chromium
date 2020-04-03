@@ -508,6 +508,10 @@
       status: "test",
     },
     {
+      name: "CSSRevert",
+      depends_on: ["CSSCascade"],
+    },
+    {
       name: "CSSSnapSize",
       status: "experimental",
     },

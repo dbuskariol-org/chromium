@@ -501,6 +501,9 @@ const CSSValue* StyleCascade::Resolve(const CSSProperty& property,
     return ResolveVariableReference(property, *v, resolver);
   if (const auto* v = DynamicTo<cssvalue::CSSPendingSubstitutionValue>(value))
     return ResolvePendingSubstitution(property, *v, resolver);
+  // TODO(andruud): Actually revert instead of treating as unset.
+  if (value.IsRevertValue())
+    return cssvalue::CSSUnsetValue::Create();
   return &value;
 }
 
