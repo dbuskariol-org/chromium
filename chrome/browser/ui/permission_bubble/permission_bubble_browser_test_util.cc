@@ -6,9 +6,7 @@
 
 #include "base/command_line.h"
 #include "chrome/browser/apps/app_service/app_launch_params.h"
-#include "chrome/browser/apps/app_service/app_service_proxy.h"
-#include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
-#include "chrome/browser/apps/app_service/browser_app_launcher.h"
+#include "chrome/browser/apps/launch_service/launch_service.h"
 #include "chrome/browser/extensions/extension_browsertest.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_window.h"
@@ -60,9 +58,7 @@ content::WebContents* PermissionBubbleBrowserTest::OpenExtensionAppWindow() {
       apps::mojom::AppLaunchSource::kSourceTest);
 
   content::WebContents* app_contents =
-      apps::AppServiceProxyFactory::GetForProfile(browser()->profile())
-          ->BrowserAppLauncher()
-          .LaunchAppWithParams(params);
+      apps::LaunchService::Get(browser()->profile())->OpenApplication(params);
   CHECK(app_contents);
   return app_contents;
 }
