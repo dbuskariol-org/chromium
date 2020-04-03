@@ -354,6 +354,34 @@ TEST_F(
       runMochaSuite('HappinessTrackingSurveys');
     });
 
+// eslint-disable-next-line no-var
+var CrSettingsRouteV3Test = class extends CrSettingsV3BrowserTest {
+  /** @override */
+  get browsePreload() {
+    return 'chrome://settings/test_loader.html?module=settings/route_tests.m.js';
+  }
+};
+
+TEST_F('CrSettingsRouteV3Test', 'Basic', function() {
+  runMochaSuite('route');
+});
+
+TEST_F('CrSettingsRouteV3Test', 'DynamicParameters', function() {
+  runMochaSuite('DynamicParameters');
+});
+
+// Copied from Polymer 2 test:
+// Failing on ChromiumOS dbg. https://crbug.com/709442
+GEN('#if (defined(OS_WIN) || defined(OS_CHROMEOS)) && !defined(NDEBUG)');
+GEN('#define MAYBE_NonExistentRoute DISABLED_NonExistentRoute');
+GEN('#else');
+GEN('#define MAYBE_NonExistentRoute NonExistentRoute');
+GEN('#endif');
+
+TEST_F('CrSettingsRouteV3Test', 'MAYBE_NonExistentRoute', function() {
+  runMochaSuite('NonExistentRoute');
+});
+
 [['AllSites', 'all_sites_tests.m.js'],
  ['AppearanceFontsPage', 'appearance_fonts_page_test.m.js'],
  ['AppearancePage', 'appearance_page_test.m.js'],
@@ -386,7 +414,6 @@ TEST_F(
  ['RecentSitePermissions', 'recent_site_permissions_test.m.js'],
  ['ResetPage', 'reset_page_test.m.js'],
  ['ResetProfileBanner', 'reset_profile_banner_test.m.js'],
- ['Route', 'route_tests.m.js'],
  ['SearchEngines', 'search_engines_page_test.m.js'],
  ['SearchPage', 'search_page_test.m.js'],
  ['Search', 'search_settings_test.m.js'],

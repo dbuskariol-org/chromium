@@ -262,3 +262,74 @@ suite('route', function() {
             settings.routes.LANGUAGES.getAbsolutePath());
       });
 });
+
+suite('DynamicParameters', function() {
+  setup(function() {
+    // TODO(https://crbug.com/1026426): Remove conditional when Polymer 2 tests
+    // are no longer run.
+    if (window.location.pathname === '/test_loader.html') {
+      PolymerTest.clearBody();
+      window.history.replaceState({}, '', 'search?guid=a%2Fb&foo=42');
+      const settingsUi = document.createElement('settings-ui');
+      document.body.appendChild(settingsUi);
+    }
+  });
+
+  test('get parameters from URL and navigation', function(done) {
+    assertEquals(
+        settings.routes.SEARCH,
+        settings.Router.getInstance().getCurrentRoute());
+    assertEquals(
+        'a/b', settings.Router.getInstance().getQueryParameters().get('guid'));
+    assertEquals(
+        '42', settings.Router.getInstance().getQueryParameters().get('foo'));
+
+    const params = new URLSearchParams();
+    params.set('bar', 'b=z');
+    params.set('biz', '3');
+    settings.Router.getInstance().navigateTo(
+        settings.routes.SEARCH_ENGINES, params);
+    assertEquals(
+        settings.routes.SEARCH_ENGINES,
+        settings.Router.getInstance().getCurrentRoute());
+    assertEquals(
+        'b=z', settings.Router.getInstance().getQueryParameters().get('bar'));
+    assertEquals(
+        '3', settings.Router.getInstance().getQueryParameters().get('biz'));
+    assertEquals('?bar=b%3Dz&biz=3', window.location.search);
+
+    window.addEventListener('popstate', function(event) {
+      assertEquals(
+          '/search', settings.Router.getInstance().getCurrentRoute().path);
+      assertEquals(
+          settings.routes.SEARCH,
+          settings.Router.getInstance().getCurrentRoute());
+      assertEquals(
+          'a/b',
+          settings.Router.getInstance().getQueryParameters().get('guid'));
+      assertEquals(
+          '42', settings.Router.getInstance().getQueryParameters().get('foo'));
+      done();
+    });
+    window.history.back();
+  });
+});
+
+suite('NonExistentRoute', function() {
+  setup(function() {
+    // TODO(https://crbug.com/1026426): Remove conditional when Polymer 2 tests
+    // are no longer run.
+    if (window.location.pathname === '/test_loader.html') {
+      PolymerTest.clearBody();
+      window.history.replaceState({}, '', 'non/existent/route');
+      const settingsUi = document.createElement('settings-ui');
+      document.body.appendChild(settingsUi);
+    }
+  });
+
+  test('redirect to basic', function() {
+    assertEquals(
+        settings.routes.BASIC, settings.Router.getInstance().getCurrentRoute());
+    assertEquals('/', location.pathname);
+  });
+});
