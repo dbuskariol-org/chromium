@@ -4784,7 +4784,7 @@ const FeatureEntry kFeatureEntries[] = {
     {"dns-httpssvc", flag_descriptions::kDnsHttpssvcName,
      flag_descriptions::kDnsHttpssvcDescription,
      kOsMac | kOsWin | kOsCrOS | kOsAndroid,
-     FEATURE_VALUE_TYPE(features::kDnsHttpssvc)},
+     FEATURE_VALUE_TYPE(net::features::kDnsHttpssvc)},
 
     {"dns-over-https", flag_descriptions::kDnsOverHttpsName,
      flag_descriptions::kDnsOverHttpsDescription,
