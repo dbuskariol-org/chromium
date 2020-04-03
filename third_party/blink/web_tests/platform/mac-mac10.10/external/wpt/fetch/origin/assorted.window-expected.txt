@@ -1,3 +1,4 @@
+Content-Type: text/plain
 This is a testharness.js-based test.
 PASS Origin header and 308 redirect
 PASS Origin header and GET navigation
@@ -44,3 +45,5 @@ PASS Origin header and POST cross-origin fetch cors mode with Referrer-Policy un
 PASS Origin header and GET cross-origin fetch cors mode with Referrer-Policy unsafe-url
 Harness: the test ran to completion.
 
+#EOF
+#EOF
