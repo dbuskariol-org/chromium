@@ -11,6 +11,10 @@
 
 namespace WTF {
 
+template <typename T>
+int* const ValueInstanceCount<T>::kDeletedValue =
+    reinterpret_cast<int*>(static_cast<uintptr_t>(-1));
+
 TEST(NewLinkedHashSetTest, CopyConstructAndAssignInt) {
   using Set = NewLinkedHashSet<ValueInstanceCount<int>>;
   // Declare the counters before the set, because they have to outlive teh set.
