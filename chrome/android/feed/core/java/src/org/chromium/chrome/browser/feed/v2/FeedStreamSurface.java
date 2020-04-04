@@ -61,7 +61,7 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
         LoadUrlParams loadUrlParams = new LoadUrlParams(url);
         loadUrlParams.setTransitionType(PageTransition.AUTO_BOOKMARK);
         mActivity.getActivityTabProvider().get().loadUrl(loadUrlParams);
-        FeedStreamSurfaceJni.get().navigationStarted(
+        FeedStreamSurfaceJni.get().reportNavigationStarted(
                 mNativeFeedStreamSurface, FeedStreamSurface.this, url, false /*inNewTab*/);
     }
 
@@ -71,7 +71,7 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
         Tab tab = mActivity.getActivityTabProvider().get();
         tabModelSelector.openNewTab(
                 new LoadUrlParams(url), TabLaunchType.FROM_CHROME_UI, tab, tab.isIncognito());
-        FeedStreamSurfaceJni.get().navigationStarted(
+        FeedStreamSurfaceJni.get().reportNavigationStarted(
                 mNativeFeedStreamSurface, FeedStreamSurface.this, url, true /*inNewTab*/);
     }
 
@@ -125,10 +125,19 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
     @NativeMethods
     interface Natives {
         long init(FeedStreamSurface caller);
-        void navigationStarted(long nativeFeedStreamSurface, FeedStreamSurface caller, String url,
-                boolean inNewTab);
-        void navigationDone(long nativeFeedStreamSurface, FeedStreamSurface caller, String url,
-                boolean inNewTab);
+        void reportNavigationStarted(long nativeFeedStreamSurface, FeedStreamSurface caller,
+                String url, boolean inNewTab);
+        // TODO(jianli): Call this function at the appropriate time.
+        void reportNavigationDone(long nativeFeedStreamSurface, FeedStreamSurface caller,
+                String url, boolean inNewTab);
+        // TODO(jianli): Call this function at the appropriate time.
+        void reportContentRemoved(long nativeFeedStreamSurface, FeedStreamSurface caller);
+        // TODO(jianli): Call this function at the appropriate time.
+        void reportNotInterestedIn(long nativeFeedStreamSurface, FeedStreamSurface caller);
+        // TODO(jianli): Call this function at the appropriate time.
+        void reportManageInterests(long nativeFeedStreamSurface, FeedStreamSurface caller);
+        // TODO(jianli): Call this function at the appropriate time.
+        void reportContextMenuOpened(long nativeFeedStreamSurface, FeedStreamSurface caller);
         void loadMore(long nativeFeedStreamSurface, FeedStreamSurface caller);
         void processThereAndBackAgain(
                 long nativeFeedStreamSurface, FeedStreamSurface caller, byte[] data);
