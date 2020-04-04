@@ -3205,6 +3205,13 @@ const char kDisplayChangeModalDescription[] =
     "If enabled, a modal dialog will be shown when resolution or refresh rate "
     "is changed rather than a notification.";
 
+const char kDisplayIdentificationName[] =
+    "Enable display identification highlight";
+const char kDisplayIdentificationDescription[] =
+    "Shows a blue highlight around the edges of the display that is selected "
+    "in the Displays Settings page. Only shown when the Displays Settings page "
+    "is open.";
+
 const char kEnableUseHDRTransferFunctionName[] =
     "Enable using HDR transfer function";
 const char kEnableUseHDRTransferFunctionDescription[] =

@@ -1853,6 +1853,9 @@ extern const char kDisableExplicitDmaFencesDescription[];
 extern const char kDisplayChangeModalName[];
 extern const char kDisplayChangeModalDescription[];
 
+extern const char kDisplayIdentificationName[];
+extern const char kDisplayIdentificationDescription[];
+
 extern const char kEnableUseHDRTransferFunctionName[];
 extern const char kEnableUseHDRTransferFunctionDescription[];
 

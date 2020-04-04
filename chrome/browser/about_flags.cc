@@ -4447,6 +4447,10 @@ const FeatureEntry kFeatureEntries[] = {
     {"print-job-management-app", flag_descriptions::kPrintJobManagementAppName,
      flag_descriptions::kPrintJobManagementAppDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kPrintJobManagementApp)},
+
+    {"display-identification", flag_descriptions::kDisplayIdentificationName,
+     flag_descriptions::kDisplayIdentificationDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(ash::features::kDisplayIdentification)},
 #endif  // OS_CHROMEOS
 
     {"autofill-off-no-server-data",
