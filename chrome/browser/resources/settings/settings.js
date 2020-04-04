@@ -2,32 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import './about_page/about_page.m.js';
-import './appearance_page/appearance_page.m.js';
-import './autofill_page/autofill_page.m.js';
-import './basic_page/basic_page.m.js';
-import './controls/controlled_radio_button.m.js';
-import './controls/extension_controlled_indicator.m.js';
-import './controls/settings_checkbox.m.js';
-import './controls/settings_dropdown_menu.m.js';
-import './controls/settings_idle_load.m.js';
-import './controls/settings_toggle_button.m.js';
-import './on_startup_page/on_startup_page.m.js';
-import './on_startup_page/startup_urls_page.m.js';
-import './prefs/prefs.m.js';
-import './privacy_page/privacy_page.m.js';
-import './safety_check_page/safety_check_page.m.js';
-import './site_favicon.m.js';
-import './search_page/search_page.m.js';
-import './settings_main/settings_main.m.js';
-import './settings_menu/settings_menu.m.js';
-import './settings_page/settings_subpage.m.js';
-import './settings_page/settings_animated_pages.m.js';
 import './settings_ui/settings_ui.m.js';
-
-// <if expr="not chromeos">
-import './default_browser_page/default_browser_page.m.js';
-// </if>
 
 // <if expr="not chromeos">
 export {DefaultBrowserBrowserProxyImpl} from './default_browser_page/default_browser_browser_proxy.m.js';
