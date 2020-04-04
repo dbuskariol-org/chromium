@@ -141,6 +141,15 @@ public class ChromeTabModalPresenterTest {
         UrlBar urlBar = mActivity.findViewById(R.id.url_bar);
         int callCount = mTestObserver.onUrlFocusChangedCallback.getCallCount();
         OmniboxTestUtils.toggleUrlBarFocus(urlBar, true);
+
+        // TODO(crbug/812066): Following line helps narrow down the cause of flakiness. Previous
+        // call to toggleUrlBarFocus() should have focused urlBar. Screenshots indicate that
+        // sometimes it doesn't happen. toggleUrlBarFocus() simulates tap in the middle of the view,
+        // maybe there are some timing issues there. Accurately simulating tap is not necessary for
+        // the purpose of this test therefore as an alternative we could call requestFocus() on
+        // urlBar view.
+        Assert.assertTrue(
+                "UrlBar didn't get focused", OmniboxTestUtils.doesUrlBarHaveFocus(urlBar));
         mTestObserver.onUrlFocusChangedCallback.waitForCallback(callCount);
         TestThreadUtils.runOnUiThreadBlocking(() -> {
             Assert.assertThat(containerParent.indexOfChild(dialogContainer),
