@@ -4117,12 +4117,6 @@ void ChromeContentBrowserClient::OverridePageVisibilityState(
   }
 }
 
-void ChromeContentBrowserClient::InitWebContextInterfaces() {
-  frame_interfaces_ = std::make_unique<service_manager::BinderRegistry>();
-  frame_interfaces_parameterized_ = std::make_unique<
-      service_manager::BinderRegistryWithArgs<content::RenderFrameHost*>>();
-}
-
 void ChromeContentBrowserClient::InitNetworkContextsParentDirectory() {
   base::FilePath user_data_dir;
   base::PathService::Get(chrome::DIR_USER_DATA, &user_data_dir);
