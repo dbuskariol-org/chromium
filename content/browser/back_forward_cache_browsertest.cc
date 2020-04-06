@@ -61,6 +61,7 @@
 #include "net/test/test_data_directory.h"
 #include "services/device/public/cpp/test/fake_sensor_and_provider.h"
 #include "services/device/public/cpp/test/scoped_geolocation_overrider.h"
+#include "services/device/public/mojom/vibration_manager.mojom.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "third_party/blink/public/common/scheduler/web_scheduler_tracked_feature.h"
 
@@ -2926,6 +2927,118 @@ IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTest,
   ExpectBlocklistedFeature(blink::scheduler::WebSchedulerTrackedFeature::
                                kServiceWorkerControlledPage,
                            FROM_HERE);
+}
+
+class BackForwardCacheBrowserTestWithVibration
+    : public BackForwardCacheBrowserTest,
+      public device::mojom::VibrationManager {
+ public:
+  BackForwardCacheBrowserTestWithVibration() {
+    OverrideVibrationManagerBinderForTesting(base::BindRepeating(
+        &BackForwardCacheBrowserTestWithVibration::BindVibrationManager,
+        base::Unretained(this)));
+  }
+
+  ~BackForwardCacheBrowserTestWithVibration() override {
+    OverrideVibrationManagerBinderForTesting(base::NullCallback());
+  }
+
+  void BindVibrationManager(
+      mojo::PendingReceiver<device::mojom::VibrationManager> receiver) {
+    receiver_.Bind(std::move(receiver));
+  }
+
+  bool TriggerVibrate(RenderFrameHostImpl* rfh,
+                      int duration,
+                      base::OnceClosure vibrate_done) {
+    vibrate_done_ = std::move(vibrate_done);
+    bool result;
+    std::string script = "domAutomationController.send(navigator.vibrate(" +
+                         base::NumberToString(duration) + "))";
+    EXPECT_TRUE(ExecuteScriptAndExtractBool(rfh, script, &result));
+    return result;
+  }
+
+  bool TriggerShortVibrationSequence(RenderFrameHostImpl* rfh,
+                                     base::OnceClosure vibrate_done) {
+    vibrate_done_ = std::move(vibrate_done);
+    bool result;
+    std::string script =
+        "domAutomationController.send(navigator.vibrate([10] * 1000))";
+    EXPECT_TRUE(ExecuteScriptAndExtractBool(rfh, script, &result));
+    return result;
+  }
+
+  bool IsCancelled() { return cancelled_; }
+
+ private:
+  // device::mojom::VibrationManager:
+  void Vibrate(int64_t milliseconds, VibrateCallback callback) override {
+    cancelled_ = false;
+    std::move(callback).Run();
+    std::move(vibrate_done_).Run();
+  }
+
+  void Cancel(CancelCallback callback) override {
+    cancelled_ = true;
+    std::move(callback).Run();
+  }
+
+  bool cancelled_ = false;
+  base::OnceClosure vibrate_done_;
+  mojo::Receiver<device::mojom::VibrationManager> receiver_{this};
+};
+
+IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTestWithVibration,
+                       VibrationStopsAfterEnteringCache) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  // 1) Navigate to a page with a long vibration.
+  GURL url(embedded_test_server()->GetURL("a.com", "/title1.html"));
+  EXPECT_TRUE(NavigateToURL(shell(), url));
+  base::RunLoop run_loop;
+  RenderFrameHostImpl* rfh_a = current_frame_host();
+  ASSERT_TRUE(TriggerVibrate(rfh_a, 10000, run_loop.QuitClosure()));
+  EXPECT_FALSE(IsCancelled());
+
+  // 2) Navigate away and expect the vibration to be canceled.
+  EXPECT_TRUE(NavigateToURL(
+      shell(), embedded_test_server()->GetURL("b.com", "/title1.html")));
+  EXPECT_NE(current_frame_host(), rfh_a);
+  EXPECT_TRUE(rfh_a->is_in_back_forward_cache());
+  EXPECT_TRUE(IsCancelled());
+
+  // 3) Go back to A.
+  web_contents()->GetController().GoBack();
+  EXPECT_TRUE(WaitForLoadStop(shell()->web_contents()));
+  ExpectOutcome(BackForwardCacheMetrics::HistoryNavigationOutcome::kRestored,
+                FROM_HERE);
+}
+
+IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTestWithVibration,
+                       ShortVibrationSequenceStopsAfterEnteringCache) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  // 1) Navigate to a page with a long vibration.
+  GURL url(embedded_test_server()->GetURL("a.com", "/title1.html"));
+  EXPECT_TRUE(NavigateToURL(shell(), url));
+  base::RunLoop run_loop;
+  RenderFrameHostImpl* rfh_a = current_frame_host();
+  ASSERT_TRUE(TriggerShortVibrationSequence(rfh_a, run_loop.QuitClosure()));
+  EXPECT_FALSE(IsCancelled());
+
+  // 2) Navigate away and expect the vibration to be canceled.
+  EXPECT_TRUE(NavigateToURL(
+      shell(), embedded_test_server()->GetURL("b.com", "/title1.html")));
+  EXPECT_NE(current_frame_host(), rfh_a);
+  EXPECT_TRUE(rfh_a->is_in_back_forward_cache());
+  EXPECT_TRUE(IsCancelled());
+
+  // 3) Go back to A.
+  web_contents()->GetController().GoBack();
+  EXPECT_TRUE(WaitForLoadStop(shell()->web_contents()));
+  ExpectOutcome(BackForwardCacheMetrics::HistoryNavigationOutcome::kRestored,
+                FROM_HERE);
 }
 
 class BackForwardCacheBrowserTestWithServiceWorkerEnabled
