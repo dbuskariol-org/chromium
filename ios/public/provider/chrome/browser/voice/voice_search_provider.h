@@ -13,7 +13,7 @@
 
 @protocol ApplicationCommands;
 class AudioSessionController;
-class Browser;
+class ChromeBrowserState;
 class VoiceSearchController;
 
 // VoiceSearchProvider allows embedders to provide functionality related to
@@ -35,7 +35,7 @@ class VoiceSearchProvider {
 
   // Creates a new VoiceSearchController object.
   virtual scoped_refptr<VoiceSearchController> CreateVoiceSearchController(
-      Browser* browser) const;
+      ChromeBrowserState* browser_state) const;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(VoiceSearchProvider);

@@ -2704,7 +2704,7 @@ NSString* const kBrowserViewControllerSnackbarCategory =
         ios::GetChromeBrowserProvider()->GetVoiceSearchProvider();
     if (provider) {
       _voiceSearchController =
-          provider->CreateVoiceSearchController(self.browser);
+          provider->CreateVoiceSearchController(self.browserState);
       if (self.primaryToolbarCoordinator) {
         _voiceSearchController->SetDispatcher(
             static_cast<id<LoadQueryCommands>>(self.commandDispatcher));
