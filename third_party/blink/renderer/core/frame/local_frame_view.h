@@ -387,6 +387,7 @@ class CORE_EXPORT LocalFrameView final
   bool InvalidateViewportConstrainedObjects();
 
   void IncrementLayoutObjectCount() { layout_object_counter_.Increment(); }
+  void IncrementLayoutObjectCountNG() { ++layout_object_counter_ng_; }
   void IncrementVisuallyNonEmptyCharacterCount(unsigned);
   void IncrementVisuallyNonEmptyPixelCount(const IntSize&);
   bool IsVisuallyNonEmpty() const { return is_visually_non_empty_; }
@@ -889,6 +890,7 @@ class CORE_EXPORT LocalFrameView final
   uint64_t visually_non_empty_pixel_count_;
   bool is_visually_non_empty_;
   LayoutObjectCounter layout_object_counter_;
+  uint32_t layout_object_counter_ng_;
 
   Member<FragmentAnchor> fragment_anchor_;
 
