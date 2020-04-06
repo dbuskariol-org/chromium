@@ -97,29 +97,6 @@ class SyncConsentTest : public OobeBaseTest {
   void SetUpOnMainThread() override {
     OobeBaseTest::SetUpOnMainThread();
     branded_build_override_ = WizardController::ForceBrandedBuildForTesting();
-    if (features::IsSplitSettingsSyncEnabled()) {
-      expected_consent_ids_ = {
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_TITLE,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_OS_SYNC_NAME,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_OS_SYNC_DESCRIPTION,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_CHROME_SYNC_NAME,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_CHROME_SYNC_DESCRIPTION,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_REVIEW_BROWSER_SYNC_OPTIONS,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_PERSONALIZE_GOOGLE_SERVICES_NAME,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_PERSONALIZE_GOOGLE_SERVICES_DESCRIPTION,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_ACCEPT_AND_CONTINUE,
-      };
-    } else {
-      expected_consent_ids_ = {
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_TITLE,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_CHROME_SYNC_NAME,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_CHROME_SYNC_DESCRIPTION,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_PERSONALIZE_GOOGLE_SERVICES_NAME,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_PERSONALIZE_GOOGLE_SERVICES_DESCRIPTION,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_REVIEW_SYNC_OPTIONS_LATER,
-          IDS_LOGIN_SYNC_CONSENT_SCREEN_ACCEPT_AND_CONTINUE,
-      };
-    }
   }
 
   void TearDownOnMainThread() override {
@@ -197,7 +174,7 @@ class SyncConsentTest : public OobeBaseTest {
               consent_recorded_waiter.consent_description_strings_);
     EXPECT_EQ(expected_consent_confirmation_string,
               consent_recorded_waiter.consent_confirmation_string_);
-    EXPECT_EQ(expected_consent_ids_,
+    EXPECT_EQ(expected_consent_ids,
               consent_recorded_waiter.consent_description_ids_);
     EXPECT_EQ(expected_consent_confirmation_id,
               consent_recorded_waiter.consent_confirmation_id_);
@@ -205,14 +182,23 @@ class SyncConsentTest : public OobeBaseTest {
 
   std::vector<std::string> GetLocalizedExpectedConsentStrings() const {
     std::vector<std::string> result;
-    for (const int& id : expected_consent_ids_) {
+    for (const int& id : expected_consent_ids) {
       result.push_back(GetLocalizedConsentString(id));
     }
     return result;
   }
 
+  const std::vector<int> expected_consent_ids = {
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_TITLE,
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_CHROME_SYNC_NAME,
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_CHROME_SYNC_DESCRIPTION,
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_PERSONALIZE_GOOGLE_SERVICES_NAME,
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_PERSONALIZE_GOOGLE_SERVICES_DESCRIPTION,
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_REVIEW_SYNC_OPTIONS_LATER,
+      IDS_LOGIN_SYNC_CONSENT_SCREEN_ACCEPT_AND_CONTINUE,
+  };
+
   std::unique_ptr<base::AutoReset<bool>> branded_build_override_;
-  std::vector<int> expected_consent_ids_;
   FakeGaiaMixin fake_gaia_{&mixin_host_, embedded_test_server()};
 
  private:
@@ -223,35 +209,15 @@ IN_PROC_BROWSER_TEST_F(SyncConsentTest, SyncConsentRecorder) {
   EXPECT_EQ(g_browser_process->GetApplicationLocale(), "en-US");
   LoginToSyncConsentScreen();
   // For En-US we hardcode strings here to catch string issues too.
-  std::vector<std::string> expected_consent_strings;
-  if (features::IsSplitSettingsSyncEnabled()) {
-    expected_consent_strings = {
-        "You're signed in!",
-        "Settings sync",
-        "Your apps, settings, and other customizations will sync across all "
-        "Chrome OS devices signed in with your Google Account.",
-        "Chrome sync",
-        "Your bookmarks, history, passwords, and other settings will be synced "
-        "to your Google Account so you can use them on all your devices.",
-        "Review browser sync options following setup",
-        "Personalize Google services",
-        "Google may use your browsing history to personalize Search, ads, and "
-        "other Google services. You can change this anytime at "
-        "myaccount.google.com/activitycontrols/search",
-        "Accept and continue"};
-  } else {
-    expected_consent_strings = {
-        "You're signed in!",
-        "Chrome sync",
-        "Your bookmarks, history, passwords, and other settings will be synced "
-        "to your Google Account so you can use them on all your devices.",
-        "Personalize Google services",
-        "Google may use your browsing history to personalize Search, ads, and "
-        "other Google services. You can change this anytime at "
-        "myaccount.google.com/activitycontrols/search",
-        "Review sync options following setup",
-        "Accept and continue"};
-  }
+  const std::vector<std::string> expected_consent_strings(
+      {"You're signed in!", "Chrome sync",
+       "Your bookmarks, history, passwords, and other settings will be synced "
+       "to your Google Account so you can use them on all your devices.",
+       "Personalize Google services",
+       "Google may use your browsing history to personalize Search, ads, and "
+       "other Google services. You can change this anytime at "
+       "myaccount.google.com/activitycontrols/search",
+       "Review sync options following setup", "Accept and continue"});
   const std::string expected_consent_confirmation_string =
       "Accept and continue";
   SyncConsentRecorderTestImpl(expected_consent_strings,
