@@ -113,7 +113,7 @@ class MODULES_EXPORT PresentationController
 
   // Lazily-initialized binding for mojom::blink::PresentationController. Sent
   // to |presentation_service_|'s implementation.
-  HeapMojoReceiver<mojom::blink::PresentationController>
+  HeapMojoReceiver<mojom::blink::PresentationController, PresentationController>
       presentation_controller_receiver_;
 
   DISALLOW_COPY_AND_ASSIGN(PresentationController);
