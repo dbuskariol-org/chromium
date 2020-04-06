@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_RELAUNCH_NOTIFICATION_WALL_CLOCK_TIMER_H_
-#define CHROME_BROWSER_UI_VIEWS_RELAUNCH_NOTIFICATION_WALL_CLOCK_TIMER_H_
+#ifndef BASE_UTIL_TIMER_WALL_CLOCK_TIMER_H_
+#define BASE_UTIL_TIMER_WALL_CLOCK_TIMER_H_
 
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/location.h"
-#include "base/macros.h"
 #include "base/power_monitor/power_observer.h"
+#include "base/time/default_clock.h"
 #include "base/time/time.h"
 #include "base/timer/timer.h"
 
@@ -17,6 +17,8 @@ namespace base {
 class Clock;
 class TickClock;
 }  // namespace base
+
+namespace util {
 
 // WallClockTimer is based on OneShotTimer and provides a simple timer API
 // which is mostly similar to OneShotTimer's API. The main difference is that
@@ -35,8 +37,15 @@ class TickClock;
 // running and there is no scheduled task active.
 class WallClockTimer : public base::PowerObserver {
  public:
+  // Constructs a timer. Start() must be called later to start the timer.
+  // If |clock| is provided, it's used instead of
+  // base::DefaultClock::GetInstance() to calulate timer's delay.
+  // If |tick_clock| is provided, it's used instead of base::TimeTicks::Now() to
+  // get base::TimeTicks when scheduling tasks.
   WallClockTimer();
   WallClockTimer(const base::Clock* clock, const base::TickClock* tick_clock);
+  WallClockTimer(const WallClockTimer&) = delete;
+  WallClockTimer& operator=(const WallClockTimer&) = delete;
 
   ~WallClockTimer() override;
 
@@ -58,8 +67,11 @@ class WallClockTimer : public base::PowerObserver {
           base::BindOnce(method, base::Unretained(receiver)));
   }
 
+  // Call this method to stop and cancle the timer. It is a no-op if the timer
+  // is not running.
   void Stop();
 
+  // Returns true if the timer is running.
   bool IsRunning() const;
 
   // base::PowerObserver:
@@ -92,9 +104,9 @@ class WallClockTimer : public base::PowerObserver {
   base::OneShotTimer timer_;
 
   // The clock used to calculate the run time for scheduled tasks.
-  const base::Clock* const clock_;
-
-  DISALLOW_COPY_AND_ASSIGN(WallClockTimer);
+  const base::Clock* const clock_ = base::DefaultClock::GetInstance();
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_RELAUNCH_NOTIFICATION_WALL_CLOCK_TIMER_H_
+}  // namespace util
+
+#endif  // BASE_UTIL_TIMER_WALL_CLOCK_TIMER_H_

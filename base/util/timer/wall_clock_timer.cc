@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/relaunch_notification/wall_clock_timer.h"
+#include "base/util/timer/wall_clock_timer.h"
 
 #include <utility>
 
@@ -12,8 +12,9 @@
 #include "base/time/default_tick_clock.h"
 #include "base/time/tick_clock.h"
 
-WallClockTimer::WallClockTimer() : WallClockTimer(nullptr, nullptr) {}
+namespace util {
 
+WallClockTimer::WallClockTimer() = default;
 WallClockTimer::WallClockTimer(const base::Clock* clock,
                                const base::TickClock* tick_clock)
     : timer_(tick_clock),
@@ -50,8 +51,9 @@ bool WallClockTimer::IsRunning() const {
 
 void WallClockTimer::RunUserTask() {
   DCHECK(user_task_);
-  base::OnceClosure task = std::move(user_task_);
-  std::move(task).Run();
+  std::exchange(user_task_, {}).Run();
+  // TODO(crbug.com/1062410): Remove observer before running |task| so that
+  //|task| is able to call Start().
   RemoveObserver();
 }
 
@@ -72,3 +74,5 @@ void WallClockTimer::RemoveObserver() {
     observer_added_ = false;
   }
 }
+
+}  // namespace util
