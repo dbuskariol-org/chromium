@@ -11,6 +11,7 @@ from blinkbuild.name_style_converter import NameStyleConverter
 from .callback_function import CallbackFunction
 from .callback_interface import CallbackInterface
 from .composition_parts import Identifier
+from .constructor import Constructor
 from .constructor import ConstructorGroup
 from .database import Database
 from .database import DatabaseBody
@@ -100,6 +101,10 @@ class IdlCompiler(object):
 
         # Process inheritances.
         self._process_interface_inheritances()
+
+        # Temporary mitigation of misuse of [HTMLConstructor]
+        # This should be removed once the IDL definitions get fixed.
+        self._supplement_missing_html_constructor_operation()
 
         self._copy_named_constructor_extattrs()
 
@@ -407,6 +412,35 @@ class IdlCompiler(object):
                     make_copy(operation) for operation in interface.operations
                     if is_own_member(operation)
                 ])
+
+    def _supplement_missing_html_constructor_operation(self):
+        # Temporary mitigation of misuse of [HTMLConstructor]
+        # https://html.spec.whatwg.org/C/#htmlconstructor
+        # [HTMLConstructor] must be applied to only the single constructor
+        # operation, but it's now applied to interfaces without a constructor
+        # operation declaration.
+        old_irs = self._ir_map.irs_of_kind(IRMap.IR.Kind.INTERFACE)
+
+        self._ir_map.move_to_new_phase()
+
+        for old_ir in old_irs:
+            new_ir = self._maybe_make_copy(old_ir)
+            self._ir_map.add(new_ir)
+
+            if not (not new_ir.constructors
+                    and "HTMLConstructor" in new_ir.extended_attributes):
+                continue
+
+            html_constructor = Constructor.IR(
+                identifier=None,
+                arguments=[],
+                return_type=self._idl_type_factory.reference_type(
+                    new_ir.identifier),
+                extended_attributes=ExtendedAttributesMutable(
+                    [ExtendedAttribute(key="HTMLConstructor")]),
+                component=new_ir.components[0],
+                debug_info=new_ir.debug_info)
+            new_ir.constructors.append(html_constructor)
 
     def _copy_named_constructor_extattrs(self):
         old_irs = self._ir_map.irs_of_kind(IRMap.IR.Kind.INTERFACE)

@@ -1688,6 +1688,10 @@ def make_constructor_function_def(cg_context, function_name):
             "HTMLElementType::{});",
             name_style.constant(cg_context.class_like.identifier))
         body.append(T(text))
+        body.accumulate(
+            CodeGenAccumulator.require_include_headers([
+                "third_party/blink/renderer/bindings/core/v8/v8_html_constructor.h",
+            ]))
     else:
         body.append(
             T("v8::Local<v8::Object> v8_wrapper = "
