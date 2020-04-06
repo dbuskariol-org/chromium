@@ -21,6 +21,7 @@
 #include "content/renderer/media/audio/audio_device_factory.h"
 #include "content/renderer/media/batching_media_log.h"
 #include "content/renderer/media/inspector_media_event_handler.h"
+#include "content/renderer/media/media_interface_factory.h"
 #include "content/renderer/media/power_status_helper_impl.h"
 #include "content/renderer/media/render_media_event_handler.h"
 #include "content/renderer/media/renderer_webmediaplayer_delegate.h"
@@ -69,10 +70,6 @@
 
 #if BUILDFLAG(ENABLE_CAST_RENDERER)
 #include "content/renderer/media/cast_renderer_client_factory.h"
-#endif
-
-#if BUILDFLAG(ENABLE_MOJO_MEDIA)
-#include "content/renderer/media/media_interface_factory.h"
 #endif
 
 #if defined(OS_FUCHSIA)
@@ -695,7 +692,6 @@ media::CdmFactory* MediaFactory::GetCdmFactory() {
   return cdm_factory_.get();
 }
 
-#if BUILDFLAG(ENABLE_MOJO_MEDIA)
 media::mojom::InterfaceFactory* MediaFactory::GetMediaInterfaceFactory() {
   DCHECK(interface_broker_);
 
@@ -712,6 +708,5 @@ MediaFactory::CreateMojoRendererFactory() {
   return std::make_unique<media::MojoRendererFactory>(
       GetMediaInterfaceFactory());
 }
-#endif  // BUILDFLAG(ENABLE_MOJO_MEDIA)
 
 }  // namespace content
