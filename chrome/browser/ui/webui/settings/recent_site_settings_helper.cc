@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/recent_site_settings_helper.h"
+#include "chrome/browser/ui/webui/settings/recent_site_settings_helper.h"
 
 #include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 #include "chrome/browser/permissions/permission_decision_auto_blocker_factory.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ui/webui/site_settings_helper.h"
+#include "chrome/browser/ui/webui/settings/site_settings_helper.h"
 #include "components/content_settings/core/common/content_settings_utils.h"
 #include "components/permissions/permission_decision_auto_blocker.h"
 

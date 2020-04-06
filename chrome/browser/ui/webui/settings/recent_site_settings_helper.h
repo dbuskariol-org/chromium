@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_RECENT_SITE_SETTINGS_HELPER_H_
-#define CHROME_BROWSER_UI_WEBUI_RECENT_SITE_SETTINGS_HELPER_H_
+#ifndef CHROME_BROWSER_UI_WEBUI_SETTINGS_RECENT_SITE_SETTINGS_HELPER_H_
+#define CHROME_BROWSER_UI_WEBUI_SETTINGS_RECENT_SITE_SETTINGS_HELPER_H_
 
 #include <vector>
 
 #include "base/time/time.h"
-#include "chrome/browser/ui/webui/site_settings_helper.h"
+#include "chrome/browser/ui/webui/settings/site_settings_helper.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "url/gurl.h"
@@ -62,4 +62,4 @@ std::vector<RecentSitePermissions> GetRecentSitePermissions(
 
 }  // namespace site_settings
 
-#endif  // CHROME_BROWSER_UI_WEBUI_RECENT_SITE_SETTINGS_HELPER_H_
+#endif  // CHROME_BROWSER_UI_WEBUI_SETTINGS_RECENT_SITE_SETTINGS_HELPER_H_
