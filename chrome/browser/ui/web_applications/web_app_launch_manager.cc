@@ -4,15 +4,12 @@
 
 #include "chrome/browser/ui/web_applications/web_app_launch_manager.h"
 
-#include "base/command_line.h"
-#include "base/files/file_path.h"
 #include "base/metrics/histogram_macros.h"
 #include "chrome/browser/app_mode/app_mode_utils.h"
 #include "chrome/browser/apps/app_service/app_launch_params.h"
 #include "chrome/browser/apps/app_service/launch_utils.h"
 #include "chrome/browser/banners/app_banner_settings_helper.h"
 #include "chrome/browser/engagement/site_engagement_service.h"
-#include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_finder.h"
 #include "chrome/browser/ui/browser_navigator.h"
@@ -101,7 +98,7 @@ content::WebContents* NavigateWebApplicationWindow(
 }
 
 WebAppLaunchManager::WebAppLaunchManager(Profile* profile)
-    : profile_(profile), provider_(WebAppProvider::Get(profile)) {}
+    : apps::LaunchManager(profile), provider_(WebAppProvider::Get(profile)) {}
 
 WebAppLaunchManager::~WebAppLaunchManager() = default;
 
@@ -111,7 +108,7 @@ content::WebContents* WebAppLaunchManager::OpenApplication(
     return nullptr;
 
   if (params.container == apps::mojom::LaunchContainer::kLaunchContainerWindow)
-    RecordAppWindowLaunch(profile_, params.app_id);
+    RecordAppWindowLaunch(profile(), params.app_id);
 
   web_app::FileHandlerManager& file_handler_manager =
       provider_->file_handler_manager();
@@ -125,10 +122,10 @@ content::WebContents* WebAppLaunchManager::OpenApplication(
 
   // System Web Apps go through their own launch path.
   base::Optional<SystemAppType> system_app_type =
-      GetSystemWebAppTypeForAppId(profile_, params.app_id);
+      GetSystemWebAppTypeForAppId(profile(), params.app_id);
   if (system_app_type) {
     Browser* browser =
-        LaunchSystemWebApp(profile_, *system_app_type, url, params);
+        LaunchSystemWebApp(profile(), *system_app_type, url, params);
     return browser->tab_strip_model()->GetActiveWebContents();
   }
 
@@ -136,19 +133,19 @@ content::WebContents* WebAppLaunchManager::OpenApplication(
   WindowOpenDisposition disposition = WindowOpenDisposition::NEW_FOREGROUND_TAB;
   if (params.container == apps::mojom::LaunchContainer::kLaunchContainerTab) {
     browser = chrome::FindTabbedBrowser(
-        profile_, /*match_original_profiles=*/false, params.display_id);
+        profile(), /*match_original_profiles=*/false, params.display_id);
     if (browser) {
       // For existing browser, ensure its window is activated.
       browser->window()->Activate();
       disposition = params.disposition;
     } else {
       browser =
-          new Browser(Browser::CreateParams(Browser::TYPE_NORMAL, profile_,
+          new Browser(Browser::CreateParams(Browser::TYPE_NORMAL, profile(),
                                             /*user_gesture=*/true));
     }
   } else {
-    browser =
-        CreateWebApplicationWindow(profile_, params.app_id, params.disposition);
+    browser = CreateWebApplicationWindow(profile(), params.app_id,
+                                         params.disposition);
   }
 
   content::WebContents* web_contents;
@@ -197,8 +194,8 @@ content::WebContents* WebAppLaunchManager::OpenApplication(
 
   // Record the launch time in the site engagement service. A recent web
   // app launch will provide an engagement boost to the origin.
-  SiteEngagementService::Get(profile_)->SetLastShortcutLaunchTime(web_contents,
-                                                                  url);
+  SiteEngagementService::Get(profile())->SetLastShortcutLaunchTime(web_contents,
+                                                                   url);
 
   // Refresh the app banner added to homescreen event. The user may have
   // cleared their browsing data since installing the app, which removes the
@@ -251,7 +248,7 @@ void WebAppLaunchManager::LaunchWebApplication(
     DCHECK(browser);
   } else {
     // Open an empty browser window as the app_id is invalid.
-    browser = apps::CreateBrowserWithNewTabPage(profile_);
+    browser = apps::CreateBrowserWithNewTabPage(profile());
     params.container = apps::mojom::LaunchContainer::kLaunchContainerNone;
   }
   std::move(callback).Run(browser, params.container);
