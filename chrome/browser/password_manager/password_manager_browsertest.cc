@@ -440,23 +440,6 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
   EXPECT_TRUE(prompt_observer->IsSavePromptShownAutomatically());
 }
 
-#if defined(OS_WIN) || defined(OS_MACOSX) || \
-    (defined(OS_LINUX) && !defined(OS_CHROMEOS))
-IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
-                       SignOutWithUnsyncedPasswords) {
-  std::vector<autofill::PasswordForm> credentials(1);
-  credentials[0].username_value = base::ASCIIToUTF16("unsynced_login");
-  credentials[0].password_value = base::ASCIIToUTF16("unsynced_password");
-  // TODO(crbug.com/1060132): Stop triggering the notifier directly once the
-  // full flow is available.
-  PasswordStoreSigninNotifierImpl notifier(browser()->profile());
-  notifier.NotifyUISignoutWillDeleteCredentials(credentials);
-  EXPECT_EQ(ManagePasswordsUIController::FromWebContents(WebContents())
-                ->GetUnsyncedCredentials(),
-            credentials);
-}
-#endif
-
 IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest, PromptForDynamicForm) {
   // Adding a PSL matching form is a workaround explained later.
   scoped_refptr<password_manager::TestPasswordStore> password_store =
