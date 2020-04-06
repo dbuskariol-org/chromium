@@ -1,12 +1,12 @@
 <?php
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 // This test ensures that non-composited animations are not interpolated when
 // the 'layout-animations' feature is disabled.
 
-Header("Feature-Policy: layout-animations 'none'");
+Header("Document-Policy: no-layout-animations");
 ?>
 <!DOCTYPE html>
 <script src="../resources/testharness.js"></script>
