@@ -541,8 +541,9 @@ TEST_F(FeedStreamTest, LoadFromNetwork) {
   TestSurface surface(stream_.get());
   WaitForIdleTaskQueue();
 
-  EXPECT_TRUE(network_.query_request_sent);
+  ASSERT_TRUE(network_.query_request_sent);
   EXPECT_TRUE(response_translator_.InjectedResponseConsumed());
+
   EXPECT_EQ("2 slices", surface.Describe());
   // Verify the model is filled correctly.
   EXPECT_STRINGS_EQUAL(ModelStateFor(MakeTypicalInitialModelState()),
@@ -557,7 +558,6 @@ TEST_F(FeedStreamTest, LoadFromNetworkBecauseStoreIsStale) {
   // fetch new data over the network.
   user_classifier_->OverrideUserClass(UserClass::kActiveSuggestionsConsumer);
   store_->SaveFullStream(MakeTypicalInitialModelState(
-
                              kTestTimeEpoch - base::TimeDelta::FromHours(12) -
                              base::TimeDelta::FromMinutes(1)),
                          base::DoNothing());
@@ -567,7 +567,11 @@ TEST_F(FeedStreamTest, LoadFromNetworkBecauseStoreIsStale) {
   TestSurface surface(stream_.get());
   WaitForIdleTaskQueue();
 
-  EXPECT_TRUE(network_.query_request_sent);
+  ASSERT_TRUE(network_.query_request_sent);
+  // The stored continutation token should be sent.
+  EXPECT_EQ(
+      "token-1",
+      network_.query_request_sent->feed_request().consistency_token().token());
   EXPECT_TRUE(response_translator_.InjectedResponseConsumed());
   ASSERT_TRUE(surface.initial_state);
 }
