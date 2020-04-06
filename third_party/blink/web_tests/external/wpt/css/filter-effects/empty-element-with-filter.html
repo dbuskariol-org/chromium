@@ -1,10 +1,13 @@
 <!DOCTYPE html>
+<title>CSS Filter Effects: filters on elements that otherwise have no visible content</title>
+<link rel="help" href="https://drafts.fxtf.org/filter-effects/#FilterProperty">
+<link rel="match" href="reference/empty-element-with-filter-ref.html">
+<meta name="assert" content="This test ensures we properly render filters on elements that otherwise have no visible content.">
 <style>
   .turbulent {
     width: 160px;
     height: 90px;
     margin: 10px;
-    filter: url(#turbulence);
     filter: url(#turbulence);
   }
 
@@ -12,11 +15,10 @@
     background-color: red;
   }
 </style>
-<div class="turbulent"></div>
 <div class="turbulent visibleContent"></div>
+<div class="turbulent"></div>
 
-This test ensures we properly render filters on elements that otherwise have
-no visible content. This test passes if both divs look the same.
+This test passes if both divs look the same.
 
 <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" version="1.1">
   <defs>
