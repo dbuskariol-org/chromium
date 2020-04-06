@@ -142,7 +142,7 @@ js_library("sync_account_control") {
   deps = [
     ":profile_info_browser_proxy",
     ":sync_browser_proxy",
-    "..:router",
+    "..:route",
     "../prefs:prefs_behavior",
     "//ui/webui/resources/cr_elements/cr_action_menu:cr_action_menu",
     "//ui/webui/resources/js:icon",

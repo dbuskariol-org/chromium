@@ -394,6 +394,7 @@ extern const char kOsPrintingSubPage[];
 extern const char kOsPrivacySubPage[];
 extern const char kOsResetSubPage[];
 extern const char kOsSearchSubPage[];
+extern const char kOsSignOutSubPage[];
 extern const char kPluginVmDetailsSubPage[];
 extern const char kPluginVmSharedPathsSubPage[];
 extern const char kPointerOverlaySubPage[];

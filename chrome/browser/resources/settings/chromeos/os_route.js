@@ -14,8 +14,8 @@ cr.define('settings', function() {
     r.BASIC = new settings.Route('/');
     r.ABOUT = new settings.Route('/help');
 
-    r.SIGN_OUT = r.BASIC.createChild('/signOut');
-    r.SIGN_OUT.isNavigableDialog = true;
+    r.OS_SIGN_OUT = r.BASIC.createChild('/osSignOut');
+    r.OS_SIGN_OUT.isNavigableDialog = true;
 
     r.OS_SEARCH = r.BASIC.createSection('/osSearch', 'osSearch');
     if (!loadTimeData.getBoolean('isGuest')) {
