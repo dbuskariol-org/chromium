@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'chrome://resources/cr_elements/cr_button/cr_button.m.js';
 import 'chrome://resources/cr_elements/hidden_style_css.m.js';
 import 'chrome://resources/polymer/v3_0/iron-pages/iron-pages.js';
 import './untrusted_iframe.js';
@@ -10,6 +11,7 @@ import {assert} from 'chrome://resources/js/assert.m.js';
 import {EventTracker} from 'chrome://resources/js/event_tracker.m.js';
 import {html, PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 import {BrowserProxy} from './browser_proxy.js';
+import {skColorToRgb} from './utils.js';
 
 // Shows the Google logo or a doodle if available.
 class LogoElement extends PolymerElement {
@@ -202,6 +204,15 @@ class LogoElement extends PolymerElement {
    */
   valueOrUnset_(value) {
     return value || 'unset';
+  }
+
+  /**
+   * @param {skia.mojom.SkColor} skColor
+   * @return {string}
+   * @private
+   */
+  rgbOrUnset_(skColor) {
+    return skColor ? skColorToRgb(skColor) : 'unset';
   }
 }
 

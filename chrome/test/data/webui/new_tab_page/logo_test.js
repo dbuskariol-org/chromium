@@ -34,14 +34,30 @@ suite('NewTabPageLogoTest', () => {
 
   test('setting simple doodle shows image', async () => {
     // Act.
-    const logo = await createLogo(
-        {content: {imageDoodle: {imageUrl: {url: 'data:foo'}}}});
+    const logo = await createLogo({
+      content: {
+        imageDoodle: {
+          imageUrl: {url: 'data:foo'},
+          shareButton: {
+            backgroundColor: {value: 0xFFFF0000},
+            x: 11,
+            y: 12,
+            iconUrl: {url: 'data:bar'},
+          },
+        }
+      }
+    });
 
     // Assert.
     assertNotStyle(logo.$.doodle, 'display', 'none');
     assertStyle(logo.$.logo, 'display', 'none');
     assertEquals(logo.$.image.src, 'data:foo');
     assertNotStyle(logo.$.image, 'display', 'none');
+    assertNotStyle(logo.$.shareButton, 'display', 'none');
+    assertStyle(logo.$.shareButton, 'background-color', 'rgb(255, 0, 0)');
+    assertStyle(logo.$.shareButton, 'left', '11px');
+    assertStyle(logo.$.shareButton, 'top', '12px');
+    assertEquals(logo.$.shareButtonImage.src, 'data:bar');
     assertStyle(logo.$.animation, 'display', 'none');
     assertStyle(logo.$.iframe, 'display', 'none');
   });

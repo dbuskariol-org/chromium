@@ -111,6 +111,17 @@ struct Theme {
   ThemeInfo info;
 };
 
+// Specifies look of the doodle share button.
+struct DoodleShareButton {
+  // Position in pixels relative to the doodle's upper left corner.
+  int32 x;
+  int32 y;
+  // Button background color.
+  skia.mojom.SkColor background_color;
+  // Data URL of icon shown on the button.
+  url.mojom.Url icon_url;
+};
+
 // The contents of simple and animated doodles.
 struct ImageDoodleContent {
   // Doodle image encoded as data URL.
@@ -119,6 +130,8 @@ struct ImageDoodleContent {
   url.mojom.Url on_click_url;
   // URL pointing to animated content (e.g. gif). Only set for animated doodles.
   url.mojom.Url? animation_url;
+  // Specification of the share button.
+  DoodleShareButton share_button;
 };
 
 // The contents of a doodle.
