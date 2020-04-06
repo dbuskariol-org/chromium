@@ -19,8 +19,8 @@ cr.define('settings', function() {
 
     r.OS_SEARCH = r.BASIC.createSection('/osSearch', 'osSearch');
     if (!loadTimeData.getBoolean('isGuest')) {
-      r.PEOPLE = r.BASIC.createSection('/people', 'people');
-      r.SYNC = r.PEOPLE.createChild('/syncSetup');
+      r.OS_PEOPLE = r.BASIC.createSection('/osPeople', 'osPeople');
+      r.SYNC = r.OS_PEOPLE.createChild('/syncSetup');
       if (!loadTimeData.getBoolean('splitSettingsSyncEnabled')) {
         r.SYNC_ADVANCED = r.SYNC.createChild('/syncSetup/advanced');
       }
@@ -55,10 +55,10 @@ cr.define('settings', function() {
       r.SMART_LOCK =
           r.MULTIDEVICE_FEATURES.createChild('/multidevice/features/smartLock');
 
-      r.ACCOUNTS = r.PEOPLE.createChild('/accounts');
-      r.ACCOUNT_MANAGER = r.PEOPLE.createChild('/accountManager');
-      r.KERBEROS_ACCOUNTS = r.PEOPLE.createChild('/kerberosAccounts');
-      r.LOCK_SCREEN = r.PEOPLE.createChild('/lockScreen');
+      r.ACCOUNTS = r.OS_PEOPLE.createChild('/accounts');
+      r.ACCOUNT_MANAGER = r.OS_PEOPLE.createChild('/accountManager');
+      r.KERBEROS_ACCOUNTS = r.OS_PEOPLE.createChild('/kerberosAccounts');
+      r.LOCK_SCREEN = r.OS_PEOPLE.createChild('/lockScreen');
       r.FINGERPRINT = r.LOCK_SCREEN.createChild('/lockScreen/fingerprint');
     }
 
@@ -111,7 +111,7 @@ cr.define('settings', function() {
 
     if (!loadTimeData.getBoolean('isGuest')) {
       if (loadTimeData.getBoolean('splitSettingsSyncEnabled')) {
-        r.OS_SYNC = r.PEOPLE.createChild('/osSync');
+        r.OS_SYNC = r.OS_PEOPLE.createChild('/osSync');
       }
       // Personalization
       r.PERSONALIZATION =
