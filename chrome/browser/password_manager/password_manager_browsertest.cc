@@ -4004,7 +4004,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBackForwardCacheBrowserTest,
   EXPECT_TRUE(NavigateToURL(
       WebContents(), embedded_test_server()->GetURL("a.com", "/title1.html")));
   EXPECT_FALSE(rfh_deleted_observer.deleted());
-  EXPECT_TRUE(content::IsInBackForwardCache(rfh));
+  EXPECT_TRUE(rfh->IsInBackForwardCache());
 
   // Restore the cached page.
   WebContents()->GetController().GoBack();
@@ -4060,7 +4060,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBackForwardCacheBrowserTest,
   // Navigate away.
   EXPECT_TRUE(NavigateToURL(
       WebContents(), embedded_test_server()->GetURL("b.com", "/title1.html")));
-  EXPECT_TRUE(content::IsInBackForwardCache(rfh));
+  EXPECT_TRUE(rfh->IsInBackForwardCache());
 
   // Restore the cached page.
   WebContents()->GetController().GoBack();
