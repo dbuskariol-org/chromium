@@ -556,13 +556,20 @@ MediaFactory::CreateRendererFactorySelector(
 #endif  // defined(OS_FUCHSIA)
 
   if (use_default_renderer_factory) {
-    factory_selector->AddBaseFactory(
-        FactoryType::kDefault,
-        std::make_unique<media::DefaultRendererFactory>(
-            media_log, decoder_factory,
-            base::BindRepeating(&RenderThreadImpl::GetGpuFactories,
-                                base::Unretained(render_thread)),
-            render_frame_->CreateSpeechRecognitionClient()));
+#if defined(OS_ANDROID)
+    auto default_factory = std::make_unique<media::DefaultRendererFactory>(
+        media_log, decoder_factory,
+        base::BindRepeating(&RenderThreadImpl::GetGpuFactories,
+                            base::Unretained(render_thread)));
+#else
+    auto default_factory = std::make_unique<media::DefaultRendererFactory>(
+        media_log, decoder_factory,
+        base::BindRepeating(&RenderThreadImpl::GetGpuFactories,
+                            base::Unretained(render_thread)),
+        render_frame_->CreateSpeechRecognitionClient());
+#endif
+    factory_selector->AddBaseFactory(FactoryType::kDefault,
+                                     std::move(default_factory));
   }
 
 #if BUILDFLAG(ENABLE_MEDIA_REMOTING)
