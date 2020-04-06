@@ -275,8 +275,8 @@ class PasswordAutofillManagerTest : public testing::Test {
 
   void InitializePasswordAutofillManager(TestPasswordManagerClient* client,
                                          MockAutofillClient* autofill_client) {
-    password_autofill_manager_.reset(new PasswordAutofillManager(
-        client->mock_driver(), autofill_client, client));
+    password_autofill_manager_ = std::make_unique<PasswordAutofillManager>(
+        client->mock_driver(), autofill_client, client);
     favicon::MockFaviconService favicon_service;
     EXPECT_CALL(*client, GetFaviconService())
         .WillOnce(Return(&favicon_service));
@@ -490,6 +490,27 @@ TEST_F(PasswordAutofillManagerTest, ShowOptInAndFillButton) {
               {autofill::POPUP_ITEM_ID_PASSWORD_ENTRY,
                autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY,
                autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPT_IN}))),
+          /*autoselect_first_suggestion=*/false, PopupType::kPasswords, _));
+  password_autofill_manager_->OnShowPasswordSuggestions(
+      base::i18n::RIGHT_TO_LEFT, base::string16(),
+      autofill::SHOW_ALL | autofill::IS_PASSWORD_FIELD, gfx::RectF());
+}
+
+// Test that a popup without entries doesn't show "Manage all Passwords".
+TEST_F(PasswordAutofillManagerTest, SuppressManageAllWithoutPasswords) {
+  TestPasswordManagerClient client;
+  NiceMock<MockAutofillClient> autofill_client;
+  password_autofill_manager_ = std::make_unique<PasswordAutofillManager>(
+      client.mock_driver(), &autofill_client, &client);
+  client.SetAccountStorageOptIn(false);
+
+  // Show the popup and verify the suggestions.
+  EXPECT_CALL(
+      autofill_client,
+      ShowAutofillPopup(
+          _, _,
+          SuggestionVectorIdsAre(ElementsAreArray(
+              {autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPT_IN})),
           /*autoselect_first_suggestion=*/false, PopupType::kPasswords, _));
   password_autofill_manager_->OnShowPasswordSuggestions(
       base::i18n::RIGHT_TO_LEFT, base::string16(),
@@ -1211,8 +1232,8 @@ TEST_F(PasswordAutofillManagerTest,
        MaybeShowPasswordSuggestionsWithGenerationNoCredentials) {
   TestPasswordManagerClient client;
   NiceMock<MockAutofillClient> autofill_client;
-  password_autofill_manager_.reset(new PasswordAutofillManager(
-      client.mock_driver(), &autofill_client, &client));
+  password_autofill_manager_ = std::make_unique<PasswordAutofillManager>(
+      client.mock_driver(), &autofill_client, &client);
 
   EXPECT_CALL(autofill_client, ShowAutofillPopup).Times(0);
   gfx::RectF element_bounds;

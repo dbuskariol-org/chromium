@@ -194,6 +194,22 @@ void MaybeAppendManualFallback(syncer::SyncService* sync_service,
       !password_manager_util::IsSyncingWithNormalEncryption(sync_service))
     return;
 #endif
+  bool has_no_fillable_suggestions = std::none_of(
+      suggestions->begin(), suggestions->end(),
+      [](const autofill::Suggestion& suggestion) {
+        return suggestion.frontend_id ==
+                   autofill::POPUP_ITEM_ID_USERNAME_ENTRY ||
+               suggestion.frontend_id ==
+                   autofill::POPUP_ITEM_ID_PASSWORD_ENTRY ||
+               suggestion.frontend_id ==
+                   autofill::POPUP_ITEM_ID_ACCOUNT_STORAGE_USERNAME_ENTRY ||
+               suggestion.frontend_id ==
+                   autofill::POPUP_ITEM_ID_ACCOUNT_STORAGE_PASSWORD_ENTRY ||
+               suggestion.frontend_id ==
+                   autofill::POPUP_ITEM_ID_GENERATE_PASSWORD_ENTRY;
+      });
+  if (has_no_fillable_suggestions)
+    return;
   autofill::Suggestion suggestion(
       l10n_util::GetStringUTF16(IDS_PASSWORD_MANAGER_MANAGE_PASSWORDS));
   suggestion.frontend_id = autofill::POPUP_ITEM_ID_ALL_SAVED_PASSWORDS_ENTRY;
