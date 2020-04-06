@@ -5617,6 +5617,20 @@
     }
   },
 
+  "CrostiniArcAdbSideloadingAllowed": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "CrostiniArcAdbSideloadingAllowed": 0 },
+        "prefs": { "crostini.arc_adb_sideloading.user_pref": {} }
+      },
+      {
+        "policies": { "CrostiniArcAdbSideloadingAllowed": 1 },
+        "prefs": { "crostini.arc_adb_sideloading.user_pref": {} }
+      }
+    ]
+  },
+
   "DeviceSamlLoginAuthenticationType": {},
 
   "DeviceScheduledUpdateCheck": {
