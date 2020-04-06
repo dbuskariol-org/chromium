@@ -32,15 +32,37 @@ suite('NewTabPageLogoTest', () => {
     BrowserProxy.instance_ = testProxy;
   });
 
-  test('setting static, animated doodle shows image', async () => {
+  test('setting simple doodle shows image', async () => {
     // Act.
-    const logo = await createLogo({content: {image: 'data:foo'}});
+    const logo = await createLogo(
+        {content: {imageDoodle: {imageUrl: {url: 'data:foo'}}}});
 
     // Assert.
     assertNotStyle(logo.$.doodle, 'display', 'none');
     assertStyle(logo.$.logo, 'display', 'none');
     assertEquals(logo.$.image.src, 'data:foo');
     assertNotStyle(logo.$.image, 'display', 'none');
+    assertStyle(logo.$.animation, 'display', 'none');
+    assertStyle(logo.$.iframe, 'display', 'none');
+  });
+
+  test('setting animated doodle shows image', async () => {
+    // Act.
+    const logo = await createLogo({
+      content: {
+        imageDoodle: {
+          imageUrl: {url: 'data:foo'},
+          animationUrl: {url: 'https://foo.com'},
+        }
+      }
+    });
+
+    // Assert.
+    assertNotStyle(logo.$.doodle, 'display', 'none');
+    assertStyle(logo.$.logo, 'display', 'none');
+    assertEquals(logo.$.image.src, 'data:foo');
+    assertNotStyle(logo.$.image, 'display', 'none');
+    assertStyle(logo.$.animation, 'display', 'none');
     assertStyle(logo.$.iframe, 'display', 'none');
   });
 
@@ -53,7 +75,7 @@ suite('NewTabPageLogoTest', () => {
     assertStyle(logo.$.logo, 'display', 'none');
     assertEquals(logo.$.iframe.path, 'iframe?https://foo.com');
     assertNotStyle(logo.$.iframe, 'display', 'none');
-    assertStyle(logo.$.image, 'display', 'none');
+    assertStyle(logo.$.imageContainer, 'display', 'none');
   });
 
   test('disallowing doodle shows logo', async () => {
@@ -159,5 +181,66 @@ suite('NewTabPageLogoTest', () => {
     // Assert.
     assertEquals(logo.$.iframe.offsetHeight, height);
     assertEquals(logo.$.iframe.offsetWidth, width);
+  });
+
+  test('clicking simple doodle opens link', async () => {
+    // Arrange.
+    const logo = await createLogo({
+      content: {
+        imageDoodle: {
+          imageUrl: {url: 'data:foo'},
+          onClickUrl: {url: 'https://foo.com'},
+        }
+      }
+    });
+
+    // Act.
+    logo.$.image.click();
+    const url = await testProxy.whenCalled('open');
+
+    // Assert.
+    assertEquals(url, 'https://foo.com');
+  });
+
+  test('clicking image of animated doodle starts animation', async () => {
+    // Arrange.
+    const logo = await createLogo({
+      content: {
+        imageDoodle: {
+          imageUrl: {url: 'data:foo'},
+          animationUrl: {url: 'https://foo.com'},
+        }
+      }
+    });
+
+    // Act.
+    logo.$.image.click();
+
+    // Assert.
+    assertEquals(testProxy.getCallCount('open'), 0);
+    assertNotStyle(logo.$.image, 'display', 'none');
+    assertNotStyle(logo.$.animation, 'display', 'none');
+    assertEquals(logo.$.animation.path, 'image?https://foo.com');
+  });
+
+  test('clicking animation of animated doodle opens link', async () => {
+    // Arrange.
+    const logo = await createLogo({
+      content: {
+        imageDoodle: {
+          imageUrl: {url: 'data:foo'},
+          animationUrl: {url: 'https://foo.com'},
+          onClickUrl: {url: 'https://bar.com'},
+        }
+      }
+    });
+    logo.$.image.click();
+
+    // Act.
+    logo.$.animation.click();
+    const url = await testProxy.whenCalled('open');
+
+    // Assert.
+    assertEquals(url, 'https://bar.com');
   });
 });

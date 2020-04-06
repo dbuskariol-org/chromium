@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'chrome://resources/cr_elements/hidden_style_css.m.js';
 import 'chrome://resources/polymer/v3_0/iron-pages/iron-pages.js';
 import './untrusted_iframe.js';
 
@@ -57,6 +58,18 @@ class LogoElement extends PolymerElement {
       /** @private */
       imageUrl_: {
         computed: 'computeImageUrl_(doodle_)',
+        type: String,
+      },
+
+      /** @private */
+      showAnimation_: {
+        type: Boolean,
+        value: false,
+      },
+
+      /** @private */
+      animationUrl_: {
+        computed: 'computeAnimationUrl_(doodle_)',
         type: String,
       },
 
@@ -135,12 +148,40 @@ class LogoElement extends PolymerElement {
   }
 
   /**
+   * Called when a simple or animated doodle was clicked. Starts animation if
+   * clicking preview image of animated doodle. Otherwise, opens
+   * doodle-associated URL in new tab/window.
+   * @private
+   */
+  onImageClick_() {
+    if (!this.showAnimation_ && this.doodle_ &&
+        this.doodle_.content.imageDoodle.animationUrl) {
+      this.showAnimation_ = true;
+      return;
+    }
+    BrowserProxy.getInstance().open(
+        this.doodle_.content.imageDoodle.onClickUrl.url);
+  }
+
+  /**
    * @return {string}
    * @private
    */
   computeImageUrl_() {
-    return (this.doodle_ && this.doodle_.content.image) ?
-        this.doodle_.content.image :
+    return (this.doodle_ && this.doodle_.content.imageDoodle &&
+            this.doodle_.content.imageDoodle.imageUrl) ?
+        this.doodle_.content.imageDoodle.imageUrl.url :
+        '';
+  }
+
+  /**
+   * @return {string}
+   * @private
+   */
+  computeAnimationUrl_() {
+    return (this.doodle_ && this.doodle_.content.imageDoodle &&
+            this.doodle_.content.imageDoodle.animationUrl) ?
+        `image?${this.doodle_.content.imageDoodle.animationUrl.url}` :
         '';
   }
 

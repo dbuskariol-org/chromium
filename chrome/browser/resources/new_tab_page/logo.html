@@ -1,6 +1,7 @@
-<style>
-  :host(:not([hidden])) {
+<style include="cr-hidden-style">
+  :host {
     display: inline-block;
+    min-height: 230px;
   }
 
   #singleColoredLogo,
@@ -21,8 +22,32 @@
     background-image: url(chrome://resources/images/google_logo.svg);
   }
 
+  #imageContainer {
+    cursor: pointer;
+    display: grid;
+    height: 230px;
+    width: 500px;
+  }
+
+  #imageContainer > * {
+    grid-column-start: 1;
+    grid-row-start: 1;
+  }
+
+  #image {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  #animation {
+    height: 100%;
+    pointer-events: none;
+    width: 100%;
+  }
+
   #iframe {
     height: var(--height, 200px);
+    margin-bottom: 30px;
     transition-duration: var(--duration, 100ms);
     transition-property: height, width;
     width: var(--width, 500px);
@@ -35,7 +60,17 @@
     <div id="multiColoredLogo" hidden="[[singleColored]]"></div>
   </div>
   <div id="doodle">
-    <img id="image" src="[[imageUrl_]]" hidden="[[!imageUrl_]]"></img>
+    <div id="imageContainer" hidden="[[!doodle_.content.imageDoodle]]"
+        on-click="onImageClick_">
+      <!-- The static image is always visible and the animated image is stacked
+           on top of the static image so that there is no flicker when starting
+           the animation. -->
+      <img id="image" src="[[imageUrl_]]">
+      </img>
+      <ntp-untrusted-iframe id="animation" path="[[animationUrl_]]"
+          hidden="[[!showAnimation_]]">
+      </ntp-untrusted-iframe>
+    </div>
     <ntp-untrusted-iframe id="iframe" path="[[iframeUrl_]]"
         hidden="[[!iframeUrl_]]"
         style="--duration: [[valueOrUnset_(duration_)]];
