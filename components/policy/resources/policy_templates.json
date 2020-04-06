@@ -9508,16 +9508,22 @@
         'items' : {
           'type': 'string',
           'enum': [
-            'settings',
+            'browser_settings',
+            'os_settings',
             'camera',
           ],
         },
       },
       'items': [
         {
-          'name': 'settings',
-          'value': 'settings',
-          'caption': '''Settings feature''',
+          'name': 'browser_settings',
+          'value': 'browser_settings',
+          'caption': '''Browser Settings''',
+        },
+        {
+          'name': 'os_settings',
+          'value': 'os_settings',
+          'caption': '''OS Settings''',
         },
         {
           'name': 'camera',
@@ -9532,9 +9538,9 @@
         'dynamic_refresh': True,
         'per_profile': False,
       },
-      'example_value': ['camera', 'settings'],
+      'example_value': ['camera', 'browser_settings', 'os_settings'],
       'id': 689,
-      'caption': '''Configure the camera and the settings feature to be disabled''',
+      'caption': '''Configure the camera, browser settings, and os settings features to be disabled''',
       'tags': [],
       'desc': '''Allows you to set a list of <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> features to be disabled.
 

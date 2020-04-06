@@ -3676,7 +3676,7 @@
     "policy_pref_mapping_test": [
       {
         "policies": {
-          "SystemFeaturesDisableList": ["settings"]
+          "SystemFeaturesDisableList": ["os_settings"]
         },
         "prefs": { "policy.system_features_disable_list": { "local_state": true } }
       }
