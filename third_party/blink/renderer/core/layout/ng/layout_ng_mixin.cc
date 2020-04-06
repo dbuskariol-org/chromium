@@ -7,7 +7,6 @@
 #include <memory>
 #include <utility>
 
-#include "third_party/blink/renderer/core/frame/local_frame_view.h"
 #include "third_party/blink/renderer/core/layout/layout_view.h"
 #include "third_party/blink/renderer/core/layout/ng/layout_box_utils.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_box_fragment_builder.h"
@@ -27,8 +26,6 @@ LayoutNGMixin<Base>::LayoutNGMixin(Element* element) : Base(element) {
       std::is_base_of<LayoutBlock, Base>::value,
       "Base class of LayoutNGMixin must be LayoutBlock or derived class.");
   DCHECK(!element || !element->ShouldForceLegacyLayout());
-  if (element)
-    Base::GetFrameView()->IncrementLayoutObjectCountNG();
 }
 
 template <typename Base>
