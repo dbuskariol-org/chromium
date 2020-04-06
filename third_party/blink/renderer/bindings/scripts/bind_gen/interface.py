@@ -1432,9 +1432,11 @@ def make_v8_set_return_value(cg_context):
         return T("bindings::V8SetReturnValue({});".format(", ".join(args)))
 
     if return_type.is_frozen_array:
-        return T("bindings::V8SetReturnValue(${info}, FreezeV8Object(ToV8("
-                 "${return_value}, ${creation_context_object}, ${isolate}), "
-                 "${isolate}));")
+        return T(
+            "bindings::V8SetReturnValue("
+            "${info}, "
+            "ToV8(${return_value}, ${creation_context_object}, ${isolate}), "
+            "bindings::V8ReturnValue::kFrozen);")
 
     if return_type.is_promise:
         return T("bindings::V8SetReturnValue"
