@@ -4,7 +4,7 @@ load('//lib/try.star', 'try_')
 # need to be changed when making a new milestone
 load('../vars.star', 'vars')
 
-defaults.pool.set('lui.chromium.try-m83')
+defaults.pool.set('lui.chromium.try')
 
 luci.bucket(
     name = vars.try_bucket,
