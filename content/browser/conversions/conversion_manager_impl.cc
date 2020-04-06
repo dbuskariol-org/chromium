@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/conversions/conversion_manager.h"
+#include "content/browser/conversions/conversion_manager_impl.h"
 
 #include <memory>
 
@@ -14,7 +14,7 @@
 
 namespace content {
 
-ConversionManager::ConversionManager(
+ConversionManagerImpl::ConversionManagerImpl(
     const base::FilePath& user_data_directory,
     scoped_refptr<base::SequencedTaskRunner> task_runner)
     : storage_task_runner_(std::move(task_runner)),
@@ -32,13 +32,14 @@ ConversionManager::ConversionManager(
       storage_task_runner_.get(), FROM_HERE,
       base::BindOnce(&ConversionStorage::Initialize,
                      base::Unretained(storage_.get())),
-      base::BindOnce(&ConversionManager::OnInitCompleted,
+      base::BindOnce(&ConversionManagerImpl::OnInitCompleted,
                      weak_factory_.GetWeakPtr()));
 }
 
-ConversionManager::~ConversionManager() = default;
+ConversionManagerImpl::~ConversionManagerImpl() = default;
 
-void ConversionManager::HandleConversion(const StorableConversion& conversion) {
+void ConversionManagerImpl::HandleConversion(
+    const StorableConversion& conversion) {
   if (!storage_)
     return;
 
@@ -54,11 +55,11 @@ void ConversionManager::HandleConversion(const StorableConversion& conversion) {
           base::Unretained(storage_.get()), conversion));
 }
 
-const ConversionPolicy& ConversionManager::GetConversionPolicy() const {
+const ConversionPolicy& ConversionManagerImpl::GetConversionPolicy() const {
   return *conversion_policy_;
 }
 
-void ConversionManager::OnInitCompleted(bool success) {
+void ConversionManagerImpl::OnInitCompleted(bool success) {
   if (!success)
     storage_.reset();
 }
