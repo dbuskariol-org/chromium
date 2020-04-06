@@ -72,6 +72,9 @@ extern const char kAllowSignedHTTPExchangeCertsWithoutExtensionDescription[];
 extern const char kAllowSyncXHRInPageDismissalName[];
 extern const char kAllowSyncXHRInPageDismissalDescription[];
 
+extern const char kEnableClipboardProviderImageSuggestionsName[];
+extern const char kEnableClipboardProviderImageSuggestionsDescription[];
+
 extern const char kEnableFtpName[];
 extern const char kEnableFtpDescription[];
 

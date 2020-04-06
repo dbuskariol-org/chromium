@@ -38422,6 +38422,8 @@ from previous Chrome versions.
       label="OmniboxAlternateMatchDescriptionSeparator:enabled"/>
   <int value="-1062119671" label="enable-password-force-saving"/>
   <int value="-1060395248" label="PasswordSearchMobile:enabled"/>
+  <int value="-1056860259"
+      label="OmniboxEnableClipboardProviderImageSuggestions:enabled"/>
   <int value="-1056310158" label="disable-memory-pressure-chromeos"/>
   <int value="-1055845287" label="SensorContentSetting:enabled"/>
   <int value="-1052782474" label="enable-cloud-devices"/>
@@ -39118,6 +39120,8 @@ from previous Chrome versions.
   <int value="-222296540" label="VirtualKeyboardBorderedKey:disabled"/>
   <int value="-220599034" label="UsePdfCompositorServiceForPrint:enabled"/>
   <int value="-216219963" label="ash-shelf-color-scheme"/>
+  <int value="-215580565"
+      label="OmniboxEnableClipboardProviderImageSuggestions:disabled"/>
   <int value="-215534141" label="NativeWindowNavButtons:enabled"/>
   <int value="-213518852" label="protect-sync-credential:enabled"/>
   <int value="-213214894" label="enable-chromevox-arc-support"/>
