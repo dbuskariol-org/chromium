@@ -38,9 +38,6 @@ crbug.com/997202 external/wpt/infrastructure/reftest/reftest_fuzzy_ini_full.html
 crbug.com/997202 external/wpt/infrastructure/reftest/reftest_fuzzy_ini_ref_only.html [ Failure ]
 crbug.com/997202 external/wpt/infrastructure/reftest/reftest_fuzzy_ini_short.html [ Failure ]
 
-# TestRendered event isn't supported by run_web_tests.
-crbug.com/1028631 external/wpt/infrastructure/reftest/reftest_wait_TestRendered.html [ Skip ]
-
 # WPT HTTP/2 is not supported by run_web_tests.
 crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.html [ Skip ]
 crbug.com/1048761 external/wpt/infrastructure/server/http2-context.sub.h2.any.serviceworker.html [ Skip ]
