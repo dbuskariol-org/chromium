@@ -1790,6 +1790,9 @@ extern const char kAshSwipingFromLeftEdgeToGoBackDescription[];
 extern const char kBluetoothAggressiveAppearanceFilterName[];
 extern const char kBluetoothAggressiveAppearanceFilterDescription[];
 
+extern const char kBluetoothFixA2dpPacketSizeName[];
+extern const char kBluetoothFixA2dpPacketSizeDescription[];
+
 extern const char kBluetoothKernelSuspendNotifierName[];
 extern const char kBluetoothKernelSuspendNotifierDescription[];
 

@@ -2043,6 +2043,10 @@ const FeatureEntry kFeatureEntries[] = {
      kOsCrOS,
      FEATURE_VALUE_TYPE(
          chromeos::features::kBluetoothAggressiveAppearanceFilter)},
+    {"bluetooth-fix-a2dp-packet-size",
+     flag_descriptions::kBluetoothFixA2dpPacketSizeName,
+     flag_descriptions::kBluetoothFixA2dpPacketSizeDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kBluetoothFixA2dpPacketSize)},
     {"bluetooth-kernel-suspend-notifier",
      flag_descriptions::kBluetoothKernelSuspendNotifierName,
      flag_descriptions::kBluetoothKernelSuspendNotifierDescription, kOsCrOS,

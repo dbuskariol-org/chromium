@@ -394,6 +394,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "bluetooth-fix-a2dp-packet-size",
+    "owners": [ "michaelfsun", "chromeos-bluetooth@google.com" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "bluetooth-kernel-suspend-notifier",
     "owners": [ "abhishekpandit", "chromeos-bluetooth@google.com" ],
     "expiry_milestone": 84
