@@ -9,7 +9,6 @@
 
 #include "base/compiler_specific.h"
 #include "base/macros.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "mojo/public/cpp/bindings/associated_receiver_set.h"
 #include "mojo/public/cpp/bindings/scoped_interface_endpoint_handle.h"
 #include "services/device/public/mojom/screen_orientation.mojom.h"
@@ -22,8 +21,7 @@ class WebLocalFrame;
 
 namespace test_runner {
 
-class TEST_RUNNER_EXPORT MockScreenOrientationClient
-    : public device::mojom::ScreenOrientation {
+class MockScreenOrientationClient : public device::mojom::ScreenOrientation {
  public:
   explicit MockScreenOrientationClient();
   ~MockScreenOrientationClient() override;

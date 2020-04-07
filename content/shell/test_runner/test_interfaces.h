@@ -10,7 +10,6 @@
 
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
-#include "content/shell/test_runner/test_runner_export.h"
 
 namespace blink {
 class WebLocalFrame;
@@ -24,7 +23,7 @@ class TestRunner;
 class WebTestDelegate;
 class WebViewTestProxy;
 
-class TEST_RUNNER_EXPORT TestInterfaces {
+class TestInterfaces {
  public:
   TestInterfaces();
   ~TestInterfaces();

@@ -10,14 +10,13 @@
 
 #include "base/macros.h"
 #include "base/values.h"
-#include "content/shell/test_runner/test_runner_export.h"
 
 namespace test_runner {
 
 // TrackedDictionary wraps base::DictionaryValue, but forces all mutations to go
 // through TrackedDictionary's Set methods.  This allows tracking of changes
 // accumulated since the last call to ResetChangeTracking.
-class TEST_RUNNER_EXPORT TrackedDictionary {
+class TrackedDictionary {
  public:
   TrackedDictionary();
 

@@ -13,7 +13,6 @@
 #include "base/memory/weak_ptr.h"
 #include "content/renderer/render_widget.h"
 #include "content/shell/test_runner/event_sender.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "third_party/blink/public/web/web_widget_client.h"
 
 namespace blink {
@@ -51,7 +50,7 @@ class WebViewTestProxy;
 // Historically, the overridden functionality has been small enough to not
 // cause too much trouble. If that changes, then this entire testing
 // architecture should be revisited.
-class TEST_RUNNER_EXPORT WebWidgetTestProxy : public content::RenderWidget {
+class WebWidgetTestProxy : public content::RenderWidget {
  public:
   template <typename... Args>
   explicit WebWidgetTestProxy(Args&&... args)

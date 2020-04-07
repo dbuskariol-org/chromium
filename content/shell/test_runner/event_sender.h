@@ -17,7 +17,6 @@
 #include "base/memory/weak_ptr.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
 #include "third_party/blink/public/common/input/web_mouse_wheel_event.h"
 #include "third_party/blink/public/common/input/web_touch_point.h"
@@ -53,7 +52,7 @@ enum KeyLocationCode {
   DOMKeyLocationNumpad = 0x03
 };
 
-class TEST_RUNNER_EXPORT EventSender {
+class EventSender {
  public:
   explicit EventSender(WebWidgetTestProxy*);
   virtual ~EventSender();

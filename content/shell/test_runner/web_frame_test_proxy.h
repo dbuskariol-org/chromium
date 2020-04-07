@@ -11,7 +11,6 @@
 
 #include "base/macros.h"
 #include "content/renderer/render_frame_impl.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "content/shell/test_runner/web_frame_test_client.h"
 #include "third_party/blink/public/platform/web_effective_connection_type.h"
 #include "third_party/blink/public/platform/web_string.h"
@@ -27,7 +26,7 @@ namespace test_runner {
 // WebFrameTestProxy is used during running web tests instead of a
 // RenderFrameImpl to inject test-only behaviour by overriding methods in the
 // base class.
-class TEST_RUNNER_EXPORT WebFrameTestProxy : public content::RenderFrameImpl {
+class WebFrameTestProxy : public content::RenderFrameImpl {
  public:
   template <typename... Args>
   explicit WebFrameTestProxy(Args&&... args)

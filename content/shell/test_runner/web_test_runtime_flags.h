@@ -10,7 +10,6 @@
 #include "base/logging.h"
 #include "base/macros.h"
 #include "base/values.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "content/shell/test_runner/tracked_dictionary.h"
 
 namespace test_runner {
@@ -18,7 +17,7 @@ namespace test_runner {
 // WebTestRuntimeFlags stores flags controlled by web tests at runtime
 // (i.e. by calling testRunner.dumpAsText() or testRunner.waitUntilDone()).
 // Changes to the flags are tracked (to help replicate them across renderers).
-class TEST_RUNNER_EXPORT WebTestRuntimeFlags {
+class WebTestRuntimeFlags {
  public:
   // Creates default flags (see also the Reset method).
   WebTestRuntimeFlags();

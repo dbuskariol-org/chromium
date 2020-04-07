@@ -9,7 +9,6 @@
 
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "content/shell/test_runner/web_ax_object_proxy.h"
 #include "third_party/blink/public/web/web_ax_object.h"
 #include "v8/include/v8.h"
@@ -25,7 +24,7 @@ namespace test_runner {
 
 class WebViewTestProxy;
 
-class TEST_RUNNER_EXPORT AccessibilityController {
+class AccessibilityController {
  public:
   explicit AccessibilityController(WebViewTestProxy* web_view_test_proxy);
   ~AccessibilityController();

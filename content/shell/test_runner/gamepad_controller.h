@@ -13,7 +13,6 @@
 #include "base/macros.h"
 #include "base/memory/read_only_shared_memory_region.h"
 #include "base/memory/weak_ptr.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "device/gamepad/public/cpp/gamepads.h"
 #include "device/gamepad/public/mojom/gamepad.mojom.h"
 #include "device/gamepad/public/mojom/gamepad_hardware_buffer.h"
@@ -27,8 +26,7 @@ class WebLocalFrame;
 
 namespace test_runner {
 
-class TEST_RUNNER_EXPORT GamepadController
-    : public base::SupportsWeakPtr<GamepadController> {
+class GamepadController : public base::SupportsWeakPtr<GamepadController> {
  public:
   GamepadController();
   ~GamepadController();

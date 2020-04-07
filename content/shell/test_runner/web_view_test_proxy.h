@@ -14,7 +14,6 @@
 #include "build/build_config.h"
 #include "content/renderer/render_view_impl.h"
 #include "content/shell/test_runner/accessibility_controller.h"
-#include "content/shell/test_runner/test_runner_export.h"
 #include "content/shell/test_runner/test_runner_for_specific_view.h"
 #include "content/shell/test_runner/text_input_controller.h"
 #include "content/shell/test_runner/web_widget_test_proxy.h"
@@ -59,7 +58,7 @@ class WebTestDelegate;
 // Historically, the overridden functionality has been small enough to not
 // cause too much trouble. If that changes, then this entire testing
 // architecture should be revisited.
-class TEST_RUNNER_EXPORT WebViewTestProxy : public content::RenderViewImpl {
+class WebViewTestProxy : public content::RenderViewImpl {
  public:
   template <typename... Args>
   explicit WebViewTestProxy(Args&&... args)
