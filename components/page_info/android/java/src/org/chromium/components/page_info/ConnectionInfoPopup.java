@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.page_info;
+package org.chromium.components.page_info;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +22,6 @@ import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Log;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ChromeActivity;
-import org.chromium.chrome.browser.vr.UiUnsupportedMode;
-import org.chromium.chrome.browser.vr.VrModuleProvider;
-import org.chromium.components.page_info.CertificateChainHelper;
-import org.chromium.components.page_info.CertificateViewer;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.WebContentsObserver;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
@@ -61,23 +55,25 @@ public class ConnectionInfoPopup implements OnClickListener, ModalDialogProperti
     private ViewGroup mDescriptionLayout;
     private Button mResetCertDecisionsButton;
     private String mLinkUrl;
+    private VrHandler mVrHandler;
 
-    private ConnectionInfoPopup(
-            Context context, ModalDialogManager modalDialogManager, WebContents webContents) {
+    private ConnectionInfoPopup(Context context, WebContents webContents,
+            ModalDialogManager modalDialogManager, VrHandler vrHandler) {
         mContext = context;
         mModalDialogManager = modalDialogManager;
         mWebContents = webContents;
+        mVrHandler = vrHandler;
 
         mCertificateViewer = new CertificateViewer(mContext);
 
         mContainer = new LinearLayout(mContext);
         mContainer.setOrientation(LinearLayout.VERTICAL);
-        mPaddingWide = (int) context.getResources().getDimension(
-                R.dimen.connection_info_padding_wide);
-        mPaddingThin = (int) context.getResources().getDimension(
-                R.dimen.connection_info_padding_thin);
-        mContainer.setPadding(mPaddingWide, mPaddingWide, mPaddingWide,
-                mPaddingWide - mPaddingThin);
+        mPaddingWide =
+                (int) context.getResources().getDimension(R.dimen.connection_info_padding_wide);
+        mPaddingThin =
+                (int) context.getResources().getDimension(R.dimen.connection_info_padding_thin);
+        mContainer.setPadding(
+                mPaddingWide, mPaddingWide, mPaddingWide, mPaddingWide - mPaddingThin);
 
         // This needs to come after other member initialization.
         mNativeConnectionInfoPopup = ConnectionInfoPopupJni.get().init(this, mWebContents);
@@ -124,8 +120,7 @@ public class ConnectionInfoPopup implements OnClickListener, ModalDialogProperti
     }
 
     private View addSection(int iconId, String headline, String description) {
-        View section = LayoutInflater.from(mContext).inflate(R.layout.connection_info,
-                null);
+        View section = LayoutInflater.from(mContext).inflate(R.layout.connection_info, null);
         ImageView i = section.findViewById(R.id.connection_info_icon);
         i.setImageResource(iconId);
 
@@ -211,18 +206,17 @@ public class ConnectionInfoPopup implements OnClickListener, ModalDialogProperti
                 // ignore this request.
                 return;
             }
-            if (VrModuleProvider.getDelegate().isInVr()) {
-                VrModuleProvider.getDelegate().requestToExitVrAndRunOnSuccess(() -> {
+            if (mVrHandler.isInVr()) {
+                mVrHandler.exitVrAndRun(() -> {
                     mCertificateViewer.showCertificateChain(certChain);
-                }, UiUnsupportedMode.UNHANDLED_CERTIFICATE_INFO);
+                }, VrHandler.UiType.CERTIFICATE_INFO);
                 return;
             }
             mCertificateViewer.showCertificateChain(certChain);
         } else if (mMoreInfoLink == v) {
-            if (VrModuleProvider.getDelegate().isInVr()) {
-                VrModuleProvider.getDelegate().requestToExitVrAndRunOnSuccess(
-                        this ::showConnectionSecurityInfo,
-                        UiUnsupportedMode.UNHANDLED_CONNECTION_SECURITY_INFO);
+            if (mVrHandler.isInVr()) {
+                mVrHandler.exitVrAndRun(this::showConnectionSecurityInfo,
+                        VrHandler.UiType.CONNECTION_SECURITY_INFO);
                 return;
             }
             showConnectionSecurityInfo();
@@ -262,8 +256,9 @@ public class ConnectionInfoPopup implements OnClickListener, ModalDialogProperti
      * @param context Context which is used for launching a dialog.
      * @param webContents The WebContents for which to show website information
      */
-    public static void show(ChromeActivity context, WebContents webContents) {
-        new ConnectionInfoPopup(context, context.getModalDialogManager(), webContents);
+    public static void show(Context context, WebContents webContents,
+            ModalDialogManager modalDialogManager, VrHandler vrHandler) {
+        new ConnectionInfoPopup(context, webContents, modalDialogManager, vrHandler);
     }
 
     @NativeMethods

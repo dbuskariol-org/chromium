@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/android/page_info/connection_info_popup_android.h"
+#include "components/page_info/android/connection_info_popup_android.h"
 
 #include "base/android/jni_android.h"
 #include "base/android/jni_array.h"
 #include "base/android/jni_string.h"
-#include "chrome/android/chrome_jni_headers/ConnectionInfoPopup_jni.h"
-#include "chrome/browser/android/resource_mapper.h"
-#include "chrome/browser/infobars/infobar_service.h"
-#include "chrome/browser/ui/page_info/chrome_page_info_delegate.h"
+#include "components/page_info/android/jni_headers/ConnectionInfoPopup_jni.h"
+#include "components/page_info/android/page_info_client.h"
 #include "components/page_info/page_info.h"
+#include "components/page_info/page_info_delegate.h"
+#include "components/page_info/page_info_ui_delegate.h"
 #include "components/security_state/core/security_state.h"
 #include "components/strings/grit/components_strings.h"
 #include "content/public/browser/browser_context.h"
@@ -23,8 +23,8 @@
 #include "ui/base/l10n/l10n_util.h"
 
 using base::android::CheckException;
-using base::android::ConvertUTF8ToJavaString;
 using base::android::ConvertUTF16ToJavaString;
+using base::android::ConvertUTF8ToJavaString;
 using base::android::GetClass;
 using base::android::JavaParamRef;
 using base::android::ScopedJavaLocalRef;
@@ -37,6 +37,7 @@ static jlong JNI_ConnectionInfoPopup_Init(
     const JavaParamRef<jobject>& java_web_contents) {
   content::WebContents* web_contents =
       content::WebContents::FromJavaWebContents(java_web_contents);
+  DCHECK(web_contents);
 
   return reinterpret_cast<intptr_t>(
       new ConnectionInfoPopupAndroid(env, obj, web_contents));
@@ -46,6 +47,9 @@ ConnectionInfoPopupAndroid::ConnectionInfoPopupAndroid(
     JNIEnv* env,
     jobject java_page_info_pop,
     WebContents* web_contents) {
+  page_info_client_ = page_info::GetPageInfoClient();
+  DCHECK(page_info_client_);
+
   // Important to use GetVisibleEntry to match what's showing in the omnibox.
   content::NavigationEntry* nav_entry =
       web_contents->GetController().GetVisibleEntry();
@@ -55,13 +59,12 @@ ConnectionInfoPopupAndroid::ConnectionInfoPopupAndroid(
   popup_jobject_.Reset(env, java_page_info_pop);
 
   presenter_ = std::make_unique<PageInfo>(
-      std::make_unique<ChromePageInfoDelegate>(web_contents), web_contents,
+      page_info_client_->CreatePageInfoDelegate(web_contents), web_contents,
       nav_entry->GetURL());
   presenter_->InitializeUiState(this);
 }
 
-ConnectionInfoPopupAndroid::~ConnectionInfoPopupAndroid() {
-}
+ConnectionInfoPopupAndroid::~ConnectionInfoPopupAndroid() {}
 
 void ConnectionInfoPopupAndroid::Destroy(JNIEnv* env,
                                          const JavaParamRef<jobject>& obj) {
@@ -80,7 +83,7 @@ void ConnectionInfoPopupAndroid::SetIdentityInfo(
   JNIEnv* env = base::android::AttachCurrentThread();
 
   {
-    int icon_id = ResourceMapper::MapToJavaDrawableId(
+    int icon_id = page_info_client_->GetJavaResourceId(
         PageInfoUI::GetIdentityIconID(identity_info.identity_status));
 
     // The headline and the certificate dialog link of the site's identity
@@ -119,7 +122,7 @@ void ConnectionInfoPopupAndroid::SetIdentityInfo(
   }
 
   {
-    int icon_id = ResourceMapper::MapToJavaDrawableId(
+    int icon_id = page_info_client_->GetJavaResourceId(
         PageInfoUI::GetConnectionIconID(identity_info.connection_status));
 
     ScopedJavaLocalRef<jstring> description = ConvertUTF8ToJavaString(

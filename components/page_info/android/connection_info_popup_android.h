@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ANDROID_PAGE_INFO_CONNECTION_INFO_POPUP_ANDROID_H_
-#define CHROME_BROWSER_UI_ANDROID_PAGE_INFO_CONNECTION_INFO_POPUP_ANDROID_H_
+#ifndef COMPONENTS_PAGE_INFO_ANDROID_CONNECTION_INFO_POPUP_ANDROID_H_
+#define COMPONENTS_PAGE_INFO_ANDROID_CONNECTION_INFO_POPUP_ANDROID_H_
 
 #include <jni.h>
 
@@ -15,6 +15,10 @@
 
 namespace content {
 class WebContents;
+}
+
+namespace page_info {
+class PageInfoClient;
 }
 
 // Android implementation of the page info UI which displays detailed
@@ -45,10 +49,13 @@ class ConnectionInfoPopupAndroid : public PageInfoUI {
   // The presenter that controls the Page Info UI.
   std::unique_ptr<PageInfo> presenter_;
 
+  // PageInfoClient outlives this class.
+  page_info::PageInfoClient* page_info_client_;
+
   // The java prompt implementation.
   base::android::ScopedJavaGlobalRef<jobject> popup_jobject_;
 
   DISALLOW_COPY_AND_ASSIGN(ConnectionInfoPopupAndroid);
 };
 
-#endif  // CHROME_BROWSER_UI_ANDROID_PAGE_INFO_CONNECTION_INFO_POPUP_ANDROID_H_
+#endif  // COMPONENTS_PAGE_INFO_ANDROID_CONNECTION_INFO_POPUP_ANDROID_H_s
