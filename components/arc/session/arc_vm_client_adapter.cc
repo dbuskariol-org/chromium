@@ -47,6 +47,7 @@
 namespace arc {
 namespace {
 
+constexpr const char kArcCreateDataJobName[] = "arc_2dcreate_2ddata";
 constexpr const char kArcVmServerProxyJobName[] = "arcvm_2dserver_2dproxy";
 constexpr const char kArcVmPerBoardFeaturesJobName[] =
     "arcvm_2dper_2dboard_2dfeatures";
@@ -481,6 +482,26 @@ class ArcVmClientAdapter : public ArcClientAdapter,
                                     bool result) {
     if (!result) {
       LOG(ERROR) << "Failed to start arcvm-server-proxy job";
+      std::move(callback).Run(false);
+      return;
+    }
+
+    VLOG(1) << "Starting arc-create-data";
+    const std::string account_id =
+        cryptohome::CreateAccountIdentifierFromIdentification(cryptohome_id_)
+            .account_id();
+    chromeos::UpstartClient::Get()->StartJob(
+        kArcCreateDataJobName, {"CHROMEOS_USER=" + account_id},
+        base::BindOnce(&ArcVmClientAdapter::OnArcCreateDataJobStarted,
+                       weak_factory_.GetWeakPtr(), std::move(params),
+                       std::move(callback)));
+  }
+
+  void OnArcCreateDataJobStarted(UpgradeParams params,
+                                 chromeos::VoidDBusMethodCallback callback,
+                                 bool result) {
+    if (!result) {
+      LOG(ERROR) << "Failed to start arc-create-data job";
       std::move(callback).Run(false);
       return;
     }

@@ -35,6 +35,7 @@
 namespace arc {
 namespace {
 
+constexpr const char kArcCreateDataJobName[] = "arc_2dcreate_2ddata";
 constexpr const char kArcVmServerProxyJobName[] = "arcvm_2dserver_2dproxy";
 constexpr const char kArcVmPerBoardFeaturesJobName[] =
     "arcvm_2dper_2dboard_2dfeatures";
@@ -435,6 +436,30 @@ TEST_F(ArcVmClientAdapterTest, UpgradeArc_StartArcVmProxyFailure) {
 
   // Inject failure to FakeUpstartClient.
   InjectUpstartStartJobFailure(kArcVmServerProxyJobName);
+
+  UpgradeArc(false);
+  EXPECT_TRUE(GetStartConciergeCalled());
+  EXPECT_FALSE(GetTestConciergeClient()->start_arc_vm_called());
+  EXPECT_FALSE(arc_instance_stopped_called());
+
+  // Try to stop the VM. StopVm will fail in this case because
+  // no VM is running.
+  vm_tools::concierge::StopVmResponse response;
+  response.set_success(false);
+  GetTestConciergeClient()->set_stop_vm_response(response);
+  adapter()->StopArcInstance(/*on_shutdown=*/false);
+  run_loop()->Run();
+  EXPECT_TRUE(GetTestConciergeClient()->stop_vm_called());
+  EXPECT_TRUE(arc_instance_stopped_called());
+}
+
+// Tests that UpgradeArc() handles arc-create-data startup failures properly.
+TEST_F(ArcVmClientAdapterTest, UpgradeArc_StartArcCreateDataFailure) {
+  SetValidUserInfo();
+  StartMiniArc();
+
+  // Inject failure to FakeUpstartClient.
+  InjectUpstartStartJobFailure(kArcCreateDataJobName);
 
   UpgradeArc(false);
   EXPECT_TRUE(GetStartConciergeCalled());
