@@ -20,6 +20,7 @@
 #include "base/task/post_task.h"
 #include "base/test/bind_test_util.h"
 #include "base/time/time.h"
+#include "chromeos/cryptohome/cryptohome_parameters.h"
 #include "chromeos/dbus/dbus_thread_manager.h"
 #include "chromeos/dbus/debug_daemon/fake_debug_daemon_client.h"
 #include "chromeos/dbus/fake_concierge_client.h"
@@ -27,6 +28,7 @@
 #include "components/arc/arc_util.h"
 #include "components/arc/session/arc_session.h"
 #include "components/arc/session/file_system_status.h"
+#include "components/user_manager/user_names.h"
 #include "content/public/test/browser_task_environment.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -191,8 +193,12 @@ class ArcVmClientAdapterTest : public testing::Test,
     GetTestDebugDaemonClient()->set_start_concierge_result(response);
   }
 
-  void SetValidUserInfo() {
-    adapter()->SetUserInfo(kUserIdHash, kSerialNumber);
+  void SetValidUserInfo() { SetUserInfo(kUserIdHash, kSerialNumber); }
+
+  void SetUserInfo(const std::string& hash, const std::string& serial) {
+    adapter()->SetUserInfo(
+        cryptohome::Identification(user_manager::StubAccountId()), hash,
+        serial);
   }
 
   void StartMiniArcWithParams(bool expect_success, StartParams params) {
@@ -341,7 +347,7 @@ class ArcVmClientAdapterTest : public testing::Test,
 
 // Tests that SetUserInfo() doesn't crash.
 TEST_F(ArcVmClientAdapterTest, SetUserInfo) {
-  adapter()->SetUserInfo(kUserIdHash, kSerialNumber);
+  SetUserInfo(kUserIdHash, kSerialNumber);
 }
 
 // Tests that StartMiniArc() succeeds by default.
@@ -472,7 +478,7 @@ TEST_F(ArcVmClientAdapterTest, UpgradeArc_StartConciergeFailure) {
 TEST_F(ArcVmClientAdapterTest, UpgradeArc_NoUserId) {
   // Don't set the user id hash. Note that we cannot call StartArcVm() without
   // it.
-  adapter()->SetUserInfo(std::string(), kSerialNumber);
+  SetUserInfo(std::string(), kSerialNumber);
   StartMiniArc();
 
   UpgradeArc(false);
@@ -495,7 +501,7 @@ TEST_F(ArcVmClientAdapterTest, UpgradeArc_NoUserId) {
 TEST_F(ArcVmClientAdapterTest, UpgradeArc_NoSerial) {
   // Don't set the serial number. Note that we cannot call StartArcVm() without
   // it.
-  adapter()->SetUserInfo(kUserIdHash, std::string());
+  SetUserInfo(kUserIdHash, std::string());
   StartMiniArc();
 
   UpgradeArc(false);

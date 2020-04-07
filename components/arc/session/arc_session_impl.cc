@@ -726,10 +726,12 @@ void ArcSessionImpl::OnShutdown() {
   OnStopped(ArcStopReason::SHUTDOWN);
 }
 
-void ArcSessionImpl::SetUserInfo(const std::string& hash,
-                                 const std::string& serial_number) {
+void ArcSessionImpl::SetUserInfo(
+    const cryptohome::Identification& cryptohome_id,
+    const std::string& hash,
+    const std::string& serial_number) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-  client_->SetUserInfo(hash, serial_number);
+  client_->SetUserInfo(cryptohome_id, hash, serial_number);
 }
 
 void ArcSessionImpl::OnConfigurationSet(bool success,
