@@ -4,7 +4,6 @@
 
 #include "third_party/blink/renderer/modules/service_worker/navigator_service_worker.h"
 
-#include "services/network/public/mojom/web_sandbox_flags.mojom-blink.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/frame/local_dom_window.h"
@@ -92,7 +91,7 @@ ServiceWorkerContainer* NavigatorServiceWorker::GetOrCreateContainer(
            ->CanAccessServiceWorkers()) {
     String error_message;
     if (frame->GetSecurityContext()->IsSandboxed(
-            network::mojom::blink::WebSandboxFlags::kOrigin)) {
+            mojom::blink::WebSandboxFlags::kOrigin)) {
       error_message =
           "Service worker is disabled because the context is sandboxed and "
           "lacks the 'allow-same-origin' flag.";

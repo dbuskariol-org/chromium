@@ -19,6 +19,7 @@
 
 namespace blink {
 enum class WebTreeScopeType;
+enum class WebSandboxFlags;
 }
 
 namespace content {
@@ -85,7 +86,7 @@ struct CONTENT_EXPORT FrameReplicationState {
   // inherited from parent frames, the currently active flags from the <iframe>
   // element hosting this frame, as well as any flags set from a
   // Content-Security-Policy HTTP header.
-  network::mojom::WebSandboxFlags active_sandbox_flags;
+  blink::mojom::WebSandboxFlags active_sandbox_flags;
 
   // Iframe sandbox flags and container policy currently in effect for the
   // frame. Container policy may be empty if this is the top-level frame.

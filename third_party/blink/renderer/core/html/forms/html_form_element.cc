@@ -266,8 +266,7 @@ void HTMLFormElement::PrepareForSubmission(
     return;
   }
 
-  if (GetDocument().IsSandboxed(
-          network::mojom::blink::WebSandboxFlags::kForms)) {
+  if (GetDocument().IsSandboxed(mojom::blink::WebSandboxFlags::kForms)) {
     GetDocument().AddConsoleMessage(MakeGarbageCollected<ConsoleMessage>(
         mojom::ConsoleMessageSource::kSecurity,
         mojom::ConsoleMessageLevel::kError,
@@ -524,8 +523,7 @@ void HTMLFormElement::SubmitForm() {
   DCHECK(submission->Form());
   if (submission->Action().IsEmpty())
     return;
-  if (GetDocument().IsSandboxed(
-          network::mojom::blink::WebSandboxFlags::kForms)) {
+  if (GetDocument().IsSandboxed(mojom::blink::WebSandboxFlags::kForms)) {
     // FIXME: This message should be moved off the console once a solution to
     // https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
     GetDocument().AddConsoleMessage(MakeGarbageCollected<ConsoleMessage>(

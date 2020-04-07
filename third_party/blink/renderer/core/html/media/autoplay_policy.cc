@@ -379,9 +379,8 @@ void AutoplayPolicy::MaybeSetAutoplayInitiated() {
 
 bool AutoplayPolicy::ShouldAutoplay() {
   if (element_->GetDocument().IsSandboxed(
-          network::mojom::blink::WebSandboxFlags::kAutomaticFeatures)) {
+          mojom::blink::WebSandboxFlags::kAutomaticFeatures))
     return false;
-  }
   return element_->can_autoplay_ && element_->paused_ && element_->Autoplay();
 }
 

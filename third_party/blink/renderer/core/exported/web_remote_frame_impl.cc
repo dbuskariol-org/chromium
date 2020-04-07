@@ -261,7 +261,7 @@ void WebRemoteFrameImpl::SetReplicatedOrigin(
 }
 
 void WebRemoteFrameImpl::SetReplicatedSandboxFlags(
-    network::mojom::blink::WebSandboxFlags flags) {
+    mojom::blink::WebSandboxFlags flags) {
   DCHECK(GetFrame());
   GetFrame()->SetReplicatedSandboxFlags(flags);
 }

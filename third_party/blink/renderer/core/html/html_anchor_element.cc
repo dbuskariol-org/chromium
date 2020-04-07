@@ -81,8 +81,7 @@ bool ShouldInterveneDownloadByFramePolicy(LocalFrame* frame) {
         should_intervene_download = true;
     }
   }
-  if (document.IsSandboxed(
-          network::mojom::blink::WebSandboxFlags::kDownloads)) {
+  if (document.IsSandboxed(mojom::blink::WebSandboxFlags::kDownloads)) {
     UseCounter::Count(document, WebFeature::kDownloadInSandbox);
     if (RuntimeEnabledFeatures::BlockingDownloadsInSandboxEnabled())
       should_intervene_download = true;

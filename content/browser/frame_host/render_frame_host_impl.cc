@@ -188,10 +188,8 @@
 #include "services/device/public/mojom/wake_lock.mojom.h"
 #include "services/device/public/mojom/wake_lock_context.mojom.h"
 #include "services/network/public/cpp/features.h"
-#include "services/network/public/cpp/web_sandbox_flags.h"
 #include "services/network/public/cpp/wrapper_shared_url_loader_factory.h"
 #include "services/network/public/mojom/network_service.mojom.h"
-#include "services/network/public/mojom/web_sandbox_flags.mojom-shared.h"
 #include "services/service_manager/public/cpp/connector.h"
 #include "services/service_manager/public/cpp/interface_provider.h"
 #include "storage/browser/blob/blob_storage_context.h"
@@ -756,7 +754,7 @@ RenderFrameHostImpl::RenderFrameHostImpl(
           nullptr,
           base::OnTaskRunnerDeleter(base::CreateSequencedTaskRunner(
               {ServiceWorkerContext::GetCoreThreadId()}))),
-      active_sandbox_flags_(network::mojom::WebSandboxFlags::kNone),
+      active_sandbox_flags_(blink::mojom::WebSandboxFlags::kNone),
       keep_alive_timeout_(base::TimeDelta::FromSeconds(30)),
       subframe_unload_timeout_(base::TimeDelta::FromMilliseconds(
           RenderViewHostImpl::kUnloadTimeoutMS)),
@@ -1360,7 +1358,7 @@ void RenderFrameHostImpl::MarkIsolatedWorldsAsRequiringSeparateURLLoaderFactory(
   }
 }
 
-bool RenderFrameHostImpl::IsSandboxed(network::mojom::WebSandboxFlags flags) {
+bool RenderFrameHostImpl::IsSandboxed(blink::mojom::WebSandboxFlags flags) {
   if (base::FeatureList::IsEnabled(features::kFeaturePolicyForSandbox)) {
     blink::mojom::FeaturePolicyFeature feature =
         blink::FeaturePolicy::FeatureForSandboxFlag(flags);
@@ -2318,9 +2316,9 @@ void RenderFrameHostImpl::SetOriginAndNetworkIsolationKeyOfNewFrame(
 
   // Calculate and set |new_frame_origin|.
   bool new_frame_should_be_sandboxed =
-      network::mojom::WebSandboxFlags::kOrigin ==
+      blink::mojom::WebSandboxFlags::kOrigin ==
       (frame_tree_node()->active_sandbox_flags() &
-       network::mojom::WebSandboxFlags::kOrigin);
+       blink::mojom::WebSandboxFlags::kOrigin);
   url::Origin new_frame_origin = new_frame_should_be_sandboxed
                                      ? new_frame_creator.DeriveNewOpaqueOrigin()
                                      : new_frame_creator;
@@ -3460,7 +3458,7 @@ void RenderFrameHostImpl::DidChangeName(const std::string& name,
 }
 
 void RenderFrameHostImpl::DidSetFramePolicyHeaders(
-    network::mojom::WebSandboxFlags sandbox_flags,
+    blink::mojom::WebSandboxFlags sandbox_flags,
     const blink::ParsedFeaturePolicy& feature_policy_header,
     const blink::DocumentPolicy::FeatureState& document_policy_header) {
   if (!is_active())

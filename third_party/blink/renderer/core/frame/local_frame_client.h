@@ -309,7 +309,7 @@ class CORE_EXPORT LocalFrameClient : public FrameClient {
   virtual void DidChangeFramePolicy(Frame* child_frame, const FramePolicy&) {}
 
   virtual void DidSetFramePolicyHeaders(
-      network::mojom::blink::WebSandboxFlags,
+      mojom::blink::WebSandboxFlags,
       const ParsedFeaturePolicy& feature_policy_header,
       const DocumentPolicy::FeatureState& document_policy_header) {}
 

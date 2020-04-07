@@ -36,6 +36,7 @@
 #include "mojo/public/cpp/bindings/remote.h"
 #include "services/data_decoder/public/mojom/web_bundler.mojom.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
+#include "third_party/blink/public/common/frame/sandbox_flags.h"
 #include "third_party/blink/public/mojom/frame/find_in_page.mojom-forward.h"
 #include "third_party/blink/public/mojom/input/pointer_lock_result.mojom.h"
 #include "third_party/blink/public/mojom/loader/pause_subresource_loading_handle.mojom-forward.h"
@@ -211,7 +212,7 @@ class WebContents : public PageNavigator,
     } desired_renderer_state;
 
     // Sandboxing flags set on the new WebContents.
-    network::mojom::WebSandboxFlags starting_sandbox_flags;
+    blink::mojom::WebSandboxFlags starting_sandbox_flags;
 
     // Value used to set the last time the WebContents was made active, this is
     // the value that'll be returned by GetLastActiveTime(). If this is left

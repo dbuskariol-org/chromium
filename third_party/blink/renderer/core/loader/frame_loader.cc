@@ -46,8 +46,6 @@
 #include "services/metrics/public/cpp/ukm_builders.h"
 #include "services/metrics/public/cpp/ukm_recorder.h"
 #include "services/network/public/cpp/features.h"
-#include "services/network/public/cpp/web_sandbox_flags.h"
-#include "services/network/public/mojom/web_sandbox_flags.mojom-blink.h"
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/navigation_initiator.mojom-blink.h"
@@ -180,7 +178,7 @@ ResourceRequest FrameLoader::ResourceRequestForReload(
 FrameLoader::FrameLoader(LocalFrame* frame)
     : frame_(frame),
       progress_tracker_(MakeGarbageCollected<ProgressTracker>(frame)),
-      forced_sandbox_flags_(network::mojom::blink::WebSandboxFlags::kNone),
+      forced_sandbox_flags_(mojom::blink::WebSandboxFlags::kNone),
       dispatching_did_clear_window_object_in_main_world_(false),
       detached_(false),
       virtual_time_pauser_(
@@ -541,10 +539,9 @@ bool FrameLoader::AllowRequestForThisFrame(const FrameLoadRequest& request) {
       return false;
 
     if (frame_->Owner() && ((frame_->Owner()->GetFramePolicy().sandbox_flags &
-                             network::mojom::blink::WebSandboxFlags::kOrigin) !=
-                            network::mojom::blink::WebSandboxFlags::kNone)) {
+                             mojom::blink::WebSandboxFlags::kOrigin) !=
+                            mojom::blink::WebSandboxFlags::kNone))
       return false;
-    }
   }
 
   if (!request.CanDisplay(url)) {
@@ -1425,12 +1422,11 @@ bool FrameLoader::ShouldReuseDefaultView(
   // be considered when deciding whether to reuse it.
   // Spec:
   // https://html.spec.whatwg.org/C/#initialise-the-document-object
-  if ((csp && (csp->GetSandboxMask() &
-               network::mojom::blink::WebSandboxFlags::kOrigin) !=
-                  network::mojom::blink::WebSandboxFlags::kNone) ||
-      ((EffectiveSandboxFlags() &
-        network::mojom::blink::WebSandboxFlags::kOrigin) !=
-       network::mojom::blink::WebSandboxFlags::kNone)) {
+  if ((csp &&
+       (csp->GetSandboxMask() & mojom::blink::WebSandboxFlags::kOrigin) !=
+           mojom::blink::WebSandboxFlags::kNone) ||
+      ((EffectiveSandboxFlags() & mojom::blink::WebSandboxFlags::kOrigin) !=
+       mojom::blink::WebSandboxFlags::kNone)) {
     return false;
   }
 
@@ -1496,16 +1492,6 @@ void FrameLoader::RunScriptsAtDocumentElementAvailable() {
   // The frame might be detached at this point.
 }
 
-void FrameLoader::ForceSandboxFlags(
-    network::mojom::blink::WebSandboxFlags flags) {
-  forced_sandbox_flags_ |= flags;
-}
-
-void FrameLoader::SetFrameOwnerSandboxFlags(
-    network::mojom::blink::WebSandboxFlags flags) {
-  frame_owner_sandbox_flags_ = flags;
-}
-
 void FrameLoader::DispatchDidClearDocumentOfWindowObject() {
   DCHECK(frame_->GetDocument());
   if (state_machine_.CreatingInitialEmptyDocument())
@@ -1541,9 +1527,8 @@ void FrameLoader::DispatchDidClearWindowObjectInMainWorld() {
   Client()->DispatchDidClearWindowObjectInMainWorld();
 }
 
-network::mojom::blink::WebSandboxFlags FrameLoader::EffectiveSandboxFlags()
-    const {
-  network::mojom::blink::WebSandboxFlags flags = forced_sandbox_flags_;
+SandboxFlags FrameLoader::EffectiveSandboxFlags() const {
+  SandboxFlags flags = forced_sandbox_flags_;
   if (frame_->Owner()) {
     // Cannot use flags in frame_owner->GetFramePolicy().sandbox_flags, because
     // frame_owner's frame policy is volatile and can be changed by javascript
@@ -1559,9 +1544,8 @@ network::mojom::blink::WebSandboxFlags FrameLoader::EffectiveSandboxFlags()
   return flags;
 }
 
-network::mojom::blink::WebSandboxFlags
-FrameLoader::PendingEffectiveSandboxFlags() const {
-  network::mojom::blink::WebSandboxFlags flags = forced_sandbox_flags_;
+SandboxFlags FrameLoader::PendingEffectiveSandboxFlags() const {
+  SandboxFlags flags = forced_sandbox_flags_;
   if (FrameOwner* frame_owner = frame_->Owner())
     flags |= frame_owner->GetFramePolicy().sandbox_flags;
   // Frames need to inherit the sandbox flags of their parent frame.

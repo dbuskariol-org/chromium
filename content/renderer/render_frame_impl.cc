@@ -162,6 +162,7 @@
 #include "services/viz/public/cpp/gpu/context_provider_command_buffer.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/features.h"
+#include "third_party/blink/public/common/frame/sandbox_flags.h"
 #include "third_party/blink/public/common/input/web_keyboard_event.h"
 #include "third_party/blink/public/common/loader/url_loader_throttle.h"
 #include "third_party/blink/public/common/logging/logging_utils.h"
@@ -4143,13 +4144,13 @@ void RenderFrameImpl::DidChangeFramePolicy(
 }
 
 void RenderFrameImpl::DidSetFramePolicyHeaders(
-    network::mojom::WebSandboxFlags flags,
+    blink::mojom::WebSandboxFlags flags,
     const blink::ParsedFeaturePolicy& fp_header,
     const blink::DocumentPolicy::FeatureState& dp_header) {
   // If any of Feature Policy or Sandbox Flags or Document Policy are different
   // from the default (empty) values, then send them to the browser.
   if (!dp_header.empty() || !fp_header.empty() ||
-      flags != network::mojom::WebSandboxFlags::kNone) {
+      flags != blink::mojom::WebSandboxFlags::kNone) {
     GetFrameHost()->DidSetFramePolicyHeaders(flags, fp_header, dp_header);
   }
 }

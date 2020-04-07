@@ -30,7 +30,7 @@ int LLVMFuzzerInitialize(int* argc, char*** argv) {
   // CSP is bound.
   scoped_refptr<SharedBuffer> empty_document_data = SharedBuffer::Create();
   g_page_holder->GetFrame().Loader().ForceSandboxFlags(
-      network::mojom::blink::WebSandboxFlags::kAll);
+      mojom::blink::WebSandboxFlags::kAll);
   g_page_holder->GetFrame().ForceSynchronousDocumentInstall(
       "text/html", empty_document_data);
   return 0;

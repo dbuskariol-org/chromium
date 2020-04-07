@@ -48,7 +48,6 @@
 #include "services/metrics/public/cpp/ukm_source_id.h"
 #include "services/metrics/public/mojom/ukm_interface.mojom-blink.h"
 #include "services/network/public/mojom/ip_address_space.mojom-blink.h"
-#include "services/network/public/mojom/web_sandbox_flags.mojom-blink.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
 #include "third_party/blink/public/common/feature_policy/document_policy_features.h"
@@ -1036,11 +1035,11 @@ ContentSecurityPolicy* Document::GetContentSecurityPolicy() const {
   return GetSecurityContext().GetContentSecurityPolicy();
 }
 
-network::mojom::blink::WebSandboxFlags Document::GetSandboxFlags() const {
+mojom::blink::WebSandboxFlags Document::GetSandboxFlags() const {
   return GetSecurityContext().GetSandboxFlags();
 }
 
-bool Document::IsSandboxed(network::mojom::blink::WebSandboxFlags mask) const {
+bool Document::IsSandboxed(mojom::blink::WebSandboxFlags mask) const {
   return GetSecurityContext().IsSandboxed(mask);
 }
 
@@ -4775,7 +4774,7 @@ void Document::MaybeHandleHttpRefresh(const String& content,
   }
 
   if (http_refresh_type == kHttpRefreshFromMetaTag &&
-      IsSandboxed(network::mojom::blink::WebSandboxFlags::kAutomaticFeatures)) {
+      IsSandboxed(mojom::blink::WebSandboxFlags::kAutomaticFeatures)) {
     String message =
         "Refused to execute the redirect specified via '<meta "
         "http-equiv='refresh' content='...'>'. The document is sandboxed, and "
@@ -5895,7 +5894,7 @@ String Document::cookie(ExceptionState& exception_state) const {
   CountUse(WebFeature::kCookieGet);
 
   if (!GetSecurityOrigin()->CanAccessCookies()) {
-    if (IsSandboxed(network::mojom::blink::WebSandboxFlags::kOrigin))
+    if (IsSandboxed(mojom::blink::WebSandboxFlags::kOrigin))
       exception_state.ThrowSecurityError(
           "The document is sandboxed and lacks the 'allow-same-origin' flag.");
     else if (Url().ProtocolIsData())
@@ -5921,7 +5920,7 @@ void Document::setCookie(const String& value, ExceptionState& exception_state) {
   UseCounter::Count(*this, WebFeature::kCookieSet);
 
   if (!GetSecurityOrigin()->CanAccessCookies()) {
-    if (IsSandboxed(network::mojom::blink::WebSandboxFlags::kOrigin))
+    if (IsSandboxed(mojom::blink::WebSandboxFlags::kOrigin))
       exception_state.ThrowSecurityError(
           "The document is sandboxed and lacks the 'allow-same-origin' flag.");
     else if (Url().ProtocolIsData())
@@ -5980,7 +5979,7 @@ void Document::setDomain(const String& raw_domain,
     return;
   }
 
-  if (IsSandboxed(network::mojom::blink::WebSandboxFlags::kDocumentDomain)) {
+  if (IsSandboxed(mojom::blink::WebSandboxFlags::kDocumentDomain)) {
     exception_state.ThrowSecurityError(
         "Assignment is forbidden for sandboxed iframes.");
     return;
@@ -7082,7 +7081,7 @@ bool Document::CanExecuteScripts(ReasonForCallingCanExecuteScripts reason) {
   // However, there is an exception for cases when the script should bypass the
   // main world's CSP (such as for privileged isolated worlds). See
   // https://crbug.com/811528.
-  if (IsSandboxed(network::mojom::blink::WebSandboxFlags::kScripts) &&
+  if (IsSandboxed(mojom::blink::WebSandboxFlags::kScripts) &&
       !ContentSecurityPolicy::ShouldBypassMainWorld(domWindow())) {
     // FIXME: This message should be moved off the console once a solution to
     // https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
@@ -8305,8 +8304,7 @@ bool Document::IsFocusAllowed() const {
   }
 
   WebFeature uma_type;
-  bool sandboxed =
-      IsSandboxed(network::mojom::blink::WebSandboxFlags::kNavigation);
+  bool sandboxed = IsSandboxed(mojom::blink::WebSandboxFlags::kNavigation);
   bool ad = frame_->IsAdSubframe();
   if (sandboxed) {
     uma_type = ad ? WebFeature::kFocusWithoutUserActivationSandboxedAdFrame

@@ -732,8 +732,7 @@ bool HTMLPlugInElement::AllowedToLoadObject(const KURL& url,
 
 bool HTMLPlugInElement::AllowedToLoadPlugin(const KURL& url,
                                             const String& mime_type) {
-  if (GetDocument().IsSandboxed(
-          network::mojom::blink::WebSandboxFlags::kPlugins)) {
+  if (GetDocument().IsSandboxed(mojom::blink::WebSandboxFlags::kPlugins)) {
     GetDocument().AddConsoleMessage(MakeGarbageCollected<ConsoleMessage>(
         mojom::ConsoleMessageSource::kSecurity,
         mojom::ConsoleMessageLevel::kError,

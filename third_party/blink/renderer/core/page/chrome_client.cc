@@ -126,7 +126,7 @@ Page* ChromeClient::CreateWindow(
     const FrameLoadRequest& r,
     const AtomicString& frame_name,
     const WebWindowFeatures& features,
-    network::mojom::blink::WebSandboxFlags sandbox_flags,
+    mojom::blink::WebSandboxFlags sandbox_flags,
     const FeaturePolicy::FeatureState& opener_feature_state,
     const SessionStorageNamespaceId& session_storage_namespace_id) {
   if (!CanOpenUIElementIfDuringPageDismissal(
@@ -278,7 +278,7 @@ bool ChromeClient::Print(LocalFrame* frame) {
   }
 
   if (frame->GetDocument()->IsSandboxed(
-          network::mojom::blink::WebSandboxFlags::kModals)) {
+          mojom::blink::WebSandboxFlags::kModals)) {
     UseCounter::Count(frame->GetDocument(),
                       WebFeature::kDialogInSandboxedContext);
     frame->Console().AddMessage(MakeGarbageCollected<ConsoleMessage>(

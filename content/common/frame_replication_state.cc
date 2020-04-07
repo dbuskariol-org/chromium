@@ -4,14 +4,14 @@
 
 #include "content/common/frame_replication_state.h"
 
-#include "services/network/public/mojom/web_sandbox_flags.mojom-shared.h"
+#include "third_party/blink/public/common/frame/sandbox_flags.h"
 #include "third_party/blink/public/mojom/security_context/insecure_request_policy.mojom.h"
 #include "third_party/blink/public/web/web_tree_scope_type.h"
 
 namespace content {
 
 FrameReplicationState::FrameReplicationState()
-    : active_sandbox_flags(network::mojom::WebSandboxFlags::kNone),
+    : active_sandbox_flags(blink::mojom::WebSandboxFlags::kNone),
       scope(blink::WebTreeScopeType::kDocument),
       insecure_request_policy(
           blink::mojom::InsecureRequestPolicy::kLeaveInsecureRequestsAlone),
@@ -29,9 +29,10 @@ FrameReplicationState::FrameReplicationState(
     bool has_received_user_gesture,
     bool has_received_user_gesture_before_nav,
     blink::FrameOwnerElementType owner_type)
-    : name(name),
+    : origin(),
+      name(name),
       unique_name(unique_name),
-      active_sandbox_flags(network::mojom::WebSandboxFlags::kNone),
+      active_sandbox_flags(blink::mojom::WebSandboxFlags::kNone),
       scope(scope),
       insecure_request_policy(insecure_request_policy),
       insecure_navigations_set(insecure_navigations_set),
