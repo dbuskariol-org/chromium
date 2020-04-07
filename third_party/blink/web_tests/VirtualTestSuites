@@ -464,7 +464,6 @@
               "http/tests/media/autoplay/document-user-activation-feature-policy-iframe-no-gesture.html",
               "http/tests/media/autoplay/webaudio-autoplay-iframe-with-gesture.html",
               "http/tests/misc/iframe-script-modify-attr.html",
-              "http/tests/misc/webtiming-no-origin.html",
               "http/tests/printing/cross-site-frame-scrolled.html",
               "http/tests/printing/cross-site-frame.html",
               "http/tests/security/frameNavigation/xss-DENIED-top-navigation-without-user-gesture.html",
