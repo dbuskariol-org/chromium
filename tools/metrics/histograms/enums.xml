@@ -39689,6 +39689,7 @@ from previous Chrome versions.
   <int value="439525862" label="GlobalMediaControlsForCast:disabled"/>
   <int value="444754854" label="LegacyTLSWarnings:disabled"/>
   <int value="446316019" label="enable-threaded-compositing"/>
+  <int value="448463569" label="NewShortcutMapping:disabled"/>
   <int value="451196246" label="disable-impl-side-painting"/>
   <int value="452139294" label="VrShellExperimentalRendering:enabled"/>
   <int value="452955571" label="EnableFilesystemInIncognito:disabled"/>
@@ -41032,6 +41033,7 @@ from previous Chrome versions.
       label="RemoveUsageOfDeprecatedGaiaSigninEndpoint:enabled"/>
   <int value="2034198538" label="TabHoverCards:enabled"/>
   <int value="2037756154" label="enable-impl-side-painting"/>
+  <int value="2038036881" label="NewShortcutMapping:enabled"/>
   <int value="2039276757" label="EnableOverviewRoundedCorners:enabled"/>
   <int value="2040316611" label="IPH_ReopenTab:enabled"/>
   <int value="2041570184" label="UsePreferredIntervalForVideo:enabled"/>
