@@ -2501,7 +2501,7 @@ void RenderFrameHostImpl::OnOpenURL(const FrameHostMsg_OpenURL_Params& params) {
       params.extra_headers, params.referrer, params.disposition,
       params.should_replace_current_entry, params.user_gesture,
       params.triggering_event_info, params.href_translate,
-      std::move(blob_url_loader_factory));
+      std::move(blob_url_loader_factory), params.impression);
 }
 
 void RenderFrameHostImpl::CancelInitialHistoryLoad() {
