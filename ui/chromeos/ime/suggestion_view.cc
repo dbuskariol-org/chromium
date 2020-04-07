@@ -19,15 +19,14 @@ namespace {
 
 // Creates the suggestion label, and returns it (never returns nullptr).
 // The label text is not set in this function.
-std::unique_ptr<views::Label> CreateSuggestionLabel() {
-  std::unique_ptr<views::Label> suggestion_label =
-      std::make_unique<views::Label>();
-
-  suggestion_label->SetFontList(kSuggestionFont);
-  suggestion_label->SetEnabledColor(kSuggestionLabelColor);
+std::unique_ptr<views::StyledLabel> CreateSuggestionLabel() {
+  std::unique_ptr<views::StyledLabel> suggestion_label =
+      std::make_unique<views::StyledLabel>(base::EmptyString16(),
+                                           /*listener=*/nullptr);
   suggestion_label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   suggestion_label->SetBorder(
       views::CreateEmptyBorder(gfx::Insets(kPadding / 2, 0)));
+  suggestion_label->SetAutoColorReadabilityEnabled(false);
 
   return suggestion_label;
 }
@@ -37,14 +36,14 @@ std::unique_ptr<views::Label> CreateAnnotationLabel() {
   std::unique_ptr<views::Label> annotation_label =
       std::make_unique<views::Label>();
   annotation_label->SetFontList(kAnnotationFont);
-  annotation_label->SetEnabledColor(kSuggestionLabelColor);
+  annotation_label->SetEnabledColor(kSuggestionColor);
   annotation_label->SetHorizontalAlignment(gfx::ALIGN_CENTER);
 
   // Set insets.
   const gfx::Insets insets(0, 0, 0, kPadding / 2);
   annotation_label->SetBorder(views::CreateRoundedRectBorder(
       kAnnotationBorderThickness, kAnnotationCornerRadius, insets,
-      kSuggestionLabelColor));
+      kSuggestionColor));
 
   // Set text.
   annotation_label->SetText(base::UTF8ToUTF16(kTabKey));
@@ -61,10 +60,31 @@ SuggestionView::SuggestionView() {
 
 SuggestionView::~SuggestionView() = default;
 
-void SuggestionView::SetView(const base::string16& text, const bool show_tab) {
-  suggestion_label_->SetText(text);
+void SuggestionView::SetView(const base::string16& text,
+                             const base::string16& confirmed_text,
+                             const bool show_tab) {
+  SetSuggestionText(text, confirmed_text);
   suggestion_width_ = suggestion_label_->GetPreferredSize().width();
   annotation_label_->SetVisible(show_tab);
+}
+
+void SuggestionView::SetSuggestionText(const base::string16& text,
+                                       const base::string16& confirmed_text) {
+  // SetText clears the existing style.
+  suggestion_label_->SetText(text);
+  size_t offset = confirmed_text.length();
+  if (offset != 0) {
+    views::StyledLabel::RangeStyleInfo confirmed_style;
+    confirmed_style.custom_font = kSuggestionFont;
+    confirmed_style.override_color = kConfirmedTextColor;
+    suggestion_label_->AddStyleRange(gfx::Range(0, offset), confirmed_style);
+  }
+
+  views::StyledLabel::RangeStyleInfo suggestion_style;
+  suggestion_style.custom_font = kSuggestionFont;
+  suggestion_style.override_color = kSuggestionColor;
+  suggestion_label_->AddStyleRange(gfx::Range(offset, text.length()),
+                                   suggestion_style);
 }
 
 const char* SuggestionView::GetClassName() const {
