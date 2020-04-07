@@ -2144,6 +2144,7 @@ crbug.com/953591 [ Win ] virtual/form-controls-refresh-disabled/fast/forms/datal
 crbug.com/591099 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/text/text-lineheight-centering.html [ Failure ]
 crbug.com/770971 [ Win7 ] virtual/form-controls-refresh-disabled/fast/forms/suggested-value.html [ Pass Failure ]
 crbug.com/1035582 virtual/form-controls-refresh-disabled/fast/forms/number/number-input-event-composed.html [ Pass Failure ]
+crbug.com/1035582 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/text/input-readonly-focus-ring.html [ Skip ]
 
 # From never fix tests:
 crbug.com/123456 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/select-popup/* [ Skip ]
