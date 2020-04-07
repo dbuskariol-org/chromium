@@ -825,6 +825,7 @@
 <translation id="2119349053129246860"><ph name="APP" />-д нээх</translation>
 <translation id="2120297377148151361">Үйл ажиллагаа болон харилцан үйлчлэл</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" />-г блоклосон</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Күүкиг блоклосон}=1{1-ээс бусад күүкиг блоклосон}other{{COUNT}-с бусад күүкиг блоклосон}}</translation>
 <translation id="2121825465123208577">Хэмжээг өөрчлөх</translation>
 <translation id="2122305276694332719">Нуусан сүлжээнд автоматаар холбогдсоноор бусдад таны төхөөрөмж болон зарим сүлжээний тохиргоог харахыг зөвшөөрөх бөгөөд үүнийг зөвлөдөггүй.</translation>
 <translation id="2123766928840368256">Өөр файл сонгох</translation>

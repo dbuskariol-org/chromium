@@ -829,6 +829,7 @@ Voit ylläpitää tilin asetuksia asentamalla laitteellesi Family Link ‑sovell
 <translation id="2119349053129246860">Avaa sovelluksessa <ph name="APP" /></translation>
 <translation id="2120297377148151361">Toiminnot ja vuorovaikutukset</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> estetty</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Evästeet on estetty}=1{Evästeet on estetty, 1 poikkeus}other{Evästeet on estetty, {COUNT} poikkeusta}}</translation>
 <translation id="2121825465123208577">Muuta kokoa</translation>
 <translation id="2122305276694332719">Automaattinen yhdistäminen piilotettuihin verkkoihin antaa muiden nähdä laitteesi ja joitain verkkoasetuksia. Sitä ei suositella.</translation>
 <translation id="2123766928840368256">Valitse toinen tiedosto</translation>

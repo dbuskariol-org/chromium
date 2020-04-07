@@ -826,6 +826,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2119349053129246860">Abrir en <ph name="APP" /></translation>
 <translation id="2120297377148151361">Interacciones y actividad</translation>
 <translation id="2120639962942052471">Se bloqueó <ph name="PERMISSION" /></translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Se bloquearon las cookies}=1{Se bloquearon las cookies; hay 1 excepción}other{Se bloquearon las cookies; hay {COUNT} excepciones}}</translation>
 <translation id="2121825465123208577">Ajustar tamaño</translation>
 <translation id="2122305276694332719">Si permites que tu dispositivo se conecte a una red oculta de forma automática, otras personas podrán ver tu dispositivo y algunas opciones de configuración de red, lo cual no es recomendable.</translation>
 <translation id="2123766928840368256">Elegir otro archivo</translation>

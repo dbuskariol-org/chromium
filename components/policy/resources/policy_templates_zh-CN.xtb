@@ -1089,6 +1089,7 @@
 <translation id="2592162121850992309">如果不设置此政策或将其设为 true，系统将启用硬件加速模式，除非特定 GPU 功能已被列入黑名单。
 
       如果此政策设为 false，系统将停用硬件加速模式。</translation>
+<translation id="2593762551209145088">“安全浏览”功能会一直处于关闭状态。</translation>
 <translation id="2596260130957832043">控制是否启用 NTLMv2。
 
           近期推出的所有 Samba 和 Windows 服务器版本都支持 NTLMv2。除非是为了实现向后兼容，否则请勿停用 NTLMv2（因为这样做会降低身份验证的安全性）。
@@ -1160,6 +1161,7 @@
 
       要详细了解安全浏览功能，请访问 https://developers.google.com/safe-browsing。</translation>
 <translation id="2706708761587205154">仅允许在有 PIN 码的情况下打印</translation>
+<translation id="2707873794476722903">“安全浏览”功能会处于开启状态且会在标准模式下运行。</translation>
 <translation id="2710534340210290498">如果将此政策设为 false，用户将无法锁定屏幕（只能退出用户会话）。如果不设置此政策或将其设为 true，则使用密码通过身份验证的用户可以锁定屏幕。</translation>
 <translation id="2731627323327011390">禁止 ARC 应用使用 <ph name="PRODUCT_OS_NAME" /> 证书</translation>
 <translation id="2742843273354638707">在“打开新的标签页”页面和 <ph name="PRODUCT_OS_NAME" />应用启动器中不显示“Chrome 网上应用店”应用和页脚链接。
@@ -1991,13 +1993,13 @@
 <translation id="402759845255257575">不允许任何网站运行 JavaScript</translation>
 <translation id="4027608872760987929">启用默认搜索服务提供商</translation>
 <translation id="4039085364173654945">控制是否允许网页上的第三方子内容弹出 HTTP 基本身份认证对话框。通常情况下，为了防止网上诱骗，此设置是停用的。如果未设置此政策，就会停用此设置，而不允许第三方子内容弹出 HTTP 基本身份认证对话框。</translation>
-<translation id="4044054366426171256">配置要强制远程访问主机使用的必要主机域名，并禁止用户更改此设置。
+<translation id="4044054366426171256">配置指定域名来限制主机接受远程访问，并禁止用户更改此设置。
 
-          如果启用了此设置并将其设为一个或多个域名，则必须使用已通过某一个指定域名注册的帐号才能共享主机。
+          如果启用此设置并将其设为一个或多个域名，则只有使用在这些指定域名注册的帐号才能用主机接受远程访问。
 
-          如果停用了/不指定此设置，或将其设为一个空列表，则可以使用任意帐号共享主机。
+          如果不进行设置、停用此设置或将其设为一个空列表，则可使用任意账号来用主机接受远程访问。
 
-          此设置会覆盖 RemoteAccessHostDomain（如果存在）。
+          若曾设置RemoteAccessHostDomain，该设置将被本设置覆盖。
 
           另请参阅 RemoteAccessHostClientDomainList。</translation>
 <translation id="4056910949759281379">停用 SPDY 协议</translation>
@@ -2220,6 +2222,19 @@
 <translation id="437791893267799639">政策未设置，禁止数据迁移和 ARC</translation>
 <translation id="4389073105055031853">允许用户管理所有证书</translation>
 <translation id="4389091865841123886">通过 TPM 机制配置远程认证。</translation>
+<translation id="4401496838830169080">允许您控制是否开启 <ph name="PRODUCT_NAME" /> 的“安全浏览”功能以及要在哪种模式下运行此功能。
+
+      如果此政策设为“NoProtection”（值为 0），“安全浏览”功能会一直处于关闭状态。
+
+      如果此政策设为“StandardProtection”（值为 1，即默认值），“安全浏览”功能会一直处于开启状态且会在标准模式下运行。
+
+      如果此政策设为“EnhancedProtection”（值为 2），“安全浏览”功能会一直处于开启状态且会在增强模式下运行。这种模式可提供更高的安全性，但需与 Google 分享更多浏览信息。
+
+      如果您将此政策设为强制性要求，用户便无法更改或覆盖 <ph name="PRODUCT_NAME" /> 中的“安全浏览”设置。
+
+      如果未设置此政策，“安全浏览”功能将会在标准保护模式下运行，但用户将能够自行更改。
+
+      要详细了解“安全浏览”功能，请访问 https://developers.google.com/safe-browsing。</translation>
 <translation id="4408428864159735559">预先配置的网络文件共享列表。</translation>
 <translation id="4410236409016356088">启用网络带宽限制功能</translation>
 <translation id="441217499641439905">在 <ph name="PRODUCT_OS_NAME" />的“文件”应用中，不允许通过移动网络连接到 Google 云端硬盘</translation>
@@ -3278,6 +3293,7 @@
 <translation id="6111936128861357925">允许用户玩恐龙复活节彩蛋游戏</translation>
 <translation id="6114416803310251055">已弃用</translation>
 <translation id="6133088669883929098">允许所有网站使用密钥生成功能</translation>
+<translation id="6135398260575578389">“安全浏览”功能会处于开启状态且会在增强模式下运行。此模式可提供更高的安全性，但需与 Google 分享更多浏览信息。</translation>
 <translation id="6136537398661737682">此政策用于控制 Google 位置信息服务的初始状态。
 
       如果此政策设为 <ph name="GLS_DISABLED" /> 或未配置，则 Google 位置信息服务的初始状态为已停用。
@@ -3614,7 +3630,7 @@
 <translation id="6734521799274931721">控制是否允许在 Chrome 操作系统中使用网络文件共享功能</translation>
 <translation id="6735701345096330595">强制检查语言拼写</translation>
 <translation id="6757613329154374267">已启用备份和恢复服务</translation>
-<translation id="6758659208493449452">此政策用于控制已加入“高级保护”计划的用户是否可获享额外的保护。其中的部分功能可能会涉及与 Google 分享数据（例如，已加入“高级保护”计划的用户将能够把他们的下载内容发送给 Google 进行恶意软件扫描）。如果此政策设为 True 或未设置，已加入“高级保护”计划的用户将会获享额外的保护。如果此政策设为 False，已加入“高级保护”计划的用户将只能获享标准的消费者级别功能。</translation>
+<translation id="6758659208493449452">此政策决定了加入“高级保护”计划的用户是否可获享额外的保护。其中部分功能可能涉及与 Google 共享数据（例如，加入“高级保护”计划的用户可将他们的下载内容发送给 Google 进行恶意软件扫描）。如果此政策设为 True 或未设置，已加入“高级保护”计划的用户将会获享额外的保护。如果此政策设为 False，已加入“高级保护”计划的用户只能使用标准的消费者级功能。</translation>
 <translation id="6762235610019366960">让您能够控制是否在 <ph name="PRODUCT_NAME" /> 中使用整个标签页显示宣传内容和/或教育内容。
 
       如果未配置或已启用（设为 true），<ph name="PRODUCT_NAME" /> 便可能会使用整个标签页向用户提供产品信息。
@@ -4069,13 +4085,13 @@
           如果此政策设为“Enabled”或未设置，Google Chrome 将会接受作为 Signed HTTP Exchange 提供的内容。
 
           如果此政策设为“Disabled”，则无法加载 Signed HTTP Exchange。</translation>
-<translation id="7506758875409719208">配置要强制远程访问客户端使用的必要客户端域名，并禁止用户更改此设置。
+<translation id="7506758875409719208">配置指定域名来限制客户端进行远程访问，并禁止用户更改此设置。
 
-          如果启用了此设置并将其设为一个或多个域名，则只有来自某一个指定域名的客户端才能连接到主机。
+          如果启用此设置并将其设为一个或多个域名，则只有来自这些指定域名的客户端才能连接到主机。
 
-          如果停用了/不指定此设置，或将其设为一个空列表，则会应用与连接类型对应的默认政策。对于远程协助，这会允许来自任何域名的客户端连接到主机；对于无时间限制的远程访问，只有主机所有者可以连接到主机。
+          如果不进行设置、停用此设置或将其设为一个空列表，系统将会应用针对连接类型的默认政策。对于远程协助，来自任何域名的客户端都可连接到主机；对于无时间限制的远程访问，只有主机所有者可以连接到主机。
 
-          此设置会覆盖 RemoteAccessHostClientDomain（如果存在）。
+          若曾设置RemoteAccessHostClientDomain，该设置将被本设置覆盖。
 
           另请参阅 RemoteAccessHostDomainList。</translation>
 <translation id="7509496865303347769">配置 <ph name="PRODUCT_NAME" /> 中的默认主页网址，并禁止用户更改此配置。
@@ -4200,6 +4216,23 @@
 <translation id="7687943045976362719">如果设置了此政策，则指定的内容类型由 <ph name="PRODUCT_FRAME_NAME" />处理。
 
           如果未设置此政策，系统将对所有网站使用默认渲染程序。（<ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> 政策可用于配置默认渲染程序。）</translation>
+<translation id="7691028179743802462">此政策在 M83 中已弃用，请改用 SafeBrowsingProtectionLevel。
+
+      开启 <ph name="PRODUCT_NAME" /> 的“安全浏览”功能，并禁止用户更改此设置。
+
+      如果您启用了此设置，“安全浏览”功能会一直处于开启状态。
+
+      如果您停用了此设置，“安全浏览”功能会一直处于关闭状态。
+
+      如果您启用或停用了此设置，用户将无法更改或覆盖 <ph name="PRODUCT_NAME" /> 中的“启用针对网上诱骗和恶意软件的防护功能”设置。
+
+      如果未设置此政策，“安全浏览”功能将会处于开启状态，但用户将能够自行更改。
+
+      要详细了解“安全浏览”功能，请访问 https://developers.google.com/safe-browsing。
+
+      此政策仅适用于已加入 <ph name="MS_AD_NAME" /> 网域的 Windows 实例，或者已注册设备管理服务的 Windows 10 专业版或企业版实例。
+
+      如果已设置 SafeBrowsingProtectionLevel 政策，系统会忽略 SafeBrowsingEnabled 政策的值。</translation>
 <translation id="7694245791806617022">控制“记住密码”功能在 Kerberos 身份验证对话框中是否处于启用状态。密码会以加密方式存储在磁盘上，只可在用户会话期间由 Kerberos 系统守护进程访问。
 
           如果启用了或未设置此政策，则用户可以决定是否记住 Kerberos 密码，记住密码后就不需要重新输入密码。除非需要进行额外的身份验证（双重身份验证），否则系统会自动获取 Kerberos 凭据。
@@ -4766,6 +4799,7 @@
           如果此政策未设置，<ph name="PRODUCT_NAME" /> 将会尝试检测某个服务器是否在内网上，只有当该服务器在内网上时，该浏览器才会回应 IWA 请求。如果检测到某个服务器在互联网上，<ph name="PRODUCT_NAME" /> 将忽略来自它的 IWA 请求。</translation>
 <translation id="8656110680728938054">启用“随选朗读”</translation>
 <translation id="8661297125441579970">禁止数据迁移和 ARC。</translation>
+<translation id="8665314828727504286">“安全浏览”功能的保护级别</translation>
 <translation id="8672321184841719703">目标自动更新版本</translation>
 <translation id="867410340948518937">U2F（通用第二重因素）</translation>
 <translation id="8685024486845674965">重复使用密码可触发密码保护服务警告功能</translation>

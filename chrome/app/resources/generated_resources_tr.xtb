@@ -829,6 +829,7 @@ Cihazınızda Family Link uygulamasını yükleyerek bu hesabın ayarlarını y�
 <translation id="2119349053129246860"><ph name="APP" /> Uygulamasında Aç</translation>
 <translation id="2120297377148151361">Etkinlik ve etkileşimler</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> engellendi</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Çerezler engellendi}=1{Çerezler engellendi, 1 istisna}other{Çerezler engellendi, {COUNT} istisna}}</translation>
 <translation id="2121825465123208577">Yeniden Boyutlandır</translation>
 <translation id="2122305276694332719">Gizli bir ağa otomatik olarak bağlanmak başkalarının cihazınızı ve bazı ağ ayarlarını görmesine olanak sağladığından önerilmez.</translation>
 <translation id="2123766928840368256">Farklı bir dosya seç</translation>

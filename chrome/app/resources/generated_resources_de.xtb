@@ -826,6 +826,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2119349053129246860">In <ph name="APP" /> öffnen</translation>
 <translation id="2120297377148151361">Aktivitäten und Interaktionen</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> blockiert</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Cookies sind blockiert}=1{Cookies sind blockiert, 1 Ausnahme}other{Cookies sind blockiert, {COUNT} Ausnahmen}}</translation>
 <translation id="2121825465123208577">Größe anpassen</translation>
 <translation id="2122305276694332719">Wenn automatisch eine Verbindung zu einem verborgenen Netzwerk hergestellt wird, können andere Ihr Gerät sowie einige Netzwerkeinstellungen sehen. Dies wird nicht empfohlen.</translation>
 <translation id="2123766928840368256">Andere Datei auswählen</translation>

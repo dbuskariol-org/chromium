@@ -829,6 +829,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="2119349053129246860">Buksan sa <ph name="APP" /></translation>
 <translation id="2120297377148151361">Aktibidad at mga pakikipag-ugnayan</translation>
 <translation id="2120639962942052471">Na-block ang <ph name="PERMISSION" /></translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Naka-block ang cookies}=1{Naka-block ang cookies, may 1 exception}one{Naka-block ang cookies, may {COUNT} exception}other{Naka-block ang cookies, may {COUNT} na exception}}</translation>
 <translation id="2121825465123208577">Baguhin ang laki</translation>
 <translation id="2122305276694332719">Ang awtomatikong pagkonekta sa nakatagong network ay nagbibigay-daan sa ibang tao na makita ang iyong device at ibang setting ng network, at hindi ito inirerekomenda.</translation>
 <translation id="2123766928840368256">Pumili ng ibang file</translation>

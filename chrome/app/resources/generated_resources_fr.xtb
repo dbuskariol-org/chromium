@@ -829,6 +829,7 @@ Vous pouvez gérer les paramètres de ce compte en installant l'application Fami
 <translation id="2119349053129246860">Ouvrir dans <ph name="APP" /></translation>
 <translation id="2120297377148151361">Activité et interactions</translation>
 <translation id="2120639962942052471">Autorisation "<ph name="PERMISSION" />" bloquée</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Les cookies sont bloqués}=1{Les cookies sont bloqués, 1 exception}one{Cookies are blocked, {COUNT} exceptions}other{Les cookies sont bloqués, {COUNT} exceptions}}</translation>
 <translation id="2121825465123208577">Redimensionner</translation>
 <translation id="2122305276694332719">La connexion automatique à un réseau masqué permet à d'autres personnes de voir votre appareil, ainsi que certains paramètres du réseau, ce qui n'est pas recommandé.</translation>
 <translation id="2123766928840368256">Choisir un autre fichier</translation>

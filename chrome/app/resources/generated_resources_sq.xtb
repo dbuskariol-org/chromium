@@ -826,6 +826,7 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="2119349053129246860">Hape në <ph name="APP" /></translation>
 <translation id="2120297377148151361">Aktiviteti dhe bashkëveprimet</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> është bllokuar</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Kukit janë bllokuar}=1{Kukit janë bllokuar, 1 përjashtim}other{Kukit janë bllokuar, {COUNT} përjashtime}}</translation>
 <translation id="2121825465123208577">Ndrysho madhësinë</translation>
 <translation id="2122305276694332719">Lidhja automatike me një rrjet të fshehtë u lejon të tjerëve të të shohin pajisjen dhe disa prej cilësimeve të rrjetit, dhe nuk rekomandohet.</translation>
 <translation id="2123766928840368256">Zgjidh një skedar tjetër</translation>

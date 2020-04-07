@@ -829,6 +829,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="2119349053129246860">Öppna i <ph name="APP" /></translation>
 <translation id="2120297377148151361">Aktivitet och interaktion</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> har blockerats</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Cookies blockeras}=1{Cookies blockeras, 1 undantag}other{Cookies blockeras, {COUNT} undantag}}</translation>
 <translation id="2121825465123208577">Ändra storlek</translation>
 <translation id="2122305276694332719">Med automatisk anslutning till ett dolt nätverk kan andra se enheten och vissa nätverksinställningar. Detta rekommenderas inte.</translation>
 <translation id="2123766928840368256">Välj en annan fil</translation>

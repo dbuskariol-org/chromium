@@ -829,6 +829,7 @@
 <translation id="2119349053129246860">በ<ph name="APP" /> ውስጥ ክፈት</translation>
 <translation id="2120297377148151361">እንቅስቃሴ እና መስተጋብሮች</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> ታግዷል</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{ኩኪዎች ታግደዋል}=1{ኩኪዎች ታግደዋል፣ 1 አልተካተተም}one{ኩኪዎች ታግደዋል፣ {COUNT} አልተካተቱም}other{ኩኪዎች ታግደዋል፣ {COUNT} አልተካተቱም}}</translation>
 <translation id="2121825465123208577">መጠን ቀይር</translation>
 <translation id="2122305276694332719">ወደ ተደበቀ አውታረ መረብ በራስ ሰር ማገናኘት ሌሎች የእርስዎን መሣሪያ እና አንዳንድ የአውታረ መረብ ቅንብሮችን እንዲመለከቱ ይፈቅድላቸዋል እንዲሁም የሚመከር አይደለም።</translation>
 <translation id="2123766928840368256">የተለየ ፋይል ይምረጡ</translation>

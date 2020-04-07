@@ -828,6 +828,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="2119349053129246860">Abrir na aplicación <ph name="APP" /></translation>
 <translation id="2120297377148151361">Actividade e interaccións</translation>
 <translation id="2120639962942052471">Bloqueouse o permiso: <ph name="PERMISSION" /></translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Bloqueáronse as cookies}=1{Bloqueáronse as cookies (1 excepción)}other{Bloqueáronse as cookies ({COUNT} excepcións)}}</translation>
 <translation id="2121825465123208577">Cambiar tamaño</translation>
 <translation id="2122305276694332719">Ao conectarte automaticamente a unha rede oculta, outros usuarios poden ver o teu dispositivo e parte da configuración de rede. Por iso esta opción non é recomendable.</translation>
 <translation id="2123766928840368256">Escoller un ficheiro diferente</translation>
@@ -1879,7 +1880,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="3492788708641132712">A sincronización non funciona. Proba a volver iniciar sesión.</translation>
 <translation id="3493486281776271508">É necesaria unha conexión a Internet</translation>
 <translation id="3493881266323043047">Validez</translation>
-<translation id="3494155060718700400">Non te protexe contra sitios web, descargas e extensións perigosos (non recomendado). Continuarás dispoñendo da protección da Navegación segura, sempre que estea dispoñible, noutros servizos de Google, como Gmail e Busca.</translation>
+<translation id="3494155060718700400">Non te protexe contra sitios web, descargas e extensións perigosos (non recomendado). Continuarás dispoñendo da protección da Navegación segura, sempre que estea dispoñible, noutros servizos de Google, como Gmail e a Busca.</translation>
 <translation id="3494769164076977169">Preguntar cando un sitio tente descargar ficheiros automaticamente despois do primeiro ficheiro (recomendado)</translation>
 <translation id="3495660573538963482">Configuración do Asistente de Google</translation>
 <translation id="3496213124478423963">Afastar</translation>

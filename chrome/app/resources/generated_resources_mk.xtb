@@ -829,6 +829,7 @@
 <translation id="2119349053129246860">Отвори во <ph name="APP" /></translation>
 <translation id="2120297377148151361">Активност и интеракции</translation>
 <translation id="2120639962942052471">Блокирана е <ph name="PERMISSION" /></translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Колачињата се блокирани}=1{Колачињата се блокирани, 1 исклучок}one{Колачињата се блокирани, {COUNT} исклучок}other{Колачињата се блокирани, {COUNT} исклучоци}}</translation>
 <translation id="2121825465123208577">Промени големина</translation>
 <translation id="2122305276694332719">Автоматското поврзување на скриена мрежа им овозможува на другите да го видат вашиот уред и некои други мрежни поставки и не се препорачува.</translation>
 <translation id="2123766928840368256">Изберете друга датотека</translation>
@@ -5702,7 +5703,7 @@
 <translation id="8645920082661222035">Предвидува опасни настани и ве предупредува пред да се случат</translation>
 <translation id="8647834505253004544">Неважечка веб-адреса</translation>
 <translation id="8648252583955599667"><ph name="GET_HELP_LINK" /> или <ph name="RE_SCAN_LINK" /></translation>
-<translation id="8648544143274677280"><ph name="SITE_NAME" /> сака да: <ph name="FIRST_PERMISSION" />, <ph name="SECOND_PERMISSION" />и друго</translation>
+<translation id="8648544143274677280"><ph name="SITE_NAME" /> сака да: <ph name="FIRST_PERMISSION" />, <ph name="SECOND_PERMISSION" /> и друго</translation>
 <translation id="8650543407998814195">Иако веќе не може да пристапувате до стариот профил, сѐ уште може да го отстраните.</translation>
 <translation id="8651585100578802546">Принуди повторно вчитување на страницата</translation>
 <translation id="8652400352452647993">Грешка на екстензијата на пакетот</translation>
@@ -5924,7 +5925,7 @@
 <translation id="8895454554629927345">Список со обележувачи</translation>
 <translation id="8896022254727357590">PIN-кодот мора да содржи најмалку 4 знаци</translation>
 <translation id="8898786835233784856">Избери нова картичка</translation>
-<translation id="8898822736010347272">Испраќа URL-адреси од некои страници што ги посетувате, ограничени податоци за системот и некои содржини од страниците во Google за да помогне да се откријат нови закани и да се заштитата сите на интернет.</translation>
+<translation id="8898822736010347272">Испраќа URL-адреси до Google од некои страници што ги посетувате, како и ограничени податоци за системот и некои содржини од страниците за да помогне да се откријат нови закани и да се заштитат сите на интернет.</translation>
 <translation id="8898840733695078011">Јачина на сигнал</translation>
 <translation id="8899851313684471736">Отвори ја врската во нов &amp;прозорец</translation>
 <translation id="8902667442496790482">Отвори ги поставките за „Изберете за говор“</translation>

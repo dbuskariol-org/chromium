@@ -829,6 +829,7 @@
 <translation id="2119349053129246860"><ph name="APP" /> で開く</translation>
 <translation id="2120297377148151361">アクティビティと操作</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" />をブロック</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Cookie がブロックされています}=1{Cookie がブロックされています（1 件の例外）}other{Cookie がブロックされています（{COUNT} 件の例外）}}</translation>
 <translation id="2121825465123208577">サイズを変更</translation>
 <translation id="2122305276694332719">非公開ネットワークに自動接続すると、お使いのデバイスと一部のネットワーク設定が他のユーザーに公開されます。そのためこの設定はおすすめしません。</translation>
 <translation id="2123766928840368256">別のファイルを選択</translation>

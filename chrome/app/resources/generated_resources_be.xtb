@@ -829,6 +829,7 @@
 <translation id="2119349053129246860">Адкрыць у праграме <ph name="APP" /></translation>
 <translation id="2120297377148151361">Дзеянні і ўзаемадзеянні</translation>
 <translation id="2120639962942052471">Блакіроўка (<ph name="PERMISSION" />)</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Файлы cookie заблакіраваны}=1{Файлы cookie заблакіраваны, 1 выключэнне}one{Файлы cookie заблакіраваны, {COUNT} выключэнне}few{Файлы cookie заблакіраваны, {COUNT} выключэнні}many{Файлы cookie заблакіраваны, {COUNT} выключэнняў}other{Файлы cookie заблакіраваны, {COUNT} выключэння}}</translation>
 <translation id="2121825465123208577">Змяніць памер</translation>
 <translation id="2122305276694332719">Аўтаматычнае падключэнне да схаванай сеткі дазваляе іншым бачыць вашу прыладу і некаторыя налады сеткі, а таму не рэкамендуецца.</translation>
 <translation id="2123766928840368256">Выберыце іншы файл</translation>

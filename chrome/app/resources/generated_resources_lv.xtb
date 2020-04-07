@@ -829,6 +829,7 @@ Varat pārvaldīt šī konta iestatījumus, savā ierīcē instalējot lietotni 
 <translation id="2119349053129246860">Atvērt lietotnē <ph name="APP" /></translation>
 <translation id="2120297377148151361">Darbības un mijiedarbības</translation>
 <translation id="2120639962942052471">Bloķēta atļauja “<ph name="PERMISSION" />”</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Sīkfaili ir bloķēti}=1{Sīkfaili ir bloķēti (1 izņēmums)}zero{Sīkfaili ir bloķēti ({COUNT} izņēmumu)}one{Sīkfaili ir bloķēti ({COUNT} izņēmums)}other{Sīkfaili ir bloķēti ({COUNT} izņēmumi)}}</translation>
 <translation id="2121825465123208577">Mainīt lielumu</translation>
 <translation id="2122305276694332719">Automātiska pieslēgšanās paslēptam tīklam ļauj citiem redzēt jūsu ierīci un dažus tīkla iestatījumus, taču tas nav ieteicams.</translation>
 <translation id="2123766928840368256">Izvēlēties citu failu</translation>

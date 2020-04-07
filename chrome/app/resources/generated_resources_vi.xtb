@@ -829,6 +829,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="2119349053129246860">Mở trong <ph name="APP" /></translation>
 <translation id="2120297377148151361">Hoạt động và tương tác</translation>
 <translation id="2120639962942052471">Đã chặn <ph name="PERMISSION" /></translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Đã chặn các cookie}=1{Đã chặn các cookie nhưng có 1 trường hợp ngoại lệ}other{Đã chặn các cookie nhưng có {COUNT} trường hợp ngoại lệ}}</translation>
 <translation id="2121825465123208577">Đổi kích thước</translation>
 <translation id="2122305276694332719">Việc tự động kết nối vào một mạng ẩn sẽ cho phép những người khác nhìn thấy thiết bị và một số tùy chọn cài đặt mạng của bạn. Bạn không nên bật tùy chọn này.</translation>
 <translation id="2123766928840368256">Chọn một tệp khác</translation>
@@ -5922,7 +5923,7 @@ Giữ tệp khóa của bạn ở nơi an toàn. Bạn sẽ cần tệp khóa đ
 <translation id="8895454554629927345">Danh sách dấu trang</translation>
 <translation id="8896022254727357590">Mã PIN phải có ít nhất 4 ký tự</translation>
 <translation id="8898786835233784856">Chọn Tab Tiếp theo</translation>
-<translation id="8898822736010347272">Gửi URL của một số trang bạn truy cập, số ít thông tin về hệ thống và một số nội dung trang cho Google, nhằm phát hiện các mối đe dọa mới và bảo vệ mọi người khi dùng web.</translation>
+<translation id="8898822736010347272">Gửi URL của một số trang bạn truy cập, thông tin về hệ thống (có giới hạn) và một số nội dung trang cho Google, nhằm phát hiện các mối đe dọa mới và bảo vệ mọi người khi dùng web.</translation>
 <translation id="8898840733695078011">Cường độ tín hiệu</translation>
 <translation id="8899851313684471736">Mở liên kết bằng cửa sổ &amp;mới</translation>
 <translation id="8902667442496790482">Mở mục cài đặt chọn để nói</translation>

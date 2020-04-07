@@ -829,6 +829,7 @@
 <translation id="2119349053129246860"><ph name="APP" />에서 열기</translation>
 <translation id="2120297377148151361">활동 및 상호작용</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> 권한이 차단됨</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{쿠키가 차단됨}=1{쿠키가 차단됨, 예외 1개}other{쿠키가 차단됨, 예외 {COUNT}개}}</translation>
 <translation id="2121825465123208577">크기 조정</translation>
 <translation id="2122305276694332719">숨겨진 네트워크에 자동 연결하면 다른 사용자가 내 기기 및 일부 네트워크 설정을 볼 수 있으므로 권장되지 않습니다.</translation>
 <translation id="2123766928840368256">다른 파일 선택</translation>

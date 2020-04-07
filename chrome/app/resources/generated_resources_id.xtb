@@ -829,6 +829,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="2119349053129246860">Buka di <ph name="APP" /></translation>
 <translation id="2120297377148151361">Aktivitas dan interaksi</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" /> diblokir</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Cookie diblokir}=1{Cookie diblokir, 1 pengecualian}other{Cookie diblokir, {COUNT} pengecualian}}</translation>
 <translation id="2121825465123208577">Ubah ukuran</translation>
 <translation id="2122305276694332719">Menghubungkan ke jaringan tersembunyi secara otomatis akan memungkinkan orang lain melihat perangkat Anda dan beberapa setelan jaringan, sehingga tindakan ini tidak direkomendasikan.</translation>
 <translation id="2123766928840368256">Pilih file yang berbeda</translation>

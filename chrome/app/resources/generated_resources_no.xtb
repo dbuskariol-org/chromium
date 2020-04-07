@@ -826,6 +826,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="2119349053129246860">Åpne i <ph name="APP" /></translation>
 <translation id="2120297377148151361">Aktivitet og interaksjoner</translation>
 <translation id="2120639962942052471">Blokkert <ph name="PERMISSION" /></translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{Informasjonskapsler er blokkert}=1{Informasjonskapsler er blokkert, 1 unntak}other{Informasjonskapsler er blokkert, {COUNT} unntak}}</translation>
 <translation id="2121825465123208577">Endre størrelse</translation>
 <translation id="2122305276694332719">Automatisk tilkobling til skjulte nettverk gjør det mulig for andre å se enheten din og enkelte nettverksinnstillinger, så det anbefales ikke.</translation>
 <translation id="2123766928840368256">Velg en annen fil</translation>
