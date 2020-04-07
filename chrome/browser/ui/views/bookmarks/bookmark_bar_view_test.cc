@@ -333,10 +333,11 @@ class BookmarkBarViewEventTestBase : public ViewEventTestBase {
     browser_.reset();
     profile_.reset();
 
-    // Run the message loop to ensure we delete allTasks and fully shut down.
+    // Run the message loop to ensure we delete all tasks and fully shut down.
     base::RunLoop().RunUntilIdle();
 
     ViewEventTestBase::TearDown();
+
     BookmarkBarView::DisableAnimationsForTesting(false);
     constrained_window::SetConstrainedWindowViewsClient(nullptr);
 
@@ -1048,7 +1049,6 @@ class BookmarkBarViewTest10 : public BookmarkBarViewEventTestBase {
     ui_test_utils::MoveMouseToCenterAndPress(button, ui_controls::LEFT,
         ui_controls::DOWN | ui_controls::UP,
         CreateEventTask(this, &BookmarkBarViewTest10::Step2));
-    base::RunLoop().RunUntilIdle();
   }
 
  private:

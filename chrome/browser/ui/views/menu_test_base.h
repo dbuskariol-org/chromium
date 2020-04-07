@@ -82,8 +82,8 @@ class MenuTestBase : public ViewEventTestBase,
   void ExecuteCommand(int id) override;
 
  private:
-  views::MenuButton* button_;
-  views::MenuItemView* menu_;
+  views::MenuButton* button_ = nullptr;
+  views::MenuItemView* menu_ = nullptr;
   std::unique_ptr<views::MenuRunner> menu_runner_;
 
   // The command id of the last pressed menu item since the menu was opened.

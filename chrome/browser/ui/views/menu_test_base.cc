@@ -53,9 +53,8 @@ void MenuTestBase::TearDown() {
   // with views::MenuRunner::FOR_DROP) don't take kindly to simply pulling the
   // runner out from under them.
   menu_runner_->Cancel();
-
   menu_runner_.reset();
-  menu_ = nullptr;
+
   ViewEventTestBase::TearDown();
 }
 

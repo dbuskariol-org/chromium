@@ -129,21 +129,16 @@ class TestingGestureRecognizer : public ui::GestureRecognizerImpl {
 
 class TouchEventsViewTest : public ViewEventTestBase {
  public:
-  TouchEventsViewTest() : ViewEventTestBase(), touch_view_(nullptr) {}
+  TouchEventsViewTest() = default;
 
   // ViewEventTestBase:
   void SetUp() override {
     ViewEventTestBase::SetUp();
-    aura::test::EnvTestHelper().SetGestureRecognizer(
-        std::make_unique<TestingGestureRecognizer>());
-    gesture_recognizer_ = static_cast<TestingGestureRecognizer*>(
-        aura::Env::GetInstance()->gesture_recognizer());
-  }
 
-  void TearDown() override {
-    touch_view_ = nullptr;
-    gesture_recognizer_ = nullptr;
-    ViewEventTestBase::TearDown();
+    auto gesture_recognizer = std::make_unique<TestingGestureRecognizer>();
+    gesture_recognizer_ = gesture_recognizer.get();
+    aura::test::EnvTestHelper().SetGestureRecognizer(
+        std::move(gesture_recognizer));
   }
 
   std::unique_ptr<views::View> CreateContentsView() override {

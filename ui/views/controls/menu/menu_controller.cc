@@ -776,10 +776,10 @@ void MenuController::OnMouseReleased(SubmenuView* source,
         return;
       }
     }
+    const int command = part.menu->GetCommand();
     if (part.menu->GetDelegate()->ShouldExecuteCommandWithoutClosingMenu(
-            part.menu->GetCommand(), event)) {
-      part.menu->GetDelegate()->ExecuteCommand(part.menu->GetCommand(),
-                                               event.flags());
+            command, event)) {
+      part.menu->GetDelegate()->ExecuteCommand(command, event.flags());
       return;
     }
     if (!part.menu->NonIconChildViewsCount() &&

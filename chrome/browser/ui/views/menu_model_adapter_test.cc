@@ -154,13 +154,8 @@ class TopMenuModel : public CommonMenuModel {
 class MenuModelAdapterTest : public ViewEventTestBase,
                              public views::ButtonListener {
  public:
-  MenuModelAdapterTest()
-      : ViewEventTestBase(),
-        button_(nullptr),
-        menu_model_adapter_(&top_menu_model_),
-        menu_(nullptr) {}
-
-  ~MenuModelAdapterTest() override {}
+  MenuModelAdapterTest() = default;
+  ~MenuModelAdapterTest() override = default;
 
   // ViewEventTestBase implementation.
 
@@ -168,13 +163,13 @@ class MenuModelAdapterTest : public ViewEventTestBase,
     ViewEventTestBase::SetUp();
 
     menu_ = menu_model_adapter_.CreateMenu();
-    menu_runner_.reset(
-        new views::MenuRunner(menu_, views::MenuRunner::HAS_MNEMONICS));
+    menu_runner_ = std::make_unique<views::MenuRunner>(
+        menu_, views::MenuRunner::HAS_MNEMONICS);
   }
 
   void TearDown() override {
-    menu_runner_ = nullptr;
-    menu_ = nullptr;
+    menu_runner_.reset();
+
     ViewEventTestBase::TearDown();
   }
 
@@ -263,10 +258,10 @@ class MenuModelAdapterTest : public ViewEventTestBase,
         std::move(next));
   }
 
-  views::MenuButton* button_;
+  views::MenuButton* button_ = nullptr;
   TopMenuModel top_menu_model_;
-  views::MenuModelAdapter menu_model_adapter_;
-  views::MenuItemView* menu_;
+  views::MenuModelAdapter menu_model_adapter_{&top_menu_model_};
+  views::MenuItemView* menu_ = nullptr;
   std::unique_ptr<views::MenuRunner> menu_runner_;
 };
 
