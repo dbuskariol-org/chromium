@@ -2082,6 +2082,11 @@ void RenderFrameHostImpl::SetRenderFrameCreated(bool created) {
       GetRemoteAssociatedInterfaces()->GetInterface(&frame_bindings_control_);
     frame_bindings_control_->AllowBindings(enabled_bindings_);
   }
+
+  // Clear all the user data associated with this RenderFrameHost in case if
+  // the renderer crashes and the RenderFrameHost still stays alive.
+  if (!created)
+    document_associated_data_.ClearAllUserData();
 }
 
 void RenderFrameHostImpl::Init() {
@@ -7542,10 +7547,17 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
   accessibility_reset_count_ = 0;
   appcache_handle_ = navigation_request->TakeAppCacheHandle();
 
-  if (navigation_request->IsInMainFrame() &&
-      !navigation_request->IsSameDocument() &&
+  if (navigation_request->IsInMainFrame() && !is_same_document_navigation &&
       !navigation_request->IsServedFromBackForwardCache()) {
     render_view_host_->ResetPerPageState();
+  }
+
+  // Clear all the user data associated with the non speculative RenderFrameHost
+  // when the navigation is a cross-document navigation not served from the
+  // back-forward cache.
+  if (!is_same_document_navigation &&
+      !navigation_request->IsServedFromBackForwardCache() && IsCurrent()) {
+    document_associated_data_.ClearAllUserData();
   }
 
   // If we still have a PeakGpuMemoryTracker, then the loading it was observing

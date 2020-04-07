@@ -948,6 +948,7 @@ test("content_browsertests") {
     "../browser/frame_host/navigation_controller_impl_browsertest.cc",
     "../browser/frame_host/navigation_request_browsertest.cc",
     "../browser/frame_host/render_document_host_browsertest.cc",
+    "../browser/frame_host/render_document_host_user_data_browsertest.cc",
     "../browser/frame_host/render_frame_host_impl_browsertest.cc",
     "../browser/frame_host/render_frame_host_impl_mac_browsertest.mm",
     "../browser/frame_host/render_frame_host_manager_browsertest.cc",
