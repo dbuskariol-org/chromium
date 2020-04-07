@@ -31,13 +31,14 @@ class UI_CHROMEOS_EXPORT SuggestionWindowView
   void Hide();
 
   // Shows suggestion text.
-  void Show(const base::string16& text);
-  void UpdateSuggestion(const base::string16& text);
+  void Show(const base::string16& text, const bool show_tab);
 
   void SetBounds(const gfx::Rect& cursor_bounds);
 
  private:
   friend class SuggestionWindowViewTest;
+
+  void UpdateSuggestion(const base::string16& text, const bool show_tab);
 
   // views::BubbleDialogDelegateView:
   const char* GetClassName() const override;

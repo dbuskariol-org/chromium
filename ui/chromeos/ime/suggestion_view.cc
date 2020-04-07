@@ -61,9 +61,10 @@ SuggestionView::SuggestionView() {
 
 SuggestionView::~SuggestionView() = default;
 
-void SuggestionView::SetText(const base::string16& text) {
+void SuggestionView::SetView(const base::string16& text, const bool show_tab) {
   suggestion_label_->SetText(text);
   suggestion_width_ = suggestion_label_->GetPreferredSize().width();
+  annotation_label_->SetVisible(show_tab);
 }
 
 const char* SuggestionView::GetClassName() const {
@@ -73,11 +74,13 @@ const char* SuggestionView::GetClassName() const {
 void SuggestionView::Layout() {
   suggestion_label_->SetBounds(kPadding, 0, suggestion_width_, height());
 
-  int annotation_left = kPadding + suggestion_width_ + kPadding;
-  int right = bounds().right();
-  annotation_label_->SetBounds(annotation_left, kAnnotationPaddingHeight,
-                               right - annotation_left - kPadding / 2,
-                               height() - 2 * kAnnotationPaddingHeight);
+  if (annotation_label_->GetVisible()) {
+    int annotation_left = kPadding + suggestion_width_ + kPadding;
+    int right = bounds().right();
+    annotation_label_->SetBounds(annotation_left, kAnnotationPaddingHeight,
+                                 right - annotation_left - kPadding / 2,
+                                 height() - 2 * kAnnotationPaddingHeight);
+  }
 }
 
 gfx::Size SuggestionView::CalculatePreferredSize() const {
@@ -87,12 +90,10 @@ gfx::Size SuggestionView::CalculatePreferredSize() const {
   suggestion_size.SetToMax(gfx::Size(suggestion_width_, 0));
   size.Enlarge(suggestion_size.width() + 2 * kPadding, 0);
   size.SetToMax(suggestion_size);
-  gfx::Size annotation_size = annotation_label_->GetPreferredSize();
-  size.Enlarge(annotation_size.width() + kPadding, 0);
-  // size.SetToMax(annotation_size);
-  LOG(ERROR) << "suggestion_size " << suggestion_size.width()
-             << " annotation size " << annotation_size.width() << " size "
-             << size.width() << " height " << size.height();
+  if (annotation_label_->GetVisible()) {
+    gfx::Size annotation_size = annotation_label_->GetPreferredSize();
+    size.Enlarge(annotation_size.width() + kPadding, 0);
+  }
   return size;
 }
 

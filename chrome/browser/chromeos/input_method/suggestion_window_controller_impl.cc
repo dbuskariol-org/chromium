@@ -73,11 +73,12 @@ void SuggestionWindowControllerImpl::FocusStateChanged() {
     Hide();
 }
 
-void SuggestionWindowControllerImpl::Show(const base::string16& text) {
+void SuggestionWindowControllerImpl::Show(const base::string16& text,
+                                          const bool show_tab) {
   if (!suggestion_window_view_)
     Init();
   suggestion_text_ = text;
-  suggestion_window_view_->Show(text);
+  suggestion_window_view_->Show(text, show_tab);
 }
 
 base::string16 SuggestionWindowControllerImpl::GetText() const {

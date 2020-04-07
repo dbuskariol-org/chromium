@@ -41,7 +41,7 @@ class UI_CHROMEOS_EXPORT SuggestionView : public views::View {
   SuggestionView();
   ~SuggestionView() override;
 
-  void SetText(const base::string16& text);
+  void SetView(const base::string16& text, const bool show_tab);
 
  private:
   friend class SuggestionWindowViewTest;

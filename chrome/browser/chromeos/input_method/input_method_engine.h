@@ -122,6 +122,7 @@ class InputMethodEngine : public ::input_method::InputMethodEngineBase {
   // Set and show suggestion window.
   bool SetSuggestion(int context_id,
                      const base::string16& text,
+                     const bool show_tab,
                      std::string* error);
 
   // Commit the suggestion and hide the window.

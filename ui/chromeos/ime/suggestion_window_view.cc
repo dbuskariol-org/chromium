@@ -87,14 +87,16 @@ void SuggestionWindowView::Hide() {
   GetWidget()->Close();
 }
 
-void SuggestionWindowView::Show(const base::string16& text) {
-  UpdateSuggestion(text);
+void SuggestionWindowView::Show(const base::string16& text,
+                                const bool show_tab) {
+  UpdateSuggestion(text, show_tab);
   suggestion_view_->SetVisible(true);
   SizeToContents();
 }
 
-void SuggestionWindowView::UpdateSuggestion(const base::string16& text) {
-  suggestion_view_->SetText(text);
+void SuggestionWindowView::UpdateSuggestion(const base::string16& text,
+                                            const bool show_tab) {
+  suggestion_view_->SetView(text, show_tab);
 
   std::unique_ptr<SuggestionWindowBorder> border =
       std::make_unique<SuggestionWindowBorder>();

@@ -224,6 +224,7 @@ bool InputMethodEngine::SetCursorPosition(int context_id,
 
 bool InputMethodEngine::SetSuggestion(int context_id,
                                       const base::string16& text,
+                                      const bool show_tab,
                                       std::string* error) {
   if (!IsActive()) {
     *error = kErrorNotActive;
@@ -237,7 +238,7 @@ bool InputMethodEngine::SetSuggestion(int context_id,
   IMESuggestionWindowHandlerInterface* sw_handler =
       ui::IMEBridge::Get()->GetSuggestionWindowHandler();
   if (sw_handler)
-    sw_handler->Show(text);
+    sw_handler->Show(text, show_tab);
   return true;
 }
 
