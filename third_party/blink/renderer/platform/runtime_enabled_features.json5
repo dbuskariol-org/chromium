@@ -294,7 +294,7 @@
     },
     {
       name: "CaptureTimeInCsrc",
-      status: "test",
+      status: "stable",
     },
     {
       name: "ClickPointerEvent",
