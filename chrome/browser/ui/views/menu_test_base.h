@@ -71,7 +71,7 @@ class MenuTestBase : public ViewEventTestBase,
   // ViewEventTestBase implementation.
   void SetUp() override;
   void TearDown() override;
-  views::View* CreateContentsView() override;
+  std::unique_ptr<views::View> CreateContentsView() override;
   void DoTestOnMessageLoop() override;
   gfx::Size GetPreferredSizeForContents() const override;
 

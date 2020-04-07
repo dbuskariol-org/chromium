@@ -83,7 +83,7 @@ class ViewEventTestBase : public testing::Test {
   void TearDown() override;
 
   // Returns the view that is added to the window.
-  virtual views::View* CreateContentsView() = 0;
+  virtual std::unique_ptr<views::View> CreateContentsView() = 0;
 
   // Returns an empty Size. Subclasses that want a preferred size other than
   // that of the View returned by CreateContentsView should override this

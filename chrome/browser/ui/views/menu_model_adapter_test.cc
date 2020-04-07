@@ -165,14 +165,11 @@ class MenuModelAdapterTest : public ViewEventTestBase,
   // ViewEventTestBase implementation.
 
   void SetUp() override {
-    button_ =
-        new views::MenuButton(base::ASCIIToUTF16("Menu Adapter Test"), this);
+    ViewEventTestBase::SetUp();
 
     menu_ = menu_model_adapter_.CreateMenu();
     menu_runner_.reset(
         new views::MenuRunner(menu_, views::MenuRunner::HAS_MNEMONICS));
-
-    ViewEventTestBase::SetUp();
   }
 
   void TearDown() override {
@@ -181,7 +178,12 @@ class MenuModelAdapterTest : public ViewEventTestBase,
     ViewEventTestBase::TearDown();
   }
 
-  views::View* CreateContentsView() override { return button_; }
+  std::unique_ptr<views::View> CreateContentsView() override {
+    auto button = std::make_unique<views::MenuButton>(
+        base::ASCIIToUTF16("Menu Adapter Test"), this);
+    button_ = button.get();
+    return button;
+  }
 
   gfx::Size GetPreferredSizeForContents() const override {
     return button_->GetPreferredSize();

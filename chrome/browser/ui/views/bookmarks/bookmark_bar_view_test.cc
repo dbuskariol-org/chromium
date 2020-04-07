@@ -300,13 +300,6 @@ class BookmarkBarViewEventTestBase : public ViewEventTestBase {
 
     model_->ClearStore();
 
-    bb_view_ = std::make_unique<BookmarkBarView>(browser_.get(), nullptr);
-    bb_view_->set_owned_by_client();
-    // Real bookmark bars get a BookmarkBarViewBackground. Set an opaque
-    // background here just to avoid triggering subpixel rendering issues.
-    bb_view_->SetBackground(views::CreateSolidBackground(SK_ColorWHITE));
-    bb_view_->SetPageNavigator(&navigator_);
-
     AddTestData(CreateBigMenu());
 
     // Create the Widget. Note the initial size is given by
@@ -330,10 +323,13 @@ class BookmarkBarViewEventTestBase : public ViewEventTestBase {
   }
 
   void TearDown() override {
-    // Destroy everything, then run the message loop to ensure we delete all
-    // Tasks and fully shut down.
+    if (window()) {
+      // Closing the window ensures |bb_view_| is deleted, which must happen
+      // before |model_| is deleted (which happens when |profile_| is reset).
+      window()->CloseNow();
+    }
+
     browser_->tab_strip_model()->CloseAllTabs();
-    bb_view_.reset();
     browser_.reset();
     profile_.reset();
 
@@ -350,7 +346,15 @@ class BookmarkBarViewEventTestBase : public ViewEventTestBase {
   }
 
  protected:
-  views::View* CreateContentsView() override { return bb_view_.get(); }
+  std::unique_ptr<views::View> CreateContentsView() override {
+    auto bb_view = std::make_unique<BookmarkBarView>(browser_.get(), nullptr);
+    // Real bookmark bars get a BookmarkBarViewBackground. Set an opaque
+    // background here just to avoid triggering subpixel rendering issues.
+    bb_view->SetBackground(views::CreateSolidBackground(SK_ColorWHITE));
+    bb_view->SetPageNavigator(&navigator_);
+    bb_view_ = bb_view.get();
+    return bb_view;
+  }
 
   gfx::Size GetPreferredSizeForContents() const override {
     // Calculate the preferred size so that one button doesn't fit, which
@@ -380,7 +384,7 @@ class BookmarkBarViewEventTestBase : public ViewEventTestBase {
   virtual bool CreateBigMenu() { return false; }
 
   BookmarkModel* model_ = nullptr;
-  std::unique_ptr<BookmarkBarView> bb_view_;
+  BookmarkBarView* bb_view_ = nullptr;
   TestingPageNavigator navigator_;
 
  private:
@@ -461,7 +465,7 @@ class BookmarkBarViewDragTestBase : public BookmarkBarViewEventTestBase,
   // BookmarkBarViewEventTestBase:
   void DoTestOnMessageLoop() override {
     widget_observer_.Add(window());
-    bookmark_bar_observer_.Add(bb_view_.get());
+    bookmark_bar_observer_.Add(bb_view_);
 
     // Record the URL for node f1a.
     const auto& f1 = model_->bookmark_bar_node()->children().front();
@@ -473,11 +477,6 @@ class BookmarkBarViewDragTestBase : public BookmarkBarViewEventTestBase,
     ui_test_utils::MoveMouseToCenterAndPress(
         button, ui_controls::LEFT, ui_controls::DOWN | ui_controls::UP,
         CreateEventTask(this, &BookmarkBarViewDragTestBase::OnMenuOpened));
-  }
-
-  void TearDown() override {
-    bookmark_bar_observer_.RemoveAll();
-    BookmarkBarViewEventTestBase::TearDown();
   }
 
   virtual void OnMenuOpened() {
@@ -1215,7 +1214,7 @@ class BookmarkBarViewTest11 : public BookmarkBarViewEventTestBase {
 
     // Now click on empty space.
     gfx::Point mouse_loc;
-    views::View::ConvertPointToScreen(bb_view_.get(), &mouse_loc);
+    views::View::ConvertPointToScreen(bb_view_, &mouse_loc);
     ASSERT_TRUE(ui_controls::SendMouseMove(mouse_loc.x(), mouse_loc.y()));
     ASSERT_TRUE(ui_controls::SendMouseEventsNotifyWhenDone(
         ui_controls::LEFT, ui_controls::UP | ui_controls::DOWN,
@@ -1797,10 +1796,10 @@ class BookmarkBarViewTest20 : public BookmarkBarViewEventTestBase {
   void DoTestOnMessageLoop() override {
     // Add |test_view_| next to |bb_view_|.
     views::View* parent = bb_view_->parent();
-    parent->RemoveChildView(bb_view_.get());
+    parent->RemoveChildView(bb_view_);
     container_view_ = std::make_unique<ContainerViewForMenuExit>();
     container_view_->set_owned_by_client();
-    container_view_->AddChildView(bb_view_.get());
+    container_view_->AddChildView(bb_view_);
     test_view_ =
         container_view_->AddChildView(std::make_unique<TestViewForMenuExit>());
     parent->AddChildView(container_view_.get());
