@@ -450,7 +450,6 @@
               "external/wpt/html/user-activation/message-event-activation-api-iframe-cross-origin.sub.tentative.html",
               "external/wpt/wasm/serialization/module/window-domain-success.sub.html",
               "external/wpt/wasm/serialization/module/window-similar-but-cross-origin-success.sub.html",
-              "http/tests/devtools/debugger/fetch-breakpoints.js",
               "http/tests/devtools/oopif/oopif-storage.js",
               "http/tests/dom/EventListener-incumbent-global-1.html",
               "http/tests/dom/EventListener-incumbent-global-2.html",

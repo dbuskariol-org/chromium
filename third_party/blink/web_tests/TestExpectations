@@ -102,7 +102,6 @@ crbug.com/608015 http/tests/inspector-protocol/access-inspected-object.js [ Fail
 crbug.com/623268 http/tests/inspector-protocol/request-mixed-content-status-blockable.js [ Timeout ]
 crbug.com/623268 http/tests/inspector-protocol/request-mixed-content-status-none.js [ Timeout ]
 crbug.com/623268 http/tests/inspector-protocol/request-mixed-content-status-optionally-blockable.js [ Timeout ]
-crbug.com/678482 http/tests/devtools/debugger/fetch-breakpoints.js [ Timeout Pass ]
 crbug.com/678491 http/tests/misc/webtiming-no-origin.html [ Crash Pass ]
 crbug.com/765779 http/tests/loading/bad-server-subframe.html [ Failure ]
 crbug.com/801992 http/tests/misc/iframe-script-modify-attr.html [ Pass Crash ]
