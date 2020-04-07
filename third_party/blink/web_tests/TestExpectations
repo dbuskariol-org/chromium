@@ -6037,7 +6037,6 @@ crbug.com/892983 external/wpt/css/css-pseudo/first-line-with-before-after.html [
 crbug.com/1025123 external/wpt/longtask-timing/longtask-in-sibling-iframe-crossorigin.html [ Pass Failure ]
 crbug.com/1025321 [ Win ] http/tests/devtools/tracing/console-timeline.js [ Pass Failure ]
 crbug.com/1025321 [ Win ] virtual/threaded/http/tests/devtools/tracing/console-timeline.js [ Pass Failure ]
-crbug.com/1025437 virtual/not-site-per-process/http/tests/devtools/debugger/fetch-breakpoints.js [ Timeout Pass ]
 
 # Sheriff 2019-11-18
 crbug.com/1025944 [ Linux ] external/wpt/pointerevents/pointerlock/pointerevent_pointermove_on_chorded_mouse_button_when_locked.html [ Pass Failure ]
