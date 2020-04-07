@@ -38,6 +38,7 @@
 #include "base/timer/elapsed_timer.h"
 #include "net/cookies/site_for_cookies.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
+#include "services/network/public/mojom/web_sandbox_flags.mojom-blink-forward.h"
 #include "third_party/blink/public/common/metrics/document_update_reason.h"
 #include "third_party/blink/public/mojom/input/focus_type.mojom-blink-forward.h"
 #include "third_party/blink/public/mojom/permissions/permission.mojom-blink.h"
@@ -384,8 +385,8 @@ class CORE_EXPORT Document : public ContainerNode,
   const SecurityOrigin* GetSecurityOrigin() const;
   SecurityOrigin* GetMutableSecurityOrigin();
   ContentSecurityPolicy* GetContentSecurityPolicy() const;
-  mojom::blink::WebSandboxFlags GetSandboxFlags() const;
-  bool IsSandboxed(mojom::blink::WebSandboxFlags mask) const;
+  network::mojom::blink::WebSandboxFlags GetSandboxFlags() const;
+  bool IsSandboxed(network::mojom::blink::WebSandboxFlags mask) const;
   PublicURLManager& GetPublicURLManager();
   bool IsContextPaused() const;
   bool IsContextDestroyed() const;
