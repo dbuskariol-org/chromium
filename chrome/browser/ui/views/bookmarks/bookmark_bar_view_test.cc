@@ -448,9 +448,19 @@ class BookmarkBarViewDragTestBase : public BookmarkBarViewEventTestBase,
     Done();
   }
 
+  void OnWidgetDestroying(views::Widget* widget) override {
+    if (widget == window())
+      bookmark_bar_observer_.RemoveAll();
+  }
+
+  void OnWidgetDestroyed(views::Widget* widget) override {
+    widget_observer_.Remove(widget);
+  }
+
  protected:
   // BookmarkBarViewEventTestBase:
   void DoTestOnMessageLoop() override {
+    widget_observer_.Add(window());
     bookmark_bar_observer_.Add(bb_view_.get());
 
     // Record the URL for node f1a.
@@ -467,7 +477,6 @@ class BookmarkBarViewDragTestBase : public BookmarkBarViewEventTestBase,
 
   void TearDown() override {
     bookmark_bar_observer_.RemoveAll();
-    widget_observer_.RemoveAll();
     BookmarkBarViewEventTestBase::TearDown();
   }
 
@@ -510,10 +519,6 @@ class BookmarkBarViewDragTestBase : public BookmarkBarViewEventTestBase,
     views::DropHelper::SetDragEnteredCallbackForTesting(
         view, base::BindRepeating(&BookmarkBarViewDragTestBase::OnDragEntered,
                                   base::Unretained(this)));
-  }
-
-  ScopedObserver<views::Widget, views::WidgetObserver>* widget_observer() {
-    return &widget_observer_;
   }
 
  private:
@@ -1958,18 +1963,10 @@ VIEW_TEST(BookmarkBarViewTest21, ContextMenusForEmptyFolder)
 class BookmarkBarViewTest22 : public BookmarkBarViewDragTestBase {
  public:
   // BookmarkBarViewDragTestBase:
-  void OnWidgetDragWillStart(views::Widget* widget) override {
-    // Watch for main window destruction instead of menu dragging.
-    widget_observer()->RemoveAll();
-    widget_observer()->Add(window());
-
-    BookmarkBarViewDragTestBase::OnWidgetDragWillStart(widget);
-  }
-
   void OnWidgetDragComplete(views::Widget* widget) override {}
 
   void OnWidgetDestroyed(views::Widget* widget) override {
-    widget_observer()->RemoveAll();
+    BookmarkBarViewDragTestBase::OnWidgetDestroyed(widget);
     Done();
   }
 
