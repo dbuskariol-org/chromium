@@ -1045,11 +1045,17 @@ body.check-select #files-selected-label {
 
 /* TODO(adanilo) document the calc() reason. */
 body.files-ng #cancel-selection-button {
+  border: 1px solid transparent;
   margin-inline-start: calc(10px + 1px);
+  width: 36px;
 }
 
-#cancel-selection-button:focus:not([tabindex='-1']):not(:active) {
+body:not(.files-ng) #cancel-selection-button:focus:not([tabindex='-1']):not(:active) {
   background-color: rgba(153, 153, 153, 20%);
+}
+
+html.focus-outline-visible body.files-ng #cancel-selection-button:focus:not([tabindex='-1']):not(:active) {
+  border: 1px solid var(--google-blue-600);
 }
 
 body:not(.files-ng) #cancel-selection-button > span {
