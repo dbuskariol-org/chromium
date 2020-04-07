@@ -784,11 +784,7 @@ void MenuController::OnMouseReleased(SubmenuView* source,
     }
     if (!part.menu->NonIconChildViewsCount() &&
         part.menu->GetDelegate()->IsTriggerableEvent(part.menu, event)) {
-      base::TimeDelta shown_time = base::TimeTicks::Now() - menu_start_time_;
-      if (!state_.context_menu || !View::ShouldShowContextMenuOnMousePress() ||
-          shown_time > menu_selection_hold_time) {
-        Accept(part.menu, event.flags());
-      }
+      Accept(part.menu, event.flags());
       return;
     }
   } else if (part.type == MenuPart::MENU_ITEM) {
