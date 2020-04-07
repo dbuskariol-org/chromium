@@ -2693,8 +2693,8 @@
   <message name="IDS_SETTINGS_SITE_SETTINGS_ORIGIN_DELETE_CONFIRMATION" desc="Text for the dialog that warns about clearing all storage data for an origin.">
     This will clear all data and cookies stored by <ph name="ORIGIN_NAME">$1<ex>www.example.com</ex></ph>.
   </message>
-  <message name="IDS_SETTINGS_SITE_SETTINGS_ORIGIN_DELETE_CONFIRMATION_INSTALLED" desc="Text for the dialog that warns about clearing all storage data for an origin that has an installed app.">
-    This will clear all data and cookies stored by <ph name="ORIGIN_NAME">$1<ex>www.example.com</ex></ph> and its installed app.
+  <message name="IDS_SETTINGS_SITE_SETTINGS_ORIGIN_DELETE_CONFIRMATION_INSTALLED" desc="Text for the dialog that warns about clearing all storage data for an origin that has one or more installed apps.">
+    This will clear all data and cookies stored by <ph name="ORIGIN_NAME">$1<ex>www.example.com</ex></ph> and its installed apps.
   </message>
   <message name="IDS_SETTINGS_SITE_SETTINGS_COOKIE_REMOVE_MULTIPLE" desc="Text for the dialog that warns about deleting all site data.">
     This will delete any data stored on your device for all the sites shown. Do you want to continue?
