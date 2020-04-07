@@ -66196,6 +66196,17 @@ Full version information for the fingerprint enum values:
   <int value="8" label="IMY"/>
 </enum>
 
+<enum name="UpdateCheckStatus">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Ok"/>
+  <int value="2" label="No update"/>
+  <int value="3" label="Error internal"/>
+  <int value="4" label="Error Hash"/>
+  <int value="5" label="Error OS not supported"/>
+  <int value="6" label="Error HW not supported"/>
+  <int value="7" label="Error unsupported protocol"/>
+</enum>
+
 <enum name="UpdateClientErrors">
   <int value="0" label="(No Error)"/>
   <int value="1" label="Update in progress"/>
