@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.app.Fragment;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.util.Pair;
@@ -20,6 +19,7 @@ import android.webkit.ValueCallback;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import org.chromium.weblayer_private.interfaces.APICallException;
 import org.chromium.weblayer_private.interfaces.BrowserFragmentArgs;
