@@ -43,8 +43,6 @@
 #include "components/constrained_window/constrained_window_views.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/browser/page_navigator.h"
-#include "ui/base/clipboard/clipboard.h"
-#include "ui/base/clipboard/test/test_clipboard.h"
 #include "ui/base/test/ui_controls.h"
 #include "ui/events/keycodes/keyboard_codes.h"
 #include "ui/views/background.h"
@@ -312,14 +310,6 @@ class BookmarkBarViewEventTestBase : public ViewEventTestBase {
     // state calculated in GetPreferredSizeForContents().
     EXPECT_TRUE(GetBookmarkButton(5)->GetVisible());
     EXPECT_FALSE(GetBookmarkButton(6)->GetVisible());
-
-#if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-    // On desktop Linux, the bookmark bar context menu blocks on retrieving the
-    // clipboard selection from the X server (for the 'paste' item), so mock it
-    // out.
-    ui::TestClipboard::CreateForCurrentThread();
-    window()->Activate();
-#endif
   }
 
   void TearDown() override {

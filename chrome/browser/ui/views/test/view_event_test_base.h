@@ -17,23 +17,18 @@
 #include "base/run_loop.h"
 #include "base/threading/thread.h"
 #include "build/build_config.h"
-#include "chrome/test/views/chrome_test_views_delegate.h"
-#include "content/public/test/browser_task_environment.h"
-#include "testing/gtest/include/gtest/gtest.h"
+#include "chrome/test/views/chrome_views_test_base.h"
 
-#if defined(OS_WIN)
-#include "ui/base/win/scoped_ole_initializer.h"
+#if defined(USE_AURA) && !defined(OS_CHROMEOS) && !defined(USE_X11)
+namespace display {
+class Screen;
+}
 #endif
 
 namespace gfx {
 class Size;
 }
 
-namespace ui {
-class TestContextFactories;
-}
-
-class ViewEventTestPlatformPart;
 class TestBaseWidgetDelegate;
 
 // Base class for Views based tests that dispatch events.
@@ -68,7 +63,7 @@ class TestBaseWidgetDelegate;
 // driven from observer callbacks and posted on the task runner returned by
 // GetDragTaskRunner().
 
-class ViewEventTestBase : public testing::Test {
+class ViewEventTestBase : public ChromeViewsTestBase {
  public:
   ViewEventTestBase();
   ViewEventTestBase(const ViewEventTestBase&) = delete;
@@ -123,16 +118,13 @@ class ViewEventTestBase : public testing::Test {
   // failures invokes Done.
   void RunTestMethod(base::OnceClosure task);
 
+#if defined(USE_AURA) && !defined(OS_CHROMEOS) && !defined(USE_X11)
+  std::unique_ptr<display::Screen> screen_;
+#endif
+
   // Thread for posting background drag events.
   std::unique_ptr<base::Thread> drag_event_thread_;
 
-  content::BrowserTaskEnvironment task_environment_;
-#if defined(OS_WIN)
-  ui::ScopedOleInitializer ole_initializer_;
-#endif
-  std::unique_ptr<ui::TestContextFactories> context_factories_;
-  std::unique_ptr<ViewEventTestPlatformPart> platform_part_;
-  ChromeTestViewsDelegate<> views_delegate_;
   base::RunLoop run_loop_;
   views::Widget* window_ = nullptr;
 };
