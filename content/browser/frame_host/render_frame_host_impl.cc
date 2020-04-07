@@ -4265,9 +4265,6 @@ void RenderFrameHostImpl::RequestOverlayRoutingToken(
 
 std::unique_ptr<blink::PendingURLLoaderFactoryBundle>
 RenderFrameHostImpl::CreateCrossOriginPrefetchLoaderFactoryBundle() {
-  DCHECK(base::FeatureList::IsEnabled(
-      network::features::kPrefetchMainResourceNetworkIsolationKey));
-
   network::mojom::URLLoaderFactoryParamsPtr factory_params =
       URLLoaderFactoryParamsHelper::CreateForPrefetch(
           this, mojo::Clone(last_committed_client_security_state_));
