@@ -9,7 +9,7 @@
 #include "third_party/blink/public/platform/web_url.h"
 #include "third_party/blink/public/web/web_settings.h"
 
-namespace test_runner {
+namespace content {
 
 struct TestPreferences {
   int default_font_size;
@@ -39,6 +39,6 @@ struct TestPreferences {
   TestPreferences();
   void Reset();
 };
-}
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_TEST_PREFERENCES_H_

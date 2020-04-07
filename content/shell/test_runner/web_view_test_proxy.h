@@ -34,7 +34,7 @@ class WebView;
 struct WebWindowFeatures;
 }
 
-namespace test_runner {
+namespace content {
 class AccessibilityController;
 class TestInterfaces;
 class TestRunnerForSpecificView;
@@ -109,6 +109,6 @@ class WebViewTestProxy : public content::RenderViewImpl {
   DISALLOW_COPY_AND_ASSIGN(WebViewTestProxy);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_WEB_VIEW_TEST_PROXY_H_

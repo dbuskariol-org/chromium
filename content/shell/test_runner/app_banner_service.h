@@ -14,7 +14,7 @@
 #include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/public/mojom/app_banner/app_banner.mojom.h"
 
-namespace test_runner {
+namespace content {
 
 // Test app banner service that is registered as a Mojo service for
 // BeforeInstallPromptEvents to look up when the test runner is executed.
@@ -44,6 +44,6 @@ class AppBannerService : public blink::mojom::AppBannerService {
   DISALLOW_COPY_AND_ASSIGN(AppBannerService);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_APP_BANNER_SERVICE_H_

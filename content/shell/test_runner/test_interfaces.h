@@ -17,7 +17,7 @@ class WebURL;
 class WebView;
 }
 
-namespace test_runner {
+namespace content {
 class GamepadController;
 class TestRunner;
 class WebTestDelegate;
@@ -63,6 +63,6 @@ class TestInterfaces {
   DISALLOW_COPY_AND_ASSIGN(TestInterfaces);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_TEST_INTERFACES_H_

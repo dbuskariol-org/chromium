@@ -19,7 +19,7 @@ namespace blink {
 class WebLocalFrame;
 }
 
-namespace test_runner {
+namespace content {
 
 class MockScreenOrientationClient : public device::mojom::ScreenOrientation {
  public:
@@ -63,6 +63,6 @@ class MockScreenOrientationClient : public device::mojom::ScreenOrientation {
   DISALLOW_COPY_AND_ASSIGN(MockScreenOrientationClient);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_MOCK_SCREEN_ORIENTATION_CLIENT_H_

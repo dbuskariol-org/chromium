@@ -24,7 +24,7 @@ namespace blink {
 class WebLocalFrame;
 }
 
-namespace test_runner {
+namespace content {
 
 class GamepadController : public base::SupportsWeakPtr<GamepadController> {
  public:
@@ -102,6 +102,6 @@ class GamepadController : public base::SupportsWeakPtr<GamepadController> {
   DISALLOW_COPY_AND_ASSIGN(GamepadController);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_GAMEPAD_CONTROLLER_H_

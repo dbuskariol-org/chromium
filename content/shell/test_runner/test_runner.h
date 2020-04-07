@@ -50,7 +50,7 @@ class ArrayBufferView;
 class Arguments;
 }
 
-namespace test_runner {
+namespace content {
 class MockContentSettingsClient;
 class MockScreenOrientationClient;
 class SpellCheckClient;
@@ -670,6 +670,6 @@ class TestRunner {
   DISALLOW_COPY_AND_ASSIGN(TestRunner);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_TEST_RUNNER_H_

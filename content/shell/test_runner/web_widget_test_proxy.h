@@ -24,7 +24,7 @@ namespace content {
 class RenderViewImpl;
 }
 
-namespace test_runner {
+namespace content {
 
 class TestRunner;
 class TestRunnerForSpecificView;
@@ -129,6 +129,6 @@ class WebWidgetTestProxy : public content::RenderWidget {
   DISALLOW_COPY_AND_ASSIGN(WebWidgetTestProxy);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_WEB_WIDGET_TEST_PROXY_H_

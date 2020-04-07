@@ -37,7 +37,7 @@ namespace gin {
 class Arguments;
 }  // namespace gin
 
-namespace test_runner {
+namespace content {
 
 class TestInterfaces;
 class WebWidgetTestProxy;
@@ -327,6 +327,6 @@ class EventSender {
   DISALLOW_COPY_AND_ASSIGN(EventSender);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_EVENT_SENDER_H_

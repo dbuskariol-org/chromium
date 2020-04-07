@@ -12,7 +12,7 @@
 #include "base/values.h"
 #include "content/shell/test_runner/tracked_dictionary.h"
 
-namespace test_runner {
+namespace content {
 
 // WebTestRuntimeFlags stores flags controlled by web tests at runtime
 // (i.e. by calling testRunner.dumpAsText() or testRunner.waitUntilDone()).
@@ -183,6 +183,6 @@ class WebTestRuntimeFlags {
   DISALLOW_COPY_AND_ASSIGN(WebTestRuntimeFlags);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_WEB_TEST_RUNTIME_FLAGS_H_

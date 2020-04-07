@@ -32,7 +32,7 @@ namespace gin {
 class Arguments;
 }
 
-namespace test_runner {
+namespace content {
 class WebTestDelegate;
 class WebWidgetTestProxy;
 class WebViewTestProxy;
@@ -237,6 +237,6 @@ class TestRunnerForSpecificView {
   DISALLOW_COPY_AND_ASSIGN(TestRunnerForSpecificView);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_TEST_RUNNER_FOR_SPECIFIC_VIEW_H_

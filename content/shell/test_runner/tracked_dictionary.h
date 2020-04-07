@@ -11,7 +11,7 @@
 #include "base/macros.h"
 #include "base/values.h"
 
-namespace test_runner {
+namespace content {
 
 // TrackedDictionary wraps base::DictionaryValue, but forces all mutations to go
 // through TrackedDictionary's Set methods.  This allows tracking of changes
@@ -52,6 +52,6 @@ class TrackedDictionary {
   DISALLOW_COPY_AND_ASSIGN(TrackedDictionary);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_TRACKED_DICTIONARY_H_

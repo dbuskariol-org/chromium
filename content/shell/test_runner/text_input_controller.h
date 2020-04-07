@@ -17,7 +17,7 @@ class WebLocalFrame;
 class WebView;
 }
 
-namespace test_runner {
+namespace content {
 
 class WebViewTestProxy;
 
@@ -62,6 +62,6 @@ class TextInputController {
   DISALLOW_COPY_AND_ASSIGN(TextInputController);
 };
 
-}  // namespace test_runner
+}  // namespace content
 
 #endif  // CONTENT_SHELL_TEST_RUNNER_TEXT_INPUT_CONTROLLER_H_
