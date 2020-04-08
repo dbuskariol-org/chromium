@@ -323,6 +323,10 @@ vars = {
   # the commit queue can handle CLs rolling libgifcodec
   # and whatever else without interference from each other.
   'libgifcodec_revision': 'd06d2a6d42baf6c0c91cacc28df2542a911d05fe',
+  # Three lines of non-changing comments so that
+  # the commit queue can handle CLs rolling libavif
+  # and whatever else without interference from each other.
+  'libavif_revision': '78e3c9d2fbfa935638145d017dda6950cc559ad3',
 
   # TODO(crbug.com/941824): The values below need to be kept in sync
   # between //DEPS and //buildtools/DEPS, so if you're updating one,
@@ -1083,6 +1087,9 @@ deps = {
 
   'src/third_party/libaom/source/libaom':
     Var('aomedia_git') + '/aom.git' + '@' +  'c25910f6d213ec5ec45ae53caa5e40bd7ebd218f',
+
+  'src/third_party/libavif/src':
+    Var('chromium_git') + '/external/github.com/AOMediaCodec/libavif.git' + '@' + Var('libavif_revision'),
 
   # Userspace interface to kernel DRM services.
   'src/third_party/libdrm/src': {
