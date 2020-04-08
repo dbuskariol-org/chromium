@@ -2508,13 +2508,13 @@ bool ShelfLayoutManager::ShouldChangeVisibilityAfterDrag(
     // The visibility of the shelf changes only if the shelf was dragged X%
     // along the correct axis. If the shelf was already visible, then the
     // direction of the drag does not matter.
-    const float kDragHideThreshold = 0.4f;
     const gfx::Rect bounds = GetIdealBounds();
     const float drag_ratio =
         fabs(drag_amount_) /
         (shelf_->IsHorizontalAlignment() ? bounds.height() : bounds.width());
 
-    return IsSwipingCorrectDirection() && drag_ratio > kDragHideThreshold;
+    return IsSwipingCorrectDirection() &&
+           drag_ratio > ShelfConfig::Get()->drag_hide_ratio_threshold();
   }
 
   if (event_in_screen.type() == ui::ET_SCROLL_FLING_START)
