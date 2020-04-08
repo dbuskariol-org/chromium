@@ -31,15 +31,14 @@ bool PrintedDocument::RenderPrintedDocument(PrintingContext* context) {
   gfx::Rect content_area = GetCenteredPageContentRect(
       page_setup.physical_size(), page_size, page_content_rect);
 
-  struct Metafile::MacRenderPageParams params;
-  params.autorotate = true;
   size_t num_pages = expected_page_count();
   for (size_t metafile_page_number = 1; metafile_page_number <= num_pages;
        metafile_page_number++) {
     if (context->NewPage() != PrintingContext::OK)
       return false;
     metafile->RenderPage(metafile_page_number, context->context(),
-                         content_area.ToCGRect(), params);
+                         content_area.ToCGRect(), /*autorotate=*/true,
+                         /*fit_to_page=*/false);
     if (context->PageDone() != PrintingContext::OK)
       return false;
   }

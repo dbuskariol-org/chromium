@@ -83,10 +83,9 @@ void RenderedPdfSha1(const base::FilePath::StringType& pdf_filename,
       kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little));
 
   // Render using metafile and calculate the output hash.
-  Metafile::MacRenderPageParams params;
-  params.autorotate = true;
   ASSERT_TRUE(pdf_cg->RenderPage(page_number, context,
-                                 gfx::Rect(dest_size).ToCGRect(), params));
+                                 gfx::Rect(dest_size).ToCGRect(),
+                                 /*autorotate=*/true, /*fit_to_page=*/false));
   *rendered_hash = base::SHA1HashSpan(rendered_bitmap);
 }
 
