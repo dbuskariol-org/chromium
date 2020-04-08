@@ -204,6 +204,7 @@
         "isolate_name": "performance_test_suite",
         "merge": {
           "args": [
+            "--lightweight",
             "--skip-perf"
           ],
           "script": "//tools/perf/process_perf_results.py"

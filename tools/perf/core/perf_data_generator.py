@@ -1043,7 +1043,7 @@ def generate_performance_test(tester_config, test, builder_name):
       'script': '//tools/perf/process_perf_results.py',
   }
   if builder_name in LIGHTWEIGHT_TESTERS:
-    result['merge']['args'] = ['--skip-perf']
+    result['merge']['args'] = ['--lightweight', '--skip-perf']
 
   result['swarming'] = {
       # Always say this is true regardless of whether the tester
