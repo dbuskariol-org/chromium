@@ -789,6 +789,12 @@
     },
   },
   'xcode_11c29': {
+    '$mixin_append': {
+      'args': [
+        '--xcode-build-version',
+        '11c29'
+      ],
+    },
     'swarming': {
       'named_caches': [
         {
