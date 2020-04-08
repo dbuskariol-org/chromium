@@ -51,6 +51,7 @@ bool SchedulingPolicy::IsFeatureSticky(SchedulingPolicy::Feature feature) {
     case Feature::kRequestedStorageAccessGrant:
     case Feature::kWebNfc:
     case Feature::kWebFileSystem:
+    case Feature::kAppBanner:
       return true;
   }
 }
