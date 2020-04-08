@@ -3863,6 +3863,14 @@
         'additional_compile_targets': [
           'all',
         ],
+        'test_suites': {
+          'gtest_tests': 'fuchsia_gtests',
+        },
+        'mixins': [
+          'arm64',
+          'docker',
+          'linux-xenial',
+        ],
       },
       'Fuchsia x64': {
         'additional_compile_targets': [
