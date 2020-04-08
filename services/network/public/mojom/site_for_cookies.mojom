@@ -10,5 +10,4 @@ struct SiteForCookies {
   // net::SiteForCookies.
   string scheme;
   string registrable_domain;
-  bool schemefully_same;
 };

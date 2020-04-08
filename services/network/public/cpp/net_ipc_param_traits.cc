@@ -567,21 +567,16 @@ void ParamTraits<net::SiteForCookies>::Write(base::Pickle* m,
                                              const param_type& p) {
   WriteParam(m, p.scheme());
   WriteParam(m, p.registrable_domain());
-  WriteParam(m, p.schemefully_same());
 }
 
 bool ParamTraits<net::SiteForCookies>::Read(const base::Pickle* m,
                                             base::PickleIterator* iter,
                                             param_type* r) {
   std::string scheme, registrable_domain;
-  bool schemefully_same;
-  if (!ReadParam(m, iter, &scheme) ||
-      !ReadParam(m, iter, &registrable_domain) ||
-      !ReadParam(m, iter, &schemefully_same))
+  if (!ReadParam(m, iter, &scheme) || !ReadParam(m, iter, &registrable_domain))
     return false;
 
-  return net::SiteForCookies::FromWire(scheme, registrable_domain,
-                                       schemefully_same, r);
+  return net::SiteForCookies::FromWire(scheme, registrable_domain, r);
 }
 
 void ParamTraits<net::SiteForCookies>::Log(const param_type& p,
@@ -590,8 +585,6 @@ void ParamTraits<net::SiteForCookies>::Log(const param_type& p,
   LogParam(p.scheme(), l);
   l->append(",");
   LogParam(p.registrable_domain(), l);
-  l->append(",");
-  LogParam(p.schemefully_same(), l);
   l->append(")");
 }
 

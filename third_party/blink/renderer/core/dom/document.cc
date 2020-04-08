@@ -6143,13 +6143,12 @@ net::SiteForCookies Document::SiteForCookies() const {
 
   const Frame* current_frame = GetFrame();
   while (current_frame) {
-    const url::Origin cur_security_origin =
-        current_frame->GetSecurityContext()->GetSecurityOrigin()->ToUrlOrigin();
-    if (!candidate.IsEquivalent(
-            net::SiteForCookies::FromOrigin(cur_security_origin))) {
+    const SecurityOrigin* cur_security_origin =
+        current_frame->GetSecurityContext()->GetSecurityOrigin();
+    if (!candidate.IsEquivalent(net::SiteForCookies::FromOrigin(
+            cur_security_origin->ToUrlOrigin()))) {
       return net::SiteForCookies();
     }
-    candidate.MarkIfCrossScheme(cur_security_origin);
     current_frame = current_frame->Tree().Parent();
   }
 

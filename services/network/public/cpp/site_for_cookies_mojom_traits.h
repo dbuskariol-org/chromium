@@ -25,10 +25,6 @@ struct COMPONENT_EXPORT(NETWORK_CPP_BASE)
     return input.registrable_domain();
   }
 
-  static bool schemefully_same(const net::SiteForCookies& input) {
-    return input.schemefully_same();
-  }
-
   static bool Read(network::mojom::SiteForCookiesDataView data,
                    net::SiteForCookies* out);
 };
