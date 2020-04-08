@@ -9,7 +9,6 @@ http/tests/devtools/tracing/* [ Skip ]
 
 virtual/composite-after-paint/* [ Skip ]
 
-virtual/gpu/fast/canvas/* [ Skip ]
 virtual/layout_ng_block_frag/* [ Skip ]
 virtual/layout_ng_fieldset/* [ Skip ]
 virtual/layout_ng_flex_box/* [ Skip ]
@@ -55,9 +54,6 @@ compositing/reflections/deeply-nested-reflections.html [ Failure ]
 
 # A fieldset paints its background twice.
 external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-overflow.html [ Crash ]
-
-#image-rendering: pixelated doesn't work on canvas.
-fast/webgl/pixelated.html [ Failure ]
 
 compositing/masks/broken-mask.html [ Failure ]
 compositing/masks/mask-with-removed-filters.html [ Failure ]
