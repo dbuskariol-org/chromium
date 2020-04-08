@@ -4043,6 +4043,10 @@ ${instance_template}->Set(
     v8::Undefined(${isolate}),
     static_cast<v8::PropertyAttribute>(
         v8::ReadOnly | v8::DontEnum | v8::DontDelete));
+// 7.7.4.2 [[SetPrototypeOf]] ( V )
+// https://html.spec.whatwg.org/C/#location-setprototypeof
+${instance_template}->SetImmutableProto();
+${prototype_template}->SetImmutableProto();
 """))
 
     if indexed_and_named_property_install_nodes:
@@ -4076,17 +4080,24 @@ ${prototype_template}->SetIntrinsicDataProperty(
     V8AtomicString(${isolate}, "forEach"), v8::kArrayProto_forEach, v8::None);
 """))
 
-    if ("Global" in cg_context.class_like.extended_attributes
-            or cg_context.class_like.identifier == "Location"):
-        if "Global" in cg_context.class_like.extended_attributes:
-            body.append(T("// [Global]"))
-        if cg_context.class_like.identifier == "Location":
-            body.append(T("// Location exotic object"))
-        body.extend([
-            T("${instance_template}->SetImmutableProto();"),
-            T("${prototype_template}->SetImmutableProto();"),
-            EmptyNode(),
-        ])
+    if "Global" in cg_context.class_like.extended_attributes:
+        body.append(
+            TextNode("""\
+// [Global]
+// 3.7.1. [[SetPrototypeOf]]
+// https://heycam.github.io/webidl/#platform-object-setprototypeof
+${instance_template}->SetImmutableProto();
+${prototype_template}->SetImmutableProto();
+"""))
+    elif any("Global" in derived.extended_attributes
+             for derived in cg_context.class_like.deriveds):
+        body.append(
+            TextNode("""\
+// [Global] - prototype object in the prototype chain of global objects
+// 3.7.1. [[SetPrototypeOf]]
+// https://heycam.github.io/webidl/#platform-object-setprototypeof
+${prototype_template}->SetImmutableProto();
+"""))
 
     func_call_pattern = ("{}(${isolate}, ${world}, ${instance_template}, "
                          "${prototype_template}, ${interface_template});")
