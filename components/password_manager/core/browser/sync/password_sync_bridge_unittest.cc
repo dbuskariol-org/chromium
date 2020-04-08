@@ -902,9 +902,6 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
   ON_CALL(*mock_password_store_sync(), IsAccountStore())
       .WillByDefault(Return(true));
 
-  const int kPrimaryKeyUnsyncedCredential = 1000;
-  const int kPrimaryKeySyncedCredential = 1001;
-  const int kPrimaryKeyUnsyncedDeletion = 1002;
   const std::string kPrimaryKeyUnsyncedCredentialStr = "1000";
   const std::string kPrimaryKeySyncedCredentialStr = "1001";
   const std::string kPrimaryKeyUnsyncedDeletionStr = "1002";
@@ -934,15 +931,16 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
         return batch;
       });
 
+  // No form is added to the database for the unsynced deletion primary key,
+  // because the deletion is supposed to have already removed such form.
+  const int kPrimaryKeyUnsyncedCredential = 1000;
+  const int kPrimaryKeySyncedCredential = 1001;
   autofill::PasswordForm unsynced_credential = MakePasswordForm(kSignonRealm1);
   autofill::PasswordForm synced_credential = MakePasswordForm(kSignonRealm2);
-  autofill::PasswordForm unsynced_deletion = MakePasswordForm(kSignonRealm3);
   fake_db()->AddLoginForPrimaryKey(kPrimaryKeyUnsyncedCredential,
                                    unsynced_credential);
   fake_db()->AddLoginForPrimaryKey(kPrimaryKeySyncedCredential,
                                    synced_credential);
-  fake_db()->AddLoginForPrimaryKey(kPrimaryKeyUnsyncedDeletion,
-                                   unsynced_deletion);
 
   // The notification should only contain new credentials that are unsynced,
   // ignoring both synced ones and deletion entries.
