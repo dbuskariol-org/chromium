@@ -1232,9 +1232,11 @@ TEST_F(DeepScanningDialogDelegateAuditOnlyTest, SupportedTypes) {
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.7z"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.bzip"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.cab"));
+  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.csv"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.doc"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.docx"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.eps"));
+  data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.tar.gz"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.gzip"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.odt"));
   data.paths.emplace_back(FILE_PATH_LITERAL("/tmp/foo.pdf"));
@@ -1262,8 +1264,8 @@ TEST_F(DeepScanningDialogDelegateAuditOnlyTest, SupportedTypes) {
              base::BindOnce(
                  [](bool* called, const DeepScanningDialogDelegate::Data& data,
                     const DeepScanningDialogDelegate::Result& result) {
-                   EXPECT_EQ(21u, data.paths.size());
-                   EXPECT_EQ(21u, result.paths_results.size());
+                   EXPECT_EQ(23u, data.paths.size());
+                   EXPECT_EQ(23u, result.paths_results.size());
 
                    // The supported types should be marked as false.
                    for (const auto& result : result.paths_results)
