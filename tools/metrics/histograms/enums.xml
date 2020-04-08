@@ -26925,6 +26925,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3200" label="CoopAndCoepIsolated"/>
   <int value="3201" label="WrongBaselineOfButtonElement"/>
   <int value="3202" label="V8Document_HasTrustToken_Method"/>
+  <int value="3203" label="ForceLoadAtTop"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
