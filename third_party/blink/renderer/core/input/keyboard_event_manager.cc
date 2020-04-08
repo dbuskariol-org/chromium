@@ -30,6 +30,7 @@
 #include "third_party/blink/renderer/core/page/spatial_navigation.h"
 #include "third_party/blink/renderer/core/page/spatial_navigation_controller.h"
 #include "third_party/blink/renderer/platform/keyboard_codes.h"
+#include "third_party/blink/renderer/platform/widget/frame_widget.h"
 #include "third_party/blink/renderer/platform/windows_keyboard_codes.h"
 #include "ui/events/keycodes/dom/keycode_converter.h"
 
@@ -236,8 +237,8 @@ WebInputEventResult KeyboardEventManager::KeyEvent(
 
   if (!should_send_key_events_to_js &&
       frame_->GetDocument()->IsInWebAppScope()) {
-    DCHECK(frame_->View());
-    blink::mojom::DisplayMode display_mode = frame_->View()->DisplayMode();
+    mojom::blink::DisplayMode display_mode =
+        frame_->GetWidgetForLocalRoot()->DisplayMode();
     should_send_key_events_to_js =
         display_mode == blink::mojom::DisplayMode::kMinimalUi ||
         display_mode == blink::mojom::DisplayMode::kStandalone ||

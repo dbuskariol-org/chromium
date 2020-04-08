@@ -781,13 +781,23 @@ VisualProperties RenderWidgetHostImpl::GetVisualProperties() {
   // which are to be sent to the renderer process.
   DCHECK(view_);
 
+  // Differentiate between widgets for frames vs widgets for popups/pepper.
+  // Historically this was done by finding the RenderViewHost for the widget,
+  // but a child local root would not convert to a RenderViewHost but is for a
+  // frame.
+  const bool is_frame_widget = owner_delegate_ || owned_by_render_frame_host_;
+
   VisualProperties visual_properties;
 
   GetScreenInfo(&visual_properties.screen_info);
 
   visual_properties.is_fullscreen_granted =
       delegate_->IsFullscreenForCurrentTab();
-  visual_properties.display_mode = delegate_->GetDisplayMode(this);
+
+  if (is_frame_widget)
+    visual_properties.display_mode = delegate_->GetDisplayMode();
+  else
+    visual_properties.display_mode = blink::mojom::DisplayMode::kBrowser;
   visual_properties.zoom_level = delegate_->GetPendingPageZoomLevel();
 
   RenderViewHostDelegateView* rvh_delegate_view = delegate_->GetDelegateView();
