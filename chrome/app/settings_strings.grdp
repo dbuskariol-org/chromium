@@ -2723,19 +2723,6 @@
     </message>
   </if>
 
-  <!-- Add Supervision Dialog Strings -->
-  <if expr="chromeos">
-    <message name="IDS_SETTINGS_CLOSE_ADD_SUPERVISION_DIALOG_TITLE" desc="Title of dialog shown when a user closes the Add Supervision dialog after an account has been converted to use supervision.">
-      Sign out to finish?
-    </message>
-    <message name="IDS_SETTINGS_CLOSE_ADD_SUPERVISION_DIALOG_SIGN_OUT_BUTTON_LABEL" desc="Text of sign-out button on dialog shown when the Add Supervision flow is closed, which results in a user being signed out.">
-      Sign out
-    </message>
-    <message name="IDS_SETTINGS_CLOSE_ADD_SUPERVISION_DIALOG_CANCEL_BUTTON_LABEL" desc="Text of cancel button on dialog shown when the Add Supervision flow is closed, which results in a return to the Add Supervision flow.">
-      Cancel
-    </message>
-  </if>
-
   <!-- Web Content -->
   <message name="IDS_SETTINGS_PAGE_ZOOM_LABEL" desc="Label for the page zoom dropdown menu in settings.">
     Page zoom
