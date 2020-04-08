@@ -23,16 +23,15 @@
 #include "url/gurl.h"
 
 WebContentRunner::WebContentRunner(
-    GetContextParamsCallback get_context_params_callback,
-    sys::OutgoingDirectory* outgoing_directory)
-    : get_context_params_callback_(std::move(get_context_params_callback)) {
-  service_binding_.emplace(outgoing_directory, this);
-}
-
-WebContentRunner::WebContentRunner(fuchsia::web::ContextPtr context)
-    : context_(std::move(context)) {}
+    GetContextParamsCallback get_context_params_callback)
+    : get_context_params_callback_(std::move(get_context_params_callback)) {}
 
 WebContentRunner::~WebContentRunner() = default;
+
+void WebContentRunner::PublishRunnerService(
+    sys::OutgoingDirectory* outgoing_directory) {
+  service_binding_.emplace(outgoing_directory, this);
+}
 
 fuchsia::web::ContextPtr WebContentRunner::CreateWebContext(
     fuchsia::web::CreateContextParams context_params) {
@@ -77,32 +76,13 @@ void WebContentRunner::StartComponent(
   RegisterComponent(std::move(component));
 }
 
-void WebContentRunner::SetWebComponentCreatedCallbackForTest(
-    base::RepeatingCallback<void(WebComponent*)> callback) {
-  DCHECK(components_.empty());
-  web_component_created_callback_for_test_ = std::move(callback);
-}
-
 void WebContentRunner::DestroyComponent(WebComponent* component) {
   components_.erase(components_.find(component));
 }
 
 void WebContentRunner::RegisterComponent(
     std::unique_ptr<WebComponent> component) {
-  if (web_component_created_callback_for_test_)
-    web_component_created_callback_for_test_.Run(component.get());
-
   components_.insert(std::move(component));
-}
-
-void WebContentRunner::SetContextProviderForTest(
-    fuchsia::web::ContextProviderPtr context_provider) {
-  DCHECK(context_provider);
-  context_provider_ = std::move(context_provider);
-}
-
-void WebContentRunner::DisconnectContextForTest() {
-  context_.Unbind();
 }
 
 fuchsia::web::ContextProvider* WebContentRunner::GetContextProvider() {

@@ -29,17 +29,13 @@ class WebContentRunner : public fuchsia::sys::Runner {
   // specified OutgoingDirectory.
   // |get_context_params_callback|: Returns parameters for the Runner's
   //     web.Context.
-  // |outgoing_directory|: The directory that the Runner's services will be
-  //     published to.
-  WebContentRunner(GetContextParamsCallback get_context_params_callback,
-                   sys::OutgoingDirectory* outgoing_directory);
-
-  // Creates a Runner which launches components using the specified |context|.
-  // The caller may publish the Runner, or call StartComponent() manually to
-  // create new components with it.
-  explicit WebContentRunner(fuchsia::web::ContextPtr context);
+  explicit WebContentRunner(
+      GetContextParamsCallback get_context_params_callback);
 
   ~WebContentRunner() override;
+
+  // Publishes the fuchsia.sys.Runner service to |outgoing_directory|.
+  void PublishRunnerService(sys::OutgoingDirectory* outgoing_directory);
 
   // TODO(crbug.com/1046615): Make this static when the injected ContextProvider
   // goes away.
@@ -59,26 +55,8 @@ class WebContentRunner : public fuchsia::sys::Runner {
                       fidl::InterfaceRequest<fuchsia::sys::ComponentController>
                           controller_request) override;
 
-  // Used by tests to asynchronously access the first WebComponent.
-  void SetWebComponentCreatedCallbackForTest(
-      base::RepeatingCallback<void(WebComponent*)> callback);
-
   // Registers a WebComponent, or specialization, with this Runner.
   void RegisterComponent(std::unique_ptr<WebComponent> component);
-
-  // Overrides the environment's the ContextProvider to use.
-  // TODO(crbug.com/1046615): Use test manifests for package specification.
-  void SetContextProviderForTest(
-      fuchsia::web::ContextProviderPtr context_provider);
-
-  // Disconnects the Context used by this Runner.
-  void DisconnectContextForTest();
-
- protected:
-  base::RepeatingCallback<void(WebComponent*)>
-  web_component_created_callback_for_test() const {
-    return web_component_created_callback_for_test_;
-  }
 
  private:
   fuchsia::web::ContextProvider* GetContextProvider();
