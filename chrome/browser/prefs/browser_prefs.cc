@@ -520,6 +520,21 @@ const char kInvalidatorSavedInvalidations[] = "invalidator.saved_invalidations";
 const char kAmbientModeTopicSource[] = "settings.ambient_mode.topic_source";
 #endif  // defined(OS_CHROMEOS)
 
+// Register local state used only for migration (clearing or moving to a new
+// key).
+void RegisterLocalStatePrefsForMigration(PrefRegistrySimple* registry) {
+  registry->RegisterBooleanPref(kGCMChannelStatus, true);
+  registry->RegisterIntegerPref(kGCMChannelPollIntervalSeconds, 0);
+  registry->RegisterInt64Pref(kGCMChannelLastCheckTime, 0);
+  registry->RegisterListPref(kInvalidatorSavedInvalidations);
+  registry->RegisterStringPref(kInvalidatorInvalidationState, std::string());
+  registry->RegisterStringPref(kInvalidatorClientId, std::string());
+
+#if defined(OS_WIN)
+  registry->RegisterBooleanPref(kHasSeenWin10PromoPage, false);
+#endif
+}
+
 // Register prefs used only for migration (clearing or moving to a new key).
 void RegisterProfilePrefsForMigration(
     user_prefs::PrefRegistrySyncable* registry) {
@@ -749,8 +764,6 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
   ModuleDatabase::RegisterLocalStatePrefs(registry);
   ThirdPartyConflictsManager::RegisterLocalStatePrefs(registry);
 #endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
-
-  registry->RegisterBooleanPref(kHasSeenWin10PromoPage, false);  // DEPRECATED
 #endif  // defined(OS_WIN)
 
 #if !defined(OS_ANDROID) && !defined(OS_CHROMEOS)
@@ -770,15 +783,7 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
   RegisterBrowserViewLocalPrefs(registry);
 #endif
 
-  // Obsolete. See MigrateObsoleteBrowserPrefs().
-  registry->RegisterBooleanPref(kGCMChannelStatus, true);
-  registry->RegisterIntegerPref(kGCMChannelPollIntervalSeconds, 0);
-  registry->RegisterInt64Pref(kGCMChannelLastCheckTime, 0);
-
-  // Obsolete. See MigrateObsoleteBrowserPrefs().
-  registry->RegisterListPref(kInvalidatorSavedInvalidations);
-  registry->RegisterStringPref(kInvalidatorInvalidationState, std::string());
-  registry->RegisterStringPref(kInvalidatorClientId, std::string());
+  RegisterLocalStatePrefsForMigration(registry);
 }
 
 // Register prefs applicable to all profiles.
@@ -1067,7 +1072,7 @@ void RegisterSigninProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 #endif
 
 // This method should be periodically pruned of year+ old migrations.
-void MigrateObsoleteBrowserPrefs(Profile* profile, PrefService* local_state) {
+void MigrateObsoleteLocalStatePrefs(PrefService* local_state) {
 #if defined(OS_WIN)
   // Added 6/2019.
   local_state->ClearPref(kHasSeenWin10PromoPage);
