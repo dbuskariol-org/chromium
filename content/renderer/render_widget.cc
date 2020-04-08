@@ -1088,10 +1088,6 @@ void RenderWidget::OnCursorVisibilityChange(bool is_visible) {
   GetWebWidget()->SetCursorVisibilityState(is_visible);
 }
 
-void RenderWidget::OnFallbackCursorModeToggled(bool is_on) {
-  GetWebWidget()->OnFallbackCursorModeToggled(is_on);
-}
-
 void RenderWidget::OnMouseCaptureLost() {
   GetWebWidget()->MouseCaptureLost();
 }
@@ -3168,18 +3164,6 @@ void RenderWidget::ZoomToFindInPageRectInMainFrame(
   DCHECK(!delegate_);
   Send(new WidgetHostMsg_ZoomToFindInPageRectInMainFrame(routing_id(),
                                                          rect_to_zoom));
-}
-
-void RenderWidget::FallbackCursorModeLockCursor(bool left,
-                                                bool right,
-                                                bool up,
-                                                bool down) {
-  widget_input_handler_manager_->FallbackCursorModeLockCursor(left, right, up,
-                                                              down);
-}
-
-void RenderWidget::FallbackCursorModeSetCursorVisibility(bool visible) {
-  widget_input_handler_manager_->FallbackCursorModeSetCursorVisibility(visible);
 }
 
 void RenderWidget::SetPageScaleStateAndLimits(float page_scale_factor,

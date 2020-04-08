@@ -95,12 +95,6 @@ enum {
 class MockWidgetInputHandlerHost : public mojom::WidgetInputHandlerHost {
  public:
   MockWidgetInputHandlerHost() {}
-#if defined(OS_ANDROID)
-  MOCK_METHOD4(FallbackCursorModeLockCursor, void(bool, bool, bool, bool));
-
-  MOCK_METHOD1(FallbackCursorModeSetCursorVisibility, void(bool));
-#endif
-
   MOCK_METHOD1(SetTouchActionFromMain, void(cc::TouchAction));
 
   MOCK_METHOD3(SetWhiteListedTouchAction,

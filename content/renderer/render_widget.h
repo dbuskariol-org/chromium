@@ -414,11 +414,6 @@ class CONTENT_EXPORT RenderWidget
                                        const blink::WebRect& bounds) override;
   void ZoomToFindInPageRectInMainFrame(
       const blink::WebRect& rect_to_zoom) override;
-  void FallbackCursorModeLockCursor(bool left,
-                                    bool right,
-                                    bool up,
-                                    bool down) override;
-  void FallbackCursorModeSetCursorVisibility(bool visible) override;
   void SetPageScaleStateAndLimits(float page_scale_factor,
                                   bool is_pinch_gesture_active,
                                   float minimum,
@@ -557,7 +552,6 @@ class CONTENT_EXPORT RenderWidget
   void OnSetFocus(bool enable);
   void OnMouseCaptureLost();
   void OnCursorVisibilityChange(bool is_visible);
-  void OnFallbackCursorModeToggled(bool is_on);
   void OnSetEditCommandsForNextKeyEvent(const EditCommands& edit_commands);
   void OnImeSetComposition(
       const base::string16& text,

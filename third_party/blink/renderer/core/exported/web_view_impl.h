@@ -474,7 +474,6 @@ class CORE_EXPORT WebViewImpl final : public WebView,
   WebInputEventResult HandleInputEvent(const WebCoalescedInputEvent&);
   WebInputEventResult DispatchBufferedTouchEvents();
   void SetCursorVisibilityState(bool is_visible);
-  void OnFallbackCursorModeToggled(bool is_on);
   void ApplyViewportChanges(const ApplyViewportChangesArgs& args);
   void RecordManipulationTypeCounts(cc::ManipulationInfo info);
   void SendOverscrollEventFromImplSide(const gfx::Vector2dF& overscroll_delta,

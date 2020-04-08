@@ -179,9 +179,6 @@ class WebWidget {
   // Called to inform the WebWidget of the mouse cursor's visibility.
   virtual void SetCursorVisibilityState(bool is_visible) {}
 
-  // Inform WebWidget fallback cursor mode toggled.
-  virtual void OnFallbackCursorModeToggled(bool is_on) {}
-
   // Applies viewport related properties during a commit from the compositor
   // thread.
   virtual void ApplyViewportChanges(const cc::ApplyViewportChangesArgs& args) {}

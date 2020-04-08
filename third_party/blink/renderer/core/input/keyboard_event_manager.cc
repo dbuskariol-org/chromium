@@ -45,7 +45,6 @@ namespace blink {
 namespace {
 
 const int kVKeyProcessKey = 229;
-const int kVKeySpatNavBack = 233;
 
 bool MapKeyCodeForScroll(int key_code,
                          WebInputEvent::Modifiers modifiers,
@@ -397,8 +396,6 @@ void KeyboardEventManager::DefaultKeyboardEventHandler(
       return;
     if (event->key() == "Enter") {
       DefaultEnterEventHandler(event);
-    } else if (event->keyCode() == kVKeySpatNavBack) {
-      DefaultSpatNavBackEventHandler(event);
     }
   }
 }
@@ -514,34 +511,6 @@ void KeyboardEventManager::DefaultEscapeEventHandler(KeyboardEvent* event) {
 
   if (HTMLDialogElement* dialog = frame_->GetDocument()->ActiveModalDialog())
     dialog->DispatchEvent(*Event::CreateCancelable(event_type_names::kCancel));
-}
-
-bool KeyboardEventManager::DefaultSpatNavBackEventHandler(
-    KeyboardEvent* event) {
-  if (RuntimeEnabledFeatures::FallbackCursorModeEnabled()) {
-    bool handled = frame_->LocalFrameRoot()
-                       .GetEventHandler()
-                       .HandleFallbackCursorModeBackEvent();
-    if (handled) {
-      event->SetDefaultHandled();
-      return true;
-    }
-  }
-
-  if (IsSpatialNavigationEnabled(frame_) &&
-      !frame_->GetDocument()->InDesignMode()) {
-    Page* page = frame_->GetPage();
-    if (!page)
-      return false;
-    bool handled =
-        page->GetSpatialNavigationController().HandleEscapeKeyboardEvent(event);
-    if (handled) {
-      event->SetDefaultHandled();
-      return true;
-    }
-  }
-
-  return false;
 }
 
 void KeyboardEventManager::DefaultEnterEventHandler(KeyboardEvent* event) {
