@@ -97,7 +97,7 @@ public class WebApkInfo extends WebappInfo {
      * manifest.
      * @param intent Intent containing info about the app.
      */
-    public static WebApkInfo create(Intent intent) {
+    public static WebappInfo create(Intent intent) {
         return create(WebApkIntentDataProviderFactory.create(intent));
     }
 
@@ -115,7 +115,7 @@ public class WebApkInfo extends WebappInfo {
      * @param shareData Shared information from the share intent.
      * @param shareDataActivityClassName Name of WebAPK activity which received share intent.
      */
-    public static WebApkInfo create(String webApkPackageName, String url, int source,
+    public static WebappInfo create(String webApkPackageName, String url, int source,
             boolean forceNavigation, boolean canUseSplashFromContentProvider, ShareData shareData,
             String shareDataActivityClassName) {
         return create(WebApkIntentDataProviderFactory.create(webApkPackageName, url, source,
@@ -157,7 +157,7 @@ public class WebApkInfo extends WebappInfo {
      * @param shareData                Shared information from the share intent.
      * @param webApkVersionCode        WebAPK's version code.
      */
-    public static WebApkInfo create(String url, String scope, WebappIcon primaryIcon,
+    public static WebappInfo create(String url, String scope, WebappIcon primaryIcon,
             WebappIcon splashIcon, String name, String shortName, @WebDisplayMode int displayMode,
             int orientation, int source, long themeColor, long backgroundColor,
             int defaultBackgroundColor, boolean isPrimaryIconMaskable, boolean isSplashIconMaskable,
@@ -174,7 +174,7 @@ public class WebApkInfo extends WebappInfo {
                 shareData, shortcutItems, webApkVersionCode));
     }
 
-    private static WebApkInfo create(@Nullable BrowserServicesIntentDataProvider provider) {
+    private static WebappInfo create(@Nullable BrowserServicesIntentDataProvider provider) {
         return (provider != null) ? new WebApkInfo(provider) : null;
     }
 

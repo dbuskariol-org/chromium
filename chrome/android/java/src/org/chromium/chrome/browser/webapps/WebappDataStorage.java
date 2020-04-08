@@ -546,7 +546,7 @@ public class WebappDataStorage {
      * Returns file where WebAPK update data should be stored and stores the file name in
      * SharedPreferences.
      */
-    String createAndSetUpdateRequestFilePath(WebApkInfo info) {
+    String createAndSetUpdateRequestFilePath(WebappInfo info) {
         String filePath = WebappDirectoryManager.getWebApkUpdateFilePathForStorage(this).getPath();
         mPreferences.edit().putString(KEY_PENDING_UPDATE_FILE_PATH, filePath).apply();
         return filePath;
