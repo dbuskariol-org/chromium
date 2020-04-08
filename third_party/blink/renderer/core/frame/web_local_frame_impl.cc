@@ -2503,8 +2503,7 @@ void WebLocalFrameImpl::AddInspectorIssueImpl(
     mojom::blink::InspectorIssueCode code) {
   DCHECK(GetFrame());
   auto info = mojom::blink::InspectorIssueInfo::New(
-      code, mojom::blink::InspectorIssueDetails::New(),
-      mojom::blink::AffectedResources::New());
+      code, mojom::blink::InspectorIssueDetails::New());
   GetFrame()->GetDocument()->AddInspectorIssue(
       InspectorIssue::Create(std::move(info)));
 }
