@@ -2339,6 +2339,53 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
         },
+        "name": "site_per_process_android_browsertests",
+        "swarming": {
+          "can_use_on_swarming_builders": true,
+          "dimension_sets": [
+            {
+              "device_os": "MMB29Q",
+              "device_type": "bullhead",
+              "os": "Android"
+            }
+          ],
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+        },
+        "test": "android_browsertests",
+        "test_target": "//chrome/test:android_browsertests"
+      },
+      {
+        "args": [
+          "--site-per-process"
+        ],
+        "merge": {
+          "args": [],
+          "script": "//testing/merge_scripts/standard_gtest_merge.py"
+        },
+        "name": "site_per_process_chrome_public_test_apk",
+        "swarming": {
+          "can_use_on_swarming_builders": true,
+          "dimension_sets": [
+            {
+              "device_os": "MMB29Q",
+              "device_type": "bullhead",
+              "os": "Android"
+            }
+          ],
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 20
+        },
+        "test": "chrome_public_test_apk",
+        "test_target": "//chrome/android:chrome_public_test_apk"
+      },
+      {
+        "args": [
+          "--site-per-process"
+        ],
+        "merge": {
+          "args": [],
+          "script": "//testing/merge_scripts/standard_gtest_merge.py"
+        },
         "name": "site_per_process_components_browsertests",
         "swarming": {
           "can_use_on_swarming_builders": true,
@@ -2402,6 +2449,30 @@
         },
         "test": "content_browsertests",
         "test_target": "//content/test:content_browsertests"
+      },
+      {
+        "args": [
+          "--site-per-process"
+        ],
+        "merge": {
+          "args": [],
+          "script": "//testing/merge_scripts/standard_gtest_merge.py"
+        },
+        "name": "site_per_process_content_shell_test_apk",
+        "swarming": {
+          "can_use_on_swarming_builders": true,
+          "dimension_sets": [
+            {
+              "device_os": "MMB29Q",
+              "device_type": "bullhead",
+              "os": "Android"
+            }
+          ],
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
+          "shards": 3
+        },
+        "test": "content_shell_test_apk",
+        "test_target": "//content/shell/android:content_shell_test_apk"
       },
       {
         "args": [
