@@ -7026,10 +7026,6 @@ void RenderFrameHostImpl::GetInterface(
   if (!registry_ ||
       !registry_->TryBindInterface(interface_name, &interface_pipe)) {
     delegate_->OnInterfaceRequest(this, interface_name, &interface_pipe);
-    if (interface_pipe.is_valid()) {
-      GetContentClient()->browser()->BindInterfaceRequestFromFrame(
-          this, interface_name, std::move(interface_pipe));
-    }
   }
 }
 
