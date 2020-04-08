@@ -111,6 +111,9 @@ extern const char kAutofillEnableCompanyNameDescription[];
 extern const char kAutofillEnableLocalCardMigrationForNonSyncUserName[];
 extern const char kAutofillEnableLocalCardMigrationForNonSyncUserDescription[];
 
+extern const char kAutofillEnableSurfacingServerCardNicknameName[];
+extern const char kAutofillEnableSurfacingServerCardNicknameDescription[];
+
 extern const char kAutofillEnableToolbarStatusChipName[];
 extern const char kAutofillEnableToolbarStatusChipDescription[];
 

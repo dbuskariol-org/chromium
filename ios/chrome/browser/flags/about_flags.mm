@@ -590,6 +590,12 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
     {"qr-code-generation", flag_descriptions::kQRCodeGenerationName,
      flag_descriptions::kQRCodeGenerationDescription, flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(kQRCodeGeneration)},
+    {"autofill-enable-surfacing-server-card-nickname",
+     flag_descriptions::kAutofillEnableSurfacingServerCardNicknameName,
+     flag_descriptions::kAutofillEnableSurfacingServerCardNicknameDescription,
+     flags_ui::kOsIos,
+     FEATURE_VALUE_TYPE(
+         autofill::features::kAutofillEnableSurfacingServerCardNickname)},
 };
 
 // Add all switches from experimental flags to |command_line|.
