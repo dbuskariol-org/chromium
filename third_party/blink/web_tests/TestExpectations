@@ -6423,8 +6423,6 @@ crbug.com/1006759 http/tests/devtools/profiler/heap-snapshot-loader.js [ Pass Fa
 crbug.com/1064472 http/tests/devtools/elements/elements-tab-stops.js [ Pass Failure ]
 
 # Flaky tests blocking WPT import
-crbug.com/1049607 external/wpt/fetch/api/response/response-error-from-stream.html [ Pass Failure ]
-crbug.com/1049607 virtual/omt-worker-fetch/external/wpt/fetch/api/response/response-error-from-stream.html [ Pass Failure ]
 crbug.com/1049607 [ Linux ] external/wpt/js-self-profiling/idlharness.any.html [ Pass Failure ]
 crbug.com/1049607 [ Linux ] external/wpt/js-self-profiling/idlharness.any.worker.html [ Pass Failure ]
 crbug.com/1049607 [ Win ] external/wpt/html/semantics/selectors/pseudo-classes/link.html [ Pass Failure ]
