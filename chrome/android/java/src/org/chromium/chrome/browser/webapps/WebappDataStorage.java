@@ -263,12 +263,11 @@ public class WebappDataStorage {
             editor.putInt(KEY_VERSION, ShortcutHelper.WEBAPP_SHORTCUT_VERSION);
 
             if (info.isForWebApk()) {
-                WebApkInfo webApkInfo = (WebApkInfo) info;
-                editor.putString(KEY_WEBAPK_PACKAGE_NAME, webApkInfo.webApkPackageName());
-                editor.putString(KEY_WEBAPK_MANIFEST_URL, webApkInfo.manifestUrl());
-                editor.putInt(KEY_WEBAPK_VERSION_CODE, webApkInfo.webApkVersionCode());
+                editor.putString(KEY_WEBAPK_PACKAGE_NAME, info.webApkPackageName());
+                editor.putString(KEY_WEBAPK_MANIFEST_URL, info.manifestUrl());
+                editor.putInt(KEY_WEBAPK_VERSION_CODE, info.webApkVersionCode());
                 editor.putLong(KEY_WEBAPK_INSTALL_TIMESTAMP,
-                        fetchWebApkInstallTimestamp(webApkInfo.webApkPackageName()));
+                        fetchWebApkInstallTimestamp(info.webApkPackageName()));
             } else {
                 editor.putString(KEY_NAME, info.name());
                 editor.putString(KEY_SHORT_NAME, info.shortName());

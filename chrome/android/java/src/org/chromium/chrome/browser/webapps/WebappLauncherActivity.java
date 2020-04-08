@@ -65,7 +65,7 @@ public class WebappLauncherActivity extends Activity {
     private static final String TAG = "webapps";
 
     /** Creates intent to relaunch WebAPK. */
-    public static Intent createRelaunchWebApkIntent(Intent sourceIntent, WebApkInfo webApkInfo) {
+    public static Intent createRelaunchWebApkIntent(Intent sourceIntent, WebappInfo webApkInfo) {
         assert webApkInfo != null;
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(webApkInfo.url()));
@@ -215,7 +215,7 @@ public class WebappLauncherActivity extends Activity {
     /** Relaunches WebAPK. */
     private static void relaunchWebApk(
             Activity launchingActivity, Intent sourceIntent, @NonNull WebappInfo info) {
-        Intent launchIntent = createRelaunchWebApkIntent(sourceIntent, (WebApkInfo) info);
+        Intent launchIntent = createRelaunchWebApkIntent(sourceIntent, info);
         launchAfterDelay(
                 launchingActivity.getApplicationContext(), launchIntent, WEBAPK_LAUNCH_DELAY_MS);
         ApiCompatibilityUtils.finishAndRemoveTask(launchingActivity);

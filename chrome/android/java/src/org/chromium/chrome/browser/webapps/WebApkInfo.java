@@ -10,10 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.browser.trusted.sharing.ShareData;
 
-import org.chromium.chrome.browser.ShortcutHelper;
 import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.webapps.WebApkExtras.ShortcutItem;
-import org.chromium.webapk.lib.common.WebApkConstants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -180,96 +178,12 @@ public class WebApkInfo extends WebappInfo {
         return (provider != null) ? new WebApkInfo(provider) : null;
     }
 
-    public WebApkInfo(@NonNull BrowserServicesIntentDataProvider provider) {
-        super(provider);
-    }
-
-    /**
-     * Returns the splash icon in Bitmap form.
-     */
-    public WebappIcon splashIcon() {
-        return getWebApkExtras().splashIcon;
-    }
-
-    public boolean isSplashIconMaskable() {
-        return getWebApkExtras().isSplashIconMaskable;
-    }
-
-    /** Returns data about the WebAPK's share intent handlers. */
-    public ShareTarget shareTarget() {
-        return getWebApkExtras().shareTarget;
-    }
-
-    /**
-     * Returns the WebAPK's version code.
-     */
-    public int webApkVersionCode() {
-        return getWebApkExtras().webApkVersionCode;
-    }
-
-    @Override
-    public boolean isForWebApk() {
-        return true;
-    }
-
-    @Override
-    public String webApkPackageName() {
-        return getWebApkExtras().webApkPackageName;
-    }
-
-    @Override
-    public boolean isSplashProvidedByWebApk() {
-        return getWebApkExtras().isSplashProvidedByWebApk;
-    }
-
-    public int shellApkVersion() {
-        return getWebApkExtras().shellApkVersion;
-    }
-
-    public String manifestUrl() {
-        return getWebApkExtras().manifestUrl;
-    }
-
-    public String manifestStartUrl() {
-        return getWebApkExtras().manifestStartUrl;
-    }
-
-    public @WebApkDistributor int distributor() {
-        return getWebApkExtras().distributor;
-    }
-
-    public Map<String, String> iconUrlToMurmur2HashMap() {
-        return getWebApkExtras().iconUrlToMurmur2HashMap;
-    }
-
-    public ShareData shareData() {
-        return mProvider.getShareData();
-    }
-
-    public List<ShortcutItem> shortcutItems() {
-        return getWebApkExtras().shortcutItems;
-    }
-
-    private WebApkExtras getWebApkExtras() {
-        WebApkExtras extras = mProvider.getWebApkExtras();
-        assert extras != null;
-        return extras;
-    }
-
-    @Override
-    public void setWebappIntentExtras(Intent intent) {
-        // For launching a WebAPK Activity.
-        intent.putExtra(ShortcutHelper.EXTRA_ID, id());
-        intent.putExtra(ShortcutHelper.EXTRA_URL, url());
-        intent.putExtra(ShortcutHelper.EXTRA_SOURCE, source());
-        intent.putExtra(ShortcutHelper.EXTRA_FORCE_NAVIGATION, shouldForceNavigation());
-        intent.putExtra(WebApkConstants.EXTRA_WEBAPK_PACKAGE_NAME, webApkPackageName());
-        intent.putExtra(
-                WebApkConstants.EXTRA_SPLASH_PROVIDED_BY_WEBAPK, isSplashProvidedByWebApk());
-    }
-
     /** Returns the value if it is non-null. Returns an empty string otherwise. */
     private static String replaceNullWithEmpty(String value) {
         return (value == null) ? "" : value;
+    }
+
+    public WebApkInfo(@NonNull BrowserServicesIntentDataProvider provider) {
+        super(provider);
     }
 }
