@@ -105,6 +105,7 @@
 <translation id="2268813581635650749">ସବୁ ସାଇନ୍ ଆଉଟ୍ କରନ୍ତୁ</translation>
 <translation id="2277103315734023688">ଆଗକୁ ବଢ଼ାନ୍ତୁ</translation>
 <translation id="2292698582925480719">ସ୍କେଲ୍‌ ପ୍ରଦର୍ଶନ କରନ୍ତୁ</translation>
+<translation id="2295777434187870477">ମାଇକ୍ ଚାଲୁ ଅଛି, ଟୋଗଲ୍ କରିବା ଦ୍ୱାରା ଇନପୁଟ୍ ମ୍ୟୁଟ୍ ହୋଇଯିବ।</translation>
 <translation id="2298170939937364391">ପୂର୍ଣ୍ଣ ସ୍କ୍ରିନ୍ ମ୍ୟାଗ୍ନିଫାୟର୍ ସକ୍ଷମ କରାଯାଇଛି। ଟୋଗଲ୍ କରି ଏହାକୁ ବନ୍ଦ କରିବା ପାଇଁ ପୁଣି Ctrl+Search+M ଦବାନ୍ତୁ।</translation>
 <translation id="2302092602801625023">Family Link ଦ୍ୱାରା ଏହି ଆକାଉଣ୍ଟ ପରିଚାଳିତ ହେଉଛି</translation>
 <translation id="2303600792989757991">ୱିଣ୍ଡୋର ସାରାଂଶ ଟୋଗଲ୍ କରନ୍ତୁ</translation>
@@ -138,6 +139,7 @@
 <translation id="2658778018866295321">କ୍ଲିକ୍ କରି ଡ୍ରାଗ୍ କରନ୍ତୁ</translation>
 <translation id="2700493154570097719">ନିଜର କୀ'ବୋର୍ଡକୁ ସେଟ୍ କରନ୍ତୁ</translation>
 <translation id="2704781753052663061">ଅନ୍ୟ ୱାଇ-ଫାଇ ନେଟ୍‍ୱାର୍କଗୁଡ଼ିକୁ ଯୋଗ କରନ୍ତୁ</translation>
+<translation id="2705001408393684014">ମାଇକ୍ ଟୋଗଲ୍ କରନ୍ତୁ। <ph name="STATE_TEXT" /></translation>
 <translation id="2718395828230677721">ରାତି ଆଲୋକ</translation>
 <translation id="2727977024730340865">କମ୍-ପାୱର୍‍ଯୁକ୍ତ ଚାର୍ଜର୍। ବ୍ୟାଟେରୀ ଚାର୍ଜିଂ ନିର୍ଭରଯୋଗ୍ୟ ହୋଇନପାରେ।</translation>
 <translation id="2792498699870441125">Alt+Search</translation>
@@ -296,6 +298,7 @@
 <translation id="4665114317261903604">'ବିରକ୍ତ କରନ୍ତୁ ନାହିଁ' ଟୋଗଲ୍ କରନ୍ତୁ। <ph name="STATE_TEXT" /></translation>
 <translation id="4696813013609194136">ମାତାପିତାଙ୍କ କୋଡ୍‌ରେ ଡିଭାଇସ୍ ଅନଲକ୍ କରନ୍ତୁ</translation>
 <translation id="4702647871202761252">ଗୋପନୀୟତା ସ୍କ୍ରିନ୍ ବନ୍ଦ ଅଛି</translation>
+<translation id="4705716602320768426">ମତାମତ ଦାଖଲ କରନ୍ତୁ</translation>
 <translation id="4710243778082831592">IME ସେଟିଂସ୍</translation>
 <translation id="4731797938093519117">ମାତା-ପିତାଙ୍କର ଆକ୍ସେସ୍</translation>
 <translation id="4734965478015604180">ଭୂସମାନ୍ତର</translation>
@@ -376,6 +379,7 @@
 <translation id="5901316534475909376">Shift+Esc</translation>
 <translation id="5911909173233110115"><ph name="USERNAME" /> (<ph name="MAIL" />)</translation>
 <translation id="5916664084637901428">ଚାଲୁ</translation>
+<translation id="5920710855273935292">ମାଇକ୍ ମ୍ୟୁଟ୍ କରାଯାଇଛି।</translation>
 <translation id="5947494881799873997">ପୂର୍ବାବସ୍ଥାକୁ ଆଣନ୍ତୁ</translation>
 <translation id="595202126637698455">କାର୍ଯ୍ୟଦକ୍ଷତା ଟ୍ରେସିଂ ସକ୍ଷମ କରାଯାଇଛି</translation>
 <translation id="5957083217255311415">ମୋବାଇଲ୍ ଡାଟା ବନ୍ଦ ଅଛି।</translation>

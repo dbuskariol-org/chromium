@@ -1641,6 +1641,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="3159493096109238499">Beige</translation>
 <translation id="3160842278951476457"><ph name="ISSUED_BY" /> [<ph name="ISSUED_TO" />] (con supporto hardware)</translation>
 <translation id="3161522574479303604">Tutte le lingue</translation>
+<translation id="3162853326462195145">Account della scuola</translation>
 <translation id="3162899666601560689">I siti possono utilizzare i cookie per migliorare la tua esperienza di navigazione, ad esempio per mantenere l'accesso o memorizzare gli articoli aggiunti al carrello</translation>
 <translation id="3163201441334626963">Prodotto sconosciuto <ph name="PRODUCT_ID" /> del fornitore <ph name="VENDOR_ID" /></translation>
 <translation id="3164329792803560526">Condivisione di questa scheda con <ph name="APP_NAME" /></translation>
@@ -2037,7 +2038,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="3681311097828166361">Grazie per il tuo feedback. Adesso sei offline; il tuo rapporto verrà inviato in un secondo momento.</translation>
 <translation id="3682824389861648626">Soglia del movimento</translation>
 <translation id="3683524264665795342">Richiesta di condivisione dello schermo da parte di <ph name="APP_NAME" /></translation>
-<translation id="3686074530047028092">Account Education</translation>
 <translation id="368789413795732264">Si è verificato un errore durante la scrittura del file: <ph name="ERROR_TEXT" />.</translation>
 <translation id="3688507211863392146">Accedere in modalità di scrittura a file e cartelle aperte nell'applicazione</translation>
 <translation id="3688526734140524629">Cambia canale</translation>
@@ -5327,7 +5327,7 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="8107015733319732394">Installazione in corso del Google Play Store sul tuo dispositivo <ph name="DEVICE_TYPE" />. L'operazione potrebbe richiedere alcuni minuti.</translation>
 <translation id="8108526232944491552">{COUNT,plural, =0{Nessun cookie di terze parti}=1{È stato bloccato 1 cookie di terze parti}other{Sono stati bloccati # cookie di terze parti}}</translation>
 <translation id="810875025413331850">Nessun dispositivo trovato nelle vicinanze.</translation>
-<translation id="8114199541033039755">Torna alla schermata Home, vai indietro e cambia app usando i pulsanti in modalità tablet. Questa impostazione viene attivata quando vengono attivate le funzionalità ChromeVox o Clic automatici.</translation>
+<translation id="8114199541033039755">Torna alla schermata Home, vai indietro e cambia app usando i pulsanti in modalità tablet. Questa impostazione viene attivata quando vengono abilitate le funzionalità ChromeVox o Clic automatici.</translation>
 <translation id="8114875720387900039">Divisione in orizzontale</translation>
 <translation id="8116972784401310538">Gestione &amp;Preferiti</translation>
 <translation id="8117620576188476503">Gestisci connessioni, aggiornamenti e impostazioni dalla barra di stato. Per accedere usando la tastiera, premi ALT + MAIUSC + S.</translation>

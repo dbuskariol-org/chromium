@@ -105,6 +105,7 @@
 <translation id="2268813581635650749">सबैलाई साइन आउट गर्नुहोस्</translation>
 <translation id="2277103315734023688">अगाडि जानुहोस्</translation>
 <translation id="2292698582925480719">प्रदर्शनको अनुपात</translation>
+<translation id="2295777434187870477">माइक सक्रिय छ, टगल गर्नुले माइक म्युट गर्ने छ।</translation>
 <translation id="2298170939937364391">पूर्ण स्क्रिन म्याग्निफायर सक्षम पारियो। यसलाई निष्क्रिय पार्न फेरि Ctrl+Search+M थिच्नुहोस्।</translation>
 <translation id="2302092602801625023">यो खाता Family Link मार्फत व्यवस्थित गरिन्छ</translation>
 <translation id="2303600792989757991">सञ्झ्याल सिंहावलोकन टगल गर्नुहोस्</translation>
@@ -138,6 +139,7 @@
 <translation id="2658778018866295321">क्लिक गरेर ड्र्याग गर्नुहोस्</translation>
 <translation id="2700493154570097719">आफ्नो किबोर्ड सेट गर्नुहोस्‌</translation>
 <translation id="2704781753052663061">अन्य Wi-Fi नेटवर्कहरूमा सामेल हुनुहोस्</translation>
+<translation id="2705001408393684014">माइक टगल गर्नुहोस्। <ph name="STATE_TEXT" /></translation>
 <translation id="2718395828230677721">रात्रि प्रकाश</translation>
 <translation id="2727977024730340865">कम शक्ति भएको चार्जरमा प्लग इन गरिएको छ। ब्याट्री चार्जिङ भरपर्दो नहुन सक्छ।</translation>
 <translation id="2792498699870441125">Alt + खोज</translation>
@@ -296,6 +298,7 @@
 <translation id="4665114317261903604">बाधा नपुर्‍याउनुहोस् नामक मोड टगल गर्नुहोस्। <ph name="STATE_TEXT" /></translation>
 <translation id="4696813013609194136">अभिभावकको कोडमार्फत यन्त्र अनलक गर्नुहोस्</translation>
 <translation id="4702647871202761252">गोपनीयताको स्क्रिन निष्क्रिय छ</translation>
+<translation id="4705716602320768426">प्रतिक्रिया दिनुहोस्</translation>
 <translation id="4710243778082831592">IME का सेटिङहरू</translation>
 <translation id="4731797938093519117">अभिभावकको पहुँच</translation>
 <translation id="4734965478015604180">तेर्सो</translation>
@@ -376,6 +379,7 @@
 <translation id="5901316534475909376">Shift+Esc</translation>
 <translation id="5911909173233110115"><ph name="USERNAME" /> (<ph name="MAIL" />)</translation>
 <translation id="5916664084637901428">खुल्ला</translation>
+<translation id="5920710855273935292">माइक म्युट गरिएको छ।</translation>
 <translation id="5947494881799873997">उल्टाउनुहोस्</translation>
 <translation id="595202126637698455">प्रदर्शन ट्रेसिङ सक्षम गरियो</translation>
 <translation id="5957083217255311415">मोबाइल डेटा निष्क्रिय पारिएको छ।</translation>

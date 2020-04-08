@@ -56,6 +56,7 @@
 <translation id="1570871743947603115">Ativar/desativar Bluetooth. <ph name="STATE_TEXT" /></translation>
 <translation id="1589090746204042747">Aceda a toda a sua atividade nesta sessão.</translation>
 <translation id="1608626060424371292">Remover este utilizador</translation>
+<translation id="1632985212731562677">O acesso por comutador pode ser desativado em Definições &gt; Acessibilidade.</translation>
 <translation id="1654477262762802994">Iniciar uma consulta de voz</translation>
 <translation id="1658406695958299976">Lamentamos, mas ainda não foi possível validar a sua palavra-passe. Nota: se alterou a palavra-passe recentemente, a nova palavra-passe será aplicada quando terminar sessão. Utilize a palavra-passe antiga aqui.</translation>
 <translation id="1677472565718498478"><ph name="TIME" /> restante(s)</translation>
@@ -182,6 +183,7 @@
 <translation id="3154351730702813399">O gestor do dispositivo pode monitorizar a sua atividade de navegação:</translation>
 <translation id="3181441307743005334">O reinício poderá demorar algum tempo</translation>
 <translation id="3202010236269062730">{NUM_DEVICES,plural, =1{Ligado a um dispositivo}other{Ligado a # dispositivos}}</translation>
+<translation id="3203405173652969239">Acesso por comutador ativado</translation>
 <translation id="3207953481422525583">Definições do utilizador</translation>
 <translation id="3217205077783620295">O volume está ativado, premir o botão irá desativar o áudio.</translation>
 <translation id="3226991577105957773">E mais <ph name="COUNT" /></translation>
@@ -298,7 +300,7 @@
 <translation id="4665114317261903604">Ative/desative o modo Não incomodar. <ph name="STATE_TEXT" /></translation>
 <translation id="4696813013609194136">Desbloquear o dispositivo com o código parental</translation>
 <translation id="4702647871202761252">O ecrã de privacidade está desligado</translation>
-<translation id="4705716602320768426">Enviar comentários</translation>
+<translation id="4705716602320768426">Envie comentários</translation>
 <translation id="4710243778082831592">Definições do IME</translation>
 <translation id="4731797938093519117">Acesso parental</translation>
 <translation id="4734965478015604180">Horizontal</translation>

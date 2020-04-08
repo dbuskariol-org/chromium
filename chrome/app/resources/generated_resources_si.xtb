@@ -1639,6 +1639,7 @@
 <translation id="3159493096109238499">ළා දුඹුරු වැලි</translation>
 <translation id="3160842278951476457"><ph name="ISSUED_BY" /> [<ph name="ISSUED_TO" />] (දෘඨාංග-පිටුබලය සහිත)</translation>
 <translation id="3161522574479303604">සියලු භාෂා</translation>
+<translation id="3162853326462195145">පාසල් ගිණුම</translation>
 <translation id="3162899666601560689">වෙබ් අඩවි ඔබේ බ්‍රවුස කිරීමේ අත්දැකීම වැඩිදියුණු කිරීමට, උදාහරණයක් වශයෙන්, ඔබව පුරනය කර තබා ගැනීමට හෝ ඔබේ සාප්පු සවාරි කරත්තයේ අයිතම මතක තබා ගැනීමට කුකී භාවිත කළ හැක</translation>
 <translation id="3163201441334626963"><ph name="VENDOR_ID" /> වෙතින් නොදන්නා නිෂ්පාදනය <ph name="PRODUCT_ID" /></translation>
 <translation id="3164329792803560526">මෙම පටිත්ත <ph name="APP_NAME" /> වෙත බෙදා ගැනීම</translation>
@@ -2035,7 +2036,6 @@
 <translation id="3681311097828166361">ඔබගේ ප්‍රතිපෝෂණයට ස්තූතියි. ඔබ දැන් නොබැඳි වන අතර, ඔබේ වාර්තාව පසුව යවනු ඇත.</translation>
 <translation id="3682824389861648626">චලන සීමාන්තිකය</translation>
 <translation id="3683524264665795342"><ph name="APP_NAME" /> තිර බෙදාගැනීම් ඉල්ලීමක්</translation>
-<translation id="3686074530047028092">අධ්‍යාපන ගිණුම</translation>
 <translation id="368789413795732264">මෙම ගොනුව ලිවීමට උත්සාහ කිරීමේදී දෝෂයක් ඇති විය: <ph name="ERROR_TEXT" />.</translation>
 <translation id="3688507211863392146">ඔබ යෙදුම තුළ විවෘත කරන ගොනු සහ ෆෝල්ඩර වෙතට ලියන්න</translation>
 <translation id="3688526734140524629">නාලිකාව වෙනස් කරන්න</translation>

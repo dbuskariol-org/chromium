@@ -825,6 +825,7 @@
 <translation id="2119349053129246860"><ph name="APP" />માં ખોલો</translation>
 <translation id="2120297377148151361">પ્રવૃત્તિ અને ક્રિયાપ્રતિક્રિયાઓ</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" />ને બ્લૉક કરેલી છે</translation>
+<translation id="2121055421682309734">{COUNT,plural, =0{કુકી બ્લૉક કરેલી છે}=1{કુકી બ્લૉક કરેલી છે, જેમાં 1 અપવાદ છે}one{કુકી બ્લૉક કરેલી છે, જેમાં {COUNT} અપવાદ છે}other{કુકી બ્લૉક કરેલી છે, જેમાં {COUNT} અપવાદ છે}}</translation>
 <translation id="2121825465123208577">આકાર બદલો</translation>
 <translation id="2122305276694332719">છુપાવેલા નેટવર્ક સાથે ઑટોમૅટિક રીતે કનેક્ટ કરવાથી અન્ય લોકો તમારું ડિવાઇસ અને અન્ય નેટવર્ક સેટિંગ જોઈ શકે છે અને તે માટે સુઝાવ આપેલો નથી.</translation>
 <translation id="2123766928840368256">કોઈ અલગ ફાઇલ પસંદ કરો</translation>
@@ -2027,7 +2028,6 @@
 <translation id="3681311097828166361">તમારા પ્રતિસાદ બદલ આભાર. તમે હમણાં ઑફલાઇન છો અને તમારી રિપોર્ટ પછીથી મોકલવામાં આવશે.</translation>
 <translation id="3682824389861648626">ગતિવિધિનો થ્રેશોલ્ડ</translation>
 <translation id="3683524264665795342"><ph name="APP_NAME" /> સ્ક્રીન શેરિંગ વિનંતી</translation>
-<translation id="3686074530047028092">શિક્ષણ સંબંધિત એકાઉન્ટ</translation>
 <translation id="368789413795732264">ફાઇલ લખવાનો પ્રયાસ કરતી વખતે ભૂલ આવી હતી: <ph name="ERROR_TEXT" />.</translation>
 <translation id="3688507211863392146">તમે એપ્લિકેશનમાં ખોલી છે તે ફાઇલો અને ફોલ્ડર્સમાં લખો</translation>
 <translation id="3688526734140524629">ચેનલ બદલો</translation>

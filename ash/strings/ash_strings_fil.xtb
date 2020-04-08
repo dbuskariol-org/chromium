@@ -56,6 +56,7 @@
 <translation id="1570871743947603115">I-toggle ang Bluetooth. <ph name="STATE_TEXT" /></translation>
 <translation id="1589090746204042747">I-access ang lahat ng iyong aktibidad sa session na ito</translation>
 <translation id="1608626060424371292">Alisin ang user na ito</translation>
+<translation id="1632985212731562677">Puwedeng i-disable ang Switch Access sa Mga Setting &gt; Accessibility.</translation>
 <translation id="1654477262762802994">Magsimula ng query gamit ang boses</translation>
 <translation id="1658406695958299976">Paumanhin, hindi pa rin ma-verify ang iyong password. Tandaan: kung pinalitan mo kamakailan ang iyong password, malalapat ang bago mong password kapag nag-sign out ka, pakigamit ang lumang password dito.</translation>
 <translation id="1677472565718498478"><ph name="TIME" /> na lang ang natitira</translation>
@@ -182,6 +183,7 @@
 <translation id="3154351730702813399">Maaaring subaybayan ng admin ng device ang iyong aktibidad sa pag-browse.</translation>
 <translation id="3181441307743005334">Posibleng magtagal nang ilang sandali ang pag-restart</translation>
 <translation id="3202010236269062730">{NUM_DEVICES,plural, =1{Nakakonekta sa isang device}one{Nakakonekta sa # device}other{Nakakonekta sa # na device}}</translation>
+<translation id="3203405173652969239">Naka-enable ang Switch Access</translation>
 <translation id="3207953481422525583">Mga Setting ng User</translation>
 <translation id="3217205077783620295">Naka-on ang volume, mamu-mute ang audio kapag nag-toggle.</translation>
 <translation id="3226991577105957773">+<ph name="COUNT" /> pa</translation>

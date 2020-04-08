@@ -105,6 +105,7 @@
 <translation id="2268813581635650749">എല്ലാം സൈൻ ഔട്ട് ചെയ്യുക</translation>
 <translation id="2277103315734023688">മുന്നോട്ട് നീക്കുക</translation>
 <translation id="2292698582925480719">ഡിസ്പ്ലേ സ്കെയിൽ</translation>
+<translation id="2295777434187870477">മൈക്ക് ഓണാണ്, മാറ്റുന്നത് ഓഡിയോയെ മ്യൂട്ട് ചെയ്യും.</translation>
 <translation id="2298170939937364391">പൂർണ്ണ സ്ക്രീൻ മാഗ്നിഫയർ പ്രവർത്തനക്ഷമമാക്കി. ഇത് ഓഫാക്കാൻ Ctrl+തിരയൽ+M വീണ്ടും അമർത്തുക.</translation>
 <translation id="2302092602801625023">ഈ അക്കൗണ്ട് Family Link ഉപയോഗിച്ച് മാനേജ് ചെയ്യുന്നു</translation>
 <translation id="2303600792989757991">വിൻഡോ ചുരുക്കവിവരണം ടോഗിൾ ചെയ്യുക</translation>
@@ -138,6 +139,7 @@
 <translation id="2658778018866295321">ക്ലിക്ക് ചെയ്‌ത് വലിച്ചിടുക</translation>
 <translation id="2700493154570097719">നിങ്ങളുടെ കീബോഡ് സജ്ജീകരിക്കുക</translation>
 <translation id="2704781753052663061">മറ്റ് വൈഫൈ നെറ്റ്‍വർക്കുകളിൽ ചേരുക</translation>
+<translation id="2705001408393684014">മൈക്ക് മാറ്റുക. <ph name="STATE_TEXT" /></translation>
 <translation id="2718395828230677721">നൈറ്റ് ലൈറ്റ്</translation>
 <translation id="2727977024730340865">കുറഞ്ഞ തോതിൽ വൈദ്യുതി പ്രവഹിക്കുന്ന ചാർജ്ജറിലേക്ക് പ്ലഗ് ചെയ്‌തിരിക്കുന്നു. ബാറ്ററി ചാർജുചെയ്യൽ വിശ്വസനീയമാകണമെന്നില്ല.</translation>
 <translation id="2792498699870441125">Alt+തിരയൽ</translation>
@@ -296,6 +298,7 @@
 <translation id="4665114317261903604">ശല്യപ്പെടുത്തരുത് മോഡ് മാറ്റുക. <ph name="STATE_TEXT" /></translation>
 <translation id="4696813013609194136">രക്ഷാകർതൃ കോഡ് ഉപയോഗിച്ച് ഉപകരണം അൺലോക്ക് ചെയ്യുക</translation>
 <translation id="4702647871202761252">സ്വകാര്യതാ സ്‌ക്രീൻ ഓഫാണ്</translation>
+<translation id="4705716602320768426">ഫീഡ്‌ബാക്ക് നൽകുക</translation>
 <translation id="4710243778082831592">IME ക്രമീകരണം</translation>
 <translation id="4731797938093519117">രക്ഷാകർതൃ ആക്‌സസ്</translation>
 <translation id="4734965478015604180">സമാന്തരം</translation>
@@ -376,6 +379,7 @@
 <translation id="5901316534475909376">Shift+Esc</translation>
 <translation id="5911909173233110115"><ph name="USERNAME" /> (<ph name="MAIL" />)</translation>
 <translation id="5916664084637901428">ഓൺ ചെയ്യുക</translation>
+<translation id="5920710855273935292">മൈക്ക് മ്യൂട്ട് ചെയ്തിരിക്കുന്നു.</translation>
 <translation id="5947494881799873997">പഴയപടിയാക്കുക</translation>
 <translation id="595202126637698455">പ്രകടനം പിന്തുടരൽ പ്രവർത്തനക്ഷമമാക്കി</translation>
 <translation id="5957083217255311415">മൊബൈൽ ഡാറ്റ ഓഫാക്കി.</translation>

@@ -2028,7 +2028,6 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3681311097828166361">Vielen Dank für Ihr Feedback. Sie sind jetzt offline und Ihr Bericht wird später versendet.</translation>
 <translation id="3682824389861648626">Grenzwert für Mausbewegungen</translation>
 <translation id="3683524264665795342">Anfrage zur Bildschirmfreigabe durch <ph name="APP_NAME" /></translation>
-<translation id="3686074530047028092">Education-Konto</translation>
 <translation id="368789413795732264">Beim Versuch, in die Datei <ph name="ERROR_TEXT" /> zu schreiben, ist ein Fehler aufgetreten.</translation>
 <translation id="3688507211863392146">In Dateien und Ordner schreiben, die Sie in der Anwendung öffnen</translation>
 <translation id="3688526734140524629">Kanal ändern</translation>
@@ -2241,7 +2240,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3927787410750478258">Dieses Gerät (<ph name="DEVICE_TYPE" />) wird von <ph name="DOMAIN" /> verwaltet.</translation>
 <translation id="3927932062596804919">Ablehnen</translation>
 <translation id="3928570707778085600">Änderungen an "<ph name="FILE_OR_FOLDER_NAME" />" speichern?</translation>
-<translation id="3929426037718431833">Diese Erweiterungen können Daten dieser Website aufrufen und ändern.</translation>
+<translation id="3929426037718431833">Diese Erweiterungen können Daten dieser Website abrufen und verändern.</translation>
 <translation id="3930155420525972941">Gruppe in ein neues Fenster verschieben</translation>
 <translation id="3930737994424905957">Suche nach Geräten läuft</translation>
 <translation id="3930968231047618417">Hintergrundfarbe</translation>
@@ -2334,7 +2333,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4042863763121826131">{NUM_PAGES,plural, =1{Seite verlassen}other{Seiten verlassen}}</translation>
 <translation id="4044612648082411741">Sie müssen Ihr Zertifikatspasswort eingeben</translation>
 <translation id="404493185430269859">Standardsuchmaschine</translation>
-<translation id="4046013316139505482">Diese Erweiterungen müssen Daten dieser Website nicht aufrufen und ändern.</translation>
+<translation id="4046013316139505482">Diese Erweiterungen funktionieren, ohne Daten dieser Website abzurufen oder zu verändern.</translation>
 <translation id="4046123991198612571">Nächster Titel</translation>
 <translation id="4047726037116394521">Zur Startseite</translation>
 <translation id="4050225813016893843">Authentifizierungsmethode</translation>
