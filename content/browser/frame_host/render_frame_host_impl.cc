@@ -2303,6 +2303,7 @@ net::IsolationInfo RenderFrameHostImpl::ComputeIsolationInfoInternal(
       return net::IsolationInfo::Create(redirect_mode, top_frame_origin,
                                         frame_origin, net::SiteForCookies());
     }
+    candidate.MarkIfCrossScheme(rfh->last_committed_origin_);
   }
 
   // If |redirect_mode| is kUpdateNothing, then IsolationInfo is being computed
