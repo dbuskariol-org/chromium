@@ -9,6 +9,11 @@
 #include "base/optional.h"
 #include "url/gurl.h"
 
+namespace base {
+template <typename T>
+struct DefaultSingletonTraits;
+}
+
 namespace enterprise_connectors {
 
 // Enums representing each connector to be used as arguments so the manager can
@@ -66,8 +71,7 @@ class ConnectorsManager {
   using AnalysisSettingsCallback =
       base::OnceCallback<void(base::Optional<AnalysisSettings>)>;
 
-  ConnectorsManager();
-  ~ConnectorsManager();
+  static ConnectorsManager* GetInstance();
 
   // Validates which settings should be applied to an analysis connector event
   // against cached policies.
@@ -85,6 +89,13 @@ class ConnectorsManager {
   bool MatchURLAgainstLegacyMalwarePolicies(const GURL& url, bool upload) const;
 
  private:
+  friend struct base::DefaultSingletonTraits<ConnectorsManager>;
+
+  // Constructor and destructor are declared as private so callers use
+  // GetInstance instead.
+  ConnectorsManager();
+  ~ConnectorsManager();
+
   // Private legacy functions.
   // These functions are used to interact with legacy policies and should stay
   // private. They should be removed once legacy policies are deprecated.

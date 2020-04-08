@@ -282,8 +282,8 @@ bool DeepScanningDialogDelegate::IsEnabled(Profile* profile,
     // both the upload and download paths instead. This is fine for now since
     // the manager isn't caching anything.
     data->do_dlp_scan =
-        enterprise_connectors::ConnectorsManager()
-            .MatchURLAgainstLegacyDlpPolicies(url, /*upload*/ true);
+        enterprise_connectors::ConnectorsManager::GetInstance()
+            ->MatchURLAgainstLegacyDlpPolicies(url, /*upload*/ true);
   }
 
   // See if malware checks are needed.
@@ -296,8 +296,8 @@ bool DeepScanningDialogDelegate::IsEnabled(Profile* profile,
 
   if (data->do_malware_scan) {
     data->do_malware_scan =
-        enterprise_connectors::ConnectorsManager()
-            .MatchURLAgainstLegacyMalwarePolicies(url, /*upload*/ true);
+        enterprise_connectors::ConnectorsManager::GetInstance()
+            ->MatchURLAgainstLegacyMalwarePolicies(url, /*upload*/ true);
   }
 
   return data->do_dlp_scan || data->do_malware_scan;
@@ -309,7 +309,7 @@ void DeepScanningDialogDelegate::ShowForWebContents(
     Data data,
     CompletionCallback callback,
     DeepScanAccessPoint access_point) {
-  enterprise_connectors::ConnectorsManager().GetAnalysisSettings(
+  enterprise_connectors::ConnectorsManager::GetInstance()->GetAnalysisSettings(
       data.url, enterprise_connectors::AnalysisConnector::FILE_ATTACHED,
       base::BindOnce(&DeepScanningDialogDelegate::OnGotAnalysisSettings,
                      web_contents, std::move(data), std::move(callback),
