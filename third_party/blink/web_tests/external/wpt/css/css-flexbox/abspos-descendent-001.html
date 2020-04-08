@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="resources/flexbox.css" rel="stylesheet">
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<title>CSS Flexbox: removing abspos descendents</title>
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#flex-containers">
+<link rel="help" href="https://drafts.csswg.org/css-flexbox/#abspos-items">
+<link rel="issue" href="https://bugs.chromium.org/p/chromium/issues/detail?id=167566">
+<meta name="assert" content="This test ensures that flex item's padding doesn't disappear when an abspos descendent is removed.">
+<link href="support/flexbox.css" rel="stylesheet">
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 <script>
 window.onload = function() {
     document.body.offsetHeight;
