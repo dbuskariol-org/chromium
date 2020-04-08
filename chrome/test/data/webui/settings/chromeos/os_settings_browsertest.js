@@ -1272,6 +1272,25 @@ TEST_F('OSSettingsLanguagesPageTest', 'InputMethods', function() {
   mocha.grep(assert(os_languages_page_tests.TestNames.InputMethods)).run();
 });
 
+// eslint-disable-next-line no-var
+var OSSettingsSmartInputsPageTest = class extends OSSettingsBrowserTest {
+  /** @override */
+  get browsePreload() {
+    return super.browsePreload +
+        'chromeos/os_languages_page/smart_inputs_page.html';
+  }
+  /** @override */
+  get extraLibraries() {
+    return super.extraLibraries.concat([
+      'smart_inputs_page_test.js',
+    ]);
+  }
+};
+
+TEST_F('OSSettingsSmartInputsPageTest', 'AllJsTests', () => {
+  mocha.run();
+});
+
 // Tests for the Reset section.
 // eslint-disable-next-line no-var
 var OSSettingsResetPageTest = class extends OSSettingsBrowserTest {
