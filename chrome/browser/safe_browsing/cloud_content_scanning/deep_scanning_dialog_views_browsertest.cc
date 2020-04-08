@@ -48,8 +48,9 @@ class DeepScanningDialogViewsBehaviorBrowserTest
     expected_scan_result_ = dlp_result && malware_result;
   }
 
-  void ConstructorCalled(DeepScanningDialogViews* views) override {
-    ctor_called_timestamp_ = base::TimeTicks::Now();
+  void ConstructorCalled(DeepScanningDialogViews* views,
+                         base::TimeTicks timestamp) override {
+    ctor_called_timestamp_ = timestamp;
     dialog_ = views;
 
     // The scan should be pending when constructed.
