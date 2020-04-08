@@ -1444,7 +1444,7 @@
     },
     {
       name: "ResizeObserverUpdates",
-      status: "test",
+      status: "stable",
     },
     {
       name: "RestrictAppCacheToSecureContexts",
