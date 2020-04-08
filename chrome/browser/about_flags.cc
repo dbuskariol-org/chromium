@@ -4849,6 +4849,10 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // defined(OS_ANDROID)
 
 #if defined(OS_CHROMEOS)
+    {"launcher-settings-search", flag_descriptions::kLauncherSettingsSearchName,
+     flag_descriptions::kLauncherSettingsSearchDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(app_list_features::kLauncherSettingsSearch)},
+
     {"enable-suggested-files", flag_descriptions::kEnableSuggestedFilesName,
      flag_descriptions::kEnableSuggestedFilesDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(app_list_features::kEnableSuggestedFiles)},

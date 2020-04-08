@@ -1105,6 +1105,10 @@ const char kJavascriptHarmonyShippingDescription[] =
     "conflict with the latest JavaScript features. This flag allows disabling "
     "support of those features for compatibility with such pages.";
 
+const char kLauncherSettingsSearchName[] = "Launcher settings search";
+const char kLauncherSettingsSearchDescription[] =
+    "Enable search results for OS settings in the launcher.";
+
 const char kLegacyTLSEnforcedName[] =
     "Enforce deprecation of legacy TLS versions";
 const char kLegacyTLSEnforcedDescription[] =
