@@ -1,51 +1,34 @@
-// Copyright (c) 2011 The Chromium Authors. All rights reserved.
+// Copyright (c) 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_AGENT_H_
-#define COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_AGENT_H_
+#ifndef COMPONENTS_TRANSLATE_CONTENT_RENDERER_PER_FRAME_TRANSLATE_AGENT_H_
+#define COMPONENTS_TRANSLATE_CONTENT_RENDERER_PER_FRAME_TRANSLATE_AGENT_H_
 
-#include <memory>
-#include <string>
-
-#include "base/gtest_prod_util.h"
-#include "base/macros.h"
-#include "base/memory/weak_ptr.h"
-#include "base/strings/string16.h"
-#include "base/time/time.h"
 #include "components/translate/content/common/translate.mojom.h"
-#include "components/translate/core/common/translate_errors.h"
+#include "content/public/renderer/render_frame.h"
 #include "content/public/renderer/render_frame_observer.h"
-#include "mojo/public/cpp/bindings/receiver.h"
-#include "mojo/public/cpp/bindings/remote.h"
-#include "url/gurl.h"
-
-namespace blink {
-class WebLocalFrame;
-}
+#include "mojo/public/cpp/bindings/associated_receiver.h"
+#include "mojo/public/cpp/bindings/pending_associated_receiver.h"
+#include "third_party/blink/public/common/associated_interfaces/associated_interface_registry.h"
 
 namespace translate {
 
-// This class deals with page translation.
-// There is one TranslateAgent per RenderView.
+// This class deals with page translation. It is a RenderFrame's
+// IPC client for translation requests from the browser process.
 //
-// Note: this class only supports translation of the main frame. See
-// PerFrameTranslateAgent for sub frame translation support.
-class TranslateAgent : public content::RenderFrameObserver,
-                       public mojom::TranslateAgent {
+// This class supports translating sub frames as well as the main
+// frame. It is intended to replace TranslateAgent (which only
+// translates the main frame. Both classes will exist for a transition
+// period in order to control an experiment for proving out sub frame
+// translation.
+class PerFrameTranslateAgent : public content::RenderFrameObserver,
+                               public mojom::TranslateAgent {
  public:
-  TranslateAgent(content::RenderFrame* render_frame,
-                 int world_id,
-                 const std::string& extension_scheme);
-  ~TranslateAgent() override;
-
-  // Informs us that the page's text has been extracted.
-  void PageCaptured(const base::string16& contents);
-
-  // Lets the translation system know that we are preparing to navigate to
-  // the specified URL. If there is anything that can or should be done before
-  // this URL loads, this is the time to prepare for it.
-  void PrepareForUrl(const GURL& url);
+  PerFrameTranslateAgent(content::RenderFrame* render_frame,
+                         int world_id,
+                         blink::AssociatedInterfaceRegistry* registry);
+  ~PerFrameTranslateAgent() override;
 
   // mojom::TranslateAgent implementation.
   void GetWebLanguageDetectionDetails(
@@ -114,21 +97,20 @@ class TranslateAgent : public content::RenderFrameObserver,
   virtual int64_t ExecuteScriptAndGetIntegerResult(const std::string& script);
 
  private:
-  FRIEND_TEST_ALL_PREFIXES(TranslateAgentTest, TestBuildTranslationScript);
+  FRIEND_TEST_ALL_PREFIXES(PerFrameTranslateAgentTest,
+                           TestBuildTranslationScript);
 
   // Converts language code to the one used in server supporting list.
   static void ConvertLanguageCodeSynonym(std::string* code);
+
+  // Sets receiver for translate messages from browser process.
+  void BindReceiver(
+      mojo::PendingAssociatedReceiver<mojom::TranslateAgent> receiver);
 
   // Builds the translation JS used to translate from source_lang to
   // target_lang.
   static std::string BuildTranslationScript(const std::string& source_lang,
                                             const std::string& target_lang);
-
-  const mojo::Remote<mojom::ContentTranslateDriver>& GetTranslateHandler();
-
-  // Cleanups all states and pending callbacks associated with the current
-  // running page translation.
-  void ResetPage();
 
   // RenderFrameObserver implementation.
   void OnDestruct() override;
@@ -142,9 +124,9 @@ class TranslateAgent : public content::RenderFrameObserver,
   // posts a task to check again later.
   void CheckTranslateStatus();
 
-  // Called by TranslatePage to do the actual translation.  |count| is used to
+  // Called by TranslateFrame to do the actual translation.  |count| is used to
   // limit the number of retries.
-  void TranslatePageImpl(int count);
+  void TranslateFrameImpl(int count);
 
   // Sends a message to the browser to notify it that the translation failed
   // with |error|.
@@ -159,34 +141,17 @@ class TranslateAgent : public content::RenderFrameObserver,
   std::string source_lang_;
   std::string target_lang_;
 
-  // Time when a page langauge is determined. This is used to know a duration
-  // time from showing infobar to requesting translation.
-  base::TimeTicks language_determined_time_;
-
   // The world ID to use for script execution.
   int world_id_;
 
-  // The URL scheme for translate extensions.
-  std::string extension_scheme_;
+  mojo::AssociatedReceiver<mojom::TranslateAgent> receiver_{this};
 
-  // The task runner responsible for the translation task, freezing it
-  // when the frame is backgrounded.
-  scoped_refptr<base::SingleThreadTaskRunner> translate_task_runner_;
+  // Method factory used to make calls to TranslateFrameImpl.
+  base::WeakPtrFactory<PerFrameTranslateAgent> weak_method_factory_{this};
 
-  // The Mojo pipe for communication with the browser process. Due to a
-  // refactor, the other end of the pipe is now attached to a
-  // LanguageDetectionTabHelper (which implements the ContentTranslateDriver
-  // Mojo interface).
-  mojo::Remote<mojom::ContentTranslateDriver> translate_handler_;
-
-  mojo::Receiver<mojom::TranslateAgent> receiver_{this};
-
-  // Method factory used to make calls to TranslatePageImpl.
-  base::WeakPtrFactory<TranslateAgent> weak_method_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(TranslateAgent);
+  DISALLOW_COPY_AND_ASSIGN(PerFrameTranslateAgent);
 };
 
 }  // namespace translate
 
-#endif  // COMPONENTS_TRANSLATE_CONTENT_RENDERER_TRANSLATE_AGENT_H_
+#endif  // COMPONENTS_TRANSLATE_CONTENT_RENDERER_PER_FRAME_TRANSLATE_AGENT_H_
