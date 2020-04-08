@@ -69,7 +69,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class InstantStartTest {
     // clang-format on
     private static final String IMMEDIATE_RETURN_PARAMS = "force-fieldtrial-params=Study.Group:"
-            + ReturnToChromeExperimentsUtil.TAB_SWITCHER_ON_RETURN_MS + "/0";
+            + ReturnToChromeExperimentsUtil.TAB_SWITCHER_ON_RETURN_MS_PARAM + "/0";
     private Bitmap mBitmap;
     private int mThumbnailFetchCount;
 
