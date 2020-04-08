@@ -75,8 +75,17 @@ class ConnectorsManager {
                            AnalysisConnector connector,
                            AnalysisSettingsCallback callback);
 
+  // Public legacy functions.
+  // These functions are used to interact with legacy policies and should only
+  // be called while the connectors equivalent isn't available. They should be
+  // removed once legacy policies are deprecated.
+
+  // Check a url against the corresponding URL patterns policies.
+  bool MatchURLAgainstLegacyDlpPolicies(const GURL& url, bool upload) const;
+  bool MatchURLAgainstLegacyMalwarePolicies(const GURL& url, bool upload) const;
+
  private:
-  // Legacy functions.
+  // Private legacy functions.
   // These functions are used to interact with legacy policies and should stay
   // private. They should be removed once legacy policies are deprecated.
 
@@ -90,8 +99,6 @@ class ConnectorsManager {
   bool LegacyBlockLargeFiles(bool upload) const;
   bool LegacyBlockUnsupportedFileTypes(bool upload) const;
 
-  bool MatchURLAgainstLegacyDlpPolicies(const GURL& url, bool upload) const;
-  bool MatchURLAgainstLegacyMalwarePolicies(const GURL& url, bool upload) const;
   std::set<std::string> MatchURLAgainstLegacyPolicies(const GURL& url,
                                                       bool upload) const;
 };
