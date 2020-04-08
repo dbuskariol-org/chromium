@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_APP_LAUNCHER_APP_LAUNCHER_UTIL_H_
-#define IOS_CHROME_BROWSER_UI_APP_LAUNCHER_APP_LAUNCHER_UTIL_H_
+#ifndef IOS_CHROME_BROWSER_APP_LAUNCHER_APP_LAUNCHER_UTIL_H_
+#define IOS_CHROME_BROWSER_APP_LAUNCHER_APP_LAUNCHER_UTIL_H_
 
 #import <Foundation/Foundation.h>
 
@@ -15,4 +15,4 @@ NSSet<NSString*>* GetItmsSchemes();
 // Returns whether |url| has an app store scheme.
 bool UrlHasAppStoreScheme(const GURL& url);
 
-#endif  // IOS_CHROME_BROWSER_UI_APP_LAUNCHER_APP_LAUNCHER_UTIL_H_
+#endif  // IOS_CHROME_BROWSER_APP_LAUNCHER_APP_LAUNCHER_UTIL_H_
