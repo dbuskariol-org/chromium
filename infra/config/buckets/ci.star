@@ -9,7 +9,9 @@ ci.defaults.cores.set(8)
 ci.defaults.cpu.set(cpu.X86_64)
 ci.defaults.executable.set('recipe:chromium')
 ci.defaults.execution_timeout.set(3 * time.hour)
+ci.defaults.header.set('//consoles/chromium-header.textpb')
 ci.defaults.os.set(os.LINUX_DEFAULT)
+ci.defaults.repo.set('https://chromium.googlesource.com/chromium/src')
 ci.defaults.service_account.set(
     'chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com')
 ci.defaults.swarming_tags.set(['vpython:native-python-wrapper'])
@@ -25,9 +27,13 @@ exec('//versioned/milestones/m83/buckets/ci.star')
 
 # *** After this point everything is trunk only ***
 ci.console_view(
+    name = 'chromium',
+    include_experimental_builds = True,
+    ordering = {},
+)
+
+ci.console_view(
     name = 'chromium.win',
-    header = '//consoles/chromium-header.textpb',
-    repo = 'https://chromium.googlesource.com/chromium/src',
     ordering = {
         None: ['release', 'debug'],
         'debug|builder': ci.ordering(short_names=['64', '32']),
@@ -295,30 +301,51 @@ ci.android_fyi_builder(
 )
 
 
+
 ci.chromium_builder(
     name = 'android-archive-dbg',
     # Bump to 32 if needed.
+    console_view_entry = ci.console_view_entry(
+        category = 'android',
+        short_name = 'dbg',
+    ),
     cores = 8,
 )
 
 ci.chromium_builder(
     name = 'android-archive-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'android',
+        short_name = 'rel',
+    ),
     cores = 32,
 )
 
 ci.chromium_builder(
     name = 'linux-archive-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux',
+        short_name = 'dbg',
+    ),
     # Bump to 32 if needed.
     cores = 8,
 )
 
 ci.chromium_builder(
     name = 'linux-archive-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux',
+        short_name = 'rel',
+    ),
     cores = 32,
 )
 
 ci.chromium_builder(
     name = 'mac-archive-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = 'dbg',
+    ),
     # Bump to 8 cores if needed.
     cores = 4,
     os = os.MAC_DEFAULT,
@@ -326,29 +353,49 @@ ci.chromium_builder(
 
 ci.chromium_builder(
     name = 'mac-archive-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = 'rel',
+    ),
     os = os.MAC_DEFAULT,
 )
 
 ci.chromium_builder(
     name = 'win-archive-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'win|dbg',
+        short_name = '64',
+    ),
     cores = 32,
     os = os.WINDOWS_DEFAULT,
 )
 
 ci.chromium_builder(
     name = 'win-archive-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'win|rel',
+        short_name = '64',
+    ),
     cores = 32,
     os = os.WINDOWS_DEFAULT,
 )
 
 ci.chromium_builder(
     name = 'win32-archive-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'win|dbg',
+        short_name = '32',
+    ),
     cores = 32,
     os = os.WINDOWS_DEFAULT,
 )
 
 ci.chromium_builder(
     name = 'win32-archive-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'win|rel',
+        short_name = '32',
+    ),
     cores = 32,
     os = os.WINDOWS_DEFAULT,
 )
