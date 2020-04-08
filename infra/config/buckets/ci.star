@@ -33,6 +33,16 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.mac',
+    ordering = {
+        None: ['release'],
+        'release': ci.ordering(short_names=['bld']),
+        'debug': ci.ordering(short_names=['bld']),
+        'ios|default': ci.ordering(short_names=['dev', 'sim']),
+    },
+)
+
+ci.console_view(
     name = 'chromium.win',
     ordering = {
         None: ['release', 'debug'],
@@ -1689,11 +1699,19 @@ ci.linux_builder(
 
 ci.mac_ios_builder(
     name = 'ios-device',
+    console_view_entry = ci.console_view_entry(
+        category = 'ios|default',
+        short_name = 'dev',
+    ),
     executable = 'recipe:chromium',
 )
 
 ci.mac_ios_builder(
     name = 'ios-simulator-noncq',
+    console_view_entry = ci.console_view_entry(
+        category = 'ios|default',
+        short_name = 'non',
+    ),
 )
 
 
