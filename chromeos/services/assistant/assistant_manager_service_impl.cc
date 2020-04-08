@@ -322,6 +322,9 @@ void AssistantManagerServiceImpl::RegisterAlarmsTimersListener() {
             assistant_client::AlarmTimerManager::EventActionType ignore) {
           listener.Run();
         });
+
+    // Force sync initial alarm/timer state.
+    OnAlarmTimerStateChanged();
   }
 }
 
