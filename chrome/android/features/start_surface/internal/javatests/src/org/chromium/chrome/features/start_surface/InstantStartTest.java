@@ -151,8 +151,15 @@ public class InstantStartTest {
      */
     @Test
     @SmallTest
-    @CommandLineFlags.Add(ChromeSwitches.DISABLE_NATIVE_INITIALIZATION)
+    // clang-format off
+    @Features.EnableFeatures({ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID + "<Study"})
+    @CommandLineFlags.Add({ChromeSwitches.DISABLE_NATIVE_INITIALIZATION,
+            "force-fieldtrials=Study/Group",
+            "force-fieldtrial-params=Study.Group:allow_to_refetch/true/thumbnail_aspect_ratio/2.0"})
     public void fetchThumbnailsPreNativeTest() {
+        // clang-format on
+        Assert.assertTrue(TabContentManager.ALLOW_TO_REFETCH_TAB_THUMBNAIL_VARIATION.getValue());
+
         int tabId = 0;
         mThumbnailFetchCount = 0;
         Callback<Bitmap> thumbnailFetchListener = (bitmap) -> {
