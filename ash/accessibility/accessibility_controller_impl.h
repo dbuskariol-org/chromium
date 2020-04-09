@@ -59,6 +59,7 @@ class ASH_EXPORT AccessibilityControllerImpl : public AccessibilityController,
     KCursorHighlight,
     kDictation,
     kFocusHighlight,
+    kFloatingMenu,
     kFullscreenMagnifier,
     kDockedMagnifier,
     kHighContrast,
@@ -168,6 +169,7 @@ class ASH_EXPORT AccessibilityControllerImpl : public AccessibilityController,
   FeatureWithDialog& dictation() const;
   Feature& focus_highlight() const;
   FeatureWithDialog& fullscreen_magnifier() const;
+  Feature& floating_menu() const;
   FeatureWithDialog& docked_magnifier() const;
   FeatureWithDialog& high_contrast() const;
   Feature& large_cursor() const;

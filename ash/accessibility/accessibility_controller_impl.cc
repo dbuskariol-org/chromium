@@ -91,6 +91,8 @@ const FeatureData kFeatures[] = {
      &kDictationMenuIcon},
     {FeatureType::kFocusHighlight, prefs::kAccessibilityFocusHighlightEnabled,
      nullptr, /* conflicting_feature= */ FeatureType::kSpokenFeedback},
+    {FeatureType::kFloatingMenu, prefs::kAccessibilityFloatingMenuEnabled,
+     nullptr},
     {FeatureType::kFullscreenMagnifier,
      prefs::kAccessibilityScreenMagnifierEnabled,
      &kSystemMenuAccessibilityFullscreenMagnifierIcon},
@@ -586,6 +588,9 @@ void AccessibilityControllerImpl::RegisterProfilePrefs(
       prefs::kAccessibilityDictationEnabled, false,
       user_prefs::PrefRegistrySyncable::SYNCABLE_OS_PREF);
   registry->RegisterBooleanPref(
+      prefs::kAccessibilityFloatingMenuEnabled, false,
+      user_prefs::PrefRegistrySyncable::SYNCABLE_OS_PREF);
+  registry->RegisterBooleanPref(
       prefs::kAccessibilityFocusHighlightEnabled, false,
       user_prefs::PrefRegistrySyncable::SYNCABLE_OS_PREF);
   registry->RegisterBooleanPref(
@@ -801,6 +806,11 @@ AccessibilityControllerImpl::dictation() const {
 AccessibilityControllerImpl::Feature&
 AccessibilityControllerImpl::focus_highlight() const {
   return GetFeature(FeatureType::kFocusHighlight);
+}
+
+AccessibilityControllerImpl::Feature&
+AccessibilityControllerImpl::floating_menu() const {
+  return GetFeature(FeatureType::kFloatingMenu);
 }
 
 AccessibilityControllerImpl::FeatureWithDialog&
@@ -1765,6 +1775,8 @@ void AccessibilityControllerImpl::UpdateFeatureFromPref(FeatureType feature) {
       UpdateAccessibilityHighlightingFromPrefs();
       break;
     case FeatureType::kDictation:
+      break;
+    case FeatureType::kFloatingMenu:
       break;
     case FeatureType::kFocusHighlight:
       UpdateAccessibilityHighlightingFromPrefs();

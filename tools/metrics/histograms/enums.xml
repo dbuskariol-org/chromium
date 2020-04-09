@@ -19952,6 +19952,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="688" label="ManagedGuestSessionAutoLaunchNotificationReduced"/>
   <int value="689" label="SystemFeaturesDisableList"/>
   <int value="690" label="CrostiniArcAdbSideloadingAllowed"/>
+  <int value="691" label="FloatingAccessibilityMenuEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
