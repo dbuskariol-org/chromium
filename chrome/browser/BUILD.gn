@@ -3618,14 +3618,14 @@ jumbo_static_library("browser") {
       "signin/signin_promo.h",
       "signin/signin_ui_util.cc",
       "signin/signin_ui_util.h",
-      "soda/soda_service.cc",
-      "soda/soda_service.h",
-      "soda/soda_service_factory.cc",
-      "soda/soda_service_factory.h",
       "speech/extension_api/tts_extension_api_constants.cc",  # Should be moved
                                                               # to extensions
                                                               # section?
       "speech/extension_api/tts_extension_api_constants.h",
+      "speech/speech_recognition_service.cc",
+      "speech/speech_recognition_service.h",
+      "speech/speech_recognition_service_factory.cc",
+      "speech/speech_recognition_service_factory.h",
       "ssl/ssl_client_auth_observer.cc",
       "ssl/ssl_client_auth_observer.h",
       "status_icons/desktop_notification_balloon.cc",

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/sandbox/linux/bpf_soda_policy_linux.h"
+#include "services/service_manager/sandbox/linux/bpf_speech_recognition_policy_linux.h"
 
 #include "sandbox/linux/bpf_dsl/bpf_dsl.h"
 #include "sandbox/linux/syscall_broker/broker_process.h"
@@ -16,10 +16,11 @@ using sandbox::syscall_broker::BrokerProcess;
 
 namespace service_manager {
 
-SodaProcessPolicy::SodaProcessPolicy() = default;
-SodaProcessPolicy::~SodaProcessPolicy() = default;
+SpeechRecognitionProcessPolicy::SpeechRecognitionProcessPolicy() = default;
+SpeechRecognitionProcessPolicy::~SpeechRecognitionProcessPolicy() = default;
 
-ResultExpr SodaProcessPolicy::EvaluateSyscall(int system_call_number) const {
+ResultExpr SpeechRecognitionProcessPolicy::EvaluateSyscall(
+    int system_call_number) const {
   switch (system_call_number) {
 #if defined(__NR_eventfd2)
     case __NR_eventfd2:

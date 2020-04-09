@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/services/soda/soda_recognizer_impl.h"
+#include "chrome/services/speech/speech_recognition_recognizer_impl.h"
 
 #include "base/bind.h"
 #include "components/soda/constants.h"
@@ -17,20 +17,20 @@
 #include "chrome/services/soda/internal/soda_client.h"
 #endif  // BUILDFLAG(ENABLE_SODA)
 
-namespace soda {
+namespace speech {
 
 namespace {
 
 #if BUILDFLAG(ENABLE_SODA)
 // Callback executed by the SODA library on a speech recognition event. The
-// callback handle is a void pointer to the SodaRecognizerImpl that owns the
-// SODA instance. SodaRecognizerImpl owns the SodaClient which owns the instance
-// of SODA and their sequential destruction order ensures that this callback
-// will never be called with an invalid callback handle to the
-// SodaRecognizerImpl.
+// callback handle is a void pointer to the SpeechRecognitionRecognizerImpl that
+// owns the SODA instance. SpeechRecognitionRecognizerImpl owns the SodaClient
+// which owns the instance of SODA and their sequential destruction order
+// ensures that this callback will never be called with an invalid callback
+// handle to the SpeechRecognitionRecognizerImpl.
 void RecognitionCallback(const char* result, void* callback_handle) {
   DCHECK(callback_handle);
-  static_cast<SodaRecognizerImpl*>(callback_handle)
+  static_cast<SpeechRecognitionRecognizerImpl*>(callback_handle)
       ->recognition_event_callback()
       .Run(std::string(result));
 }
@@ -38,31 +38,35 @@ void RecognitionCallback(const char* result, void* callback_handle) {
 
 }  // namespace
 
-SodaRecognizerImpl::~SodaRecognizerImpl() = default;
+SpeechRecognitionRecognizerImpl::~SpeechRecognitionRecognizerImpl() = default;
 
-void SodaRecognizerImpl::Create(
-    mojo::PendingReceiver<media::mojom::SodaRecognizer> receiver,
-    mojo::PendingRemote<media::mojom::SodaRecognizerClient> remote) {
+void SpeechRecognitionRecognizerImpl::Create(
+    mojo::PendingReceiver<media::mojom::SpeechRecognitionRecognizer> receiver,
+    mojo::PendingRemote<media::mojom::SpeechRecognitionRecognizerClient>
+        remote) {
   mojo::MakeSelfOwnedReceiver(
-      base::WrapUnique(new SodaRecognizerImpl(std::move(remote))),
+      base::WrapUnique(new SpeechRecognitionRecognizerImpl(std::move(remote))),
       std::move(receiver));
 }
 
-void SodaRecognizerImpl::OnRecognitionEvent(const std::string& result) {
-  client_remote_->OnSodaRecognitionEvent(result);
+void SpeechRecognitionRecognizerImpl::OnRecognitionEvent(
+    const std::string& result) {
+  client_remote_->OnSpeechRecognitionRecognitionEvent(result);
 }
 
-SodaRecognizerImpl::SodaRecognizerImpl(
-    mojo::PendingRemote<media::mojom::SodaRecognizerClient> remote)
+SpeechRecognitionRecognizerImpl::SpeechRecognitionRecognizerImpl(
+    mojo::PendingRemote<media::mojom::SpeechRecognitionRecognizerClient> remote)
     : client_remote_(std::move(remote)) {
-  recognition_event_callback_ = media::BindToCurrentLoop(base::Bind(
-      &SodaRecognizerImpl::OnRecognitionEvent, weak_factory_.GetWeakPtr()));
+  recognition_event_callback_ = media::BindToCurrentLoop(
+      base::Bind(&SpeechRecognitionRecognizerImpl::OnRecognitionEvent,
+                 weak_factory_.GetWeakPtr()));
 #if BUILDFLAG(ENABLE_SODA)
-  soda_client_ = std::make_unique<SodaClient>(GetSodaBinaryPath());
+  soda_client_ = std::make_unique<soda::SodaClient>(GetSodaBinaryPath());
 #endif  // BUILDFLAG(ENABLE_SODA)
 }
 
-void SodaRecognizerImpl::SendAudioToSoda(media::mojom::AudioDataS16Ptr buffer) {
+void SpeechRecognitionRecognizerImpl::SendAudioToSpeechRecognitionService(
+    media::mojom::AudioDataS16Ptr buffer) {
   int channel_count = buffer->channel_count;
   int frame_count = buffer->frame_count;
   int sample_rate = buffer->sample_rate;
@@ -96,4 +100,4 @@ void SodaRecognizerImpl::SendAudioToSoda(media::mojom::AudioDataS16Ptr buffer) {
 #endif  // BUILDFLAG(ENABLE_SODA)
 }
 
-}  // namespace soda
+}  // namespace speech

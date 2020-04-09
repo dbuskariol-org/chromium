@@ -117,7 +117,7 @@
 #if !defined(OS_ANDROID)
 #include "content/browser/installedapp/installed_app_provider_impl.h"
 #include "content/public/common/content_switches.h"
-#include "media/mojo/mojom/soda_service.mojom.h"
+#include "media/mojo/mojom/speech_recognition_service.mojom.h"
 #include "third_party/blink/public/mojom/hid/hid.mojom.h"
 #include "third_party/blink/public/mojom/serial/serial.mojom.h"
 #endif
@@ -669,8 +669,8 @@ void PopulateBinderMapWithContext(
   map->Add<blink::mojom::AnchorElementMetricsHost>(base::BindRepeating(
       &EmptyBinderForFrame<blink::mojom::AnchorElementMetricsHost>));
 #if !defined(OS_ANDROID)
-  map->Add<media::mojom::SodaContext>(
-      base::BindRepeating(&EmptyBinderForFrame<media::mojom::SodaContext>));
+  map->Add<media::mojom::SpeechRecognitionContext>(base::BindRepeating(
+      &EmptyBinderForFrame<media::mojom::SpeechRecognitionContext>));
 #endif
 #if BUILDFLAG(ENABLE_UNHANDLED_TAP)
   map->Add<blink::mojom::UnhandledTapNotifier>(base::BindRepeating(

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/utility/soda/soda_sandbox_hook_linux.h"
+#include "content/utility/speech/speech_recognition_sandbox_hook_linux.h"
 
 #include <dlfcn.h>
 
@@ -13,10 +13,11 @@
 using sandbox::syscall_broker::BrokerFilePermission;
 using sandbox::syscall_broker::MakeBrokerCommandSet;
 
-namespace soda {
+namespace speech {
 
 namespace {
 
+// Gets the file permissions required by the Speech On-Device API (SODA).
 std::vector<BrokerFilePermission> GetSodaFilePermissions(
     base::FilePath latest_version_dir) {
   std::vector<BrokerFilePermission> permissions{
@@ -35,7 +36,8 @@ std::vector<BrokerFilePermission> GetSodaFilePermissions(
 
 }  // namespace
 
-bool SodaPreSandboxHook(service_manager::SandboxLinux::Options options) {
+bool SpeechRecognitionPreSandboxHook(
+    service_manager::SandboxLinux::Options options) {
   void* soda_library = dlopen(GetSodaBinaryPath().value().c_str(),
                               RTLD_NOW | RTLD_GLOBAL | RTLD_NODELETE);
   DCHECK(soda_library);
@@ -55,4 +57,4 @@ bool SodaPreSandboxHook(service_manager::SandboxLinux::Options options) {
   return true;
 }
 
-}  // namespace soda
+}  // namespace speech

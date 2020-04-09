@@ -2,17 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_UTILITY_SODA_SODA_SANDBOX_HOOK_LINUX_H_
-#define CONTENT_UTILITY_SODA_SODA_SANDBOX_HOOK_LINUX_H_
+#ifndef CONTENT_UTILITY_SPEECH_SPEECH_RECOGNITION_SANDBOX_HOOK_LINUX_H_
+#define CONTENT_UTILITY_SPEECH_SPEECH_RECOGNITION_SANDBOX_HOOK_LINUX_H_
 
 #include "services/service_manager/sandbox/linux/sandbox_linux.h"
 
-namespace soda {
+namespace speech {
 
 // Opens the libsoda.so binary and grants broker file permissions to the
 // necessary files required by the binary.
-bool SodaPreSandboxHook(service_manager::SandboxLinux::Options options);
+bool SpeechRecognitionPreSandboxHook(
+    service_manager::SandboxLinux::Options options);
 
-}  // namespace soda
+}  // namespace speech
 
-#endif  // CONTENT_UTILITY_SODA_SODA_SANDBOX_HOOK_LINUX_H_
+#endif  // CONTENT_UTILITY_SPEECH_SPEECH_RECOGNITION_SANDBOX_HOOK_LINUX_H_

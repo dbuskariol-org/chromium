@@ -2,10 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-source_set("soda_sandbox_hook") {
+source_set("speech_recognition_sandbox_hook") {
   sources = [
-    "soda_sandbox_hook_linux.cc",
-    "soda_sandbox_hook_linux.h",
+    "speech_recognition_sandbox_hook_linux.cc",
+    "speech_recognition_sandbox_hook_linux.h",
   ]
 
   deps = [
