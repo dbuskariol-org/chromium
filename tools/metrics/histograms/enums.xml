@@ -42719,6 +42719,26 @@ Called by update_use_counter_css.py.-->
   <int value="139" label="AlignCenter"/>
 </enum>
 
+<enum name="MarketingOptInBackendConnectorEvent">
+  <summary>
+    An event that occurs on the MarketingBackendConnector used in the OOBE
+    MarketingOptInScreen.
+  </summary>
+  <int value="0" label="Request successful"/>
+  <int value="1" label="Internal Server Error"/>
+  <int value="2" label="Request Timeout Error"/>
+  <int value="3" label="Authentication Error"/>
+  <int value="4" label="Other Error"/>
+</enum>
+
+<enum name="MarketingOptInScreenEvent">
+  <summary>Opt-in actions that occur on the OOBE MarketingOptInScreen.</summary>
+  <int value="0" label="Opt-in when the default is opt-in"/>
+  <int value="1" label="Opt-in when the default is opt-out"/>
+  <int value="2" label="Opt-out when the default is opt-in"/>
+  <int value="3" label="Opt-out when the default is opt-out"/>
+</enum>
+
 <enum name="MarkHttpAsStatus">
   <obsolete>
     Deprecated 12/2017.
