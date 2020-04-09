@@ -511,6 +511,7 @@ if (is_android) {
       "../browser/metrics/metrics_service_user_demographics_browsertest.cc",
       "../browser/net/cert_verify_proc_browsertest.cc",
       "../browser/profiles/profile_browsertest_android.cc",
+      "../browser/ssl/chrome_security_state_client_browsertest.cc",
       "../browser/ssl/crlset_browsertest.cc",
       "android/browsertests_apk/android_browsertests_jni_onload.cc",
       "base/android/android_browser_test_browsertest_android.cc",
