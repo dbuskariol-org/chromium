@@ -91,7 +91,6 @@ external/wpt/css/compositing/root-element-background-transparency.html [ Failure
 # Tests temporarily disabled with Site Isolation - test issues or test harness
 # issues (e.g. missing OOPIF support in the test harness).
 # TODO(lukasza, alexmos): Burn down this list.
-crbug.com/665058 http/tests/local/drag-over-remote-content.html [ Crash Timeout ]
 crbug.com/771003 http/tests/security/mixedContent/insecure-iframe-in-main-frame.html [ Failure ]
 
 crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.https.html [ Timeout ]
