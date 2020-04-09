@@ -174,6 +174,38 @@ ci.console_view(
 )
 
 ci.console_view(
+    name ='chromium.fuzz',
+    ordering = {
+        None: [
+            'afl',
+            'win asan',
+            'mac asan',
+            'cros asan',
+            'linux asan',
+            'libfuzz',
+            'linux msan',
+            'linux tsan',
+        ],
+        '*config*': ci.ordering(short_names=['dbg', 'rel']),
+        'win asan': '*config*',
+        'mac asan': '*config*',
+        'linux asan': '*config*',
+        'linux asan|x64 v8-ARM': '*config*',
+        'libfuzz': ci.ordering(short_names=[
+            'chromeos-asan',
+            'linux32',
+            'linux32-dbg',
+            'linux',
+            'linux-dbg',
+            'linux-msan',
+            'linux-ubsan',
+            'mac-asan',
+            'win-asan',
+        ]),
+    },
+)
+
+ci.console_view(
     name = 'chromium.gpu',
     ordering = {
         None: ['Windows', 'Mac', 'Linux'],
@@ -1155,6 +1187,10 @@ ci.dawn_builder(
 
 ci.fuzz_builder(
     name = 'ASAN Debug',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux asan',
+        short_name = 'dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1162,6 +1198,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'ASan Debug (32-bit x86 with V8-ARM)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux asan|x64 v8-ARM',
+        short_name = 'dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1169,6 +1209,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'ASAN Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux asan',
+        short_name = 'rel',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 5,
     ),
@@ -1176,6 +1220,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'ASan Release (32-bit x86 with V8-ARM)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux asan|x64 v8-ARM',
+        short_name = 'rel',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1183,6 +1231,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'ASAN Release Media',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux asan',
+        short_name = 'med',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1190,6 +1242,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'Afl Upload Linux ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'afl',
+        short_name = 'afl',
+    ),
     executable = 'recipe:chromium_afl',
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
@@ -1198,6 +1254,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'ASan Release Media (32-bit x86 with V8-ARM)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux asan|x64 v8-ARM',
+        short_name = 'med',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1205,6 +1265,9 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'ChromiumOS ASAN Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'cros asan',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 6,
     ),
@@ -1212,6 +1275,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'MSAN Release (chained origins)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux msan',
+        short_name = 'org',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1219,6 +1286,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'MSAN Release (no origins)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux msan',
+        short_name = 'rel',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1227,6 +1298,10 @@ ci.fuzz_builder(
 ci.fuzz_builder(
     name = 'Mac ASAN Release',
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'mac asan',
+        short_name = 'rel',
+    ),
     cores = 4,
     os = os.MAC_DEFAULT,
     triggering_policy = scheduler.greedy_batching(
@@ -1237,6 +1312,10 @@ ci.fuzz_builder(
 ci.fuzz_builder(
     name = 'Mac ASAN Release Media',
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'mac asan',
+        short_name = 'med',
+    ),
     cores = 4,
     os = os.MAC_DEFAULT,
     triggering_policy = scheduler.greedy_batching(
@@ -1246,6 +1325,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'TSAN Debug',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux tsan',
+        short_name = 'dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1253,6 +1336,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'TSAN Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux tsan',
+        short_name = 'rel',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 3,
     ),
@@ -1260,6 +1347,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'UBSan Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux UBSan',
+        short_name = 'rel',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1267,6 +1358,10 @@ ci.fuzz_builder(
 
 ci.fuzz_builder(
     name = 'UBSan vptr Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux UBSan',
+        short_name = 'vpt',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 4,
     ),
@@ -1275,6 +1370,10 @@ ci.fuzz_builder(
 ci.fuzz_builder(
     name = 'Win ASan Release',
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'win asan',
+        short_name = 'rel',
+    ),
     os = os.WINDOWS_DEFAULT,
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 7,
@@ -1284,6 +1383,10 @@ ci.fuzz_builder(
 ci.fuzz_builder(
     name = 'Win ASan Release Media',
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'win asan',
+        short_name = 'med',
+    ),
     os = os.WINDOWS_DEFAULT,
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 6,
@@ -1293,6 +1396,10 @@ ci.fuzz_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Chrome OS ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'chromeos-asan',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 3,
     ),
@@ -1300,6 +1407,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'linux',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 5,
     ),
@@ -1307,6 +1418,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux ASan Debug',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'linux-dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 5,
     ),
@@ -1314,6 +1429,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux MSan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'linux-msan',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 5,
     ),
@@ -1323,6 +1442,10 @@ ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux UBSan',
     # Do not use builderless for this (crbug.com/980080).
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'linux-ubsan',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 5,
     ),
@@ -1330,6 +1453,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux V8-ARM64 ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'arm64',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 1,
     ),
@@ -1337,6 +1464,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux V8-ARM64 ASan Debug',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'arm64-dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 1,
     ),
@@ -1344,6 +1475,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux32 ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'linux32',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 3,
     ),
@@ -1351,6 +1486,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux32 ASan Debug',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'linux32-dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 3,
     ),
@@ -1358,6 +1497,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux32 V8-ARM ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'arm',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 1,
     ),
@@ -1365,6 +1508,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Linux32 V8-ARM ASan Debug',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'arm-dbg',
+    ),
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 1,
     ),
@@ -1372,6 +1519,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Mac ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'mac-asan',
+    ),
     cores = 24,
     execution_timeout = 4 * time.hour,
     os = os.MAC_DEFAULT,
@@ -1379,6 +1530,10 @@ ci.fuzz_libfuzzer_builder(
 
 ci.fuzz_libfuzzer_builder(
     name = 'Libfuzzer Upload Windows ASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'libfuzz',
+        short_name = 'win-asan',
+    ),
     os = os.WINDOWS_DEFAULT,
     triggering_policy = scheduler.greedy_batching(
         max_concurrent_invocations = 3,

@@ -104,7 +104,6 @@ exec('//buckets/webrtc.fyi.star')
 
 exec('//consoles/android.packager.star')
 exec('//consoles/angle.try.star')
-exec('//consoles/chromium.fuzz.star')
 exec('//consoles/chromium.goma.star')
 exec('//consoles/chromium.goma.fyi.star')
 exec('//consoles/chromium.goma.migration.star')
