@@ -3413,8 +3413,8 @@ bool AXObject::OnNativeScrollToMakeVisibleAction() const {
   // Node might not have a LayoutObject due to the fact that it is in a locked
   // subtree. Force the update to create the LayoutObject (and update position
   // information) for this node.
-  DisplayLockUtilities::ScopedChainForcedUpdate scoped_force_update(node);
-  GetDocument()->UpdateStyleAndLayout(DocumentUpdateReason::kDisplayLock);
+  GetDocument()->UpdateStyleAndLayoutForNode(
+      node, DocumentUpdateReason::kDisplayLock);
 
   LayoutObject* layout_object = node->GetLayoutObject();
   if (!layout_object)
