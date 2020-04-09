@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.favicon;
+package org.chromium.components.favicon;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,40 +11,39 @@ import android.support.test.filters.SmallTest;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.chromium.base.library_loader.LibraryLoader;
+import org.chromium.base.library_loader.LibraryProcessType;
+import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.Feature;
-import org.chromium.chrome.test.ChromeBrowserTestRule;
-import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 
 /**
- * Unit tests for RoundedIconGenerator.
+ * Unit tests for FaviconFallbackGenerator.
  */
-@RunWith(ChromeJUnit4ClassRunner.class)
-public class RoundedIconGeneratorTest {
-    @Rule
-    public final ChromeBrowserTestRule mBrowserTestRule = new ChromeBrowserTestRule();
-
+@RunWith(BaseJUnit4ClassRunner.class)
+public class FaviconFallbackGeneratorTest {
     private Context mContext;
 
     @Before
     public void setUp() {
         mContext = InstrumentationRegistry.getTargetContext();
+        LibraryLoader.getInstance().setLibraryProcessType(LibraryProcessType.PROCESS_BROWSER);
+        LibraryLoader.getInstance().ensureInitialized();
     }
 
     private String getIconTextForUrl(String url, boolean includePrivateRegistries) {
-        return RoundedIconGenerator.getIconTextForUrl(url, includePrivateRegistries);
+        return FaviconFallbackGenerator.getIconTextForUrl(url, includePrivateRegistries);
     }
 
     /**
-     * Verifies that RoundedIconGenerator's ability to generate icons based on URLs considers the
-     * appropriate parts of the URL for the icon to generate.
+     * Verifies that FaviconFallbackGenerator's ability to generate icons based on URLs considers
+     * the appropriate parts of the URL for the icon to generate.
      */
     @Test
     @SmallTest
-    @Feature({"Browser", "RoundedIconGenerator"})
+    @Feature({"Browser", "FaviconFallbackGenerator"})
     public void testGetIconTextForUrl() {
         // Verify valid domains when including private registries.
         Assert.assertEquals("google.com", getIconTextForUrl("https://google.com/", true));
@@ -75,14 +74,14 @@ public class RoundedIconGeneratorTest {
      */
     @Test
     @SmallTest
-    @Feature({"Browser", "RoundedIconGenerator"})
+    @Feature({"Browser", "FaviconFallbackGenerator"})
     public void testGenerateIconForText() {
         final int iconSizeDp = 32;
         final int iconCornerRadiusDp = 20;
         final int iconTextSizeDp = 12;
 
         int iconColor = Color.GRAY;
-        RoundedIconGenerator generator = new RoundedIconGenerator(mContext.getResources(),
+        FaviconFallbackGenerator generator = new FaviconFallbackGenerator(mContext.getResources(),
                 iconSizeDp, iconSizeDp, iconCornerRadiusDp, iconColor, iconTextSizeDp);
 
         Assert.assertTrue(generator.generateIconForText("") != null);

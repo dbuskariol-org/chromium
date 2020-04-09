@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.favicon;
+package org.chromium.components.favicon;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -28,8 +28,8 @@ import java.util.Locale;
  * Generator for transparent icons containing a rounded rectangle with a given background color,
  * having a centered character drawn on top of it.
  */
-public class RoundedIconGenerator {
-    private static final String TAG = "RoundedIconGenerator";
+public class FaviconFallbackGenerator {
+    private static final String TAG = "FaviconFallbackGenerator";
 
     private final int mIconWidthPx;
     private final int mIconHeightPx;
@@ -53,7 +53,7 @@ public class RoundedIconGenerator {
      * @param backgroundColor Color with which the rounded rectangle should be drawn.
      * @param textSizeDp Size at which the text should be drawn in dp.
      */
-    public RoundedIconGenerator(Resources res, int iconWidthDp, int iconHeightDp,
+    public FaviconFallbackGenerator(Resources res, int iconWidthDp, int iconHeightDp,
             int cornerRadiusDp, int backgroundColor, int textSizeDp) {
         this((int) (res.getDisplayMetrics().density * iconWidthDp),
                 (int) (res.getDisplayMetrics().density * iconHeightDp),
@@ -70,7 +70,7 @@ public class RoundedIconGenerator {
      * @param backgroundColor Color at which the rounded rectangle should be drawn.
      * @param textSizePx Size at which the text should be drawn in pixels.
      */
-    public RoundedIconGenerator(int iconWidthPx, int iconHeightPx, int cornerRadiusPx,
+    public FaviconFallbackGenerator(int iconWidthPx, int iconHeightPx, int cornerRadiusPx,
             int backgroundColor, float textSizePx) {
         mIconWidthPx = iconWidthPx;
         mIconHeightPx = iconHeightPx;
