@@ -2,8 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_RESOURCE_COORDINATOR_LOCAL_SITE_CHARACTERISTICS_DATA_IMPL_H_
-#define CHROME_BROWSER_RESOURCE_COORDINATOR_LOCAL_SITE_CHARACTERISTICS_DATA_IMPL_H_
+#ifndef COMPONENTS_PERFORMANCE_MANAGER_PERSISTENCE_SITE_DATA_SITE_DATA_IMPL_H_
+#define COMPONENTS_PERFORMANCE_MANAGER_PERSISTENCE_SITE_DATA_SITE_DATA_IMPL_H_
+
+#include <utility>
+#include <vector>
 
 #include "base/callback_forward.h"
 #include "base/gtest_prod_util.h"
@@ -12,39 +15,34 @@
 #include "base/memory/weak_ptr.h"
 #include "base/sequence_checker.h"
 #include "base/time/time.h"
-#include "chrome/browser/resource_coordinator/local_site_characteristics_database.h"
-#include "chrome/browser/resource_coordinator/tab_manager_features.h"
 #include "components/performance_manager/persistence/site_data/exponential_moving_average.h"
 #include "components/performance_manager/persistence/site_data/feature_usage.h"
 #include "components/performance_manager/persistence/site_data/site_data.pb.h"
+#include "components/performance_manager/persistence/site_data/site_data_store.h"
 #include "components/performance_manager/persistence/site_data/tab_visibility.h"
 #include "url/origin.h"
 
-namespace resource_coordinator {
+namespace performance_manager {
 
-class LocalSiteCharacteristicsDatabase;
-class LocalSiteCharacteristicsDataStore;
-class LocalSiteCharacteristicsDataStoreTest;
-class LocalSiteCharacteristicsDataReaderTest;
-class LocalSiteCharacteristicsDataWriterTest;
+class SiteDataCacheImpl;
+class SiteDataReaderTest;
+class SiteDataWriterTest;
 
-FORWARD_DECLARE_TEST(LocalSiteCharacteristicsDataReaderTest,
+FORWARD_DECLARE_TEST(SiteDataReaderTest,
                      DestroyingReaderCancelsPendingCallbacks);
-FORWARD_DECLARE_TEST(LocalSiteCharacteristicsDataReaderTest,
+FORWARD_DECLARE_TEST(SiteDataReaderTest,
                      FreeingReaderDoesntCauseWriteOperation);
-FORWARD_DECLARE_TEST(LocalSiteCharacteristicsDataReaderTest,
-                     OnDataLoadedCallbackInvoked);
+FORWARD_DECLARE_TEST(SiteDataReaderTest, OnDataLoadedCallbackInvoked);
 
 namespace internal {
 
-FORWARD_DECLARE_TEST(LocalSiteCharacteristicsDataImplTest,
-                     LateAsyncReadDoesntBypassClearEvent);
+FORWARD_DECLARE_TEST(SiteDataImplTest, LateAsyncReadDoesntBypassClearEvent);
 
-// Internal class used to read/write site characteristics. This is a wrapper
-// class around a SiteDataProto object and offers various to query
-// and/or modify it. This class shouldn't be used directly, instead it should be
-// created by a LocalSiteCharacteristicsDataStore that will serve reader and
-// writer objects.
+// Internal class used to read/write site data. This is a wrapper class around
+// a SiteDataProto object and offers various to query and/or modify
+// it. This class shouldn't be used directly, instead it should be created by
+// a LocalSiteCharacteristicsDataStore that will serve reader and writer
+// objects.
 //
 // Reader and writers objects that are interested in reading/writing information
 // about the same origin will share a unique ref counted instance of this
@@ -54,23 +52,14 @@ FORWARD_DECLARE_TEST(LocalSiteCharacteristicsDataImplTest,
 // By default tabs associated with instances of this class are assumed to be
 // running in foreground, |NotifyTabBackgrounded| should get called to indicate
 // that the tab is running in background.
-class LocalSiteCharacteristicsDataImpl
-    : public base::RefCounted<LocalSiteCharacteristicsDataImpl> {
+class SiteDataImpl : public base::RefCounted<SiteDataImpl> {
  public:
   // Interface that should be implemented in order to receive notifications when
   // this object is about to get destroyed.
   class OnDestroyDelegate {
    public:
     // Called when this object is about to get destroyed.
-    virtual void OnLocalSiteCharacteristicsDataImplDestroyed(
-        LocalSiteCharacteristicsDataImpl* impl) = 0;
-  };
-
-  enum class TrackedBackgroundFeatures {
-    kFaviconUpdate,
-    kTitleUpdate,
-    kAudioUsage,
-    kMaxValue = kAudioUsage,
+    virtual void OnSiteDataImplDestroyed(SiteDataImpl* impl) = 0;
   };
 
   // Must be called when a load event is received for this site, this can be
@@ -81,7 +70,7 @@ class LocalSiteCharacteristicsDataImpl
   // Must be called when an unload event is received for this site, this can be
   // invoked several times if instances of this class are shared between
   // multiple tabs.
-  void NotifySiteUnloaded(performance_manager::TabVisibility tab_visibility);
+  void NotifySiteUnloaded(TabVisibility tab_visibility);
 
   // Must be called when a loaded tab gets backgrounded.
   void NotifyLoadedSiteBackgrounded();
@@ -90,9 +79,9 @@ class LocalSiteCharacteristicsDataImpl
   void NotifyLoadedSiteForegrounded();
 
   // Returns the usage of a given feature for this origin.
-  performance_manager::SiteFeatureUsage UpdatesFaviconInBackground() const;
-  performance_manager::SiteFeatureUsage UpdatesTitleInBackground() const;
-  performance_manager::SiteFeatureUsage UsesAudioInBackground() const;
+  SiteFeatureUsage UpdatesFaviconInBackground() const;
+  SiteFeatureUsage UpdatesTitleInBackground() const;
+  SiteFeatureUsage UsesAudioInBackground() const;
 
   // Returns true if the most authoritative data has been loaded from the
   // backing store.
@@ -104,15 +93,13 @@ class LocalSiteCharacteristicsDataImpl
 
   // Accessors for load-time performance measurement estimates.
   // If |num_datum| is zero, there's no estimate available.
-  const performance_manager::ExponentialMovingAverage& load_duration() const {
+  const ExponentialMovingAverage& load_duration() const {
     return load_duration_;
   }
-  const performance_manager::ExponentialMovingAverage& cpu_usage_estimate()
-      const {
+  const ExponentialMovingAverage& cpu_usage_estimate() const {
     return cpu_usage_estimate_;
   }
-  const performance_manager::ExponentialMovingAverage&
-  private_footprint_kb_estimate() const {
+  const ExponentialMovingAverage& private_footprint_kb_estimate() const {
     return private_footprint_kb_estimate_;
   }
 
@@ -158,25 +145,22 @@ class LocalSiteCharacteristicsDataImpl
 
   bool fully_initialized_for_testing() const { return fully_initialized_; }
 
-  void RegisterFeatureUsageCallbackForTesting(
-      const TrackedBackgroundFeatures feature_type,
-      base::OnceClosure callback);
+  static const base::TimeDelta GetFeatureObservationWindowLengthForTesting();
 
  protected:
-  friend class base::RefCounted<LocalSiteCharacteristicsDataImpl>;
-  friend class resource_coordinator::LocalSiteCharacteristicsDataStore;
+  friend class base::RefCounted<SiteDataImpl>;
+  friend class performance_manager::SiteDataCacheImpl;
 
   // Friend all the tests.
-  friend class LocalSiteCharacteristicsDataImplTest;
-  friend class resource_coordinator::LocalSiteCharacteristicsDataReaderTest;
-  friend class resource_coordinator::LocalSiteCharacteristicsDataStoreTest;
-  friend class resource_coordinator::LocalSiteCharacteristicsDataWriterTest;
+  friend class SiteDataImplTest;
+  friend class performance_manager::SiteDataReaderTest;
+  friend class performance_manager::SiteDataWriterTest;
 
-  LocalSiteCharacteristicsDataImpl(const url::Origin& origin,
-                                   OnDestroyDelegate* delegate,
-                                   LocalSiteCharacteristicsDatabase* database);
+  SiteDataImpl(const url::Origin& origin,
+               OnDestroyDelegate* delegate,
+               SiteDataStore* data_store);
 
-  virtual ~LocalSiteCharacteristicsDataImpl();
+  virtual ~SiteDataImpl();
 
   // Helper functions to convert from/to the internal representation that is
   // used to store TimeDelta values in the |SiteDataProto| protobuf.
@@ -196,19 +180,16 @@ class LocalSiteCharacteristicsDataImpl
       const SiteDataFeatureProto& feature_proto) const;
 
  private:
-  FRIEND_TEST_ALL_PREFIXES(LocalSiteCharacteristicsDataImplTest,
+  FRIEND_TEST_ALL_PREFIXES(SiteDataImplTest,
                            FlushingStateToProtoDoesntAffectData);
-  FRIEND_TEST_ALL_PREFIXES(LocalSiteCharacteristicsDataImplTest,
+  FRIEND_TEST_ALL_PREFIXES(SiteDataImplTest,
                            LateAsyncReadDoesntBypassClearEvent);
-  FRIEND_TEST_ALL_PREFIXES(
-      resource_coordinator::LocalSiteCharacteristicsDataReaderTest,
-      DestroyingReaderCancelsPendingCallbacks);
-  FRIEND_TEST_ALL_PREFIXES(
-      resource_coordinator::LocalSiteCharacteristicsDataReaderTest,
-      FreeingReaderDoesntCauseWriteOperation);
-  FRIEND_TEST_ALL_PREFIXES(
-      resource_coordinator::LocalSiteCharacteristicsDataReaderTest,
-      OnDataLoadedCallbackInvoked);
+  FRIEND_TEST_ALL_PREFIXES(performance_manager::SiteDataReaderTest,
+                           DestroyingReaderCancelsPendingCallbacks);
+  FRIEND_TEST_ALL_PREFIXES(performance_manager::SiteDataReaderTest,
+                           FreeingReaderDoesntCauseWriteOperation);
+  FRIEND_TEST_ALL_PREFIXES(performance_manager::SiteDataReaderTest,
+                           OnDataLoadedCallbackInvoked);
 
   // Add |extra_observation_duration| to the observation window of a given
   // feature if it hasn't been used yet, do nothing otherwise.
@@ -217,21 +198,21 @@ class LocalSiteCharacteristicsDataImpl
       base::TimeDelta extra_observation_duration);
 
   // Clear all the past observations about this site and invalidate the pending
-  // read observations from the database.
+  // read observations from the data store.
   void ClearObservationsAndInvalidateReadOperation();
 
   // Returns the usage of |site_feature| for this site.
-  performance_manager::SiteFeatureUsage GetFeatureUsage(
+  SiteFeatureUsage GetFeatureUsage(
       const SiteDataFeatureProto& feature_proto) const;
 
   // Helper function to update a given |SiteDataFeatureProto| when a
   // feature gets used.
   void NotifyFeatureUsage(SiteDataFeatureProto* feature_proto,
-                          const TrackedBackgroundFeatures feature_type);
+                          const char* feature_name);
 
   bool IsLoaded() const { return loaded_tabs_count_ > 0U; }
 
-  // Callback that needs to be called by the database once it has finished
+  // Callback that needs to be called by the data store once it has finished
   // trying to read the protobuf.
   void OnInitCallback(base::Optional<SiteDataProto> site_characteristic_proto);
 
@@ -253,11 +234,9 @@ class LocalSiteCharacteristicsDataImpl
   SiteDataProto site_characteristics_;
 
   // The in-memory storage for the moving performance averages.
-  performance_manager::ExponentialMovingAverage
-      load_duration_;  // microseconds.
-  performance_manager::ExponentialMovingAverage
-      cpu_usage_estimate_;  // microseconds.
-  performance_manager::ExponentialMovingAverage private_footprint_kb_estimate_;
+  ExponentialMovingAverage load_duration_;       // microseconds.
+  ExponentialMovingAverage cpu_usage_estimate_;  // microseconds.
+  ExponentialMovingAverage private_footprint_kb_estimate_;
 
   // This site's origin.
   const url::Origin origin_;
@@ -276,9 +255,9 @@ class LocalSiteCharacteristicsDataImpl
   // from 0 to 1.
   base::TimeTicks background_session_begin_;
 
-  // The database used to store the site characteristics, it should outlive
+  // The data store used to store the site characteristics, it should outlive
   // this object.
-  LocalSiteCharacteristicsDatabase* const database_;
+  SiteDataStore* const data_store_;
 
   // The delegate that should get notified when this object is about to get
   // destroyed, it should outlive this object.
@@ -297,17 +276,14 @@ class LocalSiteCharacteristicsDataImpl
   // initialized.
   std::vector<base::OnceClosure> data_loaded_callbacks_;
 
-  base::OnceClosure feature_usage_callback_for_testing_[static_cast<size_t>(
-      TrackedBackgroundFeatures::kMaxValue) + 1];
-
   SEQUENCE_CHECKER(sequence_checker_);
 
-  base::WeakPtrFactory<LocalSiteCharacteristicsDataImpl> weak_factory_{this};
+  base::WeakPtrFactory<SiteDataImpl> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(LocalSiteCharacteristicsDataImpl);
+  DISALLOW_COPY_AND_ASSIGN(SiteDataImpl);
 };
 
 }  // namespace internal
-}  // namespace resource_coordinator
+}  // namespace performance_manager
 
-#endif  // CHROME_BROWSER_RESOURCE_COORDINATOR_LOCAL_SITE_CHARACTERISTICS_DATA_IMPL_H_
+#endif  // COMPONENTS_PERFORMANCE_MANAGER_PERSISTENCE_SITE_DATA_SITE_DATA_IMPL_H_

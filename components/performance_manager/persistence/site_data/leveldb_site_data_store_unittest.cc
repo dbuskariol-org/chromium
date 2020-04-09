@@ -1,8 +1,8 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/resource_coordinator/leveldb_site_characteristics_database.h"
+#include "components/performance_manager/persistence/site_data/leveldb_site_data_store.h"
 
 #include <limits>
 
@@ -21,7 +21,7 @@
 #include "third_party/leveldatabase/leveldb_chrome.h"
 #include "url/gurl.h"
 
-namespace resource_coordinator {
+namespace performance_manager {
 
 namespace {
 
@@ -56,8 +56,8 @@ ScopedReadOnlyDirectory::ScopedReadOnlyDirectory(
 
 // Initialize a SiteDataProto object with a test value (the same
 // value is used to initialize all fields).
-void InitSiteCharacteristicProto(SiteDataProto* proto,
-                                 ::google::protobuf::int64 test_value) {
+void InitSiteDataProto(SiteDataProto* proto,
+                       ::google::protobuf::int64 test_value) {
   proto->set_last_loaded(test_value);
 
   SiteDataFeatureProto feature_proto;
@@ -71,10 +71,8 @@ void InitSiteCharacteristicProto(SiteDataProto* proto,
 
 }  // namespace
 
-class LevelDBSiteCharacteristicsDatabaseTest : public ::testing::Test {
+class LevelDBSiteDataStoreTest : public ::testing::Test {
  public:
-  LevelDBSiteCharacteristicsDatabaseTest() {}
-
   void SetUp() override {
     EXPECT_TRUE(temp_dir_.CreateUniqueTempDir());
     OpenDB();
@@ -91,7 +89,7 @@ class LevelDBSiteCharacteristicsDatabaseTest : public ::testing::Test {
   }
 
   void OpenDB(base::FilePath path) {
-    db_ = std::make_unique<LevelDBSiteCharacteristicsDatabase>(path);
+    db_ = std::make_unique<LevelDBSiteDataStore>(path);
     WaitForAsyncOperationsToComplete();
     EXPECT_TRUE(db_);
     db_path_ = path;
@@ -101,7 +99,7 @@ class LevelDBSiteCharacteristicsDatabaseTest : public ::testing::Test {
   const base::FilePath& GetDBPath() { return db_path_; }
 
  protected:
-  // Try to read an entry from the database, returns true if the entry is
+  // Try to read an entry from the data store, returns true if the entry is
   // present and false otherwise. |receiving_proto| will receive the protobuf
   // corresponding to this entry on success.
   bool ReadFromDB(const url::Origin& origin, SiteDataProto* receiving_proto) {
@@ -115,22 +113,21 @@ class LevelDBSiteCharacteristicsDatabaseTest : public ::testing::Test {
             receiving_proto->CopyFrom(proto_opt.value());
         },
         base::Unretained(receiving_proto), base::Unretained(&success));
-    db_->ReadSiteCharacteristicsFromDB(origin, std::move(init_callback));
+    db_->ReadSiteDataFromStore(origin, std::move(init_callback));
     WaitForAsyncOperationsToComplete();
     return success;
   }
 
-  // Add some entries to the database and returns a vector with their origins.
+  // Add some entries to the data store and returns a vector with their origins.
   std::vector<url::Origin> AddDummyEntriesToDB(size_t num_entries) {
     std::vector<url::Origin> site_origins;
     for (size_t i = 0; i < num_entries; ++i) {
       SiteDataProto proto_temp;
       std::string origin_str = base::StringPrintf("http://%zu.com", i);
-      InitSiteCharacteristicProto(&proto_temp,
-                                  static_cast<::google::protobuf::int64>(i));
+      InitSiteDataProto(&proto_temp, static_cast<::google::protobuf::int64>(i));
       EXPECT_TRUE(proto_temp.IsInitialized());
       url::Origin origin = url::Origin::Create(GURL(origin_str));
-      db_->WriteSiteCharacteristicsIntoDB(origin, proto_temp);
+      db_->WriteSiteDataIntoStore(origin, proto_temp);
       site_origins.emplace_back(origin);
     }
     WaitForAsyncOperationsToComplete();
@@ -144,32 +141,32 @@ class LevelDBSiteCharacteristicsDatabaseTest : public ::testing::Test {
   base::FilePath db_path_;
   base::test::TaskEnvironment task_env_;
   base::ScopedTempDir temp_dir_;
-  std::unique_ptr<LevelDBSiteCharacteristicsDatabase> db_;
+  std::unique_ptr<LevelDBSiteDataStore> db_;
 };
 
-TEST_F(LevelDBSiteCharacteristicsDatabaseTest, InitAndStoreSiteCharacteristic) {
-  // Initializing an entry that doesn't exist in the database should fail.
+TEST_F(LevelDBSiteDataStoreTest, InitAndStoreSiteData) {
+  // Initializing an entry that doesn't exist in the data store should fail.
   SiteDataProto early_read_proto;
   EXPECT_FALSE(ReadFromDB(kDummyOrigin, &early_read_proto));
 
-  // Add an entry to the database and make sure that we can read it back.
+  // Add an entry to the data store and make sure that we can read it back.
   ::google::protobuf::int64 test_value = 42;
   SiteDataProto stored_proto;
-  InitSiteCharacteristicProto(&stored_proto, test_value);
-  db_->WriteSiteCharacteristicsIntoDB(kDummyOrigin, stored_proto);
+  InitSiteDataProto(&stored_proto, test_value);
+  db_->WriteSiteDataIntoStore(kDummyOrigin, stored_proto);
   SiteDataProto read_proto;
   EXPECT_TRUE(ReadFromDB(kDummyOrigin, &read_proto));
   EXPECT_TRUE(read_proto.IsInitialized());
   EXPECT_EQ(stored_proto.SerializeAsString(), read_proto.SerializeAsString());
 }
 
-TEST_F(LevelDBSiteCharacteristicsDatabaseTest, RemoveEntries) {
+TEST_F(LevelDBSiteDataStoreTest, RemoveEntries) {
   std::vector<url::Origin> site_origins = AddDummyEntriesToDB(10);
 
-  // Remove half the origins from the database.
+  // Remove half the origins from the data store.
   std::vector<url::Origin> site_origins_to_remove(
       site_origins.begin(), site_origins.begin() + site_origins.size() / 2);
-  db_->RemoveSiteCharacteristicsFromDB(site_origins_to_remove);
+  db_->RemoveSiteDataFromStore(site_origins_to_remove);
 
   WaitForAsyncOperationsToComplete();
 
@@ -183,8 +180,8 @@ TEST_F(LevelDBSiteCharacteristicsDatabaseTest, RemoveEntries) {
     EXPECT_TRUE(ReadFromDB(*iter, &proto_temp));
   }
 
-  // Clear the database.
-  db_->ClearDatabase();
+  // Clear the data store.
+  db_->ClearStore();
 
   WaitForAsyncOperationsToComplete();
 
@@ -193,7 +190,7 @@ TEST_F(LevelDBSiteCharacteristicsDatabaseTest, RemoveEntries) {
     EXPECT_FALSE(ReadFromDB(iter, &proto_temp));
 }
 
-TEST_F(LevelDBSiteCharacteristicsDatabaseTest, GetDatabaseSize) {
+TEST_F(LevelDBSiteDataStoreTest, GetDatabaseSize) {
   std::vector<url::Origin> site_origins = AddDummyEntriesToDB(200);
 
   auto size_callback =
@@ -208,7 +205,7 @@ TEST_F(LevelDBSiteCharacteristicsDatabaseTest, GetDatabaseSize) {
         EXPECT_LT(0, on_disk_size_kb.value());
       });
 
-  db_->GetDatabaseSize(std::move(size_callback));
+  db_->GetStoreSize(std::move(size_callback));
 
   WaitForAsyncOperationsToComplete();
 
@@ -218,7 +215,7 @@ TEST_F(LevelDBSiteCharacteristicsDatabaseTest, GetDatabaseSize) {
   EXPECT_TRUE(ReadFromDB(site_origins[0], &read_proto));
 }
 
-TEST_F(LevelDBSiteCharacteristicsDatabaseTest, DatabaseRecoveryTest) {
+TEST_F(LevelDBSiteDataStoreTest, DatabaseRecoveryTest) {
   std::vector<url::Origin> site_origins = AddDummyEntriesToDB(10);
 
   db_.reset();
@@ -243,9 +240,9 @@ TEST_F(LevelDBSiteCharacteristicsDatabaseTest, DatabaseRecoveryTest) {
   // manifest files.
 }
 
-// Ensure that there's no fatal failures if we try using the database after
+// Ensure that there's no fatal failures if we try using the data store after
 // failing to open it (all the events will be ignored).
-TEST_F(LevelDBSiteCharacteristicsDatabaseTest, DatabaseOpeningFailure) {
+TEST_F(LevelDBSiteDataStoreTest, DatabaseOpeningFailure) {
   db_.reset();
   ScopedReadOnlyDirectory read_only_dir(GetTempPath());
 
@@ -256,50 +253,48 @@ TEST_F(LevelDBSiteCharacteristicsDatabaseTest, DatabaseOpeningFailure) {
   EXPECT_FALSE(
       ReadFromDB(url::Origin::Create(GURL("https://foo.com")), &proto_temp));
   WaitForAsyncOperationsToComplete();
-  db_->WriteSiteCharacteristicsIntoDB(
-      url::Origin::Create(GURL("https://foo.com")), proto_temp);
+  db_->WriteSiteDataIntoStore(url::Origin::Create(GURL("https://foo.com")),
+                              proto_temp);
   WaitForAsyncOperationsToComplete();
-  db_->RemoveSiteCharacteristicsFromDB({});
+  db_->RemoveSiteDataFromStore({});
   WaitForAsyncOperationsToComplete();
-  db_->ClearDatabase();
+  db_->ClearStore();
   WaitForAsyncOperationsToComplete();
 }
 
-TEST_F(LevelDBSiteCharacteristicsDatabaseTest, DBGetsClearedOnVersionUpgrade) {
+TEST_F(LevelDBSiteDataStoreTest, DBGetsClearedOnVersionUpgrade) {
   leveldb::DB* raw_db = db_->GetDBForTesting();
   EXPECT_TRUE(raw_db);
 
   // Remove the entry containing the DB version number, this will cause the DB
   // to be cleared the next time it gets opened.
-  leveldb::Status s =
-      raw_db->Delete(leveldb::WriteOptions(),
-                     LevelDBSiteCharacteristicsDatabase::kDbMetadataKey);
+  leveldb::Status s = raw_db->Delete(leveldb::WriteOptions(),
+                                     LevelDBSiteDataStore::kDbMetadataKey);
   EXPECT_TRUE(s.ok());
 
-  // Add some dummy data to the database to ensure the database gets cleared
+  // Add some dummy data to the data store to ensure the data store gets cleared
   // when upgrading it to the new version.
   ::google::protobuf::int64 test_value = 42;
   SiteDataProto stored_proto;
-  InitSiteCharacteristicProto(&stored_proto, test_value);
-  db_->WriteSiteCharacteristicsIntoDB(kDummyOrigin, stored_proto);
+  InitSiteDataProto(&stored_proto, test_value);
+  db_->WriteSiteDataIntoStore(kDummyOrigin, stored_proto);
   WaitForAsyncOperationsToComplete();
 
   db_.reset();
 
-  // Reopen the database and ensure that it has been cleared.
+  // Reopen the data store and ensure that it has been cleared.
   OpenDB();
   raw_db = db_->GetDBForTesting();
   std::string db_metadata;
-  s = raw_db->Get(leveldb::ReadOptions(),
-                  LevelDBSiteCharacteristicsDatabase::kDbMetadataKey,
+  s = raw_db->Get(leveldb::ReadOptions(), LevelDBSiteDataStore::kDbMetadataKey,
                   &db_metadata);
   EXPECT_TRUE(s.ok());
   size_t version = std::numeric_limits<size_t>::max();
   EXPECT_TRUE(base::StringToSizeT(db_metadata, &version));
-  EXPECT_EQ(LevelDBSiteCharacteristicsDatabase::kDbVersion, version);
+  EXPECT_EQ(LevelDBSiteDataStore::kDbVersion, version);
 
   SiteDataProto proto_temp;
   EXPECT_FALSE(ReadFromDB(kDummyOrigin, &proto_temp));
 }
 
-}  // namespace resource_coordinator
+}  // namespace performance_manager

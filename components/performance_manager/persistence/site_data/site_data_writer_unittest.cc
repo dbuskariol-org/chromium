@@ -1,39 +1,37 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/resource_coordinator/local_site_characteristics_data_writer.h"
+#include "components/performance_manager/persistence/site_data/site_data_writer.h"
 
 #include "base/macros.h"
 #include "base/memory/ptr_util.h"
 #include "base/time/time.h"
-#include "chrome/browser/resource_coordinator/local_site_characteristics_data_impl.h"
-#include "chrome/browser/resource_coordinator/local_site_characteristics_data_unittest_utils.h"
 #include "components/performance_manager/persistence/site_data/feature_usage.h"
+#include "components/performance_manager/persistence/site_data/site_data_impl.h"
+#include "components/performance_manager/persistence/site_data/unittest_utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "url/gurl.h"
 
-namespace resource_coordinator {
+namespace performance_manager {
 
-class LocalSiteCharacteristicsDataWriterTest : public ::testing::Test {
+class SiteDataWriterTest : public ::testing::Test {
  protected:
   // The constructors needs to call 'new' directly rather than using the
   // base::MakeRefCounted helper function because the constructor of
-  // LocalSiteCharacteristicsDataImpl is protected and not visible to
+  // SiteDataImpl is protected and not visible to
   // base::MakeRefCounted.
-  LocalSiteCharacteristicsDataWriterTest()
-      : test_impl_(
-            base::WrapRefCounted(new internal::LocalSiteCharacteristicsDataImpl(
-                url::Origin::Create(GURL("foo.com")),
-                &delegate_,
-                &database_))) {
-    LocalSiteCharacteristicsDataWriter* writer =
-        new LocalSiteCharacteristicsDataWriter(
-            test_impl_.get(), performance_manager::TabVisibility::kBackground);
+  SiteDataWriterTest()
+      : test_impl_(base::WrapRefCounted(
+            new internal::SiteDataImpl(url::Origin::Create(GURL("foo.com")),
+                                       &delegate_,
+                                       &data_store_))) {
+    SiteDataWriter* writer = new SiteDataWriter(
+        test_impl_.get(), performance_manager::TabVisibility::kBackground);
     writer_ = base::WrapUnique(writer);
   }
 
-  ~LocalSiteCharacteristicsDataWriterTest() override = default;
+  ~SiteDataWriterTest() override = default;
 
   bool TabIsLoaded() { return test_impl_->IsLoaded(); }
 
@@ -41,26 +39,24 @@ class LocalSiteCharacteristicsDataWriterTest : public ::testing::Test {
     return test_impl_->loaded_tabs_in_background_count_for_testing() != 0U;
   }
 
-  // The mock delegate used by the LocalSiteCharacteristicsDataImpl objects
+  // The mock delegate used by the SiteDataImpl objects
   // created by this class, NiceMock is used to avoid having to set
   // expectations in test cases that don't care about this.
-  ::testing::NiceMock<
-      testing::MockLocalSiteCharacteristicsDataImplOnDestroyDelegate>
-      delegate_;
+  ::testing::NiceMock<testing::MockSiteDataImplOnDestroyDelegate> delegate_;
 
-  testing::NoopLocalSiteCharacteristicsDatabase database_;
+  testing::NoopSiteDataStore data_store_;
 
-  // The LocalSiteCharacteristicsDataImpl object used in these tests.
-  scoped_refptr<internal::LocalSiteCharacteristicsDataImpl> test_impl_;
+  // The SiteDataImpl object used in these tests.
+  scoped_refptr<internal::SiteDataImpl> test_impl_;
 
-  // A LocalSiteCharacteristicsDataWriter object associated with the origin used
+  // A SiteDataWriter object associated with the origin used
   // to create this object.
-  std::unique_ptr<LocalSiteCharacteristicsDataWriter> writer_;
+  std::unique_ptr<SiteDataWriter> writer_;
 
-  DISALLOW_COPY_AND_ASSIGN(LocalSiteCharacteristicsDataWriterTest);
+  DISALLOW_COPY_AND_ASSIGN(SiteDataWriterTest);
 };
 
-TEST_F(LocalSiteCharacteristicsDataWriterTest, TestModifiers) {
+TEST_F(SiteDataWriterTest, TestModifiers) {
   // Make sure that we initially have no information about any of the features
   // and that the site is in an unloaded state.
   EXPECT_EQ(performance_manager::SiteFeatureUsage::kSiteFeatureUsageUnknown,
@@ -115,8 +111,7 @@ TEST_F(LocalSiteCharacteristicsDataWriterTest, TestModifiers) {
   writer_->NotifySiteUnloaded();
 }
 
-TEST_F(LocalSiteCharacteristicsDataWriterTest,
-       LoadAndBackgroundStateTransitions) {
+TEST_F(SiteDataWriterTest, LoadAndBackgroundStateTransitions) {
   // There's 4 different states a tab can be in:
   //   - Unloaded + Background
   //   - Unloaded + Foreground (might not be possible in practice but this
@@ -199,4 +194,4 @@ TEST_F(LocalSiteCharacteristicsDataWriterTest,
   EXPECT_FALSE(TabIsLoadedAndInBackground());
 }
 
-}  // namespace resource_coordinator
+}  // namespace performance_manager
