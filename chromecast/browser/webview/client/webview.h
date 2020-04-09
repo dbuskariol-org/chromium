@@ -81,6 +81,7 @@ class WebviewClient : public exo::wayland::clients::ClientBase {
   void InputCallback();
   void ListActiveWebviews();
   void Paint();
+  void SendBackRequest(const std::vector<std::string>& tokens);
   void SendNavigationRequest(const std::vector<std::string>& tokens);
   void SendResizeRequest(const std::vector<std::string>& tokens);
   void SendTouchInput(const Webview* webview,
