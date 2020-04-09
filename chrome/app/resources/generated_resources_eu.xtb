@@ -4975,7 +4975,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="7690294790491645610">Berretsi pasahitz berria</translation>
 <translation id="7690378713476594306">Aukeratu zerrendatik</translation>
 <translation id="7690853182226561458">Gehitu &amp;karpeta…</translation>
-<translation id="7691073721729883399">Ezin izan da muntatu aplikazio espezializatuaren etxe kriptografikoa.</translation>
+<translation id="7691073721729883399">Ezin izan da muntatu aplikazio espezializatuaren cryptohome-a.</translation>
 <translation id="7691077781194517083">Ezin da berrezarri segurtasun-giltza. <ph name="ERROR_CODE" /> errorea.</translation>
 <translation id="7696063401938172191">"<ph name="PHONE_NAME" />" telefonoan:</translation>
 <translation id="7698408911093959127">{COUNT,plural, =1{1 elementu dago laster-marken zerrendan}other{# elementu daude laster-marken zerrendan}}</translation>
