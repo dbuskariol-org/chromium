@@ -1211,10 +1211,6 @@
   <message name="IDS_SETTINGS_SECURITY_DESCRIPTION" desc="Description of the controls available on the security settings page">
     Safe Browsing (protection from dangerous sites) and other security settings
   </message>
-  <message name="IDS_SETTINGS_SECURITY_ADVANCED_SECTION_LABEL" desc="Name of the section in the
-    security settings page which groups advanced security settings">
-    Advanced security
-  </message>
   <message name="IDS_SETTINGS_ADVANCED_PROTECTION_PROGRAM" desc="Name of the link which takes users
     to the Google Advanced Protection Program external webpage">
     Google Advanced Protection Program
