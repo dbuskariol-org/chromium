@@ -247,6 +247,7 @@ static_library("test_support") {
       # target.
       "//chrome/app:test_support",
       "//components/ukm:test_support",
+      "//components/ukm:ukm_test_helper",
       "//components/zoom:test_support",
     ]
     sources += [
@@ -5804,6 +5805,7 @@ if (!is_android) {
       "//components/sync",
       "//components/sync:test_support_model",
       "//components/ukm:test_support",
+      "//components/ukm:ukm_test_helper",
       "//content/app/resources",
       "//content/test:test_support",
       "//crypto:platform",

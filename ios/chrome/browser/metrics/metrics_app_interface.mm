@@ -6,7 +6,6 @@
 
 #include <string>
 
-#include "base/feature_list.h"
 #include "base/run_loop.h"
 #include "base/stl_util.h"
 #include "base/strings/sys_string_conversions.h"
@@ -20,13 +19,13 @@
 #include "components/network_time/network_time_tracker.h"
 #include "components/sync/base/pref_names.h"
 #include "components/ukm/ukm_service.h"
+#include "components/ukm/ukm_test_helper.h"
 #include "ios/chrome/browser/application_context.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state_manager.h"
 #include "ios/chrome/browser/metrics/ios_chrome_metrics_service_accessor.h"
 #import "ios/chrome/test/app/histogram_test_util.h"
 #import "ios/testing/nserror_util.h"
-#include "services/metrics/public/cpp/ukm_source_id.h"
 #include "third_party/metrics_proto/chrome_user_metrics_extension.pb.h"
 #include "third_party/metrics_proto/ukm/report.pb.h"
 #include "third_party/zlib/google/compression_utils.h"
@@ -40,6 +39,10 @@ namespace {
 bool g_metrics_enabled = false;
 
 chrome_test_util::HistogramTester* g_histogram_tester = nullptr;
+
+ukm::UkmService* GetUkmService() {
+  return GetApplicationContext()->GetMetricsServicesManager()->GetUkmService();
+}
 
 // TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns an UMA log if the metrics service has a staged log.
@@ -65,101 +68,6 @@ std::unique_ptr<metrics::ChromeUserMetricsExtension> GetLastUmaLog() {
 
 }  // namespace
 
-namespace metrics {
-
-// Helper class that provides access to UKM internals.
-// This class is a friend of UKMService and UkmRecorderImpl.
-class UkmEGTestHelper {
- public:
-  UkmEGTestHelper() {}
-  UkmEGTestHelper(const UkmEGTestHelper&) = delete;
-  UkmEGTestHelper& operator=(UkmEGTestHelper&) = delete;
-
-  static bool ukm_enabled() {
-    auto* service = ukm_service();
-    return service ? service->recording_enabled_ : false;
-  }
-
-  static bool IsReportUserNoisedUserBirthYearAndGenderEnabled() {
-    return base::FeatureList::IsEnabled(
-        ukm::UkmService::kReportUserNoisedUserBirthYearAndGender);
-  }
-
-  static uint64_t client_id() {
-    auto* service = ukm_service();
-    return service ? service->client_id_ : 0;
-  }
-
-  static bool HasDummySource(int64_t source_id_as_int64) {
-    auto* service = ukm_service();
-    ukm::SourceId source_id = source_id_as_int64;
-    return service && base::Contains(service->sources(), source_id);
-  }
-
-  static void RecordDummySource(ukm::SourceId source_id_as_int64) {
-    ukm::UkmService* service = ukm_service();
-    ukm::SourceId source_id = source_id_as_int64;
-    if (service)
-      service->UpdateSourceURL(source_id, GURL("http://example.com"));
-  }
-
-  static void BuildAndStoreUkmLog() {
-    ukm::UkmService* service = ukm_service();
-
-    // Wait for initialization to complete before flushing.
-    base::RunLoop run_loop;
-    service->SetInitializationCompleteCallbackForTesting(
-        run_loop.QuitClosure());
-    run_loop.Run();
-
-    service->Flush();
-  }
-
-  static bool HasUnsentUkmLogs() {
-    ukm::UkmService* service = ukm_service();
-    return service->reporting_service_.ukm_log_store()->has_unsent_logs();
-  }
-
-  static std::unique_ptr<ukm::Report> GetUKMReport() {
-    if (!HasUnsentUkmLogs()) {
-      return nullptr;
-    }
-
-    metrics::UnsentLogStore* log_store =
-        ukm_service()->reporting_service_.ukm_log_store();
-    if (log_store->has_staged_log()) {
-      // For testing purposes, we are examining the content of a staged log
-      // without ever sending the log, so discard any previously staged log.
-      log_store->DiscardStagedLog();
-    }
-    log_store->StageNextLog();
-    if (!log_store->has_staged_log()) {
-      return nullptr;
-    }
-
-    std::string uncompressed_log_data;
-    if (!compression::GzipUncompress(log_store->staged_log(),
-                                     &uncompressed_log_data)) {
-      return nullptr;
-    }
-
-    std::unique_ptr<ukm::Report> report = std::make_unique<ukm::Report>();
-    if (!report->ParseFromString(uncompressed_log_data)) {
-      return nullptr;
-    }
-    return report;
-  }
-
- private:
-  static ukm::UkmService* ukm_service() {
-    return GetApplicationContext()
-        ->GetMetricsServicesManager()
-        ->GetUkmService();
-  }
-};
-
-}  // namespace metrics
-
 @implementation MetricsAppInterface : NSObject
 
 + (void)overrideMetricsAndCrashReportingForTesting {
@@ -181,28 +89,32 @@ class UkmEGTestHelper {
 }
 
 + (BOOL)checkUKMRecordingEnabled:(BOOL)enabled {
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+
   ConditionBlock condition = ^{
-    return metrics::UkmEGTestHelper::ukm_enabled() == enabled;
+    return ukm_test_helper.IsRecordingEnabled() == enabled;
   };
   return base::test::ios::WaitUntilConditionOrTimeout(
       syncher::kSyncUKMOperationsTimeout, condition);
 }
 
 + (BOOL)isReportUserNoisedUserBirthYearAndGenderEnabled {
-  return metrics::UkmEGTestHelper::
-      IsReportUserNoisedUserBirthYearAndGenderEnabled();
+  return ukm::UkmTestHelper::IsReportUserNoisedUserBirthYearAndGenderEnabled();
 }
 
 + (uint64_t)UKMClientID {
-  return metrics::UkmEGTestHelper::client_id();
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  return ukm_test_helper.GetClientId();
 }
 
-+ (BOOL)UKMHasDummySource:(int64_t)sourceId {
-  return metrics::UkmEGTestHelper::HasDummySource(sourceId);
++ (BOOL)UKMHasDummySource:(int64_t)sourceID {
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  return ukm_test_helper.HasSource(sourceID);
 }
 
 + (void)UKMRecordDummySource:(int64_t)sourceID {
-  metrics::UkmEGTestHelper::RecordDummySource(sourceID);
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  ukm_test_helper.RecordSourceForTesting(sourceID);
 }
 
 + (void)setNetworkTimeForTesting {
@@ -230,16 +142,18 @@ class UkmEGTestHelper {
 }
 
 + (void)buildAndStoreUKMLog {
-  metrics::UkmEGTestHelper::BuildAndStoreUkmLog();
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  ukm_test_helper.BuildAndStoreLog();
 }
 
 + (BOOL)hasUnsentUKMLogs {
-  return metrics::UkmEGTestHelper::HasUnsentUkmLogs();
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  return ukm_test_helper.HasUnsentLogs();
 }
 
 + (BOOL)UKMReportHasBirthYear:(int)year gender:(int)gender {
-  std::unique_ptr<ukm::Report> report =
-      metrics::UkmEGTestHelper::GetUKMReport();
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  std::unique_ptr<ukm::Report> report = ukm_test_helper.GetUkmReport();
   int noisedBirthYear = [self noisedBirthYear:year];
 
   return report && gender == report->user_demographics().gender() &&
@@ -247,8 +161,9 @@ class UkmEGTestHelper {
 }
 
 + (BOOL)UKMReportHasUserDemographics {
-  std::unique_ptr<ukm::Report> report =
-      metrics::UkmEGTestHelper::GetUKMReport();
+  ukm::UkmTestHelper ukm_test_helper(GetUkmService());
+  // TODO(crbug.com/1066910): Maybe ukm::Report*?
+  std::unique_ptr<ukm::Report> report = ukm_test_helper.GetUkmReport();
   return report && report->has_user_demographics();
 }
 

@@ -32,24 +32,20 @@ const NSTimeInterval kSyncUKMOperationsTimeout = 10.0;
 + (void)stopOverridingMetricsAndCrashReportingForTesting;
 + (BOOL)setMetricsAndCrashReportingForTesting:(BOOL)enabled;
 
-// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns whether UKM recording is |enabled|.
 + (BOOL)checkUKMRecordingEnabled:(BOOL)enabled;
 
 // Returns YES if the ReportUserNoisedUserBirthYearAndGender feature is enabled.
 + (BOOL)isReportUserNoisedUserBirthYearAndGenderEnabled WARN_UNUSED_RESULT;
 
-// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns the current UKM client ID.
 + (uint64_t)UKMClientID;
 
-// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Checks whether a sourceID is registered for UKM.
-+ (BOOL)UKMHasDummySource:(int64_t)sourceId;
++ (BOOL)UKMHasDummySource:(int64_t)sourceID;
 
-// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Adds a new sourceID for UKM.
-+ (void)UKMRecordDummySource:(int64_t)sourceId;
++ (void)UKMRecordDummySource:(int64_t)sourceID;
 
 // TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Sets the network time to approximately now.
@@ -60,12 +56,10 @@ const NSTimeInterval kSyncUKMOperationsTimeout = 10.0;
 // year, pre-noise.
 + (int)noisedBirthYear:(int)rawBirthYear;
 
-// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // If data are available, creates a UKM Report and stores it in the
 // UKM service's UnsentLogStore.
 + (void)buildAndStoreUKMLog;
 
-// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns YES if the UKM service has logs to send.
 + (BOOL)hasUnsentUKMLogs;
 
