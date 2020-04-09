@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/metrics/system_session_analyzer_win.h"
+#include "components/metrics/system_session_analyzer/system_session_analyzer_win.h"
 
 #include "base/stl_util.h"
 #include "base/time/time.h"
