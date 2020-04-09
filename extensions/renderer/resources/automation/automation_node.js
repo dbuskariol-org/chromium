@@ -1240,8 +1240,9 @@ var stringAttributes = [
     'value'];
 
 var boolAttributes = [
-  'busy', 'clickable', 'containerLiveAtomic', 'containerLiveBusy', 'liveAtomic',
-  'modal', 'scrollable', 'selected', 'supportsTextLocation'
+  'busy', 'clickable', 'containerLiveAtomic', 'containerLiveBusy',
+  'editableRoot', 'liveAtomic', 'modal', 'scrollable', 'selected',
+  'supportsTextLocation'
 ];
 
 var intAttributes = [
