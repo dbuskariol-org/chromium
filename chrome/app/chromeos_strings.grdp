@@ -4356,6 +4356,12 @@
   <message name="IDS_CROSTINI_UPGRADER_RESTORE_TITLE" desc="Title of the Crostini upgrader when the container upgrade fails and restore of a backup is in progress.">
     Restoring Linux
   </message>
+  <message name="IDS_CROSTINI_UPGRADER_RESTORE_SUCCEEDED_TITLE" desc="Title of the Crostini upgrader when the upgrade failed but the restore of a backup completed successfully.">
+    Restore complete
+  </message>
+  <message name="IDS_CROSTINI_UPGRADER_RESTORE_SUCCEEDED_MESSAGE" desc="Text shown by the Crostini upgrader when the upgrade failed but the restore of a backup completed successfully..">
+    Linux backup has been successfully restored.
+  </message>
   <message name="IDS_CROSTINI_UPGRADER_ERROR_TITLE" desc="Title of the Crostini upgrader when an error occurs.">
     Error upgrading Linux
   </message>
