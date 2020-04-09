@@ -253,6 +253,9 @@ ci.chromiumos_builder(
 
 ci.fyi_builder(
     name = 'chromeos-kevin-rel-hw-tests',
+    console_view_entry = ci.console_view_entry(
+        category = 'chromeos',
+    ),
 )
 
 ci.chromiumos_builder(
@@ -402,12 +405,19 @@ ci.dawn_builder(
 
 ci.fyi_builder(
     name = 'VR Linux',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux',
+    ),
 )
 
 # This is launching & collecting entirely isolated tests.
 # OS shouldn't matter.
 ci.fyi_builder(
     name = 'mac-osxbeta-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = 'beta',
+    ),
     goma_backend = None,
     triggered_by = [builder_name('Mac Builder')],
 )
@@ -415,6 +425,9 @@ ci.fyi_builder(
 
 ci.fyi_ios_builder(
     name = 'ios-simulator-cronet',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet',
+    ),
     executable = 'recipe:chromium',
     notifies = ['cronet'],
     properties = {
@@ -425,6 +438,9 @@ ci.fyi_ios_builder(
 
 ci.fyi_windows_builder(
     name = 'Win10 Tests x64 1803',
+    console_view_entry = ci.console_view_entry(
+        category = 'win10|1803',
+    ),
     goma_backend = None,
     os = os.WINDOWS_10,
     triggered_by = [builder_name('Win x64 Builder')],
@@ -586,16 +602,31 @@ ci.linux_builder(
 
 ci.linux_builder(
     name = 'Linux Ozone Tester (Headless)',
+    console_view = 'chromium.fyi',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux',
+        short_name = 'loh',
+    ),
     triggered_by = [builder_name('linux-ozone-rel')],
 )
 
 ci.linux_builder(
     name = 'Linux Ozone Tester (Wayland)',
+    console_view = 'chromium.fyi',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux',
+        short_name = 'low',
+    ),
     triggered_by = [builder_name('linux-ozone-rel')],
 )
 
 ci.linux_builder(
     name = 'Linux Ozone Tester (X11)',
+    console_view = 'chromium.fyi',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux',
+        short_name = 'lox',
+    ),
     triggered_by = [builder_name('linux-ozone-rel')],
 )
 

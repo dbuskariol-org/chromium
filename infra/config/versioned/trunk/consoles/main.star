@@ -499,7 +499,7 @@ luci.console_view(
         ),
         luci.console_view_entry(
             builder = builder_name('chromeos-kevin-rel-hw-tests'),
-            category = 'chromium.fyi|chromos',
+            category = 'chromium.fyi|chromeos',
         ),
         luci.console_view_entry(
             builder = builder_name('VR Linux'),
