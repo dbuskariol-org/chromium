@@ -15,7 +15,6 @@
 #import "ios/chrome/browser/chrome_url_util.h"
 #include "ios/chrome/browser/reading_list/reading_list_model_factory.h"
 #import "ios/chrome/browser/u2f/u2f_tab_helper.h"
-#import "ios/chrome/browser/ui/dialogs/dialog_features.h"
 #import "ios/web/common/url_scheme_util.h"
 #import "ios/web/public/navigation/navigation_item.h"
 #import "ios/web/public/navigation/navigation_manager.h"

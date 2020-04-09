@@ -286,11 +286,6 @@ const char kMobileGoogleSRPDescription[] =
     "Request the Mobile version of Google SRP by default when the desktop mode "
     "is requested by default.";
 
-const char kNonModalDialogsName[] = "Use non-modal JavaScript dialogs";
-const char kNonModalDialogsDescription[] =
-    "Presents JavaScript dialogs non-modally so that the user can change tabs "
-    "while a dialog is displayed.";
-
 const char kOmniboxPreserveDefaultMatchAgainstAsyncUpdateName[] =
     "Omnibox Preserve Default Match Against Async Update";
 const char kOmniboxPreserveDefaultMatchAgainstAsyncUpdateDescription[] =

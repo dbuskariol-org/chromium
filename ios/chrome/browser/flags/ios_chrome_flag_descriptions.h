@@ -245,10 +245,6 @@ extern const char kMarkHttpAsDescription[];
 extern const char kMobileGoogleSRPName[];
 extern const char kMobileGoogleSRPDescription[];
 
-// Title and description for the flag to enable non-modal JavaScript dialogs.
-extern const char kNonModalDialogsName[];
-extern const char kNonModalDialogsDescription[];
-
 // Title and description for the flag to preserve the default match when an
 // async match updates.
 extern const char kOmniboxPreserveDefaultMatchAgainstAsyncUpdateName[];
