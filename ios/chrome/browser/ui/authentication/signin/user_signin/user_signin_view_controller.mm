@@ -26,6 +26,8 @@ const CGFloat kButtonCornerRadius = 8;
 const CGFloat kGradientHeight = 40.;
 // Max size for the user consent view.
 const CGFloat kUserConsentMaxSize = 600.;
+// Image inset for the more button.
+const CGFloat kImageInset = 16.0;
 
 // Layout constants for buttons.
 struct AuthenticationViewConstants {
@@ -447,6 +449,7 @@ enum AuthenticationButtonType {
       imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
   [button setImage:buttonImage forState:UIControlStateNormal];
   [self setSkipSigninStylingWithButton:button];
+  button.imageEdgeInsets = UIEdgeInsetsMake(0, -kImageInset, 0, 0);
 }
 
 // Applies font and inset to |button| according to the current size class.
