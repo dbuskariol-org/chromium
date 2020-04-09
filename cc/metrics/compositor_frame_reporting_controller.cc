@@ -312,13 +312,18 @@ void CompositorFrameReportingController::RemoveActiveTracker(
 void CompositorFrameReportingController::AdvanceReporterStage(
     PipelineStage start,
     PipelineStage target) {
-  if (reporters_[target]) {
+  auto& reporter = reporters_[target];
+  if (reporter) {
+    auto termination_time = (target == PipelineStage::kBeginMainFrame &&
+                             reporter->did_abort_main_frame())
+                                ? reporter->main_frame_abort_time()
+                                : Now();
     if (reporters_[target]->did_not_produce_frame())
       reporters_[target]->TerminateFrame(
-          FrameTerminationStatus::kDidNotProduceFrame, Now());
+          FrameTerminationStatus::kDidNotProduceFrame, termination_time);
     else
       reporters_[target]->TerminateFrame(
-          FrameTerminationStatus::kReplacedByNewReporter, Now());
+          FrameTerminationStatus::kReplacedByNewReporter, termination_time);
   }
   reporters_[target] = std::move(reporters_[start]);
 }
