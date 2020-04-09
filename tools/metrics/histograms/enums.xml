@@ -38154,6 +38154,7 @@ from previous Chrome versions.
   <int value="-1391645613" label="ImeMozcProto:enabled"/>
   <int value="-1390331361"
       label="SyncPseudoUSSHistoryDeleteDirectives:enabled"/>
+  <int value="-1390005994" label="AppCache:disabled"/>
   <int value="-1388817073" label="OmniboxReverseAnswers:disabled"/>
   <int value="-1386966873" label="disable-mac-views-native-app-windows"/>
   <int value="-1386790338" label="ImeMozcProto:disabled"/>
@@ -39921,6 +39922,7 @@ from previous Chrome versions.
   <int value="684806628" label="TranslateLanguageByULP:disabled"/>
   <int value="685916283" label="enable-zip-archiver-on-file-manager"/>
   <int value="687838135" label="ThirdPartyDoodles:disabled"/>
+  <int value="688254068" label="AppCache:enabled"/>
   <int value="689489984" label="disable-zero-suggest"/>
   <int value="689577480" label="vr-shell-experimental-rendering"/>
   <int value="690185633" label="NonValidatingReloadOnNormalReload:disabled"/>
