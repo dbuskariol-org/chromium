@@ -54,8 +54,6 @@ using perfetto::protos::pbzero::TrackEvent;
 
 namespace {
 
-const int32_t kEventDispositionUndefined = -1;
-
 cc::ScrollState CreateScrollStateForGesture(const WebGestureEvent& event) {
   cc::ScrollStateData scroll_state_data;
   switch (event.GetType()) {
@@ -185,8 +183,6 @@ InputHandlerProxy::InputHandlerProxy(cc::InputHandler* input_handler,
       synchronous_input_handler_(nullptr),
       handling_gesture_on_impl_thread_(false),
       scroll_sequence_ignored_(false),
-      touch_result_(kEventDispositionUndefined),
-      mouse_wheel_result_(kEventDispositionUndefined),
       current_overscroll_params_(nullptr),
       has_seen_first_gesture_scroll_update_after_begin_(false),
       last_injected_gesture_was_begin_(false),
@@ -728,14 +724,15 @@ void InputHandlerProxy::RecordMainThreadScrollingReasons(
   const bool is_compositor_scroll =
       reasons == cc::MainThreadScrollingReason::kNotScrollingOnMain;
 
-  int32_t disposition =
+  base::Optional<EventDisposition> disposition =
       (device == blink::WebGestureDevice::kTouchpad ? mouse_wheel_result_
                                                     : touch_result_);
 
   // Scrolling can be handled on the compositor thread but it might be blocked
   // on the main thread waiting for non-passive event handlers to process the
   // wheel/touch events (i.e. were they preventDefaulted?).
-  bool blocked_on_main_thread_handler = disposition == DID_NOT_HANDLE;
+  bool blocked_on_main_thread_handler =
+      disposition.has_value() && disposition == DID_NOT_HANDLE;
 
   auto scroll_start_state = RecordScrollingThread(
       is_compositor_scroll, blocked_on_main_thread_handler, device);
@@ -812,17 +809,18 @@ InputHandlerProxy::EventDisposition InputHandlerProxy::HandleMouseWheel(
     // Noncancellable wheel events should have phase info.
     DCHECK(wheel_event.phase != WebMouseWheelEvent::kPhaseNone ||
            wheel_event.momentum_phase != WebMouseWheelEvent::kPhaseNone);
+    DCHECK(mouse_wheel_result_.has_value());
 
-    result = static_cast<EventDisposition>(mouse_wheel_result_);
+    result = mouse_wheel_result_.value();
 
     if (wheel_event.phase == WebMouseWheelEvent::kPhaseEnded ||
         wheel_event.phase == WebMouseWheelEvent::kPhaseCancelled ||
         wheel_event.momentum_phase == WebMouseWheelEvent::kPhaseEnded ||
         wheel_event.momentum_phase == WebMouseWheelEvent::kPhaseCancelled) {
-      mouse_wheel_result_ = kEventDispositionUndefined;
-    }
-    if (mouse_wheel_result_ != kEventDispositionUndefined)
+      mouse_wheel_result_.reset();
+    } else {
       return result;
+    }
   }
 
   gfx::PointF position_in_widget = wheel_event.PositionInWidget();
@@ -1093,8 +1091,8 @@ InputHandlerProxy::EventDisposition InputHandlerProxy::HitTestTouchEvent(
   // Merge |touch_result_| and |result| so the result has the highest
   // priority value according to the sequence; (DROP_EVENT,
   // DID_HANDLE_NON_BLOCKING, DID_NOT_HANDLE).
-  if (touch_result_ == kEventDispositionUndefined ||
-      touch_result_ == DROP_EVENT || result == DID_NOT_HANDLE)
+  if (!touch_result_.has_value() || touch_result_ == DROP_EVENT ||
+      result == DID_NOT_HANDLE)
     touch_result_ = result;
   return result;
 }
@@ -1140,7 +1138,7 @@ InputHandlerProxy::EventDisposition InputHandlerProxy::HandleTouchMove(
     const blink::WebTouchEvent& touch_event) {
   // Hit test if this is the first touch move or we don't have any results
   // from a previous hit test.
-  if (touch_result_ == kEventDispositionUndefined ||
+  if (!touch_result_.has_value() ||
       touch_event.touch_start_or_first_touch_move) {
     bool is_touching_scrolling_layer;
     cc::TouchAction white_listed_touch_action = cc::TouchAction::kAuto;
@@ -1150,13 +1148,13 @@ InputHandlerProxy::EventDisposition InputHandlerProxy::HandleTouchMove(
         white_listed_touch_action, touch_event.unique_touch_event_id, result);
     return result;
   }
-  return static_cast<EventDisposition>(touch_result_);
+  return touch_result_.value();
 }
 
 InputHandlerProxy::EventDisposition InputHandlerProxy::HandleTouchEnd(
     const blink::WebTouchEvent& touch_event) {
   if (touch_event.touches_length == 1)
-    touch_result_ = kEventDispositionUndefined;
+    touch_result_.reset();
   return DID_NOT_HANDLE;
 }
 
