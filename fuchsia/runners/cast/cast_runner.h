@@ -29,17 +29,16 @@ class FilteredServiceDirectory;
 // sys::Runner which instantiates Cast activities specified via cast/casts URIs.
 class CastRunner : public WebContentRunner {
  public:
-  using OnDestructionCallback = base::OnceCallback<void(CastRunner*)>;
-
-  static constexpr uint16_t kRemoteDebuggingPort = 9222;
-
   // Creates a Runner for Cast components and publishes it into the specified
   // OutgoingDirectory.
   // |get_context_params_callback|: Returns the context parameters to use.
   // |is_headless|: True if |get_context_params_callback| sets the HEADLESS
   //     feature flag.
+  // |outgoing_directory|: The directory that this CastRunner will publish
+  //     itself to.
   CastRunner(GetContextParamsCallback get_context_params_callback,
-             bool is_headless);
+             bool is_headless,
+             sys::OutgoingDirectory* outgoing_directory);
   ~CastRunner() override;
 
   CastRunner(const CastRunner&) = delete;
@@ -60,7 +59,20 @@ class CastRunner : public WebContentRunner {
   // Returns true if this Runner is configured not to use Scenic.
   bool is_headless() const { return is_headless_; }
 
+  // Returns the number of active CastRunner instances.
+  size_t GetChildCastRunnerCountForTest();
+
  private:
+  using OnDestructionCallback = base::OnceCallback<void(CastRunner*)>;
+
+  // Constructor used for creating CastRunners that run apps in dedicated
+  // Contexts. Child CastRunners may only spawn one Component and will be
+  // destroyed by their parents when their singleton Components are destroyed.
+  // |on_destruction_callback| is invoked when the child component is destroyed.
+  CastRunner(OnDestructionCallback on_destruction_callback,
+             fuchsia::web::ContextPtr context,
+             bool is_headless);
+
   // Creates and returns the service directory that is passed to the main web
   // context.
   std::unique_ptr<base::fuchsia::FilteredServiceDirectory>
@@ -103,6 +115,9 @@ class CastRunner : public WebContentRunner {
   base::flat_set<std::unique_ptr<CastComponent::CastComponentParams>,
                  base::UniquePtrComparator>
       pending_components_;
+
+  // Used as a template for creating the ContextPtrs of isolated Runners.
+  fuchsia::web::CreateContextParams common_create_context_params_;
 
   // Invoked upon destruction of "isolated" runners, used to signal termination
   // to parents.

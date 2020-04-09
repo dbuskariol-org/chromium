@@ -117,12 +117,23 @@ const char CastRunner::kAgentComponentUrl[] =
 
 CastRunner::CastRunner(
     WebContentRunner::GetContextParamsCallback get_context_params_callback,
-    bool is_headless)
+    bool is_headless,
+    sys::OutgoingDirectory* outgoing_directory)
     : WebContentRunner(base::BindRepeating(&CastRunner::GetMainContextParams,
-                                           base::Unretained(this))),
+                                           base::Unretained(this)),
+                       outgoing_directory),
       get_context_params_callback_(std::move(get_context_params_callback)),
       is_headless_(is_headless),
+      common_create_context_params_(BuildCreateContextParamsForIsolatedRunners(
+          get_context_params_callback_.Run())),
       service_directory_(CreateServiceDirectory()) {}
+
+CastRunner::CastRunner(OnDestructionCallback on_destruction_callback,
+                       fuchsia::web::ContextPtr context,
+                       bool is_headless)
+    : WebContentRunner(std::move(context)),
+      is_headless_(is_headless),
+      on_destruction_callback_(std::move(on_destruction_callback)) {}
 
 CastRunner::~CastRunner() = default;
 
@@ -199,6 +210,10 @@ void CastRunner::StartComponent(
       });
 
   pending_components_.emplace(std::move(pending_component_params));
+}
+
+size_t CastRunner::GetChildCastRunnerCountForTest() {
+  return isolated_runners_.size();
 }
 
 void CastRunner::DestroyComponent(WebComponent* component) {
@@ -355,12 +370,16 @@ void CastRunner::CreateAndRegisterCastComponent(
 
 CastRunner* CastRunner::CreateChildRunnerForIsolatedComponent(
     CastComponent::CastComponentParams* component_params) {
-  // Construct the CreateContextParams in order to create a new Context.  Some
-  // common parameters must be inherited from default params returned from
-  // |get_context_params_callback_|.
-  fuchsia::web::CreateContextParams isolated_context_params =
-      BuildCreateContextParamsForIsolatedRunners(
-          get_context_params_callback_.Run());
+  // Construct the CreateContextParams in order to create a new Context.
+  // Some common parameters must be inherited from
+  // |common_create_context_params_|.
+  fuchsia::web::CreateContextParams isolated_context_params;
+  zx_status_t status =
+      common_create_context_params_.Clone(&isolated_context_params);
+  if (status != ZX_OK) {
+    ZX_LOG(ERROR, status) << "clone";
+    return nullptr;
+  }
 
   // Service redirection is not necessary for isolated context. Pass default
   // /svc as is, without overriding any services.
@@ -372,16 +391,17 @@ CastRunner* CastRunner::CreateChildRunnerForIsolatedComponent(
       std::move(*component_params->app_config
                      .mutable_content_directories_for_isolated_application()));
 
-  auto create_context_params_callback = base::BindRepeating(
-      [](fuchsia::web::CreateContextParams isolated_context_params) {
-        return isolated_context_params;
-      },
-      base::Passed(std::move(isolated_context_params)));
+  std::unique_ptr<CastRunner> cast_runner(new CastRunner(
+      base::BindOnce(&CastRunner::OnChildRunnerDestroyed,
+                     base::Unretained(this)),
+      CreateWebContext(std::move(isolated_context_params)), is_headless()));
 
-  auto cast_runner = std::make_unique<CastRunner>(
-      std::move(create_context_params_callback), is_headless());
-  cast_runner->on_destruction_callback_ = base::BindOnce(
-      &CastRunner::OnChildRunnerDestroyed, base::Unretained(this));
+  // If test code is listening for Component creation events, then wire up the
+  // isolated CastRunner to signal component creation events.
+  if (web_component_created_callback_for_test()) {
+    cast_runner->SetWebComponentCreatedCallbackForTest(
+        web_component_created_callback_for_test());
+  }
 
   CastRunner* cast_runner_ptr = cast_runner.get();
   isolated_runners_.insert(std::move(cast_runner));
