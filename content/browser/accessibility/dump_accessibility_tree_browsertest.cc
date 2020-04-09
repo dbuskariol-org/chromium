@@ -569,6 +569,11 @@ IN_PROC_BROWSER_TEST_P(DumpAccessibilityTreeTest,
   RunAriaTest(FILE_PATH_LITERAL("aria-combobox.html"));
 }
 
+IN_PROC_BROWSER_TEST_P(DumpAccessibilityTreeTest,
+                       AccessibilityAriaComboboxUneditable) {
+  RunAriaTest(FILE_PATH_LITERAL("aria-combobox-uneditable.html"));
+}
+
 #if defined(OS_ANDROID)
 // TODO(crbug.com/986673): test is flaky on android.
 #define MAYBE_AccessibilityAriaOnePointOneCombobox \
