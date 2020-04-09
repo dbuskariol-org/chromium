@@ -131,9 +131,8 @@ Widget::InitParams ViewsTestBase::CreateParams(Widget::InitParams::Type type) {
 
 std::unique_ptr<Widget> ViewsTestBase::CreateTestWidget(
     Widget::InitParams::Type type) {
-  Widget::InitParams params = CreateParamsForTestWidget(type);
   std::unique_ptr<Widget> widget = AllocateTestWidget();
-  widget->Init(std::move(params));
+  widget->Init(CreateParamsForTestWidget(type));
   return widget;
 }
 

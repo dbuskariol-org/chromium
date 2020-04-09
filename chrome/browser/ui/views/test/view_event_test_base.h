@@ -72,7 +72,7 @@ class ViewEventTestBase : public ChromeViewsTestBase {
 
   static void SetUpTestCase();
 
-  // testing::Test:
+  // ChromeViewsTestBase:
   void SetUp() override;
   void TearDown() override;
 
