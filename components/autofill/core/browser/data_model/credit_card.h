@@ -243,13 +243,12 @@ class CreditCard : public AutofillDataModel {
   // A label for this card formatted as 'Nickname - ****2345' if nickname is
   // available and valid; otherwise, formatted as 'IssuerNetwork - ****2345'.
   base::string16 NicknameOrNetworkAndLastFourDigits() const;
-  // A label for this card formatted as
-  // 'BankName/Netowrk' - ****2345, expires on MM/YY' if bank name
-  // experiment turned on and bank name available; otherwise, formatted as
-  // 'IssuerNetwork - ****2345, expires on MM/YY'.
-  // This label is used as a second line label when the autofill dropdown
-  // layout experiment is enabled and the cardholder name is selected.
-  base::string16 NetworkOrBankNameLastFourDigitsAndDescriptiveExpiration(
+  // A label for this card formatted as 'Nickname - ****2345, expires on MM/YY'
+  // if nickname experiment is turned on and nickname is available; otherwise,
+  // formatted as 'IssuerNetwork - ****2345, expires on MM/YY'.
+  // This label is used as a second line label when the cardholder
+  // name/expiration date field is selected.
+  base::string16 NicknameOrNetworkLastFourDigitsAndDescriptiveExpiration(
       const std::string& app_locale) const;
   // A label for this card formatted as 'Expires on MM/YY'.
   // This label is used as a second line label when the autofill dropdown

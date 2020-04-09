@@ -800,11 +800,11 @@ base::string16 CreditCard::NicknameOrNetworkAndLastFourDigits() const {
 }
 
 base::string16
-CreditCard::NetworkOrBankNameLastFourDigitsAndDescriptiveExpiration(
+CreditCard::NicknameOrNetworkLastFourDigitsAndDescriptiveExpiration(
     const std::string& app_locale) const {
   return l10n_util::GetStringFUTF16(
       IDS_AUTOFILL_CREDIT_CARD_TWO_LINE_LABEL_FROM_NAME,
-      NetworkAndLastFourDigits(),
+      NicknameOrNetworkAndLastFourDigits(),
       GetInfo(AutofillType(CREDIT_CARD_EXP_DATE_2_DIGIT_YEAR), app_locale));
 }
 
