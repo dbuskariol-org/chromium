@@ -953,9 +953,10 @@ void AppLauncherHandler::HandleShowAppInfo(const base::ListValue* args) {
   std::string extension_id;
   CHECK(args->GetString(0, &extension_id));
 
-  if (DesktopPWAsWithoutExtensions() &&
-      web_app_provider_->registrar().IsInstalled(extension_id)) {
-    NOTIMPLEMENTED();
+  if (web_app_provider_->registrar().IsInstalled(extension_id)) {
+    chrome::ShowSiteSettings(
+        chrome::FindBrowserWithWebContents(web_ui()->GetWebContents()),
+        web_app_provider_->registrar().GetAppLaunchURL(extension_id));
     return;
   }
 
@@ -967,13 +968,7 @@ void AppLauncherHandler::HandleShowAppInfo(const base::ListValue* args) {
                                  extensions::ExtensionRegistry::TERMINATED);
   if (!extension)
     return;
-
-  if (extension->is_hosted_app() && extension->from_bookmark()) {
-    chrome::ShowSiteSettings(
-        chrome::FindBrowserWithWebContents(web_ui()->GetWebContents()),
-        extensions::AppLaunchInfo::GetFullLaunchURL(extension));
-    return;
-  }
+  DCHECK(!extension->from_bookmark());
 
   UMA_HISTOGRAM_ENUMERATION("Apps.AppInfoDialog.Launches",
                             AppInfoLaunchSource::FROM_APPS_PAGE,
