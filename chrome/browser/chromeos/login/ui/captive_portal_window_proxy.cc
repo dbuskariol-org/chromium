@@ -6,7 +6,7 @@
 
 #include "base/metrics/histogram_macros.h"
 #include "chrome/browser/chromeos/login/ui/captive_portal_view.h"
-#include "chrome/browser/chromeos/profiles/profile_helper.h"
+#include "chrome/browser/themes/theme_service.h"
 #include "chrome/browser/ui/webui/chromeos/internet_detail_dialog.h"
 #include "components/constrained_window/constrained_window_views.h"
 #include "components/web_modal/web_contents_modal_dialog_host.h"
@@ -16,11 +16,37 @@
 
 namespace {
 
+// A widget that uses the supplied Profile to return a ThemeProvider.  This is
+// necessary because the Views in the captive portal UI need to access the theme
+// colors; also, this widget cannot copy the theme from e.g. a Browser widget
+// because there may be no Browsers started.
+class CaptivePortalWidget : public views::Widget {
+ public:
+  explicit CaptivePortalWidget(Profile* profile);
+  CaptivePortalWidget(const CaptivePortalWidget&) = delete;
+  CaptivePortalWidget& operator=(const CaptivePortalWidget&) = delete;
+  ~CaptivePortalWidget() override = default;
+
+  // views::Widget:
+  const ui::ThemeProvider* GetThemeProvider() const override;
+
+ private:
+  Profile* profile_;
+};
+
+CaptivePortalWidget::CaptivePortalWidget(Profile* profile)
+    : profile_(profile) {}
+
+const ui::ThemeProvider* CaptivePortalWidget::GetThemeProvider() const {
+  return &ThemeService::GetThemeProviderForProfile(profile_);
+}
+
 // The captive portal dialog is system-modal, but uses the web-content-modal
 // dialog manager (odd) and requires this atypical dialog widget initialization.
-views::Widget* CreateWindowAsFramelessChild(views::WidgetDelegate* delegate,
+views::Widget* CreateWindowAsFramelessChild(Profile* profile,
+                                            views::WidgetDelegate* delegate,
                                             gfx::NativeView parent) {
-  views::Widget* widget = new views::Widget;
+  views::Widget* widget = new CaptivePortalWidget(profile);
 
   views::Widget::InitParams params;
   params.delegate = delegate;
@@ -77,7 +103,7 @@ void CaptivePortalWindowProxy::Show() {
   auto* manager =
       web_modal::WebContentsModalDialogManager::FromWebContents(web_contents_);
   widget_ = CreateWindowAsFramelessChild(
-      portal,
+      profile_, portal,
       manager->delegate()->GetWebContentsModalDialogHost()->GetHostView());
   portal->Init();
   widget_->AddObserver(this);
@@ -130,9 +156,8 @@ void CaptivePortalWindowProxy::OnWidgetDestroyed(views::Widget* widget) {
 void CaptivePortalWindowProxy::InitCaptivePortalView() {
   DCHECK(GetState() == STATE_IDLE ||
          GetState() == STATE_WAITING_FOR_REDIRECTION);
-  if (!captive_portal_view_) {
-    captive_portal_view_ = std::make_unique<CaptivePortalView>(
-        ProfileHelper::GetSigninProfile(), this);
+  if (!captive_portal_view_.get()) {
+    captive_portal_view_ = std::make_unique<CaptivePortalView>(profile_, this);
     captive_portal_view_for_testing_ = captive_portal_view_.get();
   }
 

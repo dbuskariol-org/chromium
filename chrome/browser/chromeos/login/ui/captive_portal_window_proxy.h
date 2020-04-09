@@ -10,6 +10,7 @@
 #include "base/observer_list.h"
 #include "base/observer_list_types.h"
 #include "base/time/time.h"
+#include "chrome/browser/chromeos/profiles/profile_helper.h"
 #include "ui/views/widget/widget_observer.h"
 
 namespace content {
@@ -120,6 +121,7 @@ class CaptivePortalWindowProxy : public views::WidgetObserver {
     return captive_portal_view_for_testing_;
   }
 
+  Profile* profile_ = ProfileHelper::GetSigninProfile();
   Delegate* delegate_;
   content::WebContents* web_contents_;
   views::Widget* widget_ = nullptr;
