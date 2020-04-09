@@ -156,13 +156,15 @@ GPUSampler* GPUDevice::createSampler(const GPUSamplerDescriptor* descriptor) {
 }
 
 GPUBindGroup* GPUDevice::createBindGroup(
-    const GPUBindGroupDescriptor* descriptor) {
-  return GPUBindGroup::Create(this, descriptor);
+    const GPUBindGroupDescriptor* descriptor,
+    ExceptionState& exception_state) {
+  return GPUBindGroup::Create(this, descriptor, exception_state);
 }
 
 GPUBindGroupLayout* GPUDevice::createBindGroupLayout(
-    const GPUBindGroupLayoutDescriptor* descriptor) {
-  return GPUBindGroupLayout::Create(this, descriptor);
+    const GPUBindGroupLayoutDescriptor* descriptor,
+    ExceptionState& exception_state) {
+  return GPUBindGroupLayout::Create(this, descriptor, exception_state);
 }
 
 GPUPipelineLayout* GPUDevice::createPipelineLayout(

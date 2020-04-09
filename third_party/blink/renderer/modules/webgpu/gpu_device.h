@@ -79,9 +79,11 @@ class GPUDevice final : public EventTargetWithInlineData,
                             ExceptionState& exception_state);
   GPUSampler* createSampler(const GPUSamplerDescriptor* descriptor);
 
-  GPUBindGroup* createBindGroup(const GPUBindGroupDescriptor* descriptor);
+  GPUBindGroup* createBindGroup(const GPUBindGroupDescriptor* descriptor,
+                                ExceptionState& exception_state);
   GPUBindGroupLayout* createBindGroupLayout(
-      const GPUBindGroupLayoutDescriptor* descriptor);
+      const GPUBindGroupLayoutDescriptor* descriptor,
+      ExceptionState& exception_state);
   GPUPipelineLayout* createPipelineLayout(
       const GPUPipelineLayoutDescriptor* descriptor);
 
