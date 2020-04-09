@@ -3,13 +3,6 @@
 <grit-part>
   <message name="IDS_SETTINGS_EMPTY_STRING" desc="Empty string, exist only to make code generic. No translation required."></message>
 
-  <!-- Main Page -->
-  <if expr="chromeos">
-    <message name="IDS_SETTINGS_SECONDARY_USER_BANNER" desc="Banner displayed in settings page when the user is secondary in a multi-profile session.">
-      Some settings belonging to <ph name="PRIMARY_EMAIL">$1<ex>john@google.com</ex></ph> are being shared with you. These settings only affect your account when using multiple sign-in.
-    </message>
-  </if>
-
   <!-- Shared across multiple pages -->
   <message name="IDS_SETTINGS_CONTINUE" desc="Label for 'Continue' buttons.">
     Continue
@@ -176,12 +169,6 @@
     </message>
   </if>
   <if expr="chromeos">
-    <message name="IDS_SETTINGS_DEVICE_OFF" desc="In Settings pages, the label when a bluetooth, wifi, or mobile device is off (disabled)." meaning="Device is disabled.">
-      Off
-    </message>
-    <message name="IDS_SETTINGS_DEVICE_ON" desc="In Settings pages, the label when a bluetooth, wifi, or mobile device is on (enabled)." meaning="Device is enabled.">
-      On
-    </message>
     <message name="IDS_SETTINGS_RESTART" desc="Text for a button that will restart ChromeOS.">
       Restart
     </message>
@@ -2322,19 +2309,6 @@
   <message name="IDS_SETTINGS_MANAGE_GOOGLE_ACCOUNT" desc="Label for the button that takes the user to the Google Account website.">
     Manage your Google Account
   </message>
-<if expr="chromeos">
-  <message name="IDS_SETTINGS_THEMES_AND_WALLPAPERS_CHECKBOX_LABEL" desc="Label for the checkbox which enables or disables syncing themes and wallpapers between multiple browser instances.">
-    Themes &amp; Wallpapers
-  </message>
-  <message name="IDS_SETTINGS_WIFI_CONFIGURATIONS_CHECKBOX_LABEL" desc="Label for the checkbox which enables syncing of Wi-Fi networks across devices.">
-    Wi-Fi networks
-  </message>
-</if>
-<if expr="not chromeos">
-  <message name="IDS_SETTINGS_THEMES_AND_WALLPAPERS_CHECKBOX_LABEL" desc="Label for the checkbox which enables or disables syncing themes and wallpapers between multiple browser instances.">
-    Themes
-  </message>
-</if>
   <message name="IDS_SETTINGS_USER_EVENTS_CHECKBOX_LABEL" desc="Label for the checkbox which enables or disables recording user events.">
     Activity and interactions
   </message>

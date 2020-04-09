@@ -7,6 +7,17 @@
   <message name="IDS_SETTINGS_TURN_ON" desc="Label for turn on buttons.">
     Turn on
   </message>
+  <message name="IDS_SETTINGS_DEVICE_OFF" desc="In Settings pages, the label when a bluetooth, wifi, or mobile device is off (disabled)." meaning="Device is disabled.">
+    Off
+  </message>
+  <message name="IDS_SETTINGS_DEVICE_ON" desc="In Settings pages, the label when a bluetooth, wifi, or mobile device is on (enabled)." meaning="Device is enabled.">
+    On
+  </message>
+
+  <!--Main Page-->
+  <message name="IDS_SETTINGS_SECONDARY_USER_BANNER" desc="Banner displayed in settings page when the user is secondary in a multi-profile session.">
+    Some settings belonging to <ph name="PRIMARY_EMAIL">$1<ex>john@google.com</ex></ph> are being shared with you. These settings only affect your account when using multiple sign-in.
+  </message>
 
   <!-- About (OS Settings) -->
   <message name="IDS_OS_SETTINGS_ABOUT_PAGE_BUILD_DETAILS" desc="Label of the row button that clicks into Build details">
@@ -175,6 +186,9 @@
   </message>
   <message name="IDS_OS_SETTINGS_WALLPAPER_CHECKBOX_LABEL" desc="Label for the checkbox which enables syncing of wallpaper across devices.">
     Wallpaper
+  </message>
+  <message name="IDS_SETTINGS_WIFI_CONFIGURATIONS_CHECKBOX_LABEL" desc="Label for the checkbox which enables syncing of Wi-Fi networks across devices.">
+    Wi-Fi networks
   </message>
   <message name="IDS_SETTINGS_ACCOUNT_MANAGER_SUBMENU_LABEL" desc="Label of Account Manager submenu in Settings page.">
     Google Accounts
