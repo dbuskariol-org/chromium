@@ -6568,6 +6568,9 @@ crbug.com/1025274 http/tests/security/mixedContent/insecure-audio-video-in-main-
 crbug.com/1042877 virtual/autoupgrade-optionally-blockable-mixed-content/http/tests/mixed-autoupgrade/optionally/image-upgrade-console-message.https.html [ Failure ]
 crbug.com/1042877 virtual/autoupgrade-optionally-blockable-mixed-content/http/tests/mixed-autoupgrade/optionally/image-upgrade.https.html [ Failure ]
 
+# V8 roll
+crbug.com/v8/6751 http/tests/devtools/console/console-format-es6.js [ Skip ]
+
 # DevTools roll
 crbug.com/1006759 http/tests/devtools/profiler/agents-disabled-check.js [ Skip ]
 
