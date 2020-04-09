@@ -1577,8 +1577,9 @@ IN_PROC_BROWSER_TEST_P(DumpAccessibilityTreeTest,
   RunHtmlTest(FILE_PATH_LITERAL("iframe.html"));
 }
 
+// https://crbug.com/622387
 IN_PROC_BROWSER_TEST_P(DumpAccessibilityTreeTest,
-                       AccessibilityIframeCrossProcess) {
+                       DISABLED_AccessibilityIframeCrossProcess) {
   RunHtmlTest(FILE_PATH_LITERAL("iframe-cross-process.html"));
 }
 
