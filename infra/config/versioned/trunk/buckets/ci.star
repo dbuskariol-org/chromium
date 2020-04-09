@@ -323,50 +323,89 @@ ci.gpu_thin_tester(
 
 ci.linux_builder(
     name = 'Cast Linux',
+    console_view_entry = ci.console_view_entry(
+        category = 'cast',
+        short_name = 'vid',
+    ),
     goma_jobs = goma.jobs.J50,
 )
 
 ci.linux_builder(
     name = 'Fuchsia ARM64',
+    console_view_entry = ci.console_view_entry(
+        category = 'fuchsia|a64',
+    ),
     notifies = ['cr-fuchsia'],
 )
 
 ci.linux_builder(
     name = 'Fuchsia x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'fuchsia|x64',
+        short_name = 'rel',
+    ),
     notifies = ['cr-fuchsia'],
 )
 
 ci.linux_builder(
     name = 'Linux Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'bld',
+    ),
 )
 
 ci.linux_builder(
     name = 'Linux Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'debug|builder',
+        short_name = '64',
+    ),
 )
 
 ci.linux_builder(
     name = 'Linux Tests',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'tst',
+    ),
     goma_backend = None,
     triggered_by = [builder_name('Linux Builder')],
 )
 
 ci.linux_builder(
     name = 'Linux Tests (dbg)(1)',
+    console_view_entry = ci.console_view_entry(
+        category = 'debug|tester',
+        short_name = '64',
+    ),
     triggered_by = [builder_name('Linux Builder (dbg)')],
 )
 
 ci.linux_builder(
     name = 'fuchsia-arm64-cast',
+    console_view_entry = ci.console_view_entry(
+        category = 'fuchsia|cast',
+        short_name = 'a64',
+    ),
     notifies = ['cr-fuchsia'],
 )
 
 ci.linux_builder(
     name = 'fuchsia-x64-cast',
+    console_view_entry = ci.console_view_entry(
+        category = 'fuchsia|cast',
+        short_name = 'x64',
+    ),
     notifies = ['cr-fuchsia'],
 )
 
 ci.linux_builder(
     name = 'linux-ozone-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'ozo',
+    ),
 )
 
 ci.linux_builder(

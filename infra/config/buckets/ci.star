@@ -33,6 +33,15 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.linux',
+    ordering = {
+        None: ['release', 'debug'],
+        'release': ci.ordering(short_names=['bld', 'tst', 'nsl', 'gcc']),
+        'cast': ci.ordering(short_names=['vid', 'aud']),
+    },
+)
+
+ci.console_view(
     name = 'chromium.mac',
     ordering = {
         None: ['release'],
@@ -1636,13 +1645,22 @@ ci.gpu_fyi_windows_builder(
     name = 'GPU FYI XR Win x64 Builder',
 )
 
+
 ci.linux_builder(
     name = 'Cast Audio Linux',
+    console_view_entry = ci.console_view_entry(
+        category = 'cast',
+        short_name = 'aud',
+    ),
     ssd = True,
 )
 
 ci.linux_builder(
     name = 'Deterministic Fuchsia (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'fuchsia|x64',
+        short_name = 'det',
+    ),
     executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
     goma_jobs = None,
@@ -1650,12 +1668,20 @@ ci.linux_builder(
 
 ci.linux_builder(
     name = 'Deterministic Linux',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'det',
+    ),
     executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 ci.linux_builder(
     name = 'Deterministic Linux (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'debug|builder',
+        short_name = 'det',
+    ),
     cores = 32,
     executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
@@ -1667,24 +1693,44 @@ ci.linux_builder(
 
 ci.linux_builder(
     name = 'Linux Builder (dbg)(32)',
+    console_view_entry = ci.console_view_entry(
+        category = 'debug|builder',
+        short_name = '32',
+    ),
 )
 
 ci.linux_builder(
     name = 'Network Service Linux',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'nsl',
+    ),
 )
 
 ci.linux_builder(
     name = 'fuchsia-x64-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'fuchsia|x64',
+        short_name = 'dbg',
+    ),
     notifies = ['cr-fuchsia'],
 )
 
 ci.linux_builder(
     name = 'linux-gcc-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'gcc',
+    ),
     goma_backend = None,
 )
 
 ci.linux_builder(
     name = 'linux-trusty-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'release',
+        short_name = 'tru',
+    ),
     os = os.LINUX_TRUSTY,
 )
 
