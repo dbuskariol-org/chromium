@@ -13,10 +13,11 @@
 #include "base/memory/weak_ptr.h"
 #include "base/strings/string16.h"
 #include "ui/base/accelerators/accelerator.h"
+#include "ui/base/models/image_model.h"
 #include "ui/base/models/menu_model.h"
-#include "ui/gfx/image/image.h"
 
 namespace gfx {
+class Image;
 struct VectorIcon;
 }
 
@@ -168,8 +169,13 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
   // Sets the icon for the item at |index|.
   void SetIcon(int index, const gfx::Image& icon);
 
-  // As above, but uses a VectorIcon. Only one of the two should be set.
+  // As above and below, but uses a VectorIcon. Only one of the three should
+  // be set.
   void SetIcon(int index, const gfx::VectorIcon& icon);
+
+  // As above other two, but takes a ui::ImageModel. Only one of these three
+  // should be set.
+  void SetIcon(int index, const ui::ImageModel& icon);
 
   // Sets the label for the item at |index|.
   void SetLabel(int index, const base::string16& label);
@@ -179,6 +185,9 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
 
   // Sets the minor icon for the item at |index|.
   void SetMinorIcon(int index, const gfx::VectorIcon& minor_icon);
+
+  // As above but takes a ui::ImageModel. Only one of the two should be set.
+  void SetMinorIcon(int index, const ui::ImageModel& minor_icon);
 
   // Sets whether the item at |index| is enabled.
   void SetEnabledAt(int index, bool enabled);
@@ -201,13 +210,12 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
   int GetCommandIdAt(int index) const override;
   base::string16 GetLabelAt(int index) const override;
   base::string16 GetMinorTextAt(int index) const override;
-  const gfx::VectorIcon* GetMinorIconAt(int index) const override;
+  ImageModel GetMinorIconAt(int index) const override;
   bool IsItemDynamicAt(int index) const override;
   bool GetAcceleratorAt(int index, ui::Accelerator* accelerator) const override;
   bool IsItemCheckedAt(int index) const override;
   int GetGroupIdAt(int index) const override;
-  bool GetIconAt(int index, gfx::Image* icon) const override;
-  const gfx::VectorIcon* GetVectorIconAt(int index) const override;
+  ImageModel GetIconAt(int index) const override;
   ui::ButtonMenuItemModel* GetButtonMenuItemAt(int index) const override;
   bool IsEnabledAt(int index) const override;
   bool IsVisibleAt(int index) const override;
@@ -236,9 +244,8 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
     ItemType type = TYPE_COMMAND;
     base::string16 label;
     base::string16 minor_text;
-    const gfx::VectorIcon* minor_icon = nullptr;
-    gfx::Image icon;
-    const gfx::VectorIcon* vector_icon = nullptr;
+    ImageModel minor_icon;
+    ImageModel icon;
     int group_id = -1;
     MenuModel* submenu = nullptr;
     ButtonMenuItemModel* button_model = nullptr;

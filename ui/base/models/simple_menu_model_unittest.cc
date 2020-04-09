@@ -44,7 +44,11 @@ class DelegateBase : public SimpleMenuModel::Delegate {
   }
 
   bool GetIconForCommandId(int command_id, gfx::Image* icon) const override {
-    return item_with_icon_ == command_id;
+    if (item_with_icon_ == command_id) {
+      *icon = gfx::test::CreateImage(16, 16);
+      return true;
+    }
+    return false;
   }
 
  private:
