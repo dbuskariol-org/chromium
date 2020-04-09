@@ -213,6 +213,37 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.gpu.fyi',
+    ordering = {
+        None: ['Windows', 'Mac', 'Linux'],
+        '*builder*': ['Builder'],
+        '*type*': ci.ordering(short_names=['rel', 'dbg', 'exp']),
+        '*cpu*': ci.ordering(short_names=['x86']),
+        'Windows': '*builder*',
+        'Windows|Builder': ['Release', 'dEQP', 'dx12vk', 'Debug'],
+        'Windows|Builder|Release': '*cpu*',
+        'Windows|Builder|dEQP': '*cpu*',
+        'Windows|Builder|dx12vk': '*type*',
+        'Windows|Builder|Debug': '*cpu*',
+        'Windows|10|x64|Intel': '*type*',
+        'Windows|10|x64|Nvidia': '*type*',
+        'Windows|10|x86|Nvidia': '*type*',
+        'Windows|7|x64|Nvidia': '*type*',
+        'Mac': '*builder*',
+        'Mac|Builder': '*type*',
+        'Mac|AMD|Retina': '*type*',
+        'Mac|Intel': '*type*',
+        'Mac|Nvidia': '*type*',
+        'Linux': '*builder*',
+        'Linux|Builder': '*type*',
+        'Linux|Intel': '*type*',
+        'Linux|Nvidia': '*type*',
+        'Android': ['L32', 'M64', 'N64', 'P32', 'vk', 'dqp', 'skgl', 'skv'],
+        'Android|M64': ['QCOM'],
+    },
+)
+
+ci.console_view(
     name = 'chromium.linux',
     ordering = {
         None: ['release', 'debug'],
@@ -2092,150 +2123,286 @@ ci.gpu_thin_tester(
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI 32 Vk Release (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|vk|Q32',
+        short_name = 'P2',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI 32 dEQP Vk Release (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|dqp|vk|Q32',
+        short_name = 'P2',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI 64 Perf (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|Perf|Q64',
+        short_name = 'P2',
+    ),
     cores = 2,
     triggered_by = ['GPU FYI Perf Android 64 Builder'],
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI 64 Vk Release (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|vk|Q64',
+        short_name = 'P2',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI 64 dEQP Vk Release (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|dqp|vk|Q64',
+        short_name = 'P2',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (NVIDIA Shield TV)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|N64|NVDA',
+        short_name = 'STV',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (Nexus 5)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|L32',
+        short_name = 'N5',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (Nexus 5X)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|M64|QCOM',
+        short_name = 'N5X',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (Nexus 6)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|L32',
+        short_name = 'N6',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (Nexus 6P)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|M64|QCOM',
+        short_name = 'N6P',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (Nexus 9)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|M64|NVDA',
+        short_name = 'N9',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI Release (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|P32|QCOM',
+        short_name = 'P2',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI SkiaRenderer GL (Nexus 5X)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|skgl|M64',
+        short_name = 'N5X',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI SkiaRenderer Vulkan (Pixel 2)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|skv|P32',
+        short_name = 'P2',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Android FYI dEQP Release (Nexus 5X)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|dqp|M64',
+        short_name = 'N5X',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'GPU FYI Linux Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Builder',
+        short_name = 'rel',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'GPU FYI Linux Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Builder',
+        short_name = 'dbg',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'GPU FYI Linux Ozone Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Builder',
+        short_name = 'ozn',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'GPU FYI Linux dEQP Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Builder',
+        short_name = 'dqp',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'GPU FYI Perf Android 64 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android|Perf|Builder',
+        short_name = '64',
+    ),
 )
 
 ci.gpu_fyi_linux_builder(
     name = 'Linux FYI GPU TSAN Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux',
+        short_name = 'tsn',
+    ),
 )
 
 # Builder + tester.
 ci.gpu_fyi_linux_builder(
     name = 'Linux FYI SkiaRenderer Dawn Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'skd',
+    ),
 )
 
 
 ci.gpu_fyi_mac_builder(
     name = 'Mac FYI GPU ASAN Release',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+        short_name = 'asn',
+    ),
 )
 
 ci.gpu_fyi_mac_builder(
     name = 'GPU FYI Mac Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Builder',
+        short_name = 'rel',
+    ),
 )
 
 ci.gpu_fyi_mac_builder(
     name = 'GPU FYI Mac Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Builder',
+        short_name = 'dbg',
+    ),
 )
 
 ci.gpu_fyi_mac_builder(
     name = 'GPU FYI Mac dEQP Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Builder',
+        short_name = 'dqp',
+    ),
 )
 
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Debug (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Nvidia',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Linux Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Experimental Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'exp',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Experimental Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Nvidia',
+        short_name = 'exp',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Ozone (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'ozn',
+    ),
     triggered_by = ['GPU FYI Linux Ozone Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Nvidia',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Release (AMD R7 240)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|AMD',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI Release (Intel UHD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'uhd',
+    ),
     # TODO(https://crbug.com/986939): Remove this increased timeout once more
     # devices are added.
     execution_timeout = 18 * time.hour,
@@ -2244,41 +2411,73 @@ ci.gpu_fyi_thin_tester(
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI SkiaRenderer Vulkan (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'skv',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI SkiaRenderer Vulkan (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Nvidia',
+        short_name = 'skv',
+    ),
     triggered_by = ['GPU FYI Linux Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI dEQP Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Intel',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Linux dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Linux FYI dEQP Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux|Nvidia',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Linux dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Debug (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Intel',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Mac Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Experimental Release (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Intel',
+        short_name = 'exp',
+    ),
     triggered_by = ['GPU FYI Mac Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Experimental Retina Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|AMD|Retina',
+        short_name = 'exp',
+    ),
     triggered_by = ['GPU FYI Mac Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Experimental Retina Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Nvidia',
+        short_name = 'exp',
+    ),
     # This bot has one machine backing its tests at the moment.
     # If it gets more, this can be removed.
     # See crbug.com/853307 for more context.
@@ -2288,81 +2487,145 @@ ci.gpu_fyi_thin_tester(
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Release (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Intel',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Mac Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Retina Debug (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|AMD|Retina',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Mac Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Retina Debug (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Nvidia',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Mac Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Retina Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|AMD|Retina',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Mac Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI Retina Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Nvidia',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Mac Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI dEQP Release AMD',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|AMD',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Mac dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac FYI dEQP Release Intel',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|Intel',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Mac dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Mac Pro FYI Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac|AMD|Pro',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Mac Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Debug (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 DX12 Vulkan Debug (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia|dx12vk',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Win x64 DX12 Vulkan Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 DX12 Vulkan Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia|dx12vk',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win x64 DX12 Vulkan Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Exp Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Intel',
+        short_name = 'exp',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Exp Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'exp',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Release (AMD RX 550)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|AMD',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Intel',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Release (Intel UHD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Intel',
+        short_name = 'uhd',
+    ),
     # TODO(https://crbug.com/986939): Remove this increased timeout once
     # more devices are added.
     execution_timeout = 18 * time.hour,
@@ -2371,110 +2634,202 @@ ci.gpu_fyi_thin_tester(
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Release (NVIDIA GeForce GTX 1660)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'gtx',
+    ),
     execution_timeout = 18 * time.hour,
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 Release XR Perf (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'xr',
+    ),
     triggered_by = ['GPU FYI XR Win x64 Builder'],
 )
 
 # Builder + tester.
 ci.gpu_fyi_windows_builder(
     name = 'Win10 FYI x64 SkiaRenderer Dawn Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'skd',
+    ),
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 SkiaRenderer GL (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'skgl',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 dEQP Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Intel',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Win x64 dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x64 dEQP Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x64|Nvidia',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Win x64 dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win10 FYI x86 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|10|x86|Nvidia',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win7 FYI Debug (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|7|x86|AMD',
+        short_name = 'dbg',
+    ),
     triggered_by = ['GPU FYI Win Builder (dbg)'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win7 FYI Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|7|x86|AMD',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win7 FYI Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|7|x86|Nvidia',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win7 FYI dEQP Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|7|x86|AMD',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Win dEQP Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win7 FYI x64 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|7|x64|Nvidia',
+        short_name = 'rel',
+    ),
     triggered_by = ['GPU FYI Win x64 Builder'],
 )
 
 ci.gpu_fyi_thin_tester(
     name = 'Win7 FYI x64 dEQP Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|7|x64|Nvidia',
+        short_name = 'dqp',
+    ),
     triggered_by = ['GPU FYI Win x64 dEQP Builder'],
 )
 
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|Release',
+        short_name = 'x86',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|Debug',
+        short_name = 'x86',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win dEQP Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|dEQP',
+        short_name = 'x86',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|Release',
+        short_name = 'x64',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|Debug',
+        short_name = 'x64',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 dEQP Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|dEQP',
+        short_name = 'x64',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 DX12 Vulkan Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|dx12vk',
+        short_name = 'rel',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI Win x64 DX12 Vulkan Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|dx12vk',
+        short_name = 'dbg',
+    ),
 )
 
 ci.gpu_fyi_windows_builder(
     name = 'GPU FYI XR Win x64 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows|Builder|XR',
+        short_name = 'x64',
+    ),
 )
 
 
