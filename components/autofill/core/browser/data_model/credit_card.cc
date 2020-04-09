@@ -485,6 +485,15 @@ void CreditCard::SetExpirationYear(int expiration_year) {
   data_util::SetExpirationYear(expiration_year, &expiration_year_);
 }
 
+void CreditCard::SetNickname(const base::string16& nickname) {
+  // First replace all tabs and newlines with whitespaces and store it as
+  // |nickname_|.
+  base::ReplaceChars(nickname, base::ASCIIToUTF16("\t\r\n"),
+                     base::ASCIIToUTF16(" "), &nickname_);
+  // Then trim leading/trailing whitespaces from |nickname_|.
+  base::TrimString(nickname_, base::ASCIIToUTF16(" "), &nickname_);
+}
+
 void CreditCard::operator=(const CreditCard& credit_card) {
   set_use_count(credit_card.use_count());
   set_use_date(credit_card.use_date());
@@ -845,10 +854,11 @@ bool CreditCard::HasNameOnCard() const {
 
 bool CreditCard::HasValidNickname() const {
   // Valid nickname: 1) Non-empty 2) Doesn't exceed max length 3) Doesn't
-  // contain newline or tab characters.
-  // TODO(crbug/1059087): Trim whitespaces/newlines when set nickname.
+  // contain newline or tab or carriage return characters (even though we
+  // already enforced this when we set the nickname).
   return !nickname_.empty() && nickname_.size() <= kMaxNicknameLength &&
          nickname_.find('\n') == base::string16::npos &&
+         nickname_.find('\r') == base::string16::npos &&
          nickname_.find('\t') == base::string16::npos;
 }
 

@@ -133,7 +133,10 @@ class CreditCard : public AutofillDataModel {
   void set_server_id(const std::string& server_id) { server_id_ = server_id; }
 
   const base::string16& nickname() const { return nickname_; }
-  void set_nickname(const base::string16& nickname) { nickname_ = nickname; }
+
+  // Set the nickname with the processed input (replace all tabs and newlines
+  // with whitespaces, and trim leading/trailing whitespaces).
+  void SetNickname(const base::string16& nickname);
 
   // For use in STL containers.
   void operator=(const CreditCard& credit_card);
