@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_READING_LIST_CONTEXT_MENU_READING_LIST_CONTEXT_MENU_COMMANDS_H_
-#define IOS_CHROME_BROWSER_UI_READING_LIST_CONTEXT_MENU_READING_LIST_CONTEXT_MENU_COMMANDS_H_
+#ifndef IOS_CHROME_BROWSER_UI_READING_LIST_CONTEXT_MENU_READING_LIST_CONTEXT_MENU_DELEGATE_H_
+#define IOS_CHROME_BROWSER_UI_READING_LIST_CONTEXT_MENU_READING_LIST_CONTEXT_MENU_DELEGATE_H_
 
 @class ReadingListContextMenuParams;
 
-// Commands issued from the context menu shown for reading list items.
-@protocol ReadingListContextMenuCommands
+// Delegate to handle commands issued from the context menu shown for reading
+// list items.
+@protocol ReadingListContextMenuDelegate
 // Opens |param|'s online URL in a new tab.
 - (void)openURLInNewTabForContextMenuWithParams:
     (ReadingListContextMenuParams*)params;
@@ -25,4 +26,4 @@
     (ReadingListContextMenuParams*)params;
 @end
 
-#endif  // IOS_CHROME_BROWSER_UI_READING_LIST_CONTEXT_MENU_READING_LIST_CONTEXT_MENU_COMMANDS_H_
+#endif  // IOS_CHROME_BROWSER_UI_READING_LIST_CONTEXT_MENU_READING_LIST_CONTEXT_MENU_DELEGATE_H_
