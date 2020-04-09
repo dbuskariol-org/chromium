@@ -3133,6 +3133,9 @@ crbug.com/947951 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-in
 crbug.com/1067277 external/wpt/css/css-content/element-replacement-on-replaced-element.tentative.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Linux ] external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
+crbug.com/626703 [ Mac ] external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
+crbug.com/626703 [ Win ] external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/preload/onload-event.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/storage/estimate-indexeddb.https.any.worker.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/fetch/origin/assorted.window.html [ Failure Timeout ]
