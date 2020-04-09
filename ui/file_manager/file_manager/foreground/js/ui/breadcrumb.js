@@ -340,6 +340,18 @@ class BreadCrumb extends HTMLElement {
   }
 
   /**
+   * Returns breadcrumb buttons that have a 'has-tooltip' attribute. Note the
+   * elider button is excluded since it has an i18n aria-label.
+   *
+   * @return {!Array<HTMLButtonElement>} buttons Caller could remove the tool
+   *    tip event listeners from the returned buttons.
+   */
+  getToolTipButtons() {
+    const hasToolTip = 'button:not([elider])[has-tooltip]';
+    return Array.from(this.shadowRoot.querySelectorAll(hasToolTip));
+  }
+
+  /**
    * Handles 'click' events.
    *
    * Emits an index signal on breadcumb button click: the index indicates the
