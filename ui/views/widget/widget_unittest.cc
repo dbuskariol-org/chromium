@@ -343,28 +343,7 @@ class OwnershipTestWidget : public Widget {
 
 // TODO(sky): add coverage of ownership for the desktop variants.
 
-// Widget owns its NativeWidget, part 1: NativeWidget is a platform-native
-// widget.
-TEST_F(WidgetOwnershipTest, Ownership_WidgetOwnsPlatformNativeWidget) {
-  OwnershipTestState state;
-
-  auto widget = std::make_unique<OwnershipTestWidget>(&state);
-  Widget::InitParams params = CreateParamsForTestWidget();
-  params.native_widget = CreatePlatformNativeWidgetImpl(
-      params, widget.get(), kStubCapture, &state.native_widget_deleted);
-  widget->Init(std::move(params));
-
-  // Now delete the Widget, which should delete the NativeWidget.
-  widget.reset();
-
-  EXPECT_TRUE(state.widget_deleted);
-  EXPECT_TRUE(state.native_widget_deleted);
-
-  // TODO(beng): write test for this ownership scenario and the NativeWidget
-  //             being deleted out from under the Widget.
-}
-
-// Widget owns its NativeWidget, part 2: NativeWidget is a NativeWidget.
+// Widget owns its NativeWidget, part 1.
 TEST_F(WidgetOwnershipTest, Ownership_WidgetOwnsViewsNativeWidget) {
   OwnershipTestState state;
 
@@ -384,8 +363,7 @@ TEST_F(WidgetOwnershipTest, Ownership_WidgetOwnsViewsNativeWidget) {
   //             being deleted out from under the Widget.
 }
 
-// Widget owns its NativeWidget, part 3: NativeWidget is a NativeWidget,
-// destroy the parent view.
+// Widget owns its NativeWidget, part 2: destroy the parent view.
 TEST_F(WidgetOwnershipTest,
        Ownership_WidgetOwnsViewsNativeWidget_DestroyParentView) {
   OwnershipTestState state;
