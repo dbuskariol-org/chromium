@@ -73,6 +73,7 @@
 #include "ui/display/display_features.h"
 #include "ui/display/display_switches.h"
 #include "ui/display/manager/touch_device_manager.h"
+#include "ui/display/types/display_constants.h"
 
 namespace chromeos {
 namespace settings {
@@ -1208,6 +1209,13 @@ void AddDeviceDisplayStrings(content::WebUIDataSource* html_source) {
 
   html_source->AddBoolean("hasExternalTouchDevice",
                           display::HasExternalTouchscreenDevice());
+
+  html_source->AddBoolean(
+      "allowDisplayIdentificationApi",
+      base::FeatureList::IsEnabled(ash::features::kDisplayIdentification));
+
+  html_source->AddString("invalidDisplayId",
+                         base::NumberToString(display::kInvalidDisplayId));
 }
 
 void AddDeviceStorageStrings(content::WebUIDataSource* html_source) {
