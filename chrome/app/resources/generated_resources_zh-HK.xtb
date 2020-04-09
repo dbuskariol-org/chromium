@@ -4043,6 +4043,7 @@
 <translation id="641081527798843608">主題比對</translation>
 <translation id="6412673304250309937">使用儲存在 Chrome 中的不安全網站清單來檢查網址。如果有網站試圖盜取您的密碼，或當您下載有害檔案時，Chrome 亦可能將網址 (包括部分網頁內容) 傳送至「安全瀏覽」功能。</translation>
 <translation id="6412931879992742813">新增無痕式視窗</translation>
+<translation id="6413591858632097328">此操作會清除 <ph name="ORIGIN_NAME" /> 儲存的所有資料和 Cookie，以及該網站所安裝的應用程式。</translation>
 <translation id="641469293210305670">安裝更新內容和應用程式</translation>
 <translation id="6414888972213066896">您已詢問家長是否同意瀏覽此網站</translation>
 <translation id="6415900369006735853">透過手機連線至互聯網</translation>
@@ -5900,6 +5901,7 @@
 <translation id="885701979325669005">儲存設備</translation>
 <translation id="8859057652521303089">選擇語言：</translation>
 <translation id="8859174528519900719">子頁框：<ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">家長帳戶</translation>
 <translation id="8862003515646449717">改用速度快的瀏覽器</translation>
 <translation id="8863753581171631212">在「<ph name="APP" />」的新視窗中開啟連結</translation>
 <translation id="8864055848767439877">正在與 <ph name="APP_NAME" /> 共用 <ph name="TAB_NAME" /></translation>
@@ -6000,7 +6002,6 @@
 <translation id="8985264973231822211">曾於 <ph name="DEVICE_LAST_ACTIVATED_TIME" /> 天前在線</translation>
 <translation id="8986362086234534611">清除</translation>
 <translation id="8986494364107987395">自動將使用統計資料和當機報告傳送給 Google</translation>
-<translation id="8986651757229422279">此操作會清除 <ph name="ORIGIN_NAME" /> 儲存的所有資料和 Cookie，以及該網站所安裝的應用程式。</translation>
 <translation id="8987927404178983737">月</translation>
 <translation id="8991520179165052608">網站可以使用您的麥克風</translation>
 <translation id="899403249577094719">Netscape 憑證基底網址</translation>

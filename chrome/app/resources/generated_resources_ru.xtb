@@ -5900,6 +5900,7 @@
 <translation id="885701979325669005">Хранилище</translation>
 <translation id="8859057652521303089">Выберите язык:</translation>
 <translation id="8859174528519900719">Субфрейм: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Аккаунт родителя</translation>
 <translation id="8862003515646449717">Перейдите на быстрый браузер</translation>
 <translation id="8863753581171631212">Открыть ссылку в новом окне приложения "<ph name="APP" />"</translation>
 <translation id="8864055848767439877">Отправка вкладки "<ph name="TAB_NAME" />" в приложение "<ph name="APP_NAME" />"…</translation>
@@ -6000,7 +6001,6 @@
 <translation id="8985264973231822211">Последние действия: <ph name="DEVICE_LAST_ACTIVATED_TIME" /> дн. назад</translation>
 <translation id="8986362086234534611">Удалить</translation>
 <translation id="8986494364107987395">Автоматически отправлять в Google статистику использования и отчеты о сбоях</translation>
-<translation id="8986651757229422279">Будут удалены все данные и файлы cookie, сохраненные сайтом <ph name="ORIGIN_NAME" /> и установленным им приложением.</translation>
 <translation id="8987927404178983737">Месяц</translation>
 <translation id="8991520179165052608">Сайт может использовать микрофон</translation>
 <translation id="899403249577094719">URL базы сертификатов Netscape</translation>

@@ -4045,6 +4045,7 @@
 <translation id="641081527798843608">Совпаѓање на предмети</translation>
 <translation id="6412673304250309937">Ги проверува URL-адресите во список со небезбедни сајтови меморирани во Chrome. Ако некој сајт се обиде да ви ја украде лозинката или кога ќе преземете штетна датотека, Chrome може да испрати и URL-адреси, вклучувајќи и делови од содржините на страницата, во „Безбедно прелистување“.</translation>
 <translation id="6412931879992742813">Нов инкогнито прозорец</translation>
+<translation id="6413591858632097328">Ова ќе ги избрише сите податоци и колачиња складирани од <ph name="ORIGIN_NAME" /> и инсталираните апликации.</translation>
 <translation id="641469293210305670">Инсталирајте ажурирања и апликации</translation>
 <translation id="6414888972213066896">Го прашавте родителот дали е во ред да го посетите сајтов</translation>
 <translation id="6415900369006735853">Поврзете се на интернет преку телефонот</translation>
@@ -5905,6 +5906,7 @@
 <translation id="885701979325669005">Склад</translation>
 <translation id="8859057652521303089">Изберете го вашиот јазик:</translation>
 <translation id="8859174528519900719">Подрамка: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Сметка на родител</translation>
 <translation id="8862003515646449717">Префрлете се на брз прелистувач</translation>
 <translation id="8863753581171631212">Отвори го линкот во нов прозорец на <ph name="APP" /></translation>
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> се споделува на <ph name="APP_NAME" /></translation>
@@ -6005,7 +6007,6 @@
 <translation id="8985264973231822211">Активен пред <ph name="DEVICE_LAST_ACTIVATED_TIME" /> ден</translation>
 <translation id="8986362086234534611">Заборави</translation>
 <translation id="8986494364107987395">Автоматски испрати статистика за користење и извештаи за падови до Google</translation>
-<translation id="8986651757229422279">Ова ќе ги избрише сите податоци и колачиња складирани од <ph name="ORIGIN_NAME" /> и инсталираните апликации.</translation>
 <translation id="8987927404178983737">Месец</translation>
 <translation id="8991520179165052608">Сајтот може да го користи микрофонот</translation>
 <translation id="899403249577094719">Основен URL за сертификат на Netscape</translation>

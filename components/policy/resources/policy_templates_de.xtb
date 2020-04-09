@@ -2339,11 +2339,11 @@ Diese Richtlinie hat keine Auswirkungen darauf, ob die lokalen Nutzerdaten auf d
 
       Wird sie auf "StandardProtection" (Wert 1, die Standardeinstellung) gesetzt, ist Safe Browsing immer im Standardmodus aktiv.
 
-      Wird die Richtlinie auf "EnhancedProtection" (Wert 2), gesetzt, ist Safe Browsing immer im erweiterten Modus aktiv. Dieser bietet einen besseren Schutz. Es müssen jedoch mehr Browserdaten mit Google geteilt werden.
+      Wird die Richtlinie auf "EnhancedProtection" (Wert 2), gesetzt, ist Safe Browsing immer im erweiterten Modus aktiv. Dieser bietet einen besseren Schutz, es müssen jedoch mehr Browserdaten mit Google geteilt werden.
 
       Wird diese Richtlinie als verbindlich konfiguriert, können Nutzer die Safe Browsing-Einstellung in <ph name="PRODUCT_NAME" /> nicht ändern oder überschreiben.
 
-      Wird sie nicht konfiguriert, ist Safe Browsing im Standard-Schutzmodus aktiv, Nutzer können diese Einstellung jedoch ändern.
+      Wird sie nicht konfiguriert, ist Safe Browsing im Standardschutz-Modus aktiv, Nutzer können diese Einstellung jedoch ändern.
 
       Weitere Informationen zu Safe Browsing finden Sie unter https://developers.google.com/safe-browsing.</translation>
 <translation id="4408428864159735559">Liste der vorkonfigurierten Netzwerkfreigaben.</translation>

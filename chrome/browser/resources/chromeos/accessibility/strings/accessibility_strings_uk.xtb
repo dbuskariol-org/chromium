@@ -625,7 +625,7 @@
 <translation id="5992285135956208197">Графічний документ</translation>
 <translation id="5999630716831179808">Голоси</translation>
 <translation id="6006050241733874051">Форма</translation>
-<translation id="6006064078185310784">{COUNT,plural, =1{зворотна коса риска}one{# зворотна коса риска}few{# зворотні косі риски}many{# зворотних косих рисок}other{# backslashes}}</translation>
+<translation id="6006064078185310784">{COUNT,plural, =1{обернена скісна риска}one{# обернена скісна риска}few{# обернені скісні риски}many{# обернених скісних рисок}other{# backslashes}}</translation>
 <translation id="6017514345406065928">Зелений</translation>
 <translation id="602001110135236999">Прокрутити ліворуч</translation>
 <translation id="6034000775414344507">Світло-сірий</translation>

@@ -5902,6 +5902,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="885701979325669005">Сактагыч</translation>
 <translation id="8859057652521303089">Тилиңизди тандаңыз:</translation>
 <translation id="8859174528519900719">Көмөкчү алкак: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Ата-эненин аккаунту</translation>
 <translation id="8862003515646449717">Ылдам серепчиге которулуу</translation>
 <translation id="8863753581171631212">Шилтемени жаңы <ph name="APP" /> колдонмосунда ачуу</translation>
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> <ph name="APP_NAME" /> колдонмосу менен бөлүшүлүүдө</translation>
@@ -6002,7 +6003,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8985264973231822211">Акыркы аракеттер: <ph name="DEVICE_LAST_ACTIVATED_TIME" /> күн мурун</translation>
 <translation id="8986362086234534611">Унутуу</translation>
 <translation id="8986494364107987395">Google'га автоматтык түрдө колдонуу статистикасы жана каталар жөнүндө кабар берүү.</translation>
-<translation id="8986651757229422279">Ушуну менен <ph name="ORIGIN_NAME" /> сакталган бардык маалымат жана cookie-файлдары, ошондой эле ал орноткон колдонмо тазаланат.</translation>
 <translation id="8987927404178983737">Ай</translation>
 <translation id="8991520179165052608">Сайт микрофонуңузду колдоно алат</translation>
 <translation id="899403249577094719">Netscape тастыктама негизинин URL</translation>

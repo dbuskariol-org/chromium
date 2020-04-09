@@ -4045,6 +4045,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="641081527798843608">Subject match</translation>
 <translation id="6412673304250309937">Checks URLs with a list of unsafe sites stored in Chrome. If a site tries to steal your password, or when you download a harmful file, Chrome may also send URLs, including bits of page content, to Safe Browsing.</translation>
 <translation id="6412931879992742813">New incognito window</translation>
+<translation id="6413591858632097328">This will clear all data and cookies stored by <ph name="ORIGIN_NAME" /> and its installed apps.</translation>
 <translation id="641469293210305670">Install updates and apps</translation>
 <translation id="6414888972213066896">You asked your parent if it's OK to visit this site</translation>
 <translation id="6415900369006735853">Connect to the Internet through your phone</translation>
@@ -5903,6 +5904,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="885701979325669005">Storage</translation>
 <translation id="8859057652521303089">Select your language:</translation>
 <translation id="8859174528519900719">Subframe: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Parent account</translation>
 <translation id="8862003515646449717">Switch to a fast browser</translation>
 <translation id="8863753581171631212">Open link in new <ph name="APP" /></translation>
 <translation id="8864055848767439877">Sharing <ph name="TAB_NAME" /> to <ph name="APP_NAME" /></translation>
@@ -6003,7 +6005,6 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="8985264973231822211">Active <ph name="DEVICE_LAST_ACTIVATED_TIME" /> day ago</translation>
 <translation id="8986362086234534611">Forget</translation>
 <translation id="8986494364107987395">Automatically send usage statistics and crash reports to Google</translation>
-<translation id="8986651757229422279">This will clear all data and cookies stored by <ph name="ORIGIN_NAME" /> and its installed app.</translation>
 <translation id="8987927404178983737">Month</translation>
 <translation id="8991520179165052608">Site can use your microphone</translation>
 <translation id="899403249577094719">Netscape Certificate Base URL</translation>

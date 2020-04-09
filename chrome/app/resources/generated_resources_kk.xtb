@@ -5899,6 +5899,7 @@
 <translation id="885701979325669005">Сақтау</translation>
 <translation id="8859057652521303089">Тіліңізді таңдаңыз:</translation>
 <translation id="8859174528519900719">Ішкі жақтау: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Ата-ананың есептік жазбасы</translation>
 <translation id="8862003515646449717">Жылдам браузерге ауысыңыз</translation>
 <translation id="8863753581171631212">Сілтемені жаңа <ph name="APP" /> қолданбасында ашу</translation>
 <translation id="8864055848767439877">"<ph name="TAB_NAME" />" қойындысы <ph name="APP_NAME" /> қолданбасына жіберілуде.</translation>
@@ -5999,7 +6000,6 @@
 <translation id="8985264973231822211"><ph name="DEVICE_LAST_ACTIVATED_TIME" /> күн бұрын қосылған.</translation>
 <translation id="8986362086234534611">Ұмыту</translation>
 <translation id="8986494364107987395">Қолданыс статистикасы мен жаңылыс туралы есептерді Google компаниясына автоматты түрде жіберу</translation>
-<translation id="8986651757229422279"><ph name="ORIGIN_NAME" /> және ол орнатқан қолданба сақтаған деректер мен cookie файлдарының барлығы өшіріледі.</translation>
 <translation id="8987927404178983737">Ай</translation>
 <translation id="8991520179165052608">Сайт микрофонды пайдалана алады</translation>
 <translation id="899403249577094719">Netscape сертификатының негізгі URL мекенжайы</translation>

@@ -106,7 +106,7 @@
 <translation id="2268813581635650749">Odjavi sve</translation>
 <translation id="2277103315734023688">Traži prema naprijed</translation>
 <translation id="2292698582925480719">Skala prikaza</translation>
-<translation id="2295777434187870477">Mikrofon je uključen, prebacivanjem će se isključiti unos.</translation>
+<translation id="2295777434187870477">Mikrofon je uključen, pomicanjem klizača ulijevo isključit će se zvuk.</translation>
 <translation id="2298170939937364391">Omogućeno je povećalo za cijeli zaslon. Ponovo pritisnite Ctrl+Search+M da biste ga isključili.</translation>
 <translation id="2302092602801625023">Tim računom upravlja Family Link</translation>
 <translation id="2303600792989757991">Prebaci na prozor pregleda</translation>
@@ -140,7 +140,7 @@
 <translation id="2658778018866295321">Klikanje i povlačenje</translation>
 <translation id="2700493154570097719">Postavite tipkovnicu</translation>
 <translation id="2704781753052663061">Pridružite se drugim Wi-Fi mrežama</translation>
-<translation id="2705001408393684014">Prebacite mikrofon. <ph name="STATE_TEXT" /></translation>
+<translation id="2705001408393684014">Pomaknite klizač mikrofona udesno. <ph name="STATE_TEXT" /></translation>
 <translation id="2718395828230677721">Noćno svjetlo</translation>
 <translation id="2727977024730340865">Uređaj je priključen na punjač male snage. Punjenje baterije možda nije pouzdano.</translation>
 <translation id="2792498699870441125">Alt + Pretraživanje</translation>

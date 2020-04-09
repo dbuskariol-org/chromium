@@ -5904,6 +5904,7 @@
 <translation id="885701979325669005">Պահեստ</translation>
 <translation id="8859057652521303089">Ընտրեք լեզուն`</translation>
 <translation id="8859174528519900719">Ենթաշրջանակ՝ <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Ծնողի հաշիվը</translation>
 <translation id="8862003515646449717">Ընտրեք արագ դիտարկիչ</translation>
 <translation id="8863753581171631212">Բացել հղումը <ph name="APP" />-ի նոր պատուհանում</translation>
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> ներդիրն ուղարկվում է <ph name="APP_NAME" /></translation>
@@ -6004,7 +6005,6 @@
 <translation id="8985264973231822211">Ակտիվ է եղել <ph name="DEVICE_LAST_ACTIVATED_TIME" /> օր առաջ</translation>
 <translation id="8986362086234534611">Հեռացնել</translation>
 <translation id="8986494364107987395">Ավտոմատ Google-ին ուղարկել օգտագործման վիճակագրությունները և խափանումների մասին հաշվետվությունները</translation>
-<translation id="8986651757229422279"><ph name="ORIGIN_NAME" /> կայքի և դրա տեղադրած հավելվածի կողմից պահված բոլոր տվյալներն ու քուքիները կջնջվեն։</translation>
 <translation id="8987927404178983737">Ամիս</translation>
 <translation id="8991520179165052608">Կայքը կարող է օգտագործել ձեր խոսափողը</translation>
 <translation id="899403249577094719">Netscape-ի վկայագրերի բազայի URL</translation>

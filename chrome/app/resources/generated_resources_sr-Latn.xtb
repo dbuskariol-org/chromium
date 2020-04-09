@@ -4043,6 +4043,7 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="641081527798843608">Podudaranje naslova</translation>
 <translation id="6412673304250309937">Proverava URL-ove sa listom nebezbednih sajtova koji se čuvaju u Chrome-u. Ako neki sajt pokuša da ukrade vašu lozinku ili probate da preuzmete štetnu datoteku, Chrome može da pošalje URL-ove, uključujući delove sadržaja stranice, u Bezbedno pregledanje.</translation>
 <translation id="6412931879992742813">Novi prozor bez arhiviranja</translation>
+<translation id="6413591858632097328">Ovim brišete sve podatke i kolačiće koje čuvaju sajt <ph name="ORIGIN_NAME" /> i njegove instalirane aplikacije.</translation>
 <translation id="641469293210305670">Instalirajte ažuriranja i aplikacije</translation>
 <translation id="6414888972213066896">Pitao/la si roditelja da li smeš da posetiš ovaj sajt</translation>
 <translation id="6415900369006735853">Povežite se na internet pomoću telefona</translation>
@@ -5901,6 +5902,7 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="885701979325669005">Memorijski prostor</translation>
 <translation id="8859057652521303089">Izaberite jezik:</translation>
 <translation id="8859174528519900719">Podokvir: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">Nalog roditelja</translation>
 <translation id="8862003515646449717">Pređite na brz pregledač</translation>
 <translation id="8863753581171631212">Otvori link u novom <ph name="APP" /> prozoru</translation>
 <translation id="8864055848767439877">Kartica <ph name="TAB_NAME" /> se deli sa aplikacijom <ph name="APP_NAME" /></translation>
@@ -6001,7 +6003,6 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="8985264973231822211">Poslednja aktivnost: pre <ph name="DEVICE_LAST_ACTIVATED_TIME" /> dan/a</translation>
 <translation id="8986362086234534611">Zaboravi</translation>
 <translation id="8986494364107987395">Automatski šalji Google-u statističke podatke o korišćenju i izveštaje o otkazivanju</translation>
-<translation id="8986651757229422279">Ovim brišete sve podatke i kolačiće koje čuvaju sajt <ph name="ORIGIN_NAME" /> i njegova instalirana aplikacija.</translation>
 <translation id="8987927404178983737">Mesec</translation>
 <translation id="8991520179165052608">Sajt može da koristi mikrofon</translation>
 <translation id="899403249577094719">Osnovna URL adresa za Netscape sertifikat</translation>

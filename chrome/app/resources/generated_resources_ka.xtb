@@ -5900,6 +5900,7 @@
 <translation id="885701979325669005">შენახვა</translation>
 <translation id="8859057652521303089">აირჩიეთ ენა:</translation>
 <translation id="8859174528519900719">ქვეკადრი: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">მშობლის ანგარიში</translation>
 <translation id="8862003515646449717">გადადით სწრაფ ბრაუზერზე</translation>
 <translation id="8863753581171631212">ბმულის გახსნა ახალ <ph name="APP" />-ში</translation>
 <translation id="8864055848767439877">მიმდინარეობს „<ph name="TAB_NAME" />“-ის გაზიარება <ph name="APP_NAME" />-თან</translation>
@@ -6000,7 +6001,6 @@
 <translation id="8985264973231822211">აქტიური იყო <ph name="DEVICE_LAST_ACTIVATED_TIME" /> დღის წინ</translation>
 <translation id="8986362086234534611">დავიწყება</translation>
 <translation id="8986494364107987395">გამოყენების სტატისტიკისა და შეცდომების შესახებ მოხსენებების ავტომატური გაგზავნა Google-ში</translation>
-<translation id="8986651757229422279">ეს მოქმედება გაასუფთავებს <ph name="ORIGIN_NAME" />-ისა და მისი დაინსტალირებული აპების მიერ შენახულ ყველა მონაცემსა და ქუქი-ჩანაწერს.</translation>
 <translation id="8987927404178983737">თვე</translation>
 <translation id="8991520179165052608">საიტს შეუძლია თქვენი მიკროფონის გამოყენება</translation>
 <translation id="899403249577094719">Netscape სერტიფიკატის ბაზის URL</translation>

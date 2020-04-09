@@ -2634,7 +2634,7 @@
 <translation id="4476659815936224889">इस कोड को स्कैन करने के लिए, आप अपने फ़ोन पर क्यूआर स्कैनर या कुछ कैमरा ऐप्लिकेशन का इस्तेमाल कर सकते हैं.</translation>
 <translation id="4477015793815781985">Ctrl, Alt या ⌘ को शामिल करें</translation>
 <translation id="4478664379124702289">लिंक को इस रूप में सेव करें...</translation>
-<translation id="4478777936860197922">सेव किया हुआ कोई भी पासवर्ड नहीं है. <ph name="IDS_SHORT_PRODUCT_NAME" /> आपके पासवर्ड की जांच तब ही कर सकता है, जब वे पहले से सेव हाेते हैं.</translation>
+<translation id="4478777936860197922">कोई भी पासवर्ड सेव नहीं किया गया है. <ph name="IDS_SHORT_PRODUCT_NAME" /> आपके पासवर्ड की जांच तब ही कर सकता है, जब वे पहले से सेव हाेते हैं.</translation>
 <translation id="4479424953165245642">कियोस्क ऐप्स  प्रबंधित करें</translation>
 <translation id="4479639480957787382">इथरनेट</translation>
 <translation id="4479877282574735775">वर्चुअल मशीन कॉन्फ़िगर हो रही है. इसमें कुछ मिनट लग सकते हैं.</translation>
@@ -2881,7 +2881,7 @@
 <translation id="4849517651082200438">इंस्‍टॉल न करें</translation>
 <translation id="4850669014075537160">स्क्रॉल करना</translation>
 <translation id="4850886885716139402">देखें</translation>
-<translation id="485197095346966382">जब आप किसी हैक या चोरी हो चुके पासवर्ड से साइन इन करेंगे, तो <ph name="IDS_SHORT_PRODUCT_NAME" /> आपको इसकी सूचना देगा</translation>
+<translation id="485197095346966382">जब आप किसी हैक हो चुके या चोरी हो चुके पासवर्ड से साइन इन करेंगे, तो <ph name="IDS_SHORT_PRODUCT_NAME" /> आपको इसकी सूचना देगा</translation>
 <translation id="4853020600495124913">&amp;नई विंडो में खोलें</translation>
 <translation id="4854317507773910281">मंज़ूरी के लिए माता-पिता का खाता चुनें</translation>
 <translation id="485480310608090163">ज़्यादा सेटिंग और अनुमतियां</translation>
@@ -5015,7 +5015,7 @@
 <translation id="7744047395460924128">अपना प्रिंटिंग इतिहास देखें</translation>
 <translation id="7744192722284567281">यह पासवर्ड आपके हैक हो चुके डेटा में शामिल है</translation>
 <translation id="7750228210027921155">पिक्चर में पिक्चर</translation>
-<translation id="7751229152614300329">सुरक्षित ब्राउज़िंग अप-टू-डेट है. यह आपको नुकसान पहुंचाने वाली साइटों और डाउनलोड से बचाती है</translation>
+<translation id="7751229152614300329">सुरक्षित ब्राउज़िंग की सुविधा अप-टू-डेट है. यह आपको नुकसान पहुंचाने वाली साइटों और डाउनलोड से बचाती है</translation>
 <translation id="7751260505918304024">सभी दिखाएं</translation>
 <translation id="7754704193130578113">डाउनलोड करने से पहले, हर फ़ाइल को सेव करने की जगह के बारें में पूछें</translation>
 <translation id="7755287808199759310">आपका अभिभावक इसे आपके लिए अनवरोधित कर सकता है</translation>
@@ -5901,6 +5901,7 @@
 <translation id="885701979325669005">मेमोरी</translation>
 <translation id="8859057652521303089">अपनी भाषा चुनें:</translation>
 <translation id="8859174528519900719">सबफ़्रेम: <ph name="SUBFRAME_SITE" /></translation>
+<translation id="8859662783913000679">अभिभावक का खाता</translation>
 <translation id="8862003515646449717">किसी तेज़ ब्राउज़र पर जाएं</translation>
 <translation id="8863753581171631212">नए <ph name="APP" /> में लिंक खोलें</translation>
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> को <ph name="APP_NAME" /> के साथ शेयर किया जा रहा है</translation>
@@ -6001,7 +6002,6 @@
 <translation id="8985264973231822211"><ph name="DEVICE_LAST_ACTIVATED_TIME" /> दिन पहले चालू था</translation>
 <translation id="8986362086234534611">भूल जाएं</translation>
 <translation id="8986494364107987395">इस्तेमाल के आंकड़े और खराबी रिपोर्ट अपने आप Google को भेजें</translation>
-<translation id="8986651757229422279">इससे <ph name="ORIGIN_NAME" /> का सेव किया गया पूरा डेटा, कुकी, और इंस्टॉल किया गया ऐप्लिकेशन मिट जाएगा.</translation>
 <translation id="8987927404178983737">माह</translation>
 <translation id="8991520179165052608">साइट आपके माइक्रोफ़ोन का इस्तेमाल कर सकती है</translation>
 <translation id="899403249577094719">Netscape प्रमाणपत्र आधार URL</translation>
