@@ -137,6 +137,7 @@ class AppElement extends PolymerElement {
         }
       }
     });
+    this.setupShortcutDragDropOgbWorkaround_();
   }
 
   /** @override */
@@ -322,6 +323,50 @@ class AppElement extends PolymerElement {
       this.eventTracker_.add(window, 'resize', onResize);
       onResize();
     }
+  }
+
+  /**
+   * During a shortcut drag, an iframe behind ntp-most-visited will prevent
+   * 'dragover' events from firing. To workaround this, 'pointer-events: none'
+   * can be set on the iframe. When doing this after the 'dragstart' event is
+   * fired is too late. We can instead set 'pointer-events: none' when the
+   * pointer enters ntp-most-visited.
+   *
+   * 'pointerenter' and pointerleave' events fire during drag. The iframe
+   * 'pointer-events' needs to be reset to the original value when 'dragend'
+   * fires if the pointer has left ntp-most-visited.
+   * @private
+   */
+  setupShortcutDragDropOgbWorkaround_() {
+    const iframe = this.$.oneGoogleBar;
+    let resetAtDragEnd = false;
+    let dragging = false;
+    let originalPointerEvents;
+    this.eventTracker_.add(this.$.mostVisited, 'pointerenter', () => {
+      if (dragging) {
+        resetAtDragEnd = false;
+        return;
+      }
+      originalPointerEvents = getComputedStyle(iframe).pointerEvents;
+      iframe.style.pointerEvents = 'none';
+    });
+    this.eventTracker_.add(this.$.mostVisited, 'pointerleave', () => {
+      if (dragging) {
+        resetAtDragEnd = true;
+        return;
+      }
+      iframe.style.pointerEvents = originalPointerEvents;
+    });
+    this.eventTracker_.add(this.$.mostVisited, 'dragstart', () => {
+      dragging = true;
+    });
+    this.eventTracker_.add(this.$.mostVisited, 'dragend', () => {
+      dragging = false;
+      if (resetAtDragEnd) {
+        resetAtDragEnd = false;
+        iframe.style.pointerEvents = originalPointerEvents;
+      }
+    });
   }
 }
 
