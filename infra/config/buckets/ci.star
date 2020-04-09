@@ -55,6 +55,23 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.dawn',
+    ordering = {
+        None: ['ToT'],
+        '*builder*': ['Builder'],
+        '*cpu*': ci.ordering(short_names=['x86']),
+        'ToT|Mac': '*builder*',
+        'ToT|Windows|Builder': '*cpu*',
+        'ToT|Windows|Intel': '*cpu*',
+        'ToT|Windows|Nvidia': '*cpu*',
+        'DEPS|Mac': '*builder*',
+        'DEPS|Windows|Builder': '*cpu*',
+        'DEPS|Windows|Intel': '*cpu*',
+        'DEPS|Windows|Nvidia': '*cpu*',
+    },
+)
+
+ci.console_view(
     name = 'chromium.linux',
     ordering = {
         None: ['release', 'debug'],
@@ -739,10 +756,18 @@ ci.clang_mac_builder(
 
 ci.dawn_builder(
     name = 'Dawn Linux x64 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Linux|Builder',
+        short_name = 'x64',
+    ),
 )
 
 ci.dawn_builder(
     name = 'Dawn Linux x64 Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Linux|Intel',
+        short_name = 'x64',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Linux x64 Builder'],
@@ -750,6 +775,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Linux x64 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Linux|Nvidia',
+        short_name = 'x64',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Linux x64 Builder'],
@@ -757,6 +786,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Mac x64 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Mac|Builder',
+        short_name = 'x64',
+    ),
     builderless = False,
     cores = None,
     os = os.MAC_ANY,
@@ -764,6 +797,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Mac x64 Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Mac|AMD',
+        short_name = 'x64',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Mac x64 Builder'],
@@ -771,6 +808,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Mac x64 Release (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Mac|Intel',
+        short_name = 'x64',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Mac x64 Builder'],
@@ -778,11 +819,19 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Win10 x86 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Windows|Builder',
+        short_name = 'x86',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.dawn_builder(
     name = 'Dawn Win10 x64 Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Windows|Builder',
+        short_name = 'x64',
+    ),
     os = os.WINDOWS_ANY,
 )
 
@@ -790,6 +839,10 @@ ci.dawn_builder(
 # physical Win hardware in the Swarming pool, which is why they run on linux
 ci.dawn_builder(
     name = 'Dawn Win10 x86 Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Windows|Intel',
+        short_name = 'x86',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Win10 x86 Builder'],
@@ -797,6 +850,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Win10 x64 Release (Intel HD 630)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Windows|Intel',
+        short_name = 'x64',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Win10 x64 Builder'],
@@ -804,6 +861,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Win10 x86 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Windows|Nvidia',
+        short_name = 'x86',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Win10 x86 Builder'],
@@ -811,6 +872,10 @@ ci.dawn_builder(
 
 ci.dawn_builder(
     name = 'Dawn Win10 x64 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT|Windows|Nvidia',
+        short_name = 'x64',
+    ),
     cores = 2,
     os = os.LINUX_DEFAULT,
     triggered_by = ['Dawn Win10 x64 Builder'],
