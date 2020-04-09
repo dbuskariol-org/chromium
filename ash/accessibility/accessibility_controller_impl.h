@@ -201,8 +201,8 @@ class ASH_EXPORT AccessibilityControllerImpl : public AccessibilityController,
 
   void SetAutoclickEventType(AutoclickEventType event_type);
   AutoclickEventType GetAutoclickEventType();
-  void SetAutoclickMenuPosition(AutoclickMenuPosition position);
-  AutoclickMenuPosition GetAutoclickMenuPosition();
+  void SetAutoclickMenuPosition(FloatingMenuPosition position);
+  FloatingMenuPosition GetAutoclickMenuPosition();
   void RequestAutoclickScrollableBoundsForPoint(gfx::Point& point_in_screen);
 
   // Update the autoclick menu bounds if necessary. This may need to happen when

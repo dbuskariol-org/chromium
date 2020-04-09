@@ -1516,7 +1516,7 @@ void AccessibilityControllerImpl::UpdateAutoclickMenuPositionFromPref() {
 }
 
 void AccessibilityControllerImpl::SetAutoclickMenuPosition(
-    AutoclickMenuPosition position) {
+    FloatingMenuPosition position) {
   if (!active_user_prefs_)
     return;
   active_user_prefs_->SetInteger(prefs::kAccessibilityAutoclickMenuPosition,
@@ -1525,9 +1525,9 @@ void AccessibilityControllerImpl::SetAutoclickMenuPosition(
   Shell::Get()->autoclick_controller()->SetMenuPosition(position);
 }
 
-AutoclickMenuPosition AccessibilityControllerImpl::GetAutoclickMenuPosition() {
+FloatingMenuPosition AccessibilityControllerImpl::GetAutoclickMenuPosition() {
   DCHECK(active_user_prefs_);
-  return static_cast<AutoclickMenuPosition>(active_user_prefs_->GetInteger(
+  return static_cast<FloatingMenuPosition>(active_user_prefs_->GetInteger(
       prefs::kAccessibilityAutoclickMenuPosition));
 }
 
