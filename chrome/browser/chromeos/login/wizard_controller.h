@@ -28,6 +28,7 @@
 #include "chrome/browser/chromeos/login/screens/enable_adb_sideloading_screen.h"
 #include "chrome/browser/chromeos/login/screens/enable_debugging_screen.h"
 #include "chrome/browser/chromeos/login/screens/eula_screen.h"
+#include "chrome/browser/chromeos/login/screens/gesture_navigation_screen.h"
 #include "chrome/browser/chromeos/login/screens/kiosk_autolaunch_screen.h"
 #include "chrome/browser/chromeos/login/screens/network_screen.h"
 #include "chrome/browser/chromeos/login/screens/packaged_license_screen.h"
@@ -248,7 +249,7 @@ class WizardController {
   void OnAppDownloadingScreenExit();
   void OnAssistantOptInFlowScreenExit();
   void OnMultiDeviceSetupScreenExit();
-  void OnGestureNavigationScreenExit();
+  void OnGestureNavigationScreenExit(GestureNavigationScreen::Result result);
   void OnMarketingOptInScreenExit();
   void OnResetScreenExit();
   void OnDeviceModificationCanceled();

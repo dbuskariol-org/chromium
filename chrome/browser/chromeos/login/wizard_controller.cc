@@ -1200,8 +1200,10 @@ void WizardController::OnMultiDeviceSetupScreenExit() {
   ShowGestureNavigationScreen();
 }
 
-void WizardController::OnGestureNavigationScreenExit() {
-  OnScreenExit(GestureNavigationScreenView::kScreenId, kDefaultExitReason);
+void WizardController::OnGestureNavigationScreenExit(
+    GestureNavigationScreen::Result result) {
+  OnScreenExit(GestureNavigationScreenView::kScreenId,
+               GestureNavigationScreen::GetResultString(result));
 
   ShowMarketingOptInScreen();
 }
