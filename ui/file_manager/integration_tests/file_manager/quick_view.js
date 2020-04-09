@@ -2725,17 +2725,19 @@
     const ctrlA = ['#file-list', 'a', true, false, false];
     await remoteCall.fakeKeyDown(appId, ...ctrlA);
 
+    const caller = getCaller();
+
     // Wait until the selection menu is visible.
-    function checkElementsDisplayFlex(elements) {
+    function checkElementsDisplayVisible(elements) {
       chrome.test.assertTrue(Array.isArray(elements));
-      if (elements.length == 0 || elements[0].styles.display !== 'flex') {
+      if (elements.length == 0 || elements[0].styles.display === 'none') {
         return pending(caller, 'Waiting for Selection Menu to be visible.');
       }
     }
 
     await repeatUntil(async () => {
       const elements = ['#selection-menu-button'];
-      return checkElementsDisplayFlex(await remoteCall.callRemoteTestUtil(
+      return checkElementsDisplayVisible(await remoteCall.callRemoteTestUtil(
           'deepQueryAllElements', appId, [elements, ['display']]));
     });
 
@@ -2764,7 +2766,6 @@
         '#file-context-menu:not([hidden]) [command="#get-info"]:not([hidden])');
 
     // Check: the Quick View dialog should be shown.
-    const caller = getCaller();
     await repeatUntil(async () => {
       const query = ['#quick-view', '#dialog[open]'];
       const elements = await remoteCall.callRemoteTestUtil(
@@ -2809,16 +2810,16 @@
     await remoteCall.fakeKeyDown(appId, ...ctrlA);
 
     // Wait until the selection menu is visible.
-    function checkElementsDisplayFlex(elements) {
+    function checkElementsDisplayVisible(elements) {
       chrome.test.assertTrue(Array.isArray(elements));
-      if (elements.length == 0 || elements[0].styles.display !== 'flex') {
+      if (elements.length == 0 || elements[0].styles.display === 'none') {
         return pending(caller, 'Waiting for Selection Menu to be visible.');
       }
     }
 
     await repeatUntil(async () => {
       const elements = ['#selection-menu-button'];
-      return checkElementsDisplayFlex(await remoteCall.callRemoteTestUtil(
+      return checkElementsDisplayVisible(await remoteCall.callRemoteTestUtil(
           'deepQueryAllElements', appId, [elements, ['display']]));
     });
 
