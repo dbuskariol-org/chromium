@@ -121,6 +121,11 @@ class ViewsTestBase : public PlatformTest {
       const Widget::InitParams& init_params,
       internal::NativeWidgetDelegate* delegate);
 
+  // Instantiates a Widget for CreateTestWidget(), but does no other
+  // initialization.  Overriding this allows subclasses to customize the Widget
+  // subclass returned from CreateTestWidget().
+  virtual std::unique_ptr<Widget> AllocateTestWidget();
+
   Widget::InitParams CreateParamsForTestWidget(
       Widget::InitParams::Type type =
           Widget::InitParams::TYPE_WINDOW_FRAMELESS);
