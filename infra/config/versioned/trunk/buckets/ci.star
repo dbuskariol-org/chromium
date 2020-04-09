@@ -433,14 +433,23 @@ ci.fyi_windows_builder(
 
 ci.gpu_builder(
     name = 'Android Release (Nexus 5X)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Android',
+    ),
 )
 
 ci.gpu_builder(
     name = 'GPU Linux Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux',
+    ),
 )
 
 ci.gpu_builder(
     name = 'GPU Mac Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+    ),
     cores = None,
     os = os.MAC_ANY,
 )
@@ -448,27 +457,42 @@ ci.gpu_builder(
 ci.gpu_builder(
     name = 'GPU Win x64 Builder',
     builderless = True,
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 
 ci.gpu_thin_tester(
     name = 'Linux Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux',
+    ),
     triggered_by = [builder_name('GPU Linux Builder')],
 )
 
 ci.gpu_thin_tester(
     name = 'Mac Release (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+    ),
     triggered_by = [builder_name('GPU Mac Builder')],
 )
 
 ci.gpu_thin_tester(
     name = 'Mac Retina Release (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+    ),
     triggered_by = [builder_name('GPU Mac Builder')],
 )
 
 ci.gpu_thin_tester(
     name = 'Win10 x64 Release (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows',
+    ),
     triggered_by = [builder_name('GPU Win x64 Builder')],
 )
 

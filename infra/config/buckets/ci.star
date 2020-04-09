@@ -72,6 +72,13 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.gpu',
+    ordering = {
+        None: ['Windows', 'Mac', 'Linux'],
+    },
+)
+
+ci.console_view(
     name = 'chromium.linux',
     ordering = {
         None: ['release', 'debug'],
@@ -1418,10 +1425,16 @@ ci.fyi_windows_builder(
 
 ci.gpu_builder(
     name = 'GPU Linux Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux',
+    ),
 )
 
 ci.gpu_builder(
     name = 'GPU Mac Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+    ),
     cores = None,
     os = os.MAC_ANY,
 )
@@ -1429,27 +1442,42 @@ ci.gpu_builder(
 ci.gpu_builder(
     name = 'GPU Win x64 Builder (dbg)',
     builderless = True,
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 
 ci.gpu_thin_tester(
     name = 'Linux Debug (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Linux',
+    ),
     triggered_by = ['GPU Linux Builder (dbg)'],
 )
 
 ci.gpu_thin_tester(
     name = 'Mac Debug (Intel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+    ),
     triggered_by = ['GPU Mac Builder (dbg)'],
 )
 
 ci.gpu_thin_tester(
     name = 'Mac Retina Debug (AMD)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Mac',
+    ),
     triggered_by = ['GPU Mac Builder (dbg)'],
 )
 
 ci.gpu_thin_tester(
     name = 'Win10 x64 Debug (NVIDIA)',
+    console_view_entry = ci.console_view_entry(
+        category = 'Windows',
+    ),
     triggered_by = ['GPU Win x64 Builder (dbg)'],
 )
 
