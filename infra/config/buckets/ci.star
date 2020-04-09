@@ -62,6 +62,69 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.clang',
+    ordering = {
+        None: [
+            'ToT Linux',
+            'ToT Android',
+            'ToT Mac',
+            'ToT Windows',
+            'ToT Code Coverage',
+        ],
+        'ToT Linux': ci.ordering(
+            short_names=['rel', 'ofi', 'dbg', 'asn', 'fuz', 'msn', 'tsn'],
+        ),
+        'ToT Android': ci.ordering(short_names=['rel', 'dbg', 'x64']),
+        'ToT Mac': ci.ordering(short_names=['rel', 'ofi', 'dbg']),
+        'ToT Windows': ci.ordering(
+            short_names=['rel', 'ofi'],
+            categories=['x64'],
+        ),
+        'ToT Windows|x64': ci.ordering(short_names=['rel']),
+        'CFI|Win': ci.ordering(short_names=['x86', 'x64']),
+        'iOS': ['public'],
+        'iOS|public': ci.ordering(short_names=['sim', 'dev']),
+    },
+    entries = [
+        luci.console_view_entry(
+            builder = 'chrome:ci/ToTLinuxOfficial',
+            category = 'ToT Linux',
+            short_name = 'ofi',
+        ),
+        luci.console_view_entry(
+            builder = 'chrome:ci/ToTMacOfficial',
+            category = 'ToT Mac',
+            short_name = 'ofi',
+        ),
+        luci.console_view_entry(
+            builder = 'chrome:ci/ToTWin',
+            category = 'ToT Windows',
+            short_name = 'rel',
+        ),
+        luci.console_view_entry(
+            builder = 'chrome:ci/ToTWin64',
+            category = 'ToT Windows|x64',
+            short_name = 'rel',
+        ),
+        luci.console_view_entry(
+            builder = 'chrome:ci/ToTWinOfficial',
+            category = 'ToT Windows',
+            short_name = 'ofi',
+        ),
+        luci.console_view_entry(
+            builder = 'chrome:ci/ToTWinThinLTO64',
+            category = 'ToT Windows|x64',
+            short_name = 'lto',
+        ),
+        luci.console_view_entry(
+            builder = 'chrome:ci/clang-tot-device',
+            category = 'iOS|internal',
+            short_name = 'dev',
+        ),
+    ],
+)
+
+ci.console_view(
     name = 'chromium.dawn',
     ordering = {
         None: ['ToT'],
@@ -657,134 +720,253 @@ ci.chromiumos_builder(
 ci.clang_builder(
     name = 'CFI Linux CF',
     goma_backend = goma.backend.RBE_PROD,
+    console_view_entry = ci.console_view_entry(
+        category = 'CFI|Linux',
+        short_name = 'CF',
+    ),
 )
 
 ci.clang_builder(
     name = 'CFI Linux ToT',
+    console_view_entry = ci.console_view_entry(
+        category = 'CFI|Linux',
+        short_name = 'ToT',
+    ),
 )
 
 ci.clang_builder(
     name = 'CrWinAsan',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows|Asan',
+        short_name = 'asn',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'CrWinAsan(dll)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows|Asan',
+        short_name = 'dll',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTAndroid',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'rel',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTAndroid (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'dbg',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTAndroid x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'x64',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTAndroid64',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'a64',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTAndroidASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'asn',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTAndroidCFI',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'cfi',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTAndroidOfficial',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Android',
+        short_name = 'off',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinux',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'rel',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinux (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'dbg',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinuxASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'asn',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinuxASanLibfuzzer',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'fuz',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinuxCoverage',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Code Coverage',
+        short_name = 'linux',
+    ),
     executable = 'recipe:chromium_clang_coverage_tot',
 )
 
 ci.clang_builder(
     name = 'ToTLinuxMSan',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'msn',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinuxTSan',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'tsn',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinuxThinLTO',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'lto',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTLinuxUBSanVptr',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Linux',
+        short_name = 'usn',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTWin(dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows',
+        short_name = 'dbg',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTWin(dll)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows',
+        short_name = 'dll',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTWin64(dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows|x64',
+        short_name = 'dbg',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTWin64(dll)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows|x64',
+        short_name = 'dll',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTWinASanLibfuzzer',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows|Asan',
+        short_name = 'fuz',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTWinCFI',
+    console_view_entry = ci.console_view_entry(
+        category = 'CFI|Win',
+        short_name = 'x86',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'ToTWinCFI64',
+    console_view_entry = ci.console_view_entry(
+        category = 'CFI|Win',
+        short_name = 'x64',
+    ),
     os = os.WINDOWS_ANY,
 )
 
 ci.clang_builder(
     name = 'UBSanVptr Linux',
+    console_view_entry = ci.console_view_entry(
+        short_name = 'usn',
+    ),
     goma_backend = goma.backend.RBE_PROD,
 )
 
 ci.clang_builder(
     name = 'linux-win_cross-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Windows',
+        short_name = 'lxw',
+    ),
 )
 
 ci.clang_builder(
     name = 'ToTiOS',
     caches = [xcode_cache.x11c29],
+    console_view_entry = ci.console_view_entry(
+        category = 'iOS|public',
+        short_name = 'sim',
+    ),
     cores = None,
     os = os.MAC_10_14,
     properties = {
@@ -796,6 +978,10 @@ ci.clang_builder(
 ci.clang_builder(
     name = 'ToTiOSDevice',
     caches = [xcode_cache.x11c29],
+    console_view_entry = ci.console_view_entry(
+        category = 'iOS|public',
+        short_name = 'dev',
+    ),
     cores = None,
     os = os.MAC_10_14,
     properties = {
@@ -807,18 +993,34 @@ ci.clang_builder(
 
 ci.clang_mac_builder(
     name = 'ToTMac',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Mac',
+        short_name = 'rel',
+    ),
 )
 
 ci.clang_mac_builder(
     name = 'ToTMac (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Mac',
+        short_name = 'dbg',
+    ),
 )
 
 ci.clang_mac_builder(
     name = 'ToTMacASan',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Mac',
+        short_name = 'asn',
+    ),
 )
 
 ci.clang_mac_builder(
     name = 'ToTMacCoverage',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT Code Coverage',
+        short_name = 'mac',
+    ),
     executable = 'recipe:chromium_clang_coverage_tot',
 )
 
