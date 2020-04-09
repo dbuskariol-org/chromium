@@ -7136,6 +7136,7 @@ base::Optional<DWORD> AXPlatformNodeWin::MojoEventToMSAAEvent(
       return EVENT_SYSTEM_ALERT;
     case ax::mojom::Event::kCheckedStateChanged:
     case ax::mojom::Event::kExpandedChanged:
+    case ax::mojom::Event::kStateChanged:
       return EVENT_OBJECT_STATECHANGE;
     case ax::mojom::Event::kFocus:
     case ax::mojom::Event::kFocusContext:
@@ -7212,6 +7213,9 @@ base::Optional<PROPERTYID> AXPlatformNodeWin::MojoEventToUIAProperty(
       return UIA_ControllerForPropertyId;
     case ax::mojom::Event::kCheckedStateChanged:
       return UIA_ToggleToggleStatePropertyId;
+    case ax::mojom::Event::kRowCollapsed:
+    case ax::mojom::Event::kRowExpanded:
+      return UIA_ExpandCollapseExpandCollapseStatePropertyId;
     default:
       return base::nullopt;
   }
