@@ -587,7 +587,7 @@ polymer_modulizer("privacy_page") {
   auto_imports = settings_auto_imports + [
                    "ui/webui/resources/html/assert.html|assert",
                    "chrome/browser/resources/settings/route.html|routes",
-                   "chrome/browser/resources/settings/metrics_browser_proxy.html|PrivacyElementInteractions,MetricsBrowserProxyImpl",
+                   "chrome/browser/resources/settings/metrics_browser_proxy.html|PrivacyElementInteractions,MetricsBrowserProxy,MetricsBrowserProxyImpl",
                    "chrome/browser/resources/settings/privacy_page/privacy_page_browser_proxy.html|PrivacyPageBrowserProxy,PrivacyPageBrowserProxyImpl",
                    "chrome/browser/resources/settings/site_settings/site_settings_prefs_browser_proxy.html|SiteSettingsPrefsBrowserProxyImpl",
                    "chrome/browser/resources/settings/site_settings/constants.html|ContentSettingsTypes,CookieControlsMode,ChooserType",
