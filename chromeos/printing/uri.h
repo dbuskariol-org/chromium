@@ -367,4 +367,4 @@ class Uri {
 
 }  // namespace chromeos
 
-#endif /* CHROMEOS_PRINTING_URI_H_ */
+#endif  // CHROMEOS_PRINTING_URI_H_

@@ -130,4 +130,4 @@ class Uri::Pim {
 
 }  // namespace chromeos
 
-#endif /* CHROMEOS_PRINTING_URI_IMPL_H_ */
+#endif  // CHROMEOS_PRINTING_URI_IMPL_H_

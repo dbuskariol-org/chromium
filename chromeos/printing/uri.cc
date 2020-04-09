@@ -10,7 +10,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 
-#include "uri_impl.h"
+#include "chromeos/printing/uri_impl.h"
 
 namespace chromeos {
 
@@ -21,7 +21,7 @@ constexpr unsigned char kLastPrintableChar = 126;
 
 // Convert an input value 0-15 to a hex digit (0-9,A-H).
 char ToHexDigit(uint8_t val) {
-  DCHECK(val < 16);
+  DCHECK_LT(val, 16);
   if (val < 10)
     return ('0' + val);
   return ('A' + val - 10);
@@ -31,7 +31,7 @@ char ToHexDigit(uint8_t val) {
 class Encoder {
  public:
   // Constructor. The set of allowed characters = STD_CHARS + |additional|.
-  Encoder(const std::string& additional) { Allow(additional); }
+  explicit Encoder(const std::string& additional) { Allow(additional); }
   // Extends the set of allowed characters by |chars|.
   // All characters in |chars| must be printable ASCII characters.
   void Allow(const std::string& chars) {
@@ -86,11 +86,11 @@ class Encoder {
   // clang-format off
   std::array<bool,95> allowed_ =
       //  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ?
-      { 0,1,0,0,1,0,0,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0
+      { 0,1,0,0,1,0,0,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,
       //@ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _
-      , 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1
+        0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,
       //` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~
-      , 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1
+        0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1
       };
   // clang-format on
 };
