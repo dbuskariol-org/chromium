@@ -406,7 +406,7 @@ enum AuthenticationButtonType {
   DCHECK(self.unifiedConsentViewController);
   self.skipSigninButton = [[UIButton alloc] init];
   [self addSubviewWithButton:self.skipSigninButton];
-  [self.skipSigninButton setTitle:self.skipSigninButtonTitle.uppercaseString
+  [self.skipSigninButton setTitle:self.skipSigninButtonTitle
                          forState:UIControlStateNormal];
   [self setSkipSigninStylingWithButton:self.skipSigninButton];
   [self.skipSigninButton addTarget:self
