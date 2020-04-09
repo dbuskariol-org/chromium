@@ -412,6 +412,9 @@
       status: "experimental",
     },
     {
+      name: "CSSFoldables",
+    },
+    {
       name: "CSSFontSizeAdjust",
       status: "experimental",
     },
