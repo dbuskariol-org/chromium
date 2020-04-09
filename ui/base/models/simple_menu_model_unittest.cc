@@ -168,7 +168,7 @@ TEST(SimpleMenuModelTest, HasIconsViaAddItem) {
 
   simple_menu_model.AddItemWithIcon(
       /*command_id*/ 11, base::ASCIIToUTF16("menu item"),
-      gfx::test::CreateImage(16, 16).AsImageSkia());
+      ui::ImageModel::FromImage(gfx::test::CreateImage(16, 16)));
   EXPECT_TRUE(simple_menu_model.HasIcons());
 }
 
@@ -183,7 +183,8 @@ TEST(SimpleMenuModelTest, HasIconsViaVectorIcon) {
   gfx::VectorIcon circle_icon = {rep, 1, "circle"};
 
   simple_menu_model.AddItemWithIcon(
-      /*command_id*/ 11, base::ASCIIToUTF16("menu item"), circle_icon);
+      /*command_id*/ 11, base::ASCIIToUTF16("menu item"),
+      ui::ImageModel::FromVectorIcon(circle_icon));
   EXPECT_TRUE(simple_menu_model.HasIcons());
 }
 

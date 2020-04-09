@@ -89,23 +89,17 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
   void AddItemWithStringId(int command_id, int string_id);
   void AddItemWithIcon(int command_id,
                        const base::string16& label,
-                       const gfx::ImageSkia& icon);
-  void AddItemWithIcon(int command_id,
-                       const base::string16& label,
-                       const gfx::VectorIcon& icon);
+                       const ui::ImageModel& icon);
   void AddItemWithStringIdAndIcon(int command_id,
                                   int string_id,
-                                  const gfx::ImageSkia& icon);
-  void AddItemWithStringIdAndIcon(int command_id,
-                                  int string_id,
-                                  const gfx::VectorIcon& icon);
+                                  const ui::ImageModel& icon);
   void AddCheckItem(int command_id, const base::string16& label);
   void AddCheckItemWithStringId(int command_id, int string_id);
   void AddRadioItem(int command_id, const base::string16& label, int group_id);
   void AddRadioItemWithStringId(int command_id, int string_id, int group_id);
   void AddHighlightedItemWithIcon(int command_id,
                                   const base::string16& label,
-                                  const gfx::ImageSkia& icon);
+                                  const ui::ImageModel& icon);
   void AddTitle(const base::string16& label);
 
   // Adds a separator of the specified type to the model.
@@ -125,22 +119,14 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
   void AddSubMenuWithStringIdAndIcon(int command_id,
                                      int string_id,
                                      MenuModel* model,
-                                     const gfx::ImageSkia& icon);
-  void AddSubMenuWithStringIdAndIcon(int command_id,
-                                     int string_id,
-                                     MenuModel* model,
-                                     const gfx::VectorIcon& icon);
+                                     const ui::ImageModel& icon);
   void AddActionableSubMenu(int command_id,
                             const base::string16& label,
                             MenuModel* model);
   void AddActionableSubmenuWithStringIdAndIcon(int command_id,
                                                int string_id,
                                                MenuModel* model,
-                                               const gfx::ImageSkia& icon);
-  void AddActionableSubmenuWithStringIdAndIcon(int command_id,
-                                               int string_id,
-                                               MenuModel* model,
-                                               const gfx::VectorIcon& icon);
+                                               const ui::ImageModel& icon);
 
   // Methods for inserting items into the model.
   void InsertItemAt(int index, int command_id, const base::string16& label);
@@ -167,14 +153,6 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
   void RemoveItemAt(int index);
 
   // Sets the icon for the item at |index|.
-  void SetIcon(int index, const gfx::Image& icon);
-
-  // As above and below, but uses a VectorIcon. Only one of the three should
-  // be set.
-  void SetIcon(int index, const gfx::VectorIcon& icon);
-
-  // As above other two, but takes a ui::ImageModel. Only one of these three
-  // should be set.
   void SetIcon(int index, const ui::ImageModel& icon);
 
   // Sets the label for the item at |index|.
@@ -184,9 +162,6 @@ class UI_BASE_EXPORT SimpleMenuModel : public MenuModel {
   void SetMinorText(int index, const base::string16& minor_text);
 
   // Sets the minor icon for the item at |index|.
-  void SetMinorIcon(int index, const gfx::VectorIcon& minor_icon);
-
-  // As above but takes a ui::ImageModel. Only one of the two should be set.
   void SetMinorIcon(int index, const ui::ImageModel& minor_icon);
 
   // Sets whether the item at |index| is enabled.
