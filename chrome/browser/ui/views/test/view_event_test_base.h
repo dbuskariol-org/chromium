@@ -75,6 +75,8 @@ class ViewEventTestBase : public ChromeViewsTestBase {
   // ChromeViewsTestBase:
   void SetUp() override;
   void TearDown() override;
+  views::Widget::InitParams CreateParams(
+      views::Widget::InitParams::Type type) override;
 
   // Returns the view that is added to the window.
   virtual std::unique_ptr<views::View> CreateContentsView() = 0;
