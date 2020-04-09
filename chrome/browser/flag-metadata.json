@@ -2647,6 +2647,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "installed-apps-in-cbd",
+    "owners": [ "jarrydg", "pwnall" ],
+    "expiry_milestone": 89
+  },
+  {
     "name": "instant-tethering",
     "owners": [ "hansberry", "khorimoto", "vecore", "cros-system-services@google.com" ],
     // Though Instant Tethering is now a launched feature, it is only marked enabled on select,
