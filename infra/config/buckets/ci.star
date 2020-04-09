@@ -33,6 +33,19 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.android',
+    ordering = {
+        None: ['cronet', 'builder', 'tester'],
+        '*cpu*': ['arm', 'arm64', 'x86'],
+        'cronet': '*cpu*',
+        'builder': '*cpu*',
+        'builder|det': ci.ordering(short_names=['rel', 'dbg']),
+        'tester': ['phone', 'tablet'],
+        'builder_tester|arm64': ci.ordering(short_names=['M proguard']),
+    },
+)
+
+ci.console_view(
     name = 'chromium.chromiumos',
     ordering = {
         None: ['default'],
@@ -179,32 +192,56 @@ ci.builder(
 
 ci.android_builder(
     name = 'Android ASAN (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'on_cq',
+        short_name = 'san',
+    ),
 )
 
 ci.android_builder(
     name = 'Android WebView L (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|webview',
+        short_name = 'L',
+    ),
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
 ci.android_builder(
     name = 'Deterministic Android',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder|det',
+        short_name = 'rel',
+    ),
     executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 ci.android_builder(
     name = 'Deterministic Android (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder|det',
+        short_name = 'dbg',
+    ),
     executable = 'recipe:swarming/deterministic_build',
     execution_timeout = 6 * time.hour,
 )
 
 ci.android_builder(
     name = 'KitKat Phone Tester (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|phone',
+        short_name = 'K',
+    ),
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
 ci.android_builder(
     name = 'KitKat Tablet Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|tablet',
+        short_name = 'K',
+    ),
     # We have limited tablet capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 20 * time.hour,
@@ -213,6 +250,10 @@ ci.android_builder(
 
 ci.android_builder(
     name = 'Lollipop Phone Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|phone',
+        short_name = 'L',
+    ),
     # We have limited phone capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 6 * time.hour,
@@ -221,6 +262,10 @@ ci.android_builder(
 
 ci.android_builder(
     name = 'Lollipop Tablet Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|tablet',
+        short_name = 'L',
+    ),
     # We have limited tablet capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 20 * time.hour,
@@ -229,6 +274,10 @@ ci.android_builder(
 
 ci.android_builder(
     name = 'Marshmallow Tablet Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|tablet',
+        short_name = 'M',
+    ),
     # We have limited tablet capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 12 * time.hour,
@@ -237,28 +286,47 @@ ci.android_builder(
 
 ci.android_builder(
     name = 'android-arm64-proguard-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder_tester|arm64',
+        short_name = 'M proguard',
+    ),
     goma_jobs = goma.jobs.MANY_JOBS_FOR_CI,
     execution_timeout = 6 * time.hour,
 )
 
 ci.android_builder(
     name = 'android-cronet-arm64-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|arm64',
+        short_name = 'dbg',
+    ),
     notifies = ['cronet'],
 )
 
 ci.android_builder(
     name = 'android-cronet-arm64-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|arm64',
+        short_name = 'rel',
+    ),
     notifies = ['cronet'],
 )
 
 ci.android_builder(
     name = 'android-cronet-asan-arm-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|asan',
+    ),
     notifies = ['cronet'],
 )
 
 # Runs on a specific machine with an attached phone
 ci.android_builder(
     name = 'android-cronet-marshmallow-arm64-perf-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|test|perf',
+        short_name = 'm',
+    ),
     cores = None,
     cpu = None,
     executable = 'recipe:cronet',
@@ -268,34 +336,61 @@ ci.android_builder(
 
 ci.android_builder(
     name = 'android-cronet-marshmallow-arm64-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|test',
+        short_name = 'm',
+    ),
     notifies = ['cronet'],
     triggered_by = ['android-cronet-arm64-rel'],
 )
 
 ci.android_builder(
     name = 'android-cronet-x86-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|x86',
+        short_name = 'dbg',
+    ),
     notifies = ['cronet'],
 )
 
 ci.android_builder(
     name = 'android-cronet-x86-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|x86',
+        short_name = 'rel',
+    ),
     notifies = ['cronet'],
 )
 
 ci.android_builder(
     name = 'android-incremental-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|incremental',
+    ),
 )
 
 ci.android_builder(
     name = 'android-lollipop-arm-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'on_cq',
+        short_name = 'L',
+    ),
 )
 
 ci.android_builder(
     name = 'android-pie-x86-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder_tester|x86',
+        short_name = 'P',
+    ),
 )
 
 ci.android_builder(
     name = 'android-10-arm64-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder_tester|arm64',
+        short_name = '10',
+    ),
 )
 
 

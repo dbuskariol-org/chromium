@@ -42,100 +42,180 @@ ci.defaults.triggered_by.set([vars.ci_poller])
 
 ci.android_builder(
     name = 'Android WebView M (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|webview',
+        short_name = 'M',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'Android WebView N (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|webview',
+        short_name = 'N',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'Android WebView O (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|webview',
+        short_name = 'O',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'Android WebView P (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|webview',
+        short_name = 'P',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'Android arm Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder|arm',
+        short_name = '32',
+    ),
     execution_timeout = 4 * time.hour,
 )
 
 ci.android_builder(
     name = 'Android arm64 Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder|arm',
+        short_name = '64',
+    ),
     goma_jobs = goma.jobs.MANY_JOBS_FOR_CI,
     execution_timeout = 4 * time.hour,
 )
 
 ci.android_builder(
     name = 'Android x64 Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder|x86',
+        short_name = '64',
+    ),
     execution_timeout = 4 * time.hour,
 )
 
 ci.android_builder(
     name = 'Android x86 Builder (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder|x86',
+        short_name = '32',
+    ),
 )
 
 ci.android_builder(
     name = 'Cast Android (dbg)',
+    console_view_entry = ci.console_view_entry(
+        category = 'on_cq',
+        short_name = 'cst',
+    ),
 )
 
 ci.android_builder(
     name = 'Marshmallow 64 bit Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|phone',
+        short_name = 'M',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'Nougat Phone Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|phone',
+        short_name = 'N',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'Oreo Phone Tester',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|phone',
+        short_name = 'O',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'android-cronet-arm-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|arm',
+        short_name = 'dbg',
+    ),
     notifies = ['cronet'],
 )
 
 ci.android_builder(
     name = 'android-cronet-arm-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|arm',
+        short_name = 'rel',
+    ),
     notifies = ['cronet'],
 )
 
 ci.android_builder(
     name = 'android-cronet-kitkat-arm-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|test',
+        short_name = 'k',
+    ),
     notifies = ['cronet'],
     triggered_by = [builder_name('android-cronet-arm-rel')],
 )
 
 ci.android_builder(
     name = 'android-cronet-lollipop-arm-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'cronet|test',
+        short_name = 'l',
+    ),
     notifies = ['cronet'],
     triggered_by = [builder_name('android-cronet-arm-rel')],
 )
 
 ci.android_builder(
     name = 'android-kitkat-arm-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'on_cq',
+        short_name = 'K',
+    ),
 )
 
 ci.android_builder(
     name = 'android-marshmallow-arm64-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'on_cq',
+        short_name = 'M',
+    ),
 )
 
 ci.android_builder(
     name = 'android-pie-arm64-dbg',
+    console_view_entry = ci.console_view_entry(
+        category = 'tester|phone',
+        short_name = 'P',
+    ),
     triggered_by = [builder_name('Android arm64 Builder (dbg)')],
 )
 
 ci.android_builder(
     name = 'android-pie-arm64-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'on_cq',
+        short_name = 'P',
+    ),
 )
 
 
