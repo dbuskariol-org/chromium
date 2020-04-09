@@ -56,20 +56,47 @@ const NSTimeInterval kSyncUKMOperationsTimeout = 10.0;
 + (void)setNetworkTimeForTesting;
 
 // TODO(crbug.com/1066297): Refactor to remove duplicate code.
-// If new data are available, creates a UKM Report and stores it in the
+// Gets the user's noised birth year, where |rawBirthYear| is the true birth
+// year, pre-noise.
++ (int)noisedBirthYear:(int)rawBirthYear;
+
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
+// If data are available, creates a UKM Report and stores it in the
 // UKM service's UnsentLogStore.
 + (void)buildAndStoreUKMLog;
 
 // TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns YES if the UKM service has logs to send.
-+ (BOOL)hasUnsentLogs;
++ (BOOL)hasUnsentUKMLogs;
 
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns YES if the UKM service's report has the expected year and gender.
-// Gender corresponds to the options in UserDemographicsProto::Gender.
+// The year is the un-noised birth year, and the gender corresponds to the
+// options in UserDemographicsProto::Gender.
 + (BOOL)UKMReportHasBirthYear:(int)year gender:(int)gender;
 
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
 // Returns YES if the UKM service's report has user demographics.
 + (BOOL)UKMReportHasUserDemographics;
+
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
+// If data are available, creates an UMA log and stores it in the
+// MetricsLogStore.
++ (void)buildAndStoreUMALog;
+
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
+// Returns YES if the metrics service has logs to send.
++ (BOOL)hasUnsentUMALogs;
+
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
+// Returns YES if the UMA log has the expected year and gender. The year is the
+// un-noised birth year, and the gender corresponds to the proto enum
+// UserDemographicsProto::Gender.
++ (BOOL)UMALogHasBirthYear:(int)year gender:(int)gender;
+
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
+// Returns YES if the UMA log has user demographics.
++ (BOOL)UMALogHasUserDemographics;
 
 // Creates a chrome_test_util::HistogramTester that will record every histogram
 // sent during test.

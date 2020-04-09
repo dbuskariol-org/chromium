@@ -245,6 +245,7 @@ source_set("eg_tests") {
     "//components/metrics:demographic_metrics_provider",
     "//components/metrics_services_manager",
     "//components/strings",
+    "//components/sync/base",
     "//components/ukm",
     "//components/ukm:test_support",
     "//components/unified_consent:unified_consent",

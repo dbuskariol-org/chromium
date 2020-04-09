@@ -4,7 +4,7 @@
 
 #include "ios/chrome/browser/metrics/metrics_app_interface.h"
 
-#include <memory>
+#include <string>
 
 #include "base/feature_list.h"
 #include "base/run_loop.h"
@@ -14,6 +14,7 @@
 #include "base/time/default_clock.h"
 #include "base/time/default_tick_clock.h"
 #include "base/time/time.h"
+#include "components/metrics/metrics_service.h"
 #include "components/metrics/unsent_log_store.h"
 #include "components/metrics_services_manager/metrics_services_manager.h"
 #include "components/network_time/network_time_tracker.h"
@@ -26,8 +27,8 @@
 #import "ios/chrome/test/app/histogram_test_util.h"
 #import "ios/testing/nserror_util.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
+#include "third_party/metrics_proto/chrome_user_metrics_extension.pb.h"
 #include "third_party/metrics_proto/ukm/report.pb.h"
-#include "third_party/metrics_proto/user_demographics.pb.h"
 #include "third_party/zlib/google/compression_utils.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -39,6 +40,29 @@ namespace {
 bool g_metrics_enabled = false;
 
 chrome_test_util::HistogramTester* g_histogram_tester = nullptr;
+
+// TODO(crbug.com/1066297): Refactor to remove duplicate code.
+// Returns an UMA log if the metrics service has a staged log.
+std::unique_ptr<metrics::ChromeUserMetricsExtension> GetLastUmaLog() {
+  metrics::MetricsLogStore* const log_store =
+      GetApplicationContext()->GetMetricsService()->LogStoreForTest();
+
+  // Decompress the staged log.
+  std::string uncompressed_log;
+  if (!compression::GzipUncompress(log_store->staged_log(),
+                                   &uncompressed_log)) {
+    return nullptr;
+  }
+
+  // Deserialize and return the log.
+  std::unique_ptr<metrics::ChromeUserMetricsExtension> uma_log =
+      std::make_unique<metrics::ChromeUserMetricsExtension>();
+  if (!uma_log->ParseFromString(uncompressed_log)) {
+    return nullptr;
+  }
+  return uma_log;
+}
+
 }  // namespace
 
 namespace metrics {
@@ -91,13 +115,13 @@ class UkmEGTestHelper {
     service->Flush();
   }
 
-  static bool HasUnsentLogs() {
+  static bool HasUnsentUkmLogs() {
     ukm::UkmService* service = ukm_service();
     return service->reporting_service_.ukm_log_store()->has_unsent_logs();
   }
 
   static std::unique_ptr<ukm::Report> GetUKMReport() {
-    if (!HasUnsentLogs()) {
+    if (!HasUnsentUkmLogs()) {
       return nullptr;
     }
 
@@ -195,25 +219,28 @@ class UkmEGTestHelper {
       clock.Now() - latency / 2, resolution, latency, tickClock.NowTicks());
 }
 
-+ (void)buildAndStoreUKMLog {
-  metrics::UkmEGTestHelper::BuildAndStoreUkmLog();
-}
-
-+ (BOOL)hasUnsentLogs {
-  return metrics::UkmEGTestHelper::HasUnsentLogs();
-}
-
-+ (BOOL)UKMReportHasBirthYear:(int)year gender:(int)gender {
-  std::unique_ptr<ukm::Report> report =
-      metrics::UkmEGTestHelper::GetUKMReport();
-
++ (int)noisedBirthYear:(int)rawBirthYear {
   int birthYearOffset =
       GetApplicationContext()
           ->GetChromeBrowserStateManager()
           ->GetLastUsedBrowserState()
           ->GetPrefs()
           ->GetInteger(syncer::prefs::kSyncDemographicsBirthYearOffset);
-  int noisedBirthYear = year + birthYearOffset;
+  return rawBirthYear + birthYearOffset;
+}
+
++ (void)buildAndStoreUKMLog {
+  metrics::UkmEGTestHelper::BuildAndStoreUkmLog();
+}
+
++ (BOOL)hasUnsentUKMLogs {
+  return metrics::UkmEGTestHelper::HasUnsentUkmLogs();
+}
+
++ (BOOL)UKMReportHasBirthYear:(int)year gender:(int)gender {
+  std::unique_ptr<ukm::Report> report =
+      metrics::UkmEGTestHelper::GetUKMReport();
+  int noisedBirthYear = [self noisedBirthYear:year];
 
   return report && gender == report->user_demographics().gender() &&
          noisedBirthYear == report->user_demographics().birth_year();
@@ -223,6 +250,36 @@ class UkmEGTestHelper {
   std::unique_ptr<ukm::Report> report =
       metrics::UkmEGTestHelper::GetUKMReport();
   return report && report->has_user_demographics();
+}
+
++ (void)buildAndStoreUMALog {
+  GetApplicationContext()->GetMetricsService()->StageCurrentLogForTest();
+}
+
++ (BOOL)hasUnsentUMALogs {
+  return GetApplicationContext()
+      ->GetMetricsService()
+      ->LogStoreForTest()
+      ->has_unsent_logs();
+}
+
++ (BOOL)UMALogHasBirthYear:(int)year gender:(int)gender {
+  if (![self UMALogHasUserDemographics]) {
+    return NO;
+  }
+  std::unique_ptr<metrics::ChromeUserMetricsExtension> log = GetLastUmaLog();
+  int noisedBirthYear = [self noisedBirthYear:year];
+
+  return noisedBirthYear == log->user_demographics().birth_year() &&
+         gender == log->user_demographics().gender();
+}
+
++ (BOOL)UMALogHasUserDemographics {
+  if (![self hasUnsentUMALogs]) {
+    return NO;
+  }
+  std::unique_ptr<metrics::ChromeUserMetricsExtension> log = GetLastUmaLog();
+  return log && log->has_user_demographics();
 }
 
 + (NSError*)setupHistogramTester {
