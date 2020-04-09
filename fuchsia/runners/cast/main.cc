@@ -63,8 +63,8 @@ fuchsia::web::CreateContextParams CreateMainContextParams() {
   create_context_params.set_user_agent_product("CrKey");
   create_context_params.set_user_agent_version("1.43");
 
-  const uint16_t kRemoteDebuggingPort = 9222;
-  create_context_params.set_remote_debugging_port(kRemoteDebuggingPort);
+  create_context_params.set_remote_debugging_port(
+      CastRunner::kRemoteDebuggingPort);
 
   // TODO(crbug.com/1023514): Remove this switch when it is no longer
   // necessary.
@@ -90,8 +90,8 @@ int main(int argc, char** argv) {
   WebContentRunner::GetContextParamsCallback get_context_params_callback =
       base::BindRepeating(&CreateMainContextParams);
 
-  CastRunner runner(
-      std::move(get_context_params_callback), IsHeadless(),
+  CastRunner runner(std::move(get_context_params_callback), IsHeadless());
+  runner.PublishRunnerService(
       base::fuchsia::ComponentContextForCurrentProcess()->outgoing().get());
 
   base::fuchsia::ComponentContextForCurrentProcess()
