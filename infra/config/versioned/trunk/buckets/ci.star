@@ -641,25 +641,45 @@ ci.mac_ios_builder(
 
 ci.memory_builder(
     name = 'Linux ASan LSan Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|asan lsan',
+        short_name = 'bld',
+    ),
     ssd = True,
 )
 
 ci.memory_builder(
     name = 'Linux ASan LSan Tests (1)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|asan lsan',
+        short_name = 'tst',
+    ),
     triggered_by = [builder_name('Linux ASan LSan Builder')],
 )
 
 ci.memory_builder(
     name = 'Linux ASan Tests (sandboxed)',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|asan lsan',
+        short_name = 'sbx',
+    ),
     triggered_by = [builder_name('Linux ASan LSan Builder')],
 )
 
 ci.memory_builder(
     name = 'Linux TSan Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|TSan v2',
+        short_name = 'bld',
+    ),
 )
 
 ci.memory_builder(
     name = 'Linux TSan Tests',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|TSan v2',
+        short_name = 'tst',
+    ),
     triggered_by = [builder_name('Linux TSan Builder')],
 )
 

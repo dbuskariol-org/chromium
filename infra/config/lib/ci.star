@@ -94,6 +94,8 @@ def _builder_sort_key(console_name, console_ordering, builder):
   short_name_key = ()
   if builder.short_name:
     ordering = console_ordering.get(category, [])
+    if type(ordering) == type(''):
+      ordering = console_ordering[ordering]
     short_name_ordering = getattr(ordering, 'short_names', [])
     short_name_key = _level_sort_key(builder.short_name, short_name_ordering)
 

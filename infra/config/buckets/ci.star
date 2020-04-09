@@ -74,6 +74,17 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.memory',
+    ordering = {
+        None: ['win', 'mac', 'linux', 'cros'],
+        '*build-or-test*': ci.ordering(short_names=['bld', 'tst']),
+        'linux|TSan v2': '*build-or-test*',
+        'linux|asan lsan': '*build-or-test*',
+        'linux|webkit': ci.ordering(short_names=['asn', 'msn']),
+    },
+)
+
+ci.console_view(
     name = 'chromium.win',
     ordering = {
         None: ['release', 'debug'],
@@ -1891,6 +1902,10 @@ ci.memory_builder(
 
 ci.memory_builder(
     name = 'Linux CFI',
+    console_view_entry = ci.console_view_entry(
+        category = 'cfi',
+        short_name = 'lnx',
+    ),
     cores = 32,
     # TODO(thakis): Remove once https://crbug.com/927738 is resolved.
     execution_timeout = 4 * time.hour,
@@ -1899,6 +1914,10 @@ ci.memory_builder(
 
 ci.memory_builder(
     name = 'Linux Chromium OS ASan LSan Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'cros|asan',
+        short_name = 'bld',
+    ),
     # TODO(crbug.com/1030593): Builds take more than 3 hours sometimes. Remove
     # once the builds are faster.
     execution_timeout = 6 * time.hour,
@@ -1906,31 +1925,55 @@ ci.memory_builder(
 
 ci.memory_builder(
     name = 'Linux Chromium OS ASan LSan Tests (1)',
+    console_view_entry = ci.console_view_entry(
+        category = 'cros|asan',
+        short_name = 'tst',
+    ),
     triggered_by = ['Linux Chromium OS ASan LSan Builder'],
 )
 
 ci.memory_builder(
     name = 'Linux ChromiumOS MSan Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'cros|msan',
+        short_name = 'bld',
+    ),
 )
 
 ci.memory_builder(
     name = 'Linux ChromiumOS MSan Tests',
+    console_view_entry = ci.console_view_entry(
+        category = 'cros|msan',
+        short_name = 'tst',
+    ),
     triggered_by = ['Linux ChromiumOS MSan Builder'],
 )
 
 ci.memory_builder(
     name = 'Linux MSan Builder',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|msan',
+        short_name = 'bld',
+    ),
     goma_jobs = goma.jobs.MANY_JOBS_FOR_CI,
 )
 
 ci.memory_builder(
     name = 'Linux MSan Tests',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|msan',
+        short_name = 'tst',
+    ),
     triggered_by = ['Linux MSan Builder'],
 )
 
 ci.memory_builder(
     name = 'Mac ASan 64 Builder',
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = 'bld',
+    ),
     goma_debug = True,  # TODO(hinoka): Remove this after debugging.
     goma_jobs = None,
     cores = None,  # Swapping between 8 and 24
@@ -1943,28 +1986,52 @@ ci.memory_builder(
 ci.memory_builder(
     name = 'Mac ASan 64 Tests (1)',
     builderless = False,
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = 'tst',
+    ),
     os = os.MAC_DEFAULT,
     triggered_by = ['Mac ASan 64 Builder'],
 )
 
 ci.memory_builder(
     name = 'WebKit Linux ASAN',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|webkit',
+        short_name = 'asn',
+    ),
 )
 
 ci.memory_builder(
     name = 'WebKit Linux Leak',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|webkit',
+        short_name = 'lk',
+    ),
 )
 
 ci.memory_builder(
     name = 'WebKit Linux MSAN',
+    console_view_entry = ci.console_view_entry(
+        category = 'linux|webkit',
+        short_name = 'msn',
+    ),
 )
 
 ci.memory_builder(
     name = 'android-asan',
+    console_view_entry = ci.console_view_entry(
+        category = 'android',
+        short_name = 'asn',
+    ),
 )
 
 ci.memory_builder(
     name = 'win-asan',
+    console_view_entry = ci.console_view_entry(
+        category = 'win',
+        short_name = 'asn',
+    ),
     cores = 32,
     builderless = True,
     os = os.WINDOWS_DEFAULT,
