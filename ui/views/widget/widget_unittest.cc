@@ -343,57 +343,6 @@ class OwnershipTestWidget : public Widget {
 
 // TODO(sky): add coverage of ownership for the desktop variants.
 
-// Widget owns its NativeWidget, part 1.
-TEST_F(WidgetOwnershipTest, Ownership_WidgetOwnsViewsNativeWidget) {
-  OwnershipTestState state;
-
-  auto widget = std::make_unique<OwnershipTestWidget>(&state);
-  Widget::InitParams params = CreateParamsForTestWidget();
-  params.native_widget = CreatePlatformNativeWidgetImpl(
-      params, widget.get(), kStubCapture, &state.native_widget_deleted);
-  widget->Init(std::move(params));
-
-  // Now delete the Widget, which should delete the NativeWidget.
-  widget.reset();
-
-  EXPECT_TRUE(state.widget_deleted);
-  EXPECT_TRUE(state.native_widget_deleted);
-
-  // TODO(beng): write test for this ownership scenario and the NativeWidget
-  //             being deleted out from under the Widget.
-}
-
-// Widget owns its NativeWidget, part 2: destroy the parent view.
-TEST_F(WidgetOwnershipTest,
-       Ownership_WidgetOwnsViewsNativeWidget_DestroyParentView) {
-  OwnershipTestState state;
-
-  Widget* toplevel = CreateTopLevelPlatformWidget();
-
-  auto widget = std::make_unique<OwnershipTestWidget>(&state);
-  Widget::InitParams params = CreateParamsForTestWidget();
-  params.parent = toplevel->GetNativeView();
-  params.native_widget = CreatePlatformNativeWidgetImpl(
-      params, widget.get(), kStubCapture, &state.native_widget_deleted);
-  widget->Init(std::move(params));
-
-  // Now close the toplevel, which deletes the view hierarchy.
-  toplevel->CloseNow();
-
-  RunPendingMessages();
-
-  // This shouldn't delete the widget because it shouldn't be deleted
-  // from the native side.
-  EXPECT_FALSE(state.widget_deleted);
-  EXPECT_FALSE(state.native_widget_deleted);
-
-  // Now delete it explicitly.
-  widget.reset();
-
-  EXPECT_TRUE(state.widget_deleted);
-  EXPECT_TRUE(state.native_widget_deleted);
-}
-
 // NativeWidget owns its Widget, part 1: NativeWidget is a platform-native
 // widget.
 TEST_F(WidgetOwnershipTest, Ownership_PlatformNativeWidgetOwnsWidget) {
@@ -507,9 +456,60 @@ TEST_F(WidgetOwnershipTest, Ownership_ViewsNativeWidgetOwnsWidget_Close) {
   EXPECT_TRUE(state.native_widget_deleted);
 }
 
-// Widget owns its NativeWidget and has a WidgetDelegateView as its contents.
+// Widget owns its NativeWidget, part 1.
+TEST_F(WidgetOwnershipTest, Ownership_WidgetOwnsViewsNativeWidget) {
+  OwnershipTestState state;
+
+  auto widget = std::make_unique<OwnershipTestWidget>(&state);
+  Widget::InitParams params = CreateParamsForTestWidget();
+  params.native_widget = CreatePlatformNativeWidgetImpl(
+      params, widget.get(), kStubCapture, &state.native_widget_deleted);
+  widget->Init(std::move(params));
+
+  // Now delete the Widget, which should delete the NativeWidget.
+  widget.reset();
+
+  EXPECT_TRUE(state.widget_deleted);
+  EXPECT_TRUE(state.native_widget_deleted);
+
+  // TODO(beng): write test for this ownership scenario and the NativeWidget
+  //             being deleted out from under the Widget.
+}
+
+// Widget owns its NativeWidget, part 2: destroy the parent view.
 TEST_F(WidgetOwnershipTest,
-       Ownership_WidgetOwnsNativeWidgetWithWithWidgetDelegateView) {
+       Ownership_WidgetOwnsViewsNativeWidget_DestroyParentView) {
+  OwnershipTestState state;
+
+  Widget* toplevel = CreateTopLevelPlatformWidget();
+
+  auto widget = std::make_unique<OwnershipTestWidget>(&state);
+  Widget::InitParams params = CreateParamsForTestWidget();
+  params.parent = toplevel->GetNativeView();
+  params.native_widget = CreatePlatformNativeWidgetImpl(
+      params, widget.get(), kStubCapture, &state.native_widget_deleted);
+  widget->Init(std::move(params));
+
+  // Now close the toplevel, which deletes the view hierarchy.
+  toplevel->CloseNow();
+
+  RunPendingMessages();
+
+  // This shouldn't delete the widget because it shouldn't be deleted
+  // from the native side.
+  EXPECT_FALSE(state.widget_deleted);
+  EXPECT_FALSE(state.native_widget_deleted);
+
+  // Now delete it explicitly.
+  widget.reset();
+
+  EXPECT_TRUE(state.widget_deleted);
+  EXPECT_TRUE(state.native_widget_deleted);
+}
+
+// Widget owns its NativeWidget, part 3: has a WidgetDelegateView as contents.
+TEST_F(WidgetOwnershipTest,
+       Ownership_WidgetOwnsViewsNativeWidget_WidgetDelegateView) {
   OwnershipTestState state;
 
   WidgetDelegateView* delegate_view = new WidgetDelegateView;
