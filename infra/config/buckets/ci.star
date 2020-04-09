@@ -46,6 +46,13 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.android.fyi',
+    ordering = {
+        None: ['android', 'memory', 'weblayer', 'webview'],
+    },
+)
+
+ci.console_view(
     name = 'chromium.chromiumos',
     ordering = {
         None: ['default'],
@@ -463,22 +470,41 @@ ci.android_builder(
 
 ci.android_fyi_builder(
     name = 'android-bfcache-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'android',
+    ),
 )
 
 ci.android_fyi_builder(
     name = 'Android WebLayer P FYI (rel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'weblayer',
+        short_name = 'p-rel',
+    ),
 )
 
 ci.android_fyi_builder(
     name = 'Android WebView P Blink-CORS FYI (rel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'webview',
+        short_name = 'cors',
+    ),
 )
 
 ci.android_fyi_builder(
     name = 'Android WebView P FYI (rel)',
+    console_view_entry = ci.console_view_entry(
+        category = 'webview',
+        short_name = 'p-rel',
+    ),
 )
 
 ci.android_fyi_builder(
     name = 'android-marshmallow-x86-fyi-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'emulator|M|x86',
+        short_name = 'rel',
+    ),
     schedule = '0 7 * * *',
     triggered_by = [],
 )
@@ -486,6 +512,10 @@ ci.android_fyi_builder(
 # TODO(hypan): remove this once there is no associated disabled tests
 ci.android_fyi_builder(
     name = 'android-pie-x86-fyi-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'emulator|P|x86',
+        short_name = 'rel',
+    ),
     goma_jobs=goma.jobs.J150,
     schedule = 'triggered',  # triggered manually via Scheduler UI
 )
@@ -2213,6 +2243,13 @@ ci.mac_ios_builder(
 
 ci.memory_builder(
     name = 'Android CFI',
+    # TODO(https://crbug.com/1008094) When this builder is not consistently
+    # failing, remove the console_view value
+    console_view = 'chromium.android.fyi',
+    console_view_entry = ci.console_view_entry(
+        category = 'memory',
+        short_name = 'cfi',
+    ),
     cores = 32,
     # TODO(https://crbug.com/919430) Remove the larger timeout once compile
     # times have been brought down to reasonable level
