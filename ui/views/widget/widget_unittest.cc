@@ -1259,37 +1259,6 @@ TEST_F(WidgetTest, KeyboardInputEvent) {
   EXPECT_FALSE(backspace_r.handled());
 }
 
-// Verifies bubbles result in a focus lost when shown.
-// TODO(msw): this tests relies on focus, it needs to be in
-// interactive_ui_tests.
-TEST_F(DesktopWidgetTest, DISABLED_FocusChangesOnBubble) {
-  // Create a widget, show and activate it and focus the contents view.
-  View* contents_view = new View;
-  contents_view->SetFocusBehavior(View::FocusBehavior::ALWAYS);
-  std::unique_ptr<Widget> widget = CreateTestWidget();
-  widget->SetContentsView(contents_view);
-  widget->Show();
-  widget->Activate();
-  contents_view->RequestFocus();
-  EXPECT_TRUE(contents_view->HasFocus());
-
-  // Show a bubble.
-  BubbleDialogDelegateView* bubble_delegate_view =
-      new TestBubbleDialogDelegateView(contents_view);
-  bubble_delegate_view->SetFocusBehavior(View::FocusBehavior::ALWAYS);
-  BubbleDialogDelegateView::CreateBubble(bubble_delegate_view)->Show();
-  bubble_delegate_view->RequestFocus();
-
-  // |contents_view_| should no longer have focus.
-  EXPECT_FALSE(contents_view->HasFocus());
-  EXPECT_TRUE(bubble_delegate_view->HasFocus());
-
-  bubble_delegate_view->GetWidget()->CloseNow();
-
-  // Closing the bubble should result in focus going back to the contents view.
-  EXPECT_TRUE(contents_view->HasFocus());
-}
-
 TEST_F(WidgetTest, BubbleControlsResetOnInit) {
   WidgetAutoclosePtr anchor(CreateTopLevelPlatformWidget());
   anchor->Show();
