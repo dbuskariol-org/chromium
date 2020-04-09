@@ -681,8 +681,9 @@ class PDFiumEngine : public PDFEngine,
   // Timer for touch long press detection.
   base::OneShotTimer touch_timer_;
 
-  // Holds the zero-based page index of the last page that the mouse clicked on.
-  int last_page_mouse_down_ = -1;
+  // Holds the zero-based page index of the last page that had the focused
+  // object.
+  int last_focused_page_ = -1;
 
   // Holds the zero-based page index of the most visible page; refreshed by
   // calling CalculateVisiblePages()

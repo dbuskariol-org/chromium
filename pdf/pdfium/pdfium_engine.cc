@@ -1056,7 +1056,7 @@ bool PDFiumEngine::OnLeftMouseDown(const pp::MouseInputEvent& event) {
     return true;
 
   if (page_index != -1) {
-    last_page_mouse_down_ = page_index;
+    last_focused_page_ = page_index;
     double page_x;
     double page_y;
     DeviceToPage(page_index, point, &page_x, &page_y);
@@ -1328,8 +1328,8 @@ bool PDFiumEngine::OnMouseMove(const pp::MouseInputEvent& event) {
     // If in form text area while left mouse button is held down, check if form
     // text selection needs to be updated.
     if (mouse_left_button_down_ && area == PDFiumPage::FORM_TEXT_AREA &&
-        last_page_mouse_down_ != -1) {
-      SetFormSelectedText(form(), pages_[last_page_mouse_down_]->GetPage());
+        last_focused_page_ != -1) {
+      SetFormSelectedText(form(), pages_[last_focused_page_]->GetPage());
     }
 
     if (kViewerImplementedPanning && mouse_middle_button_down_) {
@@ -1479,10 +1479,10 @@ bool PDFiumEngine::ExtendSelection(int page_index, int char_index) {
 }
 
 bool PDFiumEngine::OnKeyDown(const pp::KeyboardInputEvent& event) {
-  if (last_page_mouse_down_ == -1)
+  if (last_focused_page_ == -1)
     return false;
 
-  bool rv = !!FORM_OnKeyDown(form(), pages_[last_page_mouse_down_]->GetPage(),
+  bool rv = !!FORM_OnKeyDown(form(), pages_[last_focused_page_]->GetPage(),
                              event.GetKeyCode(), event.GetModifiers());
 
   if (event.GetKeyCode() == ui::VKEY_BACK ||
@@ -1502,11 +1502,11 @@ bool PDFiumEngine::OnKeyDown(const pp::KeyboardInputEvent& event) {
 }
 
 bool PDFiumEngine::OnKeyUp(const pp::KeyboardInputEvent& event) {
-  if (last_page_mouse_down_ == -1)
+  if (last_focused_page_ == -1)
     return false;
 
   // Check if form text selection needs to be updated.
-  FPDF_PAGE page = pages_[last_page_mouse_down_]->GetPage();
+  FPDF_PAGE page = pages_[last_focused_page_]->GetPage();
   if (in_form_text_area_)
     SetFormSelectedText(form(), page);
 
@@ -1514,11 +1514,11 @@ bool PDFiumEngine::OnKeyUp(const pp::KeyboardInputEvent& event) {
 }
 
 bool PDFiumEngine::OnChar(const pp::KeyboardInputEvent& event) {
-  if (last_page_mouse_down_ == -1)
+  if (last_focused_page_ == -1)
     return false;
 
   base::string16 str = base::UTF8ToUTF16(event.GetCharacterText().AsString());
-  return !!FORM_OnChar(form(), pages_[last_page_mouse_down_]->GetPage(), str[0],
+  return !!FORM_OnChar(form(), pages_[last_focused_page_]->GetPage(), str[0],
                        event.GetModifiers());
 }
 
@@ -1953,45 +1953,45 @@ bool PDFiumEngine::CanEditText() {
 
 bool PDFiumEngine::HasEditableText() {
   DCHECK(CanEditText());
-  if (last_page_mouse_down_ == -1)
+  if (last_focused_page_ == -1)
     return false;
-  FPDF_PAGE page = pages_[last_page_mouse_down_]->GetPage();
+  FPDF_PAGE page = pages_[last_focused_page_]->GetPage();
   // If the return value is 2, that corresponds to "\0\0".
   return FORM_GetFocusedText(form(), page, nullptr, 0) > 2;
 }
 
 void PDFiumEngine::ReplaceSelection(const std::string& text) {
   DCHECK(CanEditText());
-  if (last_page_mouse_down_ != -1) {
+  if (last_focused_page_ != -1) {
     base::string16 text_wide = base::UTF8ToUTF16(text);
     FPDF_WIDESTRING text_pdf_wide =
         reinterpret_cast<FPDF_WIDESTRING>(text_wide.c_str());
 
-    FORM_ReplaceSelection(form(), pages_[last_page_mouse_down_]->GetPage(),
+    FORM_ReplaceSelection(form(), pages_[last_focused_page_]->GetPage(),
                           text_pdf_wide);
   }
 }
 
 bool PDFiumEngine::CanUndo() {
-  if (last_page_mouse_down_ == -1)
+  if (last_focused_page_ == -1)
     return false;
-  return !!FORM_CanUndo(form(), pages_[last_page_mouse_down_]->GetPage());
+  return !!FORM_CanUndo(form(), pages_[last_focused_page_]->GetPage());
 }
 
 bool PDFiumEngine::CanRedo() {
-  if (last_page_mouse_down_ == -1)
+  if (last_focused_page_ == -1)
     return false;
-  return !!FORM_CanRedo(form(), pages_[last_page_mouse_down_]->GetPage());
+  return !!FORM_CanRedo(form(), pages_[last_focused_page_]->GetPage());
 }
 
 void PDFiumEngine::Undo() {
-  if (last_page_mouse_down_ != -1)
-    FORM_Undo(form(), pages_[last_page_mouse_down_]->GetPage());
+  if (last_focused_page_ != -1)
+    FORM_Undo(form(), pages_[last_focused_page_]->GetPage());
 }
 
 void PDFiumEngine::Redo() {
-  if (last_page_mouse_down_ != -1)
-    FORM_Redo(form(), pages_[last_page_mouse_down_]->GetPage());
+  if (last_focused_page_ != -1)
+    FORM_Redo(form(), pages_[last_focused_page_]->GetPage());
 }
 
 void PDFiumEngine::HandleAccessibilityAction(
@@ -2690,11 +2690,11 @@ void PDFiumEngine::CalculateVisiblePages() {
         pages_[i]->Unload();
       }
 
-      // If the last mouse down was on a page that's no longer visible, reset
+      // If the last focused page was a page that's no longer visible, reset
       // that variable so that we don't send keyboard events to it (the focus
       // will be lost when the page is first closed anyways).
-      if (static_cast<int>(i) == last_page_mouse_down_)
-        last_page_mouse_down_ = -1;
+      if (static_cast<int>(i) == last_focused_page_)
+        last_focused_page_ = -1;
     }
   }
 
