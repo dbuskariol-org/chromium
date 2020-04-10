@@ -1026,6 +1026,7 @@ void AddPeopleStrings(content::WebUIDataSource* html_source, Profile* profile) {
   // Manage profile strings:
 #if !defined(OS_CHROMEOS)
     {"showShortcutLabel", IDS_SETTINGS_PROFILE_SHORTCUT_TOGGLE_LABEL},
+    {"nameInputLabel", IDS_SETTINGS_PROFILE_NAME_INPUT_LABEL},
 #endif
     {"deleteProfileWarningExpandA11yLabel",
      IDS_SETTINGS_SYNC_DISCONNECT_EXPAND_ACCESSIBILITY_LABEL},
