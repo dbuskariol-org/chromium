@@ -1799,6 +1799,17 @@ ci.fyi_builder(
     goma_backend = None,
 )
 
+# The only non-isolated tests this runs are scripts which
+# work just as well on Linux as on Mac.
+ci.fyi_builder(
+    name = 'Mac10.15 Tests',
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = '15',
+    ),
+    triggered_by = ['Mac Builder Next'],
+)
+
 ci.fyi_builder(
     name = 'win-pixel-builder-rel',
     console_view_entry = ci.console_view_entry(
@@ -2020,17 +2031,6 @@ ci.fyi_mac_builder(
     ),
     cores = None,
     os = None,
-)
-
-ci.fyi_mac_builder(
-    name = 'Mac10.15 Tests',
-    console_view_entry = ci.console_view_entry(
-        category = 'mac',
-        short_name = '15',
-    ),
-    cores = None,
-    os = os.MAC_10_15,
-    triggered_by = ['Mac Builder Next'],
 )
 
 ci.fyi_mac_builder(
