@@ -338,8 +338,8 @@ void BubbleHeaderView::AddPasswordReuseButtons(bool is_saved_password) {
   int kSpacingBetweenButtons = 8;
   int change_password_button_size =
       change_password_button
-          ? 0
-          : change_password_button->CalculatePreferredSize().width();
+          ? change_password_button->CalculatePreferredSize().width()
+          : 0;
 
   // If these two buttons cannot fit into a single line, stack them vertically.
   bool can_fit_in_one_line =
