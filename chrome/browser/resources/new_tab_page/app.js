@@ -287,21 +287,18 @@ class AppElement extends PolymerElement {
   /**
    * Handles messages from the OneGoogleBar iframe. The messages that are
    * handled include show bar on load and activate/deactivate.
-   * The activate/deactivate controls if the OneGoogleBar accepts mouse events,
-   * though other events need to be forwarded to support touch.
+   * The activate/deactivate controls if the OneGoogleBar is layered on top of
+   * #content. This would happen when OneGoogleBar has an overlay open.
    * @param {!Object} data
    * @private
    */
   handleOneGoogleBarMessage_(data) {
     if (data.messageType === 'loaded') {
       this.oneGoogleBarLoaded_ = true;
-      this.eventTracker_.add(window, 'mousemove', ({x, y}) => {
-        this.$.oneGoogleBar.postMessage({type: 'mousemove', x, y});
-      });
     } else if (data.messageType === 'activate') {
-      this.$.oneGoogleBar.style.pointerEvents = 'unset';
+      this.$.oneGoogleBar.style.zIndex = '1000';
     } else if (data.messageType === 'deactivate') {
-      this.$.oneGoogleBar.style.pointerEvents = 'none';
+      this.$.oneGoogleBar.style.zIndex = '0';
     }
   }
 
