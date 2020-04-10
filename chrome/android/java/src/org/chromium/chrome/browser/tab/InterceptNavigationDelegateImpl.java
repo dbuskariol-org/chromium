@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.tab;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ContextUtils;
@@ -26,6 +27,7 @@ import org.chromium.content_public.browser.NavigationHandle;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.common.ConsoleMessageLevel;
+import org.chromium.ui.base.WindowAndroid;
 
 /**
  * Class that controls navigations and allows to intercept them. It is used on Android to 'convert'
@@ -76,8 +78,8 @@ public class InterceptNavigationDelegateImpl implements InterceptNavigationDeleg
             }
 
             @Override
-            public void onActivityAttachmentChanged(Tab tab, boolean attached) {
-                if (attached) {
+            public void onActivityAttachmentChanged(Tab tab, @Nullable WindowAndroid window) {
+                if (window != null) {
                     setExternalNavigationHandler(
                             mTab.getDelegateFactory().createExternalNavigationHandler(tab));
                 }
