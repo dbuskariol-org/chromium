@@ -890,11 +890,6 @@ NSString* const kBrowserViewControllerSnackbarCategory =
     return;
   _broadcasting = broadcasting;
 
-  if (IsMultiwindowSupported()) {
-    // TODO(crbug.com/1060653): fix fullscreen.
-    return;
-  }
-
   ChromeBroadcaster* broadcaster = self.fullscreenController->broadcaster();
   if (_broadcasting) {
     _toolbarUIUpdater = [[LegacyToolbarUIUpdater alloc]
