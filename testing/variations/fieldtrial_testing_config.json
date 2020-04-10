@@ -3329,24 +3329,6 @@
             ]
         }
     ],
-    "MostLikelyDesktopDeprecation": [
-        {
-            "platforms": [
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Disabled",
-                    "disable_features": [
-                        "DisplaySuggestionsServiceTiles"
-                    ]
-                }
-            ]
-        }
-    ],
     "MyChromeEverywhere": [
         {
             "platforms": [
