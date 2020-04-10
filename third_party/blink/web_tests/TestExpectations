@@ -6660,3 +6660,6 @@ crbug.com/1067533 [ Mac10.10 ] external/wpt/shape-detection/idlharness.https.any
 
 crbug.com/1064422 external/wpt/html/user-activation/propagation-crossorigin.sub.tentative.html [ Pass Timeout ]
 crbug.com/1066178 external/wpt/html/user-activation/consumption-crossorigin.sub.tentative.html [ Pass Timeout ]
+
+# Sheriff 2020-04-10
+crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Failure Timeout ]
