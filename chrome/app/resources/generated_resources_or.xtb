@@ -244,7 +244,6 @@
 <translation id="1327272175893960498">Kerberos ଟିକେଟ୍‍ଗୁଡ଼ିକ</translation>
 <translation id="1327495825214193325">ADB ଡିବଗିଂ ସକ୍ଷମ କରିବାକୁ, ଏହି <ph name="DEVICE_TYPE" />କୁ ରିଷ୍ଟାର୍ଟ କରିବା ଆବଶ୍ୟକ। ଏହାକୁ ଅକ୍ଷମ କରିବା ପାଇଁ ଫ୍ୟାକ୍ଟୋରୀ ସେଟିଂସ୍‌ରେ ରିସେଟ୍ କରିବା ଆବଶ୍ୟକ।</translation>
 <translation id="1327977588028644528">ଗେଟ୍‌ୱେ</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ ନାହିଁ।</translation>
 <translation id="1329584516321524826">ଏହିକ୍ଷଣି ଅପଡେଟ୍ ହେଲା</translation>
 <translation id="1330145147221172764">ଅନ୍-ସ୍କ୍ରିନ୍ କୀ'ବୋର୍ଡ ସକ୍ଷମ କରନ୍ତୁ</translation>
 <translation id="1331977651797684645">ଏହା ମୁଁ ଥିଲି।</translation>
@@ -996,7 +995,6 @@
 <translation id="2326931316514688470">&amp;ଆପ୍ ରିଲୋଡ୍ କରନ୍ତୁ</translation>
 <translation id="2327492829706409234">ଆପ୍‍କୁ ସକ୍ଷମ କରନ୍ତୁ</translation>
 <translation id="2329597144923131178">ଆପଣଙ୍କର ସମସ୍ତ ଡିଭାଇସ୍‌ଗୁଡ଼ିକରେ ନିଜର ବୁକ୍‍ମାର୍କଗୁଡିକ, ଇତିବୃତ୍ତି, ପାସ୍‌ୱର୍ଡ ଏବଂ ଅନ୍ୟ ସେଟିଂସ୍ ପାଇବାକୁ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ।</translation>
-<translation id="2330607597130465898">କୌଣସି ସୁରକ୍ଷା ନାହିଁ</translation>
 <translation id="2332131598580221120">ଷ୍ଟୋର୍‌ରେ ଦେଖନ୍ତୁ</translation>
 <translation id="2332192922827071008">ଅଗ୍ରାଧିକାରଗୁଡ଼ିକୁ ଖୋଲନ୍ତୁ</translation>
 <translation id="2332742915001411729">ଡିଫଲ୍ଟକୁ ରିସେଟ୍ କରନ୍ତୁ</translation>
@@ -1883,7 +1881,6 @@
 <translation id="3492788708641132712">ସିଙ୍କ କାମ କରୁନାହିଁ। ପୁଣି ସାଇନ୍ ଇନ୍ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ।</translation>
 <translation id="3493486281776271508">ଇଣ୍ଟର୍ନେଟ୍ ସଂଯୋଗ ଆବଶ୍ୟକ</translation>
 <translation id="3493881266323043047">ବୈଧତା:</translation>
-<translation id="3494155060718700400">ବିପଦଜନକ ୱେବସାଇଟ୍, ଡାଉନଲୋଡ୍ ଏବଂ ଏକ୍ସଟେନ୍ସନଗୁଡ଼ିକରୁ ଆପଣଙ୍କୁ ରକ୍ଷା କରେ ନାହିଁ (ସୁପାରିଶ କରାଯାଇନାହିଁ)। Gmail ଏବଂ Search ପରି ଅନ୍ୟ Google ସେବାଗୁଡ଼ିକରେ ସେଫ୍ ବ୍ରାଉଜିଂ ସୁବିଧା ଉପଲବ୍ଧ ଥିଲେ, ଆପଣ ଏବେ ବି ଏହି ସୁରକ୍ଷା ପାଇବେ।</translation>
 <translation id="3494769164076977169">ପ୍ରଥମ ଫାଇଲ୍ (ସୁପାରିଶ୍ କରାଯାଇଛି) ପରେ ଯେତେବେଳେ ଏକ ସାଇଟ୍ ସ୍ୱଚାଳିତ ଭାବେ ଫାଇଲ୍‌ଗୁଡ଼ିକ ଡାଉନ୍‌ଲୋଡ୍ କରିବାକୁ ଚେଷ୍ଟା କରେ, ତାହା ପଚାରନ୍ତୁ</translation>
 <translation id="3495660573538963482">Google ଆସିଷ୍ଟାଣ୍ଟ ସେଟିଂସ୍</translation>
 <translation id="3496213124478423963">ଜୁମ୍ ଆଉଟ୍</translation>
@@ -2292,6 +2289,7 @@
 <translation id="3971764089670057203">ଏହି ସୁରକ୍ଷା କୀ’ରେ ଥିବା ଟିପଚିହ୍ନଗୁଡ଼ିକ</translation>
 <translation id="3973660817924297510">ପାସୱାର୍ଡ ଯାଞ୍ଚ କରାଯାଉଛି (<ph name="TOTAL_PASSWORDS" />ଟିରୁ <ph name="CHECKED_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">ଏହି କ୍ଷେତ୍ର ପାଇଁ ଯୋଗାଯୋଗ ସର୍ଭର୍ ବିଫଳ ହୋଇଛି</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ ନାହିଁ। ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।</translation>
 <translation id="3976108569178263973">କୌଣସି ପ୍ରିଣ୍ଟର୍ ଉପଲବ୍ଧ ନାହିଁ।</translation>
 <translation id="397703832102027365">ପୂରା ହେବାକୁ ଯାଉଛି...</translation>
 <translation id="3977886311744775419">ଏହି ନେ୍ଟ୍‌ୱାର୍କ ପ୍ରକାରରେ ସ୍ୱଚାଳିତ ଅପ୍‌ଡେଟ୍‌ଗୁଡ଼ିକ ଡାଉନ୍‌ଲୋଡ୍ ହୁଏ ନାହିଁ, କିନ୍ତୁ ଆପଣ ମାନୁଆଲୀ ଅପ୍‌ଡେଟ୍‌ଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବେ।</translation>
@@ -2591,6 +2589,7 @@
 <translation id="4421932782753506458">ଫ୍ଲୁଫି</translation>
 <translation id="4423376891418188461">ସେଟିଂସ୍‍ ରିଷ୍ଟୋର୍‍ କରନ୍ତୁ</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, ଆପଣ ଆପଣଙ୍କର ପାସ୍‌ୱର୍ଡ ପରିବର୍ତ୍ତନ କରନ୍ତୁ ବୋଲି ଆପଣଙ୍କର ବ୍ୟବସ୍ଥାପକ ଚାହୁଁଛନ୍ତି।</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ ନାହିଁ। 24 ଘଣ୍ଟା ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।</translation>
 <translation id="4429030830601238961">ଏହି ଡାଟା ଆପଣଙ୍କ ସଂସ୍ଥାର ସୁରକ୍ଷା ନୀତିଗୁଡ଼ିକର ଉଲ୍ଲଙ୍ଘନ କରୁଛି ଏବଂ ଏହାକୁ ପେଷ୍ଟ କରାଯାଇପାରିବ ନାହିଁ।</translation>
 <translation id="4430019312045809116">ଭଲ୍ୟୁମ୍</translation>
 <translation id="4430369329743628066">ବୁକ୍‌ମାର୍କ ଯୋଡାଗଲା</translation>
@@ -2603,6 +2602,7 @@
 <translation id="4441124369922430666">ମେସିନ୍ ଚାଲୁ ହେଉଥିବା ବେଳେ ଏହି ଆପ୍‌କୁ ସ୍ୱଚାଳିତ ଭାବେ ଆରମ୍ଭ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</translation>
 <translation id="4441147046941420429">ଜାରି ରଖିବା ପାଇଁ, ଆପଣଙ୍କ ଡିଭାଇସ୍‍ରୁ ଆପଣଙ୍କର ସୁରକ୍ଷା କୀକୁ କାଢ଼ି ଦିଅନ୍ତୁ, ତା'ପରେ ପୁଣି ଭର୍ତ୍ତି କରି ତାହାକୁ ସ୍ପର୍ଶ କରନ୍ତୁ</translation>
 <translation id="444134486829715816">ପ୍ରସାରିତ କରନ୍ତୁ...</translation>
+<translation id="4442329324652245220">ଆପଣ ଆପଣଙ୍କ Google ଆକାଉଣ୍ଟ ମାଧ୍ୟମରେ ସାଇନ୍ ଇନ୍ କଲେ, <ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ</translation>
 <translation id="4442424173763614572">DNS ଲୁକ୍‍ଅପ୍ ବିଫଳ ହୋଇଛି</translation>
 <translation id="4443536555189480885">&amp;ସାହାଯ୍ୟ</translation>
 <translation id="4444304522807523469">USB କିମ୍ବା ସ୍ଥାନୀୟ ନେଟ୍‌ୱର୍କ ମାଧ୍ୟମରେ ଆଟାଚ୍‌ ଥିବା ଡକୁମେଣ୍ଟ ସ୍କାନର୍‌କୁ ଆକ୍ସେସ୍‌ କରନ୍ତୁ</translation>
@@ -3452,7 +3452,6 @@
 <translation id="561698261642843490">Firefox ବନ୍ଦ କରନ୍ତୁ</translation>
 <translation id="5618333180342767515">(ଏହା କିଛି ସମୟ ଲାଗିପାରେ)</translation>
 <translation id="56197088284879152">ରିମୋଟ୍ ଡିଭାଇସ୍ ପାଇଁ ସଂଯୋଗ ବହୁତ ଖରାପ ଅଛି: "<ph name="DEVICE_NAME" />"।</translation>
-<translation id="5620163320393916465">କୌଣସି ସେଭ୍ କରାଯାଇଥିବା ପାସୱାର୍ଡ ନାହିଁ</translation>
 <translation id="5620568081365989559">DevTools <ph name="FOLDER_PATH" />କୁ ସମ୍ପୂର୍ଣ୍ଣ ଆକ୍ସେସ୍‌ର ଅନୁରୋଧ କରେ। ଏହା ସୁନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଆପଣ କୌଣସି ସମ୍ବେଦନଶୀଳ ସୂଚନାକୁ ଦେଖାଇବେ ନାହିଁ।</translation>
 <translation id="5620612546311710611">ବ୍ୟବହାରର ପରିସଂଖ୍ୟାନ</translation>
 <translation id="5620655347161642930">ପାସ୍‍ୱାର୍ଡଗୁଡ଼ିକୁ ଏକ୍ସପୋର୍ଟ କରନ୍ତୁ...</translation>
@@ -3874,7 +3873,6 @@
 <translation id="6178664161104547336">ଏକ ସାର୍ଟିଫିକେଟ ଚୟନ କରନ୍ତୁ</translation>
 <translation id="6181431612547969857">ଡାଉନ୍‌ଲୋଡ୍ ବ୍ଲକ୍‌ କରାଯାଇଛି</translation>
 <translation id="6185132558746749656">ଡିଭାଇସ୍ ଲୋକେସନ୍</translation>
-<translation id="6186394685773237175">କୌଣସି ଚୋରି ହୋଇଯାଇଥିବା ପାସୱାର୍ଡ ମିଳିଲା ନାହିଁ</translation>
 <translation id="6195693561221576702">ଏହି ଡିଭାଇସ୍‌ଟି ଅଫ୍‌ଲାଇନ୍ ଡେମୋ ମୋଡ୍‌ରେ ସେଟ୍‍ ଅପ୍ କରାଯାଇପାରିବ ନାହିଁ।</translation>
 <translation id="6196640612572343990">ତୃତୀୟ ପକ୍ଷ କୁକୀଗୁଡ଼ିକୁ ବ୍ଲକ୍ କରନ୍ତୁ</translation>
 <translation id="6196854373336333322">ଏକ୍ସଟେନ୍‌ସନ୍‌ "<ph name="EXTENSION_NAME" />" ଆପଣଙ୍କର ପ୍ରୋକ୍ସି ସେଟିଂସ୍‌କୁ ନିୟନ୍ତ୍ରଣକୁ ନେଇଛି, ଯାହାର ଅର୍ଥ ଆପଣ ଅନ୍‌ଲାଇନ୍‌ରେ ଯାହା କିଛି କରନ୍ତି, ସେଥିରେ ଏହା ପରିବର୍ତ୍ତନ କରିପାରେ, ଭାଙ୍ଗିପାରେ କିମ୍ବା ଲୁଚି ଶୁଣିପାରେ। ଯଦି ଆପଣ ସୁନିଶ୍ଚିତ ନୁହଁନ୍ତି ଯେ ଏହି ପରିବର୍ତ୍ତନ କ’ଣ ପାଇଁ ହେଲା, ତେବେ ସମ୍ଭବତଃ ଆପଣ ଏହା ଚାହାନ୍ତି ନାହିଁ।</translation>
@@ -4417,7 +4415,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="6943836128787782965">HTTP ବିଫଳ ହୋଇଛି</translation>
 <translation id="6945221475159498467">ଚୟନ କରନ୍ତୁ</translation>
 <translation id="694592694773692225">ଏହି ପୃଷ୍ଠାରେ ରିଡାଇରେକ୍ଟ ପ୍ରକ୍ରିୟାକୁ ବ୍ଲକ୍ କରାଗଲା।</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1ଟି ଚୋରି ହୋଇଯାଇଥିବା ପାସୱାର୍ଡ}other{{NUM_PASSWORDS}ଟି ଚୋରି ହୋଇଯାଇଥିବା ପାସୱାର୍ଡ}}</translation>
 <translation id="6949434160682548041">ପାସ୍‍ୱର୍ଡ (ଇଚ୍ଛାଧୀନ)</translation>
 <translation id="6950627417367801484">ଆପ୍ସ ରିଷ୍ଟୋର୍ କରନ୍ତୁ</translation>
 <translation id="6950943362443484797">ଆପଣଙ୍କ ପାଇଁ ଆମେ ସେହି ଆପ୍‌ ଇନ୍‍ଷ୍ଟଲ୍‌ କରିବୁ</translation>
@@ -4567,7 +4564,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="7131040479572660648"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />ଏବଂ <ph name="WEBSITE_3" />ରେ ଆପଣଙ୍କର ଡାଟା ପଢ଼ନ୍ତୁ</translation>
 <translation id="713122686776214250">&amp;ପୃଷ୍ଠା ଯୋଗ କରନ୍ତୁ...</translation>
 <translation id="7133578150266914903">ଆପଣଙ୍କର ବ୍ୟବସ୍ଥାପକ ଏହି ଡିଭାଇସ୍‌କୁ ଫେରାଇ ଆଣୁଛନ୍ତି (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271"><ph name="DONE" />/<ph name="TOTAL" />ଟି ପାସୱାର୍ଡ ଯାଞ୍ଚ କରାଯାଇଛି...</translation>
 <translation id="7134098520442464001">କ୍ଷୁଦ୍ରତର ଟେକ୍ସଟ୍‍ ତିଆରି କରନ୍ତୁ</translation>
 <translation id="7135729336746831607">ବ୍ଲୁଟୁଥ୍ ଚାଲୁ କରିବେ କି?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> ଆପଣଙ୍କୁ ତୁରନ୍ତ ଆପଣଙ୍କର <ph name="DEVICE_TYPE" /> ଅପଡେଟ୍ କରିବା ପାଇଁ ଆବଶ୍ୟକ କରୁଛି।</translation>
@@ -4719,7 +4715,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> ବର୍ତ୍ତମାନ ପୂର୍ଣ୍ଣ ସ୍କ୍ରିନ୍‍‍ରେ ଦେଖାଯାଉଛି।</translation>
 <translation id="7340650977506865820">ଆପଣଙ୍କର ସ୍କ୍ରିନ୍‍କୁ ସାଇଟ୍‍ ସେୟାର୍‌ କରୁଛି</translation>
 <translation id="7341834142292923918">ଏହି ସାଇଟ୍ ପାଇଁ ଆକ୍ସେସ୍ ଆବଶ୍ୟକ କରେ</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ ନାହିଁ। ଆସନ୍ତାକାଲି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା <ph name="BEGIN_LINK" />ଆପଣଙ୍କ Google ଆକାଉଣ୍ଟରେ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ<ph name="END_LINK" />।</translation>
 <translation id="7345706641791090287">ଆପଣଙ୍କର ପାସ୍‌ୱର୍ଡ ସୁନିଶ୍ଚିତ କରନ୍ତୁ</translation>
 <translation id="7346909386216857016">ଠିକ ଅଛି, ଏହା ବୁଝିଗଲି</translation>
 <translation id="7347751611463936647">ଏହି ଏକ୍ସଟେନ୍‍ସନ୍‍ ବ୍ୟବହାର କରିବାକୁ, "<ph name="EXTENSION_KEYWORD" />" ଟାଇପ୍‌ କରନ୍ତୁ, ଏହାପରେ TAB ଲେଖନ୍ତୁ, ଏହାପରେ ଆପଣଙ୍କର କମାଣ୍ଡ କିମ୍ବା ସର୍ଚ୍ଚ ଲେଖନ୍ତୁ।</translation>
@@ -5012,7 +5007,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="7744047395460924128">ଆପଣଙ୍କର ପ୍ରିଣ୍ଟିଂ ଇତିହାସ ଦେଖନ୍ତୁ</translation>
 <translation id="7744192722284567281">ଡାଟା ଚୋରିରେ ପାସୱାର୍ଡ ମିଳିଛି</translation>
 <translation id="7750228210027921155">ଛବି ମଧ୍ୟରେ ଛବି</translation>
-<translation id="7751229152614300329">ସେଫ୍ ବ୍ରାଉଜିଂ ଅପ୍ ଟୁ ଡେଟ୍ ଅଛି ଏବଂ ଏହା ଆପଣଙ୍କୁ କ୍ଷତିକାରକ ସାଇଟ୍ ଏବଂ ଡାଉନଲୋଡଗୁଡ଼ିକରୁ ସୁରକ୍ଷିତ ରଖିଥାଏ</translation>
 <translation id="7751260505918304024">ସବୁ ଦେଖାନ୍ତୁ</translation>
 <translation id="7754704193130578113">ଡାଉନଲୋଡିଙ୍ଗ୍ କରିବା ପୂର୍ବରୁ ପ୍ରତ୍ୟେକ ଫାଇଲ୍ କେଉଁଠି ସଞ୍ଚୟ ହେବ ପଚାରନ୍ତୁ</translation>
 <translation id="7755287808199759310">ଆପଣଙ୍କ ଅଭିଭାବକ ଆପଣଙ୍କ ପାଇଁ ଏହାର ଅବରୋଧ ହଟାଇପାରିବେ</translation>
@@ -5213,7 +5207,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="7970882136539140748">ବର୍ତ୍ତମାନ କାର୍ଡ ସେଭ୍ କରାଯାଇପାରିବ ନାହିଁ</translation>
 <translation id="7972714317346275248">RSA ଏନ୍‍କ୍ରିପ୍‌ସନ୍ ସହିତ PKCS #1 SHA-384</translation>
 <translation id="7973962044839454485">ଏକ ଭୁଲ ଉପଯୋଗକର୍ତ୍ତା ନାମ କିମ୍ୱା ପାସ୍‌ୱର୍ଡ୍ କାରଣରୁ PPP ପ୍ରମାଣୀକରଣ ହୋଇପାରିଲା ନାହିଁ</translation>
-<translation id="7974432913705876903">ଆପଣ ଆପଣଙ୍କ Google ଆକାଉଣ୍ଟ ମାଧ୍ୟମରେ ସାଇନ୍ ଇନ୍ କଲେ, <ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ।</translation>
 <translation id="7974566588408714340"><ph name="EXTENSIONNAME" /> ବ୍ୟବହାର କରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ</translation>
 <translation id="7974936243149753750">ଓଭରସ୍କାନ୍‌</translation>
 <translation id="7978412674231730200">ବ୍ୟକ୍ତିଗତ କୀ</translation>
@@ -5962,7 +5955,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="8938800817013097409">USB-C ଡିଭାଇସ୍‌ (ପଛରେ ଥିବା ଡାହାଣପଟ ପୋର୍ଟ)</translation>
 <translation id="8940081510938872932">ଆପଣଙ୍କର କମ୍ପ୍ୟୁଟର୍ ବର୍ତ୍ତମାନ ଅନେକଗୁଡ଼ିଏ କାର୍ଯ୍ୟ କରୁଛି।  ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।</translation>
 <translation id="8941173171815156065">'<ph name="PERMISSION" />' ଅନୁମତି ପ୍ରତ୍ୟାହାର କରନ୍ତୁ</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ ନାହିଁ। ଆସନ୍ତାକାଲି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।</translation>
 <translation id="894360074127026135">Netscape ଆନ୍ତର୍ଜାତିକ ଷ୍ଟେପ୍‌ ଅପ୍‌</translation>
 <translation id="8944099748578356325">ଆପଣଙ୍କ ବ୍ୟାଟେରୀକୁ ଖୁବ ଶୀଘ୍ର ବ୍ୟବହାର କରିଥାଏ। (ବର୍ତ୍ତମାନ <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" />, <ph name="TAB_NAME" /> ସହ ଏକ ୱିଣ୍ଡୋ ସେୟାର୍ କରୁଛି।</translation>
@@ -5981,6 +5973,7 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="8966870118594285808">ଯଦି ଆପଣ ଭୁଲବଶତଃ ଏକ ଟାବ୍ ବନ୍ଦ କରିଦେଇଛନ୍ତି ତେବେ ତାହାକୁ ପୁଣି ଖୋଲନ୍ତୁ</translation>
 <translation id="8967866634928501045">ଦେଖାଇବା ପାଇଁ Alt Shift A ଦବାନ୍ତୁ</translation>
 <translation id="8968766641738584599">କାର୍ଡ ସେଭ୍‌ କରନ୍ତୁ</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> ଆପଣଙ୍କ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରିପାରିବ ନାହିଁ। 24 ଘଣ୍ଟା ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା <ph name="BEGIN_LINK" />ଆପଣଙ୍କ Google ଆକାଉଣ୍ଟରେ ପାସୱାର୍ଡଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ<ph name="END_LINK" />।</translation>
 <translation id="89720367119469899">ଏସ୍କେପ୍</translation>
 <translation id="8972513834460200407">ଦୟାକରି ଆପଣଙ୍କ ନେଟ୍‌ୱର୍କ ବ୍ୟବସ୍ଥାପକଙ୍କୁ ପଚାରି ସୁନିଶ୍ଚିତ ହୁଅନ୍ତୁ କି Google ସର୍ଭରରୁ ଡାଉନ୍‌ଲୋଡ୍ କରିବାରେ ଫାୟାର୍‌ୱାଲ୍ ବ୍ଲକ୍ କରୁନାହିଁ।</translation>
 <translation id="8973557916016709913">ଜୁମ୍ ସ୍ତର କାଢ଼ି ଦିଅନ୍ତୁ</translation>

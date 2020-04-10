@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Kerberos టిక్కెట్‌లు</translation>
 <translation id="1327495825214193325">ADB డీబగ్గింగ్‌ను ఎనేబుల్ చేయడానికి, ఈ <ph name="DEVICE_TYPE" />ను తప్పనిసరిగా రీస్టార్ట్ చేయాలి. దీనిని డిజేబుల్ చేయాలంటే, ఫ్యాక్టరీ సెట్టింగ్‌లకు రీసెట్ చేయడం అవసరం అవుతుంది.</translation>
 <translation id="1327977588028644528">గేట్‌వే</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> మీ పాస్‌వర్డ్‌లను చెక్ చేయలేదు.</translation>
 <translation id="1329584516321524826">ఇప్పుడే నవీకరించబడింది</translation>
 <translation id="1330145147221172764">స్క్రీన్‌లో కీబోర్డ్‌ను ప్రారంభించండి</translation>
 <translation id="1331977651797684645">ఇది నేనే.</translation>
@@ -1000,7 +999,6 @@
 <translation id="2326931316514688470">యాప్‌ను &amp;మళ్లీ లోడ్ చేయి</translation>
 <translation id="2327492829706409234">యాప్‌ను ప్రారంభించు</translation>
 <translation id="2329597144923131178">మీ బుక్‌మార్క్‌లు, చరిత్ర, పాస్‌వర్డ్‌లు, ఇతర సెట్టింగ్‌లను మీ అన్ని పరికరాలలో పొందడానికి సైన్ ఇన్ చేయండి.</translation>
-<translation id="2330607597130465898">రక్షణ లేదు</translation>
 <translation id="2332131598580221120">స్టోర్‌లో వీక్షించండి</translation>
 <translation id="2332192922827071008">ప్రాధాన్యతలను తెరువు</translation>
 <translation id="2332742915001411729">డిఫాల్ట్‌కు రీసెట్ చేయి</translation>
@@ -1888,7 +1886,6 @@
 <translation id="3492788708641132712">సమకాలీకరణ పని చేయడం లేదు. మళ్లీ సైన్ ఇన్ చేేయడానికి ప్రయత్నించండి.</translation>
 <translation id="3493486281776271508">ఇంటర్నెట్ కనెక్షన్ అవసరం</translation>
 <translation id="3493881266323043047">చెల్లుబాటు</translation>
-<translation id="3494155060718700400">ప్రమాదకరమైన వెబ్‌సైట్‌లు, డౌన్‌లోడ్‌లు, ఎక్స్‌టెన్షన్‌ల నుండి మిమ్మల్ని రక్షించదు (సిఫార్సు చేయడం లేదు). Gmail, Search వంటి ఇతర Google సర్వీస్‌లలో, సురక్షిత బ్రౌజింగ్ అందుబాటులో ఉన్న చోట మీరు ఇప్పటికీ రక్షణను పొందుతారు.</translation>
 <translation id="3494769164076977169">సైట్ మొదటి ఫైల్ తర్వాత ఆటోమేటిక్‌గా ఫైల్‌లను డౌన్‌లోడ్ చేయడానికి ప్రయత్నించేటప్పుడు అడగాలి (సిఫార్సు చేయబడింది)</translation>
 <translation id="3495660573538963482">Google సహాయకం సెట్టింగ్‌లు</translation>
 <translation id="3496213124478423963">దూరంగా జూమ్ చెయ్యి</translation>
@@ -2298,6 +2295,7 @@
 <translation id="3971764089670057203">ఈ సెక్యూరిటీ 'కీ'లో వేలిముద్రలు ఉన్నాయి</translation>
 <translation id="3973660817924297510">పాస్‌వర్డ్‌లను తనిఖీ చేస్తోంది (<ph name="TOTAL_PASSWORDS" />లో <ph name="CHECKED_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">సర్వర్ కోసం నెట్‌వర్క్ పరిధిని కనెక్ట్ చేయడంలో విఫలమైంది</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> మీ పాస్‌వర్డ్‌లను చెక్ చేయలేదు. తర్వాత మళ్లీ ట్రై చేయండి.</translation>
 <translation id="3976108569178263973">అందుబాటులో ఉన్న ప్రింటర్లు లేవు.</translation>
 <translation id="397703832102027365">పూర్తి చేస్తోంది...</translation>
 <translation id="3977886311744775419">ఈ రకమైన నెట్‌వర్క్‌లో ఆటోమేటిక్ అప్‌డేట్‌లు డౌన్‌లోడ్ చేయబడవు, కానీ మీరు మాన్యువల్‌గా అప్‌డేట్‌లను తనిఖీ చేయవచ్చు.</translation>
@@ -2597,6 +2595,7 @@
 <translation id="4421932782753506458">ఫ్లఫ్ఫీ</translation>
 <translation id="4423376891418188461">సెట్టింగ్‌లను పునరుద్ధరించు</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, మీ నిర్వాహకులకు మీరు మీ పాస్‌వర్డ్‌ను మార్చడం అవసరం.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> మీ పాస్‌వర్డ్‌లను చెక్ చేయలేదు. 24 గంటల తర్వాత మళ్లీ ట్రై చేయండి.</translation>
 <translation id="4429030830601238961">ఈ డేటా మీ సంస్థ యొక్క భద్రతా పాలసీలను ఉల్లంఘిస్తుంది, కాబట్టి అది అతికించబడదు.</translation>
 <translation id="4430019312045809116">వాల్యూమ్</translation>
 <translation id="4430369329743628066">బుక్‌మార్క్ జోడించబడింది</translation>
@@ -2609,6 +2608,7 @@
 <translation id="4441124369922430666">మెషీన్ ప్రారంభించబడినప్పుడు ఆటోమేటిక్‌గా ఈ యాప్ ప్రారంభించబడాలని మీరు కోరుకుంటున్నారా?</translation>
 <translation id="4441147046941420429">కొనసాగించడానికి, మీ పరికరం నుండి సెక్యూరిటీ కీని తీసివేసి, ఆ తర్వాత చొప్పించి, ఆపై దానిని తాకండి</translation>
 <translation id="444134486829715816">విస్తరించు...</translation>
+<translation id="4442329324652245220">మీరు మీ Google ఖాతాతో సైన్ ఇన్ చేసినప్పుడు <ph name="IDS_SHORT_PRODUCT_NAME" />Chrome మీ పాస్‌వర్డ్‌లను చెక్ చేయగలదు</translation>
 <translation id="4442424173763614572">DNS శోధన విఫలమైంది</translation>
 <translation id="4443536555189480885">&amp;సహాయం</translation>
 <translation id="4444304522807523469">USB ద్వారా లేదా స్థానిక నెట్‌వర్క్‌లో జోడించిన పత్రం స్కానర్‌లను యాక్సెస్ చేయండి</translation>
@@ -3458,7 +3458,6 @@
 <translation id="561698261642843490">Firefoxని మూసివేయండి</translation>
 <translation id="5618333180342767515">(దీనికి కొన్ని నిమిషాల సమయం పట్టవచ్చు)</translation>
 <translation id="56197088284879152">ఈ రిమోట్ పరికరానికి ఉన్న కనెక్షన్ రద్దీగా ఉంది: "<ph name="DEVICE_NAME" />".</translation>
-<translation id="5620163320393916465">సేవ్ చేసిన పాస్‌వర్డ్‌లు ఏవీ లేవు</translation>
 <translation id="5620568081365989559">DevTools <ph name="FOLDER_PATH" />కు పూర్తి యాక్సెస్‌ను అభ్యర్థిస్తున్నాయి. మీరు ఎటువంటి ముఖ్యమైన సమాచారాన్ని బహిర్గతం చేయలేదని నిర్ధారించుకోండి.</translation>
 <translation id="5620612546311710611">వినియోగ గణాంకాలు</translation>
 <translation id="5620655347161642930">పాస్‌వర్డ్‌లను ఎగుమతి చేయండి...</translation>
@@ -3880,7 +3879,6 @@
 <translation id="6178664161104547336">ఒక సర్టిఫికెట్‌ను ఎంచుకోండి</translation>
 <translation id="6181431612547969857">డౌన్‌లోడ్ బ్లాక్ చేయబడింది</translation>
 <translation id="6185132558746749656">పరికర స్థానం</translation>
-<translation id="6186394685773237175">చోరీకి గురైన పాస్‌వర్డ్‌లు ఏవీ కనుగొనబడలేదు</translation>
 <translation id="6195693561221576702">ఈ పరికరాన్ని ఆఫ్‌లైన్ డెమో మోడ్‌లో సెటప్ చేయలేరు.</translation>
 <translation id="6196640612572343990">మూడవ పక్షం కుక్కీలను బ్లాక్ చేయి</translation>
 <translation id="6196854373336333322">"<ph name="EXTENSION_NAME" />" ఎక్సటెన్షన్ మీ ప్రాక్సీ సెట్టింగ్‌లపై నియంత్రణను కలిగి ఉంది, అంటే ఇది మీరు ఆన్‌లైన్‌‍లో చేసే ప్రతిదీ మార్చగలదు, విచ్ఛిన్నం చేయగలదు లేదా మీకు తెలియకుండా గమనించగలదు. ఈ మార్పు ఎందుకు జరిగిందో మీకు సరిగ్గా తెలియదంటే, బహుశా మీరు ఇది కోరుకొని ఉండకపోవచ్చు.</translation>
@@ -4421,7 +4419,6 @@
 <translation id="6943836128787782965">HTTP పొందడంలో విఫలమైంది</translation>
 <translation id="6945221475159498467">ఎంచుకోండి</translation>
 <translation id="694592694773692225">మళ్ళింపు ఈ పేజీలో బ్లాక్ చేయబడింది.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 చోరీకి గురైన పాస్‌వర్డ్}other{{NUM_PASSWORDS} చోరీకి గురైన పాస్‌వర్డ్‌లు}}</translation>
 <translation id="6949434160682548041">పాస్‌వర్డ్ (ఐచ్ఛికం)</translation>
 <translation id="6950627417367801484">యాప్‌లను పునరుద్ధరించండి</translation>
 <translation id="6950943362443484797">మేము మీ కోసం ఆ యాప్‌ని ఇన్‌స్టాల్ చేస్తాము</translation>
@@ -4571,7 +4568,6 @@
 <translation id="7131040479572660648"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> మరియు <ph name="WEBSITE_3" />లోని మీ డేటాను చదవండి</translation>
 <translation id="713122686776214250">పే&amp;జీని జోడించండి...</translation>
 <translation id="7133578150266914903">మీ నిర్వాహకుడు మీ పరికరాన్ని ఉపసంహరిస్తున్నారు (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271"><ph name="DONE" />/<ph name="TOTAL" /> పాస్‌వర్డ్‌లు తనిఖీ అయ్యాయి...</translation>
 <translation id="7134098520442464001">టెక్స్ట్‌ని చిన్నదిగా చెయ్యండి</translation>
 <translation id="7135729336746831607">బ్లూటూత్ ఆన్ చేయాలా?</translation>
 <translation id="7136639886842764730">వెంటనే మీ <ph name="DEVICE_TYPE" />ను అప్‌డేట్ చేయాలని <ph name="DOMAIN" /> తెలియజేస్తోంది.</translation>
@@ -4723,7 +4719,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> ఇప్పుడు పూర్తి స్క్రీన్‌లో కనిపిస్తుంది.</translation>
 <translation id="7340650977506865820">సైట్ మీ స్క్రీన్‌ను షేర్ చేస్తోంది</translation>
 <translation id="7341834142292923918">ఈ సైట్‌కు యాక్సెస్ కోరుతోంది</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> మీ పాస్‌వర్డ్‌లను చెక్ చేయలేదు. రేపు మళ్లీ ప్రయత్నించండి లేదా <ph name="BEGIN_LINK" />మీ Google ఖాతాలో పాస్‌వర్డ్‌లను తనిఖీ చేయండి<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">మీ పాస్‌వర్డ్‌ను నిర్ధారించండి</translation>
 <translation id="7346909386216857016">సరే, అర్థమైంది</translation>
 <translation id="7347751611463936647">ఈ ఎక్స్‌టెన్షన్‌ను ఉపయోగించడానికి, "<ph name="EXTENSION_KEYWORD" />", తర్వాత TAB, ఆపై మీ ఆదేశం లేదా శోధనను టైప్ చేయండి.</translation>
@@ -5016,7 +5011,6 @@
 <translation id="7744047395460924128">మీ ప్రింటింగ్ చరిత్రను చూడండి</translation>
 <translation id="7744192722284567281">డేటా ఉల్లంఘనలో కనుగొనబడింది</translation>
 <translation id="7750228210027921155">చిత్రంలో చిత్రం</translation>
-<translation id="7751229152614300329">సురక్షిత బ్రౌజింగ్ అప్‌డేట్ చేయబడి ఉంది, మిమ్మల్ని హానికరమైన సైట్‌లు, డౌన్‌లోడ్‌ల నుండి రక్షిస్తోంది</translation>
 <translation id="7751260505918304024">అన్నీ చూపించు</translation>
 <translation id="7754704193130578113">ప్రతి ఫైల్‌ను డౌన్‌లోడ్ చేసే ముందు ఎక్కడ సేవ్ చేయాలో అడుగు</translation>
 <translation id="7755287808199759310">మీ తల్లి/తండ్రి దీన్ని మీ కోసం అన్‌బ్లాక్ చేయగలరు</translation>
@@ -5216,7 +5210,6 @@
 <translation id="7970882136539140748">కార్డ్‌ను ప్రస్తుతం సేవ్ చేయలేము</translation>
 <translation id="7972714317346275248">RSA ఎన్‌క్రిప్షన్‌తో PKCS #1 SHA-384</translation>
 <translation id="7973962044839454485">వినియోగదారు పేరు లేదా పాస్‌వర్డ్ తప్పు అయినందున PPP ప్రామాణీకరణ విఫలమైంది</translation>
-<translation id="7974432913705876903">మీరు మీ Google ఖాతాతో సైన్ ఇన్ చేసినప్పుడు <ph name="IDS_SHORT_PRODUCT_NAME" />Chrome మీ పాస్‌వర్డ్‌లను చెక్ చేయగలదు.</translation>
 <translation id="7974566588408714340"><ph name="EXTENSIONNAME" />ని ఉపయోగించి మళ్లీ ప్రయత్నించు</translation>
 <translation id="7974936243149753750">ఓవర్‌స్కాన్ సర్దుబాటు</translation>
 <translation id="7978412674231730200">వ్యక్తిగత కీ</translation>
@@ -5965,7 +5958,6 @@
 <translation id="8938800817013097409">USB-C పరికరం (వెనుక భాగంలో కుడి పోర్ట్)</translation>
 <translation id="8940081510938872932">ప్రస్తుతం మీ కంప్యూటర్ అనేక చర్యలను అమలు చేస్తోంది. తర్వాత మళ్లీ ప్రయత్నించండి.</translation>
 <translation id="8941173171815156065">'<ph name="PERMISSION" />' అనుమతిని ఉపసంహరించు</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> మీ పాస్‌వర్డ్‌లను చెక్ చేయలేదు. రేపు మళ్లీ ట్రై చేయండి.</translation>
 <translation id="894360074127026135">Netscape అంతర్జాతీయ స్టెప్‌-అప్</translation>
 <translation id="8944099748578356325">బ్యాటరీని మరింత వేగంగా ఉపయోగిస్తుంది (ప్రస్తుతం <ph name="BATTERY_PERCENTAGE" />% ఉంది)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> ఒక విండోను <ph name="TAB_NAME" />తో షేర్ చేస్తోంది.</translation>
@@ -5984,6 +5976,7 @@
 <translation id="8966870118594285808">ట్యాబ్‌ను మీరు పొరపాటున మూసివేసినట్లయితే మళ్లీ తెరవగలరు</translation>
 <translation id="8967866634928501045">చూపడం కోసం Alt Shift A నొక్కండి</translation>
 <translation id="8968766641738584599">కార్డ్‌ని సేవ్ చేయండి</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> మీ పాస్‌వర్డ్‌లను చెక్ చేయలేదు. 24 గంటల తర్వాత మళ్లీ ట్రై చేయండి లేదా <ph name="BEGIN_LINK" />మీ Google ఖాతాలో పాస్‌వర్డ్‌లను తనిఖీ చేయండి<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">ఎస్కేప్</translation>
 <translation id="8972513834460200407">దయచేసి Google సర్వర్‌ల నుండి డౌన్‌లోడ్‌లను ఫైర్‌వాల్ బ్లాక్ చేయడం లేదని నిర్ధారించుకోవడానికి మీ నెట్‌వర్క్ నిర్వాహకుడిని సంప్రదించండి.</translation>
 <translation id="8973557916016709913">జూమ్ స్థాయిని తీసివేయి</translation>

@@ -94,6 +94,7 @@
 <translation id="1122960773616686544">Էջանիշի անունը</translation>
 <translation id="1124772482545689468">Օգտատեր</translation>
 <translation id="1125550662859510761"><ph name="WIDTH" />x<ph name="HEIGHT" /> (օրիգինալ)</translation>
+<translation id="1126809382673880764">Չի պաշտպանում վտանգավոր կայքերից, ընդլայնումներից և ներբեռնումներից։ Անվտանգ դիտարկումը նախկինի պես կաշխատի Google-ի այլ ծառայություններում (եթե հասանելի է), օրինակ՝ Gmail-ում կամ Որոնման էջերում։</translation>
 <translation id="1128109161498068552">Արգելել բոլոր կայքերին օգտագործել MIDI սարքերը՝ համակարգի հաղորդագրությունների միջոցով</translation>
 <translation id="1128128132059598906">EAP-TTLS</translation>
 <translation id="1128591060186966949">Փոխել որոնման համակարգը</translation>
@@ -245,7 +246,6 @@
 <translation id="1327272175893960498">Kerberos տոմսեր</translation>
 <translation id="1327495825214193325">ADB վրիպազերծումը միացնելու համար վերագործարկեք <ph name="DEVICE_TYPE" /> սարքը։ Դրա համար անհրաժեշտ է վերականգնել սարքի գործարանային կարգավորումները։</translation>
 <translation id="1327977588028644528">Անցուղի</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը չի կարող ստուգել ձեր գաղտնաբառերը։</translation>
 <translation id="1329584516321524826">Թարմացվեց հենց նոր</translation>
 <translation id="1330145147221172764">Միացնել էկրանի ստեղնաշարը</translation>
 <translation id="1331977651797684645">Սա ես եմ։</translation>
@@ -744,6 +744,7 @@
 <translation id="1979280758666859181">Դուք անցնում եք <ph name="PRODUCT_NAME" />-ի ավելի թողարկման վարկածի, որի տարբերակն ավելի հին է: Որպեսզի փոփոխությունը կիրառվի, տարբերակը պետք է համընկնի ձեր սարքում տեղադրված տարբերակի հետ:</translation>
 <translation id="197989455406964291">KDC-ն չի աջակցում գաղտնագրման տեսակը</translation>
 <translation id="1982354452682152483">Նկարագրություն չկա։</translation>
+<translation id="1984417487208496350">Առանց պաշտպանության (խորհուրդ չի տրվում)</translation>
 <translation id="1987317783729300807">Հաշիվներ</translation>
 <translation id="1989112275319619282">Ընտրել</translation>
 <translation id="1990512225220753005">Չցուցադրել դյուրանցումներ այս էջում</translation>
@@ -830,6 +831,7 @@
 <translation id="2114326799768592691">Վերաբեռնել &amp;շրջանակը</translation>
 <translation id="2114896190328250491">Լուսանկարի հեղինակ՝ <ph name="NAME" /></translation>
 <translation id="2119349053129246860">Բացել <ph name="APP" /> հավելվածում</translation>
+<translation id="2119461801241504254">Անվտանգ դիտարկումը միացված է և պաշտպանում է ձեզ վտանգավոր կայքերից ու ներբեռնումներից</translation>
 <translation id="2120297377148151361">Գործողություններ դիտարկիչում</translation>
 <translation id="2120639962942052471"><ph name="PERMISSION" />՝ արգելափակված է</translation>
 <translation id="2121055421682309734">{COUNT,plural, =0{Քուքիներն արգելափակված են}=1{Բոլոր քուքիները՝ բացառությամբ 1-ի, արգելափակված են}one{Բոլոր քուքիները՝ բացառությամբ {COUNT}-ի, արգելափակված են}other{Բոլոր քուքիները՝ բացառությամբ {COUNT}-ի, արգելափակված են}}</translation>
@@ -1000,7 +1002,6 @@
 <translation id="2326931316514688470">&amp;Վերաբեռնել հավելվածը</translation>
 <translation id="2327492829706409234">Միացնել հավելվածը</translation>
 <translation id="2329597144923131178">Մուտք գործեք՝ ձեր էջանիշները, պատմությունը, գաղտնաբառերն ու այլ կարգավորումները ձեր բոլոր սարքերում համաժամացնելու համար:</translation>
-<translation id="2330607597130465898">Պաշտպանություն չկա</translation>
 <translation id="2332131598580221120">Դիտել խանութում</translation>
 <translation id="2332192922827071008">Բացել կարգավորումները</translation>
 <translation id="2332742915001411729">Վերադարձ կանխադրվածին</translation>
@@ -1888,7 +1889,6 @@
 <translation id="3492788708641132712">Համաժամացումը չի աշխատում։ Փորձեք նորից մուտք գործել։</translation>
 <translation id="3493486281776271508">Պահանջվում է իներնետ կապ</translation>
 <translation id="3493881266323043047">Վավերականություն</translation>
-<translation id="3494155060718700400">Չի պաշտպանում վտանգավոր կայքերից, ընդլայնումներից և ներբեռնումներից (խորհուրդ չի տրվում)։ Անվտանգ դիտարկումը նախկինի պես կաշխատի Google-ի այլ ծառայություններում (եթե հասանելի է), օրինակ՝ Gmail-ում կամ Որոնում ծառայությունում։</translation>
 <translation id="3494769164076977169">Հարցնել, երբ կայքն ուզում է ավտոմատ ֆայլեր ներբեռնել առաջին ֆայլից հետո (հանձնարարելի)</translation>
 <translation id="3495660573538963482">Google Օգնականի կարգավորումներ</translation>
 <translation id="3496213124478423963">Zoom Out</translation>
@@ -1997,6 +1997,7 @@
 <translation id="3629631988386925734">Smart Lock-ը միացնելու համար մուտքագրեք ձեր գաղտնաբառը։ Դրանից հետո ձեր հեռախոսով կարող եք ապակողպել <ph name="DEVICE_TYPE" /> սարքը։ Smart Lock-ը կարող եք անջատել կարգավորումներում։</translation>
 <translation id="3630132874740063857">Հեռախոս</translation>
 <translation id="3630995161997703415">Ավելացրեք այս կայքը ձեր դարակում՝ այն ցանկացած ժամանակ օգտագործելու համար</translation>
+<translation id="3633309367764744750">Նախապես բեռնում է տեղեկություններն էջերից, այդ թվում՝ այն էջերից, որոնք դեռ չեք այցելել։ Բեռնված տեղեկությունները կարող են պարունակել քուքիներ, եթե վերջիններս թույլատրված են։</translation>
 <translation id="3634507049637220048">Ցանց <ph name="NETWORK_INDEX" />՝ <ph name="NETWORK_COUNT" />-ից, <ph name="NETWORK_NAME" />, <ph name="CONNECTION_STATUS" />, կառավարվում է ձեր ադմինիստրատորի կողմից, մանրամասներ</translation>
 <translation id="3635241501480133979">Այս տվյալները չեն տեղափոխվի, քանի որ խախտում են կազմակերպության անվտանգության կանոնները։</translation>
 <translation id="3635353578505343390">Հետադարձ կապ Google-ի հետ</translation>
@@ -2298,6 +2299,7 @@
 <translation id="3971764089670057203">Այս անվտանգության բանալու մատնահետքերը</translation>
 <translation id="3973660817924297510">Գաղտնաբառերը ստուգվում են (<ph name="CHECKED_PASSWORDS" />/<ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">Չհաջողվեց կապվել սերվերի հետ այս տիրույթի համար</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը չի կարող ստուգել ձեր գաղտնաբառերը։ Փորձեք ավելի ուշ։</translation>
 <translation id="3976108569178263973">Հասանելի տպիչներ չկան</translation>
 <translation id="397703832102027365">Ավարտվում է…</translation>
 <translation id="3977886311744775419">Ավտոմատ թարմացումները այս տեսակի ցանցում չեն ներբեռնվում, սակայն դուք կարող եք ձեռքով ստուգել թարմացումների առկայությունը:</translation>
@@ -2597,6 +2599,7 @@
 <translation id="4421932782753506458">Փափկամազիկ</translation>
 <translation id="4423376891418188461">Վերականգնել կարգավորումները</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, ձեր ադմինիստրատորը պահանջում է, որ փոխեք ձեր գաղտնաբառը:</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը չի կարող ստուգել ձեր գաղտնաբառերը։ 24 ժամ հետո նորից փորձեք։</translation>
 <translation id="4429030830601238961">Այս տվյալները չեն տեղադրվի, քանի որ խախտում են կազմակերպության անվտանգության կանոնները։</translation>
 <translation id="4430019312045809116">Ձայնի ուժգնություն</translation>
 <translation id="4430369329743628066">Էջանիշն ավելացվեց</translation>
@@ -2609,6 +2612,7 @@
 <translation id="4441124369922430666">Ուզո՞ւմ եք, որ այս հավելվածն ավտոմատ մեկնարկվի համակարգիչը միացնելիս:</translation>
 <translation id="4441147046941420429">Շարունակելու համար հանեք անվտանգության բանալին սարքից, ապա նորից տեղադրեք ու հպեք դրան:</translation>
 <translation id="444134486829715816">Ընդարձակել…</translation>
+<translation id="4442329324652245220"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը կարող է ստուգել ձեր գաղտնաբառերը, երբ մտնեք Google հաշիվ։</translation>
 <translation id="4442424173763614572">DNS սերվերը որոնելիս սխալ տեղի ունեցավ</translation>
 <translation id="4443536555189480885">&amp;Օգնություն</translation>
 <translation id="4444304522807523469">Մուտք գործել փաստաթղթի տեսածրիչներ, որոնց կցված են USB-ի կամ տեղային ցանցի միջոցով</translation>
@@ -3461,7 +3465,6 @@
 <translation id="561698261642843490">Փակեք Firefox-ը</translation>
 <translation id="5618333180342767515">(սա կարող է մի քանի րոպե տևել)</translation>
 <translation id="56197088284879152">Կապուղին զբաղեցված է հետևյալ հեռակա սարքի կողմից՝ «<ph name="DEVICE_NAME" />»:</translation>
-<translation id="5620163320393916465">Պահված գաղտնաբառեր չկան</translation>
 <translation id="5620568081365989559">Մշակողի գործիքները պահանջում են ամբողջական մուտք <ph name="FOLDER_PATH" /> գրացուցակ: Համոզվեք, որ նրանում գաղտնի տվյալներ չկան:</translation>
 <translation id="5620612546311710611">օգտագործման վիճակագրություն</translation>
 <translation id="5620655347161642930">Գաղտնաբառերի արտահանում</translation>
@@ -3883,7 +3886,6 @@
 <translation id="6178664161104547336">Ընտրեք վկայագիր</translation>
 <translation id="6181431612547969857">Ներբեռնումն արգելափակված է</translation>
 <translation id="6185132558746749656">Սարքի տեղադրությունը</translation>
-<translation id="6186394685773237175">Կոտրված գաղտնաբառեր չեն գտնվել</translation>
 <translation id="6195693561221576702">Անցանց դեմո ռեժիմն այս սարքի համար հասանելի չէ։</translation>
 <translation id="6196640612572343990">Արգելափակել երրորդ կողմի քուքիները</translation>
 <translation id="6196854373336333322">Ձեր պրոքսիի կարգավորումները վերահսկվում են «<ph name="EXTENSION_NAME" />» ընդլայնման կողմից: Դա նշանակում է, որ այն կարող է փոխել, խափանել կամ աննկատ գրառել այն ամենը, ինչ անում եք առցանց: Եթե չգիտեք, թե ինչու է այդ փոփոխությունը տեղի ունեցել, հավանաբար դուք դա չէիք ուզում:</translation>
@@ -4048,6 +4050,7 @@
 <translation id="641081527798843608">Թեմաների համընկնում</translation>
 <translation id="6412673304250309937">Ստուգում է URL-ները Chrome-ում պահված վտանգավոր կայքերի ցանկի միջոցով։ Եթե կայքը փորձում է գողանալ ձեր գաղտնաբառը, կամ երբ վնասակար ֆայլ եք ներբեռնում, Chrome-ը կարող է ուղարկել URL-ն ու էջի բովանդակությունը՝ անվտանգ դիտարկման միջոցով ստուգելու համար։</translation>
 <translation id="6412931879992742813">Նոր ինկոգնիտո պատուհան</translation>
+<translation id="6413591858632097328">Բոլոր տվյալներն ու քուքիները, որոնք պահվել են <ph name="ORIGIN_NAME" /> կայքի և դրա տեղադրած հավելվածների կողմից, կջնջվեն։</translation>
 <translation id="641469293210305670">Թարմացումների և հավելվածների տեղադրում</translation>
 <translation id="6414888972213066896">Դուք այս կայք այցելելու թույլտվության հարցում եք ուղարկել ձեր ծնողին</translation>
 <translation id="6415900369006735853">Միացեք համացանցին հեռախոսի միջոցով։</translation>
@@ -4424,7 +4427,6 @@
 <translation id="6943836128787782965">HTTP GET-ի սխալ</translation>
 <translation id="6945221475159498467">Ընտրել</translation>
 <translation id="694592694773692225">Այս էջում վերահասցեավորումն արգելափակված է:</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 կոտրված գաղտնաբառ}one{{NUM_PASSWORDS} կոտրված գաղտնաբառ}other{{NUM_PASSWORDS} կոտրված գաղտնաբառ}}</translation>
 <translation id="6949434160682548041">Գաղտնաբառ (պարտադիր չէ)</translation>
 <translation id="6950627417367801484">Վերականգնել հավելվածները</translation>
 <translation id="6950943362443484797">Մենք կտեղադրենք հավելվածը ձեզ համար</translation>
@@ -4574,7 +4576,6 @@
 <translation id="7131040479572660648">Կարդալ ձեր տվյալները <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> և <ph name="WEBSITE_3" /> կայքերում</translation>
 <translation id="713122686776214250">Հավելել է&amp;ջ...</translation>
 <translation id="7133578150266914903">Ձեր ադմինիստրատորը վերակայում է այս սարքը (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271">Գաղտնաբառերը ստուգվում են (<ph name="DONE" />/<ph name="TOTAL" />)…</translation>
 <translation id="7134098520442464001">Փոքրացնել տեքստը</translation>
 <translation id="7135729336746831607">Միացնե՞լ Bluetooth-ը</translation>
 <translation id="7136639886842764730">Տիրույթի (<ph name="DOMAIN" />) կանոնների համաձայն՝ անհրաժեշտ է անհապաղ թարմացնել <ph name="DEVICE_TYPE" />սարքը։</translation>
@@ -4726,7 +4727,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" />-ն այժմ լիաէկրան ռեժիմում է:</translation>
 <translation id="7340650977506865820">Կայքը ցուցադրում է ձեր սարքի էկրանը</translation>
 <translation id="7341834142292923918">Ընդլայնումն այս կայքի հասանելիություն է հարցում</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը չի կարող ստուգել ձեր գաղտնաբառերը։ Վաղը նորից փորձեք կամ <ph name="BEGIN_LINK" />գաղտնաբառերը ստուգեք ձեր Google հաշվում<ph name="END_LINK" />։</translation>
 <translation id="7345706641791090287">Հաստատեք ձեր գաղտնաբառը</translation>
 <translation id="7346909386216857016">Եղավ</translation>
 <translation id="7347751611463936647">Այս ընդլայնումն օգտագործելու համար մուտքագրեք «<ph name="EXTENSION_KEYWORD" />», ապա TAB, ապա հրամանը կամ որոնումը:</translation>
@@ -5019,7 +5019,6 @@
 <translation id="7744047395460924128">Տեսնել ձեր տպումների պատմությունը</translation>
 <translation id="7744192722284567281">Հայտնաբերվել է տվյալների արտահոսքում</translation>
 <translation id="7750228210027921155">Նկար նկարի մեջ</translation>
-<translation id="7751229152614300329">Անվտանգ դիտարկումը թարմացված է և պաշտպանում է ձեզ վտանգավոր կայքերից ու ներբեռնումներից</translation>
 <translation id="7751260505918304024">Ցույց տալ բոլորը</translation>
 <translation id="7754704193130578113">Յուրաքանչյուր ֆայլ ներբեռնելուց առաջ հարցնել որտեղ պահել</translation>
 <translation id="7755287808199759310">Այն կարող է արգելահանել ձեր ծնողը</translation>
@@ -5219,7 +5218,6 @@
 <translation id="7970882136539140748">Չհաջողվեց պահել քարտը</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384՝ RSA գաղտնագրումով</translation>
 <translation id="7973962044839454485">PPP իսկորոշումը չհաջողվեց: Օգտանունը կամ գաղտնաբառը սխալ են</translation>
-<translation id="7974432913705876903"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը կարող է ստուգել ձեր գաղտնաբառերը, երբ մտնեք Google հաշիվ։</translation>
 <translation id="7974566588408714340">Կրկնել՝ օգտագործելով <ph name="EXTENSIONNAME" />-ը</translation>
 <translation id="7974936243149753750">էկրանի շրջանակ</translation>
 <translation id="7978412674231730200">Մասնավոր բանալի</translation>
@@ -5970,7 +5968,6 @@
 <translation id="8938800817013097409">USB-C սարք (հետևի աջ միացք)</translation>
 <translation id="8940081510938872932">Ձեր համակարգիչը ծանրաբեռնված է: Փորձեք ավելի ուշ:</translation>
 <translation id="8941173171815156065">Հետ կանչել «<ph name="PERMISSION" />» թույլտվությունը</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը չի կարող ստուգել ձեր գաղտնաբառերը։ Վաղը նորից փորձեք։</translation>
 <translation id="894360074127026135">Netscape International Step-Up</translation>
 <translation id="8944099748578356325">Մարտկոցի լիցքավորումն ավելի արագ կսպառվի (այժմ լիցքավորված է <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> հավելվածը կիսվում է պատուհանով <ph name="TAB_NAME" />-ի հետ:</translation>
@@ -5989,6 +5986,7 @@
 <translation id="8966870118594285808">Նորից բացեք ներդիրը, եթե այն պատահաբար փակել եք</translation>
 <translation id="8967866634928501045">Ցուցադրելու համար սեղմեք Alt + Shift + A ստեղները</translation>
 <translation id="8968766641738584599">Պահել քարտը</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" />-ը չի կարող ստուգել ձեր գաղտնաբառերը։ 24 ժամ հետո նորից փորձեք կամ <ph name="BEGIN_LINK" />ստուգեք ձեր Google հաշվի գաղտնաբառերը<ph name="END_LINK" />։</translation>
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">Ճշտեք ձեր ցանցի ադմինիստրատորից՝ արդյոք հրապատը չի արգելափակում ներբեռնումները Google սերվերներից:</translation>
 <translation id="8973557916016709913">Չեղարկել մասշտաբավորումը</translation>

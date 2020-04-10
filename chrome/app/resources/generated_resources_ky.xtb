@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Kerberos билеттери</translation>
 <translation id="1327495825214193325">ADB аркылуу мүчүлүштүктөрдү оңдоону иштетүү үчүн бул <ph name="DEVICE_TYPE" /> түзмөгүн өчүрүп, кайра күйгүзүү талап кылынат. Аны өчүрүү үчүн түзмөктү демейки жөндөөлөргө кайтаруу керек.</translation>
 <translation id="1327977588028644528">Шлюз</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшере албай жатат.</translation>
 <translation id="1329584516321524826">Азыр эле жаңырды</translation>
 <translation id="1330145147221172764">Экрандагы баскычтопту иштетүү</translation>
 <translation id="1331977651797684645">Ал мен болчумун.</translation>
@@ -1000,7 +999,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="2326931316514688470">&amp;Колдонмону кайра жүктөө</translation>
 <translation id="2327492829706409234">Колдонмону иштетүү</translation>
 <translation id="2329597144923131178">Бардык түзмөктөрүңүздөн кыстармаларды, таржымалды, сырсөздөрдү жана башка жөндөөлөрүңүздү алуу үчүн аккаунтка кириңиз.</translation>
-<translation id="2330607597130465898">Коопсуздук корголгон жок</translation>
 <translation id="2332131598580221120">Дүкөндөн карап көрүү</translation>
 <translation id="2332192922827071008">Жеке параметрлерди ачуу</translation>
 <translation id="2332742915001411729">Демейкиге кайтаруу</translation>
@@ -1888,7 +1886,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="3492788708641132712">Шайкештирүү иштебей жатат. Аккаунтка кайра кирип көрүңүз.</translation>
 <translation id="3493486281776271508">Интернет байланышы талап кылынат</translation>
 <translation id="3493881266323043047">Жарактуулук</translation>
-<translation id="3494155060718700400">Кооптуу вебсайттардан, жүктөлүп алынган файлдардан жана кеңейтүүлөрдөн коргобойт (сунушталбайт). Gmail жана Издөө сыяктуу Google'дун башка кызматтарында мүмкүн болгондо Коопсуз серептөө иштетилет.</translation>
 <translation id="3494769164076977169">Сайт биринчи файлдан кийин калган файлдарды автоматтык түрдө жүктөп алууга аракет кылганда суроо (сунушталат)</translation>
 <translation id="3495660573538963482">Google Жардамчынын жөндөөлөрү</translation>
 <translation id="3496213124478423963">Кичирейтүү</translation>
@@ -2298,6 +2295,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="3971764089670057203">Бул коопсуздук ачкычы менен катталган манжа издери</translation>
 <translation id="3973660817924297510">Сырсөздөр өзгөртүлүүдө (<ph name="TOTAL_PASSWORDS" /> ичинен <ph name="CHECKED_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">Чөйрө үчүн серверге туташуу ишке ашкан жок</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшере албай жатат. Кийинчерээк кайталаңыз.</translation>
 <translation id="3976108569178263973">Жеткиликтүү принтерлер жок.</translation>
 <translation id="397703832102027365">Жыйынтыкталууда…</translation>
 <translation id="3977886311744775419">Автоматтык жаңыртуулар тармактын бул түрүндө жүктөлүп алынбайт, бирок жаңыртууларды кол менен издесеңиз болот.</translation>
@@ -2597,6 +2595,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="4421932782753506458">Телчигип жаткан</translation>
 <translation id="4423376891418188461">Жөндөөлөрдү калыбына келтирүү</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, администраторуңуз сырсөздү өзгөртүүнү талап кылууда.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшере албай жатат. 24 сааттан кийин кайра аракет кылыңыз.</translation>
 <translation id="4429030830601238961">Бул дайын-даректер уюмуңуздун коопсуздук саясаттарын бузгандыктан чапталбайт.</translation>
 <translation id="4430019312045809116">Үндүн катуулугу</translation>
 <translation id="4430369329743628066">Кыстарма кошулду</translation>
@@ -2609,6 +2608,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="4441124369922430666">Шайман иштетилгенде бул колдонмо да автоматтык түрдө иштеп баштасынбы?</translation>
 <translation id="4441147046941420429">Улантуу үчүн коопсуздук ачкычын түзмөгүңүздөн чыгарып, кайра киргизип, ага тийип коюңуз.</translation>
 <translation id="444134486829715816">Жайып көрсөтүү…</translation>
+<translation id="4442329324652245220">Google аккаунтуңуз менен киргенде <ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшерет.</translation>
 <translation id="4442424173763614572">DNS каралбай калды</translation>
 <translation id="4443536555189480885">&amp;Жардам</translation>
 <translation id="4444304522807523469">USB аркылуу же жергиликтүү тармакта тиркелген документ сканерлерин пайдалануу мүмкүнчүлүгү</translation>
@@ -3458,7 +3458,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="561698261642843490">Firefox'ту жабуу</translation>
 <translation id="5618333180342767515">(бир нече мүнөт кетиши мүмкүн)</translation>
 <translation id="56197088284879152">Алыскы түзмөккө туташуу ашкере жүктөлүп калды: "<ph name="DEVICE_NAME" />".</translation>
-<translation id="5620163320393916465">Сакталган сырсөздөр жок</translation>
 <translation id="5620568081365989559">DevTools муну <ph name="FOLDER_PATH" /> толугу менен колдонгусу келет. Анда жеке маалыматтын камтылбагандыгын текшерип алыңыз.</translation>
 <translation id="5620612546311710611">колдонуу статистикасы</translation>
 <translation id="5620655347161642930">Сырсөздөрдү экспорттоо...</translation>
@@ -3880,7 +3879,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="6178664161104547336">Тастыктама тандаңыз</translation>
 <translation id="6181431612547969857">Жүктөп алуу бөгөттөлдү</translation>
 <translation id="6185132558746749656">Түзмөктүн жайгашкан жери</translation>
-<translation id="6186394685773237175">Уурдалган сырсөздөр аныкталган жок</translation>
 <translation id="6195693561221576702">Түзмөктү оффлайн демо режиминде жөндөөгө болбойт.</translation>
 <translation id="6196640612572343990">Үчүнчү жактын кукилери бөгөттөлсүн</translation>
 <translation id="6196854373336333322">"<ph name="EXTENSION_NAME" />" кеңейтүүсү прокси жөндөөлөрүңүздү көзөмөлдөйт, демек, ал аны өзгөртүп, бузуп же онлайн абалындагы аракеттериңизге көз салып тура алат. Бул эмне болгон өзгөрүү экендигин түшүнбөсөңүз, анын сизге кереги жок болушу мүмкүн.</translation>
@@ -4421,7 +4419,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="6943836128787782965">HTTP кыйрап калды</translation>
 <translation id="6945221475159498467">Тандаңыз</translation>
 <translation id="694592694773692225">Бул баракта багыттоо бөгөттөлгөн.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 уурдалган сырсөз бар}other{{NUM_PASSWORDS} уурдалган сырсөз бар}}</translation>
 <translation id="6949434160682548041">Сырсөз (милдеттүү эмес)</translation>
 <translation id="6950627417367801484">Колдонмолорду калыбына келтирүү</translation>
 <translation id="6950943362443484797">Ал колдонмону орнотуп беребиз</translation>
@@ -4571,7 +4568,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7131040479572660648">Дайын-даректериңизди <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, жана <ph name="WEBSITE_3" /> даректеринен окуңуз</translation>
 <translation id="713122686776214250">Ба&amp;рак кошуу…</translation>
 <translation id="7133578150266914903">Администраторуңуз бул түзмөктү баштапкы абалга келтирүүдө (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271"><ph name="DONE" />/<ph name="TOTAL" /> сырсөз текшерилди...</translation>
 <translation id="7134098520442464001">Текстти кичирейтүү</translation>
 <translation id="7135729336746831607">Bluetooth күйгүзүлсүнбү?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> <ph name="DEVICE_TYPE" /> түзмөгүңүздү дароо жаңыртууну талап кылууда.</translation>
@@ -4723,7 +4719,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> эми толук экранда.</translation>
 <translation id="7340650977506865820">Сайт экраныңызды бөлүшүүдө</translation>
 <translation id="7341834142292923918">Бул сайтка киргени жатат</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшере албай жатат. Эртең кайра аракет кылыңыз же <ph name="BEGIN_LINK" />Google аккаунтуңуздагы сырсөздөрдү текшериңиз<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">Сырсөзүңүздү ырастаңыз</translation>
 <translation id="7346909386216857016">Жарайт, түшүндүм</translation>
 <translation id="7347751611463936647">Бул кеңейтүүнү колдонуу үчүн, алгач "<ph name="EXTENSION_KEYWORD" />", андан кийин TAB, андан соң буйрук же издөөңүздү териңиз.</translation>
@@ -5016,7 +5011,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7744047395460924128">Басып чыгаруу таржымалыңызды көрүү</translation>
 <translation id="7744192722284567281">Сырсөз уурдалды</translation>
 <translation id="7750228210027921155">Сүрөт ичиндеги сүрөт</translation>
-<translation id="7751229152614300329">Коопсуз серептөө жаңыртылып, сизди зыянкеч сайттар менен жүктөп алуулардан коргоп турат</translation>
 <translation id="7751260505918304024">Баарын көрсөтүү</translation>
 <translation id="7754704193130578113">Жүктөп алаардан мурун, ар бир файлдын кайсы жерге сактала тургандыгы суралсын</translation>
 <translation id="7755287808199759310">Аны ата-энеңиз ачып бере алат</translation>
@@ -5217,7 +5211,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7970882136539140748">Картаны азыр сактоо мүмкүн эмес</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384 RSA шифрлөөсү менен</translation>
 <translation id="7973962044839454485">Колдонуучунун ысымы же сырсөзү туура эмес болуп калгандыктан, PPP аныктыгы текшерилбей калды</translation>
-<translation id="7974432913705876903">Google аккаунтуңуз менен киргенде <ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшерет.</translation>
 <translation id="7974566588408714340">Кайра <ph name="EXTENSIONNAME" /> колдонуп көрүңүз</translation>
 <translation id="7974936243149753750">Камтылбаган аймак</translation>
 <translation id="7978412674231730200">Жеке ачкыч</translation>
@@ -5968,7 +5961,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8938800817013097409">USB-C түзмөгү (аркасындагы оң жактагы оюкча)</translation>
 <translation id="8940081510938872932">Учурда компьютериңиз өтө эле көп иштерди аткарып жатат. Бир аздан кийин дагы аракет кылып көрүңүз.</translation>
 <translation id="8941173171815156065">"<ph name="PERMISSION" />" уруксатын жоюу</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшере албай жатат. Эртең кайталап көрүңүз.</translation>
 <translation id="894360074127026135">Netscape эл аралык жогорулатмасы</translation>
 <translation id="8944099748578356325">Батареяны тезирээк сарптайт (учурда <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> колдонмосу терезесин <ph name="TAB_NAME" /> менен бөлүшүп жатат.</translation>
@@ -5987,6 +5979,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8966870118594285808">Өтмөктү кокустан жаап алсаңыз, аны кайра ачыңыз</translation>
 <translation id="8967866634928501045">Көрсөтүү үчүн Alt+Shift+A баскычтарын басыңыз</translation>
 <translation id="8968766641738584599">Картаны сактоо</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> сырсөздөрүңүздү текшере албай жатат. 24 сааттан кийин кайра аракет кылыңыз же <ph name="BEGIN_LINK" />Google аккаунтуңуздагы сырсөздөрдү текшериңиз<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">Google серверлеринен жүктөп алуу аракеттери файрвол тарабынан бөгөттөлбөгөндүгүн тармактык администраторуңуздан тактаңыз.</translation>
 <translation id="8973557916016709913">Чоңойтуп/кичирейтүү деңгээлин алып салуу</translation>

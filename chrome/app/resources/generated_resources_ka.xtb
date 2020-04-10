@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Kerberos ბილეთები</translation>
 <translation id="1327495825214193325">ADB გამართვის ჩასართავად უნდა გადატვირთოთ ეს <ph name="DEVICE_TYPE" />. მის გასათიშად საჭირო ქარხნული პარამეტრების დაბრუნება.</translation>
 <translation id="1327977588028644528">შლიუზი</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> ვერ ახერხებს პაროლების შემოწმებას.</translation>
 <translation id="1329584516321524826">განახლდა ახლახან</translation>
 <translation id="1330145147221172764">ეკრანული კლავიატურის ჩართვა</translation>
 <translation id="1331977651797684645">ეს მე ვიყავი.</translation>
@@ -1000,7 +999,6 @@
 <translation id="2326931316514688470">პროგრამის ხე&amp;ლახლა ჩატვირთვა</translation>
 <translation id="2327492829706409234">პროგრამის ჩართვა</translation>
 <translation id="2329597144923131178">შედით სისტემაში თქვენი სანიშნეების, ისტორიის, პაროლების და სხვა პარამეტრების ყველა თქვენს მოწყობილობაში მისაღებად.</translation>
-<translation id="2330607597130465898">დაცვის გარეშე</translation>
 <translation id="2332131598580221120">მაღაზიაში ნახვა</translation>
 <translation id="2332192922827071008">პარამეტრების გახსნა</translation>
 <translation id="2332742915001411729">დააბრუნეთ ნაგულისხმევზე</translation>
@@ -1887,7 +1885,6 @@
 <translation id="3492788708641132712">სინქრონიზაცია არ მუშაობს. ცადეთ სისტემაში ხელახლა შესვლა.</translation>
 <translation id="3493486281776271508">საჭიროა ინტერნეტ-კავშირი</translation>
 <translation id="3493881266323043047">მოქმედების ვადა</translation>
-<translation id="3494155060718700400">არ დაგიცავთ სახიფათო ვებსაიტებისგან, ჩამოტვირთვებისა და გაფართოებებისგან (არ არის რეკომენდებული). Safe Browsing-ის დაცვით (ხელმისაწვდომობის მიხედვით) მაინც ისარგებლებთ სხვა Google სერვისებში, როგორიცაა Gmail თუ Search.</translation>
 <translation id="3494769164076977169">იკითხეთ, როცა საიტი ცდილობს ფაილების ავტომატურად ჩამოტვირთვას პირველი ფაილის შემდეგ (რეკომენდირებულია)</translation>
 <translation id="3495660573538963482">Google ასისტენტის პარამეტრები</translation>
 <translation id="3496213124478423963">მასშტაბის დაპატარავება</translation>
@@ -2297,6 +2294,7 @@
 <translation id="3971764089670057203">თითის ანაბეჭდები უსაფრთხოების ამ გასაღებზე</translation>
 <translation id="3973660817924297510">მიმდინარეობს პაროლების შემოწმება (<ph name="CHECKED_PASSWORDS" /> / <ph name="TOTAL_PASSWORDS" />-დან)…</translation>
 <translation id="3975565978598857337">სერვერთან არის თაობაზე დაკავშირება ვერ მოხერხდა</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> ვერ ახერხებს პაროლების შემოწმებას. ცადეთ მოგვიანებით.</translation>
 <translation id="3976108569178263973">ხელმისაწვდომი პრინტერები არ არის.</translation>
 <translation id="397703832102027365">მიმდინარეობს დასრულება…</translation>
 <translation id="3977886311744775419">ავტომატური განახლებები არ ჩამოიტვირთება ქსელის ამ ტიპის მეშვეობით, თუმცა შეგიძლიათ განახლებების ხელით შემოწმება.</translation>
@@ -2596,6 +2594,7 @@
 <translation id="4421932782753506458">ბუსუსი</translation>
 <translation id="4423376891418188461">პარამეტრების აღდგენა</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, ადმინისტრატორი თქვენი პაროლის შეცვლას მოითხოვს.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> ვერ ახერხებს პაროლების შემოწმებას. ცადეთ 24 საათში.</translation>
 <translation id="4429030830601238961">ეს მონაცემები არღვევს თქვენი ორგანიზაციის უსაფრთხოებასთან დაკავშირებულ წესებს, ამიტომ ჩასმა ვერ მოხერხდება.</translation>
 <translation id="4430019312045809116">ხმა</translation>
 <translation id="4430369329743628066">სანიშნე დამატებულია</translation>
@@ -2608,6 +2607,7 @@
 <translation id="4441124369922430666">გსურთ ავტომატურად გაუშვათ ეს პროგრამა კომპიუტერის ჩართვისას?</translation>
 <translation id="4441147046941420429">გასაგრძელებლად ამოიღეთ უსაფრთხოების გასაღები მოწყობილობიდან, შემდეგ ხელახლა ჩასვით ის და შეეხეთ მას</translation>
 <translation id="444134486829715816">გაშლა…</translation>
+<translation id="4442329324652245220">პაროლების <ph name="IDS_SHORT_PRODUCT_NAME" />-ის მეშვეობით შესამოწმებლად შედით სისტემაში თქვენი Google ანგარიშით</translation>
 <translation id="4442424173763614572">DNS ძიება ვერ განხორციელდა</translation>
 <translation id="4443536555189480885">&amp;დახმარება</translation>
 <translation id="4444304522807523469">მიიღეთ წვდომა დოკუმენტების სკანერებზე, რომლებიც მიმაგრებულია USB-ით ან ლოკალური ქსელის მეშვეობით</translation>
@@ -3457,7 +3457,6 @@
 <translation id="561698261642843490">დახურეთ Firefox</translation>
 <translation id="5618333180342767515">(შეიძლება რამდენიმე წუთი დასჭირდეს)</translation>
 <translation id="56197088284879152">დისტანციურ მოწყობილობასთან: „<ph name="DEVICE_NAME" />“ კავშირი გადატვირთულია.</translation>
-<translation id="5620163320393916465">შენახული პაროლები არ არის</translation>
 <translation id="5620568081365989559">მოწყობილობის ხელსაწყოები მოითხოვს სრულ წვდომას <ph name="FOLDER_PATH" /> -ზე. დარწმუნდით, რომ არ ამჟღავნებთ კონფიდენციალურ ინფორმაციას.</translation>
 <translation id="5620612546311710611">გამოყენების სტატისტიკა</translation>
 <translation id="5620655347161642930">პაროლების ექსპორტი...</translation>
@@ -3879,7 +3878,6 @@
 <translation id="6178664161104547336">აირჩიეთ სერტიფიკატი</translation>
 <translation id="6181431612547969857">ჩამოტვირთვა დაბლოკილია</translation>
 <translation id="6185132558746749656">მოწყობილობის მდებარეობა</translation>
-<translation id="6186394685773237175">გატეხილი პაროლები არ მოიძებნა</translation>
 <translation id="6195693561221576702">ამ მოწყობილობის ხაზგარეშე დემო-რეჟიმში დაყენება ვერ მოხერხდება.</translation>
 <translation id="6196640612572343990">მესამე მხარის ქუქი-ჩანაწერების დაბლოკვა</translation>
 <translation id="6196854373336333322">გაფართოება „<ph name="EXTENSION_NAME" />“ ახლა თქვენი პროქსის პარამეტრებს აკონტროლებს, რაც იმას ნიშნავს, რომ მას თქვენი ონლაინ საქმიანობის შეცვლა, შეწყვეტა ან მასზე ფარულად თვალთვალი შეუძლია. თუ ეს ცვლილება გაურკვეველი ხასიათისაა, შესაძლოა, იგი თქვენი ნებართვის გარეშე განხორციელდა.</translation>
@@ -4420,7 +4418,6 @@
 <translation id="6943836128787782965">HTTP-ს შეცდომა</translation>
 <translation id="6945221475159498467">არჩევა</translation>
 <translation id="694592694773692225">გადამისამართება დაიბლოკა ამ გვერდზე.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 გატეხილი პაროლი}other{{NUM_PASSWORDS} გატეხილი პაროლი}}</translation>
 <translation id="6949434160682548041">პაროლი (არასავალდებულო)</translation>
 <translation id="6950627417367801484">აპების აღდგენა</translation>
 <translation id="6950943362443484797">ეს აპი დაინსტალირდება თქვენთვის</translation>
@@ -4570,7 +4567,6 @@
 <translation id="7131040479572660648">წაიკითხეთ თქვენი მონაცემები ვებსაიტებზე <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> და <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">გვ&amp;ერდის დამატება...</translation>
 <translation id="7133578150266914903">ადმინისტრატორი ამ მოწყობილობას ძველ ვერსიაზე აბრუნებს (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271">შემოწმებულია <ph name="TOTAL" />-დან <ph name="DONE" /> პაროლი...</translation>
 <translation id="7134098520442464001">დააპატარავეთ ტექსტი</translation>
 <translation id="7135729336746831607">გსურთ Bluetooth-ის ჩართვა?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> საჭიროებს <ph name="DEVICE_TYPE" />-ის დაუყოვნებლივ განახლებას.</translation>
@@ -4722,7 +4718,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> ახლა სრულეკრანიან რეჟიმშია.</translation>
 <translation id="7340650977506865820">საიტი აზიარებს თქვენს ეკრანს</translation>
 <translation id="7341834142292923918">ითხოვს წვდომას ამ საიტზე</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> ვერ ახერხებს პაროლების შემოწმებას. ცადეთ ხვალ ან <ph name="BEGIN_LINK" />შეამოწმეთ პაროლები თქვენს Google ანგარიშში<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">დაადასტურეთ თქვენი პაროლი</translation>
 <translation id="7346909386216857016">კარგი, გასაგებია</translation>
 <translation id="7347751611463936647">ამ გაფართოების გამოსაყენებლად აკრიფეთ „<ph name="EXTENSION_KEYWORD" />“, შემდეგ TAB, შემდეგ ბრძანება ან საძიებო სიტყვა.</translation>
@@ -5015,7 +5010,6 @@
 <translation id="7744047395460924128">თქვენი ბეჭდვის ისტორიის ნახვა</translation>
 <translation id="7744192722284567281">დაფიქსირდა პერსონალურ მონაცემთა გაჟონვისას</translation>
 <translation id="7750228210027921155">გამოსახულება გამოსახულებაში</translation>
-<translation id="7751229152614300329">Safe Browsing განახლებულია და გიცავთ საზიანო საიტებისა თუ ჩამოტვირთვებისგან</translation>
 <translation id="7751260505918304024">ყველას ჩვენება</translation>
 <translation id="7754704193130578113">მკითხე, სად შეინახოს თითოეული ფაილი ჩამოტვირთვამდე</translation>
 <translation id="7755287808199759310">მისი განბლოკვა თქვენს მშობელს შეუძლია</translation>
@@ -5216,7 +5210,6 @@
 <translation id="7970882136539140748">ბარათის შენახვა ამჟამად ვერ მოხერდა</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384 RSA დაშიფვრით</translation>
 <translation id="7973962044839454485">PPP ავთენტიფიკაცია ვერ მოხერხდა არასწორი მომხმარებლის სახელის ან პაროლის გამო</translation>
-<translation id="7974432913705876903">პაროლების <ph name="IDS_SHORT_PRODUCT_NAME" />-ის მეშვეობით შესამოწმებლად შედით სისტემაში თქვენი Google ანგარიშით.</translation>
 <translation id="7974566588408714340"><ph name="EXTENSIONNAME" />-ით გამეორება</translation>
 <translation id="7974936243149753750">ეკრანის არშია</translation>
 <translation id="7978412674231730200">პირადი გასაღები</translation>
@@ -5966,7 +5959,6 @@
 <translation id="8938800817013097409">USB-C მოწყობილობა (უკან მდებარე მარჯვენა პორტი)</translation>
 <translation id="8940081510938872932">თქვენს კომპიუტერი ძალიან ბევრ რამეს აკეთებს ახლა. სცადეთ მოგვიანებით.</translation>
 <translation id="8941173171815156065">ნებართვის „<ph name="PERMISSION" />“ გაუქმება</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> ვერ ახერხებს პაროლების შემოწმებას. ცადეთ ხვალ.</translation>
 <translation id="894360074127026135">Netscape International Step-Up</translation>
 <translation id="8944099748578356325">ბატარეის უფრო სწრაფად მოხმარება (ამჟამინდელი დონე: <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> ფანჯარას <ph name="TAB_NAME" />-ს უზიარებს.</translation>
@@ -5985,6 +5977,7 @@
 <translation id="8966870118594285808">გახსენით ჩანართი ხელახლა მისი შემთხვევით დახურვის შემთხვევაში</translation>
 <translation id="8967866634928501045">საჩვენებლად დააჭირეთ კლავიშთა შემდეგ კომბინაციას: Alt+Shift+A</translation>
 <translation id="8968766641738584599">ბარათის შენახვა</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> ვერ ახერხებს პაროლების შემოწმებას. ცადეთ 24 საათში ან <ph name="BEGIN_LINK" />შეამოწმეთ პაროლები თქვენს Google ანგარიშში<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">ჰკითხეთ ქსელის ადმინისტრატორს, ხომ არ ბლოკავს ქსელური დაცვა ჩამოტვირთვებს Google-ის სერვერებიდან.</translation>
 <translation id="8973557916016709913">მასშტაბირების დონის ამოშლა</translation>

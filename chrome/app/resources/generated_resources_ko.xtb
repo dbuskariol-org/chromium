@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Kerberos 티켓</translation>
 <translation id="1327495825214193325">ADB 디버깅을 사용 설정하려면 이 <ph name="DEVICE_TYPE" /> 기기를 다시 시작해야 합니다. ADB 디버깅을 사용 중지하려면 초기화해야 합니다.</translation>
 <translation id="1327977588028644528">게이트웨이</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 없습니다.</translation>
 <translation id="1329584516321524826">조금 전 업데이트됨</translation>
 <translation id="1330145147221172764">터치 키보드 사용</translation>
 <translation id="1331977651797684645">본인이 맞습니다.</translation>
@@ -1000,7 +999,6 @@
 <translation id="2326931316514688470">앱 새로고침(&amp;R)</translation>
 <translation id="2327492829706409234">앱 사용</translation>
 <translation id="2329597144923131178">로그인하면 모든 기기에서 북마크, 방문 기록, 비밀번호, 기타 설정을 사용할 수 있습니다.</translation>
-<translation id="2330607597130465898">보호되지 않음</translation>
 <translation id="2332131598580221120">스토어에서 보기</translation>
 <translation id="2332192922827071008">환경설정 열기</translation>
 <translation id="2332742915001411729">기본 설정으로 돌아가기</translation>
@@ -1888,7 +1886,6 @@
 <translation id="3492788708641132712">동기화가 작동하지 않습니다. 다시 로그인하세요.</translation>
 <translation id="3493486281776271508">인터넷에 연결되어 있어야 합니다.</translation>
 <translation id="3493881266323043047">유효성</translation>
-<translation id="3494155060718700400">위험한 웹사이트, 다운로드 항목 또는 확장 프로그램으로부터 사용자를 보호하지 않습니다(권장하지 않음). Gmail, Google 검색과 같은 다른 Google 서비스에서는 가능한 경우 세이프 브라우징 보호가 계속 제공됩니다.</translation>
 <translation id="3494769164076977169">사이트에서 첫 파일 다운로드 후 자동으로 파일을 다운로드하려고 할 때 확인(권장)</translation>
 <translation id="3495660573538963482">Google 어시스턴트 설정</translation>
 <translation id="3496213124478423963">축소</translation>
@@ -2298,6 +2295,7 @@
 <translation id="3971764089670057203">보안 키의 지문</translation>
 <translation id="3973660817924297510">비밀번호 확인 중(<ph name="CHECKED_PASSWORDS" />/<ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">영역 서버에 연락을 취하지 못했습니다.</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 없습니다. 나중에 다시 시도해 보세요.</translation>
 <translation id="3976108569178263973">사용 가능한 프린터가 없습니다.</translation>
 <translation id="397703832102027365">완료 중...</translation>
 <translation id="3977886311744775419">이러한 네트워크 유형에서는 자동 업데이트가 다운로드되지 않지만 수동으로 업데이트를 확인할 수 있습니다.</translation>
@@ -2595,6 +2593,7 @@
 <translation id="4421932782753506458">복실이</translation>
 <translation id="4423376891418188461">설정 복원</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />님, 관리자가 비밀번호 변경을 요청했습니다.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 없습니다. 24시간 후 다시 시도해 보세요.</translation>
 <translation id="4429030830601238961">이 데이터는 조직의 보안 정책을 위반하므로 붙여넣을 수 없습니다.</translation>
 <translation id="4430019312045809116">볼륨</translation>
 <translation id="4430369329743628066">북마크 추가됨</translation>
@@ -2607,6 +2606,7 @@
 <translation id="4441124369922430666">컴퓨터를 켤 때 이 앱을 자동으로 시작하시겠습니까?</translation>
 <translation id="4441147046941420429">계속하려면 기기에서 보안 키를 제거한 후 다시 삽입하고 터치하세요.</translation>
 <translation id="444134486829715816">펼치기...</translation>
+<translation id="4442329324652245220">Google 계정으로 로그인하면 <ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 있습니다.</translation>
 <translation id="4442424173763614572">DNS 조회 실패</translation>
 <translation id="4443536555189480885">도움말(&amp;H)</translation>
 <translation id="4444304522807523469">USB나 로컬 네트워크에 포함된 문서 스캐너에 액세스</translation>
@@ -3456,7 +3456,6 @@
 <translation id="561698261642843490">Firefox 닫기</translation>
 <translation id="5618333180342767515">(몇 분이 걸릴 수 있음)</translation>
 <translation id="56197088284879152">원격 기기(<ph name="DEVICE_NAME" />)에 대한 연결이 혼잡합니다.</translation>
-<translation id="5620163320393916465">저장된 비밀번호 없음</translation>
 <translation id="5620568081365989559">DevTools에서 <ph name="FOLDER_PATH" />에 대한 완전한 액세스를 요청합니다. 민감한 정보를 노출하지 않도록 주의하시기 바랍니다.</translation>
 <translation id="5620612546311710611">사용 통계</translation>
 <translation id="5620655347161642930">비밀번호 내보내기...</translation>
@@ -3878,7 +3877,6 @@
 <translation id="6178664161104547336">인증서 선택</translation>
 <translation id="6181431612547969857">다운로드 차단됨</translation>
 <translation id="6185132558746749656">기기 위치</translation>
-<translation id="6186394685773237175">유출된 비밀번호가 없습니다.</translation>
 <translation id="6195693561221576702">이 기기는 오프라인 데모 모드에서 설정할 수 없습니다.</translation>
 <translation id="6196640612572343990">타사 쿠키 차단</translation>
 <translation id="6196854373336333322">'<ph name="EXTENSION_NAME" />' 확장 프로그램이 프록시 설정을 제어할 수 있게 되었으며, 따라서 사용자가 온라인에서 수행하는 모든 작업을 변경, 중단하거나 엿볼 수 있게 되었습니다. 이와 같이 변경된 이유를 잘 모른다면 이 설정을 사용하지 않는 것이 좋습니다.</translation>
@@ -4419,7 +4417,6 @@
 <translation id="6943836128787782965">HTTP 실패</translation>
 <translation id="6945221475159498467">선택</translation>
 <translation id="694592694773692225">이 페이지에서 리디렉션이 차단되었습니다.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{유출된 비밀번호가 1개 있습니다.}other{유출된 비밀번호가 {NUM_PASSWORDS}개 있습니다.}}</translation>
 <translation id="6949434160682548041">비밀번호(선택사항)</translation>
 <translation id="6950627417367801484">앱 복원</translation>
 <translation id="6950943362443484797">앱은 자동으로 설치됩니다</translation>
@@ -4569,7 +4566,6 @@
 <translation id="7131040479572660648"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, <ph name="WEBSITE_3" />에서 데이터 읽기</translation>
 <translation id="713122686776214250">페이지 추가(&amp;G)...</translation>
 <translation id="7133578150266914903">관리자가 이 기기를 롤백하는 중(<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271">비밀번호 <ph name="TOTAL" />개 중 <ph name="DONE" />개 확인됨...</translation>
 <translation id="7134098520442464001">텍스트 축소</translation>
 <translation id="7135729336746831607">블루투스를 사용 설정하시겠습니까?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" />에서 <ph name="DEVICE_TYPE" /> 기기를 즉시 업데이트할 것을 요청합니다.</translation>
@@ -4721,7 +4717,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" />이(가) 이제 전체화면으로 표시됩니다.</translation>
 <translation id="7340650977506865820">사이트에서 화면을 공유하고 있습니다.</translation>
 <translation id="7341834142292923918">이 사이트의 액세스 권한이 필요합니다.</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 없습니다. 내일 다시 시도하거나 <ph name="BEGIN_LINK" />Google 계정에서 비밀번호를 확인<ph name="END_LINK" />하세요.</translation>
 <translation id="7345706641791090287">비밀번호 확인</translation>
 <translation id="7346909386216857016">확인</translation>
 <translation id="7347751611463936647">이 확장 프로그램을 사용하려면 '<ph name="EXTENSION_KEYWORD" />'(을)를 입력하고 TAB을 누른 다음 명령어 또는 검색어를 입력하세요.</translation>
@@ -5014,7 +5009,6 @@
 <translation id="7744047395460924128">인쇄 기록 보기</translation>
 <translation id="7744192722284567281">정보 유출에 포함됨</translation>
 <translation id="7750228210027921155">PIP 모드</translation>
-<translation id="7751229152614300329">세이프 브라우징이 최신 상태이며 유해한 사이트와 다운로드를 차단하고 있습니다.</translation>
 <translation id="7751260505918304024">모두 표시</translation>
 <translation id="7754704193130578113">다운로드 전에 각 파일의 저장 위치 확인</translation>
 <translation id="7755287808199759310">부모님이 차단 해제할 수 있습니다.</translation>
@@ -5215,7 +5209,6 @@
 <translation id="7970882136539140748">지금은 카드를 저장할 수 없음</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384(RSA 암호화 사용)</translation>
 <translation id="7973962044839454485">사용자 이름 또는 비밀번호가 잘못되어 PPP 인증에 실패했습니다.</translation>
-<translation id="7974432913705876903">Google 계정으로 로그인하면 <ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 있습니다.</translation>
 <translation id="7974566588408714340"><ph name="EXTENSIONNAME" />을(를) 사용하여 다시 시도</translation>
 <translation id="7974936243149753750">오버스캔</translation>
 <translation id="7978412674231730200">비공개 키</translation>
@@ -5967,7 +5960,6 @@
 <translation id="8938800817013097409">USB-C 기기(우측 후면 포트)</translation>
 <translation id="8940081510938872932">현재 컴퓨터의 처리량이 너무 많습니다. 나중에 다시 시도해 주세요.</translation>
 <translation id="8941173171815156065">'<ph name="PERMISSION" />' 권한 취소</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 없습니다. 내일 다시 시도해 보세요.</translation>
 <translation id="894360074127026135">Netscape International Step-Up</translation>
 <translation id="8944099748578356325">배터리 소모가 빨라짐(현재 <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" />에서 <ph name="TAB_NAME" />와(과) 창을 공유 중입니다.</translation>
@@ -5986,6 +5978,7 @@
 <translation id="8966870118594285808">실수로 탭을 닫은 경우 탭 다시 열기</translation>
 <translation id="8967866634928501045">표시하려면 Alt Shift A를 누르세요</translation>
 <translation id="8968766641738584599">카드 저장</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" />에서 비밀번호를 확인할 수 없습니다. 24시간 후에 다시 시도하거나 <ph name="BEGIN_LINK" />Google 계정에서 비밀번호를 확인<ph name="END_LINK" />하세요.</translation>
 <translation id="89720367119469899">Esc</translation>
 <translation id="8972513834460200407">네트워크 관리자에게 문의하여 방화벽이 Google 서버에서 다운로드를 차단하지 않는지 확인하시기 바랍니다.</translation>
 <translation id="8973557916016709913">확대/축소 레벨 삭제</translation>

@@ -94,6 +94,7 @@
 <translation id="1122960773616686544">Име на обележувачот</translation>
 <translation id="1124772482545689468">Корисник</translation>
 <translation id="1125550662859510761">Изгледа како <ph name="WIDTH" /> x <ph name="HEIGHT" /> (матична)</translation>
+<translation id="1126809382673880764">Не ве заштитува од опасни веб-сајтови, преземања и екстензии. Сѐ уште ќе имате заштита со „Безбедно прелистување“, каде што е достапно, во другите услуги на Google, како Gmail и „Пребарување“.</translation>
 <translation id="1128109161498068552">Не дозволувај локациите да користат системски ексклузивни пораки за да пристапат на MIDI-уреди</translation>
 <translation id="1128128132059598906">EAP-TTLS</translation>
 <translation id="1128591060186966949">Уредете го пребарувачот</translation>
@@ -245,7 +246,6 @@
 <translation id="1327272175893960498">Билети на Kerberos</translation>
 <translation id="1327495825214193325">За да се овозможи отстранување грешки на ADB, потребно е рестартирање на <ph name="DEVICE_TYPE" />. За да се оневозможи, потребно ресетирање на фабрички поставки.</translation>
 <translation id="1327977588028644528">Портал</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да ги провери вашите лозинки.</translation>
 <translation id="1329584516321524826">Се ажурираше пред малку</translation>
 <translation id="1330145147221172764">Овозможи тастатура на екран</translation>
 <translation id="1331977651797684645">Јас бев.</translation>
@@ -744,6 +744,7 @@
 <translation id="1979280758666859181">Се префрлате на канал со постара верзија на <ph name="PRODUCT_NAME" />. Промената на каналот ќе се примени кога неговата верзија ќе се совпадне со верзијата што тековно е инсталирана на уредот.</translation>
 <translation id="197989455406964291">KDC не го поддржува типот шифрирање</translation>
 <translation id="1982354452682152483">Не е достапен опис.</translation>
+<translation id="1984417487208496350">Нема заштита (не се препорачува)</translation>
 <translation id="1987317783729300807">Сметки</translation>
 <translation id="1989112275319619282">Прелистувај</translation>
 <translation id="1990512225220753005">Не прикажувај кратенки на страницава</translation>
@@ -830,6 +831,7 @@
 <translation id="2114326799768592691">Повторно вчитај ја &amp;рамката</translation>
 <translation id="2114896190328250491">Фотографија на <ph name="NAME" /></translation>
 <translation id="2119349053129246860">Отвори во <ph name="APP" /></translation>
+<translation id="2119461801241504254">„Безбедно прелистување“ е вклучено и ве заштитува од штетни сајтови и преземања</translation>
 <translation id="2120297377148151361">Активност и интеракции</translation>
 <translation id="2120639962942052471">Блокирана е <ph name="PERMISSION" /></translation>
 <translation id="2121055421682309734">{COUNT,plural, =0{Колачињата се блокирани}=1{Колачињата се блокирани, 1 исклучок}one{Колачињата се блокирани, {COUNT} исклучок}other{Колачињата се блокирани, {COUNT} исклучоци}}</translation>
@@ -1000,7 +1002,6 @@
 <translation id="2326931316514688470">&amp;Вчитај ја апликацијата повторно</translation>
 <translation id="2327492829706409234">Вклучи апликација</translation>
 <translation id="2329597144923131178">Најавете се за да ги добиете обележувачите, историјата, лозинките и другите поставки на сите ваши уреди.</translation>
-<translation id="2330607597130465898">Без заштита</translation>
 <translation id="2332131598580221120">Прикажи во продавница</translation>
 <translation id="2332192922827071008">Отвори ги „Поставките“</translation>
 <translation id="2332742915001411729">Ресетирај на стандардна вредност</translation>
@@ -1888,7 +1889,6 @@
 <translation id="3492788708641132712">Синхронизацијата не функционира. Обидете се да се најавите повторно.</translation>
 <translation id="3493486281776271508">Потребна е интернет-врска</translation>
 <translation id="3493881266323043047">Важност</translation>
-<translation id="3494155060718700400">Не ве заштитува од опасни веб-сајтови, преземања или екстензии (не се препорачува). Сѐ уште ќе имате заштита со „Безбедно прелистување“, каде што е достапно, во другите услуги на Google, како Gmail и „Пребарување“.</translation>
 <translation id="3494769164076977169">Прашај кога локација се обидува автоматски да преземе датотеки по првата датотека (препорачано)</translation>
 <translation id="3495660573538963482">Поставки за „Помошникот на Google“</translation>
 <translation id="3496213124478423963">Одзумирај</translation>
@@ -1997,6 +1997,7 @@
 <translation id="3629631988386925734">Внесете ја вашата лозинка за да овозможите Smart Lock. Следниот пат, телефонот ќе го отклучи вашиот <ph name="DEVICE_TYPE" />. Smart Lock може да се исклучи во „Поставки“.</translation>
 <translation id="3630132874740063857">Вашиот телефон</translation>
 <translation id="3630995161997703415">За да го користите во секое време, додајте го сајтов на полицата</translation>
+<translation id="3633309367764744750">Однапред чита податоци од страниците, вклучително и од страници што сѐ уште не сте ги посетиле. Вчитаните податоци може да опфаќаат и колачиња ако дозволувате колачиња.</translation>
 <translation id="3634507049637220048">Мрежа <ph name="NETWORK_INDEX" /> од <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, <ph name="CONNECTION_STATUS" />, управувана од администраторот, детали</translation>
 <translation id="3635241501480133979">Овие податоци ги прекршуваат безбедносните правила на вашата организација и не може да се пуштат.</translation>
 <translation id="3635353578505343390">Испратете повратни информации до Google</translation>
@@ -2298,6 +2299,7 @@
 <translation id="3971764089670057203">Отпечатоци на овој безбедносен клуч</translation>
 <translation id="3973660817924297510">Се проверуваат лозинките (<ph name="CHECKED_PASSWORDS" /> од <ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">Контактирањето со серверот за домен не успеа</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да ги провери вашите лозинки. Обидете се пак подоцна.</translation>
 <translation id="3976108569178263973">Нема достапни печатачи.</translation>
 <translation id="397703832102027365">Се финализира...</translation>
 <translation id="3977886311744775419">Автоматските ажурирања не се преземаат автоматски на овој тип мрежа, но може да проверите дали има ажурирања рачно.</translation>
@@ -2597,6 +2599,7 @@
 <translation id="4421932782753506458">Fluffy</translation>
 <translation id="4423376891418188461">Обнови поставки</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, администраторот бара да ја смените лозинката.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да ги провери вашите лозинки. Обидете се пак по 24 часа.</translation>
 <translation id="4429030830601238961">Овие податоци ги прекршуваат безбедносните правила на вашата организација и не може да се залепат.</translation>
 <translation id="4430019312045809116">Гласност</translation>
 <translation id="4430369329743628066">Додаден е обележувач</translation>
@@ -2609,6 +2612,7 @@
 <translation id="4441124369922430666">Дали сакате автоматски да ја стартувате оваа апликација кога се вклучува машината?</translation>
 <translation id="4441147046941420429">За да продолжите, отстранете го безбедносниот клуч од уредот, а потоа повторно вметнете го и допрете го</translation>
 <translation id="444134486829715816">Прошири…</translation>
+<translation id="4442329324652245220"><ph name="IDS_SHORT_PRODUCT_NAME" /> може да ги проверува вашите лозинки кога ќе се најавите со вашата сметка на Google.</translation>
 <translation id="4442424173763614572">Барањето DNS не успеа</translation>
 <translation id="4443536555189480885">&amp;Помош</translation>
 <translation id="4444304522807523469">Пристап до скенери за документи поврзани преку USB или на локалната мрежа</translation>
@@ -3458,7 +3462,6 @@
 <translation id="561698261642843490">Затворете го Firefox</translation>
 <translation id="5618333180342767515">(ова може да потрае неколку минути)</translation>
 <translation id="56197088284879152">Има застој на врската на далечинскиот уред: „<ph name="DEVICE_NAME" />".</translation>
-<translation id="5620163320393916465">Нема зачувани лозинки</translation>
 <translation id="5620568081365989559">DevTools бара целосен пристап до <ph name="FOLDER_PATH" />. Погрижете се да не откривате чувствителни информации.</translation>
 <translation id="5620612546311710611">статистика на користење</translation>
 <translation id="5620655347161642930">Извезување лозинки…</translation>
@@ -3880,7 +3883,6 @@
 <translation id="6178664161104547336">Избери сертификат</translation>
 <translation id="6181431612547969857">Преземањето е блокирано</translation>
 <translation id="6185132558746749656">Локација на уредот</translation>
-<translation id="6186394685773237175">Не се најдени компромитирани лозинки</translation>
 <translation id="6195693561221576702">Уредов не може да се постави во офлајн демо-режим.</translation>
 <translation id="6196640612572343990">Блокирај колачиња од трети лица</translation>
 <translation id="6196854373336333322">Наставката „<ph name="EXTENSION_NAME" />“ ја презеде контролата врз поставките за прокси, што значи дека може да менува, прекинува или прислушува сѐ што правите на интернет. Доколку не сте сигурни зошто се случила промената, веројатно не ја сакате.</translation>
@@ -4422,7 +4424,6 @@
 <translation id="6943836128787782965">HTTP не успеа</translation>
 <translation id="6945221475159498467">Избери</translation>
 <translation id="694592694773692225">Пренасочувањето е блокирано на оваа страница.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 компромитирана лозинка}one{{NUM_PASSWORDS} компромитирана лозинка}other{{NUM_PASSWORDS} компромитирани лозинки}}</translation>
 <translation id="6949434160682548041">Лозинка (изборно)</translation>
 <translation id="6950627417367801484">Врати ги апликациите</translation>
 <translation id="6950943362443484797">Ќе ја инсталираме апликацијата за вас</translation>
@@ -4572,7 +4573,6 @@
 <translation id="7131040479572660648">Читајте ги вашите податоци на <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> и <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">Додај стра&amp;ница...</translation>
 <translation id="7133578150266914903">Администраторот го враќа уредов на фабричките поставки (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271"><ph name="DONE" />/<ph name="TOTAL" /> проверени лозинки…</translation>
 <translation id="7134098520442464001">Направи го текстот помал</translation>
 <translation id="7135729336746831607">Да се вклучи Bluetooth?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> бара веднаш да го ажурирате вашиот <ph name="DEVICE_TYPE" />.</translation>
@@ -4724,7 +4724,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> е на цел екран сега.</translation>
 <translation id="7340650977506865820">Сајтот го споделува вашиот екран</translation>
 <translation id="7341834142292923918">Сака пристап до сајтов</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да ги провери вашите лозинки. Обидете се пак утре или <ph name="BEGIN_LINK" />проверете ги лозинките во сметката на Google<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">Потврдете ја лозинката</translation>
 <translation id="7346909386216857016">Добро, сфатив</translation>
 <translation id="7347751611463936647">За да ја користите оваа наставка, напишете „<ph name="EXTENSION_KEYWORD" />“, а потоа TAB, потоа вашата наредба или пребарување.</translation>
@@ -5017,7 +5016,6 @@
 <translation id="7744047395460924128">Видете ја историјата на печатење</translation>
 <translation id="7744192722284567281">Откриена при упад во податоци</translation>
 <translation id="7750228210027921155">Слика во слика</translation>
-<translation id="7751229152614300329">„Безбедно прелистување“ е ажурирано и ве заштитува од штетни сајтови и преземања</translation>
 <translation id="7751260505918304024">Прикажи ги сите</translation>
 <translation id="7754704193130578113">Прашај каде да се зачува секоја датотека пред преземање</translation>
 <translation id="7755287808199759310">Родителот може да го одблокира</translation>
@@ -5218,7 +5216,6 @@
 <translation id="7970882136539140748">Картичката не може да се зачува во моментов</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384 со шифрирање RSA</translation>
 <translation id="7973962044839454485">PPP автентикацијата не успеа поради неправилно корисничко име и лозинка</translation>
-<translation id="7974432913705876903"><ph name="IDS_SHORT_PRODUCT_NAME" /> може да ги проверува вашите лозинки кога ќе се најавите со вашата сметка на Google.</translation>
 <translation id="7974566588408714340">Обидете се повторно со користење <ph name="EXTENSIONNAME" /></translation>
 <translation id="7974936243149753750">Прелевање</translation>
 <translation id="7978412674231730200">Приватен клуч</translation>
@@ -5972,7 +5969,6 @@
 <translation id="8938800817013097409">USB-Ц уред (десна порта од задната страна)</translation>
 <translation id="8940081510938872932">Компјутерот во моментов прави премногу работи. Обидете се повторно подоцна.</translation>
 <translation id="8941173171815156065">Отповикај ја дозволата „<ph name="PERMISSION" />“</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да ги провери вашите лозинки. Обидете се пак утре.</translation>
 <translation id="894360074127026135">Меѓународно покачување на Netscape</translation>
 <translation id="8944099748578356325">Ја троши батеријата побрзо (во моментов <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> споделува прозорец со <ph name="TAB_NAME" />.</translation>
@@ -5991,6 +5987,7 @@
 <translation id="8966870118594285808">Повторно отворете картичка ако случајно сте ја затвориле</translation>
 <translation id="8967866634928501045">Притиснете Alt+Shift+A за да се прикаже</translation>
 <translation id="8968766641738584599">Зачувај ја картичката</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да ги провери вашите лозинки. Обидете се пак по 24 часа или <ph name="BEGIN_LINK" />проверете ги лозинките во сметката на Google<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">Проверете кај мрежниот администратор за да се осигурите дека заштитниот ѕид не ги блокира преземањата од серверите на Google.</translation>
 <translation id="8973557916016709913">Отстрани ниво на зумирање</translation>

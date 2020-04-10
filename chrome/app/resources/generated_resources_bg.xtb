@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Пропуски за Kerberos</translation>
 <translation id="1327495825214193325">За да активирате отстраняването на грешки през ADB, трябва да рестартирате това устройство <ph name="DEVICE_TYPE" />. За деактивирането му е необходимо да бъдат възстановени фабричните настройки.</translation>
 <translation id="1327977588028644528">Шлюз</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да провери паролите ви.</translation>
 <translation id="1329584516321524826">Актуализирано току-що</translation>
 <translation id="1330145147221172764">Активиране на екранната клавиатура</translation>
 <translation id="1331977651797684645">Това бях аз.</translation>
@@ -997,7 +996,6 @@
 <translation id="2326931316514688470">&amp;Презареждане на приложението</translation>
 <translation id="2327492829706409234">Активиране на приложението</translation>
 <translation id="2329597144923131178">Влезте в профила си и получете своите отметки, история, пароли и др. настройки на всички у-ва.</translation>
-<translation id="2330607597130465898">Без защита</translation>
 <translation id="2332131598580221120">Преглед в магазина</translation>
 <translation id="2332192922827071008">Отваряне на предпочитанията</translation>
 <translation id="2332742915001411729">Възстановяване на настройката по подразбиране</translation>
@@ -1885,7 +1883,6 @@
 <translation id="3492788708641132712">Синхронизирането не работи. Опитайте отново да влезете в профила си.</translation>
 <translation id="3493486281776271508">Необходима е връзка с интернет</translation>
 <translation id="3493881266323043047">Валидност</translation>
-<translation id="3494155060718700400">Няма защита срещу опасни уебсайтове, изтеглени файлове и разширения (не се препоръчва). Пак ще получавате защита посредством Безопасно сърфиране в други услуги на Google, където функцията се поддържа – например Gmail и Търсене.</translation>
 <translation id="3494769164076977169">Извеждане на запитване, когато сайт опита да изтегли автоматично повече от един файл (препоръчително)</translation>
 <translation id="3495660573538963482">Настройки на Google Асистент</translation>
 <translation id="3496213124478423963">Намаляване</translation>
@@ -2297,6 +2294,7 @@
 <translation id="3971764089670057203">Отпечатъци, регистрирани на този ключ за сигурност</translation>
 <translation id="3973660817924297510">Паролите се проверяват (<ph name="CHECKED_PASSWORDS" /> от <ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">Свързването със сървъра за областта не бе успешно</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да провери паролите ви. Опитайте отново по-късно.</translation>
 <translation id="3976108569178263973">Няма принтери.</translation>
 <translation id="397703832102027365">Довършва се...</translation>
 <translation id="3977886311744775419">Автоматичните актуализации не се изтеглят при този тип мрежа, но можете ръчно да проверявате за актуализации.</translation>
@@ -2596,6 +2594,7 @@
 <translation id="4421932782753506458">Пухчо</translation>
 <translation id="4423376891418188461">Възстановяване на настройките</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, администраторът ви изисква да промените паролата си.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да провери паролите ви. Опитайте отново след 24 часа.</translation>
 <translation id="4429030830601238961">Тези данни нарушават правилата за сигурност на организацията ви и не могат да бъдат поставени.</translation>
 <translation id="4430019312045809116">Звук</translation>
 <translation id="4430369329743628066">Отметката бе добавена</translation>
@@ -2608,6 +2607,7 @@
 <translation id="4441124369922430666">Искате ли това приложение да стартира автоматично при включването на компютъра?</translation>
 <translation id="4441147046941420429">За да продължите, премахнете ключа за сигурност от устройството си, след което го поставете отново и го докоснете</translation>
 <translation id="444134486829715816">Разгъване...</translation>
+<translation id="4442329324652245220"><ph name="IDS_SHORT_PRODUCT_NAME" /> може да проверява паролите ви, когато влизате с профила си в Google</translation>
 <translation id="4442424173763614572">Търсенето в DNS не бе успешно</translation>
 <translation id="4443536555189480885">&amp;Помощ</translation>
 <translation id="4444304522807523469">Достъп до скенери на документи, свързани чрез USB или с локалната мрежа</translation>
@@ -3457,7 +3457,6 @@
 <translation id="561698261642843490">Затваряне на Firefox</translation>
 <translation id="5618333180342767515">(това може да отнеме няколко минути)</translation>
 <translation id="56197088284879152">Връзката е претоварена при отдалеченото устройство: <ph name="DEVICE_NAME" />.</translation>
-<translation id="5620163320393916465">Няма запазени пароли</translation>
 <translation id="5620568081365989559">Инструментите за програмисти изискват пълен достъп до „<ph name="FOLDER_PATH" />“.
 Не разкривайте поверителна информация.</translation>
 <translation id="5620612546311710611">статистически данни за употребата</translation>
@@ -3880,7 +3879,6 @@
 <translation id="6178664161104547336">Избор на сертификат</translation>
 <translation id="6181431612547969857">Изтеглянето е блокирано</translation>
 <translation id="6185132558746749656">Местоположение на устройството</translation>
-<translation id="6186394685773237175">Няма намерени компрометирани пароли</translation>
 <translation id="6195693561221576702">Това устройство не може да бъде настроено в офлайн демонстрационен режим.</translation>
 <translation id="6196640612572343990">Блокиране на „бисквитките“ на трети страни</translation>
 <translation id="6196854373336333322">Разширението „<ph name="EXTENSION_NAME" />“ е поело контрол над настройките ви за прокси сървър. Това означава, че то може да променя, прекъсва или следи всичко, което правите онлайн. Ако не сте сигурни какво е причинило тази промяна, вероятно не искате тя да остава в сила.</translation>
@@ -4421,7 +4419,6 @@
 <translation id="6943836128787782965">Получаването на HTTP не бе успешно</translation>
 <translation id="6945221475159498467">Избиране</translation>
 <translation id="694592694773692225">На тази страница бе блокирано пренасочване.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 компрометирана парола}other{Открити са {NUM_PASSWORDS} компрометирани пароли}}</translation>
 <translation id="6949434160682548041">Парола (по избор)</translation>
 <translation id="6950627417367801484">Възстановяване на приложенията</translation>
 <translation id="6950943362443484797">Ще инсталираме това приложение за вас</translation>
@@ -4571,7 +4568,6 @@
 <translation id="7131040479572660648">Четене на данните ви от <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> и <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">Добавяне на &amp;страница...</translation>
 <translation id="7133578150266914903">Администраторът ви връща това устройство към по-ранна версия (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271"><ph name="DONE" /> от <ph name="TOTAL" /> пароли са проверени…</translation>
 <translation id="7134098520442464001">Шрифтът на текста се смалява</translation>
 <translation id="7135729336746831607">Да се включи ли Bluetooth?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> изисква незабавно да актуализирате устройството си <ph name="DEVICE_TYPE" />.</translation>
@@ -4723,7 +4719,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> сега е на цял екран.</translation>
 <translation id="7340650977506865820">Сайтът споделя екрана ви</translation>
 <translation id="7341834142292923918">Иска достъп до този сайт</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да провери паролите ви. Опитайте отново утре или <ph name="BEGIN_LINK" />ги проверете в профила си в Google<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">Потвърждаване на паролата</translation>
 <translation id="7346909386216857016">Добре, разбрах</translation>
 <translation id="7347751611463936647">За да използвате това разширение, въведете „<ph name="EXTENSION_KEYWORD" />“, след това натиснете „Tab“, след което въведете своята команда или търсене.</translation>
@@ -5016,7 +5011,6 @@
 <translation id="7744047395460924128">Преглеждане на историята ви на отпечатване</translation>
 <translation id="7744192722284567281">Разкрита при нарушение на сигурността на данните</translation>
 <translation id="7750228210027921155">Картина в картината</translation>
-<translation id="7751229152614300329">Функцията „Безопасно сърфиране“ е актуална и ви предпазва от злонамерени сайтове и изтегляния</translation>
 <translation id="7751260505918304024">Показване на всички</translation>
 <translation id="7754704193130578113">Извеждане на запитване къде да бъде запазен всеки файл преди изтеглянето му</translation>
 <translation id="7755287808199759310">Родителят ви може да го отблокира за вас</translation>
@@ -5217,7 +5211,6 @@
 <translation id="7970882136539140748">Картата не може да бъде запазена в момента</translation>
 <translation id="7972714317346275248">PKCS 1 SHA-384 с RSA шифроване</translation>
 <translation id="7973962044839454485">Удостоверяването през PPP не бе успешно поради неправилно потребителско име или парола</translation>
-<translation id="7974432913705876903"><ph name="IDS_SHORT_PRODUCT_NAME" /> може да проверява паролите ви, когато влизате с профила си в Google.</translation>
 <translation id="7974566588408714340">Нов опит посредством <ph name="EXTENSIONNAME" /></translation>
 <translation id="7974936243149753750">Допълнителна област</translation>
 <translation id="7978412674231730200">Личен ключ</translation>
@@ -5969,7 +5962,6 @@
 <translation id="8938800817013097409">Устройство с USB-C (десният порт на гърба)</translation>
 <translation id="8940081510938872932">Компютърът ви извършва твърде много неща в момента.  Опитайте отново по-късно.</translation>
 <translation id="8941173171815156065">Отмяна на разрешението „<ph name="PERMISSION" />“</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да провери паролите ви. Опитайте отново утре.</translation>
 <translation id="894360074127026135">Международно повишаване на сигурността от Netscape</translation>
 <translation id="8944099748578356325">използва батерията по-бързо (понастоящем тя е <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> споделя прозорец с/ъс „<ph name="TAB_NAME" />“.</translation>
@@ -5988,6 +5980,7 @@
 <translation id="8966870118594285808">Повторно отваряне на раздел, ако случайно сте го затворили</translation>
 <translation id="8967866634928501045">За показване натиснете Alt Shift A</translation>
 <translation id="8968766641738584599">Запазване на картата</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> не може да провери паролите ви. Опитайте отново след 24 часа или <ph name="BEGIN_LINK" />ги проверете в профила си в Google<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">Моля, обърнете се към системния си администратор, за да се уверите, че защитната стена не блокира изтеглянията от сървърите на Google.</translation>
 <translation id="8973557916016709913">Премахване на мащаба</translation>

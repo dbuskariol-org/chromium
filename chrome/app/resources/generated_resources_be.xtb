@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Білеты Kerberos</translation>
 <translation id="1327495825214193325">Уключэнне адладкі ADB патрабуе перазапуску прылады <ph name="DEVICE_TYPE" />. Выключэнне яе патрабуе скіду да заводскіх налад.</translation>
 <translation id="1327977588028644528">Шлюз</translation>
-<translation id="1328687626210267043">Браўзеру <ph name="IDS_SHORT_PRODUCT_NAME" /> не ўдаецца праверыць паролі.</translation>
 <translation id="1329584516321524826">Абноўлена толькі што</translation>
 <translation id="1330145147221172764">Уключыць экранную клавіятуру</translation>
 <translation id="1331977651797684645">Гэта я.</translation>
@@ -1000,7 +999,6 @@
 <translation id="2326931316514688470">&amp;Перазагрузіць праграму</translation>
 <translation id="2327492829706409234">Уключыць праграму</translation>
 <translation id="2329597144923131178">Каб закладкі, гісторыя, паролі і іншыя налады былі даступнымі на ўсіх вашых прыладах, увайдзіце ў сістэму.</translation>
-<translation id="2330607597130465898">Без абароны</translation>
 <translation id="2332131598580221120">Прагледзець у краме</translation>
 <translation id="2332192922827071008">Адкрыць параметры</translation>
 <translation id="2332742915001411729">Скінуць налады да стандартных значэнняў</translation>
@@ -1888,7 +1886,6 @@
 <translation id="3492788708641132712">Сінхранізацыя не працуе. Увайдзіце яшчэ раз.</translation>
 <translation id="3493486281776271508">Патрабуецца падключэнне да інтэрнэту</translation>
 <translation id="3493881266323043047">Тэрмін дзеяння</translation>
-<translation id="3494155060718700400">Не абараняе ад небяспечных вэб-сайтаў, спамповак і пашырэнняў (не рэкамендуецца). Вы застаняцеся пад абаронай Бяспечнага прагляду пры карыстанні іншымі сэрвісамі Google, у якіх ён даступны, такімі як Gmail і Пошук.</translation>
 <translation id="3494769164076977169">Пытацца, калі сайт спрабуе пасля першага файла аўтаматычна спампаваць яшчэ файлы (рэкамендуецца)</translation>
 <translation id="3495660573538963482">Налады Памочніка Google</translation>
 <translation id="3496213124478423963">Паменшыць маштаб</translation>
@@ -2298,6 +2295,7 @@
 <translation id="3971764089670057203">Лічбавыя адбіткі на гэтым ключы бяспекі</translation>
 <translation id="3973660817924297510">Праверка пароляў (<ph name="CHECKED_PASSWORDS" /> з <ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">Памылка сувязі з серверам па ўказанай вобласці</translation>
+<translation id="3975884715086515476">Браўзеру <ph name="IDS_SHORT_PRODUCT_NAME" /> не ўдаецца праверыць паролі. Паўтарыце спробу пазней.</translation>
 <translation id="3976108569178263973">Няма даступных прынтараў.</translation>
 <translation id="397703832102027365">Завяршэнне...</translation>
 <translation id="3977886311744775419">Сетка гэтага тыпу не падтрымлівае спампоўку аўтаматычных абнаўленняў, але вы можаце праверыць наяўнасць абнаўленняў уручную.</translation>
@@ -2597,6 +2595,7 @@
 <translation id="4421932782753506458">Пушок</translation>
 <translation id="4423376891418188461">Аднавіць налады</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, ваш адміністратар патрабуе, каб вы змянілі пароль.</translation>
+<translation id="4426209360861763174">Браўзеру <ph name="IDS_SHORT_PRODUCT_NAME" /> не ўдаецца праверыць паролі. Паўтарыце спробу праз 24 гадзіны.</translation>
 <translation id="4429030830601238961">Гэтыя даныя парушаюць палітыку бяспекі вашай арганізацыі і таму не могуць быць устаўлены.</translation>
 <translation id="4430019312045809116">Гучнасць</translation>
 <translation id="4430369329743628066">Дададзена закладка</translation>
@@ -2609,6 +2608,7 @@
 <translation id="4441124369922430666">Ці запускаць аўтаматычна гэту праграму пры ўключэнні прылады?</translation>
 <translation id="4441147046941420429">Каб працягнуць, дастаньце ключ бяспекі з прылады, затым зноў устаўце і дакраніцеся да яго</translation>
 <translation id="444134486829715816">Разгарнуць...</translation>
+<translation id="4442329324652245220"><ph name="IDS_SHORT_PRODUCT_NAME" /> зможа праверыць паролі толькі пасля таго, як вы ўвойдзеце ва Уліковы запіс Google</translation>
 <translation id="4442424173763614572">Не ўдалося выканаць пошук DNS</translation>
 <translation id="4443536555189480885">&amp;Даведка</translation>
 <translation id="4444304522807523469">Доступ для сканераў дакументаў, падключаных праз USB або па лакальнай сетцы</translation>
@@ -3458,7 +3458,6 @@
 <translation id="561698261642843490">Закрыць Firefox</translation>
 <translation id="5618333180342767515">(гэта можа заняць некалькі хвілін)</translation>
 <translation id="56197088284879152">Падключэнне да аддаленай прылады перагружанае: "<ph name="DEVICE_NAME" />".</translation>
-<translation id="5620163320393916465">Няма захаваных пароляў</translation>
 <translation id="5620568081365989559">Інструменты распрацоўшчыка запытваюць поўны доступ да папкі "<ph name="FOLDER_PATH" />". Упэўніцеся, што канфідэнцыяльная інфармацыя не будзе раскрыта.</translation>
 <translation id="5620612546311710611">статыстыка выкарыстання</translation>
 <translation id="5620655347161642930">Экспарт пароляў...</translation>
@@ -3880,7 +3879,6 @@
 <translation id="6178664161104547336">Выберыце сертыфікат</translation>
 <translation id="6181431612547969857">Спампоўванне заблакіравана</translation>
 <translation id="6185132558746749656">Месцазнаходжанне прылады</translation>
-<translation id="6186394685773237175">Не знойдзена раскрытых пароляў</translation>
 <translation id="6195693561221576702">Гэту прыладу нельга наладзіць у пазасеткавым дэманстрацыйным рэжыме.</translation>
 <translation id="6196640612572343990">Блакіраваць староннія файлы cookie</translation>
 <translation id="6196854373336333322">Пашырэнне "<ph name="EXTENSION_NAME" />" узяло пад кантроль налады проксі-сервера: яно можа змяняць, пашкоджваць і праслухоўваць усе даныя падчас вашай працы ў інтэрнэце. Калі вы не ведаеце, чаму гэта адбылося, хутчэй за ўсё, гэта непатрэбная вам змена.</translation>
@@ -4421,7 +4419,6 @@
 <translation id="6943836128787782965">Памылка метаду HTTP GET</translation>
 <translation id="6945221475159498467">Выбраць</translation>
 <translation id="694592694773692225">Заблакіравана перанакіраванне на гэтай старонцы.</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{Адзін раскрыты пароль}one{{NUM_PASSWORDS} раскрыты пароль}few{{NUM_PASSWORDS} раскрытыя паролі}many{{NUM_PASSWORDS} раскрытых пароляў}other{{NUM_PASSWORDS} раскрытага пароля}}</translation>
 <translation id="6949434160682548041">Пароль (неабавязкова)</translation>
 <translation id="6950627417367801484">Аднавіць праграмы</translation>
 <translation id="6950943362443484797">Гэта праграма будзе ўсталявана</translation>
@@ -4571,7 +4568,6 @@
 <translation id="7131040479572660648">Прагляд вашых даных на вэб-сайтах <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> і <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">Дадаць ста&amp;ронку...</translation>
 <translation id="7133578150266914903">Адміністратар робіць адкат гэтай прылады (<ph name="PROGRESS_PERCENT" />).</translation>
-<translation id="7133728868075973271">Праверана пароляў: <ph name="DONE" /> з <ph name="TOTAL" />...</translation>
 <translation id="7134098520442464001">Паменшыць тэкст</translation>
 <translation id="7135729336746831607">Уключыць Bluetooth?</translation>
 <translation id="7136639886842764730">Выкарыстанне дамена "<ph name="DOMAIN" />" патрабуе неадкладнага абнаўлення прылады "<ph name="DEVICE_TYPE" />".</translation>
@@ -4723,7 +4719,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> зараз у поўнаэкранным рэжыме.</translation>
 <translation id="7340650977506865820">Сайт абагульвае ваш экран</translation>
 <translation id="7341834142292923918">Запытвае доступ да гэтага сайта</translation>
-<translation id="734238313770196201">Браўзеру <ph name="IDS_SHORT_PRODUCT_NAME" /> не ўдаецца праверыць паролі. Паўтарыце спробу заўтра або <ph name="BEGIN_LINK" />праверце паролі ва Уліковым запісе Google<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">Пацвердзіце пароль</translation>
 <translation id="7346909386216857016">OK</translation>
 <translation id="7347751611463936647">Каб выкарыстаць гэта пашырэнне, увядзіце "<ph name="EXTENSION_KEYWORD" />", потым націсніце Tab, пасля чаго ўвядзіце каманду або пошукавы запыт.</translation>
@@ -5016,7 +5011,6 @@
 <translation id="7744047395460924128">Праглядзець вашу гісторыю друку</translation>
 <translation id="7744192722284567281">Раскрыты пры ўцечцы даных</translation>
 <translation id="7750228210027921155">Відарыс у відарысе</translation>
-<translation id="7751229152614300329">"Бяспечны прагляд" абноўлены і абараняе вас ад шкодных сайтаў і спамповак</translation>
 <translation id="7751260505918304024">Паказаць усе</translation>
 <translation id="7754704193130578113">Прапаноўваць перад спампоўваннем выбраць месца для захавання файла</translation>
 <translation id="7755287808199759310">Разблакіраваць сайт для вас можа адзін з бацькоў</translation>
@@ -5217,7 +5211,6 @@
 <translation id="7970882136539140748">Не ўдаецца захаваць даныя крэдытнай карткі</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384 з шыфраваннем RSA</translation>
 <translation id="7973962044839454485">Не ўдалося выканаць аўтэнтыфікацыю PPP: няправільнае імя карыстальніка ці пароль</translation>
-<translation id="7974432913705876903"><ph name="IDS_SHORT_PRODUCT_NAME" /> зможа праверыць паролі толькі пасля таго, як вы ўвойдзеце ва Уліковы запіс Google.</translation>
 <translation id="7974566588408714340">Паўтарыць спробу, выкарыстаўшы <ph name="EXTENSIONNAME" /></translation>
 <translation id="7974936243149753750">Вылет разгорткі</translation>
 <translation id="7978412674231730200">Закрыты ключ</translation>
@@ -5968,7 +5961,6 @@
 <translation id="8938800817013097409">Прылада USB-C (задні порт справа)</translation>
 <translation id="8940081510938872932">На вашым камп'ютары выконваецца занадта шмат працэсаў.  Паўтарыце спробу пазней.</translation>
 <translation id="8941173171815156065">Адклікаць дазвол "<ph name="PERMISSION" />"</translation>
-<translation id="8941371658602878289">Браўзеру <ph name="IDS_SHORT_PRODUCT_NAME" /> не ўдаецца праверыць паролі. Паўтарыце спробу заўтра.</translation>
 <translation id="894360074127026135">Шыфраванне International Step-Up ад Netscape</translation>
 <translation id="8944099748578356325">Актыўней спажывае зарад акумулятара (зараз – <ph name="BATTERY_PERCENTAGE" /> %)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> абагульвае акно з укладкай "<ph name="TAB_NAME" />".</translation>
@@ -5987,6 +5979,7 @@
 <translation id="8966870118594285808">Калі вы выпадкова закрылі ўкладку, адкрыйце яе зноў</translation>
 <translation id="8967866634928501045">Націсніце "Al+ Shift+A", каб паказаць</translation>
 <translation id="8968766641738584599">Захаваць картку</translation>
+<translation id="8971800409073702505">Браўзеру <ph name="IDS_SHORT_PRODUCT_NAME" /> не ўдаецца праверыць паролі. Паўтарыце спробу праз 24 гадзіны або <ph name="BEGIN_LINK" />праверце паролі ва Уліковым запісе Google<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">Даведайцеся ў адміністратара сеткі, ці не блакіруе брандмаўэр спампоўкі з сервераў Google.</translation>
 <translation id="8973557916016709913">Выдаліць узровень маштабу дысплэя</translation>

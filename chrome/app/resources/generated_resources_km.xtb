@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">សំបុត្រ Kerberos</translation>
 <translation id="1327495825214193325">តម្រូវឱ្យមាន​ការចាប់ផ្ដើម <ph name="DEVICE_TYPE" /> នេះឡើងវិញ ដើម្បីបើក​ការជួសជុល ADB។ ការបិទការជួសជុល​ ADB តម្រូវឱ្យ​កំណត់​ការកំណត់ឱ្យដូចដើមឡើងវិញ។</translation>
 <translation id="1327977588028644528">ច្រក​ចេញ​ចូល</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> មិន​អាចពិនិត្យ​ពាក្យសម្ងាត់របស់អ្នកបានទេ។</translation>
 <translation id="1329584516321524826">ទើបតែ​បាន​ធ្វើ​បច្ចុប្បន្នភាព</translation>
 <translation id="1330145147221172764">បើកដំណើរការក្តារចុចលើអេក្រង់</translation>
 <translation id="1331977651797684645">នេះ​គឺ​ជា​ខ្ញុំ។</translation>
@@ -1000,7 +999,6 @@
 <translation id="2326931316514688470">ដំណើរការកម្មវិធីឡើងវិញ</translation>
 <translation id="2327492829706409234">បើកដំណើរការកម្មវិធី</translation>
 <translation id="2329597144923131178">ចូលគណនីដើម្បីទទួលយកចំណាំ ប្រវត្តិ ពាក្យសម្ងាត់ និងការកំណត់ផ្សេងទៀតរបស់អ្នកទៅលើឧបករណ៍ទាំងអស់របស់អ្នក។</translation>
-<translation id="2330607597130465898">គ្មាន​ការការពារ​ទេ</translation>
 <translation id="2332131598580221120">មើលនៅក្នុងហាង</translation>
 <translation id="2332192922827071008">បើក​ចំណូលចិត្ត</translation>
 <translation id="2332742915001411729">កំណត់ទៅលំនាំដើមឡើងវិញ</translation>
@@ -1888,7 +1886,6 @@
 <translation id="3492788708641132712">សមកាលកម្មមិនដំណើរការទេ សូមសាកល្បងចូលគណនីម្តងទៀត។</translation>
 <translation id="3493486281776271508">តម្រូវឱ្យមាន​ការតភ្ជាប់អ៊ីនធឺណិត</translation>
 <translation id="3493881266323043047">សុពលភាព</translation>
-<translation id="3494155060718700400">មិន​ការពារអ្នក​ពី​គេហទំព័រ ការទាញយក និង​កម្មវិធីបន្ថែម​ដែលមានគ្រោះថ្នាក់​ទេ (មិនណែនាំ)។ អ្នក​នឹង​នៅតែ​ទទួលបាន​ការការពារ​ការរុករក​ដោយសុវត្ថិភាព (ប្រសិនបើមាន) នៅក្នុង​សេវាកម្ម Google ផ្សេងទៀត​ដូចជា Gmail និង​កម្មវិធីស្វែងរកជាដើម។</translation>
 <translation id="3494769164076977169">សួរនៅពេលគេហទំព័រព្យាយាមទាញយកឯកសារដោយស្វ័យប្រវត្តិ បន្ទាប់ពីឯកសារដំបូង (បានណែនាំ)</translation>
 <translation id="3495660573538963482">ការកំណត់ Google ជំនួយការ</translation>
 <translation id="3496213124478423963">បង្រួម</translation>
@@ -2298,6 +2295,7 @@
 <translation id="3971764089670057203">ស្នាម​ម្រាមដៃនៅលើ​សោសុវត្ថិភាពនេះ</translation>
 <translation id="3973660817924297510">កំពុងពិនិត្យពាក្យសម្ងាត់ (<ph name="CHECKED_PASSWORDS" /> នៃ <ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">មិនអាចទាក់ទងទៅ​ម៉ាស៊ីនមេសម្រាប់​ដែនបានទេ</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> មិន​អាចពិនិត្យ​ពាក្យសម្ងាត់របស់អ្នកបានទេ។ ព្យាយាមម្តងទៀតពេលក្រោយ។</translation>
 <translation id="3976108569178263973">មិនមាន​ម៉ាស៊ីនបោះពុម្ពទេ។</translation>
 <translation id="397703832102027365">កំពុងបញ្ចប់...</translation>
 <translation id="3977886311744775419">បច្ចុប្បន្នភាព​ស្វ័យប្រវត្តិមិនទាញយក​នៅលើប្រភេទ​បណ្ដាញនេះទេ ប៉ុន្តែ​អ្នកអាចពិនិត្យមើល​បច្ចុប្បន្នភាព​ដោយខ្លួនឯងបាន។</translation>
@@ -2597,6 +2595,7 @@
 <translation id="4421932782753506458">ថ្លុះគួរឲ្យស្រលាញ់</translation>
 <translation id="4423376891418188461">ស្តារការកំណត់</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, អ្នកគ្រប់គ្រង​របស់អ្នក​តម្រូវឲ្យ​អ្នកប្តូរ​ពាក្យសម្ងាត់​របស់​អ្នក។</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> មិន​អាចពិនិត្យ​ពាក្យសម្ងាត់របស់អ្នកបានទេ។ សូមព្យាយាមម្ដងទៀតក្រោយរយៈពេល 24 ម៉ោង។</translation>
 <translation id="4429030830601238961">ទិន្នន័យនេះ​បំពាន​គោលការណ៍សុវត្ថិភាព​ស្ថាប័ន​របស់អ្នក និងមិនអាចដាក់ចូលបានទេ។</translation>
 <translation id="4430019312045809116">សម្លេង</translation>
 <translation id="4430369329743628066">បានបន្ថែមចំណាំ</translation>
@@ -2609,6 +2608,7 @@
 <translation id="4441124369922430666">តើអ្នកចង់ចាប់ផ្តើមកម្មវិធីនេះដោយស្វ័យប្រវត្តិ នៅពេលម៉ាស៊ីននេះបើកទេ?</translation>
 <translation id="4441147046941420429">ដើម្បី​បន្ត សូម​ដក​សោសុវត្ថិភាព​ចេញពី​ឧបករណ៍​របស់អ្នក បន្ទាប់មក​ដោតបញ្ចូល​វិញ រួច​ចុច​ប៊ូតុង​បើកដំណើរការ</translation>
 <translation id="444134486829715816">ពង្រីក...</translation>
+<translation id="4442329324652245220"><ph name="IDS_SHORT_PRODUCT_NAME" /> អាចពិនិត្យពាក្យសម្ងាត់របស់អ្នក នៅពេលអ្នកចូល​ដោយប្រើគណនី Google របស់អ្នក</translation>
 <translation id="4442424173763614572">DNS lookup បានបរាជ័យ</translation>
 <translation id="4443536555189480885">ជំនួយ</translation>
 <translation id="4444304522807523469">ចូលប្រើម៉ាស៊ីនស្កេនឯកសារដែលបានភ្ជាប់តាមរយៈ USB ឬនៅលើបណ្តាញមូលដ្ឋាន។</translation>
@@ -3458,7 +3458,6 @@
 <translation id="561698261642843490">បិទ Firefox</translation>
 <translation id="5618333180342767515">(វាអាចចំណាយពេលប៉ុន្មាននាទី)</translation>
 <translation id="56197088284879152">ការតភ្ជាប់មានភាពកកស្ទះចំពោះឧបករណ៍ពីចម្ងាយ "<ph name="DEVICE_NAME" />"</translation>
-<translation id="5620163320393916465">គ្មានពាក្យសម្ងាត់ដែលបានរក្សាទុកទេ</translation>
 <translation id="5620568081365989559">ឧបករណ៍អ្នកអភិវឌ្ឍន៍ស្នើការចូលប្រើពេញលេញទៅ <ph name="FOLDER_PATH" />។
 ត្រូវប្រាកដអ្នកមិនបង្ហាញព័ត៌មានរសើបទេ។</translation>
 <translation id="5620612546311710611">ស្ថិតិការប្រើប្រាស់</translation>
@@ -3881,7 +3880,6 @@
 <translation id="6178664161104547336">ជ្រើសរើសវិញ្ញាបនប័ត្រមួយ</translation>
 <translation id="6181431612547969857">ការទាញយកត្រូវបានរារាំង</translation>
 <translation id="6185132558746749656">ទីតាំងឧបករណ៍</translation>
-<translation id="6186394685773237175">រកមិនឃើញពាក្យសម្ងាត់ដែល​រងការលុកលុយទេ</translation>
 <translation id="6195693561221576702">មិន​អាច​រៀបចំ​ឧបករណ៍នេះ​នៅក្នុងមុខងារ​សាកល្បងពេលគ្មានអ៊ីនធឺណិត​បានទេ។</translation>
 <translation id="6196640612572343990">រារាំង​ខូគី​ភាគី​ទីបី</translation>
 <translation id="6196854373336333322">កម្មវិធីបន្ថែម "<ph name="EXTENSION_NAME" />" បានគ្រប់គ្រងការកំណត់ប្រូកស៊ីរបស់អ្នក មានន័យថាវាអាចប្តូរ បំបែក និងលួចតាមដានអ្វីទាំងអស់ដែលអ្នកធ្វើនៅលើអ៊ីនធឺណិត។ ប្រសិនបើអ្នកមិនប្រាកដថាហេតុអ្វីការប្តូរនេះបានកើតឡើង អ្នកប្រហែលជាមិនចង់បានវាទេ។</translation>
@@ -4422,7 +4420,6 @@
 <translation id="6943836128787782965">HTTP បានបរាជ័យ</translation>
 <translation id="6945221475159498467">ជ្រើសរើស</translation>
 <translation id="694592694773692225">​បាន​ទប់ស្កាត់​ការបញ្ជូន​បន្ត​នៅលើ​ទំព័រនេះ។</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{ពាក្យសម្ងាត់​ដែលរង​ការលុកលុយ 1}other{ពាក្យសម្ងាត់​ដែលរង​ការលុកលុយ {NUM_PASSWORDS}}}</translation>
 <translation id="6949434160682548041">ពាក្យ​សម្ងាត់ (ជាជម្រើស)</translation>
 <translation id="6950627417367801484">ស្ដារ​កម្មវិធី</translation>
 <translation id="6950943362443484797">យើង​នឹង​ដំឡើង​កម្មវិធី​នោះសម្រាប់អ្នក</translation>
@@ -4572,7 +4569,6 @@
 <translation id="7131040479572660648">អានទិន្នន័យរបស់អ្នកនៅលើ <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, និង <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">បន្ថែមទំព័រ...</translation>
 <translation id="7133578150266914903">អ្នកគ្រប់គ្រង​របស់អ្នកកំពុងស្ដារ​ឧបករណ៍​របស់អ្នក (<ph name="PROGRESS_PERCENT" />)</translation>
-<translation id="7133728868075973271">បានពិនិត្យពាក្យសម្ងាត់ <ph name="DONE" />/<ph name="TOTAL" />...</translation>
 <translation id="7134098520442464001">ធ្វើឲ្យអត្ថបទតូចជាងមុន</translation>
 <translation id="7135729336746831607">បើកប៊្លូធូស?</translation>
 <translation id="7136639886842764730"><ph name="DOMAIN" /> តម្រូវឱ្យអ្នក​ដំឡើងកំណែ <ph name="DEVICE_TYPE" /> របស់អ្នក​ភ្លាមៗ។</translation>
@@ -4724,7 +4720,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> ឥឡូវនេះពេញអេក្រង់ហើយ។</translation>
 <translation id="7340650977506865820">ទំព័រ​កំពុង​ចែករំលែក​អេក្រង់​របស់អ្នក</translation>
 <translation id="7341834142292923918">ចង់​ទទួលបានសិទ្ធិចូលប្រើ​គេហទំព័រនេះ</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> មិន​អាចពិនិត្យ​ពាក្យសម្ងាត់របស់អ្នកបានទេ។ សូមព្យាយាម​ម្ដងទៀត​នៅថ្ងៃស្អែក ឬ​<ph name="BEGIN_LINK" />ពិនិត្យ​ពាក្យសម្ងាត់​នៅក្នុង​គណនី Google របស់អ្នក<ph name="END_LINK" />។</translation>
 <translation id="7345706641791090287">បញ្ជាក់ពាក្យសម្ងាត់របស់អ្នក</translation>
 <translation id="7346909386216857016">យល់ព្រម ខ្ញុំយល់ហើយ</translation>
 <translation id="7347751611463936647">ដើម្បីប្រើកម្មវិធីបន្ថែមនេះ វាយបញ្ចូល "<ph name="EXTENSION_KEYWORD" />" បន្ទាប់មក TAB បន្ទាប់មកការបញ្ជា ឬការស្វែងរករបស់អ្នក។</translation>
@@ -5017,7 +5012,6 @@
 <translation id="7744047395460924128">មើល​ប្រវត្តិបោះពុម្ព​របស់អ្នក</translation>
 <translation id="7744192722284567281">រកឃើញនៅក្នុងការបែកធ្លាយ​ទិន្នន័យ​</translation>
 <translation id="7750228210027921155">រូបក្នុងរូប​</translation>
-<translation id="7751229152614300329">ការរុករក​ដោយសុវត្ថិភាពមានបច្ចុប្បន្នភាព និងការពារអ្នកពីការទាញយក និងគេហទំព័រដែលបង្កគ្រោះថ្នាក់ផ្សេងៗ</translation>
 <translation id="7751260505918304024">បង្ហាញទាំងអស់</translation>
 <translation id="7754704193130578113">សួររកកន្លែងរក្សាទុកឯកសារនីមួយៗមុនពេលទាញយក</translation>
 <translation id="7755287808199759310">មាតាបិតារបស់អ្នកអាចលុបការរារាំងទំព័រនេះសម្រាប់អ្នកបាន</translation>
@@ -5218,7 +5212,6 @@
 <translation id="7970882136539140748">មិនអាច​រក្សាទុកបណ្ណបានទេ​នៅពេលនេះ</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384 ជាមួយនឹងការអ៊ិនគ្រីប RSA</translation>
 <translation id="7973962044839454485">ការសម្គាល់អត្តសញ្ញាណ PPP បានបរាជ័យដោយសារឈ្មោះ និងពាក្យសម្ងាត់មិនត្រឹមត្រូវ</translation>
-<translation id="7974432913705876903"><ph name="IDS_SHORT_PRODUCT_NAME" /> អាចពិនិត្យពាក្យសម្ងាត់របស់អ្នក នៅពេលអ្នកចូល​ដោយប្រើគណនី Google របស់អ្នក។</translation>
 <translation id="7974566588408714340">សាកល្បងប្រើ <ph name="EXTENSIONNAME" /> ម្តងទៀត</translation>
 <translation id="7974936243149753750">ពង្រីកជ្រុល</translation>
 <translation id="7978412674231730200">សោឯកជន</translation>
@@ -5969,7 +5962,6 @@
 <translation id="8938800817013097409">ឧបករណ៍ USB-C (រន្ធស្តាំផ្នែកខាងក្រោយ)</translation>
 <translation id="8940081510938872932">កុំព្យូទ័ររបស់អ្នកកំពុងដំណើរការកម្មវិធីច្រើនណាស់ឥឡូវនេះ។  ព្យាយាមម្តងទៀតពេលក្រោយ។</translation>
 <translation id="8941173171815156065">បញ្ឈប់សុពលភាពការអនុញ្ញាត '<ph name="PERMISSION" />'</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> មិន​អាចពិនិត្យ​ពាក្យសម្ងាត់របស់អ្នកបានទេ។ សូម​ព្យាយាម​ម្ដងទៀតនៅថ្ងៃស្អែក។</translation>
 <translation id="894360074127026135">Netscape International Step-Up</translation>
 <translation id="8944099748578356325">ប្រើថ្មអស់លឿន​ជាងមុន (បច្ចុប្បន្ន <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280"><ph name="APP_NAME" /> កំពុងចែករំលែកផ្ទាំងវិនដូជាមួយ <ph name="TAB_NAME" />។</translation>
@@ -5988,6 +5980,7 @@
 <translation id="8966870118594285808">បើកផ្ទាំងនេះ​ឡើងវិញ ប្រសិនបើ​អ្នកបានបិទវា​ដោយអចេតនា</translation>
 <translation id="8967866634928501045">ចុច Alt Shift A ដើម្បី​បង្ហាញ</translation>
 <translation id="8968766641738584599">រក្សាទុក​បណ្ណ</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> មិន​អាចពិនិត្យ​ពាក្យសម្ងាត់របស់អ្នកបានទេ។ សូមព្យាយាមម្ដងទៀតក្រោយរយៈពេល 24 ម៉ោង ឬ<ph name="BEGIN_LINK" />ពិនិត្យពាក្យសម្ងាត់នៅក្នុងគណនី Google របស់អ្នក<ph name="END_LINK" />។</translation>
 <translation id="89720367119469899">គេច</translation>
 <translation id="8972513834460200407">សូមពិនិត្យជាមួយអ្នកគ្រប់គ្រងបណ្តាញរបស់អ្នកដើម្បីប្រាកដថា ហ្វាយអ័រវលមិនកំពុងត្រូវបានរារាំងពីម៉ាស៊ីនមេ Google ទេ។</translation>
 <translation id="8973557916016709913">ដក​កម្រិត​ពង្រីក/បង្រួម​ចេញ</translation>

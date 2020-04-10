@@ -245,7 +245,6 @@
 <translation id="1327272175893960498">Билеты Kerberos</translation>
 <translation id="1327495825214193325">Чтобы включить отладку с ADB, нужно перезагрузить это устройство <ph name="DEVICE_TYPE" />. Для отключения ADB потребуется сбросить настройки устройства до заводских.</translation>
 <translation id="1327977588028644528">Шлюз</translation>
-<translation id="1328687626210267043"><ph name="IDS_SHORT_PRODUCT_NAME" /> не может проверить пароли.</translation>
 <translation id="1329584516321524826">Обновлено только что</translation>
 <translation id="1330145147221172764">Включить экранную клавиатуру</translation>
 <translation id="1331977651797684645">Это я</translation>
@@ -999,7 +998,6 @@
 <translation id="2326931316514688470">Пере&amp;загрузить приложение</translation>
 <translation id="2327492829706409234">Включить приложение</translation>
 <translation id="2329597144923131178">Войдите, чтобы синхронизировать закладки, пароли, историю и т. д. на всех устройствах.</translation>
-<translation id="2330607597130465898">Защита отключена</translation>
 <translation id="2332131598580221120">Открыть в Интернет-магазине</translation>
 <translation id="2332192922827071008">Открыть настройки</translation>
 <translation id="2332742915001411729">Сбросить</translation>
@@ -1886,7 +1884,6 @@
 <translation id="3492788708641132712">Ошибка синхронизации. Войдите в аккаунт ещё раз.</translation>
 <translation id="3493486281776271508">Требуется подключение к Интернету.</translation>
 <translation id="3493881266323043047">Срок действия</translation>
-<translation id="3494155060718700400">Не защищает вас от сайтов, расширений и скачанных файлов, которые могут представлять опасность (не рекомендуется). Безопасный просмотр по-прежнему будет работать в других сервисах Google, например в Gmail и Поиске.</translation>
 <translation id="3494769164076977169">Показывать запрос на скачивание дополнительных файлов после скачивания первого (рекомендуется)</translation>
 <translation id="3495660573538963482">Настройки Google Ассистента</translation>
 <translation id="3496213124478423963">Уменьшить</translation>
@@ -2296,6 +2293,7 @@
 <translation id="3971764089670057203">Цифровые отпечатки на этом электронном ключе</translation>
 <translation id="3973660817924297510">Проверка паролей (<ph name="CHECKED_PASSWORDS" /> из <ph name="TOTAL_PASSWORDS" />)…</translation>
 <translation id="3975565978598857337">Не удалось связаться с областью сервера.</translation>
+<translation id="3975884715086515476"><ph name="IDS_SHORT_PRODUCT_NAME" /> не может проверить пароли. Повторите попытку позже.</translation>
 <translation id="3976108569178263973">Нет доступных принтеров.</translation>
 <translation id="397703832102027365">Завершение…</translation>
 <translation id="3977886311744775419">Скачать обновления в вашей сети можно только вручную.</translation>
@@ -2595,6 +2593,7 @@
 <translation id="4421932782753506458">Пушистик</translation>
 <translation id="4423376891418188461">Восстановить настройки</translation>
 <translation id="442397852638519243"><ph name="USER_NAME" />, администратор просит вас сменить пароль.</translation>
+<translation id="4426209360861763174"><ph name="IDS_SHORT_PRODUCT_NAME" /> не может проверить пароли. Повторите попытку через 24 часа.</translation>
 <translation id="4429030830601238961">Эти данные нарушают правила безопасности организации, поэтому их нельзя вставить.</translation>
 <translation id="4430019312045809116">Объем</translation>
 <translation id="4430369329743628066">Закладка добавлена</translation>
@@ -2607,6 +2606,7 @@
 <translation id="4441124369922430666">Автоматически запускать это приложение при включении устройства?</translation>
 <translation id="4441147046941420429">Чтобы продолжить, извлеките электронный ключ и снова вставьте его в устройство. Затем нажмите кнопку на электронном ключе.</translation>
 <translation id="444134486829715816">Развернуть...</translation>
+<translation id="4442329324652245220"><ph name="IDS_SHORT_PRODUCT_NAME" /> сможет проверить ваши пароли, когда вы войдете в аккаунт Google.</translation>
 <translation id="4442424173763614572">Произошла ошибка при поиске сервера DNS</translation>
 <translation id="4443536555189480885">&amp;Справка</translation>
 <translation id="4444304522807523469">Доступ к сканерам, подключенным через USB-порт или локальную сеть</translation>
@@ -3456,7 +3456,6 @@
 <translation id="561698261642843490">Закройте Firefox</translation>
 <translation id="5618333180342767515">(это может занять несколько минут)</translation>
 <translation id="56197088284879152">Соединение с удаленным устройством <ph name="DEVICE_NAME" /> перегружено.</translation>
-<translation id="5620163320393916465">Сохраненных паролей нет.</translation>
 <translation id="5620568081365989559">Инструменты разработчика запрашивают полный доступ к каталогу <ph name="FOLDER_PATH" />. Убедитесь, что в нем нет конфиденциальных данных.</translation>
 <translation id="5620612546311710611">статистика использования</translation>
 <translation id="5620655347161642930">Экспорт паролей</translation>
@@ -3878,7 +3877,6 @@
 <translation id="6178664161104547336">Выбор сертификата</translation>
 <translation id="6181431612547969857">Скачивание запрещено</translation>
 <translation id="6185132558746749656">Местоположение устройства</translation>
-<translation id="6186394685773237175">Похищенных паролей не найдено.</translation>
 <translation id="6195693561221576702">Демонстрационный офлайн-режим на этом устройстве недоступен.</translation>
 <translation id="6196640612572343990">Блокировать сторонние файлы cookie</translation>
 <translation id="6196854373336333322">Расширение "<ph name="EXTENSION_NAME" />" контролирует настройки прокси-сервера. Это значит, что оно может отследить или изменить передаваемые вами данные, а также оборвать интернет-соединение. Если вы не знали об этом, вам следует отключить расширение.</translation>
@@ -4419,7 +4417,6 @@
 <translation id="6943836128787782965">Произошла ошибка запроса HTTP GET</translation>
 <translation id="6945221475159498467">Выбрать</translation>
 <translation id="694592694773692225">Попытка переадресации на этой странице заблокирована</translation>
-<translation id="6947526360212886241">{NUM_PASSWORDS,plural, =1{1 раскрытый пароль}one{{NUM_PASSWORDS} раскрытый пароль}few{{NUM_PASSWORDS} раскрытых пароля}many{{NUM_PASSWORDS} раскрытых паролей}other{{NUM_PASSWORDS} раскрытого пароля}}</translation>
 <translation id="6949434160682548041">Пароль (необязательно)</translation>
 <translation id="6950627417367801484">Восстановить приложения</translation>
 <translation id="6950943362443484797">Приложение будет установлено</translation>
@@ -4569,7 +4566,6 @@
 <translation id="7131040479572660648">Просмотр данных на сайтах <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> и <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">Добавить &amp;страницу</translation>
 <translation id="7133578150266914903">Администратор возвращает ваше устройство к прежней версии системы. Выполнено <ph name="PROGRESS_PERCENT" />.</translation>
-<translation id="7133728868075973271">Проверено паролей: <ph name="DONE" /> из <ph name="TOTAL" />…</translation>
 <translation id="7134098520442464001">Уменьшить размер текста</translation>
 <translation id="7135729336746831607">Включить Bluetooth?</translation>
 <translation id="7136639886842764730">По правилам домена <ph name="DOMAIN" /> вам нужно немедленно обновить устройство <ph name="DEVICE_TYPE" />.</translation>
@@ -4721,7 +4717,6 @@
 <translation id="7340431621085453413"><ph name="FULLSCREEN_ORIGIN" /> отображается в полноэкранном режиме.</translation>
 <translation id="7340650977506865820">Сайт открывает доступ к вашему экрану</translation>
 <translation id="7341834142292923918">Расширение запрашивает доступ к этому сайту</translation>
-<translation id="734238313770196201"><ph name="IDS_SHORT_PRODUCT_NAME" /> не может проверить пароли. Повторите попытку завтра или <ph name="BEGIN_LINK" />проверьте пароли в аккаунте Google<ph name="END_LINK" />.</translation>
 <translation id="7345706641791090287">Подтвердите пароль</translation>
 <translation id="7346909386216857016">ОК</translation>
 <translation id="7347751611463936647">Чтобы использовать это расширение, введите "<ph name="EXTENSION_KEYWORD" />", нажмите клавишу табуляции, а затем введите команду или поисковый запрос.</translation>
@@ -5014,7 +5009,6 @@
 <translation id="7744047395460924128">Просмотр истории печати</translation>
 <translation id="7744192722284567281">Раскрыт при утечке данных</translation>
 <translation id="7750228210027921155">Картинка в картинке</translation>
-<translation id="7751229152614300329">Вы используете последнюю версию Безопасного просмотра. Он защищает вас от вредоносных сайтов и файлов.</translation>
 <translation id="7751260505918304024">Показать все</translation>
 <translation id="7754704193130578113">Всегда указывать место для скачивания</translation>
 <translation id="7755287808199759310">Для разблокировки обратитесь к родителю.</translation>
@@ -5215,7 +5209,6 @@
 <translation id="7970882136539140748">Не удалось сохранить карту</translation>
 <translation id="7972714317346275248">PKCS #1 SHA-384 с шифрованием RSA</translation>
 <translation id="7973962044839454485">Не удалось выполнить аутентификацию PPP: неверное имя пользователя или пароль</translation>
-<translation id="7974432913705876903"><ph name="IDS_SHORT_PRODUCT_NAME" /> сможет проверить ваши пароли, когда вы войдете в аккаунт Google.</translation>
 <translation id="7974566588408714340">Подключиться через <ph name="EXTENSIONNAME" /></translation>
 <translation id="7974936243149753750">Каемка экрана</translation>
 <translation id="7978412674231730200">Закрытый ключ</translation>
@@ -5966,7 +5959,6 @@
 <translation id="8938800817013097409">Устройство USB-C (порт справа на задней панели)</translation>
 <translation id="8940081510938872932">В данный момент выполняется слишком много процессов. Повторите попытку позже.</translation>
 <translation id="8941173171815156065">Отозвать разрешение "<ph name="PERMISSION" />"</translation>
-<translation id="8941371658602878289"><ph name="IDS_SHORT_PRODUCT_NAME" /> не может проверить пароли. Повторите попытку завтра.</translation>
 <translation id="894360074127026135">Netscape International Step-Up</translation>
 <translation id="8944099748578356325">Начнет быстрее расходовать заряд батареи (сейчас она заряжена на <ph name="BATTERY_PERCENTAGE" />%)</translation>
 <translation id="8944964446326379280">Приложение "<ph name="APP_NAME" />" предоставило сайту <ph name="TAB_NAME" /> доступ к окну.</translation>
@@ -5985,6 +5977,7 @@
 <translation id="8966870118594285808">Если вы случайно закрыли вкладку, откройте ее снова</translation>
 <translation id="8967866634928501045">Чтобы показать, нажмите Alt + Shift + A</translation>
 <translation id="8968766641738584599">Сохранить карту</translation>
+<translation id="8971800409073702505"><ph name="IDS_SHORT_PRODUCT_NAME" /> не может проверить пароли. Повторите попытку через 24 часа или <ph name="BEGIN_LINK" />проверьте пароли в аккаунте Google<ph name="END_LINK" />.</translation>
 <translation id="89720367119469899">Отключить</translation>
 <translation id="8972513834460200407">Уточните у администратора сети, не блокирует ли брандмауэр скачивание файлов с серверов Google.</translation>
 <translation id="8973557916016709913">Сбросить масштаб</translation>
