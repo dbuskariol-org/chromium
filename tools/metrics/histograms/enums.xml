@@ -43004,6 +43004,10 @@ Called by update_use_counter_css.py.-->
   <int value="1" label="Failed due to no foreign key support"/>
   <int value="2" label="Failed since database is too new"/>
   <int value="3" label="Failed to create tables"/>
+  <int value="4" label="Failed to create directory"/>
+  <int value="5" label="Failed to open database"/>
+  <int value="6" label="Failed to establish DB transaction"/>
+  <int value="7" label="Failed to create meta table"/>
 </enum>
 
 <enum name="MediaHistoryPlaybackWriteResult">
