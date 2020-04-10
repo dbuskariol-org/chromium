@@ -28,7 +28,6 @@ try_.defaults.caches.set([
 # Execute the versioned files to define all of the per-branch entities
 # (bucket, builders, console, cq_group, etc.)
 exec('//versioned/trunk/buckets/try.star')
-exec('//versioned/milestones/m80/buckets/try.star')
 exec('//versioned/milestones/m81/buckets/try.star')
 exec('//versioned/milestones/m83/buckets/try.star')
 
