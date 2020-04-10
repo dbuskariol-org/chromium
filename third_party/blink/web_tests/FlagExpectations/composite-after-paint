@@ -87,9 +87,6 @@ paint/invalidation/media-audio-no-spurious-repaints.html [ Failure ]
 
 crbug.com/940033 virtual/threaded-prefer-compositing/fast/scrolling/wheel-scrolling-over-custom-scrollbar.html [ Pass Failure ]
 
-# Crash during PictureLayer::GetPicture() when DisplayItemList is finished twice.
-http/tests/devtools/layers/layer-canvas-log.js [ Crash ]
-http/tests/devtools/layers/layer-replay-scale.js [ Crash ]
 # Missing compositing reasons
 http/tests/devtools/layers/layer-compositing-reasons.js [ Failure ]
 # Missing WheelEventHandler
@@ -102,7 +99,6 @@ crbug.com/1047358 paint/pagination/composited-paginated-outlined-box.html [ Fail
 crbug.com/1047359 http/tests/subresource_filter/ad-highlight-frame-resized.html [ Failure ]
 
 virtual/threaded/fast/scroll-snap/snaps-after-touchpad-scrolling.html [ Failure ]
-http/tests/devtools/a11y-axe-core/layers/layers-a11y-test.js [ Crash ]
 
 # DCHECK(latched_scroll_type_.has_value()) in LayerTreeHostImpl::ScrollLatchedScroller().
 crbug.com/1041322 virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-desktop.html [ Crash ]
