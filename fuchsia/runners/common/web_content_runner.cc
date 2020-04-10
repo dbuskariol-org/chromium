@@ -86,6 +86,13 @@ void WebContentRunner::StartComponent(
   RegisterComponent(std::move(component));
 }
 
+WebComponent* WebContentRunner::GetAnyComponent() {
+  if (components_.empty())
+    return nullptr;
+
+  return components_.begin()->get();
+}
+
 void WebContentRunner::DestroyComponent(WebComponent* component) {
   components_.erase(components_.find(component));
 }

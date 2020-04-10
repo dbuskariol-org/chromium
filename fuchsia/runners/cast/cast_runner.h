@@ -5,6 +5,7 @@
 #ifndef FUCHSIA_RUNNERS_CAST_CAST_RUNNER_H_
 #define FUCHSIA_RUNNERS_CAST_CAST_RUNNER_H_
 
+#include <fuchsia/legacymetrics/cpp/fidl.h>
 #include <fuchsia/sys/cpp/fidl.h>
 #include <fuchsia/web/cpp/fidl.h>
 #include <memory>
@@ -89,6 +90,11 @@ class CastRunner : public WebContentRunner {
   // Handler for fuchsia.media.Audio requests in |service_directory_|.
   void ConnectAudioProtocol(
       fidl::InterfaceRequest<fuchsia::media::Audio> request);
+
+  // Handler for fuchsia.legacymetrics.MetricsRecorder requests in
+  // |service_directory_|.
+  void ConnectMetricsRecorderProtocol(
+      fidl::InterfaceRequest<fuchsia::legacymetrics::MetricsRecorder> request);
 
   // Returns the parameters with which the main context should be created.
   fuchsia::web::CreateContextParams GetMainContextParams();

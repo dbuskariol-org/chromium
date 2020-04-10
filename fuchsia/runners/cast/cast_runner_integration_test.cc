@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <fuchsia/legacymetrics/cpp/fidl.h>
+#include <fuchsia/legacymetrics/cpp/fidl_test_base.h>
 #include <fuchsia/modular/cpp/fidl.h>
 #include <lib/fdio/directory.h>
 #include <lib/fidl/cpp/binding.h>
@@ -221,11 +223,13 @@ class CastRunnerIntegrationTest : public testing::Test {
 
     // Create the CastRunner, published into |outgoing_directory_|.
     fuchsia::web::ContextFeatureFlags feature_flags =
-        fuchsia::web::ContextFeatureFlags::NETWORK;
+        fuchsia::web::ContextFeatureFlags::NETWORK |
+        fuchsia::web::ContextFeatureFlags::LEGACYMETRICS;
     if (headless) {
       feature_flags =
           feature_flags | fuchsia::web::ContextFeatureFlags::HEADLESS;
     }
+
     WebContentRunner::GetContextParamsCallback get_context_params =
         base::BindLambdaForTesting([feature_flags]() {
           fuchsia::web::CreateContextParams create_context_params;
@@ -442,13 +446,18 @@ class CastRunnerIntegrationTest : public testing::Test {
     base::RunLoop state_loop;
     component_state_->set_on_delete(state_loop.QuitClosure());
 
+    base::RunLoop controller_loop;
     if (component_controller_) {
-      base::RunLoop controller_loop;
       component_controller_.set_error_handler(
           [&controller_loop](zx_status_t status) {
             EXPECT_EQ(status, ZX_ERR_PEER_CLOSED);
             controller_loop.Quit();
           });
+    }
+
+    web_engine_controller_->Kill();
+
+    if (component_controller_) {
       controller_loop.Run();
     }
 
@@ -813,4 +822,34 @@ TEST_F(HeadlessCastRunnerIntegrationTest, IsolatedAndHeadless) {
   RegisterAppWithTestData(kContentDirectoryUrl);
   CreateComponentContextAndStartComponent();
   CheckAppUrl(kContentDirectoryUrl);
+}
+
+// Verifies that the Context can establish a connection to the Agent's
+// MetricsRecorder service.
+TEST_F(CastRunnerIntegrationTest, LegacyMetricsRedirect) {
+  GURL app_url = test_server_.GetURL(kBlankAppUrl);
+  app_config_manager_.AddApp(kTestAppId, app_url);
+
+  auto component_url = base::StringPrintf("cast:%s", kTestAppId);
+  CreateComponentContext(component_url);
+  EXPECT_NE(component_context_, nullptr);
+
+  StartCastComponent(component_url);
+
+  // Wait until we see the CastRunner connect to the LegacyMetrics service.
+  base::RunLoop run_loop;
+  component_state_created_callback_ = base::BindOnce(
+      [](FakeComponentState** component_state,
+         base::RepeatingClosure quit_closure) {
+        (*component_state)
+            ->outgoing_directory()
+            ->AddPublicService(
+                std::make_unique<vfs::Service>(
+                    [quit_closure](zx::channel, async_dispatcher_t*) {
+                      quit_closure.Run();
+                    }),
+                fuchsia::legacymetrics::MetricsRecorder::Name_);
+      },
+      base::Unretained(&component_state_), run_loop.QuitClosure());
+  run_loop.Run();
 }

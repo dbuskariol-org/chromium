@@ -38,7 +38,8 @@ fuchsia::web::CreateContextParams CreateMainContextParams() {
   fuchsia::web::ContextFeatureFlags features =
       fuchsia::web::ContextFeatureFlags::NETWORK |
       fuchsia::web::ContextFeatureFlags::AUDIO |
-      fuchsia::web::ContextFeatureFlags::WIDEVINE_CDM;
+      fuchsia::web::ContextFeatureFlags::WIDEVINE_CDM |
+      fuchsia::web::ContextFeatureFlags::LEGACYMETRICS;
 
   if (IsHeadless()) {
     LOG(WARNING) << "Running in headless mode.";
@@ -51,10 +52,6 @@ fuchsia::web::CreateContextParams CreateMainContextParams() {
 
   fuchsia::web::CreateContextParams create_context_params;
   create_context_params.set_features(features);
-
-  create_context_params.set_service_directory(base::fuchsia::OpenDirectory(
-      base::FilePath(base::fuchsia::kServiceDirectoryPath)));
-  CHECK(create_context_params.service_directory());
 
   const char kCastPlayreadyKeySystem[] = "com.chromecast.playready";
   create_context_params.set_playready_key_system(kCastPlayreadyKeySystem);

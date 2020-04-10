@@ -43,8 +43,9 @@ static constexpr const char* kServices[] = {
     "fuchsia.ui.scenic.Scenic",
     "fuchsia.vulkan.loader.Loader",
 
-    // Redirected to the agent.
-    // fuchsia.media.Audio
+    // These services are redirected to the Agent:
+    // * fuchsia.media.Audio
+    // * fuchsia.legacymetrics.MetricsRecorder
 };
 
 bool AreCastComponentParamsValid(
@@ -68,7 +69,8 @@ fuchsia::web::CreateContextParams BuildCreateContextParamsForIsolatedRunners(
 
   // Isolated contexts receive only a limited set of features.
   fuchsia::web::ContextFeatureFlags features =
-      fuchsia::web::ContextFeatureFlags::AUDIO;
+      fuchsia::web::ContextFeatureFlags::AUDIO |
+      fuchsia::web::ContextFeatureFlags::LEGACYMETRICS;
 
   if ((create_context_params.features() &
        fuchsia::web::ContextFeatureFlags::HEADLESS) ==
@@ -303,6 +305,17 @@ CastRunner::CreateServiceDirectory() {
       }),
       fuchsia::media::Audio::Name_);
 
+  // Proxy fuchsia.legacymetrics.MetricsRecorder connection requests to the
+  // Agent.
+  service_directory->outgoing_directory()->AddPublicService(
+      std::make_unique<vfs::Service>(
+          [this](zx::channel channel, async_dispatcher_t*) {
+            this->ConnectMetricsRecorderProtocol(
+                fidl::InterfaceRequest<fuchsia::legacymetrics::MetricsRecorder>(
+                    std::move(channel)));
+          }),
+      fuchsia::legacymetrics::MetricsRecorder::Name_);
+
   return service_directory;
 }
 
@@ -315,7 +328,7 @@ void CastRunner::MaybeStartComponent(
   CastRunner* component_owner = this;
   if (pending_component_params->app_config
           .has_content_directories_for_isolated_application()) {
-    // Create a isolated, isolated CastRunner instance which will own the
+    // Create an isolated CastRunner instance which will own the
     // CastComponent.
     component_owner =
         CreateChildRunnerForIsolatedComponent(pending_component_params);
@@ -362,12 +375,6 @@ CastRunner* CastRunner::CreateChildRunnerForIsolatedComponent(
       BuildCreateContextParamsForIsolatedRunners(
           get_context_params_callback_.Run());
 
-  // Service redirection is not necessary for isolated context. Pass default
-  // /svc as is, without overriding any services.
-  isolated_context_params.set_service_directory(base::fuchsia::OpenDirectory(
-      base::FilePath(base::fuchsia::kServiceDirectoryPath)));
-  DCHECK(isolated_context_params.service_directory());
-
   isolated_context_params.set_content_directories(
       std::move(*component_params->app_config
                      .mutable_content_directories_for_isolated_application()));
@@ -409,6 +416,16 @@ void CastRunner::ConnectAudioProtocol(
   // Otherwise use the default fuchsia.media.Audio implementation.
   base::fuchsia::ComponentContextForCurrentProcess()->svc()->Connect(
       std::move(request));
+}
+
+void CastRunner::ConnectMetricsRecorderProtocol(
+    fidl::InterfaceRequest<fuchsia::legacymetrics::MetricsRecorder> request) {
+  CastComponent* component =
+      reinterpret_cast<CastComponent*>(GetAnyComponent());
+  DCHECK(component);
+
+  component->agent_manager()->ConnectToAgentService(
+      component->application_config().agent_url(), std::move(request));
 }
 
 fuchsia::web::CreateContextParams CastRunner::GetMainContextParams() {

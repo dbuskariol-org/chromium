@@ -56,6 +56,11 @@ class WebContentRunner : public fuchsia::sys::Runner {
   // Sets a callback that's called when the context is lost.
   void SetOnContextLostCallback(base::OnceClosure callback);
 
+ protected:
+  // Returns a pointer to any currently running component, or nullptr if no
+  // components are currently running.
+  WebComponent* GetAnyComponent();
+
  private:
   const GetContextParamsCallback get_context_params_callback_;
 
