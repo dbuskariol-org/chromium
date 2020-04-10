@@ -118,9 +118,6 @@ exec('//consoles/goma.latest.star')
 exec('//consoles/luci.chromium.goma.star')
 exec('//consoles/luci.chromium.try.star')
 exec('//consoles/sheriff.ios.star')
-exec('//consoles/try-m80.star')
-exec('//consoles/try-m81.star')
-exec('//consoles/try-m83.star')
 
 exec('//notifiers.star')
 

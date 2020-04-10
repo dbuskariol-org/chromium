@@ -24,6 +24,7 @@ defaults = args.defaults(
     add_to_list_view = False,
     cq_group = None,
     list_view = args.COMPUTE,
+    main_list_view = None,
 )
 
 
@@ -95,6 +96,7 @@ def try_builder(
     add_to_list_view=args.DEFAULT,
     cq_group=args.DEFAULT,
     list_view=args.DEFAULT,
+    main_list_view = args.DEFAULT,
     tryjob=None,
     **kwargs):
   """Define a try builder.
@@ -111,6 +113,10 @@ def try_builder(
       add an entry to. Supports a module-level default that defaults to
       the mastername of the builder, if provided. An entry will be added
       only if `add_to_list_view` is True.
+    main_console_view - A string identifying the ID of the main list
+      view to add an entry to. Supports a module-level default that
+      defaults to None. Note that `add_to_list_view` has no effect on
+      creating an entry to the main list view.
     tryjob - A struct containing the details of the tryjob verifier for the
       builder, obtained by calling the `tryjob` function.
   """
@@ -155,6 +161,13 @@ def try_builder(
           builder = builder,
           list_view = list_view,
       )
+
+  main_list_view = defaults.get_value('main_list_view', main_list_view)
+  if main_list_view:
+    luci.list_view_entry(
+        builder = builder,
+        list_view = main_list_view,
+    )
 
   return ret
 
