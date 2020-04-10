@@ -4551,9 +4551,6 @@ jumbo_static_library("browser") {
         "printing/background_printing_manager.h",
         "printing/pdf_nup_converter_client.cc",
         "printing/pdf_nup_converter_client.h",
-        "printing/print_dialog_cloud.cc",
-        "printing/print_dialog_cloud.h",
-        "printing/print_dialog_cloud_win.cc",
         "printing/print_error_dialog.cc",
         "printing/print_error_dialog.h",
         "printing/print_preview_context_menu_observer.cc",
@@ -4576,8 +4573,11 @@ jumbo_static_library("browser") {
 
       deps += [ "//components/printing/common:mojo_interfaces" ]
 
-      if (is_posix || is_fuchsia) {
-        sources += [ "printing/print_dialog_cloud_posix.cc" ]
+      if (is_win) {
+        sources += [
+          "printing/print_dialog_cloud_win.cc",
+          "printing/print_dialog_cloud_win.h",
+        ]
       }
 
       if (!is_chromeos) {

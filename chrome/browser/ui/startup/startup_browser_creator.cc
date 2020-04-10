@@ -96,11 +96,10 @@
 #include "chrome/browser/notifications/win/notification_launch_id.h"
 #include "chrome/browser/ui/webui/settings/reset_settings_handler.h"
 #include "chrome/credential_provider/common/gcp_strings.h"
-#endif
-
 #if BUILDFLAG(ENABLE_PRINT_PREVIEW)
-#include "chrome/browser/printing/print_dialog_cloud.h"
-#endif
+#include "chrome/browser/printing/print_dialog_cloud_win.h"
+#endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
+#endif  // defined(OS_WIN)
 
 using content::BrowserThread;
 using content::ChildProcessSecurityPolicy;
@@ -609,7 +608,7 @@ bool StartupBrowserCreator::ProcessCmdLineImpl(
        !IncognitoModePrefs::ShouldLaunchIncognito(
            command_line, last_used_profile->GetPrefs()));
 
-#if BUILDFLAG(ENABLE_PRINT_PREVIEW)
+#if defined(OS_WIN) && BUILDFLAG(ENABLE_PRINT_PREVIEW)
   // If we are just displaying a print dialog we shouldn't open browser
   // windows.
   if (command_line.HasSwitch(switches::kCloudPrintFile) &&
@@ -618,7 +617,7 @@ bool StartupBrowserCreator::ProcessCmdLineImpl(
                                                            command_line)) {
     silent_launch = true;
   }
-#endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
+#endif  // defined(OS_WIN) && BUILDFLAG(ENABLE_PRINT_PREVIEW)
 
   if (command_line.HasSwitch(switches::kValidateCrx)) {
     if (!process_startup) {

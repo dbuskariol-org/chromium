@@ -1,8 +1,8 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/printing/print_dialog_cloud.h"
+#include "chrome/browser/ui/webui/print_preview/cloud_print_signin.h"
 
 #include "base/bind.h"
 #include "base/macros.h"
@@ -17,7 +17,7 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_contents_observer.h"
 
-namespace print_dialog_cloud {
+namespace printing {
 
 namespace {
 
@@ -73,4 +73,4 @@ void CreateCloudPrintSigninTab(Browser* browser,
   new SignInObserver(web_contents, std::move(callback));
 }
 
-}  // namespace print_dialog_cloud
+}  // namespace printing
