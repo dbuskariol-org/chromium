@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/xr/metrics/webxr_session_tracker.h"
+#include "chrome/browser/vr/metrics/webxr_session_tracker.h"
 
 #include <utility>
 
-namespace content {
+namespace vr {
 
 WebXRSessionTracker::WebXRSessionTracker(
     std::unique_ptr<ukm::builders::XR_WebXR_Session> entry)
@@ -112,4 +112,4 @@ void WebXRSessionTracker::SetFeatureRequest(
       break;
   }
 }
-}  // namespace content
+}  // namespace vr

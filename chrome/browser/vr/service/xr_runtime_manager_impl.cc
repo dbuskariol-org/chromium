@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/xr/service/xr_runtime_manager_impl.h"
-#include "content/public/browser/xr_runtime_manager.h"
+#include "chrome/browser/vr/service/xr_runtime_manager_impl.h"
+#include "chrome/browser/vr/xr_runtime_manager_statics.h"
 
 #include <string>
 #include <utility>
@@ -16,7 +16,7 @@
 #include "base/metrics/user_metrics_action.h"
 #include "base/trace_event/common/trace_event_common.h"
 #include "build/build_config.h"
-#include "content/browser/xr/service/browser_xr_runtime_impl.h"
+#include "chrome/browser/vr/service/browser_xr_runtime_impl.h"
 #include "content/public/browser/device_service.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
@@ -35,10 +35,10 @@
 #endif  // BUILDFLAG(ENABLE_ARCORE)
 
 #else  // !defined(OS_ANDROID)
-#include "content/browser/xr/service/isolated_device_provider.h"
+#include "chrome/browser/vr/service/isolated_device_provider.h"
 #endif  // defined(OS_ANDROID)
 
-namespace content {
+namespace vr {
 
 namespace {
 XRRuntimeManagerImpl* g_xr_runtime_manager = nullptr;
@@ -62,21 +62,21 @@ bool IsEnabled(const base::CommandLine* command_line,
 }  // namespace
 
 // XRRuntimeManager statics
-content::XRRuntimeManager* XRRuntimeManager::GetInstanceIfCreated() {
+content::XRRuntimeManager* XRRuntimeManagerStatics::GetInstanceIfCreated() {
   return g_xr_runtime_manager;
 }
 
-void XRRuntimeManager::AddObserver(
+void XRRuntimeManagerStatics::AddObserver(
     content::XRRuntimeManager::Observer* observer) {
   g_xr_runtime_manager_observers.Get().AddObserver(observer);
 }
 
-void XRRuntimeManager::RemoveObserver(
+void XRRuntimeManagerStatics::RemoveObserver(
     content::XRRuntimeManager::Observer* observer) {
   g_xr_runtime_manager_observers.Get().RemoveObserver(observer);
 }
 
-void XRRuntimeManager::ExitImmersivePresentation() {
+void XRRuntimeManagerStatics::ExitImmersivePresentation() {
   if (!g_xr_runtime_manager) {
     return;
   }
@@ -122,7 +122,7 @@ XRRuntimeManagerImpl::GetOrCreateInstance() {
 #if defined(OS_ANDROID)
   providers.emplace_back(std::make_unique<device::GvrDeviceProvider>());
 #else   // !defined(OS_ANDROID)
-  providers.emplace_back(std::make_unique<IsolatedVRDeviceProvider>());
+  providers.emplace_back(std::make_unique<vr::IsolatedVRDeviceProvider>());
 #endif  // defined(OS_ANDROID)
 
   bool orientation_provider_enabled = true;
@@ -454,4 +454,4 @@ void XRRuntimeManagerImpl::ForEachRuntime(
   }
 }
 
-}  // namespace content
+}  // namespace vr

@@ -2,20 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_XR_METRICS_SESSION_METRICS_HELPER_H_
-#define CONTENT_BROWSER_XR_METRICS_SESSION_METRICS_HELPER_H_
+#ifndef CHROME_BROWSER_VR_METRICS_SESSION_METRICS_HELPER_H_
+#define CHROME_BROWSER_VR_METRICS_SESSION_METRICS_HELPER_H_
 
 #include <memory>
 #include <set>
 #include <unordered_map>
 
 #include "base/time/time.h"
+#include "chrome/browser/vr/vr_base_export.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "device/vr/public/mojom/vr_service.mojom-forward.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
 
-namespace content {
+namespace vr {
 class SessionTimer;
 class WebXRSessionTracker;
 
@@ -25,7 +26,8 @@ class WebXRSessionTracker;
 // metrics that require state monitoring, such as durations, but also tracks
 // data we want attached to that, such as number of videos watched and how the
 // session was started.
-class SessionMetricsHelper : public content::WebContentsObserver {
+class VR_BASE_EXPORT SessionMetricsHelper
+    : public content::WebContentsObserver {
  public:
   // Returns the SessionMetricsHelper singleton if it has been created for the
   // WebContents.
@@ -84,6 +86,6 @@ class SessionMetricsHelper : public content::WebContentsObserver {
   int num_session_video_playback_ = 0;
 };
 
-}  // namespace content
+}  // namespace vr
 
-#endif  // CONTENT_BROWSER_XR_METRICS_SESSION_METRICS_HELPER_H_
+#endif  // CHROME_BROWSER_VR_METRICS_SESSION_METRICS_HELPER_H_

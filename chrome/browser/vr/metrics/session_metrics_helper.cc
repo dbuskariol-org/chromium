@@ -2,18 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/xr/metrics/session_metrics_helper.h"
+#include "chrome/browser/vr/metrics/session_metrics_helper.h"
 
 #include "base/logging.h"
 #include "base/metrics/histogram_macros.h"
-#include "content/browser/xr/metrics/session_timer.h"
-#include "content/browser/xr/metrics/webxr_session_tracker.h"
+#include "chrome/browser/vr/metrics/session_timer.h"
+#include "chrome/browser/vr/metrics/webxr_session_tracker.h"
+#include "components/ukm/content/source_url_recorder.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/web_contents.h"
 #include "device/vr/public/cpp/session_mode.h"
 
-namespace content {
+namespace vr {
 
 namespace {
 
@@ -70,10 +71,10 @@ SessionMetricsHelper* SessionMetricsHelper::FromWebContents(
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
   if (!web_contents)
-    return nullptr;
+    return NULL;
   SessionMetricsHelperData* data = static_cast<SessionMetricsHelperData*>(
       web_contents->GetUserData(kSessionMetricsHelperDataKey));
-  return data ? data->get() : nullptr;
+  return data ? data->get() : NULL;
 }
 
 // static
@@ -113,9 +114,10 @@ SessionMetricsHelper::StartInlineSession(
          webxr_inline_session_trackers_.end());
 
   auto result = webxr_inline_session_trackers_.emplace(
-      session_id, std::make_unique<WebXRSessionTracker>(
-                      std::make_unique<ukm::builders::XR_WebXR_Session>(
-                          web_contents()->GetLastCommittedSourceId())));
+      session_id,
+      std::make_unique<WebXRSessionTracker>(
+          std::make_unique<ukm::builders::XR_WebXR_Session>(
+              ukm::GetSourceIdForWebContentsDocument(web_contents()))));
   auto* tracker = result.first->second.get();
 
   ReportInitialSessionData(tracker, session_options, enabled_features);
@@ -150,7 +152,7 @@ SessionMetricsHelper::StartImmersiveSession(
 
   webxr_immersive_session_tracker_ = std::make_unique<WebXRSessionTracker>(
       std::make_unique<ukm::builders::XR_WebXR_Session>(
-          web_contents()->GetLastCommittedSourceId()));
+          ukm::GetSourceIdForWebContentsDocument(web_contents())));
 
   // TODO(https://crbug.com/1056930): Consider renaming the timers to something
   // that indicates both that these also record AR, and that these are no longer
@@ -264,4 +266,4 @@ void SessionMetricsHelper::DidStartNavigation(
   }
 }
 
-}  // namespace content
+}  // namespace vr

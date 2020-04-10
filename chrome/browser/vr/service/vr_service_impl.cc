@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/xr/service/vr_service_impl.h"
+#include "chrome/browser/vr/service/vr_service_impl.h"
 
 #include <utility>
 
@@ -11,12 +11,14 @@
 #include "base/metrics/histogram_macros.h"
 #include "base/stl_util.h"
 #include "base/trace_event/common/trace_event_common.h"
-#include "content/browser/permissions/permission_controller_impl.h"
-#include "content/browser/xr/metrics/session_metrics_helper.h"
-#include "content/browser/xr/service/browser_xr_runtime_impl.h"
-#include "content/browser/xr/service/xr_runtime_manager_impl.h"
+#include "chrome/browser/permissions/permission_manager_factory.h"
+#include "chrome/browser/profiles/profile.h"
+#include "chrome/browser/vr/metrics/session_metrics_helper.h"
+#include "chrome/browser/vr/service/browser_xr_runtime_impl.h"
+#include "chrome/browser/vr/service/xr_runtime_manager_impl.h"
+#include "components/permissions/permission_manager.h"
+#include "components/ukm/content/source_url_recorder.h"
 #include "content/public/browser/browser_context.h"
-#include "content/public/browser/permission_type.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/render_widget_host.h"
@@ -41,7 +43,7 @@ device::mojom::XRRuntimeSessionOptionsPtr GetRuntimeOptions(
 
 content::XrConsentPromptLevel GetRequiredConsentLevel(
     device::mojom::XRSessionMode mode,
-    const content::BrowserXRRuntimeImpl* runtime,
+    const vr::BrowserXRRuntimeImpl* runtime,
     const std::set<device::mojom::XRSessionFeature>& requested_features) {
   if (base::Contains(
           requested_features,
@@ -80,21 +82,20 @@ content::XrConsentPromptLevel GetRequiredConsentLevel(
   return content::XrConsentPromptLevel::kDefault;
 }
 
-content::PermissionType GetRequiredPermission(
-    device::mojom::XRSessionMode mode) {
+ContentSettingsType GetRequiredPermission(device::mojom::XRSessionMode mode) {
   switch (mode) {
     case device::mojom::XRSessionMode::kInline:
-      return content::PermissionType::SENSORS;
+      return ContentSettingsType::SENSORS;
     case device::mojom::XRSessionMode::kImmersiveVr:
-      return content::PermissionType::VR;
+      return ContentSettingsType::VR;
     case device::mojom::XRSessionMode::kImmersiveAr:
-      return content::PermissionType::AR;
+      return ContentSettingsType::AR;
   }
 }
 
 }  // namespace
 
-namespace content {
+namespace vr {
 
 VRServiceImpl::SessionRequestData::SessionRequestData(
     device::mojom::XRSessionOptionsPtr options,
@@ -436,15 +437,16 @@ void VRServiceImpl::ShowConsentPrompt(SessionRequestData request,
   }
 
   if (base::FeatureList::IsEnabled(features::kWebXrPermissionsApi)) {
-    PermissionControllerImpl* permission_controller =
-        PermissionControllerImpl::FromBrowserContext(
-            GetWebContents()->GetBrowserContext());
-    DCHECK(permission_controller);
+    permissions::PermissionManager* permission_manager =
+        PermissionManagerFactory::GetForProfile(
+            Profile::FromBrowserContext(GetWebContents()->GetBrowserContext()));
+    DCHECK(permission_manager);
 
     // Need to calculate the permission before the call below, as otherwise
     // std::move nulls options out before GetRequiredPermission runs.
-    PermissionType permission = GetRequiredPermission(request.options->mode);
-    permission_controller->RequestPermission(
+    ContentSettingsType permission =
+        GetRequiredPermission(request.options->mode);
+    permission_manager->RequestPermission(
         permission, render_frame_host_,
         render_frame_host_->GetLastCommittedURL(), true,
         base::BindOnce(&VRServiceImpl::OnPermissionResult,
@@ -465,9 +467,9 @@ void VRServiceImpl::ShowConsentPrompt(SessionRequestData request,
 void VRServiceImpl::OnPermissionResult(
     SessionRequestData request,
     content::XrConsentPromptLevel consent_level,
-    blink::mojom::PermissionStatus permission_status) {
+    ContentSetting setting_value) {
   OnConsentResult(std::move(request), consent_level,
-                  permission_status == blink::mojom::PermissionStatus::GRANTED);
+                  setting_value == ContentSetting::CONTENT_SETTING_ALLOW);
 }
 
 void VRServiceImpl::OnConsentResult(SessionRequestData request,
@@ -650,4 +652,4 @@ void VRServiceImpl::AddConsentGrantedDevice(
   }
 }
 
-}  // namespace content
+}  // namespace vr

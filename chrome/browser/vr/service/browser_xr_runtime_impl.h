@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_XR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
-#define CONTENT_BROWSER_XR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
+#ifndef CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
+#define CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
 
 #include <set>
 #include <vector>
 
 #include "base/observer_list.h"
 #include "base/observer_list_types.h"
-#include "content/browser/xr/service/vr_service_impl.h"
+#include "chrome/browser/vr/service/vr_service_impl.h"
 #include "content/public/browser/browser_xr_runtime.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/xr_consent_helper.h"
@@ -25,7 +25,7 @@ namespace content {
 class XrInstallHelper;
 }  // namespace content
 
-namespace content {
+namespace vr {
 // This class wraps a physical device's interfaces, and registers for events.
 // There is one BrowserXRRuntimeImpl per physical device runtime.  It manages
 // browser-side handling of state, like which VRServiceImpl is listening for
@@ -126,6 +126,6 @@ class BrowserXRRuntimeImpl : public content::BrowserXRRuntime,
   base::WeakPtrFactory<BrowserXRRuntimeImpl> weak_ptr_factory_{this};
 };
 
-}  // namespace content
+}  // namespace vr
 
-#endif  // CONTENT_BROWSER_XR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_
+#endif  // CHROME_BROWSER_VR_SERVICE_BROWSER_XR_RUNTIME_IMPL_H_

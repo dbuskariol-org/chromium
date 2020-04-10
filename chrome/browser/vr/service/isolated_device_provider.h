@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_XR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
-#define CONTENT_BROWSER_XR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
+#ifndef CHROME_BROWSER_VR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
+#define CHROME_BROWSER_VR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
 
 #include "base/containers/flat_map.h"
 #include "device/vr/public/mojom/isolated_xr_service.mojom-forward.h"
@@ -17,7 +17,7 @@ namespace content {
 class VrUiHost;
 }
 
-namespace content {
+namespace vr {
 
 class IsolatedVRDeviceProvider
     : public device::VRDeviceProvider,
@@ -69,6 +69,6 @@ class IsolatedVRDeviceProvider
   UiHostMap ui_host_map_;
 };
 
-}  // namespace content
+}  // namespace vr
 
-#endif  // CONTENT_BROWSER_XR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
+#endif  // CHROME_BROWSER_VR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_

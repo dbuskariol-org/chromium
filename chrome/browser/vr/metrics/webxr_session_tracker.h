@@ -2,21 +2,22 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_XR_METRICS_WEBXR_SESSION_TRACKER_H_
-#define CONTENT_BROWSER_XR_METRICS_WEBXR_SESSION_TRACKER_H_
+#ifndef CHROME_BROWSER_VR_METRICS_WEBXR_SESSION_TRACKER_H_
+#define CHROME_BROWSER_VR_METRICS_WEBXR_SESSION_TRACKER_H_
 
 #include <memory>
 #include <set>
 
-#include "content/browser/xr/metrics/session_tracker.h"
+#include "chrome/browser/vr/metrics/session_tracker.h"
+#include "chrome/browser/vr/vr_base_export.h"
 #include "device/vr/public/mojom/isolated_xr_service.mojom.h"
 #include "device/vr/public/mojom/vr_service.mojom.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
 
-namespace content {
+namespace vr {
 
-class WebXRSessionTracker
+class VR_BASE_EXPORT WebXRSessionTracker
     : public SessionTracker<ukm::builders::XR_WebXR_Session>,
       device::mojom::XRSessionMetricsRecorder {
  public:
@@ -46,6 +47,6 @@ class WebXRSessionTracker
   mojo::Receiver<device::mojom::XRSessionMetricsRecorder> receiver_;
 };
 
-}  // namespace content
+}  // namespace vr
 
-#endif  // CONTENT_BROWSER_XR_METRICS_WEBXR_SESSION_TRACKER_H_
+#endif  // CHROME_BROWSER_VR_METRICS_WEBXR_SESSION_TRACKER_H_

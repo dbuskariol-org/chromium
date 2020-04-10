@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/xr/metrics/session_tracker.h"
+#include "chrome/browser/vr/metrics/session_tracker.h"
+#include "components/ukm/content/source_url_recorder.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-namespace content {
+namespace vr {
 
 class FakeUkmEvent {
   void Record(ukm::UkmRecorder* recorder) {}
@@ -37,4 +38,4 @@ TEST_F(SessionTrackerTest, SessionTrackerGetRoundedDurationInSeconds) {
   EXPECT_EQ(tracker.GetRoundedDurationInSeconds(), 7200);
 }
 
-}  // namespace content
+}  // namespace vr
