@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.tab;
+package org.chromium.components.external_intents;
 
 /**
  * Handles intercepting navigation requests for an external authenticator application.
- * NOTE: DO NOT CHANGE ANYTHING IN THIS INTERFACE. It will be removed in favor of the identical one
- * in //components once downstream has been transitioned to use the //components-level one rather
- * than this one.
+ * NOTE: DO NOT CHANGE ANYTHING IN THIS INTERFACE. It needs to stay identical to the one in //chrome
+ * until downstream has been transitioned to use this one, at which point this comment will be
+ * eliminated.
  */
 public interface AuthenticatorNavigationInterceptor {
     /**
