@@ -155,6 +155,10 @@ void TestExtensionSystem::InstallUpdate(
   NOTREACHED();
 }
 
+void TestExtensionSystem::PerformActionBasedOnOmahaAttributes(
+    const std::string& extension_id,
+    const base::Value& attributes) {}
+
 bool TestExtensionSystem::FinishDelayedInstallationIfReady(
     const std::string& extension_id,
     bool install_immediately) {
