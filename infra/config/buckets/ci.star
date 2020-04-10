@@ -301,6 +301,19 @@ ci.console_view(
     },
 )
 
+# The main console includes some entries for builders from the chrome project
+[luci.console_view_entry(
+    builder = 'chrome:ci/{}'.format(name),
+    console_view = 'main',
+    category = 'chrome',
+    short_name = short_name,
+) for name, short_name in (
+    ('linux-chromeos-chrome', 'cro'),
+    ('linux-chrome', 'lnx'),
+    ('mac-chrome', 'mac'),
+    ('win-chrome', 'win'),
+)]
+
 
 ci.defaults.add_to_console_view.set(True)
 ci.defaults.bucket.set('ci')
@@ -423,6 +436,7 @@ ci.android_builder(
         category = 'tester|webview',
         short_name = 'L',
     ),
+    main_console_view = 'main',
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
@@ -452,6 +466,7 @@ ci.android_builder(
         category = 'tester|phone',
         short_name = 'K',
     ),
+    main_console_view = 'main',
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
@@ -464,6 +479,7 @@ ci.android_builder(
     # We have limited tablet capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 20 * time.hour,
+    main_console_view = 'main',
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
@@ -476,6 +492,7 @@ ci.android_builder(
     # We have limited phone capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 6 * time.hour,
+    main_console_view = 'main',
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
@@ -488,6 +505,7 @@ ci.android_builder(
     # We have limited tablet capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 20 * time.hour,
+    main_console_view = 'main',
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
@@ -500,6 +518,7 @@ ci.android_builder(
     # We have limited tablet capacity and thus limited ability to run
     # tests in parallel, hence the high timeout.
     execution_timeout = 12 * time.hour,
+    main_console_view = 'main',
     triggered_by = ['ci/Android arm Builder (dbg)'],
 )
 
@@ -675,6 +694,7 @@ ci.chromium_builder(
         short_name = 'dbg',
     ),
     cores = 8,
+    main_console_view = 'main',
 )
 
 ci.chromium_builder(
@@ -684,6 +704,7 @@ ci.chromium_builder(
         short_name = 'rel',
     ),
     cores = 32,
+    main_console_view = 'main',
 )
 
 ci.chromium_builder(
@@ -694,6 +715,7 @@ ci.chromium_builder(
     ),
     # Bump to 32 if needed.
     cores = 8,
+    main_console_view = 'main',
 )
 
 ci.chromium_builder(
@@ -703,6 +725,7 @@ ci.chromium_builder(
         short_name = 'rel',
     ),
     cores = 32,
+    main_console_view = 'main',
 )
 
 ci.chromium_builder(
@@ -713,6 +736,7 @@ ci.chromium_builder(
     ),
     # Bump to 8 cores if needed.
     cores = 4,
+    main_console_view = 'main',
     os = os.MAC_DEFAULT,
 )
 
@@ -722,6 +746,7 @@ ci.chromium_builder(
         category = 'mac',
         short_name = 'rel',
     ),
+    main_console_view = 'main',
     os = os.MAC_DEFAULT,
 )
 
@@ -732,6 +757,7 @@ ci.chromium_builder(
         short_name = '64',
     ),
     cores = 32,
+    main_console_view = 'main',
     os = os.WINDOWS_DEFAULT,
 )
 
@@ -742,6 +768,7 @@ ci.chromium_builder(
         short_name = '64',
     ),
     cores = 32,
+    main_console_view = 'main',
     os = os.WINDOWS_DEFAULT,
 )
 
@@ -752,6 +779,7 @@ ci.chromium_builder(
         short_name = '32',
     ),
     cores = 32,
+    main_console_view = 'main',
     os = os.WINDOWS_DEFAULT,
 )
 
@@ -762,6 +790,7 @@ ci.chromium_builder(
         short_name = '32',
     ),
     cores = 32,
+    main_console_view = 'main',
     os = os.WINDOWS_DEFAULT,
 )
 
