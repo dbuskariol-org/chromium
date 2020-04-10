@@ -37,9 +37,8 @@ bool EntityPropertyIsValidType(const property::PropertyConfiguration& config,
 
 // static
 bool ValidateEntity(Entity* entity) {
-  if (!entity::IsValidEntityName(entity->type)) {
+  if (!entity || !entity::IsValidEntityName(entity->type))
     return false;
-  }
 
   // Cycle through properties and remove any that have the wrong type.
   auto it = entity->properties.begin();
