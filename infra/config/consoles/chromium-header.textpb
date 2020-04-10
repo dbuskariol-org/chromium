@@ -188,7 +188,7 @@ links {
   }
   links {
     text: "angle"
-    url: "/p/chromium/g/angle.try/builders"
+    url: "/p/chromium/g/tryserver.chromium.angle/builders"
     alt: "Angle"
   }
   links {

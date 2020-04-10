@@ -34,6 +34,22 @@ exec('//versioned/milestones/m83/buckets/try.star')
 
 
 # *** After this point everything is trunk only ***
+
+[try_.list_view(
+    name = name,
+) for name in (
+    'tryserver.blink',
+    'tryserver.chromium.android',
+    'tryserver.chromium.angle',
+    'tryserver.chromium.chromiumos',
+    'tryserver.chromium.dawn',
+    'tryserver.chromium.linux',
+    'tryserver.chromium.mac',
+    'tryserver.chromium.swangle',
+    'tryserver.chromium.win',
+)]
+
+try_.defaults.add_to_list_view.set(True)
 try_.defaults.bucket.set('try')
 try_.defaults.cq_group.set('cq')
 

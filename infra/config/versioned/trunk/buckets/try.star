@@ -52,6 +52,7 @@ luci.cq_group(
     ],
 )
 
+try_.defaults.add_to_list_view.set(vars.is_master)
 try_.defaults.bucket.set(vars.try_bucket)
 try_.defaults.cq_group.set(vars.cq_group)
 
