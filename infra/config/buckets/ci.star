@@ -274,6 +274,25 @@ ci.console_view(
 )
 
 ci.console_view(
+    name = 'chromium.swangle',
+    ordering = {
+        None: ['DEPS', 'ToT ANGLE', 'ToT SwiftShader'],
+        '*os*': ['Windows', 'Mac'],
+        '*cpu*': ci.ordering(short_names=['x86', 'x64']),
+        'DEPS': '*os*',
+        'DEPS|Windows': '*cpu*',
+        'DEPS|Linux': '*cpu*',
+        'ToT ANGLE': '*os*',
+        'ToT ANGLE|Windows': '*cpu*',
+        'ToT ANGLE|Linux': '*cpu*',
+        'ToT SwiftShader': '*os*',
+        'ToT SwiftShader|Windows': '*cpu*',
+        'ToT SwiftShader|Linux': '*cpu*',
+        'Chromium': '*os*',
+    },
+)
+
+ci.console_view(
     name = 'chromium.win',
     ordering = {
         None: ['release', 'debug'],
@@ -3108,64 +3127,124 @@ ci.memory_builder(
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-chromium-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'Chromium|Linux',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-tot-angle-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT ANGLE|Linux',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-tot-angle-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT ANGLE|Linux',
+        short_name = 'x86',
+    ),
 )
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-tot-swiftshader-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT SwiftShader|Linux',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-tot-swiftshader-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT SwiftShader|Linux',
+        short_name = 'x86',
+    ),
 )
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'DEPS|Linux',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_linux_builder(
     name = 'linux-swangle-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'DEPS|Linux',
+        short_name = 'x86',
+    ),
 )
 
 
 ci.swangle_mac_builder(
     name = 'mac-swangle-chromium-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'Chromium|Mac',
+        short_name = 'x64',
+    ),
 )
 
 
 ci.swangle_windows_builder(
     name = 'win-swangle-chromium-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'Chromium|Windows',
+        short_name = 'x86',
+    ),
 )
 
 ci.swangle_windows_builder(
     name = 'win-swangle-tot-angle-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT ANGLE|Windows',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_windows_builder(
     name = 'win-swangle-tot-angle-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT ANGLE|Windows',
+        short_name = 'x86',
+    ),
 )
 
 ci.swangle_windows_builder(
     name = 'win-swangle-tot-swiftshader-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT SwiftShader|Windows',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_windows_builder(
     name = 'win-swangle-tot-swiftshader-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'ToT SwiftShader|Windows',
+        short_name = 'x86',
+    ),
 )
 
 ci.swangle_windows_builder(
     name = 'win-swangle-x64',
+    console_view_entry = ci.console_view_entry(
+        category = 'DEPS|Windows',
+        short_name = 'x64',
+    ),
 )
 
 ci.swangle_windows_builder(
     name = 'win-swangle-x86',
+    console_view_entry = ci.console_view_entry(
+        category = 'DEPS|Windows',
+        short_name = 'x86',
+    ),
 )
 
 
