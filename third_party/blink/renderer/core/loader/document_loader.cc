@@ -1810,7 +1810,6 @@ void DocumentLoader::ReportPreviewsIntervention() const {
 
   // Verify that certain types are not on main frame requests.
   DCHECK_NE(WebURLRequest::kClientLoFiAutoReload, previews_state_);
-  DCHECK_NE(WebURLRequest::kLazyImageLoadDeferred, previews_state_);
   DCHECK_NE(WebURLRequest::kSubresourceRedirectOn, previews_state_);
 
   static_assert(WebURLRequest::kPreviewsStateLast ==
