@@ -37,24 +37,22 @@ void NGFragmentItemsBuilder::AddLine(const NGPhysicalLineBoxFragment& line,
 #endif
 
   // Reserve the capacity for (children + line box item).
-  wtf_size_t size_before = items_.size();
-  wtf_size_t capacity = size_before + current_line_.size() + 1;
+  const wtf_size_t size_before = items_.size();
+  const wtf_size_t capacity = size_before + current_line_.size() + 1;
   items_.ReserveCapacity(capacity);
   offsets_.ReserveCapacity(capacity);
 
   // Add an empty item so that the start of the line can be set later.
-  wtf_size_t line_start_index = items_.size();
+  const wtf_size_t line_start_index = items_.size();
   items_.Grow(line_start_index + 1);
   offsets_.push_back(offset);
 
   AddItems(current_line_.begin(), current_line_.end());
 
   // All children are added. Create an item for the start of the line.
-  wtf_size_t item_count = items_.size() - line_start_index;
+  const wtf_size_t item_count = items_.size() - line_start_index;
   items_[line_start_index] =
       base::MakeRefCounted<NGFragmentItem>(line, item_count);
-  // TODO(kojii): We probably need an end marker too for the reverse-order
-  // traversals.
 
   // Keep children's offsets relative to |line|. They will be adjusted later in
   // |ConvertToPhysical()|.
@@ -63,6 +61,9 @@ void NGFragmentItemsBuilder::AddLine(const NGPhysicalLineBoxFragment& line,
 #if DCHECK_IS_ON()
   current_line_fragment_ = nullptr;
 #endif
+
+  DCHECK_EQ(items_.size(), offsets_.size());
+  DCHECK_LE(items_.size(), capacity);
 }
 
 void NGFragmentItemsBuilder::AddItems(Child* child_begin, Child* child_end) {
