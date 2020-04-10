@@ -2485,7 +2485,7 @@ void NavigationRequest::OnFailureChecksComplete(
     CHECK_EQ(ShouldKeepErrorPageInCurrentProcess(old_net_error),
              ShouldKeepErrorPageInCurrentProcess(net_error_))
         << " Unsupported error code change in WillFailRequest(): from "
-        << net_error_ << " to " << result.net_error_code();
+        << old_net_error << " to " << net_error_;
   }
 
   CommitErrorPage(result.error_page_content());
