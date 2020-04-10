@@ -281,6 +281,11 @@ public class TabbedRootUiCoordinator extends RootUiCoordinator implements Native
         sEnableStatusIndicatorForTests = disable;
     }
 
+    @VisibleForTesting
+    public EphemeralTabCoordinator getEphemeralTabCoordinatorForTesting() {
+        return mEphemeralTabCoordinatorSupplier.get();
+    }
+
     /**
      * Triggers the display of an appropriate promo, if any, returning true if a promo is actually
      * displayed.
