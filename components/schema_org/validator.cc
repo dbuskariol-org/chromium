@@ -46,7 +46,10 @@ bool ValidateEntity(Entity* entity) {
     property::PropertyConfiguration config =
         property::GetPropertyConfiguration((*it)->name);
 
-    if (!(*it)->values->string_values.empty() && !config.text) {
+    bool allows_text = config.text || !config.thing_types.empty() ||
+                       !config.enum_types.empty();
+
+    if (!(*it)->values->string_values.empty() && !allows_text) {
       it = entity->properties.erase(it);
     } else if (!(*it)->values->double_values.empty() && !config.number) {
       it = entity->properties.erase(it);
@@ -106,6 +109,31 @@ bool ValidateEntity(Entity* entity) {
         // If there were no valid url values representing enum options for
         // this property, remove the whole property.
         if (!has_valid_enums) {
+          it = entity->properties.erase(it);
+        } else {
+          ++it;
+        }
+      } else if (!config.thing_types.empty()) {
+        // Check all the url values in this property. Remove any ones that
+        // aren't a valid URL to an item in thing_types, or a descendant of an
+        // item in thing_types.
+        bool has_valid_entities = false;
+        auto nested_it = (*it)->values->url_values.begin();
+        while (nested_it != (*it)->values->url_values.end()) {
+          auto& url = *nested_it;
+          auto type_name = ObjectNameFromId(url.spec());
+          if (!type_name.has_value() ||
+              !EntityPropertyIsValidType(config, type_name.value())) {
+            nested_it = (*it)->values->url_values.erase(nested_it);
+          } else {
+            has_valid_entities = true;
+            ++nested_it;
+          }
+        }
+
+        // If there were no valid url values representing entity types for this
+        // property, remove the whole property.
+        if (!has_valid_entities) {
           it = entity->properties.erase(it);
         } else {
           ++it;
