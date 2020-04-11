@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/video_raf/video_request_animation_frame_impl.h"
+#include "third_party/blink/renderer/modules/video_rvfc/video_frame_callback_requester_impl.h"
 
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -32,7 +32,7 @@ namespace {
 
 class MockWebMediaPlayer : public EmptyWebMediaPlayer {
  public:
-  MOCK_METHOD0(RequestAnimationFrame, void());
+  MOCK_METHOD0(RequestVideoFrameCallback, void());
   MOCK_METHOD0(GetVideoFramePresentationMetadata,
                std::unique_ptr<VideoFramePresentationMetadata>());
 };
@@ -118,12 +118,12 @@ VideoFramePresentationMetadata MetadataHelper::metadata_;
 
 // Helper class that compares the parameters used when invoking a callback, with
 // the reference parameters we expect.
-class VideoRafParameterVerifierCallback
+class VfcRequesterParameterVerifierCallback
     : public VideoFrameRequestCallbackCollection::VideoFrameCallback {
  public:
-  explicit VideoRafParameterVerifierCallback(DocumentLoadTiming& timing)
+  explicit VfcRequesterParameterVerifierCallback(DocumentLoadTiming& timing)
       : timing_(timing) {}
-  ~VideoRafParameterVerifierCallback() override = default;
+  ~VfcRequesterParameterVerifierCallback() override = default;
 
   void Invoke(double now, const VideoFrameMetadata* metadata) override {
     was_invoked_ = true;
@@ -206,12 +206,12 @@ class VideoRafParameterVerifierCallback
 
 }  // namespace
 
-class VideoRequestAnimationFrameImplTest
+class VideoFrameCallbackRequesterImplTest
     : public PageTestBase,
-      private ScopedVideoRequestAnimationFrameForTest {
+      private ScopedRequestVideoFrameCallbackForTest {
  public:
-  VideoRequestAnimationFrameImplTest()
-      : ScopedVideoRequestAnimationFrameForTest(true) {}
+  VideoFrameCallbackRequesterImplTest()
+      : ScopedRequestVideoFrameCallbackForTest(true) {}
 
   virtual void SetUpWebMediaPlayer() {
     auto mock_media_player = std::make_unique<MockWebMediaPlayer>();
@@ -237,13 +237,13 @@ class VideoRequestAnimationFrameImplTest
 
   MockWebMediaPlayer* media_player() { return media_player_; }
 
-  VideoRequestAnimationFrameImpl& video_raf() {
-    return VideoRequestAnimationFrameImpl::From(*video());
+  VideoFrameCallbackRequesterImpl& vfc_requester() {
+    return VideoFrameCallbackRequesterImpl::From(*video());
   }
 
-  void SimulateFramePresented() { video_->OnRequestAnimationFrame(); }
+  void SimulateFramePresented() { video_->OnRequestVideoFrameCallback(); }
 
-  void SimulateAnimationFrame(base::TimeTicks now) {
+  void SimulateVideoFrameCallback(base::TimeTicks now) {
     GetDocument().GetScriptedAnimationController().ServiceScriptedAnimations(
         now);
   }
@@ -252,8 +252,9 @@ class VideoRequestAnimationFrameImplTest
     return V8VideoFrameRequestCallback::Create(function->Bind());
   }
 
-  void RegisterCallbackDirectly(VideoRafParameterVerifierCallback* callback) {
-    video_raf().RegisterCallbackForTest(callback);
+  void RegisterCallbackDirectly(
+      VfcRequesterParameterVerifierCallback* callback) {
+    vfc_requester().RegisterCallbackForTest(callback);
   }
 
  private:
@@ -263,8 +264,8 @@ class VideoRequestAnimationFrameImplTest
   MockWebMediaPlayer* media_player_;
 };
 
-class VideoRequestAnimationFrameImplNullMediaPlayerTest
-    : public VideoRequestAnimationFrameImplTest {
+class VideoFrameCallbackRequesterImplNullMediaPlayerTest
+    : public VideoFrameCallbackRequesterImplTest {
  public:
   void SetUpWebMediaPlayer() override {
     SetupPageWithClients(nullptr,
@@ -275,14 +276,14 @@ class VideoRequestAnimationFrameImplNullMediaPlayerTest
   }
 };
 
-TEST_F(VideoRequestAnimationFrameImplTest, VerifyRequestAnimationFrame) {
+TEST_F(VideoFrameCallbackRequesterImplTest, VerifyRequestVideoFrameCallback) {
   V8TestingScope scope;
 
   auto* function = MockFunction::Create(scope.GetScriptState());
 
   // Queuing up a video.rAF call should propagate to the WebMediaPlayer.
-  EXPECT_CALL(*media_player(), RequestAnimationFrame()).Times(1);
-  video_raf().requestAnimationFrame(GetCallback(function));
+  EXPECT_CALL(*media_player(), RequestVideoFrameCallback()).Times(1);
+  vfc_requester().requestVideoFrameCallback(GetCallback(function));
 
   testing::Mock::VerifyAndClear(media_player());
 
@@ -299,52 +300,54 @@ TEST_F(VideoRequestAnimationFrameImplTest, VerifyRequestAnimationFrame) {
   EXPECT_CALL(*function, Call(_)).Times(1);
   EXPECT_CALL(*media_player(), GetVideoFramePresentationMetadata())
       .WillOnce(Return(ByMove(std::move(metadata))));
-  SimulateAnimationFrame(base::TimeTicks::Now());
+  SimulateVideoFrameCallback(base::TimeTicks::Now());
 
   testing::Mock::VerifyAndClear(function);
 }
 
-TEST_F(VideoRequestAnimationFrameImplTest,
-       VerifyCancelAnimationFrame_BeforePresentedFrame) {
+TEST_F(VideoFrameCallbackRequesterImplTest,
+       VerifyCancelVideoFrameCallback_BeforePresentedFrame) {
   V8TestingScope scope;
 
   auto* function = MockFunction::Create(scope.GetScriptState());
 
   // Queue and cancel a request before a frame is presented.
-  int callback_id = video_raf().requestAnimationFrame(GetCallback(function));
-  video_raf().cancelAnimationFrame(callback_id);
+  int callback_id =
+      vfc_requester().requestVideoFrameCallback(GetCallback(function));
+  vfc_requester().cancelVideoFrameCallback(callback_id);
 
   EXPECT_CALL(*function, Call(_)).Times(0);
   SimulateFramePresented();
-  SimulateAnimationFrame(base::TimeTicks::Now());
+  SimulateVideoFrameCallback(base::TimeTicks::Now());
 
   testing::Mock::VerifyAndClear(function);
 }
 
-TEST_F(VideoRequestAnimationFrameImplTest,
-       VerifyCancelAnimationFrame_AfterPresentedFrame) {
+TEST_F(VideoFrameCallbackRequesterImplTest,
+       VerifyCancelVideoFrameCallback_AfterPresentedFrame) {
   V8TestingScope scope;
 
   auto* function = MockFunction::Create(scope.GetScriptState());
 
   // Queue a request.
-  int callback_id = video_raf().requestAnimationFrame(GetCallback(function));
+  int callback_id =
+      vfc_requester().requestVideoFrameCallback(GetCallback(function));
   SimulateFramePresented();
 
   // The callback should be scheduled for execution, but not yet run.
   EXPECT_CALL(*function, Call(_)).Times(0);
-  video_raf().cancelAnimationFrame(callback_id);
-  SimulateAnimationFrame(base::TimeTicks::Now());
+  vfc_requester().cancelVideoFrameCallback(callback_id);
+  SimulateVideoFrameCallback(base::TimeTicks::Now());
 
   testing::Mock::VerifyAndClear(function);
 }
 
-TEST_F(VideoRequestAnimationFrameImplTest, VerifyParameters) {
+TEST_F(VideoFrameCallbackRequesterImplTest, VerifyParameters) {
   auto timing = GetDocument().Loader()->GetTiming();
   MetadataHelper::InitializeFields(timing.ReferenceMonotonicTime());
 
   auto* callback =
-      MakeGarbageCollected<VideoRafParameterVerifierCallback>(timing);
+      MakeGarbageCollected<VfcRequesterParameterVerifierCallback>(timing);
 
   // Register the non-V8 callback.
   RegisterCallbackDirectly(callback);
@@ -358,7 +361,7 @@ TEST_F(VideoRequestAnimationFrameImplTest, VerifyParameters) {
 
   // Run the callbacks directly, since they weren't scheduled to be run by the
   // ScriptedAnimationController.
-  video_raf().OnRenderingSteps(now_ms);
+  vfc_requester().OnRenderingSteps(now_ms);
 
   EXPECT_EQ(callback->last_now(), now_ms);
   EXPECT_TRUE(callback->was_invoked());
@@ -366,15 +369,15 @@ TEST_F(VideoRequestAnimationFrameImplTest, VerifyParameters) {
   testing::Mock::VerifyAndClear(media_player());
 }
 
-TEST_F(VideoRequestAnimationFrameImplNullMediaPlayerTest, VerifyNoCrash) {
+TEST_F(VideoFrameCallbackRequesterImplNullMediaPlayerTest, VerifyNoCrash) {
   V8TestingScope scope;
 
   auto* function = MockFunction::Create(scope.GetScriptState());
 
-  video_raf().requestAnimationFrame(GetCallback(function));
+  vfc_requester().requestVideoFrameCallback(GetCallback(function));
 
   SimulateFramePresented();
-  SimulateAnimationFrame(base::TimeTicks::Now());
+  SimulateVideoFrameCallback(base::TimeTicks::Now());
 }
 
 }  // namespace blink

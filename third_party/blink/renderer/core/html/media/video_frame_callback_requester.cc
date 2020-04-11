@@ -2,29 +2,29 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/core/html/media/video_request_animation_frame.h"
+#include "third_party/blink/renderer/core/html/media/video_frame_callback_requester.h"
 
 #include "third_party/blink/renderer/core/html/media/html_video_element.h"
 
 namespace blink {
 
-VideoRequestAnimationFrame::VideoRequestAnimationFrame(
+VideoFrameCallbackRequester::VideoFrameCallbackRequester(
     HTMLVideoElement& element)
     : Supplement<HTMLVideoElement>(element) {}
 
 // static
-VideoRequestAnimationFrame* VideoRequestAnimationFrame::From(
+VideoFrameCallbackRequester* VideoFrameCallbackRequester::From(
     HTMLVideoElement& element) {
-  return Supplement<HTMLVideoElement>::From<VideoRequestAnimationFrame>(
+  return Supplement<HTMLVideoElement>::From<VideoFrameCallbackRequester>(
       element);
 }
 
-void VideoRequestAnimationFrame::Trace(Visitor* visitor) {
+void VideoFrameCallbackRequester::Trace(Visitor* visitor) {
   Supplement<HTMLVideoElement>::Trace(visitor);
 }
 
 // static
-const char VideoRequestAnimationFrame::kSupplementName[] =
-    "VideoRequestAnimationFrame";
+const char VideoFrameCallbackRequester::kSupplementName[] =
+    "VideoFrameCallbackRequester";
 
 }  // namespace blink

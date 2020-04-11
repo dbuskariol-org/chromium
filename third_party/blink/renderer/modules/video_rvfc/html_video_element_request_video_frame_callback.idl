@@ -4,9 +4,9 @@
 
 // See https://wicg.github.io/video-raf/.
 [
-    RuntimeEnabled=VideoRequestAnimationFrame,
-    ImplementedAs=VideoRequestAnimationFrameImpl
+    RuntimeEnabled=RequestVideoFrameCallback,
+    ImplementedAs=VideoFrameCallbackRequesterImpl
 ] partial interface HTMLVideoElement {
-    long requestAnimationFrame(VideoFrameRequestCallback callback);
-    void cancelAnimationFrame(long handle);
+    long requestVideoFrameCallback(VideoFrameRequestCallback callback);
+    void cancelVideoFrameCallback(long handle);
 };

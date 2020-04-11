@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/video_raf/video_request_animation_frame_impl.h"
+#include "third_party/blink/renderer/modules/video_rvfc/video_frame_callback_requester_impl.h"
 
 #include <memory>
 #include <utility>
@@ -15,7 +15,7 @@
 #include "third_party/blink/renderer/core/loader/document_loader.h"
 #include "third_party/blink/renderer/core/timing/performance.h"
 #include "third_party/blink/renderer/core/timing/time_clamper.h"
-#include "third_party/blink/renderer/modules/video_raf/video_frame_request_callback_collection.h"
+#include "third_party/blink/renderer/modules/video_rvfc/video_frame_request_callback_collection.h"
 #include "third_party/blink/renderer/platform/wtf/functional.h"
 
 namespace blink {
@@ -38,21 +38,21 @@ static bool IsFrameRateRelativelyHigh(base::TimeDelta rendering_interval,
 
 }  // namespace
 
-VideoRequestAnimationFrameImpl::VideoRequestAnimationFrameImpl(
+VideoFrameCallbackRequesterImpl::VideoFrameCallbackRequesterImpl(
     HTMLVideoElement& element)
-    : VideoRequestAnimationFrame(element),
+    : VideoFrameCallbackRequester(element),
       callback_collection_(
           MakeGarbageCollected<VideoFrameRequestCallbackCollection>(
               element.GetExecutionContext())) {}
 
 // static
-VideoRequestAnimationFrameImpl& VideoRequestAnimationFrameImpl::From(
+VideoFrameCallbackRequesterImpl& VideoFrameCallbackRequesterImpl::From(
     HTMLVideoElement& element) {
-  VideoRequestAnimationFrameImpl* supplement =
-      Supplement<HTMLVideoElement>::From<VideoRequestAnimationFrameImpl>(
+  VideoFrameCallbackRequesterImpl* supplement =
+      Supplement<HTMLVideoElement>::From<VideoFrameCallbackRequesterImpl>(
           element);
   if (!supplement) {
-    supplement = MakeGarbageCollected<VideoRequestAnimationFrameImpl>(element);
+    supplement = MakeGarbageCollected<VideoFrameCallbackRequesterImpl>(element);
     Supplement<HTMLVideoElement>::ProvideTo(element, supplement);
   }
 
@@ -60,30 +60,30 @@ VideoRequestAnimationFrameImpl& VideoRequestAnimationFrameImpl::From(
 }
 
 // static
-int VideoRequestAnimationFrameImpl::requestAnimationFrame(
+int VideoFrameCallbackRequesterImpl::requestVideoFrameCallback(
     HTMLVideoElement& element,
     V8VideoFrameRequestCallback* callback) {
-  return VideoRequestAnimationFrameImpl::From(element).requestAnimationFrame(
-      callback);
+  return VideoFrameCallbackRequesterImpl::From(element)
+      .requestVideoFrameCallback(callback);
 }
 
 // static
-void VideoRequestAnimationFrameImpl::cancelAnimationFrame(
+void VideoFrameCallbackRequesterImpl::cancelVideoFrameCallback(
     HTMLVideoElement& element,
     int callback_id) {
-  VideoRequestAnimationFrameImpl::From(element).cancelAnimationFrame(
+  VideoFrameCallbackRequesterImpl::From(element).cancelVideoFrameCallback(
       callback_id);
 }
 
-void VideoRequestAnimationFrameImpl::OnWebMediaPlayerCreated() {
-  DCHECK(RuntimeEnabledFeatures::VideoRequestAnimationFrameEnabled());
+void VideoFrameCallbackRequesterImpl::OnWebMediaPlayerCreated() {
+  DCHECK(RuntimeEnabledFeatures::RequestVideoFrameCallbackEnabled());
   if (!callback_collection_->IsEmpty())
-    GetSupplementable()->GetWebMediaPlayer()->RequestAnimationFrame();
+    GetSupplementable()->GetWebMediaPlayer()->RequestVideoFrameCallback();
 }
 
-void VideoRequestAnimationFrameImpl::ScheduleCallbackExecution() {
+void VideoFrameCallbackRequesterImpl::ScheduleCallbackExecution() {
   TRACE_EVENT1("blink",
-               "VideoRequestAnimationFrameImpl::ScheduleCallbackExecution",
+               "VideoFrameCallbackRequesterImpl::ScheduleCallbackExecution",
                "did_schedule", !pending_execution_);
 
   if (pending_execution_)
@@ -93,15 +93,15 @@ void VideoRequestAnimationFrameImpl::ScheduleCallbackExecution() {
   GetSupplementable()
       ->GetDocument()
       .GetScriptedAnimationController()
-      .ScheduleVideoRafExecution(
-          WTF::Bind(&VideoRequestAnimationFrameImpl::OnRenderingSteps,
+      .ScheduleVideoFrameCallbacksExecution(
+          WTF::Bind(&VideoFrameCallbackRequesterImpl::OnRenderingSteps,
                     WrapWeakPersistent(this)));
 }
 
-void VideoRequestAnimationFrameImpl::OnRequestAnimationFrame() {
-  DCHECK(RuntimeEnabledFeatures::VideoRequestAnimationFrameEnabled());
+void VideoFrameCallbackRequesterImpl::OnRequestVideoFrameCallback() {
+  DCHECK(RuntimeEnabledFeatures::RequestVideoFrameCallbackEnabled());
   TRACE_EVENT1("blink",
-               "VideoRequestAnimationFrameImpl::OnRequestAnimationFrame",
+               "VideoFrameCallbackRequesterImpl::OnRequestVideoFrameCallback",
                "has_callbacks", !callback_collection_->IsEmpty());
 
   // Skip this work if there are no registered callbacks.
@@ -111,12 +111,12 @@ void VideoRequestAnimationFrameImpl::OnRequestAnimationFrame() {
   ScheduleCallbackExecution();
 }
 
-void VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks(
+void VideoFrameCallbackRequesterImpl::ExecuteVideoFrameCallbacks(
     double high_res_now_ms,
     std::unique_ptr<WebMediaPlayer::VideoFramePresentationMetadata>
         frame_metadata) {
   TRACE_EVENT0("blink",
-               "VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks");
+               "VideoFrameCallbackRequesterImpl::ExecuteVideoFrameCallbacks");
 
   last_presented_frames_ = frame_metadata->presented_frames;
 
@@ -171,9 +171,9 @@ void VideoRequestAnimationFrameImpl::ExecuteFrameCallbacks(
   callback_collection_->ExecuteFrameCallbacks(high_res_now_ms, metadata);
 }
 
-void VideoRequestAnimationFrameImpl::OnRenderingSteps(double high_res_now_ms) {
+void VideoFrameCallbackRequesterImpl::OnRenderingSteps(double high_res_now_ms) {
   DCHECK(pending_execution_);
-  TRACE_EVENT1("blink", "VideoRequestAnimationFrameImpl::OnRenderingSteps",
+  TRACE_EVENT1("blink", "VideoFrameCallbackRequesterImpl::OnRenderingSteps",
                "has_callbacks", !callback_collection_->IsEmpty());
 
   pending_execution_ = false;
@@ -197,13 +197,13 @@ void VideoRequestAnimationFrameImpl::OnRenderingSteps(double high_res_now_ms) {
     ++consecutive_stale_frames_;
   } else {
     consecutive_stale_frames_ = 0;
-    ExecuteFrameCallbacks(high_res_now_ms, std::move(metadata));
+    ExecuteVideoFrameCallbacks(high_res_now_ms, std::move(metadata));
   }
 
   // If the video's frame rate is relatively close to the screen's refresh rate
   // (or brower's current frame rate), schedule ourselves immediately.
   // Otherwise, jittering and thread hopping means that the call to
-  // OnRequestAnimationFrame() would barely miss the rendering steps, and we
+  // OnRequestVideoFrameCallback() would barely miss the rendering steps, and we
   // would miss a frame.
   // Also check |consecutive_stale_frames_| to make sure we don't schedule
   // executions when paused, or in other scenarios where potentially scheduling
@@ -215,14 +215,14 @@ void VideoRequestAnimationFrameImpl::OnRenderingSteps(double high_res_now_ms) {
 }
 
 // static
-double VideoRequestAnimationFrameImpl::GetClampedTimeInMillis(
+double VideoFrameCallbackRequesterImpl::GetClampedTimeInMillis(
     base::TimeDelta time) {
   constexpr double kSecondsToMillis = 1000.0;
   return Performance::ClampTimeResolution(time.InSecondsF()) * kSecondsToMillis;
 }
 
 // static
-double VideoRequestAnimationFrameImpl::GetCoarseClampedTimeInSeconds(
+double VideoFrameCallbackRequesterImpl::GetCoarseClampedTimeInSeconds(
     base::TimeDelta time) {
   constexpr double kCoarseResolutionInSeconds = 100e-6;
   // Add this assert, in case TimeClamper's resolution were to change to be
@@ -236,13 +236,13 @@ double VideoRequestAnimationFrameImpl::GetCoarseClampedTimeInSeconds(
   return clamped_time;
 }
 
-int VideoRequestAnimationFrameImpl::requestAnimationFrame(
+int VideoFrameCallbackRequesterImpl::requestVideoFrameCallback(
     V8VideoFrameRequestCallback* callback) {
   TRACE_EVENT0("blink",
-               "VideoRequestAnimationFrameImpl::requestAnimationFrame");
+               "VideoFrameCallbackRequesterImpl::requestVideoFrameCallback");
 
   if (auto* player = GetSupplementable()->GetWebMediaPlayer())
-    player->RequestAnimationFrame();
+    player->RequestVideoFrameCallback();
 
   auto* frame_callback = MakeGarbageCollected<
       VideoFrameRequestCallbackCollection::V8VideoFrameCallback>(callback);
@@ -250,18 +250,18 @@ int VideoRequestAnimationFrameImpl::requestAnimationFrame(
   return callback_collection_->RegisterFrameCallback(frame_callback);
 }
 
-void VideoRequestAnimationFrameImpl::RegisterCallbackForTest(
+void VideoFrameCallbackRequesterImpl::RegisterCallbackForTest(
     VideoFrameRequestCallbackCollection::VideoFrameCallback* callback) {
   pending_execution_ = true;
 
   callback_collection_->RegisterFrameCallback(callback);
 }
 
-void VideoRequestAnimationFrameImpl::cancelAnimationFrame(int id) {
+void VideoFrameCallbackRequesterImpl::cancelVideoFrameCallback(int id) {
   callback_collection_->CancelFrameCallback(id);
 }
 
-void VideoRequestAnimationFrameImpl::Trace(Visitor* visitor) {
+void VideoFrameCallbackRequesterImpl::Trace(Visitor* visitor) {
   visitor->Trace(callback_collection_);
   Supplement<HTMLVideoElement>::Trace(visitor);
 }

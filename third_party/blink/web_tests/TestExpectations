@@ -95,6 +95,14 @@ crbug.com/771003 http/tests/security/mixedContent/insecure-iframe-in-main-frame.
 
 crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.https.html [ Timeout ]
 
+# Tests temporarily disabled until the video.requestAnimationFrame =>
+# video.requestVideoFrameCallback rename is completed. See crbug.com/1012063.
+
+external/wpt/video-raf/video-request-animation-frame.html [ Failure ]
+external/wpt/video-raf/video-request-animation-frame-parallel.html [ Failure ]
+external/wpt/video-raf/video-request-animation-frame-repeating.html [ Failure ]
+external/wpt/video-raf/idlharness.window.html [ Failure ]
+
 # Tests temporarily disabled with Site Isolation - uninvestigated bugs:
 # TODO(lukasza, alexmos): Burn down this list.
 crbug.com/608015 http/tests/inspector-protocol/access-inspected-object.js [ Failure Timeout ]
