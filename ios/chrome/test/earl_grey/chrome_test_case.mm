@@ -215,9 +215,9 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeTestCaseAppInterface)
 // Tear down called once for the class, to shutdown mock authentication and
 // the HTTP server.
 + (void)tearDown {
-  [[self class] disableMockAuthentication];
-  [[self class] stopHTTPServer];
-  [[self class] unregisterURLSchemes];
+  [self disableMockAuthentication];
+  [self stopHTTPServer];
+  [self unregisterURLSchemes];
   [super tearDown];
   gExecutedSetUpForTestCase = false;
 }
@@ -357,7 +357,7 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeTestCaseAppInterface)
 
 + (void)startHTTPServer {
   web::test::HttpServer& server = web::test::HttpServer::GetSharedInstance();
-  NSString* bundlePath = [NSBundle bundleForClass:[self class]].resourcePath;
+  NSString* bundlePath = [NSBundle bundleForClass:self].resourcePath;
   server.StartOrDie(base::FilePath(base::SysNSStringToUTF8(bundlePath)));
 }
 
@@ -372,7 +372,7 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeTestCaseAppInterface)
   // Create a new scoped registry for the test case class.
   std::unique_ptr<url::ScopedSchemeRegistryForTests> schemeRegistry =
       std::make_unique<url::ScopedSchemeRegistryForTests>();
-  [[self class] setSchemeRegistry:std::move(schemeRegistry)];
+  [self setSchemeRegistry:std::move(schemeRegistry)];
   url::ClearSchemesForTests();
 
   // Add the additional schemes from the WebAppInterface.
@@ -393,7 +393,7 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeTestCaseAppInterface)
 }
 
 + (void)unregisterURLSchemes {
-  [[self class] setSchemeRegistry:nullptr];
+  [self setSchemeRegistry:nullptr];
 }
 
 + (NSArray*)flakyTestNames {
@@ -443,9 +443,9 @@ GREY_STUB_CLASS_IN_APP_MAIN_QUEUE(ChromeTestCaseAppInterface)
   GREYAssertTrue([ChromeEarlGrey isCustomWebKitLoadedIfRequested],
                  @"Unable to load custom WebKit");
 
-  [[self class] startHTTPServer];
-  [[self class] enableMockAuthentication];
-  [[self class] registerURLSchemes];
+  [self startHTTPServer];
+  [self enableMockAuthentication];
+  [self registerURLSchemes];
 
   // Sometimes on start up there can be infobars (e.g. restore session), so
   // ensure the UI is in a clean state.
