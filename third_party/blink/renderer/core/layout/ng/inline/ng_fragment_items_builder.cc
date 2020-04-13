@@ -154,7 +154,7 @@ void NGFragmentItemsBuilder::AddItems(const NGFragmentItems& items,
                                       TextDirection direction,
                                       const PhysicalSize& container_size) {
   DCHECK(items_.IsEmpty());
-  items_.AppendVector(items.Items());
+  items_.Append(items.Items().data(), items.Size());
 
   // Convert offsets to logical. The logic is opposite to |ConvertToPhysical|.
   // This is needed because the container size may be different, in that case,

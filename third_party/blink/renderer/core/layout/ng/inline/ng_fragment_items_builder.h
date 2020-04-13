@@ -25,6 +25,8 @@ class CORE_EXPORT NGFragmentItemsBuilder {
  public:
   NGFragmentItemsBuilder(NGBoxFragmentBuilder* box_builder) {}
 
+  wtf_size_t Size() const { return items_.size(); }
+
   // Returns true if we have any floating descendants which need to be
   // traversed during the float paint phase.
   bool HasFloatingDescendantsForPaint() const {
