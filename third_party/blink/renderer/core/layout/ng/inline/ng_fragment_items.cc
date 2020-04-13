@@ -21,14 +21,14 @@ NGFragmentItems::NGFragmentItems(NGFragmentItemsBuilder* builder)
     : text_content_(std::move(builder->text_content_)),
       first_line_text_content_(std::move(builder->first_line_text_content_)),
       size_(builder->items_.size()) {
-  Vector<scoped_refptr<const NGFragmentItem>>& source_items = builder->items_;
+  NGFragmentItemsBuilder::ItemWithOffsetList& source_items = builder->items_;
   for (unsigned i = 0; i < size_; ++i) {
     // Call the move constructor to move without |AddRef|. Items in
     // |NGFragmentItemsBuilder| are not used after |this| was constructed.
-    DCHECK(source_items[i]);
+    DCHECK(source_items[i].item);
     new (&items_[i])
-        scoped_refptr<const NGFragmentItem>(std::move(source_items[i]));
-    DCHECK(!source_items[i]);  // Ensure the source was moved.
+        scoped_refptr<const NGFragmentItem>(std::move(source_items[i].item));
+    DCHECK(!source_items[i].item);  // Ensure the source was moved.
   }
 }
 
