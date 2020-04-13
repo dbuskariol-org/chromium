@@ -2167,7 +2167,8 @@ if (is_supported and ${info}.ShouldThrowOnError()) {
                                  ExceptionState::kIndexedDeletionContext,
                                  "${interface.identifier}");
   exception_state.ThrowTypeError("Index property deleter is not supported.");
-}"""))
+}
+"""))
 
     return func_decl, func_def
 
@@ -2227,7 +2228,8 @@ if (${info}.ShouldThrowOnError()) {
                                  ExceptionState::kIndexedSetterContext,
                                  "${interface.identifier}");
   exception_state.ThrowTypeError("Index property setter is not supported.");
-}"""))
+}
+"""))
     else:
         body.append(
             TextNode("""\
@@ -3667,6 +3669,190 @@ bindings::V8SetReturnValue(
 
 
 # ----------------------------------------------------------------------------
+# Callback functions of same origin interceptors
+# ----------------------------------------------------------------------------
+
+
+def make_same_origin_indexed_getter_callback(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    arg_decls = [
+        "uint32_t index",
+        "const v8::PropertyCallbackInfo<v8::Value>& info",
+    ]
+    arg_names = ["index", "info"]
+
+    func_def = _make_interceptor_callback_def(
+        cg_context, function_name, arg_decls, arg_names, None,
+        "SameOriginProperty_IndexedPropertyGetter")
+    body = func_def.body
+
+    body.append(
+        TextNode("""\
+if (${index} >= ${blink_receiver}->length()) {
+  return;
+}
+
+${class_name}::IndexedPropertyGetterCallback(${index}, ${info});
+"""))
+
+    return func_def
+
+
+def make_same_origin_indexed_setter_callback(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    arg_decls = [
+        "uint32_t index",
+        "v8::Local<v8::Value> v8_property_value",
+        "const v8::PropertyCallbackInfo<v8::Value>& info",
+    ]
+    arg_names = ["index", "v8_property_value", "info"]
+
+    func_def = _make_interceptor_callback_def(
+        cg_context, function_name, arg_decls, arg_names, None,
+        "SameOriginProperty_IndexedPropertySetter")
+    body = func_def.body
+
+    body.append(
+        TextNode("""\
+bindings::V8SetReturnValue(${info}, nullptr);
+if (${info}.ShouldThrowOnError()) {
+  ExceptionState exception_state(${info}.GetIsolate(),
+                                 ExceptionState::kIndexedSetterContext,
+                                 "${interface.identifier}");
+  exception_state.ThrowTypeError(
+      "Indexed property setter is not supported.");
+}
+"""))
+
+    return func_def
+
+
+def make_same_origin_indexed_deleter_callback(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    arg_decls = [
+        "uint32_t index",
+        "const v8::PropertyCallbackInfo<v8::Boolean>& info",
+    ]
+    arg_names = ["index", "info"]
+
+    func_def = _make_interceptor_callback_def(
+        cg_context, function_name, arg_decls, arg_names, None,
+        "SameOriginProperty_IndexedPropertyDeleter")
+    body = func_def.body
+
+    body.append(
+        TextNode("""\
+// 7.4.9 [[Delete]] ( P )
+// https://html.spec.whatwg.org/C/#windowproxy-delete
+const bool is_supported = ${index} < ${blink_receiver}->length();
+bindings::V8SetReturnValue(${info}, !is_supported);
+if (is_supported and ${info}.ShouldThrowOnError()) {
+  ExceptionState exception_state(${info}.GetIsolate(),
+                                 ExceptionState::kIndexedDeletionContext,
+                                 "${interface.identifier}");
+  exception_state.ThrowTypeError("Index property deleter is not supported.");
+}
+"""))
+
+    return func_def
+
+
+def make_same_origin_indexed_definer_callback(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    arg_decls = [
+        "uint32_t index",
+        "const v8::PropertyDescriptor& v8_property_desc",
+        "const v8::PropertyCallbackInfo<v8::Value>& info",
+    ]
+    arg_names = ["index", "v8_property_desc", "info"]
+
+    func_def = _make_interceptor_callback_def(
+        cg_context, function_name, arg_decls, arg_names, None,
+        "SameOriginProperty_IndexedPropertyDefiner")
+    body = func_def.body
+
+    body.append(
+        TextNode("""\
+// 7.4.6 [[DefineOwnProperty]] ( P, Desc )
+// https://html.spec.whatwg.org/C/#windowproxy-defineownproperty
+bindings::V8SetReturnValue(${info}, nullptr);
+if (${info}.ShouldThrowOnError()) {
+  ExceptionState exception_state(${info}.GetIsolate(),
+                                 ExceptionState::kIndexedSetterContext,
+                                 "${interface.identifier}");
+  exception_state.ThrowTypeError("Index property setter is not supported.");
+}
+"""))
+
+    return func_def
+
+
+def make_same_origin_indexed_descriptor_callback(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    arg_decls = [
+        "uint32_t index",
+        "const v8::PropertyCallbackInfo<v8::Value>& info",
+    ]
+    arg_names = ["index", "info"]
+
+    func_def = _make_interceptor_callback_def(
+        cg_context, function_name, arg_decls, arg_names, None,
+        "SameOriginProperty_IndexedPropertyDescriptor")
+    body = func_def.body
+
+    body.append(
+        TextNode("""\
+// 7.4.5 [[GetOwnProperty]] ( P )
+// https://html.spec.whatwg.org/C/#windowproxy-getownproperty
+SameOriginIndexedGetterCallback(${index}, ${info});
+v8::Local<v8::Value> v8_value = ${info}.GetReturnValue().Get();
+if (v8_value->IsUndefined()) {
+  return;  // Do not intercept.
+}
+
+v8::PropertyDescriptor desc(v8_value, /*writable=*/false);
+desc.set_enumerable(true);
+desc.set_configurable(true);
+bindings::V8SetReturnValue(${info}, desc);
+"""))
+
+    return func_def
+
+
+def make_same_origin_indexed_enumerator_callback(cg_context, function_name):
+    assert isinstance(cg_context, CodeGenContext)
+    assert isinstance(function_name, str)
+
+    arg_decls = ["const v8::PropertyCallbackInfo<v8::Array>& info"]
+    arg_names = ["info"]
+
+    func_def = _make_interceptor_callback_def(
+        cg_context, function_name, arg_decls, arg_names, None,
+        "SameOriginProperty_IndexedPropertyEnumerator")
+    body = func_def.body
+
+    body.append(
+        TextNode("""\
+uint32_t length = ${blink_receiver}->length();
+v8::Local<v8::Array> array =
+    bindings::EnumerateIndexedProperties(${isolate}, length);
+bindings::V8SetReturnValue(${info}, array);
+"""))
+
+    return func_def
+
+
+# ----------------------------------------------------------------------------
 # Installer functions
 # ----------------------------------------------------------------------------
 
@@ -4919,11 +5105,11 @@ def make_indexed_and_named_property_callbacks_and_install_node(cg_context):
 
     func_decls = ListNode()
     func_defs = ListNode()
-    install_nodes = SequenceNode()
+    install_node = SequenceNode()
 
     interface = cg_context.interface
     if not (interface and interface.indexed_and_named_properties):
-        return func_decls, func_defs, install_nodes
+        return func_decls, func_defs, install_node
     props = interface.indexed_and_named_properties
 
     def add_callback(func_decl, func_def):
@@ -4997,7 +5183,7 @@ interface.indexed_and_named_properties.named_getter.extended_attributes:
         {impl_bridge}::NamedPropertyDescriptorCallback,
         v8::Local<v8::Value>(),
         {property_handler_flags}));"""
-        install_nodes.append(
+        install_node.append(
             F(pattern,
               impl_bridge=impl_bridge,
               property_handler_flags=property_handler_flags))
@@ -5050,12 +5236,12 @@ ${instance_template}->SetHandler(
         {impl_bridge}::IndexedPropertyDescriptorCallback,
         v8::Local<v8::Value>(),
         {property_handler_flags}));"""
-        install_nodes.append(
+        install_node.append(
             F(pattern,
               impl_bridge=impl_bridge,
               property_handler_flags=property_handler_flags))
 
-    return func_decls, func_defs, install_nodes
+    return func_decls, func_defs, install_node
 
 
 def make_named_properties_object_callbacks_and_install_node(cg_context):
@@ -5067,13 +5253,13 @@ def make_named_properties_object_callbacks_and_install_node(cg_context):
     assert isinstance(cg_context, CodeGenContext)
 
     callback_defs = []
-    install_nodes = SequenceNode()
+    install_node = SequenceNode()
 
     interface = cg_context.interface
     if not (interface and interface.indexed_and_named_properties
             and interface.indexed_and_named_properties.named_getter
             and "Global" in interface.extended_attributes):
-        return callback_defs, install_nodes
+        return callback_defs, install_node
 
     cg_context = cg_context.make_copy(
         v8_callback_type=CodeGenContext.V8_OTHER_CALLBACK)
@@ -5131,17 +5317,16 @@ ${npo_prototype_template}->SetHandler(
         NamedPropsObjIndexedDescriptorCallback,
         v8::Local<v8::Value>(),
         v8::PropertyHandlerFlags::kNone));"""
-    install_nodes.append(TextNode(text))
+    install_node.append(TextNode(text))
 
-    return callback_defs, install_nodes
+    return callback_defs, install_node
 
 
 def make_cross_origin_property_callbacks_and_install_node(
         cg_context, attribute_entries, operation_entries):
     """
     Implements non-ordinary internal methods of WindowProxy and Location
-    objects for the cross origin case.  The same origin case is implemented
-    in |make_indexed_and_named_property_callbacks_and_install_nodes|.
+    objects.
     https://html.spec.whatwg.org/C/#the-windowproxy-exotic-object
     https://html.spec.whatwg.org/C/#the-location-interface
     """
@@ -5149,11 +5334,11 @@ def make_cross_origin_property_callbacks_and_install_node(
     assert isinstance(cg_context, CodeGenContext)
 
     callback_defs = []
-    install_nodes = SequenceNode()
+    install_node = SequenceNode()
 
     CROSS_ORIGIN_INTERFACES = ("Window", "Location")
     if cg_context.interface.identifier not in CROSS_ORIGIN_INTERFACES:
-        return callback_defs, install_nodes
+        return callback_defs, install_node
 
     entry_nodes = []
     for entry in attribute_entries:
@@ -5234,18 +5419,6 @@ def make_cross_origin_property_callbacks_and_install_node(
     func_defs = [
         make_cross_origin_access_check_callback(
             cg_context, "CrossOriginAccessCheckCallback"),
-        make_cross_origin_indexed_getter_callback(
-            cg_context, "CrossOriginIndexedGetterCallback"),
-        make_cross_origin_indexed_setter_callback(
-            cg_context, "CrossOriginIndexedSetterCallback"),
-        make_cross_origin_indexed_deleter_callback(
-            cg_context, "CrossOriginIndexedDeleterCallback"),
-        make_cross_origin_indexed_definer_callback(
-            cg_context, "CrossOriginIndexedDefinerCallback"),
-        make_cross_origin_indexed_descriptor_callback(
-            cg_context, "CrossOriginIndexedDescriptorCallback"),
-        make_cross_origin_indexed_enumerator_callback(
-            cg_context, "CrossOriginIndexedEnumeratorCallback"),
         make_cross_origin_named_getter_callback(
             cg_context, "CrossOriginNamedGetterCallback"),
         make_cross_origin_named_setter_callback(
@@ -5260,6 +5433,18 @@ def make_cross_origin_property_callbacks_and_install_node(
             cg_context, "CrossOriginNamedQueryCallback"),
         make_cross_origin_named_enumerator_callback(
             cg_context, "CrossOriginNamedEnumeratorCallback"),
+        make_cross_origin_indexed_getter_callback(
+            cg_context, "CrossOriginIndexedGetterCallback"),
+        make_cross_origin_indexed_setter_callback(
+            cg_context, "CrossOriginIndexedSetterCallback"),
+        make_cross_origin_indexed_deleter_callback(
+            cg_context, "CrossOriginIndexedDeleterCallback"),
+        make_cross_origin_indexed_definer_callback(
+            cg_context, "CrossOriginIndexedDefinerCallback"),
+        make_cross_origin_indexed_descriptor_callback(
+            cg_context, "CrossOriginIndexedDescriptorCallback"),
+        make_cross_origin_indexed_enumerator_callback(
+            cg_context, "CrossOriginIndexedEnumeratorCallback"),
     ]
     for func_def in func_defs:
         callback_defs.append(func_def)
@@ -5293,14 +5478,51 @@ ${instance_template}->SetAccessCheckCallbackAndHandler(
         ${isolate},
         const_cast<WrapperTypeInfo*>(${class_name}::GetWrapperTypeInfo())));
 """
-    install_nodes.append(TextNode(text))
-    install_nodes.accumulate(
+    install_node.append(TextNode(text))
+    install_node.accumulate(
         CodeGenAccumulator.require_include_headers([
             "third_party/blink/renderer/bindings/core/v8/binding_security.h",
             "third_party/blink/renderer/platform/bindings/v8_cross_origin_property_support.h",
         ]))
 
-    return callback_defs, install_nodes
+    if cg_context.interface.identifier != "Window":
+        return callback_defs, install_node
+
+    func_defs = [
+        make_same_origin_indexed_getter_callback(
+            cg_context, "SameOriginIndexedGetterCallback"),
+        make_same_origin_indexed_setter_callback(
+            cg_context, "SameOriginIndexedSetterCallback"),
+        make_same_origin_indexed_deleter_callback(
+            cg_context, "SameOriginIndexedDeleterCallback"),
+        make_same_origin_indexed_definer_callback(
+            cg_context, "SameOriginIndexedDefinerCallback"),
+        make_same_origin_indexed_descriptor_callback(
+            cg_context, "SameOriginIndexedDescriptorCallback"),
+        make_same_origin_indexed_enumerator_callback(
+            cg_context, "SameOriginIndexedEnumeratorCallback"),
+    ]
+    for func_def in func_defs:
+        callback_defs.append(func_def)
+        callback_defs.append(EmptyNode())
+
+    text = """\
+// Same origin interceptors
+${instance_template}->SetHandler(
+    v8::IndexedPropertyHandlerConfiguration(
+        SameOriginIndexedGetterCallback,
+        SameOriginIndexedSetterCallback,
+        nullptr,  // query
+        SameOriginIndexedDeleterCallback,
+        SameOriginIndexedEnumeratorCallback,
+        SameOriginIndexedDefinerCallback,
+        SameOriginIndexedDescriptorCallback,
+        v8::Local<v8::Value>(),
+        v8::PropertyHandlerFlags::kNone));
+"""
+    install_node.append(TextNode(text))
+
+    return callback_defs, install_node
 
 
 def make_cross_component_init(
