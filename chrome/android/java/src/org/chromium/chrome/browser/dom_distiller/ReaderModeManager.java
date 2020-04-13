@@ -31,7 +31,6 @@ import org.chromium.chrome.browser.tab.TabHidingType;
 import org.chromium.chrome.browser.tab.TabSelectionType;
 import org.chromium.chrome.browser.tab.TabUtils;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
-import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.components.dom_distiller.core.DomDistillerUrlUtils;
 import org.chromium.components.navigation_interception.InterceptNavigationDelegate;
@@ -86,8 +85,6 @@ public class ReaderModeManager extends TabModelSelectorTabObserver {
 
     // Hold on to the InterceptNavigationDelegate that the custom tab uses.
     InterceptNavigationDelegate mCustomTabNavigationDelegate;
-
-    private TabModelSelectorTabModelObserver mTabModelSelectorObserver;
 
     public ReaderModeManager(TabModelSelector selector, ChromeActivity activity) {
         super(selector);
