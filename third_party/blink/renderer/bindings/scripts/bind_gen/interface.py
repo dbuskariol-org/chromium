@@ -1945,11 +1945,24 @@ def make_indexed_property_getter_callback(cg_context, function_name):
     body.add_template_var("index", "index")
     body.add_template_var("info", "info")
     bind_callback_local_vars(body, cg_context)
-    bind_return_value(body, cg_context, overriding_args=["${index}"])
 
     body.extend([
         make_runtime_call_timer_scope(cg_context, "IndexedPropertyGetter"),
         EmptyNode(),
+    ])
+
+    if not cg_context.interface.indexed_and_named_properties.indexed_getter:
+        body.append(
+            TextNode("""\
+v8::Local<v8::String> property_name =
+    V8AtomicString(${isolate}, AtomicString::Number(${index}));
+${class_name}::NamedPropertyGetterCallback(property_name, ${info});\
+"""))
+        return func_decl, func_def
+
+    bind_return_value(body, cg_context, overriding_args=["${index}"])
+
+    body.extend([
         TextNode("""\
 // LegacyPlatformObjectGetOwnProperty
 // https://heycam.github.io/webidl/#LegacyPlatformObjectGetOwnProperty
@@ -1998,25 +2011,14 @@ def make_indexed_property_setter_callback(cg_context, function_name):
         EmptyNode(),
     ])
 
-    if "Global" in cg_context.interface.extended_attributes:
+    if not cg_context.interface.indexed_and_named_properties.indexed_getter:
         body.append(
             TextNode("""\
-// 7.4.8 [[Set]] ( P, V, Receiver )
-// https://html.spec.whatwg.org/C/#windowproxy-set
-// step 2. If ! IsPlatformObjectSameOrigin(W) is true, then return
-//   ? OrdinarySet(this, P, V, Receiver).
-//
-// 7.4.6 [[DefineOwnProperty]] ( P, Desc )
-// https://html.spec.whatwg.org/C/#windowproxy-defineownproperty
-// step 2.1. If P is an array index property name, return false.
-bindings::V8SetReturnValue(${info}, nullptr);
-if (${info}.ShouldThrowOnError()) {
-  ExceptionState exception_state(${info}.GetIsolate(),
-                                 ExceptionState::kIndexedSetterContext,
-                                 "${interface.identifier}");
-  exception_state.ThrowTypeError(
-      "Indexed property setter is not supported.");
-}"""))
+v8::Local<v8::String> property_name =
+    V8AtomicString(${isolate}, AtomicString::Number(${index}));
+${class_name}::NamedPropertySetterCallback(
+    property_name, ${v8_property_value}, ${info});\
+"""))
         return func_decl, func_def
 
     if not cg_context.indexed_property_setter:
@@ -2117,6 +2119,18 @@ def make_indexed_property_deleter_callback(cg_context, function_name):
     body.extend([
         make_runtime_call_timer_scope(cg_context, "IndexedPropertyDeleter"),
         EmptyNode(),
+    ])
+
+    if not cg_context.interface.indexed_and_named_properties.indexed_getter:
+        body.append(
+            TextNode("""\
+v8::Local<v8::String> property_name =
+    V8AtomicString(${isolate}, AtomicString::Number(${index}));
+${class_name}::NamedPropertyDeleterCallback(property_name, ${info});\
+"""))
+        return func_decl, func_def
+
+    body.append(
         TextNode("""\
 // 3.8.4. [[Delete]]
 // https://heycam.github.io/webidl/#legacy-platform-object-delete
@@ -2129,8 +2143,7 @@ if (is_supported and ${info}.ShouldThrowOnError()) {
                                  ExceptionState::kIndexedDeletionContext,
                                  "${interface.identifier}");
   exception_state.ThrowTypeError("Index property deleter is not supported.");
-}"""),
-    ])
+}"""))
 
     return func_decl, func_def
 
@@ -2169,20 +2182,14 @@ def make_indexed_property_definer_callback(cg_context, function_name):
         EmptyNode(),
     ])
 
-    if "Global" in cg_context.interface.extended_attributes:
+    if not cg_context.interface.indexed_and_named_properties.indexed_getter:
         body.append(
             TextNode("""\
-// 7.4.6 [[DefineOwnProperty]] ( P, Desc )
-// https://html.spec.whatwg.org/C/#windowproxy-defineownproperty
-// step 2.1. If P is an array index property name, return false.
-bindings::V8SetReturnValue(${info}, nullptr);
-if (${info}.ShouldThrowOnError()) {
-  ExceptionState exception_state(${info}.GetIsolate(),
-                                 ExceptionState::kIndexedSetterContext,
-                                 "${interface.identifier}");
-  exception_state.ThrowTypeError(
-      "Indexed property setter is not supported.");
-}"""))
+v8::Local<v8::String> property_name =
+    V8AtomicString(${isolate}, AtomicString::Number(${index}));
+${class_name}::NamedPropertyDefinerCallback(
+    property_name, ${v8_property_desc}, ${info});\
+"""))
         return func_decl, func_def
 
     body.append(
@@ -2220,8 +2227,7 @@ if (${info}.ShouldThrowOnError()) {
             TextNode("""\
 // step 1.3. Invoke the indexed property setter with P and Desc.[[Value]].
 ${class_name}::IndexedPropertySetterCallback(
-    ${index}, ${v8_property_desc}.value(), ${info});
-bindings::V8SetReturnValue(${info}, nullptr);\
+    ${index}, ${v8_property_desc}.value(), ${info});\
 """))
 
     return func_decl, func_def
@@ -2258,6 +2264,15 @@ def make_indexed_property_descriptor_callback(cg_context, function_name):
         make_runtime_call_timer_scope(cg_context, "IndexedPropertyDescriptor"),
         EmptyNode(),
     ])
+
+    if not cg_context.interface.indexed_and_named_properties.indexed_getter:
+        body.append(
+            TextNode("""\
+v8::Local<v8::String> property_name =
+    V8AtomicString(${isolate}, AtomicString::Number(${index}));
+${class_name}::NamedPropertyDescriptorCallback(property_name, ${info});\
+"""))
+        return func_decl, func_def
 
     pattern = """\
 // LegacyPlatformObjectGetOwnProperty
@@ -2297,6 +2312,9 @@ def make_indexed_property_enumerator_callback(cg_context, function_name):
     assert isinstance(cg_context, CodeGenContext)
     assert isinstance(function_name, str)
 
+    if not cg_context.interface.indexed_and_named_properties.indexed_getter:
+        return None, None
+
     arg_decls = ["const v8::PropertyCallbackInfo<v8::Array>& info"]
     return_type = "void"
 
@@ -2319,6 +2337,9 @@ def make_indexed_property_enumerator_callback(cg_context, function_name):
     body.extend([
         make_runtime_call_timer_scope(cg_context, "IndexedPropertyEnumerator"),
         EmptyNode(),
+    ])
+
+    body.append(
         TextNode("""\
 // 3.8.6. [[OwnPropertyKeys]]
 // https://heycam.github.io/webidl/#legacy-platform-object-ownpropertykeys
@@ -2329,8 +2350,7 @@ uint32_t length = ${blink_receiver}->length();
 v8::Local<v8::Array> array =
     bindings::EnumerateIndexedProperties(${isolate}, length);
 bindings::V8SetReturnValue(${info}, array);\
-"""),
-    ])
+"""))
 
     return func_decl, func_def
 
@@ -2452,13 +2472,6 @@ def make_named_property_setter_callback(cg_context, function_name):
         EmptyNode(),
     ])
 
-    if "Global" in cg_context.interface.extended_attributes:
-        body.append(
-            TextNode("""\
-// Do not intercept.  Fallback to the default behavior.\
-"""))
-        return func_decl, func_def
-
     if not cg_context.named_property_setter:
         body.append(
             TextNode("""\
@@ -2575,21 +2588,6 @@ def make_named_property_deleter_callback(cg_context, function_name):
         EmptyNode(),
     ])
 
-    if "Global" in cg_context.interface.extended_attributes:
-        body.append(
-            TextNode("""\
-// 3.6.4.3. [[Delete]]
-// https://heycam.github.io/webidl/#named-properties-object-delete
-// step 1. Return false.
-bindings::V8SetReturnValue(${info}, false);
-if (${info}.ShouldThrowOnError()) {
-  ExceptionState exception_state(${info}.GetIsolate(),
-                                 ExceptionState::kDeletionContext,
-                                 "${interface.identifier}");
-  exception_state.ThrowTypeError("Named property deleter is not supported.");
-}"""))
-        return func_decl, func_def
-
     props = cg_context.interface.indexed_and_named_properties
     if (not cg_context.named_property_deleter
             and "NotEnumerable" in props.named_getter.extended_attributes):
@@ -2704,21 +2702,6 @@ def make_named_property_definer_callback(cg_context, function_name):
         EmptyNode(),
     ])
 
-    if "Global" in cg_context.interface.extended_attributes:
-        body.append(
-            TextNode("""\
-// 3.6.4.2. [[DefineOwnProperty]]
-// https://heycam.github.io/webidl/#named-properties-object-defineownproperty
-// step 1. Return false.
-bindings::V8SetReturnValue(${info}, nullptr);
-if (${info}.ShouldThrowOnError()) {
-  ExceptionState exception_state(${info}.GetIsolate(),
-                                 ExceptionState::kSetterContext,
-                                 "${interface.identifier}");
-  exception_state.ThrowTypeError("Named property setter is not supported.");
-}"""))
-        return func_decl, func_def
-
     if not cg_context.interface.indexed_and_named_properties.named_setter:
         body.append(
             TextNode("""\
@@ -2803,29 +2786,7 @@ def make_named_property_descriptor_callback(cg_context, function_name):
         EmptyNode(),
     ])
 
-    if "Global" in cg_context.interface.extended_attributes:
-        pattern = """\
-// 3.6.4.1. [[GetOwnProperty]]
-// https://heycam.github.io/webidl/#named-properties-object-getownproperty
-// step 4. If the result of running the named property visibility algorithm
-//   with property name P and object object is true, then:
-// step 5. Return OrdinaryGetOwnProperty(O, P).
-${class_name}::NamedPropertyGetterCallback(${v8_property_name}, ${info});
-v8::Local<v8::Value> v8_value = ${info}.GetReturnValue().Get();
-if (v8_value->IsUndefined())
-  return;  // Do not intercept.  Fallback to OrdinaryGetOwnProperty.
-
-// step 7. If A implements an interface with the
-//   [LegacyUnenumerableNamedProperties] extended attribute, then set
-//   desc.[[Enumerable]] to false, otherwise set it to true.
-// step 8. Set desc.[[Writable]] to true and desc.[[Configurable]] to true.
-v8::PropertyDescriptor desc(v8_value, /*writable=*/true);
-desc.set_enumerable({cxx_enumerable});
-desc.set_configurable(true);
-bindings::V8SetReturnValue(${info}, desc);\
-"""
-    else:
-        pattern = """\
+    pattern = """\
 // LegacyPlatformObjectGetOwnProperty
 // https://heycam.github.io/webidl/#LegacyPlatformObjectGetOwnProperty
 // step 2.1.3. If operation was defined without an identifier, then set
@@ -4807,6 +4768,8 @@ def make_install_properties(cg_context, function_name, class_name,
 def make_indexed_and_named_property_callbacks_and_install_nodes(cg_context):
     assert isinstance(cg_context, CodeGenContext)
 
+    F = lambda *args, **kwargs: TextNode(_format(*args, **kwargs))
+
     func_decls = ListNode()
     func_defs = ListNode()
     install_nodes = SequenceNode()
@@ -4829,7 +4792,7 @@ def make_indexed_and_named_property_callbacks_and_install_nodes(cg_context):
     cg_context = cg_context.make_copy(
         v8_callback_type=CodeGenContext.V8_OTHER_CALLBACK)
 
-    if props.own_indexed_getter or props.own_indexed_setter:
+    if props.own_indexed_getter or props.own_named_getter:
         add_callback(*make_indexed_property_getter_callback(
             cg_context.make_copy(indexed_property_getter=props.indexed_getter),
             "IndexedPropertyGetterCallback"))
@@ -4845,15 +4808,18 @@ def make_indexed_and_named_property_callbacks_and_install_nodes(cg_context):
         add_callback(*make_indexed_property_enumerator_callback(
             cg_context, "IndexedPropertyEnumeratorCallback"))
 
-    if props.has_indexed_properties:
+    if props.indexed_getter or props.named_getter:
         impl_bridge = v8_bridge_class_name(
             most_derived_interface(
-                props.indexed_getter.owner,
+                props.indexed_getter and props.indexed_getter.owner,
                 props.indexed_setter and props.indexed_setter.owner,
+                props.named_getter and props.named_getter.owner,
+                props.named_setter and props.named_setter.owner,
+                props.named_deleter and props.named_deleter.owner,
             ))
         flags = []
-        if (props.indexed_getter.extended_attributes.value_of("Affects") ==
-                "Nothing"):
+        if (props.indexed_getter and props.indexed_getter.extended_attributes.
+                value_of("Affects") == "Nothing"):
             flags.append("v8::PropertyHandlerFlags::kHasNoSideEffect")
         else:
             flags.append("v8::PropertyHandlerFlags::kNone")
@@ -4866,20 +4832,21 @@ ${instance_template}->SetHandler(
         {impl_bridge}::IndexedPropertySetterCallback,
         nullptr,  // query
         {impl_bridge}::IndexedPropertyDeleterCallback,
+% if interface.indexed_and_named_properties.indexed_getter:
         {impl_bridge}::IndexedPropertyEnumeratorCallback,
+% else:
+        nullptr,  // enumerator
+% endif
         {impl_bridge}::IndexedPropertyDefinerCallback,
         {impl_bridge}::IndexedPropertyDescriptorCallback,
         v8::Local<v8::Value>(),
         {property_handler_flags}));"""
         install_nodes.append(
-            TextNode(
-                _format(
-                    pattern,
-                    impl_bridge=impl_bridge,
-                    property_handler_flags=property_handler_flags)))
+            F(pattern,
+              impl_bridge=impl_bridge,
+              property_handler_flags=property_handler_flags))
 
-    if (props.own_named_getter or props.own_named_setter
-            or props.own_named_deleter):
+    if props.own_named_getter:
         add_callback(*make_named_property_getter_callback(
             cg_context.make_copy(named_property_getter=props.named_getter),
             "NamedPropertyGetterCallback"))
@@ -4898,7 +4865,7 @@ ${instance_template}->SetHandler(
         add_callback(*make_named_property_enumerator_callback(
             cg_context, "NamedPropertyEnumeratorCallback"))
 
-    if props.has_named_properties:
+    if props.named_getter:
         impl_bridge = v8_bridge_class_name(
             most_derived_interface(
                 props.named_getter.owner,
@@ -4943,11 +4910,9 @@ interface.indexed_and_named_properties.named_getter.extended_attributes:
         v8::Local<v8::Value>(),
         {property_handler_flags}));"""
         install_nodes.append(
-            TextNode(
-                _format(
-                    pattern,
-                    impl_bridge=impl_bridge,
-                    property_handler_flags=property_handler_flags)))
+            F(pattern,
+              impl_bridge=impl_bridge,
+              property_handler_flags=property_handler_flags))
 
     return func_decls, func_defs, install_nodes
 
