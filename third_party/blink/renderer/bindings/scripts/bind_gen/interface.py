@@ -762,12 +762,14 @@ def make_check_constructor_call(cg_context):
                    "ExceptionMessages::ConstructorNotCallableAsFunction("
                    "${class_like_name}));\n"
                    "return;")),
-        CxxLikelyIfNode(
-            cond=("ConstructorMode::Current(${isolate}) == "
-                  "ConstructorMode::kWrapExistingObject"),
-            body=T("bindings::V8SetReturnValue(${info}, ${v8_receiver});\n"
-                   "return;")),
     ])
+    if not cg_context.is_named_constructor:
+        node.append(
+            CxxLikelyIfNode(
+                cond=("ConstructorMode::Current(${isolate}) == "
+                      "ConstructorMode::kWrapExistingObject"),
+                body=T("bindings::V8SetReturnValue(${info}, ${v8_receiver});\n"
+                       "return;")))
     node.accumulate(
         CodeGenAccumulator.require_include_headers([
             "third_party/blink/renderer/platform/bindings/v8_object_constructor.h",
@@ -1802,9 +1804,11 @@ static const V8PrivateProperty::SymbolKey kPrivatePropertyNamedConstructor;
 auto&& v8_private_named_constructor =
     V8PrivateProperty::GetSymbol(${isolate}, kPrivatePropertyNamedConstructor);
 v8::Local<v8::Value> v8_named_constructor;
-if (v8_private_named_constructor.GetOrUndefined(${v8_receiver})
-        .ToLocal(&v8_named_constructor) &&
-    !v8_named_constructor->IsUndefined()) {
+if (!v8_private_named_constructor.GetOrUndefined(${v8_receiver})
+         .ToLocal(&v8_named_constructor)) {
+  return;
+}
+if (!v8_named_constructor->IsUndefined()) {
   bindings::V8SetReturnValue(${info}, v8_named_constructor);
   return;
 }
