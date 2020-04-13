@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <script>
 'use strict';
 
 test(test => {
   event = document.createEvent('DeviceOrientationEvent');
+  assert_equals(event.type, "");
   assert_equals(event.alpha, null);
   assert_equals(event.beta, null);
   assert_equals(event.gamma, null);
@@ -15,7 +14,8 @@ test(test => {
 }, 'Tests creating a DeviceOrientationEvent.');
 
 test(test => {
-  event = new DeviceOrientationEvent('', {alpha: 0, beta: 1, gamma: 2, absolute: false});
+  event = new DeviceOrientationEvent('foo', {alpha: 0, beta: 1, gamma: 2, absolute: false});
+  assert_equals(event.type, "foo");
   assert_equals(event.alpha, 0);
   assert_equals(event.beta, 1);
   assert_equals(event.gamma, 2);
@@ -71,5 +71,3 @@ test(test => {
   assert_false(event.absolute);
 }, 'Tests all values are null.');
 </script>
-</body>
-</html>

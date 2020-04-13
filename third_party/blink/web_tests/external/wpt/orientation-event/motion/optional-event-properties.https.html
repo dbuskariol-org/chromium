@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <script>
 'use strict';
 
 function ObjectThrowingException() {};
-ObjectThrowingException.prototype.valueOf = function() { throw new Error('valueOf threw exception'); }
-ObjectThrowingException.prototype.__defineGetter__("x", function() { throw new Error('x getter exception'); });
-ObjectThrowingException.prototype.__defineGetter__("alpha", function() { throw new Error('alpha getter exception'); });
-var objectThrowingException = new ObjectThrowingException();
+ObjectThrowingException.prototype.valueOf = () => { throw new Error('valueOf threw exception'); }
+ObjectThrowingException.prototype.__defineGetter__("x", () => { throw new Error('x getter exception'); });
+ObjectThrowingException.prototype.__defineGetter__("alpha", () => { throw new Error('alpha getter exception'); });
+const objectThrowingException = new ObjectThrowingException();
 
 test(test => {
   event = document.createEvent('DeviceMotionEvent');
+  assert_equals(event.type, "");
   assert_equals(event.acceleration, null);
   assert_equals(event.accelerationIncludingGravity, null);
   assert_equals(event.rotationRate, null);
@@ -21,10 +20,11 @@ test(test => {
 }, 'Tests creating a DeviceMotionEvent.');
 
 test(test => {
-  event = new DeviceMotionEvent('', {acceleration: {x: 0, y: 1, z: 2},
+  event = new DeviceMotionEvent('foo', {acceleration: {x: 0, y: 1, z: 2},
                                      accelerationIncludingGravity: {x: 3, y: 4, z: 5},
                                      rotationRate: {alpha: 6, beta: 7, gamma: 8},
                                      interval: 9});
+  assert_equals(event.type, "foo");
   assert_equals(event.acceleration.x, 0);
   assert_equals(event.acceleration.y, 1);
   assert_equals(event.acceleration.z, 2);
@@ -255,5 +255,3 @@ test(test => {
   assert_equals(event.interval, 0);
 }, 'Tests some fields are undefined.');
 </script>
-</body>
-</html>

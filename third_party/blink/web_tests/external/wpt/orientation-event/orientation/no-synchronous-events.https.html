@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../http/tests/resources/sensor-helpers.js"></script>
-<script src="../resources/device-orientation-helpers.js"></script>
-<script src="file:///gen/layout_test_data/mojo/public/js/mojo_bindings.js"></script>
-<script src="file:///gen/services/device/public/mojom/sensor_provider.mojom.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/testdriver.js"></script>
+<script src="/resources/testdriver-vendor.js"></script>
+<script src="../resources/orientation-event-helpers.js"></script>
 <script>
 'use strict';
 
 sensor_test(async (t, sensorProvider) => {
-  var orientationData = generateOrientationData(1.1, 2.2, 3.3, false);
+  const orientationData = generateOrientationData(1.1, 2.2, 3.3, false);
 
   let setMockDataPromise = setMockOrientationData(sensorProvider, orientationData);
   // Add an empty listener to make sure the event pump is running and the mock
@@ -28,5 +25,3 @@ sensor_test(async (t, sensorProvider) => {
   });
 }, 'Tests that events are never fired synchronously from a call to window.addEventListener().');
 </script>
-</body>
-</html>

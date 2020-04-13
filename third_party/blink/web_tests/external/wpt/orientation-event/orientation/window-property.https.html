@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <script>
 'use strict';
 
 function hasProperty(orientationProperty)
 {
-  for (var property in window) {
+  for (let property in window) {
     if (property == orientationProperty)
       return true;
   }
@@ -31,5 +29,3 @@ test(test => {
   assert_true(window.hasOwnProperty('ondeviceorientationabsolute'));
 }, 'Tests that the window.DeviceOrientationEvent and window.ondeviceorientation and window.ondeviceorientationabsolute properties are present.');
 </script>
-</body>
-</html>

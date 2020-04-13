@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <script>
 'use strict';
 
 test(test => {
-  var event = document.createEvent('DeviceOrientationEvent');
-  var newEvent = new CustomEvent("deviceorientation", {
+  const event = document.createEvent('DeviceOrientationEvent');
+  const newEvent = new CustomEvent("deviceorientation", {
       bubbles: false, cancelable: false,
       alpha: 1.0,
       beta: 2.0,
@@ -40,5 +38,3 @@ test(test => {
   assert_false(newEvent.cancelable);
 }, 'Tests that document.createEvent() works with DeviceOrientationEvent.');
 </script>
-</body>
-</html>

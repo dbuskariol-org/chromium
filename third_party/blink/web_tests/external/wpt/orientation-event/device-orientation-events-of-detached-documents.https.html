@@ -2,13 +2,15 @@
 <title>Device sensor event listeners for `window` of detached documents.</title>
 <script src="/resources/testharness.js"></script>
 <script src="/resources/testharnessreport.js"></script>
-<body></body>
+<script src="/resources/testdriver.js"></script>
+<script src="/resources/testdriver-vendor.js"></script>
+<script src="resources/orientation-event-helpers.js"></script>
 <script>
 
-promise_test(async t => {
+sensor_test(async t => {
   const childFrame = document.createElement('iframe');
-  childFrame.src = "/resources/dummy.html";
-  setTimeout(() => document.body.append(childFrame));
+  childFrame.src = "/common/blank.html";
+  document.body.append(childFrame);
 
   const childLoadWatcher = new EventWatcher(t, childFrame, ["load"]);
   await childLoadWatcher.wait_for("load");

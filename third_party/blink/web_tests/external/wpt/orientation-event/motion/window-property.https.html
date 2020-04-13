@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <script>
 'use strict';
 
 function hasDeviceMotionEventProperty()
 {
-  for (var property in window) {
+  for (let property in window) {
     if (property == "DeviceMotionEvent")
       return true;
   }
@@ -17,7 +15,7 @@ function hasDeviceMotionEventProperty()
 
 function hasOnDeviceMotionProperty()
 {
-  for (var property in window) {
+  for (let property in window) {
     if (property == "ondevicemotion")
       return true;
   }
@@ -36,5 +34,3 @@ test(test => {
   assert_true(window.hasOwnProperty('ondevicemotion'));
 }, 'Tests that the window.DeviceMotionEvent and window.ondevicemotion properties are present.');
 </script>
-</body>
-</html>

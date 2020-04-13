@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html>
-<body>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <script>
 'use strict';
 
 test(test => {
-  var event = document.createEvent('DeviceMotionEvent');
-  var newEvent = new CustomEvent("devicemotion", {
+  const event = document.createEvent('DeviceMotionEvent');
+  const newEvent = new CustomEvent("devicemotion", {
       bubbles: false, cancelable: false,
       acceleration: {x:1.5,y:2.5,z:3.5},
       accelerationIncludingGravity: {x:4.5,y:5.5,z:6.5},
@@ -41,5 +39,3 @@ test(test => {
   assert_equals(typeof event.interval, 'number');
 }, 'Tests that document.createEvent() works with DeviceMotionEvent.');
 </script>
-</body>
-</html>
