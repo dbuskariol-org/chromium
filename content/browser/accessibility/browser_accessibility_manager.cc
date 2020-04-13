@@ -876,13 +876,13 @@ void BrowserAccessibilityManager::ClearAccessibilityFocus(
   delegate_->AccessibilityPerformAction(action_data);
 }
 
-void BrowserAccessibilityManager::HitTest(const gfx::Point& page_point) const {
+void BrowserAccessibilityManager::HitTest(const gfx::Point& frame_point) const {
   if (!delegate_)
     return;
 
   ui::AXActionData action_data;
   action_data.action = ax::mojom::Action::kHitTest;
-  action_data.target_point = page_point;
+  action_data.target_point = frame_point;
   action_data.hit_test_event_to_fire = ax::mojom::Event::kHover;
   delegate_->AccessibilityPerformAction(action_data);
 }
@@ -1479,6 +1479,7 @@ BrowserAccessibility* BrowserAccessibilityManager::CachingAsyncHitTest(
   if (delegate_) {
     // This triggers an asynchronous request to compute the true object that's
     // under the point.
+    // TODO(crbug.com/2140198): this should take page scale factor into account
     HitTest(blink_screen_point - screen_view_bounds.OffsetFromOrigin());
 
     // Unfortunately we still have to return an answer synchronously because
