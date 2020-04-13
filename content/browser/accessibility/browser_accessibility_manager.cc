@@ -246,7 +246,6 @@ void BrowserAccessibilityManager::FireFocusEventsIfNeeded() {
   if (!focus)
     return;
 
-  DCHECK(focus->instance_active());
   // Don't fire focus events if the window itself doesn't have focus.
   // Bypass this check for some tests.
   if (!never_suppress_or_delay_events_for_testing_ &&
@@ -1388,12 +1387,8 @@ ui::AXNode* BrowserAccessibilityManager::GetParentNodeFromParentTreeAsAXNode()
 BrowserAccessibilityManager* BrowserAccessibilityManager::GetRootManager()
     const {
   BrowserAccessibility* parent = GetParentNodeFromParentTree();
-  if (parent) {
-    DCHECK(parent->instance_active())
-        << "The BrowserAccessibility object in the parent tree that is hosting "
-           "this tree should not have been destroyed before its child tree.";
+  if (parent)
     return parent->manager() ? parent->manager()->GetRootManager() : nullptr;
-  }
 
   if (IsRootTree())
     return const_cast<BrowserAccessibilityManager*>(this);
