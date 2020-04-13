@@ -4151,6 +4151,8 @@ def _make_property_entries_and_callback_defs(
                 for_world=world,
                 v8_callback_type=CodeGenContext.
                 V8_ACCESSOR_NAME_GETTER_CALLBACK)
+        elif "NoInterfaceObject" in exposed_construct.extended_attributes:
+            return  # Skip due to [NoInterfaceObject].
         else:
             cgc = cg_context.make_copy(
                 exposed_construct=exposed_construct,
@@ -4259,33 +4261,69 @@ def _make_property_entries_and_callback_defs(
     return callback_def_nodes
 
 
-def _make_install_unscopables(cg_context):
+def _make_install_prototype_object(cg_context):
     assert isinstance(cg_context, CodeGenContext)
+
+    nodes = []
+
+    class_like = cg_context.class_like
 
     unscopables = []
     is_unscopable = lambda member: "Unscopable" in member.extended_attributes
-    unscopables.extend(filter(is_unscopable, cg_context.class_like.attributes))
-    unscopables.extend(filter(is_unscopable, cg_context.class_like.operations))
-
-    if not unscopables:
-        return None
-
-    return SequenceNode([
-        ListNode([
-            TextNode("// [Unscopable]"),
-            TextNode("static constexpr const char* "
-                     "kUnscopablePropertyNames[] = {"),
+    unscopables.extend(filter(is_unscopable, class_like.attributes))
+    unscopables.extend(filter(is_unscopable, class_like.operations))
+    if unscopables:
+        nodes.extend([
+            TextNode("""\
+// [Unscopable]
+// 3.6.3. Interface prototype object
+// https://heycam.github.io/webidl/#interface-prototype-object
+// step 8. If interface has any member declared with the [Unscopable]
+//   extended attribute, then:\
+"""),
             ListNode([
-                TextNode("\"{}\", ".format(member.identifier))
-                for member in unscopables
+                TextNode("static constexpr const char* "
+                         "kUnscopablePropertyNames[] = {"),
+                ListNode([
+                    TextNode("\"{}\", ".format(member.identifier))
+                    for member in unscopables
+                ]),
+                TextNode("};"),
             ]),
-            TextNode("};"),
-        ]),
-        TextNode("bindings::InstallUnscopablePropertyNames"
-                 "(${isolate}, ${v8_context}, ${prototype_object}, "
-                 "kUnscopablePropertyNames);"),
-        EmptyNode(),
-    ])
+            TextNode("""\
+bindings::InstallUnscopablePropertyNames(
+    ${isolate}, ${v8_context}, ${prototype_object}, kUnscopablePropertyNames);
+"""),
+        ])
+
+    if "NoInterfaceObject" in class_like.extended_attributes:
+        nodes.append(
+            TextNode("""\
+// [NoInterfaceObject]
+// 3.6.3. Interface prototype object
+// https://heycam.github.io/webidl/#interface-prototype-object
+// step 12. If the [NoInterfaceObject] extended attribute was not specified
+//   on interface, then:
+//
+// V8 defines "constructor" property on the prototype object by default.
+${prototype_object}->Delete(
+    ${v8_context}, V8AtomicString(${isolate}, "constructor")).ToChecked();
+"""))
+
+    if ("Global" in class_like.extended_attributes
+            and class_like.indexed_and_named_properties
+            and class_like.indexed_and_named_properties.has_named_properties):
+        nodes.append(
+            TextNode("""\
+// https://heycam.github.io/webidl/#named-properties-object
+// V8 defines "constructor" property on the prototype object by default.
+// Named properties object is currently implemented as a prototype object
+// (implemented with v8::FunctionTemplate::PrototypeTemplate()).
+${prototype_object}->GetPrototype().As<v8::Object>()->Delete(
+    ${v8_context}, V8AtomicString(${isolate}, "constructor")).ToChecked();
+"""))
+
+    return SequenceNode(nodes) if nodes else None
 
 
 def make_install_interface_template(
@@ -4560,12 +4598,13 @@ def make_install_properties(cg_context, function_name, class_name,
         for entry in operation_entries)
 
     if is_context_dependent:
-        install_unscopables_node = _make_install_unscopables(cg_context)
+        install_prototype_object_node = _make_install_prototype_object(
+            cg_context)
     else:
-        install_unscopables_node = None
+        install_prototype_object_node = None
 
     if not (attribute_entries or constant_entries or exposed_construct_entries
-            or operation_entries or install_unscopables_node):
+            or operation_entries or install_prototype_object_node):
         return None, None, None
 
     if is_context_dependent:
@@ -4648,7 +4687,7 @@ def make_install_properties(cg_context, function_name, class_name,
         })
     bind_installer_local_vars(body, cg_context)
 
-    body.append(install_unscopables_node)
+    body.append(install_prototype_object_node)
 
     def group_by_condition(entries):
         unconditional_entries = []
