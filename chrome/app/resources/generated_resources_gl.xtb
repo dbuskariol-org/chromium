@@ -3838,6 +3838,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="6120205520491252677">Fixar esta páxina á pantalla de inicio...</translation>
 <translation id="6122081475643980456">Estase controlando a túa conexión a Internet</translation>
 <translation id="6122095009389448667">Seguir impedindo que este sitio vexa o contido do portapapeis</translation>
+<translation id="6122831415929794347">Queres desactivar a función Navegación segura?</translation>
 <translation id="6122875415561139701">Non se permite a operación de escritura no dispositivo "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">As seguintes extensións dependen desta extensión:</translation>
 <translation id="6124698108608891449">Este sitio necesita máis permisos.</translation>
@@ -4042,6 +4043,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="6408118934673775994">Ler e cambiar os teus datos en <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> e <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Ficheiros de imaxe</translation>
 <translation id="6410328738210026208">Cambiar canle e Powerwash</translation>
+<translation id="6410390304316730527">A función Navegación segura protéxete contra os piratas informáticos que poden enganarte para que realices accións perigosas, como instalar un software malicioso ou revelar información persoal (por exemplo, contrasinais, números de teléfono ou tarxetas de crédito). Se a desactivas, ten coidado ao consultar sitios descoñecidos ou con mala reputación.</translation>
 <translation id="6410668567036790476">Engadir motor de busca</translation>
 <translation id="641081527798843608">Coincidencia do asunto</translation>
 <translation id="6412673304250309937">Comproba enderezos URL cunha lista de sitios non seguros almacenada en Chrome. Se un sitio tenta roubarche o contrasinal ou se descargas un ficheiro daniño, Chrome tamén pode comprobar os enderezos URL, entre os que se inclúen fragmentos de contido das páxinas, a través da función Navegación segura.</translation>

@@ -3837,6 +3837,7 @@ Ochiq eksponenta (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bit):
 <translation id="6120205520491252677">Ushbu sahifani bosh ekranga qadab qo‘yish...</translation>
 <translation id="6122081475643980456">Internet aloqangiz nazorat qilinmoqda</translation>
 <translation id="6122095009389448667">Saytning klipbordga ruxsati taqiqlanaversin</translation>
+<translation id="6122831415929794347">Saytlarni xavfsiz kezish faolsizlantirilsinmi?</translation>
 <translation id="6122875415561139701">“<ph name="DEVICE_NAME" />” qurilmasida ma’lumot yozish taqiqlangan.</translation>
 <translation id="6124650939968185064">Bu kengaytma quyidagi kengaytmalar bilan bog‘liq:</translation>
 <translation id="6124698108608891449">Bu saytga yana boshqa ruxsatlar kerak.</translation>
@@ -4041,6 +4042,7 @@ Ochiq eksponenta (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bit):
 <translation id="6408118934673775994"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> va <ph name="WEBSITE_3" /> saytlaridan ma’lumotlarni ko‘rish va o‘zgartirish</translation>
 <translation id="6410257289063177456">Tasvir fayllar</translation>
 <translation id="6410328738210026208">Boshqa kanal tanlash va Powerwash amalini ishga tushirish</translation>
+<translation id="6410390304316730527">Saytlarni xavfsiz kezish parollar, telefon raqamlari yoki kredit kartalari kabi shaxsiy maʼlumotlaringizni oʻgʻirlash yoki zararli dasturlarni oʻrnatish orqali xavfli ishlarni amalga oshirishga undovchi shubhali kimsalardan himoyalaydi. Agar bu funksiyani faolsizlantirsangiz, notanish va shubhali saytlarga kirishda ehtiyot boʻling.</translation>
 <translation id="6410668567036790476">Qidiruv tizimi qo‘shish</translation>
 <translation id="641081527798843608">Mavzu mosligi</translation>
 <translation id="6412673304250309937">URL manzillar Chrome bilgan zararli saytlar roʻyxati orqali tekshiriladi. Agar sayt parolingizni oʻgirlashga urinsa yoki zararli fayl yuklab olsangiz, Chrome ham URL manzillar kabi sahifa elementlarini Saytlarni xavfsiz kezish tizimiga yuborishi mumkin.</translation>

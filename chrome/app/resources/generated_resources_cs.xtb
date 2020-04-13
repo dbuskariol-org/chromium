@@ -3837,6 +3837,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="6120205520491252677">Připnout tuto stránku na úvodní obrazovku...</translation>
 <translation id="6122081475643980456">Vaše připojení k internetu je ovládáno</translation>
 <translation id="6122095009389448667">Tomuto webu přístup ke schránce i nadále blokovat</translation>
+<translation id="6122831415929794347">Vypnout Bezpečné prohlížení?</translation>
 <translation id="6122875415561139701">Operace zápisu v zařízení <ph name="DEVICE_NAME" /> není povolena.</translation>
 <translation id="6124650939968185064">Na tomto rozšíření závisejí následující rozšíření:</translation>
 <translation id="6124698108608891449">Web potřebuje další oprávnění.</translation>
@@ -4041,6 +4042,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="6408118934673775994">Čtení a úprava dat na webu <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> a <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Obrázkové soubory</translation>
 <translation id="6410328738210026208">Změnit kanál a použít funkci Powerwash</translation>
+<translation id="6410390304316730527">Bezpečné prohlížení vás chrání před útočníky, kteří se vás snaží přimět k nebezpečné akci, jako je instalace škodlivého softwaru nebo vyzrazení osobních údajů (například hesel, telefonních čísel nebo platebních karet). Pokud ji vypnete, budete si muset dávat pozor na neznámé a podezřelé weby.</translation>
 <translation id="6410668567036790476">Přidat vyhledávač</translation>
 <translation id="641081527798843608">Shoda předmětu</translation>
 <translation id="6412673304250309937">Kontroluje adresy URL oproti seznamu nebezpečných webů uloženému v Chromu. Pokud se web pokusí odcizit vám heslo nebo když stáhnete škodlivý soubor, může Chrome Bezpečnému prohlížení odeslat také adresy URL, včetně částí obsahu stránky.</translation>

@@ -3839,6 +3839,7 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="6120205520491252677">Przypnij tę stronę do ekranu startowego...</translation>
 <translation id="6122081475643980456">Twoje połączenie internetowe jest kontrolowane</translation>
 <translation id="6122095009389448667">Nadal blokuj tej stronie dostęp do schowka</translation>
+<translation id="6122831415929794347">Wyłączyć Bezpieczne przeglądanie?</translation>
 <translation id="6122875415561139701">Nie jest dozwolona operacja zapisu na: „<ph name="DEVICE_NAME" />”.</translation>
 <translation id="6124650939968185064">To rozszerzenie jest wymagane przez następujące rozszerzenia:</translation>
 <translation id="6124698108608891449">Ta strona potrzebuje większych uprawnień.</translation>
@@ -4043,6 +4044,7 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="6408118934673775994">Odczytywanie i modyfikowanie Twoich danych na: <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> i <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Pliki graficzne</translation>
 <translation id="6410328738210026208">Zmień kanał i wykonaj Powerwash</translation>
+<translation id="6410390304316730527">Bezpieczne przeglądanie chroni Cię przed osobami przeprowadzającymi ataki, które mogą podstępem nakłonić Cię do wykonania niebezpiecznych czynności, takich jak zainstalowanie oprogramowania czy ujawnienie danych osobowych (na przykład haseł, numerów telefonów lub danych kart kredytowych). Gdy wyłączasz tę funkcję, zachowaj ostrożność, przeglądając nieznane lub cieszące się złą sławą strony.</translation>
 <translation id="6410668567036790476">Dodaj wyszukiwarkę</translation>
 <translation id="641081527798843608">Dopasowanie do tematu</translation>
 <translation id="6412673304250309937">Sprawdza, czy URL jest na liście potencjalnie niebezpiecznych stron zapisanej w Chrome. Jeśli strona próbuje wykraść Twoje hasło lub pobierasz szkodliwy plik, Chrome może też wysłać URL wraz z fragmentami zawartości strony do usługi Bezpieczne przeglądanie.</translation>
@@ -6017,7 +6019,7 @@ Przechowuj plik klucza w bezpiecznym miejscu. Będzie on potrzebny do utworzenia
 <translation id="9003940392834790328">Sieć <ph name="NETWORK_INDEX" /> z <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, <ph name="CONNECTION_STATUS" />, siła sygnału: <ph name="SIGNAL_STRENGTH" />%, zarządzana przez administratora, szczegóły</translation>
 <translation id="9004952710076978168">Odebrano powiadomienie dla nieznanej drukarki.</translation>
 <translation id="9008201768610948239">Ignoruj</translation>
-<translation id="9009369504041480176">Przesyłanie (<ph name="PROGRESS_PERCENT" />%)...</translation>
+<translation id="9009369504041480176">Przesyłam (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">Zawsze pokazuj ikonę</translation>
 <translation id="9013707997379828817">Administrator przywrócił wcześniejszą wersję oprogramowania na tym urządzeniu. Zapisz ważne pliki, a następnie uruchom ponownie urządzenie. Wszystkie dane zostaną usunięte z pamięci.</translation>
 <translation id="901668144954885282">Tworzenie kopii zapasowej na Dysku Google</translation>

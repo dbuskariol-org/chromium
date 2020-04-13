@@ -3839,6 +3839,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="6120205520491252677">Zakači ovu stranicu za Početni ekran…</translation>
 <translation id="6122081475643980456">Vašom internetskom vezom se upravlja</translation>
 <translation id="6122095009389448667">Nastavi blokirati uvid u međumemoriju ovoj web lokaciji</translation>
+<translation id="6122831415929794347">Isključiti Sigurno pregledanje?</translation>
 <translation id="6122875415561139701">Pisanje nije dozvoljeno na uređaju: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">Sljedeće ekstenzije ovise o ovoj ekstenziji:</translation>
 <translation id="6124698108608891449">Ovoj web lokaciji je potrebno više odobrenja.</translation>
@@ -4043,6 +4044,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="6408118934673775994">Pregled i izmjena podataka na web lokacijama <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> i <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Fajlovi slike</translation>
 <translation id="6410328738210026208">Promijeni kanal i pokreni Powerwash</translation>
+<translation id="6410390304316730527">Sigurno pregledanje vas štiti od napadača koji vas mogu prevarom navesti da uradite nešto opasno, naprimjer, da instalirate zlonamjerni softver ili otkrijete lične informacije kao što su lozinke i brojevi telefona ili kreditnih kartica. Ako ga isključite, budite oprezni prilikom pregledanja nepoznatih ili sumnjivih web lokacija.</translation>
 <translation id="6410668567036790476">Dodajte pretraživač</translation>
 <translation id="641081527798843608">Podudaranje predmeta</translation>
 <translation id="6412673304250309937">Provjerava URL-ove s listom nesigurnih web lokacija pohranjenih u Chromeu. Ako web lokacija pokuša ukrasti vašu lozinku, ili kada preuzimate štetan fajl, Chrome može slati i URL-ove, uključujući dijelove sadržaja stranice, u Sigurno pregledanje.</translation>

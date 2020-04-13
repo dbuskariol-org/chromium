@@ -3840,6 +3840,7 @@ Não exponha nenhuma informação confidencial.</translation>
 <translation id="6120205520491252677">Fixar esta página na tela inicial...</translation>
 <translation id="6122081475643980456">Sua conexão com a Internet está sendo controlada</translation>
 <translation id="6122095009389448667">Continuar impedindo que esse site veja a área de transferência</translation>
+<translation id="6122831415929794347">Desativar "Navegação segura"?</translation>
 <translation id="6122875415561139701">A operação de escrita não é permitida em: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">As extensões a seguir dependem desta extensão:</translation>
 <translation id="6124698108608891449">Este site precisa de outras permissões.</translation>
@@ -4045,6 +4046,7 @@ permanentemente excluídos assim que esse usuário for removido. Os websites vis
 <translation id="6408118934673775994">Ler e alterar seus dados em <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> e <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Arquivos de imagem</translation>
 <translation id="6410328738210026208">Mudar de canal e executar PowerWash</translation>
+<translation id="6410390304316730527">O "Navegação segura" protege contra invasores que podem levar você a fazer algo perigoso, como instalar um software malicioso ou revelar informações pessoais como senhas, números de telefone ou cartões de crédito. Se desativá-lo, tenha cuidado ao navegar em sites desconhecidos ou com má reputação.</translation>
 <translation id="6410668567036790476">Adicionar mecanismo de pesquisa</translation>
 <translation id="641081527798843608">Correspondência de assunto</translation>
 <translation id="6412673304250309937">Verifica se os URLs estão em uma lista de sites não seguros armazenada no Chrome. Se um site tentar roubar sua senha ou se você fizer o download de um arquivo nocivo, o Chrome também poderá enviar URLs, incluindo partes do conteúdo da página, para o "Navegação segura".</translation>

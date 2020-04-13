@@ -3835,6 +3835,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="6120205520491252677">Diese Seite an Startbildschirm anpinnen...</translation>
 <translation id="6122081475643980456">Internetverbindung wird kontrolliert</translation>
 <translation id="6122095009389448667">Weiterhin verhindern, dass diese Website die Zwischenablage aufrufen kann</translation>
+<translation id="6122831415929794347">Safe Browsing deaktivieren?</translation>
 <translation id="6122875415561139701">Der Schreibvorgang ist auf folgendem Gerät nicht erlaubt: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">Die folgenden Erweiterungen hängen von dieser Erweiterung ab:</translation>
 <translation id="6124698108608891449">Diese Website benötigt weitere Berechtigungen.</translation>
@@ -4039,6 +4040,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="6408118934673775994">Eigene Daten auf <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> und <ph name="WEBSITE_3" /> lesen und ändern</translation>
 <translation id="6410257289063177456">Bilddateien</translation>
 <translation id="6410328738210026208">Kanaländerung und Powerwash</translation>
+<translation id="6410390304316730527">Safe Browsing schützt Sie gegen Angreifer, die Sie dazu verleiten möchten, Risiken einzugehen, wie z. B. schädliche Software zu installieren oder personenbezogene Daten wie Passwörter, Telefonnummern oder Kreditkartendaten preiszugeben. Wenn Sie Safe Browsing deaktivieren, seien Sie besonders vorsichtig, wenn Sie auf unbekannten oder zweifelhaften Websites surfen.</translation>
 <translation id="6410668567036790476">Suchmaschine hinzufügen</translation>
 <translation id="641081527798843608">subject-match</translation>
 <translation id="6412673304250309937">Prüft URLs anhand einer Liste unsicherer Websites, die in Chrome gespeichert wird. Wenn eine Website versucht, Ihr Passwort zu stehlen, oder wenn Sie eine schädliche Datei herunterladen, kann Chrome auch URLs, einschließlich Teile von Seiteninhalten, an Safe Browsing senden.</translation>

@@ -3839,6 +3839,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="6120205520491252677">Fixați această pagină pe ecranul de pornire...</translation>
 <translation id="6122081475643980456">Conexiunea la internet este controlată</translation>
 <translation id="6122095009389448667">Blochează în continuare accesul la clipboard pentru acest site</translation>
+<translation id="6122831415929794347">Dezactivezi Navigarea sigură?</translation>
 <translation id="6122875415561139701">Operațiunea de scriere nu este permisă pe: „<ph name="DEVICE_NAME" />”.</translation>
 <translation id="6124650939968185064">De această extensie depind următoarele extensii:</translation>
 <translation id="6124698108608891449">Acest site are nevoie de mai multe permisiuni.</translation>
@@ -4043,6 +4044,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="6408118934673775994">Citește și modifică datele de pe <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> și <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Fișiere imagine</translation>
 <translation id="6410328738210026208">Schimbați canalul și porniți Powerwash</translation>
+<translation id="6410390304316730527">Navigarea sigură te protejează împotriva atacatorilor care ar putea să te păcălească să faci lucruri periculoase, cum ar fi să instalezi software rău intenționat sau să dezvălui informații cu caracter personal, cum ar fi parole, numere de telefon sau carduri de credit. Dacă o dezactivezi, ai grijă atunci când navighezi pe site-uri nefamiliare sau nelegitime.</translation>
 <translation id="6410668567036790476">Adaugă motorul de căutare</translation>
 <translation id="641081527798843608">Potrivirea subiectului</translation>
 <translation id="6412673304250309937">Verifică adresele URL folosind o listă de site-uri nesigure, stocată în Chrome. Dacă un site încearcă să îți fure parola sau descarci un fișier dăunător, Chrome poate să trimită adresele URL, inclusiv fragmente din conținutul paginilor, către funcția Navigare sigură.</translation>

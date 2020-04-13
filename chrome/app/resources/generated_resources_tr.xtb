@@ -3840,6 +3840,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="6120205520491252677">Bu sayfayı Başlangıç ekranına sabitle...</translation>
 <translation id="6122081475643980456">İnternet bağlantınız kontrol ediliyor</translation>
 <translation id="6122095009389448667">Bu sitenin panoyu görmesini engellemeye devam et</translation>
+<translation id="6122831415929794347">Güvenli Tarama kapatılsın mı?</translation>
 <translation id="6122875415561139701">Şu cihazda yazma işlemine izin verilmiyor: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">Aşağıdaki uzantılar bu uzantıya bağımlıdır:</translation>
 <translation id="6124698108608891449">Bu site, daha fazla izne ihtiyaç duyuyor.</translation>
@@ -4044,6 +4045,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="6408118934673775994"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> ve <ph name="WEBSITE_3" /> web sitelerinde verilerinizi okuma ve değiştirme</translation>
 <translation id="6410257289063177456">Resim Dosyaları</translation>
 <translation id="6410328738210026208">Kanal değiştir ve Powerwash işlemini yap</translation>
+<translation id="6410390304316730527">Güvenli Tarama, sizi yanıltarak kötü amaçlı yazılım yüklemek veya kişisel bilgilerinizi (örneğin, şifreler, telefon numaraları veya kredi kartları) ifşa etmek gibi tehlikeli bir şey yapmanıza neden olabilecek saldırganlara karşı korur. Bu özelliği kapatırsanız tanıdık olmayan veya saygınlığı şüpheli sitelere göz atarken dikkatli olun.</translation>
 <translation id="6410668567036790476">Arama motoru ekleyin</translation>
 <translation id="641081527798843608">Konu eşleştirmesi</translation>
 <translation id="6412673304250309937">URL'leri, Chrome'da kayıtlı güvenli olmayan siteler listesine göre kontrol eder. Chrome, bir sitenin şifrenizi çalmaya çalışması veya zararlı bir dosya indirmeniz halinde de Güvenli Tarama'ya sayfa içeriğinden parçalarla birlikte URL'ler gönderebilir.</translation>

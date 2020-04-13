@@ -3839,6 +3839,7 @@ Vil du starte <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="6120205520491252677">Fastgør denne side til startskærmen...</translation>
 <translation id="6122081475643980456">Din internetforbindelse bliver overvåget</translation>
 <translation id="6122095009389448667">Fortsæt med at blokere dette website fra at se udklipsholderen</translation>
+<translation id="6122831415929794347">Vil du deaktivere Beskyttet browsing?</translation>
 <translation id="6122875415561139701">Skrivehandlingen er ikke tilladt på: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">Følgende udvidelser er afhængige af denne udvidelse:</translation>
 <translation id="6124698108608891449">Dette website kræver flere tilladelser.</translation>
@@ -4044,6 +4045,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="6408118934673775994">Læse og redigere dine data på <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> og <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Billedfiler</translation>
 <translation id="6410328738210026208">Skift kanal og powerwash</translation>
+<translation id="6410390304316730527">Beskyttet browsing beskytter dig mod hackere, som kan narre dig til at gøre uhensigtsmæssige ting, f.eks. at installere skadelig software eller afsløre personlige oplysninger som adgangskoder, telefonnumre eller betalingskortnumre. Hvis du deaktivere funktionen, skal du være ekstra forsigtig, når du besøger websites, du ikke kender eller har tillid til.</translation>
 <translation id="6410668567036790476">Tilføj søgemaskine</translation>
 <translation id="641081527798843608">Emnematch</translation>
 <translation id="6412673304250309937">Tjekker webadresser ift. en liste over usikre websites, der er gemt i Chrome. Hvis et website forsøger at stjæle din adgangskode, eller når du downloader en skadelig fil, sender Chrome muligvis også webadresser, bl.a. mindre mængder sideindhold, til Beskyttet browsing.</translation>

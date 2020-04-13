@@ -3839,6 +3839,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="6120205520491252677">Fäst den här sidan på startskärmen ...</translation>
 <translation id="6122081475643980456">Din internetanslutning kontrolleras</translation>
 <translation id="6122095009389448667">Fortsätt blockera tillgången till Urklipp för den här webbplatsen</translation>
+<translation id="6122831415929794347">Vill du inaktivera Säker webbsökning?</translation>
 <translation id="6122875415561139701">Skrivbehörigheten för åtgärden saknas på: <ph name="DEVICE_NAME" />.</translation>
 <translation id="6124650939968185064">Följande tillägg är beroende av detta tillägg:</translation>
 <translation id="6124698108608891449">Fler behörigheter behövs för webbplatsen.</translation>
@@ -4043,6 +4044,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="6408118934673775994">Läs och ändra dina uppgifter på <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> och <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Bildfiler</translation>
 <translation id="6410328738210026208">Byt kanal och Powerwash</translation>
+<translation id="6410390304316730527">Säker webbsökning skyddar dig mot angripare som kan försöka lura dig att göra något riskfyllt, till exempel installera skadlig programvara eller avslöja personliga uppgifter som lösenord, telefonnummer eller kreditkortsuppgifter. Om du inaktiverar detta bör du vara försiktig när du besöker okända webbplatser.</translation>
 <translation id="6410668567036790476">Lägg till sökmotor</translation>
 <translation id="641081527798843608">Ämnesmatchning</translation>
 <translation id="6412673304250309937">Kontrollera webbadresser mot en lista över osäkra webbplatser i Chrome. Om du utsätts för försök att kapa ditt lösenord på en webbplats eller om du laddar ned en skadlig fil kan webbadresserna skickas från Chrome till Säker webbsökning tillsammans med delar av sidinnehållet.</translation>

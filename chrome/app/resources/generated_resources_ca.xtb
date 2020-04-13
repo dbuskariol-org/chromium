@@ -2079,7 +2079,7 @@ en almenys <ph name="INSTALL_SIZE" /> d'espai lliure. Per alliberar espai, supri
 <translation id="3726137731714254362">Si se suprimeixen carpetes des d'aquí, es deixen de compartir, però no se'n suprimeixen els fitxers.</translation>
 <translation id="3727148787322499904">Els canvis en aquesta opció de configuració afectaran totes les xarxes compartides</translation>
 <translation id="3727187387656390258">Inspecciona l'element emergent</translation>
-<translation id="372722114124766626">Només un cop</translation>
+<translation id="372722114124766626">Només una vegada</translation>
 <translation id="3729303374699765035">Pregunta'm quan un lloc web vulgui descobrir dispositius Bluetooth propers</translation>
 <translation id="3729506734996624908">Llocs web permesos</translation>
 <translation id="3731997362820527097">Selecciona la teva clau de seguretat</translation>
@@ -3838,6 +3838,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="6120205520491252677">Fixa aquesta pàgina a la pantalla d'inici...</translation>
 <translation id="6122081475643980456">La vostra connexió a Internet s'està controlant</translation>
 <translation id="6122095009389448667">Continua impedint que aquest lloc web vegi el porta-retalls</translation>
+<translation id="6122831415929794347">Vols desactivar Navegació segura?</translation>
 <translation id="6122875415561139701">L'operació d'escriptura no es permet a <ph name="DEVICE_NAME" />.</translation>
 <translation id="6124650939968185064">D'aquesta extensió en depenen les extensions següents:</translation>
 <translation id="6124698108608891449">Aquest lloc web necessita més permisos.</translation>
@@ -4042,6 +4043,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="6408118934673775994">Llegir i modificar les dades dels llocs web <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> i <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Fitxers d'imatge </translation>
 <translation id="6410328738210026208">Canvia el canal i fes Powerwash</translation>
+<translation id="6410390304316730527">Navegació segura et protegeix contra els atacants que et poden enganyar perquè facis alguna acció perillosa, com ara instal·lar programari maliciós o revelar informació personal (per exemple, contrasenyes, números de telèfon o targetes de crèdit). Si la desactives, ves amb compte quan naveguis per llocs web desconeguts o amb mala reputació.</translation>
 <translation id="6410668567036790476">Afegeix un motor de cerca</translation>
 <translation id="641081527798843608">Coincidència d'assumpte</translation>
 <translation id="6412673304250309937">Compara els URL amb una llista de llocs web no segurs emmagatzemada a Chrome. Si un lloc web prova de robar-te la contrasenya o si baixes un fitxer maliciós, és possible que Chrome també n'enviï els URL, inclosos fragments de contingut de les pàgines, a Navegació segura.</translation>

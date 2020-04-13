@@ -3839,6 +3839,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="6120205520491252677">Pin this page to Start screen...</translation>
 <translation id="6122081475643980456">Your Internet connection is being controlled</translation>
 <translation id="6122095009389448667">Continue blocking this site from seeing the clipboard</translation>
+<translation id="6122831415929794347">Turn off Safe Browsing?</translation>
 <translation id="6122875415561139701">Write operation is not permitted on: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">The following extensions depend on this extension:</translation>
 <translation id="6124698108608891449">This site needs more permissions.</translation>
@@ -4043,6 +4044,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="6408118934673775994">Read and change your data on <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> and <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Image Files</translation>
 <translation id="6410328738210026208">Change channel and Powerwash</translation>
+<translation id="6410390304316730527">Safe Browsing protects you against attackers who may trick you into doing something dangerous, like installing malicious software or revealing personal information such as passwords, phone numbers or credit cards. If you turn it off, be careful when browsing unfamiliar or unreputable sites.</translation>
 <translation id="6410668567036790476">Add search engine</translation>
 <translation id="641081527798843608">Subject match</translation>
 <translation id="6412673304250309937">Checks URLs with a list of unsafe sites stored in Chrome. If a site tries to steal your password, or when you download a harmful file, Chrome may also send URLs, including bits of page content, to Safe Browsing.</translation>

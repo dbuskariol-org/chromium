@@ -828,7 +828,7 @@
 <translation id="2114326799768592691">重新加载框架(&amp;F)</translation>
 <translation id="2114896190328250491">照片提供者：<ph name="NAME" /></translation>
 <translation id="2119349053129246860">在“<ph name="APP" />”中打开</translation>
-<translation id="2119461801241504254">“安全浏览”功能已开启，正在保护您免受有害网站及下载内容的侵扰</translation>
+<translation id="2119461801241504254">“安全浏览”功能已开启，正在保护您免受有害网站及有害下载内容的侵扰</translation>
 <translation id="2120297377148151361">活动和互动行为</translation>
 <translation id="2120639962942052471">已禁用<ph name="PERMISSION" /></translation>
 <translation id="2121055421682309734">{COUNT,plural, =0{已阻止 Cookie}=1{已阻止 Cookie，但有 1 项例外情况}other{已阻止 Cookie，但有 {COUNT} 项例外情况}}</translation>
