@@ -1458,7 +1458,7 @@ deps = {
     'packages': [
       {
         'package': 'chromium/third_party/glslang_js',
-        'version': 'IB6pL73YKdgoiK7Ea7U5Uw_XjzXGZJCB0I3LhaiYY-sC',
+        'version': 'Zka0-f53_HEAZ1bpsxr9BSi7P51-4bzYwSMg0RMKX1AC',
       },
     ],
     'dep_type': 'cipd',
