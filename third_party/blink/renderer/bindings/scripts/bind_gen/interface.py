@@ -335,7 +335,7 @@ def bind_callback_local_vars(code_node, cg_context):
     if cg_context.property_ and cg_context.property_.identifier:
         _1.append("${property_name}")
     _2 = ""
-    if cg_context.return_type and cg_context.return_type.unwrap().is_promise:
+    if cg_context.is_return_type_promise_type:
         _2 = ("\n"
               "ExceptionToRejectPromiseScope reject_promise_scope"
               "(${info}, ${exception_state});")
@@ -789,7 +789,7 @@ def make_check_receiver(cg_context):
                 body=T("return;")),
         ])
 
-    if cg_context.return_type and cg_context.return_type.unwrap().is_promise:
+    if cg_context.is_return_type_promise_type:
         return SequenceNode([
             T("// Promise returning function: "
               "Convert a TypeError to a reject promise."),
@@ -3679,10 +3679,16 @@ def _make_property_entry_v8_property_attribute(property_):
     if "NotEnumerable" in property_.extended_attributes:
         values.append("v8::DontEnum")
     if "Unforgeable" in property_.extended_attributes:
+        if not isinstance(property_, web_idl.Attribute):
+            values.append("v8::ReadOnly")
         values.append("v8::DontDelete")
     if not values:
         values.append("v8::None")
-    return "static_cast<v8::PropertyAttribute>({})".format(" | ".join(values))
+    if len(values) == 1:
+        return values[0]
+    else:
+        return "static_cast<v8::PropertyAttribute>({})".format(
+            " | ".join(values))
 
 
 def _make_property_entry_on_which_object(property_):
