@@ -720,7 +720,8 @@ public class SingleCategorySettings extends SiteSettingsPreferenceFragment
         // Find origins matching the current search.
         for (Website site : sites) {
             if (mSearch == null || mSearch.isEmpty() || site.getTitle().contains(mSearch)) {
-                websites.add(new WebsitePreference(getStyledContext(), site, mCategory));
+                websites.add(new WebsitePreference(
+                        getStyledContext(), getSiteSettingsClient(), site, mCategory));
             }
         }
 
