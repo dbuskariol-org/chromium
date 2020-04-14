@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include "base/strings/string16.h"
 #include "chrome/grit/generated_resources.h"
 #include "ui/base/hit_test.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -105,6 +106,7 @@ void CaptionBubble::Init() {
   label->SetBackgroundColor(SK_ColorTRANSPARENT);
   label->SetHorizontalAlignment(gfx::HorizontalAlignment::ALIGN_LEFT);
   label->SetLineHeight(kLineHeightDip);
+  label->SetTooltipText(base::string16());
 
   // TODO(crbug.com/1055150): Respect the user's font size and minimum font size
   // settings rather than having a fixed font size.
