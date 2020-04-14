@@ -469,12 +469,6 @@
     "args": ["--disable-site-isolation-trials"]
   },
   {
-    "prefix": "streaming-preload",
-    "bases": ["external/wpt/html/semantics/scripting-1",
-              "http/tests/fetch"],
-    "args": ["--enable-features=ScriptStreamingOnPreload"]
-  },
-  {
     "prefix": "focusless-spat-nav",
     "bases": [],
     "args": ["--enable-blink-features=FocuslessSpatialNavigation",
