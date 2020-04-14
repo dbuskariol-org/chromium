@@ -1969,10 +1969,10 @@
           'all',
         ],
         'mixins': [
-          'mac_10.14',
+          'mac_10.15',
           'mac_toolchain',
           'out_dir_arg',
-          'xcode_11c29',
+          'xcode_11e146',
         ],
         'test_suites': {
           'isolated_scripts': 'ios13_sdk_simulator_tests'
