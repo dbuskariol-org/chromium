@@ -3149,6 +3149,7 @@ crbug.com/1053965 external/wpt/css/css-values/ex-unit-004.html [ Failure ]
 
 crbug.com/947951 [ Win ] external/wpt/pointerevents/pointerevent_touch-action-inherit_child-auto-child-none_touch.html [ Pass Timeout ]
 crbug.com/1067277 external/wpt/css/css-content/element-replacement-on-replaced-element.tentative.html [ Failure ]
+crbug.com/1069300 external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
 crbug.com/626703 [ Linux ] external/wpt/webxr/hit-test/ar_hittest_subscription_refSpaces.https.html [ Timeout ]
@@ -3178,9 +3179,6 @@ crbug.com/626703 [ Win ] external/wpt/css/css-text/line-break/line-break-strict-
 crbug.com/626703 [ Linux ] external/wpt/css/css-text/line-break/line-break-normal-015b.xht [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/css-text/line-break/line-break-normal-015b.xht [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/css-text/line-break/line-break-normal-015b.xht [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
-crbug.com/626703 [ Win ] external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/preload/onload-event.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/storage/estimate-indexeddb.https.any.worker.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/fetch/origin/assorted.window.html [ Failure Timeout ]
