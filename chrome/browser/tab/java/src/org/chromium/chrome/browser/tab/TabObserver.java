@@ -9,7 +9,6 @@ import android.view.ContextMenu;
 
 import androidx.annotation.Nullable;
 
-import org.chromium.chrome.browser.TabLoadStatus;
 import org.chromium.components.find_in_page.FindMatchRectsDetails;
 import org.chromium.components.find_in_page.FindNotificationDetails;
 import org.chromium.content_public.browser.LoadUrlParams;
@@ -25,9 +24,12 @@ public interface TabObserver {
      * Called when a {@link Tab} finished initialization. The {@link TabState} contains,
      * if not {@code null}, various states that a Tab should restore itself from.
      * @param tab The notifying {@link Tab}.
-     * @param tabState {@link TabState} to restore tab's state from if not {@code null}.
+     * @param appId ID of the external app that opened this tab.
+     * @param hasThemeColor {@code true} if the tab has a theme color set. {@code null}
+     *        if theme color info is not available from TabState.
+     * @param themeColor Theme color.
      */
-    void onInitialized(Tab tab, TabState tabState);
+    void onInitialized(Tab tab, String appId, @Nullable Boolean hasThemeColor, int themeColor);
 
     /**
      * Called when a {@link Tab} is shown.

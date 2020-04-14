@@ -25,7 +25,7 @@ import org.chromium.ui.base.WindowAndroid;
  */
 public class EmptyTabObserver implements TabObserver {
     @Override
-    public void onInitialized(Tab tab, TabState tabState) {}
+    public void onInitialized(Tab tab, String appId, Boolean hasThemeColor, int themeColor) {}
 
     @Override
     public void onShown(Tab tab, @TabSelectionType int type) {}
@@ -34,19 +34,19 @@ public class EmptyTabObserver implements TabObserver {
     public void onHidden(Tab tab, @TabHidingType int reason) {}
 
     @Override
-    public void onClosingStateChanged(Tab tab, boolean closing) { }
+    public void onClosingStateChanged(Tab tab, boolean closing) {}
 
     @Override
-    public void onDestroyed(Tab tab) { }
+    public void onDestroyed(Tab tab) {}
 
     @Override
-    public void onContentChanged(Tab tab) { }
+    public void onContentChanged(Tab tab) {}
 
     @Override
-    public void onLoadUrl(Tab tab, LoadUrlParams params, int loadType) { }
+    public void onLoadUrl(Tab tab, LoadUrlParams params, int loadType) {}
 
     @Override
-    public void onPageLoadStarted(Tab tab, String url) { }
+    public void onPageLoadStarted(Tab tab, String url) {}
 
     @Override
     public void onPageLoadFinished(Tab tab, String url) {}
@@ -61,40 +61,40 @@ public class EmptyTabObserver implements TabObserver {
     public void onRestoreFailed(Tab tab) {}
 
     @Override
-    public void onFaviconUpdated(Tab tab, Bitmap icon) { }
+    public void onFaviconUpdated(Tab tab, Bitmap icon) {}
 
     @Override
-    public void onTitleUpdated(Tab tab) { }
+    public void onTitleUpdated(Tab tab) {}
 
     @Override
-    public void onUrlUpdated(Tab tab) { }
+    public void onUrlUpdated(Tab tab) {}
 
     @Override
-    public void onSSLStateUpdated(Tab tab) { }
+    public void onSSLStateUpdated(Tab tab) {}
 
     @Override
     public void onCrash(Tab tab) {}
 
     @Override
-    public void onWebContentsSwapped(Tab tab, boolean didStartLoad, boolean didFinishLoad) { }
+    public void onWebContentsSwapped(Tab tab, boolean didStartLoad, boolean didFinishLoad) {}
 
     @Override
-    public void onContextMenuShown(Tab tab, ContextMenu menu) { }
+    public void onContextMenuShown(Tab tab, ContextMenu menu) {}
 
     @Override
     public void onCloseContents(Tab tab) {}
 
     @Override
-    public void onLoadStarted(Tab tab, boolean toDifferentDocument) { }
+    public void onLoadStarted(Tab tab, boolean toDifferentDocument) {}
 
     @Override
-    public void onLoadStopped(Tab tab, boolean toDifferentDocument) { }
+    public void onLoadStopped(Tab tab, boolean toDifferentDocument) {}
 
     @Override
     public void onLoadProgressChanged(Tab tab, float progress) {}
 
     @Override
-    public void onUpdateUrl(Tab tab, String url) { }
+    public void onUpdateUrl(Tab tab, String url) {}
 
     @Override
     public void onDidFailLoad(Tab tab, boolean isMainFrame, int errorCode, String failingUrl) {}
@@ -112,16 +112,16 @@ public class EmptyTabObserver implements TabObserver {
     public void didFirstVisuallyNonEmptyPaint(Tab tab) {}
 
     @Override
-    public void onDidChangeThemeColor(Tab tab, int color) { }
+    public void onDidChangeThemeColor(Tab tab, int color) {}
 
     @Override
-    public void onDidAttachInterstitialPage(Tab tab) { }
+    public void onDidAttachInterstitialPage(Tab tab) {}
 
     @Override
-    public void onDidDetachInterstitialPage(Tab tab) { }
+    public void onDidDetachInterstitialPage(Tab tab) {}
 
     @Override
-    public void onBackgroundColorChanged(Tab tab, int color) { }
+    public void onBackgroundColorChanged(Tab tab, int color) {}
 
     @Override
     public void webContentsCreated(Tab tab, WebContents sourceWebContents,
