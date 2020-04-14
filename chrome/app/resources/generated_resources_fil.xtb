@@ -1547,6 +1547,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="3019285239893817657">Button ng subpage</translation>
 <translation id="3020183492814296499">Mga Shortcut</translation>
 <translation id="3020990233660977256">Serial Number: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Habang ginagamit ang baterya</translation>
 <translation id="3021066826692793094">Paruparo</translation>
 <translation id="3021678814754966447">&amp;Tingnan ang Pinagmulan ng Frame</translation>
 <translation id="3022978424994383087">Hindi iyon nakuha.</translation>
@@ -2926,6 +2927,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="4890773143211625964">Ipakita ang mga advanced na opsyon sa printer</translation>
 <translation id="4891089016822695758">Forum sa Beta</translation>
 <translation id="4892229439761351791">Puwedeng gumamit ng Bluetooth ang site</translation>
+<translation id="489258173289528622">Idle na pagkilos habang ginagamit ang baterya</translation>
 <translation id="4893336867552636863">Permanente nitong ide-delete ang iyong data sa pag-browse sa device na ito.</translation>
 <translation id="4893522937062257019">Sa lock screen</translation>
 <translation id="489454699928748701">Payagan ang mga site na gumamit ng mga sensor ng paggalaw</translation>
@@ -3640,6 +3642,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="5863445608433396414">I-enable ang mga feature para sa pagde-debug</translation>
 <translation id="5864195618110239517">Gumamit ng nakametrong koneksyon</translation>
 <translation id="5864471791310927901">Nabigo ang paghanap ng DHCP</translation>
+<translation id="5864754048328252126">Idle na pagkilos habang nagcha-charge</translation>
 <translation id="5865508026715185451">Malapit nang mag-pause ang <ph name="APP_NAME" /></translation>
 <translation id="586567932979200359">Pinapatakbo mo ang <ph name="PRODUCT_NAME" /> mula sa larawan nito sa disk. Ang pag-install nito ay magbibigay-daan sa iyong patakbuhin ito nang walang larawan ng disk, at makakatiyak na pananatilihin itong napapanahon.</translation>
 <translation id="5865733239029070421">Awtomatikong nagpapadala sa Google ng mga istatistika ng paggamit at ulat ng pag-crash</translation>
@@ -3839,6 +3842,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="6120205520491252677">I-pin ang pahinang ito screen ng Simula...</translation>
 <translation id="6122081475643980456">Kinokontrol ang iyong koneksyon sa Internet</translation>
 <translation id="6122095009389448667">Patuloy na i-block ang site na ito sa pagtingin sa clipboard</translation>
+<translation id="6122831415929794347">I-off ang Ligtas na Pag-browse?</translation>
 <translation id="6122875415561139701">Hindi pinapahintulutan ang write na operation sa: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">Nakadepende ang mga sumusunod na extension sa extension na ito:</translation>
 <translation id="6124698108608891449">Kailangan ng site na ito ng higit pang pahintulot.</translation>
@@ -4043,6 +4047,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="6408118934673775994">Basahin at baguhin ang iyong data sa <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> at <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Mga File ng Larawan</translation>
 <translation id="6410328738210026208">Baguhin ang channel at Powerwash</translation>
+<translation id="6410390304316730527">Pinoprotektahan ka ng Ligtas na Pag-browse laban sa mga attacker na posibleng manlinlang sa iyong gumawa ng anumang mapanganib na bagay tulad ng pag-install ng nakakapinsalang software o paghahayag ng personal na impormasyon tulad ng mga password, numero ng telepono, o credit card. Kung io-off mo ito, maging maingat kapag nagba-browse sa mga hindi pamilyar o hindi mapagkakatiwalaang site.</translation>
 <translation id="6410668567036790476">Magdagdag ng search engine</translation>
 <translation id="641081527798843608">Pagtugma ng paksa</translation>
 <translation id="6412673304250309937">Sinusuri ang mga URL sa pamamagitan ng listahan ng mga hindi ligtas na site na naka-store sa Chrome. Kung susubukan ng site na nakawin ang iyong password, o kapag nag-download ka ng mapaminsalang file, posible ring magpadala ang Chrome sa Ligtas na Pag-browse ng mga URL, kabilang ang ilang content ng page</translation>
@@ -5978,6 +5983,7 @@ Ilagay ang iyong key file sa ligtas na lugar. Kailangan mo ito upang lumikha ng 
 <translation id="8951256747718668828">Hindi makumpleto ang pag-restore dahil sa error</translation>
 <translation id="8951465597020890363">Lumabas pa rin sa guest mode?</translation>
 <translation id="8952831374766033534">Hindi sinusuportahan ang opsyon sa configuration: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Habang nagcha-charge</translation>
 <translation id="895347679606913382">Nagsisimula...</translation>
 <translation id="8957762313041272117">Instant Caption</translation>
 <translation id="895944840846194039">Memory ng JavaScript</translation>

@@ -1547,6 +1547,7 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3019285239893817657">Papildomo puslapio mygtukas</translation>
 <translation id="3020183492814296499">Spartieji klavišai</translation>
 <translation id="3020990233660977256">Serijos numeris: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Naudojant su akumuliatoriumi</translation>
 <translation id="3021066826692793094">Drugelis</translation>
 <translation id="3021678814754966447">&amp;Žiūrėti rėmelio šaltinį</translation>
 <translation id="3022978424994383087">Nepavyko suprasti.</translation>
@@ -2926,6 +2927,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="4890773143211625964">Rodyti išplėstines spausdintuvo parinktis</translation>
 <translation id="4891089016822695758">Beta forumas</translation>
 <translation id="4892229439761351791">Svetainė gali naudoti „Bluetooth“</translation>
+<translation id="489258173289528622">Neaktyvus naudojant su akumuliatoriumi</translation>
 <translation id="4893336867552636863">Atlikus šį veiksmą bus visam laikui ištrinti naršymo duomenys iš šio įrenginio.</translation>
 <translation id="4893522937062257019">Užrakinimo ekrane</translation>
 <translation id="489454699928748701">Leisti svetainėms naudoti judesio jutiklius</translation>
@@ -3641,6 +3643,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="5863445608433396414">Įgalinti derinimo funkcijas</translation>
 <translation id="5864195618110239517">Naudoti matuojamą ryšį</translation>
 <translation id="5864471791310927901">DHCP paieška nepavyko</translation>
+<translation id="5864754048328252126">Neaktyvus įkraunant</translation>
 <translation id="5865508026715185451">Programa „<ph name="APP_NAME" />“ netrukus bus pristabdyta</translation>
 <translation id="586567932979200359">„<ph name="PRODUCT_NAME" />“ paleista iš disko vaizdo. Įdiegę ją kompiuteryje, galėsite paleisti be disko vaizdo ir būti tikri, kad ji bus atnaujinama.</translation>
 <translation id="5865733239029070421">Automatiškai siunčia naudojimo statistiką ir strigčių ataskaitas „Google“</translation>
@@ -3840,6 +3843,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="6120205520491252677">Prisegti šį puslapį prie pradžios ekrano...</translation>
 <translation id="6122081475643980456">Jūsų interneto ryšys yra kontroliuojamas</translation>
 <translation id="6122095009389448667">Toliau neleisti šiai svetainei peržiūrėti iškarpinės</translation>
+<translation id="6122831415929794347">Išjungti saugų naršymą?</translation>
 <translation id="6122875415561139701">Rašymo operacija neleidžiama įrenginyje „<ph name="DEVICE_NAME" />“.</translation>
 <translation id="6124650939968185064">Toliau pateikti plėtiniai priklauso nuo šio plėtinio:</translation>
 <translation id="6124698108608891449">Šiai svetainei reikia daugiau leidimų.</translation>
@@ -4044,6 +4048,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="6408118934673775994">Skaityti ir keisti duomenis <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> ir <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Vaizdo failai</translation>
 <translation id="6410328738210026208">Pakeisti kanalą ir paleisti „Powerwash“</translation>
+<translation id="6410390304316730527">Saugaus naršymo funkcija apsaugo jus nuo atakų vykdytojų, kurie gali bandyti apgaule priversti jus atlikti pavojingus veiksmus, pvz., įdiegti kenkėjišką programinę įrangą ar atskleisti asmens informaciją (pvz., slaptažodžius, telefono numerius ar kredito kortelių duomenis). Jei ją išjungsite, būkite atsargūs naršydami nežinomose ar nepatikimose svetainėse.</translation>
 <translation id="6410668567036790476">Paieškos variklio pridėjimas</translation>
 <translation id="641081527798843608">Temos atitiktis</translation>
 <translation id="6412673304250309937">Tikrinami URL pagal nesaugių svetainių sąrašą, saugomą naršyklėje „Chrome“. Jei svetainė bando pavogti slaptažodį ar atsisiuntėte žalingą failą, „Chrome“ taip pat gali siųsti URL, įskaitant puslapio turinio dalis, Saugaus naršymo funkcijai.</translation>
@@ -5977,6 +5982,7 @@ Rakto failą laikykite saugioje vietoje. Jo reikės, kai norėsite sukurti nauja
 <translation id="8951256747718668828">Nepavyko atkurti dėl klaidos</translation>
 <translation id="8951465597020890363">Vis tiek išeiti iš svečio režimo?</translation>
 <translation id="8952831374766033534">Konfigūracijos parinktis nepalaikoma: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Įkraunant</translation>
 <translation id="895347679606913382">Pradedama...</translation>
 <translation id="8957762313041272117">Subtitrai realiuoju laiku</translation>
 <translation id="895944840846194039">„JavaScript“ atmintis</translation>

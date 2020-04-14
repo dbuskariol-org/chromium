@@ -1547,6 +1547,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="3019285239893817657">Tombol subhalaman</translation>
 <translation id="3020183492814296499">Pintasan</translation>
 <translation id="3020990233660977256">Nomor Seri: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Saat menggunakan baterai</translation>
 <translation id="3021066826692793094">Kupu-kupu</translation>
 <translation id="3021678814754966447">&amp;Lihat Sumber Bingkai</translation>
 <translation id="3022978424994383087">Tidak mengerti.</translation>
@@ -2924,6 +2925,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="4890773143211625964">Tampilkan opsi printer lanjutan</translation>
 <translation id="4891089016822695758">Forum Beta</translation>
 <translation id="4892229439761351791">Situs dapat menggunakan Bluetooth</translation>
+<translation id="489258173289528622">Tidak ada aktivitas saat menggunakan baterai</translation>
 <translation id="4893336867552636863">Tindakan ini akan menghapus data penjelajahan Anda dari perangkat ini secara permanen.</translation>
 <translation id="4893522937062257019">Di layar kunci</translation>
 <translation id="489454699928748701">Izinkan situs menggunakan sensor gerakan</translation>
@@ -3638,6 +3640,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="5863445608433396414">Aktifkan fitur debug</translation>
 <translation id="5864195618110239517">Gunakan koneksi berbayar</translation>
 <translation id="5864471791310927901">Pencarian DHCP gagal</translation>
+<translation id="5864754048328252126">Tidak ada aktivitas saat mengisi daya</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> akan segera dijeda</translation>
 <translation id="586567932979200359">Anda menjalankan <ph name="PRODUCT_NAME" /> dari citra disknya. Dengan memasangnya di komputer, Anda dapat menjalankannya tanpa citra disk, dan memastikannya tetap mutakhir.</translation>
 <translation id="5865733239029070421">Secara otomatis mengirimkan statistik penggunaan dan laporan kerusakan ke Google</translation>
@@ -3837,6 +3840,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="6120205520491252677">Pasang pin halaman ini ke layar Awal...</translation>
 <translation id="6122081475643980456">Koneksi internet Anda sedang dikendalikan</translation>
 <translation id="6122095009389448667">Terus blokir situs ini dari melihat papan klip</translation>
+<translation id="6122831415929794347">Nonaktifkan Safe Browsing?</translation>
 <translation id="6122875415561139701">Operasi menulis tidak diizinkan di: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">Ekstensi berikut bergantung pada ekstensi ini:</translation>
 <translation id="6124698108608891449">Situs ini memerlukan izin lainnya.</translation>
@@ -4041,6 +4045,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="6408118934673775994">Membaca dan mengubah data Anda di <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, dan <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">File Gambar</translation>
 <translation id="6410328738210026208">Ganti saluran dan Powerwash</translation>
+<translation id="6410390304316730527">Safe Browsing akan melindungi Anda dari penyerang yang dapat mengelabui Anda agar melakukan sesuatu yang berbahaya, misalnya menginstal software berbahaya atau mengungkap informasi pribadi seperti sandi, nomor telepon, atau kartu kredit. Jika dinonaktifkan, harap berhati-hati saat mengakses situs tidak dikenal atau tidak tepercaya.</translation>
 <translation id="6410668567036790476">Tambahkan mesin telusur</translation>
 <translation id="641081527798843608">Kecocokan subjek</translation>
 <translation id="6412673304250309937">Memeriksa kesesuaian URL dengan daftar situs tidak aman yang disimpan di Chrome. Jika situs berusaha mencuri sandi Anda, atau jika Anda mendownload file berbahaya, Chrome mungkin juga mengirim URL, termasuk bit konten halaman, ke Safe Browsing.</translation>
@@ -5974,6 +5979,7 @@ Simpan file kunci Anda di tempat yang aman. Anda akan membutuhkannya untuk membu
 <translation id="8951256747718668828">Tidak dapat menyelesaikan pemulihan karena terjadi error</translation>
 <translation id="8951465597020890363">Tetap keluar dari mode tamu?</translation>
 <translation id="8952831374766033534">Opsi konfigurasi tidak didukung: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Saat mengisi daya</translation>
 <translation id="895347679606913382">Memulai...</translation>
 <translation id="8957762313041272117">Teks Otomatis</translation>
 <translation id="895944840846194039">Memori JavaScript</translation>

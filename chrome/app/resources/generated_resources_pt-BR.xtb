@@ -1547,6 +1547,7 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="3019285239893817657">Botão de subpágina</translation>
 <translation id="3020183492814296499">Atalhos</translation>
 <translation id="3020990233660977256">Número de série: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Enquanto estiver na bateria</translation>
 <translation id="3021066826692793094">Borboleta</translation>
 <translation id="3021678814754966447">&amp;Exibir código fonte do frame</translation>
 <translation id="3022978424994383087">Não entendi.</translation>
@@ -2926,6 +2927,7 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="4890773143211625964">Mostrar opções avançadas de impressora</translation>
 <translation id="4891089016822695758">Fórum do Beta</translation>
 <translation id="4892229439761351791">O site pode usar o Bluetooth</translation>
+<translation id="489258173289528622">Ação de inatividade enquanto estiver na bateria</translation>
 <translation id="4893336867552636863">Isso excluirá permanentemente os dados de navegação deste dispositivo.</translation>
 <translation id="4893522937062257019">Na tela de bloqueio</translation>
 <translation id="489454699928748701">Permitir que sites usem os sensores de movimento</translation>
@@ -3641,6 +3643,7 @@ Não exponha nenhuma informação confidencial.</translation>
 <translation id="5863445608433396414">Ativar recursos de depuração</translation>
 <translation id="5864195618110239517">Usar conexão limitada</translation>
 <translation id="5864471791310927901">Falha ao procurar DHCP</translation>
+<translation id="5864754048328252126">Ação de inatividade ao carregar</translation>
 <translation id="5865508026715185451">O app <ph name="APP_NAME" /> será pausado em breve</translation>
 <translation id="586567932979200359">Você está executando o <ph name="PRODUCT_NAME" /> a partir de uma imagem de disco. Instalá-lo no computador permite executá-lo sem a imagem de disco e garante que ele se manterá atualizado.</translation>
 <translation id="5865733239029070421">Envia estatísticas de uso e relatórios de erros automaticamente para o Google</translation>
@@ -4051,7 +4054,7 @@ permanentemente excluídos assim que esse usuário for removido. Os websites vis
 <translation id="641081527798843608">Correspondência de assunto</translation>
 <translation id="6412673304250309937">Verifica se os URLs estão em uma lista de sites não seguros armazenada no Chrome. Se um site tentar roubar sua senha ou se você fizer o download de um arquivo nocivo, o Chrome também poderá enviar URLs, incluindo partes do conteúdo da página, para o "Navegação segura".</translation>
 <translation id="6412931879992742813">Nova janela anônima</translation>
-<translation id="6413591858632097328">Isso limpará todos os dados e cookies armazenados por <ph name="ORIGIN_NAME" /> e os apps instalados.</translation>
+<translation id="6413591858632097328">Isso limpará todos os dados e cookies armazenados por <ph name="ORIGIN_NAME" /> e os apps ali instalados.</translation>
 <translation id="641469293210305670">Instalar atualizações e apps</translation>
 <translation id="6414888972213066896">Você perguntou ao seu responsável se pode visitar este site</translation>
 <translation id="6415900369006735853">Conecte-se à internet pelo smartphone</translation>
@@ -5980,6 +5983,7 @@ Mantenha a sua chave de arquivo em um local seguro. Você precisará dela para c
 <translation id="8951256747718668828">Ocorreu um erro e não foi possível concluir a restauração</translation>
 <translation id="8951465597020890363">Sair do modo visitante mesmo assim?</translation>
 <translation id="8952831374766033534">Opção de configuração indisponível: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Ao carregar</translation>
 <translation id="895347679606913382">Iniciando...</translation>
 <translation id="8957762313041272117">Legendas em tempo real</translation>
 <translation id="895944840846194039">Memória JavaScript</translation>

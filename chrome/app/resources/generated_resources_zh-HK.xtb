@@ -1546,6 +1546,7 @@
 <translation id="3019285239893817657">子頁面按鈕</translation>
 <translation id="3020183492814296499">快速鍵</translation>
 <translation id="3020990233660977256">序號：<ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">使用電池時</translation>
 <translation id="3021066826692793094">蝴蝶</translation>
 <translation id="3021678814754966447">檢視頁框原始碼(&amp;V)</translation>
 <translation id="3022978424994383087">無法辨識語音。</translation>
@@ -2924,6 +2925,7 @@
 <translation id="4890773143211625964">顯示進階打印機選項</translation>
 <translation id="4891089016822695758">Chrome 測試版論壇</translation>
 <translation id="4892229439761351791">網站可以使用藍牙</translation>
+<translation id="489258173289528622">用緊電池時嘅閒置動作</translation>
 <translation id="4893336867552636863">這會永久刪除此裝置上的瀏覽資料。</translation>
 <translation id="4893522937062257019">螢幕上鎖時</translation>
 <translation id="489454699928748701">允許網站使用動作感應器</translation>
@@ -3638,6 +3640,7 @@
 <translation id="5863445608433396414">啟用偵錯功能</translation>
 <translation id="5864195618110239517">使用按用量收費的連線</translation>
 <translation id="5864471791310927901">DHCP 查閱失敗</translation>
+<translation id="5864754048328252126">叉緊電時嘅閒置動作</translation>
 <translation id="5865508026715185451">「<ph name="APP_NAME" />」即將暫停</translation>
 <translation id="586567932979200359">您正在透過磁碟映像執行 <ph name="PRODUCT_NAME" />。如直接在電腦上安裝程式，以後無需透過磁碟映像即可直接執行，並且能隨時使用最新的版本。</translation>
 <translation id="5865733239029070421">自動將使用情況統計和當機報告傳送給 Google</translation>
@@ -5975,6 +5978,7 @@
 <translation id="8951256747718668828">發生錯誤，因此無法完成還原程序</translation>
 <translation id="8951465597020890363">仍要退出訪客模式嗎？</translation>
 <translation id="8952831374766033534">不支援的設定選項：<ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">充電時</translation>
 <translation id="895347679606913382">即將開始下載…</translation>
 <translation id="8957762313041272117">即時字幕</translation>
 <translation id="895944840846194039">JavaScript 記憶體使用量</translation>

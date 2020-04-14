@@ -1547,6 +1547,7 @@ Voit ylläpitää tilin asetuksia asentamalla laitteellesi Family Link ‑sovell
 <translation id="3019285239893817657">Alasivun painike</translation>
 <translation id="3020183492814296499">Pikanäppäimet</translation>
 <translation id="3020990233660977256">Sarjanumero: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Akkuvirralla</translation>
 <translation id="3021066826692793094">Perhonen</translation>
 <translation id="3021678814754966447">&amp;Näytä kehyksen lähdekoodi</translation>
 <translation id="3022978424994383087">En ymmärtänyt.</translation>
@@ -2923,6 +2924,7 @@ Voit ylläpitää tilin asetuksia asentamalla laitteellesi Family Link ‑sovell
 <translation id="4890773143211625964">Näytä tulostimen lisäasetukset</translation>
 <translation id="4891089016822695758">Beta-keskusteluryhmä</translation>
 <translation id="4892229439761351791">Sivusto voi käyttää Bluetoothia</translation>
+<translation id="489258173289528622">Käyttämättömyystila akkuvirralla</translation>
 <translation id="4893336867552636863">Tämä poistaa pysyvästi selaustietosi tältä laitteelta.</translation>
 <translation id="4893522937062257019">Lukitusnäytöllä</translation>
 <translation id="489454699928748701">Anna sivustojen käyttää liiketunnistimia</translation>
@@ -3637,6 +3639,7 @@ Voit ylläpitää tilin asetuksia asentamalla laitteellesi Family Link ‑sovell
 <translation id="5863445608433396414">Ota käyttöön virheenkorjausominaisuudet</translation>
 <translation id="5864195618110239517">Käytä maksullista yhteyttä</translation>
 <translation id="5864471791310927901">DHCP-haku epäonnistui</translation>
+<translation id="5864754048328252126">Käyttämättömyystila latauksessa</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> keskeytetään pian</translation>
 <translation id="586567932979200359">Käytät tuotetta <ph name="PRODUCT_NAME" /> sen levyvedoksen kautta. Asentamalla tuotteen tietokoneellesi voit käyttää sitä ilman levyvedosta ja varmistat, että tuote pysyy päivitettynä.</translation>
 <translation id="5865733239029070421">Lähettää automaattisesti käyttötilastoja ja virheraportteja Googlelle</translation>
@@ -5976,6 +5979,7 @@ Tallenna avaintiedosto suojattuun sijaintiin. Tarvitset sitä, jos haluat luoda 
 <translation id="8951256747718668828">Palauttaminen epäonnistui virheen takia</translation>
 <translation id="8951465597020890363">Haluatko silti poistua Guest Modesta?</translation>
 <translation id="8952831374766033534">Määritysvaihtoehtoa ei tueta: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Latauksessa</translation>
 <translation id="895347679606913382">Käynnistää...</translation>
 <translation id="8957762313041272117">Livetekstitys</translation>
 <translation id="895944840846194039">JavaScriptin käyttämä muisti</translation>

@@ -1545,6 +1545,7 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="3019285239893817657">Quyi sahifa tugmasi</translation>
 <translation id="3020183492814296499">Yorliqlar</translation>
 <translation id="3020990233660977256">Seriya raqami: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Batareya quvvatida ishlayotganda</translation>
 <translation id="3021066826692793094">Kapalak</translation>
 <translation id="3021678814754966447">Freym kodini ko‘rish</translation>
 <translation id="3022978424994383087">Yana bir marta qaytaring</translation>
@@ -1690,7 +1691,7 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="3220586366024592812"><ph name="CLOUD_PRINT_NAME" /> konnektori ishdan chiqdi. Qayta ishga tushirilsinmi?</translation>
 <translation id="3222066309010235055">Oldindan ishlov berish: <ph name="PRERENDER_CONTENTS_NAME" /></translation>
 <translation id="3223531857777746191">Asliga qaytarish tugmasi</translation>
-<translation id="3225084153129302039">Standart binafsharang avatar</translation>
+<translation id="3225084153129302039">Standart siyohrang avatar</translation>
 <translation id="3225319735946384299">Kodni imzolash</translation>
 <translation id="3227137524299004712">Mikrofon</translation>
 <translation id="3228679360002431295">Aloqa o‘rnatilmoqda va tekshirilmoqda<ph name="ANIMATED_ELLIPSIS" /></translation>
@@ -2924,6 +2925,7 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="4890773143211625964">Qo‘shimcha printer sozlamalarini ko‘rsatish</translation>
 <translation id="4891089016822695758">Beta forum</translation>
 <translation id="4892229439761351791">Sayt Bluetooth ishlatishi mumkin</translation>
+<translation id="489258173289528622">Batareya quvvatidan ishlayotganda kutish amali</translation>
 <translation id="4893336867552636863">Ushbu qurilmadagi brauzer faoliyati haqidagi ma’lumotlar butunlay o‘chiriladi.</translation>
 <translation id="4893522937062257019">Qulflangan ekranda</translation>
 <translation id="489454699928748701">Saytlarga harakat sensorlaridan foydalanish uchun ruxsat berish</translation>
@@ -3638,6 +3640,7 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="5863445608433396414">Nosozliklarni ko‘rib chiqish funksiyalarini yoqish</translation>
 <translation id="5864195618110239517">Trafik hisoblanadigan ulanishdan foydalanish</translation>
 <translation id="5864471791310927901">DHCP topilmadi</translation>
+<translation id="5864754048328252126">Quvvatlanayotganda kutish amali</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> tez orada pauza qilinadi</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" /> tizimini diskdagi tasviridan ishga tushirgansiz. Uni kompyuteringizga o‘rnatsangiz, disk tasviri kerak bo‘lmaydi hamda tizim muntazam yangilanib turadi.</translation>
 <translation id="5865733239029070421">Foydalanish statistikasi va ishdan chiqish hisobotlari avtomatik tarzda Google serverlariga yuborilsin</translation>
@@ -5974,6 +5977,7 @@ Kalit faylini ishonchli joyda saqlang. U kengaytmaning yangi versiyalarini yarat
 <translation id="8951256747718668828">Xato tufayli tiklanmadi</translation>
 <translation id="8951465597020890363">Mehmon rejimidan baribir chiqilsinmi?</translation>
 <translation id="8952831374766033534">Ishlamadigan konfiguratsiya: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Quvvat olayotganda</translation>
 <translation id="895347679606913382">Boshlanmoqda...</translation>
 <translation id="8957762313041272117">Jonli izoh</translation>
 <translation id="895944840846194039">JavaScript xotirasi</translation>

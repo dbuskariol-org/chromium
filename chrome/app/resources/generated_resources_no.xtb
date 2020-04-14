@@ -1544,6 +1544,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="3019285239893817657">knapp til underordnet side</translation>
 <translation id="3020183492814296499">Snarveier</translation>
 <translation id="3020990233660977256">Serienummer: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Ved batteridrift</translation>
 <translation id="3021066826692793094">Sommerfugl</translation>
 <translation id="3021678814754966447">&amp;Vis rammekilde</translation>
 <translation id="3022978424994383087">Det skjønte jeg ikke.</translation>
@@ -2921,6 +2922,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="4890773143211625964">Vis avanserte skriveralternativer</translation>
 <translation id="4891089016822695758">Forumet for betaversjoner</translation>
 <translation id="4892229439761351791">Nettstedet kan bruke Bluetooth</translation>
+<translation id="489258173289528622">Inaktivitetshandling ved batteridrift</translation>
 <translation id="4893336867552636863">Dette sletter nettlesingsdataene dine permanent fra denne enheten.</translation>
 <translation id="4893522937062257019">På låseskjermen</translation>
 <translation id="489454699928748701">Gi nettsteder tilgang til bevegelsessensorer</translation>
@@ -3635,6 +3637,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="5863445608433396414">Slå på feilsøkingsfunksjoner</translation>
 <translation id="5864195618110239517">Bruk tilkobling med datamåling</translation>
 <translation id="5864471791310927901">DHCP-oppslag mislyktes</translation>
+<translation id="5864754048328252126">Inaktivitetshandling når enheten lades</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> settes snart på pause</translation>
 <translation id="586567932979200359">Du kjører <ph name="PRODUCT_NAME" /> fra diskavbildningen. Hvis du installer produktet på datamaskinen, kan du kjøre det uten diskavbildningen og sikre at det holdes oppdatert.</translation>
 <translation id="5865733239029070421">Sender automatisk brukerstatistikk og programstopprapporter til Google</translation>
@@ -5973,6 +5976,7 @@ Jeg tror ikke det er nødvendig å blokkere dette nettstedet.</translation>
 <translation id="8951256747718668828">Kunne ikke fullføre gjenopprettingen på grunn av en feil</translation>
 <translation id="8951465597020890363">Vil du avslutte gjestemodus likevel?</translation>
 <translation id="8952831374766033534">Konfigurasjonsalternativet støttes ikke: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Når enheten lades</translation>
 <translation id="895347679606913382">Starter...</translation>
 <translation id="8957762313041272117">Direkteteksting</translation>
 <translation id="895944840846194039">JavaScript-minne</translation>

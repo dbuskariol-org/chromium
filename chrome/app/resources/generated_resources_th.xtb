@@ -1547,6 +1547,7 @@
 <translation id="3019285239893817657">ปุ่มหน้าย่อย</translation>
 <translation id="3020183492814296499">ทางลัด</translation>
 <translation id="3020990233660977256">หมายเลขซีเรียล: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">ขณะใช้แบตเตอรี่</translation>
 <translation id="3021066826692793094">ผีเสื้อ</translation>
 <translation id="3021678814754966447">&amp;ดูแหล่งที่มาของเฟรม</translation>
 <translation id="3022978424994383087">ฟังไม่เข้าใจ</translation>
@@ -2926,6 +2927,7 @@
 <translation id="4890773143211625964">แสดงตัวเลือกเครื่องพิมพ์ขั้นสูง</translation>
 <translation id="4891089016822695758">ฟอรัมเบต้า</translation>
 <translation id="4892229439761351791">เว็บไซต์ใช้บลูทูธได้</translation>
+<translation id="489258173289528622">การทำงานสำหรับการไม่ใช้งานขณะใช้แบตเตอรี่</translation>
 <translation id="4893336867552636863">การดำเนินการนี้จะลบข้อมูลการท่องเว็บของคุณจากอุปกรณ์นี้อย่างถาวร</translation>
 <translation id="4893522937062257019">ในหน้าจอล็อก</translation>
 <translation id="489454699928748701">อนุญาตให้เว็บไซต์ใช้เซ็นเซอร์ตรวจจับความเคลื่อนไหว</translation>
@@ -3640,6 +3642,7 @@
 <translation id="5863445608433396414">เปิดใช้ฟีเจอร์การแก้ไขข้อบกพร่อง</translation>
 <translation id="5864195618110239517">ใช้การเชื่อมต่อที่มีการวัดปริมาณอินเทอร์เน็ต</translation>
 <translation id="5864471791310927901">การค้นหา DHCP ล้มเหลว</translation>
+<translation id="5864754048328252126">การทำงานสำหรับการไม่ใช้งานขณะที่ชาร์จ</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> จะหยุดชั่วคราวเร็วๆ นี้</translation>
 <translation id="586567932979200359">คุณกำลังเรียกใช้ <ph name="PRODUCT_NAME" /> จากดิสก์อิมเมจ การติดตั้งผลิตภัณฑ์นี้บนคอมพิวเตอร์จะทำให้คุณเรียกใช้ได้โดยไม่ต้องใช้ดิสก์อิมเมจและคุณมั่นใจได้ว่าผลิตภัณฑ์จะอัปเดตตลอดเวลา</translation>
 <translation id="5865733239029070421">ส่งสถิติการใช้งานและรายงานข้อขัดข้องให้กับ Google โดยอัตโนมัติ</translation>
@@ -5978,6 +5981,7 @@
 <translation id="8951256747718668828">คืนค่าให้เสร็จสมบูรณ์ไม่ได้เนื่องจากเกิดข้อผิดพลาด</translation>
 <translation id="8951465597020890363">ออกจากโหมดผู้มาเยือนใช่ไหม</translation>
 <translation id="8952831374766033534">ตัวเลือกการกำหนดค่าที่ไม่รองรับ: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">ขณะที่ชาร์จ</translation>
 <translation id="895347679606913382">กำลังเริ่มต้น...</translation>
 <translation id="8957762313041272117">คำบรรยายสด</translation>
 <translation id="895944840846194039">หน่วยความจำ JavaScript</translation>

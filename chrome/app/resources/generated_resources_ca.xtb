@@ -1546,6 +1546,7 @@ Pots gestionar la configuració d'aquest compte instal·lant l'aplicació Family
 <translation id="3019285239893817657">Botó de subpàgina</translation>
 <translation id="3020183492814296499">Dreceres</translation>
 <translation id="3020990233660977256">Número de sèrie: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Mentre s'utilitza la bateria</translation>
 <translation id="3021066826692793094">Papallona</translation>
 <translation id="3021678814754966447">&amp;Visualitza l'origen del marc</translation>
 <translation id="3022978424994383087">No t'he entès.</translation>
@@ -2923,6 +2924,7 @@ en almenys <ph name="INSTALL_SIZE" /> d'espai lliure. Per alliberar espai, supri
 <translation id="4890773143211625964">Mostra les opcions avançades de la impressora</translation>
 <translation id="4891089016822695758">Fòrum per a la versió beta</translation>
 <translation id="4892229439761351791">El lloc web pot fer servir Bluetooth</translation>
+<translation id="489258173289528622">Acció d'inactivitat mentre s'utilitza la bateria</translation>
 <translation id="4893336867552636863">Amb aquesta acció, se suprimiran les vostres dades de navegació d'aquest dispositiu permanentment.</translation>
 <translation id="4893522937062257019">A la pantalla de bloqueig</translation>
 <translation id="489454699928748701">Permet que els llocs web utilitzin els sensors de moviment</translation>
@@ -3639,6 +3641,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="5863445608433396414">Activa les funcions de depuració</translation>
 <translation id="5864195618110239517">Fes servir la connexió d'ús mesurat</translation>
 <translation id="5864471791310927901">Error en la cerca de DHCP</translation>
+<translation id="5864754048328252126">Acció d'inactivitat mentre es carrega</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> aviat es posarà en pausa</translation>
 <translation id="586567932979200359">Esteu executant <ph name="PRODUCT_NAME" /> des de la imatge de disc. Si instal·leu l'aplicació a l'equip, podreu executar-la sense la imatge de disc i es mantindrà actualitzada.</translation>
 <translation id="5865733239029070421">Envia automàticament a Google estadístiques d'ús i informes d'error</translation>
@@ -5977,6 +5980,7 @@ Deseu el fitxer de clau en una ubicació segura. El necessitareu per crear versi
 <translation id="8951256747718668828">La restauració no s'ha pogut completar a causa d'un error</translation>
 <translation id="8951465597020890363">Vols sortir del mode de convidat de totes maneres?</translation>
 <translation id="8952831374766033534">Opció de configuració no admesa: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Mentre es carrega</translation>
 <translation id="895347679606913382">S'està iniciant...</translation>
 <translation id="8957762313041272117">Subtítols instantanis</translation>
 <translation id="895944840846194039">Memòria de JavaScript</translation>

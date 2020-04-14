@@ -1546,6 +1546,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="3019285239893817657">Tlačítko podstránky</translation>
 <translation id="3020183492814296499">Zkratky</translation>
 <translation id="3020990233660977256">Sériové číslo: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Při provozu na baterii</translation>
 <translation id="3021066826692793094">Motýl</translation>
 <translation id="3021678814754966447">Zobrazit zdrojo&amp;vý kód rámce</translation>
 <translation id="3022978424994383087">Nerozumím.</translation>
@@ -2924,6 +2925,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="4890773143211625964">Zobrazit rozšířené možnosti tiskárny</translation>
 <translation id="4891089016822695758">Fórum beta</translation>
 <translation id="4892229439761351791">Web může používat Bluetooth</translation>
+<translation id="489258173289528622">Akce nečinnosti při provozu na baterii</translation>
 <translation id="4893336867552636863">Tímto z tohoto zařízení trvale smažete své údaje o prohlížení.</translation>
 <translation id="4893522937062257019">Na obrazovce uzamčení</translation>
 <translation id="489454699928748701">Povolit webům používání senzorů pohybu</translation>
@@ -3638,6 +3640,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="5863445608433396414">Aktivovat funkce ladění</translation>
 <translation id="5864195618110239517">Použít měřené připojení</translation>
 <translation id="5864471791310927901">Vyhledávání serveru DHCP selhalo.</translation>
+<translation id="5864754048328252126">Akce nečinnosti při nabíjení</translation>
 <translation id="5865508026715185451">Aplikace <ph name="APP_NAME" /> se brzy pozastaví</translation>
 <translation id="586567932979200359">Aplikaci <ph name="PRODUCT_NAME" /> spouštíte z bitové kopie disku. Pokud ji nainstalujte do svého počítače, můžete ji spouštět bez bitové kopie disku a umožníte její aktualizace.</translation>
 <translation id="5865733239029070421">Automaticky odesílá statistiky o využívání a zprávy o selhání do Googlu</translation>
@@ -5975,6 +5978,7 @@ Svůj soubor klíče uchovávejte na bezpečném místě. Budete jej potřebovat
 <translation id="8951256747718668828">Obnovení se kvůli chybě nepodařilo dokončit</translation>
 <translation id="8951465597020890363">Přesto režim hosta ukončit?</translation>
 <translation id="8952831374766033534">Konfigurační možnost není podporována: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Při nabíjení</translation>
 <translation id="895347679606913382">Spouštění...</translation>
 <translation id="8957762313041272117">Živý přepis</translation>
 <translation id="895944840846194039">Paměť JavaScriptu</translation>

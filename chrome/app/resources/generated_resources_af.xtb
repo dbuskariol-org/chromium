@@ -1547,6 +1547,7 @@ Jy kan hierdie rekening se instellings bestuur deur die Family Link-program op j
 <translation id="3019285239893817657">Subbladsy-knoppie</translation>
 <translation id="3020183492814296499">Kortpaaie</translation>
 <translation id="3020990233660977256">Reeksnommer: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Terwyl dit battery gebruik</translation>
 <translation id="3021066826692793094">Skoenlapper</translation>
 <translation id="3021678814754966447">Bekyk raambron</translation>
 <translation id="3022978424994383087">Kon dit nie hoor nie.</translation>
@@ -2926,6 +2927,7 @@ Jy kan hierdie rekening se instellings bestuur deur die Family Link-program op j
 <translation id="4890773143211625964">Wys gevorderde drukkeropsies</translation>
 <translation id="4891089016822695758">Beta-forum</translation>
 <translation id="4892229439761351791">Werf kan Bluetooth gebruik</translation>
+<translation id="489258173289528622">Rushandeling terwyl dit battery gebruik</translation>
 <translation id="4893336867552636863">Dit sal jou blaaidata permanent van hierdie toestel af uitvee.</translation>
 <translation id="4893522937062257019">Op die sluitskerm</translation>
 <translation id="489454699928748701">Laat werwe toe om bewegingsensors te gebruik</translation>
@@ -3641,6 +3643,7 @@ Maak seker jy wys nie enige sensitiewe inligting nie.</translation>
 <translation id="5863445608433396414">Aktiveer ontfoutingkenmerke</translation>
 <translation id="5864195618110239517">Gebruik betaalde verbinding</translation>
 <translation id="5864471791310927901">DHCP-opsoek het misluk</translation>
+<translation id="5864754048328252126">Rushandeling terwyl dit laai</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> sal binnekort onderbreek word</translation>
 <translation id="586567932979200359">Jy laat loop <ph name="PRODUCT_NAME" /> tans van sy skyfafbeelding af. As jy dit op jou rekenaar installeer, kan jy dit sonder die skyfafbeelding laat loop, en verseker dat dit op datum gehou word.</translation>
 <translation id="5865733239029070421">Stuur gebruikstatistieke en omvalverslae outomaties na Google</translation>
@@ -5978,6 +5981,7 @@ Hou jou sleutellêer op 'n veilige plek. Jy gaan dit nodig hê om nuwe weergawes
 <translation id="8951256747718668828">Terugstelling kon weens 'n probleem nie voltooi word nie</translation>
 <translation id="8951465597020890363">Verlaat besoekermodus in elk geval?</translation>
 <translation id="8952831374766033534">Opstellingopsie word nie gesteun nie: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Terwyl dit laai</translation>
 <translation id="895347679606913382">Begin tans …</translation>
 <translation id="8957762313041272117">Intydse Onderskrif</translation>
 <translation id="895944840846194039">JavaScript-geheue</translation>

@@ -1547,6 +1547,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="3019285239893817657">Butang subhalaman</translation>
 <translation id="3020183492814296499">Pintasan</translation>
 <translation id="3020990233660977256">Nombor Siri: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Semasa menggunakan bateri</translation>
 <translation id="3021066826692793094">Rama-rama</translation>
 <translation id="3021678814754966447">&amp;Lihat Sumber Bingkai</translation>
 <translation id="3022978424994383087">Tidak faham.</translation>
@@ -2926,6 +2927,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="4890773143211625964">Tunjukkan pilihan terperinci pencetak</translation>
 <translation id="4891089016822695758">Forum beta</translation>
 <translation id="4892229439761351791">Tapak boleh menggunakan Bluetooth</translation>
+<translation id="489258173289528622">Tindakan melahu semasa menggunakan bateri</translation>
 <translation id="4893336867552636863">Tindakan ini akan memadamkan data penyemakan imbas anda daripada peranti ini selama-lamanya.</translation>
 <translation id="4893522937062257019">Pada skrin kunci</translation>
 <translation id="489454699928748701">Benarkan tapak menggunakan penderia gerakan</translation>
@@ -3640,6 +3642,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="5863445608433396414">Dayakan ciri penyahpepijatan</translation>
 <translation id="5864195618110239517">Gunakan sambungan bermeter</translation>
 <translation id="5864471791310927901">Carian DHCP gagal</translation>
+<translation id="5864754048328252126">Tindakan melahu semasa mengecas</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> akan dijeda tidak lama lagi</translation>
 <translation id="586567932979200359">Anda menjalankan <ph name="PRODUCT_NAME" /> daripada imej cakeranya. Pemasangannya pada komputer anda membolehkan anda menjalankannya tanpa imej cakera, dan memastikannya adalah yang terkini.</translation>
 <translation id="5865733239029070421">Menghantar perangkaan penggunaan dan laporan ranap sistem secara automatik kepada Google</translation>
@@ -5979,6 +5982,7 @@ perubahan ini berlaku, anda mungkin tidak mahukannya.</translation>
 <translation id="8951256747718668828">Pemulihan tidak dapat diselesaikan kerana berlaku ralat</translation>
 <translation id="8951465597020890363">Keluar daripada mod tetamu juga?</translation>
 <translation id="8952831374766033534">Pilihan konfigurasi tidak disokong: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Semasa mengecas</translation>
 <translation id="895347679606913382">Memulakan...</translation>
 <translation id="8957762313041272117">Sari kata langsung</translation>
 <translation id="895944840846194039">Memori JavaScript</translation>

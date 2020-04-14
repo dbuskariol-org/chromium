@@ -1547,6 +1547,7 @@ Vous pouvez gérer les paramètres de ce compte en installant l'application Fami
 <translation id="3019285239893817657">Bouton pour accéder à la sous-page</translation>
 <translation id="3020183492814296499">Raccourcis</translation>
 <translation id="3020990233660977256">Numéro de série : <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Lorsque l'appareil est sur batterie</translation>
 <translation id="3021066826692793094">Papillon</translation>
 <translation id="3021678814754966447">&amp;Afficher le code source du cadre</translation>
 <translation id="3022978424994383087">Je n'ai pas compris.</translation>
@@ -2926,6 +2927,7 @@ Souhaitez-vous lancer <ph name="CONTROL_PANEL_APPLET_NAME" /> ?</translation>
 <translation id="4890773143211625964">Afficher les paramètres d'imprimante avancés</translation>
 <translation id="4891089016822695758">Forum bêta</translation>
 <translation id="4892229439761351791">Le site peut utiliser le Bluetooth</translation>
+<translation id="489258173289528622">Lorsque l'appareil est inactif et fonctionne sur batterie</translation>
 <translation id="4893336867552636863">Cette action aura pour effet de supprimer définitivement vos données de navigation de cet appareil.</translation>
 <translation id="4893522937062257019">Sur l'écran de verrouillage</translation>
 <translation id="489454699928748701">Autoriser les sites à utiliser les capteurs de mouvement</translation>
@@ -3641,6 +3643,7 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="5863445608433396414">Activer les fonctionnalités de débogage</translation>
 <translation id="5864195618110239517">Utiliser une connexion facturée à l'usage</translation>
 <translation id="5864471791310927901">Échec de la vérification DHCP</translation>
+<translation id="5864754048328252126">Lorsque l'appareil est inactif et en charge</translation>
 <translation id="5865508026715185451">L'application <ph name="APP_NAME" /> sera bientôt suspendue</translation>
 <translation id="586567932979200359">Vous exécutez <ph name="PRODUCT_NAME" /> à partir de son image disque. Si vous l'installez sur votre ordinateur, vous pourrez l'utiliser sans image disque et bénéficierez de mises à jour automatiques.</translation>
 <translation id="5865733239029070421">Envoie automatiquement des statistiques d'utilisation et des rapports d'erreur à Google</translation>
@@ -3840,6 +3843,7 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="6120205520491252677">Épingler cette page à l'écran de démarrage…</translation>
 <translation id="6122081475643980456">Une extension a pris le contrôle de votre connexion Internet</translation>
 <translation id="6122095009389448667">Continuer à empêcher ce site de voir le contenu du presse-papiers</translation>
+<translation id="6122831415929794347">Désactiver la navigation sécurisée ?</translation>
 <translation id="6122875415561139701">L'opération d'écriture n'est pas autorisée sur l'appareil <ph name="DEVICE_NAME" />.</translation>
 <translation id="6124650939968185064">Les extensions suivantes dépendent de cette extension :</translation>
 <translation id="6124698108608891449">Ce site a besoin d'autres autorisations.</translation>
@@ -4044,6 +4048,7 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="6408118934673775994">Accéder aux données des sites <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> et <ph name="WEBSITE_3" />, et les modifier</translation>
 <translation id="6410257289063177456">Fichiers image</translation>
 <translation id="6410328738210026208">Changer de version et Powerwash</translation>
+<translation id="6410390304316730527">La fonctionnalité Navigation sécurisée vous protège contre les pirates informatiques qui pourraient vous inciter à effectuer des opérations dangereuses, comme installer des logiciels malveillants ou divulguer des informations personnelles (mots de passe, numéros de téléphone ou numéros de carte de crédit, par exemple). Si vous la désactivez, faites preuve de vigilance lorsque vous consultez des sites Web inconnus ou peu fiables.</translation>
 <translation id="6410668567036790476">Ajouter un moteur de recherche</translation>
 <translation id="641081527798843608">Correspondance d'objet</translation>
 <translation id="6412673304250309937">Il vérifie les URL d'après une liste de sites dangereux stockée dans Chrome. Si un site tente de voler votre mot de passe ou si vous téléchargez un fichier dangereux, Chrome peut également envoyer les URL concernées, y compris des extraits du contenu de pages, à la fonctionnalité de navigation sécurisée.</translation>
@@ -5977,6 +5982,7 @@ Conservez votre fichier de clé en lieu sûr. Vous en aurez besoin lors de la cr
 <translation id="8951256747718668828">Échec de la restauration en raison d'une erreur</translation>
 <translation id="8951465597020890363">Voulez-vous vraiment quitter le mode Invité ?</translation>
 <translation id="8952831374766033534">Option de configuration non disponible : <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Lorsque l'appareil est en charge</translation>
 <translation id="895347679606913382">Démarrage...</translation>
 <translation id="8957762313041272117">Sous-titres instantanés</translation>
 <translation id="895944840846194039">Mémoire JavaScript</translation>

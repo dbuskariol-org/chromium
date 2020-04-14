@@ -1547,6 +1547,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="3019285239893817657">Butonul Pagină secundară</translation>
 <translation id="3020183492814296499">Comenzi rapide</translation>
 <translation id="3020990233660977256">Numărul de serie: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">În timpul funcționării pe baterie</translation>
 <translation id="3021066826692793094">Fluture</translation>
 <translation id="3021678814754966447">&amp;Afișează sursa cadrului</translation>
 <translation id="3022978424994383087">Nu am înțeles.</translation>
@@ -2926,6 +2927,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="4890773143211625964">Afișează opțiunile avansate pentru imprimantă</translation>
 <translation id="4891089016822695758">Forumul pentru versiunea beta</translation>
 <translation id="4892229439761351791">Site-ul poate folosi Bluetooth</translation>
+<translation id="489258173289528622">Măsura pentru inactivitate în timpul funcționării pe baterie</translation>
 <translation id="4893336867552636863">Astfel, vor fi șterse definitiv datele de navigare de pe acest dispozitiv.</translation>
 <translation id="4893522937062257019">Pe ecranul de blocare</translation>
 <translation id="489454699928748701">Permite site-urilor să folosească senzorii de mișcare</translation>
@@ -3640,6 +3642,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="5863445608433396414">Activează funcțiile de remediere a erorilor</translation>
 <translation id="5864195618110239517">Folosește conexiunea contorizată</translation>
 <translation id="5864471791310927901">Căutarea DHCP nu a reușit</translation>
+<translation id="5864754048328252126">Măsura pentru inactivitate în timpul încărcării</translation>
 <translation id="5865508026715185451">Aplicația <ph name="APP_NAME" /> se va întrerupe în curând</translation>
 <translation id="586567932979200359">Rulează <ph name="PRODUCT_NAME" /> din imaginea sa de pe disc. Instalarea sa pe computer îți permite să îl rulezi fără imaginea de pe disc și asigură actualizarea acestuia.</translation>
 <translation id="5865733239029070421">Trimite automat statistici de utilizare și rapoarte de blocare la Google</translation>
@@ -5978,6 +5981,7 @@ Păstrează fișierul cu cheia într-un loc sigur. Acesta va fi necesar la crear
 <translation id="8951256747718668828">Nu s-a putut finaliza restabilirea din cauza unei erori</translation>
 <translation id="8951465597020890363">Ieși oricum din modul pentru invitați?</translation>
 <translation id="8952831374766033534">Opțiunea de configurare nu este acceptată: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">În timpul încărcării</translation>
 <translation id="895347679606913382">Se începe...</translation>
 <translation id="8957762313041272117">Subtitrări live</translation>
 <translation id="895944840846194039">Memorie JavaScript</translation>

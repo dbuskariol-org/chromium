@@ -1547,6 +1547,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="3019285239893817657">Dugme za podstranicu</translation>
 <translation id="3020183492814296499">Prečice</translation>
 <translation id="3020990233660977256">Serijski broj: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Tokom rada na bateriji</translation>
 <translation id="3021066826692793094">Leptir</translation>
 <translation id="3021678814754966447">&amp;Prikaži izvor okvira</translation>
 <translation id="3022978424994383087">Nisam shvatio.</translation>
@@ -2926,6 +2927,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="4890773143211625964">Prikaži napredne opcije pisača</translation>
 <translation id="4891089016822695758">Forum za beta verziju</translation>
 <translation id="4892229439761351791">Web lokacija može koristiti Bluetooth</translation>
+<translation id="489258173289528622">Radnja u slučaju neaktivnosti tokom rada na bateriji</translation>
 <translation id="4893336867552636863">Ovo će trajno izbrisati vaše podatke o pregledanju s ovog uređaja.</translation>
 <translation id="4893522937062257019">Na zaključanom zaslonu</translation>
 <translation id="489454699928748701">Dozvoli web lokacijama korištenje senzora pokreta</translation>
@@ -3640,6 +3642,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="5863445608433396414">Omogući funkcije za otklanjanje grešaka</translation>
 <translation id="5864195618110239517">Koristi vezu s naplatom</translation>
 <translation id="5864471791310927901">Traženje DHCP-a nije uspjelo</translation>
+<translation id="5864754048328252126">Radnja u slučaju neaktivnosti tokom punjenja</translation>
 <translation id="5865508026715185451">Aplikacija <ph name="APP_NAME" /> će se uskoro pauzirati</translation>
 <translation id="586567932979200359">Pokrećete <ph name="PRODUCT_NAME" /> sa slike diska. Ako ga instalirate na računaru, moći ćete ga pokrenuti bez slike diska i uvijek će biti ažuriran.</translation>
 <translation id="5865733239029070421">Automatski šalje Googleu statistiku korištenja i izvještaje o padovima aplikacije</translation>
@@ -5978,6 +5981,7 @@ Fajl ključa: <ph name="KEY_FILE" />
 <translation id="8951256747718668828">Vraćanje nije uspjelo zbog greške</translation>
 <translation id="8951465597020890363">Ipak napustiti način rada za gosta?</translation>
 <translation id="8952831374766033534">Opcija za konfiguraciju nije podržana: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Tokom punjenja</translation>
 <translation id="895347679606913382">Pokretanje…</translation>
 <translation id="8957762313041272117">Automatski titlovi</translation>
 <translation id="895944840846194039">JavaScript memorija</translation>

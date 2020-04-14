@@ -1545,6 +1545,7 @@
 <translation id="3019285239893817657">לחצן למעבר אל דף משנה</translation>
 <translation id="3020183492814296499">קיצורים</translation>
 <translation id="3020990233660977256">מספר סידורי: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">בזמן שימוש בסוללה</translation>
 <translation id="3021066826692793094">פרפר</translation>
 <translation id="3021678814754966447">&amp;הצג את מקור המסגרת</translation>
 <translation id="3022978424994383087">ההודעה שלך לא ברורה.</translation>
@@ -2924,6 +2925,7 @@
 <translation id="4890773143211625964">הצג אפשרויות מדפסת מתקדמות</translation>
 <translation id="4891089016822695758">פורום ביטא</translation>
 <translation id="4892229439761351791">‏לאתר יש הרשאה להשתמש ב-Bluetooth</translation>
+<translation id="489258173289528622">מה לעשות בעת חוסר פעילות בזמן שימוש בסוללה</translation>
 <translation id="4893336867552636863">הפעולה הזו תמחק לצמיתות את נתוני הגלישה שלך במכשיר הזה.</translation>
 <translation id="4893522937062257019">במסך הנעילה</translation>
 <translation id="489454699928748701">אתרים יוכלו להשתמש בחיישני תנועה</translation>
@@ -3638,6 +3640,7 @@
 <translation id="5863445608433396414">הפעל תכונות ניפוי באגים</translation>
 <translation id="5864195618110239517">שימוש בחיבור עם חיוב לפי שימוש בנתונים</translation>
 <translation id="5864471791310927901">‏חיפוש DHCP נכשל</translation>
+<translation id="5864754048328252126">מה לעשות בעת חוסר פעילות בזמן טעינה</translation>
 <translation id="5865508026715185451">האפליקציה <ph name="APP_NAME" /> תושהה בקרוב</translation>
 <translation id="586567932979200359">אתה מפעיל את <ph name="PRODUCT_NAME" /> מתמונת הדיסק שלו. התקנתו במחשב מאפשרת לך להפעיל אותו ללא תמונת הדיסק, ומבטיחה שיישאר מעודכן.</translation>
 <translation id="5865733239029070421">‏שליחת דוחות קריסה וסטטיסטיקת שימוש אל Google באופן אוטומטי</translation>
@@ -5977,6 +5980,7 @@
 <translation id="8951256747718668828">אירעה שגיאה ולא ניתן להשלים את השחזור</translation>
 <translation id="8951465597020890363">לצאת בכל זאת ממצב אורח?</translation>
 <translation id="8952831374766033534">אפשרות ההגדרה לא נתמכת: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">בזמן טעינה</translation>
 <translation id="895347679606913382">מתחיל...</translation>
 <translation id="8957762313041272117">כתוביות מיידיות</translation>
 <translation id="895944840846194039">‏זיכרון JavaScript</translation>

@@ -1515,7 +1515,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="2987620471460279764">Text, der über ein anderes Gerät geteilt wurde</translation>
 <translation id="2989474696604907455">Nicht angeschlossen</translation>
 <translation id="2989786307324390836">DER-verschlüsselte Binärdatei, Einzelzertifikat</translation>
-<translation id="2992931425024192067">Alle Benachrichtigungen anzeigen</translation>
+<translation id="2992931425024192067">Gesamten Benachrichtigungsinhalt anzeigen</translation>
 <translation id="2993517869960930405">App-Info</translation>
 <translation id="2996286169319737844">Daten sind mit Ihrer Synchronisierungspassphrase verschlüsselt. Davon ausgenommen sind Zahlungsmethoden oder Adressen von Google Pay.</translation>
 <translation id="2996722619877761919">Entlang der langen Seite wenden</translation>
@@ -1543,6 +1543,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3019285239893817657">Taste zur Unterseite</translation>
 <translation id="3020183492814296499">Verknüpfungen</translation>
 <translation id="3020990233660977256">Seriennummer: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Im Akkubetrieb</translation>
 <translation id="3021066826692793094">Schmetterling</translation>
 <translation id="3021678814754966447">Frame-Quelltext &amp;anzeigen</translation>
 <translation id="3022978424994383087">Nicht verstanden.</translation>
@@ -2922,6 +2923,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4890773143211625964">Erweiterte Druckereinstellungen anzeigen</translation>
 <translation id="4891089016822695758">Beta-Forum</translation>
 <translation id="4892229439761351791">Website kann Bluetooth verwenden</translation>
+<translation id="489258173289528622">Aktion bei Inaktivität im Akkubetrieb</translation>
 <translation id="4893336867552636863">Dadurch werden die Browserdaten dauerhaft von diesem Gerät gelöscht.</translation>
 <translation id="4893522937062257019">Auf dem Sperrbildschirm</translation>
 <translation id="489454699928748701">Websites erlauben, Bewegungssensoren zu verwenden</translation>
@@ -3636,6 +3638,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5863445608433396414">Debugging-Funktionen aktivieren</translation>
 <translation id="5864195618110239517">Kostenpflichtige Verbindung nutzen</translation>
 <translation id="5864471791310927901">DHCP-Suche fehlgeschlagen</translation>
+<translation id="5864754048328252126">Aktion bei Inaktivität beim Aufladen</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> wird bald pausiert</translation>
 <translation id="586567932979200359">Sie führen <ph name="PRODUCT_NAME" /> vom Datenträgerabbild aus. Wenn Sie den Browser auf Ihrem Computer installieren, wird er ohne Datenträgerabbild ausgeführt und immer automatisch aktualisiert.</translation>
 <translation id="5865733239029070421">Nutzungsstatistiken und Absturzberichte automatisch an Google senden</translation>
@@ -5973,6 +5976,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="8951256747718668828">Die Wiederherstellung konnte aufgrund eines Fehlers nicht abgeschlossen werden</translation>
 <translation id="8951465597020890363">Gastmodus trotzdem beenden?</translation>
 <translation id="8952831374766033534">Konfigurationsoption wird nicht unterstützt: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Beim Aufladen</translation>
 <translation id="895347679606913382">Wird gestartet...</translation>
 <translation id="8957762313041272117">Automatische Untertitel</translation>
 <translation id="895944840846194039">JavaScript-Speicher</translation>

@@ -1547,6 +1547,7 @@ Ha kezelni szeretné a fiók beállításait, telepítse eszközére a Family Li
 <translation id="3019285239893817657">Aloldal gombja</translation>
 <translation id="3020183492814296499">Billentyűparancsok</translation>
 <translation id="3020990233660977256">Sorozatszám: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Amíg akkumulátorról működik</translation>
 <translation id="3021066826692793094">Pillangó</translation>
 <translation id="3021678814754966447">&amp;Keret forrásának megtekintése</translation>
 <translation id="3022978424994383087">Nem értettem.</translation>
@@ -2925,6 +2926,7 @@ Elindítja a következőt: <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation
 <translation id="4890773143211625964">Speciális nyomtatóbeállítások megjelenítése</translation>
 <translation id="4891089016822695758">Béta fórum</translation>
 <translation id="4892229439761351791">A webhely használhat Bluetooth-t</translation>
+<translation id="489258173289528622">Tétlenségi művelet akkumulátorról való működéskor</translation>
 <translation id="4893336867552636863">Ezzel az eszközön lévő összes böngészési adat véglegesen törlődik.</translation>
 <translation id="4893522937062257019">A lezárási képernyőn</translation>
 <translation id="489454699928748701">A mozgásérzékelők használatának engedélyezése a webhelyek számára</translation>
@@ -3641,6 +3643,7 @@ Győződjön meg arról, hogy nem ad ki bizalmas adatokat.</translation>
 <translation id="5863445608433396414">Hibakeresési funkciók bekapcsolása</translation>
 <translation id="5864195618110239517">Forgalomkorlátos kapcsolat használata</translation>
 <translation id="5864471791310927901">DHCP-keresés sikertelen</translation>
+<translation id="5864754048328252126">Tétlenségi művelet töltés közben</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> hamarosan szünetelni fog</translation>
 <translation id="586567932979200359">A <ph name="PRODUCT_NAME" /> alkalmazást jelenleg a lemezképéről futtatja. Ha telepíti a számítógépére, akkor futtathatja a lemezkép nélkül is, emellett biztosan naprakészen tartja.</translation>
 <translation id="5865733239029070421">Automatikusan elküldi a használati statisztikákat és hibajelentéseket a Google-nak</translation>
@@ -5979,6 +5982,7 @@ A kulcsfájlt tartsa biztonságos helyen. Szüksége lesz rá ahhoz, hogy új ve
 <translation id="8951256747718668828">Hiba történt, ezért nem lehetett végrehajtani a visszaállítást.</translation>
 <translation id="8951465597020890363">Mindenképp kilép a vendég módból?</translation>
 <translation id="8952831374766033534">Nem támogatott konfigurációs beállítás: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Töltés közben</translation>
 <translation id="895347679606913382">Kezdés...</translation>
 <translation id="8957762313041272117">Élő feliratozás</translation>
 <translation id="895944840846194039">JavaScript-memória</translation>

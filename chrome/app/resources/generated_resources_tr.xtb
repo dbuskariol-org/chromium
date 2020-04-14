@@ -1547,6 +1547,7 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="3019285239893817657">Alt sayfa düğmesi</translation>
 <translation id="3020183492814296499">Kısayollar</translation>
 <translation id="3020990233660977256">Seri Numarası: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Pil kullanılırken</translation>
 <translation id="3021066826692793094">Kelebek</translation>
 <translation id="3021678814754966447">Çerçeve Kaynağını &amp;Görüntüle</translation>
 <translation id="3022978424994383087">Anlaşılmadı.</translation>
@@ -2926,6 +2927,7 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="4890773143211625964">Gelişmiş yazıcı seçeneklerini göster</translation>
 <translation id="4891089016822695758">Beta forumu</translation>
 <translation id="4892229439761351791">Site Bluetooth bağlantısı kullanabilir</translation>
+<translation id="489258173289528622">Pil kullanılırken boşta kalma işlemi</translation>
 <translation id="4893336867552636863">Bu işlem, tarama verilerinizi bu cihazdan kalıcı olarak silecektir.</translation>
 <translation id="4893522937062257019">Kilit ekranında</translation>
 <translation id="489454699928748701">Sitelerin hareket sensörlerini kullanmasına izin ver</translation>
@@ -3641,6 +3643,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="5863445608433396414">Hata ayıklama özelliklerini etkinleştir</translation>
 <translation id="5864195618110239517">Sayaçlı bağlantıyı kullan</translation>
 <translation id="5864471791310927901">DHCP araması başarısız oldu</translation>
+<translation id="5864754048328252126">Şarj olurken boşta kalma işlemi</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> yakında duraklatılacak</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" /> programını disk görüntüsünden çalıştırıyorsunuz. Bu ürünü bilgisayarınıza kurduğunuzda, disk görüntüsü olmadan çalıştırabilir ve her zaman güncel olacağından emin olabilirsiniz.</translation>
 <translation id="5865733239029070421">Kullanım istatistiklerini ve kilitlenme raporlarını Google'a otomatik olarak gönderir</translation>
@@ -5978,6 +5981,7 @@ Anahtar dosyanızı güvenli bir yerde saklayın. Uzantınızın yeni sürümler
 <translation id="8951256747718668828">Bir hata nedeniyle geri yükleme işlemi tamamlanamadı</translation>
 <translation id="8951465597020890363">Yine de misafir modundan çıkılsın mı?</translation>
 <translation id="8952831374766033534">Yapılandırma seçeneği desteklenmiyor: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Şarj olurken</translation>
 <translation id="895347679606913382">Başlatılıyor...</translation>
 <translation id="8957762313041272117">Canlı altyazı</translation>
 <translation id="895944840846194039">JavaScript Belleği</translation>

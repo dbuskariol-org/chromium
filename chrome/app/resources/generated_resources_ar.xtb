@@ -1547,6 +1547,7 @@
 <translation id="3019285239893817657">زر صفحة فرعية</translation>
 <translation id="3020183492814296499">الاختصارات</translation>
 <translation id="3020990233660977256">الرقم التسلسلي: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">أثناء التشغيل على البطارية</translation>
 <translation id="3021066826692793094">فراشة</translation>
 <translation id="3021678814754966447">عرض م&amp;صدر الإطار</translation>
 <translation id="3022978424994383087">لم يتم استيعاب هذا.</translation>
@@ -2923,6 +2924,7 @@
 <translation id="4890773143211625964">عرض خيارات الطابعة المتقدمة</translation>
 <translation id="4891089016822695758">منتدى الإصدار التجريبي</translation>
 <translation id="4892229439761351791">يمكن لموقع الويب استخدام البلوتوث.</translation>
+<translation id="489258173289528622">إجراء الخمول أثناء التشغيل على البطارية</translation>
 <translation id="4893336867552636863">سيؤدي هذا إلى حذف بيانات التصفح من هذا الجهاز نهائيًا.</translation>
 <translation id="4893522937062257019">على شاشة القفل</translation>
 <translation id="489454699928748701">السماح لمواقع الويب باستخدام مستشعرات الحركة</translation>
@@ -3638,6 +3640,7 @@
 <translation id="5863445608433396414">تفعيل ميزات تصحيح الأخطاء</translation>
 <translation id="5864195618110239517">استخدام اتصال يفرض تكلفة استخدام</translation>
 <translation id="5864471791310927901">‏تعذّر بحث DHCP</translation>
+<translation id="5864754048328252126">إجراء الخمول أثناء الشحن</translation>
 <translation id="5865508026715185451">سيتم إيقاف تطبيق <ph name="APP_NAME" /> مؤقتًا بعد قليل.</translation>
 <translation id="586567932979200359">أنت تشغّل <ph name="PRODUCT_NAME" /> من صورته على القرص. ويسمح لك تثبيته على الكمبيوتر بتشغيله بدون الحاجة إلى صورة القرص، كما يضمن ذلك الحفاظ على تحديثه بشكل مستمر.</translation>
 <translation id="5865733239029070421">‏يُرسِل إحصاءات الاستخدام وتقارير الأعطال إلى Google تلقائيًا.</translation>
@@ -5977,6 +5980,7 @@
 <translation id="8951256747718668828">تعذَّر إكمال الاستعادة بسبب حدوث خطأ</translation>
 <translation id="8951465597020890363">هل تريد الخروج من وضع الضيف على أي حال؟</translation>
 <translation id="8952831374766033534">خيار الضبط غير متاح: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">أثناء الشحن</translation>
 <translation id="895347679606913382">بدء التحميل...</translation>
 <translation id="8957762313041272117">النسخ النصي التلقائي</translation>
 <translation id="895944840846194039">‏ذاكرة JavaScript</translation>

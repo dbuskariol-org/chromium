@@ -1547,6 +1547,7 @@
 <translation id="3019285239893817657">サブページのボタン</translation>
 <translation id="3020183492814296499">ショートカット</translation>
 <translation id="3020990233660977256">シリアル番号: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">バッテリー駆動時</translation>
 <translation id="3021066826692793094">蝶</translation>
 <translation id="3021678814754966447">フレームのソースを表示(&amp;V)</translation>
 <translation id="3022978424994383087">聞き取れませんでした。</translation>
@@ -2926,6 +2927,7 @@
 <translation id="4890773143211625964">プリンタの詳細オプションを表示</translation>
 <translation id="4891089016822695758">ベータ版フォーラム</translation>
 <translation id="4892229439761351791">サイトに Bluetooth の使用が許可されています</translation>
+<translation id="489258173289528622">バッテリー駆動時のアイドル操作</translation>
 <translation id="4893336867552636863">このデバイスから閲覧データが完全に削除されます。</translation>
 <translation id="4893522937062257019">ロック画面</translation>
 <translation id="489454699928748701">サイトでのモーション センサーの使用を許可する</translation>
@@ -3640,6 +3642,7 @@
 <translation id="5863445608433396414">デバッグ機能を有効にする</translation>
 <translation id="5864195618110239517">従量制接続を使用</translation>
 <translation id="5864471791310927901">DHCP を検索できませんでした</translation>
+<translation id="5864754048328252126">充電時のアイドル操作</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> はまもなく一時的に利用できなくなります</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" /> はディスク イメージから実行されています。パソコンにインストールすると、ディスク イメージなしで実行できるようになり、常に最新の状態に維持できます。</translation>
 <translation id="5865733239029070421">使用統計情報や障害レポートを Google に自動送信します</translation>
@@ -3839,6 +3842,7 @@
 <translation id="6120205520491252677">このページを起動画面に固定...</translation>
 <translation id="6122081475643980456">インターネット接続が制限されています</translation>
 <translation id="6122095009389448667">このサイトによるクリップボードへのアクセスを引き続きブロックする</translation>
+<translation id="6122831415929794347">セーフ ブラウジングをオフにしますか？</translation>
 <translation id="6122875415561139701">「<ph name="DEVICE_NAME" />」での書き込み操作は許可されていません。</translation>
 <translation id="6124650939968185064">次の拡張機能は、この拡張機能に依存しています:</translation>
 <translation id="6124698108608891449">このサイトが追加の権限をリクエストしています。</translation>
@@ -4043,6 +4047,7 @@
 <translation id="6408118934673775994"><ph name="WEBSITE_1" />、<ph name="WEBSITE_2" />、<ph name="WEBSITE_3" /> 上にある自分のデータの読み取りと変更</translation>
 <translation id="6410257289063177456">画像ファイル</translation>
 <translation id="6410328738210026208">チャンネルを変更して Powerwash</translation>
+<translation id="6410390304316730527">セーフ ブラウジングは、不正なソフトウェアのインストールや個人情報（パスワード、電話番号、クレジット カードなど）の入力といった危険な操作を行うよう誘導する悪意のあるユーザーから保護します。オフにする場合、なじみのないサイトや評判の悪いサイトを閲覧する際は十分に注意してください。</translation>
 <translation id="6410668567036790476">検索エンジンの追加</translation>
 <translation id="641081527798843608">件名の一致</translation>
 <translation id="6412673304250309937">Chrome に保存されている安全でないサイトのリストと URL を照合します。サイトがパスワードを不正に取得しようとしている場合や、ユーザーが安全でないファイルをダウンロードしようとした場合は、URL とページ コンテンツの一部をセーフ ブラウジングに送信することがあります。</translation>
@@ -5976,6 +5981,7 @@
 <translation id="8951256747718668828">エラーが発生したため、復元を完了できませんでした</translation>
 <translation id="8951465597020890363">ゲストモードを終了してもよろしいですか？</translation>
 <translation id="8952831374766033534">設定オプションがサポートされていません: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">充電時</translation>
 <translation id="895347679606913382">開始しています...</translation>
 <translation id="8957762313041272117">自動字幕起こし</translation>
 <translation id="895944840846194039">JavaScript メモリ</translation>

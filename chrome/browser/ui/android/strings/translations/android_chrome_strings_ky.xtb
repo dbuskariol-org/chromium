@@ -594,7 +594,7 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="5342314432463739672">Уруксат сурамдары</translation>
 <translation id="534295439873310000">NFC түзмөктөрү</translation>
 <translation id="5357811892247919462">Өтмөк алынды</translation>
-<translation id="5368958499335451666">{OPEN_TABS,plural, =1{<ph name="OPEN_TABS_ONE" /> ачык өтмөк, өтмөктөрдү которуштуруу үчүн таптап коюңуз}other{<ph name="OPEN_TABS_MANY" /> ачык өтмөк, өтмөктөрдү которуштуруу үчүн таптап коюңуз}}</translation>
+<translation id="5368958499335451666">{OPEN_TABS,plural, =1{<ph name="OPEN_TABS_ONE" /> ачык өтмөк, өтмөктөрдү которуштуруу үчүн, таптап коюңуз}other{<ph name="OPEN_TABS_MANY" /> ачык өтмөк, өтмөктөрдү которуштуруу үчүн, таптап коюңуз}}</translation>
 <translation id="5394307150471348411">{DETAIL_COUNT,plural, =1{(+ дагы 1)}other{(+ дагы #)}}</translation>
 <translation id="5403592356182871684">Ысымдар</translation>
 <translation id="5403644198645076998">Белгилүү сайттарга гана кирүүгө уруксат</translation>

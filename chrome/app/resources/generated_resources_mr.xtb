@@ -1546,6 +1546,7 @@
 <translation id="3019285239893817657">सबपेज बटण</translation>
 <translation id="3020183492814296499">शॉर्टकट</translation>
 <translation id="3020990233660977256">सिरिअल नंबर: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">बॅटरीवर असताना</translation>
 <translation id="3021066826692793094">फुलपाखरू</translation>
 <translation id="3021678814754966447">फ्रेम स्रोत &amp;पहा</translation>
 <translation id="3022978424994383087">ते समजू शकले नाही.</translation>
@@ -2423,7 +2424,7 @@
 <translation id="4144218403971135344">आणखी चांगल्या दर्जाचे व्हिडिओ मिळवा आणि बॅटरी लाइफ वाचवा. व्हिडिओ फक्त तुमच्या Cast सुरू केलेल्या स्क्रीनवर प्ले होईल.</translation>
 <translation id="4146026355784316281">नेहमी सिस्टम दर्शकासह उघडा</translation>
 <translation id="4146785383423576110">रीसेट करा आणि साफ करा</translation>
-<translation id="4147897805161313378">Google फोटो</translation>
+<translation id="4147897805161313378">Google Photos</translation>
 <translation id="4147911968024186208">रीबूट करा. तुम्हाला ही एरर पुन्हा दिसल्यास कृपया तुमच्या साहाय्य प्रतिनिधीशी संपर्क साधा.</translation>
 <translation id="4150201353443180367">डिस्प्ले करा</translation>
 <translation id="4152670763139331043">{NUM_TABS,plural, =1{1 टॅब}other{# टॅब}}</translation>
@@ -2923,6 +2924,7 @@
 <translation id="4890773143211625964">प्रगत प्रिंटर पर्याय दर्शवा</translation>
 <translation id="4891089016822695758">बीटा फोरम</translation>
 <translation id="4892229439761351791">साइट ब्लूटूथ वापरू शकते</translation>
+<translation id="489258173289528622">बॅटरीवर असताना निष्क्रिय कृती</translation>
 <translation id="4893336867552636863">हे या डिव्‍हाइस वरून तुमचा ब्राउझिंग डेटा कायमचा हटवेल.</translation>
 <translation id="4893522937062257019">लॉक स्क्रीनवर</translation>
 <translation id="489454699928748701">साइटना तुमचे मोशन सेन्सर वापरण्याची अनुमती द्या</translation>
@@ -3637,6 +3639,7 @@
 <translation id="5863445608433396414">डीबगिंग वैशिष्ट्ये सुरू करा</translation>
 <translation id="5864195618110239517">मर्यादित कनेक्शन वापरा</translation>
 <translation id="5864471791310927901">DHCP लुकअप अयशस्वी</translation>
+<translation id="5864754048328252126">चार्ज होत असताना निष्क्रिय कृती</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> लवकरच थांबेल</translation>
 <translation id="586567932979200359">तुम्ही <ph name="PRODUCT_NAME" /> त्याच्या डिस्क प्रतिमेवरून चालवत आहात. तुमच्या कॉंप्युटरवर ते इंस्टॉल केल्यामुळे तुम्हाला ते डिस्क प्रतिमेशिवाय चालवू देते आणि ते अपडेट ठेवले जाईल हे निश्चित करते.</translation>
 <translation id="5865733239029070421">Google ला वापर आकडेवारी आणि क्रॅश अहवाल आपोआप पाठवते</translation>
@@ -5975,6 +5978,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="8951256747718668828">एररमुळे रिस्टोअर करणे पूर्ण करता आले नाही</translation>
 <translation id="8951465597020890363">अतिथी मोडमधून बाहेर पडायचे आहे का?</translation>
 <translation id="8952831374766033534">कॉन्फिगरेशन पर्याय सपोर्ट करत नाही: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">चार्ज होत असताना</translation>
 <translation id="895347679606913382">प्रारंभ करीत आहे...</translation>
 <translation id="8957762313041272117">लाइव्ह कॅप्शन</translation>
 <translation id="895944840846194039">JavaScript मेमरी</translation>

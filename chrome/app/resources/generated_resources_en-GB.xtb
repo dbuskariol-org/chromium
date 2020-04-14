@@ -1547,6 +1547,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3019285239893817657">Subpage button</translation>
 <translation id="3020183492814296499">Shortcuts</translation>
 <translation id="3020990233660977256">Serial Number: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">While on battery</translation>
 <translation id="3021066826692793094">Butterfly</translation>
 <translation id="3021678814754966447">&amp;View Frame Source</translation>
 <translation id="3022978424994383087">Didn't get that.</translation>
@@ -2926,6 +2927,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="4890773143211625964">Show advanced printer options</translation>
 <translation id="4891089016822695758">Beta forum</translation>
 <translation id="4892229439761351791">Site can use Bluetooth</translation>
+<translation id="489258173289528622">Idle action while on battery</translation>
 <translation id="4893336867552636863">This will permanently delete your browsing data from this device.</translation>
 <translation id="4893522937062257019">On the lock screen</translation>
 <translation id="489454699928748701">Allow sites to use motion sensors</translation>
@@ -3640,6 +3642,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="5863445608433396414">Enable debugging features</translation>
 <translation id="5864195618110239517">Use metered connection</translation>
 <translation id="5864471791310927901">DHCP look-up failed</translation>
+<translation id="5864754048328252126">Idle action while charging</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> will pause soon</translation>
 <translation id="586567932979200359">You're running <ph name="PRODUCT_NAME" /> from its disk image. Installing it on your computer lets you run it without the disk image and ensures that it will be kept up to date.</translation>
 <translation id="5865733239029070421">Automatically sends usage statistics and crash reports to Google</translation>
@@ -5978,6 +5981,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="8951256747718668828">Restoring couldn't be completed due to an error</translation>
 <translation id="8951465597020890363">Exit guest mode anyway?</translation>
 <translation id="8952831374766033534">Configuration option not supported: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">While charging</translation>
 <translation id="895347679606913382">Starting...</translation>
 <translation id="8957762313041272117">Live Caption</translation>
 <translation id="895944840846194039">JavaScript Memory</translation>

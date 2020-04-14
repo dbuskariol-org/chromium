@@ -1542,6 +1542,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="3019285239893817657">Alt səhifə düyməsi</translation>
 <translation id="3020183492814296499">Qısayollar</translation>
 <translation id="3020990233660977256">Seriya Nömrəsi: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Batareyadan istifadə edilən zaman</translation>
 <translation id="3021066826692793094">Kəpənək</translation>
 <translation id="3021678814754966447">&amp;Çərçivə mənbəsinə baxın</translation>
 <translation id="3022978424994383087">Tərcümə etmək alınmadı.</translation>
@@ -2919,6 +2920,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="4890773143211625964">Qabaqcıl printer seçimlərini göstərin</translation>
 <translation id="4891089016822695758">Beta forumu</translation>
 <translation id="4892229439761351791">Sayt Bluetooth istifadə edə bilər</translation>
+<translation id="489258173289528622">Batareyadan istifadə edilən zaman cihaz fəaliyyətsiz qaldıqda ediləcək əməliyyat</translation>
 <translation id="4893336867552636863">Brauzinq datanızı bu cihazdan həmişəlik siləcək.</translation>
 <translation id="4893522937062257019">Ekran kilidində</translation>
 <translation id="489454699928748701">Saytların hərəkət sensorundan istifadə etməsinə icazə verin</translation>
@@ -3633,6 +3635,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="5863445608433396414">Debaq funksiyalarını aktiv edin</translation>
 <translation id="5864195618110239517">Limitli bağlantıdan istifadə edin</translation>
 <translation id="5864471791310927901">DHCP axtarış uğursuz oldu</translation>
+<translation id="5864754048328252126">Şarj edilən zaman cihaz fəaliyyətsiz qaldıqda ediləcək əməliyyat</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> tezliklə dayanacaq</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" /> məhsulunu onun disk obrazindan işlədirsiniz. Onun kompüterə quraşdırılması disk obrazı olmadan işlətməyinizə imkan verəcək və həmişə güncəl qalmasını sağlayacaq.</translation>
 <translation id="5865733239029070421">İstifadə statistikası və qəza raportlarını avtomatik Google'a göndərir</translation>
@@ -3830,6 +3833,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="6120205520491252677">Ekrana başlamaq üçün bu səhifəni sancın...</translation>
 <translation id="6122081475643980456">İnternet bağlantınıza nəzarət olunur</translation>
 <translation id="6122095009389448667">Bu saytın buferə girişini bloklamağa davam edin</translation>
+<translation id="6122831415929794347">Təhlükəsiz Baxış deaktiv edilsin?</translation>
 <translation id="6122875415561139701">Bu cihazda yazı əməliyyatına icazə verilmir: "<ph name="DEVICE_NAME" /> ".</translation>
 <translation id="6124650939968185064">Aşağıdakı artırmalar bu artırmadan asılıdır:</translation>
 <translation id="6124698108608891449">Bu sayt daha çox icazə tələb edir.</translation>
@@ -4034,6 +4038,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="6408118934673775994"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> və <ph name="WEBSITE_3" /> üzərində datanızı oxuyun və dəyişin</translation>
 <translation id="6410257289063177456">Təsvir Faylları</translation>
 <translation id="6410328738210026208">Kanal və Zavod sıfırlamasını dəyişin</translation>
+<translation id="6410390304316730527">Təhlükəsiz Baxış sizi zərərli proqram təminatı quraşdırmaq və ya parol, telefon nömrəsi, kredit kartı kimi şəxsi məlumatlarınızı aşkar etmək kimi təhlükəli əməliyyatlara sövq etmək üçün aldada biləcək hücumlardan qoruyur. Bu xüsusiyyəti söndürsəniz, tanış və ya məşhur olmayan saytlara baxarkən ehtiyatlı olun.</translation>
 <translation id="6410668567036790476">Axtarış sistemi əlavə edin</translation>
 <translation id="641081527798843608">Subyekt uyğunluğu</translation>
 <translation id="6412673304250309937">URL'ləri Chrome'da saxlanılan təhlükəli saytların siyahısı ilə yoxlayır. Sayt parolunuzu oğurlamağa çalışdıqda və ya zərərli fayl endirdiyinizdə Chrome səhifə məzmunundan kiçik nümunələr də daxil olmaqla, URL'ləri Təhlükəsiz Baxışa göndərə bilər.</translation>
@@ -5963,6 +5968,7 @@ Bu saytın blok edilməsini düşünmürəm!</translation>
 <translation id="8951256747718668828">Xəta baş verdiyinə görə bərpa tamamlanmadı</translation>
 <translation id="8951465597020890363">İstənilən halda qonaq rejimindən çıxılsın?</translation>
 <translation id="8952831374766033534">Konfiqurasiya seçimi dəstəklənmir: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Şarj edilən zaman</translation>
 <translation id="895347679606913382">Başlayır...</translation>
 <translation id="8957762313041272117">Canlı altyazı</translation>
 <translation id="895944840846194039">JavaScript yaddaşı</translation>

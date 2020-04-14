@@ -1547,6 +1547,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="3019285239893817657">Knop voor subpagina</translation>
 <translation id="3020183492814296499">Snelkoppelingen</translation>
 <translation id="3020990233660977256">Serienummer: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Op batterij</translation>
 <translation id="3021066826692793094">Vlinder</translation>
 <translation id="3021678814754966447">&amp;Framebron weergeven</translation>
 <translation id="3022978424994383087">Dat heb ik niet verstaan.</translation>
@@ -2926,6 +2927,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="4890773143211625964">Geavanceerde printeropties weergeven</translation>
 <translation id="4891089016822695758">Bètaforum</translation>
 <translation id="4892229439761351791">Site kan Bluetooth gebruiken</translation>
+<translation id="489258173289528622">Inactieve actie op batterij</translation>
 <translation id="4893336867552636863">Hiermee worden je browsegegevens op dit apparaat definitief verwijderd.</translation>
 <translation id="4893522937062257019">Op het vergrendelingsscherm</translation>
 <translation id="489454699928748701">Toestaan dat sites bewegingssensoren gebruiken</translation>
@@ -3640,6 +3642,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="5863445608433396414">Foutopsporingsfuncties inschakelen</translation>
 <translation id="5864195618110239517">Verbinding met datalimiet gebruiken</translation>
 <translation id="5864471791310927901">Opzoeken van DHCP mislukt</translation>
+<translation id="5864754048328252126">Inactieve actie tijdens opladen</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> wordt straks onderbroken</translation>
 <translation id="586567932979200359">Je voert <ph name="PRODUCT_NAME" /> uit via de schijfkopie. Als je dit programma installeert op je computer, kun je dit uitvoeren zonder de schijfkopie te gebruiken en blijft het programma bijgewerkt.</translation>
 <translation id="5865733239029070421">Hiermee worden automatisch gebruiksstatistieken en crashrapporten naar Google verzonden</translation>
@@ -5978,6 +5981,7 @@ Bewaar je sleutelbestand op een veilige plaats. Je hebt het bestand nodig om nie
 <translation id="8951256747718668828">De herstelactie kan niet worden voltooid door een fout</translation>
 <translation id="8951465597020890363">Gastmodus toch sluiten?</translation>
 <translation id="8952831374766033534">Configuratie-optie niet ondersteund: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Tijdens het opladen</translation>
 <translation id="895347679606913382">Starten...</translation>
 <translation id="8957762313041272117">Live ondertiteling</translation>
 <translation id="895944840846194039">JavaScript-geheugen</translation>

@@ -1547,6 +1547,7 @@ Du kan administrere indstillingerne for denne konto ved at installere Family Lin
 <translation id="3019285239893817657">Knap til underside</translation>
 <translation id="3020183492814296499">Genveje</translation>
 <translation id="3020990233660977256">Serienummer: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Når batteriet bruges</translation>
 <translation id="3021066826692793094">Sommerfugl</translation>
 <translation id="3021678814754966447">&amp;Vis rammens kilde</translation>
 <translation id="3022978424994383087">Det er ikke forstået.</translation>
@@ -2926,6 +2927,7 @@ Vil du starte <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="4890773143211625964">Vis avancerede printerindstillinger</translation>
 <translation id="4891089016822695758">Betaforum</translation>
 <translation id="4892229439761351791">Websitet kan anvende Bluetooth</translation>
+<translation id="489258173289528622">Handling for inaktivitet, når batteriet bruges</translation>
 <translation id="4893336867552636863">Denne handling sletter dine browserdata permanent fra denne enhed.</translation>
 <translation id="4893522937062257019">På låseskærmen</translation>
 <translation id="489454699928748701">Tillad brug af bevægelsessensorer på websites</translation>
@@ -3640,6 +3642,7 @@ Vil du starte <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="5863445608433396414">Aktivér fejlretningsfunktioner</translation>
 <translation id="5864195618110239517">Brug forbrugsafregnet forbindelse</translation>
 <translation id="5864471791310927901">DHCP-opslag mislykkedes</translation>
+<translation id="5864754048328252126">Handling for inaktivitet under opladning</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> sættes snart på pause</translation>
 <translation id="586567932979200359">Du kører <ph name="PRODUCT_NAME" /> fra dets diskbillede. Hvis du installerer det på din computer, kan du køre det uden diskbilledet, og det vil blive opdateret løbende.</translation>
 <translation id="5865733239029070421">Sender automatisk brugsstatistikker og nedbrudsrapporter til Google</translation>
@@ -5979,6 +5982,7 @@ Opbevar din nøglefil på et sikkert sted. Du skal bruge den til at oprette nye 
 <translation id="8951256747718668828">Gendannelsen kunne ikke fuldføres på grund af en fejl</translation>
 <translation id="8951465597020890363">Vil du afslutte delefunktionen?</translation>
 <translation id="8952831374766033534">Konfigurationsmuligheden understøttes ikke: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Under opladning</translation>
 <translation id="895347679606913382">Begynder...</translation>
 <translation id="8957762313041272117">Livetekstning</translation>
 <translation id="895944840846194039">JavaScript-hukommelse</translation>

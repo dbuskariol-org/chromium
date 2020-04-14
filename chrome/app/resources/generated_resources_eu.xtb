@@ -1547,6 +1547,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3019285239893817657">Azpiorrira joateko botoia</translation>
 <translation id="3020183492814296499">Lasterbideak</translation>
 <translation id="3020990233660977256">Serie-zenbakia: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Kargatzen ari ez denean</translation>
 <translation id="3021066826692793094">Tximeleta</translation>
 <translation id="3021678814754966447">&amp;Ikusi markoaren iturburua</translation>
 <translation id="3022978424994383087">Ez dut ulertu.</translation>
@@ -2926,6 +2927,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="4890773143211625964">Erakutsi inprimagailuaren aukera aurreratuak</translation>
 <translation id="4891089016822695758">Beta foroa</translation>
 <translation id="4892229439761351791">Webguneak Bluetooth konexioa erabil dezake</translation>
+<translation id="489258173289528622">Gailua kargatzen ari ez denean inaktibo geratuz gero gauzatu beharreko ekintza</translation>
 <translation id="4893336867552636863">Hori eginez gero, betiko ezabatuko dira gailuko arakatze-datuak.</translation>
 <translation id="4893522937062257019">Pantaila blokeatuan</translation>
 <translation id="489454699928748701">Eman sentsoreak erabiltzeko baimena webguneei</translation>
@@ -3640,6 +3642,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5863445608433396414">Gaitu arazte-eginbideak</translation>
 <translation id="5864195618110239517">Erabili neurtutako konexioa</translation>
 <translation id="5864471791310927901">DHCP bilaketak huts egin du</translation>
+<translation id="5864754048328252126">Gailua kargatzen ari denean inaktibo geratuz gero gauzatu beharreko ekintza</translation>
 <translation id="5865508026715185451">Laster pausatuko da <ph name="APP_NAME" /></translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" /> bere disko-irudiaren bidez abiarazi duzu. Ordenagailuan instalatzen baduzu, ez duzu hori egin beharko eta eguneratuta dagoela ziurtatuko duzu.</translation>
 <translation id="5865733239029070421">Erabilera-estatistikak eta hutsegite-txostenak automatikoki bidaltzen dizkio Google-ri</translation>
@@ -5977,6 +5980,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="8951256747718668828">Ezin izan da leheneratu errore bat gertatu delako</translation>
 <translation id="8951465597020890363">Gonbidatu modutik irten nahi duzu hala ere?</translation>
 <translation id="8952831374766033534">Konfigurazio-aukera ez da onartzen: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Kargatzen ari denean</translation>
 <translation id="895347679606913382">Hasten…</translation>
 <translation id="8957762313041272117">Istanteko azpitituluak</translation>
 <translation id="895944840846194039">JavaScript memoria</translation>

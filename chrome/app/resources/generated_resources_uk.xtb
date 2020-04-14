@@ -1547,6 +1547,7 @@
 <translation id="3019285239893817657">Кнопка підсторінки</translation>
 <translation id="3020183492814296499">Ярлики</translation>
 <translation id="3020990233660977256">Серійний номер: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Під час роботи від акумулятора</translation>
 <translation id="3021066826692793094">Метелик</translation>
 <translation id="3021678814754966447">&amp;Переглянути джерело фрейму</translation>
 <translation id="3022978424994383087">Незрозуміло.</translation>
@@ -2926,6 +2927,7 @@
 <translation id="4890773143211625964">Показати розширені налаштування принтера</translation>
 <translation id="4891089016822695758">Форум бета-версії</translation>
 <translation id="4892229439761351791">Сайт може використовувати Bluetooth</translation>
+<translation id="489258173289528622">Дія, коли пристрій неактивний під час роботи від акумулятора</translation>
 <translation id="4893336867552636863">Дані веб-перегляду буде видалено з цього пристрою назавжди.</translation>
 <translation id="4893522937062257019">На екрані блокування</translation>
 <translation id="489454699928748701">Дозволити сайтам використовувати датчики руху</translation>
@@ -3640,6 +3642,7 @@
 <translation id="5863445608433396414">Увімкнути функції налагодження</translation>
 <translation id="5864195618110239517">Використовувати підключення з тарифікацією трафіку</translation>
 <translation id="5864471791310927901">Помилка пошуку DHCP</translation>
+<translation id="5864754048328252126">Дія, коли пристрій неактивний під час заряджання</translation>
 <translation id="5865508026715185451">Додаток <ph name="APP_NAME" /> невдовзі буде призупинено</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" /> працює, використовуючи своє зображення диска. Встановлення веб-переглядача на комп'ютер дозволить працювати без використання зображення диска та гарантуватиме його постійне оновлення.</translation>
 <translation id="5865733239029070421">Автоматично надсилає статистику використання та звіти про аварійне завершення роботи в Google</translation>
@@ -5978,6 +5981,7 @@
 <translation id="8951256747718668828">Не вдалося відновити через помилку</translation>
 <translation id="8951465597020890363">Усе одно вийти з режиму гостя?</translation>
 <translation id="8952831374766033534">Параметр конфігурації не підтримується: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Під час заряджання</translation>
 <translation id="895347679606913382">Запуск...</translation>
 <translation id="8957762313041272117">Живі субтитри</translation>
 <translation id="895944840846194039">Пам’ять JavaScript</translation>

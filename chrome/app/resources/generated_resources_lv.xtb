@@ -1547,6 +1547,7 @@ Servera ziņojums: <ph name="SERVER_MSG" /></translation>
 <translation id="3019285239893817657">Apakšlapas poga</translation>
 <translation id="3020183492814296499">Īsinājumtaustiņi</translation>
 <translation id="3020990233660977256">Sērijas numurs: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Izmantojot akumulatoru</translation>
 <translation id="3021066826692793094">Tauriņš</translation>
 <translation id="3021678814754966447">Skatīt rāmja a&amp;votu</translation>
 <translation id="3022978424994383087">Nesapratu.</translation>
@@ -2926,6 +2927,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="4890773143211625964">Rādīt printera papildiespējas</translation>
 <translation id="4891089016822695758">Beta versijas forums</translation>
 <translation id="4892229439761351791">Vietne var izmantot Bluetooth savienojumu</translation>
+<translation id="489258173289528622">Darbība neaktivitātes dēļ, izmantojot akumulatoru</translation>
 <translation id="4893336867552636863">Veicot šo darbību, no šīs ierīces tiks neatgriezeniski izdzēsti jūsu pārlūkošanas dati.</translation>
 <translation id="4893522937062257019">Bloķēšanas ekrānā</translation>
 <translation id="489454699928748701">Ļaut vietnēm izmantot kustību sensorus</translation>
@@ -3640,6 +3642,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="5863445608433396414">Iespējot atkļūdošanas funkcijas</translation>
 <translation id="5864195618110239517">Izmantot maksas savienojumu</translation>
 <translation id="5864471791310927901">DHCP uzmeklēšana neizdevās</translation>
+<translation id="5864754048328252126">Darbība neaktivitātes dēļ uzlādes laikā</translation>
 <translation id="5865508026715185451">Lietotnes <ph name="APP_NAME" /> darbība drīz tiks apturēta.</translation>
 <translation id="586567932979200359">Jūs izpildāt <ph name="PRODUCT_NAME" /> no diska attēla. Instalējot datorā, varēsiet to izpildīt bez diska attēla, un tiks nodrošināta tā atjaunināšana.</translation>
 <translation id="5865733239029070421">Automātiski sūtīt lietojuma statistiku un avāriju pārskatus Google serveriem</translation>
@@ -5977,6 +5980,7 @@ Glabājiet atslēgas failu drošā vietā. Tas būs vajadzīgs, lai izveidotu ja
 <translation id="8951256747718668828">Kļūdas dēļ neizdevās veikt atjaunošanu</translation>
 <translation id="8951465597020890363">Vai tik un tā iziet no viesa režīma?</translation>
 <translation id="8952831374766033534">Konfigurācijas opcija netiek atbalstīta: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Uzlādes laikā</translation>
 <translation id="895347679606913382">Sākums...</translation>
 <translation id="8957762313041272117">Subtitri reāllaikā</translation>
 <translation id="895944840846194039">JavaScript atmiņa</translation>

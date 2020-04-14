@@ -1547,6 +1547,7 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="3019285239893817657">Przycisk podstrony</translation>
 <translation id="3020183492814296499">Skróty</translation>
 <translation id="3020990233660977256">Numer seryjny: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Na baterii</translation>
 <translation id="3021066826692793094">Motyl</translation>
 <translation id="3021678814754966447">&amp;Wyświetl źródło ramki</translation>
 <translation id="3022978424994383087">Nie rozumiem.</translation>
@@ -2926,6 +2927,7 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="4890773143211625964">Pokaż zaawansowane opcje drukarki</translation>
 <translation id="4891089016822695758">Forum użytkowników wersji beta</translation>
 <translation id="4892229439761351791">Strona może używać Bluetootha</translation>
+<translation id="489258173289528622">Bezczynność na baterii</translation>
 <translation id="4893336867552636863">Spowoduje to trwałe usunięcie danych przeglądania z tego urządzenia.</translation>
 <translation id="4893522937062257019">Na ekranie blokady</translation>
 <translation id="489454699928748701">Zezwalaj stronom na używanie czujników ruchu</translation>
@@ -3640,6 +3642,7 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="5863445608433396414">Włącz funkcje debugowania</translation>
 <translation id="5864195618110239517">Użyj połączenia z pomiarem użycia danych</translation>
 <translation id="5864471791310927901">Wyszukiwanie DHCP nie powiodło się</translation>
+<translation id="5864754048328252126">Bezczynność podczas ładowania</translation>
 <translation id="5865508026715185451">Aplikacja <ph name="APP_NAME" /> wkrótce zostanie wstrzymana</translation>
 <translation id="586567932979200359">Produkt <ph name="PRODUCT_NAME" /> został uruchomiony z obrazu dysku. Zainstalowanie go na komputerze umożliwi uruchamianie bez użycia obrazu dysku i bieżące aktualizowanie.</translation>
 <translation id="5865733239029070421">Automatycznie przesyła do Google statystyki użytkowania i raporty o awariach</translation>
@@ -5978,6 +5981,7 @@ Przechowuj plik klucza w bezpiecznym miejscu. Będzie on potrzebny do utworzenia
 <translation id="8951256747718668828">Przywracanie nie powiodło się z powodu błędu</translation>
 <translation id="8951465597020890363">Zamknąć tryb gościa mimo to?</translation>
 <translation id="8952831374766033534">Nieobsługiwana opcja konfiguracyjna: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Podczas ładowania</translation>
 <translation id="895347679606913382">Zaczynam...</translation>
 <translation id="8957762313041272117">Napisy na żywo</translation>
 <translation id="895944840846194039">Pamięć JavaScript</translation>

@@ -1546,6 +1546,7 @@
 <translation id="3019285239893817657">የንዑስ ገጽ አዝራር</translation>
 <translation id="3020183492814296499">አቋራጮች</translation>
 <translation id="3020990233660977256">መለያ ቁጥር፦ <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">ባትሪ ላይ ሳለ</translation>
 <translation id="3021066826692793094">ቢራቢሮ</translation>
 <translation id="3021678814754966447">የፍሬም መነሻ &amp;አሳይ</translation>
 <translation id="3022978424994383087">አልሰማሁትም።</translation>
@@ -2923,6 +2924,7 @@
 <translation id="4890773143211625964">የላቁ የአታሚ አማራጮችን አሳይ</translation>
 <translation id="4891089016822695758">የቅድመ-ይሁንታ ሙከራ መድረክ</translation>
 <translation id="4892229439761351791">ጣቢያ ብሉቱዝን መጠቀም ይችላል</translation>
+<translation id="489258173289528622">ባትሪ ላይ ሳለ የስራ መፍታት እርምጃ</translation>
 <translation id="4893336867552636863">ይሄ የአሰሳ ውሂብዎን ለዘለዓለም ከዚህ መሣሪያ ይሰርዘዋል።</translation>
 <translation id="4893522937062257019">በማያ ገጽ ቁልፉ ላይ</translation>
 <translation id="489454699928748701">ጣቢያዎች የእንቅስቃሴ ዳሳሾችን እንዲጠቀሙ ይፍቀዱ</translation>
@@ -3637,6 +3639,7 @@
 <translation id="5863445608433396414">የማረሚያ ባህሪያትን ያንቁ</translation>
 <translation id="5864195618110239517">የሚለካ ግንኙነት ተጠቀም</translation>
 <translation id="5864471791310927901">የDHCP ፍለጋ አልተሳካም</translation>
+<translation id="5864754048328252126">ኃይል እየሞላ ሳለ የስራ መፍታት እርምጃ</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> በቅርቡ ባለበት ይቆማል</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" />ን ከዲስክ ምስሉ እያሄዱ ነው። ኮምፒውተርዎ ላይ መጫን ያለ ዲስክ ምስሉ እንዲያሂዱት ያስችልዎታል፣ እና እንደተዘመነ መቆየቱን ያረጋግጣል።</translation>
 <translation id="5865733239029070421">የአጠቃቀም ስታስቲክስን እና የብልሽት ሪፖርቶችን በራስ-ሰር ወደ Google ይልካል</translation>
@@ -3836,6 +3839,7 @@
 <translation id="6120205520491252677">ይህን ገጽ የመነሻ ገጹ ላይ ይሰኩት...</translation>
 <translation id="6122081475643980456">የበይነመረብ ግንኙነትዎ ቁጥጥር እየተደረገበት ነው</translation>
 <translation id="6122095009389448667">ይህ ጣቢያ ቅንጥብ ሰሌዳውን እንዳያይ መታገዱን ቀጥል</translation>
+<translation id="6122831415929794347">የጥንቃቄ አሰሳ ይጥፋ?</translation>
 <translation id="6122875415561139701">የመጻፍ ክወና በዚህ ላይ አይፈቀድም፦ «<ph name="DEVICE_NAME" />»።</translation>
 <translation id="6124650939968185064">የሚከተሉት ቅጥያዎች በዚህ ቅጥያ ላይ ይወሰናሉ፦</translation>
 <translation id="6124698108608891449">ይህ ጣቢያ ተጨማሪ ፈቃዶችን ይፈልጋል።</translation>
@@ -4040,6 +4044,7 @@
 <translation id="6408118934673775994">ውሂብዎን በ<ph name="WEBSITE_1" />፣ <ph name="WEBSITE_2" /> እና <ph name="WEBSITE_3" /> ላይ ያነብባል እና ይቀይራል</translation>
 <translation id="6410257289063177456">የምስል ፋይሎች</translation>
 <translation id="6410328738210026208">ሰርጥ ቀይር እና Powerwash</translation>
+<translation id="6410390304316730527">የጥንቃቄ አሰሳ እንደ ተንኮል-አዘል ሶፍትዌር መጫን ያለ አደገኛ ነገር እንዲያደርጉ ወይም እንደ የይለፍ ቃላት፣ ስልክ ቁጥሮች ወይም ክሬዲት ካርዶች ያለ የግል መረጃን እንዲገልጡ እርስዎን ሊያታልሉዎ ከሚችሉ አጥቂዎች ይጠብቀዎታል። ካጠፉት ያልተለመደ ወይም ስማቸው ጥሩ ያልሆኑ ጣቢያዎችን ሲያስሱ ይጠንቀቁ።</translation>
 <translation id="6410668567036790476">የፍለጋ ፕሮግራም ያክሉ</translation>
 <translation id="641081527798843608">የርዕሰ ጉዳይ ተዛማጅ</translation>
 <translation id="6412673304250309937">በChrome ላይ የተከማቹ ድህንነታቸው ያልተጠበቁ ጣቢያዎች ዝርዝር ጋር ዩአርኤሎችን ይፈትሻል። አንድ ጣቢያ የእርስዎን የይለፍ ቃል ለመስረቅ ከሞከረ ወይም ጎጂ ፋይል ካወረደ Chrome እንዲሁም የገጽ ይዘትን ክፍሎችም ጨምሮ ዩአርኤሎችን ወደ የጥንቃቄ አሰሳ መላክ ሊልክ ይችላል።</translation>
@@ -5977,6 +5982,7 @@ nil</translation>
 <translation id="8951256747718668828">በስህተት ምክንያት እንደ ነበረ መመለስ ሊጠናቀቅ አልተቻለም</translation>
 <translation id="8951465597020890363">የሆነው ሆኖ ከእንግዳ ሁነታ ይወጣ?</translation>
 <translation id="8952831374766033534">የውቅረት አማራጭ አይደገፍም፦ <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">ባትሪ በመሙላት ላይ ሳለ</translation>
 <translation id="895347679606913382">በመጀመር ላይ…</translation>
 <translation id="8957762313041272117">የቀጥታ ስርጭት መግለጫ ጽሑፍ</translation>
 <translation id="895944840846194039">የJavaScript ማህደረ ትውስታ</translation>

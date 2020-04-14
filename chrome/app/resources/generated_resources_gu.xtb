@@ -1543,6 +1543,7 @@
 <translation id="3019285239893817657">સબપેજનું બટન</translation>
 <translation id="3020183492814296499">શૉર્ટકટ</translation>
 <translation id="3020990233660977256">સીરિયલ નંબર: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">બૅટરી પર હોય, ત્યારે</translation>
 <translation id="3021066826692793094">પતંગિયું</translation>
 <translation id="3021678814754966447">ફ્રેમ સ્રોત &amp;જુઓ</translation>
 <translation id="3022978424994383087">તે મળ્યો નથી.</translation>
@@ -2922,6 +2923,7 @@
 <translation id="4890773143211625964">વિગતવાર પ્રિન્ટર વિકલ્પો બતાવો</translation>
 <translation id="4891089016822695758">બીટા ચર્ચા મંચ</translation>
 <translation id="4892229439761351791">સાઇટ બ્લૂટૂથનો ઉપયોગ કરી શકે</translation>
+<translation id="489258173289528622">બૅટરી પર હોય, ત્યારની નિષ્ક્રિય ક્રિયા</translation>
 <translation id="4893336867552636863">આ તમારો બ્રાઉઝીંગ ડેટા આ ડિવાઇસમાંથી સ્થાયી રૂપે ડિલીટ કરશે.</translation>
 <translation id="4893522937062257019">લૉક સ્ક્રીન પર</translation>
 <translation id="489454699928748701">સાઇટને મોશન સેન્સરનો ઉપયોગ કરવાની મંજૂરી આપો</translation>
@@ -3637,6 +3639,7 @@
 <translation id="5863445608433396414">ડિબગીંગ સુવિધાઓ ચાલુ કરો</translation>
 <translation id="5864195618110239517">મીટર્ડ કનેક્શનનો ઉપયોગ કરો</translation>
 <translation id="5864471791310927901">DHCP લુકઅપ નિષ્ફળ</translation>
+<translation id="5864754048328252126">ચાર્જિંગ દરમ્યાનની નિષ્ક્રિય ક્રિયા</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" />ને ટૂંક સમયમાં થોભાવવામાં આવશે</translation>
 <translation id="586567932979200359">તમે <ph name="PRODUCT_NAME" /> ને તેની ડિસ્ક છબીથી ચલાવી રહ્યા છો. તેને તમારા કમ્પ્યુટર પર ઇન્સ્ટોલ કરવાથી તમે તેને ડિસ્ક છબી વગર ચલાવી શકો છો, અને તે અપ-ટુ-ડેટ રાખવામાં આવશે તેની ખાતરી થાય છે.</translation>
 <translation id="5865733239029070421">Googleને વપરાશના આંકડા અને ક્રૅશ રિપોર્ટ ઑટોમૅટિક રીતે મોકલે છે</translation>
@@ -3837,6 +3840,7 @@ USB ડિવાઇસ</translation>
 <translation id="6120205520491252677">પ્રારંભ સ્ક્રીન પર આ પૃષ્ઠ પિન કરો...</translation>
 <translation id="6122081475643980456">તમારું ઇન્ટરનેટ કનેક્શન નિયંત્રિત કરવામાં આવી રહ્યું છે</translation>
 <translation id="6122095009389448667">ક્લિપબોર્ડને જોવાથી આ સાઇટને બ્લૉક કરવાનું ચાલુ રાખો</translation>
+<translation id="6122831415929794347">Safe Browsing બંધ કરીએ?</translation>
 <translation id="6122875415561139701">આના પર લેખન ઓપરેશનને મંજૂરી નથી: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="6124650939968185064">નીચેના એક્સ્ટેન્શન્સ આ એક્સ્ટેન્શન પર નિર્ભર કરે છે:</translation>
 <translation id="6124698108608891449">આ સાઇટ માટે વધુ પરવાનગીઓની જરૂર છે.</translation>
@@ -4041,6 +4045,7 @@ USB ડિવાઇસ</translation>
 <translation id="6408118934673775994"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> અને <ph name="WEBSITE_3" /> પર તમારો ડેટા વાંચો અને બદલો</translation>
 <translation id="6410257289063177456">છબી ફાઇલો</translation>
 <translation id="6410328738210026208">ચેનલ બદલો અને Powerwash કરો</translation>
+<translation id="6410390304316730527">Safe Browsing એવા હુમલાખોરોથી તમારું રક્ષણ કરી શકે છે જે તમને દુર્ભાવનાપૂર્ણ સૉફ્ટવેર ઇન્સ્ટૉલ કરવા અથવા પાસવર્ડ, ફોન નંબર અથવા ક્રેડિટ કાર્ડ જેવી વ્યક્તિગત માહિતી જાહેર કરવા જેવી જોખમી બાબતો કરવા ગેરમાર્ગે દોરી શકે છે. જો તમે આ બંધ કરો, તો અજાણી અથવા ભરોસાપાત્ર ન હોય એવી સાઇટ બ્રાઉઝ કરતી વખતે સાવધાન રહેજો.</translation>
 <translation id="6410668567036790476">શોધ એંજિન ઉમેરો</translation>
 <translation id="641081527798843608">વિષય મેળ</translation>
 <translation id="6412673304250309937">URLsને Chromeમાં સંગ્રહિત અસુરક્ષિત સાઇટની સૂચિ સાથે ચેક કરે છે. જો કોઈ સાઇટ તમારો પાસવર્ડ ચોરી કરવાનો પ્રયાસ કરે અથવા તમે કોઈ નુકસાનકારક ફાઇલ ડાઉનલોડ કરો, ત્યારે Chrome પેજ કન્ટેન્ટના બિટની સાથોસાથ URLs પણ Safe Browsingને મોકલી શકે છે.</translation>
@@ -5968,6 +5973,7 @@ USB ડિવાઇસ</translation>
 <translation id="8951256747718668828">ભૂલને કારણે પુનઃસ્થાપના પૂર્ણ ન કરી શકાઈ</translation>
 <translation id="8951465597020890363">તેમ છતાંએ અતિથિ મોડથી બહાર નીકળી જઈએ?</translation>
 <translation id="8952831374766033534">ગોઠવણીના વિકલ્પની સુવિધા નથી: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">ચાર્જિંગ થતી વખતે</translation>
 <translation id="895347679606913382">પ્રારંભ કરે છે...</translation>
 <translation id="8957762313041272117">લાઇવ કૅપ્શન</translation>
 <translation id="895944840846194039">JavaScript મેમરી</translation>

@@ -1544,6 +1544,7 @@
 <translation id="3019285239893817657">උප පිටු බොත්තම</translation>
 <translation id="3020183492814296499">කෙටි මං</translation>
 <translation id="3020990233660977256">කාණ්ඩ අංකය: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">බැටරිය මත සිටින විට</translation>
 <translation id="3021066826692793094">සමනළයා</translation>
 <translation id="3021678814754966447">රාමු මූලය දර්ශනය (&amp;V)</translation>
 <translation id="3022978424994383087">එය ලබා ගත්තේ නැත.</translation>
@@ -2924,6 +2925,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="4890773143211625964">උසස් මුද්‍රක විකල්ප පෙන්වන්න</translation>
 <translation id="4891089016822695758">බීටා සංසදය</translation>
 <translation id="4892229439761351791">වෙබ් අඩවියට බ්ලූටූත් භාවිත කළ හැක</translation>
+<translation id="489258173289528622">බැටරිය මත සිටින විට අකර්මණ්‍ය ක්‍රියාව</translation>
 <translation id="4893336867552636863">මෙය මෙම උපාංගය වෙතින් ඔබේ බ්‍රවුස් කිරීමේ දත්ත ස්ථිරව මකනු ඇත.</translation>
 <translation id="4893522937062257019">අගුලු තිරය මත</translation>
 <translation id="489454699928748701">වෙබ් අඩවිවලට චලන සංවේදක භාවිත කිරීමට ඉඩ දෙන්න</translation>
@@ -3639,6 +3641,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="5863445608433396414">දෝශ නිරාකරණ විශේෂාංග සක්‍රීය</translation>
 <translation id="5864195618110239517">මනුගත සම්බන්ධතාව භාවිත කරන්න</translation>
 <translation id="5864471791310927901">DHCP විමසුම අසාර්ථක විය</translation>
+<translation id="5864754048328252126">ආරෝපණය අතුරතුර අකර්මණ්‍ය ක්‍රියාව</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> ඉක්මනින් විරාම වෙයි</translation>
 <translation id="586567932979200359">ඔබ <ph name="PRODUCT_NAME" /> ක්‍රියාත්මක කරන්නේ එහි තැටි අනුරූපයෙනි. එය ඔබේ පරිගණකය තුළ ස්ථාපිත කිරීම තැටි අනුරුවක් නොමැතිව ක්‍රියාකරවීමට ඉඩදෙයි, තවද එය යාවත්කාලීන බව තහවුරු කරයි.</translation>
 <translation id="5865733239029070421">භාවිතා සංඛ්‍යාල්ඛන සහ සහ බිඳ වැටීම් වාර්තා ස්වයංක්‍රියව Google වෙත යවයි</translation>
@@ -5973,6 +5976,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="8951256747718668828">දෝෂයක් හේතුවෙන් ප්‍රතිසාධනය සම්පූර්ණ කළ නොහැකි විය</translation>
 <translation id="8951465597020890363">කෙසේ වූවත් ආගන්තුක ප්‍රකාරයෙන් පිට වන්නේද?</translation>
 <translation id="8952831374766033534">වින්‍යාස විකල්පයට සහය නොදැක්වේ: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">ආරෝපණය වන අතරතුර</translation>
 <translation id="895347679606913382">ආරම්භ කරමින්...</translation>
 <translation id="8957762313041272117">සජීවී සිරස්තලය</translation>
 <translation id="895944840846194039">JavaScript මතකය</translation>

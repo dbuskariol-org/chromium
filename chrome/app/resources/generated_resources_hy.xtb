@@ -1547,6 +1547,7 @@
 <translation id="3019285239893817657">Ենթաէջի կոճակ</translation>
 <translation id="3020183492814296499">Դյուրանցումներ</translation>
 <translation id="3020990233660977256">Սերիական համարը` <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Մարտկոցից սնուցման ընթացքում</translation>
 <translation id="3021066826692793094">Թիթեռ</translation>
 <translation id="3021678814754966447">&amp;Դիտել շրջանակի սկզբնաղբյուրը</translation>
 <translation id="3022978424994383087">Անհասկանալի է:</translation>
@@ -2927,6 +2928,7 @@
 <translation id="4890773143211625964">Ցուցադրել տպիչի լրացուցիչ ընտրանքները</translation>
 <translation id="4891089016822695758">Բետա ֆորում</translation>
 <translation id="4892229439761351791">Կայքը կարող է օգտագործել Bluetooth-ը</translation>
+<translation id="489258173289528622">Անգործուն ռեժիմի միացում՝ մարտկոցից սնուցման ընթացքում</translation>
 <translation id="4893336867552636863">Այս սարքից այցելությունների տվյալներն ընդմիշտ կջնջվեն:</translation>
 <translation id="4893522937062257019">Կողպէկրանին</translation>
 <translation id="489454699928748701">Թույլ տալ կայքերին օգտագործել շարժման տվիչները</translation>
@@ -3643,6 +3645,7 @@
 <translation id="5863445608433396414">Միացնել վրիպազերծման գործառույթները</translation>
 <translation id="5864195618110239517">Օգտագործել վճարովի թրաֆիկով կապը</translation>
 <translation id="5864471791310927901">DHCP-ի որոնումը չհաջողվեց</translation>
+<translation id="5864754048328252126">Անգործուն ռեժիմի միացում լիցքավորման ընթացքում</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> հավելվածի աշխատանքը շուտով կդադարեցվի</translation>
 <translation id="586567932979200359"><ph name="PRODUCT_NAME" />-ը գործարկվում է իր սկավառակի պատկերից: Եթե տեղադրեք այն համակարգչում, կարող եք գործարկել առանց սկավառակի պատկերի` միևնույն ժամանակ այն արդի պահելով:</translation>
 <translation id="5865733239029070421">Ավտոմատ Google-ին է ուղարկում օգտագործման վիճակագրությունը և խափանումների մասին հաշվետվությունները</translation>
@@ -5979,6 +5982,7 @@
 <translation id="8951256747718668828">Չհաջողվեց վերականգնել սխալի պատճառով</translation>
 <translation id="8951465597020890363">Փակե՞լ հյուրի ռեժիմը։</translation>
 <translation id="8952831374766033534">Կազմաձևումը չի աջակցվում՝ <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Լիցքավորման ընթացքում</translation>
 <translation id="895347679606913382">Մեկնարկ…</translation>
 <translation id="8957762313041272117">Կենդանի ենթագրեր</translation>
 <translation id="895944840846194039">JavaScript հիշողություն</translation>

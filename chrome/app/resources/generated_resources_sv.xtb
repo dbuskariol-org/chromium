@@ -1547,6 +1547,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="3019285239893817657">Knapp till undersida</translation>
 <translation id="3020183492814296499">Genvägar</translation>
 <translation id="3020990233660977256">Serienummer: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Vid batteridrift</translation>
 <translation id="3021066826692793094">Fjäril</translation>
 <translation id="3021678814754966447">&amp;Visa ramkälla</translation>
 <translation id="3022978424994383087">Jag hörde inte.</translation>
@@ -2926,6 +2927,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="4890773143211625964">Visa avancerade utskriftsalternativ</translation>
 <translation id="4891089016822695758">Forum för betaversionen</translation>
 <translation id="4892229439761351791">Webbplatsen kan använda Bluetooth</translation>
+<translation id="489258173289528622">Inaktivitetsåtgärd vid batteridrift</translation>
 <translation id="4893336867552636863">All webbinformation raderas permanent från den här enheten.</translation>
 <translation id="4893522937062257019">På låsskärmen</translation>
 <translation id="489454699928748701">Tillåt webbplatser att använda enhetens rörelsesensorer</translation>
@@ -3640,6 +3642,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="5863445608433396414">Aktivera felsökningsfunktioner</translation>
 <translation id="5864195618110239517">Använd anslutning med datapriser</translation>
 <translation id="5864471791310927901">DHCP-förfrågan misslyckades</translation>
+<translation id="5864754048328252126">Inaktivitetsåtgärd vid laddning</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> pausas snart</translation>
 <translation id="586567932979200359">Du kör <ph name="PRODUCT_NAME" /> från diskavbildningen. Om du installerar programmet på din dator kan du köra det utan diskavbildningen och du kan vara säker på att det alltid är uppdaterat.</translation>
 <translation id="5865733239029070421">Skickar användningsstatistik och felrapporter till Google automatiskt</translation>
@@ -5978,6 +5981,7 @@ Spara nyckelfilen på ett säkert ställe. Den behövs om du ska skapa nya versi
 <translation id="8951256747718668828">Det gick inte att slutföra återställningen på grund av ett fel</translation>
 <translation id="8951465597020890363">Vill du avsluta gästläget ändå?</translation>
 <translation id="8952831374766033534">Konfigurationsalternativet stöds inte: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Vid laddning</translation>
 <translation id="895347679606913382">Startar...</translation>
 <translation id="8957762313041272117">Live Caption</translation>
 <translation id="895944840846194039">JavaScript-minne</translation>

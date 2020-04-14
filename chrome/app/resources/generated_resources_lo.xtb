@@ -1545,6 +1545,7 @@
 <translation id="3019285239893817657">ປຸ່ມໜ້າຍ່ອຍ</translation>
 <translation id="3020183492814296499">ທາງລັດ</translation>
 <translation id="3020990233660977256">ເລກລໍາດັບ: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">ໃນເວລາໃຊ້ແບັດເຕີຣີ</translation>
 <translation id="3021066826692793094">ແມງກະເບື້ອ</translation>
 <translation id="3021678814754966447">ເບິ່ງແຫຼ່ງທີ່ມາຂອບ</translation>
 <translation id="3022978424994383087">ບໍ່ເຂົ້າໃຈສິ່ງນັ້ນ.</translation>
@@ -2924,6 +2925,7 @@
 <translation id="4890773143211625964">ສະແດງຕົວເລືອກເຄື່ອງພິມຂັ້ນສູງ</translation>
 <translation id="4891089016822695758">ເວທີເບຕ້າ</translation>
 <translation id="4892229439761351791">ເວັບໄຊສາມາດໃຊ້ Bluetooth ໄດ້</translation>
+<translation id="489258173289528622">ການດຳເນີນການທີ່ບໍ່ເຄື່ອນໄຫວໃນຂະນະທີ່ໃຊ້ແບັດເຕີຣີ</translation>
 <translation id="4893336867552636863">ອັນ​ນີ້​ຈະ​ລຶບ​ຂໍ້​ມູນ​ການ​ທ່ອງ​ເນັດ​ຂອງ​ທ່ານ​ໄປ​ຈາກ​ອຸ​ປະ​ກອນ​ນີ້​ຖາ​ວອນ.</translation>
 <translation id="4893522937062257019">ໃນໜ້າຈໍລັອກ</translation>
 <translation id="489454699928748701">ອະນຸຍາດໃຫ້ເວັບໄຊໃຊ້ເຊັນເຊີກວດຈັບການເຄື່ອນໄຫວ</translation>
@@ -3638,6 +3640,7 @@
 <translation id="5863445608433396414">ເປີດ​ໃຊ້​ງານ​ຄຸນສົມບັດ​ແກ້​ໄຂ​ບັນ​ຫາ</translation>
 <translation id="5864195618110239517">ໃຊ້ການເຊື່ອມຕໍ່ແບບວັດແທກປະລິມານອິນເຕີເນັດ</translation>
 <translation id="5864471791310927901">ຊອກຫາ DHCP ບໍ່ສໍາເລັດ</translation>
+<translation id="5864754048328252126">ການດຳເນີນການເວລາບໍ່ນຳໃຊ້ເຄື່ອງໃນຂະນະທີ່ສາກ</translation>
 <translation id="5865508026715185451"><ph name="APP_NAME" /> ຈະຢຸດຊົ່ວຄາວໃນໄວໆນີ້</translation>
 <translation id="586567932979200359">ທ່ານ​ກໍາ​ລັງ​ແລ່ນ <ph name="PRODUCT_NAME" /> ຈາກ​ຮູບ​ແຜ່ນ​ດິສກ໌ຂອງມັນ. ການ​ຕິດ​ຕັ້ງ​ມັນ​ຢູ່ໃນ​ຄອມ​ພິວ​ເຕີ​ຂອງ​ທ່ານ​​ເຮັດ​ໃຫ້​ແລ່ນມັນໄດ້​ໂດຍ​ບໍ່ຕ້ອງ​ມີ​ຮູບ​​ແຜ່ນດິສກ໌ໄດ້​, ແລະ​ຮັບ​ປະ​ກັນ​ໃຫ້ມັນອັບເດດຢູ່.</translation>
 <translation id="5865733239029070421">ສົ່ງສະຖິຕິການໃຊ້ ແລະ ລາຍງານການຂັດຂ້ອງໃຫ້ Google ໂດຍອັດຕະໂນມັດ</translation>
@@ -5974,6 +5977,7 @@
 <translation id="8951256747718668828">ການກູ້ຄືນຂໍ້ມູນບໍ່ສຳເລັດເນື່ອງຈາກຂໍ້ຜິດພາດ</translation>
 <translation id="8951465597020890363">ແນວໃດກໍອອກຈາກໂໝດແຂກບໍ?</translation>
 <translation id="8952831374766033534">ບໍ່ຮອງຮັບຕົວເລືອກການກຳນົດຄ່າ: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">ໃນຂະນະທີ່ສາກຢູ່</translation>
 <translation id="895347679606913382">ກໍາລັງເລີ່ມຕົ້ນ...</translation>
 <translation id="8957762313041272117">ຄຳບັນຍາຍສົດ</translation>
 <translation id="895944840846194039">ຄວາມ​ຈໍາ JavaScript</translation>

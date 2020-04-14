@@ -1546,6 +1546,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="3019285239893817657">Botón de subpáxina</translation>
 <translation id="3020183492814296499">Atallos</translation>
 <translation id="3020990233660977256">Número de serie: <ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">Durante o uso da batería</translation>
 <translation id="3021066826692793094">Bolboreta</translation>
 <translation id="3021678814754966447">&amp;Ver fonte do marco</translation>
 <translation id="3022978424994383087">Non se entendeu a mensaxe.</translation>
@@ -2925,6 +2926,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="4890773143211625964">Mostrar opcións avanzadas da impresora</translation>
 <translation id="4891089016822695758">Foro de Chrome Beta</translation>
 <translation id="4892229439761351791">O sitio pode usar o Bluetooth</translation>
+<translation id="489258173289528622">Acción de inactividade durante o uso da batería</translation>
 <translation id="4893336867552636863">Esta acción eliminará permanentemente os teus datos de navegación deste dispositivo.</translation>
 <translation id="4893522937062257019">Na pantalla de bloqueo</translation>
 <translation id="489454699928748701">Permitir que os sitios utilicen os sensores de movemento</translation>
@@ -3639,6 +3641,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="5863445608433396414">Activar funcións de depuración</translation>
 <translation id="5864195618110239517">Usar conexión de pago por consumo</translation>
 <translation id="5864471791310927901">Produciuse un erro na busca de DHCP</translation>
+<translation id="5864754048328252126">Acción de inactividade durante a carga</translation>
 <translation id="5865508026715185451">A aplicación <ph name="APP_NAME" /> porase en pausa en breve</translation>
 <translation id="586567932979200359">Estás executando <ph name="PRODUCT_NAME" /> desde a imaxe de disco. Se o instalas no ordenador, poderás executalo sen a imaxe de disco e aseguraraste de mantelo actualizado.</translation>
 <translation id="5865733239029070421">Envía estatísticas de uso e informes de erros automaticamente a Google</translation>
@@ -5976,6 +5979,7 @@ Mantén o ficheiro de clave nun lugar seguro, xa que o precisarás para crear no
 <translation id="8951256747718668828">Non se puido completar a restauración debido a un erro</translation>
 <translation id="8951465597020890363">Queres saír do modo de invitado de todas formas?</translation>
 <translation id="8952831374766033534">Non se admite a opción de configuración: <ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">Durante a carga</translation>
 <translation id="895347679606913382">Iniciando...</translation>
 <translation id="8957762313041272117">Subtítulos instantáneos</translation>
 <translation id="895944840846194039">Memoria JavaScript</translation>

@@ -94,7 +94,7 @@
 <translation id="1122960773616686544">書籤名稱</translation>
 <translation id="1124772482545689468">使用者</translation>
 <translation id="1125550662859510761">螢幕解析度：<ph name="WIDTH" /> x <ph name="HEIGHT" /> (原生)</translation>
-<translation id="1126809382673880764">無法封鎖不安全的網站、下載內容和擴充功能。在 Gmail 和 Google 搜尋等其他 Google 服務中，你仍可獲得安全瀏覽的防護 (如適用)。</translation>
+<translation id="1126809382673880764">無法封鎖不安全的網站、下載內容和擴充功能。在 Gmail 和 Google 搜尋等其他 Google 服務中，安全瀏覽功能的防護機制仍然會發揮作用 (在適用情況下)。</translation>
 <translation id="1128109161498068552">禁止任何網站使用系統專用訊息存取 MIDI 裝置</translation>
 <translation id="1128128132059598906">EAP-TTLS</translation>
 <translation id="1128591060186966949">編輯搜尋引擎</translation>
@@ -1546,6 +1546,7 @@
 <translation id="3019285239893817657">子頁面按鈕</translation>
 <translation id="3020183492814296499">快速鍵</translation>
 <translation id="3020990233660977256">序號：<ph name="SERIAL_NUMBER" /></translation>
+<translation id="3021065318976393105">使用電池時</translation>
 <translation id="3021066826692793094">蝴蝶</translation>
 <translation id="3021678814754966447">檢視頁框原始碼(&amp;V)</translation>
 <translation id="3022978424994383087">無法辨識語音內容。</translation>
@@ -2924,6 +2925,7 @@
 <translation id="4890773143211625964">顯示進階印表機選項</translation>
 <translation id="4891089016822695758">測試版論壇</translation>
 <translation id="4892229439761351791">網站可以使用藍牙</translation>
+<translation id="489258173289528622">使用電池時的閒置動作</translation>
 <translation id="4893336867552636863">這會將您的瀏覽資料從這個裝置上永久刪除。</translation>
 <translation id="4893522937062257019">螢幕鎖定時</translation>
 <translation id="489454699928748701">允許網站使用動作感應器</translation>
@@ -3638,6 +3640,7 @@
 <translation id="5863445608433396414">啟用偵錯功能</translation>
 <translation id="5864195618110239517">使用計量付費連線</translation>
 <translation id="5864471791310927901">DHCP 查閱失敗</translation>
+<translation id="5864754048328252126">充電時的閒置動作</translation>
 <translation id="5865508026715185451">「<ph name="APP_NAME" />」即將暫停</translation>
 <translation id="586567932979200359">你正在透過磁碟映像執行 <ph name="PRODUCT_NAME" />。你可以直接在電腦上安裝程式，往後無需透過磁碟映像即可直接執行，而且能隨時使用最新的版本。</translation>
 <translation id="5865733239029070421">自動將使用統計資料和當機報告傳送給 Google</translation>
@@ -5975,6 +5978,7 @@
 <translation id="8951256747718668828">發生錯誤，因此無法完成還原程序</translation>
 <translation id="8951465597020890363">仍然要結束訪客模式嗎？</translation>
 <translation id="8952831374766033534">不支援的設定選項：<ph name="ERROR_LINE" /></translation>
+<translation id="8953476467359856141">充電時</translation>
 <translation id="895347679606913382">啟動中...</translation>
 <translation id="8957762313041272117">即時字幕</translation>
 <translation id="895944840846194039">JavaScript 記憶體使用量</translation>
