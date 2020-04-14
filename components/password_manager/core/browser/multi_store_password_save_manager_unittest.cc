@@ -298,8 +298,7 @@ TEST_F(MultiStorePasswordSaveManagerTest, SaveInProfileStore) {
   password_save_manager()->Save(observed_form_, parsed_submitted_form);
 }
 
-TEST_F(MultiStorePasswordSaveManagerTest,
-       UpdateBothStoresIfCredentialsExistInAccountStoreOnly) {
+TEST_F(MultiStorePasswordSaveManagerTest, UpdateInAccountStoreOnly) {
   SetAccountStoreEnabled(/*is_enabled=*/true);
 
   PasswordForm saved_match_in_account_store(saved_match_);
@@ -317,14 +316,13 @@ TEST_F(MultiStorePasswordSaveManagerTest,
   // An update prompt should be shown.
   EXPECT_TRUE(password_save_manager()->IsPasswordUpdate());
 
-  EXPECT_CALL(*mock_profile_form_saver(), Update(_, _, _));
+  EXPECT_CALL(*mock_profile_form_saver(), Update(_, _, _)).Times(0);
   EXPECT_CALL(*mock_account_form_saver(), Update(_, _, _));
 
   password_save_manager()->Save(observed_form_, parsed_submitted_form_);
 }
 
-TEST_F(MultiStorePasswordSaveManagerTest,
-       UpdateBothStoresIfCredentialsExistInProfileStoreOnly) {
+TEST_F(MultiStorePasswordSaveManagerTest, UpdateInProfileStoreOnly) {
   SetAccountStoreEnabled(/*is_enabled=*/true);
 
   PasswordForm saved_match_in_profile_store(saved_match_);
@@ -343,13 +341,12 @@ TEST_F(MultiStorePasswordSaveManagerTest,
   EXPECT_TRUE(password_save_manager()->IsPasswordUpdate());
 
   EXPECT_CALL(*mock_profile_form_saver(), Update(_, _, _));
-  EXPECT_CALL(*mock_account_form_saver(), Update(_, _, _));
+  EXPECT_CALL(*mock_account_form_saver(), Update(_, _, _)).Times(0);
 
   password_save_manager()->Save(observed_form_, parsed_submitted_form_);
 }
 
-TEST_F(MultiStorePasswordSaveManagerTest,
-       UpdateBothStoresIfCredentialsExistInBothStores) {
+TEST_F(MultiStorePasswordSaveManagerTest, UpdateInBothStores) {
   SetAccountStoreEnabled(/*is_enabled=*/true);
 
   PasswordForm saved_match_in_profile_store(saved_match_);
