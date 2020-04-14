@@ -52,6 +52,11 @@ base::TimeTicks CompositorFrameReportingController::Now() const {
   return base::TimeTicks::Now();
 }
 
+bool CompositorFrameReportingController::HasReporterAt(
+    PipelineStage stage) const {
+  return !!reporters_[stage].get();
+}
+
 void CompositorFrameReportingController::WillBeginImplFrame(
     const viz::BeginFrameArgs& args) {
   base::TimeTicks begin_time = Now();
