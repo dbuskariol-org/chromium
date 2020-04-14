@@ -67,13 +67,13 @@ const char* const kValidPolicies[] = {
     "*;report-to=default",  // An empty policy.
     "no-f-bool;report-to=none, f-double;value=2.0, *;report-to=default",
     "no-f-bool;report-to=none, f-double;value=2.0, *;report-to=none",
+    "f-double;value=2;another_value=4",  // excessive param should be
+                                         // acceptable.
 };
 
 const char* const kInvalidPolicies[] = {
     "bad-feature-name", "no-bad-feature-name",
-    "f-bool;value=true",             // unnecessary param
     "f-double;value=?0",             // wrong type of param
-    "f-double;ppb=2",                // wrong param key
     "\"f-bool\"",                    // policy member should be token instead of
                                      // string
     "();value=2",                    // empty feature token
@@ -110,6 +110,11 @@ const std::pair<const char*, DocumentPolicy::ParsedDocumentPolicy>
           {} /* endpoint_map */}},
         // White-space is allowed in some positions in structured-header.
         {"no-f-bool,   f-double;value=1",
+         {{{kBoolFeature, PolicyValue(false)},
+           {kDoubleFeature, PolicyValue(1.0)}},
+          {} /* endpoint_map */}},
+        // Unrecognized params are ignored for forwards compatibility.
+        {"no-f-bool,f-double;value=1;unknown_param=xxx",
          {{{kBoolFeature, PolicyValue(false)},
            {kDoubleFeature, PolicyValue(1.0)}},
           {} /* endpoint_map */}},

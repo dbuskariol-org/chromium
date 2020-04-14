@@ -44,20 +44,15 @@ struct ParsedFeature {
 
 base::Optional<ParsedFeature> ParseWildcardFeature(
     const net::structured_headers::ParameterizedMember& directive) {
-  // Wildcard feature can only have 1 param, which is 'report-to'.
-  if (directive.params.size() != 1)
-    return base::nullopt;
+  base::Optional<std::string> endpoint_group;
 
-  const auto& param = directive.params.front();
-
-  // Wildcard feature can only have 1 param, which is 'report-to'.
-  if (param.first != kReportTo)
-    return base::nullopt;
-
-  base::Optional<std::string> endpoint_group = ItemToString(param.second);
-
-  if (!endpoint_group)
-    return base::nullopt;
+  for (const auto& param : directive.params) {
+    if (param.first == kReportTo) {
+      endpoint_group = ItemToString(param.second);
+      if (!endpoint_group)
+        return base::nullopt;
+    }
+  }
 
   return base::make_optional<ParsedFeature>(
       {mojom::blink::DocumentPolicyFeature::kDefault, PolicyValue(),
@@ -79,11 +74,6 @@ base::Optional<ParsedFeature> ParseFeature(
 
   // The item in directive should be token type.
   if (!feature_token.is_token())
-    return base::nullopt;
-
-  // No directive can currently have more than two parameters, including
-  // 'report-to'.
-  if (directive.params.size() > 2)
     return base::nullopt;
 
   std::string feature_name = feature_token.GetString();
@@ -124,6 +114,8 @@ base::Optional<ParsedFeature> ParseFeature(
           mojom::blink::PolicyValueType::kNull)
     parsed_feature.policy_value = PolicyValue(true);
 
+  const std::string& feature_param_name =
+      feature_info_map.at(parsed_feature.feature).feature_param_name;
   for (const auto& param : directive.params) {
     const std::string& param_name = param.first;
     // Handle "report-to" param. "report-to" is an optional param for
@@ -131,19 +123,14 @@ base::Optional<ParsedFeature> ParseFeature(
     // should send report to. If left unspecified, no report will be send upon
     // policy violation.
     if (param_name == kReportTo) {
-      base::Optional<std::string> endpoint_group = ItemToString(param.second);
-      if (!endpoint_group)
+      parsed_feature.endpoint_group = ItemToString(param.second);
+      if (!parsed_feature.endpoint_group)
         return base::nullopt;
-      parsed_feature.endpoint_group = *endpoint_group;
-    } else {
+    } else if (param_name == feature_param_name) {
       // Handle policy value. For all non-boolean policy value types, they
       // should be specified as FeatureX;f=xxx, with f representing the
       // |feature_param_name| and xxx representing policy value.
 
-      // |param_name| does not match param_name in config.
-      if (param_name !=
-          feature_info_map.at(parsed_feature.feature).feature_param_name)
-        return base::nullopt;
       // |parsed_feature.policy_value| should not be assigned yet.
       DCHECK(parsed_feature.policy_value.Type() ==
              mojom::blink::PolicyValueType::kNull);
