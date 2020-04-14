@@ -731,11 +731,11 @@ void PrintPreviewHandler::HandleGrantExtensionPrinterAccess(
             args->GetString(1, &printer_id) && !callback_id.empty();
   DCHECK(ok);
 
-  GetPrinterHandler(PrinterType::kExtension)
-      ->StartGrantPrinterAccess(
-          printer_id,
-          base::BindOnce(&PrintPreviewHandler::OnGotExtensionPrinterInfo,
-                         weak_factory_.GetWeakPtr(), callback_id));
+  PrinterHandler* handler = GetPrinterHandler(PrinterType::kExtension);
+  handler->StartGrantPrinterAccess(
+      printer_id,
+      base::BindOnce(&PrintPreviewHandler::OnGotExtensionPrinterInfo,
+                     weak_factory_.GetWeakPtr(), callback_id));
 }
 
 void PrintPreviewHandler::HandleGetPrinterCapabilities(
@@ -934,11 +934,11 @@ void PrintPreviewHandler::HandlePrinterSetup(const base::ListValue* args) {
     return;
   }
 
-  GetPrinterHandler(PrinterType::kLocal)
-      ->StartGetCapability(
-          printer_name, base::BindOnce(&PrintPreviewHandler::SendPrinterSetup,
-                                       weak_factory_.GetWeakPtr(), callback_id,
-                                       printer_name));
+  PrinterHandler* handler = GetPrinterHandler(PrinterType::kLocal);
+  handler->StartGetCapability(
+      printer_name,
+      base::BindOnce(&PrintPreviewHandler::SendPrinterSetup,
+                     weak_factory_.GetWeakPtr(), callback_id, printer_name));
 }
 
 void PrintPreviewHandler::HandleSignin(const base::ListValue* args) {
@@ -1037,11 +1037,6 @@ void PrintPreviewHandler::HandleGetEulaUrl(const base::ListValue* args) {
   const std::string& destination_id = args->GetList()[1].GetString();
 
   PrinterHandler* handler = GetPrinterHandler(PrinterType::kLocal);
-  if (!handler) {
-    RejectJavascriptCallback(base::Value(callback_id), base::Value());
-    return;
-  }
-
   handler->StartGetEulaUrl(
       destination_id, base::BindOnce(&PrintPreviewHandler::SendEulaUrl,
                                      weak_factory_.GetWeakPtr(), callback_id));
@@ -1083,10 +1078,10 @@ void PrintPreviewHandler::HandleGetInitialSettings(
 
   AllowJavascript();
 
-  GetPrinterHandler(PrinterType::kLocal)
-      ->GetDefaultPrinter(
-          base::BindOnce(&PrintPreviewHandler::SendInitialSettings,
-                         weak_factory_.GetWeakPtr(), callback_id));
+  PrinterHandler* handler = GetPrinterHandler(PrinterType::kLocal);
+  handler->GetDefaultPrinter(
+      base::BindOnce(&PrintPreviewHandler::SendInitialSettings,
+                     weak_factory_.GetWeakPtr(), callback_id));
 }
 
 void PrintPreviewHandler::GetUserAccountList(base::Value* settings) {
