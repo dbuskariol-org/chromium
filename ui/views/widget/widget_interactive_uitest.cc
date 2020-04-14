@@ -441,181 +441,6 @@ TEST_F(DesktopWidgetTestInteractive, DISABLED_TouchNoActivateWindow) {
 
 #endif  // defined(OS_WIN)
 
-TEST_F(WidgetTestInteractive, CaptureAutoReset) {
-  WidgetAutoclosePtr toplevel(CreateTopLevelFramelessPlatformWidget());
-  View* container = new View;
-  toplevel->SetContentsView(container);
-
-  EXPECT_FALSE(toplevel->HasCapture());
-  toplevel->SetCapture(nullptr);
-  EXPECT_TRUE(toplevel->HasCapture());
-
-  // By default, mouse release removes capture.
-  gfx::Point click_location(45, 15);
-  ui::MouseEvent release(ui::ET_MOUSE_RELEASED, click_location, click_location,
-                         ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
-                         ui::EF_LEFT_MOUSE_BUTTON);
-  toplevel->OnMouseEvent(&release);
-  EXPECT_FALSE(toplevel->HasCapture());
-
-  // Now a mouse release shouldn't remove capture.
-  toplevel->set_auto_release_capture(false);
-  toplevel->SetCapture(nullptr);
-  EXPECT_TRUE(toplevel->HasCapture());
-  toplevel->OnMouseEvent(&release);
-  EXPECT_TRUE(toplevel->HasCapture());
-  toplevel->ReleaseCapture();
-  EXPECT_FALSE(toplevel->HasCapture());
-}
-
-TEST_F(WidgetTestInteractive, ResetCaptureOnGestureEnd) {
-  WidgetAutoclosePtr toplevel(CreateTopLevelFramelessPlatformWidget());
-  View* container = new View;
-  toplevel->SetContentsView(container);
-
-  View* gesture = new GestureCaptureView;
-  gesture->SetBounds(0, 0, 30, 30);
-  container->AddChildView(gesture);
-
-  MouseView* mouse = new MouseView;
-  mouse->SetBounds(30, 0, 30, 30);
-  container->AddChildView(mouse);
-
-  toplevel->SetSize(gfx::Size(100, 100));
-  toplevel->Show();
-
-  // Start a gesture on |gesture|.
-  ui::GestureEvent tap_down(15, 15, 0, base::TimeTicks(),
-                            ui::GestureEventDetails(ui::ET_GESTURE_TAP_DOWN));
-  ui::GestureEvent end(15, 15, 0, base::TimeTicks(),
-                       ui::GestureEventDetails(ui::ET_GESTURE_END));
-  toplevel->OnGestureEvent(&tap_down);
-
-  // Now try to click on |mouse|. Since |gesture| will have capture, |mouse|
-  // will not receive the event.
-  gfx::Point click_location(45, 15);
-
-  ui::MouseEvent press(ui::ET_MOUSE_PRESSED, click_location, click_location,
-                       ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
-                       ui::EF_LEFT_MOUSE_BUTTON);
-  ui::MouseEvent release(ui::ET_MOUSE_RELEASED, click_location, click_location,
-                         ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
-                         ui::EF_LEFT_MOUSE_BUTTON);
-
-  EXPECT_TRUE(toplevel->HasCapture());
-
-  toplevel->OnMouseEvent(&press);
-  toplevel->OnMouseEvent(&release);
-  EXPECT_EQ(0, mouse->pressed());
-
-  EXPECT_FALSE(toplevel->HasCapture());
-
-  // The end of the gesture should release the capture, and pressing on |mouse|
-  // should now reach |mouse|.
-  toplevel->OnGestureEvent(&end);
-  toplevel->OnMouseEvent(&press);
-  toplevel->OnMouseEvent(&release);
-  EXPECT_EQ(1, mouse->pressed());
-}
-
-// Checks that if a mouse-press triggers a capture on a different widget (which
-// consumes the mouse-release event), then the target of the press does not have
-// capture.
-TEST_F(WidgetTestInteractive, DisableCaptureWidgetFromMousePress) {
-  // The test creates two widgets: |first| and |second|.
-  // The View in |first| makes |second| visible, sets capture on it, and starts
-  // a nested loop (like a menu does). The View in |second| terminates the
-  // nested loop and closes the widget.
-  // The test sends a mouse-press event to |first|, and posts a task to send a
-  // release event to |second|, to make sure that the release event is
-  // dispatched after the nested loop starts.
-
-  WidgetAutoclosePtr first(CreateTopLevelFramelessPlatformWidget());
-  Widget* second = CreateTopLevelFramelessPlatformWidget();
-
-  NestedLoopCaptureView* container = new NestedLoopCaptureView(second);
-  first->SetContentsView(container);
-
-  second->SetContentsView(new ExitLoopOnRelease(container->GetQuitClosure()));
-
-  first->SetSize(gfx::Size(100, 100));
-  first->Show();
-
-  gfx::Point location(20, 20);
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE,
-      base::BindOnce(
-          &Widget::OnMouseEvent, base::Unretained(second),
-          base::Owned(new ui::MouseEvent(
-              ui::ET_MOUSE_RELEASED, location, location, ui::EventTimeForNow(),
-              ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON))));
-  ui::MouseEvent press(ui::ET_MOUSE_PRESSED, location, location,
-                       ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
-                       ui::EF_LEFT_MOUSE_BUTTON);
-  first->OnMouseEvent(&press);
-  EXPECT_FALSE(first->HasCapture());
-}
-
-// Tests some grab/ungrab events.
-// TODO(estade): can this be enabled now that this is an interactive ui test?
-TEST_F(WidgetTestInteractive, DISABLED_GrabUngrab) {
-  WidgetAutoclosePtr toplevel(CreateTopLevelPlatformWidget());
-  Widget* child1 = CreateChildNativeWidgetWithParent(toplevel.get());
-  Widget* child2 = CreateChildNativeWidgetWithParent(toplevel.get());
-
-  toplevel->SetBounds(gfx::Rect(0, 0, 500, 500));
-
-  child1->SetBounds(gfx::Rect(10, 10, 300, 300));
-  View* view = new MouseView();
-  view->SetBounds(0, 0, 300, 300);
-  child1->GetRootView()->AddChildView(view);
-
-  child2->SetBounds(gfx::Rect(200, 10, 200, 200));
-  view = new MouseView();
-  view->SetBounds(0, 0, 200, 200);
-  child2->GetRootView()->AddChildView(view);
-
-  toplevel->Show();
-  RunPendingMessages();
-
-  // Click on child1
-  gfx::Point p1(45, 45);
-  ui::MouseEvent pressed(ui::ET_MOUSE_PRESSED, p1, p1, ui::EventTimeForNow(),
-                         ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
-  toplevel->OnMouseEvent(&pressed);
-
-  EXPECT_TRUE(toplevel->HasCapture());
-  EXPECT_TRUE(child1->HasCapture());
-  EXPECT_FALSE(child2->HasCapture());
-
-  ui::MouseEvent released(ui::ET_MOUSE_RELEASED, p1, p1, ui::EventTimeForNow(),
-                          ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
-  toplevel->OnMouseEvent(&released);
-
-  EXPECT_FALSE(toplevel->HasCapture());
-  EXPECT_FALSE(child1->HasCapture());
-  EXPECT_FALSE(child2->HasCapture());
-
-  RunPendingMessages();
-
-  // Click on child2
-  gfx::Point p2(315, 45);
-  ui::MouseEvent pressed2(ui::ET_MOUSE_PRESSED, p2, p2, ui::EventTimeForNow(),
-                          ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
-  toplevel->OnMouseEvent(&pressed2);
-  EXPECT_TRUE(pressed2.handled());
-  EXPECT_TRUE(toplevel->HasCapture());
-  EXPECT_TRUE(child2->HasCapture());
-  EXPECT_FALSE(child1->HasCapture());
-
-  ui::MouseEvent released2(ui::ET_MOUSE_RELEASED, p2, p2, ui::EventTimeForNow(),
-                           ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
-  toplevel->OnMouseEvent(&released2);
-  EXPECT_FALSE(toplevel->HasCapture());
-  EXPECT_FALSE(child1->HasCapture());
-  EXPECT_FALSE(child2->HasCapture());
-}
-
 // Tests mouse move outside of the window into the "resize controller" and back
 // will still generate an OnMouseEntered and OnMouseExited event..
 TEST_F(WidgetTestInteractive, CheckResizeControllerEvents) {
@@ -1062,61 +887,6 @@ TEST_F(DesktopWidgetTestInteractive, WindowModalWindowDestroyedActivationTest) {
   WidgetFocusManager::GetInstance()->RemoveFocusChangeListener(&focus_listener);
 }
 #endif
-
-// Disabled on Mac. Desktop Mac doesn't have system modal windows since Carbon
-// was deprecated. It does have application modal windows, but only Ash requests
-// those.
-#if defined(OS_MACOSX)
-#define MAYBE_SystemModalWindowReleasesCapture \
-  DISABLED_SystemModalWindowReleasesCapture
-#elif defined(OS_CHROMEOS)
-// Investigate enabling for Chrome OS. It probably requires help from the window
-// service.
-#define MAYBE_SystemModalWindowReleasesCapture \
-  DISABLED_SystemModalWindowReleasesCapture
-#else
-#define MAYBE_SystemModalWindowReleasesCapture SystemModalWindowReleasesCapture
-#endif
-
-// Test that when opening a system-modal window, capture is released.
-TEST_F(DesktopWidgetTestInteractive, MAYBE_SystemModalWindowReleasesCapture) {
-  TestWidgetFocusChangeListener focus_listener;
-  WidgetFocusManager::GetInstance()->AddFocusChangeListener(&focus_listener);
-
-  // Create a top level widget.
-  Widget top_level_widget;
-  Widget::InitParams init_params =
-      CreateParams(Widget::InitParams::TYPE_WINDOW);
-  init_params.show_state = ui::SHOW_STATE_NORMAL;
-  gfx::Rect initial_bounds(0, 0, 500, 500);
-  init_params.bounds = initial_bounds;
-  init_params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
-  top_level_widget.Init(std::move(init_params));
-  ShowSync(&top_level_widget);
-
-  ASSERT_FALSE(focus_listener.focus_changes().empty());
-  EXPECT_EQ(top_level_widget.GetNativeView(),
-            focus_listener.focus_changes().back());
-
-  EXPECT_FALSE(top_level_widget.HasCapture());
-  top_level_widget.SetCapture(nullptr);
-  EXPECT_TRUE(top_level_widget.HasCapture());
-
-  // Create a modal dialog.
-  ModalDialogDelegate* dialog_delegate =
-      new ModalDialogDelegate(ui::MODAL_TYPE_SYSTEM);
-
-  Widget* modal_dialog_widget = views::DialogDelegate::CreateDialogWidget(
-      dialog_delegate, nullptr, top_level_widget.GetNativeView());
-  modal_dialog_widget->SetBounds(gfx::Rect(100, 100, 200, 200));
-  ShowSync(modal_dialog_widget);
-
-  EXPECT_FALSE(top_level_widget.HasCapture());
-
-  modal_dialog_widget->CloseNow();
-  top_level_widget.CloseNow();
-  WidgetFocusManager::GetInstance()->RemoveFocusChangeListener(&focus_listener);
-}
 
 TEST_F(DesktopWidgetTestInteractive, CanActivateFlagIsHonored) {
   Widget widget;
@@ -1706,6 +1476,236 @@ TEST_F(WidgetCaptureTest, FailedCaptureRequestIsNoop) {
 
   EXPECT_FALSE(mouse_view1->pressed());
   EXPECT_TRUE(mouse_view2->pressed());
+}
+
+TEST_F(WidgetCaptureTest, CaptureAutoReset) {
+  WidgetAutoclosePtr toplevel(CreateTopLevelFramelessPlatformWidget());
+  View* container = new View;
+  toplevel->SetContentsView(container);
+
+  EXPECT_FALSE(toplevel->HasCapture());
+  toplevel->SetCapture(nullptr);
+  EXPECT_TRUE(toplevel->HasCapture());
+
+  // By default, mouse release removes capture.
+  gfx::Point click_location(45, 15);
+  ui::MouseEvent release(ui::ET_MOUSE_RELEASED, click_location, click_location,
+                         ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
+                         ui::EF_LEFT_MOUSE_BUTTON);
+  toplevel->OnMouseEvent(&release);
+  EXPECT_FALSE(toplevel->HasCapture());
+
+  // Now a mouse release shouldn't remove capture.
+  toplevel->set_auto_release_capture(false);
+  toplevel->SetCapture(nullptr);
+  EXPECT_TRUE(toplevel->HasCapture());
+  toplevel->OnMouseEvent(&release);
+  EXPECT_TRUE(toplevel->HasCapture());
+  toplevel->ReleaseCapture();
+  EXPECT_FALSE(toplevel->HasCapture());
+}
+
+TEST_F(WidgetCaptureTest, ResetCaptureOnGestureEnd) {
+  WidgetAutoclosePtr toplevel(CreateTopLevelFramelessPlatformWidget());
+  View* container = new View;
+  toplevel->SetContentsView(container);
+
+  View* gesture = new GestureCaptureView;
+  gesture->SetBounds(0, 0, 30, 30);
+  container->AddChildView(gesture);
+
+  MouseView* mouse = new MouseView;
+  mouse->SetBounds(30, 0, 30, 30);
+  container->AddChildView(mouse);
+
+  toplevel->SetSize(gfx::Size(100, 100));
+  toplevel->Show();
+
+  // Start a gesture on |gesture|.
+  ui::GestureEvent tap_down(15, 15, 0, base::TimeTicks(),
+                            ui::GestureEventDetails(ui::ET_GESTURE_TAP_DOWN));
+  ui::GestureEvent end(15, 15, 0, base::TimeTicks(),
+                       ui::GestureEventDetails(ui::ET_GESTURE_END));
+  toplevel->OnGestureEvent(&tap_down);
+
+  // Now try to click on |mouse|. Since |gesture| will have capture, |mouse|
+  // will not receive the event.
+  gfx::Point click_location(45, 15);
+
+  ui::MouseEvent press(ui::ET_MOUSE_PRESSED, click_location, click_location,
+                       ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
+                       ui::EF_LEFT_MOUSE_BUTTON);
+  ui::MouseEvent release(ui::ET_MOUSE_RELEASED, click_location, click_location,
+                         ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
+                         ui::EF_LEFT_MOUSE_BUTTON);
+
+  EXPECT_TRUE(toplevel->HasCapture());
+
+  toplevel->OnMouseEvent(&press);
+  toplevel->OnMouseEvent(&release);
+  EXPECT_EQ(0, mouse->pressed());
+
+  EXPECT_FALSE(toplevel->HasCapture());
+
+  // The end of the gesture should release the capture, and pressing on |mouse|
+  // should now reach |mouse|.
+  toplevel->OnGestureEvent(&end);
+  toplevel->OnMouseEvent(&press);
+  toplevel->OnMouseEvent(&release);
+  EXPECT_EQ(1, mouse->pressed());
+}
+
+// Checks that if a mouse-press triggers a capture on a different widget (which
+// consumes the mouse-release event), then the target of the press does not have
+// capture.
+TEST_F(WidgetCaptureTest, DisableCaptureWidgetFromMousePress) {
+  // The test creates two widgets: |first| and |second|.
+  // The View in |first| makes |second| visible, sets capture on it, and starts
+  // a nested loop (like a menu does). The View in |second| terminates the
+  // nested loop and closes the widget.
+  // The test sends a mouse-press event to |first|, and posts a task to send a
+  // release event to |second|, to make sure that the release event is
+  // dispatched after the nested loop starts.
+
+  WidgetAutoclosePtr first(CreateTopLevelFramelessPlatformWidget());
+  Widget* second = CreateTopLevelFramelessPlatformWidget();
+
+  NestedLoopCaptureView* container = new NestedLoopCaptureView(second);
+  first->SetContentsView(container);
+
+  second->SetContentsView(new ExitLoopOnRelease(container->GetQuitClosure()));
+
+  first->SetSize(gfx::Size(100, 100));
+  first->Show();
+
+  gfx::Point location(20, 20);
+  base::ThreadTaskRunnerHandle::Get()->PostTask(
+      FROM_HERE,
+      base::BindOnce(
+          &Widget::OnMouseEvent, base::Unretained(second),
+          base::Owned(new ui::MouseEvent(
+              ui::ET_MOUSE_RELEASED, location, location, ui::EventTimeForNow(),
+              ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON))));
+  ui::MouseEvent press(ui::ET_MOUSE_PRESSED, location, location,
+                       ui::EventTimeForNow(), ui::EF_LEFT_MOUSE_BUTTON,
+                       ui::EF_LEFT_MOUSE_BUTTON);
+  first->OnMouseEvent(&press);
+  EXPECT_FALSE(first->HasCapture());
+}
+
+// Tests some grab/ungrab events.
+// TODO(estade): can this be enabled now that this is an interactive ui test?
+TEST_F(WidgetCaptureTest, DISABLED_GrabUngrab) {
+  WidgetAutoclosePtr toplevel(CreateTopLevelPlatformWidget());
+  Widget* child1 = CreateChildNativeWidgetWithParent(toplevel.get());
+  Widget* child2 = CreateChildNativeWidgetWithParent(toplevel.get());
+
+  toplevel->SetBounds(gfx::Rect(0, 0, 500, 500));
+
+  child1->SetBounds(gfx::Rect(10, 10, 300, 300));
+  View* view = new MouseView();
+  view->SetBounds(0, 0, 300, 300);
+  child1->GetRootView()->AddChildView(view);
+
+  child2->SetBounds(gfx::Rect(200, 10, 200, 200));
+  view = new MouseView();
+  view->SetBounds(0, 0, 200, 200);
+  child2->GetRootView()->AddChildView(view);
+
+  toplevel->Show();
+  RunPendingMessages();
+
+  // Click on child1
+  gfx::Point p1(45, 45);
+  ui::MouseEvent pressed(ui::ET_MOUSE_PRESSED, p1, p1, ui::EventTimeForNow(),
+                         ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
+  toplevel->OnMouseEvent(&pressed);
+
+  EXPECT_TRUE(toplevel->HasCapture());
+  EXPECT_TRUE(child1->HasCapture());
+  EXPECT_FALSE(child2->HasCapture());
+
+  ui::MouseEvent released(ui::ET_MOUSE_RELEASED, p1, p1, ui::EventTimeForNow(),
+                          ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
+  toplevel->OnMouseEvent(&released);
+
+  EXPECT_FALSE(toplevel->HasCapture());
+  EXPECT_FALSE(child1->HasCapture());
+  EXPECT_FALSE(child2->HasCapture());
+
+  RunPendingMessages();
+
+  // Click on child2
+  gfx::Point p2(315, 45);
+  ui::MouseEvent pressed2(ui::ET_MOUSE_PRESSED, p2, p2, ui::EventTimeForNow(),
+                          ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
+  toplevel->OnMouseEvent(&pressed2);
+  EXPECT_TRUE(pressed2.handled());
+  EXPECT_TRUE(toplevel->HasCapture());
+  EXPECT_TRUE(child2->HasCapture());
+  EXPECT_FALSE(child1->HasCapture());
+
+  ui::MouseEvent released2(ui::ET_MOUSE_RELEASED, p2, p2, ui::EventTimeForNow(),
+                           ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
+  toplevel->OnMouseEvent(&released2);
+  EXPECT_FALSE(toplevel->HasCapture());
+  EXPECT_FALSE(child1->HasCapture());
+  EXPECT_FALSE(child2->HasCapture());
+}
+
+// Disabled on Mac. Desktop Mac doesn't have system modal windows since Carbon
+// was deprecated. It does have application modal windows, but only Ash requests
+// those.
+#if defined(OS_MACOSX)
+#define MAYBE_SystemModalWindowReleasesCapture \
+  DISABLED_SystemModalWindowReleasesCapture
+#elif defined(OS_CHROMEOS)
+// Investigate enabling for Chrome OS. It probably requires help from the window
+// service.
+#define MAYBE_SystemModalWindowReleasesCapture \
+  DISABLED_SystemModalWindowReleasesCapture
+#else
+#define MAYBE_SystemModalWindowReleasesCapture SystemModalWindowReleasesCapture
+#endif
+
+// Test that when opening a system-modal window, capture is released.
+TEST_F(WidgetCaptureTest, MAYBE_SystemModalWindowReleasesCapture) {
+  TestWidgetFocusChangeListener focus_listener;
+  WidgetFocusManager::GetInstance()->AddFocusChangeListener(&focus_listener);
+
+  // Create a top level widget.
+  Widget top_level_widget;
+  Widget::InitParams init_params =
+      CreateParams(Widget::InitParams::TYPE_WINDOW);
+  init_params.show_state = ui::SHOW_STATE_NORMAL;
+  gfx::Rect initial_bounds(0, 0, 500, 500);
+  init_params.bounds = initial_bounds;
+  init_params.ownership = Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  top_level_widget.Init(std::move(init_params));
+  ShowSync(&top_level_widget);
+
+  ASSERT_FALSE(focus_listener.focus_changes().empty());
+  EXPECT_EQ(top_level_widget.GetNativeView(),
+            focus_listener.focus_changes().back());
+
+  EXPECT_FALSE(top_level_widget.HasCapture());
+  top_level_widget.SetCapture(nullptr);
+  EXPECT_TRUE(top_level_widget.HasCapture());
+
+  // Create a modal dialog.
+  ModalDialogDelegate* dialog_delegate =
+      new ModalDialogDelegate(ui::MODAL_TYPE_SYSTEM);
+
+  Widget* modal_dialog_widget = views::DialogDelegate::CreateDialogWidget(
+      dialog_delegate, nullptr, top_level_widget.GetNativeView());
+  modal_dialog_widget->SetBounds(gfx::Rect(100, 100, 200, 200));
+  ShowSync(modal_dialog_widget);
+
+  EXPECT_FALSE(top_level_widget.HasCapture());
+
+  modal_dialog_widget->CloseNow();
+  top_level_widget.CloseNow();
+  WidgetFocusManager::GetInstance()->RemoveFocusChangeListener(&focus_listener);
 }
 
 // Regression test for http://crbug.com/382421 (Linux-Aura issue).
