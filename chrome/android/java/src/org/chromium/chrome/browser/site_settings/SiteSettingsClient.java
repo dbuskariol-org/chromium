@@ -27,6 +27,11 @@ public interface SiteSettingsClient {
     void launchHelpAndFeedbackActivity(Activity currentActivity, String helpContext);
 
     /**
+     * @return The NotificationSettingsClient that should be used when showing the Site Settings UI.
+     */
+    NotificationSettingsClient getNotificationSettingsClient();
+
+    /**
      * Asynchronously looks up the locally cached favicon image for the given URL.
      *
      * @param faviconUrl The URL of the page to get the favicon for. If a favicon for the full URL

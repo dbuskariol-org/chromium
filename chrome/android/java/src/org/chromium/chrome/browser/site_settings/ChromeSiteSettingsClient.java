@@ -22,6 +22,7 @@ import org.chromium.components.browser_ui.settings.ManagedPreferenceDelegate;
  * A SiteSettingsClient instance that contains Chrome-specific Site Settings logic.
  */
 public class ChromeSiteSettingsClient implements SiteSettingsClient {
+    private ChromeNotificationSettingsClient mChromeNotificationSettingsClient;
     private ManagedPreferenceDelegate mManagedPreferenceDelegate;
 
     @Override
@@ -41,6 +42,14 @@ public class ChromeSiteSettingsClient implements SiteSettingsClient {
     public void launchHelpAndFeedbackActivity(Activity currentActivity, String helpContext) {
         HelpAndFeedback.getInstance().show(
                 currentActivity, helpContext, Profile.getLastUsedRegularProfile(), null);
+    }
+
+    @Override
+    public NotificationSettingsClient getNotificationSettingsClient() {
+        if (mChromeNotificationSettingsClient == null) {
+            mChromeNotificationSettingsClient = new ChromeNotificationSettingsClient();
+        }
+        return mChromeNotificationSettingsClient;
     }
 
     @Override

@@ -37,7 +37,6 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
-import org.chromium.chrome.browser.browserservices.permissiondelegation.TrustedWebActivityPermissionManager;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.site_settings.FourStateCookieSettingsPreference.CookieSettingsState;
@@ -754,7 +753,9 @@ public class SingleCategorySettings extends SiteSettingsPreferenceFragment
 
             Set<String> delegatedOrigins =
                     mCategory.showSites(SiteSettingsCategory.Type.NOTIFICATIONS)
-                    ? TrustedWebActivityPermissionManager.get().getAllDelegatedOrigins()
+                    ? getSiteSettingsClient()
+                              .getNotificationSettingsClient()
+                              .getAllDelegatedOrigins()
                     : Collections.emptySet();
 
             for (WebsitePreference website : websites) {
