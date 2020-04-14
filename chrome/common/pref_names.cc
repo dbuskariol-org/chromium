@@ -2171,7 +2171,6 @@ const char kOobeComplete[] = "OobeComplete";
 // The name of the screen that has to be shown if OOBE has been interrupted.
 const char kOobeScreenPending[] = "OobeScreenPending";
 
-
 // A boolean pref to indicate if the marketing opt-in screen in OOBE is finished
 // for the user.
 const char kOobeMarketingOptInScreenFinished[] =
@@ -2187,6 +2186,14 @@ const char kDeviceRegistered[] = "DeviceRegistered";
 // Boolean pref to signal corrupted enrollment to force the device through
 // enrollment recovery flow upon next boot.
 const char kEnrollmentRecoveryRequired[] = "EnrollmentRecoveryRequired";
+
+// Pref name for whether we should show the Getting Started module in the Help
+// app.
+const char kHelpAppShouldShowGetStarted[] = "help_app.should_show_get_started";
+
+// Pref name for whether the device was in tablet mode when going through
+// the OOBE.
+const char kHelpAppTabletModeDuringOobe[] = "help_app.tablet_mode_during_oobe";
 
 // List of usernames that used certificates pushed by policy before.
 // This is used to prevent these users from joining multiprofile sessions.
