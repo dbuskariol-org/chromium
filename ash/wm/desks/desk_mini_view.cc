@@ -191,14 +191,20 @@ gfx::Size DeskMiniView::CalculatePreferredSize() const {
 }
 
 void DeskMiniView::GetAccessibleNodeData(ui::AXNodeData* node_data) {
-  views::View::GetAccessibleNodeData(node_data);
+  desk_preview_->GetAccessibleNodeData(node_data);
 
   // Note that the desk may have already been destroyed.
-  if (desk_ && desk_->is_active()) {
-    node_data->AddStringAttribute(
-        ax::mojom::StringAttribute::kValue,
-        l10n_util::GetStringUTF8(
-            IDS_ASH_DESKS_ACTIVE_DESK_MINIVIEW_A11Y_EXTRA_TIP));
+  if (desk_) {
+    // Announce desk name.
+    node_data->AddStringAttribute(ax::mojom::StringAttribute::kName,
+                                  base::UTF16ToUTF8(desk_->name()));
+
+    if (desk_->is_active()) {
+      node_data->AddStringAttribute(
+          ax::mojom::StringAttribute::kValue,
+          l10n_util::GetStringUTF8(
+              IDS_ASH_DESKS_ACTIVE_DESK_MINIVIEW_A11Y_EXTRA_TIP));
+    }
   }
 
   if (DesksController::Get()->CanRemoveDesks()) {
