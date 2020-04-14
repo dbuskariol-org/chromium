@@ -122,11 +122,11 @@ mojom::TimezoneResultPtr MakeTimezoneResult() {
       "MST7MDT,M3.2.0,M11.1.0" /* posix */, "America/Denver" /* region */));
 }
 
-mojom::MemoryInfoPtr MakeMemoryInfo() {
-  return mojom::MemoryInfo::New(987123 /* total_memory_kib */,
-                                346432 /* free_memory_kib */,
-                                45863 /* available_memory_kib */,
-                                43264 /* page_faults_since_last_boot */);
+mojom::MemoryResultPtr MakeMemoryResult() {
+  return mojom::MemoryResult::NewMemoryInfo(mojom::MemoryInfo::New(
+      987123 /* total_memory_kib */, 346432 /* free_memory_kib */,
+      45863 /* available_memory_kib */,
+      43264 /* page_faults_since_last_boot */));
 }
 
 base::Optional<std::vector<mojom::BacklightInfoPtr>> MakeBacklightInfo() {
@@ -151,7 +151,7 @@ mojom::TelemetryInfoPtr MakeTelemetryInfo() {
       MakeNonRemovableBlockDeviceInfo() /* block_device_info */,
       MakeCachedVpdInfo() /* vpd_info */, MakeCpuResult() /* cpu_result */,
       MakeTimezoneResult() /* timezone_result */,
-      MakeMemoryInfo() /* memory_info */,
+      MakeMemoryResult() /* memory_result */,
       MakeBacklightInfo() /* backlight_info */, MakeFanResult() /* fan_result */
   );
 }

@@ -908,17 +908,25 @@ class DeviceStatusCollectorState : public StatusCollectorState {
         }
       }
 
-      const auto& memory_info = probe_result->memory_info;
-      if (!memory_info.is_null()) {
-        em::MemoryInfo* const memory_info_out =
-            response_params_.device_status->mutable_memory_info();
-        memory_info_out->set_total_memory_kib(memory_info->total_memory_kib);
-        memory_info_out->set_free_memory_kib(memory_info->free_memory_kib);
-        memory_info_out->set_available_memory_kib(
-            memory_info->available_memory_kib);
-        memory_info_out->set_page_faults_since_last_boot(
-            memory_info->page_faults_since_last_boot);
+      // Process MemoryResult.
+      const auto& memory_result = probe_result->memory_result;
+      if (!memory_result.is_null()) {
+        if (memory_result->is_error()) {
+          LOG(ERROR) << "cros_healthd: Error getting memory info: "
+                     << memory_result->get_error()->msg;
+        } else {
+          const auto& memory_info = memory_result->get_memory_info();
+          em::MemoryInfo* const memory_info_out =
+              response_params_.device_status->mutable_memory_info();
+          memory_info_out->set_total_memory_kib(memory_info->total_memory_kib);
+          memory_info_out->set_free_memory_kib(memory_info->free_memory_kib);
+          memory_info_out->set_available_memory_kib(
+              memory_info->available_memory_kib);
+          memory_info_out->set_page_faults_since_last_boot(
+              memory_info->page_faults_since_last_boot);
+        }
       }
+
       const auto& backlight_info = probe_result->backlight_info;
       if (backlight_info.has_value()) {
         for (const auto& backlight : backlight_info.value()) {
