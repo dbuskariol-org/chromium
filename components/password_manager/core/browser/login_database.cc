@@ -392,12 +392,60 @@ void InitializeBuilders(SQLTableBuilders builders) {
          "here.";
 }
 
+// Callback called upon each migration step of the logins table. It's used to
+// inject custom schema migration logic not covered by the generic
+// SQLTableBuilder migration. |new_version| indicates how far
+// SQLTableBuilder is in the migration process.
+bool LoginsTablePostMigrationStepCallback(sql::Database* db,
+                                          unsigned new_version) {
+  // In version 26, the primary key of the logins table became an
+  // AUTOINCREMENT field. Since SQLite doesn't allow changing the column type,
+  // the only way is to actually create a temp table with the primary key
+  // properly set as an AUTOINCREMENT field, and move the data there. The code
+  // has been adjusted such that newly created tables have the primary key
+  // properly set as AUTOINCREMENT.
+  if (new_version == 26) {
+    // This statement creates the logins database similar to version 26 with
+    // the primary key column set to AUTOINCREMENT.
+    const char temp_table_create_statement_version_26[] =
+        "CREATE TABLE logins_temp (origin_url VARCHAR NOT NULL,action_url "
+        "VARCHAR,username_element VARCHAR,username_value "
+        "VARCHAR,password_element VARCHAR,password_value BLOB,submit_element "
+        "VARCHAR,signon_realm VARCHAR NOT NULL,preferred INTEGER NOT "
+        "NULL,date_created INTEGER NOT NULL,blacklisted_by_user INTEGER NOT "
+        "NULL,scheme INTEGER NOT NULL,password_type INTEGER,times_used "
+        "INTEGER,form_data BLOB,date_synced INTEGER,display_name "
+        "VARCHAR,icon_url VARCHAR,federation_url VARCHAR,skip_zero_click "
+        "INTEGER,generation_upload_status INTEGER,possible_username_pairs "
+        "BLOB,id INTEGER PRIMARY KEY AUTOINCREMENT,date_last_used "
+        "INTEGER,UNIQUE (origin_url, username_element, username_value, "
+        "password_element, signon_realm))";
+    const char move_data_statement[] =
+        "INSERT INTO logins_temp SELECT * from logins";
+    const char drop_table_statement[] = "DROP TABLE logins";
+    const char rename_table_statement[] =
+        "ALTER TABLE logins_temp RENAME TO logins";
+
+    sql::Transaction transaction(db);
+    if (!(transaction.Begin() &&
+          db->Execute(temp_table_create_statement_version_26) &&
+          db->Execute(move_data_statement) &&
+          db->Execute(drop_table_statement) &&
+          db->Execute(rename_table_statement) && transaction.Commit())) {
+      return false;
+    }
+  }
+  return true;
+}
+
 // Call this after having called InitializeBuilders(), to migrate the database
 // from the current version to kCurrentVersionNumber.
 bool MigrateLogins(unsigned current_version,
                    SQLTableBuilders builders,
                    sql::Database* db) {
-  if (!builders.logins->MigrateFrom(current_version, db))
+  if (!builders.logins->MigrateFrom(
+          current_version, db,
+          base::BindRepeating(&LoginsTablePostMigrationStepCallback)))
     return false;
 
   if (!builders.sync_entities_metadata->MigrateFrom(current_version, db))
@@ -451,45 +499,6 @@ bool MigrateLogins(unsigned current_version,
     preferred_stmt.BindInt64(0, base::TimeDelta::FromDays(1).InMicroseconds());
     if (!preferred_stmt.Run())
       return false;
-  }
-
-  // In version 26, the primary key of the logins table became an AUTOINCREMENT
-  // field. Since SQLite doesn't allow changing the column type, the only way is
-  // to actually create a temp table with the primary key propely set as an
-  // AUTOINCREMENT field, and move the data there. The code has been adjusted
-  // such that newly created tables have the primary key properly set as
-  // AUTOINCREMENT.
-  if (current_version < 26) {
-    // This statement creates the logins database similar to version 26 with the
-    // primary key column set to AUTOINCREMENT.
-    std::string temp_table_create_statement_version_26 =
-        "CREATE TABLE logins_temp (origin_url VARCHAR NOT NULL,action_url "
-        "VARCHAR,username_element VARCHAR,username_value "
-        "VARCHAR,password_element VARCHAR,password_value BLOB,submit_element "
-        "VARCHAR,signon_realm VARCHAR NOT NULL,preferred INTEGER NOT "
-        "NULL,date_created INTEGER NOT NULL,blacklisted_by_user INTEGER NOT "
-        "NULL,scheme INTEGER NOT NULL,password_type INTEGER,times_used "
-        "INTEGER,form_data BLOB,date_synced INTEGER,display_name "
-        "VARCHAR,icon_url VARCHAR,federation_url VARCHAR,skip_zero_click "
-        "INTEGER,generation_upload_status INTEGER,possible_username_pairs "
-        "BLOB,id INTEGER PRIMARY KEY AUTOINCREMENT,date_last_used "
-        "INTEGER,UNIQUE (origin_url, username_element, username_value, "
-        "password_element, signon_realm))";
-    std::string move_data_statement =
-        "INSERT INTO logins_temp SELECT * from logins";
-    std::string drop_table_statement = "DROP TABLE logins";
-    std::string rename_table_statement =
-        "ALTER TABLE logins_temp RENAME TO logins";
-
-    sql::Transaction transaction(db);
-    if (!(transaction.Begin() &&
-          db->Execute(temp_table_create_statement_version_26.c_str()) &&
-          db->Execute(move_data_statement.c_str()) &&
-          db->Execute(drop_table_statement.c_str()) &&
-          db->Execute(rename_table_statement.c_str()) &&
-          transaction.Commit())) {
-      return false;
-    }
   }
 
   return true;
