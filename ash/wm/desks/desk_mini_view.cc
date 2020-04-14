@@ -284,8 +284,22 @@ void DeskMiniView::ContentsChanged(views::Textfield* sender,
   if (!desk_)
     return;
 
+  // Avoid copying new_contents if we don't need to trim it below.
+  const base::string16* new_text = &new_contents;
+
+  // To avoid potential security and memory issues, we don't allow desk names to
+  // have an unbounded length. Therefore we trim if needed at kMaxLength UTF-16
+  // boundary. Note that we don't care about code point boundaries in this case.
+  base::string16 trimmed_new_contents;
+  if (new_contents.size() > DeskNameView::kMaxLength) {
+    trimmed_new_contents = new_contents;
+    trimmed_new_contents.resize(DeskNameView::kMaxLength);
+    new_text = &trimmed_new_contents;
+    desk_name_view_->SetText(trimmed_new_contents);
+  }
+
   desk_->SetName(
-      base::CollapseWhitespace(new_contents,
+      base::CollapseWhitespace(*new_text,
                                /*trim_sequences_with_line_breaks=*/false),
       /*set_by_user=*/true);
 }
