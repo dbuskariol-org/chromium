@@ -422,7 +422,7 @@ void CSSAnimations::CalculateAnimationUpdate(CSSAnimationUpdate& update,
 
         CSSAnimation* animation =
             DynamicTo<CSSAnimation>(existing_animation->animation.Get());
-
+        animation->SetAnimationIndex(i);
         const bool was_paused =
             CSSTimingData::GetRepeated(existing_animation->play_state_list,
                                        i) == EAnimPlayState::kPaused;
@@ -460,7 +460,7 @@ void CSSAnimations::CalculateAnimationUpdate(CSSAnimationUpdate& update,
       } else {
         DCHECK(!is_animation_style_change);
         update.StartAnimation(
-            name, name_index,
+            name, name_index, i,
             *MakeGarbageCollected<InertEffect>(
                 CreateKeyframeEffectModel(resolver, animating_element, element,
                                           &style, parent_style, name,
@@ -608,7 +608,7 @@ void CSSAnimations::MaybeApplyPendingUpdate(Element* element) {
 
     auto* animation = MakeGarbageCollected<CSSAnimation>(
         element->GetExecutionContext(), &(element->GetDocument().Timeline()),
-        effect, entry.name);
+        effect, entry.position_index, entry.name);
     animation->play();
     if (inert_animation->Paused())
       animation->pause();

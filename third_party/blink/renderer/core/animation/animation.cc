@@ -37,7 +37,9 @@
 #include "third_party/blink/public/platform/platform.h"
 #include "third_party/blink/public/platform/task_type.h"
 #include "third_party/blink/renderer/core/animation/animation_timeline.h"
+#include "third_party/blink/renderer/core/animation/css/css_animation.h"
 #include "third_party/blink/renderer/core/animation/css/css_animations.h"
+#include "third_party/blink/renderer/core/animation/css/css_transition.h"
 #include "third_party/blink/renderer/core/animation/document_timeline.h"
 #include "third_party/blink/renderer/core/animation/element_animations.h"
 #include "third_party/blink/renderer/core/animation/keyframe_effect.h"
@@ -494,10 +496,10 @@ bool Animation::HasLowerCompositeOrdering(
     const Animation* animation1,
     const Animation* animation2,
     CompareAnimationsOrdering compare_animation_type) {
-  AnimationClassPriority priority1 = AnimationPriority(*animation1);
-  AnimationClassPriority priority2 = AnimationPriority(*animation2);
-  if (priority1 != priority2)
-    return priority1 < priority2;
+  AnimationClassPriority anim_priority1 = AnimationPriority(*animation1);
+  AnimationClassPriority anim_priority2 = AnimationPriority(*animation2);
+  if (anim_priority1 != anim_priority2)
+    return anim_priority1 < anim_priority2;
 
   // If the the animation class is CssAnimation or CssTransition, then first
   // compare the owning element of animation1 and animation2, sort two of them
@@ -505,7 +507,7 @@ bool Animation::HasLowerCompositeOrdering(
   // The specs:
   // https://drafts.csswg.org/css-animations-2/#animation-composite-order
   // https://drafts.csswg.org/css-transitions-2/#animation-composite-order
-  if (priority1 != kDefaultPriority && animation1->effect() &&
+  if (anim_priority1 != kDefaultPriority && animation1->effect() &&
       animation2->effect()) {
     // TODO(crbug.com/1043778): Implement and use OwningElement on CSSAnimation
     // and CSSTransition.
@@ -514,7 +516,7 @@ bool Animation::HasLowerCompositeOrdering(
     Element* target1 = effect1->target();
     Element* target2 = effect2->target();
 
-    // The tree position comparison would take a longer time, thus affec the
+    // The tree position comparison would take a longer time, thus affect the
     // performance. We only do it when it comes to getAnimation.
     if (*target1 != *target2) {
       if (compare_animation_type == CompareAnimationsOrdering::kTreeOrder) {
@@ -543,11 +545,13 @@ bool Animation::HasLowerCompositeOrdering(
     if (priority1 == kOther && pseudo1 != pseudo2)
       return CodeUnitCompareLessThan(pseudo1, pseudo2);
 
-    // For two animatiions with the same target (including the pseudo-element
-    // selector) compare the SequenceNumber for now.
-    // TODO(crbug.com/1045835): Sort animation1 and animation2 based on their
-    // position in the computed value of "animation-name" property for
-    // CSSAnimations and transition property for CSSTransitions.
+    if (anim_priority1 == kCssAnimationPriority) {
+      // When comparing two CSSAnimations with the same owning element, we sort
+      // A and B based on their position in the computed value of the
+      // animation-name property of the (common) owning element.
+      return To<CSSAnimation>(animation1)->AnimationIndex() <
+             To<CSSAnimation>(animation2)->AnimationIndex();
+    }
     return animation1->SequenceNumber() < animation2->SequenceNumber();
   }
   // If the anmiations are not-CSS WebAnimation just compare them via generation
