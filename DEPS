@@ -875,11 +875,6 @@ deps = {
       'condition': 'checkout_linux',
   },
 
-  'src/third_party/custom_tabs_client/src': {
-      'url': Var('chromium_git') + '/custom-tabs-client.git' + '@' + 'a633542d9854151eb4f0bfd1d93da88f5934a11a',
-      'condition': 'checkout_android',
-  },
-
   'src/third_party/depot_tools':
     Var('chromium_git') + '/chromium/tools/depot_tools.git' + '@' + '08f4d59e0b177d3d15b65f9826bbf05491b3841d',
 
