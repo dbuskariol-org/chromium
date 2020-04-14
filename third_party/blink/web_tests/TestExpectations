@@ -3157,7 +3157,6 @@ crbug.com/626703 [ Win ] external/wpt/webxr/hit-test/ar_hittest_subscription_ref
 crbug.com/626703 [ Linux ] external/wpt/webxr/hit-test/ar_hittest_subscription_transientInputSources.https.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/webxr/hit-test/ar_hittest_subscription_transientInputSources.https.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/webxr/hit-test/ar_hittest_subscription_transientInputSources.https.html [ Timeout ]
-crbug.com/626703 [ Mac10.13 ] external/wpt/webrtc/RTCRtpSender-replaceTrack.https.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/webxr/hit-test/ar_hittest_subscription_inputSources.https.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/webxr/hit-test/ar_hittest_subscription_inputSources.https.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/webxr/hit-test/ar_hittest_subscription_inputSources.https.html [ Timeout ]
@@ -6669,6 +6668,10 @@ crbug.com/1067533 [ Mac10.10 ] external/wpt/shape-detection/idlharness.https.any
 
 crbug.com/1064422 external/wpt/html/user-activation/propagation-crossorigin.sub.tentative.html [ Pass Timeout ]
 crbug.com/1066178 external/wpt/html/user-activation/consumption-crossorigin.sub.tentative.html [ Pass Timeout ]
+
+# Flaky test, happens only on Mac 10.13.
+# The "timeout" was detected by the wpt-importer bot.
+crbug.com/1069714 [ Mac10.13 ] external/wpt/webrtc/RTCRtpSender-replaceTrack.https.html [ Pass Failure Timeout ]
 
 # Sheriff 2020-04-10
 crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Failure Timeout ]
