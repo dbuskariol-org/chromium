@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_GTK_GTK_UI_DELEGATE_X11_H_
-#define UI_GTK_GTK_UI_DELEGATE_X11_H_
+#ifndef UI_GTK_X_GTK_UI_DELEGATE_X11_H_
+#define UI_GTK_X_GTK_UI_DELEGATE_X11_H_
 
 #include "base/component_export.h"
 #include "ui/gfx/native_widget_types.h"
@@ -43,4 +43,4 @@ class COMPONENT_EXPORT(UI_GTK_X) GtkUiDelegateX11 : public GtkUiDelegate {
 
 }  // namespace ui
 
-#endif  // UI_GTK_GTK_UI_DELEGATE_X11_H_
+#endif  // UI_GTK_X_GTK_UI_DELEGATE_X11_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/gtk/gtk_ui_delegate_x11.h"
+#include "ui/gtk/x/gtk_ui_delegate_x11.h"
 
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
@@ -11,7 +11,7 @@
 #include "ui/events/platform/x11/x11_event_source.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/x/x11.h"
-#include "ui/gtk/gtk_event_loop_x11.h"
+#include "ui/gtk/x/gtk_event_loop_x11.h"
 
 namespace ui {
 

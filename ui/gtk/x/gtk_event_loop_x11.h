@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_GTK_GTK_EVENT_LOOP_X11_H_
-#define UI_GTK_GTK_EVENT_LOOP_X11_H_
+#ifndef UI_GTK_X_GTK_EVENT_LOOP_X11_H_
+#define UI_GTK_X_GTK_EVENT_LOOP_X11_H_
 
 #include "base/macros.h"
 #include "ui/base/glib/glib_integers.h"
@@ -36,4 +36,4 @@ class GtkEventLoopX11 {
 
 }  // namespace ui
 
-#endif  // UI_GTK_GTK_EVENT_LOOP_X11_H_
+#endif  // UI_GTK_X_GTK_EVENT_LOOP_X11_H_

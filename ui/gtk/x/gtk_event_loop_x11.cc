@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/gtk/gtk_event_loop_x11.h"
+#include "ui/gtk/x/gtk_event_loop_x11.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
