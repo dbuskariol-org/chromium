@@ -11,6 +11,10 @@ namespace blink {
 
 namespace {
 
+constexpr const char* kReportTo = "report-to";
+constexpr const char* kNone = "none";
+constexpr const char* kWildCard = "*";
+
 base::Optional<PolicyValue> ItemToPolicyValue(
     const net::structured_headers::Item& item) {
   switch (item.Type()) {
@@ -34,7 +38,31 @@ struct ParsedFeature {
   mojom::blink::DocumentPolicyFeature feature;
   PolicyValue policy_value;
   base::Optional<std::string> endpoint_group;
+  // Wildcard feature('*') is used to specify default endpoint for features.
+  bool is_wildcard = false;
 };
+
+base::Optional<ParsedFeature> ParseWildcardFeature(
+    const net::structured_headers::ParameterizedMember& directive) {
+  // Wildcard feature can only have 1 param, which is 'report-to'.
+  if (directive.params.size() != 1)
+    return base::nullopt;
+
+  const auto& param = directive.params.front();
+
+  // Wildcard feature can only have 1 param, which is 'report-to'.
+  if (param.first != kReportTo)
+    return base::nullopt;
+
+  base::Optional<std::string> endpoint_group = ItemToString(param.second);
+
+  if (!endpoint_group)
+    return base::nullopt;
+
+  return base::make_optional<ParsedFeature>(
+      {mojom::blink::DocumentPolicyFeature::kDefault, PolicyValue(),
+       endpoint_group, true});
+}
 
 base::Optional<ParsedFeature> ParseFeature(
     const net::structured_headers::ParameterizedMember& directive,
@@ -59,6 +87,10 @@ base::Optional<ParsedFeature> ParseFeature(
     return base::nullopt;
 
   std::string feature_name = feature_token.GetString();
+
+  if (feature_name == kWildCard)
+    return ParseWildcardFeature(directive);
+
   auto feature_iter = name_feature_map.find(feature_name);
 
   // Parse feature_name string to DocumentPolicyFeature.
@@ -98,7 +130,7 @@ base::Optional<ParsedFeature> ParseFeature(
     // Document-Policy header that specifies the endpoint group that the policy
     // should send report to. If left unspecified, no report will be send upon
     // policy violation.
-    if (param_name == "report-to") {
+    if (param_name == kReportTo) {
       base::Optional<std::string> endpoint_group = ItemToString(param.second);
       if (!endpoint_group)
         return base::nullopt;
@@ -132,6 +164,35 @@ base::Optional<ParsedFeature> ParseFeature(
   return parsed_feature;
 }
 
+// Apply |default_endpoint| to given |parsed_policy|.
+void ApplyDefaultEndpoint(DocumentPolicy::ParsedDocumentPolicy& parsed_policy,
+                          const std::string& default_endpoint) {
+  DocumentPolicy::FeatureEndpointMap& endpoint_map = parsed_policy.endpoint_map;
+
+  if (!default_endpoint.empty()) {
+    // Fill |default_endpoint| to all feature entry whose |endpoint_group|
+    // is missing.
+    for (const auto& feature_and_value : parsed_policy.feature_state) {
+      mojom::blink::DocumentPolicyFeature feature = feature_and_value.first;
+
+      if (endpoint_map.find(feature) == endpoint_map.end())
+        endpoint_map.emplace(feature, default_endpoint);
+    }
+  }
+
+  // Remove |endpoint_group| for feature entry if its |endpoint_group|
+  // is "none".
+  // Note: if |default_endpoint| is "none", all "none" items are filtered out
+  // here. it would be equivalent to doing nothing.
+  for (auto iter = endpoint_map.begin(); iter != endpoint_map.end();) {
+    if (iter->second == kNone) {
+      iter = endpoint_map.erase(iter);
+    } else {
+      ++iter;
+    }
+  }
+}
+
 }  // namespace
 
 // static
@@ -157,6 +218,7 @@ DocumentPolicyParser::ParseInternal(
     return base::nullopt;
 
   DocumentPolicy::ParsedDocumentPolicy parse_result;
+  std::string default_endpoint = "";
   for (const net::structured_headers::ParameterizedMember& directive :
        root.value()) {
     base::Optional<ParsedFeature> parsed_feature_option =
@@ -166,6 +228,11 @@ DocumentPolicyParser::ParseInternal(
       continue;
 
     ParsedFeature parsed_feature = *parsed_feature_option;
+
+    if (parsed_feature.is_wildcard) {
+      default_endpoint = *parsed_feature.endpoint_group;
+      continue;
+    }
 
     // If feature is not available, i.e. not enabled, ignore the entry.
     if (available_features.find(parsed_feature.feature) ==
@@ -179,6 +246,9 @@ DocumentPolicyParser::ParseInternal(
                                         *parsed_feature.endpoint_group);
     }
   }
+
+  ApplyDefaultEndpoint(parse_result, default_endpoint);
+
   return parse_result;
 }
 

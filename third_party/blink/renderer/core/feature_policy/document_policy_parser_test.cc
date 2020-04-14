@@ -63,6 +63,10 @@ const char* const kValidPolicies[] = {
     "no-f-bool;report-to=default,f-double;value=2.0;report-to=default",
     "no-f-bool;report-to=default,f-double;report-to=default;value=2.0",
     "no-f-bool;report-to=default,f-double;report-to=endpoint;value=2.0",
+    "no-f-bool,f-double;value=2.0;report-to=endpoint,*;report-to=default",
+    "*;report-to=default",  // An empty policy.
+    "no-f-bool;report-to=none, f-double;value=2.0, *;report-to=default",
+    "no-f-bool;report-to=none, f-double;value=2.0, *;report-to=none",
 };
 
 const char* const kInvalidPolicies[] = {
@@ -116,7 +120,43 @@ const std::pair<const char*, DocumentPolicy::ParsedDocumentPolicy>
         {"no-f-bool;report-to=default,f-double;value=1",
          {{{kBoolFeature, PolicyValue(false)},
            {kDoubleFeature, PolicyValue(1.0)}},
-          {{kBoolFeature, "default"}}}}};
+          {{kBoolFeature, "default"}}}},
+        {"no-f-bool;report-to=none, f-double;value=2.0, *;report-to=default",
+         {/* feature_state */ {{kBoolFeature, PolicyValue(false)},
+                               {kDoubleFeature, PolicyValue(2.0)}},
+          /* endpoint_map */ {{kDoubleFeature, "default"}}}},
+        {"no-f-bool;report-to=not_none, f-double;value=2.0, "
+         "*;report-to=default",
+         {/* feature_state */ {{kBoolFeature, PolicyValue(false)},
+                               {kDoubleFeature, PolicyValue(2.0)}},
+          /* endpoint_map */ {{kBoolFeature, "not_none"},
+                              {kDoubleFeature, "default"}}}},
+        {"no-f-bool;report-to=not_none, f-double;value=2.0, *;report-to=none",
+         {/* feature_state */ {{kBoolFeature, PolicyValue(false)},
+                               {kDoubleFeature, PolicyValue(2.0)}},
+          /* endpoint_map */ {{kBoolFeature, "not_none"}}}},
+        // Default endpoint can be specified anywhere in the header, not
+        // necessary at the end.
+        {"no-f-bool;report-to=not_none, *;report-to=default, "
+         "f-double;value=2.0",
+         {/* feature_state */ {{kBoolFeature, PolicyValue(false)},
+                               {kDoubleFeature, PolicyValue(2.0)}},
+          /* endpoint_map */ {{kBoolFeature, "not_none"},
+                              {kDoubleFeature, "default"}}}},
+        // Default endpoint can be specified multiple times in the header.
+        // According to SH rules, last value wins.
+        {"no-f-bool;report-to=not_none, f-double;value=2.0, "
+         "*;report-to=default, "
+         "*;report-to=none",
+         {/* feature_state */ {{kBoolFeature, PolicyValue(false)},
+                               {kDoubleFeature, PolicyValue(2.0)}},
+          /* endpoint_map */ {{kBoolFeature, "not_none"}}}},
+        // Even if default endpoint is not specified, none still should be
+        // treated as a reserved keyword for endpoint names.
+        {"no-f-bool;report-to=none",
+         {/* feature_state */ {{kBoolFeature, PolicyValue(false)}},
+          /* endpoint_map */ {}}},
+};
 
 const DocumentPolicy::FeatureState kParsedPolicies[] = {
     {},  // An empty policy
