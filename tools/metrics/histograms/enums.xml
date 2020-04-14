@@ -15690,6 +15690,20 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="3" label="Keyboard"/>
 </enum>
 
+<enum name="DocumentPolicyFeature">
+<!-- Generated from third_party/blink/public/mojom/feature_policy/document_policy_feature.mojom.
+Called by update_document_policy_enum.py.-->
+
+  <int value="0" label="NotFound"/>
+  <int value="1" label="FontDisplay"/>
+  <int value="2" label="UnoptimizedLosslessImages"/>
+  <int value="3" label="ForceLoadAtTop"/>
+  <int value="4" label="UnoptimizedLosslessImagesStrict"/>
+  <int value="5" label="UnoptimizedLossyImages"/>
+  <int value="6" label="OversizedImages"/>
+  <int value="7" label="UnsizedMedia"/>
+</enum>
+
 <enum name="DocumentStateForDeferredLoading">
   <int value="0" label="Created"/>
   <int value="1" label="WouldLoadBecauseVisible"/>
@@ -26956,6 +26970,12 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3223" label="LegacyLayoutByWebkitBoxWithoutVerticalLineClamp"/>
   <int value="3224"
       label="LegacyLayoutByTableFlexGridBlockInNGFragmentationContext"/>
+  <int value="3225" label="DocumentPolicyHeader"/>
+  <int value="3226" label="DocumentPolicyReportOnlyHeader"/>
+  <int value="3227" label="RequireDocumentPolicyHeader"/>
+  <int value="3228" label="DocumentPolicyIframePolicyAttribute"/>
+  <int value="3229" label="DocumentPolicyCausedPageUnload"/>
+  <int value="3230" label="RequiredDocumentPolicy"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
