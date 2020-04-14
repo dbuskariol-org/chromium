@@ -132,7 +132,8 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
 
 // Navigates to a set of cross-domains, chrome URLs and error pages, and then
 // tests that they are properly restored.
-- (void)testRestoreHistory {
+// TODO(crbug.com/1070790): Fix loadTestPages with a properly invalid URL.
+- (void)DISABLED_testRestoreHistory {
   [self setUpRestoreServers];
   [self loadTestPages];
   [self verifyRestoredTestPages:YES];
@@ -140,7 +141,8 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
 
 // Navigates to a set of cross-domains, chrome URLs and error pages, and then
 // tests that they are properly restored in airplane mode.
-- (void)testRestoreNoNetwork {
+// TODO(crbug.com/1070790): Fix loadTestPages with a properly invalid URL.
+- (void)DISABLED_testRestoreNoNetwork {
   [self setUpRestoreServers];
   [self loadTestPages];
   self.serverRespondsWithContent = false;
