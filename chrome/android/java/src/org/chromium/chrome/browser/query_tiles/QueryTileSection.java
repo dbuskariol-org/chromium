@@ -8,10 +8,10 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.TextView;
 
 import org.chromium.base.Callback;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
+import org.chromium.chrome.browser.ntp.search.SearchBoxCoordinator;
 import org.chromium.chrome.browser.profiles.Profile;
 
 import java.util.List;
@@ -23,15 +23,15 @@ import java.util.List;
  */
 public class QueryTileSection {
     private final ViewGroup mQueryTileSectionView;
-    private final TextView mSearchBox;
+    private final SearchBoxCoordinator mSearchBoxCoordinator;
     private QueryTileCoordinator mQueryTileCoordinator;
     private TileProvider mTileProvider;
 
     /** Constructor. */
-    public QueryTileSection(
-            ViewGroup queryTileSectionView, TextView searchTextView, Profile profile) {
+    public QueryTileSection(ViewGroup queryTileSectionView,
+            SearchBoxCoordinator searchBoxCoordinator, Profile profile) {
         mQueryTileSectionView = queryTileSectionView;
-        mSearchBox = searchTextView;
+        mSearchBoxCoordinator = searchBoxCoordinator;
         if (!ChromeFeatureList.isEnabled(ChromeFeatureList.QUERY_TILES)) return;
 
         mTileProvider = TileProviderFactory.getForProfile(profile);
@@ -48,7 +48,7 @@ public class QueryTileSection {
             mQueryTileSectionView.setVisibility(tiles.isEmpty() ? View.GONE : View.VISIBLE);
         });
 
-        if (tile != null) mSearchBox.setText(tile.queryText);
+        if (tile != null) mSearchBoxCoordinator.setSearchText(tile.queryText);
     }
 
     private void getVisuals(Tile tile, Callback<List<Bitmap>> callback) {
