@@ -116,6 +116,10 @@ ChromeVoxBackground = class {
     if (pref == 'earcons') {
       AbstractEarcons.enabled = !!value;
     } else if (pref == 'sticky' && announce) {
+      if (typeof (value) != 'boolean') {
+        throw new Error('Unexpected sticky mode value ' + value);
+      }
+      chrome.accessibilityPrivate.setKeyboardListener(true, !!value);
       new Output()
           .withInitialSpeechProperties(AbstractTts.PERSONALITY_ANNOTATION)
           .withString(
