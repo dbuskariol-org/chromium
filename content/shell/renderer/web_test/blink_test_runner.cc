@@ -278,15 +278,6 @@ void BlinkTestRunner::SetDeviceScaleFactor(float factor) {
   content::SetDeviceScaleFactor(render_view(), factor);
 }
 
-void BlinkTestRunner::EnableUseZoomForDSF() {
-  base::CommandLine::ForCurrentProcess()->AppendSwitch(
-      switches::kEnableUseZoomForDSF);
-}
-
-bool BlinkTestRunner::IsUseZoomForDSFEnabled() {
-  return content::IsUseZoomForDSFEnabled();
-}
-
 void BlinkTestRunner::SetDeviceColorSpace(const std::string& name) {
   content::SetDeviceColorSpace(render_view(), GetWebTestColorSpace(name));
 }

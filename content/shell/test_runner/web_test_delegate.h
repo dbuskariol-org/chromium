@@ -103,12 +103,6 @@ class WebTestDelegate {
   // Controls the device scale factor of the main WebView for hidpi tests.
   virtual void SetDeviceScaleFactor(float factor) = 0;
 
-  // Enable zoom-for-dsf option.
-  virtual void EnableUseZoomForDSF() = 0;
-
-  // Returns whether or not the use-zoom-for-dsf flag is enabled.
-  virtual bool IsUseZoomForDSFEnabled() = 0;
-
   // Change the device color space while running a web test.
   virtual void SetDeviceColorSpace(const std::string& name) = 0;
 
