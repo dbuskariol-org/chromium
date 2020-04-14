@@ -10,9 +10,9 @@
 .grid > :nth-child(2) { background: blue; }
 .grid > :nth-child(3) { background: yellow; }
 .grid > :nth-child(4) { background: green; }
-.grid > :nth-child(5) { background: red; }
+.grid > :nth-child(5) { background: black; }
 </style>
-<p>This is a regression test for the issue crbug.com/733577 and it passes if the red item is positioned in the first column of the second row, since the spec states that we must select the first one among several equally named grid lines.</p>
+<p>This test passes if the black item is positioned in the first column of the second row, since the spec states that we must select the first one among several equally named grid lines.</p>
 <div class="grid">
   <div style="grid-row: 1; grid-column: 1"></div>
   <div style="grid-row: 1; grid-column: 2"></div>
