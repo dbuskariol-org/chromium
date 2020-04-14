@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<link href="resources/grid.css" rel="stylesheet">
+<title>CSS Grid: grid size with explicit grid-template-areas.</title>
+<link rel="author" title="Manuel Rego Casasnovas" href="mailto:rego@igalia.com"/>
+<link rel="help" href="https://drafts.csswg.org/css-grid/#grid-definition"/>
+<link rel="issue" href="https://crrev.com/603160"/>
+<meta name="assert" content="Test ensures that the explicit grid size is set by the maximum of the grid-template-columns|rows properties and grid-template-areas."/>
+
+<link href="/css/support/grid.css" rel="stylesheet"/>
 <style>
 
 .grid {
@@ -47,13 +53,11 @@
 }
 
 </style>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../resources/check-layout-th.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 <body onload="checkLayout('.grid')">
 <div id="log"></div>
-
-<p>Checks that the explicit grid size is set by the maximum of the grid-template-columns|rows properties and grid-template-areas.</p>
 
 <div class="grid">
     <div class="autoRowAutoColumn"
