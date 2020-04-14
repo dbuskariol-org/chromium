@@ -52,12 +52,13 @@
 #include "url/origin.h"
 #include "url/url_constants.h"
 
+using autofill::GaiaIdHash;
 using autofill::PasswordForm;
 
 namespace password_manager {
 
 // The current version number of the login database schema.
-const int kCurrentVersionNumber = 26;
+const int kCurrentVersionNumber = 27;
 // The oldest version of the schema such that a legacy Chrome client using that
 // version can still read/write the current database.
 const int kCompatibleVersionNumber = 19;
@@ -85,6 +86,23 @@ autofill::ValueElementVector DeserializeValueElementPairs(
     ret.push_back(autofill::ValueElementPair(value, field_name));
   }
   return ret;
+}
+
+base::Pickle SerializeGaiaIdHashVector(const std::vector<GaiaIdHash>& hashes) {
+  base::Pickle p;
+  for (const auto& hash : hashes)
+    p.WriteString(hash.ToBinary());
+  return p;
+}
+
+std::vector<GaiaIdHash> DeserializeGaiaIdHashVector(const base::Pickle& p) {
+  std::vector<GaiaIdHash> hashes;
+  std::string hash;
+
+  base::PickleIterator iterator(p);
+  while (iterator.ReadString(&hash))
+    hashes.push_back(GaiaIdHash::FromBinary(hash));
+  return hashes;
 }
 
 namespace {
@@ -131,6 +149,7 @@ enum LoginDatabaseTableColumns {
   COLUMN_POSSIBLE_USERNAME_PAIRS,
   COLUMN_ID,
   COLUMN_DATE_LAST_USED,
+  COLUMN_MOVING_BLOCKED_FOR,
   COLUMN_NUM  // Keep this last.
 };
 
@@ -198,6 +217,10 @@ void BindAddStatement(const PasswordForm& form, sql::Statement* s) {
               usernames_pickle.size());
   s->BindInt64(COLUMN_DATE_LAST_USED,
                form.date_last_used.ToDeltaSinceWindowsEpoch().InMicroseconds());
+  base::Pickle moving_blocked_for_pickle =
+      SerializeGaiaIdHashVector(form.moving_blocked_for_list);
+  s->BindBlob(COLUMN_MOVING_BLOCKED_FOR, moving_blocked_for_pickle.data(),
+              moving_blocked_for_pickle.size());
 }
 
 // Output parameter is the first one because of binding order.
@@ -386,6 +409,12 @@ void InitializeBuilders(SQLTableBuilders builders) {
 
   // Version 26 is the first version where the id is AUTOINCREMENT.
   SealVersion(builders, /*expected_version=*/26u);
+
+  // Version 27. Add the moving_blocked_for column to contain serialized list of
+  // gaia id hashes for users that prefer not to move this credential to their
+  // account store.
+  builders.logins->AddColumn("moving_blocked_for", "BLOB");
+  SealVersion(builders, /*expected_version=*/27u);
 
   DCHECK_EQ(static_cast<size_t>(COLUMN_NUM), builders.logins->NumberOfColumns())
       << "Adjust LoginDatabaseTableColumns if you change column definitions "
@@ -1124,6 +1153,10 @@ PasswordStoreChangeList LoginDatabase::UpdateLogin(const PasswordForm& form,
   s.BindBlob(next_param++, username_pickle.data(), username_pickle.size());
   s.BindInt64(next_param++,
               form.date_last_used.ToDeltaSinceWindowsEpoch().InMicroseconds());
+  base::Pickle moving_blocked_for_pickle =
+      SerializeGaiaIdHashVector(form.moving_blocked_for_list);
+  s.BindBlob(next_param++, moving_blocked_for_pickle.data(),
+             moving_blocked_for_pickle.size());
   // NOTE: Add new fields here unless the field is a part of the unique key.
   // If so, add new field below.
 
@@ -1359,6 +1392,13 @@ LoginDatabase::EncryptionResult LoginDatabase::InitPasswordFormFromStatement(
           generation_upload_status_int);
   form->date_last_used = base::Time::FromDeltaSinceWindowsEpoch(
       base::TimeDelta::FromMicroseconds(s.ColumnInt64(COLUMN_DATE_LAST_USED)));
+  if (s.ColumnByteLength(COLUMN_MOVING_BLOCKED_FOR)) {
+    base::Pickle pickle(
+        static_cast<const char*>(s.ColumnBlob(COLUMN_MOVING_BLOCKED_FOR)),
+        s.ColumnByteLength(COLUMN_MOVING_BLOCKED_FOR));
+    form->moving_blocked_for_list = DeserializeGaiaIdHashVector(pickle);
+  }
+
   DCHECK(autofill::mojom::IsKnownEnumValue(form->generation_upload_status));
   return ENCRYPTION_RESULT_SUCCESS;
 }
