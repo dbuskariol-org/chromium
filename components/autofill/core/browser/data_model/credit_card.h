@@ -236,7 +236,8 @@ class CreditCard : public AutofillDataModel {
 
   // Various display functions.
 
-  // Card preview summary, for example: "Visa - ****1234", ", 01/2020".
+  // Card preview summary, for example: "Nickname/Network - ****1234",
+  // ", 01/2020".
   const std::pair<base::string16, base::string16> LabelPieces() const;
   // Like LabelPieces, but appends the two pieces together.
   const base::string16 Label() const;

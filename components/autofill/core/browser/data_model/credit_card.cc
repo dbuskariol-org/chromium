@@ -759,7 +759,7 @@ const std::pair<base::string16, base::string16> CreditCard::LabelPieces()
   if (number().empty())
     return std::make_pair(name_on_card_, base::string16());
 
-  base::string16 obfuscated_cc_number = NetworkAndLastFourDigits();
+  base::string16 obfuscated_cc_number = NicknameOrNetworkAndLastFourDigits();
   // No expiration date set.
   if (!expiration_month_ || !expiration_year_)
     return std::make_pair(obfuscated_cc_number, base::string16());
