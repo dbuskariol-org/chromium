@@ -214,6 +214,7 @@ Animation::Animation(ExecutionContext* execution_context,
       has_queued_microtask_(false),
       outdated_(false),
       finished_(true),
+      committed_finish_notification_(false),
       compositor_state_(nullptr),
       compositor_pending_(false),
       compositor_group_(0),
@@ -1167,6 +1168,7 @@ void Animation::PlayInternal(AutoRewind auto_rewind,
   // 8. Schedule a task to run as soon as animation is ready.
   pending_play_ = true;
   finished_ = false;
+  committed_finish_notification_ = false;
   SetOutdated();
   SetCompositorPending(/*effect_changed=*/false);
 
@@ -1312,15 +1314,18 @@ void Animation::UpdateFinishedState(UpdateType update_type,
   // 4. Set the current finished state.
   AnimationPlayState play_state = CalculateAnimationPlayState();
   if (play_state == kFinished) {
-    // 5. Setup finished notification.
-    if (notification_type == NotificationType::kSync)
-      CommitFinishNotification();
-    else
-      ScheduleAsyncFinish();
+    if (!committed_finish_notification_) {
+      // 5. Setup finished notification.
+      if (notification_type == NotificationType::kSync)
+        CommitFinishNotification();
+      else
+        ScheduleAsyncFinish();
+    }
   } else {
     // 6. If not finished but the current finished promise is already resolved,
     //    create a new promise.
-    finished_ = pending_finish_notification_ = false;
+    finished_ = pending_finish_notification_ = committed_finish_notification_ =
+        false;
     if (finished_promise_ &&
         finished_promise_->GetState() == AnimationPromise::kResolved) {
       finished_promise_->Reset();
@@ -1359,6 +1364,9 @@ void Animation::AsyncFinishMicrotask() {
 // Refer to 'finished notification steps' in
 // https://drafts.csswg.org/web-animations-1/#updating-the-finished-state
 void Animation::CommitFinishNotification() {
+  if (committed_finish_notification_)
+    return;
+
   pending_finish_notification_ = false;
 
   // 1. If animation’s play state is not equal to finished, abort these steps.
@@ -1373,6 +1381,8 @@ void Animation::CommitFinishNotification() {
 
   // 3. Create an AnimationPlaybackEvent, finishEvent.
   QueueFinishedEvent();
+
+  committed_finish_notification_ = true;
 }
 
 // https://drafts.csswg.org/web-animations/#setting-the-playback-rate-of-an-animation
@@ -1824,7 +1834,12 @@ bool Animation::Update(TimingUpdateReason reason) {
   DCHECK(!outdated_);
   NotifyProbe();
 
-  return !finished_ || TimeToEffectChange();
+  return !finished_ || TimeToEffectChange() ||
+         // Always return true for not idle animations attached to not
+         // monotonically increasing timelines even if the animation is
+         // finished. This is required to accommodate cases where timeline ticks
+         // back in time.
+         (!idle && !timeline_->IsMonotonicallyIncreasing());
 }
 
 void Animation::QueueFinishedEvent() {
@@ -2170,7 +2185,7 @@ bool Animation::IsReplaceable() {
     return false;
 
   // 4. The animation is associated with a monotonically increasing timeline.
-  if (!timeline_ || timeline_->IsScrollTimeline())
+  if (!timeline_ || !timeline_->IsMonotonicallyIncreasing())
     return false;
 
   // 5. The animation has an associated effect.
