@@ -1099,6 +1099,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/offlinepages/downloads/OfflinePageDownloadBridge.java",
   "java/src/org/chromium/chrome/browser/offlinepages/indicator/ConnectivityDetector.java",
   "java/src/org/chromium/chrome/browser/offlinepages/indicator/OfflineIndicatorController.java",
+  "java/src/org/chromium/chrome/browser/offlinepages/indicator/OfflineIndicatorControllerV2.java",
   "java/src/org/chromium/chrome/browser/offlinepages/indicator/TopSnackbarManager.java",
   "java/src/org/chromium/chrome/browser/offlinepages/indicator/TopSnackbarView.java",
   "java/src/org/chromium/chrome/browser/offlinepages/prefetch/OfflineNotificationBackgroundTask.java",
