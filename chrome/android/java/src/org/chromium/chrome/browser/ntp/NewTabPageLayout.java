@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.ntp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -23,8 +24,8 @@ import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.MathUtils;
 import org.chromium.base.TraceEvent;
+import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.compositor.layouts.EmptyOverviewModeObserver;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior;
 import org.chromium.chrome.browser.compositor.layouts.content.InvalidationAwareThumbnailProvider;
@@ -50,6 +51,7 @@ import org.chromium.chrome.browser.suggestions.tile.Tile;
 import org.chromium.chrome.browser.suggestions.tile.TileGridLayout;
 import org.chromium.chrome.browser.suggestions.tile.TileGroup;
 import org.chromium.chrome.browser.suggestions.tile.TileRenderer;
+import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.vr.VrModuleProvider;
 import org.chromium.components.browser_ui.widget.displaystyle.UiConfig;
 import org.chromium.ui.base.DeviceFormFactor;
@@ -86,11 +88,11 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
     private OnSearchBoxScrollListener mSearchBoxScrollListener;
 
     private NewTabPageManager mManager;
-    private ChromeActivity mActivity;
-    private OverviewModeBehavior mOverviewModeBehavior;
+    private Activity mActivity;
     private LogoDelegateImpl mLogoDelegate;
     private TileGroup mTileGroup;
     private UiConfig mUiConfig;
+    private Supplier<Tab> mTabProvider;
 
     /**
      * Whether the tiles shown in the layout have finished loading.
@@ -106,6 +108,7 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
 
     /** Observer for overview mode. */
     private EmptyOverviewModeObserver mOverviewObserver;
+    private OverviewModeBehavior mOverviewModeBehavior;
 
     private boolean mSearchProviderHasLogo = true;
     private boolean mSearchProviderIsGoogle;
@@ -128,6 +131,8 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
 
     private ScrollDelegate mScrollDelegate;
     private ExploreOfflineCard mExploreOfflineCard;
+
+    private NewTabPageUma mNewTabPageUma;
 
     /**
      * A delegate used to obtain information about scroll state and perform various scroll
@@ -201,25 +206,30 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
      * @param manager NewTabPageManager used to perform various actions when the user interacts
      *                with the page.
      * @param activity The activity that currently owns the new tab page
-     * @param overviewModeBehavior The overview mode behavior associated with the new tab page.
+     * @param tileGroupDelegate Delegate for {@link TileGroup}.
      * @param searchProviderHasLogo Whether the search provider has a logo.
      * @param searchProviderIsGoogle Whether the search provider is Google.
      * @param scrollDelegate The delegate used to obtain information about scroll state.
      * @param contextMenuManager The manager for long-press context menus.
      * @param uiConfig UiConfig that provides display information about this view.
-     * @param activityLifecycleDispatcher Allows us to subscribe to lifecycle events.
+     * @param tabProvider Provides the current active tab.
+     * @param lifecycleDispatcher Activity lifecycle dispatcher.
+     * @param overviewModeBehavior Overview mode to observe for mode changes.
+     * @param uma {@link NewTabPageUma} object recording user metrics.
      */
-    public void initialize(NewTabPageManager manager, ChromeActivity activity,
-            @Nullable OverviewModeBehavior overviewModeBehavior,
+    public void initialize(NewTabPageManager manager, Activity activity,
             TileGroup.Delegate tileGroupDelegate, boolean searchProviderHasLogo,
             boolean searchProviderIsGoogle, ScrollDelegate scrollDelegate,
-            ContextMenuManager contextMenuManager, UiConfig uiConfig,
-            ActivityLifecycleDispatcher activityLifecycleDispatcher) {
+            ContextMenuManager contextMenuManager, UiConfig uiConfig, Supplier<Tab> tabProvider,
+            ActivityLifecycleDispatcher lifecycleDispatcher,
+            @Nullable OverviewModeBehavior overviewModeBehavior, NewTabPageUma uma) {
         TraceEvent.begin(TAG + ".initialize()");
         mScrollDelegate = scrollDelegate;
         mManager = manager;
         mActivity = activity;
         mUiConfig = uiConfig;
+        mTabProvider = tabProvider;
+        mNewTabPageUma = uma;
 
         Profile profile = Profile.getLastUsedRegularProfile();
         OfflinePageBridge offlinePageBridge =
@@ -244,8 +254,8 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
                 mManager.getNavigationDelegate(), mSearchProviderLogoView, profile);
 
         mSearchBoxCoordinator = new SearchBoxCoordinator(getContext(), this);
-        mSearchBoxCoordinator.initialize(activityLifecycleDispatcher);
-        if (!DeviceFormFactor.isWindowOnTablet(mActivity.getWindowAndroid())) {
+        mSearchBoxCoordinator.initialize(lifecycleDispatcher);
+        if (!DeviceFormFactor.isNonMultiDisplayContextOnTablet(activity)) {
             mSearchBoxBoundsVerticalInset = getResources().getDimensionPixelSize(
                     R.dimen.ntp_search_box_bounds_vertical_inset_modern);
         }
@@ -697,7 +707,7 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
         if (!mHasShownView) {
             mHasShownView = true;
             onInitializationProgressChanged();
-            NewTabPageUma.recordSearchAvailableLoadTime(mActivity);
+            mNewTabPageUma.recordSearchAvailableLoadTime();
             TraceEvent.instant("NewTabPageSearchAvailable)");
         }
     }
@@ -849,7 +859,7 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
         // Need to null-check compositor view holder and layout manager since they might've
         // been cleared by now.
         if (mOverviewObserver != null) {
-            mActivity.getOverviewModeBehavior().removeOverviewModeObserver(mOverviewObserver);
+            mOverviewModeBehavior.removeOverviewModeObserver(mOverviewObserver);
             mOverviewObserver = null;
         }
 
@@ -881,7 +891,7 @@ public class NewTabPageLayout extends LinearLayout implements TileGroup.Observer
 
     private Runnable openDownloadHomeCallback() {
         return () -> {
-            DownloadUtils.showDownloadManager(mActivity, mActivity.getActivityTabProvider().get(),
+            DownloadUtils.showDownloadManager(mActivity, mTabProvider.get(),
                     DownloadOpenSource.NEW_TAB_PAGE, true /*showPrefetchedContent*/);
         };
     }
