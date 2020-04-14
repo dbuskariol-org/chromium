@@ -87,7 +87,6 @@
 #include "chrome/browser/web_applications/components/web_app_shortcut_mac.h"
 #include "chrome/common/chrome_paths_internal.h"
 #include "chrome/common/chrome_switches.h"
-#include "chrome/common/cloud_print/cloud_print_class_mac.h"
 #include "chrome/common/extensions/extension_constants.h"
 #include "chrome/common/mac/app_mode_common.h"
 #include "chrome/common/pref_names.h"
@@ -408,8 +407,6 @@ static base::mac::ScopedObjCClassSwizzler* g_swizzle_imk_input_session;
   NSAppleEventManager* em = [NSAppleEventManager sharedAppleEventManager];
   [em removeEventHandlerForEventClass:kInternetEventClass
                            andEventID:kAEGetURL];
-  [em removeEventHandlerForEventClass:cloud_print::kAECloudPrintClass
-                           andEventID:cloud_print::kAECloudPrintClass];
   [em removeEventHandlerForEventClass:'WWW!'
                            andEventID:'OURL'];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
