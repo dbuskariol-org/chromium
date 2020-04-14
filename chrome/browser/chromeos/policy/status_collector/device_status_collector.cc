@@ -929,12 +929,20 @@ class DeviceStatusCollectorState : public StatusCollectorState {
           backlight_info_out->set_brightness(backlight->brightness);
         }
       }
-      const auto& fan_info = probe_result->fan_info;
-      if (fan_info.has_value()) {
-        for (const auto& fan : fan_info.value()) {
-          em::FanInfo* const fan_info_out =
-              response_params_.device_status->add_fan_info();
-          fan_info_out->set_speed_rpm(fan->speed_rpm);
+
+      // Process FanResult.
+      const auto& fan_result = probe_result->fan_result;
+      if (!fan_result.is_null()) {
+        if (fan_result->is_error()) {
+          LOG(ERROR) << "cros_healthd: Error getting fan info: "
+                     << fan_result->get_error()->msg;
+        } else {
+          const auto& fan_info = fan_result->get_fan_info();
+          for (const auto& fan : fan_info) {
+            em::FanInfo* const fan_info_out =
+                response_params_.device_status->add_fan_info();
+            fan_info_out->set_speed_rpm(fan->speed_rpm);
+          }
         }
       }
 

@@ -493,11 +493,13 @@ void GetFakeCrosHealthdData(
   std::vector<chromeos::cros_healthd::mojom::FanInfoPtr> fan_vector;
   chromeos::cros_healthd::mojom::FanInfo fan_info(kFakeSpeedRpm);
   fan_vector.push_back(fan_info.Clone());
+  auto fan_result = chromeos::cros_healthd::mojom::FanResult::NewFanInfo(
+      std::move(fan_vector));
   chromeos::cros_healthd::mojom::TelemetryInfo fake_info(
       battery_info.Clone(), std::move(block_device_info),
       cached_vpd_info.Clone(), std::move(cpu_result),
       std::move(timezone_result), memory_info.Clone(),
-      std::move(backlight_vector), std::move(fan_vector));
+      std::move(backlight_vector), std::move(fan_result));
 
   // Create fake SampledData.
   em::CPUTempInfo fake_cpu_temp_sample;

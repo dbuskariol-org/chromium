@@ -138,11 +138,11 @@ base::Optional<std::vector<mojom::BacklightInfoPtr>> MakeBacklightInfo() {
   return backlight_info;
 }
 
-base::Optional<std::vector<mojom::FanInfoPtr>> MakeFanInfo() {
-  std::vector<mojom::FanInfoPtr> fan_info;
-  fan_info.push_back(mojom::FanInfo::New(1200 /* speed_rpm */));
-  fan_info.push_back(mojom::FanInfo::New(2650 /* speed_rpm */));
-  return fan_info;
+mojom::FanResultPtr MakeFanResult() {
+  std::vector<mojom::FanInfoPtr> fan_vector;
+  fan_vector.push_back(mojom::FanInfo::New(1200 /* speed_rpm */));
+  fan_vector.push_back(mojom::FanInfo::New(2650 /* speed_rpm */));
+  return mojom::FanResult::NewFanInfo(std::move(fan_vector));
 }
 
 mojom::TelemetryInfoPtr MakeTelemetryInfo() {
@@ -152,7 +152,7 @@ mojom::TelemetryInfoPtr MakeTelemetryInfo() {
       MakeCachedVpdInfo() /* vpd_info */, MakeCpuResult() /* cpu_result */,
       MakeTimezoneResult() /* timezone_result */,
       MakeMemoryInfo() /* memory_info */,
-      MakeBacklightInfo() /* backlight_info */, MakeFanInfo() /* fan_info */
+      MakeBacklightInfo() /* backlight_info */, MakeFanResult() /* fan_result */
   );
 }
 
