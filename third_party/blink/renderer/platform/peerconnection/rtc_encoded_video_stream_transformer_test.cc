@@ -26,9 +26,6 @@ namespace blink {
 
 namespace {
 
-const uint32_t kSSRC = 1;
-const uint32_t kNonexistentSSRC = 0;
-
 class MockWebRtcTransformedFrameCallback
     : public webrtc::TransformedFrameCallback {
  public:
@@ -41,31 +38,6 @@ class MockTransformerCallbackHolder {
   MOCK_METHOD1(OnEncodedFrame,
                void(std::unique_ptr<webrtc::TransformableVideoFrameInterface>));
 };
-
-class FakeVideoFrame : public webrtc::TransformableVideoFrameInterface {
- public:
-  explicit FakeVideoFrame(uint32_t ssrc) : ssrc_(ssrc) {}
-
-  rtc::ArrayView<const uint8_t> GetData() const override {
-    return rtc::ArrayView<const uint8_t>();
-  }
-
-  // Copies |data| into the owned frame payload data.
-  void SetData(rtc::ArrayView<const uint8_t> data) override {}
-  uint32_t GetTimestamp() const override { return 0; }
-  uint32_t GetSsrc() const override { return ssrc_; }
-  bool IsKeyFrame() const override { return true; }
-  std::vector<uint8_t> GetAdditionalData() const override {
-    return std::vector<uint8_t>();
-  }
-
- private:
-  uint32_t ssrc_;
-};
-
-std::unique_ptr<webrtc::TransformableVideoFrameInterface> CreateFakeFrame() {
-  return std::make_unique<FakeVideoFrame>(kSSRC);
-}
 
 }  // namespace
 
@@ -81,24 +53,17 @@ class RTCEncodedVideoStreamTransformerTest : public ::testing::Test {
 
   void SetUp() override {
     EXPECT_FALSE(
-        encoded_video_stream_transformer_.HasTransformedFrameSinkCallback(
-            kSSRC));
-    encoded_video_stream_transformer_.RegisterTransformedFrameSinkCallback(
-        webrtc_callback_, kSSRC);
+        encoded_video_stream_transformer_.HasTransformedFrameCallback());
+    encoded_video_stream_transformer_.RegisterTransformedFrameCallback(
+        webrtc_callback_);
     EXPECT_TRUE(
-        encoded_video_stream_transformer_.HasTransformedFrameSinkCallback(
-            kSSRC));
-    EXPECT_FALSE(
-        encoded_video_stream_transformer_.HasTransformedFrameSinkCallback(
-            kNonexistentSSRC));
+        encoded_video_stream_transformer_.HasTransformedFrameCallback());
   }
 
   void TearDown() override {
-    encoded_video_stream_transformer_.UnregisterTransformedFrameSinkCallback(
-        kSSRC);
+    encoded_video_stream_transformer_.UnregisterTransformedFrameCallback();
     EXPECT_FALSE(
-        encoded_video_stream_transformer_.HasTransformedFrameSinkCallback(
-            kSSRC));
+        encoded_video_stream_transformer_.HasTransformedFrameCallback());
   }
 
  protected:
@@ -127,13 +92,13 @@ TEST_F(RTCEncodedVideoStreamTransformerTest,
       *webrtc_task_runner_, FROM_HERE,
       CrossThreadBindOnce(&webrtc::FrameTransformerInterface::Transform,
                           encoded_video_stream_transformer_.Delegate(),
-                          CreateFakeFrame()));
+                          nullptr));
   task_environment_.RunUntilIdle();
 }
 
 TEST_F(RTCEncodedVideoStreamTransformerTest, TransformerForwardsFrameToWebRTC) {
   EXPECT_CALL(*webrtc_callback_, OnTransformedFrame);
-  encoded_video_stream_transformer_.SendFrameToSink(CreateFakeFrame());
+  encoded_video_stream_transformer_.SendFrameToSink(nullptr);
   task_environment_.RunUntilIdle();
 }
 
