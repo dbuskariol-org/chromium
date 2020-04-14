@@ -893,13 +893,21 @@ class DeviceStatusCollectorState : public StatusCollectorState {
         }
       }
 
-      const auto& timezone_info = probe_result->timezone_info;
-      if (!timezone_info.is_null()) {
-        em::TimezoneInfo* const timezone_info_out =
-            response_params_.device_status->mutable_timezone_info();
-        timezone_info_out->set_posix(timezone_info->posix);
-        timezone_info_out->set_region(timezone_info->region);
+      // Process TimezoneResult.
+      const auto& timezone_result = probe_result->timezone_result;
+      if (!timezone_result.is_null()) {
+        if (timezone_result->is_error()) {
+          LOG(ERROR) << "cros_healthd: Error getting timezone info: "
+                     << timezone_result->get_error()->msg;
+        } else {
+          const auto& timezone_info = timezone_result->get_timezone_info();
+          em::TimezoneInfo* const timezone_info_out =
+              response_params_.device_status->mutable_timezone_info();
+          timezone_info_out->set_posix(timezone_info->posix);
+          timezone_info_out->set_region(timezone_info->region);
+        }
       }
+
       const auto& memory_info = probe_result->memory_info;
       if (!memory_info.is_null()) {
         em::MemoryInfo* const memory_info_out =

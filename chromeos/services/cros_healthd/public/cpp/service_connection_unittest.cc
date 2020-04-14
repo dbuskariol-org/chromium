@@ -117,9 +117,9 @@ mojom::CpuResultPtr MakeCpuResult() {
   return mojom::CpuResult::NewCpuInfo(std::move(cpu_info));
 }
 
-mojom::TimezoneInfoPtr MakeTimezoneInfo() {
-  return mojom::TimezoneInfo::New("MST7MDT,M3.2.0,M11.1.0" /* posix */,
-                                  "America/Denver" /* region */);
+mojom::TimezoneResultPtr MakeTimezoneResult() {
+  return mojom::TimezoneResult::NewTimezoneInfo(mojom::TimezoneInfo::New(
+      "MST7MDT,M3.2.0,M11.1.0" /* posix */, "America/Denver" /* region */));
 }
 
 mojom::MemoryInfoPtr MakeMemoryInfo() {
@@ -150,7 +150,7 @@ mojom::TelemetryInfoPtr MakeTelemetryInfo() {
       MakeBatteryInfo() /* battery_info */,
       MakeNonRemovableBlockDeviceInfo() /* block_device_info */,
       MakeCachedVpdInfo() /* vpd_info */, MakeCpuResult() /* cpu_result */,
-      MakeTimezoneInfo() /* timezone_info */,
+      MakeTimezoneResult() /* timezone_result */,
       MakeMemoryInfo() /* memory_info */,
       MakeBacklightInfo() /* backlight_info */, MakeFanInfo() /* fan_info */
   );

@@ -480,8 +480,10 @@ void GetFakeCrosHealthdData(
   base::Optional<std::vector<
       chromeos::cros_healthd::mojom::NonRemovableBlockDeviceInfoPtr>>
       block_device_info(std::move(storage_vector));
-  chromeos::cros_healthd::mojom::TimezoneInfo timezone_info(kPosixTimezone,
-                                                            kTimezoneRegion);
+  auto timezone_result =
+      chromeos::cros_healthd::mojom::TimezoneResult::NewTimezoneInfo(
+          chromeos::cros_healthd::mojom::TimezoneInfo::New(kPosixTimezone,
+                                                           kTimezoneRegion));
   chromeos::cros_healthd::mojom::MemoryInfo memory_info(
       kFakeTotalMemory, kFakeFreeMemory, kFakeAvailableMemory, kFakePageFaults);
   std::vector<chromeos::cros_healthd::mojom::BacklightInfoPtr> backlight_vector;
@@ -493,8 +495,9 @@ void GetFakeCrosHealthdData(
   fan_vector.push_back(fan_info.Clone());
   chromeos::cros_healthd::mojom::TelemetryInfo fake_info(
       battery_info.Clone(), std::move(block_device_info),
-      cached_vpd_info.Clone(), std::move(cpu_result), timezone_info.Clone(),
-      memory_info.Clone(), std::move(backlight_vector), std::move(fan_vector));
+      cached_vpd_info.Clone(), std::move(cpu_result),
+      std::move(timezone_result), memory_info.Clone(),
+      std::move(backlight_vector), std::move(fan_vector));
 
   // Create fake SampledData.
   em::CPUTempInfo fake_cpu_temp_sample;
