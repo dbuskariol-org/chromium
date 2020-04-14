@@ -65,6 +65,7 @@ class CC_EXPORT CompositorFrameReportingController {
   virtual void DidPresentCompositorFrame(
       uint32_t frame_token,
       const viz::FrameTimingDetails& details);
+  void OnStoppedRequestingBeginFrames();
 
   void SetBlinkBreakdown(std::unique_ptr<BeginMainFrameMetrics> details,
                          base::TimeTicks main_thread_start_time);

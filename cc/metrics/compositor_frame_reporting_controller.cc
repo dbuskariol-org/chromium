@@ -296,6 +296,19 @@ void CompositorFrameReportingController::DidPresentCompositorFrame(
   }
 }
 
+void CompositorFrameReportingController::OnStoppedRequestingBeginFrames() {
+  // If the client stopped requesting begin-frames, that means the begin-frames
+  // currently being handled are no longer expected to produce any
+  // compositor-frames. So terminate the reporters.
+  auto now = Now();
+  for (int i = 0; i < PipelineStage::kNumPipelineStages; ++i) {
+    if (reporters_[i]) {
+      reporters_[i]->TerminateFrame(FrameTerminationStatus::kDidNotProduceFrame,
+                                    now);
+    }
+  }
+}
+
 void CompositorFrameReportingController::SetBlinkBreakdown(
     std::unique_ptr<BeginMainFrameMetrics> details,
     base::TimeTicks main_thread_start_time) {
