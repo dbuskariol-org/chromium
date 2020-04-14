@@ -3001,7 +3001,6 @@ jumbo_static_library("browser") {
       ":explore_sites_proto",
       ":usage_stats_proto",
       "//chrome/android:jni_headers",
-      "//chrome/android/features/cablev2_authenticator/internal:native",
       "//chrome/android/modules/extra_icu/provider:native",
       "//chrome/browser/android/thin_webview/internal",
       "//chrome/browser/android/webapk:proto",
