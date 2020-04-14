@@ -387,11 +387,9 @@ void AVIFImageDecoder::MaybeCreateDemuxer() {
 }
 
 bool AVIFImageDecoder::DecodeImage(size_t index) {
-  if (!pending_decoded_image_ || decoder_->imageIndex != int{index}) {
-    auto ret = (decoder_->imageIndex + 1 == int{index})
-                   ? avifDecoderNextImage(decoder_.get())
-                   : avifDecoderNthImage(decoder_.get(), index);
-    if (ret != AVIF_RESULT_OK || !decoder_->image) {
+  if (!pending_decoded_image_) {
+    auto ret = avifDecoderNthImage(decoder_.get(), index);
+    if (ret != AVIF_RESULT_OK) {
       // We shouldn't be called more times than specified in
       // DecodeFrameCount(); possibly this should truncate if the initial
       // count is wrong?
