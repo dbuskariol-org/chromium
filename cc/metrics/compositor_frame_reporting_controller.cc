@@ -319,16 +319,18 @@ void CompositorFrameReportingController::AdvanceReporterStage(
     PipelineStage target) {
   auto& reporter = reporters_[target];
   if (reporter) {
-    auto termination_time = (target == PipelineStage::kBeginMainFrame &&
-                             reporter->did_abort_main_frame())
-                                ? reporter->main_frame_abort_time()
-                                : Now();
-    if (reporters_[target]->did_not_produce_frame())
-      reporters_[target]->TerminateFrame(
-          FrameTerminationStatus::kDidNotProduceFrame, termination_time);
-    else
-      reporters_[target]->TerminateFrame(
-          FrameTerminationStatus::kReplacedByNewReporter, termination_time);
+    auto termination_status = FrameTerminationStatus::kReplacedByNewReporter;
+    base::TimeTicks termination_time;
+    if (reporter->did_not_produce_frame()) {
+      termination_time = reporter->did_not_produce_frame_time();
+      termination_status = FrameTerminationStatus::kDidNotProduceFrame;
+    } else if (target == PipelineStage::kBeginMainFrame &&
+               reporter->did_abort_main_frame()) {
+      termination_time = reporter->main_frame_abort_time();
+    } else {
+      termination_time = Now();
+    }
+    reporter->TerminateFrame(termination_status, termination_time);
   }
   reporters_[target] = std::move(reporters_[start]);
 }
