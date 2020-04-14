@@ -677,11 +677,6 @@ void GetDataFeedItems(
       }
     }
 
-    if (!convert_property.Run(schema_org::property::kPublication, false,
-                              base::BindOnce(&GetLiveDetails))) {
-      continue;
-    }
-
     if (!convert_property.Run(
             schema_org::property::kIdentifier, false,
             base::BindOnce(&GetIdentifiers<mojom::MediaFeedItem>))) {
@@ -698,17 +693,16 @@ void GetDataFeedItems(
                                 base::BindOnce(&GetDuration))) {
         continue;
       }
-    }
-
-    if (converted_item->type == mojom::MediaFeedItemType::kTVSeries) {
-      auto* num_episodes =
-          GetProperty(item.get(), schema_org::property::kNumberOfEpisodes);
-      if (!num_episodes || !IsPositiveInteger(*num_episodes))
+      if (!convert_property.Run(schema_org::property::kPublication, false,
+                                base::BindOnce(&GetLiveDetails))) {
         continue;
-      auto* num_seasons =
-          GetProperty(item.get(), schema_org::property::kNumberOfSeasons);
-      if (!num_seasons || !IsPositiveInteger(*num_seasons))
+      }
+    } else if (converted_item->type == mojom::MediaFeedItemType::kMovie) {
+      if (!convert_property.Run(schema_org::property::kPublication, false,
+                                base::BindOnce(&GetLiveDetails))) {
         continue;
+      }
+    } else if (converted_item->type == mojom::MediaFeedItemType::kTVSeries) {
       if (!convert_property.Run(schema_org::property::kEpisode, false,
                                 base::BindOnce(&GetEpisode))) {
         continue;
