@@ -170,14 +170,14 @@ IN_PROC_BROWSER_TEST_F(AppListClientImplBrowserTest, CreateNewWindow) {
 
   EXPECT_EQ(1U, chrome::GetBrowserCount(browser()->profile()));
   EXPECT_EQ(0U, chrome::GetBrowserCount(
-                    browser()->profile()->GetOffTheRecordProfile()));
+                    browser()->profile()->GetPrimaryOTRProfile()));
 
   controller->CreateNewWindow(browser()->profile(), false);
   EXPECT_EQ(2U, chrome::GetBrowserCount(browser()->profile()));
 
   controller->CreateNewWindow(browser()->profile(), true);
   EXPECT_EQ(1U, chrome::GetBrowserCount(
-                    browser()->profile()->GetOffTheRecordProfile()));
+                    browser()->profile()->GetPrimaryOTRProfile()));
 }
 
 // When getting activated, SelfDestroyAppItem has itself removed from the
@@ -312,7 +312,7 @@ IN_PROC_BROWSER_TEST_F(AppListClientImplBrowserTest,
   ASSERT_TRUE(controller);
 
   Profile* profile = browser()->profile();
-  Profile* profile_otr = profile->GetOffTheRecordProfile();
+  Profile* profile_otr = profile->GetPrimaryOTRProfile();
 
   extensions::ExtensionPrefs* prefs = extensions::ExtensionPrefs::Get(profile);
 
