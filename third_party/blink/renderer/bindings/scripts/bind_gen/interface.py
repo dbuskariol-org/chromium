@@ -166,9 +166,7 @@ def constant_name(cg_context):
 
     property_name = cg_context.property_.identifier.lower()
 
-    kind = "Constant"
-
-    return name_style.constant(kind, property_name)
+    return name_style.constant(property_name)
 
 
 def custom_function_name(cg_context):
@@ -1620,7 +1618,7 @@ def make_constant_callback_def(cg_context, function_name):
     body = func_def.body
 
     v8_set_return_value = _format(
-        "bindings::V8SetReturnValue(${info}, ${class_name}::{});",
+        "bindings::V8SetReturnValue(${info}, ${class_name}::Constant::{});",
         constant_name(cg_context))
     body.extend([
         make_runtime_call_timer_scope(cg_context),
@@ -4400,7 +4398,8 @@ def _make_property_entries_and_callback_defs(
         if const_callback_node is None:
             const_callback_name = None
         # IDL constant's C++ constant name
-        const_constant_name = _format("${class_name}::{}", constant_name(cgc))
+        const_constant_name = _format("${class_name}::Constant::{}",
+                                      constant_name(cgc))
 
         callback_def_nodes.extend([
             const_callback_node,
@@ -5878,11 +5877,14 @@ def generate_interface(interface):
         impl_class_def = api_class_def
 
     # Constants
-    constant_defs = ListNode()
-    for constant in interface.constants:
-        cgc = cg_context.make_copy(constant=constant)
-        constant_defs.append(
-            make_constant_constant_def(cgc, constant_name(cgc)))
+    constants_def = None
+    if interface.constants:
+        constants_def = CxxClassDefNode(name="Constant", final=True)
+        constants_def.top_section.append(TextNode("STATIC_ONLY(Constant);"))
+        for constant in interface.constants:
+            cgc = cg_context.make_copy(constant=constant)
+            constants_def.public_section.append(
+                make_constant_constant_def(cgc, constant_name(cgc)))
 
     # Custom callback implementations
     custom_callback_impl_decls = ListNode()
@@ -6214,6 +6216,13 @@ def generate_interface(interface):
     if is_cross_components:
         impl_header_blink_ns.body.append(impl_class_def)
 
+    if constants_def:
+        api_class_def.public_section.extend([
+            TextNode("// Constants"),
+            constants_def,
+            EmptyNode(),
+        ])
+
     api_class_def.public_section.append(get_wrapper_type_info_def)
     api_class_def.public_section.append(EmptyNode())
     api_class_def.public_section.extend([
@@ -6251,13 +6260,6 @@ def generate_interface(interface):
     else:
         api_class_def.public_section.append(installer_function_decls)
         api_class_def.public_section.append(EmptyNode())
-
-    if constant_defs:
-        api_class_def.public_section.extend([
-            TextNode("// Constants"),
-            constant_defs,
-            EmptyNode(),
-        ])
 
     if custom_callback_impl_decls:
         api_class_def.public_section.extend([
