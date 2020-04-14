@@ -45,6 +45,7 @@ component("ash") {
     "public/cpp/assistant/assistant_settings.h",
     "public/cpp/autotest_desks_api.h",
     "public/cpp/autotest_private_api_utils.h",
+    "public/cpp/debug_utils.h",
     "public/cpp/docked_magnifier_controller.h",
     "public/cpp/event_rewriter_controller.h",
     "public/cpp/first_run_helper.h",
