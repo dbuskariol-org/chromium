@@ -46,9 +46,12 @@ component("chromeos") {
     "//chromeos/dbus",
     "//chromeos/dbus/constants",
     "//components/policy/proto",
+    "//crypto",
+    "//crypto:platform",
     "//google_apis",
     "//services/network/public/cpp:cpp",
     "//third_party/protobuf:protobuf_lite",
+    "//third_party/zlib/google:compression_utils",
   ]
   sources = [
     "hugepage_text/hugepage_text.cc",
@@ -61,6 +64,9 @@ component("chromeos") {
     "memory/pagemap.h",
     "memory/swap_configuration.cc",
     "memory/swap_configuration.h",
+    "memory/userspace_swap/region.h",
+    "memory/userspace_swap/swap_storage.cc",
+    "memory/userspace_swap/swap_storage.h",
     "policy/weekly_time/time_utils.cc",
     "policy/weekly_time/time_utils.h",
     "policy/weekly_time/weekly_time.cc",
@@ -184,6 +190,8 @@ test("chromeos_unittests") {
     "//components/policy/proto",
     "//components/prefs:test_support",
     "//components/proxy_config",
+    "//crypto",
+    "//crypto:platform",
     "//dbus:test_support",
     "//google_apis",
     "//mojo/core/embedder",
@@ -198,6 +206,7 @@ test("chromeos_unittests") {
   ]
   sources = [
     "memory/pagemap_unittest.cc",
+    "memory/userspace_swap/swap_storage_unittest.cc",
     "policy/weekly_time/time_utils_unittest.cc",
     "policy/weekly_time/weekly_time_interval_unittest.cc",
     "policy/weekly_time/weekly_time_unittest.cc",
