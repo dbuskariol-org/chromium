@@ -920,11 +920,6 @@
     "expiry_milestone": 76
   },
   {
-    "name": "document-passive-wheel-event-listeners",
-    "owners": [ "sahel", "input-dev" ],
-    "expiry_milestone": 76
-  },
-  {
     "name": "double-buffer-compositing",
     "owners": [ "chromeos-gfx@google.com" ],
     "expiry_milestone": 86

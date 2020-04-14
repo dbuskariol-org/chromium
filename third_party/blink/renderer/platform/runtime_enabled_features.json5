@@ -1289,10 +1289,6 @@
       status: "stable",
     },
     {
-      name: "PassiveDocumentWheelEventListeners",
-      status: "stable",
-    },
-    {
       name: "PassPaintVisualRectToCompositor",
     },
     // This is to add an option to enable the Reveal button on password inputs while waiting ::reveal gets standardized.
