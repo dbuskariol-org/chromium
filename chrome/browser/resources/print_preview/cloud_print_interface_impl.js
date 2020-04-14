@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import {assert} from 'chrome://resources/js/assert.m.js';
+import {addSingletonGetter} from 'chrome://resources/js/cr.m.js';
 import {NativeEventTarget as EventTarget} from 'chrome://resources/js/cr/event_target.m.js';
 
 import {CloudPrintInterface, CloudPrintInterfaceErrorEventDetail, CloudPrintInterfaceEventType} from './cloud_print_interface.js';
@@ -13,44 +14,33 @@ import {NativeLayer} from './native_layer.js';
 
 
 /** @implements {CloudPrintInterface} */
-export class CloudPrintInterfaceJS {
-  /**
-   * API to the Google Cloud Print service.
-   * @param {string} baseUrl Base part of the Google Cloud Print service URL
-   *     with no trailing slash. For example,
-   *     'https://www.google.com/cloudprint'.
-   * @param {!NativeLayer} nativeLayer Native layer used to get
-   *     Auth2 tokens.
-   * @param {boolean} isInAppKioskMode Whether the print preview is in App
-   *     Kiosk mode.
-   * @param {string} uiLocale The UI locale.
-   */
-  constructor(baseUrl, nativeLayer, isInAppKioskMode, uiLocale) {
+export class CloudPrintInterfaceImpl {
+  constructor() {
     /**
      * The base URL of the Google Cloud Print API.
      * @private {string}
      */
-    this.baseUrl_ = baseUrl;
+    this.baseUrl_ = '';
 
     /**
      * Used to get Auth2 tokens.
-     * @private {!NativeLayer}
+     * @private {?NativeLayer}
      */
-    this.nativeLayer_ = nativeLayer;
+    this.nativeLayer_ = null;
 
     /**
      * Whether Print Preview is in App Kiosk mode; use only printers available
      * for the device and disable cookie destinations.
      * @private {boolean}
      */
-    this.isInAppKioskMode_ = isInAppKioskMode;
+    this.isInAppKioskMode_ = false;
 
     /**
      * The UI locale, used to get printer information in the correct locale
      * from Google Cloud Print.
      * @private {string}
      */
-    this.uiLocale_ = uiLocale;
+    this.uiLocale_ = '';
 
     /**
      * Currently logged in users (identified by email) mapped to the Google
@@ -84,6 +74,19 @@ export class CloudPrintInterfaceJS {
 
     /** @private {!EventTarget} */
     this.eventTarget_ = new EventTarget();
+  }
+
+  /** @override */
+  configure(baseUrl, nativeLayer, isInAppKioskMode, uiLocale) {
+    this.baseUrl_ = baseUrl;
+    this.nativeLayer_ = nativeLayer;
+    this.isInAppKioskMode_ = isInAppKioskMode;
+    this.uiLocale_ = uiLocale;
+  }
+
+  /** @override */
+  isConfigured() {
+    return this.baseUrl_ !== '';
   }
 
   /** @override */
@@ -624,6 +627,8 @@ export class CloudPrintInterfaceJS {
     }
   }
 }
+
+addSingletonGetter(CloudPrintInterfaceImpl);
 
 /**
  * Content type header value for a URL encoded HTTP request.
