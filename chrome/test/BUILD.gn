@@ -5452,10 +5452,6 @@ test("unit_tests") {
     ]
   }
 
-  if (enable_cdm_proxy && enable_widevine && is_win) {
-    sources += [ "../gpu/widevine_cdm_proxy_factory_unittest.cc" ]
-  }
-
   if (enable_widevine_cdm_component && is_desktop_linux) {
     sources +=
         [ "../common/media/component_widevine_cdm_hint_file_linux_unittest.cc" ]
