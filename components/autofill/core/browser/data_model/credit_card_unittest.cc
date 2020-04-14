@@ -676,6 +676,11 @@ TEST(CreditCardTest, Compare) {
   b.set_record_type(LOCAL_CARD);
   EXPECT_LT(0, a.Compare(b));
 
+  // Card with UNKNOWN_ISSUER is different from GOOGLE issued card.
+  a.set_card_issuer(CreditCard::ISSUER_UNKNOWN);
+  b.set_card_issuer(CreditCard::GOOGLE);
+  EXPECT_GT(0, a.Compare(b));
+
   // Different values produce non-zero results.
   test::SetCreditCardInfo(&a, "Jimmy", nullptr, nullptr, nullptr, "");
   test::SetCreditCardInfo(&b, "Ringo", nullptr, nullptr, nullptr, "");

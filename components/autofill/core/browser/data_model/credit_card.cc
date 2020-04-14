@@ -114,7 +114,8 @@ CreditCard::CreditCard(const std::string& guid, const std::string& origin)
       network_(kGenericCard),
       expiration_month_(0),
       expiration_year_(0),
-      server_status_(OK) {}
+      server_status_(OK),
+      card_issuer_(ISSUER_UNKNOWN) {}
 
 CreditCard::CreditCard(RecordType type, const std::string& server_id)
     : CreditCard() {
@@ -515,6 +516,7 @@ void CreditCard::operator=(const CreditCard& credit_card) {
   temp_card_first_name_ = credit_card.temp_card_first_name_;
   temp_card_last_name_ = credit_card.temp_card_last_name_;
   nickname_ = credit_card.nickname_;
+  card_issuer_ = credit_card.card_issuer_;
 
   set_guid(credit_card.guid());
   set_origin(credit_card.origin());
@@ -592,11 +594,22 @@ int CreditCard::Compare(const CreditCard& credit_card) const {
     return comparison;
 
   if (static_cast<int>(server_status_) <
-      static_cast<int>(credit_card.server_status_))
+      static_cast<int>(credit_card.server_status_)) {
     return -1;
+  }
   if (static_cast<int>(server_status_) >
-      static_cast<int>(credit_card.server_status_))
+      static_cast<int>(credit_card.server_status_)) {
     return 1;
+  }
+
+  if (static_cast<int>(card_issuer_) <
+      static_cast<int>(credit_card.card_issuer_)) {
+    return -1;
+  }
+  if (static_cast<int>(card_issuer_) >
+      static_cast<int>(credit_card.card_issuer_)) {
+    return 1;
+  }
 
   // Do not distinguish masked server cards from full server cards as this is
   // not needed and not desired - we want to identify masked server card from
@@ -971,8 +984,8 @@ std::ostream& operator<<(std::ostream& os, const CreditCard& credit_card) {
             << " " << credit_card.bank_name() << " "
             << " " << credit_card.record_type() << " "
             << credit_card.use_count() << " " << credit_card.use_date() << " "
-            << credit_card.billing_address_id() << " "
-            << credit_card.nickname();
+            << credit_card.billing_address_id() << " " << credit_card.nickname()
+            << " " << credit_card.card_issuer();
 }
 
 void CreditCard::SetNameOnCardFromSeparateParts() {
