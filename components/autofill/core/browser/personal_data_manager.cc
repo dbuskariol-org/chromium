@@ -1680,7 +1680,7 @@ void PersonalDataManager::LoadCreditCardCloudTokenData() {
 }
 
 void PersonalDataManager::LoadUpiIds() {
-  if (!database_helper_->GetServerDatabase())
+  if (!database_helper_->GetLocalDatabase())
     return;
 
   CancelPendingLocalQuery(&pending_upi_ids_query_);
