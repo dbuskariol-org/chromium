@@ -107,6 +107,7 @@
 #include "extensions/browser/extension_registry.h"
 #include "extensions/browser/extension_system.h"
 #include "net/base/filename_util.h"
+#include "net/base/mac/url_conversions.h"
 #include "ui/base/cocoa/focus_window_set.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/l10n/l10n_util_mac.h"
@@ -1427,6 +1428,23 @@ static base::mac::ScopedObjCClassSwizzler* g_swizzle_imk_input_session;
         net::FilePathToFileURL(base::FilePath([file fileSystemRepresentation]));
     gurlVector.push_back(gurl);
   }
+
+  if (!gurlVector.empty())
+    [self openUrlsReplacingNTP:gurlVector];
+  else
+    NOTREACHED() << "Nothing to open!";
+
+  [sender replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+}
+
+// TODO(avi): When Chromium requires 10.13 as a minimum, remove the
+// -[NSApplication application:openFiles:] override and the
+// kInternetEventClass/kAEGetURL Apple Event registration in -mainMenuCreated.
+- (void)application:(NSApplication*)sender openURLs:(NSArray<NSURL*>*)urls {
+  std::vector<GURL> gurlVector;
+  for (NSURL* url in urls)
+    gurlVector.push_back(net::GURLWithNSURL(url));
+
   if (!gurlVector.empty())
     [self openUrlsReplacingNTP:gurlVector];
   else
