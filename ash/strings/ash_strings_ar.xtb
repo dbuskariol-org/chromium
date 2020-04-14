@@ -468,6 +468,7 @@
 <translation id="6878400149835617132">تم إيقاف الاختصار</translation>
 <translation id="6910714959251846841">‏يتطلَّب هذا التحديث إجراء عملية Powerwash لجهازك. مزيد من المعلومات حول آخر تحديث لتطبيق <ph name="SYSTEM_APP_NAME" />.</translation>
 <translation id="6919251195245069855">لم يتم التعرُّف على البطاقة الذكية. يُرجى إعادة المحاولة.</translation>
+<translation id="6945221475159498467">تحديد</translation>
 <translation id="6972754398087986839">البدء</translation>
 <translation id="6981982820502123353">إمكانية الوصول</translation>
 <translation id="698231206551913481">سيتم حذف جميع الملفات والبيانات المحلية المرتبطة بهذا المستخدم نهائيًا بمجرد إزالة هذا المستخدم.</translation>
@@ -558,6 +559,7 @@
 <translation id="8142699993796781067">الشبكة الخاصة</translation>
 <translation id="8152092012181020186">‏يُرجى الضغط على Ctrl + W للإغلاق.</translation>
 <translation id="8155007568264258537"><ph name="FEATURE_NAME" /> يتولى مشرفك إدارة هذا الإعداد.</translation>
+<translation id="815598010540052116">التمرير إلى أسفل</translation>
 <translation id="8167567890448493835">استخدام <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">تخصيص اللغات والإدخال...</translation>
 <translation id="8192202700944119416">يتم إخفاء الإشعارات.</translation>

@@ -186,7 +186,7 @@
 <translation id="1235458158152011030">Zināmie tīkli</translation>
 <translation id="123578888592755962">Disks ir pilns.</translation>
 <translation id="1238191093934674082">Atvērt VPN</translation>
-<translation id="1239439601391236986">Rādīt teksta ievadei paredzētus personas informācijas ieteikumus</translation>
+<translation id="1239439601391236986">Rādīt personas informācijas ievades ieteikumus</translation>
 <translation id="1239594683407221485">Pārlūkojiet ierīces saturu lietotnē Faili.</translation>
 <translation id="124116460088058876">Citas valodas…</translation>
 <translation id="1241753985463165747">Lasīt un mainīt visus jūsu datus pašreizējā vietnē, kad aktivizēts</translation>
@@ -4001,7 +4001,6 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="6365411474437319296">Ģimenes un draugu pievienošana</translation>
 <translation id="636850387210749493">Uzņēmuma palaide</translation>
 <translation id="6370021412472292592">Nevarēja ielādēt manifestu.</translation>
-<translation id="6371486244597785139">{NUM_PASSWORDS,plural, =1{Mainīt paroli}zero{Mainīt paroles}one{Mainīt paroles}other{Mainīt paroles}}</translation>
 <translation id="6374077068638737855">Iceweasel</translation>
 <translation id="6374469231428023295">Mēģināt vēlreiz</translation>
 <translation id="6377268785556383139">1 rezultāts vaicājumam “<ph name="SEARCH_TEXT" />”</translation>

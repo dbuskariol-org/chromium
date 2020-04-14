@@ -467,6 +467,7 @@
 <translation id="6878400149835617132">Shortcut turned off</translation>
 <translation id="6910714959251846841">This update requires powerwashing of your device. Learn more about the latest <ph name="SYSTEM_APP_NAME" /> update.</translation>
 <translation id="6919251195245069855">Couldn’t recognise your smart card. Try again.</translation>
+<translation id="6945221475159498467">Select</translation>
 <translation id="6972754398087986839">Get Started</translation>
 <translation id="6981982820502123353">Accessibility</translation>
 <translation id="698231206551913481">All files and local data associated with this user will be permanently deleted once this user is removed.</translation>
@@ -557,6 +558,7 @@
 <translation id="8142699993796781067">Private networks</translation>
 <translation id="8152092012181020186">Press Ctrl + W to close.</translation>
 <translation id="8155007568264258537"><ph name="FEATURE_NAME" /> This setting is managed by your administrator.</translation>
+<translation id="815598010540052116">Scroll Down</translation>
 <translation id="8167567890448493835">Using <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Customise languages and input...</translation>
 <translation id="8192202700944119416">Notifications are hidden.</translation>

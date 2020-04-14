@@ -467,6 +467,7 @@
 <translation id="6878400149835617132">Пречица је искључена</translation>
 <translation id="6910714959251846841">Ово ажурирање захтева да обавите powerwash на уређају. Сазнајте више о најновијем ажурирању за: <ph name="SYSTEM_APP_NAME" />.</translation>
 <translation id="6919251195245069855">Нисмо успели да препознамо паметну картицу. Пробајте поново.</translation>
+<translation id="6945221475159498467">Изабери</translation>
 <translation id="6972754398087986839">Започнимо</translation>
 <translation id="6981982820502123353">Приступачност</translation>
 <translation id="698231206551913481">Све датотеке и локални подаци повезани са овим корисником ће бити трајно избрисани када уклоните овог корисника.</translation>
@@ -557,6 +558,7 @@
 <translation id="8142699993796781067">Приватна мрежа</translation>
 <translation id="8152092012181020186">Притисните Ctrl + W да бисте затворили.</translation>
 <translation id="8155007568264258537"><ph name="FEATURE_NAME" /> Овим подешавањем управља администратор.</translation>
+<translation id="815598010540052116">Помери надоле</translation>
 <translation id="8167567890448493835">Користи се <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Прилагоди језике и унос...</translation>
 <translation id="8192202700944119416">Обавештења су сакривена.</translation>

@@ -468,6 +468,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="6878400149835617132">Genvejen er deaktiveret</translation>
 <translation id="6910714959251846841">Denne opdatering kræver, at der udføres en powerwash på din enhed. Få flere oplysninger om den nyeste <ph name="SYSTEM_APP_NAME" />-opdatering.</translation>
 <translation id="6919251195245069855">Dit chipkort blev ikke genkendt. Prøv igen.</translation>
+<translation id="6945221475159498467">Vælg</translation>
 <translation id="6972754398087986839">Kom godt i gang</translation>
 <translation id="6981982820502123353">Hjælpefunktioner</translation>
 <translation id="698231206551913481">Alle filer og lokale data, der er knyttet til denne bruger, slettes permanent, når brugeren fjernes.</translation>
@@ -558,6 +559,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="8142699993796781067">Privat netværk</translation>
 <translation id="8152092012181020186">Tryk på Ctrl+W for at lukke.</translation>
 <translation id="8155007568264258537"><ph name="FEATURE_NAME" /> Denne indstilling administreres af din administrator.</translation>
+<translation id="815598010540052116">Scroll Down</translation>
 <translation id="8167567890448493835">Bruger <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Tilpas sprog og indtastning...</translation>
 <translation id="8192202700944119416">Notifikationer er skjult.</translation>

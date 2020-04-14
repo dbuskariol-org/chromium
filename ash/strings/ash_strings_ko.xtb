@@ -467,6 +467,7 @@
 <translation id="6878400149835617132">바로가기 사용 중지됨</translation>
 <translation id="6910714959251846841">업데이트하려면 기기에서 파워워시를 실행해야 합니다. 최신 <ph name="SYSTEM_APP_NAME" /> 업데이트에 관해 자세히 알아보세요.</translation>
 <translation id="6919251195245069855">스마트 카드를 인식할 수 없습니다. 다시 시도해 보세요.</translation>
+<translation id="6945221475159498467">선택</translation>
 <translation id="6972754398087986839">시작하기</translation>
 <translation id="6981982820502123353">접근성</translation>
 <translation id="698231206551913481">이 사용자를 제거하면 해당 사용자와 연결되어 있는 모든 파일 및 로컬 데이터가 영구적으로 삭제됩니다.</translation>
@@ -557,6 +558,7 @@
 <translation id="8142699993796781067">사설 네트워크</translation>
 <translation id="8152092012181020186">닫으려면 Ctrl + W를 누릅니다.</translation>
 <translation id="8155007568264258537"><ph name="FEATURE_NAME" /> 관리자가 관리하는 설정입니다.</translation>
+<translation id="815598010540052116">아래로 스크롤</translation>
 <translation id="8167567890448493835"><ph name="LOCALE_NAME" /> 사용 중</translation>
 <translation id="8190698733819146287">언어 및 입력 설정...</translation>
 <translation id="8192202700944119416">알림이 숨겨져 있음</translation>

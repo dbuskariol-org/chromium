@@ -468,6 +468,7 @@
 <translation id="6878400149835617132">Кратенката е исклучена</translation>
 <translation id="6910714959251846841">За ажурирањево потребно е фабричко ресетирање на уредот. Дознајте повеќе за најновото ажурирање на <ph name="SYSTEM_APP_NAME" />.</translation>
 <translation id="6919251195245069855">Не можевме да ја препознаеме вашата паметна картичка. Обидете се повторно.</translation>
+<translation id="6945221475159498467">Избери</translation>
 <translation id="6972754398087986839">Започни</translation>
 <translation id="6981982820502123353">Пристапност</translation>
 <translation id="698231206551913481">Сите датотеки и локални податоци што се поврзани со корисников трајно ќе се избришат по неговото отстранување.</translation>
@@ -558,6 +559,7 @@
 <translation id="8142699993796781067">Приватна мрежа</translation>
 <translation id="8152092012181020186">Притиснете Ctrl + W за да затворите.</translation>
 <translation id="8155007568264258537"><ph name="FEATURE_NAME" /> Администраторот управува со поставкава.</translation>
+<translation id="815598010540052116">Лизгај надолу</translation>
 <translation id="8167567890448493835">Се користи <ph name="LOCALE_NAME" /></translation>
 <translation id="8190698733819146287">Приспособи јазици и внесување...</translation>
 <translation id="8192202700944119416">Известувањата се скриени.</translation>
