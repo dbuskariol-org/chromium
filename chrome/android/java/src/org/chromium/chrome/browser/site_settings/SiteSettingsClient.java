@@ -39,4 +39,9 @@ public interface SiteSettingsClient {
      */
     void getLocalFaviconImageForURL(
             String faviconUrl, int faviconSizePx, Callback<Bitmap> callback);
+
+    /**
+     * @return true if the QuietNotificationPrompts Feature is enabled.
+     */
+    boolean isQuietNotificationPromptsFeatureEnabled();
 }

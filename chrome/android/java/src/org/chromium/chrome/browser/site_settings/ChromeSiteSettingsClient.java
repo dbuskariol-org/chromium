@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import androidx.preference.Preference;
 
 import org.chromium.base.Callback;
+import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.ChromeManagedPreferenceDelegate;
@@ -78,5 +79,10 @@ public class ChromeSiteSettingsClient implements SiteSettingsClient {
             mFaviconHelper.destroy();
             mCallback.onResult(image);
         }
+    }
+
+    @Override
+    public boolean isQuietNotificationPromptsFeatureEnabled() {
+        return ChromeFeatureList.isEnabled(ChromeFeatureList.QUIET_NOTIFICATION_PROMPTS);
     }
 }

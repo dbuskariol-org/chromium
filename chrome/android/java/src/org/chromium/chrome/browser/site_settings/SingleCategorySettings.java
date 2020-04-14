@@ -38,7 +38,6 @@ import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.browserservices.permissiondelegation.TrustedWebActivityPermissionManager;
-import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.site_settings.FourStateCookieSettingsPreference.CookieSettingsState;
@@ -974,7 +973,7 @@ public class SingleCategorySettings extends SiteSettingsPreferenceFragment
                 screen.removePreference(notificationsVibrate);
             }
 
-            if (ChromeFeatureList.isEnabled(ChromeFeatureList.QUIET_NOTIFICATION_PROMPTS)) {
+            if (getSiteSettingsClient().isQuietNotificationPromptsFeatureEnabled()) {
                 notificationsQuietUi.setOnPreferenceChangeListener(this);
             } else {
                 screen.removePreference(notificationsQuietUi);
@@ -1111,7 +1110,7 @@ public class SingleCategorySettings extends SiteSettingsPreferenceFragment
                         NOTIFICATIONS_VIBRATE_TOGGLE_KEY);
         if (vibrate_pref != null) vibrate_pref.setEnabled(categoryEnabled);
 
-        if (!ChromeFeatureList.isEnabled(ChromeFeatureList.QUIET_NOTIFICATION_PROMPTS)) return;
+        if (!getSiteSettingsClient().isQuietNotificationPromptsFeatureEnabled()) return;
 
         // The notifications quiet ui checkbox.
         ChromeBaseCheckBoxPreference quiet_ui_pref =
