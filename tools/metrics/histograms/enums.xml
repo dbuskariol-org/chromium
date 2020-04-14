@@ -37550,6 +37550,7 @@ from previous Chrome versions.
   <int value="-2134244069" label="HttpFormWarning:enabled"/>
   <int value="-2133892372" label="ResamplingInputEvents:disabled"/>
   <int value="-2133277113" label="CCTModuleCustomHeader:disabled"/>
+  <int value="-2133276662" label="EduCoexistenceConsentLog:disabled"/>
   <int value="-2132591642" label="enable-input-view"/>
   <int value="-2132161378" label="SendTabToSelfHistory:disabled"/>
   <int value="-2131746498"
@@ -38885,6 +38886,7 @@ from previous Chrome versions.
   <int value="-649956990" label="enable-harfbuzz-rendertext"/>
   <int value="-648925189" label="ExploreSites:enabled"/>
   <int value="-645455405" label="MacViewsNativeDialogs:enabled"/>
+  <int value="-643217597" label="EduCoexistenceConsentLog:enabled"/>
   <int value="-641820371" label="EnableCustomMacPaperSizes:enabled"/>
   <int value="-641719457" label="disable-compositor-touch-hit-testing"/>
   <int value="-640191786" label="DesktopPWAsWithoutExtensions:enabled"/>

@@ -4740,6 +4740,13 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // OS_CHROMEOS
 
 #if defined(OS_CHROMEOS)
+    {"enable-edu-coexistence-consent-log",
+     flag_descriptions::kEnableEduCoexistenceConsentLogName,
+     flag_descriptions::kEnableEduCoexistenceConsentLogDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kEduCoexistenceConsentLog)},
+#endif  // OS_CHROMEOS
+
+#if defined(OS_CHROMEOS)
     {"enable-assistant-routines",
      flag_descriptions::kEnableAssistantRoutinesName,
      flag_descriptions::kEnableAssistantRoutinesDescription, kOsCrOS,
