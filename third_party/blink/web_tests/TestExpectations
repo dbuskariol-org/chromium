@@ -220,7 +220,6 @@ crbug.com/774873 [ Win ] virtual/exotic-color-space/images/color-profile-border-
 crbug.com/974652 [ Debug ] virtual/gpu/fast/canvas/OffscreenCanvas-copyImage.html [ Pass Failure ]
 crbug.com/974652 [ Debug ] fast/canvas/OffscreenCanvas-copyImage.html [ Pass Failure ]
 
-crbug.com/1011060 virtual/gpu/fast/canvas/canvas-getImageData-smooth.html [ Pass Failure ]
 crbug.com/1011060 virtual/gpu/fast/canvas/bug382588.html [ Pass Failure ]
 crbug.com/1011060 virtual/gpu/fast/canvas/canvas-lost-gpu-context.html [ Pass Failure Crash ]
 
@@ -4864,7 +4863,6 @@ crbug.com/775957 virtual/gpu/fast/canvas/canvas-incremental-repaint.html [ Skip 
 # Canvas tests that are affected by change to Skia GPU rect shadow rendering.
 crbug.com/990918 virtual/gpu/fast/canvas/canvas-shadow-source-in.html [ Pass Failure ]
 crbug.com/990918 virtual/gpu/fast/canvas/canvas-composite-shadow.html [ Pass Failure ]
-crbug.com/990918 virtual/gpu/fast/canvas/canvas-shadow.html [ Pass Failure ]
 
 # Sheriff failures 2017-09-21
 crbug.com/767469 http/tests/navigation/start-load-during-provisional-loader-detach.html [ Pass Failure ]
@@ -4949,9 +4947,6 @@ crbug.com/785179 [ Win7 Debug ] http/tests/devtools/console/console-viewport-sti
 
 # Sheriff failures 2017-11-16
 crbug.com/785980 [ Win ] http/tests/devtools/network/network-xhr-same-url-as-main-resource.js [ Failure Pass ]
-
-# Sheriff failures 2017-11-29
-crbug.com/786641 virtual/gpu/fast/canvas/OffscreenCanvas-2d-imageSmoothing.html [ Pass Failure Timeout ]
 
 # Sheriff failures 2017-12-04
 crbug.com/667560 http/tests/devtools/elements/styles-4/inline-style-sourcemap.js [ Pass Failure ]
@@ -5205,7 +5200,6 @@ crbug.com/785955 http/tests/credentialmanager/tools/virtual-authenticator-enviro
 # Sheriff 2018-04-11
 crbug.com/831796 fast/events/autoscroll-in-textfield.html [ Failure Pass ]
 crbug.com/831673 http/tests/devtools/reveal-objects.js [ Pass Timeout ]
-crbug.com/831496 virtual/gpu/fast/canvas/fillrect_gradient.html [ Pass Timeout ]
 crbug.com/829952 fast/webgl/texImage-imageBitmap-from-image-resize.html [ Pass Timeout ]
 
 crbug.com/832274 [ Linux ] fast/forms/search/search-appearance-basic.html [ Pass Failure ]
@@ -5495,7 +5489,6 @@ crbug.com/922951 virtual/text-antialias/international/inline-plaintext-relayout-
 crbug.com/922951 http/tests/cache/subresource-fragment-identifier.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/devtools/tracing/timeline-network-received-data.js [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/history/back-to-post.html [ Failure Pass Timeout Crash ]
-crbug.com/922951 http/tests/security/offscreencanvas-placeholder-read-blocked-no-crossorigin.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/security/cookies/basic.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 http/tests/webaudio/autoplay-crossorigin.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 media/controls/overflow-menu-hide-on-click-outside-stoppropagation.html [ Failure Pass Timeout Crash ]
@@ -5504,8 +5497,6 @@ crbug.com/922951 media/controls/overflow-menu-toggle-class-for-animation.html [ 
 crbug.com/922951 virtual/audio-service/media/controls/overflow-menu-hide-on-click-outside-stoppropagation.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 virtual/audio-service/media/controls/overflow-menu-hide-on-click-outside.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 virtual/audio-service/media/controls/overflow-menu-toggle-class-for-animation.html [ Failure Pass Timeout Crash ]
-crbug.com/922951 virtual/gpu/fast/canvas/OffscreenCanvas-MessageChannel-transfer.html [ Failure Pass Timeout Crash ]
-crbug.com/922951 virtual/gpu/fast/canvas/color-space/canvas-drawImage-offscreenCanvas.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 virtual/prefer_compositing_to_lcd_text/scrollbars/resize-scales-with-dpi-150.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 virtual/scalefactor150/fast/events/synthetic-events/tap-on-scaled-screen.html [ Failure Pass Timeout Crash ]
 crbug.com/922951 virtual/threaded/http/tests/devtools/tracing/frame-model-instrumentation.js [ Failure Pass Timeout Crash ]
@@ -5793,9 +5784,6 @@ crbug.com/971262 http/tests/devtools/profiler/live-line-level-heap-profile.js [ 
 crbug.com/971319 [ Mac ] media/audio-garbage-collect.html [ Pass Timeout ]
 crbug.com/971319 [ Mac ] virtual/audio-service/media/audio-garbage-collect.html [ Pass Timeout ]
 
-# Sheriff 2019-06-06
-crbug.com/971612 fast/canvas/OffscreenCanvas-MessageChannel-transfer.html [ Pass Failure ]
-
 # Sheriff 2019-06-13
 crbug.com/973692 [ Mac ] external/wpt/css/css-text/parsing/hyphens-computed.html [ Failure ]
 crbug.com/973726 [ Mac ] fast/css/large-list-of-rules-crash.html [ Pass Timeout ]
@@ -6045,8 +6033,6 @@ crbug.com/1010032 [ Win7 ] fast/writing-mode/Kusa-Makura-background-canvas.html 
 crbug.com/1010170 [ Mac ] media/video-played-reset.html [ Failure ]
 
 # Sheriff 2019-10-02
-crbug.com/1010472 [ Linux Debug ] fast/canvas/color-space/canvas-drawImage-offscreenCanvas.html [ Timeout Pass ]
-crbug.com/1010472 [ Mac Debug ] fast/canvas/color-space/canvas-drawImage-offscreenCanvas.html [ Timeout Pass ]
 crbug.com/1010483 [ Win ] fast/parser/residual-style-dom.html [ Crash Pass ]
 crbug.com/1010483 [ Win ] fast/parser/residual-style-hang.html [ Crash Pass ]
 crbug.com/1010483 [ Win ] fast/selectors/specificity-overflow.html [ Crash Pass ]
@@ -6464,9 +6450,6 @@ crbug.com/1047420 [ Mac ] http/tests/devtools/persistence/persistence-move-break
 
 crbug.com/1049454 external/wpt/service-workers/service-worker/windowclient-navigate.https.html [ Pass Timeout ]
 
-# Sheriff 2020-02-10
-crbug.com/1050306 [ Fuchsia ] virtual/gpu/fast/canvas/canvas-filter-frameless-document.html [ Crash Pass Timeout ]
-
 # Swiftshader issue.
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-innerwidth.html [ Crash Timeout ]
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-screeny.html [ Crash Timeout ]
@@ -6644,8 +6627,6 @@ crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Fa
 crbug.com/1061043 fast/plugins/keypress-event.html [ Pass Failure ]
 crbug.com/1061097 http/tests/security/promise-access-control-allow.htm [ Pass Failure ]
 crbug.com/1061131 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/middle-click-autoscroll-latching-clicked-node.html [ Pass Timeout ]
-crbug.com/1061131 [ Win ] fast/canvas/toBlob-in-detached-document.html [ Pass Crash ]
-crbug.com/1061131 [ Mac ] fast/canvas/toBlob-in-detached-document.html [ Pass Crash ]
 crbug.com/1061131 [ Mac ] editing/selection/replaced-boundaries-1.html [ Pass Failure ]
 
 crbug.com/1058888 [ Linux ] animations/animationworklet/peek-updated-composited-property-on-main.html [ Pass Failure ]
