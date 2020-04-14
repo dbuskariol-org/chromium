@@ -2195,6 +2195,7 @@ if (!is_android) {
         "../browser/chromeos/login/hid_detection_browsertest.cc",
         "../browser/chromeos/login/kiosk_browsertest.cc",
         "../browser/chromeos/login/lock/fingerprint_unlock_browsertest.cc",
+        "../browser/chromeos/login/lock/lock_screen_browsertest.cc",
         "../browser/chromeos/login/lock/screen_locker_browsertest.cc",
         "../browser/chromeos/login/lock/screen_locker_tester.cc",
         "../browser/chromeos/login/lock/screen_locker_tester.h",
