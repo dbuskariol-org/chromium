@@ -5,8 +5,7 @@
 #include "content/shell/test_runner/gc_controller.h"
 
 #include "base/bind.h"
-#include "content/shell/test_runner/test_interfaces.h"
-#include "content/shell/test_runner/web_test_delegate.h"
+#include "content/shell/renderer/web_test/blink_test_runner.h"
 #include "gin/arguments.h"
 #include "gin/handle.h"
 #include "gin/object_template_builder.h"
@@ -19,7 +18,7 @@ namespace content {
 gin::WrapperInfo GCController::kWrapperInfo = {gin::kEmbedderNativeGin};
 
 // static
-void GCController::Install(TestInterfaces* interfaces,
+void GCController::Install(BlinkTestRunner* blink_test_runner,
                            blink::WebLocalFrame* frame) {
   v8::Isolate* isolate = blink::MainThreadIsolate();
   v8::HandleScope handle_scope(isolate);
@@ -30,7 +29,7 @@ void GCController::Install(TestInterfaces* interfaces,
   v8::Context::Scope context_scope(context);
 
   gin::Handle<GCController> controller =
-      gin::CreateHandle(isolate, new GCController(interfaces));
+      gin::CreateHandle(isolate, new GCController(blink_test_runner));
   if (controller.IsEmpty())
     return;
   v8::Local<v8::Object> global = context->Global();
@@ -40,8 +39,8 @@ void GCController::Install(TestInterfaces* interfaces,
       .Check();
 }
 
-GCController::GCController(TestInterfaces* interfaces)
-    : interfaces_(interfaces) {}
+GCController::GCController(BlinkTestRunner* blink_test_runner)
+    : blink_test_runner_(blink_test_runner) {}
 
 GCController::~GCController() = default;
 
@@ -79,9 +78,8 @@ void GCController::AsyncCollectAll(const gin::Arguments& args) {
   v8::UniquePersistent<v8::Function> func(
       args.isolate(), v8::Local<v8::Function>::Cast(args.PeekNext()));
 
-  CHECK(interfaces_->GetDelegate());
   CHECK(!func.IsEmpty());
-  interfaces_->GetDelegate()->PostTask(
+  blink_test_runner_->PostTask(
       base::BindOnce(&GCController::AsyncCollectAllWithEmptyStack,
                      base::Unretained(this), std::move(func)));
 }
