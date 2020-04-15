@@ -3258,9 +3258,6 @@ crbug.com/626703 [ Win ] external/wpt/content-dpr/content-dpr-various-elements.h
 crbug.com/626703 [ Linux ] external/wpt/websockets/opening-handshake/005.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/websockets/opening-handshake/005.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/websockets/opening-handshake/005.html [ Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/blob-data.https.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/blob-data.https.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/blob-data.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-tokenization-top-left.html [ Timeout ]
 crbug.com/626703 [ Linux ] virtual/omt-worker-fetch/external/wpt/workers/abrupt-completion.html [ Timeout ]
 crbug.com/626703 [ Mac ] virtual/omt-worker-fetch/external/wpt/workers/abrupt-completion.html [ Timeout ]
@@ -6573,6 +6570,9 @@ crbug.com/1058137 virtual/threaded/http/tests/devtools/tracing/timeline-paint/ti
 
 # Ecosystem-Infra Sheriff 2020-03-04
 crbug.com/1058403 external/wpt/webaudio/the-audio-api/the-audioworklet-interface/suspended-context-messageport.https.html [ Failure ]
+
+# Ecosystem-Infra Sheriff 2020-04-15
+crbug.com/1070995 external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/blob-data.https.html [ Pass Failure Timeout ]
 
 crbug.com/1057020 [ Fuchsia ] http/tests/streams/chromium/get-reader-byob.html [ Pass Timeout ]
 
