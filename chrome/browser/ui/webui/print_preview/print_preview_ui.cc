@@ -333,10 +333,7 @@ void AddPrintPreviewFlags(content::WebUIDataSource* source, Profile* profile) {
 }
 
 void SetupPrintPreviewPlugin(content::WebUIDataSource* source) {
-  static constexpr struct {
-    const char* path;
-    int id;
-  } kPdfResources[] = {
+  static constexpr webui::ResourcePath kPdfResources[] = {
     {"pdf/browser_api.js", IDR_PDF_BROWSER_API_JS},
     {"pdf/constants.js", IDR_PDF_CONSTANTS_JS},
     {"pdf/controller.js", IDR_PDF_CONTROLLER_JS},
@@ -374,9 +371,7 @@ void SetupPrintPreviewPlugin(content::WebUIDataSource* source) {
     {"pdf/viewport_scroller.js", IDR_PDF_VIEWPORT_SCROLLER_JS},
     {"pdf/zoom_manager.js", IDR_PDF_ZOOM_MANAGER_JS},
   };
-  for (const auto& resource : kPdfResources) {
-    source->AddResourcePath(resource.path, resource.id);
-  }
+  webui::AddResourcePathsBulk(source, kPdfResources);
 
   source->SetRequestFilter(base::BindRepeating(&ShouldHandleRequestCallback),
                            base::BindRepeating(&HandleRequestCallback));
