@@ -1056,6 +1056,12 @@ bool IsCustomPropertyHandle(const PropertyHandle& property) {
   return property.IsCSSCustomProperty();
 }
 
+bool IsFontAffectingPropertyHandle(const PropertyHandle& property) {
+  if (property.IsCSSCustomProperty() || !property.IsCSSProperty())
+    return false;
+  return property.GetCSSProperty().AffectsFont();
+}
+
 // TODO(alancutter): CSS properties and presentation attributes may have
 // identical effects. By grouping them in the same set we introduce a bug where
 // arbitrary hash iteration will determine the order the apply in and thus which
@@ -1457,6 +1463,13 @@ bool CSSAnimations::IsAnimatingCustomProperties(
   return element_animations &&
          element_animations->GetEffectStack().AffectsProperties(
              IsCustomPropertyHandle);
+}
+
+bool CSSAnimations::IsAnimatingFontAffectingProperties(
+    const ElementAnimations* element_animations) {
+  return element_animations &&
+         element_animations->GetEffectStack().AffectsProperties(
+             IsFontAffectingPropertyHandle);
 }
 
 bool CSSAnimations::IsAnimatingRevert(
