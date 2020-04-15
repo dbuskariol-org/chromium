@@ -6,6 +6,7 @@
 #define CONTENT_SHELL_TEST_RUNNER_GC_CONTROLLER_H_
 
 #include "base/macros.h"
+#include "base/memory/weak_ptr.h"
 #include "gin/wrappable.h"
 
 namespace blink {
@@ -17,13 +18,11 @@ class Arguments;
 }
 
 namespace content {
-class BlinkTestRunner;
 
 class GCController : public gin::Wrappable<GCController> {
  public:
   static gin::WrapperInfo kWrapperInfo;
-  static void Install(BlinkTestRunner* blink_test_runner,
-                      blink::WebLocalFrame* frame);
+  static void Install(blink::WebLocalFrame* frame);
 
  private:
   // In the first GC cycle, a weak callback of the DOM wrapper is called back
@@ -34,7 +33,7 @@ class GCController : public gin::Wrappable<GCController> {
   // that are chained. Seven GC cycles look enough in most tests.
   static constexpr int kNumberOfGCsForFullCollection = 7;
 
-  explicit GCController(BlinkTestRunner* blink_test_runner);
+  explicit GCController(blink::WebLocalFrame* frame);
   ~GCController() override;
 
   // gin::Wrappable.
@@ -49,7 +48,8 @@ class GCController : public gin::Wrappable<GCController> {
   void AsyncCollectAllWithEmptyStack(
       v8::UniquePersistent<v8::Function> callback);
 
-  BlinkTestRunner* blink_test_runner_;
+  blink::WebLocalFrame* const frame_;
+  base::WeakPtrFactory<GCController> weak_ptr_factory_{this};
 
   DISALLOW_COPY_AND_ASSIGN(GCController);
 };

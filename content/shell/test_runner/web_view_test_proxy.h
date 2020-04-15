@@ -91,7 +91,7 @@ class WebViewTestProxy : public content::RenderViewImpl {
   TestRunnerForSpecificView* view_test_runner() { return &view_test_runner_; }
 
   void Reset();
-  void BindTo(blink::WebLocalFrame* frame);
+  void Install(blink::WebLocalFrame* frame);
 
  private:
   // RenderViewImpl has no public destructor.

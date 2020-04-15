@@ -249,7 +249,7 @@ GamepadController::GamepadController() {
   Reset();
 }
 
-GamepadController::~GamepadController() {}
+GamepadController::~GamepadController() = default;
 
 void GamepadController::Reset() {
   memset(gamepads_, 0, sizeof(*gamepads_));

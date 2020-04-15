@@ -14,7 +14,6 @@
 #include "base/strings/stringprintf.h"
 #include "base/values.h"
 #include "content/shell/test_runner/gamepad_controller.h"
-#include "content/shell/test_runner/gc_controller.h"
 #include "content/shell/test_runner/test_runner.h"
 #include "content/shell/test_runner/text_input_controller.h"
 #include "content/shell/test_runner/web_view_test_proxy.h"
@@ -46,10 +45,8 @@ void TestInterfaces::SetMainView(blink::WebView* web_view) {
   test_runner_->SetMainView(web_view);
 }
 
-void TestInterfaces::BindTo(blink::WebLocalFrame* frame) {
+void TestInterfaces::Install(blink::WebLocalFrame* frame) {
   gamepad_controller_->Install(frame);
-  // TODO(danakj): Pass the frame's renderview's BlinkTestRunner.
-  GCController::Install(GetFirstBlinkTestRunner(), frame);
 }
 
 void TestInterfaces::ResetTestHelperControllers() {

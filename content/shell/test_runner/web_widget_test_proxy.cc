@@ -164,7 +164,7 @@ void WebWidgetTestProxy::Reset() {
   UseSynchronousResizeModeForTesting(false);
 }
 
-void WebWidgetTestProxy::BindTo(blink::WebLocalFrame* frame) {
+void WebWidgetTestProxy::Install(blink::WebLocalFrame* frame) {
   event_sender_.Install(frame);
 }
 

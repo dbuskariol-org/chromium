@@ -16,6 +16,7 @@
 #include "content/shell/renderer/web_test/blink_test_runner.h"
 #include "content/shell/test_runner/accessibility_controller.h"
 #include "content/shell/test_runner/event_sender.h"
+#include "content/shell/test_runner/gc_controller.h"
 #include "content/shell/test_runner/mock_screen_orientation_client.h"
 #include "content/shell/test_runner/test_interfaces.h"
 #include "content/shell/test_runner/test_plugin.h"
@@ -507,9 +508,12 @@ void WebFrameTestClient::DidClearWindowObject() {
       web_frame_test_proxy_->GetLocalRootWebWidgetTestProxy();
 
   blink::WebLocalFrame* frame = web_frame_test_proxy_->GetWebFrame();
-  interfaces->BindTo(frame);
-  web_view_test_proxy_->BindTo(frame);
-  web_widget_test_proxy->BindTo(frame);
+  // These calls will install the various JS bindings for web tests into the
+  // frame before JS has a chance to run.
+  GCController::Install(frame);
+  interfaces->Install(frame);
+  web_view_test_proxy_->Install(frame);
+  web_widget_test_proxy->Install(frame);
 }
 
 blink::WebEffectiveConnectionType

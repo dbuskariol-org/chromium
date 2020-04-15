@@ -29,7 +29,7 @@ class TestInterfaces {
   ~TestInterfaces();
 
   void SetMainView(blink::WebView* web_view);
-  void BindTo(blink::WebLocalFrame* frame);
+  void Install(blink::WebLocalFrame* frame);
   void ResetTestHelperControllers();
   void ResetAll();
   bool TestIsRunning();
