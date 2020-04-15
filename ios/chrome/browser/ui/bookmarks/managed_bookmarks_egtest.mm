@@ -78,8 +78,8 @@ void LongPressBookmarkNodeWithLabel(NSString* bookmark_node_label) {
 }
 
 void VerifyBookmarkContextMenuNil() {
-  [[EarlGrey
-      selectElementWithMatcher:grey_accessibilityID(@"bookmark_context_menu")]
+  [[EarlGrey selectElementWithMatcher:grey_accessibilityID(
+                                          kBookmarkHomeContextMenuIdentifier)]
       assertWithMatcher:grey_nil()];
 }
 

@@ -1595,7 +1595,7 @@ std::vector<GURL> GetUrlsToOpen(const std::vector<const BookmarkNode*>& nodes) {
      forMultipleBookmarkURLs:(const std::set<const BookmarkNode*>)nodes {
   __weak BookmarkHomeViewController* weakSelf = self;
   coordinator.alertController.view.accessibilityIdentifier =
-      @"bookmark_context_menu";
+      kBookmarkHomeContextMenuIdentifier;
 
   [coordinator
       addItemWithTitle:l10n_util::GetNSString(
@@ -1634,7 +1634,7 @@ std::vector<GURL> GetUrlsToOpen(const std::vector<const BookmarkNode*>& nodes) {
   __weak BookmarkHomeViewController* weakSelf = self;
   std::string urlString = node->url().possibly_invalid_spec();
   coordinator.alertController.view.accessibilityIdentifier =
-      @"bookmark_context_menu";
+      kBookmarkHomeContextMenuIdentifier;
 
   [coordinator addItemWithTitle:l10n_util::GetNSString(
                                     IDS_IOS_BOOKMARK_CONTEXT_MENU_EDIT)
@@ -1679,7 +1679,7 @@ std::vector<GURL> GetUrlsToOpen(const std::vector<const BookmarkNode*>& nodes) {
      forSingleBookmarkFolder:(const BookmarkNode*)node {
   __weak BookmarkHomeViewController* weakSelf = self;
   coordinator.alertController.view.accessibilityIdentifier =
-      @"bookmark_context_menu";
+      kBookmarkHomeContextMenuIdentifier;
 
   [coordinator addItemWithTitle:l10n_util::GetNSString(
                                     IDS_IOS_BOOKMARK_CONTEXT_MENU_EDIT_FOLDER)
@@ -1707,7 +1707,7 @@ std::vector<GURL> GetUrlsToOpen(const std::vector<const BookmarkNode*>& nodes) {
         (const std::set<const bookmarks::BookmarkNode*>)nodes {
   __weak BookmarkHomeViewController* weakSelf = self;
   coordinator.alertController.view.accessibilityIdentifier =
-      @"bookmark_context_menu";
+      kBookmarkHomeContextMenuIdentifier;
 
   [coordinator addItemWithTitle:l10n_util::GetNSString(
                                     IDS_IOS_BOOKMARK_CONTEXT_MENU_MOVE)
