@@ -1314,7 +1314,6 @@ EventSender::EventSender(WebWidgetTestProxy* web_widget_test_proxy)
 EventSender::~EventSender() {}
 
 void EventSender::Reset() {
-  DCHECK(current_drag_data_.IsNull());
   current_drag_data_.Reset();
   current_drag_effect_ = blink::kWebDragOperationNone;
   current_drag_effects_allowed_ = blink::kWebDragOperationNone;
