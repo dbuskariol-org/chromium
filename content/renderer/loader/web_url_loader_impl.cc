@@ -773,6 +773,10 @@ void WebURLLoaderImpl::Context::OnStartLoadingResponseBody(
     mojo::ScopedDataPipeConsumerHandle body) {
   if (client_)
     client_->DidStartLoadingResponseBody(std::move(body));
+
+  TRACE_EVENT_WITH_FLOW0(
+      "loading", "WebURLLoaderImpl::Context::OnStartLoadingResponseBody", this,
+      TRACE_EVENT_FLAG_FLOW_IN | TRACE_EVENT_FLAG_FLOW_OUT);
 }
 
 void WebURLLoaderImpl::Context::OnTransferSizeUpdated(int transfer_size_diff) {
