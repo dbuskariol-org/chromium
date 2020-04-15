@@ -71,6 +71,10 @@
         'args': [
           '--gtest_filter=TabTest.testTabContext',
         ],
+        'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
       },
       'content_browsertests': {
         'args': [
@@ -104,6 +108,10 @@
         'swarming': {
           'shards': 5,
         },
+        'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
       },
       'webview_instrumentation_test_apk': {
         'swarming': {
@@ -133,6 +141,10 @@
         'swarming': {
           'shards': 20,
         },
+        'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
       },
       'chrome_public_test_vr_apk': {
         'args': [
@@ -223,6 +235,10 @@
         'swarming': {
           'shards': 20,
         },
+        'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
         'test': 'chrome_public_test_apk',
       },
       'bf_cache_content_shell_test_apk': {
@@ -809,6 +825,10 @@
         'swarming': {
           'shards': 15,
          },
+         'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
       },
       'content_browsertests': {
         'swarming': {
@@ -2961,6 +2981,10 @@
         'args': [
           '--disable-features=NetworkServiceInProcess',
         ],
+        'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
         'test': 'chrome_public_test_apk',
       },
       'network_service_out_of_process_components_browsertests': {
@@ -3257,6 +3281,10 @@
         'swarming': {
           'shards': 20,
         },
+        'mixins': [
+          'chrome-gold-service-account',
+          'skia_gold_test',
+        ],
         'test': 'chrome_public_test_apk',
       },
       'site_per_process_components_browsertests': {
