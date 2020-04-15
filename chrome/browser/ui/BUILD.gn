@@ -4014,12 +4014,11 @@ jumbo_static_library("ui") {
       "views/plugin_vm/plugin_vm_installer_view.h",
     ]
     deps += [
-      # TODO(wutao): Put new icons resources to ash/public/cpp/vector_icons/
-      # when UX provides them.
       "//ash/app_list",
+      "//ash/assistant/model",
       "//ash/public/cpp",
       "//ash/public/cpp/app_list/vector_icons",
-      "//ash/resources/vector_icons",
+      "//ash/public/cpp/vector_icons",
       "//chrome/browser/chromeos/crostini:crostini_installer_types_mojom",
       "//chrome/browser/ui/app_list/search/cros_action_history:cros_action_proto",
       "//chrome/browser/ui/app_list/search/search_result_ranker:app_launch_event_logger_proto",
