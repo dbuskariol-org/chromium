@@ -39,6 +39,7 @@
 #import "ios/web/public/web_state_observer_bridge.h"
 #import "ios/web/public/web_view_only/wk_web_view_configuration_util.h"
 #import "ios/web_view/internal/autofill/cwv_autofill_controller_internal.h"
+#import "ios/web_view/internal/autofill/web_view_autofill_client_ios.h"
 #import "ios/web_view/internal/cwv_back_forward_list_internal.h"
 #import "ios/web_view/internal/cwv_favicon_internal.h"
 #import "ios/web_view/internal/cwv_html_element_internal.h"
@@ -634,6 +635,8 @@ BOOL gChromeLongPressAndForceTouchHandlingEnabled = YES;
 }
 
 - (CWVAutofillController*)newAutofillController {
+  auto autofillClient = autofill::WebViewAutofillClientIOS::Create(
+      _webState.get(), _configuration.browserState);
   AutofillAgent* autofillAgent = [[AutofillAgent alloc]
       initWithPrefService:_configuration.browserState->GetPrefs()
                  webState:_webState.get()];
@@ -660,11 +663,13 @@ BOOL gChromeLongPressAndForceTouchHandlingEnabled = YES;
       passwordManagerClient:std::move(passwordManagerClient)
       passwordManagerDriver:std::move(passwordManagerDriver)];
 
-  return [[CWVAutofillController alloc] initWithWebState:_webState.get()
-                                           autofillAgent:autofillAgent
-                                       JSAutofillManager:JSAutofillManager
-                                     JSSuggestionManager:JSSuggestionManager
-                                      passwordController:passwordController];
+  return
+      [[CWVAutofillController alloc] initWithWebState:_webState.get()
+                                       autofillClient:std::move(autofillClient)
+                                        autofillAgent:autofillAgent
+                                    JSAutofillManager:JSAutofillManager
+                                  JSSuggestionManager:JSSuggestionManager
+                                   passwordController:passwordController];
 }
 
 #pragma mark - Preserving and Restoring State

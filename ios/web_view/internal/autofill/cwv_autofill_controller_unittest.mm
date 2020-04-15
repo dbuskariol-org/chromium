@@ -29,6 +29,7 @@
 #include "ios/web/public/test/web_task_environment.h"
 #include "ios/web/public/web_client.h"
 #import "ios/web_view/internal/autofill/cwv_autofill_suggestion_internal.h"
+#import "ios/web_view/internal/autofill/web_view_autofill_client_ios.h"
 #import "ios/web_view/internal/passwords/cwv_password_controller_fake.h"
 #import "ios/web_view/internal/passwords/web_view_password_manager_client.h"
 #import "ios/web_view/internal/passwords/web_view_password_manager_driver.h"
@@ -98,12 +99,16 @@ class CWVAutofillControllerTest : public TestWithLocaleAndResources {
         passwordManagerClient:std::move(passwordManagerClient)
         passwordManagerDriver:std::move(passwordManagerDriver)];
 
-    autofill_controller_ =
-        [[CWVAutofillController alloc] initWithWebState:&test_web_state_
-                                          autofillAgent:autofill_agent_
-                                      JSAutofillManager:js_autofill_manager_
-                                    JSSuggestionManager:js_suggestion_manager_
-                                     passwordController:password_controller_];
+    // TODO(crbug.com/1070657): Fake the dependencies of the autofill client.
+    auto autofill_client = autofill::WebViewAutofillClientIOS::Create(
+        &test_web_state_, &browser_state_);
+    autofill_controller_ = [[CWVAutofillController alloc]
+           initWithWebState:&test_web_state_
+             autofillClient:std::move(autofill_client)
+              autofillAgent:autofill_agent_
+          JSAutofillManager:js_autofill_manager_
+        JSSuggestionManager:js_suggestion_manager_
+         passwordController:password_controller_];
     test_form_activity_tab_helper_ =
         std::make_unique<autofill::TestFormActivityTabHelper>(&test_web_state_);
   }
