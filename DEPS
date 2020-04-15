@@ -280,10 +280,6 @@ vars = {
   # and whatever else without interference from each other.
   'android_sdk_sources_version': '4gxhM8E62bvZpQs7Q3d0DinQaW0RLCIefhXrQBFkNy8C',
   # Three lines of non-changing comments so that
-  # the commit queue can handle CLs rolling android_sdk_tools-lint_version
-  # and whatever else without interference from each other.
-  'android_sdk_tools-lint_version': '89hXqZYzCum3delB5RV7J_QyWkaRodqdtQS0s3LMh3wC',
-  # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
   'spv_tools_revision': 'c018fc6ae667b659c80b4357c20f6016ee3fe961',
@@ -750,10 +746,6 @@ deps = {
           {
               'package': 'chromium/third_party/android_sdk/public/sources/android-29',
               'version': Var('android_sdk_sources_version'),
-          },
-          {
-              'package': 'chromium/third_party/android_sdk/public/tools-lint',
-              'version': Var('android_sdk_tools-lint_version'),
           },
           {
               'package': 'chromium/third_party/android_sdk/public/cmdline-tools',
