@@ -1,7 +1,13 @@
 <!DOCTYPE html>
+<title>CSS Grid Layout Test: free space computation with flex lengths.</title>
+<link rel="author" title="Sergio Villar Senin" href="mailto:svillar@igalia.com">
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#algo-flex-tracks">
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#fr-unit">
+<link rel="help" href="https://bugs.webkit.org/show_bug.cgi?id=150359">
+<link rel="stylesheet" href="/css/support/grid.css">
+<link rel="stylesheet" href="/css/support/alignment.css">
+<meta name="assert" content="Test that free space is properly computed after computing fr tracks so that we could use it for content distribution." />
 
-<link href="resources/grid.css" rel="stylesheet">
-<link href="resources/grid-alignment.css" rel="stylesheet">
 <style>
 .freeSpaceForColumnsGrid {
     grid-template: 100% / minmax(20px, 0.7fr);
@@ -31,11 +37,11 @@
 
 </style>
 
-<script src="../../resources/check-layout.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 
 <body onload="checkLayout('.grid');">
-
-<p>This test checks that freeSpace is properly computed after computing fr tracks so that we could use it for content distribution</p>
 
 <p>Grid with justify-content: start.</p>
 <div class="container">
