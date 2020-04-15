@@ -6124,7 +6124,8 @@ crbug.com/1006759 http/tests/devtools/editor/php-highlighter.js [ Pass Failure ]
 crbug.com/1029941 [ Linux ] external/wpt/css/css-paint-api/background-image-alpha.https.html [ Failure ]
 crbug.com/1029941 [ Linux ] transforms/3d/point-mapping/3d-point-mapping-deep.html [ Failure ]
 crbug.com/1029941 [ Linux ] virtual/cascade/external/wpt/css/css-paint-api/background-image-alpha.https.html [ Failure ]
-crbug.com/1029941 [ Linux ] virtual/exotic-color-space/images/yuv-decode-eligible/color-profile-layer-filter.html [ Failure ]
+#Temporarily superceded by suppression for skbug.com/10139
+#crbug.com/1029941 [ Linux ] virtual/exotic-color-space/images/yuv-decode-eligible/color-profile-layer-filter.html [ Failure ]
 crbug.com/1029941 [ Linux ] virtual/off-main-thread-css-paint/external/wpt/css/css-paint-api/background-image-alpha.https.html [ Failure ]
 
 # Disabled for three-way merge after https://crrev.com/c/devtools/devtools-frontend/+/1934218 is submitted
@@ -6649,6 +6650,7 @@ skbug.com/10139 media/color-profile-video-seek-filter.html [ Pass Timeout Failur
 skbug.com/10139 virtual/audio-service/media/color-profile-video-seek-filter.html [ Pass Timeout Failure ]
 skbug.com/10139 virtual/gpu-rasterization/images/yuv-decode-eligible/color-profile-filter.html [ Pass Failure ]
 skbug.com/10139 virtual/gpu-rasterization-disable-yuv/images/yuv-decode-eligible/color-profile-filter.html [ Pass Failure ]
+skbug.com/10139 virtual/exotic-color-space/images/yuv-decode-eligible/color-profile-layer-filter.html [ Pass Failure ]
 
 # Test flakes
 crbug.com/1066716 http/tests/cache/zero-length-xhr.html [ Pass Timeout ]
