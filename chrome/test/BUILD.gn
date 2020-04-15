@@ -4106,6 +4106,7 @@ test("unit_tests") {
       "../browser/ui/passwords/bubble_controllers/auto_sign_in_bubble_controller_unittest.cc",
       "../browser/ui/passwords/bubble_controllers/generation_confirmation_bubble_controller_unittest.cc",
       "../browser/ui/passwords/bubble_controllers/items_bubble_controller_unittest.cc",
+      "../browser/ui/passwords/bubble_controllers/post_save_compromised_bubble_controller_unittest.cc",
       "../browser/ui/passwords/bubble_controllers/save_unsynced_credentials_locally_bubble_controller_unittest.cc",
       "../browser/ui/passwords/bubble_controllers/save_update_bubble_controller_unittest.cc",
       "../browser/ui/passwords/bubble_controllers/save_update_with_account_store_bubble_controller_unittest.cc",

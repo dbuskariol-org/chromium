@@ -1086,6 +1086,8 @@ jumbo_static_library("ui") {
       "passwords/bubble_controllers/items_bubble_controller.h",
       "passwords/bubble_controllers/password_bubble_controller_base.cc",
       "passwords/bubble_controllers/password_bubble_controller_base.h",
+      "passwords/bubble_controllers/post_save_compromised_bubble_controller.cc",
+      "passwords/bubble_controllers/post_save_compromised_bubble_controller.h",
       "passwords/bubble_controllers/save_unsynced_credentials_locally_bubble_controller.cc",
       "passwords/bubble_controllers/save_unsynced_credentials_locally_bubble_controller.h",
       "passwords/bubble_controllers/save_update_bubble_controller.cc",

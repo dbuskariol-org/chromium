@@ -50374,6 +50374,8 @@ Called by update_net_trust_anchors.py.-->
   <int value="9"
       label="Opened automatically / Offering to save unsynced passwords
              locally"/>
+  <int value="10"
+      label="Opened automatically / Notification about compromised passwords"/>
 </enum>
 
 <enum name="PasswordBubbleSignInPromoDismissalReason">
