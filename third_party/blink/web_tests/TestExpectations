@@ -6667,3 +6667,6 @@ crbug.com/1069714 [ Mac10.13 ] external/wpt/webrtc/RTCRtpSender-replaceTrack.htt
 
 # Sheriff 2020-04-10
 crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Failure Timeout ]
+
+# QUIC reordered versions to prefer IETF QUIC
+crbug.com/1070747 [ Release ] external/wpt/webrtc-quic/* [ Skip ]
