@@ -647,6 +647,14 @@ ci.android_fyi_builder(
 )
 
 ci.android_fyi_builder(
+    name = 'android-weblayer-pie-x86-fyi-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'weblayer',
+        short_name = 'p-x86-rel',
+    ),
+)
+
+ci.android_fyi_builder(
     name = 'Android WebView P Blink-CORS FYI (rel)',
     console_view_entry = ci.console_view_entry(
         category = 'webview',

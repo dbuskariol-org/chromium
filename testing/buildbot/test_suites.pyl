@@ -3563,6 +3563,12 @@
       },
     },
 
+    'weblayer_android_x86_gtests': {
+      # TODO(crbug/1041619): Add weblayer skew tests here.
+      'weblayer_instrumentation_test_apk': {
+      },
+    },
+
     'weblayer_gtests': {
       'weblayer_browsertests': {
       },
@@ -3930,6 +3936,10 @@
       # Experimental tests end here.
       'webview_cts_tests_gtest',
       'webview_ui_instrumentation_tests',
+    ],
+
+    'android_weblayer_x86_gtests': [
+      'weblayer_android_x86_gtests',
     ],
 
     'android_wpt_scripts': [
