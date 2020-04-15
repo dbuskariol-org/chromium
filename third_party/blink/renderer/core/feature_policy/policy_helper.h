@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_FEATURE_POLICY_FEATURE_POLICY_HELPER_H_
-#define THIRD_PARTY_BLINK_RENDERER_CORE_FEATURE_POLICY_FEATURE_POLICY_HELPER_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_CORE_FEATURE_POLICY_POLICY_HELPER_H_
+#define THIRD_PARTY_BLINK_RENDERER_CORE_FEATURE_POLICY_POLICY_HELPER_H_
 
 #include "third_party/blink/public/common/feature_policy/feature_policy.h"
 #include "third_party/blink/public/mojom/feature_policy/document_policy_feature.mojom-blink-forward.h"
@@ -48,4 +48,4 @@ bool DisabledByOriginTrial(mojom::blink::DocumentPolicyFeature,
                            FeatureContext*);
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_FEATURE_POLICY_FEATURE_POLICY_HELPER_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_CORE_FEATURE_POLICY_POLICY_HELPER_H_

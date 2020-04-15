@@ -9,7 +9,7 @@ from make_runtime_features_utilities import origin_trials
 
 
 class FeaturePolicyFeatureWriter(json5_generator.Writer):
-    file_basename = 'feature_policy_helper'
+    file_basename = 'policy_helper'
 
     def __init__(self, json5_file_path, output_dir):
         super(FeaturePolicyFeatureWriter, self).__init__(
