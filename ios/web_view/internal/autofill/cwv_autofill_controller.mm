@@ -314,20 +314,6 @@ fetchNonPasswordSuggestionsForFormWithName:(NSString*)formName
   }
 }
 
-- (BOOL)removeSuggestion:(CWVAutofillSuggestion*)suggestion {
-  // Identifier is greater than 0 for Autofill suggestions.
-  DCHECK_LT(0, suggestion.formSuggestion.identifier);
-
-  web::WebFrame* frame = web::GetWebFrameWithId(
-      _webState, base::SysNSStringToUTF8(suggestion.frameID));
-  autofill::AutofillManager* manager = [self autofillManagerForFrame:frame];
-  if (!manager) {
-    return NO;
-  }
-  return manager->RemoveAutofillProfileOrCreditCard(
-      suggestion.formSuggestion.identifier);
-}
-
 - (void)focusPreviousField {
   [_JSSuggestionManager
       selectPreviousElementInFrameWithID:_lastFocusFormActivityWebFrameID];
@@ -344,16 +330,6 @@ fetchNonPasswordSuggestionsForFormWithName:(NSString*)formName
       fetchPreviousAndNextElementsPresenceInFrameWithID:
           _lastFocusFormActivityWebFrameID
                                       completionHandler:completionHandler];
-}
-
-#pragma mark - Utility Methods
-
-- (autofill::AutofillManager*)autofillManagerForFrame:(web::WebFrame*)frame {
-  if (!_webState || !frame) {
-    return nil;
-  }
-  return autofill::AutofillDriverIOS::FromWebStateAndWebFrame(_webState, frame)
-      ->autofill_manager();
 }
 
 #pragma mark - CWVAutofillClientIOSBridge
