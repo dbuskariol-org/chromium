@@ -155,4 +155,8 @@ bool PreferredAppsList::IsInitialized() {
   return initialized_;
 }
 
+const PreferredAppsList::PreferredApps& PreferredAppsList::GetReference() {
+  return preferred_apps_;
+}
+
 }  // namespace apps
