@@ -3255,14 +3255,6 @@ To change this setting, <ph name="BEGIN_LINK">&lt;resetlink&gt;</ph>reset sync<p
         Unsupported number of Chrome instances.
       </message>
 
-      <!-- Override URL -->
-      <message name="IDS_BLOCKED_NAVIGATION_WARNING" desc="Warning message added to dev tools console when navigation to a given URL is blocked.">
-        Navigation is blocked: <ph name="URL">%1$s<ex>intent://abcd</ex></ph>
-      </message>
-      <message name="IDS_UNREACHABLE_NAVIGATION_WARNING" desc="Warning message added to dev tools console when navigation to a given URL is unreachable.">
-        Navigation is unreachable: <ph name="URL">%1$s<ex>intent://abcd</ex></ph>
-      </message>
-
       <message name="IDS_CLOSE_TAB" desc="Context menu option that allows the user to close the selected tab.">
         Close tab
       </message>

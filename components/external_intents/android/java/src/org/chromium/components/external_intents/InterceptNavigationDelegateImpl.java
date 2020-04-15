@@ -2,21 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.tab;
+package org.chromium.components.external_intents;
 
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ContextUtils;
+import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.task.PostTask;
-import org.chromium.chrome.R;
-import org.chromium.components.external_intents.AuthenticatorNavigationInterceptor;
-import org.chromium.components.external_intents.ExternalNavigationHandler;
 import org.chromium.components.external_intents.ExternalNavigationHandler.OverrideUrlLoadingResult;
-import org.chromium.components.external_intents.ExternalNavigationParams;
-import org.chromium.components.external_intents.InterceptNavigationDelegateClient;
-import org.chromium.components.external_intents.RedirectHandlerImpl;
 import org.chromium.components.navigation_interception.InterceptNavigationDelegate;
 import org.chromium.components.navigation_interception.NavigationParams;
 import org.chromium.content_public.browser.NavigationController;
@@ -33,6 +28,7 @@ import org.chromium.content_public.common.ConsoleMessageLevel;
  * hence can cause UAF error. It should be done in an asynchronous fashion to avoid it.
  * See https://crbug.com/732260.
  */
+@JNINamespace("external_intents")
 public class InterceptNavigationDelegateImpl implements InterceptNavigationDelegate {
     private final AuthenticatorNavigationInterceptor mAuthenticatorHelper;
     private InterceptNavigationDelegateClient mClient;
@@ -50,8 +46,7 @@ public class InterceptNavigationDelegateImpl implements InterceptNavigationDeleg
     /**
      * Default constructor of {@link InterceptNavigationDelegateImpl}.
      */
-    @VisibleForTesting
-    InterceptNavigationDelegateImpl(InterceptNavigationDelegateClient client) {
+    public InterceptNavigationDelegateImpl(InterceptNavigationDelegateClient client) {
         mClient = client;
         mAuthenticatorHelper = mClient.createAuthenticatorNavigationInterceptor();
         associateWithWebContents(mClient.getWebContents());
@@ -85,9 +80,8 @@ public class InterceptNavigationDelegateImpl implements InterceptNavigationDeleg
             return true;
         }
 
-        ExternalNavigationParams params = new ExternalNavigationParams.Builder(url, incognito)
-                .setOpenInNewTab(true)
-                .build();
+        ExternalNavigationParams params =
+                new ExternalNavigationParams.Builder(url, incognito).setOpenInNewTab(true).build();
         mLastOverrideUrlLoadingResult = mExternalNavHandler.shouldOverrideUrlLoading(params);
         return mLastOverrideUrlLoadingResult
                 != ExternalNavigationHandler.OverrideUrlLoadingResult.NO_OVERRIDE;
@@ -199,12 +193,10 @@ public class InterceptNavigationDelegateImpl implements InterceptNavigationDeleg
         WebContents webContents = mClient.getWebContents();
         if (mClearAllForwardHistoryRequired && webContents != null) {
             webContents.getNavigationController().pruneForwardEntries();
-        } else if (mShouldClearRedirectHistoryForTabClobbering
-                && webContents != null) {
+        } else if (mShouldClearRedirectHistoryForTabClobbering && webContents != null) {
             // http://crbug/479056: Even if we clobber the current tab, we want to remove
             // redirect history to be consistent.
-            NavigationController navigationController =
-                    webContents.getNavigationController();
+            NavigationController navigationController = webContents.getNavigationController();
             int indexBeforeRedirection =
                     mClient.getOrCreateRedirectHandler()
                             .getLastCommittedEntryIndexBeforeStartingNavigation();

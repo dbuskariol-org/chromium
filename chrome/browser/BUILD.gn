@@ -2577,7 +2577,6 @@ jumbo_static_library("browser") {
       "android/instantapps/instant_apps_settings.h",
       "android/intent_helper.cc",
       "android/intent_helper.h",
-      "android/intercept_navigation_delegate_impl.cc",
       "android/large_icon_bridge.cc",
       "android/large_icon_bridge.h",
       "android/locale/locale_manager.cc",

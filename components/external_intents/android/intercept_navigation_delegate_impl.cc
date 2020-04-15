@@ -2,10 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/android/chrome_jni_headers/InterceptNavigationDelegateImpl_jni.h"
+#include "components/external_intents/android/jni_headers/InterceptNavigationDelegateImpl_jni.h"
 #include "components/navigation_interception/intercept_navigation_delegate.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/web_contents.h"
+
+namespace external_intents {
 
 static void JNI_InterceptNavigationDelegateImpl_AssociateWithWebContents(
     JNIEnv* env,
@@ -19,3 +21,5 @@ static void JNI_InterceptNavigationDelegateImpl_AssociateWithWebContents(
       std::make_unique<navigation_interception::InterceptNavigationDelegate>(
           env, jdelegate, /*escape_external_handler_value=*/true));
 }
+
+}  // namespace external_intents
