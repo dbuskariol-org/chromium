@@ -112,6 +112,7 @@
 #include "net/url_request/url_request_test_util.h"
 #include "services/network/network_context.h"
 #include "services/network/network_service.h"
+#include "services/network/public/cpp/features.h"
 #include "services/network/public/mojom/cookie_manager.mojom.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "ui/gfx/favicon_size.h"
