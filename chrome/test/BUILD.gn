@@ -3694,6 +3694,7 @@ test("unit_tests") {
     "//components/safe_browsing/core:features",
     "//components/safe_browsing/core/db",
     "//components/safe_browsing/core/db:test_database_manager",
+    "//components/safe_search_api:test_support",
     "//components/schema_org/common:improved_mojom",
     "//components/services/patch/content",
     "//components/services/unzip/content",
