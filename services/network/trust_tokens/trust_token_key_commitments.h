@@ -46,6 +46,10 @@ class TrustTokenKeyCommitments : public TrustTokenKeyCommitmentGetter {
   // SuitableTrustTokenOrigin), searches for a key commitment result
   // corresponding to |origin|. Returns nullptr if |origin| is not suitable, or
   // if no commitment result is found.
+  //
+  // If commitments for |origin| were passed both through a prior call to |Set|
+  // and through the --additional-trust-token-key-commitments command-line
+  // switch, the commitments passed through the switch take precedence.
   void Get(const url::Origin& origin,
            base::OnceCallback<void(mojom::TrustTokenKeyCommitmentResultPtr)>
                done) const override;
@@ -53,7 +57,13 @@ class TrustTokenKeyCommitments : public TrustTokenKeyCommitmentGetter {
  private:
   base::flat_map<SuitableTrustTokenOrigin,
                  mojom::TrustTokenKeyCommitmentResultPtr>
-      map_;
+      commitments_;
+
+  // Additional commitments provided (for manual experimentation or testing)
+  // through the command-line switch.
+  const base::flat_map<SuitableTrustTokenOrigin,
+                       mojom::TrustTokenKeyCommitmentResultPtr>
+      additional_commitments_from_command_line_;
 };
 
 }  // namespace network
