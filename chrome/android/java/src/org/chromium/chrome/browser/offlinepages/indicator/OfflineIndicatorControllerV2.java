@@ -73,6 +73,9 @@ public class OfflineIndicatorControllerV2 implements ConnectivityDetector.Observ
     }
 
     public void destroy() {
-        mConnectivityDetector = null;
+        if (mConnectivityDetector != null) {
+            mConnectivityDetector.destroy();
+            mConnectivityDetector = null;
+        }
     }
 }
