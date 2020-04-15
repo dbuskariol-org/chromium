@@ -10,6 +10,7 @@
 #include "base/bind.h"
 #include "base/command_line.h"
 #include "base/cpu.h"
+#include "base/feature_list.h"
 #include "base/macros.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/metrics/histogram_macros.h"
@@ -19,6 +20,7 @@
 #include "base/task/post_task.h"
 #include "base/task/task_traits.h"
 #include "base/task/thread_pool.h"
+#include "base/threading/scoped_blocking_call.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
 #include "chrome/browser/about_flags.h"
@@ -69,6 +71,13 @@
 #endif  // defined(OS_WIN)
 
 namespace {
+
+// Feature flag to  control enabling recording of the IO jank metric. Will be
+// used to ensure recording the metric itself doesn't have adverse side-effects
+// on real performance. Assuming it doesn't, the metric will be recorded on 100%
+// of users.
+const base::Feature kRecordIOJankMetric{"RecordIOJankMetric",
+                                        base::FEATURE_DISABLED_BY_DEFAULT};
 
 void RecordMemoryMetrics();
 
@@ -670,6 +679,22 @@ void ChromeBrowserMainExtraPartsMetrics::PostBrowserStart() {
             g_browser_process->local_state()));
   }
 #endif  // !defined(OS_ANDROID)
+}
+
+void ChromeBrowserMainExtraPartsMetrics::PreMainMessageLoopRun() {
+  if (base::TimeTicks::IsConsistentAcrossProcesses() &&
+      base::FeatureList::IsEnabled(kRecordIOJankMetric)) {
+    // Enable I/O jank monitoring for the browser process.
+    base::EnableIOJankMonitoringForProcess(base::BindRepeating(
+        [](int janky_intervals_per_minute, int total_janks_per_minute) {
+          UMA_HISTOGRAM_COUNTS_100(
+              "Browser.Responsiveness.IOJankyIntervalsPerMinute",
+              janky_intervals_per_minute);
+          UMA_HISTOGRAM_COUNTS_1000(
+              "Browser.Responsiveness.IOJanksTotalPerMinute",
+              total_janks_per_minute);
+        }));
+  }
 }
 
 void ChromeBrowserMainExtraPartsMetrics::OnDisplayAdded(
