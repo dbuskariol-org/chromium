@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
-<link href="resources/grid.css" rel="stylesheet">
+<title>CSS Grid: Grid items and logical margins</title>
+<link rel="author" title="Javier Fernandez" href="mailto:jfernandez@igalia.com">
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#propdef-grid-template-columns">
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#propdef-grid-column">
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#propdef-grid-row">
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#grid-items">
+<link rel="match" href="grid-item-margins-and-writing-modes-001-ref.html">
+<meta name="assert" content="This test ensures that the border, margin, and padding
+combining with RTL direction and different writing-modes generate the proper layout."/>
+<link href="/css/support/grid.css" rel="stylesheet">
+<link href="/fonts/ahem.css"  rel="stylesheet"/>
 <style>
 .grid {
     grid-template-columns: 80px;
