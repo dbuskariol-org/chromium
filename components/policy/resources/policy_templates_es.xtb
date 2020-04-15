@@ -3360,7 +3360,7 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
 
           Si no se proporciona ningún parámetro, <ph name="PRODUCT_NAME" /> volverá a utilizar un nombre de biblioteca predeterminado.</translation>
 <translation id="5783009211970309878">Imprimir encabezados y pies de página</translation>
-<translation id="5783576706065107606">Permite habilitar las mitigaciones de comprobación de <ph name="CORS" /> en la nueva implementación de <ph name="CORS" />. Así, las extensiones continúan siendo compatibles y <ph name="PRODUCT_NAME" /> puede enviar encabezados definidos sin comprobaciones de <ph name="CORS" />.
+<translation id="5783576706065107606">Habilita las mitigaciones de comprobación de <ph name="CORS" /> en la nueva implementación de <ph name="CORS" />. Así, las extensiones continúan siendo compatibles y <ph name="PRODUCT_NAME" /> puede enviar encabezados definidos sin comprobaciones de <ph name="CORS" />.
 
       Si esta lista se deja vacía, <ph name="PRODUCT_NAME" /> intentará ejecutar las extensiones de forma compatible y no introducirá cambios de <ph name="API" /> en <ph name="PRODUCT_NAME" /> 79, tal y como se explica en <ph name="WEB_REQUEST_API_MANUAL" />.
 
@@ -3436,9 +3436,9 @@ Si esta política está configurada, el usuario no puede cambiarla y el acceso d
           La configuración de esta política no afecta a los clientes de acceso remoto, ya que siempre utilizan "chromoting-client.talkgadget.google.com" para acceder a TalkGadget.</translation>
 <translation id="5888171512889380367">Permite usar la implementación antigua de <ph name="CORS" /> en vez de la nueva implementación de <ph name="CORS" />.
 
-      Si se asigna el valor True a esta política, se usará la implementación antigua, la cual debería ser compatible con las versiones anteriores.
+      Si se asigna el valor Verdadero a esta política, se usará la implementación antigua, la cual debería ser compatible con las versiones anteriores.
 
-      Si se le asigna el valor False o no se establece, se usará la nueva implementación, lo que podría causar distintos problemas de compatibilidad según la empresa.
+      Si se le asigna el valor Falso o no se establece, se usará la nueva implementación, lo que podría causar distintos problemas de compatibilidad según la empresa.
 
       Esta política se eliminará después de dos hitos.
 

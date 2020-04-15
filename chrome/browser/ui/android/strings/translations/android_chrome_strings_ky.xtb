@@ -436,7 +436,6 @@
 <translation id="4242533952199664413">Жөндөөлөрдү ачуу</translation>
 <translation id="4250229828105606438">Скриншот</translation>
 <translation id="4256782883801055595">Ачык программа уруксаттамалары</translation>
-<translation id="4259722352634471385">Чабыттоо бөгөттөлгөн: <ph name="URL" /></translation>
 <translation id="4269820728363426813">Шилтеме дарегин көчүрүү</translation>
 <translation id="4275663329226226506">Медиа</translation>
 <translation id="4278390842282768270">Уруксат берилген</translation>
@@ -755,7 +754,7 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="6534565668554028783">Google'дун жооп берүүсү өтө узакка созулуп кетти</translation>
 <translation id="6538442820324228105"><ph name="GBS" /> Гб жүктөлүп алынды</translation>
 <translation id="6539092367496845964">Бир жерден ката кетти. Бир аздан кийин кайталап көрүңүз.</translation>
-<translation id="6545017243486555795">Бардык дайындарды тазалоо</translation>
+<translation id="6545017243486555795">Бардык дайын-даректерди өчүрүү</translation>
 <translation id="6545864417968258051">Bluetooth түзмөктөрүн издөө</translation>
 <translation id="6560414384669816528">Sogou менен издөө</translation>
 <translation id="656065428026159829">Дагы көрүү</translation>
@@ -1067,7 +1066,6 @@ Google аккаунтуңуздун башка Google кызматтарынан
 <translation id="8942627711005830162">Башка терезеде ачуу</translation>
 <translation id="8951232171465285730">Chrome сизге <ph name="MEGABYTES" /> Мб үнөмдөп берди</translation>
 <translation id="8958424370300090006">Белгилүү бир сайттын cookie файлдарын бөгөттөө.</translation>
-<translation id="8959122750345127698">Чабыттоо жеткиликсиз: <ph name="URL" /></translation>
 <translation id="8965591936373831584">күтүүдө</translation>
 <translation id="8970887620466824814">Бир жерден ката кетти.</translation>
 <translation id="8972098258593396643">Демейки папкага жүктөлүп алынсынбы?</translation>

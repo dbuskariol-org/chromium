@@ -612,11 +612,11 @@
 <translation id="1805888043020974594">Servidor de impresión</translation>
 <translation id="1805967612549112634">Confirmar PIN</translation>
 <translation id="1806335016774576568">Cambiar a otra aplicación abierta</translation>
-<translation id="1809483812148634490">Las aplicaciones que hayas descargado de Google Play se eliminarán de este Chromebook.
+<translation id="1809483812148634490">Las aplicaciones que hayas descargado de Google Play se eliminarán de este Chromebook.
       <ph name="LINE_BREAKS1" />
       Es posible que también se elimine el contenido que hayas comprado, como películas, series de TV, música, libros u otras compras en la aplicación.
       <ph name="LINE_BREAKS2" />
-      Esto no afecta a las aplicaciones ni al contenido de otros dispositivos.</translation>
+      Esto no afecta a las aplicaciones ni al contenido en otros dispositivos.</translation>
 <translation id="1809734401532861917">Añadir mis marcadores, mi historial, mis contraseñas y otras opciones de configuración a <ph name="USER_EMAIL_ADDRESS" /></translation>
 <translation id="1813278315230285598">Servicios</translation>
 <translation id="18139523105317219">Nombre de parte EDI</translation>
@@ -687,7 +687,6 @@
 <translation id="189210018541388520">Abrir en pantalla completa</translation>
 <translation id="1892341345406963517">Hola, <ph name="PARENT_NAME" />:</translation>
 <translation id="189358972401248634">Otros idiomas</translation>
-<translation id="1895252664692693738">Tiempo restante: <ph name="TIME_LEFT" /></translation>
 <translation id="1895658205118569222">Cierre del navegador</translation>
 <translation id="1895934970388272448">Debes confirmar el registro de tu impresora para finalizar este proceso. Compruébalo ahora.</translation>
 <translation id="1899826437968063457">El complemento de VM necesita permiso para ejecutarse</translation>

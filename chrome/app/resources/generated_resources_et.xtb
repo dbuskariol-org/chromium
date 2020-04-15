@@ -687,7 +687,6 @@
 <translation id="189210018541388520">Ava täisekraanil</translation>
 <translation id="1892341345406963517">Tere, <ph name="PARENT_NAME" />!</translation>
 <translation id="189358972401248634">Teised keeled</translation>
-<translation id="1895252664692693738"><ph name="TIME_LEFT" /> jäänud</translation>
 <translation id="1895658205118569222">Sulgemine</translation>
 <translation id="1895934970388272448">Protsessi lõpetamiseks peate kinnitama registreerimise oma printeris. Vaadake kohe.</translation>
 <translation id="1899826437968063457">PluginVM vajab käitamiseks luba</translation>
@@ -4025,7 +4024,7 @@ kasutades juhtpaneeli funktsiooni <ph name="CONTROL_PANEL_APPLET_NAME" />.
 <translation id="6406708970972405507">Seaded – <ph name="SECTION_TITLE" /></translation>
 <translation id="6408118934673775994">Andmete lugemine ja muutmine veebisaidil <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> ja <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Pildifailid</translation>
-<translation id="6410328738210026208">Muuda kanalit ja Powerwashi</translation>
+<translation id="6410328738210026208">Muuda kanalit ja aktiveeri Powerwash</translation>
 <translation id="6410390304316730527">Google'i ohutu sirvimine kaitseb teid ründajate eest, kes võivad teid meelitada ohtlikele tegevustele, nagu pahatahtliku tarkvara installimine või isiklike andmete (nt paroolid, telefoninumbrid või krediitkaarditeave) avaldamine. Kui lülitate selle välja, olge võõraste või halva mainega saitide külastamisel ettevaatlik.</translation>
 <translation id="6410668567036790476">Otsingumootori lisamine</translation>
 <translation id="641081527798843608">Teema vaste</translation>

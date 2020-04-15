@@ -3365,7 +3365,7 @@ Lorsque cette règle n'est pas configurée, le paramètre par défaut utilisé c
 
       Pour en savoir plus sur <ph name="CORS" />, consultez la page <ph name="CORS_HELP_URL" />.
 
-      Notez que cette règle était programmée pour être supprimée dans la version 82 de<ph name="PRODUCT_NAME" />, mais que sa suppression a été finalement reportée à la version 84.</translation>
+      Notez que cette règle était programmée pour être supprimée dans la version 82 de <ph name="PRODUCT_NAME" />, mais que sa suppression a été finalement reportée à la version 84.</translation>
 <translation id="5790763087505467169">Réduire les notifications de lancement automatique des sessions Invité gérées</translation>
 <translation id="5806128552675651249">Autoriser l'impression uniquement sans images de fond</translation>
 <translation id="5809210507920527553">Contrôle les paramètres du conteneur Linux (Crostini).</translation>
@@ -3435,11 +3435,11 @@ Lorsque cette règle n'est pas configurée, le paramètre par défaut utilisé c
 
       Si cette règle est définie sur "False" ou si elle n'est pas configurée, la nouvelle mise en œuvre utilisée peut causer des problèmes de compatibilité spécifiques à l'entreprise.
 
-      Cette règle sera supprimée après quelques jalons.
+      Cette règle sera supprimée après quelques versions intermédiaires.
 
       Pour en savoir plus sur <ph name="CORS" />, consultez la page <ph name="CORS_HELP_URL" />.
 
-      Notez que cette règle était programmée pour être supprimée dans la version 82 de<ph name="PRODUCT_NAME" />, mais que sa suppression a été finalement reportée à la version 84.</translation>
+      Notez que cette règle était programmée pour être supprimée dans la version 82 de <ph name="PRODUCT_NAME" />, mais que sa suppression a été finalement reportée à la version 84.</translation>
 <translation id="5893553533827140852">Si ce paramètre est activé, les demandes d'authentification gnubby seront envoyées par un proxy via une connexion hôte à distance.
 
           S'il est désactivé ou n'est pas configuré, ces demandes ne seront pas envoyées par un proxy.</translation>

@@ -687,7 +687,6 @@
 <translation id="189210018541388520">Otvori cijeli zaslon</translation>
 <translation id="1892341345406963517">Pozdrav, <ph name="PARENT_NAME" /></translation>
 <translation id="189358972401248634">Drugi jezici</translation>
-<translation id="1895252664692693738">Još <ph name="TIME_LEFT" /></translation>
 <translation id="1895658205118569222">Isključivanje</translation>
 <translation id="1895934970388272448">Morate potvrditi registraciju na pisaču da biste dovršili proces. Provjerite ga odmah.</translation>
 <translation id="1899826437968063457">Dodatku VM potrebno je dopuštenje za pokretanje</translation>
@@ -3623,7 +3622,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="5863445608433396414">Omogući značajke za otklanjanje pogrešaka</translation>
 <translation id="5864195618110239517">Koristi vezu s ograničenim prometom</translation>
 <translation id="5864471791310927901">DHCP pretraživanje nije uspjelo</translation>
-<translation id="5864754048328252126">Radnja neaktivnosti tijekom napajanja</translation>
+<translation id="5864754048328252126">Radnja tijekom napajanja</translation>
 <translation id="5865508026715185451">Uskoro će se pauzirati <ph name="APP_NAME" /></translation>
 <translation id="586567932979200359">Pokrećete program <ph name="PRODUCT_NAME" /> iz diskovne slike. Instaliranjem na računalu moći ćete ga pokrenuti u bilo kojem trenutku i uvijek će biti ažuran.</translation>
 <translation id="5865733239029070421">Automatski šalje Googleu statistiku upotrebe i izvješća o rušenju</translation>

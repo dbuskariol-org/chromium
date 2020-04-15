@@ -3248,13 +3248,13 @@
 
            如未設定這項政策，<ph name="PRODUCT_NAME" /> 會改用預設程式庫名稱。</translation>
 <translation id="5783009211970309878">列印頁首和頁尾</translation>
-<translation id="5783576706065107606">在新版 <ph name="CORS" /> 模式中啟用 <ph name="CORS" /> 檢查安全防護措施，讓擴充功能保持相容行為，並允許 <ph name="PRODUCT_NAME" /> 不需經過 <ph name="CORS" /> 檢查即可傳送指定標頭。
+<translation id="5783576706065107606">在新版 <ph name="CORS" /> 模式中啟用緩和措施來放寬 <ph name="CORS" /> 檢查標準，讓擴充功能保持相容行為，並允許 <ph name="PRODUCT_NAME" /> 不需經過 <ph name="CORS" /> 檢查即可傳送指定標頭。
 
       如果將這份清單設為空白，<ph name="PRODUCT_NAME" /> 會嘗試以相容方式執行擴充功能，且不會採用 <ph name="PRODUCT_NAME" /> 第 79 版的 <ph name="API" /> 變更，詳情請參閱 <ph name="WEB_REQUEST_API_MANUAL" />。
 
-      如果將這份清單設為具有 <ph name="HTTP" /> 要求標頭名稱，則 <ph name="CORS" /> 檢查將忽略此處列出的標頭，並啟用擴充功能的安全防護措施。
+      如果在這份清單中納入 <ph name="HTTP" /> 要求標頭名稱，則 <ph name="CORS" /> 檢查將忽略此處列出的標頭，並針對擴充功能啟用緩和措施。
 
-      如果未設定這份清單，則不會套用上述兩種安全防護措施。
+      如果未設定這份清單，則不會套用上述兩種緩和措施。
 
       如要進一步瞭解 <ph name="CORS" />，請前往：<ph name="CORS_HELP_URL" />。
 

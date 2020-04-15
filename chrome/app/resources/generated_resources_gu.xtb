@@ -683,7 +683,6 @@
 <translation id="189210018541388520">પૂર્ણ સ્ક્રીન ખોલો</translation>
 <translation id="1892341345406963517">નમસ્કાર <ph name="PARENT_NAME" /></translation>
 <translation id="189358972401248634">અન્ય ભાષાઓ</translation>
-<translation id="1895252664692693738"><ph name="TIME_LEFT" /> બાકી</translation>
 <translation id="1895658205118569222">બંધ કરો</translation>
 <translation id="1895934970388272448">આ પ્રક્રિયા સમાપ્ત કરવા માટે તમારે તમારા પ્રિન્ટર પર પુષ્ટિ કરવી આવશ્યક છે - તેને હમણાં તપાસો.</translation>
 <translation id="1899826437968063457">પ્લગ-ઇન VMને ચાલવા માટે પરવાનગીની જરૂર છે</translation>
@@ -1654,7 +1653,7 @@
 <translation id="3188257591659621405">મારી ફાઇલો</translation>
 <translation id="3188465121994729530">ચલ સરેરાશ</translation>
 <translation id="3190558889382726167">પાસવર્ડ સાચવ્યો</translation>
-<translation id="3192947282887913208">ઑડિઓ ફાઇલો </translation>
+<translation id="3192947282887913208">ઑડિયો ફાઇલો</translation>
 <translation id="3199127022143353223">સર્વર્સ</translation>
 <translation id="3200941271596533635">રીડર મોડને ટૉગલ કરો</translation>
 <translation id="3201306578844503970">નેટવર્ક ભૂલના કારણે વર્ચ્યુઅલ મશીન ઇન્સ્ટૉલ ન કરી શકાયું. કૃપા કરીને ફરી પ્રયાસ કરો અથવા તમારી સંસ્થાના ડિવાઇસ વ્યવસ્થાપકનો સંપર્ક કરો. ભૂલનો કોડ: <ph name="ERROR_CODE" />.</translation>
