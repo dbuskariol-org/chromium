@@ -37019,6 +37019,10 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
 </enum>
 
 <enum name="LinuxDistro">
+  <obsolete>
+    Deprecated 2020-04 in favor of LinuxDistro2 because distro-specific version
+    metrics were added.
+  </obsolete>
   <int value="0" label="Unknown"/>
   <int value="1" label="(DEPRECATED) Ubuntu Other"/>
   <int value="2" label="(DEPRECATED) Ubuntu 14.04"/>
@@ -37064,6 +37068,67 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="205" label="Ubuntu 17.10"/>
   <int value="206" label="Ubuntu 18.04"/>
   <int value="207" label="Ubuntu 18.10"/>
+</enum>
+
+<enum name="LinuxDistro2">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Arch"/>
+  <int value="2" label="CentOS"/>
+  <int value="3" label="Debian"/>
+  <int value="4" label="elementary OS"/>
+  <int value="5" label="Fedora"/>
+  <int value="6" label="Mint"/>
+  <int value="7" label="openSUSE Leap"/>
+  <int value="8" label="RHEL"/>
+  <int value="9" label="SUSE Linux Enterprise"/>
+  <int value="10" label="Ubuntu"/>
+</enum>
+
+<enum name="LinuxDistroDebianVersion">
+  <int value="7" label="Wheezy"/>
+  <int value="8" label="Jessie"/>
+  <int value="9" label="Stretch"/>
+  <int value="10" label="Buster"/>
+  <int value="11" label="Bullseye"/>
+</enum>
+
+<enum name="LinuxDistroFedoraVersion">
+  <int value="24" label="24"/>
+  <int value="25" label="25"/>
+  <int value="26" label="26"/>
+  <int value="27" label="27"/>
+  <int value="28" label="28"/>
+  <int value="29" label="29"/>
+  <int value="30" label="30"/>
+  <int value="31" label="31"/>
+  <int value="32" label="32"/>
+  <int value="33" label="33"/>
+</enum>
+
+<enum name="LinuxDistroOpenSuseLeapVersion">
+  <int value="15000" label="15.0"/>
+  <int value="15001" label="15.1"/>
+  <int value="15002" label="15.2"/>
+  <int value="42002" label="42.2"/>
+  <int value="42003" label="42.3"/>
+</enum>
+
+<enum name="LinuxDistroUbuntuVersion">
+  <int value="12004" label="12.04"/>
+  <int value="12010" label="12.10"/>
+  <int value="13004" label="13.04"/>
+  <int value="13010" label="13.10"/>
+  <int value="14004" label="14.04"/>
+  <int value="14010" label="14.10"/>
+  <int value="16004" label="16.04"/>
+  <int value="16010" label="16.10"/>
+  <int value="17004" label="17.04"/>
+  <int value="17010" label="17.10"/>
+  <int value="18004" label="18.04"/>
+  <int value="18010" label="18.10"/>
+  <int value="19004" label="19.04"/>
+  <int value="19010" label="19.10"/>
+  <int value="20004" label="20.04"/>
 </enum>
 
 <enum name="LinuxGlibcVersion">
