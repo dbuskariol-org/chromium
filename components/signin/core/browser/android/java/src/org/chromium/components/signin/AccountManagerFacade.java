@@ -263,15 +263,6 @@ public class AccountManagerFacade {
     }
 
     /**
-     * Returns whether an account exists with the given name.
-     * Returns false if an error occurs while getting account list.
-     */
-    @AnyThread
-    public boolean hasAccountForName(String accountName) {
-        return getAccountFromName(accountName) != null;
-    }
-
-    /**
      * @return Whether or not there is an account authenticator for Google accounts.
      */
     @AnyThread
