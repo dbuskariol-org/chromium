@@ -279,6 +279,18 @@ bool SharedContextState::InitializeGL(
     return false;
   }
 
+  const GLint kGLES2RequiredMinimumTextureUnits = 8u;
+  GLint max_texture_units = 0;
+  api->glGetIntegervFn(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_texture_units);
+  if (max_texture_units < kGLES2RequiredMinimumTextureUnits) {
+    LOG(ERROR)
+        << "SharedContextState::InitializeGL failure max_texture_units : "
+        << max_texture_units << " is less that minimum required : "
+        << kGLES2RequiredMinimumTextureUnits;
+    feature_info_ = nullptr;
+    return false;
+  }
+
   context_state_ = std::make_unique<gles2::ContextState>(
       feature_info_.get(), false /* track_texture_and_sampler_units */);
 
@@ -290,6 +302,11 @@ bool SharedContextState::InitializeGL(
   // if perf becomes a problem.
   context_state_->InitCapabilities(nullptr);
   context_state_->InitState(nullptr);
+
+  // Init |sampler_units|, ContextState uses the size of it to reset sampler to
+  // ground state.
+  // TODO(penghuang): remove it when GrContext is created with ES 3.0.
+  context_state_->sampler_units.resize(max_texture_units);
 
   GLenum driver_status = real_context_->CheckStickyGraphicsResetStatus();
   if (driver_status != GL_NO_ERROR) {
