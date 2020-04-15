@@ -281,6 +281,47 @@ TEST_F(BackgroundTabLoadingPolicyTest, ScoreAndScheduleTabLoad) {
   page_node_impl->SetIsLoading(false);
 }
 
+TEST_F(BackgroundTabLoadingPolicyTest, OnMemoryPressure) {
+  // Multiple PageNodes are necessary to make sure that the policy
+  // doesn't immediately kick off loading of all tabs.
+  std::vector<
+      performance_manager::TestNodeWrapper<performance_manager::PageNodeImpl>>
+      page_nodes;
+  std::vector<PageNode*> raw_page_nodes;
+
+  for (uint32_t i = 0; i < 2; i++) {
+    page_nodes.push_back(CreateNode<performance_manager::PageNodeImpl>());
+    raw_page_nodes.push_back(page_nodes.back().get());
+
+    // Set |is_tab| property as this is a requirement to pass the PageNode to
+    // ScheduleLoadForRestoredTabs().
+    TabPropertiesDecorator::SetIsTabForTesting(raw_page_nodes.back(), true);
+  }
+
+  // Use 1 loading slot so only one PageNode loads at a time.
+  policy()->SetMaxSimultaneousLoadsForTesting(1);
+
+  // Test that the score produces the expected loading order
+  EXPECT_CALL(*loader(), LoadPageNode(raw_page_nodes[0]));
+
+  policy()->ScheduleLoadForRestoredTabs(raw_page_nodes);
+  task_env().RunUntilIdle();
+  testing::Mock::VerifyAndClear(loader());
+
+  // Simulate memory pressure and expect the tab loader to disable loading.
+  policy()->OnMemoryPressure(
+      base::MemoryPressureListener::MEMORY_PRESSURE_LEVEL_MODERATE);
+
+  PageNodeImpl* page_node_impl = page_nodes[0].get();
+
+  // Simulate load start of a PageNode that initiated load.
+  page_node_impl->SetIsLoading(true);
+
+  // Simulate load finish of a PageNode and expect the policy to not start
+  // another load.
+  page_node_impl->SetIsLoading(false);
+}
+
 }  // namespace policies
 
 }  // namespace performance_manager

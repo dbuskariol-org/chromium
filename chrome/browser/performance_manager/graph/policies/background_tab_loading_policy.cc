@@ -65,7 +65,10 @@ void ScheduleLoadForRestoredTabs(
 }
 
 BackgroundTabLoadingPolicy::BackgroundTabLoadingPolicy()
-    : page_loader_(std::make_unique<mechanism::PageLoader>()) {
+    : memory_pressure_listener_(
+          base::BindRepeating(&BackgroundTabLoadingPolicy::OnMemoryPressure,
+                              base::Unretained(this))),
+      page_loader_(std::make_unique<mechanism::PageLoader>()) {
   DCHECK(!g_background_tab_loading_policy);
   g_background_tab_loading_policy = this;
   max_simultaneous_tab_loads_ = CalculateMaxSimultaneousTabLoads(
@@ -214,6 +217,26 @@ void BackgroundTabLoadingPolicy::OnUsedInBackgroundAvailable(
   ++tabs_scored_;
   ScoreTab(page_node_to_load_data);
   DispatchNotifyAllTabsScoredIfNeeded();
+}
+
+void BackgroundTabLoadingPolicy::StopLoadingTabs() {
+  // Clear out the remaining tabs to load and clean ourselves up.
+  page_nodes_to_load_.clear();
+  tabs_scored_ = 0;
+
+  // TODO(crbug.com/1071077): Interrupt all ongoing loads.
+}
+
+void BackgroundTabLoadingPolicy::OnMemoryPressure(
+    base::MemoryPressureListener::MemoryPressureLevel memory_pressure_level) {
+  switch (memory_pressure_level) {
+    case base::MemoryPressureListener::MEMORY_PRESSURE_LEVEL_NONE:
+      break;
+    case base::MemoryPressureListener::MEMORY_PRESSURE_LEVEL_MODERATE:
+    case base::MemoryPressureListener::MEMORY_PRESSURE_LEVEL_CRITICAL:
+      StopLoadingTabs();
+      break;
+  }
 }
 
 void BackgroundTabLoadingPolicy::ScoreTab(
