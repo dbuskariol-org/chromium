@@ -282,6 +282,9 @@ extern const char kEnableAudioFocusEnforcementDescription[];
 extern const char kEnableAutofillAccountWalletStorageName[];
 extern const char kEnableAutofillAccountWalletStorageDescription[];
 
+extern const char kEnableAutofillCacheServerCardInfoName[];
+extern const char kEnableAutofillCacheServerCardInfoDescription[];
+
 extern const char kEnableAutofillCreditCardAblationExperimentDisplayName[];
 extern const char kEnableAutofillCreditCardAblationExperimentDescription[];
 
