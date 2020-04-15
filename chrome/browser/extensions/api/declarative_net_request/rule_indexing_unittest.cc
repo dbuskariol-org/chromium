@@ -925,9 +925,9 @@ TEST_P(MultipleRulesetsIndexingTest, EnabledRulesCount) {
   AddRuleset(CreateRuleset("2.json", 200, 20, false));
   AddRuleset(CreateRuleset("3.json", 300, 30, true));
 
-  RulesetCountWaiter waiter(manager());
+  RulesetManagerObserver ruleset_waiter(manager());
   LoadAndExpectSuccess();
-  waiter.WaitForRulesetCount(1);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
 
   // Only the first and third rulesets should be enabled.
   CompositeMatcher* composite_matcher =
@@ -957,7 +957,7 @@ TEST_P(MultipleRulesetsIndexingTest, StaticRuleCountExceeded) {
   // Enabled on load.
   AddRuleset(CreateRuleset("4.json", 30, 0, true));
 
-  RulesetCountWaiter waiter(manager());
+  RulesetManagerObserver ruleset_waiter(manager());
   extension_loader()->set_ignore_manifest_warnings(true);
 
   LoadAndExpectSuccess();
@@ -978,7 +978,7 @@ TEST_P(MultipleRulesetsIndexingTest, StaticRuleCountExceeded) {
             Field(&InstallWarning::message, kEnabledRuleCountExceeded)));
   }
 
-  waiter.WaitForRulesetCount(1);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
 
   CompositeMatcher* composite_matcher =
       manager()->GetMatcherForExtension(extension_id);
@@ -1006,7 +1006,7 @@ TEST_P(MultipleRulesetsIndexingTest, RegexRuleCountExceeded) {
   // Enabled on load.
   AddRuleset(CreateRuleset("4.json", 20, 20, true));
 
-  RulesetCountWaiter waiter(manager());
+  RulesetManagerObserver ruleset_waiter(manager());
   extension_loader()->set_ignore_manifest_warnings(true);
 
   LoadAndExpectSuccess();
@@ -1019,7 +1019,7 @@ TEST_P(MultipleRulesetsIndexingTest, RegexRuleCountExceeded) {
                                            kEnabledRegexRuleCountExceeded)));
   }
 
-  waiter.WaitForRulesetCount(1);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
 
   CompositeMatcher* composite_matcher =
       manager()->GetMatcherForExtension(extension()->id());
