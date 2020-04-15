@@ -301,11 +301,8 @@ blink::WebPlugin* WebFrameTestClient::CreatePlugin(
     const blink::WebPluginParams& params) {
   blink::WebLocalFrame* frame = web_frame_test_proxy_->GetWebFrame();
   if (TestPlugin::IsSupportedMimeType(params.mime_type)) {
-    // TODO(danakj): Pass the web_view_test_proxy_'s BlinkTestRunner.
-    return TestPlugin::Create(
-        params,
-        web_view_test_proxy_->test_interfaces()->GetFirstBlinkTestRunner(),
-        frame);
+    return TestPlugin::Create(params, web_view_test_proxy_->blink_test_runner(),
+                              frame);
   }
   return blink_test_runner()->CreatePluginPlaceholder(params);
 }
