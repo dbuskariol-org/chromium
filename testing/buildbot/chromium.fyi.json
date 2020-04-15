@@ -39996,6 +39996,7 @@
           "script": "//third_party/blink/tools/merge_web_test_results.py"
         },
         "name": "wpt_tests_suite",
+        "results_handler": "layout tests",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "dimension_sets": [
