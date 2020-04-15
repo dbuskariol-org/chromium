@@ -34,11 +34,11 @@
 #include "chrome/browser/supervised_user/supervised_user_service.h"
 #include "chrome/browser/supervised_user/supervised_user_service_factory.h"
 #include "chrome/browser/ui/webui/chromeos/assistant_optin/assistant_optin_utils.h"
-#include "chrome/browser/ui/webui/chromeos/bluetooth_dialog_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/chromeos/network_element_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/chromeos/smb_shares/smb_shares_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/management_ui.h"
 #include "chrome/browser/ui/webui/policy_indicator_localized_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/bluetooth_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
@@ -63,7 +63,6 @@
 #include "content/public/browser/web_ui_data_source.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
-#include "device/bluetooth/strings/grit/bluetooth_strings.h"
 #include "media/base/media_switches.h"
 #include "ui/accessibility/accessibility_switches.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -929,63 +928,6 @@ void AddParentalControlStrings(content::WebUIDataSource* html_source,
     html_source->AddString("accountManagerPrimaryAccountChildManagedTooltip",
                            child_managed_tooltip);
   }
-}
-
-void AddBluetoothStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"bluetoothConnected", IDS_SETTINGS_BLUETOOTH_CONNECTED},
-      {"bluetoothConnectedWithBattery",
-       IDS_SETTINGS_BLUETOOTH_CONNECTED_WITH_BATTERY},
-      {"bluetoothConnecting", IDS_SETTINGS_BLUETOOTH_CONNECTING},
-      {"bluetoothDeviceListPaired", IDS_SETTINGS_BLUETOOTH_DEVICE_LIST_PAIRED},
-      {"bluetoothDeviceListUnpaired",
-       IDS_SETTINGS_BLUETOOTH_DEVICE_LIST_UNPAIRED},
-      {"bluetoothConnect", IDS_SETTINGS_BLUETOOTH_CONNECT},
-      {"bluetoothDisconnect", IDS_SETTINGS_BLUETOOTH_DISCONNECT},
-      {"bluetoothToggleA11yLabel",
-       IDS_SETTINGS_BLUETOOTH_TOGGLE_ACCESSIBILITY_LABEL},
-      {"bluetoothExpandA11yLabel",
-       IDS_SETTINGS_BLUETOOTH_EXPAND_ACCESSIBILITY_LABEL},
-      {"bluetoothNoDevices", IDS_SETTINGS_BLUETOOTH_NO_DEVICES},
-      {"bluetoothNoDevicesFound", IDS_SETTINGS_BLUETOOTH_NO_DEVICES_FOUND},
-      {"bluetoothNotConnected", IDS_SETTINGS_BLUETOOTH_NOT_CONNECTED},
-      {"bluetoothPageTitle", IDS_SETTINGS_BLUETOOTH},
-      {"bluetoothPairDevicePageTitle",
-       IDS_SETTINGS_BLUETOOTH_PAIR_DEVICE_TITLE},
-      {"bluetoothRemove", IDS_SETTINGS_BLUETOOTH_REMOVE},
-      {"bluetoothPrimaryUserControlled",
-       IDS_SETTINGS_BLUETOOTH_PRIMARY_USER_CONTROLLED},
-      {"bluetoothDeviceType_computer",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_COMPUTER},
-      {"bluetoothDeviceType_phone",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_PHONE},
-      {"bluetoothDeviceType_modem",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_MODEM},
-      {"bluetoothDeviceType_audio",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_AUDIO},
-      {"bluetoothDeviceType_carAudio",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_CAR_AUDIO},
-      {"bluetoothDeviceType_video",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_VIDEO},
-      {"bluetoothDeviceType_peripheral",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_PERIPHERAL},
-      {"bluetoothDeviceType_joystick",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_JOYSTICK},
-      {"bluetoothDeviceType_gamepad",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_GAMEPAD},
-      {"bluetoothDeviceType_keyboard",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_KEYBOARD},
-      {"bluetoothDeviceType_mouse",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_MOUSE},
-      {"bluetoothDeviceType_tablet",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_TABLET},
-      {"bluetoothDeviceType_keyboardMouseCombo",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_KEYBOARD_MOUSE_COMBO},
-      {"bluetoothDeviceType_unknown",
-       IDS_BLUETOOTH_ACCESSIBILITY_DEVICE_TYPE_UNKNOWN},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-  chromeos::bluetooth_dialog::AddLocalizedStrings(html_source);
 }
 
 void AddChromeOSUserStrings(content::WebUIDataSource* html_source,
@@ -2086,6 +2028,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
   // TODO(khorimoto): Add providers for the remaining pages.
   per_page_providers_.push_back(
       std::make_unique<InternetStringsProvider>(profile, /*delegate=*/this));
+  per_page_providers_.push_back(
+      std::make_unique<BluetoothStringsProvider>(profile, /*delegate=*/this));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -2104,7 +2048,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddAndroidAppStrings(html_source);
   AddAppManagementStrings(html_source);
   AddAppsStrings(html_source);
-  AddBluetoothStrings(html_source);
   AddChromeOSUserStrings(html_source, profile);
   AddCommonStrings(html_source, profile);
   AddCrostiniStrings(html_source, profile);
