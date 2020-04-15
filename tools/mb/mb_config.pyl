@@ -29,6 +29,18 @@
       'win-chrome': 'official_goma_x86',
     },
 
+    'chrome.pgo': {
+      'mac-pgo-beta': 'official_goma_mac_pgo',
+      'mac-pgo-stable': 'official_goma_mac_pgo',
+      'mac-pgo-trunk': 'official_goma_mac_pgo',
+      'win32-pgo-beta': 'official_goma_x86_pgo',
+      'win32-pgo-stable': 'official_goma_x86_pgo',
+      'win32-pgo-trunk': 'official_goma_x86_pgo',
+      'win64-pgo-beta': 'official_goma_x64_pgo',
+      'win64-pgo-stable': 'official_goma_x64_pgo',
+      'win64-pgo-trunk': 'official_goma_x64_pgo',
+    },
+
     # Take care when changing any of these builders to ensure that you do not
     # include a configuration with 'chrome_with_codecs' since these builders
     # generated publicly advertised non-Official builds which are not allowed
@@ -510,18 +522,6 @@
       'android-cfi-builder-perf-fyi': 'official_goma_minimal_symbols_android_thin_lto_opt',
       'android_arm64-cfi-builder-perf-fyi': 'official_goma_minimal_symbols_android_thin_lto_opt_arm64',
       'chromeos-kevin-builder-perf-fyi': 'chromeos_kevin',
-    },
-
-    'chromium.pgo': {
-      'mac-pgo-beta': 'official_goma_mac_pgo',
-      'mac-pgo-stable': 'official_goma_mac_pgo',
-      'mac-pgo-trunk': 'official_goma_mac_pgo',
-      'win32-pgo-beta': 'official_goma_x86_pgo',
-      'win32-pgo-stable': 'official_goma_x86_pgo',
-      'win32-pgo-trunk': 'official_goma_x86_pgo',
-      'win64-pgo-beta': 'official_goma_x64_pgo',
-      'win64-pgo-stable': 'official_goma_x64_pgo',
-      'win64-pgo-trunk': 'official_goma_x64_pgo',
     },
 
     'chromium.swangle': {
