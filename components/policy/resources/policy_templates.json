@@ -19898,7 +19898,7 @@
       'owners': ['ydago@chromium.org', 'grt@chromium.org'],
       'type': 'int',
       'schema': { 'type': 'integer', 'minimum': 0 },
-      'supported_on': ['chrome.*:82-'],
+      'supported_on': ['chrome.*:83-'],
       'features': {
         'dynamic_refresh': False,
         'per_profile': False,
