@@ -322,7 +322,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling libavif
   # and whatever else without interference from each other.
-  'libavif_revision': '78e3c9d2fbfa935638145d017dda6950cc559ad3',
+  'libavif_revision': '167e406f1e2b86f6699224b5c492dc9e862ab539',
 
   # TODO(crbug.com/941824): The values below need to be kept in sync
   # between //DEPS and //buildtools/DEPS, so if you're updating one,
