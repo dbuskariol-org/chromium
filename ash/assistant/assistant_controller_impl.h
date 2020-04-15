@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_ASSISTANT_ASSISTANT_CONTROLLER_H_
-#define ASH_ASSISTANT_ASSISTANT_CONTROLLER_H_
+#ifndef ASH_ASSISTANT_ASSISTANT_CONTROLLER_IMPL_H_
+#define ASH_ASSISTANT_ASSISTANT_CONTROLLER_IMPL_H_
 
 #include <map>
 #include <memory>
@@ -26,6 +26,7 @@
 #include "ash/assistant/ui/assistant_view_delegate.h"
 #include "ash/public/cpp/assistant/assistant_image_downloader.h"
 #include "ash/public/cpp/assistant/assistant_interface_binder.h"
+#include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/mojom/assistant_volume_control.mojom.h"
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
@@ -44,8 +45,9 @@ class PrefRegistrySimple;
 
 namespace ash {
 
-class ASH_EXPORT AssistantController
-    : public chromeos::assistant::mojom::AssistantController,
+class ASH_EXPORT AssistantControllerImpl
+    : public AssistantController,
+      public chromeos::assistant::mojom::AssistantController,
       public AssistantControllerObserver,
       public AssistantStateObserver,
       public mojom::AssistantVolumeControl,
@@ -53,8 +55,8 @@ class ASH_EXPORT AssistantController
       public AccessibilityObserver,
       public AssistantInterfaceBinder {
  public:
-  AssistantController();
-  ~AssistantController() override;
+  AssistantControllerImpl();
+  ~AssistantControllerImpl() override;
 
   static void RegisterProfilePrefs(PrefRegistrySimple* registry);
 
@@ -145,7 +147,7 @@ class ASH_EXPORT AssistantController
 
   bool IsAssistantReady() const;
 
-  base::WeakPtr<AssistantController> GetWeakPtr();
+  base::WeakPtr<AssistantControllerImpl> GetWeakPtr();
 
  private:
   void NotifyConstructed();
@@ -202,11 +204,11 @@ class ASH_EXPORT AssistantController
 
   AssistantViewDelegateImpl view_delegate_{this};
 
-  base::WeakPtrFactory<AssistantController> weak_factory_{this};
+  base::WeakPtrFactory<AssistantControllerImpl> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(AssistantController);
+  DISALLOW_COPY_AND_ASSIGN(AssistantControllerImpl);
 };
 
 }  // namespace ash
 
-#endif  // ASH_ASSISTANT_ASSISTANT_CONTROLLER_H_
+#endif  // ASH_ASSISTANT_ASSISTANT_CONTROLLER_IMPL_H_

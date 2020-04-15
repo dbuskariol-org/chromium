@@ -17,7 +17,7 @@
 
 namespace ash {
 
-class AssistantController;
+class AssistantControllerImpl;
 class AssistantSuggestionsModelObserver;
 class ProactiveSuggestions;
 
@@ -29,7 +29,7 @@ class AssistantSuggestionsControllerImpl
       public AssistantStateObserver {
  public:
   explicit AssistantSuggestionsControllerImpl(
-      AssistantController* assistant_controller);
+      AssistantControllerImpl* assistant_controller);
   ~AssistantSuggestionsControllerImpl() override;
 
   // AssistantSuggestionsController:
@@ -62,7 +62,7 @@ class AssistantSuggestionsControllerImpl
   void FetchConversationStarters();
   void ProvideConversationStarters();
 
-  AssistantController* const assistant_controller_;  // Owned by Shell.
+  AssistantControllerImpl* const assistant_controller_;  // Owned by Shell.
 
   // A sub-controller for the proactive suggestions feature. Note that this will
   // only exist if the proactive suggestions feature is enabled.

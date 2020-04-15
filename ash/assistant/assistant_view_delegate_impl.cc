@@ -4,7 +4,7 @@
 
 #include "ash/assistant/assistant_view_delegate_impl.h"
 
-#include "ash/assistant/assistant_controller.h"
+#include "ash/assistant/assistant_controller_impl.h"
 #include "ash/assistant/assistant_controller_observer.h"
 #include "ash/assistant/assistant_interaction_controller.h"
 #include "ash/assistant/assistant_notification_controller.h"
@@ -21,7 +21,7 @@
 namespace ash {
 
 AssistantViewDelegateImpl::AssistantViewDelegateImpl(
-    AssistantController* assistant_controller)
+    AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {}
 
 AssistantViewDelegateImpl::~AssistantViewDelegateImpl() = default;

@@ -4,7 +4,7 @@
 
 #include "ash/assistant/assistant_proactive_suggestions_controller.h"
 
-#include "ash/assistant/assistant_controller.h"
+#include "ash/assistant/assistant_controller_impl.h"
 #include "ash/assistant/assistant_suggestions_controller_impl.h"
 #include "ash/assistant/assistant_ui_controller.h"
 #include "ash/assistant/ui/proactive_suggestions_rich_view.h"
@@ -28,7 +28,7 @@ using assistant::util::ProactiveSuggestionsAction;
 
 AssistantProactiveSuggestionsController::
     AssistantProactiveSuggestionsController(
-        AssistantController* assistant_controller)
+        AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   DCHECK(chromeos::assistant::features::IsProactiveSuggestionsEnabled());
   assistant_controller_->AddObserver(this);

@@ -12,11 +12,11 @@
 
 namespace ash {
 
-class AssistantController;
+class AssistantControllerImpl;
 
 class AssistantViewDelegateImpl : public AssistantViewDelegate {
  public:
-  AssistantViewDelegateImpl(AssistantController* assistant_controller);
+  AssistantViewDelegateImpl(AssistantControllerImpl* assistant_controller);
   ~AssistantViewDelegateImpl() override;
 
   // AssistantViewDelegate:
@@ -60,7 +60,7 @@ class AssistantViewDelegateImpl : public AssistantViewDelegate {
   void OpenUrlFromView(const GURL& url) override;
 
  private:
-  AssistantController* const assistant_controller_;
+  AssistantControllerImpl* const assistant_controller_;
   base::ObserverList<AssistantViewDelegateObserver> view_delegate_observers_;
 
   DISALLOW_COPY_AND_ASSIGN(AssistantViewDelegateImpl);

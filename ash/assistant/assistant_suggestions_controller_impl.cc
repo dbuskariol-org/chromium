@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include "ash/assistant/assistant_controller.h"
+#include "ash/assistant/assistant_controller_impl.h"
 #include "ash/assistant/assistant_ui_controller.h"
 #include "ash/assistant/model/assistant_ui_model.h"
 #include "ash/assistant/util/assistant_util.h"
@@ -75,7 +75,7 @@ AssistantSuggestionPtr ToAssistantSuggestionPtr(
 // AssistantSuggestionsControllerImpl ------------------------------------------
 
 AssistantSuggestionsControllerImpl::AssistantSuggestionsControllerImpl(
-    AssistantController* assistant_controller)
+    AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   if (IsProactiveSuggestionsEnabled()) {
     proactive_suggestions_controller_ =
