@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chromecast/renderer/cast_media_playback_options.h"
+#include "components/media_control/renderer/media_playback_options.h"
 
 #include <string>
 #include <vector>
@@ -10,57 +10,65 @@
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/logging.h"
+#include "components/media_control/renderer/media_control_buildflags.h"
 #include "content/public/renderer/render_frame.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_registry.h"
 
-namespace chromecast {
+#if BUILDFLAG(ENABLE_MEDIA_CONTROL_LOGGING_OVERRIDE)
+#if !defined(DVLOG)
+#error This file must be included after base/logging.h.
+#endif
+#undef DVLOG
+#define DVLOG(verboselevel) LOG(INFO)
+#endif  // BUILDFLAG(ENABLE_MEDIA_CONTROL_LOGGING_OVERRIDE)
 
-CastMediaPlaybackOptions::CastMediaPlaybackOptions(
-    content::RenderFrame* render_frame)
+namespace media_control {
+
+MediaPlaybackOptions::MediaPlaybackOptions(content::RenderFrame* render_frame)
     : content::RenderFrameObserver(render_frame),
-      content::RenderFrameObserverTracker<CastMediaPlaybackOptions>(
-          render_frame),
+      content::RenderFrameObserverTracker<MediaPlaybackOptions>(render_frame),
       render_frame_action_blocked_(false) {
+  // TODO(https://crbug.com/1057860): Extract to callers and remove
+  // renderer_media_playback_options_.
   // Override default content MediaPlaybackOptions
   renderer_media_playback_options_
       .is_background_video_track_optimization_supported = false;
-  renderer_media_playback_options_
-      .is_background_suspend_enabled = false;
+  renderer_media_playback_options_.is_background_suspend_enabled = false;
   render_frame->SetRenderFrameMediaPlaybackOptions(
       renderer_media_playback_options_);
 
   render_frame->GetAssociatedInterfaceRegistry()->AddInterface(
       base::BindRepeating(
-          &CastMediaPlaybackOptions::OnMediaPlaybackOptionsAssociatedReceiver,
+          &MediaPlaybackOptions::OnMediaPlaybackOptionsAssociatedReceiver,
           base::Unretained(this)));
 }
 
-CastMediaPlaybackOptions::~CastMediaPlaybackOptions() {
+MediaPlaybackOptions::~MediaPlaybackOptions() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 }
 
-void CastMediaPlaybackOptions::OnDestruct() {
+void MediaPlaybackOptions::OnDestruct() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   delete this;
 }
 
-bool CastMediaPlaybackOptions::RunWhenInForeground(base::OnceClosure closure) {
+bool MediaPlaybackOptions::RunWhenInForeground(base::OnceClosure closure) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!render_frame_action_blocked_) {
     std::move(closure).Run();
     return false;
   }
 
-  LOG(WARNING) << "A render frame action is being blocked.";
+  DVLOG(1) << "A render frame action is being blocked.";
   pending_closures_.push_back(std::move(closure));
   return true;
 }
 
-void CastMediaPlaybackOptions::SetMediaLoadingBlocked(bool blocked) {
+void MediaPlaybackOptions::SetMediaLoadingBlocked(bool blocked) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   render_frame_action_blocked_ = blocked;
   if (blocked) {
-    LOG(INFO) << "Render frame actions are blocked.";
+    DVLOG(1) << "Render frame actions are blocked.";
     return;
   }
   // Move callbacks in case OnBlockMediaLoading() is called somehow
@@ -70,27 +78,26 @@ void CastMediaPlaybackOptions::SetMediaLoadingBlocked(bool blocked) {
   for (auto& cb : callbacks) {
     std::move(cb).Run();
   }
-  LOG(INFO) << "Render frame actions are unblocked.";
+  DVLOG(1) << "Render frame actions are unblocked.";
 }
 
-void CastMediaPlaybackOptions::SetBackgroundVideoPlaybackEnabled(bool enabled) {
+void MediaPlaybackOptions::SetBackgroundVideoPlaybackEnabled(bool enabled) {
   renderer_media_playback_options_.is_background_video_playback_enabled =
       enabled;
   render_frame()->SetRenderFrameMediaPlaybackOptions(
       renderer_media_playback_options_);
 }
 
-void CastMediaPlaybackOptions::SetRendererType(
-    content::mojom::RendererType type) {
+void MediaPlaybackOptions::SetRendererType(content::mojom::RendererType type) {
   renderer_media_playback_options_.renderer_type = type;
   render_frame()->SetRenderFrameMediaPlaybackOptions(
       renderer_media_playback_options_);
 }
 
-void CastMediaPlaybackOptions::OnMediaPlaybackOptionsAssociatedReceiver(
+void MediaPlaybackOptions::OnMediaPlaybackOptionsAssociatedReceiver(
     mojo::PendingAssociatedReceiver<
-        chromecast::shell::mojom::MediaPlaybackOptions> receiver) {
+        components::media_control::mojom::MediaPlaybackOptions> receiver) {
   receivers_.Add(this, std::move(receiver));
 }
 
-}  // namespace chromecast
+}  // namespace media_control
