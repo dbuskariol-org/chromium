@@ -2273,6 +2273,11 @@ crbug.com/1052717 external/wpt/css/css-text/line-break/line-break-strict-hyphens
 crbug.com/922618 external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-error-events.html [ Timeout ]
 crbug.com/922618 external/wpt/html/semantics/document-metadata/the-link-element/link-multiple-load-events.html [ Timeout ]
 
+# WeakRefs are under development and run in a virtual test suite
+crbug.com/1016767 js/weakrefs/finalization-registry-basic.html [ Skip ]
+crbug.com/1016767 js/weakrefs/finalization-registry-microtasks.html [ Skip ]
+crbug.com/1016767 js/weakrefs/finalization-registry-onerror.html [ Skip ]
+
 # Sheriff 2020-02-06
 # Flaking on Linux Leak
 crbug.com/1049599 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/events/overscroll-event-fired-to-element-with-overscroll-behavior.html [ Pass Failure Timeout ]
