@@ -575,7 +575,7 @@ void ChromePasswordManagerClient::TriggerReauthForAccount(
 #if defined(OS_ANDROID)
   std::move(reauth_callback).Run(ReauthSucceeded(false));
 #else   // !defined(OS_ANDROID)
-  Browser* browser = chrome::FindBrowserWithProfile(profile_);
+  Browser* browser = chrome::FindBrowserWithWebContents(web_contents());
   if (!browser) {
     std::move(reauth_callback).Run(ReauthSucceeded(false));
     return;
@@ -600,7 +600,7 @@ void ChromePasswordManagerClient::TriggerReauthForAccount(
 
 void ChromePasswordManagerClient::TriggerSignIn() {
 #if BUILDFLAG(ENABLE_DICE_SUPPORT)
-  Browser* browser = chrome::FindBrowserWithProfile(profile_);
+  Browser* browser = chrome::FindBrowserWithWebContents(web_contents());
   if (!browser)
     return;
   if (SigninViewController* signin_controller =
