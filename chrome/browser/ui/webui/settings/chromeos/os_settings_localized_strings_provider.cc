@@ -27,6 +27,7 @@
 #include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/browser/chromeos/kerberos/kerberos_credentials_manager.h"
 #include "chrome/browser/chromeos/login/quick_unlock/quick_unlock_utils.h"
+#include "chrome/browser/chromeos/multidevice_setup/multidevice_setup_client_factory.h"
 #include "chrome/browser/chromeos/policy/browser_policy_connector_chromeos.h"
 #include "chrome/browser/chromeos/profiles/profile_helper.h"
 #include "chrome/browser/policy/profile_policy_connector.h"
@@ -40,6 +41,7 @@
 #include "chrome/browser/ui/webui/policy_indicator_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/bluetooth_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/multidevice_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/webui_util.h"
@@ -54,7 +56,6 @@
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/constants/chromeos_switches.h"
 #include "chromeos/services/assistant/public/features.h"
-#include "chromeos/services/multidevice_setup/public/cpp/url_provider.h"
 #include "chromeos/strings/grit/chromeos_strings.h"
 #include "components/google/core/common/google_util.h"
 #include "components/prefs/pref_service.h"
@@ -1280,91 +1281,6 @@ void AddFilesStrings(content::WebUIDataSource* html_source) {
                          GetHelpUrlWithBoard(chrome::kSmbSharesLearnMoreURL));
 }
 
-void AddEasyUnlockStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"easyUnlockSectionTitle", IDS_SETTINGS_EASY_UNLOCK_SECTION_TITLE},
-      {"easyUnlockUnlockDeviceOnly",
-       IDS_SETTINGS_EASY_UNLOCK_UNLOCK_DEVICE_ONLY},
-      {"easyUnlockUnlockDeviceAndAllowSignin",
-       IDS_SETTINGS_EASY_UNLOCK_UNLOCK_DEVICE_AND_ALLOW_SIGNIN},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-}
-
-void AddMultideviceStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"multidevicePageTitle", IDS_SETTINGS_MULTIDEVICE},
-      {"multideviceSetupButton", IDS_SETTINGS_MULTIDEVICE_SETUP_BUTTON},
-      {"multideviceVerifyButton", IDS_SETTINGS_MULTIDEVICE_VERIFY_BUTTON},
-      {"multideviceSetupItemHeading",
-       IDS_SETTINGS_MULTIDEVICE_SETUP_ITEM_HEADING},
-      {"multideviceEnabled", IDS_SETTINGS_MULTIDEVICE_ENABLED},
-      {"multideviceDisabled", IDS_SETTINGS_MULTIDEVICE_DISABLED},
-      {"multideviceSmartLockItemTitle", IDS_SETTINGS_EASY_UNLOCK_SECTION_TITLE},
-      {"multideviceInstantTetheringItemTitle",
-       IDS_SETTINGS_MULTIDEVICE_INSTANT_TETHERING},
-      {"multideviceInstantTetheringItemSummary",
-       IDS_SETTINGS_MULTIDEVICE_INSTANT_TETHERING_SUMMARY},
-      {"multideviceAndroidMessagesItemTitle",
-       IDS_SETTINGS_MULTIDEVICE_ANDROID_MESSAGES},
-      {"multideviceForgetDevice", IDS_SETTINGS_MULTIDEVICE_FORGET_THIS_DEVICE},
-      {"multideviceSmartLockOptions",
-       IDS_SETTINGS_PEOPLE_LOCK_SCREEN_OPTIONS_LOCK},
-      {"multideviceForgetDeviceDisconnect",
-       IDS_SETTINGS_MULTIDEVICE_FORGET_THIS_DEVICE_DISCONNECT},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  html_source->AddString(
-      "multideviceForgetDeviceSummary",
-      ui::SubstituteChromeOSDeviceType(
-          IDS_SETTINGS_MULTIDEVICE_FORGET_THIS_DEVICE_EXPLANATION));
-  html_source->AddString(
-      "multideviceForgetDeviceDialogMessage",
-      ui::SubstituteChromeOSDeviceType(
-          IDS_SETTINGS_MULTIDEVICE_FORGET_DEVICE_DIALOG_MESSAGE));
-  html_source->AddString(
-      "multideviceVerificationText",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_MULTIDEVICE_VERIFICATION_TEXT,
-          base::UTF8ToUTF16(
-              chromeos::multidevice_setup::
-                  GetBoardSpecificBetterTogetherSuiteLearnMoreUrl()
-                      .spec())));
-  html_source->AddString(
-      "multideviceSetupSummary",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_MULTIDEVICE_SETUP_SUMMARY, ui::GetChromeOSDeviceName(),
-          base::UTF8ToUTF16(
-              chromeos::multidevice_setup::
-                  GetBoardSpecificBetterTogetherSuiteLearnMoreUrl()
-                      .spec())));
-  html_source->AddString(
-      "multideviceNoHostText",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_MULTIDEVICE_NO_ELIGIBLE_HOSTS,
-          base::UTF8ToUTF16(
-              chromeos::multidevice_setup::
-                  GetBoardSpecificBetterTogetherSuiteLearnMoreUrl()
-                      .spec())));
-  html_source->AddString(
-      "multideviceAndroidMessagesItemSummary",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_MULTIDEVICE_ANDROID_MESSAGES_SUMMARY,
-          ui::GetChromeOSDeviceName(),
-          base::UTF8ToUTF16(chromeos::multidevice_setup::
-                                GetBoardSpecificMessagesLearnMoreUrl()
-                                    .spec())));
-  html_source->AddString(
-      "multideviceSmartLockItemSummary",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_MULTIDEVICE_SMART_LOCK_SUMMARY,
-          ui::GetChromeOSDeviceName(),
-          GetHelpUrlWithBoard(chrome::kEasyUnlockLearnMoreUrl)));
-
-  AddEasyUnlockStrings(html_source);
-}
-
 void AddKerberosAccountsPageStrings(content::WebUIDataSource* html_source) {
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
       {"kerberosAccountsAddAccountLabel",
@@ -2030,6 +1946,10 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       std::make_unique<InternetStringsProvider>(profile, /*delegate=*/this));
   per_page_providers_.push_back(
       std::make_unique<BluetoothStringsProvider>(profile, /*delegate=*/this));
+  per_page_providers_.push_back(std::make_unique<MultiDeviceStringsProvider>(
+      profile, /*delegate=*/this,
+      multidevice_setup::MultiDeviceSetupClientFactory::GetForProfile(
+          profile)));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -2056,7 +1976,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddFilesStrings(html_source);
   AddGoogleAssistantStrings(html_source, profile);
   AddLanguagesStrings(html_source);
-  AddMultideviceStrings(html_source);
   AddParentalControlStrings(html_source, profile);
   AddPageVisibilityStrings(html_source);
   AddPeoplePageStrings(html_source, profile);
@@ -2085,6 +2004,9 @@ OsSettingsLocalizedStringsProvider::GetCanonicalTagMetadata(
 
 void OsSettingsLocalizedStringsProvider::Shutdown() {
   index_ = nullptr;
+
+  // Delete all per-page providers, since some of them depend on KeyedServices.
+  per_page_providers_.clear();
 }
 
 void OsSettingsLocalizedStringsProvider::AddSearchTags(
