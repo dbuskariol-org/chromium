@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/input_method/suggestion_window_controller_impl.h"
+#include "chrome/browser/chromeos/input_method/assistive_window_controller_impl.h"
 
 #include <string>
 #include <vector>
@@ -12,7 +12,6 @@
 #include "ash/wm/window_util.h"  // mash-ok
 #include "base/logging.h"
 #include "ui/base/ime/ime_bridge.h"
-#include "ui/chromeos/ime/infolist_window.h"
 #include "ui/views/widget/widget.h"
 
 namespace chromeos {
@@ -20,15 +19,15 @@ namespace input_method {
 
 namespace {}  // namespace
 
-SuggestionWindowControllerImpl::SuggestionWindowControllerImpl() {
-  ui::IMEBridge::Get()->SetSuggestionWindowHandler(this);
+AssistiveWindowControllerImpl::AssistiveWindowControllerImpl() {
+  ui::IMEBridge::Get()->SetAssistiveWindowHandler(this);
 }
 
-SuggestionWindowControllerImpl::~SuggestionWindowControllerImpl() {
-  ui::IMEBridge::Get()->SetSuggestionWindowHandler(nullptr);
+AssistiveWindowControllerImpl::~AssistiveWindowControllerImpl() {
+  ui::IMEBridge::Get()->SetAssistiveWindowHandler(nullptr);
 }
 
-void SuggestionWindowControllerImpl::Init() {
+void AssistiveWindowControllerImpl::Init() {
   if (suggestion_window_view_)
     return;
 
@@ -48,7 +47,7 @@ void SuggestionWindowControllerImpl::Init() {
   widget->Show();
 }
 
-void SuggestionWindowControllerImpl::OnWidgetClosing(views::Widget* widget) {
+void AssistiveWindowControllerImpl::OnWidgetClosing(views::Widget* widget) {
   if (suggestion_window_view_ &&
       widget == suggestion_window_view_->GetWidget()) {
     widget->RemoveObserver(this);
@@ -56,32 +55,33 @@ void SuggestionWindowControllerImpl::OnWidgetClosing(views::Widget* widget) {
   }
 }
 
-void SuggestionWindowControllerImpl::Hide() {
+void AssistiveWindowControllerImpl::HideSuggestion() {
   suggestion_text_ = base::EmptyString16();
   if (suggestion_window_view_)
     suggestion_window_view_->GetWidget()->Close();
 }
 
-void SuggestionWindowControllerImpl::SetBounds(const gfx::Rect& cursor_bounds) {
+void AssistiveWindowControllerImpl::SetBounds(const gfx::Rect& cursor_bounds) {
   if (suggestion_window_view_)
     suggestion_window_view_->SetBounds(cursor_bounds);
 }
 
-void SuggestionWindowControllerImpl::FocusStateChanged() {
+void AssistiveWindowControllerImpl::FocusStateChanged() {
   if (suggestion_window_view_)
-    Hide();
+    HideSuggestion();
 }
 
-void SuggestionWindowControllerImpl::Show(const base::string16& text,
-                                          const base::string16& confirmed_text,
-                                          const bool show_tab) {
+void AssistiveWindowControllerImpl::ShowSuggestion(
+    const base::string16& text,
+    const base::string16& confirmed_text,
+    const bool show_tab) {
   if (!suggestion_window_view_)
     Init();
   suggestion_text_ = text;
   suggestion_window_view_->Show(text, confirmed_text, show_tab);
 }
 
-base::string16 SuggestionWindowControllerImpl::GetText() const {
+base::string16 AssistiveWindowControllerImpl::GetSuggestionText() const {
   return suggestion_text_;
 }
 

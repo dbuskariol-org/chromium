@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_BASE_IME_IME_SUGGESTION_WINDOW_HANDLER_INTERFACE_H_
-#define UI_BASE_IME_IME_SUGGESTION_WINDOW_HANDLER_INTERFACE_H_
+#ifndef UI_BASE_IME_IME_ASSISTIVE_WINDOW_HANDLER_INTERFACE_H_
+#define UI_BASE_IME_IME_ASSISTIVE_WINDOW_HANDLER_INTERFACE_H_
 
 #include <stdint.h>
 
@@ -16,19 +16,19 @@ class Rect;
 
 namespace chromeos {
 
-// A interface to handle the suggestion window related method call.
-class COMPONENT_EXPORT(UI_BASE_IME) IMESuggestionWindowHandlerInterface {
+// A interface to handle the assistive windows related method call.
+class COMPONENT_EXPORT(UI_BASE_IME) IMEAssistiveWindowHandlerInterface {
  public:
-  virtual ~IMESuggestionWindowHandlerInterface() {}
+  virtual ~IMEAssistiveWindowHandlerInterface() {}
 
   // Called when showing/hiding suggestion window.
-  virtual void Show(const base::string16& text,
-                    const base::string16& confirmed_text,
-                    const bool show_tab) {}
-  virtual void Hide() {}
+  virtual void ShowSuggestion(const base::string16& text,
+                              const base::string16& confirmed_text,
+                              const bool show_tab) {}
+  virtual void HideSuggestion() {}
 
   // Called to get the current suggestion text.
-  virtual base::string16 GetText() const = 0;
+  virtual base::string16 GetSuggestionText() const = 0;
 
   // Called when the application changes its caret bounds.
   virtual void SetBounds(const gfx::Rect& cursor_bounds) = 0;
@@ -37,9 +37,9 @@ class COMPONENT_EXPORT(UI_BASE_IME) IMESuggestionWindowHandlerInterface {
   virtual void FocusStateChanged() {}
 
  protected:
-  IMESuggestionWindowHandlerInterface() {}
+  IMEAssistiveWindowHandlerInterface() {}
 };
 
 }  // namespace chromeos
 
-#endif  // UI_BASE_IME_IME_SUGGESTION_WINDOW_HANDLER_INTERFACE_H_
+#endif  // UI_BASE_IME_IME_ASSISTIVE_WINDOW_HANDLER_INTERFACE_H_
