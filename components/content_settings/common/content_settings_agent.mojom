@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module chrome.mojom;
+module content_settings.mojom;
 
 // An interface to the content settings agent running in the renderer process.
 interface ContentSettingsAgent {

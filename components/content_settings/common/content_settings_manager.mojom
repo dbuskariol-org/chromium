@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module chrome.mojom;
+module content_settings.mojom;
 
 import "components/content_settings/core/common/content_settings.mojom";
 import "url/mojom/origin.mojom";
@@ -41,7 +41,5 @@ interface ContentSettingsManager {
 
   // Tells the browser that content in the current page was blocked due to the
   // user's content settings.
-  OnContentBlocked(
-      int32 render_frame_id,
-      content_settings.mojom.ContentSettingsType type);
+  OnContentBlocked(int32 render_frame_id, ContentSettingsType type);
 };

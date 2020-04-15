@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/renderer/content_settings_agent_impl.h"
+#include "components/content_settings/renderer/content_settings_agent_impl.h"
 
 #include <utility>
 #include <vector>
@@ -11,9 +11,6 @@
 #include "base/feature_list.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/strings/string_number_conversions.h"
-#include "chrome/common/chrome_features.h"
-#include "chrome/common/render_messages.h"
-#include "chrome/common/ssl_insecure_content.h"
 #include "components/client_hints/common/client_hints.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/content_settings.mojom.h"
@@ -27,7 +24,6 @@
 #include "content/public/renderer/document_state.h"
 #include "content/public/renderer/render_frame.h"
 #include "content/public/renderer/render_view.h"
-#include "extensions/buildflags/buildflags.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_registry.h"
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
@@ -43,15 +39,6 @@
 #include "url/origin.h"
 #include "url/url_constants.h"
 
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-#include "extensions/common/constants.h"
-#include "extensions/common/extension.h"
-#include "extensions/common/permissions/api_permission.h"
-#include "extensions/common/permissions/permissions_data.h"
-#include "extensions/renderer/dispatcher.h"
-#include "extensions/renderer/renderer_extension_registry.h"
-#endif
-
 using blink::WebDocument;
 using blink::WebFrame;
 using blink::WebLocalFrame;
@@ -61,6 +48,7 @@ using blink::WebURL;
 using blink::WebView;
 using content::DocumentState;
 
+namespace content_settings {
 namespace {
 
 GURL GetOriginOrURL(const WebFrame* frame) {
@@ -75,10 +63,113 @@ GURL GetOriginOrURL(const WebFrame* frame) {
   return top_origin.GetURL();
 }
 
-// Allow passing both WebURL and GURL here, so that we can early return without
-// allocating a new backing string if only the default rule matches.
+bool IsScriptDisabledForPreview(content::RenderFrame* render_frame) {
+  return render_frame->GetPreviewsState() & content::NOSCRIPT_ON;
+}
+
+bool IsFrameWithOpaqueOrigin(WebFrame* frame) {
+  // Storage access is keyed off the top origin and the frame's origin.
+  // It will be denied any opaque origins so have this method to return early
+  // instead of making a Sync IPC call.
+  return frame->GetSecurityOrigin().IsOpaque() ||
+         frame->Top()->GetSecurityOrigin().IsOpaque();
+}
+
+}  // namespace
+
+ContentSettingsAgentImpl::Delegate::~Delegate() = default;
+
+bool ContentSettingsAgentImpl::Delegate::IsSchemeWhitelisted(
+    const std::string& scheme) {
+  return false;
+}
+
+base::Optional<bool>
+ContentSettingsAgentImpl::Delegate::AllowReadFromClipboard() {
+  return base::nullopt;
+}
+
+base::Optional<bool>
+ContentSettingsAgentImpl::Delegate::AllowWriteToClipboard() {
+  return base::nullopt;
+}
+
+base::Optional<bool> ContentSettingsAgentImpl::Delegate::AllowMutationEvents() {
+  return base::nullopt;
+}
+
+base::Optional<bool>
+ContentSettingsAgentImpl::Delegate::AllowRunningInsecureContent(
+    bool allowed_per_settings,
+    const blink::WebURL& resource_url) {
+  return base::nullopt;
+}
+
+void ContentSettingsAgentImpl::Delegate::PassiveInsecureContentFound(
+    const blink::WebURL&) {}
+
+ContentSettingsAgentImpl::ContentSettingsAgentImpl(
+    content::RenderFrame* render_frame,
+    bool should_whitelist,
+    std::unique_ptr<Delegate> delegate)
+    : content::RenderFrameObserver(render_frame),
+      content::RenderFrameObserverTracker<ContentSettingsAgentImpl>(
+          render_frame),
+      should_whitelist_(should_whitelist),
+      delegate_(std::move(delegate)) {
+  DCHECK(delegate_);
+  ClearBlockedContentSettings();
+  render_frame->GetWebFrame()->SetContentSettingsClient(this);
+
+  render_frame->GetAssociatedInterfaceRegistry()->AddInterface(
+      base::Bind(&ContentSettingsAgentImpl::OnContentSettingsAgentRequest,
+                 base::Unretained(this)));
+
+  content::RenderFrame* main_frame =
+      render_frame->GetRenderView()->GetMainRenderFrame();
+  // TODO(nasko): The main frame is not guaranteed to be in the same process
+  // with this frame with --site-per-process. This code needs to be updated
+  // to handle this case. See https://crbug.com/496670.
+  if (main_frame && main_frame != render_frame) {
+    // Copy all the settings from the main render frame to avoid race conditions
+    // when initializing this data. See https://crbug.com/333308.
+    ContentSettingsAgentImpl* parent =
+        ContentSettingsAgentImpl::Get(main_frame);
+    allow_running_insecure_content_ = parent->allow_running_insecure_content_;
+    is_interstitial_page_ = parent->is_interstitial_page_;
+  }
+}
+
+ContentSettingsAgentImpl::~ContentSettingsAgentImpl() = default;
+
+mojom::ContentSettingsManager&
+ContentSettingsAgentImpl::GetContentSettingsManager() {
+  if (!content_settings_manager_)
+    BindContentSettingsManager(&content_settings_manager_);
+  return *content_settings_manager_;
+}
+
+void ContentSettingsAgentImpl::SetContentSettingRules(
+    const RendererContentSettingRules* content_setting_rules) {
+  content_setting_rules_ = content_setting_rules;
+  UMA_HISTOGRAM_COUNTS_1M("ClientHints.CountRulesReceived",
+                          content_setting_rules_->client_hints_rules.size());
+}
+
+const RendererContentSettingRules*
+ContentSettingsAgentImpl::GetContentSettingRules() {
+  return content_setting_rules_;
+}
+
+void ContentSettingsAgentImpl::DidBlockContentType(
+    ContentSettingsType settings_type) {
+  bool newly_blocked = content_blocked_.insert(settings_type).second;
+  if (newly_blocked)
+    GetContentSettingsManager().OnContentBlocked(routing_id(), settings_type);
+}
+
 template <typename URL>
-ContentSetting GetContentSettingFromRules(
+ContentSetting ContentSettingsAgentImpl::GetContentSettingFromRules(
     const ContentSettingsForOneType& rules,
     const WebFrame* frame,
     const URL& secondary_url) {
@@ -101,110 +192,11 @@ ContentSetting GetContentSettingFromRules(
   return CONTENT_SETTING_DEFAULT;
 }
 
-bool IsScriptDisabledForPreview(content::RenderFrame* render_frame) {
-  return render_frame->GetPreviewsState() & content::NOSCRIPT_ON;
-}
-
-bool IsFrameWithOpaqueOrigin(WebFrame* frame) {
-  // Storage access is keyed off the top origin and the frame's origin.
-  // It will be denied any opaque origins so have this method to return early
-  // instead of making a Sync IPC call.
-  return frame->GetSecurityOrigin().IsOpaque() ||
-         frame->Top()->GetSecurityOrigin().IsOpaque();
-}
-
-}  // namespace
-
-ContentSettingsAgentImpl::ContentSettingsAgentImpl(
-    content::RenderFrame* render_frame,
-    bool should_whitelist,
-    service_manager::BinderRegistry* registry)
-    : content::RenderFrameObserver(render_frame),
-      content::RenderFrameObserverTracker<ContentSettingsAgentImpl>(
-          render_frame),
-      should_whitelist_(should_whitelist) {
-  ClearBlockedContentSettings();
-  render_frame->GetWebFrame()->SetContentSettingsClient(this);
-
-  render_frame->GetAssociatedInterfaceRegistry()->AddInterface(
-      base::Bind(&ContentSettingsAgentImpl::OnContentSettingsAgentRequest,
-                 base::Unretained(this)));
-
-  content::RenderFrame* main_frame =
-      render_frame->GetRenderView()->GetMainRenderFrame();
-  // TODO(nasko): The main frame is not guaranteed to be in the same process
-  // with this frame with --site-per-process. This code needs to be updated
-  // to handle this case. See https://crbug.com/496670.
-  if (main_frame && main_frame != render_frame) {
-    // Copy all the settings from the main render frame to avoid race conditions
-    // when initializing this data. See https://crbug.com/333308.
-    ContentSettingsAgentImpl* parent =
-        ContentSettingsAgentImpl::Get(main_frame);
-    allow_running_insecure_content_ = parent->allow_running_insecure_content_;
-    temporarily_allowed_plugins_ = parent->temporarily_allowed_plugins_;
-    is_interstitial_page_ = parent->is_interstitial_page_;
-  }
-}
-
-ContentSettingsAgentImpl::~ContentSettingsAgentImpl() {}
-
-chrome::mojom::ContentSettingsManager&
-ContentSettingsAgentImpl::GetContentSettingsManager() {
-  if (!content_settings_manager_)
-    BindContentSettingsManager(&content_settings_manager_);
-  return *content_settings_manager_;
-}
-
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-void ContentSettingsAgentImpl::SetExtensionDispatcher(
-    extensions::Dispatcher* extension_dispatcher) {
-  DCHECK(!extension_dispatcher_)
-      << "SetExtensionDispatcher() should only be called once.";
-  extension_dispatcher_ = extension_dispatcher;
-}
-#endif
-
-void ContentSettingsAgentImpl::SetContentSettingRules(
-    const RendererContentSettingRules* content_setting_rules) {
-  content_setting_rules_ = content_setting_rules;
-  UMA_HISTOGRAM_COUNTS_1M("ClientHints.CountRulesReceived",
-                          content_setting_rules_->client_hints_rules.size());
-}
-
-const RendererContentSettingRules*
-ContentSettingsAgentImpl::GetContentSettingRules() {
-  return content_setting_rules_;
-}
-
-bool ContentSettingsAgentImpl::IsPluginTemporarilyAllowed(
-    const std::string& identifier) {
-  // If the empty string is in here, it means all plugins are allowed.
-  // TODO(bauerb): Remove this once we only pass in explicit identifiers.
-  return base::Contains(temporarily_allowed_plugins_, identifier) ||
-         base::Contains(temporarily_allowed_plugins_, std::string());
-}
-
-void ContentSettingsAgentImpl::DidBlockContentType(
-    ContentSettingsType settings_type) {
-  bool newly_blocked = content_blocked_.insert(settings_type).second;
-  if (newly_blocked)
-    GetContentSettingsManager().OnContentBlocked(routing_id(), settings_type);
-}
-
 void ContentSettingsAgentImpl::BindContentSettingsManager(
-    mojo::Remote<chrome::mojom::ContentSettingsManager>* manager) {
+    mojo::Remote<mojom::ContentSettingsManager>* manager) {
   DCHECK(!*manager);
   content::ChildThread::Get()->BindHostReceiver(
       manager->BindNewPipeAndPassReceiver());
-}
-
-bool ContentSettingsAgentImpl::OnMessageReceived(const IPC::Message& message) {
-  // Don't swallow LoadBlockedPlugins messages, as they're sent to every
-  // blocked plugin.
-  IPC_BEGIN_MESSAGE_MAP(ContentSettingsAgentImpl, message)
-    IPC_MESSAGE_HANDLER(ChromeViewMsg_LoadBlockedPlugins, OnLoadBlockedPlugins)
-  IPC_END_MESSAGE_MAP()
-  return false;
 }
 
 void ContentSettingsAgentImpl::DidCommitProvisionalLoad(
@@ -221,7 +213,6 @@ void ContentSettingsAgentImpl::DidCommitProvisionalLoad(
     // correctly detect that a piece of content flipped from "not blocked" to
     // "blocked".
     ClearBlockedContentSettings();
-    temporarily_allowed_plugins_.clear();
 
     // The BrowserInterfaceBroker is reset on navigation, so we will need to
     // re-acquire the ContentSettingsManager.
@@ -257,14 +248,13 @@ void ContentSettingsAgentImpl::SetDisabledMixedContentUpgrades() {
 }
 
 void ContentSettingsAgentImpl::OnContentSettingsAgentRequest(
-    mojo::PendingAssociatedReceiver<chrome::mojom::ContentSettingsAgent>
-        receiver) {
+    mojo::PendingAssociatedReceiver<mojom::ContentSettingsAgent> receiver) {
   receivers_.Add(this, std::move(receiver));
 }
 
 bool ContentSettingsAgentImpl::AllowDatabase() {
   return AllowStorageAccess(
-      chrome::mojom::ContentSettingsManager::StorageType::DATABASE);
+      mojom::ContentSettingsManager::StorageType::DATABASE);
 }
 
 void ContentSettingsAgentImpl::RequestFileSystemAccessAsync(
@@ -276,8 +266,7 @@ void ContentSettingsAgentImpl::RequestFileSystemAccessAsync(
   }
 
   GetContentSettingsManager().AllowStorageAccess(
-      routing_id(),
-      chrome::mojom::ContentSettingsManager::StorageType::FILE_SYSTEM,
+      routing_id(), mojom::ContentSettingsManager::StorageType::FILE_SYSTEM,
       frame->GetSecurityOrigin(),
       frame->GetDocument().SiteForCookies().RepresentativeUrl(),
       frame->GetDocument().TopFrameOrigin(), std::move(callback));
@@ -306,17 +295,16 @@ bool ContentSettingsAgentImpl::AllowImage(bool enabled_per_settings,
 
 bool ContentSettingsAgentImpl::AllowIndexedDB() {
   return AllowStorageAccess(
-      chrome::mojom::ContentSettingsManager::StorageType::INDEXED_DB);
+      mojom::ContentSettingsManager::StorageType::INDEXED_DB);
 }
 
 bool ContentSettingsAgentImpl::AllowCacheStorage() {
-  return AllowStorageAccess(
-      chrome::mojom::ContentSettingsManager::StorageType::CACHE);
+  return AllowStorageAccess(mojom::ContentSettingsManager::StorageType::CACHE);
 }
 
 bool ContentSettingsAgentImpl::AllowWebLocks() {
   return AllowStorageAccess(
-      chrome::mojom::ContentSettingsManager::StorageType::WEB_LOCKS);
+      mojom::ContentSettingsManager::StorageType::WEB_LOCKS);
 }
 
 bool ContentSettingsAgentImpl::AllowScript(bool enabled_per_settings) {
@@ -382,9 +370,8 @@ bool ContentSettingsAgentImpl::AllowStorage(bool local) {
   bool result = false;
   GetContentSettingsManager().AllowStorageAccess(
       routing_id(),
-      local
-          ? chrome::mojom::ContentSettingsManager::StorageType::LOCAL_STORAGE
-          : chrome::mojom::ContentSettingsManager::StorageType::SESSION_STORAGE,
+      local ? mojom::ContentSettingsManager::StorageType::LOCAL_STORAGE
+            : mojom::ContentSettingsManager::StorageType::SESSION_STORAGE,
       frame->GetSecurityOrigin(),
       frame->GetDocument().SiteForCookies().RepresentativeUrl(),
       frame->GetDocument().TopFrameOrigin(), &result);
@@ -393,66 +380,29 @@ bool ContentSettingsAgentImpl::AllowStorage(bool local) {
 }
 
 bool ContentSettingsAgentImpl::AllowReadFromClipboard(bool default_value) {
-  bool allowed = default_value;
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-  extensions::ScriptContext* current_context =
-      extension_dispatcher_->script_context_set().GetCurrent();
-  if (current_context) {
-    allowed |= current_context->HasAPIPermission(
-        extensions::APIPermission::kClipboardRead);
-  }
-#endif
-  return allowed;
+  return delegate_->AllowReadFromClipboard().value_or(default_value);
 }
 
 bool ContentSettingsAgentImpl::AllowWriteToClipboard(bool default_value) {
-  bool allowed = default_value;
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-  // All blessed extension pages could historically write to the clipboard, so
-  // preserve that for compatibility.
-  extensions::ScriptContext* current_context =
-      extension_dispatcher_->script_context_set().GetCurrent();
-  if (current_context) {
-    if (current_context->effective_context_type() ==
-            extensions::Feature::BLESSED_EXTENSION_CONTEXT &&
-        !current_context->IsForServiceWorker()) {
-      allowed = true;
-    } else {
-      allowed |= current_context->HasAPIPermission(
-          extensions::APIPermission::kClipboardWrite);
-    }
-  }
-#endif
-  return allowed;
+  return delegate_->AllowWriteToClipboard().value_or(default_value);
 }
 
 bool ContentSettingsAgentImpl::AllowMutationEvents(bool default_value) {
-  return IsPlatformApp() ? false : default_value;
+  return delegate_->AllowMutationEvents().value_or(default_value);
 }
 
 bool ContentSettingsAgentImpl::AllowRunningInsecureContent(
     bool allowed_per_settings,
     const blink::WebURL& resource_url) {
-  bool allow = allowed_per_settings;
+  base::Optional<bool> result = delegate_->AllowRunningInsecureContent(
+      allowed_per_settings, resource_url);
+  if (result.has_value())
+    return result.value();
 
-  if (base::FeatureList::IsEnabled(features::kMixedContentSiteSetting)) {
-    if (content_setting_rules_) {
-      auto setting = GetContentSettingFromRules(
-          content_setting_rules_->mixed_content_rules,
-          render_frame()->GetWebFrame(), GURL());
-      allow |= (setting == CONTENT_SETTING_ALLOW);
-    }
-  } else {
-    allow |= allow_running_insecure_content_;
-    if (!allow) {
-      DidBlockContentType(ContentSettingsType::MIXEDSCRIPT);
-    }
+  bool allow = allowed_per_settings || allow_running_insecure_content_;
+  if (!allow) {
+    DidBlockContentType(ContentSettingsType::MIXEDSCRIPT);
   }
-
-  // Note: this implementation is a mirror of
-  // Browser::ShouldAllowRunningInsecureContent.
-  FilteredReportInsecureContentRan(GURL(resource_url));
-
   return allow;
 }
 
@@ -468,10 +418,7 @@ bool ContentSettingsAgentImpl::AllowPopupsAndRedirects(bool default_value) {
 
 void ContentSettingsAgentImpl::PassiveInsecureContentFound(
     const blink::WebURL& resource_url) {
-  // Note: this implementation is a mirror of
-  // Browser::PassiveInsecureContentFound.
-  ReportInsecureContent(SslInsecureContentType::DISPLAY);
-  FilteredReportInsecureContentDisplayed(GURL(resource_url));
+  delegate_->PassiveInsecureContentFound(resource_url);
 }
 
 void ContentSettingsAgentImpl::PersistClientHints(
@@ -560,43 +507,12 @@ void ContentSettingsAgentImpl::DidNotAllowScript() {
   DidBlockContentType(ContentSettingsType::JAVASCRIPT);
 }
 
-void ContentSettingsAgentImpl::OnLoadBlockedPlugins(
-    const std::string& identifier) {
-  temporarily_allowed_plugins_.insert(identifier);
-}
-
 void ContentSettingsAgentImpl::ClearBlockedContentSettings() {
   content_blocked_.clear();
   cached_storage_permissions_.clear();
   cached_script_permissions_.clear();
 }
 
-bool ContentSettingsAgentImpl::IsPlatformApp() {
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-  blink::WebLocalFrame* frame = render_frame()->GetWebFrame();
-  WebSecurityOrigin origin = frame->GetDocument().GetSecurityOrigin();
-  const extensions::Extension* extension = GetExtension(origin);
-  return extension && extension->is_platform_app();
-#else
-  return false;
-#endif
-}
-
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-const extensions::Extension* ContentSettingsAgentImpl::GetExtension(
-    const WebSecurityOrigin& origin) const {
-  if (origin.Protocol().Ascii() != extensions::kExtensionScheme)
-    return nullptr;
-
-  const std::string extension_id = origin.Host().Utf8().data();
-  if (!extension_dispatcher_->IsExtensionActive(extension_id))
-    return nullptr;
-
-  return extensions::RendererExtensionRegistry::Get()->GetByID(extension_id);
-}
-#endif
-
-// static
 bool ContentSettingsAgentImpl::IsWhitelistedForContentSettings() const {
   if (should_whitelist_)
     return true;
@@ -607,13 +523,8 @@ bool ContentSettingsAgentImpl::IsWhitelistedForContentSettings() const {
     return true;
 
   const WebDocument& document = render_frame()->GetWebFrame()->GetDocument();
-  return IsWhitelistedForContentSettings(document.GetSecurityOrigin(),
-                                         document.Url());
-}
-
-bool ContentSettingsAgentImpl::IsWhitelistedForContentSettings(
-    const WebSecurityOrigin& origin,
-    const WebURL& document_url) {
+  WebSecurityOrigin origin = document.GetSecurityOrigin();
+  WebURL document_url = document.Url();
   if (document_url.GetString() == content::kUnreachableWebDataURL)
     return true;
 
@@ -628,10 +539,8 @@ bool ContentSettingsAgentImpl::IsWhitelistedForContentSettings(
   if (protocol == content::kChromeDevToolsScheme)
     return true;  // DevTools UI elements should still work.
 
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-  if (protocol == extensions::kExtensionScheme)
+  if (delegate_->IsSchemeWhitelisted(protocol.Utf8()))
     return true;
-#endif
 
   // If the scheme is file:, an empty file name indicates a directory listing,
   // which requires JavaScript to function properly.
@@ -643,7 +552,7 @@ bool ContentSettingsAgentImpl::IsWhitelistedForContentSettings(
 }
 
 bool ContentSettingsAgentImpl::AllowStorageAccess(
-    chrome::mojom::ContentSettingsManager::StorageType storage_type) {
+    mojom::ContentSettingsManager::StorageType storage_type) {
   WebLocalFrame* frame = render_frame()->GetWebFrame();
   if (IsFrameWithOpaqueOrigin(frame))
     return false;
@@ -655,3 +564,5 @@ bool ContentSettingsAgentImpl::AllowStorageAccess(
       frame->GetDocument().TopFrameOrigin(), &result);
   return result;
 }
+
+}  // namespace content_settings

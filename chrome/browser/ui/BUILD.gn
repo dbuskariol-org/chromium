@@ -435,6 +435,7 @@ jumbo_static_library("ui") {
     "//components/captive_portal/core:buildflags",
     "//components/client_hints/browser",
     "//components/consent_auditor/",
+    "//components/content_settings/common:mojom",
     "//components/content_settings/core/browser",
     "//components/country_codes",
     "//components/crx_file",
