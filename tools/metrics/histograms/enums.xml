@@ -48678,6 +48678,9 @@ Called by update_net_trust_anchors.py.-->
   <int value="14" label="No storage permission">
     Unable to get storage permission for publish the page.
   </int>
+  <int value="15" label="Incorrect URL">
+    The URL from the saved page doesn't match the requested page URL.
+  </int>
 </enum>
 
 <enum name="OfflinePagesSharedPageWasOffline">
