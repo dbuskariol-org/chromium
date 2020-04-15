@@ -10,10 +10,14 @@ import static org.junit.Assert.assertTrue;
 import static org.chromium.chrome.browser.multiwindow.MultiWindowTestHelper.moveActivityToFront;
 import static org.chromium.chrome.browser.multiwindow.MultiWindowTestHelper.waitForSecondChromeTabbedActivity;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.clickFirstCardFromTabSwitcher;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.clickFirstTabInDialog;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.createTabs;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.enterTabSwitcher;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.mergeAllIncognitoTabsToAGroup;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.mergeAllNormalTabsToAGroup;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.switchTabModel;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabModelTabCount;
+import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabStripFaviconCount;
 import static org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper.verifyTabSwitcherCardCount;
 
 import android.annotation.TargetApi;
@@ -152,6 +156,91 @@ public class TabSwitcherMultiWindowTest {
         verifyTabSwitcherCardCount(cta1, 3);
         verifyTabModelTabCount(cta1, 3, 2);
         verifyTabModelTabCount(cta2, 1, 1);
+    }
+
+    @Test
+    @MediumTest
+    @TargetApi(Build.VERSION_CODES.N)
+    @Features.
+    EnableFeatures({ChromeFeatureList.TAB_GROUPS_ANDROID, ChromeFeatureList.TAB_REPARENTING})
+    public void testMoveTabsAcrossWindow_GTS_WithGroup() {
+        // Initially, we have 5 normal tabs and 5 incognito tabs in cta1.
+        final ChromeTabbedActivity cta1 = mActivityTestRule.getActivity();
+        createTabs(cta1, false, 5);
+        createTabs(cta1, true, 5);
+        verifyTabModelTabCount(cta1, 5, 5);
+
+        // Enter tab switcher in cta1 in incognito mode.
+        enterTabSwitcher(cta1);
+        assertTrue(cta1.getTabModelSelector().getCurrentModel().isIncognito());
+
+        // Merge all incognito tabs into one group.
+        mergeAllIncognitoTabsToAGroup(cta1);
+        verifyTabSwitcherCardCount(cta1, 1);
+
+        // Enter group and verify there are 5 favicons in tab strip.
+        clickFirstCardFromTabSwitcher(cta1);
+        clickFirstTabInDialog(cta1);
+        verifyTabStripFaviconCount(cta1, 5);
+
+        // Move 3 incognito tabs in this group to cta2.
+        MenuUtils.invokeCustomMenuActionSync(InstrumentationRegistry.getInstrumentation(), cta1,
+                org.chromium.chrome.R.id.move_to_other_window_menu_id);
+        final ChromeTabbedActivity cta2 = waitForSecondChromeTabbedActivity();
+        moveActivityToFront(cta1);
+        moveTabsToOtherWindow(cta1, 2);
+
+        // After move, there is a group of 2 incognito tabs in cta1 and a group of 3 incognito tabs
+        // in cta2.
+        verifyTabStripFaviconCount(cta1, 2);
+        moveActivityToFront(cta2);
+        verifyTabStripFaviconCount(cta2, 3);
+        verifyTabModelTabCount(cta1, 5, 2);
+        verifyTabModelTabCount(cta2, 0, 3);
+
+        // Move one incognito tab in group back to cta1.
+        moveTabsToOtherWindow(cta2, 1);
+
+        // After move, there is group of 3 incognito tabs in cta1 and a group of 2 incognito tabs in
+        // cta2.
+        verifyTabStripFaviconCount(cta2, 2);
+        moveActivityToFront(cta1);
+        verifyTabStripFaviconCount(cta1, 3);
+        verifyTabModelTabCount(cta1, 5, 3);
+        verifyTabModelTabCount(cta2, 0, 2);
+
+        // Switch to normal tab model in cta1 and create a tab group with 5 normal tabs.
+        enterTabSwitcher(cta1);
+        switchTabModel(cta1, false);
+        mergeAllNormalTabsToAGroup(cta1);
+        verifyTabSwitcherCardCount(cta1, 1);
+
+        // Enter group and verify there are 5 favicons in tab strip.
+        clickFirstCardFromTabSwitcher(cta1);
+        clickFirstTabInDialog(cta1);
+        verifyTabStripFaviconCount(cta1, 5);
+
+        // Move 3 normal tabs in this group to cta2.
+        moveTabsToOtherWindow(cta1, 3);
+
+        // After move, there is a group of 2 normal tabs in cta1 and a group of 3 normal tabs in
+        // cta2.
+        verifyTabStripFaviconCount(cta1, 2);
+        moveActivityToFront(cta2);
+        verifyTabStripFaviconCount(cta2, 3);
+        verifyTabModelTabCount(cta1, 2, 3);
+        verifyTabModelTabCount(cta2, 3, 2);
+
+        // Move one normal tab in group back to cta1.
+        moveTabsToOtherWindow(cta2, 1);
+
+        // After move, there is a group of 3 normal tabs in cta1 and a group of 2 normal tabs in
+        // cta2.
+        verifyTabStripFaviconCount(cta2, 2);
+        moveActivityToFront(cta1);
+        verifyTabStripFaviconCount(cta1, 3);
+        verifyTabModelTabCount(cta1, 3, 3);
+        verifyTabModelTabCount(cta2, 2, 2);
     }
 
     private void moveTabsToOtherWindow(ChromeTabbedActivity cta, int number) {

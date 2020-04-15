@@ -260,17 +260,34 @@ public class TabUiTestHelper {
      * @param cta   The current running activity.
      */
     static void mergeAllNormalTabsToAGroup(ChromeTabbedActivity cta) {
+        mergeAllTabsToAGroup(cta, false);
+    }
+
+    /**
+     * Merge all incognito tabs into a single tab group.
+     * @param cta   The current running activity.
+     */
+    static void mergeAllIncognitoTabsToAGroup(ChromeTabbedActivity cta) {
+        mergeAllTabsToAGroup(cta, true);
+    }
+
+    /**
+     * Merge all tabs in one tab model into a single tab group.
+     * @param cta           The current running activity.
+     * @param isIncognito   indicates the tab model that we are creating tab group in.
+     */
+    static void mergeAllTabsToAGroup(ChromeTabbedActivity cta, boolean isIncognito) {
         List<Tab> tabGroup = new ArrayList<>();
-        TabModel tabModel = cta.getTabModelSelector().getModel(false);
+        TabModel tabModel = cta.getTabModelSelector().getModel(isIncognito);
         for (int i = 0; i < tabModel.getCount(); i++) {
             tabGroup.add(tabModel.getTabAt(i));
         }
-        createTabGroup(cta, false, tabGroup);
+        createTabGroup(cta, isIncognito, tabGroup);
         assertTrue(cta.getTabModelSelector().getTabModelFilterProvider().getCurrentTabModelFilter()
                            instanceof TabGroupModelFilter);
         TabGroupModelFilter filter = (TabGroupModelFilter) cta.getTabModelSelector()
                                              .getTabModelFilterProvider()
-                                             .getCurrentTabModelFilter();
+                                             .getTabModelFilter(isIncognito);
         assertEquals(1, filter.getCount());
     }
 
