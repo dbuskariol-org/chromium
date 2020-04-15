@@ -53,8 +53,7 @@ java_group("android_arch_lifecycle_viewmodel_java") {
 # breaking when migrating to com_google_code_findbugs_jsr305. Can be
 # removed once downstream bots move off of third_party/jsr_305.
 java_group("com_google_code_findbugs_jsr305_java_temp") {
-  deps = [ "//third_party/jsr-305:jsr_305_javalib" ]
-  input_jars_paths = [ "libs/com_google_code_findbugs_jsr305/jsr305-3.0.2.jar" ]
+  deps = [ ":com_google_code_findbugs_jsr305_java" ]
 }
 
 # TODO (bjoyce): Remove when downstream bots can call this directly.

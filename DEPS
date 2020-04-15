@@ -1053,11 +1053,6 @@ deps = {
     Var('chromium_git') + '/external/github.com/open-source-parsers/jsoncpp.git'
       + '@' + '645250b6690785be60ab6780ce4b58698d884d11', # release 1.9.1
 
-  'src/third_party/jsr-305/src': {
-      'url': Var('chromium_git') + '/external/jsr-305.git' + '@' + '642c508235471f7220af6d5df2d3210e3bfc0919',
-      'condition': 'checkout_android',
-  },
-
   'src/third_party/junit/src': {
       'url': Var('chromium_git') + '/external/junit.git' + '@' + '64155f8a9babcfcf4263cf4d08253a1556e75481',
       'condition': 'checkout_android',
