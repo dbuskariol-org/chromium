@@ -168,6 +168,12 @@ const char kAutofillEnableLocalCardMigrationForNonSyncUserDescription[] =
     "When enabled, the local card migration flow will be enabled for users who "
     "have signed in but not enabled Chrome Sync.";
 
+const char kAutofillEnableStickyPaymentsBubbleName[] =
+    "Enable Autofill payments sticky bubbles";
+const char kAutofillEnableStickyPaymentsBubbleDescription[] =
+    "When enabled, all Autofill payments bubbles will not be dismissed upon "
+    "navigation.";
+
 const char kAutofillEnableSurfacingServerCardNicknameName[] =
     "Enable surfacing masked server card nicknames";
 const char kAutofillEnableSurfacingServerCardNicknameDescription[] =

@@ -53,6 +53,11 @@ const base::Feature kAutofillEnableLocalCardMigrationForNonSyncUser{
     "AutofillEnableLocalCardMigrationForNonSyncUser",
     base::FEATURE_ENABLED_BY_DEFAULT};
 
+// When enabled, all payments related bubbles will not be dismissed upon page
+// navigation.
+const base::Feature kAutofillEnableStickyPaymentsBubble{
+    "AutofillEnableStickyPaymentsBubble", base::FEATURE_DISABLED_BY_DEFAULT};
+
 // When enabled, if Google Payments cards were given nicknames in a Google Pay
 // app, Autofill will surface these nicknames in suggestions.
 const base::Feature kAutofillEnableSurfacingServerCardNickname{

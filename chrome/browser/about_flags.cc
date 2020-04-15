@@ -5239,6 +5239,13 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableAutofillCacheServerCardInfoDescription, kOsAll,
      FEATURE_VALUE_TYPE(autofill::features::kAutofillCacheServerCardInfo)},
 
+    {"autofill-enable-sticky-payments-bubble",
+     flag_descriptions::kAutofillEnableStickyPaymentsBubbleName,
+     flag_descriptions::kAutofillEnableStickyPaymentsBubbleDescription,
+     kOsDesktop,
+     FEATURE_VALUE_TYPE(
+         autofill::features::kAutofillEnableStickyPaymentsBubble)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
