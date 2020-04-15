@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-<link href="resources/grid.css" rel="stylesheet">
+<title>CSS Grid: intrinsic width of fixed-width grid items.</title>
+<link rel="author" title="Sunil Ratnu" href="mailto:sunil.ratnu@samsung.com"/>
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#overflow"/>
+<meta name="assert" content="This test ensures that scrollbar width is not accounted for fixed-width grid items' intrinsic width."/>
+<link href="/css/support/grid.css" rel="stylesheet"/>
 <style>
 .grid {
     grid-template-columns: 400px 500px;
@@ -14,10 +18,10 @@
 }
 
 </style>
-<script src="../../resources/check-layout.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 <body onload="checkLayout('.grid')">
-
-<p>This test checks that scrollbar width should not be added to the width of fixed-width grid items.</p>
 
 <div class="grid">
     <div class="firstRowFirstColumn gridItemScrollOverflow" data-expected-width="50" data-expected-height="50"></div>
