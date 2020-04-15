@@ -9,8 +9,10 @@
 #include "base/test/scoped_feature_list.h"
 #include "chrome/browser/media/feeds/media_feeds_service_factory.h"
 #include "chrome/browser/media/history/media_history_keyed_service.h"
+#include "chrome/common/pref_names.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "chrome/test/base/testing_profile.h"
+#include "components/prefs/pref_service.h"
 #include "components/safe_search_api/stub_url_checker.h"
 #include "components/safe_search_api/url_checker.h"
 #include "media/base/media_switches.h"
@@ -94,6 +96,11 @@ class MediaFeedsServiceTest : public ChromeRenderViewHostTestHarness {
     return out;
   }
 
+  void SetSafeSearchEnabled(bool enabled) {
+    profile()->GetPrefs()->SetBoolean(prefs::kMediaFeedsSafeSearchEnabled,
+                                      enabled);
+  }
+
   safe_search_api::StubURLChecker* safe_search_checker() {
     return stub_url_checker_.get();
   }
@@ -169,6 +176,7 @@ TEST_F(MediaFeedsServiceTest, GetForProfile) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
+  SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
@@ -216,6 +224,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
+  SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ true);
 
   // Store a Media Feed.
@@ -262,7 +271,8 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
             items[2]->safe_search_result);
 }
 
-TEST_F(MediaFeedsServiceTest, SafeSearch_Failed) {
+TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
+  SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpFailedResponse();
 
   // Store a Media Feed.
@@ -309,7 +319,53 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed) {
             items[2]->safe_search_result);
 }
 
+TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
+  // Store a Media Feed.
+  GetMediaHistoryService()->DiscoverMediaFeed(
+      GURL("https://www.google.com/feed"));
+  WaitForDB();
+
+  // Store some media feed items.
+  GetMediaHistoryService()->StoreMediaFeedFetchResult(
+      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
+      std::vector<media_session::MediaImage>(), "test", base::DoNothing());
+  WaitForDB();
+
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
+  {
+    // Get the pending items and check them against Safe Search.
+    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
+    EXPECT_EQ(3u, pending_items.size());
+    GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
+        std::move(pending_items));
+  }
+
+  // Wait for the service and DB to finish.
+  run_loop.Run();
+  WaitForDB();
+
+  {
+    // The pending items should still be 3.
+    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
+    EXPECT_EQ(3u, pending_items.size());
+  }
+
+  // Check the items were updated.
+  auto items = GetItemsForMediaFeedSync(1);
+  EXPECT_EQ(3u, items.size());
+  EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
+            items[0]->safe_search_result);
+  EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
+            items[1]->safe_search_result);
+  EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
+            items[2]->safe_search_result);
+}
+
 TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
+  SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
@@ -355,6 +411,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
+  SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
@@ -406,6 +463,8 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
+  SetSafeSearchEnabled(true);
+
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
       GURL("https://www.google.com/feed"));
@@ -446,6 +505,8 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
+  SetSafeSearchEnabled(true);
+
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
       GURL("https://www.google.com/feed"));
@@ -486,6 +547,8 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
+  SetSafeSearchEnabled(true);
+
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
       GURL("https://www.google.com/feed"));

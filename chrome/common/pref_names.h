@@ -1051,6 +1051,8 @@ extern const char kRequiredClientCertificateForUser[];
 extern const char kRequiredClientCertificateForDevice[];
 #endif
 
+extern const char kMediaFeedsSafeSearchEnabled[];
+
 }  // namespace prefs
 
 #endif  // CHROME_COMMON_PREF_NAMES_H_

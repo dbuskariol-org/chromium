@@ -9,6 +9,9 @@
 #include "chrome/browser/media/history/media_history_keyed_service.h"
 #include "chrome/browser/media/history/media_history_keyed_service_factory.h"
 #include "chrome/browser/profiles/profile.h"
+#include "chrome/common/pref_names.h"
+#include "components/pref_registry/pref_registry_syncable.h"
+#include "components/prefs/pref_service.h"
 #include "components/safe_search_api/safe_search/safe_search_url_checker_client.h"
 #include "components/safe_search_api/url_checker.h"
 #include "content/public/browser/browser_context.h"
@@ -48,8 +51,19 @@ bool MediaFeedsService::IsEnabled() {
   return base::FeatureList::IsEnabled(media::kMediaFeeds);
 }
 
+// static
+void MediaFeedsService::RegisterProfilePrefs(
+    user_prefs::PrefRegistrySyncable* registry) {
+  registry->RegisterBooleanPref(prefs::kMediaFeedsSafeSearchEnabled, false);
+}
+
 void MediaFeedsService::CheckItemsAgainstSafeSearch(
     media_history::MediaHistoryKeyedService::PendingSafeSearchCheckList list) {
+  if (!IsSafeSearchCheckingEnabled()) {
+    MaybeCallCompletionCallback();
+    return;
+  }
+
   for (auto& check : list) {
     if (!AddInflightSafeSearchCheck(check->id, check->urls))
       continue;
@@ -81,6 +95,8 @@ bool MediaFeedsService::AddInflightSafeSearchCheck(const int64_t id,
 }
 
 void MediaFeedsService::CheckForSafeSearch(const int64_t id, const GURL& url) {
+  DCHECK(IsSafeSearchCheckingEnabled());
+
   if (!safe_search_url_checker_) {
     // TODO(https://crbug.com/1066643): Add a UI toggle to turn this feature on.
     net::NetworkTrafficAnnotationTag traffic_annotation =
@@ -135,6 +151,8 @@ void MediaFeedsService::OnCheckURLDone(
     const GURL& url,
     safe_search_api::Classification classification,
     bool uncertain) {
+  DCHECK(IsSafeSearchCheckingEnabled());
+
   // Get the inflight safe search check data.
   auto it = inflight_safe_search_checks_.find(id);
   if (it == inflight_safe_search_checks_.end())
@@ -182,6 +200,10 @@ void MediaFeedsService::MaybeCallCompletionCallback() {
     std::move(*safe_search_completion_callback_).Run();
     safe_search_completion_callback_.reset();
   }
+}
+
+bool MediaFeedsService::IsSafeSearchCheckingEnabled() const {
+  return profile_->GetPrefs()->GetBoolean(prefs::kMediaFeedsSafeSearchEnabled);
 }
 
 MediaFeedsService::InflightSafeSearchCheck::InflightSafeSearchCheck(

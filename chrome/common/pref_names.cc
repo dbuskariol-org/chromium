@@ -2986,4 +2986,7 @@ extern const char kRequiredClientCertificateForDevice[] =
     "required_client_certificate_for_device";
 #endif
 
+// This pref enables checking of Media Feed items against the Safe Search API.
+const char kMediaFeedsSafeSearchEnabled[] = "media_feeds_safe_search_enabled";
+
 }  // namespace prefs

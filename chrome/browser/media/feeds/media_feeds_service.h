@@ -20,6 +20,10 @@ enum class Classification;
 class URLChecker;
 }  // namespace safe_search_api
 
+namespace user_prefs {
+class PrefRegistrySyncable;
+}  // namespace user_prefs
+
 namespace media_feeds {
 
 class MediaFeedsService : public KeyedService {
@@ -33,6 +37,9 @@ class MediaFeedsService : public KeyedService {
 
   // Returns the instance attached to the given |profile|.
   static MediaFeedsService* Get(Profile* profile);
+
+  // Register profile prefs in the pref registry.
+  static void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry);
 
   // Checks the list of pending items against the Safe Search API and stores
   // the result.
@@ -60,6 +67,8 @@ class MediaFeedsService : public KeyedService {
                       bool uncertain);
 
   void MaybeCallCompletionCallback();
+
+  bool IsSafeSearchCheckingEnabled() const;
 
   struct InflightSafeSearchCheck {
     explicit InflightSafeSearchCheck(const std::set<GURL>& urls);
