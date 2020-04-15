@@ -2551,6 +2551,11 @@
     "expiry_milestone": 84
   },
   {
+    "name": "happiness-tracking-surveys-for-desktop-migration",
+    "owners": [ "msramek", "chrome-friendly-settings@google.com" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "happiness-tracking-surveys-for-desktop-settings",
     "owners": [ "msramek", "chrome-friendly-settings@google.com" ],
     "expiry_milestone": 86

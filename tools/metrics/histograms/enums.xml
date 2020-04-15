@@ -39817,6 +39817,8 @@ from previous Chrome versions.
   <int value="430959979" label="SyncStandaloneTransport:disabled"/>
   <int value="431691805" label="MediaDocumentDownloadButton:enabled"/>
   <int value="434033638" label="PwaPersistentNotification:disabled"/>
+  <int value="434530296"
+      label="HappinessTrackingSurveysForDesktopMigration:disabled"/>
   <int value="436682243" label="TabGroupsAndroid:disabled"/>
   <int value="439525862" label="GlobalMediaControlsForCast:disabled"/>
   <int value="444754854" label="LegacyTLSWarnings:disabled"/>
@@ -40544,6 +40546,8 @@ from previous Chrome versions.
   <int value="1308537004" label="force-pnacl-subzero"/>
   <int value="1311860720" label="ChromeHomeNtpRedesign:disabled"/>
   <int value="1312025202" label="NTPOfflinePageSuggestions:disabled"/>
+  <int value="1313570156"
+      label="HappinessTrackingSurveysForDesktopMigration:enabled"/>
   <int value="1313850691" label="Metal:disabled"/>
   <int value="1314681756" label="NoStatePrefetch:disabled"/>
   <int value="1317562265" label="SeccompSandboxAndroid:disabled"/>
