@@ -3151,6 +3151,9 @@ crbug.com/1067277 external/wpt/css/css-content/element-replacement-on-replaced-e
 crbug.com/1069300 external/wpt/css/css-pseudo/active-selection-063.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Linux ] external/wpt/svg/painting/reftests/display-none-mask.html [ Failure ]
+crbug.com/626703 [ Mac ] external/wpt/svg/painting/reftests/display-none-mask.html [ Failure ]
+crbug.com/626703 [ Win ] external/wpt/svg/painting/reftests/display-none-mask.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/html/cross-origin-embedder-policy/no-secure-context.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/html/cross-origin-embedder-policy/no-secure-context.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/html/cross-origin-embedder-policy/no-secure-context.html [ Timeout ]
