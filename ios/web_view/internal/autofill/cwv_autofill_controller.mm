@@ -124,7 +124,8 @@ fetchNonPasswordSuggestionsForFormWithName:(NSString*)formName
                    autofillAgent:(AutofillAgent*)autofillAgent
                JSAutofillManager:(JsAutofillManager*)JSAutofillManager
              JSSuggestionManager:(JsSuggestionManager*)JSSuggestionManager
-              passwordController:(CWVPasswordController*)passwordController {
+              passwordController:(CWVPasswordController*)passwordController
+               applicationLocale:(const std::string&)applicationLocale {
   self = [super init];
   if (self) {
     DCHECK(webState);
@@ -143,8 +144,7 @@ fetchNonPasswordSuggestionsForFormWithName:(NSString*)formName
     _autofillClient->set_bridge(self);
 
     autofill::AutofillDriverIOS::PrepareForWebStateWebFrameAndDelegate(
-        _webState, _autofillClient.get(), self,
-        ios_web_view::ApplicationContext::GetInstance()->GetApplicationLocale(),
+        _webState, _autofillClient.get(), self, applicationLocale,
         autofill::AutofillManager::ENABLE_AUTOFILL_DOWNLOAD_MANAGER);
 
     _JSAutofillManager = JSAutofillManager;

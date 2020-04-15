@@ -6,6 +6,7 @@
 #define IOS_WEB_VIEW_INTERNAL_AUTOFILL_CWV_AUTOFILL_CONTROLLER_INTERNAL_H_
 
 #include <memory>
+#include <string>
 
 #import "ios/web_view/public/cwv_autofill_controller.h"
 
@@ -34,6 +35,7 @@ class WebState;
                JSAutofillManager:(JsAutofillManager*)JSAutofillManager
              JSSuggestionManager:(JsSuggestionManager*)JSSuggestionManager
               passwordController:(CWVPasswordController*)passwordController
+               applicationLocale:(const std::string&)applicationLocale
     NS_DESIGNATED_INITIALIZER;
 
 @end

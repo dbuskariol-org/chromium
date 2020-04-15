@@ -38,6 +38,7 @@
 #import "ios/web/public/web_state_delegate_bridge.h"
 #import "ios/web/public/web_state_observer_bridge.h"
 #import "ios/web/public/web_view_only/wk_web_view_configuration_util.h"
+#include "ios/web_view/internal/app/application_context.h"
 #import "ios/web_view/internal/autofill/cwv_autofill_controller_internal.h"
 #import "ios/web_view/internal/autofill/web_view_autofill_client_ios.h"
 #import "ios/web_view/internal/cwv_back_forward_list_internal.h"
@@ -663,13 +664,15 @@ BOOL gChromeLongPressAndForceTouchHandlingEnabled = YES;
       passwordManagerClient:std::move(passwordManagerClient)
       passwordManagerDriver:std::move(passwordManagerDriver)];
 
-  return
-      [[CWVAutofillController alloc] initWithWebState:_webState.get()
-                                       autofillClient:std::move(autofillClient)
-                                        autofillAgent:autofillAgent
-                                    JSAutofillManager:JSAutofillManager
-                                  JSSuggestionManager:JSSuggestionManager
-                                   passwordController:passwordController];
+  return [[CWVAutofillController alloc]
+         initWithWebState:_webState.get()
+           autofillClient:std::move(autofillClient)
+            autofillAgent:autofillAgent
+        JSAutofillManager:JSAutofillManager
+      JSSuggestionManager:JSSuggestionManager
+       passwordController:passwordController
+        applicationLocale:ios_web_view::ApplicationContext::GetInstance()
+                              ->GetApplicationLocale()];
 }
 
 #pragma mark - Preserving and Restoring State
