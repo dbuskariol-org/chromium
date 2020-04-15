@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<link href="resources/grid.css" rel="stylesheet">
+<title>CSS Grid: auto-repeat tracks on a positioned grid container.</title>
+<link rel="author" title="Manuel Rego Casasnovas" href="mailto:rego@igalia.com"/>
+<link rel="issue" href="https://crbug.com/624301"/>
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#repeat-notation"/>
+<link rel="match" href="grid-auto-repeat-positioned-container-001-ref.html"/>
+<meta name="assert" content="Checks that auto repeat tracks are properly computed for a positioned grid container with a definite width and height."/>
+<link href="/css/support/grid.css" rel="stylesheet"/>
 <style>
-
 .wrapper {
     position: relative;
     width: 100px;
@@ -20,8 +25,6 @@
     background: green;
 }
 </style>
-
-<p>This test checks that auto repeat tracks are properly computed for a positioned grid container with a definite width and height.</p>
 
 <p>Test passes if you get a grid with 5 rows of 20px and 4 columns of 25px.</p>
 
