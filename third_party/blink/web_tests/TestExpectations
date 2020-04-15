@@ -2191,6 +2191,9 @@ crbug.com/745905 external/wpt/css/css-overflow/text-overflow-scroll-vertical-lr-
 crbug.com/745905 external/wpt/css/css-overflow/text-overflow-scroll-vertical-rl-001.html [ Failure ]
 crbug.com/745905 external/wpt/css/css-overflow/text-overflow-scroll-vertical-rl-rtl-001.html [ Failure ]
 
+crbug.com/1067031 external/wpt/css/css-overflow/text-overflow-ellipsis-002.html [ Failure ]
+crbug.com/1067031 external/wpt/css/css-overflow/webkit-line-clamp-035.html [ Failure ]
+
 crbug.com/424365 external/wpt/css/css-shapes/shape-outside/shape-image/shape-image-024.html [ Failure ]
 crbug.com/441840 [ Win ] external/wpt/css/css-shapes/shape-outside/values/shape-margin-001.html [ Failure ]
 crbug.com/441840 external/wpt/css/css-shapes/shape-outside/values/shape-outside-circle-004.html [ Failure ]
@@ -3163,12 +3166,6 @@ crbug.com/626703 [ Win ] external/wpt/css/css-text/line-break/line-break-normal-
 crbug.com/626703 [ Mac10.14 ] external/wpt/preload/onload-event.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/storage/estimate-indexeddb.https.any.worker.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/fetch/origin/assorted.window.html [ Failure Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/css/css-overflow/text-overflow-ellipsis-002.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-overflow/text-overflow-ellipsis-002.html [ Failure ]
-crbug.com/626703 [ Win ] external/wpt/css/css-overflow/text-overflow-ellipsis-002.html [ Failure ]
-crbug.com/626703 [ Linux ] external/wpt/css/css-overflow/webkit-line-clamp-035.html [ Failure ]
-crbug.com/626703 [ Mac ] external/wpt/css/css-overflow/webkit-line-clamp-035.html [ Failure ]
-crbug.com/626703 [ Win ] external/wpt/css/css-overflow/webkit-line-clamp-035.html [ Failure ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/preload/download-resources.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] virtual/threaded/external/wpt/requestidlecallback/callback-invoked.html [ Timeout ]
 crbug.com/626703 [ Mac10.10 ] virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/the-input-element/input-type-checkbox.html [ Timeout ]
