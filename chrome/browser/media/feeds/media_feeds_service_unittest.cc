@@ -6,6 +6,7 @@
 
 #include "base/strings/utf_string_conversions.h"
 #include "base/test/bind_test_util.h"
+#include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_feature_list.h"
 #include "chrome/browser/media/feeds/media_feeds_service_factory.h"
 #include "chrome/browser/media/history/media_history_keyed_service.h"
@@ -176,6 +177,8 @@ TEST_F(MediaFeedsServiceTest, GetForProfile) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
+  base::HistogramTester histogram_tester;
+
   SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
@@ -221,9 +224,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
             items[1]->safe_search_result);
   EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kSafe,
             items[2]->safe_search_result);
+
+  histogram_tester.ExpectUniqueSample(
+      MediaFeedsService::kSafeSearchResultHistogramName,
+      media_feeds::mojom::SafeSearchResult::kSafe, 3);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
+  base::HistogramTester histogram_tester;
+
   SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ true);
 
@@ -269,9 +278,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
             items[1]->safe_search_result);
   EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnsafe,
             items[2]->safe_search_result);
+
+  histogram_tester.ExpectUniqueSample(
+      MediaFeedsService::kSafeSearchResultHistogramName,
+      media_feeds::mojom::SafeSearchResult::kUnsafe, 3);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
+  base::HistogramTester histogram_tester;
+
   SetSafeSearchEnabled(true);
   safe_search_checker()->SetUpFailedResponse();
 
@@ -317,9 +332,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
             items[1]->safe_search_result);
   EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
             items[2]->safe_search_result);
+
+  histogram_tester.ExpectUniqueSample(
+      MediaFeedsService::kSafeSearchResultHistogramName,
+      media_feeds::mojom::SafeSearchResult::kUnknown, 3);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
+  base::HistogramTester histogram_tester;
+
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
       GURL("https://www.google.com/feed"));
@@ -362,6 +383,9 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
             items[1]->safe_search_result);
   EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
             items[2]->safe_search_result);
+
+  histogram_tester.ExpectTotalCount(
+      MediaFeedsService::kSafeSearchResultHistogramName, 0);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
@@ -464,6 +488,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
   SetSafeSearchEnabled(true);
+  base::HistogramTester histogram_tester;
 
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
@@ -502,10 +527,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
     EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnsafe,
               items[0]->safe_search_result);
   }
+
+  histogram_tester.ExpectUniqueSample(
+      MediaFeedsService::kSafeSearchResultHistogramName,
+      media_feeds::mojom::SafeSearchResult::kUnsafe, 1);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
   SetSafeSearchEnabled(true);
+  base::HistogramTester histogram_tester;
 
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
@@ -544,10 +574,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
     EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
               items[0]->safe_search_result);
   }
+
+  histogram_tester.ExpectUniqueSample(
+      MediaFeedsService::kSafeSearchResultHistogramName,
+      media_feeds::mojom::SafeSearchResult::kUnknown, 1);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
   SetSafeSearchEnabled(true);
+  base::HistogramTester histogram_tester;
 
   // Store a Media Feed.
   GetMediaHistoryService()->DiscoverMediaFeed(
@@ -586,6 +621,10 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
     EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnsafe,
               items[0]->safe_search_result);
   }
+
+  histogram_tester.ExpectUniqueSample(
+      MediaFeedsService::kSafeSearchResultHistogramName,
+      media_feeds::mojom::SafeSearchResult::kUnsafe, 1);
 }
 
 }  // namespace media_feeds

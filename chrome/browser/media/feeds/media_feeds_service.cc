@@ -5,6 +5,7 @@
 #include "chrome/browser/media/feeds/media_feeds_service.h"
 
 #include "base/feature_list.h"
+#include "base/metrics/histogram_functions.h"
 #include "chrome/browser/media/feeds/media_feeds_service_factory.h"
 #include "chrome/browser/media/history/media_history_keyed_service.h"
 #include "chrome/browser/media/history/media_history_keyed_service_factory.h"
@@ -35,6 +36,9 @@ GURL Normalize(const GURL& url) {
 }
 
 }  // namespace
+
+const char MediaFeedsService::kSafeSearchResultHistogramName[] =
+    "Media.Feeds.SafeSearch.Result";
 
 MediaFeedsService::MediaFeedsService(Profile* profile) : profile_(profile) {
   DCHECK(!profile->IsOffTheRecord());
@@ -190,6 +194,8 @@ void MediaFeedsService::OnCheckURLDone(
       media_history::MediaHistoryKeyedServiceFactory::GetForProfile(profile_);
   DCHECK(service);
   service->StoreMediaFeedItemSafeSearchResults(results);
+
+  base::UmaHistogramEnumeration(kSafeSearchResultHistogramName, result);
 
   MaybeCallCompletionCallback();
 }

@@ -28,6 +28,8 @@ namespace media_feeds {
 
 class MediaFeedsService : public KeyedService {
  public:
+  static const char kSafeSearchResultHistogramName[];
+
   explicit MediaFeedsService(Profile* profile);
   ~MediaFeedsService() override;
   MediaFeedsService(const MediaFeedsService& t) = delete;
