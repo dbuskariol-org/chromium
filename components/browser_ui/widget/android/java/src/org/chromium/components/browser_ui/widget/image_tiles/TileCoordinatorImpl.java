@@ -2,29 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.query_tiles.list;
+package org.chromium.components.browser_ui.widget.image_tiles;
 
 import android.content.Context;
 import android.view.View;
 
 import org.chromium.base.Callback;
-import org.chromium.chrome.browser.query_tiles.QueryTileCoordinator;
-import org.chromium.chrome.browser.query_tiles.Tile;
 
 import java.util.List;
 
 /**
- * The top level coordinator for the query tiles UI.
+ * The top level coordinator for the tiles UI.
  */
-public class QueryTileCoordinatorImpl implements QueryTileCoordinator {
+class TileCoordinatorImpl implements ImageTileCoordinator {
     private final TileListModel mModel;
     private final TileListView mView;
 
     /** Constructor. */
-    public QueryTileCoordinatorImpl(Context context, Callback<Tile> tileClickCallback,
-            TileVisualsProvider visualsProvider) {
+    public TileCoordinatorImpl(Context context, TileConfig config,
+            Callback<ImageTile> tileClickCallback, TileVisualsProvider visualsProvider) {
         mModel = new TileListModel();
-        mView = new TileListView(context, mModel);
+        mView = new TileListView(context, config, mModel);
 
         mModel.getProperties().set(TileListProperties.CLICK_CALLBACK, tileClickCallback);
         mModel.getProperties().set(TileListProperties.VISUALS_CALLBACK, visualsProvider);
@@ -36,7 +34,7 @@ public class QueryTileCoordinatorImpl implements QueryTileCoordinator {
     }
 
     @Override
-    public void setTiles(List<Tile> tiles) {
+    public void setTiles(List<ImageTile> tiles) {
         mModel.set(tiles);
     }
 }

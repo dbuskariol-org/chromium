@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.query_tiles.list;
+package org.chromium.components.browser_ui.widget.image_tiles;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -16,13 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
 import androidx.recyclerview.widget.RecyclerView.State;
 
-import org.chromium.chrome.query_tiles.R;
+import org.chromium.components.browser_ui.widget.R;
 import org.chromium.ui.modelutil.ForwardingListObservable;
 import org.chromium.ui.modelutil.PropertyModelChangeProcessor;
 import org.chromium.ui.modelutil.RecyclerViewAdapter;
 
 /**
- * The View component of a query tiles.  This takes the {@link TileListModel} and creates the
+ * The View component of the tiles UI.  This takes the {@link TileListModel} and creates the
  * glue to display it on the screen.
  */
 class TileListView {
@@ -33,7 +33,7 @@ class TileListView {
     private final TileSizeSupplier mTileSizeSupplier;
 
     /** Constructor. */
-    public TileListView(Context context, TileListModel model) {
+    public TileListView(Context context, TileConfig config, TileListModel model) {
         mModel = model;
         mView = new RecyclerView(context) {
             @Override

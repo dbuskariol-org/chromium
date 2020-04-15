@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.query_tiles.list;
+package org.chromium.components.browser_ui.widget.image_tiles;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -10,12 +10,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
-import org.chromium.chrome.browser.query_tiles.Tile;
-import org.chromium.chrome.query_tiles.R;
+import org.chromium.components.browser_ui.widget.R;
 import org.chromium.ui.modelutil.PropertyModel;
 
 /**
- * A {@link ViewHolder} responsible for building and setting properties on the query tile views.
+ * A {@link ViewHolder} responsible for building and setting properties on the tiles.
  */
 class TileViewHolder extends ViewHolder {
     /** Creates an instance of a {@link TileViewHolder}. */
@@ -28,7 +27,7 @@ class TileViewHolder extends ViewHolder {
      * @param properties The shared {@link PropertyModel} all items can access.
      * @param tile       The {@link ListItem} to visually represent in this {@link ViewHolder}.
      */
-    public void bind(PropertyModel properties, Tile tile) {
+    public void bind(PropertyModel properties, ImageTile tile) {
         TextView title = itemView.findViewById(R.id.title);
         title.setText(tile.displayTitle);
         itemView.setOnClickListener(

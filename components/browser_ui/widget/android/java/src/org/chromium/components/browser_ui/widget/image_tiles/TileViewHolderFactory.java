@@ -2,18 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.query_tiles.list;
+package org.chromium.components.browser_ui.widget.image_tiles;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.chromium.base.supplier.Supplier;
-import org.chromium.chrome.browser.query_tiles.list.TileSizeSupplier.TileSize;
-import org.chromium.chrome.query_tiles.R;
+import org.chromium.components.browser_ui.widget.R;
+import org.chromium.components.browser_ui.widget.image_tiles.TileSizeSupplier.TileSize;
 import org.chromium.ui.modelutil.RecyclerViewAdapter;
 
 /**
- * A factory class to create view holders for the query tiles.
+ * A factory class to create view holders for the tiles.
  */
 class TileViewHolderFactory implements RecyclerViewAdapter.ViewHolderFactory<TileViewHolder> {
     private final Supplier<TileSize> mTileSizeSupplier;

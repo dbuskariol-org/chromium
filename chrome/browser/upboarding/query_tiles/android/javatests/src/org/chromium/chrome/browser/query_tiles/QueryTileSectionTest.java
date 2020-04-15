@@ -89,17 +89,17 @@ public class QueryTileSectionTest {
     }
 
     private static class TestTileProvider implements TileProvider {
-        private List<Tile> mTiles = new ArrayList<>();
+        private List<QueryTile> mTiles = new ArrayList<>();
 
         private TestTileProvider() {
-            List<Tile> children = new ArrayList<>();
-            children.add(new Tile("tile1_1", "Tile 1_1", "Tile 1_1", "Tile 1_1 Query", null));
-            Tile tile = new Tile("1", "Tile 1", "Tile 1", "Tile 1 Query", children);
+            List<QueryTile> children = new ArrayList<>();
+            children.add(new QueryTile("tile1_1", "Tile 1_1", "Tile 1_1", "Tile 1_1 Query", null));
+            QueryTile tile = new QueryTile("1", "Tile 1", "Tile 1", "Tile 1 Query", children);
             mTiles.add(tile);
         }
 
         @Override
-        public void getQueryTiles(Callback<List<Tile>> callback) {
+        public void getQueryTiles(Callback<List<QueryTile>> callback) {
             callback.onResult(mTiles);
         }
 

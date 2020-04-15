@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.query_tiles.list;
+package org.chromium.components.browser_ui.widget.image_tiles;
+
 import android.content.Context;
 import android.content.res.Resources;
 
 import org.chromium.base.supplier.Supplier;
-import org.chromium.chrome.browser.query_tiles.list.TileSizeSupplier.TileSize;
-import org.chromium.chrome.query_tiles.R;
+import org.chromium.components.browser_ui.widget.R;
+import org.chromium.components.browser_ui.widget.image_tiles.TileSizeSupplier.TileSize;
 
 /**
  * A helper class to compute dimensions for the carousel layout.
@@ -65,6 +66,6 @@ class TileSizeSupplier implements Supplier<TileSize> {
     private int getAvailableWidth() {
         // TODO(shaktisahu): Cap this for tablet and landscape to 600dp.
         return mResources.getDisplayMetrics().widthPixels
-                - 2 * mResources.getDimensionPixelOffset(R.dimen.recycler_view_start_margin);
+                - 2 * mResources.getDimensionPixelOffset(R.dimen.default_list_row_padding);
     }
 }

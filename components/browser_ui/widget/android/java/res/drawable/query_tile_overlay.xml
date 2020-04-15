@@ -12,5 +12,5 @@
         android:startColor="#00000000"
         android:type="linear" />
     <corners
-        android:radius="@dimen/tile_corner_radius"/>
+        android:radius="@dimen/default_rounded_corner_radius"/>
 </shape>

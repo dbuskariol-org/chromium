@@ -16,10 +16,10 @@
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:importantForAccessibility="no"
-        app:cornerRadiusBottomStart="@dimen/tile_corner_radius"
-        app:cornerRadiusBottomEnd="@dimen/tile_corner_radius"
-        app:cornerRadiusTopStart="@dimen/tile_corner_radius"
-        app:cornerRadiusTopEnd="@dimen/tile_corner_radius" />
+        app:cornerRadiusBottomStart="@dimen/default_rounded_corner_radius"
+        app:cornerRadiusBottomEnd="@dimen/default_rounded_corner_radius"
+        app:cornerRadiusTopStart="@dimen/default_rounded_corner_radius"
+        app:cornerRadiusTopEnd="@dimen/default_rounded_corner_radius" />
 
     <ImageView
         android:id="@+id/gradient_overlay"
@@ -35,5 +35,5 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="12dp"
         android:layout_marginStart="16dp"
-        android:textAppearance="@style/TextAppearance.WhiteText"/>
+        android:textAppearance="@style/TextAppearance.TextMedium.Primary.Light"/>
 </RelativeLayout>
