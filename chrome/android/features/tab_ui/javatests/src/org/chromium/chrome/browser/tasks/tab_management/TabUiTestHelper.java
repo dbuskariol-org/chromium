@@ -10,6 +10,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 
@@ -21,6 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static org.chromium.base.test.util.CallbackHelper.WAIT_TIMEOUT_SECONDS;
+import static org.chromium.chrome.test.util.browser.RecyclerViewTestUtils.waitForStableRecyclerView;
 import static org.chromium.content_public.browser.test.util.CriteriaHelper.DEFAULT_MAX_TIME_TO_POLL;
 import static org.chromium.content_public.browser.test.util.CriteriaHelper.DEFAULT_POLLING_INTERVAL;
 
@@ -586,6 +588,29 @@ public class TabUiTestHelper {
     public static void finishActivity(final Activity activity) throws Exception {
         ApplicationTestUtils.finishActivity(activity);
         PseudoTab.clearForTesting();
+    }
+
+    /**
+     * Click on the incognito toggle within grid tab switcher top toolbar to switch between normal
+     * and incognito tab model.
+     * @param cta          The current running activity.
+     * @param isIncognito  indicates whether the incognito or normal tab model is selected after
+     *         switch.
+     */
+    public static void switchTabModel(ChromeTabbedActivity cta, boolean isIncognito) {
+        assertTrue(isIncognito != cta.getTabModelSelector().isIncognitoSelected());
+        assertTrue(cta.getOverviewModeBehavior().overviewVisible());
+
+        onView(withContentDescription(isIncognito
+                               ? R.string.accessibility_tab_switcher_incognito_stack
+                               : R.string.accessibility_tab_switcher_standard_stack))
+                .perform(click());
+
+        CriteriaHelper.pollUiThread(Criteria.equals(
+                isIncognito, () -> cta.getTabModelSelector().isIncognitoSelected()));
+        // Wait for tab list recyclerView to finish animation after tab model switch.
+        RecyclerView recyclerView = cta.findViewById(R.id.tab_list_view);
+        waitForStableRecyclerView(recyclerView);
     }
 
     /**
