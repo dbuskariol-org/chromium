@@ -4,13 +4,7 @@
 
 module tracing.mojom;
 
-// Producer processes register with the format
-// "kPerfettoProducerNamePrefix-PID" when connecting to Chrome's internal
-// tracing service. Note that system producers use a different but similar
-// naming scheme to disambiguate between different apps on the same system,
-// see SystemProducer::ConnectToSystemService() implementations. Of
-// particular interest is PosixSystemProducer::ConnectSocket().
-const string kPerfettoProducerNamePrefix = "org.chromium-";
+const string kPerfettoProducerNamePrefix = "org.chromium.perfetto_producer.";
 const string kTraceEventDataSourceName = "org.chromium.trace_event";
 const string kMetaDataSourceName = "org.chromium.trace_metadata";
 const string kSystemTraceDataSourceName = "org.chromium.trace_system";
