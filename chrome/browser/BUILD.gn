@@ -742,6 +742,8 @@ jumbo_static_library("browser") {
     "media/router/media_router_feature.h",
     "media/webrtc/audio_debug_recordings_handler.cc",
     "media/webrtc/audio_debug_recordings_handler.h",
+    "media/webrtc/camera_pan_tilt_zoom_permission_context.cc",
+    "media/webrtc/camera_pan_tilt_zoom_permission_context.h",
     "media/webrtc/desktop_media_list.h",
     "media/webrtc/desktop_media_list_base.cc",
     "media/webrtc/desktop_media_list_base.h",
