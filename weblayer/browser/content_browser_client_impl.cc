@@ -188,6 +188,19 @@ void CreateMediaDrmStorage(
 
 namespace weblayer {
 
+blink::UserAgentMetadata GetUserAgentMetadata() {
+  blink::UserAgentMetadata metadata;
+
+  metadata.brand = version_info::GetProductName();
+  metadata.full_version = version_info::GetVersionNumber();
+  metadata.major_version = version_info::GetMajorVersionNumber();
+  metadata.platform = version_info::GetOSType();
+  metadata.architecture = content::BuildCpuInfo();
+  metadata.model = content::BuildModelInfo();
+
+  return metadata;
+}
+
 ContentBrowserClientImpl::ContentBrowserClientImpl(MainParams* params)
     : params_(params),
       feature_list_creator_(std::make_unique<FeatureListCreator>()) {
@@ -260,16 +273,7 @@ std::string ContentBrowserClientImpl::GetUserAgent() {
 }
 
 blink::UserAgentMetadata ContentBrowserClientImpl::GetUserAgentMetadata() {
-  blink::UserAgentMetadata metadata;
-
-  metadata.brand = version_info::GetProductName();
-  metadata.full_version = version_info::GetVersionNumber();
-  metadata.major_version = version_info::GetMajorVersionNumber();
-  metadata.platform = version_info::GetOSType();
-  metadata.architecture = content::BuildCpuInfo();
-  metadata.model = content::BuildModelInfo();
-
-  return metadata;
+  return weblayer::GetUserAgentMetadata();
 }
 
 void ContentBrowserClientImpl::OverrideWebkitPrefs(
