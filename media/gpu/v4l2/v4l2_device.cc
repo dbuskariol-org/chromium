@@ -2047,6 +2047,23 @@ bool V4L2Device::SetExtCtrls(uint32_t ctrl_class,
   return Ioctl(VIDIOC_S_EXT_CTRLS, &ext_ctrls) == 0;
 }
 
+base::Optional<struct v4l2_ext_control> V4L2Device::GetCtrl(uint32_t ctrl_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(client_sequence_checker_);
+  struct v4l2_ext_control ctrl = {};
+  struct v4l2_ext_controls ext_ctrls = {};
+
+  ctrl.id = ctrl_id;
+  ext_ctrls.controls = &ctrl;
+  ext_ctrls.count = 1;
+
+  if (Ioctl(VIDIOC_G_EXT_CTRLS, &ext_ctrls) != 0) {
+    VPLOGF(3) << "Failed to get control";
+    return base::nullopt;
+  }
+
+  return ctrl;
+}
+
 class V4L2Request {
  public:
   // Apply the passed controls to the request.
