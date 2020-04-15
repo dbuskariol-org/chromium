@@ -27225,7 +27225,7 @@
           "--platform",
           "iPhone X",
           "--version",
-          "13.3",
+          "13.4",
           "--out-dir",
           "${ISOLATED_OUTDIR}",
           "--xcode-build-version",
@@ -27236,7 +27236,7 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
         },
-        "name": "ios_chrome_bookmarks_egtests_iPhone X 13.3",
+        "name": "ios_chrome_bookmarks_egtests_iPhone X 13.4",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "cipd_packages": [
@@ -27682,7 +27682,7 @@
           "--platform",
           "iPhone X",
           "--version",
-          "13.3",
+          "13.4",
           "--out-dir",
           "${ISOLATED_OUTDIR}",
           "--xcode-build-version",
@@ -27693,7 +27693,7 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
         },
-        "name": "ios_chrome_reading_list_egtests_iPhone X 13.3",
+        "name": "ios_chrome_reading_list_egtests_iPhone X 13.4",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "cipd_packages": [
@@ -27973,7 +27973,7 @@
           "--platform",
           "iPhone X",
           "--version",
-          "13.3",
+          "13.4",
           "--out-dir",
           "${ISOLATED_OUTDIR}",
           "--xcode-build-version",
@@ -27984,7 +27984,7 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
         },
-        "name": "ios_chrome_settings_egtests_iPhone X 13.3",
+        "name": "ios_chrome_settings_egtests_iPhone X 13.4",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "cipd_packages": [
@@ -28507,7 +28507,7 @@
           "--platform",
           "iPhone X",
           "--version",
-          "13.3",
+          "13.4",
           "--out-dir",
           "${ISOLATED_OUTDIR}",
           "--xcode-build-version",
@@ -28518,7 +28518,7 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
         },
-        "name": "ios_chrome_translate_egtests_iPhone X 13.3",
+        "name": "ios_chrome_translate_egtests_iPhone X 13.4",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "cipd_packages": [
@@ -29251,7 +29251,7 @@
           "--platform",
           "iPhone X",
           "--version",
-          "13.3",
+          "13.4",
           "--out-dir",
           "${ISOLATED_OUTDIR}",
           "--xcode-build-version",
@@ -29262,7 +29262,7 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
         },
-        "name": "ios_chrome_web_egtests_iPhone X 13.3",
+        "name": "ios_chrome_web_egtests_iPhone X 13.4",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "cipd_packages": [
@@ -29784,7 +29784,7 @@
           "--platform",
           "iPhone X",
           "--version",
-          "13.3",
+          "13.4",
           "--out-dir",
           "${ISOLATED_OUTDIR}",
           "--xcode-build-version",
@@ -29795,7 +29795,7 @@
           "args": [],
           "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
         },
-        "name": "ios_showcase_egtests_iPhone X 13.3",
+        "name": "ios_showcase_egtests_iPhone X 13.4",
         "swarming": {
           "can_use_on_swarming_builders": true,
           "cipd_packages": [
