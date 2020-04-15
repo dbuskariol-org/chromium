@@ -165,6 +165,7 @@ fuzzer_test("trust_token_key_commitment_parser_fuzzer") {
   deps = [
     ":trust_tokens",
     "//base",
+    "//net:net_fuzzer_test_support",
     "//services/network/public/mojom",
   ]
   dict = "test/trust_token_key_commitment_parser_fuzzer.dict"
