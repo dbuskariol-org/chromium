@@ -603,12 +603,11 @@ void PrintPreviewHandler::RegisterMessages() {
       base::BindRepeating(
           &PrintPreviewHandler::HandleGrantExtensionPrinterAccess,
           base::Unretained(this)));
-#if defined(OS_CHROMEOS)
   web_ui()->RegisterMessageCallback(
       "openPrinterSettings",
       base::BindRepeating(&PrintPreviewHandler::HandleOpenPrinterSettings,
                           base::Unretained(this)));
-
+#if defined(OS_CHROMEOS)
   web_ui()->RegisterMessageCallback(
       "getEulaUrl", base::BindRepeating(&PrintPreviewHandler::HandleGetEulaUrl,
                                         base::Unretained(this)));
@@ -1038,13 +1037,21 @@ void PrintPreviewHandler::HandleClosePreviewDialog(
       regenerate_preview_request_count_);
 }
 
-#if defined(OS_CHROMEOS)
 void PrintPreviewHandler::HandleOpenPrinterSettings(
     const base::ListValue* args) {
+#if defined(OS_CHROMEOS)
   chrome::SettingsWindowManager::GetInstance()->ShowOSSettings(
       Profile::FromWebUI(web_ui()), chrome::kNativePrintingSettingsSubPage);
+#else
+  GURL url(chrome::GetSettingsUrl(chrome::kPrintingSettingsSubPage));
+  content::OpenURLParams params(url, content::Referrer(),
+                                WindowOpenDisposition::NEW_FOREGROUND_TAB,
+                                ui::PAGE_TRANSITION_LINK, false);
+  preview_web_contents()->OpenURL(params);
+#endif
 }
 
+#if defined(OS_CHROMEOS)
 void PrintPreviewHandler::HandleGetEulaUrl(const base::ListValue* args) {
   CHECK_EQ(2U, args->GetSize());
 
