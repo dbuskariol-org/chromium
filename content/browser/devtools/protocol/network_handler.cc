@@ -1170,7 +1170,8 @@ void NetworkHandler::SetCookie(const std::string& name,
       net::CookieOptions::SameSiteCookieContext::MakeInclusive());
   options.set_include_httponly();
   storage_partition_->GetCookieManagerForBrowserProcess()->SetCanonicalCookie(
-      *cookie, "https", options,
+      *cookie, net::cookie_util::SimulatedCookieSource(*cookie, "https"),
+      options,
       net::cookie_util::AdaptCookieInclusionStatusToBool(base::BindOnce(
           &SetCookieCallback::sendSuccess, std::move(callback))));
 }
@@ -1207,7 +1208,8 @@ void NetworkHandler::SetCookies(
       net::CookieOptions::SameSiteCookieContext::MakeInclusive());
   for (const auto& cookie : net_cookies) {
     cookie_manager->SetCanonicalCookie(
-        *cookie, "https", options,
+        *cookie, net::cookie_util::SimulatedCookieSource(*cookie, "https"),
+        options,
         base::BindOnce(
             [](base::RepeatingClosure callback,
                net::CanonicalCookie::CookieInclusionStatus) { callback.Run(); },

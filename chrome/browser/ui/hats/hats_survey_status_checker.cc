@@ -37,12 +37,12 @@ HatsSurveyStatusChecker::HatsSurveyStatusChecker(Profile* profile) {
   // info doesn't meet requirements. However, the cookie's value is not checked.
   // To fetch the survey status directly, we need to set the cookie, but it is
   // ok to use a non-conforming value.
+  GURL cookie_url = GURL("https://www.google.com");
   auto survey_cookie = net::CanonicalCookie::Create(
-      GURL("https://www.google.com"), "PAIDCONTENT=0", base::Time::Now(),
-      base::nullopt);
+      cookie_url, "PAIDCONTENT=0", base::Time::Now(), base::nullopt);
   network::mojom::CookieManager* cookie_manager =
       GetStoragePartition()->GetCookieManagerForBrowserProcess();
-  cookie_manager->SetCanonicalCookie(*survey_cookie, "https",
+  cookie_manager->SetCanonicalCookie(*survey_cookie, cookie_url,
                                      net::CookieOptions::MakeAllInclusive(),
                                      base::DoNothing());
 }
