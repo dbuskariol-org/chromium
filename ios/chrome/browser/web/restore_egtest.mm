@@ -132,8 +132,7 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
 
 // Navigates to a set of cross-domains, chrome URLs and error pages, and then
 // tests that they are properly restored.
-// TODO(crbug.com/1070790): Fix loadTestPages with a properly invalid URL.
-- (void)DISABLED_testRestoreHistory {
+- (void)testRestoreHistory {
   [self setUpRestoreServers];
   [self loadTestPages];
   [self verifyRestoredTestPages:YES];
@@ -141,8 +140,7 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
 
 // Navigates to a set of cross-domains, chrome URLs and error pages, and then
 // tests that they are properly restored in airplane mode.
-// TODO(crbug.com/1070790): Fix loadTestPages with a properly invalid URL.
-- (void)DISABLED_testRestoreNoNetwork {
+- (void)testRestoreNoNetwork {
   [self setUpRestoreServers];
   [self loadTestPages];
   self.serverRespondsWithContent = false;
@@ -245,7 +243,7 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
   [ChromeEarlGrey loadURL:chromePage];
 
   // Load error page.
-  const GURL errorPage = GURL("http://ndtv1234.com");
+  const GURL errorPage = GURL("http://invalid.");
   [ChromeEarlGrey loadURL:errorPage];
   [ChromeEarlGrey waitForWebStateContainingText:"ERR_"];
   [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
@@ -278,12 +276,12 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
 
   // Go back to error page.
   [[EarlGrey selectElementWithMatcher:BackButton()] performAction:grey_tap()];
-  [[EarlGrey selectElementWithMatcher:OmniboxText("ndtv1234.com")]
+  [[EarlGrey selectElementWithMatcher:OmniboxText("invalid.")]
       assertWithMatcher:grey_notNil()];
   [ChromeEarlGrey waitForWebStateContainingText:"ERR_"];
   [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
   [self triggerRestore];
-  [[EarlGrey selectElementWithMatcher:OmniboxText("ndtv1234.com")]
+  [[EarlGrey selectElementWithMatcher:OmniboxText("invalid.")]
       assertWithMatcher:grey_notNil()];
   [ChromeEarlGrey waitForWebStateContainingText:"ERR_"];
   [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
