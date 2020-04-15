@@ -33,6 +33,13 @@ class TrustTokenKeyCommitments : public TrustTokenKeyCommitmentGetter {
   void Set(
       base::flat_map<url::Origin, mojom::TrustTokenKeyCommitmentResultPtr> map);
 
+  // Overwrites the current issuers-to-commitments map with the values in
+  // |raw_commitments|, which should be the JSON-encoded string representation
+  // of a collection of issuers' key commitments according to the format
+  // specified, for now, in the Trust Tokens design doc:
+  // https://docs.google.com/document/d/1TNnya6B8pyomDK2F1R9CL3dY10OAmqWlnCxsWyOBDVQ/edit#heading=h.z52drgpfgulz.
+  void ParseAndSet(base::StringPiece raw_commitments);
+
   // TrustTokenKeyCommitmentGetter implementation:
   //
   // If |origin| is a suitable Trust Tokens origin (in the sense of

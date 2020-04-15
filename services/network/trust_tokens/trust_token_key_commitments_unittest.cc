@@ -7,6 +7,7 @@
 #include "base/test/bind_test_util.h"
 #include "services/network/public/mojom/trust_tokens.mojom-forward.h"
 #include "services/network/public/mojom/trust_tokens.mojom.h"
+#include "services/network/trust_tokens/suitable_trust_token_origin.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "url/gurl.h"
 #include "url/origin.h"
@@ -120,6 +121,16 @@ TEST(TrustTokenKeyCommitments, MultipleOrigins) {
     ASSERT_TRUE(result);
     EXPECT_TRUE(result.Equals(expectations[i]));
   }
+}
+
+TEST(TrustTokenKeyCommitments, ParseAndSet) {
+  TrustTokenKeyCommitments commitments;
+  commitments.ParseAndSet(
+      R"( { "https://issuer.example": { "srrkey": "aaaa" } } )");
+
+  EXPECT_TRUE(GetCommitmentForOrigin(
+      commitments,
+      *SuitableTrustTokenOrigin::Create(GURL("https://issuer.example"))));
 }
 
 }  // namespace network

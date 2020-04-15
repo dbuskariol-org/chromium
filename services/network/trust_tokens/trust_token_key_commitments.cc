@@ -9,6 +9,7 @@
 #include "base/optional.h"
 #include "services/network/public/mojom/trust_tokens.mojom-forward.h"
 #include "services/network/trust_tokens/suitable_trust_token_origin.h"
+#include "services/network/trust_tokens/trust_token_key_commitment_parser.h"
 
 namespace network {
 
@@ -41,6 +42,13 @@ void TrustTokenKeyCommitments::Set(
   }
 
   map_.replace(std::move(filtered));
+}
+
+void TrustTokenKeyCommitments::ParseAndSet(base::StringPiece raw_commitments) {
+  TrustTokenKeyCommitmentParser parser;
+  if (auto commitments = parser.ParseMultipleIssuers(raw_commitments)) {
+    map_.swap(*commitments);
+  }
 }
 
 void TrustTokenKeyCommitments::Get(
