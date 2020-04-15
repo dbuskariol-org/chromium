@@ -25,6 +25,7 @@
 #include "ash/public/cpp/ash_pref_names.h"
 #include "ash/public/cpp/assistant/assistant_setup.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
+#include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
 #include "ash/public/cpp/assistant/proactive_suggestions.h"
 #include "ash/session/session_controller_impl.h"
 #include "ash/shell.h"
@@ -884,13 +885,12 @@ void AssistantInteractionController::OnUiVisible(
     // been cached on the client. To avoid jank, we need to post a task to start
     // our interaction to give the Assistant UI a chance to initialize itself.
     base::SequencedTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE,
-        base::BindOnce(&AssistantInteractionController::
-                           StartProactiveSuggestionsInteraction,
-                       weak_factory_.GetWeakPtr(),
-                       assistant_controller_->suggestions_controller()
-                           ->model()
-                           ->GetProactiveSuggestions()));
+        FROM_HERE, base::BindOnce(&AssistantInteractionController::
+                                      StartProactiveSuggestionsInteraction,
+                                  weak_factory_.GetWeakPtr(),
+                                  AssistantSuggestionsController::Get()
+                                      ->GetModel()
+                                      ->GetProactiveSuggestions()));
     return;
   }
 

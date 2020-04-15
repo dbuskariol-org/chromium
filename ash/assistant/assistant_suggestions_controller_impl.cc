@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_suggestions_controller.h"
+#include "ash/assistant/assistant_suggestions_controller_impl.h"
 
 #include <algorithm>
 #include <utility>
@@ -72,9 +72,9 @@ AssistantSuggestionPtr ToAssistantSuggestionPtr(
 
 }  // namespace
 
-// AssistantSuggestionsController ----------------------------------------------
+// AssistantSuggestionsControllerImpl ------------------------------------------
 
-AssistantSuggestionsController::AssistantSuggestionsController(
+AssistantSuggestionsControllerImpl::AssistantSuggestionsControllerImpl(
     AssistantController* assistant_controller)
     : assistant_controller_(assistant_controller) {
   if (IsProactiveSuggestionsEnabled()) {
@@ -92,30 +92,35 @@ AssistantSuggestionsController::AssistantSuggestionsController(
   AssistantState::Get()->AddObserver(this);
 }
 
-AssistantSuggestionsController::~AssistantSuggestionsController() {
+AssistantSuggestionsControllerImpl::~AssistantSuggestionsControllerImpl() {
   assistant_controller_->RemoveObserver(this);
   AssistantState::Get()->RemoveObserver(this);
 }
 
-void AssistantSuggestionsController::AddModelObserver(
+const AssistantSuggestionsModel* AssistantSuggestionsControllerImpl::GetModel()
+    const {
+  return &model_;
+}
+
+void AssistantSuggestionsControllerImpl::AddModelObserver(
     AssistantSuggestionsModelObserver* observer) {
   model_.AddObserver(observer);
 }
 
-void AssistantSuggestionsController::RemoveModelObserver(
+void AssistantSuggestionsControllerImpl::RemoveModelObserver(
     AssistantSuggestionsModelObserver* observer) {
   model_.RemoveObserver(observer);
 }
 
-void AssistantSuggestionsController::OnAssistantControllerConstructed() {
+void AssistantSuggestionsControllerImpl::OnAssistantControllerConstructed() {
   assistant_controller_->ui_controller()->AddModelObserver(this);
 }
 
-void AssistantSuggestionsController::OnAssistantControllerDestroying() {
+void AssistantSuggestionsControllerImpl::OnAssistantControllerDestroying() {
   assistant_controller_->ui_controller()->RemoveModelObserver(this);
 }
 
-void AssistantSuggestionsController::OnUiVisibilityChanged(
+void AssistantSuggestionsControllerImpl::OnUiVisibilityChanged(
     AssistantVisibility new_visibility,
     AssistantVisibility old_visibility,
     base::Optional<AssistantEntryPoint> entry_point,
@@ -146,12 +151,13 @@ void AssistantSuggestionsController::OnUiVisibilityChanged(
     UpdateConversationStarters();
 }
 
-void AssistantSuggestionsController::OnProactiveSuggestionsChanged(
+void AssistantSuggestionsControllerImpl::OnProactiveSuggestionsChanged(
     scoped_refptr<const ProactiveSuggestions> proactive_suggestions) {
   model_.SetProactiveSuggestions(std::move(proactive_suggestions));
 }
 
-void AssistantSuggestionsController::OnAssistantContextEnabled(bool enabled) {
+void AssistantSuggestionsControllerImpl::OnAssistantContextEnabled(
+    bool enabled) {
   // We currently assume that the context setting is not being modified while
   // Assistant UI is visible.
   DCHECK_NE(AssistantVisibility::kVisible,
@@ -165,7 +171,7 @@ void AssistantSuggestionsController::OnAssistantContextEnabled(bool enabled) {
   UpdateConversationStarters();
 }
 
-void AssistantSuggestionsController::UpdateConversationStarters() {
+void AssistantSuggestionsControllerImpl::UpdateConversationStarters() {
   // If conversation starters V2 is enabled, we'll fetch a fresh set of
   // conversation starters from the server.
   if (IsConversationStartersV2Enabled()) {
@@ -176,7 +182,7 @@ void AssistantSuggestionsController::UpdateConversationStarters() {
   ProvideConversationStarters();
 }
 
-void AssistantSuggestionsController::FetchConversationStarters() {
+void AssistantSuggestionsControllerImpl::FetchConversationStarters() {
   DCHECK(IsConversationStartersV2Enabled());
 
   // Invalidate any requests that are already in flight.
@@ -185,7 +191,7 @@ void AssistantSuggestionsController::FetchConversationStarters() {
   // Fetch a fresh set of conversation starters from the server (via the
   // dedicated ConversationStartersClient).
   ConversationStartersClient::Get()->FetchConversationStarters(base::BindOnce(
-      [](const base::WeakPtr<AssistantSuggestionsController>& self,
+      [](const base::WeakPtr<AssistantSuggestionsControllerImpl>& self,
          std::vector<ConversationStarter>&& conversation_starters) {
         if (!self)
           return;
@@ -222,7 +228,7 @@ void AssistantSuggestionsController::FetchConversationStarters() {
       conversation_starters_weak_factory_.GetWeakPtr()));
 }
 
-void AssistantSuggestionsController::ProvideConversationStarters() {
+void AssistantSuggestionsControllerImpl::ProvideConversationStarters() {
   std::vector<AssistantSuggestionPtr> conversation_starters;
 
   // Adds a conversation starter for the given |message_id| and |action_url|.

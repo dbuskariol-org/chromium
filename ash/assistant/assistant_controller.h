@@ -19,7 +19,7 @@
 #include "ash/assistant/assistant_screen_context_controller.h"
 #include "ash/assistant/assistant_setup_controller.h"
 #include "ash/assistant/assistant_state_controller.h"
-#include "ash/assistant/assistant_suggestions_controller.h"
+#include "ash/assistant/assistant_suggestions_controller_impl.h"
 #include "ash/assistant/assistant_ui_controller.h"
 #include "ash/assistant/assistant_view_delegate_impl.h"
 #include "ash/assistant/assistant_web_ui_controller.h"
@@ -43,16 +43,6 @@
 class PrefRegistrySimple;
 
 namespace ash {
-
-class AssistantAlarmTimerController;
-class AssistantInteractionController;
-class AssistantNotificationController;
-class AssistantScreenContextController;
-class AssistantSetupController;
-class AssistantStateController;
-class AssistantSuggestionsController;
-class AssistantUiController;
-class AssistantWebUiController;
 
 class ASH_EXPORT AssistantController
     : public chromeos::assistant::mojom::AssistantController,
@@ -145,10 +135,6 @@ class ASH_EXPORT AssistantController
     return &assistant_state_controller_;
   }
 
-  AssistantSuggestionsController* suggestions_controller() {
-    return &assistant_suggestions_controller_;
-  }
-
   AssistantUiController* ui_controller() { return &assistant_ui_controller_; }
 
   AssistantWebUiController* web_ui_controller() {
@@ -210,7 +196,7 @@ class ASH_EXPORT AssistantController
   AssistantStateController assistant_state_controller_;
   AssistantScreenContextController assistant_screen_context_controller_{this};
   AssistantSetupController assistant_setup_controller_{this};
-  AssistantSuggestionsController assistant_suggestions_controller_{this};
+  AssistantSuggestionsControllerImpl assistant_suggestions_controller_{this};
   AssistantUiController assistant_ui_controller_{this};
   AssistantWebUiController assistant_web_ui_controller_{this};
 
