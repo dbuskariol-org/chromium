@@ -341,6 +341,7 @@ void LayoutNGBlockFlowMixin<Base>::UpdateMargins() {
 
 template class CORE_TEMPLATE_EXPORT LayoutNGBlockFlowMixin<LayoutBlockFlow>;
 template class CORE_TEMPLATE_EXPORT LayoutNGBlockFlowMixin<LayoutProgress>;
+template class CORE_TEMPLATE_EXPORT LayoutNGBlockFlowMixin<LayoutRubyAsBlock>;
 template class CORE_TEMPLATE_EXPORT LayoutNGBlockFlowMixin<LayoutTableCaption>;
 template class CORE_TEMPLATE_EXPORT LayoutNGBlockFlowMixin<LayoutTableCell>;
 
