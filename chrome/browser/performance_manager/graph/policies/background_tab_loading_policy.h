@@ -9,6 +9,7 @@
 
 #include "components/performance_manager/public/graph/graph.h"
 #include "components/performance_manager/public/graph/page_node.h"
+#include "url/gurl.h"
 
 namespace performance_manager {
 
@@ -50,11 +51,51 @@ class BackgroundTabLoadingPolicy : public GraphOwned,
   static BackgroundTabLoadingPolicy* GetInstance();
 
  private:
+  // Holds a handful of data about a tab which is used to prioritize it during
+  // session restore.
+  struct PageNodeToLoadData {
+    explicit PageNodeToLoadData(PageNode* page_node);
+    PageNodeToLoadData(const PageNodeToLoadData&) = delete;
+    ~PageNodeToLoadData();
+    PageNodeToLoadData& operator=(const PageNodeToLoadData&) = delete;
+
+    // Keeps a pointer to the corresponding PageNode.
+    const PageNode* page_node;
+
+    // A higher value here means the tab has higher priority for restoring.
+    float score = 0.0f;
+
+    // Indicates whether or not the tab communicates with the user even when it
+    // is in the background (tab title changes, favicons, etc).
+    // It is initialized to nullopt and set asynchronously to the proper value.
+    base::Optional<bool> used_in_bg;
+  };
+
+  // Comparator used to sort PageNodeToLoadData.
+  struct ScoredTabComparator;
+
   // Determines whether or not the given PageNode should be loaded. If this
   // returns false, then the policy no longer attempts to load |page_node| and
   // removes it from the policy's internal state. This is called immediately
   // prior to trying to load the PageNode.
   bool ShouldLoad(const PageNode* page_node);
+
+  // This will initialize |page_node_to_load_data->used_in_bg| to the proper
+  // value, score the tab and call DispatchNotifyAllTabsScoredIfNeeded().
+  void OnUsedInBackgroundAvailable(base::WeakPtr<PageNode> page_node);
+
+  // Calculates a |score| for the given tab.
+  void ScoreTab(PageNodeToLoadData* page_node_to_load_data);
+
+  // Schedule the task that will initialize |PageNodeToLoadData::used_in_bg|
+  // from the local site characteristics database.
+  void SetUsedInBackgroundAsync(PageNodeToLoadData* page_node_to_load_data);
+
+  // Invoke "NotifyAllTabsScored" if all tabs are scored.
+  void DispatchNotifyAllTabsScoredIfNeeded();
+
+  // Notifying that all tabs have final scores and starts loading.
+  void NotifyAllTabsScored();
 
   // Move the PageNode from |page_nodes_to_load_| to
   // |page_nodes_load_initiated_| and make the call to load the PageNode.
@@ -80,12 +121,16 @@ class BackgroundTabLoadingPolicy : public GraphOwned,
   // Compute the amount of free memory on the system.
   size_t GetFreePhysicalMemoryMib() const;
 
+  // Helper function for a vector of PageNodeToLoadData.
+  void ErasePageNodeToLoadData(const PageNode* page_node);
+  PageNodeToLoadData* FindPageNodeToLoadData(const PageNode* page_node);
+
   // The mechanism used to load the pages.
   std::unique_ptr<performance_manager::mechanism::PageLoader> page_loader_;
 
   // The set of PageNodes that have been restored for which we need to schedule
   // loads.
-  std::vector<const PageNode*> page_nodes_to_load_;
+  std::vector<std::unique_ptr<PageNodeToLoadData>> page_nodes_to_load_;
 
   // The set of PageNodes that BackgroundTabLoadingPolicy has initiated loading,
   // and for which we are waiting for the loading to actually start. This signal
@@ -102,6 +147,11 @@ class BackgroundTabLoadingPolicy : public GraphOwned,
   // The number of tab loads that have started. Every call to InitiateLoad
   // increments this value.
   size_t tab_loads_started_ = 0;
+
+  // The number of tabs for which an accurate initial score has been assigned.
+  // This is incremented only after all tab data is available, which
+  // may happen asynchronously.
+  size_t tabs_scored_ = 0;
 
   // Used to overwrite the amount of free memory available on the system.
   size_t free_memory_mb_for_testing_ = 0;
@@ -128,6 +178,11 @@ class BackgroundTabLoadingPolicy : public GraphOwned,
   // The number of CPU cores required per permitted simultaneous tab
   // load.
   static constexpr uint32_t kCoresPerSimultaneousTabLoad = 2;
+
+  // It's possible for this policy object to be destroyed while it has posted
+  // tasks. The tasks are bound to a weak pointer so that they are not executed
+  // after the policy object is destroyed.
+  base::WeakPtrFactory<BackgroundTabLoadingPolicy> weak_factory_{this};
 
   FRIEND_TEST_ALL_PREFIXES(BackgroundTabLoadingPolicyTest,
                            ShouldLoad_MaxTabsToRestore);
