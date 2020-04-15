@@ -2,7 +2,8 @@
   "name": "Test cookie/set-cookie header removal.",
   "declarative_net_request": {
     "rule_resources": [{
-      "path": "rules_file_empty.json"
+      "path": "rules_file_empty.json",
+      "enabled": true
     }
     ]
   },

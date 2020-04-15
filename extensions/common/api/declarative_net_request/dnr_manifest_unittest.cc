@@ -66,7 +66,7 @@ class DNRManifestTest : public testing::Test {
         DNRManifestData::GetRulesets(*extension);
     ASSERT_EQ(info.size(), rulesets.size());
     for (size_t i = 0; i < rulesets.size(); ++i) {
-      EXPECT_GE(rulesets[i].id, kMinValidStaticRulesetID);
+      EXPECT_EQ(i + 1, static_cast<size_t>(rulesets[i].id));
 
       // Compare normalized FilePaths instead of their string representations
       // since different platforms represent path separators differently.
@@ -74,6 +74,8 @@ class DNRManifestTest : public testing::Test {
                     .AppendASCII(info[i].relative_file_path)
                     .NormalizePathSeparators(),
                 rulesets[i].relative_path);
+
+      EXPECT_EQ(info[i].enabled, rulesets[i].enabled);
     }
   }
 
@@ -143,9 +145,13 @@ TEST_F(DNRManifestTest, ZeroRulesets) {
 }
 
 TEST_F(DNRManifestTest, MultipleRulesFileSuccess) {
-  TestRulesetInfo ruleset_1("file1.json", base::ListValue());
-  TestRulesetInfo ruleset_2("file2.json", base::ListValue());
-  TestRulesetInfo ruleset_3("file3.json", base::ListValue());
+  TestRulesetInfo ruleset_1("file1.json", base::ListValue(),
+                            true /* enabled */);
+  TestRulesetInfo ruleset_2("file2.json", base::ListValue(),
+                            false /* enabled */);
+  TestRulesetInfo ruleset_3("file3.json", base::ListValue(),
+                            true /* enabled */);
+
   std::vector<TestRulesetInfo> rulesets = {ruleset_1, ruleset_2, ruleset_3};
   WriteManifestAndRuleset(*CreateManifest(rulesets), rulesets);
   LoadAndExpectSuccess(rulesets);

@@ -188,17 +188,21 @@ TestRule CreateGenericRule() {
 }
 
 TestRulesetInfo::TestRulesetInfo(const std::string& relative_file_path,
-                                 const base::Value& rules_value)
+                                 const base::Value& rules_value,
+                                 bool enabled)
     : relative_file_path(relative_file_path),
-      rules_value(rules_value.Clone()) {}
+      rules_value(rules_value.Clone()),
+      enabled(enabled) {}
 
 TestRulesetInfo::TestRulesetInfo(const TestRulesetInfo& info)
-    : TestRulesetInfo(info.relative_file_path, info.rules_value) {}
+    : TestRulesetInfo(info.relative_file_path, info.rules_value, info.enabled) {
+}
 
 std::unique_ptr<base::DictionaryValue> TestRulesetInfo::GetManifestValue()
     const {
   dnr_api::Ruleset ruleset;
   ruleset.path = relative_file_path;
+  ruleset.enabled = enabled;
   return ruleset.ToValue();
 }
 

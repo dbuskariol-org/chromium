@@ -10,8 +10,12 @@
 #include <vector>
 
 #include "base/optional.h"
+#include "base/run_loop.h"
+#include "base/sequence_checker.h"
 #include "extensions/browser/api/declarative_net_request/constants.h"
 #include "extensions/browser/api/declarative_net_request/request_action.h"
+#include "extensions/browser/api/declarative_net_request/ruleset_manager.h"
+#include "extensions/browser/warning_service.h"
 #include "extensions/common/api/declarative_net_request.h"
 #include "extensions/common/api/declarative_net_request/constants.h"
 #include "extensions/common/extension_id.h"
@@ -81,6 +85,33 @@ api::declarative_net_request::ModifyHeaderInfo CreateModifyHeaderInfo(
 bool EqualsForTesting(
     const api::declarative_net_request::ModifyHeaderInfo& lhs,
     const api::declarative_net_request::ModifyHeaderInfo& rhs);
+
+// Used to wait till the number of extension rulesets (CompositeMatchers)
+// managed by the RulesetManager reach a certain count. This is a multi-use
+// observer i.e. WaitForRulesetCount can be called multiple times per lifetime
+// of an observer.
+class RulesetCountWaiter : public RulesetManager::TestObserver {
+ public:
+  explicit RulesetCountWaiter(RulesetManager* manager);
+  RulesetCountWaiter(const RulesetCountWaiter&) = delete;
+  RulesetCountWaiter& operator=(const RulesetCountWaiter&) = delete;
+  ~RulesetCountWaiter() override;
+
+  // Waits for the number of rulesets to change to |count|. Note |count| is the
+  // number of extensions with rulesets or the number of active
+  // CompositeMatchers.
+  void WaitForRulesetCount(size_t count);
+
+ private:
+  // RulesetManager::TestObserver implementation.
+  void OnRulesetCountChanged(size_t count) override;
+
+  RulesetManager* const manager_;
+  size_t current_count_ = 0;
+  base::Optional<size_t> expected_count_;
+  std::unique_ptr<base::RunLoop> run_loop_;
+  SEQUENCE_CHECKER(sequence_checker_);
+};
 
 }  // namespace declarative_net_request
 }  // namespace extensions

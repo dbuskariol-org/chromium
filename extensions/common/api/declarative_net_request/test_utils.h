@@ -158,15 +158,19 @@ enum ConfigFlag {
 // Describes a single extension ruleset.
 struct TestRulesetInfo {
   TestRulesetInfo(const std::string& relative_file_path,
-                  const base::Value& rules_value);
+                  const base::Value& rules_value,
+                  bool enabled = true);
   TestRulesetInfo(const TestRulesetInfo&);
   TestRulesetInfo& operator=(const TestRulesetInfo&);
 
   // File path relative to the extension directory.
-  std::string relative_file_path;
+  const std::string relative_file_path;
 
   // The base::Value corresponding to the rules in the ruleset.
-  base::Value rules_value;
+  const base::Value rules_value;
+
+  // Whether the ruleset is enabled by default.
+  const bool enabled;
 
   // Returns the corresponding value to be specified in the manifest for the
   // ruleset.

@@ -163,54 +163,8 @@ class URLRequestMonitor : public RulesetManager::TestObserver {
   DISALLOW_COPY_AND_ASSIGN(URLRequestMonitor);
 };
 
-// Used to wait till the number of extension rulesets (CompositeMatchers)
-// managed by the RulesetManager reach a certain count.
-class RulesetCountWaiter : public RulesetManager::TestObserver {
- public:
-  explicit RulesetCountWaiter(RulesetManager* manager)
-      : manager_(manager), current_count_(manager_->GetMatcherCountForTest()) {
-    manager_->SetObserverForTest(this);
-  }
-  ~RulesetCountWaiter() override { manager_->SetObserverForTest(nullptr); }
-
-  // Waits for the number of rulesets to change to |count|. Note |count| is the
-  // number of extensions with rulesets or the number of active
-  // CompositeMatchers.
-  void WaitForRulesetCount(size_t count) {
-    DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-    ASSERT_FALSE(expected_count_);
-    if (current_count_ == count)
-      return;
-
-    expected_count_ = count;
-    run_loop_ = std::make_unique<base::RunLoop>();
-    run_loop_->Run();
-  }
-
- private:
-  // RulesetManager::TestObserver implementation.
-  void OnRulesetCountChanged(size_t count) override {
-    DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-    current_count_ = count;
-    if (expected_count_ != count)
-      return;
-
-    ASSERT_TRUE(run_loop_.get());
-
-    run_loop_->Quit();
-    expected_count_.reset();
-  }
-
-  RulesetManager* const manager_;
-  size_t current_count_ = 0;
-  base::Optional<size_t> expected_count_;
-  std::unique_ptr<base::RunLoop> run_loop_;
-  SEQUENCE_CHECKER(sequence_checker_);
-
-  DISALLOW_COPY_AND_ASSIGN(RulesetCountWaiter);
-};
-
-// Helper to wait for warnings thrown for a given extension.
+// Helper to wait for warnings thrown for a given extension. This must be
+// constructed before warnings are added.
 class WarningServiceObserver : public WarningService::Observer {
  public:
   WarningServiceObserver(WarningService* warning_service,
@@ -218,12 +172,14 @@ class WarningServiceObserver : public WarningService::Observer {
       : observer_(this), extension_id_(extension_id) {
     observer_.Add(warning_service);
   }
+  WarningServiceObserver(const WarningServiceObserver&) = delete;
+  WarningServiceObserver& operator=(const WarningServiceObserver&) = delete;
 
   // Should only be called once per WarningServiceObserver lifetime.
   void WaitForWarning() { run_loop_.Run(); }
 
  private:
-  // WarningService::TestObserver override:
+  // WarningService::Observer override:
   void ExtensionWarningsChanged(
       const ExtensionIdSet& affected_extensions) override {
     if (!base::Contains(affected_extensions, extension_id_))
@@ -235,8 +191,6 @@ class WarningServiceObserver : public WarningService::Observer {
   ScopedObserver<WarningService, WarningService::Observer> observer_;
   const ExtensionId extension_id_;
   base::RunLoop run_loop_;
-
-  DISALLOW_COPY_AND_ASSIGN(WarningServiceObserver);
 };
 
 // Helper to wait for ruleset load in response to extension load.
@@ -362,8 +316,7 @@ class DeclarativeNetRequestBrowserTest
   // specifies the host permissions the extensions should have.
   void LoadExtensionWithRulesets(const std::vector<TestRulesetInfo>& rulesets,
                                  const std::string& directory,
-                                 const std::vector<std::string>& hosts,
-                                 size_t expected_rules_count) {
+                                 const std::vector<std::string>& hosts) {
     base::ScopedAllowBlockingForTesting scoped_allow_blocking;
     base::HistogramTester tester;
 
@@ -389,21 +342,39 @@ class DeclarativeNetRequestBrowserTest
     // Ensure the ruleset is also loaded on the IO thread.
     content::RunAllTasksUntilIdle();
 
+    size_t expected_enabled_rulesets_count = 0;
+    size_t expected_rules_count = 0;
+    size_t expected_enabled_rules_count = 0;
+    for (const TestRulesetInfo& info : rulesets) {
+      size_t rules_count = info.rules_value.GetList().size();
+      expected_rules_count += rules_count;
+
+      if (info.enabled) {
+        expected_enabled_rulesets_count++;
+        expected_enabled_rules_count += rules_count;
+      }
+    }
+
     // The histograms below are not logged for unpacked extensions.
     if (GetParam() == ExtensionLoadType::PACKED) {
       size_t expected_histogram_counts = rulesets.empty() ? 0 : 1;
+
       tester.ExpectTotalCount(kIndexAndPersistRulesTimeHistogram,
                               expected_histogram_counts);
       tester.ExpectBucketCount(kManifestRulesCountHistogram,
                                expected_rules_count /*sample*/,
                                expected_histogram_counts);
+      tester.ExpectBucketCount(kManifestEnabledRulesCountHistogram,
+                               expected_enabled_rules_count /*sample*/,
+                               expected_histogram_counts);
     }
     tester.ExpectTotalCount(
         "Extensions.DeclarativeNetRequest.CreateVerifiedMatcherTime",
-        rulesets.size());
+        expected_enabled_rulesets_count);
     tester.ExpectUniqueSample(
         "Extensions.DeclarativeNetRequest.LoadRulesetResult",
-        RulesetMatcher::kLoadSuccess /*sample*/, rulesets.size());
+        RulesetMatcher::kLoadSuccess /*sample*/,
+        expected_enabled_rulesets_count);
 
     EXPECT_TRUE(AreAllIndexedStaticRulesetsValid(*extension, profile()));
 
@@ -422,7 +393,7 @@ class DeclarativeNetRequestBrowserTest
                               const std::vector<std::string>& hosts) {
     LoadExtensionWithRulesets(
         {TestRulesetInfo(kJSONRulesFilename, *ToListValue(rules))}, directory,
-        hosts, rules.size());
+        hosts);
   }
 
   // Returns a url with |filter| as a substring.
@@ -1677,9 +1648,8 @@ IN_PROC_BROWSER_TEST_P(DeclarativeNetRequestBrowserTest, ZeroRulesets) {
   // rulesets.
   RulesetCountWaiter ruleset_count_waiter(ruleset_manager());
 
-  ASSERT_NO_FATAL_FAILURE(
-      LoadExtensionWithRulesets({} /* rulesets */, "extension_directory",
-                                {} /* hosts */, 0 /* expected_rules_count */));
+  ASSERT_NO_FATAL_FAILURE(LoadExtensionWithRulesets(
+      {} /* rulesets */, "extension_directory", {} /* hosts */));
   const ExtensionId extension_id = last_loaded_extension_id();
   EXPECT_EQ(0u, ruleset_manager()->GetMatcherCountForTest());
 
@@ -1715,23 +1685,28 @@ IN_PROC_BROWSER_TEST_P(DeclarativeNetRequestBrowserTest,
   const char* kStaticFilterPrefix = "static";
   std::vector<GURL> expected_blocked_urls;
   std::vector<TestRulesetInfo> rulesets;
+  std::vector<GURL> expected_allowed_urls;
   for (int i = 0; i < kNumStaticRulesets; ++i) {
     std::vector<TestRule> rules;
     std::string id = kStaticFilterPrefix + base::NumberToString(i);
     rules.push_back(CreateMainFrameBlockRule(id));
 
-    expected_blocked_urls.push_back(GetURLForFilter(id));
+    // Enable even indexed rulesets by default.
+    bool enabled = i % 2 == 0;
+    if (enabled)
+      expected_blocked_urls.push_back(GetURLForFilter(id));
+    else
+      expected_allowed_urls.push_back(GetURLForFilter(id));
 
-    rulesets.emplace_back(id, *ToListValue(rules));
+    rulesets.emplace_back(id, *ToListValue(rules), enabled);
   }
 
   // Set-up an observer for RulesetMatcher to monitor the number of extension
   // rulesets.
   RulesetCountWaiter ruleset_count_waiter(ruleset_manager());
 
-  ASSERT_NO_FATAL_FAILURE(
-      LoadExtensionWithRulesets(rulesets, "extension_directory", {} /* hosts */,
-                                kNumStaticRulesets /* expected_rules_count */));
+  ASSERT_NO_FATAL_FAILURE(LoadExtensionWithRulesets(
+      rulesets, "extension_directory", {} /* hosts */));
   ruleset_count_waiter.WaitForRulesetCount(1);
 
   const ExtensionId extension_id = last_loaded_extension_id();
@@ -1742,7 +1717,7 @@ IN_PROC_BROWSER_TEST_P(DeclarativeNetRequestBrowserTest,
       extension_id, {CreateMainFrameBlockRule(kDynamicFilter)}));
   expected_blocked_urls.push_back(GetURLForFilter(kDynamicFilter));
 
-  std::vector<GURL> expected_allowed_urls = {GetURLForFilter("no_such_rule")};
+  expected_allowed_urls.push_back(GetURLForFilter("no_such_rule"));
 
   std::vector<GURL> all_urls;
   all_urls.insert(all_urls.end(), expected_blocked_urls.begin(),
@@ -2178,9 +2153,8 @@ IN_PROC_BROWSER_TEST_P(DeclarativeNetRequestBrowserTest,
   // rulesets.
   RulesetCountWaiter ruleset_count_waiter(ruleset_manager());
 
-  ASSERT_NO_FATAL_FAILURE(
-      LoadExtensionWithRulesets(rulesets, "extension_directory", {} /* hosts */,
-                                kNumStaticRulesets /* expected_rules_count */));
+  ASSERT_NO_FATAL_FAILURE(LoadExtensionWithRulesets(
+      rulesets, "extension_directory", {} /* hosts */));
   ruleset_count_waiter.WaitForRulesetCount(1);
 
   const ExtensionId extension_id = last_loaded_extension_id();
@@ -2272,9 +2246,8 @@ IN_PROC_BROWSER_TEST_P(DeclarativeNetRequestBrowserTest_Packed,
   for (int i = 0; i < kNumStaticRulesets; ++i)
     rulesets.emplace_back(base::NumberToString(i), *ToListValue({rule}));
 
-  ASSERT_NO_FATAL_FAILURE(
-      LoadExtensionWithRulesets(rulesets, "extension_directory", {} /* hosts */,
-                                kNumStaticRulesets /* expected_rules_count */));
+  ASSERT_NO_FATAL_FAILURE(LoadExtensionWithRulesets(
+      rulesets, "extension_directory", {} /* hosts */));
   ruleset_count_waiter.WaitForRulesetCount(1);
 
   const ExtensionId extension_id = last_loaded_extension_id();

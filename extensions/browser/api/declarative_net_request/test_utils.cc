@@ -336,5 +336,37 @@ bool EqualsForTesting(const dnr_api::ModifyHeaderInfo& lhs,
   return lhs.operation == rhs.operation && lhs.header == rhs.header;
 }
 
+RulesetCountWaiter::RulesetCountWaiter(RulesetManager* manager)
+    : manager_(manager), current_count_(manager_->GetMatcherCountForTest()) {
+  manager_->SetObserverForTest(this);
+}
+
+RulesetCountWaiter::~RulesetCountWaiter() {
+  manager_->SetObserverForTest(nullptr);
+}
+
+void RulesetCountWaiter::WaitForRulesetCount(size_t count) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  ASSERT_FALSE(expected_count_);
+  if (current_count_ == count)
+    return;
+
+  expected_count_ = count;
+  run_loop_ = std::make_unique<base::RunLoop>();
+  run_loop_->Run();
+}
+
+void RulesetCountWaiter::OnRulesetCountChanged(size_t count) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  current_count_ = count;
+  if (expected_count_ != count)
+    return;
+
+  ASSERT_TRUE(run_loop_.get());
+
+  run_loop_->Quit();
+  expected_count_.reset();
+}
+
 }  // namespace declarative_net_request
 }  // namespace extensions
