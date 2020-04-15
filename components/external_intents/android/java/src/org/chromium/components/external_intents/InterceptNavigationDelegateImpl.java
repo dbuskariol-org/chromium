@@ -94,6 +94,8 @@ public class InterceptNavigationDelegateImpl implements InterceptNavigationDeleg
 
     @Override
     public boolean shouldIgnoreNavigation(NavigationParams navigationParams) {
+        mClient.onNavigationStarted(navigationParams);
+
         String url = navigationParams.url;
         long lastUserInteractionTime = mClient.getLastUserInteractionTime();
 

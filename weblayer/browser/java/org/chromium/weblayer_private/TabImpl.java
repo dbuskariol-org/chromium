@@ -23,6 +23,7 @@ import org.chromium.components.autofill.AutofillProviderImpl;
 import org.chromium.components.browser_ui.util.BrowserControlsVisibilityDelegate;
 import org.chromium.components.browser_ui.util.ComposedBrowserControlsVisibilityDelegate;
 import org.chromium.components.embedder_support.contextmenu.ContextMenuParams;
+import org.chromium.components.external_intents.InterceptNavigationDelegateImpl;
 import org.chromium.components.find_in_page.FindInPageBridge;
 import org.chromium.components.find_in_page.FindMatchRectsDetails;
 import org.chromium.components.find_in_page.FindResultBar;
@@ -96,6 +97,7 @@ public final class TabImpl extends ITab.Stub {
     private FindResultBar mFindResultBar;
     // See usage note in {@link #onFindResultAvailable}.
     boolean mWaitingForMatchRects;
+    private InterceptNavigationDelegateClientImpl mInterceptNavigationDelegateClient;
     private InterceptNavigationDelegateImpl mInterceptNavigationDelegate;
 
     private static class InternalAccessDelegateImpl
@@ -178,8 +180,10 @@ public final class TabImpl extends ITab.Stub {
         mConstraintsUpdatedCallback = (constraints) -> onBrowserControlsStateUpdated(constraints);
         mBrowserControlsVisibility.addObserver(mConstraintsUpdatedCallback);
 
-        mInterceptNavigationDelegate = new InterceptNavigationDelegateImpl(this);
-
+        mInterceptNavigationDelegateClient = new InterceptNavigationDelegateClientImpl(this);
+        mInterceptNavigationDelegate =
+                new InterceptNavigationDelegateImpl(mInterceptNavigationDelegateClient);
+        mInterceptNavigationDelegateClient.initializeWithDelegate(mInterceptNavigationDelegate);
         sTabMap.put(mId, this);
     }
 
@@ -206,6 +210,9 @@ public final class TabImpl extends ITab.Stub {
         mWebContents.setTopLevelNativeWindow(mBrowser.getWindowAndroid());
         mViewAndroidDelegate.setContainerView(mBrowser.getViewAndroidDelegateContainerView());
         updateWebContentsVisibility();
+
+        boolean attached = (mBrowser.getContext() != null);
+        mInterceptNavigationDelegateClient.onActivityAttachmentChanged(attached);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             SelectionPopupController selectionController =
@@ -546,7 +553,7 @@ public final class TabImpl extends ITab.Stub {
             mNewTabCallbackProxy = null;
         }
 
-        mInterceptNavigationDelegate.onTabDestroyed();
+        mInterceptNavigationDelegateClient.destroy();
         mInterceptNavigationDelegate = null;
 
         mMediaStreamManager.destroy();

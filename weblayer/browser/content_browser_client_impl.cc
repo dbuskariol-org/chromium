@@ -32,6 +32,7 @@
 #include "content/public/browser/navigation_throttle.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/browser/render_process_host.h"
+#include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
 #include "content/public/common/service_names.mojom.h"
 #include "content/public/common/url_constants.h"
@@ -347,6 +348,49 @@ ContentBrowserClientImpl::CreateURLLoaderThrottles(
   }
 
   return result;
+}
+
+bool ContentBrowserClientImpl::IsHandledURL(const GURL& url) {
+  if (!url.is_valid()) {
+    // WebLayer handles error cases.
+    return true;
+  }
+
+  std::string scheme = url.scheme();
+
+  DCHECK_EQ(scheme, base::ToLowerASCII(scheme));
+  static const char* const kProtocolList[] = {
+    url::kHttpScheme,
+    url::kHttpsScheme,
+#if BUILDFLAG(ENABLE_WEBSOCKETS)
+    url::kWsScheme,
+    url::kWssScheme,
+#endif  // BUILDFLAG(ENABLE_WEBSOCKETS)
+    url::kFileScheme,
+    content::kChromeDevToolsScheme,
+    content::kChromeUIScheme,
+    content::kChromeUIUntrustedScheme,
+    url::kDataScheme,
+#if defined(OS_ANDROID)
+    url::kContentScheme,
+#endif  // defined(OS_ANDROID)
+    url::kAboutScheme,
+    url::kBlobScheme,
+    url::kFileSystemScheme,
+  };
+  for (const char* supported_protocol : kProtocolList) {
+    if (scheme == supported_protocol)
+      return true;
+  }
+
+#if !BUILDFLAG(DISABLE_FTP_SUPPORT)
+  if (scheme == url::kFtpScheme &&
+      base::FeatureList::IsEnabled(::features::kFtpProtocol)) {
+    return true;
+  }
+#endif  // !BUILDFLAG(DISABLE_FTP_SUPPORT)
+
+  return false;
 }
 
 bool ContentBrowserClientImpl::CanCreateWindow(

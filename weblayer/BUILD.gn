@@ -348,7 +348,6 @@ source_set("weblayer_lib_base") {
       "browser/error_page_callback_proxy.h",
       "browser/fullscreen_callback_proxy.cc",
       "browser/fullscreen_callback_proxy.h",
-      "browser/intercept_navigation_delegate_impl.cc",
       "browser/new_tab_callback_proxy.cc",
       "browser/new_tab_callback_proxy.h",
       "browser/tab_callback_proxy.cc",

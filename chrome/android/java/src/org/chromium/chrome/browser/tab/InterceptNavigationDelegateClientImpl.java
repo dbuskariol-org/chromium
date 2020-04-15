@@ -16,6 +16,7 @@ import org.chromium.components.external_intents.ExternalNavigationHandler;
 import org.chromium.components.external_intents.InterceptNavigationDelegateClient;
 import org.chromium.components.external_intents.InterceptNavigationDelegateImpl;
 import org.chromium.components.external_intents.RedirectHandlerImpl;
+import org.chromium.components.navigation_interception.NavigationParams;
 import org.chromium.content_public.browser.NavigationHandle;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.ui.base.WindowAndroid;
@@ -115,6 +116,9 @@ public class InterceptNavigationDelegateClientImpl implements InterceptNavigatio
     public void closeTab() {
         TabModelSelector.from(mTab).closeTab(mTab);
     }
+
+    @Override
+    public void onNavigationStarted(NavigationParams params) {}
 
     public void initializeWithDelegate(InterceptNavigationDelegateImpl delegate) {
         mInterceptNavigationDelegate = delegate;
