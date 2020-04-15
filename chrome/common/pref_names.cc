@@ -1435,6 +1435,9 @@ const char kPrintingSizeDefault[] = "printing.size_default";
 const char kPrintingSendUsernameAndFilenameEnabled[] =
     "printing.send_username_and_filename_enabled";
 
+// Indicates how many sheets is allowed to use for a single print job.
+const char kPrintingMaxSheetsAllowed[] = "printing.max_sheets_allowed";
+
 // Indicates how long print jobs metadata is stored on the device, in days.
 const char kPrintJobHistoryExpirationPeriod[] =
     "printing.print_job_history_expiration_period";

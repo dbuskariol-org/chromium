@@ -254,6 +254,12 @@ const char kHeaderFooter[] = "headerFooter";
 // Name of a dictionary pref holding the policy value for the background
 // graphics checkbox.
 const char kCssBackground[] = "cssBackground";
+#if defined(OS_CHROMEOS)
+// Name of a dictionary field holding policy value for the setting.
+const char kValue[] = "value";
+// Name of a dictionary pref holding the policy value for the sheets number.
+const char kSheets[] = "sheets";
+#endif  // defined(OS_CHROMEOS)
 // Name of a dictionary field indicating whether the 'Save to PDF' destination
 // is disabled.
 const char kPdfPrinterDisabled[] = "pdfPrinterDisabled";
@@ -471,6 +477,15 @@ base::Value GetPolicies(const PrefService& prefs) {
   }
   if (!background_graphics_policy.DictEmpty())
     policies.SetKey(kCssBackground, std::move(background_graphics_policy));
+
+#if defined(OS_CHROMEOS)
+  if (prefs.HasPrefPath(prefs::kPrintingMaxSheetsAllowed)) {
+    base::Value sheets_policy(base::Value::Type::DICTIONARY);
+    sheets_policy.SetIntKey(kValue,
+                            prefs.GetInteger(prefs::kPrintingMaxSheetsAllowed));
+    policies.SetKey(kSheets, std::move(sheets_policy));
+  }
+#endif  // defined(OS_CHROMEOS)
 
   return policies;
 }

@@ -19969,6 +19969,7 @@ Called by update_document_policy_enum.py.-->
   <int value="689" label="SystemFeaturesDisableList"/>
   <int value="690" label="CrostiniArcAdbSideloadingAllowed"/>
   <int value="691" label="FloatingAccessibilityMenuEnabled"/>
+  <int value="692" label="PrintingMaxSheetsAllowed"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">

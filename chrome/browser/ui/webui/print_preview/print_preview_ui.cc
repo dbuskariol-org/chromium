@@ -290,6 +290,9 @@ void AddPrintPreviewStrings(content::WebUIDataSource* source) {
     {"pinErrorMessage", IDS_PRINT_PREVIEW_PIN_ERROR_MESSAGE},
     {"pinPlaceholder", IDS_PRINT_PREVIEW_PIN_PLACEHOLDER},
     {"printerEulaURL", IDS_PRINT_PREVIEW_EULA_URL},
+    {"sheetsLimitErrorMessage", IDS_PRINT_PREVIEW_SHEETS_LIMIT_ERROR_MESSAGE},
+    {"sheetsLimitLabelSingular", IDS_PRINT_PREVIEW_SHEETS_LIMIT_LABEL_SINGULAR},
+    {"sheetsLimitLabelPlural", IDS_PRINT_PREVIEW_SHEETS_LIMIT_LABEL_PLURAL},
 #endif
 #if defined(OS_MACOSX)
     {"openPdfInPreviewOption", IDS_PRINT_PREVIEW_OPEN_PDF_IN_PREVIEW_APP},

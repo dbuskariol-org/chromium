@@ -451,6 +451,7 @@ extern const char kPrintingDuplexDefault[];
 extern const char kPrintingPinDefault[];
 extern const char kPrintingSizeDefault[];
 extern const char kPrintingSendUsernameAndFilenameEnabled[];
+extern const char kPrintingMaxSheetsAllowed[];
 extern const char kPrintJobHistoryExpirationPeriod[];
 extern const char kPrintingAPIExtensionsWhitelist[];
 #endif  // OS_CHROMEOS

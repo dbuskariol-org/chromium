@@ -58,6 +58,9 @@ export const BackgroundGraphicsModeRestriction = {
  *   cssBackground: ({
  *     allowedMode: (BackgroundGraphicsModeRestriction | undefined),
  *     defaultMode: (BackgroundGraphicsModeRestriction | undefined),
+ *   } | undefined),
+ *   sheets: ({
+ *     value: (number | undefined),
  *   } | undefined)
  * }}
  */
