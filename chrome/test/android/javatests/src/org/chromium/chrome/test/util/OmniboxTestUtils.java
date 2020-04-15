@@ -24,6 +24,7 @@ import org.chromium.content_public.browser.test.util.Criteria;
 import org.chromium.content_public.browser.test.util.CriteriaHelper;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.content_public.browser.test.util.TouchCommon;
+import org.chromium.url.GURL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,12 +74,12 @@ public class OmniboxTestUtils {
         private final List<OmniboxSuggestion> mSuggestions = new ArrayList<OmniboxSuggestion>();
         private String mAutocompleteText;
 
-        public SuggestionsResultBuilder addGeneratedSuggestion(
-                int type, String text, String url) {
+        public SuggestionsResultBuilder addGeneratedSuggestion(int type, String text, GURL url) {
             List<MatchClassification> classifications = new ArrayList<>();
             classifications.add(new MatchClassification(0, MatchClassificationStyle.NONE));
             mSuggestions.add(new OmniboxSuggestion(type, false, 0, 0, text, classifications, null,
-                    classifications, null, "", url, null, null, false, false, null, null));
+                    classifications, null, "", url, GURL.emptyGURL(), null, false, false, null,
+                    null));
             return this;
         }
 
