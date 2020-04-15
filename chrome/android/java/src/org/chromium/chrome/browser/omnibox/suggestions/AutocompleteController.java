@@ -21,7 +21,6 @@ import org.chromium.chrome.browser.omnibox.voice.VoiceRecognitionHandler.VoiceRe
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.components.omnibox.SuggestionAnswer;
 import org.chromium.content_public.browser.WebContents;
-import org.chromium.url.GURL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -297,7 +296,7 @@ public class AutocompleteController {
             int relevance, int transition, String contents, int[] contentClassificationOffsets,
             int[] contentClassificationStyles, String description,
             int[] descriptionClassificationOffsets, int[] descriptionClassificationStyles,
-            SuggestionAnswer answer, String fillIntoEdit, GURL url, GURL imageUrl,
+            SuggestionAnswer answer, String fillIntoEdit, String url, String imageUrl,
             String imageDominantColor, boolean isStarred, boolean isDeletable,
             String postContentType, byte[] postData) {
         assert contentClassificationOffsets.length == contentClassificationStyles.length;
@@ -344,7 +343,7 @@ public class AutocompleteController {
      * @return The url to navigate to for this match with aqs parameter updated, if we are
      *         making a Google search query.
      */
-    GURL updateMatchDestinationUrlWithQueryFormulationTime(
+    String updateMatchDestinationUrlWithQueryFormulationTime(
             int selectedIndex, int hashCode, long elapsedTimeSinceInputChange) {
         return AutocompleteControllerJni.get().updateMatchDestinationURLWithQueryFormulationTime(
                 mNativeAutocompleteControllerAndroid, AutocompleteController.this, selectedIndex,
@@ -372,7 +371,7 @@ public class AutocompleteController {
                 int pageClassification, String currentTitle);
         void deleteSuggestion(long nativeAutocompleteControllerAndroid,
                 AutocompleteController caller, int selectedIndex, int hashCode);
-        GURL updateMatchDestinationURLWithQueryFormulationTime(
+        String updateMatchDestinationURLWithQueryFormulationTime(
                 long nativeAutocompleteControllerAndroid, AutocompleteController caller,
                 int selectedIndex, int hashCode, long elapsedTimeSinceInputChange);
         /**

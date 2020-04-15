@@ -12,22 +12,24 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
 import org.chromium.base.Callback;
-import org.chromium.base.ContextUtils;
-import org.chromium.base.annotations.CalledByNative;
-import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.chrome.browser.image_fetcher.ImageFetcher;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
 import org.chromium.chrome.browser.omnibox.UrlBarEditingTextStateProvider;
@@ -35,12 +37,14 @@ import org.chromium.chrome.browser.omnibox.suggestions.OmniboxSuggestion;
 import org.chromium.chrome.browser.omnibox.suggestions.base.BaseSuggestionViewProperties;
 import org.chromium.chrome.browser.omnibox.suggestions.base.SuggestionDrawableState;
 import org.chromium.chrome.browser.omnibox.suggestions.basic.SuggestionHost;
+import org.chromium.testing.local.LocalRobolectricTestRunner;
 import org.chromium.ui.modelutil.PropertyModel;
-import org.chromium.url.GURL;
 
 /**
  * Tests for {@link EntitySuggestionProcessor}.
  */
+@RunWith(LocalRobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
 public class EntitySuggestionProcessorUnitTest {
     // These values are used with UMA to report Omnibox.RichEntity.DecorationType histograms.
     // These values are INTENTIONALLY copied here to prevent accidental updates that may
@@ -58,7 +62,10 @@ public class EntitySuggestionProcessorUnitTest {
     @Mock
     ImageFetcher mImageFetcher;
 
-    private Bitmap mBitmap;
+    @Mock
+    Bitmap mFakeBitmap;
+
+    private Activity mActivity;
     private EntitySuggestionProcessor mProcessor;
 
     /**
@@ -90,14 +97,13 @@ public class EntitySuggestionProcessorUnitTest {
 
     /** Create fake Entity suggestion. */
     SuggestionTestHelper createSuggestion(
-            String subject, String description, String color, GURL url) {
+            String subject, String description, String color, String url) {
         OmniboxSuggestion suggestion =
                 new OmniboxSuggestion(OmniboxSuggestionType.SEARCH_SUGGEST_ENTITY,
                         /* isSearchType */ true, /* relevance */ 0, /* transition */ 0, subject,
                         /* displayTextClassifications */ null, /* description */ description,
                         /* descriptionClassifications */ null,
-                        /* suggestionAnswer */ null, /* fillIntoEdit */ "",
-                        /* url */ GURL.emptyGURL(),
+                        /* suggestionAnswer */ null, /* fillIntoEdit */ "", /* url */ "",
                         /* imageUrl */ url, /* imageDominantColor */ color,
                         /* isStarred */ false, /* isDeletable */ false, /* postContentType */ null,
                         /* postData */ null);
@@ -110,23 +116,17 @@ public class EntitySuggestionProcessorUnitTest {
         mProcessor.populateModel(helper.mSuggestion, helper.mModel, 0);
     }
 
-    @CalledByNative
-    private EntitySuggestionProcessorUnitTest() {}
-
-    @CalledByNative
+    @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        mActivity = Robolectric.buildActivity(Activity.class).setup().get();
 
-        mBitmap = Bitmap.createBitmap(1, 1, Config.ALPHA_8);
-
-        mProcessor = new EntitySuggestionProcessor(
-                ContextUtils.getApplicationContext(), mSuggestionHost, () -> mImageFetcher);
+        mProcessor = new EntitySuggestionProcessor(mActivity, mSuggestionHost, () -> mImageFetcher);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void contentTest_basicContent() {
-        SuggestionTestHelper suggHelper =
-                createSuggestion("subject", "details", null, GURL.emptyGURL());
+        SuggestionTestHelper suggHelper = createSuggestion("subject", "details", null, null);
         processSuggestion(suggHelper);
         Assert.assertEquals(
                 "subject", suggHelper.mModel.get(EntitySuggestionViewProperties.SUBJECT_TEXT));
@@ -135,9 +135,9 @@ public class EntitySuggestionProcessorUnitTest {
         suggHelper.verifyReportedType(DECORATION_TYPE_ICON);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_noColorOrImage() {
-        SuggestionTestHelper suggHelper = createSuggestion("", "", null, GURL.emptyGURL());
+        SuggestionTestHelper suggHelper = createSuggestion("", "", null, null);
         processSuggestion(suggHelper);
 
         Assert.assertNotNull(suggHelper.getIcon());
@@ -145,9 +145,9 @@ public class EntitySuggestionProcessorUnitTest {
         suggHelper.verifyReportedType(DECORATION_TYPE_ICON);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_validHexColor() {
-        SuggestionTestHelper suggHelper = createSuggestion("", "", "#fedcba", GURL.emptyGURL());
+        SuggestionTestHelper suggHelper = createSuggestion("", "", "#fedcba", null);
         processSuggestion(suggHelper);
 
         Assert.assertThat(suggHelper.getIcon(), instanceOf(ColorDrawable.class));
@@ -156,9 +156,9 @@ public class EntitySuggestionProcessorUnitTest {
         suggHelper.verifyReportedType(DECORATION_TYPE_COLOR);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_validNamedColor() {
-        SuggestionTestHelper suggHelper = createSuggestion("", "", "red", GURL.emptyGURL());
+        SuggestionTestHelper suggHelper = createSuggestion("", "", "red", null);
         processSuggestion(suggHelper);
 
         Assert.assertThat(suggHelper.getIcon(), instanceOf(ColorDrawable.class));
@@ -167,47 +167,47 @@ public class EntitySuggestionProcessorUnitTest {
         suggHelper.verifyReportedType(DECORATION_TYPE_COLOR);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_invalidColor() {
         // Note, fallback is the bitmap drawable representing a search loupe.
-        SuggestionTestHelper suggHelper = createSuggestion("", "", "", GURL.emptyGURL());
+        SuggestionTestHelper suggHelper = createSuggestion("", "", "", null);
         processSuggestion(suggHelper);
         Assert.assertThat(suggHelper.getIcon(), instanceOf(BitmapDrawable.class));
         suggHelper.verifyReportedType(DECORATION_TYPE_ICON);
 
-        suggHelper = createSuggestion("", "", "#", GURL.emptyGURL());
+        suggHelper = createSuggestion("", "", "#", null);
         processSuggestion(suggHelper);
         Assert.assertThat(suggHelper.getIcon(), instanceOf(BitmapDrawable.class));
         suggHelper.verifyReportedType(DECORATION_TYPE_ICON);
 
-        suggHelper = createSuggestion("", "", "invalid", GURL.emptyGURL());
+        suggHelper = createSuggestion("", "", "invalid", null);
         processSuggestion(suggHelper);
         Assert.assertThat(suggHelper.getIcon(), instanceOf(BitmapDrawable.class));
         suggHelper.verifyReportedType(DECORATION_TYPE_ICON);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_basicSuccessfulBitmapFetch() {
-        final GURL url = new GURL("http://site.com");
+        final String url = "http://site.com";
         final ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
 
         SuggestionTestHelper suggHelper = createSuggestion("", "", "red", url);
         processSuggestion(suggHelper);
 
         verify(mImageFetcher)
-                .fetchImage(eq(url.getSpec()), anyString(), anyInt(), anyInt(), callback.capture());
+                .fetchImage(eq(url), anyString(), anyInt(), anyInt(), callback.capture());
         suggHelper.verifyReportedType(DECORATION_TYPE_COLOR);
         Assert.assertThat(suggHelper.getIcon(), instanceOf(ColorDrawable.class));
-        callback.getValue().onResult(mBitmap);
+        callback.getValue().onResult(mFakeBitmap);
         Assert.assertThat(suggHelper.getIcon(), instanceOf(BitmapDrawable.class));
-        Assert.assertEquals(mBitmap, ((BitmapDrawable) suggHelper.getIcon()).getBitmap());
+        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) suggHelper.getIcon()).getBitmap());
         suggHelper.verifyReportedType(DECORATION_TYPE_IMAGE);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_repeatedUrlsAreFetchedOnlyOnce() {
-        final GURL url1 = new GURL("http://site1.com");
-        final GURL url2 = new GURL("http://site2.com");
+        final String url1 = "http://site1.com";
+        final String url2 = "http://site2.com";
         final SuggestionTestHelper sugg1 = createSuggestion("", "", "", url1);
         final SuggestionTestHelper sugg2 = createSuggestion("", "", "", url1);
         final SuggestionTestHelper sugg3 = createSuggestion("", "", "", url2);
@@ -218,17 +218,15 @@ public class EntitySuggestionProcessorUnitTest {
         processSuggestion(sugg3);
         processSuggestion(sugg4);
 
-        verify(mImageFetcher)
-                .fetchImage(eq(url1.getSpec()), anyString(), anyInt(), anyInt(), any());
-        verify(mImageFetcher)
-                .fetchImage(eq(url2.getSpec()), anyString(), anyInt(), anyInt(), any());
+        verify(mImageFetcher).fetchImage(eq(url1), anyString(), anyInt(), anyInt(), any());
+        verify(mImageFetcher).fetchImage(eq(url2), anyString(), anyInt(), anyInt(), any());
         verify(mImageFetcher, times(2))
                 .fetchImage(anyString(), anyString(), anyInt(), anyInt(), any());
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_bitmapReplacesIconForAllSuggestionsWithSameUrl() {
-        final GURL url = new GURL("http://site.com");
+        final String url = "http://site.com";
         final ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
         final SuggestionTestHelper sugg1 = createSuggestion("", "", "", url);
         final SuggestionTestHelper sugg2 = createSuggestion("", "", "", url);
@@ -239,7 +237,7 @@ public class EntitySuggestionProcessorUnitTest {
         processSuggestion(sugg3);
 
         verify(mImageFetcher)
-                .fetchImage(eq(url.getSpec()), anyString(), anyInt(), anyInt(), callback.capture());
+                .fetchImage(eq(url), anyString(), anyInt(), anyInt(), callback.capture());
 
         final Drawable icon1 = sugg1.getIcon();
         final Drawable icon2 = sugg2.getIcon();
@@ -248,7 +246,7 @@ public class EntitySuggestionProcessorUnitTest {
         sugg2.verifyReportedType(DECORATION_TYPE_ICON);
         sugg3.verifyReportedType(DECORATION_TYPE_ICON);
 
-        callback.getValue().onResult(mBitmap);
+        callback.getValue().onResult(mFakeBitmap);
         final Drawable newIcon1 = sugg1.getIcon();
         final Drawable newIcon2 = sugg2.getIcon();
         final Drawable newIcon3 = sugg3.getIcon();
@@ -264,20 +262,20 @@ public class EntitySuggestionProcessorUnitTest {
         Assert.assertThat(newIcon2, instanceOf(BitmapDrawable.class));
         Assert.assertThat(newIcon3, instanceOf(BitmapDrawable.class));
 
-        Assert.assertEquals(mBitmap, ((BitmapDrawable) newIcon1).getBitmap());
-        Assert.assertEquals(mBitmap, ((BitmapDrawable) newIcon2).getBitmap());
-        Assert.assertEquals(mBitmap, ((BitmapDrawable) newIcon3).getBitmap());
+        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) newIcon1).getBitmap());
+        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) newIcon2).getBitmap());
+        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) newIcon3).getBitmap());
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_failedBitmapFetchDoesNotReplaceIcon() {
-        final GURL url = new GURL("http://site.com");
+        final String url = "http://site.com";
         final ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
         final SuggestionTestHelper suggHelper = createSuggestion("", "", null, url);
 
         processSuggestion(suggHelper);
         verify(mImageFetcher)
-                .fetchImage(eq(url.getSpec()), anyString(), anyInt(), anyInt(), callback.capture());
+                .fetchImage(eq(url), anyString(), anyInt(), anyInt(), callback.capture());
 
         final Drawable oldIcon = suggHelper.getIcon();
         callback.getValue().onResult(null);
@@ -288,15 +286,15 @@ public class EntitySuggestionProcessorUnitTest {
         suggHelper.verifyReportedType(DECORATION_TYPE_ICON);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_failedBitmapFetchDoesNotReplaceColor() {
-        final GURL url = new GURL("http://site.com");
+        final String url = "http://site.com";
         final ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
         final SuggestionTestHelper suggHelper = createSuggestion("", "", "red", url);
 
         processSuggestion(suggHelper);
         verify(mImageFetcher)
-                .fetchImage(eq(url.getSpec()), anyString(), anyInt(), anyInt(), callback.capture());
+                .fetchImage(eq(url), anyString(), anyInt(), anyInt(), callback.capture());
 
         final Drawable oldIcon = suggHelper.getIcon();
         callback.getValue().onResult(null);
@@ -307,10 +305,10 @@ public class EntitySuggestionProcessorUnitTest {
         suggHelper.verifyReportedType(DECORATION_TYPE_COLOR);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void decorationTest_updatedModelsAreRemovedFromPendingRequestsList() {
         ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
-        final GURL url = new GURL("http://site1.com");
+        final String url = "http://site1.com";
 
         final SuggestionTestHelper sugg1 = createSuggestion("", "", "", url);
         final SuggestionTestHelper sugg2 = createSuggestion("", "", "", url);
@@ -319,7 +317,7 @@ public class EntitySuggestionProcessorUnitTest {
         processSuggestion(sugg2);
 
         verify(mImageFetcher)
-                .fetchImage(eq(url.getSpec()), anyString(), anyInt(), anyInt(), callback.capture());
+                .fetchImage(eq(url), anyString(), anyInt(), anyInt(), callback.capture());
         verify(mImageFetcher).fetchImage(anyString(), anyString(), anyInt(), anyInt(), any());
 
         final Drawable icon1 = sugg1.getIcon();
@@ -327,7 +325,7 @@ public class EntitySuggestionProcessorUnitTest {
 
         // Invoke callback twice. If models were not erased, these should be updated.
         callback.getValue().onResult(null);
-        callback.getValue().onResult(mBitmap);
+        callback.getValue().onResult(mFakeBitmap);
 
         final Drawable newIcon1 = sugg1.getIcon();
         final Drawable newIcon2 = sugg2.getIcon();

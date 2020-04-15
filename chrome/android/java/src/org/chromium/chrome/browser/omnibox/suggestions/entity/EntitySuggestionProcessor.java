@@ -26,7 +26,6 @@ import org.chromium.chrome.browser.omnibox.suggestions.base.SuggestionDrawableSt
 import org.chromium.chrome.browser.omnibox.suggestions.basic.SuggestionHost;
 import org.chromium.components.browser_ui.util.ConversionUtils;
 import org.chromium.ui.modelutil.PropertyModel;
-import org.chromium.url.GURL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ public class EntitySuggestionProcessor extends BaseSuggestionViewProcessor {
     private static final String TAG = "EntitySP";
     private final Context mContext;
     private final SuggestionHost mSuggestionHost;
-    private final Map<GURL, List<PropertyModel>> mPendingImageRequests;
+    private final Map<String, List<PropertyModel>> mPendingImageRequests;
     private final int mEntityImageSizePx;
     private final Supplier<ImageFetcher> mImageFetcherSupplier;
     // Threshold for low RAM devices. We won't be showing entity suggestion images
@@ -99,8 +98,8 @@ public class EntitySuggestionProcessor extends BaseSuggestionViewProcessor {
 
     private void fetchEntityImage(OmniboxSuggestion suggestion, PropertyModel model) {
         ThreadUtils.assertOnUiThread();
-        final GURL url = suggestion.getImageUrl();
-        if (url.isEmpty()) return;
+        final String url = suggestion.getImageUrl();
+        if (TextUtils.isEmpty(url)) return;
 
         // Ensure an image fetcher is available prior to requesting images.
         ImageFetcher imageFetcher = mImageFetcherSupplier.get();
@@ -117,7 +116,7 @@ public class EntitySuggestionProcessor extends BaseSuggestionViewProcessor {
         models.add(model);
         mPendingImageRequests.put(url, models);
 
-        imageFetcher.fetchImage(url.getSpec(), ImageFetcher.ENTITY_SUGGESTIONS_UMA_CLIENT_NAME,
+        imageFetcher.fetchImage(url, ImageFetcher.ENTITY_SUGGESTIONS_UMA_CLIENT_NAME,
                 mEntityImageSizePx, mEntityImageSizePx, (Bitmap bitmap) -> {
                     ThreadUtils.assertOnUiThread();
 

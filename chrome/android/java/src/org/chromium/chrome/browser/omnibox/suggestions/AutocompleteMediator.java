@@ -62,7 +62,6 @@ import org.chromium.ui.modaldialog.ModalDialogProperties;
 import org.chromium.ui.modelutil.MVCListAdapter;
 import org.chromium.ui.modelutil.MVCListAdapter.ModelList;
 import org.chromium.ui.modelutil.PropertyModel;
-import org.chromium.url.GURL;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -191,15 +190,14 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
 
     public AutocompleteMediator(Context context, AutocompleteDelegate delegate,
             UrlBarEditingTextStateProvider textProvider,
-            AutocompleteController autocompleteController, PropertyModel listPropertyModel,
-            Handler handler) {
+            AutocompleteController autocompleteController, PropertyModel listPropertyModel) {
         mContext = context;
         mDelegate = delegate;
         mUrlBarEditingTextProvider = textProvider;
         mListPropertyModel = listPropertyModel;
         mAutocomplete = autocompleteController;
         mAutocomplete.setOnSuggestionsReceivedListener(this);
-        mHandler = handler;
+        mHandler = new Handler();
         mSuggestionProcessors = new ArrayList<>();
         mAvailableSuggestions = new ArrayList<>();
 
@@ -776,7 +774,7 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
      * @param skipCheck Whether to skip an out of bounds check.
      * @return The url to navigate to.
      */
-    private GURL updateSuggestionUrlIfNeeded(
+    private String updateSuggestionUrlIfNeeded(
             OmniboxSuggestion suggestion, int selectedIndex, boolean skipCheck) {
         // Only called once we have suggestions, and don't have a listener though which we can
         // receive suggestions until the native side is ready, so this is safe
@@ -798,7 +796,7 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
         long elapsedTimeSinceInputChange = mNewOmniboxEditSessionTimestamp > 0
                 ? (SystemClock.elapsedRealtime() - mNewOmniboxEditSessionTimestamp)
                 : -1;
-        GURL updatedUrl = mAutocomplete.updateMatchDestinationUrlWithQueryFormulationTime(
+        String updatedUrl = mAutocomplete.updateMatchDestinationUrlWithQueryFormulationTime(
                 verifiedIndex, suggestion.hashCode(), elapsedTimeSinceInputChange);
 
         return updatedUrl == null ? suggestion.getUrl() : updatedUrl;
@@ -1115,7 +1113,8 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
         RecordHistogram.recordMediumTimesHistogram(
                 "Omnibox.FocusToOpenTimeAnyPopupState3", activationTime - mUrlFocusTime);
 
-        GURL url = updateSuggestionUrlIfNeeded(suggestion, matchPosition, !inVisibleSuggestionList);
+        String url =
+                updateSuggestionUrlIfNeeded(suggestion, matchPosition, !inVisibleSuggestionList);
 
         // loadUrl modifies AutocompleteController's state clearing the native
         // AutocompleteResults needed by onSuggestionsSelected. Therefore,
@@ -1140,7 +1139,7 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
                     autocompleteLength, webContents);
         }
         if (((transition & PageTransition.CORE_MASK) == PageTransition.TYPED)
-                && TextUtils.equals(url.getSpec(), mDataProvider.getCurrentUrl())) {
+                && TextUtils.equals(url, mDataProvider.getCurrentUrl())) {
             // When the user hit enter on the existing permanent URL, treat it like a
             // reload for scoring purposes.  We could detect this by just checking
             // user_input_in_progress_, but it seems better to treat "edits" that end
@@ -1169,11 +1168,11 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
         }
 
         if (suggestion.getType() == OmniboxSuggestionType.CLIPBOARD_IMAGE) {
-            mDelegate.loadUrlWithPostData(url.getSpec(), transition, inputStart,
+            mDelegate.loadUrlWithPostData(url, transition, inputStart,
                     suggestion.getPostContentType(), suggestion.getPostData());
             return;
         }
-        mDelegate.loadUrl(url.getSpec(), transition, inputStart);
+        mDelegate.loadUrl(url, transition, inputStart);
     }
 
     /**

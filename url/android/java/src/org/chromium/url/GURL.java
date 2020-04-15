@@ -58,7 +58,6 @@ public class GURL {
 
     private static class Holder { private static GURL sEmptyGURL = new GURL(""); }
 
-    @CalledByNative
     public static GURL emptyGURL() {
         return Holder.sEmptyGURL;
     }

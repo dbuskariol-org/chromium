@@ -60,8 +60,6 @@
 #include "third_party/metrics_proto/omnibox_event.pb.h"
 #include "ui/base/device_form_factor.h"
 #include "ui/base/window_open_disposition.h"
-#include "url/android/gurl_android.h"
-#include "url/gurl.h"
 
 using base::android::AttachCurrentThread;
 using base::android::ConvertJavaStringToUTF16;
@@ -328,7 +326,7 @@ void AutocompleteControllerAndroid::DeleteSuggestion(
     autocomplete_controller_->DeleteMatch(match);
 }
 
-ScopedJavaLocalRef<jobject> AutocompleteControllerAndroid::
+ScopedJavaLocalRef<jstring> AutocompleteControllerAndroid::
     UpdateMatchDestinationURLWithQueryFormulationTime(
         JNIEnv* env,
         const JavaParamRef<jobject>& obj,
@@ -343,7 +341,7 @@ ScopedJavaLocalRef<jobject> AutocompleteControllerAndroid::
   autocomplete_controller_->UpdateMatchDestinationURLWithQueryFormulationTime(
       base::TimeDelta::FromMilliseconds(elapsed_time_since_input_change),
       &match);
-  return url::GURLAndroid::FromNativeGURL(env, match.destination_url);
+  return ConvertUTF8ToJavaString(env, match.destination_url.spec());
 }
 
 void AutocompleteControllerAndroid::Shutdown() {
@@ -531,13 +529,16 @@ AutocompleteControllerAndroid::BuildOmniboxSuggestion(
     janswer = match.answer->CreateJavaObject();
   ScopedJavaLocalRef<jstring> fill_into_edit =
       ConvertUTF16ToJavaString(env, match.fill_into_edit);
-  ScopedJavaLocalRef<jobject> destination_url =
-      url::GURLAndroid::FromNativeGURL(env, match.destination_url);
-  ScopedJavaLocalRef<jobject> image_url =
-      url::GURLAndroid::FromNativeGURL(env, match.image_url);
+  ScopedJavaLocalRef<jstring> destination_url =
+      ConvertUTF8ToJavaString(env, match.destination_url.spec());
+  ScopedJavaLocalRef<jstring> image_url;
   ScopedJavaLocalRef<jstring> image_dominant_color;
   ScopedJavaLocalRef<jstring> post_content_type;
   std::string post_content;
+
+  if (!match.image_url.is_empty()) {
+    image_url = ConvertUTF8ToJavaString(env, match.image_url.spec());
+  }
 
   if (!match.image_dominant_color.empty()) {
     image_dominant_color =

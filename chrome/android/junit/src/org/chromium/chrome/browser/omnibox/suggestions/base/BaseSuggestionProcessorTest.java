@@ -8,33 +8,37 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
-import org.chromium.base.ContextUtils;
-import org.chromium.base.annotations.CalledByNative;
-import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
 import org.chromium.chrome.browser.omnibox.suggestions.OmniboxSuggestion;
 import org.chromium.chrome.browser.omnibox.suggestions.OmniboxSuggestionUiType;
 import org.chromium.chrome.browser.omnibox.suggestions.basic.SuggestionHost;
 import org.chromium.chrome.browser.ui.favicon.LargeIconBridge;
 import org.chromium.chrome.browser.ui.favicon.LargeIconBridge.LargeIconCallback;
+import org.chromium.testing.local.LocalRobolectricTestRunner;
 import org.chromium.ui.modelutil.PropertyModel;
-import org.chromium.url.GURL;
 
 import java.util.ArrayList;
 
 /**
  * Tests for {@link BaseSuggestionViewProcessor}.
  */
+@RunWith(LocalRobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
 public class BaseSuggestionProcessorTest {
     private class TestBaseSuggestionProcessor extends BaseSuggestionViewProcessor {
         private final Context mContext;
@@ -67,7 +71,8 @@ public class BaseSuggestionProcessorTest {
         public void populateModel(OmniboxSuggestion suggestion, PropertyModel model, int position) {
             super.populateModel(suggestion, model, position);
             setSuggestionDrawableState(model,
-                    SuggestionDrawableState.Builder.forBitmap(mContext, mDefaultBitmap).build());
+                    SuggestionDrawableState.Builder.forBitmap(mContext, mFakeDefaultBitmap)
+                            .build());
             fetchSuggestionFavicon(model, suggestion.getUrl(), mLargeIconBridge, mRunable);
         }
     }
@@ -78,67 +83,67 @@ public class BaseSuggestionProcessorTest {
     LargeIconBridge mIconBridge;
     @Mock
     Runnable mRunnable;
+    @Mock
+    Bitmap mFakeBitmap;
+    @Mock
+    Bitmap mFakeDefaultBitmap;
 
+    private Activity mActivity;
     private TestBaseSuggestionProcessor mProcessor;
     private OmniboxSuggestion mSuggestion;
     private PropertyModel mModel;
-    private Bitmap mBitmap;
-    private Bitmap mDefaultBitmap;
 
-    @CalledByNative
-    private BaseSuggestionProcessorTest() {}
-
-    @CalledByNative
+    @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mBitmap = Bitmap.createBitmap(1, 1, Config.ALPHA_8);
-        mProcessor = new TestBaseSuggestionProcessor(
-                ContextUtils.getApplicationContext(), mSuggestionHost, mIconBridge, mRunnable);
+        mActivity = Robolectric.buildActivity(Activity.class).setup().get();
+        mProcessor =
+                new TestBaseSuggestionProcessor(mActivity, mSuggestionHost, mIconBridge, mRunnable);
     }
 
     /**
      * Create Suggestion for test.
      */
-    private void createSuggestion(int type, GURL url) {
+    private void createSuggestion(int type, String url) {
         mSuggestion = new OmniboxSuggestion(type,
                 /* isSearchType */ false, /* relevance */ 0, /* transition */ 0, "title",
                 /* displayTextClassifications */ new ArrayList<>(), "description",
                 /* descriptionClassifications */ new ArrayList<>(),
                 /* suggestionAnswer */ null, /* fillIntoEdit */ null, url,
-                /* imageUrl */ GURL.emptyGURL(), /* imageDominantColor */ "", false,
+                /* imageUrl */ "", /* imageDominantColor */ "", false,
                 /* isDeletable */ false, /* postContentType */ null, /* postData */ null);
         mModel = mProcessor.createModelForSuggestion(mSuggestion);
         mProcessor.populateModel(mSuggestion, mModel, 0);
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void suggestionFavicons_showFaviconWhenAvailable() {
         final ArgumentCaptor<LargeIconCallback> callback =
                 ArgumentCaptor.forClass(LargeIconCallback.class);
-        final GURL url = new GURL("http://url");
+        final String url = "http://url";
         createSuggestion(OmniboxSuggestionType.URL_WHAT_YOU_TYPED, url);
         SuggestionDrawableState icon1 = mModel.get(BaseSuggestionViewProperties.ICON);
         Assert.assertNotNull(icon1);
 
-        verify(mIconBridge).getLargeIconForUrl(eq(url), anyInt(), callback.capture());
-        callback.getValue().onLargeIconAvailable(mBitmap, 0, false, 0);
+        verify(mIconBridge).getLargeIconForStringUrl(eq(url), anyInt(), callback.capture());
+        callback.getValue().onLargeIconAvailable(mFakeBitmap, 0, false, 0);
         SuggestionDrawableState icon2 = mModel.get(BaseSuggestionViewProperties.ICON);
         Assert.assertNotNull(icon2);
 
         Assert.assertNotEquals(icon1, icon2);
-        Assert.assertEquals(mBitmap, ((BitmapDrawable) icon2.drawable).getBitmap());
+        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) icon2.drawable).getBitmap());
     }
 
-    @CalledByNativeJavaTest
+    @Test
     public void suggestionFavicons_doNotReplaceFallbackIconWhenNoFaviconIsAvailable() {
         final ArgumentCaptor<LargeIconCallback> callback =
                 ArgumentCaptor.forClass(LargeIconCallback.class);
-        final GURL url = new GURL("http://url");
+        final String url = "http://url";
         createSuggestion(OmniboxSuggestionType.URL_WHAT_YOU_TYPED, url);
         SuggestionDrawableState icon1 = mModel.get(BaseSuggestionViewProperties.ICON);
         Assert.assertNotNull(icon1);
 
-        verify(mIconBridge).getLargeIconForUrl(eq(url), anyInt(), callback.capture());
+        verify(mIconBridge).getLargeIconForStringUrl(eq(url), anyInt(), callback.capture());
         callback.getValue().onLargeIconAvailable(null, 0, false, 0);
         SuggestionDrawableState icon2 = mModel.get(BaseSuggestionViewProperties.ICON);
         Assert.assertNotNull(icon2);

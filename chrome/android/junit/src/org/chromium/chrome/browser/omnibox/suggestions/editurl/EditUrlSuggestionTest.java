@@ -11,14 +11,18 @@ import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.test.filters.SmallTest;
 import android.view.View;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.annotation.Config;
 
-import org.chromium.base.annotations.CalledByNative;
-import org.chromium.base.annotations.CalledByNativeJavaTest;
+import org.chromium.base.test.BaseRobolectricTestRunner;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
@@ -30,21 +34,22 @@ import org.chromium.chrome.browser.tab.TabImpl;
 import org.chromium.chrome.browser.ui.favicon.LargeIconBridge;
 import org.chromium.components.search_engines.TemplateUrlService;
 import org.chromium.ui.modelutil.PropertyModel;
-import org.chromium.url.GURL;
 
 /**
  * Unit tests for the "edit url" omnibox suggestion.
  */
-public final class EditUrlSuggestionUnitTest {
+@RunWith(BaseRobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
+public final class EditUrlSuggestionTest {
+    private static final String TEST_URL = "http://www.example.com";
     private static final String TEST_TITLE = "Test Page";
+
+    private static final String FOOBAR_SEARCH_URL = "http://www.example.com?q=foobar";
     private static final String FOOBAR_SEARCH_TERMS = "foobar";
+
+    private static final String BARBAZ_SEARCH_URL = "http://www.example.com?q=barbaz";
     private static final String BARBAZ_SEARCH_TERMS = "barbaz";
 
-    private final GURL mTestUrl = new GURL("http://www.example.com");
-    private final GURL mFoobarSearchUrl =
-            new GURL("http://www.example.com?q=" + FOOBAR_SEARCH_TERMS);
-    private final GURL mBarbazSearchUrl =
-            new GURL("http://www.example.com?q=" + BARBAZ_SEARCH_TERMS);
     private EditUrlSuggestionProcessor mProcessor;
     private PropertyModel mModel;
 
@@ -90,17 +95,14 @@ public final class EditUrlSuggestionUnitTest {
     @Mock
     private SuggestionViewDelegate mDelegate;
 
-    @CalledByNative
-    private EditUrlSuggestionUnitTest() {}
-
-    @CalledByNative
+    @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         TemplateUrlServiceFactory.setInstanceForTesting(mTemplateUrlService);
 
         when(mContext.getResources()).thenReturn(mResources);
-        when(mTab.getUrl()).thenReturn(mTestUrl);
+        when(mTab.getUrlString()).thenReturn(TEST_URL);
         when(mTab.getTitle()).thenReturn(TEST_TITLE);
         when(mTab.isNativePage()).thenReturn(false);
         when(mTab.isIncognito()).thenReturn(false);
@@ -109,10 +111,10 @@ public final class EditUrlSuggestionUnitTest {
 
         when(mWhatYouTypedSuggestion.getType())
                 .thenReturn(OmniboxSuggestionType.URL_WHAT_YOU_TYPED);
-        when(mWhatYouTypedSuggestion.getUrl()).thenReturn(mTestUrl);
+        when(mWhatYouTypedSuggestion.getUrl()).thenReturn(TEST_URL);
 
         when(mSearchSuggestion.getType()).thenReturn(OmniboxSuggestionType.SEARCH_WHAT_YOU_TYPED);
-        when(mSearchSuggestion.getUrl()).thenReturn(mFoobarSearchUrl);
+        when(mSearchSuggestion.getUrl()).thenReturn(FOOBAR_SEARCH_URL);
         when(mSearchSuggestion.getFillIntoEdit()).thenReturn(FOOBAR_SEARCH_TERMS);
 
         when(mOtherSuggestion.getType()).thenReturn(OmniboxSuggestionType.SEARCH_HISTORY);
@@ -129,7 +131,8 @@ public final class EditUrlSuggestionUnitTest {
     }
 
     /** Test that the suggestion is triggered. */
-    @CalledByNativeJavaTest
+    @Test
+    @SmallTest
     public void testSuggestionTriggered() {
         mProcessor.onUrlFocusChange(true);
 
@@ -141,22 +144,24 @@ public final class EditUrlSuggestionUnitTest {
         Assert.assertEquals("The model should have the title set.", TEST_TITLE,
                 mModel.get(EditUrlSuggestionProperties.TITLE_TEXT));
 
-        Assert.assertEquals("The model should have the URL set to the tab's URL",
-                mTestUrl.getSpec(), mModel.get(EditUrlSuggestionProperties.URL_TEXT));
+        Assert.assertEquals("The model should have the URL set to the tab's URL", TEST_URL,
+                mModel.get(EditUrlSuggestionProperties.URL_TEXT));
     }
 
     /** Test that the suggestion is not triggered if its url doesn't match the current page's. */
-    @CalledByNativeJavaTest
+    @Test
+    @SmallTest
     public void testWhatYouTypedWrongUrl() {
         mProcessor.onUrlFocusChange(true);
 
-        when(mWhatYouTypedSuggestion.getUrl()).thenReturn(mFoobarSearchUrl);
+        when(mWhatYouTypedSuggestion.getUrl()).thenReturn(FOOBAR_SEARCH_URL);
         Assert.assertFalse("The processor should not handle the suggestion.",
                 mProcessor.doesProcessSuggestion(mWhatYouTypedSuggestion));
     }
 
     /** Test the edit button is pressed, the correct method in the URL bar delegate is triggered. */
-    @CalledByNativeJavaTest
+    @Test
+    @SmallTest
     public void testEditButtonPress() {
         mProcessor.onUrlFocusChange(true);
         mProcessor.doesProcessSuggestion(mWhatYouTypedSuggestion);
@@ -164,11 +169,12 @@ public final class EditUrlSuggestionUnitTest {
 
         mModel.get(EditUrlSuggestionProperties.BUTTON_CLICK_LISTENER).onClick(mEditButton);
 
-        verify(mLocationBarDelegate).setOmniboxEditingText(mTestUrl.getSpec());
+        verify(mLocationBarDelegate).setOmniboxEditingText(TEST_URL);
     }
 
     /** Test that when suggestion is tapped, it still navigates to the correct location. */
-    @CalledByNativeJavaTest
+    @Test
+    @SmallTest
     public void testPressSuggestion() {
         mProcessor.onUrlFocusChange(true);
         mProcessor.doesProcessSuggestion(mWhatYouTypedSuggestion);
@@ -179,18 +185,19 @@ public final class EditUrlSuggestionUnitTest {
         verify(mDelegate).onSelection();
     }
 
-    @CalledByNativeJavaTest
+    @Test
+    @SmallTest
     public void testSearchSuggestion() {
-        when(mTab.getUrl()).thenReturn(mFoobarSearchUrl);
+        when(mTab.getUrlString()).thenReturn(FOOBAR_SEARCH_URL);
         mProcessor.onUrlFocusChange(true);
-        when(mTemplateUrlService.getSearchQueryForUrl(mFoobarSearchUrl))
+        when(mTemplateUrlService.getSearchQueryForUrl(FOOBAR_SEARCH_URL))
                 .thenReturn(FOOBAR_SEARCH_TERMS);
-        when(mTemplateUrlService.getSearchQueryForUrl(mBarbazSearchUrl))
+        when(mTemplateUrlService.getSearchQueryForUrl(BARBAZ_SEARCH_URL))
                 .thenReturn(BARBAZ_SEARCH_TERMS);
 
         Assert.assertTrue(mProcessor.doesProcessSuggestion(mSearchSuggestion));
 
-        when(mSearchSuggestion.getUrl()).thenReturn(mBarbazSearchUrl);
+        when(mSearchSuggestion.getUrl()).thenReturn(BARBAZ_SEARCH_URL);
         when(mSearchSuggestion.getFillIntoEdit()).thenReturn(BARBAZ_SEARCH_TERMS);
 
         Assert.assertFalse(mProcessor.doesProcessSuggestion(mSearchSuggestion));

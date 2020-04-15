@@ -16,7 +16,6 @@ import androidx.core.util.ObjectsCompat;
 import org.chromium.base.ContextUtils;
 import org.chromium.chrome.browser.omnibox.MatchClassificationStyle;
 import org.chromium.components.omnibox.SuggestionAnswer;
-import org.chromium.url.GURL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +79,8 @@ public class OmniboxSuggestion {
     private final List<MatchClassification> mDescriptionClassifications;
     private final SuggestionAnswer mAnswer;
     private final String mFillIntoEdit;
-    private final GURL mUrl;
-    private final GURL mImageUrl;
+    private final String mUrl;
+    private final String mImageUrl;
     private final String mImageDominantColor;
     private final int mRelevance;
     private final int mTransition;
@@ -93,7 +92,7 @@ public class OmniboxSuggestion {
     public OmniboxSuggestion(int nativeType, boolean isSearchType, int relevance, int transition,
             String displayText, List<MatchClassification> displayTextClassifications,
             String description, List<MatchClassification> descriptionClassifications,
-            SuggestionAnswer answer, String fillIntoEdit, GURL url, GURL imageUrl,
+            SuggestionAnswer answer, String fillIntoEdit, String url, String imageUrl,
             String imageDominantColor, boolean isStarred, boolean isDeletable,
             String postContentType, byte[] postData) {
         mType = nativeType;
@@ -106,9 +105,7 @@ public class OmniboxSuggestion {
         mDescriptionClassifications = descriptionClassifications;
         mAnswer = answer;
         mFillIntoEdit = TextUtils.isEmpty(fillIntoEdit) ? displayText : fillIntoEdit;
-        assert url != null;
         mUrl = url;
-        assert imageUrl != null;
         mImageUrl = imageUrl;
         mImageDominantColor = imageDominantColor;
         mIsStarred = isStarred;
@@ -153,11 +150,12 @@ public class OmniboxSuggestion {
         return mFillIntoEdit;
     }
 
-    public GURL getUrl() {
+    public String getUrl() {
         return mUrl;
     }
 
-    public GURL getImageUrl() {
+    @Nullable
+    public String getImageUrl() {
         return mImageUrl;
     }
 
@@ -243,7 +241,7 @@ public class OmniboxSuggestion {
             OmniboxSuggestion suggestion = suggestions.get(i);
             if (suggestion.mAnswer != null) continue;
 
-            editor.putString(KEY_PREFIX_ZERO_SUGGEST_URL + i, suggestion.getUrl().serialize())
+            editor.putString(KEY_PREFIX_ZERO_SUGGEST_URL + i, suggestion.getUrl())
                     .putString(
                             KEY_PREFIX_ZERO_SUGGEST_DISPLAY_TEST + i, suggestion.getDisplayText())
                     .putString(KEY_PREFIX_ZERO_SUGGEST_DESCRIPTION + i, suggestion.getDescription())
@@ -282,8 +280,7 @@ public class OmniboxSuggestion {
                 String answerText = prefs.getString(KEY_PREFIX_ZERO_SUGGEST_ANSWER_TEXT + i, "");
                 if (!TextUtils.isEmpty(answerText)) continue;
 
-                GURL url = GURL.deserialize(prefs.getString(KEY_PREFIX_ZERO_SUGGEST_URL + i, ""));
-                if (url == null) continue;
+                String url = prefs.getString(KEY_PREFIX_ZERO_SUGGEST_URL + i, "");
                 String displayText = prefs.getString(KEY_PREFIX_ZERO_SUGGEST_DISPLAY_TEST + i, "");
                 String description = prefs.getString(KEY_PREFIX_ZERO_SUGGEST_DESCRIPTION + i, "");
                 int nativeType = prefs.getInt(KEY_PREFIX_ZERO_SUGGEST_NATIVE_TYPE + i, -1);
@@ -300,7 +297,7 @@ public class OmniboxSuggestion {
 
                 OmniboxSuggestion suggestion = new OmniboxSuggestion(nativeType, isSearchType, 0, 0,
                         displayText, classifications, description, classifications, null, "", url,
-                        GURL.emptyGURL(), null, isStarred, isDeletable,
+                        null, null, isStarred, isDeletable,
                         postContentType.isEmpty() ? null : postContentType,
                         postData.length == 0 ? null : postData);
                 suggestions.add(suggestion);

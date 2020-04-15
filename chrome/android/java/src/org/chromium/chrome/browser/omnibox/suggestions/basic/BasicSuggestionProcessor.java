@@ -165,7 +165,7 @@ public class BasicSuggestionProcessor extends BaseSuggestionViewProcessor {
         boolean urlHighlighted = false;
 
         if (suggestion.isUrlSuggestion()) {
-            if (!suggestion.getUrl().isEmpty()) {
+            if (!TextUtils.isEmpty(suggestion.getUrl())) {
                 SuggestionSpannable str = new SuggestionSpannable(suggestion.getDisplayText());
                 urlHighlighted = applyHighlightToMatchRegions(
                         str, suggestion.getDisplayTextClassifications());
@@ -197,9 +197,10 @@ public class BasicSuggestionProcessor extends BaseSuggestionViewProcessor {
      */
     private SuggestionSpannable getSuggestedQuery(OmniboxSuggestion suggestion,
             boolean showDescriptionIfPresent, boolean shouldHighlight) {
+        String userQuery = mUrlBarEditingTextProvider.getTextWithoutAutocomplete();
         String suggestedQuery = null;
         List<OmniboxSuggestion.MatchClassification> classifications;
-        if (showDescriptionIfPresent && !suggestion.getUrl().isEmpty()
+        if (showDescriptionIfPresent && !TextUtils.isEmpty(suggestion.getUrl())
                 && !TextUtils.isEmpty(suggestion.getDescription())) {
             suggestedQuery = suggestion.getDescription();
             classifications = suggestion.getDescriptionClassifications();

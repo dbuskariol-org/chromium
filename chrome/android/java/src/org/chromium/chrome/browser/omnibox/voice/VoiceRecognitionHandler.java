@@ -238,9 +238,7 @@ public class VoiceRecognitionHandler {
 
             String url = autocompleteCoordinator.qualifyPartialURLQuery(topResultQuery);
             if (url == null) {
-                url = TemplateUrlServiceFactory.get()
-                              .getUrlForVoiceSearchQuery(topResultQuery)
-                              .getSpec();
+                url = TemplateUrlServiceFactory.get().getUrlForVoiceSearchQuery(topResultQuery);
             }
 
             // Since voice was used, we need to let the frame know that there was a user gesture.
