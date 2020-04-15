@@ -240,9 +240,9 @@ scoped_refptr<VideoFrame> V4L2Buffer::GetVideoFrame() {
   // We can create the VideoFrame only when using MMAP buffers.
   if (v4l2_buffer_.memory != V4L2_MEMORY_MMAP) {
     VLOGF(1) << "Cannot create video frame from non-MMAP buffer";
-    // video_frame_ should be null since that's its default value.
-    DCHECK_EQ(video_frame_, nullptr);
-    return video_frame_;
+    // Allow NOTREACHED() on invalid argument because this is an internal
+    // method.
+    NOTREACHED();
   }
 
   // Create the video frame instance if requiring it for the first time.
