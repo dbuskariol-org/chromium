@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.favicon;
+package org.chromium.components.browser_ui.widget;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -20,10 +20,10 @@ import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.Feature;
 
 /**
- * Unit tests for FaviconFallbackGenerator.
+ * Unit tests for RoundedIconGenerator.
  */
 @RunWith(BaseJUnit4ClassRunner.class)
-public class FaviconFallbackGeneratorTest {
+public class RoundedIconGeneratorTest {
     private Context mContext;
 
     @Before
@@ -34,16 +34,16 @@ public class FaviconFallbackGeneratorTest {
     }
 
     private String getIconTextForUrl(String url, boolean includePrivateRegistries) {
-        return FaviconFallbackGenerator.getIconTextForUrl(url, includePrivateRegistries);
+        return RoundedIconGenerator.getIconTextForUrl(url, includePrivateRegistries);
     }
 
     /**
-     * Verifies that FaviconFallbackGenerator's ability to generate icons based on URLs considers
+     * Verifies that RoundedIconGenerator's ability to generate icons based on URLs considers
      * the appropriate parts of the URL for the icon to generate.
      */
     @Test
     @SmallTest
-    @Feature({"Browser", "FaviconFallbackGenerator"})
+    @Feature({"Browser", "RoundedIconGenerator"})
     public void testGetIconTextForUrl() {
         // Verify valid domains when including private registries.
         Assert.assertEquals("google.com", getIconTextForUrl("https://google.com/", true));
@@ -74,14 +74,14 @@ public class FaviconFallbackGeneratorTest {
      */
     @Test
     @SmallTest
-    @Feature({"Browser", "FaviconFallbackGenerator"})
+    @Feature({"Browser", "RoundedIconGenerator"})
     public void testGenerateIconForText() {
         final int iconSizeDp = 32;
         final int iconCornerRadiusDp = 20;
         final int iconTextSizeDp = 12;
 
         int iconColor = Color.GRAY;
-        FaviconFallbackGenerator generator = new FaviconFallbackGenerator(mContext.getResources(),
+        RoundedIconGenerator generator = new RoundedIconGenerator(mContext.getResources(),
                 iconSizeDp, iconSizeDp, iconCornerRadiusDp, iconColor, iconTextSizeDp);
 
         Assert.assertTrue(generator.generateIconForText("") != null);
