@@ -45,6 +45,10 @@ extern const char kIntentFilterKey[];
 base::Value ConvertPreferredAppsToValue(
     const PreferredAppsList::PreferredApps& preferred_apps);
 
+// Parse the base::Value read from JSON file back to preferred apps struct.
+PreferredAppsList::PreferredApps ParseValueToPreferredApps(
+    const base::Value& preferred_apps_value);
+
 }  // namespace apps
 
 #endif  // CHROME_SERVICES_APP_SERVICE_PUBLIC_CPP_PREFERRED_APPS_CONVERTER_H_

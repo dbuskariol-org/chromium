@@ -137,6 +137,7 @@ void PreferredAppsList::DeleteAppId(const std::string& app_id) {
 }
 
 void PreferredAppsList::Init() {
+  preferred_apps_ = PreferredApps();
   initialized_ = true;
 }
 

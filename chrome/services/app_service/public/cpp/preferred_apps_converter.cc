@@ -1,7 +1,9 @@
 // Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
 #include <memory>
+#include <utility>
 
 #include "chrome/services/app_service/public/cpp/preferred_apps_converter.h"
 #include "chrome/services/app_service/public/mojom/types.mojom.h"
@@ -40,6 +42,62 @@ base::Value ConvertIntentFilterToValue(
   return intent_filter_value;
 }
 
+apps::mojom::ConditionValuePtr ParseValueToConditionValue(
+    const base::Value& value) {
+  auto* value_string = value.FindStringKey(apps::kValueKey);
+  if (!value_string) {
+    return nullptr;
+  }
+  auto condition_value = apps::mojom::ConditionValue::New();
+  condition_value->value = *value_string;
+  auto match_type = value.FindIntKey(apps::kMatchTypeKey);
+  if (!match_type.has_value()) {
+    return nullptr;
+  }
+  condition_value->match_type =
+      static_cast<apps::mojom::PatternMatchType>(match_type.value());
+  return condition_value;
+}
+
+apps::mojom::ConditionPtr ParseValueToCondition(const base::Value& value) {
+  auto condition_type = value.FindIntKey(apps::kConditionTypeKey);
+  if (!condition_type.has_value()) {
+    return nullptr;
+  }
+  auto condition = apps::mojom::Condition::New();
+  condition->condition_type =
+      static_cast<apps::mojom::ConditionType>(condition_type.value());
+
+  auto* condition_values = value.FindKey(apps::kConditionValuesKey);
+  if (!condition_values || !condition_values->is_list()) {
+    return nullptr;
+  }
+  for (auto& condition_value : condition_values->GetList()) {
+    auto parsed_condition_value = ParseValueToConditionValue(condition_value);
+    if (!parsed_condition_value) {
+      return nullptr;
+    }
+    condition->condition_values.push_back(std::move(parsed_condition_value));
+  }
+  return condition;
+}
+
+apps::mojom::IntentFilterPtr ParseValueToIntentFilter(
+    const base::Value* value) {
+  if (!value || !value->is_list()) {
+    return nullptr;
+  }
+  auto intent_filter = apps::mojom::IntentFilter::New();
+  for (auto& condition : value->GetList()) {
+    auto parsed_condition = ParseValueToCondition(condition);
+    if (!parsed_condition) {
+      return nullptr;
+    }
+    intent_filter->conditions.push_back(std::move(parsed_condition));
+  }
+  return intent_filter;
+}
+
 }  // namespace
 
 namespace apps {
@@ -63,6 +121,29 @@ base::Value ConvertPreferredAppsToValue(
     preferred_apps_value.Append(std::move(preferred_app_dict));
   }
   return preferred_apps_value;
+}
+
+PreferredAppsList::PreferredApps ParseValueToPreferredApps(
+    const base::Value& preferred_apps_value) {
+  if (!preferred_apps_value.is_list()) {
+    return PreferredAppsList::PreferredApps();
+  }
+  PreferredAppsList::PreferredApps preferred_apps;
+  for (auto& entry : preferred_apps_value.GetList()) {
+    auto* app_id = entry.FindStringKey(kAppIdKey);
+    if (!app_id) {
+      return PreferredAppsList::PreferredApps();
+    }
+    auto parsed_intent_filter =
+        ParseValueToIntentFilter(entry.FindKey(kIntentFilterKey));
+    if (!parsed_intent_filter) {
+      return PreferredAppsList::PreferredApps();
+    }
+    auto new_preferred_app = apps::mojom::PreferredApp::New(
+        std::move(parsed_intent_filter), *app_id);
+    preferred_apps.push_back(std::move(new_preferred_app));
+  }
+  return preferred_apps;
 }
 
 }  // namespace apps
