@@ -31,7 +31,7 @@ class AppWindowWrapper {
     this.openingOrOpened_ = false;
 
     /** @protected {AsyncUtil.Queue} */
-    this.queue = new AsyncUtil.Queue();
+    this.queue_ = new AsyncUtil.Queue();
   }
 
   /**
@@ -47,6 +47,17 @@ class AppWindowWrapper {
    */
   setIcon(iconPath) {
     this.window_.setIcon(iconPath);
+  }
+
+
+  /**
+   * Gets the launch lock, used to synchronize the asynchronous initialization
+   * steps.
+   *
+   * @return {Promise<function()>} A function to be called to release the lock.
+   */
+  async getLaunchLock() {
+    return this.queue_.lock();
   }
 
   /**
@@ -104,8 +115,7 @@ class AppWindowWrapper {
       chrome.app.window.create(this.url_, this.options_, appWindow => {
         this.window_ = appWindow;
         if (!appWindow) {
-          console.error(`Failed to create window for ${this.url_}`);
-          return resolve(null);
+          throw new Error(`Failed to create window for ${this.url_}`);
         }
 
         // Save the properties.
@@ -170,7 +180,7 @@ class AppWindowWrapper {
    *     False otherwise.
    * @param {function()=} opt_callback Completion callback.
    */
-  launch(appState, reopen, opt_callback) {
+  async launch(appState, reopen, opt_callback) {
     // Check if the window is opened or not.
     if (this.openingOrOpened_) {
       console.error('The window is already opened.');
@@ -188,74 +198,50 @@ class AppWindowWrapper {
     // main windows of the Files app.
     const similarWindows = window.getSimilarWindows(this.url_);
 
-    // Restore maximized windows, to avoid hiding them to tray, which can be
-    // confusing for users.
-    this.queue.run(callback => {
-      this.restoreMaximizedWindow_(similarWindows).then(callback);
-    });
+    const unlock = await this.getLaunchLock();
+    try {
+      // Restore maximized windows, to avoid hiding them to tray, which can be
+      // confusing for users.
+      await this.restoreMaximizedWindow_(similarWindows);
 
-    // Obtains the last geometry and window state (maximized or not).
-    this.queue.run(callback => {
-      this.getWindowPreferences_().then(prefs => {
-        // Overwrite maximized state with remembered last window state.
-        if (prefs.isMaximized !== undefined) {
-          this.options_.state = prefs.isMaximized ? 'maximized' : undefined;
-        }
-        // Apply the last bounds.
-        if (prefs.lastBounds) {
-          this.options_.bounds = prefs.lastBounds;
-        }
-
-        callback();
-      });
-    });
-
-    // Closure creating the window, once all preprocessing tasks are finished.
-    this.queue.run(callback => {
-      this.createWindow_(reopen).then(appWindow => {
-        if (!appWindow) {
-          opt_callback && opt_callback();
-          callback();
-          return;
-        }
-
-        // Exit full screen state if it's created as a full screen window.
-        if (appWindow.isFullscreen()) {
-          appWindow.restore();
-        }
-
-        // This is a temporary workaround for crbug.com/452737.
-        // {state: 'maximized'} in CreateWindowOptions is ignored when a window
-        // is launched with hidden option, so we maximize the window manually
-        // here.
-        if (this.options_.hidden && this.options_.state === 'maximized') {
-          appWindow.maximize();
-        }
-
-        callback();
-      });
-    });
-
-    // After creating.
-    this.queue.run(callback => {
-      if (!this.window_) {
-        opt_callback && opt_callback();
-        callback();
+      // Obtains the last geometry and window state (maximized or not).
+      const prefs = await this.getWindowPreferences_();
+      if (prefs.isMaximized !== undefined) {
+        this.options_.state = prefs.isMaximized ? 'maximized' : undefined;
+      }
+      if (prefs.lastBounds) {
+        this.options_.bounds = prefs.lastBounds;
       }
 
-      this.positionWindow_(this.window_, similarWindows);
+      // Closure creating the window, once all preprocessing tasks are finished.
+      const appWindow = await this.createWindow_(reopen);
+
+      // Exit full screen state if it's created as a full screen window.
+      if (appWindow.isFullscreen()) {
+        appWindow.restore();
+      }
+
+      // This is a temporary workaround for crbug.com/452737.
+      // {state: 'maximized'} in CreateWindowOptions is ignored when a window is
+      // launched with hidden option, so we maximize the window manually here.
+      if (this.options_.hidden && this.options_.state === 'maximized') {
+        appWindow.maximize();
+      }
+
+      this.positionWindow_(appWindow, similarWindows);
 
       // Register event listeners.
-      this.window_.onBoundsChanged.addListener(
-          this.onBoundsChanged_.bind(this));
-      this.window_.onClosed.addListener(this.onClosed_.bind(this));
+      appWindow.onBoundsChanged.addListener(this.onBoundsChanged_.bind(this));
+      appWindow.onClosed.addListener(this.onClosed_.bind(this));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      unlock();
+    }
 
-      // Callback.
-      if (opt_callback) {
-        opt_callback();
-      }
-      callback();
-    });
+    if (opt_callback) {
+      opt_callback();
+    }
   }
 
   /**
@@ -353,17 +339,18 @@ class SingletonAppWindowWrapper extends AppWindowWrapper {
    *     False otherwise.
    * @param {function()=} opt_callback Completion callback.
    */
-  launch(appState, reopen, opt_callback) {
+  async launch(appState, reopen, opt_callback) {
     // If the window is not opened yet, just call the parent method.
     if (!this.openingOrOpened_) {
-      AppWindowWrapper.prototype.launch.call(
-          this, appState, reopen, opt_callback);
-      return;
+      return super.launch(appState, reopen, opt_callback);
     }
 
-    // If the window is already opened, reload the window.
-    // The queue is used to wait until the window is opened.
-    this.queue.run(nextStep => {
+    // The lock is used to wait until the window is opened and set in
+    // this.window_.
+    const unlock = await this.getLaunchLock();
+
+    try {
+      // If the window is already opened, reload the window.
       this.window_.contentWindow.appState = appState;
       this.window_.contentWindow.appReopen = reopen;
       if (!this.window_.contentWindow.reload) {
@@ -375,11 +362,13 @@ class SingletonAppWindowWrapper extends AppWindowWrapper {
       } else {
         this.window_.contentWindow.reload();
       }
+
       if (opt_callback) {
         opt_callback();
       }
-      nextStep();
-    });
+    } finally {
+      unlock();
+    }
   }
 
   /**
