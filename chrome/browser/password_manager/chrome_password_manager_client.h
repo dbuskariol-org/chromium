@@ -54,7 +54,6 @@ class ChromeBiometricAuthenticator;
 class PasswordGenerationPopupObserver;
 class PasswordGenerationPopupControllerImpl;
 class Profile;
-struct CoreAccountId;
 
 namespace autofill {
 namespace password_generation {
@@ -139,8 +138,7 @@ class ChromePasswordManagerClient
       password_manager::CredentialLeakType leak_type,
       const GURL& origin,
       const base::string16& username) override;
-  void TriggerReauthForAccount(
-      const CoreAccountId& account_id,
+  void TriggerReauthForPrimaryAccount(
       base::OnceCallback<void(ReauthSucceeded)> reauth_callback) override;
   void TriggerSignIn(signin_metrics::AccessPoint access_point) override;
   bool IsIsolationForPasswordSitesEnabled() const override;
