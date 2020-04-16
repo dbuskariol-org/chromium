@@ -55,6 +55,9 @@ class CONTENT_EXPORT ServiceWorkerStorageControlImpl
   void DeleteRegistration(int64_t registration_id,
                           const GURL& origin,
                           DeleteRegistrationCallback callback) override;
+  void UpdateToActiveState(int64_t registration_id,
+                           const GURL& origin,
+                           UpdateToActiveStateCallback callback) override;
   void GetNewRegistrationId(GetNewRegistrationIdCallback callback) override;
   void GetNewVersionId(GetNewVersionIdCallback callback) override;
   void GetNewResourceId(GetNewResourceIdCallback callback) override;

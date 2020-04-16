@@ -169,6 +169,13 @@ void ServiceWorkerStorageControlImpl::DeleteRegistration(
       base::BindOnce(&DidDeleteRegistration, std::move(callback)));
 }
 
+void ServiceWorkerStorageControlImpl::UpdateToActiveState(
+    int64_t registration_id,
+    const GURL& origin,
+    UpdateToActiveStateCallback callback) {
+  storage_->UpdateToActiveState(registration_id, origin, std::move(callback));
+}
+
 void ServiceWorkerStorageControlImpl::GetNewRegistrationId(
     GetNewRegistrationIdCallback callback) {
   storage_->GetNewRegistrationId(std::move(callback));
