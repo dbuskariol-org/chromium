@@ -746,7 +746,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         }
 
         if (ReaderModeManager.isEnabled(this)) {
-            mReaderModeManager = new ReaderModeManager(getTabModelSelector(), this);
+            mReaderModeManager = new ReaderModeManager(getTabModelSelector());
         }
 
         TraceEvent.end("ChromeActivity:CompositorInitialization");
