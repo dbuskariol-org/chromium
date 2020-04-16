@@ -69,10 +69,10 @@ launcher.setInitializationPromise = (promise) => {
  * @param {Object=} opt_appState App state.
  * @param {number=} opt_id Window id.
  * @param {LaunchType=} opt_type Launch type. Default: ALWAYS_CREATE.
- * @param {function(?string)=} opt_callback Completion callback with the App ID.
+ * @return {!Promise<chrome.app.window.AppWindow|string>} Resolved with the App
+ *     ID.
  */
-launcher.launchFileManager =
-    async (opt_appState, opt_id, opt_type, opt_callback) => {
+launcher.launchFileManager = async (opt_appState, opt_id, opt_type) => {
   const type = opt_type || LaunchType.ALWAYS_CREATE;
   opt_appState =
       /**
@@ -113,9 +113,6 @@ launcher.launchFileManager =
         continue;
       }
       window.appWindows[key].focus();
-      if (opt_callback) {
-        opt_callback(key);
-      }
       return Promise.resolve(key);
     }
   }
@@ -132,9 +129,6 @@ launcher.launchFileManager =
       // the Files app's failed on some error, wrap it with try catch.
       try {
         if (window.appWindows[key].contentWindow.isFocused()) {
-          if (opt_callback) {
-            opt_callback(key);
-          }
           return Promise.resolve(key);
         }
       } catch (e) {
@@ -149,9 +143,6 @@ launcher.launchFileManager =
 
       if (!window.appWindows[key].isMinimized()) {
         window.appWindows[key].focus();
-        if (opt_callback) {
-          opt_callback(key);
-        }
         return Promise.resolve(key);
       }
     }
@@ -162,9 +153,6 @@ launcher.launchFileManager =
       }
 
       window.appWindows[key].focus();
-      if (opt_callback) {
-        opt_callback(key);
-      }
       return Promise.resolve(key);
     }
   }
@@ -183,16 +171,11 @@ launcher.launchFileManager =
 
   const appWindow = new AppWindowWrapper(
       'main.html', appId, FILE_MANAGER_WINDOW_CREATE_OPTIONS);
-  appWindow.launch(opt_appState || {}, false).then(() => {
-    if (!appWindow.rawAppWindow) {
-      opt_callback && opt_callback(null);
-      return Promise.resolve(null);
-    }
+  await appWindow.launch(opt_appState || {}, false);
+  if (!appWindow.rawAppWindow) {
+    return null;
+  }
 
-    appWindow.rawAppWindow.focus();
-    if (opt_callback) {
-      opt_callback(appId);
-    }
-    return Promise.resolve(appId);
-  });
+  appWindow.rawAppWindow.focus();
+  return appId;
 };
