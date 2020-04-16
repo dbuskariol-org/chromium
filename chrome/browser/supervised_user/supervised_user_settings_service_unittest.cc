@@ -159,9 +159,9 @@ TEST_F(SupervisedUserSettingsServiceTest, ProcessAtomicSetting) {
   syncer::SyncChangeList change_list;
   change_list.push_back(
       syncer::SyncChange(FROM_HERE, syncer::SyncChange::ACTION_ADD, data));
-  syncer::SyncError error =
+  base::Optional<syncer::ModelError> error =
       settings_service_.ProcessSyncChanges(FROM_HERE, change_list);
-  EXPECT_FALSE(error.IsSet()) << error.ToString();
+  EXPECT_FALSE(error.has_value()) << error.value().ToString();
   ASSERT_TRUE(settings_);
   ASSERT_TRUE(settings_->GetWithoutPathExpansion(kSettingsName, &value));
   std::string string_value;
@@ -191,9 +191,9 @@ TEST_F(SupervisedUserSettingsServiceTest, ProcessSplitSetting) {
     change_list.push_back(
         syncer::SyncChange(FROM_HERE, syncer::SyncChange::ACTION_ADD, data));
   }
-  syncer::SyncError error =
+  base::Optional<syncer::ModelError> error =
       settings_service_.ProcessSyncChanges(FROM_HERE, change_list);
-  EXPECT_FALSE(error.IsSet()) << error.ToString();
+  EXPECT_FALSE(error.has_value()) << error.value().ToString();
   ASSERT_TRUE(settings_);
   ASSERT_TRUE(settings_->GetWithoutPathExpansion(kSettingsName, &value));
   const base::DictionaryValue* dict_value = nullptr;

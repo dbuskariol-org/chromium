@@ -227,11 +227,11 @@ syncer::SyncDataList SupervisedUserWhitelistService::GetAllSyncDataForTesting(
   return sync_data;
 }
 
-syncer::SyncError SupervisedUserWhitelistService::ProcessSyncChanges(
+base::Optional<syncer::ModelError>
+SupervisedUserWhitelistService::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   bool whitelists_removed = false;
-  syncer::SyncError error;
   DictionaryPrefUpdate update(prefs_, prefs::kSupervisedUserWhitelists);
   base::DictionaryValue* pref_dict = update.Get();
   for (const syncer::SyncChange& sync_change : change_list) {
@@ -268,7 +268,7 @@ syncer::SyncError SupervisedUserWhitelistService::ProcessSyncChanges(
   if (whitelists_removed)
     NotifyWhitelistsChanged();
 
-  return error;
+  return base::nullopt;
 }
 
 void SupervisedUserWhitelistService::AddNewWhitelist(

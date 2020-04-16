@@ -88,17 +88,16 @@ class TestSyncProcessorStub : public syncer::SyncChangeProcessor {
   explicit TestSyncProcessorStub(syncer::SyncChangeList* output)
       : output_(output), fail_next_(false) {}
 
-  syncer::SyncError ProcessSyncChanges(
+  base::Optional<syncer::ModelError> ProcessSyncChanges(
       const base::Location& from_here,
       const syncer::SyncChangeList& change_list) override {
     if (output_)
       output_->insert(output_->end(), change_list.begin(), change_list.end());
     if (fail_next_) {
       fail_next_ = false;
-      return syncer::SyncError(FROM_HERE, syncer::SyncError::DATATYPE_ERROR,
-                               "Error", syncer::PREFERENCES);
+      return syncer::ModelError(FROM_HERE, "Error");
     }
-    return syncer::SyncError();
+    return base::nullopt;
   }
 
   void FailNextProcessSyncChanges() { fail_next_ = true; }
@@ -170,8 +169,7 @@ SyncData CreateRemoteSyncData(int64_t id,
 class PrefServiceSyncableTest : public testing::Test {
  public:
   PrefServiceSyncableTest()
-      : pref_sync_service_(nullptr),
-        next_pref_remote_sync_node_id_(0) {}
+      : pref_sync_service_(nullptr), next_pref_remote_sync_node_id_(0) {}
 
   void SetUp() override {
     prefs_.registry()->RegisterStringPref(kUnsyncedPreferenceName,

@@ -72,8 +72,8 @@ class MockSyncableService : public SyncableService {
                    std::unique_ptr<SyncErrorFactory> sync_error_factory));
   MOCK_METHOD1(StopSyncing, void(ModelType type));
   MOCK_METHOD2(ProcessSyncChanges,
-               SyncError(const base::Location& from_here,
-                         const SyncChangeList& change_list));
+               base::Optional<ModelError>(const base::Location& from_here,
+                                          const SyncChangeList& change_list));
   MOCK_CONST_METHOD1(GetAllSyncData, SyncDataList(ModelType type));
 };
 
@@ -362,9 +362,9 @@ TEST_F(SyncableServiceBasedBridgeTest,
         change_list.emplace_back(
             FROM_HERE, SyncChange::ACTION_ADD,
             SyncData::CreateLocalData(kClientTag, "title", GetTestSpecifics()));
-        const SyncError error =
+        const base::Optional<ModelError> error =
             sync_processor->ProcessSyncChanges(FROM_HERE, change_list);
-        EXPECT_FALSE(error.IsSet());
+        EXPECT_FALSE(error.has_value());
         return base::nullopt;
       });
 
@@ -391,9 +391,9 @@ TEST_F(SyncableServiceBasedBridgeTest, ShouldPropagateLocalCreation) {
   change_list.emplace_back(
       FROM_HERE, SyncChange::ACTION_ADD,
       SyncData::CreateLocalData(kClientTag, "title", GetTestSpecifics()));
-  const SyncError error =
+  const base::Optional<ModelError> error =
       start_syncing_sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
-  EXPECT_FALSE(error.IsSet());
+  EXPECT_FALSE(error.has_value());
   EXPECT_THAT(GetAllData(), ElementsAre(Pair(kClientTagHash.value(), _)));
 }
 
@@ -412,9 +412,9 @@ TEST_F(SyncableServiceBasedBridgeTest, ShouldPropagateLocalUpdate) {
   change_list.emplace_back(FROM_HERE, SyncChange::ACTION_UPDATE,
                            SyncData::CreateLocalData(
                                kClientTag, "title", GetTestSpecifics("name2")));
-  const SyncError error =
+  const base::Optional<ModelError> error =
       start_syncing_sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
-  EXPECT_FALSE(error.IsSet());
+  EXPECT_FALSE(error.has_value());
   EXPECT_THAT(GetAllData(),
               ElementsAre(Pair(kClientTagHash.value(), HasName("name2"))));
 }
@@ -433,9 +433,9 @@ TEST_F(SyncableServiceBasedBridgeTest, ShouldPropagateLocalDeletion) {
   change_list.emplace_back(FROM_HERE, SyncChange::ACTION_DELETE,
                            SyncData::CreateLocalDelete(kClientTag, kModelType));
 
-  const SyncError error =
+  const base::Optional<ModelError> error =
       start_syncing_sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
-  EXPECT_FALSE(error.IsSet());
+  EXPECT_FALSE(error.has_value());
   EXPECT_THAT(GetAllData(), IsEmpty());
 }
 
@@ -459,9 +459,9 @@ TEST_F(SyncableServiceBasedBridgeTest,
   change_list.emplace_back(
       FROM_HERE, SyncChange::ACTION_ADD,
       SyncData::CreateLocalData(kClientTag, "title", GetTestSpecifics()));
-  const SyncError error =
+  const base::Optional<ModelError> error =
       start_syncing_sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
-  EXPECT_TRUE(error.IsSet());
+  EXPECT_TRUE(error.has_value());
   EXPECT_THAT(GetAllData(), IsEmpty());
 }
 

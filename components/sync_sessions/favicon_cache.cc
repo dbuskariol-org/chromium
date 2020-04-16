@@ -329,19 +329,16 @@ syncer::SyncDataList FaviconCache::GetAllSyncDataForTesting(
   return data_list;
 }
 
-syncer::SyncError FaviconCache::ProcessSyncChanges(
+base::Optional<syncer::ModelError> FaviconCache::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   if (!favicon_images_sync_processor_.get() ||
       !favicon_tracking_sync_processor_.get()) {
-    return syncer::SyncError(FROM_HERE,
-                             syncer::SyncError::DATATYPE_ERROR,
-                             "One or both favicon types disabled.",
-                             change_list[0].sync_data().GetDataType());
+    return syncer::ModelError(FROM_HERE, "One or both favicon types disabled.");
   }
 
   syncer::SyncChangeList new_changes;
-  syncer::SyncError error;
+  base::Optional<syncer::ModelError> error;
   syncer::ModelType type = syncer::UNSPECIFIED;
   for (auto iter = change_list.begin(); iter != change_list.end(); ++iter) {
     type = iter->sync_data().GetDataType();
@@ -349,7 +346,7 @@ syncer::SyncError FaviconCache::ProcessSyncChanges(
     GURL favicon_url =
         GetFaviconURLFromSpecifics(iter->sync_data().GetSpecifics());
     if (!favicon_url.is_valid()) {
-      error.Reset(FROM_HERE, "Received invalid favicon url.", type);
+      error = syncer::ModelError(FROM_HERE, "Received invalid favicon url.");
       break;
     }
     auto favicon_iter = synced_favicons_.find(favicon_url);
@@ -380,7 +377,7 @@ syncer::SyncError FaviconCache::ProcessSyncChanges(
         MergeSyncFavicon(iter->sync_data(), &new_changes);
       }
     } else {
-      error.Reset(FROM_HERE, "Invalid action received.", type);
+      error = syncer::ModelError(FROM_HERE, "Invalid action received.");
       break;
     }
   }
@@ -388,7 +385,7 @@ syncer::SyncError FaviconCache::ProcessSyncChanges(
   // Note: we deliberately do not expire favicons here. If we received new
   // favicons and are now over the limit, the next local favicon change will
   // trigger the necessary expiration.
-  if (!error.IsSet() && !new_changes.empty()) {
+  if (!error.has_value() && !new_changes.empty()) {
     if (type == syncer::FAVICON_IMAGES) {
         favicon_images_sync_processor_->ProcessSyncChanges(FROM_HERE,
                                                            new_changes);

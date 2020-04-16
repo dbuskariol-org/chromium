@@ -55,7 +55,7 @@ class SyncStorageBackend : public syncer::SyncableService {
       const syncer::SyncDataList& initial_sync_data,
       std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
       std::unique_ptr<syncer::SyncErrorFactory> sync_error_factory) override;
-  syncer::SyncError ProcessSyncChanges(
+  base::Optional<syncer::ModelError> ProcessSyncChanges(
       const base::Location& from_here,
       const syncer::SyncChangeList& change_list) override;
   void StopSyncing(syncer::ModelType type) override;

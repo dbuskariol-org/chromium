@@ -240,8 +240,8 @@ PrefModelAssociator::MergeDataAndStartSyncing(
   }
 
   // Push updates to sync.
-  base::Optional<syncer::ModelError> error = syncer::ConvertToModelError(
-      sync_processor_->ProcessSyncChanges(FROM_HERE, new_changes));
+  base::Optional<syncer::ModelError> error =
+      sync_processor_->ProcessSyncChanges(FROM_HERE, new_changes);
   if (!error.has_value()) {
     models_associated_ = true;
     pref_service_->OnIsSyncingChanged();
@@ -381,13 +381,11 @@ syncer::SyncDataList PrefModelAssociator::GetAllSyncDataForTesting(
   return current_data;
 }
 
-syncer::SyncError PrefModelAssociator::ProcessSyncChanges(
+base::Optional<syncer::ModelError> PrefModelAssociator::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   if (!models_associated_) {
-    syncer::SyncError error(FROM_HERE, syncer::SyncError::DATATYPE_ERROR,
-                            "Models not yet associated.", PREFERENCES);
-    return error;
+    return syncer::ModelError(FROM_HERE, "Models not yet associated.");
   }
   base::AutoReset<bool> processing_changes(&processing_syncer_changes_, true);
   syncer::SyncChangeList::const_iterator iter;
@@ -438,7 +436,7 @@ syncer::SyncError PrefModelAssociator::ProcessSyncChanges(
       synced_preferences_.insert(pref_specifics.name());
     }
   }
-  return syncer::SyncError();
+  return base::nullopt;
 }
 
 // static
@@ -568,8 +566,7 @@ void PrefModelAssociator::ProcessPrefChange(const std::string& name) {
     }
   }
 
-  syncer::SyncError error =
-      sync_processor_->ProcessSyncChanges(FROM_HERE, changes);
+  sync_processor_->ProcessSyncChanges(FROM_HERE, changes);
 }
 
 void PrefModelAssociator::SetPrefService(PrefServiceSyncable* pref_service) {

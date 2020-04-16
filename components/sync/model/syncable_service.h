@@ -15,7 +15,6 @@
 #include "components/sync/model/model_error.h"
 #include "components/sync/model/sync_change.h"
 #include "components/sync/model/sync_data.h"
-#include "components/sync/model/sync_error.h"
 
 namespace syncer {
 
@@ -68,11 +67,11 @@ class SyncableService : public base::SupportsWeakPtr<SyncableService> {
 
   // SyncChangeProcessor interface.
   // Process a list of new SyncChanges and update the local data as necessary.
-  // Returns: A default SyncError (IsSet() == false) if no errors were
-  //          encountered, and a filled SyncError (IsSet() == true)
-  //          otherwise.
-  virtual SyncError ProcessSyncChanges(const base::Location& from_here,
-                                       const SyncChangeList& change_list) = 0;
+  // Returns: base::nullopt if no error was encountered, otherwise a
+  //          base::Optional filled with such error.
+  virtual base::Optional<ModelError> ProcessSyncChanges(
+      const base::Location& from_here,
+      const SyncChangeList& change_list) = 0;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(SyncableService);

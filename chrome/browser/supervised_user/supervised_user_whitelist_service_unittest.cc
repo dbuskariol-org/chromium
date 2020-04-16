@@ -253,8 +253,9 @@ TEST_F(SupervisedUserWhitelistServiceTest, ApplyChanges) {
       FROM_HERE, syncer::SyncChange::ACTION_DELETE,
       SupervisedUserWhitelistService::CreateWhitelistSyncData(
           "aaaa", "Ignored")));
-  syncer::SyncError error = service_->ProcessSyncChanges(FROM_HERE, changes);
-  EXPECT_FALSE(error.IsSet());
+  base::Optional<syncer::ModelError> error =
+      service_->ProcessSyncChanges(FROM_HERE, changes);
+  EXPECT_FALSE(error.has_value());
 
   EXPECT_EQ(0u, site_lists_.size());
 

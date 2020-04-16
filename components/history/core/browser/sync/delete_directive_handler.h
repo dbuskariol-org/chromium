@@ -62,7 +62,7 @@ class DeleteDirectiveHandler : public syncer::SyncableService {
   //       history entries that match. Caller still needs to call other
   //       interfaces, e.g. HistoryService::ExpireHistoryBetween(), to delete
   //       local history entries.
-  syncer::SyncError ProcessLocalDeleteDirective(
+  base::Optional<syncer::ModelError> ProcessLocalDeleteDirective(
       const sync_pb::HistoryDeleteDirectiveSpecifics& delete_directive);
 
   // syncer::SyncableService implementation.
@@ -73,7 +73,7 @@ class DeleteDirectiveHandler : public syncer::SyncableService {
       std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
       std::unique_ptr<syncer::SyncErrorFactory> error_handler) override;
   void StopSyncing(syncer::ModelType type) override;
-  syncer::SyncError ProcessSyncChanges(
+  base::Optional<syncer::ModelError> ProcessSyncChanges(
       const base::Location& from_here,
       const syncer::SyncChangeList& change_list) override;
 

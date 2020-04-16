@@ -965,13 +965,12 @@ syncer::SyncDataList AppListSyncableService::GetAllSyncDataForTesting() const {
   return list;
 }
 
-syncer::SyncError AppListSyncableService::ProcessSyncChanges(
+base::Optional<syncer::ModelError> AppListSyncableService::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   if (!sync_processor_.get()) {
-    return syncer::SyncError(FROM_HERE, syncer::SyncError::DATATYPE_ERROR,
-                             "App List syncable service is not started.",
-                             syncer::APP_LIST);
+    return syncer::ModelError(FROM_HERE,
+                              "App List syncable service is not started.");
   }
 
   HandleUpdateStarted();
@@ -995,7 +994,7 @@ syncer::SyncError AppListSyncableService::ProcessSyncChanges(
 
   HandleUpdateFinished();
 
-  return syncer::SyncError();
+  return base::nullopt;
 }
 
 void AppListSyncableService::Shutdown() {

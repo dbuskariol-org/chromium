@@ -422,7 +422,7 @@ TEST_F(SpellcheckCustomDictionaryTest, ProcessSyncChanges) {
         syncer::SyncData::CreateLocalData(word, word, specifics)));
   }
 
-  EXPECT_FALSE(dictionary->ProcessSyncChanges(FROM_HERE, changes).IsSet());
+  EXPECT_FALSE(dictionary->ProcessSyncChanges(FROM_HERE, changes).has_value());
 
   const std::set<std::string>& words = dictionary->GetWords();
   EXPECT_EQ(2UL, words.size());

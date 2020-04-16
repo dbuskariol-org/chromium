@@ -222,7 +222,7 @@ syncer::SyncDataList ExtensionSyncService::GetAllSyncDataForTesting(
   return ToSyncerSyncDataList(sync_data_list);
 }
 
-syncer::SyncError ExtensionSyncService::ProcessSyncChanges(
+base::Optional<syncer::ModelError> ExtensionSyncService::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   for (const syncer::SyncChange& sync_change : change_list) {
@@ -234,7 +234,7 @@ syncer::SyncError ExtensionSyncService::ProcessSyncChanges(
 
   ExtensionSystem::Get(profile_)->app_sorting()->FixNTPOrdinalCollisions();
 
-  return syncer::SyncError();
+  return base::nullopt;
 }
 
 ExtensionSyncData ExtensionSyncService::CreateSyncData(

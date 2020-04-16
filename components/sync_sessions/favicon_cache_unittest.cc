@@ -45,7 +45,7 @@ class TestChangeProcessor : public syncer::SyncChangeProcessor {
   ~TestChangeProcessor() override;
 
   // Store a copy of all the changes passed in so we can examine them later.
-  syncer::SyncError ProcessSyncChanges(
+  base::Optional<syncer::ModelError> ProcessSyncChanges(
       const base::Location& from_here,
       const syncer::SyncChangeList& change_list) override;
 
@@ -86,15 +86,11 @@ TestChangeProcessor::TestChangeProcessor() : erroneous_(false) {
 TestChangeProcessor::~TestChangeProcessor() {
 }
 
-syncer::SyncError TestChangeProcessor::ProcessSyncChanges(
+base::Optional<syncer::ModelError> TestChangeProcessor::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   if (erroneous_) {
-    return syncer::SyncError(
-        FROM_HERE,
-        syncer::SyncError::DATATYPE_ERROR,
-        "Some error.",
-        change_list[0].sync_data().GetDataType());
+    return syncer::ModelError(FROM_HERE, "Some error.");
   }
 
   change_list_.insert(change_list_.end(),
@@ -104,7 +100,7 @@ syncer::SyncError TestChangeProcessor::ProcessSyncChanges(
   for (auto iter = change_list.begin(); iter != change_list.end(); ++iter) {
     change_map_[iter->sync_data().GetTitle()] = *iter;
   }
-  return syncer::SyncError();
+  return base::nullopt;
 }
 
 // TestFaviconData ------------------------------------------------------------

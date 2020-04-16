@@ -202,13 +202,13 @@ void ArcPackageSyncableService::StopSyncing(syncer::ModelType type) {
   pending_uninstall_items_.clear();
 }
 
-syncer::SyncError ArcPackageSyncableService::ProcessSyncChanges(
+base::Optional<syncer::ModelError>
+ArcPackageSyncableService::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   if (!sync_processor_.get()) {
-    return syncer::SyncError(FROM_HERE, syncer::SyncError::DATATYPE_ERROR,
-                             "ARC package syncable service is not started.",
-                             syncer::ARC_PACKAGE);
+    return syncer::ModelError(FROM_HERE,
+                              "ARC package syncable service is not started.");
   }
 
   for (const auto& change : change_list) {
@@ -232,7 +232,7 @@ syncer::SyncError ArcPackageSyncableService::ProcessSyncChanges(
     }
   }
 
-  return syncer::SyncError();
+  return base::nullopt;
 }
 
 bool ArcPackageSyncableService::SyncStarted() {

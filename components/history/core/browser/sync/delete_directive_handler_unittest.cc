@@ -178,14 +178,14 @@ TEST_F(HistoryDeleteDirectiveHandlerTest,
               std::unique_ptr<syncer::SyncErrorFactory>())
           .has_value());
 
-  syncer::SyncError err =
+  base::Optional<syncer::ModelError> err =
       handler()->ProcessLocalDeleteDirective(delete_directive);
-  EXPECT_FALSE(err.IsSet());
+  EXPECT_FALSE(err.has_value());
   EXPECT_EQ(1u, change_processor.changes().size());
 
   handler()->StopSyncing(syncer::HISTORY_DELETE_DIRECTIVES);
   err = handler()->ProcessLocalDeleteDirective(delete_directive);
-  EXPECT_TRUE(err.IsSet());
+  EXPECT_TRUE(err.has_value());
   EXPECT_EQ(1u, change_processor.changes().size());
 }
 

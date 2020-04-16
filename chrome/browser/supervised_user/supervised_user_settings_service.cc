@@ -31,14 +31,14 @@ using base::JSONReader;
 using base::UserMetricsAction;
 using base::Value;
 using content::BrowserThread;
-using syncer::SUPERVISED_USER_SETTINGS;
+using syncer::ModelError;
 using syncer::ModelType;
+using syncer::SUPERVISED_USER_SETTINGS;
 using syncer::SyncChange;
 using syncer::SyncChangeList;
 using syncer::SyncChangeProcessor;
 using syncer::SyncData;
 using syncer::SyncDataList;
-using syncer::SyncError;
 using syncer::SyncErrorFactory;
 
 const char kAtomicSettings[] = "atomic_settings";
@@ -153,9 +153,9 @@ void SupervisedUserSettingsService::PushItemToSync(
         dict->HasKey(key_suffix) ? SyncChange::ACTION_UPDATE
                                  : SyncChange::ACTION_ADD;
     change_list.push_back(SyncChange(FROM_HERE, change_type, data));
-    SyncError error =
+    base::Optional<ModelError> error =
         sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
-    DCHECK(!error.IsSet()) << error.ToString();
+    DCHECK(!error.has_value()) << error.value().ToString();
   } else {
     // Queue the item up to be uploaded when we start syncing
     // (in MergeDataAndStartSyncing()).
@@ -286,8 +286,7 @@ SupervisedUserSettingsService::MergeDataAndStartSyncing(
   if (!change_list.empty()) {
     store_->ReportValueChanged(kQueuedItems,
                                WriteablePrefStore::DEFAULT_PREF_WRITE_FLAGS);
-    return syncer::ConvertToModelError(
-        sync_processor_->ProcessSyncChanges(FROM_HERE, change_list));
+    return sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
   }
 
   return base::nullopt;
@@ -321,7 +320,8 @@ SyncDataList SupervisedUserSettingsService::GetAllSyncDataForTesting(
   return data;
 }
 
-SyncError SupervisedUserSettingsService::ProcessSyncChanges(
+base::Optional<syncer::ModelError>
+SupervisedUserSettingsService::ProcessSyncChanges(
     const base::Location& from_here,
     const SyncChangeList& change_list) {
   for (const SyncChange& sync_change : change_list) {
@@ -365,8 +365,7 @@ SyncError SupervisedUserSettingsService::ProcessSyncChanges(
                              WriteablePrefStore::DEFAULT_PREF_WRITE_FLAGS);
   InformSubscribers();
 
-  SyncError error;
-  return error;
+  return base::nullopt;
 }
 
 void SupervisedUserSettingsService::OnPrefValueChanged(const std::string& key) {

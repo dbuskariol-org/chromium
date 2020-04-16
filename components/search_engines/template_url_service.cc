@@ -945,15 +945,11 @@ syncer::SyncDataList TemplateURLService::GetAllSyncData(
   return current_data;
 }
 
-syncer::SyncError TemplateURLService::ProcessSyncChanges(
+base::Optional<syncer::ModelError> TemplateURLService::ProcessSyncChanges(
     const base::Location& from_here,
     const syncer::SyncChangeList& change_list) {
   if (!models_associated_) {
-    syncer::SyncError error(FROM_HERE,
-                            syncer::SyncError::DATATYPE_ERROR,
-                            "Models not yet associated.",
-                            syncer::SEARCH_ENGINES);
-    return error;
+    return syncer::ModelError(FROM_HERE, "Models not yet associated.");
   }
   DCHECK(loaded_);
 
@@ -1069,11 +1065,9 @@ syncer::SyncError TemplateURLService::ProcessSyncChanges(
   // If something went wrong, we want to prematurely exit to avoid pushing
   // inconsistent data to Sync. We return the last error we received.
   if (error.IsSet())
-    return error;
+    return ConvertToModelError(error);
 
-  error = sync_processor_->ProcessSyncChanges(from_here, new_changes);
-
-  return error;
+  return sync_processor_->ProcessSyncChanges(from_here, new_changes);
 }
 
 base::Optional<syncer::ModelError> TemplateURLService::MergeDataAndStartSyncing(
@@ -1185,8 +1179,8 @@ base::Optional<syncer::ModelError> TemplateURLService::MergeDataAndStartSyncing(
   PruneSyncChanges(&sync_data_map, &new_changes);
 
   LogDuplicatesHistogram(GetTemplateURLs());
-  base::Optional<syncer::ModelError> error = syncer::ConvertToModelError(
-      sync_processor_->ProcessSyncChanges(FROM_HERE, new_changes));
+  base::Optional<syncer::ModelError> error =
+      sync_processor_->ProcessSyncChanges(FROM_HERE, new_changes);
   if (!error.has_value()) {
     // The ACTION_DELETEs from this set are processed. Empty it so we don't try
     // to reuse them on the next call to MergeDataAndStartSyncing.
