@@ -52,11 +52,8 @@ function openGalleryWindow(urls) {
         }
 
         // Opens a window.
-        return new Promise(function(fulfill, reject) {
-                 galleryWrapper.launch(
-                     {urls: urls}, false, fulfill.bind(null, galleryWrapper));
-               })
-            .then(function(galleryWrapper) {
+        return galleryWrapper.launch({urls: urls}, false)
+            .then(function() {
               const galleryWrapperDocument =
                   galleryWrapper.rawAppWindow.contentWindow.document;
               if (galleryWrapperDocument.readyState == 'complete') {

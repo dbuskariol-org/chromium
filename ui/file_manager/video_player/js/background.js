@@ -74,15 +74,12 @@ function openVideoPlayerWindow(urls) {
         windowId = generateWindowId();
 
         // Opens the video player window.
-        return new Promise(function(fulfill, reject) {
-          const urls = util.entriesToURLs(entries);
-          const videoPlayer = new AppWindowWrapper(
-              'video_player.html', assert(windowId), windowCreateOptions);
+        const urls = util.entriesToURLs(entries);
+        const videoPlayer = new AppWindowWrapper(
+            'video_player.html', assert(windowId), windowCreateOptions);
 
-          videoPlayer.launch(
-              {items: urls, position: position}, false,
-              fulfill.bind(null, videoPlayer));
-        }.wrap());
+        return videoPlayer.launch({items: urls, position: position}, false)
+            .then(() => videoPlayer);
       }.wrap())
       .then(function(videoPlayer) {
         const appWindow = videoPlayer.rawAppWindow;

@@ -118,12 +118,8 @@ function open(urls) {
         }
 
         // Opens the audio player.
-        return new Promise(function(fulfill, reject) {
-          const urls = util.entriesToURLs(audioEntries);
-          audioPlayer.launch(
-              {items: urls, position: position}, false,
-              fulfill.bind(null, null));
-        });
+        const urls = util.entriesToURLs(audioEntries);
+        return audioPlayer.launch({items: urls, position: position}, false);
       })
       .then(function() {
         audioPlayer.setIcon(AUDIO_PLAYER_ICON);
