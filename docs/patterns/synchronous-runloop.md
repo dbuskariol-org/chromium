@@ -113,7 +113,7 @@ about observing any intermediate states too:
     }
 
     // GizmoObserver:
-    void OnThingDone(Gizmo* observed_gismo) {
+    void OnThingDone(Gizmo* observed_gizmo) {
       run_loop_.Quit();
     }
 
@@ -126,9 +126,49 @@ about observing any intermediate states too:
   waiter.Wait();
 ```
 
+## Events vs States
+
+It's important to differentiate between waiting on an *event* (such as a
+notification or callback being fired) vs waiting for a *state* (such as a
+property on a given object).
+
+When waiting for events, it is crucial that the observer is constructed in time
+to see the event (see also [waiting to late](#starting-waiting-too-late)).
+States, on the other hand, can be queried beforehand in the body of a
+Wait()-style function.
+
+The following is an example of a Waiter helper class that waits for a state, as
+opposed to an event:
+
+```c++
+  class GizmoReadyWaiter : public GizmoObserver {
+   public:
+    GizmoReadyObserver(Gizmo* gizmo)
+        : gizmo_(gizmo) {}
+    ~GizmoReadyObserver() override = default;
+
+    void WaitForGizmoReady() {
+      if (!gizmo_->ready()) {
+        gizmo_observer_.Add(gizmo_);
+        run_loop_.Run();
+      }
+    }
+
+    // GizmoObserver:
+    void OnGizmoReady(Gizmo* observed_gizmo) {
+      run_loop_.Quit();
+    }
+
+   private:
+    RunLoop run_loop_;
+    Gizmo* gizmo_;
+    ScopedObserver<Gizmo, GizmoObserver> gizmo_observer_{this};
+  };
+```
+
 ## Sharp edges
 
-### Starting waiting too late
+### Starting to wait for an event too late
 
 A common mis-use of this pattern is like so:
 
@@ -183,6 +223,9 @@ with the test code being:
 ```c++
   NiceFriendlyDoThingAndWait(gizmo);
 ```
+
+Note that this is not an issue when waiting on a *state*, since the observer can
+query to see if that state is already the current state.
 
 ### Guessing RunLoop cycles
 
