@@ -9,7 +9,6 @@ import static org.chromium.chrome.browser.vr.XrTestFramework.POLL_CHECK_INTERVAL
 import static org.chromium.chrome.browser.vr.XrTestFramework.POLL_CHECK_INTERVAL_SHORT_MS;
 import static org.chromium.chrome.browser.vr.XrTestFramework.POLL_TIMEOUT_LONG_MS;
 import static org.chromium.chrome.browser.vr.XrTestFramework.POLL_TIMEOUT_SHORT_MS;
-import static org.chromium.chrome.browser.vr.XrTestFramework.VR_SKIA_GOLD_CORPUS;
 import static org.chromium.chrome.test.util.ChromeRestriction.RESTRICTION_TYPE_VIEWER_DAYDREAM_OR_STANDALONE;
 
 import android.graphics.PointF;
@@ -60,7 +59,9 @@ public class VrBrowserWebInputEditingTest {
 
     @Rule
     public RenderTestRule mRenderTestRule =
-            new RenderTestRule.SkiaGoldBuilder().setCorpus(VR_SKIA_GOLD_CORPUS).build();
+            new RenderTestRule.SkiaGoldBuilder()
+                    .setCorpus(RenderTestRule.Corpus.ANDROID_VR_RENDER_TESTS)
+                    .build();
 
     private VrBrowserTestFramework mVrBrowserTestFramework;
 
