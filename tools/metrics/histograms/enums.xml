@@ -68868,6 +68868,14 @@ Full version information for the fingerprint enum values:
   <int value="15" label="Install icon in the Omnibox"/>
 </enum>
 
+<enum name="WebAppLauncherLaunchResult">
+  <int value="0" label="Success"/>
+  <int value="1" label="Started">
+    Terminated unexpectedly after starting launch.
+  </int>
+  <int value="2" label="Error">Launching the Chrome process failed.</int>
+</enum>
+
 <enum name="WebAppManifestUpdateResult">
   <int value="0" label="No app in scope"/>
   <int value="1" label="Updating throttled"/>
