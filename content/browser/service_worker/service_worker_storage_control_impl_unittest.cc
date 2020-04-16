@@ -13,6 +13,7 @@
 #include "base/files/scoped_temp_dir.h"
 #include "base/test/bind_test_util.h"
 #include "base/threading/thread_task_runner_handle.h"
+#include "base/time/time.h"
 #include "content/browser/service_worker/service_worker_storage.h"
 #include "content/browser/service_worker/service_worker_test_utils.h"
 #include "content/public/test/browser_task_environment.h"
@@ -268,6 +269,21 @@ class ServiceWorkerStorageControlImplTest : public testing::Test {
     base::RunLoop loop;
     storage()->UpdateToActiveState(
         registration_id, origin,
+        base::BindLambdaForTesting([&](DatabaseStatus status) {
+          out_status = status;
+          loop.Quit();
+        }));
+    loop.Run();
+    return out_status;
+  }
+
+  DatabaseStatus UpdateLastUpdateCheckTime(int64_t registration_id,
+                                           const GURL& origin,
+                                           base::Time last_update_check_time) {
+    DatabaseStatus out_status;
+    base::RunLoop loop;
+    storage()->UpdateLastUpdateCheckTime(
+        registration_id, origin, last_update_check_time,
         base::BindLambdaForTesting([&](DatabaseStatus status) {
           out_status = status;
           loop.Quit();
@@ -647,6 +663,42 @@ TEST_F(ServiceWorkerStorageControlImplTest, UpdateToActiveState) {
         FindRegistrationForId(registration_id, kScope.GetOrigin());
     ASSERT_EQ(result->status, DatabaseStatus::kOk);
     EXPECT_TRUE(result->registration->is_active);
+  }
+}
+
+TEST_F(ServiceWorkerStorageControlImplTest, UpdateLastUpdateCheckTime) {
+  const GURL kScope("https://www.example.com/");
+  const GURL kScriptUrl("https://www.example.com/sw.js");
+  const int64_t kScriptSize = 10;
+
+  LazyInitializeForTest();
+
+  // Preparation: Store a registration.
+  const int64_t registration_id = GetNewRegistrationId();
+  const int64_t version_id = GetNewVersionId();
+  DatabaseStatus status = CreateAndStoreRegistration(
+      registration_id, version_id, kScope, kScriptUrl, kScriptSize);
+  ASSERT_EQ(status, DatabaseStatus::kOk);
+
+  // The stored registration shouldn't have the last update check time yet.
+  {
+    FindRegistrationResult result =
+        FindRegistrationForId(registration_id, kScope.GetOrigin());
+    ASSERT_EQ(result->status, DatabaseStatus::kOk);
+    EXPECT_EQ(result->registration->last_update_check, base::Time());
+  }
+
+  // Set the last update check time.
+  const base::Time now = base::Time::Now();
+  status = UpdateLastUpdateCheckTime(registration_id, kScope.GetOrigin(), now);
+  ASSERT_EQ(status, DatabaseStatus::kOk);
+
+  // Now the stored registration should be active.
+  {
+    FindRegistrationResult result =
+        FindRegistrationForId(registration_id, kScope.GetOrigin());
+    ASSERT_EQ(result->status, DatabaseStatus::kOk);
+    EXPECT_EQ(result->registration->last_update_check, now);
   }
 }
 
