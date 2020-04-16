@@ -79,10 +79,9 @@ InstallWarning GetLargeRegexWarning(
 }
 
 // Base test fixture to test indexing of rulesets.
-// TODO(karandeepb): Rename this to DeclarativeNetRequestUnittestBase.
-class RuleIndexingTestBase : public DNRTestBase {
+class DeclarativeNetRequestUnittest : public DNRTestBase {
  public:
-  RuleIndexingTestBase() = default;
+  DeclarativeNetRequestUnittest() = default;
 
   // DNRTestBase override.
   void SetUp() override {
@@ -194,10 +193,9 @@ class RuleIndexingTestBase : public DNRTestBase {
 // Fixture testing that declarative rules corresponding to the Declarative Net
 // Request API are correctly indexed, for both packed and unpacked extensions.
 // This only tests a single ruleset.
-// TODO(karandeepb): Rename this to SingleRulesetTest.
-class SingleRulesetIndexingTest : public RuleIndexingTestBase {
+class SingleRulesetTest : public DeclarativeNetRequestUnittest {
  public:
-  SingleRulesetIndexingTest() = default;
+  SingleRulesetTest() = default;
 
  protected:
   void AddRule(const TestRule& rule) { rules_list_.push_back(rule); }
@@ -214,8 +212,8 @@ class SingleRulesetIndexingTest : public RuleIndexingTestBase {
   }
 
   void LoadAndExpectError(const std::string& expected_error) {
-    RuleIndexingTestBase::LoadAndExpectError(expected_error,
-                                             kJSONRulesFilename);
+    DeclarativeNetRequestUnittest::LoadAndExpectError(expected_error,
+                                                      kJSONRulesFilename);
   }
 
   // |expected_rules_count| refers to the count of indexed rules. When
@@ -234,11 +232,12 @@ class SingleRulesetIndexingTest : public RuleIndexingTestBase {
     rules_count = std::min(rules_count,
                            static_cast<size_t>(dnr_api::MAX_NUMBER_OF_RULES));
 
-    RuleIndexingTestBase::LoadAndExpectSuccess(rules_count, rules_count, true);
+    DeclarativeNetRequestUnittest::LoadAndExpectSuccess(rules_count,
+                                                        rules_count, true);
   }
 
  private:
-  // RuleIndexingTestBase override:
+  // DeclarativeNetRequestUnittest override:
   void WriteExtensionData() override {
     if (!rules_value_)
       rules_value_ = ToListValue(rules_list_);
@@ -273,7 +272,7 @@ class SingleRulesetIndexingTest : public RuleIndexingTestBase {
   bool persist_initial_indexed_ruleset_ = false;
 };
 
-TEST_P(SingleRulesetIndexingTest, DuplicateResourceTypes) {
+TEST_P(SingleRulesetTest, DuplicateResourceTypes) {
   TestRule rule = CreateGenericRule();
   rule.condition->resource_types =
       std::vector<std::string>({"image", "stylesheet"});
@@ -283,7 +282,7 @@ TEST_P(SingleRulesetIndexingTest, DuplicateResourceTypes) {
       GetParseError(ParseResult::ERROR_RESOURCE_TYPE_DUPLICATED, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, EmptyRedirectRulePriority) {
+TEST_P(SingleRulesetTest, EmptyRedirectRulePriority) {
   TestRule rule = CreateGenericRule();
   rule.action->type = std::string("redirect");
   rule.action->redirect.emplace();
@@ -294,7 +293,7 @@ TEST_P(SingleRulesetIndexingTest, EmptyRedirectRulePriority) {
       GetParseError(ParseResult::ERROR_EMPTY_RULE_PRIORITY, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, EmptyRedirectRuleUrl) {
+TEST_P(SingleRulesetTest, EmptyRedirectRuleUrl) {
   TestRule rule = CreateGenericRule();
   rule.id = kMinValidID;
   AddRule(rule);
@@ -308,7 +307,7 @@ TEST_P(SingleRulesetIndexingTest, EmptyRedirectRuleUrl) {
       GetParseError(ParseResult::ERROR_INVALID_REDIRECT, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, InvalidRuleID) {
+TEST_P(SingleRulesetTest, InvalidRuleID) {
   TestRule rule = CreateGenericRule();
   rule.id = kMinValidID - 1;
   AddRule(rule);
@@ -316,7 +315,7 @@ TEST_P(SingleRulesetIndexingTest, InvalidRuleID) {
       GetParseError(ParseResult::ERROR_INVALID_RULE_ID, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, InvalidRedirectRulePriority) {
+TEST_P(SingleRulesetTest, InvalidRedirectRulePriority) {
   TestRule rule = CreateGenericRule();
   rule.action->type = std::string("redirect");
   rule.action->redirect.emplace();
@@ -327,7 +326,7 @@ TEST_P(SingleRulesetIndexingTest, InvalidRedirectRulePriority) {
       GetParseError(ParseResult::ERROR_INVALID_RULE_PRIORITY, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, NoApplicableResourceTypes) {
+TEST_P(SingleRulesetTest, NoApplicableResourceTypes) {
   TestRule rule = CreateGenericRule();
   rule.condition->excluded_resource_types = std::vector<std::string>(
       {"main_frame", "sub_frame", "stylesheet", "script", "image", "font",
@@ -338,7 +337,7 @@ TEST_P(SingleRulesetIndexingTest, NoApplicableResourceTypes) {
       GetParseError(ParseResult::ERROR_NO_APPLICABLE_RESOURCE_TYPES, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, EmptyDomainsList) {
+TEST_P(SingleRulesetTest, EmptyDomainsList) {
   TestRule rule = CreateGenericRule();
   rule.condition->domains = std::vector<std::string>();
   AddRule(rule);
@@ -346,7 +345,7 @@ TEST_P(SingleRulesetIndexingTest, EmptyDomainsList) {
       GetParseError(ParseResult::ERROR_EMPTY_DOMAINS_LIST, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, EmptyResourceTypeList) {
+TEST_P(SingleRulesetTest, EmptyResourceTypeList) {
   TestRule rule = CreateGenericRule();
   rule.condition->resource_types = std::vector<std::string>();
   AddRule(rule);
@@ -354,7 +353,7 @@ TEST_P(SingleRulesetIndexingTest, EmptyResourceTypeList) {
       GetParseError(ParseResult::ERROR_EMPTY_RESOURCE_TYPES_LIST, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, EmptyURLFilter) {
+TEST_P(SingleRulesetTest, EmptyURLFilter) {
   TestRule rule = CreateGenericRule();
   rule.condition->url_filter = std::string();
   AddRule(rule);
@@ -362,7 +361,7 @@ TEST_P(SingleRulesetIndexingTest, EmptyURLFilter) {
       GetParseError(ParseResult::ERROR_EMPTY_URL_FILTER, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, InvalidRedirectURL) {
+TEST_P(SingleRulesetTest, InvalidRedirectURL) {
   TestRule rule = CreateGenericRule();
   rule.action->type = std::string("redirect");
   rule.action->redirect.emplace();
@@ -373,12 +372,12 @@ TEST_P(SingleRulesetIndexingTest, InvalidRedirectURL) {
       GetParseError(ParseResult::ERROR_INVALID_REDIRECT_URL, *rule.id));
 }
 
-TEST_P(SingleRulesetIndexingTest, ListNotPassed) {
+TEST_P(SingleRulesetTest, ListNotPassed) {
   SetRules(std::make_unique<base::DictionaryValue>());
   LoadAndExpectError(kErrorListNotPassed);
 }
 
-TEST_P(SingleRulesetIndexingTest, DuplicateIDS) {
+TEST_P(SingleRulesetTest, DuplicateIDS) {
   TestRule rule = CreateGenericRule();
   AddRule(rule);
   AddRule(rule);
@@ -386,7 +385,7 @@ TEST_P(SingleRulesetIndexingTest, DuplicateIDS) {
 }
 
 // Ensure that we limit the number of parse failure warnings shown.
-TEST_P(SingleRulesetIndexingTest, TooManyParseFailures) {
+TEST_P(SingleRulesetTest, TooManyParseFailures) {
   const size_t kNumInvalidRules = 10;
   const size_t kNumValidRules = 6;
   const size_t kMaxUnparsedRulesWarnings = 5;
@@ -437,7 +436,7 @@ TEST_P(SingleRulesetIndexingTest, TooManyParseFailures) {
 
 // Ensures that rules which can't be parsed are ignored and cause an install
 // warning.
-TEST_P(SingleRulesetIndexingTest, InvalidJSONRules_StrongTypes) {
+TEST_P(SingleRulesetTest, InvalidJSONRules_StrongTypes) {
   {
     TestRule rule = CreateGenericRule();
     rule.id = 1;
@@ -485,7 +484,7 @@ TEST_P(SingleRulesetIndexingTest, InvalidJSONRules_StrongTypes) {
 
 // Ensures that rules which can't be parsed are ignored and cause an install
 // warning.
-TEST_P(SingleRulesetIndexingTest, InvalidJSONRules_Parsed) {
+TEST_P(SingleRulesetTest, InvalidJSONRules_Parsed) {
   const char* kRules = R"(
     [
       {
@@ -549,7 +548,7 @@ TEST_P(SingleRulesetIndexingTest, InvalidJSONRules_Parsed) {
 }
 
 // Ensure that we can add up to MAX_NUMBER_OF_RULES.
-TEST_P(SingleRulesetIndexingTest, RuleCountLimitMatched) {
+TEST_P(SingleRulesetTest, RuleCountLimitMatched) {
   TestRule rule = CreateGenericRule();
   for (int i = 0; i < dnr_api::MAX_NUMBER_OF_RULES; ++i) {
     rule.id = kMinValidID + i;
@@ -560,7 +559,7 @@ TEST_P(SingleRulesetIndexingTest, RuleCountLimitMatched) {
 }
 
 // Ensure that we get an install warning on exceeding the rule count limit.
-TEST_P(SingleRulesetIndexingTest, RuleCountLimitExceeded) {
+TEST_P(SingleRulesetTest, RuleCountLimitExceeded) {
   TestRule rule = CreateGenericRule();
   for (int i = 1; i <= dnr_api::MAX_NUMBER_OF_RULES + 1; ++i) {
     rule.id = kMinValidID + i;
@@ -584,7 +583,7 @@ TEST_P(SingleRulesetIndexingTest, RuleCountLimitExceeded) {
 
 // Ensure that regex rules which exceed the per rule memory limit are ignored
 // and raise an install warning.
-TEST_P(SingleRulesetIndexingTest, LargeRegexIgnored) {
+TEST_P(SingleRulesetTest, LargeRegexIgnored) {
   TestRule rule = CreateGenericRule();
   rule.condition->url_filter.reset();
   int id = kMinValidID;
@@ -624,7 +623,7 @@ TEST_P(SingleRulesetIndexingTest, LargeRegexIgnored) {
 }
 
 // Test an extension with both an error and an install warning.
-TEST_P(SingleRulesetIndexingTest, WarningAndError) {
+TEST_P(SingleRulesetTest, WarningAndError) {
   // Add a large regex rule which will exceed the per rule memory limit and
   // cause an install warning.
   TestRule rule = CreateGenericRule();
@@ -644,7 +643,7 @@ TEST_P(SingleRulesetIndexingTest, WarningAndError) {
 
 // Ensure that we get an install warning on exceeding the regex rule count
 // limit.
-TEST_P(SingleRulesetIndexingTest, RegexRuleCountExceeded) {
+TEST_P(SingleRulesetTest, RegexRuleCountExceeded) {
   TestRule regex_rule = CreateGenericRule();
   regex_rule.condition->url_filter.reset();
   int rule_id = kMinValidID;
@@ -676,23 +675,23 @@ TEST_P(SingleRulesetIndexingTest, RegexRuleCountExceeded) {
   }
 }
 
-TEST_P(SingleRulesetIndexingTest, InvalidJSONFile) {
+TEST_P(SingleRulesetTest, InvalidJSONFile) {
   set_persist_invalid_json_file();
   // The error is returned by the JSON parser we use. Hence just test an error
   // is raised.
   LoadAndExpectError("");
 }
 
-TEST_P(SingleRulesetIndexingTest, EmptyRuleset) {
+TEST_P(SingleRulesetTest, EmptyRuleset) {
   LoadAndExpectSuccess();
 }
 
-TEST_P(SingleRulesetIndexingTest, AddSingleRule) {
+TEST_P(SingleRulesetTest, AddSingleRule) {
   AddRule(CreateGenericRule());
   LoadAndExpectSuccess();
 }
 
-TEST_P(SingleRulesetIndexingTest, AddTwoRules) {
+TEST_P(SingleRulesetTest, AddTwoRules) {
   TestRule rule = CreateGenericRule();
   AddRule(rule);
 
@@ -702,20 +701,19 @@ TEST_P(SingleRulesetIndexingTest, AddTwoRules) {
 }
 
 // Test that we do not use an extension provided indexed ruleset.
-TEST_P(SingleRulesetIndexingTest, ExtensionWithIndexedRuleset) {
+TEST_P(SingleRulesetTest, ExtensionWithIndexedRuleset) {
   set_persist_initial_indexed_ruleset();
   AddRule(CreateGenericRule());
   LoadAndExpectSuccess();
 }
 
 // Tests that multiple static rulesets are correctly indexed.
-// TODO(karandeepb): Rename this to MultipleRulesetsTest.
-class MultipleRulesetsIndexingTest : public RuleIndexingTestBase {
+class MultipleRulesetsTest : public DeclarativeNetRequestUnittest {
  public:
-  MultipleRulesetsIndexingTest() = default;
+  MultipleRulesetsTest() = default;
 
  protected:
-  // RuleIndexingTestBase override:
+  // DeclarativeNetRequestUnittest override:
   void WriteExtensionData() override {
     WriteManifestAndRulesets(extension_dir(), rulesets_, {} /* hosts */);
   }
@@ -767,7 +765,7 @@ class MultipleRulesetsIndexingTest : public RuleIndexingTestBase {
         rules_enabled_count += count;
     }
 
-    RuleIndexingTestBase::LoadAndExpectSuccess(
+    DeclarativeNetRequestUnittest::LoadAndExpectSuccess(
         expected_rules_count.value_or(rules_count),
         expected_enabled_rules_count.value_or(rules_enabled_count),
         !rulesets_.empty());
@@ -778,7 +776,7 @@ class MultipleRulesetsIndexingTest : public RuleIndexingTestBase {
 };
 
 // Tests an extension with multiple static rulesets.
-TEST_P(MultipleRulesetsIndexingTest, Success) {
+TEST_P(MultipleRulesetsTest, Success) {
   size_t kNumRulesets = 7;
   size_t kRulesPerRuleset = 10;
 
@@ -790,12 +788,12 @@ TEST_P(MultipleRulesetsIndexingTest, Success) {
 }
 
 // Tests an extension with no static rulesets.
-TEST_P(MultipleRulesetsIndexingTest, ZeroRulesets) {
+TEST_P(MultipleRulesetsTest, ZeroRulesets) {
   LoadAndExpectSuccess();
 }
 
 // Tests an extension with multiple empty rulesets.
-TEST_P(MultipleRulesetsIndexingTest, EmptyRulesets) {
+TEST_P(MultipleRulesetsTest, EmptyRulesets) {
   size_t kNumRulesets = 7;
 
   for (size_t i = 0; i < kNumRulesets; ++i)
@@ -806,7 +804,7 @@ TEST_P(MultipleRulesetsIndexingTest, EmptyRulesets) {
 
 // Tests an extension with multiple static rulesets, with one of rulesets
 // specifying an invalid rules file.
-TEST_P(MultipleRulesetsIndexingTest, ListNotPassed) {
+TEST_P(MultipleRulesetsTest, ListNotPassed) {
     std::vector<TestRule> rules({CreateGenericRule()});
     AddRuleset(TestRulesetInfo("id1", "path1", *ToListValue(rules)));
 
@@ -820,7 +818,7 @@ TEST_P(MultipleRulesetsIndexingTest, ListNotPassed) {
 
 // Tests an extension with multiple static rulesets with each ruleset generating
 // some install warnings.
-TEST_P(MultipleRulesetsIndexingTest, InstallWarnings) {
+TEST_P(MultipleRulesetsTest, InstallWarnings) {
   size_t expected_rule_count = 0;
   size_t enabled_rule_count = 0;
   std::vector<std::string> expected_warnings;
@@ -890,7 +888,7 @@ TEST_P(MultipleRulesetsIndexingTest, InstallWarnings) {
   }
 }
 
-TEST_P(MultipleRulesetsIndexingTest, EnabledRulesCount) {
+TEST_P(MultipleRulesetsTest, EnabledRulesCount) {
   AddRuleset(CreateRuleset("id1", 100, 10, true));
   AddRuleset(CreateRuleset("id2", 200, 20, false));
   AddRuleset(CreateRuleset("id3", 300, 30, true));
@@ -915,7 +913,7 @@ TEST_P(MultipleRulesetsIndexingTest, EnabledRulesCount) {
 
 // Ensure that exceeding the rules count limit across rulesets raises an install
 // warning.
-TEST_P(MultipleRulesetsIndexingTest, StaticRuleCountExceeded) {
+TEST_P(MultipleRulesetsTest, StaticRuleCountExceeded) {
   // Enabled on load.
   AddRuleset(CreateRuleset("1.json", 10000, 0, true));
   // Disabled by default.
@@ -964,7 +962,7 @@ TEST_P(MultipleRulesetsIndexingTest, StaticRuleCountExceeded) {
 }
 
 // Ensure that exceeding the regex rules limit across rulesets raises a warning.
-TEST_P(MultipleRulesetsIndexingTest, RegexRuleCountExceeded) {
+TEST_P(MultipleRulesetsTest, RegexRuleCountExceeded) {
   // Enabled on load.
   AddRuleset(CreateRuleset("1.json", 10000, 100, true));
   // Won't be enabled on load since including it will exceed the regex rule
@@ -1006,11 +1004,11 @@ TEST_P(MultipleRulesetsIndexingTest, RegexRuleCountExceeded) {
 }
 
 INSTANTIATE_TEST_SUITE_P(All,
-                         SingleRulesetIndexingTest,
+                         SingleRulesetTest,
                          ::testing::Values(ExtensionLoadType::PACKED,
                                            ExtensionLoadType::UNPACKED));
 INSTANTIATE_TEST_SUITE_P(All,
-                         MultipleRulesetsIndexingTest,
+                         MultipleRulesetsTest,
                          ::testing::Values(ExtensionLoadType::PACKED,
                                            ExtensionLoadType::UNPACKED));
 
