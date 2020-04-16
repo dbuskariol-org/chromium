@@ -187,20 +187,33 @@ TestRule CreateGenericRule() {
   return rule;
 }
 
-TestRulesetInfo::TestRulesetInfo(const std::string& relative_file_path,
+TestRulesetInfo::TestRulesetInfo(const std::string& manifest_id_and_path,
                                  const base::Value& rules_value,
                                  bool enabled)
-    : relative_file_path(relative_file_path),
+    : TestRulesetInfo(manifest_id_and_path,
+                      manifest_id_and_path,
+                      rules_value,
+                      enabled) {}
+
+TestRulesetInfo::TestRulesetInfo(const std::string& manifest_id,
+                                 const std::string& relative_file_path,
+                                 const base::Value& rules_value,
+                                 bool enabled)
+    : manifest_id(manifest_id),
+      relative_file_path(relative_file_path),
       rules_value(rules_value.Clone()),
       enabled(enabled) {}
 
 TestRulesetInfo::TestRulesetInfo(const TestRulesetInfo& info)
-    : TestRulesetInfo(info.relative_file_path, info.rules_value, info.enabled) {
-}
+    : TestRulesetInfo(info.manifest_id,
+                      info.relative_file_path,
+                      info.rules_value,
+                      info.enabled) {}
 
 std::unique_ptr<base::DictionaryValue> TestRulesetInfo::GetManifestValue()
     const {
   dnr_api::Ruleset ruleset;
+  ruleset.id = manifest_id;
   ruleset.path = relative_file_path;
   ruleset.enabled = enabled;
   return ruleset.ToValue();

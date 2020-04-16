@@ -21,8 +21,16 @@ struct DNRManifestData : Extension::ManifestData {
   struct RulesetInfo {
     base::FilePath relative_path;
 
+    // ID provided for the ruleset in the extension manifest. Uniquely
+    // identifies the ruleset.
+    std::string manifest_id;
+
     // Uniquely identifies an extension ruleset. The order of rulesets within
     // the manifest defines the order for ids.
+    // Note: we introduce another notion of a ruleset ID in addition to
+    // |manifest_id| since the id is also used as an input to preference keys
+    // and indexed ruleset file paths, and integral IDs are easier to reason
+    // about here. E.g. a string ID can have invalid file path characters.
     // TODO(karandeepb): Use a StrongAlias for ruleset ID.
     int id = kInvalidRulesetID;
 

@@ -243,9 +243,11 @@ class SingleRulesetIndexingTest : public RuleIndexingTestBase {
     if (!rules_value_)
       rules_value_ = ToListValue(rules_list_);
 
-    WriteManifestAndRuleset(extension_dir(),
-                            TestRulesetInfo(kJSONRulesFilename, *rules_value_),
-                            {} /* hosts */);
+    constexpr char kRulesetID[] = "id";
+    WriteManifestAndRuleset(
+        extension_dir(),
+        TestRulesetInfo(kRulesetID, kJSONRulesFilename, *rules_value_),
+        {} /* hosts */);
 
     // Overwrite the JSON rules file with some invalid json.
     if (persist_invalid_json_file_) {
@@ -720,7 +722,7 @@ class MultipleRulesetsIndexingTest : public RuleIndexingTestBase {
 
   void AddRuleset(const TestRulesetInfo& info) { rulesets_.push_back(info); }
 
-  TestRulesetInfo CreateRuleset(const std::string& relative_file_path,
+  TestRulesetInfo CreateRuleset(const std::string& manifest_id_and_path,
                                 size_t num_non_regex_rules,
                                 size_t num_regex_rules,
                                 bool enabled) {
@@ -740,7 +742,7 @@ class MultipleRulesetsIndexingTest : public RuleIndexingTestBase {
       rules.push_back(regex_rule);
     }
 
-    return TestRulesetInfo(relative_file_path, *ToListValue(rules), enabled);
+    return TestRulesetInfo(manifest_id_and_path, *ToListValue(rules), enabled);
   }
 
   // |expected_rules_count| and |expected_enabled_rules_count| refer to the
@@ -780,16 +782,9 @@ TEST_P(MultipleRulesetsIndexingTest, Success) {
   size_t kNumRulesets = 7;
   size_t kRulesPerRuleset = 10;
 
-  std::vector<TestRule> rules;
-  for (size_t i = 0; i < kRulesPerRuleset; ++i) {
-    TestRule rule = CreateGenericRule();
-    rule.id = kMinValidID + i;
-    rules.push_back(rule);
+  for (size_t i = 0; i < kNumRulesets; ++i) {
+    AddRuleset(CreateRuleset(std::to_string(i), kRulesPerRuleset, 0, true));
   }
-  base::Value rules_value = std::move(*ToListValue(rules));
-
-  for (size_t i = 0; i < kNumRulesets; ++i)
-    AddRuleset(TestRulesetInfo(std::to_string(i), rules_value));
 
   LoadAndExpectSuccess();
 }
@@ -804,7 +799,7 @@ TEST_P(MultipleRulesetsIndexingTest, EmptyRulesets) {
   size_t kNumRulesets = 7;
 
   for (size_t i = 0; i < kNumRulesets; ++i)
-    AddRuleset(TestRulesetInfo(std::to_string(i), base::ListValue()));
+    AddRuleset(CreateRuleset(std::to_string(i), 0, 0, true));
 
   LoadAndExpectSuccess();
 }
@@ -813,14 +808,14 @@ TEST_P(MultipleRulesetsIndexingTest, EmptyRulesets) {
 // specifying an invalid rules file.
 TEST_P(MultipleRulesetsIndexingTest, ListNotPassed) {
     std::vector<TestRule> rules({CreateGenericRule()});
-    AddRuleset(TestRulesetInfo("1", *ToListValue(rules)));
+    AddRuleset(TestRulesetInfo("id1", "path1", *ToListValue(rules)));
 
     // Persist a ruleset with an invalid rules file.
-    AddRuleset(TestRulesetInfo("2", base::DictionaryValue()));
+    AddRuleset(TestRulesetInfo("id2", "path2", base::DictionaryValue()));
 
-    AddRuleset(TestRulesetInfo("3", base::ListValue()));
+    AddRuleset(TestRulesetInfo("id3", "path3", base::ListValue()));
 
-    LoadAndExpectError(kErrorListNotPassed, "2" /* filename */);
+    LoadAndExpectError(kErrorListNotPassed, "path2" /* filename */);
 }
 
 // Tests an extension with multiple static rulesets with each ruleset generating
@@ -841,12 +836,11 @@ TEST_P(MultipleRulesetsIndexingTest, InstallWarnings) {
     rule.condition->regex_filter = kLargeRegexFilter;
     rules.push_back(rule);
 
-    TestRulesetInfo info("1.json", *ToListValue(rules), true);
+    TestRulesetInfo info("id1", "path1", *ToListValue(rules), true);
+    AddRuleset(info);
 
     expected_warnings.push_back(
         GetLargeRegexWarning(*rule.id, info.relative_file_path).message);
-
-    AddRuleset(info);
 
     expected_rule_count += rules.size();
     enabled_rule_count += 1;
@@ -854,19 +848,12 @@ TEST_P(MultipleRulesetsIndexingTest, InstallWarnings) {
 
   {
     // Persist a ruleset with an install warning for exceeding the rule count.
-    std::vector<TestRule> rules;
-    for (int i = 1; i <= dnr_api::MAX_NUMBER_OF_RULES + 1; ++i) {
-      TestRule rule = CreateGenericRule();
-      rule.id = kMinValidID + i;
-      rules.push_back(rule);
-    }
-
-    TestRulesetInfo info("2.json", *ToListValue(rules), false);
+    TestRulesetInfo info =
+        CreateRuleset("id2", dnr_api::MAX_NUMBER_OF_RULES + 1, 0, false);
+    AddRuleset(info);
 
     expected_warnings.push_back(
         GetErrorWithFilename(kRuleCountExceeded, info.relative_file_path));
-
-    AddRuleset(info);
 
     expected_rule_count += dnr_api::MAX_NUMBER_OF_RULES;
   }
@@ -874,31 +861,14 @@ TEST_P(MultipleRulesetsIndexingTest, InstallWarnings) {
   {
     // Persist a ruleset with an install warning for exceeding the regex rule
     // count.
-    std::vector<TestRule> rules;
-    TestRule regex_rule = CreateGenericRule();
-    regex_rule.condition->url_filter.reset();
-    int rule_id = kMinValidID;
-    for (int i = 1; i <= dnr_api::MAX_NUMBER_OF_REGEX_RULES + 1;
-         ++i, ++rule_id) {
-      regex_rule.id = rule_id;
-      regex_rule.condition->regex_filter = std::to_string(i);
-      rules.push_back(regex_rule);
-    }
-
-    const int kCountNonRegexRules = 5;
-    TestRule rule = CreateGenericRule();
-    for (int i = 1; i <= kCountNonRegexRules; i++, ++rule_id) {
-      rule.id = rule_id;
-      rule.condition->url_filter = std::to_string(i);
-      rules.push_back(rule);
-    }
-
-    TestRulesetInfo info("3.json", *ToListValue(rules), false);
+    size_t kCountNonRegexRules = 5;
+    TestRulesetInfo info =
+        CreateRuleset("id3", kCountNonRegexRules,
+                      dnr_api::MAX_NUMBER_OF_REGEX_RULES + 1, false);
+    AddRuleset(info);
 
     expected_warnings.push_back(
         GetErrorWithFilename(kRegexRuleCountExceeded, info.relative_file_path));
-
-    AddRuleset(info);
 
     expected_rule_count +=
         kCountNonRegexRules + dnr_api::MAX_NUMBER_OF_REGEX_RULES;
@@ -921,9 +891,9 @@ TEST_P(MultipleRulesetsIndexingTest, InstallWarnings) {
 }
 
 TEST_P(MultipleRulesetsIndexingTest, EnabledRulesCount) {
-  AddRuleset(CreateRuleset("1.json", 100, 10, true));
-  AddRuleset(CreateRuleset("2.json", 200, 20, false));
-  AddRuleset(CreateRuleset("3.json", 300, 30, true));
+  AddRuleset(CreateRuleset("id1", 100, 10, true));
+  AddRuleset(CreateRuleset("id2", 200, 20, false));
+  AddRuleset(CreateRuleset("id3", 300, 30, true));
 
   RulesetManagerObserver ruleset_waiter(manager());
   LoadAndExpectSuccess();

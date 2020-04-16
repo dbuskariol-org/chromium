@@ -118,8 +118,6 @@ namespace {
 
 namespace dnr_api = api::declarative_net_request;
 
-constexpr char kJSONRulesFilename[] = "rules_file.json";
-
 // Returns true if |window.scriptExecuted| is true for the given frame.
 bool WasFrameWithScriptLoaded(content::RenderFrameHost* rfh) {
   if (!rfh)
@@ -388,9 +386,11 @@ class DeclarativeNetRequestBrowserTest
   void LoadExtensionWithRules(const std::vector<TestRule>& rules,
                               const std::string& directory,
                               const std::vector<std::string>& hosts) {
+    constexpr char kRulesetID[] = "id";
+    constexpr char kJSONRulesFilename[] = "rules_file.json";
     LoadExtensionWithRulesets(
-        {TestRulesetInfo(kJSONRulesFilename, *ToListValue(rules))}, directory,
-        hosts);
+        {TestRulesetInfo(kRulesetID, kJSONRulesFilename, *ToListValue(rules))},
+        directory, hosts);
   }
 
   // Returns a url with |filter| as a substring.

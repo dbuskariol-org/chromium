@@ -2,6 +2,7 @@
   "name": "Test extension",
   "declarative_net_request": {
     "rule_resources": [{
+      "id": "on_matched_rules_debug",
       "path": "rules.json",
       "enabled": true
     }
