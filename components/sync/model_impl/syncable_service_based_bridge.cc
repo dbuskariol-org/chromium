@@ -75,13 +75,6 @@ SyncChange::SyncChangeType ConvertToSyncChangeType(
   return SyncChange::ACTION_INVALID;
 }
 
-base::Optional<ModelError> ConvertToModelError(const SyncError& sync_error) {
-  if (sync_error.IsSet()) {
-    return ModelError(sync_error.location(), sync_error.message());
-  }
-  return base::nullopt;
-}
-
 // Parses the content of |record_list| into |*in_memory_store|. The output
 // parameter is first for binding purposes.
 base::Optional<ModelError> ParseInMemoryStoreOnBackendSequence(
@@ -551,12 +544,10 @@ base::Optional<ModelError> SyncableServiceBasedBridge::StartSyncableService() {
       type_, error_callback, store_.get(), &in_memory_store_,
       change_processor());
 
-  const base::Optional<ModelError> merge_error = ConvertToModelError(
-      syncable_service_
-          ->MergeDataAndStartSyncing(
-              type_, initial_sync_data, std::move(local_change_processor),
-              std::make_unique<SyncErrorFactoryImpl>(type_))
-          .error());
+  const base::Optional<ModelError> merge_error =
+      syncable_service_->MergeDataAndStartSyncing(
+          type_, initial_sync_data, std::move(local_change_processor),
+          std::make_unique<SyncErrorFactoryImpl>(type_));
 
   if (!merge_error) {
     syncable_service_started_ = true;

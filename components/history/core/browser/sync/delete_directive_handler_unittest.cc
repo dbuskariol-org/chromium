@@ -176,8 +176,7 @@ TEST_F(HistoryDeleteDirectiveHandlerTest,
               std::make_unique<syncer::SyncChangeProcessorWrapperForTest>(
                   &change_processor),
               std::unique_ptr<syncer::SyncErrorFactory>())
-          .error()
-          .IsSet());
+          .has_value());
 
   syncer::SyncError err =
       handler()->ProcessLocalDeleteDirective(delete_directive);
@@ -235,8 +234,7 @@ TEST_F(HistoryDeleteDirectiveHandlerTest, ProcessGlobalIdDeleteDirective) {
                            new syncer::SyncChangeProcessorWrapperForTest(
                                &change_processor)),
                        std::unique_ptr<syncer::SyncErrorFactory>())
-                   .error()
-                   .IsSet());
+                   .has_value());
 
   // Inject a task to check status and keep message loop filled before directive
   // processing finishes.
@@ -303,8 +301,7 @@ TEST_F(HistoryDeleteDirectiveHandlerTest, ProcessTimeRangeDeleteDirective) {
                            new syncer::SyncChangeProcessorWrapperForTest(
                                &change_processor)),
                        std::unique_ptr<syncer::SyncErrorFactory>())
-                   .error()
-                   .IsSet());
+                   .has_value());
 
   // Inject a task to check status and keep message loop filled before
   // directive processing finishes.
@@ -371,8 +368,7 @@ TEST_F(HistoryDeleteDirectiveHandlerTest, ProcessUrlDeleteDirective) {
                            new syncer::SyncChangeProcessorWrapperForTest(
                                &change_processor)),
                        std::unique_ptr<syncer::SyncErrorFactory>())
-                   .error()
-                   .IsSet());
+                   .has_value());
 
   // Inject a task to check status and keep message loop filled before
   // directive processing finishes.

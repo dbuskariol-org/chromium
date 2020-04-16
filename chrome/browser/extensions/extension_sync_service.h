@@ -64,7 +64,7 @@ class ExtensionSyncService : public syncer::SyncableService,
 
   // syncer::SyncableService implementation.
   void WaitUntilReadyToSync(base::OnceClosure done) override;
-  syncer::SyncMergeResult MergeDataAndStartSyncing(
+  base::Optional<syncer::ModelError> MergeDataAndStartSyncing(
       syncer::ModelType type,
       const syncer::SyncDataList& initial_sync_data,
       std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,

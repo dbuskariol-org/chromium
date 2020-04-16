@@ -431,7 +431,8 @@ void DeleteDirectiveHandler::WaitUntilReadyToSync(base::OnceClosure done) {
   }
 }
 
-syncer::SyncMergeResult DeleteDirectiveHandler::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+DeleteDirectiveHandler::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -449,7 +450,7 @@ syncer::SyncMergeResult DeleteDirectiveHandler::MergeDataAndStartSyncing(
                                 &internal_tracker_);
   }
 
-  return syncer::SyncMergeResult(type);
+  return base::nullopt;
 }
 
 void DeleteDirectiveHandler::StopSyncing(syncer::ModelType type) {

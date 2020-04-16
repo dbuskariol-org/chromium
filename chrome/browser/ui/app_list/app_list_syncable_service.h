@@ -178,7 +178,7 @@ class AppListSyncableService : public syncer::SyncableService,
 
   // syncer::SyncableService
   void WaitUntilReadyToSync(base::OnceClosure done) override;
-  syncer::SyncMergeResult MergeDataAndStartSyncing(
+  base::Optional<syncer::ModelError> MergeDataAndStartSyncing(
       syncer::ModelType type,
       const syncer::SyncDataList& initial_sync_data,
       std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -241,6 +241,7 @@ class AppListSyncableService : public syncer::SyncableService,
 
   // Creates or updates a SyncItem from |specifics|. Returns true if a new item
   // was created.
+  // TODO(crbug.com/1057577): Change return type to void.
   bool ProcessSyncItemSpecifics(const sync_pb::AppListSpecifics& specifics);
 
   // Handles a newly created sync item (e.g. creates a new AppItem and adds it

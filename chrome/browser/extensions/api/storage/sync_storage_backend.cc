@@ -170,7 +170,7 @@ syncer::SyncDataList SyncStorageBackend::GetAllSyncDataForTesting(
   return all_sync_data;
 }
 
-syncer::SyncMergeResult SyncStorageBackend::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError> SyncStorageBackend::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -229,7 +229,7 @@ syncer::SyncMergeResult SyncStorageBackend::MergeDataAndStartSyncing(
     GetOrCreateStorageWithSyncData(group.first, base::WrapUnique(group.second));
   }
 
-  return syncer::SyncMergeResult(type);
+  return base::nullopt;
 }
 
 syncer::SyncError SyncStorageBackend::ProcessSyncChanges(

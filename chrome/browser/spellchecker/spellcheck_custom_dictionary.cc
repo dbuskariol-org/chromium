@@ -305,7 +305,8 @@ void SpellcheckCustomDictionary::WaitUntilReadyToSync(base::OnceClosure done) {
     wait_until_ready_to_sync_cb_ = std::move(done);
 }
 
-syncer::SyncMergeResult SpellcheckCustomDictionary::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+SpellcheckCustomDictionary::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -337,10 +338,7 @@ syncer::SyncMergeResult SpellcheckCustomDictionary::MergeDataAndStartSyncing(
   Notify(*to_change_locally);
   Save(std::move(to_change_locally));
 
-  // Send local changes to the sync server.
-  syncer::SyncMergeResult result(type);
-  result.set_error(Sync(to_change_remotely));
-  return result;
+  return syncer::ConvertToModelError(Sync(to_change_remotely));
 }
 
 void SpellcheckCustomDictionary::StopSyncing(syncer::ModelType type) {

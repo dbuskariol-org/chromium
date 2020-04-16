@@ -183,7 +183,8 @@ void PrefModelAssociator::WaitUntilReadyToSync(base::OnceClosure done) {
   std::move(done).Run();
 }
 
-syncer::SyncMergeResult PrefModelAssociator::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+PrefModelAssociator::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -194,7 +195,6 @@ syncer::SyncMergeResult PrefModelAssociator::MergeDataAndStartSyncing(
   DCHECK(!sync_processor_.get());
   DCHECK(sync_processor.get());
   DCHECK(sync_error_factory.get());
-  syncer::SyncMergeResult merge_result(type);
   sync_processor_ = std::move(sync_processor);
   sync_error_factory_ = std::move(sync_error_factory);
 
@@ -240,14 +240,13 @@ syncer::SyncMergeResult PrefModelAssociator::MergeDataAndStartSyncing(
   }
 
   // Push updates to sync.
-  merge_result.set_error(
+  base::Optional<syncer::ModelError> error = syncer::ConvertToModelError(
       sync_processor_->ProcessSyncChanges(FROM_HERE, new_changes));
-  if (merge_result.error().IsSet())
-    return merge_result;
-
-  models_associated_ = true;
-  pref_service_->OnIsSyncingChanged();
-  return merge_result;
+  if (!error.has_value()) {
+    models_associated_ = true;
+    pref_service_->OnIsSyncingChanged();
+  }
+  return error;
 }
 
 void PrefModelAssociator::StopSyncing(syncer::ModelType type) {

@@ -40,7 +40,6 @@ using syncer::SyncData;
 using syncer::SyncDataList;
 using syncer::SyncError;
 using syncer::SyncErrorFactory;
-using syncer::SyncMergeResult;
 
 const char kAtomicSettings[] = "atomic_settings";
 const char kSupervisedUserInternalItemPrefix[] = "X-";
@@ -205,7 +204,8 @@ void SupervisedUserSettingsService::WaitUntilReadyToSync(
   }
 }
 
-SyncMergeResult SupervisedUserSettingsService::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+SupervisedUserSettingsService::MergeDataAndStartSyncing(
     ModelType type,
     const SyncDataList& initial_sync_data,
     std::unique_ptr<SyncChangeProcessor> sync_processor,
@@ -215,9 +215,6 @@ SyncMergeResult SupervisedUserSettingsService::MergeDataAndStartSyncing(
   error_handler_ = std::move(error_handler);
 
   std::set<std::string> seen_keys;
-  int num_before_association = 0;
-  // Getting number of atomic setting items.
-  num_before_association = GetAtomicSettings()->size();
   for (base::DictionaryValue::Iterator it(*GetAtomicSettings()); !it.IsAtEnd();
        it.Advance()) {
     seen_keys.insert(it.key());
@@ -227,22 +224,17 @@ SyncMergeResult SupervisedUserSettingsService::MergeDataAndStartSyncing(
        it.Advance()) {
     const base::DictionaryValue* dict = nullptr;
     it.value().GetAsDictionary(&dict);
-    num_before_association += dict->size();
     for (base::DictionaryValue::Iterator jt(*dict); !jt.IsAtEnd();
          jt.Advance()) {
       seen_keys.insert(MakeSplitSettingKey(it.key(), jt.key()));
     }
   }
 
-  int num_deleted = num_before_association;
   // Getting number of queued items.
   base::DictionaryValue* queued_items = GetQueuedItems();
-  num_before_association += queued_items->size();
 
   // Clear all atomic and split settings, then recreate them from Sync data.
   Clear();
-  int num_added = 0;
-  int num_modified = 0;
   std::set<std::string> added_sync_keys;
   for (const SyncData& sync_data : initial_sync_data) {
     DCHECK_EQ(SUPERVISED_USER_SETTINGS, sync_data.GetDataType());
@@ -264,13 +256,8 @@ SyncMergeResult SupervisedUserSettingsService::MergeDataAndStartSyncing(
     dict->SetWithoutPathExpansion(name_suffix, std::move(value));
     if (seen_keys.find(name_key) == seen_keys.end()) {
       added_sync_keys.insert(name_key);
-      num_added++;
-    } else {
-      num_modified++;
     }
   }
-
-  num_deleted -= num_modified;
 
   store_->ReportValueChanged(kAtomicSettings,
                              WriteablePrefStore::DEFAULT_PREF_WRITE_FLAGS);
@@ -292,42 +279,18 @@ SyncMergeResult SupervisedUserSettingsService::MergeDataAndStartSyncing(
                                  : SyncChange::ACTION_ADD;
     change_list.push_back(SyncChange(FROM_HERE, change_type, data));
     dict->SetKey(key_suffix, it.value().Clone());
-    if (added_sync_keys.find(name_key) != added_sync_keys.end()) {
-      num_added--;
-    }
   }
   queued_items->Clear();
 
-  SyncMergeResult result(SUPERVISED_USER_SETTINGS);
   // Process all the accumulated changes from the queued items.
   if (!change_list.empty()) {
     store_->ReportValueChanged(kQueuedItems,
                                WriteablePrefStore::DEFAULT_PREF_WRITE_FLAGS);
-    result.set_error(
+    return syncer::ConvertToModelError(
         sync_processor_->ProcessSyncChanges(FROM_HERE, change_list));
   }
 
-  // Calculating number of items after association.
-  int num_after_association = 0;
-  // Getting number of atomic setting items.
-  num_after_association = GetAtomicSettings()->size();
-  // Getting number of split setting items.
-  for (base::DictionaryValue::Iterator it(*GetSplitSettings()); !it.IsAtEnd();
-       it.Advance()) {
-    const base::DictionaryValue* dict = nullptr;
-    it.value().GetAsDictionary(&dict);
-    num_after_association += dict->size();
-  }
-  // Getting number of queued items.
-  queued_items = GetQueuedItems();
-  num_after_association += queued_items->size();
-
-  result.set_num_items_added(num_added);
-  result.set_num_items_modified(num_modified);
-  result.set_num_items_deleted(num_deleted);
-  result.set_num_items_before_association(num_before_association);
-  result.set_num_items_after_association(num_after_association);
-  return result;
+  return base::nullopt;
 }
 
 void SupervisedUserSettingsService::StopSyncing(ModelType type) {

@@ -245,7 +245,7 @@ void FaviconCache::WaitUntilReadyToSync(base::OnceClosure done) {
   }
 }
 
-syncer::SyncMergeResult FaviconCache::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError> FaviconCache::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -256,8 +256,6 @@ syncer::SyncMergeResult FaviconCache::MergeDataAndStartSyncing(
   else
     favicon_tracking_sync_processor_ = std::move(sync_processor);
 
-  syncer::SyncMergeResult merge_result(type);
-  merge_result.set_num_items_before_association(synced_favicons_.size());
   std::set<GURL> unsynced_favicon_urls;
   for (const auto& url_icon_pair : synced_favicons_) {
     if (FaviconInfoHasValidTypeData(*url_icon_pair.second, type))
@@ -272,11 +270,8 @@ syncer::SyncMergeResult FaviconCache::MergeDataAndStartSyncing(
     if (favicon_url.is_valid()) {
       unsynced_favicon_urls.erase(favicon_url);
       MergeSyncFavicon(*iter, &local_changes);
-      merge_result.set_num_items_modified(
-          merge_result.num_items_modified() + 1);
     } else {
       AddLocalFaviconFromSyncedData(*iter);
-      merge_result.set_num_items_added(merge_result.num_items_added() + 1);
     }
   }
 
@@ -299,10 +294,8 @@ syncer::SyncMergeResult FaviconCache::MergeDataAndStartSyncing(
       DVLOG(1) << "Dropping local favicon "
                << favicon_iter->second->favicon_url.spec();
       DropPartialFavicon(favicon_iter, type);
-      merge_result.set_num_items_deleted(merge_result.num_items_deleted() + 1);
     }
   }
-  merge_result.set_num_items_after_association(synced_favicons_.size());
 
   if (type == syncer::FAVICON_IMAGES) {
     favicon_images_sync_processor_->ProcessSyncChanges(FROM_HERE,
@@ -311,7 +304,7 @@ syncer::SyncMergeResult FaviconCache::MergeDataAndStartSyncing(
     favicon_tracking_sync_processor_->ProcessSyncChanges(FROM_HERE,
                                                          local_changes);
   }
-  return merge_result;
+  return base::nullopt;
 }
 
 void FaviconCache::StopSyncing(syncer::ModelType type) {

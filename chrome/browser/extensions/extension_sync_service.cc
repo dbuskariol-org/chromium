@@ -156,7 +156,8 @@ void ExtensionSyncService::WaitUntilReadyToSync(base::OnceClosure done) {
   ExtensionSystem::Get(profile_)->ready().Post(FROM_HERE, std::move(done));
 }
 
-syncer::SyncMergeResult ExtensionSyncService::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+ExtensionSyncService::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -196,7 +197,7 @@ syncer::SyncMergeResult ExtensionSyncService::MergeDataAndStartSyncing(
   if (type == syncer::APPS)
     ExtensionSystem::Get(profile_)->app_sorting()->FixNTPOrdinalCollisions();
 
-  return syncer::SyncMergeResult(type);
+  return base::nullopt;
 }
 
 void ExtensionSyncService::StopSyncing(syncer::ModelType type) {

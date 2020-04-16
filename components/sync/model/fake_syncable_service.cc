@@ -35,20 +35,20 @@ void FakeSyncableService::WaitUntilReadyToSync(base::OnceClosure done) {
   std::move(done).Run();
 }
 
-SyncMergeResult FakeSyncableService::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+FakeSyncableService::MergeDataAndStartSyncing(
     ModelType type,
     const SyncDataList& initial_sync_data,
     std::unique_ptr<SyncChangeProcessor> sync_processor,
     std::unique_ptr<SyncErrorFactory> sync_error_factory) {
-  SyncMergeResult merge_result(type);
   sync_processor_ = std::move(sync_processor);
   type_ = type;
   if (!merge_data_and_start_syncing_error_.IsSet()) {
     syncing_ = true;
   } else {
-    merge_result.set_error(merge_data_and_start_syncing_error_);
+    return ConvertToModelError(merge_data_and_start_syncing_error_);
   }
-  return merge_result;
+  return base::nullopt;
 }
 
 void FakeSyncableService::StopSyncing(ModelType type) {

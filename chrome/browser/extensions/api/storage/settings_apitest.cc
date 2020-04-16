@@ -129,8 +129,7 @@ class ExtensionSettingsApiTest : public ExtensionApiTest {
                 std::make_unique<syncer::SyncChangeProcessorWrapperForTest>(
                     sync_processor),
                 std::make_unique<syncer::SyncErrorFactoryMock>())
-            .error()
-            .IsSet());
+            .has_value());
   }
 
   void InitSync(syncer::SyncChangeProcessor* sync_processor) {

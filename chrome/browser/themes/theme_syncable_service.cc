@@ -66,7 +66,8 @@ void ThemeSyncableService::WaitUntilReadyToSync(base::OnceClosure done) {
                                                            std::move(done));
 }
 
-syncer::SyncMergeResult ThemeSyncableService::MergeDataAndStartSyncing(
+base::Optional<syncer::ModelError>
+ThemeSyncableService::MergeDataAndStartSyncing(
     syncer::ModelType type,
     const syncer::SyncDataList& initial_sync_data,
     std::unique_ptr<syncer::SyncChangeProcessor> sync_processor,
@@ -76,7 +77,6 @@ syncer::SyncMergeResult ThemeSyncableService::MergeDataAndStartSyncing(
   DCHECK(sync_processor.get());
   DCHECK(error_handler.get());
 
-  syncer::SyncMergeResult merge_result(type);
   sync_processor_ = std::move(sync_processor);
   sync_error_handler_ = std::move(error_handler);
 
@@ -91,7 +91,7 @@ syncer::SyncMergeResult ThemeSyncableService::MergeDataAndStartSyncing(
   if (!GetThemeSpecificsFromCurrentTheme(&current_specifics)) {
     // Current theme is unsyncable - don't overwrite from sync data, and don't
     // save the unsyncable theme to sync data.
-    return merge_result;
+    return base::nullopt;
   }
 
   // Find the last SyncData that has theme data and set the current theme from
@@ -103,15 +103,14 @@ syncer::SyncMergeResult ThemeSyncableService::MergeDataAndStartSyncing(
       if (!HasNonDefaultTheme(current_specifics) ||
           HasNonDefaultTheme(sync_data->GetSpecifics().theme())) {
         MaybeSetTheme(current_specifics, *sync_data);
-        return merge_result;
+        return base::nullopt;
       }
     }
   }
 
   // No theme specifics are found. Create one according to current theme.
-  merge_result.set_error(ProcessNewTheme(
-      syncer::SyncChange::ACTION_ADD, current_specifics));
-  return merge_result;
+  return syncer::ConvertToModelError(
+      ProcessNewTheme(syncer::SyncChange::ACTION_ADD, current_specifics));
 }
 
 void ThemeSyncableService::StopSyncing(syncer::ModelType type) {

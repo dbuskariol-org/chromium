@@ -30,7 +30,7 @@ class FakeSyncableService : public SyncableService {
 
   // SyncableService implementation.
   void WaitUntilReadyToSync(base::OnceClosure done) override;
-  SyncMergeResult MergeDataAndStartSyncing(
+  base::Optional<syncer::ModelError> MergeDataAndStartSyncing(
       ModelType type,
       const SyncDataList& initial_sync_data,
       std::unique_ptr<SyncChangeProcessor> sync_processor,
