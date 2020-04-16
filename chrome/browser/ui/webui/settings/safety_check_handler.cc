@@ -20,6 +20,7 @@
 #include "chrome/grit/generated_resources.h"
 #include "components/prefs/pref_service.h"
 #include "components/safe_browsing/core/common/safe_browsing_prefs.h"
+#include "components/version_info/version_info.h"
 #include "extensions/browser/extension_prefs_factory.h"
 #include "extensions/browser/extension_system.h"
 #include "extensions/common/extension_id.h"
@@ -65,9 +66,8 @@ SafetyCheckHandler::UpdateStatus ConvertToUpdateStatus(
     case VersionUpdater::DISABLED_BY_ADMIN:
       return SafetyCheckHandler::UpdateStatus::kDisabledByAdmin;
     // The disabled state can only be returned on non Chrome-branded browsers.
-    // Since we don't know the actual state of updates, this is the same as a
-    // generic error.
     case VersionUpdater::DISABLED:
+      return SafetyCheckHandler::UpdateStatus::kUnknown;
     case VersionUpdater::FAILED:
     case VersionUpdater::FAILED_CONNECTION_TYPE_DISALLOWED:
       return SafetyCheckHandler::UpdateStatus::kFailed;
@@ -337,6 +337,10 @@ base::string16 SafetyCheckHandler::GetStringForUpdates(UpdateStatus status) {
       return l10n_util::GetStringFUTF16(
           IDS_SETTINGS_SAFETY_CHECK_UPDATES_FAILED,
           base::ASCIIToUTF16(chrome::kChromeFixUpdateProblems));
+    case UpdateStatus::kUnknown:
+      return l10n_util::GetStringFUTF16(
+          IDS_SETTINGS_SAFETY_CHECK_UPDATES_UNKNOWN,
+          base::UTF8ToUTF16(version_info::GetVersionNumber()));
   }
 }
 

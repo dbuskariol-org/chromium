@@ -29,6 +29,7 @@
 #include "components/prefs/pref_service.h"
 #include "components/safe_browsing/core/common/safe_browsing_prefs.h"
 #include "components/sync_preferences/testing_pref_service_syncable.h"
+#include "components/version_info/version_info.h"
 #include "content/public/test/test_web_ui.h"
 #include "extensions/browser/extension_prefs.h"
 #include "extensions/common/extension.h"
@@ -372,16 +373,14 @@ TEST_F(SafetyCheckHandlerTest, CheckUpdates_Disabled) {
   const base::DictionaryValue* event =
       GetSafetyCheckStatusChangedWithDataIfExists(
           kUpdates,
-          static_cast<int>(SafetyCheckHandler::UpdateStatus::kFailed));
+          static_cast<int>(SafetyCheckHandler::UpdateStatus::kUnknown));
   ASSERT_TRUE(event);
   VerifyDisplayString(
       event,
-      "Browser didn't update, something went wrong. <a target=\"_blank\" "
-      "href=\"https://support.google.com/chrome?p=fix_chrome_updates\">Fix "
-      "Browser update problems and failed updates.</a>");
-  histogram_tester_.ExpectBucketCount("Settings.SafetyCheck.UpdatesResult",
-                                      SafetyCheckHandler::UpdateStatus::kFailed,
-                                      1);
+      "Browser version " + version_info::GetVersionNumber() + " is installed");
+  histogram_tester_.ExpectBucketCount(
+      "Settings.SafetyCheck.UpdatesResult",
+      SafetyCheckHandler::UpdateStatus::kUnknown, 1);
 }
 
 TEST_F(SafetyCheckHandlerTest, CheckUpdates_DisabledByAdmin) {
