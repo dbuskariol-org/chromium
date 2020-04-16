@@ -29,6 +29,8 @@ class AppWindowWrapper {
     this.window_ = null;
     this.appState_ = null;
     this.openingOrOpened_ = false;
+
+    /** @protected {AsyncUtil.Queue} */
     this.queue = new AsyncUtil.Queue();
   }
 
@@ -45,6 +47,119 @@ class AppWindowWrapper {
    */
   setIcon(iconPath) {
     this.window_.setIcon(iconPath);
+  }
+
+  /**
+   * @param {Array<chrome.app.window.AppWindow>} similarWindows
+   * @return {!Promise}
+   */
+  async restoreMaximizedWindow_(similarWindows) {
+    return new Promise(resolve => {
+      for (let index = 0; index < similarWindows.length; index++) {
+        if (similarWindows[index].isMaximized()) {
+          const listener = () => {
+            similarWindows[index].onRestored.removeListener(listener);
+            resolve();
+          };
+          similarWindows[index].onRestored.addListener(listener);
+
+          // TODO(lucmult): Isn't restore function below synchronous? If so we
+          // don't need this event listener.
+          similarWindows[index].restore();
+          return;
+        }
+      }
+
+      // If no maximized windows, then create the window immediately.
+      resolve();
+    });
+  }
+
+  /**
+   * @return {!Promise}
+   */
+  async getWindowPreferences_() {
+    return new Promise(resolve => {
+      const boundsKey = AppWindowWrapper.makeGeometryKey(this.url_);
+      const maximizedKey = AppWindowWrapper.MAXIMIZED_KEY_;
+
+      let lastBounds;
+      let isMaximized = false;
+      chrome.storage.local.get([boundsKey, maximizedKey], preferences => {
+        if (!chrome.runtime.lastError) {
+          lastBounds = preferences[boundsKey];
+          isMaximized = preferences[maximizedKey];
+        }
+        resolve({lastBounds: lastBounds, isMaximized: isMaximized});
+      });
+    });
+  }
+
+  /**
+   * @return {!Promise<?chrome.app.window.AppWindow>}
+   */
+  async createWindow_(reopen) {
+    return await new Promise((resolve) => {
+      // Create a window.
+      chrome.app.window.create(this.url_, this.options_, appWindow => {
+        this.window_ = appWindow;
+        if (!appWindow) {
+          console.error(`Failed to create window for ${this.url_}`);
+          return resolve(null);
+        }
+
+        // Save the properties.
+        window.appWindows[this.id_] = appWindow;
+        const contentWindow = appWindow.contentWindow;
+        contentWindow.appID = this.id_;
+        contentWindow.appState = this.appState_;
+        contentWindow.appReopen = reopen;
+        contentWindow.appInitialURL = this.url_;
+        if (window.IN_TEST) {
+          contentWindow.IN_TEST = true;
+        }
+
+        resolve(appWindow);
+      });
+    });
+  }
+
+  positionWindow_(appWindow, similarWindows) {
+    // If there is another window in the same position, shift the window.
+    const makeBoundsKey = bounds => {
+      return bounds.left + '/' + bounds.top;
+    };
+
+    const notAvailablePositions = {};
+    for (let i = 0; i < similarWindows.length; i++) {
+      const key = makeBoundsKey(similarWindows[i].getBounds());
+      notAvailablePositions[key] = true;
+    }
+
+    const candidateBounds = this.window_.getBounds();
+    while (true) {
+      const key = makeBoundsKey(candidateBounds);
+      if (!notAvailablePositions[key]) {
+        break;
+      }
+
+      // Make the position available to avoid an infinite loop.
+      notAvailablePositions[key] = false;
+      const nextLeft = candidateBounds.left + AppWindowWrapper.SHIFT_DISTANCE;
+      const nextRight = nextLeft + candidateBounds.width;
+      candidateBounds.left = nextRight >= screen.availWidth ?
+          nextRight % screen.availWidth :
+          nextLeft;
+      const nextTop = candidateBounds.top + AppWindowWrapper.SHIFT_DISTANCE;
+      const nextBottom = nextTop + candidateBounds.height;
+      candidateBounds.top = nextBottom >= screen.availHeight ?
+          nextBottom % screen.availHeight :
+          nextTop;
+    }
+
+    appWindow.moveTo(
+        /** @type {number} */ (candidateBounds.left),
+        /** @type {number} */ (candidateBounds.top));
   }
 
   /**
@@ -76,56 +191,34 @@ class AppWindowWrapper {
     // Restore maximized windows, to avoid hiding them to tray, which can be
     // confusing for users.
     this.queue.run(callback => {
-      for (let index = 0; index < similarWindows.length; index++) {
-        if (similarWindows[index].isMaximized()) {
-          const createWindowAndRemoveListener = () => {
-            similarWindows[index].onRestored.removeListener(
-                createWindowAndRemoveListener);
-            callback();
-          };
-          similarWindows[index].onRestored.addListener(
-              createWindowAndRemoveListener);
-          similarWindows[index].restore();
-          return;
-        }
-      }
-      // If no maximized windows, then create the window immediately.
-      callback();
+      this.restoreMaximizedWindow_(similarWindows).then(callback);
     });
 
     // Obtains the last geometry and window state (maximized or not).
-    let lastBounds;
-    let isMaximized = false;
     this.queue.run(callback => {
-      const boundsKey = AppWindowWrapper.makeGeometryKey(this.url_);
-      const maximizedKey = AppWindowWrapper.MAXIMIZED_KEY_;
-      chrome.storage.local.get([boundsKey, maximizedKey], preferences => {
-        if (!chrome.runtime.lastError) {
-          lastBounds = preferences[boundsKey];
-          isMaximized = preferences[maximizedKey];
+      this.getWindowPreferences_().then(prefs => {
+        // Overwrite maximized state with remembered last window state.
+        if (prefs.isMaximized !== undefined) {
+          this.options_.state = prefs.isMaximized ? 'maximized' : undefined;
         }
+        // Apply the last bounds.
+        if (prefs.lastBounds) {
+          this.options_.bounds = prefs.lastBounds;
+        }
+
         callback();
       });
     });
 
     // Closure creating the window, once all preprocessing tasks are finished.
     this.queue.run(callback => {
-      // Apply the last bounds.
-      if (lastBounds) {
-        this.options_.bounds = lastBounds;
-      }
-
-      // Overwrite maximized state with remembered last window state.
-      if (isMaximized !== undefined) {
-        this.options_.state = isMaximized ? 'maximized' : undefined;
-      }
-
-      // Create a window.
-      chrome.app.window.create(this.url_, this.options_, appWindow => {
+      this.createWindow_(reopen).then(appWindow => {
         if (!appWindow) {
+          opt_callback && opt_callback();
           callback();
           return;
         }
+
         // Exit full screen state if it's created as a full screen window.
         if (appWindow.isFullscreen()) {
           appWindow.restore();
@@ -138,7 +231,7 @@ class AppWindowWrapper {
         if (this.options_.hidden && this.options_.state === 'maximized') {
           appWindow.maximize();
         }
-        this.window_ = appWindow;
+
         callback();
       });
     });
@@ -150,53 +243,12 @@ class AppWindowWrapper {
         callback();
       }
 
-      // If there is another window in the same position, shift the window.
-      const makeBoundsKey = bounds => {
-        return bounds.left + '/' + bounds.top;
-      };
-      const notAvailablePositions = {};
-      for (let i = 0; i < similarWindows.length; i++) {
-        const key = makeBoundsKey(similarWindows[i].getBounds());
-        notAvailablePositions[key] = true;
-      }
-      const candidateBounds = this.window_.getBounds();
-      while (true) {
-        const key = makeBoundsKey(candidateBounds);
-        if (!notAvailablePositions[key]) {
-          break;
-        }
-        // Make the position available to avoid an infinite loop.
-        notAvailablePositions[key] = false;
-        const nextLeft = candidateBounds.left + AppWindowWrapper.SHIFT_DISTANCE;
-        const nextRight = nextLeft + candidateBounds.width;
-        candidateBounds.left = nextRight >= screen.availWidth ?
-            nextRight % screen.availWidth :
-            nextLeft;
-        const nextTop = candidateBounds.top + AppWindowWrapper.SHIFT_DISTANCE;
-        const nextBottom = nextTop + candidateBounds.height;
-        candidateBounds.top = nextBottom >= screen.availHeight ?
-            nextBottom % screen.availHeight :
-            nextTop;
-      }
-      this.window_.moveTo(
-          /** @type {number} */ (candidateBounds.left),
-          /** @type {number} */ (candidateBounds.top));
-
-      // Save the properties.
-      const appWindow = this.window_;
-      window.appWindows[this.id_] = appWindow;
-      const contentWindow = appWindow.contentWindow;
-      contentWindow.appID = this.id_;
-      contentWindow.appState = this.appState_;
-      contentWindow.appReopen = reopen;
-      contentWindow.appInitialURL = this.url_;
-      if (window.IN_TEST) {
-        contentWindow.IN_TEST = true;
-      }
+      this.positionWindow_(this.window_, similarWindows);
 
       // Register event listeners.
-      appWindow.onBoundsChanged.addListener(this.onBoundsChanged_.bind(this));
-      appWindow.onClosed.addListener(this.onClosed_.bind(this));
+      this.window_.onBoundsChanged.addListener(
+          this.onBoundsChanged_.bind(this));
+      this.window_.onClosed.addListener(this.onClosed_.bind(this));
 
       // Callback.
       if (opt_callback) {
