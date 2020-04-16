@@ -34,6 +34,7 @@
 #include "components/password_manager/core/browser/stub_password_manager_driver.h"
 #include "components/password_manager/core/common/password_manager_features.h"
 #include "components/security_state/core/security_state.h"
+#include "components/signin/public/base/signin_metrics.h"
 #include "components/strings/grit/components_strings.h"
 #include "components/ukm/test_ukm_recorder.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
@@ -143,7 +144,7 @@ class TestPasswordManagerClient : public StubPasswordManagerClient {
   MOCK_METHOD2(TriggerReauthForAccount,
                void(const CoreAccountId&,
                     base::OnceCallback<void(ReauthSucceeded)>));
-  MOCK_METHOD0(TriggerSignIn, void());
+  MOCK_METHOD1(TriggerSignIn, void(signin_metrics::AccessPoint));
   MOCK_METHOD0(GetFaviconService, favicon::FaviconService*());
   MOCK_METHOD1(NavigateToManagePasswordsPage, void(ManagePasswordsReferrer));
 
@@ -622,7 +623,9 @@ TEST_F(PasswordAutofillManagerTest, ClickOnReSiginTriggersSigninAndHides) {
   client.SetNeedsReSigninForAccountStorage(false);
   testing::Mock::VerifyAndClearExpectations(&autofill_client);
 
-  EXPECT_CALL(client, TriggerSignIn);
+  EXPECT_CALL(client,
+              TriggerSignIn(
+                  signin_metrics::AccessPoint::ACCESS_POINT_AUTOFILL_DROPDOWN));
   EXPECT_CALL(autofill_client, HideAutofillPopup);
   password_autofill_manager_->DidAcceptSuggestion(
       test_username_,

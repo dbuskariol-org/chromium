@@ -43,8 +43,9 @@ class AccountStorageAuthHelper {
           void(password_manager::PasswordManagerClient::ReauthSucceeded)>
           reauth_callback);
 
-  // Redirects the user to a sign-in in a new tab.
-  void TriggerSignIn();
+  // Redirects the user to a sign-in in a new tab. |access_point| is used for
+  // metrics recording and represents where the sign-in was triggered.
+  void TriggerSignIn(signin_metrics::AccessPoint access_point);
 
  private:
   void OnOptInReauthCompleted(

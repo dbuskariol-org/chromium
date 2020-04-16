@@ -50,16 +50,15 @@ void AccountStorageAuthHelper::TriggerOptInReauth(
                      std::move(reauth_callback)));
 }
 
-void AccountStorageAuthHelper::TriggerSignIn() {
+void AccountStorageAuthHelper::TriggerSignIn(
+    signin_metrics::AccessPoint access_point) {
 #if BUILDFLAG(ENABLE_DICE_SUPPORT)
   Browser* browser = chrome::FindBrowserWithProfile(profile_);
   if (!browser)
     return;
   if (SigninViewController* signin_controller =
           browser->signin_view_controller()) {
-    signin_controller->ShowDiceAddAccountTab(
-        signin_metrics::AccessPoint::ACCESS_POINT_AUTOFILL_DROPDOWN,
-        std::string());
+    signin_controller->ShowDiceAddAccountTab(access_point, std::string());
   }
 #endif  // BUILDFLAG(ENABLE_DICE_SUPPORT)
 }
