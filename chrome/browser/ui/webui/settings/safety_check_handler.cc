@@ -156,14 +156,17 @@ void SafetyCheckHandler::CheckUpdates() {
 
 void SafetyCheckHandler::CheckSafeBrowsing() {
   PrefService* pref_service = Profile::FromWebUI(web_ui())->GetPrefs();
-  const PrefService::Preference* pref =
+  const PrefService::Preference* enabled_pref =
       pref_service->FindPreference(prefs::kSafeBrowsingEnabled);
+  bool enabled = pref_service->GetBoolean(prefs::kSafeBrowsingEnabled);
   SafeBrowsingStatus status;
-  if (pref_service->GetBoolean(prefs::kSafeBrowsingEnabled)) {
-    status = SafeBrowsingStatus::kEnabled;
-  } else if (pref->IsManaged()) {
+  if (enabled && pref_service->GetBoolean(prefs::kSafeBrowsingEnhanced)) {
+    status = SafeBrowsingStatus::kEnabledEnhanced;
+  } else if (enabled) {
+    status = SafeBrowsingStatus::kEnabledStandard;
+  } else if (enabled_pref->IsManaged()) {
     status = SafeBrowsingStatus::kDisabledByAdmin;
-  } else if (pref->IsExtensionControlled()) {
+  } else if (enabled_pref->IsExtensionControlled()) {
     status = SafeBrowsingStatus::kDisabledByExtension;
   } else {
     status = SafeBrowsingStatus::kDisabled;
@@ -343,8 +346,12 @@ base::string16 SafetyCheckHandler::GetStringForSafeBrowsing(
     case SafeBrowsingStatus::kChecking:
       return l10n_util::GetStringUTF16(IDS_SETTINGS_SAFETY_CHECK_RUNNING);
     case SafeBrowsingStatus::kEnabled:
+    case SafeBrowsingStatus::kEnabledStandard:
       return l10n_util::GetStringUTF16(
-          IDS_SETTINGS_SAFETY_CHECK_SAFE_BROWSING_ENABLED);
+          IDS_SETTINGS_SAFETY_CHECK_SAFE_BROWSING_ENABLED_STANDARD);
+    case SafeBrowsingStatus::kEnabledEnhanced:
+      return l10n_util::GetStringUTF16(
+          IDS_SETTINGS_SAFETY_CHECK_SAFE_BROWSING_ENABLED_ENHANCED);
     case SafeBrowsingStatus::kDisabled:
       return l10n_util::GetStringUTF16(
           IDS_SETTINGS_SAFETY_CHECK_SAFE_BROWSING_DISABLED);

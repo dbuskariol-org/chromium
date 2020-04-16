@@ -446,22 +446,66 @@ TEST_F(SafetyCheckHandlerTest, CheckUpdates_DestroyedOnJavascriptDisallowed) {
   EXPECT_TRUE(TestDestructionVersionUpdater::GetDestructorInvoked());
 }
 
-TEST_F(SafetyCheckHandlerTest, CheckSafeBrowsing_Enabled) {
+TEST_F(SafetyCheckHandlerTest, CheckSafeBrowsing_EnabledStandard) {
   Profile::FromWebUI(&test_web_ui_)
       ->GetPrefs()
       ->SetBoolean(prefs::kSafeBrowsingEnabled, true);
+  Profile::FromWebUI(&test_web_ui_)
+      ->GetPrefs()
+      ->SetBoolean(prefs::kSafeBrowsingEnhanced, false);
   safety_check_->PerformSafetyCheck();
   const base::DictionaryValue* event =
       GetSafetyCheckStatusChangedWithDataIfExists(
           kSafeBrowsing,
-          static_cast<int>(SafetyCheckHandler::SafeBrowsingStatus::kEnabled));
+          static_cast<int>(
+              SafetyCheckHandler::SafeBrowsingStatus::kEnabledStandard));
   ASSERT_TRUE(event);
-  VerifyDisplayString(event,
-                      "Safe Browsing is on and protecting you from harmful "
-                      "sites and downloads");
+  VerifyDisplayString(event, "Standard Protection is on");
   histogram_tester_.ExpectBucketCount(
       "Settings.SafetyCheck.SafeBrowsingResult",
-      SafetyCheckHandler::SafeBrowsingStatus::kEnabled, 1);
+      SafetyCheckHandler::SafeBrowsingStatus::kEnabledStandard, 1);
+}
+
+TEST_F(SafetyCheckHandlerTest, CheckSafeBrowsing_EnabledEnhanced) {
+  Profile::FromWebUI(&test_web_ui_)
+      ->GetPrefs()
+      ->SetBoolean(prefs::kSafeBrowsingEnabled, true);
+  Profile::FromWebUI(&test_web_ui_)
+      ->GetPrefs()
+      ->SetBoolean(prefs::kSafeBrowsingEnhanced, true);
+  safety_check_->PerformSafetyCheck();
+  const base::DictionaryValue* event =
+      GetSafetyCheckStatusChangedWithDataIfExists(
+          kSafeBrowsing,
+          static_cast<int>(
+              SafetyCheckHandler::SafeBrowsingStatus::kEnabledEnhanced));
+  ASSERT_TRUE(event);
+  VerifyDisplayString(event, "Enhanced Protection is on");
+  histogram_tester_.ExpectBucketCount(
+      "Settings.SafetyCheck.SafeBrowsingResult",
+      SafetyCheckHandler::SafeBrowsingStatus::kEnabledEnhanced, 1);
+}
+
+TEST_F(SafetyCheckHandlerTest, CheckSafeBrowsing_InconsistentEnhanced) {
+  // Tests the corner case of SafeBrowsingEnhanced pref being on, while
+  // SafeBrowsing enabled is off. This should be treated as SB off.
+  Profile::FromWebUI(&test_web_ui_)
+      ->GetPrefs()
+      ->SetBoolean(prefs::kSafeBrowsingEnabled, false);
+  Profile::FromWebUI(&test_web_ui_)
+      ->GetPrefs()
+      ->SetBoolean(prefs::kSafeBrowsingEnhanced, true);
+  safety_check_->PerformSafetyCheck();
+  const base::DictionaryValue* event =
+      GetSafetyCheckStatusChangedWithDataIfExists(
+          kSafeBrowsing,
+          static_cast<int>(SafetyCheckHandler::SafeBrowsingStatus::kDisabled));
+  ASSERT_TRUE(event);
+  VerifyDisplayString(
+      event, "Safe Browsing is off. Browser recommends turning it on.");
+  histogram_tester_.ExpectBucketCount(
+      "Settings.SafetyCheck.SafeBrowsingResult",
+      SafetyCheckHandler::SafeBrowsingStatus::kDisabled, 1);
 }
 
 TEST_F(SafetyCheckHandlerTest, CheckSafeBrowsing_Disabled) {
