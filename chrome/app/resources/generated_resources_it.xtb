@@ -377,7 +377,7 @@
 <translation id="1509281256533087115">Accedi a qualsiasi dispositivo <ph name="DEVICE_NAME_AND_VENDOR" /> tramite USB</translation>
 <translation id="1510030919967934016">Il monitoraggio della tua posizione da parte di questa pagina è stato bloccato.</translation>
 <translation id="1510055949674985293">Genera codice QR per questa immagine</translation>
-<translation id="1510238584712386396">Avvio applicazioni</translation>
+<translation id="1510238584712386396">Avvio app</translation>
 <translation id="1510581003097415337">Genera codice QR per questa pagina</translation>
 <translation id="1510785804673676069">Se utilizzi un server proxy, controlla le impostazioni del proxy o
     contatta l'amministratore di rete per verificare che il server
@@ -1233,7 +1233,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="2629227353894235473">Sviluppo di app Android</translation>
 <translation id="2630681426381349926">Per iniziare, collegati alla rete Wi-Fi</translation>
 <translation id="2631120081682787498">Vuoi chiudere questa scheda?</translation>
-<translation id="2631498379019108537">Mostra opzioni di immissione nella shelf</translation>
+<translation id="2631498379019108537">Mostra opzioni di immissione nello shelf</translation>
 <translation id="2633212996805280240">Rimuovere "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="263325223718984101"><ph name="PRODUCT_NAME" /> non è stato in grado di completare l'installazione ma continuerà a essere eseguito dall'immagine disco.</translation>
 <translation id="2633764681656412085">FIDO</translation>
@@ -1341,7 +1341,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="275662540872599901">schermo spento</translation>
 <translation id="2757338480560142065">Assicurati che la password che stai salvando corrisponda alla password di <ph name="WEBSITE" /></translation>
 <translation id="2762441749940182211">Videocamera bloccata</translation>
-<translation id="2765217105034171413">Piccole</translation>
+<translation id="2765217105034171413">Piccola</translation>
 <translation id="2766161002040448006">Rivolgiti a un genitore</translation>
 <translation id="2767127727915954024"><ph name="ORIGIN" /> potrà modificare il file <ph name="FILENAME" /> fino alla chiusura di tutte le schede di questo sito</translation>
 <translation id="276969039800130567">Accesso eseguito come <ph name="USER_EMAIL_ADDRESS" />.</translation>
@@ -1790,7 +1790,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="3364986687961713424">Dal tuo amministratore: <ph name="ADMIN_MESSAGE" /></translation>
 <translation id="3365598184818502391">Usa il tasto CTRL o ALT</translation>
 <translation id="3367047597842238025">Configura il tuo <ph name="DEVICE_TYPE" /> secondo le tue preferenze e scopri tutte le incredibili funzionalità a portata di mano.</translation>
-<translation id="3368922792935385530">Connessa</translation>
+<translation id="3368922792935385530">Connesso</translation>
 <translation id="3369624026883419694">Risoluzione host in corso...</translation>
 <translation id="3371140690572404006">Dispositivo USB-C (porta anteriore destra)</translation>
 <translation id="337286756654493126">Lettura di cartelle aperte nell'applicazione</translation>
@@ -4046,7 +4046,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="6408118934673775994">Leggere e modificare i tuoi dati su <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> e <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">File di immagine</translation>
 <translation id="6410328738210026208">Cambia canale ed esegui Powerwash</translation>
-<translation id="6410390304316730527">La Navigazione sicura ti protegge da utenti malintenzionati che potrebbero indurti con l'inganno a effettuare operazioni pericolose, come installare software dannosi o rivelare informazioni personali (ad esempio password, numeri di telefono o carte di credito). Se la disattivi, fai attenzione quando navighi in siti sconosciuti o equivoci.</translation>
+<translation id="6410390304316730527">La Navigazione sicura ti protegge da utenti malintenzionati che potrebbero indurti con l'inganno a effettuare operazioni pericolose, come installare software dannosi o rivelare informazioni personali (ad esempio password, numeri di telefono o carte di credito). Se la disattivi, fai attenzione quando navighi in siti sconosciuti o sospetti.</translation>
 <translation id="6410668567036790476">Aggiungi motore di ricerca</translation>
 <translation id="641081527798843608">Corrispondenza oggetto</translation>
 <translation id="6412673304250309937">Verifica gli URL con un elenco di siti non sicuri archiviati in Chrome. Se un sito cerca di rubare la tua password o se scarichi un file dannoso, Chrome potrebbe inviare anche gli URL, inclusi bit e contenuti di pagina, a Navigazione sicura.</translation>
@@ -5918,7 +5918,7 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="8872155268274985541">È stato trovato un file manifest di aggiornamento esterno delle app kiosk non valido. Impossibile aggiornare l'app kiosk. Rimuovi la chiavetta USB.</translation>
 <translation id="8872187374998143710">Riavvia il dispositivo per usare Plugin VM.</translation>
 <translation id="8872777911145321141">Chiedi conferma quando un sito vuole usare i dati e dispositivi per realtà virtuale (opzione consigliata)</translation>
-<translation id="8874184842967597500">Non connessa</translation>
+<translation id="8874184842967597500">Non connesso</translation>
 <translation id="8875775314572167244">Impostazioni Ethernet</translation>
 <translation id="8876307312329369159">Questa impostazione non può essere modificata in una sessione demo.</translation>
 <translation id="8877448029301136595">[directory principale]</translation>

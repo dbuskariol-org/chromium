@@ -772,7 +772,7 @@
 <translation id="2025632980034333559"><ph name="APP_NAME" /> падна. Кликнете на балонот за повторно да се вчита наставката.</translation>
 <translation id="2025891858974379949">Небезбедни содржини</translation>
 <translation id="202918510990975568">Внесете ја лозинката за да ги конфигурирате безбедноста и најавувањето</translation>
-<translation id="2034346955588403444">Додајте друга Wi-Fi-мрежа</translation>
+<translation id="2034346955588403444">Додајте друга Wi-Fi мрежа</translation>
 <translation id="203574396658008164">Овозможи земање белешки од заклучен екран</translation>
 <translation id="2037445849770872822">Поставен е надзор за оваа сметка на Google. За да поставите уште „Родителски контроли“, изберете „Продолжи“.
 
@@ -4405,7 +4405,7 @@
 <translation id="6904655473976120856">Притиснете го копчето „Апликација“ за да излезете</translation>
 <translation id="6910211073230771657">Избришано</translation>
 <translation id="691024665142758461">преземе повеќе датотеки</translation>
-<translation id="6911324888870229398">Мрежната врска се прекина. Проверете ја врската или обидете се со друга Wi-Fi-мрежа.</translation>
+<translation id="6911324888870229398">Мрежната врска се прекина. Проверете ја врската или обидете се со друга Wi-Fi мрежа.</translation>
 <translation id="6911734910326569517">Потребна меморија</translation>
 <translation id="6914783257214138813">Вашите лозинки ќе бидат видливи за секој што може да ја види извезената датотека.</translation>
 <translation id="6915804003454593391">Корисник:</translation>
@@ -4960,7 +4960,7 @@
 <translation id="7662283695561029522">Допрете за конфигурирање</translation>
 <translation id="7663719505383602579">Приемник: <ph name="ARC_PROCESS_NAME" /></translation>
 <translation id="7664620655576155379">Неподдржан уред со Bluetooth: „<ph name="DEVICE_NAME" />“.</translation>
-<translation id="7665369617277396874">Додај сметка</translation>
+<translation id="7665369617277396874">Додајте сметка</translation>
 <translation id="7665940458857700755">Ова ќе ги избрише сите податоци и колачиња меморирани од <ph name="SITE_GROUP_NAME" /> и сите подредени сајтови.</translation>
 <translation id="7669825497510425694">{NUM_ATTEMPTS,plural, =1{Погрешен PIN. Имате уште еден обид.}one{Погрешен PIN. Имате уште # обид.}other{Погрешен PIN. Имате уште # обиди.}}</translation>
 <translation id="7671130400130574146">Користи системска лента за наслови и граници</translation>
@@ -6014,7 +6014,7 @@
 <translation id="8991520179165052608">Сајтот може да го користи микрофонот</translation>
 <translation id="899403249577094719">Основен URL за сертификат на Netscape</translation>
 <translation id="8995603266996330174">Ја управува <ph name="DOMAIN" /></translation>
-<translation id="8996526648899750015">Додај сметка...</translation>
+<translation id="8996526648899750015">Додајте сметка...</translation>
 <translation id="899657321862108550">Вашиот Chrome, насекаде</translation>
 <translation id="899676909165543803">Сензорот за отпечатоци е долното десно копче на вашата тастатура. Допрете го нежно со кој било прст.</translation>
 <translation id="8999560016882908256">Синтаксичка грешка во делот: <ph name="ERROR_LINE" /></translation>

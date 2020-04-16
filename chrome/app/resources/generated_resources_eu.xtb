@@ -3241,7 +3241,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5324780743567488672">Ezarri ordu-zona automatikoki kokapenaren arabera</translation>
 <translation id="5327248766486351172">Izena</translation>
 <translation id="5327570636534774768">Beste domeinu batek kudeatzen du gailua. Demo modua konfiguratu ahal izateko, kendu domeinuarekiko duen sarbidea gailu horri.</translation>
-<translation id="532943162177641444">Gailu honek erabil dezakeen sare mugikor publiko bat konfiguratzeko, sakatu <ph name="PHONE_NAME" /> gailuko jakinarazpena.</translation>
+<translation id="532943162177641444">Gailu honek erabil dezakeen wifi-gune mugikor bat konfiguratzeko, sakatu <ph name="PHONE_NAME" /> gailuko jakinarazpena.</translation>
 <translation id="5329858601952122676">&amp;Ezabatu</translation>
 <translation id="5331069282670671859">Ez duzu ziurtagiririk kategoria honetan</translation>
 <translation id="5331425616433531170">"<ph name="CHROME_EXTENSION_NAME" />" luzapenak parekatu egin nahi du</translation>
@@ -4650,7 +4650,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="7235716375204803342">Jarduerak eskuratzen…</translation>
 <translation id="7235737137505019098">Segurtasun-giltzak ez dauka tokirik beste konturik gehitzeko.</translation>
 <translation id="7238643356913091553">Xehetasunak (<ph name="NETWORK_NAME" />)</translation>
-<translation id="7240339475467890413">Sare publiko berrira konektatu nahi duzu?</translation>
+<translation id="7240339475467890413">Wifi-gune berrira konektatu nahi duzu?</translation>
 <translation id="7241389281993241388">Bezero-ziurtagiria inportatzeko, hasi saioa <ph name="TOKEN_NAME" /> gailuan.</translation>
 <translation id="7241443820034350811">Segurtasun-giltza ez bada agertzen zerrendan, sakatu botoia bost segundoz gutxienez.</translation>
 <translation id="7243632151880336635">Garbitu eta amaitu saioa</translation>
@@ -5845,7 +5845,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="8787254343425541995">Baimendu proxyak sare partekatuetan</translation>
 <translation id="8791534160414513928">Arakatze-trafikoari buruzko informazioarekin batera, bidali "Ez egin jarraipena" eskaera</translation>
 <translation id="8794025342371547160">IP murriztua</translation>
-<translation id="879413103056696865">Sare publikoa aktibatuta dagoen bitartean, <ph name="PHONE_NAME" /> telefonoak hau egingo du:</translation>
+<translation id="879413103056696865">Wifi-gunea aktibatuta dagoen bitartean, <ph name="PHONE_NAME" /> telefonoak hau egingo du:</translation>
 <translation id="8795916974678578410">Leiho berria</translation>
 <translation id="8797459392481275117">Ez itzuli inoiz webgune hau</translation>
 <translation id="8798099450830957504">Lehenetsia</translation>

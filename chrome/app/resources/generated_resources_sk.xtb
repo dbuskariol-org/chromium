@@ -4046,7 +4046,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="6408118934673775994">Čítať a meniť údaje na weboch <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> a <ph name="WEBSITE_3" /></translation>
 <translation id="6410257289063177456">Súbory obrázkov</translation>
 <translation id="6410328738210026208">Zmeniť kanál a použiť funkciu Powerwash</translation>
-<translation id="6410390304316730527">Bezpečné prehliadanie vás chráni pred útočníkmi, ktorí sa vás môžu pokúsiť naviesť vykonať niečo nebezpečné, ako je inštalácia škodlivého softvéru alebo odhalenie osobných údajov, napríklad hesiel, telefónnych čísel alebo kreditných kariet. Ak ho vypnete, pri prehliadaní neznámych webov alebo takých, ktoré nemajú dobrú reputáciu, postupujte opatrne.</translation>
+<translation id="6410390304316730527">Bezpečné prehliadanie vás chráni pred útočníkmi, ktorí vás môžu oklamať, aby ste urobili niečo nebezpečné, napríklad nainštalovali škodlivý softvér alebo odhalili osobné údaje, ako sú heslá, telefónne čísla alebo kreditné karty. Ak ho vypnete, pri prehliadaní neznámych alebo pochybných webov postupujte opatrne.</translation>
 <translation id="6410668567036790476">Pridať vyhľadávač</translation>
 <translation id="641081527798843608">Zhoda predmetu</translation>
 <translation id="6412673304250309937">Kontroluje webové adresy podľa zoznamu nebezpečných webov uloženého v Chrome. Ak sa vám určitý web pokúsi ukradnúť heslo alebo stiahnete škodlivý súbor, Chrome môže tiež odoslať webové adresy vrátane častí obsahu stránky Bezpečnému prehliadaniu.</translation>

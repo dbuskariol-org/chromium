@@ -1545,7 +1545,7 @@
 <translation id="3019285239893817657">Кнопка для перехода к подстранице</translation>
 <translation id="3020183492814296499">Ярлыки</translation>
 <translation id="3020990233660977256">Серийный номер: <ph name="SERIAL_NUMBER" /></translation>
-<translation id="3021065318976393105">Если устройство не заряжается</translation>
+<translation id="3021065318976393105">Если устройство работает от батареи</translation>
 <translation id="3021066826692793094">Бабочка</translation>
 <translation id="3021678814754966447">Просмотр кода фрейма</translation>
 <translation id="3022978424994383087">Повторите ещё раз.</translation>
@@ -2925,7 +2925,7 @@
 <translation id="4890773143211625964">Показать дополнительные настройки принтера</translation>
 <translation id="4891089016822695758">Форум бета-версии</translation>
 <translation id="4892229439761351791">Сайт может использовать устройство Bluetooth</translation>
-<translation id="489258173289528622">Что делать при переходе в режим бездействия, когда устройство не заряжается</translation>
+<translation id="489258173289528622">Что делать при переходе в режим бездействия, когда устройство работает от батареи</translation>
 <translation id="4893336867552636863">Все данные о работе в браузере будут удалены с устройства.</translation>
 <translation id="4893522937062257019">Экран блокировки</translation>
 <translation id="489454699928748701">Разрешить сайтам использовать датчики движения</translation>
