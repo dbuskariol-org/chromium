@@ -11,7 +11,6 @@
 GEN_INCLUDE([
   '//chrome/test/data/webui/a11y/accessibility_test.js',
   '//chrome/test/data/webui/polymer_browser_test_base.js',
-  '//chrome/test/data/webui/settings/a11y/settings_accessibility_test.js',
 ]);
 
 GEN('#include "chrome/browser/chromeos/crostini/crostini_pref_names.h"');

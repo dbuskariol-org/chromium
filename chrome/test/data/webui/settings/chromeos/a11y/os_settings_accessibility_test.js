@@ -10,17 +10,15 @@ GEN_INCLUDE([
   '//chrome/test/data/webui/polymer_browser_test_base.js',
 ]);
 
-GEN('#include "chrome/browser/ui/ui_features.h"');
-
 /**
  * Test fixture for Accessibility of Chrome Settings.
  * @constructor
  * @extends {PolymerTest}
  */
-function SettingsAccessibilityTest() {}
+function OSSettingsAccessibilityTest() {}
 
 // Default accessibility audit options. Specify in test definition to use.
-SettingsAccessibilityTest.axeOptions = {
+OSSettingsAccessibilityTest.axeOptions = {
   'rules': {
     // Disable 'skip-link' check since there are few tab stops before the main
     // content.
@@ -33,16 +31,16 @@ SettingsAccessibilityTest.axeOptions = {
 // TODO(crbug.com/1002627): This block prevents generation of a
 // link-in-text-block browser-test. This can be removed once the bug is
 // addressed, and usage should be replaced with
-// SettingsAccessibilityTest.axeOptions
-SettingsAccessibilityTest.axeOptionsExcludeLinkInTextBlock =
-    Object.assign({}, SettingsAccessibilityTest.axeOptions, {
-      'rules': Object.assign({}, SettingsAccessibilityTest.axeOptions.rules, {
+// OSSettingsAccessibilityTest.axeOptions
+OSSettingsAccessibilityTest.axeOptionsExcludeLinkInTextBlock =
+    Object.assign({}, OSSettingsAccessibilityTest.axeOptions, {
+      'rules': Object.assign({}, OSSettingsAccessibilityTest.axeOptions.rules, {
         'link-in-text-block': {enabled: false},
       })
     });
 
 // Default accessibility audit options. Specify in test definition to use.
-SettingsAccessibilityTest.violationFilter = {
+OSSettingsAccessibilityTest.violationFilter = {
   'aria-valid-attr': function(nodeResult) {
     const attributeWhitelist = [
       'aria-active-attribute',  // Polymer components use aria-active-attribute.
@@ -71,23 +69,9 @@ SettingsAccessibilityTest.violationFilter = {
   },
 };
 
-SettingsAccessibilityTest.prototype = {
+OSSettingsAccessibilityTest.prototype = {
   __proto__: PolymerTest.prototype,
 
   /** @override */
-  browsePreload: 'chrome://settings/',
-
-  // Include files that define the mocha tests.
-  extraLibraries: [
-    ...PolymerTest.prototype.extraLibraries,
-    '../ensure_lazy_loaded.js',
-  ],
-
-  /** @override */
-  featureList: {disabled: ['features::kSettingsPolymer3']},
-
-  setUp: function() {
-    PolymerTest.prototype.setUp.call(this);
-    settings.ensureLazyLoaded();
-  },
+  browsePreload: 'chrome://os-settings/',
 };

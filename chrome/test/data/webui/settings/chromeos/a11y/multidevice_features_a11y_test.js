@@ -9,22 +9,17 @@
 
 GEN_INCLUDE([
   '//chrome/test/data/webui/polymer_browser_test_base.js',
-  'settings_accessibility_test.js',
+  'os_settings_accessibility_test.js',
 ]);
 
 // eslint-disable-next-line no-var
-var MultideviceFeaturesA11yTest = class extends PolymerTest {
-  /** @override */
-  get browsePreload() {
-    return 'chrome://os-settings/';
-  }
-};
+var MultideviceFeaturesA11yTest = class extends OSSettingsAccessibilityTest {};
 
 AccessibilityTest.define('MultideviceFeaturesA11yTest', {
   /** @override */
   name: 'MULTIDEVICE_FEATURES_ACCESSIBILITY',
   /** @override */
-  axeOptions: SettingsAccessibilityTest.axeOptionsExcludeLinkInTextBlock,
+  axeOptions: OSSettingsAccessibilityTest.axeOptionsExcludeLinkInTextBlock,
   /** @override */
   setup: function() {
     settings.Router.getInstance().navigateTo(
@@ -35,7 +30,7 @@ AccessibilityTest.define('MultideviceFeaturesA11yTest', {
   tests: {'Accessible with No Changes': function() {}},
   /** @override */
   violationFilter:
-      Object.assign({}, SettingsAccessibilityTest.violationFilter, {
+      Object.assign({}, OSSettingsAccessibilityTest.violationFilter, {
         // Excuse link without an underline.
         // TODO(https://crbug.com/894602): Remove this exception when settled
         // with UX.

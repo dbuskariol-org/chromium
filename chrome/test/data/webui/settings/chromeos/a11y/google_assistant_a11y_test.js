@@ -3,35 +3,38 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview Define accessibility tests for the MULTIDEVICE route.
+ * @fileoverview Define accessibility tests for the GOOGLE_ASSISTANT route.
  * Chrome OS only.
  */
 
+// OSSettingsAccessibilityTest fixture.
 GEN_INCLUDE([
   '//chrome/test/data/webui/polymer_browser_test_base.js',
-  'settings_accessibility_test.js',
+  'os_settings_accessibility_test.js',
 ]);
 
 // eslint-disable-next-line no-var
-var MultideviceA11yTest = class extends PolymerTest {
+var GoogleAssistantA11yTest = class extends PolymerTest {
   /** @override */
   get browsePreload() {
     return 'chrome://os-settings/';
   }
 };
 
-AccessibilityTest.define('MultideviceA11yTest', {
+AccessibilityTest.define('GoogleAssistantA11yTest', {
   /** @override */
-  name: 'MULTIDEVICE',
+  name: 'GOOGLE_ASSISTANT',
   /** @override */
-  axeOptions: SettingsAccessibilityTest.axeOptionsExcludeLinkInTextBlock,
+  axeOptions: OSSettingsAccessibilityTest.axeOptions,
+  /** @override */
+  violationFilter: OSSettingsAccessibilityTest.violationFilter,
+
   /** @override */
   setup: function() {
-    settings.Router.getInstance().navigateTo(settings.routes.MULTIDEVICE);
+    settings.Router.getInstance().navigateTo(settings.routes.GOOGLE_ASSISTANT);
     Polymer.dom.flush();
   },
+
   /** @override */
   tests: {'Accessible with No Changes': function() {}},
-  /** @override */
-  violationFilter: SettingsAccessibilityTest.violationFilter,
 });

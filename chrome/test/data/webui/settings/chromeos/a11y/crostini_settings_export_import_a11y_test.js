@@ -10,13 +10,14 @@
 
 GEN_INCLUDE([
   'crostini_accessibility_test.js',
+  'os_settings_accessibility_test.js',
 ]);
 
 AccessibilityTest.define('CrostiniAccessibilityTest', {
   /** @override */
   name: 'CROSTINI_EXPORT_IMPORT',
   /** @override */
-  axeOptions: SettingsAccessibilityTest.axeOptions,
+  axeOptions: OSSettingsAccessibilityTest.axeOptions,
   /** @override */
   setup: function() {
     settings.Router.getInstance().navigateTo(
@@ -26,5 +27,5 @@ AccessibilityTest.define('CrostiniAccessibilityTest', {
   /** @override */
   tests: {'Accessible with No Changes': function() {}},
   /** @override */
-  violationFilter: SettingsAccessibilityTest.violationFilter,
+  violationFilter: OSSettingsAccessibilityTest.violationFilter,
 });

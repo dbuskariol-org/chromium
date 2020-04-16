@@ -3,28 +3,27 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview Define accessibility tests for the CROSTINI_SHARED_USB_DEVICES
- * route.
+ * @fileoverview Define accessibility tests for the CROSTINI route.
  * Chrome OS only.
  */
 
 GEN_INCLUDE([
   'crostini_accessibility_test.js',
+  'os_settings_accessibility_test.js',
 ]);
 
 AccessibilityTest.define('CrostiniAccessibilityTest', {
   /** @override */
-  name: 'CROSTINI_SHARED_USB_DEVICES',
+  name: 'CROSTINI',
   /** @override */
-  axeOptions: SettingsAccessibilityTest.axeOptions,
+  axeOptions: OSSettingsAccessibilityTest.axeOptionsExcludeLinkInTextBlock,
   /** @override */
   setup: function() {
-    settings.Router.getInstance().navigateTo(
-        settings.routes.CROSTINI_SHARED_USB_DEVICES);
+    settings.Router.getInstance().navigateTo(settings.routes.CROSTINI);
     Polymer.dom.flush();
   },
   /** @override */
   tests: {'Accessible with No Changes': function() {}},
   /** @override */
-  violationFilter: SettingsAccessibilityTest.violationFilter,
+  violationFilter: OSSettingsAccessibilityTest.violationFilter,
 });

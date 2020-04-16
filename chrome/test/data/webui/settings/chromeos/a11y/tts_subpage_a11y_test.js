@@ -3,37 +3,37 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview Define accessibility tests for the MANAGE_ACCESSIBILITY route.
+ * @fileoverview Define accessibility tests for the MANAGE_TTS_SETTINGS route.
  * Chrome OS only.
  */
 
-// SettingsAccessibilityTest fixture.
+// OSSettingsAccessibilityTest fixture.
 GEN_INCLUDE([
   '//chrome/test/data/webui/polymer_browser_test_base.js',
-  'settings_accessibility_test.js',
+  'os_settings_accessibility_test.js',
 ]);
 
 // eslint-disable-next-line no-var
-var ManageAccessibilityA11yTest = class extends PolymerTest {
+var TtsAccessibilityTest = class extends OSSettingsAccessibilityTest {
   /** @override */
-  get browsePreload() {
-    return 'chrome://os-settings/';
+  get commandLineSwitches() {
+    return ['enable-experimental-a11y-features'];
   }
 };
 
-AccessibilityTest.define('ManageAccessibilityA11yTest', {
+AccessibilityTest.define('TtsAccessibilityTest', {
   /** @override */
-  name: 'MANAGE_ACCESSIBILITY',
+  name: 'MANAGE_TTS_SETTINGS',
   /** @override */
-  axeOptions: SettingsAccessibilityTest.axeOptions,
+  axeOptions: OSSettingsAccessibilityTest.axeOptions,
   /** @override */
   setup: function() {
     settings.Router.getInstance().navigateTo(
-        settings.routes.MANAGE_ACCESSIBILITY);
+        settings.routes.MANAGE_TTS_SETTINGS);
     Polymer.dom.flush();
   },
   /** @override */
   tests: {'Accessible with No Changes': function() {}},
   /** @override */
-  violationFilter: SettingsAccessibilityTest.violationFilter,
+  violationFilter: OSSettingsAccessibilityTest.violationFilter,
 });
