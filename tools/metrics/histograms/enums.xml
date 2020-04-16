@@ -64282,6 +64282,9 @@ would be helpful to identify which type is being sent.
 </enum>
 
 <enum name="SyncBookmarkModelSyncState">
+  <obsolete>
+    Removed as of M80.
+  </obsolete>
   <summary>
     The state of the local bookmark model version compared to Sync. Corresponds
     to NativeModelSyncState in bookmark_model_associator.h.
