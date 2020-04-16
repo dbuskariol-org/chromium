@@ -26984,6 +26984,8 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3228" label="DocumentPolicyIframePolicyAttribute"/>
   <int value="3229" label="DocumentPolicyCausedPageUnload"/>
   <int value="3230" label="RequiredDocumentPolicy"/>
+  <int value="3231" label="PerformanceObserverEntryTypesAndBuffered"/>
+  <int value="3232" label="PerformanceObserverTypeError"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
