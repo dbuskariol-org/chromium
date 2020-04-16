@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef WEBLAYER_BROWSER_ISOLATED_WORLD_IDS_H_
-#define WEBLAYER_BROWSER_ISOLATED_WORLD_IDS_H_
+#ifndef WEBLAYER_COMMON_ISOLATED_WORLD_IDS_H_
+#define WEBLAYER_COMMON_ISOLATED_WORLD_IDS_H_
 
 #include "content/public/common/isolated_world_ids.h"
 
@@ -15,4 +15,4 @@ enum IsolatedWorldIDs {
 
 }  // namespace weblayer
 
-#endif  // WEBLAYER_BROWSER_ISOLATED_WORLD_IDS_H_
+#endif  // WEBLAYER_COMMON_ISOLATED_WORLD_IDS_H_
