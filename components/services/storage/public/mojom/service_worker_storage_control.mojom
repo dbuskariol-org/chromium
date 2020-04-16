@@ -112,10 +112,6 @@ interface ServiceWorkerStorageControl {
       (ServiceWorkerDatabaseStatus status,
        ServiceWorkerStorageOriginState origin_state);
 
-  // Updates the state of the registration's stored version to active.
-  UpdateToActiveState(int64 registration_id, url.mojom.Url origin) =>
-      (ServiceWorkerDatabaseStatus status);
-
   // Returns a new registration id which is guaranteed to be unique in the
   // storage. Returns blink::mojom::kInvalidServiceWorkerRegistrationId if the
   // storage is disabled.
