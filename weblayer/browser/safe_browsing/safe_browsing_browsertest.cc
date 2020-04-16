@@ -46,7 +46,6 @@ class FakeSafeBrowsingApiHandler
     : public safe_browsing::SafeBrowsingApiHandler {
  public:
   // SafeBrowsingApiHandler
-  std::string GetSafetyNetId() override { return ""; }
   void StartURLCheck(
       std::unique_ptr<URLCheckCallbackMeta> callback,
       const GURL& url,
