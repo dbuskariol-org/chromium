@@ -254,6 +254,92 @@ This will make your test brittle and flaky.
 Instead of doing this, it's vastly better to add a way (even if it's just via a
 [test API]) to observe the event you're interested in.
 
+### Not managing lifetimes
+
+As with most patterns, lifetimes can be an issue with this pattern when using
+observers. If you are waiting on a given event to happen, and the object that's
+being observed instead goes out of scope, the test may hang.
+Similar badness can happen if the Waiter isn't properly removed as an observer,
+which could lead to Use-After-Frees.
+
+There are two good mitigation practices here.
+
+#### Keep Waiter-style helper classes as narrowly scoped as possible.
+Consider something like
+```c++
+TEST_F(GizmoTest, WaitForGizmo) {
+  GizmoWaiter waiter;
+  Gizmo gizmo;
+  gizmo.Initialize();
+  waiter.WaitForGizmoReady();
+  ASSERT_TRUE(gizmo.ready());
+}
+```
+
+This looks safe, but may not be. If GizmoObserver removes itself as an observer
+from Gizmo in its destructor, this will result in a Use-After-Free during the
+test tear down.  Instead, scope the GizmoWaiter more narrowly:
+```c++
+TEST_F(GizmoTest, WaitForGizmo) {
+  Gizmo gizmo;
+  {
+    GizmoWaiter waiter;
+    gizmo.Initialize();
+    waiter.WaitForGizmoReady();
+  }
+  ASSERT_TRUE(gizmo.ready());
+}
+```
+
+Since the GizmoWaiter is now narrowly-scoped, it will be destroyed when it is
+no longer needed, and avoid Use-After-Free concerns.
+
+#### If in doubt, handle the destruction case appropriately
+If you need to potentially handle the case where the object being observed is
+destroyed while a waiter is still active, you can handle the destruction case
+gracefully.
+
+
+```c++
+  class GizmoReadyWaiter : public GizmoObserver {
+   public:
+    GizmoReadyObserver(Gizmo* gizmo)
+        : gizmo_(gizmo) {}
+    ~GizmoReadyObserver() override = default;
+
+    void WaitForGizmoReady() {
+      ASSERT_TRUE(gizmo_)
+          << "Trying to call Wait() after the Gizmo was destroyed!";
+      if (!gizmo_->ready()) {
+        gizmo_observer_.Add(gizmo_);
+        run_loop_.Run();
+      }
+    }
+
+    // GizmoObserver:
+    void OnGizmoReady(Gizmo* observed_gizmo) {
+      gizmo_observer_.Remove(observed_gizmo);
+      run_loop_.Quit();
+    }
+    void OnGizmoDestroying(Gizmo* observed_gizmo) {
+      DCHECK_EQ(gizmo_, observed_gizmo);
+      gizmo_ = nullptr;
+      // Remove the observer now, to avoid a UAF in the destructor.
+      gizmo_observer_.Remove(observed_gizmo);
+      // Bail out so we don't time out in the test waiting for a ready state
+      // that will never come.
+      run_loop_.Quit();
+      // Was this a possible expected outcome? If not, consider:
+      // ADD_FAILURE() << "The Gizmo was destroyed before it was ready!";
+    }
+
+   private:
+    RunLoop run_loop_;
+    Gizmo* gizmo_;
+    ScopedObserver<Gizmo, GizmoObserver> gizmo_observer_{this};
+  };
+```
+
 [base::RunLoop]: ../../base/run_loop.h
 [TaskEnvironment]: ../threading_and_tasks_testing.md
 [test API]: testapi.md
