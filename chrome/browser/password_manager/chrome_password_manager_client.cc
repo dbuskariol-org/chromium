@@ -221,7 +221,7 @@ ChromePasswordManagerClient::ChromePasswordManagerClient(
       observer_(nullptr),
       credentials_filter_(this, base::BindRepeating(&GetSyncService, profile_)),
 #if !defined(OS_ANDROID)
-      account_storage_auth_helper_(profile_),
+      account_storage_auth_helper_(profile_, &password_feature_manager_),
 #endif
       helper_(this) {
   ContentPasswordManagerDriverFactory::CreateForWebContents(web_contents, this,

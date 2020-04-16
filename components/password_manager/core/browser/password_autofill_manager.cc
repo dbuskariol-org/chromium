@@ -747,7 +747,6 @@ void PasswordAutofillManager::OnUnlockReauthCompleted(
     autofill::PopupItemId unlock_item,
     PasswordManagerClient::ReauthSucceeded reauth_succeeded) {
   if (reauth_succeeded) {
-    password_client_->GetPasswordFeatureManager()->SetAccountStorageOptIn(true);
     if (unlock_item ==
         autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPT_IN_AND_GENERATE) {
       password_client_->GeneratePassword();

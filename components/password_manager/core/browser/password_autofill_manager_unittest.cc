@@ -629,7 +629,8 @@ TEST_F(PasswordAutofillManagerTest, ClickOnReSiginTriggersSigninAndHides) {
       autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_RE_SIGNIN, 1);
 }
 
-// Test that the popup is updated once "opt in and fill" is clicked.
+// Test that the popup is updated once "opt in and fill" is clicked and the
+// reauth fails.
 TEST_F(PasswordAutofillManagerTest, FailedOptInAndFillUpdatesPopup) {
   TestPasswordManagerClient client;
   NiceMock<MockAutofillClient> autofill_client;
@@ -640,8 +641,6 @@ TEST_F(PasswordAutofillManagerTest, FailedOptInAndFillUpdatesPopup) {
                                      .SetUnconsentedPrimaryAccount(kAliceEmail)
                                      .account_id;
   testing::Mock::VerifyAndClearExpectations(&autofill_client);
-  EXPECT_CALL(*client.GetPasswordFeatureManager(), SetAccountStorageOptIn)
-      .Times(0);
 
   // Accepting a suggestion should trigger a call to update the popup.
   // First the popup enters the waiting state.
@@ -680,7 +679,8 @@ TEST_F(PasswordAutofillManagerTest, FailedOptInAndFillUpdatesPopup) {
   EXPECT_FALSE(suggestions.back().is_loading);
 }
 
-// Test that the popup is updated once "opt in and generate" is clicked.
+// Test that the popup is updated once "opt in and generate" is clicked and the
+// reauth fails.
 TEST_F(PasswordAutofillManagerTest, FailedOptInAndGenerateUpdatesPopup) {
   TestPasswordManagerClient client;
   NiceMock<MockAutofillClient> autofill_client;
@@ -732,8 +732,9 @@ TEST_F(PasswordAutofillManagerTest, FailedOptInAndGenerateUpdatesPopup) {
   EXPECT_FALSE(suggestions.back().is_loading);
 }
 
-// Test that the popup is updated once "opt in and fill" is clicked.
-TEST_F(PasswordAutofillManagerTest, SuccessfullOptInAndFillTriggersOptIn) {
+// Test that the popup is updated once "opt in and fill" is clicked and the
+// reauth is successful.
+TEST_F(PasswordAutofillManagerTest, SuccessfullOptInAndFillHidesPopup) {
   TestPasswordManagerClient client;
   NiceMock<MockAutofillClient> autofill_client;
   InitializePasswordAutofillManager(&client, &autofill_client);
@@ -755,17 +756,16 @@ TEST_F(PasswordAutofillManagerTest, SuccessfullOptInAndFillTriggersOptIn) {
       .WillOnce([](const auto& id, auto reauth_callback) {
         std::move(reauth_callback).Run(ReauthSucceeded(true));
       });
-  EXPECT_CALL(*client.GetPasswordFeatureManager(),
-              SetAccountStorageOptIn(true));
 
   password_autofill_manager_->DidAcceptSuggestion(
       test_username_, autofill::POPUP_ITEM_ID_PASSWORD_ACCOUNT_STORAGE_OPT_IN,
       1);
 }
 
-// Test that the popup is updated once "opt in and generate" is clicked.
+// Test that the popup is hidden and password generation is triggered once
+// "opt in and generate" is clicked and the reauth is successful.
 TEST_F(PasswordAutofillManagerTest,
-       SuccessfullOptInAndGenerateTriggersOptInAndGeneration) {
+       SuccessfullOptInAndGenerateHidesPopupAndTriggersGeneration) {
   TestPasswordManagerClient client;
   NiceMock<MockAutofillClient> autofill_client;
   InitializePasswordAutofillManager(&client, &autofill_client);
@@ -787,8 +787,6 @@ TEST_F(PasswordAutofillManagerTest,
       .WillOnce([](const auto& id, auto reauth_callback) {
         std::move(reauth_callback).Run(ReauthSucceeded(true));
       });
-  EXPECT_CALL(*client.GetPasswordFeatureManager(),
-              SetAccountStorageOptIn(true));
   EXPECT_CALL(
       autofill_client,
       HideAutofillPopup(autofill::PopupHidingReason::kAcceptSuggestion));
