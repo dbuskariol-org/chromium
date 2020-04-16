@@ -12,6 +12,7 @@ import static org.chromium.chrome.browser.vr.XrTestFramework.POLL_TIMEOUT_SHORT_
 import static org.chromium.chrome.test.util.ChromeRestriction.RESTRICTION_TYPE_VIEWER_DAYDREAM_OR_STANDALONE;
 
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.test.filters.MediumTest;
 
@@ -23,6 +24,7 @@ import org.junit.runner.RunWith;
 
 import org.chromium.base.test.BundleTestRule;
 import org.chromium.base.test.util.CommandLineFlags;
+import org.chromium.base.test.util.DisableIf;
 import org.chromium.base.test.util.Feature;
 import org.chromium.base.test.util.Restriction;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
@@ -438,6 +440,7 @@ public class VrBrowserWebInputEditingTest {
     @Test
     @MediumTest
     @Feature({"Browser", "RenderTest"})
+    @DisableIf.Build(sdk_is_greater_than = Build.VERSION_CODES.O_MR1, message = "crbug.com/1071466")
     public void testFullscreenVideoControls()
             throws InterruptedException, TimeoutException, IOException {
         // There's occasionally slight AA differences along the play button, so tolerate a small
