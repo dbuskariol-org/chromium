@@ -4839,6 +4839,7 @@ test("unit_tests") {
       "//components/services/unzip:in_process",
       "//extensions:extensions_resources",
       "//extensions/browser:test_support",
+      "//extensions/browser:value_store_test_support",
       "//extensions/common",
       "//extensions/renderer:unit_test_support",
       "//extensions/strings",
