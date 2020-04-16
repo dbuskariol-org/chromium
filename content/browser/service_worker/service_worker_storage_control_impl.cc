@@ -174,6 +174,11 @@ void ServiceWorkerStorageControlImpl::GetNewRegistrationId(
   storage_->GetNewRegistrationId(std::move(callback));
 }
 
+void ServiceWorkerStorageControlImpl::GetNewVersionId(
+    GetNewVersionIdCallback callback) {
+  storage_->GetNewVersionId(std::move(callback));
+}
+
 void ServiceWorkerStorageControlImpl::GetNewResourceId(
     GetNewResourceIdCallback callback) {
   storage_->GetNewResourceId(std::move(callback));

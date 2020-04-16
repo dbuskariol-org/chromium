@@ -274,6 +274,18 @@ class ServiceWorkerStorageControlImplTest : public testing::Test {
     return return_value;
   }
 
+  int64_t GetNewVersionId() {
+    int64_t return_value;
+    base::RunLoop loop;
+    storage()->GetNewVersionId(
+        base::BindLambdaForTesting([&](int64_t version_id) {
+          return_value = version_id;
+          loop.Quit();
+        }));
+    loop.Run();
+    return return_value;
+  }
+
   int64_t GetNewResourceId() {
     int64_t return_value;
     base::RunLoop loop;
@@ -516,10 +528,12 @@ TEST_F(ServiceWorkerStorageControlImplTest, StoreAndDeleteRegistration) {
   const GURL kScope("https://www.example.com/scope/");
   const GURL kScriptUrl("https://www.example.com/scope/sw.js");
   const GURL kClientUrl("https://www.example.com/scope/document.html");
-  const int64_t kRegistrationId = 0;
   const int64_t kScriptSize = 10;
 
   LazyInitializeForTest();
+
+  const int64_t kRegistrationId = GetNewResourceId();
+  const int64_t kVersionId = GetNewVersionId();
 
   // Create a registration data with a single resource.
   std::vector<storage::mojom::ServiceWorkerResourceRecordPtr> resources;
@@ -530,6 +544,7 @@ TEST_F(ServiceWorkerStorageControlImplTest, StoreAndDeleteRegistration) {
   data->registration_id = kRegistrationId;
   data->scope = kScope;
   data->script = kScriptUrl;
+  data->version_id = kVersionId;
   data->navigation_preload_state = blink::mojom::NavigationPreloadState::New();
 
   int64_t resources_total_size_bytes = 0;
@@ -552,6 +567,7 @@ TEST_F(ServiceWorkerStorageControlImplTest, StoreAndDeleteRegistration) {
     EXPECT_EQ(result->registration->registration_id, kRegistrationId);
     EXPECT_EQ(result->registration->scope, kScope);
     EXPECT_EQ(result->registration->script, kScriptUrl);
+    EXPECT_EQ(result->registration->version_id, kVersionId);
     EXPECT_EQ(result->registration->resources_total_size_bytes,
               resources_total_size_bytes);
     EXPECT_EQ(result->resources.size(), 1UL);

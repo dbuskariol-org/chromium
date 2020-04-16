@@ -116,6 +116,10 @@ interface ServiceWorkerStorageControl {
   // storage. Returns blink::mojom::kInvalidServiceWorkerRegistrationId if the
   // storage is disabled.
   GetNewRegistrationId() => (int64 registration_id);
+  // Returns a new service worker version id which is guaranteed to be unique
+  // in the storage. Returns blink::mojom::kInvalidServiceWorkerVersionId if
+  // the storage is disabled.
+  GetNewVersionId() => (int64 version_id);
   // Returns a new resource id which is guaranteed to be unique in the storage.
   // Returns blink::mojom::kInvalidServiceWorkerResourceId if the storage
   // is disabled.

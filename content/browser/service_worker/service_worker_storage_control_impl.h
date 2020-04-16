@@ -56,6 +56,7 @@ class CONTENT_EXPORT ServiceWorkerStorageControlImpl
                           const GURL& origin,
                           DeleteRegistrationCallback callback) override;
   void GetNewRegistrationId(GetNewRegistrationIdCallback callback) override;
+  void GetNewVersionId(GetNewVersionIdCallback callback) override;
   void GetNewResourceId(GetNewResourceIdCallback callback) override;
   void CreateResourceReader(
       int64_t resource_id,
