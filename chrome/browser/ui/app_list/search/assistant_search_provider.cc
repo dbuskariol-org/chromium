@@ -8,7 +8,6 @@
 #include "ash/public/cpp/app_list/app_list_config.h"
 #include "ash/public/cpp/app_list/app_list_metrics.h"
 #include "ash/public/cpp/app_list/app_list_types.h"
-#include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
 #include "ash/public/cpp/vector_icons/vector_icons.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/unguessable_token.h"
@@ -22,10 +21,20 @@ namespace app_list {
 namespace {
 
 // Aliases.
+using AssistantAllowedState = ash::mojom::AssistantAllowedState;
 using AssistantSuggestion = chromeos::assistant::mojom::AssistantSuggestion;
 
 // Constants.
 constexpr char kIdPrefix[] = "googleassistant://";
+
+// Helpers ---------------------------------------------------------------------
+
+// Returns if the Assistant search provider is allowed to contribute results.
+bool AreResultsAllowed() {
+  ash::AssistantState* assistant_state = ash::AssistantState::Get();
+  return assistant_state->allowed_state() == AssistantAllowedState::ALLOWED &&
+         assistant_state->settings_enabled() == true;
+}
 
 // AssistantSearchResult -------------------------------------------------------
 
@@ -63,22 +72,41 @@ class AssistantSearchResult : public ChromeSearchResult {
 // AssistantSearchProvider -----------------------------------------------------
 
 AssistantSearchProvider::AssistantSearchProvider() {
-  // Synchronize our initial state w/ that of the Assistant suggestions model.
-  OnConversationStartersChanged(ash::AssistantSuggestionsController::Get()
-                                    ->GetModel()
-                                    ->GetConversationStarters());
+  UpdateResults();
 
-  // Observe the Assistant suggestions model to receive updates.
-  ash::AssistantSuggestionsController::Get()->AddModelObserver(this);
+  // Bind observers.
+  state_observer_.Add(ash::AssistantState::Get());
+  suggestions_observer_.Add(ash::AssistantSuggestionsController::Get());
 }
 
-AssistantSearchProvider::~AssistantSearchProvider() {
-  ash::AssistantSuggestionsController::Get()->RemoveModelObserver(this);
+AssistantSearchProvider::~AssistantSearchProvider() = default;
+
+void AssistantSearchProvider::OnAssistantFeatureAllowedChanged(
+    ash::mojom::AssistantAllowedState allowed_state) {
+  UpdateResults();
+}
+
+void AssistantSearchProvider::OnAssistantSettingsEnabled(bool enabled) {
+  UpdateResults();
+}
+
+void AssistantSearchProvider::OnConversationStartersChanged(
+    const std::vector<const AssistantSuggestion*>& conversation_starters) {
+  UpdateResults();
 }
 
 // TODO(b:153466226): Only create a result if confidence score threshold is met.
-void AssistantSearchProvider::OnConversationStartersChanged(
-    const std::vector<const AssistantSuggestion*>& conversation_starters) {
+void AssistantSearchProvider::UpdateResults() {
+  if (!AreResultsAllowed()) {
+    ClearResults();
+    return;
+  }
+
+  std::vector<const AssistantSuggestion*> conversation_starters =
+      ash::AssistantSuggestionsController::Get()
+          ->GetModel()
+          ->GetConversationStarters();
+
   SearchProvider::Results results;
   if (!conversation_starters.empty()) {
     const AssistantSuggestion* starter = conversation_starters.front();
