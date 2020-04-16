@@ -976,7 +976,7 @@ void ChromePasswordManagerClient::AutomaticGenerationAvailable(
 void ChromePasswordManagerClient::ShowPasswordEditingPopup(
     const gfx::RectF& bounds,
     const autofill::FormData& form_data,
-    uint32_t field_renderer_id,
+    autofill::FieldRendererId field_renderer_id,
     const base::string16& password_value) {
   if (!password_manager::bad_message::CheckChildProcessSecurityPolicyForURL(
           password_generation_driver_receivers_.GetCurrentTargetFrame(),

@@ -15,6 +15,7 @@
 #include "base/optional.h"
 #include "build/build_config.h"
 #include "components/autofill/content/common/mojom/autofill_driver.mojom-forward.h"
+#include "components/autofill/core/common/renderer_id.h"
 #include "components/password_manager/content/browser/content_credential_manager.h"
 #include "components/password_manager/content/browser/content_password_manager_driver_factory.h"
 #include "components/password_manager/core/browser/http_auth_manager.h"
@@ -183,7 +184,7 @@ class ChromePasswordManagerClient
       override;
   void ShowPasswordEditingPopup(const gfx::RectF& bounds,
                                 const autofill::FormData& form_data,
-                                uint32_t field_renderer_id,
+                                autofill::FieldRendererId field_renderer_id,
                                 const base::string16& password_value) override;
   void PasswordGenerationRejectedByTyping() override;
   void PresaveGeneratedPassword(const autofill::FormData& form_data,
