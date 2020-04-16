@@ -5,20 +5,17 @@
 package org.chromium.weblayer.test;
 
 import org.chromium.base.test.util.CallbackHelper;
-import org.chromium.weblayer.NewTabCallback;
 import org.chromium.weblayer.Tab;
+import org.chromium.weblayer.TabListCallback;
 
 /**
- * NewTabCallback test helper. Primarily used to wait for a tab to be closed.
+ * TabListCallback test helper. Primarily used to wait for a tab to be closed.
  */
-public class CloseTabNewTabCallbackImpl extends NewTabCallback {
+public class OnTabRemovedTabListCallbackImpl extends TabListCallback {
     private final CallbackHelper mCallbackHelper = new CallbackHelper();
 
     @Override
-    public void onNewTab(Tab tab, int mode) {}
-
-    @Override
-    public void onCloseTab() {
+    public void onTabRemoved(Tab tab) {
         mCallbackHelper.notifyCalled();
     }
 
