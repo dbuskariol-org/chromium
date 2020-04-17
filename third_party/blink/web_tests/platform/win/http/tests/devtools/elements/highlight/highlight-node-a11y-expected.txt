@@ -1,21 +1,21 @@
-This test verifies the position and size of the highlight rectangles overlaid on an inspected node.
+This test verifies a11y attributes for a node.
 
-inspectedElement{
+button{
   "paths": [
     {
       "path": [
         "M",
-        30,
-        30,
+        16,
+        11,
         "L",
-        230,
-        30,
+        43,
+        11,
         "L",
-        230,
-        230,
+        43,
+        27,
         "L",
-        30,
-        230,
+        16,
+        27,
         "Z"
       ],
       "fillColor": "rgba(255, 0, 0, 0)",
@@ -25,17 +25,17 @@ inspectedElement{
     {
       "path": [
         "M",
-        15,
-        15,
+        10,
+        10,
         "L",
-        245,
-        15,
+        49,
+        10,
         "L",
-        245,
-        245,
+        49,
+        28,
         "L",
-        15,
-        245,
+        10,
+        28,
         "Z"
       ],
       "fillColor": "rgba(0, 255, 0, 0)",
@@ -44,17 +44,17 @@ inspectedElement{
     {
       "path": [
         "M",
-        5,
-        5,
+        8,
+        8,
         "L",
-        255,
-        5,
+        51,
+        8,
         "L",
-        255,
-        255,
+        51,
+        30,
         "L",
-        5,
-        255,
+        8,
+        30,
         "Z"
       ],
       "fillColor": "rgba(0, 0, 255, 0)",
@@ -63,17 +63,201 @@ inspectedElement{
     {
       "path": [
         "M",
-        0,
-        0,
+        8,
+        8,
         "L",
-        260,
-        0,
+        51,
+        8,
         "L",
-        260,
-        260,
+        51,
+        30,
         "L",
-        0,
-        260,
+        8,
+        30,
+        "Z"
+      ],
+      "fillColor": "rgba(255, 255, 255, 0)",
+      "name": "margin"
+    }
+  ],
+  "showRulers": true,
+  "showExtensionLines": true,
+  "elementInfo": {
+    "tagName": "button",
+    "idValue": "button",
+    "nodeWidth": "43",
+    "nodeHeight": "22",
+    "isKeyboardFocusable": true,
+    "accessibleName": "click",
+    "accessibleRole": "button"
+  }
+}
+input{
+  "paths": [
+    {
+      "path": [
+        "M",
+        59,
+        11,
+        "L",
+        228,
+        11,
+        "L",
+        228,
+        27,
+        "L",
+        59,
+        27,
+        "Z"
+      ],
+      "fillColor": "rgba(255, 0, 0, 0)",
+      "outlineColor": "rgba(128, 0, 0, 0)",
+      "name": "content"
+    },
+    {
+      "path": [
+        "M",
+        57,
+        10,
+        "L",
+        230,
+        10,
+        "L",
+        230,
+        28,
+        "L",
+        57,
+        28,
+        "Z"
+      ],
+      "fillColor": "rgba(0, 255, 0, 0)",
+      "name": "padding"
+    },
+    {
+      "path": [
+        "M",
+        55,
+        8,
+        "L",
+        232,
+        8,
+        "L",
+        232,
+        30,
+        "L",
+        55,
+        30,
+        "Z"
+      ],
+      "fillColor": "rgba(0, 0, 255, 0)",
+      "name": "border"
+    },
+    {
+      "path": [
+        "M",
+        55,
+        8,
+        "L",
+        232,
+        8,
+        "L",
+        232,
+        30,
+        "L",
+        55,
+        30,
+        "Z"
+      ],
+      "fillColor": "rgba(255, 255, 255, 0)",
+      "name": "margin"
+    }
+  ],
+  "showRulers": true,
+  "showExtensionLines": true,
+  "elementInfo": {
+    "tagName": "input",
+    "idValue": "input",
+    "nodeWidth": "177",
+    "nodeHeight": "22",
+    "isKeyboardFocusable": true,
+    "accessibleName": "",
+    "accessibleRole": "textbox"
+  }
+}
+div{
+  "paths": [
+    {
+      "path": [
+        "M",
+        8,
+        30,
+        "L",
+        792,
+        30,
+        "L",
+        792,
+        50,
+        "L",
+        8,
+        50,
+        "Z"
+      ],
+      "fillColor": "rgba(255, 0, 0, 0)",
+      "outlineColor": "rgba(128, 0, 0, 0)",
+      "name": "content"
+    },
+    {
+      "path": [
+        "M",
+        8,
+        30,
+        "L",
+        792,
+        30,
+        "L",
+        792,
+        50,
+        "L",
+        8,
+        50,
+        "Z"
+      ],
+      "fillColor": "rgba(0, 255, 0, 0)",
+      "name": "padding"
+    },
+    {
+      "path": [
+        "M",
+        8,
+        30,
+        "L",
+        792,
+        30,
+        "L",
+        792,
+        50,
+        "L",
+        8,
+        50,
+        "Z"
+      ],
+      "fillColor": "rgba(0, 0, 255, 0)",
+      "name": "border"
+    },
+    {
+      "path": [
+        "M",
+        8,
+        30,
+        "L",
+        792,
+        30,
+        "L",
+        792,
+        50,
+        "L",
+        8,
+        50,
         "Z"
       ],
       "fillColor": "rgba(255, 255, 255, 0)",
@@ -84,190 +268,12 @@ inspectedElement{
   "showExtensionLines": true,
   "elementInfo": {
     "tagName": "div",
-    "idValue": "inspectedElement",
-    "nodeWidth": "250",
-    "nodeHeight": "250",
-    "isKeyboardFocusable": false,
-    "accessibleName": "",
-    "accessibleRole": "generic"
-  }
-}
-
-First text node{
-  "paths": [
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(255, 0, 0, 0)",
-      "outlineColor": "rgba(128, 0, 0, 0)",
-      "name": "content"
-    },
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(0, 255, 0, 0)",
-      "name": "padding"
-    },
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(0, 0, 255, 0)",
-      "name": "border"
-    },
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(255, 255, 255, 0)",
-      "name": "margin"
-    }
-  ],
-  "showRulers": true,
-  "showExtensionLines": true,
-  "elementInfo": {
-    "nodeWidth": "Width within 3px from 28? true",
-    "nodeHeight": "Height within 3px from 25? false",
-    "tagName": "#text"
-  }
-}
-
-Second text node{
-  "paths": [
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(255, 0, 0, 0)",
-      "outlineColor": "rgba(128, 0, 0, 0)",
-      "name": "content"
-    },
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(0, 255, 0, 0)",
-      "name": "padding"
-    },
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(0, 0, 255, 0)",
-      "name": "border"
-    },
-    {
-      "path": [
-        "M",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "L",
-        "<number>",
-        "<number>",
-        "Z"
-      ],
-      "fillColor": "rgba(255, 255, 255, 0)",
-      "name": "margin"
-    }
-  ],
-  "showRulers": true,
-  "showExtensionLines": true,
-  "elementInfo": {
-    "nodeWidth": "Width within 3px from 30? true",
-    "nodeHeight": "Height within 3px from 24? true",
-    "tagName": "#text"
+    "idValue": "div",
+    "nodeWidth": "784",
+    "nodeHeight": "20",
+    "isKeyboardFocusable": true,
+    "accessibleName": "click",
+    "accessibleRole": "button"
   }
 }
 
