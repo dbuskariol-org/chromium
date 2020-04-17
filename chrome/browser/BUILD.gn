@@ -5739,7 +5739,10 @@ action("unexpire_flags_gen") {
 }
 
 source_set("unexpire_flags") {
-  deps = [ ":unexpire_flags_gen" ]
+  deps = [
+    ":unexpire_flags_gen",
+    "//base",
+  ]
   sources = [
     "$root_gen_dir/chrome/browser/unexpire_flags_gen.cc",
     "$root_gen_dir/chrome/browser/unexpire_flags_gen.h",
