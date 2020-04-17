@@ -1306,7 +1306,7 @@
       'type': 'main',
       'schema': { 'type': 'boolean' },
       'supported_on': [
-        'chrome.win:82-',
+        'chrome.win:84-',
       ],
       'features': {
         'can_be_recommended': False,
@@ -1709,7 +1709,7 @@
       'id': 648,
       'caption': '''Use a default referrer policy of no-referrer-when-downgrade.''',
       'tags': [],
-      'desc': '''This enterprise policy is for short-term adaptation and will be removed in M82.
+      'desc': '''This enterprise policy is for short-term adaptation and will be removed in M86.
 
       Chrome's default referrer policy is being strengthened from its current value of no-referrer-when-downgrade to the more secure strict-origin-when-cross-origin through a gradual rollout targeting M80 stable.
 
@@ -8145,7 +8145,7 @@
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:83-'],
       'supported_chrome_os_management': ['google_cloud'],
       'device_only': True,
       'features': {
@@ -8166,7 +8166,7 @@
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:83-'],
       'supported_chrome_os_management': ['google_cloud'],
       'device_only': True,
       'features': {
@@ -8187,7 +8187,7 @@
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:83-'],
       'supported_chrome_os_management': ['google_cloud'],
       'device_only': True,
       'features': {
@@ -8989,7 +8989,7 @@
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:83-'],
       'features': {
         'can_be_recommended': False,
         'dynamic_refresh': True,
@@ -9786,7 +9786,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -9797,7 +9797,7 @@
       'id': 172,
       'caption': '''Screen dim delay when running on AC power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which the screen is dimmed when running on AC power.
 
@@ -9817,7 +9817,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -9828,7 +9828,7 @@
       'id': 173,
       'caption': '''Screen off delay when running on AC power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which the screen is turned off when running on AC power.
 
@@ -9848,7 +9848,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -9859,7 +9859,7 @@
       'id': 174,
       'caption': '''Screen lock delay when running on AC power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="SCREEN_LOCK_DELAYS_POLICY_NAME">ScreenLockDelays</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="SCREEN_LOCK_DELAYS_POLICY_NAME">ScreenLockDelays</ph> instead.
 
           Specifies the length of time without user input after which the screen is locked when running on AC power.
 
@@ -9881,7 +9881,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:27-'],
       'features': {
         'dynamic_refresh': True,
@@ -9892,7 +9892,7 @@
       'id': 197,
       'caption': '''Idle warning delay when running on AC power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which a warning dialog is shown when running on AC power.
 
@@ -9912,7 +9912,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -9923,7 +9923,7 @@
       'id': 175,
       'caption': '''Idle delay when running on AC power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which the idle action is taken when running on AC power.
 
@@ -9941,7 +9941,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -9952,7 +9952,7 @@
       'id': 176,
       'caption': '''Screen dim delay when running on battery power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which the screen is dimmed when running on battery power.
 
@@ -9972,7 +9972,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -9983,7 +9983,7 @@
       'id': 177,
       'caption': '''Screen off delay when running on battery power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which the screen is turned off when running on battery power.
 
@@ -10003,7 +10003,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -10014,7 +10014,7 @@
       'id': 178,
       'caption': '''Screen lock delay when running on battery power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="SCREEN_LOCK_DELAYS_POLICY_NAME">ScreenLockDelays</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="SCREEN_LOCK_DELAYS_POLICY_NAME">ScreenLockDelays</ph> instead.
 
           Specifies the length of time without user input after which the screen is locked when running on battery power.
 
@@ -10036,7 +10036,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:27-'],
       'features': {
         'dynamic_refresh': True,
@@ -10047,7 +10047,7 @@
       'id': 198,
       'caption': '''Idle warning delay when running on battery power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which a warning dialog is shown when running on battery power.
 
@@ -10067,7 +10067,7 @@
         'type': 'integer',
         'minimum': 0
       },
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -10078,7 +10078,7 @@
       'id': 179,
       'caption': '''Idle delay when running on battery power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           Specifies the length of time without user input after which the idle action is taken when running on battery power.
 
@@ -10118,7 +10118,7 @@
           'caption': '''Do nothing''',
         },
       ],
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:26-'],
       'features': {
         'dynamic_refresh': True,
@@ -10129,7 +10129,7 @@
       'id': 180,
       'caption': '''Action to take when the idle delay is reached''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           This policy provides a fallback value for the more-specific <ph name="IDLE_ACTION_AC_POLICY_NAME">IdleActionAC</ph> and <ph name="IDLE_ACTION_BATTERY_POLICY_NAME">IdleActionBattery</ph> policies. If this policy is set, its value gets used if the respective more-specific policy is not set.
 
@@ -10165,7 +10165,7 @@
           'caption': '''Do nothing''',
         },
       ],
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:30-'],
       'features': {
         'dynamic_refresh': True,
@@ -10176,7 +10176,7 @@
       'id': 226,
       'caption': '''Action to take when the idle delay is reached while running on AC power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           When this policy is set, it specifies the action that <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> takes when the user remains idle for the length of time given by the idle delay, which can be configured separately.
 
@@ -10214,7 +10214,7 @@
           'caption': '''Do nothing''',
         },
       ],
-      # TODO(https://crbug.com/1016253): Remove this policy in M82.
+      # TODO(https://crbug.com/1016253): Remove this policy in M85.
       'supported_on': ['chrome_os:30-'],
       'features': {
         'dynamic_refresh': True,
@@ -10225,7 +10225,7 @@
       'id': 222,
       'caption': '''Action to take when the idle delay is reached while running on battery power''',
       'tags': [],
-      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 82. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
+      'desc': '''Note that this policy is deprecated and will be removed in <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> version 85. Please use <ph name="POWER_MANAGEMENT_IDLE_SETTINGS_POLICY_NAME">PowerManagementIdleSettings</ph> instead.
 
           When this policy is set, it specifies the action that <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> takes when the user remains idle for the length of time given by the idle delay, which can be configured separately.
 
@@ -14455,7 +14455,7 @@
     {
       'name': 'MinimumChromeVersionEnforced',
       'owners': ['snijhara@google.com'],
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:84-'],
       'device_only': True,
       'type': 'dict',
       'schema': {
@@ -14491,7 +14491,7 @@
           "warning_period" : 0,
           "eol_warning_period" : 14
         }, {
-          "chrome_version" : "82",
+          "chrome_version" : "83",
           "warning_period" : 10,
           "eol_warning_period" : 21
         }
@@ -17266,7 +17266,7 @@
         'dynamic_refresh': True,
         'per_profile': True,
       },
-      'supported_on': ['chrome.*:82-', 'chrome_os:82-'],
+      'supported_on': ['chrome.*:83-', 'chrome_os:83-'],
       'future': True,
       'caption': '''Enables <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> extension installation requests''',
       'example_value': True,
@@ -20472,7 +20472,7 @@ If this policy is left unset, privacy screen is disabled initially but can be co
       'owners': ['file://chrome/browser/notifications/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome.linux:82-'],
+      'supported_on': ['chrome.linux:83-'],
       'features': {
         'dynamic_refresh': True,
         'per_profile': True,
@@ -20521,7 +20521,7 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
           'required': ['cert_profile_id', 'key_algorithm']
         }
       },
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:83-'],
       'device_only': False,
       'features': {
         'dynamic_refresh': True,
@@ -20569,7 +20569,7 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
           'required': ['cert_profile_id', 'key_algorithm']
         }
       },
-      'supported_on': ['chrome_os:82-'],
+      'supported_on': ['chrome_os:84-'],
       'device_only': True,
       'features': {
         'dynamic_refresh': True,
@@ -20588,7 +20588,7 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
       'owners': ['file://chrome/browser/safe_browsing/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome.*:82-', 'chrome_os:82-'],
+      'supported_on': ['chrome.*:83-', 'chrome_os:83-'],
       'features': {
         'dynamic_refresh': True,
         'per_profile': True,
@@ -20604,7 +20604,7 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
       'owners': ['dlibby@microsoft.com', 'bokan@chromium.org'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome.*:82-', 'chrome_os:82-', 'android:82-'],
+      'supported_on': ['chrome.*:83-', 'chrome_os:83-', 'android:83-'],
       'features': {
         'dynamic_refresh': False,
         'per_profile': True,
