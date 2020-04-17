@@ -2,24 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/content_settings/tab_specific_content_settings.h"
+#include "components/content_settings/browser/tab_specific_content_settings.h"
 
 #include "base/macros.h"
 #include "base/optional.h"
 #include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/test/base/chrome_render_view_host_test_harness.h"
-#include "chrome/test/base/testing_profile.h"
+#include "build/build_config.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "components/security_state/core/security_state.h"
+#include "components/sync_preferences/testing_pref_service_syncable.h"
+#include "content/public/test/test_renderer_host.h"
 #include "net/cookies/canonical_cookie.h"
 #include "net/cookies/cookie_options.h"
-#include "net/cookies/parsed_cookie.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-using content::BrowserThread;
-
+namespace content_settings {
 namespace {
 
 class MockSiteDataObserver
@@ -27,10 +26,9 @@ class MockSiteDataObserver
  public:
   explicit MockSiteDataObserver(
       TabSpecificContentSettings* tab_specific_content_settings)
-      : SiteDataObserver(tab_specific_content_settings) {
-  }
+      : SiteDataObserver(tab_specific_content_settings) {}
 
-  ~MockSiteDataObserver() override {}
+  ~MockSiteDataObserver() override = default;
 
   MOCK_METHOD0(OnSiteDataAccessed, void());
 
@@ -40,12 +38,69 @@ class MockSiteDataObserver
 
 }  // namespace
 
-class TabSpecificContentSettingsTest : public ChromeRenderViewHostTestHarness {
+class TabSpecificContentSettingsTest
+    : public content::RenderViewHostTestHarness {
  public:
   void SetUp() override {
-    ChromeRenderViewHostTestHarness::SetUp();
-    TabSpecificContentSettings::CreateForWebContents(web_contents());
+    RenderViewHostTestHarness::SetUp();
+    HostContentSettingsMap::RegisterProfilePrefs(prefs_.registry());
+    security_state::RegisterProfilePrefs(prefs_.registry());
+    settings_map_ = base::MakeRefCounted<HostContentSettingsMap>(&prefs_, false,
+                                                                 false, false);
+    TabSpecificContentSettings::CreateForWebContents(
+        web_contents(), std::make_unique<TestDelegate>(this));
   }
+
+  void TearDown() override {
+    settings_map_->ShutdownOnUIThread();
+    RenderViewHostTestHarness::TearDown();
+  }
+
+  HostContentSettingsMap* settings_map() { return settings_map_.get(); }
+
+ private:
+  class TestDelegate : public TabSpecificContentSettings::Delegate {
+   public:
+    explicit TestDelegate(TabSpecificContentSettingsTest* test) : test_(test) {}
+
+    void UpdateLocationBar() override {}
+
+    void SetContentSettingRules(
+        content::RenderProcessHost* process,
+        const RendererContentSettingRules& rules) override {}
+
+    PrefService* GetPrefs() override { return &test_->prefs_; }
+
+    HostContentSettingsMap* GetSettingsMap() override {
+      return test_->settings_map_.get();
+    }
+
+    std::vector<storage::FileSystemType> GetAdditionalFileSystemTypes()
+        override {
+      return {};
+    }
+
+    bool IsMicrophoneCameraStateChanged(
+        TabSpecificContentSettings::MicrophoneCameraState
+            microphone_camera_state,
+        const std::string& media_stream_selected_audio_device,
+        const std::string& media_stream_selected_video_device) override {
+      return false;
+    }
+
+    TabSpecificContentSettings::MicrophoneCameraState GetMicrophoneCameraState()
+        override {
+      return TabSpecificContentSettings::MICROPHONE_CAMERA_NOT_ACCESSED;
+    }
+
+    void OnContentBlocked(ContentSettingsType type) override {}
+
+   private:
+    TabSpecificContentSettingsTest* test_;
+  };
+
+  sync_preferences::TestingPrefServiceSyncable prefs_;
+  scoped_refptr<HostContentSettingsMap> settings_map_;
 };
 
 TEST_F(TabSpecificContentSettingsTest, BlockedContent) {
@@ -86,12 +141,9 @@ TEST_F(TabSpecificContentSettingsTest, BlockedContent) {
           TabSpecificContentSettings::MICROPHONE_BLOCKED |
           TabSpecificContentSettings::CAMERA_ACCESSED |
           TabSpecificContentSettings::CAMERA_BLOCKED;
-  content_settings->OnMediaStreamPermissionSet(GURL("http://google.com"),
-                                               blocked_microphone_camera_state,
-                                               std::string(),
-                                               std::string(),
-                                               std::string(),
-                                               std::string());
+  content_settings->OnMediaStreamPermissionSet(
+      GURL("http://google.com"), blocked_microphone_camera_state, std::string(),
+      std::string(), std::string(), std::string());
 
   // Check that only the respective content types are affected.
 #if !defined(OS_ANDROID)
@@ -119,14 +171,13 @@ TEST_F(TabSpecificContentSettingsTest, BlockedContent) {
   EXPECT_TRUE(content_settings->IsContentBlocked(ContentSettingsType::COOKIES));
 
   // Block a javascript during a navigation.
-  content_settings->OnServiceWorkerAccessed(GURL("http://google.com"),
-                                            true, false);
+  content_settings->OnServiceWorkerAccessed(GURL("http://google.com"), true,
+                                            false);
   EXPECT_TRUE(
       content_settings->IsContentBlocked(ContentSettingsType::JAVASCRIPT));
 
   // Reset blocked content settings.
-  content_settings
-      ->ClearContentSettingsExceptForNavigationRelatedSettings();
+  content_settings->ClearContentSettingsExceptForNavigationRelatedSettings();
 #if !defined(OS_ANDROID)
   EXPECT_FALSE(content_settings->IsContentBlocked(ContentSettingsType::IMAGES));
   EXPECT_FALSE(
@@ -248,7 +299,7 @@ TEST_F(TabSpecificContentSettingsTest, SiteDataObserver) {
                                 GURL("http://google.com"), cookie_list,
                                 blocked_by_policy);
   content_settings->OnFileSystemAccessed(GURL("http://google.com"),
-                                              blocked_by_policy);
+                                         blocked_by_policy);
   content_settings->OnIndexedDBAccessed(GURL("http://google.com"),
                                         blocked_by_policy);
   content_settings->OnDomStorageAccessed(GURL("http://google.com"), true,
@@ -337,8 +388,7 @@ TEST_F(TabSpecificContentSettingsTest, IndicatorChangedOnContentSettingChange) {
       ContentSettingsType::CLIPBOARD_READ_WRITE));
 
   // Simulate the user modifying the setting.
-  HostContentSettingsMap* map =
-      HostContentSettingsMapFactory::GetForProfile(browser_context());
+  HostContentSettingsMap* map = settings_map();
 
   ContentSettingsPattern pattern =
       ContentSettingsPattern::FromURL(web_contents()->GetVisibleURL());
@@ -364,3 +414,5 @@ TEST_F(TabSpecificContentSettingsTest, IndicatorChangedOnContentSettingChange) {
   EXPECT_FALSE(content_settings->IsContentAllowed(
       ContentSettingsType::CLIPBOARD_READ_WRITE));
 }
+
+}  // namespace content_settings

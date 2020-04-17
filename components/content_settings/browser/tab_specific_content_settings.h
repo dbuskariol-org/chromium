@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CONTENT_SETTINGS_TAB_SPECIFIC_CONTENT_SETTINGS_H_
-#define CHROME_BROWSER_CONTENT_SETTINGS_TAB_SPECIFIC_CONTENT_SETTINGS_H_
+#ifndef COMPONENTS_CONTENT_SETTINGS_BROWSER_TAB_SPECIFIC_CONTENT_SETTINGS_H_
+#define COMPONENTS_CONTENT_SETTINGS_BROWSER_TAB_SPECIFIC_CONTENT_SETTINGS_H_
 
 #include <stdint.h>
 
@@ -17,7 +17,6 @@
 #include "base/observer_list.h"
 #include "base/scoped_observer.h"
 #include "build/build_config.h"
-#include "chrome/common/custom_handlers/protocol_handler.h"
 #include "components/browsing_data/content/local_shared_objects_container.h"
 #include "components/content_settings/core/browser/content_settings_observer.h"
 #include "components/content_settings/core/browser/content_settings_usages_state.h"
@@ -26,7 +25,6 @@
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
-#include "net/cookies/canonical_cookie.h"
 
 namespace content {
 class NavigationHandle;
@@ -35,6 +33,8 @@ class NavigationHandle;
 namespace url {
 class Origin;
 }  // namespace url
+
+namespace content_settings {
 
 // TODO(msramek): Media is storing their state in TabSpecificContentSettings:
 // |microphone_camera_state_| without being tied to a single content setting.
@@ -63,6 +63,47 @@ class TabSpecificContentSettings
   // Use signed int, that's what the enum flags implicitly convert to.
   typedef int32_t MicrophoneCameraState;
 
+  class Delegate {
+   public:
+    virtual ~Delegate() = default;
+
+    // Called when content settings state changes that might require updating
+    // the location bar.
+    virtual void UpdateLocationBar() = 0;
+
+    // Notifies the delegate content settings rules have changed that need to be
+    // sent to the renderer.
+    virtual void SetContentSettingRules(
+        content::RenderProcessHost* process,
+        const RendererContentSettingRules& rules) = 0;
+
+    // Gets the pref service for the current web contents.
+    virtual PrefService* GetPrefs() = 0;
+
+    // Gets the settings map for the current web contents.
+    virtual HostContentSettingsMap* GetSettingsMap() = 0;
+
+    // Gets any additional file system types which should be used when
+    // constructing a browsing_data::FileSystemHelper.
+    virtual std::vector<storage::FileSystemType>
+    GetAdditionalFileSystemTypes() = 0;
+
+    // Allows the delegate to provide additional logic for detecting state
+    // changes on top of the camera/microphone permission state.
+    virtual bool IsMicrophoneCameraStateChanged(
+        MicrophoneCameraState microphone_camera_state,
+        const std::string& media_stream_selected_audio_device,
+        const std::string& media_stream_selected_video_device) = 0;
+
+    // Allows the delegate to provide additional logic for getting microphone
+    // and camera state on top of the microphone and camera state at the last
+    // media stream request.
+    virtual MicrophoneCameraState GetMicrophoneCameraState() = 0;
+
+    // Notifies the delegate a particular content settings type was blocked.
+    virtual void OnContentBlocked(ContentSettingsType type) = 0;
+  };
+
   // Classes that want to be notified about site data events must implement
   // this abstract class and add themselves as observer to the
   // |TabSpecificContentSettings|.
@@ -90,6 +131,9 @@ class TabSpecificContentSettings
   };
 
   ~TabSpecificContentSettings() override;
+
+  static void CreateForWebContents(content::WebContents* web_contents,
+                                   std::unique_ptr<Delegate> delegate);
 
   // Returns the object given a RenderFrameHost ids.
   static TabSpecificContentSettings* GetForFrame(int render_process_id,
@@ -230,39 +274,6 @@ class TabSpecificContentSettings
     return midi_usages_state_;
   }
 
-  // Call to indicate that there is a protocol handler pending user approval.
-  void set_pending_protocol_handler(const ProtocolHandler& handler) {
-    pending_protocol_handler_ = handler;
-  }
-
-  const ProtocolHandler& pending_protocol_handler() const {
-    return pending_protocol_handler_;
-  }
-
-  void ClearPendingProtocolHandler() {
-    pending_protocol_handler_ = ProtocolHandler::EmptyProtocolHandler();
-  }
-
-  // Sets the previous protocol handler which will be replaced by the
-  // pending protocol handler.
-  void set_previous_protocol_handler(const ProtocolHandler& handler) {
-    previous_protocol_handler_ = handler;
-  }
-
-  const ProtocolHandler& previous_protocol_handler() const {
-    return previous_protocol_handler_;
-  }
-
-  // Set whether the setting for the pending handler is DEFAULT (ignore),
-  // ALLOW, or DENY.
-  void set_pending_protocol_handler_setting(ContentSetting setting) {
-    pending_protocol_handler_setting_ = setting;
-  }
-
-  ContentSetting pending_protocol_handler_setting() const {
-    return pending_protocol_handler_setting_;
-  }
-
   // Returns the |LocalSharedObjectsContainer| instances corresponding to all
   // allowed, and blocked, respectively, local shared objects like cookies,
   // local storage, ... .
@@ -296,8 +307,7 @@ class TabSpecificContentSettings
 
   // These methods are invoked on the UI thread by the static functions above.
   // Only public for tests.
-  void OnFileSystemAccessed(const GURL& url,
-                            bool blocked_by_policy);
+  void OnFileSystemAccessed(const GURL& url, bool blocked_by_policy);
   void OnIndexedDBAccessed(const GURL& url, bool blocked_by_policy);
   void OnCacheStorageAccessed(const GURL& url, bool blocked_by_policy);
   void OnServiceWorkerAccessed(const GURL& scope,
@@ -308,8 +318,7 @@ class TabSpecificContentSettings
                               const url::Origin& constructor_origin,
                               bool blocked_by_policy);
   void OnWebDatabaseAccessed(const GURL& url, bool blocked_by_policy);
-  void OnGeolocationPermissionSet(const GURL& requesting_frame,
-                                  bool allowed);
+  void OnGeolocationPermissionSet(const GURL& requesting_frame, bool allowed);
 #if defined(OS_ANDROID) || defined(OS_CHROMEOS)
   void OnProtectedMediaIdentifierPermissionSet(const GURL& requesting_frame,
                                                bool allowed);
@@ -346,10 +355,13 @@ class TabSpecificContentSettings
   // since the last navigation.
   bool HasContentSettingChangedViaPageInfo(ContentSettingsType type) const;
 
+  Delegate* delegate() { return delegate_.get(); }
+
  private:
   friend class content::WebContentsUserData<TabSpecificContentSettings>;
 
-  explicit TabSpecificContentSettings(content::WebContents* tab);
+  explicit TabSpecificContentSettings(content::WebContents* tab,
+                                      std::unique_ptr<Delegate> delegate);
 
   void MaybeSendRendererContentSettingsRules(
       content::WebContents* web_contents);
@@ -392,6 +404,8 @@ class TabSpecificContentSettings
   // Updates MIDI settings on navigation.
   void MidiDidNavigate(content::NavigationHandle* navigation_handle);
 
+  std::unique_ptr<Delegate> delegate_;
+
   // All currently registered |SiteDataObserver|s.
   base::ObserverList<SiteDataObserver>::Unchecked observer_list_;
 
@@ -414,21 +428,6 @@ class TabSpecificContentSettings
 
   // Manages information about MIDI usages in this page.
   ContentSettingsUsagesState midi_usages_state_;
-
-  // The pending protocol handler, if any. This can be set if
-  // registerProtocolHandler was invoked without user gesture.
-  // The |IsEmpty| method will be true if no protocol handler is
-  // pending registration.
-  ProtocolHandler pending_protocol_handler_;
-
-  // The previous protocol handler to be replaced by
-  // the pending_protocol_handler_, if there is one. Empty if
-  // there is no handler which would be replaced.
-  ProtocolHandler previous_protocol_handler_;
-
-  // The setting on the pending protocol handler registration. Persisted in case
-  // the user opens the bubble and makes changes multiple times.
-  ContentSetting pending_protocol_handler_setting_;
 
   // Stores whether the user can load blocked plugins on this page.
   bool load_plugins_link_enabled_;
@@ -467,4 +466,6 @@ class TabSpecificContentSettings
   DISALLOW_COPY_AND_ASSIGN(TabSpecificContentSettings);
 };
 
-#endif  // CHROME_BROWSER_CONTENT_SETTINGS_TAB_SPECIFIC_CONTENT_SETTINGS_H_
+}  // namespace content_settings
+
+#endif  // COMPONENTS_CONTENT_SETTINGS_BROWSER_TAB_SPECIFIC_CONTENT_SETTINGS_H_
