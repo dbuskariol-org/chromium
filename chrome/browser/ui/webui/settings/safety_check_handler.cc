@@ -110,13 +110,16 @@ void SafetyCheckHandler::PerformSafetyCheck() {
                                     base::UTF8ToUTF16(""));
 
   // Run safety check.
+  // Checks common to desktop, Android, and iOS are handled by
+  // safety_check::SafetyCheck.
+  safety_check_.reset(new safety_check::SafetyCheck(this));
+  safety_check_->CheckSafeBrowsing(Profile::FromWebUI(web_ui())->GetPrefs());
+
   if (!version_updater_) {
     version_updater_.reset(VersionUpdater::Create(web_ui()->GetWebContents()));
   }
   DCHECK(version_updater_);
   CheckUpdates();
-
-  CheckSafeBrowsing();
 
   if (!leak_service_) {
     leak_service_ = BulkLeakCheckServiceFactory::GetForProfile(
@@ -177,26 +180,6 @@ void SafetyCheckHandler::CheckUpdates() {
       base::Bind(&SafetyCheckHandler::OnUpdateCheckResult,
                  base::Unretained(this)),
       VersionUpdater::PromoteCallback());
-}
-
-void SafetyCheckHandler::CheckSafeBrowsing() {
-  PrefService* pref_service = Profile::FromWebUI(web_ui())->GetPrefs();
-  const PrefService::Preference* enabled_pref =
-      pref_service->FindPreference(prefs::kSafeBrowsingEnabled);
-  bool enabled = pref_service->GetBoolean(prefs::kSafeBrowsingEnabled);
-  SafeBrowsingStatus status;
-  if (enabled && pref_service->GetBoolean(prefs::kSafeBrowsingEnhanced)) {
-    status = SafeBrowsingStatus::kEnabledEnhanced;
-  } else if (enabled) {
-    status = SafeBrowsingStatus::kEnabledStandard;
-  } else if (enabled_pref->IsManaged()) {
-    status = SafeBrowsingStatus::kDisabledByAdmin;
-  } else if (enabled_pref->IsExtensionControlled()) {
-    status = SafeBrowsingStatus::kDisabledByExtension;
-  } else {
-    status = SafeBrowsingStatus::kDisabled;
-  }
-  OnSafeBrowsingCheckResult(status);
 }
 
 void SafetyCheckHandler::CheckPasswords() {
@@ -278,19 +261,6 @@ void SafetyCheckHandler::OnUpdateCheckResult(VersionUpdater::Status status,
   FireBasicSafetyCheckWebUiListener(kUpdatesEvent,
                                     static_cast<int>(update_status_),
                                     GetStringForUpdates(update_status_));
-  CompleteParentIfChildrenCompleted();
-}
-
-void SafetyCheckHandler::OnSafeBrowsingCheckResult(
-    SafetyCheckHandler::SafeBrowsingStatus status) {
-  safe_browsing_status_ = status;
-  if (safe_browsing_status_ != SafeBrowsingStatus::kChecking) {
-    base::UmaHistogramEnumeration("Settings.SafetyCheck.SafeBrowsingResult",
-                                  safe_browsing_status_);
-  }
-  FireBasicSafetyCheckWebUiListener(
-      kSafeBrowsingEvent, static_cast<int>(safe_browsing_status_),
-      GetStringForSafeBrowsing(safe_browsing_status_));
   CompleteParentIfChildrenCompleted();
 }
 
@@ -556,6 +526,19 @@ void SafetyCheckHandler::DetermineIfNoPasswordsOrSafe(
                          Compromised(0), Done(0), Total(0));
 }
 
+void SafetyCheckHandler::OnSafeBrowsingCheckResult(
+    SafetyCheckHandler::SafeBrowsingStatus status) {
+  safe_browsing_status_ = status;
+  if (safe_browsing_status_ != SafeBrowsingStatus::kChecking) {
+    base::UmaHistogramEnumeration("Settings.SafetyCheck.SafeBrowsingResult",
+                                  safe_browsing_status_);
+  }
+  FireBasicSafetyCheckWebUiListener(
+      kSafeBrowsingEvent, static_cast<int>(safe_browsing_status_),
+      GetStringForSafeBrowsing(safe_browsing_status_));
+  CompleteParentIfChildrenCompleted();
+}
+
 void SafetyCheckHandler::OnStateChanged(
     password_manager::BulkLeakCheckService::State state) {
   using password_manager::BulkLeakCheckService;
@@ -631,6 +614,8 @@ void SafetyCheckHandler::OnJavascriptDisallowed() {
   // Destroy the version updater to prevent getting a callback and firing a
   // WebUI event, which would cause a crash.
   version_updater_.reset();
+  // Stop observing safety check events.
+  safety_check_.reset(nullptr);
 }
 
 void SafetyCheckHandler::RegisterMessages() {
