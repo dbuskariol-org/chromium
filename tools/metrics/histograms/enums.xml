@@ -33491,6 +33491,9 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
 </enum>
 
 <enum name="IdleDeadlineCallbackType">
+  <obsolete>
+    Removed April 2020.
+  </obsolete>
   <int value="0" label="CalledWhenIdle"/>
   <int value="1" label="CalledByTimeout"/>
 </enum>
