@@ -164,12 +164,11 @@ void SafetyCheckHandler::HandlePerformSafetyCheck(const base::ListValue* args) {
 void SafetyCheckHandler::HandleGetParentRanDisplayString(
     const base::ListValue* args) {
   const base::Value* callback_id;
-  double timestampRanDouble;
   CHECK(args->Get(0, &callback_id));
-  CHECK(args->GetDouble(1, &timestampRanDouble));
 
   ResolveJavascriptCallback(
-      *callback_id, base::Value(GetStringForParentRan(timestampRanDouble)));
+      *callback_id,
+      base::Value(GetStringForParentRan(safety_check_completion_time_)));
 }
 
 void SafetyCheckHandler::CheckUpdates() {
@@ -492,47 +491,48 @@ base::string16 SafetyCheckHandler::GetStringForExtensions(
   }
 }
 
-base::string16 SafetyCheckHandler::GetStringForParentRan(double timestamp_ran) {
-  return SafetyCheckHandler::GetStringForParentRan(timestamp_ran,
+base::string16 SafetyCheckHandler::GetStringForParentRan(
+    base::Time safety_check_completion_time) {
+  return SafetyCheckHandler::GetStringForParentRan(safety_check_completion_time,
                                                    base::Time::Now());
 }
 
 base::string16 SafetyCheckHandler::GetStringForParentRan(
-    double timestamp_ran,
+    base::Time safety_check_completion_time,
     base::Time system_time) {
-  const base::Time timeRan = base::Time::FromJsTime(timestamp_ran);
-  base::Time::Exploded timeRanExploded;
-  timeRan.LocalExplode(&timeRanExploded);
+  base::Time::Exploded completion_time_exploded;
+  safety_check_completion_time.LocalExplode(&completion_time_exploded);
 
-  base::Time::Exploded systemTimeExploded;
-  system_time.LocalExplode(&systemTimeExploded);
+  base::Time::Exploded system_time_exploded;
+  system_time.LocalExplode(&system_time_exploded);
 
-  const base::Time timeYesterday = system_time - base::TimeDelta::FromDays(1);
-  base::Time::Exploded timeYesterdayExploded;
-  timeYesterday.LocalExplode(&timeYesterdayExploded);
+  const base::Time time_yesterday = system_time - base::TimeDelta::FromDays(1);
+  base::Time::Exploded time_yesterday_exploded;
+  time_yesterday.LocalExplode(&time_yesterday_exploded);
 
-  const auto timeDiff = system_time - timeRan;
-  if (timeRanExploded.year == systemTimeExploded.year &&
-      timeRanExploded.month == systemTimeExploded.month &&
-      timeRanExploded.day_of_month == systemTimeExploded.day_of_month) {
+  const auto time_diff = system_time - safety_check_completion_time;
+  if (completion_time_exploded.year == system_time_exploded.year &&
+      completion_time_exploded.month == system_time_exploded.month &&
+      completion_time_exploded.day_of_month ==
+          system_time_exploded.day_of_month) {
     // Safety check ran today.
-    const int timeDiffInMinutes = timeDiff.InMinutes();
-    if (timeDiffInMinutes == 0) {
+    const int time_diff_in_mins = time_diff.InMinutes();
+    if (time_diff_in_mins == 0) {
       return l10n_util::GetStringUTF16(
           IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER);
-    } else if (timeDiffInMinutes < 60) {
+    } else if (time_diff_in_mins < 60) {
       return l10n_util::GetPluralStringFUTF16(
           IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_MINS,
-          timeDiffInMinutes);
+          time_diff_in_mins);
     } else {
       return l10n_util::GetPluralStringFUTF16(
           IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_HOURS,
-          timeDiffInMinutes / 60);
+          time_diff_in_mins / 60);
     }
-  } else if (timeRanExploded.year == timeYesterdayExploded.year &&
-             timeRanExploded.month == timeYesterdayExploded.month &&
-             timeRanExploded.day_of_month ==
-                 timeYesterdayExploded.day_of_month) {
+  } else if (completion_time_exploded.year == time_yesterday_exploded.year &&
+             completion_time_exploded.month == time_yesterday_exploded.month &&
+             completion_time_exploded.day_of_month ==
+                 time_yesterday_exploded.day_of_month) {
     // Safety check ran yesterday.
     return l10n_util::GetStringUTF16(
         IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_YESTERDAY);
@@ -541,10 +541,10 @@ base::string16 SafetyCheckHandler::GetStringForParentRan(
     // TODO(crbug.com/1015841): While a minor issue, this is not be the ideal
     // way to calculate the days passed since safety check ran. For example,
     // <48 h might still be 2 days ago.
-    const int timeDiffInDays = timeDiff.InDays();
+    const int time_diff_in_days = time_diff.InDays();
     return l10n_util::GetPluralStringFUTF16(
         IDS_SETTINGS_SAFETY_CHECK_PARENT_PRIMARY_LABEL_AFTER_DAYS,
-        timeDiffInDays);
+        time_diff_in_days);
   }
 }
 
@@ -651,11 +651,10 @@ void SafetyCheckHandler::CompleteParentIfChildrenCompleted() {
       passwords_status_ != PasswordsStatus::kChecking &&
       safe_browsing_status_ != SafeBrowsingStatus::kChecking &&
       extensions_status_ != ExtensionsStatus::kChecking) {
-    // TODO(crbug.com/1015841): Minor improvement: also store the timestamp when
-    // safety check completed in the backend instead of in the frontend. This
-    // allows computing the safety check parent ran string on all platforms
-    // without the frontend handling the timestamp.
     parent_status_ = ParentStatus::kAfter;
+    // Remember when safety check completed.
+    safety_check_completion_time_ = base::Time::Now();
+    // Update UI.
     FireBasicSafetyCheckWebUiListener(kParentEvent,
                                       static_cast<int>(parent_status_),
                                       GetStringForParent(parent_status_));

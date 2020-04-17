@@ -103,9 +103,9 @@ class SafetyCheckHandler
 
   // Constructs the 'safety check ran' display string by how long ago safety
   // check ran.
-  base::string16 GetStringForParentRan(double timestamp_ran);
-  base::string16 GetStringForParentRan(double timestamp_ran,
-                                       base::Time systemTime);
+  base::string16 GetStringForParentRan(base::Time safety_check_completion_time);
+  base::string16 GetStringForParentRan(base::Time safety_check_completion_time,
+                                       base::Time system_time);
 
  protected:
   SafetyCheckHandler(std::unique_ptr<VersionUpdater> version_updater,
@@ -221,6 +221,9 @@ class SafetyCheckHandler
   PasswordsStatus passwords_status_ = PasswordsStatus::kChecking;
   SafeBrowsingStatus safe_browsing_status_ = SafeBrowsingStatus::kChecking;
   ExtensionsStatus extensions_status_ = ExtensionsStatus::kChecking;
+
+  // System time when safety check completed.
+  base::Time safety_check_completion_time_;
 
   std::unique_ptr<VersionUpdater> version_updater_;
   password_manager::BulkLeakCheckService* leak_service_ = nullptr;
