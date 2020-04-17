@@ -653,11 +653,6 @@ java_cpp_enum("sync_user_settings_enums_java") {
   sources = [ "//components/sync/driver/sync_user_settings.h" ]
 }
 
-# TODO(crbug.com/1041473): Remove this when all usages are migrated.
-java_group("chrome_android_java_switches") {
-  deps = [ "//chrome/browser/flags:java" ]
-}
-
 proto_java_library("partner_location_descriptor_proto_java") {
   proto_path = "java/src/org/chromium/chrome/browser/omnibox/geo"
   sources = [ "$proto_path/partner_location_descriptor.proto" ]
