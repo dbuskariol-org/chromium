@@ -110,6 +110,11 @@ const char kUseMessagesStagingUrlDescription[] =
     "Use the staging server as part of the \"Messages\" feature under "
     "\"Connected Devices\" settings.";
 
+const char kUseCustomMessagesDomainName[] = "Use custom Messages domain";
+const char kUseCustomMessagesDomainDescription[] =
+    "Use a custom URL as part of the \"Messages\" feature under "
+    "\"Connected Devices\" settings.";
+
 const char kAndroidPictureInPictureAPIName[] =
     "Picture-in-Picture Web API for Android";
 const char kAndroidPictureInPictureAPIDescription[] =
