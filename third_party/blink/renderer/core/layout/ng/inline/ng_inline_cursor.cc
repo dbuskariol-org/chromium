@@ -221,8 +221,7 @@ bool NGInlineCursorPosition::IsGeneratedTextType() const {
   if (paint_fragment_) {
     if (auto* text_fragment = DynamicTo<NGPhysicalTextFragment>(
             paint_fragment_->PhysicalFragment())) {
-      return text_fragment->TextType() ==
-             NGPhysicalTextFragment::kGeneratedText;
+      return text_fragment->TextType() == NGTextType::kGenerated;
     }
     return false;
   }
