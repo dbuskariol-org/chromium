@@ -22944,7 +22944,7 @@ Called by update_extension_histograms.py.-->
   <int value="39" label="kAudio"/>
   <int value="40" label="kFavicon"/>
   <int value="41" label="kMusicManagerPrivate"/>
-  <int value="42" label="kWebConnectable"/>
+  <int value="42" label="kDeleted_WebConnectable"/>
   <int value="43" label="kActivityLogPrivate"/>
   <int value="44" label="kBluetoothDevices"/>
   <int value="45" label="kDownloadsOpen"/>
