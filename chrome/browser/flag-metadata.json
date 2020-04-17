@@ -3885,16 +3885,6 @@
     "expiry_milestone":  82
   },
   {
-    "name": "temporary-unexpire-flags-m78",
-    "owners": [ "ellyjones", "flags-dev" ],
-    "expiry_milestone": 81
-  },
-  {
-    "name": "temporary-unexpire-flags-m80",
-    "owners": [ "ellyjones", "flags-dev" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "terminal-system-app",
     "owners": [ "joelhockey", "benwells", "//chrome/browser/chromeos/guest_os/OWNERS" ],
     "expiry_milestone": 85
