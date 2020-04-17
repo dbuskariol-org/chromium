@@ -3986,11 +3986,12 @@
             ],
             "experiments": [
                 {
-                    "name": "PartitionConnectionsAndSSLSessionsAndQuic",
+                    "name": "Enabled4",
                     "enable_features": [
                         "PartitionConnectionsByNetworkIsolationKey",
                         "PartitionHttpServerPropertiesByNetworkIsolationKey",
-                        "PartitionSSLSessionsByNetworkIsolationKey"
+                        "PartitionSSLSessionsByNetworkIsolationKey",
+                        "SplitHostCacheByNetworkIsolationKey"
                     ]
                 }
             ]
