@@ -65,7 +65,7 @@
 <translation id="1076698951459398590">थीम सुरू करा</translation>
 <translation id="1076818208934827215">Microsoft Internet Explorer</translation>
 <translation id="1079766198702302550">कॅमेरा ॲक्सेस नेहमी ब्लॉक करा</translation>
-<translation id="1082398631555931481"><ph name="THIRD_PARTY_TOOL_NAME" /> तुमच्या Chrome सेटिंग्ज त्यांच्या मूळ डीफॉल्टवर रिस्टोअर करू इच्छित आहे. हे तुमचे मुख्यपेज, नवीन टॅब पेज आणि शोध इंजिन रीसेट करेल, तुमच्या एक्स्टेंशनांना अक्षम करेल आणि सर्व टॅबना अनपिन करेल. ते कुकीज, सामग्री आणि साइट डेटासारखा इतर तात्पुरता आणि कॅश केलेला डेटा देखील साफ करेल.</translation>
+<translation id="1082398631555931481"><ph name="THIRD_PARTY_TOOL_NAME" /> तुमच्या Chrome सेटिंग्ज त्यांच्या मूळ डीफॉल्टवर रिस्टोअर करू इच्छित आहे. हे तुमचे मुख्यपेज, नवीन टॅब पेज आणि शोध इंजिन रीसेट करेल, तुमच्या एक्स्टेंशनांना अक्षम करेल आणि सर्व टॅबना अनपिन करेल. ते कुकीज, सामग्री आणि साइट डेटासारखा इतर तात्पुरता आणि कॅशे केलेला डेटा देखील साफ करेल.</translation>
 <translation id="1084096383128641877">हा पासवर्ड काढल्याने तुमचे <ph name="DOMAIN" /> वरील खाते हटवले जाणार नाही. तुमचे <ph name="DOMAIN_LINK" /> वरील खाते इतरांपासून सुरक्षित ठेवण्यासाठी तुमचा पासवर्ड बदला किंवा तुमचे खाते हटवा.</translation>
 <translation id="1084824384139382525">लिंक पत्ता कॉपी करा</translation>
 <translation id="1085697365578766383">व्हर्च्युअल मशीन सुरू करताना एरर आली. कृपया पुन्हा प्रयत्न करा.</translation>
@@ -442,7 +442,7 @@
 <translation id="1588870296199743671">यासह लिंक उघडा...</translation>
 <translation id="1589055389569595240">शुद्धलेखन आणि व्याकरण दर्शवा</translation>
 <translation id="1593594475886691512">स्वरूपन करत आहे...</translation>
-<translation id="159359590073980872">इमेज कॅशे</translation>
+<translation id="159359590073980872">इमेज कॅशे </translation>
 <translation id="1593926297800505364">पेमेंट पद्धत सेव्ह करा</translation>
 <translation id="1595492813686795610">Linux अपग्रेड होत आहे</translation>
 <translation id="1596286373007273895">उपलब्ध आहे</translation>
@@ -1474,7 +1474,7 @@
 <translation id="2923234477033317484">हे खाते काढून टाका</translation>
 <translation id="2925054096976782003">सुरक्षितता मंजुरीसाठी तुमची संस्था हा पेस्ट केलेला डेटा स्कॅन करत आहे.</translation>
 <translation id="2926085873880284723">डीफॉल्ट शॉर्टकट रिस्टोअर करा</translation>
-<translation id="2927017729816812676">कॅश स्टोरेज</translation>
+<translation id="2927017729816812676">कॅशे स्टोरेज</translation>
 <translation id="2931157624143513983">प्रिंट करण्यायोग्य भागात बसवा</translation>
 <translation id="2932085390869194046">पासवर्ड सुचवा...</translation>
 <translation id="2932330436172705843"><ph name="PROFILE_DISPLAY_NAME" /> (मुलांसाठी खाते)</translation>
@@ -1523,7 +1523,7 @@
 <translation id="2996286169319737844">डेटा तुमच्या सिंक पासफ्रेजसह एंक्रिप्ट केला आहे. यामध्ये Google Pay वरील पेमेंट पद्धतींचा आणि पत्त्यांचा समावेश नसतो.</translation>
 <translation id="2996722619877761919">लांब कडेवर फ्लिप करा</translation>
 <translation id="3003144360685731741">प्राधान्यीकृत नेटवर्क</translation>
-<translation id="3003623123441819449">CSS कॅशे</translation>
+<translation id="3003623123441819449">CSS कॅशे </translation>
 <translation id="3003828226041301643">डिव्हाइस डोमेनशी जोडू शकत नाही. तुम्हाला डिव्हाइस जोडण्याचे विशेषाधिकार आहेत याची खात्री करण्यासाठी तुमचे खाते तपासा.</translation>
 <translation id="3003967365858406397">तुमचे <ph name="PHONE_NAME" /> एक खाजगी वाय-फाय कनेक्शन तयार करेल.</translation>
 <translation id="3004391367407090544">कृपया नंतर परत या</translation>
@@ -1633,7 +1633,7 @@
 <translation id="3150927491400159470">कठीण रीलोड</translation>
 <translation id="315116470104423982">मोबाइल डेटा</translation>
 <translation id="3151539355209957474">सुरू वेळ</translation>
-<translation id="3151562827395986343">इतिहास, कुकी, कॅशे आणि बरेच काही साफ करा</translation>
+<translation id="3151562827395986343">इतिहास, कुकी, कॅशे  आणि बरेच काही साफ करा</translation>
 <translation id="3151786313568798007">अभिमुखता</translation>
 <translation id="3154351730702813399">डिव्हाइस प्रशासक कदाचित आपल्या ब्राउझिंग क्रियाकलापाचे परीक्षण करू शकतो.</translation>
 <translation id="3154429428035006212">एका महिन्यापेक्षा जास्त ऑफलाइन</translation>
@@ -1661,7 +1661,7 @@
 <translation id="3188257591659621405">माझ्या फायली</translation>
 <translation id="3188465121994729530">हलविण्याची सरासरी</translation>
 <translation id="3190558889382726167">पासवर्ड सेव्ह केला</translation>
-<translation id="3192947282887913208">ऑडिओ फायली</translation>
+<translation id="3192947282887913208">ऑडिओ फाइल</translation>
 <translation id="3199127022143353223">सर्व्हर</translation>
 <translation id="3200941271596533635">वाचक मोड टॉगल करा</translation>
 <translation id="3201306578844503970">नेटवर्क एररमुळे व्हर्च्युअल मशीन इंस्टॉल करता आले नाही. कृपया पुन्हा प्रयत्न करा किंवा तुमच्या संस्थेच्या डिव्हाइस अ‍ॅडमिनिस्ट्रेटरशी संपर्क साधा. एरर कोड: <ph name="ERROR_CODE" />.</translation>
@@ -2792,7 +2792,7 @@
 <translation id="4694024090038830733">प्रिंटर कॉन्फिगरेशन ॲडमिनिस्ट्रेटरद्वारे हाताळले जाते.</translation>
 <translation id="4694604912444486114">माकड</translation>
 <translation id="4697551882387947560">ब्राउझिंग सेशन समाप्त होते तेव्हा</translation>
-<translation id="4699172675775169585">कॅश   इमेज आणि फायली</translation>
+<translation id="4699172675775169585">कॅशे   इमेज आणि फायली</translation>
 <translation id="4699357559218762027">(स्वयं-लाँच केलेले)</translation>
 <translation id="470074695271471509">पूर्ण करण्यासाठी साइन आइट करायचे आहे का?</translation>
 <translation id="4701025263201366865">पालक साइन इन</translation>
@@ -3243,7 +3243,7 @@
 <translation id="5331069282670671859">तुमच्याकडे या श्रेणीतील कोणतीही प्रमाणपत्रे नाहीत</translation>
 <translation id="5331425616433531170">"<ph name="CHROME_EXTENSION_NAME" />" जोडू इच्छिते</translation>
 <translation id="5331975486040154427">USB-C डिव्‍हाइस (डाव्या बाजूचे मागील पोर्ट)</translation>
-<translation id="5334142896108694079">स्क्रिप्ट कॅशे</translation>
+<translation id="5334142896108694079">स्क्रिप्ट कॅशे </translation>
 <translation id="5336126339807372270">कोणत्याही साइटना USB डिव्हाइस ॲक्सेस करू देऊ नका</translation>
 <translation id="5336688142483283574">हे पेज तुमच्या इतिहास आणि <ph name="SEARCH_ENGINE" /> ॲक्टिव्हिटी मधून देखील काढून टाकले जाईल.</translation>
 <translation id="5337771866151525739">एका तृतीय पक्षाद्वारे इंस्टॉल.</translation>
@@ -3420,7 +3420,7 @@
 <translation id="556321030400250233">स्थानिक किंवा शेअर केलेली फाइल</translation>
 <translation id="5563234215388768762">Google वर शोधा किंवा URL टाइप करा</translation>
 <translation id="5565735124758917034">सक्रिय</translation>
-<translation id="5567989639534621706">ॲप्लिकेशन कॅश</translation>
+<translation id="5567989639534621706">ॲप्लिकेशन कॅशे</translation>
 <translation id="5568069709869097550">साइन इन करणे शक्य नाही</translation>
 <translation id="5572851009514199876">कृपया सुरुवात करा आणि Chrome मध्‍ये साइन इन करा जेणेकरून तुम्हाला या साइट ॲक्सेस करण्‍याची परवानगी  आहे किंवा नाही ते Chrome तपासू शकेल.</translation>
 <translation id="5575473780076478375">गुप्त एक्स्टेंशन: <ph name="EXTENSION_NAME" /></translation>
@@ -3867,7 +3867,7 @@
 <translation id="6154697846084421647">सध्या साइन इन </translation>
 <translation id="6155141482566063812">बॅकग्राउंड टॅब तुमची स्क्रीन शेअर करत आहे</translation>
 <translation id="6156323911414505561">बुकमार्क बार दर्शवा</translation>
-<translation id="6156863943908443225">स्क्रिप्ट कॅशे</translation>
+<translation id="6156863943908443225">स्क्रिप्ट कॅशे </translation>
 <translation id="6156960295318603523">भाषा सेटिंग्ज</translation>
 <translation id="6160625263637492097">ऑथेंटिकेशनसाठी प्रमाणपत्रे द्या</translation>
 <translation id="6163363155248589649">&amp;सामान्य</translation>
@@ -5462,7 +5462,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="8274924778568117936">अपडेट पूर्ण होईपर्यंत तुमचे <ph name="DEVICE_TYPE" /> बंद करू नका. इंस्‍टॉलेशन पूर्ण झाल्‍यानंतर तुमचे <ph name="DEVICE_TYPE" /> पुन्‍हा सुरू हाेईल .</translation>
 <translation id="8275038454117074363">इंपोर्ट</translation>
 <translation id="8275080796245127762">तुमच्या डिव्हाइसवरून कॉल करा</translation>
-<translation id="8276560076771292512">कॅशे आणि हार्ड रीलोड रिकामे करा</translation>
+<translation id="8276560076771292512">कॅशे  आणि हार्ड रीलोड रिकामे करा</translation>
 <translation id="8281886186245836920">वगळा</translation>
 <translation id="8283475148136688298">"<ph name="DEVICE_NAME" />" शी कनेक्ट करताना ऑथेंटिकेशन कोड नाकारण्यात आला.</translation>
 <translation id="8284279544186306258">सर्व <ph name="WEBSITE_1" /> साइट</translation>
@@ -5642,7 +5642,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="8543556556237226809">प्रश्न आहेत? तुमच्या प्रोफाइलचे निरीक्षण करणाऱ्या व्यक्तीशी संपर्क साधा.</translation>
 <translation id="8545575359873600875">क्षमस्व, तुमचा पासवर्ड सत्यापित केला जाऊ शकला नाही. या पर्यवेक्षित वापरकर्त्याच्या व्यवस्थापकाने अलीकडे पासवर्ड बदलला असू शकतो. तसे असल्यास, तुम्ही पुढील वेळी साइन इन कराल तेव्हा नवीन पासवर्ड लागू केला जाईल. तुमचा जुना पासवर्ड वापरून पहा.</translation>
 <translation id="8546186510985480118">डिव्हाइसवर स्थान कमी आहे</translation>
-<translation id="8546306075665861288">इमेज कॅशे</translation>
+<translation id="8546306075665861288">इमेज कॅशे </translation>
 <translation id="8546541260734613940">[*.]example.com</translation>
 <translation id="854655314928502177">वेब प्रॉक्सी स्वयं शोध URL:</translation>
 <translation id="8546930481464505581">स्पर्श बार कस्टमाइझ करा</translation>
@@ -5694,7 +5694,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="8621979332865976405">तुमची संपूर्ण स्क्रीन शेअर करा</translation>
 <translation id="862542460444371744">&amp;विस्तार</translation>
 <translation id="862727964348362408">निलंबित</translation>
-<translation id="862750493060684461">CSS कॅशे</translation>
+<translation id="862750493060684461">CSS कॅशे </translation>
 <translation id="8627706565932943526">संकालन एरर</translation>
 <translation id="8627795981664801467">केवळ सुरक्षित कनेक्शन</translation>
 <translation id="8630903300770275248">पर्यवेक्षित वापरकर्ता इंपोर्ट करा</translation>
@@ -6202,7 +6202,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="967624055006145463">डेटा स्टोअर केला</translation>
 <translation id="968000525894980488">Google Play सेवा चालू करा.</translation>
 <translation id="968037381421390582">पेस्ट करा आणि “<ph name="SEARCH_TERMS" />” शोधा</translation>
-<translation id="968174221497644223">ॲप्लिकेशन कॅशे</translation>
+<translation id="968174221497644223">ॲप्लिकेशन कॅशे </translation>
 <translation id="969096075394517431">भाषा बदला</translation>
 <translation id="970047733946999531">{NUM_TABS,plural, =1{1 टॅब}other{# टॅब}}</translation>
 <translation id="971774202801778802">बुकमार्क URL</translation>

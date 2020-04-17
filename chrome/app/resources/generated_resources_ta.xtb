@@ -1880,6 +1880,7 @@
 <translation id="3479552764303398839">இப்பொழுது இல்லை</translation>
 <translation id="3479685872808224578">பிரிண்ட் சேவையகத்தைக் கண்டறிய முடியவில்லை. முகவரியைச் சரிபார்த்துவிட்டு மீண்டும் முயலவும்.</translation>
 <translation id="3481268647794498892"><ph name="COUNTDOWN_SECONDS" /> விநாடிகளில் <ph name="ALTERNATIVE_BROWSER_NAME" /> உலாவியில் திறக்கும்</translation>
+<translation id="3482719661246593752"><ph name="ORIGIN" /> தளத்தால் பின்வரும் கோப்புகளைப் பார்க்க முடியும்:</translation>
 <translation id="3484273680291419129">தீங்கிழைக்கும் மென்பொருளை அகற்றுகிறது...</translation>
 <translation id="3484869148456018791">புதிய சான்றிதழைப் பெறு</translation>
 <translation id="3487007233252413104">அநாமதேய செயல்பாடு</translation>
@@ -1941,6 +1942,7 @@
 <translation id="3564848315152754834">USB பாதுகாப்பு விசை</translation>
 <translation id="3566721612727112615">தளங்கள் எதுவும் சேர்க்கப்படவில்லை</translation>
 <translation id="3569382839528428029">உங்கள் திரையை <ph name="APP_NAME" /> பகிர்வதற்கு விரும்புகிறீர்களா?</translation>
+<translation id="3569682580018832495"><ph name="ORIGIN" /> தளத்தால் பின்வரும் கோப்புகளையும் கோப்புறைகளையும் பார்க்க முடியும்</translation>
 <translation id="3571734092741541777">அமை</translation>
 <translation id="3574210789297084292">உள்நுழைக</translation>
 <translation id="3574917942258583917">எனினும் மறைநிலைப் பயன்முறையை விட்டு வெளியேறவா?</translation>
@@ -1950,6 +1952,7 @@
 <translation id="3578594933904494462">இந்தத் தாவலில் உள்ள உள்ளடக்கமானது பகிரப்படுகிறது.</translation>
 <translation id="357886715122934472">நீங்கள் உரிமையாளராக உள்ள குழுவில் &lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt;, &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; பிரிண்டரைப் பகிர விரும்புகிறார்: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. நீங்கள் ஏற்றுக்கொண்டால், எல்லா குழு உறுப்பினர்களாலும் பிரிண்டர் மூலம் அச்சிட முடியும்.</translation>
 <translation id="357889014807611375">கட்டண வைஃபை</translation>
+<translation id="3582057310199111521">மோசடிசெய்யும் தளத்தில் உள்ளிடப்பட்டதால் தரவு மீறலுக்கு உள்ளானது</translation>
 <translation id="3584169441612580296">உங்கள் கம்ப்யூட்டரிலிருந்து படங்கள், இசை மற்றும் பிற மீடியாவைப் படிக்கலாம், மாற்றலாம்</translation>
 <translation id="3586806079541226322">இந்தக் கோப்பைத் திறக்க முடியாது</translation>
 <translation id="3586931643579894722">விவரங்களை மறை</translation>
@@ -3086,6 +3089,7 @@
 <translation id="5117930984404104619">பார்வையிட்ட URLகள் உள்ளிட்ட பிற நீட்டிப்புகளின் செயல்பாட்டைக் கண்காணி</translation>
 <translation id="5119173345047096771">Mozilla Firefox</translation>
 <translation id="5121130586824819730">உங்கள் ஹார்டு டிஸ்க் நிரம்பியது. மற்றொரு இடத்தில் சேமிக்கவும் அல்லது ஹார்டு டிஸ்க்கில் கூடுதல் அறைகளை உருவாக்கவும்.</translation>
+<translation id="5122384452788334261">உங்கள் சாதனத்தில் சேமிப்பிடம் குறைவாக உள்ளது. Plugin VMமைப் பயன்படுத்துவதற்குக் குறைந்தபட்சம் <ph name="RECOMMENDED_SPACE" /> சேமிப்பிடத்தைக் காலியாக வைத்திருக்குமாறு பரிந்துரைக்கிறோம். சேமிப்பிடத்தைக் காலியாக்க, சாதனச் சேமிப்பகத்தில் இருந்து கோப்புகளை நீக்கவும்.</translation>
 <translation id="5123433949759960244">கூடைப்பந்து</translation>
 <translation id="5125751979347152379">செல்லுபடியாகாத URL.</translation>
 <translation id="5126611267288187364">மாற்றங்களைக் காட்டு</translation>
@@ -5175,6 +5179,7 @@
 <translation id="7915471803647590281">மறுமொழி அனுப்புவதற்கு முன், என்ன நடந்துகொண்டிருக்கிறது என்பதை எங்களிடம் தெரியப்படுத்துங்கள்.</translation>
 <translation id="7918257978052780342">பதிவுபெறுக</translation>
 <translation id="7919210519031517829"><ph name="DURATION" />வி</translation>
+<translation id="7920363873148656176"><ph name="ORIGIN" /> தளத்தால் <ph name="FILENAME" /> கோப்பைப் பார்க்க முடியும்</translation>
 <translation id="7924358170328001543">போர்ட்டை அனுப்புவதில் பிழை</translation>
 <translation id="792514962475806987">டாக் செய்யப்பட்ட பெரிதாக்கியின் அளவை மாற்றுவதற்கான நிலை:</translation>
 <translation id="7925247922861151263">AAA சோதனை தோல்வியுற்றது</translation>
@@ -5336,6 +5341,7 @@
 <translation id="8118488170956489476">உங்கள் நிறுவனம் உங்கள் <ph name="BEGIN_LINK" />உலாவியை நிர்வகிக்கிறது<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">உங்கள் பதிவிறக்கங்களை நிர்வகிக்கவும்</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />, <ph name="RECENT_PERMISSIONS_CHANGE_1" />, <ph name="RECENT_PERMISSIONS_CHANGE_2" />, மேலும் பல</translation>
+<translation id="8120715633374652536">உங்கள் சாதனத்தில் சேமிப்பிடம் குறைவாக உள்ளது. Plugin VMமைப் பயன்படுத்துவதற்குக் குறைந்தபட்சம் <ph name="MINIMUM_SPACE" /> சேமிப்பிடம் தேவை, எனினும் <ph name="RECOMMENDED_SPACE" />க்கு மேல் காலியாக வைத்திருக்குமாறு பரிந்துரைக்கிறோம். சேமிப்பிடத்தைக் காலியாக்க, சாதனச் சேமிப்பகத்தில் இருந்து கோப்புகளை நீக்கவும்.</translation>
 <translation id="8123590694679414600"><ph name="TIME" /> அன்று உங்கள் ஒத்திசைவுக் கடவுச்சொற்றொடர் மூலம் தரவு என்க்ரிப்ட் செய்யப்பட்டது.
           இதில் Google Payயிலுள்ள கட்டண முறைகளும் முகவரிகளும் சேர்க்கப்படவில்லை.</translation>
 <translation id="81238879832906896">மஞ்சள் வெள்ளை மலர்</translation>
