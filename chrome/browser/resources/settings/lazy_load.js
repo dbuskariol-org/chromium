@@ -37,7 +37,7 @@ import 'chrome://resources/cr_components/certificate_manager/certificate_manager
 
 // Sections
 import './a11y_page/a11y_page.m.js';
-import './downloads_page/downloads_page.m.js';
+import './downloads_page/downloads_page.js';
 import './languages_page/languages_page.m.js';
 import './printing_page/printing_page.js';
 import './reset_page/reset_page.js';
@@ -63,7 +63,7 @@ export {ChromeCleanupProxyImpl} from './chrome_cleanup_page/chrome_cleanup_proxy
 export {CHROME_CLEANUP_DEFAULT_ITEMS_TO_SHOW} from './chrome_cleanup_page/items_to_remove_list.m.js';
 // </if>
 export {ClearBrowsingDataBrowserProxyImpl} from './clear_browsing_data_dialog/clear_browsing_data_browser_proxy.m.js';
-export {DownloadsBrowserProxyImpl} from './downloads_page/downloads_browser_proxy.m.js';
+export {DownloadsBrowserProxyImpl} from './downloads_page/downloads_browser_proxy.js';
 // <if expr="_google_chrome and is_win">
 export {IncompatibleApplication, IncompatibleApplicationsBrowserProxyImpl} from './incompatible_applications_page/incompatible_applications_browser_proxy.m.js';
 // </if>

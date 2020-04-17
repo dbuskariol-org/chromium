@@ -240,13 +240,12 @@
              use_base_dir="false"
              compress="false" type="BINDATA" />
   </if>
-  <include name="IDR_SETTINGS_DOWNLOADS_BROWSER_PROXY_M_JS"
-           file="${root_gen_dir}/chrome/browser/resources/settings/downloads_page/downloads_browser_proxy.m.js"
-           use_base_dir="false"
+  <include name="IDR_SETTINGS_DOWNLOADS_PAGE_DOWNLOADS_BROWSER_PROXY_JS"
+           file="downloads_page/downloads_browser_proxy.js"
            compress="false" type="BINDATA"
            preprocess="true" />
-  <include name="IDR_SETTINGS_DOWNLOADS_PAGE_M_JS"
-           file="${root_gen_dir}/chrome/browser/resources/settings/downloads_page/downloads_page.m.js"
+  <include name="IDR_SETTINGS_DOWNLOADS_PAGE_DOWNLOADS_PAGE_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/downloads_page/downloads_page.js"
            use_base_dir="false"
            compress="false" type="BINDATA"
            preprocess="true" />
