@@ -994,7 +994,8 @@
                   'third_party/blink/renderer/bindings/core/v8/origin_trial_features',
     },
     'feed': {
-      'filepath': 'chrome/browser/android/feed/|' \
+      'filepath': 'chrome/android/feed|' \
+                  'chrome/browser/android/feed/|' \
                   'components/feed/'
     },
     'feedback': {
@@ -2462,7 +2463,8 @@
              'dewittj+watch@chromium.org',
              'dimich+watch@chromium.org',
              'harringtond+watch@chromium.org',
-             'petewil+watch@chromium.org'],
+             'petewil+watch@chromium.org',
+             'iwells+watch@chromium.org'],
     'feedback': ['cros-monitoring-forensics+feedback@google.com'],
     'fileapi': ['kinuko+fileapi@chromium.org',
                 'nhiroki@chromium.org'],
