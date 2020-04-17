@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+<title>CSS Grid: shrink-to-fit behavior on grid containers</title>
+<link rel="author" title="Javier Fernandez" href="mailto:jfernandez@igalia.org">
+<link rel="help" href="https://drafts.csswg.org/css-grid/#intrinsic-sizes">
+<link rel="help" href="https://crbug.com/234204">
+<meta name="assert" content="This test checks that the shrink-to-fit behavior is applied to the float and out-of-flow positioned grid containers.">
 <style>
 .grid {
     display: grid;
@@ -49,10 +54,11 @@
     grid-row: 2;
 }
 </style>
-<script src="../../resources/check-layout.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
 <body onload="checkLayout('.grid')">
 
-<p>This test checks that the shrink-to-fit behavior is applied to the float and out-of-flow positioned elements.</p>
 <p>The following grids should be 400px * 400px, except the first one which uses 'relative' positioning.</p>
 
 <div class="container">
