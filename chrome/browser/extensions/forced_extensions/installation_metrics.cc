@@ -13,6 +13,8 @@
 #include "chrome/browser/extensions/extension_management_constants.h"
 #include "chrome/browser/extensions/forced_extensions/installation_reporter.h"
 #include "chrome/browser/profiles/profile.h"
+#include "extensions/browser/disable_reason.h"
+#include "extensions/browser/extension_prefs.h"
 #include "extensions/browser/install/crx_install_error.h"
 #include "extensions/browser/updater/extension_downloader.h"
 #include "extensions/browser/updater/extension_downloader_delegate.h"
@@ -115,6 +117,15 @@ InstallationMetrics::SessionType InstallationMetrics::GetSessionType() {
 }
 #endif  // defined(OS_CHROMEOS)
 
+void InstallationMetrics::ReportDisableReason(const ExtensionId& extension_id) {
+  int disable_reasons =
+      ExtensionPrefs::Get(profile_)->GetDisableReasons(extension_id);
+  // Choose any disable reason among the disable reasons for this extension.
+  disable_reasons = disable_reasons & ~(disable_reasons - 1);
+  base::UmaHistogramSparse("Extensions.ForceInstalledNotLoadedDisableReason",
+                           disable_reasons);
+}
+
 void InstallationMetrics::ReportMetrics() {
   base::UmaHistogramCounts100("Extensions.ForceInstalledTotalCandidateCount",
                               tracker_->extensions().size());
@@ -135,8 +146,12 @@ void InstallationMetrics::ReportMetrics() {
       InstallationReporter::Get(profile_);
   size_t enabled_missing_count = missing_forced_extensions.size();
   auto installed_extensions = registry_->GenerateInstalledExtensionsSet();
-  for (const auto& entry : *installed_extensions)
-    missing_forced_extensions.erase(entry->id());
+  for (const auto& entry : *installed_extensions) {
+    if (missing_forced_extensions.count(entry->id())) {
+      missing_forced_extensions.erase(entry->id());
+      ReportDisableReason(entry->id());
+    }
+  }
   size_t misconfigured_extensions = 0;
   size_t installed_missing_count = missing_forced_extensions.size();
 

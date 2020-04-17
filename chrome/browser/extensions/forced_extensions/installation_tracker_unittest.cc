@@ -15,6 +15,8 @@
 #include "components/prefs/pref_service.h"
 #include "components/sync_preferences/testing_pref_service_syncable.h"
 #include "content/public/test/browser_task_environment.h"
+#include "extensions/browser/disable_reason.h"
+#include "extensions/browser/extension_prefs.h"
 #include "extensions/browser/extension_registry.h"
 #include "extensions/browser/install/crx_install_error.h"
 #include "extensions/browser/pref_names.h"
@@ -84,6 +86,8 @@ constexpr char kPossibleNonMisconfigurationFailures[] =
     "Extensions.ForceInstalledSessionsWithNonMisconfigurationFailureOccured";
 constexpr char kManifestUpdateCheckStatus[] =
     "Extensions.ForceInstalledFailureUpdateCheckStatus";
+constexpr char kDisableReason[] =
+    "Extensions.ForceInstalledNotLoadedDisableReason";
 }  // namespace
 
 namespace extensions {
@@ -177,6 +181,68 @@ TEST_F(ForcedExtensionsInstallationTrackerTest,
   histogram_tester_.ExpectUniqueSample(
       kTotalCountStats,
       prefs_->GetManagedPref(pref_names::kInstallForceList)->DictSize(), 1);
+}
+
+// Reporting disable reason for the force installed extensions which are
+// installed but not loaded when extension is disable due to single reason.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       ExtensionsInstalledButNotLoadedUniqueDisableReason) {
+  SetupForceList();
+  auto ext1 = ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  registry_->AddDisabled(ext1.get());
+  ExtensionPrefs::Get(&profile_)->AddDisableReason(
+      kExtensionId1, disable_reason::DisableReason::DISABLE_NOT_VERIFIED);
+  auto ext2 = ExtensionBuilder(kExtensionName2).SetID(kExtensionId2).Build();
+  registry_->AddEnabled(ext2.get());
+  tracker_->OnExtensionLoaded(&profile_, ext2.get());
+  // InstallationTracker should still keep running as kExtensionId1 is installed
+  // but not loaded.
+  EXPECT_TRUE(fake_timer_->IsRunning());
+  fake_timer_->Fire();
+  histogram_tester_.ExpectUniqueSample(
+      kDisableReason, disable_reason::DisableReason::DISABLE_NOT_VERIFIED, 1);
+}
+
+// Reporting disable reasons for the force installed extensions which are
+// installed but not loaded when extension is disable due to multiple reasons.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       ExtensionsInstalledButNotLoadedMultipleDisableReason) {
+  SetupForceList();
+  auto ext1 = ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  registry_->AddDisabled(ext1.get());
+  ExtensionPrefs::Get(&profile_)->AddDisableReasons(
+      kExtensionId1,
+      disable_reason::DisableReason::DISABLE_NOT_VERIFIED |
+          disable_reason::DisableReason::DISABLE_UNSUPPORTED_REQUIREMENT);
+  auto ext2 = ExtensionBuilder(kExtensionName2).SetID(kExtensionId2).Build();
+  registry_->AddEnabled(ext2.get());
+  tracker_->OnExtensionLoaded(&profile_, ext2.get());
+  // InstallationTracker should still keep running as kExtensionId1 is installed
+  // but not loaded.
+  EXPECT_TRUE(fake_timer_->IsRunning());
+  fake_timer_->Fire();
+  // Verifies that only one disable reason is reported;
+  histogram_tester_.ExpectUniqueSample(
+      kDisableReason,
+      disable_reason::DisableReason::DISABLE_UNSUPPORTED_REQUIREMENT, 1);
+}
+
+// Reporting DisableReason::DISABLE_NONE for the force installed extensions
+// which are installed but not loaded when extension is enabled.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       ExtensionsInstalledButNotLoadedNoDisableReason) {
+  SetupForceList();
+  auto ext1 = ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  registry_->AddEnabled(ext1.get());
+  auto ext2 = ExtensionBuilder(kExtensionName2).SetID(kExtensionId2).Build();
+  registry_->AddEnabled(ext2.get());
+  tracker_->OnExtensionLoaded(&profile_, ext2.get());
+  // InstallationTracker should still keep running as kExtensionId1 is installed
+  // but not loaded.
+  EXPECT_TRUE(fake_timer_->IsRunning());
+  fake_timer_->Fire();
+  histogram_tester_.ExpectUniqueSample(
+      kDisableReason, disable_reason::DisableReason::DISABLE_NONE, 1);
 }
 
 TEST_F(ForcedExtensionsInstallationTrackerTest,
