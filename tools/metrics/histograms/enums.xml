@@ -26995,6 +26995,23 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3230" label="RequiredDocumentPolicy"/>
   <int value="3231" label="PerformanceObserverEntryTypesAndBuffered"/>
   <int value="3232" label="PerformanceObserverTypeError"/>
+  <int value="3233" label="ImageCaptureWhiteBalanceMode"/>
+  <int value="3234" label="ImageCaptureExposureMode"/>
+  <int value="3235" label="ImageCaptureFocusMode"/>
+  <int value="3236" label="ImageCapturePointsOfInterest"/>
+  <int value="3237" label="ImageCaptureExposureCompensation"/>
+  <int value="3238" label="ImageCaptureExposureTime"/>
+  <int value="3239" label="ImageCaptureColorTemperature"/>
+  <int value="3240" label="ImageCaptureIso"/>
+  <int value="3241" label="ImageCaptureBrightness"/>
+  <int value="3242" label="ImageCaptureContrast"/>
+  <int value="3243" label="ImageCaptureSaturation"/>
+  <int value="3244" label="ImageCaptureSharpness"/>
+  <int value="3245" label="ImageCaptureFocusDistance"/>
+  <int value="3246" label="ImageCapturePan"/>
+  <int value="3247" label="ImageCaptureTilt"/>
+  <int value="3248" label="ImageCaptureZoom"/>
+  <int value="3249" label="ImageCaptureTorch"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
