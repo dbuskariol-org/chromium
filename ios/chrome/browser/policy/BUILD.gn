@@ -20,6 +20,7 @@ source_set("policy") {
 
   deps = [
     "//base",
+    "//components/autofill/core/browser",
     "//components/bookmarks/managed",
     "//components/password_manager/core/common",
     "//components/policy:generated",

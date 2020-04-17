@@ -6,6 +6,7 @@
 
 #include "base/bind.h"
 #include "base/logging.h"
+#include "components/autofill/core/browser/autofill_credit_card_policy_handler.h"
 #include "components/bookmarks/managed/managed_bookmarks_policy_handler.h"
 #include "components/password_manager/core/common/password_manager_pref_names.h"
 #include "components/policy/core/browser/configuration_policy_handler.h"
@@ -54,18 +55,23 @@ std::unique_ptr<policy::ConfigurationPolicyHandlerList> BuildPolicyHandlerList(
           base::Bind(&policy::GetChromePolicyDetails));
 
   // Check the feature flag before adding handlers to the list.
-  if (ShouldInstallEnterprisePolicyHandlers()) {
-    for (size_t i = 0; i < base::size(kSimplePolicyMap); ++i) {
-      handlers->AddHandler(std::make_unique<SimplePolicyHandler>(
-          kSimplePolicyMap[i].policy_name, kSimplePolicyMap[i].preference_path,
-          kSimplePolicyMap[i].value_type));
-    }
+  if (!ShouldInstallEnterprisePolicyHandlers()) {
+    return handlers;
+  }
 
-    if (ShouldInstallManagedBookmarksPolicyHandler()) {
-      handlers->AddHandler(
-          std::make_unique<bookmarks::ManagedBookmarksPolicyHandler>(
-              chrome_schema));
-    }
+  for (size_t i = 0; i < base::size(kSimplePolicyMap); ++i) {
+    handlers->AddHandler(std::make_unique<SimplePolicyHandler>(
+        kSimplePolicyMap[i].policy_name, kSimplePolicyMap[i].preference_path,
+        kSimplePolicyMap[i].value_type));
+  }
+
+  handlers->AddHandler(
+      std::make_unique<autofill::AutofillCreditCardPolicyHandler>());
+
+  if (ShouldInstallManagedBookmarksPolicyHandler()) {
+    handlers->AddHandler(
+        std::make_unique<bookmarks::ManagedBookmarksPolicyHandler>(
+            chrome_schema));
   }
 
   return handlers;

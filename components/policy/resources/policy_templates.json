@@ -3106,6 +3106,7 @@
         'chrome.*:63-',
         'chrome_os:63-',
         'android:63-',
+        'ios:84-',
       ],
       'features': {
         'can_be_recommended': True,

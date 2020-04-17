@@ -24,6 +24,17 @@
     ]
   },
 
+  "AutofillCreditCardEnabled": {
+    "os": [ "ios" ],
+    "can_be_recommended": true,
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "AutofillCreditCardEnabled": false },
+        "prefs": { "autofill.credit_card_enabled": {} }
+      }
+    ]
+  },
+
   "PasswordManagerEnabled": {
     "os": [ "ios" ],
     "can_be_recommended": true,
