@@ -5,7 +5,6 @@
 package org.chromium.weblayer_private;
 
 import android.app.Activity;
-import android.os.RemoteException;
 import android.os.SystemClock;
 
 import org.chromium.base.ContextUtils;
@@ -119,15 +118,7 @@ public class InterceptNavigationDelegateClientImpl implements InterceptNavigatio
 
     @Override
     public void closeTab() {
-        // Prior to 84 the client was not equipped to handle the case of WebLayer initiating the
-        // last tab being closed, so we simply short-circuit out here in that case.
-        if (WebLayerFactoryImpl.getClientMajorVersion() < 84) return;
-
-        try {
-            mTab.getBrowser().destroyTab(mTab);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        // TODO(crbug.com/1031465): Bring up tab closing.
     }
 
     @Override
