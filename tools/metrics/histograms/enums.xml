@@ -66556,6 +66556,12 @@ Full version information for the fingerprint enum values:
   <int value="3" label="No app shim"/>
 </enum>
 
+<enum name="UpdateAppBadgeTypes">
+  <int value="0" label="Set numeric badge"/>
+  <int value="1" label="Set flag badge"/>
+  <int value="2" label="Clear badge"/>
+</enum>
+
 <enum name="UpdateCheckStatus">
   <int value="0" label="Unknown"/>
   <int value="1" label="Ok"/>
