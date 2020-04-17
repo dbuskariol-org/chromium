@@ -5446,7 +5446,7 @@ TreePriority LayerTreeHostImpl::GetTreePriority() const {
   return global_tile_state_.tree_priority;
 }
 
-viz::BeginFrameArgs LayerTreeHostImpl::CurrentBeginFrameArgs() const {
+const viz::BeginFrameArgs& LayerTreeHostImpl::CurrentBeginFrameArgs() const {
   // TODO(mithro): Replace call with current_begin_frame_tracker_.Current()
   // once all calls which happens outside impl frames are fixed.
   return current_begin_frame_tracker_.DangerousMethodCurrentOrLast();

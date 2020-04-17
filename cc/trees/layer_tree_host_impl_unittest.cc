@@ -4299,17 +4299,17 @@ class LayerTreeHostImplOverridePhysicalTime : public LayerTreeHostImpl {
                           nullptr,
                           nullptr) {}
 
-  viz::BeginFrameArgs CurrentBeginFrameArgs() const override {
-    return viz::CreateBeginFrameArgsForTesting(BEGINFRAME_FROM_HERE, 0, 1,
-                                               fake_current_physical_time_);
+  const viz::BeginFrameArgs& CurrentBeginFrameArgs() const override {
+    return current_begin_frame_args_;
   }
 
   void SetCurrentPhysicalTimeTicksForTest(base::TimeTicks fake_now) {
-    fake_current_physical_time_ = fake_now;
+    current_begin_frame_args_ = viz::CreateBeginFrameArgsForTesting(
+        BEGINFRAME_FROM_HERE, 0, 1, fake_now);
   }
 
  private:
-  base::TimeTicks fake_current_physical_time_;
+  viz::BeginFrameArgs current_begin_frame_args_;
 };
 
 class LayerTreeHostImplTestScrollbarAnimation : public LayerTreeHostImplTest {
