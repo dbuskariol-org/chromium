@@ -39361,6 +39361,7 @@ from previous Chrome versions.
   <int value="-192919826" label="ViewsSimplifiedFullscreenUI:enabled"/>
   <int value="-192389983" label="NoStatePrefetch:enabled"/>
   <int value="-189478545" label="ArcCustomTabsExperiment:enabled"/>
+  <int value="-188439713" label="disable-video-capture-use-gpu-memory-buffer"/>
   <int value="-186707397" label="HideArcMediaNotifications:enabled"/>
   <int value="-185162926" label="IncreaseInputAudioBufferSize:enabled"/>
   <int value="-184091779"
@@ -39767,6 +39768,7 @@ from previous Chrome versions.
   <int value="292560715" label="ViewsCastDialog:disabled"/>
   <int value="293134455" label="AutofillSendBillingCustomerNumber:disabled"/>
   <int value="293996306" label="ArrayPrototypeValues:disabled"/>
+  <int value="295661985" label="video-capture-use-gpu-memory-buffer"/>
   <int value="296215399" label="WindowsMixedReality:disabled"/>
   <int value="296296761" label="MediaFoundationVideoCapture:disabled"/>
   <int value="297095559" label="ShowBluetoothDebugLogToggle:disabled"/>
@@ -41346,6 +41348,7 @@ from previous Chrome versions.
   <int value="2135408204" label="OverscrollHistoryNavigation:disabled"/>
   <int value="2137113620"
       label="ProcessSharingWithStrictSiteInstances:enabled"/>
+  <int value="2137294324" label="zero-copy-video-capture"/>
   <int value="2137347307" label="enable-drive-apps-in-app-list"/>
   <int value="2137599770" label="enable-win32k-renderer-lockdown"/>
   <int value="2138146331" label="OmniboxVoiceSearchAlwaysVisible:enabled"/>
