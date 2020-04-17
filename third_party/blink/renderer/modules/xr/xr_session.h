@@ -274,6 +274,7 @@ class XRSession final
   void SetXRDisplayInfo(device::mojom::blink::VRDisplayInfoPtr display_info);
 
   bool UsesInputEventing() { return uses_input_eventing_; }
+  bool LightEstimationEnabled() { return false; }
 
   void Trace(Visitor* visitor) override;
 
