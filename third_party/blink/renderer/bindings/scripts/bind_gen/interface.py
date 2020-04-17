@@ -2493,7 +2493,12 @@ if (${info}.Holder() == ${info}.This()) {
                 EmptyNode(),
                 make_v8_set_return_value(cg_context),
                 TextNode("""\
+% if interface.identifier == "CSSStyleDeclaration":
+// CSSStyleDeclaration is abusing named properties.
+// Do not intercept if the property is not found.
+% else:
 bindings::V8SetReturnValue(${info}, nullptr);
+% endif
 return;"""),
             ]),
         EmptyNode(),
@@ -2615,7 +2620,13 @@ def make_named_property_definer_callback(cg_context, function_name):
         "NamedPropertyDefiner")
     body = func_def.body
 
-    if not cg_context.interface.indexed_and_named_properties.named_setter:
+    if cg_context.interface.identifier == "CSSStyleDeclaration":
+        body.append(
+            TextNode("""\
+// CSSStyleDeclaration is abusing named properties.
+// Do not intercept.  Fallback to OrdinaryDefineOwnProperty.
+"""))
+    elif not cg_context.interface.indexed_and_named_properties.named_setter:
         body.append(
             TextNode("""\
 // 3.8.3. [[DefineOwnProperty]]
