@@ -28,6 +28,7 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 #if defined(OS_CHROMEOS)
+#include "components/arc/arc_prefs.h"
 #include "components/user_manager/fake_user_manager.h"
 #include "components/user_manager/scoped_user_manager.h"
 #include "components/user_manager/user_names.h"
@@ -615,6 +616,70 @@ TEST_F(ForcedExtensionsInstallationTrackerTest,
   // loaded or failed.
   EXPECT_FALSE(fake_timer_->IsRunning());
   histogram_tester_.ExpectBucketCount(kPossibleNonMisconfigurationFailures, 1,
+                                      1);
+}
+
+#if defined(OS_CHROMEOS)
+// Session in which either all the extensions installed successfully, or all
+// failures are admin-side misconfigurations. This test verifies that failure
+// REPLACED_BY_ARC_APP is not considered as misconfiguration when ARC++ is
+// enabled for the profile.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       NonMisconfigurationFailureNotPresentReplacedByArcAppErrorArcEnabled) {
+  // Enable ARC++ for this profile.
+  prefs_->SetManagedPref(arc::prefs::kArcEnabled,
+                         std::make_unique<base::Value>(true));
+  SetupForceList();
+  auto extension =
+      ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  tracker_->OnExtensionLoaded(&profile_, extension.get());
+  installation_reporter_->ReportFailure(
+      kExtensionId2, InstallationReporter::FailureReason::REPLACED_BY_ARC_APP);
+  // InstallationTracker shuts down timer because all extension are either
+  // loaded or failed.
+  EXPECT_FALSE(fake_timer_->IsRunning());
+  histogram_tester_.ExpectBucketCount(kPossibleNonMisconfigurationFailures, 0,
+                                      1);
+}
+
+// Session in which at least one non misconfiguration failure occurred. This
+// test verifies that failure REPLACED_BY_ARC_APP is not considered as
+// misconfiguration when ARC++ is disabled for the profile.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       NonMisconfigurationFailureNotPresentReplacedByArcAppErrorArcDisabled) {
+  // Enable ARC++ for this profile.
+  prefs_->SetManagedPref(arc::prefs::kArcEnabled,
+                         std::make_unique<base::Value>(false));
+  SetupForceList();
+  auto extension =
+      ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  tracker_->OnExtensionLoaded(&profile_, extension.get());
+  installation_reporter_->ReportFailure(
+      kExtensionId2, InstallationReporter::FailureReason::REPLACED_BY_ARC_APP);
+  // InstallationTracker shuts down timer because all extension are either
+  // loaded or failed.
+  EXPECT_FALSE(fake_timer_->IsRunning());
+  histogram_tester_.ExpectBucketCount(kPossibleNonMisconfigurationFailures, 1,
+                                      1);
+}
+#endif  // defined(OS_CHROMEOS)
+
+// Session in which either all the extensions installed successfully, or all
+// failures are admin-side misconfigurations. This test verifies that failure
+// NOT_PERFORMING_NEW_INSTALL is considered as misconfiguration.
+TEST_F(ForcedExtensionsInstallationTrackerTest,
+       NonMisconfigurationFailureNotPresentNotPerformingNewInstallError) {
+  SetupForceList();
+  auto extension =
+      ExtensionBuilder(kExtensionName1).SetID(kExtensionId1).Build();
+  tracker_->OnExtensionLoaded(&profile_, extension.get());
+  installation_reporter_->ReportFailure(
+      kExtensionId2,
+      InstallationReporter::FailureReason::NOT_PERFORMING_NEW_INSTALL);
+  // InstallationTracker shuts down timer because all extension are either
+  // loaded or failed.
+  EXPECT_FALSE(fake_timer_->IsRunning());
+  histogram_tester_.ExpectBucketCount(kPossibleNonMisconfigurationFailures, 0,
                                       1);
 }
 

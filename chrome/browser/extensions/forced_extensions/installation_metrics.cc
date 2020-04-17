@@ -13,6 +13,7 @@
 #include "chrome/browser/extensions/extension_management_constants.h"
 #include "chrome/browser/extensions/forced_extensions/installation_reporter.h"
 #include "chrome/browser/profiles/profile.h"
+#include "components/prefs/pref_service.h"
 #include "extensions/browser/disable_reason.h"
 #include "extensions/browser/extension_prefs.h"
 #include "extensions/browser/install/crx_install_error.h"
@@ -20,6 +21,7 @@
 #include "extensions/browser/updater/extension_downloader_delegate.h"
 
 #if defined(OS_CHROMEOS)
+#include "components/arc/arc_prefs.h"
 #include "components/user_manager/user_manager.h"
 #endif  // defined(OS_CHROMEOS)
 
@@ -88,17 +90,33 @@ InstallationMetrics::~InstallationMetrics() = default;
 bool InstallationMetrics::IsMisconfiguration(
     const InstallationReporter::InstallationData& installation_data,
     const ExtensionId& id) {
-  ExtensionManagement* management =
-      ExtensionManagementFactory::GetForBrowserContext(profile_);
-  CrxInstallErrorDetail detail = installation_data.install_error_detail.value();
-  if (detail == CrxInstallErrorDetail::KIOSK_MODE_ONLY)
-    return true;
+  if (installation_data.install_error_detail) {
+    ExtensionManagement* management =
+        ExtensionManagementFactory::GetForBrowserContext(profile_);
+    CrxInstallErrorDetail detail =
+        installation_data.install_error_detail.value();
+    if (detail == CrxInstallErrorDetail::KIOSK_MODE_ONLY)
+      return true;
 
-  if (detail == CrxInstallErrorDetail::DISALLOWED_BY_POLICY &&
-      !management->IsAllowedManifestType(
-          installation_data.extension_type.value(), id)) {
-    return true;
+    if (detail == CrxInstallErrorDetail::DISALLOWED_BY_POLICY &&
+        !management->IsAllowedManifestType(
+            installation_data.extension_type.value(), id)) {
+      return true;
+    }
   }
+#if defined(OS_CHROMEOS)
+  // REPLACED_BY_ARC_APP error is a misconfiguration if it ARC++ is enabled for
+  // the device.
+  if (profile_->GetPrefs()->IsManagedPreference(arc::prefs::kArcEnabled) &&
+      profile_->GetPrefs()->GetBoolean(arc::prefs::kArcEnabled) &&
+      installation_data.failure_reason ==
+          InstallationReporter::FailureReason::REPLACED_BY_ARC_APP)
+    return true;
+#endif  // defined(OS_CHROMEOS)
+
+  if (installation_data.failure_reason ==
+      InstallationReporter::FailureReason::NOT_PERFORMING_NEW_INSTALL)
+    return true;
 
   return false;
 }
@@ -184,6 +202,8 @@ void InstallationMetrics::ReportMetrics() {
             "Extensions.ForceInstalledDownloadingStage", downloading_stage);
       }
     }
+    if (IsMisconfiguration(installation, extension_id))
+      misconfigured_extensions++;
     InstallationReporter::FailureReason failure_reason =
         installation.failure_reason.value_or(
             InstallationReporter::FailureReason::UNKNOWN);
@@ -245,8 +265,6 @@ void InstallationMetrics::ReportMetrics() {
             << InstallationReporter::GetFormattedInstallationData(installation);
     if (installation.install_error_detail) {
       CrxInstallErrorDetail detail = installation.install_error_detail.value();
-      if (IsMisconfiguration(installation, extension_id))
-        misconfigured_extensions++;
       base::UmaHistogramEnumeration(
           "Extensions.ForceInstalledFailureCrxInstallError", detail);
     }
