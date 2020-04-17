@@ -8,6 +8,7 @@
 #include "ash/public/cpp/app_list/app_list_config.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
 #include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
+#include "ash/public/cpp/assistant/test_support/mock_assistant_controller.h"
 #include "ash/public/cpp/vector_icons/vector_icons.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/unguessable_token.h"
@@ -15,17 +16,20 @@
 #include "chrome/browser/ui/app_list/search/assistant_search_provider.h"
 #include "chrome/browser/ui/app_list/search/chrome_search_result.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
+#include "testing/gmock/include/gmock/gmock.h"
 #include "ui/gfx/color_palette.h"
 #include "ui/gfx/paint_vector_icon.h"
+#include "url/gurl.h"
 
 namespace app_list {
 namespace test {
 
-// Aliases.
-using AssistantAllowedState = ash::mojom::AssistantAllowedState;
-using AssistantSuggestion = chromeos::assistant::mojom::AssistantSuggestion;
-using AssistantSuggestionPtr =
-    chromeos::assistant::mojom::AssistantSuggestionPtr;
+using ash::mojom::AssistantAllowedState;
+using chromeos::assistant::mojom::AssistantSuggestion;
+using chromeos::assistant::mojom::AssistantSuggestionPtr;
+using testing::DoAll;
+using testing::NiceMock;
+using testing::SaveArg;
 
 // Expectations ----------------------------------------------------------------
 
@@ -73,6 +77,7 @@ class ConversationStarterBuilder {
     AssistantSuggestionPtr conversation_starter = AssistantSuggestion::New();
     conversation_starter->id = id_;
     conversation_starter->text = text_;
+    conversation_starter->action_url = action_url_;
     return conversation_starter;
   }
 
@@ -86,9 +91,15 @@ class ConversationStarterBuilder {
     return *this;
   }
 
+  ConversationStarterBuilder& WithActionUrl(const std::string& action_url) {
+    action_url_ = GURL(action_url);
+    return *this;
+  }
+
  private:
   base::UnguessableToken id_;
   std::string text_;
+  GURL action_url_;
 };
 
 // TestAssistantState ----------------------------------------------------------
@@ -181,9 +192,13 @@ class AssistantSearchProviderTest : public AppListTestBase {
       delete;
   ~AssistantSearchProviderTest() override = default;
 
+  AssistantSearchProvider& search_provider() { return search_provider_; }
+
   TestAssistantState& assistant_state() { return assistant_state_; }
 
-  AssistantSearchProvider& search_provider() { return search_provider_; }
+  NiceMock<ash::MockAssistantController>& assistant_controller() {
+    return assistant_controller_;
+  }
 
   TestAssistantSuggestionsController& suggestions_controller() {
     return suggestions_controller_;
@@ -191,6 +206,7 @@ class AssistantSearchProviderTest : public AppListTestBase {
 
  private:
   TestAssistantState assistant_state_;
+  NiceMock<ash::MockAssistantController> assistant_controller_;
   TestAssistantSuggestionsController suggestions_controller_;
   AssistantSearchProvider search_provider_;
 };
@@ -262,6 +278,31 @@ TEST_F(AssistantSearchProviderTest,
 
   const ChromeSearchResult& result = *search_provider().results().at(0);
   Expect(result).Matches(*update);
+}
+
+TEST_F(AssistantSearchProviderTest,
+       ShouldDelegateOpeningResultsToAssistantController) {
+  suggestions_controller().SetConversationStarter(
+      ConversationStarterBuilder()
+          .WithId(base::UnguessableToken::Create())
+          .WithText("Weather")
+          .WithActionUrl("googleassistant://send-query?q=weather")
+          .Build());
+
+  ASSERT_EQ(1u, search_provider().results().size());
+
+  GURL url;
+  bool in_background = true;
+  bool from_user = true;
+  EXPECT_CALL(assistant_controller(), OpenUrl)
+      .WillOnce(DoAll(SaveArg<0>(&url), SaveArg<1>(&in_background),
+                      SaveArg<2>(&from_user)));
+
+  search_provider().results().at(0)->Open(/*event_flags=*/0);
+
+  EXPECT_EQ(GURL("googleassistant://send-query?q=weather"), url);
+  EXPECT_FALSE(in_background);
+  EXPECT_FALSE(from_user);
 }
 
 }  // namespace test
