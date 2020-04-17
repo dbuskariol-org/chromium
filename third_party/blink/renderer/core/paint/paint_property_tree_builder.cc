@@ -3527,6 +3527,7 @@ PaintPropertyChangeType PaintPropertyTreeBuilder::UpdateForSelf() {
       // SetBackgroundNeedsFullPaintInvalidation() won't work here because we
       // have already walked the LayoutView in PrePaintTreeWalk.
       LayoutView* layout_view = object_.View();
+      layout_view->Layer()->SetNeedsRepaint();
       auto reason = PaintInvalidationReason::kBackground;
       static_cast<const DisplayItemClient*>(layout_view)->Invalidate(reason);
       if (auto* scrollable_area = layout_view->GetScrollableArea()) {
