@@ -268,8 +268,8 @@ group("gn_all") {
   if (toolkit_views) {
     deps += [
       "//ui/views:views_unittests",
-      "//ui/views/examples:views_examples_exe",
-      "//ui/views/examples:views_examples_with_content_exe",
+      "//ui/views/examples:views_examples",
+      "//ui/views/examples:views_examples_with_content",
     ]
   }
 
