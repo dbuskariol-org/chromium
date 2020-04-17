@@ -10,7 +10,11 @@ source_set("local_search_service") {
     "local_search_service_impl.h",
   ]
 
-  public_deps = [ "//base" ]
+  public_deps = [
+    "//base",
+    "//chrome/services/local_search_service/public/mojom",
+    "//mojo/public/cpp/bindings",
+  ]
 }
 
 source_set("test_utils") {
@@ -23,6 +27,8 @@ source_set("test_utils") {
 
   public_deps = [
     "//base",
+    "//chrome/services/local_search_service/public/mojom",
+    "//mojo/public/cpp/bindings",
     "//testing/gtest",
   ]
 }
