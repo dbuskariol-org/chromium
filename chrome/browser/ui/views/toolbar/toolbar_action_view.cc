@@ -166,8 +166,6 @@ void ToolbarActionView::UpdateState() {
     SetState(views::Button::STATE_NORMAL);
   }
 
-  wants_to_run_ = view_controller_->WantsToRun(web_contents);
-
   gfx::ImageSkia icon(
       view_controller_->GetIcon(web_contents, GetPreferredSize())
           .AsImageSkia());

@@ -62,7 +62,6 @@ class ExtensionActionViewController
   PageInteractionStatus GetPageInteractionStatus(
       content::WebContents* web_contents) const override;
   bool IsEnabled(content::WebContents* web_contents) const override;
-  bool WantsToRun(content::WebContents* web_contents) const override;
   bool HasPopup(content::WebContents* web_contents) const override;
   bool IsShowingPopup() const override;
   void HidePopup() override;
@@ -98,6 +97,7 @@ class ExtensionActionViewController
   std::unique_ptr<IconWithBadgeImageSource> GetIconImageSourceForTesting(
       content::WebContents* web_contents,
       const gfx::Size& size);
+  bool HasBeenBlockedForTesting(content::WebContents* web_contents) const;
 
  private:
   // ExtensionActionIconFactory::Observer:

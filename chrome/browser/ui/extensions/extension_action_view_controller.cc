@@ -159,12 +159,6 @@ bool ExtensionActionViewController::IsEnabled(
              PageInteractionStatus::kPending;
 }
 
-bool ExtensionActionViewController::WantsToRun(
-    content::WebContents* web_contents) const {
-  return ExtensionIsValid() &&
-         (PageActionWantsToRun(web_contents) || HasBeenBlocked(web_contents));
-}
-
 bool ExtensionActionViewController::HasPopup(
     content::WebContents* web_contents) const {
   if (!ExtensionIsValid())
@@ -372,6 +366,11 @@ ExtensionActionViewController::GetIconImageSourceForTesting(
     content::WebContents* web_contents,
     const gfx::Size& size) {
   return GetIconImageSource(web_contents, size);
+}
+
+bool ExtensionActionViewController::HasBeenBlockedForTesting(
+    content::WebContents* web_contents) const {
+  return HasBeenBlocked(web_contents);
 }
 
 ExtensionActionViewController*

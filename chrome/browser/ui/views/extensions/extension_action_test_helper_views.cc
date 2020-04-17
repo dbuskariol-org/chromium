@@ -134,11 +134,6 @@ bool ExtensionActionTestHelperViews::HidePopup() {
   return !HasPopup();
 }
 
-bool ExtensionActionTestHelperViews::ActionButtonWantsToRun(size_t index) {
-  return browser_actions_container_->GetToolbarActionViewAt(index)
-      ->wants_to_run_for_testing();
-}
-
 void ExtensionActionTestHelperViews::SetWidth(int width) {
   browser_actions_container_->SetSize(
       gfx::Size(width, browser_actions_container_->height()));
