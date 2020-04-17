@@ -59,7 +59,6 @@ ios_web_view_public_headers = [
   "public/cwv_navigation_type.h",
   "public/cwv_password.h",
   "public/cwv_preferences.h",
-  "public/cwv_preferences_autofill.h",
   "public/cwv_preview_element_info.h",
   "public/cwv_script_command.h",
   "public/cwv_scroll_view.h",
@@ -77,10 +76,7 @@ ios_web_view_public_headers = [
   "public/cwv_user_content_controller.h",
   "public/cwv_user_script.h",
   "public/cwv_web_view.h",
-  "public/cwv_web_view_autofill.h",
   "public/cwv_web_view_configuration.h",
-  "public/cwv_web_view_configuration_autofill.h",
-  "public/cwv_web_view_configuration_sync.h",
 ]
 
 source_set("web_view_sources") {
