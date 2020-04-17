@@ -35,6 +35,21 @@
     ]
   },
 
+  "SavingBrowserHistoryDisabled": {
+    "os": [ "ios" ],
+    "can_be_recommended": true,
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "SavingBrowserHistoryDisabled": false },
+        "prefs": { "history.saving_disabled": {} }
+      },
+      {
+        "policies": { "SavingBrowserHistoryDisabled": true },
+        "prefs": { "history.saving_disabled": {} }
+      }
+    ]
+  },
+
   "SearchSuggestEnabled": {
 	"os": [ "ios" ],
     "can_be_recommended": true,

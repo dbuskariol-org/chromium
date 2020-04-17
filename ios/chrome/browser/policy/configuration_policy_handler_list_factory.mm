@@ -24,13 +24,21 @@ using policy::SimplePolicyHandler;
 
 namespace {
 
+// List of policy types to preference names. This is used for simple policies
+// that directly map to a single preference.
+// clang-format off
 const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
-    {policy::key::kPasswordManagerEnabled,
-     password_manager::prefs::kCredentialsEnableService,
-     base::Value::Type::BOOLEAN},
-    {policy::key::kSearchSuggestEnabled, prefs::kSearchSuggestEnabled,
-     base::Value::Type::BOOLEAN},
+  { policy::key::kPasswordManagerEnabled,
+    password_manager::prefs::kCredentialsEnableService,
+    base::Value::Type::BOOLEAN },
+  { policy::key::kSavingBrowserHistoryDisabled,
+    prefs::kSavingBrowserHistoryDisabled,
+    base::Value::Type::BOOLEAN },
+  { policy::key::kSearchSuggestEnabled,
+    prefs::kSearchSuggestEnabled,
+    base::Value::Type::BOOLEAN },
 };
+// clang-format on
 
 void PopulatePolicyHandlerParameters(
     policy::PolicyHandlerParameters* parameters) {}
