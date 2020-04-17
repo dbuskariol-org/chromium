@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<link href="resources/grid.css" rel="stylesheet">
-<link href="../css-intrinsic-dimensions/resources/width-keyword-classes.css" rel=stylesheet>
-<script src="../../resources/check-layout.js"></script>
-<script src="../../resources/js-test.js"></script>
+<title>CSS Grid: grid gutters and tracks.</title>
+<link rel="author" title="Sergio Villar" href="mailto:svillar@igalia.com"/>
+<link rel="help" href="https://drafts.csswg.org/css-grid-1/#gutters"/>
+<meta name="assert" content="Check that gutters contribute to the size of the grid containers and spanning items, and do not alter grid items positioning, margin computation and track sizing."/>
+<link rel="stylesheet" href="/css/support/grid.css"/>
+<link rel="stylesheet" href="/css/support/width-keyword-classes.css"/>
+<link rel="stylesheet" href="/fonts/ahem.css" type="text/css"/>
 <style>
 body { margin: 0px; }
 
@@ -42,7 +45,14 @@ div.grid > div { font: 10px/1 Ahem; }
 
 </style>
 
-<body onload="checkLayout('.grid')">
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/resources/check-layout-th.js"></script>
+<script type="text/javascript">
+    setup({ explicit_done: true });
+</script>
+
+<body onload="document.fonts.ready.then(() => { checkLayout('.grid'); })">
 
 <!-- Check that gutters contribute to the size of the grid containers. -->
 
