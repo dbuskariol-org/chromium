@@ -6273,7 +6273,6 @@ virtual/omt-worker-fetch/http/tests/origin_trials/sample-api-script-added-after-
 # Sheriff 2020-01-16
 crbug.com/1042205 virtual/off-main-thread-css-paint/external/wpt/css/css-paint-api/paint2d-filter.https.html [ Pass Timeout ]
 crbug.com/1042681 external/wpt/html/cross-origin-embedder-policy/blob.https.html [ Pass Failure ]
-crbug.com/1042694 fast/forms/form-control-with-state-eager-tracing-crashTest.html [ Pass Timeout ]
 crbug.com/1042689 [ Linux ] http/tests/devtools/coverage/gutter-css.js [ Pass Timeout ]
 crbug.com/1042689 [ Win ] http/tests/devtools/coverage/gutter-css.js [ Pass Timeout ]
 
@@ -6691,6 +6690,9 @@ crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html 
 
 # Sheriff 2020-04-17
 crbug.com/1071909 external/wpt/html/cross-origin-opener-policy/popup-coop-by-sw.https.html [ Pass Timeout ]
+
+crbug.com/1042694 fast/forms/form-control-with-state-eager-tracing-crashTest.html [ Pass Timeout ]
+crbug.com/1042694 virtual/form-controls-refresh-disabled/fast/forms/form-control-with-state-eager-tracing-crashTest.html [ Pass Timeout ]
 
 # QUIC reordered versions to prefer IETF QUIC
 crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
