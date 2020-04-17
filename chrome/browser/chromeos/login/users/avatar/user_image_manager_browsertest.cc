@@ -29,7 +29,6 @@
 #include "chrome/browser/chromeos/login/startup_utils.h"
 #include "chrome/browser/chromeos/login/test/device_state_mixin.h"
 #include "chrome/browser/chromeos/login/test/fake_gaia_mixin.h"
-#include "chrome/browser/chromeos/login/test/login_manager_mixin.h"
 #include "chrome/browser/chromeos/login/users/avatar/user_image_manager_impl.h"
 #include "chrome/browser/chromeos/login/users/avatar/user_image_manager_test_util.h"
 #include "chrome/browser/chromeos/login/users/chrome_user_manager.h"
@@ -85,6 +84,12 @@ namespace chromeos {
 
 namespace {
 
+// Because policy is not needed in some tests it is better to use e-mails that
+// are definitely not enterprise. This lets us to avoid faking of policy fetch
+// procedure.
+constexpr char kTestUserEmail1[] = "test-user@gmail.com";
+constexpr char kTestUserEmail2[] = "test-user2@gmail.com";
+
 constexpr char kRandomTokenStrForTesting[] = "random-token-str-for-testing";
 
 policy::CloudPolicyStore* GetStoreForUser(const user_manager::User* user) {
@@ -128,8 +133,8 @@ class UserImageChangeWaiter : public user_manager::UserManager::Observer {
 
 }  // namespace
 
-class UserImageManagerTestBase : public LoginManagerTest,
-                                 public user_manager::UserManager::Observer {
+class UserImageManagerTest : public LoginManagerTest,
+                             public user_manager::UserManager::Observer {
  public:
   std::unique_ptr<net::test_server::BasicHttpResponse> HandleRequest(
       const net::test_server::HttpRequest& request) {
@@ -164,7 +169,7 @@ class UserImageManagerTestBase : public LoginManagerTest,
   }
 
  protected:
-  UserImageManagerTestBase() = default;
+  UserImageManagerTest() = default;
 
   // LoginManagerTest overrides:
   void SetUpInProcessBrowserTestFixture() override {
@@ -195,6 +200,17 @@ class UserImageManagerTestBase : public LoginManagerTest,
     LoginManagerTest::SetUpOnMainThread();
     local_state_ = g_browser_process->local_state();
     user_manager::UserManager::Get()->AddObserver(this);
+
+    // FakeGaia authorizes requests for profile info.
+    FakeGaia::AccessTokenInfo token_info;
+    token_info.any_scope = true;
+    token_info.audience = GaiaUrls::GetInstance()->oauth2_chrome_client_id();
+    token_info.token = kRandomTokenStrForTesting;
+    token_info.email = test_account_id1_.GetUserEmail();
+    fake_gaia_.fake_gaia()->IssueOAuthToken(kRandomTokenStrForTesting,
+                                            token_info);
+    fake_gaia_.fake_gaia()->MapEmailToGaiaId(
+        kTestUserEmail1, signin::GetTestGaiaIdForEmail(kTestUserEmail1));
   }
 
   void TearDownOnMainThread() override {
@@ -315,38 +331,27 @@ class UserImageManagerTestBase : public LoginManagerTest,
   std::unique_ptr<net::test_server::ControllableHttpResponse>
       controllable_http_response_;
 
-  FakeGaiaMixin fake_gaia_{&mixin_host_, embedded_test_server()};
+  const AccountId test_account_id1_ = AccountId::FromUserEmailGaiaId(
+      kTestUserEmail1,
+      signin::GetTestGaiaIdForEmail(kTestUserEmail1));
+  const AccountId test_account_id2_ = AccountId::FromUserEmailGaiaId(
+      kTestUserEmail2,
+      signin::GetTestGaiaIdForEmail(kTestUserEmail2));
+  const AccountId enterprise_account_id_ = AccountId::FromUserEmailGaiaId(
+      FakeGaiaMixin::kEnterpriseUser1,
+      signin::GetTestGaiaIdForEmail(FakeGaiaMixin::kEnterpriseUser1));
+  const cryptohome::AccountIdentifier cryptohome_id_ =
+      cryptohome::CreateAccountIdentifierFromAccountId(enterprise_account_id_);
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(UserImageManagerTestBase);
-};
+  FakeGaiaMixin fake_gaia_{&mixin_host_, embedded_test_server()};
 
-class UserImageManagerTest : public UserImageManagerTestBase {
- public:
-  UserImageManagerTest() {
-    login_manager_mixin_.AppendRegularUsers(1);
-    test_account_id1_ = login_manager_mixin_.users()[0].account_id;
-  }
-  void SetUpOnMainThread() override {
-    UserImageManagerTestBase::SetUpOnMainThread();
-    // FakeGaia authorizes requests for profile info.
-    FakeGaia::AccessTokenInfo token_info;
-    token_info.any_scope = true;
-    token_info.audience = GaiaUrls::GetInstance()->oauth2_chrome_client_id();
-    token_info.token = kRandomTokenStrForTesting;
-    token_info.email = test_account_id1_.GetUserEmail();
-    fake_gaia_.fake_gaia()->IssueOAuthToken(kRandomTokenStrForTesting,
-                                            token_info);
-    fake_gaia_.fake_gaia()->MapEmailToGaiaId(test_account_id1_.GetUserEmail(),
-                                             test_account_id1_.GetGaiaId());
-  }
-
- protected:
-  AccountId test_account_id1_;
-  LoginManagerMixin login_manager_mixin_{&mixin_host_};
+  DISALLOW_COPY_AND_ASSIGN(UserImageManagerTest);
 };
 
 IN_PROC_BROWSER_TEST_F(UserImageManagerTest, PRE_SaveAndLoadUserImage) {
+  RegisterUser(test_account_id1_);
+
   // Setup a user with JPEG image.
   run_loop_.reset(new base::RunLoop);
   const gfx::ImageSkia& image = default_user_image::GetDefaultImage(
@@ -374,6 +379,10 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerTest, SaveAndLoadUserImage) {
   EXPECT_EQ(saved_image.height(), user->GetImage().height());
 }
 
+IN_PROC_BROWSER_TEST_F(UserImageManagerTest, PRE_SaveUserDefaultImageIndex) {
+  RegisterUser(test_account_id1_);
+}
+
 // Verifies that SaveUserDefaultImageIndex() correctly sets and persists the
 // chosen user image.
 IN_PROC_BROWSER_TEST_F(UserImageManagerTest, SaveUserDefaultImageIndex) {
@@ -395,6 +404,10 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerTest, SaveUserDefaultImageIndex) {
   ExpectUserImageInfo(test_account_id1_,
                       default_user_image::kFirstDefaultImageIndex,
                       base::FilePath());
+}
+
+IN_PROC_BROWSER_TEST_F(UserImageManagerTest, PRE_SaveUserImage) {
+  RegisterUser(test_account_id1_);
 }
 
 // Verifies that SaveUserImage() correctly sets and persists the chosen user
@@ -432,6 +445,10 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerTest, SaveUserImage) {
   // Check image dimensions. Images can't be compared since JPEG is lossy.
   EXPECT_EQ(custom_image.width(), saved_image.width());
   EXPECT_EQ(custom_image.height(), saved_image.height());
+}
+
+IN_PROC_BROWSER_TEST_F(UserImageManagerTest, PRE_SaveUserImageFromFile) {
+  RegisterUser(test_account_id1_);
 }
 
 // Verifies that SaveUserImageFromFile() correctly sets and persists the chosen
@@ -500,6 +517,12 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerTest, SaveUserImageFromFile) {
   EXPECT_TRUE(base::PathExists(GetUserImagePath(test_account_id1_, "png")));
 }
 
+IN_PROC_BROWSER_TEST_F(UserImageManagerTest,
+                       PRE_SaveUserImageFromProfileImage) {
+  RegisterUser(test_account_id1_);
+  chromeos::StartupUtils::MarkOobeCompleted();
+}
+
 // Verifies that SaveUserImageFromProfileImage() correctly downloads, sets and
 // persists the chosen user image.
 // TODO(crbug.com/998369): Flaky on Linux TSAN and ASAN.
@@ -545,16 +568,11 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerTest,
   EXPECT_EQ(profile_image.height(), saved_image.height());
 }
 
-class UserImageManagerPolicyTest : public UserImageManagerTestBase,
+class UserImageManagerPolicyTest : public UserImageManagerTest,
                                    public policy::CloudPolicyStore::Observer {
  protected:
   UserImageManagerPolicyTest()
-      : owner_key_util_(new ownership::MockOwnerKeyUtil()) {
-    login_manager_.AppendManagedUsers(1);
-    enterprise_account_id_ = login_manager_.users()[0].account_id;
-    cryptohome_id_ = cryptohome::CreateAccountIdentifierFromAccountId(
-        enterprise_account_id_);
-  }
+      : owner_key_util_(new ownership::MockOwnerKeyUtil()) {}
 
   // UserImageManagerTest overrides:
   void SetUpInProcessBrowserTestFixture() override {
@@ -568,11 +586,11 @@ class UserImageManagerPolicyTest : public UserImageManagerTestBase,
     FakeSessionManagerClient::Get()->set_device_policy(
         device_policy_.GetBlob());
 
-    UserImageManagerTestBase::SetUpInProcessBrowserTestFixture();
+    UserImageManagerTest::SetUpInProcessBrowserTestFixture();
   }
 
   void SetUpOnMainThread() override {
-    UserImageManagerTestBase::SetUpOnMainThread();
+    UserImageManagerTest::SetUpOnMainThread();
 
     base::FilePath user_keys_dir;
     ASSERT_TRUE(base::PathService::Get(
@@ -635,14 +653,14 @@ class UserImageManagerPolicyTest : public UserImageManagerTestBase,
 
   gfx::ImageSkia policy_image_;
 
-  AccountId enterprise_account_id_;
-  cryptohome::AccountIdentifier cryptohome_id_ =
-      cryptohome::CreateAccountIdentifierFromAccountId(enterprise_account_id_);
-  LoginManagerMixin login_manager_{&mixin_host_};
-
  private:
   DISALLOW_COPY_AND_ASSIGN(UserImageManagerPolicyTest);
 };
+
+IN_PROC_BROWSER_TEST_F(UserImageManagerPolicyTest, PRE_SetAndClear) {
+  RegisterUser(enterprise_account_id_);
+  chromeos::StartupUtils::MarkOobeCompleted();
+}
 
 // Verifies that the user image can be set through policy. Also verifies that
 // after the policy has been cleared, the user is able to choose a different
@@ -729,6 +747,11 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerPolicyTest, SetAndClear) {
                       base::FilePath());
 }
 
+IN_PROC_BROWSER_TEST_F(UserImageManagerPolicyTest, PRE_PolicyOverridesUser) {
+  RegisterUser(enterprise_account_id_);
+  chromeos::StartupUtils::MarkOobeCompleted();
+}
+
 // Verifies that when the user chooses a user image and a different image is
 // then set through policy, the policy takes precedence, overriding the
 // previously chosen image.
@@ -785,6 +808,12 @@ IN_PROC_BROWSER_TEST_F(UserImageManagerPolicyTest, PolicyOverridesUser) {
   // Check image dimensions. Images can't be compared since JPEG is lossy.
   EXPECT_EQ(policy_image_.width(), saved_image.width());
   EXPECT_EQ(policy_image_.height(), saved_image.height());
+}
+
+IN_PROC_BROWSER_TEST_F(UserImageManagerPolicyTest,
+                       PRE_UserDoesNotOverridePolicy) {
+  RegisterUser(enterprise_account_id_);
+  chromeos::StartupUtils::MarkOobeCompleted();
 }
 
 // Verifies that when the user image has been set through policy and the user
