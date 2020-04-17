@@ -32744,7 +32744,16 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="-2147467259" label="E_FAIL"/>
   <int value="-2147418113" label="E_UNEXPECTED"/>
   <int value="-2147417848" label="RPC_E_DISCONNECTED"/>
+  <int value="-2147221232" label="CLASS_E_NOAGGREGATION"/>
   <int value="-2147221164" label="REGDB_E_CLASSNOTREG"/>
+  <int value="-2147220480"
+      label="custom error for taskbar::CustomHresultCodes::kIsBrowserAbort"/>
+  <int value="-2147220479"
+      label="custom error for taskbar::CustomHresultCodes::kInvalidIcon"/>
+  <int value="-2147220478"
+      label="custom error for taskbar::CustomHresultCodes::kWindowsInvisible"/>
+  <int value="-2147220477"
+      label="custom error for taskbar::CustomHresultCodes::kImageLoading"/>
   <int value="-2147219455" label="GOOPDATE_E_NO_NETWORK"/>
   <int value="-2147219437" label="GOOPDATE_E_APP_UPDATE_DISABLED_BY_POLICY"/>
   <int value="-2147219198" label="GOOPDATEINSTALL_E_INSTALLER_FAILED"/>
@@ -66489,6 +66498,14 @@ Full version information for the fingerprint enum values:
   <int value="6" label="RTX"/>
   <int value="7" label="OTA"/>
   <int value="8" label="IMY"/>
+</enum>
+
+<enum name="UpdateAppBadgeMacResult">
+  <summary>The result from updating App Badge on macOS.</summary>
+  <int value="0" label="success"/>
+  <int value="1" label="No app shim manager"/>
+  <int value="2" label="No app shim host"/>
+  <int value="3" label="No app shim"/>
 </enum>
 
 <enum name="UpdateCheckStatus">
