@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sync/model/sync_merge_result.h"
+#include "components/sync/driver/sync_merge_result.h"
 
 namespace syncer {
 
