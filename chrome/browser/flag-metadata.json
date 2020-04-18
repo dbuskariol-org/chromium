@@ -456,12 +456,12 @@
   {
     "name": "chrome-share-screenshot",
     "owners": ["jeffreycohen","kristipark"],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "chrome-sharing-hub",
     "owners": ["kmilka"],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "chromeos-video-decoder",
@@ -3607,7 +3607,7 @@
   {
     "name": "share-button-in-top-toolbar",
     "owners": ["jeffreycohen"],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "shared-clipboard-receiver",
@@ -3642,7 +3642,7 @@
   {
     "name": "sharing-qr-code-generator",
     "owners": [ "//components/send_tab_to_self/OWNERS" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 86
   },
   {
     "name": "sharing-rename-devices",
