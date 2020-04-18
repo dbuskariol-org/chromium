@@ -147,17 +147,16 @@
            compress="false" type="BINDATA"
            preprocess="true" />
   <if expr="is_win">
-    <include name="IDR_SETTINGS_CHROME_CLEANUP_PROXY_M_JS"
-             file="${root_gen_dir}/chrome/browser/resources/settings/chrome_cleanup_page/chrome_cleanup_proxy.m.js"
-             use_base_dir="false"
+    <include name="IDR_SETTINGS_CHROME_CLEANUP_PROXY_JS"
+             file="chrome_cleanup_page/chrome_cleanup_proxy.js"
              compress="false" type="BINDATA" />
-    <include name="IDR_SETTINGS_CHROME_CLEANUP_PAGE_M_JS"
-             file="${root_gen_dir}/chrome/browser/resources/settings/chrome_cleanup_page/chrome_cleanup_page.m.js"
+    <include name="IDR_SETTINGS_CHROME_CLEANUP_PAGE_JS"
+             file="${root_gen_dir}/chrome/browser/resources/settings/chrome_cleanup_page/chrome_cleanup_page.js"
              use_base_dir="false"
              compress="false" type="BINDATA"
              preprocess="true" />
-    <include name="IDR_SETTINGS_CHROME_CLEANUP_ITEMS_TO_REMOVE_LIST_M_JS"
-             file="${root_gen_dir}/chrome/browser/resources/settings/chrome_cleanup_page/items_to_remove_list.m.js"
+    <include name="IDR_SETTINGS_CHROME_CLEANUP_ITEMS_TO_REMOVE_LIST_JS"
+             file="${root_gen_dir}/chrome/browser/resources/settings/chrome_cleanup_page/items_to_remove_list.js"
              use_base_dir="false"
              compress="false" type="BINDATA" />
   </if>
