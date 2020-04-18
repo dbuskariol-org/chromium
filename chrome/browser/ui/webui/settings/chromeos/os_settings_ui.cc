@@ -83,7 +83,6 @@
 #include "chrome/browser/ui/webui/settings/reset_settings_handler.h"
 #include "chrome/browser/ui/webui/settings/search_engines_handler.h"
 #include "chrome/browser/ui/webui/settings/settings_cookies_view_handler.h"
-#include "chrome/browser/ui/webui/settings/settings_media_devices_selection_handler.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/tts_handler.h"
 #include "chrome/browser/ui/webui/webui_util.h"
@@ -155,8 +154,6 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
   AddSettingsPageUIHandler(std::make_unique<::settings::FontHandler>(web_ui));
   AddSettingsPageUIHandler(
       std::make_unique<::settings::LanguagesHandler>(web_ui));
-  AddSettingsPageUIHandler(
-      std::make_unique<::settings::MediaDevicesSelectionHandler>(profile));
   if (chromeos::features::IsSplitSettingsSyncEnabled())
     AddSettingsPageUIHandler(std::make_unique<OSSyncHandler>(profile));
   AddSettingsPageUIHandler(
