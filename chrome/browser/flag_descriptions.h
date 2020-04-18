@@ -60,6 +60,9 @@ extern const char kAccessibilityExposeDisplayNoneDescription[];
 extern const char kAccountIdMigrationName[];
 extern const char kAccountIdMigrationDescription[];
 
+extern const char kAlignFontDisplayAutoTimeoutWithLCPGoalName[];
+extern const char kAlignFontDisplayAutoTimeoutWithLCPGoalDescription[];
+
 extern const char kAllowInsecureLocalhostName[];
 extern const char kAllowInsecureLocalhostDescription[];
 

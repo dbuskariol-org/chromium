@@ -49,6 +49,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "align-font-display-auto-lcp",
+    "owners": [ "xiaochengh" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "allow-disable-mouse-acceleration",
     "owners": [ "zentaro" ],
     "expiry_milestone": 82

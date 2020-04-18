@@ -39,6 +39,13 @@ const char kAccountIdMigrationDescription[] =
     "Migrate to use Gaia ID instead of the email as the account identifer for "
     "the Identity Manager.";
 
+const char kAlignFontDisplayAutoTimeoutWithLCPGoalName[] =
+    "Align 'font-display: auto' timeout with LCP goal";
+const char kAlignFontDisplayAutoTimeoutWithLCPGoalDescription[] =
+    "Make all pending 'display: auto' web fonts enter the failure period "
+    "immediately before reaching the LCP time limit (~2500ms), so that web "
+    "fonts do not become a source of bad LCP (Largest Contentful Paint).";
+
 const char kAllowInsecureLocalhostName[] =
     "Allow invalid certificates for resources loaded from localhost.";
 const char kAllowInsecureLocalhostDescription[] =

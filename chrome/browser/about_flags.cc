@@ -5264,6 +5264,13 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          autofill::features::kAutofillEnableStickyPaymentsBubble)},
 
+    {"align-font-display-auto-lcp",
+     flag_descriptions::kAlignFontDisplayAutoTimeoutWithLCPGoalName,
+     flag_descriptions::kAlignFontDisplayAutoTimeoutWithLCPGoalDescription,
+     kOsAll,
+     FEATURE_VALUE_TYPE(
+         blink::features::kAlignFontDisplayAutoTimeoutWithLCPGoal)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
