@@ -24,7 +24,7 @@
            compress="false" type="BINDATA"
            preprocess="true" />
   <include name="IDR_SETTINGS_ABOUT_PAGE_ABOUT_PAGE_M_JS"
-           file="${root_gen_dir}/chrome/browser/resources/settings/about_page/about_page.m.js"
+           file="${root_gen_dir}/chrome/browser/resources/settings/about_page/about_page.js"
            use_base_dir="false"
            compress="false" type="BINDATA"
            preprocess="true" />
