@@ -2622,6 +2622,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "infobar-ui-reboot-only-ios13",
+    "owners": [ "sczs", "thegreenfrog" ],
+    "expiry_milestone": 84
+  },
+  {
     "name": "installable-ink-drop",
     "owners": [ "collinbaker", "pbos" ],
     "expiry_milestone": 82
