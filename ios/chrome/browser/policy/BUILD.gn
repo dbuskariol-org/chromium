@@ -99,6 +99,7 @@ source_set("unit_tests") {
     "//ios/chrome/browser:chrome_paths",
     "//ios/chrome/browser:pref_names",
     "//ios/chrome/browser:utils",
+    "//ios/chrome/browser/browser_state:test_support",
     "//ios/chrome/browser/prefs",
     "//ios/chrome/browser/prefs:browser_prefs",
     "//testing/gtest",
