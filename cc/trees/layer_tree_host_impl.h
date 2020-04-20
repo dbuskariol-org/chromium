@@ -84,6 +84,7 @@ class DebugRectHistory;
 class EvictionTilePriorityQueue;
 class FrameRateCounter;
 class ImageAnimationController;
+class LCDTextMetricsReporter;
 class LayerImpl;
 class LayerTreeFrameSink;
 class LayerTreeImpl;
@@ -1362,6 +1363,8 @@ class CC_EXPORT LayerTreeHostImpl : public InputHandler,
   DeJellyState de_jelly_state_;
 
   EventsMetricsManager events_metrics_manager_;
+
+  std::unique_ptr<LCDTextMetricsReporter> lcd_text_metrics_reporter_;
 
   // Must be the last member to ensure this is destroyed first in the
   // destruction order and invalidates all weak pointers.
