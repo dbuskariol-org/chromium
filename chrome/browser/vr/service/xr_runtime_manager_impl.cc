@@ -23,7 +23,7 @@
 #include "device/base/features.h"
 #include "device/vr/buildflags/buildflags.h"
 #include "device/vr/orientation/orientation_device_provider.h"
-#include "device/vr/vr_device_provider.h"
+#include "device/vr/public/cpp/vr_device_provider.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "services/device/public/mojom/sensor_provider.mojom.h"
 

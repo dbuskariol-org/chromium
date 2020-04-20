@@ -22,7 +22,6 @@
 #include "chrome/browser/vr/service/vr_service_impl.h"
 #include "content/public/browser/xr_runtime_manager.h"
 #include "device/vr/public/mojom/vr_service.mojom-forward.h"
-#include "device/vr/vr_device.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 
 namespace device {
