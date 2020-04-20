@@ -60,6 +60,9 @@
 #include "third_party/blink/renderer/core/dom/scripted_idle_task_controller.h"
 #include "third_party/blink/renderer/core/editing/editor.h"
 #include "third_party/blink/renderer/core/editing/frame_selection.h"
+#include "third_party/blink/renderer/core/editing/ime/input_method_controller.h"
+#include "third_party/blink/renderer/core/editing/spellcheck/spell_checker.h"
+#include "third_party/blink/renderer/core/editing/suggestion/text_suggestion_controller.h"
 #include "third_party/blink/renderer/core/events/hash_change_event.h"
 #include "third_party/blink/renderer/core/events/message_event.h"
 #include "third_party/blink/renderer/core/events/pop_state_event.h"
@@ -225,7 +228,12 @@ LocalDOMWindow::LocalDOMWindow(LocalFrame& frame)
       unused_preloads_timer_(frame.GetTaskRunner(TaskType::kInternalDefault),
                              this,
                              &LocalDOMWindow::WarnUnusedPreloads),
-      should_print_when_finished_loading_(false) {}
+      should_print_when_finished_loading_(false),
+      input_method_controller_(
+          MakeGarbageCollected<InputMethodController>(*this)),
+      spell_checker_(MakeGarbageCollected<SpellChecker>(*this)),
+      text_suggestion_controller_(
+          MakeGarbageCollected<TextSuggestionController>(*this)) {}
 
 void LocalDOMWindow::ClearDocument() {
   if (!document_)
@@ -1839,6 +1847,9 @@ void LocalDOMWindow::Trace(Visitor* visitor) {
   visitor->Trace(visualViewport_);
   visitor->Trace(event_listener_observers_);
   visitor->Trace(trusted_types_);
+  visitor->Trace(input_method_controller_);
+  visitor->Trace(spell_checker_);
+  visitor->Trace(text_suggestion_controller_);
   DOMWindow::Trace(visitor);
   ExecutionContext::Trace(visitor);
   Supplementable<LocalDOMWindow>::Trace(visitor);
