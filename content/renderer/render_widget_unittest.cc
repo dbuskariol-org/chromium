@@ -98,7 +98,9 @@ class MockWidgetInputHandlerHost : public mojom::WidgetInputHandlerHost {
   MOCK_METHOD1(SetTouchActionFromMain, void(cc::TouchAction));
 
   MOCK_METHOD3(SetWhiteListedTouchAction,
-               void(cc::TouchAction, uint32_t, content::InputEventAckState));
+               void(cc::TouchAction,
+                    uint32_t,
+                    blink::mojom::InputEventResultState));
 
   MOCK_METHOD1(DidOverscroll, void(const ui::DidOverscrollParams&));
 
@@ -142,7 +144,7 @@ class MockHandledEventCallback {
  public:
   MockHandledEventCallback() = default;
   MOCK_METHOD4_T(Run,
-                 void(InputEventAckState,
+                 void(blink::mojom::InputEventResultState,
                       const ui::LatencyInfo&,
                       std::unique_ptr<ui::DidOverscrollParams>&,
                       base::Optional<cc::TouchAction>));
@@ -153,7 +155,7 @@ class MockHandledEventCallback {
   }
 
  private:
-  void HandleCallback(InputEventAckState ack_state,
+  void HandleCallback(blink::mojom::InputEventResultState ack_state,
                       const ui::LatencyInfo& latency_info,
                       std::unique_ptr<ui::DidOverscrollParams> overscroll,
                       base::Optional<cc::TouchAction> touch_action) {
@@ -418,8 +420,8 @@ TEST_F(RenderWidgetExternalWidgetUnittest, EventOverscroll) {
 
   // Overscroll notifications received while handling an input event should
   // be bundled with the event ack IPC.
-  EXPECT_CALL(handled_event, Run(INPUT_EVENT_ACK_STATE_CONSUMED, _,
-                                 testing::Pointee(expected_overscroll), _))
+  EXPECT_CALL(handled_event, Run(blink::mojom::InputEventResultState::kConsumed,
+                                 _, testing::Pointee(expected_overscroll), _))
       .Times(1);
 
   widget()->SendInputEvent(scroll, handled_event.GetCallback());
