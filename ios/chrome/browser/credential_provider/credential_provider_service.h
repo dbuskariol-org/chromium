@@ -16,42 +16,33 @@
 // Extension data up to date.
 class CredentialProviderService
     : public KeyedService,
-      public password_manager::PasswordStoreConsumer,
-      public password_manager::PasswordStore::Observer {
+      public password_manager::PasswordStoreConsumer {
  public:
   // Initializes the service.
   CredentialProviderService(
       scoped_refptr<password_manager::PasswordStore> password_store,
-      ArchivableCredentialStore* credential_store);
+      NSURL* file_url);
   ~CredentialProviderService() override;
 
   // KeyedService:
   void Shutdown() override;
 
  private:
-  // Request all the credentials to sync them. Before adding the fresh ones,
-  // the old ones are deleted.
-  void RequestSyncAllCredentials();
+  friend class CredentialProviderServiceTest;
 
-  // Adds a credential with |form| to the store.
+  // Request all the credentials to sync them. B efore adding the fresh ones,
+  // the old ones are deleted.
+  void SyncAllCredentials();
+
+  // Adds a credential with the passed args to the store.
   void SaveCredential(const autofill::PasswordForm& form) const;
 
-  // Updates a credential with |form| in the store.
-  void UpdateCredential(const autofill::PasswordForm& form) const;
-
-  // Removes a credential with |form| from the store.
-  void RemoveCredential(const autofill::PasswordForm& form) const;
-
-  // Syncs the credential store to disk.
-  void SyncStore(void (^completion)(NSError*)) const;
+  // Syncs the store to disk.
+  void SyncStore() const;
 
   // PasswordStoreConsumer:
   void OnGetPasswordStoreResults(
       std::vector<std::unique_ptr<autofill::PasswordForm>> results) override;
-
-  // PasswordStore::Observer:
-  void OnLoginsChanged(
-      const password_manager::PasswordStoreChangeList& changes) override;
 
   // The interface for getting and manipulating a user's saved passwords.
   scoped_refptr<password_manager::PasswordStore> password_store_;
