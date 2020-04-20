@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.test.util.browser.notifications;
+package org.chromium.components.browser_ui.notifications;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -11,9 +11,6 @@ import android.app.NotificationChannelGroup;
 import android.os.Build;
 
 import androidx.annotation.Nullable;
-
-import org.chromium.chrome.browser.notifications.ChromeNotification;
-import org.chromium.chrome.browser.notifications.NotificationManagerProxy;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
