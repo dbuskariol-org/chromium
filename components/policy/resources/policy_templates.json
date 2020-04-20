@@ -3081,6 +3081,7 @@
         'chrome.*:69-',
         'chrome_os:69-',
         'android:69-',
+        'ios:84-',
       ],
       'features': {
         'can_be_recommended': True,
