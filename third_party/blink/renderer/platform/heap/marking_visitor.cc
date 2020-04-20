@@ -109,7 +109,8 @@ void MarkingVisitorCommon::VisitBackingStoreWeakly(
 void MarkingVisitorCommon::VisitEphemeron(const void* key,
                                           const void* value,
                                           TraceCallback value_trace_callback) {
-  if (!HeapObjectHeader::FromPayload(key)->IsMarked())
+  if (!HeapObjectHeader::FromPayload(key)
+           ->IsMarked<HeapObjectHeader::AccessMode::kAtomic>())
     return;
   value_trace_callback(this, value);
 }
