@@ -966,6 +966,11 @@
     "expiry_milestone": 89
   },
   {
+    "name": "edit-bookmarks-ios",
+    "owners": [ "edchin", "rohitrao" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "elastic-overscroll-win",
     "owners": [ "arakeri@microsoft.com" ],
     "expiry_milestone": 90
