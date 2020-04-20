@@ -27185,6 +27185,9 @@ Called by update_feature_policy_enum.py.-->
   <int value="13" label="Failed - EULA not accepted"/>
   <int value="14" label="Failed - articles list hidden"/>
   <int value="15" label="Failed - cannot parse network response body"/>
+  <int value="16"
+      label="Failed - cannot load more content because the model is not yet
+             loaded"/>
 </enum>
 
 <enum name="FeedRequestReason">
