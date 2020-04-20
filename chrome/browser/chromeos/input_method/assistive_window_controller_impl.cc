@@ -78,11 +78,16 @@ void AssistiveWindowControllerImpl::ShowSuggestion(
   if (!suggestion_window_view_)
     Init();
   suggestion_text_ = text;
+  confirmed_length_ = confirmed_length;
   suggestion_window_view_->Show(text, confirmed_length, show_tab);
 }
 
 base::string16 AssistiveWindowControllerImpl::GetSuggestionText() const {
   return suggestion_text_;
+}
+
+size_t AssistiveWindowControllerImpl::GetConfirmedLength() const {
+  return confirmed_length_;
 }
 
 }  // namespace input_method

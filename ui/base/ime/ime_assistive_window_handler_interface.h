@@ -30,6 +30,9 @@ class COMPONENT_EXPORT(UI_BASE_IME) IMEAssistiveWindowHandlerInterface {
   // Called to get the current suggestion text.
   virtual base::string16 GetSuggestionText() const = 0;
 
+  // Called to get length of the confirmed part of suggestion text.
+  virtual size_t GetConfirmedLength() const = 0;
+
   // Called when the application changes its caret bounds.
   virtual void SetBounds(const gfx::Rect& cursor_bounds) = 0;
 

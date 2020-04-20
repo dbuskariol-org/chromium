@@ -37,6 +37,7 @@ class AssistiveWindowControllerImpl
                       const bool show_tab) override;
   void HideSuggestion() override;
   base::string16 GetSuggestionText() const override;
+  size_t GetConfirmedLength() const override;
   void FocusStateChanged() override;
   void OnWidgetClosing(views::Widget* widget) override;
 
@@ -44,6 +45,7 @@ class AssistiveWindowControllerImpl
 
   ui::ime::SuggestionWindowView* suggestion_window_view_ = nullptr;
   base::string16 suggestion_text_;
+  size_t confirmed_length_;
 
   DISALLOW_COPY_AND_ASSIGN(AssistiveWindowControllerImpl);
 };

@@ -70,7 +70,9 @@ void SuggestionView::SetView(const base::string16& text,
 
 void SuggestionView::SetSuggestionText(const base::string16& text,
                                        const size_t confirmed_length) {
-  // SetText clears the existing style.
+  // SetText clears the existing style only if the text to set is different from
+  // the previous one.
+  suggestion_label_->SetText(base::EmptyString16());
   suggestion_label_->SetText(text);
   if (confirmed_length != 0) {
     views::StyledLabel::RangeStyleInfo confirmed_style;
