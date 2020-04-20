@@ -4,6 +4,7 @@
 
 #include "cc/metrics/frame_sequence_tracker.h"
 
+#include "base/bind.h"
 #include "base/metrics/histogram.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/trace_event/trace_event.h"
@@ -56,16 +57,27 @@ const char* FrameSequenceTracker::GetFrameSequenceTrackerTypeName(
 
 FrameSequenceTracker::FrameSequenceTracker(
     FrameSequenceTrackerType type,
-    ThroughputUkmReporter* throughput_ukm_reporter,
-    int custom_sequence_id)
+    ThroughputUkmReporter* throughput_ukm_reporter)
     : type_(type),
-      custom_sequence_id_(custom_sequence_id),
+      custom_sequence_id_(-1),
       metrics_(std::make_unique<FrameSequenceMetrics>(type,
                                                       throughput_ukm_reporter)),
       trace_data_(metrics_.get()) {
   DCHECK_LT(type_, FrameSequenceTrackerType::kMaxType);
-  DCHECK(type_ != FrameSequenceTrackerType::kCustom ||
-         custom_sequence_id_ >= 0);
+  DCHECK(type_ != FrameSequenceTrackerType::kCustom);
+}
+
+FrameSequenceTracker::FrameSequenceTracker(
+    int custom_sequence_id,
+    FrameSequenceMetrics::CustomReporter custom_reporter)
+    : type_(FrameSequenceTrackerType::kCustom),
+      custom_sequence_id_(custom_sequence_id),
+      metrics_(
+          std::make_unique<FrameSequenceMetrics>(type_,
+                                                 /*ukm_reporter=*/nullptr)),
+      trace_data_(metrics_.get()) {
+  DCHECK_GT(custom_sequence_id_, 0);
+  metrics_->SetCustomReporter(std::move(custom_reporter));
 }
 
 FrameSequenceTracker::~FrameSequenceTracker() = default;

@@ -105,9 +105,12 @@ class CC_EXPORT FrameSequenceTracker {
   friend class FrameSequenceTrackerCollection;
   friend class FrameSequenceTrackerTest;
 
+  // Constructs a tracker for a typed sequence other than kCustom.
   FrameSequenceTracker(FrameSequenceTrackerType type,
-                       ThroughputUkmReporter* throughput_ukm_reporter,
-                       int custom_sequence_id = -1);
+                       ThroughputUkmReporter* throughput_ukm_reporter);
+  // Constructs a tracker for a kCustom typed sequence.
+  FrameSequenceTracker(int custom_sequence_id,
+                       FrameSequenceMetrics::CustomReporter custom_reporter);
 
   FrameSequenceMetrics::ThroughputData& impl_throughput() {
     return metrics_->impl_throughput();

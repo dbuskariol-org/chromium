@@ -62,10 +62,14 @@ void FrameSequenceTrackerCollection::StopSequence(
 void FrameSequenceTrackerCollection::StartCustomSequence(int sequence_id) {
   DCHECK(!base::Contains(custom_frame_trackers_, sequence_id));
 
-  custom_frame_trackers_[sequence_id] = base::WrapUnique(
-      new FrameSequenceTracker(FrameSequenceTrackerType::kCustom,
-                               /*throughput_ukm_reporter=*/nullptr,
-                               /*custom_sequence_id=*/sequence_id));
+  // base::Unretained() is safe here because |this| owns FrameSequenceTracker
+  // and FrameSequenceMetrics.
+  custom_frame_trackers_[sequence_id] =
+      base::WrapUnique(new FrameSequenceTracker(
+          sequence_id,
+          base::BindOnce(
+              &FrameSequenceTrackerCollection::AddCustomTrackerResult,
+              base::Unretained(this), sequence_id)));
 }
 
 void FrameSequenceTrackerCollection::StopCustomSequence(int sequence_id) {
@@ -78,6 +82,7 @@ void FrameSequenceTrackerCollection::StopCustomSequence(int sequence_id) {
   custom_frame_trackers_.erase(it);
   tracker->ScheduleTerminate();
   removal_trackers_.push_back(std::move(tracker));
+  DestroyTrackers();
 }
 
 void FrameSequenceTrackerCollection::ClearAll() {
@@ -196,16 +201,12 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
       // type. If there are enough frames to report the metrics, then report the
       // metrics and destroy it. Otherwise, retain it to be merged with
       // follow-up sequences.
-      // For kCustom typed trackers, put its result in |custom_tracker_results_|
+      // For kCustom typed trackers, |metrics| invokes AddCustomTrackerResult
+      // on its destruction, which add its data to |custom_tracker_results_|
       // to be picked up by caller.
       auto metrics = tracker->TakeMetrics();
-      if (tracker->type() == FrameSequenceTrackerType::kCustom) {
-        custom_tracker_results_[tracker->custom_sequence_id()] =
-            metrics->main_throughput();
-        // |custom_tracker_results_| should be picked up timely.
-        DCHECK_LT(custom_tracker_results_.size(), 500u);
+      if (tracker->type() == FrameSequenceTrackerType::kCustom)
         continue;
-      }
 
       auto key = std::make_pair(tracker->type(), metrics->GetEffectiveThread());
       if (accumulated_metrics_.contains(key)) {
@@ -270,7 +271,9 @@ FrameSequenceTrackerCollection::FrameSequenceTrackerActiveTypes() {
 
 CustomTrackerResults
 FrameSequenceTrackerCollection::TakeCustomTrackerResults() {
-  return std::move(custom_tracker_results_);
+  CustomTrackerResults results;
+  results.swap(custom_tracker_results_);
+  return results;
 }
 
 FrameSequenceTracker* FrameSequenceTrackerCollection::GetTrackerForTesting(
@@ -295,6 +298,14 @@ void FrameSequenceTrackerCollection::SetUkmManager(UkmManager* manager) {
     throughput_ukm_reporter_ = std::make_unique<ThroughputUkmReporter>(manager);
   else
     throughput_ukm_reporter_ = nullptr;
+}
+
+void FrameSequenceTrackerCollection::AddCustomTrackerResult(
+    int custom_sequence_id,
+    FrameSequenceMetrics::ThroughputData throughput_data) {
+  // |custom_tracker_results_| should be picked up timely.
+  DCHECK_LT(custom_tracker_results_.size(), 500u);
+  custom_tracker_results_[custom_sequence_id] = std::move(throughput_data);
 }
 
 }  // namespace cc
