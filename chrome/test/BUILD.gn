@@ -1544,6 +1544,7 @@ if (!is_android) {
 
     if (enable_dice_support) {
       sources += [
+        "../browser/policy/cloud/user_policy_signin_service_browsertest.cc",
         "../browser/signin/dice_browsertest.cc",
         "../browser/unified_consent/unified_consent_browsertest.cc",
       ]
