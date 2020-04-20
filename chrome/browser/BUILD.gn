@@ -5734,7 +5734,10 @@ source_set("expired_flags_list") {
 
 action("unexpire_flags_gen") {
   script = "//tools/flags/generate_unexpire_flags.py"
-  inputs = [ "//chrome/VERSION" ]
+  inputs = [
+    "//chrome/VERSION",
+    "//tools/flags/generate_unexpire_flags.py",
+  ]
   outputs = [
     "$root_gen_dir/chrome/browser/unexpire_flags_gen.cc",
     "$root_gen_dir/chrome/browser/unexpire_flags_gen.h",
