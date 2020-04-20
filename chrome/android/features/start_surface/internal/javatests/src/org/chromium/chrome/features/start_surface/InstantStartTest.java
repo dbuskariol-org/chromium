@@ -239,6 +239,7 @@ public class InstantStartTest {
             TabManagementDelegate tabManagementDelegate = TabManagementModuleProvider.getDelegate();
             startSurface.set(
                     tabManagementDelegate.createStartSurface(mActivityTestRule.getActivity()));
+            startSurface.get().getController().enableRecordingFirstMeaningfulPaint(0);
             startSurface.get().getController().showOverview(false);
         });
         Assert.assertTrue(startSurface.get().getController().overviewVisible());
