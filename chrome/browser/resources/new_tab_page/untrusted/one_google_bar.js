@@ -45,10 +45,20 @@ function trackOverlayState() {
     mutations.forEach(({target}) => {
       if (target.id === 'gb' || target.tagName === 'BODY' ||
           target.parentElement && target.parentElement.tagName === 'BODY') {
-        return false;
+        return;
       }
       if (target.offsetTop + target.offsetHeight > oneGoogleBarHeightInPixels) {
         overlays.add(target);
+      }
+      // Update links that are loaded dynamically to ensure target is "_blank"
+      // or "_top".
+      // TODO(crbug.com/1039913): remove after OneGoogleBar links are updated.
+      if (target.parentElement) {
+        target.parentElement.querySelectorAll('a').forEach(el => {
+          if (el.target !== '_blank' && el.target !== '_top') {
+            el.target = '_top';
+          }
+        });
       }
     });
     // Remove overlays detached from DOM.
