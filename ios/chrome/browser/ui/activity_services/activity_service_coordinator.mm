@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/activity_services/activity_service_legacy_coordinator.h"
+#import "ios/chrome/browser/ui/activity_services/activity_service_coordinator.h"
 
 #include "base/metrics/histogram_macros.h"
 #include "base/time/time.h"
@@ -14,7 +14,6 @@
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_password.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_positioner.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_presentation.h"
-#import "ios/chrome/browser/ui/activity_services/share_protocol.h"
 #import "ios/chrome/browser/ui/activity_services/share_to_data.h"
 #import "ios/chrome/browser/ui/activity_services/share_to_data_builder.h"
 #import "ios/chrome/browser/ui/alert_coordinator/alert_coordinator.h"
@@ -35,7 +34,12 @@ namespace {
 const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
 }  // namespace
 
-@interface ActivityServiceLegacyCoordinator ()<ActivityServicePassword>
+@interface ActivityServiceCoordinator () <ActivityServicePassword,
+                                          ActivityServicePresentation>
+
+@property(nonatomic, weak)
+    id<ActivityServiceCommands, BrowserCommands, SnackbarCommands>
+        handler;
 
 // The time when the Share Page operation started.
 @property(nonatomic, assign) base::TimeTicks sharePageStartTime;
@@ -45,35 +49,48 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
 
 @end
 
-@implementation ActivityServiceLegacyCoordinator
-
-@synthesize positionProvider = _positionProvider;
-@synthesize presentationProvider = _presentationProvider;
-
-@synthesize sharePageStartTime = _sharePageStartTime;
+@implementation ActivityServiceCoordinator
 
 #pragma mark - Public methods
 
 - (void)start {
-  [self.browser->GetCommandDispatcher()
-      startDispatchingToTarget:self
-                   forSelector:@selector(sharePage)];
+  self.handler = static_cast<
+      id<ActivityServiceCommands, BrowserCommands, SnackbarCommands>>(
+      self.browser->GetCommandDispatcher());
+
+  self.sharePageStartTime = base::TimeTicks::Now();
+  __weak __typeof(self) weakSelf = self;
+  activity_services::RetrieveCanonicalUrl(
+      self.browser->GetWebStateList()->GetActiveWebState(), ^(const GURL& url) {
+        [weakSelf sharePageWithCanonicalURL:url];
+      });
 }
 
 - (void)stop {
-  [self.browser->GetCommandDispatcher() stopDispatchingToTarget:self];
+  [[ActivityServiceController sharedInstance] cancelShareAnimated:NO];
 
   [self.alertCoordinator stop];
   self.alertCoordinator = nil;
 }
 
-- (void)cancelShare {
-  id<ShareProtocol> controller = [ActivityServiceController sharedInstance];
-  [controller cancelShareAnimated:NO];
+#pragma mark - ActivityServicePresentation
+
+- (void)presentActivityServiceViewController:(UIViewController*)controller {
+  [self.baseViewController presentViewController:controller
+                                        animated:YES
+                                      completion:nil];
 }
 
-- (void)showErrorAlertWithStringTitle:(NSString*)title
-                              message:(NSString*)message {
+- (void)activityServiceDidEndPresenting {
+  if ([self.alertCoordinator isVisible]) {
+    return;
+  }
+
+  [self.handler hideActivityView];
+}
+
+- (void)showActivityServiceErrorAlertWithStringTitle:(NSString*)title
+                                             message:(NSString*)message {
   self.alertCoordinator = [[AlertCoordinator alloc]
       initWithBaseViewController:self.baseViewController
                          browser:self.browser
@@ -89,17 +106,6 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
                                    action:action
                                     style:UIAlertActionStyleDefault];
   [self.alertCoordinator start];
-}
-
-#pragma mark - Command handlers
-
-- (void)sharePage {
-  self.sharePageStartTime = base::TimeTicks::Now();
-  __weak __typeof(self) weakSelf = self;
-  activity_services::RetrieveCanonicalUrl(
-      self.browser->GetWebStateList()->GetActiveWebState(), ^(const GURL& url) {
-        [weakSelf sharePageWithCanonicalURL:url];
-      });
 }
 
 #pragma mark - Providers
@@ -121,7 +127,8 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
   if (!data)
     return;
 
-  id<ShareProtocol> controller = [ActivityServiceController sharedInstance];
+  ActivityServiceController* controller =
+      [ActivityServiceController sharedInstance];
   if ([controller isActive])
     return;
 
@@ -135,17 +142,15 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
   // clean up.
   [controller shareWithData:data
                browserState:self.browser->GetBrowserState()
-                 dispatcher:static_cast<id<BrowserCommands, SnackbarCommands>>(
-                                self.browser->GetCommandDispatcher())
+                 dispatcher:self.handler
            passwordProvider:self
            positionProvider:self.positionProvider
-       presentationProvider:self.presentationProvider];
+       presentationProvider:self];
 }
 
 // Cleans up the alert's components.
 - (void)alertDismissed {
-  [self.alertCoordinator stop];
-  self.alertCoordinator = nil;
+  [self.handler hideActivityView];
 }
 
 @end
