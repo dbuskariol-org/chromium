@@ -2637,12 +2637,12 @@
   {
     "name": "improved-cookie-controls",
     "owners": [ "dullweber", "huanzhong" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "improved-cookie-controls-for-third-party-cookie-blocking",
     "owners": [ "dullweber", "huanzhong" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "impulse-scroll-animations",
