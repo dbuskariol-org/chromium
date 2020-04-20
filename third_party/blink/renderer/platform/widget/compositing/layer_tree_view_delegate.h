@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_RENDERER_COMPOSITOR_LAYER_TREE_VIEW_DELEGATE_H_
-#define CONTENT_RENDERER_COMPOSITOR_LAYER_TREE_VIEW_DELEGATE_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_WIDGET_COMPOSITING_LAYER_TREE_VIEW_DELEGATE_H_
+#define THIRD_PARTY_BLINK_RENDERER_PLATFORM_WIDGET_COMPOSITING_LAYER_TREE_VIEW_DELEGATE_H_
 
 #include <memory>
-#include <vector>
 
 #include "base/callback.h"
 #include "base/time/time.h"
@@ -19,7 +18,7 @@ struct ElementId;
 class RenderFrameMetadataObserver;
 }  // namespace cc
 
-namespace content {
+namespace blink {
 
 // Consumers of LayerTreeView implement this delegate in order to
 // transport compositing information across processes.
@@ -82,7 +81,7 @@ class LayerTreeViewDelegate {
   // Call RecordStartOfFrameMetrics when a main frame is starting, and call
   // RecordEndOfFrameMetrics as soon as the total frame time becomes known for
   // a given frame. For example, ProxyMain::BeginMainFrame calls
-  // RecordStartOfFrameMetrics just be WillBeginCompositorFrame() and
+  // RecordStartOfFrameMetrics just be WillBeginMainFrame() and
   // RecordEndOfFrameMetrics immediately before aborting or completing the
   // BeginMainFrame method.
   virtual void RecordStartOfFrameMetrics() = 0;
@@ -109,15 +108,13 @@ class LayerTreeViewDelegate {
 
   // Indicates that the compositor is about to begin a frame. This is primarily
   // to signal to flow control mechanisms that a frame is beginning, not to
-  // perform actual painting work. When |record_main_frame_metrics| is true
-  // we are in a frame that shoujld capture metrics data, and the local frame's
-  // UKM aggregator must be informed that the frame is starting.
-  virtual void WillBeginCompositorFrame() = 0;
+  // perform actual painting work.
+  virtual void WillBeginMainFrame() = 0;
 
  protected:
   virtual ~LayerTreeViewDelegate() {}
 };
 
-}  // namespace content
+}  // namespace blink
 
-#endif  // CONTENT_RENDERER_COMPOSITOR_LAYER_TREE_VIEW_DELEGATE_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_PLATFORM_WIDGET_COMPOSITING_LAYER_TREE_VIEW_DELEGATE_H_

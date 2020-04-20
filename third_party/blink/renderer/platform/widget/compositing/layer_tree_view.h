@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_RENDERER_COMPOSITOR_LAYER_TREE_VIEW_H_
-#define CONTENT_RENDERER_COMPOSITOR_LAYER_TREE_VIEW_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_PLATFORM_WIDGET_COMPOSITING_LAYER_TREE_VIEW_H_
+#define THIRD_PARTY_BLINK_RENDERER_PLATFORM_WIDGET_COMPOSITING_LAYER_TREE_VIEW_H_
 
 #include <stdint.h>
 
@@ -18,14 +18,9 @@
 #include "cc/trees/layer_tree_host_single_thread_client.h"
 #include "cc/trees/swap_promise.h"
 #include "cc/trees/swap_promise_monitor.h"
-#include "content/common/content_export.h"
+#include "third_party/blink/renderer/platform/platform_export.h"
+#include "third_party/blink/renderer/platform/widget/compositing/layer_tree_view_delegate.h"
 #include "ui/gfx/geometry/rect.h"
-
-namespace blink {
-namespace scheduler {
-class WebThreadScheduler;
-}
-}  // namespace blink
 
 namespace cc {
 class AnimationHost;
@@ -37,12 +32,16 @@ class TaskGraphRunner;
 class UkmRecorderFactory;
 }  // namespace cc
 
-namespace content {
-class LayerTreeViewDelegate;
+namespace blink {
 
-class CONTENT_EXPORT LayerTreeView : public cc::LayerTreeHostClient,
-                                     public cc::LayerTreeHostSingleThreadClient,
-                                     public cc::LayerTreeHostSchedulingClient {
+namespace scheduler {
+class WebThreadScheduler;
+}
+
+class PLATFORM_EXPORT LayerTreeView
+    : public cc::LayerTreeHostClient,
+      public cc::LayerTreeHostSingleThreadClient,
+      public cc::LayerTreeHostSchedulingClient {
  public:
   // The |main_thread| is the task runner that the compositor will use for the
   // main thread (where it is constructed). The |compositor_thread| is the task
@@ -52,7 +51,7 @@ class CONTENT_EXPORT LayerTreeView : public cc::LayerTreeHostClient,
                 scoped_refptr<base::SingleThreadTaskRunner> main_thread,
                 scoped_refptr<base::SingleThreadTaskRunner> compositor_thread,
                 cc::TaskGraphRunner* task_graph_runner,
-                blink::scheduler::WebThreadScheduler* scheduler);
+                scheduler::WebThreadScheduler* scheduler);
   ~LayerTreeView() override;
 
   // The |ukm_recorder_factory| may be null to disable recording (in tests
@@ -133,7 +132,7 @@ class CONTENT_EXPORT LayerTreeView : public cc::LayerTreeHostClient,
   const scoped_refptr<base::SingleThreadTaskRunner> main_thread_;
   const scoped_refptr<base::SingleThreadTaskRunner> compositor_thread_;
   cc::TaskGraphRunner* const task_graph_runner_;
-  blink::scheduler::WebThreadScheduler* const web_main_thread_scheduler_;
+  scheduler::WebThreadScheduler* const web_main_thread_scheduler_;
   const std::unique_ptr<cc::AnimationHost> animation_host_;
 
   // The delegate_ becomes null when Disconnect() is called. After that, the
@@ -157,6 +156,6 @@ class CONTENT_EXPORT LayerTreeView : public cc::LayerTreeHostClient,
   DISALLOW_COPY_AND_ASSIGN(LayerTreeView);
 };
 
-}  // namespace content
+}  // namespace blink
 
-#endif  // CONTENT_RENDERER_COMPOSITOR_LAYER_TREE_VIEW_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_PLATFORM_WIDGET_COMPOSITING_LAYER_TREE_VIEW_H_

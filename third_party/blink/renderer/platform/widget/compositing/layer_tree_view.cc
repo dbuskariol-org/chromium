@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/renderer/compositor/layer_tree_view.h"
+#include "third_party/blink/renderer/platform/widget/compositing/layer_tree_view.h"
 
 #include <stddef.h>
 #include <string>
@@ -37,7 +37,6 @@
 #include "components/viz/common/frame_sinks/begin_frame_source.h"
 #include "components/viz/common/quads/compositor_frame_metadata.h"
 #include "components/viz/common/resources/single_release_callback.h"
-#include "content/renderer/compositor/layer_tree_view_delegate.h"
 #include "third_party/blink/public/platform/scheduler/web_thread_scheduler.h"
 #include "third_party/blink/public/platform/web_runtime_features.h"
 #include "third_party/blink/public/web/blink.h"
@@ -51,14 +50,14 @@ namespace cc {
 class Layer;
 }
 
-namespace content {
+namespace blink {
 
 LayerTreeView::LayerTreeView(
     LayerTreeViewDelegate* delegate,
     scoped_refptr<base::SingleThreadTaskRunner> main_thread,
     scoped_refptr<base::SingleThreadTaskRunner> compositor_thread,
     cc::TaskGraphRunner* task_graph_runner,
-    blink::scheduler::WebThreadScheduler* scheduler)
+    scheduler::WebThreadScheduler* scheduler)
     : main_thread_(std::move(main_thread)),
       compositor_thread_(std::move(compositor_thread)),
       task_graph_runner_(task_graph_runner),
@@ -137,7 +136,7 @@ void LayerTreeView::SetLayerTreeFrameSink(
 void LayerTreeView::WillBeginMainFrame() {
   if (!delegate_)
     return;
-  delegate_->WillBeginCompositorFrame();
+  delegate_->WillBeginMainFrame();
 }
 
 void LayerTreeView::DidBeginMainFrame() {
@@ -168,7 +167,8 @@ void LayerTreeView::DidUpdateLayers() {
 void LayerTreeView::BeginMainFrame(const viz::BeginFrameArgs& args) {
   if (!delegate_)
     return;
-  web_main_thread_scheduler_->WillBeginFrame(args);
+  if (web_main_thread_scheduler_)
+    web_main_thread_scheduler_->WillBeginFrame(args);
   delegate_->BeginMainFrame(args.frame_time);
 }
 
@@ -185,13 +185,13 @@ void LayerTreeView::OnDeferCommitsChanged(bool status) {
 }
 
 void LayerTreeView::BeginMainFrameNotExpectedSoon() {
-  if (!delegate_)
+  if (!delegate_ || !web_main_thread_scheduler_)
     return;
   web_main_thread_scheduler_->BeginFrameNotExpectedSoon();
 }
 
 void LayerTreeView::BeginMainFrameNotExpectedUntil(base::TimeTicks time) {
-  if (!delegate_)
+  if (!delegate_ || !web_main_thread_scheduler_)
     return;
   web_main_thread_scheduler_->BeginMainFrameNotExpectedUntil(time);
 }
@@ -276,7 +276,8 @@ void LayerTreeView::DidCommit(base::TimeTicks commit_start_time) {
   if (!delegate_)
     return;
   delegate_->DidCommitCompositorFrame(commit_start_time);
-  web_main_thread_scheduler_->DidCommitFrameToCompositor();
+  if (web_main_thread_scheduler_)
+    web_main_thread_scheduler_->DidCommitFrameToCompositor();
 }
 
 void LayerTreeView::DidCommitAndDrawFrame() {
@@ -331,13 +332,13 @@ LayerTreeView::GetBeginMainFrameMetrics() {
 }
 
 void LayerTreeView::DidScheduleBeginMainFrame() {
-  if (!delegate_)
+  if (!delegate_ || !web_main_thread_scheduler_)
     return;
   web_main_thread_scheduler_->DidScheduleBeginMainFrame();
 }
 
 void LayerTreeView::DidRunBeginMainFrame() {
-  if (!delegate_)
+  if (!delegate_ || !web_main_thread_scheduler_)
     return;
   web_main_thread_scheduler_->DidRunBeginMainFrame();
 }
@@ -366,4 +367,4 @@ void LayerTreeView::AddPresentationCallback(
   DCHECK_LE(presentation_callbacks_.size(), 25u);
 }
 
-}  // namespace content
+}  // namespace blink

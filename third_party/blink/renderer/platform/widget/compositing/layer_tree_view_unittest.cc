@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/renderer/compositor/layer_tree_view.h"
+#include "third_party/blink/renderer/platform/widget/compositing/layer_tree_view.h"
 
 #include <utility>
 
@@ -20,20 +20,18 @@
 #include "cc/test/test_ukm_recorder_factory.h"
 #include "cc/trees/layer_tree_host.h"
 #include "cc/trees/render_frame_metadata_observer.h"
-#include "components/viz/common/frame_sinks/copy_output_request.h"
-#include "components/viz/common/surfaces/parent_local_surface_id_allocator.h"
 #include "components/viz/test/test_context_provider.h"
-#include "content/test/stub_layer_tree_view_delegate.h"
 #include "gpu/GLES2/gl2extchromium.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/platform/scheduler/test/renderer_scheduler_test_support.h"
 #include "third_party/blink/public/platform/scheduler/test/web_fake_thread_scheduler.h"
+#include "third_party/blink/renderer/platform/widget/compositing/test/stub_layer_tree_view_delegate.h"
 
 using testing::AllOf;
 using testing::Field;
 
-namespace content {
+namespace blink {
 namespace {
 
 enum FailureMode {
@@ -378,4 +376,4 @@ TEST(LayerTreeViewTest, VisibilityTest) {
 }
 
 }  // namespace
-}  // namespace content
+}  // namespace blink
