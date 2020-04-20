@@ -545,6 +545,7 @@ source_set("unit_tests") {
     "multi_store_password_save_manager_unittest.cc",
     "origin_credential_store_unittest.cc",
     "password_access_authenticator_unittest.cc",
+    "password_account_storage_settings_watcher_unittest.cc",
     "password_autofill_manager_unittest.cc",
     "password_bubble_experiment_unittest.cc",
     "password_form_filling_unittest.cc",
