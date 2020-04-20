@@ -51,7 +51,7 @@ class CC_EXPORT UkmManager {
   void RecordLatencyUKM(
       CompositorFrameReporter::FrameReportType report_type,
       const std::vector<CompositorFrameReporter::StageData>& stage_history,
-      const base::flat_set<FrameSequenceTrackerType>* active_trackers,
+      const CompositorFrameReporter::ActiveTrackers& active_trackers,
       const viz::FrameTimingDetails& viz_breakdown) const;
 
   ukm::UkmRecorder* recorder_for_testing() { return recorder_.get(); }
