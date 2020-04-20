@@ -12,13 +12,14 @@
 #include "cc/cc_export.h"
 #include "cc/metrics/compositor_frame_reporter.h"
 #include "cc/metrics/event_metrics.h"
-#include "cc/metrics/frame_sequence_tracker.h"
+#include "cc/metrics/frame_sequence_metrics.h"
 
 namespace viz {
 struct FrameTimingDetails;
 }
 
 namespace cc {
+class UkmManager;
 struct BeginMainFrameMetrics;
 
 // This is used for managing simultaneous CompositorFrameReporter instances

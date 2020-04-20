@@ -7,7 +7,7 @@
 
 #include "cc/cc_export.h"
 #include "cc/metrics/compositor_frame_reporter.h"
-#include "cc/metrics/frame_sequence_tracker.h"
+#include "cc/metrics/frame_sequence_metrics.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
 #include "url/gurl.h"
 
