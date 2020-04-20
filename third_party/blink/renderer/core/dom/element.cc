@@ -3774,8 +3774,9 @@ void Element::AttachDeclarativeShadowRoot(HTMLTemplateElement* template_element,
   }
   ShadowRoot& shadow_root =
       AttachShadowRootInternal(type, focus_delegation, slot_assignment);
-  // 13.1. TODO(masonfreed): Set declarative shadow host element's shadow host's
-  // is declarative shadow root property to true.
+  // 13.1. Set declarative shadow host element's shadow host's "is declarative
+  // shadow root" property to true.
+  shadow_root.SetIsDeclarativeShadowRoot(true);
   // 13.2. Append the declarative template element's DocumentFragment to the
   // newly-created shadow root.
   shadow_root.appendChild(template_element->DeclarativeShadowContent());
@@ -3806,10 +3807,10 @@ ShadowRoot& Element::AttachShadowRootInternal(
   // 9. Set shadow host’s shadow root to shadow.
   ShadowRoot& shadow_root = CreateAndAttachShadowRoot(type);
   // 7. Set shadow’s delegates focus to delegates focus.
-  // 8. TODO(masonfreed): Set shadow’s is declarative shadow root property to
-  // false.
   shadow_root.SetDelegatesFocus(focus_delegation ==
                                 FocusDelegation::kDelegateFocus);
+  // 8. Set shadow’s "is declarative shadow root" property to false.
+  shadow_root.SetIsDeclarativeShadowRoot(false);
   shadow_root.SetSlotAssignmentMode(slot_assignment_mode);
   return shadow_root;
 }

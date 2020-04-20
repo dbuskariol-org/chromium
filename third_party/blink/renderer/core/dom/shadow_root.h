@@ -156,6 +156,11 @@ class CORE_EXPORT ShadowRoot final : public DocumentFragment, public TreeScope {
     return IsManualSlotting() ? "manual" : "auto";
   }
 
+  void SetIsDeclarativeShadowRoot(bool flag) {
+    is_declarative_shadow_root_ = flag;
+  }
+  bool IsDeclarativeShadowRoot() const { return is_declarative_shadow_root_; }
+
   bool ContainsShadowRoots() const { return child_shadow_root_count_; }
 
   StyleSheetList& StyleSheets();
@@ -187,8 +192,9 @@ class CORE_EXPORT ShadowRoot final : public DocumentFragment, public TreeScope {
   unsigned registered_with_parent_shadow_root_ : 1;
   unsigned delegates_focus_ : 1;
   unsigned slot_assignment_mode_ : 1;
+  unsigned is_declarative_shadow_root_ : 1;
   unsigned needs_distribution_recalc_ : 1;
-  unsigned unused_ : 10;
+  unsigned unused_ : 9;
 
   DISALLOW_COPY_AND_ASSIGN(ShadowRoot);
 };
