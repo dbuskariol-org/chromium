@@ -433,13 +433,7 @@ void WindowPerformance::DispatchFirstInputTiming(
   first_input_timing_ = entry;
 }
 
-void WindowPerformance::AddLayoutShiftValue(double value,
-                                            bool input_detected,
-                                            base::TimeTicks input_timestamp) {
-  auto* entry = MakeGarbageCollected<LayoutShift>(
-      now(), value, input_detected,
-      input_detected ? MonotonicTimeToDOMHighResTimeStamp(input_timestamp)
-                     : 0.0);
+void WindowPerformance::AddLayoutShiftEntry(LayoutShift* entry) {
   if (HasObserverFor(PerformanceEntry::kLayoutShift))
     NotifyObserversOfEntry(*entry);
   AddLayoutShiftBuffer(*entry);
