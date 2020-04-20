@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "base/macros.h"
+#include "build/build_config.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/views/accessibility/caption_bubble.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
@@ -118,7 +119,14 @@ IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest,
   EXPECT_FALSE(GetTitle()->GetVisible());
 }
 
-IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest, BubblePositioning) {
+// Flaky on Mac 10.12, crbug.com/1072818.
+#if defined(OS_MACOSX)
+#define MAYBE_BubblePositioning DISABLED_BubblePositioning
+#else
+#define MAYBE_BubblePositioning BubblePositioning
+#endif
+IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest,
+                       MAYBE_BubblePositioning) {
   views::View* contents_view =
       BrowserView::GetBrowserViewForBrowser(browser())->GetContentsView();
 
