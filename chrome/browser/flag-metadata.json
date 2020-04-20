@@ -1345,12 +1345,12 @@
   {
     "name": "enable-defer-all-script",
     "owners": [ "//components/data_reduction_proxy/OWNERS" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 90
   },
   {
     "name": "enable-defer-all-script-without-optimization-hints",
     "owners": [ "//components/data_reduction_proxy/OWNERS" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 90
   },
   {
     "name": "enable-desktop-minimal-ui",
@@ -2620,7 +2620,7 @@
   {
     "name": "ignore-litepage-redirect-optimization-blacklist",
     "owners": [ "//components/data_reduction_proxy/OWNERS" ],
-    "expiry_milestone": 79
+    "expiry_milestone": 90
   },
   {
     "name": "ignore-previews-blocklist",
