@@ -551,6 +551,8 @@ def _make_blink_api_call(code_node,
     if "Document" in values:
         arguments.append(
             "*bindings::ToDocumentFromExecutionContext(${execution_context})")
+    if "ThisValue" in values:
+        arguments.append("ScriptValue(${isolate}, ${v8_receiver})")
 
     code_generator_info = cg_context.member_like.code_generator_info
     is_partial = code_generator_info.defined_in_partial
@@ -4582,6 +4584,22 @@ def _make_property_entries_and_callback_defs(
     iterate(interface.operation_groups, process_operation_group)
     if interface.stringifier:
         iterate([interface.stringifier.operation], process_stringifier)
+    collectionlike = (interface.iterable or interface.maplike
+                      or interface.setlike)
+    if collectionlike:
+
+        def should_define(target):
+            if not target[0].is_optionally_defined:
+                return True
+            return all(target.identifier != member.identifier
+                       for member in itertools.chain(
+                           interface.attributes, interface.constants,
+                           interface.operation_groups))
+
+        iterate(collectionlike.attributes, process_attribute)
+        iterate(
+            filter(should_define, collectionlike.operation_groups),
+            process_operation_group)
 
     return callback_def_nodes
 
@@ -4592,6 +4610,7 @@ def _make_install_prototype_object(cg_context):
     nodes = []
 
     class_like = cg_context.class_like
+    interface = cg_context.interface
 
     unscopables = []
     is_unscopable = lambda member: "Unscopable" in member.extended_attributes
@@ -4634,6 +4653,29 @@ bindings::InstallUnscopablePropertyNames(
 ${prototype_object}->Delete(
     ${v8_context}, V8AtomicString(${isolate}, "constructor")).ToChecked();
 """))
+
+    collectionlike = interface and (interface.iterable or interface.maplike
+                                    or interface.setlike)
+    if collectionlike:
+        property_name = None
+        for operation_group in collectionlike.operation_groups:
+            if operation_group[0].is_iterator:
+                property_name = operation_group.identifier
+                break
+        if property_name:
+            pattern = """\
+// @@iterator == "{property_name}"
+{{
+  v8::Local<v8::Value> v8_value = ${prototype_object}->Get(
+      ${v8_context}, V8AtomicString(${isolate}, "{property_name}"))
+      .ToLocalChecked();
+  ${prototype_object}->DefineOwnProperty(
+      ${v8_context}, v8::Symbol::GetIterator(${isolate}), v8_value,
+      v8::DontEnum).ToChecked();
+}}
+"""
+            nodes.append(
+                TextNode(_format(pattern, property_name=property_name)))
 
     if class_like.identifier == "Window":
         nodes.append(
@@ -4693,6 +4735,9 @@ def make_install_interface_template(cg_context, function_name, class_name,
     assert _is_none_or_str(install_context_independent_func_name)
 
     T = TextNode
+
+    class_like = cg_context.class_like
+    interface = cg_context.interface
 
     arg_decls = [
         "v8::Isolate* isolate",
@@ -4769,7 +4814,7 @@ def make_install_interface_template(cg_context, function_name, class_name,
         EmptyNode(),
     ])
 
-    if cg_context.class_like.identifier == "DOMException":
+    if class_like.identifier == "DOMException":
         body.append(
             T("""\
 // DOMException-specific settings
@@ -4784,7 +4829,7 @@ def make_install_interface_template(cg_context, function_name, class_name,
 }
 """))
 
-    if cg_context.class_like.identifier == "HTMLAllCollection":
+    if class_like.identifier == "HTMLAllCollection":
         body.append(
             T("""\
 // HTMLAllCollection-specific settings
@@ -4794,7 +4839,7 @@ ${instance_template}->SetCallAsFunctionHandler(
 ${instance_template}->MarkAsUndetectable();
 """))
 
-    if cg_context.class_like.identifier == "Iterator":
+    if class_like.identifier == "Iterator":
         body.append(
             T("""\
 // Iterator-specific settings
@@ -4811,7 +4856,7 @@ ${instance_template}->MarkAsUndetectable();
 }
 """))
 
-    if cg_context.class_like.identifier == "Location":
+    if class_like.identifier == "Location":
         body.append(
             T("""\
 // Location-specific settings
@@ -4841,21 +4886,21 @@ ${instance_template}->SetImmutableProto();
 ${prototype_template}->SetImmutableProto();
 """))
 
-    if (cg_context.interface
-            and cg_context.interface.indexed_and_named_properties and
-            cg_context.interface.indexed_and_named_properties.indexed_getter
-            and "Global" not in cg_context.interface.extended_attributes):
+    if (interface and interface.indexed_and_named_properties
+            and interface.indexed_and_named_properties.indexed_getter
+            and "Global" not in interface.extended_attributes):
         body.append(
             T("""\
 // @@iterator for indexed properties
+// https://heycam.github.io/webidl/#define-the-iteration-methods
 ${prototype_template}->SetIntrinsicDataProperty(
     v8::Symbol::GetIterator(${isolate}), v8::kArrayProto_values, v8::DontEnum);
 """))
-        if (cg_context.interface.iterable
-                and cg_context.interface.iterable.key_type is None):
-            body.append(
-                T("""\
-// Value iterator for indexed properties
+    if interface and interface.iterable and not interface.iterable.key_type:
+        body.append(
+            T("""\
+// Value iterator's properties
+// https://heycam.github.io/webidl/#define-the-iteration-methods
 ${prototype_template}->SetIntrinsicDataProperty(
     V8AtomicString(${isolate}, "entries"), v8::kArrayProto_entries, v8::None);
 ${prototype_template}->SetIntrinsicDataProperty(
@@ -4866,7 +4911,7 @@ ${prototype_template}->SetIntrinsicDataProperty(
     V8AtomicString(${isolate}, "forEach"), v8::kArrayProto_forEach, v8::None);
 """))
 
-    if "Global" in cg_context.class_like.extended_attributes:
+    if "Global" in class_like.extended_attributes:
         body.append(
             TextNode("""\
 // [Global]
@@ -4876,7 +4921,7 @@ ${instance_template}->SetImmutableProto();
 ${prototype_template}->SetImmutableProto();
 """))
     elif any("Global" in derived.extended_attributes
-             for derived in cg_context.class_like.deriveds):
+             for derived in class_like.deriveds):
         body.append(
             TextNode("""\
 // [Global] - prototype object in the prototype chain of global objects
