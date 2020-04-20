@@ -209,6 +209,11 @@ void IsolatedPrerenderTabHelper::Prefetch() {
   DCHECK(IsolatedPrerenderIsEnabled());
 
   page_->url_loader_.reset();
+
+  if (IsolatedPrerenderCloseIdleSockets() && page_->isolated_network_context_) {
+    page_->isolated_network_context_->CloseIdleConnections(base::DoNothing());
+  }
+
   if (page_->urls_to_prefetch_.empty()) {
     return;
   }
