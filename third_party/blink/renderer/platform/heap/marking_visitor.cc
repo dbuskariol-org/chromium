@@ -223,7 +223,9 @@ MarkingVisitor::MarkingVisitor(ThreadState* state, MarkingMode marking_mode)
 }
 
 void MarkingVisitor::DynamicallyMarkAddress(ConstAddress address) {
-  HeapObjectHeader* const header = HeapObjectHeader::FromInnerAddress(address);
+  HeapObjectHeader* const header =
+      HeapObjectHeader::FromInnerAddress<HeapObjectHeader::AccessMode::kAtomic>(
+          address);
   DCHECK(header);
   DCHECK(!IsInConstruction(header));
   if (MarkHeaderNoTracing(header)) {
