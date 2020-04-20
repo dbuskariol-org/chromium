@@ -54,6 +54,18 @@ public class ModuleUtil {
 
         try (Timer timer = new Timer()) {
             SplitCompatInitializer.initApplication();
+            ActivityObserverUtil.registerDefaultObserver();
+        }
+    }
+
+    /**
+     * Notifies the ActiviyObserver when modules are installed.
+     */
+    public static void notifyModuleInstalled() {
+        if (!BundleUtils.isBundle()) return;
+
+        try (Timer timer = new Timer()) {
+            ActivityObserverUtil.notifyObservers();
         }
     }
 }
