@@ -31,10 +31,10 @@
 #include "content/public/test/mock_render_thread.h"
 #include "content/renderer/input/widget_input_handler_manager.h"
 #include "content/renderer/render_frame_proxy.h"
+#include "content/renderer/render_process.h"
 #include "content/renderer/render_widget_delegate.h"
 #include "content/renderer/render_widget_screen_metrics_emulator.h"
 #include "content/test/fake_compositor_dependencies.h"
-#include "content/test/mock_render_process.h"
 #include "ipc/ipc_test_sink.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -307,7 +307,7 @@ class RenderWidgetUnittest : public testing::Test {
 
  private:
   base::test::TaskEnvironment task_environment_;
-  MockRenderProcess render_process_;
+  RenderProcess render_process_;
   MockRenderThread render_thread_;
   blink::WebViewClient web_view_client_;
   blink::WebView* web_view_;
@@ -362,7 +362,7 @@ class RenderWidgetExternalWidgetUnittest : public testing::Test {
 
  private:
   base::test::TaskEnvironment task_environment_;
-  MockRenderProcess render_process_;
+  RenderProcess render_process_;
   MockRenderThread render_thread_;
   FakeCompositorDependencies compositor_deps_;
   MockWebExternalWidgetClient mock_web_external_widget_client_;
