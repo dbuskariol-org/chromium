@@ -239,7 +239,7 @@ bool CommonAppsNavigationThrottle::ShouldDeferNavigation(
       base::BindOnce(
           &CommonAppsNavigationThrottle::OnDeferredNavigationProcessed,
           weak_factory_.GetWeakPtr()));
-  return false;
+  return true;
 }
 
 void CommonAppsNavigationThrottle::OnDeferredNavigationProcessed(
