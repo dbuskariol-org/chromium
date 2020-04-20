@@ -3429,7 +3429,7 @@
     "name": "privacy-settings-redesign",
     "owners": ["harrisonsean", "msramek",
       "chrome-friendly-settings@google.com"],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "proactive-tab-freeze",
