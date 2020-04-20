@@ -73,12 +73,12 @@ void AssistiveWindowControllerImpl::FocusStateChanged() {
 
 void AssistiveWindowControllerImpl::ShowSuggestion(
     const base::string16& text,
-    const base::string16& confirmed_text,
+    const size_t confirmed_length,
     const bool show_tab) {
   if (!suggestion_window_view_)
     Init();
   suggestion_text_ = text;
-  suggestion_window_view_->Show(text, confirmed_text, show_tab);
+  suggestion_window_view_->Show(text, confirmed_length, show_tab);
 }
 
 base::string16 AssistiveWindowControllerImpl::GetSuggestionText() const {
