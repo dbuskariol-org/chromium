@@ -683,7 +683,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_build_tools/aapt2',
-              'version': 'LKH_DI44rZhQ4RkScMFQLGSJ4jZyuPcff0llITnq-i4C',
+              'version': 'UxU41ozMxmre3dhGh39z_YK_TVdbwv2OZiatfSTXVoMC',
           },
       ],
       'condition': 'checkout_android',
