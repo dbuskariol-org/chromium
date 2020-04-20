@@ -294,7 +294,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
-  'shaderc_revision': 'a10a0b33493e3ff1c0de1dc8406ed8de230ba8c1',
+  'shaderc_revision': '6385961a5c997551fe6895451e30f84ca889a1ba',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
