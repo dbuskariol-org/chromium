@@ -1808,6 +1808,7 @@
 <translation id="3396800784455899911">點選 [接受並繼續] 按鈕即表示您同意上述的 Google 服務處理程序。</translation>
 <translation id="3399432415385675819">通知功能會遭到停用</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> 赫茲) - 交錯顯示</translation>
+<translation id="3402585168444815892">正在註冊展示模式</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />，<ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">系統沒有儲存這個網站的密碼</translation>
 <translation id="3405664148539009465">自訂字型</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">很抱歉，你目前處於離線狀態，因此無法驗證密碼。</translation>
 <translation id="7140928199327930795">沒有其他可用裝置。</translation>
 <translation id="7141105143012495934">無法擷取您的帳戶詳細資料，導致登入失敗。請與您的管理員聯絡或再試一次。</translation>
-<translation id="7143092389027215216">正在啟動示範模式</translation>
 <translation id="7143207342074048698">連線中</translation>
 <translation id="7144878232160441200">重試</translation>
 <translation id="7149893636342594995">過去 24 小時</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">網址</translation>
 <translation id="7400839060291901923">在 <ph name="PHONE_NAME" /> 上設定連線</translation>
 <translation id="7401778920660465883">關閉這則訊息</translation>
+<translation id="7403642243184989645">正在下載資源</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{1 小時前已執行安全檢查}other{{NUM_HOURS} 小時前已執行安全檢查}}</translation>
 <translation id="740624631517654988">已封鎖彈出式視窗</translation>
 <translation id="7407430846095439694">匯入和繫結</translation>
@@ -5909,6 +5910,7 @@
 <translation id="8864055848767439877">正在與 <ph name="APP_NAME" /> 共用 <ph name="TAB_NAME" /></translation>
 <translation id="8864458770072227512">已將 <ph name="EMAIL" /> 從這個裝置中移除</translation>
 <translation id="8867228703146808825">將版本詳細資料複製到剪貼簿</translation>
+<translation id="8868333925931032127">正在啟動展示模式</translation>
 <translation id="8868626022555786497">已使用的空間</translation>
 <translation id="8870413625673593573">最近關閉的分頁</translation>
 <translation id="8871551568777368300">已由管理員固定</translation>

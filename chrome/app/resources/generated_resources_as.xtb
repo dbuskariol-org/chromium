@@ -1806,6 +1806,7 @@
 <translation id="3396800784455899911">“মই সন্মত আৰু অব্যাহত ৰাখক” বুটামত ক্লিক কৰি আপুনি ওপৰত বৰ্ণনা কৰাৰ এই Google সেৱাসমূহৰ প্ৰক্ৰিয়াত সন্মতি দিছে।</translation>
 <translation id="3399432415385675819">জাননী অক্ষম কৰা হ’ব</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> হাৰ্টজ) - একত্ৰিত</translation>
+<translation id="3402585168444815892">ডেম’ ম’ডত পঞ্জীয়ন কৰি থকা হৈছে</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">এই ছাইটটোৰ বাবে কোনো পাছৱৰ্ড ছেভ কৰি থোৱা নাই</translation>
 <translation id="3405664148539009465">ফ’ণ্ট কাষ্টমাইজ কৰক</translation>
@@ -4575,7 +4576,6 @@
 <translation id="713888829801648570">দুঃখিত, আপুনি অফলাইন হৈ থকাৰ কাৰণে আপোনাৰ পাছৱর্ড সত্যাপন কৰিব পৰা নগ’ল।</translation>
 <translation id="7140928199327930795">উপলব্ধ অন্য ডিভাইচ নহয়।</translation>
 <translation id="7141105143012495934">আপোনাৰ একাউণ্টৰ সবিশেষ পুনৰুদ্ধাৰ কৰিব নোৱাৰাৰ বাবে ছাইন ইন কৰিব পৰা নগ’ল। অনুগ্ৰহ কৰি আপোনাৰ প্ৰশাসকৰ সৈতে যোগাযোগ কৰক বা আকৌ চেষ্টা কৰক।</translation>
-<translation id="7143092389027215216">ডেম’ ম’ড আৰম্ভ হ’ব</translation>
 <translation id="7143207342074048698">সংযোগ কৰি থকা হৈছে</translation>
 <translation id="7144878232160441200">পুনৰ চেষ্টা কৰক</translation>
 <translation id="7149893636342594995">যোৱা ২৪ ঘণ্টাত</translation>
@@ -4758,6 +4758,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">আপোনাৰ <ph name="PHONE_NAME" />ত সংযোগ ছেট আপ কৰক</translation>
 <translation id="7401778920660465883">এই বাৰ্তাটো বাতিল কৰক</translation>
+<translation id="7403642243184989645">উৎসসমূহ ডাউনল’ড কৰি থকা হৈছে</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{১ ঘণ্টা পূর্বে সুৰক্ষা পৰীক্ষা চলোৱা হৈছিল}one{{NUM_HOURS} ঘণ্টা পূর্বে সুৰক্ষা পৰীক্ষা চলোৱা হৈছিল}other{{NUM_HOURS} ঘণ্টা পূর্বে সুৰক্ষা পৰীক্ষা চলোৱা হৈছিল}}</translation>
 <translation id="740624631517654988">পপ-আপ অৱৰোধ কৰা হ’ল</translation>
 <translation id="7407430846095439694">আমদানি কৰক আৰু সংযুক্ত কৰক</translation>
@@ -5895,6 +5896,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" />ক <ph name="APP_NAME" />লৈ শ্বেয়াৰ কৰি থকা হৈছে</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" />ক এই ডিভাইচটোৰ পৰা আঁতৰোৱা হৈছে</translation>
 <translation id="8867228703146808825">বিল্ডৰ সবিশেষ ক্লিপব’ৰ্ডলৈ প্ৰতিলিপি কৰক</translation>
+<translation id="8868333925931032127">ডেম’ ম’ড আৰম্ভ কৰি থকা হৈছে</translation>
 <translation id="8868626022555786497">ব্যৱহাৰ হৈ আছে</translation>
 <translation id="8870413625673593573">শেহতীয়াকৈ বন্ধ কৰা</translation>
 <translation id="8871551568777368300">প্ৰশাসকে পিন কৰি থৈছে</translation>

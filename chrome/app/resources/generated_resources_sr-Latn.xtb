@@ -1806,6 +1806,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3396800784455899911">Ako kliknete na dugme „Prihvati i nastavi“, prihvatate gorenavedenu obradu za ove Google usluge.</translation>
 <translation id="3399432415385675819">Obaveštenja će biti onemogućena</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" />×<ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> herca) – prepleteno</translation>
+<translation id="3402585168444815892">Registrovanje za režim demonstracije</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Nijedna lozinka nije sačuvana za ovaj sajt</translation>
 <translation id="3405664148539009465">Prilagodi fontove</translation>
@@ -4586,7 +4587,6 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="713888829801648570">Žao nam je, nismo uspeli da potvrdimo lozinku jer ste oflajn.</translation>
 <translation id="7140928199327930795">Nema drugih dostupnih uređaja.</translation>
 <translation id="7141105143012495934">Prijavljivanje nije uspelo jer nismo uspeli da preuzmemo detalje o nalogu. Kontaktirajte administratora ili pokušajte ponovo.</translation>
-<translation id="7143092389027215216">Pokreće se režim demonstracije</translation>
 <translation id="7143207342074048698">Povezivanje</translation>
 <translation id="7144878232160441200">Probaj ponovo</translation>
 <translation id="7149893636342594995">Poslednja 24 sata</translation>
@@ -4769,6 +4769,7 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="7400418766976504921">URL adresa</translation>
 <translation id="7400839060291901923">Podesite vezu na telefonu <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Odbaci ovu poruku</translation>
+<translation id="7403642243184989645">Preuzimanje resursa</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Bezbednosna provera je pokrenuta pre 1 sat}one{Bezbednosna provera je pokrenuta pre {NUM_HOURS} sat}few{Bezbednosna provera je pokrenuta pre {NUM_HOURS} sata}other{Bezbednosna provera je pokrenuta pre {NUM_HOURS} sati}}</translation>
 <translation id="740624631517654988">Iskačući prozori su blokirani</translation>
 <translation id="7407430846095439694">Uvezi i obaveži se</translation>
@@ -5910,6 +5911,7 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="8864055848767439877">Kartica <ph name="TAB_NAME" /> se deli sa aplikacijom <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Nalog <ph name="EMAIL" /> je uklonjen sa ovog uređaja</translation>
 <translation id="8867228703146808825">Kopirajte detalje verzije u privremenu memoriju</translation>
+<translation id="8868333925931032127">Pokreće se režim demonstracije</translation>
 <translation id="8868626022555786497">U upotrebi</translation>
 <translation id="8870413625673593573">Nedavno zatvoreno</translation>
 <translation id="8871551568777368300">Zakačio je administrator</translation>

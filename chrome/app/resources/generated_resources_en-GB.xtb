@@ -1809,6 +1809,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3396800784455899911">By clicking the 'Accept and continue' button, you agree to the processing described above for these Google services.</translation>
 <translation id="3399432415385675819">Notifications will be disabled</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hertz) – interlaced</translation>
+<translation id="3402585168444815892">Enrolling in demo mode</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">No passwords saved for this site</translation>
 <translation id="3405664148539009465">Customise fonts</translation>
@@ -4588,7 +4589,6 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="713888829801648570">Sorry, your password could not be verified because you are offline.</translation>
 <translation id="7140928199327930795">No other available devices.</translation>
 <translation id="7141105143012495934">Sign-in failed because your account details could not be retrieved. Please contact your administrator or try again.</translation>
-<translation id="7143092389027215216">Starting demo mode</translation>
 <translation id="7143207342074048698">Connecting ...</translation>
 <translation id="7144878232160441200">Retry</translation>
 <translation id="7149893636342594995">Last 24 Hours</translation>
@@ -4771,6 +4771,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Set up connection on your <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Dismiss this message</translation>
+<translation id="7403642243184989645">Downloading resources</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Safety check ran 1 hour ago}other{Safety check ran {NUM_HOURS} hours ago}}</translation>
 <translation id="740624631517654988">Pop-up blocked</translation>
 <translation id="7407430846095439694">Import and Bind</translation>
@@ -5912,6 +5913,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="8864055848767439877">Sharing <ph name="TAB_NAME" /> to <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> was removed from this device</translation>
 <translation id="8867228703146808825">Copy build details to clipboard</translation>
+<translation id="8868333925931032127">Starting demo mode</translation>
 <translation id="8868626022555786497">In use</translation>
 <translation id="8870413625673593573">Recently Closed</translation>
 <translation id="8871551568777368300">Pinned by administrator</translation>

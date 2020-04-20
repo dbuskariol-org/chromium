@@ -1806,6 +1806,7 @@
 <translation id="3396800784455899911">"Қабылдау және жалғастыру" түймесін басып, аталған Google қызметтеріне қатысты жоғарыда сипатталған өңдеулерге келісесіз.</translation>
 <translation id="3399432415385675819">Хабарландырулар өшіріледі</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Герц) – байланысқан</translation>
+<translation id="3402585168444815892">Демо режимінде тіркелуде</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Бұл сайт үшін ешқандай құпия сөз сақталмаған</translation>
 <translation id="3405664148539009465">Қаріптерді реттеу</translation>
@@ -4585,7 +4586,6 @@
 <translation id="713888829801648570">Кешіріңіз, құпия сөзіңізді растау мүмкін емес, себебі сіз желіде емессіз.</translation>
 <translation id="7140928199327930795">Басқа қолжетімді құрылғылар жоқ.</translation>
 <translation id="7141105143012495934">Кірілмеді, себебі есептік жазба мәліметтерін шығарып алу мүмкін емес. Әкімшіңізге хабарласыңыз немесе әрекетті қайталаңыз.</translation>
-<translation id="7143092389027215216">Демо режим іске қосылуда</translation>
 <translation id="7143207342074048698">Қосылып жатыр</translation>
 <translation id="7144878232160441200">Қайталау</translation>
 <translation id="7149893636342594995">Соңғы 24 сағат</translation>
@@ -4768,6 +4768,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" /> телефоныңыздағы байланысты реттеу</translation>
 <translation id="7401778920660465883">Хабарды жабу</translation>
+<translation id="7403642243184989645">Ресурстар жүктеп алынуда</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Қауіпсіздік 1 сағат бұрын тексерілді.}other{Қауіпсіздік {NUM_HOURS} сағат бұрын тексерілді.}}</translation>
 <translation id="740624631517654988">Қалқымалы терезелерге тыйым салынған</translation>
 <translation id="7407430846095439694">Импорттау және байланыстыру</translation>
@@ -5908,6 +5909,7 @@
 <translation id="8864055848767439877">"<ph name="TAB_NAME" />" қойындысы <ph name="APP_NAME" /> қолданбасына жіберілуде.</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> осы құрылғыдан өшірілген.</translation>
 <translation id="8867228703146808825">Құрама мәліметтерін буферге көшіру</translation>
+<translation id="8868333925931032127">Демо режимі іске қосылуда</translation>
 <translation id="8868626022555786497">Пайдаланылуда</translation>
 <translation id="8870413625673593573">Жақында жабылған</translation>
 <translation id="8871551568777368300">Әкімші бекіткен</translation>

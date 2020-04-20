@@ -1806,6 +1806,7 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
 <translation id="3396800784455899911">Kwa kubofya kitufe cha "Kubali na uendelee", unakubali uchakataji uliobainishwa hapo juu katika huduma hizi za Google.</translation>
 <translation id="3399432415385675819">Arifa zitazimwa</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (Hertz <ph name="REFRESH_RATE" />) - imejumuishwa pamoja</translation>
+<translation id="3402585168444815892">Inaandikisha katika Hali ya Onyesho</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Hakuna manenosiri ya tovuti hii yaliyohifadhiwa</translation>
 <translation id="3405664148539009465">Badilisha fonti zikufae</translation>
@@ -4583,7 +4584,6 @@ Ungependa kuanza <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="713888829801648570">Samahani, nenosiri lako halikuweza kuthibitishwa kwa sababu uko nje ya mtandao.</translation>
 <translation id="7140928199327930795">Hakuna vifaa vingine vinapatikana.</translation>
 <translation id="7141105143012495934">Haikufaulu kuingia katika akaunti kwa sababu maelezo ya akaunti yako hayakupatikana. Tafadhali wasiliana na msimamizi wako au jaribu tena.</translation>
-<translation id="7143092389027215216">Inaanzisha hali ya onyesho</translation>
 <translation id="7143207342074048698">Inaunganisha</translation>
 <translation id="7144878232160441200">Jaribu tena</translation>
 <translation id="7149893636342594995">Saa 24 zilizopita</translation>
@@ -4766,6 +4766,7 @@ Ungependa kuanza <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Weka mipangilio ya muunganisho kwenye <ph name="PHONE_NAME" /> yako</translation>
 <translation id="7401778920660465883">Ondoa ujumbe huu</translation>
+<translation id="7403642243184989645">Inapakua Nyenzo</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Angalizo la usalama lilitekelezwa saa moja iliyopita}other{Angalizo la usalama lilitekelezwa saa {NUM_HOURS} zilizopita}}</translation>
 <translation id="740624631517654988">Kidirisha ibukizi kimezuiwa</translation>
 <translation id="7407430846095439694">Leta na Ufunge</translation>
@@ -5909,6 +5910,7 @@ Sidhani tovuti hii inapaswa kuzuiwa!</translation>
 <translation id="8864055848767439877">Inashiriki <ph name="TAB_NAME" /> kwenye <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Imeondoa <ph name="EMAIL" /> kwenye kifaa hiki</translation>
 <translation id="8867228703146808825">Nakili maelezo ya muundo kwenye ubao wa kunakili</translation>
+<translation id="8868333925931032127">Inaanzisha Hali ya Onyesho</translation>
 <translation id="8868626022555786497">Inatumika</translation>
 <translation id="8870413625673593573">Zilizofungwa Hivi Karibuni</translation>
 <translation id="8871551568777368300">Imebandikwa na msimamizi</translation>

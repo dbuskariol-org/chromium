@@ -1809,6 +1809,7 @@
 <translation id="3396800784455899911">'동의 및 계속' 버튼을 클릭하면 이러한 Google 서비스와 관련하여 위에 설명된 처리 방식에 동의하는 것으로 간주됩니다.</translation>
 <translation id="3399432415385675819">알림이 사용 중지됩니다.</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" />x<ph name="HEIGHT" />(<ph name="REFRESH_RATE" />Hz) - 인터레이스</translation>
+<translation id="3402585168444815892">데모 모드에 등록</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">이 사이트의 비밀번호가 저장되지 않음</translation>
 <translation id="3405664148539009465">글꼴 맞춤설정</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">죄송합니다. 인터넷에 연결되어 있지 않아 비밀번호를 확인할 수 없습니다.</translation>
 <translation id="7140928199327930795">다른 사용 가능한 기기가 없습니다.</translation>
 <translation id="7141105143012495934">계정 세부정보를 가져올 수 없어 로그인할 수 없습니다. 관리자에게 문의하거나 다시 시도해 주세요.</translation>
-<translation id="7143092389027215216">데모 모드 시작</translation>
 <translation id="7143207342074048698">연결 중</translation>
 <translation id="7144878232160441200">다시 시도</translation>
 <translation id="7149893636342594995">지난 24시간</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" />에서 연결 설정</translation>
 <translation id="7401778920660465883">닫기</translation>
+<translation id="7403642243184989645">리소스 다운로드</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{안전 확인이 1시간 전에 실행됨}other{안전 확인이 {NUM_HOURS}시간 전에 실행됨}}</translation>
 <translation id="740624631517654988">팝업 차단됨</translation>
 <translation id="7407430846095439694">가져오기 및 연결</translation>
@@ -5910,6 +5911,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> 탭을 <ph name="APP_NAME" /> 앱과 공유하는 중</translation>
 <translation id="8864458770072227512">기기에서 <ph name="EMAIL" />이(가) 삭제되었습니다.</translation>
 <translation id="8867228703146808825">빌드 세부정보를 클립보드에 복사</translation>
+<translation id="8868333925931032127">데모 모드 시작</translation>
 <translation id="8868626022555786497">사용 중</translation>
 <translation id="8870413625673593573">최근에 닫은 탭</translation>
 <translation id="8871551568777368300">관리자가 고정함</translation>

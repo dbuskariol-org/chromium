@@ -1808,6 +1808,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="3396800784455899911">Kliknutím na tlačítko Přijmout a pokračovat vyjadřujete souhlas se zpracováním popsaným výše pro tyto služby Google.</translation>
 <translation id="3399432415385675819">Oznámení budou zakázána</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> × <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz) – prokládané</translation>
+<translation id="3402585168444815892">Registrace v ukázkovém režimu</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Pro tento web nejsou uložena žádná hesla</translation>
 <translation id="3405664148539009465">Personalizovat písma</translation>
@@ -4586,7 +4587,6 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="713888829801648570">Je nám líto, ale heslo nebylo možné ověřit, protože jste offline.</translation>
 <translation id="7140928199327930795">Nejsou k dispozici žádná další zařízení.</translation>
 <translation id="7141105143012495934">Přihlášení selhalo, protože se nepodařilo načíst podrobnosti účtu. Kontaktujte administrátora nebo to zkuste znovu.</translation>
-<translation id="7143092389027215216">Spouštění ukázkového režimu</translation>
 <translation id="7143207342074048698">Připojování</translation>
 <translation id="7144878232160441200">Opakovat</translation>
 <translation id="7149893636342594995">Posledních 24 hodin</translation>
@@ -4769,6 +4769,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="7400418766976504921">Adresa URL</translation>
 <translation id="7400839060291901923">Nastavte připojení na zařízení <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Zavřít tuto zprávu</translation>
+<translation id="7403642243184989645">Stahování zdrojů</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Bezpečnostní kontrola proběhla před hodinou}few{Bezpečnostní kontrola proběhla před {NUM_HOURS} hodinami}many{Bezpečnostní kontrola proběhla před {NUM_HOURS} hodiny}other{Bezpečnostní kontrola proběhla před {NUM_HOURS} hodinami}}</translation>
 <translation id="740624631517654988">Zablokováno vyskakovací okno</translation>
 <translation id="7407430846095439694">Importovat a svázat</translation>
@@ -5909,6 +5910,7 @@ Svůj soubor klíče uchovávejte na bezpečném místě. Budete jej potřebovat
 <translation id="8864055848767439877">Sdílení karty <ph name="TAB_NAME" /> s aplikací <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Účet <ph name="EMAIL" /> byl z tohoto zařízení odstraněn</translation>
 <translation id="8867228703146808825">Zkopírovat podrobnosti sestavení do schránky</translation>
+<translation id="8868333925931032127">Spouštění ukázkového režimu</translation>
 <translation id="8868626022555786497">Používáno</translation>
 <translation id="8870413625673593573">Nedávno zavřené</translation>
 <translation id="8871551568777368300">Připnuto administrátorem</translation>

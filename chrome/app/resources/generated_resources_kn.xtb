@@ -1809,6 +1809,7 @@
 <translation id="3396800784455899911">ಈ Google ಸೇವೆಗಳಿಗಾಗಿ "ಸ್ವೀಕರಿಸಿ ಮತ್ತು ಮುಂದುವರೆಸು" ಬಟನ್‌ ಅನ್ನು ಕ್ಲಿಕ್‌ ಮಾಡುವುದರ ಮೂಲಕ, ನೀವು ಮೇಲೆ ವಿವರಿಸಿರುವ ಪ್ರಕ್ರಿಯೆಗೊಳಿಸುವಿಕೆಗೆ ಒಪ್ಪುತ್ತೀರಿ.</translation>
 <translation id="3399432415385675819">ಅಧಿಸೂಚನೆಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗುತ್ತದೆ</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> ಹರ್ಟ್ಜ್) - ಇಂಟರ್‌ಲೇಸ್ ಆಗಿದೆ</translation>
+<translation id="3402585168444815892">ಡೆಮೋ ಮೋಡ್‌ನಲ್ಲಿ ನೋಂದಣಿ ಮಾಡಲಾಗುತ್ತಿದೆ</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">ಈ ಸೈಟ್‌ಗಾಗಿ ಪಾಸ್‌ವರ್ಡ್‌ಗಳನ್ನು ಉಳಿಸಿಲ್ಲ</translation>
 <translation id="3405664148539009465">ಫಾಂಟ್‌ಗಳನ್ನು ಗ್ರಾಹಕೀಯಗೊಳಿಸಿ</translation>
@@ -4591,7 +4592,6 @@
 <translation id="713888829801648570">ಕ್ಷಮಿಸಿ, ನೀವು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿರುವ ಕಾರಣ ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಪರಿಶೀಲಿಸಲಾಗುವುದಿಲ್ಲ.</translation>
 <translation id="7140928199327930795">ಇತರ ಯಾವುದೇ ಲಭ್ಯ ಸಾಧನಗಳಿಲ್ಲ.</translation>
 <translation id="7141105143012495934">ನಿಮ್ಮ ಖಾತೆ ವಿವರಗಳನ್ನು ಹಿಂಪಡೆಯಲು ಸಾಧ್ಯವಾಗದಿರುವುದರಿಂದ ಸೈನ್ ಇನ್ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ನಿರ್ವಾಹಕರನ್ನು ಸಂಪರ್ಕಿಸಿ ಅಥವಾ ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.</translation>
-<translation id="7143092389027215216">ಡೆಮೋ ಮೋಡ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ</translation>
 <translation id="7143207342074048698">ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ</translation>
 <translation id="7144878232160441200">ಮರುಪ್ರಯತ್ನಿಸಿ</translation>
 <translation id="7149893636342594995">ಕಳೆದ 24 ಗಂಟೆಗಳು</translation>
@@ -4774,6 +4774,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" /> ನಲ್ಲಿ ಸಂಪರ್ಕವನ್ನು ಹೊಂದಿಸಿ</translation>
 <translation id="7401778920660465883">ಈ ಸಂದೇಶವನ್ನು ವಜಾಗೊಳಿಸಿ</translation>
+<translation id="7403642243184989645">ಮಾಹಿತಿ ಮೂಲಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{1 ಗಂಟೆಯ ಹಿಂದೆ ಸುರಕ್ಷತೆಯ ಪರಿಶೀಲನೆ ನಡೆಸಲಾಗಿದೆ}one{{NUM_HOURS} ಗಂಟೆಗಳ ಹಿಂದೆ ಸುರಕ್ಷತೆಯ ಪರಿಶೀಲನೆ ನಡೆಸಲಾಗಿದೆ}other{{NUM_HOURS} ಗಂಟೆಗಳ ಹಿಂದೆ ಸುರಕ್ಷತೆಯ ಪರಿಶೀಲನೆ ನಡೆಸಲಾಗಿದೆ}}</translation>
 <translation id="740624631517654988">ಪಾಪ್-ಅಪ್  ನಿರ್ಬಂಧಿಸಲಾಗಿದೆ</translation>
 <translation id="7407430846095439694">ಆಮದು ಮಾಡಿ ಮತ್ತು ಬೈಂಡ್ ಮಾಡಿ</translation>
@@ -5913,6 +5914,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> ಅನ್ನು <ph name="APP_NAME" /> ಜೊತೆಗೆ ಹಂಚಿಕೊಳ್ಳಲಾಗುತ್ತಿದೆ</translation>
 <translation id="8864458770072227512">ಈ ಸಾಧನದಿಂದ <ph name="EMAIL" /> ಅನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ</translation>
 <translation id="8867228703146808825">ಬಿಲ್ಡ್ ವಿವರಗಳನ್ನು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಿ</translation>
+<translation id="8868333925931032127">ಡೆಮೋ ಮೋಡ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ</translation>
 <translation id="8868626022555786497">ಬಳಕೆಯಲ್ಲಿದೆ</translation>
 <translation id="8870413625673593573">ಇತ್ತೀಚೆಗೆ ಮುಚ್ಚಿರುವುದು</translation>
 <translation id="8871551568777368300">ನಿರ್ವಾಹಕರಿಂದ ಪಿನ್ ಮಾಡಲಾಗಿದೆ</translation>

@@ -1808,6 +1808,7 @@
 <translation id="3396800784455899911">"स्वीकारा आणि सुरू ठेवा" या बटणावर क्लिक करून तुम्ही या Google सेवांसाठी वर वर्णन केलेल्या प्रक्रियांना सहमती दर्शवता.</translation>
 <translation id="3399432415385675819">सूचना बंद केल्या जातील</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hertz) - हस्तक्षेप केला</translation>
+<translation id="3402585168444815892">डेमो मोड मध्ये नोंदणी करत आहे</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">या साइटचे कोणतेही पासवर्ड सेव्ह केलेले नाहीत</translation>
 <translation id="3405664148539009465">फॉन्ट कस्टमाइझ करा</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">क्षमस्‍व, तुम्ही ऑफलाइन असल्‍याने तुमचा पासवर्ड पडताळणी करणे शक्य झाले नाही.</translation>
 <translation id="7140928199327930795">कोणतीही अन्य उपलब्ध डिव्हाइसेस नाहीत.</translation>
 <translation id="7141105143012495934">तुमचे खाते तपशील प्राप्त करणे शक्य झाले नसल्याने साइन-इन अयशस्वी झाले. कृपया तुमच्या ॲडमिनिस्ट्रेटरशी संपर्क साधा किंवा पुन्हा प्रयत्न करा.</translation>
-<translation id="7143092389027215216">डेमो मोड सुरू करत आहे</translation>
 <translation id="7143207342074048698">कनेक्ट करीत आहे</translation>
 <translation id="7144878232160441200">पुन्हा प्रयत्न करा</translation>
 <translation id="7149893636342594995">शेवटच्या 72 तासांमधील</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">तुमच्या <ph name="PHONE_NAME" />वर कनेक्शन सेट अप करा</translation>
 <translation id="7401778920660465883">हा मेसेज डिसमिस करा</translation>
+<translation id="7403642243184989645">स्रोत डाउनलोड करत आहे</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{सुरक्षा तपासणी एका तासापूर्वी रन केली गेली}other{सुरक्षा तपासणी {NUM_HOURS} तासांपूर्वी रन केली गेली}}</translation>
 <translation id="740624631517654988">पॉप-अप अवरोधित</translation>
 <translation id="7407430846095439694">इंपोर्ट करा आणि प्रतिबद्ध करा</translation>
@@ -5909,6 +5910,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> <ph name="APP_NAME" />वर शेअर करत आहे</translation>
 <translation id="8864458770072227512">या डिव्हाइसवरून <ph name="EMAIL" /> काढून टाकण्यात आला</translation>
 <translation id="8867228703146808825">बिल्ड तपशील क्लिपबोर्डवर कॉपी करा</translation>
+<translation id="8868333925931032127">डेमो मोड सुरू करत आहे</translation>
 <translation id="8868626022555786497">वापरात आहे</translation>
 <translation id="8870413625673593573">अलीकडे बंद</translation>
 <translation id="8871551568777368300">ॲडमिनिस्ट्रेटरने पिन केले</translation>

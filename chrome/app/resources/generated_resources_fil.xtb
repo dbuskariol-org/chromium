@@ -1809,6 +1809,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="3396800784455899911">Sa pamamagitan ng pag-click sa button na "Tanggapin at magpatuloy," sumasang-ayon ka sa pagpoproseso na inilarawan sa itaas para sa mga serbisyong ito ng Google.</translation>
 <translation id="3399432415385675819">Madi-disable ang mga notification</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hertz) - naka-interlace</translation>
+<translation id="3402585168444815892">Ine-enroll sa Demo Mode</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Walang naka-save na password para sa site na ito</translation>
 <translation id="3405664148539009465">I-customize ang mga font</translation>
@@ -4588,7 +4589,6 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="713888829801648570">Paumanhin, hindi ma-verify ang iyong password dahil offline ka.</translation>
 <translation id="7140928199327930795">Walang ibang available na mga device.</translation>
 <translation id="7141105143012495934">Hindi nakapag-sign dahil hindi maibalik ang mga detalye ng iyong account. Mangyaring makipag-ugnayan sa iyong administrator o subukang muli.</translation>
-<translation id="7143092389027215216">Sinisimulan ang demo mode</translation>
 <translation id="7143207342074048698">Kumokonekta</translation>
 <translation id="7144878232160441200">Subukang muli</translation>
 <translation id="7149893636342594995">Nakalipas na 24 na oras</translation>
@@ -4771,6 +4771,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Mag-set up ng koneksyon sa iyong <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">I-dismiss ang mensaheng ito</translation>
+<translation id="7403642243184989645">Dina-download ang Mga Resource</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Nagpatakbo ng pag-check sa kaligtasan 1 oras ang nakalipas}one{Nagpatakbo ng pag-check sa kaligtasan {NUM_HOURS} oras ang nakalipas}other{Nagpatakbo ng pag-check sa kaligtasan {NUM_HOURS} na oras ang nakalipas}}</translation>
 <translation id="740624631517654988">Naka-block ang pop-up</translation>
 <translation id="7407430846095439694">I-import at I-bind</translation>
@@ -5913,6 +5914,7 @@ Ilagay ang iyong key file sa ligtas na lugar. Kailangan mo ito upang lumikha ng 
 <translation id="8864055848767439877">Ibinabahagi ang <ph name="TAB_NAME" /> sa <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Inalis ang <ph name="EMAIL" /> sa device na ito</translation>
 <translation id="8867228703146808825">Kopyahin ang mga detalye ng build sa clipboard</translation>
+<translation id="8868333925931032127">Sinisimulan ang Demo Mode</translation>
 <translation id="8868626022555786497">Ginagamit</translation>
 <translation id="8870413625673593573">Recently Closed</translation>
 <translation id="8871551568777368300">Na-pin ng administrator</translation>

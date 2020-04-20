@@ -1809,6 +1809,7 @@
 <translation id="3396800784455899911">Սեղմելով «Ընդունել և շարունակել» կոճակը՝ դուք ընդունում եք Google-ի վերոնշյալ ծառայությունների մշակման պայմանները։</translation>
 <translation id="3399432415385675819">Ծանուցումները կանջատվեն</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" />x<ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Հց), միահյուսված</translation>
+<translation id="3402585168444815892">Գրանցում դեմո ռեժիմում</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Այս կայքի համար գաղտնաբառեր չեն պահվել</translation>
 <translation id="3405664148539009465">Հարմարեցնել տառատեսակները</translation>
@@ -4591,7 +4592,6 @@
 <translation id="713888829801648570">Ներեցեք, ձեր գաղտնաբառը հնարավոր չէ հաստատել, քանի որ դուք միացած չեք ցանցին:</translation>
 <translation id="7140928199327930795">Այլ մատչելի սարքեր չկան:</translation>
 <translation id="7141105143012495934">Մուտքը չհաջողվեց, քանի որ ձեր հաշվի տվյալները չհաջողվեց առբերել: Կապվեք ադմինիստրատորի հետ կամ նորից փորձեք:</translation>
-<translation id="7143092389027215216">Ցուցադրական ռեժիմի գործարկում</translation>
 <translation id="7143207342074048698">Միացում</translation>
 <translation id="7144878232160441200">Նորից փորձել</translation>
 <translation id="7149893636342594995">Վերջին 24 ժամվա</translation>
@@ -4774,6 +4774,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Ստեղծեք թեժ կետ <ph name="PHONE_NAME" /> հեռախոսում</translation>
 <translation id="7401778920660465883">Փակել այս հաղորդագրությունը</translation>
+<translation id="7403642243184989645">Ռեսուրսների ներբեռնում</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Անվտանգության ստուգումն արվել է 1 ժամ առաջ}one{Անվտանգության ստուգումն արվել է {NUM_HOURS} ժամ առաջ}other{Անվտանգության ստուգումն արվել է {NUM_HOURS} ժամ առաջ}}</translation>
 <translation id="740624631517654988">Ելնող պատուհանն արգելափակված է</translation>
 <translation id="7407430846095439694">Ներմուծել և կապակցել</translation>
@@ -5913,6 +5914,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> ներդիրն ուղարկվում է <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> հասցեն հեռացվեց այս սարքից</translation>
 <translation id="8867228703146808825">Պատճենել կառուցման տվյալները սեղմատախտակին</translation>
+<translation id="8868333925931032127">Դեմո ռեժիմի մեկնարկ</translation>
 <translation id="8868626022555786497">Օգտագործվող</translation>
 <translation id="8870413625673593573">Վերջին փակվածները</translation>
 <translation id="8871551568777368300">Ամրացված է ադմինիստրատորի կողմից</translation>

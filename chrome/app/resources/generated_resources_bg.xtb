@@ -1806,6 +1806,7 @@
 <translation id="3396800784455899911">С кликването си върху бутона „Приемам и продължавам“ приемате описаното по-горе обработване за тези услуги на Google.</translation>
 <translation id="3399432415385675819">Известията ще бъдат деактивирани</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> херца) – презредова развивка</translation>
+<translation id="3402585168444815892">Регистриране за демонстрационния режим</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Няма запазени пароли за този сайт</translation>
 <translation id="3405664148539009465">Персонализиране на шрифтовете</translation>
@@ -4588,7 +4589,6 @@
 <translation id="713888829801648570">За съжаление, паролата ви не можа да бъде потвърдена, защото сте офлайн.</translation>
 <translation id="7140928199327930795">Няма други налични устройства.</translation>
 <translation id="7141105143012495934">Влизането не бе успешно, тъй като данните за профила ви не можаха да се извлекат. Моля, свържете се с администратора си или опитайте отново.</translation>
-<translation id="7143092389027215216">Демонстрационният режим стартира</translation>
 <translation id="7143207342074048698">Свързва се</translation>
 <translation id="7144878232160441200">Нов опит</translation>
 <translation id="7149893636342594995">Последните 24 часа</translation>
@@ -4771,6 +4771,7 @@
 <translation id="7400418766976504921">URL адрес</translation>
 <translation id="7400839060291901923">Настройте връзката на телефона си <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Отхвърляне на това съобщение</translation>
+<translation id="7403642243184989645">Ресурсите се изтеглят</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Проверката на безопасността бе изпълнена преди 1 час}other{Проверката на безопасността бе изпълнена преди {NUM_HOURS} часа}}</translation>
 <translation id="740624631517654988">Блокиран бе изскачащ прозорец</translation>
 <translation id="7407430846095439694">Импортиране и свързване</translation>
@@ -5912,6 +5913,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> се споделя с(ъс) <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Профилът <ph name="EMAIL" /> бе премахнат от това устройство</translation>
 <translation id="8867228703146808825">Копиране на подробностите за компилацията в буферната памет</translation>
+<translation id="8868333925931032127">Демонстрационният режим се стартира</translation>
 <translation id="8868626022555786497">Използвано място</translation>
 <translation id="8870413625673593573">Наскоро затворени</translation>
 <translation id="8871551568777368300">Фиксирано от администратора</translation>

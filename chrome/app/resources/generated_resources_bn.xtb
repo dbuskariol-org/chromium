@@ -1808,6 +1808,7 @@
 <translation id="3396800784455899911">'স্বীকার করে চালিয়ে যান' বোতামে ক্লিক করার অর্থ এই Google পরিষেবাগুলির জন্য উপরোক্ত বর্ণিত প্রক্রিয়াগুলিতে আপনি সম্মতি দেন।</translation>
 <translation id="3399432415385675819">বিজ্ঞপ্তি অক্ষম করা হবে</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> হার্জ) - একত্রে</translation>
+<translation id="3402585168444815892">ডেমো মোডে এনরোল করা হচ্ছে</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">এই সাইটের জন্য কোনও পাসওয়ার্ড সেভ করা হয়নি</translation>
 <translation id="3405664148539009465">হরফগুলি কাস্টমাইজ করুন</translation>
@@ -4588,7 +4589,6 @@
 <translation id="713888829801648570">দুঃখিত, আপনি অফলাইনে থাকায় আপনার পাসওয়ার্ড যাচাই করা যায়নি৷</translation>
 <translation id="7140928199327930795">অন্য কোনো উপলব্ধ ডিভাইস নেই৷</translation>
 <translation id="7141105143012495934">আপনার অ্যাকাউন্টের বিশদ বিবরণ পুনরুদ্ধার করতে না পারায় সাইন-ইন ব্যর্থ হয়েছে। অনুগ্রহ করে আপনার প্রশাসকের সাথে যোগাযোগ করুন অথবা আবার চেষ্টা করুন।</translation>
-<translation id="7143092389027215216">ডেমো মোড শুরু করা হচ্ছে</translation>
 <translation id="7143207342074048698">সংযুক্ত হচ্ছে</translation>
 <translation id="7144878232160441200">আবার চেষ্টা করুন</translation>
 <translation id="7149893636342594995">গত ২৪ ঘণ্টা</translation>
@@ -4771,6 +4771,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">আপনার <ph name="PHONE_NAME" /> এ সংযোগ সেট-আপ করুন</translation>
 <translation id="7401778920660465883">এই মেসেজ বাতিল করুন</translation>
+<translation id="7403642243184989645">রিসোর্স ডাউনলোড করা হচ্ছে</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{১ ঘণ্টা আগে নিরাপত্তা সংক্রান্ত পরীক্ষা চালানো হয়েছে}one{{NUM_HOURS} ঘণ্টা আগে নিরাপত্তা সংক্রান্ত পরীক্ষা চালানো হয়েছে}other{{NUM_HOURS} ঘণ্টা আগে নিরাপত্তা সংক্রান্ত পরীক্ষা চালানো হয়েছে}}</translation>
 <translation id="740624631517654988">পপ-আপ  অবরুদ্ধ</translation>
 <translation id="7407430846095439694">আমদানি করে আটকান</translation>
@@ -5910,6 +5911,7 @@
 <translation id="8864055848767439877"><ph name="APP_NAME" />-এর সাথে <ph name="TAB_NAME" /> শেয়ার করা হচ্ছে</translation>
 <translation id="8864458770072227512">এই ডিভাইস থেকে <ph name="EMAIL" /> সরিয়ে দেওয়া হয়েছে</translation>
 <translation id="8867228703146808825">বিল্ডের বিবরণ ক্লিপবোর্ডে কপি করুন</translation>
+<translation id="8868333925931032127">ডেমো মোড শুরু করা হচ্ছে</translation>
 <translation id="8868626022555786497">ব্যবহৃত হচ্ছে</translation>
 <translation id="8870413625673593573">সম্প্রতি বন্ধ হয়েছে</translation>
 <translation id="8871551568777368300">প্রশাসক দ্বারা পিন করা হয়েছে</translation>

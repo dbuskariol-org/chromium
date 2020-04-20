@@ -1809,6 +1809,7 @@ Pretende pará-lo?</translation>
 <translation id="3396800784455899911">Ao clicar no botão "Aceitar e continuar", está a aceitar o processamento descrito acima para estes serviços Google.</translation>
 <translation id="3399432415385675819">As notificações serão desativadas</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> hertz) – entrelaçado</translation>
+<translation id="3402585168444815892">A inscrever-se no modo de demonstração…</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Sem palavras-passe guardadas para este site</translation>
 <translation id="3405664148539009465">Personalizar tipos de letra</translation>
@@ -4589,7 +4590,6 @@ Certifique-se de que não revela informações confidenciais.</translation>
 <translation id="713888829801648570">Lamentamos, mas não foi possível verificar a sua palavra-passe por se encontrar offline.</translation>
 <translation id="7140928199327930795">Não existem outros dispositivos disponíveis.</translation>
 <translation id="7141105143012495934">O início de sessão falhou porque não foi possível obter os detalhes da sua conta. Contacte o gestor ou tente novamente.</translation>
-<translation id="7143092389027215216">A iniciar o modo de demonstração…</translation>
 <translation id="7143207342074048698">A ligar</translation>
 <translation id="7144878232160441200">Repetir</translation>
 <translation id="7149893636342594995">Últimas 24 horas</translation>
@@ -4772,6 +4772,7 @@ Certifique-se de que não revela informações confidenciais.</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Configurar ligação no <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Ignore esta mensagem</translation>
+<translation id="7403642243184989645">A transferir recursos…</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{A verificação de segurança foi efetuada há 1 hora.}other{A verificação de segurança foi efetuada há {NUM_HOURS} horas}}</translation>
 <translation id="740624631517654988">Janelas de pop-up bloqueadas</translation>
 <translation id="7407430846095439694">Importar e vincular</translation>
@@ -5912,6 +5913,7 @@ Mantenha o seu ficheiro de chave num local seguro, pois irá precisar dele para 
 <translation id="8864055848767439877">A partilhar <ph name="TAB_NAME" /> com o <ph name="APP_NAME" />…</translation>
 <translation id="8864458770072227512">O email <ph name="EMAIL" /> foi removido deste dispositivo.</translation>
 <translation id="8867228703146808825">Copiar detalhes da compilação para a área de transferência</translation>
+<translation id="8868333925931032127">A iniciar o modo de demonstração…</translation>
 <translation id="8868626022555786497">Em utilização</translation>
 <translation id="8870413625673593573">Fechadas recentemente</translation>
 <translation id="8871551568777368300">Fixado pelo gestor</translation>

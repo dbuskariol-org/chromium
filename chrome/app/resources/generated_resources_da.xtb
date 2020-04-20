@@ -1809,6 +1809,7 @@ Du kan administrere indstillingerne for denne konto ved at installere Family Lin
 <translation id="3396800784455899911">Når du klikker på knappen "Acceptér og fortsæt", accepterer du den behandling, der er beskrevet ovenfor, for disse Google-tjenester.</translation>
 <translation id="3399432415385675819">Notifikationer deaktiveres</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" />x<ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> hertz) – sammenflettet</translation>
+<translation id="3402585168444815892">Tilmelder dig i demotilstand</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Der er ikke gemt nogen adgangskoder til dette website</translation>
 <translation id="3405664148539009465">Tilpas skriftstørrelser</translation>
@@ -4589,7 +4590,6 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="713888829801648570">Din adgangskode blev ikke bekræftet, fordi du er offline.</translation>
 <translation id="7140928199327930795">Der er ingen andre tilgængelige enheder.</translation>
 <translation id="7141105143012495934">Login mislykkedes, da dine kontooplysninger ikke kunne hentes. Kontakt din administrator, eller prøv igen.</translation>
-<translation id="7143092389027215216">Starter demotilstand</translation>
 <translation id="7143207342074048698">Opretter forbindelse</translation>
 <translation id="7144878232160441200">Prøv igen</translation>
 <translation id="7149893636342594995">De seneste 24 timer</translation>
@@ -4772,6 +4772,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="7400418766976504921">Webadresse</translation>
 <translation id="7400839060291901923">Konfigurer en forbindelse på din <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Luk denne meddelelse</translation>
+<translation id="7403642243184989645">Downloader ressourcer</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Sikkerhedstjekket blev udført for 1 time siden}one{Sikkerhedstjekket blev udført for {NUM_HOURS} time siden}other{Sikkerhedstjekket blev udført for {NUM_HOURS} timer siden}}</translation>
 <translation id="740624631517654988">Pop op-vindue blokeret</translation>
 <translation id="7407430846095439694">Importér, og tilknyt</translation>
@@ -5913,6 +5914,7 @@ Opbevar din nøglefil på et sikkert sted. Du skal bruge den til at oprette nye 
 <translation id="8864055848767439877">Deler <ph name="TAB_NAME" /> med <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> blev fjernet fra denne enhed</translation>
 <translation id="8867228703146808825">Kopiér buildoplysninger til udklipsholder</translation>
+<translation id="8868333925931032127">Starter demotilstand</translation>
 <translation id="8868626022555786497">I brug</translation>
 <translation id="8870413625673593573">Senest lukkede</translation>
 <translation id="8871551568777368300">Fastgjort af administratoren</translation>

@@ -1809,6 +1809,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="3396800784455899911">Door op de knop 'Accepteren en doorgaan' te klikken, ga je akkoord met de bovengenoemde verwerking voor deze Google-services.</translation>
 <translation id="3399432415385675819">Meldingen worden uitgeschakeld</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hertz) - geïnterlinieerd</translation>
+<translation id="3402585168444815892">Inschrijven in demomodus</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Geen wachtwoorden opgeslagen voor deze site</translation>
 <translation id="3405664148539009465">Lettertypen aanpassen</translation>
@@ -4588,7 +4589,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="713888829801648570">Sorry, je wachtwoord kan niet worden geverifieerd omdat je offline bent.</translation>
 <translation id="7140928199327930795">Geen andere beschikbare apparaten.</translation>
 <translation id="7141105143012495934">Inloggen is mislukt omdat je accountgegevens niet kunnen worden opgevraagd. Neem contact op met je beheerder of probeer het opnieuw.</translation>
-<translation id="7143092389027215216">Demomodus starten</translation>
 <translation id="7143207342074048698">Verbinding maken</translation>
 <translation id="7144878232160441200">Opnieuw proberen</translation>
 <translation id="7149893636342594995">Afgelopen 24 uur</translation>
@@ -4771,6 +4771,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Een verbinding instellen op je <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Dit bericht sluiten</translation>
+<translation id="7403642243184989645">Bronnen downloaden</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Veiligheidscheck is 1 uur geleden uitgevoerd}other{Veiligheidscheck is {NUM_HOURS} uur geleden uitgevoerd}}</translation>
 <translation id="740624631517654988">Pop-up geblokkeerd</translation>
 <translation id="7407430846095439694">Importeren en binden</translation>
@@ -5912,6 +5913,7 @@ Bewaar je sleutelbestand op een veilige plaats. Je hebt het bestand nodig om nie
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> wordt gedeeld met <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> is verwijderd van dit apparaat</translation>
 <translation id="8867228703146808825">Details van build kopiëren naar klembord</translation>
+<translation id="8868333925931032127">Demomodus starten</translation>
 <translation id="8868626022555786497">In gebruik</translation>
 <translation id="8870413625673593573">Recent gesloten</translation>
 <translation id="8871551568777368300">Vastgezet door beheerder</translation>

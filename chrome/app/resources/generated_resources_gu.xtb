@@ -1805,6 +1805,7 @@
 <translation id="3396800784455899911">"સ્વીકારો અને ચાલુ રાખો" બટન પર ક્લિક કરીને, તમે આ Google સેવાઓ માટે ઉપર વર્ણવેલી પ્રક્રિયા સાથે સંમત થાઓ છો.</translation>
 <translation id="3399432415385675819">સૂચનાઓ અક્ષમ કરવામાં આવશે</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> હર્ટ્ઝ) - ઇન્ટર્લેસ</translation>
+<translation id="3402585168444815892">ડેમો મોડ માટે નોંધણી કરાવી રહ્યાં છીએ</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">આ સાઇટ માટે કોઈ પાસવર્ડ સાચવેલા નથી</translation>
 <translation id="3405664148539009465">ફોન્ટ્સ કસ્ટમાઇઝ કરો </translation>
@@ -4586,7 +4587,6 @@ USB ડિવાઇસ</translation>
 <translation id="713888829801648570">માફ કરશો, તમારો પાસવર્ડ ચકાસી શકાયો નથી કારણ કે તમે ઑફલાઇન છો.</translation>
 <translation id="7140928199327930795">કોઈ અન્ય ઉપલબ્ધ ઉપકરણો નથી.</translation>
 <translation id="7141105143012495934">સાઇન ઇન નિષ્ફળ થયું કારણ કે તમારી એકાઉન્ટ વિગતો પાછી મેળવી શકાઈ નથી. કૃપા કરીને તમારા એડમિનનો સંપર્ક કરો અથવા ફરી પ્રયાસ કરો.</translation>
-<translation id="7143092389027215216">ડેમો મોડ શરૂ કરી રહ્યાં છીએ</translation>
 <translation id="7143207342074048698">કનેક્ટ કરી રહ્યું છે</translation>
 <translation id="7144878232160441200">ફરી પ્રયાસ કરો</translation>
 <translation id="7149893636342594995">છેલ્લા 24 કલાક</translation>
@@ -4769,6 +4769,7 @@ USB ડિવાઇસ</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">તમારા <ph name="PHONE_NAME" /> પર કનેક્શન સેટ કરો</translation>
 <translation id="7401778920660465883">આ સંદેશ છોડી દો</translation>
+<translation id="7403642243184989645">સંસાધનો ડાઉનલોડ થઈ રહ્યાં છે</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{સલામતી માટે તપાસ 1 કલાક અગાઉ કરવામાં આવી હતી}one{સલામતી માટે તપાસ {NUM_HOURS} કલાક અગાઉ કરવામાં આવી હતી}other{સલામતી માટે તપાસ {NUM_HOURS} કલાક અગાઉ કરવામાં આવી હતી}}</translation>
 <translation id="740624631517654988">પૉપ-અપ બ્લૉક કરેલું છે</translation>
 <translation id="7407430846095439694">આયાત કરો અને પ્રતિબદ્ધ કરો</translation>
@@ -5904,6 +5905,7 @@ USB ડિવાઇસ</translation>
 <translation id="8864055848767439877"><ph name="TAB_NAME" />ને <ph name="APP_NAME" /> પર શેર કરી રહ્યાં છે</translation>
 <translation id="8864458770072227512">આ ડિવાઇસમાંથી <ph name="EMAIL" /> દૂર કરવામાં આવ્યું</translation>
 <translation id="8867228703146808825">ક્લિપબોર્ડ પર બિલ્ડની વિગતો કૉપિ કરો</translation>
+<translation id="8868333925931032127">ડેમો મોડ શરૂ કરી રહ્યાં છીએ</translation>
 <translation id="8868626022555786497">ઉપયોગમાં</translation>
 <translation id="8870413625673593573">તાજેતરમાં બંધ કરેલા</translation>
 <translation id="8871551568777368300">વ્યવસ્થાપક દ્વારા પિન કરેલ</translation>

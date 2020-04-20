@@ -1809,6 +1809,7 @@ Voit ylläpitää tilin asetuksia asentamalla laitteellesi Family Link ‑sovell
 <translation id="3396800784455899911">Kun valitset Hyväksy ja jatka, hyväksyt käsittelyn näissä Google-palveluissa edellä kuvatuilla tavoilla.</translation>
 <translation id="3399432415385675819">Ilmoitukset poistetaan käytöstä.</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> hertsiä) – lomitettu</translation>
+<translation id="3402585168444815892">Liitytään demotilaan</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Tämän sivuston salasanoja ei ole tallennettu</translation>
 <translation id="3405664148539009465">Muokkaa kirjasimia</translation>
@@ -4587,7 +4588,6 @@ Julkinen eksponentti (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bittiä):
 <translation id="713888829801648570">Salasanaasi ei voi vahvistaa, koska olet offline-tilassa.</translation>
 <translation id="7140928199327930795">Ei muita käytettävissä olevia laitteita.</translation>
 <translation id="7141105143012495934">Sisäänkirjautuminen epäonnistui, koska tilitietojasi ei löytynyt. Ota yhteyttä järjestelmänvalvojaan tai yritä uudelleen.</translation>
-<translation id="7143092389027215216">Käynnistetään demotilaa</translation>
 <translation id="7143207342074048698">Yhdistetään</translation>
 <translation id="7144878232160441200">Yritä uudelleen</translation>
 <translation id="7149893636342594995">Viimeiset 24 tuntia</translation>
@@ -4770,6 +4770,7 @@ Julkinen eksponentti (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bittiä):
 <translation id="7400418766976504921">URL-osoite</translation>
 <translation id="7400839060291901923">Avaa <ph name="PHONE_NAME" /> ja määritä yhteys</translation>
 <translation id="7401778920660465883">Ohita tämä viesti</translation>
+<translation id="7403642243184989645">Ladataan resursseja</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Turvatarkistus tehtiin tunti sitten}other{Turvatarkistus tehtiin {NUM_HOURS} tuntia sitten}}</translation>
 <translation id="740624631517654988">Ponnahdusikkuna estetty</translation>
 <translation id="7407430846095439694">Tuo ja sido</translation>
@@ -5910,6 +5911,7 @@ Tallenna avaintiedosto suojattuun sijaintiin. Tarvitset sitä, jos haluat luoda 
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> jaetaan, vastaanottaja: <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> poistettiin tältä laitteelta</translation>
 <translation id="8867228703146808825">Kopioi koontiversion tiedot leikepöydälle</translation>
+<translation id="8868333925931032127">Käynnistetään demotilaa</translation>
 <translation id="8868626022555786497">Käytössä</translation>
 <translation id="8870413625673593573">Hiljattain suljetut</translation>
 <translation id="8871551568777368300">Järjestelmänvalvojan kiinnittämä</translation>

@@ -1809,6 +1809,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3396800784455899911">"Onartu eta egin aurrera" botoia sakatuta, onartu egingo duzu Google-ren zerbitzuok prozesatzeko modua, arestian aipatu bezala.</translation>
 <translation id="3399432415385675819">Desgaitu egingo dira jakinarazpenak</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> hertz) - gurutzatuta</translation>
+<translation id="3402585168444815892">Demo moduan erregistratzen</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Ez da gorde webgune honetako pasahitzik</translation>
 <translation id="3405664148539009465">Pertsonalizatu letrak</translation>
@@ -4588,7 +4589,6 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="713888829801648570">Ezin izan da pasahitza egiaztatu ez zaudelako Internetera konektatuta.</translation>
 <translation id="7140928199327930795">Ez dago erabilgarri dagoen bestelako gailurik.</translation>
 <translation id="7141105143012495934">Ezin izan da hasi saioa, ezin izan direlako eskuratu kontuaren xehetasunak. Jarri administratzailearekin harremanetan edo saiatu berriro.</translation>
-<translation id="7143092389027215216">Demo modua abiarazten</translation>
 <translation id="7143207342074048698">Konektatzen</translation>
 <translation id="7144878232160441200">Saiatu berriro</translation>
 <translation id="7149893636342594995">Azken 24 orduetakoak</translation>
@@ -4771,6 +4771,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="7400418766976504921">URLa</translation>
 <translation id="7400839060291901923">Konfiguratu konexioa <ph name="PHONE_NAME" /> gailuan</translation>
 <translation id="7401778920660465883">Baztertu mezu hau</translation>
+<translation id="7403642243184989645">Baliabideak deskargatzen</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Duela ordubete egin da segurtasun-egiaztapena}other{Duela {NUM_HOURS} ordu egin da segurtasun-egiaztapena}}</translation>
 <translation id="740624631517654988">Leiho gainerakorra blokeatu da</translation>
 <translation id="7407430846095439694">Inportatu eta lotu</translation>
@@ -5911,6 +5912,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> fitxa <ph name="APP_NAME" /> aplikazioarekin dago partekatuta</translation>
 <translation id="8864458770072227512">Kendu da <ph name="EMAIL" /> gailu honetatik</translation>
 <translation id="8867228703146808825">Kopiatu konpilazioaren xehetasunak arbelean</translation>
+<translation id="8868333925931032127">Demo modua abiarazten</translation>
 <translation id="8868626022555786497">Erabilita</translation>
 <translation id="8870413625673593573">Itxitako azkenak</translation>
 <translation id="8871551568777368300">Administratzaileak ainguratu du</translation>

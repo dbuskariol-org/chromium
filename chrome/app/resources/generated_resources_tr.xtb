@@ -1809,6 +1809,7 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="3396800784455899911">"Kabul et ve devam et" düğmesini tıklayarak bu Google hizmetleri ile ilgili yukarıda açıklanan işlemleri kabul etmiş olursunuz.</translation>
 <translation id="3399432415385675819">Bildirimler devre dışı bırakılacak</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hertz) - birbirine geçmiş</translation>
+<translation id="3402585168444815892">Demo Modu'na Kaydolunuyor</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Bu site için hiç şifre kaydedilmedi</translation>
 <translation id="3405664148539009465">Yazı tiplerini özelleştir</translation>
@@ -4589,7 +4590,6 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="713888829801648570">Çevrimdışı olduğunuz için maalesef şifreniz doğrulanamadı.</translation>
 <translation id="7140928199327930795">Başka kullanılabilir cihaz yok.</translation>
 <translation id="7141105143012495934">Hesap ayrıntılarınız alınamadığı için oturum açma işlemi başarısız oldu. Lütfen yöneticinizle iletişime geçin veya tekrar deneyin.</translation>
-<translation id="7143092389027215216">Demo modu başlatılıyor</translation>
 <translation id="7143207342074048698">Bağlanıyor</translation>
 <translation id="7144878232160441200">Yeniden Dene</translation>
 <translation id="7149893636342594995">Son 24 saat</translation>
@@ -4772,6 +4772,7 @@ Hassas bilgileri vermediğinizden emin olun.</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" /> telefonunuzda bağlantıyı yapılandırın</translation>
 <translation id="7401778920660465883">Bu iletiyi kapat</translation>
+<translation id="7403642243184989645">Kaynaklar indiriliyor</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Güvenlik kontrolü 1 saat önce çalıştırıldı}other{Güvenlik kontrolü {NUM_HOURS} saat önce çalıştırıldı}}</translation>
 <translation id="740624631517654988">Pop-up engellendi</translation>
 <translation id="7407430846095439694">İçe Aktar ve Bağla</translation>
@@ -5912,6 +5913,7 @@ Anahtar dosyanızı güvenli bir yerde saklayın. Uzantınızın yeni sürümler
 <translation id="8864055848767439877"><ph name="TAB_NAME" />, <ph name="APP_NAME" /> ile paylaşılıyor</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> bu cihazdan kaldırıldı</translation>
 <translation id="8867228703146808825">Yapı ayrıntılarını panoya kopyala</translation>
+<translation id="8868333925931032127">Demo Modu Başlatılıyor</translation>
 <translation id="8868626022555786497">Kullanımda</translation>
 <translation id="8870413625673593573">Son Kapatılan</translation>
 <translation id="8871551568777368300">Yönetici tarafından sabitlendi</translation>

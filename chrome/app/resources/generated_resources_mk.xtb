@@ -1809,6 +1809,7 @@
 <translation id="3396800784455899911">Ако кликнете на копчето „Прифати и продолжи“, се согласувате со обработката опишана погоре за овие услуги на Google.</translation>
 <translation id="3399432415385675819">Известувањата ќе се оневозможат</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> Х <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz) - испреплетено</translation>
+<translation id="3402585168444815892">Се регистрира во демо-режим</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Нема зачувани лозинки за сајтов</translation>
 <translation id="3405664148539009465">Приспособете ги фонтовите</translation>
@@ -4588,7 +4589,6 @@
 <translation id="713888829801648570">Извинете, вашата лозинка не може да се провери бидејќи сте исклучени.</translation>
 <translation id="7140928199327930795">Нема други достапни уреди.</translation>
 <translation id="7141105143012495934">Најавувањето не успеа бидејќи не можеа да се вчитаат деталите за вашата сметка. Контактирајте со администраторот или обидете се повторно.</translation>
-<translation id="7143092389027215216">Се стартува демо-режимот</translation>
 <translation id="7143207342074048698">Се поврзува</translation>
 <translation id="7144878232160441200">Обиди се повторно</translation>
 <translation id="7149893636342594995">Изминатите 24 часа</translation>
@@ -4771,6 +4771,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Поставете врска на вашиот <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Отфрлете ја поракава</translation>
+<translation id="7403642243184989645">Се преземаат ресурси</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Безбедносната проверка беше извршена пред 1 час}one{Безбедносната проверка беше извршена пред {NUM_HOURS} час}other{Безбедносната проверка беше извршена пред {NUM_HOURS} часа}}</translation>
 <translation id="740624631517654988">Појавниот прозорец е блокиран</translation>
 <translation id="7407430846095439694">Увези и врзи</translation>
@@ -5914,6 +5915,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> се споделува на <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> беше отстранета од уредов</translation>
 <translation id="8867228703146808825">Копирајте ги деталите за верзијата во привремената меморија</translation>
+<translation id="8868333925931032127">Се стартува демо-режимот</translation>
 <translation id="8868626022555786497">Во употреба</translation>
 <translation id="8870413625673593573">Неодамна затворено</translation>
 <translation id="8871551568777368300">Прикачено од администраторот</translation>

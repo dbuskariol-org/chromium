@@ -1807,6 +1807,7 @@
 <translation id="3396800784455899911">‏לחיצה על הלחצן "קבלה והמשך" מבטאת את הסכמתך לעיבוד שתואר קודם לכן לגבי השירותים האלה של Google.</translation>
 <translation id="3399432415385675819">הודעות יושבתו</translation>
 <translation id="3400390787768057815">‏<ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> הרץ) – סריקה שזורה (Interlaced)</translation>
+<translation id="3402585168444815892">מתבצעת הרשמה למצב הדגמה</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">לא נשמרו סיסמאות לאתר הזה</translation>
 <translation id="3405664148539009465">התאם אישית גופנים</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">מצטערים, לא ניתן לאמת את סיסמתך מכיוון שאתה במצב לא מקוון.</translation>
 <translation id="7140928199327930795">אין מכשירים זמינים נוספים.</translation>
 <translation id="7141105143012495934">הכניסה נכשלה מפני שלא ניתן היה לאחזר את פרטי החשבון. צור קשר עם מנהל המערכת או נסה שוב.</translation>
-<translation id="7143092389027215216">מתבצעת הפעלה של מצב הדגמה</translation>
 <translation id="7143207342074048698">מתחבר</translation>
 <translation id="7144878232160441200">נסה שוב</translation>
 <translation id="7149893636342594995">מהיום האחרון</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">כתובת אתר</translation>
 <translation id="7400839060291901923">הגדר את החיבור בטלפון <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">סגירת ההודעה</translation>
+<translation id="7403642243184989645">מתבצעת הורדת משאבים</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{בדיקת הבטיחות פעלה לפני שעה}two{בדיקת הבטיחות פעלה לפני {NUM_HOURS} שעות}many{בדיקת הבטיחות פעלה לפני {NUM_HOURS} שעות}other{בדיקת הבטיחות פעלה לפני {NUM_HOURS} שעות}}</translation>
 <translation id="740624631517654988">חלונות קופצים חסומים</translation>
 <translation id="7407430846095439694">ייבא ושייך</translation>
@@ -5911,6 +5912,7 @@
 <translation id="8864055848767439877">המערכת משתפת את <ph name="TAB_NAME" /> עם <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> הוסר מהמכשיר הזה</translation>
 <translation id="8867228703146808825">‏העתקה של פרטי ה-build אל הלוח</translation>
+<translation id="8868333925931032127">מתבצעת הפעלה של מצב הדגמה</translation>
 <translation id="8868626022555786497">בשימוש</translation>
 <translation id="8870413625673593573">נסגרו לאחרונה</translation>
 <translation id="8871551568777368300">הוצמד על ידי מנהל המערכת</translation>

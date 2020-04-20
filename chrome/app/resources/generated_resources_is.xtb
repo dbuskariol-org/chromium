@@ -1809,6 +1809,7 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="3396800784455899911">Með því að smella á hnappinn „Samþykkja og halda áfram“ samþykkir þú þá úrvinnslu sem lýst er hér að ofan fyrir þessa Google þjónustu.</translation>
 <translation id="3399432415385675819">Tilkynningar verða gerðar óvirkar</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> herts) – samfléttað</translation>
+<translation id="3402585168444815892">Skráning í prufustillingu</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Engin aðgangsorð hafa verið vistuð fyrir þetta vefsvæði</translation>
 <translation id="3405664148539009465">Sérsníða letur</translation>
@@ -4588,7 +4589,6 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="713888829801648570">Því miður var ekki hægt að staðfesta aðgangsorðið þitt vegna þess að engin nettenging er fyrir hendi.</translation>
 <translation id="7140928199327930795">Engin önnur tiltæk tæki.</translation>
 <translation id="7141105143012495934">Innskráning mistókst vegna þess að ekki tókst að sækja reikningsupplýsingar. Hafðu samband við kerfisstjóra eða reyndu aftur.</translation>
-<translation id="7143092389027215216">Setur upp prufustillingu</translation>
 <translation id="7143207342074048698">Tengist</translation>
 <translation id="7144878232160441200">Reyna aftur</translation>
 <translation id="7149893636342594995">Síðastliðinn sólarhring</translation>
@@ -4771,6 +4771,7 @@ Annars skaltu skrá þig út núna svo breytingarnar á þessum reikningi taki g
 <translation id="7400418766976504921">Vefslóð</translation>
 <translation id="7400839060291901923">Settu upp tengingu í <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Hunsa þessi skilaboð</translation>
+<translation id="7403642243184989645">Sækir tilföng</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Öryggisathugun var gerð fyrir 1 klukkustund}one{Öryggisathugun var gerð fyrir {NUM_HOURS} klukkustund}other{Öryggisathugun var gerð fyrir {NUM_HOURS} klukkustundum}}</translation>
 <translation id="740624631517654988">Sprettigluggi útilokaður</translation>
 <translation id="7407430846095439694">Flytja inn og binda</translation>
@@ -5911,6 +5912,7 @@ Geymdu lykilskrána á öruggum stað. Þú þarft hana til að búa til nýjar 
 <translation id="8864055848767439877">Deilir <ph name="TAB_NAME" /> í <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> var fjarlægt úr þessu tæki</translation>
 <translation id="8867228703146808825">Afrita upplýsingar um smíði á klippiborð</translation>
+<translation id="8868333925931032127">Undirbýr prufustillingu</translation>
 <translation id="8868626022555786497">Í notkun</translation>
 <translation id="8870413625673593573">Nýlega lokað</translation>
 <translation id="8871551568777368300">Fest af stjórnanda</translation>

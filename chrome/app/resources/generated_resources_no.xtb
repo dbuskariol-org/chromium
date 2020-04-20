@@ -1806,6 +1806,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="3396800784455899911">Ved å klikke på «Godta og fortsett»-knappen godtar du behandlingen som beskrives ovenfor, for disse Google-tjenestene.</translation>
 <translation id="3399432415385675819">Varsler slås av</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> hertz) – linjefletting</translation>
+<translation id="3402585168444815892">Registrerer i demomodus</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Ingen passord er lagret for dette nettstedet</translation>
 <translation id="3405664148539009465">Tilpass skrifttyper</translation>
@@ -4583,7 +4584,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="713888829801648570">Beklager. Passordet ditt kunne ikke bekreftes fordi du ikke har nettilkobling.</translation>
 <translation id="7140928199327930795">Ingen andre tilgjengelige enheter.</translation>
 <translation id="7141105143012495934">Påloggingen mislyktes fordi kontoopplysningene dine ikke kunne hentes ut. Kontakt administratoren din, eller prøv på nytt.</translation>
-<translation id="7143092389027215216">Start demomodus</translation>
 <translation id="7143207342074048698">Kobler til</translation>
 <translation id="7144878232160441200">Prøv på nytt</translation>
 <translation id="7149893636342594995">Siste døgn</translation>
@@ -4766,6 +4766,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="7400418766976504921">Nettadresse</translation>
 <translation id="7400839060291901923">Konfigurerer tilkoblingen på <ph name="PHONE_NAME" />-enheten din</translation>
 <translation id="7401778920660465883">Lukk denne meldingen</translation>
+<translation id="7403642243184989645">Laster ned ressurser</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Sikkerhetssjekken ble kjørt for 1 time siden}other{Sikkerhetssjekken ble kjørt for {NUM_HOURS} timer siden}}</translation>
 <translation id="740624631517654988">Blokkerte forgrunnsvindu</translation>
 <translation id="7407430846095439694">Importér og bind</translation>
@@ -5907,6 +5908,7 @@ Jeg tror ikke det er nødvendig å blokkere dette nettstedet.</translation>
 <translation id="8864055848767439877">Deler <ph name="TAB_NAME" /> med <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> ble fjernet fra denne enheten</translation>
 <translation id="8867228703146808825">Kopiér detaljer om delversjonen til utklippstavlen</translation>
+<translation id="8868333925931032127">Starter demomodus</translation>
 <translation id="8868626022555786497">I bruk</translation>
 <translation id="8870413625673593573">Nylig lukket</translation>
 <translation id="8871551568777368300">Festet av administratoren</translation>

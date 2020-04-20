@@ -1808,6 +1808,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="3396800784455899911">Ao facer clic no botón Aceptar e continuar, aceptarás o procesamento descrito anteriormente para estes servizos de Google.</translation>
 <translation id="3399432415385675819">Desactivaranse as notificacións</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz): liñas entrelazadas</translation>
+<translation id="3402585168444815892">Inscribindo empresa no modo de demostración</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Non se gardou ningún contrasinal para este sitio</translation>
 <translation id="3405664148539009465">Personalizar tipos de letra</translation>
@@ -4587,7 +4588,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="713888829801648570">Non se puido verificar o teu contrasinal debido a que estás sen conexión.</translation>
 <translation id="7140928199327930795">Non hai ningún outro dispositivo dispoñible.</translation>
 <translation id="7141105143012495934">Produciuse un erro no inicio de sesión porque non se puideron recuperar os datos da túa conta. Ponte en contacto co administrador ou téntao de novo.</translation>
-<translation id="7143092389027215216">Iniciando o modo de demostración</translation>
 <translation id="7143207342074048698">Conectando</translation>
 <translation id="7144878232160441200">Volver tentar</translation>
 <translation id="7149893636342594995">Últimas 24 horas</translation>
@@ -4770,6 +4770,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Configura a conexión no teléfono <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Ignorar esta mensaxe</translation>
+<translation id="7403642243184989645">Descargando recursos</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{A comprobación de seguranza executouse hai 1 hora}other{A comprobación de seguranza executouse hai {NUM_HOURS} horas}}</translation>
 <translation id="740624631517654988">Ventá emerxente bloqueada</translation>
 <translation id="7407430846095439694">Importar e vincular</translation>
@@ -5910,6 +5911,7 @@ Mantén o ficheiro de clave nun lugar seguro, xa que o precisarás para crear no
 <translation id="8864055848767439877">Compartindo <ph name="TAB_NAME" /> con <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> quitouse deste dispositivo</translation>
 <translation id="8867228703146808825">Copia os detalles da compilación no portapapeis</translation>
+<translation id="8868333925931032127">Iniciando modo de demostración</translation>
 <translation id="8868626022555786497">En uso</translation>
 <translation id="8870413625673593573">Pechados recentemente</translation>
 <translation id="8871551568777368300">Fixado polo administrador</translation>

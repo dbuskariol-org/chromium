@@ -1809,6 +1809,7 @@ Vous pouvez gérer les paramètres de ce compte en installant l'application Fami
 <translation id="3396800784455899911">En cliquant sur le bouton "Accepter et continuer", vous acceptez le processus décrit ci-dessus pour ces services Google.</translation>
 <translation id="3399432415385675819">Les notifications seront désactivées</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz) – entrelacé</translation>
+<translation id="3402585168444815892">Inscription au mode démo</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Aucun mot de passe enregistré pour ce site</translation>
 <translation id="3405664148539009465">Personnaliser les polices</translation>
@@ -4589,7 +4590,6 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="713888829801648570">Votre mot de passe n'a pas pu être vérifié, car votre appareil est hors connexion.</translation>
 <translation id="7140928199327930795">Aucun autre périphérique disponible</translation>
 <translation id="7141105143012495934">Échec de la connexion, car il est impossible de récupérer les informations relatives à votre compte. Veuillez contacter votre administrateur ou réessayer.</translation>
-<translation id="7143092389027215216">Lancement du mode démonstration</translation>
 <translation id="7143207342074048698">Connexion en cours</translation>
 <translation id="7144878232160441200">Réessayer</translation>
 <translation id="7149893636342594995">Dernières 24 heures</translation>
@@ -4772,6 +4772,7 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Configurer la connexion sur votre <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Fermer ce message</translation>
+<translation id="7403642243184989645">Téléchargement des ressources</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Contrôle de sécurité effectué il y a 1 heure}one{Contrôle de sécurité effectué il y a {NUM_HOURS} heure}other{Contrôle de sécurité effectué il y a {NUM_HOURS} heures}}</translation>
 <translation id="740624631517654988">Fenêtre pop-up bloquée</translation>
 <translation id="7407430846095439694">Importer et lier</translation>
@@ -5913,6 +5914,7 @@ Conservez votre fichier de clé en lieu sûr. Vous en aurez besoin lors de la cr
 <translation id="8864055848767439877">Partage de <ph name="TAB_NAME" /> avec <ph name="APP_NAME" />…</translation>
 <translation id="8864458770072227512">Le compte <ph name="EMAIL" /> a été supprimé de cet appareil</translation>
 <translation id="8867228703146808825">Copier les détails de la version dans le presse-papiers</translation>
+<translation id="8868333925931032127">Lancement du mode démo</translation>
 <translation id="8868626022555786497">Utilisé</translation>
 <translation id="8870413625673593573">Récemment fermés</translation>
 <translation id="8871551568777368300">Épinglé par l'administrateur</translation>

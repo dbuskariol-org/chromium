@@ -1806,6 +1806,7 @@
 <translation id="3396800784455899911">Ако кликнете на дугме „Прихвати и настави“, прихватате горенаведену обраду за ове Google услуге.</translation>
 <translation id="3399432415385675819">Обавештења ће бити онемогућена</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" />×<ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> херца) – преплетено</translation>
+<translation id="3402585168444815892">Регистровање за режим демонстрације</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Ниједна лозинка није сачувана за овај сајт</translation>
 <translation id="3405664148539009465">Прилагоди фонтове</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">Жао нам је, нисмо успели да потврдимо лозинку јер сте офлајн.</translation>
 <translation id="7140928199327930795">Нема других доступних уређаја.</translation>
 <translation id="7141105143012495934">Пријављивање није успело јер нисмо успели да преузмемо детаље о налогу. Контактирајте администратора или покушајте поново.</translation>
-<translation id="7143092389027215216">Покреће се режим демонстрације</translation>
 <translation id="7143207342074048698">Повезивање</translation>
 <translation id="7144878232160441200">Пробај поново</translation>
 <translation id="7149893636342594995">Последња 24 сата</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">URL адреса</translation>
 <translation id="7400839060291901923">Подесите везу на телефону <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Одбаци ову поруку</translation>
+<translation id="7403642243184989645">Преузимање ресурса</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Безбедносна провера је покренута пре 1 сат}one{Безбедносна провера је покренута пре {NUM_HOURS} сат}few{Безбедносна провера је покренута пре {NUM_HOURS} сата}other{Безбедносна провера је покренута пре {NUM_HOURS} сати}}</translation>
 <translation id="740624631517654988">Искачући прозори су блокирани</translation>
 <translation id="7407430846095439694">Увези и обавежи се</translation>
@@ -5910,6 +5911,7 @@
 <translation id="8864055848767439877">Картица <ph name="TAB_NAME" /> се дели са апликацијом <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Налог <ph name="EMAIL" /> је уклоњен са овог уређаја</translation>
 <translation id="8867228703146808825">Копирајте детаље верзије у привремену меморију</translation>
+<translation id="8868333925931032127">Покреће се режим демонстрације</translation>
 <translation id="8868626022555786497">У употреби</translation>
 <translation id="8870413625673593573">Недавно затворено</translation>
 <translation id="8871551568777368300">Закачио је администратор</translation>

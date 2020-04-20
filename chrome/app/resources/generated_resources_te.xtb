@@ -1809,6 +1809,7 @@
 <translation id="3396800784455899911">"నేను అంగీకరిస్తున్నాను" బటన్‌ని క్లిక్ చేయడం ద్వారా, ఈ Google సేవల కోసం ఎగువ పేర్కొన్న వాటిని ప్రాసెస్ చేయడానికి మీరు అంగీకరిస్తున్నారు.</translation>
 <translation id="3399432415385675819">నోటిఫికేషన్‌లు నిలిపివేయబడతాయి</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> హెర్జ్) - అంతర్గత అల్లిక చేయబడింది</translation>
+<translation id="3402585168444815892">డెమో మోడ్‌కు ఎన్‌రోల్ అవుతోంది</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">ఈ సైట్ కోసం పాస్‌వర్డ్‌లు సేవ్ చేయబడలేదు</translation>
 <translation id="3405664148539009465">ఫాంట్‌లను అనుకూలీకరించు</translation>
@@ -4588,7 +4589,6 @@
 <translation id="713888829801648570">క్షమించండి, మీరు ఆఫ్‌లైన్‌లో ఉన్నందున మీ పాస్‌వర్డ్‌ను ధ్రువీక‌రించ‌డం సాధ్య‌ప‌డ‌దు.</translation>
 <translation id="7140928199327930795">అందుబాటులో ఉన్న ఇతర పరికరాలు ఏవీ లేవు.</translation>
 <translation id="7141105143012495934">మీ ఖాతా వివరాలను తిరిగి పొందలేనందున సైన్-ఇన్ విఫలమైంది. దయచేసి మీ నిర్వాహకుడిని సంప్రదించండి లేదా మళ్లీ ప్రయత్నించండి.</translation>
-<translation id="7143092389027215216">డెమో మోడ్‌ను ప్రారంభిస్తోంది</translation>
 <translation id="7143207342074048698">కనెక్ట్ అవుతోంది</translation>
 <translation id="7144878232160441200">మళ్లీ ప్రయత్నించండి</translation>
 <translation id="7149893636342594995">గత 72 గంటలు</translation>
@@ -4771,6 +4771,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">మీ <ph name="PHONE_NAME" />లో కనెక్షన్‌ని సెటప్ చేయండి</translation>
 <translation id="7401778920660465883">ఈ సందేశాన్ని రద్దు చేయి</translation>
+<translation id="7403642243184989645">రిసోర్స్‌ను డౌన్‌లోడ్ చేస్తోంది</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{భద్రతా తనిఖీ జరిగి 1 గంట అయింది}other{భద్రతా తనిఖీ జరిగి {NUM_HOURS} గంటలు అయింది}}</translation>
 <translation id="740624631517654988">పాప్-అప్ నిరోధించబడింది</translation>
 <translation id="7407430846095439694">దిగుమతి చేసి, అనుబంధించు</translation>
@@ -5908,6 +5909,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" />ను <ph name="APP_NAME" />కు షేర్ చేస్తోంది</translation>
 <translation id="8864458770072227512">ఈ పరికరం నుండి <ph name="EMAIL" /> తీసివేయబడింది</translation>
 <translation id="8867228703146808825">బిల్డ్ వివరాలను క్లిప్‌బోర్డ్‌కు కాపీ చేయి</translation>
+<translation id="8868333925931032127">డెమో మోడ్‌ను ప్రారంభిస్తోంది</translation>
 <translation id="8868626022555786497">ఉపయోగంలో ఉంది</translation>
 <translation id="8870413625673593573">ఇటీవల మూసివేసినవి</translation>
 <translation id="8871551568777368300">నిర్వాహకులు పిన్ చేశారు</translation>

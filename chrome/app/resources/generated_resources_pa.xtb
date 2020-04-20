@@ -1807,6 +1807,7 @@
 <translation id="3396800784455899911">"ਸਵੀਕਾਰ ਕਰੋ ਅਤੇ ਜਾਰੀ ਰੱਖੋ" ਬਟਨ 'ਤੇ ਕਲਿੱਕ ਕਰਕੇ, ਤੁਸੀਂ ਇਹਨਾਂ Google ਸੇਵਾਵਾਂ ਲਈ ਉਪਰੋਕਤ ਵਰਣਨ ਕੀਤੀ ਪ੍ਰਕਿਰਿਆ ਨਾਲ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ।</translation>
 <translation id="3399432415385675819">ਸੂਚਨਾਵਾਂ ਨੂੰ ਅਯੋਗ ਬਣਾਇਆ ਜਾਵੇਗਾ</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> ਹਰਟਜ਼) - ਇੰਟਰਲੇਸਡ</translation>
+<translation id="3402585168444815892">ਡੈਮੋ ਮੋਡ ਵਿੱਚ ਦਰਜ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">ਇਸ ਸਾਈਟ ਲਈ ਕੋਈ ਪਾਸਵਰਡ ਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤੇ ਗਏ</translation>
 <translation id="3405664148539009465">ਫੌਂਟਾਂ ਨੂੰ ਵਿਉਂਤਬੱਧ ਕਰੋ</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">ਮਾਫ਼ ਕਰਨਾ, ਤੁਹਾਡਾ ਪਾਸਵਰਡ ਪ੍ਰਮਾਣਿਤ ਨਹੀਂ ਕਰ ਸਕਿਆ ਕਿਉਂਕਿ ਤੁਸੀਂ ਆਫ਼ਲਾਈਨ ਹੋ।</translation>
 <translation id="7140928199327930795">ਕੋਈ ਹੋਰ ਉਪਲਬਧ ਡਿਵਾਈਸਾਂ ਨਹੀਂ।</translation>
 <translation id="7141105143012495934">ਸਾਈਨ-ਇਨ ਅਸਫਲ ਹੋਇਆ ਕਿਉਂਕਿ ਤੁਹਾਡੇ ਖਾਤੇ ਦਾ ਵੇਰਵਿਆਂ ਨੂੰ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਪ੍ਰਸ਼ਾਸਕ ਨੂੰ ਸੰਪਰਕ ਕਰੋ ਜਾਂ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</translation>
-<translation id="7143092389027215216">ਡੈਮੋ ਮੋਡ ਸ਼ੁਰੂ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</translation>
 <translation id="7143207342074048698">ਕਨੈਕਟ ਕਰ ਰਿਹਾ ਹੈ</translation>
 <translation id="7144878232160441200">ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</translation>
 <translation id="7149893636342594995">ਪਿਛਲੇ 24 ਘੰਟੇ</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">ਆਪਣੇ <ph name="PHONE_NAME" /> 'ਤੇ ਕਨੈਕਸ਼ਨ ਸਥਾਪਤ ਕਰੋ</translation>
 <translation id="7401778920660465883">ਇਹ ਸੁਨੇਹਾ ਖਾਰਜ ਕਰੋ</translation>
+<translation id="7403642243184989645">ਸਰੋਤਾਂ ਨੂੰ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{ਸੁਰੱਖਿਆ ਜਾਂਚ 1 ਘੰਟਾ ਪਹਿਲਾਂ ਚਲਾਈ ਗਈ}one{ਸੁਰੱਖਿਆ ਜਾਂਚ {NUM_HOURS} ਘੰਟਾ ਪਹਿਲਾਂ ਚਲਾਈ ਗਈ}other{ਸੁਰੱਖਿਆ ਜਾਂਚ {NUM_HOURS} ਘੰਟੇ ਪਹਿਲਾਂ ਚਲਾਈ ਗਈ}}</translation>
 <translation id="740624631517654988">ਪੌਪ-ਅੱਪ ਬਲਾਕ ਕੀਤੇ</translation>
 <translation id="7407430846095439694">ਆਯਾਤ ਕਰੋ ਅਤੇ ਜੋੜੋ</translation>
@@ -5907,6 +5908,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> ਨੂੰ <ph name="APP_NAME" /> ਨਾਲ ਸਾਂਝਾ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> ਨੂੰ ਇਸ ਡੀਵਾਈਸ ਤੋਂ ਹਟਾਇਆ ਗਿਆ</translation>
 <translation id="8867228703146808825">ਬਿਲਡ ਵੇਰਵਿਆਂ ਨੂੰ ਕਲਿੱਪਬੋਰਡ 'ਤੇ ਕਾਪੀ ਕਰੋ</translation>
+<translation id="8868333925931032127">ਡੈਮੋ ਮੋਡ ਸ਼ੁਰੂ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</translation>
 <translation id="8868626022555786497">ਵਰਤੋਂ ਵਿੱਚ</translation>
 <translation id="8870413625673593573">ਹੁਣੇ ਜਿਹੇ ਬੰਦ ਕੀਤੀਆਂ</translation>
 <translation id="8871551568777368300">ਪ੍ਰਸ਼ਾਸਕ ਵੱਲੋਂ ਪਿੰਨ ਕੀਤਾ ਗਿਆ</translation>

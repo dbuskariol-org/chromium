@@ -1809,6 +1809,7 @@ Nastavitve tega računa je mogoče upravljati z namestitvijo aplikacije Family L
 <translation id="3396800784455899911">Če kliknete gumb »Sprejmi in nadaljuj«, se strinjate z obdelavo, ki je opisana zgoraj za te Googlove storitve.</translation>
 <translation id="3399432415385675819">Obvestila bodo onemogočena</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz) – prepleteno</translation>
+<translation id="3402585168444815892">Včlanitev v predstavitveni način</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Za to spletno mesto ni shranjenih gesel</translation>
 <translation id="3405664148539009465">Prilagodi pisave</translation>
@@ -4590,7 +4591,6 @@ Poskrbite, da ne boste razkrili morebitnih občutljivih podatkov.</translation>
 <translation id="713888829801648570">Oprostite, gesla ni bilo mogoče preveriti, ker nimate internetne povezave.</translation>
 <translation id="7140928199327930795">Ni drugih razpoložljivih naprav.</translation>
 <translation id="7141105143012495934">Prijava ni uspela, ker ni bilo mogoče pridobiti podrobnosti o računu. Obrnite se na skrbnika in poskusite znova.</translation>
-<translation id="7143092389027215216">Zagon predstavitvenega načina</translation>
 <translation id="7143207342074048698">Vzpostavljanje povezave</translation>
 <translation id="7144878232160441200">Poskusi znova</translation>
 <translation id="7149893636342594995">Zadnjih 24 ur</translation>
@@ -4773,6 +4773,7 @@ Poskrbite, da ne boste razkrili morebitnih občutljivih podatkov.</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Nastavitev povezave v telefonu <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Opusti to sporočilo</translation>
+<translation id="7403642243184989645">Prenos sredstev</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Varnostno preverjanje je bilo izvedeno pred 1 uro}one{Varnostno preverjanje je bilo izvedeno pred {NUM_HOURS} uro}two{Varnostno preverjanje je bilo izvedeno pred {NUM_HOURS} urama}few{Varnostno preverjanje je bilo izvedeno pred {NUM_HOURS} urami}other{Varnostno preverjanje je bilo izvedeno pred {NUM_HOURS} urami}}</translation>
 <translation id="740624631517654988">Pojavno okno je blokirano</translation>
 <translation id="7407430846095439694">Uvoz in vezava</translation>
@@ -5914,6 +5915,7 @@ Datoteko s ključem shranite na varnem. Potrebovali jo boste za izdelavo novih r
 <translation id="8864055848767439877">Deljenje zavihka <ph name="TAB_NAME" /> z aplikacijo <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Račun <ph name="EMAIL" /> je bil odstranjen iz te naprave</translation>
 <translation id="8867228703146808825">Kopiranje podrobnosti gradnje v odložišče</translation>
+<translation id="8868333925931032127">Zagon predstavitvenega načina</translation>
 <translation id="8868626022555786497">V uporabi</translation>
 <translation id="8870413625673593573">Nedavno zaprto</translation>
 <translation id="8871551568777368300">Pripel skrbnik</translation>

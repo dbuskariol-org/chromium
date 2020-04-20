@@ -1809,6 +1809,7 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="3396800784455899911">Al hacer clic en el botón "Aceptar y continuar", declaras que estás conforme con el proceso descrito anteriormente de estos servicios de Google.</translation>
 <translation id="3399432415385675819">Se inhabilitarán las notificaciones</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz) - entrelazado</translation>
+<translation id="3402585168444815892">Registrándose en modo demo</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">No hay contraseñas guardadas de este sitio web</translation>
 <translation id="3405664148539009465">Personalizar fuentes</translation>
@@ -4587,7 +4588,6 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="713888829801648570">La contraseña no se ha podido verificar porque no te has conectado a Internet.</translation>
 <translation id="7140928199327930795">No hay otros dispositivos disponibles.</translation>
 <translation id="7141105143012495934">Se ha producido un error al iniciar sesión porque no ha sido posible recuperar la información de la cuenta. Ponte en contacto con el administrador o vuelve a intentarlo.</translation>
-<translation id="7143092389027215216">Iniciando modo de demostración</translation>
 <translation id="7143207342074048698">Conectando</translation>
 <translation id="7144878232160441200">Volver a intentar</translation>
 <translation id="7149893636342594995">Últimas 24 horas</translation>
@@ -4770,6 +4770,7 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Configurar la conexión en tu <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Ignorar este mensaje</translation>
+<translation id="7403642243184989645">Descargando recursos</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{La comprobación de seguridad se realizó hace 1 hora}other{La comprobación de seguridad se realizó hace {NUM_HOURS} horas}}</translation>
 <translation id="740624631517654988">Ventana emergente bloqueada</translation>
 <translation id="7407430846095439694">Importar y vincular</translation>
@@ -5911,6 +5912,7 @@ Guarda tu archivo de clave en un lugar seguro, ya que lo necesitarás para crear
 <translation id="8864055848767439877">Compartiendo <ph name="TAB_NAME" /> con <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512">Se ha eliminado <ph name="EMAIL" /> del dispositivo</translation>
 <translation id="8867228703146808825">Copiar detalles de compilación al portapapeles</translation>
+<translation id="8868333925931032127">Iniciando modo demo</translation>
 <translation id="8868626022555786497">En uso</translation>
 <translation id="8870413625673593573">Cerrado recientemente</translation>
 <translation id="8871551568777368300">Fijada por el administrador</translation>

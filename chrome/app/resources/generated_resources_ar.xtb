@@ -1809,6 +1809,7 @@
 <translation id="3396800784455899911">‏بالنقر على الزر "قبول ومتابعة"، فأنت توافق على المعالجة الموضّحة أعلاه لخدمات Google هذه.</translation>
 <translation id="3399432415385675819">سيتم إيقاف الإشعارات</translation>
 <translation id="3400390787768057815">‏<ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> هرتز) - متداخل</translation>
+<translation id="3402585168444815892">جارٍ التسجيل في "الوضع التجريبي"</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />، <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">لم يتم حفظ أي كلمات مرور لهذا الموقع</translation>
 <translation id="3405664148539009465">تخصيص الخطوط</translation>
@@ -4587,7 +4588,6 @@
 <translation id="713888829801648570">عفوًا، لا يمكن التحقق من كلمة المرور لأنك بلا إنترنت.</translation>
 <translation id="7140928199327930795">لا توجد أجهزة أخرى متاحة.</translation>
 <translation id="7141105143012495934">فشل تسجيل الدخول، نظرًا لعدم القدرة على استرداد تفاصيل حسابك، يُرجى الاتصال بالمسؤول أو إعادة المحاولة.</translation>
-<translation id="7143092389027215216">جارٍ بدء الوضع التجريبي</translation>
 <translation id="7143207342074048698">اتصال</translation>
 <translation id="7144878232160441200">إعادة المحاولة</translation>
 <translation id="7149893636342594995">آخر 24 ساعة</translation>
@@ -4770,6 +4770,7 @@
 <translation id="7400418766976504921">‏عنوان URL</translation>
 <translation id="7400839060291901923">إعداد الاتصال على جهاز <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">رفض هذه الرسالة</translation>
+<translation id="7403642243184989645">جارٍ تنزيل موارد</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{تم تفعيل ميزة "تأكيد السلامة" قبل ساعة واحدة.}zero{تم تفعيل ميزة "تأكيد السلامة" قبل {NUM_HOURS} ساعة.}two{تم تفعيل ميزة "تأكيد السلامة" قبل ساعتَين ({NUM_HOURS}).}few{تم تفعيل ميزة "تأكيد السلامة" قبل {NUM_HOURS} ساعات.}many{تم تفعيل ميزة "تأكيد السلامة" قبل {NUM_HOURS} ساعة.}other{تم تفعيل ميزة "تأكيد السلامة" قبل {NUM_HOURS} ساعة.}}</translation>
 <translation id="740624631517654988">تم منع النوافذ المنبثقة.</translation>
 <translation id="7407430846095439694">الاستيراد والربط</translation>
@@ -5911,6 +5912,7 @@
 <translation id="8864055848767439877">جارٍ مشاركة <ph name="TAB_NAME" /> مع <ph name="APP_NAME" />.</translation>
 <translation id="8864458770072227512">تمت إزالة <ph name="EMAIL" /> من هذا الجهاز.</translation>
 <translation id="8867228703146808825">نسخ تفاصيل الإصدار إلى الحافظة</translation>
+<translation id="8868333925931032127">جارٍ بدء "الوضع التجريبي"</translation>
 <translation id="8868626022555786497">قيد الاستخدام</translation>
 <translation id="8870413625673593573">العناصر المغلقة مؤخرًا</translation>
 <translation id="8871551568777368300">تم التثبيت من قبل المشرف</translation>

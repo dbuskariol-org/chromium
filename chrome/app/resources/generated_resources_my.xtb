@@ -1810,6 +1810,7 @@
 <translation id="3396800784455899911">"လက်ခံပြီး ရှေ့ဆက်ရန်" ခလုတ်ကို နှိပ်ခြင်းဖြင့် ဤ Google ဝန်ဆောင်မှုများအတွက် အထက်ဖော်ပြပါ စီမံဆောင်ရွက်မှုများကို သဘောတူရာရောက်ပါသည်။</translation>
 <translation id="3399432415385675819">အကြောင်းကြားချက်များကို ပိတ်ထားပါမည်</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> ဟာ့ဇ်) - တစ်ခုနှင့်တစ်ခု ထပ်ထားသည်</translation>
+<translation id="3402585168444815892">'သရုပ်ပြမုဒ်' တွင် စာရင်းသွင်းနေသည်</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />၊ <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">ဤဝဘ်ဆိုက်အတွက် မည်သည့်စကားဝှက်မျှ သိမ်းမထားပါ</translation>
 <translation id="3405664148539009465">ဖေါင့်များ စိတ်ကြိုက်ပြင်ဆင်ရန်</translation>
@@ -4586,7 +4587,6 @@
 <translation id="713888829801648570">ဆောရီး၊ သင် အော့ဖလိုင်း ဖြစ်နေသောကြောင့် သင့်လျှို့ဝှက်ကုဒ်ကို အတည်မပြုနိုင်ပါ။</translation>
 <translation id="7140928199327930795">အခြား ကိရိယာများ မရှိ။</translation>
 <translation id="7141105143012495934">သင့်အကောင့်အသေးစိတ်များအား ထုတ်ယူ၍မရသောကြောင့် လက်မှတ်ထိုးဝင်ရောက်မှု မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ သင့်ကြီးကြပ်သူကို ဆက်သွယ်ပါ သို့မဟုတ် နောက်တစ်ကြိမ်ကြိုးစားပါ။</translation>
-<translation id="7143092389027215216">သရုပ်ပြမုဒ်ကို စတင်နေသည်</translation>
 <translation id="7143207342074048698">ချိတ်ဆက်နေသည်</translation>
 <translation id="7144878232160441200">ထပ်စမ်းရန်</translation>
 <translation id="7149893636342594995">ပြီးခဲ့သည့် ၂၄ နာရီ</translation>
@@ -4769,6 +4769,7 @@
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">သင့် <ph name="PHONE_NAME" /> တွင် ချိတ်ဆက်မှုကို သတ်မှတ်ပါ</translation>
 <translation id="7401778920660465883">ဤ စာကို ပယ်ဖျက်ရန်</translation>
+<translation id="7403642243184989645">ရင်းမြစ်များ ဒေါင်းလုဒ်လုပ်နေသည်</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{ပြီးခဲ့သည့် ၁ နာရီက လုံခြုံရေးစစ်ဆေးခဲ့သည်}other{ပြီးခဲ့သည့် {NUM_HOURS} နာရီက လုံခြုံရေးစစ်ဆေးခဲ့သည်}}</translation>
 <translation id="740624631517654988">ပေါ့အာပ် ပိတ်ဆို့ထား</translation>
 <translation id="7407430846095439694">တင်သွင်းရန်နှင့် ချိတ်တွဲရန်</translation>
@@ -5909,6 +5910,7 @@
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> ကို <ph name="APP_NAME" /> သို့ မျှဝေနေသည်</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> ကို ဤစက်ပစ္စည်းမှနေ၍ ဖယ်ရှားလိုက်ပါပြီ</translation>
 <translation id="8867228703146808825">တည်ဆောက်ပုံအသေးစိတ်ကို ကလစ်ဘုတ်သို့ မိတ္တူကူးရန်</translation>
+<translation id="8868333925931032127">'သရုပ်ပြမုဒ်' စတင်ခြင်း</translation>
 <translation id="8868626022555786497">အသုံးပြုနေသည်</translation>
 <translation id="8870413625673593573">မကြာမီက ပိတ်ခဲ့</translation>
 <translation id="8871551568777368300">စီမံခန့်ခွဲသူမှ တွယ်ထားသည်</translation>

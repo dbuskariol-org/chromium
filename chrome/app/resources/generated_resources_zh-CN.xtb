@@ -1430,7 +1430,7 @@
 <translation id="287205682142673348">端口转发</translation>
 <translation id="287286579981869940">添加“<ph name="PROVIDER_NAME" />”…</translation>
 <translation id="2872961005593481000">关机</translation>
-<translation id="2874939134665556319">上一曲</translation>
+<translation id="2874939134665556319">上一首</translation>
 <translation id="2875698561019555027">（Chrome 错误页面）</translation>
 <translation id="2876336351874743617">手指 2</translation>
 <translation id="2876369937070532032">当您面临安全风险时，将您所访问的部分网页的网址发送给 Google</translation>
@@ -1805,6 +1805,7 @@
 <translation id="3396800784455899911">点击“接受并继续”按钮，即表示您同意上述针对这些 Google 服务的处理方式。</translation>
 <translation id="3399432415385675819">通知将被停用</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" />（<ph name="REFRESH_RATE" /> 赫兹） - 交错</translation>
+<translation id="3402585168444815892">正在注册演示模式</translation>
 <translation id="340282674066624">已下载 <ph name="DOWNLOAD_RECEIVED" />，还需 <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">未保存任何用于登录此网站的密码</translation>
 <translation id="3405664148539009465">自定义字体</translation>
@@ -4583,7 +4584,6 @@
 <translation id="713888829801648570">抱歉，您目前处于离线状态，因此系统无法验证您的密码。</translation>
 <translation id="7140928199327930795">没有其他可用的设备。</translation>
 <translation id="7141105143012495934">由于无法获取您的帐号详情，因此登录失败了。请与管理员联系或重试。</translation>
-<translation id="7143092389027215216">正在启动演示模式</translation>
 <translation id="7143207342074048698">正在连接</translation>
 <translation id="7144878232160441200">重试</translation>
 <translation id="7149893636342594995">过去 24 小时</translation>
@@ -4766,6 +4766,7 @@
 <translation id="7400418766976504921">网址</translation>
 <translation id="7400839060291901923">请在您的 <ph name="PHONE_NAME" /> 设备上设置连接</translation>
 <translation id="7401778920660465883">关闭此消息</translation>
+<translation id="7403642243184989645">正在下载资源</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{1 小时前运行过安全检查}other{{NUM_HOURS} 小时前运行过安全检查}}</translation>
 <translation id="740624631517654988">已拦截弹出式窗口</translation>
 <translation id="7407430846095439694">导入并绑定</translation>
@@ -5906,6 +5907,7 @@
 <translation id="8864055848767439877">正在将“<ph name="TAB_NAME" />”分享到 <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> 已从此设备中移除</translation>
 <translation id="8867228703146808825">将版本详情复制到剪贴板</translation>
+<translation id="8868333925931032127">正在启动演示模式</translation>
 <translation id="8868626022555786497">已使用</translation>
 <translation id="8870413625673593573">最近关闭的标签页</translation>
 <translation id="8871551568777368300">已被管理员固定</translation>

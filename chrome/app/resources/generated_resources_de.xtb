@@ -45,7 +45,7 @@
 <translation id="1049795001945932310">&amp;Spracheinstellungen</translation>
 <translation id="1054153489933238809">&amp;Original in neuem Tab öffnen</translation>
 <translation id="1055806300943943258">Suche nach Bluetooth- und USB-Geräten...</translation>
-<translation id="1056466516655540509">Vor <ph name="MINUTES" /> min aktualisiert</translation>
+<translation id="1056466516655540509">Vor <ph name="MINUTES" /> Min. aktualisiert</translation>
 <translation id="1056775291175587022">Keine Netzwerke</translation>
 <translation id="1056898198331236512">Warnung</translation>
 <translation id="1058262162121953039">PUK</translation>
@@ -1805,6 +1805,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3396800784455899911">Wenn Sie auf die Schaltfläche "Akzeptieren und fortfahren" klicken, willigen Sie damit in die oben für diese Google-Dienste beschriebene Verarbeitung Ihrer Daten ein.</translation>
 <translation id="3399432415385675819">Benachrichtigungen werden deaktiviert</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hertz) – Zeilensprung</translation>
+<translation id="3402585168444815892">Im Demomodus anmelden</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Für diese Website sind keine Passwörter gespeichert</translation>
 <translation id="3405664148539009465">Schriftart anpassen</translation>
@@ -4584,7 +4585,6 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="713888829801648570">Ihr Passwort konnte nicht überprüft werden, da Sie offline sind.</translation>
 <translation id="7140928199327930795">Keine weiteren Geräte vorhanden</translation>
 <translation id="7141105143012495934">Sie konnten nicht angemeldet werden, weil Ihre Kontodetails nicht abgerufen werden konnten. Bitte wenden Sie sich an Ihren Administrator oder versuchen Sie es erneut.</translation>
-<translation id="7143092389027215216">Demomodus starten</translation>
 <translation id="7143207342074048698">Verbindung wird hergestellt.</translation>
 <translation id="7144878232160441200">Wiederholen</translation>
 <translation id="7149893636342594995">Letzte 24 Stunden</translation>
@@ -4767,6 +4767,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923">Verbindung auf <ph name="PHONE_NAME" /> einrichten</translation>
 <translation id="7401778920660465883">Diese Nachricht schließen</translation>
+<translation id="7403642243184989645">Ressourcen herunterladen</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Der Sicherheitscheck wurde vor 1 Stunde durchgeführt}other{Der Sicherheitscheck wurde vor {NUM_HOURS} Stunden durchgeführt}}</translation>
 <translation id="740624631517654988">Pop-up blockiert</translation>
 <translation id="7407430846095439694">Importieren und binden</translation>
@@ -5907,6 +5908,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> wird mit <ph name="APP_NAME" /> geteilt</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> wurde von diesem Gerät entfernt</translation>
 <translation id="8867228703146808825">Build-Details in die Zwischenablage kopieren</translation>
+<translation id="8868333925931032127">Demomodus starten</translation>
 <translation id="8868626022555786497">Belegt</translation>
 <translation id="8870413625673593573">Kürzlich geschlossen</translation>
 <translation id="8871551568777368300">Vom Administrator angepinnt</translation>

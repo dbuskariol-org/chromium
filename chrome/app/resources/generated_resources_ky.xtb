@@ -1809,6 +1809,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="3396800784455899911">"Кабыл алып, улантуу" баскычын басуу менен, бул Google кызматтарын жогоруда сүрөттөлгөн шарттарга ылайык пайдаланууга макулдугуңузду билдиресиз.</translation>
 <translation id="3399432415385675819">Билдирмелер өчүрүлөт</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> герц) – бириктирилген</translation>
+<translation id="3402585168444815892">Демо режимине катталууда</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Бул сайт үчүн бир да сырсөз сакталган эмес</translation>
 <translation id="3405664148539009465">Ариптерди өзгөчөлөштүрүү</translation>
@@ -4588,7 +4589,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="713888829801648570">Кечиресиз, офлайн режиминде болгонуңуздан улам, сырсөзүңүз текшерилген жок.</translation>
 <translation id="7140928199327930795">Жеткиликтүү башка түзмөк жок.</translation>
 <translation id="7141105143012495934">Аккаунтуңуздун чоо-жайы алынбай койгондуктан, аккаунтка кире албай калдыңыз. Администраторуңузга кайрылыңыз же кайталап көрүңүз.</translation>
-<translation id="7143092389027215216">Демо режим иштетилип баштады</translation>
 <translation id="7143207342074048698">Туташууда</translation>
 <translation id="7144878232160441200">Дагы аракет кылып көрүү</translation>
 <translation id="7149893636342594995">Акыркы 24 саат</translation>
@@ -4771,6 +4771,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7400418766976504921">URL</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" /> телефонуңуздагы байланышты жөндөп алыңыз</translation>
 <translation id="7401778920660465883">Бул билдирүүнү четке кагуу</translation>
+<translation id="7403642243184989645">Ресурстар жүктөлүп алынууда</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Коопсуздук 1 саат мурун текшерилди}other{Коопсуздук {NUM_HOURS} саат мурун текшерилди}}</translation>
 <translation id="740624631517654988">Калкып чыкма бөгөттөлгөн</translation>
 <translation id="7407430846095439694">Өткөрүп алып, бекитүү</translation>
@@ -5911,6 +5912,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8864055848767439877"><ph name="TAB_NAME" /> <ph name="APP_NAME" /> колдонмосу менен бөлүшүлүүдө</translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> бул түзмөктөн өчүрүлдү</translation>
 <translation id="8867228703146808825">Кураманын чоо-жайын алмашуу буферине көчүрүңүз</translation>
+<translation id="8868333925931032127">Демо режим иштетилип баштады</translation>
 <translation id="8868626022555786497">Колдонулууда</translation>
 <translation id="8870413625673593573">Жакында жабылган</translation>
 <translation id="8871551568777368300">Администратор тарабынан төөнөлгөн</translation>

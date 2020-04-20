@@ -1806,6 +1806,7 @@
 <translation id="3396800784455899911">‏با کلیک کردن روی دکمه «پذیرفتن و ادامه»، با پردازش مربوط به این سرویس‌های Google که در بالا توضیح داده شد موافقت می‌کنید.</translation>
 <translation id="3399432415385675819">اعلان‌ها غیرفعال خواهند شد</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> × <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> هرتز) - درهم‌بافته</translation>
+<translation id="3402585168444815892">درحال ثبت‌نام کردن در «حالت نمایشی»</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />، <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">هیچ گذرواژه‌ای برای این سایت ذخیره نشده است</translation>
 <translation id="3405664148539009465">سفارشی کردن قلم‌ها</translation>
@@ -4585,7 +4586,6 @@
 <translation id="713888829801648570">متأسفیم، گذرواژه‌تان قابل تأیید نیست، زیرا آفلاین هستید.</translation>
 <translation id="7140928199327930795">هیچ دستگاه دیگری در دسترس نیست.</translation>
 <translation id="7141105143012495934">به دلیل اینکه جزئيات حساب شما بازیابی نشد، ورود به سیستم ناموفق بود. لطفاً با سرپرستتان تماس بگیرید یا دوباره امتحان کنید.</translation>
-<translation id="7143092389027215216">درحال شروع حالت نمایشی</translation>
 <translation id="7143207342074048698">در حال اتصال</translation>
 <translation id="7144878232160441200">سعی مجدد</translation>
 <translation id="7149893636342594995">۲۴ ساعت گذشته</translation>
@@ -4768,6 +4768,7 @@
 <translation id="7400418766976504921">نشانی وب</translation>
 <translation id="7400839060291901923">تنظیم اتصال در <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">رد کردن این پیام</translation>
+<translation id="7403642243184989645">درحال بارگیری کردن منابع</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{بررسی ایمنی ۱ ساعت پیش اجرا شده است}one{بررسی ایمنی {NUM_HOURS} ساعت پیش اجرا شد}other{بررسی ایمنی {NUM_HOURS} ساعت پیش اجرا شد}}</translation>
 <translation id="740624631517654988">پنجره‌های بازشو مسدود شدند</translation>
 <translation id="7407430846095439694">وارد کردن و اتصال</translation>
@@ -5909,6 +5910,7 @@
 <translation id="8864055848767439877">درحال هم‌رسانی <ph name="TAB_NAME" /> با <ph name="APP_NAME" /></translation>
 <translation id="8864458770072227512"><ph name="EMAIL" /> از این دستگاه برداشته شد</translation>
 <translation id="8867228703146808825">جزئیات ساخت را در بریده‌دان کپی کنید</translation>
+<translation id="8868333925931032127">درحال شروع کردن «حالت نمایشی»</translation>
 <translation id="8868626022555786497">درحال استفاده</translation>
 <translation id="8870413625673593573">اخیراً بسته‌شده</translation>
 <translation id="8871551568777368300">پین‌شده توسط سرپرست</translation>

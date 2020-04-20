@@ -1809,6 +1809,7 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3396800784455899911">Spustelėdami mygtuką „Sutikti ir tęsti“ sutinkate, kad šios „Google“ paslaugos būtų apdorojamos, kaip aprašyta anksčiau.</translation>
 <translation id="3399432415385675819">Pranešimai bus išjungti</translation>
 <translation id="3400390787768057815"><ph name="WIDTH" /> x <ph name="HEIGHT" /> (<ph name="REFRESH_RATE" /> Hz) – progresinis</translation>
+<translation id="3402585168444815892">Užregistruojama naudoti demonstracinį režimą</translation>
 <translation id="340282674066624"><ph name="DOWNLOAD_RECEIVED" />, <ph name="TIME_LEFT" /></translation>
 <translation id="3404065873681873169">Nėra išsaugotų šios svetainės slaptažodžių</translation>
 <translation id="3405664148539009465">Tinkinti šriftus</translation>
@@ -4589,7 +4590,6 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="713888829801648570">Apgailestaujame, slaptažodžio patikrinti nepavyko, nes esate neprisijungę.</translation>
 <translation id="7140928199327930795">Nėra kitų pasiekiamų įrenginių.</translation>
 <translation id="7141105143012495934">Nepavyko prisijungti, nes negalima gauti išsamios paskyros informacijos. Susisiekite su administratoriumi arba bandykite dar kartą.</translation>
-<translation id="7143092389027215216">Pradedamas demonstracinis režimas</translation>
 <translation id="7143207342074048698">Jungiama</translation>
 <translation id="7144878232160441200">Bandyti dar kartą</translation>
 <translation id="7149893636342594995">Pastarosios 24 valandos</translation>
@@ -4772,6 +4772,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="7400418766976504921">URL adresas</translation>
 <translation id="7400839060291901923">Nustatykite ryšį „<ph name="PHONE_NAME" />“ įrenginyje</translation>
 <translation id="7401778920660465883">Atsisakyti šio pranešimo</translation>
+<translation id="7403642243184989645">Atsisiunčiami ištekliai</translation>
 <translation id="7405938989981604410">{NUM_HOURS,plural, =1{Saugos patikra atlikta prieš 1 valandą}one{Saugos patikra atlikta prieš {NUM_HOURS} valandą}few{Saugos patikra atlikta prieš {NUM_HOURS} valandas}many{Saugos patikra atlikta prieš {NUM_HOURS} valandos}other{Saugos patikra atlikta prieš {NUM_HOURS} valandų}}</translation>
 <translation id="740624631517654988">Iššokantysis langas užblokuotas</translation>
 <translation id="7407430846095439694">Importuoti ir susaistyti</translation>
@@ -5913,6 +5914,7 @@ Rakto failą laikykite saugioje vietoje. Jo reikės, kai norėsite sukurti nauja
 <translation id="8864055848767439877">Bendrinamas skirtukas „<ph name="TAB_NAME" />“ su „<ph name="APP_NAME" />“</translation>
 <translation id="8864458770072227512">Paskyra <ph name="EMAIL" /> pašalinta iš šio įrenginio</translation>
 <translation id="8867228703146808825">Kopijuoti išsamią versijos informaciją į iškarpinę</translation>
+<translation id="8868333925931032127">Demonstracinio režimo paleidimas</translation>
 <translation id="8868626022555786497">Naudojama</translation>
 <translation id="8870413625673593573">Neseniai uždaryta</translation>
 <translation id="8871551568777368300">Prisegė administratorius</translation>
