@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/password_manager/core/browser/password_account_storage_opt_in_watcher.h"
+#include "components/password_manager/core/browser/password_account_storage_settings_watcher.h"
 
 #include <utility>
 
@@ -12,7 +12,7 @@
 
 namespace password_manager {
 
-PasswordAccountStorageOptInWatcher::PasswordAccountStorageOptInWatcher(
+PasswordAccountStorageSettingsWatcher::PasswordAccountStorageSettingsWatcher(
     PrefService* pref_service,
     syncer::SyncService* sync_service,
     base::RepeatingClosure change_callback)
@@ -29,11 +29,12 @@ PasswordAccountStorageOptInWatcher::PasswordAccountStorageOptInWatcher(
       change_callback_);
 }
 
-PasswordAccountStorageOptInWatcher::~PasswordAccountStorageOptInWatcher() {
+PasswordAccountStorageSettingsWatcher::
+    ~PasswordAccountStorageSettingsWatcher() {
   sync_service_->RemoveObserver(this);
 }
 
-void PasswordAccountStorageOptInWatcher::OnStateChanged(
+void PasswordAccountStorageSettingsWatcher::OnStateChanged(
     syncer::SyncService* sync_service) {
   change_callback_.Run();
 }
