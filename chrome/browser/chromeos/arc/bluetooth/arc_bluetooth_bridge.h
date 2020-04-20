@@ -668,6 +668,26 @@ class ArcBluetoothBridge
   std::set<std::unique_ptr<RfcommConnectingSocket>, base::UniquePtrComparator>
       connecting_sockets_;
 
+  // Observes the ARC connection to Bluetooth service in Android. We need to do
+  // some cleanup when it is down.
+  class BluetoothArcConnectionObserver
+      : public ConnectionObserver<mojom::BluetoothInstance> {
+   public:
+    explicit BluetoothArcConnectionObserver(
+        ArcBluetoothBridge* arc_bluetooth_bridge);
+    BluetoothArcConnectionObserver(const BluetoothArcConnectionObserver&) =
+        delete;
+    BluetoothArcConnectionObserver& operator=(
+        const BluetoothArcConnectionObserver&) = delete;
+    ~BluetoothArcConnectionObserver() override;
+    // ConnectionObserver<mojom::BluetoothInstance> override.
+    void OnConnectionClosed() override;
+
+   private:
+    ArcBluetoothBridge* arc_bluetooth_bridge_;
+  };
+  BluetoothArcConnectionObserver bluetooth_arc_connection_observer_;
+
   THREAD_CHECKER(thread_checker_);
 
   // WeakPtrFactory to use for callbacks.

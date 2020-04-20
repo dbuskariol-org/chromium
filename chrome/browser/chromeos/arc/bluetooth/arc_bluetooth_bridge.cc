@@ -452,7 +452,8 @@ ArcBluetoothBridge* ArcBluetoothBridge::GetForBrowserContext(
 
 ArcBluetoothBridge::ArcBluetoothBridge(content::BrowserContext* context,
                                        ArcBridgeService* bridge_service)
-    : arc_bridge_service_(bridge_service) {
+    : arc_bridge_service_(bridge_service),
+      bluetooth_arc_connection_observer_(this) {
   arc_bridge_service_->app()->AddObserver(this);
   arc_bridge_service_->intent_helper()->AddObserver(this);
 
@@ -3097,5 +3098,22 @@ ArcBluetoothBridge::RfcommListeningSocket::RfcommListeningSocket() = default;
 ArcBluetoothBridge::RfcommListeningSocket::~RfcommListeningSocket() = default;
 ArcBluetoothBridge::RfcommConnectingSocket::RfcommConnectingSocket() = default;
 ArcBluetoothBridge::RfcommConnectingSocket::~RfcommConnectingSocket() = default;
+
+ArcBluetoothBridge::BluetoothArcConnectionObserver::
+    BluetoothArcConnectionObserver(ArcBluetoothBridge* arc_bluetooth_bridge)
+    : arc_bluetooth_bridge_(arc_bluetooth_bridge) {
+  arc_bluetooth_bridge_->arc_bridge_service_->bluetooth()->AddObserver(this);
+}
+
+ArcBluetoothBridge::BluetoothArcConnectionObserver::
+    ~BluetoothArcConnectionObserver() {
+  arc_bluetooth_bridge_->arc_bridge_service_->bluetooth()->RemoveObserver(this);
+}
+
+void ArcBluetoothBridge::BluetoothArcConnectionObserver::OnConnectionClosed() {
+  // Stops the ongoing discovery sessions.
+  arc_bluetooth_bridge_->CancelDiscovery();
+  arc_bluetooth_bridge_->StopLEScan();
+}
 
 }  // namespace arc
