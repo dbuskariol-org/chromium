@@ -2358,8 +2358,6 @@ jumbo_static_library("browser") {
       "android/chrome_backup_agent.h",
       "android/chrome_backup_watcher.cc",
       "android/chrome_backup_watcher.h",
-      "android/chrome_context_util.cc",
-      "android/chrome_context_util.h",
       "android/chrome_session_state.cc",
       "android/chrome_session_state.h",
       "android/chrome_startup_flags.cc",
