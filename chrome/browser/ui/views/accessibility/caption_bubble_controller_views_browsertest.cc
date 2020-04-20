@@ -13,6 +13,7 @@
 #include "chrome/browser/ui/views/accessibility/caption_bubble.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
 #include "chrome/test/base/in_process_browser_test.h"
+#include "ui/views/controls/image_view.h"
 #include "ui/views/controls/label.h"
 #include "ui/views/widget/widget.h"
 
@@ -57,6 +58,11 @@ class CaptionBubbleControllerViewsTest : public InProcessBrowserTest {
   void ExpectPointsApproximatelyEqual(gfx::Point first, gfx::Point second) {
     EXPECT_LT(abs(first.x() - second.x()), 2);
     EXPECT_LT(abs(first.y() - second.y()), 2);
+  }
+
+  bool IsBubbleErrorMessageVisible() {
+    return GetBubble() && GetBubble()->error_icon_->GetVisible() &&
+           GetBubble()->error_message_->GetVisible();
   }
 
  private:
@@ -245,5 +251,29 @@ IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest,
   // Make it bigger again and ensure it's visible and wide again.
   browser()->window()->SetBounds(gfx::Rect(0, 0, 800, 400));
   EXPECT_TRUE(GetCaptionWidget()->IsVisible());
+}
+
+IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest, ShowsAndHidesError) {
+  GetController()->OnCaptionReceived("Elephant's trunks average 6 feet long.");
+  EXPECT_TRUE(GetTitle()->GetVisible());
+  EXPECT_TRUE(GetLabel()->GetVisible());
+  EXPECT_FALSE(IsBubbleErrorMessageVisible());
+
+  GetBubble()->SetHasError(true);
+  EXPECT_FALSE(GetTitle()->GetVisible());
+  EXPECT_FALSE(GetLabel()->GetVisible());
+  EXPECT_TRUE(IsBubbleErrorMessageVisible());
+
+  // Setting text during an error shouldn't cause the error to disappear.
+  GetController()->OnCaptionReceived("Elephant tails average 4-5 feet long.");
+  EXPECT_FALSE(GetTitle()->GetVisible());
+  EXPECT_FALSE(GetLabel()->GetVisible());
+  EXPECT_TRUE(IsBubbleErrorMessageVisible());
+
+  // Clear the error and everything should be visible again.
+  GetBubble()->SetHasError(false);
+  EXPECT_TRUE(GetTitle()->GetVisible());
+  EXPECT_TRUE(GetLabel()->GetVisible());
+  EXPECT_FALSE(IsBubbleErrorMessageVisible());
 }
 }  // namespace captions
