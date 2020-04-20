@@ -659,7 +659,7 @@ void CheckFaviconExpired(int profile, const GURL& icon_url) {
   favicon_base::FaviconRawBitmapResult bitmap_result;
   favicon_service->GetRawFavicon(
       icon_url, favicon_base::IconType::kFavicon, 0,
-      base::Bind(&OnGotFaviconData, run_loop.QuitClosure(), &bitmap_result),
+      base::BindOnce(&OnGotFaviconData, run_loop.QuitClosure(), &bitmap_result),
       &task_tracker);
   run_loop.Run();
 
@@ -679,7 +679,7 @@ void CheckHasNoFavicon(int profile, const GURL& page_url) {
   favicon_service->GetRawFaviconForPageURL(
       page_url, {favicon_base::IconType::kFavicon}, 0,
       /*fallback_to_host=*/false,
-      base::Bind(&OnGotFaviconData, run_loop.QuitClosure(), &bitmap_result),
+      base::BindOnce(&OnGotFaviconData, run_loop.QuitClosure(), &bitmap_result),
       &task_tracker);
   run_loop.Run();
 
@@ -1124,8 +1124,8 @@ void BookmarkModelStatusChangeChecker::PostCheckExitCondition() {
   // that the checker doesn't immediately kick in while bookmarks are modified.
   base::SequencedTaskRunnerHandle::Get()->PostTask(
       FROM_HERE,
-      base::BindRepeating(&BookmarkModelStatusChangeChecker::CheckExitCondition,
-                          weak_ptr_factory_.GetWeakPtr()));
+      base::BindOnce(&BookmarkModelStatusChangeChecker::CheckExitCondition,
+                     weak_ptr_factory_.GetWeakPtr()));
 }
 
 BookmarksMatchChecker::BookmarksMatchChecker() {
