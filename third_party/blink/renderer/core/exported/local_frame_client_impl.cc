@@ -253,10 +253,10 @@ void LocalFrameClientImpl::DidCreateInitialEmptyDocument() {
     web_frame_->Client()->DidCreateInitialEmptyDocument();
 }
 
-void LocalFrameClientImpl::DidCommitJavascriptUrlNavigation(
+void LocalFrameClientImpl::DidCommitDocumentReplacementNavigation(
     DocumentLoader* loader) {
   if (web_frame_->Client()) {
-    web_frame_->Client()->DidCommitJavascriptUrlNavigation(
+    web_frame_->Client()->DidCommitDocumentReplacementNavigation(
         WebDocumentLoaderImpl::FromDocumentLoader(loader));
   }
 }

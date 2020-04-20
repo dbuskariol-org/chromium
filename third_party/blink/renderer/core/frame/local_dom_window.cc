@@ -253,20 +253,6 @@ TrustedTypePolicyFactory* LocalDOMWindow::trustedTypes() const {
   return trusted_types_.Get();
 }
 
-Document* LocalDOMWindow::CreateDocument(const DocumentInit& init,
-                                         bool force_xhtml) {
-  Document* document = nullptr;
-  if (force_xhtml) {
-    // This is a hack for XSLTProcessor. See
-    // XSLTProcessor::createDocumentFromSource().
-    document = MakeGarbageCollected<Document>(init);
-  } else {
-    document = DOMImplementation::createDocument(init);
-  }
-
-  return document;
-}
-
 LocalDOMWindow* LocalDOMWindow::From(const ScriptState* script_state) {
   v8::HandleScope scope(script_state->GetIsolate());
   return blink::ToLocalDOMWindow(script_state->GetContext());
@@ -451,13 +437,12 @@ void LocalDOMWindow::CountDeprecation(mojom::WebFeature feature) {
   document()->CountDeprecation(feature);
 }
 
-Document* LocalDOMWindow::InstallNewDocument(const DocumentInit& init,
-                                             bool force_xhtml) {
+Document* LocalDOMWindow::InstallNewDocument(const DocumentInit& init) {
   DCHECK_EQ(init.GetFrame(), GetFrame());
 
   ClearDocument();
 
-  document_ = CreateDocument(init, force_xhtml);
+  document_ = DOMImplementation::createDocument(init);
   document_->Initialize();
 
   // The CSP delegate doesn't have access to all of the state it needs until

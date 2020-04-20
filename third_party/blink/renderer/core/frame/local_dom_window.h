@@ -97,8 +97,6 @@ class CORE_EXPORT LocalDOMWindow final : public DOMWindow,
     virtual void DidRemoveAllEventListeners(LocalDOMWindow*) = 0;
   };
 
-  static Document* CreateDocument(const DocumentInit&, bool force_xhtml);
-
   static LocalDOMWindow* From(const ScriptState*);
 
   explicit LocalDOMWindow(LocalFrame&);
@@ -160,7 +158,7 @@ class CORE_EXPORT LocalDOMWindow final : public DOMWindow,
   void CountUse(mojom::WebFeature feature) final;
   void CountDeprecation(mojom::WebFeature feature) final;
 
-  Document* InstallNewDocument(const DocumentInit&, bool force_xhtml);
+  Document* InstallNewDocument(const DocumentInit&);
 
   // EventTarget overrides:
   ExecutionContext* GetExecutionContext() const override;

@@ -183,8 +183,7 @@ TEST(PerformanceLifetimeTest, SurviveContextSwitch) {
   page_holder->GetFrame().DomWindow()->InstallNewDocument(
       DocumentInit::Create()
           .WithDocumentLoader(document_loader)
-          .WithTypeFrom("text/html"),
-      false);
+          .WithTypeFrom("text/html"));
 
   EXPECT_EQ(perf, DOMWindowPerformance::performance(
                       *page_holder->GetFrame().DomWindow()));
