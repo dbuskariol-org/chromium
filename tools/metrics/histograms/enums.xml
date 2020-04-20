@@ -50470,6 +50470,18 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Cookie contains both control chars and is invalid"/>
 </enum>
 
+<enum name="ParseEdidFailure">
+  <int value="0" label="No failure"/>
+  <int value="1" label="Too short EDID data: manufacturer id"/>
+  <int value="2" label="Too short EDID data: product id"/>
+  <int value="3" label="Too short EDID data: year of manufacture"/>
+  <int value="4" label="Too short EDID data: bits per channel"/>
+  <int value="5" label="Too short EDID data: gamma"/>
+  <int value="6" label="Too short EDID data: chromaticity coordinates"/>
+  <int value="7" label="Invalid EDID: human unreadable char in name"/>
+  <int value="8" label="Too short EDID data: extensions"/>
+</enum>
+
 <enum name="PartnerBookmark.FaviconFetchResult">
   <int value="0" label="SUCCESS">
     Success - favicon found in local cache or fetched from server.
