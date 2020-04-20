@@ -325,7 +325,22 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
 
         mFullscreenManager.addListener(mFullscreenListener);
 
-        if (!mTabModelSelector.getModels().isEmpty()) {
+        if (mTabModelSelector.getModels().isEmpty()) {
+            TabModelSelectorObserver selectorObserver = new EmptyTabModelSelectorObserver() {
+                @Override
+                public void onChange() {
+                    assert !mTabModelSelector.getModels().isEmpty();
+                    assert mTabModelSelector.getTabModelFilterProvider().getTabModelFilter(false)
+                            != null;
+                    assert mTabModelSelector.getTabModelFilterProvider().getTabModelFilter(true)
+                            != null;
+                    mTabModelSelector.removeObserver(this);
+                    mTabModelSelector.getTabModelFilterProvider().addTabModelFilterObserver(
+                            mTabModelObserver);
+                }
+            };
+            mTabModelSelector.addObserver(selectorObserver);
+        } else {
             mTabModelSelector.getTabModelFilterProvider().addTabModelFilterObserver(
                     mTabModelObserver);
         }
