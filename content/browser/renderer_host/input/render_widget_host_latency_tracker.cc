@@ -268,7 +268,7 @@ void RenderWidgetHostLatencyTracker::OnEventStart(ui::LatencyInfo* latency) {
   static uint64_t global_trace_id = 0;
   latency->set_trace_id(++global_trace_id);
   latency->set_ukm_source_id(
-      render_widget_host_delegate_->GetUkmSourceIdForLastCommittedSource());
+      render_widget_host_delegate_->GetCurrentPageUkmSourceId());
 }
 
 }  // namespace content
