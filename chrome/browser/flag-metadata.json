@@ -2190,7 +2190,7 @@
   {
     "name": "enable-web-authentication-cable-v2-support",
     "owners": [ "webauthn-team@google.com" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 87
   },
   {
     "name": "enable-web-bluetooth-new-permissions-backend",
