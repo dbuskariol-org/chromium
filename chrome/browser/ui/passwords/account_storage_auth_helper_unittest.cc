@@ -30,7 +30,7 @@ class MockSigninViewController : public SigninViewController {
   MockSigninViewController() : SigninViewController(/*browser=*/nullptr) {}
   ~MockSigninViewController() override = default;
 
-  MOCK_METHOD(void,
+  MOCK_METHOD(std::unique_ptr<ReauthAbortHandle>,
               ShowReauthPrompt,
               (const CoreAccountId&,
                base::OnceCallback<void(signin::ReauthResult)>),
@@ -87,6 +87,7 @@ TEST_F(AccountStorageAuthHelperTest, ShouldSetOptInOnSucessfulReauth) {
       .WillOnce(
           [](auto, base::OnceCallback<void(signin::ReauthResult)> callback) {
             std::move(callback).Run(signin::ReauthResult::kSuccess);
+            return nullptr;
           });
   EXPECT_CALL(mock_password_feature_manager_, SetAccountStorageOptIn(true));
 
@@ -100,6 +101,7 @@ TEST_F(AccountStorageAuthHelperTest, ShouldNotSetOptInOnFailedReauth) {
       .WillOnce(
           [](auto, base::OnceCallback<void(signin::ReauthResult)> callback) {
             std::move(callback).Run(signin::ReauthResult::kCancelled);
+            return nullptr;
           });
   EXPECT_CALL(mock_password_feature_manager_, SetAccountStorageOptIn).Times(0);
 
