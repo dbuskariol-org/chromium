@@ -63942,6 +63942,16 @@ would be helpful to identify which type is being sent.
   <int value="2" label="Image"/>
 </enum>
 
+<enum name="SuggestionGroupId">
+  <summary>
+    Suggestion group IDs toggled visible or hidden in the omnibox result list.
+    Based on the SuggestionGroupIds enum in suggestion_config.proto, contains
+    values currently known to Chrome.
+  </summary>
+  <int value="40001" label="Onboarding"/>
+  <int value="40009" label="Proactive zero-suggest"/>
+</enum>
+
 <enum name="SuggestionIconOrFaviconType">
   <summary>Type of icon shown beside omnibox suggestion.</summary>
   <int value="0" label="Invalid (unknown type)"/>
