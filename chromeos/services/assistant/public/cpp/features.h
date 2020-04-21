@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMEOS_SERVICES_ASSISTANT_PUBLIC_FEATURES_H_
-#define CHROMEOS_SERVICES_ASSISTANT_PUBLIC_FEATURES_H_
+#ifndef CHROMEOS_SERVICES_ASSISTANT_PUBLIC_CPP_FEATURES_H_
+#define CHROMEOS_SERVICES_ASSISTANT_PUBLIC_CPP_FEATURES_H_
 
 #include <string>
 
@@ -150,4 +150,4 @@ COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC) bool IsVoiceMatchDisabled();
 }  // namespace assistant
 }  // namespace chromeos
 
-#endif  // CHROMEOS_SERVICES_ASSISTANT_PUBLIC_FEATURES_H_
+#endif  // CHROMEOS_SERVICES_ASSISTANT_PUBLIC_CPP_FEATURES_H_

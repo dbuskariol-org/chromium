@@ -20,7 +20,7 @@
 #include "base/bind.h"
 #include "base/optional.h"
 #include "chromeos/constants/chromeos_features.h"
-#include "chromeos/services/assistant/public/features.h"
+#include "chromeos/services/assistant/public/cpp/features.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
 #include "ui/base/l10n/l10n_util.h"
 

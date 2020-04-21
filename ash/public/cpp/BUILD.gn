@@ -257,7 +257,7 @@ component("cpp") {
     "//ash/public/cpp/vector_icons",
     "//chromeos/constants",
     "//chromeos/dbus/power:power_manager_proto",
-    "//chromeos/services/assistant/public/cpp:prefs",
+    "//chromeos/services/assistant/public/cpp",
     "//chromeos/services/network_config:in_process_instance",
     "//components/prefs",
     "//components/sync:rest_of_sync",
