@@ -5449,6 +5449,7 @@ jumbo_static_library("browser") {
     deps += [
       "//chrome/browser/vr:vr_common",
       "//device/vr",
+      "//device/vr/orientation",
       "//device/vr/public/cpp",
     ]
   }
