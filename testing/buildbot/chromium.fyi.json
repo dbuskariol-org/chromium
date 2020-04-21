@@ -1867,18 +1867,6 @@
         },
         "test_target": "//ui/views:views_perftests"
       }
-    ],
-    "scripts": [
-      {
-        "name": "check_static_initializers",
-        "script": "check_static_initializers.py",
-        "swarming": {}
-      },
-      {
-        "name": "webkit_lint",
-        "script": "blink_lint_expectations.py",
-        "swarming": {}
-      }
     ]
   },
   "Mojo Android": {
