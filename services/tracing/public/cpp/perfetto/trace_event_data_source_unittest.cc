@@ -261,7 +261,7 @@ class TraceEventDataSourceTest : public testing::Test {
     if (base::trace_event::TraceLog::GetInstance()->IsEnabled()) {
       base::RunLoop wait_for_tracelog_flush;
 
-      TraceEventDataSource::GetInstance()->StopTracing(base::BindRepeating(
+      TraceEventDataSource::GetInstance()->StopTracing(base::BindOnce(
           [](const base::RepeatingClosure& quit_closure) {
             quit_closure.Run();
           },
@@ -1672,7 +1672,7 @@ TEST_F(TraceEventDataSourceTest, StartupTracingTimeout) {
   // Stop tracing must be called even if tracing is not started to clear the
   // pending task.
   base::RunLoop wait_for_stop;
-  data_source->StopTracing(base::BindRepeating(
+  data_source->StopTracing(base::BindOnce(
       [](const base::RepeatingClosure& quit_closure) { quit_closure.Run(); },
       wait_for_stop.QuitClosure()));
 
