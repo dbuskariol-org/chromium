@@ -1526,6 +1526,8 @@ void NavigationRequest::OnRequestRedirected(
   // Sanity check - this can only be set at commit time.
   DCHECK(!auth_challenge_info_);
 
+  DCHECK(response_head);
+  DCHECK(response_head->parsed_headers);
   response_head_ = std::move(response_head);
   ssl_info_ = response_head_->ssl_info;
 
@@ -1773,6 +1775,7 @@ void NavigationRequest::OnResponseStarted(
 
   DCHECK(IsNavigationStarted());
   DCHECK(response_head);
+  DCHECK(response_head->parsed_headers);
   EnterChildTraceEvent("OnResponseStarted", this);
   state_ = WILL_PROCESS_RESPONSE;
   response_head_ = std::move(response_head);
