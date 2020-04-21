@@ -829,11 +829,9 @@ RTCPeerConnection::~RTCPeerConnection() {
 }
 
 void RTCPeerConnection::Dispose() {
-  // Promptly clears the handler's pointer to |this|
+  // Promptly clears a raw reference from content/ to an on-heap object
   // so that content/ doesn't access it in a lazy sweeping phase.
-  if (peer_handler_) {
-    peer_handler_->StopAndUnregister();
-  }
+  peer_handler_.reset();
 }
 
 ScriptPromise RTCPeerConnection::createOffer(ScriptState* script_state,
@@ -3191,7 +3189,7 @@ void RTCPeerConnection::DidNoteInterestingUsage(int usage_pattern) {
       .Record(document->UkmRecorder());
 }
 
-void RTCPeerConnection::UnregisterPeerConnectionHandler() {
+void RTCPeerConnection::ReleasePeerConnectionHandler() {
   if (stopped_)
     return;
 
@@ -3199,7 +3197,7 @@ void RTCPeerConnection::UnregisterPeerConnectionHandler() {
   ice_connection_state_ = webrtc::PeerConnectionInterface::kIceConnectionClosed;
   signaling_state_ = webrtc::PeerConnectionInterface::SignalingState::kClosed;
 
-  peer_handler_->StopAndUnregister();
+  peer_handler_.reset();
   dispatch_scheduled_events_task_handle_.Cancel();
   feature_handle_for_scheduler_.reset();
 }
@@ -3219,7 +3217,7 @@ ExecutionContext* RTCPeerConnection::GetExecutionContext() const {
 }
 
 void RTCPeerConnection::ContextDestroyed() {
-  UnregisterPeerConnectionHandler();
+  ReleasePeerConnectionHandler();
 }
 
 void RTCPeerConnection::ChangeSignalingState(
