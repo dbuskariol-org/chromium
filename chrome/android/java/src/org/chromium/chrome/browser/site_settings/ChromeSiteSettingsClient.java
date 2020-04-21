@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import androidx.preference.Preference;
 
 import org.chromium.base.Callback;
+import org.chromium.chrome.R;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.help.HelpAndFeedback;
 import org.chromium.chrome.browser.profiles.Profile;
@@ -40,9 +41,17 @@ public class ChromeSiteSettingsClient implements SiteSettingsClient {
     }
 
     @Override
-    public void launchHelpAndFeedbackActivity(Activity currentActivity, String helpContext) {
-        HelpAndFeedback.getInstance().show(
-                currentActivity, helpContext, Profile.getLastUsedRegularProfile(), null);
+    public void launchSettingsHelpAndFeedbackActivity(Activity currentActivity) {
+        HelpAndFeedback.getInstance().show(currentActivity,
+                currentActivity.getString(R.string.help_context_settings),
+                Profile.getLastUsedRegularProfile(), null);
+    }
+
+    @Override
+    public void launchProtectedContentHelpAndFeedbackActivity(Activity currentActivity) {
+        HelpAndFeedback.getInstance().show(currentActivity,
+                currentActivity.getString(R.string.help_context_protected_content),
+                Profile.getLastUsedRegularProfile(), null);
     }
 
     @Override

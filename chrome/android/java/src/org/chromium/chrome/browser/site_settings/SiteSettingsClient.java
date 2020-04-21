@@ -22,9 +22,18 @@ public interface SiteSettingsClient {
     ManagedPreferenceDelegate getManagedPreferenceDelegate();
 
     /**
+     * Launches a support page relevant to settings UI pages.
+     *
      * @see org.chromium.chrome.browser.help.HelpAndFeedback#show
      */
-    void launchHelpAndFeedbackActivity(Activity currentActivity, String helpContext);
+    void launchSettingsHelpAndFeedbackActivity(Activity currentActivity);
+
+    /**
+     * Launches a support page related to protected content.
+     *
+     * @see org.chromium.chrome.browser.help.HelpAndFeedback#show
+     */
+    void launchProtectedContentHelpAndFeedbackActivity(Activity currentActivity);
 
     /**
      * @return The NotificationSettingsClient that should be used when showing the Site Settings UI.
