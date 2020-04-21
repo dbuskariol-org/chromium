@@ -71,6 +71,7 @@
 #include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 #include "third_party/blink/renderer/platform/wtf/wtf_size_t.h"
 #include "third_party/skia/include/core/SkMatrix44.h"
+#include "ui/accessibility/ax_node_data.h"
 
 namespace blink {
 
@@ -712,6 +713,79 @@ void AXObject::GetSparseAXAttributes(
                   internals_attributes.at(attr));
     }
   }
+}
+
+void AXObject::Serialize(ui::AXNodeData* node_data) {
+  AccessibilityExpanded expanded = IsExpanded();
+  if (expanded) {
+    if (expanded == kExpandedCollapsed)
+      node_data->AddState(ax::mojom::blink::State::kCollapsed);
+    else if (expanded == kExpandedExpanded)
+      node_data->AddState(ax::mojom::blink::State::kExpanded);
+  }
+
+  if (CanSetFocusAttribute())
+    node_data->AddState(ax::mojom::blink::State::kFocusable);
+
+  if (HasPopup() != ax::mojom::blink::HasPopup::kFalse)
+    node_data->SetHasPopup(HasPopup());
+  else if (RoleValue() == ax::mojom::blink::Role::kPopUpButton)
+    node_data->SetHasPopup(ax::mojom::blink::HasPopup::kMenu);
+
+  if (IsAutofillAvailable())
+    node_data->AddState(ax::mojom::blink::State::kAutofillAvailable);
+
+  if (IsDefault())
+    node_data->AddState(ax::mojom::blink::State::kDefault);
+
+  // aria-grabbed is deprecated in WAI-ARIA 1.1.
+  if (IsGrabbed() != kGrabbedStateUndefined) {
+    node_data->AddBoolAttribute(ax::mojom::blink::BoolAttribute::kGrabbed,
+                                IsGrabbed() == kGrabbedStateTrue);
+  }
+
+  if (IsHovered())
+    node_data->AddState(ax::mojom::blink::State::kHovered);
+
+  if (!IsVisible())
+    node_data->AddState(ax::mojom::blink::State::kInvisible);
+
+  if (IsLinked())
+    node_data->AddState(ax::mojom::blink::State::kLinked);
+
+  if (IsMultiline())
+    node_data->AddState(ax::mojom::blink::State::kMultiline);
+
+  if (IsMultiSelectable())
+    node_data->AddState(ax::mojom::blink::State::kMultiselectable);
+
+  if (IsPasswordField())
+    node_data->AddState(ax::mojom::blink::State::kProtected);
+
+  if (IsRequired())
+    node_data->AddState(ax::mojom::blink::State::kRequired);
+
+  if (IsEditable())
+    node_data->AddState(ax::mojom::blink::State::kEditable);
+
+  if (IsSelected() != blink::kSelectedStateUndefined) {
+    node_data->AddBoolAttribute(ax::mojom::blink::BoolAttribute::kSelected,
+                                IsSelected() == blink::kSelectedStateTrue);
+  }
+
+  if (IsRichlyEditable())
+    node_data->AddState(ax::mojom::blink::State::kRichlyEditable);
+
+  if (IsVisited())
+    node_data->AddState(ax::mojom::blink::State::kVisited);
+
+  if (Orientation() == kAccessibilityOrientationVertical)
+    node_data->AddState(ax::mojom::blink::State::kVertical);
+  else if (Orientation() == blink::kAccessibilityOrientationHorizontal)
+    node_data->AddState(ax::mojom::blink::State::kHorizontal);
+
+  if (AccessibilityIsIgnored())
+    node_data->AddState(ax::mojom::blink::State::kIgnored);
 }
 
 bool AXObject::IsARIATextControl() const {
