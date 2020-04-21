@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<!--TODO(andruud): Migrate to WPT once @property is in the specification. -->
 <link rel="help" href="https://drafts.css-houdini.org/css-properties-values-api-1/#at-property-rule">
-<script src="../../../resources/testharness.js"></script>
-<script src="../../../resources/testharnessreport.js"></script>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
 <div id="outer">
   <div id="target"></div>
 </div>
@@ -78,7 +77,7 @@ function test_descriptor(descriptor, specified_value, expected_value) {
   }, `Attribute '${descriptor}' returns expected value for [${specified_value}]`);
 }
 
-// syntax (valid)
+// syntax
 test_descriptor('syntax', '"<color>"', '<color>');
 test_descriptor('syntax', '"<color> | none"', '<color> | none');
 test_descriptor('syntax', '"<color># | <image> | none"', '<color># | <image> | none');
