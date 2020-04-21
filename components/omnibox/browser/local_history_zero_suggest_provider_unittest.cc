@@ -91,6 +91,7 @@ class LocalHistoryZeroSuggestProviderTest
   void TearDown() override {
     provider_ = nullptr;
     client_.reset();
+    scoped_feature_list_.reset();
     task_environment_.RunUntilIdle();
   }
 
