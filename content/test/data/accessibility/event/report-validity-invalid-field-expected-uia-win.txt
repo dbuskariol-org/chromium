@@ -1,1 +1,3 @@
 AutomationFocusChanged on role=textbox, name=Pet name:
+AutomationFocusChanged on role=textbox, name=Pet name:
+
