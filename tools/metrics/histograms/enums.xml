@@ -54180,6 +54180,11 @@ Called by update_net_trust_anchors.py.-->
   <int value="0" label="kUnknown"/>
   <int value="1" label="kShopping"/>
   <int value="2" label="kNews"/>
+  <int value="3" label="kArtsAndEntertainment"/>
+  <int value="4" label="kHealth"/>
+  <int value="5" label="kJobsAndEducation"/>
+  <int value="6" label="kScience"/>
+  <int value="7" label="kTravel"/>
 </enum>
 
 <enum name="ProactiveSuggestionsRequestResult">
