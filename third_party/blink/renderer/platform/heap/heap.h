@@ -692,6 +692,7 @@ class PLATFORM_EXPORT LivenessBroker final {
  private:
   LivenessBroker() = default;
   friend class ThreadHeap;
+  friend class ThreadState;
 };
 
 template <typename T>
