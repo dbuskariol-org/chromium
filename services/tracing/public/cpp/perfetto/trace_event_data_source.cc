@@ -949,7 +949,7 @@ void TraceEventDataSource::OnAddTraceEvent(
     TraceEvent* trace_event,
     bool thread_will_flush,
     base::trace_event::TraceEventHandle* handle) {
-  OnAddTraceEvent(trace_event, thread_will_flush, handle,
+  OnAddTraceEvent(trace_event, thread_will_flush, handle, perfetto::Track(),
                   [](perfetto::EventContext) {});
 }
 
