@@ -764,6 +764,33 @@ class Sample {
   /** @return {!Selection} */
   get selection() { return this.selection_; }
 
+  /**
+   * @public
+   * Enables or disables the test runner's spell checker.
+   */
+  setMockSpellCheckerEnabled(b) {
+    this.iframe_.contentWindow.eval(
+      "testRunner.setMockSpellCheckerEnabled(" + b + ");");
+  }
+
+  /**
+   * @public
+   * Sets the callback to run when spell checks are resolved.
+   */
+  setSpellCheckResolvedCallback(cb) {
+    this.iframe_.contentWindow.eval(
+      "testRunner.setSpellCheckResolvedCallback(() => { \
+        window.parent.postMessage('resolved', '*'); \
+      });");
+    window.addEventListener("message", cb, false);
+  }
+
+  /**
+   * @public
+   * @param {string} JS code to run in the Sample's iframe.
+   */
+  eval(string) { this.iframe_.window.eval(string); }
+
   /** @return {string} */
   static get playgroundId() { return 'playground'; }
 
