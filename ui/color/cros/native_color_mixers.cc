@@ -8,7 +8,11 @@
 
 namespace ui {
 
-void AddNativeColorMixers(ColorProvider* provider) {
+void AddNativeCoreColorMixer(ColorProvider* provider, bool dark_window) {
+  NOTIMPLEMENTED();
+}
+
+void AddNativeUiColorMixer(ColorProvider* provider, bool dark_window) {
   NOTIMPLEMENTED();
 }
 

@@ -1,4 +1,4 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -14,7 +14,7 @@
 
 namespace ui {
 
-void AddMixerForNativeColors(ColorProvider* provider) {
+void AddNativeCoreColorMixer(ColorProvider* provider, bool dark_window) {
   // TODO(pkasting): Not clear whether this is really the set of interest.
   // Maybe there's some way to query colors used by UxTheme.dll, or maybe we
   // should be hardcoding a list of colors for system light/dark modes based on
@@ -58,13 +58,8 @@ void AddMixerForNativeColors(ColorProvider* provider) {
        }});
 }
 
-void AddMixerToMapToCrossPlatformIds(ColorProvider* provider) {
+void AddNativeUiColorMixer(ColorProvider* provider, bool dark_window) {
   // TODO(pkasting): Add recipes
-}
-
-void AddNativeColorMixers(ColorProvider* provider) {
-  AddMixerForNativeColors(provider);
-  AddMixerToMapToCrossPlatformIds(provider);
 }
 
 }  // namespace ui
