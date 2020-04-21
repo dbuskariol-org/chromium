@@ -6258,6 +6258,7 @@ if (!is_fuchsia) {
       "//components/signin/public/identity_manager:test_support",
       "//components/sync",
       "//components/sync:test_support_model",
+      "//components/sync:test_support_nigori",
       "//components/sync/test/fake_server",
       "//content/public/browser",
       "//content/test:test_support",
