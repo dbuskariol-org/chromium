@@ -3771,7 +3771,8 @@ const FeatureEntry kFeatureEntries[] = {
 
     {"treat-unsafe-downloads-as-active-content",
      flag_descriptions::kTreatUnsafeDownloadsAsActiveName,
-     flag_descriptions::kTreatUnsafeDownloadsAsActiveDescription, kOsDesktop,
+     flag_descriptions::kTreatUnsafeDownloadsAsActiveDescription,
+     kOsDesktop | kOsAndroid,
      FEATURE_VALUE_TYPE(features::kTreatUnsafeDownloadsAsActive)},
 
 #if defined(OS_CHROMEOS)
