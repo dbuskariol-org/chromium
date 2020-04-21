@@ -1043,7 +1043,8 @@ const FeatureEntry::FeatureVariation kOmniboxRichAutocompletionVariations[] = {
 #endif  // defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_WIN)
 
 const FeatureEntry::FeatureParam kOmniboxOnFocusSuggestionsParamSERP[] = {
-    {"ZeroSuggestVariant:6:*", "RemoteSendUrl"}};
+    {"ZeroSuggestVariant:6:*", "RemoteSendUrl"},
+    {"ZeroSuggestVariant:9:*", "RemoteSendUrl"}};
 #if defined(OS_ANDROID)
 const FeatureEntry::FeatureParam kOmniboxNTPZPSLocal[] = {
     {"ZeroSuggestVariant:1:*", "Local"},
