@@ -2,28 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/content_settings/content_settings_manager_impl.h"
+#include "components/content_settings/browser/content_settings_manager_impl.h"
 
 #include "base/memory/ptr_util.h"
-#include "chrome/browser/content_settings/cookie_settings_factory.h"
-#include "chrome/browser/profiles/profile.h"
 #include "components/content_settings/browser/tab_specific_content_settings.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
 #include "components/page_load_metrics/browser/metrics_web_contents_observer.h"
 #include "components/page_load_metrics/browser/page_load_metrics_observer.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
-#include "extensions/buildflags/buildflags.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
-
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-#include "extensions/browser/guest_view/web_view/web_view_permission_helper.h"
-#include "extensions/browser/guest_view/web_view/web_view_renderer_state.h"
-#endif
 
 using content_settings::TabSpecificContentSettings;
 
-namespace chrome {
+namespace content_settings {
 namespace {
 
 void OnStorageAccessed(int process_id,
@@ -67,38 +59,6 @@ void OnDomStorageAccessed(int process_id,
     tab_settings->OnDomStorageAccessed(origin_url, local, blocked_by_policy);
 }
 
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-void OnFileSystemAccessedInGuestViewContinuation(
-    int render_process_id,
-    int render_frame_id,
-    const GURL& url,
-    base::OnceCallback<void(bool)> callback,
-    bool allowed) {
-  TabSpecificContentSettings::FileSystemAccessed(
-      render_process_id, render_frame_id, url, !allowed);
-  std::move(callback).Run(allowed);
-}
-
-void OnFileSystemAccessedInGuestView(int render_process_id,
-                                     int render_frame_id,
-                                     const GURL& url,
-                                     bool allowed,
-                                     base::OnceCallback<void(bool)> callback) {
-  extensions::WebViewPermissionHelper* web_view_permission_helper =
-      extensions::WebViewPermissionHelper::FromFrameID(render_process_id,
-                                                       render_frame_id);
-  auto continuation = base::BindOnce(
-      &OnFileSystemAccessedInGuestViewContinuation, render_process_id,
-      render_frame_id, url, std::move(callback));
-  if (!web_view_permission_helper) {
-    std::move(continuation).Run(allowed);
-    return;
-  }
-  web_view_permission_helper->RequestFileSystemPermission(
-      url, allowed, std::move(continuation));
-}
-#endif
-
 }  // namespace
 
 ContentSettingsManagerImpl::~ContentSettingsManagerImpl() = default;
@@ -107,10 +67,11 @@ ContentSettingsManagerImpl::~ContentSettingsManagerImpl() = default;
 void ContentSettingsManagerImpl::Create(
     content::RenderProcessHost* render_process_host,
     mojo::PendingReceiver<content_settings::mojom::ContentSettingsManager>
-        receiver) {
-  mojo::MakeSelfOwnedReceiver(
-      base::WrapUnique(new ContentSettingsManagerImpl(render_process_host)),
-      std::move(receiver));
+        receiver,
+    std::unique_ptr<Delegate> delegate) {
+  mojo::MakeSelfOwnedReceiver(base::WrapUnique(new ContentSettingsManagerImpl(
+                                  render_process_host, std::move(delegate))),
+                              std::move(receiver));
 }
 
 void ContentSettingsManagerImpl::Clone(
@@ -132,6 +93,11 @@ void ContentSettingsManagerImpl::AllowStorageAccess(
 
   bool allowed = cookie_settings_->IsCookieAccessAllowed(url, site_for_cookies,
                                                          top_frame_origin);
+  if (delegate_->AllowStorageAccess(render_process_id_, render_frame_id,
+                                    storage_type, url, allowed, &callback)) {
+    DCHECK(!callback);
+    return;
+  }
 
   switch (storage_type) {
     case StorageType::DATABASE:
@@ -154,14 +120,6 @@ void ContentSettingsManagerImpl::AllowStorageAccess(
 
       break;
     case StorageType::FILE_SYSTEM:
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-      if (extensions::WebViewRendererState::GetInstance()->IsGuest(
-              render_process_id_)) {
-        OnFileSystemAccessedInGuestView(render_process_id_, render_frame_id,
-                                        url, allowed, std::move(callback));
-        return;
-      }
-#endif
       TabSpecificContentSettings::FileSystemAccessed(
           render_process_id_, render_frame_id, url, !allowed);
       OnStorageAccessed(render_process_id_, render_frame_id, url,
@@ -206,15 +164,17 @@ void ContentSettingsManagerImpl::OnContentBlocked(int32_t render_frame_id,
 }
 
 ContentSettingsManagerImpl::ContentSettingsManagerImpl(
-    content::RenderProcessHost* render_process_host)
-    : render_process_id_(render_process_host->GetID()),
-      cookie_settings_(
-          CookieSettingsFactory::GetForProfile(Profile::FromBrowserContext(
-              render_process_host->GetBrowserContext()))) {}
+    content::RenderProcessHost* render_process_host,
+    std::unique_ptr<Delegate> delegate)
+    : delegate_(std::move(delegate)),
+      render_process_id_(render_process_host->GetID()),
+      cookie_settings_(delegate_->GetCookieSettings(
+          render_process_host->GetBrowserContext())) {}
 
 ContentSettingsManagerImpl::ContentSettingsManagerImpl(
     const ContentSettingsManagerImpl& other)
-    : render_process_id_(other.render_process_id_),
+    : delegate_(other.delegate_->Clone()),
+      render_process_id_(other.render_process_id_),
       cookie_settings_(other.cookie_settings_) {}
 
-}  // namespace chrome
+}  // namespace content_settings

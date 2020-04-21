@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CONTENT_SETTINGS_CONTENT_SETTINGS_MANAGER_IMPL_H_
-#define CHROME_BROWSER_CONTENT_SETTINGS_CONTENT_SETTINGS_MANAGER_IMPL_H_
+#ifndef COMPONENTS_CONTENT_SETTINGS_BROWSER_CONTENT_SETTINGS_MANAGER_IMPL_H_
+#define COMPONENTS_CONTENT_SETTINGS_BROWSER_CONTENT_SETTINGS_MANAGER_IMPL_H_
 
 #include "base/memory/ref_counted.h"
 #include "components/content_settings/common/content_settings_manager.mojom.h"
 
 namespace content {
+class BrowserContext;
 class RenderProcessHost;
 }  // namespace content
 
@@ -16,17 +17,40 @@ namespace content_settings {
 class CookieSettings;
 }  // namespace content_settings
 
-namespace chrome {
+namespace content_settings {
 
 class ContentSettingsManagerImpl
     : public content_settings::mojom::ContentSettingsManager {
  public:
+  class Delegate {
+   public:
+    virtual ~Delegate() = default;
+
+    // Gets cookie settings for this browser context.
+    virtual scoped_refptr<CookieSettings> GetCookieSettings(
+        content::BrowserContext* browser_context) = 0;
+
+    // Allows delegate to override AllowStorageAccess(). If the delegate returns
+    // true here, the default logic will be bypassed.
+    virtual bool AllowStorageAccess(
+        int render_process_id,
+        int render_frame_id,
+        StorageType storage_type,
+        const GURL& url,
+        bool allowed,
+        base::OnceCallback<void(bool)>* callback) = 0;
+
+    // Returns a new instance of this delegate.
+    virtual std::unique_ptr<Delegate> Clone() = 0;
+  };
+
   ~ContentSettingsManagerImpl() override;
 
   static void Create(
       content::RenderProcessHost* render_process_host,
       mojo::PendingReceiver<content_settings::mojom::ContentSettingsManager>
-          receiver);
+          receiver,
+      std::unique_ptr<Delegate> delegate);
 
   // mojom::ContentSettingsManager methods:
   void Clone(
@@ -42,9 +66,11 @@ class ContentSettingsManagerImpl
                         ContentSettingsType type) override;
 
  private:
-  explicit ContentSettingsManagerImpl(
-      content::RenderProcessHost* render_process_host);
-  explicit ContentSettingsManagerImpl(const ContentSettingsManagerImpl& other);
+  ContentSettingsManagerImpl(content::RenderProcessHost* render_process_host,
+                             std::unique_ptr<Delegate> delegate);
+  ContentSettingsManagerImpl(const ContentSettingsManagerImpl& other);
+
+  std::unique_ptr<Delegate> delegate_;
 
   // Use these IDs to hold a weak reference back to the RenderFrameHost.
   const int render_process_id_;
@@ -53,6 +79,6 @@ class ContentSettingsManagerImpl
   scoped_refptr<content_settings::CookieSettings> cookie_settings_;
 };
 
-}  // namespace chrome
+}  // namespace content_settings
 
-#endif  // CHROME_BROWSER_CONTENT_SETTINGS_CONTENT_SETTINGS_MANAGER_IMPL_H_
+#endif  // COMPONENTS_CONTENT_SETTINGS_BROWSER_CONTENT_SETTINGS_MANAGER_IMPL_H_
