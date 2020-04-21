@@ -415,6 +415,11 @@
 <translation id="1555130319947370107">Blå</translation>
 <translation id="1556537182262721003">Katalogen over utvidelser kan ikke flyttes til profilen.</translation>
 <translation id="155865706765934889">Styreflate</translation>
+<translation id="1560763881671211335">G Suite for utdanning-administratorer bestemmer hvilke Google-tjenester brukerne har tilgang til når de er logget på G Suite for utdanning-kontoer. Skoleadministratorene må gi eller innhente samtykke fra mindreårige brukere til bruk av tjenestene.
+
+    Nettlesingsdata (inkludert logg, bokmerker og passord) blir lagret sammen med Family Link-kontoen og ikke skolekontoen.
+
+    Foreldreinnstillingene dine i Family Link gjelder fortsatt. Hvis du har blokkert apper eller nettsteder tidligere, trenger du ikke å gjøre det på nytt.</translation>
 <translation id="1564414980088536597">Dette bildet kan ikke brukes. Velg et annet bilde.</translation>
 <translation id="1566049601598938765">Nettsted</translation>
 <translation id="15662109988763471">Den valgte skriveren er ikke tilgjengelig eller har ikke blitt installert på riktig måte. Kontrollér skriveren din, eller prøv å velge en annen skriver.</translation>
@@ -1945,7 +1950,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="3574210789297084292">logg på</translation>
 <translation id="3574917942258583917">Vil du avslutte inkognitomodus likevel?</translation>
 <translation id="3575121482199441727">Tillat for dette nettstedet</translation>
-<translation id="3575919114596668130">Foreldreinnstillingene dine i Family Link gjelder fortsatt. Hvis du har blokkert apper eller nettsteder tidligere, trenger du ikke å gjøre det på nytt.</translation>
 <translation id="3576324189521867626">Installert</translation>
 <translation id="3578594933904494462">Innholdet i denne fanen blir delt.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; vil dele skriveren &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; med en gruppe du eier: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Hvis du godtar, kan alle gruppemedlemmene skrive ut til skriveren.</translation>
@@ -4646,6 +4650,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="7235737137505019098">Sikkerhetsnøkkelen har ikke plass til flere kontoer.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" /> – detaljer</translation>
 <translation id="7240339475467890413">Vil du koble til den nye Wi-Fi-sonen?</translation>
+<translation id="7240847845291869311">Barnet ditt vil legge til en Google-konto for G Suite for utdanning på denne enheten. Formålet med <ph name="LINK_BEGIN" />merknaden om personvern for G Suite for utdanning<ph name="LINK_END" /> er å hjelpe G Suite for utdanning-brukere og foreldre med å forstå hvilke data produktet samler inn, hvorfor de samles inn, og hva som blir gjort med dem.</translation>
 <translation id="7241389281993241388">Logg på <ph name="TOKEN_NAME" /> for å importere klientsertifikat.</translation>
 <translation id="7241443820034350811">Hvis sikkerhetsnøkkelen din ikke er oppført, trykker du på knappen på nøkkelen i minst fem sekunder.</translation>
 <translation id="7243632151880336635">Slett og logg av</translation>
@@ -6062,7 +6067,6 @@ Jeg tror ikke det er nødvendig å blokkere dette nettstedet.</translation>
 <translation id="9055636786322918818">Start håndheving av RC4-kryptering. Hvis du bruker dette alternativet, øker risikoen, ettersom RC4-chiffere ikke er sikre.</translation>
 <translation id="9056810968620647706">Finner ingen treff.</translation>
 <translation id="9057354806206861646">Oppdateringsplan</translation>
-<translation id="9058976525724291037">Barnet ditt vil legge til en Google-konto til på denne enheten. Bare G Suite for utdanning-kontoer kan legges til på enheter som administreres i Family Link.</translation>
 <translation id="9062065967472365419">Overrask meg</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Feil fra linje <ph name="ERROR_LINE_START" /> til linje <ph name="ERROR_LINE_END" /></translation>

@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Biru</translation>
 <translation id="1556537182262721003">Tidak dapat menggerakkan direktori sambungan ke profil.</translation>
 <translation id="155865706765934889">Pad sentuh</translation>
+<translation id="1560763881671211335">Pentadbir G Suite for Education menentukan perkhidmatan Google yang boleh diakses oleh pengguna mereka semasa log masuk ke akaun G Suite for Education. Pentadbir sekolah dikehendaki memberikan atau memperoleh persetujuan untuk penggunaan perkhidmatan tersebut oleh pengguna bawah umur mereka.
+
+    Data semakan imbas (termasuk sejarah, penanda halanan dan kata laluan) akan disimpan pada akaun Family Link dan bukan pada akaun sekolah.
+
+    Tetapan ibu bapa Family Link anda masih digunakan. Jika sebelum ini anda telah menyekat apl atau tapak, anda tidak perlu berbuat demikian lagi.</translation>
 <translation id="1564414980088536597">Imej ini tidak boleh digunakan. Pilih imej yang lain.</translation>
 <translation id="1566049601598938765">Tapak web</translation>
 <translation id="15662109988763471">Pencetak yang dipilih tidak tersedia atau tidak dipasang dengan betul. Periksa pencetak anda atau cuba pilih pencetak lain.</translation>
@@ -1948,7 +1953,6 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="3574210789297084292">log masuk</translation>
 <translation id="3574917942258583917">Keluar daripada mod inkognito juga?</translation>
 <translation id="3575121482199441727">Benarkan untuk tapak ini</translation>
-<translation id="3575919114596668130">Tetapan ibu bapa Family Link anda masih terpakai. Jika sebelum ini anda telah menyekat apl atau tapak, anda tidak perlu berbuat demikian lagi.</translation>
 <translation id="3576324189521867626">Berjaya dipasang</translation>
 <translation id="3578594933904494462">Kandungan tab ini sedang dikongsi.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; ingin berkongsi pencetak &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; dengan kumpulan yang anda miliki: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Jika anda terima, semua ahli kumpulan boleh menggunakan pencetak tersebut.</translation>
@@ -4651,6 +4655,7 @@ Anda boleh mengurus tetapan akaun ini dengan memasang apl Family Link pada peran
 <translation id="7235737137505019098">Kunci keselamatan anda tiada ruang yang mencukupi untuk menambahkan sebarang akaun lagi.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Butiran</translation>
 <translation id="7240339475467890413">Sambungkan ke tempat liputan baharu?</translation>
+<translation id="7240847845291869311">Anak anda mahu menambahkan Akaun Google G Suite for Education pada peranti ini. <ph name="LINK_BEGIN" />Notis Privasi G Suite for Education<ph name="LINK_END" /> bertujuan untuk membantu pengguna G Suite for Education dan ibu bapa memahami jenis data yang dikumpulkan oleh produk, tujuan data itu dikumpulkan dan perkara yang dilakukan dengan data itu.</translation>
 <translation id="7241389281993241388">Sila log masuk ke <ph name="TOKEN_NAME" /> untuk mengimport sijil klien.</translation>
 <translation id="7241443820034350811">Jika kunci keselamatan anda tidak tersenarai, tekan butangnya selama sekurang-kurangnya 5 saat.</translation>
 <translation id="7243632151880336635">Kosongkan dan Log Keluar</translation>
@@ -6068,7 +6073,6 @@ perubahan ini berlaku, anda mungkin tidak mahukannya.</translation>
 <translation id="9055636786322918818">Kuat kuasakan penyulitan RC4. Penggunaan pilihan ini akan meningkatkan risiko anda, kerana sifer RC4 tidak selamat.</translation>
 <translation id="9056810968620647706">Tiada padanan dijumpai.</translation>
 <translation id="9057354806206861646">Kemas kini jadual</translation>
-<translation id="9058976525724291037">Anak anda mahu menambahkan akaun Google lain pada peranti ini. Hanya akaun G Suite for Education boleh ditambahkan pada peranti yang diurus dengan Family Link.</translation>
 <translation id="9062065967472365419">Buat saya terkejut</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Ralat daripada baris <ph name="ERROR_LINE_START" /> hingga <ph name="ERROR_LINE_END" /></translation>

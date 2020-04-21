@@ -415,6 +415,11 @@
 <translation id="1555130319947370107">Plava</translation>
 <translation id="1556537182262721003">Katalog dodataka nije bilo moguće premestiti u profil.</translation>
 <translation id="155865706765934889">Dodirna tabla</translation>
+<translation id="1560763881671211335">G Suite for Education administratori određuju kojim Google uslugama njihovi korisnici mogu da pristupaju dok su prijavljeni na G Suite for Education nalog. Administratori u školama moraju da navedu ili dobiju saglasnost kada maloletni korisnici koriste usluge.
+
+    Podaci pregledanja (uključujući istoriju, obeleživače i lozinke) se čuvaju na nalogu za Family Link, a ne na školskom nalogu.
+
+    I dalje važe podešavanja koje je roditelj izabrao u Family Link-u. Ako ste ranije blokirali aplikaciju ili sajt, ne morate to ponovo da radite.</translation>
 <translation id="1564414980088536597">Korišćenje ove slike nije uspelo. Odaberite drugu sliku.</translation>
 <translation id="1566049601598938765">Veb-sajt</translation>
 <translation id="15662109988763471">Izabrani štampač nije dostupan ili nije pravilno instaliran. Proverite štampač ili izaberite neki drugi.</translation>
@@ -1945,7 +1950,6 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3574210789297084292">prijavi me</translation>
 <translation id="3574917942258583917">Želite li da ipak izađete iz režima bez arhiviranja?</translation>
 <translation id="3575121482199441727">Dozvoli za ovaj sajt</translation>
-<translation id="3575919114596668130">I dalje važe Family Link podešavanja roditelja. Ako ste ranije blokirali aplikaciju ili sajt, ne morate to ponovo da radite.</translation>
 <translation id="3576324189521867626">Instalirano je</translation>
 <translation id="3578594933904494462">Sadržaj ove kartice se deli.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; želi da deli štampač &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; sa grupom čiji ste vlasnik: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Ako prihvatite, svi članovi grupe će moći da štampaju pomoću štampača.</translation>
@@ -4649,6 +4653,7 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="7235737137505019098">Na bezbednosnom ključu nema dovoljno prostora za još naloga.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, detalji</translation>
 <translation id="7240339475467890413">Želite li da se povežete na novi hotspot?</translation>
+<translation id="7240847845291869311">Dete želi da doda Google nalog za G Suite for Education na ovaj uređaj. <ph name="LINK_BEGIN" />Obaveštenje o privatnosti za G Suite for Education<ph name="LINK_END" /> treba da pomogne korisnicima proizvoda G Suite for Education i roditeljima da razumeju koje podatke proizvod prikuplja, zašto ih prikuplja i šta radi sa njima.</translation>
 <translation id="7241389281993241388">Prijavite se na <ph name="TOKEN_NAME" /> da biste uvezli sertifikat klijenta.</translation>
 <translation id="7241443820034350811">Ako bezbednosni ključ nije naveden, pritisnite njegovo dugme i zadržite ga najmanje 5 sekundi.</translation>
 <translation id="7243632151880336635">Obriši i odjavi me</translation>
@@ -6065,7 +6070,6 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="9055636786322918818">Primenjuje RC4 šifrovanje. Korišćenje ove opcije vas izlaže većem riziku jer su RC4 šifre nebezbedne.</translation>
 <translation id="9056810968620647706">Nije pronađeno nijedno podudaranje.</translation>
 <translation id="9057354806206861646">Ažurirajte raspored</translation>
-<translation id="9058976525724291037">Dete želi da doda još jedan Google nalog na ovaj uređaj. Samo G Suite for Education nalozi mogu da se dodaju na uređaje kojima se upravlja pomoću Family Link-a.</translation>
 <translation id="9062065967472365419">Iznenadi me</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Greška od <ph name="ERROR_LINE_START" />. do <ph name="ERROR_LINE_END" />. reda</translation>

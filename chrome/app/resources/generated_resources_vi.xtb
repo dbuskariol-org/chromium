@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Xanh lam</translation>
 <translation id="1556537182262721003">Không thể di chuyển thư mục tiện ích vào hồ sơ.</translation>
 <translation id="155865706765934889">Ô di chuột</translation>
+<translation id="1560763881671211335">Quản trị viên G Suite cho Giáo dục xác định người dùng có thể truy cập vào dịch vụ nào của Google khi họ đăng nhập vào tài khoản G Suite cho Giáo dục. Quản trị viên trường học phải đồng ý hoặc có được sự đồng ý nếu để người dùng là trẻ vị thành niên sử dụng các dịch vụ đó.
+
+    Dữ liệu duyệt web (bao gồm lịch sử hoạt động, dấu trang và mật khẩu) sẽ được lưu trữ với tài khoản Family Link chứ không phải với tài khoản trường học.
+
+    Các tùy chọn cài đặt Family Link của cha mẹ sẽ vẫn được áp dụng. Nếu trước đây đã chặn một ứng dụng hoặc trang web, thì bạn sẽ không phải chặn lại.</translation>
 <translation id="1564414980088536597">Không thể sử dụng hình ảnh này. Hãy chọn một hình ảnh khác.</translation>
 <translation id="1566049601598938765">Trang web</translation>
 <translation id="15662109988763471">Máy in đã chọn không hoạt động hoặc được cài đặt không chính xác. Hãy kiểm tra máy in của bạn hoặc thử chọn một máy in khác.</translation>
@@ -1948,7 +1953,6 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="3574210789297084292">đăng nhập</translation>
 <translation id="3574917942258583917">Bạn vẫn muốn thoát khỏi chế độ ẩn danh?</translation>
 <translation id="3575121482199441727">Cho phép đối với trang web này</translation>
-<translation id="3575919114596668130">Các tùy chọn cài đặt Family Link dành cho cha mẹ sẽ vẫn được áp dụng. Nếu trước đây bạn đã chặn một ứng dụng hoặc trang web, thì bạn sẽ không phải chặn lại.</translation>
 <translation id="3576324189521867626">Đã cài đặt thành công</translation>
 <translation id="3578594933904494462">Nội dung của tab này đang được chia sẻ.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; muốn chia sẻ máy in &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; với một nhóm bạn sở hữu: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Nếu bạn chấp nhận, tất cả thành viên của nhóm sẽ có thể in tới máy in.</translation>
@@ -4651,6 +4655,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="7235737137505019098">Khóa bảo mật của bạn không có đủ dung lượng cho bất kỳ tài khoản nào khác nữa.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Thông tin chi tiết</translation>
 <translation id="7240339475467890413">Kết nối với điểm phát sóng mới?</translation>
+<translation id="7240847845291869311">Con bạn muốn thêm một Tài khoản Google G Suite cho Giáo dục vào thiết bị này. <ph name="LINK_BEGIN" />Thông báo về quyền riêng tư của G Suite cho Giáo dục<ph name="LINK_END" /> nhằm giúp người dùng và cha mẹ sử dụng G Suite cho Giáo dục hiểu rõ những dữ liệu mà sản phẩm này thu thập, lý do thu thập cũng như những việc chúng tôi làm với dữ liệu đó.</translation>
 <translation id="7241389281993241388">Vui lòng đăng nhập vào <ph name="TOKEN_NAME" /> để nhập chứng chỉ ứng dụng khách.</translation>
 <translation id="7241443820034350811">Nếu khóa bảo mật của bạn không có trong danh sách, hãy nhấn nút trên khóa trong ít nhất 5 giây.</translation>
 <translation id="7243632151880336635">Xóa và đăng xuất</translation>
@@ -6067,7 +6072,6 @@ Giữ tệp khóa của bạn ở nơi an toàn. Bạn sẽ cần tệp khóa đ
 <translation id="9055636786322918818">Thực thi mã hóa RC4. Việc sử dụng tùy chọn này sẽ làm gia tăng rủi ro vì các thuật toán mã hóa RC4 là không an toàn.</translation>
 <translation id="9056810968620647706">Không tìm thấy kết quả phù hợp nào.</translation>
 <translation id="9057354806206861646">Cập nhật lịch biểu</translation>
-<translation id="9058976525724291037">Con bạn muốn thêm một Tài khoản Google khác vào thiết bị này. Con bạn chỉ có thể thêm tài khoản G Suite cho Giáo dục vào thiết bị do Family Link quản lý.</translation>
 <translation id="9062065967472365419">Khiến tôi ngạc nhiên</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Lỗi từ dòng <ph name="ERROR_LINE_START" /> đến <ph name="ERROR_LINE_END" /></translation>

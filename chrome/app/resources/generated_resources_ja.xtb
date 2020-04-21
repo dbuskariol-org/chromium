@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">青</translation>
 <translation id="1556537182262721003">拡張機能ディレクトリをプロフィールに移動できませんでした。</translation>
 <translation id="155865706765934889">タッチパッド</translation>
+<translation id="1560763881671211335">G Suite for Education の管理者は、ユーザーが G Suite for Education アカウントにログインしているときにアクセスできる Google サービスを管理します。学校の管理者は、未成年のユーザーがサービスを利用することに関して、管理者自身が同意するか、保護者から同意を得る必要があります。
+
+    履歴、ブックマーク、パスワードなどの閲覧データは、ファミリー リンク アカウントに保存され、学校のアカウントには保存されません。
+
+    保護者によるファミリー リンクの設定は引き続き適用されます。以前にアプリやサイトをブロックした場合、再度ブロックする必要はありません。</translation>
 <translation id="1564414980088536597">この画像は使用できません。別の画像を選択してください。</translation>
 <translation id="1566049601598938765">ウェブサイト</translation>
 <translation id="15662109988763471">選択したプリンタは利用できないか、正しくインストールされていません。プリンタを確認するか、別のプリンタを選択してみてください。</translation>
@@ -1948,7 +1953,6 @@
 <translation id="3574210789297084292">ログイン</translation>
 <translation id="3574917942258583917">シークレット モードを終了してもよろしいですか？</translation>
 <translation id="3575121482199441727">このサイトの通知を許可</translation>
-<translation id="3575919114596668130">ファミリー リンクの保護者による設定は引き続き適用されます。以前にアプリやサイトをブロックした場合、再度ブロックする必要はありません。</translation>
 <translation id="3576324189521867626">インストールが完了しました</translation>
 <translation id="3578594933904494462">このタブのコンテンツは共有されています。</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; さんがあなたのグループ &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt; と &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; プリンタを共有することを希望しています。共有を許可すると、グループのメンバー全員がこのプリンタに印刷できるようになります。</translation>
@@ -4651,6 +4655,7 @@
 <translation id="7235737137505019098">セキュリティ キーに空き容量がないため、これ以上アカウントを追加できません。</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />、詳細</translation>
 <translation id="7240339475467890413">新しいアクセス ポイントに接続しますか？</translation>
+<translation id="7240847845291869311">お子様がこのデバイスに G Suite for Education の Google アカウントを追加しようとしています。<ph name="LINK_BEGIN" />G Suite for Education のプライバシーに関するお知らせ<ph name="LINK_END" />は、G Suite for Education のユーザーとパートナーの皆様に、このサービスで収集されるデータとその理由、Google でのデータの取り扱いについて理解を深めていただくためのものです。</translation>
 <translation id="7241389281993241388">クライアント証明書をインポートするには <ph name="TOKEN_NAME" /> にログインしてください。</translation>
 <translation id="7241443820034350811">セキュリティ キーが表示されていない場合は、キーのボタンを 5 秒以上長押ししてください。</translation>
 <translation id="7243632151880336635">削除してログアウト</translation>
@@ -6067,7 +6072,6 @@
 <translation id="9055636786322918818">RC4 暗号化を適用します。なお RC4 暗号は安全でないため、このオプションを使用するとリスクが高まります。</translation>
 <translation id="9056810968620647706">一致する項目が見つかりません。</translation>
 <translation id="9057354806206861646">更新スケジュール</translation>
-<translation id="9058976525724291037">お子様がこのデバイスに別の Google アカウントを追加しようとしています。ファミリー リンクで管理しているデバイスに追加できるのは、G Suite for Education アカウントのみです。</translation>
 <translation id="9062065967472365419">おまかせ</translation>
 <translation id="9062468308252555888">14 倍</translation>
 <translation id="9063208415146866933"><ph name="ERROR_LINE_START" />～<ph name="ERROR_LINE_END" /> 行目にエラーがあります</translation>

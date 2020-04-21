@@ -1947,7 +1947,6 @@
 <translation id="3574210789297084292">登入</translation>
 <translation id="3574917942258583917">確定要結束無痕模式嗎？</translation>
 <translation id="3575121482199441727">允許這個網站的通知</translation>
-<translation id="3575919114596668130">您的 Family Link 家長設定仍然適用。如果您先前已封鎖某個應用程式或網站，則無須再次封鎖。</translation>
 <translation id="3576324189521867626">已成功安裝</translation>
 <translation id="3578594933904494462">正在分享這個分頁的內容。</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; 想要與你的群組 (<ph name="GROUP_NAME" />) 共用印表機 &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt;。你接受之後，所有群組成員即可使用這台印表機進行列印工作。</translation>
@@ -6064,7 +6063,6 @@
 <translation id="9055636786322918818">強制執行 RC4 加密。由於 RC4 加密不安全，使用這個加密選項會提高風險。</translation>
 <translation id="9056810968620647706">找不到相符項目。</translation>
 <translation id="9057354806206861646">更新時間表</translation>
-<translation id="9058976525724291037">貴子女要求在這部裝置上新增其他 Google 帳戶，但在 Family Link 管理的裝置上，只能新增 G Suite 教育版帳戶。</translation>
 <translation id="9062065967472365419">隨機</translation>
 <translation id="9062468308252555888">14 倍</translation>
 <translation id="9063208415146866933">第 <ph name="ERROR_LINE_START" /> 至第 <ph name="ERROR_LINE_END" /> 行有錯誤</translation>

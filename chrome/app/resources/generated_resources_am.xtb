@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">ሰማያዊ</translation>
 <translation id="1556537182262721003">የቅጥያ ማውጫን ወደ መገለጫ መውሰድ አልተቻለም።</translation>
 <translation id="155865706765934889">ተችፓድ</translation>
+<translation id="1560763881671211335">የG Suite ለትምህርት አስተዳዳሪዎች ተጠቃሚዎቻቸው ወደ G Suite ለትምህርት መለያ ገብተው ሳለ የትኛዎቹን የGoogle አገልግሎቶች መድረስ እንደሚችሉ ይወስናሉ። የትምህርት ቤት አስተዳዳሪዎች ከአዋቂ ዕድሜ በታች የሆኑ ተጠቃሚዎቻቸው አገልግሎቶቹን እንዲጠቀሙ ፈቃድ መስጠት ወይም ማግኘት አለባቸው።
+
+    የአሰሳ ውሂብ (ታሪክ፣ ዕልባቶች እና የይለፍ ቃላት ጨምሮ) በFamily Link መለያው ላይ ይከማቻሉ፣ በትምህርት ቤት መለያው ላይ አይደለም።
+
+    የFamily Link ወላጅ ቅንብሮችዎ አሁንም ይተገበራሉ። ከዚህ ቀደም አንድ መተግበሪያ ወይም ጣቢያ አግደው ከነበረ ዳግም ማድረግ አይኖርብዎትም።</translation>
 <translation id="1564414980088536597">ይህ ምስል ጥቅም ላይ ሊውል አይችልም። የተለየ ምስል ይምረጡ።</translation>
 <translation id="1566049601598938765">ድር ጣቢያ</translation>
 <translation id="15662109988763471">የተመረጠው አታሚ የለም ወይም በትክክል አልተጫነም። አታሚዎን ይፈትሹት ወይም ሌላ አታሚ ለመምረጥ ይሞክሩ።</translation>
@@ -1947,7 +1952,6 @@
 <translation id="3574210789297084292">ግባ</translation>
 <translation id="3574917942258583917">ለማንኛውም ማንነት ከማያሳውቅ ሁነታ ይውጡ?</translation>
 <translation id="3575121482199441727">ለዚህ ጣቢያ ፍቀድ</translation>
-<translation id="3575919114596668130">የFamily Link ወላጅ ቅንብሮችዎ አሁንም ይተገበራሉ። ከዚህ ቀደም አንድ መተግበሪያ ወይም ጣቢያ ካገዱ ዳግም ማድረግ አይኖርብዎትም።</translation>
 <translation id="3576324189521867626">በተሳካ ሁኔታ ተጭኗል</translation>
 <translation id="3578594933904494462">የዚህ ትር ይዘት በመጋራት ላይ ነው።</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; የ&lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; አታሚ እርስዎ ባለቤት ለሆኑበት ቡድን ማጋራት ይፈልጋሉ፦ &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;። ከተቀበሉ ሁሉም የቡድን አባላት ወደ አታሚው ማተም ይችላሉ።</translation>
@@ -4648,6 +4652,7 @@
 <translation id="7235737137505019098">የእርስዎ ደህንነት ቁልፍ ለማናቸውም ተጨማሪ መለያዎች በቂ ቦታ የለውም።</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />፣ ዝርዝሮች</translation>
 <translation id="7240339475467890413">ከአዲስ መገናኛ ነጥብ ጋር ይገናኝ?</translation>
+<translation id="7240847845291869311">የእርስዎ ልጅ የG Suite ለትምህርት Google መለያ ወደዚህ መሣሪያ ማከል ይፈልጋሉ። <ph name="LINK_BEGIN" />የG Suite ለትምህርት ግላዊነት ማስታወቂያው<ph name="LINK_END" /> የG Suite ለትምህርት ተጠቃሚዎችና ወላጆች ምርቱ ምን ውሂብ እንደሚሰበስብ፣ ለምን እንደሚሰበስብ እና ምን እንደሚደረግበት እንዲረዱ ለማገዝ የታሰበ ነው።</translation>
 <translation id="7241389281993241388">የደንበኛ እውቅና ማረጋገጫውን ለማስመጣት እባክዎ ወደ <ph name="TOKEN_NAME" /> ይግቡ።</translation>
 <translation id="7241443820034350811">የደህንነት ቁልፍዎ ካልተዘረዘረ አዝራሩን ቢያንስ ለ5 ሰከንዶች ተጭነው ይያዙ።</translation>
 <translation id="7243632151880336635">አጽዳና ዘግተህ ውጣ</translation>
@@ -6068,7 +6073,6 @@ nil</translation>
 <translation id="9055636786322918818">የRC4 ምሥጠራን አስገድድ። የRC4 ምሥጠራዎች ለደህንነት አስተማማኝ ስላልሆኑ ይህን አማራጭ መጠቀም የእርስዎን አደጋ ይጨምራል።</translation>
 <translation id="9056810968620647706">ምንም ተዛማጆች አልተገኙም።</translation>
 <translation id="9057354806206861646">መርሐግብርን አዘምን</translation>
-<translation id="9058976525724291037">የእርስዎ ልጅ ሌላ የGoogle መለያ በዚህ መሣሪያ ላይ ማከል ይፈልጋሉ። የG Suite for Education መለያዎች ብቻ ናቸው በFamily Link ወደሚተዳደሩ መሣሪያዎች መታከል የሚችሉት።</translation>
 <translation id="9062065967472365419">አስደንቀኝ</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">ከመስመር <ph name="ERROR_LINE_START" /> እስከ <ph name="ERROR_LINE_END" /> ስህተት</translation>

@@ -416,6 +416,11 @@ I-<ph name="EXTENSION_NAME" /></translation>
 <translation id="1555130319947370107">Okuluhlaza okwesibhakabhaka</translation>
 <translation id="1556537182262721003">Ayikwazanga ukuhambisa umkhombandlela wesandiso kuphrofayela.</translation>
 <translation id="155865706765934889">Iphedi yokuthinta</translation>
+<translation id="1560763881671211335">Abalawuli be-G Suite for Education banquma ukuthi yimaphi amasevisi we-Google abasebenzisi bawo abangakwazi ukufinyelela kuwo ngenkathi bengene ngemvume ku-akhawunti ye-G Suite for Education. Abalawuli besikole kudingeka bahlinzeke noma bathole imvume yokusetshenziswa kwamasevisi ngabasebenzisi abasebancane.
+
+    Idatha yopheqululo (okubandakanya umlando, amabhukhimakhi, namaphasiwedi) izogcinwa nge-akhawunti ye-Family Link futhi hhayi nge-akhawunti yesikole.
+
+    Izilungiselelo zakho zomzali ze-Family Link zisazosebenza. Uma ngaphambilini uvimbele uhlelo lokusebenza noma isayithi, ngeke kudingeke ukuthi ukwenze futhi.</translation>
 <translation id="1564414980088536597">Lesi sithombe asikwazi ukusetshenziswa. Khetha isithombe esihlukile.</translation>
 <translation id="1566049601598938765">Iwebhusayithi</translation>
 <translation id="15662109988763471">Iphrinta ekhethiwe ayitholakali noma ayifakiwe kahle. Hlola iphrinta yakho noma zama ukukhetha enye iphrinta.</translation>
@@ -1946,7 +1951,6 @@ Ungaphatha izilungiselelo zale akhawunti ngokufaka uhlelo lokusebenza lwe-Family
 <translation id="3574210789297084292">ngena ngemvume</translation>
 <translation id="3574917942258583917">Phuma kumodi ye-incognito noma kunjalo?</translation>
 <translation id="3575121482199441727">Vumela kuleli sayithi</translation>
-<translation id="3575919114596668130">Izilungiselelo zakho zomzali we-Family Link zisazosebenza. Uma ngaphambilini uvimbe uhlelo lokusebenza noma isayithi, ngeke kudingeke ukuthi uphinde ukwenze.</translation>
 <translation id="3576324189521867626">Ifakwe ngempumelelo</translation>
 <translation id="3578594933904494462">Lokhu okuqukethwe kwethebhu luyabiwa.</translation>
 <translation id="357886715122934472">U-&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; ufuna ukwabelana ngephrinta ye-&lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; neqembu okungelakho: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Uma wamukela, wonke amalungu weqembu azokwazi ukuphrinta kuphrinta.</translation>
@@ -4651,6 +4655,7 @@ Qiniseka ukuthi awuvezi noma yiluphi ulwazi olubucayi.</translation>
 <translation id="7235737137505019098">Ukhiye wakho wokuqinisekisa ubunikazi awunaso isikhala esanele sanoma imaphi ama-akhawunti amaningi.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Imininingwane</translation>
 <translation id="7240339475467890413">Xhumeka ku-hotspot entsha?</translation>
+<translation id="7240847845291869311">Ingane yakho ifuna ukwengeza i-akhawunti ye-Google ye-G Suite for Education kule divayisi. <ph name="LINK_BEGIN" />Isaziso Sobumfihlo se-G Suite for Education<ph name="LINK_END" /> sihloselwe ukusiza abasebenzisi nabazali be-G Suite for Education ukuqonda lokho okuqoqwa umkhiqizo, kungani kuqoqwa, nokuthi kwenziwani ngakho.</translation>
 <translation id="7241389281993241388">Sicela ungene ngemvume ku-<ph name="TOKEN_NAME" /> ukuze ungenise isitifiketi seklayenti.</translation>
 <translation id="7241443820034350811">Uma ukhiye wakho wokuvikela ungafakiwe kuhlu, wucindezele okungenani amasekhondi angu-5.</translation>
 <translation id="7243632151880336635">Sula uphinde uphume ngemvume</translation>
@@ -6066,7 +6071,6 @@ Gcina ifayela lakho elingukhiye endaweni evikelekile. Uzolidinga ukuze udale izi
 <translation id="9055636786322918818">Phoqelela ukubethelwa kwe-RC4. Ukusebenzisa le nketho kukhulisa ubucayi bakho, njengoba ama-chipers e-RC4 awaphephile.</translation>
 <translation id="9056810968620647706">Akukho ukufana okutholiwe.</translation>
 <translation id="9057354806206861646">Buyekeza ishejuli</translation>
-<translation id="9058976525724291037">Ingane yakho ifuna ukwengeza enye i-akhawunti ye-Google kule divayisi. Ama-akhawunti we-G Suite for Education kuphela akwazi ukwengezwa kumadivayisi aphathwa nge-Family Link.</translation>
 <translation id="9062065967472365419">Ngimangaze</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Iphutha kusukela kumugqa ongu-<ph name="ERROR_LINE_START" /> ukuya kongu-<ph name="ERROR_LINE_END" /></translation>

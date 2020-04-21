@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Biru</translation>
 <translation id="1556537182262721003">Tidak dapat memindah direktori ekstensi ke dalam profil.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Administrator G Suite for Education menentukan layanan Google yang dapat diakses oleh pengguna saat login ke akun G Suite for Education. Administrator sekolah harus memberikan atau memperoleh izin atas penggunaan layanan oleh pengguna di bawah umur.
+
+    Data penjelajahan (termasuk histori, bookmark, dan sandi) akan disimpan dengan akun Family Link, bukan akun sekolah.
+
+    Setelan orang tua Family Link Anda akan tetap berlaku. Jika sebelumnya Anda telah memblokir aplikasi atau situs, Anda tidak perlu melakukannya lagi.</translation>
 <translation id="1564414980088536597">Gambar ini tidak dapat digunakan. Pilih gambar lain.</translation>
 <translation id="1566049601598938765">Situs web</translation>
 <translation id="15662109988763471">Printer yang dipilih tidak tersedia atau tidak diinstal dengan benar. Periksa printer Anda atau coba pilih printer lainnya.</translation>
@@ -1946,7 +1951,6 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="3574210789297084292">login</translation>
 <translation id="3574917942258583917">Tetap keluar dari mode samaran?</translation>
 <translation id="3575121482199441727">Izinkan untuk situs ini</translation>
-<translation id="3575919114596668130">Setelan orang tua Family Link Anda akan tetap berlaku. Jika sebelumnya Anda telah memblokir aplikasi atau situs, Anda tidak perlu melakukannya lagi.</translation>
 <translation id="3576324189521867626">Berhasil dipasang</translation>
 <translation id="3578594933904494462">Konten tab ini sedang dibagikan.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; ingin membagikan printer &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; dengan grup yang Anda miliki: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Jika Anda menerima, semua anggota grup akan dapat mencetak pada printer tersebut.</translation>
@@ -4649,6 +4653,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="7235737137505019098">Kunci keamanan Anda tidak memiliki ruang penyimpanan yang cukup untuk akun lainnya.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Detail</translation>
 <translation id="7240339475467890413">Sambungkan ke hotspot baru?</translation>
+<translation id="7240847845291869311">Anak Anda ingin menambahkan Akun Google G Suite for Education ke perangkat ini. <ph name="LINK_BEGIN" />Pemberitahuan Privasi G Suite for Education<ph name="LINK_END" /> bertujuan untuk membantu pengguna G Suite for Education dan orang tua memahami data yang dikumpulkan produk, alasan data dikumpulkan, dan apa yang dilakukan dengan data tersebut.</translation>
 <translation id="7241389281993241388">Masuklah ke <ph name="TOKEN_NAME" /> untuk mengimpor sertifikat klien.</translation>
 <translation id="7241443820034350811">Jika kunci keamanan Anda tidak tercantum, tekan tombolnya selama minimal 5 detik.</translation>
 <translation id="7243632151880336635">Hapus dan Keluar</translation>
@@ -6065,7 +6070,6 @@ Simpan file kunci Anda di tempat yang aman. Anda akan membutuhkannya untuk membu
 <translation id="9055636786322918818">Terapkan enkripsi RC4. Penggunaan opsi ini akan meningkatkan risiko, karena cipher RC4 tidak aman.</translation>
 <translation id="9056810968620647706">Tidak ditemukan kecocokan.</translation>
 <translation id="9057354806206861646">Update jadwal</translation>
-<translation id="9058976525724291037">Anak Anda ingin menambahkan Akun Google lain ke perangkat ini. Hanya akun G Suite for Education yang dapat ditambahkan ke perangkat yang dikelola dengan Family Link.</translation>
 <translation id="9062065967472365419">Beri saya kejutan</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Error dari baris <ph name="ERROR_LINE_START" /> ke <ph name="ERROR_LINE_END" /></translation>

@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Plava</translation>
 <translation id="1556537182262721003">Nije uspjelo premještanje direktorija proširenja na profil.</translation>
 <translation id="155865706765934889">Dodirna površina</translation>
+<translation id="1560763881671211335">Administratori za G Suite for Education određuju kojim Googleovim uslugama korisnici mogu pristupiti dok su prijavljeni na račun za G Suite for Education. Školski administratori moraju pružiti ili dobiti pristanak kad usluge upotrebljavaju maloljetni korisnici.
+
+    Podaci o pregledavanju (uključujući povijest, oznake i zaporke) pohranjivat će se na Family Link računu, a ne na školskom računu.
+
+    Vaše roditeljske postavke Family Linka i dalje se primjenjuju. Ako ste prethodno blokirali aplikaciju ili web-lokaciju, nećete to morati učiniti ponovno.</translation>
 <translation id="1564414980088536597">Ta se slika ne može koristiti. Odaberite neku drugu sliku.</translation>
 <translation id="1566049601598938765">Web-lokacija</translation>
 <translation id="15662109988763471">Odabrani pisač nije dostupan ili nije ispravno postavljen. Provjerite svoj pisač ili pokušajte odabrati drugi pisač.</translation>
@@ -1948,7 +1953,6 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="3574210789297084292">prijava</translation>
 <translation id="3574917942258583917">Želite li svejedno zatvoriti anonimni način?</translation>
 <translation id="3575121482199441727">Dopusti za ovu web-lokaciju</translation>
-<translation id="3575919114596668130">Vaše roditeljske postavke Family Linka i dalje se primjenjuju. Ako ste prethodno blokirali aplikaciju ili web-lokaciju, nećete to morati učiniti ponovno.</translation>
 <translation id="3576324189521867626">Uspješno instalirano</translation>
 <translation id="3578594933904494462">Sadržaj ove kartice dijeli se.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; želi dijeliti pisač &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; s grupom čiji ste vlasnik: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Ako prihvatite, svi članovi grupe moći će ispisivati putem pisača.</translation>
@@ -4651,6 +4655,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="7235737137505019098">Na sigurnosnom ključu nema dovoljno prostora za izradu novih računa.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, pojedinosti</translation>
 <translation id="7240339475467890413">Želite li se povezati s novom žarišnom točkom?</translation>
+<translation id="7240847845291869311">Vaše dijete želi dodati Google račun za G Suite for Education na ovaj uređaj. Svrha je <ph name="LINK_BEGIN" />Obavijesti o privatnosti za G Suite for Education<ph name="LINK_END" /> objasniti korisnicima proizvoda G Suite for Education i njihovim roditeljima koje podatke taj proizvod prikuplja, zašto se ti podaci prikupljaju i što se s njima radi.</translation>
 <translation id="7241389281993241388">Prijavite se na uređaj <ph name="TOKEN_NAME" /> kako biste uvezli certifikat klijenta.</translation>
 <translation id="7241443820034350811">Ako vaš sigurnosni ključ nije naveden, pritisnite i držite tipku na ključu barem pet sekundi.</translation>
 <translation id="7243632151880336635">Izbriši i odjavi se</translation>
@@ -6067,7 +6072,6 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="9055636786322918818">Provođenje AES i RC4 šifriranja. Upotreba te opcije izlaže vas većoj opasnosti jer RC4 šifre nisu sigurne.</translation>
 <translation id="9056810968620647706">Nisu pronađeni nikakvi rezultati.</translation>
 <translation id="9057354806206861646">Ažuriranje rasporeda</translation>
-<translation id="9058976525724291037">Vaše dijete želi dodati drugi Google račun na ovaj uređaj. Na uređaje kojima upravlja Family Link mogu se dodati samo računi G Suite za obrazovanje.</translation>
 <translation id="9062065967472365419">Iznenadi me</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Pogreška od <ph name="ERROR_LINE_START" />. do <ph name="ERROR_LINE_END" />. retka</translation>

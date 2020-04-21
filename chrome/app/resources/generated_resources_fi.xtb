@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Sininen</translation>
 <translation id="1556537182262721003">Laajennushakemiston siirtäminen profiiliin ei onnistunut.</translation>
 <translation id="155865706765934889">Kosketuslevy</translation>
+<translation id="1560763881671211335">G Suite for Educationissa järjestelmänvalvojat päättävät, mihin Googlen palveluihin käyttäjät pääsevät G Suite for Education ‑tilillään. Koulun henkilökunnan on saatava suostumus palvelujen käyttöön, kun käyttäjä on alaikäinen.
+
+    Selausdata (kuten historia, kirjanmerkit ja salasanat) tallennetaan Family Link ‑tilille, ei koulutilille.
+
+    Family Linkissä valitut vanhempien asetukset ovat edelleen voimassa. Jos olet aiemmin estänyt sovelluksen tai sivuston, sinun ei tarvitse tehdä sitä uudelleen.</translation>
 <translation id="1564414980088536597">Kuvaa ei voi käyttää. Valitse toinen kuva.</translation>
 <translation id="1566049601598938765">Verkkosivusto</translation>
 <translation id="15662109988763471">Valittu tulostin ei ole käytettävissä tai sitä ei ole asennettu oikein. Tarkista tulostin tai valitse toinen tulostin.</translation>
@@ -1948,7 +1953,6 @@ Voit ylläpitää tilin asetuksia asentamalla laitteellesi Family Link ‑sovell
 <translation id="3574210789297084292">kirjaudu sisään</translation>
 <translation id="3574917942258583917">Haluatko silti poistua incognito-tilasta?</translation>
 <translation id="3575121482199441727">Salli tällä sivustolla</translation>
-<translation id="3575919114596668130">Family Linkin vanhempien asetukset ovat edelleen voimassa. Jos olet aiemmin estänyt sovelluksen tai sivuston, sinun ei tarvitse tehdä sitä uudelleen.</translation>
 <translation id="3576324189521867626">Asennus onnistui.</translation>
 <translation id="3578594933904494462">Tämän välilehden sisältöä jaetaan.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; haluaa jakaa tulostimen &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; omistamasi ryhmän kanssa: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Jos hyväksyt, kaikki ryhmän jäsenet voivat tulostaa tulostimeen.</translation>
@@ -4650,6 +4654,7 @@ Julkinen eksponentti (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bittiä):
 <translation id="7235737137505019098">Suojausavaimessasi ei ole tarpeeksi vapaata tilaa uusille tileille.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, tiedot</translation>
 <translation id="7240339475467890413">Yhdistetäänkö uuteen hotspotiin?</translation>
+<translation id="7240847845291869311">Lapsesi haluaa lisätä tälle laitteelle G Suite for Educationin Google-tilin. <ph name="LINK_BEGIN" />G Suite for Educationin tietosuojailmoituksen<ph name="LINK_END" /> tarkoitus on selventää G Suite for Educationin käyttäjille ja vanhemmille, mitä dataa tuote kerää, miksi sitä kerätään ja mitä sillä tehdään.</translation>
 <translation id="7241389281993241388">Kirjaudu sisään laitteeseen <ph name="TOKEN_NAME" /> ja tuo asiakkaan varmenne.</translation>
 <translation id="7241443820034350811">Jos suojausavain ei ole luettelossa, paina painiketta vähintään 5 sekuntia.</translation>
 <translation id="7243632151880336635">Tyhjennä ja kirjaudu ulos</translation>
@@ -6065,7 +6070,6 @@ Tallenna avaintiedosto suojattuun sijaintiin. Tarvitset sitä, jos haluat luoda 
 <translation id="9055636786322918818">Pakota RC4-salaus. Tämä valinta lisää riskejä, koska RC4-salaustekniikat ovat suojaamattomia.</translation>
 <translation id="9056810968620647706">Yhtään osumaa ei löytynyt.</translation>
 <translation id="9057354806206861646">Päivitysaikataulu</translation>
-<translation id="9058976525724291037">Lapsesi haluaa lisätä tälle laitteelle toisen Google-tilin. Family Linkillä hallinnoituihin laitteisiin voi lisätä ainoastaan G Suite for Education ‑tilejä.</translation>
 <translation id="9062065967472365419">Yllätä minut</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Virhe riveillä <ph name="ERROR_LINE_START" />–<ph name="ERROR_LINE_END" /></translation>

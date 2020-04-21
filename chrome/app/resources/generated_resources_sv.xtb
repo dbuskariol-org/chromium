@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Blå</translation>
 <translation id="1556537182262721003">Det gick inte att flytta tilläggskatalogen till profilen.</translation>
 <translation id="155865706765934889">Styrplatta</translation>
+<translation id="1560763881671211335">Administratörer av G Suite for Education avgör vilka av Googles tjänster användare får åtkomst till medan de är inloggade på ett G Suite for Education-konto. Det krävs att skolans administratörer ger eller inhämtar samtycke innan minderåriga användare använder tjänsterna.
+
+    Webbinformation (inklusive historik, bokmärken och lösenord) lagras med Family Link-kontot och inte med skolkontot.
+
+    Föräldrainställningarna i Family Link gäller fortfarande. Om du tidigare har blockerat en app eller webbplats måste du inte göra det igen.</translation>
 <translation id="1564414980088536597">Det går inte att använda den här bilden. Välj en annan.</translation>
 <translation id="1566049601598938765">Webbplats</translation>
 <translation id="15662109988763471">Den valda skrivaren är inte tillgänglig eller har inte installerats korrekt. Kontrollera skrivaren eller välj en annan.</translation>
@@ -1948,7 +1953,6 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="3574210789297084292">logga in</translation>
 <translation id="3574917942258583917">Vill du stänga inkognitoläget ändå?</translation>
 <translation id="3575121482199441727">Tillåt för den här webbplatsen</translation>
-<translation id="3575919114596668130">Föräldrainställningarna i Family Link gäller fortfarande. Om du tidigare har blockerat en app eller webbplats måste du inte göra det igen.</translation>
 <translation id="3576324189521867626">Appen har installerats</translation>
 <translation id="3578594933904494462">Flikens innehåll delas.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; vill dela skrivaren &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; med en grupp som du äger: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Om du accepterar kan alla medlemmar i gruppen skriva ut till skrivaren.</translation>
@@ -4651,6 +4655,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="7235737137505019098">Det finns inte tillräckligt mycket utrymme på säkerhetsnyckeln för fler konton.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, information</translation>
 <translation id="7240339475467890413">Vill du ansluta till en ny surfzon?</translation>
+<translation id="7240847845291869311">Ditt barn vill lägga till ett Google-konto för att använda G Suite for Education på den här enheten. I <ph name="LINK_BEGIN" />sekretessmeddelandet för G Suite for Education<ph name="LINK_END" /> förklarar vi för användare av G Suite for Education och föräldrar vilken data produkten samlar in, varför den samlas in och vad som händer med den.</translation>
 <translation id="7241389281993241388">Logga in på <ph name="TOKEN_NAME" /> om du vill importera klientcertifikatet.</translation>
 <translation id="7241443820034350811">Om din säkerhetsnyckel inte anges trycker du på dess knapp i minst fem sekunder.</translation>
 <translation id="7243632151880336635">Rensa och logga ut</translation>
@@ -6067,7 +6072,6 @@ Spara nyckelfilen på ett säkert ställe. Den behövs om du ska skapa nya versi
 <translation id="9055636786322918818">Tillämpa RC4-kryptering. Det här alternativet är mer riskabelt eftersom RC4-chiffer är osäkra.</translation>
 <translation id="9056810968620647706">Inga träffar hittades.</translation>
 <translation id="9057354806206861646">Uppdatera schema</translation>
-<translation id="9058976525724291037">Ditt barn vill lägga till ett Google-konto på den här enheten. Endast G Suite for Education-konton kan läggas till på enheter som hanteras via Family Link.</translation>
 <translation id="9062065967472365419">Överraska mig</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Fel på rad <ph name="ERROR_LINE_START" /> till och med <ph name="ERROR_LINE_END" /></translation>

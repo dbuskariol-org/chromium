@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Mėlyna</translation>
 <translation id="1556537182262721003">Nepavyko perkelti plėtinio katalogo į profilį.</translation>
 <translation id="155865706765934889">Jutiklinis kilimėlis</translation>
+<translation id="1560763881671211335">„G Suite for Education“ administratoriai nustato, kurias „Google“ paslaugas jų naudotojai gali pasiekti prisijungę prie „G Suite for Education“ paskyros. Mokyklos administratoriai turi pateikti arba gauti sutikimą, kad paslaugas gali naudoti nepilnamečiai.
+
+    Naršymo duomenys (įskaitant istoriją, žymes ir slaptažodžius) bus saugomi „Family Link“, o ne mokyklos paskyroje.
+
+    Jūsų „Family Link“ tėvų nustatymai vis tiek bus taikomi. Jei anksčiau buvote užblokavę programą arba svetainę, dar kartą to daryti nereikės.</translation>
 <translation id="1564414980088536597">Šio vaizdo negalima naudoti. Pasirinkite kitą vaizdą.</translation>
 <translation id="1566049601598938765">Svetainė</translation>
 <translation id="15662109988763471">Pasirinktas spausdintuvas nepasiekiamas arba netinkamai įdiegtas. Patikrinkite spausdintuvą arba pabandykite pasirinkti kitą spausdintuvą.</translation>
@@ -1948,7 +1953,6 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3574210789297084292">prisijungti</translation>
 <translation id="3574917942258583917">Vis tiek išeiti iš inkognito režimo?</translation>
 <translation id="3575121482199441727">Leisti šioje svetainėje</translation>
-<translation id="3575919114596668130">„Family Link“ tėvų nustatymai vis tiek bus taikomi. Jei anksčiau buvote užblokavę programą arba svetainę, dar kartą to daryti nereikės.</translation>
 <translation id="3576324189521867626">Sėkmingai įdiegta</translation>
 <translation id="3578594933904494462">Šio skirtuko lapo turinys bendrinamas.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; nori bendrinti spausdintuvą &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; su jums priklausančia grupe &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Jei sutiksite, visi grupės nariai galės spausdinti naudodami šį spausdintuvą.</translation>
@@ -4652,6 +4656,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="7235737137505019098">Saugos rakte nepakanka vietos jokioms kitoms paskyroms.</translation>
 <translation id="7238643356913091553">„<ph name="NETWORK_NAME" />“, išsami informacija</translation>
 <translation id="7240339475467890413">Prisijungti prie naujo viešosios interneto prieigos taško?</translation>
+<translation id="7240847845291869311">Jūsų vaikas nori pridėti „G Suite for Education“ rinkinio „Google“ paskyrą šiame įrenginyje. <ph name="LINK_BEGIN" />„G Suite for Education“ privatumo pranešimas<ph name="LINK_END" /> padės „G Suite for Education“ naudotojams ir tėvams suprasti, kokius duomenis produktas renka, kodėl renka ir ką su jais daro.</translation>
 <translation id="7241389281993241388">Jei norite importuoti programos sertifikatą, prisijunkite prie „<ph name="TOKEN_NAME" />“.</translation>
 <translation id="7241443820034350811">Jei saugos rakto nėra sąraše, paspauskite jo mygtuką ir palaikykite bent 5 sekundes.</translation>
 <translation id="7243632151880336635">Išvalyti ir atsijungti</translation>
@@ -6068,7 +6073,6 @@ Rakto failą laikykite saugioje vietoje. Jo reikės, kai norėsite sukurti nauja
 <translation id="9055636786322918818">Taikyti RC4 šifruotę. Naudojant šią parinktį padidėja rizika, nes RC4 šifrai nesaugūs.</translation>
 <translation id="9056810968620647706">Nerasta jokių atitikčių.</translation>
 <translation id="9057354806206861646">Tvarkaraščio atnaujinimas</translation>
-<translation id="9058976525724291037">Jūsų vaikas nori pridėti kitą „Google“ paskyrą šiame įrenginyje. Įrenginiuose, kurie tvarkomi naudojant „Family Link“, galima pridėti tik „G Suite for Education“ paskyrų.</translation>
 <translation id="9062065967472365419">Nustebinti mane</translation>
 <translation id="9062468308252555888">14 k.</translation>
 <translation id="9063208415146866933">Klaida eilutėse nuo <ph name="ERROR_LINE_START" /> iki <ph name="ERROR_LINE_END" /></translation>

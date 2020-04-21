@@ -415,6 +415,11 @@
 <translation id="1555130319947370107">Samawati</translation>
 <translation id="1556537182262721003">Saraka ya kiendelezi haikuweza kuhamishwa hadi kwenye wasifu.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Wasimamizi wa G Suite for Education hubaini huduma za Google ambazo watumiaji wanaweza kufikia wakiwa wameingia katika akaunti ya G Suite for Education. Wasimamizi wa shule wanahitajika kutoa au kupata idhini ya utumiaji wa huduma kwa niaba ya watumiaji ambao ni watoto.
+
+    Data ya kuvinjari (ikiwemo historia, alamisho na manenosiri) itahifadhiwa kwa kutumia akaunti ya Family Link wala si akaunti ya shule.
+
+    Mipangilio yako ya mzazi kwenye Family Link bado itatumika. Ikiwa ulizuia programu au tovuti hapo awali, hutalazimika kufanya hivyo tena.</translation>
 <translation id="1564414980088536597">Huwezi kutumia picha hii. Chagua picha nyingine.</translation>
 <translation id="1566049601598938765">Tovuti</translation>
 <translation id="15662109988763471">Printa iliyochaguliwa haipatikani au haijasakinishwa vizuri. Angalia printa yako au ujaribu kuchagua printa nyingine.</translation>
@@ -1945,7 +1950,6 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
 <translation id="3574210789297084292">ingia</translation>
 <translation id="3574917942258583917">Ungependa kufunga hali fiche?</translation>
 <translation id="3575121482199441727">Ruhusu kutoka tovuti hii</translation>
-<translation id="3575919114596668130">Mipangilio yako ya mzazi kwenye Family Link bado itatumika. Ikiwa ulizuia programu au tovuti hapo awali, hutalazimika kufanya hivyo tena.</translation>
 <translation id="3576324189521867626">Imesakinishwa</translation>
 <translation id="3578594933904494462">Maudhui ya kichupo hiki yanashirikiwa</translation>
 <translation id="357886715122934472">&lt;Strong&gt; <ph name="SENDER" /> &lt;/Strong&gt; anataka kushiriki printa &lt;strong&gt; <ph name="PRINTER_NAME" /> &lt;/Strong&gt; na kundi unalomiliki: &lt;strong&gt; <ph name="GROUP_NAME" /> &lt;/Strong&gt;. Ukikubali, wanachama wote wa kundi wataweza kuchapisha kwenye printa.</translation>
@@ -4646,6 +4650,7 @@ Ungependa kuanza <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="7235737137505019098">Ufunguo wako wa usalama hauna nafasi ya kutosha ili kutumia akaunti nyingine zozote.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Maelezo</translation>
 <translation id="7240339475467890413">Ungependa kuunganishwa kwenye mtandaopepe mpya?</translation>
+<translation id="7240847845291869311">Mtoto wako angependa kuweka Akaunti ya G Suite for Education kwenye kifaa hiki. <ph name="LINK_BEGIN" />Ilani ya Faragha ya G Suite for Education<ph name="LINK_END" /> imekusudiwa kuwasaidia watumiaji na wazazi wanaotumia G Suite for Education kuelewa data ambayo bidhaa inakusanya, sababu za kuikusanya na tunachofanya nayo.</translation>
 <translation id="7241389281993241388">Tafadhali ingia kwenye <ph name="TOKEN_NAME" /> ili kuleta cheti cha mteja.</translation>
 <translation id="7241443820034350811">Ikiwa ufunguo wako wa usalama haujaorodheshwa, bonyeza vitufe vyake kwa angalau sekunde 5.</translation>
 <translation id="7243632151880336635">Futa na Uondoke kwenye Akaunti</translation>
@@ -6064,7 +6069,6 @@ Sidhani tovuti hii inapaswa kuzuiwa!</translation>
 <translation id="9055636786322918818">Wezesha usimbaji wa RC4. Hatua ya kutumia chaguo hili huongeza uwezekano wa hatari kwa kuwa misimbo ya RC4 si salama.</translation>
 <translation id="9056810968620647706">Hakuna zinazolingana zilizopatikana.</translation>
 <translation id="9057354806206861646">Sasisha ratiba</translation>
-<translation id="9058976525724291037">Mtoto wako angependa kuweka akaunti nyingine ya Google kwenye kifaa hiki. Akaunti za G Suite for Education ndizo tu zinaweza kuwekwa kwenye vifaa vinavyodhibitiwa na Family Link.</translation>
 <translation id="9062065967472365419">Nishangaze</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Hitilafu imepatikana kuanzia mstari wa <ph name="ERROR_LINE_START" /> hadi <ph name="ERROR_LINE_END" /></translation>

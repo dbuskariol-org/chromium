@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Modrá</translation>
 <translation id="1556537182262721003">Adresář rozšíření nelze přesunout do profilu.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Administrátoři G Suite pro vzdělávání určují, ke kterým službám Google mají uživatelé přihlášení k účtu G Suite pro vzdělávání přístup. Školní administrátoři mají povinnost poskytnout nebo získat k používání služeb nezletilými souhlas.
+
+    Údaje o prohlížení (včetně historie, záložek a hesel) budou uloženy v účtu Family Link, nikoliv ve školním účtu.
+
+    Vaše rodičovská nastavení služby Family Link budou platit i nadále. Pokud jste dříve nějakou aplikaci nebo web zablokovali, nebudete to muset dělat znovu.</translation>
 <translation id="1564414980088536597">Tento obrázek nelze použít. Vyberte jiný obrázek.</translation>
 <translation id="1566049601598938765">Web</translation>
 <translation id="15662109988763471">Zvolená tiskárna není k dispozici nebo není správně nainstalovaná. Zkontrolujte tiskárnu nebo vyberte jinou.</translation>
@@ -1947,7 +1952,6 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="3574210789297084292">Přihlaste se</translation>
 <translation id="3574917942258583917">Přesto anonymní režim ukončit?</translation>
 <translation id="3575121482199441727">Povolit pro tento web</translation>
-<translation id="3575919114596668130">Na zařízení se stále budou vztahovat vaše rodičovská nastavení služby Family Link. Pokud jste dříve nějakou aplikaci nebo web blokovali, nebudete to muset dělat znovu.</translation>
 <translation id="3576324189521867626">Úspěšně nainstalováno</translation>
 <translation id="3578594933904494462">Obsah této karty je sdílen.</translation>
 <translation id="357886715122934472">Uživatel &lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; chce sdílet tiskárnu &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; se skupinou, kterou vlastníte: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Pokud tuto akci přijmete, pomocí této tiskárny budou moci tisknout všichni členové skupiny.</translation>
@@ -4649,6 +4653,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="7235737137505019098">Na bezpečnostním klíči již není dost místa pro žádné další účty.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, podrobnosti</translation>
 <translation id="7240339475467890413">Připojit k novému hotspotu?</translation>
+<translation id="7240847845291869311">Vaše dítě chce do tohoto zařízení přidat účet Google G Suite pro vzdělávání. V <ph name="LINK_BEGIN" />upozornění ve věci ochrany soukromí v G Suite pro vzdělávání<ph name="LINK_END" /> najdou uživatelé G Suite pro vzdělávání a jejich rodiče informace o tom, jaké údaje tato služba shromažďuje, proč je shromažďuje a co se s nimi dělá.</translation>
 <translation id="7241389281993241388">Chcete-li importovat certifikát klienta, přihlaste se prosím do zařízení <ph name="TOKEN_NAME" />.</translation>
 <translation id="7241443820034350811">Pokud váš bezpečnostní klíč není uveden, alespoň 5 sekund podržte jeho tlačítko.</translation>
 <translation id="7243632151880336635">Vymazat a odhlásit se</translation>
@@ -6064,7 +6069,6 @@ Svůj soubor klíče uchovávejte na bezpečném místě. Budete jej potřebovat
 <translation id="9055636786322918818">Vynutit šifrování RC4. Použití této možnosti zvyšuje riziko, protože šifry RC4 nejsou bezpečné.</translation>
 <translation id="9056810968620647706">Nebyly nalezeny žádné shody.</translation>
 <translation id="9057354806206861646">Plán aktualizací</translation>
-<translation id="9058976525724291037">Vaše dítě chce na toto zařízení přidat další účet Google. Na zařízení spravovaná prostřednictvím služby Family Link lze přidávat pouze účty G Suite pro vzdělávání.</translation>
 <translation id="9062065967472365419">Překvapte mě</translation>
 <translation id="9062468308252555888">14×</translation>
 <translation id="9063208415146866933">Chyba na řádku <ph name="ERROR_LINE_START" /> až <ph name="ERROR_LINE_END" /></translation>

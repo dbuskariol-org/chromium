@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Blu</translation>
 <translation id="1556537182262721003">Impossibile spostare la directory dell'estensione nel profilo.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Gli amministratori di G Suite for Education stabiliscono a quali servizi Google possono accedere i loro utenti quando sono collegati a un account G Suite for Education. Gli amministratori scolastici devono fornire o esprimere il loro consenso per l'utilizzo dei servizi da parte degli utenti minorenni.
+
+    I dati di navigazione (inclusi cronologia, preferiti e password) verranno memorizzati nell'account Family Link e non nell'account della scuola.
+
+    Le impostazioni genitore di Family Link continueranno a essere applicate. Se in precedenza hai bloccato un'app o un sito, non sarà necessario che tu lo faccia di nuovo.</translation>
 <translation id="1564414980088536597">Impossibile utilizzare l'immagine. Scegline un'altra.</translation>
 <translation id="1566049601598938765">Sito web</translation>
 <translation id="15662109988763471">La stampante selezionata non è disponibile o non è installata correttamente. Controlla la stampante o prova a selezionarne un'altra.</translation>
@@ -1947,7 +1952,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="3574210789297084292">accedi</translation>
 <translation id="3574917942258583917">Vuoi uscire comunque dalla modalità di navigazione in incognito?</translation>
 <translation id="3575121482199441727">Consenti per questo sito</translation>
-<translation id="3575919114596668130">Le impostazioni genitore di Family Link continueranno a essere applicate. Se in precedenza hai bloccato un'app o un sito, non sarà necessario che tu lo faccia di nuovo.</translation>
 <translation id="3576324189521867626">Installata</translation>
 <translation id="3578594933904494462">I contenuti di questa scheda vengono condivisi.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; vuole condividere una stampante &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; con un gruppo gestito da te: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Se accetti, tutti i membri del gruppo potranno utilizzare la stampante.</translation>
@@ -4650,6 +4654,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="7235737137505019098">Sul token di sicurezza non c'è spazio a sufficienza per altri account.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, dettagli</translation>
 <translation id="7240339475467890413">Eseguire la connessione al nuovo hotspot?</translation>
+<translation id="7240847845291869311">Tuo figlio vuole aggiungere un Account Google G Suite for Education a questo dispositivo. L'<ph name="LINK_BEGIN" />Informativa sulla privacy di G Suite for Education<ph name="LINK_END" /> ha lo scopo di aiutare gli utenti di G Suite for Education e i genitori a comprendere quali dati vengono raccolti dal prodotto, perché vengono raccolti e come vengono utilizzati.</translation>
 <translation id="7241389281993241388">Accedi a <ph name="TOKEN_NAME" /> per importare il certificato client.</translation>
 <translation id="7241443820034350811">Se non vedi il tuo token di sicurezza, premi il pulsante del token per almeno cinque secondi.</translation>
 <translation id="7243632151880336635">Cancella ed esci</translation>
@@ -6065,7 +6070,6 @@ Conserva il file di chiave in un luogo sicuro. Ti servirà per creare nuove vers
 <translation id="9055636786322918818">Applica la crittografia RC4. Se scegli di utilizzare quest'opzione vai incontro a un rischio maggiore, in quanto le crittografie RC4 non sono sicure.</translation>
 <translation id="9056810968620647706">Nessuna corrispondenza trovata.</translation>
 <translation id="9057354806206861646">Aggiorna programmazione</translation>
-<translation id="9058976525724291037">Tuo figlio vuole aggiungere un altro Account Google a questo dispositivo. Ai dispositivi gestiti di Family Link è possibile aggiungere solo account G Suite for Education.</translation>
 <translation id="9062065967472365419">Sorprendimi</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Errore dalla riga <ph name="ERROR_LINE_START" /> alla riga <ph name="ERROR_LINE_END" /></translation>

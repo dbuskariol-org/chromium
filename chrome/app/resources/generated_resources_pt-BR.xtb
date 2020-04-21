@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Azul</translation>
 <translation id="1556537182262721003">Não foi possível mover o diretório de extensões para o perfil.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Os administradores do G Suite for Education determinam quais serviços do Google os usuários podem acessar enquanto estiverem conectados a uma conta do G Suite for Education. Os administradores da escola precisam fornecer ou receber permissão para o uso dos serviços por usuários menores de idade.
+
+    Os dados de navegação (incluindo histórico, favoritos e senhas) serão armazenados na conta do Family Link, e não na conta escolar.
+
+    As configurações de pai/mãe no Family Link serão mantidas. Se você tiver bloqueado um app ou site, não terá que fazer isso novamente.</translation>
 <translation id="1564414980088536597">Não é possível usar esta imagem. Escolha outra.</translation>
 <translation id="1566049601598938765">Website</translation>
 <translation id="15662109988763471">A impressora selecionada não está disponível ou não foi instalada corretamente. Verifique a impressora ou selecione outra.</translation>
@@ -1948,7 +1953,6 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="3574210789297084292">fazer login</translation>
 <translation id="3574917942258583917">Sair do modo de navegação anônima mesmo assim?</translation>
 <translation id="3575121482199441727">Permitir para este site</translation>
-<translation id="3575919114596668130">Suas configurações de pai/mãe no Family Link serão mantidas. Se você já tiver bloqueado um app ou site, não precisará fazer isso novamente.</translation>
 <translation id="3576324189521867626">Instalação concluída</translation>
 <translation id="3578594933904494462">O conteúdo desta guia está sendo compartilhado.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; deseja compartilhar uma impressora &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; com um grupo de sua propriedade: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Se você aceitar, todos os membros do grupo poderão imprimir pela impressora.</translation>
@@ -4653,6 +4657,7 @@ permanentemente excluídos assim que esse usuário for removido. Os websites vis
 <translation id="7235737137505019098">Sua chave de segurança não tem espaço suficiente para mais contas.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, detalhes</translation>
 <translation id="7240339475467890413">Conectar a um novo ponto de acesso?</translation>
+<translation id="7240847845291869311">A criança quer adicionar uma Conta do Google do G Suite for Education neste dispositivo. O <ph name="LINK_BEGIN" />Aviso de privacidade do G Suite for Education<ph name="LINK_END" /> tem a finalidade de ajudar os usuários e os pais deles a entender quais são os dados coletados pelo produto, o motivo da coleta e o que é feito com eles.</translation>
 <translation id="7241389281993241388">Faça login no <ph name="TOKEN_NAME" /> para importar o certificado do cliente.</translation>
 <translation id="7241443820034350811">Se sua chave de segurança não estiver na lista, pressione o botão dela por pelo menos cinco segundos.</translation>
 <translation id="7243632151880336635">Limpar e sair</translation>
@@ -6069,7 +6074,6 @@ Mantenha a sua chave de arquivo em um local seguro. Você precisará dela para c
 <translation id="9055636786322918818">Aplicar a codificação RC4. O uso dessa opção é mais arriscado, porque as criptografias RC4 não são seguras.</translation>
 <translation id="9056810968620647706">Nenhuma correspondência foi encontrada.</translation>
 <translation id="9057354806206861646">Atualizar programação</translation>
-<translation id="9058976525724291037">A criança quer adicionar outra Conta do Google a este dispositivo. Apenas contas do G Suite for Education podem ser adicionadas a dispositivos gerenciados pelo Family Link.</translation>
 <translation id="9062065967472365419">Surpreenda-me</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Erro da linha <ph name="ERROR_LINE_START" /> a <ph name="ERROR_LINE_END" /></translation>

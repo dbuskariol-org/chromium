@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Blau</translation>
 <translation id="1556537182262721003">No s'ha pogut desplaçar el directori d'extensions al perfil.</translation>
 <translation id="155865706765934889">Ratolí tàctil</translation>
+<translation id="1560763881671211335">Els administradors de G Suite for Education determinen a quins serveis de Google poden accedir els usuaris mentre tenen la sessió iniciada en un compte d'aquest producte. Els administradors dels centres educatius han de proporcionar o obtenir consentiment perquè els usuaris menors d'edat puguin utilitzar els serveis.
+
+    Les dades de navegació (inclosos l'historial, les adreces d'interès i les contrasenyes) no s'emmagatzemaran amb el compte de centre educatiu, sinó amb el de Family Link.
+
+    La configuració parental de Family Link es continuarà aplicant. Si anteriorment has bloquejat una aplicació o un lloc web, no ho hauràs de tornar a fer.</translation>
 <translation id="1564414980088536597">Aquesta imatge no es pot utilitzar. Tria'n una altra.</translation>
 <translation id="1566049601598938765">Lloc web</translation>
 <translation id="15662109988763471">La impressora seleccionada no està disponible o no s'ha instal·lat correctament. Comprova-la o prova de seleccionar-ne una altra.</translation>
@@ -1945,7 +1950,6 @@ Descripció: <ph name="LINUX_DESCRIPTION" /></translation>
 <translation id="3574210789297084292">inicia la sessió</translation>
 <translation id="3574917942258583917">Vols sortir del mode d'incògnit de totes maneres?</translation>
 <translation id="3575121482199441727">Permet per a aquest lloc web</translation>
-<translation id="3575919114596668130">La configuració parental de Family Link es continuarà aplicant. Si anteriorment has bloquejat una aplicació o un lloc web, no ho hauràs de tornar a fer.</translation>
 <translation id="3576324189521867626">S'ha instal·lat correctament</translation>
 <translation id="3578594933904494462">El contingut d'aquesta pestanya es comparteix.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; vol compartir una impressora &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; amb un dels vostres grups: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Si accepteu, tots els membres del grup la podran fer servir.</translation>
@@ -4650,6 +4654,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="7235737137505019098">La clau de seguretat no té prou espai per a més comptes.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, detalls</translation>
 <translation id="7240339475467890413">Vols connectar-te al punt d'accés Wi-Fi nou?</translation>
+<translation id="7240847845291869311">El teu fill vol afegir un Compte de Google per a G Suite for Education a aquest dispositiu. L'<ph name="LINK_BEGIN" />avís de privadesa de G Suite for Education<ph name="LINK_END" /> està dissenyat per ajudar els pares i els usuaris a entendre quines dades recull el producte, per què les recull i què s'hi fa.</translation>
 <translation id="7241389281993241388">Inicieu la sessió a <ph name="TOKEN_NAME" /> per importar el certificat de client.</translation>
 <translation id="7241443820034350811">Si no es mostra la teva clau de seguretat, prem-ne el botó durant 5 segons com a mínim.</translation>
 <translation id="7243632151880336635">Esborra i tanca la sessió</translation>
@@ -6066,7 +6071,6 @@ Deseu el fitxer de clau en una ubicació segura. El necessitareu per crear versi
 <translation id="9055636786322918818">Força l'encriptació RC4. L'ús d'aquesta opció augmenta el risc, ja que els xifratges RC4 no són segurs.</translation>
 <translation id="9056810968620647706">No s'ha trobat cap coincidència.</translation>
 <translation id="9057354806206861646">Actualitza la programació</translation>
-<translation id="9058976525724291037">El teu fill vol afegir un altre compte de Google a aquest dispositiu. Només es poden afegir comptes de G Suite for Education en dispositius gestionats per Family Link.</translation>
 <translation id="9062065967472365419">Sorprèn-me</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Error des de la línia <ph name="ERROR_LINE_START" /> fins a la <ph name="ERROR_LINE_END" /></translation>

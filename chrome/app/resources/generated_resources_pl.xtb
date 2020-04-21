@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Niebieski</translation>
 <translation id="1556537182262721003">Nie można przenieść katalogu rozszerzenia do profilu.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Administratorzy G Suite dla Szkół i Uczelni określają, z których usług Google mogą korzystać użytkownicy zalogowani na konto tej usługi. Administratorzy szkolni mają obowiązek okazania lub uzyskania zgody na używanie usług przez osoby nieletnie.
+
+    Dane przeglądania (w tym historia, zakładki i hasła) będą przechowywane na koncie Family Link, a nie na koncie szkolnym.
+
+    Nadal będą obowiązywać ustawienia rodzica w Family Link. Jeśli wcześniej jakaś aplikacja lub strona została przez Ciebie zablokowana, nie będzie trzeba blokować jej ponownie.</translation>
 <translation id="1564414980088536597">Nie można użyć tego obrazu. Wybierz inny.</translation>
 <translation id="1566049601598938765">Strona internetowa</translation>
 <translation id="15662109988763471">Wybrana drukarka jest niedostępna lub nieprawidłowo zainstalowana. Sprawdź ją lub wybierz inną.</translation>
@@ -1948,7 +1953,6 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="3574210789297084292">zaloguj się</translation>
 <translation id="3574917942258583917">Zamknąć tryb incognito mimo to?</translation>
 <translation id="3575121482199441727">Zezwalaj tej stronie</translation>
-<translation id="3575919114596668130">Twoje ustawienia rodzica będą nadal obowiązywać. Jeśli wcześniej jakaś aplikacja lub strona została przez Ciebie zablokowana, nie będzie trzeba blokować jej ponownie.</translation>
 <translation id="3576324189521867626">Zainstalowano</translation>
 <translation id="3578594933904494462">Treść tej karty jest udostępniana.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; chce udostępnić drukarkę &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; należącej do Ciebie grupie: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Jeśli się na to zgodzisz, wszyscy członkowie grupy będą mogli na niej drukować.</translation>
@@ -4651,6 +4655,7 @@ Możesz zarządzać ustawieniami konta, korzystając z aplikacji Family Link na
 <translation id="7235737137505019098">Na Twoim kluczu bezpieczeństwa nie ma wystarczającej ilości miejsca na kolejne konta.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, szczegóły</translation>
 <translation id="7240339475467890413">Połączyć z nowym hotspotem?</translation>
+<translation id="7240847845291869311">Dziecko chce dodać na tym urządzeniu konto G Suite dla Szkół i Uczelni. <ph name="LINK_BEGIN" />Informacje na temat ochrony prywatności w G Suite dla Szkół i Uczelni<ph name="LINK_END" /> mają pomóc użytkownikom tej usługi oraz rodzicom zrozumieć, jakie dane zbieramy w G Suite dla Szkół i Uczelni, dlaczego to robimy oraz do czego je wykorzystujemy.</translation>
 <translation id="7241389281993241388">Zaloguj się do urządzenia <ph name="TOKEN_NAME" />, aby zaimportować certyfikat klienta.</translation>
 <translation id="7241443820034350811">Jeśli Twojego klucza bezpieczeństwa nie ma na liście, przytrzymaj jego przycisk przez co najmniej 5 sekund.</translation>
 <translation id="7243632151880336635">Wyczyść i wyloguj</translation>
@@ -6067,7 +6072,6 @@ Przechowuj plik klucza w bezpiecznym miejscu. Będzie on potrzebny do utworzenia
 <translation id="9055636786322918818">Wymusza szyfrowanie RC4. Używanie tej opcji jest ryzykowne, ponieważ szyfrowanie RC4 nie zapewnia bezpieczeństwa.</translation>
 <translation id="9056810968620647706">Nie znaleziono żadnych dopasowań.</translation>
 <translation id="9057354806206861646">Harmonogram aktualizacji</translation>
-<translation id="9058976525724291037">Dziecko chce dodać na tym urządzeniu kolejne konto Google. Na urządzeniach zarządzanych w Family Link można dodawać wyłącznie konta G Suite dla Szkół i Uczelni.</translation>
 <translation id="9062065967472365419">Zaskocz mnie</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Błąd w wierszach od <ph name="ERROR_LINE_START" /> do <ph name="ERROR_LINE_END" /></translation>

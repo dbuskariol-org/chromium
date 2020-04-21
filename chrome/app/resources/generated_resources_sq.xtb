@@ -415,6 +415,11 @@
 <translation id="1555130319947370107">E kaltër</translation>
 <translation id="1556537182262721003">Direktoria e shtesës nuk mund të zhvendoset te profili.</translation>
 <translation id="155865706765934889">Blloku me prekje</translation>
+<translation id="1560763881671211335">Administratorët e "G Suite për arsimin" përcaktojnë se te cilat shërbime të Google mund të qasen përdoruesit e tyre ndërkohë që janë identifikuar në një llogari "G Suite për arsimin". Administratorëve të shkollave u kërkohet të japin ose të marrin miratimin për përdorimin e shërbimeve nga përdoruesit e tyre të mitur.
+
+    Të dhënat e shfletimit (duke përfshirë historikun, faqeshënuesit dhe fjalëkalimet) do të ruhen me llogarinë e Family Link dhe jo me llogarinë e shkollës.
+
+    Cilësimet e tua të prindit të Family Link do të zbatohen përsëri. Nëse e ke bllokuar më parë një aplikacion ose një sajt, nuk do të duhet ta bësh këtë përsëri.</translation>
 <translation id="1564414980088536597">Ky imazh nuk mund të përdoret. Zgjidh një imazh tjetër.</translation>
 <translation id="1566049601598938765">Sajti i uebit</translation>
 <translation id="15662109988763471">Printeri i zgjedhur nuk ofrohet ose nuk është instaluar si duhet. Kontrollo printerin ose provo të zgjedhësh një printer tjetër.</translation>
@@ -1945,7 +1950,6 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="3574210789297084292">identifikohu</translation>
 <translation id="3574917942258583917">Dëshiron të dalësh gjithsesi nga modaliteti "i fshehtë"?</translation>
 <translation id="3575121482199441727">Lejo për këtë sajt</translation>
-<translation id="3575919114596668130">Cilësimet e tua të prindit të Family Link do të zbatohen përsëri. Nëse e ke bllokuar më parë një aplikacion ose një sajt, nuk do të duhet ta bësh këtë përsëri.</translation>
 <translation id="3576324189521867626">U instalua me sukses</translation>
 <translation id="3578594933904494462">Përmbajtja e kësaj skede po ndahet.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; do të ndajë një printer &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; me një grup që ti zotëron: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Nëse pranon, të gjithë anëtarët e grupit do të mund të printojnë në printer.</translation>
@@ -4648,6 +4652,7 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="7235737137505019098">Çelësi yt i sigurisë nuk ka hapësirë të mjaftueshme për llogari të mëtejshme.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, detaje</translation>
 <translation id="7240339475467890413">Do të lidhesh me një zonë të re të qasjes në internet?</translation>
+<translation id="7240847845291869311">Fëmija yt do që të shtojë një "Llogari të Google G Suite për edukimin" te kjo pajisje. <ph name="LINK_BEGIN" />Njoftimi i privatësisë së "G Suite për edukimin"<ph name="LINK_END" /> ka për qëllim të ndihmojë përdoruesit e "G Suite për edukimin" dhe prindërit të kuptojnë se çfarë të dhënash produkti grumbullohen, pse grumbullohen dhe çfarë bëhet me to.</translation>
 <translation id="7241389281993241388">Identifikohu te <ph name="TOKEN_NAME" /> për të importuar certifikatën e klientit.</translation>
 <translation id="7241443820034350811">Nëse çelësi yt i sigurisë nuk është listuar, shtyp butonin e tij për të paktën 5 sekonda.</translation>
 <translation id="7243632151880336635">Pastro dhe dil</translation>
@@ -6062,7 +6067,6 @@ Mbaje skedarin e çelësit tënd në një vend të sigurt. Do të të duhet për
 <translation id="9055636786322918818">Zbato enkriptimin RC4. Përdorimi i këtij opsioni rrit rrezikun për ty, pasi shifrat RC4 nuk janë të sigurta.</translation>
 <translation id="9056810968620647706">Nuk u gjet asnjë përputhje.</translation>
 <translation id="9057354806206861646">Përditëso orarin</translation>
-<translation id="9058976525724291037">Fëmija yt dëshiron të shtojë një "Llogari tjetër të Google" në këtë pajisje. Vetëm llogaritë e "G Suite për edukimin" mund të shtohen te pajisjet e menaxhuara me Family Link.</translation>
 <translation id="9062065967472365419">Ma bëj surprizë</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Gabim nga rreshti <ph name="ERROR_LINE_START" /> deri në <ph name="ERROR_LINE_END" /></translation>

@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Asul</translation>
 <translation id="1556537182262721003">Hindi maililipat ang direktoryo ng extension papunta sa profile.</translation>
 <translation id="155865706765934889">Touchpad</translation>
+<translation id="1560763881671211335">Natutukoy ng mga administrator ng G Suite for Education kung aling mga serbisyo ng Google ang maa-access ng mga user nito habang naka-sign in sa G Suite for Education account. Kinakailangang magbigay o kumuha ng pahintulot ng mga administrator ng paaralan para sa paggamit sa mga serbisyo ng mga menor de edad na user nito.
+
+    Iso-store ang data mula sa pag-browse (kabilang ang history, mga bookmark, at password) sa Family Link account at hindi sa pampaaralang account.
+
+    Mailalapat pa rin ang mga setting bilang magulang sa Family Link. Kung nag-block ka na dati ng app o site, hindi mo na ito kakailanganing gawin ulit.</translation>
 <translation id="1564414980088536597">Hindi magagamit ang larawang ito. Pumili ng ibang larawan.</translation>
 <translation id="1566049601598938765">Website</translation>
 <translation id="15662109988763471">Ang napiling printer ay hindi available o hindi naka-install nang tama. Tingnan ang iyong printer o subukang pumili ng isa pang printer.</translation>
@@ -1948,7 +1953,6 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="3574210789297084292">mag-sign in</translation>
 <translation id="3574917942258583917">Umalis pa rin sa incognito mode?</translation>
 <translation id="3575121482199441727">Payagan para sa site na ito</translation>
-<translation id="3575919114596668130">Mailalapat pa rin ang iyong mga setting bilang magulang sa Family Link. Kung nag-block ka dati ng app o site, hindi mo na iyon kailangang ulitin.</translation>
 <translation id="3576324189521867626">Matagumpay na na-install</translation>
 <translation id="3578594933904494462">Ibinabahagi ang nilalaman ng tab na ito.</translation>
 <translation id="357886715122934472">Gustong magbahagi ng &lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; ng printer na &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; sa isang pangkat na pagmamay-ari mo: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Kung tatanggapin mo, makakapag-print ang lahat ng miyembro ng pangkat sa printer.</translation>
@@ -4651,6 +4655,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="7235737137505019098">Walang sapat na espasyo para sa higit pang account ang iyong security key.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Mga Detalye</translation>
 <translation id="7240339475467890413">Kumonekta sa bagong hotspot?</translation>
+<translation id="7240847845291869311">Gustong magdagdag ng iyong anak ng G Suite for Education Google Account sa device na ito. Ang <ph name="LINK_BEGIN" />Notification ng Privacy ng G Suite for Education<ph name="LINK_END" /> ay naglalayong makatulong sa mga user ng at magulang sa G Suite for Education na maunawaan kung anong data ang kinokolekta ng produkto, bakit ito kinokolekta, at ano ang ginagawa rito.</translation>
 <translation id="7241389281993241388">Mangyaring mag-sign in sa <ph name="TOKEN_NAME" /> upang i-import ang certificate ng client.</translation>
 <translation id="7241443820034350811">Kung hindi nakalista ang iyong security key, pindutin ang button nito nang hindi bababa sa 5 segundo.</translation>
 <translation id="7243632151880336635">I-clear at Mag-sign Out</translation>
@@ -6069,7 +6074,6 @@ Ilagay ang iyong key file sa ligtas na lugar. Kailangan mo ito upang lumikha ng 
 <translation id="9055636786322918818">Ipatupad ang RC4 encryption. Magiging mas mapanganib para sa iyo kapag ginamit ang opsyong ito, dahil hindi secure ang mga RC4 cipher.</translation>
 <translation id="9056810968620647706">Walang nakitang tugma.</translation>
 <translation id="9057354806206861646">I-update ang iskedyul</translation>
-<translation id="9058976525724291037">Gustong magdagdag ng iyong anak ng isa pang Google account sa device na ito. Mga G Suite for Education account lang ang puwedeng idagdag sa mga device na pinapamahalaan ng Family Link.</translation>
 <translation id="9062065967472365419">Sorpresahin ako</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Error mula sa linya <ph name="ERROR_LINE_START" /> hanggang <ph name="ERROR_LINE_END" /></translation>

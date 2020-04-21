@@ -1945,7 +1945,6 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="3574210789297084292">acceder</translation>
 <translation id="3574917942258583917">¿Deseas salir del modo de navegación incógnito de todas formas?</translation>
 <translation id="3575121482199441727">Permitir para este sitio</translation>
-<translation id="3575919114596668130">Se seguirá aplicando tu configuración parental de Family Link. Si antes habías bloqueado una app o un sitio, no tendrás que volver a hacerlo.</translation>
 <translation id="3576324189521867626">Se instaló correctamente</translation>
 <translation id="3578594933904494462">Se está compartiendo el contenido de esta pestaña.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; quiere compartir una impresora &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; con un grupo del cual eres propietario: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Si aceptas, todos los miembros del grupo podrán usar esa impresora para imprimir.</translation>
@@ -6064,7 +6063,6 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
 <translation id="9055636786322918818">Aplica la encriptación RC4. Esta opción es riesgosa, ya que los cifrados RC4 son inseguros.</translation>
 <translation id="9056810968620647706">No se encontraron coincidencias.</translation>
 <translation id="9057354806206861646">Cronograma de actualizaciones</translation>
-<translation id="9058976525724291037">Tu hijo quiere agregar otra Cuenta de Google a este dispositivo. Solo se pueden agregar cuentas de G Suite for Education a los dispositivos administrados con Family Link.</translation>
 <translation id="9062065967472365419">Sorpréndeme</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Se produjo un error de la línea <ph name="ERROR_LINE_START" /> a la <ph name="ERROR_LINE_END" /></translation>

@@ -415,6 +415,11 @@
 <translation id="1555130319947370107">蓝色</translation>
 <translation id="1556537182262721003">无法将扩展程序目录移动到个人资料中。</translation>
 <translation id="155865706765934889">触控板</translation>
+<translation id="1560763881671211335">G Suite 教育版管理员有权决定其用户在登录 G Suite 教育版帐号后可以访问哪些 Google 服务。学校管理员必须提供同意声明或征得同意，才能允许其未成年人用户使用相关服务。
+
+    浏览数据（包括历史记录、书签和密码）将存储在 Family Link 帐号中，而不是学校帐号中。
+
+    您的 Family Link 家长设置仍然适用。如果您先前已屏蔽某个应用或网站，则无需再次执行此操作。</translation>
 <translation id="1564414980088536597">无法使用此图片。请另选一张图片。</translation>
 <translation id="1566049601598938765">网站</translation>
 <translation id="15662109988763471">所选打印机无法使用或未正确安装。请检查打印机，或尝试选择其他打印机。</translation>
@@ -1944,7 +1949,6 @@
 <translation id="3574210789297084292">登录</translation>
 <translation id="3574917942258583917">仍要退出无痕模式？</translation>
 <translation id="3575121482199441727">允许此网站显示通知</translation>
-<translation id="3575919114596668130">您的 Family Link 家长设置仍然适用。如果您之前已屏蔽某个应用或网站，则无需再次执行此操作。</translation>
 <translation id="3576324189521867626">已成功安装</translation>
 <translation id="3578594933904494462">此标签页的内容正在共享中。</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt;希望与您拥有的以下群组共享打印机&lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt;：&lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;。如果您接受，该群组的所有成员都可以将内容发送到该打印机进行打印。</translation>
@@ -4646,6 +4650,7 @@
 <translation id="7235737137505019098">您的安全密钥没有足够的空间来存储任何其他帐号。</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />，详细信息</translation>
 <translation id="7240339475467890413">要连接到新的热点吗？</translation>
+<translation id="7240847845291869311">您的孩子想在此设备上添加一个 G Suite 教育版 Google 帐号。<ph name="LINK_BEGIN" />G Suite 教育版隐私权声明<ph name="LINK_END" />旨在帮助 G Suite 教育版用户和家长了解此产品会收集哪些数据、为什么收集这些数据以及会利用这些数据做什么。</translation>
 <translation id="7241389281993241388">请登录“<ph name="TOKEN_NAME" />”，导入客户端证书。</translation>
 <translation id="7241443820034350811">如果您的安全密钥未被列出，请按住安全密钥上的按钮至少 5 秒钟。</translation>
 <translation id="7243632151880336635">清除并退出</translation>
@@ -6061,7 +6066,6 @@
 <translation id="9055636786322918818">强制执行 RC4 加密。选中此选项会令您面临更大的风险，因为 RC4 加密不安全。</translation>
 <translation id="9056810968620647706">未找到匹配项。</translation>
 <translation id="9057354806206861646">更新时间表</translation>
-<translation id="9058976525724291037">您的孩子想在此设备上再添加一个 Google 帐号。在通过 Family Link 管理的设备中，只能添加 G Suite 教育版帐号。</translation>
 <translation id="9062065967472365419">随机更换</translation>
 <translation id="9062468308252555888">14 倍</translation>
 <translation id="9063208415146866933">第 <ph name="ERROR_LINE_START" /> 行到第 <ph name="ERROR_LINE_END" /> 行存在错误</translation>

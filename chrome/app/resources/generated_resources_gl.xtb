@@ -417,6 +417,11 @@
 <translation id="1555130319947370107">Azul</translation>
 <translation id="1556537182262721003">Non se puido mover o directorio de extensións ao perfil.</translation>
 <translation id="155865706765934889">Panel táctil</translation>
+<translation id="1560763881671211335">Os administradores de G Suite for Education determinan a que servizos de Google poden acceder os seus usuarios mentres estes últimos teñen a sesión iniciada nunha conta de G Suite for Education. É necesario que os administradores dos centros educativos proporcionen ou obteñan consentimento para que os menores utilicen os servizos.
+
+    Os datos de navegación (entre os que se inclúen o historial, os marcadores e os contrasinais) almacenaranse coa conta de Family Link, non coa do centro educativo.
+
+    Seguirá aplicándose a configuración parental de Family Link. No caso de que bloqueases unha aplicación ou un sitio, non terás que volver repetir o proceso.</translation>
 <translation id="1564414980088536597">Esta imaxe non se pode usar. Escolle unha diferente.</translation>
 <translation id="1566049601598938765">Sitio web</translation>
 <translation id="15662109988763471">A impresora seleccionada non está dispoñible ou non está instalada correctamente. Compróbaa ou selecciona outra.</translation>
@@ -1947,7 +1952,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="3574210789297084292">iniciar sesión</translation>
 <translation id="3574917942258583917">Queres saír do modo de incógnito de todas formas?</translation>
 <translation id="3575121482199441727">Permitir para este sitio</translation>
-<translation id="3575919114596668130">Seguirá aplicándose a configuración parental de Family Link. No caso de que bloqueases unha aplicación ou un sitio, non terás que volver repetir o proceso.</translation>
 <translation id="3576324189521867626">A instalación realizouse correctamente</translation>
 <translation id="3578594933904494462">Estase compartindo o contido desta pestana.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; quere compartir unha impresora &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; cun grupo da túa propiedade: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Se aceptas, todos os membros do grupo poderán imprimir na impresora.</translation>
@@ -4650,6 +4654,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="7235737137505019098">A túa chave de seguranza non ten suficiente espazo para máis contas.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, detalles</translation>
 <translation id="7240339475467890413">Queres conectarte á nova zona wifi?</translation>
+<translation id="7240847845291869311">O teu fillo ou filla quere engadir a este dispositivo unha Conta de Google de G Suite for Education. O <ph name="LINK_BEGIN" />Aviso de privacidade de G Suite for Education<ph name="LINK_END" /> pretende axudarlles aos usuarios de G Suite for Education e aos pais a entender os datos que recompila o produto, así como o que se fai con eles.</translation>
 <translation id="7241389281993241388">Inicia sesión en <ph name="TOKEN_NAME" /> para importar o certificado de cliente.</translation>
 <translation id="7241443820034350811">Se non se indica a chave de seguranza, preme o botón da chave durante 5 minutos polo menos.</translation>
 <translation id="7243632151880336635">Borrar e pechar sesión</translation>
@@ -6065,7 +6070,6 @@ Mantén o ficheiro de clave nun lugar seguro, xa que o precisarás para crear no
 <translation id="9055636786322918818">Forza a encriptación RC4. Esta opción aumenta o risco, porque as cifraxes de RC4 non son seguras.</translation>
 <translation id="9056810968620647706">Non se encontraron coincidencias.</translation>
 <translation id="9057354806206861646">Programa de actualización</translation>
-<translation id="9058976525724291037">O teu fillo quere engadir outra conta de Google a este dispositivo. Só se poden engadir contas de G Suite for Education aos dispositivos xestionados con Family Link.</translation>
 <translation id="9062065967472365419">Sorpréndeme</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Produciuse un erro da liña <ph name="ERROR_LINE_START" /> á <ph name="ERROR_LINE_END" /></translation>

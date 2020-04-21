@@ -416,6 +416,11 @@
 <translation id="1555130319947370107">Mavi</translation>
 <translation id="1556537182262721003">Artırmanı birbaşa qovluğa daşıya bilmədi.</translation>
 <translation id="155865706765934889">Taçped</translation>
+<translation id="1560763881671211335">İstifadəçilər G Suite for Education hesabına daxil olduqları zaman hansı Google xidmətlərinə giriş imkanlarının olacağını G Suite for Education administratorları müəyyənləşdirir. Məktəb administratorlarından azyaşlı istifadəçiləri tərəfindən xidmətlərin istifadəsi üzrə razılıq vermək və ya razılıq əldə etmək tələb edilir.
+
+    Baxış datası (tarixçə, əlfəcinlər və parollar daxil olmaqla) məktəb hesabı ilə deyil, Family Link hesabı ilə saxlanılacaq.
+
+    Family Link valideyn ayarlarınız yenə də tətbiq ediləcək. Əvvəlcədən tətbiq və ya sayt bloklamısınızsa, bunu yenidən edə bilməyəcəksiniz.</translation>
 <translation id="1564414980088536597">Bu şəkil istifadə oluna bilməz. Fərqli şəkil seçin.</translation>
 <translation id="1566049601598938765">Veb səhifə</translation>
 <translation id="15662109988763471">Seçilmiş printer əlçatan deyil və ya düzgün quraşdırılmayıb. Printerinizi yoxlayın və ya başqa printer seçin.</translation>
@@ -1943,7 +1948,6 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="3574210789297084292">giriş</translation>
 <translation id="3574917942258583917">İstənilən halda gizli rejimdən çıxılsın?</translation>
 <translation id="3575121482199441727">Bu sayt üçün icazə verin</translation>
-<translation id="3575919114596668130">Family Link'in valideyn ayarları yenə də tətbiq olunacaq. Daha əvvəl tətbiq və ya saytı bloklamısınızsa, bunu yenidən etməyə ehtiyac yoxdur.</translation>
 <translation id="3576324189521867626">Uğurla quraşdırıldı</translation>
 <translation id="3578594933904494462">Bu tab kontenti paylaşılır.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; sahib olduğunuz qrup ilə &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; printerini paylaşmaq istəyir: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Qəbul edirsinizsə, bütün qrup üzvləri printerdə çap edə biləcək.</translation>
@@ -4642,6 +4646,7 @@ Cihazda Family Link tətbiqini quraşdırmaqla bu hesabın ayarlarını idarə e
 <translation id="7235737137505019098">Daha çox hesab əlavə etmək üçün güvənlik açarında kifayət qədər boş yer yoxdur.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, Detallar</translation>
 <translation id="7240339475467890413">Yeni hotspota qoşulsun?</translation>
+<translation id="7240847845291869311">Uşağınız bu cihaza G Suite for Education Google Hesabı əlavə etmək istəyir. <ph name="LINK_BEGIN" />G Suite for Education Məxfilik Bildirişi<ph name="LINK_END" /> G Suite for Education istifadəçilərinə və valideynlərə məhsulun hansı datanı topladığını, həmin datanın nəyə görə toplanıldığını və onunla nə edildiyini başa düşməkdə kömək etmək üçün nəzərdə tutulub.</translation>
 <translation id="7241389281993241388">Klient sertifikatını import etmək üçün <ph name="TOKEN_NAME" /> üzərinə daxil olun.</translation>
 <translation id="7241443820034350811">Təhlükəsizlik açarı siyahıda yoxdursa, ən azı 5 saniyə ərzində düyməyə basın.</translation>
 <translation id="7243632151880336635">Silin və çıxış edin</translation>
@@ -6054,7 +6059,6 @@ Bu saytın blok edilməsini düşünmürəm!</translation>
 <translation id="9055636786322918818">RC4 şifrələməsini tətbiq edin. RC4 şifrələri təhlükəli olduğu üçün bu seçimdən istifadə etmək riski artırır.</translation>
 <translation id="9056810968620647706">Heç bir uyğunluq tapılmadı.</translation>
 <translation id="9057354806206861646">Cədvəli güncəlləyin</translation>
-<translation id="9058976525724291037">Övladınız bu cihaza başqa Google hesabını əlavə etmək istəyir. Yalnız Təhsil üçün G Suite hesabları Family Link ilə idarə edilən cihazlara əlavə edilə bilər.</translation>
 <translation id="9062065967472365419">Məni təəccübləndirin</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933"><ph name="ERROR_LINE_START" /> - <ph name="ERROR_LINE_END" /> üzrə xəta baş verdi</translation>

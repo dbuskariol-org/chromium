@@ -1945,7 +1945,6 @@
 <translation id="3574210789297084292">साइन इन गर्नुहोस्</translation>
 <translation id="3574917942258583917">जे भए पनि इन्कोग्निटो मोडबाट बाहिर निस्कने हो?</translation>
 <translation id="3575121482199441727">यो साइटलाई अनुमति दिनुहोस्</translation>
-<translation id="3575919114596668130">तपाईंले अभिभावकका रूपमा Family Link मा तय गर्नुभएका सेटिङ अझै पनि लागू हुने छन्। तपाईंले यसअघि कुनै अनुप्रयोग वा साइटमाथि रोक लगाउनुभएको थियो भने तपाईंले उक्त कार्य फेरि गरिराख्नु पर्दैन।</translation>
 <translation id="3576324189521867626">सफलतापूर्वक स्थापना गरियो</translation>
 <translation id="3578594933904494462">यस ट्याबको सामग्री साझाँ गरिदेँछ।</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; ले तपाइँले स्वामित्व गरेको एक समूहसँग एक मुद्रक &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; साझा गर्न चाहन्छ: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;। यदि तपाइँले स्वीकार गर्नुभयो भने, सबै समूह सदस्यहरूले मुद्रकमा प्रिन्टिङ गर्न सक्नेछ।</translation>
@@ -6061,7 +6060,6 @@
 <translation id="9055636786322918818">RC4 इन्क्रिप्सन लागू गर्नुहोस्। RC4 साइफरहरू असुरक्षित हुने हुनाले यो विकल्पको प्रयोग गर्नुले तपाईंको जोखिममा वृद्धि हुन्छ।</translation>
 <translation id="9056810968620647706">जोडाहरू भेटिएन।</translation>
 <translation id="9057354806206861646">अद्यावधिक तालिका</translation>
-<translation id="9058976525724291037">तपाईंका बच्चा यो यन्त्रमा अर्को Google खाता थप्न चाहन्छन्। Family Link मार्फत व्यवस्थापन गरिएका यन्त्रमा G Suite for Education खाताहरू मात्र थप्न सकिन्छ।</translation>
 <translation id="9062065967472365419">मलाई आश्चर्यचकित तुल्याउनुहोस्</translation>
 <translation id="9062468308252555888">१४ गुणा</translation>
 <translation id="9063208415146866933">हरफ <ph name="ERROR_LINE_START" /> देखि हरफ <ph name="ERROR_LINE_END" /> सम्म त्रुटि छ</translation>

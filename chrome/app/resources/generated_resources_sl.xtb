@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Modra</translation>
 <translation id="1556537182262721003">Imenika razširitve ni bilo mogoče premakniti v profil.</translation>
 <translation id="155865706765934889">Sledilna ploščica</translation>
+<translation id="1560763881671211335">Skrbniki storitve G Suite for Education določajo, do katerih Googlovih storitev lahko dostopajo njihovi uporabniki, medtem ko so prijavljeni v račun za G Suite for Education. Šolski skrbniki morajo navesti ali pridobiti soglasje za storitve, ki jih uporabljajo njihovi mladoletni uporabniki.
+
+    Podatki brskanja (vključno z zgodovino, zaznamki in gesli) bodo shranjeni v računu Family Linka in ne v šolskem računu.
+
+    Starševske nastavitve v Family Linku bodo še vedno v veljavi. Če ste prej blokirali aplikacijo ali spletno mesto, vam tega ne bo več treba še enkrat storiti.</translation>
 <translation id="1564414980088536597">Te slike ni mogoče uporabiti. Izberite drugo sliko.</translation>
 <translation id="1566049601598938765">Spletno mesto</translation>
 <translation id="15662109988763471">Izbrani tiskalnik ni na voljo ali ni pravilno nameščen. Preverite tiskalnik ali izberite drugega.</translation>
@@ -1948,7 +1953,6 @@ Nastavitve tega računa je mogoče upravljati z namestitvijo aplikacije Family L
 <translation id="3574210789297084292">prijava</translation>
 <translation id="3574917942258583917">Ali želite vseeno zapustiti način brez beleženja zgodovine?</translation>
 <translation id="3575121482199441727">Dovoli za to spletno mesto</translation>
-<translation id="3575919114596668130">Starševske nastavitve v aplikaciji Family Link bodo še vedno v veljavi. Če ste prej blokirali aplikacijo ali spletno mesto, vam tega ne bo več treba še enkrat storiti.</translation>
 <translation id="3576324189521867626">Uspešno nameščeno</translation>
 <translation id="3578594933904494462">Vsebina tega zavihka je v skupni rabi.</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; želi souporabljati tiskalnik &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; s skupino v vaši lasti: &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Če sprejmete, bodo lahko tiskalnik uporabljali vsi člani skupine.</translation>
@@ -4653,6 +4657,7 @@ Poskrbite, da ne boste razkrili morebitnih občutljivih podatkov.</translation>
 <translation id="7235737137505019098">Na varnostnem ključu ni dovolj prostora za dodatne račune.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, podrobnosti</translation>
 <translation id="7240339475467890413">Se želite povezati z novo dostopno točko?</translation>
+<translation id="7240847845291869311">Vaš otrok želi v to napravo dodati račun Google za G Suite for Education. Namen <ph name="LINK_BEGIN" />obvestila o zasebnosti za G Suite for Education<ph name="LINK_END" /> je, da uporabnikom storitve G Suite for Education in staršem pomagamo razumeti, katere podatke storitev zbira, zakaj jih zbira in kako jih uporablja.</translation>
 <translation id="7241389281993241388">Prijavite se v <ph name="TOKEN_NAME" />, da uvozite potrdilo odjemalca.</translation>
 <translation id="7241443820034350811">Če vaš varnostni ključ ni naveden, pritisnite gumb na njem in ga pridržite vsaj 5 sekund.</translation>
 <translation id="7243632151880336635">Brisanje in odjava</translation>
@@ -6069,7 +6074,6 @@ Datoteko s ključem shranite na varnem. Potrebovali jo boste za izdelavo novih r
 <translation id="9055636786322918818">Vsili šifriranje RC4. Če uporabite to možnosti, je tveganje večje, saj šifriranje RC4 ni varno.</translation>
 <translation id="9056810968620647706">Ni ujemanj.</translation>
 <translation id="9057354806206861646">Posodobitev razporeda</translation>
-<translation id="9058976525724291037">Vaš otrok želi v to napravo dodati drug račun Google. Za naprave, ki so upravljane z aplikacijo Family Link, je mogoče dodati samo račune za G Suite for Education.</translation>
 <translation id="9062065967472365419">Preseneti me</translation>
 <translation id="9062468308252555888">14 x</translation>
 <translation id="9063208415146866933">Napaka od vrstice <ph name="ERROR_LINE_START" /> do <ph name="ERROR_LINE_END" /></translation>

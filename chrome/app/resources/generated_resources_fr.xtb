@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">Bleu</translation>
 <translation id="1556537182262721003">Impossible de déplacer le répertoire d'extensions dans le profil.</translation>
 <translation id="155865706765934889">Pavé tactile</translation>
+<translation id="1560763881671211335">Les administrateurs de G Suite for Education déterminent les services Google auxquels leurs utilisateurs peuvent accéder lorsqu'ils sont connectés à un compte G Suite for Education. Pour les utilisateurs mineurs, les administrateurs de l'établissement scolaire doivent donner ou obtenir une autorisation avant de permettre l'accès à ces services.
+
+    Les données de navigation (y compris l'historique, les favoris et les mots de passe) sont enregistrées dans le compte Family Link et non dans le compte scolaire.
+
+    Les paramètres parentaux Family Link restent en vigueur. Si vous avez précédemment bloqué une application ou un site, vous n'avez pas à les bloquer une deuxième fois.</translation>
 <translation id="1564414980088536597">Impossible d'utiliser cette image. Sélectionnez-en une autre.</translation>
 <translation id="1566049601598938765">Site Web</translation>
 <translation id="15662109988763471">L'imprimante sélectionnée n'est pas disponible ou n'est pas installée correctement. Vérifiez votre imprimante ou sélectionnez-en une autre.</translation>
@@ -1948,7 +1953,6 @@ Vous pouvez gérer les paramètres de ce compte en installant l'application Fami
 <translation id="3574210789297084292">connexion</translation>
 <translation id="3574917942258583917">Voulez-vous vraiment quitter le mode navigation privée ?</translation>
 <translation id="3575121482199441727">Autoriser pour ce site</translation>
-<translation id="3575919114596668130">Les paramètres parentaux Family Link restent en vigueur. Si vous avez précédemment bloqué une application ou un site, vous n'avez pas à les bloquer une deuxième fois.</translation>
 <translation id="3576324189521867626">L'application a bien été installée.</translation>
 <translation id="3578594933904494462">Le contenu de cet onglet est en cours de partage</translation>
 <translation id="357886715122934472">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; souhaite partager une imprimante &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; avec un groupe que vous gérez : &lt;strong&gt;<ph name="GROUP_NAME" />&lt;/strong&gt;. Si vous acceptez, tous les membres du groupe seront en mesure d'imprimer sur cette imprimante.</translation>
@@ -4652,6 +4656,7 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="7235737137505019098">L'espace de stockage de votre clé de sécurité est insuffisant pour y enregistrer d'autres comptes.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, détails</translation>
 <translation id="7240339475467890413">Se connecter au nouveau point d'accès ?</translation>
+<translation id="7240847845291869311">Votre enfant souhaite ajouter un compte Google G Suite for Education sur cet appareil. L'<ph name="LINK_BEGIN" />Avis de confidentialité G Suite for Education<ph name="LINK_END" /> a pour but d'aider les parents et les utilisateurs de G Suite for Education à mieux comprendre quelles données sont collectées par ce produit, à quelles fins elles sont collectées et comment elles sont utilisées.</translation>
 <translation id="7241389281993241388">Connectez-vous à <ph name="TOKEN_NAME" /> pour importer le certificat client.</translation>
 <translation id="7241443820034350811">Si votre clé de sécurité ne figure pas dans la liste, appuyez sur le bouton de la clé pendant au moins cinq secondes.</translation>
 <translation id="7243632151880336635">Effacer et se déconnecter</translation>
@@ -6068,7 +6073,6 @@ Conservez votre fichier de clé en lieu sûr. Vous en aurez besoin lors de la cr
 <translation id="9055636786322918818">Appliquez le chiffrement RC4. L'activation de cette option est risquée, car les algorithmes de chiffrement RC4 ne sont pas sécurisés.</translation>
 <translation id="9056810968620647706">Aucune correspondance trouvée</translation>
 <translation id="9057354806206861646">Calendrier des mises à jour</translation>
-<translation id="9058976525724291037">Votre enfant souhaite ajouter un compte Google à cet appareil. Seuls les comptes G Suite for Education peuvent être ajoutés aux appareils gérés via Family Link.</translation>
 <translation id="9062065967472365419">Me surprendre</translation>
 <translation id="9062468308252555888">14x</translation>
 <translation id="9063208415146866933">Erreur de la ligne <ph name="ERROR_LINE_START" /> à la ligne <ph name="ERROR_LINE_END" /></translation>
