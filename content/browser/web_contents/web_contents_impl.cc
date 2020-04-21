@@ -1942,6 +1942,14 @@ void WebContentsImpl::ReattachToOuterWebContentsFrame() {
   GetMainFrame()->UpdateAXTreeData();
 }
 
+void WebContentsImpl::DidActivatePortal(WebContents* predecessor_contents) {
+  DCHECK(predecessor_contents);
+  NotifyInsidePortal(false);
+  GetDelegate()->WebContentsBecamePortal(predecessor_contents);
+  for (auto& observer : observers_)
+    observer.DidActivatePortal(predecessor_contents);
+}
+
 void WebContentsImpl::NotifyInsidePortal(bool inside_portal) {
   SendPageMessage(new PageMsg_SetInsidePortal(MSG_ROUTING_NONE, inside_portal));
 }
