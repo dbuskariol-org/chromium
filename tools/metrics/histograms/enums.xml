@@ -50565,6 +50565,9 @@ Called by update_net_trust_anchors.py.-->
              locally"/>
   <int value="10"
       label="Opened automatically / Notification about compromised passwords"/>
+  <int value="11"
+      label="Opened automatically / Proposal to move local password to
+             account store"/>
 </enum>
 
 <enum name="PasswordBubbleSignInPromoDismissalReason">
