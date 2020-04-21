@@ -912,7 +912,7 @@ void AssistantManagerServiceImpl::OnMediaControlAction(
   }
 
   if (action_name == kStopTrackClientOp) {
-    media_controller_->Stop();
+    media_controller_->Suspend();
     return;
   }
   // TODO(llin): Handle media.SEEK_RELATIVE.
