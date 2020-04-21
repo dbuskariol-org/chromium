@@ -2182,6 +2182,17 @@ deps = {
       'dep_type': 'cipd',
   },
 
+  'src/third_party/android_deps/libs/androidx_tvprovider_tvprovider': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/androidx_tvprovider_tvprovider',
+              'version': 'version:1.0.0-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
   'src/third_party/android_deps/libs/androidx_vectordrawable_vectordrawable': {
       'packages': [
           {
