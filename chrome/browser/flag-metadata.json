@@ -1304,7 +1304,7 @@
   {
     "name": "enable-cros-virtual-keyboard-bordered-key",
     "owners": [ "essential-inputs-team@google.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 90
   },
   {
     "name": "enable-cros-virtual-keyboard-floating-resizable",
@@ -2555,7 +2555,7 @@
   {
     "name": "handwriting-gesture",
     "owners": [ "essential-inputs-team@google.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 90
   },
   {
     "name": "happiness-tracking-surveys-for-desktop",
