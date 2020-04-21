@@ -135,8 +135,8 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/autofill_page/payments_section.js"
            use_base_dir="false"
            compress="false" type="BINDATA" />
-  <include name="IDR_SETTINGS_BASIC_PAGE_BASIC_PAGE_M_JS"
-           file="${root_gen_dir}/chrome/browser/resources/settings/basic_page/basic_page.m.js"
+  <include name="IDR_SETTINGS_BASIC_PAGE_BASIC_PAGE_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/basic_page/basic_page.js"
            use_base_dir="false"
            compress="false" type="BINDATA"
            preprocess="true" />
