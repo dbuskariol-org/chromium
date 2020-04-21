@@ -230,7 +230,7 @@ if (!is_android && !is_mac) {
 
         # Needed to use the master_preferences functions
         "//chrome/installer/util:with_no_strings",
-        "//content/public/app:both",
+        "//content/public/app",
         "//content/public/common:service_names",
 
         # For headless mode.
@@ -354,7 +354,7 @@ if (is_win) {
 
     deps += [
       ":child_dependencies",
-      "//content/public/app:both",
+      "//content/public/app",
       "//headless:headless_renderer",
     ]
 
@@ -929,7 +929,7 @@ if (is_win) {
       "//chrome/common/profiler",
       "//components/crash/core/app",
       "//components/policy:generated",
-      "//content/public/app:both",
+      "//content/public/app",
       "//content/public/common:service_names",
       "//headless:headless_shell_lib",
       "//services/service_manager/embedder",
@@ -1485,7 +1485,7 @@ if (is_android) {
       "//components/safe_browsing:buildflags",
       "//components/safe_browsing/android:safe_browsing_mobile",
       "//components/services/heap_profiling",
-      "//content/public/app:both",
+      "//content/public/app",
       "//content/public/common:service_names",
       "//services/service_manager/embedder",
     ]
