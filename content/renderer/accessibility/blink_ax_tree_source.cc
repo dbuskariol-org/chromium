@@ -1151,9 +1151,13 @@ void BlinkAXTreeSource::SerializeNode(WebAXObject src,
     if (src.HasAriaAttribute())
       dst->AddBoolAttribute(ax::mojom::BoolAttribute::kHasAriaAttribute, true);
 
-    // Frames and iframes.
+    // Frames and iframes:
+    // If there are children, the fallback content has been rendered and should
+    // be used instead. For example, the fallback content may be rendered if
+    // there was an error loading an <object>. In that case, only expose the
+    // children. A node should not have both children and a child tree.
     WebFrame* frame = WebFrame::FromFrameOwnerElement(element);
-    if (frame)
+    if (frame && !src.ChildCount())
       dst->child_routing_id = RenderFrame::GetRoutingIdForWebFrame(frame);
   }
 
