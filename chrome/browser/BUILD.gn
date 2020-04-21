@@ -2128,6 +2128,8 @@ jumbo_static_library("browser") {
     "//components/security_state/core",
     "//components/send_tab_to_self",
     "//components/services/heap_profiling",
+    "//components/services/language_detection/public/cpp",
+    "//components/services/language_detection/public/mojom",
     "//components/services/patch/content",
     "//components/services/quarantine",
     "//components/services/quarantine/public/mojom",
