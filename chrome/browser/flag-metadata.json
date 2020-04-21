@@ -3182,7 +3182,7 @@
   {
     "name": "omnibox-search-engine-logo",
     "owners": [ "wylieb", "chrome-omnibox-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 90
   },
   {
     "name": "omnibox-short-bookmark-suggestions",
