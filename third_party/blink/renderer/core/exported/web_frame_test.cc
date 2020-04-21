@@ -2069,7 +2069,7 @@ TEST_F(WebFrameTest,
   ASSERT_NE(nullptr, element);
   EXPECT_EQ(String("oldValue"), element->innerText());
 
-  WebGestureEvent gesture_event(WebInputEvent::kGestureTap,
+  WebGestureEvent gesture_event(WebInputEvent::Type::kGestureTap,
                                 WebInputEvent::kNoModifiers,
                                 WebInputEvent::GetStaticTimeStampForTests(),
                                 WebGestureDevice::kTouchscreen);
@@ -4397,10 +4397,11 @@ TEST_F(WebFrameTest, TabKeyCursorMoveTriggersOneSelectionChange) {
   WebViewImpl* web_view = web_view_helper.InitializeAndLoad(
       base_url_ + "editable_elements.html", &counter);
 
-  WebKeyboardEvent tab_down(WebInputEvent::kKeyDown,
+  WebKeyboardEvent tab_down(WebInputEvent::Type::kKeyDown,
                             WebInputEvent::kNoModifiers,
                             WebInputEvent::GetStaticTimeStampForTests());
-  WebKeyboardEvent tab_up(WebInputEvent::kKeyUp, WebInputEvent::kNoModifiers,
+  WebKeyboardEvent tab_up(WebInputEvent::Type::kKeyUp,
+                          WebInputEvent::kNoModifiers,
                           WebInputEvent::GetStaticTimeStampForTests());
   tab_down.dom_key = ui::DomKey::TAB;
   tab_up.dom_key = ui::DomKey::TAB;
@@ -6236,7 +6237,7 @@ class CompositedSelectionBoundsTest
                          3);
     }
 
-    WebGestureEvent gesture_event(WebInputEvent::kGestureTap,
+    WebGestureEvent gesture_event(WebInputEvent::Type::kGestureTap,
                                   WebInputEvent::kNoModifiers,
                                   WebInputEvent::GetStaticTimeStampForTests(),
                                   WebGestureDevice::kTouchscreen);
@@ -9745,7 +9746,8 @@ TEST_F(WebFrameTest, FrameWidgetTest) {
 
   helper.GetWebView()->Resize(WebSize(1000, 1000));
 
-  WebGestureEvent event(WebInputEvent::kGestureTap, WebInputEvent::kNoModifiers,
+  WebGestureEvent event(WebInputEvent::Type::kGestureTap,
+                        WebInputEvent::kNoModifiers,
                         WebInputEvent::GetStaticTimeStampForTests(),
                         WebGestureDevice::kTouchscreen);
   event.SetPositionInWidget(gfx::PointF(20, 20));
@@ -10086,10 +10088,10 @@ class WebFrameOverscrollTest
     // TODO(wjmaclean): Make sure that touchpad device is only ever used for
     // gesture scrolling event types.
     event.SetPositionInWidget(gfx::PointF(100, 100));
-    if (type == WebInputEvent::kGestureScrollUpdate) {
+    if (type == WebInputEvent::Type::kGestureScrollUpdate) {
       event.data.scroll_update.delta_x = delta_x;
       event.data.scroll_update.delta_y = delta_y;
-    } else if (type == WebInputEvent::kGestureScrollBegin) {
+    } else if (type == WebInputEvent::Type::kGestureScrollBegin) {
       event.data.scroll_begin.delta_x_hint = delta_x;
       event.data.scroll_begin.delta_y_hint = delta_y;
     }
@@ -10100,7 +10102,7 @@ class WebFrameOverscrollTest
                    float delta_x_hint,
                    float delta_y_hint) {
     web_view_helper->GetWebView()->MainFrameWidget()->HandleInputEvent(
-        GenerateEvent(WebInputEvent::kGestureScrollBegin, delta_x_hint,
+        GenerateEvent(WebInputEvent::Type::kGestureScrollBegin, delta_x_hint,
                       delta_y_hint));
   }
 
@@ -10108,12 +10110,13 @@ class WebFrameOverscrollTest
                     float delta_x,
                     float delta_y) {
     web_view_helper->GetWebView()->MainFrameWidget()->HandleInputEvent(
-        GenerateEvent(WebInputEvent::kGestureScrollUpdate, delta_x, delta_y));
+        GenerateEvent(WebInputEvent::Type::kGestureScrollUpdate, delta_x,
+                      delta_y));
   }
 
   void ScrollEnd(frame_test_helpers::WebViewHelper* web_view_helper) {
     web_view_helper->GetWebView()->MainFrameWidget()->HandleInputEvent(
-        GenerateEvent(WebInputEvent::kGestureScrollEnd));
+        GenerateEvent(WebInputEvent::Type::kGestureScrollEnd));
   }
 };
 
@@ -11388,13 +11391,13 @@ TEST_F(WebFrameTest, ScrollBeforeLayoutDoesntCrash) {
   document->documentElement()->SetLayoutObject(nullptr);
 
   WebGestureEvent begin_event(
-      WebInputEvent::kGestureScrollBegin, WebInputEvent::kNoModifiers,
+      WebInputEvent::Type::kGestureScrollBegin, WebInputEvent::kNoModifiers,
       WebInputEvent::GetStaticTimeStampForTests(), WebGestureDevice::kTouchpad);
   WebGestureEvent update_event(
-      WebInputEvent::kGestureScrollUpdate, WebInputEvent::kNoModifiers,
+      WebInputEvent::Type::kGestureScrollUpdate, WebInputEvent::kNoModifiers,
       WebInputEvent::GetStaticTimeStampForTests(), WebGestureDevice::kTouchpad);
   WebGestureEvent end_event(
-      WebInputEvent::kGestureScrollEnd, WebInputEvent::kNoModifiers,
+      WebInputEvent::Type::kGestureScrollEnd, WebInputEvent::kNoModifiers,
       WebInputEvent::GetStaticTimeStampForTests(), WebGestureDevice::kTouchpad);
 
   // Try GestureScrollEnd and GestureScrollUpdate first to make sure that not
@@ -11452,7 +11455,7 @@ TEST_F(WebFrameTest, MouseOverDifferntNodeClearsTooltip) {
 
   // Mouse over link. Mouse cursor should be hand.
   WebMouseEvent mouse_move_over_link_event(
-      WebInputEvent::kMouseMove,
+      WebInputEvent::Type::kMouseMove,
       gfx::PointF(div1_tag->OffsetLeft() + 5, div1_tag->OffsetTop() + 5),
       gfx::PointF(div1_tag->OffsetLeft() + 5, div1_tag->OffsetTop() + 5),
       WebPointerProperties::Button::kNoButton, 0, WebInputEvent::kNoModifiers,
@@ -11472,7 +11475,7 @@ TEST_F(WebFrameTest, MouseOverDifferntNodeClearsTooltip) {
   Element* div2_tag = document->getElementById("div2");
 
   WebMouseEvent mouse_move_event(
-      WebInputEvent::kMouseMove,
+      WebInputEvent::Type::kMouseMove,
       gfx::PointF(div2_tag->OffsetLeft() + 5, div2_tag->OffsetTop() + 5),
       gfx::PointF(div2_tag->OffsetLeft() + 5, div2_tag->OffsetTop() + 5),
       WebPointerProperties::Button::kNoButton, 0, WebInputEvent::kNoModifiers,
@@ -11714,26 +11717,26 @@ TEST_F(WebFrameSimTest, ScrollToEndBubblingCrash) {
   // Focus the iframe.
   WebView().AdvanceFocus(false);
 
-  WebKeyboardEvent key_event(WebInputEvent::kRawKeyDown,
+  WebKeyboardEvent key_event(WebInputEvent::Type::kRawKeyDown,
                              WebInputEvent::kNoModifiers,
                              WebInputEvent::GetStaticTimeStampForTests());
   key_event.windows_key_code = VKEY_END;
 
   // Scroll the iframe to the end.
-  key_event.SetType(WebInputEvent::kRawKeyDown);
+  key_event.SetType(WebInputEvent::Type::kRawKeyDown);
   WebView().MainFrameWidget()->HandleInputEvent(
       WebCoalescedInputEvent(key_event));
-  key_event.SetType(WebInputEvent::kKeyUp);
+  key_event.SetType(WebInputEvent::Type::kKeyUp);
   WebView().MainFrameWidget()->HandleInputEvent(
       WebCoalescedInputEvent(key_event));
 
   Compositor().BeginFrame();
 
   // End key should now bubble from the iframe up to the main viewport.
-  key_event.SetType(WebInputEvent::kRawKeyDown);
+  key_event.SetType(WebInputEvent::Type::kRawKeyDown);
   WebView().MainFrameWidget()->HandleInputEvent(
       WebCoalescedInputEvent(key_event));
-  key_event.SetType(WebInputEvent::kKeyUp);
+  key_event.SetType(WebInputEvent::Type::kKeyUp);
   WebView().MainFrameWidget()->HandleInputEvent(
       WebCoalescedInputEvent(key_event));
 }
@@ -12576,7 +12579,7 @@ bool TestSelectAll(const std::string& html) {
   web_view->SetInitialFocus(false);
   RunPendingTasks();
 
-  WebMouseEvent mouse_event(WebInputEvent::kMouseDown,
+  WebMouseEvent mouse_event(WebInputEvent::Type::kMouseDown,
                             WebInputEvent::kNoModifiers,
                             WebInputEvent::GetStaticTimeStampForTests());
 
@@ -12616,7 +12619,7 @@ TEST_F(WebFrameTest, ContextMenuDataSelectedText) {
 
   web_view->MainFrameImpl()->ExecuteCommand(WebString::FromUTF8("SelectAll"));
 
-  WebMouseEvent mouse_event(WebInputEvent::kMouseDown,
+  WebMouseEvent mouse_event(WebInputEvent::Type::kMouseDown,
                             WebInputEvent::kNoModifiers,
                             WebInputEvent::GetStaticTimeStampForTests());
 
@@ -12645,7 +12648,7 @@ TEST_F(WebFrameTest, ContextMenuDataPasswordSelectedText) {
 
   web_view->MainFrameImpl()->ExecuteCommand(WebString::FromUTF8("SelectAll"));
 
-  WebMouseEvent mouse_event(WebInputEvent::kMouseDown,
+  WebMouseEvent mouse_event(WebInputEvent::Type::kMouseDown,
                             WebInputEvent::kNoModifiers,
                             WebInputEvent::GetStaticTimeStampForTests());
 
@@ -12677,7 +12680,7 @@ TEST_F(WebFrameTest, ContextMenuDataNonLocatedMenu) {
   web_view->SetInitialFocus(false);
   RunPendingTasks();
 
-  WebMouseEvent mouse_event(WebInputEvent::kMouseDown,
+  WebMouseEvent mouse_event(WebInputEvent::Type::kMouseDown,
                             WebInputEvent::kNoModifiers,
                             WebInputEvent::GetStaticTimeStampForTests());
 
