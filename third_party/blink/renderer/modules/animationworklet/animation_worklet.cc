@@ -22,8 +22,8 @@ int NextId() {
 
 namespace blink {
 
-AnimationWorklet::AnimationWorklet(Document* document)
-    : Worklet(document), worklet_id_(NextId()), last_animation_id_(0) {}
+AnimationWorklet::AnimationWorklet(LocalDOMWindow& window)
+    : Worklet(window), worklet_id_(NextId()), last_animation_id_(0) {}
 
 AnimationWorklet::~AnimationWorklet() = default;
 
