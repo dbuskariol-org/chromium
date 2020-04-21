@@ -3251,7 +3251,6 @@ crbug.com/626703 [ Win ] external/wpt/webxr/xrWebGLLayer_opaque_framebuffer_sten
 crbug.com/626703 [ Linux ] external/wpt/uievents/order-of-events/focus-events/focus-management-expectations.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/uievents/order-of-events/focus-events/focus-management-expectations.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/uievents/order-of-events/focus-events/focus-management-expectations.html [ Timeout ]
-crbug.com/1073060 [ Linux ] external/wpt/webxr/webxr_feature_policy.https.html [ Timeout Crash ]
 crbug.com/626703 [ Mac ] external/wpt/webxr/webxr_feature_policy.https.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/webxr/webxr_feature_policy.https.html [ Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/webrtc/RTCPeerConnection-perfect-negotiation.https.html [ Failure Timeout ]
@@ -6799,3 +6798,6 @@ crbug.com/1042694 virtual/form-controls-refresh-disabled/fast/forms/form-control
 
 # QUIC reordered versions to prefer IETF QUIC
 crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
+
+# Sheriff 2020-04-21
+crbug.com/1073133 [ Linux ] external/wpt/webxr/webxr_feature_policy.https.html [ Pass Failure Timeout Crash ]
