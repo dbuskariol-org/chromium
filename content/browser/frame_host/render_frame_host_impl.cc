@@ -4894,9 +4894,27 @@ CanCommitStatus RenderFrameHostImpl::CanCommitOriginAndUrl(
     return CanCommitStatus::CANNOT_COMMIT_URL;
   }
 
-  // TODO(creis): We should also check for WebUI pages here.  Also, when the
-  // out-of-process iframes implementation is ready, we should check for
-  // cross-site URLs that are not allowed to commit in this process.
+  // Verify that if this RenderFrameHost is for a WebUI it is not committing a
+  // URL which is not allowed in a WebUI process.
+  if (!NavigatorImpl::CheckWebUIRendererDoesNotDisplayNormalURL(
+          this, url,
+          /* is_renderer_initiated_check */ true)) {
+    // TODO(nasko): Once this is known to not happen in reality, change the
+    // return value to CanCommitStatus::CANNOT_COMMIT_URL and remove the
+    // instrumentation.
+    base::debug::ScopedCrashKeyString scoped_url(
+        base::debug::AllocateCrashKeyString("disallowed_url",
+                                            base::debug::CrashKeySize::Size256),
+        url.possibly_invalid_spec());
+
+    base::debug::ScopedCrashKeyString scoped_process_lock(
+        base::debug::AllocateCrashKeyString("site_lock",
+                                            base::debug::CrashKeySize::Size256),
+        ChildProcessSecurityPolicyImpl::GetInstance()
+            ->GetOriginLock(process_->GetID())
+            .possibly_invalid_spec());
+    base::debug::DumpWithoutCrashing();
+  }
 
   // MHTML subframes can supply URLs at commit time that do not match the
   // process lock. For example, it can be either "cid:..." or arbitrary URL at
