@@ -815,8 +815,8 @@ public class VrShellDelegate
             }
         };
 
-        SimpleConfirmInfoBarBuilder.create(tab, listener,
-                InfoBarIdentifier.VR_FEEDBACK_INFOBAR_ANDROID,
+        SimpleConfirmInfoBarBuilder.create(tab.getWebContents(), listener,
+                InfoBarIdentifier.VR_FEEDBACK_INFOBAR_ANDROID, tab.getContext(),
                 org.chromium.chrome.vr.R.drawable.vr_services,
                 ContextUtils.getApplicationContext().getString(
                         org.chromium.chrome.vr.R.string.vr_shell_feedback_infobar_description),
@@ -1009,8 +1009,8 @@ public class VrShellDelegate
                 return false;
             }
         };
-        SimpleConfirmInfoBarBuilder.create(tab, listener,
-                InfoBarIdentifier.VR_SERVICES_UPGRADE_ANDROID,
+        SimpleConfirmInfoBarBuilder.create(tab.getWebContents(), listener,
+                InfoBarIdentifier.VR_SERVICES_UPGRADE_ANDROID, mActivity,
                 org.chromium.chrome.vr.R.drawable.vr_services, infobarText, buttonText, null, null,
                 true);
     }

@@ -74,8 +74,8 @@ public class ChromeWindow extends ActivityWindowAndroid {
         Tab tab = activity != null ? ((ChromeActivity) activity).getActivityTab() : null;
 
         if (tab != null) {
-            SimpleConfirmInfoBarBuilder.create(
-                    tab, InfoBarIdentifier.WINDOW_ERROR_INFOBAR_DELEGATE_ANDROID, error, false);
+            SimpleConfirmInfoBarBuilder.create(tab.getWebContents(),
+                    InfoBarIdentifier.WINDOW_ERROR_INFOBAR_DELEGATE_ANDROID, error, false);
         } else {
             super.showCallbackNonExistentError(error);
         }

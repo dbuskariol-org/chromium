@@ -114,8 +114,8 @@ public class ModuleInstallUi {
 
         String text = String.format(context.getString(R.string.module_install_failure_text),
                 context.getResources().getString(mModuleTitleStringId));
-        SimpleConfirmInfoBarBuilder.create(mTab, listener,
-                InfoBarIdentifier.MODULE_INSTALL_FAILURE_INFOBAR_ANDROID,
+        SimpleConfirmInfoBarBuilder.create(mTab.getWebContents(), listener,
+                InfoBarIdentifier.MODULE_INSTALL_FAILURE_INFOBAR_ANDROID, context,
                 R.drawable.ic_error_outline_googblue_24dp, text,
                 context.getString(R.string.try_again), context.getString(R.string.cancel),
                 /* linkText = */ null, /* autoExpire = */ true);

@@ -76,7 +76,7 @@ public class UpdateInfoBarController implements Destroyable {
         Tab tab = mActivity.getActivityTabProvider().get();
         if (tab == null) return;
 
-        SimpleConfirmInfoBarBuilder.create(tab,
+        SimpleConfirmInfoBarBuilder.create(tab.getWebContents(),
                 new SimpleConfirmInfoBarBuilder.Listener() {
                     @Override
                     public void onInfoBarDismissed() {}
@@ -92,7 +92,7 @@ public class UpdateInfoBarController implements Destroyable {
                         return false;
                     }
                 },
-                InfoBarIdentifier.INLINE_UPDATE_READY_INFOBAR_ANDROID,
+                InfoBarIdentifier.INLINE_UPDATE_READY_INFOBAR_ANDROID, mActivity,
                 R.drawable.infobar_chrome /* drawableId */,
                 mActivity.getString(R.string.inline_update_infobar_ready_message) /* message */,
                 null /* primaryText */, null /* secondaryText */,
@@ -106,7 +106,7 @@ public class UpdateInfoBarController implements Destroyable {
         Tab tab = mActivity.getActivityTabProvider().get();
         if (tab == null) return;
 
-        SimpleConfirmInfoBarBuilder.create(tab,
+        SimpleConfirmInfoBarBuilder.create(tab.getWebContents(),
                 new SimpleConfirmInfoBarBuilder.Listener() {
                     @Override
                     public void onInfoBarDismissed() {}
@@ -122,7 +122,7 @@ public class UpdateInfoBarController implements Destroyable {
                         return false;
                     }
                 },
-                InfoBarIdentifier.INLINE_UPDATE_FAILED_INFOBAR_ANDROID,
+                InfoBarIdentifier.INLINE_UPDATE_FAILED_INFOBAR_ANDROID, mActivity,
                 R.drawable.infobar_chrome /* drawableId */,
                 mActivity.getString(R.string.inline_update_infobar_failed_message) /* message */,
                 mActivity.getString(R.string.try_again) /* primaryText */,

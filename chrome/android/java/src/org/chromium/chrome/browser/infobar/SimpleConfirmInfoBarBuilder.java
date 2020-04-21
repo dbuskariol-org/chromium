@@ -4,13 +4,13 @@
 
 package org.chromium.chrome.browser.infobar;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.content_public.browser.WebContents;
 
 /**
  * Builds and shows a basic ConfirmInfoBar for code that works almost entirely in Java.
@@ -53,22 +53,24 @@ public class SimpleConfirmInfoBarBuilder {
      *
      * Consider using snackbars instead of this function for ephemeral messages.
      *
-     * @param tab Tab to attach the infobar to.
+     * @param webContents WebContents for a Tab to attach the infobar to.
      * @param infobarTypeIdentifier Unique ID defined in the C++ InfoBarDelegate::InfoBarIdentifier.
      * @param message Message displayed to the user.
      * @param autoExpire Whether the infobar disappears on navigation.
      */
-    public static void create(
-            Tab tab, int infobarTypeIdentifier, String message, boolean autoExpire) {
-        create(tab, null, infobarTypeIdentifier, 0, message, null, null, null, autoExpire);
+    public static void create(WebContents webContents, int infobarTypeIdentifier, String message,
+            boolean autoExpire) {
+        create(webContents, null, infobarTypeIdentifier, null, 0, message, null, null, null,
+                autoExpire);
     }
 
     /**
      * Creates a simple infobar to prompt the user.
      *
-     * @param tab Tab to attach the infobar to.
+     * @param webContents WebContents for a Tab to attach the infobar to.
      * @param listener Alerted when the user interacts with the infobar.
      * @param infobarTypeIdentifier Unique ID defined in the C++ InfoBarDelegate::InfoBarIdentifier.
+     * @param context Context for loading bitmap referred by drawableId.
      * @param drawableId Resource ID of the icon representing the infobar.
      * @param message Message displayed to the user.
      * @param primaryText String shown on the primary ConfirmInfoBar button.
@@ -76,14 +78,14 @@ public class SimpleConfirmInfoBarBuilder {
      * @param linkText String shown as the link text on the ConfirmInfoBar.
      * @param autoExpire Whether the infobar disappears on navigation.
      */
-    public static void create(Tab tab, Listener listener, int infobarTypeIdentifier, int drawableId,
-            String message, String primaryText, String secondaryText, String linkText,
-            boolean autoExpire) {
-        Activity activity = tab.getWindowAndroid().getActivity().get();
-        Bitmap drawable = activity == null || drawableId == 0 ? null
-                : BitmapFactory.decodeResource(activity.getResources(), drawableId);
-        SimpleConfirmInfoBarBuilderJni.get().create(tab, infobarTypeIdentifier, drawable, message,
-                primaryText, secondaryText, linkText, autoExpire, listener);
+    public static void create(WebContents webContents, Listener listener, int infobarTypeIdentifier,
+            Context context, int drawableId, String message, String primaryText,
+            String secondaryText, String linkText, boolean autoExpire) {
+        Bitmap drawable = context == null || drawableId == 0
+                ? null
+                : BitmapFactory.decodeResource(context.getResources(), drawableId);
+        SimpleConfirmInfoBarBuilderJni.get().create(webContents, infobarTypeIdentifier, drawable,
+                message, primaryText, secondaryText, linkText, autoExpire, listener);
     }
 
     @CalledByNative
@@ -103,9 +105,9 @@ public class SimpleConfirmInfoBarBuilder {
 
     @NativeMethods
     interface Natives {
-        void create(Tab tab, int infobarTypeIdentifier, Bitmap drawable, String message,
-                String primaryText, String secondaryText, String linkText, boolean autoExpire,
-                Object listener);
+        void create(WebContents webContents, int infobarTypeIdentifier, Bitmap drawable,
+                String message, String primaryText, String secondaryText, String linkText,
+                boolean autoExpire, Object listener);
     }
 }
 
