@@ -9365,6 +9365,10 @@ be describing additional metrics about the same event.
 <event name="SameSiteDifferentSchemeRequest">
   <owner>bingler@chromium.org</owner>
   <metric name="SameSiteContextWithSchemes" enum="SameSiteCookieContext">
+    <obsolete>
+      Removed Apr 2020 as this metric doesn't capture the correct information.
+      https://crbug.com/1066231
+    </obsolete>
     <summary>
       An enum that records the type of same-site context if a cookie marked with
       SameSite=Lax or SameSite=Strict is sent across schemes on a request. E.x.:
@@ -9376,6 +9380,10 @@ be describing additional metrics about the same event.
 <event name="SameSiteDifferentSchemeResponse">
   <owner>bingler@chromium.org</owner>
   <metric name="SameSiteContextWithSchemes" enum="SameSiteCookieContext">
+    <obsolete>
+      Removed Apr 2020 as this metric doesn't capture the correct information.
+      https://crbug.com/1066231
+    </obsolete>
     <summary>
       An enum that records the type of same-site context if a cookie marked with
       SameSite=Lax or SameSite=Strict is set across schemes on a response. E.x.:
