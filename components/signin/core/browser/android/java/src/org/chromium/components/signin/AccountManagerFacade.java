@@ -95,22 +95,6 @@ public interface AccountManagerFacade {
     }
 
     /**
-     * Returns the account if it exists; null if account doesn't exists or an error occurs
-     * while getting account list.
-     */
-    @AnyThread
-    default Account getAccountFromName(String accountName) {
-        String canonicalName = AccountUtils.canonicalizeName(accountName);
-        List<Account> accounts = tryGetGoogleAccounts();
-        for (Account account : accounts) {
-            if (AccountUtils.canonicalizeName(account.name).equals(canonicalName)) {
-                return account;
-            }
-        }
-        return null;
-    }
-
-    /**
      * @return Whether or not there is an account authenticator for Google accounts.
      */
     @AnyThread

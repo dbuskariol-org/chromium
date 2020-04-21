@@ -101,7 +101,8 @@ public final class ProfileOAuth2TokenServiceDelegate
             return null;
         }
 
-        Account account = mAccountManagerFacade.getAccountFromName(username);
+        Account account = AccountUtils.findAccountByName(
+                mAccountManagerFacade.tryGetGoogleAccounts(), username);
         if (account == null) {
             Log.e(TAG, "Account not found for provided username.");
             return null;
@@ -276,7 +277,9 @@ public final class ProfileOAuth2TokenServiceDelegate
         // ProfileOAuth2TokenServiceDelegate which is expected to be called in the UI thread
         // synchronously.
         try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
-            return mAccountManagerFacade.getAccountFromName(accountName) != null;
+            return AccountUtils.findAccountByName(
+                           mAccountManagerFacade.tryGetGoogleAccounts(), accountName)
+                    != null;
         }
     }
 
