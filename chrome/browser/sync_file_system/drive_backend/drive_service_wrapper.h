@@ -40,7 +40,7 @@ class DriveServiceWrapper : public base::SupportsWeakPtr<DriveServiceWrapper> {
       const std::string& resource_id,
       const google_apis::DownloadActionCallback& download_action_callback,
       const google_apis::GetContentCallback& get_content_callback,
-      const google_apis::ProgressCallback& progress_callback);
+      google_apis::ProgressCallback progress_callback);
 
   void GetAboutResource(google_apis::AboutResourceCallback callback);
 

@@ -167,7 +167,7 @@ google_apis::CancelCallback BatchRequestConfigurator::MultipartUploadNewFile(
     const base::FilePath& local_file_path,
     const UploadNewFileOptions& options,
     FileResourceCallback callback,
-    const google_apis::ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(!callback.is_null());
 
@@ -194,7 +194,7 @@ BatchRequestConfigurator::MultipartUploadExistingFile(
     const base::FilePath& local_file_path,
     const UploadExistingFileOptions& options,
     FileResourceCallback callback,
-    const google_apis::ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(!callback.is_null());
 
@@ -504,7 +504,7 @@ CancelCallback DriveAPIService::DownloadFile(
     const std::string& resource_id,
     const DownloadActionCallback& download_action_callback,
     const GetContentCallback& get_content_callback,
-    const ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!download_action_callback.is_null());
   // get_content_callback may be null.
@@ -700,7 +700,7 @@ CancelCallback DriveAPIService::ResumeUpload(
     const std::string& content_type,
     const base::FilePath& local_file_path,
     UploadRangeCallback callback,
-    const ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!callback.is_null());
 
@@ -730,7 +730,7 @@ CancelCallback DriveAPIService::MultipartUploadNewFile(
     const base::FilePath& local_file_path,
     const drive::UploadNewFileOptions& options,
     FileResourceCallback callback,
-    const google_apis::ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!callback.is_null());
 
@@ -752,7 +752,7 @@ CancelCallback DriveAPIService::MultipartUploadExistingFile(
     const base::FilePath& local_file_path,
     const drive::UploadExistingFileOptions& options,
     FileResourceCallback callback,
-    const google_apis::ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!callback.is_null());
 

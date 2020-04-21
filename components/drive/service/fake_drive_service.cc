@@ -762,7 +762,7 @@ CancelCallback FakeDriveService::DownloadFile(
     const std::string& resource_id,
     const DownloadActionCallback& download_action_callback,
     const GetContentCallback& get_content_callback,
-    const ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   base::ThreadRestrictions::ScopedAllowIO allow_io;
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!download_action_callback.is_null());
@@ -1164,7 +1164,7 @@ CancelCallback FakeDriveService::ResumeUpload(
     const std::string& content_type,
     const base::FilePath& local_file_path,
     UploadRangeCallback callback,
-    const ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(callback);
 
@@ -1291,7 +1291,7 @@ CancelCallback FakeDriveService::MultipartUploadNewFile(
     const base::FilePath& local_file_path,
     const UploadNewFileOptions& options,
     FileResourceCallback callback,
-    const ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   CallResumeUpload* const call_resume_upload = new CallResumeUpload();
   call_resume_upload->service = weak_ptr_factory_.GetWeakPtr();
   call_resume_upload->content_type = content_type;
@@ -1316,7 +1316,7 @@ CancelCallback FakeDriveService::MultipartUploadExistingFile(
     const base::FilePath& local_file_path,
     const UploadExistingFileOptions& options,
     FileResourceCallback callback,
-    const ProgressCallback& progress_callback) {
+    ProgressCallback progress_callback) {
   CallResumeUpload* const call_resume_upload = new CallResumeUpload();
   call_resume_upload->service = weak_ptr_factory_.GetWeakPtr();
   call_resume_upload->content_type = content_type;
