@@ -5396,41 +5396,76 @@ be describing additional metrics about the same event.
     Event recorded when RequestMediaKeySystemAccess() is called as part of
     Encrypted Media Extensions (EME) API.
   </summary>
-  <metric name="IsAdFrame">
+  <metric name="IsAdFrame" enum="Boolean">
     <summary>
       Whether the frame is an ad frame.
     </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
-  <metric name="IsCrossOrigin">
+  <metric name="IsCrossOrigin" enum="Boolean">
     <summary>
       Whether the frame is Cross-Origin to the main frame.
     </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
-  <metric name="IsTopFrame">
+  <metric name="IsTopFrame" enum="Boolean">
     <summary>
       Whether the frame is the main frame.
     </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
   <metric name="KeySystem">
     <summary>
       The key system passed in requestMediaKeySystemAccess() call.
     </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
-  <metric name="VideoCapabilities">
+  <metric name="VideoCapabilities" enum="Boolean">
     <summary>
       Whether there are any &quot;videoCapabilities&quot;.
     </summary>
   </metric>
-  <metric name="VideoCapabilities.HasEmptyRobustness">
+  <metric name="VideoCapabilities.HasEmptyRobustness" enum="Boolean">
     <summary>
       Whether there are any &quot;videoCapabilities&quot; with empty robustness.
     </summary>
   </metric>
-  <metric name="VideoCapabilities.HasHwSecureAllRobustness">
+  <metric name="VideoCapabilities.HasHwSecureAllRobustness" enum="Boolean">
     <summary>
       Whether there are any &quot;videoCapabilities&quot; with robustness being
       &quot;HW_SECURE_ALL&quot;.
     </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
   </metric>
 </event>
 
