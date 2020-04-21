@@ -195,6 +195,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kTestDefaultDisabled,
     &kTestDefaultEnabled,
     &kTrustedWebActivityNewDisclosure,
+    &kTrustedWebActivityLocationDelegation,
     &kTrustedWebActivityPostMessage,
     &kStartSurfaceAndroid,
     &kUmaBackgroundSessions,
@@ -573,6 +574,9 @@ const base::Feature kTestDefaultEnabled{"TestDefaultEnabled",
 
 const base::Feature kTrustedWebActivityNewDisclosure{
     "TrustedWebActivityNewDisclosure", base::FEATURE_DISABLED_BY_DEFAULT};
+
+const base::Feature kTrustedWebActivityLocationDelegation{
+    "TrustedWebActivityLocationDelegation", base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kTrustedWebActivityPostMessage{
     "TrustedWebActivityPostMessage", base::FEATURE_DISABLED_BY_DEFAULT};
