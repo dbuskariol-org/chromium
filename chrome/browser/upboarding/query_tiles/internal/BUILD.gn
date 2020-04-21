@@ -30,6 +30,8 @@ source_set("internal") {
     "tile_group.h",
     "tile_info_fetcher.cc",
     "tile_info_fetcher.h",
+    "tile_manager.cc",
+    "tile_manager.h",
     "tile_service_impl.cc",
     "tile_service_impl.h",
   ]
@@ -59,6 +61,7 @@ source_set("unit_tests") {
     "query_tile_store_unittest.cc",
     "tile_group_unittest.cc",
     "tile_info_fetcher_unittest.cc",
+    "tile_manager_unittest.cc",
   ]
 
   deps = [

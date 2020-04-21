@@ -9,6 +9,7 @@
 #include <string>
 #include <utility>
 
+#include "base/time/time.h"
 #include "url/gurl.h"
 
 namespace upboarding {
@@ -33,6 +34,12 @@ struct QueryTilesConfig {
 
   // The URL for GetQueryTiles RPC.
   GURL get_query_tile_url;
+
+  // The maximum duration for holding current group's info and images.
+  base::TimeDelta expire_duration;
+
+  // Locale setting from operating system.
+  std::string locale;
 };
 
 }  // namespace upboarding

@@ -17,6 +17,13 @@ constexpr char kDefaultGetQueryTilePath[] = "/v1/querytiles";
 // Default state of QueryTile feature.
 constexpr bool kDefaultQueryTileState = false;
 
+// Default expire duration.
+constexpr base::TimeDelta kDefaultExpireDuration =
+    base::TimeDelta::FromHours(48);
+
+// Default locale string.
+constexpr char kDefaultLocale[] = "en-US";
+
 const GURL BuildGetQueryTileURL(const GURL& base_url, const char* path) {
   GURL::Replacements replacements;
   replacements.SetPathStr(path);
@@ -38,7 +45,9 @@ QueryTilesConfig::QueryTilesConfig()
     : is_enabled(kDefaultQueryTileState),
       base_url(GURL(kDefaultBaseURL)),
       get_query_tile_url(
-          BuildGetQueryTileURL(base_url, kDefaultGetQueryTilePath)) {}
+          BuildGetQueryTileURL(base_url, kDefaultGetQueryTilePath)),
+      expire_duration(kDefaultExpireDuration),
+      locale(kDefaultLocale) {}
 
 QueryTilesConfig::~QueryTilesConfig() = default;
 

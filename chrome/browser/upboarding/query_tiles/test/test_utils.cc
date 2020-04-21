@@ -165,6 +165,26 @@ bool AreTilesIdentical(const QueryTileEntry& lhs, const QueryTileEntry& rhs) {
   return true;
 }
 
+bool AreTilesIdentical(std::vector<QueryTileEntry*> lhs,
+                       std::vector<QueryTileEntry*> rhs) {
+  if (lhs.size() != rhs.size())
+    return false;
+
+  auto entry_comparator = [](QueryTileEntry* a, QueryTileEntry* b) {
+    return a->id < b->id;
+  };
+
+  std::sort(lhs.begin(), lhs.end(), entry_comparator);
+  std::sort(rhs.begin(), rhs.end(), entry_comparator);
+
+  for (size_t i = 0; i < lhs.size(); i++) {
+    if (*lhs[i] != *rhs[i])
+      return false;
+  }
+
+  return true;
+}
+
 }  // namespace test
 
 }  // namespace upboarding

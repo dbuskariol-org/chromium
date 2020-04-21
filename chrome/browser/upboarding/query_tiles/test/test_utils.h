@@ -6,6 +6,7 @@
 #define CHROME_BROWSER_UPBOARDING_QUERY_TILES_TEST_TEST_UTILS_H_
 
 #include <string>
+#include <vector>
 
 #include "chrome/browser/upboarding/query_tiles/internal/tile_group.h"
 #include "chrome/browser/upboarding/query_tiles/query_tile_entry.h"
@@ -23,6 +24,8 @@ std::string DebugString(const TileGroup* group);
 // Build and reset the TileGroup for test usage.
 void ResetTestGroup(TileGroup* group);
 
+// TODO(hesen): Have a better builder with parameters to specify the structure
+// of tree.
 // Build and reset the TileEntry for test usage.
 void ResetTestEntry(QueryTileEntry* entry);
 
@@ -31,6 +34,10 @@ bool AreTileGroupsIdentical(const TileGroup& lhs, const TileGroup& rhs);
 
 // Returns true if all data in two QueryTileEntries are identical.
 bool AreTilesIdentical(const QueryTileEntry& lhs, const QueryTileEntry& rhs);
+
+// Returns true if all data in two lists of QueryTileEntry are identical.
+bool AreTilesIdentical(std::vector<QueryTileEntry*> lhs,
+                       std::vector<QueryTileEntry*> rhs);
 
 }  // namespace test
 }  // namespace upboarding

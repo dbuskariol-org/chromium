@@ -16,4 +16,17 @@ enum class TileInfoRequestStatus {
   kMaxValue = kFailure,
 };
 
+enum class TileGroupStatus {
+  // No errors happen in tile group manager.
+  kSuccess = 0,
+  // Database and manager component is not fully initialized.
+  kUninitialized = 1,
+  // Db operations failed.
+  kFailureDbOperation = 2,
+  // The group status is invalid, reason could be expired or locale not match.
+  kInvalidGroup = 3,
+  // Max value.
+  kMaxValue = kInvalidGroup,
+};
+
 #endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_TYPES_H_
