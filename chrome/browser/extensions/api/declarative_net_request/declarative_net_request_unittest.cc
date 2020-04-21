@@ -12,6 +12,7 @@
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
 #include "base/json/json_reader.h"
+#include "base/location.h"
 #include "base/memory/ref_counted.h"
 #include "base/optional.h"
 #include "base/strings/string_number_conversions.h"
@@ -19,6 +20,8 @@
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/test/metrics/histogram_tester.h"
+#include "base/test/scoped_run_loop_timeout.h"
+#include "base/test/test_timeouts.h"
 #include "build/build_config.h"
 #include "chrome/browser/extensions/api/declarative_net_request/dnr_test_base.h"
 #include "chrome/browser/extensions/chrome_test_extension_loader.h"
@@ -914,18 +917,11 @@ TEST_P(MultipleRulesetsTest, EnabledRulesCount) {
 
 // Ensure that exceeding the rules count limit across rulesets raises an install
 // warning.
-// Fails on Linux and debug builds. See https://crbug.com/1071403
-#if defined(OS_LINUX) || defined(DEBUG)
-#define MAYBE_StaticRuleCountExceeded DISABLED_StaticRuleCountExceeded
-#else
-#define MAYBE_StaticRuleCountExceeded StaticRuleCountExceeded
-#endif
-TEST_P(MultipleRulesetsTest, MAYBE_StaticRuleCountExceeded) {
+TEST_P(MultipleRulesetsTest, StaticRuleCountExceeded) {
   // Enabled on load.
-  AddRuleset(CreateRuleset("1.json", 10000, 0, true));
+  AddRuleset(CreateRuleset("1.json", 10, 0, true));
   // Disabled by default.
-  AddRuleset(
-      CreateRuleset("2.json", dnr_api::MAX_NUMBER_OF_RULES + 20, 0, false));
+  AddRuleset(CreateRuleset("2.json", 20, 0, false));
   // Not enabled on load since including it exceeds the static rules count.
   AddRuleset(
       CreateRuleset("3.json", dnr_api::MAX_NUMBER_OF_RULES + 10, 0, true));
@@ -935,7 +931,15 @@ TEST_P(MultipleRulesetsTest, MAYBE_StaticRuleCountExceeded) {
   RulesetManagerObserver ruleset_waiter(manager());
   extension_loader()->set_ignore_manifest_warnings(true);
 
-  LoadAndExpectSuccess();
+  {
+    // To prevent timeouts in debug builds, increase the wait timeout to the
+    // test launcher's timeout. See crbug.com/1071403.
+    // TODO(karandeepb): Provide a way to fake dnr_api::MAX_NUMBER_OF_RULES in
+    // tests to decrease test runtime.
+    base::test::ScopedRunLoopTimeout specific_timeout(
+        FROM_HERE, TestTimeouts::test_launcher_timeout());
+    LoadAndExpectSuccess();
+  }
 
   std::string extension_id = extension()->id();
 
@@ -946,8 +950,6 @@ TEST_P(MultipleRulesetsTest, MAYBE_StaticRuleCountExceeded) {
     EXPECT_THAT(
         extension()->install_warnings(),
         UnorderedElementsAre(
-            Field(&InstallWarning::message,
-                  GetErrorWithFilename(kRuleCountExceeded, "2.json")),
             Field(&InstallWarning::message,
                   GetErrorWithFilename(kRuleCountExceeded, "3.json")),
             Field(&InstallWarning::message, kEnabledRuleCountExceeded)));
@@ -964,7 +966,7 @@ TEST_P(MultipleRulesetsTest, MAYBE_StaticRuleCountExceeded) {
                                    Pointee(Property(&RulesetMatcher::id, 4))));
   EXPECT_THAT(composite_matcher->matchers(),
               UnorderedElementsAre(
-                  Pointee(Property(&RulesetMatcher::GetRulesCount, 10000)),
+                  Pointee(Property(&RulesetMatcher::GetRulesCount, 10)),
                   Pointee(Property(&RulesetMatcher::GetRulesCount, 30))));
 }
 
