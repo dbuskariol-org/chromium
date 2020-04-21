@@ -74,7 +74,6 @@ group("closure_compile") {
     "people_page:closure_compile",
     "prefs:closure_compile",
     "privacy_page:closure_compile",
-    "safety_check_page:closure_compile",
     "search_engines_page:closure_compile",
     "settings_page:closure_compile",
     "site_settings:closure_compile",
