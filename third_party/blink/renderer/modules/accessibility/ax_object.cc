@@ -3419,18 +3419,21 @@ bool AXObject::InternalSetAccessibilityFocusAction() {
   return false;
 }
 
-bool AXObject::OnNativeScrollToMakeVisibleAction() const {
+LayoutObject* AXObject::GetLayoutObjectForNativeScrollAction() const {
   Node* node = GetNode();
   if (!node || !node->isConnected())
-    return false;
+    return nullptr;
 
   // Node might not have a LayoutObject due to the fact that it is in a locked
   // subtree. Force the update to create the LayoutObject (and update position
   // information) for this node.
   GetDocument()->UpdateStyleAndLayoutForNode(
       node, DocumentUpdateReason::kDisplayLock);
+  return node->GetLayoutObject();
+}
 
-  LayoutObject* layout_object = node->GetLayoutObject();
+bool AXObject::OnNativeScrollToMakeVisibleAction() const {
+  LayoutObject* layout_object = GetLayoutObjectForNativeScrollAction();
   if (!layout_object)
     return false;
   PhysicalRect target_rect(layout_object->AbsoluteBoundingBoxRect());
@@ -3450,10 +3453,10 @@ bool AXObject::OnNativeScrollToMakeVisibleWithSubFocusAction(
     const IntRect& rect,
     blink::mojom::blink::ScrollAlignment horizontal_scroll_alignment,
     blink::mojom::blink::ScrollAlignment vertical_scroll_alignment) const {
-  Node* node = GetNode();
-  LayoutObject* layout_object = node ? node->GetLayoutObject() : nullptr;
-  if (!layout_object || !node->isConnected())
+  LayoutObject* layout_object = GetLayoutObjectForNativeScrollAction();
+  if (!layout_object)
     return false;
+
   PhysicalRect target_rect =
       layout_object->LocalToAbsoluteRect(PhysicalRect(rect));
   layout_object->ScrollRectToVisible(
@@ -3470,10 +3473,10 @@ bool AXObject::OnNativeScrollToMakeVisibleWithSubFocusAction(
 
 bool AXObject::OnNativeScrollToGlobalPointAction(
     const IntPoint& global_point) const {
-  Node* node = GetNode();
-  LayoutObject* layout_object = node ? node->GetLayoutObject() : nullptr;
-  if (!layout_object || !node->isConnected())
+  LayoutObject* layout_object = GetLayoutObjectForNativeScrollAction();
+  if (!layout_object)
     return false;
+
   PhysicalRect target_rect(layout_object->AbsoluteBoundingBoxRect());
   target_rect.Move(-PhysicalOffset(global_point));
   layout_object->ScrollRectToVisible(

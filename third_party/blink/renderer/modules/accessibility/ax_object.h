@@ -1151,6 +1151,12 @@ class MODULES_EXPORT AXObject : public GarbageCollected<AXObject> {
                                             const QualifiedName&) const;
   bool IsHiddenViaStyle() const;
 
+  // Returns an updated layout object to be used in a native scroll action. Note
+  // that this updates style for `GetNode()` as well as layout for any layout
+  // objects generated. Returns nullptr if a native scroll action to the node is
+  // not possible.
+  LayoutObject* GetLayoutObjectForNativeScrollAction() const;
+
   static unsigned number_of_live_ax_objects_;
 
   DISALLOW_COPY_AND_ASSIGN(AXObject);
