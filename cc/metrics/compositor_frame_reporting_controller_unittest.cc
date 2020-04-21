@@ -80,7 +80,7 @@ class CompositorFrameReportingControllerTest : public testing::Test {
     if (!reporting_controller_
              .reporters()[CompositorFrameReportingController::PipelineStage::
                               kBeginMainFrame]) {
-      begin_main_start_ = base::TimeTicks::Now();
+      begin_main_start_ = AdvanceNowByMs(10);
       SimulateBeginMainFrame();
     }
     CHECK(
@@ -121,24 +121,26 @@ class CompositorFrameReportingControllerTest : public testing::Test {
     ++next_token_;
     SimulateSubmitCompositorFrame(*next_token_, {});
     viz::FrameTimingDetails details = {};
-    details.presentation_feedback.timestamp = base::TimeTicks::Now();
+    details.presentation_feedback.timestamp = AdvanceNowByMs(10);
     reporting_controller_.DidPresentCompositorFrame(*next_token_, details);
   }
 
-  viz::BeginFrameArgs SimulateBeginFrameArgs(
-      viz::BeginFrameId frame_id,
-      base::TimeTicks frame_time = base::TimeTicks::Now(),
-      base::TimeDelta interval = base::TimeDelta::FromMilliseconds(16)) {
+  viz::BeginFrameArgs SimulateBeginFrameArgs(viz::BeginFrameId frame_id) {
     args_ = viz::BeginFrameArgs();
     args_.frame_id = frame_id;
-    args_.frame_time = frame_time;
-    args_.interval = interval;
+    args_.frame_time = AdvanceNowByMs(10);
+    args_.interval = base::TimeDelta::FromMilliseconds(16);
     return args_;
   }
 
   void IncrementCurrentId() {
     current_id_.sequence_number++;
     args_.frame_id = current_id_;
+  }
+
+  base::TimeTicks AdvanceNowByMs(int64_t advance_ms) {
+    now_ += base::TimeDelta::FromMicroseconds(advance_ms);
+    return now_;
   }
 
  protected:
@@ -148,6 +150,9 @@ class CompositorFrameReportingControllerTest : public testing::Test {
   viz::BeginFrameId last_activated_id_;
   base::TimeTicks begin_main_start_;
   viz::FrameTokenGenerator next_token_;
+
+ private:
+  base::TimeTicks now_ = base::TimeTicks::Now();
 };
 
 TEST_F(CompositorFrameReportingControllerTest, ActiveReporterCounts) {
@@ -816,7 +821,7 @@ TEST_F(CompositorFrameReportingControllerTest,
        EventLatencyForPresentedFrameReported) {
   base::HistogramTester histogram_tester;
 
-  const base::TimeTicks event_time = base::TimeTicks::Now();
+  const base::TimeTicks event_time = AdvanceNowByMs(10);
   std::vector<EventMetrics> events_metrics = {
       {ui::ET_TOUCH_PRESSED, event_time, base::nullopt},
       {ui::ET_TOUCH_MOVED, event_time, base::nullopt},
@@ -830,13 +835,13 @@ TEST_F(CompositorFrameReportingControllerTest,
   SimulateSubmitCompositorFrame(*next_token_, {std::move(events_metrics), {}});
 
   // Present the submitted compositor frame to the user.
-  const base::TimeTicks presentation_time = base::TimeTicks::Now();
+  const base::TimeTicks presentation_time = AdvanceNowByMs(10);
   viz::FrameTimingDetails details;
   details.presentation_feedback.timestamp = presentation_time;
   reporting_controller_.DidPresentCompositorFrame(*next_token_, details);
 
   // Verify that EventLatency histograms are recorded.
-  const int latency_ms = (presentation_time - event_time).InMicroseconds();
+  const int64_t latency_ms = (presentation_time - event_time).InMicroseconds();
   histogram_tester.ExpectTotalCount("EventLatency.TouchPressed.TotalLatency",
                                     1);
   histogram_tester.ExpectTotalCount("EventLatency.TouchMoved.TotalLatency", 2);
@@ -852,7 +857,7 @@ TEST_F(CompositorFrameReportingControllerTest,
        EventLatencyScrollForPresentedFrameReported) {
   base::HistogramTester histogram_tester;
 
-  const base::TimeTicks event_time = base::TimeTicks::Now();
+  const base::TimeTicks event_time = AdvanceNowByMs(10);
   std::vector<EventMetrics> events_metrics = {
       {ui::ET_GESTURE_SCROLL_BEGIN, event_time, ScrollInputType::kWheel},
       {ui::ET_GESTURE_SCROLL_UPDATE, event_time, ScrollInputType::kWheel},
@@ -866,13 +871,13 @@ TEST_F(CompositorFrameReportingControllerTest,
   SimulateSubmitCompositorFrame(*next_token_, {std::move(events_metrics), {}});
 
   // Present the submitted compositor frame to the user.
-  const base::TimeTicks presentation_time = base::TimeTicks::Now();
+  const base::TimeTicks presentation_time = AdvanceNowByMs(10);
   viz::FrameTimingDetails details;
   details.presentation_feedback.timestamp = presentation_time;
   reporting_controller_.DidPresentCompositorFrame(*next_token_, details);
 
   // Verify that EventLatency histograms are recorded.
-  const int latency_ms = (presentation_time - event_time).InMicroseconds();
+  const int64_t latency_ms = (presentation_time - event_time).InMicroseconds();
   histogram_tester.ExpectTotalCount(
       "EventLatency.GestureScrollBegin.Wheel.TotalLatency", 1);
   histogram_tester.ExpectTotalCount(
@@ -889,7 +894,7 @@ TEST_F(CompositorFrameReportingControllerTest,
        EventLatencyForDidNotPresentFrameNotReported) {
   base::HistogramTester histogram_tester;
 
-  const base::TimeTicks event_time = base::TimeTicks::Now();
+  const base::TimeTicks event_time = AdvanceNowByMs(10);
   std::vector<EventMetrics> events_metrics = {
       {ui::ET_TOUCH_PRESSED, event_time, base::nullopt},
       {ui::ET_TOUCH_MOVED, event_time, base::nullopt},
@@ -909,7 +914,7 @@ TEST_F(CompositorFrameReportingControllerTest,
 
   // Present the second compositor frame to the uesr, dropping the first one.
   viz::FrameTimingDetails details;
-  details.presentation_feedback.timestamp = base::TimeTicks::Now();
+  details.presentation_feedback.timestamp = AdvanceNowByMs(10);
   reporting_controller_.DidPresentCompositorFrame(*next_token_, details);
 
   // Verify that no EventLatency histogram is recorded.
