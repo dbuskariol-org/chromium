@@ -1382,7 +1382,7 @@ void XRSession::ApplyPendingRenderState() {
       if (canvas) {
         if (!resize_observer_) {
           resize_observer_ = ResizeObserver::Create(
-              canvas->GetDocument(),
+              canvas->GetDocument().domWindow(),
               MakeGarbageCollected<XRSessionResizeObserverDelegate>(this));
         }
         resize_observer_->observe(canvas);
