@@ -250,10 +250,10 @@ RenderFrameHostImpl* FindOpenerRFH(const WebContents::CreateParams& params) {
 bool IsUserInteractionInputType(blink::WebInputEvent::Type type) {
   // Ideally, this list would be based more off of
   // https://whatwg.org/C/interaction.html#triggered-by-user-activation.
-  return type == blink::WebInputEvent::kMouseDown ||
-         type == blink::WebInputEvent::kGestureScrollBegin ||
-         type == blink::WebInputEvent::kTouchStart ||
-         type == blink::WebInputEvent::kRawKeyDown;
+  return type == blink::WebInputEvent::Type::kMouseDown ||
+         type == blink::WebInputEvent::Type::kGestureScrollBegin ||
+         type == blink::WebInputEvent::Type::kTouchStart ||
+         type == blink::WebInputEvent::Type::kRawKeyDown;
 }
 
 // Ensures that OnDialogClosed is only called once.
@@ -6487,7 +6487,7 @@ void WebContentsImpl::DidReceiveInputEvent(
   if (!HasMatchingWidgetHost(&frame_tree_, render_widget_host))
     return;
 
-  if (type != blink::WebInputEvent::kGestureScrollBegin)
+  if (type != blink::WebInputEvent::Type::kGestureScrollBegin)
     last_interactive_input_event_time_ = ui::EventTimeForNow();
 
   for (auto& observer : observers_)

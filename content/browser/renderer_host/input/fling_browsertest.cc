@@ -149,7 +149,7 @@ class BrowserSideFlingBrowserTest : public ContentBrowserTest {
                   render_widget_host,
                   blink::WebInputEvent::Type::kGestureScrollBegin);
     blink::WebGestureEvent gesture_scroll_begin(
-        blink::WebGestureEvent::kGestureScrollBegin,
+        blink::WebGestureEvent::Type::kGestureScrollBegin,
         blink::WebInputEvent::kNoModifiers, ui::EventTimeForNow());
     gesture_scroll_begin.SetSourceDevice(blink::WebGestureDevice::kTouchscreen);
     gesture_scroll_begin.data.scroll_begin.delta_hint_units =
@@ -172,7 +172,7 @@ class BrowserSideFlingBrowserTest : public ContentBrowserTest {
 
     //  Send a GFS.
     blink::WebGestureEvent gesture_fling_start(
-        blink::WebGestureEvent::kGestureFlingStart,
+        blink::WebGestureEvent::Type::kGestureFlingStart,
         blink::WebInputEvent::kNoModifiers, ui::EventTimeForNow());
     gesture_fling_start.SetSourceDevice(blink::WebGestureDevice::kTouchscreen);
     gesture_fling_start.data.fling_start.velocity_x = fling_velocity.x();
@@ -218,7 +218,7 @@ class BrowserSideFlingBrowserTest : public ContentBrowserTest {
 
     //  Send a GFS.
     blink::WebGestureEvent gesture_fling_start(
-        blink::WebGestureEvent::kGestureFlingStart,
+        blink::WebGestureEvent::Type::kGestureFlingStart,
         blink::WebInputEvent::kNoModifiers, ui::EventTimeForNow());
     gesture_fling_start.SetSourceDevice(blink::WebGestureDevice::kTouchpad);
     gesture_fling_start.data.fling_start.velocity_x = fling_velocity.x();
@@ -432,7 +432,7 @@ IN_PROC_BROWSER_TEST_F(BrowserSideFlingBrowserTest,
   auto input_msg_watcher = std::make_unique<InputMsgWatcher>(
       GetWidgetHost(), blink::WebInputEvent::Type::kGestureScrollEnd);
   blink::WebGestureEvent gesture_fling_cancel(
-      blink::WebGestureEvent::kGestureFlingCancel,
+      blink::WebGestureEvent::Type::kGestureFlingCancel,
       blink::WebInputEvent::kNoModifiers, ui::EventTimeForNow());
   gesture_fling_cancel.SetSourceDevice(blink::WebGestureDevice::kTouchscreen);
 

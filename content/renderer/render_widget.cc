@@ -2521,9 +2521,9 @@ void RenderWidget::DidHandleGestureEvent(const WebGestureEvent& event,
   }
 
 #if defined(OS_ANDROID) || defined(USE_AURA)
-  if (event.GetType() == WebInputEvent::kGestureTap) {
+  if (event.GetType() == WebInputEvent::Type::kGestureTap) {
     ShowVirtualKeyboard();
-  } else if (event.GetType() == WebInputEvent::kGestureLongPress) {
+  } else if (event.GetType() == WebInputEvent::Type::kGestureLongPress) {
     DCHECK(GetWebWidget());
     blink::WebInputMethodController* controller = GetInputMethodController();
     if (!controller || controller->TextInputInfo().value.IsEmpty())

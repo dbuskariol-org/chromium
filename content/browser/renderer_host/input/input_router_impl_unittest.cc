@@ -205,7 +205,7 @@ class MockInputRouterImplClient : public InputRouterImplClient {
   int in_flight_event_count() const {
     return input_router_client_.in_flight_event_count();
   }
-  int last_in_flight_event_type() const {
+  blink::WebInputEvent::Type last_in_flight_event_type() const {
     return input_router_client_.last_in_flight_event_type();
   }
   void set_allow_send_event(bool allow) {

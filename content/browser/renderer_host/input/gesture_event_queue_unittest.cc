@@ -524,7 +524,8 @@ TEST_F(GestureEventQueueWithCompositorEventQueueTest,
   // Simulate GSB ACK.
   SendInputEventACK(WebInputEvent::Type::kGestureScrollBegin,
                     blink::mojom::InputEventResultState::kConsumed);
-  EXPECT_EQ(WebInputEvent::kGestureScrollBegin, last_acked_event().GetType());
+  EXPECT_EQ(WebInputEvent::Type::kGestureScrollBegin,
+            last_acked_event().GetType());
   EXPECT_EQ(2U, GestureEventQueueSize());
 
   // Simulate GSE ACK first since it's usually dispatched non-blocking.
@@ -590,7 +591,8 @@ TEST_F(GestureEventQueueWithCompositorEventQueueTest,
                     blink::mojom::InputEventResultState::kConsumed);
   SendInputEventACK(WebInputEvent::Type::kGesturePinchUpdate,
                     blink::mojom::InputEventResultState::kConsumed);
-  EXPECT_EQ(WebInputEvent::kGesturePinchUpdate, last_acked_event().GetType());
+  EXPECT_EQ(WebInputEvent::Type::kGesturePinchUpdate,
+            last_acked_event().GetType());
   EXPECT_EQ(0U, GestureEventQueueSize());
   EXPECT_EQ(0U, GetAndResetSentGestureEventCount());
 }

@@ -119,7 +119,7 @@ using testing::_;
 - (void)rendererHandledGestureScrollEvent:(const blink::WebGestureEvent&)event
                                  consumed:(BOOL)consumed {
   if (!consumed &&
-      event.GetType() == blink::WebInputEvent::kGestureScrollUpdate)
+      event.GetType() == blink::WebInputEvent::Type::kGestureScrollUpdate)
     _unhandledWheelEventReceived = true;
 }
 

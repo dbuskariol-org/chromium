@@ -287,7 +287,7 @@ IN_PROC_BROWSER_TEST_F(WheelScrollLatchingBrowserTest,
 #endif
   // Send a GSB event to start scrolling the scrollableDiv.
   blink::WebGestureEvent gesture_scroll_begin(
-      blink::WebGestureEvent::kGestureScrollBegin,
+      blink::WebGestureEvent::Type::kGestureScrollBegin,
       blink::WebInputEvent::kNoModifiers,
       blink::WebInputEvent::GetStaticTimeStampForTests(),
       blink::WebGestureDevice::kTouchpad);
@@ -302,7 +302,8 @@ IN_PROC_BROWSER_TEST_F(WheelScrollLatchingBrowserTest,
 
   // Send the first GSU event.
   blink::WebGestureEvent gesture_scroll_update(gesture_scroll_begin);
-  gesture_scroll_update.SetType(blink::WebGestureEvent::kGestureScrollUpdate);
+  gesture_scroll_update.SetType(
+      blink::WebGestureEvent::Type::kGestureScrollUpdate);
   gesture_scroll_update.data.scroll_update.delta_units =
       precise ? ui::ScrollGranularity::kScrollByPrecisePixel
               : ui::ScrollGranularity::kScrollByPixel;
