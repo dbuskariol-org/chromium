@@ -263,6 +263,10 @@ class DriveInternalsWebUIHandler : public content::WebUIMessageHandler {
         base::BindRepeating(&DriveInternalsWebUIHandler::OnPeriodicUpdate,
                             weak_ptr_factory_.GetWeakPtr()));
     web_ui()->RegisterMessageCallback(
+        "restartDrive",
+        base::BindRepeating(&DriveInternalsWebUIHandler::RestartDrive,
+                            weak_ptr_factory_.GetWeakPtr()));
+    web_ui()->RegisterMessageCallback(
         "resetDriveFileSystem",
         base::BindRepeating(&DriveInternalsWebUIHandler::ResetDriveFileSystem,
                             weak_ptr_factory_.GetWeakPtr()));
@@ -546,6 +550,17 @@ class DriveInternalsWebUIHandler : public content::WebUIMessageHandler {
     DCHECK_CURRENTLY_ON(BrowserThread::UI);
     MaybeCallJavascript("updateGCacheContents", std::move(response.first),
                         std::move(response.second));
+  }
+
+  // Called when the "Restart Drive" button on the page is pressed.
+  void RestartDrive(const base::ListValue* args) {
+    AllowJavascript();
+
+    drive::DriveIntegrationService* integration_service =
+        GetIntegrationService();
+    if (integration_service) {
+      integration_service->RestartDrive();
+    }
   }
 
   // Called when the corresponding button on the page is pressed.
