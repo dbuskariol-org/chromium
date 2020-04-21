@@ -664,7 +664,6 @@ void PrerenderContents::PrepareForUse() {
 
 void PrerenderContents::CancelPrerenderForUnsupportedScheme(const GURL& url) {
   Destroy(FINAL_STATUS_UNSUPPORTED_SCHEME);
-  ReportUnsupportedPrerenderScheme(url);
 }
 
 void PrerenderContents::AddPrerenderCancelerReceiver(
