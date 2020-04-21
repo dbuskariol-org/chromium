@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.page_info;
+package org.chromium.components.page_info;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -28,7 +28,6 @@ import org.chromium.base.Consumer;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.base.metrics.RecordUserAction;
-import org.chromium.chrome.R;
 import org.chromium.components.content_settings.ContentSettingValues;
 import org.chromium.components.content_settings.CookieControlsEnforcement;
 import org.chromium.components.content_settings.CookieControlsObserver;
@@ -37,14 +36,8 @@ import org.chromium.components.dom_distiller.core.DomDistillerUrlUtils;
 import org.chromium.components.embedder_support.util.UrlUtilities;
 import org.chromium.components.omnibox.AutocompleteSchemeClassifier;
 import org.chromium.components.omnibox.OmniboxUrlEmphasizer;
-import org.chromium.components.page_info.ConnectionInfoPopup;
-import org.chromium.components.page_info.CookieControlsView;
-import org.chromium.components.page_info.PageInfoControllerDelegate;
-import org.chromium.components.page_info.PageInfoDialog;
-import org.chromium.components.page_info.PageInfoView;
 import org.chromium.components.page_info.PageInfoView.ConnectionInfoParams;
 import org.chromium.components.page_info.PageInfoView.PageInfoViewParams;
-import org.chromium.components.page_info.SystemSettingsActivityRequiredListener;
 import org.chromium.components.security_state.ConnectionSecurityLevel;
 import org.chromium.components.security_state.SecurityStateModel;
 import org.chromium.components.url_formatter.UrlFormatter;
@@ -128,7 +121,8 @@ public class PageInfoController implements ModalDialogProperties.Controller,
      * @param delegate                 The PageInfoControllerDelegate used to provide
      *                                 embedder-specific info.
      */
-    protected PageInfoController(Activity activity, WebContents webContents, int securityLevel,
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    public PageInfoController(Activity activity, WebContents webContents, int securityLevel,
             String publisher, PageInfoControllerDelegate delegate) {
         mWebContents = webContents;
         mSecurityLevel = securityLevel;
@@ -456,7 +450,8 @@ public class PageInfoController implements ModalDialogProperties.Controller,
                 contentPublisher, delegate));
     }
 
-    static PageInfoController getLastPageInfoControllerForTesting() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    public static PageInfoController getLastPageInfoControllerForTesting() {
         return sLastPageInfoControllerForTesting != null ? sLastPageInfoControllerForTesting.get()
                                                          : null;
     }

@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/android/page_info/page_info_controller_android.h"
+#include "components/page_info/android/page_info_controller_android.h"
 
 #include "base/android/jni_android.h"
 #include "base/android/jni_array.h"
 #include "base/android/jni_string.h"
 #include "base/command_line.h"
 #include "base/stl_util.h"
-#include "chrome/android/chrome_jni_headers/PageInfoController_jni.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/content_settings_types.h"
+#include "components/page_info/android/jni_headers/PageInfoController_jni.h"
 #include "components/page_info/android/page_info_client.h"
 #include "components/page_info/page_info.h"
 #include "components/page_info/page_info_ui.h"

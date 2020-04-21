@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_ANDROID_PAGE_INFO_PAGE_INFO_CONTROLLER_ANDROID_H_
-#define CHROME_BROWSER_UI_ANDROID_PAGE_INFO_PAGE_INFO_CONTROLLER_ANDROID_H_
+#ifndef COMPONENTS_PAGE_INFO_ANDROID_PAGE_INFO_CONTROLLER_ANDROID_H_
+#define COMPONENTS_PAGE_INFO_ANDROID_PAGE_INFO_CONTROLLER_ANDROID_H_
 
 #include <jni.h>
 
@@ -17,17 +17,6 @@
 namespace content {
 class WebContents;
 }
-
-// A Java counterpart will be generated for this enum.
-// GENERATED_JAVA_ENUM_PACKAGE: org.chromium.chrome.browser
-enum PageInfoConnectionType {
-  CONNECTION_UNKNOWN,
-  CONNECTION_ENCRYPTED,
-  CONNECTION_MIXED_CONTENT,
-  CONNECTION_UNENCRYPTED,
-  CONNECTION_ENCRYPTED_ERROR,
-  CONNECTION_INTERNAL_PAGE,
-};
 
 // Android implementation of the page info UI.
 class PageInfoControllerAndroid : public PageInfoUI {
@@ -69,4 +58,4 @@ class PageInfoControllerAndroid : public PageInfoUI {
   DISALLOW_COPY_AND_ASSIGN(PageInfoControllerAndroid);
 };
 
-#endif  // CHROME_BROWSER_UI_ANDROID_PAGE_INFO_PAGE_INFO_CONTROLLER_ANDROID_H_
+#endif  // COMPONENTS_PAGE_INFO_ANDROID_PAGE_INFO_CONTROLLER_ANDROID_H_
