@@ -17,7 +17,10 @@ import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.ChromeManagedPreferenceDelegate;
 import org.chromium.chrome.browser.ui.favicon.FaviconHelper;
 import org.chromium.chrome.browser.ui.favicon.FaviconHelper.FaviconImageCallback;
+import org.chromium.chrome.browser.webapps.WebappRegistry;
 import org.chromium.components.browser_ui.settings.ManagedPreferenceDelegate;
+
+import java.util.Set;
 
 /**
  * A SiteSettingsClient instance that contains Chrome-specific Site Settings logic.
@@ -111,5 +114,12 @@ public class ChromeSiteSettingsClient implements SiteSettingsClient {
             mChromeSiteSettingsPrefClient = new ChromeSiteSettingsPrefClient();
         }
         return mChromeSiteSettingsPrefClient;
+    }
+
+    @Override
+    public boolean originHasInstalledWebapp(String origin) {
+        WebappRegistry registry = WebappRegistry.getInstance();
+        Set<String> originsWithApps = registry.getOriginsWithInstalledApp();
+        return originsWithApps.contains(origin);
     }
 }

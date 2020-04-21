@@ -65,4 +65,9 @@ public interface SiteSettingsClient {
      */
     // TODO(crbug.com/1071603): Remove this once PrefServiceBridge is componentized.
     SiteSettingsPrefClient getSiteSettingsPrefClient();
+
+    /**
+     * @return True if a webapp is installed for the site at the given origin.
+     */
+    boolean originHasInstalledWebapp(String origin);
 }
