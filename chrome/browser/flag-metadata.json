@@ -992,6 +992,11 @@
     "expiry_milestone": 77
   },
   {
+    "name": "enable-accessibility-live-captions",
+    "owners": [ "//ui/accessibility/OWNERS" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "enable-accessibility-object-model",
     "owners": [ "//ui/accessibility/OWNERS" ],
     "expiry_milestone": 79

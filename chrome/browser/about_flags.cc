@@ -3797,6 +3797,13 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAccessibilityExposeDisplayNoneDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kEnableAccessibilityExposeDisplayNone)},
 
+#if !defined(OS_ANDROID)
+    {"enable-accessibility-live-captions",
+     flag_descriptions::kEnableAccessibilityLiveCaptionsName,
+     flag_descriptions::kEnableAccessibilityLiveCaptionsDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(media::kLiveCaption)},
+#endif  // !defined(OS_ANDROID)
+
     {"enable-accessibility-object-model",
      flag_descriptions::kEnableAccessibilityObjectModelName,
      flag_descriptions::kEnableAccessibilityObjectModelDescription, kOsAll,
