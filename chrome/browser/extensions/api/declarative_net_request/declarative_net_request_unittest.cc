@@ -12,6 +12,7 @@
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
 #include "base/json/json_reader.h"
+#include "base/json/json_writer.h"
 #include "base/location.h"
 #include "base/memory/ref_counted.h"
 #include "base/optional.h"
@@ -29,11 +30,13 @@
 #include "chrome/browser/extensions/load_error_reporter.h"
 #include "extensions/browser/api/declarative_net_request/composite_matcher.h"
 #include "extensions/browser/api/declarative_net_request/constants.h"
+#include "extensions/browser/api/declarative_net_request/declarative_net_request_api.h"
 #include "extensions/browser/api/declarative_net_request/parse_info.h"
 #include "extensions/browser/api/declarative_net_request/rules_monitor_service.h"
 #include "extensions/browser/api/declarative_net_request/ruleset_manager.h"
 #include "extensions/browser/api/declarative_net_request/ruleset_matcher.h"
 #include "extensions/browser/api/declarative_net_request/test_utils.h"
+#include "extensions/browser/api_test_utils.h"
 #include "extensions/browser/disable_reason.h"
 #include "extensions/browser/test_extension_registry_observer.h"
 #include "extensions/common/api/declarative_net_request.h"
@@ -43,6 +46,7 @@
 #include "extensions/common/install_warning.h"
 #include "extensions/common/manifest_constants.h"
 #include "extensions/common/url_pattern.h"
+#include "extensions/common/value_builder.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -173,6 +177,29 @@ class DeclarativeNetRequestUnittest : public DNRTestBase {
 
     tester.ExpectTotalCount(kIndexAndPersistRulesTimeHistogram, 0u);
     tester.ExpectTotalCount(kManifestRulesCountHistogram, 0u);
+  }
+
+  bool RunDynamicRuleUpdateFunction(const Extension& extension,
+                                    const std::vector<int>& rule_ids_to_remove,
+                                    const std::vector<TestRule>& rules_to_add) {
+    ListBuilder ids_to_remove;
+    for (int rule_id : rule_ids_to_remove)
+      ids_to_remove.Append(rule_id);
+
+    std::unique_ptr<base::Value> args = ListBuilder()
+                                            .Append(ids_to_remove.Build())
+                                            .Append(ToListValue(rules_to_add))
+                                            .Build();
+    std::string json_args;
+    base::JSONWriter::WriteWithOptions(
+        *args, base::JSONWriter::OPTIONS_PRETTY_PRINT, &json_args);
+
+    auto update_function =
+        base::MakeRefCounted<DeclarativeNetRequestUpdateDynamicRulesFunction>();
+    update_function->set_extension(&extension);
+    update_function->set_has_callback(true);
+    return api_test_utils::RunFunction(update_function.get(), json_args,
+                                       browser_context());
   }
 
   ChromeTestExtensionLoader* extension_loader() { return loader_.get(); }
@@ -709,6 +736,55 @@ TEST_P(SingleRulesetTest, ExtensionWithIndexedRuleset) {
   set_persist_initial_indexed_ruleset();
   AddRule(CreateGenericRule());
   LoadAndExpectSuccess();
+}
+
+// Test for crbug.com/931967. Ensures that adding dynamic rules in the midst of
+// an initial ruleset load (in response to OnExtensionLoaded) behaves
+// predictably and doesn't DCHECK.
+TEST_P(SingleRulesetTest, DynamicRulesetRace) {
+  RulesetManagerObserver ruleset_waiter(manager());
+
+  AddRule(CreateGenericRule());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  const std::string extension_id = extension()->id();
+
+  service()->DisableExtension(extension_id,
+                              disable_reason::DISABLE_USER_ACTION);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(0);
+
+  // Simulate indexed ruleset format version change. This will cause a re-index
+  // on subsequent extension load. Since this will further delay the initial
+  // ruleset load, it helps test that the ruleset loading doesn't race with
+  // updating dynamic rules.
+  int current_format_version = GetIndexedRulesetFormatVersionForTesting();
+  SetIndexedRulesetFormatVersionForTesting(current_format_version + 1);
+
+  TestExtensionRegistryObserver registry_observer(registry());
+
+  service()->EnableExtension(extension_id);
+  const Extension* extension = registry_observer.WaitForExtensionLoaded();
+  ASSERT_TRUE(extension);
+  ASSERT_EQ(extension_id, extension->id());
+
+  // At this point, the ruleset will still be loading.
+  ASSERT_FALSE(manager()->GetMatcherForExtension(extension_id));
+
+  // Add some dynamic rules.
+  std::vector<TestRule> dynamic_rules({CreateGenericRule()});
+  ASSERT_TRUE(RunDynamicRuleUpdateFunction(
+      *extension, {} /* rule_ids_to_remove */, dynamic_rules));
+
+  // The API function to update the dynamic ruleset should only complete once
+  // the initial ruleset loading (in response to OnExtensionLoaded) is complete.
+  // Hence by now, both the static and dynamic matchers must be loaded.
+  CompositeMatcher* matcher = manager()->GetMatcherForExtension(extension_id);
+  ASSERT_TRUE(matcher);
+  EXPECT_EQ(2u, matcher->matchers().size());
+
+  // Reset the ruleset format version since this updates global state.
+  SetIndexedRulesetFormatVersionForTesting(current_format_version);
 }
 
 // Tests that multiple static rulesets are correctly indexed.
