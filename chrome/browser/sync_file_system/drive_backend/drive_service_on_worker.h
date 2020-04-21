@@ -61,7 +61,7 @@ class DriveServiceOnWorker : public drive::DriveServiceInterface {
 
   google_apis::CancelCallback GetStartPageToken(
       const std::string& team_drive_id,
-      const google_apis::StartPageTokenCallback& callback) override;
+      google_apis::StartPageTokenCallback callback) override;
 
   google_apis::CancelCallback GetChangeList(
       int64_t start_changestamp,

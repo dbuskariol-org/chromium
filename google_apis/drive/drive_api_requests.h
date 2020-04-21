@@ -49,8 +49,8 @@ typedef base::Callback<void(DriveApiErrorCode error,
 // Callback used for requests that the server returns StartToken data
 // formatted into JSON value.
 using StartPageTokenCallback =
-    base::RepeatingCallback<void(DriveApiErrorCode error,
-                                 std::unique_ptr<StartPageToken> entry)>;
+    base::OnceCallback<void(DriveApiErrorCode error,
+                            std::unique_ptr<StartPageToken> entry)>;
 
 namespace drive {
 
@@ -493,7 +493,7 @@ class StartPageTokenRequest : public DriveApiDataRequest<StartPageToken> {
  public:
   StartPageTokenRequest(RequestSender* sender,
                         const DriveApiUrlGenerator& url_generator,
-                        const StartPageTokenCallback& callback);
+                        StartPageTokenCallback callback);
   ~StartPageTokenRequest() override;
 
   // Optional parameter

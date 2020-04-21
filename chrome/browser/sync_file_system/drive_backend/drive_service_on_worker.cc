@@ -101,15 +101,15 @@ google_apis::CancelCallback DriveServiceOnWorker::GetAboutResource(
 
 google_apis::CancelCallback DriveServiceOnWorker::GetStartPageToken(
     const std::string& team_drive_id,
-    const google_apis::StartPageTokenCallback& callback) {
+    google_apis::StartPageTokenCallback callback) {
   DCHECK(sequence_checker_.CalledOnValidSequence());
 
   ui_task_runner_->PostTask(
       FROM_HERE,
-      base::BindOnce(&DriveServiceWrapper::GetStartPageToken, wrapper_,
-                     team_drive_id,
-                     RelayCallbackToTaskRunner(worker_task_runner_.get(),
-                                               FROM_HERE, callback)));
+      base::BindOnce(
+          &DriveServiceWrapper::GetStartPageToken, wrapper_, team_drive_id,
+          RelayCallbackToTaskRunner(worker_task_runner_.get(), FROM_HERE,
+                                    std::move(callback))));
 
   return google_apis::CancelCallback();
 }

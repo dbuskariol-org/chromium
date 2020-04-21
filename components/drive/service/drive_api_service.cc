@@ -488,13 +488,13 @@ CancelCallback DriveAPIService::GetAboutResource(
 
 CancelCallback DriveAPIService::GetStartPageToken(
     const std::string& team_drive_id,
-    const StartPageTokenCallback& callback) {
+    StartPageTokenCallback callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(!callback.is_null());
 
   std::unique_ptr<StartPageTokenRequest> request =
       std::make_unique<StartPageTokenRequest>(sender_.get(), url_generator_,
-                                              callback);
+                                              std::move(callback));
   request->set_team_drive_id(team_drive_id);
   return sender_->StartRequestWithAuthRetry(std::move(request));
 }

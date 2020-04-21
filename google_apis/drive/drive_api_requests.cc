@@ -525,11 +525,9 @@ GURL TeamDriveListRequest::GetURLInternal() const {
 StartPageTokenRequest::StartPageTokenRequest(
     RequestSender* sender,
     const DriveApiUrlGenerator& url_generator,
-    const StartPageTokenCallback& callback)
-    : DriveApiDataRequest<StartPageToken>(sender, callback),
-      url_generator_(url_generator) {
-  DCHECK(!callback.is_null());
-}
+    StartPageTokenCallback callback)
+    : DriveApiDataRequest<StartPageToken>(sender, std::move(callback)),
+      url_generator_(url_generator) {}
 
 StartPageTokenRequest::~StartPageTokenRequest() = default;
 

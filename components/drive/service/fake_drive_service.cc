@@ -636,15 +636,15 @@ CancelCallback FakeDriveService::GetAboutResource(
 
 CancelCallback FakeDriveService::GetStartPageToken(
     const std::string& team_drive_id,
-    const google_apis::StartPageTokenCallback& callback) {
+    google_apis::StartPageTokenCallback callback) {
   DCHECK(thread_checker_.CalledOnValidThread());
   DCHECK(callback);
 
   if (offline_) {
     std::unique_ptr<StartPageToken> null;
     base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE,
-        base::BindOnce(callback, DRIVE_NO_CONNECTION, std::move(null)));
+        FROM_HERE, base::BindOnce(std::move(callback), DRIVE_NO_CONNECTION,
+                                  std::move(null)));
     return CancelCallback();
   }
 
@@ -658,8 +658,8 @@ CancelCallback FakeDriveService::GetStartPageToken(
   }
   ++start_page_token_load_count_;
   base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE,
-      base::BindOnce(callback, HTTP_SUCCESS, std::move(start_page_token)));
+      FROM_HERE, base::BindOnce(std::move(callback), HTTP_SUCCESS,
+                                std::move(start_page_token)));
   return CancelCallback();
 }
 

@@ -334,7 +334,7 @@ class DriveServiceInterface : public DriveServiceBatchOperationsInterface {
   // |callback| must not be null.
   virtual google_apis::CancelCallback GetStartPageToken(
       const std::string& team_drive_id,
-      const google_apis::StartPageTokenCallback& callback) = 0;
+      google_apis::StartPageTokenCallback callback) = 0;
 
   // Permanently deletes a resource identified by its |resource_id|.
   // If |etag| is not empty and did not match, the deletion fails with

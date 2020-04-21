@@ -116,7 +116,7 @@ CancelCallback DummyDriveService::GetAboutResource(
 
 CancelCallback DummyDriveService::GetStartPageToken(
     const std::string& team_drive_id,
-    const google_apis::StartPageTokenCallback& callback) {
+    google_apis::StartPageTokenCallback callback) {
   return CancelCallback();
 }
 

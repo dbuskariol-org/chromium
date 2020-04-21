@@ -167,7 +167,7 @@ class DriveAPIService : public DriveServiceInterface,
       google_apis::AboutResourceCallback callback) override;
   google_apis::CancelCallback GetStartPageToken(
       const std::string& team_drive_id,
-      const google_apis::StartPageTokenCallback& callback) override;
+      google_apis::StartPageTokenCallback callback) override;
   google_apis::CancelCallback DeleteResource(
       const std::string& resource_id,
       const std::string& etag,
