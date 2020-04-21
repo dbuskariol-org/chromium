@@ -1890,14 +1890,13 @@ Vector<XRViewData>& XRSession::views() {
       // In non-immersive mode, if there is no explicit projection matrix
       // provided, the projection matrix must be aligned with the
       // output canvas dimensions.
-      bool is_null = true;
-      double inline_vertical_fov =
-          render_state_->inlineVerticalFieldOfView(is_null);
+      base::Optional<double> inline_vertical_fov =
+          render_state_->inlineVerticalFieldOfView();
 
       // inlineVerticalFieldOfView should only be null in immersive mode.
-      DCHECK(!is_null);
+      DCHECK(inline_vertical_fov.has_value());
       views_[kMonoOrStereoLeftView].UpdateProjectionMatrixFromAspect(
-          inline_vertical_fov, aspect, render_state_->depthNear(),
+          inline_vertical_fov.value(), aspect, render_state_->depthNear(),
           render_state_->depthFar());
     }
 
