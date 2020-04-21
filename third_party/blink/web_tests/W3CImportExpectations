@@ -5,8 +5,8 @@
 
 # This file controls which subdirectories of the w3c test repos we import.
 #
-# This file acts as a blacklist; directories and files not listed here will
-# automatically be found and imported.
+# This file acts as a list of exclusions; directories and files not listed here
+# will automatically be found and imported.
 #
 # Tests that are imported but not run are listed in NeverFixTests. This can be
 # used to make it easier to work on getting them running and passing.
