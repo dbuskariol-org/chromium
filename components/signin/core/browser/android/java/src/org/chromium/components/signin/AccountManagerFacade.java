@@ -16,7 +16,6 @@ import androidx.annotation.WorkerThread;
 
 import org.chromium.base.Callback;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,20 +57,7 @@ public interface AccountManagerFacade {
     boolean isCachePopulated();
 
     /**
-     * Retrieves a list of the Google account names on the device.
-     * Returns an empty list if Google Play Services aren't available or out of date.
-     */
-    @AnyThread
-    default List<String> tryGetGoogleAccountNames() {
-        List<String> accountNames = new ArrayList<>();
-        for (Account account : tryGetGoogleAccounts()) {
-            accountNames.add(account.name);
-        }
-        return accountNames;
-    }
-
-    /**
-     * Asynchronous version of {@link #tryGetGoogleAccountNames()}.
+     * Gets Google account names asynchronously.
      * TODO(https://crbug.com/1070624): Remove this method
      */
     @Deprecated
