@@ -208,6 +208,7 @@
 #include "third_party/blink/public/mojom/bluetooth/web_bluetooth.mojom.h"
 #include "third_party/blink/public/mojom/cache_storage/cache_storage.mojom.h"
 #include "third_party/blink/public/mojom/choosers/file_chooser.mojom.h"
+#include "third_party/blink/public/mojom/frame/frame.mojom.h"
 #include "third_party/blink/public/mojom/frame/frame_owner_properties.mojom.h"
 #include "third_party/blink/public/mojom/frame/fullscreen.mojom.h"
 #include "third_party/blink/public/mojom/frame/media_player_action.mojom.h"
@@ -3180,6 +3181,11 @@ void RenderFrameHostImpl::ScaleFactorChanged(float scale) {
 void RenderFrameHostImpl::ContentsPreferredSizeChanged(
     const gfx::Size& pref_size) {
   render_view_host_->OnDidContentsPreferredSizeChange(pref_size);
+}
+
+void RenderFrameHostImpl::TextAutosizerPageInfoChanged(
+    blink::mojom::TextAutosizerPageInfoPtr page_info) {
+  delegate_->OnTextAutosizerPageInfoChanged(this, std::move(page_info));
 }
 
 void RenderFrameHostImpl::UpdateFaviconURL(
