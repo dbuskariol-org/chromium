@@ -39,7 +39,6 @@ namespace {
 
 constexpr char kWiFiDeviceSettingId[] = "WIFI";
 constexpr char kBluetoothDeviceSettingId[] = "BLUETOOTH";
-constexpr char kVolumeLevelDeviceSettingId[] = "VOLUME_LEVEL";
 constexpr char kScreenBrightnessDeviceSettingId[] = "BRIGHTNESS_LEVEL";
 constexpr char kDoNotDisturbDeviceSettingId[] = "DO_NOT_DISTURB";
 constexpr char kNightLightDeviceSettingId[] = "NIGHT_LIGHT_SWITCH";
@@ -84,14 +83,14 @@ double ConvertSliderValueToLevel(double value,
                                  double default_value) {
   switch (unit) {
     case client_op::ModifySettingArgs_Unit_RANGE:
-      // "set volume to 20%".
+      // "set brightness to 20%".
       return value;
     case client_op::ModifySettingArgs_Unit_STEP:
-      // "set volume to 20".  Treat the step as a percentage.
+      // "set brightness to 20".  Treat the step as a percentage.
       return value / 100.0f;
 
-    // Currently, factor (e.g., 'double the volume') and decibel units aren't
-    // handled by the backend.  This could change in the future.
+    // Currently, factor (e.g., 'double the brightness') and decibel units
+    // aren't handled by the backend.  This could change in the future.
     case client_op::ModifySettingArgs_Unit_FACTOR:
     case client_op::ModifySettingArgs_Unit_DECIBEL:
       break;
@@ -231,29 +230,6 @@ class NightLightSetting : public SettingWithDeviceAction {
   }
 };
 
-class VolumeSetting : public Setting {
- public:
-  explicit VolumeSetting(assistant_client::VolumeControl* volume_control)
-      : volume_control_(volume_control) {}
-
-  const char* setting_id() const override {
-    return kVolumeLevelDeviceSettingId;
-  }
-
-  void Modify(const client_op::ModifySettingArgs& request) override {
-    DCHECK(volume_control_ != nullptr);
-    HandleSliderChange(
-        request,
-        [this](double value) {
-          this->volume_control_->SetSystemVolume(value, true);
-        },
-        [this]() { return this->volume_control_->GetSystemVolume(); });
-  }
-
- private:
-  assistant_client::VolumeControl* const volume_control_;
-};
-
 class BrightnessSetting : public SettingWithDeviceAction {
  public:
   explicit BrightnessSetting(ServiceContext* context)
@@ -289,14 +265,12 @@ class BrightnessSetting : public SettingWithDeviceAction {
 }  // namespace
 
 AssistantDeviceSettingsDelegate::AssistantDeviceSettingsDelegate(
-    ServiceContext* context,
-    assistant_client::VolumeControl* volume_control) {
+    ServiceContext* context) {
   AddSetting(std::make_unique<WifiSetting>(context));
   AddSetting(std::make_unique<BluetoothSetting>(context));
   AddSetting(std::make_unique<NightLightSetting>(context));
   AddSetting(std::make_unique<DoNotDisturbSetting>(
       context->assistant_notification_controller()));
-  AddSetting(std::make_unique<VolumeSetting>(volume_control));
   AddSetting(std::make_unique<BrightnessSetting>(context));
 
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(

@@ -12,10 +12,6 @@
 #include "ash/public/mojom/assistant_controller.mojom-forward.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom-forward.h"
 
-namespace assistant_client {
-class VolumeControl;
-}  // namespace assistant_client
-
 namespace assistant {
 namespace api {
 namespace client_op {
@@ -36,9 +32,7 @@ class Setting;
 // the device settings, like Bluetooth or WiFi.
 class AssistantDeviceSettingsDelegate {
  public:
-  explicit AssistantDeviceSettingsDelegate(
-      ServiceContext* context,
-      assistant_client::VolumeControl* volume_control);
+  explicit AssistantDeviceSettingsDelegate(ServiceContext* context);
   AssistantDeviceSettingsDelegate(AssistantDeviceSettingsDelegate&) = delete;
   AssistantDeviceSettingsDelegate& operator=(AssistantDeviceSettingsDelegate&) =
       delete;

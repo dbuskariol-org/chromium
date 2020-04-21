@@ -36,7 +36,6 @@ using ::testing::StrictMock;
 
 constexpr char kWiFi[] = "WIFI";
 constexpr char kBluetooth[] = "BLUETOOTH";
-constexpr char kVolumeLevel[] = "VOLUME_LEVEL";
 constexpr char kScreenBrightness[] = "BRIGHTNESS_LEVEL";
 constexpr char kDoNotDisturb[] = "DO_NOT_DISTURB";
 constexpr char kNightLight[] = "NIGHT_LIGHT_SWITCH";
@@ -45,8 +44,7 @@ constexpr char kSwitchAccess[] = "SWITCH_ACCESS";
 // Returns the settings that are always supported.
 // Does not contain |SWITCH_ACCESS| as that is conditionally supported.
 const std::vector<std::string> kAlwaysSupportedSettings = {
-    kWiFi,         kBluetooth,  kVolumeLevel, kScreenBrightness,
-    kDoNotDisturb, kNightLight,
+    kWiFi, kBluetooth, kScreenBrightness, kDoNotDisturb, kNightLight,
 };
 
 class DeviceActionsMock : public mojom::DeviceActions {
@@ -84,17 +82,6 @@ class DeviceActionsMock : public mojom::DeviceActions {
 
  private:
   double current_brightness_ = 0.0;
-};
-
-class VolumeControlMock : public assistant_client::VolumeControl {
- public:
-  MOCK_METHOD(void, SetAudioFocus, (assistant_client::OutputStreamType));
-  MOCK_METHOD(float, GetSystemVolume, ());
-  MOCK_METHOD(void, SetSystemVolume, (float new_volume, bool user_initiated));
-  MOCK_METHOD(float, GetAlarmVolume, ());
-  MOCK_METHOD(void, SetAlarmVolume, (float new_volume, bool user_initiated));
-  MOCK_METHOD(bool, IsSystemMuted, ());
-  MOCK_METHOD(void, SetSystemMuted, (bool muted));
 };
 
 class AssistantNotificationControllerMock
@@ -142,10 +129,9 @@ class AssistantDeviceSettingsDelegateTest : public testing::Test {
 
   AssistantDeviceSettingsDelegate* delegate() { return delegate_.get(); }
 
-  void CreateAssistantDeviceSettingsDelegate(
-      assistant_client::VolumeControl* volume_control = nullptr) {
+  void CreateAssistantDeviceSettingsDelegate() {
     delegate_ = std::make_unique<AssistantDeviceSettingsDelegate>(
-        service_context_.get(), volume_control);
+        service_context_.get());
   }
 
  private:
@@ -305,56 +291,6 @@ TEST_F(AssistantDeviceSettingsDelegateTest, ShouldTurnNightLightOnAndOff) {
 
   args.set_change(Change::ModifySettingArgs_Change_OFF);
   EXPECT_CALL(device_actions, SetNightLightEnabled(false));
-  delegate()->HandleModifyDeviceSetting(args);
-}
-
-TEST_F(AssistantDeviceSettingsDelegateTest, ShouldSetVolume) {
-  StrictMock<VolumeControlMock> volume_control;
-  CreateAssistantDeviceSettingsDelegate(&volume_control);
-  EXPECT_CALL(volume_control, GetSystemVolume).Times(AnyNumber());
-
-  ModifySettingArgs args;
-  args.set_setting_id(kVolumeLevel);
-  args.set_change(Change::ModifySettingArgs_Change_SET);
-
-  // Set volume to 20%
-  args.set_numeric_value(0.2);
-  args.set_unit(Unit::ModifySettingArgs_Unit_RANGE);
-  EXPECT_CALL(volume_control, SetSystemVolume(FloatNear(0.2, kEpsilon),
-                                              /*user_initiated=*/true));
-  delegate()->HandleModifyDeviceSetting(args);
-
-  // Set volume to 20.
-  // This will be converted to a percentage
-  args.set_numeric_value(20);
-  args.set_unit(Unit::ModifySettingArgs_Unit_STEP);
-  EXPECT_CALL(volume_control, SetSystemVolume(FloatNear(0.2, kEpsilon),
-                                              /*user_initiated=*/true));
-  delegate()->HandleModifyDeviceSetting(args);
-}
-
-TEST_F(AssistantDeviceSettingsDelegateTest, ShouldIncreaseAndDecreaseVolume) {
-  StrictMock<VolumeControlMock> volume_control;
-  CreateAssistantDeviceSettingsDelegate(&volume_control);
-  EXPECT_CALL(volume_control, GetSystemVolume).Times(AnyNumber());
-
-  ModifySettingArgs args;
-  args.set_setting_id(kVolumeLevel);
-  args.set_change(Change::ModifySettingArgs_Change_SET);
-
-  // Set volume to 20%
-  args.set_numeric_value(0.2);
-  args.set_unit(Unit::ModifySettingArgs_Unit_RANGE);
-  EXPECT_CALL(volume_control, SetSystemVolume(FloatNear(0.2, kEpsilon),
-                                              /*user_initiated=*/true));
-  delegate()->HandleModifyDeviceSetting(args);
-
-  // Set volume to 20.
-  // This will be converted to a percentage
-  args.set_numeric_value(20);
-  args.set_unit(Unit::ModifySettingArgs_Unit_STEP);
-  EXPECT_CALL(volume_control, SetSystemVolume(FloatNear(0.2, kEpsilon),
-                                              /*user_initiated=*/true));
   delegate()->HandleModifyDeviceSetting(args);
 }
 

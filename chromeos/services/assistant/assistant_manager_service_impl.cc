@@ -169,8 +169,8 @@ AssistantManagerServiceImpl::AssistantManagerServiceImpl(
   platform_api_ = delegate_->CreatePlatformApi(
       media_session_.get(), background_thread_.task_runner());
 
-  settings_delegate_ = std::make_unique<AssistantDeviceSettingsDelegate>(
-      context, &platform_api_->GetAudioOutputProvider().GetVolumeControl());
+  settings_delegate_ =
+      std::make_unique<AssistantDeviceSettingsDelegate>(context);
 
   mojo::Remote<media_session::mojom::MediaControllerManager>
       media_controller_manager;
