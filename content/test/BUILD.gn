@@ -1586,6 +1586,8 @@ test("content_unittests") {
     "../browser/appcache/mock_appcache_storage.cc",
     "../browser/appcache/mock_appcache_storage.h",
     "../browser/appcache/mock_appcache_storage_unittest.cc",
+    "../browser/appcache/test_origin_trial_policy.cc",
+    "../browser/appcache/test_origin_trial_policy.h",
     "../browser/background_fetch/background_fetch_cross_origin_filter_unittest.cc",
     "../browser/background_fetch/background_fetch_data_manager_unittest.cc",
     "../browser/background_fetch/background_fetch_delegate_proxy_unittest.cc",
