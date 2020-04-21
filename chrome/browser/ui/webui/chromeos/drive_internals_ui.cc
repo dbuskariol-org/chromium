@@ -284,7 +284,6 @@ class DriveInternalsWebUIHandler : public content::WebUIMessageHandler {
 
     UpdateDriveRelatedPreferencesSection();
     UpdateGCacheContentsSection();
-    UpdateLocalStorageUsageSection();
     UpdatePathConfigurationsSection();
 
     UpdateConnectionStatusSection();
@@ -294,6 +293,8 @@ class DriveInternalsWebUIHandler : public content::WebUIMessageHandler {
     UpdateCacheContentsSection();
 
     UpdateInFlightOperationsSection();
+
+    UpdateDriveDebugSection();
 
     // When the drive-internals page is reloaded by the reload key, the page
     // content is recreated, but this WebUI object is not (instead, OnPageLoaded
@@ -402,8 +403,8 @@ class DriveInternalsWebUIHandler : public content::WebUIMessageHandler {
     MaybeCallJavascript("updatePathConfigurations", std::move(paths));
   }
 
-  void UpdateLocalStorageUsageSection() {
-    SetSectionEnabled("local-metadata-section", true);
+  void UpdateDriveDebugSection() {
+    SetSectionEnabled("drive-debug", true);
 
     // Propagate the amount of local free space in bytes.
     base::FilePath home_path;
