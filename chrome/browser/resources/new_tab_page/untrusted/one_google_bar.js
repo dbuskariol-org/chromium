@@ -81,23 +81,30 @@ function trackOverlayState() {
       }
       return true;
     });
-    postMessage(overlayShown ? 'activate' : 'deactivate');
-    // Allow the iframe z-level update to take effect before updating the
-    // backdrop.
-    setTimeout(() => {
-      document.querySelector('#overlayBackdrop')
-          .toggleAttribute('show', overlayShown);
-      // When showing the backdrop, turn on dark theme for better visibility if
-      // it is off.
-      if (overlayShown && !darkThemeEnabled) {
-        shouldUndoDarkTheme = true;
-        enableDarkTheme(true);
-      }
-      if (!overlayShown && shouldUndoDarkTheme) {
+    const backdropElement = document.querySelector('#overlayBackdrop');
+    if (!overlayShown) {
+      // Hide backdrop before z-level update so NTP content cannot appear above
+      // backdrop.
+      backdropElement.toggleAttribute('show', false);
+      if (shouldUndoDarkTheme) {
         shouldUndoDarkTheme = false;
         enableDarkTheme(false);
       }
-    });
+    }
+    postMessage(overlayShown ? 'activate' : 'deactivate');
+    if (overlayShown) {
+      // Allow the iframe z-level update to take effect before updating the
+      // backdrop.
+      setTimeout(() => {
+        backdropElement.toggleAttribute('show', true);
+        // When showing the backdrop, turn on dark theme for better visibility
+        // if it is off.
+        if (!darkThemeEnabled) {
+          shouldUndoDarkTheme = true;
+          enableDarkTheme(true);
+        }
+      });
+    }
   });
   observer.observe(
       document, {attributes: true, childList: true, subtree: true});
