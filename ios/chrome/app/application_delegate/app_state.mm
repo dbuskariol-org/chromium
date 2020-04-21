@@ -343,11 +343,6 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
                                           connectedScenes:self.connectedScenes];
   [memoryHelper resetForegroundMemoryWarningCount];
 
-  // Use the mainBVC as the ContentSuggestions can only be started in non-OTR.
-  ChromeBrowserState* mainBrowserState =
-      _browserLauncher.interfaceProvider.mainInterface.browserState;
-  [ContentSuggestionsSchedulerNotifications notifyForeground:mainBrowserState];
-
   // If the current browser state is not OTR, check for cookie loss.
   ChromeBrowserState* currentBrowserState =
       _browserLauncher.interfaceProvider.currentInterface.browserState;
@@ -526,6 +521,11 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
       NSSet* connectedScenes =
           [UIApplication sharedApplication].connectedScenes;
       for (UIWindowScene* scene in connectedScenes) {
+        if (!scene.delegate) {
+          // This might happen in tests.
+          continue;
+        }
+
         SceneDelegate* sceneDelegate =
             base::mac::ObjCCastStrict<SceneDelegate>(scene.delegate);
         [sceneStates addObject:sceneDelegate.sceneState];
