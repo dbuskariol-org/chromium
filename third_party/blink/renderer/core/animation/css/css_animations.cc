@@ -1601,6 +1601,16 @@ bool CSSAnimations::IsAnimatingCustomProperties(
              IsCustomPropertyHandle);
 }
 
+bool CSSAnimations::IsAnimatingStandardProperties(
+    const ElementAnimations* element_animations,
+    const CSSBitset* bitset,
+    KeyframeEffect::Priority priority) {
+  if (!element_animations || !bitset)
+    return false;
+  return element_animations->GetEffectStack().AffectsProperties(*bitset,
+                                                                priority);
+}
+
 bool CSSAnimations::IsAnimatingFontAffectingProperties(
     const ElementAnimations* element_animations) {
   return element_animations &&
