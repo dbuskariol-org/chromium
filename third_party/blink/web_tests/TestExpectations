@@ -6722,9 +6722,3 @@ crbug.com/1042694 virtual/form-controls-refresh-disabled/fast/forms/form-control
 
 # QUIC reordered versions to prefer IETF QUIC
 crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
-
-# Temporarily disabling security tests to check in security changes.
-crbug.com/962686 http/tests/devtools/security/origin-view-then-interstitial.js [ Pass Failure ]
-crbug.com/962686 http/tests/devtools/security/security-details-updated-with-security-state.js [ Pass Failure ]
-crbug.com/962686 http/tests/devtools/security/origin-view-noncryptographic-secure-origin.js [ Pass Failure ]
-crbug.com/962686 http/tests/devtools/security/origin-view-ct-compliance.js [ Pass Failure ]
