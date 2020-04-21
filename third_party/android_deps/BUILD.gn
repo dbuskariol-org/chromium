@@ -49,16 +49,6 @@ java_group("android_arch_lifecycle_viewmodel_java") {
   ]
 }
 
-# TODO (bjoyce): Remove when downstream bots can call this directly.
-java_group("com_android_support_animated_vector_drawable_java_temp") {
-  deps = [ ":com_android_support_animated_vector_drawable_java" ]
-}
-
-# TODO (bjoyce): Remove when downstream bots can call this directly.
-java_group("com_android_support_appcompat_v7_java_temp") {
-  deps = [ ":com_android_support_appcompat_v7_java" ]
-}
-
 java_group("com_android_support_cardview_v7_java") {
   deps = [
     ":${target_name}_orig__unpack_aar",
@@ -176,11 +166,6 @@ java_group("com_android_support_support_v4_java") {
   input_jars_paths = [
     "${target_out_dir}/com_android_support_support_v4_java_orig/classes.jar",
   ]
-}
-
-# TODO (bjoyce): Remove when downstream bots can call this directly.
-java_group("com_android_support_support_vector_drawable_java_temp") {
-  deps = [ ":com_android_support_support_vector_drawable_java" ]
 }
 
 java_group("com_android_support_versionedparcelable_java") {
