@@ -51,7 +51,8 @@ void FrameSequenceTrackerCollection::StopSequence(
       std::move(frame_trackers_[type]);
 
   if (compositor_frame_reporting_controller_)
-    compositor_frame_reporting_controller_->RemoveActiveTracker(tracker->type_);
+    compositor_frame_reporting_controller_->RemoveActiveTracker(
+        tracker->type());
 
   frame_trackers_.erase(type);
   tracker->ScheduleTerminate();
@@ -205,17 +206,17 @@ void FrameSequenceTrackerCollection::NotifyFramePresented(
       // on its destruction, which add its data to |custom_tracker_results_|
       // to be picked up by caller.
       auto metrics = tracker->TakeMetrics();
-      if (tracker->type() == FrameSequenceTrackerType::kCustom)
+      if (metrics->type() == FrameSequenceTrackerType::kCustom)
         continue;
 
-      auto key = std::make_pair(tracker->type(), metrics->GetEffectiveThread());
+      auto key = std::make_pair(metrics->type(), metrics->GetEffectiveThread());
       if (accumulated_metrics_.contains(key)) {
         metrics->Merge(std::move(accumulated_metrics_[key]));
         accumulated_metrics_.erase(key);
       }
 
       if (metrics->HasEnoughDataForReporting()) {
-        if (tracker->type() == FrameSequenceTrackerType::kUniversal) {
+        if (metrics->type() == FrameSequenceTrackerType::kUniversal) {
           uint32_t frames_expected = metrics->impl_throughput().frames_expected;
           uint32_t frames_produced =
               metrics->aggregated_throughput().frames_produced;
@@ -287,7 +288,7 @@ FrameSequenceTracker*
 FrameSequenceTrackerCollection::GetRemovalTrackerForTesting(
     FrameSequenceTrackerType type) {
   for (const auto& tracker : removal_trackers_)
-    if (tracker->type_ == type)
+    if (tracker->type() == type)
       return tracker.get();
   return nullptr;
 }

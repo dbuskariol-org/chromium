@@ -96,7 +96,7 @@ class CC_EXPORT FrameSequenceTracker {
   bool ShouldReportMetricsNow(const viz::BeginFrameArgs& args) const;
 
   FrameSequenceMetrics* metrics() { return metrics_.get(); }
-  FrameSequenceTrackerType type() const { return type_; }
+  FrameSequenceTrackerType type() const { return metrics_->type(); }
   int custom_sequence_id() const { return custom_sequence_id_; }
 
   std::unique_ptr<FrameSequenceMetrics> TakeMetrics();
@@ -158,7 +158,6 @@ class CC_EXPORT FrameSequenceTracker {
 
   bool ShouldIgnoreSequence(uint64_t sequence_number) const;
 
-  const FrameSequenceTrackerType type_;
   const int custom_sequence_id_;
 
   TerminationStatus termination_status_ = TerminationStatus::kActive;

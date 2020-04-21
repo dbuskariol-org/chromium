@@ -106,7 +106,7 @@ class FrameSequenceTrackerTest : public testing::Test {
   bool RemovalTrackerExists(unsigned index,
                             FrameSequenceTrackerType type) const {
     DCHECK_GT(collection_.removal_trackers_.size(), index);
-    return collection_.removal_trackers_[index]->type_ == type;
+    return collection_.removal_trackers_[index]->type() == type;
   }
 
   void GenerateSequence(const char* str) {
