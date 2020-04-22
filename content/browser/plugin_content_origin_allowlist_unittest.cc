@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/plugin_content_origin_whitelist.h"
+#include "content/browser/plugin_content_origin_allowlist.h"
 
 #include <memory>
 
@@ -19,16 +19,16 @@
 
 namespace content {
 
-class PluginContentOriginWhitelistTest : public RenderViewHostTestHarness {
+class PluginContentOriginAllowlistTest : public RenderViewHostTestHarness {
  public:
-  PluginContentOriginWhitelistTest() = default;
-  ~PluginContentOriginWhitelistTest() override = default;
+  PluginContentOriginAllowlistTest() = default;
+  ~PluginContentOriginAllowlistTest() override = default;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PluginContentOriginWhitelistTest);
+  DISALLOW_COPY_AND_ASSIGN(PluginContentOriginAllowlistTest);
 };
 
-TEST_F(PluginContentOriginWhitelistTest, ClearAllowlistOnNavigate) {
+TEST_F(PluginContentOriginAllowlistTest, ClearAllowlistOnNavigate) {
   net::EmbeddedTestServer https_server(net::EmbeddedTestServer::TYPE_HTTPS);
   ASSERT_TRUE(https_server.Start());
 
@@ -40,10 +40,10 @@ TEST_F(PluginContentOriginWhitelistTest, ClearAllowlistOnNavigate) {
   // 2) Allowlist an origin on Page A.
   url::Origin allow_origin = url::Origin::Create(GURL("http://www.google.com"));
   static_cast<WebContentsImpl*>(web_contents())
-      ->plugin_content_origin_whitelist_->OnPluginContentOriginAllowed(
+      ->plugin_content_origin_allowlist_->OnPluginContentOriginAllowed(
           rfh_a, allow_origin);
   EXPECT_TRUE(
-      PluginContentOriginWhitelist::IsOriginAllowlistedForFrameForTesting(
+      PluginContentOriginAllowlist::IsOriginAllowlistedForFrameForTesting(
           rfh_a, allow_origin));
 
   // 3) Navigate to B and confirm that the allowlist is cleared.
@@ -52,11 +52,11 @@ TEST_F(PluginContentOriginWhitelistTest, ClearAllowlistOnNavigate) {
       NavigationSimulator::NavigateAndCommitFromBrowser(web_contents(), url_b);
   EXPECT_NE(rfh_a, rfh_b);
   EXPECT_FALSE(
-      PluginContentOriginWhitelist::IsOriginAllowlistedForFrameForTesting(
+      PluginContentOriginAllowlist::IsOriginAllowlistedForFrameForTesting(
           rfh_b, allow_origin));
 }
 
-TEST_F(PluginContentOriginWhitelistTest, SubframeInheritsAllowlist) {
+TEST_F(PluginContentOriginAllowlistTest, SubframeInheritsAllowlist) {
   net::EmbeddedTestServer https_server(net::EmbeddedTestServer::TYPE_HTTPS);
   ASSERT_TRUE(https_server.Start());
 
@@ -68,10 +68,10 @@ TEST_F(PluginContentOriginWhitelistTest, SubframeInheritsAllowlist) {
   // 2) Allowlist an origin on Page A.
   url::Origin allow_origin = url::Origin::Create(GURL("http://www.google.com"));
   static_cast<WebContentsImpl*>(web_contents())
-      ->plugin_content_origin_whitelist_->OnPluginContentOriginAllowed(
+      ->plugin_content_origin_allowlist_->OnPluginContentOriginAllowed(
           rfh_a, allow_origin);
   EXPECT_TRUE(
-      PluginContentOriginWhitelist::IsOriginAllowlistedForFrameForTesting(
+      PluginContentOriginAllowlist::IsOriginAllowlistedForFrameForTesting(
           rfh_a, allow_origin));
 
   // 3) Create a frame inside Page A, and confirm that the allowlist is passed
@@ -81,7 +81,7 @@ TEST_F(PluginContentOriginWhitelistTest, SubframeInheritsAllowlist) {
   RenderFrameHost* subframe = rfh_tester->AppendChild("subframe");
   EXPECT_NE(rfh_a, subframe);
   EXPECT_TRUE(
-      PluginContentOriginWhitelist::IsOriginAllowlistedForFrameForTesting(
+      PluginContentOriginAllowlist::IsOriginAllowlistedForFrameForTesting(
           subframe, allow_origin));
 }
 

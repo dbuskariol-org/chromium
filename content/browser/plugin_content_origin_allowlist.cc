@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/plugin_content_origin_whitelist.h"
+#include "content/browser/plugin_content_origin_allowlist.h"
 
 #include "content/browser/renderer_host/render_view_host_impl.h"
 #include "content/common/frame_messages.h"
@@ -12,27 +12,27 @@
 
 namespace content {
 
-PluginContentOriginWhitelist::DocumentPluginContentOriginAllowlist::
+PluginContentOriginAllowlist::DocumentPluginContentOriginAllowlist::
     ~DocumentPluginContentOriginAllowlist() {}
 
-PluginContentOriginWhitelist::DocumentPluginContentOriginAllowlist::
+PluginContentOriginAllowlist::DocumentPluginContentOriginAllowlist::
     DocumentPluginContentOriginAllowlist(RenderFrameHost* render_frame_host) {}
 
-void PluginContentOriginWhitelist::DocumentPluginContentOriginAllowlist::
+void PluginContentOriginAllowlist::DocumentPluginContentOriginAllowlist::
     InsertOrigin(const url::Origin& content_origin) {
   origins_.insert(content_origin);
 }
 
 RENDER_DOCUMENT_HOST_USER_DATA_KEY_IMPL(
-    PluginContentOriginWhitelist::DocumentPluginContentOriginAllowlist)
+    PluginContentOriginAllowlist::DocumentPluginContentOriginAllowlist)
 
-PluginContentOriginWhitelist::PluginContentOriginWhitelist(
+PluginContentOriginAllowlist::PluginContentOriginAllowlist(
     WebContents* web_contents)
     : WebContentsObserver(web_contents) {}
 
-PluginContentOriginWhitelist::~PluginContentOriginWhitelist() {}
+PluginContentOriginAllowlist::~PluginContentOriginAllowlist() {}
 
-void PluginContentOriginWhitelist::RenderFrameCreated(
+void PluginContentOriginAllowlist::RenderFrameCreated(
     RenderFrameHost* render_frame_host) {
   // When RenderFrame is created inside the main frame,
   DocumentPluginContentOriginAllowlist* allowlist =
@@ -40,15 +40,15 @@ void PluginContentOriginWhitelist::RenderFrameCreated(
           render_frame_host->GetMainFrame());
   if (!allowlist || allowlist->origins().empty())
     return;
-  render_frame_host->Send(new FrameMsg_UpdatePluginContentOriginWhitelist(
+  render_frame_host->Send(new FrameMsg_UpdatePluginContentOriginAllowlist(
       render_frame_host->GetRoutingID(), allowlist->origins()));
 }
 
-bool PluginContentOriginWhitelist::OnMessageReceived(
+bool PluginContentOriginAllowlist::OnMessageReceived(
     const IPC::Message& message,
     RenderFrameHost* render_frame_host) {
   bool handled = true;
-  IPC_BEGIN_MESSAGE_MAP_WITH_PARAM(PluginContentOriginWhitelist, message,
+  IPC_BEGIN_MESSAGE_MAP_WITH_PARAM(PluginContentOriginAllowlist, message,
                                    render_frame_host)
     IPC_MESSAGE_HANDLER(FrameHostMsg_PluginContentOriginAllowed,
                         OnPluginContentOriginAllowed)
@@ -58,7 +58,7 @@ bool PluginContentOriginWhitelist::OnMessageReceived(
   return handled;
 }
 
-void PluginContentOriginWhitelist::OnPluginContentOriginAllowed(
+void PluginContentOriginAllowlist::OnPluginContentOriginAllowed(
     RenderFrameHost* render_frame_host,
     const url::Origin& content_origin) {
   DocumentPluginContentOriginAllowlist* allowlist =
@@ -71,12 +71,12 @@ void PluginContentOriginWhitelist::OnPluginContentOriginAllowed(
   // RenderViewHosts from |render_frame_host| instead of getting them from
   // |web_contents()|.
   web_contents()->SendToAllFrames(
-      new FrameMsg_UpdatePluginContentOriginWhitelist(MSG_ROUTING_NONE,
+      new FrameMsg_UpdatePluginContentOriginAllowlist(MSG_ROUTING_NONE,
                                                       allowlist->origins()));
 }
 
-PluginContentOriginWhitelist::DocumentPluginContentOriginAllowlist*
-PluginContentOriginWhitelist::GetOrCreateAllowlistForFrame(
+PluginContentOriginAllowlist::DocumentPluginContentOriginAllowlist*
+PluginContentOriginAllowlist::GetOrCreateAllowlistForFrame(
     RenderFrameHost* render_frame_host) {
   RenderFrameHost* main_frame = render_frame_host->GetMainFrame();
   if (!DocumentPluginContentOriginAllowlist::GetForCurrentDocument(
@@ -87,12 +87,14 @@ PluginContentOriginWhitelist::GetOrCreateAllowlistForFrame(
       main_frame);
 }
 
-bool PluginContentOriginWhitelist::IsOriginAllowlistedForFrameForTesting(
+bool PluginContentOriginAllowlist::IsOriginAllowlistedForFrameForTesting(
     RenderFrameHost* render_frame_host,
     const url::Origin& content_origin) {
   DocumentPluginContentOriginAllowlist* allowlist =
       DocumentPluginContentOriginAllowlist::GetForCurrentDocument(
           render_frame_host->GetMainFrame());
+  PluginContentOriginAllowlist::DocumentPluginContentOriginAllowlist::
+      GetForCurrentDocument(render_frame_host->GetMainFrame());
   if (!allowlist)
     return false;
   return allowlist->origins().find(content_origin) !=

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_PLUGIN_CONTENT_ORIGIN_WHITELIST_H_
-#define CONTENT_BROWSER_PLUGIN_CONTENT_ORIGIN_WHITELIST_H_
+#ifndef CONTENT_BROWSER_PLUGIN_CONTENT_ORIGIN_ALLOWLIST_H_
+#define CONTENT_BROWSER_PLUGIN_CONTENT_ORIGIN_ALLOWLIST_H_
 
 #include <set>
 
@@ -17,7 +17,7 @@ namespace content {
 
 class WebContents;
 
-class CONTENT_EXPORT PluginContentOriginWhitelist : public WebContentsObserver {
+class CONTENT_EXPORT PluginContentOriginAllowlist : public WebContentsObserver {
   // This class manages the lists of document-tied temporarily allowlisted
   // plugin content origins that are exempt from power saving.
   //
@@ -26,13 +26,13 @@ class CONTENT_EXPORT PluginContentOriginWhitelist : public WebContentsObserver {
   // RenderFrames inside the same RenderView. This class also sends these
   // origins to any newly created RenderFrames.
  public:
-  explicit PluginContentOriginWhitelist(WebContents* web_contents);
-  ~PluginContentOriginWhitelist() override;
+  explicit PluginContentOriginAllowlist(WebContents* web_contents);
+  ~PluginContentOriginAllowlist() override;
 
  private:
-  FRIEND_TEST_ALL_PREFIXES(PluginContentOriginWhitelistTest,
+  FRIEND_TEST_ALL_PREFIXES(PluginContentOriginAllowlistTest,
                            ClearAllowlistOnNavigate);
-  FRIEND_TEST_ALL_PREFIXES(PluginContentOriginWhitelistTest,
+  FRIEND_TEST_ALL_PREFIXES(PluginContentOriginAllowlistTest,
                            SubframeInheritsAllowlist);
 
   class DocumentPluginContentOriginAllowlist
@@ -73,9 +73,9 @@ class CONTENT_EXPORT PluginContentOriginWhitelist : public WebContentsObserver {
   void OnPluginContentOriginAllowed(RenderFrameHost* render_frame_host,
                                     const url::Origin& content_origin);
 
-  DISALLOW_COPY_AND_ASSIGN(PluginContentOriginWhitelist);
+  DISALLOW_COPY_AND_ASSIGN(PluginContentOriginAllowlist);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_PLUGIN_CONTENT_ORIGIN_WHITELIST_H_
+#endif  // CONTENT_BROWSER_PLUGIN_CONTENT_ORIGIN_ALLOWLIST_H_
