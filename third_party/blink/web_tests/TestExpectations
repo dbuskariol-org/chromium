@@ -6732,3 +6732,4 @@ crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
 # Sheriff 2020-04-22
 # Flaky test.
 crbug.com/1073431 http/tests/streams/transferable/readable-stream.html [ Pass Failure ]
+crbug.com/1073460 external/wpt/css/CSS2/linebox/animations/line-height-interpolation.html [ Pass Timeout ]
