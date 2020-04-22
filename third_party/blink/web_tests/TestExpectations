@@ -6727,5 +6727,5 @@ crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
 # Flaky test.
 crbug.com/1073431 http/tests/streams/transferable/readable-stream.html [ Pass Failure ]
 crbug.com/1073460 external/wpt/css/CSS2/linebox/animations/line-height-interpolation.html [ Pass Timeout ]
-crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-success-external-module.html [ Pass Failure ]
-crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-fetch-error-external-module.html [ Pass Failure ]
+crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents [ Pass Failure ]
+crbug.com/1073505 [ Mac10.13 ] virtual/web-components-v0-disabled/external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents [ Pass Failure ]
