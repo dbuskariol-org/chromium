@@ -35,12 +35,8 @@ AlertRequest::AlertRequest(NSString* title,
       text_field_configs_(text_field_configs),
       button_configs_(button_configs),
       response_converter_(response_converter) {
-  // All alerts need a title, a message, or both.
   DCHECK(title_.length || message_.length);
-  // All alerts must have at least one button.
   DCHECK_GT(button_configs_.size(), 0U);
-  // All alerts must have a response converter to create feature-specific
-  // responses from alert UI interaction information.
   DCHECK(!response_converter.is_null());
 }
 

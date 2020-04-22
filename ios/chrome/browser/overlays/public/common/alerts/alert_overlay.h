@@ -110,6 +110,11 @@ class AlertRequest : public OverlayRequestConfig<AlertRequest> {
 
  private:
   OVERLAY_USER_DATA_SETUP(AlertRequest);
+
+  // Constructor called by CreateForUserData().  All arguments are copied to the
+  // ivars below.  |title|, |message|, or both must be non-empty strings.
+  // |button_configs| must contain at least one ButtonConfig.
+  // |response_converter| must be non-null.
   AlertRequest(NSString* title,
                NSString* message,
                NSString* accessibility_identifier,
