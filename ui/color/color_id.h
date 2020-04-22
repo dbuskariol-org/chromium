@@ -50,6 +50,7 @@
   E(kColorFocusableBorderFocused, NativeTheme::kColorId_FocusedBorderColor) \
   E(kColorFocusableBorderUnfocused, \
     NativeTheme::kColorId_UnfocusedBorderColor) \
+  E(kColorMenuIcon, NativeTheme::kColorId_MenuIconColor) \
   E(kColorIcon, NativeTheme::kColorId_DefaultIconColor) \
   E(kColorLabelDisabledForeground, NativeTheme::kColorId_LabelDisabledColor) \
   E(kColorLabelForeground, NativeTheme::kColorId_LabelEnabledColor) \

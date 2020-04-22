@@ -128,7 +128,7 @@ int CommandIdToWindowVectorIndex(int command_id) {
 
 ui::ImageModel CreateFavicon(const gfx::VectorIcon& icon) {
   return ui::ImageModel::FromVectorIcon(
-      icon, ui::NativeTheme::kColorId_DefaultIconColor, 16);
+      icon, ui::NativeTheme::kColorId_MenuIconColor, 16);
 }
 
 }  // namespace
