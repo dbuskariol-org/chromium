@@ -360,7 +360,7 @@ bool RenderViewHostImpl::CreateRenderView(
     DCHECK(main_rfh);
   }
 
-  GetWidget()->set_renderer_initialized(
+  GetWidget()->SetRendererInitialized(
       true, RenderWidgetHostImpl::RendererInitializer::kCreateRenderView);
 
   mojom::CreateViewParamsPtr params = mojom::CreateViewParams::New();
