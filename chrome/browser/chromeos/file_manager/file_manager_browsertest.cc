@@ -979,7 +979,8 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
                       TestCase("breadcrumbsLeafNoFocus").DisableFilesNg(),
                       TestCase("breadcrumbsTooltip").DisableFilesNg(),
                       TestCase("breadcrumbsDownloadsTranslation"),
-                      TestCase("breadcrumbsRenderShortPath").FilesNg()));
+                      TestCase("breadcrumbsRenderShortPath").FilesNg(),
+                      TestCase("breadcrumbsEliderButtonHidden").FilesNg()));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
     FormatDialog, /* format_dialog.js */
