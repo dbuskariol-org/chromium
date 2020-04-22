@@ -435,7 +435,8 @@ enum class GenerationDialogChoice {
 };
 
 // Represents the state of the user wrt. sign-in and account-scoped storage.
-// Used for metrics.
+// Used for metrics. Always keep this enum in sync with the corresponding
+// histogram_suffixes in histograms.xml!
 enum class PasswordAccountStorageUserState {
   // Signed-out user (and no account storage opt-in exists).
   kSignedOutUser,
@@ -456,6 +457,8 @@ enum class PasswordAccountStorageUserState {
   // Syncing user.
   kSyncUser,
 };
+std::string GetPasswordAccountStorageUserStateHistogramSuffix(
+    PasswordAccountStorageUserState user_state);
 
 // Log the |reason| a user dismissed the password manager UI except save/update
 // bubbles.

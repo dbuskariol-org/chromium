@@ -595,6 +595,12 @@ void ClearAccountStorageSettingsForAllUsers(PrefService* pref_service) {
 PasswordAccountStorageUserState ComputePasswordAccountStorageUserState(
     const PrefService* pref_service,
     const syncer::SyncService* sync_service) {
+  DCHECK(pref_service);
+  // The SyncService can be null in incognito, or due to a commandline flag. In
+  // those cases, simply consider the user as signed out.
+  if (!sync_service)
+    return PasswordAccountStorageUserState::kSignedOutUser;
+
   if (sync_service->IsSyncFeatureEnabled())
     return PasswordAccountStorageUserState::kSyncUser;
 
