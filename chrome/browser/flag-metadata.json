@@ -3633,11 +3633,6 @@
     "expiry_milestone": 85
   },
   {
-    "name": "sharing-derive-vapid-key",
-    "owners": [ "//chrome/browser/sharing/OWNERS" ],
-    "expiry_milestone": 85
-  },
-  {
     "name": "sharing-device-expiration",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
     "expiry_milestone": 83

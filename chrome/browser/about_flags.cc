@@ -4152,10 +4152,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(data_reduction_proxy::features::
                             kDataReductionProxyEnabledWithNetworkService)},
 
-    {"sharing-derive-vapid-key", flag_descriptions::kSharingDeriveVapidKeyName,
-     flag_descriptions::kSharingDeriveVapidKeyDescription, kOsAll,
-     FEATURE_VALUE_TYPE(kSharingDeriveVapidKey)},
-
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
     {"sharing-peer-connection-receiver",
