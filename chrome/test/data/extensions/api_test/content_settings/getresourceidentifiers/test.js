@@ -22,20 +22,8 @@ chrome.test.runTests([
       "javascript": undefined,
       "plugins": [
         {
-          "description": "Chromium PDF Viewer",
-          "id": "chromium-pdf",
-        },
-        {
-          "description": "Native Client",
-          "id": "internal-nacl-plugin",
-        },
-        {
-          "description": "Chromium PDF Plugin",
-          "id": "chromium-pdf-plugin",
-        },
-        {
-          "description": "Foo Plugin",
-          "id": "foo.plugin",
+          "description": "Foo",
+          "id": "foo",
         },
         {
           "description": "Bar Plugin",

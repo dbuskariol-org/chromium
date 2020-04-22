@@ -288,6 +288,8 @@ IN_PROC_BROWSER_TEST_F(ExtensionContentSettingsApiTest, MAYBE_Standard) {
 // TODO(crbug.com/1073588): Make this test work in branded builds.
 // Pass the plugins to look for into the JS to make this test less
 // brittle or just have the JS side look for the additional plugins.
+//
+// Flaky on the trybots. See http://crbug.com/96725.
 IN_PROC_BROWSER_TEST_F(ExtensionContentSettingsApiTest,
                        DISABLED_GetResourceIdentifiers) {
   base::FilePath::CharType kFooPath[] =
