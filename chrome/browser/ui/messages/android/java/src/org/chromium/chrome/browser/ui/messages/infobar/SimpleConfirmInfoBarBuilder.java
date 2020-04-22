@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.infobar;
+package org.chromium.chrome.browser.ui.messages.infobar;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,12 +19,10 @@ import org.chromium.content_public.browser.WebContents;
  * own customized native InfoBarDelegate to avoid unnecessary JNI hops.
  */
 public class SimpleConfirmInfoBarBuilder {
-
     /**
      * Listens for when users interact with an infobar.
      */
     public static interface Listener {
-
         /**
          * Called when the infobar was dismissed.
          */
@@ -110,4 +108,3 @@ public class SimpleConfirmInfoBarBuilder {
                 boolean autoExpire, Object listener);
     }
 }
-

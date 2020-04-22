@@ -594,6 +594,7 @@ group("jni_headers") {
     "//chrome/browser/profiles/android:jni_headers",
     "//chrome/browser/touch_to_fill/android:jni_headers",
     "//chrome/browser/ui/android/favicon:jni_headers",
+    "//chrome/browser/ui/messages/android:jni_headers",
     "//chrome/browser/util:jni_headers",
   ]
 }
@@ -2803,7 +2804,6 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/infobar/SafetyTipInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/SavePasswordInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/SearchGeolocationDisclosureInfoBar.java",
-    "java/src/org/chromium/chrome/browser/infobar/SimpleConfirmInfoBarBuilder.java",
     "java/src/org/chromium/chrome/browser/infobar/SurveyInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/SyncErrorInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/TranslateCompactInfoBar.java",
