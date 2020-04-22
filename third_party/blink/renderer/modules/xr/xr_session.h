@@ -164,7 +164,7 @@ class XRSession final
   int requestAnimationFrame(V8XRFrameRequestCallback* callback);
   void cancelAnimationFrame(int id);
 
-  XRInputSourceArray* inputSources() const;
+  XRInputSourceArray* inputSources(ScriptState*) const;
 
   ScriptPromise requestHitTestSource(ScriptState* script_state,
                                      XRHitTestOptionsInit* options,

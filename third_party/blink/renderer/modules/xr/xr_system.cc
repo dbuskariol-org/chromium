@@ -14,6 +14,7 @@
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/dom_exception.h"
 #include "third_party/blink/renderer/core/dom/element.h"
+#include "third_party/blink/renderer/core/frame/local_dom_window.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/core/fullscreen/fullscreen.h"
 #include "third_party/blink/renderer/core/fullscreen/scoped_allow_fullscreen.h"
@@ -694,7 +695,7 @@ device::mojom::blink::XRSessionOptionsPtr XRSystem::XRSessionOptionsFromQuery(
 }
 
 XRSystem::XRSystem(LocalFrame& frame, int64_t ukm_source_id)
-    : ExecutionContextLifecycleObserver(frame.GetDocument()),
+    : ExecutionContextLifecycleObserver(frame.DomWindow()),
       FocusChangedObserver(frame.GetPage()),
       ukm_source_id_(ukm_source_id),
       navigation_start_(

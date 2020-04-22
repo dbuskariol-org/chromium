@@ -22,6 +22,7 @@
 #include "third_party/blink/renderer/core/dom/dom_exception.h"
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/frame/frame.h"
+#include "third_party/blink/renderer/core/frame/local_dom_window.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/core/resize_observer/resize_observer.h"
 #include "third_party/blink/renderer/core/resize_observer/resize_observer_entry.h"
@@ -694,12 +695,11 @@ void XRSession::cancelAnimationFrame(int id) {
   callback_collection_->CancelCallback(id);
 }
 
-XRInputSourceArray* XRSession::inputSources() const {
-  Document* doc = Document::From(GetExecutionContext());
-  if (!did_log_getInputSources_ && doc) {
+XRInputSourceArray* XRSession::inputSources(ScriptState* script_state) const {
+  if (!did_log_getInputSources_ && script_state->ContextIsValid()) {
     ukm::builders::XR_WebXR(xr_->GetSourceId())
         .SetDidGetXRInputSources(1)
-        .Record(doc->UkmRecorder());
+        .Record(LocalDOMWindow::From(script_state)->document()->UkmRecorder());
     did_log_getInputSources_ = true;
   }
 
@@ -1556,13 +1556,13 @@ void XRSession::OnFrame(
 }
 
 void XRSession::LogGetPose() const {
-  Document* doc = Document::From(GetExecutionContext());
-  if (!did_log_getViewerPose_ && doc) {
+  LocalDOMWindow* window = To<LocalDOMWindow>(GetExecutionContext());
+  if (!did_log_getViewerPose_ && window) {
     did_log_getViewerPose_ = true;
 
     ukm::builders::XR_WebXR(xr_->GetSourceId())
         .SetDidRequestPose(1)
-        .Record(doc->UkmRecorder());
+        .Record(window->document()->UkmRecorder());
   }
 }
 
