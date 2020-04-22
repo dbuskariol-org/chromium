@@ -59,16 +59,6 @@ void AssistantControllerImpl::BindReceiver(
   assistant_volume_control_receiver_.Bind(std::move(receiver));
 }
 
-void AssistantControllerImpl::AddObserver(
-    AssistantControllerObserver* observer) {
-  observers_.AddObserver(observer);
-}
-
-void AssistantControllerImpl::RemoveObserver(
-    AssistantControllerObserver* observer) {
-  observers_.RemoveObserver(observer);
-}
-
 void AssistantControllerImpl::SetAssistant(
     mojo::PendingRemote<chromeos::assistant::mojom::Assistant> assistant) {
   assistant_.Bind(std::move(assistant));
@@ -140,6 +130,16 @@ void AssistantControllerImpl::DownloadImage(
   AccountId account_id = user_session->user_info.account_id;
   AssistantImageDownloader::GetInstance()->Download(account_id, url,
                                                     std::move(callback));
+}
+
+void AssistantControllerImpl::AddObserver(
+    AssistantControllerObserver* observer) {
+  observers_.AddObserver(observer);
+}
+
+void AssistantControllerImpl::RemoveObserver(
+    AssistantControllerObserver* observer) {
+  observers_.RemoveObserver(observer);
 }
 
 void AssistantControllerImpl::OpenUrl(const GURL& url,

@@ -170,11 +170,10 @@ AssistantAlarmTimerController::AssistantAlarmTimerController(
     AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   AddModelObserver(this);
-  assistant_controller_->AddObserver(this);
+  assistant_controller_observer_.Add(AssistantController::Get());
 }
 
 AssistantAlarmTimerController::~AssistantAlarmTimerController() {
-  assistant_controller_->RemoveObserver(this);
   RemoveModelObserver(this);
 }
 

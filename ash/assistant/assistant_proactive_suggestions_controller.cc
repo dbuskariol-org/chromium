@@ -16,7 +16,6 @@
 #include "ash/assistant/ui/proactive_suggestions_simple_view.h"
 #include "ash/assistant/ui/proactive_suggestions_view.h"
 #include "ash/assistant/util/deep_link_util.h"
-#include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
 #include "ash/public/cpp/assistant/proactive_suggestions.h"
 #include "ash/public/cpp/assistant/util/histogram_util.h"
@@ -37,7 +36,7 @@ AssistantProactiveSuggestionsController::
         AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   DCHECK(chromeos::assistant::features::IsProactiveSuggestionsEnabled());
-  assistant_controller_->AddObserver(this);
+  assistant_controller_observer_.Add(AssistantController::Get());
 }
 
 AssistantProactiveSuggestionsController::
@@ -47,8 +46,6 @@ AssistantProactiveSuggestionsController::
   auto* client = ProactiveSuggestionsClient::Get();
   if (client)
     client->SetDelegate(nullptr);
-
-  assistant_controller_->RemoveObserver(this);
 }
 
 void AssistantProactiveSuggestionsController::

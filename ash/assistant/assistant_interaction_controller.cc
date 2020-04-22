@@ -25,13 +25,11 @@
 #include "ash/public/cpp/ash_pref_names.h"
 #include "ash/public/cpp/assistant/assistant_setup.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
-#include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
 #include "ash/public/cpp/assistant/proactive_suggestions.h"
 #include "ash/session/session_controller_impl.h"
 #include "ash/shell.h"
 #include "ash/strings/grit/ash_strings.h"
-#include "ash/wm/tablet_mode/tablet_mode_controller.h"
 #include "base/bind.h"
 #include "base/optional.h"
 #include "base/strings/string_util.h"
@@ -118,15 +116,12 @@ AssistantInteractionController::AssistantInteractionController(
     AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   AddModelObserver(this);
-  assistant_controller_->AddObserver(this);
-  Shell::Get()->highlighter_controller()->AddObserver(this);
-  GetTabletModeController()->AddObserver(this);
+  assistant_controller_observer_.Add(AssistantController::Get());
+  highlighter_controller_observer_.Add(Shell::Get()->highlighter_controller());
+  tablet_mode_controller_observer_.Add(GetTabletModeController());
 }
 
 AssistantInteractionController::~AssistantInteractionController() {
-  GetTabletModeController()->RemoveObserver(this);
-  Shell::Get()->highlighter_controller()->RemoveObserver(this);
-  assistant_controller_->RemoveObserver(this);
   RemoveModelObserver(this);
 }
 

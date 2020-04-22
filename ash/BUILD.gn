@@ -194,7 +194,6 @@ component("ash") {
     "assistant/assistant_alarm_timer_controller.h",
     "assistant/assistant_controller_impl.cc",
     "assistant/assistant_controller_impl.h",
-    "assistant/assistant_controller_observer.h",
     "assistant/assistant_interaction_controller.cc",
     "assistant/assistant_interaction_controller.h",
     "assistant/assistant_notification_controller.cc",

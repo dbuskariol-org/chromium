@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_ASSISTANT_ASSISTANT_CONTROLLER_OBSERVER_H_
-#define ASH_ASSISTANT_ASSISTANT_CONTROLLER_OBSERVER_H_
+#ifndef ASH_PUBLIC_CPP_ASSISTANT_CONTROLLER_ASSISTANT_CONTROLLER_OBSERVER_H_
+#define ASH_PUBLIC_CPP_ASSISTANT_CONTROLLER_ASSISTANT_CONTROLLER_OBSERVER_H_
 
 #include <map>
 #include <string>
 
+#include "ash/public/cpp/ash_public_export.h"
 #include "base/macros.h"
 #include "base/observer_list_types.h"
 
@@ -23,7 +24,8 @@ enum class DeepLinkType;
 
 // A checked observer which receives notification of changes to the
 // AssistantController.
-class AssistantControllerObserver : public base::CheckedObserver {
+class ASH_PUBLIC_EXPORT AssistantControllerObserver
+    : public base::CheckedObserver {
  public:
   // Invoked when the AssistantController has been fully constructed.
   virtual void OnAssistantControllerConstructed() {}
@@ -60,4 +62,4 @@ class AssistantControllerObserver : public base::CheckedObserver {
 
 }  // namespace ash
 
-#endif  // ASH_ASSISTANT_ASSISTANT_CONTROLLER_OBSERVER_H_
+#endif  // ASH_PUBLIC_CPP_ASSISTANT_CONTROLLER_ASSISTANT_CONTROLLER_OBSERVER_H_
