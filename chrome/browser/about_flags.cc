@@ -5308,6 +5308,11 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-palm-suppression", flag_descriptions::kEnablePalmSuppressionName,
      flag_descriptions::kEnablePalmSuppressionDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(ui::kEnablePalmSuppression)},
+
+    {"enable-high-resolution-mouse-scrolling",
+     flag_descriptions::kEnableHighResolutionMouseScrollingName,
+     flag_descriptions::kEnableHighResolutionMouseScrollingDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(ui::kEnableHighResolutionMouseScrolling)},
 #endif  // defined(OS_CHROMEOS)
 
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
