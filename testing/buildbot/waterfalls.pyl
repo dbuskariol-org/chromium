@@ -2177,6 +2177,15 @@
           'gtest_tests': 'fieldtrial_browser_tests',
         },
       },
+      'linux-perfetto-rel': {
+        'additional_compile_targets': [ 'chrome' ],
+        'mixins': [
+          'linux-xenial',
+        ],
+        'test_suites': {
+          'gtest_tests': 'perfetto_gtests',
+        },
+      },
       'linux-upload-perfetto': {
         'additional_compile_targets': [ 'trace_processor_shell' ],
         'test_suites': {

@@ -401,6 +401,10 @@ try_.chromium_linux_builder(
 )
 
 try_.chromium_linux_builder(
+    name = 'linux-perfetto-rel',
+)
+
+try_.chromium_linux_builder(
     name = 'linux-trusty-rel',
     goma_jobs = goma.jobs.J150,
     os = os.LINUX_TRUSTY,
