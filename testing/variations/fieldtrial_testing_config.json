@@ -2119,6 +2119,22 @@
             ]
         }
     ],
+    "EduCoexistence": [
+        {
+            "platforms": [
+                "chromeos"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "EduCoexistence",
+                        "EduCoexistenceConsentLog"
+                    ]
+                }
+            ]
+        }
+    ],
     "EnableCsrssLockdown": [
         {
             "platforms": [
