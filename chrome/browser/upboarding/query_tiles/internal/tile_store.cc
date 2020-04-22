@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/upboarding/query_tiles/internal/query_tile_store.h"
+#include "chrome/browser/upboarding/query_tiles/internal/tile_store.h"
 
 #include <utility>
 
@@ -11,11 +11,11 @@
 namespace leveldb_proto {
 
 void DataToProto(upboarding::TileGroup* data,
-                 upboarding::query_tiles::proto::QueryTileGroup* proto) {
+                 upboarding::query_tiles::proto::TileGroup* proto) {
   TileGroupToProto(data, proto);
 }
 
-void ProtoToData(upboarding::query_tiles::proto::QueryTileGroup* proto,
+void ProtoToData(upboarding::query_tiles::proto::TileGroup* proto,
                  upboarding::TileGroup* data) {
   TileGroupFromProto(proto, data);
 }
@@ -24,19 +24,19 @@ void ProtoToData(upboarding::query_tiles::proto::QueryTileGroup* proto,
 
 namespace upboarding {
 
-QueryTileStore::QueryTileStore(QueryTileProtoDb db) : db_(std::move(db)) {}
+TileStore::TileStore(TileProtoDb db) : db_(std::move(db)) {}
 
-QueryTileStore::~QueryTileStore() = default;
+TileStore::~TileStore() = default;
 
-void QueryTileStore::InitAndLoad(LoadCallback callback) {
-  db_->Init(base::BindOnce(&QueryTileStore::OnDbInitialized,
+void TileStore::InitAndLoad(LoadCallback callback) {
+  db_->Init(base::BindOnce(&TileStore::OnDbInitialized,
                            weak_ptr_factory_.GetWeakPtr(),
                            std::move(callback)));
 }
 
-void QueryTileStore::Update(const std::string& key,
-                            const TileGroup& group,
-                            UpdateCallback callback) {
+void TileStore::Update(const std::string& key,
+                       const TileGroup& group,
+                       UpdateCallback callback) {
   auto entries_to_save = std::make_unique<KeyEntryVector>();
   TileGroup entry_to_save = group;
   entries_to_save->emplace_back(key, std::move(entry_to_save));
@@ -45,26 +45,26 @@ void QueryTileStore::Update(const std::string& key,
                      std::move(callback));
 }
 
-void QueryTileStore::Delete(const std::string& key, DeleteCallback callback) {
+void TileStore::Delete(const std::string& key, DeleteCallback callback) {
   auto keys_to_delete = std::make_unique<KeyVector>();
   keys_to_delete->emplace_back(key);
   db_->UpdateEntries(std::make_unique<KeyEntryVector>() /*entries_to_save*/,
                      std::move(keys_to_delete), std::move(callback));
 }
 
-void QueryTileStore::OnDbInitialized(LoadCallback callback,
-                                     leveldb_proto::Enums::InitStatus status) {
+void TileStore::OnDbInitialized(LoadCallback callback,
+                                leveldb_proto::Enums::InitStatus status) {
   if (status != leveldb_proto::Enums::InitStatus::kOK) {
     std::move(callback).Run(false, KeysAndEntries());
     return;
   }
 
-  db_->LoadKeysAndEntries(base::BindOnce(&QueryTileStore::OnDataLoaded,
+  db_->LoadKeysAndEntries(base::BindOnce(&TileStore::OnDataLoaded,
                                          weak_ptr_factory_.GetWeakPtr(),
                                          std::move(callback)));
 }
 
-void QueryTileStore::OnDataLoaded(
+void TileStore::OnDataLoaded(
     LoadCallback callback,
     bool success,
     std::unique_ptr<std::map<std::string, TileGroup>> loaded_keys_and_entries) {

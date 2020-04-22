@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_STORE_H_
-#define CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_STORE_H_
+#ifndef CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_TILE_STORE_H_
+#define CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_TILE_STORE_H_
 
 #include <map>
 #include <memory>
@@ -16,33 +16,32 @@
 #include "base/memory/weak_ptr.h"
 #include "chrome/browser/upboarding/query_tiles/internal/store.h"
 #include "chrome/browser/upboarding/query_tiles/internal/tile_group.h"
-#include "chrome/browser/upboarding/query_tiles/proto/query_tile_entry.pb.h"
-#include "chrome/browser/upboarding/query_tiles/query_tile_entry.h"
+#include "chrome/browser/upboarding/query_tiles/proto/tile.pb.h"
+#include "chrome/browser/upboarding/query_tiles/tile.h"
 #include "components/leveldb_proto/public/proto_database.h"
 
 namespace leveldb_proto {
 
 void DataToProto(upboarding::TileGroup* data,
-                 upboarding::query_tiles::proto::QueryTileGroup* proto);
-void ProtoToData(upboarding::query_tiles::proto::QueryTileGroup* proto,
+                 upboarding::query_tiles::proto::TileGroup* proto);
+void ProtoToData(upboarding::query_tiles::proto::TileGroup* proto,
                  upboarding::TileGroup* data);
 
 }  // namespace leveldb_proto
 
 namespace upboarding {
-// QueryTileStore is the storage layer of all TileGroup which contains
+// TileStore is the storage layer of all TileGroup which contains
 // the top-level tile entries and group metadata. Sub-level tiles are
 // recursively owned by their parents.
-class QueryTileStore : public Store<TileGroup> {
+class TileStore : public Store<TileGroup> {
  public:
-  using QueryTileProtoDb = std::unique_ptr<
-      leveldb_proto::ProtoDatabase<query_tiles::proto::QueryTileGroup,
-                                   TileGroup>>;
-  explicit QueryTileStore(QueryTileProtoDb db);
-  ~QueryTileStore() override;
+  using TileProtoDb = std::unique_ptr<
+      leveldb_proto::ProtoDatabase<query_tiles::proto::TileGroup, TileGroup>>;
+  explicit TileStore(TileProtoDb db);
+  ~TileStore() override;
 
-  QueryTileStore(const QueryTileStore& other) = delete;
-  QueryTileStore& operator=(const QueryTileStore& other) = delete;
+  TileStore(const TileStore& other) = delete;
+  TileStore& operator=(const TileStore& other) = delete;
 
  private:
   using KeyEntryVector = std::vector<std::pair<std::string, TileGroup>>;
@@ -66,11 +65,11 @@ class QueryTileStore : public Store<TileGroup> {
       bool success,
       std::unique_ptr<std::map<std::string, TileGroup>> loaded_entries);
 
-  QueryTileProtoDb db_;
+  TileProtoDb db_;
 
-  base::WeakPtrFactory<QueryTileStore> weak_ptr_factory_{this};
+  base::WeakPtrFactory<TileStore> weak_ptr_factory_{this};
 };
 
 }  // namespace upboarding
 
-#endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_STORE_H_
+#endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_TILE_STORE_H_

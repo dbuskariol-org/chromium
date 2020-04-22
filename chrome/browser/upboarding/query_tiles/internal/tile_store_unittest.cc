@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/upboarding/query_tiles/internal/query_tile_store.h"
+#include "chrome/browser/upboarding/query_tiles/internal/tile_store.h"
 
 #include <map>
 #include <memory>
@@ -22,27 +22,27 @@ using InitStatus = leveldb_proto::Enums::InitStatus;
 namespace upboarding {
 namespace {
 
-class QueryTileStoreTest : public testing::Test {
+class TileStoreTest : public testing::Test {
  public:
-  using TileGroupProto = query_tiles::proto::QueryTileGroup;
+  using TileGroupProto = query_tiles::proto::TileGroup;
   using EntriesMap = std::map<std::string, std::unique_ptr<TileGroup>>;
   using ProtoMap = std::map<std::string, TileGroupProto>;
   using KeysAndEntries = std::map<std::string, TileGroup>;
   using TestEntries = std::vector<TileGroup>;
 
-  QueryTileStoreTest() : load_result_(false), db_(nullptr) {}
-  ~QueryTileStoreTest() override = default;
+  TileStoreTest() : load_result_(false), db_(nullptr) {}
+  ~TileStoreTest() override = default;
 
-  QueryTileStoreTest(const QueryTileStoreTest& other) = delete;
-  QueryTileStoreTest& operator=(const QueryTileStoreTest& other) = delete;
+  TileStoreTest(const TileStoreTest& other) = delete;
+  TileStoreTest& operator=(const TileStoreTest& other) = delete;
 
  protected:
   void Init(TestEntries input, InitStatus status) {
     CreateTestDbEntries(std::move(input));
     auto db = std::make_unique<FakeDB<TileGroupProto, TileGroup>>(&db_entries_);
     db_ = db.get();
-    store_ = std::make_unique<QueryTileStore>(std::move(db));
-    store_->InitAndLoad(base::BindOnce(&QueryTileStoreTest::OnEntriesLoaded,
+    store_ = std::make_unique<TileStore>(std::move(db));
+    store_->InitAndLoad(base::BindOnce(&TileStoreTest::OnEntriesLoaded,
                                        base::Unretained(this)));
     db_->InitStatusCallback(status);
   }
@@ -62,9 +62,9 @@ class QueryTileStoreTest : public testing::Test {
 
   // Verifies the entries in the db is |expected|.
   void VerifyDataInDb(std::unique_ptr<KeysAndEntries> expected) {
-    db_->LoadKeysAndEntries(
-        base::BindOnce(&QueryTileStoreTest::OnVerifyDataInDb,
-                       base::Unretained(this), std::move(expected)));
+    db_->LoadKeysAndEntries(base::BindOnce(&TileStoreTest::OnVerifyDataInDb,
+                                           base::Unretained(this),
+                                           std::move(expected)));
     db_->LoadCallback(true);
   }
 
@@ -100,7 +100,7 @@ class QueryTileStoreTest : public testing::Test {
 };
 
 // Test Initializing and loading an empty database .
-TEST_F(QueryTileStoreTest, InitSuccessEmptyDb) {
+TEST_F(TileStoreTest, InitSuccessEmptyDb) {
   auto test_data = TestEntries();
   Init(std::move(test_data), InitStatus::kOK);
   db()->LoadCallback(true);
@@ -109,7 +109,7 @@ TEST_F(QueryTileStoreTest, InitSuccessEmptyDb) {
 }
 
 // Test Initializing and loading a non-empty database.
-TEST_F(QueryTileStoreTest, InitSuccessWithData) {
+TEST_F(TileStoreTest, InitSuccessWithData) {
   auto test_data = TestEntries();
   TileGroup test_group;
   test::ResetTestGroup(&test_group);
@@ -125,7 +125,7 @@ TEST_F(QueryTileStoreTest, InitSuccessWithData) {
 }
 
 // Test Initializing and loading a non-empty database failed.
-TEST_F(QueryTileStoreTest, InitFailedWithData) {
+TEST_F(TileStoreTest, InitFailedWithData) {
   auto test_data = TestEntries();
   TileGroup test_group;
   test::ResetTestGroup(&test_group);
@@ -138,7 +138,7 @@ TEST_F(QueryTileStoreTest, InitFailedWithData) {
 }
 
 // Test adding and updating.
-TEST_F(QueryTileStoreTest, AddAndUpdateDataFailed) {
+TEST_F(TileStoreTest, AddAndUpdateDataFailed) {
   auto test_data = TestEntries();
   Init(std::move(test_data), InitStatus::kOK);
   db()->LoadCallback(true);
@@ -148,7 +148,7 @@ TEST_F(QueryTileStoreTest, AddAndUpdateDataFailed) {
   // Add an entry failed.
   TileGroup test_group;
   test_group.id = "test_group_id";
-  auto test_entry_1 = std::make_unique<QueryTileEntry>();
+  auto test_entry_1 = std::make_unique<Tile>();
   test_entry_1->id = "test_entry_id_1";
   test_entry_1->display_text = "test_entry_test_display_text";
   test_group.tiles.emplace_back(std::move(test_entry_1));
@@ -157,7 +157,7 @@ TEST_F(QueryTileStoreTest, AddAndUpdateDataFailed) {
   db()->UpdateCallback(false);
 }
 
-TEST_F(QueryTileStoreTest, AddAndUpdateDataSuccess) {
+TEST_F(TileStoreTest, AddAndUpdateDataSuccess) {
   auto test_data = TestEntries();
   Init(std::move(test_data), InitStatus::kOK);
   db()->LoadCallback(true);
@@ -177,7 +177,7 @@ TEST_F(QueryTileStoreTest, AddAndUpdateDataSuccess) {
 }
 
 // Test deleting from db.
-TEST_F(QueryTileStoreTest, DeleteSuccess) {
+TEST_F(TileStoreTest, DeleteSuccess) {
   auto test_data = TestEntries();
   TileGroup test_group;
   test::ResetTestGroup(&test_group);

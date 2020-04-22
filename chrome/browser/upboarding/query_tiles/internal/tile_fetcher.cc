@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/upboarding/query_tiles/internal/tile_info_fetcher.h"
+#include "chrome/browser/upboarding/query_tiles/internal/tile_fetcher.h"
 
 #include <utility>
 
@@ -17,9 +17,9 @@
 namespace upboarding {
 namespace {
 
-class TileInfoFetcherImpl : public TileInfoFetcher {
+class TileFetcherImpl : public TileFetcher {
  public:
-  TileInfoFetcherImpl(
+  TileFetcherImpl(
       const GURL& url,
       const std::string& locale,
       const std::string& accept_languages,
@@ -36,14 +36,13 @@ class TileInfoFetcherImpl : public TileInfoFetcher {
     url_loader_ = network::SimpleURLLoader::Create(std::move(resource_request),
                                                    traffic_annotation);
 
-    url_loader_->SetOnResponseStartedCallback(
-        base::BindOnce(&TileInfoFetcherImpl::OnResponseStarted,
-                       weak_ptr_factory_.GetWeakPtr()));
+    url_loader_->SetOnResponseStartedCallback(base::BindRepeating(
+        &TileFetcherImpl::OnResponseStarted, weak_ptr_factory_.GetWeakPtr()));
     // TODO(hesen): Estimate max size of response then replace to
     // DownloadToString method.
     url_loader_->DownloadToStringOfUnboundedSizeUntilCrashAndDie(
         url_loader_factory_.get(),
-        base::BindOnce(&TileInfoFetcherImpl::OnDownloadComplete,
+        base::BindOnce(&TileFetcherImpl::OnDownloadComplete,
                        weak_ptr_factory_.GetWeakPtr()));
   }
 
@@ -92,13 +91,13 @@ class TileInfoFetcherImpl : public TileInfoFetcher {
   // Status of the tile info request.
   TileInfoRequestStatus tile_info_request_status_;
 
-  base::WeakPtrFactory<TileInfoFetcherImpl> weak_ptr_factory_{this};
+  base::WeakPtrFactory<TileFetcherImpl> weak_ptr_factory_{this};
 };
 
 }  // namespace
 
 // static
-std::unique_ptr<TileInfoFetcher> TileInfoFetcher::CreateAndFetchForTileInfo(
+std::unique_ptr<TileFetcher> TileFetcher::CreateAndFetchForTileInfo(
     const GURL& url,
     const std::string& locale,
     const std::string& accept_languages,
@@ -106,12 +105,12 @@ std::unique_ptr<TileInfoFetcher> TileInfoFetcher::CreateAndFetchForTileInfo(
     const net::NetworkTrafficAnnotationTag& traffic_annotation,
     scoped_refptr<network::SharedURLLoaderFactory> url_loader_factory,
     FinishedCallback callback) {
-  return std::make_unique<TileInfoFetcherImpl>(
+  return std::make_unique<TileFetcherImpl>(
       url, locale, accept_languages, api_key, traffic_annotation,
       url_loader_factory, std::move(callback));
 }
 
-TileInfoFetcher::TileInfoFetcher() = default;
-TileInfoFetcher::~TileInfoFetcher() = default;
+TileFetcher::TileFetcher() = default;
+TileFetcher::~TileFetcher() = default;
 
 }  // namespace upboarding

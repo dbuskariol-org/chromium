@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UPBOARDING_QUERY_TILES_QUERY_TILE_ENTRY_H_
-#define CHROME_BROWSER_UPBOARDING_QUERY_TILES_QUERY_TILE_ENTRY_H_
+#ifndef CHROME_BROWSER_UPBOARDING_QUERY_TILES_TILE_H_
+#define CHROME_BROWSER_UPBOARDING_QUERY_TILES_TILE_H_
 
 #include <memory>
 #include <string>
@@ -29,18 +29,18 @@ struct ImageMetadata {
   GURL url;
 };
 
-// Represents the in memory structure of QueryTile.
-struct QueryTileEntry {
-  QueryTileEntry();
-  ~QueryTileEntry();
-  bool operator==(const QueryTileEntry& other) const;
-  bool operator!=(const QueryTileEntry& other) const;
+// Represents the in memory structure of Tile.
+struct Tile {
+  Tile();
+  ~Tile();
+  bool operator==(const Tile& other) const;
+  bool operator!=(const Tile& other) const;
 
-  QueryTileEntry(const QueryTileEntry& other);
-  QueryTileEntry(QueryTileEntry&& other) noexcept;
+  Tile(const Tile& other);
+  Tile(Tile&& other) noexcept;
 
-  QueryTileEntry& operator=(const QueryTileEntry& other);
-  QueryTileEntry& operator=(QueryTileEntry&& other) noexcept;
+  Tile& operator=(const Tile& other);
+  Tile& operator=(Tile&& other) noexcept;
 
   // Unique Id for each entry.
   std::string id;
@@ -58,9 +58,9 @@ struct QueryTileEntry {
   std::vector<ImageMetadata> image_metadatas;
 
   // A list of children of this tile.
-  std::vector<std::unique_ptr<QueryTileEntry>> sub_tiles;
+  std::vector<std::unique_ptr<Tile>> sub_tiles;
 };
 
 }  // namespace upboarding
 
-#endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_QUERY_TILE_ENTRY_H_
+#endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_TILE_H_

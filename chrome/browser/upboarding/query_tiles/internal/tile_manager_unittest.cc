@@ -11,7 +11,7 @@
 #include "base/test/simple_test_clock.h"
 #include "base/test/task_environment.h"
 #include "chrome/browser/upboarding/query_tiles/internal/config.h"
-#include "chrome/browser/upboarding/query_tiles/internal/query_tile_store.h"
+#include "chrome/browser/upboarding/query_tiles/internal/tile_store.h"
 #include "chrome/browser/upboarding/query_tiles/test/test_utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -22,16 +22,13 @@ using ::testing::Invoke;
 namespace upboarding {
 namespace {
 
-class MockQueryTileStore : public Store<TileGroup> {
+class MockTileStore : public Store<TileGroup> {
  public:
-  MockQueryTileStore() = default;
-  MOCK_METHOD1(InitAndLoad, void(QueryTileStore::LoadCallback));
+  MockTileStore() = default;
+  MOCK_METHOD1(InitAndLoad, void(TileStore::LoadCallback));
   MOCK_METHOD3(Update,
-               void(const std::string&,
-                    const TileGroup&,
-                    QueryTileStore::UpdateCallback));
-  MOCK_METHOD2(Delete,
-               void(const std::string&, QueryTileStore::DeleteCallback));
+               void(const std::string&, const TileGroup&, UpdateCallback));
+  MOCK_METHOD2(Delete, void(const std::string&, TileStore::DeleteCallback));
 };
 
 class TileManagerTest : public testing::Test {
@@ -43,7 +40,7 @@ class TileManagerTest : public testing::Test {
   TileManagerTest& operator=(const TileManagerTest& other) = delete;
 
   void SetUp() override {
-    auto tile_store = std::make_unique<MockQueryTileStore>();
+    auto tile_store = std::make_unique<MockTileStore>();
     tile_store_ = tile_store.get();
     config_.locale = "en-US";
     config_.is_enabled = true;
@@ -70,7 +67,7 @@ class TileManagerTest : public testing::Test {
 
   // Run SaveTiles call from manager_, compare the |expected_status| to the
   // actual returned status.
-  void SaveTiles(std::vector<std::unique_ptr<QueryTileEntry>> tiles,
+  void SaveTiles(std::vector<std::unique_ptr<Tile>> tiles,
                  base::RepeatingClosure closure,
                  TileGroupStatus expected_status) {
     manager()->SaveTiles(
@@ -88,52 +85,49 @@ class TileManagerTest : public testing::Test {
 
   // Run GetTiles call from manager_, compare the |expected| to the actual
   // returned tiles.
-  void GetTiles(std::vector<QueryTileEntry*> expected) {
-    std::vector<QueryTileEntry*> actual;
+  void GetTiles(std::vector<Tile*> expected) {
+    std::vector<Tile*> actual;
     manager()->GetTiles(&actual);
     EXPECT_TRUE(test::AreTilesIdentical(expected, actual));
   }
 
  protected:
   TileManager* manager() { return manager_.get(); }
-  MockQueryTileStore* tile_store() { return tile_store_; }
-  const QueryTilesConfig& config() const { return config_; }
+  MockTileStore* tile_store() { return tile_store_; }
+  const TileConfig& config() const { return config_; }
   const base::SimpleTestClock* clock() const { return &clock_; }
 
  private:
   base::test::TaskEnvironment task_environment_;
   std::unique_ptr<TileManager> manager_;
-  MockQueryTileStore* tile_store_;
-  QueryTilesConfig config_;
+  MockTileStore* tile_store_;
+  TileConfig config_;
   base::SimpleTestClock clock_;
 };
 
 TEST_F(TileManagerTest, InitAndLoadWithDbOperationFailed) {
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
-      .WillOnce(Invoke(
-          [](base::OnceCallback<void(bool, MockQueryTileStore::KeysAndEntries)>
-                 callback) {
-            std::move(callback).Run(false,
-                                    MockQueryTileStore::KeysAndEntries());
-          }));
+      .WillOnce(Invoke([](base::OnceCallback<void(
+                              bool, MockTileStore::KeysAndEntries)> callback) {
+        std::move(callback).Run(false, MockTileStore::KeysAndEntries());
+      }));
 
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kFailureDbOperation);
-  GetTiles(std::vector<QueryTileEntry*>() /*expect an empty result*/);
+  GetTiles(std::vector<Tile*>() /*expect an empty result*/);
   loop.Run();
 }
 
 TEST_F(TileManagerTest, InitWithEmptyDb) {
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
-      .WillOnce(Invoke(
-          [](base::OnceCallback<void(bool, MockQueryTileStore::KeysAndEntries)>
-                 callback) {
-            std::move(callback).Run(true, MockQueryTileStore::KeysAndEntries());
-          }));
+      .WillOnce(Invoke([](base::OnceCallback<void(
+                              bool, MockTileStore::KeysAndEntries)> callback) {
+        std::move(callback).Run(true, MockTileStore::KeysAndEntries());
+      }));
 
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kSuccess);
-  GetTiles(std::vector<QueryTileEntry*>() /*expect an empty result*/);
+  GetTiles(std::vector<Tile*>() /*expect an empty result*/);
   loop.Run();
 }
 
@@ -141,12 +135,12 @@ TEST_F(TileManagerTest, InitAndLoadWithLocaleNotMatch) {
   auto invalid_group = std::make_unique<TileGroup>();
   test::ResetTestGroup(invalid_group.get());
   invalid_group->locale = "jp";
-  MockQueryTileStore::KeysAndEntries input;
+  MockTileStore::KeysAndEntries input;
   input[invalid_group->id] = std::move(invalid_group);
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
       .WillOnce(Invoke(
-          [&input](base::OnceCallback<void(
-                       bool, MockQueryTileStore::KeysAndEntries)> callback) {
+          [&input](base::OnceCallback<void(bool, MockTileStore::KeysAndEntries)>
+                       callback) {
             std::move(callback).Run(true, std::move(input));
           }));
 
@@ -154,7 +148,7 @@ TEST_F(TileManagerTest, InitAndLoadWithLocaleNotMatch) {
 
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kInvalidGroup);
-  GetTiles(std::vector<QueryTileEntry*>() /*expect an empty result*/);
+  GetTiles(std::vector<Tile*>() /*expect an empty result*/);
   loop.Run();
 }
 
@@ -163,12 +157,12 @@ TEST_F(TileManagerTest, InitAndLoadWithExpiredGroup) {
   test::ResetTestGroup(invalid_group.get());
   invalid_group->last_updated_ts =
       clock()->Now() - base::TimeDelta::FromDays(3);
-  MockQueryTileStore::KeysAndEntries input;
+  MockTileStore::KeysAndEntries input;
   input[invalid_group->id] = std::move(invalid_group);
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
       .WillOnce(Invoke(
-          [&input](base::OnceCallback<void(
-                       bool, MockQueryTileStore::KeysAndEntries)> callback) {
+          [&input](base::OnceCallback<void(bool, MockTileStore::KeysAndEntries)>
+                       callback) {
             std::move(callback).Run(true, std::move(input));
           }));
 
@@ -176,25 +170,25 @@ TEST_F(TileManagerTest, InitAndLoadWithExpiredGroup) {
 
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kInvalidGroup);
-  GetTiles(std::vector<QueryTileEntry*>() /*expect an empty result*/);
+  GetTiles(std::vector<Tile*>() /*expect an empty result*/);
   loop.Run();
 }
 
 TEST_F(TileManagerTest, InitAndLoadSuccess) {
   auto input_group = std::make_unique<TileGroup>();
   test::ResetTestGroup(input_group.get());
-  std::vector<QueryTileEntry*> expected;
+  std::vector<Tile*> expected;
   input_group->last_updated_ts =
       clock()->Now() - base::TimeDelta::FromMinutes(5);
   for (const auto& tile : input_group->tiles)
     expected.emplace_back(tile.get());
 
-  MockQueryTileStore::KeysAndEntries input;
+  MockTileStore::KeysAndEntries input;
   input[input_group->id] = std::move(input_group);
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
       .WillOnce(Invoke(
-          [&input](base::OnceCallback<void(
-                       bool, MockQueryTileStore::KeysAndEntries)> callback) {
+          [&input](base::OnceCallback<void(bool, MockTileStore::KeysAndEntries)>
+                       callback) {
             std::move(callback).Run(true, std::move(input));
           }));
 
@@ -210,26 +204,24 @@ TEST_F(TileManagerTest, InitAndLoadSuccess) {
 // uninitialized. GetTiles should return empty result.
 TEST_F(TileManagerTest, SaveTilesWhenUnintialized) {
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
-      .WillOnce(Invoke(
-          [](base::OnceCallback<void(bool, MockQueryTileStore::KeysAndEntries)>
-                 callback) {
-            std::move(callback).Run(false,
-                                    MockQueryTileStore::KeysAndEntries());
-          }));
+      .WillOnce(Invoke([](base::OnceCallback<void(
+                              bool, MockTileStore::KeysAndEntries)> callback) {
+        std::move(callback).Run(false, MockTileStore::KeysAndEntries());
+      }));
   EXPECT_CALL(*tile_store(), Update(_, _, _)).Times(0);
   EXPECT_CALL(*tile_store(), Delete(_, _)).Times(0);
 
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kFailureDbOperation);
 
-  auto tile_to_save = std::make_unique<QueryTileEntry>();
+  auto tile_to_save = std::make_unique<Tile>();
   test::ResetTestEntry(tile_to_save.get());
-  std::vector<std::unique_ptr<QueryTileEntry>> tiles_to_save;
+  std::vector<std::unique_ptr<Tile>> tiles_to_save;
   tiles_to_save.emplace_back(std::move(tile_to_save));
 
   SaveTiles(std::move(tiles_to_save), loop.QuitClosure(),
             TileGroupStatus::kUninitialized);
-  GetTiles(std::vector<QueryTileEntry*>() /*expect an empty result*/);
+  GetTiles(std::vector<Tile*>() /*expect an empty result*/);
 
   loop.Run();
 }
@@ -238,14 +230,13 @@ TEST_F(TileManagerTest, SaveTilesWhenUnintialized) {
 // operation failed. GetTiles should return empty result.
 TEST_F(TileManagerTest, SaveTilesFailed) {
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
-      .WillOnce(Invoke(
-          [](base::OnceCallback<void(bool, MockQueryTileStore::KeysAndEntries)>
-                 callback) {
-            std::move(callback).Run(true, MockQueryTileStore::KeysAndEntries());
-          }));
+      .WillOnce(Invoke([](base::OnceCallback<void(
+                              bool, MockTileStore::KeysAndEntries)> callback) {
+        std::move(callback).Run(true, MockTileStore::KeysAndEntries());
+      }));
   EXPECT_CALL(*tile_store(), Update(_, _, _))
       .WillOnce(Invoke([](const std::string& id, const TileGroup& group,
-                          MockQueryTileStore::UpdateCallback callback) {
+                          MockTileStore::UpdateCallback callback) {
         std::move(callback).Run(false);
       }));
   EXPECT_CALL(*tile_store(), Delete(_, _)).Times(0);
@@ -253,14 +244,14 @@ TEST_F(TileManagerTest, SaveTilesFailed) {
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kSuccess);
 
-  auto tile_to_save = std::make_unique<QueryTileEntry>();
+  auto tile_to_save = std::make_unique<Tile>();
   test::ResetTestEntry(tile_to_save.get());
-  std::vector<std::unique_ptr<QueryTileEntry>> tiles_to_save;
+  std::vector<std::unique_ptr<Tile>> tiles_to_save;
   tiles_to_save.emplace_back(std::move(tile_to_save));
 
   SaveTiles(std::move(tiles_to_save), loop.QuitClosure(),
             TileGroupStatus::kFailureDbOperation);
-  GetTiles(std::vector<QueryTileEntry*>() /*expect an empty result*/);
+  GetTiles(std::vector<Tile*>() /*expect an empty result*/);
 
   loop.Run();
 }
@@ -269,14 +260,13 @@ TEST_F(TileManagerTest, SaveTilesFailed) {
 // return the recent saved tiles, and no Delete call is executed.
 TEST_F(TileManagerTest, SaveTilesSuccess) {
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
-      .WillOnce(Invoke(
-          [](base::OnceCallback<void(bool, MockQueryTileStore::KeysAndEntries)>
-                 callback) {
-            std::move(callback).Run(true, MockQueryTileStore::KeysAndEntries());
-          }));
+      .WillOnce(Invoke([](base::OnceCallback<void(
+                              bool, MockTileStore::KeysAndEntries)> callback) {
+        std::move(callback).Run(true, MockTileStore::KeysAndEntries());
+      }));
   EXPECT_CALL(*tile_store(), Update(_, _, _))
       .WillOnce(Invoke([](const std::string& id, const TileGroup& group,
-                          MockQueryTileStore::UpdateCallback callback) {
+                          MockTileStore::UpdateCallback callback) {
         std::move(callback).Run(true);
       }));
   EXPECT_CALL(*tile_store(), Delete(_, _)).Times(0);
@@ -284,13 +274,13 @@ TEST_F(TileManagerTest, SaveTilesSuccess) {
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kSuccess);
 
-  auto tile_to_save = std::make_unique<QueryTileEntry>();
-  auto expected_tile = std::make_unique<QueryTileEntry>();
+  auto tile_to_save = std::make_unique<Tile>();
+  auto expected_tile = std::make_unique<Tile>();
   test::ResetTestEntry(tile_to_save.get());
   test::ResetTestEntry(expected_tile.get());
-  std::vector<std::unique_ptr<QueryTileEntry>> tiles_to_save;
+  std::vector<std::unique_ptr<Tile>> tiles_to_save;
   tiles_to_save.emplace_back(std::move(tile_to_save));
-  std::vector<QueryTileEntry*> expected;
+  std::vector<Tile*> expected;
   expected.emplace_back(expected_tile.get());
 
   SaveTiles(std::move(tiles_to_save), loop.QuitClosure(),
@@ -309,18 +299,18 @@ TEST_F(TileManagerTest, SaveTilesAndReplaceOldGroupSuccess) {
   input_group->last_updated_ts =
       clock()->Now() - base::TimeDelta::FromMinutes(5);
 
-  MockQueryTileStore::KeysAndEntries input;
+  MockTileStore::KeysAndEntries input;
   input[input_group->id] = std::move(input_group);
   EXPECT_CALL(*tile_store(), InitAndLoad(_))
       .WillOnce(Invoke(
-          [&input](base::OnceCallback<void(
-                       bool, MockQueryTileStore::KeysAndEntries)> callback) {
+          [&input](base::OnceCallback<void(bool, MockTileStore::KeysAndEntries)>
+                       callback) {
             std::move(callback).Run(true, std::move(input));
           }));
 
   EXPECT_CALL(*tile_store(), Update(_, _, _))
       .WillOnce(Invoke([](const std::string& id, const TileGroup& group,
-                          MockQueryTileStore::UpdateCallback callback) {
+                          MockTileStore::UpdateCallback callback) {
         std::move(callback).Run(true);
       }));
 
@@ -329,14 +319,14 @@ TEST_F(TileManagerTest, SaveTilesAndReplaceOldGroupSuccess) {
   base::RunLoop loop;
   Init(loop.QuitClosure(), TileGroupStatus::kSuccess);
 
-  auto tile_to_save = std::make_unique<QueryTileEntry>();
+  auto tile_to_save = std::make_unique<Tile>();
   test::ResetTestEntry(tile_to_save.get());
-  std::vector<std::unique_ptr<QueryTileEntry>> tiles_to_save;
+  std::vector<std::unique_ptr<Tile>> tiles_to_save;
   tiles_to_save.emplace_back(std::move(tile_to_save));
 
-  auto expected_tile = std::make_unique<QueryTileEntry>();
+  auto expected_tile = std::make_unique<Tile>();
   test::ResetTestEntry(expected_tile.get());
-  std::vector<QueryTileEntry*> expected;
+  std::vector<Tile*> expected;
   expected.emplace_back(std::move(expected_tile.get()));
 
   SaveTiles(std::move(tiles_to_save), loop.QuitClosure(),

@@ -8,9 +8,9 @@ option optimize_for = LITE_RUNTIME;
 
 package upboarding.query_tiles.proto;
 
-// The QuertTileEntry is the schema to represent data in query tile entry.
+// The Tile is the schema to represent data in entries.
 // Next tag: 7
-message QueryTileEntry {
+message Tile {
   // Metadata about the image.
   // Next tag: 3
   message ImageMetadata {
@@ -37,12 +37,12 @@ message QueryTileEntry {
   repeated ImageMetadata image_metadatas = 5;
 
   // Sub level children.
-  repeated QueryTileEntry sub_tiles = 6;
+  repeated Tile sub_tiles = 6;
 }
 
 // Data schema of a group of entries and its metadata.
 // Next tag: 5
-message QueryTileGroup {
+message TileGroup {
   // Unique id of each group.
   string id = 1;
 
@@ -53,5 +53,5 @@ message QueryTileGroup {
   int64 last_updated_time_ms = 3;
 
   // Top level tiles;
-  repeated QueryTileEntry tiles = 4;
+  repeated Tile tiles = 4;
 }

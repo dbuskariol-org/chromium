@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/upboarding/query_tiles/query_tile_entry.h"
+#include "chrome/browser/upboarding/query_tiles/tile.h"
 
 #include <utility>
 
 namespace upboarding {
 namespace {
 
-void DeepCopyTiles(const QueryTileEntry& input, QueryTileEntry* out) {
+void DeepCopyTiles(const Tile& input, Tile* out) {
   DCHECK(out);
 
   out->id = input.id;
@@ -19,7 +19,7 @@ void DeepCopyTiles(const QueryTileEntry& input, QueryTileEntry* out) {
   out->image_metadatas = input.image_metadatas;
   out->sub_tiles.clear();
   for (const auto& child : input.sub_tiles) {
-    auto entry = std::make_unique<QueryTileEntry>();
+    auto entry = std::make_unique<Tile>();
     DeepCopyTiles(*child.get(), entry.get());
     out->sub_tiles.emplace_back(std::move(entry));
   }
@@ -40,7 +40,7 @@ bool ImageMetadata::operator==(const ImageMetadata& other) const {
   return id == other.id && url == other.url;
 }
 
-bool QueryTileEntry::operator==(const QueryTileEntry& other) const {
+bool Tile::operator==(const Tile& other) const {
   return id == other.id && display_text == other.display_text &&
          query_text == other.query_text &&
          accessibility_text == other.accessibility_text &&
@@ -48,25 +48,25 @@ bool QueryTileEntry::operator==(const QueryTileEntry& other) const {
          sub_tiles.size() == other.sub_tiles.size();
 }
 
-bool QueryTileEntry::operator!=(const QueryTileEntry& other) const {
+bool Tile::operator!=(const Tile& other) const {
   return !(*this == other);
 }
 
-QueryTileEntry::QueryTileEntry(const QueryTileEntry& other) {
+Tile::Tile(const Tile& other) {
   DeepCopyTiles(other, this);
 }
 
-QueryTileEntry::QueryTileEntry() = default;
+Tile::Tile() = default;
 
-QueryTileEntry::QueryTileEntry(QueryTileEntry&& other) = default;
+Tile::Tile(Tile&& other) = default;
 
-QueryTileEntry::~QueryTileEntry() = default;
+Tile::~Tile() = default;
 
-QueryTileEntry& QueryTileEntry::operator=(const QueryTileEntry& other) {
+Tile& Tile::operator=(const Tile& other) {
   DeepCopyTiles(other, this);
   return *this;
 }
 
-QueryTileEntry& QueryTileEntry::operator=(QueryTileEntry&& other) = default;
+Tile& Tile::operator=(Tile&& other) = default;
 
 }  // namespace upboarding

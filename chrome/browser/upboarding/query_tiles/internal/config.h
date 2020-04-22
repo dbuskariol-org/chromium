@@ -14,17 +14,17 @@
 
 namespace upboarding {
 
-struct QueryTilesConfig {
-  // Creates a default QueryTilesConfig.
-  static std::unique_ptr<QueryTilesConfig> Create();
+struct TileConfig {
+  // Creates a default TileConfig.
+  static std::unique_ptr<TileConfig> Create();
 
-  // Creates a QueryTilesConfig that reads parameters from Finch.
-  static std::unique_ptr<QueryTilesConfig> CreateFromFinch();
+  // Creates a TileConfig that reads parameters from Finch.
+  static std::unique_ptr<TileConfig> CreateFromFinch();
 
-  QueryTilesConfig();
-  ~QueryTilesConfig();
-  QueryTilesConfig(const QueryTilesConfig& other) = delete;
-  QueryTilesConfig& operator=(const QueryTilesConfig& other) = delete;
+  TileConfig();
+  ~TileConfig();
+  TileConfig(const TileConfig& other) = delete;
+  TileConfig& operator=(const TileConfig& other) = delete;
 
   // Flag to tell whether query tiles is enabled or not.
   bool is_enabled;

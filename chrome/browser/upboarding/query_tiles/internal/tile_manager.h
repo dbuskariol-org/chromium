@@ -12,10 +12,10 @@
 #include "base/callback.h"
 #include "base/time/clock.h"
 #include "chrome/browser/upboarding/query_tiles/internal/config.h"
-#include "chrome/browser/upboarding/query_tiles/internal/query_tile_types.h"
 #include "chrome/browser/upboarding/query_tiles/internal/store.h"
 #include "chrome/browser/upboarding/query_tiles/internal/tile_group.h"
-#include "chrome/browser/upboarding/query_tiles/query_tile_entry.h"
+#include "chrome/browser/upboarding/query_tiles/internal/tile_types.h"
+#include "chrome/browser/upboarding/query_tiles/tile.h"
 
 namespace upboarding {
 
@@ -29,19 +29,18 @@ class TileManager {
   static std::unique_ptr<TileManager> Create(
       std::unique_ptr<TileStore> tile_store,
       base::Clock* clock,
-      QueryTilesConfig* config);
+      TileConfig* config);
 
   // Initializes the query tile store, loading them into memory after
   // validating.
   virtual void Init(TileGroupStatusCallback callback) = 0;
 
   // Returns tiles to the caller.
-  virtual void GetTiles(std::vector<QueryTileEntry*>* tiles) = 0;
+  virtual void GetTiles(std::vector<Tile*>* tiles) = 0;
 
   // Save the query tiles into database.
-  virtual void SaveTiles(
-      std::vector<std::unique_ptr<QueryTileEntry>> top_level_tiles,
-      TileGroupStatusCallback callback) = 0;
+  virtual void SaveTiles(std::vector<std::unique_ptr<Tile>> top_level_tiles,
+                         TileGroupStatusCallback callback) = 0;
 
   TileManager();
   virtual ~TileManager() = default;

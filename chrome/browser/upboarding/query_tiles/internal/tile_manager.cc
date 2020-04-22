@@ -19,7 +19,7 @@ class TileManagerImpl : public TileManager {
  public:
   TileManagerImpl(std::unique_ptr<TileStore> store,
                   base::Clock* clock,
-                  QueryTilesConfig* config)
+                  TileConfig* config)
       : initialized_(false),
         store_(std::move(store)),
         clock_(clock),
@@ -36,7 +36,7 @@ class TileManagerImpl : public TileManager {
                                        std::move(callback)));
   }
 
-  void SaveTiles(std::vector<std::unique_ptr<QueryTileEntry>> top_level_tiles,
+  void SaveTiles(std::vector<std::unique_ptr<Tile>> top_level_tiles,
                  TileGroupStatusCallback callback) override {
     if (!initialized_) {
       std::move(callback).Run(TileGroupStatus::kUninitialized);
@@ -55,7 +55,7 @@ class TileManagerImpl : public TileManager {
                                   std::move(group), std::move(callback)));
   }
 
-  void GetTiles(std::vector<QueryTileEntry*>* tiles) override {
+  void GetTiles(std::vector<Tile*>* tiles) override {
     DCHECK(tiles);
 
     if (!initialized_)
@@ -71,7 +71,7 @@ class TileManagerImpl : public TileManager {
   void OnTileStoreInitialized(
       TileGroupStatusCallback callback,
       bool success,
-      std::map<std::string, std::unique_ptr<TileGroup>> loaded_group) {
+      std::map<std::string, std::unique_ptr<TileGroup>> loaded_groups) {
     if (!success) {
       std::move(callback).Run(TileGroupStatus::kFailureDbOperation);
       return;
@@ -79,18 +79,18 @@ class TileManagerImpl : public TileManager {
 
     initialized_ = true;
 
-    PruneInvalidGroup(std::move(callback), std::move(loaded_group));
+    PruneInvalidGroup(std::move(callback), std::move(loaded_groups));
   }
 
   // Filters out and deletes invalid groups from db and memory.
   void PruneInvalidGroup(
       TileGroupStatusCallback callback,
-      std::map<std::string, std::unique_ptr<TileGroup>> loaded_group) {
-    DCHECK_LE(loaded_group.size(), 1u);
+      std::map<std::string, std::unique_ptr<TileGroup>> loaded_groups) {
+    DCHECK_LE(loaded_groups.size(), 1u);
 
     TileGroupStatus status = TileGroupStatus::kSuccess;
     std::vector<std::string> to_deprecated_in_db;
-    for (const auto& pair : loaded_group) {
+    for (const auto& pair : loaded_groups) {
       auto group_id = pair.first;
       auto* group = pair.second.get();
       if (!ValidateGroup(group)) {
@@ -101,12 +101,12 @@ class TileManagerImpl : public TileManager {
 
     for (const auto& key : to_deprecated_in_db) {
       DeleteGroup(key);
-      loaded_group.erase(key);
+      loaded_groups.erase(key);
     }
 
     // Moves the valid group into in memory holder.
-    if (!loaded_group.empty())
-      std::swap(tile_group_, loaded_group.begin()->second);
+    if (!loaded_groups.empty())
+      std::swap(tile_group_, loaded_groups.begin()->second);
     std::move(callback).Run(status);
   }
 
@@ -154,7 +154,7 @@ class TileManagerImpl : public TileManager {
   base::Clock* clock_;
 
   // QueryTileConfig object.
-  QueryTilesConfig* config_;
+  TileConfig* config_;
 
   base::WeakPtrFactory<TileManagerImpl> weak_ptr_factory_{this};
 };
@@ -166,7 +166,7 @@ TileManager::TileManager() = default;
 std::unique_ptr<TileManager> TileManager::Create(
     std::unique_ptr<TileStore> tile_store,
     base::Clock* clock,
-    QueryTilesConfig* config) {
+    TileConfig* config) {
   return std::make_unique<TileManagerImpl>(std::move(tile_store), clock,
                                            config);
 }

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_TYPES_H_
-#define CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_TYPES_H_
+#ifndef CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_TILE_TYPES_H_
+#define CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_TILE_TYPES_H_
 
 enum class TileInfoRequestStatus {
   // Initial status, request is not sent.
@@ -29,4 +29,4 @@ enum class TileGroupStatus {
   kMaxValue = kInvalidGroup,
 };
 
-#endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_QUERY_TILE_TYPES_H_
+#endif  // CHROME_BROWSER_UPBOARDING_QUERY_TILES_INTERNAL_TILE_TYPES_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/upboarding/query_tiles/query_tile_entry.h"
+#include "chrome/browser/upboarding/query_tiles/tile.h"
 
 #include <utility>
 
@@ -13,8 +13,8 @@
 namespace upboarding {
 namespace {
 
-TEST(QueryTileEntryTest, CompareOperators) {
-  QueryTileEntry lhs, rhs;
+TEST(TileTest, CompareOperators) {
+  Tile lhs, rhs;
   test::ResetTestEntry(&lhs);
   test::ResetTestEntry(&rhs);
   EXPECT_EQ(lhs, rhs);
@@ -37,8 +37,8 @@ TEST(QueryTileEntryTest, CompareOperators) {
   test::ResetTestEntry(&rhs);
 }
 
-TEST(QueryTileEntryTest, DeepComparison) {
-  QueryTileEntry lhs, rhs;
+TEST(TileTest, DeepComparison) {
+  Tile lhs, rhs;
   test::ResetTestEntry(&lhs);
   test::ResetTestEntry(&rhs);
   EXPECT_TRUE(test::AreTilesIdentical(lhs, rhs));
@@ -73,7 +73,7 @@ TEST(QueryTileEntryTest, DeepComparison) {
   EXPECT_FALSE(test::AreTilesIdentical(lhs, rhs));
   test::ResetTestEntry(&rhs);
 
-  rhs.sub_tiles.emplace_back(std::make_unique<QueryTileEntry>());
+  rhs.sub_tiles.emplace_back(std::make_unique<Tile>());
   EXPECT_FALSE(test::AreTilesIdentical(lhs, rhs));
   test::ResetTestEntry(&rhs);
 
@@ -81,25 +81,25 @@ TEST(QueryTileEntryTest, DeepComparison) {
   EXPECT_TRUE(test::AreTilesIdentical(lhs, rhs));
 }
 
-TEST(QueryTileEntryTest, CopyOperator) {
-  QueryTileEntry lhs;
+TEST(TileTest, CopyOperator) {
+  Tile lhs;
   test::ResetTestEntry(&lhs);
-  QueryTileEntry rhs(lhs);
+  Tile rhs(lhs);
   EXPECT_TRUE(test::AreTilesIdentical(lhs, rhs));
 }
 
-TEST(QueryTileEntryTest, AssignOperator) {
-  QueryTileEntry lhs;
+TEST(TileTest, AssignOperator) {
+  Tile lhs;
   test::ResetTestEntry(&lhs);
-  QueryTileEntry rhs = lhs;
+  Tile rhs = lhs;
   EXPECT_TRUE(test::AreTilesIdentical(lhs, rhs));
 }
 
-TEST(QueryTileEntryTest, MoveOperator) {
-  QueryTileEntry lhs;
+TEST(TileTest, MoveOperator) {
+  Tile lhs;
   test::ResetTestEntry(&lhs);
-  QueryTileEntry rhs = std::move(lhs);
-  QueryTileEntry expected;
+  Tile rhs = std::move(lhs);
+  Tile expected;
   test::ResetTestEntry(&expected);
   EXPECT_TRUE(test::AreTilesIdentical(expected, rhs));
 }

@@ -32,16 +32,16 @@ const GURL BuildGetQueryTileURL(const GURL& base_url, const char* path) {
 
 }  // namespace
 
-std::unique_ptr<QueryTilesConfig> QueryTilesConfig::Create() {
-  return std::make_unique<QueryTilesConfig>();
+std::unique_ptr<TileConfig> TileConfig::Create() {
+  return std::make_unique<TileConfig>();
 }
 
-std::unique_ptr<QueryTilesConfig> QueryTilesConfig::CreateFromFinch() {
+std::unique_ptr<TileConfig> TileConfig::CreateFromFinch() {
   // TODO(hesen): Implement reading parameters from Finch.
-  return std::make_unique<QueryTilesConfig>();
+  return std::make_unique<TileConfig>();
 }
 
-QueryTilesConfig::QueryTilesConfig()
+TileConfig::TileConfig()
     : is_enabled(kDefaultQueryTileState),
       base_url(GURL(kDefaultBaseURL)),
       get_query_tile_url(
@@ -49,6 +49,6 @@ QueryTilesConfig::QueryTilesConfig()
       expire_duration(kDefaultExpireDuration),
       locale(kDefaultLocale) {}
 
-QueryTilesConfig::~QueryTilesConfig() = default;
+TileConfig::~TileConfig() = default;
 
 }  // namespace upboarding
