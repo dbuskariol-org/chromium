@@ -109,12 +109,6 @@ void SharingSyncPreference::RegisterProfilePrefs(
   registry->RegisterDictionaryPref(prefs::kSharingLocalSharingInfo);
 }
 
-// static
-base::Optional<syncer::DeviceInfo::SharingInfo>
-SharingSyncPreference::GetLocalSharingInfoForSync(PrefService* prefs) {
-  return GetLocalSharingInfo(prefs);
-}
-
 base::Optional<std::vector<uint8_t>> SharingSyncPreference::GetVapidKey()
     const {
   const base::DictionaryValue* vapid_key =
@@ -241,7 +235,7 @@ void SharingSyncPreference::ClearLocalSharingInfo() {
 
 // static
 base::Optional<syncer::DeviceInfo::SharingInfo>
-SharingSyncPreference::GetLocalSharingInfo(PrefService* prefs) {
+SharingSyncPreference::GetLocalSharingInfoForSync(PrefService* prefs) {
   const base::DictionaryValue* registration =
       prefs->GetDictionary(prefs::kSharingLocalSharingInfo);
 

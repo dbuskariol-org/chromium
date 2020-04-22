@@ -90,10 +90,6 @@ class SharingSyncPreference {
  private:
   friend class SharingSyncPreferenceTest;
 
-  // Returns local SharingInfo stored in preferences.
-  static base::Optional<syncer::DeviceInfo::SharingInfo> GetLocalSharingInfo(
-      PrefService* prefs);
-
   PrefService* prefs_;
   syncer::DeviceInfoSyncService* device_info_sync_service_;
   syncer::LocalDeviceInfoProvider* local_device_info_provider_;
