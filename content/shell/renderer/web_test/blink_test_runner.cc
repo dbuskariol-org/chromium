@@ -193,11 +193,6 @@ WebString BlinkTestRunner::GetAbsoluteWebStringFromUTF8Path(
   return blink::FilePathToWebString(path);
 }
 
-WebURL BlinkTestRunner::RewriteWebTestsURL(const std::string& utf8_url,
-                                           bool is_wpt_mode) {
-  return content::RewriteWebTestsURL(utf8_url, is_wpt_mode);
-}
-
 TestPreferences* BlinkTestRunner::Preferences() {
   return &prefs_;
 }
@@ -295,26 +290,6 @@ void BlinkTestRunner::SetFocus(blink::WebView* web_view, bool focus) {
 
 void BlinkTestRunner::SetBlockThirdPartyCookies(bool block) {
   GetWebTestClientRemote()->BlockThirdPartyCookies(block);
-}
-
-std::string BlinkTestRunner::PathToLocalResource(const std::string& resource) {
-#if defined(OS_WIN)
-  if (base::StartsWith(resource, "/tmp/", base::CompareCase::SENSITIVE)) {
-    // We want a temp file.
-    GURL base_url = net::FilePathToFileURL(test_config_->temp_path);
-    return base_url.Resolve(resource.substr(sizeof("/tmp/") - 1)).spec();
-  }
-#endif
-
-  // Some web tests use file://// which we resolve as a UNC path. Normalize
-  // them to just file:///.
-  std::string result = resource;
-  static const size_t kFileLen = sizeof("file:///") - 1;
-  while (base::StartsWith(base::ToLowerASCII(result), "file:////",
-                          base::CompareCase::SENSITIVE)) {
-    result = result.substr(0, kFileLen) + result.substr(kFileLen + 1);
-  }
-  return RewriteWebTestsURL(result, false /* is_wpt_mode */).GetString().Utf8();
 }
 
 void BlinkTestRunner::SetLocale(const std::string& locale) {

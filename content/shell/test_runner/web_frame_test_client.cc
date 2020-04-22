@@ -14,6 +14,7 @@
 #include "content/public/common/referrer.h"
 #include "content/public/renderer/render_frame.h"
 #include "content/shell/common/web_test/web_test_string_util.h"
+#include "content/shell/renderer/web_test/blink_test_helpers.h"
 #include "content/shell/renderer/web_test/blink_test_runner.h"
 #include "content/shell/test_runner/accessibility_controller.h"
 #include "content/shell/test_runner/event_sender.h"
@@ -371,9 +372,8 @@ void WebFrameTestClient::WillSendRequest(blink::WebURLRequest& request) {
   }
 
   // Set the new substituted URL.
-  request.SetUrl(blink_test_runner()->RewriteWebTestsURL(
-      request.Url().GetString().Utf8(),
-      test_runner()->IsWebPlatformTestsMode()));
+  request.SetUrl(RewriteWebTestsURL(request.Url().GetString().Utf8(),
+                                    test_runner()->IsWebPlatformTestsMode()));
 }
 
 void WebFrameTestClient::DidAddMessageToConsole(
@@ -485,9 +485,9 @@ bool WebFrameTestClient::ShouldContinueNavigation(
         network::mojom::ReferrerPolicy::kDefault);
   }
 
-  info->url_request.SetUrl(blink_test_runner()->RewriteWebTestsURL(
-      info->url_request.Url().GetString().Utf8(),
-      test_runner()->IsWebPlatformTestsMode()));
+  info->url_request.SetUrl(
+      RewriteWebTestsURL(info->url_request.Url().GetString().Utf8(),
+                         test_runner()->IsWebPlatformTestsMode()));
   return should_continue;
 }
 

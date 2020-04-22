@@ -518,9 +518,6 @@ class TestRunner {
   // - block only third-party cookies when |block| is true
   void SetBlockThirdPartyCookies(bool block);
 
-  // Converts a URL starting with file:///tmp/ to the local mapping.
-  std::string PathToLocalResource(const std::string& path);
-
   // Sets the permission's |name| to |value| for a given {origin, embedder}
   // tuple.
   void SetPermission(const std::string& name,

@@ -23,6 +23,7 @@
 #include "cc/paint/paint_canvas.h"
 #include "content/shell/common/web_test/web_test_constants.h"
 #include "content/shell/common/web_test/web_test_string_util.h"
+#include "content/shell/renderer/web_test/blink_test_helpers.h"
 #include "content/shell/renderer/web_test/blink_test_runner.h"
 #include "content/shell/test_runner/layout_dump.h"
 #include "content/shell/test_runner/mock_content_settings_client.h"
@@ -1198,9 +1199,7 @@ void TestRunnerBindings::SetWindowIsKey(bool value) {
 }
 
 std::string TestRunnerBindings::PathToLocalResource(const std::string& path) {
-  if (runner_)
-    return runner_->PathToLocalResource(path);
-  return std::string();
+  return RewriteFileURLToLocalResource(path).GetString().Utf8();
 }
 
 void TestRunnerBindings::SetBackingScaleFactor(
@@ -2533,10 +2532,6 @@ void TestRunner::SetFocus(blink::WebView* web_view, bool focus) {
       previously_focused_view_ = nullptr;
     }
   }
-}
-
-std::string TestRunner::PathToLocalResource(const std::string& path) {
-  return blink_test_runner_->PathToLocalResource(path);
 }
 
 void TestRunner::SetPermission(const std::string& name,

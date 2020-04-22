@@ -76,12 +76,6 @@ class BlinkTestRunner {
   // Convert the provided relative path into an absolute path.
   blink::WebString GetAbsoluteWebStringFromUTF8Path(const std::string& path);
 
-  // Replaces file:///tmp/web_tests/ with the actual path to the
-  // web_tests directory, or rewrite URLs generated from absolute
-  // path links in web-platform-tests.
-  blink::WebURL RewriteWebTestsURL(const std::string& utf8_url,
-                                   bool is_wpt_mode);
-
   // Manages the settings to used for web tests.
   TestPreferences* Preferences();
   void ApplyPreferences();
@@ -144,10 +138,6 @@ class BlinkTestRunner {
   // Controls whether all cookies should be accepted or writing cookies in a
   // third-party context is blocked.
   void SetBlockThirdPartyCookies(bool block);
-
-  // The same as RewriteWebTestsURL unless the resource is a path starting
-  // with /tmp/, then return a file URL to a temporary file.
-  std::string PathToLocalResource(const std::string& resource);
 
   // Sets the POSIX locale of the current process.
   void SetLocale(const std::string& locale);
