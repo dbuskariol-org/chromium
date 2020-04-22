@@ -2827,6 +2827,7 @@ jumbo_static_library("browser") {
       "download/android/service/download_background_task.cc",
       "download/android/service/download_task_scheduler.cc",
       "download/android/service/download_task_scheduler.h",
+      "download/android/string_utils.cc",
       "engagement/site_engagement_service_android.cc",
       "engagement/site_engagement_service_android.h",
       "first_run/android/first_run_utils.cc",

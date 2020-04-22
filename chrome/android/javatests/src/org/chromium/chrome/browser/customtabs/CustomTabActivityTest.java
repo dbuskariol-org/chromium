@@ -953,7 +953,8 @@ public class CustomTabActivityTest {
     @RetryOnFailure
     public void testMultipleActionButtons() throws TimeoutException {
         Bitmap expectedIcon1 = createVectorDrawableBitmap(R.drawable.ic_content_copy_black, 48, 48);
-        Bitmap expectedIcon2 = createVectorDrawableBitmap(R.drawable.ic_music_note_36dp, 48, 48);
+        Bitmap expectedIcon2 =
+                createVectorDrawableBitmap(R.drawable.ic_email_googblue_36dp, 48, 48);
         Intent intent = createMinimalCustomTabIntent();
 
         // Mark the intent as trusted so it can show more than one action button.
@@ -1102,7 +1103,7 @@ public class CustomTabActivityTest {
                         R.layout.web_notification);
         remoteViews.setTextViewText(R.id.title, "Kittens!");
         remoteViews.setTextViewText(R.id.body, "So fluffy");
-        remoteViews.setImageViewResource(R.id.icon, R.drawable.ic_music_note_36dp);
+        remoteViews.setImageViewResource(R.id.icon, R.drawable.ic_email_googblue_36dp);
         intent.putExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS, remoteViews);
         intent.putExtra(CustomTabsIntent.EXTRA_REMOTEVIEWS_VIEW_IDS, new int[] {R.id.icon});
         PendingIntent pi2 = PendingIntent.getBroadcast(
