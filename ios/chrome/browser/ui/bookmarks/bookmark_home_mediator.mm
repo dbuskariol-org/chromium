@@ -103,12 +103,18 @@ const int kMaxBookmarksSearchResults = 50;
                                                    delegate:self
                                                   presenter:self];
 
+  _prefChangeRegistrar = std::make_unique<PrefChangeRegistrar>();
+  _prefChangeRegistrar->Init(self.browserState->GetPrefs());
+  _prefObserverBridge.reset(new PrefObserverBridge(self));
+
   if (IsEditBookmarksIOSEnabled()) {
-    _prefChangeRegistrar = std::make_unique<PrefChangeRegistrar>();
-    _prefChangeRegistrar->Init(self.browserState->GetPrefs());
-    _prefObserverBridge.reset(new PrefObserverBridge(self));
     _prefObserverBridge->ObserveChangesForPreference(
         bookmarks::prefs::kEditBookmarksEnabled, _prefChangeRegistrar.get());
+  }
+
+  if (IsManagedBookmarksEnabled()) {
+    _prefObserverBridge->ObserveChangesForPreference(
+        bookmarks::prefs::kManagedBookmarks, _prefChangeRegistrar.get());
   }
 
   [self computePromoTableViewData];
@@ -487,8 +493,12 @@ const int kMaxBookmarksSearchResults = 50;
 #pragma mark - PrefObserverDelegate
 
 - (void)onPreferenceChanged:(const std::string&)preferenceName {
-  if (preferenceName == bookmarks::prefs::kEditBookmarksEnabled)
+  // Editing capability may need to be updated on the bookmarks UI.
+  // Or managed bookmarks contents may need to be updated. 
+  if (preferenceName == bookmarks::prefs::kEditBookmarksEnabled ||
+      preferenceName == bookmarks::prefs::kManagedBookmarks) {
     [self.consumer refreshContents];
+  }
 }
 
 #pragma mark - Private Helpers
