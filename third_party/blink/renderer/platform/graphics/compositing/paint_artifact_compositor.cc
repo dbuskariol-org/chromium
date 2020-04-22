@@ -281,7 +281,15 @@ PaintArtifactCompositor::ScrollbarLayerForPendingLayer(
   // the layer's offset for decomposited transforms.
   DCHECK_EQ(FloatPoint(), pending_layer.offset_of_decomposited_transforms);
 
-  return static_cast<const ScrollbarDisplayItem&>(item).GetLayer();
+  const auto& scrollbar_item = static_cast<const ScrollbarDisplayItem&>(item);
+  cc::ScrollbarLayerBase* existing_layer = nullptr;
+  for (auto& layer : scrollbar_layers_) {
+    if (layer->element_id() == scrollbar_item.ElementId()) {
+      existing_layer = layer.get();
+      break;
+    }
+  }
+  return scrollbar_item.CreateOrReuseLayer(existing_layer);
 }
 
 std::unique_ptr<ContentLayerClientImpl>
@@ -305,7 +313,8 @@ PaintArtifactCompositor::CompositedLayerForPendingLayer(
     scoped_refptr<const PaintArtifact> paint_artifact,
     const PendingLayer& pending_layer,
     Vector<std::unique_ptr<ContentLayerClientImpl>>& new_content_layer_clients,
-    Vector<scoped_refptr<cc::Layer>>& new_scroll_hit_test_layers) {
+    Vector<scoped_refptr<cc::Layer>>& new_scroll_hit_test_layers,
+    Vector<scoped_refptr<cc::ScrollbarLayerBase>>& new_scrollbar_layers) {
   auto paint_chunks =
       paint_artifact->GetPaintChunkSubset(pending_layer.paint_chunk_indices);
   DCHECK(paint_chunks.size());
@@ -328,8 +337,9 @@ PaintArtifactCompositor::CompositedLayerForPendingLayer(
     return scroll_layer;
   }
 
-  if (auto scrollbar_layer =
+  if (scoped_refptr<cc::ScrollbarLayerBase> scrollbar_layer =
           ScrollbarLayerForPendingLayer(*paint_artifact, pending_layer)) {
+    new_scrollbar_layers.push_back(scrollbar_layer);
     return scrollbar_layer;
   }
 
@@ -1232,6 +1242,7 @@ void PaintArtifactCompositor::Update(
   Vector<std::unique_ptr<ContentLayerClientImpl>> new_content_layer_clients;
   new_content_layer_clients.ReserveCapacity(pending_layers_.size());
   Vector<scoped_refptr<cc::Layer>> new_scroll_hit_test_layers;
+  Vector<scoped_refptr<cc::ScrollbarLayerBase>> new_scrollbar_layers;
 
   // Maps from cc effect id to blink effects. Containing only the effects
   // having composited layers.
@@ -1262,7 +1273,7 @@ void PaintArtifactCompositor::Update(
 
     scoped_refptr<cc::Layer> layer = CompositedLayerForPendingLayer(
         paint_artifact, pending_layer, new_content_layer_clients,
-        new_scroll_hit_test_layers);
+        new_scroll_hit_test_layers, new_scrollbar_layers);
 
     // In Pre-CompositeAfterPaint, touch action rects and non-fast scrollable
     // regions are updated through ScrollingCoordinator.
@@ -1344,6 +1355,7 @@ void PaintArtifactCompositor::Update(
   property_tree_manager.Finalize();
   content_layer_clients_.swap(new_content_layer_clients);
   scroll_hit_test_layers_.swap(new_scroll_hit_test_layers);
+  scrollbar_layers_.swap(new_scrollbar_layers);
 
   auto pos = std::remove_if(synthesized_clip_cache_.begin(),
                             synthesized_clip_cache_.end(),
@@ -1545,7 +1557,7 @@ void PaintArtifactCompositor::SetLayerDebugInfoEnabled(bool enabled) {
   layer_debug_info_enabled_ = enabled;
 
   if (enabled)
-    root_layer_->EnsureDebugInfo().name = "root";
+    root_layer_->SetDebugName("root");
   else
     root_layer_->ClearDebugInfo();
 }
