@@ -3315,9 +3315,6 @@ crbug.com/626703 [ Win ] virtual/omt-worker-fetch/external/wpt/workers/abrupt-co
 crbug.com/626703 [ Linux ] external/wpt/workers/abrupt-completion.html [ Timeout ]
 crbug.com/626703 [ Mac ] external/wpt/workers/abrupt-completion.html [ Timeout ]
 crbug.com/626703 [ Win ] external/wpt/workers/abrupt-completion.html [ Timeout ]
-crbug.com/626703 [ Linux ] external/wpt/webaudio/the-audio-api/the-audioworklet-interface/process-parameters.https.html [ Timeout ]
-crbug.com/626703 [ Mac ] external/wpt/webaudio/the-audio-api/the-audioworklet-interface/process-parameters.https.html [ Timeout ]
-crbug.com/626703 [ Win ] external/wpt/webaudio/the-audio-api/the-audioworklet-interface/process-parameters.https.html [ Timeout ]
 crbug.com/626703 [ Mac10.12 ] external/wpt/eventsource/eventsource-constructor-url-bogus.any.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/webrtc/RTCPeerConnection-createDataChannel.html [ Failure Crash ]
 crbug.com/626703 [ Mac10.10 ] external/wpt/html/webappapis/scripting/events/event-handler-attributes-body-window.html [ Failure Timeout ]
@@ -6717,9 +6714,16 @@ crbug.com/1042694 virtual/form-controls-refresh-disabled/fast/forms/form-control
 # QUIC reordered versions to prefer IETF QUIC
 crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
 
+# Web Audio active processing tests
+crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-audiobuffersourcenode-interface/active-processing.https.html [ Pass Failure ]
+crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-channelmergernode-interface/active-processing.https.html [ Pass Failure ]
+crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-convolvernode-interface/active-processing.https.html [ Pass Failure ]
+
 # Sheriff 2020-04-22
 # Flaky test.
 crbug.com/1073431 http/tests/streams/transferable/readable-stream.html [ Pass Failure ]
 crbug.com/1073460 external/wpt/css/CSS2/linebox/animations/line-height-interpolation.html [ Pass Timeout ]
 crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents [ Pass Failure ]
 crbug.com/1073505 [ Mac10.13 ] virtual/web-components-v0-disabled/external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents [ Pass Failure ]
+crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-success-external-module.html [ Pass Failure ]
+crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-fetch-error-external-module.html [ Pass Failure ]
