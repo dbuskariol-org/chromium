@@ -359,9 +359,8 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
                            float scale_factor,
                            bool animate_visibility);
 
-  // Handles ripping off an item from the shelf. Returns true when the item got
-  // removed.
-  bool HandleRipOffDrag(const ui::LocatedEvent& event);
+  // Handles ripping off an item from the shelf.
+  void HandleRipOffDrag(const ui::LocatedEvent& event);
 
   // Finalize the rip off dragging by either |cancel| the action or validating.
   void FinalizeRipOffDrag(bool cancel);

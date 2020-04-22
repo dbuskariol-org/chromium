@@ -1301,16 +1301,19 @@ void ShelfView::ContinueDrag(const ui::LocatedEvent& event) {
   DCHECK(drag_view_);
   DCHECK_NE(-1, view_model_->GetIndexOfView(drag_view_));
 
-  // If this is not a drag and drop host operation and not the app list item,
-  // check if the item got ripped off the shelf - if it did we are done.
+  // Handle rip off functionality if this is not a drag and drop host operation
+  // and not the app list item.
   if (drag_and_drop_shelf_id_.IsNull() &&
       RemovableByRipOff(view_model_->GetIndexOfView(drag_view_)) !=
-          NOT_REMOVABLE &&
-      HandleRipOffDrag(event)) {
-    drag_scroll_dir_ = 0;
-    scrolling_timer_.Stop();
-    speed_up_drag_scrolling_.Stop();
-    return;
+          NOT_REMOVABLE) {
+    HandleRipOffDrag(event);
+    // Check if the item got ripped off the shelf - if it did we are done.
+    if (dragged_off_shelf_) {
+      drag_scroll_dir_ = 0;
+      scrolling_timer_.Stop();
+      speed_up_drag_scrolling_.Stop();
+      return;
+    }
   }
 
   // Calculates the drag point in screen before MoveDragViewTo is called.
@@ -1392,7 +1395,7 @@ void ShelfView::CreateDragIconProxy(
   drag_image_->SetWidgetVisible(true);
 }
 
-bool ShelfView::HandleRipOffDrag(const ui::LocatedEvent& event) {
+void ShelfView::HandleRipOffDrag(const ui::LocatedEvent& event) {
   int current_index = view_model_->GetIndexOfView(drag_view_);
   DCHECK_NE(-1, current_index);
   std::string dragged_app_id = model_->items()[current_index].id.app_id;
@@ -1417,11 +1420,11 @@ bool ShelfView::HandleRipOffDrag(const ui::LocatedEvent& event) {
       // the move as in any normal case.
       dragged_off_shelf_ = false;
 
-      return false;
+      return;
     }
     // Move our proxy view item.
     UpdateDragIconProxy(screen_location);
-    return true;
+    return;
   }
 
   // Mark the item as dragged off the shelf if the drag distance exceeds
@@ -1454,9 +1457,7 @@ bool ShelfView::HandleRipOffDrag(const ui::LocatedEvent& event) {
       // dropped.
       drag_image_->SetOpacity(kDraggedImageOpacity);
     }
-    return true;
   }
-  return false;
 }
 
 void ShelfView::FinalizeRipOffDrag(bool cancel) {
