@@ -7,7 +7,10 @@
 #import <AuthenticationServices/AuthenticationServices.h>
 #import <UIKit/UIKit.h>
 
+#include "ios/chrome/common/app_group/app_group_constants.h"
+#import "ios/chrome/common/credential_provider/constants.h"
 #import "ios/chrome/common/ui/confirmation_alert/confirmation_alert_action_handler.h"
+#import "ios/chrome/credential_provider_extension/ui/consent_coordinator.h"
 #import "ios/chrome/credential_provider_extension/ui/credential_list_mediator.h"
 #import "ios/chrome/credential_provider_extension/ui/credential_list_ui_handler.h"
 #import "ios/chrome/credential_provider_extension/ui/credential_list_view_controller.h"
@@ -39,6 +42,14 @@
 @property(nonatomic, strong)
     NSArray<ASCredentialServiceIdentifier*>* serviceIdentifiers;
 
+// Consent coordinator that shows a view requesting device auth in order to
+// enable the extension.
+@property(nonatomic, strong) ConsentCoordinator* consentCoordinator;
+
+// Interface for |reauthenticationModule|, handling mostly the case when no
+// hardware for authentication is available.
+@property(nonatomic, weak) ReauthenticationHandler* reauthenticationHandler;
+
 @end
 
 @implementation CredentialListCoordinator
@@ -48,13 +59,16 @@
                credentialStore:(id<CredentialStore>)credentialStore
                        context:(ASCredentialProviderExtensionContext*)context
             serviceIdentifiers:
-                (NSArray<ASCredentialServiceIdentifier*>*)serviceIdentifiers {
+                (NSArray<ASCredentialServiceIdentifier*>*)serviceIdentifiers
+       reauthenticationHandler:
+           (ReauthenticationHandler*)reauthenticationHandler {
   self = [super init];
   if (self) {
     _baseViewController = baseViewController;
     _context = context;
     _serviceIdentifiers = serviceIdentifiers;
     _credentialStore = credentialStore;
+    _reauthenticationHandler = reauthenticationHandler;
   }
   return self;
 }
@@ -77,6 +91,18 @@
                                         animated:NO
                                       completion:nil];
   [self.mediator fetchCredentials];
+
+  NSUserDefaults* shared_defaults = app_group::GetGroupUserDefaults();
+  BOOL isConsentGiven = [shared_defaults
+      boolForKey:kUserDefaultsCredentialProviderConsentVerified];
+  if (!isConsentGiven) {
+    self.consentCoordinator = [[ConsentCoordinator alloc]
+           initWithBaseViewController:self.viewController
+                              context:self.context
+              reauthenticationHandler:self.reauthenticationHandler
+        isInitialConfigurationRequest:NO];
+    [self.consentCoordinator start];
+  }
 }
 
 - (void)stop {

@@ -4,6 +4,8 @@
 
 source_set("ui") {
   sources = [
+    "consent_coordinator.h",
+    "consent_coordinator.mm",
     "consent_view_controller.h",
     "consent_view_controller.mm",
     "credential_details_consumer.h",
@@ -24,10 +26,12 @@ source_set("ui") {
   ]
   deps = [
     "//base",
+    "//ios/chrome/common/app_group",
     "//ios/chrome/common/credential_provider",
     "//ios/chrome/common/credential_provider:ui",
     "//ios/chrome/common/ui/colors",
     "//ios/chrome/common/ui/confirmation_alert",
+    "//ios/chrome/credential_provider_extension:reauthentication_handler",
     "//ios/chrome/credential_provider_extension/ui/resources",
   ]
   libs = [
