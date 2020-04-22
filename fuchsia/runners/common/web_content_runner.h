@@ -13,6 +13,7 @@
 
 #include "base/callback.h"
 #include "base/containers/unique_ptr_adapters.h"
+#include "base/fuchsia/scoped_service_binding.h"
 #include "base/macros.h"
 #include "base/optional.h"
 
@@ -24,26 +25,24 @@ class WebContentRunner : public fuchsia::sys::Runner {
   using GetContextParamsCallback =
       base::RepeatingCallback<fuchsia::web::CreateContextParams()>;
 
-  // Creates a Runner which will (re-)create the Context, if not already
-  // running, when StartComponent() is called,
+  // Creates a Runner for web-based components, and publishes it to the
+  // specified OutgoingDirectory.
   // |get_context_params_callback|: Returns parameters for the Runner's
-  //     fuchsia.web.Context.
+  //     web.Context.
   explicit WebContentRunner(
       GetContextParamsCallback get_context_params_callback);
 
-  // Creates a Runner using a Context configured with |context_params|.
-  // The Runner becomes non-functional if the Context terminates.
-  explicit WebContentRunner(fuchsia::web::CreateContextParams context_params);
-
   ~WebContentRunner() override;
 
-  // Creates a Frame in this Runner's Context. If no Context exists then
-  // |get_context_params_callback_| will be used to create one, if set.
-  fuchsia::web::FramePtr CreateFrame(fuchsia::web::CreateFrameParams params);
+  // Publishes the fuchsia.sys.Runner service to |outgoing_directory|.
+  void PublishRunnerService(sys::OutgoingDirectory* outgoing_directory);
+
+  // Gets a pointer to this runner's Context, creating one if needed.
+  fuchsia::web::Context* GetContext();
 
   // Used by WebComponent instances to signal that the ComponentController
   // channel was dropped, and therefore the component should be destroyed.
-  void DestroyComponent(WebComponent* component);
+  virtual void DestroyComponent(WebComponent* component);
 
   // fuchsia::sys::Runner implementation.
   void StartComponent(fuchsia::sys::Package package,
@@ -54,14 +53,10 @@ class WebContentRunner : public fuchsia::sys::Runner {
   // Registers a WebComponent, or specialization, with this Runner.
   void RegisterComponent(std::unique_ptr<WebComponent> component);
 
-  // Sets a callback to invoke when |components_| next becomes empty.
-  void SetOnEmptyCallback(base::OnceClosure on_empty);
+  // Sets a callback that's called when the context is lost.
+  void SetOnContextLostCallback(base::OnceClosure callback);
 
-  // Sets a callback that's called when |context_| disconnects.
-  void SetOnContextLostCallbackForTest(base::OnceClosure on_context_lost);
-
-  // TODO(https://crbug.com/1065707): Remove this once capability routing for
-  // the fuchsia.legacymetrics.Provider service is properly set up.
+ protected:
   // Returns a pointer to any currently running component, or nullptr if no
   // components are currently running.
   WebComponent* GetAnyComponent();
@@ -77,7 +72,10 @@ class WebContentRunner : public fuchsia::sys::Runner {
   std::set<std::unique_ptr<WebComponent>, base::UniquePtrComparator>
       components_;
 
-  base::OnceClosure on_empty_callback_;
+  // Publishes this Runner into the service directory specified at construction.
+  // This is not set for child runner instances.
+  base::Optional<base::fuchsia::ScopedServiceBinding<fuchsia::sys::Runner>>
+      service_binding_;
 
   base::OnceClosure on_context_lost_callback_;
 
