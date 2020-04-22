@@ -7,6 +7,10 @@
 
 #include <memory>
 
+namespace leveldb_proto {
+class ProtoDatabaseProvider;
+}  // namespace leveldb_proto
+
 namespace image_fetcher {
 class ImageFetcherService;
 }  // namespace image_fetcher
@@ -16,7 +20,8 @@ namespace upboarding {
 class TileService;
 
 std::unique_ptr<TileService> CreateTileService(
-    image_fetcher::ImageFetcherService* image_fetcher_service);
+    image_fetcher::ImageFetcherService* image_fetcher_service,
+    leveldb_proto::ProtoDatabaseProvider* db_provider);
 
 }  // namespace upboarding
 

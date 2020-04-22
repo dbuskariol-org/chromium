@@ -12,7 +12,8 @@
 namespace upboarding {
 
 std::unique_ptr<TileService> CreateTileService(
-    image_fetcher::ImageFetcherService* image_fetcher_service) {
+    image_fetcher::ImageFetcherService* image_fetcher_service,
+    leveldb_proto::ProtoDatabaseProvider* db_provider) {
   auto* cached_image_fetcher = image_fetcher_service->GetImageFetcher(
       image_fetcher::ImageFetcherConfig::kDiskCacheOnly);
   auto* reduced_mode_image_fetcher = image_fetcher_service->GetImageFetcher(
