@@ -65,9 +65,6 @@ class BlinkTestRunner {
   // Add a message to the text dump for the web test.
   void PrintMessage(const std::string& message);
 
-  void PostTask(base::OnceClosure task);
-  void PostDelayedTask(base::OnceClosure task, base::TimeDelta delay);
-
   // Register a new isolated filesystem with the given files, and return the
   // new filesystem id.
   blink::WebString RegisterIsolatedFileSystem(
@@ -243,8 +240,6 @@ class BlinkTestRunner {
   void CaptureLocalAudioDump();
   void CaptureLocalLayoutDump();
   void CaptureLocalPixelsDump();
-
-  scoped_refptr<base::SingleThreadTaskRunner> GetTaskRunner();
 
   mojom::WebTestBluetoothFakeAdapterSetter& GetBluetoothFakeAdapterSetter();
   mojo::Remote<mojom::WebTestBluetoothFakeAdapterSetter>
