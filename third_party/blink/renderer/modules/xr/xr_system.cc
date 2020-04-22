@@ -127,7 +127,7 @@ base::Optional<device::mojom::XRSessionFeature> StringToXRSessionFeature(
     return device::mojom::XRSessionFeature::ANCHORS;
   } else if (feature_string == "dom-overlay") {
     return device::mojom::XRSessionFeature::DOM_OVERLAY;
-  } else if (RuntimeEnabledFeatures::WebXRIncubationsEnabled(doc) &&
+  } else if (RuntimeEnabledFeatures::WebXRLightEstimationEnabled(doc) &&
              feature_string == "light-estimation") {
     return device::mojom::XRSessionFeature::LIGHT_ESTIMATION;
   }

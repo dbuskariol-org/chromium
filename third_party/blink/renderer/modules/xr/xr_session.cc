@@ -38,6 +38,7 @@
 #include "third_party/blink/renderer/modules/xr/xr_hit_test_source.h"
 #include "third_party/blink/renderer/modules/xr/xr_input_source_event.h"
 #include "third_party/blink/renderer/modules/xr/xr_input_sources_change_event.h"
+#include "third_party/blink/renderer/modules/xr/xr_light_probe.h"
 #include "third_party/blink/renderer/modules/xr/xr_plane.h"
 #include "third_party/blink/renderer/modules/xr/xr_ray.h"
 #include "third_party/blink/renderer/modules/xr/xr_reference_space.h"
@@ -85,6 +86,9 @@ const char kHitTestFeatureNotSupported[] =
     "Hit test feature is not supported by the session.";
 
 const char kHitTestSubscriptionFailed[] = "Hit test subscription failed.";
+
+const char kLightEstimationFeatureNotSupported[] =
+    "Light estimation feature is not supported.";
 
 const char kEntityTypesNotSpecified[] =
     "No entityTypes specified: the array cannot be empty!";
@@ -1095,6 +1099,32 @@ void XRSession::ProcessHitTestData(
   }
 }
 
+ScriptPromise XRSession::requestLightProbe(ScriptState* script_state,
+                                           ExceptionState& exception_state) {
+  if (ended_) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,
+                                      kSessionEnded);
+    return ScriptPromise();
+  }
+
+  if (!IsFeatureEnabled(device::mojom::XRSessionFeature::LIGHT_ESTIMATION)) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kNotSupportedError,
+                                      kLightEstimationFeatureNotSupported);
+    return {};
+  }
+
+  auto* resolver = MakeGarbageCollected<ScriptPromiseResolver>(script_state);
+  ScriptPromise promise = resolver->Promise();
+
+  if (!world_light_probe_) {
+    world_light_probe_ = MakeGarbageCollected<XRLightProbe>(this);
+  }
+
+  resolver->Resolve(world_light_probe_);
+
+  return promise;
+}
+
 ScriptPromise XRSession::end(ScriptState* script_state,
                              ExceptionState& exception_state) {
   DVLOG(2) << __func__;
@@ -1457,10 +1487,20 @@ void XRSession::UpdateWorldUnderstandingStateForFrame(
         frame_data->detected_planes_data.get(), timestamp);
     ProcessAnchorsData(frame_data->anchors_data.get(), timestamp);
     ProcessHitTestData(frame_data->hit_test_subscription_results.get());
+
+    const device::mojom::blink::XRLightEstimationData* light_data =
+        frame_data->light_estimation_data.get();
+    if (world_light_probe_ && light_data) {
+      world_light_probe_->ProcessLightEstimationData(light_data, timestamp);
+    }
   } else {
     world_information_->ProcessPlaneInformation(nullptr, timestamp);
     ProcessAnchorsData(nullptr, timestamp);
     ProcessHitTestData(nullptr);
+
+    if (world_light_probe_) {
+      world_light_probe_->ProcessLightEstimationData(nullptr, timestamp);
+    }
   }
 }
 
@@ -1918,6 +1958,7 @@ void XRSession::Trace(Visitor* visitor) {
   visitor->Trace(render_state_);
   visitor->Trace(world_tracking_state_);
   visitor->Trace(world_information_);
+  visitor->Trace(world_light_probe_);
   visitor->Trace(pending_render_state_);
   visitor->Trace(end_session_resolver_);
   visitor->Trace(input_sources_);

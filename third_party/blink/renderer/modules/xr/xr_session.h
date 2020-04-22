@@ -42,6 +42,7 @@ class XRCanvasInputProvider;
 class XRDOMOverlayState;
 class XRHitTestOptionsInit;
 class XRHitTestSource;
+class XRLightProbe;
 class XRReferenceSpace;
 class XRRenderState;
 class XRRenderStateInit;
@@ -176,6 +177,8 @@ class XRSession final
       XRTransientInputHitTestOptionsInit* options_init,
       ExceptionState& exception_state);
 
+  ScriptPromise requestLightProbe(ScriptState* script_state, ExceptionState&);
+
   // Called by JavaScript to manually end the session.
   ScriptPromise end(ScriptState* script_state, ExceptionState&);
 
@@ -276,7 +279,7 @@ class XRSession final
   void SetXRDisplayInfo(device::mojom::blink::VRDisplayInfoPtr display_info);
 
   bool UsesInputEventing() { return uses_input_eventing_; }
-  bool LightEstimationEnabled() { return false; }
+  bool LightEstimationEnabled() { return !!world_light_probe_; }
 
   void Trace(Visitor* visitor) override;
 
@@ -391,6 +394,7 @@ class XRSession final
   Member<XRRenderState> render_state_;
   Member<XRWorldTrackingState> world_tracking_state_;
   Member<XRWorldInformation> world_information_;
+  Member<XRLightProbe> world_light_probe_;
   HeapVector<Member<XRRenderStateInit>> pending_render_state_;
 
   // Handle delayed events and promises for session shutdown. A JS-initiated

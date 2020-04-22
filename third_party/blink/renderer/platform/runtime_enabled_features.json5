@@ -1961,6 +1961,11 @@
       depends_on: ["WebXRARModule"],
       status: "experimental",
     },
+    {
+      name: "WebXRLightEstimation",
+      depends_on: ["WebXRARModule"],
+      status: "experimental",
+    },
     // Extends window placement functionality for multi-screen devices.
     {
       name: "WindowPlacement",

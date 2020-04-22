@@ -26,4 +26,7 @@
   FrozenArray<XRHitTestResult> getHitTestResults(XRHitTestSource hitTestSource);
   [RuntimeEnabled=WebXRHitTest, RaisesException]
   FrozenArray<XRTransientInputHitTestResult> getHitTestResultsForTransientInput(XRTransientInputHitTestSource hitTestSource);
+
+  [RuntimeEnabled=WebXRLightEstimation, RaisesException]
+  XRLightEstimate? getLightEstimate(XRLightProbe lightProbe);
 };

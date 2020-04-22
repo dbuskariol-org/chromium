@@ -7,6 +7,8 @@
 #include "third_party/blink/renderer/core/dom/dom_exception.h"
 #include "third_party/blink/renderer/modules/xr/xr_hit_test_source.h"
 #include "third_party/blink/renderer/modules/xr/xr_input_source.h"
+#include "third_party/blink/renderer/modules/xr/xr_light_estimate.h"
+#include "third_party/blink/renderer/modules/xr/xr_light_probe.h"
 #include "third_party/blink/renderer/modules/xr/xr_reference_space.h"
 #include "third_party/blink/renderer/modules/xr/xr_session.h"
 #include "third_party/blink/renderer/modules/xr/xr_transient_input_hit_test_source.h"
@@ -96,6 +98,35 @@ XRViewerPose* XRFrame::getViewerPose(XRReferenceSpace* reference_space,
 
 XRAnchorSet* XRFrame::trackedAnchors() const {
   return session_->TrackedAnchors();
+}
+
+XRLightEstimate* XRFrame::getLightEstimate(
+    XRLightProbe* light_probe,
+    ExceptionState& exception_state) const {
+  if (!is_active_) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,
+                                      kInactiveFrame);
+    return nullptr;
+  }
+
+  if (!is_animation_frame_) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,
+                                      kNonAnimationFrame);
+    return nullptr;
+  }
+
+  if (!light_probe) {
+    return nullptr;
+  }
+
+  // Must use a light probe created from the same session.
+  if (light_probe->session() != session_) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,
+                                      kSessionMismatch);
+    return nullptr;
+  }
+
+  return light_probe->getLightEstimate();
 }
 
 // Return an XRPose that has a transform of basespace_from_space, while

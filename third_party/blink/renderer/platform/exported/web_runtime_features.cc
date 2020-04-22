@@ -457,6 +457,10 @@ void WebRuntimeFeatures::EnableWebXRIncubations(bool enable) {
   RuntimeEnabledFeatures::SetWebXRIncubationsEnabled(enable);
 }
 
+void WebRuntimeFeatures::EnableWebXRLightEstimation(bool enable) {
+  RuntimeEnabledFeatures::SetWebXRLightEstimationEnabled(enable);
+}
+
 void WebRuntimeFeatures::EnablePresentationAPI(bool enable) {
   RuntimeEnabledFeatures::SetPresentationEnabled(enable);
 }
