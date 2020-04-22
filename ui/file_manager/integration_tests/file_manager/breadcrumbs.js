@@ -404,4 +404,36 @@
     // Check: the focus should return to the elider button.
     await remoteCall.waitForElement(appId, eliderFocus);
   };
+
+  /**
+   * Tests that clicking outside the elider button drop down menu makes that
+   * drop down menu close.
+   */
+  testcase.breadcrumbsEliderMenuClickOutside = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(5);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Click the breadcrumb elider button when it appears.
+    const eliderButton = ['bread-crumb', '[elider]:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, eliderButton);
+
+    // Check: the elider button drop-down menu should open.
+    const menu = ['bread-crumb', '#elider-menu', 'dialog[open]'];
+    await remoteCall.waitForElement(appId, menu);
+
+    // Click somewhere outside the drop down menu.
+    await remoteCall.simulateUiClick(appId, '#file-list');
+
+    // Check: the elider button drop-down menu should close.
+    await remoteCall.waitForElementLost(appId, menu);
+  };
 })();
