@@ -1030,6 +1030,14 @@ void NGInlineCursor::MoveToContainingLine() {
   NOTREACHED();
 }
 
+bool NGInlineCursor::IsAtFirst() const {
+  if (const NGPaintFragment* paint_fragment = Current().PaintFragment())
+    return paint_fragment == root_paint_fragment_->FirstChild();
+  if (const NGFragmentItem* item = Current().Item())
+    return item == items_.front().get();
+  return false;
+}
+
 void NGInlineCursor::MoveToFirst() {
   if (root_paint_fragment_) {
     current_.paint_fragment_ = root_paint_fragment_->FirstChild();
