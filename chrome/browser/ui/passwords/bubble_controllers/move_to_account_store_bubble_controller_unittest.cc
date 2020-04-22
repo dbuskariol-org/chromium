@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/passwords/bubble_controllers/account_storage_migration_bubble_controller.h"
+#include "chrome/browser/ui/passwords/bubble_controllers/move_to_account_store_bubble_controller.h"
 
 #include "chrome/browser/ui/passwords/passwords_model_delegate_mock.h"
 #include "testing/gmock/include/gmock/gmock.h"
@@ -10,29 +10,27 @@
 
 namespace {
 
-class AccountStorageMigrationBubbleControllerTest : public ::testing::Test {
+class MoveToAccountStoreBubbleControllerTest : public ::testing::Test {
  public:
-  AccountStorageMigrationBubbleControllerTest() {
+  MoveToAccountStoreBubbleControllerTest() {
     mock_delegate_ =
         std::make_unique<testing::NiceMock<PasswordsModelDelegateMock>>();
     EXPECT_CALL(*delegate(), OnBubbleShown());
-    controller_ = std::make_unique<AccountStorageMigrationBubbleController>(
+    controller_ = std::make_unique<MoveToAccountStoreBubbleController>(
         mock_delegate_->AsWeakPtr());
     EXPECT_TRUE(testing::Mock::VerifyAndClearExpectations(delegate()));
   }
-  ~AccountStorageMigrationBubbleControllerTest() override = default;
+  ~MoveToAccountStoreBubbleControllerTest() override = default;
 
   PasswordsModelDelegateMock* delegate() { return mock_delegate_.get(); }
-  AccountStorageMigrationBubbleController* controller() {
-    return controller_.get();
-  }
+  MoveToAccountStoreBubbleController* controller() { return controller_.get(); }
 
  private:
   std::unique_ptr<PasswordsModelDelegateMock> mock_delegate_;
-  std::unique_ptr<AccountStorageMigrationBubbleController> controller_;
+  std::unique_ptr<MoveToAccountStoreBubbleController> controller_;
 };
 
-TEST_F(AccountStorageMigrationBubbleControllerTest, CloseExplicictly) {
+TEST_F(MoveToAccountStoreBubbleControllerTest, CloseExplicictly) {
   EXPECT_CALL(*delegate(), OnBubbleHidden());
   controller()->OnBubbleClosing();
 }
