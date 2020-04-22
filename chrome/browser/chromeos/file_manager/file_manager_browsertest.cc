@@ -978,7 +978,8 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
     ::testing::Values(TestCase("breadcrumbsNavigate").DisableFilesNg(),
                       TestCase("breadcrumbsLeafNoFocus").DisableFilesNg(),
                       TestCase("breadcrumbsTooltip").DisableFilesNg(),
-                      TestCase("breadcrumbsDownloadsTranslation")));
+                      TestCase("breadcrumbsDownloadsTranslation"),
+                      TestCase("breadcrumbsRenderShortPath").FilesNg()));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
     FormatDialog, /* format_dialog.js */
