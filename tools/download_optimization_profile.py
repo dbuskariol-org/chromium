@@ -2,18 +2,15 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+"""This script is used to update local profiles (AFDO, PGO or orderfiles)
 
-"""This script is used to update our local profiles (AFDO or orderfiles)
+This uses profiles of Chrome, or orderfiles for compiling or linking. Though the
+profiles are available externally, the bucket they sit in is otherwise
+unreadable by non-Googlers. Gsutil usage with this bucket is therefore quite
+awkward: you can't do anything but `cp` certain files with an external account,
+and you can't even do that if you're not yet authenticated.
 
-This uses profiles of Chrome, or orderfiles for linking, provided by our
-friends from Chrome OS. Though the profiles are available externally,
-the bucket they sit in is otherwise unreadable by non-Googlers. Gsutil
-usage with this bucket is therefore quite awkward: you can't do anything
-but `cp` certain files with an external account, and you can't even do
-that if you're not yet authenticated.
-
-No authentication is necessary if you pull these profiles directly over
-https.
+No authentication is necessary if you pull these profiles directly over https.
 """
 
 from __future__ import print_function
@@ -104,37 +101,32 @@ def RetrieveProfile(desired_profile_name, out_path, gs_url_base):
 
 def main():
   parser = argparse.ArgumentParser(
-      'Downloads profile/orderfile provided by Chrome OS')
-
+      description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
   parser.add_argument(
       '--newest_state',
       required=True,
       help='Path to the file with name of the newest profile. '
-           'We use this file to track the name of the newest profile '
-           'we should pull'
-  )
+      'We use this file to track the name of the newest profile '
+      'we should pull.')
   parser.add_argument(
       '--local_state',
       required=True,
       help='Path of the file storing name of the local profile. '
-           'We use this file to track the most recent profile we\'ve '
-           'successfully pulled.'
-  )
+      'We use this file to track the most recent profile we\'ve '
+      'successfully pulled.')
   parser.add_argument(
       '--gs_url_base',
       required=True,
-      help='The base GS URL to search for the profile.'
-  )
+      help='The base GS URL to search for the profile.')
   parser.add_argument(
       '--output_name',
       required=True,
-      help='Output name of the downloaded and uncompressed profile.'
-  )
+      help='Output name of the downloaded and uncompressed profile.')
   parser.add_argument(
-      '-f', '--force',
+      '-f',
+      '--force',
       action='store_true',
-      help='Fetch a profile even if the local one is current'
-  )
+      help='Fetch a profile even if the local one is current.')
   args = parser.parse_args()
 
   up_to_date_profile = ReadUpToDateProfileName(args.newest_state)
