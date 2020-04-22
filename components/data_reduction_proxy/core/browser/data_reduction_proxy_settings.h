@@ -199,6 +199,8 @@ class DataReductionProxySettings {
     return data_reduction_proxy_service_.get();
   }
 
+  bool is_initialized() const { return !!prefs_; }
+
  protected:
   void InitPrefMembers();
 
@@ -213,7 +215,6 @@ class DataReductionProxySettings {
   // enabled or disabled at startup.
   virtual void RecordStartupState(
       data_reduction_proxy::ProxyStartupState state) const;
-
 
  private:
   friend class DataReductionProxySettingsTestBase;
