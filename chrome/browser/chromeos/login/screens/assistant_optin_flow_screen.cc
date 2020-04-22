@@ -5,12 +5,10 @@
 #include "chrome/browser/chromeos/login/screens/assistant_optin_flow_screen.h"
 
 #include "chrome/browser/chromeos/assistant/assistant_util.h"
-#include "chrome/browser/chromeos/login/screen_manager.h"
 #include "chrome/browser/chromeos/login/users/chrome_user_manager_util.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/ui/webui/chromeos/login/assistant_optin_flow_screen_handler.h"
-#include "chromeos/assistant/buildflags.h"
 #include "chromeos/constants/chromeos_features.h"
 
 namespace chromeos {
@@ -18,20 +16,7 @@ namespace {
 
 constexpr const char kFlowFinished[] = "flow-finished";
 
-#if BUILDFLAG(ENABLE_CROS_LIBASSISTANT)
-bool g_libassistant_enabled = true;
-#else
-bool g_libassistant_enabled = false;
-#endif
-
 }  // namespace
-
-// static
-AssistantOptInFlowScreen* AssistantOptInFlowScreen::Get(
-    ScreenManager* manager) {
-  return static_cast<AssistantOptInFlowScreen*>(
-      manager->GetScreen(AssistantOptInFlowScreenView::kScreenId));
-}
 
 AssistantOptInFlowScreen::AssistantOptInFlowScreen(
     AssistantOptInFlowScreenView* view,
@@ -59,14 +44,10 @@ void AssistantOptInFlowScreen::ShowImpl() {
     return;
   }
 
-  if (!g_libassistant_enabled) {
-    exit_callback_.Run();
-    return;
-  }
-
   if (::assistant::IsAssistantAllowedForProfile(
           ProfileManager::GetActiveUserProfile()) ==
-      ash::mojom::AssistantAllowedState::ALLOWED) {
+          ash::mojom::AssistantAllowedState::ALLOWED &&
+      !skip_for_testing_) {
     view_->Show();
     return;
   }
@@ -82,12 +63,6 @@ void AssistantOptInFlowScreen::OnViewDestroyed(
     AssistantOptInFlowScreenView* view) {
   if (view_ == view)
     view_ = nullptr;
-}
-
-// static
-std::unique_ptr<base::AutoReset<bool>>
-AssistantOptInFlowScreen::ForceLibAssistantEnabledForTesting() {
-  return std::make_unique<base::AutoReset<bool>>(&g_libassistant_enabled, true);
 }
 
 void AssistantOptInFlowScreen::OnUserAction(const std::string& action_id) {

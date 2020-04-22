@@ -7,7 +7,6 @@
 
 #include <string>
 
-#include "base/auto_reset.h"
 #include "base/callback.h"
 #include "base/macros.h"
 #include "chrome/browser/chromeos/login/screens/base_screen.h"
@@ -15,12 +14,9 @@
 namespace chromeos {
 
 class AssistantOptInFlowScreenView;
-class ScreenManager;
 
 class AssistantOptInFlowScreen : public BaseScreen {
  public:
-  static AssistantOptInFlowScreen* Get(ScreenManager* manager);
-
   AssistantOptInFlowScreen(AssistantOptInFlowScreenView* view,
                            const base::RepeatingClosure& exit_callback);
   ~AssistantOptInFlowScreen() override;
@@ -28,12 +24,7 @@ class AssistantOptInFlowScreen : public BaseScreen {
   // Called when view is destroyed so there's no dead reference to it.
   void OnViewDestroyed(AssistantOptInFlowScreenView* view_);
 
-  void set_exit_callback_for_testing(base::RepeatingClosure exit_callback) {
-    exit_callback_ = exit_callback;
-  }
-
-  static std::unique_ptr<base::AutoReset<bool>>
-  ForceLibAssistantEnabledForTesting();
+  void SetSkipForTesting() { skip_for_testing_ = true; }
 
  protected:
   // BaseScreen:
@@ -44,6 +35,9 @@ class AssistantOptInFlowScreen : public BaseScreen {
  private:
   AssistantOptInFlowScreenView* view_;
   base::RepeatingClosure exit_callback_;
+
+  // Skip the screen for testing if set to true.
+  bool skip_for_testing_ = false;
 
   DISALLOW_COPY_AND_ASSIGN(AssistantOptInFlowScreen);
 };

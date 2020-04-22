@@ -24,7 +24,6 @@ class Clock;
 namespace chromeos {
 
 class ErrorScreensHistogramHelper;
-class ScreenManager;
 class UpdateRequiredView;
 
 // Controller for the update required screen.
@@ -32,9 +31,8 @@ class UpdateRequiredScreen : public BaseScreen,
                              public VersionUpdater::Delegate,
                              public NetworkStateHandlerObserver {
  public:
-  static UpdateRequiredScreen* Get(ScreenManager* manager);
-
-  UpdateRequiredScreen(UpdateRequiredView* view, ErrorScreen* error_screen);
+  explicit UpdateRequiredScreen(UpdateRequiredView* view,
+                                ErrorScreen* error_screen);
   ~UpdateRequiredScreen() override;
 
   // Called when the being destroyed. This should call Unbind() on the

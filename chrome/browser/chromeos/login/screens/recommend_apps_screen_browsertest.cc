@@ -18,22 +18,15 @@
 #include "chrome/browser/chromeos/login/screens/recommend_apps/recommend_apps_fetcher_delegate.h"
 #include "chrome/browser/chromeos/login/screens/recommend_apps/scoped_test_recommend_apps_fetcher_factory.h"
 #include "chrome/browser/chromeos/login/test/js_checker.h"
-#include "chrome/browser/chromeos/login/test/local_policy_test_server_mixin.h"
-#include "chrome/browser/chromeos/login/test/login_manager_mixin.h"
-#include "chrome/browser/chromeos/login/test/oobe_base_test.h"
-#include "chrome/browser/chromeos/login/test/oobe_screen_exit_waiter.h"
 #include "chrome/browser/chromeos/login/test/oobe_screen_waiter.h"
-#include "chrome/browser/chromeos/login/test/user_policy_mixin.h"
 #include "chrome/browser/chromeos/login/ui/login_display_host.h"
 #include "chrome/browser/chromeos/login/wizard_controller.h"
 #include "chrome/browser/policy/profile_policy_connector.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
-#include "chrome/browser/ui/webui/chromeos/login/gaia_screen_handler.h"
 #include "chrome/browser/ui/webui/chromeos/login/oobe_ui.h"
 #include "chrome/browser/ui/webui/chromeos/login/recommend_apps_screen_handler.h"
-#include "chromeos/constants/chromeos_features.h"
-#include "components/account_id/account_id.h"
+#include "chrome/test/base/mixin_based_in_process_browser_test.h"
 #include "components/arc/arc_prefs.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/test/browser_test_utils.h"
@@ -41,6 +34,11 @@
 namespace chromeos {
 
 namespace {
+
+chromeos::OobeUI* GetOobeUI() {
+  auto* host = chromeos::LoginDisplayHost::default_host();
+  return host ? host->GetOobeUI() : nullptr;
+}
 
 struct FakeAppInfo {
  public:
@@ -105,41 +103,47 @@ class FakeRecommendAppsFetcher : public RecommendAppsFetcher {
 
 }  // namespace
 
-class RecommendAppsScreenTest : public OobeBaseTest {
+class RecommendAppsScreenTest : public InProcessBrowserTest {
  public:
-  RecommendAppsScreenTest() {
-    // To reuse existing wizard controller in the flow.
-    feature_list_.InitAndEnableFeature(
-        chromeos::features::kOobeScreensPriority);
-  }
+  RecommendAppsScreenTest() = default;
   ~RecommendAppsScreenTest() override = default;
 
-  // OobeBaseTest:
   void SetUpOnMainThread() override {
-    OobeBaseTest::SetUpOnMainThread();
+    ShowLoginWizard(OobeScreen::SCREEN_TEST_NO_WINDOW);
+
     recommend_apps_fetcher_factory_ =
         std::make_unique<ScopedTestRecommendAppsFetcherFactory>(
             base::BindRepeating(
                 &RecommendAppsScreenTest::CreateRecommendAppsFetcher,
                 base::Unretained(this)));
 
-    recommend_apps_screen_ = RecommendAppsScreen::Get(
-        WizardController::default_controller()->screen_manager());
-    recommend_apps_screen_->set_exit_callback_for_testing(base::BindRepeating(
-        &RecommendAppsScreenTest::HandleScreenExit, base::Unretained(this)));
+    // Delete initial screen before we create the new screen, as the screen ctor
+    // will bind to the handler.
+    WizardController::default_controller()
+        ->screen_manager()
+        ->DeleteScreenForTesting(RecommendAppsScreenView::kScreenId);
+    auto recommend_apps_screen = std::make_unique<RecommendAppsScreen>(
+        GetOobeUI()->GetView<RecommendAppsScreenHandler>(),
+        base::BindRepeating(&RecommendAppsScreenTest::HandleScreenExit,
+                            base::Unretained(this)));
+    recommend_apps_screen_ = recommend_apps_screen.get();
+    WizardController::default_controller()
+        ->screen_manager()
+        ->SetScreenForTesting(std::move(recommend_apps_screen));
+
+    InProcessBrowserTest::SetUpOnMainThread();
   }
+
+  void ShowRecommendAppsScreen() {
+    WizardController::default_controller()->AdvanceToScreen(
+        RecommendAppsScreenView::kScreenId);
+  }
+
   void TearDownOnMainThread() override {
     recommend_apps_fetcher_ = nullptr;
     recommend_apps_fetcher_factory_.reset();
 
-    OobeBaseTest::TearDownOnMainThread();
-  }
-
-  void ShowRecommendAppsScreen() {
-    login_manager_.LoginAsNewReguarUser();
-    OobeScreenExitWaiter(GaiaView::kScreenId).Wait();
-    LoginDisplayHost::default_host()->StartWizard(
-        RecommendAppsScreenView::kScreenId);
+    InProcessBrowserTest::TearDownOnMainThread();
   }
 
   void WaitForScreenExit() {
@@ -205,11 +209,13 @@ class RecommendAppsScreenTest : public OobeBaseTest {
            result;
   }
 
+  policy::ProfilePolicyConnector* GetProfilePolicyConnector() {
+    return ProfileManager::GetActiveUserProfile()->GetProfilePolicyConnector();
+  }
+
   RecommendAppsScreen* recommend_apps_screen_;
   base::Optional<RecommendAppsScreen::Result> screen_result_;
   FakeRecommendAppsFetcher* recommend_apps_fetcher_ = nullptr;
-
-  LoginManagerMixin login_manager_{&mixin_host_};
 
  private:
   void HandleScreenExit(RecommendAppsScreen::Result result) {
@@ -233,12 +239,10 @@ class RecommendAppsScreenTest : public OobeBaseTest {
       recommend_apps_fetcher_factory_;
 
   base::OnceClosure screen_exit_callback_;
-
-  base::test::ScopedFeatureList feature_list_;
 };
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, BasicSelection) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -304,7 +308,7 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, BasicSelection) {
 }
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SelectionChange) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -372,7 +376,7 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SelectionChange) {
 }
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SkipWithSelectedApps) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -434,7 +438,7 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SkipWithSelectedApps) {
 }
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SkipWithNoAppsSelected) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -501,7 +505,7 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SkipWithNoAppsSelected) {
 }
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, InstallWithNoAppsSelected) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -547,7 +551,7 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, InstallWithNoAppsSelected) {
 }
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, NoRecommendedApps) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -590,7 +594,7 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, NoRecommendedApps) {
 }
 
 IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, ParseError) {
-  ShowRecommendAppsScreen();
+  recommend_apps_screen_->Show();
 
   OobeScreenWaiter screen_waiter(RecommendAppsScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
@@ -609,25 +613,12 @@ IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, ParseError) {
   EXPECT_EQ(0, recommend_apps_fetcher_->retries());
 }
 
-class RecommendAppsScreenManagedTest : public RecommendAppsScreenTest {
- protected:
-  const LoginManagerMixin::TestUserInfo test_user_{
-      AccountId::FromUserEmailGaiaId("user@example.com", "1111")};
-  UserPolicyMixin user_policy_mixin_{&mixin_host_, test_user_.account_id};
-};
 
-IN_PROC_BROWSER_TEST_F(RecommendAppsScreenManagedTest, SkipDueToManagedUser) {
-  // Mark user as managed.
-  user_policy_mixin_.RequestPolicyUpdate();
+IN_PROC_BROWSER_TEST_F(RecommendAppsScreenTest, SkipDueToManagedUser) {
+  GetProfilePolicyConnector()->OverrideIsManagedForTesting(true);
 
-  login_manager_.LoginWithDefaultContext(test_user_);
-  OobeScreenExitWaiter(GaiaView::kScreenId).Wait();
-  if (!screen_result_.has_value()) {
-    // Skip screens to the tested one.
-    LoginDisplayHost::default_host()->StartWizard(
-        RecommendAppsScreenView::kScreenId);
-    WaitForScreenExit();
-  }
+  ShowRecommendAppsScreen();
+  WaitForScreenExit();
   EXPECT_EQ(screen_result_.value(),
             RecommendAppsScreen::Result::NOT_APPLICABLE);
 }

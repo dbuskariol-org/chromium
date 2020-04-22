@@ -13,52 +13,49 @@
 #include "chrome/browser/chromeos/login/login_wizard.h"
 #include "chrome/browser/chromeos/login/oobe_screen.h"
 #include "chrome/browser/chromeos/login/test/js_checker.h"
-#include "chrome/browser/chromeos/login/test/login_manager_mixin.h"
-#include "chrome/browser/chromeos/login/test/oobe_base_test.h"
-#include "chrome/browser/chromeos/login/test/oobe_screen_exit_waiter.h"
 #include "chrome/browser/chromeos/login/test/oobe_screen_waiter.h"
 #include "chrome/browser/chromeos/login/ui/login_display_host.h"
-#include "chrome/browser/chromeos/login/wizard_controller.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/ui/webui/chromeos/login/app_downloading_screen_handler.h"
-#include "chrome/browser/ui/webui/chromeos/login/gaia_screen_handler.h"
 #include "chrome/browser/ui/webui/chromeos/login/oobe_ui.h"
 #include "chrome/grit/generated_resources.h"
-#include "chromeos/constants/chromeos_features.h"
+#include "chrome/test/base/in_process_browser_test.h"
 #include "components/arc/arc_prefs.h"
 #include "components/prefs/pref_service.h"
 #include "ui/base/l10n/l10n_util.h"
 
 namespace chromeos {
 
-class AppDownloadingScreenTest : public OobeBaseTest {
+namespace {
+
+chromeos::OobeUI* GetOobeUI() {
+  auto* host = chromeos::LoginDisplayHost::default_host();
+  return host ? host->GetOobeUI() : nullptr;
+}
+
+}  // namespace
+
+class AppDownloadingScreenTest : public InProcessBrowserTest {
  public:
-  AppDownloadingScreenTest() {
-    // To reuse existing wizard controller in the flow.
-    feature_list_.InitAndEnableFeature(
-        chromeos::features::kOobeScreensPriority);
-  }
+  AppDownloadingScreenTest() = default;
   ~AppDownloadingScreenTest() override = default;
 
-  // OobeBaseTest:
+  // InProcessBrowserTest:
   void SetUpOnMainThread() override {
-    OobeBaseTest::SetUpOnMainThread();
-    app_downloading_screen_ = AppDownloadingScreen::Get(
-        WizardController::default_controller()->screen_manager());
-    app_downloading_screen_->set_exit_callback_for_testing(base::BindRepeating(
-        &AppDownloadingScreenTest::HandleScreenExit, base::Unretained(this)));
-  }
+    ShowLoginWizard(OobeScreen::SCREEN_TEST_NO_WINDOW);
 
-  void Login() {
-    login_manager_.LoginAsNewReguarUser();
-    OobeScreenExitWaiter(GaiaView::kScreenId).Wait();
-  }
+    app_downloading_screen_ = std::make_unique<AppDownloadingScreen>(
+        GetOobeUI()->GetView<AppDownloadingScreenHandler>(),
+        base::BindRepeating(&AppDownloadingScreenTest::HandleScreenExit,
+                            base::Unretained(this)));
 
-  void ShowAppDownloadingScreen() {
-    LoginDisplayHost::default_host()->StartWizard(
-        AppDownloadingScreenView::kScreenId);
-    OobeScreenWaiter(AppDownloadingScreenView::kScreenId).Wait();
+    InProcessBrowserTest::SetUpOnMainThread();
+  }
+  void TearDownOnMainThread() override {
+    app_downloading_screen_.reset();
+
+    InProcessBrowserTest::TearDownOnMainThread();
   }
 
   void WaitForScreenExit() {
@@ -69,7 +66,7 @@ class AppDownloadingScreenTest : public OobeBaseTest {
     run_loop.Run();
   }
 
-  AppDownloadingScreen* app_downloading_screen_;
+  std::unique_ptr<AppDownloadingScreen> app_downloading_screen_;
   bool screen_exited_ = false;
 
  private:
@@ -81,15 +78,14 @@ class AppDownloadingScreenTest : public OobeBaseTest {
   }
 
   base::OnceClosure screen_exit_callback_;
-
-  base::test::ScopedFeatureList feature_list_;
-
-  LoginManagerMixin login_manager_{&mixin_host_};
 };
 
 IN_PROC_BROWSER_TEST_F(AppDownloadingScreenTest, NoAppsSelected) {
-  Login();
-  ShowAppDownloadingScreen();
+  app_downloading_screen_->Show();
+
+  OobeScreenWaiter screen_waiter(AppDownloadingScreenView::kScreenId);
+  screen_waiter.set_assert_next_screen();
+  screen_waiter.Wait();
 
   const std::initializer_list<base::StringPiece> continue_button = {
       "app-downloading-screen", "app-downloading-continue-setup-button"};
@@ -111,13 +107,17 @@ IN_PROC_BROWSER_TEST_F(AppDownloadingScreenTest, NoAppsSelected) {
 }
 
 IN_PROC_BROWSER_TEST_F(AppDownloadingScreenTest, SingleAppSelected) {
-  Login();
   base::Value apps(base::Value::Type::LIST);
   apps.Append("app.test.package.1");
 
   ProfileManager::GetActiveUserProfile()->GetPrefs()->Set(
       arc::prefs::kArcFastAppReinstallPackages, std::move(apps));
-  ShowAppDownloadingScreen();
+
+  app_downloading_screen_->Show();
+
+  OobeScreenWaiter screen_waiter(AppDownloadingScreenView::kScreenId);
+  screen_waiter.set_assert_next_screen();
+  screen_waiter.Wait();
 
   const std::initializer_list<base::StringPiece> continue_button = {
       "app-downloading-screen", "app-downloading-continue-setup-button"};
@@ -140,7 +140,6 @@ IN_PROC_BROWSER_TEST_F(AppDownloadingScreenTest, SingleAppSelected) {
 }
 
 IN_PROC_BROWSER_TEST_F(AppDownloadingScreenTest, MultipleAppsSelected) {
-  Login();
   base::Value apps(base::Value::Type::LIST);
   apps.Append("app.test.package.1");
   apps.Append("app.test.package.2");
@@ -148,7 +147,11 @@ IN_PROC_BROWSER_TEST_F(AppDownloadingScreenTest, MultipleAppsSelected) {
   ProfileManager::GetActiveUserProfile()->GetPrefs()->Set(
       arc::prefs::kArcFastAppReinstallPackages, std::move(apps));
 
-  ShowAppDownloadingScreen();
+  app_downloading_screen_->Show();
+
+  OobeScreenWaiter screen_waiter(AppDownloadingScreenView::kScreenId);
+  screen_waiter.set_assert_next_screen();
+  screen_waiter.Wait();
 
   const std::initializer_list<base::StringPiece> continue_button = {
       "app-downloading-screen", "app-downloading-continue-setup-button"};

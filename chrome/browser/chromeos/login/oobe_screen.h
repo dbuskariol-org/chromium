@@ -68,6 +68,8 @@ struct OobeScreen {
 
   // Special "first screen" that initiates full OOBE flow.
   constexpr static StaticOobeScreenId SCREEN_SPECIAL_OOBE{"oobe"};
+  // Special test value that commands not to create any window yet.
+  constexpr static StaticOobeScreenId SCREEN_TEST_NO_WINDOW{"test:nowindow"};
 
   constexpr static StaticOobeScreenId SCREEN_UNKNOWN{"unknown"};
 };

@@ -15,7 +15,6 @@
 #include "chrome/browser/chromeos/login/oobe_screen.h"
 #include "chrome/browser/chromeos/login/test/js_checker.h"
 #include "chrome/browser/chromeos/login/test/login_manager_mixin.h"
-#include "chrome/browser/chromeos/login/test/oobe_base_test.h"
 #include "chrome/browser/chromeos/login/test/oobe_screen_waiter.h"
 #include "chrome/browser/chromeos/login/test/user_policy_mixin.h"
 #include "chrome/browser/chromeos/login/ui/login_display_host.h"
@@ -23,6 +22,7 @@
 #include "chrome/browser/ui/webui/chromeos/login/encryption_migration_screen_handler.h"
 #include "chrome/browser/ui/webui/chromeos/login/gaia_screen_handler.h"
 #include "chrome/browser/ui/webui/chromeos/login/oobe_ui.h"
+#include "chrome/test/base/mixin_based_in_process_browser_test.h"
 #include "chromeos/constants/chromeos_switches.h"
 #include "chromeos/dbus/cryptohome/account_identifier_operators.h"
 #include "chromeos/dbus/cryptohome/fake_cryptohome_client.h"
@@ -45,24 +45,26 @@ OobeUI* GetOobeUI() {
 
 }  // namespace
 
-class EncryptionMigrationTest : public OobeBaseTest {
+class EncryptionMigrationTest : public MixinBasedInProcessBrowserTest {
  public:
   EncryptionMigrationTest() = default;
   ~EncryptionMigrationTest() override = default;
 
-  // OobeBaseTest:
   void SetUpCommandLine(base::CommandLine* command_line) override {
-    OobeBaseTest::SetUpCommandLine(command_line);
+    MixinBasedInProcessBrowserTest::SetUpCommandLine(command_line);
     // Enable ARC, so dircrypto encryption is forced.
     command_line->AppendSwitchASCII(switches::kArcAvailability,
                                     "officially-supported");
   }
+
   void SetUpOnMainThread() override {
-    OobeBaseTest::SetUpOnMainThread();
+    MixinBasedInProcessBrowserTest::SetUpOnMainThread();
 
     FakeCryptohomeClient::Get()->set_run_default_dircrypto_migration(false);
 
-    // Configure encryption migration screen handler for test.
+    // Initialize OOBE UI, and configure encryption migration screen handler for
+    // test.
+    ShowLoginWizard(OobeScreen::SCREEN_TEST_NO_WINDOW);
     auto* handler = GetOobeUI()->GetHandler<EncryptionMigrationScreenHandler>();
     handler->SetFreeDiskSpaceFetcherForTesting(base::BindRepeating(
         &EncryptionMigrationTest::GetFreeSpace, base::Unretained(this)));

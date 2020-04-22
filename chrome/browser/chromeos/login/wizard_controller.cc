@@ -32,6 +32,7 @@
 #include "base/task/thread_pool.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "build/branding_buildflags.h"
+#include "build/buildflag.h"
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/browser_process_platform_part.h"
 #include "chrome/browser/chrome_notification_types.h"
@@ -136,6 +137,7 @@
 #include "chrome/browser/ui/webui/help/help_utils_chromeos.h"
 #include "chrome/common/chrome_constants.h"
 #include "chrome/common/pref_names.h"
+#include "chromeos/assistant/buildflags.h"
 #include "chromeos/audio/cras_audio_handler.h"
 #include "chromeos/constants/chromeos_constants.h"
 #include "chromeos/constants/chromeos_features.h"
@@ -415,7 +417,8 @@ void WizardController::Init(OobeScreenId first_screen) {
   const std::string screen_pref =
       GetLocalState()->GetString(prefs::kOobeScreenPending);
   if (is_out_of_box_ && !screen_pref.empty() &&
-      first_screen == OobeScreen::SCREEN_UNKNOWN) {
+      (first_screen == OobeScreen::SCREEN_UNKNOWN ||
+       first_screen == OobeScreen::SCREEN_TEST_NO_WINDOW)) {
     first_screen_ = OobeScreenId(screen_pref);
   }
 
@@ -753,7 +756,12 @@ void WizardController::ShowUpdateRequiredScreen() {
 }
 
 void WizardController::ShowAssistantOptInFlowScreen() {
+#if BUILDFLAG(ENABLE_CROS_LIBASSISTANT)
+  UpdateStatusAreaVisibilityForScreen(AssistantOptInFlowScreenView::kScreenId);
   SetCurrentScreen(GetScreen(AssistantOptInFlowScreenView::kScreenId));
+#else
+  ShowMultiDeviceSetupScreen();
+#endif
 }
 
 void WizardController::ShowMultiDeviceSetupScreen() {
@@ -1562,7 +1570,7 @@ void WizardController::AdvanceToScreen(OobeScreenId screen_id) {
     ShowMarketingOptInScreen();
   } else if (screen_id == SupervisionTransitionScreenView::kScreenId) {
     ShowSupervisionTransitionScreen();
-  } else {
+  } else if (screen_id != OobeScreen::SCREEN_TEST_NO_WINDOW) {
     if (is_out_of_box_) {
       if (CanShowHIDDetectionScreen()) {
         hid_screen_ = GetScreen(HIDDetectionView::kScreenId);
