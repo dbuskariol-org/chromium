@@ -53,6 +53,12 @@
 #endif
 
 namespace web {
+namespace {
+// Function used to implement the default WebState getters.
+web::WebState* ReturnWeakReference(base::WeakPtr<WebStateImpl> weak_web_state) {
+  return weak_web_state.get();
+}
+}  // namespace
 
 /* static */
 std::unique_ptr<WebState> WebState::Create(const CreateParams& params) {
@@ -118,6 +124,14 @@ WebStateImpl::~WebStateImpl() {
   for (auto& observer : policy_deciders_)
     observer.ResetWebState();
   SetDelegate(nullptr);
+}
+
+WebState::Getter WebStateImpl::CreateDefaultGetter() {
+  return base::BindRepeating(&ReturnWeakReference, weak_factory_.GetWeakPtr());
+}
+
+WebState::OnceGetter WebStateImpl::CreateDefaultOnceGetter() {
+  return base::BindOnce(&ReturnWeakReference, weak_factory_.GetWeakPtr());
 }
 
 WebStateDelegate* WebStateImpl::GetDelegate() {
