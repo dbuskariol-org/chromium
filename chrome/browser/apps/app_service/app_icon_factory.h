@@ -39,6 +39,9 @@ enum IconEffects : uint32_t {
   kRoundCorners = 0x08,  // Bookmark apps get round corners.
   kPaused = 0x10,  // Paused apps are grayed out and badged to indicate they
                    // cannot be launched.
+  kPendingLocalLaunch = 0x20,  // Apps that are installed through sync, but
+                               // have not been launched locally yet. They
+                               // should appear gray until they are launched.
 };
 
 // Modifies |image_skia| to apply icon post-processing effects like badging and
