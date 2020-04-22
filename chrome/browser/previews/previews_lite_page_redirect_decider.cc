@@ -175,10 +175,8 @@ PreviewsLitePageRedirectDecider::PreviewsLitePageRedirectDecider(
   // the prefs now.
   drp_settings_ = drp_settings;
   drp_settings_->AddDataReductionProxySettingsObserver(this);
-  if (drp_settings_->Config()) {
-    OnSettingsInitialized();
-    OnProxyRequestHeadersChanged(drp_settings->GetProxyRequestHeaders());
-  }
+  OnSettingsInitialized();
+  OnProxyRequestHeadersChanged(drp_settings->GetProxyRequestHeaders());
 
   // This section depends on |pref_service_| being set so it must come after
   // that.

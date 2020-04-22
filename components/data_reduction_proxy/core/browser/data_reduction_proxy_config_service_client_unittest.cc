@@ -23,7 +23,6 @@
 #include "base/time/default_clock.h"
 #include "base/time/time.h"
 #include "components/data_reduction_proxy/core/browser/data_reduction_proxy_config_service_client_test_utils.h"
-#include "components/data_reduction_proxy/core/browser/data_reduction_proxy_config_test_utils.h"
 #include "components/data_reduction_proxy/core/browser/data_reduction_proxy_test_utils.h"
 #include "components/data_reduction_proxy/core/common/data_reduction_proxy_features.h"
 #include "components/data_reduction_proxy/core/common/data_reduction_proxy_params.h"
@@ -150,11 +149,6 @@ class DataReductionProxyConfigServiceClientTest : public testing::Test {
     no_proxies_config_ = EncodeConfig(no_proxies_config);
   }
 
-  void SetDataReductionProxyEnabled(bool enabled, bool secure_proxy_allowed) {
-    test_context_->config()->UpdateConfigForTesting(enabled,
-                                                    secure_proxy_allowed, true);
-  }
-
   void ResetBackoffEntryReleaseTime() {
     config_client()->SetCustomReleaseTime(base::TimeTicks::UnixEpoch());
   }
@@ -180,8 +174,6 @@ class DataReductionProxyConfigServiceClientTest : public testing::Test {
   TestDataReductionProxyConfigServiceClient* config_client() {
     return test_context_->test_config_client();
   }
-
-  TestDataReductionProxyConfig* config() { return test_context_->config(); }
 
   MockDataReductionProxyRequestOptions* request_options() {
     return test_context_->mock_request_options();
@@ -284,8 +276,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, EnsureBackoff) {
 
   EXPECT_EQ(0, config_client()->failed_attempts_before_success());
 
-  SetDataReductionProxyEnabled(true, true);
-
   // First attempt should be unsuccessful.
   config_client()->RetrieveConfig();
   RunUntilIdle();
@@ -317,7 +307,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, RemoteConfigSuccess) {
   base::HistogramTester histogram_tester;
 
   AddMockSuccess();
-  SetDataReductionProxyEnabled(true, true);
   config_client()->RetrieveConfig();
   RunUntilIdle();
   VerifyRemoteSuccess(true);
@@ -334,7 +323,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
        RemoteConfigSuccessWithSecureCheckFail) {
   Init();
   AddMockSuccess();
-  SetDataReductionProxyEnabled(true, false);
   config_client()->RetrieveConfig();
   RunUntilIdle();
   VerifyRemoteSuccess(false);
@@ -354,8 +342,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
   AddMockSuccess();
 
   EXPECT_EQ(0, config_client()->failed_attempts_before_success());
-
-  SetDataReductionProxyEnabled(true, true);
 
   // First attempt should be unsuccessful.
   config_client()->RetrieveConfig();
@@ -392,7 +378,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, OnIPAddressChange) {
   };
 
   for (size_t i = 0; i < base::size(tests); ++i) {
-    SetDataReductionProxyEnabled(true, tests[i].secure_proxies_allowed);
     config_client()->RetrieveConfig();
 
     const int kFailureCount = 5;
@@ -431,7 +416,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
        OnIPAddressChangeDelayedSecureProxyCheckFail) {
   Init();
 
-  SetDataReductionProxyEnabled(true, true);
   config_client()->RetrieveConfig();
 
   const int kFailureCount = 5;
@@ -468,7 +452,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
 TEST_F(DataReductionProxyConfigServiceClientTest, OnIPAddressChangeDisabled) {
   Init();
   config_client()->SetEnabled(false);
-  SetDataReductionProxyEnabled(true, true);
   config_client()->RetrieveConfig();
   EXPECT_TRUE(request_options()->GetSecureSession().empty());
 
@@ -497,7 +480,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, OnIPAddressChangeDisabled) {
 TEST_F(DataReductionProxyConfigServiceClientTest,
        ValidatePersistedClientConfig) {
   Init();
-  SetDataReductionProxyEnabled(true, true);
 
   const struct {
     base::Optional<base::TimeDelta> staleness;
@@ -577,7 +559,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, ApplyClientConfigOverride) {
   Init();
 
   AddMockSuccess();
-  SetDataReductionProxyEnabled(true, true);
   config_client()->RetrieveConfig();
   RunUntilIdle();
   // Make sure repeated fetches won't change the overridden config.
@@ -592,7 +573,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, ApplySerializedConfig) {
   Init();
   AddMockSuccess();
 
-  SetDataReductionProxyEnabled(true, true);
   config_client()->ApplySerializedConfig(loaded_config());
   VerifySuccessWithLoadedConfig(true);
   EXPECT_TRUE(persisted_config().empty());
@@ -611,7 +591,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
 
   AddMockSuccess();
 
-  SetDataReductionProxyEnabled(true, false);
   config_client()->ApplySerializedConfig(loaded_config());
   VerifySuccessWithLoadedConfig(false);
   EXPECT_TRUE(persisted_config().empty());
@@ -628,7 +607,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
   Init();
   AddMockSuccess();
 
-  SetDataReductionProxyEnabled(true, true);
   EXPECT_TRUE(request_options()->GetSecureSession().empty());
 
   // Retrieve the remote config.
@@ -646,7 +624,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
 // config has not been fetched so far.
 TEST_F(DataReductionProxyConfigServiceClientTest, ApplySerializedConfigLocal) {
   Init();
-  SetDataReductionProxyEnabled(true, true);
   EXPECT_TRUE(request_options()->GetSecureSession().empty());
   EXPECT_TRUE(persisted_config_retrieval_time().is_null());
 
@@ -667,7 +644,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
 
 TEST_F(DataReductionProxyConfigServiceClientTest, EmptyConfigDisablesDRP) {
   Init();
-  SetDataReductionProxyEnabled(true, true);
 
   config_client()->ApplySerializedConfig(no_proxies_config());
 }
@@ -677,7 +653,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, EmptyConfigDisablesDRP) {
 // and foreground.
 TEST_F(DataReductionProxyConfigServiceClientTest, FetchConfigOnForeground) {
   Init();
-  SetDataReductionProxyEnabled(true, true);
 
   {
     // Tests that successful config fetches while Chromium is in background,
@@ -757,7 +732,6 @@ class DataReductionProxyAggressiveConfigServiceClientTest
 TEST_F(DataReductionProxyAggressiveConfigServiceClientTest,
        AggressiveFetchConfigOnBackground) {
   Init();
-  SetDataReductionProxyEnabled(true, true);
 
   // Tests that config fetch failures while Chromium is in background, trigger
   // refetches while still in background, and no refetch happens Chromium
