@@ -30,7 +30,6 @@ source_set("credential_provider") {
     "//ios/chrome/browser/passwords",
     "//ios/chrome/common/app_group",
     "//ios/chrome/common/credential_provider",
-    "//ios/chrome/common/credential_provider:account_verification_provider",
     "//url",
   ]
 }

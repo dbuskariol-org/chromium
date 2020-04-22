@@ -12,7 +12,6 @@
 #include "components/password_manager/core/browser/password_store_change.h"
 #include "ios/chrome/browser/credential_provider/archivable_credential+password_form.h"
 #include "ios/chrome/common/app_group/app_group_constants.h"
-#import "ios/chrome/common/credential_provider/account_verification_provider.h"
 #import "ios/chrome/common/credential_provider/archivable_credential.h"
 #import "ios/chrome/common/credential_provider/archivable_credential_store.h"
 #import "ios/chrome/common/credential_provider/constants.h"
