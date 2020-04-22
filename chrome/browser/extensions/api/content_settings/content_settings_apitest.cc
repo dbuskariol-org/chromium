@@ -285,8 +285,11 @@ IN_PROC_BROWSER_TEST_F(ExtensionContentSettingsApiTest, MAYBE_Standard) {
   CheckContentSettingsDefault();
 }
 
+// TODO(crbug.com/1073588): Make this test work in branded builds.
+// Pass the plugins to look for into the JS to make this test less
+// brittle or just have the JS side look for the additional plugins.
 IN_PROC_BROWSER_TEST_F(ExtensionContentSettingsApiTest,
-                       GetResourceIdentifiers) {
+                       DISABLED_GetResourceIdentifiers) {
   base::FilePath::CharType kFooPath[] =
       FILE_PATH_LITERAL("/plugins/foo.plugin");
   base::FilePath::CharType kBarPath[] =
