@@ -1749,6 +1749,9 @@
         'additional_compile_targets': [
           'all',
         ],
+        'test_suites': {
+          'scripts': 'chromium_mac_scripts',
+        }
       },
       'Mac10.15 Tests': {
         'mixins': [
