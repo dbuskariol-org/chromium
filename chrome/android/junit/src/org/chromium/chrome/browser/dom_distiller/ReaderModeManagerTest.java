@@ -6,6 +6,7 @@ package org.chromium.chrome.browser.dom_distiller;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -30,13 +31,19 @@ import org.chromium.chrome.browser.tab.TabObserver;
 import org.chromium.components.dom_distiller.core.DomDistillerUrlUtils;
 import org.chromium.components.dom_distiller.core.DomDistillerUrlUtilsJni;
 import org.chromium.content_public.browser.NavigationController;
+import org.chromium.content_public.browser.NavigationEntry;
+import org.chromium.content_public.browser.NavigationHandle;
 import org.chromium.content_public.browser.WebContents;
+import org.chromium.content_public.browser.WebContentsObserver;
 
 import java.util.concurrent.TimeoutException;
 
 /** This class tests the behavior of the {@link ReaderModeManager}. */
 @RunWith(BaseRobolectricTestRunner.class)
 public class ReaderModeManagerTest {
+    private static final String MOCK_DISTILLER_URL = "distiller://url";
+    private static final String MOCK_URL = "http://url";
+
     @Rule
     public JniMocker jniMocker = new JniMocker();
 
@@ -61,6 +68,9 @@ public class ReaderModeManagerTest {
     @Mock
     private ReaderModeInfoBar.Natives mReaderModeInfobarJniMock;
 
+    @Mock
+    private NavigationHandle mNavigationHandle;
+
     @Captor
     private ArgumentCaptor<TabObserver> mTabObserverCaptor;
     private TabObserver mTabObserver;
@@ -68,6 +78,10 @@ public class ReaderModeManagerTest {
     @Captor
     private ArgumentCaptor<DistillabilityObserver> mDistillabilityObserverCaptor;
     private DistillabilityObserver mDistillabilityObserver;
+
+    @Captor
+    private ArgumentCaptor<WebContentsObserver> mWebContentsObserverCaptor;
+    private WebContentsObserver mWebContentsObserver;
 
     private UserDataHost mUserDataHost;
     private ReaderModeManager mManager;
@@ -91,7 +105,11 @@ public class ReaderModeManagerTest {
         when(mWebContents.getNavigationController()).thenReturn(mNavController);
         when(mNavController.getUseDesktopUserAgent()).thenReturn(false);
 
-        when(DomDistillerUrlUtils.isDistilledPage("url")).thenReturn(false);
+        when(DomDistillerUrlUtils.isDistilledPage(MOCK_DISTILLER_URL)).thenReturn(true);
+        when(DomDistillerUrlUtils.isDistilledPage(MOCK_URL)).thenReturn(false);
+
+        when(DomDistillerUrlUtils.getOriginalUrlFromDistillerUrl(MOCK_DISTILLER_URL))
+                .thenReturn(MOCK_URL);
 
         mManager = new ReaderModeManager(mTab);
 
@@ -103,11 +121,15 @@ public class ReaderModeManagerTest {
         mTabObserver.onShown(mTab, 0);
         verify(mDistillabilityProvider).addObserver(mDistillabilityObserverCaptor.capture());
         mDistillabilityObserver = mDistillabilityObserverCaptor.getValue();
+
+        // An observer should have also been added to the web contents.
+        verify(mWebContents).addObserver(mWebContentsObserverCaptor.capture());
+        mWebContentsObserver = mWebContentsObserverCaptor.getValue();
     }
 
     @Test
     @Feature("ReaderMode")
-    public void testReaderModeUI_triggered() {
+    public void testUI_triggered() {
         mDistillabilityObserver.onIsPageDistillableResult(mTab, true, true, false);
         assertEquals("Distillation should be possible.", DistillationStatus.POSSIBLE,
                 mManager.getDistillationStatus());
@@ -116,9 +138,100 @@ public class ReaderModeManagerTest {
 
     @Test
     @Feature("ReaderMode")
-    public void testReaderModeUI_notTriggered() {
+    public void testUI_notTriggered() {
         mDistillabilityObserver.onIsPageDistillableResult(mTab, false, true, false);
         assertEquals("Distillation should not be possible.", DistillationStatus.NOT_POSSIBLE,
                 mManager.getDistillationStatus());
+        verifyNoMoreInteractions(mReaderModeInfobarJniMock);
+    }
+
+    @Test
+    @Feature("ReaderMode")
+    public void testUI_notTriggered_navBeforeCallback() {
+        // Simulate a page navigation prior to the distillability callback happening.
+        when(mTab.getUrlString()).thenReturn("http://different_url");
+
+        mDistillabilityObserver.onIsPageDistillableResult(mTab, true, true, false);
+        assertEquals("Distillation should not be possible.", DistillationStatus.NOT_POSSIBLE,
+                mManager.getDistillationStatus());
+        verifyNoMoreInteractions(mReaderModeInfobarJniMock);
+    }
+
+    @Test
+    @Feature("ReaderMode")
+    public void testUI_notTriggered_afterDismiss() {
+        mDistillabilityObserver.onIsPageDistillableResult(mTab, true, true, false);
+        verify(mReaderModeInfobarJniMock).create(mTab);
+        mManager.onClosed(mTab, 0);
+
+        mManager.tryShowingInfoBar();
+        verifyNoMoreInteractions(mReaderModeInfobarJniMock);
+    }
+
+    @Test
+    @Feature("ReaderMode")
+    public void testWebContentsObserver_distillerNavigationRemoved() {
+        when(mNavController.getEntryAtIndex(0))
+                .thenReturn(createNavigationEntry(0, MOCK_DISTILLER_URL));
+        when(mNavController.getEntryAtIndex(1)).thenReturn(createNavigationEntry(1, MOCK_URL));
+
+        // Simulate a navigation from a distilled page.
+        when(mNavController.getLastCommittedEntryIndex()).thenReturn(0);
+        when(mNavigationHandle.isInMainFrame()).thenReturn(true);
+        when(mNavigationHandle.isSameDocument()).thenReturn(false);
+        when(mNavigationHandle.hasCommitted()).thenReturn(true);
+        when(mNavigationHandle.getUrl()).thenReturn(MOCK_URL);
+
+        mWebContentsObserver.didStartNavigation(mNavigationHandle);
+        mWebContentsObserver.didFinishNavigation(mNavigationHandle);
+
+        // Distiller entry should have been removed.
+        verify(mNavController).removeEntryAtIndex(0);
+    }
+
+    @Test
+    @Feature("ReaderMode")
+    public void testWebContentsObserver_navigateToDistilledPage() {
+        when(mNavController.getEntryAtIndex(0))
+                .thenReturn(createNavigationEntry(0, MOCK_DISTILLER_URL));
+
+        // Simulate a navigation to a distilled page.
+        when(mNavController.getLastCommittedEntryIndex()).thenReturn(0);
+        when(mNavigationHandle.isInMainFrame()).thenReturn(true);
+        when(mNavigationHandle.isSameDocument()).thenReturn(false);
+        when(mNavigationHandle.getUrl()).thenReturn(MOCK_DISTILLER_URL);
+
+        mWebContentsObserver.didStartNavigation(mNavigationHandle);
+        mWebContentsObserver.didFinishNavigation(mNavigationHandle);
+
+        assertEquals("Distillation should have started.", DistillationStatus.STARTED,
+                mManager.getDistillationStatus());
+    }
+
+    @Test
+    @Feature("ReaderMode")
+    public void testWebContentsObserver_sameDocumentLoad() {
+        when(mNavController.getEntryAtIndex(0)).thenReturn(createNavigationEntry(0, MOCK_URL));
+
+        // Simulate an same-document navigation.
+        when(mNavController.getLastCommittedEntryIndex()).thenReturn(0);
+        when(mNavigationHandle.isInMainFrame()).thenReturn(true);
+        when(mNavigationHandle.isSameDocument()).thenReturn(true);
+        when(mNavigationHandle.getUrl()).thenReturn(MOCK_URL);
+
+        mWebContentsObserver.didStartNavigation(mNavigationHandle);
+        mWebContentsObserver.didFinishNavigation(mNavigationHandle);
+
+        assertEquals("Distillation should not be possible.", DistillationStatus.NOT_POSSIBLE,
+                mManager.getDistillationStatus());
+    }
+
+    /**
+     * @param index The index of the entry.
+     * @param url The URL the entry represents.
+     * @return A new {@link NavigationEntry}.
+     */
+    private NavigationEntry createNavigationEntry(int index, String url) {
+        return new NavigationEntry(index, url, url, url, url, "", null, 0, 0);
     }
 }
