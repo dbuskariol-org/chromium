@@ -982,7 +982,8 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
                       TestCase("breadcrumbsRenderShortPath").FilesNg(),
                       TestCase("breadcrumbsEliderButtonHidden").FilesNg(),
                       TestCase("breadcrumbsRenderLongPath").FilesNg(),
-                      TestCase("breadcrumbsEliderButtonClick").FilesNg()));
+                      TestCase("breadcrumbsEliderButtonClick").FilesNg(),
+                      TestCase("breadcrumbsEliderButtonKeyboard").FilesNg()));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
     FormatDialog, /* format_dialog.js */

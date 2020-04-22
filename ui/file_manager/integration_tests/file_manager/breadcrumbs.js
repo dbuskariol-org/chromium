@@ -347,4 +347,61 @@
     // Check: the focus should return to the elider button.
     await remoteCall.waitForElement(appId, eliderFocus);
   };
+
+  /**
+   * Tests that pressing Enter key on the breadcrumbs elider button opens its
+   * drop down menu, then pressing Escape key closes the drop down menu.
+   */
+  testcase.breadcrumbsEliderButtonKeyboard = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(4);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder: 2 + 4 nested = 6 path components.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Wait for the breadcrumb elider button to appear.
+    const eliderButton = ['bread-crumb', '[elider]:not([hidden])'];
+    await remoteCall.waitForElement(appId, eliderButton);
+
+    // Send an Enter key to the breadcrumb elider button.
+    const enterKey = [eliderButton, 'Enter', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, enterKey));
+
+    // Check: the elider button drop-down menu should open.
+    const menu = ['bread-crumb', '#elider-menu', 'dialog[open]'];
+    await remoteCall.waitForElement(appId, menu);
+
+    // Check: the drop-down menu should contain 6 - 3 = 3 elided items.
+    const menuItems = ['bread-crumb', '#elider-menu .dropdown-item'];
+    const elements = await remoteCall.callRemoteTestUtil(
+        'deepQueryAllElements', appId, [menuItems]);
+    chrome.test.assertEq(3, elements.length);
+
+    // Check: the menu item text should be the elided path components.
+    chrome.test.assertEq('Downloads', elements[0].text);
+    chrome.test.assertEq('nested-folder0', elements[1].text);
+    chrome.test.assertEq('nested-folder1', elements[2].text);
+
+    // Check: the elider button should not have the focus.
+    const eliderFocus = ['bread-crumb', '[elider]:not([hidden]):focus'];
+    await remoteCall.waitForElementLost(appId, eliderFocus);
+
+    // Send an Escape key to the drop-down menu.
+    const escKey = [menu, 'Escape', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, escKey));
+
+    // Check: the elider button drop-down menu should close.
+    await remoteCall.waitForElementLost(appId, menu);
+
+    // Check: the focus should return to the elider button.
+    await remoteCall.waitForElement(appId, eliderFocus);
+  };
 })();
