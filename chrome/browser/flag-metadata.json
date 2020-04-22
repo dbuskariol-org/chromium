@@ -4173,7 +4173,7 @@
   {
     "name": "web-bundles",
     "owners": [ "toyoshim", "ksakamoto", "horo", "kinuko" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "web-clear-browsing-data",
