@@ -2143,6 +2143,7 @@ jumbo_static_library("browser") {
     "//components/signin/public/base:signin_buildflags",
     "//components/signin/public/identity_manager",
     "//components/signin/public/webdata",
+    "//components/site_isolation",
     "//components/spellcheck:buildflags",
     "//components/sqlite_proto",
     "//components/ssl_errors",
