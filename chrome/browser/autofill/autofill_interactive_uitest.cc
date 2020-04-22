@@ -995,9 +995,18 @@ IN_PROC_BROWSER_TEST_F(AutofillInteractiveTest,
   ExpectFieldValue("phone", "");
 }
 
+#if defined(OS_MACOSX)
+// https://crbug.com/1045545
+#define MAYBE_FillChangeSecondFieldRefillAndClearSecondField \
+  DISABLED_FillChangeSecondFieldRefillAndClearSecondField
+#else
+#define MAYBE_FillChangeSecondFieldRefillAndClearSecondField \
+  FillChangeSecondFieldRefillAndClearSecondField
+#endif
+
 // Test that multiple autofillings work.
 IN_PROC_BROWSER_TEST_F(AutofillInteractiveTest,
-                       FillChangeSecondFieldRefillAndClearSecondField) {
+                       MAYBE_FillChangeSecondFieldRefillAndClearSecondField) {
   CreateTestProfile();
 
   // Load the test page.
@@ -1080,9 +1089,18 @@ IN_PROC_BROWSER_TEST_F(
   TryClearForm();
 }
 
+#if defined(OS_MACOSX)
+// https://crbug.com/1045545
+#define MAYBE_FillThenFillSomeWithAnotherProfileThenClear \
+  DISABLED_FillThenFillSomeWithAnotherProfileThenClear
+#else
+#define MAYBE_FillThenFillSomeWithAnotherProfileThenClear \
+  FillThenFillSomeWithAnotherProfileThenClear
+#endif
+
 // Test that multiple autofillings work.
 IN_PROC_BROWSER_TEST_F(AutofillInteractiveTest,
-                       FillThenFillSomeWithAnotherProfileThenClear) {
+                       MAYBE_FillThenFillSomeWithAnotherProfileThenClear) {
   CreateTestProfile();
   CreateSecondTestProfile();
 
