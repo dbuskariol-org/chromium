@@ -16,17 +16,19 @@
 #include "v8/include/v8.h"
 
 namespace blink {
-class WebLocalFrame;
 class WebTextCheckingCompletion;
 }  // namespace blink
 
 namespace content {
+class BlinkTestRunner;
+class TestRunner;
 
 class SpellCheckClient : public blink::WebTextCheckClient {
  public:
-  explicit SpellCheckClient(blink::WebLocalFrame* frame);
+  explicit SpellCheckClient(TestRunner* test_runner);
   ~SpellCheckClient() override;
 
+  void SetDelegate(BlinkTestRunner* blink_test_runner);
   void SetEnabled(bool enabled);
 
   // Sets a callback that will be invoked after each request is revoled.
@@ -53,8 +55,6 @@ class SpellCheckClient : public blink::WebTextCheckClient {
 
   void RequestResolved();
 
-  blink::WebLocalFrame* const frame_;
-
   // Do not perform any checking when |enabled_ == false|.
   // Tests related to spell checking should enable it manually.
   bool enabled_ = false;
@@ -67,6 +67,9 @@ class SpellCheckClient : public blink::WebTextCheckClient {
       last_requested_text_checking_completion_;
 
   v8::Persistent<v8::Function> resolved_callback_;
+
+  TestRunner* test_runner_;
+  BlinkTestRunner* blink_test_runner_;
 
   base::WeakPtrFactory<SpellCheckClient> weak_factory_{this};
 

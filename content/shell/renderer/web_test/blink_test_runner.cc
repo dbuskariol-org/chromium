@@ -162,6 +162,15 @@ void BlinkTestRunner::PrintMessage(const std::string& message) {
   GetBlinkTestClientRemote()->PrintMessage(message);
 }
 
+void BlinkTestRunner::PostTask(base::OnceClosure task) {
+  GetTaskRunner()->PostTask(FROM_HERE, std::move(task));
+}
+
+void BlinkTestRunner::PostDelayedTask(base::OnceClosure task,
+                                      base::TimeDelta delay) {
+  GetTaskRunner()->PostDelayedTask(FROM_HERE, std::move(task), delay);
+}
+
 WebString BlinkTestRunner::RegisterIsolatedFileSystem(
     const blink::WebVector<blink::WebString>& absolute_filenames) {
   std::vector<base::FilePath> files;
@@ -756,6 +765,15 @@ void BlinkTestRunner::OnReplyBluetoothManualChooserEvents(
       std::move(get_bluetooth_events_callbacks_.front());
   get_bluetooth_events_callbacks_.pop_front();
   std::move(callback).Run(events);
+}
+
+scoped_refptr<base::SingleThreadTaskRunner> BlinkTestRunner::GetTaskRunner() {
+  if (web_view_test_proxy_->GetWebView()->MainFrame()->IsWebLocalFrame()) {
+    WebLocalFrame* main_frame =
+        web_view_test_proxy_->GetWebView()->MainFrame()->ToWebLocalFrame();
+    return main_frame->GetTaskRunner(blink::TaskType::kInternalTest);
+  }
+  return blink::scheduler::GetSingleThreadTaskRunnerForTesting();
 }
 
 }  // namespace content

@@ -318,12 +318,6 @@ function invokeSpellcheckTest(testObject, input, tester, expectedText) {
     const sample = typeof(input) === 'string' ? new Sample(input) : input;
     testObject.sample = sample;
 
-    sample.setMockSpellCheckerEnabled(true);
-    sample.setSpellCheckResolvedCallback(() => {
-      if (verificationForCurrentTest)
-         verificationForCurrentTest();
-    });
-
     if (typeof(tester) === 'function') {
       tester.call(window, sample.document);
     } else if (typeof(tester) === 'string') {
@@ -447,6 +441,14 @@ function spellcheckTest(input, tester, expectedText, opt_args) {
   }
 
   invokeSpellcheckTest(testObject, input, tester, expectedText);
+}
+
+if (window.testRunner) {
+  testRunner.setMockSpellCheckerEnabled(true);
+  testRunner.setSpellCheckResolvedCallback(() => {
+    if (verificationForCurrentTest)
+      verificationForCurrentTest();
+  });
 }
 
 // Export symbols

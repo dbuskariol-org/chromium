@@ -13,7 +13,6 @@
 
 namespace content {
 class BlinkTestRunner;
-class SpellCheckClient;
 class TestRunner;
 class WebFrameTestProxy;
 class WebViewTestProxy;
@@ -30,10 +29,7 @@ class WebFrameTestClient : public blink::WebLocalFrameClient {
   WebFrameTestClient(WebViewTestProxy* web_view_test_proxy,
                      WebFrameTestProxy* web_frame_test_proxy);
 
-  ~WebFrameTestClient() override;
-
-  // Reset state between tests.
-  void Reset();
+  ~WebFrameTestClient() override = default;
 
   static std::string GetFrameDescription(blink::WebLocalFrame* frame);
 
@@ -74,8 +70,6 @@ class WebFrameTestClient : public blink::WebLocalFrameClient {
   // Borrowed pointers to other parts of web tests state.
   WebViewTestProxy* web_view_test_proxy_;
   WebFrameTestProxy* web_frame_test_proxy_;
-
-  std::unique_ptr<SpellCheckClient> spell_check_;
 
   DISALLOW_COPY_AND_ASSIGN(WebFrameTestClient);
 };

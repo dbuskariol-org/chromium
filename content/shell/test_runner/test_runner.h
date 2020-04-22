@@ -77,8 +77,7 @@ class TestRunner {
   virtual ~TestRunner();
 
   void Install(blink::WebLocalFrame* frame,
-               SpellCheckClient* spell_check,
-               TestRunnerForSpecificView* view_test_runner);
+               base::WeakPtr<TestRunnerForSpecificView> view_test_runner);
 
   void SetDelegate(BlinkTestRunner*);
   void SetMainView(blink::WebView*);
@@ -182,6 +181,7 @@ class TestRunner {
   bool ShouldDumpIconChanges() const;
   bool ShouldDumpCreateView() const;
   bool CanOpenWindows() const;
+  bool ShouldDumpSpellCheckCallbacks() const;
   bool ShouldWaitUntilExternalURLLoad() const;
   const std::set<std::string>* HttpHeadersToClear() const;
   bool ClearReferrer() const;
@@ -439,6 +439,10 @@ class TestRunner {
       const std::vector<std::string>& suffixes,
       bool block_subresources);
 
+  // This function sets a flag that tells the test runner to dump all
+  // the lines of descriptive text about spellcheck execution.
+  void DumpSpellCheckCallbacks();
+
   // This function sets a flag that tells the test runner to print out a text
   // representation of the back/forward list. It ignores all arguments.
   void DumpBackForwardList();
@@ -486,6 +490,9 @@ class TestRunner {
   // TypeUnknown at the end of your test if you use this.
   void SetEffectiveConnectionType(
       blink::WebEffectiveConnectionType connection_type);
+
+  // Controls whether the mock spell checker is enabled.
+  void SetMockSpellCheckerEnabled(bool enabled);
 
   ///////////////////////////////////////////////////////////////////////////
   // Methods forwarding to the BlinkTestRunner.
@@ -624,6 +631,7 @@ class TestRunner {
   bool use_mock_theme_ = false;
 
   MockScreenOrientationClient mock_screen_orientation_client_;
+  std::unique_ptr<SpellCheckClient> spellcheck_;
 
   // Number of currently active color choosers.
   int chooser_count_ = 0;
