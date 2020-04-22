@@ -2049,6 +2049,8 @@ jumbo_static_library("ui") {
       "webui/settings/chromeos/parental_controls_handler.h",
       "webui/settings/chromeos/people_strings_provider.cc",
       "webui/settings/chromeos/people_strings_provider.h",
+      "webui/settings/chromeos/personalization_strings_provider.cc",
+      "webui/settings/chromeos/personalization_strings_provider.h",
       "webui/settings/chromeos/plugin_vm_handler.cc",
       "webui/settings/chromeos/plugin_vm_handler.h",
       "webui/settings/chromeos/pref_names.cc",

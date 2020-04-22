@@ -38,6 +38,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/multidevice_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_features_util.h"
 #include "chrome/browser/ui/webui/settings/chromeos/people_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/personalization_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/webui_util.h"
@@ -432,51 +433,6 @@ void AddLanguagesStrings(content::WebUIDataSource* html_source) {
   html_source->AddString(
       "languagesLearnMoreURL",
       base::ASCIIToUTF16(chrome::kLanguageSettingsLearnMoreUrl));
-}
-
-void AddPersonalizationStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"ambientModeTitle", IDS_OS_SETTINGS_AMBIENT_MODE_TITLE},
-      {"ambientModeEnabled", IDS_OS_SETTINGS_AMBIENT_MODE_ENABLED},
-      {"ambientModeDisabled", IDS_OS_SETTINGS_AMBIENT_MODE_DISABLED},
-      {"ambientModeOn", IDS_OS_SETTINGS_AMBIENT_MODE_ON},
-      {"ambientModeOff", IDS_OS_SETTINGS_AMBIENT_MODE_OFF},
-      {"ambientModeTopicSourceTitle",
-       IDS_OS_SETTINGS_AMBIENT_MODE_TOPIC_SOURCE_TITLE},
-      {"ambientModeTopicSourceGooglePhotos",
-       IDS_OS_SETTINGS_AMBIENT_MODE_TOPIC_SOURCE_GOOGLE_PHOTOS},
-      {"ambientModeTopicSourceArtGallery",
-       IDS_OS_SETTINGS_AMBIENT_MODE_TOPIC_SOURCE_ART_GALLERY},
-      {"changePictureTitle", IDS_OS_SETTINGS_CHANGE_PICTURE_TITLE},
-      {"openWallpaperApp", IDS_OS_SETTINGS_OPEN_WALLPAPER_APP},
-      {"personalizationPageTitle", IDS_OS_SETTINGS_PERSONALIZATION},
-      {"setWallpaper", IDS_OS_SETTINGS_SET_WALLPAPER},
-      {"takePhoto", IDS_SETTINGS_CHANGE_PICTURE_TAKE_PHOTO},
-      {"captureVideo", IDS_SETTINGS_CHANGE_PICTURE_CAPTURE_VIDEO},
-      {"discardPhoto", IDS_SETTINGS_CHANGE_PICTURE_DISCARD_PHOTO},
-      {"previewAltText", IDS_SETTINGS_CHANGE_PICTURE_PREVIEW_ALT},
-      {"switchModeToVideo", IDS_SETTINGS_CHANGE_PICTURE_SWITCH_MODE_TO_VIDEO},
-      {"profilePhoto", IDS_SETTINGS_CHANGE_PICTURE_PROFILE_PHOTO},
-      {"changePicturePageDescription", IDS_SETTINGS_CHANGE_PICTURE_DIALOG_TEXT},
-      {"switchModeToCamera", IDS_SETTINGS_CHANGE_PICTURE_SWITCH_MODE_TO_CAMERA},
-      {"chooseFile", IDS_SETTINGS_CHANGE_PICTURE_CHOOSE_FILE},
-      {"oldPhoto", IDS_SETTINGS_CHANGE_PICTURE_OLD_PHOTO},
-      {"oldVideo", IDS_SETTINGS_CHANGE_PICTURE_OLD_VIDEO},
-      {"authorCreditText", IDS_SETTINGS_CHANGE_PICTURE_AUTHOR_CREDIT_TEXT},
-      {"photoCaptureAccessibleText",
-       IDS_SETTINGS_PHOTO_CAPTURE_ACCESSIBLE_TEXT},
-      {"photoDiscardAccessibleText",
-       IDS_SETTINGS_PHOTO_DISCARD_ACCESSIBLE_TEXT},
-      {"photoModeAccessibleText", IDS_SETTINGS_PHOTO_MODE_ACCESSIBLE_TEXT},
-      {"videoModeAccessibleText", IDS_SETTINGS_VIDEO_MODE_ACCESSIBLE_TEXT},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  html_source->AddBoolean(
-      "changePictureVideoModeEnabled",
-      base::FeatureList::IsEnabled(::features::kChangePictureVideoMode));
-  html_source->AddBoolean("isAmbientModeEnabled",
-                          chromeos::features::IsAmbientModeEnabled());
 }
 
 void AddCrostiniStrings(content::WebUIDataSource* html_source,
@@ -1236,6 +1192,9 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       kerberos_credentials_manager));
   per_page_providers_.push_back(
       std::make_unique<DeviceStringsProvider>(profile, /*delegate=*/this));
+  per_page_providers_.push_back(
+      std::make_unique<PersonalizationStringsProvider>(
+          profile, /*delegate=*/this, profile->GetPrefs()));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -1261,7 +1220,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddFilesStrings(html_source);
   AddGoogleAssistantStrings(html_source, profile);
   AddLanguagesStrings(html_source);
-  AddPersonalizationStrings(html_source);
   AddPluginVmStrings(html_source, profile);
   AddPrintingStrings(html_source);
   AddPrivacyStrings(html_source);
