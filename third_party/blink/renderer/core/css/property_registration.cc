@@ -150,7 +150,7 @@ void PropertyRegistration::DeclareProperty(Document& document,
       name, *MakeGarbageCollected<PropertyRegistration>(
                 name, *syntax, inherits, initial, initial_variable_data));
 
-  document.GetStyleEngine().CustomPropertyRegistered();
+  document.GetStyleEngine().PropertyRegistryChanged();
 }
 
 void PropertyRegistration::registerProperty(
@@ -230,7 +230,14 @@ void PropertyRegistration::registerProperty(
           atomic_name, *syntax_definition, property_definition->inherits(),
           initial, std::move(initial_variable_data)));
 
-  document->GetStyleEngine().CustomPropertyRegistered();
+  document->GetStyleEngine().PropertyRegistryChanged();
+}
+
+void PropertyRegistration::RemoveDeclaredProperties(Document& document) {
+  if (PropertyRegistry* registry = document.GetPropertyRegistry()) {
+    registry->RemoveDeclaredProperties();
+    document.GetStyleEngine().PropertyRegistryChanged();
+  }
 }
 
 }  // namespace blink
