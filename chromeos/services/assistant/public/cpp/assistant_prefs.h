@@ -46,6 +46,7 @@ COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC)
 extern const char kAssistantLaunchWithMicOpen[];
 COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC)
 extern const char kAssistantNotificationEnabled[];
+extern const char kAssistantQuickAnswersEnabled[];
 
 // Registers Assistant specific profile preferences for browser prefs.
 COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC)
