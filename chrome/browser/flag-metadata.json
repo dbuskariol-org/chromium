@@ -1876,8 +1876,10 @@
   },
   {
     "name": "enable-reader-mode-in-cct",
-    "owners": [ "mdjones" ],
-    "expiry_milestone": 78
+    "owners": [ "mdjones", "wychen" ],
+    // This flag is a utility for disabling Reader Mode in CCT without using
+    // low-end devices.
+    "expiry_milestone": -1
   },
   {
     "name": "enable-removing-all-third-party-cookies",
