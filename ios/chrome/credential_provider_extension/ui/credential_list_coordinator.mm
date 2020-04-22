@@ -11,6 +11,8 @@
 #import "ios/chrome/common/credential_provider/constants.h"
 #import "ios/chrome/common/ui/confirmation_alert/confirmation_alert_action_handler.h"
 #import "ios/chrome/credential_provider_extension/ui/consent_coordinator.h"
+#import "ios/chrome/credential_provider_extension/ui/credential_details_consumer.h"
+#import "ios/chrome/credential_provider_extension/ui/credential_details_view_controller.h"
 #import "ios/chrome/credential_provider_extension/ui/credential_list_mediator.h"
 #import "ios/chrome/credential_provider_extension/ui/credential_list_ui_handler.h"
 #import "ios/chrome/credential_provider_extension/ui/credential_list_view_controller.h"
@@ -21,7 +23,8 @@
 #endif
 
 @interface CredentialListCoordinator () <CredentialListUIHandler,
-                                         ConfirmationAlertActionHandler>
+                                         ConfirmationAlertActionHandler,
+                                         CredentialDetailsConsumerDelegate>
 
 // Base view controller from where |viewController| is presented.
 @property(nonatomic, weak) UIViewController* baseViewController;
@@ -125,6 +128,32 @@
       presentViewController:emptyCredentialsViewController
                    animated:NO
                  completion:nil];
+}
+
+- (void)showDetailsForCredential:(id<Credential>)credential {
+  CredentialDetailsViewController* detailsViewController =
+      [[CredentialDetailsViewController alloc] init];
+  detailsViewController.delegate = self;
+  [detailsViewController presentCredential:credential];
+
+  [self.viewController pushViewController:detailsViewController animated:YES];
+}
+
+#pragma mark - CredentialDetailsConsumerDelegate
+
+- (void)navigationCancelButtonWasPressed:(UIButton*)button {
+  NSError* error =
+      [[NSError alloc] initWithDomain:ASExtensionErrorDomain
+                                 code:ASExtensionErrorCodeUserCanceled
+                             userInfo:nil];
+  [self.context cancelRequestWithError:error];
+}
+
+- (void)unlockPasswordForCredential:(id<Credential>)credential
+                  completionHandler:(void (^)(NSString*))completionHandler {
+  // TODO(crbug.com/1045454): show unlock if needed, then complete with
+  // password.
+  completionHandler(@"DreamOn");
 }
 
 #pragma mark - ConfirmationAlertActionHandler
