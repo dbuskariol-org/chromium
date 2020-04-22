@@ -178,7 +178,7 @@
     const appId = await setupAndWaitUntilReady(
         RootPath.DOWNLOADS, nestedFolderTestEntries, []);
 
-    // Navigate to deepest folder: 2 + 1 nested = 3 path components.
+    // Navigate to deepest folder.
     const breadcrumb = '/My files/Downloads/' +
         nestedFolderTestEntries.map(e => e.nameText).join('/');
     await navigateWithDirectoryTree(appId, breadcrumb);
@@ -222,7 +222,7 @@
     const appId = await setupAndWaitUntilReady(
         RootPath.DOWNLOADS, nestedFolderTestEntries, []);
 
-    // Navigate to deepest folder: 2 + 2 nested = 4 path components.
+    // Navigate to deepest folder.
     const breadcrumb = '/My files/Downloads/' +
         nestedFolderTestEntries.map(e => e.nameText).join('/');
     await navigateWithDirectoryTree(appId, breadcrumb);
@@ -267,7 +267,7 @@
     const appId = await setupAndWaitUntilReady(
         RootPath.DOWNLOADS, nestedFolderTestEntries, []);
 
-    // Navigate to deepest folder: 2 + 3 nested = 5 path components.
+    // Navigate to deepest folder.
     const breadcrumb = '/My files/Downloads/' +
         nestedFolderTestEntries.map(e => e.nameText).join('/');
     await navigateWithDirectoryTree(appId, breadcrumb);
@@ -311,7 +311,7 @@
     const appId = await setupAndWaitUntilReady(
         RootPath.DOWNLOADS, nestedFolderTestEntries, []);
 
-    // Navigate to deepest folder: 2 + 3 nested = 5 path components.
+    // Navigate to deepest folder.
     const breadcrumb = '/My files/Downloads/' +
         nestedFolderTestEntries.map(e => e.nameText).join('/');
     await navigateWithDirectoryTree(appId, breadcrumb);
@@ -324,7 +324,7 @@
     const menu = ['bread-crumb', '#elider-menu', 'dialog[open]'];
     await remoteCall.waitForElement(appId, menu);
 
-    // Check: the drop-down menu should contain 5 - 3 = 2 elided items.
+    // Check: the drop-down menu should contain 2 elided items.
     const menuItems = ['bread-crumb', '#elider-menu .dropdown-item'];
     const elements = await remoteCall.callRemoteTestUtil(
         'deepQueryAllElements', appId, [menuItems]);
@@ -360,7 +360,7 @@
     const appId = await setupAndWaitUntilReady(
         RootPath.DOWNLOADS, nestedFolderTestEntries, []);
 
-    // Navigate to deepest folder: 2 + 4 nested = 6 path components.
+    // Navigate to deepest folder.
     const breadcrumb = '/My files/Downloads/' +
         nestedFolderTestEntries.map(e => e.nameText).join('/');
     await navigateWithDirectoryTree(appId, breadcrumb);
@@ -378,7 +378,7 @@
     const menu = ['bread-crumb', '#elider-menu', 'dialog[open]'];
     await remoteCall.waitForElement(appId, menu);
 
-    // Check: the drop-down menu should contain 6 - 3 = 3 elided items.
+    // Check: the drop-down menu should contain 3 elided items.
     const menuItems = ['bread-crumb', '#elider-menu .dropdown-item'];
     const elements = await remoteCall.callRemoteTestUtil(
         'deepQueryAllElements', appId, [menuItems]);
