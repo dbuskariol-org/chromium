@@ -392,9 +392,6 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
   // Invoked after the fading out animation for item deletion is ended.
   void OnFadeOutAnimationEnded();
 
-  // Fade in last visible item.
-  void StartFadeInLastVisibleItem();
-
   // Gets the menu anchor rect for menus. |source| is the view that is
   // asking for a menu, |location| is the location of the event, |context_menu|
   // is whether the menu is for a context or application menu.

@@ -1448,10 +1448,8 @@ bool ShelfView::HandleRipOffDrag(const ui::LocatedEvent& event) {
     if (RemovableByRipOff(current_index) == REMOVABLE) {
       // Move the item to the back and hide it. ShelfItemMoved() callback will
       // handle the |view_model_| update and call AnimateToIdealBounds().
-      if (current_index != model_->item_count() - 1) {
+      if (current_index != model_->item_count() - 1)
         model_->Move(current_index, model_->item_count() - 1);
-        StartFadeInLastVisibleItem();
-      }
       // Make the item partially disappear to show that it will get removed if
       // dropped.
       drag_image_->SetOpacity(kDraggedImageOpacity);
@@ -1581,10 +1579,7 @@ void ShelfView::OnFadeOutAnimationEnded() {
   PreferredSizeChanged();
 
   AnimateToIdealBounds();
-  StartFadeInLastVisibleItem();
 }
-
-void ShelfView::StartFadeInLastVisibleItem() {}
 
 gfx::Rect ShelfView::GetMenuAnchorRect(const views::View& source,
                                        const gfx::Point& location,
