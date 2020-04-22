@@ -1995,11 +1995,12 @@ StyleDifference LayoutObject::AdjustStyleDifference(
         StyleRef().HasBackgroundRelatedColorReferencingCurrentColor() ||
         // Skip any text nodes that do not contain text boxes. Whitespace cannot
         // be skipped or we will miss invalidating decorations (e.g.,
-        // underlines).
+        // underlines). MathML elements are not skipped either as some of them
+        // do special painting (e.g. fraction bar).
         (IsText() && !IsBR() && ToLayoutText(this)->HasInlineFragments()) ||
         (IsSVG() && StyleRef().SvgStyle().IsFillColorCurrentColor()) ||
         (IsSVG() && StyleRef().SvgStyle().IsStrokeColorCurrentColor()) ||
-        IsListMarker() || IsDetailsMarker())
+        IsListMarker() || IsDetailsMarker() || IsMathML())
       diff.SetNeedsPaintInvalidation();
   }
 
