@@ -1086,10 +1086,6 @@ void AddGoogleAssistantStrings(content::WebUIDataSource* html_source,
       {"googleAssistantEnableContext", IDS_ASSISTANT_SCREEN_CONTEXT_TITLE},
       {"googleAssistantEnableContextDescription",
        IDS_ASSISTANT_SCREEN_CONTEXT_DESC},
-      {"googleAssistantEnableQuickAnswers",
-       IDS_ASSISTANT_QUICK_ANSWERS_SETTING_TITLE},
-      {"googleAssistantEnableQuickAnswersDescription",
-       IDS_ASSISTANT_QUICK_ANSWERS_SETTING_DESC},
       {"googleAssistantEnableHotword",
        IDS_SETTINGS_GOOGLE_ASSISTANT_ENABLE_HOTWORD},
       {"googleAssistantEnableHotwordDescription",
@@ -1125,9 +1121,6 @@ void AddGoogleAssistantStrings(content::WebUIDataSource* html_source,
   html_source->AddBoolean(
       "voiceMatchDisabled",
       chromeos::assistant::features::IsVoiceMatchDisabled());
-  html_source->AddBoolean(
-      "quickAnswersAvailable",
-      chromeos::features::IsQuickAnswersSettingToggleEnabled());
 }
 
 void AddPrintingStrings(content::WebUIDataSource* html_source) {

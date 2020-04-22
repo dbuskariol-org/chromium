@@ -98,22 +98,14 @@ Polymer({
 
     /** @private {DspHotwordState} */
     dspHotwordState_: Number,
-
-    /** @private */
-    quickAnswersAvailable_: {
-      type: Boolean,
-      value: false,
-    },
   },
 
   observers: [
-    'onPrefsChanged_(' +
-        'prefs.settings.voice_interaction.hotword.enabled.value, ' +
-        'prefs.settings.voice_interaction.hotword.always_on.value, ' +
-        'prefs.settings.voice_interaction.activity_control.consent_status' +
-        '.value, ' +
-        'prefs.settings.assistant.disabled_by_policy.value, ' +
-        'prefs.settings.voice_interaction.context.enabled.value)',
+    'onPrefsChanged_(prefs.settings.voice_interaction.hotword.enabled.value)',
+    'onPrefsChanged_(prefs.settings.voice_interaction.hotword.always_on.value)',
+    `onPrefsChanged_(
+      prefs.settings.voice_interaction.activity_control.consent_status.value)`,
+    'onPrefsChanged_(prefs.settings.assistant.disabled_by_policy.value)',
   ],
 
   /** @private {?settings.GoogleAssistantBrowserProxy} */
@@ -197,7 +189,7 @@ Polymer({
 
   /** @private */
   onPrefsChanged_() {
-    if (this.getPref('settings.assistant.disabled_by_policy').value) {
+    if (this.getPref('settings.assistant.disabled_by_policy.value')) {
       this.setPrefValue('settings.voice_interaction.enabled', false);
       return;
     }
@@ -206,28 +198,24 @@ Polymer({
 
     this.shouldShowVoiceMatchSettings_ =
         !loadTimeData.getBoolean('voiceMatchDisabled') &&
-        !!this.getPref('settings.voice_interaction.hotword.enabled').value &&
+        this.getPref('settings.voice_interaction.hotword.enabled.value') &&
         (this.getPref(
-                 'settings.voice_interaction.activity_control.consent_status')
-             .value == ConsentStatus.kActivityControlAccepted);
+             'settings.voice_interaction.activity_control.consent_status.value') ==
+         ConsentStatus.kActivityControlAccepted);
 
     const hotwordEnabled =
         this.getPref('settings.voice_interaction.hotword.enabled');
 
     this.hotwordEnforced_ = hotwordEnabled.enforcement ==
         chrome.settingsPrivate.Enforcement.ENFORCED;
-
-    this.quickAnswersAvailable_ =
-        loadTimeData.getBoolean('quickAnswersAvailable') &&
-        !!this.getPref('settings.voice_interaction.context.enabled').value;
   },
 
   /** @private */
   refreshDspHotwordState_() {
-    if (!this.getPref('settings.voice_interaction.hotword.enabled').value) {
+    if (!this.getPref('settings.voice_interaction.hotword.enabled.value')) {
       this.dspHotwordState_ = DspHotwordState.OFF;
-    } else if (this.getPref('settings.voice_interaction.hotword.always_on')
-                   .value) {
+    } else if (this.getPref(
+                   'settings.voice_interaction.hotword.always_on.value')) {
       this.dspHotwordState_ = DspHotwordState.ALWAYS_ON;
     } else {
       this.dspHotwordState_ = DspHotwordState.DEFAULT_ON;

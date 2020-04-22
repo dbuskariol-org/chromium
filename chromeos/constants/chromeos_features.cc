@@ -435,10 +435,6 @@ bool IsQuickAnswersRichUiEnabled() {
   return base::FeatureList::IsEnabled(kQuickAnswersRichUi);
 }
 
-bool IsQuickAnswersSettingToggleEnabled() {
-  return IsQuickAnswersEnabled() && IsQuickAnswersRichUiEnabled();
-}
-
 bool IsSplitSettingsSyncEnabled() {
   return base::FeatureList::IsEnabled(kSplitSettingsSync);
 }
