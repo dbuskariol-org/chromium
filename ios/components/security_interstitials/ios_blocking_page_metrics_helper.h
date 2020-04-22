@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INTERSTITIALS_IOS_CHROME_METRICS_HELPER_H_
-#define IOS_CHROME_BROWSER_INTERSTITIALS_IOS_CHROME_METRICS_HELPER_H_
+#ifndef IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_METRICS_HELPER_H_
+#define IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_METRICS_HELPER_H_
 
 #include <string>
 
@@ -15,17 +15,20 @@ namespace web {
 class WebState;
 }
 
-// This class provides a concrete implementation for Chrome on iOS to the
+namespace security_interstitials {
+
+// This class provides a concrete implementation for iOS to the
 // security_interstitials::MetricsHelper class. Together, they record UMA,
 // Rappor, and experience sampling metrics.
-class IOSChromeMetricsHelper : public security_interstitials::MetricsHelper {
+class IOSBlockingPageMetricsHelper
+    : public security_interstitials::MetricsHelper {
  public:
-  IOSChromeMetricsHelper(
+  IOSBlockingPageMetricsHelper(
       web::WebState* web_state,
       const GURL& request_url,
       const security_interstitials::MetricsHelper::ReportDetails
           report_details);
-  ~IOSChromeMetricsHelper() override;
+  ~IOSBlockingPageMetricsHelper() override;
 
  protected:
   // security_interstitials::MetricsHelper implementation.
@@ -36,7 +39,9 @@ class IOSChromeMetricsHelper : public security_interstitials::MetricsHelper {
   void RecordExtraShutdownMetrics() override;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(IOSChromeMetricsHelper);
+  DISALLOW_COPY_AND_ASSIGN(IOSBlockingPageMetricsHelper);
 };
 
-#endif  // IOS_CHROME_BROWSER_INTERSTITIALS_IOS_CHROME_METRICS_HELPER_H_
+}  // namespace security_interstitials
+
+#endif  // IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_METRICS_HELPER_H_

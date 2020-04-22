@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/interstitials/ios_blocking_page_tab_helper.h"
+#import "ios/components/security_interstitials/ios_blocking_page_tab_helper.h"
 
-#include "ios/chrome/browser/interstitials/ios_security_interstitial_page.h"
+#include "ios/components/security_interstitials/ios_security_interstitial_page.h"
 #import "ios/web/public/test/fakes/fake_navigation_context.h"
 #import "ios/web/public/test/web_test_with_web_state.h"
 #import "ios/web/public/web_state.h"
@@ -14,13 +14,17 @@
 #error "This file requires ARC support."
 #endif
 
+namespace security_interstitials {
+
 class TestInterstitialPage : public IOSSecurityInterstitialPage {
  public:
   // |*destroyed_tracker| is set to true in the destructor.
   TestInterstitialPage(web::WebState* web_state,
                        const GURL& request_url,
                        bool* destroyed_tracker)
-      : IOSSecurityInterstitialPage(web_state, request_url),
+      : IOSSecurityInterstitialPage(web_state,
+                                    request_url,
+                                    /*argument_name=*/nullptr),
         destroyed_tracker_(destroyed_tracker) {}
 
   ~TestInterstitialPage() override { *destroyed_tracker_ = true; }
@@ -193,3 +197,5 @@ TEST_F(IOSBlockingPageTabHelperTest, NavigationDoesNotCommit) {
   helper->DidFinishNavigation(web_state(), next_committed_context.get());
   EXPECT_TRUE(committed_blocking_page_destroyed);
 }
+
+}  // namespace security_interstitials

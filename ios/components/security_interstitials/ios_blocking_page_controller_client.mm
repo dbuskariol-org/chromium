@@ -2,15 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/interstitials/ios_chrome_controller_client.h"
+#include "ios/components/security_interstitials/ios_blocking_page_controller_client.h"
 
 #include "base/bind.h"
 #include "base/logging.h"
 #include "base/task/post_task.h"
 #include "components/security_interstitials/core/metrics_helper.h"
-#include "ios/chrome/browser/application_context.h"
-#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
-#include "ios/chrome/browser/pref_names.h"
 #import "ios/web/public/navigation/navigation_manager.h"
 #include "ios/web/public/navigation/reload_type.h"
 #include "ios/web/public/security/web_interstitial.h"
@@ -22,42 +19,47 @@
 #error "This file requires ARC support."
 #endif
 
-IOSChromeControllerClient::IOSChromeControllerClient(
+namespace security_interstitials {
+
+IOSBlockingPageControllerClient::IOSBlockingPageControllerClient(
     web::WebState* web_state,
-    std::unique_ptr<security_interstitials::MetricsHelper> metrics_helper)
+    std::unique_ptr<security_interstitials::MetricsHelper> metrics_helper,
+    const std::string& app_locale)
     : security_interstitials::ControllerClient(std::move(metrics_helper)),
       web_state_(web_state),
       web_interstitial_(nullptr),
+      app_locale_(app_locale),
       weak_factory_(this) {
   web_state_->AddObserver(this);
 }
 
-IOSChromeControllerClient::~IOSChromeControllerClient() {
+IOSBlockingPageControllerClient::~IOSBlockingPageControllerClient() {
   if (web_state_) {
     web_state_->RemoveObserver(this);
   }
 }
 
-void IOSChromeControllerClient::SetWebInterstitial(
+void IOSBlockingPageControllerClient::SetWebInterstitial(
     web::WebInterstitial* web_interstitial) {
   web_interstitial_ = web_interstitial;
 }
 
-void IOSChromeControllerClient::WebStateDestroyed(web::WebState* web_state) {
+void IOSBlockingPageControllerClient::WebStateDestroyed(
+    web::WebState* web_state) {
   DCHECK_EQ(web_state_, web_state);
   web_state_->RemoveObserver(this);
   web_state_ = nullptr;
 }
 
-bool IOSChromeControllerClient::CanLaunchDateAndTimeSettings() {
+bool IOSBlockingPageControllerClient::CanLaunchDateAndTimeSettings() {
   return false;
 }
 
-void IOSChromeControllerClient::LaunchDateAndTimeSettings() {
+void IOSBlockingPageControllerClient::LaunchDateAndTimeSettings() {
   NOTREACHED();
 }
 
-void IOSChromeControllerClient::GoBack() {
+void IOSBlockingPageControllerClient::GoBack() {
   if (CanGoBack()) {
     web_state_->GetNavigationManager()->GoBack();
   } else {
@@ -65,62 +67,65 @@ void IOSChromeControllerClient::GoBack() {
     // involved in the operation and CloseWebState interrupts it, so call
     // CloseWebState asynchronously.
     base::PostTask(FROM_HERE, {web::WebThread::UI},
-                   base::BindOnce(&IOSChromeControllerClient::Close,
+                   base::BindOnce(&IOSBlockingPageControllerClient::Close,
                                   weak_factory_.GetWeakPtr()));
   }
 }
 
-bool IOSChromeControllerClient::CanGoBack() {
+bool IOSBlockingPageControllerClient::CanGoBack() {
   return web_state_->GetNavigationManager()->CanGoBack();
 }
 
-bool IOSChromeControllerClient::CanGoBackBeforeNavigation() {
+bool IOSBlockingPageControllerClient::CanGoBackBeforeNavigation() {
   NOTREACHED();
   return false;
 }
 
-void IOSChromeControllerClient::GoBackAfterNavigationCommitted() {
+void IOSBlockingPageControllerClient::GoBackAfterNavigationCommitted() {
   NOTREACHED();
 }
 
-void IOSChromeControllerClient::Proceed() {
+void IOSBlockingPageControllerClient::Proceed() {
   DCHECK(web_interstitial_);
   web_interstitial_->Proceed();
 }
 
-void IOSChromeControllerClient::Reload() {
+void IOSBlockingPageControllerClient::Reload() {
   web_state_->GetNavigationManager()->Reload(web::ReloadType::NORMAL,
                                              true /*check_for_repost*/);
 }
 
-void IOSChromeControllerClient::OpenUrlInCurrentTab(const GURL& url) {
+void IOSBlockingPageControllerClient::OpenUrlInCurrentTab(const GURL& url) {
   web_state_->OpenURL(web::WebState::OpenURLParams(
       url, web::Referrer(), WindowOpenDisposition::CURRENT_TAB,
       ui::PAGE_TRANSITION_LINK, false));
 }
 
-void IOSChromeControllerClient::OpenUrlInNewForegroundTab(const GURL& url) {
+void IOSBlockingPageControllerClient::OpenUrlInNewForegroundTab(
+    const GURL& url) {
   web_state_->OpenURL(web::WebState::OpenURLParams(
       url, web::Referrer(), WindowOpenDisposition::NEW_FOREGROUND_TAB,
       ui::PAGE_TRANSITION_LINK, false));
 }
 
-const std::string& IOSChromeControllerClient::GetApplicationLocale() const {
-  return GetApplicationContext()->GetApplicationLocale();
-}
-
-PrefService* IOSChromeControllerClient::GetPrefService() {
-  return ChromeBrowserState::FromBrowserState(web_state_->GetBrowserState())
-      ->GetPrefs();
-}
-
-const std::string IOSChromeControllerClient::GetExtendedReportingPrefName()
+const std::string& IOSBlockingPageControllerClient::GetApplicationLocale()
     const {
+  return app_locale_;
+}
+
+PrefService* IOSBlockingPageControllerClient::GetPrefService() {
+  return nullptr;
+}
+
+const std::string
+IOSBlockingPageControllerClient::GetExtendedReportingPrefName() const {
   return std::string();
 }
 
-void IOSChromeControllerClient::Close() {
+void IOSBlockingPageControllerClient::Close() {
   if (web_state_) {
     web_state_->CloseWebState();
   }
 }
+
+}  // namespace security_interstitials

@@ -2,16 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
-#define IOS_CHROME_BROWSER_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
+#ifndef IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
+#define IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
 
-#include "ios/chrome/browser/interstitials/ios_security_interstitial_page.h"
+#include "ios/components/security_interstitials/ios_security_interstitial_page.h"
 #include "ios/web/public/web_state_observer.h"
 #import "ios/web/public/web_state_user_data.h"
 
 namespace web {
 class WebState;
 }  // namespace web
+
+namespace security_interstitials {
 
 // Helps manage IOSSecurityInterstitialPage lifetime independent from
 // interstitial code. Stores an IOSSecurityInterstitialPage while an SSL error
@@ -79,4 +81,6 @@ class IOSBlockingPageTabHelper
   base::WeakPtrFactory<IOSBlockingPageTabHelper> weak_factory_{this};
 };
 
-#endif  // IOS_CHROME_BROWSER_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_
+}  // namespace security_interstitials
+
+#endif  // IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_TAB_HELPER_H_

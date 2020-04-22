@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INTERSTITIALS_IOS_SECURITY_INTERSTITIAL_PAGE_H_
-#define IOS_CHROME_BROWSER_INTERSTITIALS_IOS_SECURITY_INTERSTITIAL_PAGE_H_
+#ifndef IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_SECURITY_INTERSTITIAL_PAGE_H_
+#define IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_SECURITY_INTERSTITIAL_PAGE_H_
 
 #include <string>
 
 #include "base/macros.h"
 #include "base/strings/string16.h"
+#include "ios/components/security_interstitials/ios_blocking_page_controller_client.h"
 #include "ios/web/public/security/web_interstitial_delegate.h"
 #include "url/gurl.h"
 
@@ -20,12 +21,15 @@ namespace web {
 class WebFrame;
 class WebInterstitial;
 class WebState;
-}
+}  // namespace web
+
+namespace security_interstitials {
 
 class IOSSecurityInterstitialPage : public web::WebInterstitialDelegate {
  public:
   IOSSecurityInterstitialPage(web::WebState* web_state,
-                              const GURL& request_url);
+                              const GURL& request_url,
+                              IOSBlockingPageControllerClient* client);
   ~IOSSecurityInterstitialPage() override;
 
   // Creates an interstitial and shows it.
@@ -56,10 +60,6 @@ class IOSSecurityInterstitialPage : public web::WebInterstitialDelegate {
   // Returns the formatted host name for the request url.
   base::string16 GetFormattedHostName() const;
 
-  // Returns the boolean value of the given |pref_name| from the PrefService of
-  // the ChromeBrowserState associated with |web_state_|.
-  bool IsPrefEnabled(const char* pref_name) const;
-
   web::WebState* web_state() const { return web_state_; }
   const GURL& request_url() const { return request_url_; }
   web::WebInterstitial* web_interstitial() const { return web_interstitial_; }
@@ -75,7 +75,13 @@ class IOSSecurityInterstitialPage : public web::WebInterstitialDelegate {
   // IOSSecurityInterstitialPage instance.
   web::WebInterstitial* web_interstitial_;
 
+  // Used to interact with the embedder. Unowned pointer; must outlive |this|
+  // instance.
+  IOSBlockingPageControllerClient* const client_ = nullptr;
+
   DISALLOW_COPY_AND_ASSIGN(IOSSecurityInterstitialPage);
 };
 
-#endif  // IOS_CHROME_BROWSER_INTERSTITIALS_IOS_SECURITY_INTERSTITIAL_PAGE_H_
+}  // namespace security_interstitials
+
+#endif  // IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_SECURITY_INTERSTITIAL_PAGE_H_

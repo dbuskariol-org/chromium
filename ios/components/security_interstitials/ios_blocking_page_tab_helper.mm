@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/interstitials/ios_blocking_page_tab_helper.h"
+#import "ios/components/security_interstitials/ios_blocking_page_tab_helper.h"
 
 #include "base/values.h"
-#include "ios/chrome/browser/interstitials/ios_security_interstitial_page.h"
+#include "ios/components/security_interstitials/ios_security_interstitial_page.h"
 #import "ios/web/public/navigation/navigation_context.h"
 #import "ios/web/public/web_state.h"
 #import "ios/web/public/web_state_user_data.h"
@@ -13,6 +13,8 @@
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
 #endif
+
+namespace security_interstitials {
 
 namespace {
 // Script command prefix.
@@ -111,3 +113,5 @@ void IOSBlockingPageTabHelper::OnBlockingPageCommand(
 }
 
 WEB_STATE_USER_DATA_KEY_IMPL(IOSBlockingPageTabHelper)
+
+}  // namespace security_interstitials

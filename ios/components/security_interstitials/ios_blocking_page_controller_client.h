@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_INTERSTITIALS_IOS_CHROME_CONTROLLER_CLIENT_H_
-#define IOS_CHROME_BROWSER_INTERSTITIALS_IOS_CHROME_CONTROLLER_CLIENT_H_
+#ifndef IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_CONTROLLER_CLIENT_H_
+#define IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_CONTROLLER_CLIENT_H_
 
 #include <string>
 
@@ -14,29 +14,31 @@
 
 class GURL;
 
-namespace security_interstitials {
-class MetricsHelper;
-}
-
 namespace web {
 class WebInterstitial;
 class WebState;
-}
+}  // namespace web
+
+namespace security_interstitials {
+class MetricsHelper;
 
 // Provides embedder-specific logic for the security error page controller.
-class IOSChromeControllerClient
+class IOSBlockingPageControllerClient
     : public security_interstitials::ControllerClient,
       public web::WebStateObserver {
  public:
-  IOSChromeControllerClient(
+  IOSBlockingPageControllerClient(
       web::WebState* web_state,
-      std::unique_ptr<security_interstitials::MetricsHelper> metrics_helper);
-  ~IOSChromeControllerClient() override;
+      std::unique_ptr<security_interstitials::MetricsHelper> metrics_helper,
+      const std::string& app_locale);
+  ~IOSBlockingPageControllerClient() override;
 
   void SetWebInterstitial(web::WebInterstitial* web_interstitial);
 
   // web::WebStateObserver implementation.
   void WebStateDestroyed(web::WebState* web_state) override;
+
+  const std::string& GetApplicationLocale() const override;
 
  private:
   // security_interstitials::ControllerClient implementation.
@@ -50,7 +52,6 @@ class IOSChromeControllerClient
   void Reload() override;
   void OpenUrlInCurrentTab(const GURL& url) override;
   void OpenUrlInNewForegroundTab(const GURL& url) override;
-  const std::string& GetApplicationLocale() const override;
   PrefService* GetPrefService() override;
   const std::string GetExtendedReportingPrefName() const override;
 
@@ -60,10 +61,13 @@ class IOSChromeControllerClient
 
   web::WebState* web_state_;
   web::WebInterstitial* web_interstitial_;
+  const std::string app_locale_;
 
-  base::WeakPtrFactory<IOSChromeControllerClient> weak_factory_;
+  base::WeakPtrFactory<IOSBlockingPageControllerClient> weak_factory_;
 
-  DISALLOW_COPY_AND_ASSIGN(IOSChromeControllerClient);
+  DISALLOW_COPY_AND_ASSIGN(IOSBlockingPageControllerClient);
 };
 
-#endif  // IOS_CHROME_BROWSER_INTERSTITIALS_IOS_CHROME_CONTROLLER_CLIENT_H_
+}  // namespace security_interstitials
+
+#endif  // IOS_COMPONENTS_SECURITY_INTERSTITIALS_IOS_BLOCKING_PAGE_CONTROLLER_CLIENT_H_
