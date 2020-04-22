@@ -74,19 +74,39 @@ void CompositorThreadEventQueue::Queue(
           ToWebGestureEvent(last_event->event()),
           ToWebGestureEvent(new_event->event()));
 
+  // When we copy oldest_latency we clobbered the trace_id to be the same as
+  // either |last_event| or |second_last_event|, but |new_event| has a different
+  // trace_id so restore it for this pinch or scroll event to follow it through
+  // the system with flow events properly attributed.
+  LatencyInfo scroll_latency = oldest_latency;
+  LatencyInfo pinch_latency = oldest_latency;
+  if (ToWebGestureEvent(new_event->event()).GetType() ==
+      blink::WebInputEvent::Type::kGestureScrollUpdate) {
+    scroll_latency.set_trace_id(new_event->latency_info().trace_id());
+  } else {
+    pinch_latency.set_trace_id(new_event->latency_info().trace_id());
+  }
+
   std::unique_ptr<EventWithCallback> scroll_event =
       std::make_unique<EventWithCallback>(
-          coalesced_events.first.Clone(), oldest_latency,
+          coalesced_events.first.Clone(), scroll_latency,
           oldest_creation_timestamp, timestamp_now, nullptr);
 
   std::unique_ptr<EventWithCallback> pinch_event =
       std::make_unique<EventWithCallback>(
-          coalesced_events.second.Clone(), oldest_latency,
+          coalesced_events.second.Clone(), pinch_latency,
           oldest_creation_timestamp, timestamp_now,
           std::move(combined_original_events));
 
-  queue_.emplace_back(std::move(scroll_event));
-  queue_.emplace_back(std::move(pinch_event));
+  // Ensure the invariant that the queue is in order of the events being
+  // generated (trace_id() is strictly increasing).
+  if (scroll_latency.trace_id() <= pinch_latency.trace_id()) {
+    queue_.emplace_back(std::move(scroll_event));
+    queue_.emplace_back(std::move(pinch_event));
+  } else {
+    queue_.emplace_back(std::move(pinch_event));
+    queue_.emplace_back(std::move(scroll_event));
+  }
 }
 
 std::unique_ptr<EventWithCallback> CompositorThreadEventQueue::Pop() {
