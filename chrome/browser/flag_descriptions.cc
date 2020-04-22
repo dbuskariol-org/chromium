@@ -513,6 +513,12 @@ const char kEnableAutofillCreditCardUploadFeedbackDescription[] =
     "show a highlight, otherwise the icon will be updated and if it is "
     "clicked, the save card failure bubble will be shown.";
 
+const char kEnableExperimentalCookieFeaturesName[] =
+    "Enable experimental cookie features";
+const char kEnableExperimentalCookieFeaturesDescription[] =
+    "Enable new features that affect setting, sending, and managing cookies. "
+    "The enabled features are subject to change at any time.";
+
 const char kEnableDeferAllScriptName[] = "DeferAllScript previews";
 const char kEnableDeferAllScriptDescription[] =
     "Enable deferring synchronous script on slow pages.";

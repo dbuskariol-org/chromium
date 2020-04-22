@@ -40230,6 +40230,7 @@ from previous Chrome versions.
   <int value="724052572" label="EnableFilesystemInIncognito"/>
   <int value="724208771" label="TabsInCBD:enabled"/>
   <int value="724427456" label="WebAuthenticationPINSupport:disabled"/>
+  <int value="725067265" label="enable-experimental-cookie-features"/>
   <int value="725270017" label="ScrollAnchorSerialization:disabled"/>
   <int value="725870294" label="RequestUnbufferedDispatch:disabled"/>
   <int value="726764779" label="WebXRGamepadSupport:enabled"/>

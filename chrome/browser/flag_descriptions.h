@@ -311,6 +311,9 @@ extern const char
 extern const char kEnableAutofillCreditCardUploadFeedbackName[];
 extern const char kEnableAutofillCreditCardUploadFeedbackDescription[];
 
+extern const char kEnableExperimentalCookieFeaturesName[];
+extern const char kEnableExperimentalCookieFeaturesDescription[];
+
 extern const char kEnableDeferAllScriptName[];
 extern const char kEnableDeferAllScriptDescription[];
 

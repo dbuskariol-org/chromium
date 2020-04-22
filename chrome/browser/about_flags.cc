@@ -1756,6 +1756,16 @@ const FeatureEntry::Choice kWebOtpBackendChoices[] = {
 };
 #endif  // defined(OS_ANDROID)
 
+// The choices for --enable-experimental-cookie-features. This really should
+// just be a SINGLE_VALUE_TYPE, but it is misleading to have the choices be
+// labeled "Disabled"/"Enabled". So instead this is made to be a
+// MULTI_VALUE_TYPE with choices "Default"/"Enabled".
+const FeatureEntry::Choice kEnableExperimentalCookieFeaturesChoices[] = {
+    {flags_ui::kGenericExperimentChoiceDefault, "", ""},
+    {flags_ui::kGenericExperimentChoiceEnabled,
+     switches::kEnableExperimentalCookieFeatures, ""},
+};
+
 // RECORDING USER METRICS FOR FLAGS:
 // -----------------------------------------------------------------------------
 // The first line of the entry is the internal name.
@@ -5314,6 +5324,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableHighResolutionMouseScrollingDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(ui::kEnableHighResolutionMouseScrolling)},
 #endif  // defined(OS_CHROMEOS)
+
+    {"enable-experimental-cookie-features",
+     flag_descriptions::kEnableExperimentalCookieFeaturesName,
+     flag_descriptions::kEnableExperimentalCookieFeaturesDescription, kOsAll,
+     MULTI_VALUE_TYPE(kEnableExperimentalCookieFeaturesChoices)},
 
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
