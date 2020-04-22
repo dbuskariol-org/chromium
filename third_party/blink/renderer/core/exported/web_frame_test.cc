@@ -4185,29 +4185,6 @@ TEST_F(WebFrameTest, DivScrollIntoEditableTestWithDeviceScaleFactor) {
   EXPECT_NEAR(min_readable_caret_height / caret_bounds.Height(), scale, 0.1);
 }
 
-TEST_F(WebFrameTest, CharacterIndexAtPointWithPinchZoom) {
-  RegisterMockedHttpURLLoad("sometext.html");
-
-  frame_test_helpers::WebViewHelper web_view_helper;
-  web_view_helper.InitializeAndLoad(base_url_ + "sometext.html");
-  web_view_helper.LoadAhem();
-  web_view_helper.Resize(WebSize(640, 480));
-
-  // Move the visual viewport to the start of the target div containing the
-  // text.
-  web_view_helper.GetWebView()->SetPageScaleFactor(2);
-  web_view_helper.GetWebView()->SetVisualViewportOffset(gfx::PointF(100, 50));
-
-  WebLocalFrame* main_frame =
-      web_view_helper.GetWebView()->MainFrame()->ToWebLocalFrame();
-
-  // Since we're zoomed in to 2X, each char of Ahem is 20px wide/tall in
-  // viewport space. We expect to hit the fifth char on the first line.
-  size_t ix = main_frame->CharacterIndexForPoint(gfx::Point(100, 15));
-
-  EXPECT_EQ(5ul, ix);
-}
-
 TEST_F(WebFrameTest, FirstRectForCharacterRangeWithPinchZoom) {
   RegisterMockedHttpURLLoad("textbox.html");
 
