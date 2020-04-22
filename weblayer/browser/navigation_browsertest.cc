@@ -273,6 +273,35 @@ IN_PROC_BROWSER_TEST_F(NavigationBrowserTest,
   EXPECT_EQ(final_url, controller->GetNavigationEntryDisplayURL(1));
 }
 
+// Verifies calling Navigate() from NavigationRedirected() works.
+IN_PROC_BROWSER_TEST_F(NavigationBrowserTest, NavigateFromRedirect) {
+  net::test_server::ControllableHttpResponse response_1(embedded_test_server(),
+                                                        "", true);
+  net::test_server::ControllableHttpResponse response_2(embedded_test_server(),
+                                                        "", true);
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  NavigationObserverImpl observer(GetNavigationController());
+  bool got_redirect = false;
+  const GURL url_to_load_on_redirect =
+      embedded_test_server()->GetURL("/url_to_load_on_redirect.html");
+  observer.SetRedirectedCallback(
+      base::BindLambdaForTesting([&](Navigation* navigation) {
+        shell()->LoadURL(url_to_load_on_redirect);
+        got_redirect = true;
+      }));
+
+  shell()->LoadURL(embedded_test_server()->GetURL("/initial_url.html"));
+  response_1.WaitForRequest();
+  response_1.Send(
+      "HTTP/1.1 302 Moved Temporarily\r\nLocation: /redirect_dest_url\r\n\r\n");
+  response_1.Done();
+  response_2.WaitForRequest();
+  response_2.Done();
+  EXPECT_EQ(url_to_load_on_redirect, response_2.http_request()->GetURL());
+  EXPECT_TRUE(got_redirect);
+}
+
 IN_PROC_BROWSER_TEST_F(NavigationBrowserTest, SetRequestHeader) {
   net::test_server::ControllableHttpResponse response_1(embedded_test_server(),
                                                         "", true);
