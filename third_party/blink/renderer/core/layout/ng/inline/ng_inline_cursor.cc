@@ -269,7 +269,7 @@ bool NGInlineCursor::IsLastLineInInlineBlock() const {
     return false;
   NGInlineCursor next_sibling(*this);
   for (;;) {
-    next_sibling.MoveToNextSibling();
+    next_sibling.MoveToNextSkippingChildren();
     if (!next_sibling)
       return true;
     if (next_sibling.Current().IsLineBox())
