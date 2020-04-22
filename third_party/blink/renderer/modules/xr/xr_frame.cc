@@ -176,6 +176,12 @@ ScriptPromise XRFrame::createAnchor(ScriptState* script_state,
                                     ExceptionState& exception_state) {
   DVLOG(2) << __func__;
 
+  if (!session_->IsFeatureEnabled(device::mojom::XRSessionFeature::ANCHORS)) {
+    exception_state.ThrowDOMException(DOMExceptionCode::kNotSupportedError,
+                                      XRSession::kAnchorsFeatureNotSupported);
+    return {};
+  }
+
   if (!is_active_) {
     DVLOG(2) << __func__ << ": frame not active, failing anchor creation";
     exception_state.ThrowDOMException(DOMExceptionCode::kInvalidStateError,

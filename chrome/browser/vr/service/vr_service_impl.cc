@@ -50,11 +50,6 @@ content::XrConsentPromptLevel GetRequiredConsentLevel(
     return content::XrConsentPromptLevel::kVRFloorPlan;
   }
 
-  if (base::Contains(requested_features,
-                     device::mojom::XRSessionFeature::HIT_TEST)) {
-    return content::XrConsentPromptLevel::kVRFloorPlan;
-  }
-
   // If the device supports a custom IPD and it will be exposed (via immersive),
   // we need to warn about physical features Being exposed.
   if (runtime->SupportsCustomIPD() &&

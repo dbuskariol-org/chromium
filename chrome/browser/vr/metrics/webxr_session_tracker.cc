@@ -72,6 +72,7 @@ void WebXRSessionTracker::ReportFeatureUsed(
     case XRSessionFeature::DOM_OVERLAY:
     case XRSessionFeature::HIT_TEST:
     case XRSessionFeature::LIGHT_ESTIMATION:
+    case XRSessionFeature::ANCHORS:
       // Not recording metrics for these features currently.
       // TODO(https://crbug.com/965729): Add metrics for the AR-related features
       // that are enabled by default.
@@ -108,6 +109,7 @@ void WebXRSessionTracker::SetFeatureRequest(
     case XRSessionFeature::DOM_OVERLAY:
     case XRSessionFeature::HIT_TEST:
     case XRSessionFeature::LIGHT_ESTIMATION:
+    case XRSessionFeature::ANCHORS:
       // Not recording metrics for these features currently.
       // TODO(https://crbug.com/965729): Add metrics for the AR-related features
       // that are enabled by default.

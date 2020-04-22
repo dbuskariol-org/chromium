@@ -441,6 +441,10 @@ void WebRuntimeFeatures::EnableWebXR(bool enable) {
   RuntimeEnabledFeatures::SetWebXREnabled(enable);
 }
 
+void WebRuntimeFeatures::EnableWebXRAnchors(bool enable) {
+  RuntimeEnabledFeatures::SetWebXRAnchorsEnabled(enable);
+}
+
 void WebRuntimeFeatures::EnableWebXRARModule(bool enable) {
   RuntimeEnabledFeatures::SetWebXRARModuleEnabled(enable);
 }

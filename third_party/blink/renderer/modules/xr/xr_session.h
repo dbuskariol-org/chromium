@@ -73,6 +73,8 @@ class XRSession final
       "The operation was unable to retrieve a matrix from passed in space and "
       "could not be completed.";
   static constexpr char kNoSpaceSpecified[] = "No XRSpace specified.";
+  static constexpr char kAnchorsFeatureNotSupported[] =
+      "Anchors feature is not supported by the session.";
 
   enum EnvironmentBlendMode {
     kBlendModeOpaque = 0,

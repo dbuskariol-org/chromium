@@ -81,7 +81,8 @@ const char kUnableToRetrieveNativeOrigin[] =
     "The operation was unable to retrieve the native origin from XRSpace and "
     "could not be completed.";
 
-const char kHitTestFeatureNotSupported[] = "Hit test feature is not supported.";
+const char kHitTestFeatureNotSupported[] =
+    "Hit test feature is not supported by the session.";
 
 const char kHitTestSubscriptionFailed[] = "Hit test subscription failed.";
 
@@ -240,6 +241,7 @@ bool ValidateHitTestSourceExistsHelper(
 constexpr char XRSession::kNoRigidTransformSpecified[];
 constexpr char XRSession::kUnableToRetrieveMatrix[];
 constexpr char XRSession::kNoSpaceSpecified[];
+constexpr char XRSession::kAnchorsFeatureNotSupported[];
 
 class XRSession::XRSessionResizeObserverDelegate final
     : public ResizeObserver::Delegate {
@@ -297,6 +299,7 @@ void XRSession::MetricsReporter::ReportFeatureUsed(
     case XRSessionFeature::DOM_OVERLAY:
     case XRSessionFeature::HIT_TEST:
     case XRSessionFeature::LIGHT_ESTIMATION:
+    case XRSessionFeature::ANCHORS:
       // Not recording metrics for these features currently.
       break;
   }
