@@ -1637,9 +1637,9 @@ void StyleEngine::ApplyRuleSetChanges(
   if (changed_rule_flags & kPropertyRules) {
     // TODO(https://crbug.com/978786): Don't ignore TreeScope.
 
-    // TODO(https://crbug.com/978781): Support unregistration.
-    // At this point we could have unregistered properties for
-    // change==kActiveSheetsChanged, but we don't yet support that.
+    PropertyRegistry* registry = GetDocument().GetPropertyRegistry();
+    if (registry)
+      registry->RemoveDeclaredProperties();
 
     for (auto* it = new_style_sheets.begin(); it != new_style_sheets.end();
          it++) {
@@ -1895,7 +1895,6 @@ void StyleEngine::AddPropertyRules(const RuleSet& rule_set) {
     return;
   const HeapVector<Member<StyleRuleProperty>> property_rules =
       rule_set.PropertyRules();
-  // TODO(andruud): Clear existing declared properties.
   for (unsigned i = 0; i < property_rules.size(); ++i) {
     StyleRuleProperty* rule = property_rules[i];
     AtomicString name(rule->GetName());

@@ -21,7 +21,9 @@ class CORE_EXPORT PropertyRegistry : public GarbageCollected<PropertyRegistry> {
   // Registers a property (@property).
   void DeclareProperty(const AtomicString&, PropertyRegistration&);
 
-  // TODO(andruud): Support removing declarations.
+  // Removes all registrations originating from @property. Has no effect on
+  // properties originating from CSS.registerProperty.
+  void RemoveDeclaredProperties();
 
   // Returns the registration originating from CSS.registerProperty if present,
   // otherwise returns the registration originating from @property (which may

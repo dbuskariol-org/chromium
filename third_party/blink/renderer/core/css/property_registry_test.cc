@@ -219,6 +219,28 @@ TEST_F(PropertyRegistryTest, Version) {
 
   DeclareProperty("--d");
   EXPECT_EQ(5u, Registry()->Version());
+
+  Registry()->RemoveDeclaredProperties();
+  EXPECT_EQ(6u, Registry()->Version());
+}
+
+TEST_F(PropertyRegistryTest, RemoveDeclaredProperties) {
+  DeclareProperty("--a");
+  DeclareProperty("--b");
+  RegisterProperty("--c");
+  RegisterProperty("--d");
+
+  EXPECT_TRUE(Registration("--a"));
+  EXPECT_TRUE(Registration("--b"));
+  EXPECT_TRUE(Registration("--c"));
+  EXPECT_TRUE(Registration("--d"));
+
+  Registry()->RemoveDeclaredProperties();
+
+  EXPECT_FALSE(Registration("--a"));
+  EXPECT_FALSE(Registration("--b"));
+  EXPECT_TRUE(Registration("--c"));
+  EXPECT_TRUE(Registration("--d"));
 }
 
 }  // namespace blink
