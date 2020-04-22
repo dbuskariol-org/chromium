@@ -418,6 +418,11 @@
 <translation id="1555130319947370107">藍色</translation>
 <translation id="1556537182262721003">無法將擴充功能目錄移至設定檔。</translation>
 <translation id="155865706765934889">觸控板</translation>
+<translation id="1560763881671211335">G Suite 教育版的系統管理員可決定使用者登入 G Suite 教育版帳戶後，可以存取哪些 Google 服務。學校的系統管理員必須提供或取得家長的同意聲明，才能讓未成年使用者使用這些服務。
+
+    瀏覽資料 (包含歷史記錄、書籤和密碼) 將儲存在 Family Link 帳戶中，而非學校帳戶。
+
+    你的 Family Link 家長設定仍然適用。如果你先前已封鎖某個應用程式或網站，則無須再次封鎖。</translation>
 <translation id="1564414980088536597">無法使用這張圖片，請選擇其他圖片。</translation>
 <translation id="1566049601598938765">網站</translation>
 <translation id="15662109988763471">選取的印表機無法使用或未正確安裝。請檢查你的印表機，或改選其他印表機。</translation>
@@ -4648,6 +4653,7 @@
 <translation id="7235737137505019098">安全金鑰的空間不足，無法建立帳戶。</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />，詳細資料</translation>
 <translation id="7240339475467890413">確定要連線至新的無線基地台嗎？</translation>
+<translation id="7240847845291869311">貴子女想在這部裝置上新增 G Suite 教育版 Google 帳戶。《<ph name="LINK_BEGIN" />G Suite 教育版隱私權聲明<ph name="LINK_END" />》旨在協助 G Suite 教育版使用者和家長瞭解這項產品會收集哪些資料、收集這些資料的原因和用途。</translation>
 <translation id="7241389281993241388">登入 <ph name="TOKEN_NAME" /> 即可匯入用戶端憑證。</translation>
 <translation id="7241443820034350811">如果畫面上未列出你的安全金鑰，請按住金鑰上的按鈕至少 5 秒。</translation>
 <translation id="7243632151880336635">清除並登出</translation>

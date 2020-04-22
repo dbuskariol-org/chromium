@@ -415,6 +415,11 @@
 <translation id="1555130319947370107">Azul</translation>
 <translation id="1556537182262721003">No se pudo mover el directorio de extensiones al perfil</translation>
 <translation id="155865706765934889">Panel táctil</translation>
+<translation id="1560763881671211335">Los administradores de G Suite for Education determinan cuáles son los servicios de Google que pueden utilizar los usuarios cuando acceden a una cuenta de G Suite for Education. Los administradores de las instituciones educativas deben dar el consentimiento, o bien recibirlo de los padres o madres, para que los usuarios menores de edad puedan utilizar los servicios.
+
+    Los datos de navegación (como el historial, los favoritos y las contraseñas) se almacenarán en la cuenta de Family Link, no en la cuenta de la institución educativa.
+
+    Se seguirá aplicando la configuración parental de Family Link. Si antes habías bloqueado una app o un sitio, no tendrás que volver a hacerlo.</translation>
 <translation id="1564414980088536597">No se puede usar esta imagen. Elige otra.</translation>
 <translation id="1566049601598938765">Sitio web</translation>
 <translation id="15662109988763471">La impresora seleccionada no está disponible o no se instaló correctamente. Revisa tu impresora o selecciona otra.</translation>
@@ -4647,6 +4652,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="7235737137505019098">Tu llave de seguridad no tiene suficiente espacio disponible para crear más cuentas.</translation>
 <translation id="7238643356913091553"><ph name="NETWORK_NAME" />, detalles</translation>
 <translation id="7240339475467890413">¿Deseas conectarte a un nuevo hotspot?</translation>
+<translation id="7240847845291869311">Tu hijo quiere agregar una Cuenta de Google de G Suite for Education en este dispositivo. El <ph name="LINK_BEGIN" />Aviso de Privacidad de G Suite for Education<ph name="LINK_END" /> tiene como finalidad que los usuarios de este producto y sus padres o madres comprendan cuáles son los datos que se recopilan, por qué se hace y qué se hace con ellos.</translation>
 <translation id="7241389281993241388">Accede a <ph name="TOKEN_NAME" /> para importar el certificado de cliente.</translation>
 <translation id="7241443820034350811">Si no encuentras tu llave de seguridad en la lista, presiona el botón de la llave durante al menos 5 segundos.</translation>
 <translation id="7243632151880336635">Borrar y salir</translation>

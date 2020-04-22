@@ -653,7 +653,7 @@ xizmatlarini sizga moslashtirish maqsadlarida foydalanishi mumkin. Bu ruxsatni m
 <translation id="1850508293116537636">Soat mili yo‘nalishida burish</translation>
 <translation id="1852141627593563189">Zararli dasturlarni topish</translation>
 <translation id="1852799913675865625">Faylni o‘qishda xatolik yuz berdi: <ph name="ERROR_TEXT" />.</translation>
-<translation id="1853692000353488670">Yangi inkognito ichki oynasi</translation>
+<translation id="1853692000353488670">Yangi inkognito varaq</translation>
 <translation id="1854180393107901205">Translatsiyani to‘xtatish</translation>
 <translation id="1856715684130786728">Jild qo‘shish...</translation>
 <translation id="1858585891038687145">Dasturiy ta’minot ishlab chiquvchilarni identifikatsiya qilishda ushbu sertifikat ishonchli deb hisoblansin.</translation>
@@ -3543,7 +3543,7 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="572155275267014074">Android sozlamalari</translation>
 <translation id="5722086096420375088">Yashil va oq</translation>
 <translation id="5722930212736070253">Ana xolos! Zip formatda arxivlashda xatolik yuz berdi.</translation>
-<translation id="572328651809341494">Yaqinda ochilgan ichki oynalar</translation>
+<translation id="572328651809341494">Yaqinda ochilgan varaqlar</translation>
 <translation id="5723508132121499792">Orqa fonda ishlayotgan ilovalar yo‘q</translation>
 <translation id="5723967018671998714">Inkognito rejimida tashqi cookie fayllariga ruxsat berilmaydi</translation>
 <translation id="5727728807527375859">Kengaytma, ilova va mavzular kompyuterngizga zararli bo‘lishi mumkin. Davom ettirilsinmi?</translation>
@@ -4482,7 +4482,7 @@ Ochiq eksponenta (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bit):
 <translation id="7003723821785740825">Barmoq izi orqali qulfdan yechish imkoniyatini sozlash</translation>
 <translation id="7003844668372540529"><ph name="VENDOR_NAME" /> tomonidan ishlab chiqarilgan noma’lum mahsulot: <ph name="PRODUCT_ID" /></translation>
 <translation id="7004402701596653846">Sayt MIDI ishlatishi mumkin</translation>
-<translation id="7004499039102548441">Yaqinda ochilgan ichki oynalar</translation>
+<translation id="7004499039102548441">Yaqinda ochilgan varaqlar</translation>
 <translation id="7005496624875927304">Qoʻshimcha ruxsatlar.</translation>
 <translation id="7005848115657603926">Sahifalar diapazoni noto‘g‘ri kiritildi. <ph name="EXAMPLE_PAGE_RANGE" /> ko‘rinishida kiriting.</translation>
 <translation id="7006634003215061422">Pastki maydon</translation>
@@ -5876,7 +5876,7 @@ Kalit faylini ishonchli joyda saqlang. U kengaytmaning yangi versiyalarini yarat
 <translation id="881799181680267069">Boshqalarini yashirish</translation>
 <translation id="8818152010000655963">Fon rasmi</translation>
 <translation id="8818958672113348984">Telefon orqali tasdiqlash</translation>
-<translation id="8820817407110198400">Xatcho‘plar</translation>
+<translation id="8820817407110198400">Bukmarklar</translation>
 <translation id="8821045908425223359">IP manzil avtomatik sozlansin</translation>
 <translation id="882204272221080310">Xavfsizlikni oshirish uchun mikrodasturni yangilang.</translation>
 <translation id="8823514049557262177">Havoladan nusxa olish</translation>
