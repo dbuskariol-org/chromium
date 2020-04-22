@@ -1052,6 +1052,8 @@ void NGBlockNode::PlaceChildrenInLayoutBox(
     // wrapper, we're ready to compensate for this discrepancy. See
     // LayoutNGFieldset for more details.
     LayoutBlock* content_wrapper = rendered_legend->ContainingBlock();
+    if (content_wrapper->IsLayoutFlowThread())
+      content_wrapper = content_wrapper->ContainingBlock();
     DCHECK(content_wrapper->IsAnonymous());
     DCHECK(IsA<HTMLFieldSetElement>(content_wrapper->Parent()->GetNode()));
     LayoutPoint location = rendered_legend->Location();

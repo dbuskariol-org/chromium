@@ -547,7 +547,10 @@ bool LayoutObject::IsRenderedLegendInternal() const {
   const auto* parent = Parent();
   if (RuntimeEnabledFeatures::LayoutNGFieldsetEnabled()) {
     // If there is a rendered legend, it will be found inside the anonymous
-    // fieldset wrapper.
+    // fieldset wrapper. If the anonymous fieldset wrapper is a multi-column,
+    // the rendered legend will be found inside the multi-column flow thread.
+    if (parent->IsLayoutFlowThread())
+      parent = parent->Parent();
     if (parent->IsAnonymous() && parent->Parent()->IsLayoutNGFieldset())
       parent = parent->Parent();
   }
