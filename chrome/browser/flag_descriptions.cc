@@ -1757,12 +1757,6 @@ const char kSharingQRCodeGeneratorName[] = "Enable sharing page via QR Code";
 const char kSharingQRCodeGeneratorDescription[] =
     "Enables right-click UI to share the page's URL via a generated QR Code.";
 
-const char kSharingRenameDevicesName[] =
-    "Enable device renaming in Sharing features.";
-const char kSharingRenameDevicesDescription[] =
-    "Enables renaming devices using HardwareInfo when populating device list "
-    "and sender device info.";
-
 const char kSharingSendViaSyncName[] =
     "Enable sending Sharing message via Sync";
 const char kSharingSendViaSyncDescription[] =

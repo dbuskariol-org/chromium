@@ -1019,9 +1019,6 @@ extern const char kSharingPeerConnectionSenderDescription[];
 extern const char kSharingQRCodeGeneratorName[];
 extern const char kSharingQRCodeGeneratorDescription[];
 
-extern const char kSharingRenameDevicesName[];
-extern const char kSharingRenameDevicesDescription[];
-
 extern const char kSharingSendViaSyncName[];
 extern const char kSharingSendViaSyncDescription[];
 

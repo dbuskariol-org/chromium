@@ -4181,10 +4181,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kSharingQRCodeGeneratorDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(kSharingQRCodeGenerator)},
 
-    {"sharing-rename-devices", flag_descriptions::kSharingRenameDevicesName,
-     flag_descriptions::kSharingRenameDevicesDescription, kOsAll,
-     FEATURE_VALUE_TYPE(send_tab_to_self::kSharingRenameDevices)},
-
     {"sharing-send-via-sync", flag_descriptions::kSharingSendViaSyncName,
      flag_descriptions::kSharingSendViaSyncDescription, kOsAll,
      FEATURE_VALUE_TYPE(kSharingSendViaSync)},
