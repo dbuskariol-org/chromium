@@ -13,8 +13,12 @@
 #include "ash/assistant/model/assistant_query_history.h"
 #include "ash/assistant/model/assistant_ui_model_observer.h"
 #include "ash/assistant/ui/base/assistant_button_listener.h"
+#include "ash/public/cpp/assistant/controller/assistant_controller.h"
+#include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "base/component_export.h"
 #include "base/macros.h"
+#include "base/scoped_observer.h"
 #include "ui/views/controls/button/button.h"
 #include "ui/views/controls/textfield/textfield_controller.h"
 #include "ui/views/view.h"
@@ -42,6 +46,7 @@ class MicView;
 class APP_LIST_EXPORT AssistantDialogPlate
     : public views::View,
       public views::TextfieldController,
+      public AssistantControllerObserver,
       public AssistantInteractionModelObserver,
       public AssistantUiModelObserver,
       public AssistantButtonListener {
@@ -60,6 +65,9 @@ class APP_LIST_EXPORT AssistantDialogPlate
   // views::TextfieldController:
   bool HandleKeyEvent(views::Textfield* sender,
                       const ui::KeyEvent& key_event) override;
+
+  // ash::AssistantControllerObserver:
+  void OnAssistantControllerDestroying() override;
 
   // ash::AssistantInteractionModelObserver:
   void OnInputModalityChanged(InputModality input_modality) override;
@@ -102,6 +110,15 @@ class APP_LIST_EXPORT AssistantDialogPlate
 
   std::unique_ptr<ui::CallbackLayerAnimationObserver> animation_observer_;
   std::unique_ptr<AssistantQueryHistory::Iterator> query_history_iterator_;
+
+  ScopedObserver<AssistantController, AssistantControllerObserver>
+      assistant_controller_observer_{this};
+
+  ScopedObserver<AssistantUiController,
+                 AssistantUiModelObserver,
+                 &AssistantUiController::AddModelObserver,
+                 &AssistantUiController::RemoveModelObserver>
+      assistant_ui_model_observer_{this};
 
   DISALLOW_COPY_AND_ASSIGN(AssistantDialogPlate);
 };

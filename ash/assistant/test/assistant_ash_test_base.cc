@@ -16,6 +16,7 @@
 #include "ash/keyboard/ui/keyboard_ui_controller.h"
 #include "ash/keyboard/ui/test/keyboard_test_util.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ash/public/cpp/test/assistant_test_api.h"
 #include "ash/shell.h"
 #include "ash/test/ash_test_helper.h"
@@ -152,15 +153,15 @@ void AssistantAshTestBase::ShowAssistantUi(AssistantEntryPoint entry_point) {
     // by the Assistant service.
     assistant_service()->StartVoiceInteraction();
   } else {
-    // Otherwise, the interaction is triggered by a call to |ShowUi|.
-    controller_->ui_controller()->ShowUi(entry_point);
+    // Otherwise, the interaction is triggered by a call to ShowUi().
+    AssistantUiController::Get()->ShowUi(entry_point);
   }
   // Send all mojom messages to/from the assistant service.
   base::RunLoop().RunUntilIdle();
 }
 
 void AssistantAshTestBase::CloseAssistantUi(AssistantExitPoint exit_point) {
-  controller_->ui_controller()->CloseUi(exit_point);
+  AssistantUiController::Get()->CloseUi(exit_point);
 }
 
 void AssistantAshTestBase::OpenLauncher() {

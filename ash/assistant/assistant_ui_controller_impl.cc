@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_ui_controller.h"
+#include "ash/assistant/assistant_ui_controller_impl.h"
 
 #include "ash/ambient/ambient_controller.h"
 #include "ash/assistant/assistant_controller_impl.h"
@@ -43,9 +43,9 @@ void ShowToast(const std::string& id, int message_id) {
 
 }  // namespace
 
-// AssistantUiController -------------------------------------------------------
+// AssistantUiControllerImpl ---------------------------------------------------
 
-AssistantUiController::AssistantUiController(
+AssistantUiControllerImpl::AssistantUiControllerImpl(
     AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   AddModelObserver(this);
@@ -54,115 +54,30 @@ AssistantUiController::AssistantUiController(
   overview_controller_observer_.Add(Shell::Get()->overview_controller());
 }
 
-AssistantUiController::~AssistantUiController() {
+AssistantUiControllerImpl::~AssistantUiControllerImpl() {
   RemoveModelObserver(this);
 }
 
-void AssistantUiController::SetAssistant(
+void AssistantUiControllerImpl::SetAssistant(
     chromeos::assistant::mojom::Assistant* assistant) {
   assistant_ = assistant;
 }
 
-void AssistantUiController::AddModelObserver(
+const AssistantUiModel* AssistantUiControllerImpl::GetModel() const {
+  return &model_;
+}
+
+void AssistantUiControllerImpl::AddModelObserver(
     AssistantUiModelObserver* observer) {
   model_.AddObserver(observer);
 }
 
-void AssistantUiController::RemoveModelObserver(
+void AssistantUiControllerImpl::RemoveModelObserver(
     AssistantUiModelObserver* observer) {
   model_.RemoveObserver(observer);
 }
 
-void AssistantUiController::OnInputModalityChanged(
-    InputModality input_modality) {
-  UpdateUiMode();
-}
-
-void AssistantUiController::OnInteractionStateChanged(
-    InteractionState interaction_state) {
-  if (interaction_state != InteractionState::kActive)
-    return;
-
-  // If there is an active interaction, we need to show Assistant UI if it is
-  // not already showing. We don't have enough information here to know what
-  // the interaction source is.
-  ShowUi(AssistantEntryPoint::kUnspecified);
-
-  // We also need to ensure that we're in the appropriate UI mode if we aren't
-  // already so that the interaction is visible to the user. Note that we
-  // indicate that this UI mode change is occurring due to an interaction so
-  // that we won't inadvertently stop the interaction due to the UI mode change.
-  UpdateUiMode(AssistantUiMode::kLauncherEmbeddedUi,
-               /*due_to_interaction=*/true);
-}
-
-void AssistantUiController::OnMicStateChanged(MicState mic_state) {
-  // When the mic is opened we update the UI mode to ensure that the user is
-  // being presented with the main stage. When closing the mic it is appropriate
-  // to stay in whatever UI mode we are currently in.
-  if (mic_state == MicState::kOpen)
-    UpdateUiMode();
-}
-
-void AssistantUiController::OnHighlighterEnabledChanged(
-    HighlighterEnabledState state) {
-  if (state != HighlighterEnabledState::kEnabled)
-    return;
-
-  ShowToast(kStylusPromptToastId, IDS_ASH_ASSISTANT_PROMPT_STYLUS);
-  CloseUi(AssistantExitPoint::kStylus);
-}
-
-void AssistantUiController::OnAssistantControllerConstructed() {
-  assistant_controller_->interaction_controller()->AddModelObserver(this);
-}
-
-void AssistantUiController::OnAssistantControllerDestroying() {
-  assistant_controller_->interaction_controller()->RemoveModelObserver(this);
-}
-
-void AssistantUiController::OnOpeningUrl(const GURL& url,
-                                         bool in_background,
-                                         bool from_server) {
-  if (model_.visibility() != AssistantVisibility::kVisible)
-    return;
-
-  CloseUi(from_server ? AssistantExitPoint::kNewBrowserTabFromServer
-                      : AssistantExitPoint::kNewBrowserTabFromUser);
-}
-
-void AssistantUiController::OnUiVisibilityChanged(
-    AssistantVisibility new_visibility,
-    AssistantVisibility old_visibility,
-    base::Optional<AssistantEntryPoint> entry_point,
-    base::Optional<AssistantExitPoint> exit_point) {
-  if (new_visibility == AssistantVisibility::kVisible) {
-    // Only record the entry point when Assistant UI becomes visible.
-    assistant::util::RecordAssistantEntryPoint(entry_point.value());
-
-    // Notify Assistant service of the most recent entry point.
-    assistant_->NotifyEntryIntoAssistantUi(
-        entry_point.value_or(AssistantEntryPoint::kUnspecified));
-    return;
-  }
-
-  if (old_visibility == AssistantVisibility::kVisible) {
-    // Metalayer should not be sticky. Disable when the UI is no longer visible.
-    if (exit_point != AssistantExitPoint::kStylus)
-      Shell::Get()->highlighter_controller()->AbortSession();
-
-    // Only record the exit point when Assistant UI becomes invisible to
-    // avoid recording duplicate events (e.g. pressing ESC key).
-    assistant::util::RecordAssistantExitPoint(exit_point.value());
-  }
-}
-
-void AssistantUiController::OnOverviewModeWillStart() {
-  // Close Assistant UI before entering overview mode.
-  CloseUi(AssistantExitPoint::kOverviewMode);
-}
-
-void AssistantUiController::ShowUi(AssistantEntryPoint entry_point) {
+void AssistantUiControllerImpl::ShowUi(AssistantEntryPoint entry_point) {
   // Skip if the opt-in window is active.
   auto* assistant_setup = AssistantSetup::GetInstance();
   if (assistant_setup && assistant_setup->BounceOptInWindowIfActive())
@@ -197,14 +112,14 @@ void AssistantUiController::ShowUi(AssistantEntryPoint entry_point) {
   model_.SetVisible(entry_point);
 }
 
-void AssistantUiController::CloseUi(AssistantExitPoint exit_point) {
+void AssistantUiControllerImpl::CloseUi(AssistantExitPoint exit_point) {
   if (model_.visibility() == AssistantVisibility::kClosed)
     return;
 
   model_.SetClosed(exit_point);
 }
 
-void AssistantUiController::ToggleUi(
+void AssistantUiControllerImpl::ToggleUi(
     base::Optional<AssistantEntryPoint> entry_point,
     base::Optional<AssistantExitPoint> exit_point) {
   // When not visible, toggling will show the UI.
@@ -219,7 +134,96 @@ void AssistantUiController::ToggleUi(
   CloseUi(exit_point.value());
 }
 
-void AssistantUiController::UpdateUiMode(
+void AssistantUiControllerImpl::OnInputModalityChanged(
+    InputModality input_modality) {
+  UpdateUiMode();
+}
+
+void AssistantUiControllerImpl::OnInteractionStateChanged(
+    InteractionState interaction_state) {
+  if (interaction_state != InteractionState::kActive)
+    return;
+
+  // If there is an active interaction, we need to show Assistant UI if it is
+  // not already showing. We don't have enough information here to know what
+  // the interaction source is.
+  ShowUi(AssistantEntryPoint::kUnspecified);
+
+  // We also need to ensure that we're in the appropriate UI mode if we aren't
+  // already so that the interaction is visible to the user. Note that we
+  // indicate that this UI mode change is occurring due to an interaction so
+  // that we won't inadvertently stop the interaction due to the UI mode change.
+  UpdateUiMode(AssistantUiMode::kLauncherEmbeddedUi,
+               /*due_to_interaction=*/true);
+}
+
+void AssistantUiControllerImpl::OnMicStateChanged(MicState mic_state) {
+  // When the mic is opened we update the UI mode to ensure that the user is
+  // being presented with the main stage. When closing the mic it is appropriate
+  // to stay in whatever UI mode we are currently in.
+  if (mic_state == MicState::kOpen)
+    UpdateUiMode();
+}
+
+void AssistantUiControllerImpl::OnHighlighterEnabledChanged(
+    HighlighterEnabledState state) {
+  if (state != HighlighterEnabledState::kEnabled)
+    return;
+
+  ShowToast(kStylusPromptToastId, IDS_ASH_ASSISTANT_PROMPT_STYLUS);
+  CloseUi(AssistantExitPoint::kStylus);
+}
+
+void AssistantUiControllerImpl::OnAssistantControllerConstructed() {
+  assistant_controller_->interaction_controller()->AddModelObserver(this);
+}
+
+void AssistantUiControllerImpl::OnAssistantControllerDestroying() {
+  assistant_controller_->interaction_controller()->RemoveModelObserver(this);
+}
+
+void AssistantUiControllerImpl::OnOpeningUrl(const GURL& url,
+                                             bool in_background,
+                                             bool from_server) {
+  if (model_.visibility() != AssistantVisibility::kVisible)
+    return;
+
+  CloseUi(from_server ? AssistantExitPoint::kNewBrowserTabFromServer
+                      : AssistantExitPoint::kNewBrowserTabFromUser);
+}
+
+void AssistantUiControllerImpl::OnUiVisibilityChanged(
+    AssistantVisibility new_visibility,
+    AssistantVisibility old_visibility,
+    base::Optional<AssistantEntryPoint> entry_point,
+    base::Optional<AssistantExitPoint> exit_point) {
+  if (new_visibility == AssistantVisibility::kVisible) {
+    // Only record the entry point when Assistant UI becomes visible.
+    assistant::util::RecordAssistantEntryPoint(entry_point.value());
+
+    // Notify Assistant service of the most recent entry point.
+    assistant_->NotifyEntryIntoAssistantUi(
+        entry_point.value_or(AssistantEntryPoint::kUnspecified));
+    return;
+  }
+
+  if (old_visibility == AssistantVisibility::kVisible) {
+    // Metalayer should not be sticky. Disable when the UI is no longer visible.
+    if (exit_point != AssistantExitPoint::kStylus)
+      Shell::Get()->highlighter_controller()->AbortSession();
+
+    // Only record the exit point when Assistant UI becomes invisible to
+    // avoid recording duplicate events (e.g. pressing ESC key).
+    assistant::util::RecordAssistantExitPoint(exit_point.value());
+  }
+}
+
+void AssistantUiControllerImpl::OnOverviewModeWillStart() {
+  // Close Assistant UI before entering overview mode.
+  CloseUi(AssistantExitPoint::kOverviewMode);
+}
+
+void AssistantUiControllerImpl::UpdateUiMode(
     base::Optional<AssistantUiMode> ui_mode,
     bool due_to_interaction) {
   // If a UI mode is provided, we will use it in lieu of updating UI mode on the

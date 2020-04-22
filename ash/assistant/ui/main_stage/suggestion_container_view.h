@@ -12,9 +12,14 @@
 #include "ash/assistant/model/assistant_ui_model_observer.h"
 #include "ash/assistant/ui/main_stage/animated_container_view.h"
 #include "ash/assistant/ui/main_stage/suggestion_chip_view.h"
+#include "ash/public/cpp/assistant/controller/assistant_controller.h"
+#include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
+#include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "base/component_export.h"
 #include "base/macros.h"
 #include "base/memory/scoped_refptr.h"
+#include "base/scoped_observer.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
 #include "ui/views/controls/scroll_view.h"
 
@@ -31,6 +36,7 @@ class AssistantViewDelegate;
 // suggestion events.
 class COMPONENT_EXPORT(ASSISTANT_UI) SuggestionContainerView
     : public AnimatedContainerView,
+      public AssistantControllerObserver,
       public AssistantSuggestionsModelObserver,
       public AssistantUiModelObserver,
       public views::ButtonListener {
@@ -48,6 +54,9 @@ class COMPONENT_EXPORT(ASSISTANT_UI) SuggestionContainerView
   int GetHeightForWidth(int width) const override;
   void OnContentsPreferredSizeChanged(views::View* content_view) override;
   void OnCommittedQueryChanged(const AssistantQuery& query) override;
+
+  // AssistantControllerObserver:
+  void OnAssistantControllerDestroying() override;
 
   // AssistantSuggestionsModelObserver:
   void OnConversationStartersChanged(
@@ -85,6 +94,21 @@ class COMPONENT_EXPORT(ASSISTANT_UI) SuggestionContainerView
 
   // The suggestion chip that was pressed by the user. May be |nullptr|.
   const SuggestionChipView* selected_chip_ = nullptr;
+
+  ScopedObserver<AssistantController, AssistantControllerObserver>
+      assistant_controller_observer_{this};
+
+  ScopedObserver<AssistantSuggestionsController,
+                 AssistantSuggestionsModelObserver,
+                 &AssistantSuggestionsController::AddModelObserver,
+                 &AssistantSuggestionsController::RemoveModelObserver>
+      assistant_suggestions_model_observer_{this};
+
+  ScopedObserver<AssistantUiController,
+                 AssistantUiModelObserver,
+                 &AssistantUiController::AddModelObserver,
+                 &AssistantUiController::RemoveModelObserver>
+      assistant_ui_model_observer_{this};
 
   DISALLOW_COPY_AND_ASSIGN(SuggestionContainerView);
 };

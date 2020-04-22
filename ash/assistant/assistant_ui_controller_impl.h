@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_ASSISTANT_ASSISTANT_UI_CONTROLLER_H_
-#define ASH_ASSISTANT_ASSISTANT_UI_CONTROLLER_H_
+#ifndef ASH_ASSISTANT_ASSISTANT_UI_CONTROLLER_IMPL_H_
+#define ASH_ASSISTANT_ASSISTANT_UI_CONTROLLER_IMPL_H_
 
 #include <map>
 #include <memory>
@@ -16,6 +16,7 @@
 #include "ash/highlighter/highlighter_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ash/wm/overview/overview_controller.h"
 #include "ash/wm/overview/overview_observer.h"
 #include "base/macros.h"
@@ -34,25 +35,29 @@ namespace ash {
 
 class AssistantControllerImpl;
 
-class ASH_EXPORT AssistantUiController
-    : public AssistantControllerObserver,
+class ASH_EXPORT AssistantUiControllerImpl
+    : public AssistantUiController,
+      public AssistantControllerObserver,
       public AssistantInteractionModelObserver,
       public AssistantUiModelObserver,
       public HighlighterController::Observer,
       public OverviewObserver {
  public:
-  explicit AssistantUiController(AssistantControllerImpl* assistant_controller);
-  ~AssistantUiController() override;
+  explicit AssistantUiControllerImpl(
+      AssistantControllerImpl* assistant_controller);
+  ~AssistantUiControllerImpl() override;
 
   // Provides a pointer to the |assistant| owned by AssistantController.
   void SetAssistant(chromeos::assistant::mojom::Assistant* assistant);
 
-  // Returns the underlying model.
-  const AssistantUiModel* model() const { return &model_; }
-
-  // Adds/removes the specified model |observer|.
-  void AddModelObserver(AssistantUiModelObserver* observer);
-  void RemoveModelObserver(AssistantUiModelObserver* observer);
+  // AssistantUiController:
+  const AssistantUiModel* GetModel() const override;
+  void AddModelObserver(AssistantUiModelObserver* observer) override;
+  void RemoveModelObserver(AssistantUiModelObserver* observer) override;
+  void ShowUi(AssistantEntryPoint entry_point) override;
+  void CloseUi(AssistantExitPoint exit_point) override;
+  void ToggleUi(base::Optional<AssistantEntryPoint> entry_point,
+                base::Optional<AssistantExitPoint> exit_point) override;
 
   // AssistantInteractionModelObserver:
   void OnInputModalityChanged(InputModality input_modality) override;
@@ -79,11 +84,6 @@ class ASH_EXPORT AssistantUiController
   // OverviewObserver:
   void OnOverviewModeWillStart() override;
 
-  void ShowUi(AssistantEntryPoint entry_point);
-  void CloseUi(AssistantExitPoint exit_point);
-  void ToggleUi(base::Optional<AssistantEntryPoint> entry_point,
-                base::Optional<AssistantExitPoint> exit_point);
-
  private:
   // Updates UI mode to |ui_mode| if specified. Otherwise UI mode is updated on
   // the basis of interaction/widget visibility state. If |due_to_interaction|
@@ -107,9 +107,9 @@ class ASH_EXPORT AssistantUiController
   ScopedObserver<OverviewController, OverviewObserver>
       overview_controller_observer_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(AssistantUiController);
+  DISALLOW_COPY_AND_ASSIGN(AssistantUiControllerImpl);
 };
 
 }  // namespace ash
 
-#endif  // ASH_ASSISTANT_ASSISTANT_UI_CONTROLLER_H_
+#endif  // ASH_ASSISTANT_ASSISTANT_UI_CONTROLLER_IMPL_H_

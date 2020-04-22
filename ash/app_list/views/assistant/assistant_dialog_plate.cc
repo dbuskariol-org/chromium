@@ -97,13 +97,14 @@ AssistantDialogPlate::AssistantDialogPlate(AssistantViewDelegate* delegate)
   SetID(AssistantViewID::kDialogPlate);
   InitLayout();
 
+  assistant_controller_observer_.Add(AssistantController::Get());
+  assistant_ui_model_observer_.Add(AssistantUiController::Get());
+
   // The AssistantViewDelegate should outlive AssistantDialogPlate.
   delegate_->AddInteractionModelObserver(this);
-  delegate_->AddUiModelObserver(this);
 }
 
 AssistantDialogPlate::~AssistantDialogPlate() {
-  delegate_->RemoveUiModelObserver(this);
   delegate_->RemoveInteractionModelObserver(this);
 }
 
@@ -250,6 +251,11 @@ void AssistantDialogPlate::OnCommittedQueryChanged(
 
   DCHECK(query_history_iterator_);
   query_history_iterator_->ResetToLast();
+}
+
+void AssistantDialogPlate::OnAssistantControllerDestroying() {
+  assistant_ui_model_observer_.Remove(AssistantUiController::Get());
+  assistant_controller_observer_.Remove(AssistantController::Get());
 }
 
 void AssistantDialogPlate::OnUiVisibilityChanged(

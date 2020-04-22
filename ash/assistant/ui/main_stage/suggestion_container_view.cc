@@ -17,7 +17,6 @@
 #include "ash/assistant/ui/main_stage/element_animator.h"
 #include "ash/assistant/util/animation_util.h"
 #include "ash/assistant/util/assistant_util.h"
-#include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
 #include "base/bind.h"
 #include "ui/compositor/callback_layer_animation_observer.h"
 #include "ui/compositor/layer_animation_element.h"
@@ -94,14 +93,13 @@ SuggestionContainerView::SuggestionContainerView(
   SetID(AssistantViewID::kSuggestionContainer);
   InitLayout();
 
-  AssistantSuggestionsController::Get()->AddModelObserver(this);
-  delegate->AddUiModelObserver(this);
+  assistant_controller_observer_.Add(AssistantController::Get());
+  assistant_suggestions_model_observer_.Add(
+      AssistantSuggestionsController::Get());
+  assistant_ui_model_observer_.Add(AssistantUiController::Get());
 }
 
-SuggestionContainerView::~SuggestionContainerView() {
-  delegate()->RemoveUiModelObserver(this);
-  AssistantSuggestionsController::Get()->RemoveModelObserver(this);
-}
+SuggestionContainerView::~SuggestionContainerView() = default;
 
 const char* SuggestionContainerView::GetClassName() const {
   return "SuggestionContainerView";
@@ -145,6 +143,13 @@ void SuggestionContainerView::InitLayout() {
   // We center align when showing conversation starters.
   layout_manager_->set_main_axis_alignment(
       views::BoxLayout::MainAxisAlignment::kCenter);
+}
+
+void SuggestionContainerView::OnAssistantControllerDestroying() {
+  assistant_ui_model_observer_.Remove(AssistantUiController::Get());
+  assistant_suggestions_model_observer_.Remove(
+      AssistantSuggestionsController::Get());
+  assistant_controller_observer_.Remove(AssistantController::Get());
 }
 
 void SuggestionContainerView::OnConversationStartersChanged(

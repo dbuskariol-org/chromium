@@ -9,7 +9,6 @@
 #include "ash/accessibility/accessibility_controller_impl.h"
 #include "ash/assistant/assistant_controller_impl.h"
 #include "ash/assistant/assistant_screen_context_controller.h"
-#include "ash/assistant/assistant_ui_controller.h"
 #include "ash/assistant/model/assistant_interaction_model_observer.h"
 #include "ash/assistant/model/assistant_query.h"
 #include "ash/assistant/model/assistant_response.h"
@@ -26,6 +25,7 @@
 #include "ash/public/cpp/assistant/assistant_setup.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
 #include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ash/public/cpp/assistant/proactive_suggestions.h"
 #include "ash/session/session_controller_impl.h"
 #include "ash/shell.h"
@@ -145,13 +145,13 @@ void AssistantInteractionController::RemoveModelObserver(
 }
 
 void AssistantInteractionController::OnAssistantControllerConstructed() {
-  assistant_controller_->ui_controller()->AddModelObserver(this);
+  AssistantUiController::Get()->AddModelObserver(this);
   assistant_controller_->view_delegate()->AddObserver(this);
 }
 
 void AssistantInteractionController::OnAssistantControllerDestroying() {
   assistant_controller_->view_delegate()->RemoveObserver(this);
-  assistant_controller_->ui_controller()->RemoveModelObserver(this);
+  AssistantUiController::Get()->RemoveModelObserver(this);
 }
 
 void AssistantInteractionController::OnDeepLinkReceived(
@@ -165,8 +165,7 @@ void AssistantInteractionController::OnDeepLinkReceived(
 
     // Explicitly call ShowUi() to set the correct Assistant entry point.
     // ShowUi() will no-op if UI is already shown.
-    assistant_controller_->ui_controller()->ShowUi(
-        AssistantEntryPoint::kDeepLink);
+    AssistantUiController::Get()->ShowUi(AssistantEntryPoint::kDeepLink);
 
     // The "What's on my screen" chip initiates a screen context interaction.
     StartScreenContextInteraction(
@@ -227,8 +226,7 @@ void AssistantInteractionController::OnDeepLinkReceived(
 
   // Explicitly call ShowUi() to set the correct Assistant entry point.
   // ShowUi() will no-op if UI is already shown.
-  assistant_controller_->ui_controller()->ShowUi(
-      AssistantEntryPoint::kDeepLink);
+  AssistantUiController::Get()->ShowUi(AssistantEntryPoint::kDeepLink);
 
   // A text query originating from a deep link will carry forward the allowance/
   // forbiddance of TTS from the previous response. This is predominately aimed
@@ -265,7 +263,7 @@ void AssistantInteractionController::OnHighlighterSelectionRecognized(
     const gfx::Rect& rect) {
   DCHECK(AssistantState::Get()->IsScreenContextAllowed());
 
-  assistant_controller_->ui_controller()->ShowUi(AssistantEntryPoint::kStylus);
+  AssistantUiController::Get()->ShowUi(AssistantEntryPoint::kStylus);
   StartScreenContextInteraction(
       /*include_assistant_structure=*/false, rect,
       AssistantQuerySource::kStylus);
@@ -336,7 +334,7 @@ void AssistantInteractionController::OnCommittedQueryChanged(
   model_.query_history().Add(query);
 
   assistant::util::IncrementAssistantQueryCountForEntryPoint(
-      assistant_controller_->ui_controller()->model()->entry_point());
+      AssistantUiController::Get()->GetModel()->entry_point());
   assistant::util::RecordAssistantQuerySource(assistant_query.source());
 }
 
@@ -362,8 +360,7 @@ void AssistantInteractionController::OnInteractionStarted(
     // If the Assistant UI is not visible yet, and |is_voice_interaction| is
     // true, then it will be sure that Assistant is fired via OKG. ShowUi will
     // not update the Assistant entry point if the UI is already visible.
-    assistant_controller_->ui_controller()->ShowUi(
-        AssistantEntryPoint::kHotword);
+    AssistantUiController::Get()->ShowUi(AssistantEntryPoint::kHotword);
   }
 
   model_.SetInteractionState(InteractionState::kActive);
@@ -1053,7 +1050,7 @@ AssistantInteractionController::GetResponseForActiveInteraction() {
 }
 
 AssistantVisibility AssistantInteractionController::GetVisibility() const {
-  return assistant_controller_->ui_controller()->model()->visibility();
+  return AssistantUiController::Get()->GetModel()->visibility();
 }
 
 bool AssistantInteractionController::IsVisible() const {

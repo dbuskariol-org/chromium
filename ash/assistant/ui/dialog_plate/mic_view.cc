@@ -10,6 +10,7 @@
 #include "ash/assistant/model/assistant_ui_model.h"
 #include "ash/assistant/ui/assistant_view_delegate.h"
 #include "ash/assistant/ui/logo_view/logo_view.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ui/views/layout/box_layout.h"
 #include "ui/views/layout/fill_layout.h"
 
@@ -106,8 +107,8 @@ void MicView::UpdateState(bool animate) {
   if (animate) {
     // If Assistant UI is not visible, we shouldn't attempt to animate state
     // changes. We should instead advance immediately to the next state.
-    const AssistantUiModel* ui_model = delegate_->GetUiModel();
-    animate = ui_model->visibility() == AssistantVisibility::kVisible;
+    animate = AssistantUiController::Get()->GetModel()->visibility() ==
+              AssistantVisibility::kVisible;
   }
 
   LogoView::State mic_state;

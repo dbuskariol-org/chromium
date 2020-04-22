@@ -11,8 +11,6 @@
 #include "ash/assistant/model/assistant_interaction_model_observer.h"
 #include "ash/assistant/model/assistant_notification_model.h"
 #include "ash/assistant/model/assistant_notification_model_observer.h"
-#include "ash/assistant/model/assistant_ui_model.h"
-#include "ash/assistant/model/assistant_ui_model_observer.h"
 #include "ash/public/cpp/assistant/assistant_state_base.h"
 #include "ash/shell.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
@@ -38,10 +36,6 @@ AssistantViewDelegateImpl::GetInteractionModel() const {
 const AssistantNotificationModel*
 AssistantViewDelegateImpl::GetNotificationModel() const {
   return assistant_controller_->notification_controller()->model();
-}
-
-const AssistantUiModel* AssistantViewDelegateImpl::GetUiModel() const {
-  return assistant_controller_->ui_controller()->model();
 }
 
 void AssistantViewDelegateImpl::AddObserver(
@@ -85,16 +79,6 @@ void AssistantViewDelegateImpl::RemoveNotificationModelObserver(
     AssistantNotificationModelObserver* observer) {
   assistant_controller_->notification_controller()->RemoveModelObserver(
       observer);
-}
-
-void AssistantViewDelegateImpl::AddUiModelObserver(
-    AssistantUiModelObserver* observer) {
-  assistant_controller_->ui_controller()->AddModelObserver(observer);
-}
-
-void AssistantViewDelegateImpl::RemoveUiModelObserver(
-    AssistantUiModelObserver* observer) {
-  assistant_controller_->ui_controller()->RemoveModelObserver(observer);
 }
 
 void AssistantViewDelegateImpl::DownloadImage(

@@ -19,7 +19,7 @@
 #include "ash/assistant/assistant_setup_controller.h"
 #include "ash/assistant/assistant_state_controller.h"
 #include "ash/assistant/assistant_suggestions_controller_impl.h"
-#include "ash/assistant/assistant_ui_controller.h"
+#include "ash/assistant/assistant_ui_controller_impl.h"
 #include "ash/assistant/assistant_view_delegate_impl.h"
 #include "ash/assistant/assistant_web_ui_controller.h"
 #include "ash/assistant/ui/assistant_view_delegate.h"
@@ -133,8 +133,6 @@ class ASH_EXPORT AssistantControllerImpl
     return &assistant_state_controller_;
   }
 
-  AssistantUiController* ui_controller() { return &assistant_ui_controller_; }
-
   AssistantWebUiController* web_ui_controller() {
     return &assistant_web_ui_controller_;
   }
@@ -193,7 +191,7 @@ class ASH_EXPORT AssistantControllerImpl
   AssistantScreenContextController assistant_screen_context_controller_{this};
   AssistantSetupController assistant_setup_controller_{this};
   AssistantSuggestionsControllerImpl assistant_suggestions_controller_{this};
-  AssistantUiController assistant_ui_controller_{this};
+  AssistantUiControllerImpl assistant_ui_controller_{this};
   AssistantWebUiController assistant_web_ui_controller_;
 
   AssistantViewDelegateImpl view_delegate_{this};

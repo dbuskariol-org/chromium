@@ -119,15 +119,16 @@ AppListAssistantMainStage::AppListAssistantMainStage(
   SetID(AssistantViewID::kMainStage);
   InitLayout();
 
+  assistant_controller_observer_.Add(AssistantController::Get());
+  assistant_ui_model_observer_.Add(AssistantUiController::Get());
+
   // The view hierarchy will be destructed before AssistantController in Shell,
   // which owns AssistantViewDelegate, so AssistantViewDelegate is guaranteed to
   // outlive the AppListAssistantMainStage.
   delegate_->AddInteractionModelObserver(this);
-  delegate_->AddUiModelObserver(this);
 }
 
 AppListAssistantMainStage::~AppListAssistantMainStage() {
-  delegate_->RemoveUiModelObserver(this);
   delegate_->RemoveInteractionModelObserver(this);
 }
 
@@ -328,6 +329,11 @@ void AppListAssistantMainStage::AnimateInFooter() {
           ui::LayerAnimationElement::AnimatableProperty::OPACITY,
           kFooterEntryAnimationFadeInDelay),
       CreateOpacityElement(1.f, kFooterEntryAnimationFadeInDuration)));
+}
+
+void AppListAssistantMainStage::OnAssistantControllerDestroying() {
+  assistant_ui_model_observer_.Remove(AssistantUiController::Get());
+  assistant_controller_observer_.Remove(AssistantController::Get());
 }
 
 void AppListAssistantMainStage::OnCommittedQueryChanged(
