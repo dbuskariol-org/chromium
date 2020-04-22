@@ -12081,6 +12081,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//base:base_unittests"
@@ -12122,6 +12129,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//base:base_unittests"
@@ -12163,6 +12177,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//base:base_unittests"
@@ -12204,6 +12225,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//base:base_unittests"
@@ -12245,6 +12273,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//third_party/boringssl:boringssl_crypto_tests"
@@ -12286,6 +12321,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//third_party/boringssl:boringssl_crypto_tests"
@@ -12327,6 +12369,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//third_party/boringssl:boringssl_ssl_tests"
@@ -12368,6 +12417,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//third_party/boringssl:boringssl_ssl_tests"
@@ -12409,6 +12465,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//components:components_unittests"
@@ -12450,6 +12513,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//components:components_unittests"
@@ -12491,6 +12561,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//components:components_unittests"
@@ -12532,6 +12609,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//components:components_unittests"
@@ -12573,6 +12657,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//crypto:crypto_unittests"
@@ -12614,6 +12705,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//crypto:crypto_unittests"
@@ -12655,6 +12753,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/gfx:gfx_unittests"
@@ -12696,6 +12801,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/gfx:gfx_unittests"
@@ -12737,6 +12849,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/gfx:gfx_unittests"
@@ -12778,6 +12897,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/gfx:gfx_unittests"
@@ -12819,6 +12945,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//google_apis:google_apis_unittests"
@@ -12860,6 +12993,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//google_apis:google_apis_unittests"
@@ -12901,6 +13041,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -12943,6 +13090,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -12985,6 +13139,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_signin_egtests"
@@ -13026,6 +13187,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_signin_egtests"
@@ -13067,6 +13235,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 5
         },
@@ -13109,6 +13284,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 5
         },
@@ -13151,6 +13333,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test:ios_chrome_unittests"
@@ -13192,6 +13381,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test:ios_chrome_unittests"
@@ -13233,6 +13429,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test:ios_chrome_unittests"
@@ -13274,6 +13477,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test:ios_chrome_unittests"
@@ -13315,6 +13525,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/components:ios_components_unittests"
@@ -13356,6 +13573,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/components:ios_components_unittests"
@@ -13397,6 +13621,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/net:ios_net_unittests"
@@ -13438,6 +13669,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/net:ios_net_unittests"
@@ -13479,6 +13717,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//remoting/ios:ios_remoting_unittests"
@@ -13520,6 +13765,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//remoting/ios:ios_remoting_unittests"
@@ -13561,6 +13813,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/testing:ios_testing_unittests"
@@ -13602,6 +13861,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/testing:ios_testing_unittests"
@@ -13643,6 +13909,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_inttests"
@@ -13684,6 +13957,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_inttests"
@@ -13725,6 +14005,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_inttests"
@@ -13766,6 +14053,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_inttests"
@@ -13807,6 +14101,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web/shell/test:ios_web_shell_egtests"
@@ -13848,6 +14149,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web/shell/test:ios_web_shell_egtests"
@@ -13889,6 +14197,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_unittests"
@@ -13930,6 +14245,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_unittests"
@@ -13971,6 +14293,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_unittests"
@@ -14012,6 +14341,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web:ios_web_unittests"
@@ -14053,6 +14389,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_inttests"
@@ -14094,6 +14437,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_inttests"
@@ -14135,6 +14485,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_inttests"
@@ -14176,6 +14533,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_inttests"
@@ -14217,6 +14581,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_unittests"
@@ -14258,6 +14629,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_unittests"
@@ -14299,6 +14677,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_unittests"
@@ -14340,6 +14725,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web_view:ios_web_view_unittests"
@@ -14381,6 +14773,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//net:net_unittests"
@@ -14422,6 +14821,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//net:net_unittests"
@@ -14463,6 +14869,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//services:services_unittests"
@@ -14504,6 +14917,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//services:services_unittests"
@@ -14545,6 +14965,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//skia:skia_unittests"
@@ -14586,6 +15013,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//skia:skia_unittests"
@@ -14627,6 +15061,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//skia:skia_unittests"
@@ -14668,6 +15109,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//skia:skia_unittests"
@@ -14709,6 +15157,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//sql:sql_unittests"
@@ -14750,6 +15205,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//sql:sql_unittests"
@@ -14791,6 +15253,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/base:ui_base_unittests"
@@ -14832,6 +15301,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/base:ui_base_unittests"
@@ -14873,6 +15349,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/base:ui_base_unittests"
@@ -14914,6 +15397,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ui/base:ui_base_unittests"
@@ -14955,6 +15445,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//url:url_unittests"
@@ -14996,6 +15493,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//url:url_unittests"
@@ -15044,6 +15548,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_bookmarks_egtests"
@@ -15085,6 +15596,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_bookmarks_egtests"
@@ -15126,6 +15644,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_bookmarks_egtests"
@@ -15167,6 +15692,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_bookmarks_egtests"
@@ -15208,6 +15740,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_bookmarks_egtests"
@@ -15249,6 +15788,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15291,6 +15837,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15333,6 +15886,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15375,6 +15935,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_reading_list_egtests"
@@ -15416,6 +15983,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_reading_list_egtests"
@@ -15457,6 +16031,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_reading_list_egtests"
@@ -15498,6 +16079,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_reading_list_egtests"
@@ -15539,6 +16127,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_reading_list_egtests"
@@ -15580,6 +16175,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15622,6 +16224,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15664,6 +16273,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15706,6 +16322,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15748,6 +16371,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 3
         },
@@ -15790,6 +16420,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_signin_egtests"
@@ -15831,6 +16468,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_signin_egtests"
@@ -15872,6 +16516,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_signin_egtests"
@@ -15913,6 +16564,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_translate_egtests"
@@ -15954,6 +16612,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_translate_egtests"
@@ -15995,6 +16660,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_translate_egtests"
@@ -16036,6 +16708,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_translate_egtests"
@@ -16077,6 +16756,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_translate_egtests"
@@ -16118,6 +16804,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 5
         },
@@ -16160,6 +16853,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 5
         },
@@ -16202,6 +16902,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
           "shards": 5
         },
@@ -16244,6 +16951,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_web_egtests"
@@ -16285,6 +16999,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_web_egtests"
@@ -16326,6 +17047,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_web_egtests"
@@ -16367,6 +17095,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_web_egtests"
@@ -16408,6 +17143,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/chrome/test/earl_grey:ios_chrome_web_egtests"
@@ -16449,6 +17191,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/showcase:ios_showcase_egtests"
@@ -16490,6 +17239,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/showcase:ios_showcase_egtests"
@@ -16531,6 +17287,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/showcase:ios_showcase_egtests"
@@ -16572,6 +17335,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/showcase:ios_showcase_egtests"
@@ -16613,6 +17383,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/showcase:ios_showcase_egtests"
@@ -16654,6 +17431,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web/shell/test:ios_web_shell_egtests"
@@ -16695,6 +17479,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web/shell/test:ios_web_shell_egtests"
@@ -16736,6 +17527,13 @@
               "path": "Xcode.app"
             }
           ],
+          "optional_dimensions": {
+            "60": [
+              {
+                "os": "Mac-10.15"
+              }
+            ]
+          },
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_target": "//ios/web/shell/test:ios_web_shell_egtests"

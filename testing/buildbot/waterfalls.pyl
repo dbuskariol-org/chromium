@@ -1291,7 +1291,7 @@
           'all'
         ],
         'mixins': [
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29',
@@ -1321,7 +1321,7 @@
           'url_unittests'
         ],
         'mixins': [
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29',
@@ -1997,7 +1997,7 @@
       'ios-simulator-code-coverage': {
         'mixins': [
           'code-coverage',
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29'
@@ -2008,7 +2008,7 @@
       },
       'ios-simulator-cronet': {
         'mixins': [
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29'
@@ -2020,7 +2020,7 @@
       'ios-webkit-tot': {
         'mixins': [
           'ios_custom_webkit',
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29'
@@ -2034,7 +2034,7 @@
           'all',
         ],
         'mixins': [
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29',
@@ -4329,7 +4329,7 @@
           'all',
         ],
         'mixins': [
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29',
@@ -4343,7 +4343,7 @@
           'all'
         ],
         'mixins': [
-          'mac_10.14',
+          'mac_10.14_and_15',
           'mac_toolchain',
           'out_dir_arg',
           'xcode_11c29',
