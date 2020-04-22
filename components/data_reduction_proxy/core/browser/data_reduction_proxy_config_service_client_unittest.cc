@@ -124,21 +124,21 @@ class DataReductionProxyConfigServiceClientTest : public testing::Test {
         GURL("http://configservice.com"));
 
     // Set up the various test ClientConfigs.
-    ClientConfig config = CreateClientConfig(
-        kSuccessSessionKey, kConfigRefreshDurationSeconds, 0, 0.5f, false);
+    ClientConfig config = CreateClientConfig(kSuccessSessionKey,
+                                             kConfigRefreshDurationSeconds, 0);
     config.SerializeToString(&config_);
     encoded_config_ = EncodeConfig(config);
 
     ClientConfig previous_config = CreateClientConfig(
-        kOldSuccessSessionKey, kConfigRefreshDurationSeconds, 0, 0.0f, false);
+        kOldSuccessSessionKey, kConfigRefreshDurationSeconds, 0);
     previous_config.SerializeToString(&previous_config_);
 
     ClientConfig persisted = CreateClientConfig(
-        kPersistedSessionKey, kConfigRefreshDurationSeconds, 0, 0.0f, false);
+        kPersistedSessionKey, kConfigRefreshDurationSeconds, 0);
     loaded_config_ = EncodeConfig(persisted);
 
     ClientConfig ignore_black_list_config = CreateClientConfig(
-        kSuccessSessionKey, kConfigRefreshDurationSeconds, 0, 0.5f, true);
+        kSuccessSessionKey, kConfigRefreshDurationSeconds, 0);
     ignore_black_list_encoded_config_ = EncodeConfig(ignore_black_list_config);
 
     ClientConfig no_proxies_config;
@@ -548,8 +548,8 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
 TEST_F(DataReductionProxyConfigServiceClientTest, ApplyClientConfigOverride) {
   const std::string override_key = "OverrideSecureSession";
   std::string encoded_config;
-  ClientConfig config = CreateClientConfig(
-      override_key, kConfigRefreshDurationSeconds, 0, 0.5f, false);
+  ClientConfig config =
+      CreateClientConfig(override_key, kConfigRefreshDurationSeconds, 0);
   config.SerializeToString(&encoded_config);
   base::Base64Encode(encoded_config, &encoded_config);
 
@@ -632,14 +632,6 @@ TEST_F(DataReductionProxyConfigServiceClientTest, ApplySerializedConfigLocal) {
   EXPECT_TRUE(persisted_config().empty());
   EXPECT_TRUE(persisted_config_retrieval_time().is_null());
   EXPECT_FALSE(request_options()->GetSecureSession().empty());
-}
-
-TEST_F(DataReductionProxyConfigServiceClientTest,
-       ApplySerializedConfigIgnoreBlackList) {
-  Init();
-
-  config_client()->ApplySerializedConfig(ignore_black_list_encoded_config());
-  EXPECT_TRUE(ignore_blacklist());
 }
 
 TEST_F(DataReductionProxyConfigServiceClientTest, EmptyConfigDisablesDRP) {

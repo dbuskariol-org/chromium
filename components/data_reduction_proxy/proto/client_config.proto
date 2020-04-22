@@ -26,19 +26,20 @@ message ClientConfig {
   // present, refresh_duration should take priority.
   optional Duration refresh_duration = 4;
   // Configuration information for reporting pageload metrics.
-  optional PageloadMetricsConfig pageload_metrics_config = 5;
+  optional DeprecatedPageloadMetricsConfig pageload_metrics_config = 5
+      [deprecated = true];
   // Prevents the host base and user base blacklisting behaviors for lite pages
   // and server LoFi.
-  optional bool ignore_long_term_black_list_rules = 7;
+  optional bool ignore_long_term_black_list_rules = 7 [deprecated = true];
   // The configuration that the client should use to connect to the prefetch
   // proxy.
   optional PrefetchProxyConfig prefetch_proxy_config = 8;
 }
 
 // The configuration for reporting pageload metrics.
-message PageloadMetricsConfig {
+message DeprecatedPageloadMetricsConfig {
   // The fraction of pageloads for which to report pageload metrics.
-  optional float reporting_fraction = 1;
+  optional float reporting_fraction = 1 [deprecated = true];
 }
 
 // N.B.:

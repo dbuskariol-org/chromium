@@ -16,23 +16,12 @@ namespace data_reduction_proxy {
 // Creates a new ClientConfig.
 ClientConfig CreateClientConfig(const std::string& session_key,
                                 int64_t expire_duration_seconds,
-                                int64_t expire_duration_nanoseconds,
-                                float reporting_fraction,
-                                bool ignore_long_term_black_list_rules) {
+                                int64_t expire_duration_nanoseconds) {
   ClientConfig config;
 
   config.set_session_key(session_key);
   config.mutable_refresh_duration()->set_seconds(expire_duration_seconds);
   config.mutable_refresh_duration()->set_nanos(expire_duration_nanoseconds);
-
-  // Leave the pageload_metrics_config empty when |reporting_fraction| is not
-  // inclusively between zero and one.
-  if (reporting_fraction >= 0.0f && reporting_fraction <= 1.0f) {
-    config.mutable_pageload_metrics_config()->set_reporting_fraction(
-        reporting_fraction);
-  }
-  config.set_ignore_long_term_black_list_rules(
-      ignore_long_term_black_list_rules);
   config.mutable_proxy_config()->clear_http_proxy_servers();
   return config;
 }
@@ -47,8 +36,7 @@ std::string EncodeConfig(const ClientConfig& config) {
 }
 
 std::string DummyBase64Config() {
-  ClientConfig config =
-      CreateClientConfig("secureSessionKey", 600, 0, 0.5f, false);
+  ClientConfig config = CreateClientConfig("secureSessionKey", 600, 0);
   return EncodeConfig(config);
 }
 
