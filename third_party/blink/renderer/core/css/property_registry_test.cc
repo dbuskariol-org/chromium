@@ -243,4 +243,66 @@ TEST_F(PropertyRegistryTest, RemoveDeclaredProperties) {
   EXPECT_TRUE(Registration("--d"));
 }
 
+TEST_F(PropertyRegistryTest, MarkReferencedRegisterProperty) {
+  css_test_helpers::RegisterProperty(GetDocument(), "--x", "<length>", "0px",
+                                     false);
+
+  UpdateAllLifecyclePhasesForTest();
+  EXPECT_FALSE(Registry()->WasReferenced("--x"));
+
+  GetDocument().documentElement()->setInnerHTML(R"HTML(
+    <style>
+      :root {
+        --x: 10px;
+      }
+      div {
+        width: var(--x);
+      }
+    </style>
+    <div id="div">Test</div>
+  )HTML");
+
+  UpdateAllLifecyclePhasesForTest();
+  EXPECT_TRUE(Registry()->WasReferenced("--x"));
+}
+
+TEST_F(PropertyRegistryTest, MarkReferencedAtProperty) {
+  UpdateAllLifecyclePhasesForTest();
+  EXPECT_FALSE(Registry()->WasReferenced("--x"));
+
+  GetDocument().documentElement()->setInnerHTML(R"HTML(
+    <style>
+      @property --x {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+      }
+      :root {
+        --x: 10px;
+      }
+      div {
+        width: var(--x);
+      }
+    </style>
+    <div id="div">Test</div>
+  )HTML");
+
+  UpdateAllLifecyclePhasesForTest();
+  EXPECT_TRUE(Registry()->WasReferenced("--x"));
+
+  css_test_helpers::RegisterProperty(GetDocument(), "--x", "<length>", "1px",
+                                     false);
+
+  // Check that the registration was successful, and did overwrite the
+  // declaration.
+  ASSERT_TRUE(Registration("--x"));
+  ASSERT_TRUE(Registration("--x")->Initial());
+  EXPECT_EQ("1px", Registration("--x")->Initial()->CssText());
+
+  // --x should still be marked as referenced, even though RegisterProperty
+  // now takes precedence over @property.
+  UpdateAllLifecyclePhasesForTest();
+  EXPECT_TRUE(Registry()->WasReferenced("--x"));
+}
+
 }  // namespace blink

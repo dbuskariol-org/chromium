@@ -85,7 +85,10 @@ class CORE_EXPORT PropertyRegistry : public GarbageCollected<PropertyRegistry> {
     visitor->Trace(declared_properties_);
   }
 
-  // TODO(andruud): Doesn't work with declared properties.
+  // Whenever a registered custom property is referenced by anything using
+  // var(), it is marked as referenced (globally). This information is used
+  // when determining whether or not a custom property animation can run
+  // on the compositor.
   void MarkReferenced(const AtomicString&) const;
   bool WasReferenced(const AtomicString&) const;
 
