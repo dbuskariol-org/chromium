@@ -1999,6 +1999,7 @@ test("content_unittests") {
   if (use_atk) {
     sources += [
       "../browser/accessibility/browser_accessibility_auralinux_unittest.cc",
+      "../browser/accessibility/browser_accessibility_manager_auralinux_unittest.cc",
     ]
     configs += [ "//build/config/linux/atk" ]
   }
