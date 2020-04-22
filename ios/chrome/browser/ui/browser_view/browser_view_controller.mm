@@ -160,6 +160,7 @@
 #import "ios/chrome/browser/webui/net_export_tab_helper.h"
 #import "ios/chrome/browser/webui/net_export_tab_helper_delegate.h"
 #import "ios/chrome/browser/webui/show_mail_composer_context.h"
+#import "ios/chrome/browser/window_activities/window_activity_helpers.h"
 #import "ios/chrome/common/ui/colors/semantic_color_names.h"
 #import "ios/chrome/common/ui/util/constraints_ui_util.h"
 #include "ios/chrome/grit/ios_strings.h"
@@ -3004,6 +3005,27 @@ NSString* const kBrowserViewControllerSnackbarCategory =
         UrlLoadingBrowserAgent::FromBrowser(self.browser)->Load(params);
       };
       [_contextMenuCoordinator addItemWithTitle:title action:action];
+
+      if (IsMultiwindowSupported()) {
+        // Open in New Window.
+        title = l10n_util::GetNSStringWithFixup(
+            IDS_IOS_CONTENT_CONTEXT_OPENINNEWWINDOW);
+        action = ^{
+          // TODO(crbug.com/1073410): Record this in the
+          //   MobileWebContextMenuOpenInNewTab histogram.
+          // The "Open In New Window" item in the context menu opens a new tab
+          // in a new window. This will be (according to |isOffTheRecord|)
+          // incognito if the originating browser is incognito.
+          BrowserViewController* strongSelf = weakSelf;
+          if (!strongSelf)
+            return;
+
+          NSUserActivity* loadURLActivity =
+              ActivityToLoadURL(link, referrer, strongSelf.isOffTheRecord);
+          [strongSelf.dispatcher openNewWindowWithActivity:loadURLActivity];
+        };
+        [_contextMenuCoordinator addItemWithTitle:title action:action];
+      }
       if (!_isOffTheRecord) {
         // Open in Incognito Tab.
         title = l10n_util::GetNSStringWithFixup(
