@@ -19,7 +19,7 @@ message ClientConfig {
   optional Timestamp DEPRECATED_refresh_time = 2 [deprecated = true];
   // The proxy configuration the client should use to connect to the Data Saver
   // service.
-  optional ProxyConfig proxy_config = 3;
+  optional DeprecatedProxyConfig proxy_config = 3 [deprecated = true];
   // The duration after which the client should request a new configuration. The
   // session_key is guaranteed to be valid through this time and may be valid
   // for some time thereafter. If both refresh_duration and refresh_time are
@@ -84,19 +84,19 @@ message Duration {
 }
 
 // Data Saver proxy configuration.
-message ProxyConfig {
+message DeprecatedProxyConfig {
   // Provides proxy server information for HTTP URIs.
-  repeated ProxyServer http_proxy_servers = 1;
+  repeated DeprecatedProxyServer http_proxy_servers = 1 [deprecated = true];
 }
 
 // Configuration information for a specific proxy server.
-message ProxyServer {
+message DeprecatedProxyServer {
   // The scheme of the proxy server.
   enum ProxyScheme {
     // The proxy scheme is unspecified.
     UNSPECIFIED = 0;
     // HTTP
-    HTTP = 1;
+    DEPRECATED_HTTP = 1 [deprecated = true];
     // HTTPS
     HTTPS = 2;
     // HTTPS over QUIC

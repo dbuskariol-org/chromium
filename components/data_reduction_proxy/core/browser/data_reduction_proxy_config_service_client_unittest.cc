@@ -125,29 +125,21 @@ class DataReductionProxyConfigServiceClientTest : public testing::Test {
         GURL("http://configservice.com"));
 
     // Set up the various test ClientConfigs.
-    ClientConfig config = CreateConfig(
-        kSuccessSessionKey, kConfigRefreshDurationSeconds, 0,
-        ProxyServer_ProxyScheme_HTTPS, "origin.net", 443,
-        ProxyServer_ProxyScheme_HTTP, "fallback.net", 80, 0.5f, false);
+    ClientConfig config = CreateClientConfig(
+        kSuccessSessionKey, kConfigRefreshDurationSeconds, 0, 0.5f, false);
     config.SerializeToString(&config_);
     encoded_config_ = EncodeConfig(config);
 
-    ClientConfig previous_config = CreateConfig(
-        kOldSuccessSessionKey, kConfigRefreshDurationSeconds, 0,
-        ProxyServer_ProxyScheme_HTTPS, "old.origin.net", 443,
-        ProxyServer_ProxyScheme_HTTP, "old.fallback.net", 80, 0.0f, false);
+    ClientConfig previous_config = CreateClientConfig(
+        kOldSuccessSessionKey, kConfigRefreshDurationSeconds, 0, 0.0f, false);
     previous_config.SerializeToString(&previous_config_);
 
-    ClientConfig persisted = CreateConfig(
-        kPersistedSessionKey, kConfigRefreshDurationSeconds, 0,
-        ProxyServer_ProxyScheme_HTTPS, "persisted.net", 443,
-        ProxyServer_ProxyScheme_HTTP, "persisted.net", 80, 0.0f, false);
+    ClientConfig persisted = CreateClientConfig(
+        kPersistedSessionKey, kConfigRefreshDurationSeconds, 0, 0.0f, false);
     loaded_config_ = EncodeConfig(persisted);
 
-    ClientConfig ignore_black_list_config =
-        CreateConfig(kSuccessSessionKey, kConfigRefreshDurationSeconds, 0,
-                     ProxyServer_ProxyScheme_HTTPS, "origin.net", 443,
-                     ProxyServer_ProxyScheme_HTTP, "origin.net", 0, 0.5f, true);
+    ClientConfig ignore_black_list_config = CreateClientConfig(
+        kSuccessSessionKey, kConfigRefreshDurationSeconds, 0, 0.5f, true);
     ignore_black_list_encoded_config_ = EncodeConfig(ignore_black_list_config);
 
     ClientConfig no_proxies_config;
@@ -574,10 +566,8 @@ TEST_F(DataReductionProxyConfigServiceClientTest,
 TEST_F(DataReductionProxyConfigServiceClientTest, ApplyClientConfigOverride) {
   const std::string override_key = "OverrideSecureSession";
   std::string encoded_config;
-  ClientConfig config = CreateConfig(
-      override_key, kConfigRefreshDurationSeconds, 0,
-      ProxyServer_ProxyScheme_HTTPS, "origin.net", 443,
-      ProxyServer_ProxyScheme_HTTP, "fallback.net", 80, 0.5f, false);
+  ClientConfig config = CreateClientConfig(
+      override_key, kConfigRefreshDurationSeconds, 0, 0.5f, false);
   config.SerializeToString(&encoded_config);
   base::Base64Encode(encoded_config, &encoded_config);
 
