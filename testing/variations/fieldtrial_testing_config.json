@@ -5113,6 +5113,21 @@
             ]
         }
     ],
+    "SafeBrowsingRealTimeUrlLookupEnabledAndroidAllDevices": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "SafeBrowsingRealTimeUrlLookupEnabledForAllAndroidDevices"
+                    ]
+                }
+            ]
+        }
+    ],
     "SafeBrowsingRealTimeUrlLookupEnabledWithToken": [
         {
             "platforms": [
