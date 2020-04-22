@@ -1677,7 +1677,7 @@
   {
     "name": "enable-media-internals-devtools",
     "owners": ["tmathmeyer"],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-media-session-notifications",
