@@ -1694,6 +1694,40 @@ const FeatureEntry::FeatureVariation kSharingDeviceExpirationVariations[] = {
      base::size(kSharingDeviceExpirationHours_240), nullptr},
 };
 
+const FeatureEntry::FeatureParam kAlignFontDisplayAutoTimeoutWithLCPGoal2250[] =
+    {{"lcp-limit-in-ms", "2250"}};
+const FeatureEntry::FeatureParam kAlignFontDisplayAutoTimeoutWithLCPGoal2000[] =
+    {{"lcp-limit-in-ms", "2000"}};
+const FeatureEntry::FeatureParam kAlignFontDisplayAutoTimeoutWithLCPGoal1750[] =
+    {{"lcp-limit-in-ms", "1750"}};
+const FeatureEntry::FeatureParam kAlignFontDisplayAutoTimeoutWithLCPGoal1500[] =
+    {{"lcp-limit-in-ms", "1500"}};
+const FeatureEntry::FeatureParam kAlignFontDisplayAutoTimeoutWithLCPGoal1250[] =
+    {{"lcp-limit-in-ms", "1250"}};
+const FeatureEntry::FeatureParam kAlignFontDisplayAutoTimeoutWithLCPGoal1000[] =
+    {{"lcp-limit-in-ms", "1000"}};
+const FeatureEntry::FeatureVariation
+    kAlignFontDisplayAutoTimeoutWithLCPGoalVariations[] = {
+        {"with 2250ms timeout after navigation",
+         kAlignFontDisplayAutoTimeoutWithLCPGoal2250,
+         base::size(kAlignFontDisplayAutoTimeoutWithLCPGoal2250), nullptr},
+        {"with 2000ms timeout after navigation",
+         kAlignFontDisplayAutoTimeoutWithLCPGoal2000,
+         base::size(kAlignFontDisplayAutoTimeoutWithLCPGoal2000), nullptr},
+        {"with 1750ms timeout after navigation",
+         kAlignFontDisplayAutoTimeoutWithLCPGoal1750,
+         base::size(kAlignFontDisplayAutoTimeoutWithLCPGoal1750), nullptr},
+        {"with 1500ms timeout after navigation",
+         kAlignFontDisplayAutoTimeoutWithLCPGoal1500,
+         base::size(kAlignFontDisplayAutoTimeoutWithLCPGoal1500), nullptr},
+        {"with 1250ms timeout after navigation",
+         kAlignFontDisplayAutoTimeoutWithLCPGoal1250,
+         base::size(kAlignFontDisplayAutoTimeoutWithLCPGoal1250), nullptr},
+        {"with 1000ms timeout after navigation",
+         kAlignFontDisplayAutoTimeoutWithLCPGoal1000,
+         base::size(kAlignFontDisplayAutoTimeoutWithLCPGoal1000), nullptr},
+};
+
 #if defined(OS_CHROMEOS)
 const FeatureEntry::Choice kEnableCrOSActionRecorderChoices[] = {
     {flags_ui::kGenericExperimentChoiceDefault, "", ""},
@@ -5269,8 +5303,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAlignFontDisplayAutoTimeoutWithLCPGoalName,
      flag_descriptions::kAlignFontDisplayAutoTimeoutWithLCPGoalDescription,
      kOsAll,
-     FEATURE_VALUE_TYPE(
-         blink::features::kAlignFontDisplayAutoTimeoutWithLCPGoal)},
+     FEATURE_WITH_PARAMS_VALUE_TYPE(
+         blink::features::kAlignFontDisplayAutoTimeoutWithLCPGoal,
+         kAlignFontDisplayAutoTimeoutWithLCPGoalVariations,
+         "AlignFontDisplayAutoTimeoutWithLCPGoalVariations")},
 
 #if defined(OS_CHROMEOS)
     {"enable-palm-suppression", flag_descriptions::kEnablePalmSuppressionName,
