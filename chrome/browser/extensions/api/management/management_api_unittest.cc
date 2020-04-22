@@ -1038,7 +1038,9 @@ TEST_F(ManagementApiSupervisedUserTest,
   ASSERT_TRUE(known_perms);
   EXPECT_TRUE(known_perms->IsEmpty());
 
-  // The parent approval dialog should have not appeared.
+  // The parent approval dialog should have not appeared. The parent approval
+  // dialog should never appear when the "Permissions for sites, apps and
+  // extensions" toggle is off.
   EXPECT_EQ(0, supervised_user_delegate_->show_dialog_count_);
 }
 
@@ -1191,30 +1193,14 @@ class ManagementApiSupervisedUserTestWithSetup
     delegate_ = new TestManagementAPIDelegate;
     management_api_->set_delegate_for_test(base::WrapUnique(delegate_));
 
-    // Install a policy provider that requires parent approval for extensions.
-    provider_ = std::make_unique<TestManagementPolicyProvider>();
-    provider_->SetProhibitedActions(
-        TestManagementPolicyProvider::MUST_REMAIN_DISABLED);
-    provider_->SetDisableReason(
-        disable_reason::DISABLE_CUSTODIAN_APPROVAL_REQUIRED);
-    ExtensionSystem::Get(profile())->management_policy()->RegisterProvider(
-        provider_.get());
-
     // Add a generic extension.
     extension_ = ExtensionBuilder("Test").Build();
     service()->AddExtension(extension_.get());
     EXPECT_TRUE(registry()->enabled_extensions().Contains(extension_->id()));
   }
 
-  void TearDown() override {
-    ExtensionSystem::Get(profile())->management_policy()->UnregisterProvider(
-        provider_.get());
-    ManagementApiSupervisedUserTest::TearDown();
-  }
-
   TestManagementAPIDelegate* delegate_ = nullptr;
   scoped_refptr<const Extension> extension_;
-  std::unique_ptr<TestManagementPolicyProvider> provider_;
 };
 
 TEST_F(ManagementApiSupervisedUserTestWithSetup, SetEnabled_ParentApproves) {
@@ -1297,8 +1283,6 @@ TEST_F(ManagementApiSupervisedUserTestWithSetup, SetEnabled_PreviouslyAllowed) {
   service()->DisableExtension(extension_->id(),
                               disable_reason::DISABLE_USER_ACTION);
 
-  // Allow the extension to be enabled.
-  provider_->SetProhibitedActions(TestManagementPolicyProvider::ALLOW_ALL);
   // Simulate previous parent approval.
   GetSupervisedUserService()->AddOrUpdateExtensionApproval(*extension_);
 
