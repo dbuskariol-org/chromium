@@ -33,11 +33,12 @@
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     _supportedMediatorClasses = @[
+      [AlertOverlayMediator class],
       [AppLauncherAlertOverlayMediator class],
       [HTTPAuthDialogOverlayMediator class],
       [JavaScriptConfirmationOverlayMediator class],
       [JavaScriptAlertOverlayMediator class],
-      [JavaScriptPromptOverlayMediator class]
+      [JavaScriptPromptOverlayMediator class],
     ];
   });
   return _supportedMediatorClasses;
