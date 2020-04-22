@@ -295,10 +295,21 @@
       },
     },
   },
-  'kitkat_generic': {
+  'kitkat_or_lollipop': {
     'swarming': {
       'dimensions': {
-        'device_os': 'K',
+        # TODO(https://crbug.com/1032336) Remove the kitkat related mixins
+        # once Kitkat deprecation is finished
+        'device_os': 'KTU84P|LMY48M',
+      },
+    },
+  },
+  'kitkat_or_lollipop_generic': {
+    'swarming': {
+      'dimensions': {
+        # TODO(https://crbug.com/1032336) Remove the kitkat related mixins
+        # once Kitkat deprecation is finished
+        'device_os': 'K|L',
       },
     },
   },

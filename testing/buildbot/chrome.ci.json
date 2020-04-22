@@ -28,7 +28,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",
@@ -82,7 +82,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",
@@ -131,7 +131,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",
@@ -180,7 +180,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",
@@ -229,7 +229,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",
@@ -278,7 +278,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",
@@ -327,7 +327,7 @@
           ],
           "dimension_sets": [
             {
-              "device_os": "KTU84P",
+              "device_os": "KTU84P|LMY48M",
               "device_os_type": "userdebug",
               "device_type": "hammerhead",
               "os": "Android",

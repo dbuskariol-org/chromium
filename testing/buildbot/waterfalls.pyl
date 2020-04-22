@@ -448,7 +448,7 @@
       },
       'KitKat Phone Tester (dbg)': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'test_suites': {
@@ -596,7 +596,7 @@
       },
       'android-cronet-arm-dbg': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'additional_compile_targets': [
@@ -651,7 +651,7 @@
       },
       'android-cronet-asan-arm-rel': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'additional_compile_targets': [
@@ -733,7 +733,7 @@
       },
       'android-kitkat-arm-rel': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'additional_compile_targets': [
@@ -871,7 +871,7 @@
       },
       'android-bfcache-rel': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'os_type': 'android',
@@ -1033,7 +1033,7 @@
       },
       'ToTAndroid': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'additional_compile_targets': [
@@ -1551,7 +1551,7 @@
       'android-kitkat-arm-rel-swarming': {
         'mixins': [
           'chromium-template-pool',
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'test_suites': {
@@ -4489,7 +4489,7 @@
         },
         'mixins': [
           'hammerhead',
-          'kitkat',
+          'kitkat_or_lollipop',
         ],
         'os_type': 'android',
       },
@@ -4721,7 +4721,7 @@
       'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)': {
         'os_type': 'android',
         'mixins': [
-          'kitkat_generic',
+          'kitkat_or_lollipop_generic',
           'hammerhead',
         ],
         'test_suites': {
@@ -5167,7 +5167,7 @@
     'machines': {
       'android-opus-kitkat-arm-rel': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'test_suites': {
@@ -5177,7 +5177,7 @@
       },
       'android_blink_rel': {
         'mixins': [
-          'kitkat',
+          'kitkat_or_lollipop',
           'hammerhead',
         ],
         'test_suites': {
