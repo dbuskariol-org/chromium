@@ -90,32 +90,51 @@
   };
 
   /**
-   * Tests that breadcrumbs has to tooltip. crbug.com/951305
+   * Creates a folder test entry from a folder |path|.
+   * @param {string} path The folder path.
+   * @return {!TestEntryInfo}
    */
-  testcase.breadcrumbsTooltip = async () => {
-    /**
-     * Helper to create a test folder from a full |path|.
-     * @param {string} path The folder path.
-     * @return {TestEntryInfo}
-     */
-    function createTestFolder(path) {
-      const name = path.split('/').pop();
-      return new TestEntryInfo({
-        targetPath: path,
-        nameText: name,
-        type: EntryType.DIRECTORY,
-        lastModifiedTime: 'Jan 1, 1980, 11:59 PM',
-        sizeText: '--',
-        typeText: 'Folder',
-      });
-    }
+  function createTestFolder(path) {
+    const name = path.split('/').pop();
+    return new TestEntryInfo({
+      targetPath: path,
+      nameText: name,
+      type: EntryType.DIRECTORY,
+      lastModifiedTime: 'Jan 1, 1980, 11:59 PM',
+      sizeText: '--',
+      typeText: 'Folder',
+    });
+  }
 
-    // Build an array of nested folder test entries.
+  /**
+   * Returns an array of nested folder test entries, where |depth| controls
+   * the nesting. For example, a |depth| of 4 will return:
+   *
+   *   [0]: nested-folder0
+   *   [1]: nested-folder0/nested-folder1
+   *   [2]: nested-folder0/nested-folder1/nested-folder2
+   *   [3]: nested-folder0/nested-folder1/nested-folder2/nested-folder3
+   *
+   * @param {number} depth The nesting depth.
+   * @return {!Array<!TestEntryInfo>}
+   */
+  function createNestedTestFolders(depth) {
     const nestedFolderTestEntries = [];
-    for (let path = 'nested-folder0', i = 0; i < 8; ++i) {
+
+    for (let path = 'nested-folder0', i = 0; i < depth; ++i) {
       nestedFolderTestEntries.push(createTestFolder(path));
       path += `/nested-folder${i + 1}`;
     }
+
+    return nestedFolderTestEntries;
+  }
+
+  /**
+   * Tests that breadcrumbs has to tooltip. crbug.com/951305
+   */
+  testcase.breadcrumbsTooltip = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(8);
 
     // Open FilesApp on Downloads containing the test entries.
     const appId = await setupAndWaitUntilReady(
