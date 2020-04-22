@@ -255,13 +255,6 @@
       ],
     },
   },
-  'fuchsia_system_log': {
-    '$mixin_append': {
-      'args': [
-        '--enable-fuchsia-system-log',
-      ],
-    },
-  },
   'gpu_pool': {
     'swarming': {
       'dimensions': {

@@ -1951,7 +1951,6 @@
         'mixins': [
           'arm64',
           'docker',
-          'fuchsia_system_log',
           'linux-xenial',
         ],
       },
@@ -1960,7 +1959,6 @@
           'all',
         ],
         'mixins': [
-          'fuchsia_system_log',
           'linux-xenial',
         ],
         'swarming': {
@@ -1981,7 +1979,6 @@
         'browser_config': 'web-engine-shell',
         'os_type': 'linux',
         'mixins': [
-          'fuchsia_system_log',
           'linux-xenial',
         ],
         'swarming': {

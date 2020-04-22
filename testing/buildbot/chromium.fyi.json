@@ -12172,8 +12172,7 @@
     "gtest_tests": [
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.accessibility_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.accessibility_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -12194,9 +12193,6 @@
         "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12216,9 +12212,6 @@
         "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12238,9 +12231,6 @@
         "test_target": "//base:base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12260,9 +12250,6 @@
         "test_target": "//base/util:base_util_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12282,9 +12269,6 @@
         "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12304,9 +12288,6 @@
         "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12326,9 +12307,6 @@
         "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12348,9 +12326,6 @@
         "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12370,9 +12345,6 @@
         "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12392,9 +12364,6 @@
         "test_target": "//fuchsia/runners:cast_runner_browsertests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12414,9 +12383,6 @@
         "test_target": "//fuchsia/runners:cast_runner_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12437,8 +12403,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.content_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.content_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -12459,9 +12424,6 @@
         "test_target": "//content/test:content_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12481,9 +12443,6 @@
         "test_target": "//fuchsia/base:cr_fuchsia_base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12503,9 +12462,6 @@
         "test_target": "//components/cronet:cronet_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12525,9 +12481,6 @@
         "test_target": "//components/cronet:cronet_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12547,9 +12500,6 @@
         "test_target": "//crypto:crypto_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12569,9 +12519,6 @@
         "test_target": "//ui/events:events_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12591,9 +12538,6 @@
         "test_target": "//ui/gfx:gfx_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12613,9 +12557,6 @@
         "test_target": "//gin:gin_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12635,9 +12576,6 @@
         "test_target": "//google_apis:google_apis_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12657,9 +12595,6 @@
         "test_target": "//gpu:gpu_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12679,9 +12614,6 @@
         "test_target": "//fuchsia/http:http_service_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12701,9 +12633,6 @@
         "test_target": "//ipc:ipc_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12723,9 +12652,6 @@
         "test_target": "//media/blink:media_blink_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12746,8 +12672,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -12768,9 +12693,6 @@
         "test_target": "//mojo:mojo_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12790,9 +12712,6 @@
         "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12813,8 +12732,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.services_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.services_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -12835,9 +12753,6 @@
         "test_target": "//services:services_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12857,9 +12772,6 @@
         "test_target": "//skia:skia_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12880,8 +12792,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.ui_base_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.ui_base_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -12902,9 +12813,6 @@
         "test_target": "//ui/base:ui_base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12925,8 +12833,7 @@
       },
       {
         "args": [
-          "--child-arg=--ozone-platform=headless",
-          "--enable-fuchsia-system-log"
+          "--child-arg=--ozone-platform=headless"
         ],
         "merge": {
           "args": [],
@@ -12947,9 +12854,6 @@
         "test_target": "//components/viz:viz_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12969,9 +12873,6 @@
         "test_target": "//fuchsia/engine:web_engine_browsertests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12991,9 +12892,6 @@
         "test_target": "//fuchsia/engine:web_engine_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13013,9 +12911,6 @@
         "test_target": "//fuchsia/engine:web_engine_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13035,9 +12930,6 @@
         "test_target": "//fuchsia/runners:web_runner_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13065,8 +12957,7 @@
     "gtest_tests": [
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.accessibility_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.accessibility_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13086,9 +12977,6 @@
         "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13107,9 +12995,6 @@
         "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13128,9 +13013,6 @@
         "test_target": "//base:base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13149,9 +13031,6 @@
         "test_target": "//base/util:base_util_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13170,9 +13049,6 @@
         "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13191,9 +13067,6 @@
         "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13212,9 +13085,6 @@
         "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13233,9 +13103,6 @@
         "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13254,9 +13121,6 @@
         "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13275,9 +13139,6 @@
         "test_target": "//fuchsia/runners:cast_runner_browsertests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13296,9 +13157,6 @@
         "test_target": "//fuchsia/runners:cast_runner_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13318,8 +13176,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.cc_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.cc_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13341,8 +13198,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.content_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.content_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13362,9 +13218,6 @@
         "test_target": "//content/test:content_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13383,9 +13236,6 @@
         "test_target": "//fuchsia/base:cr_fuchsia_base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13404,9 +13254,6 @@
         "test_target": "//components/cronet:cronet_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13425,9 +13272,6 @@
         "test_target": "//components/cronet:cronet_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13446,9 +13290,6 @@
         "test_target": "//crypto:crypto_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13467,9 +13308,6 @@
         "test_target": "//ui/events:events_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13488,9 +13326,6 @@
         "test_target": "//ui/gfx:gfx_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13509,9 +13344,6 @@
         "test_target": "//gin:gin_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13530,9 +13362,6 @@
         "test_target": "//google_apis:google_apis_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13551,9 +13380,6 @@
         "test_target": "//gpu:gpu_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13572,9 +13398,6 @@
         "test_target": "//fuchsia/http:http_service_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13593,9 +13416,6 @@
         "test_target": "//ipc:ipc_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13614,9 +13434,6 @@
         "test_target": "//media/blink:media_blink_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13636,8 +13453,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13657,9 +13473,6 @@
         "test_target": "//mojo:mojo_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13678,9 +13491,6 @@
         "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13700,8 +13510,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.services_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.services_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13721,9 +13530,6 @@
         "test_target": "//services:services_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13742,9 +13548,6 @@
         "test_target": "//skia:skia_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13764,8 +13567,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.ui_base_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.ui_base_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13785,9 +13587,6 @@
         "test_target": "//ui/base:ui_base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13807,8 +13606,7 @@
       },
       {
         "args": [
-          "--child-arg=--ozone-platform=headless",
-          "--enable-fuchsia-system-log"
+          "--child-arg=--ozone-platform=headless"
         ],
         "merge": {
           "args": [],
@@ -13828,9 +13626,6 @@
         "test_target": "//components/viz:viz_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13849,9 +13644,6 @@
         "test_target": "//fuchsia/engine:web_engine_browsertests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13870,9 +13662,6 @@
         "test_target": "//fuchsia/engine:web_engine_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13891,9 +13680,6 @@
         "test_target": "//fuchsia/engine:web_engine_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13912,9 +13698,6 @@
         "test_target": "//fuchsia/runners:web_runner_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13941,8 +13724,7 @@
     "gtest_tests": [
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.accessibility_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.accessibility_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -13962,9 +13744,6 @@
         "test_target": "//ui/accessibility:accessibility_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -13983,9 +13762,6 @@
         "test_target": "//third_party/angle/src/tests:angle_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14004,9 +13780,6 @@
         "test_target": "//base:base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14025,9 +13798,6 @@
         "test_target": "//base/util:base_util_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14046,9 +13816,6 @@
         "test_target": "//third_party/blink/common:blink_common_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14067,9 +13834,6 @@
         "test_target": "//third_party/blink/renderer/platform/heap:blink_heap_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14088,9 +13852,6 @@
         "test_target": "//third_party/blink/renderer/platform:blink_platform_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14109,9 +13870,6 @@
         "test_target": "//third_party/boringssl:boringssl_crypto_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14130,9 +13888,6 @@
         "test_target": "//third_party/boringssl:boringssl_ssl_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14151,9 +13906,6 @@
         "test_target": "//fuchsia/runners:cast_runner_browsertests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14172,9 +13924,6 @@
         "test_target": "//fuchsia/runners:cast_runner_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14194,8 +13943,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.cc_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.cc_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -14217,8 +13965,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.content_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.content_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -14238,9 +13985,6 @@
         "test_target": "//content/test:content_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14259,9 +14003,6 @@
         "test_target": "//fuchsia/base:cr_fuchsia_base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14280,9 +14021,6 @@
         "test_target": "//components/cronet:cronet_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14301,9 +14039,6 @@
         "test_target": "//components/cronet:cronet_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14322,9 +14057,6 @@
         "test_target": "//crypto:crypto_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14343,9 +14075,6 @@
         "test_target": "//ui/events:events_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14364,9 +14093,6 @@
         "test_target": "//ui/gfx:gfx_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14385,9 +14111,6 @@
         "test_target": "//gin:gin_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14406,9 +14129,6 @@
         "test_target": "//google_apis:google_apis_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14427,9 +14147,6 @@
         "test_target": "//gpu:gpu_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14448,9 +14165,6 @@
         "test_target": "//fuchsia/http:http_service_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14469,9 +14183,6 @@
         "test_target": "//ipc:ipc_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14490,9 +14201,6 @@
         "test_target": "//media/blink:media_blink_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14512,8 +14220,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -14534,8 +14241,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.net_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.net_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -14555,9 +14261,6 @@
         "test_target": "//net:net_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14576,9 +14279,6 @@
         "test_target": "//third_party/perfetto:perfetto_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14598,8 +14298,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.services_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.services_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -14619,9 +14318,6 @@
         "test_target": "//services:services_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14640,9 +14336,6 @@
         "test_target": "//skia:skia_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14662,8 +14355,7 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.ui_base_unittests.filter",
-          "--enable-fuchsia-system-log"
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.ui_base_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -14683,9 +14375,6 @@
         "test_target": "//ui/base:ui_base_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14705,8 +14394,7 @@
       },
       {
         "args": [
-          "--child-arg=--ozone-platform=headless",
-          "--enable-fuchsia-system-log"
+          "--child-arg=--ozone-platform=headless"
         ],
         "merge": {
           "args": [],
@@ -14726,9 +14414,6 @@
         "test_target": "//components/viz:viz_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14747,9 +14432,6 @@
         "test_target": "//fuchsia/engine:web_engine_browsertests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14768,9 +14450,6 @@
         "test_target": "//fuchsia/engine:web_engine_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14789,9 +14468,6 @@
         "test_target": "//fuchsia/engine:web_engine_unittests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14810,9 +14486,6 @@
         "test_target": "//fuchsia/runners:web_runner_integration_tests"
       },
       {
-        "args": [
-          "--enable-fuchsia-system-log"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -14835,7 +14508,6 @@
       {
         "args": [
           "--num-retries=3",
-          "--enable-fuchsia-system-log",
           "--platform=fuchsia"
         ],
         "isolate_name": "blink_web_tests",
@@ -14866,8 +14538,7 @@
           "--browser=web-engine-shell",
           "--passthrough",
           "-v",
-          "--extra-browser-args=--enable-logging=stderr --js-flags=--expose-gc",
-          "--enable-fuchsia-system-log"
+          "--extra-browser-args=--enable-logging=stderr --js-flags=--expose-gc"
         ],
         "isolate_name": "fuchsia_telemetry_gpu_integration_test",
         "merge": {
@@ -14900,8 +14571,7 @@
           "--expected-vendor-id",
           "0",
           "--expected-device-id",
-          "0",
-          "--enable-fuchsia-system-log"
+          "0"
         ],
         "isolate_name": "fuchsia_telemetry_gpu_integration_test",
         "merge": {
