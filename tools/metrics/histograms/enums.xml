@@ -5244,6 +5244,9 @@ Unknown properties are collapsed to zero. -->
 </enum>
 
 <enum name="BackForwardNavigationType">
+  <obsolete>
+    Removed from code April 2020.
+  </obsolete>
   <int value="0" label="Fast back navigation with WKBackForwardList"/>
   <int value="1" label="Slow back navigation"/>
   <int value="2" label="Fast forward navigation with WKBackForwardList"/>
