@@ -22814,6 +22814,9 @@ Called by update_extension_histograms.py.-->
 </enum>
 
 <enum name="ExtensionInstallVerifierMustRemainDisabled">
+  <obsolete>
+    Removed 2020/04 with the removal of the relevant histogram.
+  </obsolete>
   <int value="0" label="VERIFIED"/>
   <int value="1" label="NOT_EXTENSION"/>
   <int value="2" label="UNPACKED"/>
