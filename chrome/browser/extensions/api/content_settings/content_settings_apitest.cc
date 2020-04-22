@@ -285,9 +285,8 @@ IN_PROC_BROWSER_TEST_F(ExtensionContentSettingsApiTest, MAYBE_Standard) {
   CheckContentSettingsDefault();
 }
 
-// Flaky on the trybots. See http://crbug.com/96725.
 IN_PROC_BROWSER_TEST_F(ExtensionContentSettingsApiTest,
-                       DISABLED_GetResourceIdentifiers) {
+                       GetResourceIdentifiers) {
   base::FilePath::CharType kFooPath[] =
       FILE_PATH_LITERAL("/plugins/foo.plugin");
   base::FilePath::CharType kBarPath[] =
