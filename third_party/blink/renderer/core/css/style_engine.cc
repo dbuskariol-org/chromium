@@ -1635,16 +1635,18 @@ void StyleEngine::ApplyRuleSetChanges(
     ScopedStyleResolver::KeyframesRulesAdded(tree_scope);
 
   if (changed_rule_flags & kPropertyRules) {
-    // TODO(https://crbug.com/978786): Don't ignore TreeScope.
+    // @property rules are (for now) ignored in shadow trees, per spec.
+    // https://drafts.css-houdini.org/css-properties-values-api-1/#at-property-rule
+    if (tree_scope.RootNode().IsDocumentNode()) {
+      PropertyRegistry* registry = GetDocument().GetPropertyRegistry();
+      if (registry)
+        registry->RemoveDeclaredProperties();
 
-    PropertyRegistry* registry = GetDocument().GetPropertyRegistry();
-    if (registry)
-      registry->RemoveDeclaredProperties();
-
-    for (auto* it = new_style_sheets.begin(); it != new_style_sheets.end();
-         it++) {
-      DCHECK(it->second);
-      AddPropertyRules(*it->second);
+      for (auto* it = new_style_sheets.begin(); it != new_style_sheets.end();
+           it++) {
+        DCHECK(it->second);
+        AddPropertyRules(*it->second);
+      }
     }
   }
 
