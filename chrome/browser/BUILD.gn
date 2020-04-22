@@ -5613,7 +5613,7 @@ grit("resources") {
 
   deps = [
     ":chrome_internal_resources_gen",
-    "//chrome/browser/resources/browser_switch:app_module",
+    "//chrome/browser/resources/browser_switch:web_components",
     "//chrome/browser/ui/webui/usb_internals:mojo_bindings_js",
     "//device/bluetooth/public/mojom:deprecated_experimental_interfaces_js",
     "//device/bluetooth/public/mojom:mojom_js",
@@ -5642,8 +5642,8 @@ grit("resources") {
     deps += [
       "//chrome/browser/resources/discards:discards_resources_gen",
       "//chrome/browser/resources/gaia_auth_host:modulize",
-      "//chrome/browser/resources/management:polymer3_elements",
-      "//chrome/browser/resources/signin:polymer3_elements",
+      "//chrome/browser/resources/management:web_components",
+      "//chrome/browser/resources/signin:web_components",
       "//chrome/browser/ui/webui/discards:mojo_bindings_js",
       "//services/resource_coordinator/public/mojom:mojom_js",
     ]
