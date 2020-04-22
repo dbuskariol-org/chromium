@@ -255,4 +255,47 @@
     const eliderButtonHidden = ['bread-crumb', '[elider][hidden]'];
     await remoteCall.waitForElement(appId, eliderButtonHidden);
   };
+
+  /**
+   * Tests that the breadcrumbs correctly render a long (5 component) path.
+   */
+  testcase.breadcrumbsRenderLongPath = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(3);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder: 2 + 3 nested = 5 path components.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Check: the breadcrumb element should have a |path| attribute.
+    const breadcrumbElement =
+        await remoteCall.waitForElement(appId, ['bread-crumb']);
+    const path = breadcrumb.slice(1);  // remove leading "/" char
+    chrome.test.assertEq(path, breadcrumbElement.attributes.path);
+
+    // Check: some of the main breadcrumb buttons should be visible.
+    const buttons = ['bread-crumb', 'button[id]:not([hidden])'];
+    const elements = await remoteCall.callRemoteTestUtil(
+        'deepQueryAllElements', appId, [buttons]);
+    chrome.test.assertEq(3, elements.length);
+
+    // Check: main button text should be the non-elided path components.
+    chrome.test.assertEq(path.split('/')[0], elements[0].text);
+    chrome.test.assertEq(path.split('/')[3], elements[1].text);
+    chrome.test.assertEq(path.split('/')[4], elements[2].text);
+
+    // Check: the "last" main button should be disabled.
+    chrome.test.assertEq(undefined, elements[0].attributes.disabled);
+    chrome.test.assertEq(undefined, elements[1].attributes.disabled);
+    chrome.test.assertEq('', elements[2].attributes.disabled);
+
+    // Check: the breadcrumb elider button should be shown.
+    const eliderButton = ['bread-crumb', '[elider]:not([hidden])'];
+    await remoteCall.waitForElement(appId, eliderButton);
+  };
 })();
