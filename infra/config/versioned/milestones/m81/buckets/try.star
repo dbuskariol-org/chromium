@@ -210,6 +210,7 @@ try_.chromium_linux_builder(
 try_.chromium_mac_builder(
     name = 'mac-rel',
     goma_jobs = goma.jobs.J150,
+    os = os.MAC_10_13,
     tryjob = try_.job(),
     should_exonerate_flaky_failures = True,
 )
