@@ -100,7 +100,6 @@ android_library("java") {
     "//third_party/android_deps:android_support_v7_appcompat_java",
     "//third_party/android_deps:androidx_recyclerview_recyclerview_java",
     "//third_party/android_deps:com_android_support_interpolator_java",
-    "//third_party/android_deps:com_google_android_material_material_java",
     "//ui/android:ui_java",
     "//url:gurl_java",
   ]
@@ -191,7 +190,6 @@ android_resources("java_resources") {
   deps = [
     "//components/browser_ui/strings/android:browser_ui_strings_grd",
     "//components/browser_ui/styles/android:java_resources",
-    "//third_party/android_deps:com_google_android_material_material_java",
     "//ui/android:ui_java_resources",
   ]
 }
