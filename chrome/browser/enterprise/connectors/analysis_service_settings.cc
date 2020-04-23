@@ -39,6 +39,7 @@ AnalysisServiceSettings::AnalysisServiceSettings(
   // Add the patterns to the settings, which configures settings.matcher and
   // settings.*_pattern_settings. No enable patterns implies the settings are
   // invalid.
+  matcher_ = std::make_unique<url_matcher::URLMatcher>();
   url_matcher::URLMatcherConditionSet::ID id(0);
   const base::Value* enable = settings_value.FindListKey(kKeyEnable);
   if (enable && enable->is_list()) {
@@ -94,7 +95,8 @@ base::Optional<AnalysisSettings> AnalysisServiceSettings::GetAnalysisSettings(
   if (!IsValid())
     return base::nullopt;
 
-  auto matches = matcher_.MatchURL(url);
+  DCHECK(matcher_);
+  auto matches = matcher_->MatchURL(url);
   if (matches.empty())
     return base::nullopt;
 
@@ -141,7 +143,7 @@ void AnalysisServiceSettings::AddUrlPatternSettings(
     const base::ListValue* url_list_value = nullptr;
     url_list->GetAsList(&url_list_value);
     DCHECK(url_list_value);
-    policy::url_util::AddFilters(&matcher_, enabled, id, url_list_value);
+    policy::url_util::AddFilters(matcher_.get(), enabled, id, url_list_value);
   } else {
     return;
   }
@@ -195,6 +197,8 @@ bool AnalysisServiceSettings::IsValid() const {
   return true;
 }
 
+AnalysisServiceSettings::AnalysisServiceSettings(AnalysisServiceSettings&&) =
+    default;
 AnalysisServiceSettings::~AnalysisServiceSettings() = default;
 
 AnalysisServiceSettings::URLPatternSettings::URLPatternSettings() = default;

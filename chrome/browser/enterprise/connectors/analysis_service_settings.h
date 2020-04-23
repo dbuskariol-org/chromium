@@ -5,6 +5,8 @@
 #ifndef CHROME_BROWSER_ENTERPRISE_CONNECTORS_ANALYSIS_SERVICE_SETTINGS_H_
 #define CHROME_BROWSER_ENTERPRISE_CONNECTORS_ANALYSIS_SERVICE_SETTINGS_H_
 
+#include <memory>
+
 #include "base/values.h"
 #include "chrome/browser/enterprise/connectors/common.h"
 #include "components/url_matcher/url_matcher.h"
@@ -15,6 +17,7 @@ namespace enterprise_connectors {
 class AnalysisServiceSettings {
  public:
   explicit AnalysisServiceSettings(const base::Value& settings_value);
+  AnalysisServiceSettings(AnalysisServiceSettings&&);
   ~AnalysisServiceSettings();
 
   // Get the settings to apply to a specific analysis. base::nullopt implies no
@@ -63,7 +66,7 @@ class AnalysisServiceSettings {
   // condition set IDs returned after matching against a URL can be used to
   // check |enabled_patterns_settings| and |disable_patterns_settings| to
   // obtain URL-specific settings.
-  url_matcher::URLMatcher matcher_;
+  std::unique_ptr<url_matcher::URLMatcher> matcher_;
 
   // These members map URL patterns to corresponding settings.  If an entry in
   // the "enabled" or "disabled" lists contains more than one pattern in its
