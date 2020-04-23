@@ -42,6 +42,11 @@
 #include "services/tracing/public/cpp/stack_sampling/stack_sampler_android.h"
 #endif
 
+#if defined(OS_WIN)
+#include "base/threading/platform_thread.h"
+#include "services/tracing/public/cpp/stack_sampling/loader_lock_sampler_win.h"
+#endif
+
 using StreamingProfilePacketHandle =
     protozero::MessageHandle<perfetto::protos::pbzero::StreamingProfilePacket>;
 
@@ -186,7 +191,61 @@ GetSequenceLocalStorageProfilerSlot() {
   return *storage;
 }
 
+#if defined(OS_WIN)
+// The loader lock is process-wide so should only be sampled on a single
+// thread.
+base::PlatformThreadId g_loader_lock_sample_thread_id = base::kInvalidThreadId;
+
+bool g_loader_lock_is_held = false;
+
+TracingSamplerProfiler::LoaderLockSampler* g_test_loader_lock_sampler = nullptr;
+
+void InitializeLoaderLockSamplingForThread(base::PlatformThreadId thread_id) {
+  InitializeLoaderLockSampling();
+  g_loader_lock_sample_thread_id = thread_id;
+
+  // InitializeLoaderLockSamplingForThread can be called multiple times during
+  // tests. Make sure each test starts from a known state.
+  g_loader_lock_is_held = false;
+}
+
+// Checks the state of the loader lock while samples are being taken for thread
+// |thread_id|. This function should only be called from the profiler thread
+// since it updates global data.
+void SampleLoaderLockForThread(base::PlatformThreadId thread_id) {
+  if (thread_id != g_loader_lock_sample_thread_id)
+    return;
+
+  bool loader_lock_now_held =
+      g_test_loader_lock_sampler
+          ? g_test_loader_lock_sampler->IsLoaderLockHeld()
+          : IsLoaderLockHeld();
+
+  // TODO(crbug.com/1065077): It would be cleaner to save the loader lock state
+  // alongside buffered_samples_ and then add it to the ProcessDescriptor
+  // packet in
+  // TracingSamplerProfiler::TracingProfileBuilder::WriteSampleToTrace. But
+  // ProcessDescriptor is currently not being collected correctly. See the full
+  // discussion in the linked crbug.
+  if (loader_lock_now_held && !g_loader_lock_is_held) {
+    TRACE_EVENT_ASYNC_BEGIN0(TRACE_DISABLED_BY_DEFAULT("cpu_profiler"),
+                             TracingSamplerProfiler::kLoaderLockHeldEventName,
+                             thread_id);
+  } else if (!loader_lock_now_held && g_loader_lock_is_held) {
+    TRACE_EVENT_ASYNC_END0(TRACE_DISABLED_BY_DEFAULT("cpu_profiler"),
+                           TracingSamplerProfiler::kLoaderLockHeldEventName,
+                           thread_id);
+  }
+  g_loader_lock_is_held = loader_lock_now_held;
+}
+#endif  // defined(OS_WIN)
+
 }  // namespace
+
+#if defined(OS_WIN)
+const char TracingSamplerProfiler::kLoaderLockHeldEventName[] =
+    "LoaderLockHeld (sampled)";
+#endif
 
 TracingSamplerProfiler::TracingProfileBuilder::BufferedSample::BufferedSample(
     base::TimeTicks ts,
@@ -234,6 +293,10 @@ TracingSamplerProfiler::TracingProfileBuilder::GetModuleCache() {
 void TracingSamplerProfiler::TracingProfileBuilder::OnSampleCompleted(
     std::vector<base::Frame> frames,
     base::TimeTicks sample_timestamp) {
+#if defined(OS_WIN)
+  SampleLoaderLockForThread(sampled_thread_id_);
+#endif
+
   base::AutoLock l(trace_writer_lock_);
   if (!trace_writer_) {
     if (buffered_samples_.size() < kMaxBufferedSamples) {
@@ -494,8 +557,11 @@ void TracingSamplerProfiler::MangleModuleIDIfNeeded(std::string* module_id) {
 // static
 std::unique_ptr<TracingSamplerProfiler>
 TracingSamplerProfiler::CreateOnMainThread() {
-  return std::make_unique<TracingSamplerProfiler>(
-      base::GetSamplingProfilerCurrentThreadToken());
+  auto thread_token = base::GetSamplingProfilerCurrentThreadToken();
+#if defined(OS_WIN)
+  InitializeLoaderLockSamplingForThread(thread_token.id);
+#endif
+  return std::make_unique<TracingSamplerProfiler>(std::move(thread_token));
 }
 
 // static
@@ -539,6 +605,14 @@ void TracingSamplerProfiler::SetupStartupTracingForTesting() {
 void TracingSamplerProfiler::StopTracingForTesting() {
   TracingSamplerProfilerDataSource::Get()->StopTracing(base::DoNothing());
 }
+
+#if defined(OS_WIN)
+// static
+void TracingSamplerProfiler::SetLoaderLockSamplerForTesting(
+    LoaderLockSampler* sampler) {
+  g_test_loader_lock_sampler = sampler;
+}
+#endif
 
 TracingSamplerProfiler::TracingSamplerProfiler(
     base::SamplingProfilerThreadToken sampled_thread_token)

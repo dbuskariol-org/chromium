@@ -107,6 +107,13 @@ target(tracing_lib_type, "cpp") {
       "tracing_features.h",
     ]
 
+    if (is_win) {
+      sources += [
+        "stack_sampling/loader_lock_sampler_win.cc",
+        "stack_sampling/loader_lock_sampler_win.h",
+      ]
+    }
+
     public_deps += [
       "//components/tracing:startup_tracing",
       "//mojo/public/cpp/bindings",
