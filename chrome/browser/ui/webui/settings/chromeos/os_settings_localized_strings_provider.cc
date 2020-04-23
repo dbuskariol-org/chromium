@@ -903,8 +903,6 @@ void AddSearchInSettingsStrings(content::WebUIDataSource* html_source) {
       {"searchNoResults", IDS_SEARCH_NO_RESULTS},
       {"searchResults", IDS_SEARCH_RESULTS},
       {"searchResultSelected", IDS_OS_SEARCH_RESULT_ROW_A11Y_RESULT_SELECTED},
-      {"searchResultNavigatedTo",
-       IDS_OS_SEARCH_RESULT_ROW_A11Y_NAVIGATED_TO_RESULT},
       {"searchResultsOne", IDS_OS_SEARCH_BOX_A11Y_ONE_RESULT},
       {"searchResultsNumber", IDS_OS_SEARCH_BOX_A11Y_RESULT_COUNT},
       // TODO(dpapad): IDS_DOWNLOAD_CLEAR_SEARCH and IDS_HISTORY_CLEAR_SEARCH
