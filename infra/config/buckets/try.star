@@ -1,35 +1,18 @@
 load('//lib/builders.star', 'cpu', 'goma', 'os', 'xcode_cache')
 load('//lib/try.star', 'try_')
-
-# Defaults that apply to all branch versions of the bucket
-
-try_.defaults.build_numbers.set(True)
-try_.defaults.configure_kitchen.set(True)
-try_.defaults.cores.set(8)
-try_.defaults.cpu.set(cpu.X86_64)
-try_.defaults.executable.set('recipe:chromium_trybot')
-try_.defaults.execution_timeout.set(4 * time.hour)
-# Max. pending time for builds. CQ considers builds pending >2h as timed
-# out: http://shortn/_8PaHsdYmlq. Keep this in sync.
-try_.defaults.expiration_timeout.set(2 * time.hour)
-try_.defaults.os.set(os.LINUX_DEFAULT)
-try_.defaults.service_account.set('chromium-try-builder@chops-service-accounts.iam.gserviceaccount.com')
-try_.defaults.swarming_tags.set(['vpython:native-python-wrapper'])
-try_.defaults.task_template_canary_percentage.set(5)
-
-try_.defaults.caches.set([
-    swarming.cache(
-        name = 'win_toolchain',
-        path = 'win_toolchain',
-    ),
-])
-
+load('//versioned/trunk/vars.star', 'vars')
 
 # Execute the versioned files to define all of the per-branch entities
 # (bucket, builders, console, cq_group, etc.)
 exec('//versioned/trunk/buckets/try.star')
 exec('//versioned/milestones/m81/buckets/try.star')
 exec('//versioned/milestones/m83/buckets/try.star')
+
+
+try_.set_defaults(
+    vars,
+    add_to_list_view = True,
+)
 
 
 # *** After this point everything is trunk only ***
@@ -47,10 +30,6 @@ exec('//versioned/milestones/m83/buckets/try.star')
     'tryserver.chromium.swangle',
     'tryserver.chromium.win',
 )]
-
-try_.defaults.add_to_list_view.set(True)
-try_.defaults.bucket.set('try')
-try_.defaults.cq_group.set('cq')
 
 
 # Builders are sorted first lexicographically by the function used to define

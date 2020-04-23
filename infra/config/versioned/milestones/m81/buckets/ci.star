@@ -1,68 +1,17 @@
-load('//lib/builders.star', 'builder_name', 'cpu', 'defaults', 'goma', 'os')
+load('//lib/builders.star', 'builder_name', 'cpu', 'goma', 'os')
 load('//lib/ci.star', 'ci')
 # Load this using relative path so that the load statement doesn't
 # need to be changed when making a new milestone
 load('../vars.star', 'vars')
 
-defaults.pool.set('luci.chromium.ci')
 
-luci.bucket(
-    name = vars.ci_bucket,
-    acls = [
-        acl.entry(
-            roles = acl.BUILDBUCKET_READER,
-            groups = 'all',
-        ),
-        acl.entry(
-            roles = acl.BUILDBUCKET_TRIGGERER,
-            groups = 'project-chromium-ci-schedulers',
-        ),
-        acl.entry(
-            roles = acl.BUILDBUCKET_OWNER,
-            groups = 'google/luci-task-force@google.com',
-        ),
-    ],
+ci.set_defaults(
+    vars,
+    bucketed_triggers = True,
+    main_console_view = vars.main_console_name,
 )
 
-luci.gitiles_poller(
-    name = vars.ci_poller,
-    bucket = vars.ci_bucket,
-    repo = 'https://chromium.googlesource.com/chromium/src',
-    refs = [vars.ref],
-)
-
-ci.main_console_view(
-    name = vars.main_console_name,
-    header = '//consoles/chromium-header.textpb',
-    repo = 'https://chromium.googlesource.com/chromium/src',
-    refs = [vars.ref],
-    title = vars.main_console_title,
-    top_level_ordering = [
-        'chromium',
-        'chromium.win',
-        'chromium.mac',
-        'chromium.linux',
-        'chromium.chromiumos',
-        'chromium.android',
-        'chrome',
-        'chromium.memory',
-        'chromium.dawn',
-        'chromium.gpu',
-        'chromium.fyi',
-        'chromium.android.fyi',
-        'chromium.clang',
-        'chromium.fuzz',
-        'chromium.gpu.fyi',
-        'chromium.swangle',
-    ],
-)
-
-
-ci.defaults.add_to_console_view.set(vars.is_master)
-ci.defaults.bucket.set(vars.ci_bucket)
-ci.defaults.bucketed_triggers.set(True)
-ci.defaults.main_console_view.set(vars.main_console_name)
-ci.defaults.triggered_by.set([vars.ci_poller])
+ci.declare_bucket(vars)
 
 
 # Builders are sorted first lexicographically by the function used to define

@@ -10,4 +10,5 @@ vars = struct(
     cq_ref_regexp = 'refs/branch-heads/4103',
     main_list_view_name = 'try-m83',
     main_list_view_title = 'Chromium M83 CQ console',
+    tree_status_host = None,
 )

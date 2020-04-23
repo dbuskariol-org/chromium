@@ -1,27 +1,18 @@
 load('//lib/builders.star', 'cpu', 'goma', 'os', 'xcode_cache')
 load('//lib/ci.star', 'ci')
-
-# Defaults that apply to all branch versions of the bucket
-
-ci.defaults.build_numbers.set(True)
-ci.defaults.configure_kitchen.set(True)
-ci.defaults.cores.set(8)
-ci.defaults.cpu.set(cpu.X86_64)
-ci.defaults.executable.set('recipe:chromium')
-ci.defaults.execution_timeout.set(3 * time.hour)
-ci.defaults.header.set('//consoles/chromium-header.textpb')
-ci.defaults.os.set(os.LINUX_DEFAULT)
-ci.defaults.repo.set('https://chromium.googlesource.com/chromium/src')
-ci.defaults.service_account.set(
-    'chromium-ci-builder@chops-service-accounts.iam.gserviceaccount.com')
-ci.defaults.swarming_tags.set(['vpython:native-python-wrapper'])
-
+load('//versioned/trunk/vars.star', 'vars')
 
 # Execute the versioned files to define all of the per-branch entities
 # (bucket, builders, console, poller, etc.)
 exec('//versioned/trunk/buckets/ci.star')
 exec('//versioned/milestones/m81/buckets/ci.star')
 exec('//versioned/milestones/m83/buckets/ci.star')
+
+
+ci.set_defaults(
+    vars,
+    add_to_console_view = True,
+)
 
 
 # *** After this point everything is trunk only ***
@@ -313,11 +304,6 @@ ci.console_view(
     ('win-chrome', 'win'),
     ('win64-chrome', 'win'),
 )]
-
-
-ci.defaults.add_to_console_view.set(True)
-ci.defaults.bucket.set('ci')
-ci.defaults.triggered_by.set(['master-gitiles-trigger'])
 
 
 # Builders are sorted first lexicographically by the function used to define

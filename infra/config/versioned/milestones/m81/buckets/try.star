@@ -1,68 +1,16 @@
-load('//lib/builders.star', 'cpu', 'defaults', 'goma', 'os')
+load('//lib/builders.star', 'cpu', 'goma', 'os')
 load('//lib/try.star', 'try_')
 # Load this using relative path so that the load statement doesn't
 # need to be changed when making a new milestone
 load('../vars.star', 'vars')
 
-defaults.pool.set('luci.chromium.try')
 
-luci.bucket(
-    name = vars.try_bucket,
-    acls = [
-        acl.entry(
-            roles = acl.BUILDBUCKET_READER,
-            groups = 'all',
-        ),
-        acl.entry(
-            roles = acl.BUILDBUCKET_TRIGGERER,
-            users = [
-                'findit-for-me@appspot.gserviceaccount.com',
-                'tricium-prod@appspot.gserviceaccount.com',
-            ],
-            groups = [
-                'project-chromium-tryjob-access',
-                # Allow Pinpoint to trigger builds for bisection
-                'service-account-chromeperf',
-                'service-account-cq',
-            ],
-        ),
-        acl.entry(
-            roles = acl.BUILDBUCKET_OWNER,
-            groups = 'service-account-chromium-tryserver',
-        ),
-    ],
+try_.declare_bucket(vars)
+
+try_.set_defaults(
+    vars,
+    main_list_view = vars.main_list_view_name,
 )
-
-luci.cq_group(
-    name = vars.cq_group,
-    cancel_stale_tryjobs = True,
-    retry_config = cq.RETRY_ALL_FAILURES,
-    watch = cq.refset(
-        repo = 'https://chromium.googlesource.com/chromium/src',
-        refs = [vars.cq_ref_regexp],
-    ),
-    acls = [
-        acl.entry(
-            acl.CQ_COMMITTER,
-            groups = 'project-chromium-committers',
-        ),
-        acl.entry(
-            acl.CQ_DRY_RUNNER,
-            groups = 'project-chromium-tryjob-access',
-        ),
-    ],
-)
-
-try_.list_view(
-    name = vars.main_list_view_name,
-    title = vars.main_list_view_title,
-)
-
-
-try_.defaults.add_to_list_view.set(vars.is_master)
-try_.defaults.bucket.set(vars.try_bucket)
-try_.defaults.cq_group.set(vars.cq_group)
-try_.defaults.main_list_view.set(vars.main_list_view_name)
 
 
 # Builders are sorted first lexicographically by the function used to define
