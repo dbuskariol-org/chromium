@@ -12,7 +12,6 @@ import org.chromium.base.ContextUtils;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.components.browser_ui.notifications.NotificationManagerProxyImpl;
-import org.chromium.components.browser_ui.notifications.channels.ChannelsInitializer;
 
 /**
  * Contains helper methods for checking if we should update channels and updating them if so.
@@ -31,24 +30,15 @@ public class ChannelsUpdater {
     }
 
     private static class LazyHolder {
-        public static final ChannelsUpdater INSTANCE;
-
-        static {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                INSTANCE = new ChannelsUpdater(false /* isAtLeastO */, null, null, -1);
-            } else {
-                // If pre-O, initialize with nulls as a small optimization to avoid getting
-                // AppContext etc when we won't need it. It's ok for these parameters to be null
-                // when mIsAtLeastO is false.
-                INSTANCE = new ChannelsUpdater(true /* isAtLeastO */,
-                        SharedPreferencesManager.getInstance(),
+        // If pre-O, initialize with nulls as a small optimization to avoid getting AppContext etc
+        // when we won't need it. It's ok for these parameters to be null when mIsAtLeastO is false.
+        public static final ChannelsUpdater INSTANCE = Build.VERSION.SDK_INT < Build.VERSION_CODES.O
+                ? new ChannelsUpdater(false /* isAtLeastO */, null, null, -1)
+                : new ChannelsUpdater(true /* isAtLeastO */, SharedPreferencesManager.getInstance(),
                         new ChannelsInitializer(new NotificationManagerProxyImpl(
                                                         ContextUtils.getApplicationContext()),
-                                ChromeChannelDefinitions.getInstance(),
                                 ContextUtils.getApplicationContext().getResources()),
-                        ChromeChannelDefinitions.CHANNELS_VERSION);
-            }
-        }
+                        ChannelDefinitions.CHANNELS_VERSION);
     }
 
     @VisibleForTesting

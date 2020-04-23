@@ -35,6 +35,7 @@ import org.chromium.chrome.R;
 import org.chromium.chrome.browser.ChromeApplication;
 import org.chromium.chrome.browser.browserservices.TrustedWebActivityClient;
 import org.chromium.chrome.browser.init.ChromeBrowserInitializer;
+import org.chromium.chrome.browser.notifications.channels.ChannelDefinitions;
 import org.chromium.chrome.browser.notifications.channels.SiteChannelsManager;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
@@ -411,7 +412,8 @@ public class NotificationPlatformBridge {
     @Nullable
     @VisibleForTesting
     static String getOriginFromChannelId(@Nullable String channelId) {
-        if (channelId == null || !SiteChannelsManager.isValidSiteChannelId(channelId)) {
+        if (channelId == null
+                || !channelId.startsWith(ChannelDefinitions.CHANNEL_ID_PREFIX_SITES)) {
             return null;
         }
         return SiteChannelsManager.toSiteOrigin(channelId);

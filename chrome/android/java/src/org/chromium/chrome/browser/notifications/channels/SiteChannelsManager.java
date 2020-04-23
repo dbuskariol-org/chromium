@@ -29,7 +29,6 @@ import java.util.List;
  */
 @TargetApi(Build.VERSION_CODES.O)
 public class SiteChannelsManager {
-    private static final String CHANNEL_ID_PREFIX_SITES = "web:";
     private static final String CHANNEL_ID_SEPARATOR = ";";
 
     private final NotificationManagerProxy mNotificationManager;
@@ -64,8 +63,7 @@ public class SiteChannelsManager {
         }
         // Channel group must be created before the channel.
         NotificationChannelGroup channelGroup =
-                ChromeChannelDefinitions.getInstance()
-                        .getChannelGroup(ChromeChannelDefinitions.ChannelGroupId.SITES)
+                ChannelDefinitions.getChannelGroup(ChannelDefinitions.ChannelGroupId.SITES)
                         .toNotificationChannelGroup(
                                 ContextUtils.getApplicationContext().getResources());
         mNotificationManager.createNotificationChannelGroup(channelGroup);
@@ -132,16 +130,17 @@ public class SiteChannelsManager {
     }
 
     private static SiteChannel toSiteChannel(NotificationChannel channel) {
-        String originAndTimestamp = channel.getId().substring(CHANNEL_ID_PREFIX_SITES.length());
+        String originAndTimestamp =
+                channel.getId().substring(ChannelDefinitions.CHANNEL_ID_PREFIX_SITES.length());
         String[] parts = originAndTimestamp.split(CHANNEL_ID_SEPARATOR);
         assert parts.length == 2;
         return new SiteChannel(channel.getId(), parts[0], Long.parseLong(parts[1]),
                 toChannelStatus(channel.getImportance()));
     }
 
-    public static boolean isValidSiteChannelId(String channelId) {
-        return channelId.startsWith(CHANNEL_ID_PREFIX_SITES)
-                && channelId.substring(CHANNEL_ID_PREFIX_SITES.length())
+    static boolean isValidSiteChannelId(String channelId) {
+        return channelId.startsWith(ChannelDefinitions.CHANNEL_ID_PREFIX_SITES)
+                && channelId.substring(ChannelDefinitions.CHANNEL_ID_PREFIX_SITES.length())
                            .contains(CHANNEL_ID_SEPARATOR);
     }
 
@@ -150,18 +149,19 @@ public class SiteChannelsManager {
      */
     @VisibleForTesting
     public static String createChannelId(String origin, long creationTime) {
-        return CHANNEL_ID_PREFIX_SITES + WebsiteAddress.create(origin).getOrigin()
-                + CHANNEL_ID_SEPARATOR + creationTime;
+        return ChannelDefinitions.CHANNEL_ID_PREFIX_SITES
+                + WebsiteAddress.create(origin).getOrigin() + CHANNEL_ID_SEPARATOR + creationTime;
     }
 
     /**
      * Converts the channel id of a notification channel to a site origin. This is only valid for
      * site notification channels, i.e. channels with ids beginning with
-     * {@link CHANNEL_ID_PREFIX_SITES}.
+     * {@link ChannelDefinitions#CHANNEL_ID_PREFIX_SITES}.
      */
     public static String toSiteOrigin(String channelId) {
-        assert channelId.startsWith(CHANNEL_ID_PREFIX_SITES);
-        return channelId.substring(CHANNEL_ID_PREFIX_SITES.length()).split(CHANNEL_ID_SEPARATOR)[0];
+        assert channelId.startsWith(ChannelDefinitions.CHANNEL_ID_PREFIX_SITES);
+        return channelId.substring(ChannelDefinitions.CHANNEL_ID_PREFIX_SITES.length())
+                .split(CHANNEL_ID_SEPARATOR)[0];
     }
 
     /**
@@ -184,6 +184,6 @@ public class SiteChannelsManager {
         if (fallbackToSitesChannel) {
             RecordHistogram.recordBooleanHistogram("Notifications.Android.SitesChannel", true);
         }
-        return fallbackToSitesChannel ? ChromeChannelDefinitions.ChannelId.SITES : channel.getId();
+        return fallbackToSitesChannel ? ChannelDefinitions.ChannelId.SITES : channel.getId();
     }
 }
