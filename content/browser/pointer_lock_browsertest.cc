@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <string>
+
 #include "content/browser/pointer_lock_browsertest.h"
 
 #include "base/test/scoped_feature_list.h"
@@ -238,14 +240,7 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest,
                    EXECUTE_SCRIPT_NO_USER_GESTURE));
 }
 
-// TODO(https://crbug.com/992529): Fix test flakiness on Windows and Linux.
-#if defined(OS_WIN) || defined(OS_LINUX)
-#define MAYBE_PointerLockEventRouting DISABLED_PointerLockEventRouting
-#else
-#define MAYBE_PointerLockEventRouting PointerLockEventRouting
-#endif
-
-IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
+IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, PointerLockEventRouting) {
   GURL main_url(embedded_test_server()->GetURL(
       "a.com", "/cross_site_iframe_factory.html?a(b)"));
   EXPECT_TRUE(NavigateToURL(shell(), main_url));
@@ -261,11 +256,28 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
 
   WaitForHitTestData(child->current_frame_host());
 
+  std::string set_mouse_move_event_listener =
+      R"code(mouseMoveExecuted = new Promise(function (resolve, reject){
+              document.addEventListener('mousemove', function(e) {
+                x = e.x; y = e.y; mX = e.movementX; mY = e.movementY;
+                resolve();
+              });
+             });)code";
+  std::string set_pointer_lock_promise =
+      R"code(pointerLockPromise=new Promise(function (resolve, reject){
+          document.addEventListener('pointerlockchange', resolve);
+          document.addEventListener('pointerlockerror', reject);
+       });)code";
+  std::string wait_for_pointer_lock_promise =
+      "(async()=> {return await pointerLockPromise.then(()=>true, "
+      "()=>false);})()";
   // Add a mouse move event listener to the root frame.
-  EXPECT_TRUE(ExecJs(
-      root,
-      "var x; var y; var mX; var mY; document.addEventListener('mousemove', "
-      "function(e) {x = e.x; y = e.y; mX = e.movementX; mY = e.movementY;});"));
+  EXPECT_TRUE(ExecJs(root,
+                     R"code(var x; var y; var mX; var mY;
+       var mouseMoveExecuted;
+       var pointerLockPromise;
+       )code"));
+  EXPECT_TRUE(ExecJs(root, set_mouse_move_event_listener));
 
   // Send a mouse move to root frame before lock to set last mouse position.
   blink::WebMouseEvent mouse_event(
@@ -279,9 +291,10 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
   mouse_event.movement_y = 9;
   router->RouteMouseEvent(root_view, &mouse_event, ui::LatencyInfo());
 
-  // Make sure that the renderer handled the input event.
-  MainThreadFrameObserver root_observer(root_view->GetRenderWidgetHost());
-  root_observer.Wait();
+  // wait for mouse move to fire mouse move event
+  EXPECT_EQ(true, EvalJs(root,
+                         "(async ()=> {return await "
+                         "mouseMoveExecuted.then(()=>true);})()"));
 
   if (base::FeatureList::IsEnabled(features::kConsolidatedMovementXY))
     EXPECT_EQ("[6,7,0,0]", EvalJs(root, "JSON.stringify([x,y,mX,mY])"));
@@ -289,10 +302,17 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
     EXPECT_EQ("[6,7,8,9]", EvalJs(root, "JSON.stringify([x,y,mX,mY])"));
 
   // Request a pointer lock on the root frame's body.
-  EXPECT_TRUE(ExecJs(root, "document.body.requestPointerLock()"));
+  // wait for requestPointerLock to finish by either firing
+  // pointerlockchange or pointerlockerror
+  EXPECT_EQ(true, EvalJs(root, set_pointer_lock_promise +
+                                   "document.body.requestPointerLock();" +
+                                   wait_for_pointer_lock_promise));
 
   // Root frame should have been granted pointer lock.
-  EXPECT_EQ(true, EvalJs(root, "document.pointerLockElement == document.body"));
+  EXPECT_EQ(true,
+            EvalJs(root, "document.pointerLockElement === document.body"));
+
+  EXPECT_TRUE(ExecJs(root, set_mouse_move_event_listener));
 
   mouse_event.SetPositionInWidget(10, 12);
   mouse_event.SetPositionInScreen(10, 12);
@@ -300,9 +320,9 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
   mouse_event.movement_y = 13;
   router->RouteMouseEvent(root_view, &mouse_event, ui::LatencyInfo());
 
-  // Make sure that the renderer handled the input event.
-  root_observer.Wait();
-
+  EXPECT_EQ(true, EvalJs(root,
+                         "(async ()=> {return await "
+                         "mouseMoveExecuted.then(()=>true);})()"));
   // Locked event has same coordinates as before locked.
   if (base::FeatureList::IsEnabled(features::kConsolidatedMovementXY))
     EXPECT_EQ("[6,7,4,5]", EvalJs(root, "JSON.stringify([x,y,mX,mY])"));
@@ -310,20 +330,20 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
     EXPECT_EQ("[6,7,12,13]", EvalJs(root, "JSON.stringify([x,y,mX,mY])"));
 
   // Release pointer lock on root frame.
-  EXPECT_TRUE(ExecJs(root, "document.exitPointerLock()"));
+  EXPECT_EQ(true, EvalJs(root, set_pointer_lock_promise +
+                                   "document.exitPointerLock();" +
+                                   wait_for_pointer_lock_promise));
 
   // Request a pointer lock on the child frame's body.
-  EXPECT_TRUE(ExecJs(child, "document.body.requestPointerLock()"));
-
+  EXPECT_EQ(true, EvalJs(child, set_pointer_lock_promise +
+                                    "document.body.requestPointerLock();" +
+                                    wait_for_pointer_lock_promise));
   // Child frame should have been granted pointer lock.
   EXPECT_EQ(true,
             EvalJs(child, "document.pointerLockElement == document.body"));
 
   // Add a mouse move event listener to the child frame.
-  EXPECT_TRUE(ExecJs(
-      child,
-      "var x; var y; var mX; var mY; document.addEventListener('mousemove', "
-      "function(e) {x = e.x; y = e.y; mX = e.movementX; mY = e.movementY;});"));
+  EXPECT_TRUE(ExecJs(child, set_mouse_move_event_listener));
 
   gfx::PointF transformed_point;
   root_view->TransformPointToCoordSpaceForView(gfx::PointF(0, 0), child_view,
@@ -339,9 +359,9 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, MAYBE_PointerLockEventRouting) {
   // responsible for correctly routing the event to the child frame.
   router->RouteMouseEvent(root_view, &mouse_event, ui::LatencyInfo());
 
-  // Make sure that the renderer handled the input event.
-  MainThreadFrameObserver child_observer(child_view->GetRenderWidgetHost());
-  child_observer.Wait();
+  EXPECT_EQ(true, EvalJs(child,
+                         "(async ()=> {return await "
+                         "mouseMoveExecuted.then(()=>true);})()"));
 
   // This is the first event to child render, so the coordinates is (0, 0)
   if (base::FeatureList::IsEnabled(features::kConsolidatedMovementXY))
