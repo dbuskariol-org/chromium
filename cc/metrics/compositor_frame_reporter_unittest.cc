@@ -10,6 +10,7 @@
 
 #include "base/strings/strcat.h"
 #include "base/test/metrics/histogram_tester.h"
+#include "base/test/simple_test_tick_clock.h"
 #include "cc/input/scroll_input_type.h"
 #include "cc/metrics/compositor_frame_reporting_controller.h"
 #include "cc/metrics/event_metrics.h"
@@ -34,16 +35,17 @@ class CompositorFrameReporterTest : public testing::Test {
             base::TimeTicks() + base::TimeDelta::FromMilliseconds(16),
             nullptr,
             /*should_report_metrics=*/true)) {
+    pipeline_reporter_->set_tick_clock(&test_tick_clock_);
     AdvanceNowByMs(1);
   }
 
  protected:
   base::TimeTicks AdvanceNowByMs(int advance_ms) {
-    now_ += base::TimeDelta::FromMicroseconds(advance_ms);
-    return now_;
+    test_tick_clock_.Advance(base::TimeDelta::FromMicroseconds(advance_ms));
+    return test_tick_clock_.NowTicks();
   }
 
-  base::TimeTicks Now() { return now_; }
+  base::TimeTicks Now() { return test_tick_clock_.NowTicks(); }
 
   viz::FrameTimingDetails BuildFrameTimingDetails() {
     viz::FrameTimingDetails frame_timing_details;
@@ -56,10 +58,11 @@ class CompositorFrameReporterTest : public testing::Test {
     return frame_timing_details;
   }
 
-  std::unique_ptr<CompositorFrameReporter> pipeline_reporter_;
+  // This should be defined before |pipeline_reporter_| so it is created before
+  // and destroyed after that.
+  base::SimpleTestTickClock test_tick_clock_;
 
- private:
-  base::TimeTicks now_;
+  std::unique_ptr<CompositorFrameReporter> pipeline_reporter_;
 };
 
 TEST_F(CompositorFrameReporterTest, MainFrameAbortedReportingTest) {

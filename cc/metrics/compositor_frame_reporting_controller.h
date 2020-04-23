@@ -79,6 +79,7 @@ class CC_EXPORT CompositorFrameReportingController {
   virtual void RemoveActiveTracker(FrameSequenceTrackerType type);
 
   void set_tick_clock(const base::TickClock* tick_clock) {
+    DCHECK(tick_clock);
     tick_clock_ = tick_clock;
   }
 
