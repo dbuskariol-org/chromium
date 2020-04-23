@@ -120,14 +120,6 @@ source_set("tests") {
       ]
     }
   }
-
-  if (is_win) {
-    sources +=
-        [ "public/cpp/stack_sampling/loader_lock_sampler_win_unittest.cc" ]
-
-    deps += [ ":loader_lock_sampler_test_strings" ]
-    data_deps = [ ":loader_lock_sampler_test_dll" ]
-  }
 }
 
 if (is_android) {
@@ -140,24 +132,5 @@ if (is_android) {
     testonly = true
     deps = [ "//base:base_java" ]
     sources = [ "android/test/src/org/chromium/tracing/UnwindTestHelper.java" ]
-  }
-}
-
-if (is_win) {
-  source_set("loader_lock_sampler_test_strings") {
-    testonly = true
-
-    sources = [
-      "public/cpp/stack_sampling/loader_lock_sampler_test_strings.cc",
-      "public/cpp/stack_sampling/loader_lock_sampler_test_strings.h",
-    ]
-  }
-
-  loadable_module("loader_lock_sampler_test_dll") {
-    testonly = true
-
-    sources = [ "public/cpp/stack_sampling/loader_lock_sampler_test_dll.cc" ]
-
-    deps = [ ":loader_lock_sampler_test_strings" ]
   }
 }
