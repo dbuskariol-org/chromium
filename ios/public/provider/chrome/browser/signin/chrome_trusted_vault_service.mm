@@ -16,10 +16,4 @@ ChromeTrustedVaultService::ChromeTrustedVaultService() {}
 
 ChromeTrustedVaultService::~ChromeTrustedVaultService() {}
 
-void ChromeTrustedVaultService::FetchKeys(
-    ChromeIdentity* chrome_identity,
-    base::OnceCallback<void(const TrustedVaultSharedKeyList&)> callback) {
-  NOTREACHED();
-}
-
 }  // namespace ios
