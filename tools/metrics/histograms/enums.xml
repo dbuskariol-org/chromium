@@ -42212,6 +42212,22 @@ from previous Chrome versions.
   <int value="3" label="Fetch failed because the document origin is opaque"/>
 </enum>
 
+<enum name="ManifestInvalidError">
+  <int value="0" label="XML Parsing failed"/>
+  <int value="1" label="Invalid xlmns on gupdate tag"/>
+  <int value="2" label="Missing gupdate tag"/>
+  <int value="3" label="Invalid protocol on gupdate tag"/>
+  <int value="4" label="Missing app id"/>
+  <int value="5" label="Missing update check tags"/>
+  <int value="6" label="Multiple update check tags"/>
+  <int value="7" label="Invalid Prodversion min"/>
+  <int value="8" label="Empty codebase url"/>
+  <int value="9" label="Invalid codebase url"/>
+  <int value="10" label="Missing version for update check"/>
+  <int value="11" label="Invalid version"/>
+  <int value="12" label="Bad Update specification"/>
+</enum>
+
 <enum name="MappedCSSProperties">
 <!-- Generated from third_party/blink/public/mojom/use_counter/css_property_id.mojom.
 Called by update_use_counter_css.py.-->
