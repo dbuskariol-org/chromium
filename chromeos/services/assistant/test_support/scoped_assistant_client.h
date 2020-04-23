@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMEOS_SERVICES_ASSISTANT_TEST_SUPPORT_FAKE_CLIENT_H_
-#define CHROMEOS_SERVICES_ASSISTANT_TEST_SUPPORT_FAKE_CLIENT_H_
+#ifndef CHROMEOS_SERVICES_ASSISTANT_TEST_SUPPORT_SCOPED_ASSISTANT_CLIENT_H_
+#define CHROMEOS_SERVICES_ASSISTANT_TEST_SUPPORT_SCOPED_ASSISTANT_CLIENT_H_
 
 #include "base/macros.h"
+#include "chromeos/services/assistant/public/cpp/assistant_client.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/receiver.h"
@@ -13,19 +14,15 @@
 namespace chromeos {
 namespace assistant {
 
-// A base testing implementation of the Client interface which tests can
-// subclass to implement specific client mocking support.
-class FakeClient : public mojom::Client {
+// A base testing implementation of the AssistantClient interface which tests
+// can subclass to implement specific client mocking support. It also installs
+// itself as the singleton instance.
+class ScopedAssistantClient : AssistantClient {
  public:
-  FakeClient();
-  ~FakeClient() override;
+  ScopedAssistantClient();
+  ~ScopedAssistantClient() override;
 
-  mojo::PendingRemote<mojom::Client> MakeRemote() {
-    return receiver_.BindNewPipeAndPassRemote();
-  }
-
- protected:
-  // mojom::Client implementation:
+  // AssistantClient implementation:
   void OnAssistantStatusChanged(ash::mojom::AssistantState new_state) override {
   }
   void RequestAssistantController(
@@ -64,14 +61,9 @@ class FakeClient : public mojom::Client {
   void RequestNetworkConfig(
       mojo::PendingReceiver<network_config::mojom::CrosNetworkConfig> receiver)
       override {}
-
- private:
-  mojo::Receiver<mojom::Client> receiver_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(FakeClient);
 };
 
 }  // namespace assistant
 }  // namespace chromeos
 
-#endif  // CHROMEOS_SERVICES_ASSISTANT_TEST_SUPPORT_FAKE_CLIENT_H_
+#endif  // CHROMEOS_SERVICES_ASSISTANT_TEST_SUPPORT_SCOPED_ASSISTANT_CLIENT_H_

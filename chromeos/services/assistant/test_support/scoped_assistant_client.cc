@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chromeos/services/assistant/test_support/fake_client.h"
+#include "chromeos/services/assistant/test_support/scoped_assistant_client.h"
 
 namespace chromeos {
 namespace assistant {
 
-FakeClient::FakeClient() = default;
+ScopedAssistantClient::ScopedAssistantClient() = default;
 
-FakeClient::~FakeClient() = default;
+ScopedAssistantClient::~ScopedAssistantClient() = default;
 
 }  // namespace assistant
 }  // namespace chromeos
