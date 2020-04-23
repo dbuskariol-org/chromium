@@ -60,6 +60,7 @@ source_set("chromeos") {
     ":reporting_constants_proto",
     ":reporting_record_proto",
     ":screen_brightness_event_proto",
+    ":status_proto",
     ":user_activity_event_proto",
     ":user_charging_event_proto",
     "crostini:crostini_installer_types_mojom",
@@ -3271,6 +3272,7 @@ source_set("unit_tests") {
   deps = [
     ":arc_test_support",
     ":attestation_proto",
+    ":status_proto",
     ":test_support",
     ":user_activity_event_proto",
     "//ash",
@@ -3422,6 +3424,11 @@ proto_library("reporting_record_proto") {
 
 proto_library("reporting_constants_proto") {
   sources = [ "policy/messaging_layer/public/record_constants.proto" ]
+}
+
+proto_library("status_proto") {
+  sources = [ "policy/messaging_layer/util/status.proto" ]
+  generate_python = false
 }
 
 device_policy_remover_path = "$target_gen_dir/device_policy_remover.cc"
