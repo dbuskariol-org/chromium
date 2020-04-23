@@ -107,6 +107,8 @@ using ::testing::ReturnRef;
 
 namespace em = enterprise_management;
 
+namespace cros_healthd = chromeos::cros_healthd::mojom;
+
 namespace {
 
 // Test values for cros_healthd:
@@ -141,9 +143,8 @@ constexpr char kFakeBatteryStatus[] = "fake_battery_status";
 constexpr char kFakeSkuNumber[] = "fake_sku_number";
 // CPU test values:
 constexpr char kFakeModelName[] = "fake_cpu_model_name";
-constexpr chromeos::cros_healthd::mojom::CpuArchitectureEnum
-    kFakeMojoArchitecture =
-        chromeos::cros_healthd::mojom::CpuArchitectureEnum::kX86_64;
+constexpr cros_healthd::CpuArchitectureEnum kFakeMojoArchitecture =
+    cros_healthd::CpuArchitectureEnum::kX86_64;
 constexpr em::CpuInfo::Architecture kFakeProtoArchitecture =
     em::CpuInfo::X86_64;
 constexpr uint32_t kFakeMaxClockSpeed = 3400000;
@@ -435,74 +436,71 @@ em::StatefulPartitionInfo GetFakeStatefulPartitionInfo(
 
 void GetEmptyCrosHealthdData(
     policy::DeviceStatusCollector::CrosHealthdDataReceiver receiver) {
-  chromeos::cros_healthd::mojom::TelemetryInfoPtr empty_info;
+  cros_healthd::TelemetryInfoPtr empty_info;
   base::circular_deque<std::unique_ptr<policy::SampledData>> empty_samples;
   std::move(receiver).Run(std::move(empty_info), empty_samples);
 }
 
-void GetFakeCrosHealthdData(
-    policy::DeviceStatusCollector::CrosHealthdDataReceiver receiver) {
-  // Create fake TelemetryInfo.
-  auto battery_result =
-      chromeos::cros_healthd::mojom::BatteryResult::NewBatteryInfo(
-          chromeos::cros_healthd::mojom::BatteryInfo::New(
-              kFakeBatteryCycleCount, kFakeBatteryVoltageNow,
-              kFakeBatteryVendor, kFakeBatterySerial,
-              kFakeBatteryChargeFullDesign, kFakeBatteryChargeFull,
-              kFakeBatteryVoltageMinDesign, kFakeBatteryModel,
-              kFakeBatteryChargeNow, kFakeBatteryCurrentNow,
-              kFakeBatteryTechnology, kFakeBatteryStatus,
-              kFakeSmartBatteryManufactureDate,
-              chromeos::cros_healthd::mojom::UInt64Value::New(
-                  kFakeSmartBatteryTemperature)));
-  auto vpd_result = chromeos::cros_healthd::mojom::CachedVpdResult::NewVpdInfo(
-      chromeos::cros_healthd::mojom::CachedVpdInfo::New(kFakeSkuNumber));
-  chromeos::cros_healthd::mojom::CpuInfo cpu_info(
-      kFakeModelName, kFakeMojoArchitecture, kFakeMaxClockSpeed);
-  std::vector<chromeos::cros_healthd::mojom::CpuInfoPtr> cpu_vector;
-  cpu_vector.push_back(cpu_info.Clone());
-  auto cpu_result = chromeos::cros_healthd::mojom::CpuResult::NewCpuInfo(
-      std::move(cpu_vector));
-  chromeos::cros_healthd::mojom::NonRemovableBlockDeviceInfo storage_info(
-      kFakeStoragePath, kFakeStorageSize, kFakeStorageType, kFakeStorageManfid,
-      kFakeStorageName, kFakeStorageSerial);
-  std::vector<chromeos::cros_healthd::mojom::NonRemovableBlockDeviceInfoPtr>
-      storage_vector;
-  storage_vector.push_back(storage_info.Clone());
-  auto block_device_result =
-      chromeos::cros_healthd::mojom::NonRemovableBlockDeviceResult::
-          NewBlockDeviceInfo(std::move(storage_vector));
-  base::Optional<std::vector<
-      chromeos::cros_healthd::mojom::NonRemovableBlockDeviceInfoPtr>>
-      block_device_info(std::move(storage_vector));
-  auto timezone_result =
-      chromeos::cros_healthd::mojom::TimezoneResult::NewTimezoneInfo(
-          chromeos::cros_healthd::mojom::TimezoneInfo::New(kPosixTimezone,
-                                                           kTimezoneRegion));
-  auto memory_result =
-      chromeos::cros_healthd::mojom::MemoryResult::NewMemoryInfo(
-          chromeos::cros_healthd::mojom::MemoryInfo::New(
-              kFakeTotalMemory, kFakeFreeMemory, kFakeAvailableMemory,
-              kFakePageFaults));
-  std::vector<chromeos::cros_healthd::mojom::BacklightInfoPtr> backlight_vector;
-  chromeos::cros_healthd::mojom::BacklightInfo backlight_info(
-      kFakeBacklightPath, kFakeMaxBrightness, kFakeBrightness);
-  backlight_vector.push_back(backlight_info.Clone());
-  auto backlight_result =
-      chromeos::cros_healthd::mojom::BacklightResult::NewBacklightInfo(
-          std::move(backlight_vector));
-  std::vector<chromeos::cros_healthd::mojom::FanInfoPtr> fan_vector;
-  chromeos::cros_healthd::mojom::FanInfo fan_info(kFakeSpeedRpm);
-  fan_vector.push_back(fan_info.Clone());
-  auto fan_result = chromeos::cros_healthd::mojom::FanResult::NewFanInfo(
-      std::move(fan_vector));
-  chromeos::cros_healthd::mojom::TelemetryInfo fake_info(
-      std::move(battery_result), std::move(block_device_result),
-      std::move(vpd_result), std::move(cpu_result), std::move(timezone_result),
-      std::move(memory_result), std::move(backlight_result),
-      std::move(fan_result));
+cros_healthd::BatteryResultPtr CreateBatteryResult() {
+  return cros_healthd::BatteryResult::NewBatteryInfo(
+      cros_healthd::BatteryInfo::New(
+          kFakeBatteryCycleCount, kFakeBatteryVoltageNow, kFakeBatteryVendor,
+          kFakeBatterySerial, kFakeBatteryChargeFullDesign,
+          kFakeBatteryChargeFull, kFakeBatteryVoltageMinDesign,
+          kFakeBatteryModel, kFakeBatteryChargeNow, kFakeBatteryCurrentNow,
+          kFakeBatteryTechnology, kFakeBatteryStatus,
+          kFakeSmartBatteryManufactureDate,
+          cros_healthd::UInt64Value::New(kFakeSmartBatteryTemperature)));
+}
 
-  // Create fake SampledData.
+cros_healthd::NonRemovableBlockDeviceResultPtr CreateBlockDeviceResult() {
+  std::vector<cros_healthd::NonRemovableBlockDeviceInfoPtr> storage_vector;
+  storage_vector.push_back(cros_healthd::NonRemovableBlockDeviceInfo::New(
+      kFakeStoragePath, kFakeStorageSize, kFakeStorageType, kFakeStorageManfid,
+      kFakeStorageName, kFakeStorageSerial));
+  return cros_healthd::NonRemovableBlockDeviceResult::NewBlockDeviceInfo(
+      std::move(storage_vector));
+}
+
+cros_healthd::CachedVpdResultPtr CreateVpdResult() {
+  return cros_healthd::CachedVpdResult::NewVpdInfo(
+      cros_healthd::CachedVpdInfo::New(kFakeSkuNumber));
+}
+
+cros_healthd::CpuResultPtr CreateCpuResult() {
+  std::vector<cros_healthd::CpuInfoPtr> cpu_vector;
+  cpu_vector.push_back(cros_healthd::CpuInfo::New(
+      kFakeModelName, kFakeMojoArchitecture, kFakeMaxClockSpeed));
+  return cros_healthd::CpuResult::NewCpuInfo(std::move(cpu_vector));
+}
+
+cros_healthd::TimezoneResultPtr CreateTimezoneResult() {
+  return cros_healthd::TimezoneResult::NewTimezoneInfo(
+      cros_healthd::TimezoneInfo::New(kPosixTimezone, kTimezoneRegion));
+}
+
+cros_healthd::MemoryResultPtr CreateMemoryResult() {
+  return cros_healthd::MemoryResult::NewMemoryInfo(
+      cros_healthd::MemoryInfo::New(kFakeTotalMemory, kFakeFreeMemory,
+                                    kFakeAvailableMemory, kFakePageFaults));
+}
+
+cros_healthd::BacklightResultPtr CreateBacklightResult() {
+  std::vector<cros_healthd::BacklightInfoPtr> backlight_vector;
+  backlight_vector.push_back(cros_healthd::BacklightInfo::New(
+      kFakeBacklightPath, kFakeMaxBrightness, kFakeBrightness));
+  return cros_healthd::BacklightResult::NewBacklightInfo(
+      std::move(backlight_vector));
+}
+
+cros_healthd::FanResultPtr CreateFanResult() {
+  std::vector<cros_healthd::FanInfoPtr> fan_vector;
+  fan_vector.push_back(cros_healthd::FanInfo::New(kFakeSpeedRpm));
+  return cros_healthd::FanResult::NewFanInfo(std::move(fan_vector));
+}
+
+base::circular_deque<std::unique_ptr<policy::SampledData>>
+CreateFakeSampleData() {
   em::CPUTempInfo fake_cpu_temp_sample;
   fake_cpu_temp_sample.set_cpu_label(kFakeCpuLabel);
   fake_cpu_temp_sample.set_cpu_temp(kFakeCpuTemp);
@@ -518,8 +516,17 @@ void GetFakeCrosHealthdData(
   sample->battery_samples[kFakeBatteryModel] = fake_battery_sample;
   base::circular_deque<std::unique_ptr<policy::SampledData>> samples;
   samples.push_back(std::move(sample));
+  return samples;
+}
 
-  std::move(receiver).Run(fake_info.Clone(), samples);
+void GetFakeCrosHealthdData(
+    policy::DeviceStatusCollector::CrosHealthdDataReceiver receiver) {
+  cros_healthd::TelemetryInfo fake_info(
+      CreateBatteryResult(), CreateBlockDeviceResult(), CreateVpdResult(),
+      CreateCpuResult(), CreateTimezoneResult(), CreateMemoryResult(),
+      CreateBacklightResult(), CreateFanResult());
+
+  std::move(receiver).Run(fake_info.Clone(), CreateFakeSampleData());
 }
 
 void GetEmptyGraphicsStatus(
