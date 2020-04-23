@@ -3102,6 +3102,8 @@ TEST_P(PaintArtifactCompositorTest, SynthesizedClipRotatedNotSupported) {
   EXPECT_TRUE(mask_isolation_0.HasRenderSurface());
 
   EXPECT_EQ(SynthesizedClipLayerAt(0), clip_mask0);
+  EXPECT_TRUE(clip_mask0->DrawsContent());
+  EXPECT_TRUE(clip_mask0->HitTestable());
   EXPECT_EQ(gfx::Size(300, 200), clip_mask0->bounds());
   EXPECT_EQ(c1_id, clip_mask0->clip_tree_index());
   int mask_effect_0_id = clip_mask0->effect_tree_index();
@@ -3196,6 +3198,8 @@ TEST_P(PaintArtifactCompositorTest,
   EXPECT_TRUE(mask_isolation_0.HasRenderSurface());
 
   EXPECT_EQ(SynthesizedClipLayerAt(0), clip_mask0);
+  EXPECT_TRUE(clip_mask0->DrawsContent());
+  EXPECT_TRUE(clip_mask0->HitTestable());
   EXPECT_EQ(gfx::Size(300, 200), clip_mask0->bounds());
   EXPECT_EQ(c1_id, clip_mask0->clip_tree_index());
   int mask_effect_0_id = clip_mask0->effect_tree_index();

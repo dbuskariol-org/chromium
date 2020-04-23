@@ -975,6 +975,7 @@ void SynthesizedClip::UpdateLayer(bool needs_layer,
   if (!layer_) {
     layer_ = cc::PictureLayer::Create(this);
     layer_->SetIsDrawable(true);
+    layer_->SetHitTestable(true);
   }
 
   const RefCountedPath* path = clip.ClipPath();
@@ -1065,6 +1066,8 @@ SynthesizedClip& PaintArtifactCompositor::CreateOrReuseSynthesizedClipLayer(
   if (needs_layer) {
     synthesized_clip.UpdateLayer(needs_layer, clip, transform);
     synthesized_clip.Layer()->SetLayerTreeHost(root_layer_->layer_tree_host());
+    if (layer_debug_info_enabled_ && !synthesized_clip.Layer()->debug_info())
+      synthesized_clip.Layer()->SetDebugName("Synthesized Clip");
   }
   mask_isolation_id = synthesized_clip.GetMaskIsolationId();
   mask_effect_id = synthesized_clip.GetMaskEffectId();
