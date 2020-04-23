@@ -74,8 +74,7 @@ mojom::RoutineUpdatePtr MakeNonInteractiveRoutineUpdate() {
       /*output=*/mojo::ScopedHandle(), update_union.Clone());
 }
 
-base::Optional<std::vector<mojom::NonRemovableBlockDeviceInfoPtr>>
-MakeNonRemovableBlockDeviceInfo() {
+mojom::NonRemovableBlockDeviceResultPtr MakeNonRemovableBlockDeviceResult() {
   std::vector<mojom::NonRemovableBlockDeviceInfoPtr> info;
   info.push_back(mojom::NonRemovableBlockDeviceInfo::New(
       "test_path", 123 /* size */, "test_type", 10 /* manfid */, "test_name",
@@ -83,7 +82,7 @@ MakeNonRemovableBlockDeviceInfo() {
   info.push_back(mojom::NonRemovableBlockDeviceInfo::New(
       "test_path2", 124 /* size */, "test_type2", 11 /* manfid */, "test_name2",
       767 /* serial */));
-  return base::Optional<std::vector<mojom::NonRemovableBlockDeviceInfoPtr>>(
+  return mojom::NonRemovableBlockDeviceResult::NewBlockDeviceInfo(
       std::move(info));
 }
 
@@ -149,7 +148,7 @@ mojom::FanResultPtr MakeFanResult() {
 mojom::TelemetryInfoPtr MakeTelemetryInfo() {
   return mojom::TelemetryInfo::New(
       MakeBatteryInfo() /* battery_info */,
-      MakeNonRemovableBlockDeviceInfo() /* block_device_info */,
+      MakeNonRemovableBlockDeviceResult() /* block_device_result */,
       MakeCachedVpdResult() /* vpd_result */, MakeCpuResult() /* cpu_result */,
       MakeTimezoneResult() /* timezone_result */,
       MakeMemoryResult() /* memory_result */,

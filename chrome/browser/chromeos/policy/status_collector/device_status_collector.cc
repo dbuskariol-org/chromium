@@ -833,18 +833,25 @@ class DeviceStatusCollectorState : public StatusCollectorState {
     if (probe_result.is_null())
       return;
 
-    const auto& block_device_info = probe_result->block_device_info;
-    if (block_device_info) {
-      em::StorageStatus* const storage_status_out =
-          response_params_.device_status->mutable_storage_status();
-      for (const auto& storage : block_device_info.value()) {
-        em::DiskInfo* const disk_info_out = storage_status_out->add_disks();
-        disk_info_out->set_serial(base::NumberToString(storage->serial));
-        disk_info_out->set_manufacturer(
-            base::NumberToString(storage->manufacturer_id));
-        disk_info_out->set_model(storage->name);
-        disk_info_out->set_type(storage->type);
-        disk_info_out->set_size(storage->size);
+    // Process NonRemovableBlockDeviceResult.
+    const auto& block_device_result = probe_result->block_device_result;
+    if (!block_device_result.is_null()) {
+      if (block_device_result->is_error()) {
+        LOG(ERROR) << "cros_healthd: Error getting block device info: "
+                   << block_device_result->get_error()->msg;
+      } else {
+        em::StorageStatus* const storage_status_out =
+            response_params_.device_status->mutable_storage_status();
+        for (const auto& storage :
+             block_device_result->get_block_device_info()) {
+          em::DiskInfo* const disk_info_out = storage_status_out->add_disks();
+          disk_info_out->set_serial(base::NumberToString(storage->serial));
+          disk_info_out->set_manufacturer(
+              base::NumberToString(storage->manufacturer_id));
+          disk_info_out->set_model(storage->name);
+          disk_info_out->set_type(storage->type);
+          disk_info_out->set_size(storage->size);
+        }
       }
     }
 

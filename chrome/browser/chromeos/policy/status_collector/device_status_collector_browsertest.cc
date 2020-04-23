@@ -465,6 +465,9 @@ void GetFakeCrosHealthdData(
   std::vector<chromeos::cros_healthd::mojom::NonRemovableBlockDeviceInfoPtr>
       storage_vector;
   storage_vector.push_back(storage_info.Clone());
+  auto block_device_result =
+      chromeos::cros_healthd::mojom::NonRemovableBlockDeviceResult::
+          NewBlockDeviceInfo(std::move(storage_vector));
   base::Optional<std::vector<
       chromeos::cros_healthd::mojom::NonRemovableBlockDeviceInfoPtr>>
       block_device_info(std::move(storage_vector));
@@ -490,8 +493,8 @@ void GetFakeCrosHealthdData(
   auto fan_result = chromeos::cros_healthd::mojom::FanResult::NewFanInfo(
       std::move(fan_vector));
   chromeos::cros_healthd::mojom::TelemetryInfo fake_info(
-      battery_info.Clone(), std::move(block_device_info), std::move(vpd_result),
-      std::move(cpu_result), std::move(timezone_result),
+      battery_info.Clone(), std::move(block_device_result),
+      std::move(vpd_result), std::move(cpu_result), std::move(timezone_result),
       std::move(memory_result), std::move(backlight_result),
       std::move(fan_result));
 
