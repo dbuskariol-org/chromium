@@ -706,34 +706,44 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTest, PointerLockOutOfFocus) {
 }
 #endif
 
-// Flaky. https://crbug.com/1014324
 IN_PROC_BROWSER_TEST_F(PointerLockBrowserTestWithOptions,
-                       DISABLED_PointerLockRequestUnadjustedMovement) {
+                       PointerLockRequestUnadjustedMovement) {
   GURL main_url(embedded_test_server()->GetURL(
       "a.com", "/cross_site_iframe_factory.html?a(b)"));
   EXPECT_TRUE(NavigateToURL(shell(), main_url));
 
   FrameTreeNode* root = web_contents()->GetFrameTree()->root();
 
-  EXPECT_TRUE(ExecJs(root,
-                     "var PointerLockErrorReceived=false;"
-                     "document.addEventListener('pointerlockerror', "
-                     "function() {PointerLockErrorReceived = true;});"));
+  EXPECT_TRUE(ExecJs(root, "var pointerLockPromise;"));
+  std::string wait_for_pointer_lock_promise =
+      "(async ()=> {return await pointerLockPromise.then(()=>true, "
+      "()=>false);})()";
+  std::string set_pointer_lock_promise =
+      R"code(pointerLockPromise = new Promise( function(resolve, reject){
+                        document.addEventListener('pointerlockchange', resolve);
+                        document.addEventListener('pointerlockerror', reject)
+                     });)code";
+
   // Request a pointer lock.
-  EXPECT_TRUE(ExecJs(root, "document.body.requestPointerLock()"));
+  EXPECT_EQ(true, EvalJs(root, set_pointer_lock_promise +
+                                   "document.body.requestPointerLock();" +
+                                   wait_for_pointer_lock_promise));
   // Root frame should have been granted pointer lock.
   EXPECT_EQ(true, EvalJs(root, "document.pointerLockElement == document.body"));
   // Mouse is locked and unadjusted_movement is not set.
   EXPECT_TRUE(root->current_frame_host()->GetView()->IsMouseLocked());
-  // Release pointer lock.
-  EXPECT_TRUE(ExecJs(root, "document.exitPointerLock()"));
 
-  EXPECT_EQ("false", EvalJs(root, "JSON.stringify(PointerLockErrorReceived)"));
+  // Release pointer lock.
+  EXPECT_EQ(true, EvalJs(root, set_pointer_lock_promise +
+                                   "document.exitPointerLock();" +
+                                   wait_for_pointer_lock_promise));
 
   // Request a pointer lock with unadjustedMovement.
   EXPECT_TRUE(ExecJs(
-      root, "document.body.requestPointerLock({unadjustedMovement:true})"));
+      root, set_pointer_lock_promise +
+                "document.body.requestPointerLock({unadjustedMovement:true})"));
 #if defined(USE_AURA)
+  EXPECT_EQ(true, EvalJs(root, wait_for_pointer_lock_promise));
   // Root frame should have been granted pointer lock.
   EXPECT_EQ(true, EvalJs(root, "document.pointerLockElement == document.body"));
   // Mouse is locked and unadjusted_movement is set.
@@ -743,15 +753,17 @@ IN_PROC_BROWSER_TEST_F(PointerLockBrowserTestWithOptions,
                   ->GetIsMouseLockedUnadjustedMovementForTesting());
 
   // Release pointer lock, unadjusted_movement bit is reset.
-  EXPECT_TRUE(ExecJs(root, "document.exitPointerLock()"));
+  EXPECT_EQ(true, EvalJs(root, set_pointer_lock_promise +
+                                   "document.exitPointerLock();" +
+                                   wait_for_pointer_lock_promise));
   EXPECT_FALSE(root->current_frame_host()
                    ->GetView()
                    ->GetIsMouseLockedUnadjustedMovementForTesting());
 #else
   // On platform that does not support unadjusted movement yet, do not lock and
   // a pointerlockerror event is dispatched.
+  EXPECT_EQ(false, EvalJs(root, wait_for_pointer_lock_promise));
   EXPECT_FALSE(root->current_frame_host()->GetView()->IsMouseLocked());
-  EXPECT_EQ("true", EvalJs(root, "JSON.stringify(PointerLockErrorReceived)"));
 #endif
 }
 
