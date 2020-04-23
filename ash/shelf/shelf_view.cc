@@ -1562,19 +1562,20 @@ bool ShelfView::ShouldFocusOut(bool reverse, views::View* button) {
 }
 
 std::pair<int, int> ShelfView::GetDragRange(int index) {
-  int min_index = -1;
-  int max_index = -1;
-  ShelfItemType type = model_->items()[index].type;
-  for (int i = 0; i < model_->item_count(); ++i) {
-    if (SameDragType(model_->items()[i].type, type)) {
-      if (min_index == -1)
-        min_index = i;
-      max_index = i;
-    }
-  }
-  min_index = std::max(min_index, 0);
-  max_index = std::min(max_index, last_visible_index_);
-  return std::pair<int, int>(min_index, max_index);
+  const ShelfItemType type = model_->items()[index].type;
+  const auto same_drag_type = [this, type](const ShelfItem& item) {
+    return SameDragType(item.type, type);
+  };
+  const auto begin_iter = model_->items().cbegin();
+  const auto end_iter = model_->items().cend();
+  const auto min_iter = std::find_if(begin_iter, end_iter, same_drag_type);
+  DCHECK(min_iter != end_iter);
+  const auto max_iter = std::prev(
+      std::find_if_not(std::next(min_iter), end_iter, same_drag_type));
+  DCHECK(max_iter != end_iter);
+  return std::make_pair(
+      static_cast<int>(min_iter - begin_iter),
+      std::min(static_cast<int>(max_iter - begin_iter), last_visible_index_));
 }
 
 void ShelfView::OnFadeInAnimationEnded() {
