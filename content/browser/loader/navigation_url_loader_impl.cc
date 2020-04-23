@@ -41,8 +41,8 @@
 #include "content/browser/service_worker/service_worker_container_host.h"
 #include "content/browser/service_worker/service_worker_main_resource_handle.h"
 #include "content/browser/service_worker/service_worker_main_resource_handle_core.h"
+#include "content/browser/service_worker/service_worker_navigation_loader_interceptor.h"
 #include "content/browser/service_worker/service_worker_provider_host.h"
-#include "content/browser/service_worker/service_worker_request_handler.h"
 #include "content/browser/storage_partition_impl.h"
 #include "content/browser/url_loader_factory_getter.h"
 #include "content/browser/web_contents/web_contents_impl.h"
@@ -498,8 +498,8 @@ class NavigationURLLoaderImpl::URLLoaderRequestController
 
     // Set up an interceptor for service workers.
     if (service_worker_handle_) {
-      std::unique_ptr<NavigationLoaderInterceptor> service_worker_interceptor =
-          ServiceWorkerRequestHandler::CreateForNavigation(
+      auto service_worker_interceptor =
+          ServiceWorkerNavigationLoaderInterceptor::CreateForNavigation(
               resource_request_->url, service_worker_handle_->AsWeakPtr(),
               *request_info);
       // The interceptor may not be created in certain cases (e.g., the origin
