@@ -53,8 +53,8 @@ class ServiceWorkerRequestHandlerTest : public testing::Test {
  protected:
   void InitializeHandlerForNavigationSimpleTest(const std::string& url,
                                                 bool expected_handler_created) {
-    auto navigation_handle =
-        std::make_unique<ServiceWorkerMainResourceHandle>(context_wrapper());
+    auto navigation_handle = std::make_unique<ServiceWorkerMainResourceHandle>(
+        context_wrapper(), base::DoNothing());
     GURL gurl(url);
     auto begin_params = mojom::BeginNavigationParams::New();
     begin_params->request_context_type =

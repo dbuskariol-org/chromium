@@ -137,7 +137,8 @@ void MaybeCreateLoaderOnCoreThread(
     handle_core->set_interceptor(
         std::make_unique<ServiceWorkerControlleeRequestHandler>(
             context_core->AsWeakPtr(), container_host, params.resource_type,
-            params.skip_service_worker));
+            params.skip_service_worker,
+            handle_core->service_worker_accessed_callback()));
   }
 
   // If |initialize_container_host_only| is true, we have already determined
