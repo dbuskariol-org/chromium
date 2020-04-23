@@ -314,16 +314,6 @@ void ChromePasswordManagerClient::PostHSTSQueryForHost(
       std::move(callback));
 }
 
-bool ChromePasswordManagerClient::OnCredentialManagerUsed() {
-  prerender::PrerenderContents* prerender_contents =
-      prerender::PrerenderContents::FromWebContents(web_contents());
-  if (prerender_contents) {
-    prerender_contents->Destroy(prerender::FINAL_STATUS_CREDENTIAL_MANAGER_API);
-    return false;
-  }
-  return true;
-}
-
 bool ChromePasswordManagerClient::PromptUserToSaveOrUpdatePassword(
     std::unique_ptr<password_manager::PasswordFormManagerForUI> form_to_save,
     bool update_password) {
