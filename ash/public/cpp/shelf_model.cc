@@ -232,6 +232,16 @@ void ShelfModel::OnItemStatusChanged(const ShelfID& id) {
     observer.ShelfItemStatusChanged(id);
 }
 
+void ShelfModel::OnItemRippedOff() {
+  for (auto& observer : observers_)
+    observer.ShelfItemRippedOff();
+}
+
+void ShelfModel::OnItemReturnedFromRipOff(int index) {
+  for (auto& observer : observers_)
+    observer.ShelfItemReturnedFromRipOff(index);
+}
+
 void ShelfModel::RemoveNotificationRecord(const std::string& notification_id) {
   auto notification_id_it = notification_id_to_app_id_.find(notification_id);
 

@@ -1301,6 +1301,8 @@ void ShelfView::ContinueDrag(const ui::LocatedEvent& event) {
   DCHECK(drag_view_);
   DCHECK_NE(-1, view_model_->GetIndexOfView(drag_view_));
 
+  const bool dragged_off_shelf_before = dragged_off_shelf_;
+
   // Handle rip off functionality if this is not a drag and drop host operation
   // and not the app list item.
   if (drag_and_drop_shelf_id_.IsNull() &&
@@ -1312,6 +1314,8 @@ void ShelfView::ContinueDrag(const ui::LocatedEvent& event) {
       drag_scroll_dir_ = 0;
       scrolling_timer_.Stop();
       speed_up_drag_scrolling_.Stop();
+      if (!dragged_off_shelf_before)
+        model_->OnItemRippedOff();
       return;
     }
   }
@@ -1326,6 +1330,8 @@ void ShelfView::ContinueDrag(const ui::LocatedEvent& event) {
                                           drag_point.y() - drag_origin_.y()));
   drag_and_drop_host_->UpdateDragIconProxy(drag_point_in_screen -
                                            drag_origin_.OffsetFromOrigin());
+  if (dragged_off_shelf_before)
+    model_->OnItemReturnedFromRipOff(view_model_->GetIndexOfView(drag_view_));
 }
 
 void ShelfView::MoveDragViewTo(int primary_axis_coordinate) {
@@ -1918,6 +1924,27 @@ void ShelfView::ShelfItemStatusChanged(const ShelfID& id) {
   ShelfAppButton* button = GetShelfAppButton(id);
   button->ReflectItemStatus(item);
   button->SchedulePaint();
+}
+
+void ShelfView::ShelfItemRippedOff() {
+  // On the display where the drag started, there is nothing to do.
+  if (dragging())
+    return;
+  // When a dragged item has been ripped off the shelf, it is moved to the end.
+  // Now we need to hide it.
+  view_model_->view_at(model_->item_count() - 1)->layer()->SetOpacity(0.f);
+}
+
+void ShelfView::ShelfItemReturnedFromRipOff(int index) {
+  // On the display where the drag started, there is nothing to do.
+  if (dragging())
+    return;
+  // Show the item and prevent it from animating into place from the position
+  // where it was sitting with zero opacity.
+  views::View* view = view_model_->view_at(index);
+  view->SetBoundsRect(bounds_animator_->GetTargetBounds(view));
+  bounds_animator_->StopAnimatingView(view);
+  view->layer()->SetOpacity(1.f);
 }
 
 void ShelfView::OnShelfAlignmentChanged(aura::Window* root_window,
