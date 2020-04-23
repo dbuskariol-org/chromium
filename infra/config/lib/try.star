@@ -210,6 +210,9 @@ def try_builder(
   # (e.g. bucket) occurs before we try to use it
   ret = builders.builder(
       name = name,
+      resultdb_bigquery_exports = [resultdb.export_test_results(
+          bq_table = 'luci-resultdb.chromium.try_test_results',
+      )],
       **kwargs
   )
 
