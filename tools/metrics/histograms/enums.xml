@@ -53490,7 +53490,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="EVICTED (Obsolete)"/>
   <int value="3" label="MANAGER_SHUTDOWN (Obsolete)"/>
   <int value="4" label="CLOSED (Obsolete)"/>
-  <int value="5" label="CREATE_NEW_WINDOW"/>
+  <int value="5" label="CREATE_NEW_WINDOW (Obsolete)"/>
   <int value="6" label="PROFILE_DESTROYED"/>
   <int value="7" label="APP_TERMINATING"/>
   <int value="8" label="JAVASCRIPT_ALERT (Obsolete)"/>
@@ -53527,7 +53527,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="39" label="DUPLICATE"/>
   <int value="40" label="OPEN_URL"/>
   <int value="41" label="WOULD_HAVE_BEEN_USED (Obsolete)"/>
-  <int value="42" label="REGISTER_PROTOCOL_HANDLER"/>
+  <int value="42" label="REGISTER_PROTOCOL_HANDLER (Obsolete)"/>
   <int value="43" label="CREATING_AUDIO_STREAM (Obsolete)"/>
   <int value="44" label="PAGE_BEING_CAPTURED (Obsolete)"/>
   <int value="45" label="BAD_DEFERRED_REDIRECT (Obsolete)"/>
@@ -53535,12 +53535,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="47" label="NEW_NAVIGATION_ENTRY (Obsolete)"/>
   <int value="48" label="COOKIE_STORE_NOT_LOADED (Obsolete)"/>
   <int value="49" label="COOKIE_CONFLICT (Obsolete)"/>
-  <int value="50" label="NON_EMPTY_BROWSING_INSTANCE"/>
+  <int value="50" label="NON_EMPTY_BROWSING_INSTANCE (Obsolete)"/>
   <int value="51" label="NAVIGATION_INTERCEPTED"/>
   <int value="52" label="PRERENDERING_DISABLED"/>
   <int value="53" label="CELLULAR_NETWORK"/>
   <int value="54" label="BLOCK_THIRD_PARTY_COOKIES"/>
-  <int value="55" label="CREDENTIAL_MANAGER_API"/>
+  <int value="55" label="CREDENTIAL_MANAGER_API (Obsolete)"/>
   <int value="56" label="NOSTATE_PREFETCH_FINISHED"/>
   <int value="57" label="LOW_END_DEVICE"/>
   <int value="58" label="FINAL_STATUS_BROWSER_SWITCH"/>
