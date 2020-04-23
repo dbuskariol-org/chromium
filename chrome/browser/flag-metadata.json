@@ -642,8 +642,8 @@
   },
   {
     "name": "crostini-disk-resizing",
-    "owners": [ "davidmunro@google.com", "nverne" ],
-    "expiry_milestone": 83
+    "owners": [ "davidmunro", "nverne" ],
+    "expiry_milestone": 86
   },
   {
     "name": "crostini-gpu-support",
