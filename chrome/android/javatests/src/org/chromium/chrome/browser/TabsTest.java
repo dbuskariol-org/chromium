@@ -523,29 +523,33 @@ public class TabsTest {
 
     /**
      * Verify that the provided click position closes a tab.
+     * TODO(yuezhanggg@): The hard-coded coordinates are not a good way to verify the position of
+     * the closing button. Should be replaced by render tests.
      */
     private void checkCloseTabAtPosition(final float x, final float y) {
-        mActivityTestRule.getActivity();
+        ChromeTabbedActivity cta = mActivityTestRule.getActivity();
 
-        int initialTabCount = mActivityTestRule.getActivity().getCurrentTabModel().getCount();
-        ChromeTabUtils.fullyLoadUrlInNewTab(InstrumentationRegistry.getInstrumentation(),
-                mActivityTestRule.getActivity(), UrlConstants.CHROME_BLANK_URL, false);
+        int initialTabCount = cta.getCurrentTabModel().getCount();
+        ChromeTabUtils.fullyLoadUrlInNewTab(InstrumentationRegistry.getInstrumentation(), cta,
+                UrlConstants.CHROME_BLANK_URL, false);
         TestThreadUtils.runOnUiThreadBlocking(
-                () -> { mActivityTestRule.getActivity().getLayoutManager().showOverview(false); });
+                () -> { cta.getLayoutManager().showOverview(false); });
 
-        Assert.assertTrue("Expected: " + (initialTabCount + 1) + " tab Got: "
-                        + mActivityTestRule.getActivity().getCurrentTabModel().getCount(),
-                (initialTabCount + 1)
-                        == mActivityTestRule.getActivity().getCurrentTabModel().getCount());
+        Assert.assertTrue("Expected: " + (initialTabCount + 1)
+                        + " tab Got: " + cta.getCurrentTabModel().getCount(),
+                (initialTabCount + 1) == cta.getCurrentTabModel().getCount());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         final LayoutManagerChrome layoutManager = updateTabsViewSize();
-        ChromeTabUtils.closeTabWithAction(InstrumentationRegistry.getInstrumentation(),
-                mActivityTestRule.getActivity(),
-                () -> InstrumentationRegistry.getInstrumentation().runOnMainSync(
+        StackLayout layout = (StackLayout) layoutManager.getOverviewLayout();
+        Assert.assertTrue("Position is not in the active area of the close button",
+                layout.getTabStackAtIndex(0).getTabs()[0].getLayoutTab().checkCloseHitTest(x, y));
+        ChromeTabUtils.closeTabWithAction(InstrumentationRegistry.getInstrumentation(), cta,
+                ()
+                        -> InstrumentationRegistry.getInstrumentation().runOnMainSync(
                                 new SimulateClickOnMainThread(layoutManager, x, y)));
-        Assert.assertTrue("Expected: " + initialTabCount + " tab Got: "
-                        + mActivityTestRule.getActivity().getCurrentTabModel().getCount(),
-                initialTabCount == mActivityTestRule.getActivity().getCurrentTabModel().getCount());
+        Assert.assertTrue(
+                "Expected: " + initialTabCount + " tab Got: " + cta.getCurrentTabModel().getCount(),
+                initialTabCount == cta.getCurrentTabModel().getCount());
     }
 
     /**
@@ -572,18 +576,18 @@ public class TabsTest {
     /**
      * Verify close button works in the TabSwitcher in landscape mode.
      * This code does not handle properly different screen densities.
-     * @Restriction({RESTRICTION_TYPE_PHONE, RESTRICTION_TYPE_NON_LOW_END_DEVICE})
-     * @LargeTest
-     * @Feature({"Android-TabSwitcher"})
      */
     @Test
-    @FlakyTest(message = "crbug.com/170179")
+    @LargeTest
+    @Restriction({UiRestriction.RESTRICTION_TYPE_PHONE, RESTRICTION_TYPE_NON_LOW_END_DEVICE})
+    @Feature({"Android-TabSwitcher"})
+    @RetryOnFailure
     public void testTabSwitcherLandscapeCloseButton() {
         mActivityTestRule.getActivity().setRequestedOrientation(
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // Hard-coded coordinates of the close button on the bottom left of the screen.
         // If the coordinates need to be updated, the easiest is to take a screenshot and measure.
-        checkCloseTabAtPosition(31 * mPxToDp, 31 * mPxToDp);
+        checkCloseTabAtPosition(74 * mPxToDp, 216 * mPxToDp);
     }
 
     /**
