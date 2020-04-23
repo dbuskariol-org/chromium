@@ -1,10 +1,4 @@
-    <style include="cr-shared-style settings-shared iron-flex">
-      .extension-engines,
-      #noOtherEngines,
-      .no-search-results {
-        @apply --settings-list-frame-padding;
-      }
-
+    <style include="cr shared-style settings-shared iron-flex">
       settings-omnibox-extension-entry {
         border-top: var(--cr-separator-line);
       }
@@ -12,7 +6,8 @@
     <div class="cr-row first">
       <h2>$i18n{searchEnginesDefault}</h2>
     </div>
-    <div class="no-search-results" hidden="[[matchingDefaultEngines_.length]]">
+    <div class="no-search-results list-frame"
+        hidden="[[matchingDefaultEngines_.length]]">
       $i18n{searchNoResults}
     </div>
     <settings-search-engines-list fixed-height
@@ -32,10 +27,11 @@
         $i18n{add}
       </cr-button>
     </div>
-    <div id="noOtherEngines" hidden="[[otherEngines.length]]">
+    <div id="noOtherEngines" class="list-frame"
+        hidden="[[otherEngines.length]]">
       $i18n{searchEnginesNoOtherEngines}
     </div>
-    <div class="no-search-results"
+    <div class="no-search-results list-frame"
         hidden="[[!showNoResultsMessage_(
             otherEngines, matchingOtherEngines_)]]">
       $i18n{searchNoResults}
@@ -49,10 +45,11 @@
       <div class="cr-row first">
         <h2>$i18n{searchEnginesExtension}</h2>
       </div>
-      <div class="no-search-results" hidden="[[matchingExtensions_.length]]">
+      <div class="no-search-results list-frame"
+          hidden="[[matchingExtensions_.length]]">
         $i18n{searchNoResults}
       </div>
-      <iron-list id="extensions" class="extension-engines"
+      <iron-list id="extensions" class="extension-engines list-frame"
           items="[[matchingExtensions_]]" preserve-focus risk-selection>
         <template>
           <settings-omnibox-extension-entry engine="[[item]]"
