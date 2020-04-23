@@ -40,9 +40,7 @@ void GPUSwapChain::Trace(Visitor* visitor) {
 
 void GPUSwapChain::Neuter() {
   texture_ = nullptr;
-
-  DCHECK(swap_buffers_);
-  if (!swap_buffers_) {
+  if (swap_buffers_) {
     swap_buffers_->Neuter();
     swap_buffers_ = nullptr;
   }
