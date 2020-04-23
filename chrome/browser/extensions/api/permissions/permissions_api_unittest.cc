@@ -59,10 +59,7 @@ scoped_refptr<const Extension> CreateExtensionWithPermissions(
 // Helper function to create a base::Value from a list of strings.
 std::unique_ptr<base::Value> StringVectorToValue(
     const std::vector<std::string>& strings) {
-  ListBuilder builder;
-  for (const auto& str : strings)
-    builder.Append(str);
-  return builder.Build();
+  return ListBuilder().Append(strings.begin(), strings.end()).Build();
 }
 
 // Runs permissions.request() with the provided |args|, and returns the result
