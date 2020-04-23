@@ -150,7 +150,8 @@ NewTabPageUI::NewTabPageUI(content::WebUI* web_ui)
       page_factory_receiver_(this),
       profile_(Profile::FromWebUI(web_ui)),
       instant_service_(InstantServiceFactory::GetForProfile(profile_)),
-      web_contents_(web_ui->GetWebContents()) {
+      web_contents_(web_ui->GetWebContents()),
+      creation_time_(base::Time::Now()) {
   content::WebUIDataSource::Add(profile_,
                                 CreateNewTabPageUiHtmlSource(profile_));
 
@@ -194,7 +195,7 @@ void NewTabPageUI::CreatePageHandler(
   DCHECK(pending_page.is_valid());
   page_handler_ = std::make_unique<NewTabPageHandler>(
       std::move(pending_page_handler), std::move(pending_page), profile_,
-      web_contents_);
+      web_contents_, creation_time_);
 }
 
 void NewTabPageUI::NtpThemeChanged(const NtpTheme& theme) {
