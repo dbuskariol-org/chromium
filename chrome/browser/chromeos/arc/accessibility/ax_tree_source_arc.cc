@@ -60,9 +60,6 @@ AXTreeSourceArc::~AXTreeSourceArc() {
 }
 
 void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
-  tree_map_.clear();
-  parent_map_.clear();
-  computed_bounds_.clear();
   root_id_.reset();
 
   window_id_ = event_data->window_id;
@@ -264,6 +261,11 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
     AXWindowInfoData* window = event_data->window_data->at(i).get();
     previous_raw_bounds_[window->window_id] = window->bounds_in_screen;
   }
+
+  // Clear maps in order to prevent invalid access from dead pointers.
+  tree_map_.clear();
+  parent_map_.clear();
+  computed_bounds_.clear();
 }
 
 void AXTreeSourceArc::NotifyActionResult(const ui::AXActionData& data,
