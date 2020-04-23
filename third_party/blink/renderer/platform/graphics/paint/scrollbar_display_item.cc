@@ -61,6 +61,8 @@ scoped_refptr<cc::ScrollbarLayerBase> ScrollbarDisplayItem::CreateOrReuseLayer(
   auto layer =
       cc::ScrollbarLayerBase::CreateOrReuse(scrollbar_, existing_layer);
   layer->SetIsDrawable(true);
+  if (!scrollbar_->IsSolidColor())
+    layer->SetHitTestable(true);
   layer->SetElementId(element_id_);
   layer->SetScrollElementId(
       scroll_translation_

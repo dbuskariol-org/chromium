@@ -238,6 +238,7 @@ PaintArtifactCompositor::ScrollHitTestLayerForPendingLayer(
   if (!scroll_layer) {
     scroll_layer = cc::Layer::Create();
     scroll_layer->SetElementId(scroll_element_id);
+    scroll_layer->SetHitTestable(true);
   }
 
   scroll_layer->SetOffsetToTransformParent(

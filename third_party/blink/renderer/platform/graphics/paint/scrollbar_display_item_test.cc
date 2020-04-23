@@ -54,6 +54,7 @@ TEST(ScrollbarDisplayItemTest, HorizontalSolidColorScrollbar) {
   auto layer = display_item.CreateOrReuseLayer(nullptr);
   ASSERT_EQ(cc::ScrollbarLayerBase::kSolidColor,
             layer->GetScrollbarLayerType());
+  EXPECT_FALSE(layer->HitTestable());
 
   auto* scrollbar_layer =
       static_cast<cc::SolidColorScrollbarLayer*>(layer.get());
@@ -84,6 +85,7 @@ TEST(ScrollbarDisplayItemTest, VerticalSolidColorScrollbar) {
   auto layer = display_item.CreateOrReuseLayer(nullptr);
   ASSERT_EQ(cc::ScrollbarLayerBase::kSolidColor,
             layer->GetScrollbarLayerType());
+  EXPECT_FALSE(layer->HitTestable());
 
   auto* scrollbar_layer =
       static_cast<cc::SolidColorScrollbarLayer*>(layer.get());
@@ -108,6 +110,7 @@ TEST(ScrollbarDisplayItemTest, PaintedScrollbar) {
                                     scroll_translation.get(), element_id);
   auto layer = display_item.CreateOrReuseLayer(nullptr);
   ASSERT_EQ(cc::ScrollbarLayerBase::kPainted, layer->GetScrollbarLayerType());
+  EXPECT_TRUE(layer->HitTestable());
 
   EXPECT_EQ(layer.get(), display_item.CreateOrReuseLayer(layer.get()).get());
 }
@@ -128,6 +131,7 @@ TEST(ScrollbarDisplayItemTest, PaintedScrollbarOverlayNonNinePatch) {
   // We should create PaintedScrollbarLayer instead of
   // PaintedOverlayScrollbarLayer for non-nine-patch overlay scrollbars.
   ASSERT_EQ(cc::ScrollbarLayerBase::kPainted, layer->GetScrollbarLayerType());
+  EXPECT_TRUE(layer->HitTestable());
 
   EXPECT_EQ(layer.get(), display_item.CreateOrReuseLayer(layer.get()).get());
 }
@@ -148,6 +152,7 @@ TEST(ScrollbarDisplayItemTest, PaintedScrollbarOverlayNinePatch) {
   auto layer = display_item.CreateOrReuseLayer(nullptr);
   ASSERT_EQ(cc::ScrollbarLayerBase::kPaintedOverlay,
             layer->GetScrollbarLayerType());
+  EXPECT_TRUE(layer->HitTestable());
 
   EXPECT_EQ(layer.get(), display_item.CreateOrReuseLayer(layer.get()).get());
 }
