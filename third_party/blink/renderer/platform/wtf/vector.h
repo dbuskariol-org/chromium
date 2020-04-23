@@ -1054,6 +1054,10 @@ class VectorBuffer : protected VectorBufferBase<T, Allocator> {
 template <typename T, wtf_size_t inlineCapacity, typename Allocator>
 class Vector
     : private VectorBuffer<T, INLINE_CAPACITY, Allocator>,
+      // ConditionalDestructor could in addition check for
+      // VectorTraits<T>::kNeedsDestruction which requires that the complete
+      // type is available though. Unfortunately, there's some use cases that
+      // use Vector with foward-declared types.
       public ConditionalDestructor<Vector<T, INLINE_CAPACITY, Allocator>,
                                    (INLINE_CAPACITY == 0) &&
                                        Allocator::kIsGarbageCollected> {
