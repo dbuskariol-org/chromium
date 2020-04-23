@@ -2,18 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/metrics/session_metrics_helper.h"
+#include "content/browser/xr/metrics/session_metrics_helper.h"
 
 #include "base/logging.h"
 #include "base/metrics/histogram_macros.h"
-#include "chrome/browser/vr/metrics/session_timer.h"
-#include "chrome/browser/vr/metrics/webxr_session_tracker.h"
+#include "content/browser/xr/metrics/session_timer.h"
+#include "content/browser/xr/metrics/webxr_session_tracker.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/web_contents.h"
 #include "device/vr/public/cpp/session_mode.h"
 
-namespace vr {
+namespace content {
 
 namespace {
 
@@ -271,4 +271,4 @@ void SessionMetricsHelper::DidStartNavigation(
   }
 }
 
-}  // namespace vr
+}  // namespace content

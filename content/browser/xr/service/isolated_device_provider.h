@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
-#define CHROME_BROWSER_VR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
+#ifndef CONTENT_BROWSER_XR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
+#define CONTENT_BROWSER_XR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
 
 #include "base/containers/flat_map.h"
 #include "device/vr/public/cpp/vr_device_provider.h"
@@ -16,7 +16,7 @@ namespace content {
 class VrUiHost;
 }
 
-namespace vr {
+namespace content {
 
 class IsolatedVRDeviceProvider
     : public device::VRDeviceProvider,
@@ -68,6 +68,6 @@ class IsolatedVRDeviceProvider
   UiHostMap ui_host_map_;
 };
 
-}  // namespace vr
+}  // namespace content
 
-#endif  // CHROME_BROWSER_VR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_
+#endif  // CONTENT_BROWSER_XR_SERVICE_ISOLATED_DEVICE_PROVIDER_H_

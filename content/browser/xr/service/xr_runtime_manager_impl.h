@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_SERVICE_XR_RUNTIME_MANAGER_IMPL_H_
-#define CHROME_BROWSER_VR_SERVICE_XR_RUNTIME_MANAGER_IMPL_H_
+#ifndef CONTENT_BROWSER_XR_SERVICE_XR_RUNTIME_MANAGER_IMPL_H_
+#define CONTENT_BROWSER_XR_SERVICE_XR_RUNTIME_MANAGER_IMPL_H_
 
 #include <stdint.h>
 
@@ -18,19 +18,22 @@
 #include "base/optional.h"
 #include "base/threading/thread_checker.h"
 #include "base/timer/timer.h"
-#include "chrome/browser/vr/service/browser_xr_runtime_impl.h"
-#include "chrome/browser/vr/service/vr_service_impl.h"
+#include "content/browser/xr/service/browser_xr_runtime_impl.h"
+#include "content/browser/xr/service/vr_service_impl.h"
+#include "content/common/content_export.h"
 #include "content/public/browser/xr_integration_client.h"
 #include "content/public/browser/xr_runtime_manager.h"
 #include "device/vr/public/mojom/vr_service.mojom-forward.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
-namespace vr {
+
+namespace content {
 class XRRuntimeManagerTest;
 
 // Singleton used to provide the platform's XR Runtimes to VRServiceImpl
 // instances.
-class XRRuntimeManagerImpl : public content::XRRuntimeManager,
-                             public base::RefCounted<XRRuntimeManagerImpl> {
+class CONTENT_EXPORT XRRuntimeManagerImpl
+    : public XRRuntimeManager,
+      public base::RefCounted<XRRuntimeManagerImpl> {
  public:
   friend base::RefCounted<XRRuntimeManagerImpl>;
   static constexpr auto kRefCountPreference =
@@ -73,13 +76,12 @@ class XRRuntimeManagerImpl : public content::XRRuntimeManager,
   // XRRuntimeManager implementation
   BrowserXRRuntimeImpl* GetRuntime(device::mojom::XRDeviceId id) override;
   void ForEachRuntime(
-      base::RepeatingCallback<void(content::BrowserXRRuntime*)> fn) override;
+      base::RepeatingCallback<void(BrowserXRRuntime*)> fn) override;
 
  private:
-
   // Constructor also used by tests to supply an arbitrary list of providers
   static scoped_refptr<XRRuntimeManagerImpl> CreateInstance(
-      content::XRProviderList providers);
+      XRProviderList providers);
 
   // Used by tests to check on runtime state.
   device::mojom::XRRuntime* GetRuntimeForTest(device::mojom::XRDeviceId id);
@@ -87,7 +89,7 @@ class XRRuntimeManagerImpl : public content::XRRuntimeManager,
   // Used by tests
   size_t NumberOfConnectedServices();
 
-  explicit XRRuntimeManagerImpl(content::XRProviderList providers);
+  explicit XRRuntimeManagerImpl(XRProviderList providers);
 
   ~XRRuntimeManagerImpl() override;
 
@@ -106,7 +108,7 @@ class XRRuntimeManagerImpl : public content::XRRuntimeManager,
   // Gets the system default immersive-ar runtime if available.
   BrowserXRRuntimeImpl* GetImmersiveArRuntime();
 
-  content::XRProviderList providers_;
+  XRProviderList providers_;
 
   // XRRuntimes are owned by their providers, each correspond to a
   // BrowserXRRuntimeImpl that is owned by XRRuntimeManagerImpl.
@@ -123,6 +125,6 @@ class XRRuntimeManagerImpl : public content::XRRuntimeManager,
   THREAD_CHECKER(thread_checker_);
 };
 
-}  // namespace vr
+}  // namespace content
 
-#endif  // CHROME_BROWSER_VR_SERVICE_XR_RUNTIME_MANAGER_IMPL_H_
+#endif  // CONTENT_BROWSER_XR_SERVICE_XR_RUNTIME_MANAGER_IMPL_H_

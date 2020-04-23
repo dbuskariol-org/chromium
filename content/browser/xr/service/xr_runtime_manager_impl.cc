@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/service/xr_runtime_manager_impl.h"
-#include "chrome/browser/vr/xr_runtime_manager_statics.h"
+#include "content/browser/xr/service/xr_runtime_manager_impl.h"
+#include "content/public/browser/xr_runtime_manager.h"
 
 #include <string>
 #include <utility>
@@ -14,8 +14,7 @@
 #include "base/memory/singleton.h"
 #include "base/trace_event/common/trace_event_common.h"
 #include "build/build_config.h"
-#include "chrome/browser/vr/chrome_xr_integration_client.h"
-#include "chrome/browser/vr/service/browser_xr_runtime_impl.h"
+#include "content/browser/xr/xr_utils.h"
 #include "content/public/browser/device_service.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
@@ -27,16 +26,16 @@
 #include "services/device/public/mojom/sensor_provider.mojom.h"
 
 #if !defined(OS_ANDROID)
-#include "chrome/browser/vr/service/isolated_device_provider.h"
+#include "content/browser/xr/service/isolated_device_provider.h"
 #endif  // !defined(OS_ANDROID)
 
-namespace vr {
+namespace content {
 
 namespace {
 XRRuntimeManagerImpl* g_xr_runtime_manager = nullptr;
 
-base::LazyInstance<base::ObserverList<content::XRRuntimeManager::Observer>>::
-    Leaky g_xr_runtime_manager_observers;
+base::LazyInstance<base::ObserverList<XRRuntimeManager::Observer>>::Leaky
+    g_xr_runtime_manager_observers;
 
 #if !defined(OS_ANDROID)
 bool IsEnabled(const base::CommandLine* command_line,
@@ -54,21 +53,19 @@ bool IsEnabled(const base::CommandLine* command_line,
 }  // namespace
 
 // XRRuntimeManager statics
-content::XRRuntimeManager* XRRuntimeManagerStatics::GetInstanceIfCreated() {
+XRRuntimeManager* XRRuntimeManager::GetInstanceIfCreated() {
   return g_xr_runtime_manager;
 }
 
-void XRRuntimeManagerStatics::AddObserver(
-    content::XRRuntimeManager::Observer* observer) {
+void XRRuntimeManager::AddObserver(XRRuntimeManager::Observer* observer) {
   g_xr_runtime_manager_observers.Get().AddObserver(observer);
 }
 
-void XRRuntimeManagerStatics::RemoveObserver(
-    content::XRRuntimeManager::Observer* observer) {
+void XRRuntimeManager::RemoveObserver(XRRuntimeManager::Observer* observer) {
   g_xr_runtime_manager_observers.Get().RemoveObserver(observer);
 }
 
-void XRRuntimeManagerStatics::ExitImmersivePresentation() {
+void XRRuntimeManager::ExitImmersivePresentation() {
   if (!g_xr_runtime_manager) {
     return;
   }
@@ -90,8 +87,8 @@ XRRuntimeManagerImpl::GetOrCreateInstance() {
   }
 
   // Start by getting any providers specified by the XrIntegrationClient
-  content::XRProviderList providers;
-  auto* integration_client = ChromeXrIntegrationClient::GetInstance();
+  XRProviderList providers;
+  auto* integration_client = GetXrIntegrationClient();
 
   if (integration_client) {
     auto additional_providers = integration_client->GetAdditionalProviders();
@@ -102,7 +99,7 @@ XRRuntimeManagerImpl::GetOrCreateInstance() {
 
   // Then add any other "built-in" providers
 #if !defined(OS_ANDROID)
-  providers.push_back(std::make_unique<vr::IsolatedVRDeviceProvider>());
+  providers.push_back(std::make_unique<IsolatedVRDeviceProvider>());
 #endif  // !defined(OS_ANDROID)
 
   bool orientation_provider_enabled = true;
@@ -116,7 +113,7 @@ XRRuntimeManagerImpl::GetOrCreateInstance() {
 
   if (orientation_provider_enabled) {
     mojo::PendingRemote<device::mojom::SensorProvider> sensor_provider;
-    content::GetDeviceService().BindSensorProvider(
+    GetDeviceService().BindSensorProvider(
         sensor_provider.InitWithNewPipeAndPassReceiver());
     providers.emplace_back(
         std::make_unique<device::VROrientationDeviceProvider>(
@@ -313,7 +310,7 @@ void XRRuntimeManagerImpl::SupportsSession(
   std::move(callback).Run(true);
 }
 
-XRRuntimeManagerImpl::XRRuntimeManagerImpl(content::XRProviderList providers)
+XRRuntimeManagerImpl::XRRuntimeManagerImpl(XRProviderList providers)
     : providers_(std::move(providers)) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   CHECK(!g_xr_runtime_manager);
@@ -327,7 +324,7 @@ XRRuntimeManagerImpl::~XRRuntimeManagerImpl() {
 }
 
 scoped_refptr<XRRuntimeManagerImpl> XRRuntimeManagerImpl::CreateInstance(
-    content::XRProviderList providers) {
+    XRProviderList providers) {
   auto* ptr = new XRRuntimeManagerImpl(std::move(providers));
   CHECK_EQ(ptr, g_xr_runtime_manager);
   return base::AdoptRef(ptr);
@@ -428,10 +425,10 @@ void XRRuntimeManagerImpl::RemoveRuntime(device::mojom::XRDeviceId id) {
 }
 
 void XRRuntimeManagerImpl::ForEachRuntime(
-    base::RepeatingCallback<void(content::BrowserXRRuntime*)> fn) {
+    base::RepeatingCallback<void(BrowserXRRuntime*)> fn) {
   for (auto& runtime : runtimes_) {
     fn.Run(runtime.second.get());
   }
 }
 
-}  // namespace vr
+}  // namespace content

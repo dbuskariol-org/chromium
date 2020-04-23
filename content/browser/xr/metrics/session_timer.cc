@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/metrics/session_timer.h"
+#include "content/browser/xr/metrics/session_timer.h"
 
 #include "base/metrics/histogram_functions.h"
 
-namespace vr {
+namespace content {
 
 SessionTimer::SessionTimer(char const* histogram_name,
                            base::TimeDelta gap_time,
@@ -66,4 +66,4 @@ void SessionTimer::SendAccumulatedSessionTime() {
   }
 }
 
-}  // namespace vr
+}  // namespace content
