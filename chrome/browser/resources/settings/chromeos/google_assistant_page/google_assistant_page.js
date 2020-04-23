@@ -45,14 +45,6 @@ Polymer({
 
   properties: {
     /** @private */
-    isAssistantAllowed_: {
-      type: Boolean,
-      value() {
-        return loadTimeData.getBoolean('isAssistantAllowed');
-      },
-    },
-
-    /** @private */
     shouldShowVoiceMatchSettings_: {
       type: Boolean,
       value: false,
