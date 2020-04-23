@@ -4155,13 +4155,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kSendTabToSelfWhenSignedInDescription, kOsAll,
      FEATURE_VALUE_TYPE(send_tab_to_self::kSendTabToSelfWhenSignedIn)},
 
-    {"enable-data-reduction-proxy-with-network-service",
-     flag_descriptions::kEnableDataReductionProxyNetworkServiceName,
-     flag_descriptions::kEnableDataReductionProxyNetworkServiceDescription,
-     kOsAll,
-     FEATURE_VALUE_TYPE(data_reduction_proxy::features::
-                            kDataReductionProxyEnabledWithNetworkService)},
-
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
     {"sharing-peer-connection-receiver",
