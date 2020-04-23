@@ -35,7 +35,6 @@
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/core/page/chrome_client.h"
 #include "third_party/blink/renderer/core/page/page_popup_controller.h"
-#include "third_party/blink/renderer/platform/text/platform_locale.h"
 #include "third_party/blink/renderer/platform/wtf/text/character_names.h"
 #include "third_party/blink/renderer/platform/wtf/text/string_builder.h"
 
@@ -156,12 +155,6 @@ void PagePopupClient::AddProperty(const char* name,
   AddProperty("width", rect.Width(), data);
   AddProperty("height", rect.Height(), data);
   addLiteral("},\n", data);
-}
-
-void PagePopupClient::AddLocalizedProperty(const char* name,
-                                           int resource_id,
-                                           SharedBuffer* data) {
-  AddProperty(name, GetLocale().QueryString(resource_id), data);
 }
 
 CSSFontSelector* PagePopupClient::CreateCSSFontSelector(
