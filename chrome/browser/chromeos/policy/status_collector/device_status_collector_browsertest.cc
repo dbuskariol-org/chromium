@@ -443,14 +443,18 @@ void GetEmptyCrosHealthdData(
 void GetFakeCrosHealthdData(
     policy::DeviceStatusCollector::CrosHealthdDataReceiver receiver) {
   // Create fake TelemetryInfo.
-  chromeos::cros_healthd::mojom::SmartBatteryInfo smart_battery_info(
-      kFakeSmartBatteryManufactureDate, kFakeSmartBatteryTemperature);
-  chromeos::cros_healthd::mojom::BatteryInfo battery_info(
-      kFakeBatteryCycleCount, kFakeBatteryVoltageNow, kFakeBatteryVendor,
-      kFakeBatterySerial, kFakeBatteryChargeFullDesign, kFakeBatteryChargeFull,
-      kFakeBatteryVoltageMinDesign, kFakeBatteryModel, kFakeBatteryChargeNow,
-      kFakeBatteryCurrentNow, kFakeBatteryTechnology, kFakeBatteryStatus,
-      smart_battery_info.Clone());
+  auto battery_result =
+      chromeos::cros_healthd::mojom::BatteryResult::NewBatteryInfo(
+          chromeos::cros_healthd::mojom::BatteryInfo::New(
+              kFakeBatteryCycleCount, kFakeBatteryVoltageNow,
+              kFakeBatteryVendor, kFakeBatterySerial,
+              kFakeBatteryChargeFullDesign, kFakeBatteryChargeFull,
+              kFakeBatteryVoltageMinDesign, kFakeBatteryModel,
+              kFakeBatteryChargeNow, kFakeBatteryCurrentNow,
+              kFakeBatteryTechnology, kFakeBatteryStatus,
+              kFakeSmartBatteryManufactureDate,
+              chromeos::cros_healthd::mojom::UInt64Value::New(
+                  kFakeSmartBatteryTemperature)));
   auto vpd_result = chromeos::cros_healthd::mojom::CachedVpdResult::NewVpdInfo(
       chromeos::cros_healthd::mojom::CachedVpdInfo::New(kFakeSkuNumber));
   chromeos::cros_healthd::mojom::CpuInfo cpu_info(
@@ -493,7 +497,7 @@ void GetFakeCrosHealthdData(
   auto fan_result = chromeos::cros_healthd::mojom::FanResult::NewFanInfo(
       std::move(fan_vector));
   chromeos::cros_healthd::mojom::TelemetryInfo fake_info(
-      battery_info.Clone(), std::move(block_device_result),
+      std::move(battery_result), std::move(block_device_result),
       std::move(vpd_result), std::move(cpu_result), std::move(timezone_result),
       std::move(memory_result), std::move(backlight_result),
       std::move(fan_result));
@@ -511,7 +515,7 @@ void GetFakeCrosHealthdData(
   fake_battery_sample.set_status(kFakeBatteryStatus);
   auto sample = std::make_unique<policy::SampledData>();
   sample->cpu_samples[fake_cpu_temp_sample.cpu_label()] = fake_cpu_temp_sample;
-  sample->battery_samples[battery_info.model_name] = fake_battery_sample;
+  sample->battery_samples[kFakeBatteryModel] = fake_battery_sample;
   base::circular_deque<std::unique_ptr<policy::SampledData>> samples;
   samples.push_back(std::move(sample));
 

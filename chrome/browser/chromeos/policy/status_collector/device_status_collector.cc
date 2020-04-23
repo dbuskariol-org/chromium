@@ -870,32 +870,40 @@ class DeviceStatusCollectorState : public StatusCollectorState {
       }
     }
 
-    const auto& battery_info = probe_result->battery_info;
-    if (!battery_info.is_null()) {
-      em::PowerStatus* const power_status_out =
-          response_params_.device_status->mutable_power_status();
-      em::BatteryInfo* const battery_info_out =
-          power_status_out->add_batteries();
-      battery_info_out->set_serial(battery_info->serial_number);
-      battery_info_out->set_manufacturer(battery_info->vendor);
-      battery_info_out->set_cycle_count(battery_info->cycle_count);
-      battery_info_out->set_technology(battery_info->technology);
-      // Convert Ah to mAh:
-      battery_info_out->set_design_capacity(
-          std::lround(battery_info->charge_full_design * 1000));
-      battery_info_out->set_full_charge_capacity(
-          std::lround(battery_info->charge_full * 1000));
-      // Convert V to mV:
-      battery_info_out->set_design_min_voltage(
-          std::lround(battery_info->voltage_min_design * 1000));
-      const auto& smart_info = battery_info->smart_battery_info;
-      if (!smart_info.is_null())
-        battery_info_out->set_manufacture_date(smart_info->manufacture_date);
+    // Process BatteryResult.
+    const auto& battery_result = probe_result->battery_result;
+    if (!battery_result.is_null()) {
+      if (battery_result->is_error()) {
+        LOG(ERROR) << "cros_healthd: Error getting battery info: "
+                   << battery_result->get_error()->msg;
+      } else if (!battery_result->get_battery_info().is_null()) {
+        const auto& battery_info = battery_result->get_battery_info();
+        em::PowerStatus* const power_status_out =
+            response_params_.device_status->mutable_power_status();
+        em::BatteryInfo* const battery_info_out =
+            power_status_out->add_batteries();
+        battery_info_out->set_serial(battery_info->serial_number);
+        battery_info_out->set_manufacturer(battery_info->vendor);
+        battery_info_out->set_cycle_count(battery_info->cycle_count);
+        battery_info_out->set_technology(battery_info->technology);
+        // Convert Ah to mAh:
+        battery_info_out->set_design_capacity(
+            std::lround(battery_info->charge_full_design * 1000));
+        battery_info_out->set_full_charge_capacity(
+            std::lround(battery_info->charge_full * 1000));
+        // Convert V to mV:
+        battery_info_out->set_design_min_voltage(
+            std::lround(battery_info->voltage_min_design * 1000));
+        if (battery_info->manufacture_date) {
+          battery_info_out->set_manufacture_date(
+              battery_info->manufacture_date.value());
+        }
 
-      for (const std::unique_ptr<SampledData>& sample_data : samples) {
-        auto it = sample_data->battery_samples.find(battery_info->model_name);
-        if (it != sample_data->battery_samples.end())
-          battery_info_out->add_samples()->CheckTypeAndMergeFrom(it->second);
+        for (const std::unique_ptr<SampledData>& sample_data : samples) {
+          auto it = sample_data->battery_samples.find(battery_info->model_name);
+          if (it != sample_data->battery_samples.end())
+            battery_info_out->add_samples()->CheckTypeAndMergeFrom(it->second);
+        }
       }
     }
 
@@ -1480,25 +1488,30 @@ void DeviceStatusCollector::SampleProbeData(
   if (result.is_null())
     return;
 
-  const auto& battery = result->battery_info;
-  if (!battery.is_null()) {
-    enterprise_management::BatterySample battery_sample;
-    battery_sample.set_timestamp(sample->timestamp.ToJavaTime());
-    // Convert V to mV:
-    battery_sample.set_voltage(std::lround(battery->voltage_now * 1000));
-    // Convert Ah to mAh:
-    battery_sample.set_remaining_capacity(
-        std::lround(battery->charge_now * 1000));
-    // Convert A to mA:
-    battery_sample.set_current(std::lround(battery->current_now * 1000));
-    battery_sample.set_status(battery->status);
-    // Convert 0.1 Kelvin to Celsius:
-    const auto& smart_info = battery->smart_battery_info;
-    if (!smart_info.is_null()) {
-      battery_sample.set_temperature(
-          (smart_info->temperature - kZeroCInDeciKelvin) / 10);
+  const auto& battery_result = result->battery_result;
+  if (!battery_result.is_null()) {
+    if (battery_result->is_error()) {
+      LOG(ERROR) << "cros_healthd: Error getting battery info: "
+                 << battery_result->get_error()->msg;
+    } else if (!battery_result->get_battery_info().is_null()) {
+      const auto& battery = battery_result->get_battery_info();
+      enterprise_management::BatterySample battery_sample;
+      battery_sample.set_timestamp(sample->timestamp.ToJavaTime());
+      // Convert V to mV:
+      battery_sample.set_voltage(std::lround(battery->voltage_now * 1000));
+      // Convert Ah to mAh:
+      battery_sample.set_remaining_capacity(
+          std::lround(battery->charge_now * 1000));
+      // Convert A to mA:
+      battery_sample.set_current(std::lround(battery->current_now * 1000));
+      battery_sample.set_status(battery->status);
+      // Convert 0.1 Kelvin to Celsius:
+      if (battery->temperature) {
+        battery_sample.set_temperature(
+            (battery->temperature->value - kZeroCInDeciKelvin) / 10);
+      }
+      sample->battery_samples[battery->model_name] = battery_sample;
     }
-    sample->battery_samples[battery->model_name] = battery_sample;
   }
 
   SamplingCallback completion_callback;
