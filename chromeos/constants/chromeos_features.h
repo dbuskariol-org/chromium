@@ -72,6 +72,8 @@ extern const base::Feature kDisableOfficeEditingComponentApp;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS) extern const base::Feature kDiscoverApp;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS) extern const base::Feature kDriveFs;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
+extern const base::Feature kDlcSettingsUi;
+COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
 extern const base::Feature kDriveFsMirroring;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
 extern const base::Feature kEmojiSuggestAddition;

@@ -37829,6 +37829,7 @@ from previous Chrome versions.
   <int value="-2097515669" label="disable-cast"/>
   <int value="-2095519429" label="FtpProtocol:enabled"/>
   <int value="-2092067251" label="NativeFilesystemAPI:disabled"/>
+  <int value="-2091414992" label="DlcSettingsUi:disabled"/>
   <int value="-2091404586" label="TabStripKeyboardFocus:enabled"/>
   <int value="-2090484194" label="ContextualSearchUrlActions:disabled"/>
   <int value="-2088555929" label="EnableAppGridGhost:enabled"/>
@@ -38199,6 +38200,7 @@ from previous Chrome versions.
   <int value="-1677715989" label="UnifiedConsent:disabled"/>
   <int value="-1676256979"
       label="AutofillUpstreamUseGooglePayOnAndroidBranding:enabled"/>
+  <int value="-1674868343" label="DlcSettingsUi:enabled"/>
   <int value="-1672160462"
       label="SwapSideVolumeButtonsForOrientation:disabled"/>
   <int value="-1671494049" label="TrimOnFreeze:disabled"/>
