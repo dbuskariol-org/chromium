@@ -4488,6 +4488,16 @@ if (is_chromeos) {
 }
 
 if (is_android) {
+  java_cpp_enum("infobar_android_enums") {
+    sources = [ "android/infobars/infobar_android.h" ]
+  }
+
+  android_library("infobar_android_enums_java") {
+    deps = [ "//third_party/android_deps:androidx_annotation_annotation_java" ]
+
+    srcjar_deps = [ ":infobar_android_enums" ]
+  }
+
   java_cpp_enum("tab_model_enums_java") {
     sources = [ "android/tab_model/tab_model.h" ]
   }

@@ -305,6 +305,7 @@ android_library("chrome_java") {
     "//chrome/browser/share/android:java_resources",
     "//chrome/browser/tab:java",
     "//chrome/browser/thumbnail:java",
+    "//chrome/browser/ui:infobar_android_enums_java",
     "//chrome/browser/ui/android/appmenu:factory_java",
     "//chrome/browser/ui/android/appmenu:java",
     "//chrome/browser/ui/android/favicon:java",
@@ -635,7 +636,6 @@ java_cpp_enum("chrome_android_java_enums_srcjar") {
     "//chrome/browser/ntp_snippets/ntp_snippets_metrics.h",
     "//chrome/browser/profiles/profile_metrics.h",
     "//chrome/browser/translate/android/translate_utils.h",
-    "//chrome/browser/ui/android/infobars/infobar_android.h",
   ]
 }
 
@@ -1036,6 +1036,7 @@ if (enable_vr || enable_arcore) {
     "//chrome/android:chrome_java",
     "//chrome/android/features/vr:java",
     "//chrome/browser/tab:java",
+    "//chrome/browser/ui/messages/android:java",
     "//chrome/browser/util:java",
     "//chrome/test/android:chrome_java_test_support",
     "//components/embedder_support/android:util_java",
@@ -2800,13 +2801,11 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/infobar/AdsBlockedInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/AutofillCreditCardFillingInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/AutofillSaveCardInfoBar.java",
-    "java/src/org/chromium/chrome/browser/infobar/ConfirmInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/DataReductionPromoInfoBarDelegate.java",
     "java/src/org/chromium/chrome/browser/infobar/DownloadProgressInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/DuplicateDownloadInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/FramebustBlockInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/GeneratedPasswordSavedInfoBarDelegate.java",
-    "java/src/org/chromium/chrome/browser/infobar/InfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/InfoBarContainer.java",
     "java/src/org/chromium/chrome/browser/infobar/InstallableAmbientBadgeInfoBar.java",
     "java/src/org/chromium/chrome/browser/infobar/InstantAppsInfoBar.java",

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.infobar;
+package org.chromium.chrome.browser.ui.messages.infobar;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,11 +14,9 @@ import androidx.annotation.Nullable;
 
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarCompactLayout;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarInteractionHandler;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarLayout;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarUiItem;
+import org.chromium.chrome.browser.infobar.ActionType;
+import org.chromium.chrome.browser.infobar.InfoBarIdentifier;
+import org.chromium.chrome.ui.messages.R;
 import org.chromium.ui.modelutil.PropertyModel;
 
 /**
@@ -104,7 +102,7 @@ public abstract class InfoBar implements InfoBarInteractionHandler, InfoBarUiIte
     /**
      * Sets the Context used when creating the InfoBar.
      */
-    protected void setContext(Context context) {
+    public void setContext(Context context) {
         mContext = context;
     }
 
@@ -121,7 +119,7 @@ public abstract class InfoBar implements InfoBarInteractionHandler, InfoBarUiIte
      * Creates the View that represents the InfoBar.
      * @return The View representing the InfoBar.
      */
-    protected final View createView() {
+    public final View createView() {
         assert mContext != null;
 
         if (usesCompactLayout()) {
@@ -258,18 +256,26 @@ public abstract class InfoBar implements InfoBarInteractionHandler, InfoBarUiIte
      */
     protected void onStartedHiding() {}
 
-    long getNativeInfoBarPtr() {
+    /**
+     * Returns pointer to native InfoBarAndroid instance.
+     * TODO(crbug/1056346): The function is used in subclasses typically to get Tab reference. When
+     * Tab is modularized, replace this function with the one that returns Tab reference.
+     */
+    protected long getNativeInfoBarPtr() {
         return mNativeInfoBarPtr;
     }
 
-    void setContainer(Container container) {
+    /**
+     * Sets the Container that displays the InfoBar.
+     */
+    public void setContainer(Container container) {
         mContainer = container;
     }
 
     /**
      * @return Whether or not this InfoBar is already dismissed (i.e. closed).
      */
-    boolean isDismissed() {
+    protected boolean isDismissed() {
         return mIsDismissed;
     }
 
@@ -289,8 +295,7 @@ public abstract class InfoBar implements InfoBarInteractionHandler, InfoBarUiIte
     }
 
     @Override
-    public void onButtonClicked(boolean isPrimaryButton) {
-    }
+    public void onButtonClicked(boolean isPrimaryButton) {}
 
     @Override
     public void onLinkClicked() {
