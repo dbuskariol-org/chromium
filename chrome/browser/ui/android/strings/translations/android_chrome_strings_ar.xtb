@@ -668,7 +668,7 @@
 <translation id="5854790677617711513">مرّ عليها أكثر من 30 يومًا</translation>
 <translation id="5858741533101922242">‏يتعذر على Chrome تشغيل محوّل البلوتوث</translation>
 <translation id="5862731021271217234">للحصول على علامات التبويب من أجهزتك الأخرى، يُرجى تفعيل المزامنة.</translation>
-<translation id="5864174910718532887">التفاصيل: تم الترتيب بحسب اسم موقع الويب</translation>
+<translation id="5864174910718532887">التفاصيل: تم الترتيب حسب اسم موقع الويب</translation>
 <translation id="5864419784173784555">في انتظار تنزيل آخر…</translation>
 <translation id="5865733239029070421">‏يُرسِل إحصاءات الاستخدام وتقارير الأعطال إلى Google تلقائيًا.</translation>
 <translation id="5869522115854928033">كلمات المرور المحفوظة</translation>
@@ -732,7 +732,7 @@
 <translation id="6343495912647200061">{SHIPPING_ADDRESS,plural, =1{‏<ph name="SHIPPING_ADDRESS_PREVIEW" />\u2026 وعنوان إضافي واحد (<ph name="NUMBER_OF_ADDITIONAL_ADDRESSES" />)}zero{‏<ph name="SHIPPING_ADDRESS_PREVIEW" />\u2026 و<ph name="NUMBER_OF_ADDITIONAL_ADDRESSES" /> عنوان إضافي}two{‏<ph name="SHIPPING_ADDRESS_PREVIEW" />\u2026 وعنوانان إضافيان (<ph name="NUMBER_OF_ADDITIONAL_ADDRESSES" />)}few{‏<ph name="SHIPPING_ADDRESS_PREVIEW" />\u2026 و<ph name="NUMBER_OF_ADDITIONAL_ADDRESSES" /> عناوين إضافية}many{‏<ph name="SHIPPING_ADDRESS_PREVIEW" />\u2026 و<ph name="NUMBER_OF_ADDITIONAL_ADDRESSES" /> عنوانًا إضافيًا}other{‏<ph name="SHIPPING_ADDRESS_PREVIEW" />\u2026 و<ph name="NUMBER_OF_ADDITIONAL_ADDRESSES" /> عنوان إضافي}}</translation>
 <translation id="6364438453358674297">هل تريد إزالة اقتراح من السجل؟</translation>
 <translation id="6369229450655021117">يمكنك "من هنا" البحث في الويب والمشاركة مع أصدقائك وعرض الصفحات المفتوحة</translation>
-<translation id="6378173571450987352">التفاصيل: تم الترتيب بحسب مقدار البيانات المُستخدَمة</translation>
+<translation id="6378173571450987352">التفاصيل: تم الترتيب حسب مقدار البيانات المُستخدَمة</translation>
 <translation id="6379829913050047669">‏سيتم فتح تطبيق <ph name="APP_NAME" /> في Chrome. تعني المتابعة موافقتك على <ph name="BEGIN_LINK1" />بنود خدمة Google<ph name="END_LINK1" /> و<ph name="BEGIN_LINK2" />بنود الخدمة الإضافية لكل من متصفح Google Chrome و"نظام التشغيل Chrome"<ph name="END_LINK2" />.</translation>
 <translation id="6381421346744604172">تعتيم المواقع الإلكترونية</translation>
 <translation id="6388207532828177975">المحو وإعادة الضبط</translation>
@@ -856,7 +856,7 @@
 <translation id="7291387454912369099">‏الملء التلقائي باستخدام "مساعد Google"</translation>
 <translation id="7293171162284876153">‏لبدء المزامنة، يُرجى تفعيل "مزامنة بيانات Chrome".</translation>
 <translation id="729975465115245577">لا يتضمن جهازك تطبيقًا لتخزين ملف كلمات المرور.</translation>
-<translation id="7302081693174882195">التفاصيل: تم الترتيب بحسب مقدار البيانات المحفوظة</translation>
+<translation id="7302081693174882195">التفاصيل: تم الترتيب حسب مقدار البيانات المحفوظة</translation>
 <translation id="7302486331832100261">أنت تحظر الإشعارات عادةً. للسماح بها، يُرجى النقر على "التفاصيل".</translation>
 <translation id="7328017930301109123">‏في الوضع البسيط، يُحمِّل Chrome الصفحات بشكلٍ أسرع ويستخدم بيانات أقل بنسبة تصل إلى 60 بالمائة.</translation>
 <translation id="7333031090786104871">لا تزال عملية إضافة موقع الويب السابق جارية</translation>
