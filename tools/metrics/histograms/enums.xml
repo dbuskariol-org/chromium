@@ -27056,6 +27056,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3249" label="ImageCaptureTorch"/>
   <int value="3250" label="XRFrameCreateAnchor"/>
   <int value="3251" label="XRHitTestResultCreateAnchor"/>
+  <int value="3252" label="CSSKeywordRevert"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
