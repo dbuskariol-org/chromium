@@ -1537,6 +1537,83 @@ TEST_F(PasswordStoreTest, RemoveCompromisedCredentialsCreatedBetween) {
   store->ShutdownOnUIThread();
 }
 
+// Test that updating a password in the store deletes the corresponding
+// compromised record synchronously.
+TEST_F(PasswordStoreTest, RemoveCompromisedCredentialsSyncOnUpdate) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(password_manager::features::kPasswordCheck);
+
+  scoped_refptr<PasswordStoreDefault> store = CreatePasswordStore();
+  store->Init(nullptr);
+
+  CompromisedCredentials compromised_credentials = {
+      kTestWebRealm1, base::ASCIIToUTF16("username1"),
+      base::Time::FromTimeT(100), CompromiseType::kLeaked};
+  constexpr PasswordFormData kTestCredential = {PasswordForm::Scheme::kHtml,
+                                                kTestWebRealm1,
+                                                kTestWebOrigin1,
+                                                "",
+                                                L"",
+                                                L"username_element_1",
+                                                L"password_element_1",
+                                                L"username1",
+                                                L"12345",
+                                                10,
+                                                5};
+  std::unique_ptr<PasswordForm> form(FillPasswordFormWithData(kTestCredential));
+  store->AddCompromisedCredentials(compromised_credentials);
+  store->AddLogin(*form);
+  WaitForPasswordStore();
+
+  // Update the password value and immediately get the compromised passwords.
+  form->password_value = base::ASCIIToUTF16("new_password");
+  store->UpdateLogin(*form);
+  MockCompromisedCredentialsConsumer consumer;
+  store->GetAllCompromisedCredentials(&consumer);
+  EXPECT_CALL(consumer, OnGetCompromisedCredentials(IsEmpty()));
+  WaitForPasswordStore();
+
+  store->ShutdownOnUIThread();
+}
+
+// Test that deleting a password in the store deletes the corresponding
+// compromised record synchronously.
+TEST_F(PasswordStoreTest, RemoveCompromisedCredentialsSyncOnDelete) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(password_manager::features::kPasswordCheck);
+
+  scoped_refptr<PasswordStoreDefault> store = CreatePasswordStore();
+  store->Init(nullptr);
+
+  CompromisedCredentials compromised_credentials = {
+      kTestWebRealm1, base::ASCIIToUTF16("username1"),
+      base::Time::FromTimeT(100), CompromiseType::kLeaked};
+  constexpr PasswordFormData kTestCredential = {PasswordForm::Scheme::kHtml,
+                                                kTestWebRealm1,
+                                                kTestWebOrigin1,
+                                                "",
+                                                L"",
+                                                L"username_element_1",
+                                                L"password_element_1",
+                                                L"username1",
+                                                L"12345",
+                                                10,
+                                                5};
+  std::unique_ptr<PasswordForm> form(FillPasswordFormWithData(kTestCredential));
+  store->AddCompromisedCredentials(compromised_credentials);
+  store->AddLogin(*form);
+  WaitForPasswordStore();
+
+  // Delete the password and immediately get the compromised passwords.
+  store->RemoveLogin(*form);
+  MockCompromisedCredentialsConsumer consumer;
+  store->GetAllCompromisedCredentials(&consumer);
+  EXPECT_CALL(consumer, OnGetCompromisedCredentials(IsEmpty()));
+  WaitForPasswordStore();
+
+  store->ShutdownOnUIThread();
+}
+
 #if !defined(OS_ANDROID)
 // TODO(https://crbug.com/1051914): Enable on Android after making local
 // heuristics reliable.
