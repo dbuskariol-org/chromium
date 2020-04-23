@@ -764,7 +764,8 @@ TEST_P(SingleRulesetTest, DynamicRulesetRace) {
   TestExtensionRegistryObserver registry_observer(registry());
 
   service()->EnableExtension(extension_id);
-  const Extension* extension = registry_observer.WaitForExtensionLoaded();
+  scoped_refptr<const Extension> extension =
+      registry_observer.WaitForExtensionLoaded();
   ASSERT_TRUE(extension);
   ASSERT_EQ(extension_id, extension->id());
 

@@ -689,7 +689,7 @@ TEST_F(PermissionsAPIUnitTest, RequestingFilePermissions) {
     // This will reload the extension, so we need to reset the extension
     // pointer.
     util::SetAllowFileAccess(extension->id(), profile(), true);
-    extension = base::WrapRefCounted(observer.WaitForExtensionLoaded());
+    extension = observer.WaitForExtensionLoaded();
     ASSERT_TRUE(extension);
   }
 
