@@ -1,6 +1,6 @@
 luci.console_view(
     name = 'android.packager',
-    header = '//consoles/chromium-header.textpb',
+    header = '//chromium-header.textpb',
     repo = 'https://chromium.googlesource.com/chromium/src',
     entries = [
         luci.console_view_entry(

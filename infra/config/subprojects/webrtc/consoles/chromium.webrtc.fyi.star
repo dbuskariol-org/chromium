@@ -1,6 +1,6 @@
 luci.console_view(
     name = 'chromium.webrtc.fyi',
-    header = '//consoles/chromium-header.textpb',
+    header = '//chromium-header.textpb',
     repo = 'https://webrtc.googlesource.com/src',
     entries = [
         luci.console_view_entry(

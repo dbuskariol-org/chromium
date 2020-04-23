@@ -1,6 +1,6 @@
 load('//lib/builders.star', 'builder', 'cpu', 'defaults', 'goma', 'os')
 load('//lib/try.star', 'try_')
-load('//versioned/trunk/vars.star', 'vars')
+load('./versioned/trunk/vars.star', 'vars')
 
 
 try_.set_defaults(

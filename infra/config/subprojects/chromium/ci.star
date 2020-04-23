@@ -1,12 +1,12 @@
 load('//lib/builders.star', 'cpu', 'goma', 'os', 'xcode_cache')
 load('//lib/ci.star', 'ci')
-load('//versioned/trunk/vars.star', 'vars')
+load('./versioned/trunk/vars.star', 'vars')
 
 # Execute the versioned files to define all of the per-branch entities
 # (bucket, builders, console, poller, etc.)
-exec('//versioned/trunk/buckets/ci.star')
-exec('//versioned/milestones/m81/buckets/ci.star')
-exec('//versioned/milestones/m83/buckets/ci.star')
+exec('./versioned/trunk/buckets/ci.star')
+exec('./versioned/m81/buckets/ci.star')
+exec('./versioned/m83/buckets/ci.star')
 
 
 ci.set_defaults(

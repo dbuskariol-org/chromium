@@ -1,6 +1,6 @@
 luci.console_view(
     name = 'chromium.goma',
-    header = '//consoles/chromium-header.textpb',
+    header = '//chromium-header.textpb',
     include_experimental_builds = True,
     repo = 'https://chromium.googlesource.com/chromium/src',
     entries = [

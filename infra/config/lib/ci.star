@@ -53,7 +53,7 @@ def declare_bucket(milestone_vars):
 
   ci.main_console_view(
       name = milestone_vars.main_console_name,
-      header = '//consoles/chromium-header.textpb',
+      header = '//chromium-header.textpb',
       repo = 'https://chromium.googlesource.com/chromium/src',
       refs = [milestone_vars.ref],
       title = milestone_vars.main_console_title,
@@ -88,7 +88,7 @@ def set_defaults(milestone_vars, **kwargs):
       cpu = builders.cpu.X86_64,
       executable = 'recipe:chromium',
       execution_timeout = 3 * time.hour,
-      header = '//consoles/chromium-header.textpb',
+      header = '//chromium-header.textpb',
       os = builders.os.LINUX_DEFAULT,
       pool = 'luci.chromium.ci',
       repo = 'https://chromium.googlesource.com/chromium/src',

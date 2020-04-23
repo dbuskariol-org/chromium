@@ -1,6 +1,6 @@
 luci.console_view(
     name = 'sheriff.ios',
-    header = '//consoles/chromium-header.textpb',
+    header = '//chromium-header.textpb',
     repo = 'https://chromium.googlesource.com/chromium/src',
     title = 'iOS Sheriff Console',
     entries = [

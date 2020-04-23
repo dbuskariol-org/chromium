@@ -1,12 +1,12 @@
 load('//lib/builders.star', 'cpu', 'goma', 'os', 'xcode_cache')
 load('//lib/try.star', 'try_')
-load('//versioned/trunk/vars.star', 'vars')
+load('./versioned/trunk/vars.star', 'vars')
 
 # Execute the versioned files to define all of the per-branch entities
 # (bucket, builders, console, cq_group, etc.)
-exec('//versioned/trunk/buckets/try.star')
-exec('//versioned/milestones/m81/buckets/try.star')
-exec('//versioned/milestones/m83/buckets/try.star')
+exec('./versioned/trunk/buckets/try.star')
+exec('./versioned/m81/buckets/try.star')
+exec('./versioned/m83/buckets/try.star')
 
 
 try_.set_defaults(
