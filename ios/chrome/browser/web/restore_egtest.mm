@@ -147,7 +147,8 @@ bool WaitForOmniboxContaining(std::string text) {
 
 // Navigates to a set of cross-domains, chrome URLs and error pages, and then
 // tests that they are properly restored.
-- (void)testRestoreHistory {
+// TODO(crbug.com/1073932): Re-enable this.
+- (void)DISABLED_testRestoreHistory {
   [self setUpRestoreServers];
   [self loadTestPages];
   [self verifyRestoredTestPages:YES];
@@ -155,7 +156,8 @@ bool WaitForOmniboxContaining(std::string text) {
 
 // Navigates to a set of cross-domains, chrome URLs and error pages, and then
 // tests that they are properly restored in airplane mode.
-- (void)testRestoreNoNetwork {
+// TODO(crbug.com/1073932): Re-enable this.
+- (void)DISABLED_testRestoreNoNetwork {
   [self setUpRestoreServers];
   [self loadTestPages];
   self.serverRespondsWithContent = false;
