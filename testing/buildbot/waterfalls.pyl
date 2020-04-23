@@ -1756,6 +1756,7 @@
       'Mac10.15 Tests': {
         'mixins': [
             'mac_10.15',
+            'no_gpu',
         ],
         'test_suites': {
           'gtest_tests': 'chromium_mac_gtests',
