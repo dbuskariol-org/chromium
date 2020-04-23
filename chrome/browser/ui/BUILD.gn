@@ -2069,6 +2069,8 @@ jumbo_static_library("ui") {
       "webui/settings/chromeos/search/search_handler_factory.h",
       "webui/settings/chromeos/search/settings_user_action_tracker.cc",
       "webui/settings/chromeos/search/settings_user_action_tracker.h",
+      "webui/settings/chromeos/search_strings_provider.cc",
+      "webui/settings/chromeos/search_strings_provider.h",
       "webui/settings/chromeos/server_printer_url_util.cc",
       "webui/settings/chromeos/server_printer_url_util.h",
       "webui/settings/chromeos/wallpaper_handler.cc",
