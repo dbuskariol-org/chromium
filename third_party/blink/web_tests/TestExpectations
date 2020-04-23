@@ -6727,3 +6727,6 @@ crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-scrip
 crbug.com/1073505 [ Mac10.13 ] virtual/web-components-v0-disabled/external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/* [ Pass Failure ]
 crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-success-external-module.html [ Pass Failure ]
 crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-fetch-error-external-module.html [ Pass Failure ]
+
+# Sheriff 2020-04-23
+crbug.com/1073792 [ Mac10.13 ] virtual/threaded-prefer-compositing/fast/scrolling/events/scrollend-event-fired-after-snap.html [ Pass Failure ]
