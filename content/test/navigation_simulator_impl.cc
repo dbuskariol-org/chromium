@@ -605,8 +605,7 @@ void NavigationSimulatorImpl::Commit() {
   if (request_) {
     scoped_refptr<net::HttpResponseHeaders> response_headers =
         new net::HttpResponseHeaders(std::string());
-    response_headers->AddHeader(std::string("Content-Type: ") +
-                                contents_mime_type_);
+    response_headers->SetHeader("Content-Type", contents_mime_type_);
     request_->set_response_headers_for_testing(response_headers);
   }
 

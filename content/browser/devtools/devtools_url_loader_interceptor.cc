@@ -902,9 +902,7 @@ Response InterceptionJob::InnerContinueRequest(
     if (modifications->modified_url.isJust()) {
       std::string location = modifications->modified_url.fromJust();
       CancelRequest();
-      auto* headers = response_metadata_->head->headers.get();
-      headers->RemoveHeader("location");
-      headers->AddHeader("location: " + location);
+      response_metadata_->head->headers->SetHeader("location", location);
       GURL redirect_url = create_loader_params_->request.url.Resolve(location);
       if (!redirect_url.is_valid())
         return Response::ServerError("Invalid modified URL");

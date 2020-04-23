@@ -298,8 +298,7 @@ void TestRenderFrameHost::SendNavigateWithParamsAndInterfaceParams(
   if (navigation_request() && !navigation_request()->GetResponseHeaders()) {
     scoped_refptr<net::HttpResponseHeaders> response_headers =
         new net::HttpResponseHeaders(std::string());
-    response_headers->AddHeader(std::string("Content-Type: ") +
-                                params->contents_mime_type);
+    response_headers->SetHeader("Content-Type", params->contents_mime_type);
     navigation_request()->set_response_headers_for_testing(response_headers);
   }
 
