@@ -158,7 +158,7 @@ WindowPerformance::WindowPerformance(LocalDOMWindow* window)
     : Performance(
           ToTimeOrigin(window),
           window->document()->GetTaskRunner(TaskType::kPerformanceTimeline)),
-      DOMWindowClient(window) {
+      ExecutionContextClient(window) {
   DCHECK(GetFrame());
   DCHECK(GetFrame()->GetPerformanceMonitor());
   GetFrame()->GetPerformanceMonitor()->Subscribe(
@@ -232,7 +232,7 @@ void WindowPerformance::Trace(Visitor* visitor) {
   visitor->Trace(timing_);
   Performance::Trace(visitor);
   PerformanceMonitor::Client::Trace(visitor);
-  DOMWindowClient::Trace(visitor);
+  ExecutionContextClient::Trace(visitor);
 }
 
 static bool CanAccessOrigin(Frame* frame1, Frame* frame2) {
