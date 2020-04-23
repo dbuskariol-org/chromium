@@ -56,12 +56,6 @@ static const char kTranslateSubframeSuccessPercentage[] =
 static const char kTranslateSubframeErrorType[] =
     "Translate.TranslateSubframe.ErrorType";
 
-// Overrides the hrefTranslate logic to auto-translate when the navigation is
-// from any origin rather than only Google origins. Used for manual testing
-// where the test page may reside on a test domain.
-const base::Feature kAutoHrefTranslateAllOrigins{
-    "AutoHrefTranslateAllOrigins", base::FEATURE_DISABLED_BY_DEFAULT};
-
 // A helper function for CombineTextNodesAndMakeCallback() below.
 // This is a copy of logic from macos specific RenderWidgetHostViewMac
 // that was created in https://chromium-review.googlesource.com/956029
@@ -270,7 +264,7 @@ void PerFrameContentTranslateDriver::DidFinishNavigation(
       (google_util::IsGoogleDomainUrl(initiator_origin->GetURL(),
                                       google_util::DISALLOW_SUBDOMAIN,
                                       google_util::ALLOW_NON_STANDARD_PORTS) ||
-       base::FeatureList::IsEnabled(kAutoHrefTranslateAllOrigins));
+       IsAutoHrefTranslateAllOriginsEnabled());
 
   translate_manager()->GetLanguageState().DidNavigate(
       navigation_handle->IsSameDocument(), navigation_handle->IsInMainFrame(),
