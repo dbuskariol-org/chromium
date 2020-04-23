@@ -8,7 +8,6 @@
 #include <utility>
 
 #include "ash/app_list/app_list_controller_impl.h"
-#include "ash/assistant/assistant_controller_impl.h"
 #include "ash/assistant/test/test_assistant_client.h"
 #include "ash/assistant/test/test_assistant_setup.h"
 #include "ash/assistant/test/test_assistant_web_view_factory.h"
@@ -125,10 +124,6 @@ void AssistantAshTestBase::SetUp() {
 
   // Set user consent so the suggestion chips are displayed.
   SetConsentStatus(ConsentStatus::kActivityControlAccepted);
-
-  // Cache controller.
-  controller_ = Shell::Get()->assistant_controller();
-  DCHECK(controller_);
 
   // At this point our Assistant service is ready for use.
   // Indicate this by changing status from NOT_READY to READY.
@@ -316,14 +311,6 @@ void AssistantAshTestBase::DismissKeyboard() {
 bool AssistantAshTestBase::IsKeyboardShowing() const {
   auto* keyboard_controller = keyboard::KeyboardUIController::Get();
   return keyboard_controller->IsEnabled() && keyboard::IsKeyboardShowing();
-}
-
-AssistantInteractionController* AssistantAshTestBase::interaction_controller() {
-  return controller_->interaction_controller();
-}
-
-const AssistantInteractionModel* AssistantAshTestBase::interaction_model() {
-  return interaction_controller()->model();
 }
 
 TestAssistantService* AssistantAshTestBase::assistant_service() {

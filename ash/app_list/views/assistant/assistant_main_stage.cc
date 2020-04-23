@@ -120,17 +120,12 @@ AppListAssistantMainStage::AppListAssistantMainStage(
   InitLayout();
 
   assistant_controller_observer_.Add(AssistantController::Get());
+  assistant_interaction_model_observer_.Add(
+      AssistantInteractionController::Get());
   assistant_ui_model_observer_.Add(AssistantUiController::Get());
-
-  // The view hierarchy will be destructed before AssistantController in Shell,
-  // which owns AssistantViewDelegate, so AssistantViewDelegate is guaranteed to
-  // outlive the AppListAssistantMainStage.
-  delegate_->AddInteractionModelObserver(this);
 }
 
-AppListAssistantMainStage::~AppListAssistantMainStage() {
-  delegate_->RemoveInteractionModelObserver(this);
-}
+AppListAssistantMainStage::~AppListAssistantMainStage() = default;
 
 const char* AppListAssistantMainStage::GetClassName() const {
   return "AppListAssistantMainStage";
@@ -333,6 +328,8 @@ void AppListAssistantMainStage::AnimateInFooter() {
 
 void AppListAssistantMainStage::OnAssistantControllerDestroying() {
   assistant_ui_model_observer_.Remove(AssistantUiController::Get());
+  assistant_interaction_model_observer_.Remove(
+      AssistantInteractionController::Get());
   assistant_controller_observer_.Remove(AssistantController::Get());
 }
 
@@ -392,7 +389,8 @@ void AppListAssistantMainStage::OnPendingQueryCleared(bool due_to_commit) {
   // cancelled, or because the query was committed. If the query was committed,
   // reseting the query here will have no visible effect. If the interaction was
   // cancelled, we set the query here to restore the previously committed query.
-  query_view_->SetQuery(delegate_->GetInteractionModel()->committed_query());
+  query_view_->SetQuery(
+      AssistantInteractionController::Get()->GetModel()->committed_query());
 }
 
 void AppListAssistantMainStage::OnResponseChanged(

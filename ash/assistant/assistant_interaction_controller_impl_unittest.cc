@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_interaction_controller.h"
+#include "ash/assistant/assistant_interaction_controller_impl.h"
+
 #include "ash/assistant/test/assistant_ash_test_base.h"
+#include "ash/public/cpp/assistant/controller/assistant_interaction_controller.h"
 #include "ash/test/fake_android_intent_helper.h"
 #include "base/bind.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom-forward.h"
@@ -39,9 +41,18 @@ class OpenAppCallbackMock {
   }
 };
 
-class AssistantInteractionControllerTest : public AssistantAshTestBase {
+class AssistantInteractionControllerImplTest : public AssistantAshTestBase {
  public:
-  AssistantInteractionControllerTest() = default;
+  AssistantInteractionControllerImplTest() = default;
+
+  AssistantInteractionControllerImpl* interaction_controller() {
+    return static_cast<AssistantInteractionControllerImpl*>(
+        AssistantInteractionController::Get());
+  }
+
+  const AssistantInteractionModel* interaction_model() {
+    return interaction_controller()->GetModel();
+  }
 
   void StartInteraction() {
     interaction_controller()->OnInteractionStarted(
@@ -58,7 +69,7 @@ class AssistantInteractionControllerTest : public AssistantAshTestBase {
 
 }  // namespace
 
-TEST_F(AssistantInteractionControllerTest,
+TEST_F(AssistantInteractionControllerImplTest,
        ShouldBecomeActiveWhenInteractionStarts) {
   EXPECT_EQ(interaction_model()->interaction_state(),
             InteractionState::kInactive);
@@ -70,7 +81,7 @@ TEST_F(AssistantInteractionControllerTest,
             InteractionState::kActive);
 }
 
-TEST_F(AssistantInteractionControllerTest,
+TEST_F(AssistantInteractionControllerImplTest,
        ShouldCallCallbackWhenOpenAppIsCalledWhileInactive) {
   StrictMock<OpenAppCallbackMock> callback;
 
@@ -82,7 +93,7 @@ TEST_F(AssistantInteractionControllerTest,
                                               callback.Bind());
 }
 
-TEST_F(AssistantInteractionControllerTest,
+TEST_F(AssistantInteractionControllerImplTest,
        ShouldCallCallbackWhenOpenAppIsCalledWithoutAnAndroidIntentHelper) {
   StrictMock<OpenAppCallbackMock> callback;
 
@@ -93,7 +104,7 @@ TEST_F(AssistantInteractionControllerTest,
                                               callback.Bind());
 }
 
-TEST_F(AssistantInteractionControllerTest,
+TEST_F(AssistantInteractionControllerImplTest,
        ShouldCallCallbackWhenOpenAppIsCalledForUnknownAndroidApp) {
   StrictMock<OpenAppCallbackMock> callback;
 
@@ -105,7 +116,7 @@ TEST_F(AssistantInteractionControllerTest,
       CreateAndroidAppInfo("unknown-app-name"), callback.Bind());
 }
 
-TEST_F(AssistantInteractionControllerTest,
+TEST_F(AssistantInteractionControllerImplTest,
        ShouldLaunchAppAndCallCallbackWhenOpenAppIsCalled) {
   StrictMock<OpenAppCallbackMock> callback;
   const std::string app_name = "AppName";
@@ -122,7 +133,7 @@ TEST_F(AssistantInteractionControllerTest,
   EXPECT_EQ(intent, fake_helper.last_launched_android_intent());
 }
 
-TEST_F(AssistantInteractionControllerTest,
+TEST_F(AssistantInteractionControllerImplTest,
        ShouldAddSchemeToIntentWhenLaunchingAndroidApp) {
   StrictMock<OpenAppCallbackMock> callback;
   const std::string app_name = "AppName";

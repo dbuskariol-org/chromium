@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_ASSISTANT_ASSISTANT_INTERACTION_CONTROLLER_H_
-#define ASH_ASSISTANT_ASSISTANT_INTERACTION_CONTROLLER_H_
+#ifndef ASH_ASSISTANT_ASSISTANT_INTERACTION_CONTROLLER_IMPL_H_
+#define ASH_ASSISTANT_ASSISTANT_INTERACTION_CONTROLLER_IMPL_H_
 
 #include <map>
 #include <memory>
@@ -17,6 +17,7 @@
 #include "ash/highlighter/highlighter_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
+#include "ash/public/cpp/assistant/controller/assistant_interaction_controller.h"
 #include "ash/public/cpp/tablet_mode_observer.h"
 #include "ash/wm/tablet_mode/tablet_mode_controller.h"
 #include "base/macros.h"
@@ -33,8 +34,9 @@ class ProactiveSuggestions;
 enum class AssistantButtonId;
 enum class AssistantQuerySource;
 
-class AssistantInteractionController
-    : public chromeos::assistant::mojom::AssistantInteractionSubscriber,
+class AssistantInteractionControllerImpl
+    : public AssistantInteractionController,
+      public chromeos::assistant::mojom::AssistantInteractionSubscriber,
       public AssistantControllerObserver,
       public AssistantInteractionModelObserver,
       public AssistantUiModelObserver,
@@ -57,19 +59,17 @@ class AssistantInteractionController
   using AssistantSuggestionType =
       chromeos::assistant::mojom::AssistantSuggestionType;
 
-  explicit AssistantInteractionController(
+  explicit AssistantInteractionControllerImpl(
       AssistantControllerImpl* assistant_controller);
-  ~AssistantInteractionController() override;
+  ~AssistantInteractionControllerImpl() override;
 
   // Provides a pointer to the |assistant| owned by AssistantController.
   void SetAssistant(chromeos::assistant::mojom::Assistant* assistant);
 
-  // Returns a reference to the underlying model.
-  const AssistantInteractionModel* model() const { return &model_; }
-
-  // Adds/removes the specified interaction model |observer|.
-  void AddModelObserver(AssistantInteractionModelObserver* observer);
-  void RemoveModelObserver(AssistantInteractionModelObserver* observer);
+  // AssistantInteractionController:
+  const AssistantInteractionModel* GetModel() const override;
+  void AddModelObserver(AssistantInteractionModelObserver*) override;
+  void RemoveModelObserver(AssistantInteractionModelObserver*) override;
 
   // AssistantControllerObserver:
   void OnAssistantControllerConstructed() override;
@@ -181,13 +181,13 @@ class AssistantInteractionController
   ScopedObserver<TabletModeController, TabletModeObserver>
       tablet_mode_controller_observer_{this};
 
-  base::WeakPtrFactory<AssistantInteractionController>
+  base::WeakPtrFactory<AssistantInteractionControllerImpl>
       screen_context_request_factory_{this};
-  base::WeakPtrFactory<AssistantInteractionController> weak_factory_{this};
+  base::WeakPtrFactory<AssistantInteractionControllerImpl> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(AssistantInteractionController);
+  DISALLOW_COPY_AND_ASSIGN(AssistantInteractionControllerImpl);
 };
 
 }  // namespace ash
 
-#endif  // ASH_ASSISTANT_ASSISTANT_INTERACTION_CONTROLLER_H_
+#endif  // ASH_ASSISTANT_ASSISTANT_INTERACTION_CONTROLLER_IMPL_H_

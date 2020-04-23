@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_interaction_controller.h"
+#include "ash/assistant/assistant_interaction_controller_impl.h"
 
 #include <utility>
 
@@ -112,7 +112,7 @@ void IncrementNumWarmerWelcomeTriggered() {
 
 // AssistantInteractionController ----------------------------------------------
 
-AssistantInteractionController::AssistantInteractionController(
+AssistantInteractionControllerImpl::AssistantInteractionControllerImpl(
     AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   AddModelObserver(this);
@@ -121,11 +121,11 @@ AssistantInteractionController::AssistantInteractionController(
   tablet_mode_controller_observer_.Add(GetTabletModeController());
 }
 
-AssistantInteractionController::~AssistantInteractionController() {
+AssistantInteractionControllerImpl::~AssistantInteractionControllerImpl() {
   RemoveModelObserver(this);
 }
 
-void AssistantInteractionController::SetAssistant(
+void AssistantInteractionControllerImpl::SetAssistant(
     chromeos::assistant::mojom::Assistant* assistant) {
   assistant_ = assistant;
 
@@ -134,27 +134,32 @@ void AssistantInteractionController::SetAssistant(
       assistant_interaction_subscriber_receiver_.BindNewPipeAndPassRemote());
 }
 
-void AssistantInteractionController::AddModelObserver(
+const AssistantInteractionModel* AssistantInteractionControllerImpl::GetModel()
+    const {
+  return &model_;
+}
+
+void AssistantInteractionControllerImpl::AddModelObserver(
     AssistantInteractionModelObserver* observer) {
   model_.AddObserver(observer);
 }
 
-void AssistantInteractionController::RemoveModelObserver(
+void AssistantInteractionControllerImpl::RemoveModelObserver(
     AssistantInteractionModelObserver* observer) {
   model_.RemoveObserver(observer);
 }
 
-void AssistantInteractionController::OnAssistantControllerConstructed() {
+void AssistantInteractionControllerImpl::OnAssistantControllerConstructed() {
   AssistantUiController::Get()->AddModelObserver(this);
   assistant_controller_->view_delegate()->AddObserver(this);
 }
 
-void AssistantInteractionController::OnAssistantControllerDestroying() {
+void AssistantInteractionControllerImpl::OnAssistantControllerDestroying() {
   assistant_controller_->view_delegate()->RemoveObserver(this);
   AssistantUiController::Get()->RemoveModelObserver(this);
 }
 
-void AssistantInteractionController::OnDeepLinkReceived(
+void AssistantInteractionControllerImpl::OnDeepLinkReceived(
     assistant::util::DeepLinkType type,
     const std::map<std::string, std::string>& params) {
   using assistant::util::DeepLinkParam;
@@ -240,7 +245,7 @@ void AssistantInteractionController::OnDeepLinkReceived(
                        /*query_source=*/AssistantQuerySource::kDeepLink);
 }
 
-void AssistantInteractionController::OnUiVisibilityChanged(
+void AssistantInteractionControllerImpl::OnUiVisibilityChanged(
     AssistantVisibility new_visibility,
     AssistantVisibility old_visibility,
     base::Optional<AssistantEntryPoint> entry_point,
@@ -259,7 +264,7 @@ void AssistantInteractionController::OnUiVisibilityChanged(
   }
 }
 
-void AssistantInteractionController::OnHighlighterSelectionRecognized(
+void AssistantInteractionControllerImpl::OnHighlighterSelectionRecognized(
     const gfx::Rect& rect) {
   DCHECK(AssistantState::Get()->IsScreenContextAllowed());
 
@@ -269,7 +274,7 @@ void AssistantInteractionController::OnHighlighterSelectionRecognized(
       AssistantQuerySource::kStylus);
 }
 
-void AssistantInteractionController::OnInteractionStateChanged(
+void AssistantInteractionControllerImpl::OnInteractionStateChanged(
     InteractionState interaction_state) {
   if (!HasActiveInteraction())
     return;
@@ -278,7 +283,7 @@ void AssistantInteractionController::OnInteractionStateChanged(
   Shell::Get()->highlighter_controller()->AbortSession();
 }
 
-void AssistantInteractionController::OnInputModalityChanged(
+void AssistantInteractionControllerImpl::OnInputModalityChanged(
     InputModality input_modality) {
   if (!IsVisible())
     return;
@@ -306,13 +311,13 @@ void AssistantInteractionController::OnInputModalityChanged(
   }
 }
 
-void AssistantInteractionController::OnMicStateChanged(MicState mic_state) {
+void AssistantInteractionControllerImpl::OnMicStateChanged(MicState mic_state) {
   // We should stop ChromeVox from speaking when opening the mic.
   if (mic_state == MicState::kOpen)
     Shell::Get()->accessibility_controller()->SilenceSpokenFeedback();
 }
 
-void AssistantInteractionController::OnCommittedQueryChanged(
+void AssistantInteractionControllerImpl::OnCommittedQueryChanged(
     const AssistantQuery& assistant_query) {
   std::string query;
   switch (assistant_query.type()) {
@@ -340,7 +345,7 @@ void AssistantInteractionController::OnCommittedQueryChanged(
 
 // TODO(b/140565663): Set pending query from |metadata| and remove calls to set
 // pending query that occur outside of this method.
-void AssistantInteractionController::OnInteractionStarted(
+void AssistantInteractionControllerImpl::OnInteractionStarted(
     AssistantInteractionMetadataPtr metadata) {
   // Abort any request in progress.
   screen_context_request_factory_.InvalidateWeakPtrs();
@@ -392,7 +397,7 @@ void AssistantInteractionController::OnInteractionStarted(
   model_.SetPendingResponse(base::MakeRefCounted<AssistantResponse>());
 }
 
-void AssistantInteractionController::OnInteractionFinished(
+void AssistantInteractionControllerImpl::OnInteractionFinished(
     AssistantInteractionResolution resolution) {
   // If we don't have an active interaction, that indicates that this
   // interaction was explicitly stopped outside of LibAssistant. In this case,
@@ -478,7 +483,7 @@ void AssistantInteractionController::OnInteractionFinished(
   OnProcessPendingResponse();
 }
 
-void AssistantInteractionController::OnHtmlResponse(
+void AssistantInteractionControllerImpl::OnHtmlResponse(
     const std::string& html,
     const std::string& fallback) {
   if (!HasActiveInteraction())
@@ -506,7 +511,7 @@ void AssistantInteractionController::OnHtmlResponse(
   }
 }
 
-void AssistantInteractionController::OnSuggestionChipPressed(
+void AssistantInteractionControllerImpl::OnSuggestionChipPressed(
     const AssistantSuggestion* suggestion) {
   // If the suggestion contains a non-empty action url, we will handle the
   // suggestion chip pressed event by launching the action url in the browser.
@@ -540,22 +545,22 @@ void AssistantInteractionController::OnSuggestionChipPressed(
           : AssistantQuerySource::kSuggestionChip);
 }
 
-void AssistantInteractionController::OnTabletModeStarted() {
+void AssistantInteractionControllerImpl::OnTabletModeStarted() {
   OnTabletModeChanged();
 }
 
-void AssistantInteractionController::OnTabletModeEnded() {
+void AssistantInteractionControllerImpl::OnTabletModeEnded() {
   OnTabletModeChanged();
 }
 
-void AssistantInteractionController::OnTabletModeChanged() {
+void AssistantInteractionControllerImpl::OnTabletModeChanged() {
   // The default input modality is different for tablet and normal mode.
   // Change input modality to the new default input modality.
   if (!HasActiveInteraction() && !IsVisible())
     model_.SetInputModality(GetDefaultInputModality());
 }
 
-void AssistantInteractionController::OnSuggestionsResponse(
+void AssistantInteractionControllerImpl::OnSuggestionsResponse(
     std::vector<AssistantSuggestionPtr> suggestions) {
   if (!HasActiveInteraction())
     return;
@@ -581,7 +586,8 @@ void AssistantInteractionController::OnSuggestionsResponse(
   }
 }
 
-void AssistantInteractionController::OnTextResponse(const std::string& text) {
+void AssistantInteractionControllerImpl::OnTextResponse(
+    const std::string& text) {
   if (!HasActiveInteraction())
     return;
 
@@ -606,7 +612,7 @@ void AssistantInteractionController::OnTextResponse(const std::string& text) {
   }
 }
 
-void AssistantInteractionController::OnTimersResponse(
+void AssistantInteractionControllerImpl::OnTimersResponse(
     const std::vector<std::string>& timer_ids) {
   DCHECK(IsTimersV2Enabled());
   if (!HasActiveInteraction())
@@ -633,20 +639,20 @@ void AssistantInteractionController::OnTimersResponse(
   }
 }
 
-void AssistantInteractionController::OnSpeechRecognitionStarted() {}
+void AssistantInteractionControllerImpl::OnSpeechRecognitionStarted() {}
 
-void AssistantInteractionController::OnSpeechRecognitionIntermediateResult(
+void AssistantInteractionControllerImpl::OnSpeechRecognitionIntermediateResult(
     const std::string& high_confidence_text,
     const std::string& low_confidence_text) {
   model_.SetPendingQuery(std::make_unique<AssistantVoiceQuery>(
       high_confidence_text, low_confidence_text));
 }
 
-void AssistantInteractionController::OnSpeechRecognitionEndOfUtterance() {
+void AssistantInteractionControllerImpl::OnSpeechRecognitionEndOfUtterance() {
   model_.SetMicState(MicState::kClosed);
 }
 
-void AssistantInteractionController::OnSpeechRecognitionFinalResult(
+void AssistantInteractionControllerImpl::OnSpeechRecognitionFinalResult(
     const std::string& final_result) {
   // We sometimes receive this event with an empty payload when the interaction
   // is resolving due to mic timeout. In such cases, we should not commit the
@@ -658,11 +664,12 @@ void AssistantInteractionController::OnSpeechRecognitionFinalResult(
   model_.CommitPendingQuery();
 }
 
-void AssistantInteractionController::OnSpeechLevelUpdated(float speech_level) {
+void AssistantInteractionControllerImpl::OnSpeechLevelUpdated(
+    float speech_level) {
   model_.SetSpeechLevel(speech_level);
 }
 
-void AssistantInteractionController::OnTtsStarted(bool due_to_error) {
+void AssistantInteractionControllerImpl::OnTtsStarted(bool due_to_error) {
   if (!HasActiveInteraction())
     return;
 
@@ -710,7 +717,7 @@ void AssistantInteractionController::OnTtsStarted(bool due_to_error) {
   OnProcessPendingResponse();
 }
 
-void AssistantInteractionController::OnWaitStarted() {
+void AssistantInteractionControllerImpl::OnWaitStarted() {
   if (!HasActiveInteraction())
     return;
 
@@ -738,8 +745,8 @@ void AssistantInteractionController::OnWaitStarted() {
   OnProcessPendingResponse();
 }
 
-void AssistantInteractionController::OnOpenUrlResponse(const GURL& url,
-                                                       bool in_background) {
+void AssistantInteractionControllerImpl::OnOpenUrlResponse(const GURL& url,
+                                                           bool in_background) {
   if (!HasActiveInteraction())
     return;
 
@@ -749,7 +756,7 @@ void AssistantInteractionController::OnOpenUrlResponse(const GURL& url,
   AssistantController::Get()->OpenUrl(url, in_background, /*from_server=*/true);
 }
 
-void AssistantInteractionController::OnOpenAppResponse(
+void AssistantInteractionControllerImpl::OnOpenAppResponse(
     chromeos::assistant::mojom::AndroidAppInfoPtr app_info,
     OnOpenAppResponseCallback callback) {
   if (!HasActiveInteraction()) {
@@ -785,7 +792,7 @@ void AssistantInteractionController::OnOpenAppResponse(
   std::move(callback).Run(true);
 }
 
-void AssistantInteractionController::OnDialogPlateButtonPressed(
+void AssistantInteractionControllerImpl::OnDialogPlateButtonPressed(
     AssistantButtonId id) {
   if (id == AssistantButtonId::kKeyboardInputToggle) {
     model_.SetInputModality(InputModality::kKeyboard);
@@ -805,7 +812,7 @@ void AssistantInteractionController::OnDialogPlateButtonPressed(
   }
 }
 
-void AssistantInteractionController::OnDialogPlateContentsCommitted(
+void AssistantInteractionControllerImpl::OnDialogPlateContentsCommitted(
     const std::string& text) {
   DCHECK(!text.empty());
   StartTextInteraction(
@@ -813,18 +820,18 @@ void AssistantInteractionController::OnDialogPlateContentsCommitted(
       /*query_source=*/AssistantQuerySource::kDialogPlateTextField);
 }
 
-bool AssistantInteractionController::HasUnprocessedPendingResponse() {
+bool AssistantInteractionControllerImpl::HasUnprocessedPendingResponse() {
   DCHECK(!IsResponseProcessingV2Enabled());
   return model_.pending_response() &&
          model_.pending_response()->processing_state() ==
              AssistantResponse::ProcessingState::kUnprocessed;
 }
 
-bool AssistantInteractionController::HasActiveInteraction() const {
+bool AssistantInteractionControllerImpl::HasActiveInteraction() const {
   return model_.interaction_state() == InteractionState::kActive;
 }
 
-void AssistantInteractionController::OnProcessPendingResponse() {
+void AssistantInteractionControllerImpl::OnProcessPendingResponse() {
   DCHECK(!IsResponseProcessingV2Enabled());
 
   // It's possible that the pending response is already being processed. This
@@ -837,11 +844,11 @@ void AssistantInteractionController::OnProcessPendingResponse() {
 
   // Start processing.
   model_.pending_response()->Process(base::BindOnce(
-      &AssistantInteractionController::OnPendingResponseProcessed,
+      &AssistantInteractionControllerImpl::OnPendingResponseProcessed,
       weak_factory_.GetWeakPtr()));
 }
 
-void AssistantInteractionController::OnPendingResponseProcessed(
+void AssistantInteractionControllerImpl::OnPendingResponseProcessed(
     bool is_completed) {
   DCHECK(!IsResponseProcessingV2Enabled());
 
@@ -857,7 +864,7 @@ void AssistantInteractionController::OnPendingResponseProcessed(
   model_.CommitPendingResponse();
 }
 
-void AssistantInteractionController::OnUiVisible(
+void AssistantInteractionControllerImpl::OnUiVisible(
     AssistantEntryPoint entry_point) {
   DCHECK(IsVisible());
 
@@ -878,7 +885,7 @@ void AssistantInteractionController::OnUiVisible(
     // been cached on the client. To avoid jank, we need to post a task to start
     // our interaction to give the Assistant UI a chance to initialize itself.
     base::SequencedTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&AssistantInteractionController::
+        FROM_HERE, base::BindOnce(&AssistantInteractionControllerImpl::
                                       StartProactiveSuggestionsInteraction,
                                   weak_factory_.GetWeakPtr(),
                                   AssistantSuggestionsController::Get()
@@ -891,7 +898,7 @@ void AssistantInteractionController::OnUiVisible(
     AttemptWarmerWelcome();
 }
 
-bool AssistantInteractionController::ShouldAttemptWarmerWelcome(
+bool AssistantInteractionControllerImpl::ShouldAttemptWarmerWelcome(
     AssistantEntryPoint entry_point) const {
   if (!chromeos::assistant::features::IsWarmerWelcomeEnabled())
     return false;
@@ -916,7 +923,7 @@ bool AssistantInteractionController::ShouldAttemptWarmerWelcome(
   return true;
 }
 
-void AssistantInteractionController::AttemptWarmerWelcome() {
+void AssistantInteractionControllerImpl::AttemptWarmerWelcome() {
   // TODO(yileili): Currently WW is only triggered when the first Assistant
   // launch of the user session does not automatically start an interaction that
   // would otherwise cause us to interrupt the user.  Need further UX design to
@@ -931,7 +938,7 @@ void AssistantInteractionController::AttemptWarmerWelcome() {
   IncrementNumWarmerWelcomeTriggered();
 }
 
-void AssistantInteractionController::StartProactiveSuggestionsInteraction(
+void AssistantInteractionControllerImpl::StartProactiveSuggestionsInteraction(
     scoped_refptr<const ProactiveSuggestions> proactive_suggestions) {
   // For a proactive suggestions interaction, we've already cached the response
   // but we still need to spoof lifecycle events. This is only safe to do if we
@@ -966,7 +973,7 @@ void AssistantInteractionController::StartProactiveSuggestionsInteraction(
   OnInteractionFinished(AssistantInteractionResolution::kNormal);
 }
 
-void AssistantInteractionController::StartScreenContextInteraction(
+void AssistantInteractionControllerImpl::StartScreenContextInteraction(
     bool include_assistant_structure,
     const gfx::Rect& region,
     AssistantQuerySource query_source) {
@@ -979,7 +986,7 @@ void AssistantInteractionController::StartScreenContextInteraction(
   assistant_controller_->screen_context_controller()->RequestScreenContext(
       include_assistant_structure, region,
       base::BindOnce(
-          [](const base::WeakPtr<AssistantInteractionController>& self,
+          [](const base::WeakPtr<AssistantInteractionControllerImpl>& self,
              ax::mojom::AssistantStructurePtr assistant_structure,
              const std::vector<uint8_t>& screenshot) {
             if (!self)
@@ -991,7 +998,7 @@ void AssistantInteractionController::StartScreenContextInteraction(
           screen_context_request_factory_.GetWeakPtr()));
 }
 
-void AssistantInteractionController::StartTextInteraction(
+void AssistantInteractionControllerImpl::StartTextInteraction(
     const std::string& text,
     bool allow_tts,
     AssistantQuerySource query_source) {
@@ -1005,7 +1012,7 @@ void AssistantInteractionController::StartTextInteraction(
   assistant_->StartTextInteraction(text, query_source, allow_tts);
 }
 
-void AssistantInteractionController::StartVoiceInteraction() {
+void AssistantInteractionControllerImpl::StartVoiceInteraction() {
   StopActiveInteraction(false);
 
   model_.SetPendingQuery(std::make_unique<AssistantVoiceQuery>());
@@ -1013,7 +1020,7 @@ void AssistantInteractionController::StartVoiceInteraction() {
   assistant_->StartVoiceInteraction();
 }
 
-void AssistantInteractionController::StopActiveInteraction(
+void AssistantInteractionControllerImpl::StopActiveInteraction(
     bool cancel_conversation) {
   // Even though the interaction state will be asynchronously set to inactive
   // via a call to OnInteractionFinished(Resolution), we explicitly set it to
@@ -1033,12 +1040,13 @@ void AssistantInteractionController::StopActiveInteraction(
   model_.ClearPendingResponse();
 }
 
-InputModality AssistantInteractionController::GetDefaultInputModality() const {
+InputModality AssistantInteractionControllerImpl::GetDefaultInputModality()
+    const {
   return IsPreferVoice() ? InputModality::kVoice : InputModality::kKeyboard;
 }
 
 AssistantResponse*
-AssistantInteractionController::GetResponseForActiveInteraction() {
+AssistantInteractionControllerImpl::GetResponseForActiveInteraction() {
   // Returns the response for the active interaction. In response processing v2,
   // this may be the pending response (if no client ops have yet been received)
   // or else is the committed response. In response processing v2, this is
@@ -1049,11 +1057,11 @@ AssistantInteractionController::GetResponseForActiveInteraction() {
                                          : model_.pending_response();
 }
 
-AssistantVisibility AssistantInteractionController::GetVisibility() const {
+AssistantVisibility AssistantInteractionControllerImpl::GetVisibility() const {
   return AssistantUiController::Get()->GetModel()->visibility();
 }
 
-bool AssistantInteractionController::IsVisible() const {
+bool AssistantInteractionControllerImpl::IsVisible() const {
   return GetVisibility() == AssistantVisibility::kVisible;
 }
 

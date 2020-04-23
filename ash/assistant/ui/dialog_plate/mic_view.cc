@@ -8,7 +8,6 @@
 
 #include "ash/assistant/model/assistant_interaction_model.h"
 #include "ash/assistant/model/assistant_ui_model.h"
-#include "ash/assistant/ui/assistant_view_delegate.h"
 #include "ash/assistant/ui/logo_view/logo_view.h"
 #include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ui/views/layout/box_layout.h"
@@ -28,20 +27,16 @@ constexpr int kPreferredSizeDip = 32;
 
 }  // namespace
 
-MicView::MicView(AssistantButtonListener* listener,
-                 AssistantViewDelegate* delegate,
-                 AssistantButtonId button_id)
-    : AssistantButton(listener, button_id), delegate_(delegate) {
+MicView::MicView(AssistantButtonListener* listener, AssistantButtonId button_id)
+    : AssistantButton(listener, button_id) {
   InitLayout();
 
-  // The AssistantViewDelegate is owned by AssistantController which is
-  // guaranteed to outlive the Assistant view hierarchy.
-  delegate_->AddInteractionModelObserver(this);
+  assistant_controller_observer_.Add(AssistantController::Get());
+  assistant_interaction_model_observer_.Add(
+      AssistantInteractionController::Get());
 }
 
-MicView::~MicView() {
-  delegate_->RemoveInteractionModelObserver(this);
-}
+MicView::~MicView() = default;
 
 const char* MicView::GetClassName() const {
   return "MicView";
@@ -53,6 +48,30 @@ gfx::Size MicView::CalculatePreferredSize() const {
 
 int MicView::GetHeightForWidth(int width) const {
   return kPreferredSizeDip;
+}
+
+void MicView::OnAssistantControllerDestroying() {
+  assistant_interaction_model_observer_.Remove(
+      AssistantInteractionController::Get());
+  assistant_controller_observer_.Remove(AssistantController::Get());
+}
+
+void MicView::OnMicStateChanged(MicState mic_state) {
+  is_user_speaking_ = false;
+  UpdateState(/*animate=*/true);
+}
+
+void MicView::OnSpeechLevelChanged(float speech_level_db) {
+  // TODO: Work with UX to determine the threshold.
+  constexpr float kSpeechLevelThreshold = -60.0f;
+  if (speech_level_db < kSpeechLevelThreshold)
+    return;
+
+  logo_view_->SetSpeechLevel(speech_level_db);
+  if (!is_user_speaking_) {
+    is_user_speaking_ = true;
+    UpdateState(/*animate=*/true);
+  }
 }
 
 void MicView::InitLayout() {
@@ -82,27 +101,9 @@ void MicView::InitLayout() {
   UpdateState(/*animate=*/false);
 }
 
-void MicView::OnMicStateChanged(MicState mic_state) {
-  is_user_speaking_ = false;
-  UpdateState(/*animate=*/true);
-}
-
-void MicView::OnSpeechLevelChanged(float speech_level_db) {
-  // TODO: Work with UX to determine the threshold.
-  constexpr float kSpeechLevelThreshold = -60.0f;
-  if (speech_level_db < kSpeechLevelThreshold)
-    return;
-
-  logo_view_->SetSpeechLevel(speech_level_db);
-  if (!is_user_speaking_) {
-    is_user_speaking_ = true;
-    UpdateState(/*animate=*/true);
-  }
-}
-
 void MicView::UpdateState(bool animate) {
   const AssistantInteractionModel* interaction_model =
-      delegate_->GetInteractionModel();
+      AssistantInteractionController::Get()->GetModel();
 
   if (animate) {
     // If Assistant UI is not visible, we shouldn't attempt to animate state

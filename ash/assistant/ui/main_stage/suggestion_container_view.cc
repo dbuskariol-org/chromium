@@ -93,7 +93,6 @@ SuggestionContainerView::SuggestionContainerView(
   SetID(AssistantViewID::kSuggestionContainer);
   InitLayout();
 
-  assistant_controller_observer_.Add(AssistantController::Get());
   assistant_suggestions_model_observer_.Add(
       AssistantSuggestionsController::Get());
   assistant_ui_model_observer_.Add(AssistantUiController::Get());
@@ -122,6 +121,14 @@ void SuggestionContainerView::OnContentsPreferredSizeChanged(
   content_view->SetSize(gfx::Size(width, kPreferredHeightDip));
 }
 
+void SuggestionContainerView::OnAssistantControllerDestroying() {
+  AnimatedContainerView::OnAssistantControllerDestroying();
+
+  assistant_ui_model_observer_.Remove(AssistantUiController::Get());
+  assistant_suggestions_model_observer_.Remove(
+      AssistantSuggestionsController::Get());
+}
+
 void SuggestionContainerView::OnCommittedQueryChanged(
     const AssistantQuery& query) {
   AnimatedContainerView::OnCommittedQueryChanged(query);
@@ -143,13 +150,6 @@ void SuggestionContainerView::InitLayout() {
   // We center align when showing conversation starters.
   layout_manager_->set_main_axis_alignment(
       views::BoxLayout::MainAxisAlignment::kCenter);
-}
-
-void SuggestionContainerView::OnAssistantControllerDestroying() {
-  assistant_ui_model_observer_.Remove(AssistantUiController::Get());
-  assistant_suggestions_model_observer_.Remove(
-      AssistantSuggestionsController::Get());
-  assistant_controller_observer_.Remove(AssistantController::Get());
 }
 
 void SuggestionContainerView::OnConversationStartersChanged(

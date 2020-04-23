@@ -5,7 +5,6 @@
 #include "ash/assistant/assistant_view_delegate_impl.h"
 
 #include "ash/assistant/assistant_controller_impl.h"
-#include "ash/assistant/assistant_interaction_controller.h"
 #include "ash/assistant/assistant_notification_controller.h"
 #include "ash/assistant/model/assistant_interaction_model.h"
 #include "ash/assistant/model/assistant_interaction_model_observer.h"
@@ -26,11 +25,6 @@ AssistantViewDelegateImpl::~AssistantViewDelegateImpl() = default;
 const AssistantAlarmTimerModel* AssistantViewDelegateImpl::GetAlarmTimerModel()
     const {
   return assistant_controller_->alarm_timer_controller()->model();
-}
-
-const AssistantInteractionModel*
-AssistantViewDelegateImpl::GetInteractionModel() const {
-  return assistant_controller_->interaction_controller()->model();
 }
 
 const AssistantNotificationModel*
@@ -56,17 +50,6 @@ void AssistantViewDelegateImpl::AddAlarmTimerModelObserver(
 void AssistantViewDelegateImpl::RemoveAlarmTimerModelObserver(
     AssistantAlarmTimerModelObserver* observer) {
   assistant_controller_->alarm_timer_controller()->RemoveModelObserver(
-      observer);
-}
-
-void AssistantViewDelegateImpl::AddInteractionModelObserver(
-    AssistantInteractionModelObserver* observer) {
-  assistant_controller_->interaction_controller()->AddModelObserver(observer);
-}
-
-void AssistantViewDelegateImpl::RemoveInteractionModelObserver(
-    AssistantInteractionModelObserver* observer) {
-  assistant_controller_->interaction_controller()->RemoveModelObserver(
       observer);
 }
 

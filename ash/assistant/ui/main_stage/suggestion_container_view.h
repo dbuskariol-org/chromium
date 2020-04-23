@@ -12,8 +12,6 @@
 #include "ash/assistant/model/assistant_ui_model_observer.h"
 #include "ash/assistant/ui/main_stage/animated_container_view.h"
 #include "ash/assistant/ui/main_stage/suggestion_chip_view.h"
-#include "ash/public/cpp/assistant/controller/assistant_controller.h"
-#include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
 #include "ash/public/cpp/assistant/controller/assistant_suggestions_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "base/component_export.h"
@@ -36,7 +34,6 @@ class AssistantViewDelegate;
 // suggestion events.
 class COMPONENT_EXPORT(ASSISTANT_UI) SuggestionContainerView
     : public AnimatedContainerView,
-      public AssistantControllerObserver,
       public AssistantSuggestionsModelObserver,
       public AssistantUiModelObserver,
       public views::ButtonListener {
@@ -53,10 +50,8 @@ class COMPONENT_EXPORT(ASSISTANT_UI) SuggestionContainerView
   gfx::Size CalculatePreferredSize() const override;
   int GetHeightForWidth(int width) const override;
   void OnContentsPreferredSizeChanged(views::View* content_view) override;
-  void OnCommittedQueryChanged(const AssistantQuery& query) override;
-
-  // AssistantControllerObserver:
   void OnAssistantControllerDestroying() override;
+  void OnCommittedQueryChanged(const AssistantQuery& query) override;
 
   // AssistantSuggestionsModelObserver:
   void OnConversationStartersChanged(
@@ -94,9 +89,6 @@ class COMPONENT_EXPORT(ASSISTANT_UI) SuggestionContainerView
 
   // The suggestion chip that was pressed by the user. May be |nullptr|.
   const SuggestionChipView* selected_chip_ = nullptr;
-
-  ScopedObserver<AssistantController, AssistantControllerObserver>
-      assistant_controller_observer_{this};
 
   ScopedObserver<AssistantSuggestionsController,
                  AssistantSuggestionsModelObserver,

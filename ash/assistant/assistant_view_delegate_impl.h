@@ -21,7 +21,6 @@ class AssistantViewDelegateImpl : public AssistantViewDelegate {
 
   // AssistantViewDelegate:
   const AssistantAlarmTimerModel* GetAlarmTimerModel() const override;
-  const AssistantInteractionModel* GetInteractionModel() const override;
   const AssistantNotificationModel* GetNotificationModel() const override;
   void AddObserver(AssistantViewDelegateObserver* observer) override;
   void RemoveObserver(AssistantViewDelegateObserver* observer) override;
@@ -29,10 +28,6 @@ class AssistantViewDelegateImpl : public AssistantViewDelegate {
       AssistantAlarmTimerModelObserver* observer) override;
   void RemoveAlarmTimerModelObserver(
       AssistantAlarmTimerModelObserver* observer) override;
-  void AddInteractionModelObserver(
-      AssistantInteractionModelObserver* observer) override;
-  void RemoveInteractionModelObserver(
-      AssistantInteractionModelObserver* observer) override;
   void AddNotificationModelObserver(
       AssistantNotificationModelObserver* observer) override;
   void RemoveNotificationModelObserver(

@@ -15,6 +15,7 @@
 #include "ash/assistant/ui/base/assistant_button_listener.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
+#include "ash/public/cpp/assistant/controller/assistant_interaction_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "base/component_export.h"
 #include "base/macros.h"
@@ -113,6 +114,12 @@ class APP_LIST_EXPORT AssistantDialogPlate
 
   ScopedObserver<AssistantController, AssistantControllerObserver>
       assistant_controller_observer_{this};
+
+  ScopedObserver<AssistantInteractionController,
+                 AssistantInteractionModelObserver,
+                 &AssistantInteractionController::AddModelObserver,
+                 &AssistantInteractionController::RemoveModelObserver>
+      assistant_interaction_model_observer_{this};
 
   ScopedObserver<AssistantUiController,
                  AssistantUiModelObserver,

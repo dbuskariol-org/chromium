@@ -5,13 +5,14 @@
 #include "ash/assistant/assistant_ui_controller_impl.h"
 
 #include "ash/ambient/ambient_controller.h"
-#include "ash/assistant/assistant_controller_impl.h"
-#include "ash/assistant/assistant_interaction_controller.h"
+#include "ash/assistant/model/assistant_interaction_model.h"
 #include "ash/assistant/ui/assistant_ui_constants.h"
 #include "ash/assistant/util/assistant_util.h"
 #include "ash/assistant/util/deep_link_util.h"
 #include "ash/assistant/util/histogram_util.h"
 #include "ash/public/cpp/assistant/assistant_setup.h"
+#include "ash/public/cpp/assistant/assistant_state.h"
+#include "ash/public/cpp/assistant/controller/assistant_interaction_controller.h"
 #include "ash/public/cpp/toast_data.h"
 #include "ash/shell.h"
 #include "ash/strings/grit/ash_strings.h"
@@ -45,9 +46,7 @@ void ShowToast(const std::string& id, int message_id) {
 
 // AssistantUiControllerImpl ---------------------------------------------------
 
-AssistantUiControllerImpl::AssistantUiControllerImpl(
-    AssistantControllerImpl* assistant_controller)
-    : assistant_controller_(assistant_controller) {
+AssistantUiControllerImpl::AssistantUiControllerImpl() {
   AddModelObserver(this);
   assistant_controller_observer_.Add(AssistantController::Get());
   highlighter_controller_observer_.Add(Shell::Get()->highlighter_controller());
@@ -175,11 +174,11 @@ void AssistantUiControllerImpl::OnHighlighterEnabledChanged(
 }
 
 void AssistantUiControllerImpl::OnAssistantControllerConstructed() {
-  assistant_controller_->interaction_controller()->AddModelObserver(this);
+  AssistantInteractionController::Get()->AddModelObserver(this);
 }
 
 void AssistantUiControllerImpl::OnAssistantControllerDestroying() {
-  assistant_controller_->interaction_controller()->RemoveModelObserver(this);
+  AssistantInteractionController::Get()->RemoveModelObserver(this);
 }
 
 void AssistantUiControllerImpl::OnOpeningUrl(const GURL& url,

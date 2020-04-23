@@ -19,8 +19,6 @@ namespace ash {
 
 class AssistantAlarmTimerModel;
 class AssistantAlarmTimerModelObserver;
-class AssistantInteractionModel;
-class AssistantInteractionModelObserver;
 class AssistantNotificationModel;
 class AssistantNotificationModelObserver;
 enum class AssistantButtonId;
@@ -73,9 +71,6 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantViewDelegate {
   // Gets the alarm/timer model.
   virtual const AssistantAlarmTimerModel* GetAlarmTimerModel() const = 0;
 
-  // Gets the interaction model.
-  virtual const AssistantInteractionModel* GetInteractionModel() const = 0;
-
   // Gets the notification model.
   virtual const AssistantNotificationModel* GetNotificationModel() const = 0;
 
@@ -88,12 +83,6 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantViewDelegate {
       AssistantAlarmTimerModelObserver* observer) = 0;
   virtual void RemoveAlarmTimerModelObserver(
       AssistantAlarmTimerModelObserver* observer) = 0;
-
-  // Adds/removes the interaction model observer.
-  virtual void AddInteractionModelObserver(
-      AssistantInteractionModelObserver* observer) = 0;
-  virtual void RemoveInteractionModelObserver(
-      AssistantInteractionModelObserver* observer) = 0;
 
   // Adds/removes the notification model observer.
   virtual void AddNotificationModelObserver(

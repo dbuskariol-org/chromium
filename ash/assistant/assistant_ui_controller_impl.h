@@ -33,8 +33,6 @@ class Assistant;
 
 namespace ash {
 
-class AssistantControllerImpl;
-
 class ASH_EXPORT AssistantUiControllerImpl
     : public AssistantUiController,
       public AssistantControllerObserver,
@@ -43,8 +41,7 @@ class ASH_EXPORT AssistantUiControllerImpl
       public HighlighterController::Observer,
       public OverviewObserver {
  public:
-  explicit AssistantUiControllerImpl(
-      AssistantControllerImpl* assistant_controller);
+  AssistantUiControllerImpl();
   ~AssistantUiControllerImpl() override;
 
   // Provides a pointer to the |assistant| owned by AssistantController.
@@ -90,8 +87,6 @@ class ASH_EXPORT AssistantUiControllerImpl
   // is true, the UI mode changed because of an Assistant interaction.
   void UpdateUiMode(base::Optional<AssistantUiMode> ui_mode = base::nullopt,
                     bool due_to_interaction = false);
-
-  AssistantControllerImpl* const assistant_controller_;  // Owned by Shell.
 
   // Owned by AssistantController.
   chromeos::assistant::mojom::Assistant* assistant_ = nullptr;
