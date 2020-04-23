@@ -150,6 +150,10 @@ var CrSettingsAutofillPageV3Test = class extends CrSettingsV3BrowserTest {
   }
 };
 
+TEST_F('CrSettingsAutofillPageV3Test', 'All', function() {
+  mocha.run();
+});
+
 // eslint-disable-next-line no-var
 var CrSettingsAutofillSectionCompanyEnabledV3Test =
     class extends CrSettingsV3BrowserTest {
