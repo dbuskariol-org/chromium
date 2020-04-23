@@ -4,6 +4,7 @@
 
 #include "base/bind.h"
 #include "base/strings/sys_string_conversions.h"
+#import "base/test/ios/wait_util.h"
 #import "ios/chrome/test/earl_grey/chrome_earl_grey.h"
 #import "ios/chrome/test/earl_grey/chrome_matchers.h"
 #import "ios/chrome/test/earl_grey/chrome_test_case.h"
@@ -80,6 +81,20 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
                              "<body>Hello World!</body></html>");
   (*counter)++;
   return std::move(http_response);
+}
+
+// Returns true when omnibox contains |text|, otherwise returns false after
+// after a timeout.
+bool WaitForOmniboxContaining(std::string text) WARN_UNUSED_RESULT;
+bool WaitForOmniboxContaining(std::string text) {
+  return base::test::ios::WaitUntilConditionOrTimeout(
+      base::test::ios::kWaitForUIElementTimeout, ^bool {
+        NSError* error = nil;
+        [[EarlGrey selectElementWithMatcher:OmniboxText(text)]
+            assertWithMatcher:grey_notNil()
+                        error:&error];
+        return error == nil;
+      });
 }
 }
 
@@ -276,24 +291,28 @@ std::unique_ptr<net::test_server::HttpResponse> CountResponse(
 
   // Go back to error page.
   [[EarlGrey selectElementWithMatcher:BackButton()] performAction:grey_tap()];
-  [[EarlGrey selectElementWithMatcher:OmniboxText("invalid.")]
-      assertWithMatcher:grey_notNil()];
+  GREYAssert(
+      WaitForOmniboxContaining("invalid."),
+      @"Timeout while waiting for  omnibox text to become \"invalid.\".");
   [ChromeEarlGrey waitForWebStateContainingText:"ERR_"];
   [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
   [self triggerRestore];
-  [[EarlGrey selectElementWithMatcher:OmniboxText("invalid.")]
-      assertWithMatcher:grey_notNil()];
+  GREYAssert(
+      WaitForOmniboxContaining("invalid."),
+      @"Timeout while waiting for  omnibox text to become \"invalid.\".");
   [ChromeEarlGrey waitForWebStateContainingText:"ERR_"];
   [[GREYUIThreadExecutor sharedInstance] drainUntilIdle];
 
   // Go back to chrome url.
   [[EarlGrey selectElementWithMatcher:BackButton()] performAction:grey_tap()];
-  [[EarlGrey selectElementWithMatcher:OmniboxText("chrome://chrome-urls")]
-      assertWithMatcher:grey_notNil()];
+  GREYAssert(WaitForOmniboxContaining("chrome://chrome-urls"),
+             @"Timeout while waiting for  omnibox text to become "
+             @"\"chrome://chrome-urls\".");
   [ChromeEarlGrey waitForWebStateContainingText:"List of Chrome"];
   [self triggerRestore];
-  [[EarlGrey selectElementWithMatcher:OmniboxText("chrome://chrome-urls")]
-      assertWithMatcher:grey_notNil()];
+  GREYAssert(WaitForOmniboxContaining("chrome://chrome-urls"),
+             @"Timeout while waiting for  omnibox text to become "
+             @"\"chrome://chrome-urls\".");
   [ChromeEarlGrey waitForWebStateContainingText:"List of Chrome"];
 
   // Go back to page1 and confirm page2 is still in the forward history.
