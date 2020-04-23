@@ -5744,7 +5744,7 @@ crbug.com/958347 [ Linux ] external/wpt/editing/run/removeformat.html [ Pass Cra
 crbug.com/958426 [ Mac10.13 ] virtual/text-antialias/line-break-ascii.html [ Timeout Pass ]
 
 # Sheriff 2019-05-06
-crbug.com/959002 crbug.com/959042 http/tests/devtools/elements/styles-1/color-aware-property-value-edit.js [ Pass Timeout ]
+# crbug.com/959002 crbug.com/959042 http/tests/devtools/elements/styles-1/color-aware-property-value-edit.js [ Pass Timeout ]
 crbug.com/959002 crbug.com/959042 http/tests/devtools/elements/styles-1/edit-resource-referred-by-multiple-styletags.js [ Pass Timeout ]
 crbug.com/959002 crbug.com/959042 http/tests/devtools/elements/styles-3/style-autocomplete.js [ Pass Timeout ]
 crbug.com/959002 crbug.com/959042 http/tests/devtools/elements/styles-3/styles-variables.js [ Pass Timeout ]
@@ -6397,7 +6397,7 @@ crbug.com/1044562 [ Release Mac ] http/tests/devtools/modify-cross-domain-rule.j
 crbug.com/1044563 [ Release ] http/tests/devtools/background-services/background-services-panel.js [ Pass Timeout ]
 crbug.com/1044805 [ Release ] http/tests/devtools/elements/styles-2/inject-stylesheet.js [ Pass Timeout ]
 crbug.com/1044822 [ Release ] http/tests/devtools/cache-storage/cache-entry-deletion.js [ Pass Timeout ]
-crbug.com/1044823 [ Release ] http/tests/devtools/extensions/extensions-timeline-api.js [ Pass Timeout ]
+# crbug.com/1044823 [ Release ] http/tests/devtools/extensions/extensions-timeline-api.js [ Pass Timeout ]
 crbug.com/1044825 [ Release ] http/tests/devtools/network/resource-priority.js [ Pass Timeout ]
 crbug.com/1044829 [ Release Win ] http/tests/devtools/cache-storage/cache-deletion.js [ Pass Timeout ]
 crbug.com/1044829 [ Release Mac ] http/tests/devtools/cache-storage/cache-deletion.js [ Pass Timeout ]
@@ -6579,6 +6579,13 @@ crbug.com/1054977 [ Mac ] media/video-controls-rendering.html [ Pass Failure ]
 crbug.com/1006759 http/tests/devtools/agents-enable-disable.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/search/search-in-non-existing-resource.js [ Skip ]
 crbug.com/1006759 http/tests/devtools/sources/debugger-breakpoints/debugger-set-breakpoint-regex.js [ Skip ]
+
+# DevTools roll
+crbug.com/1073350 http/tests/devtools/components/color.js [ Skip ]
+crbug.com/1073350 http/tests/devtools/elements/styles-1/color-aware-property-value-edit.js [ Skip ]
+crbug.com/1073350 http/tests/devtools/elements/styles-1/color-swatch.js [ Skip ]
+crbug.com/1073350 http/tests/devtools/elements/styles-4/styles-invalid-color-values.js [ Skip ]
+crbug.com/1073350 http/tests/devtools/extensions/extensions-timeline-api.js [ Skip ]
 
 # DevTools roll
 crbug.com/1050549 http/tests/devtools/unit/string-util.js [ Skip ]
