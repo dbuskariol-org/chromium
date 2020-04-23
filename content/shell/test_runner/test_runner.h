@@ -295,7 +295,6 @@ class TestRunner {
   // Functions for dealing with windows. By default we block all new windows.
   int WindowCount();
   void SetCloseRemainingWindowsWhenComplete(bool close_remaining_windows);
-  void ResetTestHelperControllers();
 
   // Allows web tests to manage origins' allow list.
   void AddOriginAccessAllowListEntry(const std::string& source_origin,

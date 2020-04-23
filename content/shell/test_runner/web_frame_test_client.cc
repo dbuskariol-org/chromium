@@ -145,7 +145,10 @@ WebFrameTestClient::WebFrameTestClient(WebViewTestProxy* web_view_test_proxy,
 WebFrameTestClient::~WebFrameTestClient() = default;
 
 void WebFrameTestClient::Reset() {
-  spell_check_->Reset();
+  // If this frame failed to navigate then it won't have set up the
+  // SpellCheckClient in DidClearWindowObject().
+  if (spell_check_)
+    spell_check_->Reset();
 }
 
 // static

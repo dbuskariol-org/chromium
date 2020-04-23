@@ -311,8 +311,7 @@ void BlinkTestRunner::OnWebTestRuntimeFlagsChanged(
   // Ignore changes that happen before we got the initial, accumulated
   // web flag changes in either OnReplicateTestConfiguration or
   // OnSetTestConfiguration.
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   if (!interfaces->TestIsRunning())
     return;
 
@@ -320,8 +319,7 @@ void BlinkTestRunner::OnWebTestRuntimeFlagsChanged(
 }
 
 void BlinkTestRunner::TestFinished() {
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   TestRunner* test_runner = interfaces->GetTestRunner();
 
   // We might get multiple TestFinished calls, ensure to only process the dump
@@ -395,16 +393,14 @@ void BlinkTestRunner::TestFinished() {
 
 void BlinkTestRunner::CaptureLocalAudioDump() {
   TRACE_EVENT0("shell", "BlinkTestRunner::CaptureLocalAudioDump");
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   dump_result_->audio.emplace();
   interfaces->GetTestRunner()->GetAudioData(&*dump_result_->audio);
 }
 
 void BlinkTestRunner::CaptureLocalLayoutDump() {
   TRACE_EVENT0("shell", "BlinkTestRunner::CaptureLocalLayoutDump");
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   TestRunner* test_runner = interfaces->GetTestRunner();
   std::string layout;
   if (test_runner->HasCustomTextDump(&layout)) {
@@ -429,8 +425,7 @@ void BlinkTestRunner::CaptureLocalPixelsDump() {
 
   waiting_for_pixels_dump_result_ = true;
 
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   interfaces->GetTestRunner()->DumpPixelsAsync(
       web_view_test_proxy_,
       base::BindOnce(&BlinkTestRunner::OnPixelsDumpCompleted,
@@ -650,8 +645,7 @@ void BlinkTestRunner::HandleWebTestClientDisconnected() {
 void BlinkTestRunner::OnSetupRendererProcessForNonTestWindow() {
   DCHECK(!is_main_window_);
 
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   // Allows the window to receive replicated WebTestRuntimeFlags and to
   // control or end the test.
   interfaces->SetTestIsRunning(true);
@@ -670,8 +664,7 @@ void BlinkTestRunner::OnSetupRendererProcessForNonTestWindow() {
 
 void BlinkTestRunner::ApplyTestConfiguration(
     mojom::ShellTestConfigurationPtr params) {
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
 
   test_config_ = params.Clone();
 
@@ -701,8 +694,7 @@ void BlinkTestRunner::OnSetTestConfiguration(
                         window_size.width(), window_size.height());
   widget->SetWindowRectSynchronouslyForTesting(window_rect);
 
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   TestRunner* test_runner = interfaces->GetTestRunner();
   test_runner->SetFocus(web_view_test_proxy_->GetWebView(), true);
 }
@@ -712,7 +704,8 @@ void BlinkTestRunner::OnReset() {
   DCHECK(web_view_test_proxy_->GetMainRenderFrame());
 
   prefs_.Reset();
-  WebTestRenderThreadObserver::GetInstance()->test_interfaces()->ResetAll();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
+  interfaces->ResetAll();
 
   // Navigating to about:blank will make sure that no new loads are initiated
   // by the renderer.
@@ -732,8 +725,7 @@ void BlinkTestRunner::OnTestFinishedInSecondaryRenderer() {
 
   // Avoid a situation where TestFinished is called twice, because
   // of a racey test finish in 2 secondary renderers.
-  TestInterfaces* interfaces =
-      WebTestRenderThreadObserver::GetInstance()->test_interfaces();
+  TestInterfaces* interfaces = web_view_test_proxy_->test_interfaces();
   if (!interfaces->TestIsRunning())
     return;
 

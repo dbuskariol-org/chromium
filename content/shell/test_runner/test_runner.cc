@@ -200,7 +200,6 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
   void QueueReload();
   void RemoveSpellCheckResolvedCallback();
   void RemoveWebPageOverlay();
-  void ResetTestHelperControllers();
   void ResolveBeforeInstallPromptPromise(const std::string& platform);
   void RunIdleTasks(v8::Local<v8::Function> callback);
   void SendBluetoothManualChooserEvent(const std::string& event,
@@ -507,8 +506,6 @@ gin::ObjectTemplateBuilder TestRunnerBindings::GetObjectTemplateBuilder(
                  &TestRunnerBindings::RemoveSpellCheckResolvedCallback)
       .SetMethod("removeWebPageOverlay",
                  &TestRunnerBindings::RemoveWebPageOverlay)
-      .SetMethod("resetTestHelperControllers",
-                 &TestRunnerBindings::ResetTestHelperControllers)
       .SetMethod("resolveBeforeInstallPromptPromise",
                  &TestRunnerBindings::ResolveBeforeInstallPromptPromise)
       .SetMethod("runIdleTasks", &TestRunnerBindings::RunIdleTasks)
@@ -704,11 +701,6 @@ void TestRunnerBindings::SetCloseRemainingWindowsWhenComplete(
   bool close_remaining_windows = false;
   if (args->GetNext(&close_remaining_windows))
     runner_->SetCloseRemainingWindowsWhenComplete(close_remaining_windows);
-}
-
-void TestRunnerBindings::ResetTestHelperControllers() {
-  if (runner_)
-    runner_->ResetTestHelperControllers();
 }
 
 void TestRunnerBindings::SetTabKeyCyclesThroughElements(
@@ -2041,10 +2033,6 @@ int TestRunner::WindowCount() {
 void TestRunner::SetCloseRemainingWindowsWhenComplete(
     bool close_remaining_windows) {
   close_remaining_windows_ = close_remaining_windows;
-}
-
-void TestRunner::ResetTestHelperControllers() {
-  test_interfaces_->ResetTestHelperControllers();
 }
 
 void TestRunner::AddOriginAccessAllowListEntry(
