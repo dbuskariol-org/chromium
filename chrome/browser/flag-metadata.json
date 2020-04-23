@@ -4240,12 +4240,12 @@
   {
     "name": "win-use-hybrid-spellchecker",
     "owners": [ "gujen@google.com", "chrome-language@google.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 88
   },
   {
     "name": "win-use-native-spellchecker",
     "owners": [ "gujen@google.com", "chrome-language@google.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 88
   },
   {
     "name": "zero-copy-video-capture",
