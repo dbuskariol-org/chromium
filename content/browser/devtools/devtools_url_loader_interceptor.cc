@@ -1107,7 +1107,7 @@ void InterceptionJob::ProcessSetCookies(const net::HttpResponseHeaders& headers,
           create_loader_params_->request.url,
           create_loader_params_->request.site_for_cookies,
           create_loader_params_->request.request_initiator,
-          (create_loader_params_->request.attach_same_site_cookies ||
+          (create_loader_params_->request.force_ignore_site_for_cookies ||
            should_treat_as_first_party)));
 
   // |this| might be deleted here if |cookies| is empty!
@@ -1255,7 +1255,8 @@ void InterceptionJob::FetchCookies(
       net::cookie_util::ComputeSameSiteContextForRequest(
           request.method, request.url, request.site_for_cookies,
           request.request_initiator,
-          (request.attach_same_site_cookies || should_treat_as_first_party)));
+          (request.force_ignore_site_for_cookies ||
+           should_treat_as_first_party)));
 
   cookie_manager_->GetCookieList(request.url, options, std::move(callback));
 }

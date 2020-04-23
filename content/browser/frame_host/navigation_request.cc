@@ -698,8 +698,8 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateBrowserInitiated(
       std::string() /* searchable_form_encoding */,
       GURL() /* client_side_redirect_url */,
       base::nullopt /* devtools_initiator_info */,
-      false /* attach_same_site_cookies */, nullptr /* trust_token_params */,
-      impression);
+      false /* force_ignore_site_for_cookies */,
+      nullptr /* trust_token_params */, impression);
 
   // Shift-Reload forces bypassing caches and service workers.
   if (common_params->navigation_type ==

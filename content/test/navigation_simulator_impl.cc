@@ -1134,7 +1134,7 @@ bool NavigationSimulatorImpl::SimulateRendererInitiatedStart() {
           std::string() /* searchable_form_encoding */,
           GURL() /* client_side_redirect_url */,
           base::nullopt /* detools_initiator_info */,
-          false /* attach_same_site_cookies */,
+          false /* force_ignore_site_for_cookies */,
           nullptr /* trust_token_params */, impression_);
   auto common_params = CreateCommonNavigationParams();
   common_params->navigation_start = base::TimeTicks::Now();

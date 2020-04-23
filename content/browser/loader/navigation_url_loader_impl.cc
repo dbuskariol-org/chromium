@@ -199,8 +199,8 @@ std::unique_ptr<network::ResourceRequest> CreateResourceRequest(
   new_request->url = request_info->common_params->url;
   new_request->site_for_cookies =
       request_info->isolation_info.site_for_cookies();
-  new_request->attach_same_site_cookies =
-      request_info->begin_params->attach_same_site_cookies;
+  new_request->force_ignore_site_for_cookies =
+      request_info->begin_params->force_ignore_site_for_cookies;
   new_request->trusted_params = network::ResourceRequest::TrustedParams();
   new_request->trusted_params->isolation_info = request_info->isolation_info;
   new_request->is_main_frame = request_info->is_main_frame;
