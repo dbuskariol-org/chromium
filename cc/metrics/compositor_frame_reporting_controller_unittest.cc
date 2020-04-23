@@ -10,6 +10,7 @@
 #include "base/macros.h"
 #include "base/strings/strcat.h"
 #include "base/test/metrics/histogram_tester.h"
+#include "base/test/simple_test_tick_clock.h"
 #include "cc/input/scroll_input_type.h"
 #include "cc/metrics/event_metrics.h"
 #include "components/viz/common/frame_timing_details.h"
@@ -56,6 +57,8 @@ class TestCompositorFrameReportingController
 class CompositorFrameReportingControllerTest : public testing::Test {
  public:
   CompositorFrameReportingControllerTest() : current_id_(1, 1) {
+    test_tick_clock_.SetNowTicks(base::TimeTicks::Now());
+    reporting_controller_.set_tick_clock(&test_tick_clock_);
     args_ = SimulateBeginFrameArgs(current_id_);
   }
 
@@ -137,20 +140,21 @@ class CompositorFrameReportingControllerTest : public testing::Test {
   }
 
   base::TimeTicks AdvanceNowByMs(int64_t advance_ms) {
-    now_ += base::TimeDelta::FromMicroseconds(advance_ms);
-    return now_;
+    test_tick_clock_.Advance(base::TimeDelta::FromMicroseconds(advance_ms));
+    return test_tick_clock_.NowTicks();
   }
 
  protected:
+  // This should be defined before |reporting_controller_| so it is created
+  // before and destroyed after that.
+  base::SimpleTestTickClock test_tick_clock_;
+
   TestCompositorFrameReportingController reporting_controller_;
   viz::BeginFrameArgs args_;
   viz::BeginFrameId current_id_;
   viz::BeginFrameId last_activated_id_;
   base::TimeTicks begin_main_start_;
   viz::FrameTokenGenerator next_token_;
-
- private:
-  base::TimeTicks now_ = base::TimeTicks::Now();
 };
 
 TEST_F(CompositorFrameReportingControllerTest, ActiveReporterCounts) {

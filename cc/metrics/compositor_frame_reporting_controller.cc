@@ -49,7 +49,7 @@ CompositorFrameReportingController::SubmittedCompositorFrame::
     SubmittedCompositorFrame(SubmittedCompositorFrame&& other) = default;
 
 base::TimeTicks CompositorFrameReportingController::Now() const {
-  return base::TimeTicks::Now();
+  return tick_clock_->NowTicks();
 }
 
 bool CompositorFrameReportingController::HasReporterAt(
