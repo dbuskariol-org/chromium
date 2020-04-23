@@ -1910,8 +1910,9 @@ ci.fyi_coverage_builder(
     os = os.MAC_ANY,
     use_clang_coverage = True,
     properties = {
-        'xcode_build_version': '11c29',
+        'coverage_exclude_sources': 'ios_test_files_and_test_utils',
         'coverage_test_types': ['overall', 'unit'],
+        'xcode_build_version': '11c29',
     },
 )
 
