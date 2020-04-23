@@ -201,21 +201,36 @@ void BlinkTestRunner::SetPopupBlockingEnabled(bool block_popups) {
 
 void BlinkTestRunner::EnableAutoResizeMode(const WebSize& min_size,
                                            const WebSize& max_size) {
-  content::EnableAutoResizeMode(web_view_test_proxy_, min_size, max_size);
+  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
+
+  RenderWidget* widget =
+      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
+  widget->EnableAutoResizeForTesting(min_size, max_size);
 }
 
 void BlinkTestRunner::DisableAutoResizeMode(const WebSize& new_size) {
-  content::DisableAutoResizeMode(web_view_test_proxy_, new_size);
-  ForceResizeRenderView(web_view_test_proxy_, new_size);
+  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
+
+  RenderWidget* widget =
+      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
+  widget->DisableAutoResizeForTesting(new_size);
+
+  gfx::Rect window_rect(widget->WindowRect().x, widget->WindowRect().y,
+                        new_size.width, new_size.height);
+  widget->SetWindowRectSynchronouslyForTesting(window_rect);
 }
 
 void BlinkTestRunner::ResetAutoResizeMode() {
-  // An empty size indicates to keep the size as is. Resetting races with the
-  // browser setting up the new test (one is a mojo IPC (OnSetTestConfiguration)
-  // and one is legacy (OnReset)) so we can not clobber the size here.
-  content::DisableAutoResizeMode(web_view_test_proxy_, gfx::Size());
-  // Does not call ForceResizeRenderView() here intentionally. This is between
-  // tests, and the next test will set up a size.
+  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
+
+  RenderWidget* widget =
+      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
+  // An empty size indicates to keep the size as is, the next test will set up
+  // the window's size in OnSetTestConfiguration().
+  // TODO(danakj): We don't really need the empty size anymore, that was to
+  // avoid an IPC race. We could just have a global constant because all windows
+  // are 800x600 at the start of a test.
+  widget->DisableAutoResizeForTesting(gfx::Size());
 }
 
 void BlinkTestRunner::ClearAllDatabases() {
@@ -241,15 +256,6 @@ void BlinkTestRunner::SimulateWebNotificationClose(const std::string& title,
 
 void BlinkTestRunner::SimulateWebContentIndexDelete(const std::string& id) {
   GetWebTestClientRemote()->SimulateWebContentIndexDelete(id);
-}
-
-void BlinkTestRunner::SetDeviceScaleFactor(float factor) {
-  content::SetDeviceScaleFactor(web_view_test_proxy_, factor);
-}
-
-void BlinkTestRunner::SetDeviceColorSpace(const std::string& name) {
-  content::SetDeviceColorSpace(web_view_test_proxy_,
-                               GetWebTestColorSpace(name));
 }
 
 void BlinkTestRunner::SetBluetoothFakeAdapter(const std::string& adapter_name,
@@ -480,7 +486,7 @@ void BlinkTestRunner::DeleteAllCookies() {
 }
 
 int BlinkTestRunner::NavigationEntryCount() {
-  return GetLocalSessionHistoryLength(web_view_test_proxy_);
+  return web_view_test_proxy_->GetLocalSessionHistoryLengthForTesting();
 }
 
 void BlinkTestRunner::GoToOffset(int offset) {
@@ -653,8 +659,13 @@ void BlinkTestRunner::OnSetupRendererProcessForNonTestWindow() {
   // All non-main windows get sized to 800x600 (so does the main window).
   // This is done for the main frame only, not child local roots in other
   // processes.
-  if (web_view_test_proxy_->GetMainRenderFrame())
-    ForceResizeRenderView(web_view_test_proxy_, WebSize(800, 600));
+  if (web_view_test_proxy_->GetMainRenderFrame()) {
+    RenderWidget* widget =
+        web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
+    gfx::Rect window_rect(widget->WindowRect().x, widget->WindowRect().y, 800,
+                          600);
+    widget->SetWindowRectSynchronouslyForTesting(window_rect);
+  }
 }
 
 void BlinkTestRunner::ApplyTestConfiguration(
@@ -678,12 +689,17 @@ void BlinkTestRunner::OnReplicateTestConfiguration(
 
 void BlinkTestRunner::OnSetTestConfiguration(
     mojom::ShellTestConfigurationPtr params) {
-  mojom::ShellTestConfigurationPtr local_params = params.Clone();
+  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
+
+  gfx::Size window_size = params->initial_size;
+
   ApplyTestConfiguration(std::move(params));
 
-  ForceResizeRenderView(web_view_test_proxy_,
-                        WebSize(local_params->initial_size.width(),
-                                local_params->initial_size.height()));
+  RenderWidget* widget =
+      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
+  gfx::Rect window_rect(widget->WindowRect().x, widget->WindowRect().y,
+                        window_size.width(), window_size.height());
+  widget->SetWindowRectSynchronouslyForTesting(window_rect);
 
   TestInterfaces* interfaces =
       WebTestRenderThreadObserver::GetInstance()->test_interfaces();

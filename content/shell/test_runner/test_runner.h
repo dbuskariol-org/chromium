@@ -54,6 +54,7 @@ namespace content {
 class BlinkTestRunner;
 class MockContentSettingsClient;
 class MockScreenOrientationClient;
+class RenderFrame;
 class SpellCheckClient;
 class TestInterfaces;
 class TestRunnerForSpecificView;
@@ -76,7 +77,7 @@ class TestRunner {
   explicit TestRunner(TestInterfaces*);
   virtual ~TestRunner();
 
-  void Install(blink::WebLocalFrame* frame,
+  void Install(RenderFrame* frame,
                SpellCheckClient* spell_check,
                TestRunnerForSpecificView* view_test_runner);
 

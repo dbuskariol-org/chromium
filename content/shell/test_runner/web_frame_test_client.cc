@@ -528,7 +528,7 @@ void WebFrameTestClient::DidClearWindowObject() {
   // frame before JS has a chance to run.
   GCController::Install(frame);
   interfaces->Install(frame);
-  test_runner->Install(frame, spell_check_.get(),
+  test_runner->Install(web_frame_test_proxy_, spell_check_.get(),
                        web_view_test_proxy_->view_test_runner());
   web_view_test_proxy_->Install(frame);
   web_widget_test_proxy->Install(frame);
