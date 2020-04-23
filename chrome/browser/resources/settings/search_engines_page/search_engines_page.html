@@ -1,4 +1,4 @@
-    <style include="settings-shared">
+    <style include="cr-shared-style settings-shared iron-flex">
       .extension-engines,
       #noOtherEngines,
       .no-search-results {
@@ -9,7 +9,7 @@
         border-top: var(--cr-separator-line);
       }
     </style>
-    <div class="settings-box first">
+    <div class="cr-row first">
       <h2>$i18n{searchEnginesDefault}</h2>
     </div>
     <div class="no-search-results" hidden="[[matchingDefaultEngines_.length]]">
@@ -25,8 +25,8 @@
       </settings-search-engine-dialog>
     </template>
 
-    <div class="settings-box first">
-      <h2 class="start">$i18n{searchEnginesOther}</h2>
+    <div class="cr-row first">
+      <h2 class="flex">$i18n{searchEnginesOther}</h2>
       <cr-button class="secondary-button header-aligned-button"
           on-click="onAddSearchEngineTap_" id="addSearchEngine">
         $i18n{add}
@@ -46,7 +46,7 @@
         scroll-target="[[subpageScrollTarget]]">
     </settings-search-engines-list>
     <template is="dom-if" if="[[showExtensionsList_]]">
-      <div class="settings-box first">
+      <div class="cr-row first">
         <h2>$i18n{searchEnginesExtension}</h2>
       </div>
       <div class="no-search-results" hidden="[[matchingExtensions_.length]]">
