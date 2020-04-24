@@ -168,7 +168,7 @@ class MESSAGE_CENTER_PUBLIC_EXPORT RichNotificationData {
   // Usually, it should not be set directly.
   // For system notification, ash::CreateSystemNotification with
   // SystemNotificationWarningLevel should be used.
-  SkColor accent_color = SK_ColorTRANSPARENT;
+  base::Optional<SkColor> accent_color;
 
   // Controls whether a settings button should appear on the notification. See
   // enum definition. TODO(estade): turn this into a boolean. See
@@ -392,8 +392,10 @@ class MESSAGE_CENTER_PUBLIC_EXPORT Notification {
   const base::string16& accessible_name() const {
     return optional_fields_.accessible_name;
   }
-
-  SkColor accent_color() const { return optional_fields_.accent_color; }
+  // If no value, set accent_color to a default value
+  base::Optional<SkColor> accent_color() const {
+    return optional_fields_.accent_color;
+  }
   void set_accent_color(SkColor accent_color) {
     optional_fields_.accent_color = accent_color;
   }

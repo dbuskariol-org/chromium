@@ -386,6 +386,8 @@ SkColor GetDefaultColor(NativeTheme::ColorId color_id,
       return SkColorSetRGB(0xf5, 0xf5, 0xf5);
     case NativeTheme::kColorId_NotificationEmptyPlaceholderIconColor:
       return SkColorSetA(SK_ColorWHITE, 0x60);
+    case NativeTheme::kColorId_NotificationInkDropBase:
+      return gfx::kGoogleBlue600;
 
     // Scrollbar
     case NativeTheme::kColorId_OverlayScrollbarThumbBackground:

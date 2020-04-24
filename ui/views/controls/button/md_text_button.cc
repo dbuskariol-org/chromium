@@ -151,7 +151,7 @@ std::unique_ptr<views::InkDropHighlight> MdTextButton::CreateInkDropHighlight()
       std::make_unique<BorderShadowLayerDelegate>(
           shadows, GetLocalBounds(), theme->GetSystemColor(fill_color_id),
           corner_radius_));
-  highlight->set_visible_opacity(1.0f);
+  highlight->set_visible_opacity(visible_opacity_);
   return highlight;
 }
 
