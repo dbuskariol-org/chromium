@@ -503,7 +503,10 @@ blink::ParsedFeaturePolicyDeclaration CreateParsedFeaturePolicyDeclaration(
   declaration.opaque_value = declaration.fallback_value;
 
   for (const auto& origin : origins)
-    declaration.values.emplace(url::Origin::Create(origin), true);
+    declaration.allowed_origins.push_back(url::Origin::Create(origin));
+
+  std::sort(declaration.allowed_origins.begin(),
+            declaration.allowed_origins.end());
 
   return declaration;
 }
@@ -9307,8 +9310,8 @@ IN_PROC_BROWSER_TEST_F(SitePerProcessBrowserTest,
   // origin.
   const blink::ParsedFeaturePolicy initial_effective_policy =
       root->child_at(2)->effective_frame_policy().container_policy;
-  EXPECT_EQ(1UL, initial_effective_policy[0].values.size());
-  EXPECT_FALSE(initial_effective_policy[0].values.begin()->first.opaque());
+  EXPECT_EQ(1UL, initial_effective_policy[0].allowed_origins.size());
+  EXPECT_FALSE(initial_effective_policy[0].allowed_origins.begin()->opaque());
 
   // Set the "sandbox" attribute; pending policy should update, and should now
   // be flagged as matching the opaque origin of the frame (without containing
@@ -9320,17 +9323,17 @@ IN_PROC_BROWSER_TEST_F(SitePerProcessBrowserTest,
       root->child_at(2)->effective_frame_policy().container_policy;
   const blink::ParsedFeaturePolicy updated_pending_policy =
       root->child_at(2)->pending_frame_policy().container_policy;
-  EXPECT_EQ(1UL, updated_effective_policy[0].values.size());
-  EXPECT_FALSE(updated_effective_policy[0].values.begin()->first.opaque());
+  EXPECT_EQ(1UL, updated_effective_policy[0].allowed_origins.size());
+  EXPECT_FALSE(updated_effective_policy[0].allowed_origins.begin()->opaque());
   EXPECT_TRUE(updated_pending_policy[0].opaque_value);
-  EXPECT_EQ(0UL, updated_pending_policy[0].values.size());
+  EXPECT_EQ(0UL, updated_pending_policy[0].allowed_origins.size());
 
   // Navigate the frame; pending policy should now be committed.
   NavigateFrameToURL(root->child_at(2), nav_url);
   const blink::ParsedFeaturePolicy final_effective_policy =
       root->child_at(2)->effective_frame_policy().container_policy;
   EXPECT_TRUE(final_effective_policy[0].opaque_value);
-  EXPECT_EQ(0UL, final_effective_policy[0].values.size());
+  EXPECT_EQ(0UL, final_effective_policy[0].allowed_origins.size());
 }
 
 // Test that creating a new remote frame at the same origin as its parent

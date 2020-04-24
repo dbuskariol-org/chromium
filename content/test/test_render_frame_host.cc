@@ -225,7 +225,7 @@ void TestRenderFrameHost::SimulateFeaturePolicyHeader(
   header[0].fallback_value = false;
   header[0].opaque_value = false;
   for (const auto& origin : allowlist) {
-    header[0].values.emplace(origin, true);
+    header[0].allowed_origins.push_back(origin);
   }
   DidSetFramePolicyHeaders(network::mojom::WebSandboxFlags::kNone, header,
                            {} /* dp_header */);

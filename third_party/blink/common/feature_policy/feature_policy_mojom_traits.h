@@ -26,9 +26,9 @@ class BLINK_COMMON_EXPORT
       const blink::ParsedFeaturePolicyDeclaration& policy) {
     return policy.feature;
   }
-  static const std::map<url::Origin, bool>& values(
+  static const std::vector<url::Origin>& allowed_origins(
       const blink::ParsedFeaturePolicyDeclaration& policy) {
-    return policy.values;
+    return policy.allowed_origins;
   }
   static bool fallback_value(
       const blink::ParsedFeaturePolicyDeclaration& policy) {

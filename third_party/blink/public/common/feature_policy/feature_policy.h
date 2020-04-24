@@ -95,7 +95,7 @@ struct BLINK_COMMON_EXPORT ParsedFeaturePolicyDeclaration {
   ParsedFeaturePolicyDeclaration();
   explicit ParsedFeaturePolicyDeclaration(mojom::FeaturePolicyFeature feature);
   ParsedFeaturePolicyDeclaration(mojom::FeaturePolicyFeature feature,
-                                 const std::map<url::Origin, bool>& values,
+                                 const std::vector<url::Origin>& values,
                                  bool fallback_value,
                                  bool opaque_value);
   ParsedFeaturePolicyDeclaration(const ParsedFeaturePolicyDeclaration& rhs);
@@ -105,8 +105,8 @@ struct BLINK_COMMON_EXPORT ParsedFeaturePolicyDeclaration {
 
   mojom::FeaturePolicyFeature feature;
 
-  // This map records all the allowed origins and their corresponding values.
-  std::map<url::Origin, bool> values;
+  // An alphabetically sorted list of all the origins allowed.
+  std::vector<url::Origin> allowed_origins;
   // Fallback value is used when feature is enabled for all or disabled for all.
   bool fallback_value;
   // This flag is set true for a declared policy on an <iframe sandbox>
@@ -139,7 +139,7 @@ class BLINK_COMMON_EXPORT FeaturePolicy {
     ~Allowlist();
 
     // Adds a single origin to the allowlist.
-    void Add(const url::Origin& origin, bool value);
+    void Add(const url::Origin& origin);
 
     // Returns the value of the given origin if specified, fallback value
     // otherwise.
@@ -158,14 +158,12 @@ class BLINK_COMMON_EXPORT FeaturePolicy {
     // Sets the opaque value.
     void SetOpaqueValue(bool opaque_value);
 
-    // Returns set of origins in the allowlist.
-    const base::flat_set<url::Origin>& Origins() const;
-
-    // Returns set of <origin, value> pair in the allowlist.
-    const base::flat_map<url::Origin, bool>& Values() const;
+    const std::vector<url::Origin>& AllowedOrigins() const {
+      return allowed_origins_;
+    }
 
    private:
-    base::flat_map<url::Origin, bool> values_;
+    std::vector<url::Origin> allowed_origins_;
     bool fallback_value_;
     bool opaque_value_;
   };

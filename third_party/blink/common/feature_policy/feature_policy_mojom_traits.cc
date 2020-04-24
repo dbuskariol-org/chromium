@@ -14,7 +14,8 @@ bool StructTraits<blink::mojom::ParsedFeaturePolicyDeclarationDataView,
          blink::ParsedFeaturePolicyDeclaration* out) {
   out->fallback_value = in.fallback_value();
   out->opaque_value = in.opaque_value();
-  return in.ReadFeature(&out->feature) && in.ReadValues(&out->values);
+  return in.ReadFeature(&out->feature) &&
+         in.ReadAllowedOrigins(&out->allowed_origins);
 }
 
 }  // namespace mojo

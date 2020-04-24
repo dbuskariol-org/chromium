@@ -13,7 +13,7 @@ import "third_party/blink/public/mojom/feature_policy/feature_policy_feature.moj
 // NOTE: These types are used for replication frame state between processes.
 struct ParsedFeaturePolicyDeclaration {
   FeaturePolicyFeature feature;
-  map<url.mojom.Origin, bool> values;
+  array<url.mojom.Origin> allowed_origins;
   bool fallback_value;
   bool opaque_value;
 };

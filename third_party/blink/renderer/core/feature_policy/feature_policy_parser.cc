@@ -4,7 +4,6 @@
 #include "third_party/blink/renderer/core/feature_policy/feature_policy_parser.h"
 
 #include <algorithm>
-#include <map>
 #include <utility>
 
 #include <bitset>
@@ -148,7 +147,7 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
       allowlist.fallback_value = false;
       allowlist.opaque_value = false;
       features_specified.set(static_cast<size_t>(feature));
-      std::map<url::Origin, bool> values;
+
       // If a policy entry has no listed origins (e.g. "feature_name1" in
       // allow="feature_name1; feature_name2 value"), enable the feature for:
       //     a. |self_origin|, if we are parsing a header policy (i.e.,
@@ -158,9 +157,9 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
       //     c. the opaque origin of the frame, if |src_origin| is opaque.
       if (tokens.size() == 1) {
         if (!src_origin) {
-          values[self_origin->ToUrlOrigin()] = true;
+          allowlist.allowed_origins.push_back(self_origin->ToUrlOrigin());
         } else if (!src_origin->IsOpaque()) {
-          values[src_origin->ToUrlOrigin()] = true;
+          allowlist.allowed_origins.push_back(src_origin->ToUrlOrigin());
         } else {
           allowlist.opaque_value = true;
         }
@@ -240,7 +239,7 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
         } else if (target_is_opaque) {
           allowlist.opaque_value = true;
         } else {
-          values[target_origin] = true;
+          allowlist.allowed_origins.push_back(target_origin);
         }
       }
 
@@ -273,16 +272,14 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
         }
       }
 
-      // Size reduction: remove all items in the allowlist whose value is the
-      // same as the fallback.
-      for (auto it = values.begin(); it != values.end();) {
-        if (it->second == allowlist.fallback_value)
-          it = values.erase(it);
-        else
-          it++;
-      }
+      // Size reduction: remove all items in the allowlist if target is all.
+      if (allowlist.fallback_value)
+        allowlist.allowed_origins.clear();
 
-      allowlist.values = std::move(values);
+      // Sort |allowed_origins| in alphabetical order.
+      std::sort(allowlist.allowed_origins.begin(),
+                allowlist.allowed_origins.end());
+
       allowlists.push_back(allowlist);
     }
   }

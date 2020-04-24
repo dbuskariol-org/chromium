@@ -82,14 +82,14 @@ Vector<String> DOMFeaturePolicy::getAllowlistForFeature(
 
     const FeaturePolicy::Allowlist allowlist =
         GetPolicy()->GetAllowlistForFeature(feature_name);
-    auto values = allowlist.Values();
-    if (values.empty()) {
+    const auto& allowed_origins = allowlist.AllowedOrigins();
+    if (allowed_origins.empty()) {
       if (allowlist.GetFallbackValue())
         return Vector<String>({"*"});
     }
     Vector<String> result;
-    for (const auto& entry : values) {
-      result.push_back(WTF::String::FromUTF8(entry.first.Serialize()));
+    for (const auto& origin : allowed_origins) {
+      result.push_back(WTF::String::FromUTF8(origin.Serialize()));
     }
     return result;
   }

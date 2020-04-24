@@ -142,8 +142,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
             parsed_policy[0].feature);
   EXPECT_FALSE(parsed_policy[0].fallback_value);
   EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[0].values.size());
-  EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[0].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[0].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_a_));
 
   // Simple policy with *.
@@ -155,7 +155,7 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
             parsed_policy[0].feature);
   EXPECT_TRUE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
+  EXPECT_EQ(0UL, parsed_policy[0].allowed_origins.size());
 
   // Complicated policy.
   parsed_policy = FeaturePolicyParser::Parse(
@@ -168,21 +168,21 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
             parsed_policy[0].feature);
   EXPECT_TRUE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
+  EXPECT_EQ(0UL, parsed_policy[0].allowed_origins.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[1].feature);
   EXPECT_FALSE(parsed_policy[1].fallback_value);
   EXPECT_FALSE(parsed_policy[1].opaque_value);
-  EXPECT_EQ(2UL, parsed_policy[1].values.size());
-  auto it = parsed_policy[1].values.begin();
-  EXPECT_TRUE(it->first.IsSameOriginWith(expected_url_origin_b_));
-  EXPECT_TRUE((++it)->first.IsSameOriginWith(expected_url_origin_c_));
+  EXPECT_EQ(2UL, parsed_policy[1].allowed_origins.size());
+  auto it = parsed_policy[1].allowed_origins.begin();
+  EXPECT_TRUE(it->IsSameOriginWith(expected_url_origin_b_));
+  EXPECT_TRUE((++it)->IsSameOriginWith(expected_url_origin_c_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             parsed_policy[2].feature);
   EXPECT_FALSE(parsed_policy[2].fallback_value);
   EXPECT_FALSE(parsed_policy[2].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[2].values.size());
-  EXPECT_TRUE(parsed_policy[2].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[2].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[2].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_a_));
 
   // Multiple policies.
@@ -196,21 +196,21 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
             parsed_policy[0].feature);
   EXPECT_TRUE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
+  EXPECT_EQ(0UL, parsed_policy[0].allowed_origins.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[1].feature);
   EXPECT_FALSE(parsed_policy[1].fallback_value);
   EXPECT_FALSE(parsed_policy[1].opaque_value);
-  EXPECT_EQ(2UL, parsed_policy[1].values.size());
-  it = parsed_policy[1].values.begin();
-  EXPECT_TRUE(it->first.IsSameOriginWith(expected_url_origin_b_));
-  EXPECT_TRUE((++it)->first.IsSameOriginWith(expected_url_origin_c_));
+  EXPECT_EQ(2UL, parsed_policy[1].allowed_origins.size());
+  it = parsed_policy[1].allowed_origins.begin();
+  EXPECT_TRUE(it->IsSameOriginWith(expected_url_origin_b_));
+  EXPECT_TRUE((++it)->IsSameOriginWith(expected_url_origin_c_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             parsed_policy[2].feature);
   EXPECT_FALSE(parsed_policy[2].fallback_value);
   EXPECT_FALSE(parsed_policy[2].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[2].values.size());
-  EXPECT_TRUE(parsed_policy[2].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[2].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[2].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_a_));
 
   // Header policies with no optional origin lists.
@@ -222,21 +222,21 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
             parsed_policy[0].feature);
   EXPECT_FALSE(parsed_policy[0].fallback_value);
   EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[0].values.size());
-  EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[0].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[0].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_a_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[1].feature);
   EXPECT_FALSE(parsed_policy[1].fallback_value);
   EXPECT_FALSE(parsed_policy[1].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[1].values.size());
-  EXPECT_TRUE(parsed_policy[1].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[1].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[1].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_a_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             parsed_policy[2].feature);
   EXPECT_FALSE(parsed_policy[2].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[2].values.size());
-  EXPECT_TRUE(parsed_policy[2].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[2].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[2].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_a_));
 }
 
@@ -262,7 +262,7 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
             parsed_policy[0].feature);
   EXPECT_FALSE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
+  EXPECT_EQ(0UL, parsed_policy[0].allowed_origins.size());
 
   // Simple policy with 'src'.
   parsed_policy = FeaturePolicyParser::Parse(
@@ -274,7 +274,7 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
             parsed_policy[0].feature);
   EXPECT_FALSE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
+  EXPECT_EQ(0UL, parsed_policy[0].allowed_origins.size());
 
   // Simple policy with *.
   parsed_policy = FeaturePolicyParser::Parse("geolocation *", origin_a_.get(),
@@ -286,7 +286,7 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
             parsed_policy[0].feature);
   EXPECT_TRUE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
+  EXPECT_EQ(0UL, parsed_policy[0].allowed_origins.size());
 
   // Policy with explicit origins
   parsed_policy = FeaturePolicyParser::Parse(
@@ -298,10 +298,10 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
             parsed_policy[0].feature);
   EXPECT_FALSE(parsed_policy[0].fallback_value);
   EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(2UL, parsed_policy[0].values.size());
-  auto it = parsed_policy[0].values.begin();
-  EXPECT_TRUE(it->first.IsSameOriginWith(expected_url_origin_b_));
-  EXPECT_TRUE((++it)->first.IsSameOriginWith(expected_url_origin_c_));
+  EXPECT_EQ(2UL, parsed_policy[0].allowed_origins.size());
+  auto it = parsed_policy[0].allowed_origins.begin();
+  EXPECT_TRUE(it->IsSameOriginWith(expected_url_origin_b_));
+  EXPECT_TRUE((++it)->IsSameOriginWith(expected_url_origin_c_));
 
   // Policy with multiple origins, including 'src'.
   parsed_policy = FeaturePolicyParser::Parse(
@@ -313,8 +313,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
             parsed_policy[0].feature);
   EXPECT_FALSE(parsed_policy[0].fallback_value);
   EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[0].values.size());
-  EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
+  EXPECT_EQ(1UL, parsed_policy[0].allowed_origins.size());
+  EXPECT_TRUE(parsed_policy[0].allowed_origins.begin()->IsSameOriginWith(
       expected_url_origin_b_));
 }
 
@@ -677,7 +677,7 @@ class FeaturePolicyMutationTest : public testing::Test {
       return false;
 
     return result->feature == feature && result->fallback_value &&
-           result->opaque_value && result->values.empty();
+           result->opaque_value && result->allowed_origins.empty();
   }
 
   // Returns true if the policy contains a declaration for the feature which
@@ -692,16 +692,14 @@ class FeaturePolicyMutationTest : public testing::Test {
       return false;
 
     return result->feature == feature && !result->fallback_value &&
-           !result->opaque_value && result->values.empty();
+           !result->opaque_value && result->allowed_origins.empty();
   }
 
   ParsedFeaturePolicy test_policy = {
       {mojom::blink::FeaturePolicyFeature::kFullscreen,
-       std::map<url::Origin, bool>{{url_origin_a_, true},
-                                   {url_origin_b_, true}},
-       false, false},
+       /* allowed_origins */ {url_origin_a_, url_origin_b_}, false, false},
       {mojom::blink::FeaturePolicyFeature::kGeolocation,
-       std::map<url::Origin, bool>{{url_origin_a_, true}}, false, false}};
+       /* allowed_origins */ {url_origin_a_}, false, false}};
 
   ParsedFeaturePolicy empty_policy = {};
 };

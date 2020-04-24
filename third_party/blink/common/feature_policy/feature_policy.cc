@@ -22,8 +22,8 @@ std::unique_ptr<FeaturePolicy::Allowlist> AllowlistFromDeclaration(
       base::WrapUnique(new FeaturePolicy::Allowlist());
   result->SetFallbackValue(parsed_declaration.fallback_value);
   result->SetOpaqueValue(parsed_declaration.opaque_value);
-  for (const auto& value : parsed_declaration.values)
-    result->Add(value.first, value.second);
+  for (const auto& value : parsed_declaration.allowed_origins)
+    result->Add(value);
 
   return result;
 }
@@ -39,11 +39,11 @@ ParsedFeaturePolicyDeclaration::ParsedFeaturePolicyDeclaration(
 
 ParsedFeaturePolicyDeclaration::ParsedFeaturePolicyDeclaration(
     mojom::FeaturePolicyFeature feature,
-    const std::map<url::Origin, bool>& values,
+    const std::vector<url::Origin>& allowed_origins,
     bool fallback_value,
     bool opaque_value)
     : feature(feature),
-      values(values),
+      allowed_origins(allowed_origins),
       fallback_value(fallback_value),
       opaque_value(opaque_value) {}
 
@@ -63,7 +63,7 @@ bool operator==(const ParsedFeaturePolicyDeclaration& lhs,
     return false;
   if (!(lhs.opaque_value == rhs.opaque_value))
     return false;
-  return lhs.values == rhs.values;
+  return lhs.allowed_origins == rhs.allowed_origins;
 }
 
 FeaturePolicy::Allowlist::Allowlist()
@@ -73,17 +73,16 @@ FeaturePolicy::Allowlist::Allowlist(const Allowlist& rhs) = default;
 
 FeaturePolicy::Allowlist::~Allowlist() = default;
 
-void FeaturePolicy::Allowlist::Add(const url::Origin& origin, bool value) {
-  values_[origin] = value;
+void FeaturePolicy::Allowlist::Add(const url::Origin& origin) {
+  allowed_origins_.push_back(origin);
 }
 
 bool FeaturePolicy::Allowlist::GetValueForOrigin(
     const url::Origin& origin) const {
-  // |fallback_value_| will either be min (initialized in the parser) value or
-  // set to the corresponding value for * origins.
-  auto value = values_.find(origin);
-  if (value != values_.end())
-    return value->second;
+  for (const auto& allowed_origin : allowed_origins_) {
+    if (origin == allowed_origin)
+      return true;
+  }
   if (origin.opaque())
     return opaque_value_;
   return fallback_value_;
@@ -103,11 +102,6 @@ bool FeaturePolicy::Allowlist::GetOpaqueValue() const {
 
 void FeaturePolicy::Allowlist::SetOpaqueValue(bool opaque_value) {
   opaque_value_ = opaque_value;
-}
-
-const base::flat_map<url::Origin, bool>& FeaturePolicy::Allowlist::Values()
-    const {
-  return values_;
 }
 
 // static
@@ -208,7 +202,7 @@ const FeaturePolicy::Allowlist FeaturePolicy::GetAllowlistForFeature(
   if (default_policy == FeaturePolicy::FeatureDefault::EnableForAll) {
     default_allowlist.SetFallbackValue(true);
   } else if (default_policy == FeaturePolicy::FeatureDefault::EnableForSelf) {
-    default_allowlist.Add(origin_, true);
+    default_allowlist.Add(origin_);
   }
 
   return default_allowlist;
