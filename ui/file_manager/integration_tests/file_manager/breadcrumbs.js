@@ -520,6 +520,12 @@
         nestedFolderTestEntries.map(e => e.nameText).join('/');
     await navigateWithDirectoryTree(appId, breadcrumb);
 
+    // Check: the breadcrumb path attribute should be |breadcrumb|.
+    const breadcrumbElement =
+        await remoteCall.waitForElement(appId, ['bread-crumb']);
+    const path = breadcrumb.slice(1);  // remove leading "/" char
+    chrome.test.assertEq(path, breadcrumbElement.attributes.path);
+
     // Click the breadcrumb elider button when it appears.
     const eliderButton = ['bread-crumb', '[elider]:not([hidden])'];
     await remoteCall.waitAndClickElement(appId, eliderButton);
