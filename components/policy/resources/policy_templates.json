@@ -2280,7 +2280,6 @@
         },
       ],
       'supported_on': ['chrome_os:75-'],
-      'future': True,
       'features': {
         'can_be_recommended': False,
         'dynamic_refresh': True,
@@ -2433,7 +2432,6 @@
         },
       ],
       'supported_on': ['chrome_os:75-'],
-      'future': True,
       'features': {
         'can_be_recommended': False,
         'dynamic_refresh': True,
@@ -16306,7 +16304,6 @@
       'type': 'main',
       'schema': { 'type': 'boolean' },
       'supported_on': ['chrome_os:67-'],
-      'future': True,
       'features': {
         'dynamic_refresh': True,
         'per_profile': True,
