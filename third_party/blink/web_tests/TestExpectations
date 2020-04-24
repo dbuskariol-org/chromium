@@ -6448,7 +6448,6 @@ crbug.com/956688 [ Linux ] external/wpt/js-self-profiling/idlharness.any.html [ 
 crbug.com/956688 [ Linux ] external/wpt/js-self-profiling/idlharness.any.worker.html [ Pass Failure ]
 
 # Flaky tests blocking WPT import
-crbug.com/1049607 [ Win ] external/wpt/html/semantics/selectors/pseudo-classes/link.html [ Pass Failure ]
 crbug.com/1054577 [ Linux ] virtual/storage-access-api/external/wpt/storage-access-api/requestStorageAccess.sub.window.html [ Pass Failure ]
 crbug.com/1054577 [ Win ] virtual/storage-access-api/external/wpt/storage-access-api/requestStorageAccess.sub.window.html [ Pass Failure ]
 crbug.com/1054577 [ Mac ] external/wpt/media-source/mediasource-detach.html [ Pass Failure ]
