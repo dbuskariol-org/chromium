@@ -483,4 +483,99 @@
     await remoteCall.waitForElement(
         appId, ['bread-crumb[path="My files/Downloads"']);
   };
+
+  /**
+   * Tests that a <shift>-Tab key on the elider button drop down menu closes
+   * the menu and focuses button#first to the left of the elider button.
+   */
+  testcase.breadcrumbsEliderMenuItemTabLeft = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(3);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Click the breadcrumb elider button when it appears.
+    const eliderButton = ['bread-crumb', '[elider]:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, eliderButton);
+
+    // Check: the elider button drop-down menu should open.
+    const menu = ['bread-crumb', '#elider-menu', 'dialog[open]'];
+    await remoteCall.waitForElement(appId, menu);
+
+    // Send an ArrowDown key to the drop-down menu.
+    const key = [menu, 'ArrowDown', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, key));
+
+    // Check: the drop-down menu item should focus.
+    const item = ['bread-crumb', '#elider-menu .dropdown-item:focus'];
+    await remoteCall.waitForElement(appId, item);
+
+    // Dispatch a <shift>-Tab key to the focused drop-down menu item.
+    const result = await sendTestMessage(
+        {name: 'dispatchTabKey', /* key modifier */ shift: true});
+    chrome.test.assertEq(
+        result, 'tabKeyDispatched', 'shift-Tab key dispatch failed');
+
+    // Check: the elider button drop-down menu should close.
+    await remoteCall.waitForElementLost(appId, menu);
+
+    // Check: the "first" main button should be focused.
+    await remoteCall.waitForElement(
+        appId, ['bread-crumb', 'button[id="first"]:focus']);
+  };
+
+  /**
+   * Tests that a Tab key on the elider button drop down menu closes the menu
+   * and focuses button#third to the right of the elider button.
+   */
+  testcase.breadcrumbsEliderMenuItemTabRight = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(3);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Click the breadcrumb elider button when it appears.
+    const eliderButton = ['bread-crumb', '[elider]:not([hidden])'];
+    await remoteCall.waitAndClickElement(appId, eliderButton);
+
+    // Check: the elider button drop-down menu should open.
+    const menu = ['bread-crumb', '#elider-menu', 'dialog[open]'];
+    await remoteCall.waitForElement(appId, menu);
+
+    // Send an ArrowDown key to the drop-down menu.
+    const key = [menu, 'ArrowDown', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, key));
+
+    // Check: the drop-down menu item should focus.
+    const item = ['bread-crumb', '#elider-menu .dropdown-item:focus'];
+    await remoteCall.waitForElement(appId, item);
+
+    // Dispatch a Tab key to the focused drop-down menu item.
+    const result = await sendTestMessage(
+        {name: 'dispatchTabKey', /* key modifier */ shift: false});
+    chrome.test.assertEq(result, 'tabKeyDispatched', 'Tab key dispatch failed');
+
+    // Check: the elider button drop-down menu should close.
+    await remoteCall.waitForElementLost(appId, menu);
+
+    // Check: the "third" main button should be focused.
+    await remoteCall.waitForElement(
+        appId, ['bread-crumb', 'button[id="third"]:focus']);
+  };
 })();
