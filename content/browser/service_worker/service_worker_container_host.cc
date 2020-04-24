@@ -776,7 +776,7 @@ ServiceWorkerClientInfo ServiceWorkerContainerHost::GetServiceWorkerClientInfo()
   DCHECK(IsContainerForClient());
 
   return ServiceWorkerClientInfo(process_id_, frame_id_, web_contents_getter_,
-                                 type_);
+                                 GetClientType());
 }
 
 void ServiceWorkerContainerHost::OnBeginNavigationCommit(
