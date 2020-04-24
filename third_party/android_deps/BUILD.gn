@@ -12,13 +12,13 @@ java_group("android_support_v4_java") {
     ":androidx_interpolator_interpolator_java",
     ":androidx_legacy_legacy_support_core_ui_java",
     ":androidx_legacy_legacy_support_core_utils_java",
+    ":androidx_legacy_legacy_support_v4_java",
     ":androidx_lifecycle_lifecycle_common_java",
     ":androidx_lifecycle_lifecycle_viewmodel_java",
+    ":androidx_media_media_java",
     ":com_android_support_recyclerview_v7_java",
     ":com_android_support_support_compat_java",
     ":com_android_support_support_fragment_java",
-    ":com_android_support_support_media_compat_java",
-    ":com_android_support_support_v4_java",
   ]
   input_jars_paths = [ "${target_out_dir}/com_android_support_support_compat_java_orig/classes.jar" ]
 }
@@ -35,25 +35,12 @@ java_group("android_support_v7_appcompat_java") {
       [ "${target_out_dir}/com_android_support_appcompat_v7_java/classes.jar" ]
 }
 
-java_group("com_android_support_mediarouter_v7_java") {
-  deps = [
-    ":${target_name}_orig__unpack_aar",
-    ":androidx_mediarouter_mediarouter_java",
-  ]
-  input_jars_paths = [ "${target_out_dir}/com_android_support_mediarouter_v7_java_orig/classes.jar" ]
-}
-
 java_group("com_android_support_recyclerview_v7_java") {
   deps = [
     ":${target_name}_orig__unpack_aar",
     ":androidx_recyclerview_recyclerview_java",
   ]
   input_jars_paths = [ "${target_out_dir}/com_android_support_recyclerview_v7_java_orig/classes.jar" ]
-}
-
-java_group("com_android_support_support_annotations_java") {
-  deps = [ ":androidx_annotation_annotation_java" ]
-  input_jars_paths = [ "libs/com_android_support_support_annotations/support-annotations-28.0.0.jar" ]
 }
 
 java_group("com_android_support_support_compat_java") {
@@ -70,24 +57,6 @@ java_group("com_android_support_support_fragment_java") {
     ":androidx_fragment_fragment_java",
   ]
   input_jars_paths = [ "${target_out_dir}/com_android_support_support_fragment_java_orig/classes.jar" ]
-}
-
-java_group("com_android_support_support_media_compat_java") {
-  deps = [
-    ":${target_name}_orig__unpack_aar",
-    ":androidx_media_media_java",
-  ]
-  input_jars_paths = [ "${target_out_dir}/com_android_support_support_media_compat_java_orig/classes.jar" ]
-}
-
-java_group("com_android_support_support_v4_java") {
-  deps = [
-    ":${target_name}_orig__unpack_aar",
-    ":androidx_legacy_legacy_support_v4_java",
-  ]
-  input_jars_paths = [
-    "${target_out_dir}/com_android_support_support_v4_java_orig/classes.jar",
-  ]
 }
 
 # The dependencies below are used by chromecast internal.
@@ -130,7 +99,7 @@ java_prebuilt("android_arch_lifecycle_common_java") {
   output_name = "android_arch_lifecycle_common"
   supports_android = true
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -140,7 +109,7 @@ java_prebuilt("android_arch_lifecycle_common_java8_java") {
   supports_android = true
   deps = [
     ":android_arch_lifecycle_common_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
   ]
   skip_jetify = true
 }
@@ -153,7 +122,7 @@ android_aar_prebuilt("android_arch_lifecycle_runtime_java") {
   deps = [
     ":android_arch_core_common_java",
     ":android_arch_lifecycle_common_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
   ]
   skip_jetify = true
 
@@ -166,7 +135,7 @@ android_aar_prebuilt("android_arch_lifecycle_viewmodel_java") {
   aar_path = "libs/android_arch_lifecycle_viewmodel/viewmodel-1.1.1.aar"
   info_path = "libs/android_arch_lifecycle_viewmodel/android_arch_lifecycle_viewmodel.info"
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 
   # https://crbug.com/887942#c1
   ignore_proguard_configs = true
@@ -684,7 +653,7 @@ android_aar_prebuilt("com_android_support_appcompat_v7_java") {
     ":com_android_support_animated_vector_drawable_java",
     ":com_android_support_collections_java",
     ":com_android_support_cursoradapter_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_support_core_utils_java",
     ":com_android_support_support_fragment_java_orig",
@@ -699,7 +668,7 @@ android_aar_prebuilt("com_android_support_asynclayoutinflater_java_orig") {
   aar_path = "libs/com_android_support_asynclayoutinflater/asynclayoutinflater-28.0.0.aar"
   info_path = "libs/com_android_support_asynclayoutinflater/com_android_support_asynclayoutinflater.info"
   deps = [
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -710,7 +679,7 @@ android_aar_prebuilt("com_android_support_cardview_v7_java") {
   aar_path = "libs/com_android_support_cardview_v7/cardview-v7-28.0.0.aar"
   info_path = "libs/com_android_support_cardview_v7/com_android_support_cardview_v7.info"
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -719,7 +688,7 @@ java_prebuilt("com_android_support_collections_java") {
   output_name = "com_android_support_collections"
   supports_android = true
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -729,7 +698,7 @@ android_aar_prebuilt("com_android_support_coordinatorlayout_java") {
   info_path = "libs/com_android_support_coordinatorlayout/com_android_support_coordinatorlayout.info"
   deps = [
     ":com_android_support_customview_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -744,7 +713,7 @@ android_aar_prebuilt("com_android_support_customview_java") {
   info_path =
       "libs/com_android_support_customview/com_android_support_customview.info"
   deps = [
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -758,7 +727,7 @@ android_aar_prebuilt("com_android_support_design_java") {
     ":com_android_support_appcompat_v7_java",
     ":com_android_support_cardview_v7_java",
     ":com_android_support_recyclerview_v7_java_orig",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_support_core_ui_java",
     ":com_android_support_support_core_utils_java",
@@ -775,7 +744,7 @@ android_aar_prebuilt("com_android_support_drawerlayout_java") {
   info_path = "libs/com_android_support_drawerlayout/com_android_support_drawerlayout.info"
   deps = [
     ":com_android_support_customview_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -797,7 +766,7 @@ android_aar_prebuilt("com_android_support_interpolator_java") {
   aar_path = "libs/com_android_support_interpolator/interpolator-28.0.0.aar"
   info_path = "libs/com_android_support_interpolator/com_android_support_interpolator.info"
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -805,18 +774,18 @@ android_aar_prebuilt("com_android_support_localbroadcastmanager_java") {
   aar_path = "libs/com_android_support_localbroadcastmanager/localbroadcastmanager-28.0.0.aar"
   info_path = "libs/com_android_support_localbroadcastmanager/com_android_support_localbroadcastmanager.info"
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
-android_aar_prebuilt("com_android_support_mediarouter_v7_java_orig") {
+android_aar_prebuilt("com_android_support_mediarouter_v7_java") {
   aar_path = "libs/com_android_support_mediarouter_v7/mediarouter-v7-28.0.0.aar"
   info_path = "libs/com_android_support_mediarouter_v7/com_android_support_mediarouter_v7.info"
   deps = [
     ":com_android_support_appcompat_v7_java",
     ":com_android_support_palette_v7_java",
     ":com_android_support_recyclerview_v7_java_orig",
-    ":com_android_support_support_media_compat_java_orig",
+    ":com_android_support_support_media_compat_java",
   ]
   skip_jetify = true
 
@@ -873,7 +842,7 @@ android_aar_prebuilt("com_android_support_recyclerview_v7_java_orig") {
       "libs/com_android_support_recyclerview_v7/recyclerview-v7-28.0.0.aar"
   info_path = "libs/com_android_support_recyclerview_v7/com_android_support_recyclerview_v7.info"
   deps = [
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_support_core_ui_java",
   ]
@@ -881,7 +850,7 @@ android_aar_prebuilt("com_android_support_recyclerview_v7_java_orig") {
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
-java_prebuilt("com_android_support_support_annotations_java_orig") {
+java_prebuilt("com_android_support_support_annotations_java") {
   jar_path = "libs/com_android_support_support_annotations/support-annotations-28.0.0.jar"
   output_name = "com_android_support_support_annotations"
   supports_android = true
@@ -898,7 +867,7 @@ android_aar_prebuilt("com_android_support_support_compat_java_orig") {
   deps = [
     ":android_arch_lifecycle_runtime_java",
     ":com_android_support_collections_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_versionedparcelable_java",
   ]
   skip_jetify = true
@@ -927,7 +896,7 @@ android_aar_prebuilt("com_android_support_support_core_ui_java") {
     ":com_android_support_drawerlayout_java",
     ":com_android_support_interpolator_java",
     ":com_android_support_slidingpanelayout_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_support_core_utils_java",
     ":com_android_support_swiperefreshlayout_java",
@@ -945,7 +914,7 @@ android_aar_prebuilt("com_android_support_support_core_utils_java") {
     ":com_android_support_loader_java",
     ":com_android_support_localbroadcastmanager_java",
     ":com_android_support_print_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -959,7 +928,7 @@ android_aar_prebuilt("com_android_support_support_fragment_java_orig") {
   deps = [
     ":android_arch_lifecycle_viewmodel_java",
     ":com_android_support_loader_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_support_core_ui_java",
     ":com_android_support_support_core_utils_java",
@@ -972,11 +941,11 @@ android_aar_prebuilt("com_android_support_support_v13_java") {
   aar_path = "libs/com_android_support_support_v13/support-v13-28.0.0.aar"
   info_path = "libs/com_android_support_support_v13/com_android_support_support_v13.info"
   skip_jetify = true
-  deps = [ ":com_android_support_support_v4_java_orig" ]
+  deps = [ ":com_android_support_support_v4_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
-android_aar_prebuilt("com_android_support_support_v4_java_orig") {
+android_aar_prebuilt("com_android_support_support_v4_java") {
   aar_path = "libs/com_android_support_support_v4/support-v4-28.0.0.aar"
   info_path =
       "libs/com_android_support_support_v4/com_android_support_support_v4.info"
@@ -985,7 +954,7 @@ android_aar_prebuilt("com_android_support_support_v4_java_orig") {
     ":com_android_support_support_core_ui_java",
     ":com_android_support_support_core_utils_java",
     ":com_android_support_support_fragment_java_orig",
-    ":com_android_support_support_media_compat_java_orig",
+    ":com_android_support_support_media_compat_java",
   ]
   skip_jetify = true
 }
@@ -996,7 +965,7 @@ android_aar_prebuilt("com_android_support_swiperefreshlayout_java") {
   info_path = "libs/com_android_support_swiperefreshlayout/com_android_support_swiperefreshlayout.info"
   deps = [
     ":com_android_support_interpolator_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -1009,7 +978,7 @@ android_aar_prebuilt("com_android_support_viewpager_java") {
       "libs/com_android_support_viewpager/com_android_support_viewpager.info"
   deps = [
     ":com_android_support_customview_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -1509,7 +1478,7 @@ java_prebuilt("android_arch_core_common_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -1522,7 +1491,7 @@ android_aar_prebuilt("android_arch_core_runtime_java") {
   visibility = [ ":*" ]
   deps = [
     ":android_arch_core_common_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
   ]
   skip_jetify = true
 }
@@ -1822,7 +1791,7 @@ android_aar_prebuilt("com_android_support_cursoradapter_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -1834,7 +1803,7 @@ android_aar_prebuilt("com_android_support_documentfile_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -1850,7 +1819,7 @@ android_aar_prebuilt("com_android_support_leanback_v17_java") {
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_support_core_ui_java",
     ":com_android_support_support_fragment_java_orig",
-    ":com_android_support_support_media_compat_java_orig",
+    ":com_android_support_support_media_compat_java",
   ]
   skip_jetify = true
 }
@@ -1866,7 +1835,7 @@ android_aar_prebuilt("com_android_support_loader_java") {
   deps = [
     ":android_arch_lifecycle_livedata_java",
     ":android_arch_lifecycle_viewmodel_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -1910,7 +1879,7 @@ android_aar_prebuilt("com_android_support_print_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   skip_jetify = true
-  deps = [ ":com_android_support_support_annotations_java_orig" ]
+  deps = [ ":com_android_support_support_annotations_java" ]
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
@@ -1924,14 +1893,14 @@ android_aar_prebuilt("com_android_support_slidingpanelayout_java") {
   visibility = [ ":*" ]
   deps = [
     ":com_android_support_customview_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
-android_aar_prebuilt("com_android_support_support_media_compat_java_orig") {
+android_aar_prebuilt("com_android_support_support_media_compat_java") {
   aar_path = "libs/com_android_support_support_media_compat/support-media-compat-28.0.0.aar"
   info_path = "libs/com_android_support_support_media_compat/com_android_support_support_media_compat.info"
 
@@ -1939,7 +1908,7 @@ android_aar_prebuilt("com_android_support_support_media_compat_java_orig") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   deps = [
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
     ":com_android_support_versionedparcelable_java",
   ]
@@ -1956,7 +1925,7 @@ android_aar_prebuilt("com_android_support_support_vector_drawable_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   deps = [
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -1973,7 +1942,7 @@ android_aar_prebuilt("com_android_support_transition_java") {
   # //third_party/android_deps/build.gradle.
   visibility = [ ":*" ]
   deps = [
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
     ":com_android_support_support_compat_java_orig",
   ]
   skip_jetify = true
@@ -1990,7 +1959,7 @@ android_aar_prebuilt("com_android_support_versionedparcelable_java") {
   visibility = [ ":*" ]
   deps = [
     ":com_android_support_collections_java",
-    ":com_android_support_support_annotations_java_orig",
+    ":com_android_support_support_annotations_java",
   ]
   skip_jetify = true
   ignore_aidl = true
