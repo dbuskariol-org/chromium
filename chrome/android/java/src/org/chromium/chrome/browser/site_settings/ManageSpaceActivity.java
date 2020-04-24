@@ -40,6 +40,7 @@ import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.searchwidget.SearchWidgetProvider;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
+import org.chromium.chrome.browser.settings.SettingsLauncherImpl;
 import org.chromium.chrome.browser.site_settings.Website.StoredDataClearedCallback;
 import org.chromium.components.browser_ui.util.ConversionUtils;
 
@@ -238,7 +239,8 @@ public class ManageSpaceActivity extends AppCompatActivity implements View.OnCli
                     getString(R.string.website_settings_storage));
             RecordHistogram.recordEnumeratedHistogram(
                     "Android.ManageSpace.ActionTaken", OPTION_MANAGE_STORAGE, OPTION_MAX);
-            SettingsLauncher.getInstance().launchSettingsPage(
+            SettingsLauncher settingsLauncher = new SettingsLauncherImpl();
+            settingsLauncher.launchSettingsActivity(
                     this, SingleCategorySettings.class, initialArguments);
         } else if (view == mClearAllDataButton) {
             final ActivityManager activityManager =

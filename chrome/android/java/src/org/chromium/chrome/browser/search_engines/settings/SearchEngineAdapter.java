@@ -33,6 +33,7 @@ import org.chromium.chrome.browser.locale.LocaleManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
+import org.chromium.chrome.browser.settings.SettingsLauncherImpl;
 import org.chromium.chrome.browser.site_settings.PermissionInfo;
 import org.chromium.chrome.browser.site_settings.SingleWebsiteSettings;
 import org.chromium.chrome.browser.site_settings.WebsitePreferenceBridge;
@@ -471,7 +472,8 @@ public class SearchEngineAdapter extends BaseAdapter
         if (linkBeingShown == R.string.search_engine_system_location_disabled) {
             mContext.startActivity(LocationUtils.getInstance().getSystemLocationSettingsIntent());
         } else {
-            SettingsLauncher.getInstance().launchSettingsPage(mContext, SingleWebsiteSettings.class,
+            SettingsLauncher settingsLauncher = new SettingsLauncherImpl();
+            settingsLauncher.launchSettingsActivity(mContext, SingleWebsiteSettings.class,
                     SingleWebsiteSettings.createFragmentArgsForSite(url));
         }
     }

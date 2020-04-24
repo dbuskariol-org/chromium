@@ -36,6 +36,7 @@ import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.settings.SettingsActivity;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
+import org.chromium.chrome.browser.settings.SettingsLauncherImpl;
 import org.chromium.chrome.browser.site_settings.FourStateCookieSettingsPreference.CookieSettingsState;
 import org.chromium.chrome.test.ChromeActivityTestRule;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
@@ -1220,7 +1221,8 @@ public class SiteSettingsTest {
             mActivityTestRule.runJavaScriptCodeInCurrentTab("requestPermissionAndRespond()");
         }
 
-        Intent intent = SettingsLauncher.getInstance().createIntentForSettingsPage(
+        SettingsLauncher settingsLauncher = new SettingsLauncherImpl();
+        Intent intent = settingsLauncher.createSettingsActivityIntent(
                 InstrumentationRegistry.getTargetContext(), SingleWebsiteSettings.class.getName(),
                 SingleWebsiteSettings.createFragmentArgsForSite(url));
         final SettingsActivity settingsActivity =
