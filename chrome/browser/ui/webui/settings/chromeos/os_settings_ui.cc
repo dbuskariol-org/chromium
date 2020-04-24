@@ -370,13 +370,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   html_source->AddBoolean("hasInternalStylus",
                           ash::stylus_utils::HasInternalStylus());
 
-  html_source->AddBoolean("showCrostini",
-                          crostini::CrostiniFeatures::Get()->IsUIAllowed(
-                              profile, /*check_policy=*/false));
-
-  html_source->AddBoolean(
-      "allowCrostini", crostini::CrostiniFeatures::Get()->IsUIAllowed(profile));
-
   html_source->AddBoolean("allowPluginVm", allow_plugin_vm);
   html_source->AddBoolean("showPluginVm", show_plugin_vm);
 

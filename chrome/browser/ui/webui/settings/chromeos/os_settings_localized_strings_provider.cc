@@ -18,13 +18,10 @@
 #include "build/buildflag.h"
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/browser_process_platform_part.h"
-#include "chrome/browser/chromeos/crostini/crostini_features.h"
-#include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/browser/chromeos/local_search_service/local_search_service.h"
 #include "chrome/browser/chromeos/multidevice_setup/multidevice_setup_client_factory.h"
 #include "chrome/browser/chromeos/policy/browser_policy_connector_chromeos.h"
 #include "chrome/browser/chromeos/profiles/profile_helper.h"
-#include "chrome/browser/policy/profile_policy_connector.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/webui/chromeos/network_element_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/chromeos/smb_shares/smb_shares_localized_strings_provider.h"
@@ -32,6 +29,7 @@
 #include "chrome/browser/ui/webui/policy_indicator_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/apps_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/bluetooth_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/crostini_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/multidevice_strings_provider.h"
@@ -109,10 +107,6 @@ bool IsDeviceManaged() {
   policy::BrowserPolicyConnectorChromeOS* connector =
       g_browser_process->platform_part()->browser_policy_connector_chromeos();
   return connector->IsEnterpriseManaged();
-}
-
-bool IsProfileManaged(Profile* profile) {
-  return profile->GetProfilePolicyConnector()->IsManaged();
 }
 
 void AddCommonStrings(content::WebUIDataSource* html_source, Profile* profile) {
@@ -431,167 +425,6 @@ void AddLanguagesStrings(content::WebUIDataSource* html_source) {
   html_source->AddString(
       "languagesLearnMoreURL",
       base::ASCIIToUTF16(chrome::kLanguageSettingsLearnMoreUrl));
-}
-
-void AddCrostiniStrings(content::WebUIDataSource* html_source,
-                        Profile* profile) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"crostiniPageTitle", IDS_SETTINGS_CROSTINI_TITLE},
-      {"crostiniPageLabel", IDS_SETTINGS_CROSTINI_LABEL},
-      {"crostiniEnable", IDS_SETTINGS_TURN_ON},
-      {"crostiniSharedPaths", IDS_SETTINGS_CROSTINI_SHARED_PATHS},
-      {"crostiniSharedPathsListHeading",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_LIST_HEADING},
-      {"crostiniSharedPathsInstructionsAdd",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_INSTRUCTIONS_ADD},
-      {"crostiniSharedPathsInstructionsRemove",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_INSTRUCTIONS_REMOVE},
-      {"crostiniSharedPathsRemoveSharing",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_REMOVE_SHARING},
-      {"crostiniSharedPathsRemoveFailureDialogMessage",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_REMOVE_FAILURE_DIALOG_MESSAGE},
-      {"crostiniSharedPathsRemoveFailureDialogTitle",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_REMOVE_FAILURE_DIALOG_TITLE},
-      {"crostiniSharedPathsRemoveFailureTryAgain",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_REMOVE_FAILURE_TRY_AGAIN},
-      {"crostiniSharedPathsListEmptyMessage",
-       IDS_SETTINGS_CROSTINI_SHARED_PATHS_LIST_EMPTY_MESSAGE},
-      {"crostiniExportImportTitle", IDS_SETTINGS_CROSTINI_EXPORT_IMPORT_TITLE},
-      {"crostiniExport", IDS_SETTINGS_CROSTINI_EXPORT},
-      {"crostiniExportLabel", IDS_SETTINGS_CROSTINI_EXPORT_LABEL},
-      {"crostiniImport", IDS_SETTINGS_CROSTINI_IMPORT},
-      {"crostiniImportLabel", IDS_SETTINGS_CROSTINI_IMPORT_LABEL},
-      {"crostiniImportConfirmationDialogTitle",
-       IDS_SETTINGS_CROSTINI_CONFIRM_IMPORT_DIALOG_WINDOW_TITLE},
-      {"crostiniImportConfirmationDialogMessage",
-       IDS_SETTINGS_CROSTINI_CONFIRM_IMPORT_DIALOG_WINDOW_MESSAGE},
-      {"crostiniImportConfirmationDialogConfirmationButton",
-       IDS_SETTINGS_CROSTINI_IMPORT},
-      {"crostiniRemoveButton", IDS_SETTINGS_CROSTINI_REMOVE_BUTTON},
-      {"crostiniSharedUsbDevicesLabel",
-       IDS_SETTINGS_CROSTINI_SHARED_USB_DEVICES_LABEL},
-      {"crostiniSharedUsbDevicesDescription",
-       IDS_SETTINGS_CROSTINI_SHARED_USB_DEVICES_DESCRIPTION},
-      {"crostiniSharedUsbDevicesExtraDescription",
-       IDS_SETTINGS_CROSTINI_SHARED_USB_DEVICES_EXTRA_DESCRIPTION},
-      {"crostiniSharedUsbDevicesListEmptyMessage",
-       IDS_SETTINGS_CROSTINI_SHARED_USB_DEVICES_LIST_EMPTY_MESSAGE},
-      {"crostiniArcAdbTitle", IDS_SETTINGS_CROSTINI_ARC_ADB_TITLE},
-      {"crostiniArcAdbDescription", IDS_SETTINGS_CROSTINI_ARC_ADB_DESCRIPTION},
-      {"crostiniArcAdbLabel", IDS_SETTINGS_CROSTINI_ARC_ADB_LABEL},
-      {"crostiniArcAdbRestartButton",
-       IDS_SETTINGS_CROSTINI_ARC_ADB_RESTART_BUTTON},
-      {"crostiniArcAdbConfirmationTitleEnable",
-       IDS_SETTINGS_CROSTINI_ARC_ADB_CONFIRMATION_TITLE_ENABLE},
-      {"crostiniArcAdbConfirmationTitleDisable",
-       IDS_SETTINGS_CROSTINI_ARC_ADB_CONFIRMATION_TITLE_DISABLE},
-      {"crostiniContainerUpgrade",
-       IDS_SETTINGS_CROSTINI_CONTAINER_UPGRADE_MESSAGE},
-      {"crostiniContainerUpgradeSubtext",
-       IDS_SETTINGS_CROSTINI_CONTAINER_UPGRADE_SUBTEXT},
-      {"crostiniContainerUpgradeButton",
-       IDS_SETTINGS_CROSTINI_CONTAINER_UPGRADE_BUTTON},
-      {"crostiniPortForwarding", IDS_SETTINGS_CROSTINI_PORT_FORWARDING},
-      {"crostiniPortForwardingDescription",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_DESCRIPTION},
-      {"crostiniPortForwardingNoPorts",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_NO_PORTS},
-      {"crostiniPortForwardingTableTitle",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_TABLE_TITLE},
-      {"crostiniPortForwardingListPortNumber",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_LIST_PORT_NUMBER},
-      {"crostiniPortForwardingListLabel",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_LIST_LABEL},
-      {"crostiniPortForwardingAddPortButton",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_ADD_PORT_BUTTON},
-      {"crostiniPortForwardingAddPortButtonDescription",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_ADD_PORT_BUTTON_DESCRIPTION},
-      {"crostiniPortForwardingAddPortDialogTitle",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_ADD_PORT_DIALOG_TITLE},
-      {"crostiniPortForwardingAddPortDialogLabel",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_ADD_PORT_DIALOG_LABEL},
-      {"crostiniPortForwardingTCP", IDS_SETTINGS_CROSTINI_PORT_FORWARDING_TCP},
-      {"crostiniPortForwardingUDP", IDS_SETTINGS_CROSTINI_PORT_FORWARDING_UDP},
-      {"crostiniPortForwardingAddError",
-       IDS_SETTINGS_CROSTINI_PORT_FORWARDING_ADD_ERROR},
-      {"crostiniDiskResizeTitle", IDS_SETTINGS_CROSTINI_DISK_RESIZE_TITLE},
-      {"crostiniDiskResizeShowButton",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_SHOW_BUTTON},
-      {"crostiniDiskResizeShowButtonAriaLabel",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_SHOW_BUTTON_ARIA_LABEL},
-      {"crostiniDiskResizeLabel", IDS_SETTINGS_CROSTINI_DISK_RESIZE_LABEL},
-      {"crostiniDiskResizeUnsupported",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_UNSUPPORTED},
-      {"crostiniDiskResizeLoading", IDS_SETTINGS_CROSTINI_DISK_RESIZE_LOADING},
-      {"crostiniDiskResizeError", IDS_SETTINGS_CROSTINI_DISK_RESIZE_ERROR},
-      {"crostiniDiskResizeErrorRetry",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_ERROR_RETRY},
-      {"crostiniDiskResizeCancel", IDS_SETTINGS_CROSTINI_DISK_RESIZE_CANCEL},
-      {"crostiniDiskResizeGoButton",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_GO_BUTTON},
-      {"crostiniDiskResizeInProgress",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_IN_PROGRESS},
-      {"crostiniDiskResizeResizingError",
-       IDS_SETTINGS_CROSTINI_DISK_RESIZE_RESIZING_ERROR},
-      {"crostiniDiskResizeDone", IDS_SETTINGS_CROSTINI_DISK_RESIZE_DONE},
-      {"crostiniMicTitle", IDS_SETTINGS_CROSTINI_MIC_TITLE},
-      {"crostiniMicDialogTitle", IDS_SETTINGS_CROSTINI_MIC_DIALOG_TITLE},
-      {"crostiniMicDialogLabel", IDS_SETTINGS_CROSTINI_MIC_DIALOG_LABEL},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-  html_source->AddString(
-      "crostiniSubtext",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_CROSTINI_SUBTEXT, ui::GetChromeOSDeviceName(),
-          GetHelpUrlWithBoard(chrome::kLinuxAppsLearnMoreURL)));
-  html_source->AddString(
-      "crostiniArcAdbPowerwashRequiredSublabel",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_CROSTINI_ARC_ADB_POWERWASH_REQUIRED_SUBLABEL,
-          base::ASCIIToUTF16(chrome::kArcAdbSideloadingLearnMoreURL)));
-  html_source->AddString("crostiniRemove", l10n_util::GetStringFUTF16(
-                                               IDS_SETTINGS_CROSTINI_REMOVE,
-                                               ui::GetChromeOSDeviceName()));
-  html_source->AddString(
-      "crostiniArcAdbConfirmationMessageEnable",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_CROSTINI_ARC_ADB_CONFIRMATION_MESSAGE_ENABLE,
-          ui::GetChromeOSDeviceName()));
-  html_source->AddString(
-      "crostiniArcAdbConfirmationMessageDisable",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_CROSTINI_ARC_ADB_CONFIRMATION_MESSAGE_DISABLE,
-          ui::GetChromeOSDeviceName()));
-  html_source->AddString(
-      "crostiniSharedPathsInstructionsLocate",
-      l10n_util::GetStringFUTF16(
-          IDS_SETTINGS_CROSTINI_SHARED_PATHS_INSTRUCTIONS_LOCATE,
-          base::ASCIIToUTF16(
-              crostini::ContainerChromeOSBaseDirectory().value())));
-  html_source->AddBoolean(
-      "showCrostiniExportImport",
-      crostini::CrostiniFeatures::Get()->IsExportImportUIAllowed(profile));
-  html_source->AddBoolean("arcAdbSideloadingSupported",
-                          base::FeatureList::IsEnabled(
-                              chromeos::features::kArcAdbSideloadingFeature));
-  html_source->AddBoolean("showCrostiniPortForwarding",
-                          base::FeatureList::IsEnabled(
-                              chromeos::features::kCrostiniPortForwarding));
-  html_source->AddBoolean("isOwnerProfile",
-                          chromeos::ProfileHelper::IsOwnerProfile(profile));
-  html_source->AddBoolean("isEnterpriseManaged",
-                          IsDeviceManaged() || IsProfileManaged(profile));
-  html_source->AddBoolean(
-      "canChangeAdbSideloading",
-      crostini::CrostiniFeatures::Get()->CanChangeAdbSideloading(profile));
-  html_source->AddBoolean("showCrostiniContainerUpgrade",
-                          crostini::ShouldAllowContainerUpgrade(profile));
-  html_source->AddBoolean(
-      "showCrostiniDiskResize",
-      base::FeatureList::IsEnabled(chromeos::features::kCrostiniDiskResizing));
-  html_source->AddBoolean("showCrostiniMic",
-                          base::FeatureList::IsEnabled(
-                              chromeos::features::kCrostiniShowMicSetting));
 }
 
 void AddPluginVmStrings(content::WebUIDataSource* html_source,
@@ -1057,6 +890,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       std::make_unique<SearchStringsProvider>(profile, /*delegate=*/this));
   per_page_providers_.push_back(std::make_unique<AppsStringsProvider>(
       profile, /*delegate=*/this, profile->GetPrefs(), arc_app_list_prefs));
+  per_page_providers_.push_back(std::make_unique<CrostiniStringsProvider>(
+      profile, /*delegate=*/this, profile->GetPrefs()));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -1074,7 +909,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddA11yStrings(html_source);
   AddChromeOSUserStrings(html_source, profile);
   AddCommonStrings(html_source, profile);
-  AddCrostiniStrings(html_source, profile);
   AddDateTimeStrings(html_source);
   AddFilesStrings(html_source);
   AddLanguagesStrings(html_source);
