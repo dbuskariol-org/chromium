@@ -1239,9 +1239,7 @@ base::UnguessableToken RenderFrameHostImpl::GetDevToolsFrameToken() {
 
 base::Optional<base::UnguessableToken>
 RenderFrameHostImpl::GetEmbeddingToken() {
-  if (!IsCurrent())
-    return base::nullopt;
-  return frame_tree_node_->GetEmbeddingToken();
+  return embedding_token_;
 }
 
 const std::string& RenderFrameHostImpl::GetFrameName() {
@@ -2581,6 +2579,22 @@ void RenderFrameHostImpl::DidCommitBackForwardCacheNavigation(
   // The page is already loaded since it came from the cache, so fire the stop
   // loading event.
   OnDidStopLoading();
+}
+
+void RenderFrameHostImpl::SetEmbeddingToken(
+    const base::Optional<base::UnguessableToken>& embedding_token) {
+  embedding_token_ = embedding_token;
+  if (!embedding_token_.has_value())
+    return;
+
+  // Only non-null tokens are propagated to the parent document. The token is
+  // automatically reset in the parent document when the child document is
+  // navigated cross-origin.
+  RenderFrameProxyHost* proxy_to_parent =
+      frame_tree_node()->render_manager()->GetProxyToParent();
+  DCHECK(proxy_to_parent);
+  proxy_to_parent->GetAssociatedRemoteFrame()->SetEmbeddingToken(
+      embedding_token_.value());
 }
 
 void RenderFrameHostImpl::DidCommitPerNavigationMojoInterfaceNavigation(

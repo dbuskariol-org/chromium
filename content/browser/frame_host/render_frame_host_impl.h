@@ -1302,6 +1302,11 @@ class CONTENT_EXPORT RenderFrameHostImpl
     return has_committed_any_navigation_;
   }
 
+  // Sets the embedding token corresponding to the document in this
+  // RenderFrameHost.
+  void SetEmbeddingToken(
+      const base::Optional<base::UnguessableToken>& embedding_token);
+
   // Return true if the process this RenderFrameHost is using has crashed and we
   // are replacing RenderFrameHosts for crashed frames rather than reusing them.
   //
@@ -2797,6 +2802,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // If true, RenderFrameHost should not be actually deleted and should be left
   // stuck in pending deletion.
   bool do_not_delete_for_testing_ = false;
+
+  // Embedding token for the document in this RenderFrameHost.
+  base::Optional<base::UnguessableToken> embedding_token_;
 
   // NOTE: This must be the last member.
   base::WeakPtrFactory<RenderFrameHostImpl> weak_ptr_factory_{this};
