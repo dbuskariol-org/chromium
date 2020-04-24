@@ -6657,3 +6657,6 @@ crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-scrip
 
 # Sheriff 2020-04-23
 crbug.com/1073792 [ Mac10.13 ] virtual/threaded-prefer-compositing/fast/scrolling/events/scrollend-event-fired-after-snap.html [ Pass Failure ]
+
+# the inspector-protocol/media tests only work in the virtual test environment.
+crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
