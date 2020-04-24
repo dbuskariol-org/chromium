@@ -6,17 +6,12 @@ package org.chromium.chrome.browser.omnibox.suggestions;
 
 import android.text.TextUtils;
 
-import androidx.test.core.app.ApplicationProvider;
-
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.annotation.Config;
 
-import org.chromium.base.ContextUtils;
+import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
-import org.chromium.testing.local.LocalRobolectricTestRunner;
+import org.chromium.url.GURL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,13 +20,9 @@ import java.util.List;
 /**
  * Unit tests for {@link OmniboxSuggestion}.
  */
-@RunWith(LocalRobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
 public class OmniboxSuggestionUnitTest {
-    @Before
-    public void setUp() {
-        ContextUtils.initApplicationContextForTests(ApplicationProvider.getApplicationContext());
-    }
+    @CalledByNative
+    private OmniboxSuggestionUnitTest() {}
 
     /**
      * Compare two cached {@link OmniboxSuggestion} to see if they are same. Only comparing cached
@@ -45,7 +36,7 @@ public class OmniboxSuggestionUnitTest {
         return suggestion1.getType() == suggestion2.getType()
                 && TextUtils.equals(suggestion1.getDisplayText(), suggestion2.getDisplayText())
                 && TextUtils.equals(suggestion1.getDescription(), suggestion2.getDescription())
-                && TextUtils.equals(suggestion1.getUrl(), suggestion2.getUrl())
+                && suggestion1.getUrl().equals(suggestion2.getUrl())
                 && suggestion1.isSearchSuggestion() == suggestion2.isSearchSuggestion()
                 && suggestion1.isStarred() == suggestion2.isStarred()
                 && suggestion1.isDeletable() == suggestion2.isDeletable()
@@ -90,9 +81,9 @@ public class OmniboxSuggestionUnitTest {
                     null /* displayTextClassifications */,
                     "dummy description 1" + (index + 1) /* description */,
                     null /* descriptionClassifications */, null /* answer */,
-                    null /* fillIntoEdit */, "dummy url" + (index + 1) /* url */,
-                    null /* imageUrl */, null /* imageDominantColor */, false /* isStarred */,
-                    false /* isDeletable */,
+                    null /* fillIntoEdit */, new GURL("dummy url" + (index + 1)) /* url */,
+                    GURL.emptyGURL() /* imageUrl */, null /* imageDominantColor */,
+                    false /* isStarred */, false /* isDeletable */,
                     hasPostData ? "Dummy Content Type" + (index + 1) : null /* postContentType */,
                     hasPostData ? new byte[] {4, 5, 6, (byte) (index + 1)} : null /* postData */,
                     OmniboxSuggestion.INVALID_GROUP);
@@ -102,7 +93,7 @@ public class OmniboxSuggestionUnitTest {
         return list;
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void setNewSuggestions_cachedSuggestionsWithPostdataBeforeAndAfterAreSame() {
         List<OmniboxSuggestion> list1 = buildDummySuggestionsList(2, true);
         OmniboxSuggestion.cacheOmniboxSuggestionListForZeroSuggest(list1);
@@ -111,7 +102,7 @@ public class OmniboxSuggestionUnitTest {
         Assert.assertTrue(isOmniboxSuggestionListMatch(list1, list2));
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void setNewSuggestions_cachedSuggestionsWithoutPostdataBeforeAndAfterAreSame() {
         List<OmniboxSuggestion> list1 = buildDummySuggestionsList(2, false);
         OmniboxSuggestion.cacheOmniboxSuggestionListForZeroSuggest(list1);

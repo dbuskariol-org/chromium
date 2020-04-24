@@ -12,23 +12,21 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.Robolectric;
-import org.robolectric.annotation.Config;
 
 import org.chromium.base.Callback;
+import org.chromium.base.ContextUtils;
+import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.CalledByNativeJavaTest;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.image_fetcher.ImageFetcher;
 import org.chromium.chrome.browser.omnibox.OmniboxSuggestionType;
@@ -43,18 +41,16 @@ import org.chromium.components.omnibox.AnswerType;
 import org.chromium.components.omnibox.SuggestionAnswer;
 import org.chromium.components.omnibox.SuggestionAnswer.ImageLine;
 import org.chromium.components.omnibox.SuggestionAnswer.TextField;
-import org.chromium.testing.local.LocalRobolectricTestRunner;
 import org.chromium.ui.modelutil.PropertyModel;
 import org.chromium.ui.modelutil.PropertyModel.WritableIntPropertyKey;
 import org.chromium.ui.modelutil.PropertyModel.WritableObjectPropertyKey;
+import org.chromium.url.GURL;
 
 import java.util.Arrays;
 
 /**
  * Tests for {@link AnswerSuggestionProcessor}.
  */
-@RunWith(LocalRobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
 public class AnswerSuggestionProcessorUnitTest {
     private static final @AnswerType int ANSWER_TYPES[] = {AnswerType.DICTIONARY,
             AnswerType.FINANCE, AnswerType.KNOWLEDGE_GRAPH, AnswerType.SPORTS, AnswerType.SUNRISE,
@@ -69,10 +65,7 @@ public class AnswerSuggestionProcessorUnitTest {
     @Mock
     ImageFetcher mImageFetcher;
 
-    @Mock
-    Bitmap mFakeBitmap;
-
-    private Activity mActivity;
+    private Bitmap mBitmap;
     private AnswerSuggestionProcessor mProcessor;
 
     /**
@@ -143,8 +136,8 @@ public class AnswerSuggestionProcessorUnitTest {
                 /* isSearchType */ true, /* relevance */ 0, /* transition */ 0, displayText,
                 /* displayTextClassifications */ null, /* description */ null,
                 /* descriptionClassifications */ null,
-                /* suggestionAnswer */ null, /* fillIntoEdit */ "", /* url */ "",
-                /* imageUrl */ "", /* imageDominantColor */ "",
+                /* suggestionAnswer */ null, /* fillIntoEdit */ "", /* url */ GURL.emptyGURL(),
+                /* imageUrl */ GURL.emptyGURL(), /* imageDominantColor */ "",
                 /* isStarred */ false, /* isDeletable */ false, /* postContentType */ null,
                 /* postData */ null, OmniboxSuggestion.INVALID_GROUP);
         PropertyModel model = mProcessor.createModelForSuggestion(suggestion);
@@ -162,7 +155,7 @@ public class AnswerSuggestionProcessorUnitTest {
                 /* isSearchType */ true, /* relevance */ 0, /* transition */ 0,
                 /* displayText */ null, /* displayTextClassifications */ null,
                 /* description */ null, /* descriptionClassifications */ null, answer,
-                /* fillIntoEdit */ "", /* url */ "", /* imageUrl */ "",
+                /* fillIntoEdit */ "", /* url */ GURL.emptyGURL(), /* imageUrl */ GURL.emptyGURL(),
                 /* imageDominantColor */ "",
                 /* isStarred */ false, /* isDeletable */ false, /* postContentType */ null,
                 /* postData */ null, OmniboxSuggestion.INVALID_GROUP);
@@ -177,13 +170,16 @@ public class AnswerSuggestionProcessorUnitTest {
                 /* additionalText */ null, /* statusText */ null, url);
     }
 
-    @Before
+    @CalledByNative
+    private AnswerSuggestionProcessorUnitTest() {}
+
+    @CalledByNative
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mActivity = Robolectric.buildActivity(Activity.class).setup().get();
+        mBitmap = Bitmap.createBitmap(1, 1, Config.ALPHA_8);
 
-        mProcessor = new AnswerSuggestionProcessor(
-                mActivity, mSuggestionHost, mUrlStateProvider, () -> mImageFetcher);
+        mProcessor = new AnswerSuggestionProcessor(ContextUtils.getApplicationContext(),
+                mSuggestionHost, mUrlStateProvider, () -> mImageFetcher);
     }
 
     /** Populate model for associated suggestion. */
@@ -197,7 +193,7 @@ public class AnswerSuggestionProcessorUnitTest {
         when(mUrlStateProvider.getTextWithoutAutocomplete()).thenReturn(null);
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void regularAnswer_order() {
         final SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.KNOWLEDGE_GRAPH, "Query", 1, "Answer", 1, null);
@@ -209,7 +205,7 @@ public class AnswerSuggestionProcessorUnitTest {
         suggHelper.verifyLine2("Query", 1, "Answer");
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void dictionaryAnswer_order() {
         final SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.DICTIONARY, "Query", 1, "Answer", 1, null);
@@ -220,7 +216,7 @@ public class AnswerSuggestionProcessorUnitTest {
         suggHelper.verifyLine2("Answer", 1, "Answer");
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void calculationAnswer_order() {
         final SuggestionTestHelper suggHelper = createCalculationSuggestion("12345", "123 + 45");
         processSuggestion(suggHelper);
@@ -229,7 +225,7 @@ public class AnswerSuggestionProcessorUnitTest {
         suggHelper.verifyLine2("12345", 1, null);
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void regularAnswer_shortMultiline() {
         final SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.KNOWLEDGE_GRAPH, "", 1, "", 3, null);
@@ -239,7 +235,7 @@ public class AnswerSuggestionProcessorUnitTest {
         suggHelper.verifyLine2("", 1, "");
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void dictionaryAnswer_shortMultiline() {
         final SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.DICTIONARY, "", 1, "", 3, null);
@@ -251,7 +247,7 @@ public class AnswerSuggestionProcessorUnitTest {
 
     // Check that multiline answers that span across more than 3 lines - are reduced to 3 lines.
     // Check that multiline titles are truncated to a single line.
-    @Test
+    @CalledByNativeJavaTest
     public void regularAnswer_truncatedMultiline() {
         final SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.KNOWLEDGE_GRAPH, "", 3, "", 10, null);
@@ -261,7 +257,7 @@ public class AnswerSuggestionProcessorUnitTest {
         suggHelper.verifyLine2("", 1, "");
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void dictionaryAnswer_truncatedMultiline() {
         final SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.DICTIONARY, "", 3, "", 10, null);
@@ -272,7 +268,7 @@ public class AnswerSuggestionProcessorUnitTest {
     }
 
     // Image fetching and icon association tests.
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_fallbackIcons() {
         for (@AnswerType int type : ANSWER_TYPES) {
             SuggestionTestHelper suggHelper = createAnswerSuggestion(type, "", 1, "", 1, null);
@@ -282,7 +278,7 @@ public class AnswerSuggestionProcessorUnitTest {
         }
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_iconAssociation() {
         SuggestionTestHelper suggHelper =
                 createAnswerSuggestion(AnswerType.DICTIONARY, "", 1, "", 1, null);
@@ -326,7 +322,7 @@ public class AnswerSuggestionProcessorUnitTest {
                 mProcessor.getSuggestionIcon(suggHelper.mSuggestion));
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_repeatedUrlsAreFetchedOnlyOnce() {
         final String url1 = "http://site1.com";
         final String url2 = "http://site2.com";
@@ -349,7 +345,7 @@ public class AnswerSuggestionProcessorUnitTest {
         verify(mImageFetcher, times(2)).fetchImage(anyString(), anyString(), any());
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_bitmapReplacesIconForAllSuggestionsWithSameUrl() {
         final String url = "http://site.com";
         final ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
@@ -369,7 +365,7 @@ public class AnswerSuggestionProcessorUnitTest {
         final Drawable icon1 = sugg1.getIcon();
         final Drawable icon2 = sugg2.getIcon();
         final Drawable icon3 = sugg3.getIcon();
-        callback.getValue().onResult(mFakeBitmap);
+        callback.getValue().onResult(mBitmap);
         final Drawable newIcon1 = sugg1.getIcon();
         final Drawable newIcon2 = sugg2.getIcon();
         final Drawable newIcon3 = sugg3.getIcon();
@@ -382,12 +378,12 @@ public class AnswerSuggestionProcessorUnitTest {
         Assert.assertThat(newIcon2, instanceOf(BitmapDrawable.class));
         Assert.assertThat(newIcon3, instanceOf(BitmapDrawable.class));
 
-        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) newIcon1).getBitmap());
-        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) newIcon2).getBitmap());
-        Assert.assertEquals(mFakeBitmap, ((BitmapDrawable) newIcon3).getBitmap());
+        Assert.assertEquals(mBitmap, ((BitmapDrawable) newIcon1).getBitmap());
+        Assert.assertEquals(mBitmap, ((BitmapDrawable) newIcon2).getBitmap());
+        Assert.assertEquals(mBitmap, ((BitmapDrawable) newIcon3).getBitmap());
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_failedBitmapFetchDoesNotClearIcons() {
         final String url = "http://site.com";
         final ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
@@ -405,7 +401,7 @@ public class AnswerSuggestionProcessorUnitTest {
         Assert.assertEquals(icon, newIcon);
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_noImageFetchWhenFetcherIsUnavailable() {
         final String url = "http://site.com";
         mImageFetcher = null;
@@ -415,7 +411,7 @@ public class AnswerSuggestionProcessorUnitTest {
         Assert.assertNotNull(suggHelper.getIcon());
     }
 
-    @Test
+    @CalledByNativeJavaTest
     public void answerImage_associatedModelsAreErasedFromPendingListAfterImageFetch() {
         ArgumentCaptor<Callback<Bitmap>> callback = ArgumentCaptor.forClass(Callback.class);
         final String url = "http://site1.com";
@@ -435,7 +431,7 @@ public class AnswerSuggestionProcessorUnitTest {
 
         // Invoke callback twice. If models were not erased, these should be updated.
         callback.getValue().onResult(null);
-        callback.getValue().onResult(mFakeBitmap);
+        callback.getValue().onResult(mBitmap);
 
         final Drawable newIcon1 = sugg1.getIcon();
         final Drawable newIcon2 = sugg2.getIcon();
