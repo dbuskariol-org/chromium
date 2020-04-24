@@ -94,9 +94,31 @@ class AwMetricsServiceClient : public ::metrics::AndroidMetricsServiceClient,
   friend class base::NoDestructor<AwMetricsServiceClient>;
 
  public:
-  static AwMetricsServiceClient* GetInstance();
+  // This interface define the tasks that depend on the
+  // android_webview/browser directory.
+  class Delegate {
+   public:
+    Delegate();
+    virtual ~Delegate();
 
-  AwMetricsServiceClient();
+    // Not copyable or movable
+    Delegate(const Delegate&) = delete;
+    Delegate& operator=(const Delegate&) = delete;
+    Delegate(Delegate&&) = delete;
+    Delegate& operator=(Delegate&&) = delete;
+
+    virtual void RegisterAdditionalMetricsProviders(
+        metrics::MetricsService* service) = 0;
+    virtual void AddWebViewAppStateObserver(
+        WebViewAppStateObserver* observer) = 0;
+    virtual bool HasAwContentsEverCreated() const = 0;
+  };
+
+  static AwMetricsServiceClient* GetInstance();
+  static void SetInstance(
+      std::unique_ptr<AwMetricsServiceClient> aw_metrics_service_client);
+
+  AwMetricsServiceClient(std::unique_ptr<Delegate> delegate);
   ~AwMetricsServiceClient() override;
 
   // metrics::MetricsServiceClient
@@ -115,6 +137,7 @@ class AwMetricsServiceClient : public ::metrics::AndroidMetricsServiceClient,
 
  private:
   bool app_in_foreground_ = false;
+  std::unique_ptr<Delegate> delegate_;
 
   DISALLOW_COPY_AND_ASSIGN(AwMetricsServiceClient);
 };
