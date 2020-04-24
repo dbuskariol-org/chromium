@@ -37,7 +37,7 @@ TEST_F(HTMLFrameElementTest, DefaultContainerPolicy) {
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             container_policy[0].feature);
   EXPECT_EQ(0UL, container_policy[0].values.size());
-  EXPECT_GE(PolicyValue(false), container_policy[0].fallback_value);
+  EXPECT_GE(false, container_policy[0].fallback_value);
 }
 
 }  // namespace blink

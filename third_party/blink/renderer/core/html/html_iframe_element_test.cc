@@ -41,9 +41,6 @@ class HTMLIFrameElementTest : public testing::Test {
   }
 
  protected:
-  const PolicyValue min_value = PolicyValue(false);
-  const PolicyValue max_value = PolicyValue(true);
-
   std::unique_ptr<DummyPageHolder> page_holder_;
   Persistent<Document> document_;
   Persistent<HTMLIFrameElement> frame_element_;
@@ -168,7 +165,7 @@ TEST_F(HTMLIFrameElementTest, AllowAttributeContainerPolicy) {
   EXPECT_EQ(1UL, container_policy1.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             container_policy1[0].feature);
-  EXPECT_GE(min_value, container_policy1[0].fallback_value);
+  EXPECT_FALSE(container_policy1[0].fallback_value);
   EXPECT_EQ(1UL, container_policy1[0].values.size());
   EXPECT_EQ("http://example.net",
             container_policy1[0].values.begin()->first.Serialize());
@@ -190,7 +187,7 @@ TEST_F(HTMLIFrameElementTest, AllowAttributeContainerPolicy) {
   EXPECT_EQ(1UL, container_policy2[0].values.size());
   EXPECT_EQ("http://example.net",
             container_policy2[0].values.begin()->first.Serialize());
-  EXPECT_GE(min_value, container_policy2[1].fallback_value);
+  EXPECT_FALSE(container_policy2[1].fallback_value);
   EXPECT_EQ(1UL, container_policy2[1].values.size());
   EXPECT_EQ("http://example.net",
             container_policy2[1].values.begin()->first.Serialize());
@@ -235,8 +232,8 @@ TEST_F(HTMLIFrameElementTest, CrossOriginSandboxAttributeContainerPolicy) {
 
   const ParsedFeaturePolicyDeclaration item = *container_policy_item;
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen, item.feature);
-  EXPECT_GE(min_value, item.fallback_value);
-  EXPECT_LE(max_value, item.opaque_value);
+  EXPECT_FALSE(item.fallback_value);
+  EXPECT_TRUE(item.opaque_value);
   EXPECT_EQ(0UL, item.values.size());
 }
 
@@ -266,8 +263,8 @@ TEST_F(HTMLIFrameElementTest, SameOriginSandboxAttributeContainerPolicy) {
 
   const ParsedFeaturePolicyDeclaration item = *container_policy_item;
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen, item.feature);
-  EXPECT_GE(min_value, item.fallback_value);
-  EXPECT_GE(min_value, item.opaque_value);
+  EXPECT_FALSE(item.fallback_value);
+  EXPECT_FALSE(item.opaque_value);
   EXPECT_EQ(1UL, item.values.size());
   EXPECT_FALSE(item.values.begin()->first.opaque());
   EXPECT_EQ("http://example.net", item.values.begin()->first.Serialize());
@@ -290,7 +287,7 @@ TEST_F(HTMLIFrameElementTest, ConstructContainerPolicy) {
   EXPECT_EQ(2UL, container_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             container_policy[0].feature);
-  EXPECT_GE(min_value, container_policy[0].fallback_value);
+  EXPECT_FALSE(container_policy[0].fallback_value);
   EXPECT_EQ(1UL, container_policy[0].values.size());
   EXPECT_TRUE(container_policy[0].values.begin()->first.IsSameOriginWith(
       GetOriginForFeaturePolicy(frame_element_)->ToUrlOrigin()));
@@ -311,7 +308,7 @@ TEST_F(HTMLIFrameElementTest, ConstructContainerPolicyWithAllowFullscreen) {
   EXPECT_EQ(1UL, container_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             container_policy[0].feature);
-  EXPECT_LE(max_value, container_policy[0].fallback_value);
+  EXPECT_TRUE(container_policy[0].fallback_value);
 }
 
 // Test the ConstructContainerPolicy method when the "allowpaymentrequest"
@@ -326,7 +323,7 @@ TEST_F(HTMLIFrameElementTest, ConstructContainerPolicyWithAllowPaymentRequest) {
   EXPECT_EQ(2UL, container_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kUsb,
             container_policy[0].feature);
-  EXPECT_GE(min_value, container_policy[0].fallback_value);
+  EXPECT_FALSE(container_policy[0].fallback_value);
   EXPECT_EQ(1UL, container_policy[0].values.size());
   EXPECT_TRUE(container_policy[0].values.begin()->first.IsSameOriginWith(
       GetOriginForFeaturePolicy(frame_element_)->ToUrlOrigin()));
@@ -351,7 +348,7 @@ TEST_F(HTMLIFrameElementTest, ConstructContainerPolicyWithAllowAttributes) {
   EXPECT_EQ(3UL, container_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             container_policy[0].feature);
-  EXPECT_GE(min_value, container_policy[0].fallback_value);
+  EXPECT_FALSE(container_policy[0].fallback_value);
   EXPECT_EQ(1UL, container_policy[0].values.size());
   EXPECT_TRUE(container_policy[0].values.begin()->first.IsSameOriginWith(
       GetOriginForFeaturePolicy(frame_element_)->ToUrlOrigin()));

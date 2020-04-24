@@ -17,9 +17,6 @@
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   static blink::BlinkFuzzerTestSupport test_support =
       blink::BlinkFuzzerTestSupport();
-  blink::FeaturePolicyParser::ParseValueForFuzzer(
-      blink::mojom::PolicyValueType::kBool, WTF::String(data, size));
-  blink::FeaturePolicyParser::ParseValueForFuzzer(
-      blink::mojom::PolicyValueType::kDecDouble, WTF::String(data, size));
+  blink::FeaturePolicyParser::ParseValueForFuzzer(WTF::String(data, size));
   return 0;
 }

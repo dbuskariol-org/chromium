@@ -100,17 +100,6 @@ class FeaturePolicyParserTest : public testing::Test {
       {"fullscreen", blink::mojom::blink::FeaturePolicyFeature::kFullscreen},
       {"payment", blink::mojom::blink::FeaturePolicyFeature::kPayment},
       {"geolocation", blink::mojom::blink::FeaturePolicyFeature::kGeolocation}};
-
-  const PolicyValue min_value = PolicyValue(false);
-  const PolicyValue max_value = PolicyValue(true);
-  const PolicyValue sample_double_value =
-      PolicyValue(1.5, mojom::PolicyValueType::kDecDouble);
-  const PolicyValue default_double_value =
-      PolicyValue(2.0, mojom::PolicyValueType::kDecDouble);
-  const PolicyValue min_double_value =
-      PolicyValue::CreateMinPolicyValue(mojom::PolicyValueType::kDecDouble);
-  const PolicyValue max_double_value =
-      PolicyValue::CreateMaxPolicyValue(mojom::PolicyValueType::kDecDouble);
 };
 
 TEST_F(FeaturePolicyParserTest, ParseValidPolicy) {
@@ -158,8 +147,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_GE(min_value, parsed_policy[0].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
@@ -171,8 +160,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
   EXPECT_EQ(1UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_LE(max_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_TRUE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // Complicated policy.
@@ -184,21 +173,21 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
   EXPECT_EQ(3UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_LE(max_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_TRUE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[1].feature);
-  EXPECT_GE(min_value, parsed_policy[1].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[1].opaque_value);
+  EXPECT_FALSE(parsed_policy[1].fallback_value);
+  EXPECT_FALSE(parsed_policy[1].opaque_value);
   EXPECT_EQ(2UL, parsed_policy[1].values.size());
   auto it = parsed_policy[1].values.begin();
   EXPECT_TRUE(it->first.IsSameOriginWith(expected_url_origin_b_));
   EXPECT_TRUE((++it)->first.IsSameOriginWith(expected_url_origin_c_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             parsed_policy[2].feature);
-  EXPECT_GE(min_value, parsed_policy[2].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[2].opaque_value);
+  EXPECT_FALSE(parsed_policy[2].fallback_value);
+  EXPECT_FALSE(parsed_policy[2].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[2].values.size());
   EXPECT_TRUE(parsed_policy[2].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
@@ -212,21 +201,21 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
   EXPECT_EQ(3UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_LE(max_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_TRUE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[1].feature);
-  EXPECT_GE(min_value, parsed_policy[1].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[1].opaque_value);
+  EXPECT_FALSE(parsed_policy[1].fallback_value);
+  EXPECT_FALSE(parsed_policy[1].opaque_value);
   EXPECT_EQ(2UL, parsed_policy[1].values.size());
   it = parsed_policy[1].values.begin();
   EXPECT_TRUE(it->first.IsSameOriginWith(expected_url_origin_b_));
   EXPECT_TRUE((++it)->first.IsSameOriginWith(expected_url_origin_c_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             parsed_policy[2].feature);
-  EXPECT_GE(min_value, parsed_policy[2].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[2].opaque_value);
+  EXPECT_FALSE(parsed_policy[2].fallback_value);
+  EXPECT_FALSE(parsed_policy[2].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[2].values.size());
   EXPECT_TRUE(parsed_policy[2].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
@@ -238,21 +227,21 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectly) {
   EXPECT_EQ(3UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_GE(min_value, parsed_policy[0].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[1].feature);
-  EXPECT_GE(min_value, parsed_policy[1].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[1].opaque_value);
+  EXPECT_FALSE(parsed_policy[1].fallback_value);
+  EXPECT_FALSE(parsed_policy[1].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[1].values.size());
   EXPECT_TRUE(parsed_policy[1].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kPayment,
             parsed_policy[2].feature);
-  EXPECT_GE(min_value, parsed_policy[2].opaque_value);
+  EXPECT_FALSE(parsed_policy[2].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[2].values.size());
   EXPECT_TRUE(parsed_policy[2].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
@@ -278,8 +267,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_GE(min_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // Simple policy with 'src'.
@@ -290,8 +279,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_GE(min_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // Simple policy with *.
@@ -302,8 +291,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_LE(max_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_TRUE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // Policy with explicit origins
@@ -314,8 +303,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_GE(min_value, parsed_policy[0].fallback_value);
-  EXPECT_GE(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(2UL, parsed_policy[0].values.size());
   auto it = parsed_policy[0].values.begin();
   EXPECT_TRUE(it->first.IsSameOriginWith(expected_url_origin_b_));
@@ -329,8 +318,8 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kGeolocation,
             parsed_policy[0].feature);
-  EXPECT_GE(min_value, parsed_policy[0].fallback_value);
-  EXPECT_LE(max_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_b_));
@@ -348,12 +337,12 @@ TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
   EXPECT_EQ(1UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_b_));
-  EXPECT_EQ(max_value, parsed_policy[0].values.begin()->second);
+  EXPECT_TRUE(parsed_policy[0].values.begin()->second);
 
   // Test no origin specified, in a header context.
   // (true)
@@ -363,12 +352,12 @@ TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
   EXPECT_EQ(1UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
-  EXPECT_EQ(max_value, parsed_policy[0].values.begin()->second);
+  EXPECT_TRUE(parsed_policy[0].values.begin()->second);
 
   // Test no origin specified, in a sandboxed container policy context.
   // (true)
@@ -380,8 +369,8 @@ TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
   EXPECT_EQ(1UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(max_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // 'self'(true)
@@ -392,12 +381,12 @@ TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_a_));
-  EXPECT_EQ(max_value, parsed_policy[0].values.begin()->second);
+  EXPECT_TRUE(parsed_policy[0].values.begin()->second);
 
   // *(false)
   parsed_policy = FeaturePolicyParser::Parse("fullscreen *(false)",
@@ -407,8 +396,8 @@ TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // *(true)
@@ -419,8 +408,8 @@ TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(max_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(max_value, parsed_policy[0].opaque_value);
+  EXPECT_TRUE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 }
 
@@ -436,8 +425,8 @@ TEST_F(FeaturePolicyParserTest, RedundantBooleanItemsRemoved) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(max_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(max_value, parsed_policy[0].opaque_value);
+  EXPECT_TRUE(parsed_policy[0].fallback_value);
+  EXPECT_TRUE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // 'self'(false)
@@ -448,8 +437,8 @@ TEST_F(FeaturePolicyParserTest, RedundantBooleanItemsRemoved) {
 
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 
   // (true)
@@ -459,8 +448,8 @@ TEST_F(FeaturePolicyParserTest, RedundantBooleanItemsRemoved) {
   EXPECT_EQ(1UL, parsed_policy.size());
   EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
             parsed_policy[0].feature);
-  EXPECT_EQ(min_value, parsed_policy[0].fallback_value);
-  EXPECT_EQ(min_value, parsed_policy[0].opaque_value);
+  EXPECT_FALSE(parsed_policy[0].fallback_value);
+  EXPECT_FALSE(parsed_policy[0].opaque_value);
   EXPECT_EQ(0UL, parsed_policy[0].values.size());
 }
 
@@ -822,8 +811,8 @@ class FeaturePolicyMutationTest : public testing::Test {
     if (result == policy.end())
       return false;
 
-    return result->feature == feature && result->fallback_value >= max_value &&
-           result->opaque_value >= max_value && result->values.empty();
+    return result->feature == feature && result->fallback_value &&
+           result->opaque_value && result->values.empty();
   }
 
   // Returns true if the policy contains a declaration for the feature which
@@ -837,25 +826,17 @@ class FeaturePolicyMutationTest : public testing::Test {
     if (result == policy.end())
       return false;
 
-    return result->feature == feature && result->fallback_value <= min_value &&
-           result->opaque_value <= min_value && result->values.empty();
+    return result->feature == feature && !result->fallback_value &&
+           !result->opaque_value && result->values.empty();
   }
-
-  const PolicyValue min_value = PolicyValue(false);
-  const PolicyValue max_value = PolicyValue(true);
-  const PolicyValue min_double_value =
-      PolicyValue(2.0, mojom::PolicyValueType::kDecDouble);
-  const PolicyValue max_double_value =
-      PolicyValue::CreateMaxPolicyValue(mojom::PolicyValueType::kDecDouble);
 
   ParsedFeaturePolicy test_policy = {
       {mojom::blink::FeaturePolicyFeature::kFullscreen,
-       std::map<url::Origin, PolicyValue>{{url_origin_a_, PolicyValue(true)},
-                                          {url_origin_b_, PolicyValue(true)}},
-       PolicyValue(false), PolicyValue(false)},
+       std::map<url::Origin, bool>{{url_origin_a_, true},
+                                   {url_origin_b_, true}},
+       false, false},
       {mojom::blink::FeaturePolicyFeature::kGeolocation,
-       std::map<url::Origin, PolicyValue>{{url_origin_a_, PolicyValue(true)}},
-       PolicyValue(false), PolicyValue(false)}};
+       std::map<url::Origin, bool>{{url_origin_a_, true}}, false, false}};
 
   ParsedFeaturePolicy empty_policy = {};
 };

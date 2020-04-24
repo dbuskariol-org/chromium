@@ -326,8 +326,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   bool GetSuddenTerminationDisablerState(
       blink::mojom::SuddenTerminationDisablerType disabler_type) override;
   bool IsFeatureEnabled(blink::mojom::FeaturePolicyFeature feature) override;
-  bool IsFeatureEnabled(blink::mojom::FeaturePolicyFeature feature,
-                        blink::PolicyValue threshold_value) override;
   bool IsFeatureEnabled(blink::mojom::DocumentPolicyFeature feature) override;
   bool IsFeatureEnabled(blink::mojom::DocumentPolicyFeature feature,
                         blink::PolicyValue threshold_value) override;

@@ -3359,18 +3359,8 @@ void RenderFrameHostImpl::DoNotDeleteForTesting() {
 
 bool RenderFrameHostImpl::IsFeatureEnabled(
     blink::mojom::FeaturePolicyFeature feature) {
-  blink::mojom::PolicyValueType feature_type =
-      feature_policy_->GetFeatureList().at(feature).second;
-  return IsFeatureEnabled(
-      feature, blink::PolicyValue::CreateMaxPolicyValue(feature_type));
-}
-
-bool RenderFrameHostImpl::IsFeatureEnabled(
-    blink::mojom::FeaturePolicyFeature feature,
-    blink::PolicyValue threshold_value) {
-  return feature_policy_ &&
-         feature_policy_->IsFeatureEnabledForOrigin(
-             feature, GetLastCommittedOrigin(), threshold_value);
+  return feature_policy_ && feature_policy_->IsFeatureEnabledForOrigin(
+                                feature, GetLastCommittedOrigin());
 }
 
 bool RenderFrameHostImpl::IsFeatureEnabled(
