@@ -100,12 +100,6 @@ try_.chromium_android_builder(
     execution_timeout = 6 * time.hour,
 )
 
-# TODO(crbug/1032336): Remove this once all try builds are finished
-try_.chromium_android_builder(
-    name = 'android-kitkat-arm-rel',
-    goma_jobs=goma.jobs.J150,
-)
-
 try_.chromium_android_builder(
     name = 'android-marshmallow-x86-fyi-rel',
 )
