@@ -369,4 +369,24 @@ void MediaHistoryKeyedService::UpdateMediaFeedDisplayTime(
   }
 }
 
+void MediaHistoryKeyedService::IncrementMediaFeedItemsShownCount(
+    const std::set<int64_t> feed_item_ids) {
+  if (auto* store = store_->GetForWrite()) {
+    store->db_task_runner_->PostTask(
+        FROM_HERE,
+        base::BindOnce(&MediaHistoryStore::IncrementMediaFeedItemsShownCount,
+                       base::RetainedRef(store), feed_item_ids));
+  }
+}
+
+void MediaHistoryKeyedService::MarkMediaFeedItemAsClicked(
+    const int64_t& feed_item_id) {
+  if (auto* store = store_->GetForWrite()) {
+    store->db_task_runner_->PostTask(
+        FROM_HERE,
+        base::BindOnce(&MediaHistoryStore::MarkMediaFeedItemAsClicked,
+                       base::RetainedRef(store), feed_item_id));
+  }
+}
+
 }  // namespace media_history

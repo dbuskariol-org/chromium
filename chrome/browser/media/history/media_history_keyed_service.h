@@ -167,6 +167,13 @@ class MediaHistoryKeyedService : public KeyedService,
   // Updates the display time for the Media Feed with |feed_id| to now.
   void UpdateMediaFeedDisplayTime(const int64_t feed_id);
 
+  // Increment the media feed items shown counter by one.
+  void IncrementMediaFeedItemsShownCount(const std::set<int64_t> feed_item_ids);
+
+  // Marks a media feed item as clicked. This is when the user has opened the
+  // item in the UI.
+  void MarkMediaFeedItemAsClicked(const int64_t& feed_item_id);
+
  private:
   class StoreHolder;
 

@@ -1921,4 +1921,120 @@ TEST_P(MediaHistoryStoreFeedsTest, GetMediaFeedsSortByWatchtimePercentile) {
   }
 }
 
+TEST_P(MediaHistoryStoreFeedsTest, FeedItemsClickAndShown) {
+  service()->DiscoverMediaFeed(GURL("https://www.google.com/feed"));
+  WaitForDB();
+
+  // If we are read only we should use -1 as a placeholder feed id because the
+  // feed will not have been stored. This is so we can run the rest of the test
+  // to ensure a no-op.
+  const int feed_id = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
+      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
+      kExpectedDisplayName, base::DoNothing());
+  WaitForDB();
+
+  {
+    // The media items should be stored.
+    auto items = GetItemsForMediaFeedSync(service(), feed_id);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(items.empty());
+    } else {
+      EXPECT_EQ(3u, items[0]->shown_count);
+      EXPECT_TRUE(items[0]->clicked);
+
+      EXPECT_EQ(0u, items[1]->shown_count);
+      EXPECT_FALSE(items[1]->clicked);
+
+      EXPECT_EQ(0u, items[2]->shown_count);
+      EXPECT_FALSE(items[2]->clicked);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
+  }
+
+  std::set<int64_t> ids;
+  ids.insert(1);
+  ids.insert(2);
+
+  // Increment the shown count.
+  service()->IncrementMediaFeedItemsShownCount(ids);
+  WaitForDB();
+
+  {
+    // The media items should have been incremented.
+    auto items = GetItemsForMediaFeedSync(service(), feed_id);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(items.empty());
+    } else {
+      EXPECT_EQ(4u, items[0]->shown_count);
+      EXPECT_TRUE(items[0]->clicked);
+
+      EXPECT_EQ(1u, items[1]->shown_count);
+      EXPECT_FALSE(items[1]->clicked);
+
+      EXPECT_EQ(0u, items[2]->shown_count);
+      EXPECT_FALSE(items[2]->clicked);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
+  }
+
+  // Increment the shown count.
+  service()->IncrementMediaFeedItemsShownCount(ids);
+  WaitForDB();
+
+  {
+    // The media items should have been incremented.
+    auto items = GetItemsForMediaFeedSync(service(), feed_id);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(items.empty());
+    } else {
+      EXPECT_EQ(5u, items[0]->shown_count);
+      EXPECT_TRUE(items[0]->clicked);
+
+      EXPECT_EQ(2u, items[1]->shown_count);
+      EXPECT_FALSE(items[1]->clicked);
+
+      EXPECT_EQ(0u, items[2]->shown_count);
+      EXPECT_FALSE(items[2]->clicked);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
+  }
+
+  // Mark the item as clicked.
+  service()->MarkMediaFeedItemAsClicked(2);
+  WaitForDB();
+
+  {
+    // The media item should have been clicked.
+    auto items = GetItemsForMediaFeedSync(service(), feed_id);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(items.empty());
+    } else {
+      EXPECT_EQ(5u, items[0]->shown_count);
+      EXPECT_TRUE(items[0]->clicked);
+
+      EXPECT_EQ(2u, items[1]->shown_count);
+      EXPECT_TRUE(items[1]->clicked);
+
+      EXPECT_EQ(0u, items[2]->shown_count);
+      EXPECT_FALSE(items[2]->clicked);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
+  }
+}
+
 }  // namespace media_history
