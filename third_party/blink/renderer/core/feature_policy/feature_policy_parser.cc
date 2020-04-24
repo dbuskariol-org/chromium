@@ -173,6 +173,7 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
         }
 
         String origin_string = tokens[i];
+        DCHECK(!origin_string.IsEmpty());
 
         // Determine the target of the declaration. This may be a specific
         // origin, either explicitly written, or one of the special keywords
@@ -188,22 +189,16 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
         bool target_is_opaque = false;
         bool target_is_all = false;
 
-        // 'self' origin is used if either the origin is omitted (and there is
-        // no 'src' origin available) or the origin is exactly 'self'.
-        if ((origin_string.length() == 0 && !src_origin)) {
-          target_origin = self_origin->ToUrlOrigin();
-        } else if (EqualIgnoringASCIICase(origin_string, "'self'")) {
+        // 'self' origin is used if the origin is exactly 'self'.
+        if (EqualIgnoringASCIICase(origin_string, "'self'")) {
           target_origin = self_origin->ToUrlOrigin();
           allowlist_includes_self = true;
         }
-        // 'src' origin is used if |src_origin| is available and either the
-        // origin is omitted or is a match for 'src'. |src_origin| is only set
+        // 'src' origin is used if |src_origin| is available and the
+        // origin is a match for 'src'. |src_origin| is only set
         // when parsing an iframe allow attribute.
-        else if (src_origin &&
-                 (origin_string.length() == 0 ||
-                  EqualIgnoringASCIICase(origin_string, "'src'"))) {
-          if (origin_string.length() > 0)
-            allowlist_includes_src = true;
+        else if (src_origin && EqualIgnoringASCIICase(origin_string, "'src'")) {
+          allowlist_includes_src = true;
           if (!src_origin->IsOpaque()) {
             target_origin = src_origin->ToUrlOrigin();
           } else {
