@@ -162,8 +162,7 @@ void AutoConnectNotifier::DisplayNotification(
       message_center::SystemNotificationWarningLevel::NORMAL);
 
   notification->set_small_image(gfx::Image(network_icon::GetImageForWifiNetwork(
-      notification->accent_color().value_or(
-          ash::kSystemNotificationColorNormal),
+      notification->accent_color(),
       gfx::Size(message_center::kSmallImageSizeMD,
                 message_center::kSmallImageSizeMD))));
 

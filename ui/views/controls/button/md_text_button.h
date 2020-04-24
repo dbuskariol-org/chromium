@@ -57,10 +57,6 @@ class VIEWS_EXPORT MdTextButton : public LabelButton {
   PropertyEffects UpdateStyleToIndicateDefaultStatus() override;
   void StateChanged(ButtonState old_state) override;
 
-  void set_visible_opacity(float visible_opacity) {
-    visible_opacity_ = visible_opacity;
-  }
-
  protected:
   // View:
   void OnFocus() override;
@@ -70,16 +66,13 @@ class VIEWS_EXPORT MdTextButton : public LabelButton {
 
  private:
   void UpdatePadding();
-  virtual void UpdateColors();
+  void UpdateColors();
 
   // True if this button uses prominent styling (blue fill, etc.).
   bool is_prominent_;
 
   // When set, this provides the background color.
   base::Optional<SkColor> bg_color_override_;
-
-  // This provides the visible opacity of the InkDropHighlight
-  float visible_opacity_ = 1.0f;
 
   float corner_radius_;
 
