@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/extensions/api/extension_action/action_info.h"
+#include "extensions/common/api/extension_action/action_info.h"
 
 #include <memory>
 
@@ -36,8 +36,7 @@ struct ActionInfoData : public Extension::ManifestData {
 ActionInfoData::ActionInfoData(std::unique_ptr<ActionInfo> info)
     : action_info(std::move(info)) {}
 
-ActionInfoData::~ActionInfoData() {
-}
+ActionInfoData::~ActionInfoData() {}
 
 }  // namespace
 
@@ -55,8 +54,7 @@ ActionInfo::ActionInfo(Type type) : type(type), synthesized(false) {
 
 ActionInfo::ActionInfo(const ActionInfo& other) = default;
 
-ActionInfo::~ActionInfo() {
-}
+ActionInfo::~ActionInfo() {}
 
 // static
 std::unique_ptr<ActionInfo> ActionInfo::Load(const Extension* extension,
@@ -109,8 +107,8 @@ std::unique_ptr<ActionInfo> ActionInfo::Load(const Extension* extension,
 
     if (!url_str.empty()) {
       // An empty string is treated as having no popup.
-      result->default_popup_url = Extension::GetResourceURL(extension->url(),
-                                                            url_str);
+      result->default_popup_url =
+          Extension::GetResourceURL(extension->url(), url_str);
       if (!result->default_popup_url.is_valid()) {
         *error = base::ASCIIToUTF16(errors::kInvalidActionDefaultPopup);
         return nullptr;
