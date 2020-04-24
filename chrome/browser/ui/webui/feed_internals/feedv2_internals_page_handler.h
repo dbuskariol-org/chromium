@@ -1,10 +1,11 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_FEED_INTERNALS_FEED_INTERNALS_PAGE_HANDLER_H_
-#define CHROME_BROWSER_UI_WEBUI_FEED_INTERNALS_FEED_INTERNALS_PAGE_HANDLER_H_
+#ifndef CHROME_BROWSER_UI_WEBUI_FEED_INTERNALS_FEEDV2_INTERNALS_PAGE_HANDLER_H_
+#define CHROME_BROWSER_UI_WEBUI_FEED_INTERNALS_FEEDV2_INTERNALS_PAGE_HANDLER_H_
 
+#include <string>
 #include <vector>
 
 #include "base/macros.h"
@@ -14,25 +15,23 @@
 #include "mojo/public/cpp/bindings/receiver.h"
 
 class PrefService;
-
 namespace feed {
-class FeedHostService;
-class FeedOfflineHost;
-class FeedSchedulerHost;
+class FeedService;
+class FeedStreamApi;
 }  // namespace feed
 
-namespace offline_pages {
-struct PrefetchSuggestion;
-}  // namespace offline_pages
-
 // Concrete implementation of feed_internals::mojom::PageHandler.
-class FeedInternalsPageHandler : public feed_internals::mojom::PageHandler {
+class FeedV2InternalsPageHandler : public feed_internals::mojom::PageHandler {
  public:
-  FeedInternalsPageHandler(
+  FeedV2InternalsPageHandler(
       mojo::PendingReceiver<feed_internals::mojom::PageHandler> receiver,
-      feed::FeedHostService* feed_host_service,
+      feed::FeedService* feed_service,
       PrefService* pref_service);
-  ~FeedInternalsPageHandler() override;
+  FeedV2InternalsPageHandler(const FeedV2InternalsPageHandler&) = delete;
+  FeedV2InternalsPageHandler& operator=(const FeedV2InternalsPageHandler&) =
+      delete;
+
+  ~FeedV2InternalsPageHandler() override;
 
   // feed_internals::mojom::PageHandler
   void GetGeneralProperties(GetGeneralPropertiesCallback) override;
@@ -48,22 +47,15 @@ class FeedInternalsPageHandler : public feed_internals::mojom::PageHandler {
   void OverrideFeedHost(const GURL& host) override;
 
  private:
-  mojo::Receiver<feed_internals::mojom::PageHandler> receiver_;
-
-  void OnGetCurrentArticleSuggestionsDone(
-      GetCurrentContentCallback callback,
-      std::vector<offline_pages::PrefetchSuggestion> suggestions);
-
   bool IsFeedAllowed();
 
+  mojo::Receiver<feed_internals::mojom::PageHandler> receiver_;
+
   // Services that provide the data and functionality.
-  feed::FeedSchedulerHost* feed_scheduler_host_;
-  feed::FeedOfflineHost* feed_offline_host_;
+  feed::FeedStreamApi* feed_stream_;
   PrefService* pref_service_;
 
-  base::WeakPtrFactory<FeedInternalsPageHandler> weak_ptr_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(FeedInternalsPageHandler);
+  base::WeakPtrFactory<FeedV2InternalsPageHandler> weak_ptr_factory_{this};
 };
 
-#endif  // CHROME_BROWSER_UI_WEBUI_FEED_INTERNALS_FEED_INTERNALS_PAGE_HANDLER_H_
+#endif  // CHROME_BROWSER_UI_WEBUI_FEED_INTERNALS_FEEDV2_INTERNALS_PAGE_HANDLER_H_
