@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/safe_browsing/safe_browsing_service.h"
+#include "ios/chrome/browser/safe_browsing/safe_browsing_service_impl.h"
 
 #include "base/bind.h"
 #include "base/files/file_path.h"
@@ -17,6 +17,7 @@
 #include "components/safe_browsing/core/db/v4_local_database_manager.h"
 #import "ios/chrome/browser/safe_browsing/url_checker_delegate_impl.h"
 #include "ios/web/public/thread/web_task_traits.h"
+#include "ios/web/public/thread/web_thread.h"
 #import "ios/web/public/web_state.h"
 #include "net/url_request/url_request_context.h"
 #include "net/url_request/url_request_context_builder.h"
@@ -26,14 +27,14 @@
 #error "This file requires ARC support."
 #endif
 
-#pragma mark - SafeBrowsingService
+#pragma mark - SafeBrowsingServiceImpl
 
-SafeBrowsingService::SafeBrowsingService() = default;
+SafeBrowsingServiceImpl::SafeBrowsingServiceImpl() = default;
 
-SafeBrowsingService::~SafeBrowsingService() = default;
+SafeBrowsingServiceImpl::~SafeBrowsingServiceImpl() = default;
 
-void SafeBrowsingService::Initialize(PrefService* prefs,
-                                     const base::FilePath& user_data_path) {
+void SafeBrowsingServiceImpl::Initialize(PrefService* prefs,
+                                         const base::FilePath& user_data_path) {
   DCHECK_CURRENTLY_ON(web::WebThread::UI);
 
   if (io_thread_enabler_) {
@@ -50,13 +51,12 @@ void SafeBrowsingService::Initialize(PrefService* prefs,
       base::MakeRefCounted<UrlCheckerDelegateImpl>(safe_browsing_db_manager_);
 
   io_thread_enabler_ =
-      base::MakeRefCounted<SafeBrowsingService::IOThreadEnabler>(
-          safe_browsing_db_manager_);
+      base::MakeRefCounted<IOThreadEnabler>(safe_browsing_db_manager_);
 
   base::PostTask(
       FROM_HERE, {web::WebThread::IO},
-      base::BindOnce(&SafeBrowsingService::IOThreadEnabler::Initialize,
-                     io_thread_enabler_, base::WrapRefCounted(this),
+      base::BindOnce(&IOThreadEnabler::Initialize, io_thread_enabler_,
+                     base::WrapRefCounted(this),
                      network_context_client_.BindNewPipeAndPassReceiver()));
 
   // Watch for changes to the Safe Browsing opt-out preference.
@@ -64,29 +64,30 @@ void SafeBrowsingService::Initialize(PrefService* prefs,
   pref_change_registrar_->Init(prefs);
   pref_change_registrar_->Add(
       prefs::kSafeBrowsingEnabled,
-      base::Bind(&SafeBrowsingService::UpdateSafeBrowsingEnabledState,
+      base::Bind(&SafeBrowsingServiceImpl::UpdateSafeBrowsingEnabledState,
                  base::Unretained(this)));
   UpdateSafeBrowsingEnabledState();
 }
 
-void SafeBrowsingService::ShutDown() {
+void SafeBrowsingServiceImpl::ShutDown() {
   DCHECK_CURRENTLY_ON(web::WebThread::UI);
 
   pref_change_registrar_.reset();
-  base::PostTask(FROM_HERE, {web::WebThread::IO},
-                 base::BindOnce(&SafeBrowsingService::IOThreadEnabler::ShutDown,
-                                io_thread_enabler_));
+  base::PostTask(
+      FROM_HERE, {web::WebThread::IO},
+      base::BindOnce(&IOThreadEnabler::ShutDown, io_thread_enabler_));
   network_context_client_.reset();
 }
 
 std::unique_ptr<safe_browsing::SafeBrowsingUrlCheckerImpl>
-SafeBrowsingService::CreateUrlChecker(safe_browsing::ResourceType resource_type,
-                                      web::WebState* web_state) {
+SafeBrowsingServiceImpl::CreateUrlChecker(
+    safe_browsing::ResourceType resource_type,
+    web::WebState* web_state) {
   return std::make_unique<safe_browsing::SafeBrowsingUrlCheckerImpl>(
       resource_type, url_checker_delegate_, web_state->CreateDefaultGetter());
 }
 
-void SafeBrowsingService::SetUpURLLoaderFactory(
+void SafeBrowsingServiceImpl::SetUpURLLoaderFactory(
     mojo::PendingReceiver<network::mojom::URLLoaderFactory> receiver) {
   DCHECK_CURRENTLY_ON(web::WebThread::UI);
   auto url_loader_factory_params =
@@ -97,26 +98,24 @@ void SafeBrowsingService::SetUpURLLoaderFactory(
       std::move(receiver), std::move(url_loader_factory_params));
 }
 
-void SafeBrowsingService::UpdateSafeBrowsingEnabledState() {
+void SafeBrowsingServiceImpl::UpdateSafeBrowsingEnabledState() {
   bool enabled =
       pref_change_registrar_->prefs()->GetBoolean(prefs::kSafeBrowsingEnabled);
-  base::PostTask(
-      FROM_HERE, {web::WebThread::IO},
-      base::BindOnce(
-          &SafeBrowsingService::IOThreadEnabler::SetSafeBrowsingEnabled,
-          io_thread_enabler_, enabled));
+  base::PostTask(FROM_HERE, {web::WebThread::IO},
+                 base::BindOnce(&IOThreadEnabler::SetSafeBrowsingEnabled,
+                                io_thread_enabler_, enabled));
 }
 
-#pragma mark - SafeBrowsingService::IOThreadEnabler
+#pragma mark - SafeBrowsingServiceImpl::IOThreadEnabler
 
-SafeBrowsingService::IOThreadEnabler::IOThreadEnabler(
+SafeBrowsingServiceImpl::IOThreadEnabler::IOThreadEnabler(
     scoped_refptr<safe_browsing::SafeBrowsingDatabaseManager> database_manager)
     : safe_browsing_db_manager_(database_manager) {}
 
-SafeBrowsingService::IOThreadEnabler::~IOThreadEnabler() = default;
+SafeBrowsingServiceImpl::IOThreadEnabler::~IOThreadEnabler() = default;
 
-void SafeBrowsingService::IOThreadEnabler::Initialize(
-    scoped_refptr<SafeBrowsingService> safe_browsing_service,
+void SafeBrowsingServiceImpl::IOThreadEnabler::Initialize(
+    scoped_refptr<SafeBrowsingServiceImpl> safe_browsing_service,
     mojo::PendingReceiver<network::mojom::NetworkContext>
         network_context_receiver) {
   SetUpURLRequestContext();
@@ -127,7 +126,7 @@ void SafeBrowsingService::IOThreadEnabler::Initialize(
   SetUpURLLoaderFactory(safe_browsing_service);
 }
 
-void SafeBrowsingService::IOThreadEnabler::ShutDown() {
+void SafeBrowsingServiceImpl::IOThreadEnabler::ShutDown() {
   DCHECK_CURRENTLY_ON(web::WebThread::IO);
   shutting_down_ = true;
   SetSafeBrowsingEnabled(false);
@@ -137,7 +136,7 @@ void SafeBrowsingService::IOThreadEnabler::ShutDown() {
   url_request_context_.reset();
 }
 
-void SafeBrowsingService::IOThreadEnabler::SetSafeBrowsingEnabled(
+void SafeBrowsingServiceImpl::IOThreadEnabler::SetSafeBrowsingEnabled(
     bool enabled) {
   DCHECK_CURRENTLY_ON(web::WebThread::IO);
   if (enabled_ == enabled)
@@ -150,7 +149,7 @@ void SafeBrowsingService::IOThreadEnabler::SetSafeBrowsingEnabled(
     safe_browsing_db_manager_->StopOnIOThread(shutting_down_);
 }
 
-void SafeBrowsingService::IOThreadEnabler::StartSafeBrowsingDBManager() {
+void SafeBrowsingServiceImpl::IOThreadEnabler::StartSafeBrowsingDBManager() {
   DCHECK_CURRENTLY_ON(web::WebThread::IO);
 
   std::string client_name;
@@ -167,7 +166,7 @@ void SafeBrowsingService::IOThreadEnabler::StartSafeBrowsingDBManager() {
                                              config);
 }
 
-void SafeBrowsingService::IOThreadEnabler::SetUpURLRequestContext() {
+void SafeBrowsingServiceImpl::IOThreadEnabler::SetUpURLRequestContext() {
   DCHECK_CURRENTLY_ON(web::WebThread::IO);
 
   // This uses an in-memory non-persistent cookie store. The Safe Browsing V4
@@ -176,12 +175,12 @@ void SafeBrowsingService::IOThreadEnabler::SetUpURLRequestContext() {
   url_request_context_ = builder.Build();
 }
 
-void SafeBrowsingService::IOThreadEnabler::SetUpURLLoaderFactory(
-    scoped_refptr<SafeBrowsingService> safe_browsing_service) {
+void SafeBrowsingServiceImpl::IOThreadEnabler::SetUpURLLoaderFactory(
+    scoped_refptr<SafeBrowsingServiceImpl> safe_browsing_service) {
   DCHECK_CURRENTLY_ON(web::WebThread::IO);
   base::PostTask(
       FROM_HERE, {web::WebThread::UI},
-      base::BindOnce(&SafeBrowsingService::SetUpURLLoaderFactory,
+      base::BindOnce(&SafeBrowsingServiceImpl::SetUpURLLoaderFactory,
                      safe_browsing_service,
                      url_loader_factory_.BindNewPipeAndPassReceiver()));
   shared_url_loader_factory_ =
