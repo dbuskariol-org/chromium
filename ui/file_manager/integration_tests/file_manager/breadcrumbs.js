@@ -300,6 +300,72 @@
   };
 
   /**
+   * Tests that clicking a main breadcumb button makes the app navigate and
+   * update the breadcrumb to that item.
+   */
+  testcase.breadcrumbsMainButtonClick = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(2);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Check: the breadcrumb path attribute should be |breadcrumb|.
+    const breadcrumbElement =
+        await remoteCall.waitForElement(appId, ['bread-crumb']);
+    const path = breadcrumb.slice(1);  // remove leading "/" char
+    chrome.test.assertEq(path, breadcrumbElement.attributes.path);
+
+    // Click the "second" main breadcrumb button (2nd path component).
+    await remoteCall.waitAndClickElement(
+        appId, ['bread-crumb', 'button[id="second"]']);
+
+    // Check: the breadcrumb path should be updated due to navigation.
+    await remoteCall.waitForElement(
+        appId, ['bread-crumb[path="My files/Downloads"']);
+  };
+
+  /**
+   * Tests that an Enter key on a main breadcumb button item makes the app
+   * navigate and update the breadcrumb to that item.
+   */
+  testcase.breadcrumbsMainButtonEnterKey = async () => {
+    // Build an array of nested folder test entries.
+    const nestedFolderTestEntries = createNestedTestFolders(2);
+
+    // Open FilesApp on Downloads containing the test entries.
+    const appId = await setupAndWaitUntilReady(
+        RootPath.DOWNLOADS, nestedFolderTestEntries, []);
+
+    // Navigate to deepest folder.
+    const breadcrumb = '/My files/Downloads/' +
+        nestedFolderTestEntries.map(e => e.nameText).join('/');
+    await navigateWithDirectoryTree(appId, breadcrumb);
+
+    // Check: the breadcrumb path attribute should be |breadcrumb|.
+    const breadcrumbElement =
+        await remoteCall.waitForElement(appId, ['bread-crumb']);
+    const path = breadcrumb.slice(1);  // remove leading "/" char
+    chrome.test.assertEq(path, breadcrumbElement.attributes.path);
+
+    // Send an Enter key to the "second" main breadcrumb button.
+    const secondButton = ['bread-crumb', 'button[id="second"]'];
+    const enterKey = [secondButton, 'Enter', false, false, false];
+    chrome.test.assertTrue(
+        await remoteCall.callRemoteTestUtil('fakeKeyDown', appId, enterKey));
+
+    // Check: the breadcrumb path should be updated due to navigation.
+    await remoteCall.waitForElement(
+        appId, ['bread-crumb[path="My files/Downloads"']);
+  };
+
+  /**
    * Tests that a breadcrumbs elider button click opens its drop down menu and
    * that clicking the button again, closes the drop down menu.
    */

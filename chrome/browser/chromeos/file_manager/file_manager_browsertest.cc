@@ -982,6 +982,8 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
                       TestCase("breadcrumbsRenderShortPath").FilesNg(),
                       TestCase("breadcrumbsEliderButtonHidden").FilesNg(),
                       TestCase("breadcrumbsRenderLongPath").FilesNg(),
+                      TestCase("breadcrumbsMainButtonClick").FilesNg(),
+                      TestCase("breadcrumbsMainButtonEnterKey").FilesNg(),
                       TestCase("breadcrumbsEliderButtonClick").FilesNg(),
                       TestCase("breadcrumbsEliderButtonKeyboard").FilesNg(),
                       TestCase("breadcrumbsEliderMenuClickOutside").FilesNg(),
