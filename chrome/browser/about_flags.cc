@@ -4545,11 +4545,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          browsing_data::features::kEnableRemovingAllThirdPartyCookies)},
 
-    {"enable-send-tab-to-self-broadcast",
-     flag_descriptions::kSendTabToSelfBroadcastName,
-     flag_descriptions::kSendTabToSelfBroadcastDescription, kOsAll,
-     FEATURE_VALUE_TYPE(send_tab_to_self::kSendTabToSelfBroadcast)},
-
     {"cookies-without-same-site-must-be-secure",
      flag_descriptions::kCookiesWithoutSameSiteMustBeSecureName,
      flag_descriptions::kCookiesWithoutSameSiteMustBeSecureDescription, kOsAll,

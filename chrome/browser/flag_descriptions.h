@@ -1001,9 +1001,6 @@ extern const char kScalableAppListDescription[];
 extern const char kScrollableTabStripName[];
 extern const char kScrollableTabStripDescription[];
 
-extern const char kSendTabToSelfBroadcastName[];
-extern const char kSendTabToSelfBroadcastDescription[];
-
 extern const char kSendTabToSelfOmniboxSendingAnimationName[];
 extern const char kSendTabToSelfOmniboxSendingAnimationDescription[];
 
