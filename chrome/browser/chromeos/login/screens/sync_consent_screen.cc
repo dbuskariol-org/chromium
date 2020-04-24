@@ -47,23 +47,6 @@ void RecordUmaReviewFollowingSetup(bool value) {
 }  // namespace
 
 // static
-#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-bool g_is_branded_build = true;
-#else
-bool g_is_branded_build = false;
-#endif
-
-// static
-std::string SyncConsentScreen::GetResultString(Result result) {
-  switch (result) {
-    case Result::NEXT:
-      return "Next";
-    case Result::NOT_APPLICABLE:
-      return BaseScreen::kNotApplicable;
-  }
-}
-
-// static
 void SyncConsentScreen::MaybeLaunchSyncConsentSettings(Profile* profile) {
   if (profile->GetPrefs()->GetBoolean(prefs::kShowSyncSettingsOnSessionStart)) {
     // TODO (alemate): In a very special case when chrome is exiting at the very
@@ -83,8 +66,9 @@ void SyncConsentScreen::MaybeLaunchSyncConsentSettings(Profile* profile) {
   }
 }
 
-SyncConsentScreen::SyncConsentScreen(SyncConsentScreenView* view,
-                                     const ScreenExitCallback& exit_callback)
+SyncConsentScreen::SyncConsentScreen(
+    SyncConsentScreenView* view,
+    const base::RepeatingClosure& exit_callback)
     : BaseScreen(SyncConsentScreenView::kScreenId, OobeScreenPriority::DEFAULT),
       view_(view),
       exit_callback_(exit_callback) {
@@ -96,32 +80,16 @@ SyncConsentScreen::~SyncConsentScreen() {
   view_->Bind(NULL);
 }
 
-void SyncConsentScreen::Init() {
-  if (is_initialized_)
-    return;
-  is_initialized_ = true;
+void SyncConsentScreen::ShowImpl() {
   user_ = user_manager::UserManager::Get()->GetPrimaryUser();
   profile_ = ProfileHelper::Get()->GetProfileByUser(user_);
-  UpdateScreen();
-}
 
-bool SyncConsentScreen::MaybeSkip() {
-  if (!g_is_branded_build) {
-    exit_callback_.Run(Result::NOT_APPLICABLE);
-    return true;
-  }
-  Init();
+  UpdateScreen();
 
   if (behavior_ == SyncScreenBehavior::SKIP) {
-    exit_callback_.Run(Result::NOT_APPLICABLE);
-    return true;
+    exit_callback_.Run();
+    return;
   }
-
-  return false;
-}
-
-void SyncConsentScreen::ShowImpl() {
-  Init();
 
   if (behavior_ != SyncScreenBehavior::SHOW) {
     // Wait for updates and set the loading throbber to be visible.
@@ -154,7 +122,7 @@ void SyncConsentScreen::OnContinueAndReview(
   RecordConsent(CONSENT_GIVEN, consent_description, consent_confirmation);
   profile_->GetPrefs()->SetBoolean(prefs::kShowSyncSettingsOnSessionStart,
                                    true);
-  exit_callback_.Run(Result::NEXT);
+  exit_callback_.Run();
 }
 
 void SyncConsentScreen::OnContinueWithDefaults(
@@ -164,7 +132,7 @@ void SyncConsentScreen::OnContinueWithDefaults(
     return;
   RecordUmaReviewFollowingSetup(false);
   RecordConsent(CONSENT_GIVEN, consent_description, consent_confirmation);
-  exit_callback_.Run(Result::NEXT);
+  exit_callback_.Run();
 }
 
 void SyncConsentScreen::OnAcceptAndContinue(
@@ -179,13 +147,7 @@ void SyncConsentScreen::OnAcceptAndContinue(
                 consent_description, consent_confirmation);
   profile_->GetPrefs()->SetBoolean(syncer::prefs::kOsSyncFeatureEnabled,
                                    enable_os_sync);
-  exit_callback_.Run(Result::NEXT);
-}
-
-// static
-std::unique_ptr<base::AutoReset<bool>>
-SyncConsentScreen::ForceBrandedBuildForTesing() {
-  return std::make_unique<base::AutoReset<bool>>(&g_is_branded_build, true);
+  exit_callback_.Run();
 }
 
 void SyncConsentScreen::SetDelegateForTesting(
@@ -244,7 +206,7 @@ void SyncConsentScreen::UpdateScreen() {
 
   // Screen is shown and behavior has changed.
   if (behavior_ == SyncScreenBehavior::SKIP)
-    exit_callback_.Run(Result::NEXT);
+    exit_callback_.Run();
 
   if (behavior_ == SyncScreenBehavior::SHOW) {
     view_->SetThrobberVisible(false /*visible*/);
