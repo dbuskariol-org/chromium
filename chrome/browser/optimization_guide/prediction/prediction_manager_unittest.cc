@@ -1051,6 +1051,9 @@ TEST_F(PredictionManagerTest,
           GetStringNameForOptimizationTarget(
               optimization_guide::proto::OPTIMIZATION_TARGET_PAINFUL_PAGE_LOAD),
       PredictionManagerModelStatus::kStoreAvailableModelNotLoaded, 1);
+
+  histogram_tester.ExpectTotalCount(
+      "OptimizationGuide.PredictionModelVersion.PainfulPageLoad", 0);
 }
 
 TEST_F(PredictionManagerTest,
@@ -1575,6 +1578,7 @@ TEST_F(PredictionManagerTest, PreviousSessionStatisticsUsed) {
 
 TEST_F(PredictionManagerTest,
        StoreInitializedAfterOptimizationTargetRegistered) {
+  base::HistogramTester histogram_tester;
   CreatePredictionManager({});
   // Ensure that the fetch does not cause any models or features to load.
   prediction_manager()->SetPredictionModelFetcherForTesting(
@@ -1592,10 +1596,13 @@ TEST_F(PredictionManagerTest,
   EXPECT_TRUE(prediction_manager()->GetHostModelFeaturesForHost("foo.com"));
 
   EXPECT_FALSE(prediction_model_fetcher()->models_fetched());
+  histogram_tester.ExpectUniqueSample(
+      "OptimizationGuide.PredictionModelVersion.PainfulPageLoad", 1, 1);
 }
 
 TEST_F(PredictionManagerTest,
        StoreInitializedBeforeOptimizationTargetRegistered) {
+  base::HistogramTester histogram_tester;
   CreatePredictionManager({});
   // Ensure that the fetch does not cause any models or features to load.
   prediction_manager()->SetPredictionModelFetcherForTesting(
@@ -1615,6 +1622,8 @@ TEST_F(PredictionManagerTest,
   EXPECT_TRUE(prediction_manager()->GetHostModelFeaturesForHost("foo.com"));
 
   EXPECT_FALSE(prediction_model_fetcher()->models_fetched());
+  histogram_tester.ExpectUniqueSample(
+      "OptimizationGuide.PredictionModelVersion.PainfulPageLoad", 1, 1);
 }
 
 TEST_F(PredictionManagerTest, ModelFetcherTimerRetryDelay) {
