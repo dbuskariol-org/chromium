@@ -1488,27 +1488,21 @@ std::unique_ptr<views::ImageView> TranslateBubbleView::CreateTranslateIcon() {
 
 std::unique_ptr<views::Button> TranslateBubbleView::CreateOptionsMenuButton() {
   // Three dots options menu button
-  const SkColor option_icon_color = gfx::kChromeIconGrey;
-  const gfx::VectorIcon* option_icon_id = &kBrowserToolsIcon;
-  std::unique_ptr<views::MenuButton> tab_translate_options_button =
-      std::make_unique<views::MenuButton>(
-          base::string16(base::ASCIIToUTF16("")), this);
-  tab_translate_options_button->SetImage(
-      views::Button::STATE_NORMAL,
-      gfx::CreateVectorIcon(*option_icon_id, 16, option_icon_color));
-  tab_translate_options_button->set_ink_drop_base_color(gfx::kChromeIconGrey);
-  tab_translate_options_button->SetInkDropMode(views::Button::InkDropMode::ON);
+  auto tab_translate_options_button =
+      views::CreateVectorImageButtonWithNativeTheme(this, kBrowserToolsIcon);
   InstallCircleHighlightPathGenerator(tab_translate_options_button.get());
-  tab_translate_options_button->SetID(BUTTON_ID_OPTIONS_MENU_TAB);
   tab_translate_options_button->SetFocusForPlatform();
   tab_translate_options_button->SetAccessibleName(
       l10n_util::GetStringUTF16(IDS_TRANSLATE_BUBBLE_OPTIONS_MENU_BUTTON));
   tab_translate_options_button->set_request_focus_on_press(true);
+  tab_translate_options_button->SetVisible(true);
+  tab_translate_options_button->SetID(BUTTON_ID_OPTIONS_MENU_TAB);
   return tab_translate_options_button;
 }
 
 std::unique_ptr<views::Button> TranslateBubbleView::CreateCloseButton() {
   auto close_button = views::BubbleFrameView::CreateCloseButton(this);
+  close_button->SetVisible(true);
   close_button->SetID(BUTTON_ID_CLOSE);
   return close_button;
 }
