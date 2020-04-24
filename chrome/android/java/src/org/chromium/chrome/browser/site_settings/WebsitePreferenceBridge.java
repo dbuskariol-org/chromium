@@ -12,6 +12,7 @@ import org.chromium.base.annotations.NativeMethods;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.components.content_settings.ContentSettingsFeatureList;
 import org.chromium.components.content_settings.ContentSettingsType;
+import org.chromium.components.embedder_support.browser_context.BrowserContextHandle;
 import org.chromium.components.location.LocationUtils;
 
 import java.util.ArrayList;
@@ -556,36 +557,52 @@ public class WebsitePreferenceBridge {
         boolean getNfcEnabled();
         void getSensorsOrigins(Object list);
         void getVrOrigins(Object list);
-        int getArSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getCameraSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getClipboardSettingForOrigin(String origin, boolean isIncognito);
-        int getGeolocationSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getMicrophoneSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getMidiSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getNfcSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getNotificationSettingForOrigin(String origin, boolean isIncognito);
+        int getArSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getCameraSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getClipboardSettingForOrigin(BrowserContextHandle browserContextHandle, String origin);
+        int getGeolocationSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getMicrophoneSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getMidiSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getNfcSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getNotificationSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin);
         boolean isNotificationEmbargoedForOrigin(Profile profile, String origin);
         int getProtectedMediaIdentifierSettingForOrigin(
-                String origin, String embedder, boolean isIncognito);
-        int getSensorsSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        int getVrSettingForOrigin(String origin, String embedder, boolean isIncognito);
-        void setArSettingForOrigin(String origin, String embedder, int value, boolean isIncognito);
-        void setCameraSettingForOrigin(String origin, int value, boolean isIncognito);
-        void setClipboardSettingForOrigin(String origin, int value, boolean isIncognito);
-        void setGeolocationSettingForOrigin(
-                String origin, String embedder, int value, boolean isIncognito);
-        void setMicrophoneSettingForOrigin(String origin, int value, boolean isIncognito);
-        void setMidiSettingForOrigin(
-                String origin, String embedder, int value, boolean isIncognito);
-        void setNfcSettingForOrigin(String origin, String embedder, int value, boolean isIncognito);
-        void setNotificationSettingForOrigin(String origin, int value, boolean isIncognito);
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getSensorsSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        int getVrSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, String embedder);
+        void setArSettingForOrigin(BrowserContextHandle browserContextHandle, String origin,
+                String embedder, int value);
+        void setCameraSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, int value);
+        void setClipboardSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, int value);
+        void setGeolocationSettingForOrigin(BrowserContextHandle browserContextHandle,
+                String origin, String embedder, int value);
+        void setMicrophoneSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, int value);
+        void setMidiSettingForOrigin(BrowserContextHandle browserContextHandle, String origin,
+                String embedder, int value);
+        void setNfcSettingForOrigin(BrowserContextHandle browserContextHandle, String origin,
+                String embedder, int value);
+        void setNotificationSettingForOrigin(
+                BrowserContextHandle browserContextHandle, String origin, int value);
         void reportNotificationRevokedForOrigin(
-                String origin, int newSettingValue, boolean isIncognito);
-        void setProtectedMediaIdentifierSettingForOrigin(
-                String origin, String embedder, int value, boolean isIncognito);
-        void setSensorsSettingForOrigin(
-                String origin, String embedder, int value, boolean isIncognito);
-        void setVrSettingForOrigin(String origin, String embedder, int value, boolean isIncognito);
+                BrowserContextHandle browserContextHandle, String origin, int newSettingValue);
+        void setProtectedMediaIdentifierSettingForOrigin(BrowserContextHandle browserContextHandle,
+                String origin, String embedder, int value);
+        void setSensorsSettingForOrigin(BrowserContextHandle browserContextHandle, String origin,
+                String embedder, int value);
+        void setVrSettingForOrigin(BrowserContextHandle browserContextHandle, String origin,
+                String embedder, int value);
         void clearBannerData(String origin);
         void clearMediaLicenses(String origin);
         void clearCookieData(String path);

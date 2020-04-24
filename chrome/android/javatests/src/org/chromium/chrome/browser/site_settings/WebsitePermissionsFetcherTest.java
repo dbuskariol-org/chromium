@@ -1,4 +1,3 @@
-
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -19,6 +18,7 @@ import org.chromium.base.Callback;
 import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.base.test.util.CommandLineFlags;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
+import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.test.ChromeBrowserTestRule;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.util.browser.Features.EnableFeatures;
@@ -287,19 +287,20 @@ public class WebsitePermissionsFetcherTest {
         final WebsitePermissionsWaiter waiter = new WebsitePermissionsWaiter();
         // Set lots of permissions values.
         TestThreadUtils.runOnUiThreadBlocking(() -> {
+            Profile profile = Profile.getLastUsedRegularProfile();
             for (String url : PERMISSION_URLS) {
                 WebsitePreferenceBridgeJni.get().setGeolocationSettingForOrigin(
-                        url, url, ContentSettingValues.BLOCK, false);
+                        profile, url, url, ContentSettingValues.BLOCK);
                 WebsitePreferenceBridgeJni.get().setMidiSettingForOrigin(
-                        url, url, ContentSettingValues.ALLOW, false);
+                        profile, url, url, ContentSettingValues.ALLOW);
                 WebsitePreferenceBridgeJni.get().setProtectedMediaIdentifierSettingForOrigin(
-                        url, url, ContentSettingValues.BLOCK, false);
+                        profile, url, url, ContentSettingValues.BLOCK);
                 WebsitePreferenceBridgeJni.get().setNotificationSettingForOrigin(
-                        url, ContentSettingValues.ALLOW, false);
+                        profile, url, ContentSettingValues.ALLOW);
                 WebsitePreferenceBridgeJni.get().setMicrophoneSettingForOrigin(
-                        url, ContentSettingValues.ALLOW, false);
+                        profile, url, ContentSettingValues.ALLOW);
                 WebsitePreferenceBridgeJni.get().setCameraSettingForOrigin(
-                        url, ContentSettingValues.BLOCK, false);
+                        profile, url, ContentSettingValues.BLOCK);
             }
 
             // This should not time out. See crbug.com/732907.

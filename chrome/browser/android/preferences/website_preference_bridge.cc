@@ -30,12 +30,14 @@
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/browser/uma_util.h"
 #include "components/content_settings/core/common/content_settings.h"
+#include "components/embedder_support/android/browser_context/browser_context_handle.h"
 #include "components/permissions/chooser_context_base.h"
 #include "components/permissions/permission_decision_auto_blocker.h"
 #include "components/permissions/permission_manager.h"
 #include "components/permissions/permission_uma_util.h"
 #include "components/permissions/permission_util.h"
 #include "components/permissions/permissions_client.h"
+#include "content/public/browser/browser_context.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/storage_partition.h"
 #include "services/network/public/mojom/cookie_manager.mojom.h"
@@ -53,12 +55,17 @@ using base::android::JavaParamRef;
 using base::android::JavaRef;
 using base::android::ScopedJavaGlobalRef;
 using base::android::ScopedJavaLocalRef;
+using content::BrowserContext;
 using content::BrowserThread;
 
 namespace {
 
 const char kHttpPortSuffix[] = ":80";
 const char kHttpsPortSuffix[] = ":443";
+
+BrowserContext* unwrap(const JavaParamRef<jobject>& jbrowser_context_handle) {
+  return browser_context::BrowserContextFromJavaHandle(jbrowser_context_handle);
+}
 
 Profile* GetActiveUserProfile(bool is_incognito) {
   Profile* profile = ProfileManager::GetActiveUserProfile();
@@ -81,9 +88,14 @@ HostContentSettingsMap* GetHostContentSettingsMap() {
       GetOriginalProfile());
 }
 
+HostContentSettingsMap* GetHostContentSettingsMap(
+    BrowserContext* browser_context) {
+  return permissions::PermissionsClient::Get()->GetSettingsMap(browser_context);
+}
+
 // Reset the give permission for the DSE if the permission and origin are
 // controlled by the DSE.
-bool MaybeResetDSEPermission(Profile* profile,
+bool MaybeResetDSEPermission(BrowserContext* browser_context,
                              ContentSettingsType type,
                              const GURL& origin,
                              const GURL& embedder,
@@ -95,7 +107,7 @@ bool MaybeResetDSEPermission(Profile* profile,
     return false;
 
   return permissions::PermissionsClient::Get()
-      ->ResetPermissionIfControlledByDse(profile, type,
+      ->ResetPermissionIfControlledByDse(browser_context, type,
                                          url::Origin::Create(origin));
 }
 
@@ -198,11 +210,12 @@ void GetOrigins(JNIEnv* env,
   }
 }
 
-ContentSetting GetSettingForOrigin(JNIEnv* env,
-                                   ContentSettingsType content_type,
-                                   jstring origin,
-                                   jstring embedder,
-                                   jboolean is_incognito) {
+ContentSetting GetSettingForOrigin(
+    JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
+    ContentSettingsType content_type,
+    jstring origin,
+    jstring embedder) {
   GURL url(ConvertJavaStringToUTF8(env, origin));
   std::string embedder_str = ConvertJavaStringToUTF8(env, embedder);
   GURL embedder_url;
@@ -214,40 +227,40 @@ ContentSetting GetSettingForOrigin(JNIEnv* env,
   else
     embedder_url = GURL(embedder_str);
   return permissions::PermissionsClient::Get()
-      ->GetPermissionManager(GetActiveUserProfile(is_incognito))
+      ->GetPermissionManager(unwrap(jbrowser_context_handle))
       ->GetPermissionStatus(content_type, url, embedder_url)
       .content_setting;
 }
 
 void SetSettingForOrigin(JNIEnv* env,
+                         const JavaParamRef<jobject>& jbrowser_context_handle,
                          ContentSettingsType content_type,
                          jstring origin,
                          jstring embedder,
-                         ContentSetting setting,
-                         jboolean is_incognito) {
+                         ContentSetting setting) {
   GURL origin_url(ConvertJavaStringToUTF8(env, origin));
   GURL embedder_url =
       embedder ? GURL(ConvertJavaStringToUTF8(env, embedder)) : GURL();
-  Profile* profile = GetActiveUserProfile(is_incognito);
+  BrowserContext* browser_context = unwrap(jbrowser_context_handle);
 
   // The permission may have been blocked due to being under embargo, so if it
   // was changed away from BLOCK, clear embargo status if it exists.
   if (setting != CONTENT_SETTING_BLOCK) {
     permissions::PermissionsClient::Get()
-        ->GetPermissionDecisionAutoBlocker(profile)
+        ->GetPermissionDecisionAutoBlocker(browser_context)
         ->RemoveEmbargoByUrl(origin_url, content_type);
   }
 
-  if (MaybeResetDSEPermission(profile, content_type, origin_url, embedder_url,
-                              setting)) {
+  if (MaybeResetDSEPermission(browser_context, content_type, origin_url,
+                              embedder_url, setting)) {
     return;
   }
 
   permissions::PermissionUmaUtil::ScopedRevocationReporter
       scoped_revocation_reporter(
-          profile, origin_url, embedder_url, content_type,
+          browser_context, origin_url, embedder_url, content_type,
           permissions::PermissionSourceUI::SITE_SETTINGS);
-  GetHostContentSettingsMap(is_incognito)
+  GetHostContentSettingsMap(browser_context)
       ->SetContentSettingDefaultScope(origin_url, embedder_url, content_type,
                                       std::string(), setting);
   content_settings::LogWebSiteSettingsPermissionChange(content_type, setting);
@@ -315,19 +328,21 @@ static void JNI_WebsitePreferenceBridge_GetClipboardOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetClipboardSettingForOrigin(
     JNIEnv* env,
-    const JavaParamRef<jstring>& origin,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::CLIPBOARD_READ_WRITE,
-                             origin, origin, is_incognito);
+    const JavaParamRef<jobject>& jbrowser_context_handle,
+    const JavaParamRef<jstring>& origin) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::CLIPBOARD_READ_WRITE, origin,
+                             origin);
 }
 
 static void JNI_WebsitePreferenceBridge_SetClipboardSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::CLIPBOARD_READ_WRITE, origin,
-                      origin, static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::CLIPBOARD_READ_WRITE, origin, origin,
+                      static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetGeolocationOrigins(
@@ -341,21 +356,23 @@ static void JNI_WebsitePreferenceBridge_GetGeolocationOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetGeolocationSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::GEOLOCATION, origin,
-                             embedder, is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::GEOLOCATION, origin,
+                             embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetGeolocationSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::GEOLOCATION, origin, embedder,
-                      static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::GEOLOCATION, origin, embedder,
+                      static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetMidiOrigins(
@@ -367,21 +384,22 @@ static void JNI_WebsitePreferenceBridge_GetMidiOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetMidiSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::MIDI_SYSEX, origin,
-                             embedder, is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::MIDI_SYSEX, origin, embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetMidiSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::MIDI_SYSEX, origin, embedder,
-                      static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::MIDI_SYSEX, origin, embedder,
+                      static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetProtectedMediaIdentifierOrigins(
@@ -396,24 +414,24 @@ static void JNI_WebsitePreferenceBridge_GetProtectedMediaIdentifierOrigins(
 static jint
 JNI_WebsitePreferenceBridge_GetProtectedMediaIdentifierSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env,
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
                              ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER,
-                             origin, embedder, is_incognito);
+                             origin, embedder);
 }
 
 static void
 JNI_WebsitePreferenceBridge_SetProtectedMediaIdentifierSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER,
-                      origin, embedder, static_cast<ContentSetting>(value),
-                      is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::PROTECTED_MEDIA_IDENTIFIER, origin,
+                      embedder, static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetNotificationOrigins(
@@ -426,10 +444,11 @@ static void JNI_WebsitePreferenceBridge_GetNotificationOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetNotificationSettingForOrigin(
     JNIEnv* env,
-    const JavaParamRef<jstring>& origin,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::NOTIFICATIONS, origin,
-                             origin, is_incognito);
+    const JavaParamRef<jobject>& jbrowser_context_handle,
+    const JavaParamRef<jstring>& origin) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::NOTIFICATIONS, origin,
+                             origin);
 }
 
 static jboolean JNI_WebsitePreferenceBridge_IsNotificationEmbargoedForOrigin(
@@ -451,9 +470,9 @@ static jboolean JNI_WebsitePreferenceBridge_IsNotificationEmbargoedForOrigin(
 
 static void JNI_WebsitePreferenceBridge_SetNotificationSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    jint value,
-    jboolean is_incognito) {
+    jint value) {
   // Note: For Android O+, SetNotificationSettingForOrigin is only called when:
   //  1) the "Clear & Reset" button in Site Settings is pressed,
   //  2) the notification permission is blocked by embargo, so no notification
@@ -464,25 +483,26 @@ static void JNI_WebsitePreferenceBridge_SetNotificationSettingForOrigin(
   //
   // Note: Web Notification permission behaves differently from all other
   // permission types. See https://crbug.com/416894.
-  Profile* profile = GetActiveUserProfile(is_incognito);
+  BrowserContext* browser_context = unwrap(jbrowser_context_handle);
   GURL url = GURL(ConvertJavaStringToUTF8(env, origin));
   ContentSetting setting = static_cast<ContentSetting>(value);
 
   permissions::PermissionsClient::Get()
-      ->GetPermissionDecisionAutoBlocker(profile)
+      ->GetPermissionDecisionAutoBlocker(browser_context)
       ->RemoveEmbargoByUrl(url, ContentSettingsType::NOTIFICATIONS);
 
-  if (MaybeResetDSEPermission(profile, ContentSettingsType::NOTIFICATIONS, url,
-                              GURL(), setting)) {
+  if (MaybeResetDSEPermission(browser_context,
+                              ContentSettingsType::NOTIFICATIONS, url, GURL(),
+                              setting)) {
     return;
   }
 
   permissions::PermissionUmaUtil::ScopedRevocationReporter
       scoped_revocation_reporter(
-          profile, url, GURL(), ContentSettingsType::NOTIFICATIONS,
+          browser_context, url, GURL(), ContentSettingsType::NOTIFICATIONS,
           permissions::PermissionSourceUI::SITE_SETTINGS);
 
-  GetHostContentSettingsMap(is_incognito)
+  GetHostContentSettingsMap(browser_context)
       ->SetContentSettingDefaultScope(
           url, GURL(), ContentSettingsType::NOTIFICATIONS,
           content_settings::ResourceIdentifier(), setting);
@@ -494,10 +514,9 @@ static void JNI_WebsitePreferenceBridge_SetNotificationSettingForOrigin(
 // We detect this change and explicitly report it back for UMA reporting.
 static void JNI_WebsitePreferenceBridge_ReportNotificationRevokedForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    jint new_setting_value,
-    jboolean is_incognito) {
-  Profile* profile = GetActiveUserProfile(is_incognito);
+    jint new_setting_value) {
   GURL url = GURL(ConvertJavaStringToUTF8(env, origin));
 
   ContentSetting setting = static_cast<ContentSetting>(new_setting_value);
@@ -509,7 +528,7 @@ static void JNI_WebsitePreferenceBridge_ReportNotificationRevokedForOrigin(
   permissions::PermissionUmaUtil::PermissionRevoked(
       ContentSettingsType::NOTIFICATIONS,
       permissions::PermissionSourceUI::ANDROID_SETTINGS, url.GetOrigin(),
-      profile);
+      unwrap(jbrowser_context_handle));
 }
 
 static void JNI_WebsitePreferenceBridge_GetCameraOrigins(
@@ -532,42 +551,44 @@ static void JNI_WebsitePreferenceBridge_GetMicrophoneOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetMicrophoneSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::MEDIASTREAM_MIC, origin,
-                             embedder, is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::MEDIASTREAM_MIC, origin,
+                             embedder);
 }
 
 static jint JNI_WebsitePreferenceBridge_GetCameraSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::MEDIASTREAM_CAMERA,
-                             origin, embedder, is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::MEDIASTREAM_CAMERA, origin,
+                             embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetMicrophoneSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    jint value,
-    jboolean is_incognito) {
+    jint value) {
   // Here 'nullptr' indicates that microphone uses wildcard for embedder.
-  SetSettingForOrigin(env, ContentSettingsType::MEDIASTREAM_MIC, origin,
-                      nullptr, static_cast<ContentSetting>(value),
-                      is_incognito);
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::MEDIASTREAM_MIC, origin, nullptr,
+                      static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_SetCameraSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    jint value,
-    jboolean is_incognito) {
+    jint value) {
   // Here 'nullptr' indicates that camera uses wildcard for embedder.
-  SetSettingForOrigin(env, ContentSettingsType::MEDIASTREAM_CAMERA, origin,
-                      nullptr, static_cast<ContentSetting>(value),
-                      is_incognito);
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::MEDIASTREAM_CAMERA, origin, nullptr,
+                      static_cast<ContentSetting>(value));
 }
 
 static jboolean JNI_WebsitePreferenceBridge_IsContentSettingsPatternValid(
@@ -852,21 +873,21 @@ static void JNI_WebsitePreferenceBridge_GetArOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetArSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::AR, origin, embedder,
-                             is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::AR, origin, embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetArSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::AR, origin, embedder,
-                      static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle, ContentSettingsType::AR,
+                      origin, embedder, static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetNfcOrigins(
@@ -878,21 +899,21 @@ static void JNI_WebsitePreferenceBridge_GetNfcOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetNfcSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::NFC, origin, embedder,
-                             is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::NFC, origin, embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetNfcSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::NFC, origin, embedder,
-                      static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle, ContentSettingsType::NFC,
+                      origin, embedder, static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetSensorsOrigins(
@@ -905,21 +926,22 @@ static void JNI_WebsitePreferenceBridge_GetSensorsOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetSensorsSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::SENSORS, origin,
-                             embedder, is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::SENSORS, origin, embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetSensorsSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::SENSORS, origin, embedder,
-                      static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle,
+                      ContentSettingsType::SENSORS, origin, embedder,
+                      static_cast<ContentSetting>(value));
 }
 
 static void JNI_WebsitePreferenceBridge_GetVrOrigins(
@@ -931,29 +953,29 @@ static void JNI_WebsitePreferenceBridge_GetVrOrigins(
 
 static jint JNI_WebsitePreferenceBridge_GetVrSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
-    const JavaParamRef<jstring>& embedder,
-    jboolean is_incognito) {
-  return GetSettingForOrigin(env, ContentSettingsType::VR, origin, embedder,
-                             is_incognito);
+    const JavaParamRef<jstring>& embedder) {
+  return GetSettingForOrigin(env, jbrowser_context_handle,
+                             ContentSettingsType::VR, origin, embedder);
 }
 
 static void JNI_WebsitePreferenceBridge_SetVrSettingForOrigin(
     JNIEnv* env,
+    const JavaParamRef<jobject>& jbrowser_context_handle,
     const JavaParamRef<jstring>& origin,
     const JavaParamRef<jstring>& embedder,
-    jint value,
-    jboolean is_incognito) {
-  SetSettingForOrigin(env, ContentSettingsType::VR, origin, embedder,
-                      static_cast<ContentSetting>(value), is_incognito);
+    jint value) {
+  SetSettingForOrigin(env, jbrowser_context_handle, ContentSettingsType::VR,
+                      origin, embedder, static_cast<ContentSetting>(value));
 }
 
 // On Android O+ notification channels are not stored in the Chrome profile and
 // so are persisted across tests. This function resets them.
 static void JNI_WebsitePreferenceBridge_ResetNotificationsSettingsForTest(
     JNIEnv* env) {
-  GetHostContentSettingsMap(/*is_incognito=*/false)
-      ->ClearSettingsForOneType(ContentSettingsType::NOTIFICATIONS);
+  GetHostContentSettingsMap()->ClearSettingsForOneType(
+      ContentSettingsType::NOTIFICATIONS);
 }
 
 static jboolean JNI_WebsitePreferenceBridge_IsContentSettingManaged(

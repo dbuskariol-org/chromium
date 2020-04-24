@@ -17,6 +17,7 @@ import org.chromium.base.test.util.Feature;
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
+import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.test.ChromeActivityTestRule;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.util.browser.Features.DisableFeatures;
@@ -42,11 +43,17 @@ public class PermissionInfoTest {
         mActivityTestRule.startMainActivityOnBlankPage();
     }
 
+    private Profile getProfile(boolean incognito) {
+        return incognito ? Profile.getLastUsedRegularProfile().getOffTheRecordProfile()
+                         : Profile.getLastUsedRegularProfile();
+    }
+
     private void setGeolocation(
             String origin, String embedder, @ContentSettingValues int setting, boolean incognito) {
         PermissionInfo info =
                 new PermissionInfo(PermissionInfo.Type.GEOLOCATION, origin, embedder, incognito);
-        TestThreadUtils.runOnUiThreadBlocking(() -> info.setContentSetting(setting));
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> info.setContentSetting(getProfile(incognito), setting));
     }
 
     private @ContentSettingValues int getGeolocation(
@@ -54,7 +61,7 @@ public class PermissionInfoTest {
         return TestThreadUtils.runOnUiThreadBlocking(() -> {
             PermissionInfo info = new PermissionInfo(
                     PermissionInfo.Type.GEOLOCATION, origin, embedder, incognito);
-            return info.getContentSetting();
+            return info.getContentSetting(getProfile(incognito));
         });
     }
 
@@ -62,7 +69,8 @@ public class PermissionInfoTest {
             String origin, String embedder, @ContentSettingValues int setting, boolean incognito) {
         PermissionInfo info =
                 new PermissionInfo(PermissionInfo.Type.NOTIFICATION, origin, embedder, incognito);
-        TestThreadUtils.runOnUiThreadBlocking(() -> info.setContentSetting(setting));
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> info.setContentSetting(getProfile(incognito), setting));
     }
 
     private @ContentSettingValues int getNotifications(
@@ -70,7 +78,7 @@ public class PermissionInfoTest {
         return TestThreadUtils.runOnUiThreadBlocking(() -> {
             PermissionInfo info = new PermissionInfo(
                     PermissionInfo.Type.NOTIFICATION, origin, embedder, incognito);
-            return info.getContentSetting();
+            return info.getContentSetting(getProfile(incognito));
         });
     }
 

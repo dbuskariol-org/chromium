@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import org.chromium.base.MathUtils;
 import org.chromium.base.metrics.RecordUserAction;
+import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.site_settings.WebsitePreferenceBridge.StorageInfoClearedCallback;
 import org.chromium.components.content_settings.ContentSettingValues;
 import org.chromium.components.content_settings.ContentSettingsType;
@@ -146,7 +147,9 @@ public class Website implements Serializable {
      *         (Camera, Clipboard, etc.).
      */
     public @ContentSettingValues @Nullable Integer getPermission(@PermissionInfo.Type int type) {
-        return getPermissionInfo(type) != null ? getPermissionInfo(type).getContentSetting() : null;
+        return getPermissionInfo(type) != null
+                ? getPermissionInfo(type).getContentSetting(Profile.getLastUsedRegularProfile())
+                : null;
     }
 
     /**
@@ -154,7 +157,9 @@ public class Website implements Serializable {
      * (Camera, Clipboard, etc.).
      */
     public void setPermission(@PermissionInfo.Type int type, @ContentSettingValues int value) {
-        if (getPermissionInfo(type) != null) getPermissionInfo(type).setContentSetting(value);
+        if (getPermissionInfo(type) != null) {
+            getPermissionInfo(type).setContentSetting(Profile.getLastUsedRegularProfile(), value);
+        }
     }
 
     /**

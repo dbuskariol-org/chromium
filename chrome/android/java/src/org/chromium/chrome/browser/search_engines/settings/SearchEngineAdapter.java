@@ -30,6 +30,7 @@ import org.chromium.base.Log;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.locale.LocaleManager;
+import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
 import org.chromium.chrome.browser.settings.SettingsLauncher;
 import org.chromium.chrome.browser.site_settings.PermissionInfo;
@@ -497,14 +498,16 @@ public class SearchEngineAdapter extends BaseAdapter
     private int getPermissionsLinkMessage(String url) {
         if (url == null) return 0;
 
+        Profile profile = Profile.getLastUsedRegularProfile();
         PermissionInfo settings =
                 new PermissionInfo(PermissionInfo.Type.NOTIFICATION, url, null, false);
-        boolean notificationsAllowed = settings.getContentSetting() == ContentSettingValues.ALLOW
+        boolean notificationsAllowed =
+                settings.getContentSetting(profile) == ContentSettingValues.ALLOW
                 && WebsitePreferenceBridge.isPermissionControlledByDSE(
                         ContentSettingsType.NOTIFICATIONS, url, false);
 
         settings = new PermissionInfo(PermissionInfo.Type.GEOLOCATION, url, null, false);
-        boolean locationAllowed = settings.getContentSetting() == ContentSettingValues.ALLOW
+        boolean locationAllowed = settings.getContentSetting(profile) == ContentSettingValues.ALLOW
                 && WebsitePreferenceBridge.isPermissionControlledByDSE(
                         ContentSettingsType.GEOLOCATION, url, false);
 
@@ -561,7 +564,8 @@ public class SearchEngineAdapter extends BaseAdapter
 
         PermissionInfo locationSettings =
                 new PermissionInfo(PermissionInfo.Type.GEOLOCATION, url, null, false);
-        return locationSettings.getContentSetting() == ContentSettingValues.ALLOW;
+        return locationSettings.getContentSetting(Profile.getLastUsedRegularProfile())
+                == ContentSettingValues.ALLOW;
     }
 
     private int computeStartIndexForRecentSearchEngines() {

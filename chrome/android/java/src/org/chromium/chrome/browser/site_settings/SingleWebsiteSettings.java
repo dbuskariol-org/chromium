@@ -554,8 +554,8 @@ public class SingleWebsiteSettings extends SiteSettingsPreferenceFragment
             if (mPreviousNotificationPermission == ContentSettingValues.ALLOW
                     && newPermission != ContentSettingValues.ALLOW) {
                 WebsitePreferenceBridgeJni.get().reportNotificationRevokedForOrigin(
-                        mSite.getAddress().getOrigin(), newPermission,
-                        mSite.getPermissionInfo(PermissionInfo.Type.NOTIFICATION).isIncognito());
+                        getSiteSettingsClient().getBrowserContextHandle(),
+                        mSite.getAddress().getOrigin(), newPermission);
                 mPreviousNotificationPermission = null;
             }
         }
