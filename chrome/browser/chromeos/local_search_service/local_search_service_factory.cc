@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/local_search_service/local_search_service_proxy_factory.h"
+#include "chrome/browser/chromeos/local_search_service/local_search_service_factory.h"
 
-#include "chrome/browser/chromeos/local_search_service/local_search_service_proxy.h"
+#include "chrome/browser/chromeos/local_search_service/local_search_service.h"
 #include "chrome/browser/profiles/profile.h"
 #include "components/keyed_service/content/browser_context_dependency_manager.h"
 
@@ -14,25 +14,24 @@
 
 namespace local_search_service {
 
-LocalSearchServiceProxy* LocalSearchServiceProxyFactory::GetForProfile(
-    Profile* profile) {
-  return static_cast<LocalSearchServiceProxy*>(
-      LocalSearchServiceProxyFactory::GetInstance()
-          ->GetServiceForBrowserContext(profile, true /* create */));
+LocalSearchService* LocalSearchServiceFactory::GetForProfile(Profile* profile) {
+  return static_cast<LocalSearchService*>(
+      LocalSearchServiceFactory::GetInstance()->GetServiceForBrowserContext(
+          profile, true /* create */));
 }
 
-LocalSearchServiceProxyFactory* LocalSearchServiceProxyFactory::GetInstance() {
-  return base::Singleton<LocalSearchServiceProxyFactory>::get();
+LocalSearchServiceFactory* LocalSearchServiceFactory::GetInstance() {
+  return base::Singleton<LocalSearchServiceFactory>::get();
 }
 
-LocalSearchServiceProxyFactory::LocalSearchServiceProxyFactory()
+LocalSearchServiceFactory::LocalSearchServiceFactory()
     : BrowserContextKeyedServiceFactory(
-          "LocalSearchServiceProxy",
+          "LocalSearchService",
           BrowserContextDependencyManager::GetInstance()) {}
 
-LocalSearchServiceProxyFactory::~LocalSearchServiceProxyFactory() = default;
+LocalSearchServiceFactory::~LocalSearchServiceFactory() = default;
 
-content::BrowserContext* LocalSearchServiceProxyFactory::GetBrowserContextToUse(
+content::BrowserContext* LocalSearchServiceFactory::GetBrowserContextToUse(
     content::BrowserContext* context) const {
   Profile* const profile = Profile::FromBrowserContext(context);
   if (!profile || profile->IsSystemProfile()) {
@@ -54,9 +53,10 @@ content::BrowserContext* LocalSearchServiceProxyFactory::GetBrowserContextToUse(
   return context;
 }
 
-KeyedService* LocalSearchServiceProxyFactory::BuildServiceInstanceFor(
+KeyedService* LocalSearchServiceFactory::BuildServiceInstanceFor(
     content::BrowserContext* context) const {
-  return new LocalSearchServiceProxy(Profile::FromBrowserContext(context));
+  // Profile isn't needed.
+  return new LocalSearchService();
 }
 
 }  // namespace local_search_service
