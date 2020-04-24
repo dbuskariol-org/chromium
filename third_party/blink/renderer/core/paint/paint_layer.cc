@@ -262,6 +262,11 @@ PaintLayerCompositor* PaintLayer::Compositor() const {
 }
 
 void PaintLayer::ContentChanged(ContentChangeType change_type) {
+  // Content changes in CAP are reflected in changes to what is painted, nothing
+  // to do here.
+  if (RuntimeEnabledFeatures::CompositeAfterPaintEnabled())
+    return;
+
   // updateLayerCompositingState will query compositingReasons for accelerated
   // overflow scrolling.  This is tripped by
   // web_tests/compositing/content-changed-chicken-egg.html
