@@ -4891,6 +4891,12 @@ crbug.com/961439 virtual/legacy-samesite/external/wpt/cookies/samesite/setcookie
 crbug.com/961439 virtual/legacy-samesite/external/wpt/cookies/samesite/window-open-reload.https.html [ Skip ]
 crbug.com/961439 virtual/legacy-samesite/external/wpt/cookies/samesite/window-open.https.html [ Skip ]
 
+# Temporarily disable some tests that produce non-deterministic outputs.
+crbug.com/1074441 external/wpt/cookies/samesite/iframe-reload.https.html [ Skip ]
+crbug.com/1074441 external/wpt/cookies/samesite/iframe.https.html [ Skip ]
+crbug.com/1074441 virtual/legacy-samesite/external/wpt/cookies/samesite/iframe-reload.https.html?legacy-samesite [ Skip ]
+crbug.com/1074441 virtual/legacy-samesite/external/wpt/cookies/samesite/iframe.https.html?legacy-samesite [ Skip ]
+
 # Sheriff failures 2017-11-15
 crbug.com/785179 [ Win7 Debug ] http/tests/devtools/console/console-viewport-stick-to-bottom.js [ Skip ]
 
