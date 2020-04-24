@@ -3142,11 +3142,6 @@ const FeatureEntry kFeatureEntries[] = {
                                     kOmniboxOnFocusSuggestionsVariations,
                                     "OmniboxBundledExperimentV1")},
 
-    {"omnibox-rich-entity-suggestions",
-     flag_descriptions::kOmniboxRichEntitySuggestionsName,
-     flag_descriptions::kOmniboxRichEntitySuggestionsDescription, kOsAll,
-     FEATURE_VALUE_TYPE(omnibox::kOmniboxRichEntitySuggestions)},
-
     {"omnibox-preserve-default-match-against-async-update",
      flag_descriptions::kOmniboxPreserveDefaultMatchAgainstAsyncUpdateName,
      flag_descriptions::
