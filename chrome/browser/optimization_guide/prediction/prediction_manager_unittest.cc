@@ -537,6 +537,13 @@ class PredictionManagerTest
   DISALLOW_COPY_AND_ASSIGN(PredictionManagerTest);
 };
 
+// No support for Mac, Windows or ChromeOS.
+#if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_CHROMEOS)
+#define DISABLE_ON_WIN_MAC_CHROMEOS(x) DISABLED_##x
+#else
+#define DISABLE_ON_WIN_MAC_CHROMEOS(x) x
+#endif
+
 TEST_F(PredictionManagerTest,
        OptimizationTargetProvidedAtInitializationIsRegistered) {
   CreatePredictionManager(
@@ -591,16 +598,9 @@ TEST_F(PredictionManagerTest, OptimizationTargetNotRegisteredForNavigation) {
       0);
 }
 
-// TODO(https://crbug.com/1034433) Flaky on Mac10.12 and Windows.
-#if defined(OS_MACOSX) || defined(OS_WIN)
-#define MAYBE_NoPredictionModelForRegisteredOptimizationTarget \
-  DISABLED_NoPredictionModelForRegisteredOptimizationTarget
-#else
-#define MAYBE_NoPredictionModelForRegisteredOptimizationTarget \
-  NoPredictionModelForRegisteredOptimizationTarget
-#endif
 TEST_F(PredictionManagerTest,
-       MAYBE_NoPredictionModelForRegisteredOptimizationTarget) {
+       DISABLE_ON_WIN_MAC_CHROMEOS(
+           NoPredictionModelForRegisteredOptimizationTarget)) {
   base::HistogramTester histogram_tester;
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1053,16 +1053,9 @@ TEST_F(PredictionManagerTest,
       PredictionManagerModelStatus::kStoreAvailableModelNotLoaded, 1);
 }
 
-// TODO(https://crbug.com/1034433) Flaky on Mac10.12 and Windows.
-#if defined(OS_MACOSX) || defined(OS_WIN)
-#define MAYBE_ShouldTargetNavigationStoreUnavailableModelUnknown \
-  DISABLED_ShouldTargetNavigationStoreUnavailableModelUnknown
-#else
-#define MAYBE_ShouldTargetNavigationStoreUnavailableModelUnknown \
-  ShouldTargetNavigationStoreUnavailableModelUnknown
-#endif
 TEST_F(PredictionManagerTest,
-       MAYBE_ShouldTargetNavigationStoreUnavailableModelUnknown) {
+       DISABLE_ON_WIN_MAC_CHROMEOS(
+           ShouldTargetNavigationStoreUnavailableModelUnknown)) {
   base::HistogramTester histogram_tester;
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
@@ -1122,16 +1115,9 @@ TEST_F(PredictionManagerTest, UpdateModelForUnregisteredTarget) {
       "OptimizationGuide.PredictionManager.HostModelFeaturesStored", 0);
 }
 
-// TODO(https://crbug.com/1034433) Flaky on Mac10.12 and Windows.
-#if defined(OS_MACOSX) || defined(OS_WIN)
-#define MAYBE_UpdateModelWithUnsupportedOptimizationTarget \
-  DISABLED_UpdateModelWithUnsupportedOptimizationTarget
-#else
-#define MAYBE_UpdateModelWithUnsupportedOptimizationTarget \
-  UpdateModelWithUnsupportedOptimizationTarget
-#endif
-TEST_F(PredictionManagerTest,
-       MAYBE_UpdateModelWithUnsupportedOptimizationTarget) {
+TEST_F(
+    PredictionManagerTest,
+    DISABLE_ON_WIN_MAC_CHROMEOS(UpdateModelWithUnsupportedOptimizationTarget)) {
   std::unique_ptr<content::MockNavigationHandle> navigation_handle =
       CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
           GURL("https://foo.com"));
