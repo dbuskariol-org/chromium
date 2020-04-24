@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "base/auto_reset.h"
 #include "base/bind.h"
 #include "base/macros.h"
 #include "base/strings/stringprintf.h"
@@ -14,20 +15,27 @@
 #include "chrome/browser/chromeos/login/test/login_manager_mixin.h"
 #include "chrome/browser/chromeos/login/test/oobe_base_test.h"
 #include "chrome/browser/chromeos/login/test/oobe_screen_exit_waiter.h"
+#include "chrome/browser/chromeos/login/test/oobe_screen_waiter.h"
+#include "chrome/browser/chromeos/login/test/oobe_screens_utils.h"
 #include "chrome/browser/chromeos/login/test/session_manager_state_waiter.h"
 #include "chrome/browser/chromeos/login/test/test_condition_waiter.h"
 #include "chrome/browser/chromeos/login/ui/login_display_host.h"
+#include "chrome/browser/chromeos/login/users/fake_chrome_user_manager.h"
 #include "chrome/browser/chromeos/login/wizard_controller.h"
 #include "chrome/browser/lifetime/application_lifetime.h"
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/ui/webui/chromeos/login/gaia_screen_handler.h"
+#include "chrome/browser/ui/webui/chromeos/login/marketing_opt_in_screen_handler.h"
 #include "chrome/browser/ui/webui/chromeos/login/signin_screen_handler.h"
 #include "chrome/common/pref_names.h"
 #include "chrome/grit/generated_resources.h"
+#include "chrome/test/base/testing_profile_manager.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/constants/chromeos_switches.h"
 #include "components/prefs/pref_service.h"
 #include "components/sync/base/pref_names.h"
+#include "components/user_manager/scoped_user_manager.h"
+#include "components/user_manager/user_manager.h"
 #include "content/public/test/test_utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -91,12 +99,15 @@ std::string GetLocalizedConsentString(const int id) {
 
 class SyncConsentTest : public OobeBaseTest {
  public:
-  SyncConsentTest() = default;
+  SyncConsentTest() {
+    // To reuse existing wizard controller in the flow.
+    feature_list_.InitAndEnableFeature(
+        chromeos::features::kOobeScreensPriority);
+  }
   ~SyncConsentTest() override = default;
 
   void SetUpOnMainThread() override {
     OobeBaseTest::SetUpOnMainThread();
-    branded_build_override_ = WizardController::ForceBrandedBuildForTesting();
     if (features::IsSplitSettingsSyncEnabled()) {
       expected_consent_ids_ = {
           IDS_LOGIN_SYNC_CONSENT_SCREEN_TITLE,
@@ -120,6 +131,12 @@ class SyncConsentTest : public OobeBaseTest {
           IDS_LOGIN_SYNC_CONSENT_SCREEN_ACCEPT_AND_CONTINUE,
       };
     }
+
+    ReplaceExitCallback();
+
+    // Set up screen to be shown.
+    GetSyncConsentScreen()->SetProfileSyncDisabledByPolicyForTesting(false);
+    GetSyncConsentScreen()->SetProfileSyncEngineInitializedForTesting(true);
   }
 
   void TearDownOnMainThread() override {
@@ -143,12 +160,25 @@ class SyncConsentTest : public OobeBaseTest {
     test::OobeJS().CreateWaiter(condition)->Wait();
   }
 
+  void WaitForScreenShown() {
+    OobeScreenWaiter(SyncConsentScreenView::kScreenId).Wait();
+  }
+
+  void ReplaceExitCallback() {
+    original_callback_ =
+        GetSyncConsentScreen()->get_exit_callback_for_testing();
+    GetSyncConsentScreen()->set_exit_callback_for_testing(base::BindRepeating(
+        &SyncConsentTest::HandleScreenExit, base::Unretained(this)));
+  }
+
   void LoginToSyncConsentScreen() {
     login_manager_mixin_.LoginAsNewReguarUser();
     OobeScreenExitWaiter(GaiaView::kScreenId).Wait();
-    LoginDisplayHost::default_host()->StartWizard(
-        SyncConsentScreenView::kScreenId);
+    // No need to explicitly show the screen as it is the first one after login.
   }
+
+  base::Optional<SyncConsentScreen::Result> screen_result_;
+  base::HistogramTester histogram_tester_;
 
  protected:
   static SyncConsentScreen* GetSyncConsentScreen() {
@@ -164,9 +194,6 @@ class SyncConsentTest : public OobeBaseTest {
     ConsentRecordedWaiter consent_recorded_waiter;
     screen->SetDelegateForTesting(&consent_recorded_waiter);
 
-    screen->SetProfileSyncDisabledByPolicyForTesting(false);
-    screen->SetProfileSyncEngineInitializedForTesting(true);
-    screen->OnStateChanged(nullptr);
     test::OobeJS().CreateVisibilityWaiter(true, {"sync-consent-impl"})->Wait();
 
     if (features::IsSplitSettingsSyncEnabled()) {
@@ -194,6 +221,13 @@ class SyncConsentTest : public OobeBaseTest {
               consent_recorded_waiter.consent_description_ids_);
     EXPECT_EQ(expected_consent_confirmation_id,
               consent_recorded_waiter.consent_confirmation_id_);
+
+    WaitForScreenExit();
+    EXPECT_EQ(screen_result_.value(), SyncConsentScreen::Result::NEXT);
+    histogram_tester_.ExpectTotalCount(
+        "OOBE.StepCompletionTimeByExitReason.Sync-consent.Next", 1);
+    histogram_tester_.ExpectTotalCount("OOBE.StepCompletionTime.Sync-consent",
+                                       1);
   }
 
   std::vector<std::string> GetLocalizedExpectedConsentStrings() const {
@@ -204,17 +238,66 @@ class SyncConsentTest : public OobeBaseTest {
     return result;
   }
 
-  std::unique_ptr<base::AutoReset<bool>> branded_build_override_;
+  void WaitForScreenExit() {
+    if (screen_exited_)
+      return;
+
+    base::RunLoop run_loop;
+    screen_exit_callback_ = run_loop.QuitClosure();
+    run_loop.Run();
+  }
+
+ private:
+  void HandleScreenExit(SyncConsentScreen::Result result) {
+    ASSERT_FALSE(screen_exited_);
+    screen_exited_ = true;
+    screen_result_ = result;
+    original_callback_.Run(result);
+    if (screen_exit_callback_)
+      std::move(screen_exit_callback_).Run();
+  }
+
+  bool screen_exited_ = false;
+  base::RepeatingClosure screen_exit_callback_;
+  SyncConsentScreen::ScreenExitCallback original_callback_;
+
   std::vector<int> expected_consent_ids_;
   LoginManagerMixin login_manager_mixin_{&mixin_host_};
 
- private:
+  base::test::ScopedFeatureList feature_list_;
   DISALLOW_COPY_AND_ASSIGN(SyncConsentTest);
 };
 
+IN_PROC_BROWSER_TEST_F(SyncConsentTest, SkippedNotBrandedBuild) {
+  LoginToSyncConsentScreen();
+
+  WaitForScreenExit();
+  EXPECT_EQ(screen_result_.value(), SyncConsentScreen::Result::NOT_APPLICABLE);
+  histogram_tester_.ExpectTotalCount(
+      "OOBE.StepCompletionTimeByExitReason.Sync-consent.Next", 0);
+  histogram_tester_.ExpectTotalCount("OOBE.StepCompletionTime.Sync-consent", 0);
+}
+
+IN_PROC_BROWSER_TEST_F(SyncConsentTest, SkippedSyncDisabledByPolicy) {
+  // Set up screen and policy.
+  auto autoreset = SyncConsentScreen::ForceBrandedBuildForTesing();
+  SyncConsentScreen* screen = GetSyncConsentScreen();
+  screen->SetProfileSyncDisabledByPolicyForTesting(true);
+
+  LoginToSyncConsentScreen();
+
+  WaitForScreenExit();
+  EXPECT_EQ(screen_result_.value(), SyncConsentScreen::Result::NOT_APPLICABLE);
+  histogram_tester_.ExpectTotalCount(
+      "OOBE.StepCompletionTimeByExitReason.Sync-consent.Next", 0);
+  histogram_tester_.ExpectTotalCount("OOBE.StepCompletionTime.Sync-consent", 0);
+}
+
 IN_PROC_BROWSER_TEST_F(SyncConsentTest, SyncConsentRecorder) {
+  auto autoreset = SyncConsentScreen::ForceBrandedBuildForTesing();
   EXPECT_EQ(g_browser_process->GetApplicationLocale(), "en-US");
   LoginToSyncConsentScreen();
+  WaitForScreenShown();
   // For En-US we hardcode strings here to catch string issues too.
   std::vector<std::string> expected_consent_strings;
   if (features::IsSplitSettingsSyncEnabled()) {
@@ -301,6 +384,7 @@ class SyncConsentPolicyDisabledTest : public SyncConsentTest,
 
 IN_PROC_BROWSER_TEST_P(SyncConsentPolicyDisabledTest,
                        SyncConsentPolicyDisabled) {
+  auto autoreset = SyncConsentScreen::ForceBrandedBuildForTesing();
   LoginToSyncConsentScreen();
 
   SyncConsentScreen* screen = GetSyncConsentScreen();
@@ -321,7 +405,7 @@ INSTANTIATE_TEST_SUITE_P(All,
 // Tests of the consent dialog with the SplitSyncConsent flag enabled.
 class SyncConsentSplitSyncConsentTest : public SyncConsentTest {
  public:
-  SyncConsentSplitSyncConsentTest() {
+  SyncConsentSplitSyncConsentTest() : SyncConsentTest() {
     sync_feature_list_.InitWithFeatures({chromeos::features::kSplitSettingsSync,
                                          chromeos::features::kSplitSyncConsent},
                                         {});
@@ -339,6 +423,7 @@ class SyncConsentSplitSyncConsentTest : public SyncConsentTest {
 #define MAYBE_DefaultFlow DefaultFlow
 #endif
 IN_PROC_BROWSER_TEST_F(SyncConsentSplitSyncConsentTest, MAYBE_DefaultFlow) {
+  auto autoreset = SyncConsentScreen::ForceBrandedBuildForTesing();
   LoginToSyncConsentScreen();
 
   // OS sync is disabled by default.
@@ -385,6 +470,12 @@ IN_PROC_BROWSER_TEST_F(SyncConsentSplitSyncConsentTest, MAYBE_DefaultFlow) {
 
   // Toggle button is on-by-default, so OS sync should be on.
   EXPECT_TRUE(prefs->GetBoolean(syncer::prefs::kOsSyncFeatureEnabled));
+
+  WaitForScreenExit();
+  EXPECT_EQ(screen_result_.value(), SyncConsentScreen::Result::NEXT);
+  histogram_tester_.ExpectTotalCount(
+      "OOBE.StepCompletionTimeByExitReason.Sync-consent.Next", 1);
+  histogram_tester_.ExpectTotalCount("OOBE.StepCompletionTime.Sync-consent", 1);
 }
 
 // Flaky failures on sanitizer builds. https://crbug.com/1054377
@@ -394,6 +485,7 @@ IN_PROC_BROWSER_TEST_F(SyncConsentSplitSyncConsentTest, MAYBE_DefaultFlow) {
 #define MAYBE_UserCanDisable UserCanDisable
 #endif
 IN_PROC_BROWSER_TEST_F(SyncConsentSplitSyncConsentTest, MAYBE_UserCanDisable) {
+  auto autoreset = SyncConsentScreen::ForceBrandedBuildForTesing();
   LoginToSyncConsentScreen();
 
   // Wait for content to load.
@@ -421,6 +513,12 @@ IN_PROC_BROWSER_TEST_F(SyncConsentSplitSyncConsentTest, MAYBE_UserCanDisable) {
   // OS sync is off.
   PrefService* prefs = ProfileManager::GetPrimaryUserProfile()->GetPrefs();
   EXPECT_FALSE(prefs->GetBoolean(syncer::prefs::kOsSyncFeatureEnabled));
+
+  WaitForScreenExit();
+  EXPECT_EQ(screen_result_.value(), SyncConsentScreen::Result::NEXT);
+  histogram_tester_.ExpectTotalCount(
+      "OOBE.StepCompletionTimeByExitReason.Sync-consent.Next", 1);
+  histogram_tester_.ExpectTotalCount("OOBE.StepCompletionTime.Sync-consent", 1);
 }
 
 // Tests that the SyncConsent screen performs a timezone request so that
@@ -436,6 +534,7 @@ class SyncConsentTimezoneOverride : public SyncConsentTest {
 };
 
 IN_PROC_BROWSER_TEST_F(SyncConsentTimezoneOverride, MakesTimezoneRequest) {
+  auto autoreset = SyncConsentScreen::ForceBrandedBuildForTesing();
   LoginToSyncConsentScreen();
   EXPECT_EQ("TimezeonPropagationTest",
             g_browser_process->local_state()->GetString(
