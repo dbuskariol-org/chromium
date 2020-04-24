@@ -376,8 +376,6 @@ class CONTENT_EXPORT RenderWidget
   void SetHasTouchEventHandlers(bool has_handlers) override;
   void SetNeedsLowLatencyInput(bool) override;
   void SetNeedsUnbufferedInputForDebugger(bool) override;
-  void ZoomToFindInPageRectInMainFrame(
-      const blink::WebRect& rect_to_zoom) override;
   void SetPageScaleStateAndLimits(float page_scale_factor,
                                   bool is_pinch_gesture_active,
                                   float minimum,

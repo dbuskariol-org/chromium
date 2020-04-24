@@ -3065,14 +3065,6 @@ void RenderWidget::SetNeedsUnbufferedInputForDebugger(bool unbuffered) {
   input_event_queue_->SetNeedsUnbufferedInputForDebugger(unbuffered);
 }
 
-void RenderWidget::ZoomToFindInPageRectInMainFrame(
-    const blink::WebRect& rect_to_zoom) {
-  // Only oopif subframes should be sending this message.
-  DCHECK(!delegate_);
-  Send(new WidgetHostMsg_ZoomToFindInPageRectInMainFrame(routing_id(),
-                                                         rect_to_zoom));
-}
-
 void RenderWidget::SetPageScaleStateAndLimits(float page_scale_factor,
                                               bool is_pinch_gesture_active,
                                               float minimum,
