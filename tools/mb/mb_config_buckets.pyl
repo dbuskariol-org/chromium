@@ -675,7 +675,6 @@
     ],
     'android_binary_size': [
       'android',
-      'android_config_check',
       'chrome_with_codecs',
       'goma',
       'minimal_symbols',
@@ -2193,10 +2192,6 @@
         'android_without_codecs',
         'chrome_with_codecs'
       ],
-    },
-
-    'android_config_check': {
-      'gn_args': 'check_android_configuration = true'
     },
 
     'android_fastbuild': {
