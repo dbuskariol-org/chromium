@@ -1919,6 +1919,7 @@ if (!is_android) {
         "../browser/ui/views/autofill/autofill_popup_base_view_browsertest.cc",
         "../browser/ui/views/autofill/payments/card_unmask_prompt_view_tester_views.cc",
         "../browser/ui/views/autofill/payments/card_unmask_prompt_view_tester_views.h",
+        "../browser/ui/views/autofill/payments/credit_card_access_manager_browsertest.cc",
         "../browser/ui/views/autofill/payments/local_card_migration_browsertest.cc",
         "../browser/ui/views/autofill/payments/save_card_bubble_views_browsertest.cc",
         "../browser/ui/views/autofill/payments/virtual_card_selection_dialog_browsertest.cc",
