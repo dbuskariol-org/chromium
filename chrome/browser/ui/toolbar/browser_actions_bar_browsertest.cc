@@ -12,6 +12,7 @@
 #include "base/run_loop.h"
 #include "base/stl_util.h"
 #include "base/strings/stringprintf.h"
+#include "build/build_config.h"
 #include "chrome/browser/chrome_notification_types.h"
 #include "chrome/browser/extensions/api/extension_action/extension_action_api.h"
 #include "chrome/browser/extensions/extension_action.h"
@@ -431,8 +432,16 @@ IN_PROC_BROWSER_TEST_F(BrowserActionsBarBrowserTest,
 
 // Test removing an extension that has an popup showing.
 // Regression test for crbug.com/599467.
+// TODO(crbug.com/1074169): Test doesn't work on Win
+#if defined(OS_WIN)
+#define MAYBE_OverflowedBrowserActionPopupTestRemoval \
+  DISABLED_OverflowedBrowserActionPopupTestRemoval
+#else
+#define MAYBE_OverflowedBrowserActionPopupTestRemoval \
+  OverflowedBrowserActionPopupTestRemoval
+#endif
 IN_PROC_BROWSER_TEST_F(BrowserActionsBarBrowserTest,
-                       OverflowedBrowserActionPopupTestRemoval) {
+                       MAYBE_OverflowedBrowserActionPopupTestRemoval) {
   std::unique_ptr<ExtensionActionTestHelper> overflow_bar =
       browser_actions_bar()->CreateOverflowBar(browser());
 
