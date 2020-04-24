@@ -594,7 +594,7 @@
     const result = await sendTestMessage(
         {name: 'dispatchTabKey', /* key modifier */ shift: true});
     chrome.test.assertEq(
-        result, 'tabKeyDispatched', 'shift-Tab key dispatch failed');
+        result, 'tabKeyDispatched', 'shift-Tab key dispatch failure');
 
     // Check: the elider button drop-down menu should close.
     await remoteCall.waitForElementLost(appId, menu);
@@ -641,7 +641,8 @@
     // Dispatch a Tab key to the focused drop-down menu item.
     const result = await sendTestMessage(
         {name: 'dispatchTabKey', /* key modifier */ shift: false});
-    chrome.test.assertEq(result, 'tabKeyDispatched', 'Tab key dispatch failed');
+    chrome.test.assertEq(
+        result, 'tabKeyDispatched', 'Tab key dispatch failure');
 
     // Check: the elider button drop-down menu should close.
     await remoteCall.waitForElementLost(appId, menu);
