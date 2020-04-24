@@ -641,8 +641,18 @@ void PaintLayer::UpdateDescendantDependentFlags() {
     bool can_contain_abs =
         GetLayoutObject().CanContainAbsolutePositionObjects();
 
-    for (PaintLayer* child = FirstChild(); child;
-         child = child->NextSibling()) {
+    auto* first_child = [this]() -> PaintLayer* {
+      if (GetLayoutObject().PrePaintBlockedByDisplayLock(
+              DisplayLockLifecycleTarget::kChildren)) {
+        GetLayoutObject()
+            .GetDisplayLockContext()
+            ->NotifyCompositingDescendantDependentFlagUpdateWasBlocked();
+        return nullptr;
+      }
+      return FirstChild();
+    }();
+
+    for (PaintLayer* child = first_child; child; child = child->NextSibling()) {
       const ComputedStyle& child_style = child->GetLayoutObject().StyleRef();
 
       child->UpdateDescendantDependentFlags();
