@@ -5526,8 +5526,8 @@ interface Navigator
     method webkitGetUserMedia
 interface NavigatorUAData
     attribute @@toStringTag
+    getter brands
     getter mobile
-    getter uaList
     method constructor
     method getHighEntropyValues
 interface NetworkInformation : EventTarget
