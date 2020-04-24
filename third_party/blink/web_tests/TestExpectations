@@ -6607,9 +6607,6 @@ crbug.com/1064839 fast/hidpi/image-srcset-svg-canvas-2x.html [ Pass Failure ]
 crbug.com/1064839 fast/hidpi/image-srcset-svg-canvas.html [ Pass Failure ]
 crbug.com/1065335 [ Win ] fast/hidpi/image-srcset-relative-svg-canvas.html [ Pass Failure ]
 
-#Slight change to Skia displacement filter implementation.
-skbug.com/10139 css3/filters/effect-reference-zoom-hw.html [ Pass Failure ]
-
 # Sheriff 2020-03-31
 crbug.com/1065335 [ Win ] fast/hidpi/image-srcset-relative-svg-canvas-2x.html [ Pass Failure ]
 # Sheriff 2020-04-01
