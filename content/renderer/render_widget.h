@@ -398,7 +398,7 @@ class CONTENT_EXPORT RenderWidget
   // emulator. Returns 1 if there is no emulation active. Use this to position
   // things when the coordinates did not come from blink, such as from the mouse
   // position.
-  float GetEmulatorScale() const;
+  float GetEmulatorScale() const override;
 
   // Override point to obtain that the current input method state and caret
   // position.

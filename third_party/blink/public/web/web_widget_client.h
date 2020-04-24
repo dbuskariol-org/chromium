@@ -288,6 +288,9 @@ class WebWidgetClient {
   // Record the time it took for the first paint after the widget transitioned
   // from background inactive to active.
   virtual void RecordTimeToFirstActivePaint(base::TimeDelta duration) {}
+
+  // Returns a scale of the device emulator from the widget.
+  virtual float GetEmulatorScale() const { return 1.0f; }
 };
 
 }  // namespace blink
