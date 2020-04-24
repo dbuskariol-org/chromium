@@ -593,11 +593,12 @@ ci.android_builder(
     ),
 )
 
+# TODO(crbug/1032336): Remove this once all try builds are finished
 ci.android_builder(
-    name = 'android-lollipop-arm-rel',
+    name = 'android-kitkat-arm-rel',
     console_view_entry = ci.console_view_entry(
-        category = 'on_cq',
-        short_name = 'L',
+        category = 'depre',
+        short_name = 'K',
     ),
 )
 
