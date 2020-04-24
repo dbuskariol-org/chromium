@@ -1060,6 +1060,7 @@
         'CrostiniRootAccessAllowed',
         'CrostiniAnsiblePlaybook',
         'CrostiniArcAdbSideloadingAllowed',
+        'DeviceCrostiniArcAdbSideloadingAllowed',
       ]
     },
     {
@@ -16068,6 +16069,48 @@
       If the user's device is not managed, the availability of this functionality is additionally dependant on whether the user is the device owner.''',
     },
     {
+      'name': 'DeviceCrostiniArcAdbSideloadingAllowed',
+      'owners': ['janagrill@chromium.org', 'okalitova@'],
+      'device_only': True,
+      'future': True,
+      'type': 'int-enum',
+      'schema': {
+        'type': 'integer',
+        'enum': [ 0, 1, 2 ],
+      },
+      'items': [
+        {
+          'name': 'Disallow',
+          'value': 0,
+          'caption': '''Prevent users of this device from using ADB sideloading. If sideloading has been enabled before, switching to this setting leaves the device in a questionable state security-wise.''',
+        },
+        {
+          'name': 'DisallowWithPowerwash',
+          'value': 1,
+          'caption': '''Prevent users of this device from using ADB sideloading and force a device powerwash if sideloading was enabled before.''',
+        },
+        {
+          'name': 'AllowForAffiliatedUsers',
+          'value': 2,
+          'caption': '''Allow affiliated users of this device to use ADB sideloading.''',
+        },
+      ],
+      'supported_on': ['chrome_os:84-'],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'example_value': 1,
+      'id': 695,
+      'caption': '''Control usage of Android apps from untrusted sources for the device''',
+      'tags': ['system-security'],
+      'desc': '''This policy controls the usage of Android apps from untrusted sources (other than Google Play Store) for a device.
+
+      If the value for this policy is not set, then the functionality is treated as disallowed.
+
+      The availability of this functionality is additionally dependant on the corresponding user policy.''',
+    },
+    {
       'name': 'SafeBrowsingWhitelistDomains',
       'owners': ['bdea@chromium.org', 'nparker@chromium.org'],
       'type': 'list',
@@ -21181,6 +21224,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     'SystemProxySettings': 'system_proxy_settings.system_proxy_settings',
     'DeviceLoginScreenPrivacyScreenEnabled': 'device_login_screen_privacy_screen_enabled.enabled',
     'RequiredClientCertificateForDevice': 'required_client_certificate_for_device.required_client_certificate_for_device',
+    'DeviceCrostiniArcAdbSideloadingAllowed': 'device_crostini_arc_adb_sideloading_allowed.mode',
   },
   'policy_atomic_group_definitions': [
     {
@@ -21638,6 +21682,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 476, 546, 562, 569, 578],
-  'highest_id_currently_used': 694,
+  'highest_id_currently_used': 695,
   'highest_atomic_group_id_currently_used': 38
 }
