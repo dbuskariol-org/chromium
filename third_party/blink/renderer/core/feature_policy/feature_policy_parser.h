@@ -92,12 +92,6 @@ class CORE_EXPORT FeaturePolicyParser {
       Vector<String>* messages,
       const FeatureNameMap& feature_names,
       FeaturePolicyParserDelegate* delegate = nullptr);
-
-  // Used for LLVM fuzzer test
-  static void ParseValueForFuzzer(const String&);
-
- private:
-  static base::Optional<bool> ParseValueForType(const String& value_string);
 };
 // Returns true iff any declaration in the policy is for the given feature.
 CORE_EXPORT bool IsFeatureDeclared(mojom::blink::FeaturePolicyFeature,

@@ -168,35 +168,12 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
 
       for (wtf_size_t i = 1; i < tokens.size(); i++) {
         if (!tokens[i].ContainsOnlyASCIIOrEmpty()) {
-          messages->push_back("Non-ASCII characters in origin.");
+          if (messages)
+            messages->push_back("Non-ASCII characters in origin.");
           continue;
         }
 
-        // Break the token into an origin and a value. Either one may be
-        // omitted.
-        base::Optional<bool> value = true;
         String origin_string = tokens[i];
-        String value_string;
-        wtf_size_t param_start = origin_string.find('(');
-        if (param_start != kNotFound) {
-          // There is a value attached to this origin
-          if (!origin_string.EndsWith(')')) {
-            // The declaration is malformed if the value is not the last part of
-            // the string.
-            if (messages)
-              messages->push_back("Unable to parse policy value.");
-            continue;
-          }
-          value_string = origin_string.Substring(
-              param_start + 1, origin_string.length() - param_start - 2);
-          origin_string = origin_string.Substring(0, param_start);
-          value = ParseValueForType(value_string);
-          if (!value.has_value()) {
-            if (messages)
-              messages->push_back("Unable to parse policy value.");
-            continue;
-          }
-        }
 
         // Determine the target of the declaration. This may be a specific
         // origin, either explicitly written, or one of the special keywords
@@ -258,12 +235,12 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
 
         // Assign the value to the target origin(s).
         if (target_is_all) {
-          allowlist.fallback_value = *value;
-          allowlist.opaque_value = *value;
+          allowlist.fallback_value = true;
+          allowlist.opaque_value = true;
         } else if (target_is_opaque) {
-          allowlist.opaque_value = *value;
+          allowlist.opaque_value = true;
         } else {
-          values[target_origin] = *value;
+          values[target_origin] = true;
         }
       }
 
@@ -327,21 +304,6 @@ ParsedFeaturePolicy FeaturePolicyParser::Parse(
     }
   }
   return allowlists;
-}
-
-base::Optional<bool> FeaturePolicyParser::ParseValueForType(
-    const String& value_string) {
-  // recognize true, false
-  if (value_string.LowerASCII() == "true") {
-    return true;
-  } else if (value_string.LowerASCII() == "false") {
-    return false;
-  }
-  return base::nullopt;
-}
-
-void FeaturePolicyParser::ParseValueForFuzzer(const String& value_string) {
-  ParseValueForType(value_string);
 }
 
 bool IsFeatureDeclared(mojom::blink::FeaturePolicyFeature feature,

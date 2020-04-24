@@ -50,10 +50,6 @@ const char* const kValidPolicies[] = {
     "geolocation 'none' 'none' 'none'",
     "geolocation " ORIGIN_A " *",
     "fullscreen  " ORIGIN_A "; payment 'self'",
-    "fullscreen  " ORIGIN_A "(true)",
-    "fullscreen  " ORIGIN_A "(false)",
-    "fullscreen  " ORIGIN_A "(True)",
-    "fullscreen  " ORIGIN_A "(TRUE)",
     "fullscreen " ORIGIN_A "; payment *, geolocation 'self'"};
 
 const char* const kInvalidPolicies[] = {
@@ -66,10 +62,7 @@ const char* const kInvalidPolicies[] = {
     "geolocation https://example.com, https://a.com",
     "geolocation *, payment data://badorigin",
     "geolocation ws://xn--fd\xbcwsw3taaaaaBaa333aBBBBBBJBBJBBBt",
-    "fullscreen(true)",
-    "fullscreen  " ORIGIN_A "(notabool)",
-    "fullscreen " ORIGIN_A "(2.0)",
-    "fullscreen  " ORIGIN_A "()"};
+};
 
 // Names of UMA histograms
 const char kAllowlistAttributeHistogram[] =
@@ -323,134 +316,6 @@ TEST_F(FeaturePolicyParserTest, PolicyParsedCorrectlyForOpaqueOrigins) {
   EXPECT_EQ(1UL, parsed_policy[0].values.size());
   EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
       expected_url_origin_b_));
-}
-
-TEST_F(FeaturePolicyParserTest, BooleanPolicyParametersParsedCorrectly) {
-  Vector<String> messages;
-  ParsedFeaturePolicy parsed_policy;
-
-  // Test no origin specified, in a container policy context.
-  // (true)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen (true)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[0].values.size());
-  EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
-      expected_url_origin_b_));
-  EXPECT_TRUE(parsed_policy[0].values.begin()->second);
-
-  // Test no origin specified, in a header context.
-  // (true)
-  parsed_policy =
-      FeaturePolicyParser::Parse("fullscreen (true)", origin_a_.get(), nullptr,
-                                 &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[0].values.size());
-  EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
-      expected_url_origin_a_));
-  EXPECT_TRUE(parsed_policy[0].values.begin()->second);
-
-  // Test no origin specified, in a sandboxed container policy context.
-  // (true)
-  scoped_refptr<SecurityOrigin> opaque_origin =
-      SecurityOrigin::CreateUniqueOpaque();
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen (true)",
-                                             origin_a_.get(), opaque_origin,
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
-
-  // 'self'(true)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen 'self'(true)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(1UL, parsed_policy[0].values.size());
-  EXPECT_TRUE(parsed_policy[0].values.begin()->first.IsSameOriginWith(
-      expected_url_origin_a_));
-  EXPECT_TRUE(parsed_policy[0].values.begin()->second);
-
-  // *(false)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen *(false)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
-
-  // *(true)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen *(true)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_TRUE(parsed_policy[0].fallback_value);
-  EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
-}
-
-TEST_F(FeaturePolicyParserTest, RedundantBooleanItemsRemoved) {
-  Vector<String> messages;
-  ParsedFeaturePolicy parsed_policy;
-
-  // 'self'(true) *(true)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen 'self'(true) *(true)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_TRUE(parsed_policy[0].fallback_value);
-  EXPECT_TRUE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
-
-  // 'self'(false)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen 'self'(false)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
-
-  // (true)
-  parsed_policy = FeaturePolicyParser::Parse("fullscreen (false)",
-                                             origin_a_.get(), origin_b_.get(),
-                                             &messages, test_feature_name_map);
-  EXPECT_EQ(1UL, parsed_policy.size());
-  EXPECT_EQ(mojom::blink::FeaturePolicyFeature::kFullscreen,
-            parsed_policy[0].feature);
-  EXPECT_FALSE(parsed_policy[0].fallback_value);
-  EXPECT_FALSE(parsed_policy[0].opaque_value);
-  EXPECT_EQ(0UL, parsed_policy[0].values.size());
 }
 
 // Test histogram counting the use of feature policies in header.
