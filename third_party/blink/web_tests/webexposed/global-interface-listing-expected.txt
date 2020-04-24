@@ -11285,7 +11285,7 @@ interface XRAnchor
     attribute @@toStringTag
     getter anchorSpace
     method constructor
-    method detach
+    method delete
 interface XRAnchorSet
     attribute @@toStringTag
     getter size
