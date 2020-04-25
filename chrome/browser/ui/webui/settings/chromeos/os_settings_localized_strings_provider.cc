@@ -30,6 +30,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/apps_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/bluetooth_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/crostini_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/date_time_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/multidevice_strings_provider.h"
@@ -670,39 +671,6 @@ void AddSearchInSettingsStrings(content::WebUIDataSource* html_source) {
       base::FeatureList::IsEnabled(chromeos::features::kNewOsSettingsSearch));
 }
 
-void AddDateTimeStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"dateTimePageTitle", IDS_SETTINGS_DATE_TIME},
-      {"timeZone", IDS_SETTINGS_TIME_ZONE},
-      {"selectTimeZoneResolveMethod",
-       IDS_SETTINGS_SELECT_TIME_ZONE_RESOLVE_METHOD},
-      {"timeZoneGeolocation", IDS_SETTINGS_TIME_ZONE_GEOLOCATION},
-      {"timeZoneButton", IDS_SETTINGS_TIME_ZONE_BUTTON},
-      {"timeZoneSubpageTitle", IDS_SETTINGS_TIME_ZONE_SUBPAGE_TITLE},
-      {"setTimeZoneAutomaticallyDisabled",
-       IDS_SETTINGS_TIME_ZONE_DETECTION_MODE_DISABLED},
-      {"setTimeZoneAutomaticallyOn",
-       IDS_SETTINGS_TIME_ZONE_DETECTION_SET_AUTOMATICALLY},
-      {"setTimeZoneAutomaticallyOff",
-       IDS_SETTINGS_TIME_ZONE_DETECTION_CHOOSE_FROM_LIST},
-      {"setTimeZoneAutomaticallyIpOnlyDefault",
-       IDS_SETTINGS_TIME_ZONE_DETECTION_MODE_IP_ONLY_DEFAULT},
-      {"setTimeZoneAutomaticallyWithWiFiAccessPointsData",
-       IDS_SETTINGS_TIME_ZONE_DETECTION_MODE_SEND_WIFI_AP},
-      {"setTimeZoneAutomaticallyWithAllLocationInfo",
-       IDS_SETTINGS_TIME_ZONE_DETECTION_MODE_SEND_ALL_INFO},
-      {"use24HourClock", IDS_SETTINGS_USE_24_HOUR_CLOCK},
-      {"setDateTime", IDS_SETTINGS_SET_DATE_TIME},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  html_source->AddString(
-      "timeZoneSettingsLearnMoreURL",
-      base::ASCIIToUTF16(base::StringPrintf(
-          chrome::kTimeZoneSettingsLearnMoreURL,
-          g_browser_process->GetApplicationLocale().c_str())));
-}
-
 void AddAboutStrings(content::WebUIDataSource* html_source, Profile* profile) {
   // Top level About page strings.
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
@@ -866,6 +834,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       profile, /*delegate=*/this, profile->GetPrefs()));
   per_page_providers_.push_back(std::make_unique<PluginVmStringsProvider>(
       profile, /*delegate=*/this, profile->GetPrefs()));
+  per_page_providers_.push_back(
+      std::make_unique<DateTimeStringsProvider>(profile, /*delegate=*/this));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -883,7 +853,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddA11yStrings(html_source);
   AddChromeOSUserStrings(html_source, profile);
   AddCommonStrings(html_source, profile);
-  AddDateTimeStrings(html_source);
   AddFilesStrings(html_source);
   AddLanguagesStrings(html_source);
   AddPrintingStrings(html_source);
