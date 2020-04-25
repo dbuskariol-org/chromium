@@ -2085,6 +2085,8 @@ jumbo_static_library("ui") {
       "webui/settings/chromeos/privacy_strings_provider.h",
       "webui/settings/chromeos/quick_unlock_handler.cc",
       "webui/settings/chromeos/quick_unlock_handler.h",
+      "webui/settings/chromeos/reset_strings_provider.cc",
+      "webui/settings/chromeos/reset_strings_provider.h",
       "webui/settings/chromeos/search/search_concept.h",
       "webui/settings/chromeos/search/search_handler.cc",
       "webui/settings/chromeos/search/search_handler.h",

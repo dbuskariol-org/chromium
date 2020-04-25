@@ -41,6 +41,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/plugin_vm_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/printing_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/privacy_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/reset_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
@@ -51,7 +52,6 @@
 #include "chrome/common/webui_url_constants.h"
 #include "chrome/grit/chromium_strings.h"
 #include "chrome/grit/generated_resources.h"
-#include "chrome/grit/locale_settings.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/constants/chromeos_switches.h"
 #include "chromeos/strings/grit/chromeos_strings.h"
@@ -297,26 +297,6 @@ void AddAboutStrings(content::WebUIDataSource* html_source, Profile* profile) {
                          ManagementUI::GetManagementPageSubtitle(profile));
 }
 
-void AddResetStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"resetPageTitle", IDS_SETTINGS_RESET},
-      {"powerwashTitle", IDS_SETTINGS_FACTORY_RESET},
-      {"powerwashDialogTitle", IDS_SETTINGS_FACTORY_RESET_HEADING},
-      {"powerwashDialogButton", IDS_SETTINGS_RESTART},
-      {"powerwashButton", IDS_SETTINGS_FACTORY_RESET_BUTTON_LABEL},
-      {"powerwashDialogExplanation", IDS_SETTINGS_FACTORY_RESET_WARNING},
-      {"powerwashLearnMoreUrl", IDS_FACTORY_RESET_HELP_URL},
-      {"powerwashButtonRoleDescription",
-       IDS_SETTINGS_FACTORY_RESET_BUTTON_ROLE},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  html_source->AddString(
-      "powerwashDescription",
-      l10n_util::GetStringFUTF16(IDS_SETTINGS_FACTORY_RESET_DESCRIPTION,
-                                 l10n_util::GetStringUTF16(IDS_PRODUCT_NAME)));
-}
-
 }  // namespace
 
 OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
@@ -365,6 +345,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       std::make_unique<PrintingStringsProvider>(profile, /*delegate=*/this));
   per_page_providers_.push_back(std::make_unique<AccessibilityStringsProvider>(
       profile, /*delegate=*/this, profile->GetPrefs()));
+  per_page_providers_.push_back(
+      std::make_unique<ResetStringsProvider>(profile, /*delegate=*/this));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -381,7 +363,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddAboutStrings(html_source, profile);
   AddChromeOSUserStrings(html_source, profile);
   AddCommonStrings(html_source, profile);
-  AddResetStrings(html_source);
   AddSearchInSettingsStrings(html_source);
 
   policy_indicator::AddLocalizedStrings(html_source);
