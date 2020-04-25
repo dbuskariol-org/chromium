@@ -24,7 +24,6 @@
 #include "chrome/browser/chromeos/profiles/profile_helper.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/webui/chromeos/network_element_localized_strings_provider.h"
-#include "chrome/browser/ui/webui/chromeos/smb_shares/smb_shares_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/management_ui.h"
 #include "chrome/browser/ui/webui/policy_indicator_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/apps_strings_provider.h"
@@ -32,6 +31,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/crostini_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/date_time_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/files_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/languages_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/multidevice_strings_provider.h"
@@ -383,8 +383,6 @@ void AddChromeOSUserStrings(content::WebUIDataSource* html_source,
                          l10n_util::GetStringFUTF16(
                              IDS_SETTINGS_BROWSER_SETTINGS_BANNER,
                              base::ASCIIToUTF16(chrome::kChromeUISettingsURL)));
-  html_source->AddBoolean("isActiveDirectoryUser",
-                          user && user->IsActiveDirectoryUser());
   html_source->AddBoolean(
       "isSecondaryUser",
       user && user->GetAccountId() != primary_user->GetAccountId());
@@ -397,41 +395,6 @@ void AddChromeOSUserStrings(content::WebUIDataSource* html_source,
     html_source->AddString("ownerEmail",
                            user_manager->GetOwnerAccountId().GetUserEmail());
   }
-}
-
-void AddFilesStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"disconnectGoogleDriveAccount", IDS_SETTINGS_DISCONNECT_GOOGLE_DRIVE},
-      {"filesPageTitle", IDS_OS_SETTINGS_FILES},
-      {"smbSharesTitle", IDS_SETTINGS_DOWNLOADS_SMB_SHARES},
-      {"smbSharesLearnMoreLabel",
-       IDS_SETTINGS_DOWNLOADS_SMB_SHARES_LEARN_MORE_LABEL},
-      {"addSmbShare", IDS_SETTINGS_DOWNLOADS_SMB_SHARES_ADD_SHARE},
-      {"smbShareAddedSuccessfulMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_SUCCESS_MESSAGE},
-      {"smbShareAddedErrorMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_ERROR_MESSAGE},
-      {"smbShareAddedAuthFailedMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_AUTH_FAILED_MESSAGE},
-      {"smbShareAddedNotFoundMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_NOT_FOUND_MESSAGE},
-      {"smbShareAddedUnsupportedDeviceMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_UNSUPPORTED_DEVICE_MESSAGE},
-      {"smbShareAddedMountExistsMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_MOUNT_EXISTS_MESSAGE},
-      {"smbShareAddedTooManyMountsMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_TOO_MANY_MOUNTS_MESSAGE},
-      {"smbShareAddedInvalidURLMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_MOUNT_INVALID_URL_MESSAGE},
-      {"smbShareAddedInvalidSSOURLMessage",
-       IDS_SETTINGS_DOWNLOADS_SHARE_ADDED_MOUNT_INVALID_SSO_URL_MESSAGE},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  chromeos::smb_dialog::AddLocalizedStrings(html_source);
-
-  html_source->AddString("smbSharesLearnMoreURL",
-                         GetHelpUrlWithBoard(chrome::kSmbSharesLearnMoreURL));
 }
 
 void AddPrintingStrings(content::WebUIDataSource* html_source) {
@@ -765,6 +728,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       std::make_unique<PrivacyStringsProvider>(profile, /*delegate=*/this));
   per_page_providers_.push_back(
       std::make_unique<LanguagesStringsProvider>(profile, /*delegate=*/this));
+  per_page_providers_.push_back(
+      std::make_unique<FilesStringsProvider>(profile, /*delegate=*/this));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -782,7 +747,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddA11yStrings(html_source);
   AddChromeOSUserStrings(html_source, profile);
   AddCommonStrings(html_source, profile);
-  AddFilesStrings(html_source);
   AddPrintingStrings(html_source);
   AddResetStrings(html_source);
   AddSearchInSettingsStrings(html_source);
