@@ -1148,8 +1148,9 @@ void Display::SetPreferredFrameInterval(base::TimeDelta interval) {
 }
 
 base::TimeDelta Display::GetPreferredFrameIntervalForFrameSinkId(
-    const FrameSinkId& id) {
-  return client_->GetPreferredFrameIntervalForFrameSinkId(id);
+    const FrameSinkId& id,
+    mojom::CompositorFrameSinkType* type) {
+  return client_->GetPreferredFrameIntervalForFrameSinkId(id, type);
 }
 
 void Display::SetSupportedFrameIntervals(
