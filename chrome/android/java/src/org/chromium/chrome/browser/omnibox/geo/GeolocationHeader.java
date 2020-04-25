@@ -403,7 +403,7 @@ public class GeolocationHeader {
                 // could be called for an origin that isn't the default search engine. Otherwise
                 // remove this line.
                 WebsitePreferenceBridge.isPermissionControlledByDSE(
-                        ContentSettingsType.GEOLOCATION, uri.toString(), profile.isOffTheRecord())
+                        profile, ContentSettingsType.GEOLOCATION, uri.toString())
                 && locationContentSettingForUrl(profile, uri) == ContentSettingValues.ALLOW;
         return !enabled;
     }

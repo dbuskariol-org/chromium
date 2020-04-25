@@ -137,8 +137,10 @@ public class PermissionInfoTest {
     public void testResetDSENotifications() throws Throwable {
         // On Android O+ we need to clear notification channels so they don't interfere with the
         // test.
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> WebsitePreferenceBridgeJni.get().resetNotificationsSettingsForTest());
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            WebsitePreferenceBridgeJni.get().resetNotificationsSettingsForTest(
+                    Profile.getLastUsedRegularProfile());
+        });
 
         // Resetting the DSE notifications permission should change it to ALLOW.
         boolean incognito = false;
@@ -150,8 +152,10 @@ public class PermissionInfoTest {
                 ContentSettingValues.ALLOW, getNotifications(DSE_ORIGIN, null, incognito));
 
         // Resetting in incognito should not have the same behavior.
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> WebsitePreferenceBridgeJni.get().resetNotificationsSettingsForTest());
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            WebsitePreferenceBridgeJni.get().resetNotificationsSettingsForTest(
+                    Profile.getLastUsedRegularProfile());
+        });
         incognito = true;
         setNotifications(DSE_ORIGIN, null, ContentSettingValues.BLOCK, incognito);
         Assert.assertEquals(
@@ -161,8 +165,10 @@ public class PermissionInfoTest {
                 ContentSettingValues.ASK, getNotifications(DSE_ORIGIN, null, incognito));
 
         // // Resetting a different top level origin should not have the same behavior
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> WebsitePreferenceBridgeJni.get().resetNotificationsSettingsForTest());
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            WebsitePreferenceBridgeJni.get().resetNotificationsSettingsForTest(
+                    Profile.getLastUsedRegularProfile());
+        });
         incognito = false;
         setNotifications(OTHER_ORIGIN, null, ContentSettingValues.BLOCK, incognito);
         Assert.assertEquals(

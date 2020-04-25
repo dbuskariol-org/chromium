@@ -506,12 +506,12 @@ public class SearchEngineAdapter extends BaseAdapter
         boolean notificationsAllowed =
                 settings.getContentSetting(profile) == ContentSettingValues.ALLOW
                 && WebsitePreferenceBridge.isPermissionControlledByDSE(
-                        ContentSettingsType.NOTIFICATIONS, url, false);
+                        profile, ContentSettingsType.NOTIFICATIONS, url);
 
         settings = new PermissionInfo(PermissionInfo.Type.GEOLOCATION, url, null, false);
         boolean locationAllowed = settings.getContentSetting(profile) == ContentSettingValues.ALLOW
                 && WebsitePreferenceBridge.isPermissionControlledByDSE(
-                        ContentSettingsType.GEOLOCATION, url, false);
+                        profile, ContentSettingsType.GEOLOCATION, url);
 
         boolean systemLocationAllowed =
                 LocationUtils.getInstance().isSystemLocationSettingEnabled();
