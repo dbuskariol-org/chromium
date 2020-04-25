@@ -38,6 +38,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/people_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/personalization_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/plugin_vm_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/privacy_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
@@ -782,22 +783,6 @@ void AddResetStrings(content::WebUIDataSource* html_source) {
                                  l10n_util::GetStringUTF16(IDS_PRODUCT_NAME)));
 }
 
-void AddPrivacyStrings(content::WebUIDataSource* html_source) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"privacyPageTitle", IDS_SETTINGS_PRIVACY},
-      {"enableLogging", IDS_SETTINGS_ENABLE_LOGGING_TOGGLE_TITLE},
-      {"enableLoggingDesc", IDS_SETTINGS_ENABLE_LOGGING_TOGGLE_DESC},
-      {"wakeOnWifi", IDS_SETTINGS_WAKE_ON_WIFI_DESCRIPTION},
-      {"enableContentProtectionAttestation",
-       IDS_SETTINGS_ENABLE_CONTENT_PROTECTION_ATTESTATION},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-
-  html_source->AddString("syncAndGoogleServicesLearnMoreURL",
-                         chrome::kSyncAndGoogleServicesLearnMoreURL);
-  ::settings::AddPersonalizationOptionsStrings(html_source);
-}
-
 }  // namespace
 
 OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
@@ -836,6 +821,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       profile, /*delegate=*/this, profile->GetPrefs()));
   per_page_providers_.push_back(
       std::make_unique<DateTimeStringsProvider>(profile, /*delegate=*/this));
+  per_page_providers_.push_back(
+      std::make_unique<PrivacyStringsProvider>(profile, /*delegate=*/this));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -856,7 +843,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddFilesStrings(html_source);
   AddLanguagesStrings(html_source);
   AddPrintingStrings(html_source);
-  AddPrivacyStrings(html_source);
   AddResetStrings(html_source);
   AddSearchInSettingsStrings(html_source);
 

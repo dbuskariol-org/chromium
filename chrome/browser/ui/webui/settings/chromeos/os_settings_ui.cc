@@ -352,10 +352,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   }
 
   html_source->AddBoolean(
-      "privacySettingsRedesignEnabled",
-      base::FeatureList::IsEnabled(::features::kPrivacySettingsRedesign));
-
-  html_source->AddBoolean(
       "userCannotManuallyEnterPassword",
       !chromeos::password_visibility::AccountHasUserFacingPassword(
           chromeos::ProfileHelper::Get()
