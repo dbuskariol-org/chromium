@@ -227,6 +227,7 @@ void FrameSequenceTracker::ReportSubmitFrame(
   // not going to be presented, and thus terminate this tracker.
   const uint32_t frames_to_terminate_tracker = 3;
   if (termination_status_ == TerminationStatus::kScheduledForTermination &&
+      last_submitted_frame_ != 0 &&
       viz::FrameTokenGT(frame_token,
                         last_submitted_frame_ + frames_to_terminate_tracker)) {
     termination_status_ = TerminationStatus::kReadyForTermination;
