@@ -9,9 +9,7 @@
 
 #include "android_webview/browser/metrics/aw_stability_metrics_provider.h"
 #include "android_webview/browser_jni_headers/AwMetricsServiceClient_jni.h"
-#include "android_webview/common/aw_features.h"
 #include "base/android/jni_android.h"
-#include "base/feature_list.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/no_destructor.h"
 #include "components/metrics/metrics_pref_names.h"
@@ -95,10 +93,6 @@ int AwMetricsServiceClient::GetPackageNameLimitRatePerMille() {
   return kPackageNameLimitRatePerMille;
 }
 
-bool AwMetricsServiceClient::ShouldWakeMetricsService() {
-  return base::FeatureList::IsEnabled(features::kWebViewWakeMetricsService);
-}
-
 void AwMetricsServiceClient::OnAppStateChanged(
     WebViewAppStateObserver::State state) {
   // To match MetricsService's expectation,
@@ -130,11 +124,9 @@ void AwMetricsServiceClient::OnAppStateChanged(
 
 void AwMetricsServiceClient::RegisterAdditionalMetricsProviders(
     metrics::MetricsService* service) {
-  if (base::FeatureList::IsEnabled(features::kWebViewWakeMetricsService)) {
-    service->RegisterMetricsProvider(
-        std::make_unique<android_webview::AwStabilityMetricsProvider>(
-            pref_service()));
-  }
+  service->RegisterMetricsProvider(
+      std::make_unique<android_webview::AwStabilityMetricsProvider>(
+          pref_service()));
   delegate_->RegisterAdditionalMetricsProviders(service);
 }
 
