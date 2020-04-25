@@ -1995,6 +1995,8 @@ jumbo_static_library("ui") {
       "webui/help/help_utils_chromeos.h",
       "webui/help/version_updater_chromeos.cc",
       "webui/help/version_updater_chromeos.h",
+      "webui/settings/chromeos/about_page_strings_provider.cc",
+      "webui/settings/chromeos/about_page_strings_provider.h",
       "webui/settings/chromeos/accessibility_handler.cc",
       "webui/settings/chromeos/accessibility_handler.h",
       "webui/settings/chromeos/accessibility_strings_provider.cc",
