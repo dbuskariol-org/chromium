@@ -36,6 +36,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_features_util.h"
 #include "chrome/browser/ui/webui/settings/chromeos/people_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/personalization_strings_provider.h"
+#include "chrome/browser/ui/webui/settings/chromeos/plugin_vm_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
@@ -425,35 +426,6 @@ void AddLanguagesStrings(content::WebUIDataSource* html_source) {
   html_source->AddString(
       "languagesLearnMoreURL",
       base::ASCIIToUTF16(chrome::kLanguageSettingsLearnMoreUrl));
-}
-
-void AddPluginVmStrings(content::WebUIDataSource* html_source,
-                        Profile* profile) {
-  static constexpr webui::LocalizedString kLocalizedStrings[] = {
-      {"pluginVmPageTitle", IDS_SETTINGS_PLUGIN_VM_PAGE_TITLE},
-      {"pluginVmPageLabel", IDS_SETTINGS_PLUGIN_VM_PAGE_LABEL},
-      {"pluginVmPageSubtext", IDS_SETTINGS_PLUGIN_VM_PAGE_SUBTEXT},
-      {"pluginVmPageEnable", IDS_SETTINGS_TURN_ON},
-      {"pluginVmPrinterAccess", IDS_SETTINGS_PLUGIN_VM_PRINTER_ACCESS},
-      {"pluginVmSharedPaths", IDS_SETTINGS_PLUGIN_VM_SHARED_PATHS},
-      {"pluginVmSharedPathsListHeading",
-       IDS_SETTINGS_PLUGIN_VM_SHARED_PATHS_LIST_HEADING},
-      {"pluginVmSharedPathsInstructionsAdd",
-       IDS_SETTINGS_PLUGIN_VM_SHARED_PATHS_INSTRUCTIONS_ADD},
-      {"pluginVmSharedPathsInstructionsRemove",
-       IDS_SETTINGS_PLUGIN_VM_SHARED_PATHS_INSTRUCTIONS_REMOVE},
-      {"pluginVmSharedPathsRemoveSharing",
-       IDS_SETTINGS_PLUGIN_VM_SHARED_PATHS_REMOVE_SHARING},
-      {"pluginVmRemove", IDS_SETTINGS_PLUGIN_VM_REMOVE_LABEL},
-      {"pluginVmRemoveButton", IDS_SETTINGS_PLUGIN_VM_REMOVE_BUTTON},
-      {"pluginVmRemoveConfirmationDialogMessage",
-       IDS_SETTINGS_PLUGIN_VM_CONFIRM_REMOVE_DIALOG_BODY},
-      {"pluginVmCameraAccessTitle", IDS_SETTINGS_PLUGIN_VM_CAMERA_ACCESS_TITLE},
-  };
-  AddLocalizedStringsBulk(html_source, kLocalizedStrings);
-  html_source->AddBoolean("showPluginVmCamera",
-                          base::FeatureList::IsEnabled(
-                              chromeos::features::kPluginVmShowCameraSetting));
 }
 
 void AddChromeOSUserStrings(content::WebUIDataSource* html_source,
@@ -892,6 +864,8 @@ OsSettingsLocalizedStringsProvider::OsSettingsLocalizedStringsProvider(
       profile, /*delegate=*/this, profile->GetPrefs(), arc_app_list_prefs));
   per_page_providers_.push_back(std::make_unique<CrostiniStringsProvider>(
       profile, /*delegate=*/this, profile->GetPrefs()));
+  per_page_providers_.push_back(std::make_unique<PluginVmStringsProvider>(
+      profile, /*delegate=*/this, profile->GetPrefs()));
 }
 
 OsSettingsLocalizedStringsProvider::~OsSettingsLocalizedStringsProvider() =
@@ -912,7 +886,6 @@ void OsSettingsLocalizedStringsProvider::AddOsLocalizedStrings(
   AddDateTimeStrings(html_source);
   AddFilesStrings(html_source);
   AddLanguagesStrings(html_source);
-  AddPluginVmStrings(html_source, profile);
   AddPrintingStrings(html_source);
   AddPrivacyStrings(html_source);
   AddResetStrings(html_source);

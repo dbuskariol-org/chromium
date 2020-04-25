@@ -304,14 +304,8 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::WallpaperHandler>(web_ui()));
 
-  // If |!allow_plugin_vm| we still want to |show_plugin_vm| if the VM image is
-  // on disk, so that users are still able to delete the image at will.
-  const bool allow_plugin_vm = plugin_vm::IsPluginVmAllowedForProfile(profile);
-  const bool show_plugin_vm =
-      allow_plugin_vm ||
-      profile->GetPrefs()->GetBoolean(plugin_vm::prefs::kPluginVmImageExists);
-
-  if (show_plugin_vm) {
+  if (plugin_vm::IsPluginVmAllowedForProfile(profile) ||
+      profile->GetPrefs()->GetBoolean(plugin_vm::prefs::kPluginVmImageExists)) {
     web_ui()->AddMessageHandler(
         std::make_unique<chromeos::settings::PluginVmHandler>(profile));
   }
@@ -369,9 +363,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
               ->GetAccountId()));
   html_source->AddBoolean("hasInternalStylus",
                           ash::stylus_utils::HasInternalStylus());
-
-  html_source->AddBoolean("allowPluginVm", allow_plugin_vm);
-  html_source->AddBoolean("showPluginVm", show_plugin_vm);
 
   html_source->AddBoolean("isDemoSession",
                           chromeos::DemoSession::IsDeviceInDemoMode());
