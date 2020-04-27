@@ -99,7 +99,9 @@ class OptimizationGuideKeyedService
       optimization_guide::OptimizationGuideDecisionCallback callback) override;
 
   // Adds hints for a URL with provided metadata to the optimziation guide.
-  // For testing purposes only.
+  // For testing purposes only. This will flush any callbacks for |url| that
+  // were registered via |CanApplyOptimizationAsync|. If no applicable callbacks
+  // were registered, this will just add the hint for later use.
   void AddHintForTesting(
       const GURL& url,
       optimization_guide::proto::OptimizationType optimization_type,
