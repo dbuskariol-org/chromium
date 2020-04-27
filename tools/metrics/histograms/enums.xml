@@ -37884,6 +37884,8 @@ from previous Chrome versions.
   <int value="-2043128632" label="enable-tab-switcher-in-document-mode"/>
   <int value="-2040471724" label="CrOSComponent:disabled"/>
   <int value="-2040115518" label="load-media-router-component-extension"/>
+  <int value="-2039439354"
+      label="OmniboxOnDeviceHeadProviderIncognito:disabled"/>
   <int value="-2039343702"
       label="KeepAliveRendererForKeepaliveRequests:enabled"/>
   <int value="-2036149591" label="FaviconsFromWebManifest:disabled"/>
@@ -38296,6 +38298,8 @@ from previous Chrome versions.
   <int value="-1571841513" label="enable-devtools-experiments"/>
   <int value="-1568559155" label="WebSocketHandshakeReuseConnection:enabled"/>
   <int value="-1567727398" label="DesktopPWAsWithoutExtensions:disabled"/>
+  <int value="-1564232131"
+      label="OmniboxOnDeviceHeadProviderNonIncognito:enabled"/>
   <int value="-1561360053" label="LauncherSettingsSearch:disabled"/>
   <int value="-1561252720" label="AutofillCreditCardUploadFeedback:disabled"/>
   <int value="-1560729847" label="AutofillCacheQueryResponses:enabled"/>
@@ -39220,6 +39224,7 @@ from previous Chrome versions.
   <int value="-536230323" label="SingleClickAutofill:disabled"/>
   <int value="-535662704" label="BundledConnectionHelp:enabled"/>
   <int value="-535208779" label="enable-native-cups"/>
+  <int value="-534470003" label="OmniboxOnDeviceHeadProviderIncognito:enabled"/>
   <int value="-534221085" label="LazyImageLoading:disabled"/>
   <int value="-533552313"
       label="AutofillUpstreamEditableCardholderName:enabled"/>
@@ -39456,7 +39461,6 @@ from previous Chrome versions.
   <int value="-250543540" label="DeferAllScript:enabled"/>
   <int value="-249415830" label="FilteringScrollPrediction:disabled"/>
   <int value="-248223420" label="AutofillKeyboardAccessory:disabled"/>
-  <int value="-243323793" label="OmniboxOnDeviceHeadProvider:enabled"/>
   <int value="-241353344" label="MidiManagerWinrt:disabled"/>
   <int value="-240531943" label="ContextualSearchRankerQuery:disabled"/>
   <int value="-239616243" label="HighDynamicRange:enabled"/>
@@ -39718,7 +39722,6 @@ from previous Chrome versions.
   <int value="44088203" label="ExpensiveBackgroundTimerThrottling:enabled"/>
   <int value="44240181" label="SharingQRCodeGenerator:disabled"/>
   <int value="48159177" label="reduced-referrer-granularity"/>
-  <int value="49113130" label="OmniboxOnDeviceHeadProvider:disabled"/>
   <int value="51793504" label="protect-sync-credential-on-reauth:disabled"/>
   <int value="52368742" label="enable-pixel-canvas-recording:disabled"/>
   <int value="54258707" label="NewTabstripAnimation:enabled"/>
@@ -40987,6 +40990,8 @@ from previous Chrome versions.
   <int value="1563255033" label="memlog-stack-mode"/>
   <int value="1567839560"
       label="ChromeHomePersonalizedOmniboxSuggestions:disabled"/>
+  <int value="1568172566"
+      label="OmniboxOnDeviceHeadProviderNonIncognito:disabled"/>
   <int value="1570178909" label="NewOverviewLayout:enabled"/>
   <int value="1571998166" label="DetectingHeavyPages:disabled"/>
   <int value="1575978252" label="PasswordLeakDetection:enabled"/>
