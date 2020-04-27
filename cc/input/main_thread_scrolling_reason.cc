@@ -50,8 +50,6 @@ void MainThreadScrollingReason::AddToTracedValue(
     traced_value.AppendString("Background is not opaque in rect and LCD text");
   if (reasons & kHasClipRelatedProperty)
     traced_value.AppendString("Has clip related property");
-  if (reasons & kHasBoxShadowFromNonRootLayer)
-    traced_value.AppendString("Has box shadow from non-root layer");
   if (reasons & kIsNotStackingContextAndLCDText)
     traced_value.AppendString("Is not stacking context and LCD text");
 

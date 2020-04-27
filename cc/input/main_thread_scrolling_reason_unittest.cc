@@ -23,7 +23,6 @@ TEST_F(MainThreadScrollingReasonTest, AsText) {
       "Has transform and LCD text, "
       "Background is not opaque in rect and LCD text, "
       "Has clip related property, "
-      "Has box shadow from non-root layer, "
       "Is not stacking context and LCD text, "
       "Non fast scrollable region, "
       "Failed hit test, "
