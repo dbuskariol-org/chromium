@@ -1604,7 +1604,8 @@ message SetFormFieldValueProto {
 
 // Asks the password manager to generate a suitable password for |element|. The
 // generated password can be filled in subsequent SetFormFieldValueProto
-// actions.
+// actions. Generated password will be presaved to password store,
+// login details need to be available in the client memory for this action.
 message GeneratePasswordForFormFieldProto {
   // A reference to the form element for which to generate a password.
   optional ElementReferenceProto element = 1;
