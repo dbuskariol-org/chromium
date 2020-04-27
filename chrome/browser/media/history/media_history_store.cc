@@ -914,4 +914,24 @@ void MediaHistoryStore::ResetMediaFeed(const int64_t feed_id,
   DB()->CommitTransaction();
 }
 
+void MediaHistoryStore::DeleteMediaFeed(const int64_t feed_id) {
+  if (!CanAccessDatabase())
+    return;
+
+  if (!feeds_table_)
+    return;
+
+  if (!DB()->BeginTransaction()) {
+    LOG(ERROR) << "Failed to begin the transaction.";
+    return;
+  }
+
+  if (!feeds_table_->Delete(feed_id)) {
+    DB()->RollbackTransaction();
+    return;
+  }
+
+  DB()->CommitTransaction();
+}
+
 }  // namespace media_history

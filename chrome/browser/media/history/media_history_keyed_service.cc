@@ -416,4 +416,14 @@ void MediaHistoryKeyedService::ResetMediaFeed(
   }
 }
 
+void MediaHistoryKeyedService::DeleteMediaFeed(const int64_t feed_id,
+                                               base::OnceClosure callback) {
+  if (auto* store = store_->GetForDelete()) {
+    store->db_task_runner_->PostTaskAndReply(
+        FROM_HERE,
+        base::BindOnce(&MediaHistoryStore::DeleteMediaFeed, store, feed_id),
+        std::move(callback));
+  }
+}
+
 }  // namespace media_history

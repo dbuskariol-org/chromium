@@ -181,6 +181,8 @@ class MediaHistoryStore : public base::RefCountedThreadSafe<MediaHistoryStore> {
 
   void MarkMediaFeedItemAsClicked(const int64_t& feed_item_id);
 
+  void DeleteMediaFeed(const int64_t feed_id);
+
  private:
   friend class base::RefCountedThreadSafe<MediaHistoryStore>;
 

@@ -112,6 +112,24 @@ class MediaFeedsServiceTest : public ChromeRenderViewHostTestHarness {
     return out;
   }
 
+  std::vector<media_feeds::mojom::MediaFeedPtr> GetMediaFeedsSync(
+      const media_history::MediaHistoryKeyedService::GetMediaFeedsRequest&
+          request =
+              media_history::MediaHistoryKeyedService::GetMediaFeedsRequest()) {
+    base::RunLoop run_loop;
+    std::vector<media_feeds::mojom::MediaFeedPtr> out;
+
+    GetMediaHistoryService()->GetMediaFeeds(
+        request, base::BindLambdaForTesting(
+                     [&](std::vector<media_feeds::mojom::MediaFeedPtr> rows) {
+                       out = std::move(rows);
+                       run_loop.Quit();
+                     }));
+
+    run_loop.Run();
+    return out;
+  }
+
   void SetSafeSearchEnabled(bool enabled) {
     profile()->GetPrefs()->SetBoolean(prefs::kMediaFeedsSafeSearchEnabled,
                                       enabled);
@@ -129,6 +147,14 @@ class MediaFeedsServiceTest : public ChromeRenderViewHostTestHarness {
         feed_url, network::URLLoaderCompletionStatus(net::OK),
         network::CreateURLResponseHead(net::HttpStatusCode::HTTP_OK),
         response_body);
+    return rv;
+  }
+
+  bool RespondToPendingFeedFetchWithStatus(const GURL& feed_url,
+                                           net::HttpStatusCode code) {
+    bool rv = url_loader_factory_.SimulateResponseForPendingRequest(
+        feed_url, network::URLLoaderCompletionStatus(net::OK),
+        network::CreateURLResponseHead(code), std::string());
     return rv;
   }
 
@@ -766,12 +792,13 @@ TEST_F(MediaFeedsServiceTest, FetcherShouldTriggerSafeSearch) {
   }
 }
 
-TEST_F(MediaFeedsServiceTest, PrefChangeShouldTriggerSafeSearchCheck) {
+TEST_F(MediaFeedsServiceTest, FetcherShouldDeleteFeedIfGone) {
+  const GURL feed_url("https://www.google.com/feed");
+
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
-  GetMediaHistoryService()->DiscoverMediaFeed(
-      GURL("https://www.google.com/feed"));
+  GetMediaHistoryService()->DiscoverMediaFeed(feed_url);
   WaitForDB();
 
   // Store some media feed items.
@@ -821,15 +848,6 @@ TEST_F(MediaFeedsServiceTest, PrefChangeShouldTriggerSafeSearchCheck) {
       std::vector<media_session::MediaImage>(), "test",
       std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
-
-  {
-    // Check there are pending items.
-    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(3u, pending_items.size());
-  }
-
-  // Disable the Safe Search pref. This should not trigger a check.
-  SetSafeSearchEnabled(false);
 
   {
     // Check there are pending items.

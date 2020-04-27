@@ -266,6 +266,12 @@ void MediaFeedsService::OnFetchResponse(
     base::OnceClosure callback,
     const schema_org::improved::mojom::EntityPtr& response,
     MediaFeedsFetcher::Status status) {
+  if (status == MediaFeedsFetcher::Status::kGone) {
+    GetMediaHistoryService()->DeleteMediaFeed(feed_id, std::move(callback));
+    fetchers_.erase(feed_id);
+    return;
+  }
+
   std::vector<media_session::MediaImage> logos;
   std::string display_name;
   auto feed_items = GetMediaFeeds(response, &logos, &display_name);

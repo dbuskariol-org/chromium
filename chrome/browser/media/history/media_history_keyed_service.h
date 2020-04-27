@@ -199,6 +199,9 @@ class MediaHistoryKeyedService : public KeyedService,
   void ResetMediaFeed(const int64_t feed_id,
                       media_feeds::mojom::ResetReason reason);
 
+  // Deletes the Media Feed and runs the callback.
+  void DeleteMediaFeed(const int64_t feed_id, base::OnceClosure callback);
+
  private:
   class StoreHolder;
 

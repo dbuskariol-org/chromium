@@ -2141,4 +2141,79 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeed) {
   }
 }
 
+TEST_P(MediaHistoryStoreFeedsTest, DeleteMediaFeed) {
+  service()->DiscoverMediaFeed(GURL("https://www.google.com/feed"));
+  service()->DiscoverMediaFeed(GURL("https://www.google.co.uk/feed"));
+  WaitForDB();
+
+  // If we are read only we should use -1 as a placeholder feed id because the
+  // feed will not have been stored. This is so we can run the rest of the test
+  // to ensure a no-op.
+  const int feed_id_a = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
+  const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
+      /* was_fetched_from_cache= */ false,
+      std::vector<media_session::MediaImage>(), std::string(),
+      std::vector<url::Origin>(), base::DoNothing());
+  WaitForDB();
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id_b, GetAltExpectedItems(),
+      media_feeds::mojom::FetchResult::kFailedNetworkError,
+      /* was_fetched_from_cache= */ false,
+      std::vector<media_session::MediaImage>(), std::string(),
+      std::vector<url::Origin>(), base::DoNothing());
+  WaitForDB();
+
+  {
+    // Check the feed and items are stored.
+    auto stats = GetStatsSync(service());
+    auto feeds = GetMediaFeedsSync(service());
+
+    if (IsReadOnly()) {
+      EXPECT_EQ(0, stats->table_row_counts[MediaHistoryFeedsTable::kTableName]);
+      EXPECT_EQ(
+          0, stats->table_row_counts[MediaHistoryFeedItemsTable::kTableName]);
+    } else {
+      ASSERT_EQ(2, stats->table_row_counts[MediaHistoryFeedsTable::kTableName]);
+      EXPECT_EQ(
+          4, stats->table_row_counts[MediaHistoryFeedItemsTable::kTableName]);
+
+      EXPECT_EQ(feed_id_a, feeds[0]->id);
+      EXPECT_EQ(feed_id_b, feeds[1]->id);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(stats, GetStatsSync(otr_service()));
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+  }
+
+  service()->DeleteMediaFeed(feed_id_a, base::DoNothing());
+  WaitForDB();
+
+  {
+    // Check the first feed was deleted.
+    auto stats = GetStatsSync(service());
+    auto feeds = GetMediaFeedsSync(service());
+
+    if (IsReadOnly()) {
+      EXPECT_EQ(0, stats->table_row_counts[MediaHistoryFeedsTable::kTableName]);
+      EXPECT_EQ(
+          0, stats->table_row_counts[MediaHistoryFeedItemsTable::kTableName]);
+    } else {
+      ASSERT_EQ(1, stats->table_row_counts[MediaHistoryFeedsTable::kTableName]);
+      EXPECT_EQ(
+          1, stats->table_row_counts[MediaHistoryFeedItemsTable::kTableName]);
+
+      EXPECT_EQ(feed_id_b, feeds[0]->id);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(stats, GetStatsSync(otr_service()));
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+  }
+}
+
 }  // namespace media_history
