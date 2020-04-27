@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/cronet/histogram_manager.h"
+#include "components/metrics/library_support/histogram_manager.h"
 
 #include <stdint.h>
 
@@ -11,10 +11,7 @@
 #include "base/metrics/histogram_macros.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-namespace cronet {
-
-using metrics::ChromeUserMetricsExtension;
-using metrics::HistogramEventProto;
+namespace metrics {
 
 TEST(HistogramManager, HistogramBucketFields) {
   // Capture histograms at the start of the test to avoid later GetDeltas()
@@ -29,8 +26,8 @@ TEST(HistogramManager, HistogramBucketFields) {
   EXPECT_TRUE(HistogramManager::GetInstance()->GetDeltas(&data));
   EXPECT_FALSE(data.empty());
   ChromeUserMetricsExtension uma_proto;
-  EXPECT_TRUE(uma_proto.ParseFromArray(
-      reinterpret_cast<const char*>(&data[0]), data.size()));
+  EXPECT_TRUE(uma_proto.ParseFromArray(reinterpret_cast<const char*>(&data[0]),
+                                       data.size()));
   EXPECT_FALSE(data.empty());
 
   const HistogramEventProto& histogram_proto =
@@ -57,4 +54,4 @@ TEST(HistogramManager, HistogramBucketFields) {
   EXPECT_EQ(1, histogram_proto2.bucket(0).count());
 }
 
-}  // namespace cronet
+}  // namespace metrics

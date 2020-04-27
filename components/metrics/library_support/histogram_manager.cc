@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/cronet/histogram_manager.h"
+#include "components/metrics/library_support/histogram_manager.h"
 
 #include <string>
 #include <vector>
@@ -14,17 +14,15 @@
 #include "base/thread_annotations.h"
 #include "components/metrics/histogram_encoder.h"
 
-namespace cronet {
+namespace metrics {
 
 // TODO(rtenneti): move g_histogram_manager into java code.
-static base::LazyInstance<HistogramManager>::Leaky
-    g_histogram_manager = LAZY_INSTANCE_INITIALIZER;
+static base::LazyInstance<HistogramManager>::Leaky g_histogram_manager =
+    LAZY_INSTANCE_INITIALIZER;
 
-HistogramManager::HistogramManager() : histogram_snapshot_manager_(this) {
-}
+HistogramManager::HistogramManager() : histogram_snapshot_manager_(this) {}
 
-HistogramManager::~HistogramManager() {
-}
+HistogramManager::~HistogramManager() {}
 
 // static
 HistogramManager* HistogramManager::GetInstance() {
@@ -60,4 +58,4 @@ bool HistogramManager::GetDeltas(std::vector<uint8_t>* data)
   return false;
 }
 
-}  // namespace cronet
+}  // namespace metrics

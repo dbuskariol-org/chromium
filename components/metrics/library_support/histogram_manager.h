@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_CRONET_HISTOGRAM_MANAGER_H_
-#define COMPONENTS_CRONET_HISTOGRAM_MANAGER_H_
+#ifndef COMPONENTS_METRICS_LIBRARY_SUPPORT_HISTOGRAM_MANAGER_H_
+#define COMPONENTS_METRICS_LIBRARY_SUPPORT_HISTOGRAM_MANAGER_H_
 
 #include <stdint.h>
 
@@ -18,7 +18,7 @@
 #include "base/synchronization/lock.h"
 #include "third_party/metrics_proto/chrome_user_metrics_extension.pb.h"
 
-namespace cronet {
+namespace metrics {
 
 // A HistogramManager instance is created by the app. It is the central
 // controller for the acquisition of log data, and recording deltas for
@@ -55,6 +55,6 @@ class HistogramManager : public base::HistogramFlattener {
   DISALLOW_COPY_AND_ASSIGN(HistogramManager);
 };
 
-}  // namespace cronet
+}  // namespace metrics
 
-#endif  // COMPONENTS_CRONET_HISTOGRAM_MANAGER_H_
+#endif  // COMPONENTS_METRICS_LIBRARY_SUPPORT_HISTOGRAM_MANAGER_H_
