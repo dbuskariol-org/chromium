@@ -75,6 +75,11 @@ chromeos::app_time::AppId GetAndroidChromeAppId() {
                                    "com.android.chrome");
 }
 
+bool IsWebAppOrExtension(const AppId& app_id) {
+  return app_id.app_type() == apps::mojom::AppType::kWeb ||
+         app_id.app_type() == apps::mojom::AppType::kExtension;
+}
+
 }  // namespace
 
 AppActivityRegistry::TestApi::TestApi(AppActivityRegistry* registry)
@@ -471,8 +476,8 @@ bool AppActivityRegistry::UpdateAppLimits(
   for (auto& entry : activity_registry_) {
     const AppId& app_id = entry.first;
 
-    // Web time limits are updated when chrome's time limit is updated. Return.
-    if (app_id.app_type() == apps::mojom::AppType::kWeb)
+    // Web time limits are updated when chrome's time limit is updated.
+    if (app_id != GetChromeAppId() && IsWebAppOrExtension(app_id))
       continue;
 
     base::Optional<AppLimit> new_limit = base::nullopt;
@@ -513,6 +518,12 @@ bool AppActivityRegistry::SetAppLimit(
   if (!IsAppInstalled(app_id))
     return false;
 
+  // Chrome and web apps should not be blocked.
+  if (app_limit && app_limit->restriction() == AppRestriction::kBlocked &&
+      IsWebAppOrExtension(app_id)) {
+    return false;
+  }
+
   AppDetails& details = activity_registry_.at(app_id);
   // Limit 'data' are considered equal if only the |last_updated_| is different.
   // Update the limit to store new |last_updated_| value.
@@ -535,8 +546,7 @@ bool AppActivityRegistry::SetAppLimit(
     return false;
   }
 
-  if (app_id != GetChromeAppId() &&
-      app_id.app_type() != apps::mojom::AppType::kWeb) {
+  if (!IsWebAppOrExtension(app_id)) {
     AppLimitUpdated(app_id);
     return updated;
   }
@@ -733,8 +743,11 @@ void AppActivityRegistry::Add(const AppId& app_id) {
   activity_registry_[app_id].activity = AppActivity(AppState::kAvailable);
   activity_registry_[app_id].received_app_installed_ = true;
 
-  if (app_id.app_type() == apps::mojom::AppType::kWeb &&
-      base::Contains(activity_registry_, GetChromeAppId())) {
+  bool is_app_chrome = app_id == GetChromeAppId();
+  bool is_web = IsWebAppOrExtension(app_id);
+  bool is_chrome_installed =
+      base::Contains(activity_registry_, GetChromeAppId());
+  if (!is_app_chrome && is_web && is_chrome_installed) {
     activity_registry_[app_id].limit = GetWebTimeLimit();
     activity_registry_[app_id].activity.SetAppState(
         GetAppState(GetChromeAppId()));
@@ -960,7 +973,7 @@ bool AppActivityRegistry::ShowLimitUpdatedNotificationIfNeeded(
     const base::Optional<AppLimit>& old_limit,
     const base::Optional<AppLimit>& new_limit) {
   // Web app limit changes are covered by Chrome notification.
-  if (app_id.app_type() == apps::mojom::AppType::kWeb)
+  if (app_id != GetChromeAppId() && IsWebAppOrExtension(app_id))
     return false;
 
   // Don't show notification if the time limit's update was older than the
