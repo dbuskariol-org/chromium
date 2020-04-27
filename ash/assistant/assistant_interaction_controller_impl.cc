@@ -684,6 +684,9 @@ void AssistantInteractionControllerImpl::OnSpeechLevelUpdated(
 }
 
 void AssistantInteractionControllerImpl::OnTtsStarted(bool due_to_error) {
+  // When Assistant is talking, ChromeVox should not be.
+  Shell::Get()->accessibility_controller()->SilenceSpokenFeedback();
+
   if (!HasActiveInteraction())
     return;
 
