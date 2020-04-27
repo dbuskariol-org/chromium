@@ -9,9 +9,10 @@
 #include <utility>
 #include <vector>
 
-#include "base/logging.h"
+#include "base/check.h"
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
+#include "base/notreached.h"
 #include "base/optional.h"
 #include "base/run_loop.h"
 #include "base/strings/string_piece.h"
