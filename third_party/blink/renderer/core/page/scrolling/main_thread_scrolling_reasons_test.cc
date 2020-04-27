@@ -298,7 +298,6 @@ TEST_F(MainThreadScrollingReasonsTest,
 class NonCompositedMainThreadScrollingReasonsTest
     : public MainThreadScrollingReasonsTest {
   static const uint32_t kLCDTextRelatedReasons =
-      cc::MainThreadScrollingReason::kHasOpacityAndLCDText |
       cc::MainThreadScrollingReason::kHasTransformAndLCDText |
       cc::MainThreadScrollingReason::kBackgroundNotOpaqueInRectAndLCDText |
       cc::MainThreadScrollingReason::kIsNotStackingContextAndLCDText;
@@ -376,8 +375,8 @@ class NonCompositedMainThreadScrollingReasonsTest
 };
 
 TEST_F(NonCompositedMainThreadScrollingReasonsTest, TransparentTest) {
-  TestNonCompositedReasons(
-      "transparent", cc::MainThreadScrollingReason::kHasOpacityAndLCDText);
+  TestNonCompositedReasons("transparent",
+                           cc::MainThreadScrollingReason::kNotScrollingOnMain);
 }
 
 TEST_F(NonCompositedMainThreadScrollingReasonsTest, TransformTest) {

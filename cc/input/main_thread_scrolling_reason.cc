@@ -42,8 +42,6 @@ void MainThreadScrollingReason::AddToTracedValue(
     traced_value.AppendString("Frame overlay");
   if (reasons & kHandlingScrollFromMainThread)
     traced_value.AppendString("Handling scroll from main thread");
-  if (reasons & kHasOpacityAndLCDText)
-    traced_value.AppendString("Has opacity and LCD text");
   if (reasons & kHasTransformAndLCDText)
     traced_value.AppendString("Has transform and LCD text");
   if (reasons & kBackgroundNotOpaqueInRectAndLCDText)
