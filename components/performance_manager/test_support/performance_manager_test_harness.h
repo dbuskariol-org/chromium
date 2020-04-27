@@ -2,27 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PERFORMANCE_MANAGER_PERFORMANCE_MANAGER_TEST_HARNESS_H_
-#define COMPONENTS_PERFORMANCE_MANAGER_PERFORMANCE_MANAGER_TEST_HARNESS_H_
+#ifndef COMPONENTS_PERFORMANCE_MANAGER_TEST_SUPPORT_PERFORMANCE_MANAGER_TEST_HARNESS_H_
+#define COMPONENTS_PERFORMANCE_MANAGER_TEST_SUPPORT_PERFORMANCE_MANAGER_TEST_HARNESS_H_
 
-#include "components/performance_manager/performance_manager_impl.h"
-#include "content/public/browser/web_contents.h"
+#include "components/performance_manager/test_support/test_harness_helper.h"
 #include "content/public/test/test_renderer_host.h"
 
 namespace performance_manager {
 
-class PerformanceManagerRegistry;
-
 // A test harness that initializes PerformanceManagerImpl, plus the entire
 // RenderViewHost harness. Allows for creating full WebContents, and their
 // accompanying structures in the graph. The task environment is accessed
-// via content::RenderViewHostTestHarness::test_bundle().
+// via content::RenderViewHostTestHarness::test_bundle(). RenderFrameHosts and
+// such are not created, so this is suitable for unittests but not browsertests.
 class PerformanceManagerTestHarness
     : public content::RenderViewHostTestHarness {
  public:
   using Super = content::RenderViewHostTestHarness;
 
   PerformanceManagerTestHarness();
+  PerformanceManagerTestHarness(const PerformanceManagerTestHarness&) = delete;
+  PerformanceManagerTestHarness& operator=(
+      const PerformanceManagerTestHarness&) = delete;
   ~PerformanceManagerTestHarness() override;
 
   void SetUp() override;
@@ -34,12 +35,9 @@ class PerformanceManagerTestHarness
   std::unique_ptr<content::WebContents> CreateTestWebContents();
 
  private:
-  std::unique_ptr<PerformanceManagerImpl> perf_man_;
-  std::unique_ptr<PerformanceManagerRegistry> registry_;
-
-  DISALLOW_COPY_AND_ASSIGN(PerformanceManagerTestHarness);
+  std::unique_ptr<PerformanceManagerTestHarnessHelper> helper_;
 };
 
 }  // namespace performance_manager
 
-#endif  // COMPONENTS_PERFORMANCE_MANAGER_PERFORMANCE_MANAGER_TEST_HARNESS_H_
+#endif  // COMPONENTS_PERFORMANCE_MANAGER_TEST_SUPPORT_PERFORMANCE_MANAGER_TEST_HARNESS_H_

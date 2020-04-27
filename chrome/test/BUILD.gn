@@ -3275,7 +3275,6 @@ test("unit_tests") {
     "../browser/performance_manager/metrics/memory_pressure_metrics_unittest.cc",
     "../browser/performance_manager/observers/isolation_context_metrics_unittest.cc",
     "../browser/performance_manager/observers/metrics_collector_unittest.cc",
-    "../browser/performance_manager/render_process_host_proxy_unittest.cc",
     "../browser/performance_manager/test_support/page_aggregator.cc",
     "../browser/performance_manager/test_support/page_aggregator.h",
     "../browser/performance_monitor/metric_evaluator_helper_win_unittest.cc",
