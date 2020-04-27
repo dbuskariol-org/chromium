@@ -17528,6 +17528,12 @@ Called by update_document_policy_enum.py.-->
   <int value="2" label="Unknown"/>
 </enum>
 
+<enum name="DuplicateBookmarkEntityOnRemoteUpdateCondition">
+  <int value="0" label="Entity with server ID is a tombstone"/>
+  <int value="1" label="Only entity with temporary ID is a tombstone"/>
+  <int value="2" label="Both entities are non-tombstone"/>
+</enum>
+
 <enum name="DXGI_COLOR_SPACE_TYPE">
   <summary>
     DirectX color space type. Documented here:
