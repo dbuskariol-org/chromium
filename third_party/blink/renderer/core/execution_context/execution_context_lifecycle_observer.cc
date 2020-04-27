@@ -37,13 +37,6 @@ void ExecutionContextClient::Trace(Visitor* visitor) {
 }
 
 ExecutionContextLifecycleObserver::ExecutionContextLifecycleObserver(
-    Document* document,
-    Type type)
-    : ExecutionContextLifecycleObserver(
-          document ? document->GetExecutionContext() : nullptr,
-          type) {}
-
-ExecutionContextLifecycleObserver::ExecutionContextLifecycleObserver(
     ExecutionContext* execution_context,
     Type type)
     : observer_type_(type) {
