@@ -13,6 +13,7 @@
 #include "chrome/browser/media/feeds/media_feeds_store.mojom.h"
 #include "chrome/browser/media/history/media_history_keyed_service.h"
 #include "components/keyed_service/core/keyed_service.h"
+#include "components/prefs/pref_change_registrar.h"
 
 class Profile;
 class GURL;
@@ -86,10 +87,14 @@ class MediaFeedsService : public KeyedService {
                        const schema_org::improved::mojom::EntityPtr& response,
                        MediaFeedsFetcher::Status status);
 
+  void OnSafeSearchPrefChanged();
+
   media_history::MediaHistoryKeyedService* GetMediaHistoryService();
 
   scoped_refptr<::network::SharedURLLoaderFactory>
   GetURLLoaderFactoryForFetcher();
+
+  PrefChangeRegistrar pref_change_registrar_;
 
   // Used to fetch media feeds. Null if no fetch is ongoing.
   std::map<int64_t, std::unique_ptr<MediaFeedsFetcher>> fetchers_;

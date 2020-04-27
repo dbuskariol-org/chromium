@@ -756,4 +756,74 @@ TEST_F(MediaFeedsServiceTest, FetcherShouldTriggerSafeSearch) {
   }
 }
 
+TEST_F(MediaFeedsServiceTest, PrefChangeShouldTriggerSafeSearchCheck) {
+  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
+
+  // Store a Media Feed.
+  GetMediaHistoryService()->DiscoverMediaFeed(
+      GURL("https://www.google.com/feed"));
+  WaitForDB();
+
+  // Store some media feed items.
+  GetMediaHistoryService()->StoreMediaFeedFetchResult(
+      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
+      std::vector<media_session::MediaImage>(), "test", base::DoNothing());
+  WaitForDB();
+
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
+  {
+    // Check there are pending items.
+    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
+    EXPECT_EQ(3u, pending_items.size());
+  }
+
+  // Enable the safe search pref. This should trigger a refetch.
+  SetSafeSearchEnabled(true);
+
+  // Wait for the service and DB to finish.
+  run_loop.Run();
+  WaitForDB();
+
+  {
+    // The pending items should be empty.
+    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
+    EXPECT_TRUE(pending_items.empty());
+  }
+
+  {
+    // Check the items were updated.
+    auto items = GetItemsForMediaFeedSync(1);
+    EXPECT_EQ(3u, items.size());
+
+    for (auto& item : items) {
+      EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kSafe,
+                item->safe_search_result);
+    }
+  }
+
+  // Store some new media feed items.
+  GetMediaHistoryService()->StoreMediaFeedFetchResult(
+      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
+      std::vector<media_session::MediaImage>(), "test", base::DoNothing());
+  WaitForDB();
+
+  {
+    // Check there are pending items.
+    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
+    EXPECT_EQ(3u, pending_items.size());
+  }
+
+  // Disable the Safe Search pref. This should not trigger a check.
+  SetSafeSearchEnabled(false);
+
+  {
+    // Check there are pending items.
+    auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
+    EXPECT_EQ(3u, pending_items.size());
+  }
+}
+
 }  // namespace media_feeds

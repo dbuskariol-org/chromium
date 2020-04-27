@@ -47,6 +47,12 @@ const char MediaFeedsService::kSafeSearchResultHistogramName[] =
 
 MediaFeedsService::MediaFeedsService(Profile* profile) : profile_(profile) {
   DCHECK(!profile->IsOffTheRecord());
+
+  pref_change_registrar_.Init(profile_->GetPrefs());
+  pref_change_registrar_.Add(
+      prefs::kMediaFeedsSafeSearchEnabled,
+      base::BindRepeating(&MediaFeedsService::OnSafeSearchPrefChanged,
+                          weak_factory_.GetWeakPtr()));
 }
 
 // static
@@ -284,6 +290,15 @@ void MediaFeedsService::OnFetchResponse(
         base::BindOnce(&MediaFeedsService::CheckItemsAgainstSafeSearch,
                        weak_factory_.GetWeakPtr()));
   }
+}
+
+void MediaFeedsService::OnSafeSearchPrefChanged() {
+  if (!IsSafeSearchCheckingEnabled())
+    return;
+
+  GetMediaHistoryService()->GetPendingSafeSearchCheckMediaFeedItems(
+      base::BindOnce(&MediaFeedsService::CheckItemsAgainstSafeSearch,
+                     weak_factory_.GetWeakPtr()));
 }
 
 scoped_refptr<::network::SharedURLLoaderFactory>
