@@ -43,12 +43,13 @@ void GamepadDispatcher::ResetVibrationActuator(
 GamepadDispatcher::GamepadDispatcher(ExecutionContext* context)
     :  // See https://bit.ly/2S0zRAS for task types.
       task_runner_(context ? context->GetTaskRunner(TaskType::kMiscPlatformAPI)
-                           : nullptr) {}
+                           : nullptr),
+      gamepad_haptics_manager_remote_(context) {}
 
 GamepadDispatcher::~GamepadDispatcher() = default;
 
 void GamepadDispatcher::InitializeHaptics() {
-  if (!gamepad_haptics_manager_remote_) {
+  if (!gamepad_haptics_manager_remote_.is_bound()) {
     Platform::Current()->GetBrowserInterfaceBroker()->GetInterface(
         gamepad_haptics_manager_remote_.BindNewPipeAndPassReceiver(
             task_runner_));
@@ -57,6 +58,7 @@ void GamepadDispatcher::InitializeHaptics() {
 
 void GamepadDispatcher::Trace(Visitor* visitor) {
   visitor->Trace(reader_);
+  visitor->Trace(gamepad_haptics_manager_remote_);
   PlatformEventDispatcher::Trace(visitor);
 }
 

@@ -9,10 +9,11 @@
 
 #include "base/memory/scoped_refptr.h"
 #include "device/gamepad/public/mojom/gamepad.mojom-blink.h"
-#include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/frame/platform_event_dispatcher.h"
 #include "third_party/blink/renderer/modules/gamepad/gamepad_listener.h"
+#include "third_party/blink/renderer/platform/mojo/heap_mojo_remote.h"
+#include "third_party/blink/renderer/platform/mojo/heap_mojo_wrapper_mode.h"
 
 namespace device {
 class Gamepad;
@@ -63,7 +64,8 @@ class GamepadDispatcher final : public GarbageCollected<GamepadDispatcher>,
 
   scoped_refptr<base::SingleThreadTaskRunner> task_runner_;
   Member<GamepadSharedMemoryReader> reader_;
-  mojo::Remote<device::mojom::blink::GamepadHapticsManager>
+  HeapMojoRemote<device::mojom::blink::GamepadHapticsManager,
+                 HeapMojoWrapperMode::kWithoutContextObserver>
       gamepad_haptics_manager_remote_;
 };
 
