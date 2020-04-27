@@ -4575,6 +4575,10 @@ bool LayerTreeHostImpl::CanConsumeDelta(const ScrollState& scroll_state,
       return false;
     }
     delta_to_scroll = local_scroll_delta;
+  } else if (scroll_state.delta_granularity() ==
+             ui::ScrollGranularity::kScrollByPercentage) {
+    delta_to_scroll =
+        ResolveScrollPercentageToPixels(scroll_node, delta_to_scroll);
   }
 
   if (ComputeScrollDelta(scroll_node, delta_to_scroll) != gfx::Vector2dF())
