@@ -40,9 +40,10 @@ void GamepadDispatcher::ResetVibrationActuator(
                                                           std::move(callback));
 }
 
-GamepadDispatcher::GamepadDispatcher(
-    scoped_refptr<base::SingleThreadTaskRunner> task_runner)
-    : task_runner_(std::move(task_runner)) {}
+GamepadDispatcher::GamepadDispatcher(ExecutionContext* context)
+    :  // See https://bit.ly/2S0zRAS for task types.
+      task_runner_(context ? context->GetTaskRunner(TaskType::kMiscPlatformAPI)
+                           : nullptr) {}
 
 GamepadDispatcher::~GamepadDispatcher() = default;
 

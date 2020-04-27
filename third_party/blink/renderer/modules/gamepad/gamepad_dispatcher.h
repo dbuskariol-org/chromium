@@ -10,6 +10,7 @@
 #include "base/memory/scoped_refptr.h"
 #include "device/gamepad/public/mojom/gamepad.mojom-blink.h"
 #include "mojo/public/cpp/bindings/remote.h"
+#include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/core/frame/platform_event_dispatcher.h"
 #include "third_party/blink/renderer/modules/gamepad/gamepad_listener.h"
 
@@ -28,8 +29,7 @@ class GamepadDispatcher final : public GarbageCollected<GamepadDispatcher>,
   USING_GARBAGE_COLLECTED_MIXIN(GamepadDispatcher);
 
  public:
-  explicit GamepadDispatcher(
-      scoped_refptr<base::SingleThreadTaskRunner> task_runner);
+  explicit GamepadDispatcher(ExecutionContext* context);
   ~GamepadDispatcher() override;
 
   void SampleGamepads(device::Gamepads&);
