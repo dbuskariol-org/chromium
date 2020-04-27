@@ -26961,7 +26961,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3153" label="SameOriginIframeWindowPrompt"/>
   <int value="3154" label="SameOriginIframeWindowPrint"/>
   <int value="3155" label="LargeStickyAd"/>
-  <int value="3156" label="OverlayInterstitialAd"/>
+  <int value="3156" label="ObsoleteOverlayInterstitialAd"/>
   <int value="3157" label="CSSComparisonFunctions"/>
   <int value="3158" label="FeaturePolicyProposalWouldChangeBehaviour"/>
   <int value="3159" label="RTCLocalSdpModificationSimulcast"/>
@@ -27059,6 +27059,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3250" label="XRFrameCreateAnchor"/>
   <int value="3251" label="XRHitTestResultCreateAnchor"/>
   <int value="3252" label="CSSKeywordRevert"/>
+  <int value="3253" label="OverlayPopupAd"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
