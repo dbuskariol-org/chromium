@@ -463,7 +463,19 @@ CastMessage CreateCastMessage(const std::string& message_namespace,
                               message_namespace);
   output.set_payload_type(
       CastMessage::PayloadType::CastMessage_PayloadType_STRING);
-  CHECK(base::JSONWriter::Write(message, output.mutable_payload_utf8()));
+  if (message.is_string()) {
+    // NOTE(jrw): This case is needed to fix crbug.com/149843471, which affects
+    // the ability to cast the Shaka player.  Without it, the payload of the
+    // first message sent with the urn:x-cast:com.google.shaka.v2 namespace is
+    // given an extra level of quoting.  It's not clear whether switching on the
+    // JSON type of the message is the right thing to do here, or if this case
+    // is simply compensating for some other problem that occurs between here
+    // and PresentationConnection::send(string, ...), which receives a value
+    // with the correct amount of quotation.
+    output.set_payload_utf8(message.GetString());
+  } else {
+    CHECK(base::JSONWriter::Write(message, output.mutable_payload_utf8()));
+  }
   return output;
 }
 
