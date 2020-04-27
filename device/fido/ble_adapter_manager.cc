@@ -95,8 +95,7 @@ void BleAdapterManager::Start(scoped_refptr<BluetoothAdapter> adapter) {
   adapter_->AddObserver(this);
 
   request_handler_->OnBluetoothAdapterEnumerated(
-      adapter_->IsPresent(), adapter_->IsPowered(), adapter_->CanPower(),
-      adapter_->IsPeripheralRoleSupported());
+      adapter_->IsPresent(), adapter_->IsPowered(), adapter_->CanPower());
 }
 
 }  // namespace device
