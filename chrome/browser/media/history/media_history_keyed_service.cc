@@ -268,13 +268,15 @@ void MediaHistoryKeyedService::StoreMediaFeedFetchResult(
     const bool was_fetched_from_cache,
     const std::vector<media_session::MediaImage>& logos,
     const std::string& display_name,
+    const std::vector<url::Origin>& associated_origins,
     base::OnceClosure callback) {
   if (auto* store = store_->GetForWrite()) {
     store->db_task_runner_->PostTaskAndReply(
         FROM_HERE,
         base::BindOnce(&MediaHistoryStore::StoreMediaFeedFetchResult, store,
                        feed_id, std::move(items), result,
-                       was_fetched_from_cache, logos, display_name),
+                       was_fetched_from_cache, logos, display_name,
+                       associated_origins),
         std::move(callback));
   }
 }

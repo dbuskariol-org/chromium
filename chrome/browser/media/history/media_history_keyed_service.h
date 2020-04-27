@@ -103,6 +103,7 @@ class MediaHistoryKeyedService : public KeyedService,
       const bool was_fetched_from_cache,
       const std::vector<media_session::MediaImage>& logos,
       const std::string& display_name,
+      const std::vector<url::Origin>& associated_origins,
       base::OnceClosure callback);
 
   void GetURLsInTableForTest(const std::string& table,
