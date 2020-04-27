@@ -6142,7 +6142,7 @@ if (is_android) {
     deps = [
       "//chrome/android:chrome_all_java",
       "//chrome/test/android:chrome_java_test_support",
-      "//components/signin/public/android:java",
+      "//components/signin/public/android:signin_java",
       "//content/public/test/android:content_java_test_support",
       "//third_party/junit",
     ]
