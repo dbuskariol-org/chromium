@@ -2292,12 +2292,6 @@ crbug.com/1011811 http/tests/devtools/report-protocol-errors.js [ Pass Failure ]
 crbug.com/1047760 http/tests/devtools/screen-orientation-override.js [ Pass Failure Timeout ]
 crbug.com/1011811 http/tests/devtools/elements/styles-1/cached-sync-computed-styles.js [ Pass Failure ]
 
-# We only want to run one of the web-animations-api tests in stable mode.
-crbug.com/441553 virtual/stable/web-animations-api/* [ Skip ]
-# These tests *only* run in stable, to verify that these features are unsupported and throw exceptions.
-crbug.com/441559 virtual/stable/web-animations-api/partial-keyframes-unsupported.html [ Pass ]
-crbug.com/437696 virtual/stable/web-animations-api/additive-animations-unsupported.html [ Pass ]
-
 # switching to apache-win32: needs triaging.
 crbug.com/528062 [ Win ] http/tests/css/missing-repaint-after-slow-style-sheet.pl [ Failure ]
 crbug.com/528062 [ Win ] http/tests/local/blob/send-data-blob.html [ Failure Timeout ]
