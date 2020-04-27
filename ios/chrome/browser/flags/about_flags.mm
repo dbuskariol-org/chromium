@@ -633,6 +633,17 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(autofill::features::kAutofillEnableGoogleIssuedCard)},
 };
 
+bool SkipConditionalFeatureEntry(const flags_ui::FeatureEntry& entry) {
+  return false;
+}
+
+flags_ui::FlagsState& GetGlobalFlagsState() {
+  static base::NoDestructor<flags_ui::FlagsState> flags_state(kFeatureEntries,
+                                                              nullptr);
+  return *flags_state;
+}
+}  // namespace
+
 // Add all switches from experimental flags to |command_line|.
 void AppendSwitchesFromExperimentalSettings(base::CommandLine* command_line) {
   NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -699,20 +710,8 @@ void AppendSwitchesFromExperimentalSettings(base::CommandLine* command_line) {
       defaults, command_line);
 }
 
-bool SkipConditionalFeatureEntry(const flags_ui::FeatureEntry& entry) {
-  return false;
-}
-
-flags_ui::FlagsState& GetGlobalFlagsState() {
-  static base::NoDestructor<flags_ui::FlagsState> flags_state(kFeatureEntries,
-                                                              nullptr);
-  return *flags_state;
-}
-}  // namespace
-
 void ConvertFlagsToSwitches(flags_ui::FlagsStorage* flags_storage,
                             base::CommandLine* command_line) {
-  AppendSwitchesFromExperimentalSettings(command_line);
   GetGlobalFlagsState().ConvertFlagsToSwitches(
       flags_storage, command_line, flags_ui::kAddSentinels,
       switches::kEnableFeatures, switches::kDisableFeatures);
