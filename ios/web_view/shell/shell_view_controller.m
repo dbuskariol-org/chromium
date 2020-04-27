@@ -640,6 +640,13 @@ NSString* const kWebViewShellJavaScriptDialogTextFieldAccessibilityIdentifier =
                                          [weakSelf resetTranslateSettings];
                                        }]];
 
+  [alertController
+      addAction:[UIAlertAction actionWithTitle:@"Request translation offer"
+                                         style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction* action) {
+                                         [weakSelf requestTranslationOffer];
+                                       }]];
+
   // Shows sync menu.
   [alertController
       addAction:[UIAlertAction actionWithTitle:@"Sync menu"
@@ -664,6 +671,11 @@ NSString* const kWebViewShellJavaScriptDialogTextFieldAccessibilityIdentifier =
   CWVWebViewConfiguration* configuration =
       [CWVWebViewConfiguration defaultConfiguration];
   [configuration.preferences resetTranslationSettings];
+}
+
+- (void)requestTranslationOffer {
+  BOOL offered = [_webView.translationController requestTranslationOffer];
+  NSLog(@"Manual translation was offered: %d", offered);
 }
 
 - (void)toggleIncognito {
