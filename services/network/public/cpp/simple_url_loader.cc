@@ -1626,6 +1626,7 @@ void SimpleURLLoaderImpl::OnReceiveRedirect(
 
   final_url_ = redirect_info.new_url;
   url_loader_->FollowRedirect(removed_headers, {} /* modified_headers */,
+                              {} /* modified_cors_exempt_headers */,
                               {} /* new_url */);
 }
 

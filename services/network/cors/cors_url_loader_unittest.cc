@@ -231,11 +231,15 @@ class CorsURLLoaderTest : public testing::Test {
     test_url_loader_factory_->NotifyClientOnComplete(error_code);
   }
 
-  void FollowRedirect(const std::vector<std::string>& removed_headers = {},
-                      const net::HttpRequestHeaders& modified_headers =
-                          net::HttpRequestHeaders()) {
+  void FollowRedirect(
+      const std::vector<std::string>& removed_headers = {},
+      const net::HttpRequestHeaders& modified_headers =
+          net::HttpRequestHeaders(),
+      const net::HttpRequestHeaders& modified_cors_exempt_headers =
+          net::HttpRequestHeaders()) {
     DCHECK(url_loader_);
     url_loader_->FollowRedirect(removed_headers, modified_headers,
+                                modified_cors_exempt_headers,
                                 base::nullopt /*new_url*/);
   }
 
@@ -245,6 +249,7 @@ class CorsURLLoaderTest : public testing::Test {
     modified_headers.SetHeader(net::HttpRequestHeaders::kHost, "bar.test");
     url_loader_->FollowRedirect({},  // removed_headers
                                 modified_headers,
+                                {},              // modified_cors_exempt_headers
                                 base::nullopt);  // new_url
   }
 
