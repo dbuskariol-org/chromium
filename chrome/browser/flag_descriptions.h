@@ -1007,9 +1007,6 @@ extern const char kScrollableTabStripDescription[];
 extern const char kSendTabToSelfOmniboxSendingAnimationName[];
 extern const char kSendTabToSelfOmniboxSendingAnimationDescription[];
 
-extern const char kSendTabToSelfWhenSignedInName[];
-extern const char kSendTabToSelfWhenSignedInDescription[];
-
 extern const char kServiceWorkerOnUIName[];
 extern const char kServiceWorkerOnUIDescription[];
 

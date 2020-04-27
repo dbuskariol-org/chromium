@@ -4227,11 +4227,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          send_tab_to_self::kSendTabToSelfOmniboxSendingAnimation)},
 
-    {"enable-send-tab-to-self-when-signed-in",
-     flag_descriptions::kSendTabToSelfWhenSignedInName,
-     flag_descriptions::kSendTabToSelfWhenSignedInDescription, kOsAll,
-     FEATURE_VALUE_TYPE(send_tab_to_self::kSendTabToSelfWhenSignedIn)},
-
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
     {"sharing-peer-connection-receiver",

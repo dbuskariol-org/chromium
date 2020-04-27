@@ -1734,13 +1734,6 @@ const char kSendTabToSelfOmniboxSendingAnimationDescription[] =
     "If enabled, shows Sending... animation in omnibox instead of Desktop OS "
     "notifications for contextual menu entry points.";
 
-const char kSendTabToSelfWhenSignedInName[] =
-    "Send tab to self: enable use when signed-in regardless of sync state";
-const char kSendTabToSelfWhenSignedInDescription[] =
-    "Allows use of the send-tab-to-self feature for users who are signed-in "
-    "but not necessarily syncing. The tab-share data is thus ephemeral, "
-    "rather than persistent sync data.";
-
 const char kServiceWorkerOnUIName[] = "Service worker on UI thread";
 const char kServiceWorkerOnUIDescription[] =
     "Enables browser process logic related to service workers to run on the UI "
