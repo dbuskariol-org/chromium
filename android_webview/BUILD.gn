@@ -845,6 +845,19 @@ grit("generate_mojo_resources") {
   ]
 }
 
+action("concatenate_resources_allowlists") {
+  script = "//mojo/public/tools/bindings/concatenate-files.py"
+  inputs = [ "//android_webview/ui/grit_resources_allowlist.txt" ]
+
+  if (webview_includes_weblayer) {
+    inputs += [ "//weblayer/grit_resources_allowlist.txt" ]
+  }
+
+  outputs = [ "$target_gen_dir/grit_resources_allowlist.txt" ]
+  args =
+      rebase_path(inputs, root_build_dir) + rebase_path(outputs, root_build_dir)
+}
+
 grit("generate_components_resources") {
   # Note that dev_ui_components_resources.grd is Chrome-only, so excluded.
   source = "../components/resources/components_resources.grd"
@@ -852,14 +865,14 @@ grit("generate_components_resources") {
   use_brotli = true
 
   # See :generate_webui_resources for an explanation of the allowlist
-  _allowlist = "ui/grit_resources_allowlist.txt"
-  inputs = [ _allowlist ]
+  _allowlist = rebase_path("$target_gen_dir/grit_resources_allowlist.txt",
+                           root_build_dir)
   _about_credits_file = get_label_info("//components/resources",
                                        "target_gen_dir") + "/about_credits.html"
 
   grit_flags = [
     "-w",
-    rebase_path(_allowlist, root_build_dir),
+    _allowlist,
     "-E",
     "about_credits_file=" + rebase_path(_about_credits_file, root_build_dir),
     "-E",
@@ -871,6 +884,7 @@ grit("generate_components_resources") {
   ]
 
   deps = [
+    ":concatenate_resources_allowlists",
     "//components/resources:about_credits",
     "//components/resources/ssl/ssl_error_assistant:make_ssl_error_assistant_protobuf",
   ]
