@@ -17804,18 +17804,6 @@ Called by update_document_policy_enum.py.-->
   <int value="11" label="SCRIPT_EVALUATION"/>
 </enum>
 
-<enum name="EmeApiType">
-  <int value="0" label="Not expected"/>
-  <int value="1" label="MediaKeySystemAccess.createMediaKeys()"/>
-  <int value="2" label="MediaKeys.setServerCertificate()"/>
-  <int value="3" label="MediaKeys.getStatusForPolicy()"/>
-  <int value="4" label="MediaKeySession.generateRequest()"/>
-  <int value="5" label="MediaKeySession.load()"/>
-  <int value="6" label="MediaKeySession.update()"/>
-  <int value="7" label="MediaKeySession.close()"/>
-  <int value="8" label="MediaKeySession.remove()"/>
-</enum>
-
 <enum name="EmmcLifeUsed">
   <int value="0" label="Not defined"/>
   <int value="1" label="0% - 10% device life time used"/>

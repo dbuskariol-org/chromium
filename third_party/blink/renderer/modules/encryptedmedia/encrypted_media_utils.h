@@ -17,18 +17,16 @@ enum class EmeInitDataType;
 
 namespace blink {
 
-// Enum for EME MediaKeySystemAccess, MediaKeys and MediaKeySession APIs.
-// Reported to UKM. Existing values should NEVER be changed.
+// Enum for MediaKeys and MediaKeySession operations.
 enum class EmeApiType {
-  // Value 0 is reserved to detect errors.
-  kCreateMediaKeys = 1,
-  kSetServerCertificate = 2,
-  kGetStatusForPolicy = 3,
-  kGenerateRequest = 4,
-  kLoad = 5,
-  kUpdate = 6,
-  kClose = 7,
-  kRemove = 8,
+  kCreateMediaKeys,
+  kSetServerCertificate,
+  kGetStatusForPolicy,
+  kGenerateRequest,
+  kLoad,
+  kUpdate,
+  kClose,
+  kRemove,
 };
 
 constexpr const char* kEncryptedMediaFeaturePolicyConsoleWarning =
