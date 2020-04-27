@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMECAST_MEDIA_CMA_BACKEND_CPLAY_WAV_HEADER_H_
-#define CHROMECAST_MEDIA_CMA_BACKEND_CPLAY_WAV_HEADER_H_
+#ifndef CHROMECAST_MEDIA_AUDIO_WAV_HEADER_H_
+#define CHROMECAST_MEDIA_AUDIO_WAV_HEADER_H_
 
 #include <stdint.h>
 
@@ -81,4 +81,4 @@ WavHeader::WavHeader() = default;
 }  // namespace media
 }  // namespace chromecast
 
-#endif  // CHROMECAST_MEDIA_CMA_BACKEND_CPLAY_WAV_HEADER_H_
+#endif  // CHROMECAST_MEDIA_AUDIO_WAV_HEADER_H_
