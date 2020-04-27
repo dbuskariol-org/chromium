@@ -4981,6 +4981,7 @@ crbug.com/1067477 [ Fuchsia ] editing/selection/leave-requested-block.html [ Ski
 crbug.com/1067477 [ Fuchsia ] editing/selection/previous-line-position.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] editing/style/block-styles-007.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] external/wpt/bluetooth/requestDevice/canonicalizeFilter/no-arguments.https.html [ Skip ]
+crbug.com/1067477 [ Fuchsia ] external/wpt/css/filter-effects/crashtests/multiple-references-id-crash-001.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] fast/backgrounds/background-clip-text.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] fast/block/basic/018.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] fast/block/float/002.html [ Skip ]
