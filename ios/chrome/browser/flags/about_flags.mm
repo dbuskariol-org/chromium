@@ -25,6 +25,7 @@
 #include "components/autofill/core/common/autofill_payments_features.h"
 #include "components/autofill/core/common/autofill_switches.h"
 #include "components/autofill/ios/browser/autofill_switches.h"
+#include "components/content_settings/core/common/features.h"
 #include "components/dom_distiller/core/dom_distiller_switches.h"
 #include "components/feature_engagement/public/feature_constants.h"
 #include "components/feature_engagement/public/feature_list.h"
@@ -552,9 +553,10 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
     {"reload-sad-tab", flag_descriptions::kReloadSadTabName,
      flag_descriptions::kReloadSadTabDescription, flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(web::kReloadSadTab)},
-    {"page-info-chrome-guard", flag_descriptions::kPageInfoChromeGuardName,
-     flag_descriptions::kPageInfoChromeGuardDescription, flags_ui::kOsIos,
-     FEATURE_VALUE_TYPE(kPageInfoChromeGuard)},
+    {"improved-cookie-controls",
+     flag_descriptions::kImprovedCookieControlsDescription,
+     flag_descriptions::kImprovedCookieControlsDescription, flags_ui::kOsIos,
+     FEATURE_VALUE_TYPE(content_settings::kImprovedCookieControls)},
     {"page-info-refactoring", flag_descriptions::kPageInfoRefactoringName,
      flag_descriptions::kPageInfoRefactoringDescription, flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(kPageInfoRefactoring)},

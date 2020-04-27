@@ -4,6 +4,7 @@
 
 #import "ios/chrome/browser/ui/ntp/incognito_view.h"
 
+#include "components/content_settings/core/common/features.h"
 #include "components/google/core/common/google_util.h"
 #include "components/strings/grit/components_strings.h"
 #include "ios/chrome/browser/application_context.h"
@@ -180,8 +181,8 @@ NSAttributedString* FormatHTMLListForUILabel(NSString* listString) {
 
     [self addTextSections];
 
-    if (base::FeatureList::IsEnabled(kPageInfoChromeGuard))
-      [self addCoockiesViewController];
+    if (base::FeatureList::IsEnabled(content_settings::kImprovedCookieControls))
+      [self addCookiesViewController];
 
     // |topGuide| and |bottomGuide| exist to vertically position the stackview
     // inside the container scrollview.
@@ -451,7 +452,7 @@ NSAttributedString* FormatHTMLListForUILabel(NSString* listString) {
            object:nil];
 }
 
-- (void)addCoockiesViewController {
+- (void)addCookiesViewController {
   IncognitoCookiesView* cookiesView = [[IncognitoCookiesView alloc] init];
   [_stackView addArrangedSubview:cookiesView];
 }
