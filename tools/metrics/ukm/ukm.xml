@@ -5389,6 +5389,39 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="Media.EME.ApiPromiseRejection">
+  <owner>xhwang@chromium.org</owner>
+  <owner>media-dev@chromium.org</owner>
+  <summary>
+    Event recorded when an Encrypted Media Extensions (EME) API promise is
+    rejected. In most cases this indicates a failure.
+  </summary>
+  <metric name="Api" enum="EmeApiType">
+    <summary>
+      The EME API for which the promise is rejected.
+    </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+  <metric name="SystemCode" enum="CdmSystemCode">
+    <summary>
+      A CDM specific code providing more details about the cause of rejection.
+    </summary>
+    <aggregation>
+      <history>
+        <statistics>
+          <enumeration/>
+        </statistics>
+      </history>
+    </aggregation>
+  </metric>
+</event>
+
 <event name="Media.EME.RequestMediaKeySystemAccess">
   <owner>xhwang@chromium.org</owner>
   <owner>media-dev@chromium.org</owner>

@@ -4,9 +4,12 @@
 
 #include "third_party/blink/renderer/modules/encryptedmedia/content_decryption_module_result_promise.h"
 
+#include "services/metrics/public/cpp/ukm_builders.h"
+#include "services/metrics/public/cpp/ukm_recorder.h"
 #include "third_party/blink/public/platform/web_string.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_promise.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_throw_dom_exception.h"
+#include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/dom_exception.h"
 #include "third_party/blink/renderer/core/execution_context/execution_context.h"
 #include "third_party/blink/renderer/platform/bindings/exception_state.h"
@@ -83,9 +86,19 @@ void ContentDecryptionModuleResultPromise::CompleteWithError(
   if (!IsValidToFulfillPromise())
     return;
 
-  // Non-zero |systemCode| is appended to the |errorMessage|. If the
-  // |errorMessage| is empty, we'll report "Rejected with system code
-  // (systemCode)".
+  // Report Media.EME.ApiPromiseRejection UKM.
+  Document* document = Document::From(GetExecutionContext());
+  if (document) {
+    ukm::builders::Media_EME_ApiPromiseRejection builder(
+        document->UkmSourceID());
+    builder.SetApi(static_cast<int>(type_));
+    builder.SetSystemCode(system_code);
+    builder.Record(document->UkmRecorder());
+  }
+
+  // Non-zero |system_code| is appended to the |error_message|. If the
+  // |error_message| is empty, we'll report "Rejected with system code
+  // (|system_code|)".
   StringBuilder result;
   result.Append(error_message);
   if (system_code != 0) {
@@ -95,6 +108,7 @@ void ContentDecryptionModuleResultPromise::CompleteWithError(
     result.AppendNumber(system_code);
     result.Append(')');
   }
+
   Reject(WebCdmExceptionToExceptionCode(exception_code), result.ToString());
 }
 
