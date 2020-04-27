@@ -117,10 +117,7 @@ MediaFeedsWebUIBrowserTest.prototype = {
     GEN('logos.push_back(logo2);');
     GEN('service->StoreMediaFeedFetchResult(');
     GEN('  1, std::move(items), media_feeds::mojom::FetchResult::kSuccess,');
-    GEN('  false, logos, "Test Feed",');
-    GEN('  {url::Origin::Create(GURL("https://www.google1.com")),');
-    GEN('   url::Origin::Create(GURL("https://www.google2.com"))},');
-    GEN('  base::DoNothing());');
+    GEN('  false, logos, "Test Feed", base::DoNothing());');
     GEN('service->UpdateMediaFeedDisplayTime(1);');
     GEN('base::RunLoop run_loop;');
     GEN('service->PostTaskToDBForTest(run_loop.QuitClosure());');
@@ -148,8 +145,7 @@ TEST_F('MediaFeedsWebUIBrowserTest', 'All', function() {
           'User Status', 'Last Fetch Result', 'Fetch Failed Count',
           'Last Fetch Time (not cache hit)', 'Last Fetch Item Count',
           'Last Fetch Play Next Count', 'Last Fetch Content Types',
-          'Last Display Time', 'Reset Reason', 'Associated Origins', 'Logos',
-          'Actions'
+          'Last Display Time', 'Reset Reason', 'Logos', 'Actions'
         ],
         feedsHeaders.map(x => x.textContent.trim()));
 
@@ -171,17 +167,14 @@ TEST_F('MediaFeedsWebUIBrowserTest', 'All', function() {
     assertNotEquals('', feedsContents.childNodes[12].textContent.trim());
     assertEquals('None', feedsContents.childNodes[13].textContent.trim());
     assertEquals(
-        'https://www.google1.com, https://www.google2.com',
+        'https://www.example.org/logo1.pnghttps://www.example.org/logo2.png',
         feedsContents.childNodes[14].textContent.trim());
     assertEquals(
-        'https://www.example.org/logo1.pnghttps://www.example.org/logo2.png',
-        feedsContents.childNodes[15].textContent.trim());
-    assertEquals(
         'Show ContentsFetch Feed',
-        feedsContents.childNodes[16].textContent.trim());
+        feedsContents.childNodes[15].textContent.trim());
 
     // Click on the show contents button.
-    feedsContents.childNodes[16].firstChild.click();
+    feedsContents.childNodes[15].firstChild.click();
 
     return whenFeedTableIsPopulatedForTest().then(() => {
       assertEquals(

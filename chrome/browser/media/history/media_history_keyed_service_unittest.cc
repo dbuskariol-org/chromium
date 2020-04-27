@@ -416,13 +416,11 @@ TEST_P(MediaHistoryKeyedServiceTest, CleanUpDatabaseWhenOriginIsDeleted) {
   service()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
       /* was_fetched_from_cache= */ false,
-      std::vector<media_session::MediaImage>(), "Test",
-      std::vector<url::Origin>(), base::DoNothing());
+      std::vector<media_session::MediaImage>(), "Test", base::DoNothing());
   service()->StoreMediaFeedFetchResult(
       2, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
       /* was_fetched_from_cache= */ false,
-      std::vector<media_session::MediaImage>(), "test",
-      std::vector<url::Origin>(), base::DoNothing());
+      std::vector<media_session::MediaImage>(), "test", base::DoNothing());
 
   // Wait until the feed data has finished saving.
   WaitForDB();
@@ -635,13 +633,11 @@ TEST_P(MediaHistoryKeyedServiceTest, CleanUpDatabaseWhenURLIsDeleted) {
   service()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
       /* was_fetched_from_cache= */ false,
-      std::vector<media_session::MediaImage>(), "Test",
-      std::vector<url::Origin>(), base::DoNothing());
+      std::vector<media_session::MediaImage>(), "Test", base::DoNothing());
   service()->StoreMediaFeedFetchResult(
       2, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
       /* was_fetched_from_cache= */ false,
-      std::vector<media_session::MediaImage>(), "test",
-      std::vector<url::Origin>(), base::DoNothing());
+      std::vector<media_session::MediaImage>(), "test", base::DoNothing());
 
   // Wait until the feed data has finished saving.
   WaitForDB();

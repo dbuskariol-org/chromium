@@ -11,7 +11,6 @@
 #include "base/strings/stringprintf.h"
 #include "base/task_runner_util.h"
 #include "chrome/browser/media/feeds/media_feeds_service.h"
-#include "chrome/browser/media/history/media_history_feed_associated_origins_table.h"
 #include "chrome/browser/media/history/media_history_feed_items_table.h"
 #include "chrome/browser/media/history/media_history_feeds_table.h"
 #include "chrome/browser/media/history/media_history_images_table.h"
@@ -105,10 +104,6 @@ MediaHistoryStore::MediaHistoryStore(
       feed_items_table_(media_feeds::MediaFeedsService::IsEnabled()
                             ? new MediaHistoryFeedItemsTable(db_task_runner_)
                             : nullptr),
-      feed_origins_table_(
-          media_feeds::MediaFeedsService::IsEnabled()
-              ? new MediaHistoryFeedAssociatedOriginsTable(db_task_runner_)
-              : nullptr),
       initialization_successful_(false) {}
 
 MediaHistoryStore::~MediaHistoryStore() {
@@ -344,8 +339,6 @@ sql::InitStatus MediaHistoryStore::InitializeTables() {
     status = feeds_table_->Initialize(db_.get());
   if (feed_items_table_ && status == sql::INIT_OK)
     status = feed_items_table_->Initialize(db_.get());
-  if (feed_origins_table_ && status == sql::INIT_OK)
-    status = feed_origins_table_->Initialize(db_.get());
 
   return status;
 }
@@ -430,16 +423,10 @@ MediaHistoryStore::GetMediaHistoryPlaybackRowsForDebug() {
 std::vector<media_feeds::mojom::MediaFeedPtr> MediaHistoryStore::GetMediaFeeds(
     const MediaHistoryKeyedService::GetMediaFeedsRequest& request) {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
-  if (!CanAccessDatabase() || !feeds_table_ || !feed_origins_table_)
+  if (!CanAccessDatabase() || !feeds_table_)
     return std::vector<media_feeds::mojom::MediaFeedPtr>();
 
-  auto feeds = feeds_table_->GetRows(request);
-
-  for (auto& feed : feeds) {
-    feed->associated_origins = feed_origins_table_->Get(feed->id);
-  }
-
-  return feeds;
+  return feeds_table_->GetRows(request);
 }
 
 int MediaHistoryStore::GetTableRowCount(const std::string& table_name) {
@@ -664,13 +651,12 @@ void MediaHistoryStore::StoreMediaFeedFetchResult(
     const media_feeds::mojom::FetchResult result,
     const bool was_fetched_from_cache,
     const std::vector<media_session::MediaImage>& logos,
-    const std::string& display_name,
-    const std::vector<url::Origin>& associated_origins) {
+    const std::string& display_name) {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   if (!CanAccessDatabase())
     return;
 
-  if (!feeds_table_ || !feed_items_table_ || !feed_origins_table_)
+  if (!feeds_table_ || !feed_items_table_)
     return;
 
   if (!DB()->BeginTransaction()) {
@@ -719,20 +705,6 @@ void MediaHistoryStore::StoreMediaFeedFetchResult(
           item_safe_count)) {
     DB()->RollbackTransaction();
     return;
-  }
-
-  // Clear any old associated origins.
-  if (!feed_origins_table_->Clear(feed_id)) {
-    DB()->RollbackTransaction();
-    return;
-  }
-
-  // Store associated origins.
-  for (auto& origin : associated_origins) {
-    if (!feed_origins_table_->Add(origin, feed_id)) {
-      DB()->RollbackTransaction();
-      return;
-    }
   }
 
   DB()->CommitTransaction();
