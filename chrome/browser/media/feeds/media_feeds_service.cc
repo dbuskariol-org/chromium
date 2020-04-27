@@ -102,9 +102,8 @@ void MediaFeedsService::FetchMediaFeed(int64_t feed_id,
   }
 
   fetchers_.emplace(std::make_pair(
-      feed_id, std::make_unique<MediaFeedsFetcher>(
-                   content::BrowserContext::GetDefaultStoragePartition(profile_)
-                       ->GetURLLoaderFactoryForBrowserProcess())));
+      feed_id,
+      std::make_unique<MediaFeedsFetcher>(GetURLLoaderFactoryForFetcher())));
 
   fetchers_.find(feed_id)->second->FetchFeed(
       url,
@@ -245,7 +244,8 @@ void MediaFeedsService::MaybeCallCompletionCallback() {
 }
 
 bool MediaFeedsService::IsSafeSearchCheckingEnabled() const {
-  return profile_->GetPrefs()->GetBoolean(prefs::kMediaFeedsSafeSearchEnabled);
+  return base::FeatureList::IsEnabled(media::kMediaFeedsSafeSearch) &&
+         profile_->GetPrefs()->GetBoolean(prefs::kMediaFeedsSafeSearchEnabled);
 }
 
 MediaFeedsService::InflightSafeSearchCheck::InflightSafeSearchCheck(
@@ -276,6 +276,23 @@ void MediaFeedsService::OnFetchResponse(
       false, std::move(logos), display_name, std::move(callback));
 
   fetchers_.erase(feed_id);
+
+  // If safe search checking is enabled then we should check the new feed items
+  // against the Safe Search API.
+  if (IsSafeSearchCheckingEnabled()) {
+    GetMediaHistoryService()->GetPendingSafeSearchCheckMediaFeedItems(
+        base::BindOnce(&MediaFeedsService::CheckItemsAgainstSafeSearch,
+                       weak_factory_.GetWeakPtr()));
+  }
+}
+
+scoped_refptr<::network::SharedURLLoaderFactory>
+MediaFeedsService::GetURLLoaderFactoryForFetcher() {
+  if (test_url_loader_factory_for_fetcher_)
+    return test_url_loader_factory_for_fetcher_;
+
+  return content::BrowserContext::GetDefaultStoragePartition(profile_)
+      ->GetURLLoaderFactoryForBrowserProcess();
 }
 
 }  // namespace media_feeds
