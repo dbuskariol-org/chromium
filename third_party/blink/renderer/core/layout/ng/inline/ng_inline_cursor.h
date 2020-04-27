@@ -420,7 +420,6 @@ class CORE_EXPORT NGInlineCursor {
   void MoveToItem(const ItemsSpan::iterator& iter);
   void MoveToNextItem();
   void MoveToNextItemSkippingChildren();
-  void MoveToNextSiblingItem();
   void MoveToPreviousItem();
 
   void MoveToParentPaintFragment();
