@@ -2725,7 +2725,6 @@ jumbo_static_library("ui") {
         "views/javascript_app_modal_event_blocker_x11.cc",
         "views/javascript_app_modal_event_blocker_x11.h",
       ]
-      configs += [ "//build/config/linux:x11" ]
       deps += [
         "//components/dbus/menu",
         "//ui/events/devices",

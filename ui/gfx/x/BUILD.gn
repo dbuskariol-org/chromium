@@ -116,7 +116,7 @@ jumbo_component("x") {
 
   defines = [ "GFX_IMPLEMENTATION" ]
 
-  configs += [ "//build/config/linux:x11" ]
+  public_configs = [ "//build/config/linux:x11" ]
 
   deps = [
     "//base",
