@@ -23,6 +23,7 @@ source_set("safe_browsing") {
   ]
 
   deps = [
+    ":util",
     "//base",
     "//build:branding_buildflags",
     "//components/prefs",
@@ -66,19 +67,37 @@ source_set("test_support") {
   configs += [ "//build/config/compiler:enable_arc" ]
 }
 
+source_set("util") {
+  sources = [
+    "unsafe_resource_util.h",
+    "unsafe_resource_util.mm",
+  ]
+
+  deps = [
+    "//base",
+    "//components/safe_browsing/core/db:v4_protocol_manager_util",
+    "//components/security_interstitials/core:unsafe_resource",
+  ]
+
+  configs += [ "//build/config/compiler:enable_arc" ]
+}
+
 source_set("unit_tests") {
   testonly = true
   sources = [
     "safe_browsing_service_unittest.mm",
     "safe_browsing_unsafe_resource_container_unittest.mm",
     "safe_browsing_url_allow_list_unittest.mm",
+    "url_checker_delegate_impl_unittest.mm",
   ]
 
   deps = [
     ":safe_browsing",
+    "//base/test:test_support",
     "//components/prefs:test_support",
     "//components/safe_browsing/core/browser",
     "//components/safe_browsing/core/common",
+    "//components/safe_browsing/core/common:thread_utils",
     "//components/safe_browsing/core/db",
     "//components/safe_browsing/core/db:database_manager",
     "//components/safe_browsing/core/db:metadata_proto",
