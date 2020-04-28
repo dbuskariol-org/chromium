@@ -691,9 +691,8 @@ TEST_F(BluetoothAdapterTest, StartDiscoverySessionError_Destroy) {
 }
 
 // TODO(scheib): Enable BluetoothTest fixture tests on all platforms.
-// TODO(https://crbug.com/1076005) Flaky on Mac MSan
-#if defined(OS_ANDROID) || \
-    (defined(OS_MACOSX) && not defined(ADDRESS_SANITIZER))
+// TODO(https://crbug.com/1076005) Flaky on Mac
+#if defined(OS_ANDROID)
 #define MAYBE_ConstructDefaultAdapter ConstructDefaultAdapter
 #else
 #define MAYBE_ConstructDefaultAdapter DISABLED_ConstructDefaultAdapter
