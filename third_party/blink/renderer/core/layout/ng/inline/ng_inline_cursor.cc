@@ -252,6 +252,8 @@ bool NGInlineCursorPosition::IsInlineLeaf() const {
 
 bool NGInlineCursorPosition::IsPartOfCulledInlineBox(
     const LayoutInline& layout_inline) const {
+  DCHECK(!layout_inline.ShouldCreateBoxFragment());
+  DCHECK(*this);
   const LayoutObject* const layout_object = GetLayoutObject();
   // We use |IsInline()| to exclude floating and out-of-flow objects.
   if (!layout_object || !layout_object->IsInline() ||
@@ -259,7 +261,19 @@ bool NGInlineCursorPosition::IsPartOfCulledInlineBox(
     return false;
   DCHECK(!layout_object->IsFloatingOrOutOfFlowPositioned());
   DCHECK(!BoxFragment() || !BoxFragment()->IsFormattingContextRoot());
-  return layout_object->IsDescendantOf(&layout_inline);
+  for (const LayoutObject* parent = layout_object->Parent(); parent;
+       parent = parent->Parent()) {
+    // Children of culled inline should be included.
+    if (parent == &layout_inline)
+      return true;
+    // Grand children should be included only if children are also culled.
+    if (const auto* parent_layout_inline = ToLayoutInlineOrNull(parent)) {
+      if (!parent_layout_inline->ShouldCreateBoxFragment())
+        continue;
+    }
+    return false;
+  }
+  return false;
 }
 
 bool NGInlineCursor::IsLastLineInInlineBlock() const {
