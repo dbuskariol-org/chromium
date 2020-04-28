@@ -9027,11 +9027,17 @@ be describing additional metrics about the same event.
     </summary>
   </metric>
   <metric name="lite_page_redirect">
+    <obsolete>
+      Removed in M84.
+    </obsolete>
     <summary>
       Set to 1 when a user is shown a lite page redirect in page load.
     </summary>
   </metric>
   <metric name="lite_page_redirect_eligibility_reason">
+    <obsolete>
+      Removed in M84.
+    </obsolete>
     <summary>
       Set to the value of the last known reason a Lite Page Redirect preview was
       not eligible on this page load. The value of this metric corresponds to

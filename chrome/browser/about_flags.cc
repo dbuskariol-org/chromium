@@ -2564,12 +2564,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kIgnorePreviewsBlacklistName,
      flag_descriptions::kIgnorePreviewsBlacklistDescription, kOsAll,
      SINGLE_VALUE_TYPE(previews::switches::kIgnorePreviewsBlacklist)},
-    {"ignore-litepage-redirect-optimization-blacklist",
-     flag_descriptions::kIgnoreLitePageRedirectHintsBlacklistName,
-     flag_descriptions::kIgnoreLitePageRedirectHintsBlacklistDescription,
-     kOsAll,
-     SINGLE_VALUE_TYPE(
-         previews::switches::kIgnoreLitePageRedirectOptimizationBlacklist)},
     {"enable-data-reduction-proxy-server-experiment",
      flag_descriptions::kEnableDataReductionProxyServerExperimentName,
      flag_descriptions::kEnableDataReductionProxyServerExperimentDescription,
@@ -2582,10 +2576,6 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-offline-previews", flag_descriptions::kEnableOfflinePreviewsName,
      flag_descriptions::kEnableOfflinePreviewsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(previews::features::kOfflinePreviews)},
-    {"enable-lite-page-server-previews",
-     flag_descriptions::kEnableLitePageServerPreviewsName,
-     flag_descriptions::kEnableLitePageServerPreviewsDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(previews::features::kLitePageServerPreviews)},
 #endif  // OS_ANDROID
 #if defined(OS_CHROMEOS) || defined(OS_LINUX)
     {"enable-save-data", flag_descriptions::kEnableSaveDataName,
