@@ -29,8 +29,10 @@ import org.chromium.base.test.util.CommandLineFlags;
 import org.chromium.base.test.util.Feature;
 import org.chromium.base.test.util.Matchers;
 import org.chromium.base.test.util.Restriction;
+import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromePhone;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromeTablet;
+import org.chromium.chrome.browser.compositor.layouts.OverviewModeState;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
@@ -148,6 +150,25 @@ public class InstantStartTest {
         output.close();
     }
 
+    private void startAndWaitNativeInitialization() {
+        CommandLine.getInstance().removeSwitch(ChromeSwitches.DISABLE_NATIVE_INITIALIZATION);
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> mActivityTestRule.getActivity().startDelayedNativeInitializationForTests());
+        CriteriaHelper.pollUiThread(() -> {
+            return mActivityTestRule.getActivity()
+                            .getTabModelSelector()
+                            .getTabModelFilterProvider()
+                            .getCurrentTabModelFilter()
+                    != null
+                    && mActivityTestRule.getActivity()
+                               .getTabModelSelector()
+                               .getTabModelFilterProvider()
+                               .getCurrentTabModelFilter()
+                               .isTabModelRestored();
+        });
+        Assert.assertTrue(LibraryLoader.getInstance().isInitialized());
+    }
+
     /**
      * Test TabContentManager is able to fetch thumbnail jpeg files before native is initialized.
      */
@@ -207,16 +228,66 @@ public class InstantStartTest {
         Assert.assertTrue(CachedFeatureFlags.isEnabled(ChromeFeatureList.INSTANT_START));
         Assert.assertTrue(ReturnToChromeExperimentsUtil.shouldShowTabSwitcher(-1));
 
-        CriteriaHelper.pollUiThread(
-                ()
-                        -> Assert.assertThat(mActivityTestRule.getActivity().getLayoutManager(),
-                                Matchers.notNullValue()));
+        CriteriaHelper.pollUiThread(()
+                                            -> Assert.assertTrue(mActivityTestRule.getActivity()
+                                                                         .getLayoutManager()
+                                                                         .overviewVisible()));
 
         Assert.assertFalse(LibraryLoader.getInstance().isInitialized());
         assertThat(mActivityTestRule.getActivity().getLayoutManager())
                 .isInstanceOf(LayoutManagerChromePhone.class);
         assertThat(mActivityTestRule.getActivity().getLayoutManager().getOverviewLayout())
                 .isInstanceOf(StartSurfaceLayout.class);
+    }
+
+    @Test
+    @SmallTest
+    @Restriction({UiRestriction.RESTRICTION_TYPE_PHONE})
+    // clang-format off
+    @EnableFeatures({ChromeFeatureList.TAB_SWITCHER_ON_RETURN + "<Study,",
+            ChromeFeatureList.START_SURFACE_ANDROID + "<Study"})
+    @CommandLineFlags.Add({ChromeSwitches.DISABLE_NATIVE_INITIALIZATION,
+            "force-fieldtrials=Study/Group",
+            IMMEDIATE_RETURN_PARAMS + "/start_surface_variation/single"})
+    public void startSurfaceSinglePanePreNativeAndWithNativeTest() {
+        // clang-format on
+        Assert.assertFalse(mActivityTestRule.getActivity().isTablet());
+        Assert.assertTrue(CachedFeatureFlags.isEnabled(ChromeFeatureList.INSTANT_START));
+        Assert.assertEquals("single", StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue());
+        Assert.assertTrue(ReturnToChromeExperimentsUtil.shouldShowTabSwitcher(-1));
+
+        CriteriaHelper.pollUiThread(()
+                                            -> Assert.assertTrue(mActivityTestRule.getActivity()
+                                                                         .getLayoutManager()
+                                                                         .overviewVisible()));
+
+        Assert.assertFalse(LibraryLoader.getInstance().isInitialized());
+        assertThat(mActivityTestRule.getActivity().getLayoutManager())
+                .isInstanceOf(LayoutManagerChromePhone.class);
+        assertThat(mActivityTestRule.getActivity().getLayoutManager().getOverviewLayout())
+                .isInstanceOf(StartSurfaceLayout.class);
+
+        StartSurfaceCoordinator startSurfaceCoordinator =
+                (StartSurfaceCoordinator) ((ChromeTabbedActivity) mActivityTestRule.getActivity())
+                        .getStartSurface();
+        Assert.assertTrue(startSurfaceCoordinator.isInitPendingForTesting());
+        Assert.assertFalse(startSurfaceCoordinator.isInitializedWithNativeForTesting());
+        Assert.assertFalse(startSurfaceCoordinator.isSecondaryTaskInitPendingForTesting());
+
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            startSurfaceCoordinator.getController().setOverviewState(
+                    OverviewModeState.SHOWN_TABSWITCHER);
+        });
+        CriteriaHelper.pollUiThread(
+                ()
+                        -> Assert.assertTrue(
+                                startSurfaceCoordinator.isSecondaryTaskInitPendingForTesting()));
+
+        // Initializes native.
+        startAndWaitNativeInitialization();
+        Assert.assertFalse(startSurfaceCoordinator.isInitPendingForTesting());
+        Assert.assertFalse(startSurfaceCoordinator.isSecondaryTaskInitPendingForTesting());
+        Assert.assertTrue(startSurfaceCoordinator.isInitializedWithNativeForTesting());
     }
 
     @Test
@@ -334,22 +405,7 @@ public class InstantStartTest {
         //  Right now the real tab model is empty despite of our fake state file.
         Assert.assertFalse(LibraryLoader.getInstance().isInitialized());
 
-        CommandLine.getInstance().removeSwitch(ChromeSwitches.DISABLE_NATIVE_INITIALIZATION);
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().startDelayedNativeInitializationForTests());
-        CriteriaHelper.pollUiThread(() -> {
-            return mActivityTestRule.getActivity()
-                            .getTabModelSelector()
-                            .getTabModelFilterProvider()
-                            .getCurrentTabModelFilter()
-                    != null
-                    && mActivityTestRule.getActivity()
-                               .getTabModelSelector()
-                               .getTabModelFilterProvider()
-                               .getCurrentTabModelFilter()
-                               .isTabModelRestored();
-        });
-        Assert.assertTrue(LibraryLoader.getInstance().isInitialized());
+        startAndWaitNativeInitialization();
         mRenderTestRule.render(mActivityTestRule.getActivity().findViewById(R.id.tab_list_view),
                 "tabSwitcher_empty");
     }
