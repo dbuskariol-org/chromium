@@ -54217,6 +54217,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="1" label="PREVIEW_EVENT_CACHE_HIT"/>
   <int value="2" label="PREVIEW_EVENT_CREATE_DOCUMENT"/>
   <int value="3" label="PREVIEW_EVENT_NEW_SETTINGS"/>
+  <int value="4" label="PREVIEW_EVENT_INITIATED"/>
 </enum>
 
 <enum name="PrintPreviewPdfActionBuckets">
