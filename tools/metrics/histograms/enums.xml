@@ -38131,6 +38131,7 @@ from previous Chrome versions.
   <int value="-1837329460" label="NewEncodeCpuLoadEstimator:enabled"/>
   <int value="-1836854634" label="CloseTabSuggestions:enabled"/>
   <int value="-1835975804" label="disable-offline-auto-reload"/>
+  <int value="-1835905702" label="FilesZipNoNaCl:enabled"/>
   <int value="-1835608319" label="EnableHeuristicPalmDetectionFilter:disabled"/>
   <int value="-1834841895" label="CrostiniWebUIUpgrader:enabled"/>
   <int value="-1834536026" label="AppServiceIntentHandling:enabled"/>
@@ -41022,6 +41023,7 @@ from previous Chrome versions.
   <int value="1548942246" label="PassiveDocumentEventListeners:disabled"/>
   <int value="1552753678" label="DnsHttpssvc:disabled"/>
   <int value="1553422694" label="EnablePalmOnMaxTouchMajor:enabled"/>
+  <int value="1558410842" label="FilesZipNoNaCl:disabled"/>
   <int value="1559034872" label="AutofillPrefilledFields:enabled"/>
   <int value="1560188739" label="reader-mode-heuristics"/>
   <int value="1561781431" label="VirtualKeyboardBorderedKey:enabled"/>
