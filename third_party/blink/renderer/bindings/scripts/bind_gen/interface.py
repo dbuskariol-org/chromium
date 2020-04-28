@@ -1483,7 +1483,9 @@ def make_v8_set_return_value(cg_context):
     if return_type.keyword_typename in V8_RETURN_VALUE_FAST_TYPES:
         return T("bindings::V8SetReturnValue(${info}, ${return_value});")
 
-    if return_type_body.is_string:
+    # TODO(yukishiino): Remove |return_type_body.is_enumeration| below once
+    # the migration from String to V8Enum type is done.
+    if return_type_body.is_string or return_type_body.is_enumeration:
         args = ["${info}", "${return_value}", "${isolate}"]
         if return_type.is_nullable:
             args.append("bindings::V8ReturnValue::kNullable")
