@@ -4674,10 +4674,6 @@ void Document::ProcessBaseElement() {
   }
 }
 
-String Document::UserAgent() const {
-  return GetFrame() ? GetFrame()->Loader().UserAgent() : String();
-}
-
 void Document::DidLoadAllImports() {
   if (!HaveScriptBlockingStylesheetsLoaded())
     return;
