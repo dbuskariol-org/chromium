@@ -3807,10 +3807,6 @@ const char kVirtualKeyboardDescription[] =
     "Always show virtual keyboard regardless of having a physical keyboard "
     "present";
 
-const char kWakeOnPacketsName[] = "Wake On Packets";
-const char kWakeOnPacketsDescription[] =
-    "Enables waking the device based on the receipt of some network packets.";
-
 const char kZeroStateFilesName[] = "Enable Launcher Zero State Files";
 const char kZeroStateFilesDescription[] =
     "Enables zero state file recommendations in the Launcher, which appear when"

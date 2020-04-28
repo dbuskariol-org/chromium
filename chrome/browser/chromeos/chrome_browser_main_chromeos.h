@@ -58,7 +58,6 @@ class RendererFreezer;
 class SessionTerminationManager;
 class ShutdownPolicyForwarder;
 class SystemTokenCertDBInitializer;
-class WakeOnWifiManager;
 class WebKioskAppManager;
 class WilcoDtcSupportdManager;
 
@@ -122,7 +121,6 @@ class ChromeBrowserMainPartsChromeos : public ChromeBrowserMainPartsLinux {
   std::unique_ptr<IdleActionWarningObserver> idle_action_warning_observer_;
   std::unique_ptr<RendererFreezer> renderer_freezer_;
   std::unique_ptr<PowerMetricsReporter> power_metrics_reporter_;
-  std::unique_ptr<WakeOnWifiManager> wake_on_wifi_manager_;
   std::unique_ptr<FastTransitionObserver> fast_transition_observer_;
   std::unique_ptr<NetworkThrottlingObserver> network_throttling_observer_;
   std::unique_ptr<NetworkChangeManagerClient> network_change_manager_client_;
