@@ -215,7 +215,7 @@ crbug.com/974720 [ Mac10.13 ] virtual/text-antialias/firstline/capitalize-transf
 crbug.com/974720 [ Mac10.13 ] virtual/text-antialias/firstline/capitalize-transform.html [ Pass Crash ]
 
 # This will likely be fixed as we finish off the origin isolation architecture work
-crbug.com/1067389 external/wpt/origin-isolation/parent-no-child-yes-same.sub.https.html [ Pass Failure Crash ]
+crbug.com/1067389 virtual/no-auto-wpt-origin-isolation/external/wpt/origin-isolation/parent-no-child-yes-same.sub.https.html [ Pass Failure Crash ]
 
 # Flakily timing out or failing.
 # TODO(ccameron): Investigate this.
