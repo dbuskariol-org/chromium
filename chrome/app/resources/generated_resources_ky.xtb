@@ -673,6 +673,7 @@
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> орнотууңузду бүтүргөнгө даяр</translation>
 <translation id="1868193363684582383">"Окей Google"</translation>
 <translation id="1870629042957780127">Микрофонду колдонууга уруксат берүү</translation>
+<translation id="1871534214638631766">Чычкандагы оң баскычты чыкылдатканда же мазмунду коё бербей басып турганда тийиштүү маалымат көрсөтүлөт</translation>
 <translation id="1871615898038944731"><ph name="DEVICE_TYPE" /> түзмөгүңүз жаңыртылган</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Өтмөктү башка терезеге жылдыруу}other{Өтмөктөрдү башка терезеге жылдыруу}}</translation>
 <translation id="1875386316419689002">Бул өтмөк HID түзмөгүнө туташтырылган.</translation>
@@ -729,6 +730,7 @@
 <translation id="1944528062465413897">Bluetooth жупташтыруу коду:</translation>
 <translation id="1944921356641260203">Жаңыртуу табылды</translation>
 <translation id="1946577776959096882">Аккаунттарды көрүү</translation>
+<translation id="1949584741547056205">Ыкчам жооптор</translation>
 <translation id="1951012854035635156">Жардамчы</translation>
 <translation id="1954813140452229842">Түзмөктү кошууда ката кетти. Эсептик дайын-даректериңизди текшерип, кайталап көрүңүз.</translation>
 <translation id="1956050014111002555">Файлда, бирөөсү да импорттолбогон, бир нече тастыктама бар:</translation>

@@ -670,6 +670,7 @@
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> орнатуды аяқтауға дайын</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
 <translation id="1870629042957780127">Микрофонға рұқсат беру</translation>
+<translation id="1871534214638631766">Тінтуірдің оң жақ пернесін басқанда немесе мазмұнды ұзақ басқанда, қатысты ақпаратты көрсету</translation>
 <translation id="1871615898038944731"><ph name="DEVICE_TYPE" /> құрылғысы әлдеқашан жаңартылған</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Қойындыны басқа терезеден ашу}other{Қойындыларды басқа терезеден ашу}}</translation>
 <translation id="1875386316419689002">Бұл қойынды HID құрылғысына қосылған.</translation>
@@ -726,6 +727,7 @@
 <translation id="1944528062465413897">Bluetooth жұптау коды:</translation>
 <translation id="1944921356641260203">Жаңарту табылды</translation>
 <translation id="1946577776959096882">Есептік жазбаларды көру</translation>
+<translation id="1949584741547056205">Жылдам жауаптар</translation>
 <translation id="1951012854035635156">Assistant</translation>
 <translation id="1954813140452229842">Ортақ файлды орнату кезінде қате шықты. Тіркелу деректерін тексеріп, қайталап көріңіз.</translation>
 <translation id="1956050014111002555">Файлда ешбірі импортталмаған көптеген сертификаттар қамтылған:</translation>
