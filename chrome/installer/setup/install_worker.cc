@@ -411,10 +411,9 @@ void AddElevationServiceWorkItems(const base::FilePath& elevation_service_path,
   }
 
   list->AddWorkItem(new InstallServiceWorkItem(
-                        install_static::GetElevationServiceName(),
-                        install_static::GetElevationServiceDisplayName(),
-                        base::CommandLine(elevation_service_path)))
-      ->set_best_effort(true);
+      install_static::GetElevationServiceName(),
+      install_static::GetElevationServiceDisplayName(),
+      base::CommandLine(elevation_service_path)));
 
   list->AddCreateRegKeyWorkItem(root, clsid_reg_path, WorkItem::kWow64Default);
   list->AddSetRegValueWorkItem(root, clsid_reg_path, WorkItem::kWow64Default,
