@@ -22,6 +22,7 @@ import org.chromium.chrome.browser.flags.ChromeSwitches;
 import org.chromium.chrome.browser.notifications.channels.ChromeChannelDefinitions;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.components.browser_ui.notifications.ChromeNotification;
+import org.chromium.components.browser_ui.notifications.ChromeNotificationBuilder;
 import org.chromium.components.browser_ui.notifications.NotificationManagerProxy;
 import org.chromium.components.browser_ui.notifications.NotificationManagerProxyImpl;
 import org.chromium.components.browser_ui.notifications.NotificationMetadata;
@@ -33,7 +34,7 @@ import org.chromium.components.browser_ui.notifications.NotificationMetadata;
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE})
-public class ChromeNotificationBuilderTest {
+public class NotificationBuilderFactoryTest {
     private static final int TEST_NOTIFICATION_ID = 101;
 
     private NotificationManagerProxy mNotificationManager;

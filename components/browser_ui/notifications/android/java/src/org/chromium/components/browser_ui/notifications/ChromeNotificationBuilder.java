@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.notifications;
+package org.chromium.components.browser_ui.notifications;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -11,8 +11,6 @@ import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.widget.RemoteViews;
-
-import org.chromium.components.browser_ui.notifications.ChromeNotification;
 
 /**
  * Abstraction over Notification.Builder and NotificationCompat.Builder interfaces.
@@ -54,14 +52,19 @@ public interface ChromeNotificationBuilder {
     @Deprecated
     ChromeNotificationBuilder addAction(int icon, CharSequence title, PendingIntent intent);
 
-    ChromeNotificationBuilder addAction(int icon, CharSequence title, PendingIntentProvider intent,
-            @NotificationUmaTracker.ActionType int actionType);
+    /**
+     * @param actionType is for UMA. In Chrome, this is {@link NotificationUmaTracker.ActionType}.
+     */
+    ChromeNotificationBuilder addAction(
+            int icon, CharSequence title, PendingIntentProvider intent, int actionType);
 
     @Deprecated
     ChromeNotificationBuilder addAction(Notification.Action action);
 
-    ChromeNotificationBuilder addAction(Notification.Action action, int flags,
-            @NotificationUmaTracker.ActionType int actionType);
+    /**
+     * @param actionType is for UMA. In Chrome, this is {@link NotificationUmaTracker.ActionType}.
+     */
+    ChromeNotificationBuilder addAction(Notification.Action action, int flags, int actionType);
 
     @Deprecated
     ChromeNotificationBuilder setDeleteIntent(PendingIntent intent);
