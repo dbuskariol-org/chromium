@@ -274,6 +274,9 @@ def bind_callback_local_vars(code_node, cg_context):
         S("current_script_state", ("ScriptState* ${current_script_state} = "
                                    "ScriptState::From(${current_context});")),
         S("isolate", "v8::Isolate* ${isolate} = ${info}.GetIsolate();"),
+        S("non_undefined_argument_length",
+          ("const int ${non_undefined_argument_length} = "
+           "bindings::NonUndefinedArgumentLength(${info});")),
         S("per_context_data", ("V8PerContextData* ${per_context_data} = "
                                "${script_state}->PerContextData();")),
         S("per_isolate_data", ("V8PerIsolateData* ${per_isolate_data} = "
@@ -687,7 +690,9 @@ def bind_return_value(code_node, cg_context, overriding_args=None):
                 if index is not None:
                     branches.append(
                         CxxLikelyIfNode(
-                            cond=_format("${info}[{}]->IsUndefined()", index),
+                            cond=_format(
+                                "${non_undefined_argument_length} <= {}",
+                                index),
                             body=[
                                 T(assignment),
                                 T("break;"),
