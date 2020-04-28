@@ -11,13 +11,13 @@
 #include <memory>
 #include <set>
 #include <string>
-#include <unordered_set>
 #include <utility>
 #include <vector>
 
 #include "base/callback.h"
 #include "base/component_export.h"
 #include "base/containers/flat_map.h"
+#include "base/containers/flat_set.h"
 #include "base/containers/unique_ptr_adapters.h"
 #include "base/macros.h"
 #include "base/optional.h"
@@ -155,7 +155,7 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) NetworkContext
 
   CookieManager* cookie_manager() { return cookie_manager_.get(); }
 
-  const std::unordered_set<std::string>* cors_exempt_header_list() const {
+  const base::flat_set<std::string>* cors_exempt_header_list() const {
     return &cors_exempt_header_list_;
   }
 
@@ -695,7 +695,7 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) NetworkContext
 
   // Manages header keys that are allowed to be used in
   // ResourceRequest::cors_exempt_headers.
-  std::unordered_set<std::string> cors_exempt_header_list_;
+  base::flat_set<std::string> cors_exempt_header_list_;
 
   // Manages CORS preflight requests and its cache.
   cors::PreflightController cors_preflight_controller_;
