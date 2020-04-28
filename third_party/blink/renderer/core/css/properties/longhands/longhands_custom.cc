@@ -5920,21 +5920,21 @@ const CSSValue* StrokeWidth::CSSValueFromComputedStyleInternal(
   return CSSValue::Create(svg_style.StrokeWidth().length(), 1);
 }
 
-const CSSValue* SubtreeVisibility::CSSValueFromComputedStyleInternal(
+const CSSValue* ContentVisibility::CSSValueFromComputedStyleInternal(
     const ComputedStyle& style,
     const SVGComputedStyle&,
     const LayoutObject*,
     bool allow_visited_style) const {
-  return CSSIdentifierValue::Create(style.SubtreeVisibility());
+  return CSSIdentifierValue::Create(style.ContentVisibility());
 }
 
-const CSSValue* SubtreeVisibility::ParseSingleValue(
+const CSSValue* ContentVisibility::ParseSingleValue(
     CSSParserTokenRange& range,
     const CSSParserContext& context,
     const CSSParserLocalContext&) const {
   auto id = range.Peek().Id();
   if (id == CSSValueID::kHiddenMatchable &&
-      !RuntimeEnabledFeatures::CSSSubtreeVisibilityHiddenMatchableEnabled()) {
+      !RuntimeEnabledFeatures::CSSContentVisibilityHiddenMatchableEnabled()) {
     return nullptr;
   }
   if (!css_property_parser_helpers::IdentMatches<

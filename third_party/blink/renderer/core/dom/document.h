@@ -1696,7 +1696,7 @@ class CORE_EXPORT Document : public ContainerNode,
   void ApplyScrollRestorationLogic();
 
   void MarkHasFindInPageRequest();
-  void MarkHasFindInPageSubtreeVisibilityActiveMatch();
+  void MarkHasFindInPageContentVisibilityActiveMatch();
 
   void ScheduleFormSubmission(HTMLFormElement* form_element);
   void CancelFormSubmissions();
