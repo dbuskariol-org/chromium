@@ -810,6 +810,9 @@ def make_check_receiver(cg_context):
 
     T = TextNode
 
+    if cg_context.member_like.is_static:
+        return None
+
     if (cg_context.attribute
             and "LenientThis" in cg_context.attribute.extended_attributes):
         return SequenceNode([
