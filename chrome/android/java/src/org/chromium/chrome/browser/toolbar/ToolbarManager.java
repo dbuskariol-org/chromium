@@ -753,7 +753,6 @@ public class ToolbarManager implements ToolbarTabController, UrlFocusChangeListe
      * @param visible Whether the contextual action bar is now visible.
      */
     public void onActionBarVisibilityChanged(boolean visible) {
-        if (visible) RecordUserAction.record("MobileActionBarShown");
         ActionBar actionBar = mActionBarDelegate.getSupportActionBar();
         if (!visible && actionBar != null) actionBar.hide();
         if (mActivity.isTablet()) {
