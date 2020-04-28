@@ -307,9 +307,6 @@ public class NotificationCompatBuilder implements ChromeNotificationBuilder {
         } catch (NullPointerException e) {
             // Android M and L may throw exception, see https://crbug.com/949794.
             Log.e(TAG, "Failed to build notification.", e);
-            if (mMetadata != null) {
-                NotificationUmaTracker.onNotificationFailedToCreate(mMetadata.type);
-            }
         }
         return notification;
     }
