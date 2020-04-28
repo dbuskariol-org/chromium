@@ -1912,7 +1912,6 @@ Selle konto seadete haldamiseks installige oma seadmesse Family Link.  Saatsime 
 <translation id="3543597750097719865">X9.62 ECDSA allkiri SHA-512-ga</translation>
 <translation id="3544879808695557954">Kasutajanimi (valikuline)</translation>
 <translation id="354602065659584722">Kahjulik tarkvara eemaldati</translation>
-<translation id="3546284949680281622">TCP</translation>
 <translation id="3547954654003013442">Puhverserveri seaded</translation>
 <translation id="3548162552723420559">Kohandab ekraanivärvid keskkonnale vastavaks</translation>
 <translation id="3550915441744863158">Chrome teeb värskendused automaatselt, nii et kasutate alati uusimat versiooni</translation>
@@ -5559,7 +5558,6 @@ Hoidke oma võtmefail kindlas kohas. Teil läheb seda oma laiendi uute versiooni
 <translation id="8493236660459102203">Mikrofon:</translation>
 <translation id="8496717697661868878">Käita pistikprogramm</translation>
 <translation id="8497219075884839166">Windowsi utiliidid</translation>
-<translation id="8498014781268779783">UDP</translation>
 <translation id="8498214519255567734">See võimaldab hämaras ekraani mugavamalt vaadata või sellelt teksti lugeda</translation>
 <translation id="8498395510292172881">Jätkake lugemist Chrome'is</translation>
 <translation id="8500234928660943538">Vale PUK. Katseid jäänud: <ph name="RETRIES" />.</translation>

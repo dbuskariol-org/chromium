@@ -1907,7 +1907,6 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3543597750097719865">Potpis X9.62 ECDSA putem SHA-512</translation>
 <translation id="3544879808695557954">Korisničko ime (opcionalno)</translation>
 <translation id="354602065659584722">Štetan softver je uklonjen</translation>
-<translation id="3546284949680281622">TCP</translation>
 <translation id="3547954654003013442">Podešavanja proksija</translation>
 <translation id="3548162552723420559">Usklađuje boju ekrana sa okruženjem</translation>
 <translation id="3550915441744863158">Chrome se automatski ažurira, pa uvek imate najnoviju verziju</translation>
@@ -5555,7 +5554,6 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="8493236660459102203">Mikrofon:</translation>
 <translation id="8496717697661868878">Pokreni ovaj dodatak</translation>
 <translation id="8497219075884839166">Windows uslužni programi</translation>
-<translation id="8498014781268779783">UDP</translation>
 <translation id="8498214519255567734">Omogućava da lakše pregledate sadržaj ekrana ili da čitate pri prigušenom svetlu</translation>
 <translation id="8498395510292172881">Nastavite da čitate u Chrome-u</translation>
 <translation id="8500234928660943538">Netačan PUK. Preostalih pokušaja: <ph name="RETRIES" />.</translation>

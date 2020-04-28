@@ -1912,7 +1912,6 @@
 <translation id="3543597750097719865">Алгоритм ECDSA X9.62 з підписом SHA-512</translation>
 <translation id="3544879808695557954">Ім’я користувача (необов’язково)</translation>
 <translation id="354602065659584722">Зловмисне програмне забезпечення вилучено</translation>
-<translation id="3546284949680281622">TCP</translation>
 <translation id="3547954654003013442">Налаштування проксі-сервера</translation>
 <translation id="3548162552723420559">Регулює колір екрана відповідно до середовища</translation>
 <translation id="3550915441744863158">Chrome оновлюється автоматично, тому ви завжди маєте найновішу версію</translation>
@@ -5559,7 +5558,6 @@
 <translation id="8493236660459102203">Мікрофон:</translation>
 <translation id="8496717697661868878">Запустити цей плагін</translation>
 <translation id="8497219075884839166">Службові програми Windows</translation>
-<translation id="8498014781268779783">UDP</translation>
 <translation id="8498214519255567734">У цьому режимі зручніше переглядати або читати вміст на екрані в умовах тьмяного освітлення</translation>
 <translation id="8498395510292172881">Продовжити читати в Chrome</translation>
 <translation id="8500234928660943538">Неправильний PUK-код. Залишилося стільки спроб: <ph name="RETRIES" />.</translation>

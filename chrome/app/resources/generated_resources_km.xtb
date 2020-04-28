@@ -1910,7 +1910,6 @@
 <translation id="3543597750097719865">ហត្ថលេខា X9.62 ECDSA ជាមួយ SHA-512</translation>
 <translation id="3544879808695557954">ឈ្មោះ​អ្នក​ប្រើប្រាស់ (ជាជម្រើស)</translation>
 <translation id="354602065659584722">បាន​លុប​កម្មវិធី​ដែល​បង្កគ្រោះថ្នាក់</translation>
-<translation id="3546284949680281622">TCP</translation>
 <translation id="3547954654003013442">ការកំណត់ប្រូកស៊ី</translation>
 <translation id="3548162552723420559">កែតម្រូវ​ពណ៌អេក្រង់​ឱ្យ​ស៊ីគ្នា​ជាមួយ​មជ្ឈដ្ឋាន​ជុំវិញ</translation>
 <translation id="3550915441744863158">Chrome ធ្វើបច្ចុប្បន្នភាពដោយស្វ័យប្រវត្តិ ដូច្នេះអ្នកមានកំណែថ្មីបំផុតជានិច្ច</translation>
@@ -5557,7 +5556,6 @@
 <translation id="8493236660459102203">ម៉ៃក្រូហ្វូន៖</translation>
 <translation id="8496717697661868878">ដំណើរការកម្មវិធីជំនួយនេះ</translation>
 <translation id="8497219075884839166">ការប្រើប្រាស់​វិនដូ</translation>
-<translation id="8498014781268779783">UDP</translation>
 <translation id="8498214519255567734">វាធ្វើ​ឲ្យមាន​ភាពងាយស្រួល​ជាងមុន​ក្នុងការ​មើលអេក្រង់​របស់អ្នក ឬ​អាននៅ​កន្លែងដែល​មាន​ពន្លឺតិច</translation>
 <translation id="8498395510292172881">បន្ត​អាន​នៅក្នុង Chrome</translation>
 <translation id="8500234928660943538">PUK មិនត្រឹមត្រូវ។ ការសាកល្បងឡើងវិញ​នៅសល់៖ <ph name="RETRIES" />។</translation>

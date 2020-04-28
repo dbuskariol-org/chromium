@@ -1912,7 +1912,6 @@
 <translation id="3543597750097719865">Υπογραφή X9.62 ECDSA με SHA-512</translation>
 <translation id="3544879808695557954">Όνομα χρήστη (προαιρετικά)</translation>
 <translation id="354602065659584722">Το επιβλαβές λογισμικό καταργήθηκε</translation>
-<translation id="3546284949680281622">TCP</translation>
 <translation id="3547954654003013442">Ρυθμίσεις διακομιστή μεσολάβησης</translation>
 <translation id="3548162552723420559">Προσαρμόζει το χρώμα της οθόνης, προκειμένου να ταιριάζει με τον περιβάλλοντα χώρο</translation>
 <translation id="3550915441744863158">Το Chrome ενημερώνεται αυτόματα έτσι ώστε να έχετε πάντα στη διάθεσή σας τη νεότερη έκδοση.</translation>
@@ -5560,7 +5559,6 @@
 <translation id="8493236660459102203">Μικρόφωνο:</translation>
 <translation id="8496717697661868878">Εκτέλεση αυτής της προσθήκης</translation>
 <translation id="8497219075884839166">Βοηθητικά προγράμματα των Windows</translation>
-<translation id="8498014781268779783">UDP</translation>
 <translation id="8498214519255567734">Διευκολύνετε τη θέαση της οθόνης ή την ανάγνωση σε συνθήκες χαμηλού φωτισμού</translation>
 <translation id="8498395510292172881">Συνέχιση ανάγνωσης στο Chrome</translation>
 <translation id="8500234928660943538">Εσφαλμένος κωδικός PUK. Απομένουν <ph name="RETRIES" /> προσπάθειες.</translation>
