@@ -6,7 +6,7 @@
 
 #include <type_traits>
 
-#include "base/logging.h"
+#include "base/notreached.h"
 #include "base/optional.h"
 #include "components/sync/base/model_type.h"
 #include "components/sync/base/pref_names.h"
