@@ -4686,10 +4686,8 @@ bool ChromeContentBrowserClient::ShouldForceDownloadResource(
 void ChromeContentBrowserClient::CreateWebUsbService(
     content::RenderFrameHost* render_frame_host,
     mojo::PendingReceiver<blink::mojom::WebUsbService> receiver) {
-  if (!base::FeatureList::IsEnabled(features::kWebUsb)) {
-    LOG(INFO) << "WebUSB feature flag is disabled.";
+  if (!base::FeatureList::IsEnabled(features::kWebUsb))
     return;
-  }
 
   CHECK(render_frame_host);
   FrameUsbServices::CreateFrameUsbServices(render_frame_host,
