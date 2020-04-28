@@ -66,7 +66,6 @@ namespace net {
 class CertNetFetcher;
 class CertNetFetcherURLRequest;
 class CertVerifier;
-class CertVerifyProc;
 class HostPortPair;
 class NetworkIsolationKey;
 class ReportSender;
@@ -521,13 +520,6 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) NetworkContext
 
 #if defined(OS_CHROMEOS)
   void TrustAnchorUsed();
-
-  scoped_refptr<net::CertVerifyProc> CreateCertVerifyProcForUser(
-      scoped_refptr<net::CertNetFetcher> net_fetcher,
-      crypto::ScopedPK11Slot user_public_slot);
-
-  scoped_refptr<net::CertVerifyProc> CreateCertVerifyProcWithoutUserSlots(
-      scoped_refptr<net::CertNetFetcher> net_fetcher);
 #endif
 
 #if BUILDFLAG(IS_CT_SUPPORTED)

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/network/public/cpp/cert_verifier/cert_net_fetcher_url_loader.h"
+#include "services/cert_verifier/cert_net_url_loader/cert_net_fetcher_url_loader.h"
 
 #include <memory>
 #include <string>
@@ -26,7 +26,7 @@
 #include "net/traffic_annotation/network_traffic_annotation_test_helper.h"
 #include "net/url_request/url_request_filter.h"
 #include "net/url_request/url_request_interceptor.h"
-#include "services/network/public/cpp/cert_verifier/cert_net_fetcher_test.h"
+#include "services/cert_verifier/cert_net_url_loader/cert_net_fetcher_test.h"
 #include "services/network/public/mojom/url_loader.mojom.h"
 #include "services/network/test/test_url_loader_factory.h"
 #include "testing/gmock/include/gmock/gmock.h"

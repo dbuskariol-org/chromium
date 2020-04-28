@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_NETWORK_CERT_VERIFY_PROC_CHROMEOS_H_
-#define SERVICES_NETWORK_CERT_VERIFY_PROC_CHROMEOS_H_
+#ifndef SERVICES_NETWORK_PUBLIC_CPP_CERT_VERIFIER_CERT_VERIFY_PROC_CHROMEOS_H_
+#define SERVICES_NETWORK_PUBLIC_CPP_CERT_VERIFIER_CERT_VERIFY_PROC_CHROMEOS_H_
 
 #include "base/component_export.h"
 #include "crypto/scoped_nss_types.h"
@@ -60,4 +60,4 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) CertVerifyProcChromeOS
 
 }  // namespace network
 
-#endif  // SERVICES_NETWORK_CERT_VERIFY_PROC_CHROMEOS_H_
+#endif  // SERVICES_NETWORK_PUBLIC_CPP_CERT_VERIFIER_CERT_VERIFY_PROC_CHROMEOS_H_

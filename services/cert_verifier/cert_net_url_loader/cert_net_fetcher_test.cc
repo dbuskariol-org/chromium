@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/network/public/cpp/cert_verifier/cert_net_fetcher_test.h"
+#include "services/cert_verifier/cert_net_url_loader/cert_net_fetcher_test.h"
 
 #include "base/memory/scoped_refptr.h"
 #include "mojo/public/cpp/bindings/remote.h"

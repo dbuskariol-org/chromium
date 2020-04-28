@@ -56,7 +56,7 @@
 //   * Signals completion of requests through RequestCore's WaitableEvent.
 //   * Attaches requests to Jobs for the purpose of de-duplication
 
-#include "services/network/public/cpp/cert_verifier/cert_net_fetcher_url_loader.h"
+#include "services/cert_verifier/cert_net_url_loader/cert_net_fetcher_url_loader.h"
 
 #include <tuple>
 #include <utility>

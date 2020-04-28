@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/network/public/cpp/cert_verifier/nss_ocsp_session_url_loader.h"
+#include "services/cert_verifier/cert_net_url_loader/nss_ocsp_session_url_loader.h"
 #include <type_traits>
 
 #include "base/bind.h"

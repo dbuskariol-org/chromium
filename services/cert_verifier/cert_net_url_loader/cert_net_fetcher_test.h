@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_NETWORK_PUBLIC_CPP_CERT_VERIFIER_CERT_NET_FETCHER_TEST_H_
-#define SERVICES_NETWORK_PUBLIC_CPP_CERT_VERIFIER_CERT_NET_FETCHER_TEST_H_
+#ifndef SERVICES_CERT_VERIFIER_CERT_NET_URL_LOADER_CERT_NET_FETCHER_TEST_H_
+#define SERVICES_CERT_VERIFIER_CERT_NET_URL_LOADER_CERT_NET_FETCHER_TEST_H_
 
 #include <memory>
 
@@ -12,7 +12,7 @@
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "net/cert/cert_net_fetcher.h"
-#include "services/network/public/cpp/cert_verifier/cert_net_fetcher_url_loader.h"
+#include "services/cert_verifier/cert_net_url_loader/cert_net_fetcher_url_loader.h"
 #include "services/network/public/mojom/url_loader_factory.mojom.h"
 #include "services/network/test/test_shared_url_loader_factory.h"
 #include "services/network/test/test_url_loader_factory.h"
@@ -69,4 +69,4 @@ class CertNetFetcherTestUtilRealLoader : public CertNetFetcherTestUtil {
 
 }  // namespace cert_verifier
 
-#endif  // SERVICES_NETWORK_PUBLIC_CPP_CERT_VERIFIER_CERT_NET_FETCHER_TEST_H_
+#endif  // SERVICES_CERT_VERIFIER_CERT_NET_URL_LOADER_CERT_NET_FETCHER_TEST_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/network/trial_comparison_cert_verifier_mojo.h"
+#include "services/network/public/cpp/cert_verifier/trial_comparison_cert_verifier_mojo.h"
 
 #include <utility>
 
