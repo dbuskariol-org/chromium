@@ -1407,7 +1407,7 @@ deps = {
   },
 
   'src/third_party/usrsctp/usrsctplib':
-    Var('chromium_git') + '/external/github.com/sctplab/usrsctp' + '@' + 'bee946a606752a443bd70bca1cb296527fed706d',
+    Var('chromium_git') + '/external/github.com/sctplab/usrsctp' + '@' + 'a8c51df76caae94254b1e59999405f739467490e',
 
   # Display server protocol for Linux.
   'src/third_party/wayland/src': {
