@@ -201,10 +201,15 @@ class DisplayLockStyleScope {
            context->ShouldStyle(DisplayLockLifecycleTarget::kChildren);
   }
   void DidUpdateChildStyle() { did_update_children_ = true; }
-  void DidUpdateSelfStyle() {
+  // Returns true if the element was force unlocked due to missing requirements.
+  bool DidUpdateSelfStyle() {
     DCHECK(should_update_self_);
-    if (auto* context = element_->GetDisplayLockContext())
+    if (auto* context = element_->GetDisplayLockContext()) {
+      bool was_locked = context->IsLocked();
       context->DidStyle(DisplayLockLifecycleTarget::kSelf);
+      return was_locked && !context->IsLocked();
+    }
+    return false;
   }
 
   void NotifyUpdateWasBlocked(DisplayLockContext::StyleType style) {
@@ -213,6 +218,14 @@ class DisplayLockStyleScope {
     DCHECK(element_->GetDisplayLockContext());
 
     element_->GetDisplayLockContext()->NotifyStyleRecalcWasBlocked(style);
+  }
+
+  StyleRecalcChange AdjustStyleRecalcChangeForChildren(
+      StyleRecalcChange change) {
+    DCHECK(element_->GetDisplayLockContext());
+    DCHECK(!element_->GetDisplayLockContext()->IsLocked());
+    return element_->GetDisplayLockContext()
+        ->AdjustStyleRecalcChangeForChildren(change);
   }
 
  private:
@@ -3066,7 +3079,16 @@ void Element::RecalcStyle(const StyleRecalcChange change) {
   }
 
   // We're done with self style, notify the display lock.
-  display_lock_style_scope.DidUpdateSelfStyle();
+  bool did_unlock = display_lock_style_scope.DidUpdateSelfStyle();
+
+  // If the update to self style caused the display-lock to unlock, then we
+  // should adjust `child_change` with whatever deferred dirty bits the context
+  // had. This ensures that during this call, we will recurse into children for
+  // layout changes (if needed).
+  if (did_unlock) {
+    child_change = display_lock_style_scope.AdjustStyleRecalcChangeForChildren(
+        child_change);
+  }
 
   if (!display_lock_style_scope.ShouldUpdateChildStyle()) {
     if (child_change.RecalcChildren()) {
