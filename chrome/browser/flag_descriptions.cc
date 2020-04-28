@@ -3508,6 +3508,11 @@ const char kExperimentalAccessibilityChromeVoxLanguageSwitchingDescription[] =
     "Enable ChromeVox language switching, which changes ChromeVox's "
     "output language upon detection of new language.";
 
+const char kExperimentalAccessibilityChromeVoxTutorialName[] =
+    "Enable experimental ChromeVox interactive tutorial.";
+const char kExperimentalAccessibilityChromeVoxTutorialDescription[] =
+    "A comprehensive and interactive tutorial for the ChromeVox screen reader.";
+
 const char kExperimentalAccessibilityChromeVoxSearchMenusName[] =
     "Enable experimental ChromeVox search menus feature.";
 const char kExperimentalAccessibilityChromeVoxSearchMenusDescription[] =

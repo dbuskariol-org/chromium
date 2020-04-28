@@ -2041,6 +2041,9 @@ extern const char
 extern const char kExperimentalAccessibilityChromeVoxSearchMenusName[];
 extern const char kExperimentalAccessibilityChromeVoxSearchMenusDescription[];
 
+extern const char kExperimentalAccessibilityChromeVoxTutorialName[];
+extern const char kExperimentalAccessibilityChromeVoxTutorialDescription[];
+
 extern const char kExperimentalAccessibilitySwitchAccessName[];
 extern const char kExperimentalAccessibilitySwitchAccessDescription[];
 

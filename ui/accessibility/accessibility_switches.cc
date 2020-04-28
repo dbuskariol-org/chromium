@@ -48,6 +48,10 @@ const char kDisableExperimentalAccessibilityChromeVoxLanguageSwitching[] =
 const char kEnableExperimentalAccessibilityChromeVoxSearchMenus[] =
     "enable-experimental-accessibility-chromevox-search-menus";
 
+// Enables interactive tutorial for ChromeVox.
+const char kEnableExperimentalAccessibilityChromeVoxTutorial[] =
+    "enable-experimental-accessibility-chromevox-tutorial";
+
 bool IsExperimentalAccessibilityLanguageDetectionEnabled() {
   return base::CommandLine::ForCurrentProcess()->HasSwitch(
       ::switches::kEnableExperimentalAccessibilityLanguageDetection);

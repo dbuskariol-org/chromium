@@ -3008,6 +3008,12 @@ const FeatureEntry kFeatureEntries[] = {
      kOsCrOS,
      SINGLE_VALUE_TYPE(
          ::switches::kEnableExperimentalAccessibilityChromeVoxSearchMenus)},
+    {"enable-experimental-accessibility-chromevox-tutorial",
+     flag_descriptions::kExperimentalAccessibilityChromeVoxTutorialName,
+     flag_descriptions::kExperimentalAccessibilityChromeVoxTutorialDescription,
+     kOsCrOS,
+     SINGLE_VALUE_TYPE(
+         ::switches::kEnableExperimentalAccessibilityChromeVoxTutorial)},
 #endif  // OS_CHROMEOS
 #if defined(OS_MACOSX)
     {"enable-immersive-fullscreen-toolbar",
