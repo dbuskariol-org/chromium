@@ -2759,6 +2759,11 @@
     "expiry_milestone": 90
   },
   {
+    "name" : "lacros-support",
+    "owners": [ "jamescook", "erikchen", "lacros-team@google.com" ],
+    "expiry_milestone": 92
+  },
+  {
     "name": "launcher-settings-search",
     "owners": [ "jiameng", "tby" ],
     "expiry_milestone": 88

@@ -2086,6 +2086,9 @@ extern const char kImeMozcProtoDescription[];
 extern const char kImeNativeDecoderName[];
 extern const char kImeNativeDecoderDescription[];
 
+extern const char kLacrosSupportName[];
+extern const char kLacrosSupportDescription[];
+
 extern const char kLimitAltTabToActiveDeskName[];
 extern const char kLimitAltTabToActiveDeskDescription[];
 

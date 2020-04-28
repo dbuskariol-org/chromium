@@ -38902,6 +38902,7 @@ from previous Chrome versions.
   <int value="-962030536" label="ChromeDuetLabeled:enabled"/>
   <int value="-960077963" label="EnableAuraTooltipsOnWindows:enabled"/>
   <int value="-958950214" label="AllowDisableMouseAcceleration:disabled"/>
+  <int value="-958372962" label="LacrosSupport:enabled"/>
   <int value="-957200826" label="enable-spdy-proxy-auth"/>
   <int value="-956696029" label="scheduler-configuration"/>
   <int value="-953215709" label="StorageAccessAPI:enabled"/>
@@ -41497,6 +41498,7 @@ from previous Chrome versions.
   <int value="2106855416" label="HostWindowsInAppShimProcess:enabled"/>
   <int value="2113804526" label="EnableAppShortcutSearch:enabled"/>
   <int value="2114843059" label="ContextualSuggestionsOptOut:enabled"/>
+  <int value="2115848376" label="LacrosSupport:disabled"/>
   <int value="2119964154" label="enable-download-resumption"/>
   <int value="2120659210" label="BackForwardCache:enabled"/>
   <int value="2121056855" label="IncreaseInputAudioBufferSize:disabled"/>

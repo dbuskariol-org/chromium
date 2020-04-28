@@ -3583,6 +3583,10 @@ const char kImeNativeDecoderName[] = "Enable native decoders in IME Service";
 const char kImeNativeDecoderDescription[] =
     "Enable native decoders in IME service to deprecate NaCl decoders";
 
+const char kLacrosSupportName[] = "LaCrOS support";
+const char kLacrosSupportDescription[] =
+    "Support for the experimental lacros-chrome browser.";
+
 const char kLimitAltTabToActiveDeskName[] =
     "Limit Alt-Tab windows to active desk";
 const char kLimitAltTabToActiveDeskDescription[] =
