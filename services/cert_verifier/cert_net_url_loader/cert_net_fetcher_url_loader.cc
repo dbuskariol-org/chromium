@@ -58,6 +58,7 @@
 
 #include "services/cert_verifier/cert_net_url_loader/cert_net_fetcher_url_loader.h"
 
+#include <memory>
 #include <tuple>
 #include <utility>
 
@@ -66,6 +67,7 @@
 #include "base/check_op.h"
 #include "base/macros.h"
 #include "base/memory/ptr_util.h"
+#include "base/memory/scoped_refptr.h"
 #include "base/numerics/safe_math.h"
 #include "base/sequence_checker.h"
 #include "base/sequenced_task_runner.h"
@@ -116,6 +118,9 @@ struct JobComparator {
 // owned types doesn't come until C++17.
 using JobSet = std::map<Job*, std::unique_ptr<Job>, JobComparator>;
 
+using BindNewURLLoaderFactoryCallback = base::RepeatingCallback<void(
+    mojo::PendingReceiver<network::mojom::URLLoaderFactory>)>;
+
 }  // namespace
 
 // AsyncCertNetFetcherURLLoader manages URLLoaders in an async fashion on the
@@ -125,11 +130,13 @@ using JobSet = std::map<Job*, std::unique_ptr<Job>, JobComparator>;
 //  * De-duplicates requests
 class CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader {
  public:
-  // Initializes AsyncCertNetFetcherURLLoader using the specified
-  // URLLoaderFactory for creating URLLoaders. |factory| must remain valid until
-  // Shutdown() is called or the AsyncCertNetFetcherURLLoader is destroyed.
+  // Initializes AsyncCertNetFetcherURLLoader, binding the
+  // PendingRemote<URLLoaderFactory> into a Remote<URLLoaderFactory> for
+  // creating URLLoaders.
   explicit AsyncCertNetFetcherURLLoader(
-      network::mojom::URLLoaderFactory* factory);
+      mojo::PendingRemote<network::mojom::URLLoaderFactory>
+          factory_pending_remote,
+      BindNewURLLoaderFactoryCallback bind_new_url_loader_factory_cb);
 
   // The AsyncCertNetFetcherURLLoader is expected to be kept alive until all
   // requests have completed or Shutdown() is called.
@@ -149,6 +156,10 @@ class CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader {
   void Shutdown();
 
  private:
+  // Callback for disconnection of |factory_|. Attempts to use
+  // |bind_new_url_loader_factory_cb_| to reconnect.
+  void RebindURLLoaderFactory();
+
   // Finds a job with a matching RequestPararms or returns nullptr if there was
   // no match.
   Job* FindJob(const RequestParams& params);
@@ -157,10 +168,16 @@ class CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader {
   // invoking callbacks (OnJobCompleted).
   JobSet jobs_;
 
-  // Not owned. |factory_| must outlive the AsyncCertNetFetcherURLLoader, and if
-  // it disconnects, the AsyncCertNetFetcher must be shutdown so it doesn't run
-  // any more requests.
-  network::mojom::URLLoaderFactory* factory_ = nullptr;
+  // |factory_| may disconnect. On disconnection, immediately try to reconnect
+  // in case the disconnection was deliberate. If the disconnection was due to a
+  // crash, the CertNetFetcherURLLoader will likely be destroyed and recreated
+  // for a new CertVerifier. It can then be reconnected with
+  // |bind_new_url_loader_factory_cb_|.
+  mojo::Remote<network::mojom::URLLoaderFactory> factory_;
+
+  // A callback provided by the creator of the CertNetFetcherURLLoader that can
+  // be used to bind a new URLLoaderFactory if the current one disconnects.
+  BindNewURLLoaderFactoryCallback bind_new_url_loader_factory_cb_;
 
   SEQUENCE_CHECKER(sequence_checker_);
 
@@ -235,10 +252,6 @@ class CertNetFetcherURLLoader::RequestCore
     completion_event_.Signal();
   }
 
-  // Detaches this request from its job (if it is attached to any) and
-  // signals completion with ERR_ABORTED. Can be called from any thread.
-  void CancelJob();
-
   // Can be used to signal that an error was encountered before the request was
   // attached to a job. Can be called from any thread.
   void SignalImmediateError();
@@ -254,6 +267,10 @@ class CertNetFetcherURLLoader::RequestCore
     error_ = net::ERR_UNEXPECTED;
   }
 
+  // Detaches this request from its job (if it is attached to any) and
+  // signals completion with ERR_ABORTED. Can be called from any thread.
+  void CancelJob();
+
  private:
   friend class base::RefCountedThreadSafe<RequestCore>;
 
@@ -261,6 +278,9 @@ class CertNetFetcherURLLoader::RequestCore
     // Requests should have been cancelled prior to destruction.
     DCHECK(!job_);
   }
+
+  // See comments on CancelJob().
+  void CancelJobOnTaskRunner();
 
   // A non-owned pointer to the job that is executing the request.
   Job* job_ = nullptr;
@@ -275,6 +295,7 @@ class CertNetFetcherURLLoader::RequestCore
   // Indicates when |error_| and |bytes_| have been written to.
   base::WaitableEvent completion_event_;
 
+  // The task runner of the creation thread.
   scoped_refptr<base::SequencedTaskRunner> task_runner_;
 
   DISALLOW_COPY_AND_ASSIGN(RequestCore);
@@ -384,22 +405,6 @@ class Job {
 
 }  // namespace
 
-void CertNetFetcherURLLoader::RequestCore::CancelJob() {
-  if (!task_runner_->RunsTasksInCurrentSequence()) {
-    task_runner_->PostTask(FROM_HERE,
-                           base::BindOnce(&RequestCore::CancelJob, this));
-    return;
-  }
-
-  if (job_) {
-    auto* job = job_;
-    job_ = nullptr;
-    job->DetachRequest(this);
-  }
-
-  SignalImmediateError();
-}
-
 void CertNetFetcherURLLoader::RequestCore::SignalImmediateError() {
   // These data members are normally only written on the network thread, but it
   // is safe to write here from either thread. This is because
@@ -414,6 +419,22 @@ void CertNetFetcherURLLoader::RequestCore::SignalImmediateError() {
   error_ = net::ERR_ABORTED;
   bytes_.clear();
   completion_event_.Signal();
+}
+
+void CertNetFetcherURLLoader::RequestCore::CancelJob() {
+  DCHECK(!task_runner_->RunsTasksInCurrentSequence());
+  task_runner_->PostTask(
+      FROM_HERE, base::BindOnce(&RequestCore::CancelJobOnTaskRunner, this));
+}
+
+void CertNetFetcherURLLoader::RequestCore::CancelJobOnTaskRunner() {
+  if (job_) {
+    auto* job = job_;
+    job_ = nullptr;
+    job->DetachRequest(this);
+  }
+
+  SignalImmediateError();
 }
 
 namespace {
@@ -565,15 +586,28 @@ void Job::FailRequest(net::Error error) {
 }  // namespace
 
 CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::
-    AsyncCertNetFetcherURLLoader(network::mojom::URLLoaderFactory* factory)
-    : factory_(factory) {
-  // Allow creation to happen from another thread.
-  DETACH_FROM_SEQUENCE(sequence_checker_);
+    AsyncCertNetFetcherURLLoader(
+        mojo::PendingRemote<network::mojom::URLLoaderFactory>
+            factory_pending_remote,
+        BindNewURLLoaderFactoryCallback bind_new_url_loader_factory_cb)
+    : factory_(std::move(factory_pending_remote)),
+      bind_new_url_loader_factory_cb_(
+          std::move(bind_new_url_loader_factory_cb)) {
+  // If the URLLoaderFactory disconnects, try to rebind immediately in case this
+  // was a deliberate disconnection to force a restart. Safe to use
+  // base::Unretained(this) because |this| owns |factory_|.
+  factory_.set_disconnect_handler(
+      base::BindOnce(&CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::
+                         RebindURLLoaderFactory,
+                     base::Unretained(this)));
 }
 
 CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::
     ~AsyncCertNetFetcherURLLoader() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  // The fetcher must be shutdown (at which point |factory_| will be reset and
+  // unbound) before destruction.
+  DCHECK(!factory_);
   DCHECK(jobs_.empty());
 }
 
@@ -600,15 +634,33 @@ void CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::Fetch(
   // request will get signalled if |StartURLLoader()| completes the job
   // synchronously.
   job->AttachRequest(std::move(request));
-  job->StartURLLoader(factory_);
+  job->StartURLLoader(factory_.get());
 }
 
 void CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::Shutdown() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   for (const auto& job : jobs_) {
     job.first->Cancel();
   }
   jobs_.clear();
+
+  factory_.reset();
+}
+
+void CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::
+    RebindURLLoaderFactory() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  // If Shutdown() was called, the AsyncCertNetFetcherURLLoader should not be
+  // trying to reconnect a URLLoaderFactory.
+  DCHECK(factory_);
+
+  factory_.reset();
+  bind_new_url_loader_factory_cb_.Run(factory_.BindNewPipeAndPassReceiver());
+  factory_.set_disconnect_handler(
+      base::BindOnce(&CertNetFetcherURLLoader::AsyncCertNetFetcherURLLoader::
+                         RebindURLLoaderFactory,
+                     base::Unretained(this)));
 }
 
 namespace {
@@ -658,6 +710,7 @@ class CertNetFetcherRequestImpl : public net::CertNetFetcher::Request {
   void WaitForResult(net::Error* error, std::vector<uint8_t>* bytes) override {
     // Should only be called a single time.
     DCHECK(core_);
+
     core_->WaitForResult(error, bytes);
     core_ = nullptr;
   }
@@ -674,22 +727,14 @@ class CertNetFetcherRequestImpl : public net::CertNetFetcher::Request {
 }  // namespace
 
 CertNetFetcherURLLoader::CertNetFetcherURLLoader(
-    mojo::PendingRemote<network::mojom::URLLoaderFactory> factory)
+    mojo::PendingRemote<network::mojom::URLLoaderFactory> factory,
+    BindNewURLLoaderFactoryCallback bind_new_url_loader_factory_cb)
     : task_runner_(base::SequencedTaskRunnerHandle::Get()),
-      factory_(std::move(factory)) {
-  // If the URLLoaderFactory disconnects (for example if the network context is
-  // destroyed), then this CertNetFetcherURLLoader should just shutdown and
-  // error out all future requests. Safe to use base::Unretained(this) because
-  // |this| owns |factory_|.
-  factory_.set_disconnect_handler(base::BindOnce(
-      &CertNetFetcherURLLoader::Shutdown, base::Unretained(this)));
-}
+      impl_(std::make_unique<AsyncCertNetFetcherURLLoader>(
+          std::move(factory),
+          std::move(bind_new_url_loader_factory_cb))) {}
 
-CertNetFetcherURLLoader::~CertNetFetcherURLLoader() {
-  // The fetcher must be shutdown (at which point |factory_| will be reset and
-  // unbound) before destruction.
-  DCHECK(!factory_);
-}
+CertNetFetcherURLLoader::~CertNetFetcherURLLoader() = default;
 
 // static
 base::TimeDelta CertNetFetcherURLLoader::GetDefaultTimeoutForTesting() {
@@ -702,8 +747,6 @@ void CertNetFetcherURLLoader::Shutdown() {
     impl_->Shutdown();
     impl_.reset();
   }
-  // Unbinds this Remote<URLLoaderFactory> entirely.
-  factory_.reset();
 }
 
 std::unique_ptr<net::CertNetFetcher::Request>
@@ -756,16 +799,12 @@ void CertNetFetcherURLLoader::DoFetchOnTaskRunner(
     scoped_refptr<RequestCore> request) {
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
 
-  if (!factory_) {
-    // The fetcher might have been shutdown between when this task was posted
-    // and when it is running. In this case, signal the request and do not
-    // start a network request.
+  if (!impl_) {
+    // The fetcher might have been shutdown (which resets |impl_|) between when
+    // this task was posted and when it is running. In this case, signal the
+    // request and do not start a network request.
     request->SignalImmediateError();
     return;
-  }
-
-  if (!impl_) {
-    impl_.reset(new AsyncCertNetFetcherURLLoader(factory_.get()));
   }
 
   impl_->Fetch(std::move(request_params), request);
@@ -774,7 +813,10 @@ void CertNetFetcherURLLoader::DoFetchOnTaskRunner(
 std::unique_ptr<CertNetFetcherURLLoader::Request>
 CertNetFetcherURLLoader::DoFetch(
     std::unique_ptr<RequestParams> request_params) {
-  scoped_refptr<RequestCore> request_core = new RequestCore(task_runner_);
+  // Caller thread cannot be the same as the creation thread.
+  DCHECK(!task_runner_->RunsTasksInCurrentSequence());
+
+  auto request_core = base::MakeRefCounted<RequestCore>(task_runner_);
 
   // If the fetcher has already been shutdown, DoFetchOnTaskRunner will
   // signal the request with an error. However, if the fetcher shuts down

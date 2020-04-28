@@ -166,6 +166,21 @@ class CertNetFetcherURLLoaderTest : public PlatformTest {
     done.Wait();
   }
 
+  void ResetTestURLLoaderFactoryOnNetworkThread(base::WaitableEvent* done) {
+    test_util_->ResetURLLoaderFactory();
+    done->Signal();
+  }
+
+  void ResetTestURLLoaderFactory() {
+    base::WaitableEvent done(base::WaitableEvent::ResetPolicy::MANUAL,
+                             base::WaitableEvent::InitialState::NOT_SIGNALED);
+    creation_thread_->task_runner()->PostTask(
+        FROM_HERE, base::BindOnce(&CertNetFetcherURLLoaderTest::
+                                      ResetTestURLLoaderFactoryOnNetworkThread,
+                                  base::Unretained(this), &done));
+    done.Wait();
+  }
+
   void TeardownOnNetworkThread() {
     if (!test_util_)
       return;
@@ -447,6 +462,57 @@ TEST_F(CertNetFetcherURLLoaderTest, CancelHttpsNotAllowed) {
   request.reset();
 }
 
+TEST_F(CertNetFetcherURLLoaderTest,
+       ReconnectsAfterURLLoaderFactoryDisconnection) {
+  ASSERT_TRUE(test_server_.Start());
+  CreateFetcher();
+
+  GURL cert_crt_url = test_server_.GetURL("/cert.crt");
+  std::unique_ptr<net::CertNetFetcher::Request> request1 =
+      StartRequest(fetcher(), cert_crt_url);
+
+  // Reset the URLLoaderFactory. It should reconnect afterwards and successfully
+  // complete the rest of the requests.
+  ResetTestURLLoaderFactory();
+
+  GURL root_url = test_server_.GetURL("/root.crl");
+  std::unique_ptr<net::CertNetFetcher::Request> request2 =
+      StartRequest(fetcher(), root_url);
+
+  GURL certs_p7c_url = test_server_.GetURL("/certs.p7c");
+  std::unique_ptr<net::CertNetFetcher::Request> request3 =
+      StartRequest(fetcher(), certs_p7c_url);
+
+  // Wait for all of the requests to complete and verify the fetch results.
+  VerifySuccess("-root.crl-\n", request2.get());
+  VerifySuccess("-certs.p7c-\n", request3.get());
+
+  // Depending on thread timing, |request1| may have completed successfully
+  // prior to the URLLoaderFactory being disconnected, or the disconnect may
+  // have caused the request to fail. Because it's timing dependent, and not
+  // relevant to the subsequent requests which must succeed, either state is
+  // allowed.
+  {
+    net::Error error;
+    std::vector<uint8_t> body;
+    request1->WaitForResult(&error, &body);
+  }
+
+  EXPECT_GE(2, NumCreatedRequests());
+
+  ResetTestURLLoaderFactory();
+
+  // Requests should work even after a second reset.
+  std::unique_ptr<net::CertNetFetcher::Request> request4 =
+      StartRequest(fetcher(), cert_crt_url);
+
+  std::unique_ptr<net::CertNetFetcher::Request> request5 =
+      StartRequest(fetcher(), root_url);
+
+  VerifySuccess("-cert.crt-\n", request4.get());
+  VerifySuccess("-root.crl-\n", request5.get());
+}
+
 // Start a few requests, and cancel one of them before running the message loop
 // again.
 TEST_F(CertNetFetcherURLLoaderTest, CancelBeforeRunningMessageLoop) {
@@ -634,7 +700,7 @@ TEST_F(CertNetFetcherURLLoaderTest,
   VerifyFailure(net::ERR_ABORTED, request.get());
 }
 
-// // Tests that outstanding Requests are cancelled when Shutdown is called.
+// Tests that outstanding Requests are cancelled when Shutdown is called.
 TEST_F(CertNetFetcherURLLoaderTest, ShutdownCancelsRequests) {
   SetUseHangingURLLoader();
   CreateFetcher();

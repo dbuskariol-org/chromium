@@ -5,6 +5,7 @@
 #ifndef SERVICES_CERT_VERIFIER_CERT_NET_URL_LOADER_CERT_NET_FETCHER_URL_LOADER_H_
 #define SERVICES_CERT_VERIFIER_CERT_NET_URL_LOADER_CERT_NET_FETCHER_URL_LOADER_H_
 
+#include "base/callback_forward.h"
 #include "base/component_export.h"
 #include "base/memory/ref_counted.h"
 #include "mojo/public/cpp/bindings/remote.h"
@@ -30,10 +31,13 @@ class COMPONENT_EXPORT(CERT_VERIFIER_CPP) CertNetFetcherURLLoader
   struct RequestParams;
 
   // Creates the CertNetFetcherURLLoader, using the provided URLLoaderFactory.
-  // If the other side of the remote disconnects, this CertNetFetcherURLLoader
-  // will call Shutdown().
+  // If the other side of the remote disconnects, the CertNetFetcherURLLoader
+  // will attempt that reconnect using |bind_new_url_loader_factory_cb|.
   explicit CertNetFetcherURLLoader(
-      mojo::PendingRemote<network::mojom::URLLoaderFactory> factory);
+      mojo::PendingRemote<network::mojom::URLLoaderFactory> factory,
+      base::RepeatingCallback<
+          void(mojo::PendingReceiver<network::mojom::URLLoaderFactory>)>
+          bind_new_url_loader_factory_cb);
 
   // Returns the default timeout value. Intended for test use only.
   static base::TimeDelta GetDefaultTimeoutForTesting();
@@ -60,11 +64,9 @@ class COMPONENT_EXPORT(CERT_VERIFIER_CPP) CertNetFetcherURLLoader
   std::unique_ptr<Request> DoFetch(
       std::unique_ptr<RequestParams> request_params);
 
+  // The task runner of the creation thread.
   scoped_refptr<base::SequencedTaskRunner> task_runner_;
-  // |factory_| should stay valid until Shutdown() is called. If it disconnects,
-  // the CertNetFetcherURLLoader will automatically shutdown and cancel all
-  // outstanding requests.
-  mojo::Remote<network::mojom::URLLoaderFactory> factory_;
+
   std::unique_ptr<AsyncCertNetFetcherURLLoader> impl_;
 };
 
