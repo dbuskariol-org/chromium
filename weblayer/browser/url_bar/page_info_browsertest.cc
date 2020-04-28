@@ -39,4 +39,11 @@ IN_PROC_BROWSER_TEST_F(PageInfoBrowserTest, StatefulSSLHostStateDelegateSet) {
   EXPECT_TRUE(page_info_delegate->GetStatefulSSLHostStateDelegate());
 }
 
+IN_PROC_BROWSER_TEST_F(PageInfoBrowserTest, PermissionDecisionAutoblocker) {
+  std::unique_ptr<PageInfoDelegate> page_info_delegate =
+      page_info::GetPageInfoClient()->CreatePageInfoDelegate(GetWebContents());
+  ASSERT_TRUE(page_info_delegate);
+  EXPECT_TRUE(page_info_delegate->GetPermissionDecisionAutoblocker());
+}
+
 }  // namespace weblayer
