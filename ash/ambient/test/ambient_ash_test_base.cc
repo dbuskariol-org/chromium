@@ -19,8 +19,7 @@ AmbientAshTestBase::~AmbientAshTestBase() = default;
 void AmbientAshTestBase::SetUp() {
   scoped_feature_list_.InitAndEnableFeature(
       chromeos::features::kAmbientModeFeature);
-  assistant_image_downloader_ =
-      std::make_unique<TestAssistantImageDownloader>();
+  image_downloader_ = std::make_unique<TestImageDownloader>();
   ambient_client_ = std::make_unique<TestAmbientClient>();
 
   AshTestBase::SetUp();
@@ -37,7 +36,7 @@ void AmbientAshTestBase::TearDown() {
   AshTestBase::TearDown();
 
   ambient_client_.reset();
-  assistant_image_downloader_.reset();
+  image_downloader_.reset();
 }
 
 AmbientController* AmbientAshTestBase::ambient_controller() const {

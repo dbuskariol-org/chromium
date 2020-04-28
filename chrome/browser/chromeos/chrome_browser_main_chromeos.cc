@@ -129,6 +129,7 @@
 #include "chrome/browser/task_manager/task_manager_interface.h"
 #include "chrome/browser/ui/ash/assistant/assistant_client_impl.h"
 #include "chrome/browser/ui/ash/assistant/assistant_state_client.h"
+#include "chrome/browser/ui/ash/image_downloader_impl.h"
 #include "chrome/browser/ui/ash/keyboard/chrome_keyboard_controller_client.h"
 #include "chrome/browser/ui/webui/chromeos/login/discover/discover_manager.h"
 #include "chrome/common/channel_info.h"
@@ -677,6 +678,9 @@ void ChromeBrowserMainPartsChromeos::PreProfileInit() {
   // Initialize magnification manager before ash tray is created. And this
   // must be placed after UserManager initialization.
   MagnificationManager::Initialize();
+
+  // Has to be initialized before |assistant_client_|;
+  image_downloader_ = std::make_unique<ImageDownloaderImpl>();
 
   // Requires UserManager.
   assistant_state_client_ = std::make_unique<AssistantStateClient>();

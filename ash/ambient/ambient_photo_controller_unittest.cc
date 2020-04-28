@@ -40,7 +40,6 @@ TEST_F(AmbientPhotoControllerTest, ShouldGetScreenUpdateSuccessfully) {
             std::move(weather_inf_closure).Run();
             on_done.Run();
           }));
-
   run_loop.Run();
 }
 

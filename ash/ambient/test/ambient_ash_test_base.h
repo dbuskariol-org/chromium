@@ -9,8 +9,8 @@
 #include <string>
 
 #include "ash/ambient/ambient_controller.h"
-#include "ash/public/cpp/assistant/test_support/test_assistant_image_downloader.h"
 #include "ash/public/cpp/test/test_ambient_client.h"
+#include "ash/public/cpp/test/test_image_downloader.h"
 #include "ash/test/ash_test_base.h"
 #include "base/test/scoped_feature_list.h"
 
@@ -44,7 +44,7 @@ class AmbientAshTestBase : public AshTestBase {
 
  private:
   base::test::ScopedFeatureList scoped_feature_list_;
-  std::unique_ptr<TestAssistantImageDownloader> assistant_image_downloader_;
+  std::unique_ptr<TestImageDownloader> image_downloader_;
   std::unique_ptr<TestAmbientClient> ambient_client_;
 };
 

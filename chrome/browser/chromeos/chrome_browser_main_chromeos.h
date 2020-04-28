@@ -16,6 +16,7 @@
 class AssistantClientImpl;
 class AssistantStateClient;
 class ChromeKeyboardControllerClient;
+class ImageDownloaderImpl;
 class SpokenFeedbackEventRewriterDelegate;
 
 namespace lock_screen_apps {
@@ -141,6 +142,8 @@ class ChromeBrowserMainPartsChromeos : public ChromeBrowserMainPartsLinux {
   scoped_refptr<chromeos::ExternalMetrics> external_metrics_;
 
   std::unique_ptr<arc::ArcServiceLauncher> arc_service_launcher_;
+
+  std::unique_ptr<ImageDownloaderImpl> image_downloader_;
 
   std::unique_ptr<AssistantStateClient> assistant_state_client_;
 
