@@ -4056,6 +4056,7 @@ jumbo_static_library("ui") {
     deps += [
       "//ash/app_list",
       "//ash/assistant/model",
+      "//ash/assistant/util",
       "//ash/public/cpp",
       "//ash/public/cpp/app_list/vector_icons",
       "//ash/public/cpp/vector_icons",

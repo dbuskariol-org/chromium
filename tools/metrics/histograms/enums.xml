@@ -3286,6 +3286,7 @@ Unknown properties are collapsed to zero. -->
   <int value="8" label="kLauncherSearchResult"/>
   <int value="9" label="kLauncherSearchBoxIcon"/>
   <int value="10" label="kProactiveSuggestions"/>
+  <int value="11" label="kLauncherChip"/>
 </enum>
 
 <enum name="AssistantExitPoint">
@@ -3350,6 +3351,7 @@ Unknown properties are collapsed to zero. -->
   <int value="9" label="kConversationStarter"/>
   <int value="10" label="kWhatsOnMyScreen"/>
   <int value="11" label="kQuickAnswers"/>
+  <int value="12" label="kLauncherChip"/>
 </enum>
 
 <enum name="AsyncDNSConfigParsePosix">
