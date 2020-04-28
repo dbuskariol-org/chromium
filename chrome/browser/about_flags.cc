@@ -3001,13 +3001,13 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kKernelnextVMsName,
      flag_descriptions::kKernelnextVMsDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kKernelnextVMs)},
-    {"enable-experimental-accessibility-chromevox-search-menus",
+    {"disable-experimental-accessibility-chromevox-search-menus",
      flag_descriptions::kExperimentalAccessibilityChromeVoxSearchMenusName,
      flag_descriptions::
          kExperimentalAccessibilityChromeVoxSearchMenusDescription,
      kOsCrOS,
      SINGLE_VALUE_TYPE(
-         ::switches::kEnableExperimentalAccessibilityChromeVoxSearchMenus)},
+         ::switches::kDisableExperimentalAccessibilityChromeVoxSearchMenus)},
     {"enable-experimental-accessibility-chromevox-tutorial",
      flag_descriptions::kExperimentalAccessibilityChromeVoxTutorialName,
      flag_descriptions::kExperimentalAccessibilityChromeVoxTutorialDescription,
