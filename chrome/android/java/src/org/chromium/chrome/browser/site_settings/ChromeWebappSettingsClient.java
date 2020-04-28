@@ -7,7 +7,7 @@ package org.chromium.chrome.browser.site_settings;
 import androidx.annotation.Nullable;
 
 import org.chromium.chrome.browser.browserservices.permissiondelegation.TrustedWebActivityPermissionManager;
-import org.chromium.chrome.browser.notifications.channels.SiteChannelsManager;
+import org.chromium.chrome.browser.webapps.WebappRegistry;
 import org.chromium.components.embedder_support.util.Origin;
 
 import java.util.Set;
@@ -15,26 +15,27 @@ import java.util.Set;
 /**
  * A SiteSettingsClient instance that contains Chrome-specific Site Settings logic.
  */
-public class ChromeNotificationSettingsClient implements NotificationSettingsClient {
+public class ChromeWebappSettingsClient implements WebappSettingsClient {
     @Override
-    public Set<String> getAllDelegatedOrigins() {
+    public Set<String> getOriginsWithInstalledApp() {
+        WebappRegistry registry = WebappRegistry.getInstance();
+        return registry.getOriginsWithInstalledApp();
+    }
+
+    @Override
+    public Set<String> getAllDelegatedNotificationOrigins() {
         return TrustedWebActivityPermissionManager.get().getAllDelegatedOrigins();
     }
 
     @Override
     @Nullable
-    public String getDelegateAppNameForOrigin(Origin origin) {
+    public String getNotificationDelegateAppNameForOrigin(Origin origin) {
         return TrustedWebActivityPermissionManager.get().getDelegateAppName(origin);
     }
 
     @Override
     @Nullable
-    public String getDelegatePackageNameForOrigin(Origin origin) {
+    public String getNotificationDelegatePackageNameForOrigin(Origin origin) {
         return TrustedWebActivityPermissionManager.get().getDelegatePackageName(origin);
-    }
-
-    @Override
-    public String getChannelIdForOrigin(String origin) {
-        return SiteChannelsManager.getInstance().getChannelIdForOrigin(origin);
     }
 }
