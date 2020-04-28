@@ -363,6 +363,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void SetIsXrOverlaySetup() override;
   bool IsInBackForwardCache() override;
   ukm::SourceId GetPageUkmSourceId() override;
+  StoragePartition* GetStoragePartition() override;
+  BrowserContext* GetBrowserContext() override;
 
   // Determines if a clipboard paste using |data| of type |data_type| is allowed
   // in this renderer frame.  The implementation delegates to

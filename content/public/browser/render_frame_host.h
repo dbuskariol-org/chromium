@@ -75,6 +75,8 @@ class RenderProcessHost;
 class RenderViewHost;
 class RenderWidgetHostView;
 class SiteInstance;
+class BrowserContext;
+class StoragePartition;
 
 // The interface provides a communication conduit with a frame in the renderer.
 class CONTENT_EXPORT RenderFrameHost : public IPC::Listener,
@@ -126,10 +128,20 @@ class CONTENT_EXPORT RenderFrameHost : public IPC::Listener,
   // Returns the SiteInstance grouping all RenderFrameHosts that have script
   // access to this RenderFrameHost, and must therefore live in the same
   // process.
+  // Associated SiteInstance never changes.
   virtual SiteInstance* GetSiteInstance() = 0;
 
   // Returns the process for this frame.
+  // Associated RenderProcessHost never changes.
   virtual RenderProcessHost* GetProcess() = 0;
+
+  // Returns a StoragePartition associated with this RenderFrameHost.
+  // Associated StoragePartition never changes.
+  virtual StoragePartition* GetStoragePartition() = 0;
+
+  // Returns the user browser context associated with this RenderFrameHost.
+  // Associated BrowserContext never changes.
+  virtual BrowserContext* GetBrowserContext() = 0;
 
   // Returns the RenderWidgetHostView that can be used to control focus and
   // visibility for this frame.

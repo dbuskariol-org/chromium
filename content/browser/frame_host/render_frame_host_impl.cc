@@ -3325,6 +3325,15 @@ ukm::SourceId RenderFrameHostImpl::GetPageUkmSourceId() {
                                 ukm::SourceIdType::NAVIGATION_ID);
 }
 
+BrowserContext* RenderFrameHostImpl::GetBrowserContext() {
+  return GetProcess()->GetBrowserContext();
+}
+
+StoragePartition* RenderFrameHostImpl::GetStoragePartition() {
+  return BrowserContext::GetStoragePartition(GetBrowserContext(),
+                                             GetSiteInstance());
+}
+
 void RenderFrameHostImpl::RequestTextSurroundingSelection(
     blink::mojom::LocalFrame::GetTextSurroundingSelectionCallback callback,
     int max_length) {
