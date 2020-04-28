@@ -558,7 +558,8 @@ HRESULT AXPlatformNodeTextRangeProviderWin::GetEnclosingElement(
     return UIA_E_ELEMENTNOTAVAILABLE;
 
   while (enclosing_node->GetData().IsIgnored() ||
-         enclosing_node->GetData().role == ax::mojom::Role::kInlineTextBox) {
+         enclosing_node->GetData().role == ax::mojom::Role::kInlineTextBox ||
+         enclosing_node->IsChildOfLeaf()) {
     AXPlatformNodeWin* parent = static_cast<AXPlatformNodeWin*>(
         AXPlatformNode::FromNativeViewAccessible(enclosing_node->GetParent()));
     DCHECK(parent);
