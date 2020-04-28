@@ -278,6 +278,11 @@ bool ChromePasswordManagerClient::PromptUserToSaveOrUpdatePassword(
   return true;
 }
 
+void ChromePasswordManagerClient::PromptUserToMovePasswordToAccount(
+    std::unique_ptr<password_manager::PasswordFormManagerForUI> form_to_move) {
+  // TODO(crbug/com/1060128): Implement triggering the bubble.
+}
+
 bool ChromePasswordManagerClient::ShowOnboarding(
     std::unique_ptr<password_manager::PasswordFormManagerForUI> form_to_save) {
   // The save password infobar and the password bubble prompt in case of
@@ -442,8 +447,10 @@ void ChromePasswordManagerClient::NotifyUserCouldBeAutoSignedIn(
 }
 
 void ChromePasswordManagerClient::NotifySuccessfulLoginWithExistingPassword(
-    const autofill::PasswordForm& form) {
-  helper_.NotifySuccessfulLoginWithExistingPassword(form);
+    std::unique_ptr<password_manager::PasswordFormManagerForUI>
+        submitted_manager) {
+  helper_.NotifySuccessfulLoginWithExistingPassword(
+      std::move(submitted_manager));
 }
 
 void ChromePasswordManagerClient::NotifyStorePasswordCalled() {
