@@ -1479,6 +1479,13 @@ class CONTENT_EXPORT RenderFrameHostImpl
     document_associated_data_.SetUserData(key, std::move(data));
   }
 
+  // Returns the child RenderFrameHostImpl if |child_frame_routing_id| is an
+  // immediate child of this FrameTreeNode. |child_frame_routing_id| is
+  // considered untrusted, so the renderer process is killed if it refers to a
+  // RenderFrameHostImpl that is not a child of this node.
+  RenderFrameHostImpl* FindAndVerifyChild(int32_t child_frame_routing_id,
+                                          bad_message::BadMessageReason reason);
+
  protected:
   friend class RenderFrameHostFactory;
 
@@ -1860,13 +1867,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // this function will return the platform view on the main frame; for main
   // frames, it will return the current frame's view.
   RenderWidgetHostViewBase* GetViewForAccessibility();
-
-  // Returns the child RenderFrameHostImpl if |child_frame_routing_id| is an
-  // immediate child of this FrameTreeNode.  |child_frame_routing_id| is
-  // considered untrusted, so the renderer process is killed if it refers to a
-  // RenderFrameHostImpl that is not a child of this node.
-  RenderFrameHostImpl* FindAndVerifyChild(int32_t child_frame_routing_id,
-                                          bad_message::BadMessageReason reason);
 
   // Returns a raw pointer to the Web Bluetooth Service owned by the frame. Used
   // for testing purposes only (see |TestRenderFrameHost|).

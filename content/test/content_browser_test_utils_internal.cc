@@ -183,7 +183,8 @@ std::string FrameTreeVisualizer::DepictFrameTree(FrameTreeNode* root) {
         line = "  |--";
       else
         line = "  +--";
-      for (FrameTreeNode* up = node->parent(); up != root; up = up->parent()) {
+      for (FrameTreeNode* up = node->parent()->frame_tree_node(); up != root;
+           up = FrameTreeNode::From(up->parent())) {
         if (up->parent()->child_at(up->parent()->child_count() - 1) != up)
           line = "  |  " + line;
         else

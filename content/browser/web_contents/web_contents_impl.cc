@@ -5849,7 +5849,7 @@ RenderFrameHostImpl* WebContentsImpl::GetOuterWebContentsFrame() {
       FrameTreeNode::GloballyFindByID(GetOuterDelegateFrameTreeNodeId());
   // The outer node should be in the outer WebContents.
   DCHECK_EQ(outer_node->frame_tree(), GetOuterWebContents()->GetFrameTree());
-  return outer_node->parent()->current_frame_host();
+  return outer_node->parent();
 }
 
 WebContentsImpl* WebContentsImpl::GetOuterWebContents() {
