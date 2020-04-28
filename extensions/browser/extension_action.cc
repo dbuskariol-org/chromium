@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/extensions/extension_action.h"
+#include "extensions/browser/extension_action.h"
 
 #include <algorithm>
 #include <utility>
@@ -40,8 +40,7 @@ namespace {
 
 class GetAttentionImageSource : public gfx::ImageSkiaSource {
  public:
-  explicit GetAttentionImageSource(const gfx::ImageSkia& icon)
-      : icon_(icon) {}
+  explicit GetAttentionImageSource(const gfx::ImageSkia& icon) : icon_(icon) {}
 
   // gfx::ImageSkiaSource overrides:
   gfx::ImageSkiaRep GetImageForScale(float scale) override {
@@ -95,8 +94,7 @@ ExtensionAction::ExtensionAction(const extensions::Extension& extension,
   Populate(extension, manifest_data);
 }
 
-ExtensionAction::~ExtensionAction() {
-}
+ExtensionAction::~ExtensionAction() {}
 
 void ExtensionAction::SetPopupUrl(int tab_id, const GURL& url) {
   // We store |url| even if it is empty, rather than removing a URL from the
@@ -244,9 +242,8 @@ gfx::Image ExtensionAction::GetPlaceholderIconImage() const {
     // letter of the extension name) rather than the default (puzzle piece).
     // Note that this is only if we can't find any better image (e.g. a product
     // icon).
-    placeholder_icon_image_ =
-        extensions::ExtensionIconPlaceholder::CreateImage(ActionIconSize(),
-                                                          extension_name_);
+    placeholder_icon_image_ = extensions::ExtensionIconPlaceholder::CreateImage(
+        ActionIconSize(), extension_name_);
   }
 
   return placeholder_icon_image_;
@@ -305,9 +302,9 @@ void ExtensionAction::SetDefaultIconForTest(
 void ExtensionAction::Populate(const extensions::Extension& extension,
                                const extensions::ActionInfo& manifest_data) {
   // If the manifest doesn't specify a title, set it to |extension|'s name.
-  const std::string& title =
-      !manifest_data.default_title.empty() ? manifest_data.default_title :
-      extension.name();
+  const std::string& title = !manifest_data.default_title.empty()
+                                 ? manifest_data.default_title
+                                 : extension.name();
   SetTitle(kDefaultTabId, title);
   SetPopupUrl(kDefaultTabId, manifest_data.default_popup_url);
 

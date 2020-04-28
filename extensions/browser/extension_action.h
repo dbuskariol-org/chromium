@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_EXTENSIONS_EXTENSION_ACTION_H_
-#define CHROME_BROWSER_EXTENSIONS_EXTENSION_ACTION_H_
+#ifndef EXTENSIONS_BROWSER_EXTENSION_ACTION_H_
+#define EXTENSIONS_BROWSER_EXTENSION_ACTION_H_
 
 #include <map>
 #include <memory>
@@ -22,12 +22,12 @@ class GURL;
 namespace extensions {
 class Extension;
 class IconImage;
-}
+}  // namespace extensions
 
 namespace gfx {
 class Image;
 class ImageSkia;
-}
+}  // namespace gfx
 
 // ExtensionAction encapsulates the state of a browser action or page action.
 // Instances can have both global and per-tab state. If a property does not have
@@ -60,9 +60,7 @@ class ExtensionAction {
   const std::string& extension_id() const { return extension_id_; }
 
   // What kind of action is this?
-  extensions::ActionInfo::Type action_type() const {
-    return action_type_;
-  }
+  extensions::ActionInfo::Type action_type() const { return action_type_; }
 
   extensions::ActionInfo::DefaultState default_state() const {
     return default_state_;
@@ -110,9 +108,7 @@ class ExtensionAction {
   void DeclarativeSetIcon(int tab_id, int priority, const gfx::Image& icon);
   void UndoDeclarativeSetIcon(int tab_id, int priority, const gfx::Image& icon);
 
-  const ExtensionIconSet* default_icon() const {
-    return default_icon_.get();
-  }
+  const ExtensionIconSet* default_icon() const { return default_icon_.get(); }
 
   // Set this action's badge text on a specific tab.
   void SetBadgeText(int tab_id, const std::string& text) {
@@ -196,7 +192,7 @@ class ExtensionAction {
       return true;
 
     if (const bool* default_is_visible =
-        FindOrNull(&is_visible_, kDefaultTabId))
+            FindOrNull(&is_visible_, kDefaultTabId))
       return *default_is_visible;
 
     return false;
@@ -245,17 +241,15 @@ class ExtensionAction {
 
   template <class T>
   struct ValueTraits {
-    static T CreateEmpty() {
-      return T();
-    }
+    static T CreateEmpty() { return T(); }
   };
 
-  template<class T>
+  template <class T>
   void SetValue(std::map<int, T>* map, int tab_id, const T& val) {
     (*map)[tab_id] = val;
   }
 
-  template<class Map>
+  template <class Map>
   static const typename Map::mapped_type* FindOrNull(
       const Map* map,
       const typename Map::key_type& key) {
@@ -265,7 +259,7 @@ class ExtensionAction {
     return &iter->second;
   }
 
-  template<class T>
+  template <class T>
   T GetValue(const std::map<int, T>* map, int tab_id) const {
     if (const T* tab_value = FindOrNull(map, tab_id)) {
       return *tab_value;
@@ -310,7 +304,7 @@ class ExtensionAction {
 
   // declarative_icon_[tab_id][declarative_rule_priority] is a vector of icon
   // images that are currently in effect
-  std::map<int, std::map<int, std::vector<gfx::Image> > > declarative_icon_;
+  std::map<int, std::map<int, std::vector<gfx::Image>>> declarative_icon_;
 
   // Maps tab_id to the number of actions taken based on declarative net request
   // rule matches on incoming requests. Overrides the default |badge_text_| for
@@ -339,11 +333,9 @@ class ExtensionAction {
   DISALLOW_COPY_AND_ASSIGN(ExtensionAction);
 };
 
-template<>
+template <>
 struct ExtensionAction::ValueTraits<int> {
-  static int CreateEmpty() {
-    return -1;
-  }
+  static int CreateEmpty() { return -1; }
 };
 
-#endif  // CHROME_BROWSER_EXTENSIONS_EXTENSION_ACTION_H_
+#endif  // EXTENSIONS_BROWSER_EXTENSION_ACTION_H_

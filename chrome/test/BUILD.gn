@@ -4633,7 +4633,6 @@ test("unit_tests") {
       "../browser/extensions/extension_action_icon_factory_unittest.cc",
       "../browser/extensions/extension_action_manager_unittest.cc",
       "../browser/extensions/extension_action_runner_unittest.cc",
-      "../browser/extensions/extension_action_unittest.cc",
       "../browser/extensions/extension_api_unittest.cc",
       "../browser/extensions/extension_api_unittest.h",
       "../browser/extensions/extension_checkup_unittest.cc",

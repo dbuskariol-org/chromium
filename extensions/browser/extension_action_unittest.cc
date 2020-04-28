@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/extensions/extension_action.h"
+#include "extensions/browser/extension_action.h"
 
 #include "extensions/common/api/extension_action/action_info.h"
 #include "extensions/common/extension_builder.h"
@@ -68,12 +68,10 @@ TEST(ExtensionActionTest, Icon) {
   action_info.default_icon.Add(16, "icon16.png");
   std::unique_ptr<ExtensionAction> page_action = CreateAction(action_info);
   ASSERT_TRUE(page_action->default_icon());
-  EXPECT_EQ("icon16.png",
-            page_action->default_icon()->Get(
-                16, ExtensionIconSet::MATCH_EXACTLY));
-  EXPECT_EQ("",
-            page_action->default_icon()->Get(
-                17, ExtensionIconSet::MATCH_BIGGER));
+  EXPECT_EQ("icon16.png", page_action->default_icon()->Get(
+                              16, ExtensionIconSet::MATCH_EXACTLY));
+  EXPECT_EQ(
+      "", page_action->default_icon()->Get(17, ExtensionIconSet::MATCH_BIGGER));
 }
 
 TEST(ExtensionActionTest, Badge) {
@@ -134,15 +132,13 @@ TEST(ExtensionActionTest, BadgeBackgroundColor) {
   std::unique_ptr<ExtensionAction> action =
       CreateAction(ActionInfo(ActionInfo::TYPE_PAGE));
   ASSERT_EQ(0x00000000u, action->GetBadgeBackgroundColor(1));
-  action->SetBadgeBackgroundColor(ExtensionAction::kDefaultTabId,
-                                 0xFFFF0000u);
+  action->SetBadgeBackgroundColor(ExtensionAction::kDefaultTabId, 0xFFFF0000u);
   ASSERT_EQ(0xFFFF0000u, action->GetBadgeBackgroundColor(1));
   ASSERT_EQ(0xFFFF0000u, action->GetBadgeBackgroundColor(100));
   action->SetBadgeBackgroundColor(100, 0xFF00FF00);
   ASSERT_EQ(0xFFFF0000u, action->GetBadgeBackgroundColor(1));
   ASSERT_EQ(0xFF00FF00u, action->GetBadgeBackgroundColor(100));
-  action->SetBadgeBackgroundColor(ExtensionAction::kDefaultTabId,
-                                 0xFF0000FFu);
+  action->SetBadgeBackgroundColor(ExtensionAction::kDefaultTabId, 0xFF0000FFu);
   ASSERT_EQ(0xFF0000FFu, action->GetBadgeBackgroundColor(1));
   action->ClearAllValuesForTab(100);
   ASSERT_EQ(0xFF0000FFu, action->GetBadgeBackgroundColor(100));
