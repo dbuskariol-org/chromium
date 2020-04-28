@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_TOOLBAR_KEYBOARD_ASSIST_TOOLBAR_KEYBOARD_ACCESSORY_VIEW_H_
-#define IOS_CHROME_BROWSER_UI_TOOLBAR_KEYBOARD_ASSIST_TOOLBAR_KEYBOARD_ACCESSORY_VIEW_H_
+#ifndef IOS_CHROME_BROWSER_UI_OMNIBOX_KEYBOARD_ASSIST_TOOLBAR_KEYBOARD_ACCESSORY_VIEW_H_
+#define IOS_CHROME_BROWSER_UI_OMNIBOX_KEYBOARD_ASSIST_TOOLBAR_KEYBOARD_ACCESSORY_VIEW_H_
 
 #import <UIKit/UIKit.h>
 
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_assistive_keyboard_delegate.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_delegate.h"
 
 // Accessory View above the keyboard.
 // Shows keys that are shortcuts to commonly used characters or strings,
 // and buttons to start Voice Search or a Camera Search.
-@interface ToolbarKeyboardAccessoryView : UIInputView<UIInputViewAudioFeedback>
+@interface ToolbarKeyboardAccessoryView : UIInputView <UIInputViewAudioFeedback>
 
 // Designated initializer. |buttonTitles| lists the titles of the shortcut
 // buttons. |delegate| receives the various events triggered in the view. Not
@@ -28,4 +28,4 @@
 
 @end
 
-#endif  // IOS_CHROME_BROWSER_UI_TOOLBAR_KEYBOARD_ASSIST_TOOLBAR_KEYBOARD_ACCESSORY_VIEW_H_
+#endif  // IOS_CHROME_BROWSER_UI_OMNIBOX_KEYBOARD_ASSIST_TOOLBAR_KEYBOARD_ACCESSORY_VIEW_H_

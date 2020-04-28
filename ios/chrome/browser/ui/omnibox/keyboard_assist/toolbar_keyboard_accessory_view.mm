@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_keyboard_accessory_view.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_keyboard_accessory_view.h"
 
 #include "base/mac/foundation_util.h"
 #include "ios/chrome/browser/system_flags.h"
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_assistive_keyboard_views.h"
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_assistive_keyboard_views_utils.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views_utils.h"
 #include "ios/chrome/browser/ui/util/rtl_geometry.h"
 #include "ios/chrome/browser/ui/util/ui_util.h"
 #import "ios/chrome/common/ui/colors/semantic_color_names.h"
@@ -36,8 +36,8 @@
 
 - (instancetype)initWithButtons:(NSArray<NSString*>*)buttonTitles
                        delegate:(id<ToolbarAssistiveKeyboardDelegate>)delegate {
-  self =
-      [super initWithFrame:CGRectZero inputViewStyle:UIInputViewStyleKeyboard];
+  self = [super initWithFrame:CGRectZero
+               inputViewStyle:UIInputViewStyleKeyboard];
   if (self) {
     _buttonTitles = buttonTitles;
     _delegate = delegate;

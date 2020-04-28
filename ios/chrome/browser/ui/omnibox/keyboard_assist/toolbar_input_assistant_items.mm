@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_input_assistant_items.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_input_assistant_items.h"
 
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_assistive_keyboard_delegate.h"
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_assistive_keyboard_views.h"
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_assistive_keyboard_views_utils.h"
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/toolbar_ui_bar_button_item.h"
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/voice_search_keyboard_bar_button_item.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_delegate.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views_utils.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_ui_bar_button_item.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/voice_search_keyboard_bar_button_item.h"
 #import "ios/chrome/browser/ui/util/uikit_ui_util.h"
 #import "ios/chrome/browser/voice/voice_search_availability.h"
 #include "ios/chrome/grit/ios_strings.h"

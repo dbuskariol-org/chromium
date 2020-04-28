@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/voice_search_keyboard_bar_button_item.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/voice_search_keyboard_bar_button_item.h"
 
 #import "ios/chrome/browser/voice/fake_voice_search_availability.h"
 #include "testing/platform_test.h"

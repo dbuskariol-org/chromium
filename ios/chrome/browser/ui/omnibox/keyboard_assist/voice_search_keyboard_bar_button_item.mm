@@ -2,41 +2,42 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/toolbar/keyboard_assist/voice_search_keyboard_accessory_button.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/voice_search_keyboard_bar_button_item.h"
 
-#include "base/logging.h"
 #import "ios/chrome/browser/voice/voice_search_availability.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
 #endif
 
-@interface VoiceSearchKeyboardAccessoryButton () <
+@interface VoiceSearchKeyboardBarButtonItem () <
     VoiceSearchAvailabilityObserver> {
   std::unique_ptr<VoiceSearchAvailability> _availability;
 }
 @end
 
-@implementation VoiceSearchKeyboardAccessoryButton
+@implementation VoiceSearchKeyboardBarButtonItem
 
-- (instancetype)initWithVoiceSearchAvailability:
-    (std::unique_ptr<VoiceSearchAvailability>)availability {
-  if (self = [super initWithFrame:CGRectZero]) {
+- (instancetype)initWithImage:(UIImage*)image
+                        style:(UIBarButtonItemStyle)style
+                       target:(id)target
+                       action:(SEL)action
+      voiceSearchAvailability:
+          (std::unique_ptr<VoiceSearchAvailability>)availability {
+  if (self = [super init]) {
+    self.image = image;
+    self.style = style;
+    self.target = target;
+    self.action = action;
     _availability = std::move(availability);
-    DCHECK(_availability);
     _availability->AddObserver(self);
+    [self updateEnabledState];
   }
   return self;
 }
 
 - (void)dealloc {
   _availability->RemoveObserver(self);
-}
-
-#pragma mark - UIView
-
-- (void)willMoveToSuperview:(UIView*)newSuperview {
-  [self updateEnabledState];
 }
 
 #pragma mark - VoiceSearchAvailabilityObserver
@@ -48,8 +49,7 @@
 
 #pragma mark - Private
 
-// Updates the button's enabled state according to its voice search
-// availability.
+// Updates the item's enabled state according to its voice search availability.
 - (void)updateEnabledState {
   self.enabled = _availability->IsVoiceSearchAvailable();
 }
