@@ -21,7 +21,7 @@ AX_EXPORT extern const char kEnableExperimentalAccessibilitySwitchAccessText[];
 AX_EXPORT extern const char
     kEnableExperimentalAccessibilityChromeVoxAnnotations[];
 AX_EXPORT extern const char
-    kEnableExperimentalAccessibilityChromeVoxLanguageSwitching[];
+    kDisableExperimentalAccessibilityChromeVoxLanguageSwitching[];
 AX_EXPORT extern const char
     kEnableExperimentalAccessibilityChromeVoxSearchMenus[];
 
