@@ -4181,6 +4181,7 @@ interface HTMLTableSectionElement : HTMLElement
 interface HTMLTemplateElement : HTMLElement
     attribute @@toStringTag
     getter content
+    getter shadowRoot
     method constructor
 interface HTMLTextAreaElement : HTMLElement
     attribute @@toStringTag
