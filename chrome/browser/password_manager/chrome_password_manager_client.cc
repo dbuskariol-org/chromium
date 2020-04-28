@@ -302,10 +302,10 @@ void ChromePasswordManagerClient::ShowManualFallbackForSaving(
     std::unique_ptr<password_manager::PasswordFormManagerForUI> form_to_save,
     bool has_generated_password,
     bool is_update) {
+#if !defined(OS_ANDROID)
   if (!CanShowBubbleOnURL(web_contents()->GetLastCommittedURL()))
     return;
 
-#if !defined(OS_ANDROID)
   PasswordsClientUIDelegate* manage_passwords_ui_controller =
       PasswordsClientUIDelegateFromWebContents(web_contents());
   // There may be no UI controller for ChromeOS login page
@@ -318,10 +318,10 @@ void ChromePasswordManagerClient::ShowManualFallbackForSaving(
 }
 
 void ChromePasswordManagerClient::HideManualFallbackForSaving() {
+#if !defined(OS_ANDROID)
   if (!CanShowBubbleOnURL(web_contents()->GetLastCommittedURL()))
     return;
 
-#if !defined(OS_ANDROID)
   PasswordsClientUIDelegate* manage_passwords_ui_controller =
       PasswordsClientUIDelegateFromWebContents(web_contents());
   // There may be no UI controller for ChromeOS login page
