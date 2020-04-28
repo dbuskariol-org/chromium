@@ -39279,6 +39279,8 @@ from previous Chrome versions.
   <int value="-528149352" label="WebRtcUseEchoCanceller3:enabled"/>
   <int value="-526236814" label="WebAssemblyTiering:enabled"/>
   <int value="-523030434" label="EnableBackgroundBlur:enabled"/>
+  <int value="-522075903"
+      label="OmniboxOnFocusSuggestionsContextualWeb:enabled"/>
   <int value="-520221221" label="UserDataSnapshot:enabled"/>
   <int value="-520004021" label="WebXRHitTest:disabled"/>
   <int value="-519960638" label="enable-site-engagement-service"/>
@@ -40567,6 +40569,8 @@ from previous Chrome versions.
   <int value="1024560563" label="EnableFuzzyAppSearch:enabled"/>
   <int value="1026981579" label="TLS13HardeningForLocalAnchors:enabled"/>
   <int value="1027252926" label="SyncSupportSecondaryAccount:enabled"/>
+  <int value="1028817487"
+      label="OmniboxOnFocusSuggestionsContextualWeb:disabled"/>
   <int value="1033148287" label="NTPShortcuts:disabled"/>
   <int value="1033412163" label="OmniboxDisplayTitleForCurrentUrl:enabled"/>
   <int value="1033597574" label="disable-layer-squashing"/>

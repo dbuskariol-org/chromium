@@ -3230,6 +3230,11 @@ const FeatureEntry kFeatureEntries[] = {
                                     kOmniboxOnFocusSuggestionsVariations,
                                     "OmniboxBundledExperimentV1")},
 
+    {"omnibox-on-focus-suggestions-contextual-web",
+     flag_descriptions::kOmniboxOnFocusSuggestionsContextualWebName,
+     flag_descriptions::kOmniboxOnFocusSuggestionsContextualWebDescription,
+     kOsAll, FEATURE_VALUE_TYPE(omnibox::kOnFocusSuggestionsContextualWeb)},
+
     {"omnibox-preserve-default-match-against-async-update",
      flag_descriptions::kOmniboxPreserveDefaultMatchAgainstAsyncUpdateName,
      flag_descriptions::

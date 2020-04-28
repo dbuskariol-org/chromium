@@ -804,6 +804,9 @@ extern const char kOmniboxRichAutocompletionDescription[];
 extern const char kOmniboxOnFocusSuggestionsName[];
 extern const char kOmniboxOnFocusSuggestionsDescription[];
 
+extern const char kOmniboxOnFocusSuggestionsContextualWebName[];
+extern const char kOmniboxOnFocusSuggestionsContextualWebDescription[];
+
 extern const char kOmniboxRemoveSuggestionsFromClipboardName[];
 extern const char kOmniboxRemoveSuggestionsFromClipboardDescription[];
 
