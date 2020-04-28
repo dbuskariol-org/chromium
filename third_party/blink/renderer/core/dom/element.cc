@@ -38,6 +38,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/script_promise_resolver.h"
 #include "third_party/blink/renderer/bindings/core/v8/scroll_into_view_options_or_boolean.h"
 #include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html_or_trusted_script_or_trusted_script_url.h"
+#include "third_party/blink/renderer/bindings/core/v8/v8_get_inner_html_options.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_pointer_lock_options.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_scroll_into_view_options.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_scroll_to_options.h"
@@ -4737,10 +4738,10 @@ void Element::setInnerHTML(const String& html,
   }
 }
 
-String Element::getInnerHTML(bool include_shadow_roots) const {
+String Element::getInnerHTML(const GetInnerHTMLOptions* options) const {
   return CreateMarkup(
       this, kChildrenOnly, kDoNotResolveURLs,
-      include_shadow_roots ? kIncludeShadowRoots : kNoShadowRoots);
+      options->includeShadowRoots() ? kIncludeShadowRoots : kNoShadowRoots);
 }
 
 void Element::setOuterHTML(const String& html,
