@@ -11,7 +11,7 @@ import 'chrome://resources/cr_elements/cr_dialog/cr_dialog.m.js';
 import 'chrome://resources/cr_elements/md_select_css.m.js';
 import 'chrome://resources/polymer/v3_0/iron-icon/iron-icon.js';
 import 'chrome://resources/polymer/v3_0/paper-spinner/paper-spinner-lite.js';
-import '../controls/settings_checkbox.m.js';
+import '../controls/settings_checkbox.js';
 import '../controls/settings_toggle_button.m.js';
 import '../icons.m.js';
 import '../settings_vars_css.m.js';
