@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_VIDEO_RAF_VIDEO_FRAME_REQUEST_CALLBACK_COLLECTION_H_
-#define THIRD_PARTY_BLINK_RENDERER_MODULES_VIDEO_RAF_VIDEO_FRAME_REQUEST_CALLBACK_COLLECTION_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_VIDEO_RVFC_VIDEO_FRAME_REQUEST_CALLBACK_COLLECTION_H_
+#define THIRD_PARTY_BLINK_RENDERER_MODULES_VIDEO_RVFC_VIDEO_FRAME_REQUEST_CALLBACK_COLLECTION_H_
 
 #include "third_party/blink/renderer/bindings/modules/v8/v8_video_frame_metadata.h"
 #include "third_party/blink/renderer/bindings/modules/v8/v8_video_frame_request_callback.h"
@@ -104,4 +104,4 @@ class MODULES_EXPORT VideoFrameRequestCallbackCollection final
 
 }  // namespace blink
 
-#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_VIDEO_RAF_VIDEO_FRAME_REQUEST_CALLBACK_COLLECTION_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_VIDEO_RVFC_VIDEO_FRAME_REQUEST_CALLBACK_COLLECTION_H_

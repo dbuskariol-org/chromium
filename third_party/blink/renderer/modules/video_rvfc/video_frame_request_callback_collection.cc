@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/video_raf/video_frame_request_callback_collection.h"
+#include "third_party/blink/renderer/modules/video_rvfc/video_frame_request_callback_collection.h"
 
 #include "third_party/blink/renderer/core/inspector/inspector_trace_events.h"
 #include "third_party/blink/renderer/core/probe/core_probes.h"
