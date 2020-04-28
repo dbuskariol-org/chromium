@@ -56,7 +56,6 @@ source_set("google_services") {
     "//ios/chrome/browser/ui/alert_coordinator",
     "//ios/chrome/browser/ui/authentication",
     "//ios/chrome/browser/ui/authentication/cells",
-    "//ios/chrome/browser/ui/authentication/signin/advanced_settings_signin",
     "//ios/chrome/browser/ui/commands",
     "//ios/chrome/browser/ui/coordinators:chrome_coordinators",
     "//ios/chrome/browser/ui/icons",
@@ -74,9 +73,6 @@ source_set("google_services") {
     "//ios/public/provider/chrome/browser/images",
     "//ios/public/provider/chrome/browser/signin",
     "//ui/base",
-  ]
-  allow_circular_includes_from = [
-    "//ios/chrome/browser/ui/authentication/signin/advanced_settings_signin",
   ]
 }
 
