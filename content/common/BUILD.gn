@@ -414,10 +414,7 @@ source_set("common") {
   }
 
   if (use_clang_profiling_inside_sandbox) {
-    sources += [
-      "profiling_utils.cc",
-      "profiling_utils.h",
-    ]
+    sources += [ "profiling_utils.cc" ]
   }
 }
 
