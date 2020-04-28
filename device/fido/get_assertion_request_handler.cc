@@ -272,6 +272,24 @@ GetAssertionRequestHandler::GetAssertionRequestHandler(
 
 GetAssertionRequestHandler::~GetAssertionRequestHandler() = default;
 
+void GetAssertionRequestHandler::OnBluetoothAdapterEnumerated(
+    bool is_present,
+    bool is_powered_on,
+    bool can_power_on,
+    bool is_peripheral_role_supported) {
+  if (!is_peripheral_role_supported && request_.cable_extension) {
+    // caBLEv1 relies on the client being able to broadcast Bluetooth
+    // advertisements. |is_peripheral_role_supported| supposedly indicates
+    // whether the adapter supports advertising, but there appear to be false
+    // negatives (crbug/1074692). So we can't really do anything about it
+    // besides log it to aid diagnostics.
+    FIDO_LOG(ERROR)
+        << "caBLEv1 request, but BLE adapter does not support peripheral role";
+  }
+  FidoRequestHandlerBase::OnBluetoothAdapterEnumerated(
+      is_present, is_powered_on, can_power_on, is_peripheral_role_supported);
+}
+
 void GetAssertionRequestHandler::DispatchRequest(
     FidoAuthenticator* authenticator) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(my_sequence_checker_);
