@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUS_H_
-#define CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUS_H_
+#ifndef CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUS_H_
+#define CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUS_H_
 
 #include <cstdint>
 #include <iosfwd>
@@ -11,7 +11,7 @@
 
 #include "base/compiler_specific.h"
 #include "base/strings/string_piece.h"
-#include "chrome/browser/chromeos/policy/messaging_layer/util/status.pb.h"
+#include "chrome/browser/policy/messaging_layer/util/status.pb.h"
 
 namespace reporting {
 namespace error {
@@ -90,4 +90,4 @@ std::ostream& operator<<(std::ostream& os, const Status& x);
 
 }  // namespace reporting
 
-#endif  // CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUS_H_
+#endif  // CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUS_H_

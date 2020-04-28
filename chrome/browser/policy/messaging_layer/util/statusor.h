@@ -53,8 +53,8 @@
 //  }
 //
 
-#ifndef CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUSOR_H_
-#define CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUSOR_H_
+#ifndef CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUSOR_H_
+#define CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUSOR_H_
 
 #include <new>
 #include <string>
@@ -62,7 +62,7 @@
 #include <utility>
 
 #include "base/compiler_specific.h"
-#include "chrome/browser/chromeos/policy/messaging_layer/util/status.h"
+#include "chrome/browser/policy/messaging_layer/util/status.h"
 
 namespace reporting {
 
@@ -261,4 +261,4 @@ inline T&& StatusOr<T>::ValueOrDie() {
 
 }  // namespace reporting
 
-#endif  // CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUSOR_H_
+#endif  // CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUSOR_H_

@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUS_MACROS_H_
-#define CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUS_MACROS_H_
+#ifndef CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUS_MACROS_H_
+#define CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUS_MACROS_H_
 
-#include "chrome/browser/chromeos/policy/messaging_layer/util/status.h"
-#include "chrome/browser/chromeos/policy/messaging_layer/util/statusor.h"
+#include "chrome/browser/policy/messaging_layer/util/status.h"
+#include "chrome/browser/policy/messaging_layer/util/statusor.h"
 
 namespace reporting {
 
@@ -49,4 +49,4 @@ namespace reporting {
 
 }  // namespace reporting
 
-#endif  // CHROME_BROWSER_CHROMEOS_POLICY_MESSAGING_LAYER_UTIL_STATUS_MACROS_H_
+#endif  // CHROME_BROWSER_POLICY_MESSAGING_LAYER_UTIL_STATUS_MACROS_H_

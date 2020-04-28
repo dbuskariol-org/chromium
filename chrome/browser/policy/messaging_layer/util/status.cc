@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/policy/messaging_layer/util/status.h"
+#include "chrome/browser/policy/messaging_layer/util/status.h"
 
 #include <stdio.h>
 #include <ostream>
@@ -11,7 +11,7 @@
 
 #include "base/no_destructor.h"
 #include "base/strings/strcat.h"
-#include "chrome/browser/chromeos/policy/messaging_layer/util/status.pb.h"
+#include "chrome/browser/policy/messaging_layer/util/status.pb.h"
 
 namespace reporting {
 namespace error {

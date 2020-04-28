@@ -1244,6 +1244,11 @@ jumbo_static_library("browser") {
     "policy/homepage_location_policy_handler.h",
     "policy/javascript_policy_handler.cc",
     "policy/javascript_policy_handler.h",
+    "policy/messaging_layer/util/status.cc",
+    "policy/messaging_layer/util/status.h",
+    "policy/messaging_layer/util/status_macros.h",
+    "policy/messaging_layer/util/statusor.cc",
+    "policy/messaging_layer/util/statusor.h",
     "policy/network_prediction_policy_handler.cc",
     "policy/network_prediction_policy_handler.h",
     "policy/profile_policy_connector.cc",
@@ -1963,7 +1968,9 @@ jumbo_static_library("browser") {
     ":expired_flags_list",
     ":ntp_background_proto",
     ":permissions_proto",
+    ":reporting_record_proto",
     ":resource_prefetch_predictor_proto",
+    ":status_proto",
     ":tab_state_db_content_proto",
     ":unexpire_flags",
     "//base:i18n",
@@ -6109,4 +6116,13 @@ if (is_android) {
   java_cpp_enum("sharing_dialog_type_generated_enum") {
     sources = [ "sharing/sharing_metrics.h" ]
   }
+}
+
+proto_library("reporting_record_proto") {
+  sources = [ "policy/messaging_layer/proto/record.proto" ]
+}
+
+proto_library("status_proto") {
+  sources = [ "policy/messaging_layer/util/status.proto" ]
+  generate_python = false
 }
