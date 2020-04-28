@@ -102,6 +102,17 @@ public class ExternalNavigationHandlerTest {
             "intent:///name/nm0000158#Intent;scheme=imdb;package=com.imdb.mobile;S."
             + ExternalNavigationHandler.EXTRA_MARKET_REFERRER + "=" + ENCODED_MARKET_REFERRER
             + ";end";
+    private static final String INTENT_URL_FOR_CHROME_CUSTOM_TABS = "intent://example.com#Intent;"
+            + "package=org.chromium.chrome;"
+            + "action=android.intent.action.VIEW;"
+            + "scheme=http;"
+            + "S.android.support.customtabs.extra.SESSION=;"
+            + "end;";
+    private static final String INTENT_URL_FOR_CHROME = "intent://example.com#Intent;"
+            + "package=org.chromium.chrome;"
+            + "action=android.intent.action.VIEW;"
+            + "scheme=http;"
+            + "end;";
     private static final String INTENT_APP_PACKAGE_NAME = "com.imdb.mobile";
     private static final String YOUTUBE_URL = "http://youtube.com";
     private static final String YOUTUBE_MOBILE_URL = "http://m.youtube.com";
@@ -716,6 +727,36 @@ public class ExternalNavigationHandlerTest {
                 .withIsRedirect(true)
                 .withRedirectHandler(redirectHandler)
                 .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, IGNORE);
+    }
+
+    @Test
+    @SmallTest
+    public void testCCTIntentUriDoesNotFireCCTAndLoadInChrome_InIncognito() throws Exception {
+        mDelegate.setCanLoadUrlInTab(false);
+        checkUrl(INTENT_URL_FOR_CHROME_CUSTOM_TABS)
+                .withIsIncognito(true)
+                .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, IGNORE);
+        Assert.assertTrue(mDelegate.handleIncognitoIntentTargetingSelfCalled);
+    }
+
+    @Test
+    @SmallTest
+    public void testCCTIntentUriFiresCCT_InRegular() throws Exception {
+        checkUrl(INTENT_URL_FOR_CHROME_CUSTOM_TABS)
+                .withIsIncognito(false)
+                .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT,
+                        START_OTHER_ACTIVITY);
+        Assert.assertFalse(mDelegate.handleIncognitoIntentTargetingSelfCalled);
+    }
+
+    @Test
+    @SmallTest
+    public void testChromeIntentUriDoesNotFireAndLoadsInChrome_InIncognito() throws Exception {
+        mDelegate.setCanLoadUrlInTab(false);
+        checkUrl(INTENT_URL_FOR_CHROME)
+                .withIsIncognito(true)
+                .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, IGNORE);
+        Assert.assertTrue(mDelegate.handleIncognitoIntentTargetingSelfCalled);
     }
 
     @Test
@@ -1816,6 +1857,14 @@ public class ExternalNavigationHandlerTest {
         }
 
         @Override
+        public @OverrideUrlLoadingResult int handleIncognitoIntentTargetingSelf(
+                Intent intent, String referrerUrl, String fallbackUrl) {
+            handleIncognitoIntentTargetingSelfCalled = true;
+            if (mCanLoadUrlInTab) return OverrideUrlLoadingResult.OVERRIDE_WITH_CLOBBERING_TAB;
+            return OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT;
+        }
+
+        @Override
         public boolean shouldRequestFileAccess(String url) {
             return shouldRequestFileAccess;
         }
@@ -1915,6 +1964,7 @@ public class ExternalNavigationHandlerTest {
         public void reset() {
             startActivityIntent = null;
             startIncognitoIntentCalled = false;
+            handleIncognitoIntentTargetingSelfCalled = false;
             startFileIntentCalled = false;
             mCalledWithProxy = false;
         }
@@ -1975,8 +2025,13 @@ public class ExternalNavigationHandlerTest {
             mIsIntentToAutofillAssistant = value;
         }
 
+        public void setCanLoadUrlInTab(boolean value) {
+            mCanLoadUrlInTab = value;
+        }
+
         public Intent startActivityIntent;
         public boolean startIncognitoIntentCalled;
+        public boolean handleIncognitoIntentTargetingSelfCalled;
         public boolean maybeSetUserGestureCalled;
         public boolean startFileIntentCalled;
 
@@ -1995,7 +2050,7 @@ public class ExternalNavigationHandlerTest {
         private boolean mShouldDisableExternalIntentRequests;
         private boolean mIsIntentToInstantApp;
         private boolean mIsIntentToAutofillAssistant;
-
+        private boolean mCanLoadUrlInTab;
         public boolean shouldRequestFileAccess;
     }
 

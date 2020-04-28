@@ -77,6 +77,17 @@ public interface ExternalNavigationDelegate {
             boolean needsToCloseTab, boolean proxy);
 
     /**
+     * Handle the incognito intent by loading it as a URL in the embedder, using the fallbackUrl if
+     * the intent URL cannot be handled by the embedder.
+     * @param intent The intent to be handled by the embedder.
+     * @param referrerUrl The referrer for the current navigation.
+     * @param fallbackUrl The fallback URL to load if the intent cannot be handled by the embedder.
+     * @return The OverrideUrlLoadingResult for the action taken by the embedder.
+     */
+    @OverrideUrlLoadingResult
+    int handleIncognitoIntentTargetingSelf(Intent intent, String referrerUrl, String fallbackUrl);
+
+    /**
      * @param url The requested url.
      * @return Whether we should block the navigation and request file access before proceeding.
      */

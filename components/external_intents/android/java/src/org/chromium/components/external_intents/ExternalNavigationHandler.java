@@ -927,9 +927,20 @@ public class ExternalNavigationHandler {
         // re-computed as it won't have changed.
         assert intentResolutionMatches(debugIntent, targetIntent);
 
-        if (params.isIncognito() && !mDelegate.willChromeHandleIntent(targetIntent)) {
-            return handleExternalIncognitoIntent(
-                    targetIntent, params, browserFallbackUrl, shouldProxyForInstantApps);
+        if (params.isIncognito()) {
+            boolean intentTargetedToChrome = mDelegate.willChromeHandleIntent(targetIntent);
+
+            // The user is about to potentially leave Chrome, so we should ask whether they want to
+            // leave incognito or not.
+            if (!intentTargetedToChrome) {
+                return handleExternalIncognitoIntent(
+                        targetIntent, params, browserFallbackUrl, shouldProxyForInstantApps);
+            }
+
+            // The intent is staying in Chrome, so we can simply navigate to the intent's URL, while
+            // staying in incognito.
+            return mDelegate.handleIncognitoIntentTargetingSelf(
+                    targetIntent, params.getReferrerUrl(), browserFallbackUrl);
         }
 
         if (shouldKeepIntentRedirectInChrome(

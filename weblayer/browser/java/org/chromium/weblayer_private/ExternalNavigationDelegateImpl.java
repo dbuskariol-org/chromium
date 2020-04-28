@@ -182,6 +182,14 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
         return true;
     }
 
+    // This method should never be invoked as WebLayer does not handle incoming intents.
+    @Override
+    public @OverrideUrlLoadingResult int handleIncognitoIntentTargetingSelf(
+            final Intent intent, final String referrerUrl, final String fallbackUrl) {
+        assert false;
+        return OverrideUrlLoadingResult.NO_OVERRIDE;
+    }
+
     @Override
     public boolean shouldRequestFileAccess(String url) {
         // If the tab is null, then do not attempt to prompt for access.
