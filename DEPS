@@ -143,12 +143,12 @@ vars = {
 
   # Default to the empty board. Desktop Chrome OS builds don't need cros SDK
   # dependencies. Other Chrome OS builds should always define this explicitly.
-  'cros_board': '',
+  'cros_boards': '',
   # Building for CrOS is only supported on linux currently.
-  'checkout_simplechrome': '(checkout_chromeos and host_os == "linux") and ("{cros_board}" != "")',
+  'checkout_simplechrome': '(checkout_chromeos and host_os == "linux") and ("{cros_boards}" != "")',
   # Surround the board var in quotes so gclient doesn't try parsing the string
   # as an expression.
-  'cros_download_vm': '(("{cros_board}" == "amd64-generic") or ("{cros_board}" == "betty")) or ("{cros_board}" == "betty-pi-arc")',
+  'cros_download_vm': '(("{cros_boards}" == "amd64-generic") or ("{cros_boards}" == "betty")) or ("{cros_boards}" == "betty-pi-arc")',
   # Should we build and test for public (ie: full) CrOS images, or private
   # (ie: release) images.
   'use_public_cros_config': 'not checkout_src_internal',
@@ -4337,7 +4337,7 @@ hooks = [
       '--fallback-versions=10',
       '--nogn-gen',
       '--download-vm',
-      '--board={cros_board}',
+      '--boards={cros_boards}',
       '--cache-dir=src/build/cros_cache/',
       # TODO(crbug.com/834134): Remove the cache clobber when the sdk is smart
       # enough to eject old toolchains from the cache.
@@ -4357,7 +4357,7 @@ hooks = [
       '--use-external-config',
       '--fallback-versions=10',
       '--nogn-gen',
-      '--board={cros_board}',
+      '--boards={cros_boards}',
       '--cache-dir=src/build/cros_cache/',
       '--log-level=error',
       '--no-shell',
