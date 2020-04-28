@@ -595,7 +595,6 @@
     'remove_from': [
       'Fuchsia ARM64', # https://crbug.com/1046552
       'Fuchsia x64', # https://crbug.com/1046552
-      'fuchsia-fyi-arm64-rel',
     ],
   },
   'checkbins': {
@@ -1438,7 +1437,6 @@
   'net_unittests': {
     'remove_from': [
       'Fuchsia ARM64',  # https://crbug.com/877248
-      'fuchsia-fyi-arm64-rel',  # https://crbug.com/877248
       'fuchsia-fyi-x64-dbg',  # https://crbug.com/844416
     ],
     'modifications': {
