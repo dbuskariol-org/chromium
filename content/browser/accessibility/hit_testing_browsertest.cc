@@ -4,7 +4,7 @@
 
 #include "content/browser/accessibility/hit_testing_browsertest.h"
 
-#include "base/logging.h"
+#include "base/check.h"
 #include "build/build_config.h"
 #include "build/chromecast_buildflags.h"
 #include "content/browser/accessibility/accessibility_tree_formatter_blink.h"

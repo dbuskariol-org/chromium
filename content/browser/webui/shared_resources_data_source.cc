@@ -7,10 +7,11 @@
 #include <stddef.h>
 #include <string>
 
+#include "base/check_op.h"
 #include "base/feature_list.h"
 #include "base/files/file_path.h"
-#include "base/logging.h"
 #include "base/memory/ref_counted_memory.h"
+#include "base/notreached.h"
 #include "base/strings/string_piece.h"
 #include "base/strings/string_util.h"
 #include "base/task/post_task.h"

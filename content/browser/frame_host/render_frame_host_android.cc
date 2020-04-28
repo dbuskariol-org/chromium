@@ -10,7 +10,7 @@
 #include "base/android/jni_string.h"
 #include "base/android/unguessable_token_android.h"
 #include "base/bind.h"
-#include "base/logging.h"
+#include "base/check_op.h"
 #include "content/browser/frame_host/render_frame_host_delegate.h"
 #include "content/browser/frame_host/render_frame_host_impl.h"
 #include "content/public/android/content_jni_headers/RenderFrameHostImpl_jni.h"
