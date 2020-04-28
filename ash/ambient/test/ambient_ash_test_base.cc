@@ -40,7 +40,7 @@ void AmbientAshTestBase::TearDown() {
   assistant_image_downloader_.reset();
 }
 
-AmbientController* AmbientAshTestBase::ambient_controller() {
+AmbientController* AmbientAshTestBase::ambient_controller() const {
   return Shell::Get()->ambient_controller();
 }
 
@@ -52,8 +52,21 @@ void AmbientAshTestBase::LockScreen() {
   GetSessionControllerClient()->LockScreen();
 }
 
+void AmbientAshTestBase::UnlockScreen() {
+  GetSessionControllerClient()->UnlockScreen();
+}
+
 void AmbientAshTestBase::Toggle() {
   ambient_controller()->Toggle();
+}
+
+void AmbientAshTestBase::IssueAccessToken(const std::string& token,
+                                          bool with_error) {
+  ambient_client_->IssueAccessToken(token, with_error);
+}
+
+bool AmbientAshTestBase::IsAccessTokenRequestPending() const {
+  return ambient_client_->IsAccessTokenRequestPending();
 }
 
 }  // namespace ash
