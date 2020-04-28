@@ -42952,6 +42952,7 @@ Called by update_use_counter_css.py.-->
   <int value="658" label="appearance"/>
   <int value="659" label="math-superscript-shift-style"/>
   <int value="660" label="ruby-position"/>
+  <int value="661" label="text-underline-offset"/>
 </enum>
 
 <enum name="MappedEditingCommands">
