@@ -369,6 +369,7 @@ public class StartSurfaceLayoutTest {
     @Test
     @MediumTest
     @CommandLineFlags.Add({BASE_PARAMS})
+    @FlakyTest(message = "crbug.com/1075804")
     public void testTabToGridFromNtp() throws InterruptedException {
         prepareTabs(2, 0, NTP_URL);
         testTabToGrid(NTP_URL);
@@ -603,6 +604,7 @@ public class StartSurfaceLayoutTest {
     @Test
     @MediumTest
     @CommandLineFlags.Add({BASE_PARAMS + "/soft-cleanup-delay/2000/cleanup-delay/10000"})
+    @FlakyTest(message = "crbug.com/1075804")
     public void testInvisibleTabsDontFetchWarm() throws InterruptedException {
         // Get the GTS in the warm state.
         prepareTabs(2, 0, NTP_URL);
@@ -626,6 +628,7 @@ public class StartSurfaceLayoutTest {
     @Test
     @MediumTest
     @CommandLineFlags.Add({BASE_PARAMS + "/cleanup-delay/10000"})
+    @FlakyTest(message = "crbug.com/1075804")
     public void testInvisibleTabsDontFetchSoft() throws InterruptedException {
         // Get the GTS in the soft cleaned up state.
         prepareTabs(2, 0, NTP_URL);
