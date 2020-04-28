@@ -772,7 +772,7 @@ public class ExternalNavigationHandlerTest {
                 + "com.yelp.android;S.android.intent.extra.REFERRER_NAME="
                 + "https%3A%2F%2Fwww.google.com;end";
 
-        mDelegate.setIsSerpReferrer(true);
+        mUrlHandler.mIsSerpReferrer = true;
         mDelegate.setIsIntentToInstantApp(true);
         checkUrl(intentUrl)
                 .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT,
@@ -781,13 +781,13 @@ public class ExternalNavigationHandlerTest {
                 mDelegate.startActivityIntent.getBooleanExtra(IS_INSTANT_APP_EXTRA, false));
 
         // Check that we block all instant app intent:// URLs not from SERP.
-        mDelegate.setIsSerpReferrer(false);
+        mUrlHandler.mIsSerpReferrer = false;
         checkUrl(intentUrl)
                 .expecting(OverrideUrlLoadingResult.NO_OVERRIDE, IGNORE);
 
         // Check that that just having the SERP referrer alone doesn't cause intents to be treated
         // as intents to instant apps if the delegate indicates that they shouldn't be.
-        mDelegate.setIsSerpReferrer(true);
+        mUrlHandler.mIsSerpReferrer = true;
         mDelegate.setIsIntentToInstantApp(false);
         checkUrl(intentUrl).expecting(
                 OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, START_OTHER_ACTIVITY);
@@ -1688,6 +1688,7 @@ public class ExternalNavigationHandlerTest {
     private static class ExternalNavigationHandlerForTesting extends ExternalNavigationHandler {
         public String defaultSmsPackageName;
         public String mLastCommittedUrl;
+        public boolean mIsSerpReferrer;
 
         public ExternalNavigationHandlerForTesting(ExternalNavigationDelegate delegate) {
             super(delegate);
@@ -1706,6 +1707,11 @@ public class ExternalNavigationHandlerTest {
         @Override
         protected String getLastCommittedUrl() {
             return mLastCommittedUrl;
+        }
+
+        @Override
+        protected boolean isSerpReferrer() {
+            return mIsSerpReferrer;
         }
     };
 
@@ -1860,19 +1866,19 @@ public class ExternalNavigationHandlerTest {
         }
 
         @Override
-        public boolean maybeLaunchInstantApp(
-                String url, String referrerUrl, boolean isIncomingRedirect) {
+        public boolean maybeLaunchInstantApp(String url, String referrerUrl,
+                boolean isIncomingRedirect, boolean isSerpReferrer) {
             return mCanHandleWithInstantApp;
-        }
-
-        @Override
-        public boolean isSerpReferrer() {
-            return mIsSerpReferrer;
         }
 
         @Override
         public WebContents getWebContents() {
             return null;
+        }
+
+        @Override
+        public boolean hasValidTab() {
+            return false;
         }
 
         @Override
@@ -1901,8 +1907,8 @@ public class ExternalNavigationHandlerTest {
         }
 
         @Override
-        public boolean handleWithAutofillAssistant(
-                ExternalNavigationParams params, Intent targetIntent, String browserFallbackUrl) {
+        public boolean handleWithAutofillAssistant(ExternalNavigationParams params,
+                Intent targetIntent, String browserFallbackUrl, boolean isGoogleReferrer) {
             return mHandleWithAutofillAssistant;
         }
 
@@ -1953,10 +1959,6 @@ public class ExternalNavigationHandlerTest {
             mHandleWithAutofillAssistant = value;
         }
 
-        public void setIsSerpReferrer(boolean value) {
-            mIsSerpReferrer = value;
-        }
-
         public void setIsCallingAppTrusted(boolean trusted) {
             mIsCallingAppTrusted = trusted;
         }
@@ -1987,7 +1989,6 @@ public class ExternalNavigationHandlerTest {
         private String mReferrerUrlForClobbering;
         private boolean mCanHandleWithInstantApp;
         private boolean mHandleWithAutofillAssistant;
-        private boolean mIsSerpReferrer;
         public boolean mCalledWithProxy;
         public boolean mIsChromeAppInForeground = true;
         private boolean mIsCallingAppTrusted;

@@ -20,7 +20,6 @@ import android.provider.Browser;
 import android.text.TextUtils;
 import android.view.WindowManager.BadTokenException;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ApplicationState;
@@ -46,15 +45,12 @@ import org.chromium.chrome.browser.tab.TabImpl;
 import org.chromium.chrome.browser.tab.TabObserver;
 import org.chromium.components.embedder_support.util.UrlConstants;
 import org.chromium.components.embedder_support.util.UrlUtilities;
-import org.chromium.components.embedder_support.util.UrlUtilitiesJni;
 import org.chromium.components.external_intents.ExternalNavigationDelegate;
 import org.chromium.components.external_intents.ExternalNavigationHandler;
 import org.chromium.components.external_intents.ExternalNavigationHandler.OverrideUrlLoadingResult;
 import org.chromium.components.external_intents.ExternalNavigationParams;
 import org.chromium.components.external_intents.RedirectHandlerImpl;
 import org.chromium.content_public.browser.LoadUrlParams;
-import org.chromium.content_public.browser.NavigationController;
-import org.chromium.content_public.browser.NavigationEntry;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.common.Referrer;
@@ -461,40 +457,9 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
         IntentHandler.setPendingIncognitoUrl(intent);
     }
 
-    @Nullable
-    private String getReferrerUrl() {
-        // TODO (thildebr): Investigate whether or not we can use getLastCommittedUrl() instead of
-        // the NavigationController.
-        if (!hasValidTab() || mTab.getWebContents() == null) return null;
-
-        NavigationController nController = mTab.getWebContents().getNavigationController();
-        int index = nController.getLastCommittedEntryIndex();
-        if (index == -1) return null;
-
-        NavigationEntry entry = nController.getEntryAtIndex(index);
-        if (entry == null) return null;
-
-        return entry.getUrl();
-    }
-
-    @Override
-    public boolean isSerpReferrer() {
-        String referrerUrl = getReferrerUrl();
-        if (referrerUrl == null) return false;
-
-        return UrlUtilitiesJni.get().isGoogleSearchUrl(referrerUrl);
-    }
-
-    public boolean isGoogleReferrer() {
-        String referrerUrl = getReferrerUrl();
-        if (referrerUrl == null) return false;
-
-        return UrlUtilitiesJni.get().isGoogleSubDomainUrl(referrerUrl);
-    }
-
     @Override
     public boolean maybeLaunchInstantApp(
-            String url, String referrerUrl, boolean isIncomingRedirect) {
+            String url, String referrerUrl, boolean isIncomingRedirect, boolean isSerpReferrer) {
         if (!hasValidTab() || mTab.getWebContents() == null) return false;
 
         InstantAppsHandler handler = InstantAppsHandler.getInstance();
@@ -510,7 +475,7 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
                     LaunchIntentDispatcher.isCustomTabIntent(resolvedIntent), true);
         } else if (!isIncomingRedirect) {
             // Check if the navigation is coming from SERP and skip instant app handling.
-            if (isSerpReferrer()) return false;
+            if (isSerpReferrer) return false;
             return handler.handleNavigation(getAvailableContext(), url,
                     TextUtils.isEmpty(referrerUrl) ? null : Uri.parse(referrerUrl), mTab);
         }
@@ -549,7 +514,8 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
     /**
      * @return Whether or not we have a valid {@link Tab} available.
      */
-    private boolean hasValidTab() {
+    @Override
+    public boolean hasValidTab() {
         return mTab != null && !mIsTabDestroyed;
     }
 
@@ -574,12 +540,12 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
     }
 
     @Override
-    public boolean handleWithAutofillAssistant(
-            ExternalNavigationParams params, Intent targetIntent, String browserFallbackUrl) {
+    public boolean handleWithAutofillAssistant(ExternalNavigationParams params, Intent targetIntent,
+            String browserFallbackUrl, boolean isGoogleReferrer) {
         if (browserFallbackUrl != null && !params.isIncognito()
                 && AutofillAssistantFacade.isAutofillAssistantByIntentTriggeringEnabled(
                         targetIntent)
-                && isGoogleReferrer()) {
+                && isGoogleReferrer) {
             if (mTab != null) {
                 startAutofillAssistantWithIntent(targetIntent, browserFallbackUrl);
             }

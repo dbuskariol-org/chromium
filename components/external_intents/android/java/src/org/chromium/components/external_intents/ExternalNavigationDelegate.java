@@ -136,19 +136,21 @@ public interface ExternalNavigationDelegate {
      * @param url The current URL.
      * @param referrerUrl The referrer URL.
      * @param isIncomingRedirect Whether we are handling an incoming redirect to an instant app.
+     * @param isSerpReferrer whether the referrer is the SERP.
      * @return Whether we launched an instant app.
      */
-    boolean maybeLaunchInstantApp(String url, String referrerUrl, boolean isIncomingRedirect);
-
-    /**
-     * @return whether this navigation is from the search results page.
-     */
-    boolean isSerpReferrer();
+    boolean maybeLaunchInstantApp(
+            String url, String referrerUrl, boolean isIncomingRedirect, boolean isSerpReferrer);
 
     /**
      * @return The WebContents instance associated with this delegate instance.
      */
     WebContents getWebContents();
+
+    /**
+     * @return Whether this delegate has a valid tab available.
+     */
+    public boolean hasValidTab();
 
     /**
      * @param intent The intent to launch.
@@ -177,6 +179,6 @@ public interface ExternalNavigationDelegate {
     /**
      * Gives the embedder a chance to handle the intent via the autofill assistant.
      */
-    boolean handleWithAutofillAssistant(
-            ExternalNavigationParams params, Intent targetIntent, String browserFallbackUrl);
+    boolean handleWithAutofillAssistant(ExternalNavigationParams params, Intent targetIntent,
+            String browserFallbackUrl, boolean isGoogleReferrer);
 }
