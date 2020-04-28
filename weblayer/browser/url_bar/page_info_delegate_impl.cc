@@ -12,6 +12,7 @@
 #include "weblayer/browser/permissions/permission_decision_auto_blocker_factory.h"
 #include "weblayer/browser/permissions/permission_manager_factory.h"
 #include "weblayer/browser/stateful_ssl_host_state_delegate_factory.h"
+#include "weblayer/browser/tab_specific_content_settings_delegate.h"
 
 PageInfoDelegateImpl::PageInfoDelegateImpl(content::WebContents* web_contents)
     : web_contents_(web_contents) {
@@ -103,9 +104,8 @@ PageInfoDelegateImpl::GetVisibleSecurityState() {
 
 std::unique_ptr<content_settings::TabSpecificContentSettings::Delegate>
 PageInfoDelegateImpl::GetTabSpecificContentSettingsDelegate() {
-  // TODO(crbug.com/1052375): Implement.
-  NOTREACHED();
-  return nullptr;
+  return std::make_unique<weblayer::TabSpecificContentSettingsDelegate>(
+      web_contents_);
 }
 
 content::BrowserContext* PageInfoDelegateImpl::GetBrowserContext() const {
