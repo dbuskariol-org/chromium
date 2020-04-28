@@ -1140,7 +1140,7 @@ NavigationRequest::~NavigationRequest() {
   if (loading_mem_tracker_)
     loading_mem_tracker_->Cancel();
   ResetExpectedProcess();
-  if (state_ >= WILL_START_NAVIGATION && state_ < READY_TO_COMMIT) {
+  if (state_ >= WILL_START_NAVIGATION && !HasCommitted()) {
     devtools_instrumentation::OnNavigationRequestFailed(
         *this, network::URLLoaderCompletionStatus(net::ERR_ABORTED));
   }
