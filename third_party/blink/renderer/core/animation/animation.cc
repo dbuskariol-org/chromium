@@ -2011,8 +2011,10 @@ void Animation::DetachCompositorTimeline() {
 
   compositor_timeline->AnimationDestroyed(*this);
 
-  if (compositor_timeline->GetAnimationTimeline()->IsScrollTimeline())
+  if (compositor_timeline->GetAnimationTimeline()->IsScrollTimeline() &&
+      !compositor_timeline->GetAnimationTimeline()->HasAnimation()) {
     document_->DetachCompositorTimeline(compositor_timeline);
+  }
 }
 
 void Animation::UpdateCompositorScrollTimeline() {
