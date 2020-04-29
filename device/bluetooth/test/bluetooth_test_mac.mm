@@ -103,6 +103,10 @@ BluetoothTestMac::~BluetoothTestMac() {}
 
 void BluetoothTestMac::SetUp() {}
 
+bool BluetoothTestMac::PlatformSupportsLowEnergy() {
+  return true;
+}
+
 void BluetoothTestMac::InitWithDefaultAdapter() {
   auto adapter = BluetoothAdapterMac::CreateAdapter();
   adapter_mac_ = adapter.get();

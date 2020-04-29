@@ -97,6 +97,10 @@ void BluetoothTestBlueZ::TearDown() {
   BluetoothTestBase::TearDown();
 }
 
+bool BluetoothTestBlueZ::PlatformSupportsLowEnergy() {
+  return true;
+}
+
 void BluetoothTestBlueZ::InitWithFakeAdapter() {
   base::RunLoop run_loop;
   adapter_ = bluez::BluetoothAdapterBlueZ::CreateAdapter();
