@@ -8,10 +8,10 @@ import {
 } from './async_writer.js';
 
 /**
- * A no-op video processor.
- * TODO(shik): Convert the video format in the processor.
+ * A no-op video processor that simply passes the input to the output as is
+ * without any processing.
  */
-class VideoProcessor {
+class NopVideoProcessor {
   /**
    * @param {!AsyncWriter} output
    */
@@ -38,4 +38,4 @@ class VideoProcessor {
   }
 }
 
-Comlink.expose(VideoProcessor);
+Comlink.expose(NopVideoProcessor);
