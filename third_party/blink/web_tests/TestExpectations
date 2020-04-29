@@ -6807,4 +6807,4 @@ crbug.com/1073792 [ Mac10.13 ] virtual/threaded-prefer-compositing/fast/scrollin
 crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
 
 # Sheriff 2020-04-29
-crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access-workers.html [ Pass Failure ]
+crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access-workers.html [ Pass Timeout ]
