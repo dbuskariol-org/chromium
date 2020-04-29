@@ -2372,7 +2372,7 @@
   {
     "name": "exo-pointer-lock",
     "owners": [ "hollingum@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 88
   },
   {
     "name": "expensive-background-timer-throttling",
