@@ -20073,6 +20073,7 @@ Called by update_document_policy_enum.py.-->
   <int value="694" label="VoiceInteractionQuickAnswersEnabled"/>
   <int value="695" label="DeviceCrostiniArcAdbSideloadingAllowed"/>
   <int value="696" label="OnFileDownloadedEnterpriseConnector"/>
+  <int value="697" label="OnBulkDataEntryEnterpriseConnector"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
