@@ -30,8 +30,6 @@
 #  public:
 #   explicit XProto(XDisplay* display);
 #
-#   XDisplay* display() { return display_; }
-#
 #   struct RGB {
 #     uint16_t red{};
 #     uint16_t green{};
@@ -683,8 +681,6 @@ class GenXproto:
             self.namespace = ['x11', self.class_name]
             self.write('public:')
             self.write('explicit %s(XDisplay* display);' % name)
-            self.write()
-            self.write('XDisplay* display() { return display_; }')
             self.write()
             for (name, item) in self.module.all:
                 self.declare_type(item, name)
