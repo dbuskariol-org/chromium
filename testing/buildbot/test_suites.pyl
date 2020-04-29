@@ -4394,6 +4394,7 @@
 
     'gpu_dawn_tot_isolated_scripts': [
       'gpu_dawn_perf_smoke_isolated_scripts',
+      'gpu_webgpu_integration_isolated_scripts',
     ],
 
     'gpu_desktop_gtests': [
