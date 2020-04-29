@@ -7790,7 +7790,7 @@
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome_os:77-', 'chrome.linux:79-', 'chrome.mac:83-'],
+      'supported_on': ['chrome_os:77-83', 'chrome.linux:79-83', 'chrome.mac:83-'],
       'features': {
         'dynamic_refresh': False,
         'per_profile': False,
