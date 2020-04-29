@@ -2577,9 +2577,11 @@ void NavigationRequest::OnRedirectChecksComplete(
     modified_headers.MergeFrom(client_hints_extra_headers);
   }
 
+  net::HttpRequestHeaders cors_exempt_headers;
+  std::swap(cors_exempt_headers, cors_exempt_request_headers_);
   loader_->FollowRedirect(
       std::move(removed_headers), std::move(modified_headers),
-      {} /* modified_cors_exempt_headers */, common_params_->previews_state);
+      std::move(cors_exempt_headers), common_params_->previews_state);
 }
 
 void NavigationRequest::OnFailureChecksComplete(
