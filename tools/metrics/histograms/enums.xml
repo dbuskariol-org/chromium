@@ -12934,6 +12934,19 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="4" label="Non-Debian OS"/>
 </enum>
 
+<enum name="CrostiniDiskImageStatus">
+<!-- Keep this in sync with concierge_service.proto in ChromeOS. -->
+
+  <int value="0" label="DISK_STATUS_UNKNOWN"/>
+  <int value="1" label="DISK_STATUS_CREATED"/>
+  <int value="2" label="DISK_STATUS_EXISTS"/>
+  <int value="3" label="DISK_STATUS_FAILED"/>
+  <int value="4" label="DISK_STATUS_DOES_NOT_EXIST"/>
+  <int value="5" label="DISK_STATUS_DESTROYED"/>
+  <int value="6" label="DISK_STATUS_IN_PROGRESS"/>
+  <int value="7" label="DISK_STATUS_RESIZED"/>
+</enum>
+
 <enum name="CrostiniExportContainerResult">
   <int value="0" label="Success"/>
   <int value="1" label="Failed"/>
