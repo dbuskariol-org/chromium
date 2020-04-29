@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/shell/browser/web_test/blink_test_controller.h"
+#include "content/shell/browser/web_test/web_test_control_host.h"
 
 #include <stddef.h>
 #include <string.h>
@@ -159,12 +159,12 @@ std::string DumpHistoryForWebContents(WebContents* web_contents) {
 }
 
 std::vector<std::string> DumpTitleWasSet(WebContents* web_contents) {
-  base::Optional<bool> load = BlinkTestController::Get()
+  base::Optional<bool> load = WebTestControlHost::Get()
                                   ->accumulated_web_test_runtime_flags_changes()
                                   .FindBoolPath("dump_frame_load_callbacks");
 
   base::Optional<bool> title_changed =
-      BlinkTestController::Get()
+      WebTestControlHost::Get()
           ->accumulated_web_test_runtime_flags_changes()
           .FindBoolPath("dump_title_changes");
 
@@ -187,7 +187,7 @@ std::vector<std::string> DumpTitleWasSet(WebContents* web_contents) {
 std::string DumpFailLoad(WebContents* web_contents,
                          RenderFrameHost* render_frame_host) {
   base::Optional<bool> result =
-      BlinkTestController::Get()
+      WebTestControlHost::Get()
           ->accumulated_web_test_runtime_flags_changes()
           .FindBoolPath("dump_frame_load_callbacks");
 
@@ -276,23 +276,21 @@ void ApplyWebTestDefaultPreferences(WebPreferences* prefs) {
 
 }  // namespace
 
-// BlinkTestResultPrinter ----------------------------------------------------
+// WebTestResultPrinter ----------------------------------------------------
 
-BlinkTestResultPrinter::BlinkTestResultPrinter(std::ostream* output,
-                                               std::ostream* error)
+WebTestResultPrinter::WebTestResultPrinter(std::ostream* output,
+                                           std::ostream* error)
     : state_(DURING_TEST),
       capture_text_only_(false),
       encode_binary_data_(false),
       output_(output),
       error_(error) {}
 
-BlinkTestResultPrinter::~BlinkTestResultPrinter() {}
-
-void BlinkTestResultPrinter::StartStateDump() {
+void WebTestResultPrinter::StartStateDump() {
   state_ = DURING_STATE_DUMP;
 }
 
-void BlinkTestResultPrinter::PrintTextHeader() {
+void WebTestResultPrinter::PrintTextHeader() {
   if (state_ != DURING_STATE_DUMP)
     return;
   if (!capture_text_only_)
@@ -300,13 +298,13 @@ void BlinkTestResultPrinter::PrintTextHeader() {
   state_ = IN_TEXT_BLOCK;
 }
 
-void BlinkTestResultPrinter::PrintTextBlock(const std::string& block) {
+void WebTestResultPrinter::PrintTextBlock(const std::string& block) {
   if (state_ != IN_TEXT_BLOCK)
     return;
   *output_ << block;
 }
 
-void BlinkTestResultPrinter::PrintTextFooter() {
+void WebTestResultPrinter::PrintTextFooter() {
   if (state_ != IN_TEXT_BLOCK)
     return;
   if (!capture_text_only_) {
@@ -316,9 +314,8 @@ void BlinkTestResultPrinter::PrintTextFooter() {
   state_ = IN_IMAGE_BLOCK;
 }
 
-void BlinkTestResultPrinter::PrintImageHeader(
-    const std::string& actual_hash,
-    const std::string& expected_hash) {
+void WebTestResultPrinter::PrintImageHeader(const std::string& actual_hash,
+                                            const std::string& expected_hash) {
   if (state_ != IN_IMAGE_BLOCK || capture_text_only_)
     return;
   *output_ << "\nActualHash: " << actual_hash << "\n";
@@ -326,7 +323,7 @@ void BlinkTestResultPrinter::PrintImageHeader(
     *output_ << "\nExpectedHash: " << expected_hash << "\n";
 }
 
-void BlinkTestResultPrinter::PrintImageBlock(
+void WebTestResultPrinter::PrintImageBlock(
     const std::vector<unsigned char>& png_image) {
   if (state_ != IN_IMAGE_BLOCK || capture_text_only_)
     return;
@@ -341,7 +338,7 @@ void BlinkTestResultPrinter::PrintImageBlock(
                  png_image.size());
 }
 
-void BlinkTestResultPrinter::PrintImageFooter() {
+void WebTestResultPrinter::PrintImageFooter() {
   if (state_ != IN_IMAGE_BLOCK)
     return;
   if (!capture_text_only_) {
@@ -351,14 +348,14 @@ void BlinkTestResultPrinter::PrintImageFooter() {
   state_ = AFTER_TEST;
 }
 
-void BlinkTestResultPrinter::PrintAudioHeader() {
+void WebTestResultPrinter::PrintAudioHeader() {
   DCHECK_EQ(state_, DURING_STATE_DUMP);
   if (!capture_text_only_)
     *output_ << "Content-Type: audio/wav\n";
   state_ = IN_AUDIO_BLOCK;
 }
 
-void BlinkTestResultPrinter::PrintAudioBlock(
+void WebTestResultPrinter::PrintAudioBlock(
     const std::vector<unsigned char>& audio_data) {
   if (state_ != IN_AUDIO_BLOCK || capture_text_only_)
     return;
@@ -372,7 +369,7 @@ void BlinkTestResultPrinter::PrintAudioBlock(
                  audio_data.size());
 }
 
-void BlinkTestResultPrinter::PrintAudioFooter() {
+void WebTestResultPrinter::PrintAudioFooter() {
   if (state_ != IN_AUDIO_BLOCK)
     return;
   if (!capture_text_only_) {
@@ -382,21 +379,21 @@ void BlinkTestResultPrinter::PrintAudioFooter() {
   state_ = IN_IMAGE_BLOCK;
 }
 
-void BlinkTestResultPrinter::AddMessageToStderr(const std::string& message) {
+void WebTestResultPrinter::AddMessageToStderr(const std::string& message) {
   *error_ << message;
 }
 
-void BlinkTestResultPrinter::AddMessage(const std::string& message) {
+void WebTestResultPrinter::AddMessage(const std::string& message) {
   AddMessageRaw(message + "\n");
 }
 
-void BlinkTestResultPrinter::AddMessageRaw(const std::string& message) {
+void WebTestResultPrinter::AddMessageRaw(const std::string& message) {
   if (state_ != DURING_TEST)
     return;
   *output_ << message;
 }
 
-void BlinkTestResultPrinter::AddErrorMessage(const std::string& message) {
+void WebTestResultPrinter::AddErrorMessage(const std::string& message) {
   if (!capture_text_only_)
     *error_ << message << "\n";
   if (state_ != DURING_TEST && state_ != DURING_STATE_DUMP)
@@ -407,7 +404,7 @@ void BlinkTestResultPrinter::AddErrorMessage(const std::string& message) {
   PrintImageFooter();
 }
 
-void BlinkTestResultPrinter::PrintEncodedBinaryData(
+void WebTestResultPrinter::PrintEncodedBinaryData(
     const std::vector<unsigned char>& data) {
   *output_ << "Content-Transfer-Encoding: base64\n";
 
@@ -420,7 +417,7 @@ void BlinkTestResultPrinter::PrintEncodedBinaryData(
   output_->write(data_base64.c_str(), data_base64.length());
 }
 
-void BlinkTestResultPrinter::CloseStderr() {
+void WebTestResultPrinter::CloseStderr() {
   if (state_ != AFTER_TEST)
     return;
   if (!capture_text_only_) {
@@ -429,16 +426,16 @@ void BlinkTestResultPrinter::CloseStderr() {
   }
 }
 
-// BlinkTestController -------------------------------------------------------
+// WebTestControlHost -------------------------------------------------------
 
-BlinkTestController* BlinkTestController::instance_ = nullptr;
+WebTestControlHost* WebTestControlHost::instance_ = nullptr;
 
 // static
-BlinkTestController* BlinkTestController::Get() {
+WebTestControlHost* WebTestControlHost::Get() {
   return instance_;
 }
 
-BlinkTestController::BlinkTestController()
+WebTestControlHost::WebTestControlHost()
     : main_window_(nullptr),
       secondary_window_(nullptr),
       test_phase_(BETWEEN_TESTS),
@@ -456,7 +453,7 @@ BlinkTestController::BlinkTestController()
     crash_when_leak_found_ = switchValue == switches::kCrashOnFailure;
   }
 
-  printer_.reset(new BlinkTestResultPrinter(&std::cout, &std::cerr));
+  printer_ = std::make_unique<WebTestResultPrinter>(&std::cout, &std::cerr);
   if (base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kEncodeBinary))
     printer_->set_encode_binary_data(true);
@@ -474,7 +471,7 @@ BlinkTestController::BlinkTestController()
   ResetBrowserAfterWebTest();
 }
 
-BlinkTestController::~BlinkTestController() {
+WebTestControlHost::~WebTestControlHost() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   CHECK(instance_ == this);
   CHECK(test_phase_ == BETWEEN_TESTS);
@@ -483,7 +480,7 @@ BlinkTestController::~BlinkTestController() {
   instance_ = nullptr;
 }
 
-bool BlinkTestController::PrepareForWebTest(const TestInfo& test_info) {
+bool WebTestControlHost::PrepareForWebTest(const TestInfo& test_info) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   test_phase_ = DURING_TEST;
   current_working_directory_ = test_info.current_working_directory;
@@ -501,14 +498,14 @@ bool BlinkTestController::PrepareForWebTest(const TestInfo& test_info) {
     printer_->set_capture_text_only(false);
   printer_->reset();
 
-  frame_to_layout_dump_map_.clear();
-  render_process_host_observer_.RemoveAll();
-  all_observed_render_process_hosts_.clear();
-  main_window_render_process_hosts_.clear();
-  main_window_render_view_hosts_.clear();
+  web_test_render_frame_map_.clear();
+  web_test_render_thread_map_.clear();
   accumulated_web_test_runtime_flags_changes_.Clear();
-  blink_test_control_map_.clear();
-  web_test_control_map_.clear();
+  main_window_render_view_hosts_.clear();
+  main_window_render_process_hosts_.clear();
+  all_observed_render_process_hosts_.clear();
+  render_process_host_observer_.RemoveAll();
+  frame_to_layout_dump_map_.clear();
 
   ShellBrowserContext* browser_context =
       ShellContentBrowserClient::Get()->browser_context();
@@ -575,7 +572,7 @@ bool BlinkTestController::PrepareForWebTest(const TestInfo& test_info) {
       ->GetRenderViewHost()
       ->GetWidget()
       ->FlushForTesting();
-  GetBlinkTestControlRemote(
+  GetWebTestRenderFrameRemote(
       main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
       .FlushForTesting();
 
@@ -605,7 +602,7 @@ bool BlinkTestController::PrepareForWebTest(const TestInfo& test_info) {
   return true;
 }
 
-bool BlinkTestController::ResetBrowserAfterWebTest() {
+bool WebTestControlHost::ResetBrowserAfterWebTest() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   printer_->PrintTextFooter();
   printer_->PrintImageFooter();
@@ -642,11 +639,11 @@ bool BlinkTestController::ResetBrowserAfterWebTest() {
   return true;
 }
 
-void BlinkTestController::SetTempPath(const base::FilePath& temp_path) {
+void WebTestControlHost::SetTempPath(const base::FilePath& temp_path) {
   temp_path_ = temp_path;
 }
 
-void BlinkTestController::RendererUnresponsive() {
+void WebTestControlHost::RendererUnresponsive() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kDisableHangMonitor)) {
@@ -654,7 +651,7 @@ void BlinkTestController::RendererUnresponsive() {
   }
 }
 
-void BlinkTestController::OverrideWebkitPrefs(WebPreferences* prefs) {
+void WebTestControlHost::OverrideWebkitPrefs(WebPreferences* prefs) {
   if (should_override_prefs_) {
     *prefs = prefs_;
   } else {
@@ -668,7 +665,7 @@ void BlinkTestController::OverrideWebkitPrefs(WebPreferences* prefs) {
   }
 }
 
-void BlinkTestController::OpenURL(const GURL& url) {
+void WebTestControlHost::OpenURL(const GURL& url) {
   if (test_phase_ != DURING_TEST)
     return;
 
@@ -677,7 +674,7 @@ void BlinkTestController::OpenURL(const GURL& url) {
                          gfx::Size());
 }
 
-void BlinkTestController::InitiateLayoutDump() {
+void WebTestControlHost::InitiateLayoutDump() {
   // There should be at most 1 layout dump in progress at any given time.
   DCHECK_EQ(0, pending_layout_dumps_);
 
@@ -687,16 +684,16 @@ void BlinkTestController::InitiateLayoutDump() {
       continue;
 
     ++number_of_messages;
-    GetBlinkTestControlRemote(rfh)->DumpFrameLayout(
-        base::BindOnce(&BlinkTestController::OnDumpFrameLayoutResponse,
+    GetWebTestRenderFrameRemote(rfh)->DumpFrameLayout(
+        base::BindOnce(&WebTestControlHost::OnDumpFrameLayoutResponse,
                        weak_factory_.GetWeakPtr(), rfh->GetFrameTreeNodeId()));
   }
 
   pending_layout_dumps_ = number_of_messages;
 }
 
-void BlinkTestController::InitiateCaptureDump(bool capture_navigation_history,
-                                              bool capture_pixels) {
+void WebTestControlHost::InitiateCaptureDump(bool capture_navigation_history,
+                                             bool capture_pixels) {
   if (test_phase_ != DURING_TEST)
     return;
 
@@ -739,34 +736,32 @@ void BlinkTestController::InitiateCaptureDump(bool capture_navigation_history,
       EnqueueSurfaceCopyRequest();
     } else {
       CompositeAllFramesThen(
-          base::BindOnce(&BlinkTestController::EnqueueSurfaceCopyRequest,
+          base::BindOnce(&WebTestControlHost::EnqueueSurfaceCopyRequest,
                          weak_factory_.GetWeakPtr()));
     }
   }
 
   RenderFrameHost* rfh = main_window_->web_contents()->GetMainFrame();
   printer_->StartStateDump();
-  GetBlinkTestControlRemote(rfh)->CaptureDump(
-      base::BindOnce(&BlinkTestController::OnCaptureDumpCompleted,
-                     weak_factory_.GetWeakPtr()));
+  GetWebTestRenderFrameRemote(rfh)->CaptureDump(base::BindOnce(
+      &WebTestControlHost::OnCaptureDumpCompleted, weak_factory_.GetWeakPtr()));
 }
 
-void BlinkTestController::TestFinishedInSecondaryRenderer() {
-  GetBlinkTestControlRemote(
+void WebTestControlHost::TestFinishedInSecondaryRenderer() {
+  GetWebTestRenderFrameRemote(
       main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
       ->FinishTestInMainWindow();
 }
 
 // Enqueue an image copy output request.
-void BlinkTestController::EnqueueSurfaceCopyRequest() {
+void WebTestControlHost::EnqueueSurfaceCopyRequest() {
   auto* rwhv = main_window_->web_contents()->GetRenderWidgetHostView();
-  rwhv->CopyFromSurface(
-      gfx::Rect(), gfx::Size(),
-      base::BindOnce(&BlinkTestController::OnPixelDumpCaptured,
-                     weak_factory_.GetWeakPtr()));
+  rwhv->CopyFromSurface(gfx::Rect(), gfx::Size(),
+                        base::BindOnce(&WebTestControlHost::OnPixelDumpCaptured,
+                                       weak_factory_.GetWeakPtr()));
 }
 
-void BlinkTestController::CompositeAllFramesThen(
+void WebTestControlHost::CompositeAllFramesThen(
     base::OnceCallback<void()> callback) {
   // Only allow a single call to CompositeAllFramesThen(), without a call to
   // ResetBrowserAfterWebTest() in between. More than once risks overlapping
@@ -788,7 +783,7 @@ void BlinkTestController::CompositeAllFramesThen(
   CompositeNodeQueueThen(std::move(callback));
 }
 
-void BlinkTestController::CompositeNodeQueueThen(
+void WebTestControlHost::CompositeNodeQueueThen(
     base::OnceCallback<void()> callback) {
   // Frames can get freed somewhere else while a CompositeWithRaster is taking
   // place. Therefore, we need to double-check that this frame pointer is
@@ -813,19 +808,19 @@ void BlinkTestController::CompositeNodeQueueThen(
       next_node_host = nullptr;  // This one is now gone
     }
   } while (!next_node_host || !next_node_host->IsRenderFrameLive());
-  GetBlinkTestControlRemote(next_node_host)
+  GetWebTestRenderFrameRemote(next_node_host)
       ->CompositeWithRaster(
-          base::BindOnce(&BlinkTestController::CompositeNodeQueueThen,
+          base::BindOnce(&WebTestControlHost::CompositeNodeQueueThen,
                          weak_factory_.GetWeakPtr(), std::move(callback)));
 }
 
-void BlinkTestController::BuildDepthFirstQueue(Node* node) {
+void WebTestControlHost::BuildDepthFirstQueue(Node* node) {
   for (auto* child : node->children)
     BuildDepthFirstQueue(child);
   composite_all_frames_node_queue_.push(node);
 }
 
-BlinkTestController::Node* BlinkTestController::BuildFrameTree(
+WebTestControlHost::Node* WebTestControlHost::BuildFrameTree(
     WebContents* web_contents) {
   // Returns a Node for a given RenderFrameHost, or nullptr if doesn't exist.
   auto node_for_frame = [this](RenderFrameHost* rfh) {
@@ -890,11 +885,11 @@ BlinkTestController::Node* BlinkTestController::BuildFrameTree(
   return outer_root;
 }
 
-bool BlinkTestController::IsMainWindow(WebContents* web_contents) const {
+bool WebTestControlHost::IsMainWindow(WebContents* web_contents) const {
   return main_window_ && web_contents == main_window_->web_contents();
 }
 
-std::unique_ptr<BluetoothChooser> BlinkTestController::RunBluetoothChooser(
+std::unique_ptr<BluetoothChooser> WebTestControlHost::RunBluetoothChooser(
     RenderFrameHost* frame,
     const BluetoothChooser::EventHandler& event_handler) {
   // TODO(https://crbug.com/509038): Remove |bluetooth_chooser_factory_| once
@@ -916,24 +911,24 @@ std::unique_ptr<BluetoothChooser> BlinkTestController::RunBluetoothChooser(
   return std::make_unique<WebTestFirstDeviceBluetoothChooser>(event_handler);
 }
 
-void BlinkTestController::PluginCrashed(const base::FilePath& plugin_path,
-                                        base::ProcessId plugin_pid) {
+void WebTestControlHost::PluginCrashed(const base::FilePath& plugin_path,
+                                       base::ProcessId plugin_pid) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   printer_->AddErrorMessage(
       base::StringPrintf("#CRASHED - plugin (pid %" CrPRIdPid ")", plugin_pid));
   base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(base::IgnoreResult(
-                                    &BlinkTestController::DiscardMainWindow),
-                                weak_factory_.GetWeakPtr()));
+      FROM_HERE,
+      base::BindOnce(base::IgnoreResult(&WebTestControlHost::DiscardMainWindow),
+                     weak_factory_.GetWeakPtr()));
 }
 
-void BlinkTestController::RenderFrameCreated(
+void WebTestControlHost::RenderFrameCreated(
     RenderFrameHost* render_frame_host) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   HandleNewRenderFrameHost(render_frame_host);
 }
 
-void BlinkTestController::TitleWasSet(NavigationEntry* entry) {
+void WebTestControlHost::TitleWasSet(NavigationEntry* entry) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   std::vector<std::string> logs = DumpTitleWasSet(main_window_->web_contents());
   if (logs.empty())
@@ -942,9 +937,9 @@ void BlinkTestController::TitleWasSet(NavigationEntry* entry) {
     printer_->AddMessage(log);
 }
 
-void BlinkTestController::DidFailLoad(RenderFrameHost* render_frame_host,
-                                      const GURL& validated_url,
-                                      int error_code) {
+void WebTestControlHost::DidFailLoad(RenderFrameHost* render_frame_host,
+                                     const GURL& validated_url,
+                                     int error_code) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   std::string log =
       DumpFailLoad(main_window_->web_contents(), render_frame_host);
@@ -953,13 +948,13 @@ void BlinkTestController::DidFailLoad(RenderFrameHost* render_frame_host,
   printer_->AddMessage(log);
 }
 
-void BlinkTestController::WebContentsDestroyed() {
+void WebTestControlHost::WebContentsDestroyed() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   printer_->AddErrorMessage("FAIL: main window was destroyed");
   DiscardMainWindow();
 }
 
-void BlinkTestController::DidUpdateFaviconURL(
+void WebTestControlHost::DidUpdateFaviconURL(
     const std::vector<blink::mojom::FaviconURLPtr>& candidates) {
   bool should_dump_icon_changes = false;
   accumulated_web_test_runtime_flags_changes_.GetBoolean(
@@ -970,15 +965,15 @@ void BlinkTestController::DidUpdateFaviconURL(
   }
 }
 
-void BlinkTestController::RenderProcessHostDestroyed(
+void WebTestControlHost::RenderProcessHostDestroyed(
     RenderProcessHost* render_process_host) {
   render_process_host_observer_.Remove(render_process_host);
   all_observed_render_process_hosts_.erase(render_process_host);
-  web_test_control_map_.erase(render_process_host);
+  web_test_render_thread_map_.erase(render_process_host);
   main_window_render_process_hosts_.erase(render_process_host);
 }
 
-void BlinkTestController::RenderProcessExited(
+void WebTestControlHost::RenderProcessExited(
     RenderProcessHost* render_process_host,
     const ChildProcessTerminationInfo& info) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
@@ -1006,9 +1001,9 @@ void BlinkTestController::RenderProcessExited(
   }
 }
 
-void BlinkTestController::Observe(int type,
-                                  const NotificationSource& source,
-                                  const NotificationDetails& details) {
+void WebTestControlHost::Observe(int type,
+                                 const NotificationSource& source,
+                                 const NotificationDetails& details) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   switch (type) {
     case NOTIFICATION_RENDERER_PROCESS_CREATED: {
@@ -1030,14 +1025,14 @@ void BlinkTestController::Observe(int type,
   }
 }
 
-void BlinkTestController::OnGpuProcessCrashed(
+void WebTestControlHost::OnGpuProcessCrashed(
     base::TerminationStatus exit_code) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   printer_->AddErrorMessage("#CRASHED - gpu");
   DiscardMainWindow();
 }
 
-void BlinkTestController::DiscardMainWindow() {
+void WebTestControlHost::DiscardMainWindow() {
   // If we're running a test, we need to close all windows and exit the message
   // loop. Otherwise, we're already outside of the message loop, and we just
   // discard the main window.
@@ -1055,7 +1050,7 @@ void BlinkTestController::DiscardMainWindow() {
   current_pid_ = base::kNullProcessId;
 }
 
-void BlinkTestController::HandleNewRenderFrameHost(RenderFrameHost* frame) {
+void WebTestControlHost::HandleNewRenderFrameHost(RenderFrameHost* frame) {
   RenderProcessHost* process_host = frame->GetProcess();
   RenderViewHost* view_host = frame->GetRenderViewHost();
   bool main_window =
@@ -1085,8 +1080,8 @@ void BlinkTestController::HandleNewRenderFrameHost(RenderFrameHost* frame) {
 
     // Make sure the new renderer process_host has a test configuration shared
     // with other renderers.
-    mojom::ShellTestConfigurationPtr params =
-        mojom::ShellTestConfiguration::New();
+    mojom::WebTestRunTestConfigurationPtr params =
+        mojom::WebTestRunTestConfiguration::New();
     params->allow_external_pages = false;
     params->current_working_directory = current_working_directory_;
     params->temp_path = temp_path_;
@@ -1099,11 +1094,12 @@ void BlinkTestController::HandleNewRenderFrameHost(RenderFrameHost* frame) {
     params->protocol_mode = protocol_mode_;
 
     if (did_send_initial_test_configuration_) {
-      GetBlinkTestControlRemote(frame)->ReplicateTestConfiguration(
+      GetWebTestRenderFrameRemote(frame)->ReplicateTestConfiguration(
           std::move(params));
     } else {
       did_send_initial_test_configuration_ = true;
-      GetBlinkTestControlRemote(frame)->SetTestConfiguration(std::move(params));
+      GetWebTestRenderFrameRemote(frame)->SetTestConfiguration(
+          std::move(params));
       // Tests should always start with the browser controls hidden.
       frame->UpdateBrowserControlsState(BROWSER_CONTROLS_STATE_BOTH,
                                         BROWSER_CONTROLS_STATE_HIDDEN, false);
@@ -1116,15 +1112,16 @@ void BlinkTestController::HandleNewRenderFrameHost(RenderFrameHost* frame) {
     all_observed_render_process_hosts_.insert(process_host);
 
     if (!main_window)
-      GetBlinkTestControlRemote(frame)->SetupRendererProcessForNonTestWindow();
+      GetWebTestRenderFrameRemote(frame)
+          ->SetupRendererProcessForNonTestWindow();
 
-    GetWebTestControlRemote(process_host)
+    GetWebTestRenderThreadRemote(process_host)
         ->ReplicateWebTestRuntimeFlagsChanges(
             accumulated_web_test_runtime_flags_changes_.Clone());
   }
 }
 
-void BlinkTestController::OnTestFinished() {
+void WebTestControlHost::OnTestFinished() {
   test_phase_ = CLEAN_UP;
   if (!printer_->output_finished())
     printer_->PrintImageFooter();
@@ -1138,7 +1135,7 @@ void BlinkTestController::OnTestFinished() {
       ShellContentBrowserClient::Get()->browser_context();
 
   base::RepeatingClosure barrier_closure = base::BarrierClosure(
-      2, base::BindOnce(&BlinkTestController::OnCleanupFinished,
+      2, base::BindOnce(&WebTestControlHost::OnCleanupFinished,
                         weak_factory_.GetWeakPtr()));
 
   StoragePartition* storage_partition =
@@ -1155,38 +1152,38 @@ void BlinkTestController::OnTestFinished() {
       barrier_closure);
 }
 
-void BlinkTestController::OnCleanupFinished() {
+void WebTestControlHost::OnCleanupFinished() {
   if (secondary_window_) {
     secondary_window_->web_contents()->Stop();
-    GetBlinkTestControlRemote(
+    GetWebTestRenderFrameRemote(
         secondary_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
         ->ResetRendererAfterWebTest();
     ++waiting_for_reset_done_;
   }
   if (main_window_) {
     main_window_->web_contents()->Stop();
-    GetBlinkTestControlRemote(
+    GetWebTestRenderFrameRemote(
         main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
         ->ResetRendererAfterWebTest();
     ++waiting_for_reset_done_;
   }
 }
 
-void BlinkTestController::OnCaptureDumpCompleted(mojom::BlinkTestDumpPtr dump) {
+void WebTestControlHost::OnCaptureDumpCompleted(mojom::WebTestDumpPtr dump) {
   main_frame_dump_ = std::move(dump);
 
   waiting_for_main_frame_dump_ = false;
   ReportResults();
 }
 
-void BlinkTestController::OnPixelDumpCaptured(const SkBitmap& snapshot) {
+void WebTestControlHost::OnPixelDumpCaptured(const SkBitmap& snapshot) {
   DCHECK(!snapshot.drawsNothing());
   pixel_dump_ = snapshot;
   waiting_for_pixel_results_ = false;
   ReportResults();
 }
 
-void BlinkTestController::ReportResults() {
+void WebTestControlHost::ReportResults() {
   if (waiting_for_pixel_results_ || waiting_for_main_frame_dump_)
     return;
   if (main_frame_dump_->audio)
@@ -1215,8 +1212,8 @@ void BlinkTestController::ReportResults() {
   OnTestFinished();
 }
 
-void BlinkTestController::OnImageDump(const std::string& actual_pixel_hash,
-                                      const SkBitmap& image) {
+void WebTestControlHost::OnImageDump(const std::string& actual_pixel_hash,
+                                     const SkBitmap& image) {
   printer_->PrintImageHeader(actual_pixel_hash, expected_pixel_hash_);
 
   // Only encode and dump the png if the hashes don't match. Encoding the
@@ -1256,13 +1253,13 @@ void BlinkTestController::OnImageDump(const std::string& actual_pixel_hash,
   printer_->PrintImageFooter();
 }
 
-void BlinkTestController::OnAudioDump(const std::vector<unsigned char>& dump) {
+void WebTestControlHost::OnAudioDump(const std::vector<unsigned char>& dump) {
   printer_->PrintAudioHeader();
   printer_->PrintAudioBlock(dump);
   printer_->PrintAudioFooter();
 }
 
-void BlinkTestController::OnTextDump(const std::string& dump) {
+void WebTestControlHost::OnTextDump(const std::string& dump) {
   printer_->PrintTextHeader();
   printer_->PrintTextBlock(dump);
   if (!navigation_history_dump_.empty())
@@ -1270,7 +1267,7 @@ void BlinkTestController::OnTextDump(const std::string& dump) {
   printer_->PrintTextFooter();
 }
 
-void BlinkTestController::OnWebTestRuntimeFlagsChanged(
+void WebTestControlHost::OnWebTestRuntimeFlagsChanged(
     int sender_process_host_id,
     const base::DictionaryValue& changed_web_test_runtime_flags) {
   // Stash the accumulated changes for future, not-yet-created renderers.
@@ -1285,13 +1282,13 @@ void BlinkTestController::OnWebTestRuntimeFlagsChanged(
     if (process->GetID() == sender_process_host_id)
       continue;
 
-    GetWebTestControlRemote(process)->ReplicateWebTestRuntimeFlagsChanges(
+    GetWebTestRenderThreadRemote(process)->ReplicateWebTestRuntimeFlagsChanges(
         changed_web_test_runtime_flags.Clone());
   }
 }
 
-void BlinkTestController::OnDumpFrameLayoutResponse(int frame_tree_node_id,
-                                                    const std::string& dump) {
+void WebTestControlHost::OnDumpFrameLayoutResponse(int frame_tree_node_id,
+                                                   const std::string& dump) {
   // Store the result.
   auto pair = frame_to_layout_dump_map_.insert(
       std::make_pair(frame_tree_node_id, dump));
@@ -1323,20 +1320,20 @@ void BlinkTestController::OnDumpFrameLayoutResponse(int frame_tree_node_id,
   }
 
   // Continue finishing the test.
-  GetBlinkTestControlRemote(
+  GetWebTestRenderFrameRemote(
       main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
       ->LayoutDumpCompleted(stitched_layout_dump);
 }
 
-void BlinkTestController::PrintMessageToStderr(const std::string& message) {
+void WebTestControlHost::PrintMessageToStderr(const std::string& message) {
   printer_->AddMessageToStderr(message);
 }
 
-void BlinkTestController::PrintMessage(const std::string& message) {
+void WebTestControlHost::PrintMessage(const std::string& message) {
   printer_->AddMessageRaw(message);
 }
 
-void BlinkTestController::OverridePreferences(const WebPreferences& prefs) {
+void WebTestControlHost::OverridePreferences(const WebPreferences& prefs) {
   should_override_prefs_ = true;
   prefs_ = prefs;
 
@@ -1350,15 +1347,15 @@ void BlinkTestController::OverridePreferences(const WebPreferences& prefs) {
   main_render_view_host->OnWebkitPreferencesChanged();
 }
 
-void BlinkTestController::SetPopupBlockingEnabled(bool block_popups) {
+void WebTestControlHost::SetPopupBlockingEnabled(bool block_popups) {
   WebTestContentBrowserClient::Get()->SetPopupBlockingEnabled(block_popups);
 }
 
-void BlinkTestController::SetScreenOrientationChanged() {
+void WebTestControlHost::SetScreenOrientationChanged() {
   WebTestContentBrowserClient::Get()->SetScreenOrientationChanged(true);
 }
 
-void BlinkTestController::GetWritableDirectory(
+void WebTestControlHost::GetWritableDirectory(
     GetWritableDirectoryCallback reply_callback) {
   base::ScopedAllowBlockingForTesting allow_blocking;
   if (!writable_directory_for_tests_.IsValid()) {
@@ -1423,25 +1420,25 @@ class FakeSelectFileDialogFactory : public ui::SelectFileDialogFactory {
 
 }  // namespace
 
-void BlinkTestController::SetFilePathForMockFileDialog(
+void WebTestControlHost::SetFilePathForMockFileDialog(
     const base::FilePath& path) {
   ui::SelectFileDialog::SetFactory(new FakeSelectFileDialogFactory(path));
 }
 
-void BlinkTestController::GoToOffset(int offset) {
+void WebTestControlHost::GoToOffset(int offset) {
   main_window_->GoBackOrForward(offset);
 }
 
-void BlinkTestController::Reload() {
+void WebTestControlHost::Reload() {
   main_window_->Reload();
 }
 
-void BlinkTestController::LoadURLForFrame(const GURL& url,
-                                          const std::string& frame_name) {
+void WebTestControlHost::LoadURLForFrame(const GURL& url,
+                                         const std::string& frame_name) {
   main_window_->LoadURLForFrame(url, frame_name, ui::PAGE_TRANSITION_LINK);
 }
 
-void BlinkTestController::CloseRemainingWindows() {
+void WebTestControlHost::CloseRemainingWindows() {
   DevToolsAgentHost::DetachAllClients();
   std::vector<Shell*> open_windows(Shell::windows());
   for (auto* shell : open_windows) {
@@ -1451,7 +1448,7 @@ void BlinkTestController::CloseRemainingWindows() {
   base::RunLoop().RunUntilIdle();
 }
 
-void BlinkTestController::ResetRendererAfterWebTestDone() {
+void WebTestControlHost::ResetRendererAfterWebTestDone() {
   if (--waiting_for_reset_done_ > 0)
     return;
 
@@ -1460,7 +1457,7 @@ void BlinkTestController::ResetRendererAfterWebTestDone() {
       RenderViewHost* rvh = main_window_->web_contents()->GetRenderViewHost();
       leak_detector_->TryLeakDetection(
           rvh->GetProcess(),
-          base::BindOnce(&BlinkTestController::OnLeakDetectionDone,
+          base::BindOnce(&WebTestControlHost::OnLeakDetectionDone,
                          weak_factory_.GetWeakPtr()));
     }
     return;
@@ -1469,7 +1466,7 @@ void BlinkTestController::ResetRendererAfterWebTestDone() {
   Shell::QuitMainMessageLoopForTesting();
 }
 
-void BlinkTestController::OnLeakDetectionDone(
+void WebTestControlHost::OnLeakDetectionDone(
     const LeakDetector::LeakDetectionReport& report) {
   if (!report.leaked) {
     Shell::QuitMainMessageLoopForTesting();
@@ -1483,27 +1480,27 @@ void BlinkTestController::OnLeakDetectionDone(
   DiscardMainWindow();
 }
 
-void BlinkTestController::SetBluetoothManualChooser(bool enable) {
+void WebTestControlHost::SetBluetoothManualChooser(bool enable) {
   bluetooth_chooser_factory_.reset();
   if (enable) {
     bluetooth_chooser_factory_.reset(new WebTestBluetoothChooserFactory());
   }
 }
 
-void BlinkTestController::GetBluetoothManualChooserEvents() {
+void WebTestControlHost::GetBluetoothManualChooserEvents() {
   if (!bluetooth_chooser_factory_) {
     printer_->AddErrorMessage(
         "FAIL: Must call setBluetoothManualChooser before "
         "getBluetoothManualChooserEvents.");
     return;
   }
-  GetBlinkTestControlRemote(
+  GetWebTestRenderFrameRemote(
       main_window_->web_contents()->GetRenderViewHost()->GetMainFrame())
       ->ReplyBluetoothManualChooserEvents(
           bluetooth_chooser_factory_->GetAndResetEvents());
 }
 
-void BlinkTestController::SendBluetoothManualChooserEvent(
+void WebTestControlHost::SendBluetoothManualChooserEvent(
     const std::string& event_name,
     const std::string& argument) {
   if (!bluetooth_chooser_factory_) {
@@ -1528,7 +1525,7 @@ void BlinkTestController::SendBluetoothManualChooserEvent(
   bluetooth_chooser_factory_->SendEvent(event, argument);
 }
 
-void BlinkTestController::BlockThirdPartyCookies(bool block) {
+void WebTestControlHost::BlockThirdPartyCookies(bool block) {
   ShellBrowserContext* browser_context =
       ShellContentBrowserClient::Get()->browser_context();
   browser_context->GetDefaultStoragePartition(browser_context)
@@ -1536,58 +1533,61 @@ void BlinkTestController::BlockThirdPartyCookies(bool block) {
       ->BlockThirdPartyCookies(block);
 }
 
-void BlinkTestController::AddBlinkTestClientReceiver(
-    mojo::PendingAssociatedReceiver<mojom::BlinkTestClient> receiver) {
+void WebTestControlHost::AddWebTestControlHostReceiver(
+    mojo::PendingAssociatedReceiver<mojom::WebTestControlHost> receiver) {
   blink_test_client_receivers_.Add(this, std::move(receiver));
 }
 
-mojo::AssociatedRemote<mojom::BlinkTestControl>&
-BlinkTestController::GetBlinkTestControlRemote(RenderFrameHost* frame) {
+mojo::AssociatedRemote<mojom::WebTestRenderFrame>&
+WebTestControlHost::GetWebTestRenderFrameRemote(RenderFrameHost* frame) {
   GlobalFrameRoutingId key(frame->GetProcess()->GetID(), frame->GetRoutingID());
-  if (blink_test_control_map_.find(key) == blink_test_control_map_.end()) {
-    mojo::AssociatedRemote<mojom::BlinkTestControl>& new_ptr =
-        blink_test_control_map_[key];
+  if (web_test_render_frame_map_.find(key) ==
+      web_test_render_frame_map_.end()) {
+    mojo::AssociatedRemote<mojom::WebTestRenderFrame>& new_ptr =
+        web_test_render_frame_map_[key];
     frame->GetRemoteAssociatedInterfaces()->GetInterface(&new_ptr);
     new_ptr.set_disconnect_handler(
-        base::BindOnce(&BlinkTestController::HandleBlinkTestControlError,
+        base::BindOnce(&WebTestControlHost::HandleWebTestRenderFrameRemoteError,
                        weak_factory_.GetWeakPtr(), key));
   }
-  DCHECK(blink_test_control_map_[key].get());
-  return blink_test_control_map_[key];
+  DCHECK(web_test_render_frame_map_[key].get());
+  return web_test_render_frame_map_[key];
 }
 
-mojo::AssociatedRemote<mojom::WebTestControl>&
-BlinkTestController::GetWebTestControlRemote(RenderProcessHost* process) {
-  if (web_test_control_map_.find(process) == web_test_control_map_.end()) {
+mojo::AssociatedRemote<mojom::WebTestRenderThread>&
+WebTestControlHost::GetWebTestRenderThreadRemote(RenderProcessHost* process) {
+  if (web_test_render_thread_map_.find(process) ==
+      web_test_render_thread_map_.end()) {
     IPC::ChannelProxy* channel = process->GetChannel();
     // channel might be null in tests.
     if (process->IsInitializedAndNotDead() && channel) {
-      mojo::AssociatedRemote<mojom::WebTestControl>& new_ptr =
-          web_test_control_map_[process];
+      mojo::AssociatedRemote<mojom::WebTestRenderThread>& new_ptr =
+          web_test_render_thread_map_[process];
       channel->GetRemoteAssociatedInterface(&new_ptr);
-      new_ptr.set_disconnect_handler(
-          base::BindOnce(&BlinkTestController::HandleWebTestControlError,
-                         weak_factory_.GetWeakPtr(), process));
+      new_ptr.set_disconnect_handler(base::BindOnce(
+          &WebTestControlHost::HandleWebTestRenderThreadRemoteError,
+          weak_factory_.GetWeakPtr(), process));
     }
   }
-  DCHECK(web_test_control_map_[process].get());
-  return web_test_control_map_[process];
+  DCHECK(web_test_render_thread_map_[process].get());
+  return web_test_render_thread_map_[process];
 }
 
-void BlinkTestController::HandleBlinkTestControlError(
+void WebTestControlHost::HandleWebTestRenderFrameRemoteError(
     const GlobalFrameRoutingId& key) {
-  blink_test_control_map_.erase(key);
+  web_test_render_frame_map_.erase(key);
 }
 
-void BlinkTestController::HandleWebTestControlError(RenderProcessHost* key) {
-  web_test_control_map_.erase(key);
+void WebTestControlHost::HandleWebTestRenderThreadRemoteError(
+    RenderProcessHost* key) {
+  web_test_render_thread_map_.erase(key);
 }
 
-BlinkTestController::Node::Node() = default;
-BlinkTestController::Node::Node(RenderFrameHost* host)
+WebTestControlHost::Node::Node() = default;
+WebTestControlHost::Node::Node(RenderFrameHost* host)
     : render_frame_host(host),
       render_frame_host_id(host->GetProcess()->GetID(), host->GetRoutingID()) {}
-BlinkTestController::Node::Node(Node&& other) = default;
-BlinkTestController::Node::~Node() = default;
+WebTestControlHost::Node::Node(Node&& other) = default;
+WebTestControlHost::Node::~Node() = default;
 
 }  // namespace content

@@ -5192,7 +5192,7 @@ void WebContentsImpl::OnPluginCrashed(RenderFrameHostImpl* source,
                                       const base::FilePath& plugin_path,
                                       base::ProcessId plugin_pid) {
   // TODO(nick): Eliminate the |plugin_pid| parameter, which can't be trusted,
-  // and is only used by BlinkTestController.
+  // and is only used by WebTestControlHost.
   for (auto& observer : observers_)
     observer.PluginCrashed(plugin_path, plugin_pid);
 }
