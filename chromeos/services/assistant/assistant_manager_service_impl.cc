@@ -154,8 +154,7 @@ AssistantManagerServiceImpl::AssistantManagerServiceImpl(
       action_module_(std::make_unique<action::CrosActionModule>(
           this,
           assistant::features::IsAppSupportEnabled(),
-          assistant::features::IsRoutinesEnabled(),
-          assistant::features::IsTimersV2Enabled())),
+          assistant::features::IsRoutinesEnabled())),
       chromium_api_delegate_(std::move(pending_url_loader_factory)),
       assistant_settings_manager_(
           std::make_unique<AssistantSettingsManagerImpl>(context, this)),
@@ -739,18 +738,6 @@ void AssistantManagerServiceImpl::OnShowText(const std::string& text) {
 
   for (auto& it : interaction_subscribers_)
     it->OnTextResponse(text);
-}
-
-void AssistantManagerServiceImpl::OnShowTimers(
-    const std::vector<std::string>& timer_ids) {
-  ENSURE_MAIN_THREAD(&AssistantManagerServiceImpl::OnShowTimers, timer_ids);
-  if (!features::IsTimersV2Enabled())
-    return;
-
-  receive_inline_response_ = true;
-
-  for (auto& it : interaction_subscribers_)
-    it->OnTimersResponse(timer_ids);
 }
 
 void AssistantManagerServiceImpl::OnOpenUrl(const std::string& url,
