@@ -87,6 +87,11 @@ using alert_overlays::AlertResponse;
                                                      self.textFieldValues);
   self.request->GetCallbackManager()->SetCompletionResponse(
       config->response_converter().Run(std::move(alertResponse)));
+  // The response converter should convert the AlertResponse into a feature-
+  // specific OverlayResponseInfo type.
+  OverlayResponse* convertedResponse =
+      self.request->GetCallbackManager()->GetCompletionResponse();
+  DCHECK(!convertedResponse || !convertedResponse->GetInfo<AlertResponse>());
 }
 
 // Returns the action block for the button at |index|.
