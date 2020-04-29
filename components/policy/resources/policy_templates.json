@@ -148,6 +148,9 @@
 #   'cloud_only' Set to True if the policy is forced or recommended to set from
 #   Admin console only. This hides the policy from policy templates and
 #   documentation.
+#   'platform_only' Set to True if the policy can only be set from platform
+#   policy but do not support Admin console. This is only used as a hint for
+#   Admin console.
 #
 #   The 'max_size' key is used to specify the maximal size of the external data
 #   that a policy can reference, in bytes. This annotation is compulsory for
@@ -21174,6 +21177,10 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     },
     'doc_feature_per_profile': {
       'desc': '''The name of the feature that indicates whether a policy is applicable to browser Profiles individually or whether it affects the entire browser.''',
+      'text': '''Per Profile'''
+    },
+    'doc_feature_platform_only': {
+      'desc': '''The name of the feature that indicates whether a policy can only be set with platfrom policy.''',
       'text': '''Per Profile'''
     },
     'doc_deprecated': {
