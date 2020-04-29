@@ -5849,11 +5849,6 @@ crbug.com/954998 [ Mac ] http/tests/devtools/tracing/timeline-js/timeline-js-lin
 # Sheriff 2019-04-25
 crbug.com/956736 virtual/gpu-rasterization/images/imagemap-focus-ring-outline-color-not-inherited-from-map.html [ Pass Failure ]
 
-crbug.com/1065059 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/animationworklet/scroll-timeline-non-scrollable.html [ Pass Crash ]
-crbug.com/1065059 [ Linux ] virtual/threaded-no-composited-antialiasing/animations/animationworklet/playback-rate-scroll-timeline-accelerated-property.html [ Pass Crash ]
-crbug.com/1065059 [ Linux ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline.https.html [ Pass Crash ]
-crbug.com/1065059 [ Linux ] virtual/threaded/external/wpt/animation-worklet/worklet-animation-with-scroll-timeline-root-scroller.https.html [ Pass Crash ]
-
 # Sheriff 2019-04-30
 crbug.com/948785 [ Debug ] fast/events/pointerevents/pointer-event-consumed-touchstart-in-slop-region.html [ Pass Failure ]
 
