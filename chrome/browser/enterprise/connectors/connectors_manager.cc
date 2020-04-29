@@ -53,18 +53,6 @@ bool MatchURLAgainstPatterns(const GURL& url,
   return has_scan_match;
 }
 
-const char* ConnectorToPref(AnalysisConnector connector) {
-  switch (connector) {
-    case AnalysisConnector::BULK_DATA_ENTRY:
-    case AnalysisConnector::FILE_DOWNLOADED:
-      // TODO(crbug/1067631): Return the corresponding prefs for these analysis
-      // connectors once they exist.
-      return nullptr;
-    case AnalysisConnector::FILE_ATTACHED:
-      return kOnFileAttachedPref;
-  }
-}
-
 }  // namespace
 
 // ConnectorsManager implementation---------------------------------------------
@@ -84,7 +72,7 @@ bool ConnectorsManager::IsConnectorEnabled(AnalysisConnector connector) {
   if (connector_settings_.count(connector) == 1)
     return true;
 
-  const char* pref = ConnectorToPref(connector);
+  const char* pref = ConnectorPref(connector);
   return pref && g_browser_process->local_state()->HasPrefPath(pref);
 }
 
@@ -121,7 +109,7 @@ void ConnectorsManager::GetAnalysisSettingsFromConnectorPolicy(
 
 void ConnectorsManager::CacheConnectorPolicy(AnalysisConnector connector) {
   // Connectors with non-existing policies should not reach this code.
-  const char* pref = ConnectorToPref(connector);
+  const char* pref = ConnectorPref(connector);
   DCHECK(pref);
 
   const base::ListValue* policy_value =

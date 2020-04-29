@@ -10,6 +10,7 @@
 
 #include "base/callback.h"
 #include "base/optional.h"
+#include "components/safe_browsing/core/common/safe_browsing_prefs.h"
 #include "components/safe_browsing/core/proto/webprotect.pb.h"
 
 namespace base {
@@ -104,6 +105,21 @@ class EventReportValidator {
 
   base::RepeatingClosure done_closure_;
 };
+
+// Helper functions that set matching connector policies values from legacy
+// policy values.
+void SetDlpPolicy(CheckContentComplianceValues state);
+void SetMalwarePolicy(SendFilesForMalwareCheckValues state);
+void SetDelayDeliveryUntilVerdictPolicy(DelayDeliveryUntilVerdictValues state);
+void SetAllowPasswordProtectedFilesPolicy(
+    AllowPasswordProtectedFilesValues state);
+void SetBlockUnsupportedFileTypesPolicy(BlockUnsupportedFiletypesValues state);
+void SetBlockLargeFileTransferPolicy(BlockLargeFileTransferValues state);
+void AddUrlsToCheckComplianceOfDownloads(const std::vector<std::string>& urls);
+void AddUrlsToNotCheckComplianceOfUploads(const std::vector<std::string>& urls);
+void AddUrlsToCheckForMalwareOfUploads(const std::vector<std::string>& urls);
+void AddUrlsToNotCheckForMalwareOfDownloads(
+    const std::vector<std::string>& urls);
 
 }  // namespace safe_browsing
 
