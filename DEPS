@@ -100,6 +100,9 @@ vars = {
   # the gn arg 'use_clang_coverage').
   'checkout_clang_coverage_tools': False,
 
+  # Fetch the pgo profiles to optimize official builds.
+  'checkout_pgo_profiles': False,
+
   # Fetch clang-tidy into the same bin/ directory as our clang binary.
   'checkout_clang_tidy': False,
 
@@ -4358,6 +4361,41 @@ hooks = [
       '--cache-dir=src/build/cros_cache/',
       '--log-level=error',
       '--no-shell',
+    ],
+  },
+
+  # Download PGO profiles.
+  {
+    'name': 'Fetch PGO profiles for win32',
+    'pattern': '.',
+    'condition': 'checkout_pgo_profiles and checkout_win',
+    'action': [ 'vpython',
+                'src/tools/update_pgo_profiles.py',
+                '--target=win32',
+                'update',
+                '--gs-url-base=chromium-optimization-profiles/pgo_profiles',
+    ],
+  },
+  {
+    'name': 'Fetch PGO profiles for win64',
+    'pattern': '.',
+    'condition': 'checkout_pgo_profiles and checkout_win',
+    'action': [ 'vpython',
+                'src/tools/update_pgo_profiles.py',
+                '--target=win64',
+                'update',
+                '--gs-url-base=chromium-optimization-profiles/pgo_profiles',
+    ],
+  },
+  {
+    'name': 'Fetch PGO profiles for mac',
+    'pattern': '.',
+    'condition': 'checkout_pgo_profiles and checkout_mac',
+    'action': [ 'vpython',
+                'src/tools/update_pgo_profiles.py',
+                '--target=mac',
+                'update',
+                '--gs-url-base=chromium-optimization-profiles/pgo_profiles',
     ],
   },
 
