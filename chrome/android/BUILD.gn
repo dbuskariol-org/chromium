@@ -2713,7 +2713,6 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/autofill/settings/AutofillProfileBridge.java",
     "java/src/org/chromium/chrome/browser/background_sync/BackgroundSyncBackgroundTask.java",
     "java/src/org/chromium/chrome/browser/background_sync/BackgroundSyncBackgroundTaskScheduler.java",
-    "java/src/org/chromium/chrome/browser/background_sync/BackgroundSyncPwaDetector.java",
     "java/src/org/chromium/chrome/browser/background_sync/GooglePlayServicesChecker.java",
     "java/src/org/chromium/chrome/browser/background_sync/PeriodicBackgroundSyncChromeWakeUpTask.java",
     "java/src/org/chromium/chrome/browser/background_task_scheduler/ChromeBackgroundTaskFactory.java",
