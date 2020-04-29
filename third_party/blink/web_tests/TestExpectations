@@ -6786,9 +6786,6 @@ crbug.com/1066178 external/wpt/html/user-activation/consumption-crossorigin.sub.
 # The "timeout" was detected by the wpt-importer bot.
 crbug.com/1069714 [ Mac10.13 ] external/wpt/webrtc/RTCRtpSender-replaceTrack.https.html [ Pass Failure Timeout ]
 
-# Sheriff 2020-04-10
-crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Failure Timeout ]
-
 # Sheriff 2020-04-17
 crbug.com/1071909 external/wpt/html/cross-origin-opener-policy/popup-coop-by-sw.https.html [ Pass Timeout ]
 
