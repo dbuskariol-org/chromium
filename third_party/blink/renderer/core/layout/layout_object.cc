@@ -543,10 +543,8 @@ bool LayoutObject::HasClipRelatedProperty() const {
 
 bool LayoutObject::IsRenderedLegendInternal() const {
   DCHECK(IsBox());
-  DCHECK(IsHTMLLegendElement());
+  DCHECK(IsRenderedLegendCandidate());
 
-  if (IsFloatingOrOutOfFlowPositioned())
-    return false;
   const auto* parent = Parent();
   if (RuntimeEnabledFeatures::LayoutNGFieldsetEnabled()) {
     // If there is a rendered legend, it will be found inside the anonymous

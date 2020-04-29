@@ -1339,7 +1339,7 @@ class CORE_EXPORT LayoutBox : public LayoutBoxModelObject {
     return IsFlexItemCommon() && Parent()->IsFlexibleBoxIncludingNG();
   }
   bool IsFlexItemCommon() const {
-    return !IsInline() && !IsFloatingOrOutOfFlowPositioned() && Parent();
+    return !IsInline() && !IsOutOfFlowPositioned() && Parent();
   }
 
   bool IsGridItem() const { return Parent() && Parent()->IsLayoutGrid(); }
