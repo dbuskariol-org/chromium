@@ -1093,8 +1093,7 @@ void AssistantManagerServiceImpl::PostInitAssistant() {
   assistant_settings_manager_->UpdateServerDeviceSettings();
 
   if (base::FeatureList::IsEnabled(assistant::features::kAssistantAppSupport)) {
-    device_actions()->AddAppListEventSubscriber(
-        app_list_subscriber_receiver_.BindNewPipeAndPassRemote());
+    scoped_app_list_event_subscriber.Add(device_actions());
   }
 }
 

@@ -225,12 +225,6 @@ interface AssistantInteractionSubscriber {
   OnWaitStarted();
 };
 
-// Subscribes to App list events.
-interface AppListEventSubscriber {
-  // Called when the android app list changed.
-  OnAndroidAppListRefreshed(array<AndroidAppInfo> apps_info);
-};
-
 // Enumeration of possible completions for an Assistant interaction.
 enum AssistantInteractionResolution {
   // Assistant interaction completed normally.
