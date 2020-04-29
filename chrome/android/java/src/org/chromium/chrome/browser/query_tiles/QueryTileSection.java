@@ -32,9 +32,11 @@ import java.util.List;
  * section.
  */
 public class QueryTileSection {
-    private static final String QUERY_TILES_SHORTEN_MOST_VISITED_TILES_FOR_SMALL_SCREEN =
-            "shorten_most_visited_tiles_for_small_screen";
-    private static final int SMALL_SCREEN_HEIGHT_THRESHOLD_DP = 600;
+    private static final String MOST_VISITED_MAX_ROWS_SMALL_SCREEN =
+            "most_visited_max_rows_small_screen";
+    private static final String MOST_VISITED_MAX_ROWS_NORMAL_SCREEN =
+            "most_visited_max_rows_normal_screen";
+    private static final int SMALL_SCREEN_HEIGHT_THRESHOLD_DP = 750;
     private static final String UMA_PREFIX = "NTP.QueryTiles";
 
     private final ViewGroup mQueryTileSectionView;
@@ -112,20 +114,20 @@ public class QueryTileSection {
     }
 
     /**
-     * @return Whether the screen height is small. Used for shortening the most visited tiles
-     *         section on NTP so that feed is still visible above the fold.
+     * @return Max number of rows for most visted tiles. For smaller screens, the most visited tiles
+     *         section on NTP is shortened so that feed is still visible above the fold.
      */
-    public boolean shouldConsiderAsSmallScreen() {
-        if (!isFeatureEnabled()) return false;
-        boolean shortenMostVisitedTiles = ChromeFeatureList.getFieldTrialParamByFeatureAsBoolean(
-                ChromeFeatureList.QUERY_TILES,
-                QUERY_TILES_SHORTEN_MOST_VISITED_TILES_FOR_SMALL_SCREEN, false);
-        if (!shortenMostVisitedTiles) return false;
+    public Integer getMaxRowsForMostVisitedTiles() {
+        if (!isFeatureEnabled()) return null;
 
         DisplayAndroid display =
                 DisplayAndroid.getNonMultiDisplay(mQueryTileSectionView.getContext());
         int screenHeightDp = DisplayUtil.pxToDp(display, display.getDisplayHeight());
-        return screenHeightDp < SMALL_SCREEN_HEIGHT_THRESHOLD_DP;
+        boolean isSmallScreen = screenHeightDp < SMALL_SCREEN_HEIGHT_THRESHOLD_DP;
+        return ChromeFeatureList.getFieldTrialParamByFeatureAsInt(ChromeFeatureList.QUERY_TILES,
+                isSmallScreen ? MOST_VISITED_MAX_ROWS_SMALL_SCREEN
+                              : MOST_VISITED_MAX_ROWS_NORMAL_SCREEN,
+                2);
     }
 
     private static boolean isFeatureEnabled() {
