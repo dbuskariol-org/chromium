@@ -1333,7 +1333,9 @@ class AdsPageLoadMetricsObserverResourceBrowserTestWithoutHeavyAdIntervention
     : public AdsPageLoadMetricsObserverResourceBrowserTest {
  public:
   AdsPageLoadMetricsObserverResourceBrowserTestWithoutHeavyAdIntervention() {
-    feature_list_.InitAndDisableFeature(features::kHeavyAdIntervention);
+    // The experiment is "on" if either intervention or reporting is active.
+    feature_list_.InitWithFeatures({}, {features::kHeavyAdIntervention,
+                                        features::kHeavyAdInterventionWarning});
   }
 
  private:
