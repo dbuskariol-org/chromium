@@ -32827,6 +32827,14 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="3" label="Interact outside of shelf to hide hotseat"/>
 </enum>
 
+<enum name="HotspotSupport">
+  <int value="0" label="Unsupported"/>
+  <int value="1" label="Invalid version"/>
+  <int value="2" label="Version 1"/>
+  <int value="3" label="Version 2"/>
+  <int value="4" label="Version 3"/>
+</enum>
+
 <enum name="HotwordAvailability">
   <int value="0" label="Unavailable -- reason may be unknown"/>
   <int value="1" label="Available"/>
