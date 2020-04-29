@@ -32,15 +32,15 @@ gfx::PointF GetScreenLocationFromEvent(const LocatedEvent& event) {
 blink::WebPointerProperties::PointerType EventPointerTypeToWebPointerType(
     EventPointerType pointer_type) {
   switch (pointer_type) {
-    case EventPointerType::POINTER_TYPE_UNKNOWN:
+    case EventPointerType::kUnknown:
       return blink::WebPointerProperties::PointerType::kUnknown;
-    case EventPointerType::POINTER_TYPE_MOUSE:
+    case EventPointerType::kMouse:
       return blink::WebPointerProperties::PointerType::kMouse;
-    case EventPointerType::POINTER_TYPE_PEN:
+    case EventPointerType::kPen:
       return blink::WebPointerProperties::PointerType::kPen;
-    case EventPointerType::POINTER_TYPE_ERASER:
+    case EventPointerType::kEraser:
       return blink::WebPointerProperties::PointerType::kEraser;
-    case EventPointerType::POINTER_TYPE_TOUCH:
+    case EventPointerType::kTouch:
       return blink::WebPointerProperties::PointerType::kTouch;
   }
   NOTREACHED() << "Unexpected EventPointerType";

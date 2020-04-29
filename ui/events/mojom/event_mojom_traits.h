@@ -104,15 +104,15 @@ template <>
 struct EnumTraits<ui::mojom::PointerKind, ui::EventPointerType> {
   static ui::mojom::PointerKind ToMojom(ui::EventPointerType input) {
     switch (input) {
-      case ui::EventPointerType::POINTER_TYPE_UNKNOWN:
+      case ui::EventPointerType::kUnknown:
         return ui::mojom::PointerKind::UNKNOWN;
-      case ui::EventPointerType::POINTER_TYPE_MOUSE:
+      case ui::EventPointerType::kMouse:
         return ui::mojom::PointerKind::MOUSE;
-      case ui::EventPointerType::POINTER_TYPE_PEN:
+      case ui::EventPointerType::kPen:
         return ui::mojom::PointerKind::PEN;
-      case ui::EventPointerType::POINTER_TYPE_TOUCH:
+      case ui::EventPointerType::kTouch:
         return ui::mojom::PointerKind::TOUCH;
-      case ui::EventPointerType::POINTER_TYPE_ERASER:
+      case ui::EventPointerType::kEraser:
         return ui::mojom::PointerKind::ERASER;
     }
     NOTREACHED();
@@ -123,19 +123,19 @@ struct EnumTraits<ui::mojom::PointerKind, ui::EventPointerType> {
                         ui::EventPointerType* out) {
     switch (input) {
       case ui::mojom::PointerKind::UNKNOWN:
-        *out = ui::EventPointerType::POINTER_TYPE_UNKNOWN;
+        *out = ui::EventPointerType::kUnknown;
         return true;
       case ui::mojom::PointerKind::MOUSE:
-        *out = ui::EventPointerType::POINTER_TYPE_MOUSE;
+        *out = ui::EventPointerType::kMouse;
         return true;
       case ui::mojom::PointerKind::PEN:
-        *out = ui::EventPointerType::POINTER_TYPE_PEN;
+        *out = ui::EventPointerType::kPen;
         return true;
       case ui::mojom::PointerKind::TOUCH:
-        *out = ui::EventPointerType::POINTER_TYPE_TOUCH;
+        *out = ui::EventPointerType::kTouch;
         return true;
       case ui::mojom::PointerKind::ERASER:
-        *out = ui::EventPointerType::POINTER_TYPE_ERASER;
+        *out = ui::EventPointerType::kEraser;
         return true;
     }
     NOTREACHED();
