@@ -3265,14 +3265,14 @@ test("unit_tests") {
     "../browser/performance_manager/decorators/page_aggregator_unittest.cc",
     "../browser/performance_manager/decorators/process_metrics_decorator_unittest.cc",
     "../browser/performance_manager/decorators/process_priority_aggregator_unittest.cc",
-    "../browser/performance_manager/graph/policies/dynamic_tcmalloc_policy_linux_unittest.cc",
-    "../browser/performance_manager/graph/policies/high_pmf_memory_pressure_policy_unittest.cc",
-    "../browser/performance_manager/graph/policies/working_set_trimmer_policy_chromeos_unittest.cc",
-    "../browser/performance_manager/graph/policies/working_set_trimmer_policy_unittest.cc",
     "../browser/performance_manager/mechanisms/working_set_trimmer_win_unittest.cc",
     "../browser/performance_manager/metrics/memory_pressure_metrics_unittest.cc",
     "../browser/performance_manager/observers/isolation_context_metrics_unittest.cc",
     "../browser/performance_manager/observers/metrics_collector_unittest.cc",
+    "../browser/performance_manager/policies/dynamic_tcmalloc_policy_linux_unittest.cc",
+    "../browser/performance_manager/policies/high_pmf_memory_pressure_policy_unittest.cc",
+    "../browser/performance_manager/policies/working_set_trimmer_policy_chromeos_unittest.cc",
+    "../browser/performance_manager/policies/working_set_trimmer_policy_unittest.cc",
     "../browser/performance_manager/test_support/page_aggregator.cc",
     "../browser/performance_manager/test_support/page_aggregator.h",
     "../browser/performance_monitor/metric_evaluator_helper_win_unittest.cc",
@@ -4000,11 +4000,11 @@ test("unit_tests") {
       "../browser/performance_manager/persistence/site_data/unittest_utils.h",
 
       # Urgent discarding from performance_manager isn't supported on Android.
-      "../browser/performance_manager/graph/policies/urgent_page_discarding_policy_unittest.cc",
+      "../browser/performance_manager/policies/urgent_page_discarding_policy_unittest.cc",
 
       # Background tab loading from performance_manager isn't supported on Android.
-      "../browser/performance_manager/graph/policies/background_tab_loading_policy_helpers_unittest.cc",
-      "../browser/performance_manager/graph/policies/background_tab_loading_policy_unittest.cc",
+      "../browser/performance_manager/policies/background_tab_loading_policy_helpers_unittest.cc",
+      "../browser/performance_manager/policies/background_tab_loading_policy_unittest.cc",
 
       # Android does not use the Message Center notification system.
       "../browser/notifications/notification_ui_manager_unittest.cc",

@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/graph/policies/background_tab_loading_policy.h"
+#include "chrome/browser/performance_manager/policies/background_tab_loading_policy.h"
 
 #include "base/system/sys_info.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "base/time/time.h"
-#include "chrome/browser/performance_manager/graph/policies/background_tab_loading_policy_helpers.h"
 #include "chrome/browser/performance_manager/mechanisms/page_loader.h"
+#include "chrome/browser/performance_manager/policies/background_tab_loading_policy_helpers.h"
 #include "components/performance_manager/graph/page_node_impl.h"
 #include "components/performance_manager/public/decorators/tab_properties_decorator.h"
 #include "components/performance_manager/public/graph/frame_node.h"

@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/graph/policies/dynamic_tcmalloc_policy_linux.h"
+#include "chrome/browser/performance_manager/policies/dynamic_tcmalloc_policy_linux.h"
 
 #include "base/allocator/buildflags.h"
 #include "base/task/post_task.h"
 #include "base/test/scoped_feature_list.h"
-#include "chrome/browser/performance_manager/graph/policies/policy_features.h"
+#include "chrome/browser/performance_manager/policies/policy_features.h"
 #include "chrome/common/performance_manager/mojom/tcmalloc.mojom.h"
 #include "components/performance_manager/graph/graph_impl_operations.h"
 #include "components/performance_manager/graph/page_node_impl.h"

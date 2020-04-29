@@ -11,8 +11,8 @@
 #include "base/allocator/buildflags.h"
 #endif
 
-#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_POLICY_FEATURES_H_
-#define CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_POLICY_FEATURES_H_
+#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_POLICY_FEATURES_H_
+#define CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_POLICY_FEATURES_H_
 
 namespace performance_manager {
 namespace features {
@@ -97,4 +97,4 @@ extern const base::Feature kHighPMFMemoryPressureSignals;
 }  // namespace features
 }  // namespace performance_manager
 
-#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_POLICY_FEATURES_H_
+#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_POLICY_FEATURES_H_

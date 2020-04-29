@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/graph/policies/urgent_page_discarding_policy.h"
+#include "chrome/browser/performance_manager/policies/urgent_page_discarding_policy.h"
 
 #include <memory>
 
@@ -14,8 +14,8 @@
 #include "base/sequence_checker.h"
 #include "base/time/time.h"
 #include "build/build_config.h"
-#include "chrome/browser/performance_manager/graph/policies/policy_features.h"
 #include "chrome/browser/performance_manager/mechanisms/page_discarder.h"
+#include "chrome/browser/performance_manager/policies/policy_features.h"
 #include "components/performance_manager/graph/node_attached_data_impl.h"
 #include "components/performance_manager/graph/page_node_impl.h"
 #include "components/performance_manager/public/graph/frame_node.h"

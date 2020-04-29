@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/graph/policies/working_set_trimmer_policy.h"
+#include "chrome/browser/performance_manager/policies/working_set_trimmer_policy.h"
 
 #include "build/build_config.h"
 
@@ -11,9 +11,9 @@
 #include "components/performance_manager/public/graph/node_attached_data.h"
 #include "components/performance_manager/public/graph/process_node.h"
 #if defined(OS_WIN)
-#include "chrome/browser/performance_manager/graph/policies/working_set_trimmer_policy_win.h"
+#include "chrome/browser/performance_manager/policies/working_set_trimmer_policy_win.h"
 #elif defined(OS_CHROMEOS)
-#include "chrome/browser/performance_manager/graph/policies/working_set_trimmer_policy_chromeos.h"
+#include "chrome/browser/performance_manager/policies/working_set_trimmer_policy_chromeos.h"
 #endif
 
 namespace performance_manager {

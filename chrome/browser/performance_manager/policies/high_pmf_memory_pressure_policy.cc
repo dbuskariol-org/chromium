@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/graph/policies/high_pmf_memory_pressure_policy.h"
+#include "chrome/browser/performance_manager/policies/high_pmf_memory_pressure_policy.h"
 
 #include "base/bind.h"
 #include "base/memory/memory_pressure_listener.h"
 #include "base/metrics/field_trial_params.h"
 #include "base/process/process_metrics.h"
-#include "chrome/browser/performance_manager/graph/policies/policy_features.h"
 #include "chrome/browser/performance_manager/mechanisms/high_pmf_memory_pressure_signals.h"
+#include "chrome/browser/performance_manager/policies/policy_features.h"
 #include "components/performance_manager/public/graph/process_node.h"
 
 namespace performance_manager {

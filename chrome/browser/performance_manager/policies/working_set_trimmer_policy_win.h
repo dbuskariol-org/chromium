@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_WORKING_SET_TRIMMER_POLICY_WIN_H_
-#define CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_WORKING_SET_TRIMMER_POLICY_WIN_H_
+#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_WORKING_SET_TRIMMER_POLICY_WIN_H_
+#define CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_WORKING_SET_TRIMMER_POLICY_WIN_H_
 
-#include "chrome/browser/performance_manager/graph/policies/working_set_trimmer_policy.h"
+#include "chrome/browser/performance_manager/policies/working_set_trimmer_policy.h"
 
 namespace performance_manager {
 namespace policies {
@@ -30,4 +30,4 @@ class WorkingSetTrimmerPolicyWin : public WorkingSetTrimmerPolicy {
 }  // namespace policies
 }  // namespace performance_manager
 
-#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_WORKING_SET_TRIMMER_POLICY_WIN_H_
+#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_WORKING_SET_TRIMMER_POLICY_WIN_H_

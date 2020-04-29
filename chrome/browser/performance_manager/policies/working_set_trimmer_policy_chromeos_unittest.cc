@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/graph/policies/working_set_trimmer_policy_chromeos.h"
+#include "chrome/browser/performance_manager/policies/working_set_trimmer_policy_chromeos.h"
 
 #include "base/memory/memory_pressure_listener.h"
 #include "components/performance_manager/graph/graph_impl_operations.h"

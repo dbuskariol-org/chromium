@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_HIGH_PMF_MEMORY_PRESSURE_POLICY_H_
-#define CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_HIGH_PMF_MEMORY_PRESSURE_POLICY_H_
+#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_HIGH_PMF_MEMORY_PRESSURE_POLICY_H_
+#define CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_HIGH_PMF_MEMORY_PRESSURE_POLICY_H_
 
 #include "base/memory/memory_pressure_listener.h"
 #include "base/sequence_checker.h"
@@ -58,4 +58,4 @@ class HighPMFMemoryPressurePolicy : public GraphOwned,
 }  // namespace policies
 }  // namespace performance_manager
 
-#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_GRAPH_POLICIES_HIGH_PMF_MEMORY_PRESSURE_POLICY_H_
+#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_POLICIES_HIGH_PMF_MEMORY_PRESSURE_POLICY_H_
