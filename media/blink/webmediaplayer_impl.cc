@@ -3232,7 +3232,7 @@ void WebMediaPlayerImpl::FinishMemoryUsageReport(int64_t demuxer_memory_usage) {
       stats.audio_memory_usage + video_memory_usage + data_source_memory_usage +
       demuxer_memory_usage;
 
-  DVLOG(2) << "Memory Usage -- Total: " << current_memory_usage
+  DVLOG(3) << "Memory Usage -- Total: " << current_memory_usage
            << " Audio: " << stats.audio_memory_usage
            << ", Video: " << video_memory_usage
            << ", DataSource: " << data_source_memory_usage
