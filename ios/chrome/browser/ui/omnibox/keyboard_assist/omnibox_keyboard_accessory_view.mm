@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_keyboard_accessory_view.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_keyboard_accessory_view.h"
 
 #include "base/mac/foundation_util.h"
 #include "ios/chrome/browser/system_flags.h"
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views.h"
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views_utils.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_assistive_keyboard_views.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_assistive_keyboard_views_utils.h"
 #include "ios/chrome/browser/ui/util/rtl_geometry.h"
 #include "ios/chrome/browser/ui/util/ui_util.h"
 #import "ios/chrome/common/ui/colors/semantic_color_names.h"
@@ -17,10 +17,10 @@
 #error "This file requires ARC support."
 #endif
 
-@interface ToolbarKeyboardAccessoryView ()
+@interface OmniboxKeyboardAccessoryView ()
 
 @property(nonatomic, retain) NSArray<NSString*>* buttonTitles;
-@property(nonatomic, weak) id<ToolbarAssistiveKeyboardDelegate> delegate;
+@property(nonatomic, weak) id<OmniboxAssistiveKeyboardDelegate> delegate;
 
 // Called when a keyboard shortcut button is pressed.
 - (void)keyboardButtonPressed:(NSString*)title;
@@ -29,13 +29,13 @@
 
 @end
 
-@implementation ToolbarKeyboardAccessoryView
+@implementation OmniboxKeyboardAccessoryView
 
 @synthesize buttonTitles = _buttonTitles;
 @synthesize delegate = _delegate;
 
 - (instancetype)initWithButtons:(NSArray<NSString*>*)buttonTitles
-                       delegate:(id<ToolbarAssistiveKeyboardDelegate>)delegate {
+                       delegate:(id<OmniboxAssistiveKeyboardDelegate>)delegate {
   self = [super initWithFrame:CGRectZero
                inputViewStyle:UIInputViewStyleKeyboard];
   if (self) {
@@ -77,7 +77,7 @@
   // Create and add a stackview containing the leading assistive buttons, i.e.
   // Voice search and camera search.
   NSArray<UIButton*>* leadingButtons =
-      ToolbarAssistiveKeyboardLeadingButtons(_delegate);
+      OmniboxAssistiveKeyboardLeadingButtons(_delegate);
   UIStackView* searchStackView = [[UIStackView alloc] init];
   searchStackView.translatesAutoresizingMaskIntoConstraints = NO;
   searchStackView.spacing = kBetweenSearchButtonSpacing;

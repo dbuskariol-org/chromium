@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_input_assistant_items.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_input_assistant_items.h"
 
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_delegate.h"
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views.h"
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_views_utils.h"
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_ui_bar_button_item.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_assistive_keyboard_delegate.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_assistive_keyboard_views.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_assistive_keyboard_views_utils.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_ui_bar_button_item.h"
 #import "ios/chrome/browser/ui/omnibox/keyboard_assist/voice_search_keyboard_bar_button_item.h"
 #import "ios/chrome/browser/ui/util/uikit_ui_util.h"
 #import "ios/chrome/browser/voice/voice_search_availability.h"
@@ -21,8 +21,8 @@
 
 #pragma mark - Util Functions
 
-NSArray<UIBarButtonItemGroup*>* ToolbarAssistiveKeyboardLeadingBarButtonGroups(
-    id<ToolbarAssistiveKeyboardDelegate> delegate) {
+NSArray<UIBarButtonItemGroup*>* OmniboxAssistiveKeyboardLeadingBarButtonGroups(
+    id<OmniboxAssistiveKeyboardDelegate> delegate) {
   NSMutableArray<UIBarButtonItem*>* items = [NSMutableArray array];
 
   UIImage* voiceSearchIcon =
@@ -60,14 +60,14 @@ NSArray<UIBarButtonItemGroup*>* ToolbarAssistiveKeyboardLeadingBarButtonGroups(
   return @[ group ];
 }
 
-NSArray<UIBarButtonItemGroup*>* ToolbarAssistiveKeyboardTrailingBarButtonGroups(
-    id<ToolbarAssistiveKeyboardDelegate> delegate,
+NSArray<UIBarButtonItemGroup*>* OmniboxAssistiveKeyboardTrailingBarButtonGroups(
+    id<OmniboxAssistiveKeyboardDelegate> delegate,
     NSArray<NSString*>* buttonTitles) {
   NSMutableArray<UIBarButtonItem*>* barButtonItems =
       [NSMutableArray arrayWithCapacity:[buttonTitles count]];
   for (NSString* title in buttonTitles) {
     UIBarButtonItem* item =
-        [[ToolbarUIBarButtonItem alloc] initWithTitle:title delegate:delegate];
+        [[OmniboxUIBarButtonItem alloc] initWithTitle:title delegate:delegate];
     [barButtonItems addObject:item];
   }
   UIBarButtonItemGroup* group =

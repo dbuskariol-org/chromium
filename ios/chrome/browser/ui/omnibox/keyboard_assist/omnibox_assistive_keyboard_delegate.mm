@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/omnibox/keyboard_assist/toolbar_assistive_keyboard_delegate.h"
+#import "ios/chrome/browser/ui/omnibox/keyboard_assist/omnibox_assistive_keyboard_delegate.h"
 
 #include "base/metrics/user_metrics.h"
 #include "base/metrics/user_metrics_action.h"
@@ -18,7 +18,7 @@
 #error "This file requires ARC support."
 #endif
 
-@implementation ToolbarAssistiveKeyboardDelegateImpl
+@implementation OmniboxAssistiveKeyboardDelegateImpl
 
 @synthesize dispatcher = _dispatcher;
 @synthesize omniboxTextField = _omniboxTextField;
