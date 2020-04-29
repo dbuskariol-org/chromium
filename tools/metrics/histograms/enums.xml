@@ -27101,6 +27101,8 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3252" label="CSSKeywordRevert"/>
   <int value="3253" label="OverlayPopupAd"/>
   <int value="3254" label="EventTimingFirstInputExplicitlyRequested"/>
+  <int value="3255" label="CustomScrollbarPercentThickness"/>
+  <int value="3256" label="CustomScrollbarPartPercentLength"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
