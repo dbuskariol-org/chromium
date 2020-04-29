@@ -196,24 +196,6 @@ Textfield* LayoutExampleBase::CreateAndAddTextfield(
 
 void LayoutExampleBase::CreateMarginsTextFields(
     const base::string16& label_text,
-    Textfield* textfields[4],
-    int* vertical_pos) {
-  textfields[0] = CreateAndAddTextfield(label_text, vertical_pos);
-  int center = textfields[0]->x() + textfields[0]->width() / 2;
-  int horizontal_pos = std::max(
-      0, center - (textfields[0]->width() + kLayoutExampleVerticalSpacing / 2));
-  textfields[1] = CreateAndAddRawTextfield(*vertical_pos, &horizontal_pos);
-  textfields[3] = CreateAndAddRawTextfield(*vertical_pos, &horizontal_pos);
-  *vertical_pos = textfields[1]->y() + textfields[1]->height() +
-                  kLayoutExampleVerticalSpacing;
-  horizontal_pos = textfields[0]->x();
-  textfields[2] = CreateAndAddRawTextfield(*vertical_pos, &horizontal_pos);
-  *vertical_pos = textfields[2]->y() + textfields[2]->height() +
-                  kLayoutExampleVerticalSpacing;
-}
-
-void LayoutExampleBase::CreateMarginsTextFields(
-    const base::string16& label_text,
     InsetTextfields* textfields,
     int* vertical_pos) {
   textfields->top = CreateAndAddTextfield(label_text, vertical_pos);

@@ -96,14 +96,6 @@ class VIEWS_EXAMPLES_EXPORT LayoutExampleBase : public ExampleBase,
   // Creates a set of labeled Textfields with |label_text|, and four text fields
   // arranged at compass points representing a set of insets. |vertical_pos| is
   // updated to the bottom of the last Textfield + kSpacing, and |textfields| is
-  // populated with the fieds that are created.
-  void CreateMarginsTextFields(const base::string16& label_text,
-                               Textfield* textfields[4],
-                               int* vertical_pos);
-
-  // Creates a set of labeled Textfields with |label_text|, and four text fields
-  // arranged at compass points representing a set of insets. |vertical_pos| is
-  // updated to the bottom of the last Textfield + kSpacing, and |textfields| is
   // populated with the fields that are created.
   void CreateMarginsTextFields(const base::string16& label_text,
                                InsetTextfields* textfields,
