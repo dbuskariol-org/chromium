@@ -791,6 +791,8 @@ source_set("chromeos") {
     "cert_provisioning/cert_provisioning_common.h",
     "cert_provisioning/cert_provisioning_invalidator.cc",
     "cert_provisioning/cert_provisioning_invalidator.h",
+    "cert_provisioning/cert_provisioning_platform_keys_helpers.cc",
+    "cert_provisioning/cert_provisioning_platform_keys_helpers.h",
     "cert_provisioning/cert_provisioning_worker.cc",
     "cert_provisioning/cert_provisioning_worker.h",
     "certificate_provider/certificate_info.cc",
