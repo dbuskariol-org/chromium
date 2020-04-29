@@ -1,17 +1,16 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_coordinator.h"
+#import "ios/chrome/browser/ui/overlays/web_content_area/alerts/alert_overlay_coordinator.h"
 
 #include "base/logging.h"
 #include "base/mac/foundation_util.h"
-#import "ios/chrome/browser/overlays/public/common/alerts/alert_overlay.h"
+#import "ios/chrome/browser/overlays/public/web_content_area/alert_overlay.h"
 #import "ios/chrome/browser/ui/alert_view/alert_view_controller.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_coordinator+alert_mediator_creation.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_mediator.h"
 #import "ios/chrome/browser/ui/overlays/overlay_request_coordinator+subclassing.h"
 #import "ios/chrome/browser/ui/overlays/overlay_request_coordinator_delegate.h"
+#import "ios/chrome/browser/ui/overlays/web_content_area/alerts/alert_overlay_mediator.h"
 #import "ios/chrome/browser/ui/presenters/contained_presenter_delegate.h"
 #import "ios/chrome/browser/ui/presenters/non_modal_view_controller_presenter.h"
 
@@ -87,7 +86,8 @@ using alert_overlays::AlertRequest;
       UIModalPresentationOverCurrentContext;
   self.alertViewController.modalTransitionStyle =
       UIModalTransitionStyleCrossDissolve;
-  self.alertMediator = [self newMediator];
+  self.alertMediator =
+      [[AlertOverlayMediator alloc] initWithRequest:self.request];
   self.alertMediator.consumer = self.alertViewController;
   self.presenter = [[NonModalViewControllerPresenter alloc] init];
   self.presenter.delegate = self;
@@ -103,15 +103,6 @@ using alert_overlays::AlertRequest;
     return;
   [self.presenter dismissAnimated:animated];
   self.started = NO;
-}
-
-@end
-
-@implementation AlertOverlayCoordinator (AlertMediatorCreation)
-
-- (AlertOverlayMediator*)newMediator {
-  NOTREACHED() << "Subclasses implement.";
-  return nil;
 }
 
 @end

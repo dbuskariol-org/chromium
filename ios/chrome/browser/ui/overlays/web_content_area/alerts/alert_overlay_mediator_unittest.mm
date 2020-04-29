@@ -2,21 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_mediator.h"
+#import "ios/chrome/browser/ui/overlays/web_content_area/alerts/alert_overlay_mediator.h"
 
 #include "base/bind.h"
 #include "base/test/metrics/user_action_tester.h"
-#import "ios/chrome/browser/overlays/public/common/alerts/alert_overlay.h"
 #include "ios/chrome/browser/overlays/public/overlay_callback_manager.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
 #include "ios/chrome/browser/overlays/public/overlay_request_config.h"
 #include "ios/chrome/browser/overlays/public/overlay_response_info.h"
+#import "ios/chrome/browser/overlays/public/web_content_area/alert_overlay.h"
 #import "ios/chrome/browser/ui/alert_view/alert_action.h"
 #import "ios/chrome/browser/ui/alert_view/test/fake_alert_consumer.h"
 #import "ios/chrome/browser/ui/elements/text_field_configuration.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_mediator+alert_consumer_support.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/test/alert_overlay_mediator_test.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/test/fake_alert_overlay_mediator_data_source.h"
 #include "testing/gtest_mac.h"
 #include "testing/platform_test.h"
 
@@ -86,7 +83,7 @@ class FakeRequestConfig : public OverlayResponseInfo<FakeRequestConfig> {
     ];
     const std::vector<ButtonConfig> button_configs{
         ButtonConfig(@"OK", kOKTappedUserActionName),
-        ButtonConfig(@"Cancel", UIAlertActionStyleDefault)};
+        ButtonConfig(@"Cancel", UIAlertActionStyleCancel)};
     AlertRequest::CreateForUserData(user_data, @"title", @"message",
                                     @"accessibility_identifier",
                                     text_field_configs, button_configs,
@@ -96,23 +93,53 @@ class FakeRequestConfig : public OverlayResponseInfo<FakeRequestConfig> {
 OVERLAY_USER_DATA_SETUP_IMPL(FakeRequestConfig);
 }  // namespace
 
+#pragma mark - FakeAlertOverlayMediatorDataSource
+
+// Fake AlertOverlayMediatorDataSource for use in tests.
+@interface FakeAlertOverlayMediatorDataSource
+    : NSObject <AlertOverlayMediatorDataSource>
+// The text field values to return for the data source protocol.
+@property(nonatomic, strong) NSArray<NSString*>* textFieldValues;
+@end
+@implementation FakeAlertOverlayMediatorDataSource
+- (NSString*)textFieldInputForMediator:(AlertOverlayMediator*)mediator
+                        textFieldIndex:(NSUInteger)index {
+  return index < self.textFieldValues.count ? self.textFieldValues[index] : nil;
+}
+@end
+
+#pragma mark - AlertOverlayMediatorTest
+
+// Test fixture for AlertOverlayMediator.
+class AlertOverlayMediatorTest : public PlatformTest {
+ protected:
+  AlertOverlayMediatorTest()
+      : request_(OverlayRequest::CreateWithConfig<FakeRequestConfig>()),
+        consumer_([[FakeAlertConsumer alloc] init]),
+        mediator_(
+            [[AlertOverlayMediator alloc] initWithRequest:request_.get()]) {
+    mediator_.consumer = consumer_;
+  }
+
+  std::unique_ptr<OverlayRequest> request_;
+  FakeAlertConsumer* consumer_ = nil;
+  AlertOverlayMediator* mediator_ = nil;
+};
+
 // Tests that the AlertOverlayMediator's subclassing properties are correctly
 // applied to the consumer.
 TEST_F(AlertOverlayMediatorTest, SetUpConsumer) {
-  std::unique_ptr<OverlayRequest> request =
-      OverlayRequest::CreateWithConfig<FakeRequestConfig>();
-  AlertRequest* config = request->GetConfig<AlertRequest>();
-  AlertOverlayMediator* mediator =
-      [[AlertOverlayMediator alloc] initWithRequest:request.get()];
-  SetMediator(mediator);
-  EXPECT_NSEQ(config->title(), consumer().title);
-  EXPECT_NSEQ(config->message(), consumer().message);
-  EXPECT_NSEQ(config->accessibility_identifier(),
-              consumer().alertAccessibilityIdentifier);
-  EXPECT_NSEQ(config->text_field_configs(), consumer().textFieldConfigurations);
-  for (size_t i = 0; i < config->button_configs().size(); ++i) {
-    AlertAction* consumer_action = consumer().actions[i];
-    const ButtonConfig& button_config = config->button_configs()[i];
+  AlertRequest* alert_request = request_->GetConfig<AlertRequest>();
+  ASSERT_TRUE(alert_request);
+  EXPECT_NSEQ(alert_request->title(), consumer_.title);
+  EXPECT_NSEQ(alert_request->message(), consumer_.message);
+  EXPECT_NSEQ(alert_request->accessibility_identifier(),
+              consumer_.alertAccessibilityIdentifier);
+  EXPECT_NSEQ(alert_request->text_field_configs(),
+              consumer_.textFieldConfigurations);
+  for (size_t i = 0; i < alert_request->button_configs().size(); ++i) {
+    AlertAction* consumer_action = consumer_.actions[i];
+    const ButtonConfig& button_config = alert_request->button_configs()[i];
     EXPECT_NSEQ(button_config.title, consumer_action.title);
     EXPECT_EQ(button_config.style, consumer_action.style);
   }
@@ -121,28 +148,21 @@ TEST_F(AlertOverlayMediatorTest, SetUpConsumer) {
 // Tests that AlertOverlayMediator successfully converts OverlayResponses
 // created with AlertResponses into their feature-specific response.
 TEST_F(AlertOverlayMediatorTest, ResponseConversion) {
-  // Create a request with FakeRequestConfig and create the mediator for that
-  // request.
-  std::unique_ptr<OverlayRequest> request =
-      OverlayRequest::CreateWithConfig<FakeRequestConfig>();
-  AlertOverlayMediator* mediator =
-      [[AlertOverlayMediator alloc] initWithRequest:request.get()];
-  SetMediator(mediator);
-
   // Set up a fake datasource for the text field values.
   FakeAlertOverlayMediatorDataSource* data_source =
       [[FakeAlertOverlayMediatorDataSource alloc] init];
   data_source.textFieldValues = @[ @"TextFieldValue" ];
-  mediator.dataSource = data_source;
+  mediator_.dataSource = data_source;
 
   // Simulate a tap on the OK button.
-  AlertAction* ok_button_action = consumer().actions[kButtonIndexOk];
+  AlertAction* ok_button_action = consumer_.actions[kButtonIndexOk];
+  ASSERT_TRUE(ok_button_action.handler);
   ok_button_action.handler(ok_button_action);
 
   // Verify that the request's completion callback is a FakeResponseInfo with
   // the expected values.
   OverlayResponse* response =
-      request->GetCallbackManager()->GetCompletionResponse();
+      request_->GetCallbackManager()->GetCompletionResponse();
   ASSERT_TRUE(response);
   FakeResponseInfo* info = response->GetInfo<FakeResponseInfo>();
   ASSERT_TRUE(info);
@@ -152,21 +172,8 @@ TEST_F(AlertOverlayMediatorTest, ResponseConversion) {
 
 // Tests UMA user action recording.
 TEST_F(AlertOverlayMediatorTest, UserActionRecording) {
-  // Create a request with FakeRequestConfig and create the mediator for that
-  // request.
-  auto request = OverlayRequest::CreateWithConfig<FakeRequestConfig>();
-  AlertOverlayMediator* mediator =
-      [[AlertOverlayMediator alloc] initWithRequest:request.get()];
-  SetMediator(mediator);
-
-  // Set up a fake datasource for the text field values.
-  FakeAlertOverlayMediatorDataSource* data_source =
-      [[FakeAlertOverlayMediatorDataSource alloc] init];
-  data_source.textFieldValues = @[ @"TextFieldValue" ];
-  mediator.dataSource = data_source;
-
   // Tapping OK button records User Action.
-  AlertAction* ok_button_action = consumer().actions[kButtonIndexOk];
+  AlertAction* ok_button_action = consumer_.actions[kButtonIndexOk];
   base::UserActionTester user_action_tester;
   EXPECT_EQ(0, user_action_tester.GetActionCount(kOKTappedUserActionName));
   ok_button_action.handler(ok_button_action);

@@ -2,16 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_coordinator.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/alert_overlay_coordinator+alert_mediator_creation.h"
+#import "ios/chrome/browser/ui/overlays/web_content_area/alerts/alert_overlay_coordinator.h"
 
 #include "base/mac/foundation_util.h"
 #import "ios/chrome/browser/main/test_browser.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
+#include "ios/chrome/browser/overlays/public/web_content_area/alert_overlay.h"
 #include "ios/chrome/browser/overlays/test/overlay_test_macros.h"
 #import "ios/chrome/browser/ui/alert_view/alert_action.h"
 #import "ios/chrome/browser/ui/alert_view/alert_view_controller.h"
-#import "ios/chrome/browser/ui/overlays/common/alerts/test/fake_alert_overlay_mediator.h"
 #include "ios/chrome/browser/ui/overlays/test/fake_overlay_request_coordinator_delegate.h"
 #include "ios/chrome/test/scoped_key_window.h"
 #include "ios/web/public/test/web_task_environment.h"
@@ -21,53 +20,40 @@
 #error "This file requires ARC support."
 #endif
 
+using alert_overlays::AlertRequest;
+using alert_overlays::ButtonConfig;
+
 namespace {
-// Fake request config type for use in tests.
-DEFINE_TEST_OVERLAY_REQUEST_CONFIG(FakeAlert);
+// Consts used for the alert.
+NSString* const kTitle = @"title";
+NSString* const kMessage = @"message";
+NSString* const kAccessibilityIdentifier = @"identifier";
+NSString* const kDefaultTextFieldValue = @"default_text";
+NSString* const kButtonTitle = @"button_title";
+
+// Creates an AlertRequest for use in tests.
+std::unique_ptr<OverlayRequest> CreateAlertRequest() {
+  const std::vector<ButtonConfig> button_configs{ButtonConfig(kButtonTitle)};
+  return OverlayRequest::CreateWithConfig<AlertRequest>(
+      kTitle, kMessage, kAccessibilityIdentifier, nil, button_configs,
+      base::BindRepeating(^std::unique_ptr<OverlayResponse>(
+          std::unique_ptr<OverlayResponse> response) {
+        return response;
+      }));
 }
+}  // namespace
 
-#pragma mark - FakeAlertOverlayCoordinator
-
-@interface FakeAlertOverlayCoordinator : AlertOverlayCoordinator
-@property(nonatomic, strong) FakeAlertOverlayMediator* fakeMediator;
-@end
-
-@implementation FakeAlertOverlayCoordinator
-+ (const OverlayRequestSupport*)requestSupport {
-  return FakeAlert::RequestSupport();
-}
-@end
-
-@implementation FakeAlertOverlayCoordinator (AlertMediatorCreation)
-- (AlertOverlayMediator*)newMediator {
-  return self.fakeMediator;
-}
-@end
-
-#pragma mark - AlertOverlayCoordinatorTest
-
-// Test fixture for AlertOverlayCoordinator.
 class AlertOverlayCoordinatorTest : public PlatformTest {
  public:
   AlertOverlayCoordinatorTest()
       : root_view_controller_([[UIViewController alloc] init]),
-        request_(OverlayRequest::CreateWithConfig<FakeAlert>()),
-        mediator_(
-            [[FakeAlertOverlayMediator alloc] initWithRequest:request_.get()]),
-        coordinator_([[FakeAlertOverlayCoordinator alloc]
+        request_(CreateAlertRequest()),
+        coordinator_([[AlertOverlayCoordinator alloc]
             initWithBaseViewController:root_view_controller_
                                browser:&browser_
                                request:request_.get()
                               delegate:&delegate_]) {
     scoped_window_.Get().rootViewController = root_view_controller_;
-    // Set up the fake mediator and provide it to the coordinator.
-    mediator_.alertTitle = @"title";
-    mediator_.alertMessage = @"message";
-    mediator_.alertActions =
-        @[ [AlertAction actionWithTitle:@"OK"
-                                  style:UIAlertActionStyleDefault
-                                handler:nil] ];
-    coordinator_.fakeMediator = mediator_;
   }
 
  protected:
@@ -77,13 +63,13 @@ class AlertOverlayCoordinatorTest : public PlatformTest {
   UIViewController* root_view_controller_ = nil;
   std::unique_ptr<OverlayRequest> request_;
   FakeOverlayRequestCoordinatorDelegate delegate_;
-  FakeAlertOverlayMediator* mediator_ = nil;
-  FakeAlertOverlayCoordinator* coordinator_ = nil;
+  AlertOverlayCoordinator* coordinator_ = nil;
 };
 
-// Tests that the coordinator creates an alert view, presents it within the
-// base UIViewController's hierarchy, and sets it up using its mediator.
+// Tests that the coordinator creates an alert view, sets it up using its
+// mediator presents it within the base UIViewController's hierarchy.
 TEST_F(AlertOverlayCoordinatorTest, ViewSetup) {
+  ASSERT_FALSE(delegate_.HasUIBeenPresented(request_.get()));
   [coordinator_ startAnimated:NO];
   AlertViewController* view_controller =
       base::mac::ObjCCast<AlertViewController>(coordinator_.viewController);
@@ -92,7 +78,6 @@ TEST_F(AlertOverlayCoordinatorTest, ViewSetup) {
   EXPECT_TRUE(
       [view_controller.view isDescendantOfView:root_view_controller_.view]);
   EXPECT_TRUE(delegate_.HasUIBeenPresented(request_.get()));
-  EXPECT_EQ(mediator_.consumer, view_controller);
   [coordinator_ stopAnimated:NO];
   EXPECT_TRUE(delegate_.HasUIBeenDismissed(request_.get()));
 }

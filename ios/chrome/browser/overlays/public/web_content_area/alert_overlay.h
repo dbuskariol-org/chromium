@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_COMMON_ALERTS_ALERT_OVERLAY_H_
-#define IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_COMMON_ALERTS_ALERT_OVERLAY_H_
+#ifndef IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_WEB_CONTENT_AREA_ALERT_OVERLAY_H_
+#define IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_WEB_CONTENT_AREA_ALERT_OVERLAY_H_
 
 #import <UIKit/UIKit.h>
 #include <memory>
@@ -160,4 +160,4 @@ class AlertResponse : public OverlayResponseInfo<AlertResponse> {
 
 }  // alert_overlays
 
-#endif  // IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_COMMON_ALERTS_ALERT_OVERLAY_H_
+#endif  // IOS_CHROME_BROWSER_OVERLAYS_PUBLIC_WEB_CONTENT_AREA_ALERT_OVERLAY_H_
