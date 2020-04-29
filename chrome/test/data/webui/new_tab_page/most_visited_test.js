@@ -58,6 +58,9 @@ suite('NewTabPageMostVisitedTest', () => {
         title: char,
         titleDirection: mojoBase.mojom.TextDirection.LEFT_TO_RIGHT,
         url: {url: `https://${char}/`},
+        source: i,
+        titleSource: i,
+        dataGenerationTime: {internalValue: 0},
       };
     });
     const tilesRendered = eventToPromise('dom-change', mostVisited.$.tiles);
@@ -664,6 +667,9 @@ suite('NewTabPageMostVisitedTest', () => {
         title: 'title',
         titleDirection: mojoBase.mojom.TextDirection.RIGHT_TO_LEFT,
         url: {url: 'https://url/'},
+        source: 0,
+        titleSource: 0,
+        dataGenerationTime: {internalValue: 0},
       }],
       visible: true,
     });
@@ -682,6 +688,9 @@ suite('NewTabPageMostVisitedTest', () => {
         title: 'title',
         titleDirection: mojoBase.mojom.TextDirection.LEFT_TO_RIGHT,
         url: {url: 'https://url/'},
+        source: 0,
+        titleSource: 0,
+        dataGenerationTime: {internalValue: 0},
       }],
       visible: true,
     });
@@ -721,11 +730,52 @@ suite('NewTabPageMostVisitedTest', () => {
     testProxy.setResultFor('now', 123);
 
     // Act.
-    await addTiles(1);
+    await addTiles(2);
 
     // Assert.
-    const time =
+    const [tiles, time] =
         await testProxy.handler.whenCalled('onMostVisitedTilesRendered');
     assertEquals(time, 123);
+    assertEquals(tiles.length, 2);
+    assertDeepEquals(tiles[0], {
+      title: 'a',
+      titleDirection: mojoBase.mojom.TextDirection.LEFT_TO_RIGHT,
+      url: {url: 'https://a/'},
+      source: 0,
+      titleSource: 0,
+      dataGenerationTime: {internalValue: 0},
+    });
+    assertDeepEquals(tiles[1], {
+      title: 'b',
+      titleDirection: mojoBase.mojom.TextDirection.LEFT_TO_RIGHT,
+      url: {url: 'https://b/'},
+      source: 1,
+      titleSource: 1,
+      dataGenerationTime: {internalValue: 0},
+    });
+  });
+
+  test('clicking tile logs event', async () => {
+    // Arrange.
+    await addTiles(1);
+
+    // Act.
+    const tileLink = queryTiles()[0];
+    // Prevent triggering a navigation, which would break the test.
+    tileLink.href = '#';
+    tileLink.click();
+
+    // Assert.
+    const [tile, index] =
+        await testProxy.handler.whenCalled('onMostVisitedTileNavigation');
+    assertEquals(index, 0);
+    assertDeepEquals(tile, {
+      title: 'a',
+      titleDirection: mojoBase.mojom.TextDirection.LEFT_TO_RIGHT,
+      url: {url: 'https://a/'},
+      source: 0,
+      titleSource: 0,
+      dataGenerationTime: {internalValue: 0},
+    });
   });
 });
