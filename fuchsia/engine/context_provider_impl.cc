@@ -463,10 +463,8 @@ void ContextProviderImpl::Create(
     launch_command.AppendSwitch(switches::kEnableOopRasterization);
 
     if (!enable_protected_graphics) {
-      // TODO(https://crbug.com/1074600): Re-enable ANGLE once AEMU crashes are
-      // resolved.
       launch_command.AppendSwitchASCII(switches::kUseGL,
-                                       gl::kGLImplementationStubName);
+                                       gl::kGLImplementationANGLEName);
     } else {
       DLOG(WARNING) << "ANGLE is not compatible with "
                     << switches::kEnforceVulkanProtectedMemory
