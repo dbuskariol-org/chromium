@@ -1067,12 +1067,10 @@ const char kHardwareMediaKeyHandlingDescription[] =
     "Enables using media keys to control the active media session. This "
     "requires MediaSessionService to be enabled too";
 
-const char kHeavyAdPrivacyMitigationsOptOutName[] =
-    "Disable heavy ad privacy mitigations";
-const char kHeavyAdPrivacyMitigationsOptOutDescription[] =
-    "Disables privacy mitigations for the heavy ad intervention. This makes "
-    "the intervention deterministic."
-    "This is intended to be used for debugging only.";
+const char kHeavyAdPrivacyMitigationsName[] = "Heavy ad privacy mitigations";
+const char kHeavyAdPrivacyMitigationsDescription[] =
+    "Enables privacy mitigations for the heavy ad intervention. Disabling "
+    "this makes the intervention deterministic. Defaults to enabled.";
 
 const char kHeavyAdInterventionName[] = "Heavy Ad Intervention";
 const char kHeavyAdInterventionDescription[] =

@@ -629,8 +629,8 @@ extern const char kHandwritingGestureDescription[];
 extern const char kHardwareMediaKeyHandling[];
 extern const char kHardwareMediaKeyHandlingDescription[];
 
-extern const char kHeavyAdPrivacyMitigationsOptOutName[];
-extern const char kHeavyAdPrivacyMitigationsOptOutDescription[];
+extern const char kHeavyAdPrivacyMitigationsName[];
+extern const char kHeavyAdPrivacyMitigationsDescription[];
 
 extern const char kHeavyAdInterventionName[];
 extern const char kHeavyAdInterventionDescription[];

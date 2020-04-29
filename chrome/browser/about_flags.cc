@@ -5140,9 +5140,9 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kHeavyAdInterventionDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kHeavyAdIntervention)},
 
-    {"heavy-ad-privacy-mitigations-opt-out",
-     flag_descriptions::kHeavyAdPrivacyMitigationsOptOutName,
-     flag_descriptions::kHeavyAdPrivacyMitigationsOptOutDescription, kOsAll,
+    {"heavy-ad-privacy-mitigations",
+     flag_descriptions::kHeavyAdPrivacyMitigationsName,
+     flag_descriptions::kHeavyAdPrivacyMitigationsDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kHeavyAdPrivacyMitigations)},
 
 #if !BUILDFLAG(DISABLE_FTP_SUPPORT)
