@@ -1702,10 +1702,6 @@ Animation::CheckCanStartAnimationOnCompositorInternal() const {
   if (!Playing())
     reasons |= CompositorAnimations::kInvalidAnimationOrEffect;
 
-  // TODO(crbug.com/916117): Support accelerated scroll linked animations.
-  if (timeline_->IsScrollTimeline())
-    reasons |= CompositorAnimations::kInvalidAnimationOrEffect;
-
   return reasons;
 }
 
