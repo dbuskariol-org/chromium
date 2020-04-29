@@ -7,6 +7,8 @@ import("//ios/features.gni")
 
 source_set("safe_browsing") {
   sources = [
+    "safe_browsing_blocking_page.h",
+    "safe_browsing_blocking_page.mm",
     "safe_browsing_error.h",
     "safe_browsing_error.mm",
     "safe_browsing_service.h",
@@ -34,8 +36,10 @@ source_set("safe_browsing") {
     "//components/safe_browsing/core/db:database_manager",
     "//components/safe_browsing/core/db:v4_local_database_manager",
     "//components/safe_browsing/core/db:v4_protocol_manager_util",
+    "//components/security_interstitials/core",
     "//components/security_interstitials/core:unsafe_resource",
     "//ios/chrome/browser",
+    "//ios/components/security_interstitials",
     "//ios/net",
     "//ios/web/public",
     "//ios/web/public/init",
@@ -44,6 +48,7 @@ source_set("safe_browsing") {
     "//services/network:network_service",
     "//services/network/public/cpp",
     "//services/network/public/mojom",
+    "//ui/base",
   ]
 
   configs += [ "//build/config/compiler:enable_arc" ]
@@ -76,6 +81,7 @@ source_set("util") {
   deps = [
     "//base",
     "//components/safe_browsing/core/db:v4_protocol_manager_util",
+    "//components/security_interstitials/core",
     "//components/security_interstitials/core:unsafe_resource",
   ]
 
@@ -85,6 +91,7 @@ source_set("util") {
 source_set("unit_tests") {
   testonly = true
   sources = [
+    "safe_browsing_blocking_page_unittest.mm",
     "safe_browsing_service_unittest.mm",
     "safe_browsing_unsafe_resource_container_unittest.mm",
     "safe_browsing_url_allow_list_unittest.mm",
@@ -106,6 +113,7 @@ source_set("unit_tests") {
     "//components/safe_browsing/core/db:v4_get_hash_protocol_manager",
     "//components/safe_browsing/core/db:v4_protocol_manager_util",
     "//components/safe_browsing/core/db:v4_test_util",
+    "//components/security_interstitials/core:unsafe_resource",
     "//ios/web/public",
     "//ios/web/public/test",
     "//services/network/public/cpp",
