@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/autofill_assistant/browser/website_login_fetcher_impl.h"
+#include "components/autofill_assistant/browser/website_login_manager_impl.h"
 
 #include "base/stl_util.h"
 #include "base/strings/utf_string_conversions.h"
@@ -24,7 +24,7 @@ namespace {
 // Creates a |PasswordForm| with minimal initialization (origin, username,
 // password).
 autofill::PasswordForm CreatePasswordForm(
-    const WebsiteLoginFetcher::Login& login,
+    const WebsiteLoginManager::Login& login,
     const std::string& password) {
   autofill::PasswordForm form;
   form.signon_realm = login.origin.spec();
@@ -38,8 +38,8 @@ autofill::PasswordForm CreatePasswordForm(
 }  // namespace
 
 // Represents a pending form fetcher request which will notify the
-// |WebsiteLoginFetcherImpl| when finished.
-class WebsiteLoginFetcherImpl::PendingRequest
+// |WebsiteLoginManagerImpl| when finished.
+class WebsiteLoginManagerImpl::PendingRequest
     : public password_manager::FormFetcher::Consumer {
  public:
   PendingRequest(
@@ -92,8 +92,8 @@ class WebsiteLoginFetcherImpl::PendingRequest
 };
 
 // A pending request to fetch all logins that match the specified |form_digest|.
-class WebsiteLoginFetcherImpl::PendingFetchLoginsRequest
-    : public WebsiteLoginFetcherImpl::PendingRequest {
+class WebsiteLoginManagerImpl::PendingFetchLoginsRequest
+    : public WebsiteLoginManagerImpl::PendingRequest {
  public:
   PendingFetchLoginsRequest(
       const password_manager::PasswordStore::FormDigest& form_digest,
@@ -122,8 +122,8 @@ class WebsiteLoginFetcherImpl::PendingFetchLoginsRequest
 };
 
 // A pending request to fetch the password for the specified |login|.
-class WebsiteLoginFetcherImpl::PendingFetchPasswordRequest
-    : public WebsiteLoginFetcherImpl::PendingRequest {
+class WebsiteLoginManagerImpl::PendingFetchPasswordRequest
+    : public WebsiteLoginManagerImpl::PendingRequest {
  public:
   PendingFetchPasswordRequest(
       const password_manager::PasswordStore::FormDigest& form_digest,
@@ -160,7 +160,7 @@ class WebsiteLoginFetcherImpl::PendingFetchPasswordRequest
 };
 
 // A request to update store with new password for a login.
-class WebsiteLoginFetcherImpl::UpdatePasswordRequest
+class WebsiteLoginManagerImpl::UpdatePasswordRequest
     : public password_manager::FormFetcher::Consumer {
  public:
   UpdatePasswordRequest(const Login& login,
@@ -227,14 +227,14 @@ class WebsiteLoginFetcherImpl::UpdatePasswordRequest
   std::unique_ptr<password_manager::FormFetcher> form_fetcher_;
 };
 
-WebsiteLoginFetcherImpl::WebsiteLoginFetcherImpl(
+WebsiteLoginManagerImpl::WebsiteLoginManagerImpl(
     password_manager::PasswordManagerClient* client,
     password_manager::PasswordManagerDriver* driver)
     : client_(client), driver_(driver), weak_ptr_factory_(this) {}
 
-WebsiteLoginFetcherImpl::~WebsiteLoginFetcherImpl() = default;
+WebsiteLoginManagerImpl::~WebsiteLoginManagerImpl() = default;
 
-void WebsiteLoginFetcherImpl::GetLoginsForUrl(
+void WebsiteLoginManagerImpl::GetLoginsForUrl(
     const GURL& url,
     base::OnceCallback<void(std::vector<Login>)> callback) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
@@ -242,12 +242,12 @@ void WebsiteLoginFetcherImpl::GetLoginsForUrl(
       autofill::PasswordForm::Scheme::kHtml, url.GetOrigin().spec(), GURL());
   pending_requests_.emplace_back(std::make_unique<PendingFetchLoginsRequest>(
       digest, client_, std::move(callback),
-      base::BindOnce(&WebsiteLoginFetcherImpl::OnRequestFinished,
+      base::BindOnce(&WebsiteLoginManagerImpl::OnRequestFinished,
                      weak_ptr_factory_.GetWeakPtr())));
   pending_requests_.back()->Start();
 }
 
-void WebsiteLoginFetcherImpl::GetPasswordForLogin(
+void WebsiteLoginManagerImpl::GetPasswordForLogin(
     const Login& login,
     base::OnceCallback<void(bool, std::string)> callback) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
@@ -255,12 +255,12 @@ void WebsiteLoginFetcherImpl::GetPasswordForLogin(
       autofill::PasswordForm::Scheme::kHtml, login.origin.spec(), GURL());
   pending_requests_.emplace_back(std::make_unique<PendingFetchPasswordRequest>(
       digest, client_, login, std::move(callback),
-      base::BindOnce(&WebsiteLoginFetcherImpl::OnRequestFinished,
+      base::BindOnce(&WebsiteLoginManagerImpl::OnRequestFinished,
                      weak_ptr_factory_.GetWeakPtr())));
   pending_requests_.back()->Start();
 }
 
-std::string WebsiteLoginFetcherImpl::GeneratePassword(
+std::string WebsiteLoginManagerImpl::GeneratePassword(
     autofill::FormSignature form_signature,
     autofill::FieldSignature field_signature,
     uint64_t max_length) {
@@ -270,7 +270,7 @@ std::string WebsiteLoginFetcherImpl::GeneratePassword(
           max_length));
 }
 
-void WebsiteLoginFetcherImpl::PresaveGeneratedPassword(
+void WebsiteLoginManagerImpl::PresaveGeneratedPassword(
     const Login& login,
     const std::string& password,
     const autofill::FormData& form_data,
@@ -282,11 +282,11 @@ void WebsiteLoginFetcherImpl::PresaveGeneratedPassword(
   update_password_request_->FetchAndPresave();
 }
 
-bool WebsiteLoginFetcherImpl::ReadyToCommitGeneratedPassword() {
+bool WebsiteLoginManagerImpl::ReadyToCommitGeneratedPassword() {
   return update_password_request_ != nullptr;
 }
 
-void WebsiteLoginFetcherImpl::CommitGeneratedPassword() {
+void WebsiteLoginManagerImpl::CommitGeneratedPassword() {
   DCHECK(update_password_request_);
 
   update_password_request_->CommitGeneratedPassword();
@@ -294,7 +294,7 @@ void WebsiteLoginFetcherImpl::CommitGeneratedPassword() {
   update_password_request_.reset();
 }
 
-void WebsiteLoginFetcherImpl::OnRequestFinished(const PendingRequest* request) {
+void WebsiteLoginManagerImpl::OnRequestFinished(const PendingRequest* request) {
   base::EraseIf(pending_requests_, [request](const auto& candidate_request) {
     return candidate_request.get() == request;
   });

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_FETCHER_H_
-#define COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_FETCHER_H_
+#ifndef COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_MANAGER_H_
+#define COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_MANAGER_H_
 
 #include <memory>
 #include <string>
@@ -18,7 +18,7 @@
 namespace autofill_assistant {
 
 // Common interface for implementations that fetch login details for websites.
-class WebsiteLoginFetcher {
+class WebsiteLoginManager {
  public:
   // Uniquely represents a particular login.
   struct Login {
@@ -31,8 +31,8 @@ class WebsiteLoginFetcher {
     std::string username;
   };
 
-  WebsiteLoginFetcher() = default;
-  virtual ~WebsiteLoginFetcher() = default;
+  WebsiteLoginManager() = default;
+  virtual ~WebsiteLoginManager() = default;
 
   // Asynchronously returns all matching login details for |url| in the
   // specified callback.
@@ -67,9 +67,9 @@ class WebsiteLoginFetcher {
   // Commits the presaved passwod to the store.
   virtual void CommitGeneratedPassword() = 0;
 
-  DISALLOW_COPY_AND_ASSIGN(WebsiteLoginFetcher);
+  DISALLOW_COPY_AND_ASSIGN(WebsiteLoginManager);
 };
 
 }  // namespace autofill_assistant
 
-#endif  // COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_FETCHER_H_
+#endif  // COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_MANAGER_H_

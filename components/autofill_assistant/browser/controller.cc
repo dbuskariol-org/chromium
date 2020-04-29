@@ -183,8 +183,8 @@ autofill::PersonalDataManager* Controller::GetPersonalDataManager() {
   return client_->GetPersonalDataManager();
 }
 
-WebsiteLoginFetcher* Controller::GetWebsiteLoginFetcher() {
-  return client_->GetWebsiteLoginFetcher();
+WebsiteLoginManager* Controller::GetWebsiteLoginManager() {
+  return client_->GetWebsiteLoginManager();
 }
 
 content::WebContents* Controller::GetWebContents() {

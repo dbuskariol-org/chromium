@@ -205,7 +205,7 @@ class ScriptExecutor : public ActionDelegate,
   void Shutdown() override;
   void Close() override;
   autofill::PersonalDataManager* GetPersonalDataManager() override;
-  WebsiteLoginFetcher* GetWebsiteLoginFetcher() override;
+  WebsiteLoginManager* GetWebsiteLoginManager() override;
   content::WebContents* GetWebContents() override;
   std::string GetAccountEmailAddress() override;
   std::string GetLocale() override;

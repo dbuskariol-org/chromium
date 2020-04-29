@@ -26,7 +26,7 @@
 #include "components/autofill_assistant/browser/metrics.h"
 #include "components/autofill_assistant/browser/service.pb.h"
 #include "components/autofill_assistant/browser/user_data_util.h"
-#include "components/autofill_assistant/browser/website_login_fetcher_impl.h"
+#include "components/autofill_assistant/browser/website_login_manager_impl.h"
 #include "components/strings/grit/components_strings.h"
 #include "content/public/browser/web_contents.h"
 #include "third_party/blink/public/mojom/payments/payment_request.mojom.h"
@@ -447,7 +447,7 @@ namespace autofill_assistant {
 CollectUserDataAction::LoginDetails::LoginDetails(
     bool _choose_automatically_if_no_other_options,
     const std::string& _payload,
-    const WebsiteLoginFetcher::Login& _login)
+    const WebsiteLoginManager::Login& _login)
     : choose_automatically_if_no_other_options(
           _choose_automatically_if_no_other_options),
       payload(_payload),
@@ -515,7 +515,7 @@ void CollectUserDataAction::InternalProcessAction(
       base::BindOnce(&CollectUserDataAction::OnTermsAndConditionsLinkClicked,
                      weak_ptr_factory_.GetWeakPtr());
   if (requests_pwm_logins) {
-    delegate_->GetWebsiteLoginFetcher()->GetLoginsForUrl(
+    delegate_->GetWebsiteLoginManager()->GetLoginsForUrl(
         delegate_->GetWebContents()->GetLastCommittedURL(),
         base::BindOnce(&CollectUserDataAction::OnGetLogins,
                        weak_ptr_factory_.GetWeakPtr(),
@@ -534,7 +534,7 @@ void CollectUserDataAction::EndAction(const ClientStatus& status) {
 
 void CollectUserDataAction::OnGetLogins(
     const LoginDetailsProto::LoginOptionProto& login_option,
-    std::vector<WebsiteLoginFetcher::Login> logins) {
+    std::vector<WebsiteLoginManager::Login> logins) {
   for (const auto& login : logins) {
     auto identifier =
         base::NumberToString(collect_user_data_options_->login_choices.size());

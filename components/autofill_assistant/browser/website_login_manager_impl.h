@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_FETCHER_IMPL_H_
-#define COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_FETCHER_IMPL_H_
+#ifndef COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_MANAGER_IMPL_H_
+#define COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_MANAGER_IMPL_H_
 
 #include "base/callback.h"
 #include "base/memory/weak_ptr.h"
 #include "components/autofill/core/common/password_form.h"
-#include "components/autofill_assistant/browser/website_login_fetcher.h"
+#include "components/autofill_assistant/browser/website_login_manager.h"
 
 namespace password_manager {
 class PasswordManagerClient;
@@ -19,13 +19,13 @@ namespace autofill_assistant {
 
 // Native implementation of the autofill assistant website login fetcher, which
 // wraps access to the Chrome password manager.
-class WebsiteLoginFetcherImpl : public WebsiteLoginFetcher {
+class WebsiteLoginManagerImpl : public WebsiteLoginManager {
  public:
-  WebsiteLoginFetcherImpl(password_manager::PasswordManagerClient* client,
+  WebsiteLoginManagerImpl(password_manager::PasswordManagerClient* client,
                           password_manager::PasswordManagerDriver* driver);
-  ~WebsiteLoginFetcherImpl() override;
+  ~WebsiteLoginManagerImpl() override;
 
-  // From WebsiteLoginFetcher:
+  // From WebsiteLoginManager:
   void GetLoginsForUrl(
       const GURL& url,
       base::OnceCallback<void(std::vector<Login>)> callback) override;
@@ -67,11 +67,11 @@ class WebsiteLoginFetcherImpl : public WebsiteLoginFetcher {
   std::vector<std::unique_ptr<PendingRequest>> pending_requests_;
 
   // Needs to be the last member.
-  base::WeakPtrFactory<WebsiteLoginFetcherImpl> weak_ptr_factory_;
+  base::WeakPtrFactory<WebsiteLoginManagerImpl> weak_ptr_factory_;
 
-  DISALLOW_COPY_AND_ASSIGN(WebsiteLoginFetcherImpl);
+  DISALLOW_COPY_AND_ASSIGN(WebsiteLoginManagerImpl);
 };
 
 }  // namespace autofill_assistant
 
-#endif  // COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_WEBSITE_LOGIN_FETCHER_IMPL_H_
+#endif  // COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_website_login_manager_IMPL_H_

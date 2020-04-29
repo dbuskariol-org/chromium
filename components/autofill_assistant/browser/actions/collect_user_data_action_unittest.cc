@@ -14,7 +14,7 @@
 #include "components/autofill/core/browser/autofill_test_utils.h"
 #include "components/autofill_assistant/browser/actions/mock_action_delegate.h"
 #include "components/autofill_assistant/browser/mock_personal_data_manager.h"
-#include "components/autofill_assistant/browser/mock_website_login_fetcher.h"
+#include "components/autofill_assistant/browser/mock_website_login_manager.h"
 #include "components/autofill_assistant/browser/user_model.h"
 #include "content/public/test/test_renderer_host.h"
 #include "content/public/test/web_contents_tester.h"
@@ -62,8 +62,8 @@ class CollectUserDataActionTest : public content::RenderViewHostTestHarness {
 
     ON_CALL(mock_action_delegate_, GetPersonalDataManager)
         .WillByDefault(Return(&mock_personal_data_manager_));
-    ON_CALL(mock_action_delegate_, GetWebsiteLoginFetcher)
-        .WillByDefault(Return(&mock_website_login_fetcher_));
+    ON_CALL(mock_action_delegate_, GetWebsiteLoginManager)
+        .WillByDefault(Return(&mock_website_login_manager_));
     ON_CALL(mock_action_delegate_, GetUserData)
         .WillByDefault(Return(&user_data_));
     ON_CALL(mock_action_delegate_, WriteUserData(_))
@@ -80,11 +80,11 @@ class CollectUserDataActionTest : public content::RenderViewHostTestHarness {
                   .Run(&user_data_, &user_model_);
             }));
 
-    ON_CALL(mock_website_login_fetcher_, OnGetLoginsForUrl(_, _))
+    ON_CALL(mock_website_login_manager_, OnGetLoginsForUrl(_, _))
         .WillByDefault(
-            RunOnceCallback<1>(std::vector<WebsiteLoginFetcher::Login>{
-                WebsiteLoginFetcher::Login(GURL(kFakeUrl), kFakeUsername)}));
-    ON_CALL(mock_website_login_fetcher_, OnGetPasswordForLogin(_, _))
+            RunOnceCallback<1>(std::vector<WebsiteLoginManager::Login>{
+                WebsiteLoginManager::Login(GURL(kFakeUrl), kFakeUsername)}));
+    ON_CALL(mock_website_login_manager_, OnGetPasswordForLogin(_, _))
         .WillByDefault(RunOnceCallback<1>(true, kFakePassword));
 
     content::WebContentsTester::For(web_contents())
@@ -96,7 +96,7 @@ class CollectUserDataActionTest : public content::RenderViewHostTestHarness {
  protected:
   base::MockCallback<Action::ProcessActionCallback> callback_;
   MockPersonalDataManager mock_personal_data_manager_;
-  MockWebsiteLoginFetcher mock_website_login_fetcher_;
+  MockWebsiteLoginManager mock_website_login_manager_;
   MockActionDelegate mock_action_delegate_;
   UserData user_data_;
   UserModel user_model_;
@@ -283,9 +283,9 @@ TEST_F(CollectUserDataActionTest, SelectLogin) {
   login_option->set_payload("payload");
 
   // Action should fetch the logins, but not the passwords.
-  EXPECT_CALL(mock_website_login_fetcher_, OnGetLoginsForUrl(GURL(kFakeUrl), _))
+  EXPECT_CALL(mock_website_login_manager_, OnGetLoginsForUrl(GURL(kFakeUrl), _))
       .Times(1);
-  EXPECT_CALL(mock_website_login_fetcher_, OnGetPasswordForLogin(_, _))
+  EXPECT_CALL(mock_website_login_manager_, OnGetPasswordForLogin(_, _))
       .Times(0);
 
   ON_CALL(mock_action_delegate_, CollectUserData(_))
@@ -324,9 +324,9 @@ TEST_F(CollectUserDataActionTest, LoginChoiceAutomaticIfNoOtherOptions) {
   login_option->mutable_password_manager();
   login_option->set_payload("password_manager");
 
-  ON_CALL(mock_website_login_fetcher_, OnGetLoginsForUrl(_, _))
+  ON_CALL(mock_website_login_manager_, OnGetLoginsForUrl(_, _))
       .WillByDefault(
-          RunOnceCallback<1>(std::vector<WebsiteLoginFetcher::Login>{}));
+          RunOnceCallback<1>(std::vector<WebsiteLoginManager::Login>{}));
 
   EXPECT_CALL(mock_action_delegate_, CollectUserData(_)).Times(0);
   EXPECT_CALL(callback_,
@@ -351,9 +351,9 @@ TEST_F(CollectUserDataActionTest, SelectLoginFailsIfNoOptionAvailable) {
   login_option->mutable_password_manager();
   login_option->set_payload("password_manager");
 
-  ON_CALL(mock_website_login_fetcher_, OnGetLoginsForUrl(_, _))
+  ON_CALL(mock_website_login_manager_, OnGetLoginsForUrl(_, _))
       .WillByDefault(
-          RunOnceCallback<1>(std::vector<WebsiteLoginFetcher::Login>{}));
+          RunOnceCallback<1>(std::vector<WebsiteLoginManager::Login>{}));
 
   EXPECT_CALL(callback_, Run(Pointee(Property(&ProcessedActionProto::status,
                                               COLLECT_USER_DATA_ERROR))));
@@ -1974,7 +1974,7 @@ TEST_F(CollectUserDataActionTest, ClearUserDataIfRequested) {
   user_data_.selected_addresses_["shipping"] =
       std::make_unique<autofill::AutofillProfile>(address_b);
   user_data_.selected_login_ =
-      WebsiteLoginFetcher::Login(GURL("http://www.example.com"), "username");
+      WebsiteLoginManager::Login(GURL("http://www.example.com"), "username");
 
   CollectUserDataAction action(&mock_action_delegate_, action_proto);
   action.ProcessAction(callback_.Get());

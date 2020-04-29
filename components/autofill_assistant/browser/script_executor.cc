@@ -537,8 +537,8 @@ autofill::PersonalDataManager* ScriptExecutor::GetPersonalDataManager() {
   return delegate_->GetPersonalDataManager();
 }
 
-WebsiteLoginFetcher* ScriptExecutor::GetWebsiteLoginFetcher() {
-  return delegate_->GetWebsiteLoginFetcher();
+WebsiteLoginManager* ScriptExecutor::GetWebsiteLoginManager() {
+  return delegate_->GetWebsiteLoginManager();
 }
 
 content::WebContents* ScriptExecutor::GetWebContents() {
