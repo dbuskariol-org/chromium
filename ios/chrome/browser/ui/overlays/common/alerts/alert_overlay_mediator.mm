@@ -62,8 +62,9 @@ using alert_overlays::AlertResponse;
   NSMutableArray<NSString*>* textFieldValues =
       [NSMutableArray<NSString*> array];
   for (size_t i = 0; i < config->text_field_configs().count; ++i) {
-    [textFieldValues addObject:[self.dataSource textFieldInputForMediator:self
-                                                           textFieldIndex:i]];
+    NSString* text_field_value = [self.dataSource textFieldInputForMediator:self
+                                                             textFieldIndex:i];
+    [textFieldValues addObject:text_field_value ?: @""];
   }
   return textFieldValues;
 }
