@@ -51,7 +51,7 @@ struct PointerData {
   float tangential_pressure;
   int32 twist;
   blink.mojom.Button button;
-  PointerType pointer_type;
+  ui.mojom.EventPointerType pointer_type;
   int32 movement_x;
   int32 movement_y;
   bool is_raw_movement_event;
@@ -126,7 +126,7 @@ struct GestureData {
   gfx.mojom.PointF widget_position;
   blink.mojom.GestureDevice source_device;
   bool is_source_touch_event_set_non_blocking;
-  PointerType primary_pointer_type;
+  ui.mojom.EventPointerType primary_pointer_type;
   int32 unique_touch_event_id;
   gfx.mojom.Size? contact_size;
   ScrollData? scroll_data;
