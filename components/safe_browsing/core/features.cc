@@ -32,6 +32,9 @@ const base::Feature kAdSamplerTriggerFeature{"SafeBrowsingAdSamplerTrigger",
 const base::Feature kCaptureInlineJavascriptForGoogleAds{
     "CaptureInlineJavascriptForGoogleAds", base::FEATURE_DISABLED_BY_DEFAULT};
 
+const base::Feature kCommittedSBInterstitials{
+    "SafeBrowsingCommittedInterstitials", base::FEATURE_ENABLED_BY_DEFAULT};
+
 const base::Feature kContentComplianceEnabled{
     "SafeBrowsingContentComplianceEnabled", base::FEATURE_ENABLED_BY_DEFAULT};
 
@@ -139,6 +142,7 @@ constexpr struct {
     {&kAdRedirectTriggerFeature, true},
     {&kAdSamplerTriggerFeature, false},
     {&kCaptureInlineJavascriptForGoogleAds, true},
+    {&kCommittedSBInterstitials, true},
     {&kContentComplianceEnabled, true},
     {&kDelayedWarnings, true},
     {&kDownloadRequestWithToken, true},

@@ -26,15 +26,26 @@ SafeBrowsingControllerClient::SafeBrowsingControllerClient(
 SafeBrowsingControllerClient::~SafeBrowsingControllerClient() {}
 
 void SafeBrowsingControllerClient::Proceed() {
-  // With committed interstitials the site has already
-  // been added to the whitelist, so reload will proceed.
-  Reload();
-  return;
+  if (!interstitial_page()) {
+    DCHECK(
+        base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials));
+    // In this case, committed interstitials are enabled, the site has already
+    // been added to the whitelist, so reload will proceed.
+    Reload();
+    return;
+  }
+  security_interstitials::SecurityInterstitialControllerClient::Proceed();
 }
 
 void SafeBrowsingControllerClient::GoBack() {
-  SecurityInterstitialControllerClient::GoBackAfterNavigationCommitted();
-  return;
+  if (!interstitial_page()) {
+    // In this case, committed interstitials are enabled, so we do a regular
+    // back navigation.
+    SecurityInterstitialControllerClient::GoBackAfterNavigationCommitted();
+    return;
+  }
+
+  SecurityInterstitialControllerClient::GoBack();
 }
 
 }  // namespace safe_browsing

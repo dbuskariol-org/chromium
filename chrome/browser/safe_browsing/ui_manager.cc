@@ -132,7 +132,8 @@ void SafeBrowsingUIManager::StartDisplayingBlockingPage(
   // get the navigation URL and referrer URL from the navigation entry now,
   // since they are required for threat reporting, and the entry will be
   // destroyed once the request is failed.
-  if (resource.IsMainPageLoadBlocked()) {
+  if (base::FeatureList::IsEnabled(kCommittedSBInterstitials) &&
+      resource.IsMainPageLoadBlocked()) {
     content::NavigationEntry* entry =
         web_contents->GetController().GetPendingEntry();
     if (entry) {

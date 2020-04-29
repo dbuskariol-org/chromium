@@ -583,6 +583,8 @@ void ThreatDetails::StartCollection() {
   // navigation to the interstitial, and the entry with the page details get
   // destroyed when leaving the interstitial.
   if (!resource_.navigation_url.is_empty()) {
+    DCHECK(
+        base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials));
     page_url = resource_.navigation_url;
     referrer_url = resource_.referrer_url;
   } else {

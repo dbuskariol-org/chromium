@@ -23,8 +23,8 @@ extern const char kSafeBrowsingUrl[];
 // details.
 extern const char kCustomCancelReasonForURLLoader[];
 
-// error_code to use when Safe Browsing blocks a request.
-extern const int kNetErrorCodeForSafeBrowsing;
+// Returns the error_code to use when Safe Browsing blocks a request.
+int GetNetErrorCodeForSafeBrowsing();
 
 // This enum must be kept in-sync with content::ResourceType. This is enforced
 // by static_asserts in safebrowsing_constants_content.cc. content::ResourceType

@@ -639,8 +639,11 @@ AwContentBrowserClient::CreateThrottlesForNavigation(
     throttles.push_back(std::make_unique<PolicyBlacklistNavigationThrottle>(
         navigation_handle, AwBrowserContext::FromWebContents(
                                navigation_handle->GetWebContents())));
-    throttles.push_back(
-        std::make_unique<AwSafeBrowsingNavigationThrottle>(navigation_handle));
+    if (base::FeatureList::IsEnabled(
+            safe_browsing::kCommittedSBInterstitials)) {
+      throttles.push_back(std::make_unique<AwSafeBrowsingNavigationThrottle>(
+          navigation_handle));
+    }
   }
   return throttles;
 }

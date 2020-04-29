@@ -19,6 +19,10 @@ const char kSafeBrowsingUrl[] = "https://safebrowsing.google.com/";
 
 const char kCustomCancelReasonForURLLoader[] = "SafeBrowsing";
 
-const int kNetErrorCodeForSafeBrowsing = net::ERR_BLOCKED_BY_CLIENT;
+int GetNetErrorCodeForSafeBrowsing() {
+  return base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials)
+             ? net::ERR_BLOCKED_BY_CLIENT
+             : net::ERR_ABORTED;
+}
 
 }  // namespace safe_browsing

@@ -1461,14 +1461,16 @@ void AwContents::DidFinishNavigation(
   // We do not call OnReceivedError for requests that were blocked due to an
   // interstitial showing. OnReceivedError is handled directly by the blocking
   // page for interstitials.
-  security_interstitials::SecurityInterstitialTabHelper*
-      security_interstitial_tab_helper = security_interstitials::
-          SecurityInterstitialTabHelper::FromWebContents(web_contents_.get());
-  if (security_interstitial_tab_helper &&
-      (security_interstitial_tab_helper->IsInterstitialPendingForNavigation(
-           navigation_handle->GetNavigationId()) ||
-       security_interstitial_tab_helper->IsDisplayingInterstitial())) {
-    return;
+  if (base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials)) {
+    security_interstitials::SecurityInterstitialTabHelper*
+        security_interstitial_tab_helper = security_interstitials::
+            SecurityInterstitialTabHelper::FromWebContents(web_contents_.get());
+    if (security_interstitial_tab_helper &&
+        (security_interstitial_tab_helper->IsInterstitialPendingForNavigation(
+             navigation_handle->GetNavigationId()) ||
+         security_interstitial_tab_helper->IsDisplayingInterstitial())) {
+      return;
+    }
   }
 
   AwContentsClientBridge* client =
@@ -1514,15 +1516,23 @@ int AwContents::GetErrorUiType() {
   return Java_AwContents_getErrorUiType(env, obj);
 }
 
-// TODO(carlosil): This function no longer has anything specific to
-// interstitials and can be cleaned up.
+// TODO(carlosil): Once committed interstitials are the only codepath supported
+// this will have nothing that's interstitial specific so this function should
+// be cleaned up.
 void AwContents::EvaluateJavaScriptOnInterstitialForTesting(
     JNIEnv* env,
     const base::android::JavaParamRef<jobject>& obj,
     const base::android::JavaParamRef<jstring>& script,
     const base::android::JavaParamRef<jobject>& callback) {
   content::RenderFrameHost* main_frame;
-  main_frame = web_contents_->GetMainFrame();
+  if (base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials)) {
+    main_frame = web_contents_->GetMainFrame();
+  } else {
+    content::InterstitialPage* interstitial =
+        web_contents_->GetInterstitialPage();
+    DCHECK(interstitial);
+    main_frame = interstitial->GetMainFrame();
+  }
 
   if (!callback) {
     // No callback requested.

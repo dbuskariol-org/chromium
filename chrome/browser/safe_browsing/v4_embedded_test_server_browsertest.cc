@@ -27,12 +27,16 @@
 namespace {
 
 bool IsShowingInterstitial(content::WebContents* contents) {
-  security_interstitials::SecurityInterstitialTabHelper* helper =
-      security_interstitials::SecurityInterstitialTabHelper::FromWebContents(
-          contents);
-  return helper &&
-         (helper->GetBlockingPageForCurrentlyCommittedNavigationForTesting() !=
-          nullptr);
+  if (base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials)) {
+    security_interstitials::SecurityInterstitialTabHelper* helper =
+        security_interstitials::SecurityInterstitialTabHelper::FromWebContents(
+            contents);
+    return helper &&
+           (helper
+                ->GetBlockingPageForCurrentlyCommittedNavigationForTesting() !=
+            nullptr);
+  }
+  return contents->GetInterstitialPage() != nullptr;
 }
 
 }  // namespace

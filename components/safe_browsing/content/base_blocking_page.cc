@@ -56,7 +56,11 @@ BaseBlockingPage::BaseBlockingPage(
                                std::move(controller_client)),
       ui_manager_(ui_manager),
       main_frame_url_(main_frame_url),
-      navigation_entry_index_to_remove_(-1),
+      navigation_entry_index_to_remove_(
+          IsMainPageLoadBlocked(unsafe_resources) ||
+                  base::FeatureList::IsEnabled(kCommittedSBInterstitials)
+              ? -1
+              : web_contents->GetController().GetLastCommittedEntryIndex()),
       unsafe_resources_(unsafe_resources),
       proceeded_(false),
       threat_details_proceed_delay_ms_(kThreatDetailsProceedDelayMilliSeconds),
@@ -69,7 +73,8 @@ BaseBlockingPage::BaseBlockingPage(
           base::Time::NowFromSystemTime(),
           controller(),
           /* created_prior_to_navigation */
-          IsMainPageLoadBlocked(unsafe_resources))) {}
+          IsMainPageLoadBlocked(unsafe_resources) &&
+              base::FeatureList::IsEnabled(kCommittedSBInterstitials))) {}
 
 BaseBlockingPage::~BaseBlockingPage() {}
 
@@ -151,9 +156,22 @@ void BaseBlockingPage::SetThreatDetailsProceedDelayForTesting(int64_t delay) {
 }
 
 void BaseBlockingPage::OnDontProceed() {
-  // TODO(carlosil): This function can be eliminated once the overlay
-  // interstitials code is removed.
-  NOTREACHED();
+  // With committed interstitials we shouldn't hit this code.
+  DCHECK(
+      !base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials));
+
+  // We could have already called Proceed(), in which case we must not notify
+  // the SafeBrowsingUIManager again, as the client has been deleted.
+  if (proceeded_)
+    return;
+
+  OnInterstitialClosing();
+
+  // Send the malware details, if we opted to.
+  FinishThreatDetails(base::TimeDelta(), false /* did_proceed */,
+                      controller()->metrics_helper()->NumVisits());  // No delay
+
+  OnDontProceedDone();
 }
 
 void BaseBlockingPage::CommandReceived(const std::string& page_cmd) {
@@ -169,8 +187,9 @@ void BaseBlockingPage::CommandReceived(const std::string& page_cmd) {
   auto interstitial_command =
       static_cast<security_interstitials::SecurityInterstitialCommand>(command);
 
-  if (interstitial_command ==
-      security_interstitials::SecurityInterstitialCommand::CMD_PROCEED) {
+  if (base::FeatureList::IsEnabled(safe_browsing::kCommittedSBInterstitials) &&
+      interstitial_command ==
+          security_interstitials::SecurityInterstitialCommand::CMD_PROCEED) {
     // With committed interstitials, OnProceed() doesn't get called, so handle
     // adding to the allow list here.
     set_proceeded(true);
