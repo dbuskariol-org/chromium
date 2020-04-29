@@ -99,7 +99,7 @@ suite('NewTabPageMostVisitedTest', () => {
     updateScreenWidth(true, true);
   }
 
-  setup(async () => {
+  setup(() => {
     PolymerTest.clearBody();
 
     testProxy = createTestProxy();
@@ -130,8 +130,7 @@ suite('NewTabPageMostVisitedTest', () => {
     BrowserProxy.instance_ = testProxy;
     mostVisited = document.createElement('ntp-most-visited');
     document.body.appendChild(mostVisited);
-
-    await testProxy.whenCalled('matchMedia', 2);
+    assertEquals(2, testProxy.getCallCount('matchMedia'));
     wide();
   });
 

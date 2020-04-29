@@ -102,18 +102,11 @@ let MethodData;
    *     the expected arguments.
    * @protected
    */
-  methodCalled(methodName, args) {
+  methodCalled(methodName, opt_arg) {
     const methodData = this.resolverMap_.get(methodName);
     methodData.callCount += 1;
-    const {callCount, resolvers} = methodData;
-    if (resolvers.length >= callCount) {
-      resolvers[callCount - 1].resolve(args);
-    } else {
-      assert(resolvers.length === callCount - 1);
-      const resolver = new PromiseResolver();
-      resolver.resolve(args);
-      resolvers.push(resolver);
-    }
+    this.resolverMap_.set(methodName, methodData);
+    methodData.resolver.resolve(opt_arg);
   }
 
   /**
@@ -141,19 +134,11 @@ let MethodData;
 
   /**
    * @param {string} methodName
-   * @param {number=} callCount
    * @return {!Promise} A promise that is resolved when the given method
-   *     is called |callCount| times.
+   *     is called.
    */
-  whenCalled(methodName, callCount = 1) {
-    const {resolvers} = this.getMethodData_(methodName);
-    for (let i = 0; i < callCount - resolvers.length; i++) {
-      resolvers.push(new PromiseResolver());
-    }
-    if (callCount === 1) {
-      return resolvers[0].promise;
-    }
-    return Promise.all(resolvers.slice(0, callCount).map(r => r.promise));
+  whenCalled(methodName) {
+    return this.getMethodData_(methodName).resolver.promise;
   }
 
   /**
@@ -224,6 +209,7 @@ let MethodData;
    * @private
    */
   createMethodData_(methodName) {
-    this.resolverMap_.set(methodName, {resolvers: [], callCount: 0});
+    this.resolverMap_.set(
+        methodName, {resolver: new PromiseResolver(), callCount: 0});
   }
 }
