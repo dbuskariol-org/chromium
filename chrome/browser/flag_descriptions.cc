@@ -3849,6 +3849,11 @@ const char kInstallableInkDropDescription[] =
     "InstallableInkDrop is part of an InkDrop refactoring effort. This enables "
     "the pilot implementation where available.";
 
+const char kTextfieldFocusOnTapUpName[] = "Focus UI text fields on touch-up";
+const char kTextfieldFocusOnTapUpDescription[] =
+    "When enabled, Views-based text fields take focus on touch-up instead of "
+    "touch-down. This includes the Omnibox.";
+
 const char kReopenTabInProductHelpName[] = "Reopen tab in-product help";
 const char kReopenTabInProductHelpDescription[] =
     "Enable in-product help that guides a user to reopen a tab if it looks "

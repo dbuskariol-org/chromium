@@ -2248,6 +2248,9 @@ extern const char kEnableMDRoundedCornersOnDialogsDescription[];
 extern const char kInstallableInkDropName[];
 extern const char kInstallableInkDropDescription[];
 
+extern const char kTextfieldFocusOnTapUpName[];
+extern const char kTextfieldFocusOnTapUpDescription[];
+
 extern const char kReopenTabInProductHelpName[];
 extern const char kReopenTabInProductHelpDescription[];
 

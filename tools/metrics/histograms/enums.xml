@@ -38868,6 +38868,7 @@ from previous Chrome versions.
   <int value="-1052782474" label="enable-cloud-devices"/>
   <int value="-1052415111" label="malware-interstitial-v2"/>
   <int value="-1052219252" label="disable-captive-portal-bypass-proxy"/>
+  <int value="-1052115254" label="TextfieldFocusOnTapUp:disabled"/>
   <int value="-1051509976" label="ServiceWorkerOnUI:disabled"/>
   <int value="-1048901516" label="ChromeMemex:enabled"/>
   <int value="-1048011353" label="LongPressBackNewDesign:disabled"/>
@@ -39545,6 +39546,7 @@ from previous Chrome versions.
   <int value="-263150202" label="BundledConnectionHelp:disabled"/>
   <int value="-262122630" label="ArcEnableDocumentsProviderInFilesApp:enabled"/>
   <int value="-258081634" label="AutofillAssistantDirectActions:disabled"/>
+  <int value="-257478609" label="TextfieldFocusOnTapUp:enabled"/>
   <int value="-255264176" label="OmniboxSearchEngineLogo:disabled"/>
   <int value="-254887599" label="google-profile-info"/>
   <int value="-254158542" label="SubresourceRedirectPreviews:enabled"/>

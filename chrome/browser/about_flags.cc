@@ -5421,6 +5421,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAutofillEnableGoogleIssuedCardDescription, kOsAll,
      FEATURE_VALUE_TYPE(autofill::features::kAutofillEnableGoogleIssuedCard)},
 
+#if defined(TOOLKIT_VIEWS)
+    {"textfield-focus-on-tap-up", flag_descriptions::kTextfieldFocusOnTapUpName,
+     flag_descriptions::kTextfieldFocusOnTapUpDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(views::features::kTextfieldFocusOnTapUp)},
+#endif  // defined(TOOLKIT_VIEWS)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the
