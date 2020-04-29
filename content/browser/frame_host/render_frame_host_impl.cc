@@ -6896,11 +6896,10 @@ void RenderFrameHostImpl::BindMediaRemoterFactoryReceiver(
 
 void RenderFrameHostImpl::CreateWebSocketConnector(
     mojo::PendingReceiver<blink::mojom::WebSocketConnector> receiver) {
-  mojo::MakeSelfOwnedReceiver(
-      std::make_unique<WebSocketConnectorImpl>(
-          GetProcess()->GetID(), routing_id_, last_committed_origin_,
-          isolation_info_.network_isolation_key()),
-      std::move(receiver));
+  mojo::MakeSelfOwnedReceiver(std::make_unique<WebSocketConnectorImpl>(
+                                  GetProcess()->GetID(), routing_id_,
+                                  last_committed_origin_, isolation_info_),
+                              std::move(receiver));
 }
 
 void RenderFrameHostImpl::CreateQuicTransportConnector(
