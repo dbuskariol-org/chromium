@@ -1086,7 +1086,7 @@ void Browser::MoveTabsToExistingWindow(const std::vector<int> tab_indices,
   size_t existing_browser_count = existing_browsers_for_menu_list_.size();
   if (static_cast<size_t>(browser_index) < existing_browser_count &&
       existing_browsers_for_menu_list_[browser_index]) {
-    chrome::MoveToExistingWindow(
+    chrome::MoveTabsToExistingWindow(
         this, existing_browsers_for_menu_list_[browser_index].get(),
         tab_indices);
   }
