@@ -285,7 +285,7 @@ void MediaFeedsService::OnFetchResponse(
   // TODO(crbug.com/1074486): Set the fetch result and was_fetched_from_cache.
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       feed_id, std::move(feed_items.value()), mojom::FetchResult::kSuccess,
-      false, std::move(logos), display_name, std::set<url::Origin>(),
+      false, std::move(logos), display_name, std::vector<url::Origin>(),
       std::move(callback));
 
   fetchers_.erase(feed_id);

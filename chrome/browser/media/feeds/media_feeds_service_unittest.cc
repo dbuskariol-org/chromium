@@ -249,7 +249,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -304,7 +304,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -359,7 +359,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -411,7 +411,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -463,7 +463,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -510,7 +510,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   auto pending_items_a = GetPendingSafeSearchCheckMediaFeedItemsSync();
@@ -565,7 +565,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, std::move(items), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   {
@@ -613,7 +613,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, std::move(items), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   {
@@ -661,7 +661,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, std::move(items), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   {
@@ -711,7 +711,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Feature) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -805,7 +805,7 @@ TEST_F(MediaFeedsServiceTest, FetcherShouldDeleteFeedIfGone) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   base::RunLoop run_loop;
@@ -846,7 +846,7 @@ TEST_F(MediaFeedsServiceTest, FetcherShouldDeleteFeedIfGone) {
   GetMediaHistoryService()->StoreMediaFeedFetchResult(
       1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess, false,
       std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      std::set<url::Origin>(), base::DoNothing());
+      std::vector<url::Origin>(), base::DoNothing());
   WaitForDB();
 
   {

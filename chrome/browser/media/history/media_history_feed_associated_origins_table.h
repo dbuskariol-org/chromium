@@ -5,7 +5,6 @@
 #ifndef CHROME_BROWSER_MEDIA_HISTORY_MEDIA_HISTORY_FEED_ASSOCIATED_ORIGINS_TABLE_H_
 #define CHROME_BROWSER_MEDIA_HISTORY_MEDIA_HISTORY_FEED_ASSOCIATED_ORIGINS_TABLE_H_
 
-#include <set>
 #include <vector>
 
 #include "chrome/browser/media/history/media_history_table_base.h"
@@ -20,8 +19,6 @@ namespace media_history {
 
 class MediaHistoryFeedAssociatedOriginsTable : public MediaHistoryTableBase {
  public:
-  static const char kTableName[];
-
   MediaHistoryFeedAssociatedOriginsTable(
       const MediaHistoryFeedAssociatedOriginsTable&) = delete;
   MediaHistoryFeedAssociatedOriginsTable& operator=(
@@ -46,9 +43,6 @@ class MediaHistoryFeedAssociatedOriginsTable : public MediaHistoryTableBase {
 
   // Gets all the associated origins associated with a feed.
   std::vector<url::Origin> Get(const int64_t feed_id);
-
-  // Gets all the feeds associated with an origin.
-  std::set<int64_t> GetFeeds(const url::Origin& origin);
 };
 
 }  // namespace media_history

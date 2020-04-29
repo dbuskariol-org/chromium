@@ -665,7 +665,7 @@ void MediaHistoryStore::StoreMediaFeedFetchResult(
     const bool was_fetched_from_cache,
     const std::vector<media_feeds::mojom::MediaImagePtr>& logos,
     const std::string& display_name,
-    const std::set<url::Origin>& associated_origins) {
+    const std::vector<url::Origin>& associated_origins) {
   DCHECK(db_task_runner_->RunsTasksInCurrentSequence());
   if (!CanAccessDatabase())
     return;
@@ -677,18 +677,6 @@ void MediaHistoryStore::StoreMediaFeedFetchResult(
     LOG(ERROR) << "Failed to begin the transaction.";
     return;
   }
-
-  std::set<url::Origin> origins_set;
-  for (auto& origin : associated_origins)
-    origins_set.insert(origin);
-
-  // Get the origin for the feed.
-  auto origin = feeds_table_->GetOrigin(feed_id);
-  if (!origin.has_value()) {
-    DB()->RollbackTransaction();
-    return;
-  }
-  origins_set.insert(*origin);
 
   // Remove all the items currently associated with this feed.
   if (!feed_items_table_->DeleteItems(feed_id)) {
@@ -740,7 +728,7 @@ void MediaHistoryStore::StoreMediaFeedFetchResult(
   }
 
   // Store associated origins.
-  for (auto& origin : origins_set) {
+  for (auto& origin : associated_origins) {
     if (!feed_origins_table_->Add(origin, feed_id)) {
       DB()->RollbackTransaction();
       return;
@@ -898,7 +886,7 @@ void MediaHistoryStore::UpdateMediaFeedDisplayTime(const int64_t feed_id) {
   DB()->CommitTransaction();
 }
 
-void MediaHistoryStore::ResetMediaFeed(const url::Origin& origin,
+void MediaHistoryStore::ResetMediaFeed(const int64_t feed_id,
                                        media_feeds::mojom::ResetReason reason) {
   if (!CanAccessDatabase())
     return;
@@ -911,27 +899,16 @@ void MediaHistoryStore::ResetMediaFeed(const url::Origin& origin,
     return;
   }
 
-  // Get all the feeds with |origin| as an associated origin.
-  std::set<int64_t> feed_ids = feed_origins_table_->GetFeeds(origin);
+  // Remove all the items currently associated with this feed.
+  if (!feeds_table_->Reset(feed_id, reason)) {
+    DB()->RollbackTransaction();
+    return;
+  }
 
-  for (auto& feed_id : feed_ids) {
-    // Remove all the items currently associated with this feed.
-    if (!feeds_table_->Reset(feed_id, reason)) {
-      DB()->RollbackTransaction();
-      return;
-    }
-
-    // Remove all the items currently associated with this feed.
-    if (!feed_items_table_->DeleteItems(feed_id)) {
-      DB()->RollbackTransaction();
-      return;
-    }
-
-    // Clear any old associated origins.
-    if (!feed_origins_table_->Clear(feed_id)) {
-      DB()->RollbackTransaction();
-      return;
-    }
+  // Remove all the items currently associated with this feed.
+  if (!feed_items_table_->DeleteItems(feed_id)) {
+    DB()->RollbackTransaction();
+    return;
   }
 
   DB()->CommitTransaction();
