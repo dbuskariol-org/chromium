@@ -1788,6 +1788,9 @@ void WebMediaPlayerImpl::OnError(PipelineStatus status) {
   if (found_hls && mb_data_source_) {
     demuxer_found_hls_ = true;
 
+    if (observer_)
+      observer_->OnHlsManifestDetected();
+
     UMA_HISTOGRAM_BOOLEAN("Media.WebMediaPlayerImpl.HLS.IsCorsCrossOrigin",
                           mb_data_source_->IsCorsCrossOrigin());
     if (mb_data_source_->IsCorsCrossOrigin()) {
