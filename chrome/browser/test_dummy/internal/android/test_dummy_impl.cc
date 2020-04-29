@@ -4,7 +4,7 @@
 
 #include "base/android/jni_string.h"
 #include "base/logging.h"
-#include "chrome/android/features/test_dummy/internal/jni_headers/TestDummyImpl_jni.h"
+#include "chrome/browser/test_dummy/internal/jni_headers/TestDummyImpl_jni.h"
 #include "chrome/grit/test_dummy_resources.h"
 #include "ui/base/resource/resource_bundle.h"
 

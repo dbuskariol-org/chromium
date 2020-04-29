@@ -8,8 +8,8 @@ import("//chrome/android/modules/buildflags.gni")
 import("//tools/grit/grit_rule.gni")
 
 android_resources("java_resources") {
-  sources = [ "java/res/raw/dummy_resource" ]
-  custom_package = "org.chromium.chrome.features.test_dummy"
+  sources = [ "android/java/res/raw/dummy_resource" ]
+  custom_package = "org.chromium.chrome.browser.test_dummy"
 }
 
 android_library("java") {
@@ -17,19 +17,18 @@ android_library("java") {
     ":base_module_java",
     ":java_resources",
     "//base:base_java",
-    "//chrome/android/features/test_dummy/public:java",
+    "//chrome/browser/test_dummy:java",
     "//third_party/android_deps:android_support_v7_appcompat_java",
     "//third_party/android_deps:androidx_annotation_annotation_java",
   ]
-  sources =
-      [ "java/src/org/chromium/chrome/features/test_dummy/TestDummyImpl.java" ]
+  sources = [ "android/java/src/org/chromium/chrome/browser/test_dummy/TestDummyImpl.java" ]
 
   annotation_processor_deps = [ "//base/android/jni_generator:jni_processor" ]
   deps += [ "//base:jni_java" ]
 }
 
 source_set("native") {
-  sources = [ "test_dummy_impl.cc" ]
+  sources = [ "android/test_dummy_impl.cc" ]
 
   deps = [
     ":jni_headers",
@@ -47,26 +46,23 @@ source_set("native") {
 android_library("base_module_java") {
   deps = [
     "//base:base_java",
-    "//chrome/android/features/test_dummy/public:java",
     "//chrome/android/modules/test_dummy/provider:java",
     "//chrome/android/modules/test_dummy/public:java",
+    "//chrome/browser/test_dummy:java",
     "//third_party/android_deps:android_support_v7_appcompat_java",
     "//third_party/android_deps:androidx_annotation_annotation_java",
   ]
-  sources = [
-    "java/src/org/chromium/chrome/features/test_dummy/TestDummyActivity.java",
-  ]
+  sources = [ "android/java/src/org/chromium/chrome/browser/test_dummy/TestDummyActivity.java" ]
 }
 
 generate_jni("jni_headers") {
-  sources =
-      [ "java/src/org/chromium/chrome/features/test_dummy/TestDummyImpl.java" ]
+  sources = [ "android/java/src/org/chromium/chrome/browser/test_dummy/TestDummyImpl.java" ]
 }
 
 # Cannot call this just "resources" since all targets with that name in
 # //chrome/android need a build_config, which grit targets don't have.
 grit("resources_native") {
-  source = "resources/resources.grd"
+  source = "android/resources/resources.grd"
   outputs = [
     "grit/test_dummy_resources.h",
     "test_dummy_resources.pak",
