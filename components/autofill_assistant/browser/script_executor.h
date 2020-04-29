@@ -370,10 +370,16 @@ class ScriptExecutor : public ActionDelegate,
       base::OnceCallback<void(UserData*, const UserModel*)> callback,
       UserData* user_data,
       const UserModel* user_model);
-  void OnAdditionalActionTriggered(base::OnceCallback<void(int)> callback,
-                                   int index);
-  void OnTermsAndConditionsLinkClicked(base::OnceCallback<void(int)> callback,
-                                       int link);
+  void OnAdditionalActionTriggered(
+      base::OnceCallback<void(int, UserData*, const UserModel*)> callback,
+      int index,
+      UserData* user_data,
+      const UserModel* user_model);
+  void OnTermsAndConditionsLinkClicked(
+      base::OnceCallback<void(int, UserData*, const UserModel*)> callback,
+      int link,
+      UserData* user_data,
+      const UserModel* user_model);
   void OnGetFullCard(GetFullCardCallback callback,
                      std::unique_ptr<autofill::CreditCard> card,
                      const base::string16& cvc);

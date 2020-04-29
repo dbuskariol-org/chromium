@@ -73,8 +73,12 @@ class CollectUserDataAction : public Action,
   void OnGetUserData(const CollectUserDataProto& collect_user_data,
                      UserData* user_data,
                      const UserModel* user_model);
-  void OnAdditionalActionTriggered(int index);
-  void OnTermsAndConditionsLinkClicked(int link);
+  void OnAdditionalActionTriggered(int index,
+                                   UserData* user_data,
+                                   const UserModel* user_model);
+  void OnTermsAndConditionsLinkClicked(int link,
+                                       UserData* user_data,
+                                       const UserModel* user_model);
 
   void OnGetLogins(const LoginDetailsProto::LoginOptionProto& login_option,
                    std::vector<WebsiteLoginManager::Login> logins);
@@ -87,6 +91,8 @@ class CollectUserDataAction : public Action,
   // Will update |initial_card_has_billing_postal_code_|.
   bool CheckInitialAutofillDataComplete(
       autofill::PersonalDataManager* personal_data_manager);
+
+  void WriteProcessedAction(UserData* user_data, const UserModel* user_model);
 
   // Update user data with the new state from personal data manager.
   void UpdatePersonalDataManagerProfiles(

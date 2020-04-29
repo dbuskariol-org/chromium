@@ -197,8 +197,10 @@ struct CollectUserDataOptions {
   base::Optional<std::string> additional_model_identifier_to_check;
 
   base::OnceCallback<void(UserData*, const UserModel*)> confirm_callback;
-  base::OnceCallback<void(int)> additional_actions_callback;
-  base::OnceCallback<void(int)> terms_link_callback;
+  base::OnceCallback<void(int, UserData*, const UserModel*)>
+      additional_actions_callback;
+  base::OnceCallback<void(int, UserData*, const UserModel*)>
+      terms_link_callback;
 };
 
 }  // namespace autofill_assistant

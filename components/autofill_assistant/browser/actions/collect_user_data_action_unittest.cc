@@ -1044,6 +1044,8 @@ TEST_F(CollectUserDataActionTest, PopupListSectionValid) {
   auto* popup_list_section =
       collect_user_data_proto->add_additional_prepended_sections();
   popup_list_section->set_title("Popup list section");
+  popup_list_section->mutable_popup_list_section()->set_selection_mandatory(
+      false);
   {
     CollectUserDataAction action(&mock_action_delegate_, action_proto);
     EXPECT_CALL(
@@ -1328,8 +1330,8 @@ TEST_F(CollectUserDataActionTest, InitialSelectsProfileAndShippingAddress) {
 
   autofill::AutofillProfile profile;
   autofill::test::SetProfileInfo(&profile, "Adam", "", "West",
-                                 "adam.west@gmail.com", "", "", "", "", "", "",
-                                 "", "");
+                                 "adam.west@gmail.com", "", "Main St. 18", "",
+                                 "abc", "New York", "NY", "10001", "us", "");
 
   ON_CALL(mock_personal_data_manager_, GetProfiles)
       .WillByDefault(
@@ -1421,8 +1423,8 @@ TEST_F(CollectUserDataActionTest, KeepsSelectedProfileAndShippingAddress) {
 
   autofill::AutofillProfile profile;
   autofill::test::SetProfileInfo(&profile, "Adam", "", "West",
-                                 "adam.west@gmail.com", "", "", "", "", "", "",
-                                 "", "");
+                                 "adam.west@gmail.com", "", "Main St. 18", "",
+                                 "abc", "New York", "NY", "10001", "us", "");
 
   ON_CALL(mock_personal_data_manager_, GetProfiles)
       .WillByDefault(
@@ -1977,6 +1979,51 @@ TEST_F(CollectUserDataActionTest, ClearUserDataIfRequested) {
       WebsiteLoginManager::Login(GURL("http://www.example.com"), "username");
 
   CollectUserDataAction action(&mock_action_delegate_, action_proto);
+  action.ProcessAction(callback_.Get());
+}
+
+TEST_F(CollectUserDataActionTest, LinkClickWritesPartialUserData) {
+  ActionProto action_proto;
+  auto* collect_user_data_proto = action_proto.mutable_collect_user_data();
+  collect_user_data_proto->set_request_terms_and_conditions(true);
+  collect_user_data_proto->set_accept_terms_and_conditions_text(
+      "terms and conditions");
+  collect_user_data_proto->set_show_terms_as_checkbox(true);
+  auto* contact_details_proto =
+      collect_user_data_proto->mutable_contact_details();
+  contact_details_proto->set_contact_details_name(kMemoryLocation);
+  contact_details_proto->set_request_payer_name(true);
+  ON_CALL(mock_action_delegate_, CollectUserData(_))
+      .WillByDefault(
+          Invoke([this](CollectUserDataOptions* collect_user_data_options) {
+            user_data_.succeed_ = false;
+            ValueProto value;
+            value.mutable_strings()->add_values("modified");
+            user_data_.additional_values_["key1"] = value;
+            std::move(collect_user_data_options->terms_link_callback)
+                .Run(1, &user_data_, &user_model_);
+          }));
+
+  auto* text_input_section =
+      collect_user_data_proto->add_additional_prepended_sections();
+  text_input_section->set_title("Text input section");
+
+  auto* input_field_1 =
+      text_input_section->mutable_text_input_section()->add_input_fields();
+  input_field_1->set_value("initial");
+  input_field_1->set_input_type(TextInputProto::INPUT_ALPHANUMERIC);
+  input_field_1->set_client_memory_key("key1");
+
+  CollectUserDataAction action(&mock_action_delegate_, action_proto);
+
+  EXPECT_CALL(
+      callback_,
+      Run(Pointee(AllOf(
+          Property(&ProcessedActionProto::status, ACTION_APPLIED),
+          Property(
+              &ProcessedActionProto::collect_user_data_result,
+              Property(&CollectUserDataResultProto::set_text_input_memory_keys,
+                       UnorderedElementsAre("key1")))))));
   action.ProcessAction(callback_.Get());
 }
 
