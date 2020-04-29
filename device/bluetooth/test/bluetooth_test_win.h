@@ -31,7 +31,6 @@ class BluetoothTestWin : public BluetoothTestBase,
   ~BluetoothTestWin() override;
 
   // BluetoothTestBase overrides
-  bool PlatformSupportsLowEnergy() override;
   void InitWithDefaultAdapter() override;
   void InitWithoutDefaultAdapter() override;
   void InitWithFakeAdapter() override;
@@ -125,7 +124,6 @@ class BluetoothTestWinrt : public BluetoothTestWin,
   void SimulateSpuriousRadioStateChangedEvent();
 
   // BluetoothTestBase:
-  bool PlatformSupportsLowEnergy() override;
   void InitWithDefaultAdapter() override;
   void InitWithoutDefaultAdapter() override;
   void InitWithFakeAdapter() override;
@@ -209,6 +207,7 @@ class BluetoothTestWinrt : public BluetoothTestWin,
   void OnFakeBluetoothDescriptorWriteValue(std::vector<uint8_t> value);
 
  private:
+  bool IsCurrentVersionNewerOrEqualThanWin10();
   base::test::ScopedFeatureList scoped_feature_list_;
   base::Optional<base::win::ScopedWinrtInitializer> scoped_winrt_initializer_;
 

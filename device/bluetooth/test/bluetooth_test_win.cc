@@ -246,12 +246,6 @@ BluetoothTestWin::BluetoothTestWin()
       fake_bt_le_wrapper_(nullptr) {}
 BluetoothTestWin::~BluetoothTestWin() {}
 
-bool BluetoothTestWin::PlatformSupportsLowEnergy() {
-  if (fake_bt_le_wrapper_)
-    return fake_bt_le_wrapper_->IsBluetoothLowEnergySupported();
-  return true;
-}
-
 void BluetoothTestWin::InitWithDefaultAdapter() {
   auto adapter = base::WrapRefCounted(new BluetoothAdapterWin());
   base::RunLoop run_loop;
@@ -688,9 +682,9 @@ BluetoothTestWinrt::~BluetoothTestWinrt() {
   notify_sessions_.clear();
 }
 
-bool BluetoothTestWinrt::PlatformSupportsLowEnergy() {
+bool BluetoothTestWinrt::IsCurrentVersionNewerOrEqualThanWin10() {
   return GetParam() ? base::win::GetVersion() >= base::win::Version::WIN10
-                    : BluetoothTestWin::PlatformSupportsLowEnergy();
+                    : true;
 }
 
 void BluetoothTestWinrt::InitWithDefaultAdapter() {
@@ -808,7 +802,7 @@ void BluetoothTestWinrt::SimulateAdapterPoweredOff() {
 
 BluetoothDevice* BluetoothTestWinrt::SimulateLowEnergyDevice(
     int device_ordinal) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateLowEnergyDevice(device_ordinal);
 
   LowEnergyDeviceData data = GetLowEnergyDeviceData(device_ordinal);
@@ -862,7 +856,7 @@ void BluetoothTestWinrt::SimulateAdvertisementError(
 }
 
 void BluetoothTestWinrt::SimulateGattConnection(BluetoothDevice* device) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattConnection(device);
 
   // Spin the message loop to make sure a device instance was obtained.
@@ -875,7 +869,7 @@ void BluetoothTestWinrt::SimulateGattConnection(BluetoothDevice* device) {
 
 void BluetoothTestWinrt::SimulateGattNameChange(BluetoothDevice* device,
                                                 const std::string& new_name) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattNameChange(device, new_name);
 
   auto* const ble_device =
@@ -886,7 +880,7 @@ void BluetoothTestWinrt::SimulateGattNameChange(BluetoothDevice* device,
 
 void BluetoothTestWinrt::SimulateStatusChangeToDisconnect(
     BluetoothDevice* device) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateStatusChangeToDisconnect(device);
   // Spin the message loop to make sure a device instance was obtained.
   base::RunLoop().RunUntilIdle();
@@ -923,7 +917,7 @@ void BluetoothTestWinrt::SimulateDeviceBreaksConnection(
 void BluetoothTestWinrt::SimulateGattServicesDiscovered(
     BluetoothDevice* device,
     const std::vector<std::string>& uuids) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattServicesDiscovered(device, uuids);
 
   auto* const ble_device =
@@ -933,7 +927,7 @@ void BluetoothTestWinrt::SimulateGattServicesDiscovered(
 }
 
 void BluetoothTestWinrt::SimulateGattServicesChanged(BluetoothDevice* device) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattServicesChanged(device);
 
   auto* const ble_device =
@@ -944,7 +938,7 @@ void BluetoothTestWinrt::SimulateGattServicesChanged(BluetoothDevice* device) {
 
 void BluetoothTestWinrt::SimulateGattServiceRemoved(
     BluetoothRemoteGattService* service) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattServiceRemoved(service);
 
   auto* const ble_device =
@@ -956,7 +950,7 @@ void BluetoothTestWinrt::SimulateGattServiceRemoved(
 
 void BluetoothTestWinrt::SimulateGattServicesDiscoveryError(
     BluetoothDevice* device) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattServicesDiscoveryError(device);
 
   auto* const ble_device =
@@ -969,7 +963,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristic(
     BluetoothRemoteGattService* service,
     const std::string& uuid,
     int properties) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattCharacteristic(service, uuid,
                                                         properties);
 
@@ -982,7 +976,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristic(
 
 void BluetoothTestWinrt::SimulateGattNotifySessionStarted(
     BluetoothRemoteGattCharacteristic* characteristic) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattNotifySessionStarted(characteristic);
 
   static_cast<FakeGattCharacteristicWinrt*>(
@@ -994,7 +988,7 @@ void BluetoothTestWinrt::SimulateGattNotifySessionStarted(
 void BluetoothTestWinrt::SimulateGattNotifySessionStartError(
     BluetoothRemoteGattCharacteristic* characteristic,
     BluetoothRemoteGattService::GattErrorCode error_code) {
-  if (!GetParam() || !PlatformSupportsLowEnergy()) {
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10()) {
     return BluetoothTestWin::SimulateGattNotifySessionStartError(characteristic,
                                                                  error_code);
   }
@@ -1025,7 +1019,7 @@ void BluetoothTestWinrt::SimulateGattNotifySessionStopError(
 void BluetoothTestWinrt::SimulateGattCharacteristicChanged(
     BluetoothRemoteGattCharacteristic* characteristic,
     const std::vector<uint8_t>& value) {
-  if (!GetParam() || !PlatformSupportsLowEnergy()) {
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10()) {
     return BluetoothTestWin::SimulateGattCharacteristicChanged(characteristic,
                                                                value);
   }
@@ -1039,7 +1033,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristicChanged(
 void BluetoothTestWinrt::SimulateGattCharacteristicRead(
     BluetoothRemoteGattCharacteristic* characteristic,
     const std::vector<uint8_t>& value) {
-  if (!GetParam() || !PlatformSupportsLowEnergy()) {
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10()) {
     return BluetoothTestWin::SimulateGattCharacteristicRead(characteristic,
                                                             value);
   }
@@ -1053,7 +1047,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristicRead(
 void BluetoothTestWinrt::SimulateGattCharacteristicReadError(
     BluetoothRemoteGattCharacteristic* characteristic,
     BluetoothRemoteGattService::GattErrorCode error_code) {
-  if (!GetParam() || !PlatformSupportsLowEnergy()) {
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10()) {
     return BluetoothTestWin::SimulateGattCharacteristicReadError(characteristic,
                                                                  error_code);
   }
@@ -1066,7 +1060,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristicReadError(
 
 void BluetoothTestWinrt::SimulateGattCharacteristicWrite(
     BluetoothRemoteGattCharacteristic* characteristic) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattCharacteristicWrite(characteristic);
 
   static_cast<FakeGattCharacteristicWinrt*>(
@@ -1078,7 +1072,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristicWrite(
 void BluetoothTestWinrt::SimulateGattCharacteristicWriteError(
     BluetoothRemoteGattCharacteristic* characteristic,
     BluetoothRemoteGattService::GattErrorCode error_code) {
-  if (!GetParam() || !PlatformSupportsLowEnergy()) {
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10()) {
     return BluetoothTestWin::SimulateGattCharacteristicWriteError(
         characteristic, error_code);
   }
@@ -1092,7 +1086,7 @@ void BluetoothTestWinrt::SimulateGattCharacteristicWriteError(
 void BluetoothTestWinrt::SimulateGattDescriptor(
     BluetoothRemoteGattCharacteristic* characteristic,
     const std::string& uuid) {
-  if (!GetParam() || !PlatformSupportsLowEnergy())
+  if (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
     return BluetoothTestWin::SimulateGattDescriptor(characteristic, uuid);
 
   auto* const ble_device = static_cast<TestBluetoothDeviceWinrt*>(
@@ -1138,7 +1132,7 @@ void BluetoothTestWinrt::SimulateGattDescriptorWriteError(
 }
 
 void BluetoothTestWinrt::DeleteDevice(BluetoothDevice* device) {
-  (!GetParam() || !PlatformSupportsLowEnergy())
+  (!GetParam() || !IsCurrentVersionNewerOrEqualThanWin10())
       ? BluetoothTestWin::DeleteDevice(device)
       : BluetoothTestBase::DeleteDevice(device);
 }
