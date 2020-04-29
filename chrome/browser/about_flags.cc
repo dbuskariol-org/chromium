@@ -90,6 +90,7 @@
 #include "components/games/core/games_features.h"
 #include "components/invalidation/impl/invalidation_switches.h"
 #include "components/language/core/common/language_experiments.h"
+#include "components/lookalikes/core/features.h"
 #include "components/nacl/common/buildflags.h"
 #include "components/nacl/common/nacl_switches.h"
 #include "components/network_session_configurator/common/network_features.h"
@@ -3907,6 +3908,13 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kTreatUnsafeDownloadsAsActiveDescription,
      kOsDesktop | kOsAndroid,
      FEATURE_VALUE_TYPE(features::kTreatUnsafeDownloadsAsActive)},
+
+    {"detect-target-embedding-lookalikes",
+     flag_descriptions::kDetectTargetEmbeddingLookalikesName,
+     flag_descriptions::kDetectTargetEmbeddingLookalikesDescription,
+     kOsDesktop | kOsAndroid,
+     FEATURE_VALUE_TYPE(
+         lookalikes::features::kDetectTargetEmbeddingLookalikes)},
 
 #if defined(OS_CHROMEOS)
     {"enable-play-store-search", flag_descriptions::kEnablePlayStoreSearchName,

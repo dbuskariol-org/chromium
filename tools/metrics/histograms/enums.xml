@@ -38047,6 +38047,7 @@ from previous Chrome versions.
   <int value="-1955923385" label="EnableGamepadButtonAxisEvents:enabled"/>
   <int value="-1954246274"
       label="enable-experimental-accessibility-switch-access"/>
+  <int value="-1953145846" label="TargetEmbeddingLookalikes:disabled"/>
   <int value="-1953121360" label="EphemeralTab:disabled"/>
   <int value="-1948540128" label="disable-webrtc-hw-encoding (deprecated)"/>
   <int value="-1946595906" label="enable-push-api-background-mode"/>
@@ -39074,6 +39075,7 @@ from previous Chrome versions.
   <int value="-832561975" label="enable-picture-in-picture"/>
   <int value="-825942229" label="tab-management-experiment-type-elderberry"/>
   <int value="-824199802" label="ContextualSearchSimplifiedServer:enabled"/>
+  <int value="-823394398" label="TargetEmbeddingLookalikes:enabled"/>
   <int value="-823165021" label="MaterialDesignUserMenu:enabled"/>
   <int value="-820041355" label="enable-transition-compositing"/>
   <int value="-816984237" label="OfflinePagesAsyncDownload:enabled"/>

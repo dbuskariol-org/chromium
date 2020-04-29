@@ -203,6 +203,9 @@ extern const char kDecodeJpeg420ImagesToYUVDescription[];
 extern const char kDecodeLossyWebPImagesToYUVName[];
 extern const char kDecodeLossyWebPImagesToYUVDescription[];
 
+extern const char kDetectTargetEmbeddingLookalikesName[];
+extern const char kDetectTargetEmbeddingLookalikesDescription[];
+
 extern const char kDoubleBufferCompositingName[];
 extern const char kDoubleBufferCompositingDescription[];
 
