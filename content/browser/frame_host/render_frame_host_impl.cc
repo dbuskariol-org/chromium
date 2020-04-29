@@ -2140,6 +2140,10 @@ void RenderFrameHostImpl::SetRenderFrameCreated(bool created) {
     document_associated_data_.ClearAllUserData();
 }
 
+void RenderFrameHostImpl::SwapIn() {
+  GetNavigationControl()->SwapIn();
+}
+
 void RenderFrameHostImpl::Init() {
   ResumeBlockedRequestsForFrame();
   if (!waiting_for_init_)
