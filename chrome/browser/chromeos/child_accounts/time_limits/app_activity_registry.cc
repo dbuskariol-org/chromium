@@ -70,16 +70,6 @@ enterprise_management::AppActivity::AppState AppStateForReporting(
   }
 }
 
-chromeos::app_time::AppId GetAndroidChromeAppId() {
-  return chromeos::app_time::AppId(apps::mojom::AppType::kArc,
-                                   "com.android.chrome");
-}
-
-bool IsWebAppOrExtension(const AppId& app_id) {
-  return app_id.app_type() == apps::mojom::AppType::kWeb ||
-         app_id.app_type() == apps::mojom::AppType::kExtension;
-}
-
 }  // namespace
 
 AppActivityRegistry::TestApi::TestApi(AppActivityRegistry* registry)
@@ -532,8 +522,16 @@ bool AppActivityRegistry::SetAppLimit(
       ShowLimitUpdatedNotificationIfNeeded(app_id, details.limit, app_limit);
   details.limit = app_limit;
 
-  // Limit 'data' is the same - no action needed.
-  if (!did_change)
+  // If |did_change| is false, handle the following corner case before
+  // returning. The default value for app limit during construction at the
+  // beginning of the session is base::nullopt. If the application was paused in
+  // the previous session, and its limit was removed or feature is disabled in
+  // the current session, the |app_limit| provided will be base::nullopt. Since
+  // both values(the default app limit and the |app_limit| provided as an
+  // argument for this method) are the same base::nullopt, |did_change| will be
+  // false. But we still need to update the state to available as the new app
+  // limit is base::nullopt.
+  if (!did_change && (IsAppAvailable(app_id) || app_limit.has_value()))
     return updated;
 
   if (IsWhitelistedApp(app_id)) {
