@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.externalnav;
+package org.chromium.components.external_intents;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -33,16 +33,11 @@ import org.chromium.base.ContextUtils;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.DisableIf;
-import org.chromium.components.external_intents.ExternalNavigationDelegate;
-import org.chromium.components.external_intents.ExternalNavigationHandler;
 import org.chromium.components.external_intents.ExternalNavigationHandler.OverrideUrlLoadingResult;
-import org.chromium.components.external_intents.ExternalNavigationParams;
-import org.chromium.components.external_intents.RedirectHandlerImpl;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.test.NativeLibraryTestRule;
 import org.chromium.ui.base.PageTransition;
 import org.chromium.ui.base.WindowAndroid;
-import org.chromium.webapk.lib.common.WebApkConstants;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -127,7 +122,8 @@ public class ExternalNavigationHandlerTest {
     private static final String TEXT_APP_2_PACKAGE_NAME = "text_app_2";
 
     private static final String WEBAPK_SCOPE = "https://www.template.com";
-    private static final String WEBAPK_PACKAGE_NAME = "org.chromium.webapk.template";
+    private static final String WEBAPK_PACKAGE_PREFIX = "org.chromium.webapk";
+    private static final String WEBAPK_PACKAGE_NAME = WEBAPK_PACKAGE_PREFIX + ".template";
 
     private static final String[] SUPERVISOR_START_ACTIONS = {
             "com.google.android.instantapps.START", "com.google.android.instantapps.nmr1.INSTALL",
@@ -464,8 +460,7 @@ public class ExternalNavigationHandlerTest {
     public void testIncomingIntentRedirect() {
         mDelegate.add(new IntentActivity(YOUTUBE_URL, YOUTUBE_PACKAGE_NAME));
 
-        int transitionTypeIncomingIntent = PageTransition.LINK
-                | PageTransition.FROM_API;
+        int transitionTypeIncomingIntent = PageTransition.LINK | PageTransition.FROM_API;
         // http://crbug.com/149218
         checkUrl(YOUTUBE_URL)
                 .withPageTransition(transitionTypeIncomingIntent)
@@ -507,8 +502,7 @@ public class ExternalNavigationHandlerTest {
     public void testYouTubePairingCode() {
         mDelegate.add(new IntentActivity(YOUTUBE_MOBILE_URL, YOUTUBE_PACKAGE_NAME));
 
-        int transitionTypeIncomingIntent = PageTransition.LINK
-                | PageTransition.FROM_API;
+        int transitionTypeIncomingIntent = PageTransition.LINK | PageTransition.FROM_API;
         final String[] goodUrls = {"http://m.youtube.com/watch?v=1234&pairingCode=5678",
                 "youtube.com?pairingCode=xyz", "youtube.com/tv?pairingCode=xyz",
                 "youtube.com/watch?v=1234&version=3&autohide=1&pairingCode=xyz",
@@ -546,16 +540,14 @@ public class ExternalNavigationHandlerTest {
 
     @Test
     @SmallTest
-    public void
-    testInitialIntent() throws URISyntaxException {
+    public void testInitialIntent() throws URISyntaxException {
         mDelegate.add(new IntentActivity(YOUTUBE_MOBILE_URL, YOUTUBE_PACKAGE_NAME));
         mDelegate.add(new IntentActivity(YOUTUBE_URL, YOUTUBE_PACKAGE_NAME));
 
         RedirectHandlerImpl redirectHandler = RedirectHandlerImpl.create();
         Intent ytIntent = Intent.parseUri(YOUTUBE_URL, Intent.URI_INTENT_SCHEME);
         Intent fooIntent = Intent.parseUri("http://foo.com/", Intent.URI_INTENT_SCHEME);
-        int transTypeLinkFromIntent = PageTransition.LINK
-                | PageTransition.FROM_API;
+        int transTypeLinkFromIntent = PageTransition.LINK | PageTransition.FROM_API;
 
         // Ignore if url is redirected, transition type is IncomingIntent and a new intent doesn't
         // have any new resolver.
@@ -596,15 +588,13 @@ public class ExternalNavigationHandlerTest {
 
     @Test
     @SmallTest
-    public void
-    testInitialIntentHeadingToChrome() throws URISyntaxException {
+    public void testInitialIntentHeadingToChrome() throws URISyntaxException {
         mDelegate.add(new IntentActivity(YOUTUBE_MOBILE_URL, YOUTUBE_PACKAGE_NAME));
 
         RedirectHandlerImpl redirectHandler = RedirectHandlerImpl.create();
         Intent fooIntent = Intent.parseUri("http://foo.com/", Intent.URI_INTENT_SCHEME);
         fooIntent.setPackage(mContext.getPackageName());
-        int transTypeLinkFromIntent = PageTransition.LINK
-                | PageTransition.FROM_API;
+        int transTypeLinkFromIntent = PageTransition.LINK | PageTransition.FROM_API;
 
         // Ignore if an initial Intent was heading to Chrome.
         redirectHandler.updateIntent(fooIntent, !IS_CUSTOM_TAB_INTENT, !SEND_TO_EXTERNAL_APPS,
@@ -632,8 +622,7 @@ public class ExternalNavigationHandlerTest {
 
     @Test
     @SmallTest
-    public void
-    testIntentForCustomTab() throws URISyntaxException {
+    public void testIntentForCustomTab() throws URISyntaxException {
         mDelegate.add(new IntentActivity(YOUTUBE_URL, YOUTUBE_PACKAGE_NAME));
 
         RedirectHandlerImpl redirectHandler = RedirectHandlerImpl.create();
@@ -696,8 +685,8 @@ public class ExternalNavigationHandlerTest {
                 IS_CCT_EXTERNAL_LINK_HANDLING_ENABLED);
         redirectHandler.updateNewUrlLoading(transTypeLinkFromIntent, false, false, 0, 0);
         // Simulate a real user navigation.
-        redirectHandler.updateNewUrlLoading(PageTransition.LINK, false, true,
-                SystemClock.elapsedRealtime() + 1, 0);
+        redirectHandler.updateNewUrlLoading(
+                PageTransition.LINK, false, true, SystemClock.elapsedRealtime() + 1, 0);
         checkUrl(YOUTUBE_URL)
                 .withPageTransition(PageTransition.LINK)
                 .withRedirectHandler(redirectHandler)
@@ -707,8 +696,7 @@ public class ExternalNavigationHandlerTest {
 
     @Test
     @SmallTest
-    public void
-    testInstantAppsIntent_customTabRedirect() throws Exception {
+    public void testInstantAppsIntent_customTabRedirect() throws Exception {
         RedirectHandlerImpl redirectHandler = RedirectHandlerImpl.create();
         int transTypeLinkFromIntent = PageTransition.LINK | PageTransition.FROM_API;
 
@@ -763,11 +751,10 @@ public class ExternalNavigationHandlerTest {
     @Test
     @SmallTest
     public void testInstantAppsIntent_incomingIntentRedirect() throws Exception {
-        int transTypeLinkFromIntent = PageTransition.LINK
-                | PageTransition.FROM_API;
+        int transTypeLinkFromIntent = PageTransition.LINK | PageTransition.FROM_API;
         RedirectHandlerImpl redirectHandler = RedirectHandlerImpl.create();
-        Intent fooIntent = Intent.parseUri("http://instantappenabled.com",
-                Intent.URI_INTENT_SCHEME);
+        Intent fooIntent =
+                Intent.parseUri("http://instantappenabled.com", Intent.URI_INTENT_SCHEME);
         redirectHandler.updateIntent(fooIntent, !IS_CUSTOM_TAB_INTENT, !SEND_TO_EXTERNAL_APPS,
                 IS_CCT_EXTERNAL_LINK_HANDLING_ENABLED);
         redirectHandler.updateNewUrlLoading(transTypeLinkFromIntent, false, false, 0, 0);
@@ -816,16 +803,14 @@ public class ExternalNavigationHandlerTest {
 
         mUrlHandler.mIsSerpReferrer = true;
         mDelegate.setIsIntentToInstantApp(true);
-        checkUrl(intentUrl)
-                .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT,
-                        START_OTHER_ACTIVITY | PROXY_FOR_INSTANT_APPS);
+        checkUrl(intentUrl).expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT,
+                START_OTHER_ACTIVITY | PROXY_FOR_INSTANT_APPS);
         Assert.assertTrue(
                 mDelegate.startActivityIntent.getBooleanExtra(IS_INSTANT_APP_EXTRA, false));
 
         // Check that we block all instant app intent:// URLs not from SERP.
         mUrlHandler.mIsSerpReferrer = false;
-        checkUrl(intentUrl)
-                .expecting(OverrideUrlLoadingResult.NO_OVERRIDE, IGNORE);
+        checkUrl(intentUrl).expecting(OverrideUrlLoadingResult.NO_OVERRIDE, IGNORE);
 
         // Check that that just having the SERP referrer alone doesn't cause intents to be treated
         // as intents to instant apps if the delegate indicates that they shouldn't be.
@@ -858,8 +843,7 @@ public class ExternalNavigationHandlerTest {
 
     @Test
     @SmallTest
-    public void
-    testFallbackUrl_IntentResolutionSucceedsInIncognito() {
+    public void testFallbackUrl_IntentResolutionSucceedsInIncognito() {
         // IMDB app is installed.
         mDelegate.add(new IntentActivity("imdb:", INTENT_APP_PACKAGE_NAME));
 
@@ -932,9 +916,8 @@ public class ExternalNavigationHandlerTest {
                 + "S." + ExternalNavigationHandler.EXTRA_BROWSER_FALLBACK_URL + "="
                 + "https://play.google.com/store/apps/details?id=com.imdb.mobile"
                 + "&referrer=mypage;end";
-        checkUrl(intent)
-                .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT,
-                        START_OTHER_ACTIVITY);
+        checkUrl(intent).expecting(
+                OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, START_OTHER_ACTIVITY);
 
         Assert.assertEquals("market://details?id=com.imdb.mobile&referrer=mypage",
                 mDelegate.startActivityIntent.getDataString());
@@ -1149,8 +1132,7 @@ public class ExternalNavigationHandlerTest {
 
     @Test
     @SmallTest
-    public void
-    testChromeAppInBackground() {
+    public void testChromeAppInBackground() {
         mDelegate.add(new IntentActivity(YOUTUBE_URL, YOUTUBE_PACKAGE_NAME));
         mDelegate.setIsChromeAppInForeground(false);
         checkUrl(YOUTUBE_URL).expecting(OverrideUrlLoadingResult.NO_OVERRIDE, IGNORE);
@@ -1449,8 +1431,8 @@ public class ExternalNavigationHandlerTest {
     @SmallTest
     public void testLaunchWebApk_ShowIntentPickerMultipleIntentHandlers() {
         final String scope = "https://www.webapk.with.native.com";
-        mDelegate.add(
-                new IntentActivity(scope, "org.chromium.webapk.with.native").withIsWebApk(true));
+        mDelegate.add(new IntentActivity(scope, WEBAPK_PACKAGE_PREFIX + ".with.native")
+                              .withIsWebApk(true));
         mDelegate.add(new IntentActivity(scope, "com.webapk.with.native.android"));
 
         checkUrl(scope).expecting(
@@ -1465,7 +1447,7 @@ public class ExternalNavigationHandlerTest {
     @SmallTest
     public void testLaunchWebApk_BypassIntentPickerFromAnotherWebApk() {
         final String scope1 = "https://www.webapk.with.native.com";
-        final String scope1WebApkPackageName = "org.chromium.webapk.with.native";
+        final String scope1WebApkPackageName = WEBAPK_PACKAGE_PREFIX + ".with.native";
         final String scope1NativeAppPackageName = "com.webapk.with.native.android";
         final String scope2 = "https://www.template.com";
         mDelegate.add(new IntentActivity(scope1, scope1WebApkPackageName).withIsWebApk(true));
@@ -1473,9 +1455,8 @@ public class ExternalNavigationHandlerTest {
         mDelegate.add(new IntentActivity(scope2, WEBAPK_PACKAGE_NAME).withIsWebApk(true));
         mDelegate.setReferrerWebappPackageName(scope1WebApkPackageName);
 
-        checkUrl(scope2)
-                .withReferrer(scope1)
-                .expecting(OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, START_WEBAPK);
+        checkUrl(scope2).withReferrer(scope1).expecting(
+                OverrideUrlLoadingResult.OVERRIDE_WITH_EXTERNAL_INTENT, START_WEBAPK);
     }
 
     /**
@@ -1884,8 +1865,7 @@ public class ExternalNavigationHandlerTest {
         }
 
         @Override
-        public void maybeSetWindowId(Intent intent) {
-        }
+        public void maybeSetWindowId(Intent intent) {}
 
         @Override
         public void maybeSetPendingReferrer(Intent intent, String referrerUrl) {
@@ -2161,8 +2141,7 @@ public class ExternalNavigationHandlerTest {
                 startActivityCalled = true;
                 String packageName = mDelegate.startActivityIntent.getPackage();
                 if (packageName != null) {
-                    startWebApkCalled =
-                            packageName.startsWith(WebApkConstants.WEBAPK_PACKAGE_PREFIX);
+                    startWebApkCalled = packageName.startsWith(WEBAPK_PACKAGE_PREFIX);
                 }
             }
 
@@ -2176,8 +2155,8 @@ public class ExternalNavigationHandlerTest {
             if (startActivityCalled && expectSaneIntent) {
                 checkIntentSanity(mDelegate.startActivityIntent, "Intent");
                 if (mDelegate.startActivityIntent.getSelector() != null) {
-                    checkIntentSanity(mDelegate.startActivityIntent.getSelector(),
-                            "Intent's selector");
+                    checkIntentSanity(
+                            mDelegate.startActivityIntent.getSelector(), "Intent's selector");
                 }
             }
         }
