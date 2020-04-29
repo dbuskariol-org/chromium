@@ -27116,6 +27116,24 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3254" label="EventTimingFirstInputExplicitlyRequested"/>
   <int value="3255" label="CustomScrollbarPercentThickness"/>
   <int value="3256" label="CustomScrollbarPartPercentLength"/>
+  <int value="3257" label="V8InvalidatedArrayBufferDetachingProtector"/>
+  <int value="3258" label="V8InvalidatedArrayConstructorProtector"/>
+  <int value="3259" label="V8InvalidatedArrayIteratorLookupChainProtector"/>
+  <int value="3260" label="V8InvalidatedArraySpeciesLookupChainProtector"/>
+  <int value="3261"
+      label="V8InvalidatedIsConcatSpreadableLookupChainProtector"/>
+  <int value="3262" label="V8InvalidatedMapIteratorLookupChainProtector"/>
+  <int value="3263" label="V8InvalidatedNoElementsProtector"/>
+  <int value="3264" label="V8InvalidatedPromiseHookProtector"/>
+  <int value="3265" label="V8InvalidatedPromiseResolveLookupChainProtector"/>
+  <int value="3266" label="V8InvalidatedPromiseSpeciesLookupChainProtector"/>
+  <int value="3267" label="V8InvalidatedPromiseThenLookupChainProtector"/>
+  <int value="3268" label="V8InvalidatedRegExpSpeciesLookupChainProtector"/>
+  <int value="3269" label="V8InvalidatedSetIteratorLookupChainProtector"/>
+  <int value="3270" label="V8InvalidatedStringIteratorLookupChainProtector"/>
+  <int value="3271"
+      label="V8InvalidatedStringLengthOverflowLookupChainProtector"/>
+  <int value="3272" label="V8InvalidatedTypedArraySpeciesLookupChainProtector"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
