@@ -201,11 +201,9 @@ void SafeBrowsingUrlCheckerImpl::OnUrlResult(const GURL& url,
 
   TRACE_EVENT_ASYNC_END1("safe_browsing", "CheckUrl", this, "url", url.spec());
 
-  const bool is_prefetch = (load_flags_ & net::LOAD_PREFETCH);
-
   // Handle main frame and subresources. We do this to catch resources flagged
   // as phishing even if the top frame isn't flagged.
-  if (!is_prefetch && threat_type == SB_THREAT_TYPE_URL_PHISHING &&
+  if (threat_type == SB_THREAT_TYPE_URL_PHISHING &&
       base::FeatureList::IsEnabled(kDelayedWarnings)) {
     if (state_ != STATE_DELAYED_BLOCKING_PAGE) {
       // Delayed warnings experiment delays the warning until a user interaction
@@ -240,7 +238,7 @@ void SafeBrowsingUrlCheckerImpl::OnUrlResult(const GURL& url,
     return;
   }
 
-  if (is_prefetch) {
+  if (load_flags_ & net::LOAD_PREFETCH) {
     // Destroy the prefetch with FINAL_STATUS_SAFEBROSWING.
     if (resource_type_ == ResourceType::kMainFrame) {
       url_checker_delegate_->MaybeDestroyPrerenderContents(
@@ -446,8 +444,7 @@ void SafeBrowsingUrlCheckerImpl::BlockAndProcessUrls(bool showed_interstitial) {
 void SafeBrowsingUrlCheckerImpl::OnBlockingPageComplete(
     bool proceed,
     bool showed_interstitial) {
-  DCHECK(state_ == STATE_DISPLAYING_BLOCKING_PAGE ||
-         state_ == STATE_DELAYED_BLOCKING_PAGE);
+  DCHECK_EQ(STATE_DISPLAYING_BLOCKING_PAGE, state_);
 
   if (proceed) {
     state_ = STATE_NONE;
