@@ -6817,6 +6817,3 @@ crbug.com/1073792 [ Mac10.13 ] virtual/threaded-prefer-compositing/fast/scrollin
 # the inspector-protocol/media tests only work in the virtual test environment.
 crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
 
-# Sheriff 2020-04-28
-crbug.com/1075915 [ Mac ] external/wpt/webrtc/RTCPeerConnection-ondatachannel.html [ Failure ]
-crbug.com/1075915 [ Mac ] virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-ondatachannel.html [ Failure ]
