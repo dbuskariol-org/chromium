@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/ui/activity_services/share_to_data.h"
+#include "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 
 #include "base/logging.h"
 #include "base/strings/sys_string_conversions.h"
@@ -29,6 +29,7 @@
        isOriginalTitle:(BOOL)isOriginalTitle
        isPagePrintable:(BOOL)isPagePrintable
       isPageSearchable:(BOOL)isPageSearchable
+      canSendTabToSelf:(BOOL)canSendTabToSelf
              userAgent:(web::UserAgentType)userAgent
     thumbnailGenerator:
         (ChromeActivityItemThumbnailGenerator*)thumbnailGenerator {
@@ -43,6 +44,7 @@
     _isOriginalTitle = isOriginalTitle;
     _isPagePrintable = isPagePrintable;
     _isPageSearchable = isPageSearchable;
+    _canSendTabToSelf = canSendTabToSelf;
     _userAgent = userAgent;
     _thumbnailGenerator = thumbnailGenerator;
   }

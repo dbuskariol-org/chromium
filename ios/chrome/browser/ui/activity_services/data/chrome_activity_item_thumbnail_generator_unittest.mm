@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/activity_services/chrome_activity_item_thumbnail_generator.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_thumbnail_generator.h"
 
 #include "base/test/task_environment.h"
 #import "ios/chrome/browser/browser_state/test_chrome_browser_state.h"

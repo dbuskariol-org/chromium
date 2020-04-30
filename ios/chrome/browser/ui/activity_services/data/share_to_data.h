@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_UI_ACTIVITY_SERVICES_SHARE_TO_DATA_H_
-#define IOS_CHROME_BROWSER_UI_ACTIVITY_SERVICES_SHARE_TO_DATA_H_
+#ifndef IOS_CHROME_BROWSER_UI_ACTIVITY_SERVICES_DATA_SHARE_TO_DATA_H_
+#define IOS_CHROME_BROWSER_UI_ACTIVITY_SERVICES_DATA_SHARE_TO_DATA_H_
 
 #import <UIKit/UIKit.h>
 
-#include "ios/chrome/browser/ui/activity_services/chrome_activity_item_thumbnail_generator.h"
+#include "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_thumbnail_generator.h"
 #include "ios/web/common/user_agent.h"
 #include "url/gurl.h"
 
@@ -20,6 +20,7 @@
        isOriginalTitle:(BOOL)isOriginalTitle
        isPagePrintable:(BOOL)isPagePrintable
       isPageSearchable:(BOOL)isPageSearchable
+      canSendTabToSelf:(BOOL)canSendTabToSelf
              userAgent:(web::UserAgentType)userAgent
     thumbnailGenerator:
         (ChromeActivityItemThumbnailGenerator*)thumbnailGenerator;
@@ -43,10 +44,12 @@
 @property(nonatomic, readonly, assign) BOOL isPagePrintable;
 // Whether FindInPage can be enabled for this page.
 @property(nonatomic, readonly, assign) BOOL isPageSearchable;
+// Whether the current tab can be sent via Send-Tab-To-Self.
+@property(nonatomic, readonly, assign) BOOL canSendTabToSelf;
 @property(nonatomic, readonly, assign) web::UserAgentType userAgent;
 @property(nonatomic, readonly)
     ChromeActivityItemThumbnailGenerator* thumbnailGenerator;
 
 @end
 
-#endif  // IOS_CHROME_BROWSER_UI_ACTIVITY_SERVICES_SHARE_TO_DATA_H_
+#endif  // IOS_CHROME_BROWSER_UI_ACTIVITY_SERVICES_DATA_SHARE_TO_DATA_H_

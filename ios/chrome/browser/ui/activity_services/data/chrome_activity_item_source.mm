@@ -2,12 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/activity_services/chrome_activity_item_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_source.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #include "base/logging.h"
-#import "ios/chrome/browser/ui/activity_services/activity_type_util.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
@@ -31,6 +30,12 @@
     _image = image;
   }
   return self;
+}
+
+#pragma mark - ChromeActivityItemSource
+
+- (NSSet*)excludedActivityTypes {
+  return [NSSet setWithArray:@[]];
 }
 
 #pragma mark - UIActivityItemSource
@@ -75,6 +80,15 @@
     _thumbnailGenerator = thumbnailGenerator;
   }
   return self;
+}
+
+#pragma mark - ChromeActivityItemSource
+
+- (NSSet*)excludedActivityTypes {
+  return [NSSet setWithArray:@[
+    UIActivityTypeAddToReadingList, UIActivityTypeCopyToPasteboard,
+    UIActivityTypePrint, UIActivityTypeSaveToCameraRoll
+  ]];
 }
 
 #pragma mark - UIActivityItemSource

@@ -2,14 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/ui/activity_services/share_to_data_builder.h"
+#include "ios/chrome/browser/ui/activity_services/data/share_to_data_builder.h"
 
 #include "base/logging.h"
 #import "base/strings/sys_string_conversions.h"
+#include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #import "ios/chrome/browser/find_in_page/find_tab_helper.h"
+#import "ios/chrome/browser/send_tab_to_self/send_tab_to_self_util.h"
 #import "ios/chrome/browser/tabs/tab_title_util.h"
-#include "ios/chrome/browser/ui/activity_services/chrome_activity_item_thumbnail_generator.h"
-#include "ios/chrome/browser/ui/activity_services/share_to_data.h"
+#include "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_thumbnail_generator.h"
+#include "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/web/public/navigation/navigation_item.h"
 #import "ios/web/public/navigation/navigation_manager.h"
 #import "ios/web/public/web_state.h"
@@ -64,12 +66,19 @@ ShareToData* ShareToDataForWebState(web::WebState* web_state,
       (helper && helper->CurrentPageSupportsFindInPage() &&
        !helper->IsFindUIActive());
   NSString* tab_title = tab_util::GetTabTitle(web_state);
+
+  ChromeBrowserState* browser_state =
+      ChromeBrowserState::FromBrowserState(web_state->GetBrowserState());
+  BOOL can_send_tab_to_self =
+      send_tab_to_self::ShouldOfferFeature(browser_state, finalURLToShare);
+
   return [[ShareToData alloc] initWithShareURL:finalURLToShare
                                     visibleURL:web_state->GetVisibleURL()
                                          title:tab_title
                                isOriginalTitle:is_original_title
                                isPagePrintable:is_page_printable
                               isPageSearchable:is_page_searchable
+                              canSendTabToSelf:can_send_tab_to_self
                                      userAgent:userAgent
                             thumbnailGenerator:thumbnail_generator];
 }

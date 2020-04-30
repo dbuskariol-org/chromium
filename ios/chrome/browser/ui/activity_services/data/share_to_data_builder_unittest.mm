@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/activity_services/share_to_data_builder.h"
+#import "ios/chrome/browser/ui/activity_services/data/share_to_data_builder.h"
 
 #include <memory>
 
@@ -13,7 +13,7 @@
 #import "ios/chrome/browser/download/download_manager_tab_helper.h"
 #import "ios/chrome/browser/snapshots/fake_snapshot_generator_delegate.h"
 #import "ios/chrome/browser/snapshots/snapshot_tab_helper.h"
-#import "ios/chrome/browser/ui/activity_services/share_to_data.h"
+#import "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/testing/ocmock_complex_type_helper.h"
 #import "ios/web/public/test/fakes/test_navigation_manager.h"
 #import "ios/web/public/test/fakes/test_web_state.h"
@@ -36,7 +36,6 @@ namespace {
 const char kExpectedUrl[] = "http://www.testurl.net/";
 const char kExpectedTitle[] = "title";
 }  // namespace
-
 
 class ShareToDataBuilderTest : public PlatformTest {
  public:
