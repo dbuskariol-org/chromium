@@ -206,6 +206,7 @@ class TimeoutMonitor;
 class WebAuthRequestSecurityChecker;
 class WebBluetoothServiceImpl;
 class WebBundleHandle;
+class WebBundleHandleTracker;
 struct UntrustworthyContextMenuParams;
 struct PendingNavigation;
 struct ResourceTimingInfo;
@@ -1181,6 +1182,10 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // Clears the entries in the PrefetchedSignedExchangeCache if exists.
   void ClearPrefetchedSignedExchangeCache();
+
+  // Creates a WebBundleHandleTracker from WebBundleHandles which are attached
+  // |this| or the parent frame or the opener frame.
+  std::unique_ptr<WebBundleHandleTracker> MaybeCreateWebBundleHandleTracker();
 
   // Adds |message| to the DevTools console only if it is unique (i.e. has not
   // been added to the console previously from this frame).
