@@ -1706,7 +1706,8 @@ void LocalFrameView::ScheduleRelayoutOfSubtree(LayoutObject* relayout_root) {
     if (!ShouldThrottleRendering())
       GetPage()->Animator().ScheduleVisualUpdate(frame_.Get());
 
-    Lifecycle().EnsureStateAtMost(DocumentLifecycle::kStyleClean);
+    if (GetPage()->Animator().IsServicingAnimations())
+      Lifecycle().EnsureStateAtMost(DocumentLifecycle::kStyleClean);
   }
   TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"),
                        "InvalidateLayout", TRACE_EVENT_SCOPE_THREAD, "data",
