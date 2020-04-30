@@ -389,9 +389,15 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   LayoutBox* EnclosingScrollableBox() const;
 
   // Returns the root of the inline formatting context |this| belongs to. |this|
-  // must be |IsInline()|. The root is the object that holds |NGPaintFragment|
-  // if it's in LayoutNG context.
+  // must be |IsInline()|. The root is the object that holds |NGInlineNodeData|
+  // and the root |NGPaintFragment| if it's in LayoutNG context. See also
+  // |ContainingFragmentainer()|.
   LayoutBlockFlow* RootInlineFormattingContext() const;
+
+  // Returns the |LayoutBlockFlow| that has |NGFragmentItems| for |this|. This
+  // is usually the same as |RootInlineFormattingContext()|, but it is the child
+  // of that when the IFC has multicol applied. TODO(crbug.com/1076470)
+  LayoutBlockFlow* FragmentItemsContainer() const;
 
   // Returns the containing block flow if it's a LayoutNGBlockFlow, or nullptr
   // otherwise. Note that the semantics is different from |EnclosingBox| for

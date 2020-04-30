@@ -843,6 +843,15 @@ LayoutBlockFlow* LayoutObject::RootInlineFormattingContext() const {
   return nullptr;
 }
 
+LayoutBlockFlow* LayoutObject::FragmentItemsContainer() const {
+  DCHECK(IsInline());
+  for (LayoutObject* parent = Parent(); parent; parent = parent->Parent()) {
+    if (auto* block_flow = DynamicTo<LayoutBlockFlow>(parent))
+      return block_flow;
+  }
+  return nullptr;
+}
+
 LayoutBlockFlow* LayoutObject::ContainingNGBlockFlow() const {
   DCHECK(IsInline());
   if (!RuntimeEnabledFeatures::LayoutNGEnabled())
