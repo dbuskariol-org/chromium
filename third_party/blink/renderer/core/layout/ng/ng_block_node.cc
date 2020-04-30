@@ -362,9 +362,6 @@ bool CanUseCachedIntrinsicInlineSizes(const MinMaxSizesInput& input,
     if (node.IsOutOfFlowPositioned())
       return false;
 
-    if (node.IsTable())
-      return false;
-
     if (style.LogicalHeight().IsPercentOrCalc() ||
         style.LogicalMinHeight().IsPercentOrCalc() ||
         style.LogicalMaxHeight().IsPercentOrCalc())
@@ -711,8 +708,10 @@ MinMaxSizes NGBlockNode::ComputeMinMaxSizes(
   bool is_orthogonal_flow_root =
       !IsParallelWritingMode(container_writing_mode, Style().GetWritingMode());
 
-  if (CanUseCachedIntrinsicInlineSizes(input, *this, is_orthogonal_flow_root))
-    return box_->IntrinsicLogicalWidths();
+  if (CanUseCachedIntrinsicInlineSizes(input, *this, is_orthogonal_flow_root)) {
+    return box_->IsTable() ? box_->PreferredLogicalWidths()
+                           : box_->IntrinsicLogicalWidths();
+  }
 
   box_->SetIntrinsicLogicalWidthsDirty();
 
