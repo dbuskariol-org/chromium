@@ -2687,7 +2687,7 @@ bool Document::NeedsLayoutTreeUpdateForNode(const Node& node,
                                             bool ignore_adjacent_style) const {
   // TODO(rakina): Switch some callers that may need to call
   // NeedsLayoutTreeUpdateForNodeIncludingDisplayLocked instead of this.
-  if (DisplayLockUtilities::NearestLockedExclusiveAncestor(node)) {
+  if (DisplayLockUtilities::LockedAncestorPreventingStyle(node)) {
     // |node| is in a locked-subtree, so we don't need to update it.
     return false;
   }
