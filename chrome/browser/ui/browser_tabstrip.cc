@@ -63,6 +63,7 @@ void AddWebContents(Browser* browser,
 
   NavigateParams params(browser, std::move(new_contents));
   params.source_contents = source_contents;
+  params.url = target_url;
   params.disposition = disposition;
   params.window_bounds = initial_rect;
   params.window_action = NavigateParams::SHOW_WINDOW;
