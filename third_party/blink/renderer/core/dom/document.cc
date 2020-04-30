@@ -8118,15 +8118,10 @@ void Document::SetShadowCascadeOrder(ShadowCascadeOrder order) {
     shadow_cascade_order_ = order;
 }
 
-PropertyRegistry* Document::GetPropertyRegistry() {
-  // TODO(timloh): When the flag is removed, return a reference instead.
-  if (!property_registry_ && RuntimeEnabledFeatures::CSSVariables2Enabled())
+PropertyRegistry& Document::EnsurePropertyRegistry() {
+  if (!property_registry_)
     property_registry_ = MakeGarbageCollected<PropertyRegistry>();
-  return property_registry_;
-}
-
-const PropertyRegistry* Document::GetPropertyRegistry() const {
-  return const_cast<Document*>(this)->GetPropertyRegistry();
+  return *property_registry_;
 }
 
 void Document::MaybeQueueSendDidEditFieldInInsecureContext() {
