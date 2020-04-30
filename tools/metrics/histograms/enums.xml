@@ -49882,6 +49882,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="9" label="TokenDisabled"/>
 </enum>
 
+<enum name="OsSettingsProviderError">
+  <int value="0" label="Ok"/>
+  <int value="1" label="App service unavailable"/>
+  <int value="2" label="No settings icon"/>
+</enum>
+
 <enum name="OsSuite">
   <int value="0" label="Windows Home Edition (or unknown)"/>
   <int value="1" label="Windows Professional/Ultimate Editions"/>
