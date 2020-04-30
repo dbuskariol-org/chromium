@@ -223,12 +223,14 @@ void DeviceCloudPolicyManagerChromeOS::SetDeviceEnrollmentAutoStart() {
   }
 }
 
+// Keep clean up order as the reversed creation order.
 void DeviceCloudPolicyManagerChromeOS::Shutdown() {
-  status_uploader_.reset();
-  syslog_uploader_.reset();
+  device_cert_provisioning_scheduler_.reset();
   heartbeat_scheduler_.reset();
-  state_keys_update_subscription_.reset();
+  syslog_uploader_.reset();
+  status_uploader_.reset();
   external_data_manager_->Disconnect();
+  state_keys_update_subscription_.reset();
   CloudPolicyManager::Shutdown();
   signin_profile_forwarding_schema_registry_.reset();
 }
@@ -342,6 +344,9 @@ void DeviceCloudPolicyManagerChromeOS::StartConnection(
         g_browser_process->gcm_driver(), client(), device_store_.get(),
         install_attributes->GetDeviceId(), task_runner_));
   }
+
+  device_cert_provisioning_scheduler_ = chromeos::cert_provisioning::
+      CertProvisioningScheduler::CreateDeviceCertProvisioningScheduler();
 
   NotifyConnected();
 }

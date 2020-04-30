@@ -27,25 +27,37 @@ const char kCertProfileIdKey[] = "cert_profile_id";
 policy::CloudPolicyClient* GetCloudPolicyClientForDevice() {
   policy::BrowserPolicyConnectorChromeOS* connector =
       g_browser_process->platform_part()->browser_policy_connector_chromeos();
+  if (!connector) {
+    return nullptr;
+  }
 
   policy::DeviceCloudPolicyManagerChromeOS* policy_manager =
       connector->GetDeviceCloudPolicyManager();
+  if (!policy_manager) {
+    return nullptr;
+  }
 
-  policy::CloudPolicyClient* client = policy_manager->core()->client();
+  policy::CloudPolicyCore* core = policy_manager->core();
+  if (!core) {
+    return nullptr;
+  }
 
-  DCHECK(client);
-  return client;
+  return core->client();
 }
 
 policy::CloudPolicyClient* GetCloudPolicyClientForUser(Profile* profile) {
   policy::UserCloudPolicyManagerChromeOS* user_cloud_policy_manager =
       profile->GetUserCloudPolicyManagerChromeOS();
+  if (!user_cloud_policy_manager) {
+    return nullptr;
+  }
 
-  policy::CloudPolicyClient* client =
-      user_cloud_policy_manager->core()->client();
+  policy::CloudPolicyCore* core = user_cloud_policy_manager->core();
+  if (!core) {
+    return nullptr;
+  }
 
-  DCHECK(client);
-  return client;
+  return core->client();
 }
 
 }  // namespace
@@ -54,20 +66,36 @@ policy::CloudPolicyClient* GetCloudPolicyClientForUser(Profile* profile) {
 std::unique_ptr<CertProvisioningScheduler>
 CertProvisioningScheduler::CreateUserCertProvisioningScheduler(
     Profile* profile) {
+  PrefService* pref_service = profile->GetPrefs();
+  policy::CloudPolicyClient* cloud_policy_client =
+      GetCloudPolicyClientForUser(profile);
+
+  if (!profile || !pref_service || !cloud_policy_client) {
+    LOG(ERROR) << "Failed to create user certificate provisioning scheduler";
+    return nullptr;
+  }
+
   return std::make_unique<CertProvisioningScheduler>(
-      CertScope::kUser, profile, profile->GetPrefs(),
-      prefs::kRequiredClientCertificateForUser,
-      GetCloudPolicyClientForUser(profile));
+      CertScope::kUser, profile, pref_service,
+      prefs::kRequiredClientCertificateForUser, cloud_policy_client);
 }
 
 // static
 std::unique_ptr<CertProvisioningScheduler>
 CertProvisioningScheduler::CreateDeviceCertProvisioningScheduler() {
+  Profile* profile = ProfileHelper::GetSigninProfile();
+  PrefService* pref_service = g_browser_process->local_state();
+  policy::CloudPolicyClient* cloud_policy_client =
+      GetCloudPolicyClientForDevice();
+
+  if (!profile || !pref_service || !cloud_policy_client) {
+    LOG(ERROR) << "Failed to create device certificate provisioning scheduler";
+    return nullptr;
+  }
+
   return std::make_unique<CertProvisioningScheduler>(
-      CertScope::kDevice, ProfileHelper::GetSigninProfile(),
-      g_browser_process->local_state(),
-      prefs::kRequiredClientCertificateForDevice,
-      GetCloudPolicyClientForDevice());
+      CertScope::kDevice, profile, pref_service,
+      prefs::kRequiredClientCertificateForDevice, cloud_policy_client);
 }
 
 CertProvisioningScheduler::CertProvisioningScheduler(
