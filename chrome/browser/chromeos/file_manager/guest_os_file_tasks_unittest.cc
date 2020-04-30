@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/file_manager/crostini_file_tasks.h"
+#include "chrome/browser/chromeos/file_manager/guest_os_file_tasks.h"
 
 #include "base/files/file_path.h"
 #include "base/values.h"
 #include "chrome/browser/chromeos/crostini/crostini_pref_names.h"
 #include "chrome/browser/chromeos/guest_os/guest_os_pref_names.h"
+#include "chrome/browser/chromeos/guest_os/guest_os_registry_service.h"
 #include "chrome/test/base/testing_profile.h"
 #include "components/prefs/pref_service.h"
 #include "components/prefs/scoped_user_pref_update.h"
@@ -24,9 +25,16 @@ class CrostiniFileTasksTest : public testing::Test {
   CrostiniFileTasksTest() {}
 
  protected:
+  static constexpr auto VM_TERMINA =
+      guest_os::GuestOsRegistryService::VmType::ApplicationList_VmType_TERMINA;
+  static constexpr auto PLUGIN_VM = guest_os::GuestOsRegistryService::VmType::
+      ApplicationList_VmType_PLUGIN_VM;
+
   void AddApp(const std::string& id,
               const std::string& name,
-              const std::string& mime) {
+              const std::vector<std::string>& mimes,
+              const std::vector<std::string>& extensions,
+              guest_os::GuestOsRegistryService::VmType vm_type) {
     // crostini.registry {<id>: {container_name: "penguin", name: {"": <name>},
     //                           mime_types: [<mime>,], vm_name: "termina"}}
     DictionaryPrefUpdate update(profile_.GetPrefs(),
@@ -34,13 +42,19 @@ class CrostiniFileTasksTest : public testing::Test {
     base::DictionaryValue* registry = update.Get();
     base::Value app(base::Value::Type::DICTIONARY);
     app.SetKey("container_name", base::Value("penguin"));
-    base::Value mimes(base::Value::Type::LIST);
-    mimes.Append(mime);
-    app.SetKey("mime_types", std::move(mimes));
+    base::Value mime_list(base::Value::Type::LIST);
+    for (const auto& mime : mimes)
+      mime_list.Append(mime);
+    app.SetKey("mime_types", std::move(mime_list));
+    base::Value extension_list(base::Value::Type::LIST);
+    for (const auto& extension : extensions)
+      extension_list.Append(extension);
+    app.SetKey("extensions", std::move(extension_list));
     base::Value name_dict(base::Value::Type::DICTIONARY);
     name_dict.SetKey("", base::Value(name));
     app.SetKey("name", std::move(name_dict));
     app.SetKey("vm_name", base::Value("termina"));
+    app.SetIntKey("vm_type", static_cast<int>(vm_type));
     registry->SetKey(id, std::move(app));
   }
 
@@ -72,62 +86,98 @@ class CrostiniFileTasksTest : public testing::Test {
 };
 
 TEST_F(CrostiniFileTasksTest, NoApps) {
-  AddApp("app1", "name1", "test/mime1");
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
   AddEntry("entry.txt", "test/mime2");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::IsEmpty());
   EXPECT_THAT(app_names_, testing::IsEmpty());
 }
 
-TEST_F(CrostiniFileTasksTest, AppRegisteredForMime) {
-  AddApp("app1", "name1", "test/mime1");
+TEST_F(CrostiniFileTasksTest, Termina_AppRegistered) {
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
   AddEntry("entry.txt", "test/mime1");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::ElementsAre("app1"));
   EXPECT_THAT(app_names_, testing::ElementsAre("name1"));
 }
 
-TEST_F(CrostiniFileTasksTest, NotAllEntries) {
-  AddApp("app1", "name1", "test/mime1");
-  AddApp("app2", "name2", "test/mime2");
+TEST_F(CrostiniFileTasksTest, PluginVm_AppRegistered) {
+  AddApp("app1", "name1", {}, {"txt"}, PLUGIN_VM);
+  AddEntry("entry.txt", "test/mime1");
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
+  EXPECT_THAT(app_ids_, testing::ElementsAre("app1"));
+  EXPECT_THAT(app_names_, testing::ElementsAre("name1"));
+}
+
+TEST_F(CrostiniFileTasksTest, Termina_NotAllEntries) {
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
+  AddApp("app2", "name2", {"test/mime2"}, {}, VM_TERMINA);
   AddEntry("entry1.txt", "test/mime1");
   AddEntry("entry2.txt", "test/mime2");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::IsEmpty());
   EXPECT_THAT(app_names_, testing::IsEmpty());
 }
 
-TEST_F(CrostiniFileTasksTest, MultipleAppsRegistered) {
-  AddApp("app1", "name1", "test/mime1");
-  AddApp("app2", "name2", "test/mime1");
+TEST_F(CrostiniFileTasksTest, PluginVm_NotAllEntries) {
+  AddApp("app1", "name1", {}, {"txt"}, PLUGIN_VM);
+  AddApp("app2", "name2", {}, {"jpg"}, PLUGIN_VM);
+  AddEntry("entry1.txt", "test/mime1");
+  AddEntry("entry2.jpg", "test/mime2");
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
+  EXPECT_THAT(app_ids_, testing::IsEmpty());
+  EXPECT_THAT(app_names_, testing::IsEmpty());
+}
+
+TEST_F(CrostiniFileTasksTest, Termina_MultipleAppsRegistered) {
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
+  AddApp("app2", "name2", {"test/mime1"}, {}, VM_TERMINA);
   AddEntry("entry.txt", "test/mime1");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
+  EXPECT_THAT(app_ids_, testing::ElementsAre("app1", "app2"));
+  EXPECT_THAT(app_names_, testing::ElementsAre("name1", "name2"));
+}
+
+TEST_F(CrostiniFileTasksTest, PluginVm_MultipleAppsRegistered) {
+  AddApp("app1", "name1", {}, {"txt"}, PLUGIN_VM);
+  AddApp("app2", "name2", {}, {"txt"}, PLUGIN_VM);
+  AddEntry("entry.txt", "test/mime1");
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
+  EXPECT_THAT(app_ids_, testing::ElementsAre("app1", "app2"));
+  EXPECT_THAT(app_names_, testing::ElementsAre("name1", "name2"));
+}
+
+TEST_F(CrostiniFileTasksTest, MultipleAppsFromMultipleVmsRegistered) {
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
+  AddApp("app2", "name2", {}, {"txt"}, PLUGIN_VM);
+  AddEntry("entry.txt", "test/mime1");
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::ElementsAre("app1", "app2"));
   EXPECT_THAT(app_names_, testing::ElementsAre("name1", "name2"));
 }
 
 TEST_F(CrostiniFileTasksTest, AppRegisteredForTextPlain) {
-  AddApp("app1", "name1", "text/plain");
+  AddApp("app1", "name1", {"text/plain"}, {}, VM_TERMINA);
   AddEntry("entry.js", "text/javascript");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::ElementsAre("app1"));
   EXPECT_THAT(app_names_, testing::ElementsAre("name1"));
 }
 
 TEST_F(CrostiniFileTasksTest, MimeServiceForTextPlain) {
-  AddApp("app1", "name1", "test/mime1");
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
   AddEntry("entry.unknown", "text/plain");
   AddMime("unknown", "test/mime1");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::ElementsAre("app1"));
   EXPECT_THAT(app_names_, testing::ElementsAre("name1"));
 }
 
 TEST_F(CrostiniFileTasksTest, MimeServiceForApplicationOctetStream) {
-  AddApp("app1", "name1", "test/mime1");
+  AddApp("app1", "name1", {"test/mime1"}, {}, VM_TERMINA);
   AddEntry("entry.unknown", "application/octet-stream");
   AddMime("unknown", "test/mime1");
-  FindCrostiniApps(&profile_, entries_, &app_ids_, &app_names_);
+  FindGuestOsApps(&profile_, entries_, &app_ids_, &app_names_);
   EXPECT_THAT(app_ids_, testing::ElementsAre("app1"));
   EXPECT_THAT(app_names_, testing::ElementsAre("name1"));
 }
