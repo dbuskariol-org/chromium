@@ -527,6 +527,10 @@ void ManagementUIHandler::AddDeviceReportingInfo(
                               kManagementReportNetworkInterfaces,
                               DeviceReportingType::kDevice);
   }
+  if (collector->ShouldReportCrashReportInfo()) {
+    AddDeviceReportingElement(report_sources, kManagementReportCrashReports,
+                              DeviceReportingType::kCrashReport);
+  }
   if (uploader->upload_enabled()) {
     AddDeviceReportingElement(report_sources, kManagementLogUploadEnabled,
                               DeviceReportingType::kLogs);
