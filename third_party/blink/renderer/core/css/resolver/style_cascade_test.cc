@@ -149,6 +149,9 @@ class TestCascade {
   bool NeedsInterpolationsAnalyze() const {
     return cascade_.needs_interpolations_analyze_;
   }
+  bool DependsOnCascadeAffectingProperty() const {
+    return cascade_.depends_on_cascade_affecting_property_;
+  }
 
  private:
   Document& GetDocument() const { return state_.GetDocument(); }
@@ -593,6 +596,17 @@ TEST_F(StyleCascadeTest, ApplyingPendingSubstitutionLast) {
   EXPECT_EQ("2px", cascade.ComputedValue("margin-right"));
   EXPECT_EQ("3px", cascade.ComputedValue("margin-bottom"));
   EXPECT_EQ("4px", cascade.ComputedValue("margin-left"));
+}
+
+TEST_F(StyleCascadeTest, PendingSubstitutionInLogicalShorthand) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("margin-inline:var(--x)");
+  cascade.Add("--x:10px 20px");
+  cascade.Add("direction:rtl");
+  cascade.Apply();
+
+  EXPECT_EQ("20px", cascade.ComputedValue("margin-left"));
+  EXPECT_EQ("10px", cascade.ComputedValue("margin-right"));
 }
 
 TEST_F(StyleCascadeTest, ResolverDetectCycle) {
@@ -2561,6 +2575,81 @@ TEST_F(StyleCascadeTest, WebkitBorderImageMixedOrder) {
   EXPECT_EQ("10px", cascade.ComputedValue("border-image-width"));
   EXPECT_EQ("4px", cascade.ComputedValue("border-image-outset"));
   EXPECT_EQ("space", cascade.ComputedValue("border-image-repeat"));
+}
+
+TEST_F(StyleCascadeTest, InitialDirection) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("margin-inline-start:10px");
+  cascade.Add("margin-inline-end:20px");
+  cascade.Apply();
+
+  EXPECT_EQ("10px", cascade.ComputedValue("margin-left"));
+  EXPECT_EQ("20px", cascade.ComputedValue("margin-right"));
+}
+
+TEST_F(StyleCascadeTest, NonInitialDirection) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("margin-inline-start:10px");
+  cascade.Add("margin-inline-end:20px");
+  cascade.Add("direction:rtl");
+  cascade.Apply();
+
+  EXPECT_EQ("20px", cascade.ComputedValue("margin-left"));
+  EXPECT_EQ("10px", cascade.ComputedValue("margin-right"));
+}
+
+TEST_F(StyleCascadeTest, InitialWritingMode) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("inline-size:10px");
+  cascade.Add("block-size:20px");
+  cascade.Apply();
+
+  EXPECT_EQ("10px", cascade.ComputedValue("width"));
+  EXPECT_EQ("20px", cascade.ComputedValue("height"));
+}
+
+TEST_F(StyleCascadeTest, NonInitialWritingMode) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("inline-size:10px");
+  cascade.Add("block-size:20px");
+  cascade.Add("writing-mode:vertical-lr");
+  cascade.Apply();
+
+  EXPECT_EQ("20px", cascade.ComputedValue("width"));
+  EXPECT_EQ("10px", cascade.ComputedValue("height"));
+}
+
+TEST_F(StyleCascadeTest, DoesNotDependOnCascadeAffectingProperty) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("width:10px");
+  cascade.Add("height:20px");
+  cascade.Apply();
+
+  EXPECT_FALSE(cascade.DependsOnCascadeAffectingProperty());
+  EXPECT_EQ("10px", cascade.ComputedValue("width"));
+  EXPECT_EQ("20px", cascade.ComputedValue("height"));
+}
+
+TEST_F(StyleCascadeTest, DependsOnCascadeAffectingProperty) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("inline-size:10px");
+  cascade.Add("height:20px");
+  cascade.Apply();
+
+  EXPECT_TRUE(cascade.DependsOnCascadeAffectingProperty());
+  EXPECT_EQ("10px", cascade.ComputedValue("width"));
+  EXPECT_EQ("20px", cascade.ComputedValue("height"));
+}
+
+TEST_F(StyleCascadeTest, ResetDependsOnCascadeAffectingPropertyFlag) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("inline-size:10px");
+  cascade.Add("height:20px");
+  cascade.Apply();
+
+  EXPECT_TRUE(cascade.DependsOnCascadeAffectingProperty());
+  cascade.Reset();
+  EXPECT_FALSE(cascade.DependsOnCascadeAffectingProperty());
 }
 
 TEST_F(StyleCascadeTest, MarkReferenced) {
