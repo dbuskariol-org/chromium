@@ -1527,6 +1527,10 @@ LayoutUnit LayoutBox::OverrideLogicalHeight() const {
   return rare_data_->override_logical_height_;
 }
 
+bool LayoutBox::IsOverrideLogicalHeightDefinite() const {
+  return extra_input_ && extra_input_->is_override_block_size_definite;
+}
+
 bool LayoutBox::HasOverrideLogicalHeight() const {
   if (extra_input_ && extra_input_->override_block_size)
     return true;
@@ -4423,9 +4427,14 @@ LayoutUnit LayoutBox::AvailableLogicalHeightUsing(
       const LayoutFlexibleBox& flex_box = ToLayoutFlexibleBox(*Parent());
       if (flex_box.UseOverrideLogicalHeightForPerentageResolution(*this))
         return OverrideContentLogicalHeight();
-    } else if (GetCachedLayoutResult()) {
+    } else if (HasOverrideContainingBlockContentLogicalWidth() &&
+               IsOrthogonalWritingModeRoot()) {
+      return OverrideContainingBlockContentLogicalWidth();
+    } else if (HasOverrideContainingBlockContentLogicalHeight()) {
+      return OverrideContainingBlockContentLogicalHeight();
+    } else if (const auto* previous_result = GetCachedLayoutResult()) {
       const NGConstraintSpace& space =
-          GetCachedLayoutResult()->GetConstraintSpaceForCaching();
+          previous_result->GetConstraintSpaceForCaching();
       if (space.IsFixedBlockSize() && !space.IsFixedBlockSizeIndefinite())
         return space.AvailableSize().block_size;
     }
