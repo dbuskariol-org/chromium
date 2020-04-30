@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Tallenna</translation>
 <translation id="5335288049665977812">Anna kaikkien sivustojen käyttää JavaScriptiä (suositus).</translation>
 <translation id="534295439873310000">NFC-laitteet</translation>
+<translation id="5354152178998424783">Tämä tyhjentää <ph name="DATASIZE" /> dataa ja sivustojen tallentamat evästeet.</translation>
 <translation id="5391532827096253100">Sivustolle muodostamasi yhteys ei ole turvallinen. Sivuston tiedot</translation>
 <translation id="5494752089476963479">Estä häiritseviä tai harhaanjohtavia mainoksia näyttävien sivustojen mainokset</translation>
 <translation id="5505264765875738116">Sivustot eivät saa pyytää lupaa ilmoitusten lähettämiseen</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Sinut kirjataan ulos tältä sivustolta.</translation>
 <translation id="7828557259026017104">Evästeet ovat avaamiesi verkkosivustojen luomia tiedostoja. Niiden avulla sivustot muistavat valintasi. Kolmannen osapuolen evästeitä luovat muut sivustot. Nämä sivustot omistavat mainoksia, kuvia tai muita sisältöjä, joita käytetään avaamallasi sivulla.</translation>
 <translation id="7846076177841592234">Peruuta valinta</translation>
+<translation id="7846621471902887024">Sinut kirjataan ulos kaikilta sivustoilta.</translation>
 <translation id="7882806643839505685">Salli tietyn sivuston äänet.</translation>
 <translation id="7993619969781047893">Joidenkin sivustojen ominaisuudet saattavat lakata toimimasta</translation>
 <translation id="7999064672810608036">Haluatko varmasti tyhjentää kaikki paikalliset tiedot, mukaan lukien evästeet, ja nollata kaikki tämän verkkosivuston käyttöluvat?</translation>

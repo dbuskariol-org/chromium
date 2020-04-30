@@ -364,6 +364,7 @@ Nếu bạn tắt chính sách này, thì việc cuộn trang web đến các ph
           Nếu bạn tắt hoặc không đặt chính sách này, thì các tùy chọn cài đặt của Tài khoản Kerberos sẽ tắt. Người dùng không thể thêm các tài khoản Kerberos và sử dụng tính năng xác thực Kerberos. Tất cả các tài khoản Kerberos hiện có và mọi mật khẩu đã lưu trữ sẽ bị xóa.</translation>
 <translation id="1561424797596341174">Chính sách ghi đè dành cho bản dựng Gỡ lỗi của máy chủ truy cập từ xa</translation>
 <translation id="1561967320164410511">Tiện ích U2F+ để chứng thực cá nhân</translation>
+<translation id="1575015449587326319">Chính sách cấu hình dành cho Trình kết nối OnFileDownloaded của Chrome Enterprise</translation>
 <translation id="1583248206450240930">Sử dụng <ph name="PRODUCT_FRAME_NAME" /> theo mặc định</translation>
 <translation id="1588240398285670601">Cài đặt của trình duyệt</translation>
 <translation id="1599424828227887013">Bật tính năng Cách ly trang web cho nguồn gốc đã chỉ định trên thiết bị Android</translation>
@@ -1458,6 +1459,7 @@ Khi chính sách này được đặt thành false hoặc không được địn
 <translation id="3096595567015595053">Danh sách plugin được kích hoạt</translation>
 <translation id="3101501961102569744">Chọn cách chỉ định cài đặt máy chủ proxy</translation>
 <translation id="3101709781009526431">Ngày và giờ</translation>
+<translation id="3112706537206652445">Không để người dùng thiết bị này sử dụng Cầu gỡ lỗi Android (ADB) được cài đặt không qua cửa hàng. Nếu chế độ cài đặt không qua cửa hàng đã được bật từ trước, thì việc chuyển sang tùy chọn cài đặt này sẽ khiến thiết bị có trạng thái bảo mật là đáng ngờ.</translation>
 <translation id="3114411414586006215">Chính sách này kiểm soát danh sách các trang web không bao giờ kích hoạt quá trình chuyển trình duyệt.
 
       Xin lưu ý rằng bạn cũng có thể thêm các thành phần vào danh sách này thông qua chính sách <ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" />.
@@ -1705,6 +1707,11 @@ Nếu đặt thành False, thì <ph name="PRODUCT_NAME" /> sẽ không sử dụ
           vẫn có thể sử dụng những mật khẩu đã lưu trước đó.
 
           Nếu bạn bật hoặc tắt chính sách này, thì người dùng sẽ không thể thay đổi hoặc ghi đè chính sách này trong <ph name="PRODUCT_NAME" />. Nếu bạn không đặt chính sách này, người dùng được phép lưu mật khẩu (nhưng họ có thể tắt tính năng lưu mật khẩu).</translation>
+<translation id="3492834335089638487">Chính sách này kiểm soát việc thiết bị dùng ứng dụng Android từ các nguồn không tin cậy (không phải là Cửa hàng Google Play).
+
+      Nếu chính sách không được đặt, thì hệ thống sẽ xem là không cho phép chức năng này.
+
+      Khả năng cung cấp chức năng này còn phụ thuộc vào chính sách người dùng tương ứng.</translation>
 <translation id="3496296378755072552">Trình quản lý mật khẩu</translation>
 <translation id="3500732098526756068">Cho phép bạn kiểm soát hoạt động kích hoạt cảnh báo bảo vệ mật khẩu. Tính năng bảo vệ mật khẩu sẽ cảnh báo người dùng khi họ sử dụng lại mật khẩu được bảo vệ trên các trang web có thể đáng ngờ.
 
@@ -2974,6 +2981,7 @@ Nếu đặt thành False, thì <ph name="PRODUCT_NAME" /> sẽ không sử dụ
 <translation id="5369937289900051171">Chỉ in màu</translation>
 <translation id="5370279767682621504">Bật hỗ trợ HTTP/0.9 trên các cổng không phải là cổng mặc định</translation>
 <translation id="5377606826822211923">Kiểm soát việc người dùng sử dụng ứng dụng Android từ những nguồn không tin cậy</translation>
+<translation id="537786648513450280">Kiểm soát việc thiết bị dùng ứng dụng Android từ các nguồn không tin cậy</translation>
 <translation id="5378985487213287085">Cho phép bạn đặt liệu các trang web có được phép hiển thị thông báo trên màn hình hay không. Việc hiển thị thông báo trên màn hình có thể được cho phép theo mặc định, từ chối theo mặc định hoặc người dùng có thể được hỏi mỗi lần trang web muốn hiển thị thông báo trên màn hình.
 
           Nếu không thiết lập chính sách này, 'AskNotifications' sẽ được sử dụng và người dùng có thể thay đổi cài đặt này.</translation>
@@ -4232,6 +4240,7 @@ Nếu bạn không đặt chính sách này thì người dùng sẽ có thể t
 <translation id="7202925763179776247">Cho phép hạn chế tải xuống</translation>
 <translation id="7207095846245296855">Bắt buộc bật Tìm kiếm an toàn của Google</translation>
 <translation id="7211368186050418507">Không bao giờ tự động phát hiện múi giờ</translation>
+<translation id="7213920626995591871">Không để người dùng thiết bị này sử dụng Cầu gỡ lỗi Android (ADB) được cài đặt không qua cửa hàng và buộc thực hiện chức năng powerwash thiết bị nếu chế độ cài đặt không qua cửa hàng được bật từ trước.</translation>
 <translation id="7216442368414164495">Cho phép người dùng chọn sử dụng báo cáo mở rộng trong Duyệt web an toàn</translation>
 <translation id="7222749588229362483">Cho phép hợp nhất các chính sách đã chọn khi các chính sách đó thuộc nhiều nguồn, có cùng phạm vi và cấp độ.
 
@@ -4539,6 +4548,7 @@ Nếu bạn không đặt chính sách này thì người dùng sẽ có thể t
 <translation id="7687943045976362719">Nếu bạn đặt chính sách này, <ph name="PRODUCT_FRAME_NAME" /> sẽ xử lý các loại nội dung được chỉ định.
 
           Nếu bạn không đặt chính sách này, trình kết xuất mặc định sẽ được sử dụng cho tất cả các trang web. (Chính sách <ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> có thể dùng để định cấu hình trình kết xuất mặc định).</translation>
+<translation id="7690423044860056310">Cho phép người dùng đã liên kết của thiết bị này sử dụng Cầu gỡ lỗi Android (ADB) được cài đặt không qua cửa hàng.</translation>
 <translation id="7691028179743802462">Chính sách này không còn dùng trong M83, vui lòng sử dụng SafeBrowsingProtectionLevel.
 
       Bật tính năng Duyệt web an toàn của <ph name="PRODUCT_NAME" /> và ngăn người dùng thay đổi tùy chọn cài đặt này.
@@ -4771,6 +4781,19 @@ Nếu bạn không đặt chính sách này thì người dùng sẽ có thể t
 
       Chính sách <ph name="SYNC_DISABLED_POLICY_NAME" /> sẽ tắt tất cả tính năng đồng bộ hóa dữ liệu, ghi đè <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" />.</translation>
 <translation id="802147957407376460">Xoay màn hình 0 độ</translation>
+<translation id="8027265928215448940">Danh sách các tùy chọn cài đặt dịch vụ Trình kết nối của Chrome Enterprise sẽ áp dụng cho Trình kết nối <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> của Enterprise. Trình kết nối này sẽ chạy khi tệp được tải xuống trong Chrome.
+
+      Các trường <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> và <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> dùng để xác định xem trình kết nối có gửi tệp đi phân tích hay không khi tệp được tải xuống trên một trang cụ thể, cũng như thẻ nào cần thêm vào yêu cầu phân tích cho tệp đó. Nếu URL của trang khớp với mẫu được liên kết với thẻ đó, thì hệ thống sẽ thêm một thẻ tương ứng với mẫu 'enable' vào yêu cầu phân tích cho tới chừng nào không còn mẫu 'disable' có thẻ như vậy khớp với URL của trang. Quá trình phân tích sẽ diễn ra nếu hệ thống thêm ít nhất 1 thẻ vào yêu cầu.
+
+      Trường <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" /> xác định nhà cung cấp dịch vụ phân tích nào tương ứng với các tùy chọn cài đặt.
+
+      Nếu bạn đặt trường <ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" /> thành 1, thì Chrome sẽ đợi để nhận phản hồi từ dịch vụ phân tích rồi mới cho phép người dùng truy cập vào tệp đã tải xuống đó. Nếu bạn đặt trường này thành một giá trị số nguyên khác bất kỳ, thì Chrome sẽ cho phép người dùng truy cập vào tệp đó ngay lập tức.
+
+      Trường <ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" /> sẽ kiểm soát việc Chrome chặn hay cho phép các tệp được bảo vệ bằng mật khẩu.
+
+      Trường <ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" /> sẽ kiểm soát việc Chrome chặn hay cho phép những tệp có kích thước quá lớn (hơn 50 MB) nên không phân tích được.
+
+      Bạn chỉ có thể đặt chính sách này trên Bảng điều khiển dành cho quản trị viên Google.</translation>
 <translation id="8033913082323846868">Chính sách này không còn dùng trong M70, thay vào đó, hãy sử dụng AutofillAddressEnabled và AutofillCreditCardEnabled.
 
       Bật tính năng Tự động điền của <ph name="PRODUCT_NAME" /> và cho phép người dùng tự động hoàn thành các biểu mẫu web bằng cách sử dụng thông tin đã lưu trữ trước đây, chẳng hạn như địa chỉ và thông tin thẻ tín dụng.

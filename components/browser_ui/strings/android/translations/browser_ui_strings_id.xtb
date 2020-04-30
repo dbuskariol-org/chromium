@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Simpan</translation>
 <translation id="5335288049665977812">Izinkan situs menjalankan JavaScript (disarankan)</translation>
 <translation id="534295439873310000">Perangkat NFC</translation>
+<translation id="5354152178998424783">Ini akan menghapus <ph name="DATASIZE" /> data dan cookie yang disimpan oleh situs.</translation>
 <translation id="5391532827096253100">Sambungan ke situs ini tidak aman. Informasi situs</translation>
 <translation id="5494752089476963479">Blokir iklan di situs yang menampilkan iklan yang mengganggu atau menyesatkan</translation>
 <translation id="5505264765875738116">Situs tidak dapat meminta izin mengirimkan notifikasi</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Anda akan logout dari situs ini.</translation>
 <translation id="7828557259026017104">Cookie adalah file yang dibuat oleh situs yang Anda kunjungi. Situs menggunakannya untuk mengingat preferensi Anda. Cookie pihak ketiga dibuat oleh situs lain. Situs seperti ini adalah pemilik beberapa konten, misalnya iklan atau gambar, yang terlihat di halaman yang Anda kunjungi.</translation>
 <translation id="7846076177841592234">Batalkan pilihan</translation>
+<translation id="7846621471902887024">Anda akan logout dari semua situs.</translation>
 <translation id="7882806643839505685">Izinkan suara untuk situs tertentu.</translation>
 <translation id="7993619969781047893">Fitur pada beberapa situs mungkin error</translation>
 <translation id="7999064672810608036">Yakin ingin menghapus semua data lokal, termasuk cookie, dan menyetel ulang semua izin untuk situs web ini?</translation>

@@ -2881,7 +2881,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="4863769717153320198">‏<ph name="WIDTH" /> x <ph name="HEIGHT" /> جیسا نظر آتا ہے (ڈیفالٹ)</translation>
 <translation id="4864369630010738180">سائن ان کر رہا ہے…</translation>
 <translation id="486635084936119914">ڈاؤن لوڈ کرنے کے بعد مخصوص فائل کی قسموں کو کھولیں</translation>
-<translation id="4869289251183233431">آپ کے آلے کا اسٹوریج کم ہے۔ <ph name="APP_NAME" /> کا استعمال کرنے کے لیے کم از کم <ph name="MINIMUM_SPACE" /> خالی جگہ درکار ہے اور <ph name="RECOMMENDED_SPACE" /> سے زیادہ خالی جگہ کی تجویز پیش کی جاتی ہے۔ خالی جگہ میں اضافہ کرنے کے لیے، آلہ سے فائلز حذف کریں۔</translation>
+<translation id="4869289251183233431">آپ کے آلے کا اسٹوریج کم ہے۔ <ph name="APP_NAME" /> کا استعمال کرنے کے لیے کم از کم <ph name="MINIMUM_SPACE" /> خالی جگہ درکار ہے اور <ph name="RECOMMENDED_SPACE" /> سے زیادہ خالی جگہ کی تجویز کی جاتی ہے۔ خالی جگہ میں اضافہ کرنے کے لیے، آلہ سے فائلز حذف کریں۔</translation>
 <translation id="48704129375571883">اضافی خصوصیات شامل کریں</translation>
 <translation id="4870758487381879312">کنفیگریشن کی معلومات حاصل کرنے کیلئے منتظم کی طرف سے فراہم کردہ پاس ورڈ درج کریں</translation>
 <translation id="4870903493621965035">کوئی جوڑا بنایا ہوا آلہ نہیں ہے</translation>
@@ -4090,7 +4090,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="6491376743066338510">اجازت دہندگی ناکام ہو گئی</translation>
 <translation id="6494445798847293442">سرٹیفیکیشن ادارہ نہیں ہے</translation>
 <translation id="6495925982925244349"><ph name="NETWORK_COUNT" /> میں سے <ph name="NETWORK_INDEX" /> نیٹ ورک، <ph name="NETWORK_NAME" />، <ph name="SECURITY_STATUS" />، <ph name="CONNECTION_STATUS" />، سگنل کی مضبوطی <ph name="SIGNAL_STRENGTH" />%، آپ کے منتظم کے زیر انتظام ہے، تفصیلات</translation>
-<translation id="6496965928959882519">آپ کے آلے کا اسٹوریج کم ہے۔ <ph name="APP_NAME" /> استعمال کرنے کے لیے کم از کم <ph name="RECOMMENDED_SPACE" /> خالی جگہ کی تجویز پیش کی جاتی ہے۔ خالی جگہ میں اضافہ کرنے کے لیے، اپنے آلہ سے فائلز حذف کریں۔</translation>
+<translation id="6496965928959882519">آپ کے آلے کا اسٹوریج کم ہے۔ <ph name="APP_NAME" /> استعمال کرنے کے لیے کم از کم <ph name="RECOMMENDED_SPACE" /> خالی جگہ کی تجویز کی جاتی ہے۔ خالی جگہ میں اضافہ کرنے کے لیے، اپنے آلہ سے فائلز حذف کریں۔</translation>
 <translation id="6498249116389603658">&amp;آپ کی سبھی زبانیں</translation>
 <translation id="6499143127267478107">میزبان کو پراکسی اسکرپٹ میں حل کیا جا رہا ہے…</translation>
 <translation id="6499681088828539489">مشترکہ نیٹ ورکس کیلئے پراکسیز کی اجازت نہ دیں</translation>
@@ -4762,7 +4762,7 @@ myaccount.google.com/activitycontrols/search پر تبدیل کر سکتے ہي�
 <translation id="7421925624202799674">صفحہ کا ماخذ &amp;دیکھیں</translation>
 <translation id="7422192691352527311">ترجیحات…</translation>
 <translation id="7423098979219808738">پہلے پوچھیں</translation>
-<translation id="7423807071740419372">چلانے کے لیے <ph name="APP_NAME" /> کو اجازت کی ضرورت ہے</translation>
+<translation id="7423807071740419372">چلنے کے لیے <ph name="APP_NAME" /> کو اجازت کی ضرورت ہے</translation>
 <translation id="7427315641433634153">MSCHAP</translation>
 <translation id="7427348830195639090">پس منظر کا صفحہ: <ph name="BACKGROUND_PAGE_URL" /></translation>
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> سے کال کریں</translation>

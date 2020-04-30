@@ -364,6 +364,7 @@ Si vous la désactivez, le défilement des pages Web vers des fragments de texte
           Si cette règle est désactivée ou si elle n'est pas définie, les paramètres de comptes Kerberos sont désactivés. Aucun compte Kerberos ne peut être ajouté et l'authentification Kerberos ne peut pas être utilisée. Les comptes Kerberos déjà créés et les mots de passe enregistrés sont tous supprimés.</translation>
 <translation id="1561424797596341174">Remplacements de règle pour les versions de débogage de l'hôte distant</translation>
 <translation id="1561967320164410511">U2F plus extensions pour chaque attestation</translation>
+<translation id="1575015449587326319">Règle de configuration du connecteur Chrome Enterprise OnFileDownloaded</translation>
 <translation id="1583248206450240930">Utiliser <ph name="PRODUCT_FRAME_NAME" /> par défaut</translation>
 <translation id="1588240398285670601">Paramètres du navigateur</translation>
 <translation id="1599424828227887013">Activer l'isolation des sites pour des origines définies sur les appareils Android</translation>
@@ -1469,6 +1470,7 @@ Si cette règle n'est pas configurée, le paramètre "AllowJavaScript" est utili
 <translation id="3096595567015595053">Liste des plug-ins activés</translation>
 <translation id="3101501961102569744">Sélectionner le mode de spécification des paramètres de serveur proxy</translation>
 <translation id="3101709781009526431">Date et heure</translation>
+<translation id="3112706537206652445">Empêche les utilisateurs de cet appareil d'utiliser le téléchargement indépendant adb. Si le téléchargement indépendant était activé auparavant, l'activation de ce paramètre laisse l'appareil dans un état de sécurité douteux.</translation>
 <translation id="3114411414586006215">Cette règle contrôle la liste des sites Web qui ne déclencheront jamais de changement de navigateur.
 
       Notez que vous pouvez également ajouter des éléments à cette liste avec la règle <ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" />.
@@ -1715,6 +1717,11 @@ Si elle est définie sur "False", <ph name="PRODUCT_NAME" /> n'utilise pas les n
           Si ce paramètre est désactivé, les utilisateurs ne peuvent pas enregistrer de nouveaux mots de passe, mais ils peuvent toujours utiliser des mots de passe préalablement enregistrés.
 
           Si cette règle est activée ou désactivée, les utilisateurs ne peuvent pas la modifier ni l'ignorer dans <ph name="PRODUCT_NAME" />. Si cette règle n'est pas définie, l'enregistrement des mots de passe est autorisé (mais peut être désactivé par l'utilisateur).</translation>
+<translation id="3492834335089638487">Cette règle permet de contrôler l'utilisation des applications Android provenant de sources non approuvées (autres que le Google Play Store) pour un appareil.
+
+      Si la valeur de cette règle n'est pas définie, la règle est considérée comme non autorisée.
+
+      La disponibilité de cette règle dépend également des règles relatives aux utilisateurs correspondantes.</translation>
 <translation id="3496296378755072552">Gestionnaire de mots de passe</translation>
 <translation id="3500732098526756068">Vous permet de contrôler le déclenchement de l'avertissement relatif à la protection par mot de passe. La protection par mot de passe affiche une alerte lorsque les utilisateurs réutilisent leur mot de passe protégé sur des sites potentiellement suspects.
 
@@ -2978,6 +2985,7 @@ Si cette règle n'est pas configurée, ce paramètre est activé, mais l'utilisa
 <translation id="5369937289900051171">Impression couleur seulement</translation>
 <translation id="5370279767682621504">Activer la compatibilité avec HTTP 0.9 sur les ports non utilisés par défaut</translation>
 <translation id="5377606826822211923">Contrôler l'accès par l'utilisateur aux applications Android provenant de sources non approuvées</translation>
+<translation id="537786648513450280">Contrôler l'accès de l'appareil aux applications Android provenant de sources non approuvées</translation>
 <translation id="5378985487213287085">Permet de définir si les sites Web sont autorisés à afficher des notifications sur le bureau. L'affichage des notifications sur le bureau peut être autorisé par défaut, refusé par défaut, ou bien l'utilisateur peut recevoir un message chaque fois qu'un site veut afficher ces notifications. 
 
 Si cette règle n'est pas configurée, le paramètre "AskNotifications" est utilisé et l'utilisateur est en mesure de le modifier.</translation>
@@ -4224,6 +4232,7 @@ Ces règles sont ignorées, sauf si l'hôte Bureau à distance Chrome est instal
 <translation id="7202925763179776247">Autoriser les restrictions de téléchargement</translation>
 <translation id="7207095846245296855">Forcer Google SafeSearch</translation>
 <translation id="7211368186050418507">Ne jamais détecter automatiquement le fuseau horaire</translation>
+<translation id="7213920626995591871">Empêche les utilisateurs de cet appareil d'utiliser le téléchargement indépendant adb, et soumet l'appareil à la fonction Powerwash si le téléchargement indépendant était activé auparavant.</translation>
 <translation id="7216442368414164495">Permettre aux utilisateurs d'activer la création de rapports détaillés dans le cadre de la navigation sécurisée</translation>
 <translation id="7222749588229362483">Permet de fusionner les règles sélectionnées lorsqu'elles proviennent de sources différentes, et si le niveau et les champs d'application sont les mêmes.
 
@@ -4535,6 +4544,7 @@ Si ce paramètre est désactivé ou s'il n'est pas configuré, <ph name="PRODUCT
 
 
 Dans le cas contraire, le moteur de rendu par défaut sera utilisé pour tous les sites. (La règle <ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> peut être utilisée pour configurer le moteur de rendu par défaut.)</translation>
+<translation id="7690423044860056310">Permet aux utilisateurs affiliés de cet appareil d'utiliser le téléchargement indépendant adb.</translation>
 <translation id="7691028179743802462">Cette règle étant obsolète dans la version M83, veuillez utiliser la règle "SafeBrowsingProtectionLevel" à la place.
 
       Permet d'activer la fonctionnalité de navigation sécurisée de <ph name="PRODUCT_NAME" /> et d'empêcher les utilisateurs de modifier ce paramètre.
@@ -4771,6 +4781,19 @@ Si ce paramètre est désactivé et que les connexions UDP sortantes sont filtr�
 
       La règle <ph name="SYNC_DISABLED_POLICY_NAME" /> entraîne la désactivation de la synchronisation de toutes les données, remplaçant ainsi <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" />.</translation>
 <translation id="802147957407376460">Faire pivoter l'écran de 0 degré</translation>
+<translation id="8027265928215448940">Liste des services des connecteurs Chrome Enterprise à appliquer au connecteur <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> Enterprise, qui se déclenche lorsqu'un fichier est téléchargé dans Chrome.
+
+      Les champs <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> et <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> permettent de déterminer si le connecteur doit envoyer un fichier en vue d'une analyse lorsqu'il est téléchargé à partir d'une page spécifique, ainsi que les tags à inclure dans la demande d'analyse pour ce fichier. Un tag correspondant à un format "activer" sera inclus dans la demande d'analyse si l'URL de la page suit un format associé à ce tag, à condition qu'aucun format "désactiver" associé à ce même tag ne corresponde à l'URL de la page. L'analyse a lieu si au moins un tag doit être inclus dans la demande.
+
+      Le champ <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" /> permet de savoir à quel fournisseur de services d'analyse les paramètres correspondent.
+
+      Si la valeur du champ <ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" /> est 1, Chrome attend de recevoir une réponse du service d'analyse avant de laisser l'utilisateur accéder au fichier téléchargé. Pour toute autre valeur entière, Chrome laisse l'utilisateur accéder immédiatement au fichier.
+
+      Le champ <ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" /> permet de définir si Chrome doit bloquer ou autoriser l'accès aux fichiers protégés par un mot de passe.
+
+      Le champ <ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" /> permet de définir si Chrome doit bloquer ou autoriser l'accès aux fichiers trop volumineux pour être analysés (plus de 50 Mo).
+
+      Cette règle ne peut être définie que dans la Console d'administration Google.</translation>
 <translation id="8033913082323846868">Cette règle a été abandonnée dans la version M70. Veuillez utiliser les règles AutofillAddressEnabled et AutofillCreditCardEnabled à la place.
 
       Active la fonctionnalité de saisie automatique de <ph name="PRODUCT_NAME" />, qui permet à l'utilisateur de remplir automatiquement des formulaires Web à partir de données stockées précédemment, telles qu'une adresse et des informations relatives à sa carte de crédit.

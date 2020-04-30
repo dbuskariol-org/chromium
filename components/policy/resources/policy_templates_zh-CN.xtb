@@ -340,6 +340,7 @@
           如果停用了或未设置此政策，则 Kerberos 帐号设置处于停用状态。此时无法添加任何 Kerberos 帐号，也无法使用 Kerberos 身份验证功能。系统会删除所有现有 Kerberos 帐号，以及所有已存储的密码。</translation>
 <translation id="1561424797596341174">覆盖与远程访问主机的调试版本号相关的政策</translation>
 <translation id="1561967320164410511">用于个人认证的 U2F 和扩展程序</translation>
+<translation id="1575015449587326319">OnFileDownloaded Chrome 企业版连接器的配置政策</translation>
 <translation id="1583248206450240930">默认情况下使用“<ph name="PRODUCT_FRAME_NAME" />”</translation>
 <translation id="1588240398285670601">浏览器设置</translation>
 <translation id="1599424828227887013">在 Android 设备上为指定的来源启用网站隔离功能</translation>
@@ -1393,6 +1394,7 @@
 <translation id="3096595567015595053">已启用插件的列表</translation>
 <translation id="3101501961102569744">选择如何指定代理服务器设置</translation>
 <translation id="3101709781009526431">日期和时间</translation>
+<translation id="3112706537206652445">禁止此设备的用户使用 ADB 旁加载。如果先前已启用旁加载，切换到此设置会致使设备处于不安全的状态。</translation>
 <translation id="3114411414586006215">此政策可控制始终不会导致切换浏览器的网站列表。
 
       请注意，还可以通过 <ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" /> 政策向该列表添加元素。
@@ -1633,6 +1635,11 @@
           此设置处于停用状态时，用户将无法保存新密码，但仍可以使用之前保存的密码。
 
           此政策处于启用或停用状态时，用户将无法在 <ph name="PRODUCT_NAME" /> 中更改或替换它。如果未设置此政策，则允许保存密码（不过用户可以停用密码保存功能）。</translation>
+<translation id="3492834335089638487">此政策用于控制设备对来源不受信任（不是来自 Google Play 商店）的 Android 应用的使用。
+
+      不设置此政策的值等同于禁止使用此功能。
+
+      此功能是否可用还取决于相应的用户规范。</translation>
 <translation id="3496296378755072552">密码管理器</translation>
 <translation id="3500732098526756068">可让您控制密码保护服务警告的触发条件。当用户在可疑网站上重复使用受保护的密码时，密码保护服务会向用户发出提醒。
 
@@ -2854,6 +2861,7 @@
 <translation id="5369937289900051171">仅限彩色打印</translation>
 <translation id="5370279767682621504">在非默认端口上启用 HTTP/0.9 支持</translation>
 <translation id="5377606826822211923">控制用户对来源不受信任的 Android 应用的使用</translation>
+<translation id="537786648513450280">控制设备对来源不受信任的 Android 应用的使用</translation>
 <translation id="5378985487213287085">可让您设置是否允许网站显示桌面通知。默认情况下，可以允许或拒绝显示桌面通知，也可以在每次网站要显示桌面通知时询问用户。如果未设置此政策，系统将使用“AskNotifications”并允许用户更改此设置。</translation>
 <translation id="5380329473151894945">设置大号光标无障碍功能在登录屏幕上的默认状态。
 
@@ -4059,6 +4067,7 @@
 <translation id="7202925763179776247">允许下载限制</translation>
 <translation id="7207095846245296855">强制启用 Google 安全搜索功能</translation>
 <translation id="7211368186050418507">一律不自动检测时区</translation>
+<translation id="7213920626995591871">禁止此设备的用户使用 ADB 旁加载；如果先前已启用旁加载，就对设备强制执行 Powerwash。</translation>
 <translation id="7216442368414164495">允许用户启用安全浏览扩展报告功能</translation>
 <translation id="7222749588229362483">允许合并来自多个不同来源并具有相同范围及级别的所选政策。
 
@@ -4363,6 +4372,7 @@
 <translation id="7687943045976362719">如果设置了此政策，则指定的内容类型由 <ph name="PRODUCT_FRAME_NAME" />处理。
 
           如果未设置此政策，系统将对所有网站使用默认渲染程序。（<ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> 政策可用于配置默认渲染程序。）</translation>
+<translation id="7690423044860056310">允许此设备的关联用户使用 ADB 旁加载。</translation>
 <translation id="7691028179743802462">此政策在 M83 中已弃用，请改用 SafeBrowsingProtectionLevel。
 
       开启 <ph name="PRODUCT_NAME" /> 的“安全浏览”功能，并禁止用户更改此设置。
@@ -4593,6 +4603,19 @@
 
       <ph name="SYNC_DISABLED_POLICY_NAME" /> 政策会停用所有数据同步，并会替换 <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" />。</translation>
 <translation id="802147957407376460">将屏幕旋转 0 度</translation>
+<translation id="8027265928215448940">让您能够指定适用于 <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> 企业版连接器的 Chrome 企业版连接器服务设置列表，以供有人在 Chrome 中下载文件时调用。
+
+      <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />、<ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />、<ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> 和 <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> 字段用于确定当从特定网页中下载某个文件后，该连接器是否应发送此文件进行分析，以及要将哪些标记添加到针对此文件的分析请求中。如果相应的网页网址与“enable”格式所对应的某个标记相匹配，那么只要所有包含这个标记的“disable”格式与此网页网址都不匹配，该连接器便会将这个标记添加到分析请求中。如果该连接器向分析请求中添加了至少 1 个标记，分析服务便会分析下载的文件。
+
+      <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" /> 字段用于确定您指定的设置是与哪个分析服务提供商对应。
+
+      如果您将 <ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" /> 字段设为 1，Chrome 需要先等到分析服务做出响应，再确定是否要向相应用户授予对所下载文件的访问权限。如果您将该字段设为任何其他整数值，Chrome 就会立即向相应用户授予文件访问权限。
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" /> 字段用于控制 Chrome 是会禁止访问还是会允许访问受密码保护的文件。
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" /> 字段用于控制 Chrome 是会禁止访问还是会允许访问因过大（超过 50 MB）而无法分析的文件。
+
+      此政策只能通过 Google 管理控制台进行设置。</translation>
 <translation id="8033913082323846868">我们在 M70 中弃用了此政策，请改用 AutofillAddressEnabled 和 AutofillCreditCardEnabled。
 
       可用于启用 <ph name="PRODUCT_NAME" /> 的“自动填充”功能，并允许用户使用先前存储的信息（例如地址或信用卡信息）自动填写网络表单。

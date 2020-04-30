@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Guardar</translation>
 <translation id="5335288049665977812">Permitir que los sitios ejecuten JavaScript (recomendado)</translation>
 <translation id="534295439873310000">Dispositivos NFC</translation>
+<translation id="5354152178998424783">Esta acción borrará <ph name="DATASIZE" /> de datos y cookies que almacenaron los sitios.</translation>
 <translation id="5391532827096253100">La conexión con este sitio no es segura. Consulta la información del sitio.</translation>
 <translation id="5494752089476963479">Bloquear anuncios de sitios que muestran anuncios intrusivos o engañosos</translation>
 <translation id="5505264765875738116">Los sitios no podrán preguntarte si quieres recibir notificaciones</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Saldrás de este sitio.</translation>
 <translation id="7828557259026017104">Las cookies son archivos que crean los sitios web que visitas para recordar tus preferencias. Las cookies de terceros son las que se generan desde otros sitios a los cuales pertenece parte del contenido que ves en la página web que visitas (como anuncios o imágenes).</translation>
 <translation id="7846076177841592234">Cancelar la selección</translation>
+<translation id="7846621471902887024">Saldrás de todos los sitios.</translation>
 <translation id="7882806643839505685">Habilitar el sonido de un sitio específico</translation>
 <translation id="7993619969781047893">Es posible que las características de algunos sitios no funcionen de forma correcta</translation>
 <translation id="7999064672810608036">¿Quieres eliminar todos los datos locales de este sitio web, incluidas las cookies, y restablecer todos los permisos?</translation>

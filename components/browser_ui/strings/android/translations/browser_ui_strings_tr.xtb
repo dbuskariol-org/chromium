@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Kaydet</translation>
 <translation id="5335288049665977812">Sitelerin JavaScript çalıştırmasına izin ver (önerilir)</translation>
 <translation id="534295439873310000">NFC cihazları</translation>
+<translation id="5354152178998424783">Bu işlem, siteler tarafından depolanan <ph name="DATASIZE" /> boyutunda veriyi ve çerezi temizler.</translation>
 <translation id="5391532827096253100">Bu siteye bağlantınız güvenli değil. Site bilgileri</translation>
 <translation id="5494752089476963479">Araya giren veya yanıltıcı reklamlar gösteren sitelerde reklamları engelle</translation>
 <translation id="5505264765875738116">Siteler bildirim göndermek isteyemez</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Bu sitedeki oturumunuz kapatılacak.</translation>
 <translation id="7828557259026017104">Çerezler, ziyaret ettiğiniz web siteleri tarafından oluşturulan dosyalardır. Siteler tercihlerinizi hatırlamak için çerezleri kullanır. Üçüncü taraf çerezleri diğer siteler tarafından oluşturulur. Bu siteler, ziyaret ettiğiniz web sayfasında gördüğünüz reklam veya resim gibi içeriğin bir kısmına sahiptir.</translation>
 <translation id="7846076177841592234">Seçimi iptal et</translation>
+<translation id="7846621471902887024">Tüm sitelerdeki oturumunuz kapatılacak.</translation>
 <translation id="7882806643839505685">Belirli bir site için sese izin verin.</translation>
 <translation id="7993619969781047893">Bazı sitelerdeki özellikler bozulabilir</translation>
 <translation id="7999064672810608036">Bu web sitesine ilişkin çerezler dahil tüm yerel verileri temizlemek ve bu sitenin tüm izinlerini sıfırlamak istediğinizden emin misiniz?</translation>

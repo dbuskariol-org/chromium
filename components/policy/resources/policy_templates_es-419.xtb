@@ -362,6 +362,7 @@ Si la inhabilitas, se inhabilitará el desplazamiento de la página web a fragme
           Si se inhabilita o no se establece, no se permitirá la configuración de las cuentas de Kerberos. No se podrán agregar cuentas de Kerberos ni usar la autenticación Kerberos. Se borrarán todas las cuentas de Kerberos existentes y todas las contraseñas almacenadas.</translation>
 <translation id="1561424797596341174">Anulaciones de políticas en compilaciones de depuración del host de acceso remoto</translation>
 <translation id="1561967320164410511">U2F más extensiones para atestación individual</translation>
+<translation id="1575015449587326319">Política de configuración para el Conector de Chrome Enterprise OnFileDownloaded</translation>
 <translation id="1583248206450240930">Utilizar <ph name="PRODUCT_FRAME_NAME" /> de manera predeterminada</translation>
 <translation id="1588240398285670601">Configuración del navegador</translation>
 <translation id="1599424828227887013">Habilitar el aislamiento de sitios para orígenes específicos en dispositivos Android</translation>
@@ -1426,6 +1427,7 @@ Si no la estableces, inicialmente se inhabilitará la pantalla de privacidad, pe
 <translation id="3096595567015595053">Lista de complementos habilitados</translation>
 <translation id="3101501961102569744">Elegir cómo especificar la configuración del servidor proxy</translation>
 <translation id="3101709781009526431">Fecha y hora</translation>
+<translation id="3112706537206652445">Impide que los usuarios de este dispositivo usen la transferencia de ADB. Si se había habilitado la transferencia, el cambio a esta configuración provocará una vulnerabilidad en la seguridad del dispositivo.</translation>
 <translation id="3114411414586006215">Esta política controla la lista de sitios web que nunca provocarán que se cambie de navegador.
 
       Ten en cuenta que se pueden agregar elementos a esta lista a través de la política <ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" />.
@@ -1667,6 +1669,11 @@ Si se establece como falsa, <ph name="PRODUCT_NAME" /> no podrá usar notificaci
           Si se inhabilita esta política, los usuarios no podrán guardar contraseñas nuevas, pero podrán seguir usando las que se guardaron antes.
 
           Si se habilita o inhabilita esta política, los usuarios no podrán cambiarla ni anularla en <ph name="PRODUCT_NAME" />. Si no se configura esta política, se permitirá el guardado de contraseñas (pero el usuario podrá desactivarlo).</translation>
+<translation id="3492834335089638487">Esta política controla la forma en que un dispositivo usa las apps para Android de fuentes no seguras (que no provienen de Google Play Store).
+
+      Si no se establece el valor para esta política, no se permitirá la funcionalidad.
+
+      La disponibilidad de esta funcionalidad también depende de la política de dispositivo correspondiente.</translation>
 <translation id="3496296378755072552">Administrador de contraseñas</translation>
 <translation id="3500732098526756068">Permite controlar la activación de la advertencia para la protección de contraseñas, que se encarga de alertar a los usuarios cuando utilizan la contraseña protegida en sitios posiblemente peligrosos.
 
@@ -2906,6 +2913,7 @@ Si se establece como falsa, <ph name="PRODUCT_NAME" /> no podrá usar notificaci
 <translation id="5369937289900051171">Solo impresión a color</translation>
 <translation id="5370279767682621504">Habilitar la compatibilidad con HTTP/0.9 en puertos no predeterminados</translation>
 <translation id="5377606826822211923">Controla la forma en que el usuario usa las apps para Android de fuentes no confiables</translation>
+<translation id="537786648513450280">Controla la forma en que el usuario usa las apps para Android de fuentes no confiables</translation>
 <translation id="5378985487213287085">Te permite configurar si los sitios web pueden mostrar notificaciones de escritorio. Esto se puede permitir de manera predeterminada, se puede denegar de manera predeterminada o se le puede preguntar al usuario cada vez que un sitio web quiera mostrar notificaciones de escritorio. Si esta política no se configura, se usará "AskNotifications" y el usuario podrá cambiarlo.</translation>
 <translation id="5380329473151894945">Establece el estado predeterminado de la función de accesibilidad del cursor grande en la pantalla de acceso.
 
@@ -4137,6 +4145,7 @@ Si se selecciona "U2F_EXTENDED", el segundo factor integrado proporcionará func
 <translation id="7202925763179776247">Permitir las restricciones de descarga</translation>
 <translation id="7207095846245296855">Forzar Google SafeSearch</translation>
 <translation id="7211368186050418507">Nunca detectar de forma automática la zona horaria</translation>
+<translation id="7213920626995591871">Impide que los usuarios de este dispositivo apliquen la transferencia de ADB y fuerza la opción de Powerwash en el dispositivo si la transferencia se había habilitado.</translation>
 <translation id="7216442368414164495">Permitir que los usuarios acepten informes extendidos de navegación segura</translation>
 <translation id="7222749588229362483">Permite que se combinen las políticas seleccionadas cuando provienen de diferentes fuentes, con los mismos alcances y niveles.
 
@@ -4441,6 +4450,7 @@ Si se selecciona "U2F_EXTENDED", el segundo factor integrado proporcionará func
 <translation id="7687943045976362719">Si se configura esta política, <ph name="PRODUCT_FRAME_NAME" /> determinará los tipos de contenido especificados.
 
           Si no se configura esta política, se usará el procesador determinado en todos los sitios. (Se puede usar la política <ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> para configurar este procesador).</translation>
+<translation id="7690423044860056310">Permite que los usuarios afiliados de este dispositivo apliquen la transferencia de ADB.</translation>
 <translation id="7691028179743802462">Esta política deja de estar disponible en la versión M83. En su lugar, utiliza SafeBrowsingProtectionLevel.
 
       Habilita la función Navegación segura de <ph name="PRODUCT_NAME" /> y evita que los usuarios puedan cambiar esta configuración.
@@ -4671,6 +4681,19 @@ Si se selecciona "U2F_EXTENDED", el segundo factor integrado proporcionará func
 
       La política <ph name="SYNC_DISABLED_POLICY_NAME" /> inhabilita la sincronización de todos los datos y anula la política <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" />.</translation>
 <translation id="802147957407376460">Rotar la pantalla 0 grados</translation>
+<translation id="8027265928215448940">Lista de configuraciones para los servicios de Conectores de Chrome Enterprise que se aplicarán al Conector de Enterprise <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" />, el cual se activa cuando se descarga un archivo en Chrome.
+
+      Los campos <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> y <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> se usan para determinar si el Conector debe enviar un archivo para que se analice cuando se descarga de una página específica o qué etiquetas deben incluirse en la solicitud de análisis del archivo. La solicitud de análisis incluirá la etiqueta correspondiente al patrón "enable" si la URL de la página coincide con un patrón asociado a esa etiqueta siempre y cuando no exista coincidencia entre un patrón "disable" con esa misma etiqueta y la URL de la página. Si la solicitud incluye al menos 1 etiqueta, se realizará el análisis.
+
+      El campo <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" /> especifica el proveedor de servicios de análisis al que corresponde la configuración.
+
+      Si se establece el valor "1" en el campo <ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" />, Chrome esperará a recibir una respuesta del servicio de análisis para permitir que el usuario acceda al archivo descargado. Si se indica cualquier otro valor entero, Chrome permitirá que el usuario acceda al archivo de inmediato.
+
+      El campo <ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" /> controla si Chrome bloquea o permite el acceso a archivos protegidos con contraseña.
+
+      El campo <ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" /> controla si Chrome bloquea o permite el acceso a archivos demasiado grandes para ser analizados (más de 50 MB).
+
+      Esta política solo se puede configurar en la Consola del administrador de Google.</translation>
 <translation id="8033913082323846868">Esta política deja de estar disponible en M70. En su lugar, utiliza AutofillAddressEnabled y AutofillCreditCardEnabled.
 
       Habilita la función de "Autocompletar" de <ph name="PRODUCT_NAME" /> y permite que los usuarios completen automáticamente los formularios web con la información que se haya almacenado, como la dirección o información de la tarjeta de crédito.

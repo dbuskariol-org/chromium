@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">저장</translation>
 <translation id="5335288049665977812">사이트에서 자바스크립트를 실행하도록 허용(권장)</translation>
 <translation id="534295439873310000">NFC 기기</translation>
+<translation id="5354152178998424783">사이트에서 저장한 <ph name="DATASIZE" />의 데이터와 쿠키가 삭제됩니다.</translation>
 <translation id="5391532827096253100">이 사이트와의 연결은 안전하지 않습니다. 사이트 정보</translation>
 <translation id="5494752089476963479">방해가 되거나 사용자를 현혹하는 광고를 표시하는 사이트의 광고 차단</translation>
 <translation id="5505264765875738116">사이트에서 알림 전송 허용을 요청할 수 없음</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">이 사이트에서 로그아웃됩니다.</translation>
 <translation id="7828557259026017104">쿠키는 방문한 웹사이트에서 생성된 파일로, 사이트에서 사용자의 설정을 기억하기 위해 사용합니다. 타사 쿠키는 다른 사이트, 즉 광고나 이미지 등 방문하는 웹페이지에 표시되는 일부 콘텐츠를 소유하는 사이트에 의해 생성됩니다.</translation>
 <translation id="7846076177841592234">선택 취소</translation>
+<translation id="7846621471902887024">모든 사이트에서 로그아웃됩니다.</translation>
 <translation id="7882806643839505685">특정 사이트에서 소리를 재생하도록 허용합니다.</translation>
 <translation id="7993619969781047893">일부 사이트에서는 기능이 작동하지 않을 수 있음</translation>
 <translation id="7999064672810608036">쿠키를 포함하여 이 웹사이트의 모든 로컬 데이터를 삭제하고 모든 권한을 재설정하시겠습니까?</translation>

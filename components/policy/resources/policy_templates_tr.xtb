@@ -353,6 +353,7 @@ Bu politikayı devre dışı bırakırsanız web sayfasını URL yoluyla belirli
           Bu politika devre dışı bırakılır veya ayarlanmazsa Kerberos Hesap ayarları devre dışı bırakılır. Kerberos hesabı eklenemez ve Kerberos kimlik doğrulama protokolü kullanılamaz. Mevcut tüm Kerberos hesapları kaldırılır, saklanan tüm şifreler silinir.</translation>
 <translation id="1561424797596341174">Politika, uzaktan erişim ana makinesinin Hata Ayıklama yapılarını geçersiz kılar</translation>
 <translation id="1561967320164410511">Bağımsız doğrulama için U2F plus uzantıları</translation>
+<translation id="1575015449587326319">OnFileDownloaded Chrome Enterprise Bağlayıcı için yapılandırma politikası</translation>
 <translation id="1583248206450240930">Varsayılan olarak <ph name="PRODUCT_FRAME_NAME" /> ürününü kullan</translation>
 <translation id="1588240398285670601">Tarayıcı Ayarları</translation>
 <translation id="1599424828227887013">Android cihazlarda Site İzolasyonu'nu belirtilen kaynaklar için etkinleştirme</translation>
@@ -1453,6 +1454,7 @@ Bu politika ayarlanmazsa <ph name="PRODUCT_NAME" /> varsayılan 10.000 milisaniy
 <translation id="3096595567015595053">Etkin eklentilerin listesi</translation>
 <translation id="3101501961102569744">Proxy sunucu ayarlarının nasıl belirtileceğini seç</translation>
 <translation id="3101709781009526431">Tarih ve saat</translation>
+<translation id="3112706537206652445">Bu cihazın kullanıcılarının ADB başka cihazdan yükleme işlevini kullanmalarını engelleyin. Başka cihazdan yükleme daha önce etkinleştirildiyse bu ayara geçmek cihazı güvenlik açısından şüpheli bir durumda bırakır.</translation>
 <translation id="3114411414586006215">Bu politika, hiçbir zaman tarayıcı geçişine neden olmayacak web sitelerinin listesini kontrol eder.
 
       Bu listeye <ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" /> politikası aracılığıyla öğeler eklenebileceğini de unutmayın.
@@ -1698,6 +1700,11 @@ Bu ayar Kapalı değerine getirilirse veya herhangi bir değer belirlenmezse <ph
           önceden kaydedilmiş şifreleri kullanmaya devam edebilirler.
 
           Bu politika etkinleştirilirse veya devre dışı bırakılırsa kullanıcılar bunu <ph name="PRODUCT_NAME" /> ürününün içinden değiştiremez veya geçersiz kılamazlar. Bu politika ayarlanmazsa, şifre kaydetmeye izin verilir (ancak kullanıcı bu özelliği kapatabilir).</translation>
+<translation id="3492834335089638487">Bu politika, cihazda güvenilmeyen kaynaklardan (Google Play Store dışında) Android uygulamalarının kullanımını kontrol eder.
+
+      Bu politikanın değeri ayarlanmazsa işleve izin verilmiyor olarak değerlendirilir.
+
+      Bu işlevin kullanılabilirliği, ek olarak ilgili kullanıcı politikasına da bağlıdır.</translation>
 <translation id="3496296378755072552">Şifre yöneticisi</translation>
 <translation id="3500732098526756068">Şifre koruma uyarısının tetiklenmesini kontrol etmenizi sağlar. Şifre koruma, korunan şifrelerini şüpheli olabilecek sitelerde yeniden kullanan kullanıcıları uyarır.
 
@@ -2958,6 +2965,7 @@ politikayı geçersiz kılamaz.
 <translation id="5369937289900051171">Yalnızca renkli yazdır</translation>
 <translation id="5370279767682621504">Varsayılan olmayan bağlantı noktalarında HTTP/0.9 desteğini etkinleştir</translation>
 <translation id="5377606826822211923">Kullanıcı için güvenilmeyen kaynaklardan Android uygulaması kullanımının kontrolü</translation>
+<translation id="537786648513450280">Cihaz için güvenilmeyen kaynaklardan Android uygulaması kullanımının kontrolü</translation>
 <translation id="5378985487213287085">Web sitelerinin masaüstü bildirimleri görüntülemesine izin verilip verilmeyeceğini ayarlamanıza olanak tanır. Varsayılan olarak masaüstü bildirimlerinin görüntülenmesine izin verilebilir, varsayılan olarak bu reddedilebilir veya bir web sitesi her masaüstü bildirimi gösterme isteğinde bulunduğunda kullanıcıya sorulabilir.
 
           Bu politika ayarlanmadan bırakılırsa, 'AskNotifications' kullanılır ve kullanıcı ayarı değiştirebilir.</translation>
@@ -4198,6 +4206,7 @@ Bu ayar devre dışı bırakılır veya herhangi bir değer belirlenmezse <ph na
 <translation id="7202925763179776247">İndirme kısıtlamalarına izin ver</translation>
 <translation id="7207095846245296855">Google Güvenli Arama'yı zorla</translation>
 <translation id="7211368186050418507">Saat dilimini hiçbir zaman otomatik algılama</translation>
+<translation id="7213920626995591871">Bu cihaz kullanıcılarının ADB başka cihazdan yükleme işlevini kullanmalarını engelleyin ve başka cihazdan yükleme daha önce etkinleştirildiyse cihazda Powerwash işlemi uygulayın.</translation>
 <translation id="7216442368414164495">Kullanıcıların Güvenli Tarama genişletilmiş raporlamasını etkinleştirmesine izin ver</translation>
 <translation id="7222749588229362483">Seçilen politikaların, farklı kaynaklardan geldiklerinde aynı kapsam ve düzeyle birleştirilmesine olanak verir.
 
@@ -4509,6 +4518,7 @@ Bu politika yanlış (false) değerine ayarlanırsa Yeni Sekme sayfasında, otom
 <translation id="7687943045976362719">Bu politika ayarlanırsa, belirtilen içerik türleri <ph name="PRODUCT_FRAME_NAME" /> tarafından işlenir.
 
           Bu politika ayarlanmazsa, tüm siteler için varsayılan oluşturucu kullanılır. (<ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> politikası, varsayılan oluşturucuyu yapılandırmak için kullanılabilir.)</translation>
+<translation id="7690423044860056310">Bu cihazın ilişkili kullanıcılarının ADB başka cihazdan yükleme işlevini kullanmalarına izin verir.</translation>
 <translation id="7691028179743802462">Bu politika M83 sürümüyle birlikte kullanımdan kaldırıldı. Bunun yerine lütfen SafeBrowsingProtectionLevel politikasını kullanın.
 
       <ph name="PRODUCT_NAME" /> ürününün Güvenli Tarama özelliğini etkinleştirip kullanıcıların bu ayarı değiştirmelerini önler.
@@ -4744,6 +4754,19 @@ Bu politika yanlış (false) değerine ayarlanırsa Yeni Sekme sayfasında, otom
 
       <ph name="SYNC_DISABLED_POLICY_NAME" /> politikası, <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" /> politikasını geçersiz kılarak tüm veri senkronizasyonunu devre dışı bırakır.</translation>
 <translation id="802147957407376460">Ekranı 0 derece döndür</translation>
+<translation id="8027265928215448940">Chrome'da bir dosya indirildiğinde tetiklenen <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> Enterprise Bağlayıcı'ya uygulanacak Chrome Enterprise Bağlayıcılar hizmetleri ayarlarının listesidir.
+
+      <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> ve <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> alanları, bağlayıcı belirli bir sayfayadan indirildiğinde analiz için dosya gönderip göndermemesi gerektiğini ve bu dosyanın analiz isteğine hangi etiketlerin dahil edileceğini belirlemek üzere kullanılır. Sayfa URL'si etiketle ilişkilendirilen desenle eşleşirse "etkinleştir" desenine karşılık gelen bu etiket analiz isteğine dahil edilir. Bu, aynı etikete sahip "devre dışı bırak" deseni sayfa URL'si ile eşleşirse gerçekleşmez. Analiz, isteğe en az 1 etiket dahil edilecekse gerçekleşir.
+
+      <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" /> alanı, ayarların hangi analiz servis sağlayıcısına karşılık geldiğini tanımlar.
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" /> alanının 1 değerine ayarlanması, Chrome'un kullanıcıya indirilen dosyaya erişim izni vermeden önce analiz hizmetinden yanıt almak için bekleyeceği anlamına gelir. Başka herhangi bir tam sayı değeri, Chrome'un, kullanıcının dosyaya erişim iznini hemen vereceği anlamına gelir.
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" /> alanı, Chrome'un şifre korumalı dosyaları engelleyeceğini mi yoksa izin mi vereceğini kontrol eder.
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" /> alanı, Chrome'un analiz edilemeyecek kadar büyük dosyaları (50 MB'tan büyük) engelleyeceğini mi yoksa izin mi vereceğini kontrol eder.
+
+      Bu politika yalnızca Google Yönetici konsolundan ayarlanabilir.</translation>
 <translation id="8033913082323846868">Bu politika M70 sürümünde kullanımdan kaldırılmıştır. Lütfen bunun yerine AutofillAddressEnabled ve AutofillCreditCardEnabled politikalarını kullanın.
 
       <ph name="PRODUCT_NAME" /> içinde bulunan Otomatik Doldurma özelliğini etkinleştirir ve kullanıcıların adresler ve kredi kartı bilgileri gibi önceden saklanmış bilgileri kullanarak web formlarını otomatik bir şekilde doldurmalarına olanak sağlar.

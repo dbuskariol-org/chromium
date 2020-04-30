@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Saglabāt</translation>
 <translation id="5335288049665977812">Atļaut vietnēm izmantot JavaScript (ieteicams)</translation>
 <translation id="534295439873310000">NFC ierīces</translation>
+<translation id="5354152178998424783">Tiks dzēsti dati un vietnēs uzglabātie sīkfaili (<ph name="DATASIZE" />).</translation>
 <translation id="5391532827096253100">Savienojums ar šo vietni nav drošs. Vietnes informācija</translation>
 <translation id="5494752089476963479">Bloķēt reklāmas vietnēs, kurās tiek rādītas traucējošas vai maldinošas reklāmas</translation>
 <translation id="5505264765875738116">Vietnēs nevar lūgt atļauju sūtīt paziņojumus</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Jūs tiksiet izrakstīts no šīs vietnes.</translation>
 <translation id="7828557259026017104">Sīkfaili ir faili, ko izveido jūsu apmeklētās vietnes. Vietnes izmanto šos sīkfailus, lai atcerētos jūsu preferences. Trešo pušu sīkfailus izveido citas vietnes. Jūsu apmeklētajā tīmekļa lapā var būt ietverts citu vietņu saturs, piemēram, reklāmas vai attēli.</translation>
 <translation id="7846076177841592234">Atcelt atlasi</translation>
+<translation id="7846621471902887024">Jūs tiksiet izrakstīts no visām vietnēm.</translation>
 <translation id="7882806643839505685">Atļaut skaņu konkrētai vietnei</translation>
 <translation id="7993619969781047893">Noteiktās vietnēs funkcijas var nedarboties</translation>
 <translation id="7999064672810608036">Vai tiešām vēlaties notīrīt visus ar šo vietni saistītos lokālos datus, tostarp sīkfailus, un atiestatīt visas atļaujas?</translation>

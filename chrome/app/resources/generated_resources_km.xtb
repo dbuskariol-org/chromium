@@ -173,6 +173,7 @@
 <translation id="122082903575839559">នីតិវិធីដោះស្រាយហត្ថលេខាវិញ្ញាបនប័ត្រ</translation>
 <translation id="1221024147024329929">PKCS #1 MD2 ជាមួយការអ៊ីនគ្រីប RSA</translation>
 <translation id="1221825588892235038">ការជ្រើសរើសតែប៉ុណ្ណោះ</translation>
+<translation id="1223484782328004593"><ph name="APP_NAME" /> តម្រូវឱ្យមាន​អាជ្ញាបណ្ណ</translation>
 <translation id="1223853788495130632">អ្នកគ្រប់គ្រងរបស់អ្នកណែនាំតម្លៃជាក់លាក់សម្រាប់ការកំណត់នេះ។</translation>
 <translation id="1224275271335624810">លឿន​បំផុត</translation>
 <translation id="1225177025209879837">កំពុងដំណើរការសំណើរ...</translation>
@@ -211,6 +212,7 @@
 <translation id="1272978324304772054">គណនីអ្នកប្រើនេះមិនមែនជាកម្មសិទ្ធិរបស់ដែន ដែលឧបករណ៍នេះបានចុះឈ្មោះទៅទេ។  ប្រសិនបើអ្នកចង់ចុះឈ្មោះទៅដែនផ្សេងទៀត អ្នកត្រូវឆ្លងកាតការសង្រ្គោះឧបករណ៍ជាមុនសិន។</translation>
 <translation id="1274977772557788323">ការកំណត់ទំហំផ្ទុកទិន្នន័យ Adobe Flash Player</translation>
 <translation id="1274997165432133392">ខុកឃី និងទិន្នន័យគេហទំព័រដ៏ទៃទៀត</translation>
+<translation id="1276994519141842946">មិនអាច​លុប <ph name="APP_NAME" /> បានទេ</translation>
 <translation id="1280820357415527819">កំពុង​ស្វែងរក​បណ្ដាញ​ទូរសព្ទ​ចល័ត</translation>
 <translation id="1280965841156951489">កែ​ឯកសារ</translation>
 <translation id="1285320974508926690">មិនបកប្រែគេហទំព័រនេះទៀតឡើយ</translation>
@@ -319,6 +321,7 @@
 <translation id="1426870617281699524">ចុច​ព្យាយាមម្តងទៀត រួចទទួល​យក​សារ​ជំរុញ​នៅលើ​កុំព្យូទ័រ​របស់អ្នក</translation>
 <translation id="1427269577154060167">ប្រទេស</translation>
 <translation id="142758023928848008">បើកដំណើរការសោស្អិត (ដើម្បីប្រតិបត្តិការផ្លូវកាត់ក្តារចុចដោយការវាយបញ្ចូលពួកវាបន្តបន្ទាប់)</translation>
+<translation id="142765311413773645">អាជ្ញាបណ្ណ <ph name="APP_NAME" /> បានផុតកំណត់​ហើយ</translation>
 <translation id="1429300045468813835">បានសម្អាត​ទាំងអស់</translation>
 <translation id="143027896309062157">អាន និងប្តូរទិន្នន័យរបស់អ្នកទាំងអស់នៅលើកុំព្យូទ័ររបស់អ្នក និងគេហទំព័រដែលអ្នកទៅកាន់</translation>
 <translation id="1430915738399379752">បោះពុម្ព</translation>
@@ -1006,6 +1009,7 @@
 <translation id="2325444234681128157">ចងចាំ​ពាក្យ​សម្ងាត់</translation>
 <translation id="2326931316514688470">ដំណើរការកម្មវិធីឡើងវិញ</translation>
 <translation id="2327492829706409234">បើកដំណើរការកម្មវិធី</translation>
+<translation id="2328561734797404498">សូម​ចាប់ផ្តើម​ឧបករណ៍​របស់អ្នក​ឡើងវិញ ដើម្បី​ប្រើ <ph name="APP_NAME" />។</translation>
 <translation id="2329597144923131178">ចូលគណនីដើម្បីទទួលយកចំណាំ ប្រវត្តិ ពាក្យសម្ងាត់ និងការកំណត់ផ្សេងទៀតរបស់អ្នកទៅលើឧបករណ៍ទាំងអស់របស់អ្នក។</translation>
 <translation id="2332131598580221120">មើលនៅក្នុងហាង</translation>
 <translation id="2332192922827071008">បើក​ចំណូលចិត្ត</translation>
@@ -1264,6 +1268,7 @@
 <translation id="2665717534925640469">ឥឡូវនេះទំព័រនេះពេញអេក្រង់ហើយ និងបានបិទដំណើរការព្រួញកណ្តុររបស់អ្នក។</translation>
 <translation id="2665919335226618153">អូយ ទក់! មានកំហុសឆ្គងកំឡុងពេលសម្អាត។</translation>
 <translation id="2667463864537187133">គ្រប់គ្រងការពិនិត្យអក្ខរាវិរុទ្ធ</translation>
+<translation id="2669241540496514785">មិនអាចបើក <ph name="APP_NAME" /> បានទេ</translation>
 <translation id="2670102641511624474"><ph name="APP_NAME" /> កំពុងចែករំលែកផ្ទាំង Chrome</translation>
 <translation id="2670429602441959756">ទំព័រនេះផ្ទុកមុខងារដែលមិនទាន់ស្គាល់នៅក្នុង VR ។ កំពុងចាកចេញ...</translation>
 <translation id="2671451824761031126">ចំណាំ និង​ការកំណត់​របស់អ្នក​រួចរាល់​ហើយ</translation>
@@ -1340,6 +1345,7 @@
 <translation id="2757338480560142065">សូម​ប្រាកដថា ពាក្យសម្ងាត់​ដែលអ្នក​កំពុងរក្សាទុក​ត្រូវគ្នា​នឹងពាក្យសម្ងាត់​របស់អ្នក​សម្រាប់ <ph name="WEBSITE" /></translation>
 <translation id="2762441749940182211">បាន​ទប់ស្កាត់​កាមេរ៉ា</translation>
 <translation id="2765217105034171413">តូច</translation>
+<translation id="2766091842833763951">មិនអាចរៀបចំ <ph name="APP_NAME" /> បានទេ ដោយសារ​មានបញ្ហា​ក្នុងការកំណត់រចនាសម្ព័ន្ធ។ សូម​ទាក់ទង​អ្នកគ្រប់គ្រង​ឧបករណ៍​របស់​ស្ថាប័ន​អ្នក​។ លេខកូដ​បញ្ហា៖ <ph name="ERROR_CODE" />។</translation>
 <translation id="2766161002040448006">ស្នើសុំមាតាបិតា</translation>
 <translation id="2767127727915954024"><ph name="ORIGIN" /> នឹងអាចកែ <ph name="FILENAME" /> បាន រហូតទាល់តែអ្នកបិទផ្ទាំងទាំងអស់​សម្រាប់គេហទំព័រនេះ</translation>
 <translation id="276969039800130567">បានចូលជា <ph name="USER_EMAIL_ADDRESS" />។</translation>
@@ -2421,6 +2427,7 @@
 <translation id="4181602000363099176">20x</translation>
 <translation id="4181841719683918333">ភាសា</translation>
 <translation id="4184885522552335684">អូសដើម្បីផ្លាស់ទីអេក្រង់</translation>
+<translation id="4187424053537113647">កំពុងរៀបចំ <ph name="APP_NAME" />...</translation>
 <translation id="4194570336751258953">បើកដំណើរការ ប៉ះ ដើម្បី ចុច</translation>
 <translation id="4195643157523330669">បើកនៅក្នុងផ្ទាំងថ្មី</translation>
 <translation id="4195814663415092787">បន្តកន្លែងដែលអ្នកបានចាកចេញ</translation>
@@ -2539,6 +2546,7 @@
 <translation id="4379281552162875326">លុប "<ph name="APP_NAME" />" ឬ?</translation>
 <translation id="4380648069038809855">បានចូលមុខងារពេញអេក្រង់</translation>
 <translation id="4382131447572146376">{COUNT,plural, =0{<ph name="EMAIL" />}=1{<ph name="EMAIL" />, +1 គណនីទៀត}other{<ph name="EMAIL" />, +<ph name="EXTRA_ACCOUNTS" /> គណនីទៀត}}</translation>
+<translation id="43829217466934313">មិនអនុញ្ញាត​ឱ្យប្រើ <ph name="APP_NAME" /> នៅលើ​ឧបករណ៍នេះទេ។ សូមទាក់ទង​អ្នកគ្រប់គ្រង​ឧបករណ៍​របស់​ស្ថាប័ន​អ្នក​។ លេខកូដ​បញ្ហា៖ <ph name="ERROR_CODE" />។</translation>
 <translation id="4384312707950789900">បញ្ចូល​ទៅក្នុង​បណ្តាញ​ដែល​ពេញចិត្ត</translation>
 <translation id="4384652540891215547">ធ្វើសកម្មភាពកម្មវិធីបន្ថែម</translation>
 <translation id="438503109373656455">សារ៉ាតូកា</translation>
@@ -2871,6 +2879,7 @@
 <translation id="4863769717153320198">មើល​ទៅដូចជា <ph name="WIDTH" /> x <ph name="HEIGHT" /> (លំនាំ​ដើម)</translation>
 <translation id="4864369630010738180">កំពុង​ចូល...</translation>
 <translation id="486635084936119914">បើក​ប្រភេទឯកសារជាក់លាក់ដោយស្វ័យប្រវត្តិ បន្ទាប់ពីទាញយករួចហើយ</translation>
+<translation id="4869289251183233431">ឧបករណ៍​របស់អ្នក​ជិតអស់​ទំហំផ្ទុក​ហើយ។ តម្រូវឱ្យ​មានទំហំផ្ទុក​ទំនេរ​យ៉ាងហោចណាស់ <ph name="MINIMUM_SPACE" /> ដើម្បី​ប្រើ <ph name="APP_NAME" /> និងណែនាំឱ្យមានទំហំផ្ទុក​ទំនេរលើសពី <ph name="RECOMMENDED_SPACE" />។ ដើម្បីបង្កើនទំហំផ្ទុក សូមលុបឯកសារចេញពីឧបករណ៍។</translation>
 <translation id="48704129375571883">បន្ថែមលក្ខណៈពិសេសបន្ថែម</translation>
 <translation id="4870758487381879312">បញ្ចូល​ពាក្យសម្ងាត់ដែលផ្ដល់ដោយ​អ្នក​គ្រប់គ្រង ដើម្បី​ទទួលបានព័ត៌មាន​អំពីការ​កំណត់រចនាសម្ព័ន្ធ</translation>
 <translation id="4870903493621965035">គ្មាន​ឧបករណ៍​ដែល​បាន​ផ្គូផ្គង​ទេ</translation>
@@ -2923,6 +2932,7 @@
 <translation id="4920887663447894854">គេហទំព័រខាងក្រោមត្រូវបានរារាំងពីការតាមដានទីតាំងរបស់អ្នកនៅលើទំព័រនេះ៖</translation>
 <translation id="49226369361073053">{0,plural, =0{ដំឡើងកំណែ​ឧបករណ៍​ឥឡូវនេះ}=1{ដំឡើងកំណែ​ឧបករណ៍​ក្នុងរយៈពេល 1 វិនាទី​ទៀត}other{ដំឡើងកំណែ​ឧបករណ៍​ក្នុងរយៈពេល # វិនាទី​ទៀត}}</translation>
 <translation id="492299503953721473">យកកម្មវិធី Android ចេញ</translation>
+<translation id="492363500327720082">កំពុងលុប <ph name="APP_NAME" />...</translation>
 <translation id="4924352752174756392">12x</translation>
 <translation id="4925320384394644410">ច្រករបស់អ្នកនឹងបង្ហាញនៅទីនេះ</translation>
 <translation id="4925542575807923399">អ្នកគ្រប់គ្រងគណនីនេះតម្រូវឲ្យគណនីនេះជាគណនីចូលមុននៅក្នុងវេនចូលច្រើនគណនី។</translation>
@@ -3485,6 +3495,7 @@
 <translation id="5692875591060376599">មិនស្គាល់ឯកសារ​ដែលបាន​ជ្រើសរើសទេ ហើយឯកសារនេះអាច​បង្កគ្រោះថ្នាក់។ ផ្ញើទៅ​កម្មវិធី​ការពារ​កម្រិតខ្ពស់​របស់ Google ដើម្បី​ស្កេន​ឬ?</translation>
 <translation id="569425414730375234">វគ្គឯកជន​បច្ចុប្បន្ន៖ <ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /></translation>
 <translation id="5696143504434933566">រាយការណ៍​ពី​ការបំពាន​ពី "<ph name="EXTENSION_NAME" />"</translation>
+<translation id="5696177755977520104">សមកាលកម្ម​ការកំណត់ Chrome OS</translation>
 <translation id="5696679855467848181">កំពុងប្រើ​ឯកសារ PPD បច្ចុប្បន្ន៖ <ph name="PPD_NAME" /></translation>
 <translation id="570043786759263127">កម្មវិធី និង​សេវាកម្ម Google Play</translation>
 <translation id="5700836101007545240">ការបញ្ចូល​ការតភ្ជាប់​ត្រូវបានបិទ​ដោយ​អ្នកគ្រប់គ្រង​របស់​អ្នក</translation>
@@ -3795,6 +3806,7 @@
 <translation id="6103681770816982672">ការព្រមាន៖ អ្នកកំពុងឆ្លាស់ទៅបណ្តាញអ្នកអភិវឌ្ឍន៍</translation>
 <translation id="6104068876731806426">គណនី Google</translation>
 <translation id="6104311680260824317">មិនអាច​ភ្ជាប់ឧបករណ៍​ទៅដែន​បានទេ។ ម៉ាសីុនមេ​មិនអាច​ប្រើប្រភេទ​អ៊ីនគ្រីប Kerberos ដែលបានបញ្ជាក់​ទេ។ សូម​ពិនិត្យមើល "ជម្រើស​ច្រើនទៀត" សម្រាប់​ការកំណត់​ការអ៊ីនគ្រីប។</translation>
+<translation id="6105994589138235234">​សមកាលកម្មកម្មវិធីរុករកតាមអ៊ីនធឺណិត Chrome</translation>
 <translation id="6112294629795967147">ប៉ះ​ដើម្បីប្ដូរ​ទំហំ</translation>
 <translation id="6112727384379533756">បញ្ចូលសំបុត្រ</translation>
 <translation id="6112931163620622315">ពិនិត្យមើល​ទូរសព្ទ​របស់អ្នក</translation>
@@ -3832,6 +3844,7 @@
 <translation id="6155141482566063812">ផ្ទាំងផ្ទៃ​ខាងក្រោយ​កំពុង​ចែករំលែក​អេក្រង់​របស់អ្នក</translation>
 <translation id="6156323911414505561">បង្ហាញ​របាចំណាំ</translation>
 <translation id="6156863943908443225">ឃ្លាំងសម្ងាត់ស្គ្រីប</translation>
+<translation id="6157197137667039897">មិនអាចដំឡើង <ph name="APP_NAME" /> បានទេ។ សូមព្យាយាម​ម្ដងទៀត ឬទាក់ទង​អ្នកគ្រប់គ្រង​ឧបករណ៍​របស់​ស្ថាប័ន​អ្នក។ លេខកូដ​បញ្ហា៖ <ph name="ERROR_CODE" />។</translation>
 <translation id="6160625263637492097">ផ្តល់ជូនវិញ្ញាបនបត្រសម្រាប់ការផ្ទៀងផ្ទាត់</translation>
 <translation id="6163363155248589649">ធម្មតា</translation>
 <translation id="6163522313638838258">ពង្រីកទាំងអស់...</translation>
@@ -4032,6 +4045,7 @@
 <translation id="6430814529589430811">Base64-encoded ASCII, វិញ្ញាបនប័ត្រទោល</translation>
 <translation id="6431347207794742960"><ph name="PRODUCT_NAME" /> នឹងតំឡើងការធ្វើបច្ចុប្បន្នភាពស្វ័យប្រវត្តិសម្រាប់អ្នកប្រើកុំព្យូទ័រនេះទាំងអស់។</translation>
 <translation id="6434309073475700221">កម្ចាត់</translation>
+<translation id="6434325376267409267">ចាំបាច់ត្រូវ​ដំឡើងកំណែ​ឧបករណ៍​របស់អ្នក​ជាមុនសិន ទើបអ្នក​អាចប្រើ <ph name="APP_NAME" /> បាន។</translation>
 <translation id="6436164536244065364">មើលនៅក្នុង Web Store</translation>
 <translation id="6438992844451964465"><ph name="WINDOW_TITLE" /> - កំពុង​ចាក់​សំឡេង</translation>
 <translation id="6442187272350399447">អស្ចារ្យ</translation>
@@ -4075,6 +4089,7 @@
 <translation id="6491376743066338510">ការផ្ទៀងផ្ទាត់បានបរាជ័យ</translation>
 <translation id="6494445798847293442">មិនមែន​ជា​អាជ្ញាធរ​វិញ្ញាបនបត្រ​ទេ</translation>
 <translation id="6495925982925244349">បណ្ដាញ <ph name="NETWORK_INDEX" /> នៃ <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, <ph name="SECURITY_STATUS" />, <ph name="CONNECTION_STATUS" />, កម្លាំងរលកសញ្ញា <ph name="SIGNAL_STRENGTH" />%, គ្រប់គ្រងដោយ​អ្នកគ្រប់គ្រង​របស់អ្នក, ព័ត៌មាន​លម្អិត</translation>
+<translation id="6496965928959882519">ឧបករណ៍​របស់អ្នក​ជិតអស់​ទំហំផ្ទុក​ហើយ។ ណែនាំឱ្យ​មានទំហំផ្ទុក​ទំនេរ​យ៉ាងហោចណាស់ <ph name="RECOMMENDED_SPACE" /> ដើម្បីប្រើ <ph name="APP_NAME" />។ ដើម្បីបង្កើនទំហំផ្ទុក សូមលុបឯកសារចេញពីឧបករណ៍របស់អ្នក។</translation>
 <translation id="6498249116389603658">&amp;ភាសារបស់អ្នកទាំងអស់</translation>
 <translation id="6499143127267478107">ការដោះស្រាយឧបករណ៍ចែករំលែកនៅក្នុងស្គ្រីបប្រូកស៊ី...</translation>
 <translation id="6499681088828539489">មិនអនុញ្ញាតប្រូកស៊ីសម្រាប់បណ្ដាញរួមទេ</translation>
@@ -4746,6 +4761,7 @@
 <translation id="7421925624202799674">មើលប្រភពទំព័រ</translation>
 <translation id="7422192691352527311">ចំណូលចិត្ត......</translation>
 <translation id="7423098979219808738">សួរជាមុនសិន</translation>
+<translation id="7423807071740419372"><ph name="APP_NAME" /> ត្រូវការ​ការអនុញ្ញាត ដើម្បី​ដំណើរការ</translation>
 <translation id="7427315641433634153">MSCHAP</translation>
 <translation id="7427348830195639090">ទំព័រផ្ទៃខាងក្រោយ៖ <ph name="BACKGROUND_PAGE_URL" /></translation>
 <translation id="7427798576651127129">ហៅទូរសព្ទពី <ph name="DEVICE_NAME" /></translation>
@@ -4776,6 +4792,7 @@
 <translation id="746216226901520237">លើកក្រោយ ទូរសព្ទរបស់អ្នក​នឹងដោះសោ <ph name="DEVICE_TYPE" /> របស់អ្នក។ អ្នក​អាច​បិទ Smart Lock នៅក្នុង​ការកំណត់។</translation>
 <translation id="7463006580194749499">បន្ថែមបុគ្គល</translation>
 <translation id="7465522323587461835">{NUM_OPEN_TABS,plural, =1{ផ្ទាំង​បើក # សូម​ចុច ដើម្បី​បិទ/បើក​របារ​ផ្ទាំង}other{ផ្ទាំង​បើក # សូម​ចុច ដើម្បី​បិទ/បើក​របារ​ផ្ទាំង}}</translation>
+<translation id="7465635034594602553">មានអ្វីមួយខុសប្រក្រតី។ សូមរង់ចាំ​មួយភ្លែត រួច​ដំណើរការ <ph name="APP_NAME" /> ម្ដងទៀត។</translation>
 <translation id="7465778193084373987">URL បញ្ឈប់សុពលភាពវិញ្ញាបនប័ត្រ Netscape</translation>
 <translation id="7469894403370665791">ភ្ជាប់ទៅបណ្តាញនេះដោយស្វ័យប្រវត្តិ</translation>
 <translation id="747114903913869239">កំហុសឆ្គង៖ មិនអាចបម្លែងកម្មវិធីបន្ថែម</translation>
@@ -5818,6 +5835,7 @@
 <translation id="8818958672113348984">ផ្ទៀងផ្ទាត់​តាមរយៈ​ទូរសព្ទ​របស់អ្នក</translation>
 <translation id="8820817407110198400">ចំណាំ</translation>
 <translation id="8821045908425223359">កំណត់រចនាសម្ព័ន្ធអាសយដ្ឋាន IP ដោយស្វ័យប្រវត្តិ</translation>
+<translation id="8821268776955756404">អាចប្រើ <ph name="APP_NAME" /> បានហើយ។</translation>
 <translation id="882204272221080310">ដំឡើង​ជំនាន់​កម្មវិធី​បង្កប់ ដើម្បី​ទទួលបាន​សុវត្ថិភាព​បន្ថែម។</translation>
 <translation id="8823514049557262177">ចម្លងអត្ថបទតំណ</translation>
 <translation id="8823559166155093873">ទប់ស្កាត់ខូគី</translation>
@@ -5888,6 +5906,7 @@
 <translation id="8902667442496790482">បើក​ការកំណត់​ជ្រើសរើសដើម្បីអាន</translation>
 <translation id="8903263458134414071">ជ្រើសរើស​គណនី​សម្រាប់​ចូល</translation>
 <translation id="890616557918890486">ប្ដូរប្រភព</translation>
+<translation id="8909298138148012791">បានលុប <ph name="APP_NAME" /> ហើយ</translation>
 <translation id="8909833622202089127">ទំព័រ​កំពុងតាមដាន​ទីតាំង​របស់អ្នក</translation>
 <translation id="8910146161325739742">ចែករំលែកអេក្រង់របស់អ្នក</translation>
 <translation id="8910222113987937043">ការផ្លាស់ប្តូរនៅលើចំណាំ ប្រវត្តិ ពាក្យសម្ងាត់ និងការកំណត់ផ្សេងទៀតរបស់អ្នក នឹងមិនអាចធ្វើសមកាលកម្មទៅគណនី Google របស់អ្នកបានទៀតទេ។ ទោះបីជាយ៉ាងណាក៏ដោយ ទិន្នន័យដែលមានស្រាប់របស់អ្នកនៅតែផ្ទុកក្នុងគណនី Google ដដែល ហើយអ្នកអាចគ្រប់គ្រងវានៅលើ <ph name="BEGIN_LINK" />Google ផ្ទាំងគ្រប់គ្រង<ph name="END_LINK" />។</translation>

@@ -173,6 +173,7 @@
 <translation id="122082903575839559">Algoritmo de firma del certificado</translation>
 <translation id="1221024147024329929">PKCS N. º 1 MD2 con encriptación RSA</translation>
 <translation id="1221825588892235038">Solo selección</translation>
+<translation id="1223484782328004593"><ph name="APP_NAME" /> requiere una licencia</translation>
 <translation id="1223853788495130632">El administrador recomienda un valor específico para esta configuración.</translation>
 <translation id="1224275271335624810">Más rápido</translation>
 <translation id="1225177025209879837">Procesando la solicitud...</translation>
@@ -211,6 +212,7 @@
 <translation id="1272978324304772054">Esta cuenta de usuario no pertenece al dominio en el que se inscribió el dispositivo. Si deseas inscribirte en un dominio diferente, primero tendrás que realizar el proceso de recuperación del dispositivo.</translation>
 <translation id="1274977772557788323">Configuración de almacenamiento de Adobe Flash Player</translation>
 <translation id="1274997165432133392">Cookies y otros datos de sitios</translation>
+<translation id="1276994519141842946">No se pudo desinstalar <ph name="APP_NAME" /></translation>
 <translation id="1280820357415527819">Buscando redes móviles</translation>
 <translation id="1280965841156951489">Editar archivos</translation>
 <translation id="1285320974508926690">Nunca traducir este sitio</translation>
@@ -319,6 +321,7 @@
 <translation id="1426870617281699524">Haz clic en Reintentar y acepta el mensaje en la computadora</translation>
 <translation id="1427269577154060167">País</translation>
 <translation id="142758023928848008">Habilitar teclas especiales (para realizar combinaciones de teclas para acceso directo escribiéndolas en secuencia)</translation>
+<translation id="142765311413773645">Caducó la licencia de <ph name="APP_NAME" /></translation>
 <translation id="1429300045468813835">Se borraron todas las entradas</translation>
 <translation id="143027896309062157">Leer y cambiar todos los datos de la computadora y los sitios web que visites</translation>
 <translation id="1430915738399379752">Imprimir</translation>
@@ -1003,6 +1006,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2325444234681128157">Recordar contraseña</translation>
 <translation id="2326931316514688470">&amp;Volver a cargar la aplicación</translation>
 <translation id="2327492829706409234">Habilitar aplicación</translation>
+<translation id="2328561734797404498">Para usar <ph name="APP_NAME" />, reinicia el dispositivo.</translation>
 <translation id="2329597144923131178">Accede a tu cuenta para ver los favoritos, el historial, las contraseñas y otras opciones de configuración en todos los dispositivos.</translation>
 <translation id="2332131598580221120">Ver en Chrome Web Store</translation>
 <translation id="2332192922827071008">Abrir preferencias</translation>
@@ -1261,6 +1265,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2665717534925640469">Esta página se está visualizando en pantalla completa y ha inhabilitado el cursor del mouse.</translation>
 <translation id="2665919335226618153">Se produjo un error durante la aplicación de formato.</translation>
 <translation id="2667463864537187133">Administrar el corrector ortográfico</translation>
+<translation id="2669241540496514785">No se pudo abrir <ph name="APP_NAME" /></translation>
 <translation id="2670102641511624474"><ph name="APP_NAME" /> comparte una pestaña de Chrome.</translation>
 <translation id="2670429602441959756">Esta página incluye funciones que aún no son compatibles con RV. Saliendo…</translation>
 <translation id="2671451824761031126">Tus marcadores y opciones de configuración están listos</translation>
@@ -1337,6 +1342,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="2757338480560142065">Asegúrate de que la contraseña que guardes coincida con tu contraseña de <ph name="WEBSITE" /></translation>
 <translation id="2762441749940182211">Cámara bloqueada</translation>
 <translation id="2765217105034171413">Pequeño</translation>
+<translation id="2766091842833763951">No se pudo instalar <ph name="APP_NAME" /> debido a un problema de configuración. Comunícate con el administrador de dispositivos de tu organización. Código de error: <ph name="ERROR_CODE" />.</translation>
 <translation id="2766161002040448006">Preguntarles a tus padres</translation>
 <translation id="2767127727915954024"><ph name="ORIGIN" /> podrá editar <ph name="FILENAME" /> hasta que cierres todas las pestañas de este sitio</translation>
 <translation id="276969039800130567">Se accedió como <ph name="USER_EMAIL_ADDRESS" />.</translation>
@@ -2418,6 +2424,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4181602000363099176">20x</translation>
 <translation id="4181841719683918333">Idiomas</translation>
 <translation id="4184885522552335684">Arrastrar para mover una pantalla</translation>
+<translation id="4187424053537113647">Configurando <ph name="APP_NAME" />…</translation>
 <translation id="4194570336751258953">Habilitar el punteo para hacer clic</translation>
 <translation id="4195643157523330669">Abrir en una pestaña nueva</translation>
 <translation id="4195814663415092787">Continuar la sesión desde donde la dejaste</translation>
@@ -2536,6 +2543,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4379281552162875326">¿Deseas desinstalar "<ph name="APP_NAME" />"?</translation>
 <translation id="4380648069038809855">Accediste a la pantalla completa</translation>
 <translation id="4382131447572146376">{COUNT,plural, =0{<ph name="EMAIL" />}=1{<ph name="EMAIL" /> y 1 cuenta más}other{<ph name="EMAIL" /> y <ph name="EXTRA_ACCOUNTS" /> cuentas más}}</translation>
+<translation id="43829217466934313">No se permite usar <ph name="APP_NAME" /> en este dispositivo. Comunícate con el administrador de dispositivos de tu organización. Código de error: <ph name="ERROR_CODE" />.</translation>
 <translation id="4384312707950789900">Agregar a redes preferidas</translation>
 <translation id="4384652540891215547">Activar la extensión</translation>
 <translation id="438503109373656455">Rocinante</translation>
@@ -2868,6 +2876,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4863769717153320198">Resolución: <ph name="WIDTH" /> × <ph name="HEIGHT" /> (predeterminada)</translation>
 <translation id="4864369630010738180">Accediendo</translation>
 <translation id="486635084936119914">Abre determinados tipos de archivo después de descargarlos</translation>
+<translation id="4869289251183233431">El dispositivo tiene poco espacio de almacenamiento. Para usar <ph name="APP_NAME" />, debes contar con al menos <ph name="MINIMUM_SPACE" /> de espacio libre (se recomienda tener más de <ph name="RECOMMENDED_SPACE" />). Si necesitas liberar espacio, borra archivos del dispositivo.</translation>
 <translation id="48704129375571883">Agregar funciones adicionales</translation>
 <translation id="4870758487381879312">Ingresar la contraseña que proporcionó el administrador para obtener información sobre la configuración</translation>
 <translation id="4870903493621965035">Sin dispositivos sincronizados</translation>
@@ -2920,6 +2929,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="4920887663447894854">Se bloquearon los siguientes sitios para que no puedan rastrear tu ubicación en esta página:</translation>
 <translation id="49226369361073053">{0,plural, =0{Actualiza el dispositivo ahora}=1{Actualiza el dispositivo en el transcurso de 1 segundo}other{Actualiza el dispositivo en el transcurso de # segundos}}</translation>
 <translation id="492299503953721473">Quitar las apps de Android</translation>
+<translation id="492363500327720082">Desinstalando <ph name="APP_NAME" />…</translation>
 <translation id="4924352752174756392">12x</translation>
 <translation id="4925320384394644410">Aquí aparecerán tus puertos</translation>
 <translation id="4925542575807923399">El administrador de esta cuenta requiere que sea la primera a la que se acceda al crear una sesión de acceso múltiple.</translation>
@@ -3481,6 +3491,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="5692875591060376599">El archivo seleccionado es desconocido y puede ser peligroso. ¿Quieres enviarlo al Programa de protección avanzada de Google para que lo analicemos?</translation>
 <translation id="569425414730375234">Sesión actual en modo Incógnito: <ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /></translation>
 <translation id="5696143504434933566">Informar abuso de "<ph name="EXTENSION_NAME" />"</translation>
+<translation id="5696177755977520104">Sincronización de la configuración del Sistema operativo Chrome</translation>
 <translation id="5696679855467848181">Archivo PPD actualmente en uso: <ph name="PPD_NAME" /></translation>
 <translation id="570043786759263127">Apps y servicios de Google Play</translation>
 <translation id="5700836101007545240">Tu administrador inhabilitó la opción Agregar conexión</translation>
@@ -3791,6 +3802,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="6103681770816982672">Advertencia: vas a cambiar al canal de programadores</translation>
 <translation id="6104068876731806426">Cuentas de Google</translation>
 <translation id="6104311680260824317">No se puede unir el dispositivo con el dominio. El servidor no es compatible con los tipos de encriptación de Kerberos especificados. Para conocer la configuración de la encriptación, consulta "Más opciones".</translation>
+<translation id="6105994589138235234">Sincronización del navegador Chrome</translation>
 <translation id="6112294629795967147">Tocar para cambiar el tamaño</translation>
 <translation id="6112727384379533756">Agregar un ticket</translation>
 <translation id="6112931163620622315">Revisa el teléfono</translation>
@@ -3828,6 +3840,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="6155141482566063812">La pestaña en segundo plano está compartiendo tu pantalla</translation>
 <translation id="6156323911414505561">Mostrar barra de favoritos</translation>
 <translation id="6156863943908443225">Caché de la secuencia de comandos</translation>
+<translation id="6157197137667039897">No se pudo instalar <ph name="APP_NAME" />. Vuelve a intentarlo o comunícate con el administrador de dispositivos de tu organización. Código de error: <ph name="ERROR_CODE" />.</translation>
 <translation id="6160625263637492097">Proporcionar certificados para autenticación</translation>
 <translation id="6163363155248589649">&amp;Normal</translation>
 <translation id="6163522313638838258">Expandir todo...</translation>
@@ -4028,6 +4041,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="6430814529589430811">Certificado único ASCII con codificación Base64</translation>
 <translation id="6431347207794742960"><ph name="PRODUCT_NAME" /> configurará actualizaciones automáticas para todos los usuarios de esta computadora.</translation>
 <translation id="6434309073475700221">Rechazar</translation>
+<translation id="6434325376267409267">Para usar <ph name="APP_NAME" />, actualiza el dispositivo.</translation>
 <translation id="6436164536244065364">Ver en Web Store</translation>
 <translation id="6438992844451964465"><ph name="WINDOW_TITLE" />: Reproducción de audio</translation>
 <translation id="6442187272350399447">Impresionante</translation>
@@ -4071,6 +4085,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="6491376743066338510">Se produjo un error en la autorización</translation>
 <translation id="6494445798847293442">No es una entidad de certificación</translation>
 <translation id="6495925982925244349">Red <ph name="NETWORK_INDEX" /> de <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, <ph name="SECURITY_STATUS" />, <ph name="CONNECTION_STATUS" />, intensidad de la señal: <ph name="SIGNAL_STRENGTH" />%, administrada por tu administrador, detalles</translation>
+<translation id="6496965928959882519">El dispositivo tiene poco espacio de almacenamiento. Para usar <ph name="APP_NAME" />, se recomienda tener al menos <ph name="RECOMMENDED_SPACE" /> de espacio libre. Si necesitas liberar espacio, borra archivos del dispositivo.</translation>
 <translation id="6498249116389603658">&amp;Todos tus idiomas</translation>
 <translation id="6499143127267478107">Resolviendo host en secuencia de comandos de proxy...</translation>
 <translation id="6499681088828539489">Deshabilitar proxies para redes compartidas</translation>
@@ -4742,6 +4757,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="7421925624202799674">&amp;Ver el código fuente de la página</translation>
 <translation id="7422192691352527311">Preferencias...</translation>
 <translation id="7423098979219808738">Preguntar primero</translation>
+<translation id="7423807071740419372"><ph name="APP_NAME" /> necesita permiso para ejecutarse</translation>
 <translation id="7427315641433634153">MSCHAP</translation>
 <translation id="7427348830195639090">Página de fondo: <ph name="BACKGROUND_PAGE_URL" /></translation>
 <translation id="7427798576651127129">Llamada de <ph name="DEVICE_NAME" /></translation>
@@ -4772,6 +4788,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="746216226901520237">La próxima vez, tu teléfono desbloqueará tu <ph name="DEVICE_TYPE" />. Puedes desactivar Smart Lock en la configuración.</translation>
 <translation id="7463006580194749499">Agregar a una persona</translation>
 <translation id="7465522323587461835">{NUM_OPEN_TABS,plural, =1{# pestaña abierta, presiona para activar o desactivar la barra de pestañas}other{# pestañas abiertas, presiona para activar o desactivar la barra de pestañas}}</translation>
+<translation id="7465635034594602553">Se produjo un error. Espera unos minutos y vuelve a ejecutar <ph name="APP_NAME" />.</translation>
 <translation id="7465778193084373987">URL de revocación del certificado de Netscape</translation>
 <translation id="7469894403370665791">Conectarse automáticamente a esta red</translation>
 <translation id="747114903913869239">Error: No se puede decodificar la extensión</translation>
@@ -5815,6 +5832,7 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
 <translation id="8818958672113348984">Verificar por teléfono</translation>
 <translation id="8820817407110198400">Favoritos</translation>
 <translation id="8821045908425223359">Configurar una dirección IP de forma automática</translation>
+<translation id="8821268776955756404">Se puede usar <ph name="APP_NAME" />.</translation>
 <translation id="882204272221080310">Actualizar el firmware para mejorar la seguridad</translation>
 <translation id="8823514049557262177">Copiar texto del vínculo</translation>
 <translation id="8823559166155093873">Bloquear cookies</translation>
@@ -5885,6 +5903,7 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
 <translation id="8902667442496790482">Abrir configuración de Seleccionar para pronunciar</translation>
 <translation id="8903263458134414071">Selecciona una cuenta para acceder</translation>
 <translation id="890616557918890486">Cambiar la fuente</translation>
+<translation id="8909298138148012791">Se desinstaló <ph name="APP_NAME" /></translation>
 <translation id="8909833622202089127">El sitio está haciendo un seguimiento de tu ubicación</translation>
 <translation id="8910146161325739742">Compartir la pantalla</translation>
 <translation id="8910222113987937043">Los cambios en tus favoritos, historial, contraseñas y otras opciones de configuración ya no se sincronizarán con tu cuenta de Google. Sin embargo, tus datos existentes permanecerán almacenados en tu cuenta de Google y se podrán administrar en el <ph name="BEGIN_LINK" />Panel de control de Google<ph name="END_LINK" />.</translation>

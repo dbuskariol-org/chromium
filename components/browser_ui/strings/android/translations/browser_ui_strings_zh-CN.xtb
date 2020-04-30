@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">保存</translation>
 <translation id="5335288049665977812">允许网站运行 JavaScript（推荐）</translation>
 <translation id="534295439873310000">NFC 设备</translation>
+<translation id="5354152178998424783">这会清除网站存储的 <ph name="DATASIZE" /> 数据和 Cookie。</translation>
 <translation id="5391532827096253100">您与此网站之间建立的连接不安全。网站信息</translation>
 <translation id="5494752089476963479">禁止会展示侵扰性或误导性广告的网站显示广告</translation>
 <translation id="5505264765875738116">网站无法询问能否向您发送通知</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">您将会退出此网站。</translation>
 <translation id="7828557259026017104">Cookie 是由您访问过的网站创建的文件，供网站用来记住您的偏好；第三方 Cookie 是由其他网站创建而成，这些网站是您在所访问网页上看到的部分内容（比如广告或图片）的所有方。</translation>
 <translation id="7846076177841592234">取消选择</translation>
+<translation id="7846621471902887024">您将会从所有网站上退出帐号。</translation>
 <translation id="7882806643839505685">允许特定网站播放声音。</translation>
 <translation id="7993619969781047893">某些网站上的功能可能会无法正常运作</translation>
 <translation id="7999064672810608036">确定要清除该网站的所有本地数据（包括 Cookie）并重置该网站的所有权限吗？</translation>

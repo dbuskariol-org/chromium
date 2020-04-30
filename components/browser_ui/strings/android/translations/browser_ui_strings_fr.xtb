@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Enregistrer</translation>
 <translation id="5335288049665977812">Autoriser les sites à exécuter JavaScript (recommandé)</translation>
 <translation id="534295439873310000">Appareils NFC</translation>
+<translation id="5354152178998424783">Cette action entraînera la suppression de <ph name="DATASIZE" /> de données et de cookies stockés par les sites.</translation>
 <translation id="5391532827096253100">Votre connexion à ce site n'est pas sécurisée. Informations sur le site</translation>
 <translation id="5494752089476963479">Bloquer les annonces sur les sites qui affichent des annonces intrusives ou trompeuses</translation>
 <translation id="5505264765875738116">Les sites ne peuvent pas vous demander l'autorisation d'envoyer des notifications</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Vous allez être déconnecté de ce site.</translation>
 <translation id="7828557259026017104">Les cookies sont des fichiers créés par les sites Web que vous consultez. Les sites les utilisent pour mémoriser vos préférences. Les cookies tiers sont créés par d'autres sites, lesquels possèdent une partie du contenu, comme les annonces ou les images, que vous voyez sur la page Web que vous consultez.</translation>
 <translation id="7846076177841592234">Annuler la sélection</translation>
+<translation id="7846621471902887024">Vous allez être déconnecté de tous les sites.</translation>
 <translation id="7882806643839505685">Autorisez le son pour un site spécifique.</translation>
 <translation id="7993619969781047893">Des fonctionnalités sur certains sites risquent de ne pas fonctionner</translation>
 <translation id="7999064672810608036">Voulez-vous vraiment effacer toutes les données locales, y compris les cookies, et réinitialiser toutes les autorisations pour ce site Web ?</translation>

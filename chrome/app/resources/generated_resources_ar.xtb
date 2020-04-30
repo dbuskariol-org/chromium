@@ -173,6 +173,7 @@
 <translation id="122082903575839559">خوارزمية التوقيع على الشهادة</translation>
 <translation id="1221024147024329929">‏PKCS #1 MD2 مع ترميز RSA</translation>
 <translation id="1221825588892235038">التحديد فقط</translation>
+<translation id="1223484782328004593">يتطلّب <ph name="APP_NAME" /> ترخيصًا</translation>
 <translation id="1223853788495130632">يوصي المشرف بقيمة محددة لهذا الإعداد.</translation>
 <translation id="1224275271335624810">الأسرع</translation>
 <translation id="1225177025209879837">جارٍ معالجة الطلب...</translation>
@@ -211,6 +212,7 @@
 <translation id="1272978324304772054">لا ينتمي حساب المستخدم هذا إلى النطاق المسجَّل به هذا الجهاز. إذا أردت التسجيل بنطاق مختلف، فيلزمك إجراء استرداد الجهاز أولاً.</translation>
 <translation id="1274977772557788323">‏إعدادات مساحة تخزين برنامج Adobe Flash Player</translation>
 <translation id="1274997165432133392">ملفات تعريف الارتباط وبيانات الموقع الأخرى</translation>
+<translation id="1276994519141842946">تعذّر إلغاء تثبيت <ph name="APP_NAME" />.</translation>
 <translation id="1280820357415527819">جارٍ البحث عن شبكات الجوّال</translation>
 <translation id="1280965841156951489">تعديل الملفات</translation>
 <translation id="1285320974508926690">عدم ترجمة هذا الموقع مطلقًا</translation>
@@ -319,6 +321,7 @@
 <translation id="1426870617281699524">النقر على "المحاولة مرة أخرى"، وقبول المطالبة على جهاز الكمبيوتر</translation>
 <translation id="1427269577154060167">البلد</translation>
 <translation id="142758023928848008">تفعيل مفاتيح الثبات (تنفيذ اختصارات لوحة مفاتيح من خلال كتابتها بالتعاقب)</translation>
+<translation id="142765311413773645">انتهت صلاحية ترخيص <ph name="APP_NAME" /></translation>
 <translation id="1429300045468813835">تم محو الكل</translation>
 <translation id="143027896309062157">قراءة جميع بياناتك وتغييرها على جهاز الكمبيوتر، ومواقع الويب التي تزورها</translation>
 <translation id="1430915738399379752">طباعة</translation>
@@ -1006,6 +1009,7 @@
 <translation id="2325444234681128157">تذكّر كلمة المرور</translation>
 <translation id="2326931316514688470">&amp;إعادة تحميل التطبيق</translation>
 <translation id="2327492829706409234">تفعيل التطبيق</translation>
+<translation id="2328561734797404498">يُرجى إعادة تشغيل الجهاز للتمكّن من استخدام <ph name="APP_NAME" />.</translation>
 <translation id="2329597144923131178">سجّل الدخول للحصول على الإشارات المرجعية، والسجل، وكلمات المرور، والإعدادات الأخرى على كل أجهزتك.</translation>
 <translation id="2332131598580221120">عرض في المتجر</translation>
 <translation id="2332192922827071008">فتح الإعدادات المفضَّلة</translation>
@@ -1264,6 +1268,7 @@
 <translation id="2665717534925640469">هذه الصفحة في وضع ملء الشاشة الآن وتم إيقاف مؤشر الماوس.</translation>
 <translation id="2665919335226618153">عذرًا، حدث خطأ أثناء التنسيق.</translation>
 <translation id="2667463864537187133">إدارة التدقيق الإملائي</translation>
+<translation id="2669241540496514785">تعذّر فتح <ph name="APP_NAME" /></translation>
 <translation id="2670102641511624474">‏يشارك <ph name="APP_NAME" /> علامة تبويب متصفح Chrome.</translation>
 <translation id="2670429602441959756">‏تحتوي هذه الصفحة على ميزات لم يتم دعمها بعد في الواقع الافتراضي (VR). جارٍ الخروج...</translation>
 <translation id="2671451824761031126">الإشارات المرجعية والإعدادات جاهزة</translation>
@@ -1340,6 +1345,7 @@
 <translation id="2757338480560142065">يُرجى التأكد من أن كلمة المرور التي تحتفظ بها تُطابِق كلمة مرور <ph name="WEBSITE" />.</translation>
 <translation id="2762441749940182211">تم حظر استخدام الكاميرا</translation>
 <translation id="2765217105034171413">صغير</translation>
+<translation id="2766091842833763951">تعذّر إعداد <ph name="APP_NAME" /> بسبب مشكلة في الضبط. يُرجى التواصل مع مشرف أجهزة مؤسستك. رمز الخطأ: <ph name="ERROR_CODE" /></translation>
 <translation id="2766161002040448006">طلب الإذن من أحد الوالدَين</translation>
 <translation id="2767127727915954024">سيتمكّن <ph name="ORIGIN" /> من تعديل <ph name="FILENAME" /> إلى أن يتم إغلاق جميع علامات تبويب هذا الموقع الإلكتروني.</translation>
 <translation id="276969039800130567">تم تسجيل الدخول بحساب <ph name="USER_EMAIL_ADDRESS" />.</translation>
@@ -2418,6 +2424,7 @@
 <translation id="4181602000363099176">20 ضعفًا</translation>
 <translation id="4181841719683918333">اللغات</translation>
 <translation id="4184885522552335684">السحب لنقل شاشة</translation>
+<translation id="4187424053537113647">جارٍ إعداد <ph name="APP_NAME" />...</translation>
 <translation id="4194570336751258953">تفعيل الضغط للنقر</translation>
 <translation id="4195643157523330669">الفتح في علامة تبويب جديدة</translation>
 <translation id="4195814663415092787">المتابعة من حيث توقفت</translation>
@@ -2536,6 +2543,7 @@
 <translation id="4379281552162875326">هل تريد إلغاء تثبيت "<ph name="APP_NAME" />"؟</translation>
 <translation id="4380648069038809855">الدخول إلى وضع ملء الشاشة</translation>
 <translation id="4382131447572146376">{COUNT,plural, =0{<ph name="EMAIL" />}=1{<ph name="EMAIL" /> وحساب واحد آخر}two{<ph name="EMAIL" /> وحسابان آخران (<ph name="EXTRA_ACCOUNTS" />)}few{<ph name="EMAIL" /> و<ph name="EXTRA_ACCOUNTS" /> حسابات أخرى}many{<ph name="EMAIL" /> و<ph name="EXTRA_ACCOUNTS" /> حسابًا آخر}other{<ph name="EMAIL" /> و<ph name="EXTRA_ACCOUNTS" /> حساب آخر}}</translation>
+<translation id="43829217466934313">لا يُسمح باستخدام <ph name="APP_NAME" /> على هذا الجهاز. يُرجى التواصل مع مشرف أجهزة مؤسستك. رمز الخطأ: <ph name="ERROR_CODE" /></translation>
 <translation id="4384312707950789900">إضافة إلى الشبكات المُفضلة</translation>
 <translation id="4384652540891215547">تفعيل الإضافة</translation>
 <translation id="438503109373656455">ساراتوجا</translation>
@@ -2868,6 +2876,7 @@
 <translation id="4863769717153320198">‏تبدو كـ <ph name="WIDTH" /> x <ph name="HEIGHT" /> (تلقائية)</translation>
 <translation id="4864369630010738180">جارٍ تسجيل الدخول...</translation>
 <translation id="486635084936119914">فتح أنواع معينة من الملفات تلقائيًا بعد التنزيل</translation>
+<translation id="4869289251183233431">مساحة التخزين في جهازك منخفضة. يجب توفير <ph name="MINIMUM_SPACE" /> على الأقل من المساحة الخالية لاستخدام <ph name="APP_NAME" />، ويُنصَح بأن تكون المساحة الخالية أكثر من <ph name="RECOMMENDED_SPACE" />. ولزيادة المساحة الخالية، يجب حذف ملفات من الجهاز.</translation>
 <translation id="48704129375571883">إضافة ميزات إضافية</translation>
 <translation id="4870758487381879312">إدخال كلمة المرور التي قدمها المشرف للحصول على معلومات الضبط</translation>
 <translation id="4870903493621965035">ليست هناك أجهزة مقترنة</translation>
@@ -2920,6 +2929,7 @@
 <translation id="4920887663447894854">تم حظر تتبع المواقع التالية لموقعك في هذه الصفحة:</translation>
 <translation id="49226369361073053">{0,plural, =0{تحديث الجهاز الآن}=1{تحديث الجهاز خلال ثانية واحدة}two{تحديث الجهاز خلال ثانيتَين}few{تحديث الجهاز خلال # ثوانٍ}many{تحديث الجهاز خلال # ثانية}other{تحديث الجهاز خلال # ثانية}}</translation>
 <translation id="492299503953721473">‏إزالة تطبيقات Android</translation>
+<translation id="492363500327720082">جارٍ إلغاء تثبيت <ph name="APP_NAME" />...</translation>
 <translation id="4924352752174756392">12 ضعفًا</translation>
 <translation id="4925320384394644410">ستظهر المنافذ هنا.</translation>
 <translation id="4925542575807923399">يحتاج مشرف هذا الحساب أن يكون هذا الحساب الأول في تسجيل الدخول إلى جلسة دخول متعدد.</translation>
@@ -3482,6 +3492,7 @@
 <translation id="5692875591060376599">‏الملف الذي تم اختياره غير معروف ويمكن أن يكون ضارًا. هل تريد إرساله إلى برنامج "الحماية المتقدّمة" من Google لفحصه؟</translation>
 <translation id="569425414730375234">جلسة التصفّح المتخفي الحالية: <ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" /></translation>
 <translation id="5696143504434933566">الإبلاغ عن إساءة الاستخدام من "<ph name="EXTENSION_NAME" />"</translation>
+<translation id="5696177755977520104">‏مزامنة إعدادات "نظام التشغيل Chrome"</translation>
 <translation id="5696679855467848181">‏الملف الحالي بتنسيق PPD قيد الاستخدام: <ph name="PPD_NAME" /></translation>
 <translation id="570043786759263127">‏تطبيقات Google Play وخدماته</translation>
 <translation id="5700836101007545240">تم إيقاف إضافة اتصال بواسطة المشرف</translation>
@@ -3792,6 +3803,7 @@
 <translation id="6103681770816982672">تحذير: أنت الآن تجري تحويلاً إلى قناة المطوّر</translation>
 <translation id="6104068876731806426">‏حسابات Google</translation>
 <translation id="6104311680260824317">‏يتعذَّر ضم الجهاز إلى النطاق لأن الخادم لا يدعم أنواع ترميز Kerberos المحدَّدة. يُرجى الانتقال إلى "مزيد من الخيارات" للاطِّلاع على إعدادات الترميز.</translation>
+<translation id="6105994589138235234">‏مزامنة متصفّح Chrome</translation>
 <translation id="6112294629795967147">اللمس لتغيير الحجم</translation>
 <translation id="6112727384379533756">إضافة تذكرة</translation>
 <translation id="6112931163620622315">يُرجى التحقّق من هاتفك</translation>
@@ -3829,6 +3841,7 @@
 <translation id="6155141482566063812">تتشارك علامة تبويب خلفية في شاشتك</translation>
 <translation id="6156323911414505561">عرض شريط الإشارات</translation>
 <translation id="6156863943908443225">ذاكرة التخزين المؤقت للنص البرمجي</translation>
+<translation id="6157197137667039897">تعذّر تثبيت <ph name="APP_NAME" />. يُرجى إعادة المحاولة أو التواصل مع مشرف أجهزة مؤسستك. رمز الخطأ: <ph name="ERROR_CODE" /></translation>
 <translation id="6160625263637492097">تقديم شهادات للمصادقة</translation>
 <translation id="6163363155248589649">&amp;عادي</translation>
 <translation id="6163522313638838258">توسيع الكل...</translation>
@@ -4030,6 +4043,7 @@
 <translation id="6430814529589430811">‏حفظ شهادة واحدة بتشفير ASCII المرمّز باستخدام Base64</translation>
 <translation id="6431347207794742960">سيعمل <ph name="PRODUCT_NAME" /> على إعداد التحديثات التلقائية لجميع مستخدمي هذا الكمبيوتر.</translation>
 <translation id="6434309073475700221">إلغاء</translation>
+<translation id="6434325376267409267">يجب تحديث الجهاز للتمكّن من استخدام <ph name="APP_NAME" />.</translation>
 <translation id="6436164536244065364">عرض في السوق الإلكتروني</translation>
 <translation id="6438992844451964465"><ph name="WINDOW_TITLE" /> - تشغيل الصوت</translation>
 <translation id="6442187272350399447">الروعة</translation>
@@ -4073,6 +4087,7 @@
 <translation id="6491376743066338510">تعذّر التفويض</translation>
 <translation id="6494445798847293442">ليست مرجعًا مصدقًا</translation>
 <translation id="6495925982925244349">الشبكة <ph name="NETWORK_INDEX" /> من <ph name="NETWORK_COUNT" />، الشبكة <ph name="NETWORK_NAME" />، حالة الأمان <ph name="SECURITY_STATUS" />، حالة الاتصال <ph name="CONNECTION_STATUS" />، قوة الإشارة <ph name="SIGNAL_STRENGTH" />%، يديرها المشرف، التفاصيل</translation>
+<translation id="6496965928959882519">مساحة التخزين في جهازك منخفضة. يُنصَح بتوفير <ph name="RECOMMENDED_SPACE" /> على الأقل من المساحة الخالية لاستخدام <ph name="APP_NAME" />. ولزيادة المساحة الخالية، يجب حذف ملفات من جهازك.</translation>
 <translation id="6498249116389603658">&amp;جميع اللغات</translation>
 <translation id="6499143127267478107">حل المضيف في النص البرمجي للخادم الوكيل...</translation>
 <translation id="6499681088828539489">عدم السماح بالخوادم الوكيلة للشبكات المشتركة</translation>
@@ -4744,6 +4759,7 @@
 <translation id="7421925624202799674">عرض م&amp;صدر الصفحة</translation>
 <translation id="7422192691352527311">الإعدادات المفضّلة...</translation>
 <translation id="7423098979219808738">السؤال أولاً</translation>
+<translation id="7423807071740419372">يجب الحصول على إذن لتشغيل <ph name="APP_NAME" /></translation>
 <translation id="7427315641433634153">MSCHAP</translation>
 <translation id="7427348830195639090">صفحة الخلفية: <ph name="BACKGROUND_PAGE_URL" /></translation>
 <translation id="7427798576651127129">الاتصال من <ph name="DEVICE_NAME" /></translation>
@@ -4774,6 +4790,7 @@
 <translation id="746216226901520237">‏في المرة القادمة، سيفتح هاتفك قفل جهاز <ph name="DEVICE_TYPE" />. يمكنك إيقاف Smart Lock في "الإعدادات".</translation>
 <translation id="7463006580194749499">إضافة شخص</translation>
 <translation id="7465522323587461835">{NUM_OPEN_TABS,plural, =1{هناك علامة تبويب واحدة مفتوحة. اضغط لعرض شريط علامات التبويب أو إخفائه.}zero{ليس هناك أي علامات تبويب مفتوحة. اضغط لعرض شريط علامات التبويب أو إخفائه.}two{هناك علامتَا تبويب مفتوحتَان. اضغط لعرض شريط علامات التبويب أو إخفائه.}few{هناك # علامات تبويب مفتوحة. اضغط لعرض شريط علامات التبويب أو إخفائه.}many{هناك # علامة تبويب مفتوحة. اضغط لعرض شريط علامات التبويب أو إخفائه.}other{هناك # علامة تبويب مفتوحة. اضغط لعرض شريط علامات التبويب أو إخفائه.}}</translation>
+<translation id="7465635034594602553">حدث خطأ. يُرجى الانتظار بضع دقائق، ثم إعادة تشغيل <ph name="APP_NAME" />.</translation>
 <translation id="7465778193084373987">‏عنوان URL لإبطال شهادة Netscape</translation>
 <translation id="7469894403370665791">الاتصال بهذه الشبكة تلقائيًا</translation>
 <translation id="747114903913869239">خطأ: تعذر فك ترميز الإضافة</translation>
@@ -5817,6 +5834,7 @@
 <translation id="8818958672113348984">التحقُّق عبر الهاتف</translation>
 <translation id="8820817407110198400">الإشارات المرجعية</translation>
 <translation id="8821045908425223359">‏ضبط عنوان IP تلقائيًا</translation>
+<translation id="8821268776955756404"><ph name="APP_NAME" /> جاهز للاستخدام.</translation>
 <translation id="882204272221080310">يمكنك تحديث البرامج الثابتة لمزيد من الأمان.</translation>
 <translation id="8823514049557262177">نسخ &amp;نص الرابط</translation>
 <translation id="8823559166155093873">حظر ملفات تعريف الارتباط</translation>
@@ -5887,6 +5905,7 @@
 <translation id="8902667442496790482">فتح إعدادات الاختيار والاستماع</translation>
 <translation id="8903263458134414071">اختيار حساب لتسجيل الدخول</translation>
 <translation id="890616557918890486">تغيير المصدر</translation>
+<translation id="8909298138148012791">تم إلغاء تثبيت <ph name="APP_NAME" />.</translation>
 <translation id="8909833622202089127">تتبّع موقع الويب موقعك الجغرافي.</translation>
 <translation id="8910146161325739742">مشاركة الشاشة</translation>
 <translation id="8910222113987937043">‏لن تتم بعد الآن مزامنة التغييرات التي تطرأ على الإشارات المرجعية والسجلّ وكلمات المرور والإعدادات الأخرى مع حسابك على Google، ولكن ستظل بياناتك الحالية مخزّنة في حسابك على Google ويمكن إدارتها في <ph name="BEGIN_LINK" />لوحة تحكّم Google<ph name="END_LINK" />.</translation>

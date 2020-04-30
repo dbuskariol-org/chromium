@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Uložit</translation>
 <translation id="5335288049665977812">Povolit webům spouštět JavaScript (doporučeno)</translation>
 <translation id="534295439873310000">Zařízení NFC</translation>
+<translation id="5354152178998424783">Tímto vymažete <ph name="DATASIZE" /> dat a souborů cookie, které uložily weby.</translation>
 <translation id="5391532827096253100">Spojení s tímto webem není zabezpečené. Informace o webu</translation>
 <translation id="5494752089476963479">Blokovat reklamy na webech, které zobrazují obtěžující nebo zavádějící reklamy</translation>
 <translation id="5505264765875738116">Weby nemohou žádat o oprávnění zasílat vám oznámení</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Budete odhlášeni z tohoto webu.</translation>
 <translation id="7828557259026017104">Soubory cookie jsou vytvářeny webovými stránkami, které navštěvujete. Weby je používají k tomu, aby si zapamatovaly vaše preference. Soubory cookie třetích stran jsou vytvářeny ostatními weby. Tyto weby na navštívené stránce vlastní nějaký obsah, např. reklamy nebo obrázky.</translation>
 <translation id="7846076177841592234">Zrušit výběr</translation>
+<translation id="7846621471902887024">Budete odhlášeni ze všech webů.</translation>
 <translation id="7882806643839505685">Zapne zvuk na konkrétním webu.</translation>
 <translation id="7993619969781047893">Některé weby mohou přestat fungovat</translation>
 <translation id="7999064672810608036">Opravdu chcete vymazat všechna místní data tohoto webu, včetně souborů cookie, a resetovat všechna jeho oprávnění?</translation>

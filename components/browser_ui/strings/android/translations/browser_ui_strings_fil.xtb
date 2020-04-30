@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">I-save</translation>
 <translation id="5335288049665977812">Payagan ang mga site na magpatakbo ng JavaScript (inirerekomenda)</translation>
 <translation id="534295439873310000">Mga NFC device</translation>
+<translation id="5354152178998424783">Iki-clear nito ang <ph name="DATASIZE" /> ng data at cookies na na-store ng mga site.</translation>
 <translation id="5391532827096253100">Hindi secure ang iyong koneksyon sa site na ito. Impormasyon ng site</translation>
 <translation id="5494752089476963479">I-block ang mga ad sa mga site na nagpapakita ng mga nakakasagabal o nakakapanlinlang na ad</translation>
 <translation id="5505264765875738116">Hindi puwedeng humiling ang mga site na magpadala ng mga notification</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Masa-sign out ka sa site na ito.</translation>
 <translation id="7828557259026017104">Ang cookies ay mga file na ginagawa ng mga website na binibisita mo. Ginagamit ng mga site ang mga ito para tandaan ang iyong mga kagustuhan. Ginagawa ng iba pang site ang third-party na cookies. Nagmamay-ari ang mga site na ito ng ilan sa content, gaya ng mga ad o larawan, na nakikita mo sa webpage na iyong binibisita.</translation>
 <translation id="7846076177841592234">Kanselahin ang pinili</translation>
+<translation id="7846621471902887024">Masa-sign out ka sa lahat ng site.</translation>
 <translation id="7882806643839505685">Payagan ang tunog para sa isang partikular na site.</translation>
 <translation id="7993619969781047893">Posibleng masira ang mga feature sa ilang site</translation>
 <translation id="7999064672810608036">Sigurado ka bang gusto mong i-clear ang lahat ng lokal na data, kasama ang cookies, at i-reset ang lahat ng pahintulot para sa website na ito?</translation>

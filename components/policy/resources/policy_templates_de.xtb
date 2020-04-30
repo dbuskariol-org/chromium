@@ -359,6 +359,7 @@ Wenn die Richtlinie "EnableMediaRouter" auf "false" gesetzt ist, hat der Wert di
           Ist die Richtlinie deaktiviert oder nicht konfiguriert, sind die Einstellungen für Kerberos-Konten deaktiviert. In diesem Fall können keine Kerberos-Konten hinzugefügt werden und die Nutzung der Kerberos-Authentifizierung ist nicht möglich. Alle vorhandenen Kerberos-Konten werden gelöscht, ebenso wie alle gespeicherten Passwörter.</translation>
 <translation id="1561424797596341174">Überschreiben von Richtlinien für Fehlerbehebungs-Builds des Hosts für den Remotezugriff</translation>
 <translation id="1561967320164410511">U2F plus Erweiterungen zur individuellen Bestätigung</translation>
+<translation id="1575015449587326319">Konfigurationsrichtlinie für den Chrome Enterprise-Connector "OnFileDownloaded"</translation>
 <translation id="1583248206450240930">Standardmäßig <ph name="PRODUCT_FRAME_NAME" /> verwenden</translation>
 <translation id="1588240398285670601">Browsereinstellungen</translation>
 <translation id="1599424828227887013">Website-Isolierung für angegebene Ursprünge auf Android-Geräten aktivieren</translation>
@@ -1436,6 +1437,7 @@ Wenn Sie "Letzte Sitzung wiederherstellen" wählen, werden die URLs, die beim le
 <translation id="3096595567015595053">Liste der aktivierten Plug-ins</translation>
 <translation id="3101501961102569744">Auswählen, wie Proxyserver-Einstellungen angegeben werden</translation>
 <translation id="3101709781009526431">Datum und Uhrzeit</translation>
+<translation id="3112706537206652445">Mit dieser Richtlinie können Nutzer dieses Geräts daran gehindert werden, ADB-Sideloading zu verwenden. Wenn Sideloading zuvor bereits aktiviert war, führt eine Änderung auf diese Einstellung zu einem unklaren Sicherheitszustand des Geräts.</translation>
 <translation id="3114411414586006215">Anhand dieser Richtlinie wird die Liste der Websites verwaltet, die unter keinen Umständen einen Browserwechsel auslösen.
 
       Diese Liste kann auch über die Richtlinie "<ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" />" ergänzt werden.
@@ -1676,6 +1678,11 @@ Wenn diese Einstellung auf "Aus" oder kein Wert festgelegt wird, wird der einges
           Bereits gespeicherte Passwörter können jedoch weiterhin verwendet werden.
 
           Wenn diese Richtlinie aktiviert oder deaktiviert ist, können Nutzer sie in <ph name="PRODUCT_NAME" /> nicht ändern oder überschreiben. Ist die Richtlinie nicht konfiguriert, so ist das Speichern von Passwörtern zulässig, kann jedoch vom Nutzer deaktiviert werden.</translation>
+<translation id="3492834335089638487">Mit dieser Richtlinie kann die Nutzung von Android-Apps konfiguriert werden, die aus anderen Quellen als Google Play für ein Gerät heruntergeladen wurden.
+
+      Wenn die Richtlinie nicht konfiguriert ist, können keine Apps aus anderen Quellen verwendet werden.
+
+      Die Verfügbarkeit dieser Funktion hängt außerdem von den entsprechenden Nutzerrichtlinien ab.</translation>
 <translation id="3496296378755072552">Passwortmanager</translation>
 <translation id="3500732098526756068">Damit können Sie das Auslösen der Passwortschutzwarnung steuern. Durch diese Meldung werden Nutzer gewarnt, wenn sie ihr geschütztes Passwort auf potenziell verdächtigen Websites wiederverwenden.
 
@@ -2909,6 +2916,7 @@ Wenn diese Richtlinie zu "false" geändert wird, wirkt sich dies auf den Start n
 <translation id="5369937289900051171">Nur Farbdruck</translation>
 <translation id="5370279767682621504">HTTP/0.9-Unterstützung für nicht standardmäßige Ports aktivieren</translation>
 <translation id="5377606826822211923">Nutzung von Android-Apps aus nicht vertrauenswürdigen Quellen kontrollieren</translation>
+<translation id="537786648513450280">Nutzung von Android-Apps aus nicht vertrauenswürdigen Quellen für das Gerät konfigurieren</translation>
 <translation id="5378985487213287085">Ermöglicht Ihnen festzulegen, ob Websites Desktop-Benachrichtigungen anzeigen dürfen. Das Anzeigen von Desktop-Benachrichtigungen kann entweder standardmäßig gestattet oder nicht gestattet werden oder auf Anfrage beim Nutzer geschehen. Wenn diese Richtlinie nicht konfiguriert ist, so kommt "AskNotifications" zum Einsatz, wobei dies vom Nutzer geändert werden kann.</translation>
 <translation id="5380329473151894945">Hiermit wird der Standardstatus der Bedienungshilfe "großer Cursor" auf der Anmeldeseite festgelegt.
 
@@ -3830,7 +3838,7 @@ Wenn diese Richtlinie nicht konfiguriert ist, können die Nutzer selbst wählen,
 <translation id="6786967369487349613">Roaming-Profilverzeichnis festlegen</translation>
 <translation id="6795485990775913659">Drucken nur ohne PIN zulassen</translation>
 <translation id="6810445994095397827">JavaScript auf diesen Websites blockieren</translation>
-<translation id="6813263547126514821">Betrieb und Herunterfahren</translation>
+<translation id="6813263547126514821">Energiesparmodus und Herunterfahren</translation>
 <translation id="681446116407619279">Unterstützte Authentifizierungsschemas</translation>
 <translation id="6821268164692776674"><ph name="CLOUD_PRINT_NAME" />- und "In Google Drive speichern"-Ziele</translation>
 <translation id="6833988859168635883">Start, Startseite und Seite "Neuer Tab"</translation>
@@ -4126,6 +4134,7 @@ Falls die Richtlinie auf "false" gesetzt wird, werden Bildschirm-Wakelock-Anfrag
 <translation id="7202925763179776247">Download-Einschränkungen zulassen</translation>
 <translation id="7207095846245296855">Google SafeSearch erzwingen</translation>
 <translation id="7211368186050418507">Zeitzone nie automatisch erkennen</translation>
+<translation id="7213920626995591871">Mit dieser Richtlinie können Nutzer des Geräts daran gehindert werden, ADB-Sideloading zu verwenden. Außerdem kann ein Powerwash für das Gerät erzwungen werden, wenn Sideloading zuvor aktiviert war.</translation>
 <translation id="7216442368414164495">Ermöglicht Nutzern die Aktivierung erweiterter Berichterstellung bei Verwendung von Safe Browsing</translation>
 <translation id="7222749588229362483">Ermöglicht das Zusammenführen der ausgewählten Richtlinien, wenn diese aus unterschiedlichen Quellen stammen, mit gleichem Bereich und gleicher Ebene.
 
@@ -4430,6 +4439,7 @@ Die Richtlinienwerte sollten in % angegeben werden und zwischen 0 und 100 liegen
 <translation id="7687943045976362719">Wenn diese Richtlinie konfiguriert ist, wird für alle angegebenen Inhaltstypen <ph name="PRODUCT_FRAME_NAME" /> verwendet.
 
           Ist die Richtlinie nicht konfiguriert, kommt der Standardrenderer für alle Websites zum Einsatz. Anhand der Richtlinie "<ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" />" kann der Standardrenderer konfiguriert werden.</translation>
+<translation id="7690423044860056310">Mit dieser Option kann Nutzern dieses Geräts erlaubt werden, ADB-Sideloading zu verwenden.</translation>
 <translation id="7691028179743802462">Diese Richtlinie wurde in M83 eingestellt. Verwenden Sie stattdessen "SafeBrowsingProtectionLevel".
 
       Mit dieser Richtlinie können Sie die Safe Browsing-Funktion von <ph name="PRODUCT_NAME" /> aktivieren und verhindern, dass Nutzer diese Einstellung ändern können.
@@ -4660,6 +4670,19 @@ Auf nicht verwalteten Geräten dürfen virtuelle Maschinen ausgeführt werden.</
 
       Durch die Richtlinie <ph name="SYNC_DISABLED_POLICY_NAME" /> wird die gesamte Datensynchronisierung deaktiviert und somit <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" /> überschrieben.</translation>
 <translation id="802147957407376460">Bildschirm um 0 Grad drehen</translation>
+<translation id="8027265928215448940">Liste der Einstellungen für Chrome Enterprise-Connector-Services für den Enterprise-Connector "<ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" />" – dieser wird ausgelöst, wenn eine Datei in Chrome heruntergeladen wird.
+
+      Mit den Feldern "<ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />", "<ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />", "<ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" />" und "<ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" />" wird ermittelt, ob der Connector eine Datei zur Analyse senden soll, wenn sie von einer bestimmten Seite heruntergeladen wird, und welche Tags für die Analyseanfrage verwendet werden sollen. Ein Tag, das einem "enable"-Muster entspricht, wird der Anfrage hinzugefügt, wenn die Seiten-URL mit einem für das jeweilige Tag passenden Muster übereinstimmt – jedoch nur, wenn kein "disable"-Muster mit demselben Tag mit der Seiten-URL übereinstimmt. Die Analyse wird durchgeführt, wenn die Anfrage mindestens ein Tag enthält.
+
+      Das Feld "<ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" />" legt fest, für welchen Analyseanbieter die Einstellungen gelten.
+
+      Wenn das Feld "<ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" />" auf 1 gesetzt ist, wartet Chrome auf eine Antwort des Analyseanbieters, bevor dem Nutzer Zugriff auf die heruntergeladene Datei gewährt wird. Wenn es auf einen anderen Ganzzahlwert gesetzt ist, gewährt Chrome dem Nutzer sofort Zugriff auf die Datei.
+
+      Das Feld "<ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" />" legt fest, ob Chrome den Zugriff auf Dateien blockiert, die durch ein Passwort geschützt sind.
+
+      Das Feld "<ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" />" legt fest, ob Chrome den Zugriff auf Dateien blockiert, die zu groß für die Analyse sind (50 MB oder größer).
+
+      Diese Richtlinie kann nur über die Google Admin-Konsole konfiguriert werden.</translation>
 <translation id="8033913082323846868">Diese Richtlinie wurde in M70 eingestellt, bitte verwenden Sie stattdessen "AutofillAddressEnabled" und "AutofillCreditCardEnabled".
 
       Aktiviert die AutoFill-Funktion von <ph name="PRODUCT_NAME" /> und ermöglicht es Nutzern, Webformulare mit zuvor gespeicherten Informationen wie Adresse oder Kreditkartendaten ausfüllen zu lassen.

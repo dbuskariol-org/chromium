@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Lưu</translation>
 <translation id="5335288049665977812">Cho phép các trang web chạy JavaScript (được đề xuất)</translation>
 <translation id="534295439873310000">Thiết bị dùng công nghệ NFC</translation>
+<translation id="5354152178998424783">Thao tác này sẽ xóa <ph name="DATASIZE" /> dữ liệu và cookie do các trang web lưu trữ.</translation>
 <translation id="5391532827096253100">Kết nối của bạn tới trang web này không an toàn. Thông tin trang web</translation>
 <translation id="5494752089476963479">Chặn quảng cáo trên các trang web hiển thị quảng cáo xâm nhập hoặc quảng cáo gây hiểu nhầm</translation>
 <translation id="5505264765875738116">Các trang web không thể xin phép gửi thông báo</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Bạn sẽ bị đăng xuất khỏi trang web này.</translation>
 <translation id="7828557259026017104">Cookie là các tệp do các trang web bạn truy cập tạo ra. Các trang web dùng cookie để ghi nhớ lựa chọn của bạn. Cookie bên thứ ba do các trang web khác tạo ra. Các trang web này sở hữu một số nội dung như quảng cáo hoặc hình ảnh mà bạn thấy trên trang web mình truy cập.</translation>
 <translation id="7846076177841592234">Hủy chọn</translation>
+<translation id="7846621471902887024">Bạn sẽ bị đăng xuất khỏi tất cả các trang web.</translation>
 <translation id="7882806643839505685">Cho phép phát âm thanh trên một trang web cụ thể.</translation>
 <translation id="7993619969781047893">Các tính năng trên một số trang web có thể hoạt động không đúng cách</translation>
 <translation id="7999064672810608036">Bạn có chắc chắn muốn xóa tất cả dữ liệu cục bộ, bao gồm cookie và đặt lại tất cả các quyền cho trang web này không?</translation>

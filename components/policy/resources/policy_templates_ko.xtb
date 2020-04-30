@@ -363,6 +363,7 @@ Google에 전송됩니다.  사용 중지되면 이 정보가 Google에 전송�
           이 정책이 사용 중지되거나 설정되지 않으면 Kerberos 계정 설정이 사용 중지됩니다. Kerberos 계정을 추가할 수 없으며 Kerberos 인증도 사용할 수 없습니다. 기존의 모든 Kerberos 계정은 삭제되며 저장된 모든 비밀번호도 삭제됩니다.</translation>
 <translation id="1561424797596341174">정책은 원격 액세스 호스트의 디버그 빌드를 무시합니다.</translation>
 <translation id="1561967320164410511">개별 인증을 위한 U2F 및 확장 프로그램</translation>
+<translation id="1575015449587326319">OnFileDownloaded Chrome Enterprise Connector 설정 정책</translation>
 <translation id="1583248206450240930">기본으로 <ph name="PRODUCT_FRAME_NAME" /> 사용</translation>
 <translation id="1588240398285670601">브라우저 설정</translation>
 <translation id="1599424828227887013">Android 기기에서 지정된 출처의 사이트 격리 사용 설정</translation>
@@ -1456,6 +1457,7 @@ False로 설정하면 개인정보 보호 화면은 항상 사용 중지됩니�
 <translation id="3096595567015595053">사용 가능한 플러그인 목록</translation>
 <translation id="3101501961102569744">프록시 서버 설정을 지정하는 방법 선택</translation>
 <translation id="3101709781009526431">날짜 및 시간</translation>
+<translation id="3112706537206652445">기기의 사용자가 ADB 사이드로드를 사용하지 못하게 합니다. 이전에 사이드로드가 사용 설정된 경우 이 설정으로 전환하면 기기의 보안이 취약해질 수 있습니다.</translation>
 <translation id="3114411414586006215">이 정책은 브라우저 전환을 실행하지 않는 웹사이트 목록을 제어합니다.
 
       <ph name="EXTERNAL_SITELIST_URL_POLICY_NAME" /> 정책을 통해서도 이 목록에 요소를 추가할 수 있습니다.
@@ -1703,6 +1705,11 @@ False로 설정하면 <ph name="PRODUCT_NAME" />에서 기본 알림을 사용�
           이전에 저장한 비밀번호는 계속 사용할 수 있습니다.
 
           이 정책을 사용 또는 사용 중지하면 사용자는 <ph name="PRODUCT_NAME" />에서 이 정책을 변경하거나 재정의할 수 없습니다. 이 정책을 설정하지 않은 경우 비밀번호 저장이 허용되지만 사용자가 설정을 사용 중지할 수 있습니다.</translation>
+<translation id="3492834335089638487">이 정책은 기기에서 Google Play 스토어 이외의 신뢰할 수 없는 출처의 Android 앱 사용을 제어합니다.
+
+      정책 값을 설정하지 않으면 기능이 허용되지 않는 것으로 간주됩니다.
+
+      기능의 사용 가능 여부는 관련된 사용자 정책에 따라 추가로 달라집니다.</translation>
 <translation id="3496296378755072552">비밀번호 관리자</translation>
 <translation id="3500732098526756068">비밀번호 보호 경고 트리거를 제어할 수 있습니다. 비밀번호 보호 알림은 사용자가 의심스러워 보이는 사이트에서 보호된 비밀번호를 재사용할 때 사용자에게 경고를 전송하는 기능입니다.
 
@@ -2971,6 +2978,7 @@ False로 설정하면 <ph name="PRODUCT_NAME" />에서 기본 알림을 사용�
 <translation id="5369937289900051171">컬러 인쇄만</translation>
 <translation id="5370279767682621504">기본 포트가 아닌 포트에서 HTTP/0.9 지원 사용</translation>
 <translation id="5377606826822211923">사용자를 위해 신뢰할 수 없는 출처의 Android 앱 사용 제어</translation>
+<translation id="537786648513450280">기기에서 신뢰할 수 없는 출처의 Android 앱 사용 제어</translation>
 <translation id="5378985487213287085">웹사이트에서 데스크톱 알림을 표시하도록 허용할지 여부를 설정할 수 있습니다. 데스크톱 알림 표시는 기본적으로 허용 또는 거부하거나 웹사이트에서 데스크톱 알림을 표시할 때마다 사용자에게 확인하도록 할 수 있습니다.
 
           이 정책을 설정하지 않은 경우 'AskNotifications' 정책이 사용되며 사용자가 설정을 변경할 수 있습니다.</translation>
@@ -4233,6 +4241,7 @@ False로 설정하면 <ph name="PRODUCT_NAME" />에서 기본 알림을 사용�
 <translation id="7202925763179776247">다운로드 제한 허용</translation>
 <translation id="7207095846245296855">Google 세이프서치 강제 실행</translation>
 <translation id="7211368186050418507">시간대 자동 감지 기능을 사용하지 않습니다.</translation>
+<translation id="7213920626995591871">기기의 사용자가 ADB 사이드로드를 사용하지 못하게 하고 이전에 사이드로드가 사용 설정된 경우 기기 파워워시를 강제 시행합니다.</translation>
 <translation id="7216442368414164495">사용자가 세이프 브라우징 확장 보고를 선택하도록 허용</translation>
 <translation id="7222749588229362483">범위 및 수준이 같다면 출처가 서로 다를 경우에도 선택한 정책을 병합하도록 허용합니다.
 
@@ -4544,6 +4553,7 @@ False로 설정하면 <ph name="PRODUCT_NAME" />에서 기본 알림을 사용�
 <translation id="7687943045976362719">이 정책이 설정되면 특정 콘텐츠 유형은 <ph name="PRODUCT_FRAME_NAME" />에서 처리됩니다.
 
           이 정책이 설정되지 않으면 모든 사이트에서 기본 렌더기가 사용됩니다. 기본 렌더기 설정 시 <ph name="CHROME_FRAME_RENDERER_SETTINGS_POLICY_NAME" /> 정책이 사용됩니다.</translation>
+<translation id="7690423044860056310">기기의 연결된 사용자가 ADB 사이드로드를 사용하도록 허용합니다.</translation>
 <translation id="7691028179743802462">이 정책은 M83에서 지원 중단됩니다. 대신 SafeBrowsingProtectionLevel을 사용하세요.
 
       <ph name="PRODUCT_NAME" />의 세이프 브라우징 기능을 사용 설정하고 사용자가 이 설정을 변경하지 못하게 차단합니다.
@@ -4780,6 +4790,19 @@ False로 설정하면 <ph name="PRODUCT_NAME" />에서 기본 알림을 사용�
 
       <ph name="SYNC_DISABLED_POLICY_NAME" /> 정책은 모든 데이터 동기화를 사용 중지하며 <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" /> 정책을 무시합니다.</translation>
 <translation id="802147957407376460">화면을 0도 회전</translation>
+<translation id="8027265928215448940"><ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> Enterprise Connector에 적용할 Chrome Enterprise Connector 서비스 설정의 목록으로, 파일이 Chrome에서 다운로드될 때 실행됩니다.
+
+      <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> 필드는 파일이 특정 페이지에서 다운로드되었을 때 Connector가 분석을 위해 파일을 전송할지와 파일 분석 요청에 어떤 태그를 포함할지를 결정하는 데 사용됩니다. 페이지 URL이 특정 태그와 연결된 패턴과 일치하면 'enable' 패턴에 해당하는 태그가 분석 요청에 포함되지만, 이 태그의 'disable' 패턴 중에서 페이지 URL과 일치하는 것이 없어야 합니다. 하나 이상의 태그가 요청에 포함되면 분석이 실시됩니다.
+
+      <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD" /> 필드는 설정에 해당하는 분석 서비스 제공업체를 나타냅니다.
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_UNTIL_VERDICT_FIELD" /> 필드가 1로 설정되면 Chrome에서 사용자에게 다운로드된 파일 액세스 권한을 부여하기 전에 분석 서비스의 응답을 받을 때까지 대기합니다. 다른 정수 값으로 설정되면 Chrome에서 사용자에게 파일 액세스 권한을 즉시 부여합니다.
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_PASSWORD_PROTECTED_FIELD" /> 필드는 Chrome에서 비밀번호로 보호된 파일을 차단 또는 허용할지 결정합니다.
+
+      <ph name="ENTERPRISE_CONNECTOR_BLOCK_LARGE_FILES_FIELD" /> 필드는 Chrome에서 크기가 커서 분석하기 어려운 파일(50MB 이상)을 차단 또는 허용할지 결정합니다.
+
+      이 정책은 Google 관리 콘솔에서만 설정할 수 있습니다.</translation>
 <translation id="8033913082323846868">이 정책은 M70에서 지원이 중단되었습니다. 대신 AutofillAddressEnabled 및 AutofillCreditCardEnabled를 사용하시기 바랍니다.
 
       <ph name="PRODUCT_NAME" />의 자동 완성 기능을 사용 설정하여 사용자가 주소나 신용카드 정보와 같이 이전에 저장한 정보를 이용하여 웹 양식을 자동으로 완성할 수 있습니다.

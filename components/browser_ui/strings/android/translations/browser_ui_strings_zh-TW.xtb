@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">儲存</translation>
 <translation id="5335288049665977812">允許網站執行 JavaScript (建議)</translation>
 <translation id="534295439873310000">NFC 裝置</translation>
+<translation id="5354152178998424783">這會清除網站儲存的資料和 Cookie (共 <ph name="DATASIZE" />)。</translation>
 <translation id="5391532827096253100">你與這個網站的連線不安全。網站資訊</translation>
 <translation id="5494752089476963479">封鎖干擾性或誤導性的網站廣告</translation>
 <translation id="5505264765875738116">網站無法要求傳送通知給你</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">系統會將你登出這個網站。</translation>
 <translation id="7828557259026017104">Cookie 是你造訪過的網站所建立的檔案，網站會使用這些檔案記住你的偏好設定。第三方 Cookie 由其他網站所建立。這類網站通常是在你造訪的網站上提供部分內容 (例如廣告或圖片) 的其他網站。</translation>
 <translation id="7846076177841592234">全部取消選取</translation>
+<translation id="7846621471902887024">系統會將你登出所有網站。</translation>
 <translation id="7882806643839505685">允許特定網站播放音訊。</translation>
 <translation id="7993619969781047893">某些網站的功能可能無法正常運作</translation>
 <translation id="7999064672810608036">確定要刪除這個網站儲存的所有本機資料 (包括 Cookie 在內)，並重設這個網站的所有權限嗎？</translation>

@@ -111,6 +111,7 @@
 <translation id="5317780077021120954">Gardar</translation>
 <translation id="5335288049665977812">Permite que os sitios executen JavaScript (recomendado)</translation>
 <translation id="534295439873310000">Dispositivos con NFC</translation>
+<translation id="5354152178998424783">Ao realizar esta acción, borraranse os datos e as cookies (<ph name="DATASIZE" />) que almacenasen os sitios.</translation>
 <translation id="5391532827096253100">A túa conexión a este sitio non é segura. Información do sitio</translation>
 <translation id="5494752089476963479">Bloquear anuncios en sitios que mostran anuncios enganosos ou intrusivos</translation>
 <translation id="5505264765875738116">Os sitios non poden pedir permiso para enviar notificacións</translation>
@@ -179,6 +180,7 @@
 <translation id="7817023149356982970">Pecharase a túa sesión neste sitio.</translation>
 <translation id="7828557259026017104">As cookies son ficheiros creados polos sitios web que visitas. Os sitios utilízanas para lembrar as túas preferencias. As de terceiros son as que crean outros sitios. Parte do contido que ves na páxina web que visitas, como anuncios ou imaxes, pertence a esoutros sitios.</translation>
 <translation id="7846076177841592234">Cancelar selección</translation>
+<translation id="7846621471902887024">Pecharase a túa sesión en todos os sitios.</translation>
 <translation id="7882806643839505685">Permite o son dun sitio específico.</translation>
 <translation id="7993619969781047893">As funcións dalgúns sitios poden deixar de funcionar</translation>
 <translation id="7999064672810608036">Estás seguro de que queres borrar todos os datos locais, incluídas as cookies, e restablecer todos os permisos para este sitio web?</translation>

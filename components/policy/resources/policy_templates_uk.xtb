@@ -4713,7 +4713,7 @@
 
       Правило <ph name="SYNC_DISABLED_POLICY_NAME" /> вимикає синхронізацію всіх даних, замінюючи правило <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" />.</translation>
 <translation id="802147957407376460">Обернути екран на 0 градусів</translation>
-<translation id="8027265928215448940">Список налаштувань сервісів конекторів Chrome Enterprise, які застосовуються до конектора Enterprise <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" />, що активується, коли файл завантажується в Chrome.
+<translation id="8027265928215448940">Список налаштувань сервісів конекторів Chrome Enterprise, які застосовуються до конектора Enterprise <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" />, що активується, коли в браузері Chrome завантажується файл.
 
       Поля <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> та <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> визначають, чи надсилатиме конектор на аналіз файл, який завантажено з певної сторінки, а також які теги додавати в запит на аналіз цього файлу. Тег, який відповідає шаблону enable, буде включено в запит на аналіз, якщо URL-адреса сторінки відповідає шаблону, зв'язаному з цим тегом, і якщо для цього тега немає шаблону disable, що відповідає цій URL-адресі сторінки. Файл буде проаналізовано, якщо запит містить принаймні 1 тег.
 
