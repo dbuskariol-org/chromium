@@ -10481,13 +10481,21 @@ TEST_F(WebFrameTest, OrientationFrameDetach) {
   web_view_impl->MainFrameImpl()->SendOrientationChangeEvent();
 }
 
-// https://crbug.com/1069355
-TEST_F(WebFrameTest, DISABLED_MaxFramesDetach) {
-  RegisterMockedHttpURLLoad("max-frames-detach.html");
+TEST_F(WebFrameTest, MaxFrames) {
   frame_test_helpers::WebViewHelper web_view_helper;
-  WebViewImpl* web_view_impl =
-      web_view_helper.InitializeAndLoad(base_url_ + "max-frames-detach.html");
-  web_view_impl->MainFrameImpl()->CollectGarbageForTesting();
+  web_view_helper.InitializeRemote();
+  Page* page = web_view_helper.GetWebView()->GetPage();
+
+  WebLocalFrameImpl* frame =
+      frame_test_helpers::CreateLocalChild(*web_view_helper.RemoteMainFrame());
+  while (page->SubframeCount() < Page::kMaxNumberOfFrames) {
+    frame_test_helpers::CreateRemoteChild(*web_view_helper.RemoteMainFrame());
+  }
+  auto* iframe = MakeGarbageCollected<HTMLIFrameElement>(
+      *frame->GetFrame()->GetDocument());
+  iframe->setAttribute(html_names::kSrcAttr, "");
+  frame->GetFrame()->GetDocument()->body()->appendChild(iframe);
+  EXPECT_FALSE(iframe->ContentFrame());
 }
 
 TEST_F(WebFrameTest, ImageDocumentLoadResponseEnd) {
