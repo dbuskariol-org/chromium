@@ -142,13 +142,8 @@ bool ExceptionSnapshotMac::Initialize(ProcessReaderMac* process_reader,
 
   thread_id_ = thread->id;
 
-  // Normally, for EXC_BAD_ACCESS exceptions, the exception address is present
-  // in code[1]. It may or may not be the instruction pointer address (usually
-  // it’s not). code[1] may carry the exception address for other exception
-  // types too, but it’s not guaranteed. But for all other exception types, the
-  // instruction pointer will be the exception address, and in fact will be
-  // equal to codes[1] when it’s carrying the exception address. In those cases,
-  // just use the instruction pointer directly.
+  // Normally, the exception address is present in code[1] for EXC_BAD_ACCESS
+  // exceptions, but not for other types of exceptions.
   bool code_1_is_exception_address = exception_ == EXC_BAD_ACCESS;
 
 #if defined(ARCH_CPU_X86_FAMILY)

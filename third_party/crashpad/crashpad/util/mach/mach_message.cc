@@ -15,6 +15,7 @@
 #include "util/mach/mach_message.h"
 
 #include <AvailabilityMacros.h>
+#include <bsm/libbsm.h>
 
 #include <limits>
 
@@ -22,10 +23,6 @@
 #include "base/mac/mach_logging.h"
 #include "util/misc/clock.h"
 #include "util/misc/implicit_cast.h"
-
-#if !defined(OS_IOS)
-#include <bsm/libbsm.h>
-#endif  // !OS_IOS
 
 namespace crashpad {
 
@@ -220,41 +217,6 @@ const mach_msg_trailer_t* MachMessageTrailerFromHeader(
   return reinterpret_cast<const mach_msg_trailer_t*>(trailer_address);
 }
 
-bool MachMessageDestroyReceivedPort(mach_port_t port,
-                                    mach_msg_type_name_t port_right_type) {
-  // This implements a subset of 10.10.5
-  // xnu-2782.40.9/libsyscall/mach/mach_msg.c mach_msg_destroy_port() that deals
-  // only with port rights that can be received in Mach messages.
-  switch (port_right_type) {
-    case MACH_MSG_TYPE_PORT_RECEIVE: {
-      kern_return_t kr = mach_port_mod_refs(
-          mach_task_self(), port, MACH_PORT_RIGHT_RECEIVE, -1);
-      if (kr != KERN_SUCCESS) {
-        MACH_LOG(ERROR, kr) << "mach_port_mod_refs";
-        return false;
-      }
-      return true;
-    }
-
-    case MACH_MSG_TYPE_PORT_SEND:
-    case MACH_MSG_TYPE_PORT_SEND_ONCE: {
-      kern_return_t kr = mach_port_deallocate(mach_task_self(), port);
-      if (kr != KERN_SUCCESS) {
-        MACH_LOG(ERROR, kr) << "mach_port_deallocate";
-        return false;
-      }
-      return true;
-    }
-
-    default: {
-      LOG(ERROR) << "unexpected port right type " << port_right_type;
-      return false;
-    }
-  }
-}
-
-#if !defined(OS_IOS)
-
 pid_t AuditPIDFromMachMessageTrailer(const mach_msg_trailer_t* trailer) {
   if (trailer->msgh_trailer_type != MACH_MSG_TRAILER_FORMAT_0) {
     LOG(ERROR) << "unexpected msgh_trailer_type " << trailer->msgh_trailer_type;
@@ -287,6 +249,37 @@ pid_t AuditPIDFromMachMessageTrailer(const mach_msg_trailer_t* trailer) {
   return audit_pid;
 }
 
-#endif  // !OS_IOS
+bool MachMessageDestroyReceivedPort(mach_port_t port,
+                                    mach_msg_type_name_t port_right_type) {
+  // This implements a subset of 10.10.5
+  // xnu-2782.40.9/libsyscall/mach/mach_msg.c mach_msg_destroy_port() that deals
+  // only with port rights that can be received in Mach messages.
+  switch (port_right_type) {
+    case MACH_MSG_TYPE_PORT_RECEIVE: {
+      kern_return_t kr = mach_port_mod_refs(
+          mach_task_self(), port, MACH_PORT_RIGHT_RECEIVE, -1);
+      if (kr != KERN_SUCCESS) {
+        MACH_LOG(ERROR, kr) << "mach_port_mod_refs";
+        return false;
+      }
+      return true;
+    }
+
+    case MACH_MSG_TYPE_PORT_SEND:
+    case MACH_MSG_TYPE_PORT_SEND_ONCE: {
+      kern_return_t kr = mach_port_deallocate(mach_task_self(), port);
+      if (kr != KERN_SUCCESS) {
+        MACH_LOG(ERROR, kr) << "mach_port_deallocate";
+        return false;
+      }
+      return true;
+    }
+
+    default: {
+      LOG(ERROR) << "unexpected port right type " << port_right_type;
+      return false;
+    }
+  }
+}
 
 }  // namespace crashpad

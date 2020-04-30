@@ -12,9 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CRASHPAD_COMPAT_IOS_MACH_MACH_EXC_DEFS_
-#define CRASHPAD_COMPAT_IOS_MACH_MACH_EXC_DEFS_
+#import "test/ios/host/crash_view_controller.h"
 
-#include "third_party/xnu/osfmk/mach/mach_exc.defs"
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "This file requires ARC support."
+#endif
 
-#endif  // CRASHPAD_COMPAT_IOS_MACH_MACH_EXC_DEFS_
+@implementation CrashViewController
+
+- (void)loadView {
+  self.view = [[UIView alloc] init];
+}
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+
+  self.view.backgroundColor = UIColor.redColor;
+}
+
+@end
