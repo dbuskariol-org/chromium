@@ -10489,6 +10489,9 @@ Called by update_net_error_codes.py.-->
   <int value="10" label="Pin Missing"/>
   <int value="11" label="Unknown"/>
   <int value="12" label="No failure"/>
+  <int value="13" label="Not Associated"/>
+  <int value="14" label="Not Authenticated"/>
+  <int value="15" label="Too Many STAs"/>
 </enum>
 
 <enum name="ConnectionInfo">
