@@ -128,18 +128,16 @@ int WriteResponse(ServiceWorkerStorage* storage,
   std::unique_ptr<ServiceWorkerResponseWriter> writer =
       storage->CreateResponseWriter(id);
 
-  std::unique_ptr<net::HttpResponseInfo> info =
-      std::make_unique<net::HttpResponseInfo>();
-  info->request_time = base::Time::Now();
-  info->response_time = base::Time::Now();
-  info->was_cached = false;
-  info->headers = new net::HttpResponseHeaders(headers);
-  scoped_refptr<HttpResponseInfoIOBuffer> info_buffer =
-      base::MakeRefCounted<HttpResponseInfoIOBuffer>(std::move(info));
+  auto response_head = network::mojom::URLResponseHead::New();
+  response_head->request_time = base::Time::Now();
+  response_head->response_time = base::Time::Now();
+  response_head->headers = new net::HttpResponseHeaders(headers);
+  response_head->content_length = length;
+
   int rv = 0;
   {
     TestCompletionCallback cb;
-    writer->WriteInfo(info_buffer.get(), cb.callback());
+    writer->WriteResponseHead(*response_head, length, cb.callback());
     rv = cb.WaitForResult();
     if (rv < 0)
       return rv;
@@ -204,9 +202,8 @@ bool VerifyBasicResponse(ServiceWorkerStorage* storage,
     return false;
   received_body.assign(buffer->data(), rv);
 
-  bool status_match =
-      std::string("HONKYDORY") ==
-          info_buffer->http_info->headers->GetStatusText();
+  bool status_match = std::string("HONKYDORY") ==
+                      info_buffer->http_info->headers->GetStatusText();
   bool data_match = kExpectedHttpBody == received_body;
 
   EXPECT_TRUE(status_match);
