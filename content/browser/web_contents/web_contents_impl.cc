@@ -310,6 +310,14 @@ void RecordMaxFrameCountUMA(size_t max_frame_count) {
 
 }  // namespace
 
+CreatedWindow::CreatedWindow() = default;
+CreatedWindow::CreatedWindow(std::unique_ptr<WebContentsImpl> contents,
+                             GURL target_url)
+    : contents(std::move(contents)), target_url(std::move(target_url)) {}
+CreatedWindow::~CreatedWindow() = default;
+CreatedWindow::CreatedWindow(CreatedWindow&&) = default;
+CreatedWindow& CreatedWindow::operator=(CreatedWindow&&) = default;
+
 std::unique_ptr<WebContents> WebContents::Create(
     const WebContents::CreateParams& params) {
   return WebContentsImpl::Create(params);
@@ -2182,12 +2190,12 @@ void WebContentsImpl::OnWebContentsDestroyed(WebContentsImpl* web_contents) {
   // Clear a pending contents that has been closed before being shown.
   for (auto iter = pending_contents_.begin(); iter != pending_contents_.end();
        ++iter) {
-    if (iter->second.get() != web_contents)
+    if (iter->second.contents.get() != web_contents)
       continue;
 
     // Someone else has deleted the WebContents. That should never happen!
     // TODO(erikchen): Fix semantics here. https://crbug.com/832879.
-    iter->second.release();
+    iter->second.contents.release();
     pending_contents_.erase(iter);
     return;
   }
@@ -2969,7 +2977,8 @@ RenderFrameHostDelegate* WebContentsImpl::CreateNewWindow(
                                         ->GetRenderWidgetHost()
                                         ->GetRoutingID();
     GlobalRoutingID id(render_process_id, main_frame_routing_id);
-    pending_contents_[id] = std::move(new_contents);
+    pending_contents_[id] =
+        CreatedWindow(std::move(new_contents), params.target_url);
     AddDestructionObserver(new_contents_impl);
   }
 
@@ -3109,13 +3118,15 @@ void WebContentsImpl::ShowCreatedWindow(int process_id,
   // TODO(danakj): Why do we defer this show step until the renderer asks for it
   // when it will always do so. What needs to happen in the renderer before we
   // reach here?
-  std::unique_ptr<WebContentsImpl> owned_created =
+  base::Optional<CreatedWindow> owned_created =
       GetCreatedWindow(process_id, main_frame_widget_route_id);
-  WebContentsImpl* created = owned_created.get();
+
   // The browser may have rejected the request to make a new window, or the
   // renderer could be sending an invalid route id. Ignore the request then.
-  if (!created)
+  if (!owned_created || !owned_created->contents)
     return;
+
+  WebContentsImpl* created = owned_created->contents.get();
 
   // This uses the delegate for the WebContents where the window was created
   // from, to control how to show the newly created window.
@@ -3131,8 +3142,8 @@ void WebContentsImpl::ShowCreatedWindow(int process_id,
 
     base::WeakPtr<WebContentsImpl> weak_created =
         created->weak_factory_.GetWeakPtr();
-    delegate->AddNewContents(this, std::move(owned_created), disposition,
-                             initial_rect, user_gesture, nullptr);
+    delegate->AddNewContents(this, std::move(owned_created->contents),
+                             disposition, initial_rect, user_gesture, nullptr);
     // The delegate may delete |created| during AddNewContents().
     if (!weak_created)
       return;
@@ -3220,7 +3231,7 @@ void WebContentsImpl::ShowCreatedWidget(int process_id,
   render_widget_host_impl->set_allow_privileged_mouse_lock(is_fullscreen);
 }
 
-std::unique_ptr<WebContentsImpl> WebContentsImpl::GetCreatedWindow(
+base::Optional<CreatedWindow> WebContentsImpl::GetCreatedWindow(
     int process_id,
     int main_frame_widget_route_id) {
   auto key = GlobalRoutingID(process_id, main_frame_widget_route_id);
@@ -3229,22 +3240,23 @@ std::unique_ptr<WebContentsImpl> WebContentsImpl::GetCreatedWindow(
   // Certain systems can block the creation of new windows. If we didn't succeed
   // in creating one, just return NULL.
   if (iter == pending_contents_.end())
-    return nullptr;
+    return base::nullopt;
 
-  std::unique_ptr<WebContentsImpl> new_contents = std::move(iter->second);
+  CreatedWindow result = std::move(iter->second);
+  WebContentsImpl* new_contents = result.contents.get();
   pending_contents_.erase(key);
-  RemoveDestructionObserver(new_contents.get());
+  RemoveDestructionObserver(new_contents);
 
   // Don't initialize the guest WebContents immediately.
-  if (BrowserPluginGuest::IsGuest(new_contents.get()))
-    return new_contents;
+  if (BrowserPluginGuest::IsGuest(new_contents))
+    return result;
 
   if (!new_contents->GetMainFrame()->GetProcess()->IsInitializedAndNotDead() ||
       !new_contents->GetMainFrame()->GetView()) {
-    return nullptr;
+    return base::nullopt;
   }
 
-  return new_contents;
+  return result;
 }
 
 RenderWidgetHostView* WebContentsImpl::GetCreatedWidget(int process_id,
