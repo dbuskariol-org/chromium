@@ -3543,7 +3543,7 @@
   {
     "name": "recover-from-never-save-android",
     "owners": ["ioanap"],
-    "expiry_milestone": 83
+    "expiry_milestone": 85
   },
   { "name": "reduce-display-notifications",
     "owners": [ "baileyberro", "zentaro" ],
