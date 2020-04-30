@@ -1194,8 +1194,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   void CreateWebBluetoothService(
       mojo::PendingReceiver<blink::mojom::WebBluetoothService> receiver);
-  void GetCredentialManager(
-      mojo::PendingReceiver<blink::mojom::CredentialManager> receiver);
 
   void GetAuthenticator(
       mojo::PendingReceiver<blink::mojom::Authenticator> receiver);

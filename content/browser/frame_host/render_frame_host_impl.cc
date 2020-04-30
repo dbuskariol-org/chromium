@@ -7210,12 +7210,6 @@ void RenderFrameHostImpl::GetAuthenticator(
 #endif  // !defined(OS_ANDROID)
 }
 
-void RenderFrameHostImpl::GetCredentialManager(
-    mojo::PendingReceiver<blink::mojom::CredentialManager> receiver) {
-  GetContentClient()->browser()->BindCredentialManagerReceiver(
-      this, std::move(receiver));
-}
-
 void RenderFrameHostImpl::GetPushMessaging(
     mojo::PendingReceiver<blink::mojom::PushMessaging> receiver) {
   if (!push_messaging_manager_) {
