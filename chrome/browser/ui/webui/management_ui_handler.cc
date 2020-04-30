@@ -547,6 +547,19 @@ void ManagementUIHandler::AddDeviceReportingInfo(
     AddDeviceReportingElement(report_sources, kManagementCrostini,
                               DeviceReportingType::kCrostini);
   }
+
+  if (g_browser_process->local_state()->GetBoolean(
+          prefs::kCloudReportingEnabled) &&
+      base::FeatureList::IsEnabled(features::kEnterpriseReportingInChromeOS)) {
+    AddDeviceReportingElement(report_sources,
+                              kManagementExtensionReportUsername,
+                              DeviceReportingType::kUsername);
+    AddDeviceReportingElement(report_sources, kManagementReportExtensions,
+                              DeviceReportingType::kExtensions);
+    AddDeviceReportingElement(report_sources,
+                              kManagementReportAndroidApplications,
+                              DeviceReportingType::kAndroidApplication);
+  }
 }
 #endif
 

@@ -27,6 +27,7 @@
 #include "ui/base/l10n/l10n_util.h"
 
 #if defined(OS_CHROMEOS)
+#include "base/test/scoped_feature_list.h"
 #include "base/test/test_simple_task_runner.h"
 #include "chrome/browser/chromeos/crostini/crostini_pref_names.h"
 #include "chrome/browser/chromeos/policy/device_cloud_policy_initializer.h"
@@ -40,6 +41,7 @@
 #include "chrome/browser/chromeos/settings/device_settings_test_helper.h"
 #include "chrome/browser/chromeos/settings/scoped_testing_cros_settings.h"
 #include "chrome/browser/prefs/browser_prefs.h"
+#include "chrome/common/chrome_features.h"
 #include "chrome/common/pref_names.h"
 #include "chrome/test/base/testing_browser_process.h"
 #include "chromeos/cryptohome/async_method_caller.h"
@@ -276,6 +278,7 @@ class ManagementUIHandlerTests : public TestingBaseClass {
     bool upload_enabled;
     bool printing_send_username_and_filename;
     bool crostini_report_usage;
+    bool cloud_reporting_enabled;
     std::string profile_name;
     bool override_policy_connector_is_managed;
     bool managed_account;
@@ -294,6 +297,7 @@ class ManagementUIHandlerTests : public TestingBaseClass {
     setup_config_.upload_enabled = default_value;
     setup_config_.printing_send_username_and_filename = default_value;
     setup_config_.crostini_report_usage = default_value;
+    setup_config_.cloud_reporting_enabled = default_value;
     setup_config_.profile_name = "";
     setup_config_.override_policy_connector_is_managed = false;
     setup_config_.managed_account = true;
@@ -307,6 +311,8 @@ class ManagementUIHandlerTests : public TestingBaseClass {
     install_attributes_ =
         std::make_unique<chromeos::ScopedStubInstallAttributes>(
             chromeos::StubInstallAttributes::CreateUnset());
+    scoped_feature_list_.Init();
+
     SetUpConnectManager();
   }
   void TearDown() override {
@@ -346,6 +352,12 @@ class ManagementUIHandlerTests : public TestingBaseClass {
     profile_->GetPrefs()->SetBoolean(
         crostini::prefs::kReportCrostiniUsageEnabled,
         GetTestConfig().crostini_report_usage);
+    local_state_.SetBoolean(prefs::kCloudReportingEnabled,
+                            GetTestConfig().cloud_reporting_enabled);
+    scoped_feature_list()->Reset();
+    scoped_feature_list()->InitAndEnableFeature(
+        features::kEnterpriseReportingInChromeOS);
+
     const policy::SystemLogUploader* system_uploader =
         new policy::SystemLogUploader(/*syslog_delegate=*/nullptr,
                                       /*task_runner=*/task_runner_);
@@ -380,6 +392,10 @@ class ManagementUIHandlerTests : public TestingBaseClass {
   base::string16 GetManagementOverview() const {
     return extracted_.management_overview;
   }
+  base::test::ScopedFeatureList* scoped_feature_list() {
+    return &scoped_feature_list_;
+  }
+
 #else
   base::string16 GetBrowserManagementNotice() const {
     return extracted_.browser_management_notice;
@@ -406,6 +422,7 @@ class ManagementUIHandlerTests : public TestingBaseClass {
 #if defined(OS_CHROMEOS)
   std::unique_ptr<chromeos::ScopedStubInstallAttributes> install_attributes_;
   TestingPrefServiceSimple local_state_;
+  base::test::ScopedFeatureList scoped_feature_list_;
   std::unique_ptr<TestDeviceCloudPolicyManagerChromeOS> manager_;
   scoped_refptr<base::TestSimpleTaskRunner> task_runner_;
   policy::ServerBackedStateKeysBroker state_keys_broker_;
@@ -753,7 +770,10 @@ TEST_F(ManagementUIHandlerTests, AllEnabledDeviceReportingInfo) {
       {kManagementReportCrashReports, "crash report"},
       {kManagementLogUploadEnabled, "logs"},
       {kManagementPrinting, "print"},
-      {kManagementCrostini, "crostini"}};
+      {kManagementCrostini, "crostini"},
+      {kManagementExtensionReportUsername, "username"},
+      {kManagementReportExtensions, "extension"},
+      {kManagementReportAndroidApplications, "android application"}};
 
   ASSERT_PRED_FORMAT2(ReportingElementsToBeEQ, info.GetList(),
                       expected_elements);
