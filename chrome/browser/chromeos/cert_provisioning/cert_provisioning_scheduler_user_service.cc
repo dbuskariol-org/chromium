@@ -30,7 +30,7 @@ CertProvisioningSchedulerUserService*
 CertProvisioningSchedulerUserServiceFactory::GetForProfile(Profile* profile) {
   return static_cast<CertProvisioningSchedulerUserService*>(
       CertProvisioningSchedulerUserServiceFactory::GetInstance()
-          ->GetServiceForBrowserContext(profile, true));
+          ->GetServiceForBrowserContext(profile, /*create=*/true));
 }
 
 // static

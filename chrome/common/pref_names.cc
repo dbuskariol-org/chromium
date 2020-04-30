@@ -2975,6 +2975,10 @@ extern const char kRequiredClientCertificateForUser[] =
     "required_client_certificate_for_user";
 extern const char kRequiredClientCertificateForDevice[] =
     "required_client_certificate_for_device";
+extern const char kCertificateProvisioningStateForUser[] =
+    "cert_provisioning_user_state";
+extern const char kCertificateProvisioningStateForDevice[] =
+    "cert_provisioning_device_state";
 #endif
 
 // This pref enables checking of Media Feed items against the Safe Search API.

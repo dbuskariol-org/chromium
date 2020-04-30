@@ -1046,6 +1046,8 @@ extern const char kKnownInterceptionDisclosureInfobarLastShown[];
 #if defined(OS_CHROMEOS)
 extern const char kRequiredClientCertificateForUser[];
 extern const char kRequiredClientCertificateForDevice[];
+extern const char kCertificateProvisioningStateForUser[];
+extern const char kCertificateProvisioningStateForDevice[];
 #endif
 
 extern const char kMediaFeedsSafeSearchEnabled[];

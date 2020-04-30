@@ -178,6 +178,7 @@ void CertProvisioningScheduler::OnDeleteKeysWithoutPolicyDone(
                << error_message;
   }
 
+  DeserializeWorkers();
   UpdateCerts();
 }
 
@@ -187,6 +188,32 @@ void CertProvisioningScheduler::DailyUpdateCerts() {
   failed_cert_profiles_.clear();
   UpdateCerts();
   ScheduleDailyUpdate();
+}
+
+void CertProvisioningScheduler::DeserializeWorkers() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  const base::Value* saved_workers =
+      pref_service_->Get(GetPrefNameForSerialization(cert_scope_));
+  if (!saved_workers) {
+    return;
+  }
+
+  for (const auto& kv : saved_workers->DictItems()) {
+    const base::Value& saved_worker = kv.second;
+
+    std::unique_ptr<CertProvisioningWorker> worker =
+        CertProvisioningWorkerFactory::Get()->Deserialize(
+            cert_scope_, profile_, pref_service_, saved_worker,
+            cloud_policy_client_,
+            base::BindOnce(&CertProvisioningScheduler::OnProfileFinished,
+                           weak_factory_.GetWeakPtr()));
+    if (!worker) {
+      // Deserialization error message was already logged.
+      continue;
+    }
+
+    workers_[worker->GetCertProfile().profile_id] = std::move(worker);
+  }
 }
 
 void CertProvisioningScheduler::OnPrefsChange() {
@@ -267,24 +294,26 @@ void CertProvisioningScheduler::CreateCertProvisioningWorker(
           cert_scope_, profile_, pref_service_, cert_profile,
           cloud_policy_client_,
           base::BindOnce(&CertProvisioningScheduler::OnProfileFinished,
-                         weak_factory_.GetWeakPtr(), cert_profile.profile_id));
+                         weak_factory_.GetWeakPtr()));
   CertProvisioningWorker* worker_unowned = worker.get();
   workers_[cert_profile.profile_id] = std::move(worker);
   worker_unowned->DoStep();
 }
 
-void CertProvisioningScheduler::OnProfileFinished(const std::string& profile_id,
-                                                  bool is_success) {
+void CertProvisioningScheduler::OnProfileFinished(
+    const CertProfile& cert_profile,
+    bool is_success) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   if (!is_success) {
-    LOG(ERROR) << "Failed to process certificate profile: " << profile_id;
-    failed_cert_profiles_.insert(profile_id);
+    LOG(ERROR) << "Failed to process certificate profile: "
+               << cert_profile.profile_id;
+    failed_cert_profiles_.insert(cert_profile.profile_id);
   }
 
-  auto iter = workers_.find(profile_id);
+  auto iter = workers_.find(cert_profile.profile_id);
   if (iter == workers_.end()) {
-    LOG(WARNING) << "Finished worker is not found";
+    LOG(WARNING) << "Finished worker is not found: " << cert_profile.profile_id;
     return;
   }
   workers_.erase(iter);
