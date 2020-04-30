@@ -388,6 +388,8 @@ jumbo_static_library("browser") {
     "download/chrome_download_manager_delegate.h",
     "download/deferred_client_wrapper.cc",
     "download/deferred_client_wrapper.h",
+    "download/download_auto_open_policy_handler.cc",
+    "download/download_auto_open_policy_handler.h",
     "download/download_confirmation_reason.h",
     "download/download_confirmation_result.h",
     "download/download_core_service.cc",

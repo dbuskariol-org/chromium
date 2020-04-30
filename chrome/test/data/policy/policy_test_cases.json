@@ -961,6 +961,18 @@
     ]
   },
 
+  "AutoOpenFileTypes" : {
+    "os": ["win", "mac", "linux", "chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": { "AutoOpenFileTypes": ["exe", ".txt", "pdf"] },
+        "prefs": {
+          "download.extensions_to_open_by_policy": {"value" : ["exe", "pdf"] }
+        }
+      }
+    ]
+  },
+
   "ClearSiteDataOnExit": {
     "note": "This policy is retired, see http://crbug.com/133291."
   },
