@@ -73,12 +73,6 @@ void SetAccessibilityCrashKey(ui::AXMode mode) {
     base::debug::SetCrashKeyString(ax_mode_crash_key, mode.ToString());
 }
 
-// Returns the first language in the accept languages list.
-std::string GetPreferredLanguage(const std::string& accept_languages) {
-  const std::vector<std::string> tokens = base::SplitString(
-      accept_languages, ",", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
-  return tokens.empty() ? "" : tokens[0];
-}
 }
 
 namespace content {
@@ -217,11 +211,6 @@ RenderAccessibilityImpl::RenderAccessibilityImpl(
   image_annotation_debugging_ =
       base::CommandLine::ForCurrentProcess()->HasSwitch(
           ::switches::kEnableExperimentalAccessibilityLabelsDebugging);
-
-  if (render_frame->render_view()) {
-    render_frame_->render_view()->RegisterRendererPreferenceWatcher(
-        pref_watcher_receiver_.BindNewPipeAndPassRemote());
-  }
 }
 
 RenderAccessibilityImpl::~RenderAccessibilityImpl() = default;
@@ -246,6 +235,7 @@ void RenderAccessibilityImpl::DidCommitProvisionalLoad(
   tree_source_.RemoveImageAnnotator();
   ax_image_annotator_->Destroy();
   ax_image_annotator_.release();
+  page_language_.clear();
 }
 
 void RenderAccessibilityImpl::AccessibilityModeChanged(const ui::AXMode& mode) {
@@ -486,13 +476,6 @@ void RenderAccessibilityImpl::Reset(int32_t reset_token) {
   }
 }
 
-void RenderAccessibilityImpl::NotifyUpdate(
-    blink::mojom::RendererPreferencesPtr new_prefs) {
-  if (ax_image_annotator_)
-    ax_image_annotator_->set_preferred_language(
-        GetPreferredLanguage(new_prefs->accept_languages));
-}
-
 void RenderAccessibilityImpl::HandleWebAccessibilityEvent(
     const ui::AXEvent& event) {
   HandleAXEvent(event);
@@ -655,6 +638,10 @@ WebDocument RenderAccessibilityImpl::GetMainDocument() {
   return WebDocument();
 }
 
+std::string RenderAccessibilityImpl::GetLanguage() {
+  return page_language_;
+}
+
 void RenderAccessibilityImpl::SendPendingAccessibilityEvents() {
   TRACE_EVENT0("accessibility",
                "RenderAccessibilityImpl::SendPendingAccessibilityEvents");
@@ -689,6 +676,10 @@ void RenderAccessibilityImpl::SendPendingAccessibilityEvents() {
   bool had_load_complete_messages = false;
 
   ScopedFreezeBlinkAXTreeSource freeze(&tree_source_);
+
+  // Save the page language.
+  WebAXObject root = tree_source_.GetRoot();
+  page_language_ = root.Language().Utf8();
 
   // Loop over each event and generate an updated event message.
   for (auto& event : src_events) {
@@ -1022,13 +1013,8 @@ void RenderAccessibilityImpl::CreateAXImageAnnotator() {
   render_frame_->GetBrowserInterfaceBroker()->GetInterface(
       annotator.InitWithNewPipeAndPassReceiver());
 
-  const std::string preferred_language =
-      render_frame_->render_view()
-          ? GetPreferredLanguage(
-                render_frame_->render_view()->GetAcceptLanguages())
-          : std::string();
-  ax_image_annotator_ = std::make_unique<AXImageAnnotator>(
-      this, preferred_language, std::move(annotator));
+  ax_image_annotator_ =
+      std::make_unique<AXImageAnnotator>(this, std::move(annotator));
   tree_source_.AddImageAnnotator(ax_image_annotator_.get());
 }
 
