@@ -5117,7 +5117,7 @@ void RenderFrameHostImpl::NavigateToInterstitialURL(const GURL& data_url) {
 void RenderFrameHostImpl::Stop() {
   TRACE_EVENT1("navigation", "RenderFrameHostImpl::Stop", "frame_tree_node",
                frame_tree_node_->frame_tree_node_id());
-  Send(new FrameMsg_Stop(routing_id_));
+  GetAssociatedLocalFrame()->StopLoading();
 }
 
 void RenderFrameHostImpl::DispatchBeforeUnload(BeforeUnloadType type,
@@ -7980,8 +7980,9 @@ void RenderFrameHostImpl::DidCommitNavigation(
   // If we're waiting for a cross-site beforeunload completion callback from
   // this renderer and we receive a Navigate message from the main frame, then
   // the renderer was navigating already and sent it before hearing the
-  // FrameMsg_Stop message. Treat this as an implicit beforeunload completion
-  // callback to allow the pending navigation to continue.
+  // blink::mojom::LocalFrame::StopLoading() message. Treat this as an implicit
+  // beforeunload completion callback to allow the pending navigation to
+  // continue.
   if (is_waiting_for_beforeunload_completion_ &&
       unload_ack_is_for_navigation_ && !GetParent()) {
     base::TimeTicks approx_renderer_start_time = send_before_unload_start_time_;

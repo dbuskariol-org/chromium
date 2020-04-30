@@ -159,11 +159,6 @@ WebView* WebRemoteFrameImpl::View() const {
   return GetFrame()->GetPage()->GetChromeClient().GetWebView();
 }
 
-void WebRemoteFrameImpl::StopLoading() {
-  // TODO(dcheng,japhet): Calling this method should stop loads
-  // in all subframes, both remote and local.
-}
-
 WebLocalFrame* WebRemoteFrameImpl::CreateLocalChild(
     WebTreeScopeType scope,
     const WebString& name,

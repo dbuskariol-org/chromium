@@ -630,6 +630,8 @@ class BLINK_EXPORT WebLocalFrameClient {
     return nullptr;
   }
 
+  virtual void OnStopLoading() {}
+
   // Accessibility Object Model -------------------------------------------
 
   // This method is used to expose the AX Tree stored in content/renderer to the

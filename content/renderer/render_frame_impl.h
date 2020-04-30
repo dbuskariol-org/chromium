@@ -770,6 +770,7 @@ class CONTENT_EXPORT RenderFrameImpl
       const blink::WebString& sink_id,
       blink::WebSetSinkIdCompleteCallback callback) override;
   std::unique_ptr<blink::WebURLLoaderFactory> CreateURLLoaderFactory() override;
+  void OnStopLoading() override;
   void DraggableRegionsChanged() override;
   blink::BrowserInterfaceBrokerProxy* GetBrowserInterfaceBroker() override;
 
@@ -1027,7 +1028,6 @@ class CONTENT_EXPORT RenderFrameImpl
                 bool is_loading,
                 const FrameReplicationState& replicated_frame_state);
   void OnDeleteFrame(FrameDeleteIntention intent);
-  void OnStop();
   void OnShowContextMenu(const gfx::Point& location);
   void OnContextMenuClosed(const CustomContextMenuContext& custom_context);
   void OnCustomContextMenuAction(const CustomContextMenuContext& custom_context,

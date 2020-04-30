@@ -618,12 +618,15 @@ class WebLocalFrame : public WebFrame {
   // Loading ------------------------------------------------------------------
 
   // Returns an AssociatedURLLoader that is associated with this frame.  The
-  // loader will, for example, be cancelled when WebFrame::stopLoading is
-  // called.
+  // loader will, for example, be cancelled when StopLoading is called.
   //
-  // FIXME: stopLoading does not yet cancel an associated loader!!
+  // FIXME: StopLoading does not yet cancel an associated loader!!
   virtual WebAssociatedURLLoader* CreateAssociatedURLLoader(
       const WebAssociatedURLLoaderOptions&) = 0;
+
+  // This API is deprecated and only required by PepperURLLoaderHost::Close(),
+  // and so it should not be used on a regular basis.
+  virtual void StopLoading() = 0;
 
   // Geometry -----------------------------------------------------------------
 

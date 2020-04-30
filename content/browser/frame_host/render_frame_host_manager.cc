@@ -373,8 +373,7 @@ void RenderFrameHostManager::Stop() {
   // A loading speculative RenderFrameHost should also stop.
   if (speculative_render_frame_host_ &&
       speculative_render_frame_host_->is_loading()) {
-    speculative_render_frame_host_->Send(
-        new FrameMsg_Stop(speculative_render_frame_host_->GetRoutingID()));
+    speculative_render_frame_host_->GetAssociatedLocalFrame()->StopLoading();
   }
 }
 

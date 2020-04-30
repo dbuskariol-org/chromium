@@ -99,7 +99,6 @@ class CORE_EXPORT WebLocalFrameImpl final
   void Close() override;
   WebView* View() const override;
   v8::Local<v8::Object> GlobalProxy() const override;
-  void StopLoading() override;
   bool IsLoading() const override;
 
   // WebLocalFrame overrides:
@@ -274,6 +273,7 @@ class CORE_EXPORT WebLocalFrameImpl final
   WebInputMethodController* GetInputMethodController() override;
   WebAssociatedURLLoader* CreateAssociatedURLLoader(
       const WebAssociatedURLLoaderOptions&) override;
+  void StopLoading() override;
   WebSize GetScrollOffset() const override;
   void SetScrollOffset(const WebSize&) override;
   WebSize DocumentSize() const override;

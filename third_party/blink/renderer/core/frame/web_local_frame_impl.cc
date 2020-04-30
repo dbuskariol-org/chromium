@@ -970,14 +970,6 @@ void WebLocalFrameImpl::StartNavigation(const WebURLRequest& request) {
                                        WebFrameLoadType::kStandard);
 }
 
-void WebLocalFrameImpl::StopLoading() {
-  if (!GetFrame())
-    return;
-  // FIXME: Figure out what we should really do here. It seems like a bug
-  // that FrameLoader::stopLoading doesn't call stopAllLoaders.
-  GetFrame()->Loader().StopAllLoaders();
-}
-
 WebDocumentLoader* WebLocalFrameImpl::GetDocumentLoader() const {
   DCHECK(GetFrame());
   return DocumentLoaderForDocLoader(GetFrame()->Loader().GetDocumentLoader());
@@ -1008,6 +1000,10 @@ void WebLocalFrameImpl::SetReferrerForRequest(WebURLRequest& request,
 WebAssociatedURLLoader* WebLocalFrameImpl::CreateAssociatedURLLoader(
     const WebAssociatedURLLoaderOptions& options) {
   return new WebAssociatedURLLoaderImpl(GetFrame()->DomWindow(), options);
+}
+
+void WebLocalFrameImpl::StopLoading() {
+  GetFrame()->StopLoading();
 }
 
 void WebLocalFrameImpl::ReplaceSelection(const WebString& text) {

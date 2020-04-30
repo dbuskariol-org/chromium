@@ -2245,6 +2245,20 @@ void LocalFrame::AddInspectorIssue(mojom::blink::InspectorIssueInfoPtr info) {
   }
 }
 
+void LocalFrame::StopLoading() {
+  Loader().StopAllLoaders();
+
+  // The stopLoading handler may run script, which may cause this frame to be
+  // detached/deleted. If that happens, return immediately.
+  if (!IsAttached())
+    return;
+
+  // Notify RenderFrame observers.
+  WebLocalFrameClient* client = Client()->GetWebFrame()->Client();
+  if (client)
+    client->OnStopLoading();
+}
+
 void LocalFrame::Collapse(bool collapsed) {
   FrameOwner* owner = Owner();
   To<HTMLFrameOwnerElement>(owner)->SetCollapsed(collapsed);

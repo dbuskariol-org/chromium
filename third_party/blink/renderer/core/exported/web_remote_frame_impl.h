@@ -52,7 +52,6 @@ class CORE_EXPORT WebRemoteFrameImpl final
   // WebFrame methods:
   void Close() override;
   WebView* View() const override;
-  void StopLoading() override;
 
   // WebRemoteFrame methods:
   WebLocalFrame* CreateLocalChild(WebTreeScopeType,

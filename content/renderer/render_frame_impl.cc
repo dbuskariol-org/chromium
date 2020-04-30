@@ -2175,7 +2175,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
   bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(RenderFrameImpl, msg)
     IPC_MESSAGE_HANDLER(UnfreezableFrameMsg_Unload, OnUnload)
-    IPC_MESSAGE_HANDLER(FrameMsg_Stop, OnStop)
     IPC_MESSAGE_HANDLER(FrameMsg_ContextMenuClosed, OnContextMenuClosed)
     IPC_MESSAGE_HANDLER(FrameMsg_CustomContextMenuAction,
                         OnCustomContextMenuAction)
@@ -4984,20 +4983,6 @@ void RenderFrameImpl::RemoveObserver(RenderFrameObserver* observer) {
   observers_.RemoveObserver(observer);
 }
 
-void RenderFrameImpl::OnStop() {
-  DCHECK(frame_);
-
-  // The stopLoading call may run script, which may cause this frame to be
-  // detached/deleted.  If that happens, return immediately.
-  base::WeakPtr<RenderFrameImpl> weak_this = weak_factory_.GetWeakPtr();
-  frame_->StopLoading();
-  if (!weak_this)
-    return;
-
-  for (auto& observer : observers_)
-    observer.OnStop();
-}
-
 void RenderFrameImpl::OnDroppedNavigation() {
   browser_side_navigation_pending_ = false;
   browser_side_navigation_pending_url_ = GURL();
@@ -6443,6 +6428,11 @@ RenderFrameImpl::CreateURLLoaderFactory() {
     return nullptr;
   }
   return std::make_unique<FrameURLLoaderFactory>(weak_factory_.GetWeakPtr());
+}
+
+void RenderFrameImpl::OnStopLoading() {
+  for (auto& observer : observers_)
+    observer.OnStop();
 }
 
 void RenderFrameImpl::DraggableRegionsChanged() {

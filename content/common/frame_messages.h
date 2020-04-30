@@ -497,9 +497,6 @@ IPC_MESSAGE_ROUTED1(FrameMsg_UpdateOpener, int /* opener_routing_id */)
 // commit, activation and frame swap of the current DOM tree in blink.
 IPC_MESSAGE_ROUTED1(FrameMsg_VisualStateRequest, uint64_t /* id */)
 
-// Instructs the frame to stop the load in progress, if any.
-IPC_MESSAGE_ROUTED0(FrameMsg_Stop)
-
 // TODO(https://crbug.com/995428): Deprecated.
 // Tells the renderer to reload the frame.
 IPC_MESSAGE_ROUTED0(FrameMsg_Reload)
