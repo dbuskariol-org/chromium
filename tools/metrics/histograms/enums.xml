@@ -38546,6 +38546,7 @@ from previous Chrome versions.
   <int value="-1416758392" label="migrate-linux-to-logindb:disabled"/>
   <int value="-1416754663" label="enable-mac-views-native-app-windows"/>
   <int value="-1416184931" label="TranslateRankerEnforcement:enabled"/>
+  <int value="-1412230070" label="query-tiles-instant-background-task"/>
   <int value="-1411733990" label="OmniboxDedupeGoogleDriveURLs:disabled"/>
   <int value="-1411219910"
       label="enable-experimental-accessibility-chromevox-annotations"/>
