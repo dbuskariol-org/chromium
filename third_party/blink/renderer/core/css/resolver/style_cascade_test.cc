@@ -2449,6 +2449,57 @@ TEST_F(StyleCascadeTest, WritingModePriority) {
   EXPECT_EQ("vertical-lr", cascade.ComputedValue("-webkit-writing-mode"));
 }
 
+TEST_F(StyleCascadeTest, RubyPositionCascadeOrder) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("ruby-position", "over");
+  cascade.Add("-webkit-ruby-position", "after");
+  cascade.Apply();
+
+  EXPECT_EQ("under", cascade.ComputedValue("ruby-position"));
+  EXPECT_EQ("after", cascade.ComputedValue("-webkit-ruby-position"));
+}
+
+TEST_F(StyleCascadeTest, RubyPositionReverseCascadeOrder) {
+  TestCascade cascade(GetDocument());
+  cascade.Add("-webkit-ruby-position", "after");
+  cascade.Add("ruby-position", "over");
+  cascade.Apply();
+
+  EXPECT_EQ("over", cascade.ComputedValue("ruby-position"));
+  EXPECT_EQ("before", cascade.ComputedValue("-webkit-ruby-position"));
+}
+
+TEST_F(StyleCascadeTest, RubyPositionSurrogateCanCascadeAsOriginal) {
+  // Note: ruby-position is defined as the surrogate, and -webkit-ruby-position
+  // is the original.
+  ASSERT_TRUE(GetCSSPropertyRubyPosition().IsSurrogate());
+  ASSERT_FALSE(GetCSSPropertyWebkitRubyPosition().IsSurrogate());
+
+  const struct {
+    CSSValueID specified;
+    const char* webkit_expected;
+    const char* unprefixed_expected;
+  } tests[] = {
+      {CSSValueID::kBefore, "before", "over"},
+      {CSSValueID::kAfter, "after", "under"},
+      {CSSValueID::kOver, "before", "over"},
+      {CSSValueID::kUnder, "after", "under"},
+  };
+
+  for (const auto& test : tests) {
+    TestCascade cascade(GetDocument());
+    auto* set =
+        MakeGarbageCollected<MutableCSSPropertyValueSet>(kHTMLStandardMode);
+    set->SetProperty(CSSPropertyID::kWebkitRubyPosition,
+                     *CSSIdentifierValue::Create(test.specified));
+    cascade.Add(set);
+    cascade.Apply();
+    EXPECT_EQ(test.unprefixed_expected, cascade.ComputedValue("ruby-position"));
+    EXPECT_EQ(test.webkit_expected,
+              cascade.ComputedValue("-webkit-ruby-position"));
+  }
+}
+
 TEST_F(StyleCascadeTest, WebkitBorderImageCascadeOrder) {
   String gradient1("linear-gradient(rgb(0, 0, 0), rgb(0, 128, 0))");
   String gradient2("linear-gradient(rgb(0, 0, 0), rgb(0, 200, 0))");
