@@ -1502,6 +1502,8 @@ extern const char kProcessSharingWithStrictSiteInstancesDescription[];
 
 extern const char kQueryTilesName[];
 extern const char kQueryTilesDescription[];
+extern const char kQueryTilesOmniboxName[];
+extern const char kQueryTilesOmniboxDescription[];
 extern const char kQueryTilesCountryCode[];
 extern const char kQueryTilesCountryCodeDescription[];
 extern const char kQueryTilesCountryCodeUS[];

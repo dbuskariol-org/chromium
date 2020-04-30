@@ -2605,7 +2605,8 @@ const char kProcessSharingWithStrictSiteInstancesDescription[] =
 
 const char kQueryTilesName[] = "Show query tiles";
 const char kQueryTilesDescription[] = "Shows query tiles in Chrome";
-
+const char kQueryTilesOmniboxName[] = "Show query tiles in omnibox";
+const char kQueryTilesOmniboxDescription[] = "Shows query tiles in omnibox";
 const char kQueryTilesCountryCode[] = "Country code for getting tiles";
 const char kQueryTilesCountryCodeDescription[] =
     "When query tiles are enabled, this value determines tiles for which "

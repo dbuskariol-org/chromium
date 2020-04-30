@@ -3521,7 +3521,7 @@
   {
     "name": "query-tiles",
     "owners": [ "shaktisahu", "qinmin"],
-    "expiry_milestone": 86
+    "expiry_milestone": 88
   },
   {
     "name": "query-tiles-country-code",
@@ -3531,6 +3531,11 @@
   {
     "name": "query-tiles-instant-fetch",
     "owners": [ "xingliu"],
+    "expiry_milestone": 88
+  },
+  {
+    "name": "query-tiles-omnibox",
+    "owners": [ "shaktisahu", "qinmin"],
     "expiry_milestone": 88
   },
   {

@@ -252,6 +252,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &switches::kSyncUseSessionsUnregisterDelay,
     &subresource_filter::kSafeBrowsingSubresourceFilter,
     &upboarding::features::kQueryTiles,
+    &upboarding::features::kQueryTilesInOmnibox,
 };
 
 const base::Feature* FindFeatureExposedToJava(const std::string& feature_name) {
