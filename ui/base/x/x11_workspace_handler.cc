@@ -7,6 +7,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "ui/base/x/x11_util.h"
 #include "ui/events/x/x11_window_event_manager.h"
+#include "ui/gfx/x/connection.h"
 #include "ui/gfx/x/x11_atom_cache.h"
 #include "ui/gfx/x/xproto.h"
 
@@ -14,9 +15,10 @@ namespace ui {
 
 namespace {
 
-x11::Future<x11::XProto::GetPropertyReply> GetWorkspace(XDisplay* display) {
-  return x11::XProto{display}.GetProperty({
-      .window = XDefaultRootWindow(display),
+x11::Future<x11::XProto::GetPropertyReply> GetWorkspace() {
+  auto* connection = x11::Connection::Get();
+  return connection->GetProperty({
+      .window = XDefaultRootWindow(connection->display()),
       .property = gfx::GetAtom("_NET_CURRENT_DESKTOP"),
       .type = gfx::GetAtom("CARDINAL"),
       .long_length = 1,
@@ -44,7 +46,7 @@ X11WorkspaceHandler::~X11WorkspaceHandler() {
 
 std::string X11WorkspaceHandler::GetCurrentWorkspace() {
   if (workspace_.empty())
-    OnWorkspaceResponse(GetWorkspace(xdisplay_).Sync());
+    OnWorkspaceResponse(GetWorkspace().Sync());
   return workspace_;
 }
 
@@ -56,7 +58,7 @@ bool X11WorkspaceHandler::DispatchXEvent(XEvent* event) {
   switch (event->type) {
     case PropertyNotify: {
       if (event->xproperty.atom == gfx::GetAtom("_NET_CURRENT_DESKTOP")) {
-        GetWorkspace(xdisplay_).OnResponse(
+        GetWorkspace().OnResponse(
             base::BindOnce(&X11WorkspaceHandler::OnWorkspaceResponse,
                            weak_factory_.GetWeakPtr()));
       }

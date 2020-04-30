@@ -6,6 +6,7 @@
 
 #include "base/threading/thread_task_runner_handle.h"
 #include "ui/base/x/x11_display_util.h"
+#include "ui/gfx/x/connection.h"
 #include "ui/gfx/x/x11.h"
 #include "ui/gfx/x/xproto.h"
 #include "ui/gl/egl_util.h"
@@ -55,8 +56,7 @@ bool NativeViewGLSurfaceEGLX11::Initialize(GLSurfaceFormat format) {
   // Query all child windows and store them. ANGLE creates a child window when
   // eglCreateWidnowSurface is called on X11 and expose events from this window
   // need to be received by this class.
-  x11::XProto conn{GetXNativeDisplay()};
-  if (auto reply = conn.QueryTree({window_}).Sync())
+  if (auto reply = x11::Connection::Get()->QueryTree({window_}).Sync())
     children_ = std::move(reply->children);
 
   if (ui::X11EventSource::HasInstance()) {
