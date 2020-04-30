@@ -1404,6 +1404,12 @@ const FeatureEntry::FeatureVariation kTabGridLayoutAndroidVariations[] = {
 const FeatureEntry::FeatureParam kStartSurfaceAndroid_SingleSurface[] = {
     {"start_surface_variation", "single"}};
 
+const FeatureEntry::FeatureParam kStartSurfaceAndroid_SingleSurface_V2[] = {
+    {"start_surface_variation", "single"},
+    {"show_last_active_tab_only", "true"},
+    {"exclude_mv_tiles", "true"},
+    {"hide_switch_when_no_incognito_tabs", "true"}};
+
 const FeatureEntry::FeatureParam
     kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles[] = {
         {"start_surface_variation", "single"},
@@ -1428,6 +1434,8 @@ const FeatureEntry::FeatureParam kStartSurfaceAndroid_OmniboxOnly[] = {
 const FeatureEntry::FeatureVariation kStartSurfaceAndroidVariations[] = {
     {"Single Surface", kStartSurfaceAndroid_SingleSurface,
      base::size(kStartSurfaceAndroid_SingleSurface), nullptr},
+    {"Single Surface V2", kStartSurfaceAndroid_SingleSurface_V2,
+     base::size(kStartSurfaceAndroid_SingleSurface_V2), nullptr},
     {"Single Surface without MV Tiles",
      kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles,
      base::size(kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles), nullptr},
