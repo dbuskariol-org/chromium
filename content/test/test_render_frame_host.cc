@@ -63,14 +63,16 @@ TestRenderFrameHost::TestRenderFrameHost(
     RenderFrameHostDelegate* delegate,
     FrameTree* frame_tree,
     FrameTreeNode* frame_tree_node,
-    int32_t routing_id)
+    int32_t routing_id,
+    RenderFrameHostImpl::LifecycleState lifecyle_state)
     : RenderFrameHostImpl(site_instance,
                           std::move(render_view_host),
                           delegate,
                           frame_tree,
                           frame_tree_node,
                           routing_id,
-                          /*renderer_initiated_creation=*/false),
+                          /*renderer_initiated_creation=*/false,
+                          lifecyle_state),
       child_creation_observer_(delegate ? delegate->GetAsWebContents()
                                         : nullptr),
       simulate_history_list_was_cleared_(false),
