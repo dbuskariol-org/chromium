@@ -247,6 +247,19 @@ mojom("mojom_platform") {
     enabled_features += [ "use_x11" ]
   }
 
+  cpp_typemaps = [
+    {
+      types = [
+        {
+          mojom = "blink.mojom.ClipboardBuffer"
+          cpp = "::ui::ClipboardBuffer"
+        },
+      ]
+      traits_headers = [ "//ui/base/mojom/clipboard_blink_mojom_traits.h" ]
+      traits_public_deps = [ "//ui/base/clipboard:clipboard_types" ]
+    },
+  ]
+
   export_class_attribute = "BLINK_COMMON_EXPORT"
   export_define = "BLINK_COMMON_IMPLEMENTATION=1"
   export_header = "third_party/blink/public/common/common_export.h"
