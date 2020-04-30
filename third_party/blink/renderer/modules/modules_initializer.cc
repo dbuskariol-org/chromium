@@ -58,7 +58,6 @@
 #include "third_party/blink/renderer/modules/indexed_db_names.h"
 #include "third_party/blink/renderer/modules/indexeddb/inspector_indexed_db_agent.h"
 #include "third_party/blink/renderer/modules/installation/installation_service_impl.h"
-#include "third_party/blink/renderer/modules/installedapp/installed_app_controller.h"
 #include "third_party/blink/renderer/modules/launch/file_handling_expiry_impl.h"
 #include "third_party/blink/renderer/modules/launch/web_launch_service_impl.h"
 #include "third_party/blink/renderer/modules/manifest/manifest_manager.h"
@@ -182,16 +181,10 @@ void ModulesInitializer::InitLocalFrame(LocalFrame& frame) const {
 }
 
 void ModulesInitializer::InstallSupplements(LocalFrame& frame) const {
-  WebLocalFrameImpl* web_frame = WebLocalFrameImpl::FromFrame(&frame);
-  WebLocalFrameClient* client = web_frame->Client();
-  DCHECK(client);
-  ProvidePushMessagingClientTo(
-      frame, MakeGarbageCollected<PushMessagingClient>(frame));
+  DCHECK(WebLocalFrameImpl::FromFrame(&frame)->Client());
 
   ScreenOrientationControllerImpl::ProvideTo(frame);
   InspectorAccessibilityAgent::ProvideTo(&frame);
-  ManifestManager::ProvideTo(frame);
-  InstalledAppController::ProvideTo(frame);
   ImageDownloaderImpl::ProvideTo(frame);
   MediaInspectorContextImpl::ProvideToLocalFrame(frame);
 }
@@ -247,6 +240,7 @@ void ModulesInitializer::OnClearWindowObjectInMainWorld(
     // presentation can offer a connection to the presentation receiver.
     PresentationReceiver::From(document);
   }
+  ManifestManager::From(window);
 
 #if defined(OS_ANDROID)
   LocalFrame* frame = document.GetFrame();
@@ -305,16 +299,8 @@ void ModulesInitializer::CloneSessionStorage(
     storage_namespace->CloneTo(WebString::FromLatin1(clone_to_namespace));
 }
 
-void ModulesInitializer::DidCommitLoad(LocalFrame& frame) {
-  ManifestManager* manifest_manager = ManifestManager::From(frame);
-  if (manifest_manager)
-    manifest_manager->DidCommitLoad();
-}
-
 void ModulesInitializer::DidChangeManifest(LocalFrame& frame) {
-  ManifestManager* manifest_manager = ManifestManager::From(frame);
-  if (manifest_manager)
-    manifest_manager->DidChangeManifest();
+  ManifestManager::From(*frame.DomWindow())->DidChangeManifest();
 }
 
 void ModulesInitializer::RegisterInterfaces(mojo::BinderMap& binders) {
