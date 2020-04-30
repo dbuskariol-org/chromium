@@ -73,7 +73,6 @@
 #include "third_party/blink/renderer/modules/remoteplayback/remote_playback.h"
 #include "third_party/blink/renderer/modules/screen_orientation/screen_orientation_controller_impl.h"
 #include "third_party/blink/renderer/modules/service_worker/navigator_service_worker.h"
-#include "third_party/blink/renderer/modules/speech/speech_recognition_controller.h"
 #include "third_party/blink/renderer/modules/storage/dom_window_storage_controller.h"
 #include "third_party/blink/renderer/modules/storage/inspector_dom_storage_agent.h"
 #include "third_party/blink/renderer/modules/storage/storage_namespace.h"
@@ -190,7 +189,6 @@ void ModulesInitializer::InstallSupplements(LocalFrame& frame) const {
       frame, MakeGarbageCollected<PushMessagingClient>(frame));
 
   ScreenOrientationControllerImpl::ProvideTo(frame);
-  ::blink::ProvideSpeechRecognitionTo(frame);
   InspectorAccessibilityAgent::ProvideTo(&frame);
   ManifestManager::ProvideTo(frame);
   InstalledAppController::ProvideTo(frame);
