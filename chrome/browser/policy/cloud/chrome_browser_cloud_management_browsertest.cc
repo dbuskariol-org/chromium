@@ -403,7 +403,7 @@ class MachineLevelUserCloudPolicyManagerTest : public InProcessBrowserTest {
                          : DMToken::CreateValidTokenForTesting(dm_token);
     std::unique_ptr<MachineLevelUserCloudPolicyStore> policy_store =
         MachineLevelUserCloudPolicyStore::Create(
-            browser_dm_token, client_id, user_data_dir,
+            browser_dm_token, client_id, base::FilePath(), user_data_dir,
             /*cloud_policy_overrides=*/false,
             base::ThreadPool::CreateSequencedTaskRunner(
                 {base::MayBlock(), base::TaskPriority::BEST_EFFORT}));

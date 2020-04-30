@@ -51,7 +51,10 @@
 #include "chrome/install_static/install_util.h"
 #endif
 
-#if !BUILDFLAG(GOOGLE_CHROME_BRANDING)
+#if defined(OS_WIN) && BUILDFLAG(GOOGLE_CHROME_BRANDING)
+#include "base/base_paths_win.h"
+#include "chrome/install_static/install_modes.h"
+#else
 #include "chrome/common/chrome_switches.h"
 #endif
 
@@ -62,6 +65,13 @@
 namespace policy {
 
 namespace {
+
+#if defined(OS_WIN) && BUILDFLAG(GOOGLE_CHROME_BRANDING)
+constexpr base::FilePath::StringPieceType kCachedPolicyDirname =
+    FILE_PATH_LITERAL("Policies");
+constexpr base::FilePath::StringPieceType kCachedPolicyFilename =
+    FILE_PATH_LITERAL("PolicyFetchResponse");
+#endif
 
 void RecordEnrollmentResult(
     ChromeBrowserCloudManagementEnrollmentResult result) {
@@ -266,9 +276,23 @@ ChromeBrowserCloudManagementController::CreatePolicyManager(
 
   base::FilePath policy_dir =
       user_data_dir.Append(ChromeBrowserCloudManagementController::kPolicyDir);
+
+  base::FilePath external_policy_path;
+#if defined(OS_WIN) && BUILDFLAG(GOOGLE_CHROME_BRANDING)
+  base::PathService::Get(base::DIR_PROGRAM_FILESX86, &external_policy_path);
+
+  external_policy_path =
+      external_policy_path.Append(install_static::kCompanyPathName)
+          .Append(kCachedPolicyDirname)
+          .AppendASCII(
+              policy::dm_protocol::kChromeMachineLevelUserCloudPolicyTypeBase64)
+          .Append(kCachedPolicyFilename);
+#endif
+
   std::unique_ptr<MachineLevelUserCloudPolicyStore> policy_store =
       MachineLevelUserCloudPolicyStore::Create(
-          dm_token, client_id, policy_dir, cloud_policy_has_priority,
+          dm_token, client_id, external_policy_path, policy_dir,
+          cloud_policy_has_priority,
           base::ThreadPool::CreateSequencedTaskRunner(
               {base::MayBlock(), base::TaskPriority::BEST_EFFORT,
                // Block shutdown to make sure the policy cache update is always
