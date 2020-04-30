@@ -8564,17 +8564,18 @@ void RenderFrameHostImpl::UpdateAdFrameType(
 
 blink::mojom::AuthenticatorStatus
 RenderFrameHostImpl::PerformGetAssertionWebAuthSecurityChecks(
-    const std::string& relying_party_id) {
+    const std::string& relying_party_id,
+    const url::Origin& effective_origin) {
   bool is_cross_origin;
   blink::mojom::AuthenticatorStatus status =
       GetWebAuthRequestSecurityChecker()->ValidateAncestorOrigins(
-          GetLastCommittedOrigin(), &is_cross_origin);
+          effective_origin, &is_cross_origin);
   if (status != blink::mojom::AuthenticatorStatus::SUCCESS) {
     return status;
   }
 
   status = GetWebAuthRequestSecurityChecker()->ValidateDomainAndRelyingPartyID(
-      GetLastCommittedOrigin(), relying_party_id);
+      effective_origin, relying_party_id);
   if (status != blink::mojom::AuthenticatorStatus::SUCCESS) {
     return status;
   }
@@ -8584,17 +8585,18 @@ RenderFrameHostImpl::PerformGetAssertionWebAuthSecurityChecks(
 
 blink::mojom::AuthenticatorStatus
 RenderFrameHostImpl::PerformMakeCredentialWebAuthSecurityChecks(
-    const std::string& relying_party_id) {
+    const std::string& relying_party_id,
+    const url::Origin& effective_origin) {
   bool is_cross_origin;
   blink::mojom::AuthenticatorStatus status =
       GetWebAuthRequestSecurityChecker()->ValidateAncestorOrigins(
-          GetLastCommittedOrigin(), &is_cross_origin);
+          effective_origin, &is_cross_origin);
   if (status != blink::mojom::AuthenticatorStatus::SUCCESS) {
     return status;
   }
 
   status = GetWebAuthRequestSecurityChecker()->ValidateDomainAndRelyingPartyID(
-      GetLastCommittedOrigin(), relying_party_id);
+      effective_origin, relying_party_id);
   if (status != blink::mojom::AuthenticatorStatus::SUCCESS) {
     return status;
   }

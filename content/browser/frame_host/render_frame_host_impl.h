@@ -355,9 +355,11 @@ class CONTENT_EXPORT RenderFrameHostImpl
   bool IsDOMContentLoaded() override;
   void UpdateAdFrameType(blink::mojom::AdFrameType ad_frame_type) override;
   blink::mojom::AuthenticatorStatus PerformGetAssertionWebAuthSecurityChecks(
-      const std::string& relying_party_id) override;
+      const std::string& relying_party_id,
+      const url::Origin& effective_origin) override;
   blink::mojom::AuthenticatorStatus PerformMakeCredentialWebAuthSecurityChecks(
-      const std::string& relying_party_id) override;
+      const std::string& relying_party_id,
+      const url::Origin& effective_origin) override;
   void SetIsXrOverlaySetup() override;
   bool IsInBackForwardCache() override;
   ukm::SourceId GetPageUkmSourceId() override;
@@ -960,7 +962,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
       mojo::PendingAssociatedReceiver<blink::mojom::DevToolsAgent> receiver);
 
 #if defined(OS_ANDROID)
-  base::android::ScopedJavaLocalRef<jobject> GetJavaRenderFrameHost();
+  base::android::ScopedJavaLocalRef<jobject> GetJavaRenderFrameHost() override;
   service_manager::InterfaceProvider* GetJavaInterfaces() override;
 #endif
 
