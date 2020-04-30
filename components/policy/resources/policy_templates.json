@@ -19901,6 +19901,37 @@
       This policy can only be set from the Google Admin console.'''
     },
     {
+      'name': 'OnSecurityEventEnterpriseConnector',
+      'owners': ['rogerta@chromium.org', 'mad@chromium.org', 'domfc@chromium.org'],
+      'type': 'dict',
+      'schema': {
+        'type': 'array',
+        'items': {
+          'type': 'object',
+          'properties': {
+            'service_provider': { 'type': 'string' },
+          },
+        },
+      },
+      'example_value': [{
+        'service_provider': 'Google',
+      }],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'id': 699,
+      'supported_on': ['chrome.*:84-', 'chrome_os:84-'],
+      'future': True,
+      'caption': '''Configuration policy for the OnSecurityEvent Chrome Enterprise Connector''',
+      'tags': [],
+      'desc': '''List of Chrome Enterprise Connectors services settings to be applied to the <ph name="ON_SECURITY_EVENT_ENTERPRISE_CONNECTOR">OnSecurityEvent</ph> Enterprise Connector, which triggers when a security event occurs in Chrome. This includes negative verdicts from analysis Enterprise Connectors, password reuse, navigations to unsafe pages and other security sensitive user actions.
+
+      The <ph name="ENTERPRISE_CONNECTOR_SERVICE_PROVIDER_FIELD">service_provider</ph> field identifies which reporting service provider the settings correspond to.
+
+      This policy can only be set from the Google Admin console.'''
+    },
+    {
       'name': 'RendererCodeIntegrityEnabled',
       'owners': ['wfh@chromium.org', 'adetaylor@chromium.org'],
       'type': 'main',
@@ -21923,6 +21954,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 476, 546, 562, 569, 578],
-  'highest_id_currently_used': 698,
+  'highest_id_currently_used': 699,
   'highest_atomic_group_id_currently_used': 38
 }

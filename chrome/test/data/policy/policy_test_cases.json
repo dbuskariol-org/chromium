@@ -7053,6 +7053,22 @@
     ]
   },
 
+  "OnSecurityEventEnterpriseConnector": {
+    "os": ["win", "linux", "mac", "chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": {
+          "OnSecurityEventEnterpriseConnector": [
+            {
+              "service_provider": "Google"
+            }
+          ]
+        },
+        "prefs": { "enterprise_connectors.on_security_event": { "local_state": true } }
+      }
+    ]
+  },
+
   "RendererCodeIntegrityEnabled": {
     "os": ["win"],
     "policy_pref_mapping_test": [

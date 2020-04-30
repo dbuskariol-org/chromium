@@ -20085,6 +20085,7 @@ Called by update_document_policy_enum.py.-->
   <int value="696" label="OnFileDownloadedEnterpriseConnector"/>
   <int value="697" label="OnBulkDataEntryEnterpriseConnector"/>
   <int value="698" label="PluginVmUserId"/>
+  <int value="699" label="OnSecurityEventEnterpriseConnector"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
