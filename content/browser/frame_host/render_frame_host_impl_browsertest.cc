@@ -1169,9 +1169,11 @@ class ExecuteScriptBeforeRenderFrameDeletedHelper
 // code and may run nested message loops and send sync IPC messages.
 IN_PROC_BROWSER_TEST_F(RenderFrameHostImplBrowserTest,
                        FrameDetached_WindowOpenIPCFails) {
-  EXPECT_TRUE(NavigateToURL(shell(), GetTestUrl("", "title1.html")));
+  EXPECT_TRUE(
+      NavigateToURL(shell(), embedded_test_server()->GetURL("/title1.html")));
   EXPECT_EQ(1u, Shell::windows().size());
-  GURL test_url = GetTestUrl("render_frame_host", "window_open.html");
+  GURL test_url =
+      embedded_test_server()->GetURL("/render_frame_host/window_open.html");
   std::string open_script =
       base::StringPrintf("popup = window.open('%s');", test_url.spec().c_str());
 
