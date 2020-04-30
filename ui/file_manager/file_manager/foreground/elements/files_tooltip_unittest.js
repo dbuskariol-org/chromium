@@ -76,6 +76,7 @@ function setUp() {
 
   tooltip = document.querySelector('files-tooltip');
   assertNotEqual('none', window.getComputedStyle(tooltip).display);
+  assertEquals('0', window.getComputedStyle(tooltip).opacity);
   assertEquals(enableFilesNg, tooltip.hasAttribute('files-ng'));
 
   tooltip.addTargets([chocolateButton, cherriesButton]);
