@@ -3091,6 +3091,8 @@ jumbo_static_library("browser") {
       "accessibility/caption_controller.h",
       "accessibility/caption_controller_factory.cc",
       "accessibility/caption_controller_factory.h",
+      "accessibility/caption_host_impl.cc",
+      "accessibility/caption_host_impl.h",
       "accessibility/invert_bubble_prefs.cc",
       "accessibility/invert_bubble_prefs.h",
       "apps/app_service/app_icon_factory.cc",
