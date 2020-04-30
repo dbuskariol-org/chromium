@@ -124,10 +124,9 @@
   emptyCredentialsViewController.modalPresentationStyle =
       UIModalPresentationOverCurrentContext;
   emptyCredentialsViewController.actionHandler = self;
-  [self.viewController.navigationController
-      presentViewController:emptyCredentialsViewController
-                   animated:NO
-                 completion:nil];
+  [self.viewController presentViewController:emptyCredentialsViewController
+                                    animated:YES
+                                  completion:nil];
 }
 
 - (void)showDetailsForCredential:(id<Credential>)credential {
