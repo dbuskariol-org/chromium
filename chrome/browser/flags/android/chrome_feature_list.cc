@@ -164,6 +164,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kOfflineIndicatorV2,
     &kOmniboxSpareRenderer,
     &kOverlayNewLayout,
+    &kPageInfoPerformanceHints,
     &kPayWithGoogleV1,
     &kPhotoPickerVideoSupport,
     &kPhotoPickerZoom,
@@ -487,6 +488,9 @@ const base::Feature kOmniboxSpareRenderer{"OmniboxSpareRenderer",
 
 const base::Feature kOverlayNewLayout{"OverlayNewLayout",
                                       base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kPageInfoPerformanceHints{
+    "PageInfoPerformanceHints", base::FEATURE_DISABLED_BY_DEFAULT};
 
 // TODO(rouslan): Remove this.
 const base::Feature kPayWithGoogleV1{"PayWithGoogleV1",

@@ -2568,6 +2568,10 @@ const char kAndroidPartnerCustomizationPhenotypeDescription[] =
     "This flag loads a new configuration source of the default homepage and "
     "bookmarks.";
 
+const char kPageInfoPerformanceHintsName[] = "Page info performance hints";
+const char kPageInfoPerformanceHintsDescription[] =
+    "Show site performance information in the page info menu.";
+
 const char kPasswordManagerOnboardingAndroidName[] =
     "Password manager onboarding experience";
 const char kPasswordManagerOnboardingAndroidDescription[] =

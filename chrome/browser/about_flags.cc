@@ -5313,6 +5313,13 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(chrome::android::kContextMenuPerformanceInfo)},
 #endif  // !defined(OS_ANDROID)
 
+#if defined(OS_ANDROID)
+    {"page-info-performance-hints",
+     flag_descriptions::kPageInfoPerformanceHintsName,
+     flag_descriptions::kPageInfoPerformanceHintsDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kPageInfoPerformanceHints)},
+#endif  // !defined(OS_ANDROID)
+
 #if defined(OS_CHROMEOS)
     {"drag-to-snap-in-clamshell-mode",
      flag_descriptions::kDragToSnapInClamshellModeName,

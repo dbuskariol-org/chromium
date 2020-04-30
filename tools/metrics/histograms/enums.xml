@@ -38440,6 +38440,7 @@ from previous Chrome versions.
   <int value="-1536242739" label="security-chip"/>
   <int value="-1535946978" label="MixBrowserTypeTabs:disabled"/>
   <int value="-1535758690" label="AutoplayIgnoreWebAudio:disabled"/>
+  <int value="-1535694535" label="PageInfoPerformanceHints:enabled"/>
   <int value="-1533258008" label="CalculateNativeWinOcclusion:enabled"/>
   <int value="-1532035450" label="DragTabsInTabletMode:disabled"/>
   <int value="-1532014193" label="disable-encryption-migration"/>
@@ -38772,6 +38773,7 @@ from previous Chrome versions.
   <int value="-1197245070" label="CookieDeprecationMessages:disabled"/>
   <int value="-1197035323" label="ZeroSuggestRedirectToChrome:disabled"/>
   <int value="-1195194959" label="XGEOVisibleNetworks:disabled"/>
+  <int value="-1191258368" label="PageInfoPerformanceHints:disabled"/>
   <int value="-1190174011" label="enable-hdr"/>
   <int value="-1185477291" label="ImeDecoderWithSandbox:enabled"/>
   <int value="-1184904651" label="enable-npapi"/>
