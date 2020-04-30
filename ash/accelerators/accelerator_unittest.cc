@@ -172,9 +172,32 @@ TEST_F(AcceleratorTest, PartialScreenshot) {
   EXPECT_EQ(0, screenshot_delegate->handle_take_window_screenshot_count());
   screenshot_delegate->reset_all_screenshot_counts();
 
+  // Test TAKE_PARTIAL_SCREENSHOT via alt+PrtScn key then exit with escape
+  // key.
+  SendKeyPressSync(ui::VKEY_SNAPSHOT, false, false, true);
+  SendKeyPressSync(ui::VKEY_ESCAPE, false, false, false);
+  EXPECT_EQ(0, screenshot_delegate->handle_take_screenshot_count());
+  EXPECT_EQ(0, screenshot_delegate->handle_take_partial_screenshot_count());
+  EXPECT_EQ(0, screenshot_delegate->handle_take_window_screenshot_count());
+  screenshot_delegate->reset_all_screenshot_counts();
+
   // Test TAKE_PARTIAL_SCREENSHOT via ctrl+shift+overview key then select
   // a region to complete the screenshot.
   SendKeyPressSync(ui::VKEY_MEDIA_LAUNCH_APP1, true, true, false);
+  generator.MoveMouseTo(100, 100);
+  generator.PressLeftButton();
+  EXPECT_EQ(0, screenshot_delegate->handle_take_partial_screenshot_count());
+  generator.MoveMouseTo(150, 150);
+  generator.ReleaseLeftButton();
+  EXPECT_EQ(0, screenshot_delegate->handle_take_screenshot_count());
+  EXPECT_EQ(1, screenshot_delegate->handle_take_partial_screenshot_count());
+  EXPECT_EQ(0, screenshot_delegate->handle_take_window_screenshot_count());
+  EXPECT_EQ(gfx::Rect(100, 100, 50, 50), screenshot_delegate->last_rect());
+  screenshot_delegate->reset_all_screenshot_counts();
+
+  // Test TAKE_PARTIAL_SCREENSHOT via alt+PrtScn key then select a region
+  // to complete the screenshot.
+  SendKeyPressSync(ui::VKEY_SNAPSHOT, false, false, true);
   generator.MoveMouseTo(100, 100);
   generator.PressLeftButton();
   EXPECT_EQ(0, screenshot_delegate->handle_take_partial_screenshot_count());
