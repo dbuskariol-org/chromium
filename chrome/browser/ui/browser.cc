@@ -1923,6 +1923,12 @@ content::ColorChooser* Browser::OpenColorChooser(
   return chrome::ShowColorChooser(web_contents, initial_color);
 }
 
+std::unique_ptr<content::EyeDropper> Browser::OpenEyeDropper(
+    content::RenderFrameHost* frame,
+    content::EyeDropperListener* listener) {
+  return window()->OpenEyeDropper(frame, listener);
+}
+
 void Browser::RunFileChooser(
     content::RenderFrameHost* render_frame_host,
     std::unique_ptr<content::FileSelectListener> listener,
