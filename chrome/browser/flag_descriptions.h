@@ -1911,6 +1911,9 @@ extern const char kDisableOfficeEditingComponentAppDescription[];
 extern const char kDoubleTapToZoomInTabletModeName[];
 extern const char kDoubleTapToZoomInTabletModeDescription[];
 
+extern const char kMovablePartialScreenshotName[];
+extern const char kMovablePartialScreenshotDescription[];
+
 extern const char kEnableAdvancedPpdAttributesName[];
 extern const char kEnableAdvancedPpdAttributesDescription[];
 

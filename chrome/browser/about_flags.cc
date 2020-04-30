@@ -5428,6 +5428,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableHighResolutionMouseScrollingName,
      flag_descriptions::kEnableHighResolutionMouseScrollingDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(ui::kEnableHighResolutionMouseScrolling)},
+
+    {"movable-partial-screenshot-region",
+     flag_descriptions::kMovablePartialScreenshotName,
+     flag_descriptions::kMovablePartialScreenshotDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(ash::features::kMovablePartialScreenshot)},
 #endif  // defined(OS_CHROMEOS)
 
     {"enable-experimental-cookie-features",

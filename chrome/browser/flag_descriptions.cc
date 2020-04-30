@@ -3301,6 +3301,11 @@ const char kDoubleTapToZoomInTabletModeDescription[] =
     "If Enabled, double tapping in webpages while in tablet mode will zoom the "
     "page.";
 
+const char kMovablePartialScreenshotName[] =
+    "Movable/resizable partial screenshot region";
+const char kMovablePartialScreenshotDescription[] =
+    "Allow partial screenshot region to be moved/resized via mouse/touch.";
+
 const char kEnableAdvancedPpdAttributesName[] =
     "Enable advanced PPD attributes";
 const char kEnableAdvancedPpdAttributesDescription[] =

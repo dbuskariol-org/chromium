@@ -2926,6 +2926,11 @@
     "expiry_milestone": 84
   },
   {
+    "name": "movable-partial-screenshot-region",
+    "owners": [ "xiyuan", "chromeos-wmp-eng" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "multi-display-overview-and-split-view",
     "owners": [ "amusbach@chromium.org", "xdai@chromium.org" ],
     "expiry_milestone": 86
