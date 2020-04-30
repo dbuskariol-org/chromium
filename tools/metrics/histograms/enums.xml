@@ -11839,9 +11839,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="CorruptionStates">
-  <int value="0" label="Corruption Detected After Mount"/>
-  <int value="1" label="Mount Failed"/>
-  <int value="2" label="Rolled Back During Mount"/>
+  <int value="0" label="Mount Failed"/>
+  <int value="1" label="Rolled Back During Mount"/>
+  <int value="2" label="Corruption Detected After Mount"/>
 </enum>
 
 <enum name="CorsAccessCheckError">
