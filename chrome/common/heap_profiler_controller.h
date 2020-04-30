@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_HEAP_PROFILING_IN_PROCESS_HEAP_PROFILER_CONTROLLER_H_
-#define COMPONENTS_HEAP_PROFILING_IN_PROCESS_HEAP_PROFILER_CONTROLLER_H_
+#ifndef CHROME_COMMON_HEAP_PROFILER_CONTROLLER_H_
+#define CHROME_COMMON_HEAP_PROFILER_CONTROLLER_H_
 
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
@@ -31,4 +31,4 @@ class HeapProfilerController {
   DISALLOW_COPY_AND_ASSIGN(HeapProfilerController);
 };
 
-#endif  // COMPONENTS_HEAP_PROFILING_IN_PROCESS_HEAP_PROFILER_CONTROLLER_H_
+#endif  // CHROME_COMMON_HEAP_PROFILER_CONTROLLER_H_

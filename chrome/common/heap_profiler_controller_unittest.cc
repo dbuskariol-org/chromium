@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/heap_profiling/in_process/heap_profiler_controller.h"
+#include "chrome/common/heap_profiler_controller.h"
 
 #include "base/sampling_heap_profiler/sampling_heap_profiler.h"
 #include "base/test/bind_test_util.h"
