@@ -7082,6 +7082,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Is Tagged"/>
 </enum>
 
+<enum name="BooleanIsTopLevel">
+  <int value="0" label="Not Top Level"/>
+  <int value="1" label="Top Level"/>
+</enum>
+
 <enum name="BooleanIsUseRelinker">
   <obsolete>
     Removed in 2019-07.

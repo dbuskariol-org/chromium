@@ -20,6 +20,7 @@ import org.chromium.components.browser_ui.widget.image_tiles.ImageTileCoordinato
 import org.chromium.components.browser_ui.widget.image_tiles.TileConfig;
 import org.chromium.components.query_tiles.QueryTile;
 import org.chromium.components.query_tiles.TileProvider;
+import org.chromium.components.query_tiles.TileUmaLogger;
 import org.chromium.ui.display.DisplayAndroid;
 import org.chromium.ui.display.DisplayUtil;
 
@@ -37,13 +38,14 @@ public class QueryTileSection {
     private static final String MOST_VISITED_MAX_ROWS_NORMAL_SCREEN =
             "most_visited_max_rows_normal_screen";
     private static final int SMALL_SCREEN_HEIGHT_THRESHOLD_DP = 750;
-    private static final String UMA_PREFIX = "NTP.QueryTiles";
+    private static final String UMA_PREFIX = "QueryTiles.NTP";
 
     private final ViewGroup mQueryTileSectionView;
     private final SearchBoxCoordinator mSearchBoxCoordinator;
     private final Callback<String> mSubmitQueryCallback;
     private ImageTileCoordinator mTileCoordinator;
     private TileProvider mTileProvider;
+    private TileUmaLogger mTileUmaLogger;
 
     /** Constructor. */
     public QueryTileSection(ViewGroup queryTileSectionView,
@@ -57,6 +59,7 @@ public class QueryTileSection {
         TileProviderFactory.setFakeTileProvider(new FakeTileProvider());
         mTileProvider = TileProviderFactory.getForProfile(profile);
         TileConfig tileConfig = new TileConfig.Builder().setUmaPrefix(UMA_PREFIX).build();
+        mTileUmaLogger = new TileUmaLogger(UMA_PREFIX);
         mTileCoordinator = ImageTileCoordinatorFactory.create(mQueryTileSectionView.getContext(),
                 tileConfig, this::onTileClicked, this::getVisuals);
         mQueryTileSectionView.addView(mTileCoordinator.getView(),
@@ -66,6 +69,7 @@ public class QueryTileSection {
 
     private void onTileClicked(ImageTile tile) {
         QueryTile queryTile = (QueryTile) tile;
+        mTileUmaLogger.recordTileClicked(queryTile);
         boolean isLastLevelTile = queryTile.children.isEmpty();
         if (isLastLevelTile) {
             mSubmitQueryCallback.onResult(queryTile.queryText);
@@ -81,11 +85,13 @@ public class QueryTileSection {
         mSearchBoxCoordinator.setChipDelegate(new SearchBoxChipDelegate() {
             @Override
             public void onChipClicked() {
+                mTileUmaLogger.recordSearchButtonClicked(queryTile);
                 mSubmitQueryCallback.onResult(queryTile.queryText);
             }
 
             @Override
             public void onCancelClicked() {
+                mTileUmaLogger.recordChipCleared();
                 mSearchBoxCoordinator.setChipText(null);
                 reloadTiles();
             }
@@ -105,6 +111,7 @@ public class QueryTileSection {
     }
 
     private void setTiles(List<QueryTile> tiles) {
+        mTileUmaLogger.recordTilesLoaded(tiles);
         mTileCoordinator.setTiles(new ArrayList<>(tiles));
         mQueryTileSectionView.setVisibility(tiles.isEmpty() ? View.GONE : View.VISIBLE);
     }

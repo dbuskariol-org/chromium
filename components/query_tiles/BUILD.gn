@@ -75,6 +75,7 @@ if (is_android) {
     sources = [
       "android/java/src/org/chromium/components/query_tiles/QueryTile.java",
       "android/java/src/org/chromium/components/query_tiles/TileProvider.java",
+      "android/java/src/org/chromium/components/query_tiles/TileUmaLogger.java",
       "android/java/src/org/chromium/components/query_tiles/bridges/TileConversionBridge.java",
       "android/java/src/org/chromium/components/query_tiles/bridges/TileProviderBridge.java",
     ]
