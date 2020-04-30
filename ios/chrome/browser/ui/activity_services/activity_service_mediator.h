@@ -13,11 +13,13 @@ class BookmarkModel;
 }
 
 @protocol BrowserCommands;
+@class ChromeActivityImageSource;
 @protocol ChromeActivityItemSource;
 @class ChromeActivityURLSource;
 @protocol FindInPageCommands;
 class PrefService;
 @protocol QRGenerationCommands;
+@class ShareImageData;
 @class ShareToData;
 
 // Snackbar ID for any services that wish to show snackbars.
@@ -44,6 +46,15 @@ extern NSString* const kActivityServicesSnackbarCategory;
 // Generates an array of activities to be added to the activity view for the
 // given |data|.
 - (NSArray*)applicationActivitiesForData:(ShareToData*)data;
+
+// Generates an array of activity items to be shared via an activity view for
+// the given |data|.
+- (NSArray<ChromeActivityImageSource*>*)activityItemsForImageData:
+    (ShareImageData*)data;
+
+// Generates an array of activities to be added to the activity view for the
+// given |data|.
+- (NSArray*)applicationActivitiesForImageData:(ShareImageData*)data;
 
 // Returns the union of excluded activity types given |items| to share.
 - (NSSet*)excludedActivityTypesForItems:

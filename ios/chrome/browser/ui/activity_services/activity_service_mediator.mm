@@ -24,8 +24,10 @@
 #import "ios/chrome/browser/ui/activity_services/activities/request_desktop_or_mobile_site_activity.h"
 #import "ios/chrome/browser/ui/activity_services/activities/send_tab_to_self_activity.h"
 #import "ios/chrome/browser/ui/activity_services/activity_type_util.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_image_source.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_source.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_url_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/share_image_data.h"
 #import "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_positioner.h"
 #import "ios/chrome/browser/ui/commands/qr_generation_commands.h"
@@ -129,6 +131,17 @@ NSString* const kActivityServicesSnackbarCategory =
       [[PrintActivity alloc] initWithData:data handler:self.handler];
   [applicationActivities addObject:printActivity];
   return applicationActivities;
+}
+
+- (NSArray<ChromeActivityImageSource*>*)activityItemsForImageData:
+    (ShareImageData*)data {
+  return @[ [[ChromeActivityImageSource alloc] initWithImage:data.image
+                                                       title:data.title] ];
+}
+
+- (NSArray*)applicationActivitiesForImageData:(ShareImageData*)data {
+  // TODO(crbug.com/1068606): Implement and add Save and Copy activities.
+  return @[];
 }
 
 - (NSSet*)excludedActivityTypesForItems:

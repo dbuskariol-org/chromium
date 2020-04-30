@@ -12,7 +12,10 @@
 #import "ios/chrome/browser/main/browser.h"
 #import "ios/chrome/browser/ui/activity_services/activity_service_mediator.h"
 #import "ios/chrome/browser/ui/activity_services/canonical_url_retriever.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_image_source.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_url_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/share_image_data.h"
 #import "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/chrome/browser/ui/activity_services/data/share_to_data_builder.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_positioner.h"
@@ -71,9 +74,11 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
       [[ActivityServiceMediator alloc] initWithHandler:self.handler
                                            prefService:browserState->GetPrefs()
                                          bookmarkModel:bookmarkModel];
-
-  self.sharePageStartTime = base::TimeTicks::Now();
-  [self shareCurrentPage];
+  if (self.image) {
+    [self shareImage];
+  } else {
+    [self shareCurrentPage];
+  }
 }
 
 - (void)stop {
@@ -132,6 +137,8 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
 #pragma mark - Private Methods: Current Page
 
 - (void)shareCurrentPage {
+  self.sharePageStartTime = base::TimeTicks::Now();
+
   // Retrieve the current page's URL.
   __weak __typeof(self) weakSelf = self;
   activity_services::RetrieveCanonicalUrl(
@@ -153,8 +160,22 @@ const char kSharePageLatencyHistogram[] = "IOS.SharePageLatency";
     self.sharePageStartTime = base::TimeTicks();
   }
 
-  NSArray* items = [self.mediator activityItemsForData:data];
+  NSArray<ChromeActivityURLSource*>* items =
+      [self.mediator activityItemsForData:data];
   NSArray* activities = [self.mediator applicationActivitiesForData:data];
+
+  [self shareItems:items activities:activities];
+}
+
+#pragma mark - Private Methods: Share Image
+
+- (void)shareImage {
+  ShareImageData* data = [[ShareImageData alloc] initWithImage:self.image
+                                                         title:self.title];
+
+  NSArray<ChromeActivityImageSource*>* items =
+      [self.mediator activityItemsForImageData:data];
+  NSArray* activities = [self.mediator applicationActivitiesForImageData:data];
 
   [self shareItems:items activities:activities];
 }

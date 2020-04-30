@@ -12,6 +12,8 @@ source_set("data") {
     "chrome_activity_item_thumbnail_generator.mm",
     "chrome_activity_url_source.h",
     "chrome_activity_url_source.mm",
+    "share_image_data.h",
+    "share_image_data.mm",
     "share_to_data.h",
     "share_to_data.mm",
     "share_to_data_builder.h",

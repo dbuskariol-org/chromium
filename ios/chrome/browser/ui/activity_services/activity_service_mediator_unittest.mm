@@ -18,6 +18,7 @@
 #import "ios/chrome/browser/ui/activity_services/activity_type_util.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_thumbnail_generator.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_url_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/share_image_data.h"
 #import "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/commands/find_in_page_commands.h"
@@ -154,6 +155,31 @@ TEST_F(ActivityServiceMediatorTest, ActivitiesForData_HTTPS) {
     [GenerateQrCodeActivity class], [FindInPageActivity class],
     [RequestDesktopOrMobileSiteActivity class], [PrintActivity class]
   ]);
+}
+
+// Tests that only one ChromeActivityImageSource is initialized from a
+// ShareIamgeData instance.
+TEST_F(ActivityServiceMediatorTest, ActivityItemsForImageData_Success) {
+  ShareImageData* data =
+      [[ShareImageData alloc] initWithImage:[[UIImage alloc] init]
+                                      title:@"some title"];
+
+  NSArray<ChromeActivityImageSource*>* activityItems =
+      [mediator_ activityItemsForImageData:data];
+
+  EXPECT_EQ(1U, [activityItems count]);
+}
+
+// Tests that the right activities are added in order for an image.
+TEST_F(ActivityServiceMediatorTest, ActivitiesForImageData) {
+  ShareImageData* data =
+      [[ShareImageData alloc] initWithImage:[[UIImage alloc] init]
+                                      title:@"some title"];
+
+  NSArray* activities = [mediator_ applicationActivitiesForImageData:data];
+
+  // For now, we don't have any custom activities.
+  EXPECT_EQ(0U, [activities count]);
 }
 
 // Tests that computing the list of excluded activities works for one item.
