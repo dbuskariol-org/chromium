@@ -813,6 +813,9 @@ extern const char kOmniboxSearchEngineLogoDescription[];
 extern const char kOmniboxSpareRendererName[];
 extern const char kOmniboxSpareRendererDescription[];
 
+extern const char kOmniboxSuggestionsRecyclerViewName[];
+extern const char kOmniboxSuggestionsRecyclerViewDescription[];
+
 extern const char kOmniboxUIHideSteadyStateUrlSchemeName[];
 extern const char kOmniboxUIHideSteadyStateUrlSchemeDescription[];
 

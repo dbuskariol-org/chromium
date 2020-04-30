@@ -3214,6 +3214,10 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_WITH_PARAMS_VALUE_TYPE(omnibox::kOmniboxSearchEngineLogo,
                                     kOmniboxSearchEngineLogoFeatureVariations,
                                     "OmniboxSearchEngineLogo")},
+    {"omnibox-suggestions-recycler-view",
+     flag_descriptions::kOmniboxSuggestionsRecyclerViewName,
+     flag_descriptions::kOmniboxSuggestionsRecyclerViewDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(omnibox::kOmniboxSuggestionsRecyclerView)},
 #endif  // defined(OS_ANDROID)
 
     {"omnibox-on-device-head-suggestions-incognito",

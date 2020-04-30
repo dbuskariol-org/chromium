@@ -40553,6 +40553,7 @@ from previous Chrome versions.
   <int value="926852901" label="DataReductionProxyMainMenu:disabled"/>
   <int value="928900043" label="OmniboxLooseMaxLimitOnDedicatedRows:disabled"/>
   <int value="929462705" label="disable-link-disambiguation-popup"/>
+  <int value="934236781" label="OmniboxSuggestionsRecyclerView:enabled"/>
   <int value="934292666" label="DownloadRename:enabled"/>
   <int value="934805020" label="CornerShortcuts:disabled"/>
   <int value="935655516" label="password-import-export:disabled"/>
@@ -41353,6 +41354,7 @@ from previous Chrome versions.
   <int value="1851358497" label="enable-ash-sidebar"/>
   <int value="1851746253" label="ReducedReferrerGranularity:disabled"/>
   <int value="1852630189" label="NTPBookmarkSuggestions:disabled"/>
+  <int value="1854048611" label="OmniboxSuggestionsRecyclerView:disabled"/>
   <int value="1854226565" label="AutofillNoLocalSaveOnUnmaskSuccess:enabled"/>
   <int value="1855524566" label="allow-insecure-websocket-from-https-origin"/>
   <int value="1858385315" label="ChromeHomeBottomNavLabels:enabled"/>
