@@ -3014,8 +3014,8 @@ RenderFrameHostDelegate* WebContentsImpl::CreateNewWindow(
 
       gfx::Rect initial_rect;  // Report an empty initial rect.
       delegate_->AddNewContents(this, std::move(new_contents),
-                                params.disposition, initial_rect,
-                                has_user_gesture, &was_blocked);
+                                params.target_url, params.disposition,
+                                initial_rect, has_user_gesture, &was_blocked);
       // The delegate may delete |new_contents_impl| during AddNewContents().
       if (!weak_new_contents)
         return nullptr;
@@ -3143,7 +3143,8 @@ void WebContentsImpl::ShowCreatedWindow(int process_id,
     base::WeakPtr<WebContentsImpl> weak_created =
         created->weak_factory_.GetWeakPtr();
     delegate->AddNewContents(this, std::move(owned_created->contents),
-                             disposition, initial_rect, user_gesture, nullptr);
+                             std::move(owned_created->target_url), disposition,
+                             initial_rect, user_gesture, nullptr);
     // The delegate may delete |created| during AddNewContents().
     if (!weak_created)
       return;
@@ -4866,10 +4867,9 @@ void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
       title_for_view_source, ui::PAGE_TRANSITION_LINK,
       /* is_renderer_initiated = */ false,
       /* blob_url_loader_factory = */ nullptr);
-  navigation_entry->SetVirtualURL(GURL(content::kViewSourceScheme +
-                                       std::string(":") +
-                                       frame_entry->url().spec()));
-
+  const GURL url(content::kViewSourceScheme + std::string(":") +
+                 frame_entry->url().spec());
+  navigation_entry->SetVirtualURL(url);
   navigation_entry->set_isolation_info(
       frame->GetIsolationInfoForSubresources());
 
@@ -4898,7 +4898,7 @@ void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
   gfx::Rect initial_rect;
   constexpr bool kUserGesture = true;
   bool ignored_was_blocked;
-  delegate_->AddNewContents(this, std::move(view_source_contents),
+  delegate_->AddNewContents(this, std::move(view_source_contents), url,
                             WindowOpenDisposition::NEW_FOREGROUND_TAB,
                             initial_rect, kUserGesture, &ignored_was_blocked);
   // Note that the |delegate_| could have deleted |view_source_contents| during
