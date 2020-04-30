@@ -944,6 +944,7 @@
       // Traverse the fragment tree when painting and hit-testing, instead of
       // the layout object tree.
       name: "LayoutNGFragmentTraversal",
+      implied_by: ["LayoutNGBlockFragmentation"],
     },
     {
       name: "LayoutNGGrid",
