@@ -563,10 +563,18 @@ void ContextProviderImpl::Create(
     // process.
   }
 
-  // TODO(crbug.com/1039788): Re-enable OutOfBlinkCors when custom HTTP header
-  // preflight validation errors are fixed.
-  AppendFeature(switches::kDisableFeatures,
-                network::features::kOutOfBlinkCors.name, &launch_command);
+  if (params.has_cors_exempt_headers()) {
+    std::vector<std::string> cors_exempt_headers;
+    for (const auto& header : params.cors_exempt_headers()) {
+      // Headers are evaluated against CORS policy using their lowercased forms,
+      // so normalize to lowercase here.
+      cors_exempt_headers.push_back(
+          base::ToLowerASCII(cr_fuchsia::BytesAsString(header)));
+    }
+    launch_command.AppendSwitchNative(
+        switches::kCorsExemptHeaders,
+        base::JoinString(cors_exempt_headers, ","));
+  }
 
   if (launch_for_test_)
     launch_for_test_.Run(launch_command, launch_options);
