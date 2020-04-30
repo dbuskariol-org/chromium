@@ -1753,6 +1753,11 @@ class DisplayLockContextRenderingTest
       : RenderingTest(MakeGarbageCollected<SingleChildLocalFrameClient>()),
         ScopedCSSContentVisibilityHiddenMatchableForTest(true) {}
 
+  void SetUp() override {
+    EnableCompositing();
+    RenderingTest::SetUp();
+  }
+
   bool IsObservingLifecycle(DisplayLockContext* context) const {
     return context->is_registered_for_lifecycle_notifications_;
   }
@@ -2431,6 +2436,31 @@ TEST_F(DisplayLockContextRenderingTest,
   EXPECT_FALSE(hide->GetLayoutObject()->NeedsLayout());
   EXPECT_FALSE(target->GetLayoutObject()->NeedsLayout());
   EXPECT_FALSE(new_parent->GetLayoutObject()->NeedsLayout());
+}
+
+TEST_F(DisplayLockContextRenderingTest, ContainStrictChild) {
+  SetHtmlInnerHTML(R"HTML(
+    <style>
+      .hidden { content-visibility: hidden; }
+      .contained { contain: strict; }
+      #target { backface-visibility: hidden; }
+    </style>
+    <div id=hide>
+      <div id=container class=contained>
+        <div id=target></div>
+      </div>
+    </div>
+  )HTML");
+
+  // Lock an ancestor.
+  auto* hide = GetDocument().getElementById("hide");
+  hide->classList().Add("hidden");
+
+  // This should not DCHECK.
+  UpdateAllLifecyclePhasesForTest();
+
+  hide->classList().Remove("hidden");
+  UpdateAllLifecyclePhasesForTest();
 }
 
 class DisplayLockContextLegacyRenderingTest
