@@ -64,7 +64,7 @@ class FileSequenceHelperTest : public ExtensionsTest {
  public:
   FileSequenceHelperTest() : channel_(::version_info::Channel::UNKNOWN) {}
 
-  // ExtensonsTest overrides:
+  // ExtensionsTest overrides:
   void SetUp() override {
     ExtensionsTest::SetUp();
     helper_ = std::make_unique<FileSequenceHelper>();
