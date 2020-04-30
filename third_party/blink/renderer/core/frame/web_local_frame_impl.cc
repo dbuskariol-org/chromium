@@ -97,6 +97,7 @@
 #include "mojo/public/cpp/bindings/pending_associated_remote.h"
 #include "services/network/public/cpp/web_sandbox_flags.h"
 #include "services/network/public/mojom/web_sandbox_flags.mojom-blink.h"
+#include "third_party/blink/public/mojom/devtools/inspector_issue.mojom-blink.h"
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/frame_owner_element_type.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/media_player_action.mojom-blink.h"
@@ -212,7 +213,6 @@
 #include "third_party/blink/renderer/core/input/context_menu_allowed_scope.h"
 #include "third_party/blink/renderer/core/input/event_handler.h"
 #include "third_party/blink/renderer/core/inspector/console_message.h"
-#include "third_party/blink/renderer/core/inspector/inspector_issue.h"
 #include "third_party/blink/renderer/core/inspector/main_thread_debugger.h"
 #include "third_party/blink/renderer/core/layout/hit_test_result.h"
 #include "third_party/blink/renderer/core/layout/layout_embedded_content.h"
@@ -2497,8 +2497,7 @@ void WebLocalFrameImpl::AddInspectorIssueImpl(
   DCHECK(GetFrame());
   auto info = mojom::blink::InspectorIssueInfo::New(
       code, mojom::blink::InspectorIssueDetails::New());
-  GetFrame()->GetDocument()->AddInspectorIssue(
-      InspectorIssue::Create(std::move(info)));
+  GetFrame()->AddInspectorIssue(std::move(info));
 }
 
 void WebLocalFrameImpl::SetTextCheckClient(
