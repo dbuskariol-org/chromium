@@ -72709,6 +72709,7 @@ Called by update_scheduler_enums.py.-->
   <int value="48" label="Open in Chrome"/>
   <int value="49" label="Site Settings"/>
   <int value="50" label="App Info"/>
+  <int value="51" label="Uninstall app"/>
 </enum>
 
 <enum name="XFrameOptions">
