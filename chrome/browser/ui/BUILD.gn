@@ -3774,6 +3774,8 @@ jumbo_static_library("ui") {
       "app_list/app_list_model_updater.cc",
       "app_list/app_list_model_updater.h",
       "app_list/app_list_model_updater_observer.h",
+      "app_list/app_list_notifier_impl.cc",
+      "app_list/app_list_notifier_impl.h",
       "app_list/app_list_syncable_service.cc",
       "app_list/app_list_syncable_service.h",
       "app_list/app_list_syncable_service_factory.cc",
