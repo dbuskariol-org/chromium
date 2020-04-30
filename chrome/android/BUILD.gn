@@ -35,6 +35,17 @@ import("java_sources.gni")
 import("static_initializers.gni")
 import("trichrome.gni")
 
+_default_package = "org.chromium.chrome"
+if (android_channel != "default") {
+  # android-binary-size trybot may checks if an internal Chrome variant's
+  # AndroidManifest is as expected by ensuring the differences between its
+  # AndroidManifest and its upstream target's .AndroidManifest.expected file
+  # are as expected. Upstream targets having a "org.chromium.chrome" package
+  # name will cause the comparison to output many unnecessary differences.
+  # See https://source.chromium.org/chromium/chromium/src/+/master:chrome/android/java/README.md
+  _default_package += "." + android_channel
+}
+
 declare_args() {
   # Android package name to use when compiling the public chrome targets
   # (chrome_modern_public_apk, monochrome_public_apk, etc. as well as the
@@ -43,7 +54,7 @@ declare_args() {
   # WebView providers which declare one of a handful of package names. See
   # https://chromium.googlesource.com/chromium/src/+/HEAD/android_webview/docs/build-instructions.md#Changing-package-name
   # for details.
-  chrome_public_manifest_package = "org.chromium.chrome"
+  chrome_public_manifest_package = _default_package
 }
 chrome_public_test_manifest_package = "org.chromium.chrome.tests"
 
