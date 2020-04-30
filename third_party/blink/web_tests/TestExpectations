@@ -6664,3 +6664,6 @@ crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
 # Sheriff 2020-04-29
 crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access-workers.html [ Pass Timeout Crash ]
 crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access-window.html [ Pass Timeout Crash ]
+
+# Sheriff 2020-04-30
+crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Timeout ]
