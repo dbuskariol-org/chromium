@@ -16058,12 +16058,12 @@
         {
           'name': 'Disallow',
           'value': 0,
-          'caption': '''Prevent the user from using Android apps from untrusted sources.''',
+          'caption': '''Prevent the user from using Android apps from untrusted sources''',
         },
         {
           'name': 'Allow',
           'value': 1,
-          'caption': '''Allow the user to use Android apps from untrusted sources.''',
+          'caption': '''Allow the user to use Android apps from untrusted sources''',
         },
       ],
       'supported_on': ['chrome_os:84-'],
@@ -16097,17 +16097,17 @@
         {
           'name': 'Disallow',
           'value': 0,
-          'caption': '''Prevent users of this device from using ADB sideloading. If sideloading has been enabled before, switching to this setting leaves the device in a questionable state security-wise.''',
+          'caption': '''Prevent users of this device from using ADB sideloading, without forcing a powerwash, which might leave the device in a questionable state security-wise''',
         },
         {
           'name': 'DisallowWithPowerwash',
           'value': 1,
-          'caption': '''Prevent users of this device from using ADB sideloading and force a device powerwash if sideloading was enabled before.''',
+          'caption': '''Prevent users of this device from using ADB sideloading and force a device powerwash if sideloading was enabled before''',
         },
         {
           'name': 'AllowForAffiliatedUsers',
           'value': 2,
-          'caption': '''Allow affiliated users of this device to use ADB sideloading.''',
+          'caption': '''Allow affiliated users of this device to use ADB sideloading''',
         },
       ],
       'supported_on': ['chrome_os:84-'],
