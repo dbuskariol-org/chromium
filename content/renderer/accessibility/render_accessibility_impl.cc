@@ -528,18 +528,6 @@ void RenderAccessibilityImpl::HandleAXEvent(const ui::AXEvent& event) {
     serializer_.InvalidateSubtree(obj);
 #endif
 
-  // If some cell IDs have been added or removed, we need to update the whole
-  // table.
-  if (obj.Role() == ax::mojom::Role::kRow &&
-      event.event_type == ax::mojom::Event::kChildrenChanged) {
-    WebAXObject table_like_object = obj.ParentObject();
-    if (!table_like_object.IsDetached()) {
-      serializer_.InvalidateSubtree(table_like_object);
-      HandleAXEvent(ui::AXEvent(table_like_object.AxID(),
-                                ax::mojom::Event::kChildrenChanged));
-    }
-  }
-
   // If a select tag is opened or closed, all the children must be updated
   // because their visibility may have changed.
   if (obj.Role() == ax::mojom::Role::kMenuListPopup &&
@@ -741,18 +729,6 @@ void RenderAccessibilityImpl::SendPendingAccessibilityEvents() {
       continue;
 
     events.push_back(event);
-
-    // Whenever there's a change within a table, invalidate the
-    // whole table so that row and cell indexes are recomputed.
-    const ax::mojom::Role role = obj.Role();
-    if (ui::IsTableLike(role) || role == ax::mojom::Role::kRow ||
-        ui::IsCellOrTableHeader(role)) {
-      auto table = obj;
-      while (!table.IsDetached() && !ui::IsTableLike(table.Role()))
-        table = table.ParentObject();
-      if (!table.IsDetached())
-        serializer_.InvalidateSubtree(table);
-    }
 
     VLOG(1) << "Accessibility event: " << ui::ToString(event.event_type)
             << " on node id " << event.id;
