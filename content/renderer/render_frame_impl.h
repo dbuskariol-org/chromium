@@ -660,7 +660,7 @@ class CONTENT_EXPORT RenderFrameImpl
       override;
   blink::WebLocalFrame* CreateChildFrame(
       blink::WebLocalFrame* parent,
-      blink::WebTreeScopeType scope,
+      blink::mojom::TreeScopeType scope,
       const blink::WebString& name,
       const blink::WebString& fallback_name,
       const blink::FramePolicy& frame_policy,

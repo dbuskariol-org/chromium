@@ -2209,7 +2209,7 @@ void RenderFrameHostImpl::OnCreateChildFrame(
         new_interface_provider_provider_receiver,
     mojo::PendingReceiver<blink::mojom::BrowserInterfaceBroker>
         browser_interface_broker_receiver,
-    blink::WebTreeScopeType scope,
+    blink::mojom::TreeScopeType scope,
     const std::string& frame_name,
     const std::string& frame_unique_name,
     bool is_created_by_script,

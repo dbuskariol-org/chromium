@@ -3860,7 +3860,7 @@ RenderFrameImpl::GetRemoteNavigationAssociatedInterfaces() {
 
 blink::WebLocalFrame* RenderFrameImpl::CreateChildFrame(
     blink::WebLocalFrame* parent,
-    blink::WebTreeScopeType scope,
+    blink::mojom::TreeScopeType scope,
     const blink::WebString& name,
     const blink::WebString& fallback_name,
     const blink::FramePolicy& frame_policy,

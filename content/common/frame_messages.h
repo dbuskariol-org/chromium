@@ -63,6 +63,7 @@
 #include "third_party/blink/public/mojom/frame/frame_owner_element_type.mojom.h"
 #include "third_party/blink/public/mojom/frame/frame_owner_properties.mojom.h"
 #include "third_party/blink/public/mojom/frame/lifecycle.mojom.h"
+#include "third_party/blink/public/mojom/frame/tree_scope_type.mojom.h"
 #include "third_party/blink/public/mojom/frame/user_activation_update_types.mojom.h"
 #include "third_party/blink/public/mojom/input/focus_type.mojom.h"
 #include "third_party/blink/public/mojom/loader/resource_load_info.mojom-shared.h"
@@ -72,7 +73,6 @@
 #include "third_party/blink/public/platform/viewport_intersection_state.h"
 #include "third_party/blink/public/platform/web_intrinsic_sizing_info.h"
 #include "third_party/blink/public/web/web_frame_owner_properties.h"
-#include "third_party/blink/public/web/web_tree_scope_type.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/rect_f.h"
 #include "ui/gfx/ipc/gfx_param_traits.h"
@@ -117,8 +117,8 @@ IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::ScrollbarMode,
 IPC_ENUM_TRAITS_MAX_VALUE(content::StopFindAction,
                           content::STOP_FIND_ACTION_LAST)
 IPC_ENUM_TRAITS(network::mojom::WebSandboxFlags)  // Bitmask.
-IPC_ENUM_TRAITS_MAX_VALUE(blink::WebTreeScopeType,
-                          blink::WebTreeScopeType::kMaxValue)
+IPC_ENUM_TRAITS_MAX_VALUE(blink::mojom::TreeScopeType,
+                          blink::mojom::TreeScopeType::kMaxValue)
 IPC_ENUM_TRAITS_MAX_VALUE(ui::MenuSourceType, ui::MENU_SOURCE_TYPE_LAST)
 IPC_ENUM_TRAITS_MAX_VALUE(network::mojom::CSPDirectiveName,
                           network::mojom::CSPDirectiveName::kMaxValue)
@@ -432,7 +432,7 @@ IPC_STRUCT_TRAITS_END()
 
 IPC_STRUCT_BEGIN(FrameHostMsg_CreateChildFrame_Params)
   IPC_STRUCT_MEMBER(int32_t, parent_routing_id)
-  IPC_STRUCT_MEMBER(blink::WebTreeScopeType, scope)
+  IPC_STRUCT_MEMBER(blink::mojom::TreeScopeType, scope)
   IPC_STRUCT_MEMBER(std::string, frame_name)
   IPC_STRUCT_MEMBER(std::string, frame_unique_name)
   IPC_STRUCT_MEMBER(bool, is_created_by_script)

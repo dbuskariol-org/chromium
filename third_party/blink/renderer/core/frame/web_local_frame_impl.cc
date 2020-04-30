@@ -101,6 +101,7 @@
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/frame_owner_element_type.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/media_player_action.mojom-blink.h"
+#include "third_party/blink/public/mojom/frame/tree_scope_type.mojom-blink.h"
 #include "third_party/blink/public/platform/interface_registry.h"
 #include "third_party/blink/public/platform/task_type.h"
 #include "third_party/blink/public/platform/web_double_size.h"
@@ -134,7 +135,6 @@
 #include "third_party/blink/public/web/web_range.h"
 #include "third_party/blink/public/web/web_script_source.h"
 #include "third_party/blink/public/web/web_serialized_script_value.h"
-#include "third_party/blink/public/web/web_tree_scope_type.h"
 #include "third_party/blink/renderer/bindings/core/v8/binding_security.h"
 #include "third_party/blink/renderer/bindings/core/v8/isolated_world_csp.h"
 #include "third_party/blink/renderer/bindings/core/v8/sanitize_script_errors.h"
@@ -1670,8 +1670,8 @@ WebLocalFrameImpl* WebLocalFrameImpl::CreateMainFrame(
     network::mojom::blink::WebSandboxFlags sandbox_flags,
     const FeaturePolicy::FeatureState& opener_feature_state) {
   auto* frame = MakeGarbageCollected<WebLocalFrameImpl>(
-      util::PassKey<WebLocalFrameImpl>(), WebTreeScopeType::kDocument, client,
-      interface_registry);
+      util::PassKey<WebLocalFrameImpl>(),
+      mojom::blink::TreeScopeType::kDocument, client, interface_registry);
   frame->SetOpener(opener);
   Page& page = *static_cast<WebViewImpl*>(web_view)->GetPage();
   DCHECK(!page.MainFrame());
@@ -1693,8 +1693,9 @@ WebLocalFrameImpl* WebLocalFrameImpl::CreateProvisional(
   DCHECK(name.IsEmpty() || name.Equals(previous_frame->Tree().GetName()));
   auto* web_frame = MakeGarbageCollected<WebLocalFrameImpl>(
       util::PassKey<WebLocalFrameImpl>(),
-      previous_web_frame->InShadowTree() ? WebTreeScopeType::kShadow
-                                         : WebTreeScopeType::kDocument,
+      previous_web_frame->InShadowTree()
+          ? mojom::blink::TreeScopeType::kShadow
+          : mojom::blink::TreeScopeType::kDocument,
       client, interface_registry);
   web_frame->SetParent(previous_web_frame->Parent());
   web_frame->SetOpener(previous_web_frame->Opener());
@@ -1739,7 +1740,7 @@ WebLocalFrameImpl* WebLocalFrameImpl::CreateProvisional(
 }
 
 WebLocalFrameImpl* WebLocalFrameImpl::CreateLocalChild(
-    WebTreeScopeType scope,
+    mojom::blink::TreeScopeType scope,
     WebLocalFrameClient* client,
     blink::InterfaceRegistry* interface_registry) {
   auto* frame = MakeGarbageCollected<WebLocalFrameImpl>(
@@ -1750,7 +1751,7 @@ WebLocalFrameImpl* WebLocalFrameImpl::CreateLocalChild(
 
 WebLocalFrameImpl::WebLocalFrameImpl(
     util::PassKey<WebLocalFrameImpl>,
-    WebTreeScopeType scope,
+    mojom::blink::TreeScopeType scope,
     WebLocalFrameClient* client,
     blink::InterfaceRegistry* interface_registry)
     : WebNavigationControl(scope),
@@ -1770,7 +1771,7 @@ WebLocalFrameImpl::WebLocalFrameImpl(
 
 WebLocalFrameImpl::WebLocalFrameImpl(
     util::PassKey<WebRemoteFrameImpl>,
-    WebTreeScopeType scope,
+    mojom::blink::TreeScopeType scope,
     WebLocalFrameClient* client,
     blink::InterfaceRegistry* interface_registry)
     : WebLocalFrameImpl(util::PassKey<WebLocalFrameImpl>(),
@@ -1837,10 +1838,10 @@ LocalFrame* WebLocalFrameImpl::CreateChildFrame(
     HTMLFrameOwnerElement* owner_element) {
   DCHECK(client_);
   TRACE_EVENT0("blink", "WebLocalFrameImpl::createChildframe");
-  WebTreeScopeType scope =
+  mojom::blink::TreeScopeType scope =
       GetFrame()->GetDocument() == owner_element->GetTreeScope()
-          ? WebTreeScopeType::kDocument
-          : WebTreeScopeType::kShadow;
+          ? mojom::blink::TreeScopeType::kDocument
+          : mojom::blink::TreeScopeType::kShadow;
   WebFrameOwnerProperties owner_properties(
       owner_element->BrowsingContextContainerName(),
       owner_element->ScrollbarMode(), owner_element->MarginWidth(),
