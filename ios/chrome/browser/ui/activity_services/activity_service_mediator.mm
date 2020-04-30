@@ -25,6 +25,7 @@
 #import "ios/chrome/browser/ui/activity_services/activities/send_tab_to_self_activity.h"
 #import "ios/chrome/browser/ui/activity_services/activity_type_util.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_url_source.h"
 #import "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_positioner.h"
 #import "ios/chrome/browser/ui/commands/qr_generation_commands.h"
@@ -74,13 +75,13 @@ NSString* const kActivityServicesSnackbarCategory =
   return self;
 }
 
-- (NSArray<UIActivityURLSource*>*)activityItemsForData:(ShareToData*)data {
-  // The provider object UIActivityURLSource supports the public.url UTType for
-  // Share Extensions (e.g. Facebook, Twitter).
-  UIActivityURLSource* urlActivitySource =
-      [[UIActivityURLSource alloc] initWithShareURL:data.shareNSURL
-                                            subject:data.title
-                                 thumbnailGenerator:data.thumbnailGenerator];
+- (NSArray<ChromeActivityURLSource*>*)activityItemsForData:(ShareToData*)data {
+  // The provider object ChromeActivityURLSource supports the public.url UTType
+  // for Share Extensions (e.g. Facebook, Twitter).
+  ChromeActivityURLSource* urlActivitySource = [[ChromeActivityURLSource alloc]
+        initWithShareURL:data.shareNSURL
+                 subject:data.title
+      thumbnailGenerator:data.thumbnailGenerator];
   return @[ urlActivitySource ];
 }
 

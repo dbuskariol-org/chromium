@@ -16,8 +16,8 @@
 #import "ios/chrome/browser/ui/activity_services/activities/request_desktop_or_mobile_site_activity.h"
 #import "ios/chrome/browser/ui/activity_services/activities/send_tab_to_self_activity.h"
 #import "ios/chrome/browser/ui/activity_services/activity_type_util.h"
-#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_source.h"
 #import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_thumbnail_generator.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_url_source.h"
 #import "ios/chrome/browser/ui/activity_services/data/share_to_data.h"
 #import "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/commands/find_in_page_commands.h"
@@ -68,7 +68,7 @@ class ActivityServiceMediatorTest : public PlatformTest {
   ActivityServiceMediator* mediator_;
 };
 
-// Tests that only one UIActivityURLSource is initialized from a ShareToData
+// Tests that only one ChromeActivityURLSource is initialized from a ShareToData
 // instance.
 TEST_F(ActivityServiceMediatorTest, ActivityItemsForData_Success) {
   ShareToData* data =
@@ -82,7 +82,7 @@ TEST_F(ActivityServiceMediatorTest, ActivityItemsForData_Success) {
                                   userAgent:web::UserAgentType::MOBILE
                          thumbnailGenerator:mocked_thumbnail_generator_];
 
-  NSArray<UIActivityURLSource*>* activityItems =
+  NSArray<ChromeActivityURLSource*>* activityItems =
       [mediator_ activityItemsForData:data];
 
   EXPECT_EQ(1U, [activityItems count]);
@@ -158,7 +158,7 @@ TEST_F(ActivityServiceMediatorTest, ActivitiesForData_HTTPS) {
 
 // Tests that computing the list of excluded activities works for one item.
 TEST_F(ActivityServiceMediatorTest, ExcludedActivityTypes) {
-  UIActivityURLSource* activityURLSource = [[UIActivityURLSource alloc]
+  ChromeActivityURLSource* activityURLSource = [[ChromeActivityURLSource alloc]
         initWithShareURL:[NSURL URLWithString:@"https://example.com"]
                  subject:@"Does not matter"
       thumbnailGenerator:mocked_thumbnail_generator_];

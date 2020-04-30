@@ -14,6 +14,7 @@ class BookmarkModel;
 
 @protocol BrowserCommands;
 @protocol ChromeActivityItemSource;
+@class ChromeActivityURLSource;
 @protocol FindInPageCommands;
 class PrefService;
 @protocol QRGenerationCommands;
@@ -38,7 +39,7 @@ extern NSString* const kActivityServicesSnackbarCategory;
 
 // Generates an array of activity items to be shared via an activity view for
 // the given |data|.
-- (NSArray*)activityItemsForData:(ShareToData*)data;
+- (NSArray<ChromeActivityURLSource*>*)activityItemsForData:(ShareToData*)data;
 
 // Generates an array of activities to be added to the activity view for the
 // given |data|.

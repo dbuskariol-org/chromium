@@ -1,60 +1,19 @@
-// Copyright 2014 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_source.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_url_source.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #include "base/logging.h"
+#import "ios/chrome/browser/ui/activity_services/data/chrome_activity_item_thumbnail_generator.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
 #endif
 
-#pragma mark - UIActivityImageSource
-
-@interface UIActivityImageSource () {
-  // The shared image.
-  UIImage* _image;
-}
-
-@end
-
-@implementation UIActivityImageSource
-
-- (instancetype)initWithImage:(UIImage*)image {
-  DCHECK(image);
-  self = [super init];
-  if (self) {
-    _image = image;
-  }
-  return self;
-}
-
-#pragma mark - ChromeActivityItemSource
-
-- (NSSet*)excludedActivityTypes {
-  return [NSSet setWithArray:@[]];
-}
-
-#pragma mark - UIActivityItemSource
-
-- (id)activityViewController:(UIActivityViewController*)activityViewController
-         itemForActivityType:(NSString*)activityType {
-  return _image;
-}
-
-- (id)activityViewControllerPlaceholderItem:
-    (UIActivityViewController*)activityViewController {
-  return _image;
-}
-
-@end
-
-#pragma mark - UIActivityURLSource
-
-@interface UIActivityURLSource () {
+@interface ChromeActivityURLSource () {
   NSString* _subject;
   ChromeActivityItemThumbnailGenerator* _thumbnailGenerator;
 }
@@ -64,7 +23,7 @@
 
 @end
 
-@implementation UIActivityURLSource
+@implementation ChromeActivityURLSource
 
 - (instancetype)initWithShareURL:(NSURL*)shareURL
                          subject:(NSString*)subject
