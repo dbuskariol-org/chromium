@@ -12587,6 +12587,7 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="4" label="ParseFromStringFail"/>
   <int value="5" label="CreateDirectoryFail"/>
   <int value="6" label="WriteFileAtomicallyFail"/>
+  <int value="7" label="StructuredMetricsLogged"/>
 </enum>
 
 <enum name="CrosBeamformingDeviceState">
