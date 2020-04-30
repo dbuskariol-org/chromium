@@ -18,7 +18,6 @@
 #include "content/common/content_export.h"
 #include "content/public/browser/bluetooth_chooser.h"
 #include "content/public/browser/bluetooth_scanning_prompt.h"
-#include "content/public/browser/eye_dropper.h"
 #include "content/public/browser/invalidate_type.h"
 #include "content/public/browser/media_stream_request.h"
 #include "content/public/browser/serial_chooser.h"
@@ -57,7 +56,6 @@ class FileChooserParams;
 
 namespace content {
 class ColorChooser;
-class EyeDropperListener;
 class FileSelectListener;
 class JavaScriptDialogManager;
 class RenderFrameHost;
@@ -397,14 +395,6 @@ class CONTENT_EXPORT WebContentsDelegate {
       WebContents* web_contents,
       SkColor color,
       const std::vector<blink::mojom::ColorSuggestionPtr>& suggestions);
-
-  // Called when an eye dropper should open. Returns the eye dropper window.
-  // The eye dropper is responsible for calling listener->ColorSelected() or
-  // listener->ColorSelectionCanceled().
-  // The ownership of the returned pointer is transferred to the caller.
-  virtual std::unique_ptr<EyeDropper> OpenEyeDropper(
-      RenderFrameHost* frame,
-      EyeDropperListener* listener);
 
   // Called when a file selection is to be done.
   // This function is responsible for calling listener->FileSelected() or
