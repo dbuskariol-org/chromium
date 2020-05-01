@@ -3600,6 +3600,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kNtpDismissPromosDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(ntp_features::kDismissPromos)},
 
+    {"ntp-iframe-one-google-bar", flag_descriptions::kNtpIframeOneGoogleBarName,
+     flag_descriptions::kNtpIframeOneGoogleBarDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(ntp_features::kIframeOneGoogleBar)},
+
     {"ntp-realbox", flag_descriptions::kNtpRealboxName,
      flag_descriptions::kNtpRealboxDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(ntp_features::kRealbox)},

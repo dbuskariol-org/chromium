@@ -2798,6 +2798,11 @@ const char kNtpDismissPromosDescription[] =
     "Enables a UI to persistently dismiss [non-emergency] promos on the "
     "bottom/middle of the New Tab Page";
 
+const char kNtpIframeOneGoogleBarName[] = "Load OneGoogleBar in an iframe";
+const char kNtpIframeOneGoogleBarDescription[] =
+    "Enables loading the OneGoogleBar in an iframe. Otherwise, the "
+    "OneGoogleBar is loaded inline on chrome://new-tab-page.";
+
 const char kNtpRealboxName[] = "Real search box in New Tab Page";
 const char kNtpRealboxDescription[] =
     "Enables a search box in the middle of the NTP that will accept input "

@@ -1609,6 +1609,9 @@ extern const char kNtpConfirmSuggestionRemovalsDescription[];
 extern const char kNtpDismissPromosName[];
 extern const char kNtpDismissPromosDescription[];
 
+extern const char kNtpIframeOneGoogleBarName[];
+extern const char kNtpIframeOneGoogleBarDescription[];
+
 extern const char kNtpRealboxName[];
 extern const char kNtpRealboxDescription[];
 
