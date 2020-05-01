@@ -1,30 +1,36 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/idle/idle_manager.h"
-#include "content/browser/renderer_host/render_process_host_impl.h"
-#include "content/browser/storage_partition_impl.h"
+#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
+#include "chrome/browser/profiles/profile.h"
+#include "chrome/browser/ui/browser.h"
+#include "chrome/test/base/in_process_browser_test.h"
+#include "chrome/test/base/ui_test_utils.h"
+#include "components/content_settings/core/browser/host_content_settings_map.h"
+#include "components/content_settings/core/common/content_settings_types.h"
 #include "content/public/browser/content_browser_client.h"
+#include "content/public/browser/idle_manager.h"
+#include "content/public/browser/render_process_host.h"
+#include "content/public/browser/storage_partition.h"
 #include "content/public/common/content_switches.h"
 #include "content/public/test/browser_test_utils.h"
 #include "content/public/test/content_browser_test.h"
+
 #include "content/public/test/content_browser_test_utils.h"
-#include "content/shell/browser/shell.h"
+#include "net/test/embedded_test_server/embedded_test_server.h"
 #include "testing/gmock/include/gmock/gmock.h"
 
+using content::RenderFrameHost;
 using ::testing::NiceMock;
-
-namespace content {
 
 namespace {
 
-class MockIdleTimeProvider : public IdleManager::IdleTimeProvider {
+class MockIdleTimeProvider : public content::IdleManager::IdleTimeProvider {
  public:
   MockIdleTimeProvider() = default;
   ~MockIdleTimeProvider() override = default;
 
-  MOCK_METHOD1(CalculateIdleState, ui::IdleState(base::TimeDelta));
   MOCK_METHOD0(CalculateIdleTime, base::TimeDelta());
   MOCK_METHOD0(CheckIdleStateIsLocked, bool());
 
@@ -32,36 +38,48 @@ class MockIdleTimeProvider : public IdleManager::IdleTimeProvider {
   DISALLOW_COPY_AND_ASSIGN(MockIdleTimeProvider);
 };
 
-class IdleTest : public ContentBrowserTest {
+class IdleBrowserTest : public InProcessBrowserTest {
  public:
-  IdleTest() = default;
-  ~IdleTest() override = default;
+  IdleBrowserTest() = default;
+  ~IdleBrowserTest() override = default;
 
   void SetUpCommandLine(base::CommandLine* command_line) override {
-    ContentBrowserTest::SetUpCommandLine(command_line);
+    InProcessBrowserTest::SetUpCommandLine(command_line);
     command_line->AppendSwitchASCII(switches::kEnableBlinkFeatures,
                                     "IdleDetection");
+    command_line->AppendSwitch(
+        switches::kEnableExperimentalWebPlatformFeatures);
+  }
+
+  void SetUpOnMainThread() override {
+    embedded_test_server()->ServeFilesFromSourceDirectory("content/test/data");
+    ASSERT_TRUE(embedded_test_server()->Start());
   }
 };
 
-}  // namespace
-
-IN_PROC_BROWSER_TEST_F(IdleTest, Start) {
-  EXPECT_TRUE(NavigateToURL(shell(), GetTestUrl(nullptr, "simple_page.html")));
+IN_PROC_BROWSER_TEST_F(IdleBrowserTest, Start) {
+  GURL url = embedded_test_server()->GetURL("localhost", "/simple_page.html");
+  auto* map =
+      HostContentSettingsMapFactory::GetForProfile(browser()->profile());
+  map->SetContentSettingDefaultScope(url, url,
+                                     ContentSettingsType::NOTIFICATIONS,
+                                     std::string(), CONTENT_SETTING_ALLOW);
+  ui_test_utils::NavigateToURL(browser(), url);
 
   auto mock_time_provider = std::make_unique<NiceMock<MockIdleTimeProvider>>();
-  auto* rph = static_cast<RenderProcessHostImpl*>(
-      shell()->web_contents()->GetMainFrame()->GetProcess());
-  IdleManager* idle_mgr =
-      static_cast<StoragePartitionImpl*>(rph->GetStoragePartition())
-          ->GetIdleManager();
+
+  content::RenderFrameHost* const frame =
+      browser()->tab_strip_model()->GetActiveWebContents()->GetMainFrame();
+  content::RenderProcessHost* const process = frame->GetProcess();
+
+  content::IdleManager* idle_mgr =
+      process->GetStoragePartition()->GetIdleManager();
 
   // Test that statuses are updated after idleDetector.start().
   std::string script = R"(
     (async () => {
         let idleDetector = new IdleDetector({threshold: 60});
-        await idleDetector.start();
-        return new Promise(function(resolve) {
+        let promise = new Promise(function(resolve) {
           let states = [];
           idleDetector.addEventListener('change', e => {
             let {user, screen} = idleDetector.state;
@@ -72,6 +90,8 @@ IN_PROC_BROWSER_TEST_F(IdleTest, Start) {
             }
           });
         });
+        await idleDetector.start();
+        return promise;
     }) ();
   )";
 
@@ -97,7 +117,9 @@ IN_PROC_BROWSER_TEST_F(IdleTest, Start) {
 
   idle_mgr->SetIdleTimeProviderForTest(std::move(mock_time_provider));
 
-  std::string result = EvalJs(shell(), script).ExtractString();
+  std::string result =
+      EvalJs(browser()->tab_strip_model()->GetActiveWebContents(), script)
+          .ExtractString();
   std::vector<std::string> states = base::SplitString(
       result, ",", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
 
@@ -106,4 +128,4 @@ IN_PROC_BROWSER_TEST_F(IdleTest, Start) {
   EXPECT_EQ("active-unlocked", states.at(2));
 }
 
-}  // namespace content
+}  // namespace

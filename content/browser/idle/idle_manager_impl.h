@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_IDLE_IDLE_MANAGER_H_
-#define CONTENT_BROWSER_IDLE_IDLE_MANAGER_H_
+#ifndef CONTENT_BROWSER_IDLE_IDLE_MANAGER_IMPL_H_
+#define CONTENT_BROWSER_IDLE_IDLE_MANAGER_IMPL_H_
 
 #include <memory>
 
@@ -15,58 +15,43 @@
 #include "base/time/time.h"
 #include "base/timer/timer.h"
 #include "content/browser/idle/idle_monitor.h"
+#include "content/public/browser/idle_manager.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/receiver_set.h"
 #include "third_party/blink/public/mojom/idle/idle_manager.mojom.h"
-#include "ui/base/idle/idle.h"
 #include "url/origin.h"
 
 namespace content {
 
-class CONTENT_EXPORT IdleManager : public blink::mojom::IdleManager {
+class BrowserContext;
+
+class CONTENT_EXPORT IdleManagerImpl : public IdleManager,
+                                       public blink::mojom::IdleManager {
  public:
-  // This class adapts functions from ui:: and allows tests to
-  // inject custom providers.
-  // Adapted from: extensions/browser/api/idle/idle_manager.h
-  class IdleTimeProvider {
-   public:
-    using IdleCallback = base::OnceCallback<void(blink::mojom::IdleState)>;
-    using IdleTimeCallback = base::OnceCallback<void(int)>;
+  explicit IdleManagerImpl(BrowserContext* browser_context);
+  ~IdleManagerImpl() override;
 
-    IdleTimeProvider() {}
-    virtual ~IdleTimeProvider() {}
+  IdleManagerImpl(const IdleManagerImpl&) = delete;
+  IdleManagerImpl& operator=(const IdleManagerImpl&) = delete;
 
-    // See ui/base/idle/idle.h for the semantics of these methods.
-    // TODO(goto): should this be made private? Doesn't seem to be necessary
-    // as part of a public interface.
-    virtual ui::IdleState CalculateIdleState(
-        base::TimeDelta idle_threshold) = 0;
-    virtual base::TimeDelta CalculateIdleTime() = 0;
-    virtual bool CheckIdleStateIsLocked() = 0;
-
-   private:
-    DISALLOW_COPY_AND_ASSIGN(IdleTimeProvider);
-  };
-
-  IdleManager();
-  ~IdleManager() override;
-
-  void CreateService(mojo::PendingReceiver<blink::mojom::IdleManager> receiver);
+  // IdleManager:
+  void CreateService(mojo::PendingReceiver<blink::mojom::IdleManager> receiver,
+                     const url::Origin& origin) override;
+  void SetIdleTimeProviderForTest(
+      std::unique_ptr<IdleTimeProvider> idle_provider) override;
+  bool IsPollingForTest() override;
 
   // blink.mojom.IdleManager:
   void AddMonitor(base::TimeDelta threshold,
                   mojo::PendingRemote<blink::mojom::IdleMonitor> monitor_remote,
-                  AddMonitorCallback callback) override;
-
-  // Testing helpers.
-  void SetIdleTimeProviderForTest(
-      std::unique_ptr<IdleTimeProvider> idle_provider);
-
-  // Tests whether the manager is still polling for updates or not.
-  bool IsPollingForTest();
+                  AddMonitorCallback callback) final;
 
  private:
+  // Check permission controller to see if the notification permission is
+  // enabled for the origin.
+  bool HasPermission(const url::Origin&);
+
   // Called internally when a monitor's pipe closes to remove it from
   // |monitors_|.
   void RemoveMonitor(IdleMonitor* monitor);
@@ -91,18 +76,21 @@ class CONTENT_EXPORT IdleManager : public blink::mojom::IdleManager {
   base::RepeatingTimer poll_timer_;
   std::unique_ptr<IdleTimeProvider> idle_time_provider_;
 
+  // Raw pointer should always be valid. IdleManagerImpl is owned by the
+  // StoragePartitionImpl which is owned by BrowserContext. Therefore when the
+  // BrowserContext is destroyed, |this| will be destroyed as well.
+  BrowserContext* const browser_context_;
+
   // Registered clients.
-  mojo::ReceiverSet<blink::mojom::IdleManager> receivers_;
+  mojo::ReceiverSet<blink::mojom::IdleManager, url::Origin> receivers_;
 
   // Owns Monitor instances, added when clients call AddMonitor().
   base::LinkedList<IdleMonitor> monitors_;
 
   SEQUENCE_CHECKER(sequence_checker_);
-  base::WeakPtrFactory<IdleManager> weak_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(IdleManager);
+  base::WeakPtrFactory<IdleManagerImpl> weak_factory_{this};
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_IDLE_IDLE_MANAGER_H_
+#endif  // CONTENT_BROWSER_IDLE_IDLE_MANAGER_IMPL_H_

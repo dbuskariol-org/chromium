@@ -2,36 +2,38 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include <utility>
+#include "content/browser/idle/idle_manager_impl.h"
 
-#include "content/browser/idle/idle_manager.h"
+#include <utility>
 
 #include "base/bind.h"
 #include "base/callback_helpers.h"
-#include "content/browser/idle/idle_monitor.h"
+#include "content/public/browser/browser_context.h"
+#include "content/public/browser/idle_manager.h"
 #include "content/public/browser/permission_controller.h"
 #include "content/public/browser/permission_type.h"
 #include "ui/base/idle/idle.h"
+#include "url/gurl.h"
+#include "url/origin.h"
 
 namespace content {
 
 namespace {
+
+using blink::mojom::IdleManagerError;
+using blink::mojom::IdleState;
+using blink::mojom::PermissionStatus;
 
 constexpr base::TimeDelta kPollInterval = base::TimeDelta::FromSeconds(1);
 
 constexpr base::TimeDelta kMinimumThreshold = base::TimeDelta::FromSeconds(60);
 
 // Default provider implementation. Everything is delegated to
-// ui::CalculateIdleState, ui::CalculateIdleTime, and
-// ui::CheckIdleStateIsLocked.
+// ui::CalculateIdleTime and ui::CheckIdleStateIsLocked.
 class DefaultIdleProvider : public IdleManager::IdleTimeProvider {
  public:
   DefaultIdleProvider() = default;
   ~DefaultIdleProvider() override = default;
-
-  ui::IdleState CalculateIdleState(base::TimeDelta idle_threshold) override {
-    return ui::CalculateIdleState(idle_threshold.InSeconds());
-  }
 
   base::TimeDelta CalculateIdleTime() override {
     return base::TimeDelta::FromSeconds(ui::CalculateIdleTime());
@@ -57,14 +59,16 @@ blink::mojom::IdleStatePtr IdleTimeToIdleState(bool locked,
   else
     screen = blink::mojom::ScreenIdleState::kUnlocked;
 
-  return blink::mojom::IdleState::New(user, screen);
+  return IdleState::New(user, screen);
 }
 
 }  // namespace
 
-IdleManager::IdleManager() : idle_time_provider_(new DefaultIdleProvider()) {}
+IdleManagerImpl::IdleManagerImpl(BrowserContext* browser_context)
+    : idle_time_provider_(new DefaultIdleProvider()),
+      browser_context_(browser_context) {}
 
-IdleManager::~IdleManager() {
+IdleManagerImpl::~IdleManagerImpl() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   while (!monitors_.empty()) {
@@ -74,14 +78,15 @@ IdleManager::~IdleManager() {
   }
 }
 
-void IdleManager::CreateService(
-    mojo::PendingReceiver<blink::mojom::IdleManager> receiver) {
+void IdleManagerImpl::CreateService(
+    mojo::PendingReceiver<blink::mojom::IdleManager> receiver,
+    const url::Origin& origin) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
-  receivers_.Add(this, std::move(receiver));
+  receivers_.Add(this, std::move(receiver), origin);
 }
 
-void IdleManager::AddMonitor(
+void IdleManagerImpl::AddMonitor(
     base::TimeDelta threshold,
     mojo::PendingRemote<blink::mojom::IdleMonitor> monitor_remote,
     AddMonitorCallback callback) {
@@ -91,22 +96,38 @@ void IdleManager::AddMonitor(
     return;
   }
 
+  const url::Origin& origin = receivers_.current_context();
+  if (!HasPermission(origin)) {
+    std::move(callback).Run(IdleManagerError::kPermissionDisabled, nullptr);
+    return;
+  }
+
   auto monitor = std::make_unique<IdleMonitor>(
       std::move(monitor_remote), CheckIdleState(threshold), threshold);
 
-  // This unretained reference is safe because IdleManager owns all IdleMonitor
-  // instances.
+  // This unretained reference is safe because IdleManagerImpl owns all
+  // IdleMonitor instances.
   monitor->SetErrorHandler(
-      base::BindOnce(&IdleManager::RemoveMonitor, base::Unretained(this)));
+      base::BindOnce(&IdleManagerImpl::RemoveMonitor, base::Unretained(this)));
 
   monitors_.Append(monitor.release());
 
   StartPolling();
 
-  std::move(callback).Run(CheckIdleState(threshold));
+  std::move(callback).Run(IdleManagerError::kSuccess,
+                          CheckIdleState(threshold));
 }
 
-void IdleManager::RemoveMonitor(IdleMonitor* monitor) {
+bool IdleManagerImpl::HasPermission(const url::Origin& origin) {
+  PermissionController* permission_controller =
+      BrowserContext::GetPermissionController(browser_context_);
+  DCHECK(permission_controller);
+  PermissionStatus status = permission_controller->GetPermissionStatus(
+      PermissionType::NOTIFICATIONS, origin.GetURL(), origin.GetURL());
+  return status == PermissionStatus::GRANTED;
+}
+
+void IdleManagerImpl::RemoveMonitor(IdleMonitor* monitor) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   monitor->RemoveFromList();
@@ -117,32 +138,32 @@ void IdleManager::RemoveMonitor(IdleMonitor* monitor) {
   }
 }
 
-void IdleManager::SetIdleTimeProviderForTest(
+void IdleManagerImpl::SetIdleTimeProviderForTest(
     std::unique_ptr<IdleTimeProvider> idle_time_provider) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   idle_time_provider_ = std::move(idle_time_provider);
 }
 
-bool IdleManager::IsPollingForTest() {
+bool IdleManagerImpl::IsPollingForTest() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   return poll_timer_.IsRunning();
 }
 
-void IdleManager::StartPolling() {
+void IdleManagerImpl::StartPolling() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   if (!poll_timer_.IsRunning()) {
     poll_timer_.Start(FROM_HERE, kPollInterval,
-                      base::BindRepeating(&IdleManager::UpdateIdleState,
+                      base::BindRepeating(&IdleManagerImpl::UpdateIdleState,
                                           base::Unretained(this)));
   }
 }
 
-void IdleManager::StopPolling() {
+void IdleManagerImpl::StopPolling() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   poll_timer_.Stop();
 }
 
-blink::mojom::IdleStatePtr IdleManager::CheckIdleState(
+blink::mojom::IdleStatePtr IdleManagerImpl::CheckIdleState(
     base::TimeDelta threshold) {
   base::TimeDelta idle_time = idle_time_provider_->CalculateIdleTime();
   bool locked = idle_time_provider_->CheckIdleStateIsLocked();
@@ -150,7 +171,7 @@ blink::mojom::IdleStatePtr IdleManager::CheckIdleState(
   return IdleTimeToIdleState(locked, idle_time, threshold);
 }
 
-void IdleManager::UpdateIdleState() {
+void IdleManagerImpl::UpdateIdleState() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   for (auto* node = monitors_.head(); node != monitors_.end();

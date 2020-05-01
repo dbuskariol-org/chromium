@@ -145,6 +145,7 @@
 #include "content/public/browser/context_menu_params.h"
 #include "content/public/browser/download_manager.h"
 #include "content/public/browser/global_routing_id.h"
+#include "content/public/browser/idle_manager.h"
 #include "content/public/browser/media_player_watch_time.h"
 #include "content/public/browser/network_service_instance.h"
 #include "content/public/browser/permission_type.h"
@@ -7033,7 +7034,8 @@ void RenderFrameHostImpl::GetIdleManager(
   }
   static_cast<StoragePartitionImpl*>(GetProcess()->GetStoragePartition())
       ->GetIdleManager()
-      ->CreateService(std::move(receiver));
+      ->CreateService(std::move(receiver),
+                      GetMainFrame()->GetLastCommittedOrigin());
 }
 
 void RenderFrameHostImpl::GetPresentationService(
