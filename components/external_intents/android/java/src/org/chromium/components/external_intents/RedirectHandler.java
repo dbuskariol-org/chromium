@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * This class contains the logic to determine effective navigation/redirect.
  */
-public class RedirectHandlerImpl {
+public class RedirectHandler {
     /**
      * An invalid entry index.
      */
@@ -49,11 +49,11 @@ public class RedirectHandlerImpl {
 
     private boolean mShouldNotOverrideUrlLoadingOnCurrentRedirectChain;
 
-    public static RedirectHandlerImpl create() {
-        return new RedirectHandlerImpl();
+    public static RedirectHandler create() {
+        return new RedirectHandler();
     }
 
-    protected RedirectHandlerImpl() {}
+    protected RedirectHandler() {}
 
     /**
      * Updates |mIntentHistory| and |mLastIntentUpdatedTime|. If |intent| comes from chrome and
