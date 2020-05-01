@@ -78,7 +78,7 @@
   {
     "name": "allow-scroll-settings",
     "owners": [ "khorimoto", "zentaro" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 88
   },
   {
     "name": "allow-sxg-certs-without-extension",
