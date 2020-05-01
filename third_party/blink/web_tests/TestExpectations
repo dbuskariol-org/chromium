@@ -214,6 +214,15 @@ crbug.com/974666 [ Mac10.13 ] http/tests/misc/object-embedding-svg-delayed-size-
 crbug.com/974720 [ Mac10.13 ] virtual/text-antialias/firstline/capitalize-transform-2.html [ Pass Crash ]
 crbug.com/974720 [ Mac10.13 ] virtual/text-antialias/firstline/capitalize-transform.html [ Pass Crash ]
 
+# This test depends on synchronous focus() which does not exist (anymore?).
+crbug.com/1074482 external/wpt/html/interaction/focus/the-autofocus-attribute/update-the-rendering.html [ Failure ]
+# This test has a bug in it that prevents it from being able to deal with order
+# differences it claims to support.
+crbug.com/1076129 external/wpt/service-workers/service-worker/clients-matchall-frozen.https.html [ Pass Failure ]
+crbug.com/1076129 virtual/cache-storage-eager-reading/external/wpt/service-workers/service-worker/clients-matchall-frozen.https.html [ Pass Failure ]
+crbug.com/1076129 virtual/cache-storage-sequence/external/wpt/service-workers/service-worker/clients-matchall-frozen.https.html [ Pass Failure ]
+crbug.com/1076129 virtual/omt-worker-fetch/external/wpt/service-workers/service-worker/clients-matchall-frozen.https.html [ Pass Failure ]
+
 # Flakily timing out or failing.
 # TODO(ccameron): Investigate this.
 crbug.com/730267 virtual/gpu-rasterization/images/color-profile-group.html [ Pass Timeout Failure ]
