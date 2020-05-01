@@ -619,6 +619,9 @@ CHAR-LIMIT guidelines:
       <message name="IDS_HOMEPAGE_PROMO_TITLE" desc="The title displayed on homepage promo card, which guide user set chrome's new tab page as their new homepage.">
         Get here quicker
       </message>
+      <message name="IDS_HOMEPAGE_PROMO_TITLE_SLIM" desc="The title displayed on homepage promo card, which guide user set chrome's new tab page as their new homepage. Used for the one liner variation.">
+        Make this page your homepage
+      </message>
       <message name="IDS_HOMEPAGE_PROMO_DESCRIPTION" desc="The description displayed on homepage promo card, which guide user set chrome's new tab page as their new homepage.">
         See your top sites and recent stories whenever you tap the Home button
       </message>
