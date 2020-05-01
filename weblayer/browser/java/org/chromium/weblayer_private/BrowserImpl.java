@@ -30,7 +30,6 @@ import org.chromium.weblayer_private.interfaces.IUrlBarController;
 import org.chromium.weblayer_private.interfaces.ObjectWrapper;
 import org.chromium.weblayer_private.interfaces.StrictModeWorkaround;
 
-import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class BrowserImpl extends IBrowser.Stub {
 
     private long mNativeBrowser;
     private final ProfileImpl mProfile;
-    private WeakReference<Context> mEmbedderActivityContext;
+    private Context mEmbedderActivityContext;
     private BrowserViewController mViewController;
     private FragmentWindowAndroid mWindowAndroid;
     private IBrowserClient mClient;
@@ -124,7 +123,7 @@ public class BrowserImpl extends IBrowser.Stub {
         assert mWindowAndroid == null;
         assert mEmbedderActivityContext == null;
         mWindowAndroid = windowAndroid;
-        mEmbedderActivityContext = new WeakReference<Context>(embedderAppContext);
+        mEmbedderActivityContext = embedderAppContext;
         mViewController = new BrowserViewController(windowAndroid);
         mLocaleReceiver = new LocaleChangedBroadcastReceiver(windowAndroid.getContext().get());
         mPasswordEchoEnabled = null;
@@ -257,9 +256,8 @@ public class BrowserImpl extends IBrowser.Stub {
     boolean getDarkThemeEnabled() {
         if (mEmbedderActivityContext == null) return false;
         if (mDarkThemeEnabled == null) {
-            Context embedderActivitycontext = mEmbedderActivityContext.get();
-            if (embedderActivitycontext == null) return false;
-            int uiMode = embedderActivitycontext.getResources().getConfiguration().uiMode;
+            if (mEmbedderActivityContext == null) return false;
+            int uiMode = mEmbedderActivityContext.getResources().getConfiguration().uiMode;
             mDarkThemeEnabled =
                     (uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         }
