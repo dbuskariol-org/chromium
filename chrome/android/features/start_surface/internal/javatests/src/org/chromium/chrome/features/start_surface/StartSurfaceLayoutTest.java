@@ -257,6 +257,7 @@ public class StartSurfaceLayoutTest {
     @Feature({"RenderTest"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
+    @FlakyTest(message = "crbug.com/1075524")
     public void testRenderGrid_Incognito() throws InterruptedException, IOException {
         // clang-format on
         // Prepare some incognito tabs and enter tab switcher.
