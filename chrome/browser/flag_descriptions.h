@@ -374,6 +374,9 @@ extern const char kDesktopPWAsLocalUpdatingDescription[];
 extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceName[];
 extern const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[];
 
+extern const char kDesktopPWAsAppIconShortcutsMenuName[];
+extern const char kDesktopPWAsAppIconShortcutsMenuDescription[];
+
 extern const char kDesktopPWAsTabStripName[];
 extern const char kDesktopPWAsTabStripDescription[];
 

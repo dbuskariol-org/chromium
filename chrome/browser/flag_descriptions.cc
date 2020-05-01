@@ -618,6 +618,12 @@ const char kDesktopPWAsLocalUpdatingThrottlePersistenceDescription[] =
     "Persist the throttling of local PWA manifest update checks across browser "
     "restarts.";
 
+extern const char kDesktopPWAsAppIconShortcutsMenuName[] =
+    "Desktop PWAs app icon shortcuts menu";
+extern const char kDesktopPWAsAppIconShortcutsMenuDescription[] =
+    "Enable installed PWAs to include a menu of shortcuts associated with the "
+    "app icon in the taskbar on Windows, or the dock on macOS or Linux.";
+
 const char kDesktopPWAsTabStripName[] = "Desktop PWA tab strips";
 const char kDesktopPWAsTabStripDescription[] =
     "Experimental UI for exploring what PWA windows would look like with a tab "
