@@ -240,7 +240,8 @@ TEST_F(FileSequenceHelperTest, RulesetFormatVersionMismatch) {
   TestLoadRulesets(test_cases);
 
   // Now simulate a flatbuffer version mismatch.
-  ScopedIncrementIndexedRulesetFormatVersion scoped_version_change;
+  ScopedIncrementRulesetVersion scoped_version_change =
+      CreateScopedIncrementRulesetVersionForTesting();
 
   // Version mismatch will cause reindexing and updated checksums.
   for (auto& test_case : test_cases) {
