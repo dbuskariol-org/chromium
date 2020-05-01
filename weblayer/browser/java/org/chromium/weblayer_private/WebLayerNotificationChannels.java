@@ -6,12 +6,16 @@ package org.chromium.weblayer_private;
 
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.StringDef;
 
+import org.chromium.base.ContextUtils;
+import org.chromium.components.browser_ui.notifications.NotificationManagerProxyImpl;
 import org.chromium.components.browser_ui.notifications.channels.ChannelDefinitions;
 import org.chromium.components.browser_ui.notifications.channels.ChannelDefinitions.PredefinedChannel;
+import org.chromium.components.browser_ui.notifications.channels.ChannelsInitializer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,6 +27,14 @@ import java.util.Set;
 
 @TargetApi(Build.VERSION_CODES.O)
 class WebLayerNotificationChannels extends ChannelDefinitions {
+    /**
+     * Version number identifying the current set of channels. This must be incremented whenever the
+     * set of channels returned by {@link #getStartupChannelIds()} or {@link #getLegacyChannelIds()}
+     * changes.
+     */
+    static final int sChannelsVersion = 0;
+    static final String sChannelsVersionKey = "org.chromium.weblayer.notification_channels_version";
+
     private static class LazyHolder {
         private static WebLayerNotificationChannels sInstance = new WebLayerNotificationChannels();
     }
@@ -105,5 +117,41 @@ class WebLayerNotificationChannels extends ChannelDefinitions {
     @Override
     public PredefinedChannel getChannelFromId(@ChannelId String channelId) {
         return PredefinedChannels.MAP.get(channelId);
+    }
+
+    /**
+     * Updates the user-facing channel names after a locale switch.
+     */
+    public static void onLocaleChanged() {
+        if (!isAtLeastO()) return;
+
+        getChannelsInitializer().updateLocale(ContextUtils.getApplicationContext().getResources());
+    }
+
+    /**
+     * Updates the registered channels based on {@link sChannelsVersion}.
+     */
+    public static void updateChannelsIfNecessary() {
+        if (!isAtLeastO()) return;
+
+        SharedPreferences prefs = ContextUtils.getAppSharedPreferences();
+        if (prefs.getInt(sChannelsVersionKey, -1) == sChannelsVersion) return;
+
+        ChannelsInitializer initializer = getChannelsInitializer();
+        initializer.deleteLegacyChannels();
+        initializer.initializeStartupChannels();
+        prefs.edit().putInt(sChannelsVersionKey, sChannelsVersion).apply();
+    }
+
+    private static boolean isAtLeastO() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
+
+    private static ChannelsInitializer getChannelsInitializer() {
+        assert isAtLeastO();
+
+        return new ChannelsInitializer(
+                new NotificationManagerProxyImpl(ContextUtils.getApplicationContext()),
+                getInstance(), ContextUtils.getApplicationContext().getResources());
     }
 }
