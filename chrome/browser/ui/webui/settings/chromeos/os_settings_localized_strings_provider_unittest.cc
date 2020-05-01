@@ -8,6 +8,7 @@
 #include "chrome/browser/chromeos/local_search_service/index.h"
 #include "chrome/browser/chromeos/local_search_service/local_search_service.h"
 #include "chrome/browser/chromeos/local_search_service/local_search_service_factory.h"
+#include "chrome/browser/ui/webui/settings/chromeos/constants/routes.mojom.h"
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_manager_factory.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/common/webui_url_constants.h"
@@ -65,7 +66,7 @@ TEST_F(OsSettingsManagerTest, WifiTags) {
   const SearchConcept* network_settings_concept =
       manager_->GetCanonicalTagMetadata(IDS_SETTINGS_TAG_NETWORK_SETTINGS);
   ASSERT_TRUE(network_settings_concept);
-  EXPECT_EQ(chrome::kNetworksSubPage,
+  EXPECT_EQ(chromeos::settings::mojom::kWifiNetworksSubpagePath,
             network_settings_concept->url_path_with_parameters);
   EXPECT_EQ(mojom::SearchResultIcon::kWifi, network_settings_concept->icon);
 
@@ -87,7 +88,7 @@ TEST_F(OsSettingsManagerTest, WifiTags) {
   ethernet_settings_concept =
       manager_->GetCanonicalTagMetadata(IDS_SETTINGS_TAG_ETHERNET_SETTINGS);
   ASSERT_TRUE(ethernet_settings_concept);
-  EXPECT_EQ(chrome::kEthernetSettingsSubPage,
+  EXPECT_EQ(chromeos::settings::mojom::kEthernetDetailsSubpagePath,
             ethernet_settings_concept->url_path_with_parameters);
   EXPECT_EQ(mojom::SearchResultIcon::kEthernet,
             ethernet_settings_concept->icon);
