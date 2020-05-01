@@ -26,12 +26,12 @@ class BruteForceParameterOptimizer(
     self._args.max_delta_threshold += 1
 
   def _RunOptimizationImpl(self):
-    should_continue = True
     # Look for the minimum max_delta that results in a successful comparison
     # for each possible edge_threshold/max_diff combination.
     for edge_threshold in xrange(self._args.max_edge_threshold,
                                  self._args.min_edge_threshold,
                                  -1 * self._args.edge_threshold_step):
+      should_continue = True
       for max_diff in xrange(self._args.min_max_diff, self._args.max_max_diff,
                              self._args.max_diff_step):
         for max_delta in xrange(self._args.min_delta_threshold,
@@ -42,5 +42,11 @@ class BruteForceParameterOptimizer(
           success, _, _ = self._RunComparisonForParameters(parameters)
           if success:
             print 'Found good parameters %s' % parameters
+            should_continue = False
             break
           logging.info('Found bad parameters %s', parameters)
+        # Increasing the max_diff for a given edge_threshold once we've found
+        # a good max_delta won't give us any new information, so go on to the
+        # next edge_threshold.
+        if not should_continue:
+          break
