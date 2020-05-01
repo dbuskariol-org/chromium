@@ -899,7 +899,8 @@ WRAPPED_INSTANTIATE_TEST_SUITE_P(
     FilesAppBrowserTest,
     ::testing::Values(TestCase("mountCrostini"),
                       TestCase("enableDisableCrostini"),
-                      TestCase("sharePathWithCrostini")));
+                      TestCase("sharePathWithCrostini"),
+                      TestCase("pluginVmErrorDialog")));
 
 WRAPPED_INSTANTIATE_TEST_SUITE_P(
     MyFiles, /* my_files.js */
