@@ -981,6 +981,12 @@
       <structure name="IDR_OS_SETTINGS_CROSTINI_DISK_RESIZE_DIALOG_JS"
                  file="chromeos/crostini_page/crostini_disk_resize_dialog.js"
                  compress="false" type="chrome_html" />
+      <structure name="IDR_OS_SETTINGS_CROSTINI_DISK_RESIZE_CONFIRMATION_DIALOG_HTML"
+                 file="chromeos/crostini_page/crostini_disk_resize_confirmation_dialog.html"
+                 compress="false" type="chrome_html" />
+      <structure name="IDR_OS_SETTINGS_CROSTINI_DISK_RESIZE_CONFIRMATION_DIALOG_JS"
+                 file="chromeos/crostini_page/crostini_disk_resize_confirmation_dialog.js"
+                 compress="false" type="chrome_html" />
       <structure name="IDR_OS_SETTINGS_CROSTINI_EXPORT_IMPORT_HTML"
                  file="chromeos/crostini_page/crostini_export_import.html"
                  compress="false" type="chrome_html" />
