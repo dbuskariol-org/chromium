@@ -1,3 +1,21 @@
+/*
+  gpuBenchmarking finishes a gesture by sending a completion callback to the
+  renderer after the final input event. When the renderer receives the callback
+  it requests a new frame. This should flush all input through the system - and
+  DOM events should synchronously run here - and produce a compositor frame.
+  The callback is resolved when the frame is presented to the screen.
+  For methods in this file, the callback is the resolve method of the Promise
+  returned.
+
+  Example:
+  await mouseMoveTo(10,10);
+  The await returns after the mousemove event fired.
+
+  Note:
+  Given the event handler runs synchronous code, the await returns after
+  the event handler finished running.
+*/
+
 function waitForCompositorCommit() {
   return new Promise((resolve) => {
     if (window.testRunner) {
