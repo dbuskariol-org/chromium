@@ -9,12 +9,12 @@ assert(is_mac)
 config("gcapi_config") {
   cflags = [
     "-isysroot",
-    rebase_path(sysroot, root_build_dir),
+    sysroot,
     "-mmacosx-version-min=10.6",
   ]
   ldflags = [
     "-isysroot",
-    rebase_path(sysroot, root_build_dir),
+    sysroot,
     "-mmacosx-version-min=10.6",
   ]
 }
