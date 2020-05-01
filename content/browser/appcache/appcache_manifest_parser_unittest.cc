@@ -821,11 +821,13 @@ TEST_F(AppCacheManifestParserTest, OriginTrial) {
   const GURL kUrl("http://mockhost");
   const std::string kScope = kUrl.GetWithoutFilename().path();
 
+// tools/origin_trials/generate_token.py http://mockhost AppCache
+// --expire-days=2000
 #define APPCACHE_ORIGIN_TRIAL_TOKEN                                            \
-  "AnIRfMbu5xrUEIBGno19QnlNiW7gZgKrkLaCysH+/"                                  \
-  "XU2FEpF+"                                                                   \
-  "TLisekclfG9xOkjQgTEllip14FPATbapHAH5ggAAABNeyJvcmlnaW4iOiAiaHR0cDovL21vY2t" \
-  "ob3N0OjgwIiwgImZlYXR1cmUiOiAiQXBwQ2FjaGUiLCAiZXhwaXJ5IjogMTU4ODM1OTM5NH0="
+  "AhiiB7vi3JiEO1/"                                                            \
+  "RQIytQslLSN3WYVu3Xd32abYhTia+91ladjnXSClfU981x+"                            \
+  "aoPimEqYVy6tWoeMZZYTpqlggAAABNeyJvcmlnaW4iOiAiaHR0cDovL21vY2tob3N0OjgwIiwg" \
+  "ImZlYXR1cmUiOiAiQXBwQ2FjaGUiLCAiZXhwaXJ5IjogMTc2MTE2NjQxOH0="
 
   const std::string kData(
       "CACHE MANIFEST\r"
