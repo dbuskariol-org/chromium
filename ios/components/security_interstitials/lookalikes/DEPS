@@ -1,6 +1,0 @@
-include_rules = [
-  "+components/lookalikes",
-  "+components/url_formatter",
-  "+ios/net",
-  "+net/base",
-]
