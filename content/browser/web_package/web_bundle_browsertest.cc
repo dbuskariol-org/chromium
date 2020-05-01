@@ -1302,7 +1302,13 @@ IN_PROC_BROWSER_TEST_P(WebBundleFileBrowserTest, Iframe) {
                  true /* support_third_party_wbn_page */);
 }
 
-IN_PROC_BROWSER_TEST_P(WebBundleFileBrowserTest, WindowOpen) {
+// Flaky failures on Android; https://crbug.com/1077177.
+#if defined(OS_ANDROID)
+#define MAYBE_WindowOpen DISABLED_WindowOpen
+#else
+#define MAYBE_WindowOpen WindowOpen
+#endif
+IN_PROC_BROWSER_TEST_P(WebBundleFileBrowserTest, MAYBE_WindowOpen) {
   net::EmbeddedTestServer third_party_server;
   GURL primary_url_origin;
   GURL third_party_origin;
