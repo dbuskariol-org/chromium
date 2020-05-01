@@ -25,7 +25,8 @@ namespace chromeos {
 namespace cert_provisioning {
 
 using CertProvisioningWorkerCallback =
-    base::OnceCallback<void(const CertProfile& profile, bool is_success)>;
+    base::OnceCallback<void(const CertProfile& profile,
+                            CertProvisioningWorkerState state)>;
 
 class CertProvisioningWorker;
 
@@ -56,21 +57,6 @@ class CertProvisioningWorkerFactory {
 
  private:
   static CertProvisioningWorkerFactory* test_factory_;
-};
-
-// These values are used in serialization and should be changed carefully.
-enum class CertProvisioningWorkerState {
-  kInitState = 0,
-  kKeypairGenerated = 1,
-  kStartCsrResponseReceived = 2,
-  kVaChallengeFinished = 3,
-  kKeyRegistered = 4,
-  kKeypairMarked = 5,
-  kSignCsrFinished = 6,
-  kFinishCsrResponseReceived = 7,
-  kSucceed = 8,
-  kFailed = 9,
-  kMaxValue = kFailed,
 };
 
 // This class is a part of certificate provisioning feature.  It takes a

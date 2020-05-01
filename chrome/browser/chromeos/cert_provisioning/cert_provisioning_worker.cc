@@ -8,6 +8,7 @@
 #include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/no_destructor.h"
+#include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_common.h"
 #include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_serializer.h"
 #include "chrome/browser/chromeos/platform_keys/platform_keys_service.h"
 #include "chrome/browser/chromeos/platform_keys/platform_keys_service_factory.h"
@@ -92,6 +93,7 @@ int GetStateOrderedIndex(CertProvisioningWorkerState state) {
       res -= 1;
       FALLTHROUGH;
     case CertProvisioningWorkerState::kSucceed:
+    case CertProvisioningWorkerState::kInconsistentDataError:
     case CertProvisioningWorkerState::kFailed:
       res -= 1;
   }
@@ -210,6 +212,7 @@ void CertProvisioningWorkerImpl::DoStep() {
       DownloadCert();
       return;
     case CertProvisioningWorkerState::kSucceed:
+    case CertProvisioningWorkerState::kInconsistentDataError:
     case CertProvisioningWorkerState::kFailed:
       DCHECK(false);
       return;
@@ -229,8 +232,7 @@ void CertProvisioningWorkerImpl::UpdateState(
 
   if (IsFinished()) {
     CleanUp();
-    std::move(callback_).Run(cert_profile_,
-                             state_ == CertProvisioningWorkerState::kSucceed);
+    std::move(callback_).Run(cert_profile_, state_);
   }
 }
 
@@ -266,7 +268,8 @@ void CertProvisioningWorkerImpl::StartCsr() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   cloud_policy_client_->ClientCertProvisioningStartCsr(
-      CertScopeToString(cert_scope_), cert_profile_.profile_id, public_key_,
+      CertScopeToString(cert_scope_), cert_profile_.profile_id,
+      cert_profile_.policy_version, public_key_,
       base::BindOnce(&CertProvisioningWorkerImpl::OnStartCsrDone,
                      weak_factory_.GetWeakPtr()));
 }
@@ -417,8 +420,9 @@ void CertProvisioningWorkerImpl::FinishCsr() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   cloud_policy_client_->ClientCertProvisioningFinishCsr(
-      CertScopeToString(cert_scope_), cert_profile_.profile_id, public_key_,
-      va_challenge_response_, signature_,
+      CertScopeToString(cert_scope_), cert_profile_.profile_id,
+      cert_profile_.policy_version, public_key_, va_challenge_response_,
+      signature_,
       base::BindOnce(&CertProvisioningWorkerImpl::OnFinishCsrDone,
                      weak_factory_.GetWeakPtr()));
 }
@@ -441,7 +445,8 @@ void CertProvisioningWorkerImpl::DownloadCert() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   cloud_policy_client_->ClientCertProvisioningDownloadCert(
-      CertScopeToString(cert_scope_), cert_profile_.profile_id, public_key_,
+      CertScopeToString(cert_scope_), cert_profile_.profile_id,
+      cert_profile_.policy_version, public_key_,
       base::BindOnce(&CertProvisioningWorkerImpl::OnDownloadCertDone,
                      weak_factory_.GetWeakPtr()));
 }
@@ -494,6 +499,7 @@ void CertProvisioningWorkerImpl::OnImportCertDone(
 bool CertProvisioningWorkerImpl::IsFinished() const {
   switch (state_) {
     case CertProvisioningWorkerState::kSucceed:
+    case CertProvisioningWorkerState::kInconsistentDataError:
     case CertProvisioningWorkerState::kFailed:
       return true;
     default:
@@ -537,6 +543,13 @@ bool CertProvisioningWorkerImpl::ProcessResponseErrors(
   }
 
   request_backoff_.InformOfRequest(true);
+
+  if (error.has_value() &&
+      (error.value() == CertProvisioningResponseError::INCONSISTENT_DATA)) {
+    LOG(ERROR) << "Server response contains error: " << error.value();
+    UpdateState(CertProvisioningWorkerState::kInconsistentDataError);
+    return false;
+  }
 
   if (error.has_value()) {
     LOG(ERROR) << "Server response contains error: " << error.value();
@@ -612,6 +625,7 @@ void CertProvisioningWorkerImpl::HandleSerialization() {
       CertProvisioningSerializer::SerializeWorkerToPrefs(pref_service_, *this);
       break;
     case CertProvisioningWorkerState::kSucceed:
+    case CertProvisioningWorkerState::kInconsistentDataError:
     case CertProvisioningWorkerState::kFailed:
       CertProvisioningSerializer::DeleteWorkerFromPrefs(pref_service_, *this);
       break;
