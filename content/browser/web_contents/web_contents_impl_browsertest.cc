@@ -1265,13 +1265,12 @@ IN_PROC_BROWSER_TEST_F(WebContentsImplBrowserTest,
   const GURL kViewSourceURL(kViewSourceScheme + std::string(":") + kUrl.spec());
   EXPECT_TRUE(NavigateToURL(shell(), kUrl));
 
-  auto console_delegate = std::make_unique<ConsoleObserverDelegate>(
-      shell()->web_contents(),
+  WebContentsConsoleObserver console_observer(shell()->web_contents());
+  console_observer.SetPattern(
       "Not allowed to load local resource: view-source:*");
-  shell()->web_contents()->SetDelegate(console_delegate.get());
   EXPECT_TRUE(ExecuteScript(shell()->web_contents(),
                             "window.open('" + kViewSourceURL.spec() + "');"));
-  console_delegate->Wait();
+  console_observer.Wait();
   // Original page shouldn't navigate away, no new tab should be opened.
   EXPECT_EQ(kUrl, shell()->web_contents()->GetURL());
   EXPECT_EQ(1u, Shell::windows().size());
@@ -1285,16 +1284,14 @@ IN_PROC_BROWSER_TEST_F(WebContentsImplBrowserTest,
   const GURL kViewSourceURL(kViewSourceScheme + std::string(":") + kUrl.spec());
   EXPECT_TRUE(NavigateToURL(shell(), kUrl));
 
-  std::unique_ptr<ConsoleObserverDelegate> console_delegate(
-      new ConsoleObserverDelegate(
-          shell()->web_contents(),
-          "Not allowed to load local resource: view-source:*"));
-  shell()->web_contents()->SetDelegate(console_delegate.get());
+  WebContentsConsoleObserver console_observer(shell()->web_contents());
+  console_observer.SetPattern(
+      "Not allowed to load local resource: view-source:*");
 
   EXPECT_TRUE(
       ExecuteScript(shell()->web_contents(),
                     "window.location = '" + kViewSourceURL.spec() + "';"));
-  console_delegate->Wait();
+  console_observer.Wait();
   // Original page shouldn't navigate away.
   EXPECT_EQ(kUrl, shell()->web_contents()->GetURL());
   EXPECT_FALSE(shell()
