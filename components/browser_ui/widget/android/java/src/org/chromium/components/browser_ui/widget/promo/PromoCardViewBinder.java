@@ -6,6 +6,7 @@ package org.chromium.components.browser_ui.widget.promo;
 
 import android.view.View;
 
+import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Callback;
 import org.chromium.ui.modelutil.PropertyKey;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -21,6 +22,9 @@ class PromoCardViewBinder
     public void bind(PropertyModel model, PromoCardView view, PropertyKey propertyKey) {
         if (propertyKey == PromoCardProperties.IMAGE) {
             view.mPromoImage.setImageDrawable(model.get(PromoCardProperties.IMAGE));
+        } else if (propertyKey == PromoCardProperties.ICON_TINT) {
+            ApiCompatibilityUtils.setImageTintList(
+                    view.mPromoImage, model.get(PromoCardProperties.ICON_TINT));
         } else if (propertyKey == PromoCardProperties.TITLE) {
             view.mTitle.setText(model.get(PromoCardProperties.TITLE));
         } else if (propertyKey == PromoCardProperties.DESCRIPTION) {
