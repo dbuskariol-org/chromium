@@ -1697,7 +1697,8 @@ ci.fyi_builder(
 ci.fyi_builder(
     name = 'fuchsia-fyi-arm64-rel',
     console_view_entry = ci.console_view_entry(
-        category = 'fuchsia',
+        category = 'fuchsia|a64',
+        short_name = 'rel',
     ),
     notifies = ['cr-fuchsia'],
 )
@@ -1705,7 +1706,8 @@ ci.fyi_builder(
 ci.fyi_builder(
     name = 'fuchsia-fyi-x64-dbg',
     console_view_entry = ci.console_view_entry(
-        category = 'fuchsia',
+        category = 'fuchsia|x64',
+        short_name = 'dbg',
     ),
     notifies = ['cr-fuchsia'],
 )
@@ -1713,7 +1715,8 @@ ci.fyi_builder(
 ci.fyi_builder(
     name = 'fuchsia-fyi-x64-rel',
     console_view_entry = ci.console_view_entry(
-        category = 'fuchsia',
+        category = 'fuchsia|x64',
+        short_name = 'rel',
     ),
     notifies = ['cr-fuchsia'],
 )
