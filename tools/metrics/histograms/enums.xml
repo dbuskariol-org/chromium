@@ -58261,6 +58261,8 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
       label="User clicked on the page at least once but the feature isn't
              configured to show warnings on mouse clicks."/>
   <int value="4" label="User clicked on the page and the warning was shown."/>
+  <int value="5"
+      label="Page tried to enter fullscreen mode and the warning was shown."/>
 </enum>
 
 <enum name="SafeBrowsingParseV4HashResult">
