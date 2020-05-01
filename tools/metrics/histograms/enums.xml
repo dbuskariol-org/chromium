@@ -40210,6 +40210,7 @@ from previous Chrome versions.
   <int value="481506759" label="ServiceWorkerScriptStreaming:enabled"/>
   <int value="482232604" label="PercentBasedScrolling:enabled"/>
   <int value="487810392" label="EnablePalmOnToolTypePalm:enabled"/>
+  <int value="491334698" label="ConditionalTabStripAndroid:enabled"/>
   <int value="492113129" label="ExperimentalAppBanners:enabled"/>
   <int value="492985975" label="use-monitor-color-space"/>
   <int value="493903641" label="disable-appcontainer"/>
@@ -40630,6 +40631,7 @@ from previous Chrome versions.
       label="ContentSuggestionsThumbnailDominantColor:disabled"/>
   <int value="1005684777" label="PictureInPicture:disabled"/>
   <int value="1006608931" label="ArcEnableUnifiedAudioFocus:disabled"/>
+  <int value="1006691801" label="ConditionalTabStripAndroid:disabled"/>
   <int value="1007444341" label="enable-prefixed-encrypted-media"/>
   <int value="1008677979"
       label="AutofillUseImprovedLabelDisambiguation:disabled"/>

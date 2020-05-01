@@ -197,6 +197,9 @@ extern const char kOmniboxContextMenuShowFullUrlsDescription[];
 extern const char kClickToOpenPDFName[];
 extern const char kClickToOpenPDFDescription[];
 
+extern const char kConditionalTabStripAndroidName[];
+extern const char kConditionalTabStripAndroidDescription[];
+
 extern const char kDecodeJpeg420ImagesToYUVName[];
 extern const char kDecodeJpeg420ImagesToYUVDescription[];
 

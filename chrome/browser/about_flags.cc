@@ -3862,6 +3862,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kDuetTabStripIntegrationAndroidName,
      flag_descriptions::kDuetTabStripIntegrationAndroidDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kDuetTabStripIntegrationAndroid)},
+
+    {"enable-conditional-tabstrip",
+     flag_descriptions::kConditionalTabStripAndroidName,
+     flag_descriptions::kConditionalTabStripAndroidDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kConditionalTabStripAndroid)},
 #endif  // OS_ANDROID
 
     {"enable-layout-ng", flag_descriptions::kEnableLayoutNGName,

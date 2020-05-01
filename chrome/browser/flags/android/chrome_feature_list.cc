@@ -127,6 +127,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kChromeSharingHub,
     &kChromeSmartSelection,
     &kCommandLineOnNonRooted,
+    &kConditionalTabStripAndroid,
     &kContactsPickerSelectAll,
     &kContentIndexingDownloadHome,
     &kContentIndexingNTP,
@@ -308,6 +309,9 @@ const base::Feature kBackgroundTaskComponentUpdate{
 
 const base::Feature kBookmarksShowInFolder{"BookmarksShowInFolder",
                                            base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kConditionalTabStripAndroid{
+    "ConditionalTabStripAndroid", base::FEATURE_DISABLED_BY_DEFAULT};
 
 // Used in downstream code.
 const base::Feature kCastDeviceFilter{"CastDeviceFilter",

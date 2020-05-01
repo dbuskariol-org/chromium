@@ -71,6 +71,10 @@ const char kAllowSyncXHRInPageDismissalDescription[] =
     "Allows synchronous XHR requests during page dismissal when the page is "
     "being navigated away or closed by the user.";
 
+const char kConditionalTabStripAndroidName[] = "Conditional Tab Strip";
+const char kConditionalTabStripAndroidDescription[] =
+    "Allows users to access conditional tab strip.";
+
 const char kEnableClipboardProviderImageSuggestionsName[] =
     "Omnibox clipboard image search suggestions";
 const char kEnableClipboardProviderImageSuggestionsDescription[] =
