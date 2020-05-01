@@ -1353,8 +1353,16 @@ void InputHandlerProxy::HandleScrollElasticityOverscroll(
     const WebGestureEvent& gesture_event,
     const cc::InputHandlerScrollResult& scroll_result) {
   DCHECK(scroll_elasticity_controller_);
-  scroll_elasticity_controller_->ObserveGestureEventAndResult(gesture_event,
-                                                              scroll_result);
+  // Send the event and its disposition to the elasticity controller to update
+  // the over-scroll animation. Note that the call to the elasticity controller
+  // is made asynchronously, to minimize divergence between main thread and
+  // impl thread event handling paths.
+  base::ThreadTaskRunnerHandle::Get()->PostTask(
+      FROM_HERE,
+      base::BindOnce(
+          &InputScrollElasticityController::ObserveGestureEventAndResult,
+          scroll_elasticity_controller_->GetWeakPtr(), gesture_event,
+          scroll_result));
 }
 
 void InputHandlerProxy::SetTickClockForTesting(
