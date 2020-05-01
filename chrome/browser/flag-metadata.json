@@ -3737,6 +3737,11 @@
     "expiry_milestone": 82
   },
   {
+    "name":"shelf-app-scaling",
+    "owners":["andrewxu"],
+    "expiry_milestone": 86
+  },
+  {
     "name": "shelf-hide-buttons-in-tablet",
     "owners": [ "tbarzic", "//ash/shelf/OWNERS" ],
     "expiry_milestone": 84

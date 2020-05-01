@@ -38848,6 +38848,7 @@ from previous Chrome versions.
   <int value="-1119700637" label="ui-disable-partial-swap"/>
   <int value="-1118921985" label="ForceEnableSystemAec:enabled"/>
   <int value="-1117104514" label="smbfs-file-shares"/>
+  <int value="-1116278039" label="ShelfAppScaling:disabled"/>
   <int value="-1114080030" label="ResourceLoadingHints:enabled"/>
   <int value="-1112782121" label="AndroidSigninPromos:disabled"/>
   <int value="-1109826787" label="AccessibilityExposeDisplayNone:enabled"/>
@@ -41575,6 +41576,7 @@ from previous Chrome versions.
   <int value="2077106718" label="EnableMessagesWebPush:enabled"/>
   <int value="2077917024"
       label="enable-supervised-user-managed-bookmarks-folder"/>
+  <int value="2078599705" label="ShelfAppScaling:enabled"/>
   <int value="2079672348" label="ExperimentalKeyboardLockUI:disabled"/>
   <int value="2081154375" label="AssistantKeyRemapping:disabled"/>
   <int value="2084477383" label="CrostiniDiskResizing:enabled"/>
