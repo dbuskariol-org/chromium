@@ -385,6 +385,27 @@ function mouseClickOn(x, y, button = 0 /* left */, keys = '') {
   });
 }
 
+// Simulate a mouse double click on point.
+function mouseDoubleClickOn(x, y, button = 0 /* left */, keys = '') {
+  return new Promise((resolve, reject) => {
+    if (window.chrome && chrome.gpuBenchmarking) {
+      let pointerActions = [{
+        source: 'mouse',
+        actions: [
+          { 'name': 'pointerMove', 'x': x, 'y': y },
+          { 'name': 'pointerDown', 'x': x, 'y': y, 'button': button, 'keys': keys  },
+          { 'name': 'pointerUp', 'button': button },
+          { 'name': 'pointerDown', 'x': x, 'y': y, 'button': button, 'keys': keys  },
+          { 'name': 'pointerUp', 'button': button },
+        ]
+      }];
+      chrome.gpuBenchmarking.pointerActionSequence(pointerActions, resolve);
+    } else {
+      reject('This test requires chrome.gpuBenchmarking');
+    }
+  });
+}
+
 // Simulate a mouse press on point for a certain time.
 function mousePressOn(x, y, t) {
   return new Promise((resolve, reject) => {
