@@ -33,5 +33,5 @@ export {ResetBrowserProxyImpl} from './reset_page/reset_browser_proxy.js';
 export {buildRouter, routes} from './route.m.js';
 export {Route, Router} from './router.m.js';
 export {SafetyCheckBrowserProxy, SafetyCheckBrowserProxyImpl, SafetyCheckCallbackConstants, SafetyCheckExtensionsStatus, SafetyCheckParentStatus, SafetyCheckPasswordsStatus, SafetyCheckSafeBrowsingStatus, SafetyCheckUpdatesStatus} from './safety_check_page/safety_check_browser_proxy.js';
-export {SearchEnginesBrowserProxyImpl} from './search_engines_page/search_engines_browser_proxy.m.js';
+export {SearchEngine, SearchEnginesBrowserProxy, SearchEnginesBrowserProxyImpl, SearchEnginesInfo} from './search_engines_page/search_engines_browser_proxy.m.js';
 export {getSearchManager, SearchRequest, setSearchManagerForTesting} from './search_settings.m.js';

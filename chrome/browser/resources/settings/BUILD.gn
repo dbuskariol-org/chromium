@@ -230,6 +230,7 @@ group("closure_compile_module") {
 
 js_type_check("closure_compile_local_module") {
   is_polymer3 = true
+  closure_flags = settings_closure_flags
   deps = [
     ":extension_control_browser_proxy.m",
     ":global_scroll_target_behavior.m",
@@ -243,8 +244,16 @@ js_type_check("closure_compile_local_module") {
     ":route.m",
     ":router.m",
     ":search_settings.m",
+    ":settings",
     ":settings_routes.m",
     ":site_favicon.m",
+  ]
+}
+
+js_library("settings") {
+  deps = [
+    "search_engines_page:search_engines_browser_proxy.m",
+    "settings_ui:settings_ui",
   ]
 }
 

@@ -331,13 +331,22 @@ js_modulizer("modulize_local") {
 group("closure_compile") {
   deps = [
     ":closure_compile_local",
+    "settings:closure_compile",
+
     # TODO(crbug.com/1000989): Add page specific targets here.
   ]
 }
 
 js_type_check("closure_compile_local") {
   uses_js_modules = true
-  deps = [ ":test_browser_proxy.m" ]
+  deps = [
+    ":chai_assert",
+    ":test_browser_proxy.m",
+  ]
+}
+
+js_library("chai_assert") {
+  externs_list = [ "//third_party/chaijs/externs/chai-3.5.js" ]
 }
 
 js_library("test_browser_proxy.m") {
