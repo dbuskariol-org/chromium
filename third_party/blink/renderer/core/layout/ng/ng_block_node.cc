@@ -1224,12 +1224,9 @@ bool NGBlockNode::HasAspectRatio() const {
 LogicalSize NGBlockNode::GetAspectRatio() const {
   // The CSS parser will ensure that this will only be set if the feature
   // is enabled.
-  const base::Optional<IntSize>& ratio = Style().AspectRatio();
-  if (ratio.has_value()) {
-    PhysicalSize physical_ratio(LayoutUnit(ratio->Width()),
-                                LayoutUnit(ratio->Height()));
-    return physical_ratio.ConvertToLogical(Style().GetWritingMode());
-  }
+  const base::Optional<LogicalSize>& ratio = Style().LogicalAspectRatio();
+  if (ratio.has_value())
+    return *ratio;
 
   base::Optional<LayoutUnit> computed_inline_size;
   base::Optional<LayoutUnit> computed_block_size;
