@@ -1038,6 +1038,7 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/ntp/cards/promo/HomepagePromoController.java",
   "java/src/org/chromium/chrome/browser/ntp/cards/promo/HomepagePromoSnackbarController.java",
   "java/src/org/chromium/chrome/browser/ntp/cards/promo/HomepagePromoUtils.java",
+  "java/src/org/chromium/chrome/browser/ntp/cards/promo/HomepagePromoVariationManager.java",
   "java/src/org/chromium/chrome/browser/ntp/search/SearchBoxChipDelegate.java",
   "java/src/org/chromium/chrome/browser/ntp/search/SearchBoxContainerView.java",
   "java/src/org/chromium/chrome/browser/ntp/search/SearchBoxCoordinator.java",

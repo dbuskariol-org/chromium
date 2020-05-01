@@ -340,9 +340,12 @@ public class FeedSurfaceCoordinator {
 
         // Mediator should be created before any Stream changes.
         mMediator = new FeedSurfaceMediator(this, snapScrollHelper, mPageNavigationDelegate);
-        mHomepagePromoController =
-                new HomepagePromoController(mActivity, mSnackbarManager, mTracker, mMediator);
-        mMediator.onHomepagePromoStateChange();
+
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.HOMEPAGE_PROMO_CARD)) {
+            mHomepagePromoController =
+                    new HomepagePromoController(mActivity, mSnackbarManager, mTracker, mMediator);
+            mMediator.onHomepagePromoStateChange();
+        }
 
         // Native should already have been loaded because of FeedSurfaceMediator.
         if (ChromeFeatureList.isEnabled(ChromeFeatureList.INTEREST_FEED_V2)) {

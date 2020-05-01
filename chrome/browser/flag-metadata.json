@@ -2638,6 +2638,11 @@
     "expiry_milestone": 90
   },
   {
+    "name": "homepage-promo-card",
+    "owners": [ "wenyufu", "chrome-android-app@chromium.org" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "homepage-settings-ui-conversion",
     "owners": [ "wenyufu", "chrome-android-app@chromium.org" ],
     "expiry_milestone": 84

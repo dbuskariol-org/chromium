@@ -2443,6 +2443,12 @@ const char kHomepageLocationDescription[] =
     "Enable enterprice policy HomepageLocation, a rule of configure the home "
     "page URL";
 
+const char kHomepagePromoCardName[] =
+    "Enable homepage promo card on the New Tab Page";
+const char kHomepagePromoCardDescription[] =
+    "Enable homepage promo card that will be shown to users with partner "
+    "configured homepage.";
+
 const char kHomepageSettingsUIConversionName[] =
     "Enable new homepage setting UI";
 const char kHomepageSettingsUIConversionDescription[] =

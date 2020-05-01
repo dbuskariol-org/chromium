@@ -137,12 +137,14 @@ public class HomepagePromoController implements HomepageStateListener {
                                 r.getString(R.string.homepage_promo_primary_button))
                         .with(PromoCardProperties.PRIMARY_BUTTON_CALLBACK,
                                 (v) -> onPrimaryButtonClicked())
-                        .with(PromoCardProperties.SECONDARY_BUTTON_VISIBLE, false)
+                        .with(PromoCardProperties.HAS_SECONDARY_BUTTON, false)
+                        .with(PromoCardProperties.HAS_CLOSE_BUTTON, true)
                         .with(PromoCardProperties.CLOSE_BUTTON_CALLBACK, (v) -> dismissPromo())
                         .build();
 
-        mPromoCoordinator = new PromoCardCoordinator(
-                mContext, mModel, FeatureConstants.HOMEPAGE_PROMO_CARD_FEATURE);
+        mPromoCoordinator = new PromoCardCoordinator(mContext, mModel,
+                FeatureConstants.HOMEPAGE_PROMO_CARD_FEATURE,
+                HomepagePromoVariationManager.getInstance().getLayoutVariation());
         mPromoCoordinator.getView().setId(R.id.homepage_promo);
 
         // Subscribe to homepage update only when view is created.

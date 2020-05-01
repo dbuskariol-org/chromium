@@ -153,6 +153,7 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &kFocusOmniboxInIncognitoTabIntents,
     &kHandleMediaIntents,
     &kHomepageLocation,
+    &kHomepagePromoCard,
     &kHomepageSettingsUIConversion,
     &kHorizontalTabSwitcherAndroid,
     &kImmersiveUiMode,
@@ -448,6 +449,9 @@ const base::Feature kHandleMediaIntents{"HandleMediaIntents",
 // force the home page url for managed devices.
 const base::Feature kHomepageLocation{"HomepageLocationPolicy",
                                       base::FEATURE_ENABLED_BY_DEFAULT};
+
+const base::Feature kHomepagePromoCard{"HomepagePromoCard",
+                                       base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kHomepageSettingsUIConversion{
     "HomepageSettingsUIConversion", base::FEATURE_ENABLED_BY_DEFAULT};
