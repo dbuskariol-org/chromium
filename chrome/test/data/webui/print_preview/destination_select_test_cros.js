@@ -6,15 +6,16 @@ import {Destination, DestinationConnectionStatus, DestinationOrigin, Destination
 import {assert} from 'chrome://resources/js/assert.m.js';
 import {getGoogleDriveDestination, selectOption} from 'chrome://test/print_preview/print_preview_test_utils.js';
 
-window.destination_select_test = {};
-destination_select_test.suiteName = 'DestinationSelectTest';
+window.destination_select_test_cros = {};
+destination_select_test_cros.suiteName = 'DestinationSelectTestCros';
 /** @enum {string} */
-destination_select_test.TestNames = {
+destination_select_test_cros.TestNames = {
   UpdateStatus: 'update status',
   ChangeIcon: 'change icon',
+  EulaIsDisplayed: 'eula is displayed'
 };
 
-suite(destination_select_test.suiteName, function() {
+suite(destination_select_test_cros.suiteName, function() {
   /** @type {?PrintPreviewDestinationSelectElement} */
   let destinationSelect = null;
 
@@ -27,7 +28,7 @@ suite(destination_select_test.suiteName, function() {
     PolymerTest.clearBody();
 
     destinationSelect =
-        document.createElement('print-preview-destination-select');
+        document.createElement('print-preview-destination-select-cros');
     destinationSelect.activeUser = account;
     destinationSelect.appKioskMode = false;
     destinationSelect.disabled = false;
@@ -58,7 +59,7 @@ suite(destination_select_test.suiteName, function() {
     assertEquals(expected, icon);
   }
 
-  test(assert(destination_select_test.TestNames.UpdateStatus), function() {
+  test(assert(destination_select_test_cros.TestNames.UpdateStatus), function() {
     assertFalse(destinationSelect.$$('.throbber-container').hidden);
     assertTrue(destinationSelect.$$('.md-select').hidden);
 
@@ -75,7 +76,7 @@ suite(destination_select_test.suiteName, function() {
     assertFalse(destinationSelect.$$('.destination-additional-info').hidden);
   });
 
-  test(assert(destination_select_test.TestNames.ChangeIcon), function() {
+  test(assert(destination_select_test_cros.TestNames.ChangeIcon), function() {
     const destination = recentDestinationList[0];
     destinationSelect.destination = destination;
     destinationSelect.updateDestination();
@@ -118,4 +119,20 @@ suite(destination_select_test.suiteName, function() {
           compareIcon(selectEl, 'print');
         });
   });
+
+  /**
+   * Tests that destinations with a EULA will display the EULA URL.
+   */
+  test(
+      assert(destination_select_test_cros.TestNames.EulaIsDisplayed),
+      function() {
+        destinationSelect.destination = recentDestinationList[0];
+        destinationSelect.loaded = true;
+        assertTrue(destinationSelect.$.destinationEulaWrapper.hidden);
+
+        destinationSelect.set(
+            'destination.eulaUrl', 'chrome://os-credits/eula');
+        const eulaWrapper = destinationSelect.$.destinationEulaWrapper;
+        assertFalse(destinationSelect.$.destinationEulaWrapper.hidden);
+      });
 });

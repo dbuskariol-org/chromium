@@ -40,3 +40,14 @@
     <div class="destination-status">[[statusText_]]</div>
   </div>
 </print-preview-settings-section>
+<print-preview-settings-section class="destination-additional-info"
+    id="destinationEulaWrapper"
+    hidden$="[[!destination.eulaUrl]]">
+  <div slot="title"></div>
+  <div slot="controls">
+    <a class="destination-status" href="[[destination.eulaUrl]]"
+        target="_blank">
+     $i18n{printerEulaURL}
+    </a>
+  </div>
+</print-preview-settings-section>

@@ -1,12 +1,6 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-/**
- * Note: Chrome OS uses print-preview-destination-select-cros rather than the
- * element in this file. Ensure any fixes for cross platform bugs work on both
- * Chrome OS and non-Chrome OS.
- */
 
 import 'chrome://resources/cr_elements/hidden_style_css.m.js';
 import 'chrome://resources/cr_elements/shared_vars_css.m.js';
@@ -29,7 +23,7 @@ import {getSelectDropdownBackground} from '../print_preview_utils.js';
 import {SelectBehavior} from './select_behavior.js';
 
 Polymer({
-  is: 'print-preview-destination-select',
+  is: 'print-preview-destination-select-cros',
 
   _template: html`{__html_template__}`,
 
