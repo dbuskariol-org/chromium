@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/views/web_apps/web_app_frame_toolbar_test.h"
+#include "chrome/browser/ui/views/web_apps/web_app_frame_toolbar_test_mixin.h"
 
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/ui/browser.h"
@@ -18,13 +18,13 @@
 #include "ui/views/window/non_client_view.h"
 #include "url/gurl.h"
 
-WebAppFrameToolbarTest::WebAppFrameToolbarTest() {
-  scoped_feature_list_.InitWithFeatures({features::kDesktopMinimalUI}, {});
+WebAppFrameToolbarTestMixin::WebAppFrameToolbarTestMixin() {
+  scoped_feature_list_.InitAndEnableFeature(features::kDesktopMinimalUI);
+  WebAppFrameToolbarView::DisableAnimationForTesting();
 }
 
-WebAppFrameToolbarTest::~WebAppFrameToolbarTest() = default;
-
-void WebAppFrameToolbarTest::InstallAndLaunchWebApp(const GURL& app_url) {
+void WebAppFrameToolbarTestMixin::InstallAndLaunchWebApp(Browser* browser,
+                                                         const GURL& app_url) {
   auto web_app_info = std::make_unique<WebApplicationInfo>();
   web_app_info->app_url = app_url;
   web_app_info->scope = app_url.GetWithoutFilename();
@@ -33,10 +33,10 @@ void WebAppFrameToolbarTest::InstallAndLaunchWebApp(const GURL& app_url) {
   web_app_info->open_as_window = true;
 
   web_app::AppId app_id =
-      web_app::InstallWebApp(browser()->profile(), std::move(web_app_info));
+      web_app::InstallWebApp(browser->profile(), std::move(web_app_info));
   content::TestNavigationObserver navigation_observer(app_url);
   navigation_observer.StartWatchingNewWebContents();
-  app_browser_ = web_app::LaunchWebAppBrowser(browser()->profile(), app_id);
+  app_browser_ = web_app::LaunchWebAppBrowser(browser->profile(), app_id);
   navigation_observer.WaitForNavigationFinished();
 
   browser_view_ = BrowserView::GetBrowserViewForBrowser(app_browser_);
@@ -47,10 +47,4 @@ void WebAppFrameToolbarTest::InstallAndLaunchWebApp(const GURL& app_url) {
   web_app_frame_toolbar_ = frame_view_->web_app_frame_toolbar_for_testing();
   DCHECK(web_app_frame_toolbar_);
   DCHECK(web_app_frame_toolbar_->GetVisible());
-}
-
-void WebAppFrameToolbarTest::SetUpOnMainThread() {
-  InProcessBrowserTest::SetUpOnMainThread();
-
-  WebAppFrameToolbarView::DisableAnimationForTesting();
 }
