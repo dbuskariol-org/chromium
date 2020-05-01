@@ -87,7 +87,7 @@ also ramping up ownership in the Web Perf API space.
 ## Metrics changelog
 We realize it's important to keep developers on the loop regarding important
 changes to our metric definitions. For this reason, we have created a [metrics
-changelog](metrics_changelog/README.md) which will be updated over time.
+changelog](../speed/metrics_changelog/README.md) which will be updated over time.
 
 ## User Docs
   * [Metrics for web developers](https://web.dev/metrics/).
