@@ -8613,7 +8613,9 @@ RenderFrameHostImpl::PerformGetAssertionWebAuthSecurityChecks(
   bool is_cross_origin;
   blink::mojom::AuthenticatorStatus status =
       GetWebAuthRequestSecurityChecker()->ValidateAncestorOrigins(
-          effective_origin, &is_cross_origin);
+          effective_origin,
+          WebAuthRequestSecurityChecker::RequestType::kGetAssertion,
+          &is_cross_origin);
   if (status != blink::mojom::AuthenticatorStatus::SUCCESS) {
     return status;
   }
@@ -8634,7 +8636,9 @@ RenderFrameHostImpl::PerformMakeCredentialWebAuthSecurityChecks(
   bool is_cross_origin;
   blink::mojom::AuthenticatorStatus status =
       GetWebAuthRequestSecurityChecker()->ValidateAncestorOrigins(
-          effective_origin, &is_cross_origin);
+          effective_origin,
+          WebAuthRequestSecurityChecker::RequestType::kMakeCredential,
+          &is_cross_origin);
   if (status != blink::mojom::AuthenticatorStatus::SUCCESS) {
     return status;
   }

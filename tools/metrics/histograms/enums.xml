@@ -27242,7 +27242,7 @@ Called by update_feature_policy_enum.py.-->
   <int value="64" label="ClientHintWidth"/>
   <int value="65" label="DocumentAccess"/>
   <int value="66" label="WebXr"/>
-  <int value="67" label="PublicKeyCredentials"/>
+  <int value="67" label="PublicKeyCredentialsGet"/>
   <int value="68" label="Clipboard"/>
   <int value="69" label="ClientHintUAMobile"/>
   <int value="70" label="StorageAccessAPI"/>

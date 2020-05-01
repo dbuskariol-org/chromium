@@ -1836,7 +1836,7 @@
       status: "stable",
     },
     {
-      name: "WebAuthenticationFeaturePolicy",
+      name: "WebAuthenticationGetAssertionFeaturePolicy",
       status: "experimental",
     },
     // WebBluetooth is enabled by default on Android, ChromeOS and Mac.
