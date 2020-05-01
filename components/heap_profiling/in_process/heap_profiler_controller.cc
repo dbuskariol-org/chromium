@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/heap_profiler_controller.h"
+#include "components/heap_profiling/in_process/heap_profiler_controller.h"
 
 #include <cmath>
 
@@ -67,8 +67,7 @@ void HeapProfilerController::ScheduleNextSnapshot(
 }
 
 // static
-void HeapProfilerController::TakeSnapshot(
-    scoped_refptr<StoppedFlag> stopped) {
+void HeapProfilerController::TakeSnapshot(scoped_refptr<StoppedFlag> stopped) {
   if (stopped->data.IsSet())
     return;
   RetrieveAndSendSnapshot();
