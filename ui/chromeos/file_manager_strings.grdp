@@ -553,6 +553,9 @@
   <message name="IDS_FILE_BROWSER_MORE_ACTIONS_BUTTON_LABEL" desc="Menu item label, showing dialog to choose extension to open/share/pack/etc... selected files or directories.">
     More actions
   </message>
+  <message name="IDS_FILE_BROWSER_GO_TO_FILE_LOCATION_BUTTON_LABEL" desc="Menu item label, navigating the user to the file's containing folder.">
+    Go to file location
+  </message>
   <message name="IDS_FILE_BROWSER_OPEN_WITH_VERB_BUTTON_LABEL" desc="Verb that describe the action of opening one or more files or directories with the given extension.">
     Open with <ph name="EXTENSION_NAME">$1<ex>Gallery</ex></ph>
   </message>
