@@ -1550,7 +1550,7 @@
   {
     "name": "enable-generic-sensor-extra-classes",
     "owners": [ "reillyg@chromium.org", "raphael.kubo.da.costa@intel.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "enable-google-srp-isolated-prerender-probing",
@@ -2983,7 +2983,7 @@
   {
     "name": "new-usb-backend",
     "owners": [ "reillyg@chromium.org" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "no-credit-card-abort",
