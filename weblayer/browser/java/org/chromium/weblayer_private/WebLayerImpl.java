@@ -356,6 +356,14 @@ public final class WebLayerImpl extends IWebLayer.Stub {
         }
     }
 
+    public static String getClientApplicationName() {
+        Context context = ContextUtils.getApplicationContext();
+        return new StringBuilder()
+                .append(context.getPackageManager().getApplicationLabel(
+                        context.getApplicationInfo()))
+                .toString();
+    }
+
     /**
      * Performs the minimal initialization needed for a context. This is used for example in
      * CrashReporterControllerImpl, so it can be used before full WebLayer initialization.
