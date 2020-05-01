@@ -1679,7 +1679,7 @@ ci.fyi_builder(
                 ],
                 'dirs': ['locales', 'swiftshader'],
                 'gcs_bucket': 'chromium-lacros-fishfood',
-                'gcs_path': '{%position%}/lacros.zip',
+                'gcs_path': 'x86_64/{%position%}/lacros.zip',
                 'archive_type': 'ARCHIVE_TYPE_ZIP',
             },
         ],
