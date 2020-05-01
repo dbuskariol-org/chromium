@@ -3361,6 +3361,28 @@ void RenderFrameHostImpl::RequestTextSurroundingSelection(
                                                          std::move(callback));
 }
 
+bool RenderFrameHostImpl::HasCommittingNavigationRequestForOrigin(
+    const url::Origin& origin,
+    NavigationRequest* navigation_request_to_exclude) {
+  if (navigation_request_ &&
+      navigation_request_.get() != navigation_request_to_exclude &&
+      navigation_request_->HasCommittingOrigin(origin)) {
+    return true;
+  }
+
+  for (const auto& it : navigation_requests_) {
+    NavigationRequest* request = it.first;
+    if (request != navigation_request_to_exclude &&
+        request->HasCommittingOrigin(origin)) {
+      return true;
+    }
+  }
+
+  // Note: this function excludes |same_document_navigation_request_|, which
+  // should be ok since these cannot change the origin.
+  return false;
+}
+
 void RenderFrameHostImpl::SendInterventionReport(const std::string& id,
                                                  const std::string& message) {
   GetAssociatedLocalFrame()->SendInterventionReport(id, message);
