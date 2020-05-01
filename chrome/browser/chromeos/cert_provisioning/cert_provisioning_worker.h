@@ -181,8 +181,7 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   // on failure.
   CertProvisioningWorkerState prev_state_ = state_;
   bool is_waiting_ = false;
-  // Currently it is used only for DM Server DM_STATUS_TEMPORARY_UNAVAILABLE
-  // error. For all other errors the worker just gives up.
+  // Calculates retry timeout for network related failures.
   net::BackoffEntry request_backoff_;
 
   std::string public_key_;

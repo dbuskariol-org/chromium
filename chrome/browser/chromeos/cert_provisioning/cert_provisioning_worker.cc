@@ -8,6 +8,7 @@
 #include "base/bind.h"
 #include "base/bind_helpers.h"
 #include "base/no_destructor.h"
+#include "chrome/browser/chromeos/attestation/tpm_challenge_key_result.h"
 #include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_common.h"
 #include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_serializer.h"
 #include "chrome/browser/chromeos/platform_keys/platform_keys_service.h"
@@ -253,8 +254,17 @@ void CertProvisioningWorkerImpl::OnGenerateKeyDone(
     const attestation::TpmChallengeKeyResult& result) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
+  if (result.result_code ==
+      attestation::TpmChallengeKeyResultCode::kGetCertificateFailedError) {
+    LOG(WARNING) << "Failed to get certificate for a key";
+    request_backoff_.InformOfRequest(false);
+    // Next DoStep will retry generating the key.
+    ScheduleNextStep(request_backoff_.GetTimeUntilRelease());
+    return;
+  }
+
   if (!result.IsSuccess() || result.public_key.empty()) {
-    LOG(ERROR) << "Failed to prepare key: " << result.GetErrorMessage();
+    LOG(ERROR) << "Failed to prepare a key: " << result.GetErrorMessage();
     UpdateState(CertProvisioningWorkerState::kFailed);
     return;
   }
@@ -528,9 +538,11 @@ bool CertProvisioningWorkerImpl::ProcessResponseErrors(
     base::Optional<int64_t> try_later) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
-  if (status ==
-      policy::DeviceManagementStatus::DM_STATUS_TEMPORARY_UNAVAILABLE) {
-    LOG(WARNING) << "DM Server is temporary unavailable";
+  if ((status ==
+       policy::DeviceManagementStatus::DM_STATUS_TEMPORARY_UNAVAILABLE) ||
+      (status == policy::DeviceManagementStatus::DM_STATUS_REQUEST_FAILED) ||
+      (status == policy::DeviceManagementStatus::DM_STATUS_HTTP_STATUS_ERROR)) {
+    LOG(WARNING) << "Connection to DM Server failed, error: " << status;
     request_backoff_.InformOfRequest(false);
     ScheduleNextStep(request_backoff_.GetTimeUntilRelease());
     return false;
