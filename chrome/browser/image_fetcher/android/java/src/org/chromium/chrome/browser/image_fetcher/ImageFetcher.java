@@ -35,7 +35,6 @@ public abstract class ImageFetcher {
      */
     public static class Params {
         static final int DEFAULT_IMAGE_SIZE = 0;
-        // TODO(xingliu): Merge with ImageFetcherBridge.INVALID_EXPIRATION_INTERVAL.
         static final int INVALID_EXPIRATION_INTERVAL = 0;
 
         /**
