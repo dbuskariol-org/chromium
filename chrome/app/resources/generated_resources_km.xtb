@@ -382,9 +382,7 @@
 <translation id="1509281256533087115">ចូលប្រើ <ph name="DEVICE_NAME_AND_VENDOR" /> ណាមួយតាមរយៈ USB</translation>
 <translation id="1509960214886564027">មុខងារ​នៅលើ​គេហទំព័រ​ជាច្រើន​អាចដំណើរការមិន​ត្រឹមត្រូវ</translation>
 <translation id="1510030919967934016">ទំព័រនេះត្រូវបានរារាំងពីការតាមដានទីតាំងរបស់អ្នក។</translation>
-<translation id="1510055949674985293">បង្កើតកូដ QR សម្រាប់​រូបភាព​នេះ</translation>
 <translation id="1510238584712386396">ឡាន់ឆ័រ</translation>
-<translation id="1510581003097415337">បង្កើតកូដ QR សម្រាប់​ទំព័រនេះ</translation>
 <translation id="1510785804673676069">អ្នកកំពុងប្រើម៉ាស៊ីនមេប្រូកស៊ី ពិនិត្យការកំណត់ប្រូកស៊ីរបស់អ្នក ឬ
     ទំនាក់ទំនងអ្នកគ្រប់គ្រងបណ្តាញដើម្បីពិនិត្យថា
     ម៉ាស៊ីនមេប្រូកស៊ីនោះកំពុងដំណើរការ។ ប្រសិនបើអ្នកប្រាកដថាអ្នកគួរប្រើ
@@ -2309,7 +2307,6 @@
 <translation id="4007856537951125667">លាក់​ផ្លូវកាត់</translation>
 <translation id="4008291085758151621">ព័ត៌មាន​អំពីទំព័រមិនមាននៅក្នុង VR ទេ</translation>
 <translation id="4010917659463429001">ដើម្បីទទួលចំណាំនៅលើឧបករណ៍ចល័តរបស់អ្នក <ph name="GET_IOS_APP_LINK" /> ។</translation>
-<translation id="4013132157686828973">"<ph name="CLIENT_NAME" />" កំពុង​ជួសជុល​កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិតនេះ</translation>
 <translation id="4014432863917027322">ជួសជុល "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="4015163439792426608">មាន​កម្មវិធី​បន្ថែម​ដែរទេ? <ph name="BEGIN_LINK" />គ្រប់គ្រង​កម្មវិធីបន្ថែម​របស់អ្នក<ph name="END_LINK" />នៅក្នុង​កន្លែងតែមួយ​យ៉ាងងាយស្រួល​។</translation>
 <translation id="4020327272915390518">ម៉ឺនុយជម្រើស</translation>
@@ -3013,7 +3010,6 @@
 <translation id="504561833207953641">កំពុង​បើក​នៅក្នុង​រយៈពេលចូលប្រើកម្មវិធីរុករកដែលមានស្រាប់។</translation>
 <translation id="5047421709274785093">ទប់ស្កាត់​ទំព័រ​មិនឱ្យប្រើ​ឧបករណ៍​ចាប់សញ្ញាពន្លឺ​ និងចលនា</translation>
 <translation id="5050042263972837708">ឈ្មោះ​ក្រុម</translation>
-<translation id="5051073330196664891">លក្ខខណ្ឌប្រើប្រាស់សកលរបស់ Google (uToS)</translation>
 <translation id="5051836348807686060">មិនស្គាល់​ការពិនិត្យ​អក្ខរាវិរុទ្ធសម្រាប់​ភាសា​ដែលអ្នក​បានជ្រើសរើស​ទេ</translation>
 <translation id="5052499409147950210">កែ​សម្រួល​ទំព័រ</translation>
 <translation id="5053604404986157245">ពាក្យសម្ងាត់ TPM ដែលបានបង្កើតដោយចៃដន្យមិនមានទេ។ វាជារឿងធម្មតាបន្ទាប់ពី Powerwash។</translation>
@@ -3887,7 +3883,6 @@
 <translation id="6226777517901268232">ឯកសារសោឯកជន (ស្រេចចិត្ត)</translation>
 <translation id="6227280783235722609">កម្មវិធីបន្ថែម​</translation>
 <translation id="6228691855869374890">គេហទំព័រនេះមានការគ្រប់គ្រងឧបករណ៍ MIDI ទាំងស្រុង។</translation>
-<translation id="6228720835160974792">បង្កើតកូដ QR សម្រាប់​រូបភាព​នេះ</translation>
 <translation id="6229890768313448549">លក្ខខណ្ឌប្រើប្រាស់ Google Play មិនអាចដំណើរការបានទេ។ សូមព្យាយាមម្តងទៀត។</translation>
 <translation id="6231881193380278751">បន្ថែមប៉ារ៉ាម៉ែត្រសំណួរនៅក្នុង URL ដើម្បីផ្ទុកទំព័រឡើងវិញដោយស្វ័យប្រវត្តិ៖ chrome://device-log/?refresh=&lt;sec&gt;</translation>
 <translation id="6232017090690406397">ថ្ម</translation>
@@ -4550,7 +4545,6 @@
 <translation id="7123360114020465152">លែង​ប្រើបាន​ទៀតហើយ</translation>
 <translation id="7127980134843952133">ប្រវត្តិទាញយក</translation>
 <translation id="7128151990937044829">បង្ហាញសូចនាករ​នៅក្នុងរបារ​អាសយដ្ឋាន នៅពេល​ទប់ស្កាត់​ការជូនដំណឹង</translation>
-<translation id="7128239828194367697">បង្កើតកូដ QR សម្រាប់​ទំព័រនេះ</translation>
 <translation id="7131040479572660648">អានទិន្នន័យរបស់អ្នកនៅលើ <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, និង <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">បន្ថែមទំព័រ...</translation>
 <translation id="7133578150266914903">អ្នកគ្រប់គ្រង​របស់អ្នកកំពុងស្ដារ​ឧបករណ៍​របស់អ្នក (<ph name="PROGRESS_PERCENT" />)</translation>

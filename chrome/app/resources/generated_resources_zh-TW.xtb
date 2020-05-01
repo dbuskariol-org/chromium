@@ -382,9 +382,7 @@
 <translation id="1509281256533087115">透過 USB 存取任何 <ph name="DEVICE_NAME_AND_VENDOR" /></translation>
 <translation id="1509960214886564027">許多網站的功能可能無法正常運作</translation>
 <translation id="1510030919967934016">此網頁已遭封鎖，無法追蹤你的位置。</translation>
-<translation id="1510055949674985293">為這張圖片產生 QR 圖碼</translation>
 <translation id="1510238584712386396">啟動器</translation>
-<translation id="1510581003097415337">為這個頁面產生 QR 圖碼</translation>
 <translation id="1510785804673676069">如果你使用 Proxy 伺服器，請檢查你的 Proxy 設定或
     與網路管理員聯絡，確認 Proxy 伺服器是否運作正
     常。如果你不是使用 Proxy 伺服器，請調整你的
@@ -1786,6 +1784,7 @@
 <translation id="3365598184818502391">請擇一使用 Ctrl 或 Alt 鍵</translation>
 <translation id="3367047597842238025">依你的需求設定 <ph name="DEVICE_TYPE" />；只要動動手指即可探索各種實用功能。</translation>
 <translation id="3368922792935385530">已連線</translation>
+<translation id="3369067987974711168">顯示這個通訊埠的更多動作</translation>
 <translation id="3369624026883419694">正在解析主機...</translation>
 <translation id="3371140690572404006">USB-C 裝置 (右前方連接埠)</translation>
 <translation id="337286756654493126">讀取你在應用程式中開啟的資料夾</translation>
@@ -2307,11 +2306,11 @@
 <translation id="4007856537951125667">隱藏捷徑</translation>
 <translation id="4008291085758151621">無法在 VR 狀態下存取網站資訊</translation>
 <translation id="4010917659463429001">如要在行動裝置上取得你的書籤，請<ph name="GET_IOS_APP_LINK" />。</translation>
-<translation id="4013132157686828973">「<ph name="CLIENT_NAME" />」正在為這個瀏覽器偵錯</translation>
 <translation id="4014432863917027322">修復「<ph name="EXTENSION_NAME" />」？</translation>
 <translation id="4015163439792426608">你有使用擴充功能嗎？<ph name="BEGIN_LINK" />集中管理擴充功能<ph name="END_LINK" />，輕鬆又方便。</translation>
 <translation id="4020327272915390518">選項選單</translation>
 <translation id="4021279097213088397">–</translation>
+<translation id="402184264550408568">(TCP)</translation>
 <translation id="4022426551683927403">新增到字典(&amp;A)</translation>
 <translation id="4023146161712577481">正在確定裝置設定。</translation>
 <translation id="4025039777635956441">將所選網站設為靜音</translation>
@@ -2825,6 +2824,7 @@
 <translation id="4780321648949301421">另存網頁...</translation>
 <translation id="4785719467058219317">你目前使用的安全金鑰並未在這個網站註冊</translation>
 <translation id="4788092183367008521">請檢查你的網路連線，然後再試一次。</translation>
+<translation id="4791037424585594169">(UDP)</translation>
 <translation id="4792711294155034829">回報問題(&amp;R)...</translation>
 <translation id="4794810983896241342">更新項目是由<ph name="BEGIN_LINK" />系統管理員<ph name="END_LINK" />管理</translation>
 <translation id="479536056609751218">僅限網頁的 HTML 部分</translation>
@@ -3011,7 +3011,6 @@
 <translation id="504561833207953641">正於現有瀏覽器工作階段中開啟。</translation>
 <translation id="5047421709274785093">禁止網站使用動作感應器和光源感應器</translation>
 <translation id="5050042263972837708">群組名稱</translation>
-<translation id="5051073330196664891">Google 通用服務條款 (uToS)</translation>
 <translation id="5051836348807686060">你選取的語言不支援拼字檢查功能</translation>
 <translation id="5052499409147950210">編輯網站</translation>
 <translation id="5053604404986157245">無法使用隨機產生的 TPM 密碼。在執行 Powerwash 之後，這是正常情況。</translation>
@@ -3110,6 +3109,7 @@
 <translation id="5185359571430619712">查看擴充功能</translation>
 <translation id="5185386675596372454">由於最新版本的 <ph name="EXTENSION_NAME" /> 需要更多權限，因此已經停用。</translation>
 <translation id="5187826826541650604"><ph name="KEY_NAME" /> (<ph name="DEVICE" />)</translation>
+<translation id="5190926251776387065">啟用通訊埠</translation>
 <translation id="51918995459521422"><ph name="ORIGIN" /> 想要下載多個檔案</translation>
 <translation id="5192062846343383368">開啟 Family Link 應用程式以查看監督功能設定</translation>
 <translation id="5193988420012215838">已複製到剪貼簿</translation>
@@ -3836,6 +3836,7 @@
 <translation id="6150961653851236686">這是翻譯網頁時使用的語言</translation>
 <translation id="6151323131516309312">按一下 <ph name="SEARCH_KEY" /> 以搜尋 <ph name="SITE_NAME" /></translation>
 <translation id="6151771661215463137">下載資料夾中已有這個檔案。</translation>
+<translation id="6154240335466762404">移除所有通訊埠</translation>
 <translation id="615436196126345398">通訊協定</translation>
 <translation id="6154697846084421647">目前已登入</translation>
 <translation id="6155141482566063812">背景分頁正在分享你的螢幕畫面</translation>
@@ -3884,7 +3885,6 @@
 <translation id="6226777517901268232">私密金鑰檔案 (選填)</translation>
 <translation id="6227280783235722609">擴充功能</translation>
 <translation id="6228691855869374890">這個網站可完整控制 MIDI 裝置。</translation>
-<translation id="6228720835160974792">為這張圖片產生 QR 圖碼</translation>
 <translation id="6229890768313448549">無法載入《Google Play 服務條款》，請重試。</translation>
 <translation id="6231881193380278751">在網址中加入查詢間距的參數，設定自動重新整理網頁的時間：chrome://device-log/?refresh=&lt;秒數&gt;</translation>
 <translation id="6232017090690406397">電池</translation>
@@ -3917,6 +3917,7 @@
 <translation id="6263082573641595914">Microsoft CA 版本</translation>
 <translation id="6263284346895336537">非重要</translation>
 <translation id="6264365405983206840">選取全部(&amp;A)</translation>
+<translation id="6265687851677020761">移除通訊埠</translation>
 <translation id="6267166720438879315">請選取你在 <ph name="HOST_NAME" /> 的驗證憑證</translation>
 <translation id="6267547857941397424">第 <ph name="NETWORK_INDEX" /> 個網路 (共 <ph name="NETWORK_COUNT" /> 個)，<ph name="PHONE_NAME" />，訊號強度 <ph name="SIGNAL_STRENGTH" />%，手機電量：<ph name="BATTERY_STATUS" />%，連線</translation>
 <translation id="6268252012308737255">使用「<ph name="APP" />」開啟</translation>
@@ -4547,7 +4548,6 @@
 <translation id="7123360114020465152">已停止支援</translation>
 <translation id="7127980134843952133">下載記錄</translation>
 <translation id="7128151990937044829">封鎖通知時，在網址列上顯示圖示</translation>
-<translation id="7128239828194367697">為這個頁面產生 QR 圖碼</translation>
 <translation id="7131040479572660648">讀取你在 <ph name="WEBSITE_1" />、<ph name="WEBSITE_2" /> 和 <ph name="WEBSITE_3" /> 上產生的資料</translation>
 <translation id="713122686776214250">新增網頁(&amp;G)...</translation>
 <translation id="7133578150266914903">你的管理員正在復原這個裝置 (進度：<ph name="PROGRESS_PERCENT" />)</translation>
@@ -4937,6 +4937,7 @@
 <translation id="767127784612208024">輕觸即可確認重設</translation>
 <translation id="767147716926917172">自動將診斷資料和使用資料傳送給 Google</translation>
 <translation id="7672520070349703697"><ph name="HUNG_IFRAME_URL" /> (在「<ph name="PAGE_TITLE" />」中)。</translation>
+<translation id="7674416868315480713">停用所有在 Linux 中轉接的通訊埠</translation>
 <translation id="7676867886086876795">將你的語音資料傳送給 Google，讓你在任何文字欄位中使用語音輸入功能。</translation>
 <translation id="7678280409648629969">離開無痕模式後，登入資料會儲存在 Chrome 中；這樣你日後就能在此網站上再次使用 Touch ID。</translation>
 <translation id="7681095912841365527">網站可以使用藍牙</translation>

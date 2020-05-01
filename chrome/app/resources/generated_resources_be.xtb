@@ -382,9 +382,7 @@
 <translation id="1509281256533087115">Доступ да <ph name="DEVICE_NAME_AND_VENDOR" /> праз USB</translation>
 <translation id="1509960214886564027">Функцыі на многіх сайтах могуць перастаць працаваць</translation>
 <translation id="1510030919967934016">Адсочванне гэтай старонкай вашага месцазнаходжання заблакіравана.</translation>
-<translation id="1510055949674985293">Стварыць QR-код для гэтага відарыса</translation>
 <translation id="1510238584712386396">Панэль запуску</translation>
-<translation id="1510581003097415337">Стварыць QR-код для гэтай старонкі</translation>
 <translation id="1510785804673676069">Калі вы карыстаецеся проксі-серверам, праверце яго налады
     або звярніцеся да адміністратара сеткі, каб
     праверыць, ці працуе проксі-сервер. Калі вы лічыце, што проксі-сервер вам
@@ -2309,7 +2307,6 @@
 <translation id="4007856537951125667">Схаваць ярлыкі</translation>
 <translation id="4008291085758151621">Звесткі сайта недаступныя ў VR</translation>
 <translation id="4010917659463429001">Каб карыстацца сваімі закладкамі на мабільнай прыладзе, <ph name="GET_IOS_APP_LINK" />.</translation>
-<translation id="4013132157686828973">Кліент "<ph name="CLIENT_NAME" />" выконвае адладку гэтага браўзера</translation>
 <translation id="4014432863917027322">Выправіць "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="4015163439792426608">У вас ёсць пашырэнні? <ph name="BEGIN_LINK" />Кіруйце пашырэннямі<ph name="END_LINK" /> з лёгкасцю з аднаго месца.</translation>
 <translation id="4020327272915390518">Меню параметраў</translation>
@@ -3013,7 +3010,6 @@
 <translation id="504561833207953641">Ідзе адкрыццё ў бягучым сеансе браўзера.</translation>
 <translation id="5047421709274785093">Заблакіраваць сайтам выкарыстанне датчыкаў руху і святла</translation>
 <translation id="5050042263972837708">Назва групы</translation>
-<translation id="5051073330196664891">Універсальныя Умовы выкарыстання Google</translation>
 <translation id="5051836348807686060">Праверка правапісу для выбраных моў не падтрымліваецца</translation>
 <translation id="5052499409147950210">Рэдагаванне сайта</translation>
 <translation id="5053604404986157245">Створаны выпадковым чынам пароль TPM недаступны. Пасля выкарыстання Powerwash гэта нармальна.</translation>
@@ -3886,7 +3882,6 @@
 <translation id="6226777517901268232">Файл закрытага ключа (неабавязкова)</translation>
 <translation id="6227280783235722609">пашырэнне</translation>
 <translation id="6228691855869374890">Гэты сайт мае поўны кантроль над прыладамі MIDI.</translation>
-<translation id="6228720835160974792">Стварыць QR-код для гэтага відарыса</translation>
 <translation id="6229890768313448549">Не ўдалося загрузіць Умовы выкарыстання Google Play. Паўтарыце спробу.</translation>
 <translation id="6231881193380278751">Дадайце параметр запыту ў URL-адрас для аўтаматычнага абнаўлення старонкі: chrome://device-log/?refresh=&lt;sec&gt;</translation>
 <translation id="6232017090690406397">Акумулятар</translation>
@@ -4549,7 +4544,6 @@
 <translation id="7123360114020465152">Больш не падтрымліваецца</translation>
 <translation id="7127980134843952133">Гісторыя спампоўвання</translation>
 <translation id="7128151990937044829">Паказваць індыкатар у адрасным радку пры блакіраванні апавяшчэнняў</translation>
-<translation id="7128239828194367697">Стварыць QR-код для гэтай старонкі</translation>
 <translation id="7131040479572660648">Прагляд вашых даных на вэб-сайтах <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> і <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">Дадаць ста&amp;ронку...</translation>
 <translation id="7133578150266914903">Адміністратар робіць адкат гэтай прылады (<ph name="PROGRESS_PERCENT" />).</translation>

@@ -382,9 +382,7 @@
 <translation id="1509281256533087115">USB аркылуу каалаган <ph name="DEVICE_NAME_AND_VENDOR" /> түзмөккө мүмкүнчүлүк алуу</translation>
 <translation id="1509960214886564027">Функциялар көпчүлүк сайттарда туура иштебеши мүмкүн.</translation>
 <translation id="1510030919967934016">Бул бетке жайгашкан жериңизге көз салууга тыюу салынган.</translation>
-<translation id="1510055949674985293">Сүрөттүн QR кодун алуу</translation>
 <translation id="1510238584712386396">Жүргүзгүч</translation>
-<translation id="1510581003097415337">Барактын QR кодун алуу</translation>
 <translation id="1510785804673676069">Эгер прокси серверин колдонуп жатсаңыз, прокси жөндөөлөрүңүздү текшериңиз же
     прокси серверинин иштеп жатканын текшерүү үчүн, тармактык администраторуңузга
     кайрылыңыз. Эгер прокси сервери колдонулган жок деп
@@ -2309,7 +2307,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="4007856537951125667">Ыкчам баскычтарды жашыруу</translation>
 <translation id="4008291085758151621">VR режиминде сайт жөнүндө маалыматты алуу мүмкүн эмес</translation>
 <translation id="4010917659463429001">Бардык кыстармаларыңызды мобилдик түзмөгүңүзгө алуу үчүн, <ph name="GET_IOS_APP_LINK" />.</translation>
-<translation id="4013132157686828973">"<ph name="CLIENT_NAME" />" бул серепчидеги мүчүлүштүктөрдү таап, оңдоп жатат</translation>
 <translation id="4014432863917027322">"<ph name="EXTENSION_NAME" />" оңдойсузбу?</translation>
 <translation id="4015163439792426608">Кеңейтүүлөрүңүз барбы? <ph name="BEGIN_LINK" />Кеңейтүүлөрдү башкарыңыз<ph name="END_LINK" />.</translation>
 <translation id="4020327272915390518">Параметрлер менюсу</translation>
@@ -3013,7 +3010,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="504561833207953641">Терезе же өтмөк серепчинин учурдагы сеансында ачылат.</translation>
 <translation id="5047421709274785093">Сайттарда кыймыл жана жарык сенсорлорун колдонуу бөгөттөлсүн</translation>
 <translation id="5050042263972837708">Топтун аталышы:</translation>
-<translation id="5051073330196664891">Google'дун универсалдуу Тейлөө шарттары (уТШ)</translation>
 <translation id="5051836348807686060">Сиз тандаган тилдерде орфография текшерилбейт</translation>
 <translation id="5052499409147950210">Сайтты түзөтүү</translation>
 <translation id="5053604404986157245">Баш аламан мүнөздө түзүлгөн TPM сырсөзү жеткиликтүү эмес. Бул жууп салуу аракетинен кийинки адаттагы көрүнүш.</translation>
@@ -3886,7 +3882,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="6226777517901268232">Жеке ачкыч файлы (милдеттүү эмес)</translation>
 <translation id="6227280783235722609">кеңейтүү</translation>
 <translation id="6228691855869374890">Бул сайт MIDI түзмөктөрүн толугу менен көзөмөлдөйт.</translation>
-<translation id="6228720835160974792">Сүрөттүн QR кодун алуу</translation>
 <translation id="6229890768313448549">Google Play Тейлөө шарттары жүктөлбөй жатат. Кайталап көрүңүз.</translation>
 <translation id="6231881193380278751">Баракты авто-жаңылоо үчүн URL'ге сурам параметрин кошуңуз: chrome://device-log/?refresh=&lt;sec&gt;</translation>
 <translation id="6232017090690406397">Батарея</translation>
@@ -4549,7 +4544,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7123360114020465152">Мындан ары колдоого алынбайт</translation>
 <translation id="7127980134843952133">Жүктөп алуу таржымалы</translation>
 <translation id="7128151990937044829">Билдирмелер өчүрүлсө, дарек тилкесинде индикатор көрсөтүлсүн</translation>
-<translation id="7128239828194367697">Барактын QR кодун алуу</translation>
 <translation id="7131040479572660648">Дайын-даректериңизди <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />, жана <ph name="WEBSITE_3" /> даректеринен окуңуз</translation>
 <translation id="713122686776214250">Ба&amp;рак кошуу…</translation>
 <translation id="7133578150266914903">Администраторуңуз бул түзмөктү баштапкы абалга келтирүүдө (<ph name="PROGRESS_PERCENT" />)</translation>

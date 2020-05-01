@@ -381,9 +381,7 @@
 <translation id="1509281256533087115">USB ମାଧ୍ୟମରେ ଯେକୌଣସି <ph name="DEVICE_NAME_AND_VENDOR" /> ଆକ୍ସେସ୍‌ କରନ୍ତୁ</translation>
 <translation id="1509960214886564027">କିଛି ସାଇଟରେ ଫିଚରଗୁଡ଼ିକ ଠିକ୍ ଭାବେ କାମ କରିନପାରେ</translation>
 <translation id="1510030919967934016">ଏହି ପୃଷ୍ଟାକୁ ଆପଣଙ୍କର ଲୋକେସନ୍ ଟ୍ରାକ୍ କରିବାରୁ ବ୍ଲକ୍ କରାଯାଇଛି।</translation>
-<translation id="1510055949674985293">ଏହି ଛବି ପାଇଁ QR କୋଡ୍ ସୃଷ୍ଟି କରନ୍ତୁ</translation>
 <translation id="1510238584712386396">ଲଞ୍ଚର୍</translation>
-<translation id="1510581003097415337">ଏହି ପୃଷ୍ଠା ପାଇଁ QR କୋଡ୍ ସୃଷ୍ଟି କରନ୍ତୁ</translation>
 <translation id="1510785804673676069">ଯଦି ଆପଣ ଏକ ପ୍ରକ୍ସି ସର୍ଭର୍ ବ୍ୟବହାର କରୁଛନ୍ତି, ତେବେ ନିଜର ପ୍ରକ୍ସି ସେଟିଂସ୍ ଯାଞ୍ଚ କରନ୍ତୁ କିମ୍ବା ପ୍ରକ୍ସି ସର୍ଭର କାର୍ଯ୍ୟକ୍ଷମ ଅଛି କି ନାହିଁ ତାହା ଯାଞ୍ଚ କରିବାକୁ ନିଜର ନେଟ୍‌ୱାର୍କ ବ୍ୟବସ୍ଥାପକଙ୍କ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ। ଯଦି ଏକ ପ୍ରକ୍ସି ସର୍ଭର ବ୍ୟବହାର କରିବାକୁ ଆପଣ ଉଚିତ ମନେକରୁନାହାନ୍ତି, ତେବେ ନିଜର <ph name="LINK_START" />ପ୍ରକ୍ସି ସେଟିଂସ୍<ph name="LINK_END" />କୁ ଆଡ୍‌ଜଷ୍ଟ କରନ୍ତୁ।</translation>
 <translation id="1511997356770098059">କୌଣସି ସାଇନ୍-ଇନ୍ ଡାଟା ଏହି ସୁରକ୍ଷା କୀ ଷ୍ଟୋର୍ କରିପାରିବ ନାହିଁ</translation>
 <translation id="1512210426710821809">ଏହାକୁ ପୂର୍ବବତ୍ କରିବାର ଏକମାତ୍ର ଉପାୟ ହେଉଛି <ph name="IDS_SHORT_PRODUCT_OS_NAME" />କୁ ରିଇନ୍‌ଷ୍ଟଲ୍ କରିବା</translation>
@@ -2301,7 +2299,6 @@
 <translation id="4007856537951125667">ସର୍ଟକଟ୍‍ଗୁଡ଼ିକ ଲୁଚାନ୍ତୁ</translation>
 <translation id="4008291085758151621">VRରେ ସାଇଟ୍ ସୂଚନା ଉପଲବ୍ଧ ନୁହେଁ</translation>
 <translation id="4010917659463429001">ଆପଣଙ୍କର ମୋବାଇଲ୍‌ ଡିଭାଇସ୍‌ରେ ଆପଣଙ୍କ ବୁକ୍‍ମାର୍କଗୁଡ଼ିକ ପ୍ରାପ୍ତ କରିବାକୁ <ph name="GET_IOS_APP_LINK" />।</translation>
-<translation id="4013132157686828973">"<ph name="CLIENT_NAME" />" ଏହି ବ୍ରାଉଜର୍‌କୁ ଡିବଗ୍ କରୁଛନ୍ତି</translation>
 <translation id="4014432863917027322">"<ph name="EXTENSION_NAME" />" ଅପ୍‌ଡେଟ୍ କରିବେ?</translation>
 <translation id="4015163439792426608">ଏକ୍ସଟେନ୍‍ସନ୍‍ଗୁଡ଼ିକ ପାଇଛନ୍ତି କି? ଏକ ସ୍ଥାନରୁ ସହଜରେ <ph name="BEGIN_LINK" />ଆପଣଙ୍କର ଏକ୍ସଟେନ୍‍ସନ୍‍ଗୁଡ଼ିକ ପରିଚାଳନା କରନ୍ତୁ<ph name="END_LINK" />।</translation>
 <translation id="4020327272915390518">ବିକଳ୍ପ ମେନ୍ୟୁ</translation>
@@ -3005,7 +3002,6 @@
 <translation id="504561833207953641">ପୂର୍ବରୁ ଥିବା ବ୍ରାଉଜର୍‌ ଅବଧିରେ ଖୋଲୁଛି</translation>
 <translation id="5047421709274785093">ମୋସନ୍ ଏବଂ ଲାଇଟ୍ ସେନ୍ସର୍ ବ୍ୟବହାର କରିବାରୁ ସାଇଟ୍‍ଗୁଡ଼ିକୁ ବ୍ଲକ୍ କରନ୍ତୁ</translation>
 <translation id="5050042263972837708">ଗୋଷ୍ଠୀର ନାମ</translation>
-<translation id="5051073330196664891">Google ୟୁନିଭର୍ସାଲ୍ ସେବାର ସର୍ତ୍ତାବଳୀ (uToS)</translation>
 <translation id="5051836348807686060">ଆପଣ ଚୟନ କରିଥିବା ଭାଷାଗୁଡ଼ିକ ପାଇଁ ବନାନ ଯାଞ୍ଚ ସମର୍ଥନ ନାହିଁ</translation>
 <translation id="5052499409147950210">ସାଇଟ୍‌ ଏଡିଟ୍‌ କରନ୍ତୁ</translation>
 <translation id="5053604404986157245">ଅନିୟମିତ କ୍ରମରେ ସୃଷ୍ଟି କରାଯାଇଥିବା TPM ପାସ୍‍ୱର୍ଡ ଉପଲବ୍ଧ ନାହିଁ। ଏକ ପାୱାର୍‍ୱାସ୍ ପରେ ଏହା ସ୍ୱାଭାବିକ ଅଟେ।</translation>
@@ -3878,7 +3874,6 @@
 <translation id="6226777517901268232">ବ୍ୟକ୍ତିଗତ କୀ' ଫାଇଲ୍ (ଇଛାଧୀନ)</translation>
 <translation id="6227280783235722609">ଏକ୍ସଟେନସନ୍</translation>
 <translation id="6228691855869374890">ଏହି ସାଇଟ୍‌ରେ MIDI ଡିଭାଇସ୍‌ଗୁଡ଼ିକର ପୂର୍ଣ୍ଣ ନିୟନ୍ତ୍ରଣ ଅଛି।</translation>
-<translation id="6228720835160974792">ଏହି ଛବି ପାଇଁ QR କୋଡ୍ ସୃଷ୍ଟି କରନ୍ତୁ</translation>
 <translation id="6229890768313448549">Google Play ସେବାର ସର୍ତ୍ତାବଳୀକୁ ଲୋଡ୍ କରାଯାଇପାରିବ ନାହିଁ। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।</translation>
 <translation id="6231881193380278751">ପୃଷ୍ଠାକୁ ସ୍ବତଃ-ରିଫ୍ରେସ୍ କରିବାକୁ URLରେ ଏକ ତ୍ରୁଟି ପରମ ଯୋଗ କରନ୍ତୁ: chrome://device-log/?refresh=&lt;sec&gt;</translation>
 <translation id="6232017090690406397">ବ୍ୟାଟେରୀ</translation>
@@ -4543,7 +4538,6 @@ Google Chrome ଆପଣଙ୍କ ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବ
 <translation id="7123360114020465152">ଆଉ ସମର୍ଥିତ ନୁହେଁ</translation>
 <translation id="7127980134843952133">ଡାଉନ୍‍‍ଲୋଡ୍ ଇତିବୃତ୍ତି</translation>
 <translation id="7128151990937044829">ଯେତେବେଳେ ବିଜ୍ଞପ୍ତି ବ୍ଲକ୍ କରାଯାଇଥାଏ, ସେତେବେଳେ ଠିକଣା ବାର୍‌ରେ ଏକ ସୂଚକ ଦେଖାଏ</translation>
-<translation id="7128239828194367697">ଏହି ପୃଷ୍ଠା ପାଇଁ QR କୋଡ୍ ସୃଷ୍ଟି କରନ୍ତୁ</translation>
 <translation id="7131040479572660648"><ph name="WEBSITE_1" />, <ph name="WEBSITE_2" />ଏବଂ <ph name="WEBSITE_3" />ରେ ଆପଣଙ୍କର ଡାଟା ପଢ଼ନ୍ତୁ</translation>
 <translation id="713122686776214250">&amp;ପୃଷ୍ଠା ଯୋଗ କରନ୍ତୁ...</translation>
 <translation id="7133578150266914903">ଆପଣଙ୍କର ବ୍ୟବସ୍ଥାପକ ଏହି ଡିଭାଇସ୍‌କୁ ଫେରାଇ ଆଣୁଛନ୍ତି (<ph name="PROGRESS_PERCENT" />)</translation>

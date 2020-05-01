@@ -382,9 +382,7 @@
 <translation id="1509281256533087115">USB-ს მეშვეობით ნებისმიერ <ph name="DEVICE_NAME_AND_VENDOR" />-ზე წვდომა</translation>
 <translation id="1509960214886564027">მრავალი საიტის ფუნქციებმა შეიძლება არასათანადოდ იმუშაოს</translation>
 <translation id="1510030919967934016">ამ გვერდზე დაბლოკა თქვენი მდებარეობის თვალთვალი.</translation>
-<translation id="1510055949674985293">ამ სურათისთვის QR კოდის გენერირება</translation>
 <translation id="1510238584712386396">გამშვები</translation>
-<translation id="1510581003097415337">QR კოდის გენერირება ამ გვერდისთვის</translation>
 <translation id="1510785804673676069">თუ იყენებთ პროქსი სერვერს, შეამოწმეთ პროქსის პარამეტრები ან
     დაუკავშირდით ქსელის ადმინისტრატორს და შეამოწმეთ, რომ პროქსი
     სერვერი მუშაობს. თუ ფიქრობთ, რომ არ იყენებთ
@@ -2308,7 +2306,6 @@
 <translation id="4007856537951125667">მალსახმობების დამალვა</translation>
 <translation id="4008291085758151621">საიტის ინფორმაცია მიუწვდომელია VR რეჟიმში</translation>
 <translation id="4010917659463429001"><ph name="GET_IOS_APP_LINK" /> სანიშნეების ყველა თქვენს მობილურ მოწყობილობაზე მისაღებად.</translation>
-<translation id="4013132157686828973">„<ph name="CLIENT_NAME" />“ ახორციელებს ამ ბრაუზერის გამართვას</translation>
 <translation id="4014432863917027322">აღვადგინოთ „<ph name="EXTENSION_NAME" />“?</translation>
 <translation id="4015163439792426608">სარგებლობთ გაფართოებებით? მარტივად <ph name="BEGIN_LINK" />მართეთ ყველა გაფართოება<ph name="END_LINK" /> ერთი სივრციდან.</translation>
 <translation id="4020327272915390518">ვარიანტების მენიუ</translation>
@@ -3012,7 +3009,6 @@
 <translation id="504561833207953641">მიმდინარეობს ბრაუზერის არსებულ სესიაში გახსნა.</translation>
 <translation id="5047421709274785093">საიტებისთვის მოძრაობისა და განათების სენსორების გამოყენების აკრძალვა</translation>
 <translation id="5050042263972837708">ჯგუფის სახელი</translation>
-<translation id="5051073330196664891">Google-ის მომსახურების უნივერსალური პირობები (uToS)</translation>
 <translation id="5051836348807686060">მართლწერის შემოწმება მხარდაუჭერელია თქვენ მიერ არჩეული ენებისთვის</translation>
 <translation id="5052499409147950210">საიტის რედაქტირება</translation>
 <translation id="5053604404986157245">შემთხვევითად მინიჭებული TPM პაროლი მიუწვდომელია Powerwash ის შემდეგ ეს ნორმალურია.</translation>
@@ -3885,7 +3881,6 @@
 <translation id="6226777517901268232">პირადი გასაღების ფაილი (არასავალდებულო)</translation>
 <translation id="6227280783235722609">გაფართოება</translation>
 <translation id="6228691855869374890">ეს საიტი სრულად აკონტროლებს MIDI მოწყობილობებს.</translation>
-<translation id="6228720835160974792">ამ სურათისთვის QR კოდის გენერირება</translation>
 <translation id="6229890768313448549">Google Play-ს მომსახურების პირობები ვერ ჩაიტვირთა. გთხოვთ, ცადოთ ხელახლა.</translation>
 <translation id="6231881193380278751">URL-ში დაამატეთ მოთხოვნის პარამეტრი, გვერდის ავტომატური განახლებისათვის: chrome://device-log/?refresh=&lt;sec&gt;</translation>
 <translation id="6232017090690406397">ბატარეა</translation>
@@ -4548,7 +4543,6 @@
 <translation id="7123360114020465152">აღარ არის მხარდაჭერილი</translation>
 <translation id="7127980134843952133">ჩამოტვირთვების ისტორია</translation>
 <translation id="7128151990937044829">შეტყობინებების დაბლოკვისას მისამართთა ზოლში ინდიკატორის ჩვენება</translation>
-<translation id="7128239828194367697">QR კოდის გენერირება ამ გვერდისთვის</translation>
 <translation id="7131040479572660648">წაიკითხეთ თქვენი მონაცემები ვებსაიტებზე <ph name="WEBSITE_1" />, <ph name="WEBSITE_2" /> და <ph name="WEBSITE_3" /></translation>
 <translation id="713122686776214250">გვ&amp;ერდის დამატება...</translation>
 <translation id="7133578150266914903">ადმინისტრატორი ამ მოწყობილობას ძველ ვერსიაზე აბრუნებს (<ph name="PROGRESS_PERCENT" />)</translation>
