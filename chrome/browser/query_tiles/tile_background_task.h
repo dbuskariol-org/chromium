@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_QUERY_TILES_TILE_BACKGROUND_TASK_H_
-#define COMPONENTS_QUERY_TILES_TILE_BACKGROUND_TASK_H_
+#ifndef CHROME_BROWSER_QUERY_TILES_TILE_BACKGROUND_TASK_H_
+#define CHROME_BROWSER_QUERY_TILES_TILE_BACKGROUND_TASK_H_
 
 #include "components/background_task_scheduler/background_task.h"
 
@@ -40,8 +40,16 @@ class TileBackgroundTask : public BackgroundTask {
       content::BrowserContext* browser_context) override;
   void OnFullBrowserLoaded(content::BrowserContext* browser_context) override;
   bool OnStopTask(const TaskParameters& task_params) override;
+
+  // Function to call TileService to start fetch query tiles.
+  void StartFetchTask(SimpleFactoryKey* key,
+                      bool is_from_reduced_mode,
+                      TaskFinishedCallback callback);
+
+  // Cached Callback to invoke.
+  TaskFinishedCallback callback_;
 };
 
 }  // namespace upboarding
 
-#endif  // COMPONENTS_QUERY_TILES_TILE_BACKGROUND_TASK_H_
+#endif  // CHROME_BROWSER_QUERY_TILES_TILE_BACKGROUND_TASK_H_
