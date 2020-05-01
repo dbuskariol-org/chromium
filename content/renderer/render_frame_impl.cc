@@ -5653,9 +5653,7 @@ void RenderFrameImpl::BeginNavigation(
         !weak_self) {
       return;
     }
-  }
 
-  if (info->navigation_policy == blink::kWebNavigationPolicyCurrentTab) {
     if (!info->form.IsNull()) {
       for (auto& observer : observers_)
         observer.WillSubmitForm(info->form);
@@ -5901,14 +5899,14 @@ void RenderFrameImpl::OpenURL(std::unique_ptr<blink::WebNavigationInfo> info) {
   if (GetContentClient()->renderer()->AllowPopup())
     params.user_gesture = true;
 
-  // TODO(csharrison,dgozman): FrameLoader::StartNavigation already consumes for
-  // all main frame navigations, except in the case where page A is navigating
-  // page B (e.g. using anchor targets). This edge case can go away when
-  // UserActivationV2 ships, which would make the conditional below redundant.
-  if (is_main_frame_ || policy == blink::kWebNavigationPolicyNewBackgroundTab ||
-      policy == blink::kWebNavigationPolicyNewForegroundTab ||
-      policy == blink::kWebNavigationPolicyNewWindow ||
-      policy == blink::kWebNavigationPolicyNewPopup) {
+  // A main frame navigation should already have consumed an activation in
+  // FrameLoader::StartNavigation.
+  DCHECK(!is_main_frame_ || !frame_->HasTransientUserActivation());
+  if (!is_main_frame_ &&
+      (policy == blink::kWebNavigationPolicyNewBackgroundTab ||
+       policy == blink::kWebNavigationPolicyNewForegroundTab ||
+       policy == blink::kWebNavigationPolicyNewWindow ||
+       policy == blink::kWebNavigationPolicyNewPopup)) {
     frame_->ConsumeTransientUserActivation();
   }
 
