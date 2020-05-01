@@ -1022,6 +1022,9 @@
   <message name="IDS_FILE_BROWSER_METADATA_BOX_EXIF_GEOGRAPHY" desc="Label for the latitude and the longitude where the image was taken.">
     Geography
   </message>
+  <message name="IDS_FILE_BROWSER_METADATA_BOX_FILE_LOCATION" desc="Label for file location.">
+    File location
+  </message>
   <message name="IDS_FILE_BROWSER_METADATA_BOX_FILE_PATH" desc="Label for file path.">
     Path
   </message>
