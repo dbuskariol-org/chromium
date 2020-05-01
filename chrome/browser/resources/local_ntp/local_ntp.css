@@ -246,7 +246,6 @@ body.hide-fakebox #fakebox {
   display: none;
   left: 0;
   overflow: hidden;
-  padding-bottom: 8px;
   padding-top: var(--searchbox-height);
   position: absolute;
   right: 0;
@@ -337,6 +336,10 @@ body.hide-fakebox #fakebox {
 
 #realbox-matches.removable a {
   padding-inline-end: 48px;
+}
+
+#realbox-matches a:last-of-type {
+  margin-bottom: 8px;
 }
 
 #realbox-matches a:-webkit-any(:focus-within, .selected) .match-icon {
