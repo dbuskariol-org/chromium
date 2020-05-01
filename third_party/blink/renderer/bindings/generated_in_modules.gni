@@ -1399,3 +1399,10 @@ generated_interface_sources_for_testing_in_modules = [
   "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/v8_internals.cc",
   "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/v8_internals.h",
 ]
+
+generated_interface_sources_for_testing_in_modules += [
+  "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/init_idl_interfaces_for_testing.cc",
+  "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/init_idl_interfaces_for_testing.h",
+  "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/properties_per_feature_installer_for_testing.cc",
+  "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/properties_per_feature_installer_for_testing.h",
+]
