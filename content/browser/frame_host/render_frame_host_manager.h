@@ -119,6 +119,7 @@ class CONTENT_EXPORT RenderFrameHostManager
         RenderViewHost* render_view_host,
         int opener_frame_routing_id,
         int proxy_routing_id,
+        const base::UnguessableToken& frame_token,
         const base::UnguessableToken& devtools_frame_token,
         const FrameReplicationState& replicated_frame_state) = 0;
     virtual void CreateRenderWidgetHostViewForRenderManager(
@@ -184,7 +185,9 @@ class CONTENT_EXPORT RenderFrameHostManager
   void InitRoot(SiteInstance* site_instance, bool renderer_initiated_creation);
 
   // Initialize this frame as the child of another frame.
-  void InitChild(SiteInstance* site_instance, int32_t frame_routing_id);
+  void InitChild(SiteInstance* site_instance,
+                 int32_t frame_routing_id,
+                 const base::UnguessableToken& frame_token);
 
   // Returns the currently active RenderFrameHost.
   //
@@ -724,6 +727,7 @@ class CONTENT_EXPORT RenderFrameHostManager
       CreateFrameCase create_frame_case,
       SiteInstance* site_instance,
       int32_t frame_routing_id,
+      const base::UnguessableToken& frame_token,
       bool renderer_initiated_creation);
 
   // Create and initialize a speculative RenderFrameHost for an ongoing
