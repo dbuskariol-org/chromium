@@ -23,6 +23,7 @@
 #include "chromeos/components/media_app_ui/url_constants.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "content/public/test/test_utils.h"
+#include "extensions/browser/api/crash_report_private/mock_crash_endpoint.h"
 #include "extensions/browser/entry_info.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/common/features.h"
@@ -208,6 +209,38 @@ IN_PROC_BROWSER_TEST_P(MediaAppIntegrationTest, HiddenInLauncherAndSearch) {
   EXPECT_FALSE(
       GetManager().ShouldShowInLauncher(web_app::SystemAppType::MEDIA));
   EXPECT_FALSE(GetManager().ShouldShowInSearch(web_app::SystemAppType::MEDIA));
+}
+
+IN_PROC_BROWSER_TEST_P(MediaAppIntegrationTest, ReportsUnhandledExceptions) {
+  MockCrashEndpoint endpoint(embedded_test_server());
+  content::WebContents* app =
+      WaitForSystemAppInstallAndLoad(web_app::SystemAppType::MEDIA);
+
+  const char kScript[] =
+      "window.dispatchEvent("
+      "new CustomEvent('simulate-unhandled-rejection-for-test'));";
+  EXPECT_EQ(true, MediaAppUiBrowserTest::EvalJsInAppFrame(app, kScript));
+  auto report = endpoint.WaitForReport();
+  EXPECT_NE(std::string::npos, report.query.find("error_message=fake_throw"))
+      << report.query;
+  EXPECT_NE(std::string::npos, report.query.find("prod=ChromeOS_MediaApp"));
+}
+
+IN_PROC_BROWSER_TEST_P(MediaAppIntegrationTest, ReportsTypeErrors) {
+  MockCrashEndpoint endpoint(embedded_test_server());
+  content::WebContents* app =
+      WaitForSystemAppInstallAndLoad(web_app::SystemAppType::MEDIA);
+
+  const char kScript[] =
+      "window.dispatchEvent("
+      "new CustomEvent('simulate-type-error-for-test'));";
+  EXPECT_EQ(true, MediaAppUiBrowserTest::EvalJsInAppFrame(app, kScript));
+  auto report = endpoint.WaitForReport();
+  EXPECT_NE(std::string::npos,
+            report.query.find(
+                "error_message=event.notAFunction%20is%20not%20a%20function"))
+      << report.query;
+  EXPECT_NE(std::string::npos, report.query.find("prod=ChromeOS_MediaApp"));
 }
 
 // End-to-end test to ensure that the MediaApp successfully registers as a file
