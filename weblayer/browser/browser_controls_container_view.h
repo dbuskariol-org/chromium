@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef WEBLAYER_BROWSER_TOP_CONTROLS_CONTAINER_VIEW_H_
-#define WEBLAYER_BROWSER_TOP_CONTROLS_CONTAINER_VIEW_H_
+#ifndef WEBLAYER_BROWSER_BROWSER_CONTROLS_CONTAINER_VIEW_H_
+#define WEBLAYER_BROWSER_BROWSER_CONTROLS_CONTAINER_VIEW_H_
 
 #include "base/android/scoped_java_ref.h"
 #include "base/macros.h"
@@ -23,15 +23,15 @@ namespace weblayer {
 
 class ContentViewRenderView;
 
-// Native side of TopControlsContainerView. Responsible for creating and
+// Native side of BrowserControlsContainerView. Responsible for creating and
 // positioning the cc::Layer that contains an image of the contents of the
 // top-control.
-class TopControlsContainerView : public content::WebContentsObserver {
+class BrowserControlsContainerView : public content::WebContentsObserver {
  public:
-  TopControlsContainerView(const base::android::JavaParamRef<jobject>&
-                               java_top_controls_container_view,
-                           ContentViewRenderView* content_view_render_view);
-  ~TopControlsContainerView() override;
+  BrowserControlsContainerView(const base::android::JavaParamRef<jobject>&
+                                   java_top_controls_container_view,
+                               ContentViewRenderView* content_view_render_view);
+  ~BrowserControlsContainerView() override;
 
   // Height needed to display the top-control.
   int GetTopControlsHeight();
@@ -87,9 +87,9 @@ class TopControlsContainerView : public content::WebContentsObserver {
   // of the WebContents layer.
   scoped_refptr<cc::UIResourceLayer> top_controls_layer_;
 
-  DISALLOW_COPY_AND_ASSIGN(TopControlsContainerView);
+  DISALLOW_COPY_AND_ASSIGN(BrowserControlsContainerView);
 };
 
 }  // namespace weblayer
 
-#endif  // WEBLAYER_BROWSER_TOP_CONTROLS_CONTAINER_VIEW_H_
+#endif  // WEBLAYER_BROWSER_BROWSER_CONTROLS_CONTAINER_VIEW_H_

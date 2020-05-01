@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "weblayer/browser/top_controls_container_view.h"
+#include "weblayer/browser/browser_controls_container_view.h"
 
 #include "base/android/jni_string.h"
 #include "cc/layers/ui_resource_layer.h"
@@ -13,14 +13,14 @@
 #include "ui/android/resources/resource_manager.h"
 #include "ui/android/view_android.h"
 #include "weblayer/browser/content_view_render_view.h"
-#include "weblayer/browser/java/jni/TopControlsContainerView_jni.h"
+#include "weblayer/browser/java/jni/BrowserControlsContainerView_jni.h"
 
 using base::android::AttachCurrentThread;
 using base::android::JavaParamRef;
 
 namespace weblayer {
 
-TopControlsContainerView::TopControlsContainerView(
+BrowserControlsContainerView::BrowserControlsContainerView(
     const JavaParamRef<jobject>& java_top_controls_container_view,
     ContentViewRenderView* content_view_render_view)
     : java_top_controls_container_view_(java_top_controls_container_view),
@@ -28,13 +28,13 @@ TopControlsContainerView::TopControlsContainerView(
   DCHECK(content_view_render_view_);
 }
 
-TopControlsContainerView::~TopControlsContainerView() = default;
+BrowserControlsContainerView::~BrowserControlsContainerView() = default;
 
-int TopControlsContainerView::GetTopControlsHeight() {
+int BrowserControlsContainerView::GetTopControlsHeight() {
   return top_controls_layer_ ? top_controls_layer_->bounds().height() : 0;
 }
 
-void TopControlsContainerView::CreateTopControlsLayer(
+void BrowserControlsContainerView::CreateTopControlsLayer(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller,
     int id) {
@@ -51,19 +51,19 @@ void TopControlsContainerView::CreateTopControlsLayer(
   UpdateTopControlsResource(env, caller);
 }
 
-void TopControlsContainerView::DeleteTopControlsContainerView(
+void BrowserControlsContainerView::DeleteTopControlsContainerView(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller) {
   delete this;
 }
 
-void TopControlsContainerView::DeleteTopControlsLayer(
+void BrowserControlsContainerView::DeleteTopControlsLayer(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller) {
   top_controls_layer_.reset();
 }
 
-void TopControlsContainerView::SetTopControlsOffset(
+void BrowserControlsContainerView::SetTopControlsOffset(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller,
     int top_controls_offset_y,
@@ -78,7 +78,7 @@ void TopControlsContainerView::SetTopControlsOffset(
   }
 }
 
-void TopControlsContainerView::SetTopControlsSize(
+void BrowserControlsContainerView::SetTopControlsSize(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller,
     int width,
@@ -87,7 +87,7 @@ void TopControlsContainerView::SetTopControlsSize(
   top_controls_layer_->SetBounds(gfx::Size(width, height));
 }
 
-void TopControlsContainerView::UpdateTopControlsResource(
+void BrowserControlsContainerView::UpdateTopControlsResource(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller) {
   DCHECK(top_controls_layer_);
@@ -100,31 +100,32 @@ void TopControlsContainerView::UpdateTopControlsResource(
       top_controls_resource->ui_resource()->id());
 }
 
-void TopControlsContainerView::SetWebContents(
+void BrowserControlsContainerView::SetWebContents(
     JNIEnv* env,
     const JavaParamRef<jobject>& caller,
     const JavaParamRef<jobject>& web_contents) {
   Observe(content::WebContents::FromJavaWebContents(web_contents));
 }
 
-void TopControlsContainerView::DidToggleFullscreenModeForTab(
+void BrowserControlsContainerView::DidToggleFullscreenModeForTab(
     bool entered_fullscreen,
     bool will_cause_resize) {
-  TRACE_EVENT0("weblayer",
-               "Java_TopControlsContainerView_didToggleFullscreenModeForTab");
-  Java_TopControlsContainerView_didToggleFullscreenModeForTab(
+  TRACE_EVENT0(
+      "weblayer",
+      "Java_BrowserControlsContainerView_didToggleFullscreenModeForTab");
+  Java_BrowserControlsContainerView_didToggleFullscreenModeForTab(
       AttachCurrentThread(), java_top_controls_container_view_,
       entered_fullscreen);
 }
 
-static jlong JNI_TopControlsContainerView_CreateTopControlsContainerView(
+static jlong JNI_BrowserControlsContainerView_CreateTopControlsContainerView(
     JNIEnv* env,
     const JavaParamRef<jobject>& java_top_controls_container_view,
     jlong native_content_view_render_view) {
   return reinterpret_cast<jlong>(
-      new TopControlsContainerView(java_top_controls_container_view,
-                                   reinterpret_cast<ContentViewRenderView*>(
-                                       native_content_view_render_view)));
+      new BrowserControlsContainerView(java_top_controls_container_view,
+                                       reinterpret_cast<ContentViewRenderView*>(
+                                           native_content_view_render_view)));
 }
 
 }  // namespace weblayer
