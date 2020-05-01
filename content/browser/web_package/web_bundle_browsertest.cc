@@ -624,7 +624,8 @@ void RunSubPageTest(const ToRenderFrameHost& adapter,
                                       .Resolve("#/not-in-wbn-script")));
 
   EXPECT_EQ(
-      "wbn-page third-party:wbn-script",
+      support_third_party_wbn_page ? "wbn-page third-party:wbn-script"
+                                   : "wbn-page third-party:server-script",
       (*test_func)(adapter,
                    primary_url_origin.Resolve("/subpage")
                        .Resolve(std::string("#") +
@@ -1917,12 +1918,8 @@ IN_PROC_BROWSER_TEST_F(WebBundleNetworkBrowserTest, OutScopeSubPage) {
         (*func)(
             shell()->web_contents(),
             origin.Resolve("/in_scope/subpage").Resolve("#/in_scope/script")));
-    // Currently Chrome loads the out of scope subresources from the web bundle
-    // file. This behavior doesn't match with the explainer:
-    // https://github.com/WICG/webpackage/blob/master/explainers/navigation-to-unsigned-bundles.md#loading-an-authoritative-unsigned-bundle
-    // TODO(crbug/1018640): Fix this.
     EXPECT_EQ(
-        "in-scope-wbn-page out-scope-wbn-script",
+        "in-scope-wbn-page server-script",
         (*func)(
             shell()->web_contents(),
             origin.Resolve("/in_scope/subpage").Resolve("#/out_scope/script")));
