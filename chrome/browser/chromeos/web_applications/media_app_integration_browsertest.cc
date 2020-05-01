@@ -140,7 +140,7 @@ content::EvalJsResult ClearOpenedImage(content::WebContents* web_ui) {
 IN_PROC_BROWSER_TEST_P(MediaAppIntegrationTest, MediaApp) {
   const GURL url(chromeos::kChromeUIMediaAppURL);
   EXPECT_NO_FATAL_FAILURE(
-      ExpectSystemWebAppValid(web_app::SystemAppType::MEDIA, url, "Media App"));
+      ExpectSystemWebAppValid(web_app::SystemAppType::MEDIA, url, "Gallery"));
 }
 
 // Test that the MediaApp successfully loads a file passed in on its launch
@@ -190,7 +190,7 @@ IN_PROC_BROWSER_TEST_P(MediaAppIntegrationTest, MediaAppEligibleOpenTask) {
     const auto& task = result[0];
     const auto& descriptor = task.task_descriptor();
 
-    EXPECT_EQ("Media App", task.task_title());
+    EXPECT_EQ("Gallery", task.task_title());
     EXPECT_EQ(extensions::api::file_manager_private::Verb::VERB_OPEN_WITH,
               task.task_verb());
     EXPECT_EQ(descriptor.app_id, *GetManager().GetAppIdForSystemApp(

@@ -106,6 +106,13 @@ TEST_F('MediaAppUIBrowserTest', 'DISABLED_GuestCanLoad', async () => {
   testDone();
 });
 
+// Tests that we have localized information in the HTML like title and lang.
+TEST_F('MediaAppUIBrowserTest', 'HasTitleAndLang', () => {
+  assertEquals(document.documentElement.lang, 'en');
+  assertEquals(document.title, 'Gallery');
+  testDone();
+});
+
 TEST_F('MediaAppUIBrowserTest', 'DISABLED_LoadFile', async () => {
   loadFile(await createTestImageFile(), new FakeFileSystemFileHandle());
   const result =
@@ -393,5 +400,10 @@ TEST_F('MediaAppUIBrowserTest', 'RelatedFiles', async () => {
 
 TEST_F('MediaAppUIBrowserTest', 'GuestCanSpawnWorkers', async () => {
   await runTestInGuest('GuestCanSpawnWorkers');
+  testDone();
+});
+
+TEST_F('MediaAppUIBrowserTest', 'GuestHasLang', async () => {
+  await runTestInGuest('GuestHasLang');
   testDone();
 });
