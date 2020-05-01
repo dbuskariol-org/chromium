@@ -8303,7 +8303,7 @@ Unknown properties are collapsed to zero. -->
 <!-- System Code is CDM specific. Use this as a placeholder to treat sparse
 histogram as enum -->
 
-  <int value="0" label="Unknown Error"/>
+  <int value="0" label="Unknown"/>
 </enum>
 
 <enum name="CertificateChainPosition">
