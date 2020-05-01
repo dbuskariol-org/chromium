@@ -1272,7 +1272,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="2665717534925640469">Orria pantaila osoan dago eta saguaren kurtsorea desgaitu du.</translation>
 <translation id="2665919335226618153">Errore bat gertatu da formateatzean.</translation>
 <translation id="2667463864537187133">Kudeatu ortografia-zuzentzailea</translation>
-<translation id="2670102641511624474"><ph name="APP_NAME" /> Chrome fitxa bat partekatzen ari da.</translation>
+<translation id="2670102641511624474"><ph name="APP_NAME" /> Chrome-ko fitxa bat partekatzen ari da.</translation>
 <translation id="2670429602441959756">Oraingoz errealitate birtualean onartzen ez diren eginbideak ditu orri honek. Irteten…</translation>
 <translation id="2671451824761031126">Prest dituzu laster-markak eta ezarpenak</translation>
 <translation id="2672142220933875349">crx fitxategiak ez du balio. Ezin izan da deskonprimatu.</translation>
@@ -3094,7 +3094,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5117930984404104619">Kontrolatu beste luzapenen funtzionamendua, bisitatutako URLena barne</translation>
 <translation id="5119173345047096771">Mozilla Firefox</translation>
 <translation id="5121130586824819730">Disko gogorra beteta duzu. Gorde beste kokapen batean edo libratu espazioa disko gogorrean.</translation>
-<translation id="5122384452788334261">Biltegiratzeko toki gutxi du gailuak. Gutxienez <ph name="RECOMMENDED_SPACE" /> libre izatea gomendatzen dugu Plugin VM erabiltzeko. Tokia egiteko, ezabatu gailuko memorian dauden fitxategiak.</translation>
+<translation id="5122384452788334261">Biltegiratzeko toki gutxi dago gailuan. Gutxienez <ph name="RECOMMENDED_SPACE" /> libre izatea gomendatzen dugu Plugin VM erabiltzeko. Tokia egiteko, ezabatu gailuko memorian dauden fitxategiak.</translation>
 <translation id="5123433949759960244">Saskibaloiko baloia</translation>
 <translation id="5125751979347152379">URLak ez du balio.</translation>
 <translation id="5126611267288187364">Ikusi aldaketak</translation>
@@ -3780,9 +3780,9 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="6041155700700864984">Irten pantaila osoko modutik</translation>
 <translation id="604124094241169006">Automatikoa</translation>
 <translation id="6042308850641462728">Gehiago</translation>
-<translation id="6043317578411397101"><ph name="APP_NAME" /> Chrome fitxa bat partekatzen ari da <ph name="TAB_NAME" /> fitxarekin.</translation>
+<translation id="6043317578411397101"><ph name="APP_NAME" /> Chrome-ko fitxa bat partekatzen ari da <ph name="TAB_NAME" /> fitxarekin.</translation>
 <translation id="604388835206766544">Ezin izan da analizatu konfigurazioa</translation>
-<translation id="6044805581023976844"><ph name="APP_NAME" /> Chrome fitxa bat eta audioa partekatzen ari da <ph name="TAB_NAME" /> fitxarekin.</translation>
+<translation id="6044805581023976844"><ph name="APP_NAME" /> Chrome-ko fitxa bat eta audioa partekatzen ari da <ph name="TAB_NAME" /> fitxarekin.</translation>
 <translation id="6049004884579590341">Pantaila osotik irteteko, eduki sakatuta |<ph name="ACCELERATOR" />|</translation>
 <translation id="6049065490165456785">Barneko kamerako argazkia</translation>
 <translation id="6051354611314852653">Sistemak ezin izan dio gailu honi APIa atzitzeko baimenik eman.</translation>
@@ -5345,7 +5345,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="8118488170956489476">Zure erakundeak <ph name="BEGIN_LINK" />kudeatzen du arakatzailea<ph name="END_LINK" /></translation>
 <translation id="8118860139461251237">Kudeatu deskargak</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />, <ph name="RECENT_PERMISSIONS_CHANGE_1" />, <ph name="RECENT_PERMISSIONS_CHANGE_2" /> eta beste</translation>
-<translation id="8120715633374652536">Biltegiratzeko toki gutxi du gailuak. Gutxienez <ph name="MINIMUM_SPACE" /> behar dituzu Plugin VM erabiltzeko, eta <ph name="RECOMMENDED_SPACE" /> baino gehiago libre izatea gomendatzen dugu. Tokia egiteko, ezabatu gailuko memorian dauden fitxategiak.</translation>
+<translation id="8120715633374652536">Biltegiratzeko toki gutxi dago gailuan. Gutxienez <ph name="MINIMUM_SPACE" /> behar dituzu Plugin VM erabiltzeko, eta <ph name="RECOMMENDED_SPACE" /> baino gehiago libre izatea gomendatzen dugu. Tokia egiteko, ezabatu gailuko memorian dauden fitxategiak.</translation>
 <translation id="8123590694679414600">Sinkronizazio-pasaesaldiarekin enkriptatu dira datuak ordu honetan:
           <ph name="TIME" />. Ez dira hartzen barne Google Pay-ko ordainketa-metodoak eta helbideak.</translation>
 <translation id="81238879832906896">Lore hori eta zuria</translation>
@@ -6191,7 +6191,7 @@ Horrek ez die eragiten beste gailu batzuetako aplikazioei edo edukiei.</translat
 <translation id="939519157834106403">SSID</translation>
 <translation id="939598580284253335">Idatzi pasaesaldia</translation>
 <translation id="939736085109172342">Karpeta berria</translation>
-<translation id="942532530371314860"><ph name="APP_NAME" /> Chrome fitxa bat eta audioa partekatzen ari da.</translation>
+<translation id="942532530371314860"><ph name="APP_NAME" /> Chrome-ko fitxa bat eta audioa partekatzen ari da.</translation>
 <translation id="945522503751344254">Bidali oharrak</translation>
 <translation id="947329552760389097">&amp;Aztertu elementuak</translation>
 <translation id="952992212772159698">Ez da aktibatu</translation>

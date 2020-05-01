@@ -4107,7 +4107,7 @@
 <translation id="6473842110411557830">Powerwash 插圖</translation>
 <translation id="6474498546677193336">某個應用程式正在使用此資料夾，因此無法取消分享。系統會在下次關閉 Linux 時取消分享此資料夾。</translation>
 <translation id="6474884162850599008">中斷 Google Drive 帳戶連線</translation>
-<translation id="6475697075626596525"><ph name="APP_NAME" /> 要求分享您的螢幕內容，請選擇您要分享的內容。</translation>
+<translation id="6475697075626596525"><ph name="APP_NAME" /> 要求分享您的螢幕內容。請選擇要分享的內容。</translation>
 <translation id="6478248366783946499">要保留不安全的檔案嗎？</translation>
 <translation id="6483485061007832714">開啟下載檔案</translation>
 <translation id="6483805311199035658">正在開啟「<ph name="FILE" />」…</translation>
@@ -4320,7 +4320,7 @@
 <translation id="6790428901817661496">播放</translation>
 <translation id="6790497603648687708">已從遠端新增 <ph name="EXTENSION_NAME" /></translation>
 <translation id="6790820461102226165">新增使用者…</translation>
-<translation id="6792072150955115067">「<ph name="APP_NAME" />」要求與 <ph name="TARGET_NAME" /> 分享您的螢幕內容，請選擇您要分享的內容。</translation>
+<translation id="6792072150955115067"><ph name="APP_NAME" /> 要求與 <ph name="TARGET_NAME" /> 分享您的螢幕內容。請選擇要分享的內容。</translation>
 <translation id="6793604637258913070">當文字插入符號出現或移動時，突顯文字插入符號</translation>
 <translation id="6795884519221689054">熊貓</translation>
 <translation id="6797493596609571643">糟糕，發生錯誤。</translation>
