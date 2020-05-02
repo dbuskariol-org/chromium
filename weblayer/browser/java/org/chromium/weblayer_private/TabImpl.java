@@ -160,6 +160,14 @@ public final class TabImpl extends ITab.Stub {
                     viewController.onTopControlsChanged(topControlsOffsetY, topContentOffsetY);
                 }
             }
+            @Override
+            public void onBottomControlsChanged(
+                    int bottomControlsOffsetY, int bottomControlsMinHeightOffsetY) {
+                BrowserViewController viewController = getViewController();
+                if (viewController != null) {
+                    viewController.onBottomControlsChanged(bottomControlsOffsetY);
+                }
+            }
         };
         mWebContents.initialize("", mViewAndroidDelegate, new InternalAccessDelegateImpl(),
                 windowAndroid, WebContents.createDefaultInternalsHolder());
@@ -277,10 +285,12 @@ public final class TabImpl extends ITab.Stub {
     /**
      * Called when this TabImpl becomes the active TabImpl.
      */
-    public void onDidGainActive(long topControlsContainerViewHandle) {
+    public void onDidGainActive(
+            long topControlsContainerViewHandle, long bottomControlsContainerViewHandle) {
         // attachToFragment() must be called before activate().
         assert mBrowser != null;
-        TabImplJni.get().setTopControlsContainerView(mNativeTab, topControlsContainerViewHandle);
+        TabImplJni.get().setBrowserControlsContainerViews(
+                mNativeTab, topControlsContainerViewHandle, bottomControlsContainerViewHandle);
         updateWebContentsVisibility();
         mWebContents.onShow();
     }
@@ -292,7 +302,7 @@ public final class TabImpl extends ITab.Stub {
         hideFindInPageUiAndNotifyClient();
         mWebContents.onHide();
         updateWebContentsVisibility();
-        TabImplJni.get().setTopControlsContainerView(mNativeTab, 0);
+        TabImplJni.get().setBrowserControlsContainerViews(mNativeTab, 0, 0);
     }
 
     /**
@@ -691,8 +701,9 @@ public final class TabImpl extends ITab.Stub {
         long createTab(long profile, TabImpl caller);
         void setJavaImpl(long nativeTabImpl, TabImpl impl);
         void onAutofillProviderChanged(long nativeTabImpl, AutofillProvider autofillProvider);
-        void setTopControlsContainerView(
-                long nativeTabImpl, long nativeBrowserControlsContainerView);
+        void setBrowserControlsContainerViews(long nativeTabImpl,
+                long nativeTopBrowserControlsContainerView,
+                long nativeBottomBrowserControlsContainerView);
         void deleteTab(long tab);
         WebContents getWebContents(long nativeTabImpl, TabImpl caller);
         void executeScript(long nativeTabImpl, String script, boolean useSeparateIsolate,

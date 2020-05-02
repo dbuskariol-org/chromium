@@ -175,6 +175,12 @@ public class BrowserImpl extends IBrowser.Stub {
     }
 
     @Override
+    public void setBottomView(IObjectWrapper viewWrapper) {
+        StrictModeWorkaround.apply();
+        getViewController().setBottomView(ObjectWrapper.unwrap(viewWrapper, View.class));
+    }
+
+    @Override
     public void setSupportsEmbedding(boolean enable, IObjectWrapper valueCallback) {
         StrictModeWorkaround.apply();
         getViewController().setSupportsEmbedding(enable,
