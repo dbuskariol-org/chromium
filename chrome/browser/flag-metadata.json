@@ -2650,7 +2650,7 @@
   {
     "name": "homepage-settings-ui-conversion",
     "owners": [ "wenyufu", "chrome-android-app@chromium.org" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "http-auth-committed-interstitials",
