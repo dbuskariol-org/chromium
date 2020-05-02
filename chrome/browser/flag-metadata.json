@@ -3566,7 +3566,7 @@
   {
     "name": "raw-clipboard",
     "owners": ["huangdarwin", "pwnall"],
-    "expiry_milestone": 84
+    "expiry_milestone": 88
   },
   {
     "name": "reader-mode-heuristics",
