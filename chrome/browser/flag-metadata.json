@@ -603,7 +603,7 @@
   {
     "name": "contextual-search-translations",
     "owners": [ "//chrome/android/java/src/org/chromium/chrome/browser/contextualsearch/OWNERS" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "cookie-deprecation-messages",
