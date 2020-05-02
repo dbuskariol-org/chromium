@@ -4743,24 +4743,11 @@ void RenderFrameImpl::WillSendRequestInternal(
 void RenderFrameImpl::DidLoadResourceFromMemoryCache(
     const blink::WebURLRequest& request,
     const blink::WebURLResponse& response) {
-  // The recipients of this message have no use for data: URLs: they don't
-  // affect the page's insecure content list and are not in the disk cache. To
-  // prevent large (1M+) data: URLs from crashing in the IPC system, we simply
-  // filter them out here.
-  if (request.Url().ProtocolIs(url::kDataScheme))
-    return;
-
   for (auto& observer : observers_) {
     observer.DidLoadResourceFromMemoryCache(
         request.Url(), response.RequestId(), response.EncodedBodyLength(),
         response.MimeType().Utf8(), response.FromArchive());
   }
-
-  // Let the browser know we loaded a resource from the memory cache.  This
-  // message is needed to display the correct SSL indicators.
-  Send(new FrameHostMsg_DidLoadResourceFromMemoryCache(
-      routing_id_, request.Url(), request.HttpMethod().Utf8(),
-      response.MimeType().Utf8(), request.GetRequestDestination()));
 }
 
 void RenderFrameImpl::DidStartResponse(
