@@ -1901,12 +1901,12 @@
   {
     "name": "enable-quick-answers",
     "owners": [ "croissant-eng" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-quick-answers-rich-ui",
     "owners": [ "croissant-eng" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "enable-reader-mode",
