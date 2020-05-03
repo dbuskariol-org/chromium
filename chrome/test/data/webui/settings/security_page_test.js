@@ -382,6 +382,9 @@ suite('CrSettingsSecurityPageTestWithoutEnhanced', function() {
   /** @type {SettingsSecurityPageElement} */
   let page;
 
+  /** @type {SafeBrowsingBrowserProxy} */
+  let testSafeBrowsingBrowserProxy;
+
   suiteSetup(function() {
     loadTimeData.overrideValues({
       safeBrowsingEnhancedEnabled: false,
@@ -389,6 +392,8 @@ suite('CrSettingsSecurityPageTestWithoutEnhanced', function() {
   });
 
   setup(function() {
+    testSafeBrowsingBrowserProxy = new TestSafeBrowsingBrowserProxy();
+    settings.SafeBrowsingBrowserProxyImpl.instance_ = testSafeBrowsingBrowserProxy;
     PolymerTest.clearBody();
     page = document.createElement('settings-security-page');
     page.prefs = {
@@ -413,5 +418,10 @@ suite('CrSettingsSecurityPageTestWithoutEnhanced', function() {
 
   test('enhancedHiddenWhenDisbled', function() {
     assertTrue(page.$$('#safeBrowsingEnhanced').hidden);
+  });
+
+  test('validateSafeBrowsingEnhanced', function() {
+    return testSafeBrowsingBrowserProxy.whenCalled(
+        'validateSafeBrowsingEnhanced');
   });
 });
