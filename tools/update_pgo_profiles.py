@@ -48,10 +48,7 @@ def _read_profile_name(target):
   with open(state_file, 'r') as f:
     profile_name = f.read().strip()
 
-  # PGO profiles are pushed to folders by branch (master, or branch number),
-  # thus in the form master/chrome-*.profdata. We want to write out just the
-  # profile, without the foldername so we split by '/' and take the last bit.
-  return profile_name.split('/')[-1]
+  return profile_name
 
 
 def _remove_unused_profiles(current_profile_name):
