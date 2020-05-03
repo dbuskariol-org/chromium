@@ -449,9 +449,7 @@ static void JNI_TabImpl_DeleteTab(JNIEnv* env, jlong tab) {
     owned_tab.reset(tab_impl);
 }
 
-ScopedJavaLocalRef<jobject> TabImpl::GetWebContents(
-    JNIEnv* env,
-    const JavaParamRef<jobject>& obj) {
+ScopedJavaLocalRef<jobject> TabImpl::GetWebContents(JNIEnv* env) {
   return web_contents_->GetJavaWebContents();
 }
 

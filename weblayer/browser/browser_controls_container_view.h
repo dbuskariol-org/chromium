@@ -38,17 +38,13 @@ class BrowserControlsContainerView : public content::WebContentsObserver {
 
   // Creates |controls_layer_|.
   void CreateControlsLayer(JNIEnv* env,
-                           const base::android::JavaParamRef<jobject>& caller,
                            int id);
 
   // Deletes |this|.
-  void DeleteBrowserControlsContainerView(
-      JNIEnv* env,
-      const base::android::JavaParamRef<jobject>& caller);
+  void DeleteBrowserControlsContainerView(JNIEnv* env);
 
   // Deletes |controls_layer_|.
-  void DeleteControlsLayer(JNIEnv* env,
-                           const base::android::JavaParamRef<jobject>& caller);
+  void DeleteControlsLayer(JNIEnv* env);
 
   // Sets the offsets of the controls and content. See
   // BrowserControlsContainerView's javadoc for details on this.
@@ -59,17 +55,13 @@ class BrowserControlsContainerView : public content::WebContentsObserver {
 
   // Sets the size of |controls_layer_|.
   void SetControlsSize(JNIEnv* env,
-                       const base::android::JavaParamRef<jobject>& caller,
                        int width,
                        int height);
 
   // Triggers updating the resource (bitmap) shown in |controls_layer_|.
-  void UpdateControlsResource(
-      JNIEnv* env,
-      const base::android::JavaParamRef<jobject>& caller);
+  void UpdateControlsResource(JNIEnv* env);
 
   void SetWebContents(JNIEnv* env,
-                      const base::android::JavaParamRef<jobject>& caller,
                       const base::android::JavaParamRef<jobject>& web_contents);
 
  private:

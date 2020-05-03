@@ -39,7 +39,6 @@ int BrowserControlsContainerView::GetControlsHeight() {
 
 void BrowserControlsContainerView::CreateControlsLayer(
     JNIEnv* env,
-    const JavaParamRef<jobject>& caller,
     int id) {
   controls_resource_id_ = id;
   controls_layer_ = cc::UIResourceLayer::Create();
@@ -50,18 +49,15 @@ void BrowserControlsContainerView::CreateControlsLayer(
   controls_layer_->SetHitTestable(false);
   controls_layer_->SetIsDrawable(true);
   content_view_render_view_->root_container_layer()->AddChild(controls_layer_);
-  UpdateControlsResource(env, caller);
+  UpdateControlsResource(env);
 }
 
 void BrowserControlsContainerView::DeleteBrowserControlsContainerView(
-    JNIEnv* env,
-    const JavaParamRef<jobject>& caller) {
+    JNIEnv* env) {
   delete this;
 }
 
-void BrowserControlsContainerView::DeleteControlsLayer(
-    JNIEnv* env,
-    const JavaParamRef<jobject>& caller) {
+void BrowserControlsContainerView::DeleteControlsLayer(JNIEnv* env) {
   controls_layer_.reset();
 }
 
@@ -90,16 +86,13 @@ void BrowserControlsContainerView::SetBottomControlsOffset(
 
 void BrowserControlsContainerView::SetControlsSize(
     JNIEnv* env,
-    const JavaParamRef<jobject>& caller,
     int width,
     int height) {
   DCHECK(controls_layer_);
   controls_layer_->SetBounds(gfx::Size(width, height));
 }
 
-void BrowserControlsContainerView::UpdateControlsResource(
-    JNIEnv* env,
-    const JavaParamRef<jobject>& caller) {
+void BrowserControlsContainerView::UpdateControlsResource(JNIEnv* env) {
   DCHECK(controls_layer_);
   ui::ResourceManager& resource_manager =
       content_view_render_view_->compositor()->GetResourceManager();
@@ -111,7 +104,6 @@ void BrowserControlsContainerView::UpdateControlsResource(
 
 void BrowserControlsContainerView::SetWebContents(
     JNIEnv* env,
-    const JavaParamRef<jobject>& caller,
     const JavaParamRef<jobject>& web_contents) {
   Observe(content::WebContents::FromJavaWebContents(web_contents));
 }

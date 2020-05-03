@@ -118,9 +118,7 @@ class TabImpl : public Tab,
   // on the Java side to have the desired effect.
   static void DisableAutofillSystemIntegrationForTesting();
 
-  base::android::ScopedJavaLocalRef<jobject> GetWebContents(
-      JNIEnv* env,
-      const base::android::JavaParamRef<jobject>& obj);
+  base::android::ScopedJavaLocalRef<jobject> GetWebContents(JNIEnv* env);
   void SetBrowserControlsContainerViews(
       JNIEnv* env,
       jlong native_top_browser_controls_container_view,

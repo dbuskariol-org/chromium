@@ -110,7 +110,7 @@ class BrowserControlsContainerView extends FrameLayout {
     private final Runnable mRefreshResourceIdRunnable = () -> {
         if (mView == null) return;
         BrowserControlsContainerViewJni.get().updateControlsResource(
-                mNativeBrowserControlsContainerView, BrowserControlsContainerView.this);
+                mNativeBrowserControlsContainerView);
     };
 
     BrowserControlsContainerView(Context context, ContentViewRenderView contentViewRenderView,
@@ -126,14 +126,14 @@ class BrowserControlsContainerView extends FrameLayout {
 
     public void setWebContents(WebContents webContents) {
         mWebContents = webContents;
-        BrowserControlsContainerViewJni.get().setWebContents(mNativeBrowserControlsContainerView,
-                BrowserControlsContainerView.this, webContents);
+        BrowserControlsContainerViewJni.get().setWebContents(
+                mNativeBrowserControlsContainerView, webContents);
     }
 
     public void destroy() {
         clearViewAndDestroyResources();
         BrowserControlsContainerViewJni.get().deleteBrowserControlsContainerView(
-                mNativeBrowserControlsContainerView, BrowserControlsContainerView.this);
+                mNativeBrowserControlsContainerView);
         if (mSystemUiFullscreenResizeRunnable != null) {
             removeCallbacks(mSystemUiFullscreenResizeRunnable);
             mSystemUiFullscreenResizeRunnable = null;
@@ -222,7 +222,7 @@ class BrowserControlsContainerView extends FrameLayout {
         // TODO: need some sort of destroy to drop reference.
         mViewResourceAdapter = null;
         BrowserControlsContainerViewJni.get().deleteControlsLayer(
-                mNativeBrowserControlsContainerView, BrowserControlsContainerView.this);
+                mNativeBrowserControlsContainerView);
         mContentViewRenderView.getResourceManager().getDynamicResourceLoader().unregisterResource(
                 getResourceId());
         mView = null;
@@ -273,8 +273,7 @@ class BrowserControlsContainerView extends FrameLayout {
                     createAdapterAndLayer();
                 } else {
                     BrowserControlsContainerViewJni.get().setControlsSize(
-                            mNativeBrowserControlsContainerView, BrowserControlsContainerView.this,
-                            mLastWidth, mLastHeight);
+                            mNativeBrowserControlsContainerView, mLastWidth, mLastHeight);
                 }
             }
         }
@@ -303,12 +302,11 @@ class BrowserControlsContainerView extends FrameLayout {
         // View. Creating the layer only when needed results in a noticeable delay between when
         // the layer is created and actually shown. Chrome for Android does the same thing.
         BrowserControlsContainerViewJni.get().createControlsLayer(
-                mNativeBrowserControlsContainerView, BrowserControlsContainerView.this,
-                getResourceId());
+                mNativeBrowserControlsContainerView, getResourceId());
         mLastWidth = getWidth();
         mLastHeight = getHeight();
-        BrowserControlsContainerViewJni.get().setControlsSize(mNativeBrowserControlsContainerView,
-                BrowserControlsContainerView.this, mLastWidth, mLastHeight);
+        BrowserControlsContainerViewJni.get().setControlsSize(
+                mNativeBrowserControlsContainerView, mLastWidth, mLastHeight);
         setControlsOffset(0, mLastHeight);
     }
 
@@ -385,20 +383,14 @@ class BrowserControlsContainerView extends FrameLayout {
     interface Natives {
         long createBrowserControlsContainerView(
                 BrowserControlsContainerView view, long nativeContentViewRenderView);
-        void deleteBrowserControlsContainerView(
-                long nativeBrowserControlsContainerView, BrowserControlsContainerView caller);
-        void createControlsLayer(long nativeBrowserControlsContainerView,
-                BrowserControlsContainerView caller, int id);
-        void deleteControlsLayer(
-                long nativeBrowserControlsContainerView, BrowserControlsContainerView caller);
+        void deleteBrowserControlsContainerView(long nativeBrowserControlsContainerView);
+        void createControlsLayer(long nativeBrowserControlsContainerView, int id);
+        void deleteControlsLayer(long nativeBrowserControlsContainerView);
         void setTopControlsOffset(
                 long nativeBrowserControlsContainerView, int controlsOffsetY, int contentOffsetY);
         void setBottomControlsOffset(long nativeBrowserControlsContainerView, int controlsOffsetY);
-        void setControlsSize(long nativeBrowserControlsContainerView,
-                BrowserControlsContainerView caller, int width, int height);
-        void updateControlsResource(
-                long nativeBrowserControlsContainerView, BrowserControlsContainerView caller);
-        void setWebContents(long nativeBrowserControlsContainerView,
-                BrowserControlsContainerView caller, WebContents webContents);
+        void setControlsSize(long nativeBrowserControlsContainerView, int width, int height);
+        void updateControlsResource(long nativeBrowserControlsContainerView);
+        void setWebContents(long nativeBrowserControlsContainerView, WebContents webContents);
     }
 }
