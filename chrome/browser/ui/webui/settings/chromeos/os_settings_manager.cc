@@ -4,6 +4,7 @@
 
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_manager.h"
 
+#include "base/feature_list.h"
 #include "chrome/browser/chromeos/local_search_service/local_search_service.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/webui/settings/chromeos/about_section.h"
@@ -26,6 +27,7 @@
 #include "chrome/browser/ui/webui/settings/chromeos/reset_section.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search_section.h"
+#include "chromeos/constants/chromeos_features.h"
 #include "content/public/browser/web_ui_data_source.h"
 #include "ui/base/l10n/l10n_util.h"
 
@@ -148,8 +150,8 @@ void OsSettingsManager::Shutdown() {
 
 void OsSettingsManager::AddSearchTags(
     const std::vector<SearchConcept>& tags_group) {
-  // Note: Can be null after Shutdown().
-  if (!index_)
+  // Note: |index_| is null after Shutdown().
+  if (!index_ || !base::FeatureList::IsEnabled(features::kNewOsSettingsSearch))
     return;
 
   index_->AddOrUpdate(ConceptVectorToDataVector(tags_group));
@@ -163,8 +165,8 @@ void OsSettingsManager::AddSearchTags(
 
 void OsSettingsManager::RemoveSearchTags(
     const std::vector<SearchConcept>& tags_group) {
-  // Note: Can be null after Shutdown().
-  if (!index_)
+  // Note: |index_| is null after Shutdown().
+  if (!index_ || !base::FeatureList::IsEnabled(features::kNewOsSettingsSearch))
     return;
 
   std::vector<std::string> ids;

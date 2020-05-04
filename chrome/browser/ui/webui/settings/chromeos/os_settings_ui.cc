@@ -316,6 +316,9 @@ void OSSettingsUI::BindInterface(
 
 void OSSettingsUI::BindInterface(
     mojo::PendingReceiver<mojom::SearchHandler> receiver) {
+  if (!base::FeatureList::IsEnabled(::chromeos::features::kNewOsSettingsSearch))
+    return;
+
   SearchHandlerFactory::GetForProfile(Profile::FromWebUI(web_ui()))
       ->BindInterface(std::move(receiver));
 }
