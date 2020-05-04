@@ -1859,6 +1859,17 @@ bool ComputedStyle::HasVariables() const {
          HasInitialVariables(InitialDataInternal().get());
 }
 
+HashSet<AtomicString> ComputedStyle::GetVariableNames() const {
+  HashSet<AtomicString> names;
+  if (auto* initial_data = InitialDataInternal().get())
+    initial_data->CollectVariableNames(names);
+  if (auto* inherited_variables = InheritedVariables())
+    inherited_variables->CollectNames(names);
+  if (auto* non_inherited_variables = NonInheritedVariables())
+    non_inherited_variables->CollectNames(names);
+  return names;
+}
+
 StyleInheritedVariables* ComputedStyle::InheritedVariables() const {
   return InheritedVariablesInternal().get();
 }
