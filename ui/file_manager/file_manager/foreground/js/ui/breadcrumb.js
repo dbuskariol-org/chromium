@@ -106,8 +106,17 @@ const breadCrumbTemplate = `
       position: relative;
     }
 
+    :host-context(:root.pointer-active) button.dropdown-item:active {
+      background-color: rgba(0, 0, 0, 4%);
+    }
+
     :host-context(:root:not(.pointer-active)) button.dropdown-item > paper-ripple {
       display: none;
+    }
+
+    button.dropdown-item > paper-ripple {
+      --paper-ripple-opacity: 8%;
+      color: black;
     }
 
     button:not([disabled]):not(:active):hover {
