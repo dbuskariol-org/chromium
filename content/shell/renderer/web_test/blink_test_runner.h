@@ -20,7 +20,7 @@
 #include "content/public/common/page_state.h"
 #include "content/shell/common/web_test/web_test.mojom.h"
 #include "content/shell/common/web_test/web_test_bluetooth_fake_adapter_setter.mojom.h"
-#include "content/shell/test_runner/test_preferences.h"
+#include "content/shell/renderer/web_test/test_preferences.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
 #include "mojo/public/cpp/bindings/remote.h"
 #include "third_party/blink/public/platform/web_string.h"
