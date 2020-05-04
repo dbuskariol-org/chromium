@@ -3735,12 +3735,12 @@
   {
     "name": "sharing-peer-connection-receiver",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 84
   },
   {
     "name": "sharing-peer-connection-sender",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 84
   },
   {
     "name": "sharing-qr-code-generator",
