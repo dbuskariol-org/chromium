@@ -3,7 +3,8 @@
 include_rules = [
   "-chrome",
   "-content",
-  "+content/public",
-  "+chrome/browser/android/digital_asset_links",
+  "+content/public/browser",
+  "+content/public/test",
+  "+chrome/browser/installable/digital_asset_links",
   "+net",
 ]

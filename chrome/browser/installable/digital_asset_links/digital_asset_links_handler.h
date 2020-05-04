@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ANDROID_DIGITAL_ASSET_LINKS_DIGITAL_ASSET_LINKS_HANDLER_H_
-#define CHROME_BROWSER_ANDROID_DIGITAL_ASSET_LINKS_DIGITAL_ASSET_LINKS_HANDLER_H_
+#ifndef CHROME_BROWSER_INSTALLABLE_DIGITAL_ASSET_LINKS_DIGITAL_ASSET_LINKS_HANDLER_H_
+#define CHROME_BROWSER_INSTALLABLE_DIGITAL_ASSET_LINKS_DIGITAL_ASSET_LINKS_HANDLER_H_
 
 #include <map>
 #include <string>
@@ -32,7 +32,7 @@ enum class RelationshipCheckResult {
 };
 
 using RelationshipCheckResultCallback =
-  base::OnceCallback<void(RelationshipCheckResult)>;
+    base::OnceCallback<void(RelationshipCheckResult)>;
 
 // A handler class for sending REST API requests to DigitalAssetLinks web
 // end point. See
@@ -110,4 +110,4 @@ class DigitalAssetLinksHandler : public content::WebContentsObserver {
 
 }  // namespace digital_asset_links
 
-#endif  // CHROME_BROWSER_ANDROID_DIGITAL_ASSET_LINKS_DIGITAL_ASSET_LINKS_HANDLER_H_
+#endif  // CHROME_BROWSER_INSTALLABLE_DIGITAL_ASSET_LINKS_DIGITAL_ASSET_LINKS_HANDLER_H_
