@@ -6647,3 +6647,6 @@ crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access
 
 # Sheriff 2020-04-30
 crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Timeout ]
+
+# Sheriff 2020-05-04
+crbug.com/952717 [ Debug ] http/tests/xmlhttprequest/redirect-cross-origin-post.html [ Pass Failure ]
