@@ -1290,7 +1290,7 @@
   {
     "name": "enable-cros-action-recorder",
     "owners": [ "charleszhao", "tby" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 90
   },
   {
     "name": "enable-cros-ime-assist-autocorrect",
