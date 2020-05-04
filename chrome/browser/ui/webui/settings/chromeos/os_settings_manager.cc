@@ -71,7 +71,8 @@ OsSettingsManager::OsSettingsManager(
     SupervisedUserService* supervised_user_service,
     KerberosCredentialsManager* kerberos_credentials_manager,
     ArcAppListPrefs* arc_app_list_prefs,
-    signin::IdentityManager* identity_manager)
+    signin::IdentityManager* identity_manager,
+    android_sms::AndroidSmsService* android_sms_service)
     : index_(local_search_service->GetIndex(
           local_search_service::IndexId::kCrosSettings)) {
   // Add per-page string providers.
@@ -82,7 +83,8 @@ OsSettingsManager::OsSettingsManager(
   sections_.push_back(
       std::make_unique<BluetoothSection>(profile, /*delegate=*/this));
   sections_.push_back(std::make_unique<MultiDeviceSection>(
-      profile, /*delegate=*/this, multidevice_setup_client));
+      profile, /*delegate=*/this, multidevice_setup_client, android_sms_service,
+      profile->GetPrefs()));
   sections_.push_back(std::make_unique<PeopleSection>(
       profile, /*delegate=*/this, sync_service, supervised_user_service,
       kerberos_credentials_manager, identity_manager, profile->GetPrefs()));
