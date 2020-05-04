@@ -409,10 +409,26 @@ void MediaHistoryKeyedService::ResetMediaFeed(
     media_feeds::mojom::ResetReason reason) {
   CHECK_NE(media_feeds::mojom::ResetReason::kNone, reason);
 
-  if (auto* store = store_->GetForWrite()) {
+  if (auto* store = store_->GetForDelete()) {
     store->db_task_runner_->PostTask(
         FROM_HERE, base::BindOnce(&MediaHistoryStore::ResetMediaFeed, store,
                                   origin, reason));
+  }
+}
+
+void MediaHistoryKeyedService::ResetMediaFeedDueToCacheClearing(
+    const base::Time& start_time,
+    const base::Time& end_time,
+    CacheClearingFilter filter,
+    base::OnceClosure callback) {
+  if (auto* store = store_->GetForDelete()) {
+    store->db_task_runner_->PostTaskAndReply(
+        FROM_HERE,
+        base::BindOnce(&MediaHistoryStore::ResetMediaFeedDueToCacheClearing,
+                       store, start_time, end_time, std::move(filter)),
+        std::move(callback));
+  } else {
+    std::move(callback).Run();
   }
 }
 

@@ -199,6 +199,15 @@ class MediaHistoryKeyedService : public KeyedService,
   void ResetMediaFeed(const url::Origin& origin,
                       media_feeds::mojom::ResetReason reason);
 
+  // Resets any Media Feeds that were fetched between |start_time| and
+  // |end_time|. This will delete any items and reset them to defaults. The
+  // reason will be set to |kCache|.
+  using CacheClearingFilter = base::RepeatingCallback<bool(const GURL& url)>;
+  void ResetMediaFeedDueToCacheClearing(const base::Time& start_time,
+                                        const base::Time& end_time,
+                                        CacheClearingFilter filter,
+                                        base::OnceClosure callback);
+
   // Deletes the Media Feed and runs the callback.
   void DeleteMediaFeed(const int64_t feed_id, base::OnceClosure callback);
 

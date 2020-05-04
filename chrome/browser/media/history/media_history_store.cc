@@ -903,7 +903,7 @@ void MediaHistoryStore::ResetMediaFeed(const url::Origin& origin,
   if (!CanAccessDatabase())
     return;
 
-  if (!feeds_table_ || !feed_items_table_)
+  if (!feeds_table_ || !feed_items_table_ || !feed_origins_table_)
     return;
 
   if (!DB()->BeginTransaction()) {
@@ -914,27 +914,78 @@ void MediaHistoryStore::ResetMediaFeed(const url::Origin& origin,
   // Get all the feeds with |origin| as an associated origin.
   std::set<int64_t> feed_ids = feed_origins_table_->GetFeeds(origin);
 
-  for (auto& feed_id : feed_ids) {
-    // Remove all the items currently associated with this feed.
-    if (!feeds_table_->Reset(feed_id, reason)) {
-      DB()->RollbackTransaction();
-      return;
-    }
+  if (ResetMediaFeedInternal(feed_ids, reason)) {
+    DB()->CommitTransaction();
+  } else {
+    DB()->RollbackTransaction();
+  }
+}
 
-    // Remove all the items currently associated with this feed.
-    if (!feed_items_table_->DeleteItems(feed_id)) {
-      DB()->RollbackTransaction();
-      return;
-    }
+void MediaHistoryStore::ResetMediaFeedDueToCacheClearing(
+    const base::Time& start_time,
+    const base::Time& end_time,
+    MediaHistoryKeyedService::CacheClearingFilter filter) {
+  if (!CanAccessDatabase())
+    return;
 
-    // Clear any old associated origins.
-    if (!feed_origins_table_->Clear(feed_id)) {
-      DB()->RollbackTransaction();
-      return;
-    }
+  if (!feeds_table_)
+    return;
+
+  if (!DB()->BeginTransaction()) {
+    LOG(ERROR) << "Failed to begin the transaction.";
+    return;
   }
 
-  DB()->CommitTransaction();
+  const auto start_time_s = start_time.ToDeltaSinceWindowsEpoch().InSeconds();
+  const auto end_time_s = end_time.ToDeltaSinceWindowsEpoch().InSeconds();
+
+  sql::Statement statement(DB()->GetCachedStatement(
+      SQL_FROM_HERE,
+      "SELECT id, url FROM mediaFeed WHERE last_fetch_time_s >= ? AND "
+      "last_fetch_time_s <= ?"));
+  statement.BindInt64(0, start_time_s);
+  statement.BindInt64(1, end_time_s);
+
+  std::set<int64_t> feed_ids;
+  while (statement.Step()) {
+    GURL url(statement.ColumnString(1));
+
+    if (!filter.is_null() && !filter.Run(url))
+      continue;
+
+    feed_ids.insert(statement.ColumnInt64(0));
+  }
+
+  if (ResetMediaFeedInternal(feed_ids,
+                             media_feeds::mojom::ResetReason::kCache)) {
+    DB()->CommitTransaction();
+  } else {
+    DB()->RollbackTransaction();
+  }
+}
+
+bool MediaHistoryStore::ResetMediaFeedInternal(
+    const std::set<int64_t>& feed_ids,
+    media_feeds::mojom::ResetReason reason) {
+  DCHECK_LT(0, DB()->transaction_nesting());
+  if (!CanAccessDatabase())
+    return false;
+
+  for (auto& feed_id : feed_ids) {
+    // Remove all the items currently associated with this feed.
+    if (!feeds_table_->Reset(feed_id, reason))
+      return false;
+
+    // Remove all the items currently associated with this feed.
+    if (!feed_items_table_->DeleteItems(feed_id))
+      return false;
+
+    // Clear any old associated origins.
+    if (!feed_origins_table_->Clear(feed_id))
+      return false;
+  }
+
+  return true;
 }
 
 void MediaHistoryStore::DeleteMediaFeed(const int64_t feed_id) {

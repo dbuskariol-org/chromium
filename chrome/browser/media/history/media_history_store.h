@@ -174,6 +174,14 @@ class MediaHistoryStore : public base::RefCountedThreadSafe<MediaHistoryStore> {
   void ResetMediaFeed(const url::Origin& origin,
                       media_feeds::mojom::ResetReason reason);
 
+  void ResetMediaFeedDueToCacheClearing(
+      const base::Time& start_time,
+      const base::Time& end_time,
+      MediaHistoryKeyedService::CacheClearingFilter filter);
+
+  bool ResetMediaFeedInternal(const std::set<int64_t>& feed_ids,
+                              media_feeds::mojom::ResetReason reason);
+
   // Cancels pending DB transactions. Should only be called on the UI thread.
   void SetCancelled();
 

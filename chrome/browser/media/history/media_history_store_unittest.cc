@@ -2131,8 +2131,7 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeed) {
   WaitForDB();
 
   {
-    // The feed should have been reset. The display time, the discovery time and
-    // the reset reason should still be present.
+    // The feed should have been reset.
     auto feeds = GetMediaFeedsSync(service());
     auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
     auto items_b = GetItemsForMediaFeedSync(service(), feed_id_b);
@@ -2213,6 +2212,276 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeed) {
 
       EXPECT_EQ(GetExpectedItems(), items_a);
       EXPECT_EQ(GetAltExpectedItems(), items_b);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+    EXPECT_EQ(items_a, GetItemsForMediaFeedSync(otr_service(), feed_id_a));
+    EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
+  }
+}
+
+TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeedDueToCacheClearing) {
+  const GURL feed_url_a("https://www.google.com/feed");
+  const GURL feed_url_b("https://www.google.co.uk/feed");
+
+  service()->DiscoverMediaFeed(feed_url_a);
+  service()->DiscoverMediaFeed(feed_url_b);
+  WaitForDB();
+
+  // If we are read only we should use -1 as a placeholder feed id because the
+  // feed will not have been stored. This is so we can run the rest of the test
+  // to ensure a no-op.
+  const int feed_id_a = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
+  const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
+      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
+      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
+  WaitForDB();
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id_b, GetAltExpectedItems(),
+      media_feeds::mojom::FetchResult::kSuccess,
+      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
+      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
+  WaitForDB();
+
+  service()->UpdateMediaFeedDisplayTime(feed_id_a);
+  service()->UpdateMediaFeedDisplayTime(feed_id_b);
+  WaitForDB();
+
+  {
+    // The media items should be stored and the feed should be stored.
+    auto feeds = GetMediaFeedsSync(service());
+    auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
+    auto items_b = GetItemsForMediaFeedSync(service(), feed_id_b);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(feeds.empty());
+      EXPECT_TRUE(items_a.empty());
+      EXPECT_TRUE(items_b.empty());
+    } else {
+      ASSERT_EQ(2u, feeds.size());
+
+      for (auto& feed : feeds) {
+        EXPECT_FALSE(feed->last_discovery_time.is_null());
+        EXPECT_TRUE(feed->last_fetch_time.has_value());
+        EXPECT_EQ(media_feeds::mojom::FetchResult::kSuccess,
+                  feed->last_fetch_result);
+        EXPECT_EQ(0, feed->fetch_failed_count);
+        EXPECT_TRUE(feed->last_fetch_time_not_cache_hit.has_value());
+        EXPECT_NE(0, feed->last_fetch_item_count);
+        EXPECT_NE(0, feed->last_fetch_play_next_count);
+        EXPECT_NE(0, feed->last_fetch_content_types);
+        EXPECT_EQ(GetExpectedLogos(), feed->logos);
+        EXPECT_EQ(kExpectedDisplayName, feed->display_name);
+        EXPECT_TRUE(feed->last_display_time.has_value());
+        EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feed->reset_reason);
+      }
+
+      EXPECT_EQ(GetExpectedAssociatedOrigins(feed_url_a),
+                ToSet(feeds[0]->associated_origins));
+      EXPECT_EQ(GetExpectedAssociatedOrigins(feed_url_b),
+                ToSet(feeds[1]->associated_origins));
+
+      EXPECT_EQ(GetExpectedItems(), items_a);
+      EXPECT_EQ(GetAltExpectedItems(), items_b);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+    EXPECT_EQ(items_a, GetItemsForMediaFeedSync(otr_service(), feed_id_a));
+    EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
+  }
+
+  service()->ResetMediaFeedDueToCacheClearing(
+      base::Time(), base::Time::Now() - base::TimeDelta::FromDays(1),
+      base::BindRepeating([](const GURL& url) { return true; }),
+      base::DoNothing());
+  WaitForDB();
+
+  {
+    // The media items should not have been affected since we cleared yesterday.
+    auto feeds = GetMediaFeedsSync(service());
+    auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
+    auto items_b = GetItemsForMediaFeedSync(service(), feed_id_b);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(feeds.empty());
+      EXPECT_TRUE(items_a.empty());
+      EXPECT_TRUE(items_b.empty());
+    } else {
+      ASSERT_EQ(2u, feeds.size());
+
+      for (auto& feed : feeds) {
+        EXPECT_FALSE(feed->last_discovery_time.is_null());
+        EXPECT_TRUE(feed->last_fetch_time.has_value());
+        EXPECT_EQ(media_feeds::mojom::FetchResult::kSuccess,
+                  feed->last_fetch_result);
+        EXPECT_EQ(0, feed->fetch_failed_count);
+        EXPECT_TRUE(feed->last_fetch_time_not_cache_hit.has_value());
+        EXPECT_NE(0, feed->last_fetch_item_count);
+        EXPECT_NE(0, feed->last_fetch_play_next_count);
+        EXPECT_NE(0, feed->last_fetch_content_types);
+        EXPECT_EQ(GetExpectedLogos(), feed->logos);
+        EXPECT_EQ(kExpectedDisplayName, feed->display_name);
+        EXPECT_TRUE(feed->last_display_time.has_value());
+        EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feed->reset_reason);
+      }
+
+      EXPECT_EQ(GetExpectedAssociatedOrigins(feed_url_a),
+                ToSet(feeds[0]->associated_origins));
+      EXPECT_EQ(GetExpectedAssociatedOrigins(feed_url_b),
+                ToSet(feeds[1]->associated_origins));
+
+      EXPECT_EQ(GetExpectedItems(), items_a);
+      EXPECT_EQ(GetAltExpectedItems(), items_b);
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+    EXPECT_EQ(items_a, GetItemsForMediaFeedSync(otr_service(), feed_id_a));
+    EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
+  }
+
+  service()->ResetMediaFeedDueToCacheClearing(
+      base::Time(), base::Time::Max(),
+      base::BindRepeating([](const GURL& url) { return true; }),
+      base::DoNothing());
+  WaitForDB();
+
+  {
+    // The feeds should have been reset.
+    auto feeds = GetMediaFeedsSync(service());
+    auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
+    auto items_b = GetItemsForMediaFeedSync(service(), feed_id_b);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(feeds.empty());
+      EXPECT_TRUE(items_a.empty());
+      EXPECT_TRUE(items_b.empty());
+    } else {
+      ASSERT_EQ(2u, feeds.size());
+
+      for (auto& feed : feeds) {
+        EXPECT_FALSE(feed->last_discovery_time.is_null());
+        EXPECT_FALSE(feed->last_fetch_time.has_value());
+        EXPECT_EQ(media_feeds::mojom::FetchResult::kNone,
+                  feed->last_fetch_result);
+        EXPECT_EQ(0, feed->fetch_failed_count);
+        EXPECT_FALSE(feed->last_fetch_time_not_cache_hit.has_value());
+        EXPECT_EQ(0, feed->last_fetch_item_count);
+        EXPECT_EQ(0, feed->last_fetch_play_next_count);
+        EXPECT_EQ(0, feed->last_fetch_content_types);
+        EXPECT_TRUE(feed->logos.empty());
+        EXPECT_TRUE(feed->display_name.empty());
+        EXPECT_TRUE(feed->last_display_time.has_value());
+        EXPECT_EQ(media_feeds::mojom::ResetReason::kCache, feed->reset_reason);
+        EXPECT_TRUE(feed->associated_origins.empty());
+      }
+
+      EXPECT_TRUE(items_a.empty());
+      EXPECT_TRUE(items_b.empty());
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+    EXPECT_EQ(items_a, GetItemsForMediaFeedSync(otr_service(), feed_id_a));
+    EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
+  }
+
+  service()->StoreMediaFeedFetchResult(
+      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
+      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
+      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
+  service()->UpdateMediaFeedDisplayTime(feed_id_a);
+  WaitForDB();
+
+  {
+    // The media items and feed should be repopulated.
+    auto feeds = GetMediaFeedsSync(service());
+    auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
+    auto items_b = GetItemsForMediaFeedSync(service(), feed_id_b);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(feeds.empty());
+      EXPECT_TRUE(items_a.empty());
+      EXPECT_TRUE(items_b.empty());
+    } else {
+      EXPECT_EQ(feed_id_a, feeds[0]->id);
+      EXPECT_FALSE(feeds[0]->last_discovery_time.is_null());
+      EXPECT_TRUE(feeds[0]->last_fetch_time.has_value());
+      EXPECT_EQ(media_feeds::mojom::FetchResult::kSuccess,
+                feeds[0]->last_fetch_result);
+      EXPECT_EQ(0, feeds[0]->fetch_failed_count);
+      EXPECT_TRUE(feeds[0]->last_fetch_time_not_cache_hit.has_value());
+      EXPECT_EQ(kExpectedFetchItemCount, feeds[0]->last_fetch_item_count);
+      EXPECT_EQ(kExpectedFetchPlayNextCount,
+                feeds[0]->last_fetch_play_next_count);
+      EXPECT_EQ(kExpectedFetchContentTypes, feeds[0]->last_fetch_content_types);
+      EXPECT_EQ(GetExpectedLogos(), feeds[0]->logos);
+      EXPECT_EQ(kExpectedDisplayName, feeds[0]->display_name);
+      EXPECT_TRUE(feeds[0]->last_display_time.has_value());
+      EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feeds[0]->reset_reason);
+      EXPECT_EQ(GetExpectedAssociatedOrigins(feed_url_a),
+                ToSet(feeds[0]->associated_origins));
+
+      EXPECT_EQ(feed_id_b, feeds[1]->id);
+      EXPECT_TRUE(feeds[1]->associated_origins.empty());
+
+      EXPECT_EQ(GetExpectedItems(), items_a);
+      EXPECT_TRUE(items_b.empty());
+    }
+
+    // The OTR service should have the same data.
+    EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
+    EXPECT_EQ(items_a, GetItemsForMediaFeedSync(otr_service(), feed_id_a));
+    EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
+  }
+
+  service()->ResetMediaFeedDueToCacheClearing(
+      base::Time(), base::Time::Max(),
+      base::BindRepeating([](const GURL& url) { return false; }),
+      base::DoNothing());
+  WaitForDB();
+
+  {
+    // The media items and feed should still be populated because the filter
+    // returned false.
+    auto feeds = GetMediaFeedsSync(service());
+    auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
+    auto items_b = GetItemsForMediaFeedSync(service(), feed_id_b);
+
+    if (IsReadOnly()) {
+      EXPECT_TRUE(feeds.empty());
+      EXPECT_TRUE(items_a.empty());
+      EXPECT_TRUE(items_b.empty());
+    } else {
+      EXPECT_EQ(feed_id_a, feeds[0]->id);
+      EXPECT_FALSE(feeds[0]->last_discovery_time.is_null());
+      EXPECT_TRUE(feeds[0]->last_fetch_time.has_value());
+      EXPECT_EQ(media_feeds::mojom::FetchResult::kSuccess,
+                feeds[0]->last_fetch_result);
+      EXPECT_EQ(0, feeds[0]->fetch_failed_count);
+      EXPECT_TRUE(feeds[0]->last_fetch_time_not_cache_hit.has_value());
+      EXPECT_EQ(kExpectedFetchItemCount, feeds[0]->last_fetch_item_count);
+      EXPECT_EQ(kExpectedFetchPlayNextCount,
+                feeds[0]->last_fetch_play_next_count);
+      EXPECT_EQ(kExpectedFetchContentTypes, feeds[0]->last_fetch_content_types);
+      EXPECT_EQ(GetExpectedLogos(), feeds[0]->logos);
+      EXPECT_EQ(kExpectedDisplayName, feeds[0]->display_name);
+      EXPECT_TRUE(feeds[0]->last_display_time.has_value());
+      EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feeds[0]->reset_reason);
+      EXPECT_EQ(GetExpectedAssociatedOrigins(feed_url_a),
+                ToSet(feeds[0]->associated_origins));
+
+      EXPECT_EQ(feed_id_b, feeds[1]->id);
+      EXPECT_TRUE(feeds[1]->associated_origins.empty());
+
+      EXPECT_EQ(GetExpectedItems(), items_a);
+      EXPECT_TRUE(items_b.empty());
     }
 
     // The OTR service should have the same data.
