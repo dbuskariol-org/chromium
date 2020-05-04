@@ -148,8 +148,6 @@ static_library("web_test_renderer") {
     "test_runner/tracked_dictionary.h",
     "test_runner/web_ax_object_proxy.cc",
     "test_runner/web_ax_object_proxy.h",
-    "test_runner/web_frame_test_client.cc",
-    "test_runner/web_frame_test_client.h",
     "test_runner/web_frame_test_proxy.cc",
     "test_runner/web_frame_test_proxy.h",
     "test_runner/web_test_runtime_flags.cc",

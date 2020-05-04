@@ -30,7 +30,6 @@
 #include "base/time/time.h"
 #include "base/values.h"
 #include "build/build_config.h"
-#include "components/plugins/renderer/plugin_placeholder.h"
 #include "content/public/common/content_switches.h"
 #include "content/public/common/service_names.mojom.h"
 #include "content/public/common/url_constants.h"
@@ -526,17 +525,6 @@ void BlinkTestRunner::ResolveBeforeInstallPromptPromise(
     app_banner_service_->ResolvePromise(platform);
     app_banner_service_.reset(nullptr);
   }
-}
-
-blink::WebPlugin* BlinkTestRunner::CreatePluginPlaceholder(
-    const blink::WebPluginParams& params) {
-  if (params.mime_type != "application/x-plugin-placeholder-test")
-    return nullptr;
-
-  plugins::PluginPlaceholder* placeholder =
-      new plugins::PluginPlaceholder(web_view_test_proxy_->GetMainRenderFrame(),
-                                     params, "<div>Test content</div>");
-  return placeholder->plugin();
 }
 
 void BlinkTestRunner::SetScreenOrientationChanged() {

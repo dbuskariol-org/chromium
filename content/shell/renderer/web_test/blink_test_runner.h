@@ -36,8 +36,6 @@ class DictionaryValue;
 }  // namespace base
 
 namespace blink {
-class WebPlugin;
-struct WebPluginParams;
 struct WebSize;
 }  // namespace blink
 
@@ -181,9 +179,6 @@ class BlinkTestRunner {
   // Resolves the in-flight beforeinstallprompt event userChoice promise with a
   // platform of |platform|.
   void ResolveBeforeInstallPromptPromise(const std::string& platform);
-
-  blink::WebPlugin* CreatePluginPlaceholder(
-      const blink::WebPluginParams& params);
 
   // Mark the orientation changed for fullscreen layout tests.
   void SetScreenOrientationChanged();

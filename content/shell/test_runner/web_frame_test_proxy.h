@@ -12,7 +12,6 @@
 #include "base/macros.h"
 #include "content/renderer/render_frame_impl.h"
 #include "content/shell/common/web_test/web_test.mojom.h"
-#include "content/shell/test_runner/web_frame_test_client.h"
 #include "mojo/public/cpp/bindings/associated_receiver.h"
 #include "mojo/public/cpp/bindings/pending_associated_receiver.h"
 #include "third_party/blink/public/platform/web_effective_connection_type.h"
@@ -23,6 +22,8 @@
 
 namespace content {
 class BlinkTestRunner;
+class SpellCheckClient;
+class TestRunner;
 class WebViewTestProxy;
 class WebWidgetTestProxy;
 
@@ -45,6 +46,10 @@ class WebFrameTestProxy : public RenderFrameImpl,
   // Returns a frame name that can be used in the output of web tests
   // (the name is derived from the frame's unique name).
   std::string GetFrameNameForWebTests();
+  // Returns a description of the frame, including the name from
+  // GetFrameNameForWebTests(), that can be used in the output of web
+  // tests.
+  std::string GetFrameDescriptionForWebTests();
 
   // Returns the test-subclass of RenderWidget for the local root of this frame.
   WebWidgetTestProxy* GetLocalRootWebWidgetTestProxy();
@@ -92,10 +97,15 @@ class WebFrameTestProxy : public RenderFrameImpl,
   void BindReceiver(
       mojo::PendingAssociatedReceiver<mojom::WebTestRenderFrame> receiver);
 
+  void HandleWebAccessibilityEvent(const blink::WebAXObject& object,
+                                   const char* event_name);
+
+  TestRunner* test_runner();
   BlinkTestRunner* blink_test_runner();
 
   WebViewTestProxy* const web_view_test_proxy_;
-  WebFrameTestClient test_client_;
+
+  std::unique_ptr<SpellCheckClient> spell_check_;
 
   mojo::AssociatedReceiver<mojom::WebTestRenderFrame>
       web_test_render_frame_receiver_{this};
