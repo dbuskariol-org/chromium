@@ -53532,6 +53532,19 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Wrong prediction"/>
 </enum>
 
+<enum name="PreferredAppsFileIOAction">
+  <int value="0" label="Write to file (success)"/>
+  <int value="1" label="Write to file (failed)"/>
+  <int value="2" label="Read from file (success)"/>
+  <int value="3" label="Read from file (failed)"/>
+</enum>
+
+<enum name="PreferredAppsUpdateAction">
+  <int value="0" label="Add preferred app"/>
+  <int value="1" label="Delete preferred app"/>
+  <int value="2" label="Delete preferred app for an app id"/>
+</enum>
+
 <enum name="PrefetchRedirect">
   <int value="0" label="Prefetch request made"/>
   <int value="1" label="Prefetch request was redirected normally"/>
