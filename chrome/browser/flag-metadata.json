@@ -456,7 +456,7 @@
   {
     "name": "change-tab-switcher-position",
     "owners": [ "ewannpv", "gambard" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 87
   },
   {
     "name": "chrome-share-screenshot",
@@ -538,7 +538,7 @@
   {
     "name": "contained-browser-bvc",
     "owners": [ "gambard" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 87
   },
   {
     "name": "content-indexing-download-home",
@@ -751,7 +751,7 @@
   {
     "name": "desktop-version-default",
     "owners": [ "gambard" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 87
   },
   {
     "name": "detect-main-thread-freeze",
@@ -1836,7 +1836,7 @@
   {
     "name": "enable-persistent-downloads",
     "owners": [ "ewannpv", "gambard" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 87
   },
   {
     "name": "enable-pixel-canvas-recording",
@@ -2918,7 +2918,7 @@
   {
     "name": "mobile-google-srp",
     "owners": [ "gambard" ],
-    "expiry_milestone": 86
+    "expiry_milestone": 88
   },
   {
     "name": "mobile-identity-consistency",
@@ -3333,7 +3333,7 @@
   {
     "name": "open-downloads-in-files.app",
     "owners": [ "ewannpv", "gambard" ],
-    "expiry_milestone": 86
+    "expiry_milestone": 87
   },
   {
     "name": "overlay-new-layout",
@@ -3370,7 +3370,7 @@
   {
     "name": "page-info-chrome-guard",
        "owners": ["ewannpv", "gambard" ],
-       "expiry_milestone": 85
+       "expiry_milestone": 88
   },
   {
     "name": "page-info-performance-hints",
@@ -3380,7 +3380,7 @@
   {
     "name": "page-info-refactoring",
     "owners": [ "ewannpv", "gambard" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 88
   },
   {
     "name": "paint-preview-demo",
@@ -3607,7 +3607,7 @@
   {
     "name": "reload-sad-tab",
     "owners": [ "gambard" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 85
   },
   {
     "name": "remote-copy-image-notification",
@@ -3710,7 +3710,7 @@
   {
     "name": "settings-refresh",
     "owners": [ "gambard" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 89
   },
   {
     "name": "share-button-in-top-toolbar",
@@ -4188,7 +4188,7 @@
   {
     "name": "use-js-error-page",
     "owners": [ "gambard" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 89
   },
   {
     "name": "use_messages_staging_url",
