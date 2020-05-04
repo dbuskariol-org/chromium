@@ -1386,7 +1386,7 @@
   {
     "name": "enable-desktop-pwas-local-updating",
     "owners": [ "desktop-pwas-team@google.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 88
   },
   {
     "name": "enable-desktop-pwas-tab-strip",
