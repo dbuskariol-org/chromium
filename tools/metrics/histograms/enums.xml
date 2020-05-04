@@ -37986,6 +37986,7 @@ from previous Chrome versions.
   <int value="-2061363134"
       label="AutofillSaveCreditCardUsesStrikeSystemV2:disabled"/>
   <int value="-2059771509" label="NTPTilesLowerResolutionFavicons:disabled"/>
+  <int value="-2059331227" label="DiceWebSigninInterception:disabled"/>
   <int value="-2058762785"
       label="AllowDownloadResumptionWithoutStrongValidators:disabled"/>
   <int value="-2058656447" label="ContextualSearchUrlActions:enabled"/>
@@ -38210,6 +38211,7 @@ from previous Chrome versions.
       label="enable-experimental-accessibility-switch-access-text"/>
   <int value="-1844754731" label="Mash:disabled"/>
   <int value="-1843677118" label="TwoPanesStartSurfaceAndroid:disabled"/>
+  <int value="-1842511843" label="DiceWebSigninInterception:enabled"/>
   <int value="-1840608422" label="AdvancedPpdAttributes:disabled"/>
   <int value="-1839874877" label="WebXROrientationSensorDevice:enabled"/>
   <int value="-1839496458" label="disable-file-manager-touch-mode"/>

@@ -3977,6 +3977,12 @@ const char kDcheckIsFatalDescription[] =
     "rather than crashing. If enabled, DCHECKs will crash the calling process.";
 #endif  // defined(DCHECK_IS_CONFIGURABLE)
 
+#if BUILDFLAG(ENABLE_DICE_SUPPORT)
+const char kDiceWebSigninInterceptionName[] = "Dice Web-Signin Interception";
+const char kDiceWebSigninInterceptionDescription[] =
+    "If enabled, Chrome may promote profile creation after signin on the web.";
+#endif
+
 #if BUILDFLAG(ENABLE_NACL)
 const char kNaclName[] = "Native Client";
 const char kNaclDescription[] =

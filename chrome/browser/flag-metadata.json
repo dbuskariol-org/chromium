@@ -774,6 +774,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "dice-web-signin-interception",
+    "owners": [ "droger", "my-chrome-everywhere@google.com" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "dim-shelf",
     "owners": [ "yulunwu" ],
     "expiry_milestone": 82
