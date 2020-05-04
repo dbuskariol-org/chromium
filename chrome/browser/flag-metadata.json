@@ -3842,11 +3842,6 @@
     "expiry_milestone": 85
   },
   {
-    "name": "site-settings",
-    "owners": [ "mxcai" ],
-    "expiry_milestone": 78
-  },
-  {
     "name": "slow-dc-timer-interrupts-win",
     "owners": [ "jessemckenna", "brucedawson" ],
     "expiry_milestone": 85
