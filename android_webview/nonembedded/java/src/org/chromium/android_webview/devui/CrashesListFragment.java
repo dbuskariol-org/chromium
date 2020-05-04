@@ -155,8 +155,9 @@ public class CrashesListFragment extends Fragment {
 
     private boolean isCrashUploadsEnabledFromFlagsUi() {
         if (DeveloperModeUtils.isDeveloperModeEnabled(mContext.getPackageName())) {
-            return DeveloperModeUtils.getFlagOverrides(mContext.getPackageName())
-                    .getOrDefault(AwSwitches.CRASH_UPLOADS_ENABLED_FOR_TESTING_SWITCH, false);
+            Boolean flagValue = DeveloperModeUtils.getFlagOverrides(mContext.getPackageName())
+                                        .get(AwSwitches.CRASH_UPLOADS_ENABLED_FOR_TESTING_SWITCH);
+            return Boolean.TRUE.equals(flagValue);
         }
         return false;
     }
