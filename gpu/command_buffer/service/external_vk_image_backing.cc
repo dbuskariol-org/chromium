@@ -380,7 +380,7 @@ bool ExternalVkImageBacking::BeginAccess(
   if (use_separate_gl_texture())
     return true;
 
-  DCHECK(need_sychronization());
+  DCHECK(need_synchronization());
 
   auto command_buffer = command_pool_->CreatePrimaryCommandBuffer();
   {
@@ -811,7 +811,7 @@ bool ExternalVkImageBacking::WritePixels(size_t data_size,
                                       size().width(), size().height());
   }
 
-  if (!need_sychronization()) {
+  if (!need_synchronization()) {
     DCHECK(handles.empty());
     command_buffer->Submit(0, nullptr, 0, nullptr);
     EndAccessInternal(false /* readonly */, SemaphoreHandle());
@@ -1023,7 +1023,7 @@ void ExternalVkImageBacking::EndAccessInternal(
     is_write_in_progress_ = false;
   }
 
-  if (need_sychronization()) {
+  if (need_synchronization()) {
     DCHECK(semaphore_handle.is_valid());
     if (readonly) {
       read_semaphore_handles_.push_back(std::move(semaphore_handle));

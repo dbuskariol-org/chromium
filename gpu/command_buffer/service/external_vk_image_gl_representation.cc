@@ -119,7 +119,7 @@ void ExternalVkImageGLRepresentationShared::EndAccess() {
   VkSemaphore semaphore = VK_NULL_HANDLE;
   SemaphoreHandle semaphore_handle;
   GLuint gl_semaphore = 0;
-  if (backing_impl()->need_sychronization()) {
+  if (backing_impl()->need_synchronization()) {
     semaphore =
         vk_implementation()->CreateExternalSemaphore(backing_impl()->device());
     if (semaphore == VK_NULL_HANDLE) {
@@ -158,7 +158,7 @@ void ExternalVkImageGLRepresentationShared::EndAccess() {
   auto result = backing_impl()->backend_texture().getVkImageInfo(&info);
   DCHECK(result);
   GLenum dst_layout = ToGLImageLayout(info.fImageLayout);
-  if (backing_impl()->need_sychronization()) {
+  if (backing_impl()->need_synchronization()) {
     api()->glSignalSemaphoreEXTFn(gl_semaphore, 0, nullptr, 1,
                                   &texture_service_id_, &dst_layout);
     api()->glDeleteSemaphoresEXTFn(1, &gl_semaphore);
