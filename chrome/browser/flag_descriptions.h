@@ -365,9 +365,6 @@ extern const char kEnableDataReductionProxyServerExperimentDescription[];
 extern const char kColorProviderRedirectionName[];
 extern const char kColorProviderRedirectionDescription[];
 
-extern const char kDesktopMinimalUIName[];
-extern const char kDesktopMinimalUIDescription[];
-
 extern const char kDesktopPWAsLocalUpdatingName[];
 extern const char kDesktopPWAsLocalUpdatingDescription[];
 

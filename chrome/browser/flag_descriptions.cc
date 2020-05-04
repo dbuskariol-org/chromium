@@ -602,11 +602,6 @@ const char kEnableDataReductionProxyServerExperimentDescription[] =
     "Enable a different approach to saving data by configuring the back end "
     "server";
 
-const char kDesktopMinimalUIName[] = "Desktop PWAs support minimal-ui";
-const char kDesktopMinimalUIDescription[] =
-    "PWAs with display mode minimal-ui open in a window with Back and Refresh "
-    "buttons.";
-
 const char kDesktopPWAsLocalUpdatingName[] = "Desktop PWAs local updating";
 const char kDesktopPWAsLocalUpdatingDescription[] =
     "Enable installed PWAs to update their app manifest data when the site "

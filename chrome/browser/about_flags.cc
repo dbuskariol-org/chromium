@@ -5169,10 +5169,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kMixBrowserTypeTabs)},
 #endif  // !defined(OS_ANDROID)
 
-    {"enable-desktop-minimal-ui", flag_descriptions::kDesktopMinimalUIName,
-     flag_descriptions::kDesktopMinimalUIDescription, kOsDesktop,
-     FEATURE_VALUE_TYPE(features::kDesktopMinimalUI)},
-
     {"enable-media-internals-devtools",
      flag_descriptions::kMediaInspectorLoggingName,
      flag_descriptions::kMediaInspectorLoggingDescription, kOsAll,
