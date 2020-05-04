@@ -4,10 +4,11 @@
 
 #include "chrome/browser/ui/views/tabs/window_finder.h"
 
-#include "ash/public/cpp/window_finder.h"
+#include "ui/display/screen.h"
 
 gfx::NativeWindow WindowFinder::GetLocalProcessWindowAtPoint(
     const gfx::Point& screen_point,
     const std::set<gfx::NativeWindow>& ignore) {
-  return ash::GetTopmostWindowAtPoint(screen_point, ignore);
+  return display::Screen::GetScreen()->GetLocalProcessWindowAtPoint(
+      screen_point, ignore);
 }

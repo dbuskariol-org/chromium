@@ -158,7 +158,7 @@ class X11TopmostWindowFinderTest : public test::DesktopWidgetTestInteractive {
     ui::X11TopmostWindowFinder finder;
     auto widget =
         finder.FindLocalProcessWindowAt(gfx::Point(screen_x, screen_y), {});
-    return widget ? DesktopWindowTreeHostLinux::GetContentWindowForWidget(
+    return widget ? DesktopWindowTreeHostPlatform::GetContentWindowForWidget(
                         static_cast<gfx::AcceleratedWidget>(widget))
                   : nullptr;
   }
@@ -175,7 +175,7 @@ class X11TopmostWindowFinderTest : public test::DesktopWidgetTestInteractive {
     ui::X11TopmostWindowFinder finder;
     auto widget =
         finder.FindLocalProcessWindowAt(gfx::Point(screen_x, screen_y), ignore);
-    return widget ? DesktopWindowTreeHostLinux::GetContentWindowForWidget(
+    return widget ? DesktopWindowTreeHostPlatform::GetContentWindowForWidget(
                         static_cast<gfx::AcceleratedWidget>(widget))
                   : nullptr;
   }
