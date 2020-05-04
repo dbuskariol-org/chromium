@@ -16,6 +16,7 @@
 #include "base/test/test_mock_time_task_runner.h"
 #include "build/build_config.h"
 #include "chrome/browser/history/history_service_factory.h"
+#include "chrome/browser/media/feeds/media_feeds_store.mojom-shared.h"
 #include "chrome/browser/media/feeds/media_feeds_store.mojom.h"
 #include "chrome/browser/media/history/media_history_feed_associated_origins_table.h"
 #include "chrome/browser/media/history/media_history_feed_items_table.h"
@@ -231,6 +232,17 @@ class MediaHistoryKeyedServiceTest
     return items;
   }
 
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult FetchResult(
+      int64_t feed_id) {
+    media_history::MediaHistoryKeyedService::MediaFeedFetchResult result;
+    result.feed_id = feed_id;
+    result.items = GetExpectedItems();
+    result.status = media_feeds::mojom::FetchResult::kSuccess;
+    result.associated_origins = GetExpectedAssociatedOrigins();
+    result.display_name = "Test";
+    return result;
+  }
+
   scoped_refptr<base::TestMockTimeTaskRunner> mock_time_task_runner_;
 
  private:
@@ -425,16 +437,8 @@ TEST_P(MediaHistoryKeyedServiceTest, CleanUpDatabaseWhenOriginIsDeleted) {
   WaitForDB();
 
   // Store the feed data.
-  service()->StoreMediaFeedFetchResult(
-      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "Test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
-  service()->StoreMediaFeedFetchResult(
-      2, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
+  service()->StoreMediaFeedFetchResult(FetchResult(1), base::DoNothing());
+  service()->StoreMediaFeedFetchResult(FetchResult(2), base::DoNothing());
 
   // Wait until the feed data has finished saving.
   WaitForDB();
@@ -654,16 +658,8 @@ TEST_P(MediaHistoryKeyedServiceTest,
   WaitForDB();
 
   // Store the feed data.
-  service()->StoreMediaFeedFetchResult(
-      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "Test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
-  service()->StoreMediaFeedFetchResult(
-      2, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
+  service()->StoreMediaFeedFetchResult(FetchResult(1), base::DoNothing());
+  service()->StoreMediaFeedFetchResult(FetchResult(2), base::DoNothing());
 
   // Wait until the feed data has finished saving.
   WaitForDB();
@@ -876,16 +872,8 @@ TEST_P(MediaHistoryKeyedServiceTest, CleanUpDatabaseWhenURLIsDeleted) {
   WaitForDB();
 
   // Store the feed data.
-  service()->StoreMediaFeedFetchResult(
-      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "Test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
-  service()->StoreMediaFeedFetchResult(
-      2, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
+  service()->StoreMediaFeedFetchResult(FetchResult(1), base::DoNothing());
+  service()->StoreMediaFeedFetchResult(FetchResult(2), base::DoNothing());
 
   // Wait until the feed data has finished saving.
   WaitForDB();

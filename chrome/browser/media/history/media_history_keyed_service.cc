@@ -261,22 +261,23 @@ void MediaHistoryKeyedService::GetItemsForMediaFeedForDebug(
       std::move(callback));
 }
 
+MediaHistoryKeyedService::MediaFeedFetchResult::MediaFeedFetchResult() =
+    default;
+
+MediaHistoryKeyedService::MediaFeedFetchResult::~MediaFeedFetchResult() =
+    default;
+
+MediaHistoryKeyedService::MediaFeedFetchResult::MediaFeedFetchResult(
+    MediaFeedFetchResult&& t) = default;
+
 void MediaHistoryKeyedService::StoreMediaFeedFetchResult(
-    const int64_t feed_id,
-    std::vector<media_feeds::mojom::MediaFeedItemPtr> items,
-    const media_feeds::mojom::FetchResult result,
-    const bool was_fetched_from_cache,
-    std::vector<media_feeds::mojom::MediaImagePtr> logos,
-    const std::string& display_name,
-    const std::set<url::Origin>& associated_origins,
+    MediaFeedFetchResult result,
     base::OnceClosure callback) {
   if (auto* store = store_->GetForWrite()) {
     store->db_task_runner_->PostTaskAndReply(
         FROM_HERE,
         base::BindOnce(&MediaHistoryStore::StoreMediaFeedFetchResult, store,
-                       feed_id, std::move(items), result,
-                       was_fetched_from_cache, std::move(logos), display_name,
-                       associated_origins),
+                       std::move(result)),
         std::move(callback));
   }
 }

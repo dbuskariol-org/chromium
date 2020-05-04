@@ -220,6 +220,25 @@ class MediaHistoryStoreUnitTest
     return out;
   }
 
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult ResultWithItems(
+      int64_t feed_id,
+      std::vector<media_feeds::mojom::MediaFeedItemPtr> items,
+      media_feeds::mojom::FetchResult fetch_result) {
+    media_history::MediaHistoryKeyedService::MediaFeedFetchResult result;
+    result.feed_id = feed_id;
+    result.items = std::move(items);
+    result.status = fetch_result;
+    return result;
+  }
+
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult
+  SuccessfulResultWithItems(
+      int64_t feed_id,
+      std::vector<media_feeds::mojom::MediaFeedItemPtr> items) {
+    return ResultWithItems(feed_id, std::move(items),
+                           media_feeds::mojom::FetchResult::kSuccess);
+  }
+
   MediaHistoryKeyedService* service() const {
     // If the param is true then we use the OTR service to simulate being in
     // incognito.
@@ -915,13 +934,14 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult) {
   // to ensure a no-op.
   const int feed_id = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
-  WaitForDB();
-
   {
+    auto result = SuccessfulResultWithItems(feed_id, GetExpectedItems());
+    result.logos = GetExpectedLogos();
+    result.display_name = kExpectedDisplayName;
+    result.associated_origins = GetExpectedAssociatedOrigins();
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    WaitForDB();
+
     // The media items should be stored and the feed should be updated.
     auto feeds = GetMediaFeedsSync(service());
     auto items = GetItemsForMediaFeedSync(service(), feed_id);
@@ -955,16 +975,14 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult) {
     EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetAltExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), kExpectedDisplayName,
-      std::set<url::Origin>(), base::DoNothing());
-  WaitForDB();
-
   base::Optional<base::Time> last_fetch_time_not_cache_hit;
 
   {
+    auto result = SuccessfulResultWithItems(feed_id, GetAltExpectedItems());
+    result.display_name = kExpectedDisplayName;
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    WaitForDB();
+
     // The media items should be stored and the feed should be updated.
     auto feeds = GetMediaFeedsSync(service());
     auto items = GetItemsForMediaFeedSync(service(), feed_id);
@@ -999,14 +1017,12 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult) {
     EXPECT_EQ(items, GetItemsForMediaFeedSync(otr_service(), feed_id));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetAltExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ true,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), kExpectedDisplayName,
-      std::set<url::Origin>(), base::DoNothing());
-  WaitForDB();
-
   {
+    auto result = SuccessfulResultWithItems(feed_id, GetAltExpectedItems());
+    result.display_name = kExpectedDisplayName;
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    WaitForDB();
+
     // The media items should be stored and the feed should be updated.
     auto feeds = GetMediaFeedsSync(service());
     auto items = GetItemsForMediaFeedSync(service(), feed_id);
@@ -1071,10 +1087,8 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_WithEmpty) {
   const int feed_id = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
 
   service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+      SuccessfulResultWithItems(feed_id, GetExpectedItems()),
+      base::DoNothing());
   WaitForDB();
 
   {
@@ -1092,11 +1106,9 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_WithEmpty) {
   }
 
   service()->StoreMediaFeedFetchResult(
-      feed_id, std::vector<media_feeds::mojom::MediaFeedItemPtr>(),
-      media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+      SuccessfulResultWithItems(
+          feed_id, std::vector<media_feeds::mojom::MediaFeedItemPtr>()),
+      base::DoNothing());
   WaitForDB();
 
   {
@@ -1123,19 +1135,15 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_MultipleFeeds) {
   const int feed_id_a = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
   const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      GetExpectedAssociatedOrigins(), base::DoNothing());
+  auto result = SuccessfulResultWithItems(feed_id_a, GetExpectedItems());
+  result.associated_origins = GetExpectedAssociatedOrigins();
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   WaitForDB();
 
   service()->StoreMediaFeedFetchResult(
-      feed_id_b, GetAltExpectedItems(),
-      media_feeds::mojom::FetchResult::kFailedNetworkError,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+      ResultWithItems(feed_id_b, GetAltExpectedItems(),
+                      media_feeds::mojom::FetchResult::kFailedNetworkError),
+      base::DoNothing());
   WaitForDB();
 
   {
@@ -1216,10 +1224,8 @@ TEST_P(MediaHistoryStoreFeedsTest, RediscoverMediaFeed) {
   }
 
   service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+      SuccessfulResultWithItems(feed_id, GetExpectedItems()),
+      base::DoNothing());
   WaitForDB();
 
   {
@@ -1298,14 +1304,16 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_IncreaseFailed) {
   // to ensure a no-op.
   const int feed_id = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(),
-      media_feeds::mojom::FetchResult::kFailedNetworkError,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
-  WaitForDB();
 
   {
+    auto result =
+        ResultWithItems(feed_id, GetExpectedItems(),
+                        media_feeds::mojom::FetchResult::kFailedNetworkError);
+    result.logos = GetExpectedLogos();
+    result.display_name = kExpectedDisplayName;
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    WaitForDB();
+
     // The fetch failed count should have been increased.
     auto feeds = GetMediaFeedsSync(service());
 
@@ -1322,14 +1330,15 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_IncreaseFailed) {
     EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(),
-      media_feeds::mojom::FetchResult::kFailedBackendError,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
-  WaitForDB();
-
   {
+    auto result =
+        ResultWithItems(feed_id, GetExpectedItems(),
+                        media_feeds::mojom::FetchResult::kFailedBackendError);
+    result.logos = GetExpectedLogos();
+    result.display_name = kExpectedDisplayName;
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    WaitForDB();
+
     // The fetch failed count should have been increased.
     auto feeds = GetMediaFeedsSync(service());
 
@@ -1346,13 +1355,13 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_IncreaseFailed) {
     EXPECT_EQ(feeds, GetMediaFeedsSync(otr_service()));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
-  WaitForDB();
-
   {
+    auto result = SuccessfulResultWithItems(feed_id, GetExpectedItems());
+    result.logos = GetExpectedLogos();
+    result.display_name = kExpectedDisplayName;
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    WaitForDB();
+
     // The fetch failed count should have been reset.
     auto feeds = GetMediaFeedsSync(service());
 
@@ -1423,11 +1432,12 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_CheckLogoMax) {
     logos.push_back(std::move(image));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(),
-      media_feeds::mojom::FetchResult::kFailedNetworkError,
-      /* was_fetched_from_cache= */ false, std::move(logos),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
+  auto result =
+      ResultWithItems(feed_id, GetExpectedItems(),
+                      media_feeds::mojom::FetchResult::kFailedNetworkError);
+  result.logos = std::move(logos);
+  result.display_name = kExpectedDisplayName;
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   WaitForDB();
 
   {
@@ -1505,10 +1515,10 @@ TEST_P(MediaHistoryStoreFeedsTest, StoreMediaFeedFetchResult_CheckImageMax) {
   std::vector<media_feeds::mojom::MediaFeedItemPtr> items;
   items.push_back(std::move(item));
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, std::move(items), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
+  auto result = SuccessfulResultWithItems(feed_id, std::move(items));
+  result.logos = GetExpectedLogos();
+  result.display_name = kExpectedDisplayName;
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   WaitForDB();
 
   {
@@ -1543,10 +1553,10 @@ TEST_P(MediaHistoryStoreFeedsTest,
   std::vector<media_feeds::mojom::MediaFeedItemPtr> items;
   items.push_back(std::move(item));
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, std::move(items), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
+  auto result = SuccessfulResultWithItems(feed_id, GetExpectedItems());
+  result.logos = GetExpectedLogos();
+  result.display_name = kExpectedDisplayName;
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   WaitForDB();
 
   {
@@ -1576,19 +1586,18 @@ TEST_P(MediaHistoryStoreFeedsTest, SafeSearchCheck) {
   const int feed_id_a = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
   const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult result_a;
+  result_a.feed_id = feed_id_a;
+  result_a.status = media_feeds::mojom::FetchResult::kSuccess;
+  result_a.items = GetExpectedItems();
+  service()->StoreMediaFeedFetchResult(std::move(result_a), base::DoNothing());
   WaitForDB();
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_b, GetAltExpectedItems(),
-      media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult result_b;
+  result_b.feed_id = feed_id_b;
+  result_b.status = media_feeds::mojom::FetchResult::kSuccess;
+  result_b.items = GetAltExpectedItems();
+  service()->StoreMediaFeedFetchResult(std::move(result_b), base::DoNothing());
   WaitForDB();
 
   std::map<int64_t, media_feeds::mojom::SafeSearchResult> found_ids;
@@ -1707,18 +1716,12 @@ TEST_P(MediaHistoryStoreFeedsTest, GetMediaFeedsSortByWatchtimePercentile) {
 
       if (i == 0) {
         service()->StoreMediaFeedFetchResult(
-            i + 1, GetExpectedItems(),
-            media_feeds::mojom::FetchResult::kSuccess,
-            /* was_fetched_from_cache= */ false,
-            std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-            std::set<url::Origin>(), base::DoNothing());
+            SuccessfulResultWithItems(i + 1, GetExpectedItems()),
+            base::DoNothing());
       } else if (i % 2 == 0) {
         service()->StoreMediaFeedFetchResult(
-            i + 1, GetAltExpectedItems(),
-            media_feeds::mojom::FetchResult::kSuccess,
-            /* was_fetched_from_cache= */ false,
-            std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-            std::set<url::Origin>(), base::DoNothing());
+            SuccessfulResultWithItems(i + 1, GetAltExpectedItems()),
+            base::DoNothing());
       }
     }
   }
@@ -1949,10 +1952,10 @@ TEST_P(MediaHistoryStoreFeedsTest, FeedItemsClickAndShown) {
   // to ensure a no-op.
   const int feed_id = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
+  auto result = SuccessfulResultWithItems(feed_id, GetExpectedItems());
+  result.logos = GetExpectedLogos();
+  result.display_name = kExpectedDisplayName;
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   WaitForDB();
 
   {
@@ -2070,17 +2073,18 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeed) {
   const int feed_id_a = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
   const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
+  auto result = SuccessfulResultWithItems(feed_id_a, GetExpectedItems());
+  result.logos = GetExpectedLogos();
+  result.display_name = kExpectedDisplayName;
+  result.associated_origins = GetExpectedAssociatedOrigins();
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   service()->UpdateMediaFeedDisplayTime(feed_id_a);
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_b, GetAltExpectedItems(),
-      media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, std::set<url::Origin>(), base::DoNothing());
+  auto alt_result = SuccessfulResultWithItems(feed_id_b, GetAltExpectedItems());
+  alt_result.logos = GetExpectedLogos();
+  alt_result.display_name = kExpectedDisplayName;
+  service()->StoreMediaFeedFetchResult(std::move(alt_result),
+                                       base::DoNothing());
   service()->UpdateMediaFeedDisplayTime(feed_id_b);
   WaitForDB();
 
@@ -2171,14 +2175,15 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeed) {
     EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
-  service()->UpdateMediaFeedDisplayTime(feed_id_a);
-  WaitForDB();
-
   {
+    auto result = SuccessfulResultWithItems(feed_id_a, GetExpectedItems());
+    result.logos = GetExpectedLogos();
+    result.display_name = kExpectedDisplayName;
+    result.associated_origins = GetExpectedAssociatedOrigins();
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    service()->UpdateMediaFeedDisplayTime(feed_id_a);
+    WaitForDB();
+
     // The media items and feed should be repopulated.
     auto feeds = GetMediaFeedsSync(service());
     auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
@@ -2235,17 +2240,19 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeedDueToCacheClearing) {
   const int feed_id_a = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[0]->id;
   const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
+  auto result = SuccessfulResultWithItems(feed_id_a, GetExpectedItems());
+  result.logos = GetExpectedLogos();
+  result.display_name = kExpectedDisplayName;
+  result.associated_origins = GetExpectedAssociatedOrigins();
+  service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
   WaitForDB();
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_b, GetAltExpectedItems(),
-      media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
+  auto alt_result = SuccessfulResultWithItems(feed_id_b, GetAltExpectedItems());
+  alt_result.logos = GetExpectedLogos();
+  alt_result.display_name = kExpectedDisplayName;
+  alt_result.associated_origins = GetExpectedAssociatedOrigins();
+  service()->StoreMediaFeedFetchResult(std::move(alt_result),
+                                       base::DoNothing());
   WaitForDB();
 
   service()->UpdateMediaFeedDisplayTime(feed_id_a);
@@ -2392,14 +2399,15 @@ TEST_P(MediaHistoryStoreFeedsTest, ResetMediaFeedDueToCacheClearing) {
     EXPECT_EQ(items_b, GetItemsForMediaFeedSync(otr_service(), feed_id_b));
   }
 
-  service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false, GetExpectedLogos(),
-      kExpectedDisplayName, GetExpectedAssociatedOrigins(), base::DoNothing());
-  service()->UpdateMediaFeedDisplayTime(feed_id_a);
-  WaitForDB();
-
   {
+    auto result = SuccessfulResultWithItems(feed_id_a, GetExpectedItems());
+    result.logos = GetExpectedLogos();
+    result.display_name = kExpectedDisplayName;
+    result.associated_origins = GetExpectedAssociatedOrigins();
+    service()->StoreMediaFeedFetchResult(std::move(result), base::DoNothing());
+    service()->UpdateMediaFeedDisplayTime(feed_id_a);
+    WaitForDB();
+
     // The media items and feed should be repopulated.
     auto feeds = GetMediaFeedsSync(service());
     auto items_a = GetItemsForMediaFeedSync(service(), feed_id_a);
@@ -2503,18 +2511,14 @@ TEST_P(MediaHistoryStoreFeedsTest, DeleteMediaFeed) {
   const int feed_id_b = IsReadOnly() ? -1 : GetMediaFeedsSync(service())[1]->id;
 
   service()->StoreMediaFeedFetchResult(
-      feed_id_a, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+      SuccessfulResultWithItems(feed_id_a, GetExpectedItems()),
+      base::DoNothing());
   WaitForDB();
 
   service()->StoreMediaFeedFetchResult(
-      feed_id_b, GetAltExpectedItems(),
-      media_feeds::mojom::FetchResult::kFailedNetworkError,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), std::string(),
-      std::set<url::Origin>(), base::DoNothing());
+      ResultWithItems(feed_id_b, GetAltExpectedItems(),
+                      media_feeds::mojom::FetchResult::kFailedNetworkError),
+      base::DoNothing());
   WaitForDB();
 
   {

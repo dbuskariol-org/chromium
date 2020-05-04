@@ -286,6 +286,17 @@ class MediaHistoryBrowserTest : public InProcessBrowserTest,
     WaitForDB(GetMediaHistoryService(browser));
   }
 
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult FetchResult(
+      int64_t feed_id) {
+    media_history::MediaHistoryKeyedService::MediaFeedFetchResult result;
+    result.feed_id = feed_id;
+    result.items = GetExpectedItems();
+    result.status = media_feeds::mojom::FetchResult::kSuccess;
+    result.associated_origins = GetExpectedAssociatedOrigins();
+    result.display_name = "Test";
+    return result;
+  }
+
   const GURL GetTestURL() const {
     return embedded_test_server()->GetURL("/media/media_history.html");
   }
@@ -1075,11 +1086,7 @@ IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
   WaitForDB(service);
 
   // Store the feed data.
-  service->StoreMediaFeedFetchResult(
-      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "Test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
+  service->StoreMediaFeedFetchResult(FetchResult(1), base::DoNothing());
   WaitForDB(service);
 
   {
@@ -1144,11 +1151,7 @@ IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
   WaitForDB(service);
 
   // Store the feed data.
-  service->StoreMediaFeedFetchResult(
-      1, GetExpectedItems(), media_feeds::mojom::FetchResult::kSuccess,
-      /* was_fetched_from_cache= */ false,
-      std::vector<media_feeds::mojom::MediaImagePtr>(), "Test",
-      GetExpectedAssociatedOrigins(), base::DoNothing());
+  service->StoreMediaFeedFetchResult(FetchResult(1), base::DoNothing());
   WaitForDB(service);
 
   {
