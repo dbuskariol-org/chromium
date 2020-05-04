@@ -276,7 +276,11 @@ class ArcVmClientAdapterTest : public testing::Test,
     boot_server_->Start();
     SetArcVmBootNotificationServerAddressForTesting(
         std::string(kArcVmBootNotificationServerAddress,
-                    sizeof(kArcVmBootNotificationServerAddress)));
+                    sizeof(kArcVmBootNotificationServerAddress)),
+        base::TimeDelta::FromMilliseconds(100) /* connect_timeout_limit */,
+        base::TimeDelta::FromMilliseconds(
+            20) /* connect_sleep_duration_initial */
+    );
   }
 
   void TearDown() override {
