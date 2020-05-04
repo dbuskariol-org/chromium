@@ -102,55 +102,11 @@ using blink::WebView;
 
 namespace content {
 
-namespace {
-
-class MockVideoCapturerSource : public media::VideoCapturerSource {
- public:
-  MockVideoCapturerSource() = default;
-  ~MockVideoCapturerSource() override {}
-
-  media::VideoCaptureFormats GetPreferredFormats() override {
-    const int supported_width = 640;
-    const int supported_height = 480;
-    const float supported_framerate = 60.0;
-    return media::VideoCaptureFormats(
-        1, media::VideoCaptureFormat(
-               gfx::Size(supported_width, supported_height),
-               supported_framerate, media::PIXEL_FORMAT_I420));
-  }
-  void StartCapture(const media::VideoCaptureParams& params,
-                    const VideoCaptureDeliverFrameCB& new_frame_callback,
-                    const RunningCallback& running_callback) override {
-    running_callback.Run(true);
-  }
-  void StopCapture() override {}
-};
-
-class MockAudioCapturerSource : public media::AudioCapturerSource {
- public:
-  MockAudioCapturerSource() = default;
-
-  void Initialize(const media::AudioParameters& params,
-                  CaptureCallback* callback) override {}
-  void Start() override {}
-  void Stop() override {}
-  void SetVolume(double volume) override {}
-  void SetAutomaticGainControl(bool enable) override {}
-  void SetOutputDeviceForAec(const std::string& output_device_id) override {}
-
- protected:
-  ~MockAudioCapturerSource() override {}
-};
-
-}  // namespace
-
 BlinkTestRunner::BlinkTestRunner(WebViewTestProxy* web_view_test_proxy)
     : web_view_test_proxy_(web_view_test_proxy),
       test_config_(mojom::WebTestRunTestConfiguration::New()) {}
 
 BlinkTestRunner::~BlinkTestRunner() = default;
-
-// WebTestDelegate  -----------------------------------------------------------
 
 void BlinkTestRunner::PrintMessageToStderr(const std::string& message) {
   GetWebTestControlHostRemote()->PrintMessageToStderr(message);
@@ -512,8 +468,6 @@ void BlinkTestRunner::ClearTrustTokenState(base::OnceClosure callback) {
   GetWebTestClientRemote()->ClearTrustTokenState(std::move(callback));
 }
 
-// Public methods - -----------------------------------------------------------
-
 void BlinkTestRunner::CaptureDump(
     mojom::WebTestRenderFrame::CaptureDumpCallback callback) {
   // TODO(vmpstr): This is only called on the main frame. One suggestion is to
@@ -543,8 +497,6 @@ void BlinkTestRunner::DidCommitNavigationInMainFrame() {
   waiting_for_reset_navigation_to_about_blank_ = false;
   GetWebTestControlHostRemote()->ResetRendererAfterWebTestDone();
 }
-
-// Private methods  -----------------------------------------------------------
 
 mojom::WebTestBluetoothFakeAdapterSetter&
 BlinkTestRunner::GetBluetoothFakeAdapterSetter() {
