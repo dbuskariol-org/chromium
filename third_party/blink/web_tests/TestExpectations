@@ -2887,14 +2887,14 @@ crbug.com/1012242 external/wpt/webvtt/rendering/cues-with-video/processing-model
 crbug.com/965409 external/wpt/css/css-font-loading/fontface-descriptor-updates.html [ Failure ]
 
 # Implement text-decoration-thickness and text-decoration-offset
-crbug.com/785230 external/wpt/css/css-text-decor/text-underline-offset-002.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-001.html [ Failure ]
-crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-overline-001.html [ Failure ]
-crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-vertical-001.html [ Failure ]
-crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-scroll-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-linethrough-001.html [ Failure ]
+crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-overline-001.html [ Failure ]
+crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-scroll-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-underline-001.html [ Failure ]
+crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-vertical-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-vertical-002.html [ Failure ]
+crbug.com/785230 external/wpt/css/css-text-decor/text-underline-offset-002.html [ Failure ]
 
 # Implement support for percentage values in scale
 crbug.com/1029997 external/wpt/css/css-transforms/transform-scale-percent-001.html [ Failure ]
