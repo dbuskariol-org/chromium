@@ -1404,11 +1404,6 @@
     "expiry_milestone": 88
   },
   {
-    "name": "enable-display-locking",
-    "owners": [ "//third_party/blink/renderer/core/display_lock/OWNERS" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "enable-duet-tabstrip-integration",
     "owners": [ "memex-team@google.com" ],
     "expiry_milestone": 84
