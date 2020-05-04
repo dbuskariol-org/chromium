@@ -2210,11 +2210,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "enable-viz-hit-test-surface-layer",
-    "owners": [ "yigu", "rjkroege", "kylechar" ],
-    "expiry_milestone": 81
-  },
-  {
     "name": "enable-vulkan",
     "owners": [ "penghuang" ],
     "expiry_milestone": 90
