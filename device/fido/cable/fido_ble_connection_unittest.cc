@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "device/fido/ble/fido_ble_connection.h"
+#include "device/fido/cable/fido_ble_connection.h"
 
 #include <bitset>
 #include <utility>
@@ -23,7 +23,7 @@
 #include "device/bluetooth/test/mock_bluetooth_gatt_connection.h"
 #include "device/bluetooth/test/mock_bluetooth_gatt_notify_session.h"
 #include "device/bluetooth/test/mock_bluetooth_gatt_service.h"
-#include "device/fido/ble/fido_ble_uuids.h"
+#include "device/fido/cable/fido_ble_uuids.h"
 #include "device/fido/test_callback_receiver.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"

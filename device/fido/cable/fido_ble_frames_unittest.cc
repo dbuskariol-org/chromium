@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "device/fido/ble/fido_ble_frames.h"
+#include "device/fido/cable/fido_ble_frames.h"
 
 #include <algorithm>
 #include <vector>
@@ -136,8 +136,10 @@ TEST(FidoBleFramesTest, FrameGettersAndValidity) {
            FidoBleFrame::ErrorCode::INVALID_PAR,
            FidoBleFrame::ErrorCode::INVALID_SEQ,
            FidoBleFrame::ErrorCode::INVALID_LEN,
-           FidoBleFrame::ErrorCode::REQ_TIMEOUT, FidoBleFrame::ErrorCode::NA_1,
-           FidoBleFrame::ErrorCode::NA_2, FidoBleFrame::ErrorCode::NA_3,
+           FidoBleFrame::ErrorCode::REQ_TIMEOUT,
+           FidoBleFrame::ErrorCode::NA_1,
+           FidoBleFrame::ErrorCode::NA_2,
+           FidoBleFrame::ErrorCode::NA_3,
        }) {
     FidoBleFrame frame(FidoBleDeviceCommand::kError,
                        {static_cast<uint8_t>(code)});

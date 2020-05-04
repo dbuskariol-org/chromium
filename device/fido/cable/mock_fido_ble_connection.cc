@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "device/fido/ble/mock_fido_ble_connection.h"
+#include "device/fido/cable/mock_fido_ble_connection.h"
+
 #include "base/bind_helpers.h"
 #include "device/bluetooth/public/cpp/bluetooth_uuid.h"
-#include "device/fido/ble/fido_ble_uuids.h"
+#include "device/fido/cable/fido_ble_uuids.h"
 
 #include <utility>
 

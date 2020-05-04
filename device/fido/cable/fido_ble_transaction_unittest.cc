@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "device/fido/ble/fido_ble_transaction.h"
+#include "device/fido/cable/fido_ble_transaction.h"
 
 #include <stdint.h>
 
@@ -15,9 +15,9 @@
 #include "base/threading/thread_task_runner_handle.h"
 #include "device/bluetooth/test/bluetooth_test.h"
 #include "device/bluetooth/test/mock_bluetooth_adapter.h"
-#include "device/fido/ble/fido_ble_connection.h"
-#include "device/fido/ble/fido_ble_frames.h"
-#include "device/fido/ble/mock_fido_ble_connection.h"
+#include "device/fido/cable/fido_ble_connection.h"
+#include "device/fido/cable/fido_ble_frames.h"
+#include "device/fido/cable/mock_fido_ble_connection.h"
 #include "device/fido/fido_constants.h"
 #include "device/fido/test_callback_receiver.h"
 #include "testing/gmock/include/gmock/gmock.h"
