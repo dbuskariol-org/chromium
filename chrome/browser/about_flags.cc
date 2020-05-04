@@ -4808,10 +4808,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kFontAccessAPIDescription, kOsAll,
      FEATURE_VALUE_TYPE(blink::features::kFontAccess)},
 
-    {"font-src-local-matching", flag_descriptions::kFontSrcLocalMatchingName,
-     flag_descriptions::kFontSrcLocalMatchingDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kFontSrcLocalMatching)},
-
 #if defined(OS_CHROMEOS)
     {"enable-parental-controls-settings",
      flag_descriptions::kEnableParentalControlsSettingsName,

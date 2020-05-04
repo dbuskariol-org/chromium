@@ -2452,11 +2452,6 @@
     "expiry_milestone": 85
   },
   {
-    "name": "font-src-local-matching",
-    "owners": [ "drott", "layout-dev" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "force-color-profile",
     "owners": [ "ccameron" ],
     "expiry_milestone": 81
