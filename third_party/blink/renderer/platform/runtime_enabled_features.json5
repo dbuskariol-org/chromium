@@ -1058,6 +1058,9 @@
       status: {"Android": "stable"},
     },
     {
+      name: "MediaControlsUseCutOutByDefault"
+    },
+    {
       name: "MediaDocumentDownloadButton",
     },
     {
