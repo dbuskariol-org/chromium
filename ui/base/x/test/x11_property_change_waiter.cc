@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/test/x11_property_change_waiter.h"
+#include "ui/base/x/test/x11_property_change_waiter.h"
 
 #include <utility>
 
@@ -14,7 +14,7 @@
 #include "ui/gfx/x/x11.h"
 #include "ui/gfx/x/x11_atom_cache.h"
 
-namespace views {
+namespace ui {
 
 X11PropertyChangeWaiter::X11PropertyChangeWaiter(XID window,
                                                  const char* property)
@@ -22,12 +22,11 @@ X11PropertyChangeWaiter::X11PropertyChangeWaiter(XID window,
   // Ensure that we are listening to PropertyNotify events for |window|. This
   // is not the case for windows which were not created by X11Window.
   x_window_events_ =
-      std::make_unique<ui::XScopedEventSelector>(x_window_, PropertyChangeMask);
+      std::make_unique<XScopedEventSelector>(x_window_, PropertyChangeMask);
 
   // Override the dispatcher so that we get events before X11Window does. We
   // must do this because X11Window stops propagation.
-  dispatcher_ =
-      ui::X11EventSource::GetInstance()->OverrideXEventDispatcher(this);
+  dispatcher_ = X11EventSource::GetInstance()->OverrideXEventDispatcher(this);
 }
 
 X11PropertyChangeWaiter::~X11PropertyChangeWaiter() = default;
@@ -62,4 +61,4 @@ bool X11PropertyChangeWaiter::DispatchXEvent(XEvent* xev) {
   return false;
 }
 
-}  // namespace views
+}  // namespace ui

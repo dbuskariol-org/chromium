@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_VIEWS_TEST_X11_PROPERTY_CHANGE_WAITER_H_
-#define UI_VIEWS_TEST_X11_PROPERTY_CHANGE_WAITER_H_
+#ifndef UI_BASE_X_TEST_X11_PROPERTY_CHANGE_WAITER_H_
+#define UI_BASE_X_TEST_X11_PROPERTY_CHANGE_WAITER_H_
 
 #include <stdint.h>
 
@@ -15,10 +15,10 @@
 #include "ui/events/platform_event.h"
 #include "ui/gfx/x/x11_types.h"
 
-namespace views {
+namespace ui {
 
 // Blocks till the value of |property| on |window| changes.
-class X11PropertyChangeWaiter : public ui::XEventDispatcher {
+class X11PropertyChangeWaiter : public XEventDispatcher {
  public:
   X11PropertyChangeWaiter(XID window, const char* property);
   ~X11PropertyChangeWaiter() override;
@@ -33,13 +33,13 @@ class X11PropertyChangeWaiter : public ui::XEventDispatcher {
   XID xwindow() const { return x_window_; }
 
  private:
-  // ui::XEventDispatcher:
+  // XEventDispatcher:
   bool DispatchXEvent(XEvent* event) override;
 
   XID x_window_;
   const char* property_;
 
-  std::unique_ptr<ui::XScopedEventSelector> x_window_events_;
+  std::unique_ptr<XScopedEventSelector> x_window_events_;
 
   // Whether Wait() should block.
   bool wait_;
@@ -47,11 +47,11 @@ class X11PropertyChangeWaiter : public ui::XEventDispatcher {
   // Ends the run loop.
   base::OnceClosure quit_closure_;
 
-  std::unique_ptr<ui::ScopedXEventDispatcher> dispatcher_;
+  std::unique_ptr<ScopedXEventDispatcher> dispatcher_;
 
   DISALLOW_COPY_AND_ASSIGN(X11PropertyChangeWaiter);
 };
 
-}  // namespace views
+}  // namespace ui
 
-#endif  // UI_VIEWS_TEST_X11_PROPERTY_CHANGE_WAITER_H_
+#endif  // UI_BASE_X_TEST_X11_PROPERTY_CHANGE_WAITER_H_
