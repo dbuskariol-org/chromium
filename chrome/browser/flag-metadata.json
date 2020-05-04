@@ -446,7 +446,7 @@
   {
     "name": "cct-incognito",
     "owners": [ "rhalavati", "//chrome/android/java/src/org/chromium/chrome/browser/customtabs/OWNERS" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 88
   },
   {
     "name": "cct-target-translate-language",
