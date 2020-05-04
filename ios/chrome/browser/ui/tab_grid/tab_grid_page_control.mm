@@ -162,6 +162,7 @@ UIImage* ImageForSegment(NSString* segment, BOOL selected) {
 // drags.
 @property(nonatomic) CGPoint dragStart;
 @property(nonatomic) CGFloat dragStartPosition;
+@property(nonatomic) BOOL draggingSlider;
 @end
 
 @implementation TabGridPageControl
@@ -290,20 +291,29 @@ UIImage* ImageForSegment(NSString* segment, BOOL selected) {
   }
 }
 
-#pragma mark - UIControl
+#pragma mark - UIResponder
 
-- (BOOL)beginTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event {
+- (void)touchesBegan:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+  [super touchesBegan:touches withEvent:event];
+  DCHECK(!self.multipleTouchEnabled);
+  DCHECK_EQ(1U, touches.count);
+  DCHECK(!self.draggingSlider);
+  UITouch* touch = [touches anyObject];
   CGPoint locationInSlider = [touch locationInView:self.sliderView];
   if ([self.sliderView pointInside:locationInSlider withEvent:event]) {
     self.dragStart = [touch locationInView:self];
     self.dragStartPosition = self.sliderPosition;
-    return YES;
+    self.draggingSlider = YES;
   }
-  return NO;
 }
 
-- (BOOL)continueTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event {
-  // Compute x-distance offset
+- (void)touchesMoved:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+  [super touchesMoved:touches withEvent:event];
+  if (!self.draggingSlider)
+    return;
+  DCHECK(!self.multipleTouchEnabled);
+  DCHECK_EQ(1U, touches.count);
+  UITouch* touch = [touches anyObject];
   CGPoint position = [touch locationInView:self];
   CGFloat deltaX = position.x - self.dragStart.x;
   // Convert to position change.
@@ -311,22 +321,23 @@ UIImage* ImageForSegment(NSString* segment, BOOL selected) {
 
   self.sliderPosition = self.dragStartPosition + positionChange;
   [self sendActionsForControlEvents:UIControlEventValueChanged];
-  return YES;
 }
 
-- (void)endTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event {
-  // UIControl requires that the superclass method is called.
-  [super endTrackingWithTouch:touch withEvent:event];
+- (void)touchesEnded:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+  [super touchesEnded:touches withEvent:event];
+  DCHECK(!self.multipleTouchEnabled);
+  DCHECK_EQ(1U, touches.count);
+  self.draggingSlider = NO;
   [self setSelectedPage:self.selectedPage animated:YES];
-  // UIControl will send actions for UIControlEventTouchUpInside as part of its
-  // UIResponder implementation, so there's no need to send them at this point.
+  [self sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)cancelTrackingWithEvent:(UIEvent*)event {
-  [super cancelTrackingWithEvent:event];
+- (void)touchesCancelled:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
+  [super touchesCancelled:touches withEvent:event];
+  DCHECK(!self.multipleTouchEnabled);
+  DCHECK_EQ(1U, touches.count);
+  self.draggingSlider = NO;
   [self setSelectedPage:self.selectedPage animated:YES];
-  // UIControl doesn't sent control events for -cancelTrackingWithEvent:, so
-  // explicitly do so here.
   [self sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -416,7 +427,7 @@ UIImage* ImageForSegment(NSString* segment, BOOL selected) {
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gestureRecognizer {
   // Don't recognize taps if drag touches are being tracked.
-  return !self.tracking;
+  return !self.draggingSlider;
 }
 
 #pragma mark - Private
