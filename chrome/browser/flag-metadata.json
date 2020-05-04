@@ -4058,7 +4058,7 @@
   {
     "name": "translate-force-trigger-on-english",
     "owners": [ "anthonyvd", "frechette", "chrome-language@google.com" ],
-    "expiry_milestone": 78
+    "expiry_milestone": 90
   },
   {
     "name": "treat-unsafe-downloads-as-active-content",
