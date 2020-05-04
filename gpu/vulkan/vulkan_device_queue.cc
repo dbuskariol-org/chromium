@@ -228,6 +228,8 @@ bool VulkanDeviceQueue::Initialize(
     vkGetDeviceQueue(vk_device_, queue_index, 0, &vk_queue_);
   }
 
+  vma::CreateAllocator(vk_physical_device_, vk_device_, vk_instance_,
+                       &vma_allocator_);
   cleanup_helper_ = std::make_unique<VulkanFenceHelper>(this);
 
   allow_protected_memory_ = allow_protected_memory;
@@ -259,6 +261,11 @@ void VulkanDeviceQueue::Destroy() {
   if (cleanup_helper_) {
     cleanup_helper_->Destroy();
     cleanup_helper_.reset();
+  }
+
+  if (vma_allocator_ != VK_NULL_HANDLE) {
+    vma::DestroyAllocator(vma_allocator_);
+    vma_allocator_ = VK_NULL_HANDLE;
   }
 
   if (VK_NULL_HANDLE != owned_vk_device_) {
