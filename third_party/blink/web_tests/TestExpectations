@@ -6650,3 +6650,4 @@ crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html 
 
 # Sheriff 2020-05-04
 crbug.com/952717 [ Debug ] http/tests/xmlhttprequest/redirect-cross-origin-post.html [ Pass Failure ]
+crbug.com/984467 [ Mac Debug ] virtual/gpu/fast/canvas/canvas-composite-stroke-alpha.html [ Pass Timeout ]
