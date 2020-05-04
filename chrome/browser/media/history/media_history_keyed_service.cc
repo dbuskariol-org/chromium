@@ -166,7 +166,7 @@ void MediaHistoryKeyedService::OnURLsDeleted(
   if (!deleted_origins.empty()) {
     store->db_task_runner_->PostTask(
         FROM_HERE, base::BindOnce(&MediaHistoryStore::DeleteAllOriginData,
-                                  store, origins));
+                                  store, deleted_origins));
   }
 
   // Build a set of all urls in |deleted_rows| that do not have their origin in
