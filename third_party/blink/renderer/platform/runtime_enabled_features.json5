@@ -496,6 +496,11 @@
       implied_by: ["MathMLCore"],
     },
     {
+      name: "CSSMathVariant",
+      status: "experimental",
+      implied_by: ["MathMLCore"],
+    },
+    {
       name: "CSSModules",
       status: "experimental",
     },

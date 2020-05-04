@@ -442,6 +442,7 @@
     "uppercase",
     "lowercase",
     //none
+    "math-auto",
     //
     // visibility
     //
