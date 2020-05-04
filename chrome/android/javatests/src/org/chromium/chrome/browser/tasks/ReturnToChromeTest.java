@@ -18,6 +18,7 @@ import android.support.test.filters.SmallTest;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
 import org.chromium.base.metrics.RecordHistogram;
@@ -32,12 +33,16 @@ import org.chromium.chrome.browser.flags.ChromeSwitches;
 import org.chromium.chrome.browser.tabmodel.TestTabModelDirectory;
 import org.chromium.chrome.browser.tasks.tab_management.TabUiTestHelper;
 import org.chromium.chrome.features.start_surface.InstantStartTest;
+import org.chromium.chrome.features.start_surface.StartSurfaceConfiguration;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.ChromeTabbedActivityTestRule;
 import org.chromium.chrome.test.util.ChromeRenderTestRule;
 import org.chromium.chrome.test.util.browser.Features;
+import org.chromium.chrome.test.util.browser.Features.EnableFeatures;
+import org.chromium.components.embedder_support.util.UrlConstants;
 import org.chromium.content_public.browser.test.util.Criteria;
 import org.chromium.content_public.browser.test.util.CriteriaHelper;
+import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.net.test.EmbeddedTestServer;
 import org.chromium.ui.test.util.UiRestriction;
 
@@ -46,11 +51,11 @@ import org.chromium.ui.test.util.UiRestriction;
  * has passed.
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
+@EnableFeatures({ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID,
+        ChromeFeatureList.TAB_SWITCHER_ON_RETURN + "<Study"})
 // clang-format off
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE,
-        "enable-features=" + ChromeFeatureList.TAB_SWITCHER_ON_RETURN + "<Study",
         "force-fieldtrials=Study/Group"})
-@Features.EnableFeatures({ChromeFeatureList.TAB_GRID_LAYOUT_ANDROID})
 public class ReturnToChromeTest {
     // clang-format on
     private static final String BASE_PARAMS =
@@ -61,6 +66,9 @@ public class ReturnToChromeTest {
     @Rule
     public ChromeRenderTestRule mRenderTestRule = new ChromeRenderTestRule();
 
+    @Rule
+    public TestRule mProcessor = new Features.InstrumentationProcessor();
+
     /**
      * Test that overview mode is not triggered if the delay is longer than the interval between
      * stop and start.
@@ -68,15 +76,93 @@ public class ReturnToChromeTest {
     @Test
     @SmallTest
     @Feature({"ReturnToChrome"})
-    @CommandLineFlags.Add({BASE_PARAMS + "/" + TAB_SWITCHER_ON_RETURN_MS_PARAM + "/100000"})
+    @EnableFeatures({ChromeFeatureList.START_SURFACE_ANDROID + "<Study"})
+    // clang-format off
+    @CommandLineFlags.Add({BASE_PARAMS + "/" + TAB_SWITCHER_ON_RETURN_MS_PARAM + "/100000"
+            + "/start_surface_variation/single"})
     public void testTabSwitcherModeNotTriggeredWithinThreshold() throws Exception {
+        // clang-format on
         InstantStartTest.createTabStateFile(new int[] {0, 1});
         mActivityTestRule.startMainActivityFromLauncher();
+
+        Assert.assertEquals("single", StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue());
+        TestThreadUtils.runOnUiThreadBlocking(
+                ()
+                        -> Assert.assertTrue(ReturnToChromeExperimentsUtil
+                                                     .shouldShowStartSurfaceAsTheHomePage()));
 
         Assert.assertFalse(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
         assertEquals(0,
                 RecordHistogram.getHistogramTotalCountForTesting(
                         ReturnToChromeExperimentsUtil.UMA_TIME_TO_GTS_FIRST_MEANINGFUL_PAINT));
+    }
+
+    /**
+     * Test that overview mode is triggered in Single-pane variation with no tabs, even though
+     * the delay is longer than the interval between stop and start.
+     */
+    @Test
+    @SmallTest
+    @Feature({"ReturnToChrome"})
+    @EnableFeatures({ChromeFeatureList.START_SURFACE_ANDROID + "<Study"})
+    // clang-format off
+    @CommandLineFlags.Add({BASE_PARAMS + "/" + TAB_SWITCHER_ON_RETURN_MS_PARAM + "/100000"
+            + "/start_surface_variation/single"})
+    public void testTabSwitcherModeTriggeredWithinThreshold_NoTab() {
+        // clang-format on
+        startMainActivityFromLauncherWithoutCurrentTab();
+
+        Assert.assertEquals("single", StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue());
+        TestThreadUtils.runOnUiThreadBlocking(
+                ()
+                        -> Assert.assertTrue(ReturnToChromeExperimentsUtil
+                                                     .shouldShowStartSurfaceAsTheHomePage()));
+
+        if (!mActivityTestRule.getActivity().isTablet()) {
+            Assert.assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+        }
+
+        CriteriaHelper.pollUiThread(Criteria.equals(true,
+                mActivityTestRule.getActivity()
+                        .getTabModelSelector()
+                        .getTabModelFilterProvider()
+                        .getCurrentTabModelFilter()::isTabModelRestored));
+        assertEquals(0, mActivityTestRule.getActivity().getTabModelSelector().getTotalTabCount());
+    }
+
+    /**
+     * Test that overview mode is triggered in Single-pane variation with NTP intent, even though
+     * the delay is longer than the interval between stop and start.
+     */
+    @Test
+    @SmallTest
+    @Feature({"ReturnToChrome"})
+    @EnableFeatures({ChromeFeatureList.START_SURFACE_ANDROID + "<Study"})
+    // clang-format off
+    @CommandLineFlags.Add({BASE_PARAMS + "/" + TAB_SWITCHER_ON_RETURN_MS_PARAM + "/100000"
+            + "/start_surface_variation/single"})
+    public void testTabSwitcherModeTriggeredWithinThreshold_NTP() throws Exception {
+        // clang-format on
+        InstantStartTest.createTabStateFile(new int[] {0, 1});
+        mActivityTestRule.startMainActivityWithURL(UrlConstants.NTP_URL);
+
+        Assert.assertEquals("single", StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue());
+        TestThreadUtils.runOnUiThreadBlocking(
+                ()
+                        -> Assert.assertTrue(ReturnToChromeExperimentsUtil
+                                                     .shouldShowStartSurfaceAsTheHomePage()));
+
+        if (!mActivityTestRule.getActivity().isTablet()) {
+            Assert.assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+        }
+
+        CriteriaHelper.pollUiThread(Criteria.equals(true,
+                mActivityTestRule.getActivity()
+                        .getTabModelSelector()
+                        .getTabModelFilterProvider()
+                        .getCurrentTabModelFilter()::isTabModelRestored));
+        // Not 3 because we don't create a tab for NTP in this case.
+        assertEquals(2, mActivityTestRule.getActivity().getTabModelSelector().getTotalTabCount());
     }
 
     /**
@@ -199,18 +285,6 @@ public class ReturnToChromeTest {
     }
 
     /**
-     * Similar to {@link ChromeTabbedActivityTestRule#startMainActivityFromLauncher} but skip
-     * verification and tasks regarding current tab.
-     */
-    private void startMainActivityFromLauncherWithoutCurrentTab() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        mActivityTestRule.prepareUrlIntent(intent, null);
-        mActivityTestRule.startActivityCompletely(intent);
-        mActivityTestRule.waitForActivityNativeInitializationComplete();
-    }
-
-    /**
      * Test that overview mode is triggered if the delay is shorter than the interval between
      * stop and start.
      */
@@ -317,5 +391,17 @@ public class ReturnToChromeTest {
         mRenderTestRule.render(mActivityTestRule.getActivity().findViewById(
                                        org.chromium.chrome.tab_ui.R.id.tab_list_view),
                 "10_web_tabs-select_last");
+    }
+
+    /**
+     * Similar to {@link ChromeTabbedActivityTestRule#startMainActivityFromLauncher} but skip
+     * verification and tasks regarding current tab.
+     */
+    private void startMainActivityFromLauncherWithoutCurrentTab() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        mActivityTestRule.prepareUrlIntent(intent, null);
+        mActivityTestRule.startActivityCompletely(intent);
+        mActivityTestRule.waitForActivityNativeInitializationComplete();
     }
 }
