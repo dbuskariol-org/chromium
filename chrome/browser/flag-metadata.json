@@ -3854,7 +3854,7 @@
   {
     "name": "smart-dim-model-v3",
     "owners": [ "amoylan", "jiameng" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 85
   },
   {
     "name": "smart-dim-new-ml-agent",
