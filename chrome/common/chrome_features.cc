@@ -223,11 +223,6 @@ const base::Feature kDesktopPWAsCacheDuringDefaultInstall{
 const base::Feature kDesktopPWAsLocalUpdating{"DesktopPWAsLocalUpdating",
                                               base::FEATURE_ENABLED_BY_DEFAULT};
 
-// Whether PWA update check throttling persists across browser restarts.
-const base::Feature kDesktopPWAsLocalUpdatingThrottlePersistence{
-    "DesktopPWAsLocalUpdatingThrottlePersistence",
-    base::FEATURE_DISABLED_BY_DEFAULT};
-
 // Adds a tab strip to PWA windows, used for UI experimentation.
 // TODO(crbug.com/897314): Enable this feature.
 const base::Feature kDesktopPWAsTabStrip{"DesktopPWAsTabStrip",
