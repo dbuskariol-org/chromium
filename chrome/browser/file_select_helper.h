@@ -86,7 +86,6 @@ class FileSelectHelper : public base::RefCountedThreadSafe<
                            DeepScanCompletionCallback_TwoBadFiles);
   FRIEND_TEST_ALL_PREFIXES(FileSelectHelperTest,
                            DeepScanCompletionCallback_OKBadFiles);
-  FRIEND_TEST_ALL_PREFIXES(FileSelectHelperTest, GetFileTypesFromAcceptType);
 
   explicit FileSelectHelper(Profile* profile);
   ~FileSelectHelper() override;
