@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_SERVICE_MANAGER_PUBLIC_CPP_BINDER_MAP_INTERNAL_H_
-#define SERVICES_SERVICE_MANAGER_PUBLIC_CPP_BINDER_MAP_INTERNAL_H_
+#ifndef MOJO_PUBLIC_CPP_BINDINGS_LIB_BINDER_MAP_INTERNAL_H_
+#define MOJO_PUBLIC_CPP_BINDINGS_LIB_BINDER_MAP_INTERNAL_H_
 
 #include <utility>
 
@@ -12,7 +12,7 @@
 #include "base/macros.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 
-namespace service_manager {
+namespace mojo {
 namespace internal {
 
 template <typename ContextType>
@@ -127,6 +127,6 @@ class GenericCallbackBinderWithContext {
 };
 
 }  // namespace internal
-}  // namespace service_manager
+}  // namespace mojo
 
-#endif  // SERVICES_SERVICE_MANAGER_PUBLIC_CPP_BINDER_MAP_INTERNAL_H_
+#endif  // MOJO_PUBLIC_CPP_BINDINGS_LIB_BINDER_MAP_INTERNAL_H_
