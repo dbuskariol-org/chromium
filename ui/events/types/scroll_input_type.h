@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CC_INPUT_SCROLL_INPUT_TYPE_H_
-#define CC_INPUT_SCROLL_INPUT_TYPE_H_
+#ifndef UI_EVENTS_TYPES_SCROLL_INPUT_TYPE_H_
+#define UI_EVENTS_TYPES_SCROLL_INPUT_TYPE_H_
 
-namespace cc {
+namespace ui {
 
 enum class ScrollInputType {
   kTouchscreen = 0,
@@ -15,6 +15,6 @@ enum class ScrollInputType {
   kMaxValue = kScrollbar,
 };
 
-}  // namespace cc
+}  // namespace ui
 
-#endif  // CC_INPUT_SCROLL_INPUT_TYPE_H_
+#endif  // UI_EVENTS_TYPES_SCROLL_INPUT_TYPE_H_
