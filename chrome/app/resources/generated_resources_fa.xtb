@@ -3,7 +3,7 @@
 <translationbundle lang="fa">
 <translation id="1003088604756913841">باز کردن پیوند در پنجره جدید <ph name="APP" /></translation>
 <translation id="1004218526896219317">دسترسی به سایت</translation>
-<translation id="1005274289863221750">استفاده از میکروفون و دوربین خود</translation>
+<translation id="1005274289863221750">استفاده از میکروفون و دوربین شما</translation>
 <translation id="1005333234656240382">‏اشکال‌زدایی ADB (پل اشکال‌زدایی Android) فعال شود؟</translation>
 <translation id="1006873397406093306">این افزونه می‌تواند داده‌هایتان را در سایت‌ها بخواند و تغییر دهد. می‌توانید سایت‌هایی را که این افزونه به آن‌ها دسترسی دارد کنترل کنید.</translation>
 <translation id="1007408791287232274">بارگیری دستگاه‌ها انجام نشد.</translation>
@@ -2834,7 +2834,7 @@
 <translation id="4756378406049221019">توقف/تازه‌سازی</translation>
 <translation id="4756388243121344051">&amp;سابقه</translation>
 <translation id="4759238208242260848">بارگیری‌ها</translation>
-<translation id="4761104368405085019">استفاده از میکروفون خود</translation>
+<translation id="4761104368405085019">استفاده از میکروفون شما</translation>
 <translation id="4762718786438001384">فضای دیسک دستگاه بسیار کم است</translation>
 <translation id="4763408175235639573">وقتی این صفحه را مشاهده کردید، کوکی‌های زیر تنظیم شدند</translation>
 <translation id="4765582662863429759">‏به «پیام‌های Android» اجازه دهید پیام‌های متنی را از تلفن در Chromebook بازپخش کند</translation>
@@ -6128,7 +6128,7 @@
 <translation id="9148058034647219655">خروج</translation>
 <translation id="9148126808321036104">ورود مجدد به سیستم</translation>
 <translation id="9149866541089851383">ویرایش...</translation>
-<translation id="9150045010208374699">استفاده از دوربین خود</translation>
+<translation id="9150045010208374699">استفاده از دوربین شما</translation>
 <translation id="9150429437595727962">‏تنظیمات Wi-Fi</translation>
 <translation id="9153934054460603056">ذخیره شناسه و رمز عبور</translation>
 <translation id="9154194610265714752">به‌روزرسانی ‌شد</translation>
