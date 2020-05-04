@@ -6636,7 +6636,7 @@ crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-scrip
 crbug.com/1073505 [ Mac10.13 ] external/wpt/html/semantics/scripting-1/the-script-element/moving-between-documents/before-prepare-iframe-fetch-error-external-module.html [ Pass Failure ]
 
 # Sheriff 2020-04-23
-crbug.com/1073792 [ Mac10.13 ] virtual/threaded-prefer-compositing/fast/scrolling/events/scrollend-event-fired-after-snap.html [ Pass Failure ]
+crbug.com/1073792 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/events/scrollend-event-fired-after-snap.html [ Pass Failure ]
 
 # the inspector-protocol/media tests only work in the virtual test environment.
 crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
