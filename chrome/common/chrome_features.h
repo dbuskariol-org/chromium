@@ -340,6 +340,11 @@ extern const base::Feature kPrerenderFallbackToPreconnect;
 COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kPrivacySettingsRedesign;
 
+#if defined(OS_ANDROID)
+COMPONENT_EXPORT(CHROME_FEATURES)
+extern const base::Feature kSafetyCheckAndroid;
+#endif
+
 #if BUILDFLAG(ENABLE_PLUGINS)
 COMPONENT_EXPORT(CHROME_FEATURES)
 extern const base::Feature kFlashDeprecationWarning;

@@ -958,6 +958,9 @@ extern const char kPrintJobManagementAppDescription[];
 extern const char kPrivacySettingsRedesignName[];
 extern const char kPrivacySettingsRedesignDescription[];
 
+extern const char kSafetyCheckAndroidName[];
+extern const char kSafetyCheckAndroidDescription[];
+
 extern const char kProminentDarkModeActiveTabTitleName[];
 extern const char kProminentDarkModeActiveTabTitleDescription[];
 

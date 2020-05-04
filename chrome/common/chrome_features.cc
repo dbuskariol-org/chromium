@@ -556,6 +556,11 @@ const base::Feature kPrerenderFallbackToPreconnect{
 const base::Feature kPrivacySettingsRedesign{"PrivacySettingsRedesign",
                                              base::FEATURE_DISABLED_BY_DEFAULT};
 
+#if defined(OS_ANDROID)
+const base::Feature kSafetyCheckAndroid{"SafetyCheckAndroid",
+                                        base::FEATURE_DISABLED_BY_DEFAULT};
+#endif
+
 #if BUILDFLAG(ENABLE_PLUGINS)
 // Show Flash deprecation warning to users who have manually enabled Flash.
 // https://crbug.com/918428

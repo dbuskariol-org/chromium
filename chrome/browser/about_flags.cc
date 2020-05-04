@@ -4776,6 +4776,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPrivacySettingsRedesignDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(features::kPrivacySettingsRedesign)},
 
+#if defined(OS_ANDROID)
+    {"safety-check-android", flag_descriptions::kSafetyCheckAndroidName,
+     flag_descriptions::kSafetyCheckAndroidDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(features::kSafetyCheckAndroid)},
+#endif
+
 #if defined(OS_CHROMEOS)
     {"gesture-properties-dbus-service",
      flag_descriptions::kEnableGesturePropertiesDBusServiceName,

@@ -1638,6 +1638,10 @@ const char kPrivacySettingsRedesignDescription[] =
     "Redesign of the privacy settings card to make it more prominent and "
     "and easier to use.";
 
+const char kSafetyCheckAndroidName[] = "Safety Check on Android";
+const char kSafetyCheckAndroidDescription[] =
+    "A settings component for checking multiple areas of browser safety.";
+
 const char kProminentDarkModeActiveTabTitleName[] =
     "Prominent Dark Mode Active Tab Titles";
 const char kProminentDarkModeActiveTabTitleDescription[] =
