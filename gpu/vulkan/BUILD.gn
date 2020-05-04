@@ -43,6 +43,8 @@ if (enable_vulkan) {
       "vulkan_command_buffer.h",
       "vulkan_command_pool.cc",
       "vulkan_command_pool.h",
+      "vulkan_crash_keys.cc",
+      "vulkan_crash_keys.h",
       "vulkan_device_queue.cc",
       "vulkan_device_queue.h",
       "vulkan_export.h",
@@ -74,6 +76,7 @@ if (enable_vulkan) {
     deps = [
       "//base",
       "//base/util/type_safety",
+      "//components/crash/core/common:crash_key",
       "//gpu/ipc/common:vulkan_ycbcr_info",
       "//ui/gfx",
     ]
