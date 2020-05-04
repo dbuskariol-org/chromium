@@ -23,6 +23,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/values.h"
+#include "chrome/browser/apps/app_service/app_icon_source.h"
 #include "chrome/browser/apps/app_service/app_launch_params.h"
 #include "chrome/browser/apps/app_service/app_service_proxy.h"
 #include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
@@ -205,31 +206,22 @@ void AppLauncherHandler::CreateWebAppInfo(const web_app::AppId& app_id,
   base::Optional<std::string> icon_big;
   base::Optional<std::string> icon_small;
 
-  // TODO(https://crbug.com/1062081): Figure out how to serve icons for web apps
-  // when BMO is enabled.
-  if (!DesktopPWAsWithoutExtensions()) {
-    // This is a hack to allow extensions-backed webapps to continue to have an
-    // icon.
-    if (HasMatchingOrGreaterThanIcon(registrar.GetAppIconInfos(app_id),
-                                     kWebAppIconLargeNonDefault)) {
-      icon_big = extensions::ExtensionIconSource::GetIconURL(
-                     app_id, kWebAppIconLargeNonDefault,
-                     ExtensionIconSet::MATCH_BIGGER, false)
-                     .spec();
-    }
+  if (HasMatchingOrGreaterThanIcon(registrar.GetAppIconInfos(app_id),
+                                   kWebAppIconLargeNonDefault)) {
+    icon_big =
+        apps::AppIconSource::GetIconURL(app_id, kWebAppIconLargeNonDefault)
+            .spec();
+  }
 
-    if (HasMatchingOrGreaterThanIcon(registrar.GetAppIconInfos(app_id),
-                                     kWebAppIconSmallNonDefault)) {
-      icon_small = extensions::ExtensionIconSource::GetIconURL(
-                       app_id, kWebAppIconSmallNonDefault,
-                       ExtensionIconSet::MATCH_BIGGER, false)
-                       .spec();
-    }
+  if (HasMatchingOrGreaterThanIcon(registrar.GetAppIconInfos(app_id),
+                                   kWebAppIconSmallNonDefault)) {
+    icon_small =
+        apps::AppIconSource::GetIconURL(app_id, kWebAppIconSmallNonDefault)
+            .spec();
   }
 
   value->SetBoolean("icon_big_exists", icon_big.has_value());
   value->SetString("icon_big", icon_big.value_or(GURL().spec()));
-  // TODO(https://crbug.com/1062081): Figure out how to serve icons.
   value->SetBoolean("icon_small_exists", icon_small.has_value());
   value->SetString("icon_small", icon_small.value_or(GURL().spec()));
 
