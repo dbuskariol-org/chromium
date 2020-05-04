@@ -71,6 +71,54 @@ class IsolatedPrerenderTabHelper
     // The interceptor was not able to use an available prefetch because the
     // origin probe failed.
     kPrefetchNotUsedProbeFailed = 2,
+
+    // The url was eligible to be prefetched, but the network request was never
+    // made.
+    kPrefetchNotStarted = 3,
+
+    // The url was not eligible to be prefetched because it is a Google-owned
+    // domain.
+    kPrefetchNotEligibleGoogleDomain = 4,
+
+    // The url was not eligible to be prefetched because the user had cookies
+    // for that origin.
+    kPrefetchNotEligibleUserHasCookies = 5,
+
+    // The url was not eligible to be prefetched because there was a registered
+    // service worker for that origin.
+    kPrefetchNotEligibleUserHasServiceWorker = 6,
+
+    // The url was not eligible to be prefetched because its scheme was not
+    // https://.
+    kPrefetchNotEligibleSchemeIsNotHttps = 7,
+
+    // The url was not eligible to be prefetched because its host was an IP
+    // address.
+    kPrefetchNotEligibleHostIsIPAddress = 8,
+
+    // The url was not eligible to be prefetched because it uses a non-default
+    // storage partition.
+    kPrefetchNotEligibleNonDefaultStoragePartition = 9,
+
+    // The network request was cancelled before it finished. This happens when
+    // there is a new navigation.
+    kPrefetchNotFinishedInTime = 10,
+
+    // The prefetch failed because of a net error.
+    kPrefetchFailedNetError = 11,
+
+    // The prefetch failed with a non-2XX HTTP response code.
+    kPrefetchFailedNon2XX = 12,
+
+    // The prefetch's Content-Type header was not html.
+    kPrefetchFailedNotHTML = 13,
+
+    // The prefetch finished successfully but was never used.
+    kPrefetchSuccessful = 14,
+
+    // The navigation off of the Google SRP was to a url that was not on the
+    // SRP.
+    kNavigatedToLinkNotOnSRP = 15,
   };
 
   // Container for several metrics which pertain to prefetching actions

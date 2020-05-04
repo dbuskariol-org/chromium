@@ -200,6 +200,8 @@ void IsolatedPrerenderTabHelper::DidFinishNavigation(
     auto status_iter = page_->prefetch_status_by_url_.find(url);
     if (status_iter != page_->prefetch_status_by_url_.end()) {
       after_srp->prefetch_status_ = status_iter->second;
+    } else {
+      after_srp->prefetch_status_ = PrefetchStatus::kNavigatedToLinkNotOnSRP;
     }
   }
 
@@ -278,6 +280,9 @@ void IsolatedPrerenderTabHelper::Prefetch() {
 
   GURL url = page_->urls_to_prefetch_[0];
   page_->urls_to_prefetch_.erase(page_->urls_to_prefetch_.begin());
+
+  // The status is updated to be successful or failed when it finishes.
+  OnPrefetchStatusUpdate(url, PrefetchStatus::kPrefetchNotFinishedInTime);
 
   net::IsolationInfo isolation_info =
       net::IsolationInfo::CreateOpaqueAndNonTransient();
@@ -359,6 +364,10 @@ void IsolatedPrerenderTabHelper::OnPrefetchComplete(
   base::UmaHistogramSparse("IsolatedPrerender.Prefetch.Mainframe.NetError",
                            std::abs(page_->url_loader_->NetError()));
 
+  if (page_->url_loader_->NetError() != net::OK) {
+    OnPrefetchStatusUpdate(url, PrefetchStatus::kPrefetchFailedNetError);
+  }
+
   if (page_->url_loader_->NetError() == net::OK && body &&
       page_->url_loader_->ResponseInfo()) {
     network::mojom::URLResponseHeadPtr head =
@@ -414,6 +423,7 @@ void IsolatedPrerenderTabHelper::HandlePrefetchResponse(
                            response_code);
 
   if (response_code < 200 || response_code >= 300) {
+    OnPrefetchStatusUpdate(url, PrefetchStatus::kPrefetchFailedNon2XX);
     for (auto& observer : observer_list_) {
       observer.OnPrefetchCompletedWithError(url, response_code);
     }
@@ -421,13 +431,17 @@ void IsolatedPrerenderTabHelper::HandlePrefetchResponse(
   }
 
   if (head->mime_type != "text/html") {
+    OnPrefetchStatusUpdate(url, PrefetchStatus::kPrefetchFailedNotHTML);
     return;
   }
+
   std::unique_ptr<PrefetchedMainframeResponseContainer> response =
       std::make_unique<PrefetchedMainframeResponseContainer>(
           isolation_info, std::move(head), std::move(body));
   page_->prefetched_responses_.emplace(url, std::move(response));
   page_->srp_metrics_->prefetch_successful_count_++;
+
+  OnPrefetchStatusUpdate(url, PrefetchStatus::kPrefetchSuccessful);
 
   for (auto& observer : observer_list_) {
     observer.OnPrefetchCompletedSuccessfully(url);
@@ -510,14 +524,20 @@ bool IsolatedPrerenderTabHelper::CheckAndMaybePrefetchURL(const GURL& url) {
                                       profile_->GetPrefs()));
 
   if (google_util::IsGoogleAssociatedDomainUrl(url)) {
+    OnPrefetchStatusUpdate(url,
+                           PrefetchStatus::kPrefetchNotEligibleGoogleDomain);
     return false;
   }
 
   if (url.HostIsIPAddress()) {
+    OnPrefetchStatusUpdate(url,
+                           PrefetchStatus::kPrefetchNotEligibleHostIsIPAddress);
     return false;
   }
 
   if (!url.SchemeIs(url::kHttpsScheme)) {
+    OnPrefetchStatusUpdate(
+        url, PrefetchStatus::kPrefetchNotEligibleSchemeIsNotHttps);
     return false;
   }
 
@@ -530,6 +550,8 @@ bool IsolatedPrerenderTabHelper::CheckAndMaybePrefetchURL(const GURL& url) {
   if (default_storage_partition !=
       content::BrowserContext::GetStoragePartitionForSite(
           profile_, url, /*can_create=*/false)) {
+    OnPrefetchStatusUpdate(
+        url, PrefetchStatus::kPrefetchNotEligibleNonDefaultStoragePartition);
     return false;
   }
 
@@ -543,6 +565,8 @@ bool IsolatedPrerenderTabHelper::CheckAndMaybePrefetchURL(const GURL& url) {
       isolated_prerender_service->service_workers_observer()
           ->IsServiceWorkerRegisteredForOrigin(url::Origin::Create(url));
   if (!site_has_service_worker.has_value() || site_has_service_worker.value()) {
+    OnPrefetchStatusUpdate(
+        url, PrefetchStatus::kPrefetchNotEligibleUserHasServiceWorker);
     return false;
   }
 
@@ -560,12 +584,16 @@ void IsolatedPrerenderTabHelper::OnGotCookieList(
     const net::CookieStatusList& excluded_cookies) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
-  if (!cookie_with_status_list.empty())
+  if (!cookie_with_status_list.empty()) {
+    OnPrefetchStatusUpdate(url,
+                           PrefetchStatus::kPrefetchNotEligibleUserHasCookies);
     return;
+  }
 
   // TODO(robertogden): Consider adding redirect URLs to the front of the list.
   page_->urls_to_prefetch_.push_back(url);
   page_->srp_metrics_->prefetch_eligible_count_++;
+  OnPrefetchStatusUpdate(url, PrefetchStatus::kPrefetchNotStarted);
 
   // The queried url may not have been part of this page's prediction if it was
   // a redirect (common) or if the cookie query finished after
