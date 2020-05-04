@@ -3803,17 +3803,17 @@
   {
     "name": "tab-groups",
     "owners": [ "chrome-desktop-ui-seattle@google.com", "bsep" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "tab-groups-collapse",
     "owners": [ "chrome-desktop-ui-seattle@google.com", "xialinyan" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "tab-groups-feedback",
     "owners": [ "chrome-desktop-ui-seattle@google.com", "xialinyan" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "tab-hover-card-images",
