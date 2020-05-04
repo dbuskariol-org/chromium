@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_LOOKALIKES_LOOKALIKE_URL_UTIL_H_
-#define COMPONENTS_LOOKALIKES_LOOKALIKE_URL_UTIL_H_
+#ifndef COMPONENTS_LOOKALIKES_CORE_LOOKALIKE_URL_UTIL_H_
+#define COMPONENTS_LOOKALIKES_CORE_LOOKALIKE_URL_UTIL_H_
 
 #include <string>
 #include <vector>
@@ -148,4 +148,4 @@ bool IsTargetEmbeddingLookalike(
     const LookalikeTargetAllowlistChecker& in_target_allowlist,
     std::string* safe_hostname);
 
-#endif  // COMPONENTS_LOOKALIKES_LOOKALIKE_URL_UTIL_H_
+#endif  // COMPONENTS_LOOKALIKES_CORE_LOOKALIKE_URL_UTIL_H_
