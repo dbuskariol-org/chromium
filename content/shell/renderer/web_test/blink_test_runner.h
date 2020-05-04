@@ -35,10 +35,6 @@ namespace base {
 class DictionaryValue;
 }  // namespace base
 
-namespace blink {
-struct WebSize;
-}  // namespace blink
-
 namespace content {
 class AppBannerService;
 class WebViewTestProxy;
@@ -72,13 +68,6 @@ class BlinkTestRunner {
   TestPreferences* Preferences();
   void ApplyPreferences();
   void SetPopupBlockingEnabled(bool block_popups);
-
-  // Controls auto resize mode.
-  void EnableAutoResizeMode(const blink::WebSize& min_size,
-                            const blink::WebSize& max_size);
-  void DisableAutoResizeMode(const blink::WebSize& new_size);
-  // Resets auto resize mode off in between tests, without requiring a size.
-  void ResetAutoResizeMode();
 
   // Controls WebSQL databases.
   void ClearAllDatabases();

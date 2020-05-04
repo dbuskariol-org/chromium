@@ -197,40 +197,6 @@ void BlinkTestRunner::SetPopupBlockingEnabled(bool block_popups) {
   GetWebTestControlHostRemote()->SetPopupBlockingEnabled(block_popups);
 }
 
-void BlinkTestRunner::EnableAutoResizeMode(const WebSize& min_size,
-                                           const WebSize& max_size) {
-  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
-
-  RenderWidget* widget =
-      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
-  widget->EnableAutoResizeForTesting(min_size, max_size);
-}
-
-void BlinkTestRunner::DisableAutoResizeMode(const WebSize& new_size) {
-  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
-
-  RenderWidget* widget =
-      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
-  widget->DisableAutoResizeForTesting(new_size);
-
-  gfx::Rect window_rect(widget->WindowRect().x, widget->WindowRect().y,
-                        new_size.width, new_size.height);
-  widget->SetWindowRectSynchronouslyForTesting(window_rect);
-}
-
-void BlinkTestRunner::ResetAutoResizeMode() {
-  DCHECK(web_view_test_proxy_->GetMainRenderFrame());
-
-  RenderWidget* widget =
-      web_view_test_proxy_->GetMainRenderFrame()->GetLocalRootRenderWidget();
-  // An empty size indicates to keep the size as is, the next test will set up
-  // the window's size in OnSetTestConfiguration().
-  // TODO(danakj): We don't really need the empty size anymore, that was to
-  // avoid an IPC race. We could just have a global constant because all windows
-  // are 800x600 at the start of a test.
-  widget->DisableAutoResizeForTesting(gfx::Size());
-}
-
 void BlinkTestRunner::ClearAllDatabases() {
   GetWebTestClientRemote()->ClearAllDatabases();
 }

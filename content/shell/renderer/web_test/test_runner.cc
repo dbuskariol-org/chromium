@@ -900,13 +900,32 @@ void TestRunnerBindings::EnableAutoResizeMode(int min_width,
                                               int min_height,
                                               int max_width,
                                               int max_height) {
-  if (runner_)
-    runner_->EnableAutoResizeMode(min_width, min_height, max_width, max_height);
+  CHECK(frame_->IsMainFrame());
+  if (max_width <= 0 || max_height <= 0)
+    return;
+
+  auto* frame_impl = static_cast<RenderFrameImpl*>(frame_);
+  RenderWidget* widget = frame_impl->GetLocalRootRenderWidget();
+
+  blink::WebSize min_size(min_width, min_height);
+  blink::WebSize max_size(max_width, max_height);
+  widget->EnableAutoResizeForTesting(min_size, max_size);
 }
 
 void TestRunnerBindings::DisableAutoResizeMode(int new_width, int new_height) {
-  if (runner_)
-    return runner_->DisableAutoResizeMode(new_width, new_height);
+  CHECK(frame_->IsMainFrame());
+  if (new_width <= 0 || new_height <= 0)
+    return;
+
+  auto* frame_impl = static_cast<RenderFrameImpl*>(frame_);
+  RenderWidget* widget = frame_impl->GetLocalRootRenderWidget();
+
+  blink::WebSize new_size(new_width, new_height);
+  widget->DisableAutoResizeForTesting(new_size);
+
+  gfx::Rect window_rect(widget->WindowRect().x, widget->WindowRect().y,
+                        new_size.width, new_size.height);
+  widget->SetWindowRectSynchronouslyForTesting(window_rect);
 }
 
 void TestRunnerBindings::SetMockScreenOrientation(
@@ -1548,7 +1567,6 @@ void TestRunner::Reset() {
     blink_test_runner_->SetDatabaseQuota(content::kDefaultDatabaseQuota);
     blink_test_runner_->SetBlockThirdPartyCookies(false);
     blink_test_runner_->SetLocale("");
-    blink_test_runner_->ResetAutoResizeMode();
     blink_test_runner_->DeleteAllCookies();
     blink_test_runner_->SetBluetoothManualChooser(false);
     blink_test_runner_->ResetPermissions();
@@ -2118,24 +2136,6 @@ void TestRunner::UseUnfortunateSynchronousResizeMode() {
       widget_proxy->UseSynchronousResizeModeForTesting(true);
     }
   }
-}
-
-void TestRunner::EnableAutoResizeMode(int min_width,
-                                      int min_height,
-                                      int max_width,
-                                      int max_height) {
-  if (max_width <= 0 || max_height <= 0)
-    return;
-  blink::WebSize min_size(min_width, min_height);
-  blink::WebSize max_size(max_width, max_height);
-  blink_test_runner_->EnableAutoResizeMode(min_size, max_size);
-}
-
-void TestRunner::DisableAutoResizeMode(int new_width, int new_height) {
-  if (new_width <= 0 || new_height <= 0)
-    return;
-  blink::WebSize new_size(new_width, new_height);
-  blink_test_runner_->DisableAutoResizeMode(new_size);
 }
 
 MockScreenOrientationClient* TestRunner::GetMockScreenOrientationClient() {
