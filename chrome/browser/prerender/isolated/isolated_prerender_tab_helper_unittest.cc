@@ -157,31 +157,31 @@ class IsolatedPrerenderTabHelperTest : public ChromeRenderViewHostTestHarness {
   IsolatedPrerenderTabHelper* tab_helper() const { return tab_helper_.get(); }
 
   int64_t ordered_eligible_pages_bitmask() const {
-    return tab_helper_->metrics().ordered_eligible_pages_bitmask_;
+    return tab_helper_->srp_metrics().ordered_eligible_pages_bitmask_;
   }
 
   size_t prefetch_eligible_count() const {
-    return tab_helper_->metrics().prefetch_eligible_count_;
+    return tab_helper_->srp_metrics().prefetch_eligible_count_;
   }
 
   size_t prefetch_attempted_count() const {
-    return tab_helper_->metrics().prefetch_attempted_count_;
+    return tab_helper_->srp_metrics().prefetch_attempted_count_;
   }
 
   size_t prefetch_successful_count() const {
-    return tab_helper_->metrics().prefetch_successful_count_;
+    return tab_helper_->srp_metrics().prefetch_successful_count_;
   }
 
   size_t prefetch_total_redirect_count() const {
-    return tab_helper_->metrics().prefetch_total_redirect_count_;
+    return tab_helper_->srp_metrics().prefetch_total_redirect_count_;
   }
 
   size_t predicted_urls_count() const {
-    return tab_helper_->metrics().predicted_urls_count_;
+    return tab_helper_->srp_metrics().predicted_urls_count_;
   }
 
   base::Optional<base::TimeDelta> navigation_to_prefetch_start() const {
-    return tab_helper_->metrics().navigation_to_prefetch_start_;
+    return tab_helper_->srp_metrics().navigation_to_prefetch_start_;
   }
 
   void VerifyIsolationInfo(const net::IsolationInfo& isolation_info) {
