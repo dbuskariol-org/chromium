@@ -53,6 +53,7 @@
 #include "chrome/browser/ui/webui/extensions/extension_icon_source.h"
 #include "chrome/browser/ui/webui/ntp/new_tab_ui.h"
 #include "chrome/browser/web_applications/components/app_registry_controller.h"
+#include "chrome/browser/web_applications/components/app_shortcut_manager.h"
 #include "chrome/browser/web_applications/components/file_handler_manager.h"
 #include "chrome/browser/web_applications/components/install_finalizer.h"
 #include "chrome/browser/web_applications/components/web_app_constants.h"
@@ -937,37 +938,26 @@ void AppLauncherHandler::HandleCreateAppShortcut(const base::ListValue* args) {
 }
 
 void AppLauncherHandler::HandleInstallAppLocally(const base::ListValue* args) {
-  std::string extension_id;
-  CHECK(args->GetString(0, &extension_id));
+  std::string app_id;
+  CHECK(args->GetString(0, &app_id));
 
-  if (DesktopPWAsWithoutExtensions() &&
-      web_app_provider_->registrar().IsInstalled(extension_id)) {
-    NOTIMPLEMENTED();
-    return;
-  }
-
-  const Extension* extension =
-      extensions::ExtensionRegistry::Get(extension_service_->profile())
-          ->GetExtensionById(extension_id,
-                             extensions::ExtensionRegistry::ENABLED |
-                                 extensions::ExtensionRegistry::DISABLED |
-                                 extensions::ExtensionRegistry::TERMINATED);
-  if (!extension)
+  if (!web_app_provider_->registrar().IsInstalled(app_id))
     return;
 
-  auto* profile = Profile::FromBrowserContext(
-      web_ui()->GetWebContents()->GetBrowserContext());
-  SetBookmarkAppIsLocallyInstalled(profile, extension, true);
-  if (extensions::CanBookmarkAppCreateOsShortcuts()) {
-    extensions::BookmarkAppCreateOsShortcuts(
-        profile, extension, true /* add_to_desktop */,
-        base::BindOnce(&AppLauncherHandler::
-                           OnExtensionShortcutsCreatedRegisterFileHandlers,
-                       weak_ptr_factory_.GetWeakPtr(), extension_id));
+  web_app_provider_->registry_controller().SetAppIsLocallyInstalled(app_id,
+                                                                    true);
+  web_app::AppShortcutManager& shortcut_manager =
+      web_app_provider_->shortcut_manager();
+  if (shortcut_manager.CanCreateShortcuts()) {
+    shortcut_manager.CreateShortcuts(
+        app_id, /*add_to_desktop=*/true,
+        base::BindOnce(
+            &AppLauncherHandler::OnShortcutsCreatedRegisterOsIntegration,
+            weak_ptr_factory_.GetWeakPtr(), app_id));
   }
-
-  // Use the appAdded to update the app icon's color to no longer be greyscale.
-  std::unique_ptr<base::DictionaryValue> app_info(GetExtensionInfo(extension));
+  // Use the appAdded to update the app icon's color to no longer be
+  // greyscale.
+  std::unique_ptr<base::DictionaryValue> app_info = GetWebAppInfo(app_id);
   if (app_info)
     web_ui()->CallJavascriptFunctionUnsafe("ntp.appAdded", *app_info);
 }
@@ -1184,13 +1174,13 @@ void AppLauncherHandler::PromptToEnableApp(const std::string& extension_id) {
   extension_enable_flow_->StartForWebContents(web_ui()->GetWebContents());
 }
 
-void AppLauncherHandler::OnExtensionShortcutsCreatedRegisterFileHandlers(
-    const extensions::ExtensionId& extension_id,
-    bool /*shortcuts_created*/) {
-  auto* provider = web_app::WebAppProviderBase::GetProviderBase(
-      extension_service_->profile());
-  provider->file_handler_manager().EnableAndRegisterOsFileHandlers(
-      extension_id);
+void AppLauncherHandler::OnShortcutsCreatedRegisterOsIntegration(
+    const web_app::AppId& app_id,
+    bool shortcuts_created) {
+  LOCAL_HISTOGRAM_BOOLEAN("Apps.Launcher.InstallLocallyShortcutsCreated",
+                          shortcuts_created);
+  web_app_provider_->file_handler_manager().EnableAndRegisterOsFileHandlers(
+      app_id);
 }
 
 void AppLauncherHandler::OnExtensionUninstallDialogClosed(
