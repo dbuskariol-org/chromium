@@ -36,7 +36,7 @@
   {
     "name": "account-id-migration",
     "owners": [ "msarda" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 88
   },
   {
     "name": "aggregated-ml-app-ranking",
