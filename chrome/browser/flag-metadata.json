@@ -3380,7 +3380,7 @@
   {
     "name": "paint-preview-demo",
     "owners": [ "ckitagawa", "fredmello", "mahmoudi" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 88
   },
   {
     "name": "passive-listener-default",
