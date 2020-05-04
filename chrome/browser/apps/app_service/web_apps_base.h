@@ -55,7 +55,7 @@ class WebAppsBase : public apps::PublisherBase,
   const web_app::WebApp* GetWebApp(const web_app::AppId& app_id) const;
 
   // web_app::AppRegistrarObserver:
-  void OnWebAppWillBeUninstalled(const web_app::AppId& app_id) override;
+  void OnWebAppUninstalled(const web_app::AppId& app_id) override;
 
   apps::mojom::AppPtr ConvertImpl(const web_app::WebApp* web_app,
                                   apps::mojom::Readiness readiness);

@@ -65,7 +65,7 @@ class WebAppsChromeOs : public WebAppsBase,
                     GetMenuModelCallback callback) override;
 
   // web_app::AppRegistrarObserver:
-  void OnWebAppWillBeUninstalled(const web_app::AppId& app_id) override;
+  void OnWebAppUninstalled(const web_app::AppId& app_id) override;
   void OnWebAppDisabledStateChanged(const web_app::AppId& app_id,
                                     bool is_disabled) override;
   // TODO(loyso): Implement app->last_launch_time field for the new system.
