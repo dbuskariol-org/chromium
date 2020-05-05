@@ -27173,6 +27173,7 @@ Called by update_use_counter_feature_enum.py.-->
       label="V8InvalidatedStringLengthOverflowLookupChainProtector"/>
   <int value="3272" label="V8InvalidatedTypedArraySpeciesLookupChainProtector"/>
   <int value="3273" label="ClientHintsUAPlatformVersion"/>
+  <int value="3274" label="IFrameCSPAttribute"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
