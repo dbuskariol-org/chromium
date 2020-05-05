@@ -75,7 +75,6 @@ CORE_EXPORT LayoutUnit ResolveBlockLengthInternal(
     const NGBoxStrut& border_padding,
     const Length&,
     LayoutUnit content_size,
-    LengthResolvePhase,
     const LayoutUnit* opt_percentage_resolution_block_size_for_min_max =
         nullptr);
 
@@ -191,7 +190,7 @@ inline LayoutUnit ResolveMinBlockLength(
     return border_padding.BlockSum();
 
   return ResolveBlockLengthInternal(
-      constraint_space, style, border_padding, length, kIndefiniteSize, phase,
+      constraint_space, style, border_padding, length, kIndefiniteSize,
       opt_percentage_resolution_block_size_for_min_max);
 }
 
@@ -210,7 +209,7 @@ inline LayoutUnit ResolveMaxBlockLength(
     return LayoutUnit::Max();
 
   return ResolveBlockLengthInternal(
-      constraint_space, style, border_padding, length, kIndefiniteSize, phase,
+      constraint_space, style, border_padding, length, kIndefiniteSize,
       opt_percentage_resolution_block_size_for_min_max);
 }
 
@@ -231,7 +230,7 @@ inline LayoutUnit ResolveMainBlockLength(
     return content_size;
 
   return ResolveBlockLengthInternal(
-      constraint_space, style, border_padding, length, content_size, phase,
+      constraint_space, style, border_padding, length, content_size,
       opt_percentage_resolution_block_size_for_min_max);
 }
 
@@ -257,7 +256,7 @@ inline LayoutUnit ResolveMainBlockLength(
 
   return ResolveBlockLengthInternal(
       constraint_space, style, border_padding, length, intrinsic_block_size,
-      phase, opt_percentage_resolution_block_size_for_min_max);
+      opt_percentage_resolution_block_size_for_min_max);
 }
 
 // For the given style and min/max content sizes, computes the min and max

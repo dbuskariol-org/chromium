@@ -163,7 +163,6 @@ LayoutUnit ResolveBlockLengthInternal(
     const NGBoxStrut& border_padding,
     const Length& length,
     LayoutUnit content_size,
-    LengthResolvePhase phase,
     const LayoutUnit* opt_percentage_resolution_block_size_for_min_max) {
   DCHECK_EQ(constraint_space.GetWritingMode(), style.GetWritingMode());
 
