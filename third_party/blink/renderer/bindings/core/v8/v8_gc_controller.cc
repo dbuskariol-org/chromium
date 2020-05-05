@@ -161,26 +161,6 @@ void V8GCController::GcEpilogue(v8::Isolate* isolate,
                        inspector_update_counters_event::Data());
 }
 
-void V8GCController::CollectAllGarbageForTesting(
-    v8::Isolate* isolate,
-    v8::EmbedderHeapTracer::EmbedderStackState stack_state) {
-  constexpr unsigned kNumberOfGCs = 5;
-
-  if (stack_state != v8::EmbedderHeapTracer::EmbedderStackState::kUnknown) {
-    v8::EmbedderHeapTracer* const tracer = static_cast<v8::EmbedderHeapTracer*>(
-        ThreadState::Current()->unified_heap_controller());
-    // Passing a stack state is only supported when either wrapper tracing or
-    // unified heap is enabled.
-    for (unsigned i = 0; i < kNumberOfGCs; i++)
-      tracer->GarbageCollectionForTesting(stack_state);
-    return;
-  }
-
-  for (unsigned i = 0; i < kNumberOfGCs; i++)
-    isolate->RequestGarbageCollectionForTesting(
-        v8::Isolate::kFullGarbageCollection);
-}
-
 namespace {
 
 // Visitor forwarding all DOM wrapper handles to the provided Blink visitor.
