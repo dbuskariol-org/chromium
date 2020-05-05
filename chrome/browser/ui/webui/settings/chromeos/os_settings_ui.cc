@@ -44,9 +44,7 @@
 #include "chrome/browser/ui/webui/settings/browser_lifetime_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/accessibility_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/account_manager_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/ambient_mode_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/android_apps_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/change_picture_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/crostini_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/cups_printers_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/date_time_handler.h"
@@ -62,7 +60,6 @@
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_handler_factory.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/settings_user_action_tracker.h"
-#include "chrome/browser/ui/webui/settings/chromeos/wallpaper_handler.h"
 #include "chrome/browser/ui/webui/settings/downloads_handler.h"
 #include "chrome/browser/ui/webui/settings/extension_control_handler.h"
 #include "chrome/browser/ui/webui/settings/font_handler.h"
@@ -233,9 +230,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   OsSettingsManagerFactory::GetForProfile(profile)->AddHandlers(web_ui());
 
   web_ui()->AddMessageHandler(
-      std::make_unique<chromeos::settings::ChangePictureHandler>());
-
-  web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::AccessibilityHandler>(profile));
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::AndroidAppsHandler>(profile));
@@ -260,9 +254,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
     web_ui()->AddMessageHandler(std::move(kerberos_accounts_handler));
   }
 
-  web_ui()->AddMessageHandler(
-      std::make_unique<chromeos::settings::WallpaperHandler>(web_ui()));
-
   if (plugin_vm::IsPluginVmAllowedForProfile(profile) ||
       profile->GetPrefs()->GetBoolean(plugin_vm::prefs::kPluginVmImageExists)) {
     web_ui()->AddMessageHandler(
@@ -277,12 +268,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::smb_dialog::SmbHandler>(profile,
                                                          base::DoNothing()));
-
-  if (!profile->IsGuestSession() &&
-      chromeos::features::IsAmbientModeEnabled()) {
-    web_ui()->AddMessageHandler(
-        std::make_unique<chromeos::settings::AmbientModeHandler>());
-  }
 
   html_source->AddBoolean(
       "userCannotManuallyEnterPassword",
