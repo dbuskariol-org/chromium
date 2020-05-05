@@ -1719,6 +1719,11 @@
     "expiry_milestone": 82
   },
   {
+    "name": "enable-mygoogle",
+    "owners": [ "fernandex", "chrome-ios-signin@google.com" ],
+    "expiry_milestone": 87
+  },
+  {
     "name": "enable-nacl",
     "owners": [ "dschuff", "native-client-dev@googlegroups.com" ],
     "expiry_milestone": 87
