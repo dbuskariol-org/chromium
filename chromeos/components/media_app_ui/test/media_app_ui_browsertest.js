@@ -277,8 +277,6 @@ TEST_F('MediaAppUIBrowserTest', 'NavigateIPC', async () => {
 // in the untrusted context.
 TEST_F('MediaAppUIBrowserTest', 'RenameOriginalIPC', async () => {
   const firstFile = await createTestImageFile();
-  console.log('Rename DLEI firstFile size: ' + firstFile.size);
-  console.log(firstFile.name);
   const directory = await createMockTestDirectory([firstFile]);
   // Simulate steps taken to load a file via a launch event.
   const firstFileHandle = directory.files[0];
