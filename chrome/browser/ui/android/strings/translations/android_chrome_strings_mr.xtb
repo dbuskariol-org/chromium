@@ -752,7 +752,7 @@
 <translation id="6447558397796644647">तो बुकमार्क सापडत नाही. तुमचे शब्दलेखन तपासा किंवा नवीन बुकमार्क जोडा.</translation>
 <translation id="6447842834002726250">कुकीज</translation>
 <translation id="6461962085415701688">फाइल उघडू शकत नाही</translation>
-<translation id="6464977750820128603">तुम्ही Chrome मध्ये भेट दिलेल्या साइट पाहू शकता आणि त्यांच्यासाठी टायमर सेट करू शकता.\n\nGoogle ला तुम्ही ज्या साइटसाठी टायमर सेट केला आणि त्यांना किती वेळ भेट दिली याबद्दलची माहिती मिळते. ही माहिती डिजिटल संतुलन चांगले करण्यास वापरली जाते.</translation>
+<translation id="6464977750820128603">तुम्ही Chrome मध्ये भेट दिलेल्या साइट पाहू शकता आणि त्यांच्यासाठी टायमर सेट करू शकता.\n\nGoogle ला तुम्ही ज्या साइटसाठी टायमर सेट केला आणि त्यांना किती वेळ भेट दिली याबद्दलची माहिती मिळते. ही माहिती Digital wellbeing चांगले करण्यास वापरली जाते.</translation>
 <translation id="6475951671322991020">व्हिडिओ डाउनलोड करा</translation>
 <translation id="6482749332252372425">स्टोरेज स्थानाच्या अभावामुळे <ph name="FILE_NAME" /> डाउनलोड अयशस्वी झाले.</translation>
 <translation id="6496823230996795692"><ph name="APP_NAME" /> पहिल्यांदा वापरण्यासाठी, कृपया इंटरनेटशी कनेक्ट करा.</translation>
@@ -973,7 +973,7 @@
 <translation id="8103578431304235997">गुप्त टॅब</translation>
 <translation id="8105893657415066307"><ph name="DESCRIPTION" /> <ph name="SEPARATOR" /> <ph name="FILE_SIZE" /></translation>
 <translation id="8109613176066109935">तुमच्या सर्व डिव्हाइसवरील तुमचे बुकमार्क मिळवण्यासाठी, सिंक सुरू करा</translation>
-<translation id="8110087112193408731">डिजिटल संतुलन मध्ये तुमची Chrome ॲक्टिव्हिटी दाखवायची का?</translation>
+<translation id="8110087112193408731">Digital wellbeing मध्ये तुमची Chrome ॲक्टिव्हिटी दाखवायची का?</translation>
 <translation id="8116925261070264013">म्यूट केले</translation>
 <translation id="8127542551745560481">होमपेज संपादित करा</translation>
 <translation id="813082847718468539">साइटची माहिती पहा</translation>
@@ -1070,7 +1070,7 @@
 <translation id="8921772741368021346"><ph name="POSITION" /> / <ph name="DURATION" /></translation>
 <translation id="8922289737868596582">पेज ऑफलाइन वापरता येण्यासाठी ती अधिक पर्यायांमधून डाउनलोड करा</translation>
 <translation id="8926666909099850184">या डिव्हाइससाठी NFC बंद केले आहे. ते <ph name="BEGIN_LINK" />Android सेटिंग्जमध्ये<ph name="END_LINK" /> सुरू करा.</translation>
-<translation id="8937772741022875483">डिजिटल संतुलन वरून तुमची Chrome ॲक्टिव्हिटी काढून टाकायची का?</translation>
+<translation id="8937772741022875483">Digital wellbeing वरून तुमची Chrome ॲक्टिव्हिटी काढून टाकायची का?</translation>
 <translation id="8941729603749328384">www.example.com</translation>
 <translation id="8942627711005830162">इतर विंडोमध्ये उघडा</translation>
 <translation id="8951232171465285730">Chrome ने तुमच्यासाठी <ph name="MEGABYTES" /> MB सेव्ह केले</translation>
@@ -1105,7 +1105,7 @@
 <translation id="9206873250291191720">A</translation>
 <translation id="9209888181064652401">कॉल करू शकत नाही</translation>
 <translation id="9219103736887031265">इमेज</translation>
-<translation id="926205370408745186">डिजिटल संतुलन वरून तुमची Chrome ॲक्टिव्हिटी काढून टाका</translation>
+<translation id="926205370408745186">Digital wellbeing वरून तुमची Chrome ॲक्टिव्हिटी काढून टाका</translation>
 <translation id="932327136139879170">होम</translation>
 <translation id="938850635132480979">एरर: <ph name="ERROR_CODE" /></translation>
 <translation id="945632385593298557">तुमचा मायक्रोफोन ॲक्सेस करा</translation>

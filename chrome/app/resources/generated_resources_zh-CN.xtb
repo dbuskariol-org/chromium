@@ -215,7 +215,7 @@
 <translation id="1280965841156951489">修改文件</translation>
 <translation id="1285320974508926690">一律不翻译此网站</translation>
 <translation id="1285484354230578868">将数据存储在您的 Google 云端硬盘帐号中</translation>
-<translation id="1288037062697528143">夜间模式将于日落时自动开启</translation>
+<translation id="1288037062697528143">护眼模式将于日落时自动开启</translation>
 <translation id="1288300545283011870">语音属性</translation>
 <translation id="1293264513303784526">USB-C 设备（左侧端口）</translation>
 <translation id="1293556467332435079">文件</translation>
@@ -1304,7 +1304,7 @@
 <translation id="2714393097308983682">Google Play 商店</translation>
 <translation id="2715751256863167692">此项升级操作会重置您 Chromebook 的硬件并移除当前的用户数据。</translation>
 <translation id="2716986496990888774">此设置由家长管理。</translation>
-<translation id="2718395828230677721">夜间模式</translation>
+<translation id="2718395828230677721">护眼模式</translation>
 <translation id="2718998670920917754">防病毒软件检测到病毒。</translation>
 <translation id="2719020180254996569">第 <ph name="NETWORK_INDEX" /> 个网络（共 <ph name="NETWORK_COUNT" /> 个），<ph name="NETWORK_NAME" />，<ph name="CONNECTION_STATUS" />，详细信息</translation>
 <translation id="2719936478972253983">已拦截以下 Cookie</translation>
@@ -2418,7 +2418,7 @@
 <translation id="413121957363593859">组件</translation>
 <translation id="4131410914670010031">黑白色</translation>
 <translation id="4133076602192971179">打开应用以更改密码</translation>
-<translation id="4136203100490971508">夜间模式将于日出时自动关闭</translation>
+<translation id="4136203100490971508">护眼模式将于日出时自动关闭</translation>
 <translation id="41365691917097717">继续操作会启用 ADB 调试，以创建和测试 Android 应用。请注意，此操作会允许安装未经 Google 验证的 Android 应用，而且一旦安装就无法停用，除非将设备恢复到出厂设置。</translation>
 <translation id="4138267921960073861">在登录屏幕上显示用户名和照片</translation>
 <translation id="413915106327509564"><ph name="WINDOW_TITLE" /> - HID 设备已连接</translation>

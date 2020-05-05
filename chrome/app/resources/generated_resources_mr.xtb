@@ -723,7 +723,7 @@
 <translation id="1938351510777341717">बाह्य कमांड</translation>
 <translation id="1940546824932169984">कनेक्‍ट केलेली डिव्हाइस</translation>
 <translation id="1942600407708803723">कव्हर बंद केल्यावर शट डाउन करा</translation>
-<translation id="1944528062465413897">ब्लूटूथ पेअरींग कोड:</translation>
+<translation id="1944528062465413897">ब्लूटूथ पेअरिंग कोड:</translation>
 <translation id="1944921356641260203">अपडेट आढळले</translation>
 <translation id="1946577776959096882">खाती पाहा</translation>
 <translation id="1951012854035635156">Assistant</translation>
@@ -1787,7 +1787,7 @@
 <translation id="3347086966102161372">इमेज पत्ता कॉपी करा</translation>
 <translation id="3348038390189153836">काढण्यायोग्य डिव्हाइस आढळले</translation>
 <translation id="3349933790966648062">मेमरी फुटप्रिंट</translation>
-<translation id="3350117557200012647">पेअरींग मोड मध्ये जा</translation>
+<translation id="3350117557200012647">पेअरिंग मोड मध्ये जा</translation>
 <translation id="3355936511340229503">कनेक्शन एरर</translation>
 <translation id="3356580349448036450">पूर्ण</translation>
 <translation id="3359256513598016054">सर्टिफिकेट धोरण प्रतिबंध</translation>
@@ -5842,7 +5842,7 @@ https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-featu
 <translation id="8781834595282316166">गटामधील नवीन टॅब</translation>
 <translation id="8782565991310229362">कियोस्क ॲप्लिकेशन लाँच रद्द झाले.</translation>
 <translation id="8783093612333542422">&lt;strong&gt;<ph name="SENDER" />&lt;/strong&gt; आपल्याशी एक &lt;strong&gt;<ph name="PRINTER_NAME" />&lt;/strong&gt; प्रिंटर शेअर करू इच्छितात.</translation>
-<translation id="8783834180813871000">ब्लूटूथ पेअरींग कोड टाइप करा, नंतर Return किंवा Enter दाबा.</translation>
+<translation id="8783834180813871000">ब्लूटूथ पेअरिंग कोड टाइप करा, नंतर Return किंवा Enter दाबा.</translation>
 <translation id="8784626084144195648">बिन केलेली सरासरी</translation>
 <translation id="8785622406424941542">स्टायलस</translation>
 <translation id="8787254343425541995">शेअर नेटवर्कसाठी प्रॉक्सीला अनुमती द्या</translation>
