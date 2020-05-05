@@ -4220,8 +4220,8 @@
   },
   {
     "name": "username-first-flow",
-    "owners": [ "dvadym" ],
-    "expiry_milestone": 84
+    "owners": [ "jdoerrie" ],
+    "expiry_milestone": 88
   },
   {
     "name": "wallet-service-use-sandbox",
