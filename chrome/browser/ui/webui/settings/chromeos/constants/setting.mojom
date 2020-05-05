@@ -108,6 +108,7 @@ enum Setting {
   kCrostiniAdbDebugging = 804,
   kCrostiniDiskResize = 805,
   kCrostiniMicAccess = 806,
+  kCrostiniContainerUpgrade = 807,
 
   // Note: Plugin VM section is omitted (see https://crbug.com/1074101).
 

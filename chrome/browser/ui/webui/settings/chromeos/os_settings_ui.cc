@@ -25,7 +25,6 @@
 #include "chrome/browser/browser_process_platform_part.h"
 #include "chrome/browser/chromeos/account_manager/account_manager_util.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
-#include "chrome/browser/chromeos/crostini/crostini_features.h"
 #include "chrome/browser/chromeos/login/demo_mode/demo_session.h"
 #include "chrome/browser/chromeos/login/quick_unlock/quick_unlock_utils.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_pref_names.h"
@@ -45,7 +44,6 @@
 #include "chrome/browser/ui/webui/settings/chromeos/accessibility_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/account_manager_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/android_apps_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/crostini_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/cups_printers_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/date_time_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_storage_handler.h"
@@ -229,11 +227,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
       std::make_unique<chromeos::settings::AccessibilityHandler>(profile));
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::AndroidAppsHandler>(profile));
-  if (crostini::CrostiniFeatures::Get()->IsUIAllowed(profile,
-                                                     /*check_policy=*/false)) {
-    web_ui()->AddMessageHandler(
-        std::make_unique<chromeos::settings::CrostiniHandler>(profile));
-  }
   web_ui()->AddMessageHandler(
       chromeos::settings::CupsPrintersHandler::Create(web_ui()));
   web_ui()->AddMessageHandler(base::WrapUnique(
