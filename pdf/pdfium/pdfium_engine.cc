@@ -1220,11 +1220,6 @@ bool PDFiumEngine::OnRightMouseDown(const pp::MouseInputEvent& event) {
   // Handle the case when focus starts outside a form text area and transitions
   // into a form text area.
   if (is_form_text_area) {
-    {
-      SelectionChangeInvalidator selection_invalidator(this);
-      selection_.clear();
-    }
-
     FORM_OnFocus(form(), page, 0, page_x, page_y);
     return true;
   }
@@ -3692,6 +3687,10 @@ void PDFiumEngine::OnFocusedAnnotationUpdated(FPDF_ANNOTATION annot) {
   }
   bool is_form_text_area =
       PDFiumPage::FormTypeToArea(form_type) == PDFiumPage::FORM_TEXT_AREA;
+  if (is_form_text_area) {
+    SelectionChangeInvalidator selection_invalidator(this);
+    selection_.clear();
+  }
   SetInFormTextArea(is_form_text_area);
   editable_form_text_area_ =
       is_form_text_area && IsAnnotationAnEditableFormTextArea(annot, form_type);
