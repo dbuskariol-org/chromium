@@ -48,8 +48,7 @@ void DeleteComService() {
   InstallUtil::DeleteRegistryKey(HKEY_LOCAL_MACHINE,
                                  GetComServiceAppidRegistryPath(),
                                  WorkItem::kWow64Default);
-  if (!installer::InstallServiceWorkItem::DeleteService(
-          kWindowsServiceName, __uuidof(UpdaterServiceClass), GUID_NULL))
+  if (!installer::InstallServiceWorkItem::DeleteService(kWindowsServiceName))
     LOG(WARNING) << "DeleteService failed.";
 }
 

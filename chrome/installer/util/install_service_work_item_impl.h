@@ -6,15 +6,12 @@
 #define CHROME_INSTALLER_UTIL_INSTALL_SERVICE_WORK_ITEM_IMPL_H_
 
 #include <windows.h>
-
 #include <vector>
 
-#include "base/command_line.h"
 #include "base/macros.h"
 #include "base/strings/string16.h"
 #include "base/win/scoped_handle.h"
 #include "base/win/windows_types.h"
-#include "chrome/installer/util/work_item_list.h"
 
 namespace base {
 
@@ -52,9 +49,7 @@ class InstallServiceWorkItemImpl {
 
   InstallServiceWorkItemImpl(const base::string16& service_name,
                              const base::string16& display_name,
-                             const base::CommandLine& service_cmd_line,
-                             const GUID& clsid,
-                             const GUID& iid);
+                             const base::CommandLine& service_cmd_line);
 
   ~InstallServiceWorkItemImpl();
 
@@ -114,12 +109,6 @@ class InstallServiceWorkItemImpl {
       base::win::GenericScopedHandle<ScHandleTraits,
                                      base::win::DummyVerifierTraits>;
 
-  // This is the core functionality for installing the Windows Service itself.
-  bool DoInstallService();
-
-  // This is the core functionality for COM registration for the Service.
-  bool DoComRegistration();
-
   // Member functions that help with service installation or upgrades.
   bool InstallNewService();
 
@@ -151,9 +140,6 @@ class InstallServiceWorkItemImpl {
   // Persists the given service name in the registry.
   bool SetServiceName(const base::string16& service_name) const;
 
-  // The COM registration is done using a contained WorkItemList.
-  std::unique_ptr<WorkItemList> com_registration_work_items_;
-
   // The service name, or in the case of a conflict, the prefix for the service
   // name.
   const base::string16 service_name_;
@@ -162,15 +148,7 @@ class InstallServiceWorkItemImpl {
   const base::string16 display_name_;
 
   // The desired service command line.
-  const base::CommandLine service_cmd_line_;
-
-  // If COM CLSID/AppId registration is required, |clsid| would contain a valid
-  // CLSID.
-  const GUID clsid_;
-
-  // If COM Interface/Typelib registration is required, |iid| would contain a
-  // valid IID.
-  const GUID iid_;
+  const base::string16 service_cmd_line_;
 
   ScopedScHandle scm_;
   ScopedScHandle service_;
