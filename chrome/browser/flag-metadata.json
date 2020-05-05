@@ -1953,11 +1953,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "enable-search-box-selection",
-    "owners": [ "ginko", "newcomer" ],
-    "expiry_milestone": 78
-  },
-  {
     "name": "enable-send-tab-to-self",
     "owners": [ "//components/send_tab_to_self/OWNERS" ],
     "expiry_milestone": 77
