@@ -639,6 +639,11 @@ const char kPostQuantumCECPQ2Description[] =
     "This option enables a post-quantum (i.e. resistent to quantum computers) "
     "key exchange algorithm in TLS (CECPQ2).";
 
+const char kMacCoreLocationImplementationName[] =
+    "Core Location Implementation";
+const char kMacCoreLocationImplementationDescription[] =
+    "Enables usage of the Core Location APIs on macOS for geolocation";
+
 const char kWinrtGeolocationImplementationName[] =
     "WinRT Geolocation Implementation";
 const char kWinrtGeolocationImplementationDescription[] =

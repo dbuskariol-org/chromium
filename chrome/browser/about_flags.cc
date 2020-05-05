@@ -5134,6 +5134,13 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kWinrtGeolocationImplementation)},
 #endif
 
+#if defined(OS_MACOSX)
+    {"enable-core-location-implementation",
+     flag_descriptions::kMacCoreLocationImplementationName,
+     flag_descriptions::kMacCoreLocationImplementationDescription, kOsMac,
+     FEATURE_VALUE_TYPE(features::kMacCoreLocationImplementation)},
+#endif
+
 #if defined(OS_CHROMEOS)
     {"exo-pointer-lock", flag_descriptions::kExoPointerLockName,
      flag_descriptions::kExoPointerLockDescription, kOsCrOS,

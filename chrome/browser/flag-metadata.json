@@ -1288,6 +1288,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "enable-core-location-implementation",
+    "owners": [ "jameshollyer@google.com" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "enable-credit-card-assist",
     "owners": [ "ftirelo", "gogerald" ],
     "expiry_milestone": 76
