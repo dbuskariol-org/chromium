@@ -358,8 +358,7 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
                                               transition:transition]) {
       policyDecision = web::WebStatePolicyDecider::PolicyDecision::Cancel();
     }
-    if (policyDecision.ShouldAllowNavigation() &&
-        !self.webStateImpl->HasWebUI()) {
+    if (policyDecision.ShouldAllowNavigation()) {
       [self.delegate navigationHandler:self createWebUIForURL:requestURL];
     }
   }
@@ -686,25 +685,6 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
   if (!web::GetWebClient()->IsAppSpecificURL(webViewURL) ||
       !exemptedAppSpecificLoad) {
     self.webStateImpl->ClearWebUI();
-  }
-
-  if (web::GetWebClient()->IsAppSpecificURL(webViewURL) &&
-      !exemptedAppSpecificLoad) {
-    // Restart app specific URL loads to properly capture state.
-    // TODO(crbug.com/546347): Extract necessary tasks for app specific URL
-    // navigation rather than restarting the load.
-
-    // Renderer-initiated loads of WebUI can be done only from other WebUI
-    // pages. WebUI pages may have increased power and using the same web
-    // process (which may potentially be controller by an attacker) is
-    // dangerous.
-    if (web::GetWebClient()->IsAppSpecificURL(self.documentURL)) {
-      [webView stopLoading];
-      [self stopLoading];
-      web::NavigationManager::WebLoadParams params(webViewURL);
-      self.navigationManagerImpl->LoadURLWithParams(params);
-    }
-    return;
   }
 
   self.webStateImpl->GetNavigationManagerImpl().OnNavigationStarted(webViewURL);

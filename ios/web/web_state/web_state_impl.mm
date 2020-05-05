@@ -310,6 +310,13 @@ WebStateImpl::GetSessionCertificatePolicyCacheImpl() {
 }
 
 void WebStateImpl::CreateWebUI(const GURL& url) {
+  if (HasWebUI()) {
+    if (web_ui_->GetController()->GetHost() == url.host()) {
+      // Don't recreate webUI for the same host.
+      return;
+    }
+    ClearWebUI();
+  }
   web_ui_ = CreateWebUIIOS(url);
 }
 
