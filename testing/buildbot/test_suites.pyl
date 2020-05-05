@@ -3259,23 +3259,6 @@
       },
     },
 
-    'performance_system_health_isolated_scripts': {
-      'performance_test_suite': {
-        'args': [
-          # executable is set in gn_isolate_map.pyl
-          '--benchmarks=system_health.common_desktop',
-          # Unknown args are appended as passthrough-args to the executable
-          '-v',
-          '--assert-gpu-compositing',
-          '--upload-results',
-          '--extra-browser-args=LLVM_PROFILE_FILE=${ISOLATED_OUTDIR}'
-        ],
-        'merge': {
-          'script': '//tools/perf/process_perf_results.py',
-        },
-      }
-    },
-
     'pixel_browser_tests_gtests': {
       'pixel_browser_tests': {
         'name': 'pixel_browser_tests',
