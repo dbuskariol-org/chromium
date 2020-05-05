@@ -6049,7 +6049,6 @@ crbug.com/1061029 [ Mac ] external/wpt/html/cross-origin-embedder-policy/cache-s
 # [virtual/...]external/wpt/web-animation test flakes
 crbug.com/1064065 virtual/threaded/external/wpt/css/css-animations/event-dispatch.tentative.html [ Pass Failure ]
 crbug.com/1064127 virtual/threaded/external/wpt/web-animations/timing-model/animations/update-playback-rate-slow.html [ Pass Failure ]
-crbug.com/1064463 external/wpt/web-animations/interfaces/Animation/style-change-events.html [ Pass Failure ]
 
 # These tests will pass once the --enable-features=TrustTokens flag is on by
 # default. A virtual test suite runs the same tests with the flag enabled.
