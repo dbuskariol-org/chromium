@@ -230,7 +230,30 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
     @Override
     public void maybeSetWindowId(Intent intent) {}
 
-    private void closeTab() {
+    @Override
+    public boolean supportsCreatingNewTabs() {
+        // In WebLayer all URLs that ExternalNavigationHandler loads internally are loaded within
+        // the current tab; this flow is sufficient for WebLayer from a UX POV, and there is no
+        // reason to add the complexity of a flow to create new tabs here. In particular, in Chrome
+        // that new tab creation is done by launching an activity targeted at the Chrome package.
+        // This would not work for WebLayer as the embedder does not in general handle incoming
+        // browsing intents.
+        return false;
+    }
+
+    @Override
+    public void loadUrlInNewTab(final String url, final boolean launchIncognito) {
+        // Should never be invoked based on the implementation of supportsCreatingNewTabs().
+        assert false;
+    }
+
+    @Override
+    public boolean canLoadUrlInCurrentTab() {
+        return true;
+    }
+
+    @Override
+    public void closeTab() {
         InterceptNavigationDelegateClientImpl.closeTab(mTab);
     }
 
