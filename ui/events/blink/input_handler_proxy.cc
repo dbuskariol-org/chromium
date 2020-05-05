@@ -339,9 +339,9 @@ void InputHandlerProxy::DispatchSingleInputEvent(
           &monitored_latency_info);
   auto scoped_event_metrics_monitor =
       input_handler_->GetScopedEventMetricsMonitor(
-          {WebEventTypeToEventType(event_with_callback->event().GetType()),
+          {event_with_callback->event().GetTypeAsUiEventType(),
            event_with_callback->event().TimeStamp(),
-           GetScrollInputTypeForEvent(event_with_callback->event())});
+           event_with_callback->event().GetScrollInputType()});
 
   current_overscroll_params_.reset();
 
@@ -417,7 +417,7 @@ void InputHandlerProxy::InjectScrollbarGestureScroll(
                               pointer_result.scroll_offset.y());
 
   std::unique_ptr<WebGestureEvent> synthetic_gesture_event =
-      GenerateInjectedScrollGesture(
+      WebGestureEvent::GenerateInjectedScrollGesture(
           type, original_timestamp, blink::WebGestureDevice::kScrollbar,
           position_in_widget, scroll_delta, pointer_result.scroll_units);
 
