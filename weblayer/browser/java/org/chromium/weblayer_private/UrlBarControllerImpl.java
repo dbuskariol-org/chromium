@@ -21,6 +21,8 @@ import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.components.omnibox.SecurityButtonAnimationDelegate;
 import org.chromium.components.omnibox.SecurityStatusIcon;
+import org.chromium.components.page_info.PageInfoController;
+import org.chromium.components.page_info.PageInfoControllerDelegate;
 import org.chromium.weblayer_private.interfaces.IObjectWrapper;
 import org.chromium.weblayer_private.interfaces.IUrlBarController;
 import org.chromium.weblayer_private.interfaces.ObjectWrapper;
@@ -130,7 +132,20 @@ public class UrlBarControllerImpl extends IUrlBarController.Stub {
                             UrlBarControllerImplJni.get().getConnectionSecurityLevel(
                                     mNativeUrlBarController))));
 
-            // TODO(crbug.com/1025607): Set a click listener to show Page Info UI.
+            // TODO(crbug.com/1025607): Allow the embedder to make the entire URL bar clicklable.
+            mSecurityButton.setOnClickListener(view -> {
+                PageInfoController.show(mBrowserImpl.getWindowAndroid().getActivity().get(),
+                        mBrowserImpl.getActiveTab().getWebContents(),
+                        /* contentPublisher= */ null, PageInfoController.OpenedFromSource.TOOLBAR,
+                        new PageInfoControllerDelegate(
+                                ((FragmentWindowAndroid) mBrowserImpl.getWindowAndroid())
+                                        .getModalDialogManager(),
+                                new AutocompleteSchemeClassifierImpl(),
+                                /** vrHandler= */ null,
+                                /** isSiteSettingsAvailable= */ false,
+                                /** useDarkColors= */ !mBrowserImpl.getDarkThemeEnabled(),
+                                /** cookieControlsShown= */ false));
+            });
         }
 
         @DrawableRes
