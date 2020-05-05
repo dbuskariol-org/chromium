@@ -665,6 +665,7 @@ void TabletModeController::OnInputDeviceConfigurationChanged(
 }
 
 void TabletModeController::OnDeviceListsComplete() {
+  initial_input_device_set_up_finished_ = true;
   HandlePointingDeviceAddedOrRemoved();
 }
 
@@ -942,6 +943,9 @@ TabletModeController::CurrentTabletModeIntervalType() {
 }
 
 void TabletModeController::HandlePointingDeviceAddedOrRemoved() {
+  if (!initial_input_device_set_up_finished_)
+    return;
+
   bool has_external_pointing_device = false;
   bool has_internal_pointing_device = false;
 
