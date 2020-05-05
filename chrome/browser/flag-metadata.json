@@ -311,7 +311,7 @@
   {
     "name": "autofill-keyboard-accessory-view",
     "owners": [ "fhorschig@chromium.org" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "autofill-no-local-save-on-unmask-success",
@@ -376,12 +376,12 @@
   {
     "name": "autofill-use-improved-label-disambiguation",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "autofill-use-mobile-label-disambiguation",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "avatar-toolbar-button",
@@ -1193,7 +1193,7 @@
   {
     "name": "enable-autofill-manual-fallback",
     "owners": [ "fhorschig@chromium.org" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "enable-autofill-refresh-style",
@@ -2052,7 +2052,7 @@
   {
     "name": "enable-suggestions-with-substring-match",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "enable-surfacecontrol",
@@ -3385,7 +3385,7 @@
   {
     "name": "password-editing-android",
     "owners": [ "fhorschig" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "password-manager-onboarding-android",
