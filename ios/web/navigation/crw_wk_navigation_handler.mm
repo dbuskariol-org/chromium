@@ -324,27 +324,6 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     }
   }
 
-  // WKBasedNavigationManager doesn't use |loadCurrentURL| for reload or back/
-  // forward navigation. So this is the first point where a form repost would
-  // be detected. Display the confirmation dialog.
-  if ([action.request.HTTPMethod isEqual:@"POST"] &&
-      (action.navigationType == WKNavigationTypeFormResubmitted)) {
-    self.webStateImpl->ShowRepostFormWarningDialog(
-        base::BindOnce(^(bool shouldContinue) {
-          if (self.beingDestroyed) {
-            decisionHandler(WKNavigationActionPolicyCancel);
-          } else if (shouldContinue) {
-            decisionHandler(WKNavigationActionPolicyAllow);
-          } else {
-            decisionHandler(WKNavigationActionPolicyCancel);
-            if (action.targetFrame.mainFrame) {
-              [self.pendingNavigationInfo setCancelled:YES];
-            }
-          }
-        }));
-    return;
-  }
-
   // Invalid URLs should not be loaded.
   if (!requestURL.is_valid()) {
     // The HTML5 spec indicates that window.open with an invalid URL should open
@@ -417,6 +396,24 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
 
   if (policyDecision.ShouldAllowNavigation()) {
     if ([[action.request HTTPMethod] isEqualToString:@"POST"]) {
+      // Display the confirmation dialog if a form repost is detected.
+      if (action.navigationType == WKNavigationTypeFormResubmitted) {
+        self.webStateImpl->ShowRepostFormWarningDialog(
+            base::BindOnce(^(bool shouldContinue) {
+              if (self.beingDestroyed) {
+                decisionHandler(WKNavigationActionPolicyCancel);
+              } else if (shouldContinue) {
+                decisionHandler(WKNavigationActionPolicyAllow);
+              } else {
+                decisionHandler(WKNavigationActionPolicyCancel);
+                if (action.targetFrame.mainFrame) {
+                  [self.pendingNavigationInfo setCancelled:YES];
+                }
+              }
+            }));
+        return;
+      }
+
       web::NavigationItemImpl* item =
           self.navigationManagerImpl->GetCurrentItemImpl();
       // TODO(crbug.com/570699): Remove this check once it's no longer possible
