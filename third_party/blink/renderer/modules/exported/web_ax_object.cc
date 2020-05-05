@@ -1074,7 +1074,7 @@ bool WebAXObject::SupportsRangeValue() const {
   if (IsDetached())
     return false;
 
-  return private_->SupportsRangeValue();
+  return private_->IsRangeValueSupported();
 }
 
 WebString WebAXObject::ValueDescription() const {
