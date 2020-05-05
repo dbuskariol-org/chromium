@@ -145,10 +145,14 @@ void V8GCController::GcEpilogue(v8::Isolate* isolate,
   ThreadState* current_thread_state = ThreadState::Current();
   if (current_thread_state && !current_thread_state->IsGCForbidden()) {
     if (flags & v8::kGCCallbackFlagForced) {
-      // Forces a precise GC at the end of the current event loop.
-      // This is required for testing code that cannot use GC internals but
-      // rather has to rely on window.gc().
-      current_thread_state->ScheduleForcedGCForTesting();
+      // Forces a precise GC at the end of the current event loop. This is
+      // required for testing code that cannot use GC internals but rather has
+      // to rely on window.gc(). Only schedule additional GCs if the last GC was
+      // using conservative stack scanning.
+      if (type == v8::kGCTypeScavenge ||
+          current_thread_state->RequiresForcedGCForTesting()) {
+        current_thread_state->ScheduleForcedGCForTesting();
+      }
     }
   }
 
