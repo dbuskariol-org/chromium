@@ -1644,9 +1644,6 @@ extern const char
 extern const char kHappinessTrackingSurveysForDesktopMigrationName[];
 extern const char kHappinessTrackingSurveysForDesktopMigrationDescription[];
 
-extern const char kIntentPickerName[];
-extern const char kIntentPickerDescription[];
-
 extern const char kKernelnextVMsName[];
 extern const char kKernelnextVMsDescription[];
 

@@ -4522,12 +4522,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kFileHandlingAPIDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(blink::features::kFileHandlingAPI)},
 
-#if !defined(OS_ANDROID)
-    {"enable-intent-picker", flag_descriptions::kIntentPickerName,
-     flag_descriptions::kIntentPickerDescription, kOsMac | kOsWin | kOsLinux,
-     FEATURE_VALUE_TYPE(features::kIntentPicker)},
-#endif  // !defined(OS_ANDROID)
-
 #if defined(TOOLKIT_VIEWS)
     {"installable-ink-drop", flag_descriptions::kInstallableInkDropName,
      flag_descriptions::kInstallableInkDropDescription, kOsDesktop,

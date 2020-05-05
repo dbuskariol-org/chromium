@@ -2854,11 +2854,6 @@ const char kHappinessTrackingSurveysForDesktopMigrationName[] =
 const char kHappinessTrackingSurveysForDesktopMigrationDescription[] =
     "Enable the latest version of Happiness Tracking Surveys.";
 
-const char kIntentPickerName[] = "Intent picker";
-const char kIntentPickerDescription[] =
-    "When going to a site that has URL managable by a PWA, show the intent"
-    "picker to allow user to open the URL in the app.";
-
 const char kKernelnextVMsName[] = "Enable VMs on experimental kernels.";
 const char kKernelnextVMsDescription[] =
     "Enables VM support on devices running experimental kernel versions.";

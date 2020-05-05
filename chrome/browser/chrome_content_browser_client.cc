@@ -3818,20 +3818,18 @@ ChromeContentBrowserClient::CreateThrottlesForNavigation(
 #endif
 
 #if !defined(OS_ANDROID)
-  if (base::FeatureList::IsEnabled(features::kIntentPicker)) {
-    auto url_to_apps_throttle =
+  auto url_to_apps_throttle =
 #if defined(OS_CHROMEOS)
-        base::FeatureList::IsEnabled(features::kAppServiceIntentHandling)
-            ? apps::CommonAppsNavigationThrottle::MaybeCreate(handle)
-            : chromeos::ChromeOsAppsNavigationThrottle::MaybeCreate(handle);
+      base::FeatureList::IsEnabled(features::kAppServiceIntentHandling)
+          ? apps::CommonAppsNavigationThrottle::MaybeCreate(handle)
+          : chromeos::ChromeOsAppsNavigationThrottle::MaybeCreate(handle);
 #elif defined(OS_MACOSX)
-        apps::MacAppsNavigationThrottle::MaybeCreate(handle);
+      apps::MacAppsNavigationThrottle::MaybeCreate(handle);
 #else
-        apps::AppsNavigationThrottle::MaybeCreate(handle);
+      apps::AppsNavigationThrottle::MaybeCreate(handle);
 #endif
-    if (url_to_apps_throttle)
-      throttles.push_back(std::move(url_to_apps_throttle));
-  }
+  if (url_to_apps_throttle)
+    throttles.push_back(std::move(url_to_apps_throttle));
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
