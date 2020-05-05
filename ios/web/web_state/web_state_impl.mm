@@ -736,8 +736,6 @@ GURL WebStateImpl::GetCurrentURL(URLVerificationTrustLevel* trust_level) const {
   } else {
     equalOrigins = result.GetOrigin() == lastCommittedURL.GetOrigin();
   }
-  DCHECK(equalOrigins) << "Origin mismatch. URL: " << result.spec()
-                       << " Last committed: " << lastCommittedURL.spec();
   UMA_HISTOGRAM_BOOLEAN("Web.CurrentOriginEqualsLastCommittedOrigin",
                         equalOrigins);
   if (!equalOrigins || (item && item->IsUntrusted())) {
