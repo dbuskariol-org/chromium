@@ -5196,25 +5196,6 @@
     },
   },
   {
-    'project': 'chromium',
-    'bucket': 'try',
-    'name': 'tryserver.chromium.mac',
-    'mixins': ['chromium-tester-service-account'],
-    'machines': {
-      'mac-rel': {
-        'mixins': [
-            'mac_10.13',
-            'no_gpu',
-        ],
-        'test_suites': {
-          'gtest_tests': 'chromium_mac_gtests',
-          'isolated_scripts': 'chromium_mac_rel_isolated_scripts',
-          'scripts': 'chromium_mac_scripts',
-        },
-      },
-    },
-  },
-  {
     'project': 'devtools-frontend',
     'bucket': 'try',
     'name': 'tryserver.devtools-frontend',
