@@ -1150,7 +1150,7 @@
   {
     "name": "enable-autofill-account-wallet-storage",
     "owners": [ "treib", "jsaul@google.com", "butter-team@google.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 88
   },
   {
     "name": "enable-autofill-cache-server-card-info",
