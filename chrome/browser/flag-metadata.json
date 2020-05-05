@@ -1202,7 +1202,7 @@
   {
     "name": "enable-close-tab-suggestions",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-cloud-print-xps",
@@ -2035,37 +2035,37 @@
   {
     "name": "enable-tab-engagement-reporting",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-tab-grid-layout",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-tab-groups",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-tab-groups-continuation",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "enable-tab-groups-ui-improvements",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-tab-switcher-on-return",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-tab-to-gts-animation",
     "owners": [ "memex-team@google.com" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "enable-text-fragment-anchor",
