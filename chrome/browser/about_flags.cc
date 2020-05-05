@@ -5079,11 +5079,6 @@ const FeatureEntry kFeatureEntries[] = {
                                     "BackForwardCache")},
 
 #if defined(OS_ANDROID)
-    {"omnibox-remove-suggestions-from-clipboard",
-     flag_descriptions::kOmniboxRemoveSuggestionsFromClipboardName,
-     flag_descriptions::kOmniboxRemoveSuggestionsFromClipboardDescription,
-     kOsAndroid,
-     FEATURE_VALUE_TYPE(omnibox::kOmniboxRemoveSuggestionsFromClipboard)},
     {"context-menu-copy-image", flag_descriptions::kContextMenuCopyImageName,
      flag_descriptions::kContextMenuCopyImageDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kContextMenuCopyImage)},

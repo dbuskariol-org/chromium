@@ -1379,11 +1379,6 @@ const char kOmniboxOnFocusSuggestionsContextualWebDescription[] =
     "current URL. Will only work if user is signed-in and syncing, or is "
     "otherwise eligible to send the current page URL to the suggest server.";
 
-const char kOmniboxRemoveSuggestionsFromClipboardName[] =
-    "Omnibox remove suggestions from clipboard";
-const char kOmniboxRemoveSuggestionsFromClipboardDescription[] =
-    "Allow users to remove suggestions from clipboard.";
-
 const char kOmniboxSearchEngineLogoName[] = "Omnibox search engine logo";
 const char kOmniboxSearchEngineLogoDescription[] =
     "Display the current default search engine's logo in the omnibox";

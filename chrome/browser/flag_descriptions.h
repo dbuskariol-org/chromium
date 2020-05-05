@@ -808,9 +808,6 @@ extern const char kOmniboxOnFocusSuggestionsDescription[];
 extern const char kOmniboxOnFocusSuggestionsContextualWebName[];
 extern const char kOmniboxOnFocusSuggestionsContextualWebDescription[];
 
-extern const char kOmniboxRemoveSuggestionsFromClipboardName[];
-extern const char kOmniboxRemoveSuggestionsFromClipboardDescription[];
-
 extern const char kOmniboxShortBookmarkSuggestionsName[];
 extern const char kOmniboxShortBookmarkSuggestionsDescription[];
 

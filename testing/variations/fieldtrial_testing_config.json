@@ -94,21 +94,6 @@
             ]
         }
     ],
-    "AndroidClipboardSuggestionsRemoval": [
-        {
-            "platforms": [
-                "android"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "OmniboxRemoveSuggestionsFromClipboard"
-                    ]
-                }
-            ]
-        }
-    ],
     "AndroidInProductHelpContextualSearchPromotePanelOpen": [
         {
             "platforms": [
