@@ -1163,6 +1163,10 @@ message PromptProto {
   // like go_back do not shut down autofill assistant.
   // TODO(marianfe): Consider introducing a BrowseAction instead.
   optional bool browse_mode = 7;
+
+  // A list of domains and subdomains to allow users to navigate to when in
+  // browse mode.
+  repeated string browse_domains_whitelist = 9;
 }
 
 message ContactDetailsProto {
