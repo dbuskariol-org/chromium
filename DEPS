@@ -297,7 +297,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
-  'shaderc_revision': '41f271e6139ceb6a54457fb2da14571f66100a9a',
+  'shaderc_revision': '15a66d72f33a099ec65e0fd37cf14548ed1d2bdb',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling feed
   # and whatever else without interference from each other.
@@ -927,7 +927,7 @@ deps = {
     Var('chromium_git') + '/codecs/libgav1.git' + '@' + '638ef84819f8b3cd614dcf63378fe4814aa4cb2a',
 
   'src/third_party/glslang/src':
-    Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + '2c53baedbb64049e15ed8d3b38f867c1d9bec097',
+    Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + 'b5f003d7a3ece37db45578a8a3140b370036fc64',
 
   'src/third_party/google_toolbox_for_mac/src': {
       'url': Var('chromium_git') + '/external/github.com/google/google-toolbox-for-mac.git' + '@' + Var('google_toolbox_for_mac_revision'),
