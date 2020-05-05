@@ -28,6 +28,8 @@ class NetworkDiagnosticsImpl : public mojom::NetworkDiagnosticsRoutines {
   void LanConnectivity(LanConnectivityCallback callback) override;
   void SignalStrength(SignalStrengthCallback callback) override;
   void GatewayCanBePinged(GatewayCanBePingedCallback callback) override;
+  void HasSecureWiFiConnection(
+      HasSecureWiFiConnectionCallback callback) override;
 
  private:
   mojo::ReceiverSet<mojom::NetworkDiagnosticsRoutines> receivers_;

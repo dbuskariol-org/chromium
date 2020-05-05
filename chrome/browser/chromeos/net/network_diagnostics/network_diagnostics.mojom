@@ -37,6 +37,15 @@ enum GatewayCanBePingedProblem {
   kNonDefaultNetworksAboveLatencyThreshold,
 };
 
+// Messages related to the HasSecureWiFiConnection routine.
+[Extensible]
+enum HasSecureWiFiConnectionProblem {
+  kSecurityTypeNone,
+  kSecurityTypeWep8021x,
+  kSecurityTypeWepPsk,
+  kUnknownSecurityType,
+};
+
 // This interface is to be used by any clients that need to run specific
 // network-related diagnostics. Expected clients of this interface are
 // NetworkHealth, cros_healthd, and a connectivity diagnostics Web UI (to name
@@ -55,4 +64,9 @@ interface NetworkDiagnosticsRoutines {
   // Tests whether the gateway of connected networks is pingable.
   GatewayCanBePinged() => (RoutineVerdict verdict,
       array<GatewayCanBePingedProblem> problems);
+
+  // Tests whether the WiFi connection is secure. Note that if WiFi is not
+  // connected, the routine will result in a |kNotRun| verdict.
+  HasSecureWiFiConnection() => (RoutineVerdict verdict,
+      array<HasSecureWiFiConnectionProblem> problems);
 };

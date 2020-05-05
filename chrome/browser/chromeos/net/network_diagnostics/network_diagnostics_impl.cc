@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "chrome/browser/chromeos/net/network_diagnostics/gateway_can_be_pinged_routine.h"
+#include "chrome/browser/chromeos/net/network_diagnostics/has_secure_wifi_connection_routine.h"
 #include "chrome/browser/chromeos/net/network_diagnostics/lan_connectivity_routine.h"
 #include "chrome/browser/chromeos/net/network_diagnostics/signal_strength_routine.h"
 #include "chromeos/dbus/dbus_thread_manager.h"
@@ -42,6 +43,12 @@ void NetworkDiagnosticsImpl::GatewayCanBePinged(
       chromeos::DBusThreadManager::Get()->GetDebugDaemonClient();
   GatewayCanBePingedRoutine gateway_can_be_pinged_routine(client);
   gateway_can_be_pinged_routine.RunTest(std::move(callback));
+}
+
+void NetworkDiagnosticsImpl::HasSecureWiFiConnection(
+    HasSecureWiFiConnectionCallback callback) {
+  HasSecureWiFiConnectionRoutine has_secure_wifi_connection_routine;
+  has_secure_wifi_connection_routine.RunTest(std::move(callback));
 }
 
 }  // namespace network_diagnostics
