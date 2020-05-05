@@ -611,7 +611,7 @@ int GetInstallAge(const InstallerState& installer_state) {
 
 void RecordUnPackMetrics(UnPackStatus unpack_status,
                          UnPackConsumer consumer) {
-  std::string consumer_name = "";
+  std::string consumer_name;
 
   switch (consumer) {
     case UnPackConsumer::CHROME_ARCHIVE_PATCH:
