@@ -1211,11 +1211,6 @@
     "expiry_milestone": 86
   },
   {
-    "name": "enable-bookmark-reorder",
-    "owners": ["jhimawan@google.com", "twellington" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "enable-breakpad-upload-no-delay",
     "owners": [ "olivierrobin" ],
     "expiry_milestone": 82

@@ -1688,11 +1688,6 @@ const char kRewriteLevelDBOnDeletionName[] =
 const char kRewriteLevelDBOnDeletionDescription[] =
     "Rewrite LevelDB instances to remove traces of deleted data from disk.";
 
-const char kReorderBookmarksName[] = "Reorder bookmarks";
-const char kReorderBookmarksDescription[] =
-    "Allows the user to reorder their bookmarks from their Android device. "
-    "The bookmark ordering will be synced across devices.";
-
 const char kRequestUnbufferedDispatchName[] = "Use RequestUnbufferedDispatch";
 const char kRequestUnbufferedDispatchDescription[] =
     "Calls RequestUnbufferedDispatch in the Android API to disable buffering "

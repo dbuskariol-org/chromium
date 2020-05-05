@@ -990,9 +990,6 @@ extern const char kReducedReferrerGranularityDescription[];
 extern const char kRewriteLevelDBOnDeletionName[];
 extern const char kRewriteLevelDBOnDeletionDescription[];
 
-extern const char kReorderBookmarksName[];
-extern const char kReorderBookmarksDescription[];
-
 extern const char kRequestUnbufferedDispatchName[];
 extern const char kRequestUnbufferedDispatchDescription[];
 
