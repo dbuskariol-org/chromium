@@ -94,6 +94,71 @@ class ToolTip {
       return;
     }
 
+    /**
+     * Helper for recursively flattening an Object.
+     *
+     * @param {!Set} visited The set of visited objects, excluding
+     *          {@code object}.
+     * @param {!Object<?,?>} flattened The flattened object being built.
+     * @param {string} path The current flattened path.
+     * @param {!Object<?,?>} object The nested dict to be flattened.
+     */
+    function flattenObjectRec(visited, flattened, path, object) {
+      if (typeof object !== 'object' || visited.has(object)) {
+        return;
+      }
+      visited.add(object);
+      for (const [key, value] of Object.entries(object)) {
+        const fullPath = path ? `${path}.${key}` : key;
+        // Recurse on non-null objects.
+        if (!!value && typeof value === 'object') {
+          flattenObjectRec(
+              visited, flattened, fullPath,
+              /** @type {!Object<?,?>} */ (value));
+        } else {
+          // Everything else is considered a leaf value.
+          flattened[fullPath] = value;
+        }
+      }
+    }
+
+    /**
+     * Recursively flattens an Object of key/value pairs. Nested objects will be
+     * flattened to paths with a . separator between each key. If there are
+     * circular dependencies, they will not be expanded.
+     *
+     * For example, converting:
+     *
+     * {
+     *   'foo': 'hello',
+     *   'bar': 1,
+     *   'baz': {
+     *     'x': 43.5,
+     *     'y': 'fox'
+     *     'z': [1, 2]
+     *   },
+     *   'self': (reference to self)
+     * }
+     *
+     * will yield:
+     *
+     * {
+     *   'foo': 'hello',
+     *   'bar': 1,
+     *   'baz.x': 43.5,
+     *   'baz.y': 'fox',
+     *   'baz.z.0': '1',
+     *   'baz.y.1': '2'
+     * }
+     * @param {!Object<?,?>} object The object to be flattened.
+     * @return {!Object<?,?>} the flattened object.
+     */
+    function flattenObject(object) {
+      const flattened = {};
+      flattenObjectRec(new Set(), flattened, '', object);
+      return flattened;
+    }
+
     // The JSON is a dictionary of data describer name to their data. Assuming a
     // convention that describers emit a dictionary from string->string, this is
     // flattened to an array. Each top-level dictionary entry is flattened to a
@@ -104,7 +169,15 @@ class ToolTip {
         /** @type {!Object<?,?>} */ (JSON.parse(description_json));
     const flattenedDescription = [];
     for (const [title, value] of Object.entries(description)) {
-      flattenedDescription.push([title, null], ...Object.entries(value));
+      flattenedDescription.push([title, null]);
+      const flattenedValue = flattenObject(value);
+      for (const [propName, propValue] of Object.entries(flattenedValue)) {
+        let strValue = String(propValue);
+        if (strValue.length > 50) {
+          strValue = `${strValue.substring(0, 47)}...`;
+        }
+        flattenedDescription.push([propName, strValue]);
+      }
     }
     if (flattenedDescription.length === 0) {
       flattenedDescription.push(['No Data', null]);
