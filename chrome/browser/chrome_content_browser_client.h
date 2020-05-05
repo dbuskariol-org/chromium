@@ -147,7 +147,7 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
       const GURL& destination_url) override;
   bool ShouldUseMobileFlingCurve() override;
   bool ShouldUseProcessPerSite(content::BrowserContext* browser_context,
-                               const GURL& effective_url) override;
+                               const GURL& site_url) override;
   bool ShouldUseSpareRenderProcessHost(content::BrowserContext* browser_context,
                                        const GURL& site_url) override;
   bool DoesSiteRequireDedicatedProcess(content::BrowserContext* browser_context,

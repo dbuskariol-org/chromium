@@ -323,10 +323,10 @@ class CONTENT_EXPORT ContentBrowserClient {
   // curve for scrolling.
   virtual bool ShouldUseMobileFlingCurve();
 
-  // Returns whether all instances of the specified effective URL should be
+  // Returns whether all instances of the specified site URL should be
   // rendered by the same process, rather than using process-per-site-instance.
   virtual bool ShouldUseProcessPerSite(BrowserContext* browser_context,
-                                       const GURL& effective_url);
+                                       const GURL& site_url);
 
   // Returns whether a spare RenderProcessHost should be used for navigating to
   // the specified site URL.

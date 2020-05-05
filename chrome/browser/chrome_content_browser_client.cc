@@ -1512,29 +1512,29 @@ bool ChromeContentBrowserClient::ShouldUseMobileFlingCurve() {
 
 bool ChromeContentBrowserClient::ShouldUseProcessPerSite(
     content::BrowserContext* browser_context,
-    const GURL& effective_url) {
+    const GURL& site_url) {
   Profile* profile = Profile::FromBrowserContext(browser_context);
   if (!profile)
     return false;
 
   // NTP should use process-per-site.  This is a performance optimization to
   // reduce process count associated with NTP tabs.
-  if (effective_url == GURL(chrome::kChromeUINewTabURL))
+  if (site_url == GURL(chrome::kChromeUINewTabURL))
     return true;
 
   // The web footer experiment should share its renderer to not effectively
   // instantiate one per window. See https://crbug.com/993502.
-  if (effective_url == GURL(chrome::kChromeUIWebFooterExperimentURL))
+  if (site_url == GURL(chrome::kChromeUIWebFooterExperimentURL))
     return true;
 
 #if !defined(OS_ANDROID)
-  if (search::ShouldUseProcessPerSiteForInstantURL(effective_url, profile))
+  if (search::ShouldUseProcessPerSiteForInstantSiteURL(site_url, profile))
     return true;
 #endif
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
   if (ChromeContentBrowserClientExtensionsPart::ShouldUseProcessPerSite(
-          profile, effective_url))
+          profile, site_url))
     return true;
 #endif
 
