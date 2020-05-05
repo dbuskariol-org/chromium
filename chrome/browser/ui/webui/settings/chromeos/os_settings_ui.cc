@@ -49,7 +49,6 @@
 #include "chrome/browser/ui/webui/settings/chromeos/cups_printers_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/date_time_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_storage_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/google_assistant_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/kerberos_accounts_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_features_util.h"
@@ -67,7 +66,6 @@
 #include "chrome/browser/ui/webui/settings/profile_info_handler.h"
 #include "chrome/browser/ui/webui/settings/protocol_handlers_handler.h"
 #include "chrome/browser/ui/webui/settings/reset_settings_handler.h"
-#include "chrome/browser/ui/webui/settings/search_engines_handler.h"
 #include "chrome/browser/ui/webui/settings/settings_cookies_view_handler.h"
 #include "chrome/browser/ui/webui/settings/shared_settings_localized_strings_provider.h"
 #include "chrome/browser/ui/webui/settings/tts_handler.h"
@@ -136,8 +134,6 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
       std::make_unique<::settings::ProfileInfoHandler>(profile));
   AddSettingsPageUIHandler(
       std::make_unique<::settings::ProtocolHandlersHandler>());
-  AddSettingsPageUIHandler(
-      std::make_unique<::settings::SearchEnginesHandler>(profile));
   AddSettingsPageUIHandler(
       base::WrapUnique(::settings::AboutHandler::Create(html_source, profile)));
   AddSettingsPageUIHandler(
@@ -242,8 +238,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
       chromeos::settings::CupsPrintersHandler::Create(web_ui()));
   web_ui()->AddMessageHandler(base::WrapUnique(
       chromeos::settings::DateTimeHandler::Create(html_source)));
-  web_ui()->AddMessageHandler(
-      std::make_unique<chromeos::settings::GoogleAssistantHandler>());
 
   std::unique_ptr<chromeos::settings::KerberosAccountsHandler>
       kerberos_accounts_handler =
