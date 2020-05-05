@@ -139,6 +139,7 @@ jumbo_source_set("common") {
     "//net",
     "//services/metrics/public/cpp:metrics_cpp",
     "//services/metrics/public/cpp:ukm_builders",
+    "//services/metrics/public/mojom:mojom",
     "//services/network/public/cpp:cpp",
   ]
 
