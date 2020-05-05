@@ -509,7 +509,7 @@
       'win-asan': 'asan_clang_fuzzer_static_v8_heap_minimal_symbols_release',
     },
 
-    'chrome.perf': {
+    'chromium.perf': {
       'Android Builder Perf': 'official_goma_minimal_symbols_android',
       'Android arm64 Builder Perf': 'official_goma_minimal_symbols_android_arm64',
       'android_arm64-builder-perf': 'official_goma_minimal_symbols_android_arm64',
@@ -520,7 +520,7 @@
       'win64-builder-perf': 'official_goma_perf',
     },
 
-    'chrome.perf.fyi': {
+    'chromium.perf.fyi': {
       'android-cfi-builder-perf-fyi': 'official_goma_minimal_symbols_android_thin_lto_opt',
       'android_arm64-cfi-builder-perf-fyi': 'official_goma_minimal_symbols_android_thin_lto_opt_arm64',
       'chromeos-kevin-builder-perf-fyi': 'chromeos_kevin',
@@ -931,7 +931,7 @@
       'mac-rel': 'gpu_tests_release_trybot_deterministic_mac',
     },
 
-    'tryserver.chrome.perf': {
+    'tryserver.chromium.perf': {
       'Android Compile Perf': 'official_goma_minimal_symbols_android',
       'Android arm64 Compile Perf': 'official_goma_minimal_symbols_android_arm64',
       'Linux Builder Perf': 'official_goma_linux_perf',
