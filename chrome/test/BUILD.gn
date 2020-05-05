@@ -3617,7 +3617,6 @@ test("unit_tests") {
   data = [
     "../browser/flag-metadata.json",
     "../browser/flag-never-expire-list.json",
-    "data/",
     "//base/test/data/",
     "//components/test/data/",
     "//extensions/test/data/",
@@ -3628,6 +3627,28 @@ test("unit_tests") {
     "//third_party/zlib/google/test/data/",
     "//tools/metrics/histograms/enums.xml",
   ]
+
+  if (is_android) {
+    # Trim data specifically to what is used by unit tests on Android.
+    data += [
+      "data/android/google.png",
+      "data/file_select_helper/",
+      "data/media/feeds/media-feed.json",
+      "data/offline_pages/",
+      "data/osdd/",
+      "data/public_offline_pages/",
+      "data/whitelists/content_pack/site_list.json",
+
+      # webapk_installer_unittest
+      "data/banners/image-512px-corp.png",
+      "data/nostore.html",
+      "data/simple.html",
+      "data/title1.html",
+    ]
+  } else {
+    data += [ "data/" ]
+  }
+
   data += js2gtest_js_libraries
   if (is_android) {
     data += [
