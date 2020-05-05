@@ -1261,45 +1261,43 @@ const FeatureEntry::FeatureVariation kLongpressResolveVariations[] = {
 #endif  // defined(OS_ANDROID)
 
 const FeatureEntry::FeatureParam kResamplingInputEventsLSQEnabled[] = {
-    {"predictor", ui::input_prediction::kScrollPredictorNameLsq}};
+    {"predictor", blink::features::kScrollPredictorNameLsq}};
 const FeatureEntry::FeatureParam kResamplingInputEventsKalmanEnabled[] = {
-    {"predictor", ui::input_prediction::kScrollPredictorNameKalman}};
+    {"predictor", blink::features::kScrollPredictorNameKalman}};
 const FeatureEntry::FeatureParam kResamplingInputEventsLinearFirstEnabled[] = {
-    {"predictor", ui::input_prediction::kScrollPredictorNameLinearFirst}};
+    {"predictor", blink::features::kScrollPredictorNameLinearFirst}};
 const FeatureEntry::FeatureParam kResamplingInputEventsLinearSecondEnabled[] = {
-    {"predictor", ui::input_prediction::kScrollPredictorNameLinearSecond}};
+    {"predictor", blink::features::kScrollPredictorNameLinearSecond}};
 const FeatureEntry::FeatureParam
     kResamplingInputEventsLinearResamplingEnabled[] = {
-        {"predictor",
-         ui::input_prediction::kScrollPredictorNameLinearResampling}};
+        {"predictor", blink::features::kScrollPredictorNameLinearResampling}};
 
 const FeatureEntry::FeatureVariation kResamplingInputEventsFeatureVariations[] =
-    {{ui::input_prediction::kScrollPredictorNameLsq,
+    {{blink::features::kScrollPredictorNameLsq,
       kResamplingInputEventsLSQEnabled,
       base::size(kResamplingInputEventsLSQEnabled), nullptr},
-     {ui::input_prediction::kScrollPredictorNameKalman,
+     {blink::features::kScrollPredictorNameKalman,
       kResamplingInputEventsKalmanEnabled,
       base::size(kResamplingInputEventsKalmanEnabled), nullptr},
-     {ui::input_prediction::kScrollPredictorNameLinearFirst,
+     {blink::features::kScrollPredictorNameLinearFirst,
       kResamplingInputEventsLinearFirstEnabled,
       base::size(kResamplingInputEventsLinearFirstEnabled), nullptr},
-     {ui::input_prediction::kScrollPredictorNameLinearSecond,
+     {blink::features::kScrollPredictorNameLinearSecond,
       kResamplingInputEventsLinearSecondEnabled,
       base::size(kResamplingInputEventsLinearSecondEnabled), nullptr},
-     {ui::input_prediction::kScrollPredictorNameLinearResampling,
+     {blink::features::kScrollPredictorNameLinearResampling,
       kResamplingInputEventsLinearResamplingEnabled,
       base::size(kResamplingInputEventsLinearResamplingEnabled), nullptr}};
 
 const FeatureEntry::FeatureParam kFilteringPredictionEmptyFilterEnabled[] = {
-    {"filter", ui::input_prediction::kFilterNameEmpty}};
+    {"filter", blink::features::kFilterNameEmpty}};
 const FeatureEntry::FeatureParam kFilteringPredictionOneEuroFilterEnabled[] = {
-    {"filter", ui::input_prediction::kFilterNameOneEuro}};
+    {"filter", blink::features::kFilterNameOneEuro}};
 
 const FeatureEntry::FeatureVariation kFilteringPredictionFeatureVariations[] = {
-    {ui::input_prediction::kFilterNameEmpty,
-     kFilteringPredictionEmptyFilterEnabled,
+    {blink::features::kFilterNameEmpty, kFilteringPredictionEmptyFilterEnabled,
      base::size(kFilteringPredictionEmptyFilterEnabled), nullptr},
-    {ui::input_prediction::kFilterNameOneEuro,
+    {blink::features::kFilterNameOneEuro,
      kFilteringPredictionOneEuroFilterEnabled,
      base::size(kFilteringPredictionOneEuroFilterEnabled), nullptr}};
 
@@ -4108,14 +4106,14 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-resampling-scroll-events",
      flag_descriptions::kEnableResamplingScrollEventsName,
      flag_descriptions::kEnableResamplingScrollEventsDescription, kOsAll,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(features::kResamplingScrollEvents,
+     FEATURE_WITH_PARAMS_VALUE_TYPE(blink::features::kResamplingScrollEvents,
                                     kResamplingInputEventsFeatureVariations,
                                     "ResamplingScrollEvents")},
 
     {"enable-filtering-scroll-events",
      flag_descriptions::kFilteringScrollPredictionName,
      flag_descriptions::kFilteringScrollPredictionDescription, kOsAll,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(features::kFilteringScrollPrediction,
+     FEATURE_WITH_PARAMS_VALUE_TYPE(blink::features::kFilteringScrollPrediction,
                                     kFilteringPredictionFeatureVariations,
                                     "FilteringScrollPrediction")},
 
