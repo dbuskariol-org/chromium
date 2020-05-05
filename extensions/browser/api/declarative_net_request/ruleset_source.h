@@ -136,7 +136,6 @@ class RulesetSource {
   // Returns null on failure.
   static std::unique_ptr<RulesetSource> CreateTemporarySource(
       int id,
-      api::declarative_net_request::SourceType type,
       size_t rule_count_limit,
       ExtensionId extension_id);
 
@@ -156,9 +155,6 @@ class RulesetSource {
   int id() const { return id_; }
 
   bool is_dynamic_ruleset() const { return id_ == kDynamicRulesetID; }
-
-  // The origin type for this ruleset. Can be from the manifest or dynamic.
-  api::declarative_net_request::SourceType type() const { return type_; }
 
   // The maximum number of rules that will be indexed from this source.
   size_t rule_count_limit() const { return rule_count_limit_; }
@@ -203,7 +199,6 @@ class RulesetSource {
   RulesetSource(base::FilePath json_path,
                 base::FilePath indexed_path,
                 int id,
-                api::declarative_net_request::SourceType type,
                 size_t rule_count_limit,
                 ExtensionId extension_id,
                 bool enabled);
@@ -211,7 +206,6 @@ class RulesetSource {
   base::FilePath json_path_;
   base::FilePath indexed_path_;
   int id_;
-  api::declarative_net_request::SourceType type_;
   size_t rule_count_limit_;
   ExtensionId extension_id_;
   bool enabled_;

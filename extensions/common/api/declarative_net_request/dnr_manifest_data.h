@@ -26,7 +26,8 @@ struct DNRManifestData : Extension::ManifestData {
     std::string manifest_id;
 
     // Uniquely identifies an extension ruleset. The order of rulesets within
-    // the manifest defines the order for ids.
+    // the manifest defines the order for ids. In practice, this is equal to
+    // kMinValidStaticRulesetID + the index of the ruleset within |rulesets|.
     // Note: we introduce another notion of a ruleset ID in addition to
     // |manifest_id| since the id is also used as an input to preference keys
     // and indexed ruleset file paths, and integral IDs are easier to reason
@@ -48,6 +49,12 @@ struct DNRManifestData : Extension::ManifestData {
   static const std::vector<RulesetInfo>& GetRulesets(
       const Extension& extension);
 
+  // Returns the |manifest_id| corresponding to the given |ruleset_id|.
+  static const std::string& GetManifestID(const Extension& extension,
+                                          int ruleset_id);
+
+  // Static rulesets specified by the extension in its manifest, in the order in
+  // which they were specified.
   std::vector<RulesetInfo> rulesets;
 
   DISALLOW_COPY_AND_ASSIGN(DNRManifestData);

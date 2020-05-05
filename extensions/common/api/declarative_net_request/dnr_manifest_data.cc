@@ -6,6 +6,7 @@
 
 #include <utility>
 
+#include "base/check_op.h"
 #include "base/no_destructor.h"
 #include "extensions/common/manifest_constants.h"
 
@@ -30,6 +31,23 @@ const std::vector<DNRManifestData::RulesetInfo>& DNRManifestData::GetRulesets(
     return *empty_vector;
 
   return static_cast<DNRManifestData*>(data)->rulesets;
+}
+
+// static
+const std::string& DNRManifestData::GetManifestID(const Extension& extension,
+                                                  int ruleset_id) {
+  Extension::ManifestData* data =
+      extension.GetManifestData(manifest_keys::kDeclarativeNetRequestKey);
+  DCHECK(data);
+
+  const std::vector<DNRManifestData::RulesetInfo>& rulesets =
+      static_cast<DNRManifestData*>(data)->rulesets;
+
+  int index = ruleset_id - kMinValidStaticRulesetID;
+  CHECK_GE(index, 0);
+  CHECK_LT(static_cast<size_t>(index), rulesets.size());
+
+  return rulesets[index].manifest_id;
 }
 
 }  // namespace declarative_net_request

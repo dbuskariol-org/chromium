@@ -129,21 +129,18 @@ TEST_F(CompositeMatcherTest, HeadersMaskForRules) {
 
   // Create the first ruleset matcher, which matches all requests with "g" in
   // their URL.
-  const size_t kSource1ID = 1;
+  const size_t kSource1ID = 5;
   std::unique_ptr<RulesetMatcher> matcher_1;
   ASSERT_TRUE(CreateVerifiedMatcher(
-      {static_rule_1},
-      CreateTemporarySource(kSource1ID, dnr_api::SOURCE_TYPE_MANIFEST),
-      &matcher_1));
+      {static_rule_1}, CreateTemporarySource(kSource1ID), &matcher_1));
 
   // Create a second ruleset matcher, which matches all requests from
   // |google.com|.
-  const size_t kSource2ID = 2;
+  const size_t kSource2ID = kDynamicRulesetID;
   std::unique_ptr<RulesetMatcher> matcher_2;
-  ASSERT_TRUE(CreateVerifiedMatcher(
-      {dynamic_rule_1, dynamic_rule_2},
-      CreateTemporarySource(kSource2ID, dnr_api::SOURCE_TYPE_DYNAMIC),
-      &matcher_2));
+  ASSERT_TRUE(CreateVerifiedMatcher({dynamic_rule_1, dynamic_rule_2},
+                                    CreateTemporarySource(kSource2ID),
+                                    &matcher_2));
 
   // Create a composite matcher with the two rulesets.
   std::vector<std::unique_ptr<RulesetMatcher>> matchers;
@@ -171,19 +168,19 @@ TEST_F(CompositeMatcherTest, HeadersMaskForRules) {
   // attributed to |matcher_2|.
   RequestAction static_action_1 = CreateRequestActionForTesting(
       RequestAction::Type::REMOVE_HEADERS, *static_rule_1.id, kDefaultPriority,
-      dnr_api::SOURCE_TYPE_MANIFEST);
+      kSource1ID);
   static_action_1.request_headers_to_remove.push_back(
       net::HttpRequestHeaders::kCookie);
 
   RequestAction dynamic_action_1 = CreateRequestActionForTesting(
       RequestAction::Type::REMOVE_HEADERS, *dynamic_rule_1.id, kDefaultPriority,
-      dnr_api::SOURCE_TYPE_DYNAMIC);
+      kDynamicRulesetID);
   dynamic_action_1.request_headers_to_remove.push_back(
       net::HttpRequestHeaders::kReferer);
 
   RequestAction dynamic_action_2 = CreateRequestActionForTesting(
       RequestAction::Type::REMOVE_HEADERS, *dynamic_rule_2.id, kDefaultPriority,
-      dnr_api::SOURCE_TYPE_DYNAMIC);
+      kDynamicRulesetID);
   dynamic_action_2.response_headers_to_remove.push_back("set-cookie");
 
   EXPECT_THAT(actions, ::testing::UnorderedElementsAre(

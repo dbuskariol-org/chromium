@@ -97,7 +97,6 @@ class RulesetMatcher {
  private:
   explicit RulesetMatcher(std::string ruleset_data,
                           int id,
-                          api::declarative_net_request::SourceType source_type,
                           const ExtensionId& extension_id);
 
   const std::string ruleset_data_;
