@@ -246,6 +246,47 @@ IN_PROC_BROWSER_TEST_F(ChromeBackForwardCacheBrowserTest,
   delete_observer_rfh_a.WaitUntilDeleted();
 }
 
+IN_PROC_BROWSER_TEST_F(ChromeBackForwardCacheBrowserTest,
+                       DoesNotCacheIfPictureInPicture) {
+  net::EmbeddedTestServer https_server(net::EmbeddedTestServer::TYPE_HTTPS);
+  https_server.AddDefaultHandlers(GetChromeTestDataDir());
+  https_server.SetSSLConfig(net::EmbeddedTestServer::CERT_OK);
+  ASSERT_TRUE(https_server.Start());
+
+  GURL url_a(https_server.GetURL("a.com", "/title1.html"));
+  GURL url_b(https_server.GetURL("b.com", "/title1.html"));
+
+  // 1) Navigate to A.
+  EXPECT_TRUE(content::NavigateToURL(web_contents(), url_a));
+
+  // Add video to the page and trigger picture in picture.
+  EXPECT_EQ("success", content::EvalJs(current_frame_host(), R"(
+    let vid = document.createElement('video')
+    document.body.appendChild(vid);
+    vid.id = 'vid';
+    vid.src = '/media/bigbuck.webm';
+    new Promise(resolve => {
+      vid.onloadedmetadata = function() {
+        vid.requestPictureInPicture()
+          .then(m => { resolve("success"); })
+          .catch(() => { resolve("error"); });
+      };
+    });
+  )"));
+
+  content::RenderFrameDeletedObserver deleted(current_frame_host());
+
+  // 2) Navigate away.
+  EXPECT_TRUE(content::NavigateToURL(web_contents(), url_b));
+
+  // The page uses Picture-in-Picture so it should be deleted.
+  deleted.WaitUntilDeleted();
+
+  // 3) Go back.
+  web_contents()->GetController().GoBack();
+  EXPECT_TRUE(content::WaitForLoadStop(web_contents()));
+}
+
 #if defined(OS_ANDROID)
 IN_PROC_BROWSER_TEST_F(ChromeBackForwardCacheBrowserTest,
                        DoesNotCacheIfWebShare) {
