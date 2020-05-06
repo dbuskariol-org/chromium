@@ -8,6 +8,7 @@
 #include "remoting/base/logging.h"
 #include "remoting/proto/ftl/v1/chromoting_message.pb.h"
 #include "remoting/proto/ftl/v1/ftl_messages.pb.h"
+#include "remoting/signaling/signaling_address.h"
 
 namespace {
 constexpr int kMaxEchoMessageLength = 16;
@@ -57,7 +58,8 @@ bool FtlEchoMessageListener::OnSignalStrategyIncomingMessage(
   ftl::ChromotingMessage response_message;
   response_message.mutable_echo()->set_message(response_message_payload);
 
-  signal_strategy_->SendMessage(sender_id, sender_registration_id,
+  signal_strategy_->SendMessage(SignalingAddress::CreateFtlSignalingAddress(
+                                    sender_id.id(), sender_registration_id),
                                 response_message);
 
   return true;
