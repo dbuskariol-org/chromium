@@ -6977,6 +6977,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Hit"/>
 </enum>
 
+<enum name="BooleanHttpBasedOrOtherScheme">
+  <int value="0" label="Non-http/https scheme"/>
+  <int value="1" label="Http(s) scheme"/>
+</enum>
+
 <enum name="BooleanHttps">
   <int value="0" label="HTTP"/>
   <int value="1" label="HTTPS"/>
