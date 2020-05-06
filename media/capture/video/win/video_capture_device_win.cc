@@ -675,7 +675,20 @@ void VideoCaptureDeviceWin::GetPhotoState(GetPhotoStateCallback callback) {
       [this](auto... args) {
         return this->video_control_->get_Sharpness(args...);
       });
-
+  photo_capabilities->pan = RetrieveControlRangeAndCurrent(
+      [this](auto... args) {
+        return this->camera_control_->getRange_Pan(args...);
+      },
+      [this](auto... args) { return this->camera_control_->get_Pan(args...); },
+      nullptr, nullptr, PlatformAngleToCaptureValue,
+      PlatformAngleToCaptureStep);
+  photo_capabilities->tilt = RetrieveControlRangeAndCurrent(
+      [this](auto... args) {
+        return this->camera_control_->getRange_Tilt(args...);
+      },
+      [this](auto... args) { return this->camera_control_->get_Tilt(args...); },
+      nullptr, nullptr, PlatformAngleToCaptureValue,
+      PlatformAngleToCaptureStep);
   photo_capabilities->zoom = RetrieveControlRangeAndCurrent(
       [this](auto... args) {
         return this->camera_control_->getRange_Zoom(args...);
@@ -708,13 +721,6 @@ void VideoCaptureDeviceWin::SetPhotoOptions(
 
   HRESULT hr;
 
-  if (settings->has_zoom) {
-    hr = camera_control_->put_Zoom(settings->zoom, CameraControl_Flags_Manual);
-    DLOG_IF_FAILED_WITH_HRESULT("Zoom config failed", hr);
-    if (FAILED(hr))
-      return;
-  }
-
   if (settings->has_white_balance_mode) {
     if (settings->white_balance_mode == mojom::MeteringMode::CONTINUOUS) {
       hr = video_control_->put_WhiteBalance(0L, VideoProcAmp_Flags_Auto);
@@ -729,7 +735,7 @@ void VideoCaptureDeviceWin::SetPhotoOptions(
   }
   if (white_balance_mode_manual_ && settings->has_color_temperature) {
     hr = video_control_->put_WhiteBalance(settings->color_temperature,
-                                          CameraControl_Flags_Manual);
+                                          VideoProcAmp_Flags_Manual);
     DLOG_IF_FAILED_WITH_HRESULT("Color temperature config failed", hr);
     if (FAILED(hr))
       return;
@@ -737,7 +743,7 @@ void VideoCaptureDeviceWin::SetPhotoOptions(
 
   if (settings->has_focus_mode) {
     if (settings->focus_mode == mojom::MeteringMode::CONTINUOUS) {
-      hr = camera_control_->put_Focus(0L, VideoProcAmp_Flags_Auto);
+      hr = camera_control_->put_Focus(0L, CameraControl_Flags_Auto);
       DLOG_IF_FAILED_WITH_HRESULT("Auto focus config failed", hr);
       if (FAILED(hr))
         return;
@@ -757,7 +763,7 @@ void VideoCaptureDeviceWin::SetPhotoOptions(
 
   if (settings->has_exposure_mode) {
     if (settings->exposure_mode == mojom::MeteringMode::CONTINUOUS) {
-      hr = camera_control_->put_Exposure(0L, VideoProcAmp_Flags_Auto);
+      hr = camera_control_->put_Exposure(0L, CameraControl_Flags_Auto);
       DLOG_IF_FAILED_WITH_HRESULT("Auto exposure config failed", hr);
       if (FAILED(hr))
         return;
@@ -778,29 +784,49 @@ void VideoCaptureDeviceWin::SetPhotoOptions(
   }
   if (settings->has_brightness) {
     hr = video_control_->put_Brightness(settings->brightness,
-                                        CameraControl_Flags_Manual);
+                                        VideoProcAmp_Flags_Manual);
     DLOG_IF_FAILED_WITH_HRESULT("Brightness config failed", hr);
     if (FAILED(hr))
       return;
   }
   if (settings->has_contrast) {
     hr = video_control_->put_Contrast(settings->contrast,
-                                      CameraControl_Flags_Manual);
+                                      VideoProcAmp_Flags_Manual);
     DLOG_IF_FAILED_WITH_HRESULT("Contrast config failed", hr);
     if (FAILED(hr))
       return;
   }
   if (settings->has_saturation) {
     hr = video_control_->put_Saturation(settings->saturation,
-                                        CameraControl_Flags_Manual);
+                                        VideoProcAmp_Flags_Manual);
     DLOG_IF_FAILED_WITH_HRESULT("Saturation config failed", hr);
     if (FAILED(hr))
       return;
   }
   if (settings->has_sharpness) {
     hr = video_control_->put_Sharpness(settings->sharpness,
-                                       CameraControl_Flags_Manual);
+                                       VideoProcAmp_Flags_Manual);
     DLOG_IF_FAILED_WITH_HRESULT("Sharpness config failed", hr);
+    if (FAILED(hr))
+      return;
+  }
+  if (settings->has_pan) {
+    hr = camera_control_->put_Pan(CaptureAngleToPlatformValue(settings->pan),
+                                  CameraControl_Flags_Manual);
+    DLOG_IF_FAILED_WITH_HRESULT("Pan config failed", hr);
+    if (FAILED(hr))
+      return;
+  }
+  if (settings->has_tilt) {
+    hr = camera_control_->put_Tilt(CaptureAngleToPlatformValue(settings->tilt),
+                                   CameraControl_Flags_Manual);
+    DLOG_IF_FAILED_WITH_HRESULT("Tilt config failed", hr);
+    if (FAILED(hr))
+      return;
+  }
+  if (settings->has_zoom) {
+    hr = camera_control_->put_Zoom(settings->zoom, CameraControl_Flags_Manual);
+    DLOG_IF_FAILED_WITH_HRESULT("Zoom config failed", hr);
     if (FAILED(hr))
       return;
   }
