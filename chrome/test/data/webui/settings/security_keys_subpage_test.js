@@ -46,7 +46,7 @@ class TestSecurityKeysBrowserProxy extends TestBrowserProxy {
   handleMethod(methodName, opt_arg) {
     this.methodCalled(methodName, opt_arg);
     const promise = this.promiseMap_.get(methodName);
-    if (promise != undefined) {
+    if (promise !== undefined) {
       this.promiseMap_.delete(methodName);
       return promise;
     }
@@ -207,7 +207,7 @@ function assertShown(allDivs, dialog, expectedID) {
   assertTrue(allDivs.includes(expectedID));
 
   const allShown =
-      allDivs.filter(id => dialog.$[id].className == 'iron-selected');
+      allDivs.filter(id => dialog.$[id].className === 'iron-selected');
   assertEquals(allShown.length, 1);
   assertEquals(allShown[0], expectedID);
 }
@@ -369,7 +369,7 @@ suite('SecurityKeysSetPINDialog', function() {
       await browserProxy.whenCalled('close');
       assertComplete();
       assertShown(allDivs, dialog, testCase[1]);
-      if (testCase[1] == 'error') {
+      if (testCase[1] === 'error') {
         // Unhandled error codes display the numeric code.
         assertTrue(
             dialog.$.error.textContent.trim().includes(testCase[0].toString()));
@@ -481,7 +481,7 @@ suite('SecurityKeysSetPINDialog', function() {
       await browserProxy.whenCalled('close');
       assertComplete();
       assertShown(allDivs, dialog, testCase[1]);
-      if (testCase[1] == 'error') {
+      if (testCase[1] === 'error') {
         // Unhandled error codes display the numeric code.
         assertTrue(
             dialog.$.error.textContent.trim().includes(testCase[0].toString()));
