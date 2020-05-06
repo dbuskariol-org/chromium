@@ -27188,6 +27188,9 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3277" label="TrustTokenXhr"/>
   <int value="3278" label="TrustTokenIframe"/>
   <int value="3279" label="TrustedTypesPolicyCreated"/>
+  <int value="3280"
+      label="V8HTMLVideoElement_RequestVideoFrameCallback_Method"/>
+  <int value="3281" label="V8HTMLVideoElement_CancelVideoFrameCallback_Method"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
