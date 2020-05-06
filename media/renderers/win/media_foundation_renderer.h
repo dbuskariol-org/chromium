@@ -35,8 +35,12 @@ namespace media {
 class MediaFoundationRenderer : public Renderer,
                                 public MediaFoundationRendererExtension {
  public:
+  // Whether MediaFoundationRenderer() is supported on the current device.
+  static bool IsSupported();
+
   MediaFoundationRenderer(bool muted,
-                          scoped_refptr<base::SequencedTaskRunner> task_runner);
+                          scoped_refptr<base::SequencedTaskRunner> task_runner,
+                          bool force_dcomp_mode_for_testing = false);
 
   ~MediaFoundationRenderer() override;
 
@@ -93,8 +97,13 @@ class MediaFoundationRenderer : public Renderer,
   // TODO(crbug.com/1017943): Support Audio Indicator when using
   // media::MojoRenderer. For now, keep |muted_| as const.
   const bool muted_;
+
   // Renderer methods are running in the same sequence.
   scoped_refptr<base::SequencedTaskRunner> task_runner_;
+
+  // Once set, will force |mf_media_engine_| to use DirectComposition mode.
+  // This is used for testing.
+  const bool force_dcomp_mode_for_testing_;
 
   bool mf_started_ = false;
   RendererClient* renderer_client_;

@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 
+#include "base/bind_helpers.h"
 #include "base/callback_helpers.h"
 #include "base/guid.h"
 #include "base/strings/string16.h"
@@ -17,6 +18,7 @@
 #include "base/win/scoped_bstr.h"
 #include "base/win/scoped_hdc.h"
 #include "base/win/scoped_propvariant.h"
+#include "base/win/windows_version.h"
 #include "base/win/wrapped_window_proc.h"
 #include "media/base/bind_to_current_loop.h"
 #include "media/base/timestamp_constants.h"
@@ -61,10 +63,18 @@ bool InitializeVideoWindowClass() {
 
 }  // namespace
 
+// static
+bool MediaFoundationRenderer::IsSupported() {
+  return base::win::GetVersion() >= base::win::Version::WIN10;
+}
+
 MediaFoundationRenderer::MediaFoundationRenderer(
     bool muted,
-    scoped_refptr<base::SequencedTaskRunner> task_runner)
-    : muted_(muted), task_runner_(task_runner) {
+    scoped_refptr<base::SequencedTaskRunner> task_runner,
+    bool force_dcomp_mode_for_testing)
+    : muted_(muted),
+      task_runner_(task_runner),
+      force_dcomp_mode_for_testing_(force_dcomp_mode_for_testing) {
   DVLOG_FUNC(1);
 }
 
@@ -191,10 +201,12 @@ HRESULT MediaFoundationRenderer::CreateMediaEngine(
   RETURN_IF_FAILED(MakeAndInitialize<MediaFoundationSourceWrapper>(
       &mf_source_, playback_element_id_, media_resource, task_runner_));
 
+  if (force_dcomp_mode_for_testing_)
+    SetDCompMode(true, base::DoNothing());
+
   if (!mf_source_->HasEncryptedStream()) {
-    // TODO(frankli): we might need to call SetSourceOnMediaEngine for testing
-    // of clear content.
-    return E_ABORT;
+    // Supports clear stream for testing.
+    return SetSourceOnMediaEngine();
   }
 
   // Has encrypted stream.
