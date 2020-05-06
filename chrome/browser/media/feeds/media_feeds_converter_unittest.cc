@@ -4,7 +4,10 @@
 
 #include "chrome/browser/media/feeds/media_feeds_converter.h"
 
+#include "base/run_loop.h"
 #include "base/strings/utf_string_conversions.h"
+#include "base/test/bind_test_util.h"
+#include "base/test/task_environment.h"
 #include "base/time/time.h"
 #include "chrome/browser/media/feeds/media_feeds_store.mojom-forward.h"
 #include "chrome/browser/media/feeds/media_feeds_store.mojom-shared.h"
@@ -14,6 +17,7 @@
 #include "components/schema_org/extractor.h"
 #include "components/schema_org/schema_org_entity_names.h"
 #include "components/schema_org/schema_org_property_names.h"
+#include "services/data_decoder/public/cpp/test_support/in_process_data_decoder.h"
 #include "services/network/test/test_utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -68,8 +72,11 @@ class MediaFeedsConverterTest : public testing::Test {
   base::Optional<std::vector<mojom::MediaFeedItemPtr>> GetResults(
       const schema_org::improved::mojom::EntityPtr& schema_org_entity);
 
+  base::test::TaskEnvironment task_environment_;
+
  private:
   schema_org::Extractor extractor_;
+  data_decoder::test::InProcessDataDecoder data_decoder_;
 };
 
 Property* MediaFeedsConverterTest::GetProperty(Entity* entity,
@@ -154,11 +161,20 @@ PropertyPtr MediaFeedsConverterTest::CreateDoubleProperty(
 
 EntityPtr MediaFeedsConverterTest::ConvertJSONToEntityPtr(
     const std::string& json) {
-  return extractor_.Extract(json);
+  base::RunLoop run_loop;
+  EntityPtr out;
+
+  extractor_.Extract(json, base::BindLambdaForTesting([&](EntityPtr entity) {
+                       out = std::move(entity);
+                       run_loop.Quit();
+                     }));
+
+  run_loop.Run();
+  return out;
 }
 
 EntityPtr MediaFeedsConverterTest::ValidActiveWatchAction() {
-  return extractor_.Extract(
+  return ConvertJSONToEntityPtr(
       R"END(
       {
         "@type": "WatchAction",
@@ -170,7 +186,7 @@ EntityPtr MediaFeedsConverterTest::ValidActiveWatchAction() {
 }
 
 EntityPtr MediaFeedsConverterTest::ValidPotentialWatchAction() {
-  return extractor_.Extract(
+  return ConvertJSONToEntityPtr(
       R"END(
       {
         "@type": "WatchAction",
@@ -182,7 +198,7 @@ EntityPtr MediaFeedsConverterTest::ValidPotentialWatchAction() {
 }
 
 EntityPtr MediaFeedsConverterTest::ValidMediaFeed() {
-  return extractor_.Extract(
+  return ConvertJSONToEntityPtr(
       R"END(
         {
           "@type": "CompleteDataFeed",
@@ -207,7 +223,7 @@ EntityPtr MediaFeedsConverterTest::ValidMediaFeed() {
 
 EntityPtr MediaFeedsConverterTest::ValidEpisode(int episode_number,
                                                 EntityPtr action) {
-  EntityPtr episode = extractor_.Extract(
+  EntityPtr episode = ConvertJSONToEntityPtr(
       R"END(
         {
           "@type": "TVEpisode",
@@ -228,7 +244,7 @@ EntityPtr MediaFeedsConverterTest::ValidEpisode(int episode_number,
 }
 
 EntityPtr MediaFeedsConverterTest::ValidMediaFeedItem() {
-  EntityPtr item = extractor_.Extract(
+  EntityPtr item = ConvertJSONToEntityPtr(
       R"END(
         {
           "@type": "Movie",
@@ -246,7 +262,7 @@ EntityPtr MediaFeedsConverterTest::ValidMediaFeedItem() {
 }
 
 EntityPtr MediaFeedsConverterTest::ValidMediaImage() {
-  return extractor_.Extract(
+  return ConvertJSONToEntityPtr(
       R"END(
         {
           "@type": "ImageObject",
@@ -258,7 +274,7 @@ EntityPtr MediaFeedsConverterTest::ValidMediaImage() {
 }
 
 EntityPtr MediaFeedsConverterTest::WithContentAttributes(EntityPtr image) {
-  auto attributes = extractor_.Extract(
+  auto attributes = ConvertJSONToEntityPtr(
       R"END(
         {
           "@type": "PropertyValue",
@@ -272,7 +288,7 @@ EntityPtr MediaFeedsConverterTest::WithContentAttributes(EntityPtr image) {
 }
 
 EntityPtr MediaFeedsConverterTest::WithAssociatedOrigins(EntityPtr feed) {
-  auto origins = extractor_.Extract(
+  auto origins = ConvertJSONToEntityPtr(
       R"END(
       {
         "@type": "PropertyValue",
