@@ -1003,6 +1003,12 @@ void VideoCaptureDeviceMFWin::GetPhotoState(GetPhotoStateCallback callback) {
     photo_capabilities->sharpness =
         RetrieveControlRangeAndCurrent(video_control_, VideoProcAmp_Sharpness);
     photo_capabilities->torch = false;
+    photo_capabilities->pan = RetrieveControlRangeAndCurrent(
+        camera_control_, CameraControl_Pan, nullptr, nullptr,
+        PlatformAngleToCaptureValue, PlatformAngleToCaptureStep);
+    photo_capabilities->tilt = RetrieveControlRangeAndCurrent(
+        camera_control_, CameraControl_Tilt, nullptr, nullptr,
+        PlatformAngleToCaptureValue, PlatformAngleToCaptureStep);
     photo_capabilities->zoom =
         RetrieveControlRangeAndCurrent(camera_control_, CameraControl_Zoom);
   }
@@ -1152,6 +1158,22 @@ void VideoCaptureDeviceMFWin::SetPhotoOptions(
       hr = video_control_->Set(VideoProcAmp_Sharpness, settings->sharpness,
                                VideoProcAmp_Flags_Manual);
       DLOG_IF_FAILED_WITH_HRESULT("Sharpness config failed", hr);
+      if (FAILED(hr))
+        return;
+    }
+    if (settings->has_pan) {
+      hr = camera_control_->Set(CameraControl_Pan,
+                                CaptureAngleToPlatformValue(settings->pan),
+                                CameraControl_Flags_Manual);
+      DLOG_IF_FAILED_WITH_HRESULT("Pan config failed", hr);
+      if (FAILED(hr))
+        return;
+    }
+    if (settings->has_tilt) {
+      hr = camera_control_->Set(CameraControl_Tilt,
+                                CaptureAngleToPlatformValue(settings->tilt),
+                                CameraControl_Flags_Manual);
+      DLOG_IF_FAILED_WITH_HRESULT("Tilt config failed", hr);
       if (FAILED(hr))
         return;
     }
