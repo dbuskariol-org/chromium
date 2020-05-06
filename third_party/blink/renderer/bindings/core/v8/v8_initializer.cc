@@ -629,8 +629,7 @@ static void InitializeV8Common(v8::Isolate* isolate) {
   V8PerIsolateData::From(isolate)->SetGCCallbacks(
       isolate, V8GCController::GcPrologue, V8GCController::GcEpilogue);
   ThreadState::Current()->AttachToIsolate(
-      isolate, V8GCController::TraceDOMWrappers,
-      EmbedderGraphBuilder::BuildEmbedderGraphCallback);
+      isolate, EmbedderGraphBuilder::BuildEmbedderGraphCallback);
   V8PerIsolateData::From(isolate)->SetActiveScriptWrappableManager(
       MakeGarbageCollected<ActiveScriptWrappableManager>());
 
