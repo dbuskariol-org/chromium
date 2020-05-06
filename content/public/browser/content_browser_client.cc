@@ -123,7 +123,7 @@ bool ContentBrowserClient::ShouldUseMobileFlingCurve() {
 
 bool ContentBrowserClient::ShouldUseProcessPerSite(
     BrowserContext* browser_context,
-    const GURL& effective_url) {
+    const GURL& site_url) {
   DCHECK(browser_context);
   return false;
 }
