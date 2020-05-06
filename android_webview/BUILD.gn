@@ -73,6 +73,7 @@ if (enable_webview_bundles) {
     base_module_target = ":system_webview_base_bundle_module"
     bundle_name = "SystemWebView"
     min_sdk_version = 21
+    compress_shared_libraries = true
   }
 }
 
@@ -97,6 +98,7 @@ if (android_64bit_target_cpu) {
       bundle_name = "SystemWebView32"
       include_64_bit_webview = false
       min_sdk_version = 21
+      compress_shared_libraries = true
     }
   }
 }
