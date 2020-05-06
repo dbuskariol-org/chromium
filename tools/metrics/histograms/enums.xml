@@ -27177,6 +27177,9 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3273" label="ClientHintsUAPlatformVersion"/>
   <int value="3274" label="IFrameCSPAttribute"/>
   <int value="3275" label="NavigatorCookieEnabled"/>
+  <int value="3276" label="TrustTokenFetch"/>
+  <int value="3277" label="TrustTokenXhr"/>
+  <int value="3278" label="TrustTokenIframe"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
