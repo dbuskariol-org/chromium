@@ -1345,7 +1345,7 @@
   {
     "name": "enable-cssom-view-scroll-coordinates",
     "owners": [ "cathiechen@igalia.com", "fwang@igalia.com" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 85
   },
   {
     "name": "enable-cups-printers-ui-overhaul",
