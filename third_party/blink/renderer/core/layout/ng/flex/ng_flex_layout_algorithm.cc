@@ -43,27 +43,8 @@ NGFlexLayoutAlgorithm::NGFlexLayoutAlgorithm(
   child_percentage_size_ = CalculateChildPercentageSize(
       ConstraintSpace(), Node(), content_box_size_);
 
-  LayoutUnit gap_between_items;
-  LayoutUnit gap_between_lines;
-  if (!Style().ColumnGap().IsNormal()) {
-    DCHECK(!Style().ColumnGap().GetLength().IsAuto());
-    DCHECK(!Style().ColumnGap().GetLength().IsIntrinsic());
-    // column-gap is defined to always apply in the inline axis.
-    gap_between_items = MinimumValueForLength(
-        Style().ColumnGap().GetLength(), child_percentage_size_.inline_size);
-  }
-  if (!Style().RowGap().IsNormal()) {
-    DCHECK(!Style().RowGap().GetLength().IsAuto());
-    DCHECK(!Style().RowGap().GetLength().IsIntrinsic());
-    // row-gap is defined to always apply in the block axis.
-    gap_between_lines = MinimumValueForLength(
-        Style().RowGap().GetLength(), child_percentage_size_.block_size);
-  }
-  if (is_column_)
-    std::swap(gap_between_items, gap_between_lines);
-
   algorithm_.emplace(&Style(), MainAxisContentExtent(LayoutUnit::Max()),
-                     gap_between_items, gap_between_lines);
+                     child_percentage_size_);
 }
 
 bool NGFlexLayoutAlgorithm::MainAxisIsInlineAxis(
