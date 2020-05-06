@@ -600,6 +600,9 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kAdvancedProtectionAllowed,
     prefs::kAdvancedProtectionAllowed,
     base::Value::Type::BOOLEAN },
+  { key::kAccessibilityImageLabelsEnabled,
+    prefs::kAccessibilityImageLabelsEnabled,
+    base::Value::Type::BOOLEAN },
 
 #if defined(OS_ANDROID)
   { key::kDataCompressionProxyEnabled,

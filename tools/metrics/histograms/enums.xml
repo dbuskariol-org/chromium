@@ -20106,6 +20106,7 @@ Called by update_document_policy_enum.py.-->
   <int value="700" label="AutoOpenFileTypes"/>
   <int value="701" label="LoginDisplayPasswordButtonEnabled"/>
   <int value="702" label="ReportDeviceAppInfo"/>
+  <int value="703" label="AccessibilityImageLabelsEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
