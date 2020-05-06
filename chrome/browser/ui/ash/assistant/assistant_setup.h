@@ -46,9 +46,6 @@ class AssistantSetup : public ash::AssistantSetup,
   void SyncSettingsState();
   void OnGetSettingsResponse(const std::string& settings);
 
-  mojo::Remote<chromeos::assistant::mojom::AssistantSettingsManager>
-      settings_manager_;
-
   std::unique_ptr<SearchAndAssistantEnabledChecker>
       search_and_assistant_enabled_checker_;
 

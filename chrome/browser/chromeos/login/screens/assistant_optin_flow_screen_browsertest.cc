@@ -29,10 +29,9 @@
 #include "chrome/common/chrome_paths.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/constants/chromeos_switches.h"
-#include "chromeos/services/assistant/assistant_settings_manager.h"
 #include "chromeos/services/assistant/public/cpp/assistant_prefs.h"
+#include "chromeos/services/assistant/public/cpp/assistant_settings.h"
 #include "chromeos/services/assistant/public/cpp/features.h"
-#include "chromeos/services/assistant/public/mojom/settings.mojom.h"
 #include "chromeos/services/assistant/public/proto/settings_ui.pb.h"
 #include "chromeos/services/assistant/service.h"
 #include "components/prefs/pref_service.h"
@@ -59,8 +58,7 @@ constexpr char kTestUser[] = "test-user1@gmail.com";
 constexpr char kAssistantConsentToken[] = "consent_token";
 constexpr char kAssistantUiAuditKey[] = "ui_audit_key";
 
-class FakeAssistantSettings
-    : public chromeos::assistant::AssistantSettingsManager {
+class ScopedAssistantSettings : public chromeos::assistant::AssistantSettings {
  public:
   // Flags to configure GetSettings response.
   static constexpr int CONSENT_UI_FLAGS_NONE = 0;
@@ -85,13 +83,9 @@ class FakeAssistantSettings
     EMAIL,
   };
 
-  FakeAssistantSettings() {
-    chromeos::assistant::Service::OverrideSettingsManagerForTesting(this);
-  }
+  ScopedAssistantSettings() = default;
 
-  ~FakeAssistantSettings() override {
-    chromeos::assistant::Service::OverrideSettingsManagerForTesting(nullptr);
-  }
+  ~ScopedAssistantSettings() override = default;
 
   void set_consent_ui_flags(int flags) { consent_ui_flags_ = flags; }
 
@@ -136,21 +130,12 @@ class FakeAssistantSettings
 
   void FailSpeakerIdEnrollment() {
     ASSERT_NE(speaker_id_enrollment_state_, SpeakerIdEnrollmentState::IDLE);
-    std::move(speaker_id_enrollment_client_)->OnSpeakerIdEnrollmentFailure();
+    speaker_id_enrollment_client_->OnSpeakerIdEnrollmentFailure();
     processed_hotwords_ = 0;
     speaker_id_enrollment_state_ = SpeakerIdEnrollmentState::IDLE;
   }
 
-  void Flush() { receivers_.FlushForTesting(); }
-
-  // chromeos::assistant::AssistantSettingsManager:
-  void BindReceiver(mojo::PendingReceiver<
-                    chromeos::assistant::mojom::AssistantSettingsManager>
-                        receiver) override {
-    receivers_.Add(this, std::move(receiver));
-  }
-
-  // chromeos::assistant::mojom::AssistantSettingsManager:
+  // chromeos::assistant::AssistantSettings:
   void GetSettings(const std::string& selector,
                    GetSettingsCallback callback) override {
     chromeos::assistant::SettingsUiSelector selector_proto;
@@ -263,26 +248,22 @@ class FakeAssistantSettings
 
   void StartSpeakerIdEnrollment(
       bool skip_cloud_enrollment,
-      mojo::PendingRemote<chromeos::assistant::mojom::SpeakerIdEnrollmentClient>
-          client) override {
+      base::WeakPtr<chromeos::assistant::SpeakerIdEnrollmentClient> client)
+      override {
     if (speaker_id_enrollment_mode_ == SpeakerIdEnrollmentMode::IMMEDIATE) {
-      mojo::Remote<chromeos::assistant::mojom::SpeakerIdEnrollmentClient>(
-          std::move(client))
-          ->OnSpeakerIdEnrollmentDone();
+      client->OnSpeakerIdEnrollmentDone();
       return;
     }
     ASSERT_FALSE(speaker_id_enrollment_client_);
     processed_hotwords_ = 0;
-    speaker_id_enrollment_client_.Bind(std::move(client));
+    speaker_id_enrollment_client_ = std::move(client);
     speaker_id_enrollment_state_ = SpeakerIdEnrollmentState::REQUESTED;
   }
 
-  void StopSpeakerIdEnrollment(
-      StopSpeakerIdEnrollmentCallback callback) override {
+  void StopSpeakerIdEnrollment() override {
     processed_hotwords_ = 0;
     speaker_id_enrollment_state_ = SpeakerIdEnrollmentState::IDLE;
     speaker_id_enrollment_client_.reset();
-    std::move(callback).Run();
   }
 
   void SyncSpeakerIdEnrollmentStatus() override {}
@@ -295,9 +276,6 @@ class FakeAssistantSettings
     PROCESSING
   };
 
-  mojo::ReceiverSet<chromeos::assistant::mojom::AssistantSettingsManager>
-      receivers_;
-
   // The service test config:
   int consent_ui_flags_ = CONSENT_UI_FLAGS_NONE;
   SpeakerIdEnrollmentMode speaker_id_enrollment_mode_ =
@@ -306,14 +284,14 @@ class FakeAssistantSettings
   // Speaker ID enrollment state:
   SpeakerIdEnrollmentState speaker_id_enrollment_state_ =
       SpeakerIdEnrollmentState::IDLE;
-  mojo::Remote<assistant::mojom::SpeakerIdEnrollmentClient>
+  base::WeakPtr<assistant::SpeakerIdEnrollmentClient>
       speaker_id_enrollment_client_;
   int processed_hotwords_ = 0;
 
   // Set of opt ins given by the user.
   std::set<OptIn> collected_optins_;
 
-  DISALLOW_COPY_AND_ASSIGN(FakeAssistantSettings);
+  DISALLOW_COPY_AND_ASSIGN(ScopedAssistantSettings);
 };
 
 }  // namespace
@@ -337,7 +315,7 @@ class AssistantOptInFlowTest : public OobeBaseTest {
     force_lib_assistant_enabled_ =
         AssistantOptInFlowScreen::ForceLibAssistantEnabledForTesting();
 
-    assistant_settings_ = std::make_unique<FakeAssistantSettings>();
+    assistant_settings_ = std::make_unique<ScopedAssistantSettings>();
     assistant_optin_flow_screen_ = AssistantOptInFlowScreen::Get(
         WizardController::default_controller()->screen_manager());
     assistant_optin_flow_screen_->set_exit_callback_for_testing(
@@ -401,8 +379,7 @@ class AssistantOptInFlowTest : public OobeBaseTest {
   }
 
   void ExpectCollectedOptIns(
-      const std::set<FakeAssistantSettings::OptIn>& opt_ins) {
-    assistant_settings_->Flush();
+      const std::set<ScopedAssistantSettings::OptIn>& opt_ins) {
     EXPECT_EQ(opt_ins, assistant_settings_->collected_optins());
   }
 
@@ -417,7 +394,7 @@ class AssistantOptInFlowTest : public OobeBaseTest {
 
   AssistantOptInFlowScreen* assistant_optin_flow_screen_;
 
-  std::unique_ptr<FakeAssistantSettings> assistant_settings_;
+  std::unique_ptr<ScopedAssistantSettings> assistant_settings_;
 
   // If set, HandleRequest will return an error for the next value prop URL
   // request..
@@ -483,7 +460,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, Basic) {
 
   WaitForScreenExit();
 
-  ExpectCollectedOptIns({FakeAssistantSettings::OptIn::ACTIVITY_CONTROL});
+  ExpectCollectedOptIns({ScopedAssistantSettings::OptIn::ACTIVITY_CONTROL});
   PrefService* const prefs = ProfileManager::GetActiveUserProfile()->GetPrefs();
   EXPECT_EQ(assistant::prefs::ConsentStatus::kActivityControlAccepted,
             prefs->GetInteger(assistant::prefs::kAssistantConsentStatus));
@@ -523,7 +500,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, DisableScreenContext) {
 
   WaitForScreenExit();
 
-  ExpectCollectedOptIns({FakeAssistantSettings::OptIn::ACTIVITY_CONTROL});
+  ExpectCollectedOptIns({ScopedAssistantSettings::OptIn::ACTIVITY_CONTROL});
   PrefService* const prefs = ProfileManager::GetActiveUserProfile()->GetPrefs();
   EXPECT_EQ(assistant::prefs::ConsentStatus::kActivityControlAccepted,
             prefs->GetInteger(assistant::prefs::kAssistantConsentStatus));
@@ -538,11 +515,6 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AssistantStateUpdateAfterShow) {
   OobeScreenWaiter screen_waiter(AssistantOptInFlowScreenView::kScreenId);
   screen_waiter.set_assert_next_screen();
   screen_waiter.Wait();
-
-  // Value prop screen will not be sohwn until it receives assistant settings
-  // config, which is blocked on the Assistant state becomes READY state.
-  test::OobeJS().ExpectHiddenPath({"assistant-optin-flow-card", "value-prop"});
-  test::OobeJS().ExpectVisiblePath({"assistant-optin-flow-card", "loading"});
 
   ash::AssistantState::Get()->NotifyStatusChanged(
       ash::mojom::AssistantState::READY);
@@ -561,7 +533,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AssistantStateUpdateAfterShow) {
 
   WaitForScreenExit();
 
-  ExpectCollectedOptIns({FakeAssistantSettings::OptIn::ACTIVITY_CONTROL});
+  ExpectCollectedOptIns({ScopedAssistantSettings::OptIn::ACTIVITY_CONTROL});
   PrefService* const prefs = ProfileManager::GetActiveUserProfile()->GetPrefs();
   EXPECT_EQ(assistant::prefs::ConsentStatus::kActivityControlAccepted,
             prefs->GetInteger(assistant::prefs::kAssistantConsentStatus));
@@ -601,7 +573,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, RetryOnWebviewLoadFail) {
 
   WaitForScreenExit();
 
-  ExpectCollectedOptIns({FakeAssistantSettings::OptIn::ACTIVITY_CONTROL});
+  ExpectCollectedOptIns({ScopedAssistantSettings::OptIn::ACTIVITY_CONTROL});
   PrefService* const prefs = ProfileManager::GetActiveUserProfile()->GetPrefs();
   EXPECT_EQ(assistant::prefs::ConsentStatus::kActivityControlAccepted,
             prefs->GetInteger(assistant::prefs::kAssistantConsentStatus));
@@ -635,7 +607,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, RejectValueProp) {
 
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AskEmailOptIn_NotChecked) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_ASK_EMAIL_OPT_IN);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_ASK_EMAIL_OPT_IN);
   ash::AssistantState::Get()->NotifyStatusChanged(
       ash::mojom::AssistantState::READY);
 
@@ -666,7 +638,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AskEmailOptIn_NotChecked) {
 
   WaitForScreenExit();
 
-  ExpectCollectedOptIns({FakeAssistantSettings::OptIn::ACTIVITY_CONTROL});
+  ExpectCollectedOptIns({ScopedAssistantSettings::OptIn::ACTIVITY_CONTROL});
   PrefService* const prefs = ProfileManager::GetActiveUserProfile()->GetPrefs();
   EXPECT_EQ(assistant::prefs::ConsentStatus::kActivityControlAccepted,
             prefs->GetInteger(assistant::prefs::kAssistantConsentStatus));
@@ -676,7 +648,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AskEmailOptIn_NotChecked) {
 
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AskEmailOptIn_Accepted) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_ASK_EMAIL_OPT_IN);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_ASK_EMAIL_OPT_IN);
   ash::AssistantState::Get()->NotifyStatusChanged(
       ash::mojom::AssistantState::READY);
 
@@ -709,8 +681,8 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AskEmailOptIn_Accepted) {
 
   WaitForScreenExit();
 
-  ExpectCollectedOptIns({FakeAssistantSettings::OptIn::ACTIVITY_CONTROL,
-                         FakeAssistantSettings::OptIn::EMAIL});
+  ExpectCollectedOptIns({ScopedAssistantSettings::OptIn::ACTIVITY_CONTROL,
+                         ScopedAssistantSettings::OptIn::EMAIL});
   PrefService* const prefs = ProfileManager::GetActiveUserProfile()->GetPrefs();
   EXPECT_EQ(assistant::prefs::ConsentStatus::kActivityControlAccepted,
             prefs->GetInteger(assistant::prefs::kAssistantConsentStatus));
@@ -720,7 +692,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AskEmailOptIn_Accepted) {
 
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SkipShowingValueProp) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL);
 
   SetUpAssistantScreensForTest();
   ash::AssistantState::Get()->NotifyStatusChanged(
@@ -754,8 +726,8 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SkipShowingValueProp) {
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
                        SkipShowingValuePropAndThirdPartyDisclosure) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
 
   SetUpAssistantScreensForTest();
   ash::AssistantState::Get()->NotifyStatusChanged(
@@ -785,10 +757,10 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
 
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SpeakerIdEnrollment) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
   assistant_settings_->set_speaker_id_enrollment_mode(
-      FakeAssistantSettings::SpeakerIdEnrollmentMode::STEP_BY_STEP);
+      ScopedAssistantSettings::SpeakerIdEnrollmentMode::STEP_BY_STEP);
 
   SetUpAssistantScreensForTest();
   ash::AssistantState::Get()->NotifyStatusChanged(
@@ -803,14 +775,12 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SpeakerIdEnrollment) {
   WaitForAssistantScreen("voice-match");
   TapWhenEnabled({"assistant-optin-flow-card", "voice-match", "agree-button"});
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-0"}, "active");
   test::OobeJS().ExpectVisiblePath(
       {"assistant-optin-flow-card", "voice-match", "later-button"});
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-0"},
@@ -818,7 +788,6 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SpeakerIdEnrollment) {
   test::OobeJS().ExpectVisiblePath(
       {"assistant-optin-flow-card", "voice-match", "later-button"});
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-1"}, "active");
@@ -830,23 +799,19 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SpeakerIdEnrollment) {
       {"assistant-optin-flow-card", "voice-match", "voice-entry-1"},
       "completed");
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-2"}, "active");
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-2"},
       "completed");
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-3"}, "active");
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-3"},
@@ -855,7 +820,6 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SpeakerIdEnrollment) {
       {"assistant-optin-flow-card", "voice-match", "later-button"});
 
   // This should finish the enrollment, and move the UI to get-more screen.
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   EXPECT_FALSE(assistant_settings_->IsSpeakerIdEnrollmentActive());
 
@@ -875,10 +839,10 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, SpeakerIdEnrollment) {
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
                        BailOutDuringSpeakerIdEnrollment) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
   assistant_settings_->set_speaker_id_enrollment_mode(
-      FakeAssistantSettings::SpeakerIdEnrollmentMode::STEP_BY_STEP);
+      ScopedAssistantSettings::SpeakerIdEnrollmentMode::STEP_BY_STEP);
 
   SetUpAssistantScreensForTest();
   ash::AssistantState::Get()->NotifyStatusChanged(
@@ -893,14 +857,12 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
   WaitForAssistantScreen("voice-match");
   TapWhenEnabled({"assistant-optin-flow-card", "voice-match", "agree-button"});
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-0"}, "active");
   test::OobeJS().ExpectVisiblePath(
       {"assistant-optin-flow-card", "voice-match", "later-button"});
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-0"},
@@ -908,7 +870,6 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
 
   test::OobeJS().TapOnPath(
       {"assistant-optin-flow-card", "voice-match", "later-button"});
-  assistant_settings_->Flush();
   EXPECT_FALSE(assistant_settings_->IsSpeakerIdEnrollmentActive());
 
   WaitForAssistantScreen("get-more");
@@ -927,10 +888,10 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
                        SpeakerIdEnrollmentFailureAndRetry) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
-      FakeAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_ACTIVITY_CONTROL |
+      ScopedAssistantSettings::CONSENT_UI_FLAG_SKIP_THIRD_PARTY_DISCLOSURE);
   assistant_settings_->set_speaker_id_enrollment_mode(
-      FakeAssistantSettings::SpeakerIdEnrollmentMode::STEP_BY_STEP);
+      ScopedAssistantSettings::SpeakerIdEnrollmentMode::STEP_BY_STEP);
 
   SetUpAssistantScreensForTest();
   ash::AssistantState::Get()->NotifyStatusChanged(
@@ -944,14 +905,12 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
 
   TapWhenEnabled({"assistant-optin-flow-card", "voice-match", "agree-button"});
 
-  assistant_settings_->Flush();
   ASSERT_TRUE(assistant_settings_->AdvanceSpeakerIdEnrollmentState());
   WaitForElementAttribute(
       {"assistant-optin-flow-card", "voice-match", "voice-entry-0"}, "active");
   test::OobeJS().ExpectVisiblePath(
       {"assistant-optin-flow-card", "voice-match", "later-button"});
 
-  assistant_settings_->Flush();
   assistant_settings_->FailSpeakerIdEnrollment();
 
   // Failure should cause an error screen to be shown, with retry button
@@ -960,7 +919,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
 
   // Make enrollment succeed immediately next time.
   assistant_settings_->set_speaker_id_enrollment_mode(
-      FakeAssistantSettings::SpeakerIdEnrollmentMode::IMMEDIATE);
+      ScopedAssistantSettings::SpeakerIdEnrollmentMode::IMMEDIATE);
 
   TapWhenEnabled({"assistant-optin-flow-card", "loading", "retry-button"});
 
@@ -982,7 +941,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest,
 
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, WAADisabledByPolicy) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_WAA_DISABLED_BY_POLICY);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_WAA_DISABLED_BY_POLICY);
 
   ash::AssistantState::Get()->NotifyStatusChanged(
       ash::mojom::AssistantState::READY);
@@ -1000,7 +959,7 @@ IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, WAADisabledByPolicy) {
 
 IN_PROC_BROWSER_TEST_F(AssistantOptInFlowTest, AssistantDisabledByPolicy) {
   assistant_settings_->set_consent_ui_flags(
-      FakeAssistantSettings::CONSENT_UI_FLAG_ASSISTANT_DISABLED_BY_POLICY);
+      ScopedAssistantSettings::CONSENT_UI_FLAG_ASSISTANT_DISABLED_BY_POLICY);
 
   ash::AssistantState::Get()->NotifyStatusChanged(
       ash::mojom::AssistantState::READY);

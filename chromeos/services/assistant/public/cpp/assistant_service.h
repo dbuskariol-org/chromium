@@ -30,10 +30,6 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE_PUBLIC) AssistantService {
   virtual void BindAssistant(
       mojo::PendingReceiver<mojom::Assistant> receiver) = 0;
 
-  // Binds an interface to control assistant settings.
-  virtual void BindSettingsManager(
-      mojo::PendingReceiver<mojom::AssistantSettingsManager> receiver) = 0;
-
   // Signals system shutdown, the service could start cleaning up if needed.
   virtual void Shutdown() = 0;
 };
