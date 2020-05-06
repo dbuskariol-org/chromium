@@ -2981,7 +2981,8 @@
         "args": [
           "--gtest-benchmark-name=angle_perftests",
           "-v",
-          "--shard-timeout=800"
+          "--shard-timeout=800",
+          "--test-launcher-batch-limit=100"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
