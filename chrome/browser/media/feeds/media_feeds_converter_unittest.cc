@@ -38,7 +38,8 @@ class MediaFeedsConverterTest : public testing::Test {
             {schema_org::entity::kCompleteDataFeed, schema_org::entity::kMovie,
              schema_org::entity::kWatchAction, schema_org::entity::kTVEpisode,
              schema_org::entity::kImageObject,
-             schema_org::entity::kPropertyValue}) {}
+             schema_org::entity::kPropertyValue, schema_org::entity::kPerson}) {
+  }
 
  protected:
   Property* GetProperty(Entity* entity, const std::string& name);
@@ -197,12 +198,6 @@ EntityPtr MediaFeedsConverterTest::ValidMediaFeed() {
                 "name": "contentAttributes",
                 "value": ["forDarkBackground", "hasTitle"]
               }
-            },
-            "member": {
-              "@type": "Person",
-              "name": "Becca Hughes",
-              "image": "https://www.example.org/profile_pic.jpg",
-              "email": "beccahughes@chromium.org"
             }
           }
         }
@@ -352,6 +347,9 @@ TEST_F(MediaFeedsConverterTest, SucceedsOnValidCompleteDataFeed) {
       mojom::ContentAttribute::kForDarkBackground,
       mojom::ContentAttribute::kHasTitle};
 
+  mojom::MediaImagePtr expected_user_image = mojom::MediaImage::New();
+  expected_user_image->src = GURL("https://www.example.org/profile_pic.jpg");
+
   media_history::MediaHistoryKeyedService::MediaFeedFetchResult result;
   ConvertMediaFeed(std::move(entity), &result);
 
@@ -371,6 +369,58 @@ TEST_F(MediaFeedsConverterTest, SucceedsOnValidFeedWithAssociatedOrigins) {
   expected_origins.insert(url::Origin::Create(GURL("https://www.github2.com")));
 
   EXPECT_EQ(expected_origins, result.associated_origins);
+}
+
+TEST_F(MediaFeedsConverterTest, SucceedsOnValidCompleteDataFeedWithUser) {
+  auto feed = ValidMediaFeed();
+  auto user = ConvertJSONToEntityPtr(
+      R"END(
+              {
+                "@type": "Person",
+                "name": "Becca Hughes",
+                "image": "https://www.example.org/profile_pic.jpg",
+                "email": "beccahughes@chromium.org"
+              }
+            )END");
+
+  // Add the user to the provider property inside the feed.
+  feed->properties[0]->values->entity_values[0]->properties.push_back(
+      CreateEntityProperty(schema_org::property::kMember, std::move(user)));
+
+  mojom::MediaImagePtr expected_user_image = mojom::MediaImage::New();
+  expected_user_image->src = GURL("https://www.example.org/profile_pic.jpg");
+
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult result;
+  ConvertMediaFeed(std::move(feed), &result);
+
+  ASSERT_TRUE(result.user_identifier);
+  EXPECT_EQ("Becca Hughes", result.user_identifier->name);
+  EXPECT_EQ(expected_user_image, result.user_identifier->image);
+  EXPECT_EQ("beccahughes@chromium.org", result.user_identifier->email);
+}
+
+TEST_F(MediaFeedsConverterTest,
+       SucceedsOnValidCompleteDataFeedWithMinimalUser) {
+  auto feed = ValidMediaFeed();
+  auto user = ConvertJSONToEntityPtr(
+      R"END(
+              {
+                "@type": "Person",
+                "name": "Becca Hughes"
+              }
+            )END");
+
+  // Add the user to the provider property inside the feed.
+  feed->properties[0]->values->entity_values[0]->properties.push_back(
+      CreateEntityProperty(schema_org::property::kMember, std::move(user)));
+
+  media_history::MediaHistoryKeyedService::MediaFeedFetchResult result;
+  ConvertMediaFeed(std::move(feed), &result);
+
+  ASSERT_TRUE(result.user_identifier);
+  EXPECT_EQ("Becca Hughes", result.user_identifier->name);
+  EXPECT_FALSE(result.user_identifier->image);
+  EXPECT_FALSE(result.user_identifier->email.has_value());
 }
 
 TEST_F(MediaFeedsConverterTest, SucceedsOnValidCompleteDataFeedWithItem) {

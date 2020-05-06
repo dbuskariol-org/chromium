@@ -43471,7 +43471,8 @@ Called by update_use_counter_css.py.-->
   <int value="1" label="Bad user status"/>
   <int value="2" label="Bad fetch result"/>
   <int value="3" label="Bad logo"/>
-  <int value="4" label="Bad reset reason"/>
+  <int value="4" label="Bad user identifier"/>
+  <int value="5" label="Bad reset reason"/>
 </enum>
 
 <enum name="MediaFeedSafeSearchResult">
