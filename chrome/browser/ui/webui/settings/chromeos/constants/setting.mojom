@@ -115,6 +115,7 @@ enum Setting {
 
   // Date and Time section.
   k24HourClock = 1000,
+  kChangeTimeZone = 1001,
 
   // Privacy section.
   kVerifiedAccess = 1101,

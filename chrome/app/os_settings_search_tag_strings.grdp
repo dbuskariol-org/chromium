@@ -605,6 +605,21 @@
   </message>
 
   <!-- Date and Time section. -->
+  <message name="IDS_OS_SETTINGS_TAG_DATE_TIME" desc="Text for search result item which, when clicked, navigates the user to date and time settings.">
+    Date and time settings
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_DATE_TIME_MILITARY_CLOCK" desc="Text for search result item which, when clicked, navigates the user to date and time settings, with a toggle to enable/disable using a 24-hour clock. Alternate phrase for: 'Military time'">
+    Use 24-hour clock
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_DATE_TIME_MILITARY_CLOCK_ALT1" desc="Text for search result item which, when clicked, navigates the user to date and time settings, with a toggle to enable/disable using a 24-hour clock. Alternate phrase for: 'Use 24-hour clock'">
+    Military time
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_DATE_TIME_ZONE_SUBPAGE" desc="Text for search result item which, when clicked, navigates the user to time zone settings.">
+    Time zone
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_DATE_TIME_ZONE" desc="Text for search result item which, when clicked, navigates the user to time zone settings.">
+    Time zone
+  </message>
 
   <!-- Privacy section. -->
   <message name="IDS_OS_SETTINGS_TAG_PRIVACY" desc="Text for search result item which, when clicked, navigates the user to privacy settings.">

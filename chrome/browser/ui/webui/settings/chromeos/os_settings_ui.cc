@@ -42,7 +42,6 @@
 #include "chrome/browser/ui/webui/settings/browser_lifetime_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/accessibility_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/account_manager_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/date_time_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_storage_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/kerberos_accounts_handler.h"
@@ -219,8 +218,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
 
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::AccessibilityHandler>(profile));
-  web_ui()->AddMessageHandler(base::WrapUnique(
-      chromeos::settings::DateTimeHandler::Create(html_source)));
 
   std::unique_ptr<chromeos::settings::KerberosAccountsHandler>
       kerberos_accounts_handler =
