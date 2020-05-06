@@ -1238,6 +1238,11 @@
       status: {"Android": "stable"},
     },
     {
+      name: "OriginIsolationHeader",
+      origin_trial_feature_name: "OriginIsolationHeader",
+      status: "experimental",
+    },
+    {
       name: "OriginPolicy",
       status: "experimental",
     },
