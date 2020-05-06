@@ -319,14 +319,6 @@ net::HashValue GetSPKIHash(const CRYPTO_BUFFER* cert) {
   return sha256;
 }
 
-net::SpawnedTestServer::SSLOptions GetOCSPSSLOptions(
-    net::SpawnedTestServer::SSLOptions::OCSPStatus ocsp_status) {
-  net::SpawnedTestServer::SSLOptions ssl_options(
-      net::SpawnedTestServer::SSLOptions::CERT_AUTO);
-  ssl_options.ocsp_status = ocsp_status;
-  return ssl_options;
-}
-
 // Compares two SSLStatuses to check if they match up before and after an
 // interstitial. To match up, they should have the same connection information
 // properties, such as certificate, connection status, connection security,
@@ -407,14 +399,8 @@ class SSLUITestBase : public InProcessBrowserTest,
         https_server_mismatched_(net::EmbeddedTestServer::TYPE_HTTPS),
         https_server_sha1_(net::EmbeddedTestServer::TYPE_HTTPS),
         https_server_common_name_only_(net::EmbeddedTestServer::TYPE_HTTPS),
-        https_server_ocsp_ok_(
-            net::SpawnedTestServer::TYPE_HTTPS,
-            GetOCSPSSLOptions(net::SpawnedTestServer::SSLOptions::OCSP_OK),
-            GetChromeTestDataDir()),
-        https_server_ocsp_revoked_(
-            net::SpawnedTestServer::TYPE_HTTPS,
-            GetOCSPSSLOptions(net::SpawnedTestServer::SSLOptions::OCSP_REVOKED),
-            GetChromeTestDataDir()),
+        https_server_ocsp_ok_(net::EmbeddedTestServer::TYPE_HTTPS),
+        https_server_ocsp_revoked_(net::EmbeddedTestServer::TYPE_HTTPS),
         wss_server_expired_(net::SpawnedTestServer::TYPE_WSS,
                             SSLOptions(SSLOptions::CERT_EXPIRED),
                             net::GetWebSocketTestDataDirectory()),
@@ -436,6 +422,20 @@ class SSLUITestBase : public InProcessBrowserTest,
     https_server_common_name_only_.SetSSLConfig(
         net::EmbeddedTestServer::CERT_COMMON_NAME_ONLY);
     https_server_common_name_only_.AddDefaultHandlers(GetChromeTestDataDir());
+
+    net::EmbeddedTestServer::ServerCertificateConfig ok_cert_config;
+    ok_cert_config.ocsp_config = net::EmbeddedTestServer::OCSPConfig(
+        {{net::OCSPRevocationStatus::GOOD,
+          net::EmbeddedTestServer::OCSPConfig::SingleResponse::Date::kValid}});
+    https_server_ocsp_ok_.SetSSLConfig(ok_cert_config);
+    https_server_ocsp_ok_.AddDefaultHandlers(GetChromeTestDataDir());
+
+    net::EmbeddedTestServer::ServerCertificateConfig revoked_cert_config;
+    revoked_cert_config.ocsp_config = net::EmbeddedTestServer::OCSPConfig(
+        {{net::OCSPRevocationStatus::REVOKED,
+          net::EmbeddedTestServer::OCSPConfig::SingleResponse::Date::kValid}});
+    https_server_ocsp_revoked_.SetSSLConfig(revoked_cert_config);
+    https_server_ocsp_revoked_.AddDefaultHandlers(GetChromeTestDataDir());
   }
 
   void SetUp() override {
@@ -882,9 +882,9 @@ class SSLUITestBase : public InProcessBrowserTest,
   net::EmbeddedTestServer https_server_mismatched_;
   net::EmbeddedTestServer https_server_sha1_;
   net::EmbeddedTestServer https_server_common_name_only_;
+  net::EmbeddedTestServer https_server_ocsp_ok_;
+  net::EmbeddedTestServer https_server_ocsp_revoked_;
 
-  net::SpawnedTestServer https_server_ocsp_ok_;
-  net::SpawnedTestServer https_server_ocsp_revoked_;
   net::SpawnedTestServer wss_server_expired_;
   net::SpawnedTestServer wss_server_mismatched_;
 
