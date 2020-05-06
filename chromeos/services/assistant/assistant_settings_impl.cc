@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chromeos/services/assistant/assistant_settings_manager_impl.h"
+#include "chromeos/services/assistant/assistant_settings_impl.h"
 
 #include <utility>
 
@@ -37,22 +37,16 @@ bool HasStarted(const AssistantManagerService* assistant_manager_service) {
 
 }  // namespace
 
-AssistantSettingsManagerImpl::AssistantSettingsManagerImpl(
+AssistantSettingsImpl::AssistantSettingsImpl(
     ServiceContext* context,
     AssistantManagerServiceImpl* assistant_manager_service)
     : context_(context),
-      assistant_manager_service_(assistant_manager_service),
-      weak_factory_(this) {}
+      assistant_manager_service_(assistant_manager_service) {}
 
-AssistantSettingsManagerImpl::~AssistantSettingsManagerImpl() = default;
+AssistantSettingsImpl::~AssistantSettingsImpl() = default;
 
-void AssistantSettingsManagerImpl::BindReceiver(
-    mojo::PendingReceiver<mojom::AssistantSettingsManager> receiver) {
-  receivers_.Add(this, std::move(receiver));
-}
-
-void AssistantSettingsManagerImpl::GetSettings(const std::string& selector,
-                                               GetSettingsCallback callback) {
+void AssistantSettingsImpl::GetSettings(const std::string& selector,
+                                        GetSettingsCallback callback) {
   DCHECK(HasStarted(assistant_manager_service_));
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
@@ -88,9 +82,8 @@ void AssistantSettingsManagerImpl::GetSettings(const std::string& selector,
           });
 }
 
-void AssistantSettingsManagerImpl::UpdateSettings(
-    const std::string& update,
-    GetSettingsCallback callback) {
+void AssistantSettingsImpl::UpdateSettings(const std::string& update,
+                                           GetSettingsCallback callback) {
   DCHECK(HasStarted(assistant_manager_service_));
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
@@ -122,18 +115,19 @@ void AssistantSettingsManagerImpl::UpdateSettings(
           });
 }
 
-void AssistantSettingsManagerImpl::StartSpeakerIdEnrollment(
+void AssistantSettingsImpl::StartSpeakerIdEnrollment(
     bool skip_cloud_enrollment,
-    mojo::PendingRemote<mojom::SpeakerIdEnrollmentClient> client) {
+    base::WeakPtr<SpeakerIdEnrollmentClient> client) {
   DCHECK(HasStarted(assistant_manager_service_));
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
+  DCHECK(!speaker_id_enrollment_client_);
 
   assistant_manager_service_->platform_api()->SetMicState(true);
 
   if (!assistant_manager_service_->assistant_manager_internal())
     return;
 
-  speaker_id_enrollment_client_.Bind(std::move(client));
+  speaker_id_enrollment_client_ = std::move(client);
 
   assistant_client::SpeakerIdEnrollmentConfig client_config;
   client_config.user_id = context_->primary_account_gaia_id();
@@ -146,39 +140,34 @@ void AssistantSettingsManagerImpl::StartSpeakerIdEnrollment(
            task_runner = main_task_runner()](
               const assistant_client::SpeakerIdEnrollmentUpdate& update) {
             task_runner->PostTask(
-                FROM_HERE, base::BindOnce(&AssistantSettingsManagerImpl::
-                                              HandleSpeakerIdEnrollmentUpdate,
-                                          weak_ptr, update));
+                FROM_HERE,
+                base::BindOnce(
+                    &AssistantSettingsImpl::HandleSpeakerIdEnrollmentUpdate,
+                    weak_ptr, update));
           });
 }
 
-void AssistantSettingsManagerImpl::StopSpeakerIdEnrollment(
-    StopSpeakerIdEnrollmentCallback callback) {
+void AssistantSettingsImpl::StopSpeakerIdEnrollment() {
   DCHECK(HasStarted(assistant_manager_service_));
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
   assistant_manager_service_->platform_api()->SetMicState(false);
 
-  if (!assistant_manager_service_->assistant_manager_internal()) {
-    std::move(callback).Run();
+  if (!assistant_manager_service_->assistant_manager_internal())
     return;
-  }
 
   assistant_manager_service_->assistant_manager_internal()
-      ->StopSpeakerIdEnrollment([repeating_callback =
-                                     base::AdaptCallbackForRepeating(
-                                         std::move(callback)),
-                                 task_runner = main_task_runner(),
+      ->StopSpeakerIdEnrollment([task_runner = main_task_runner(),
                                  weak_ptr = weak_factory_.GetWeakPtr()]() {
         task_runner->PostTask(
             FROM_HERE,
             base::BindOnce(
-                &AssistantSettingsManagerImpl::HandleStopSpeakerIdEnrollment,
-                std::move(weak_ptr), repeating_callback));
+                &AssistantSettingsImpl::HandleStopSpeakerIdEnrollment,
+                std::move(weak_ptr)));
       });
 }
 
-void AssistantSettingsManagerImpl::SyncSpeakerIdEnrollmentStatus() {
+void AssistantSettingsImpl::SyncSpeakerIdEnrollmentStatus() {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
   if (assistant_state()->allowed_state() !=
@@ -195,13 +184,13 @@ void AssistantSettingsManagerImpl::SyncSpeakerIdEnrollmentStatus() {
               const assistant_client::SpeakerIdEnrollmentStatus& status) {
             task_runner->PostTask(
                 FROM_HERE,
-                base::BindOnce(&AssistantSettingsManagerImpl::
-                                   HandleSpeakerIdEnrollmentStatusSync,
-                               weak_ptr, status));
+                base::BindOnce(
+                    &AssistantSettingsImpl::HandleSpeakerIdEnrollmentStatusSync,
+                    weak_ptr, status));
           });
 }
 
-void AssistantSettingsManagerImpl::SyncDeviceAppsStatus(
+void AssistantSettingsImpl::SyncDeviceAppsStatus(
     base::OnceCallback<void(bool)> callback) {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
@@ -211,15 +200,17 @@ void AssistantSettingsManagerImpl::SyncDeviceAppsStatus(
   consent_flow_ui->set_flow_id(
       ActivityControlSettingsUiSelector::ASSISTANT_SUW_ONBOARDING_ON_CHROME_OS);
   selector.set_gaia_user_context_ui(true);
-  GetSettings(
-      selector.SerializeAsString(),
-      base::BindOnce(&AssistantSettingsManagerImpl::HandleDeviceAppsStatusSync,
-                     weak_factory_.GetWeakPtr(), std::move(callback)));
+  GetSettings(selector.SerializeAsString(),
+              base::BindOnce(&AssistantSettingsImpl::HandleDeviceAppsStatusSync,
+                             weak_factory_.GetWeakPtr(), std::move(callback)));
 }
 
-void AssistantSettingsManagerImpl::HandleSpeakerIdEnrollmentUpdate(
+void AssistantSettingsImpl::HandleSpeakerIdEnrollmentUpdate(
     const assistant_client::SpeakerIdEnrollmentUpdate& update) {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
+  if (!speaker_id_enrollment_client_)
+    return;
+
   switch (update.state) {
     case SpeakerIdEnrollmentState::LISTEN:
       speaker_id_enrollment_client_->OnListeningHotword();
@@ -246,7 +237,7 @@ void AssistantSettingsManagerImpl::HandleSpeakerIdEnrollmentUpdate(
   }
 }
 
-void AssistantSettingsManagerImpl::HandleSpeakerIdEnrollmentStatusSync(
+void AssistantSettingsImpl::HandleSpeakerIdEnrollmentStatusSync(
     const assistant_client::SpeakerIdEnrollmentStatus& status) {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
@@ -264,27 +255,25 @@ void AssistantSettingsManagerImpl::HandleSpeakerIdEnrollmentStatusSync(
   }
 }
 
-ash::AssistantStateBase* AssistantSettingsManagerImpl::assistant_state() {
+ash::AssistantStateBase* AssistantSettingsImpl::assistant_state() {
   return context_->assistant_state();
 }
 
-ash::AssistantController* AssistantSettingsManagerImpl::assistant_controller() {
+ash::AssistantController* AssistantSettingsImpl::assistant_controller() {
   return context_->assistant_controller();
 }
 
 scoped_refptr<base::SequencedTaskRunner>
-AssistantSettingsManagerImpl::main_task_runner() {
+AssistantSettingsImpl::main_task_runner() {
   return context_->main_task_runner();
 }
 
-void AssistantSettingsManagerImpl::HandleStopSpeakerIdEnrollment(
-    base::RepeatingCallback<void()> callback) {
+void AssistantSettingsImpl::HandleStopSpeakerIdEnrollment() {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
   speaker_id_enrollment_client_.reset();
-  callback.Run();
 }
 
-void AssistantSettingsManagerImpl::HandleDeviceAppsStatusSync(
+void AssistantSettingsImpl::HandleDeviceAppsStatusSync(
     base::OnceCallback<void(bool)> callback,
     const std::string& settings) {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
@@ -312,7 +301,7 @@ void AssistantSettingsManagerImpl::HandleDeviceAppsStatusSync(
   std::move(callback).Run(gaia_user_context_ui.device_apps_enabled());
 }
 
-void AssistantSettingsManagerImpl::UpdateServerDeviceSettings() {
+void AssistantSettingsImpl::UpdateServerDeviceSettings() {
   DCHECK(main_task_runner()->RunsTasksInCurrentSequence());
 
   const std::string device_id =
