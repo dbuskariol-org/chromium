@@ -7720,6 +7720,7 @@ Unknown properties are collapsed to zero. -->
   <int value="5" label="Composited UI"/>
   <int value="6" label="VR"/>
   <int value="7" label="PROMOTE_TAB"/>
+  <int value="8" label="OMNIBOX_FOCUS"/>
 </enum>
 
 <enum name="BrokenAlternateProtocolLocation">
