@@ -42,7 +42,7 @@ class SearchHandlerTest : public testing::Test {
         /*sync_service=*/nullptr, /*supervised_user_service=*/nullptr,
         /*kerberos_credentials_manager=*/nullptr,
         /*arc_app_list_prefs=*/nullptr, /*identity_manager=*/nullptr,
-        /*android_sms_service=*/nullptr);
+        /*android_sms_service=*/nullptr, /*printers_manager=*/nullptr);
 
     handler_ = std::make_unique<SearchHandler>(provider_.get(),
                                                &local_search_service_);
