@@ -54,7 +54,7 @@ AssistantOptInFlowScreenHandler::AssistantOptInFlowScreenHandler(
 }
 
 AssistantOptInFlowScreenHandler::~AssistantOptInFlowScreenHandler() {
-  if (voice_match_enrollment_started_)
+  if (client_receiver_.is_bound())
     StopSpeakerIdEnrollment();
   if (ash::AssistantState::Get())
     ash::AssistantState::Get()->RemoveObserver(this);
@@ -225,7 +225,7 @@ void AssistantOptInFlowScreenHandler::SetupAssistantConnection() {
       ash::mojom::AssistantState::NOT_READY) {
     ash::AssistantState::Get()->AddObserver(this);
   } else {
-    SendGetSettingsRequest();
+    BindAssistantSettingsManager();
   }
 }
 
@@ -239,7 +239,7 @@ void AssistantOptInFlowScreenHandler::OnActivityControlOptInResult(
   RecordActivityControlConsent(profile, ui_audit_key_, opted_in);
   if (opted_in) {
     RecordAssistantOptInStatus(ACTIVITY_CONTROL_ACCEPTED);
-    assistant::AssistantSettings::Get()->UpdateSettings(
+    settings_manager_->UpdateSettings(
         GetSettingsUiUpdate(consent_token_).SerializeAsString(),
         base::BindOnce(
             &AssistantOptInFlowScreenHandler::OnUpdateSettingsResponse,
@@ -260,7 +260,7 @@ void AssistantOptInFlowScreenHandler::OnEmailOptInResult(bool opted_in) {
   }
 
   RecordAssistantOptInStatus(opted_in ? EMAIL_OPTED_IN : EMAIL_OPTED_OUT);
-  assistant::AssistantSettings::Get()->UpdateSettings(
+  settings_manager_->UpdateSettings(
       GetEmailOptInUpdate(opted_in).SerializeAsString(),
       base::BindOnce(&AssistantOptInFlowScreenHandler::OnUpdateSettingsResponse,
                      weak_factory_.GetWeakPtr()));
@@ -284,22 +284,28 @@ void AssistantOptInFlowScreenHandler::OnAssistantSettingsEnabled(bool enabled) {
 void AssistantOptInFlowScreenHandler::OnAssistantStatusChanged(
     ash::mojom::AssistantState state) {
   if (state != ash::mojom::AssistantState::NOT_READY) {
-    SendGetSettingsRequest();
+    BindAssistantSettingsManager();
     ash::AssistantState::Get()->RemoveObserver(this);
   }
 }
 
-void AssistantOptInFlowScreenHandler::SendGetSettingsRequest() {
-  if (!initialized_)
+void AssistantOptInFlowScreenHandler::BindAssistantSettingsManager() {
+  if (settings_manager_.is_bound())
     return;
+  DCHECK_EQ(user_manager::UserManager::Get()->GetActiveUser(),
+            user_manager::UserManager::Get()->GetPrimaryUser());
+  // Set up settings mojom.
+  chromeos::assistant::AssistantService::Get()->BindSettingsManager(
+      settings_manager_.BindNewPipeAndPassReceiver());
 
-  if (ash::AssistantState::Get()->assistant_state() ==
-      ash::mojom::AssistantState::NOT_READY) {
-    return;
+  if (initialized_) {
+    SendGetSettingsRequest();
   }
+}
 
+void AssistantOptInFlowScreenHandler::SendGetSettingsRequest() {
   assistant::SettingsUiSelector selector = GetSettingsUiSelector();
-  assistant::AssistantSettings::Get()->GetSettings(
+  settings_manager_->GetSettings(
       selector.SerializeAsString(),
       base::BindOnce(&AssistantOptInFlowScreenHandler::OnGetSettingsResponse,
                      weak_factory_.GetWeakPtr()));
@@ -307,9 +313,9 @@ void AssistantOptInFlowScreenHandler::SendGetSettingsRequest() {
 }
 
 void AssistantOptInFlowScreenHandler::StopSpeakerIdEnrollment() {
-  DCHECK(voice_match_enrollment_started_);
-  voice_match_enrollment_started_ = false;
-  assistant::AssistantSettings::Get()->StopSpeakerIdEnrollment();
+  settings_manager_->StopSpeakerIdEnrollment(base::DoNothing());
+  // Reset the receiver so it can be used again if enrollment is retried.
+  client_receiver_.reset();
 }
 
 void AssistantOptInFlowScreenHandler::ReloadContent(const base::Value& dict) {
@@ -491,7 +497,11 @@ void AssistantOptInFlowScreenHandler::HandleValuePropScreenUserAction(
   } else if (action == kNextPressed) {
     OnActivityControlOptInResult(true);
   } else if (action == kReloadRequested) {
-    SendGetSettingsRequest();
+    if (settings_manager_.is_bound()) {
+      SendGetSettingsRequest();
+    } else {
+      LOG(ERROR) << "Settings mojom failed to setup. Check Assistant service.";
+    }
   }
 }
 
@@ -524,11 +534,9 @@ void AssistantOptInFlowScreenHandler::HandleVoiceMatchScreenUserAction(
       prefs->SetBoolean(assistant::prefs::kAssistantHotwordEnabled, true);
     }
 
-    DCHECK(!voice_match_enrollment_started_);
-    voice_match_enrollment_started_ = true;
-    assistant::AssistantSettings::Get()->StartSpeakerIdEnrollment(
+    settings_manager_->StartSpeakerIdEnrollment(
         flow_type_ == ash::FlowType::kSpeakerIdRetrain,
-        weak_factory_.GetWeakPtr());
+        client_receiver_.BindNewPipeAndPassRemote());
   }
 }
 
@@ -596,8 +604,10 @@ void AssistantOptInFlowScreenHandler::HandleFlowInitialized(
   DCHECK(IsKnownEnumValue(static_cast<ash::FlowType>(flow_type)));
   flow_type_ = static_cast<ash::FlowType>(flow_type);
 
-  if (flow_type_ == ash::FlowType::kConsentFlow)
+  if (settings_manager_.is_bound() &&
+      flow_type_ == ash::FlowType::kConsentFlow) {
     SendGetSettingsRequest();
+  }
 }
 
 }  // namespace chromeos

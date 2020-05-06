@@ -4,7 +4,6 @@
 
 #include "chrome/browser/ui/ash/assistant/assistant_test_mixin.h"
 
-#include <algorithm>
 #include <utility>
 
 #include "ash/assistant/model/ui/assistant_card_element.h"
@@ -355,10 +354,9 @@ AssistantTestMixin::AssistantTestMixin(
     InProcessBrowserTestMixinHost* host,
     InProcessBrowserTest* test_base,
     net::EmbeddedTestServer* embedded_test_server,
-    FakeS3Mode mode,
-    int test_data_version)
+    FakeS3Mode mode)
     : InProcessBrowserTestMixin(host),
-      fake_s3_server_(test_data_version),
+      fake_s3_server_(),
       mode_(mode),
       test_api_(ash::AssistantTestApi::Create()),
       user_mixin_(std::make_unique<LoggedInUserMixin>(host,

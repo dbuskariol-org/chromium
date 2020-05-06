@@ -38,6 +38,11 @@ class GoogleAssistantHandler : public ::settings::SettingsPageUIHandler,
   // WebUI call to signal js side is ready.
   void HandleInitialized(const base::ListValue* args);
 
+  // Bind to assistant settings manager.
+  void BindAssistantSettingsManager();
+
+  mojo::Remote<assistant::mojom::AssistantSettingsManager> settings_manager_;
+
   bool pending_hotword_update_ = false;
 
   base::WeakPtrFactory<GoogleAssistantHandler> weak_factory_{this};

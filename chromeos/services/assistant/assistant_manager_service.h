@@ -10,8 +10,9 @@
 
 #include "ash/public/mojom/assistant_controller.mojom.h"
 #include "base/component_export.h"
-#include "chromeos/services/assistant/public/cpp/assistant_settings.h"
+#include "chromeos/services/assistant/assistant_settings_manager.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
+#include "chromeos/services/assistant/public/mojom/settings.mojom.h"
 
 namespace chromeos {
 namespace assistant {
@@ -84,8 +85,8 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) AssistantManagerService
   // Enable/disable Assistant Context.
   virtual void SetAssistantContextEnabled(bool enable) = 0;
 
-  // Return a pointer of AssistantSettings.
-  virtual AssistantSettings* GetAssistantSettings() = 0;
+  // Return a pointer of AssistantSettingsManager.
+  virtual AssistantSettingsManager* GetAssistantSettingsManager() = 0;
 
   // Add/Remove an observer that is invoked when there is a communication
   // error with the Assistant service.

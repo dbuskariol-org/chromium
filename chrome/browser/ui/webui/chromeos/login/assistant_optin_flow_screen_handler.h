@@ -7,14 +7,12 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 
-#include "ash/public/cpp/assistant/assistant_settings.h"
 #include "ash/public/cpp/assistant/assistant_setup.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
 #include "base/macros.h"
 #include "chrome/browser/ui/webui/chromeos/login/base_screen_handler.h"
-#include "chromeos/services/assistant/public/cpp/assistant_settings.h"
+#include "chromeos/services/assistant/public/mojom/settings.mojom.h"
 #include "mojo/public/cpp/bindings/receiver.h"
 #include "mojo/public/cpp/bindings/remote.h"
 
@@ -47,7 +45,7 @@ class AssistantOptInFlowScreenHandler
     : public BaseScreenHandler,
       public AssistantOptInFlowScreenView,
       public ash::AssistantStateObserver,
-      public chromeos::assistant::SpeakerIdEnrollmentClient {
+      assistant::mojom::SpeakerIdEnrollmentClient {
  public:
   using TView = AssistantOptInFlowScreenView;
 
@@ -74,7 +72,7 @@ class AssistantOptInFlowScreenHandler
   void Show() override;
   void Hide() override;
 
-  // assistant::SpeakerIdEnrollmentClient:
+  // assistant::mojom::SpeakerIdEnrollmentClient:
   void OnListeningHotword() override;
   void OnProcessingHotword() override;
   void OnSpeakerIdEnrollmentDone() override;
@@ -100,6 +98,9 @@ class AssistantOptInFlowScreenHandler
   // ash::AssistantStateObserver:
   void OnAssistantSettingsEnabled(bool enabled) override;
   void OnAssistantStatusChanged(ash::mojom::AssistantState state) override;
+
+  // Connect to assistant settings manager.
+  void BindAssistantSettingsManager();
 
   // Send GetSettings request for the opt-in UI.
   void SendGetSettingsRequest();
@@ -148,9 +149,6 @@ class AssistantOptInFlowScreenHandler
   // Whether email optin is needed for user.
   bool email_optin_needed_ = false;
 
-  // Whether the user has started voice match enrollment.
-  bool voice_match_enrollment_started_ = false;
-
   // Whether the use has completed voice match enrollment.
   bool voice_match_enrollment_done_ = false;
 
@@ -166,6 +164,9 @@ class AssistantOptInFlowScreenHandler
   // Whether the screen has been initialized.
   bool initialized_ = false;
 
+  mojo::Receiver<assistant::mojom::SpeakerIdEnrollmentClient> client_receiver_{
+      this};
+  mojo::Remote<assistant::mojom::AssistantSettingsManager> settings_manager_;
   base::WeakPtrFactory<AssistantOptInFlowScreenHandler> weak_factory_{this};
 
   DISALLOW_COPY_AND_ASSIGN(AssistantOptInFlowScreenHandler);

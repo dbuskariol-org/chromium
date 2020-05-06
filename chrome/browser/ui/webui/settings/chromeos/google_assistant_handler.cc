@@ -87,13 +87,23 @@ void GoogleAssistantHandler::HandleRetrainVoiceModel(
 void GoogleAssistantHandler::HandleSyncVoiceModelStatus(
     const base::ListValue* args) {
   CHECK_EQ(0U, args->GetSize());
+  if (!settings_manager_.is_bound())
+    BindAssistantSettingsManager();
 
-  assistant::AssistantSettings::Get()->SyncSpeakerIdEnrollmentStatus();
+  settings_manager_->SyncSpeakerIdEnrollmentStatus();
 }
 
 void GoogleAssistantHandler::HandleInitialized(const base::ListValue* args) {
   CHECK_EQ(0U, args->GetSize());
   AllowJavascript();
+}
+
+void GoogleAssistantHandler::BindAssistantSettingsManager() {
+  DCHECK(!settings_manager_.is_bound());
+
+  // Set up settings mojom.
+  chromeos::assistant::AssistantService::Get()->BindSettingsManager(
+      settings_manager_.BindNewPipeAndPassReceiver());
 }
 
 }  // namespace settings

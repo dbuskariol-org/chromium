@@ -17,10 +17,6 @@ namespace chromeos {
 namespace assistant {
 
 namespace {
-// Please remember to set auth token when running in |kProxy| mode.
-constexpr auto kMode = FakeS3Mode::kReplay;
-// Update this when you introduce breaking changes to existing tests.
-constexpr int kVersion = 1;
 
 constexpr int kStartBrightnessPercent = 50;
 
@@ -109,8 +105,8 @@ class AssistantBrowserTest : public MixinBasedInProcessBrowserTest {
   }
 
  private:
-  AssistantTestMixin tester_{&mixin_host_, this, embedded_test_server(), kMode,
-                             kVersion};
+  AssistantTestMixin tester_{&mixin_host_, this, embedded_test_server(),
+                             FakeS3Mode::kReplay};
 
   DISALLOW_COPY_AND_ASSIGN(AssistantBrowserTest);
 };
@@ -251,12 +247,11 @@ IN_PROC_BROWSER_TEST_F(AssistantTimersV2BrowserTest,
 
   // Start a timer for one minute.
   tester()->SendTextQuery("Set a timer for 1 minute.");
-  // Check for a stable substring of the expected answers.
-  tester()->ExpectTextResponse(", 1 min.");
+  tester()->ExpectTextResponse("Alright, 1 min. And that's starting… now.");
 
   // Confirm that an Assistant timer notification is now showing.
   auto notifications = message_center->FindNotificationsByAppId("assistant");
-  ASSERT_EQ(1u, notifications.size());
+  EXPECT_EQ(1u, notifications.size());
   EXPECT_STARTS_WITH((*notifications.begin())->id(), "assistant/timer");
 
   // Disable Assistant.

@@ -47,8 +47,7 @@ class AssistantTestMixin : public InProcessBrowserTestMixin {
   AssistantTestMixin(InProcessBrowserTestMixinHost* host,
                      InProcessBrowserTest* test_base,
                      net::EmbeddedTestServer* embedded_test_server,
-                     FakeS3Mode mode,
-                     int test_data_version);
+                     FakeS3Mode mode);
   ~AssistantTestMixin() override;
 
   // InProcessBrowserTestMixin overrides:

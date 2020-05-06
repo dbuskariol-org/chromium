@@ -25,6 +25,7 @@
 #include "chromeos/services/assistant/assistant_state_proxy.h"
 #include "chromeos/services/assistant/public/cpp/assistant_service.h"
 #include "chromeos/services/assistant/public/mojom/assistant.mojom.h"
+#include "chromeos/services/assistant/public/mojom/settings.mojom.h"
 #include "components/signin/public/identity_manager/account_info.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
@@ -56,6 +57,7 @@ class IdentityManager;
 namespace chromeos {
 namespace assistant {
 
+class AssistantSettingsManager;
 class ServiceContext;
 class ScopedAshSessionObserver;
 
@@ -79,6 +81,9 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) Service
           PrefService* profile_prefs);
   ~Service() override;
 
+  // Allows tests to override the AssistantSettingsManager bound by the service.
+  static void OverrideSettingsManagerForTesting(
+      AssistantSettingsManager* manager);
   // Allows tests to override the S3 server URI used by the service.
   // The caller must ensure the memory passed in remains valid.
   // This override can be removed by passing in a nullptr.
@@ -97,6 +102,8 @@ class COMPONENT_EXPORT(ASSISTANT_SERVICE) Service
   // AssistantService overrides:
   void Init() override;
   void BindAssistant(mojo::PendingReceiver<mojom::Assistant> receiver) override;
+  void BindSettingsManager(
+      mojo::PendingReceiver<mojom::AssistantSettingsManager> receiver) override;
   void Shutdown() override;
 
  private:

@@ -27,8 +27,9 @@
 #include "chromeos/dbus/power_manager/power_supply_properties.pb.h"
 #include "chromeos/services/assistant/assistant_manager_service.h"
 #include "chromeos/services/assistant/assistant_manager_service_delegate_impl.h"
+#include "chromeos/services/assistant/assistant_settings_manager.h"
 #include "chromeos/services/assistant/fake_assistant_manager_service_impl.h"
-#include "chromeos/services/assistant/fake_assistant_settings_impl.h"
+#include "chromeos/services/assistant/fake_assistant_settings_manager_impl.h"
 #include "chromeos/services/assistant/public/cpp/assistant_client.h"
 #include "chromeos/services/assistant/public/cpp/assistant_prefs.h"
 #include "chromeos/services/assistant/public/cpp/device_actions.h"
@@ -46,7 +47,7 @@
 #if BUILDFLAG(ENABLE_CROS_LIBASSISTANT)
 #include "chromeos/assistant/internal/internal_constants.h"
 #include "chromeos/services/assistant/assistant_manager_service_impl.h"
-#include "chromeos/services/assistant/assistant_settings_impl.h"
+#include "chromeos/services/assistant/assistant_settings_manager_impl.h"
 #include "chromeos/services/assistant/utils.h"
 #include "services/device/public/mojom/battery_monitor.mojom.h"
 #endif
@@ -69,6 +70,8 @@ constexpr base::TimeDelta kMinTokenRefreshDelay =
 constexpr base::TimeDelta kMaxTokenRefreshDelay =
     base::TimeDelta::FromMilliseconds(60 * 1000);
 
+// Testing override for the AssistantSettingsManager implementation.
+AssistantSettingsManager* g_settings_manager_override = nullptr;
 // Testing override for the URI used to contact the s3 server.
 const char* g_s3_server_uri_override = nullptr;
 
@@ -225,6 +228,12 @@ Service::~Service() {
 }
 
 // static
+void Service::OverrideSettingsManagerForTesting(
+    AssistantSettingsManager* manager) {
+  g_settings_manager_override = manager;
+}
+
+// static
 void Service::OverrideS3ServerUriForTesting(const char* uri) {
   g_s3_server_uri_override = uri;
 }
@@ -262,6 +271,20 @@ void Service::BindAssistant(mojo::PendingReceiver<mojom::Assistant> receiver) {
   DCHECK(assistant_manager_service_);
   assistant_receivers_.Add(assistant_manager_service_.get(),
                            std::move(receiver));
+}
+
+void Service::BindSettingsManager(
+    mojo::PendingReceiver<mojom::AssistantSettingsManager> receiver) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  if (g_settings_manager_override) {
+    g_settings_manager_override->BindReceiver(std::move(receiver));
+    return;
+  }
+
+  DCHECK(assistant_manager_service_);
+  assistant_manager_service_->GetAssistantSettingsManager()->BindReceiver(
+      std::move(receiver));
 }
 
 void Service::Shutdown() {

@@ -28,11 +28,6 @@ namespace assistant {
 
 namespace {
 
-// Please remember to set auth token when running in |kProxy| mode.
-constexpr auto kMode = FakeS3Mode::kReplay;
-// Update this when you introduce breaking changes to existing tests.
-constexpr int kVersion = 1;
-
 // TODO(b:153496343): Move generic helpers to a more generic location for reuse.
 // Helpers ---------------------------------------------------------------------
 
@@ -166,8 +161,8 @@ class AssistantTimersBrowserTest : public MixinBasedInProcessBrowserTest {
  private:
   base::test::ScopedFeatureList feature_list_;
   base::test::ScopedRestoreICUDefaultLocale locale_{"en_US"};
-  AssistantTestMixin tester_{&mixin_host_, this, embedded_test_server(), kMode,
-                             kVersion};
+  AssistantTestMixin tester_{&mixin_host_, this, embedded_test_server(),
+                             FakeS3Mode::kReplay};
 };
 
 // Tests -----------------------------------------------------------------------
