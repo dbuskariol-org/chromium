@@ -43,7 +43,6 @@
 #include "chrome/browser/ui/webui/settings/browser_lifetime_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/accessibility_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/account_manager_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/android_apps_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/cups_printers_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/date_time_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_storage_handler.h"
@@ -225,8 +224,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
 
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::AccessibilityHandler>(profile));
-  web_ui()->AddMessageHandler(
-      std::make_unique<chromeos::settings::AndroidAppsHandler>(profile));
   web_ui()->AddMessageHandler(
       chromeos::settings::CupsPrintersHandler::Create(web_ui()));
   web_ui()->AddMessageHandler(base::WrapUnique(

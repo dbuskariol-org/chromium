@@ -481,6 +481,36 @@
   </message>
 
   <!-- Apps section. -->
+  <message name="IDS_OS_SETTINGS_TAG_APPS" desc="Text for search result item which, when clicked, navigates the user to apps settings.">
+    Apps
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_APPS_MANAGEMENT" desc="Text for search result item which, when clicked, navigates the user to app mangement settings. Alternate phrase for: 'View installed apps'">
+    Manage apps
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_APPS_MANAGEMENT_ALT1" desc="Text for search result item which, when clicked, navigates the user to app mangement settings. Alternate phrase for: 'Manage apps'">
+    View installed apps
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_REMOVE_PLAY_STORE" desc="Text for search result item which, when clicked, navigates the user to Android app settings, with a button to remove the Play Store (Android app store). Alternate phrase for: 'Uninstall Google Play Store'">
+    Remove Google Play Store
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_REMOVE_PLAY_STORE_ALT1" desc="Text for search result item which, when clicked, navigates the user to Android app settings, with a button to remove the Play Store (Android app store). Alternate phrase for: 'Remove Google Play Store'">
+    Uninstall Google Play Store
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_PLAY_STORE" desc="Text for search result item which, when clicked, navigates the user to Play Store (Android app store) settings.">
+    Play Store
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_ANDROID_SETTINGS_WITH_PLAY_STORE" desc="Text for search result item which, when clicked, navigates the user to Android app settings, with a button to open Android settings.">
+    Android settings
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_ANDROID_SETTINGS" desc="Text for search result item which, when clicked, navigates the user to apps settings, with a button to open Android settings.">
+    Android settings
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_ANDROID_TURN_ON_PLAY_STORE" desc="Text for search result item which, when clicked, navigates the user to apps settings, with a button to turn on the Play Store (Android app store). Alternate phrase for: 'Enable Play Store'">
+    Turn on Play Store
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_ANDROID_TURN_ON_PLAY_STORE_ALT1" desc="Text for search result item which, when clicked, navigates the user to apps settings, with a button to turn on the Play Store (Android app store). Alternate phrase for: 'Turn on Play Store'">
+    Enable Play Store
+  </message>
 
   <!-- Crostini section. -->
   <message name="IDS_OS_SETTINGS_TAG_CROSTINI" desc="Text for search result item which, when clicked, navigates the user to Linux (a.k.a. Crostini) settings. Alternate phrase for: 'Crostini'">
