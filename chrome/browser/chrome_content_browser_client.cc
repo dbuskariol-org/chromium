@@ -1609,6 +1609,20 @@ bool ChromeContentBrowserClient::ShouldLockToOrigin(
   return true;
 }
 
+bool ChromeContentBrowserClient::DoesWebUISchemeRequireProcessLock(
+    base::StringPiece scheme) {
+  // Note: This method can be called from multiple threads. It is not safe to
+  // assume it runs only on the UI thread.
+
+  // chrome-search: documents commit only in the NTP instant process and are not
+  // locked to chrome-search: origin.
+  if (scheme == chrome::kChromeSearchScheme)
+    return false;
+
+  // All other WebUIs must be locked to origin.
+  return true;
+}
+
 bool ChromeContentBrowserClient::ShouldTreatURLSchemeAsFirstPartyWhenTopLevel(
     base::StringPiece scheme,
     bool is_embedded_origin_secure) {
