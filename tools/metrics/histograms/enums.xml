@@ -54334,6 +54334,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="PrinterSetupSource">
+  <obsolete>
+    Removed 2020-04.
+  </obsolete>
   <int value="0" label="Printer was setup from Print Preview"/>
   <int value="1" label="Printer was setup from Settings"/>
   <int value="2" label="Printer was setup by automatic USB configurer"/>
