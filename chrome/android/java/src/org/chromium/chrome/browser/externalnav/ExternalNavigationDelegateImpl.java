@@ -146,7 +146,7 @@ public class ExternalNavigationDelegateImpl implements ExternalNavigationDelegat
             }
 
             if (info.activityInfo != null) {
-                if (InstantAppsHandler.getInstance().isInstantAppResolveInfo(info)) {
+                if (IntentUtils.isInstantAppResolveInfo(info)) {
                     // Don't consider the Instant Apps resolver a specialized application.
                     continue;
                 }
