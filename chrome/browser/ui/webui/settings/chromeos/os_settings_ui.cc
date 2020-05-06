@@ -34,7 +34,6 @@
 #include "chrome/browser/ui/ui_features.h"
 #include "chrome/browser/ui/webui/app_management/app_management.mojom.h"
 #include "chrome/browser/ui/webui/app_management/app_management_page_handler.h"
-#include "chrome/browser/ui/webui/chromeos/smb_shares/smb_handler.h"
 #include "chrome/browser/ui/webui/managed_ui_handler.h"
 #include "chrome/browser/ui/webui/metrics_handler.h"
 #include "chrome/browser/ui/webui/plural_string_handler.h"
@@ -249,9 +248,6 @@ void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   web_ui()->AddMessageHandler(
       std::make_unique<chromeos::settings::InternetHandler>(profile));
   web_ui()->AddMessageHandler(std::make_unique<::settings::TtsHandler>());
-  web_ui()->AddMessageHandler(
-      std::make_unique<chromeos::smb_dialog::SmbHandler>(profile,
-                                                         base::DoNothing()));
 
   html_source->AddBoolean(
       "userCannotManuallyEnterPassword",
