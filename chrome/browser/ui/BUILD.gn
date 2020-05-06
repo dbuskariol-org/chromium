@@ -465,7 +465,7 @@ jumbo_static_library("ui") {
     "//components/flags_ui",
     "//components/gcm_driver",
     "//components/google/core/common",
-    "//components/heap_profiling",
+    "//components/heap_profiling/multi_process",
     "//components/history/content/browser",
     "//components/history/core/browser",
     "//components/history/core/common",

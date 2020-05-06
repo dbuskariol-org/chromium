@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_HEAP_PROFILING_SUPERVISOR_H_
-#define COMPONENTS_HEAP_PROFILING_SUPERVISOR_H_
+#ifndef COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_SUPERVISOR_H_
+#define COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_SUPERVISOR_H_
 
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
@@ -137,4 +137,4 @@ class Supervisor {
 
 }  // namespace heap_profiling
 
-#endif  // COMPONENTS_HEAP_PROFILING_SUPERVISOR_H_
+#endif  // COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_SUPERVISOR_H_

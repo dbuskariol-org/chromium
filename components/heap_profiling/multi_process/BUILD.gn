@@ -6,7 +6,7 @@ if (is_android) {
   import("//build/config/android/rules.gni")
 }
 
-static_library("heap_profiling") {
+static_library("multi_process") {
   sources = [
     "client_connection_manager.cc",
     "client_connection_manager.h",
@@ -26,14 +26,14 @@ static_library("heap_profiling") {
 if (is_android) {
   generate_jni("jni_headers") {
     testonly = true
-    sources = [ "javatests/src/org/chromium/components/heap_profiling/HeapProfilingTestShim.java" ]
+    sources = [ "javatests/src/org/chromium/components/heap_profiling/multi_process/HeapProfilingTestShim.java" ]
   }
 
   # This library must be included by the apk_under_test in order for the JNI
   # shim to function correctly.
   android_library("heap_profiling_java_test_support") {
     testonly = true
-    sources = [ "javatests/src/org/chromium/components/heap_profiling/HeapProfilingTestShim.java" ]
+    sources = [ "javatests/src/org/chromium/components/heap_profiling/multi_process/HeapProfilingTestShim.java" ]
     deps = [ "//base:base_java" ]
   }
 }
@@ -46,7 +46,7 @@ source_set("test_support") {
   ]
 
   deps = [
-    ":heap_profiling",
+    ":multi_process",
     "//base",
     "//base/test:test_support",
     "//components/services/heap_profiling/public/cpp",

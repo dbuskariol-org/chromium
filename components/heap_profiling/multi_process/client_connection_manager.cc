@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/heap_profiling/client_connection_manager.h"
+#include "components/heap_profiling/multi_process/client_connection_manager.h"
 
 #include "base/bind.h"
 #include "base/no_destructor.h"

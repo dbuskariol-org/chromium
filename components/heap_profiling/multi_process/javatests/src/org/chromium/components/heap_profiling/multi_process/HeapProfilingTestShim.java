@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.heap_profiling;
+package org.chromium.components.heap_profiling.multi_process;
 
 import org.chromium.base.annotations.MainDex;
 

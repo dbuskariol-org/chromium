@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_HEAP_PROFILING_CLIENT_CONNECTION_MANAGER_H_
-#define COMPONENTS_HEAP_PROFILING_CLIENT_CONNECTION_MANAGER_H_
+#ifndef COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_CLIENT_CONNECTION_MANAGER_H_
+#define COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_CLIENT_CONNECTION_MANAGER_H_
 
 #include <unordered_set>
 
@@ -122,4 +122,4 @@ class ClientConnectionManager : public content::BrowserChildProcessObserver,
 
 }  // namespace heap_profiling
 
-#endif  // COMPONENTS_HEAP_PROFILING_CLIENT_CONNECTION_MANAGER_H_
+#endif  // COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_CLIENT_CONNECTION_MANAGER_H_

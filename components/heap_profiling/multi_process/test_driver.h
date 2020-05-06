@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_HEAP_PROFILING_TEST_DRIVER_H_
-#define COMPONENTS_HEAP_PROFILING_TEST_DRIVER_H_
+#ifndef COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_TEST_DRIVER_H_
+#define COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_TEST_DRIVER_H_
 
 #include <vector>
 
@@ -154,4 +154,4 @@ class TestDriver {
 
 }  // namespace heap_profiling
 
-#endif  // COMPONENTS_HEAP_PROFILING_TEST_DRIVER_H_
+#endif  // COMPONENTS_HEAP_PROFILING_MULTI_PROCESS_TEST_DRIVER_H_

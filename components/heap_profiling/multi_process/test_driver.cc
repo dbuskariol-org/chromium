@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/heap_profiling/test_driver.h"
+#include "components/heap_profiling/multi_process/test_driver.h"
 
 #include <algorithm>
 #include <string>
@@ -21,7 +21,7 @@
 #include "base/trace_event/heap_profiler_event_filter.h"
 #include "base/values.h"
 #include "build/build_config.h"
-#include "components/heap_profiling/supervisor.h"
+#include "components/heap_profiling/multi_process/supervisor.h"
 #include "components/services/heap_profiling/public/cpp/controller.h"
 #include "components/services/heap_profiling/public/cpp/profiling_client.h"
 #include "components/services/heap_profiling/public/cpp/settings.h"
@@ -631,30 +631,29 @@ bool TestDriver::ValidateBrowserAllocations(base::Value* dump_json) {
 
   std::string thread_name = ShouldIncludeNativeThreadNames() ? kThreadName : "";
 
-    if (should_validate_dumps) {
-      result = ValidateSamplingAllocations(heaps_v2, "malloc",
-                                           kMallocAllocSize * kMallocAllocCount,
-                                           kMallocAllocCount, kMallocTypeTag);
-      if (!result) {
-        LOG(ERROR) << "Failed to validate malloc fixed allocations";
-        return false;
-      }
+  if (should_validate_dumps) {
+    result = ValidateSamplingAllocations(heaps_v2, "malloc",
+                                         kMallocAllocSize * kMallocAllocCount,
+                                         kMallocAllocCount, kMallocTypeTag);
+    if (!result) {
+      LOG(ERROR) << "Failed to validate malloc fixed allocations";
+      return false;
+    }
 
-      result = ValidateSamplingAllocations(
-          heaps_v2, "malloc", total_variadic_allocations_, kVariadicAllocCount,
-          kMallocVariadicTypeTag);
-      if (!result) {
-        LOG(ERROR) << "Failed to validate malloc variadic allocations";
-        return false;
-      }
-      result = ValidateSamplingAllocations(
-          heaps_v2, "partition_alloc",
-          kPartitionAllocSize * kPartitionAllocCount, kPartitionAllocCount,
-          kPartitionAllocTypeName);
-      if (!result) {
-        LOG(ERROR) << "Failed to validate sampling allocations";
-        return false;
-      }
+    result = ValidateSamplingAllocations(
+        heaps_v2, "malloc", total_variadic_allocations_, kVariadicAllocCount,
+        kMallocVariadicTypeTag);
+    if (!result) {
+      LOG(ERROR) << "Failed to validate malloc variadic allocations";
+      return false;
+    }
+    result = ValidateSamplingAllocations(
+        heaps_v2, "partition_alloc", kPartitionAllocSize * kPartitionAllocCount,
+        kPartitionAllocCount, kPartitionAllocTypeName);
+    if (!result) {
+      LOG(ERROR) << "Failed to validate sampling allocations";
+      return false;
+    }
   }
 
   int process_count = NumProcessesWithName(dump_json, "Browser", nullptr);
