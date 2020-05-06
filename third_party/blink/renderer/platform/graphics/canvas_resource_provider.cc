@@ -17,12 +17,14 @@
 #include "gpu/command_buffer/common/capabilities.h"
 #include "gpu/config/gpu_driver_bug_workaround_type.h"
 #include "gpu/config/gpu_feature_info.h"
+#include "skia/buildflags.h"
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/platform/platform.h"
 #include "third_party/blink/renderer/platform/graphics/accelerated_static_bitmap_image.h"
 #include "third_party/blink/renderer/platform/graphics/gpu/shared_gpu_context.h"
 #include "third_party/blink/renderer/platform/graphics/memory_managed_paint_recorder.h"
 #include "third_party/blink/renderer/platform/graphics/unaccelerated_static_bitmap_image.h"
+#include "third_party/blink/renderer/platform/runtime_enabled_features.h"
 #include "third_party/skia/include/core/SkSurface.h"
 
 namespace blink {
@@ -178,9 +180,10 @@ class CanvasResourceProviderSharedImage : public CanvasResourceProvider {
       base::WeakPtr<CanvasResourceDispatcher> resource_dispatcher,
       bool is_origin_top_left,
       bool is_accelerated,
+      bool is_webgpu,
       uint32_t shared_image_usage_flags)
       : CanvasResourceProvider(
-            kSharedImage,
+            is_webgpu ? kWebGPUSharedImage : kSharedImage,
             size,
             msaa_sample_count,
             filter_quality,
@@ -240,6 +243,14 @@ class CanvasResourceProviderSharedImage : public CanvasResourceProvider {
     TRACE_EVENT0("blink", "CanvasResourceProviderSharedImage::CreateResource");
     if (IsGpuContextLost())
       return nullptr;
+
+#if BUILDFLAG(SKIA_USE_DAWN)
+    if (type_ == kWebGPUSharedImage) {
+      return CanvasResourceWebGPUSharedImage::Create(
+          Size(), ContextProviderWrapper(), CreateWeakPtr(), FilterQuality(),
+          ColorParams(), IsOriginTopLeft(), shared_image_usage_flags_);
+    }
+#endif
 
     return CanvasResourceRasterSharedImage::Create(
         Size(), ContextProviderWrapper(), CreateWeakPtr(), FilterQuality(),
@@ -693,12 +704,21 @@ enum class CanvasResourceType {
   kSharedImage,
   kSharedBitmap,
   kBitmap,
+  kWebGPUSharedImage,
 };
 
 const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
     CanvasResourceProvider::ResourceUsage usage) {
 
   static const Vector<CanvasResourceType> kCompositedFallbackList({
+      CanvasResourceType::kSharedImage,
+      CanvasResourceType::kSharedBitmap,
+      // Fallback to no direct compositing support
+      CanvasResourceType::kBitmap,
+  });
+
+  static const Vector<CanvasResourceType> kCompositedFallbackListWithDawn({
+      CanvasResourceType::kWebGPUSharedImage,
       CanvasResourceType::kSharedImage,
       CanvasResourceType::kSharedBitmap,
       // Fallback to no direct compositing support
@@ -745,10 +765,16 @@ const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
       return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
         kSoftwareCompositedResourceUsage:
+      if (base::FeatureList::IsEnabled(blink::features::kDawn2dCanvas)) {
+        return kCompositedFallbackListWithDawn;
+      }
       return kCompositedFallbackList;
 
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedCompositedResourceUsage:
+      if (base::FeatureList::IsEnabled(blink::features::kDawn2dCanvas)) {
+        return kCompositedFallbackListWithDawn;
+      }
       return kCompositedFallbackList;
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedDirect2DResourceUsage:
@@ -784,7 +810,9 @@ std::unique_ptr<CanvasResourceProvider> CanvasResourceProvider::Create(
   bool is_gpu_memory_buffer_image_allowed = false;
   bool is_swap_chain_allowed = false;
 
-  if (SharedGpuContext::IsGpuCompositingEnabled() && context_provider_wrapper) {
+  if (SharedGpuContext::IsGpuCompositingEnabled() &&
+      !base::FeatureList::IsEnabled(blink::features::kDawn2dCanvas) &&
+      context_provider_wrapper) {
     const auto& context_capabilities =
         context_provider_wrapper->ContextProvider()->GetCapabilities();
 
@@ -836,7 +864,8 @@ std::unique_ptr<CanvasResourceProvider> CanvasResourceProvider::Create(
         provider = std::make_unique<CanvasResourceProviderBitmap>(
             size, filter_quality, color_params, resource_dispatcher);
         break;
-      case CanvasResourceType::kSharedImage: {
+      case CanvasResourceType::kSharedImage:
+      case CanvasResourceType::kWebGPUSharedImage: {
         if (!context_provider_wrapper)
           continue;
 
@@ -884,7 +913,10 @@ std::unique_ptr<CanvasResourceProvider> CanvasResourceProvider::Create(
         provider = std::make_unique<CanvasResourceProviderSharedImage>(
             size, msaa_sample_count, filter_quality, color_params,
             context_provider_wrapper, resource_dispatcher, is_origin_top_left,
-            is_accelerated, shared_image_usage_flags);
+            is_accelerated,
+            resource_type == CanvasResourceType::kWebGPUSharedImage,
+            shared_image_usage_flags);
+
       } break;
     }
     if (!provider->IsValid())
@@ -976,8 +1008,8 @@ CanvasResourceProvider::CreateSharedImageProvider(
 
   auto provider = std::make_unique<CanvasResourceProviderSharedImage>(
       size, 0 /* msaa_sample_count */, filter_quality, color_params,
-      context_provider_wrapper, nullptr /* resource_dispatcher */,
-      is_origin_top_left, raster_mode == RasterMode::kGPU,
+      context_provider_wrapper, nullptr /*resource_dispatcher*/,
+      is_origin_top_left, raster_mode == RasterMode::kGPU, false,
       shared_image_usage_flags);
   if (provider->IsValid())
     return provider;
@@ -1240,6 +1272,9 @@ void CanvasResourceProvider::RasterRecord(
 }
 
 bool CanvasResourceProvider::IsGpuContextLost() const {
+  if (type_ == kWebGPUSharedImage) {
+    return false;
+  }
   auto* raster_interface = RasterInterface();
   return !raster_interface ||
          raster_interface->GetGraphicsResetStatusKHR() != GL_NO_ERROR;
