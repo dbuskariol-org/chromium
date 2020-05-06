@@ -4202,12 +4202,12 @@
   {
     "name": "use-xps-for-printing",
     "owners": [ "awscreen", "thestig" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 86
   },
   {
     "name": "use-xps-for-printing-from-pdf",
     "owners": [ "awscreen", "thestig" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 87
   },
   {
     "name": "username-first-flow",
