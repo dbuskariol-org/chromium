@@ -178,9 +178,6 @@ android_resources("chrome_app_java_resources") {
     "//components/autofill/android:autofill_java_resources",
     "//components/browser_ui/modaldialog/android:java_resources",
     "//components/browser_ui/settings/android:java_resources",
-
-    # TODO(crbug.com/1058595): Remove this dependency once site_settings is componentized.
-    "//components/browser_ui/site_settings/android:java_resources",
     "//components/browser_ui/strings/android:browser_ui_strings_grd",
     "//components/browser_ui/styles/android:java_resources",
     "//components/browser_ui/widget/android:java_resources",
@@ -871,6 +868,7 @@ android_library("chrome_test_java") {
     "//components/browser_ui/modaldialog/android:java",
     "//components/browser_ui/modaldialog/android:javatests",
     "//components/browser_ui/settings/android:java",
+    "//components/browser_ui/site_settings/android:javatests",
     "//components/browser_ui/styles/android:java",
     "//components/browser_ui/util/android:java",
     "//components/browser_ui/widget/android:java",
@@ -2949,7 +2947,6 @@ generate_jni("chrome_jni_headers") {
     "java/src/org/chromium/chrome/browser/signin/UnifiedConsentServiceBridge.java",
     "java/src/org/chromium/chrome/browser/site_settings/CookieControlsBridge.java",
     "java/src/org/chromium/chrome/browser/site_settings/CookieControlsServiceBridge.java",
-    "java/src/org/chromium/chrome/browser/site_settings/WebsitePreferenceBridge.java",
     "java/src/org/chromium/chrome/browser/sms/SmsReceiverInfoBar.java",
     "java/src/org/chromium/chrome/browser/status_indicator/StatusIndicatorSceneLayer.java",
     "java/src/org/chromium/chrome/browser/suggestions/SuggestionsEventReporterBridge.java",
