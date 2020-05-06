@@ -124,6 +124,7 @@ enum Setting {
   // Languages and Input section.
   kAddLanguage = 1200,
   kShowInputOptionsInShelf = 1201,
+  kShowPersonalInformationSuggestions = 1202,
 
   // Files section.
   kGoogleDriveConnection = 1300,

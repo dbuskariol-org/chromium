@@ -57,7 +57,6 @@
 #include "chrome/browser/ui/webui/settings/downloads_handler.h"
 #include "chrome/browser/ui/webui/settings/extension_control_handler.h"
 #include "chrome/browser/ui/webui/settings/font_handler.h"
-#include "chrome/browser/ui/webui/settings/languages_handler.h"
 #include "chrome/browser/ui/webui/settings/profile_info_handler.h"
 #include "chrome/browser/ui/webui/settings/protocol_handlers_handler.h"
 #include "chrome/browser/ui/webui/settings/reset_settings_handler.h"
@@ -123,8 +122,6 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
   AddSettingsPageUIHandler(
       std::make_unique<::settings::ExtensionControlHandler>());
   AddSettingsPageUIHandler(std::make_unique<::settings::FontHandler>(web_ui));
-  AddSettingsPageUIHandler(
-      std::make_unique<::settings::LanguagesHandler>(web_ui));
   AddSettingsPageUIHandler(
       std::make_unique<::settings::ProfileInfoHandler>(profile));
   AddSettingsPageUIHandler(

@@ -627,6 +627,27 @@
   </message>
 
   <!-- Languages and Input section. -->
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_INPUT" desc="Text for search result item which, when clicked, navigates the user to languages and input settings.">
+    Languages and input settings
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_INPUT_ADD_LANGUAGE" desc="Text for search result item which, when clicked, navigates the user to languages and input settings, with an option to add a new language.">
+    Add languages
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_INPUT_METHODS" desc="Text for search result item which, when clicked, navigates the user to input settings, with the option to enable/disable input in supported languages.">
+    Manage input methods
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_INPUT_INPUT_OPTIONS_SHELF" desc="Text for search result item which, when clicked, navigates the user to languages and input settings, with a toggle to enable/disable showing input options in the shelf. Alternate phrase for: 'Input options in toolbar'">
+    Show input options in the shelf
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_INPUT_INPUT_OPTIONS_SHELF_ALT1" desc="Text for search result item which, when clicked, navigates the user to languages and input settings, with a toggle to enable/disable showing input options in the shelf. Alternate phrase for: 'Show input options in the shelf'">
+    Input options in toolbar
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_SMART_INPUTS" desc="Text for search result item which, when clicked, navigates the user to smart input settings, which allows spelling/grammar suggestions generated using personal information such as contacts.">
+    Smart inputs
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_LANGUAGES_PERSONAL_INFORMATION_SUGGESTIONS" desc="Text for search result item which, when clicked, navigates the user to smart input settings, which with a toggle to enable/disable showing personal information suggestions.">
+    Personal information suggestions
+  </message>
 
   <!-- Files section. -->
   <message name="IDS_OS_SETTINGS_TAG_FILES" desc="Text for search result item which, when clicked, navigates the user to files settings.">
