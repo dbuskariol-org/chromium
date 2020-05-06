@@ -15,7 +15,6 @@
 #include "gpu/GLES2/gl2extchromium.h"
 #include "gpu/command_buffer/client/raster_interface.h"
 #include "gpu/command_buffer/common/capabilities.h"
-#include "gpu/command_buffer/common/shared_image_usage.h"
 #include "gpu/config/gpu_driver_bug_workaround_type.h"
 #include "gpu/config/gpu_feature_info.h"
 #include "third_party/blink/public/common/features.h"
@@ -737,8 +736,11 @@ const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
 
   static const Vector<CanvasResourceType> kEmptyList;
   switch (usage) {
+    // All these usages have been deprecated.
     case CanvasResourceProvider::ResourceUsage::kAcceleratedResourceUsage:
     case CanvasResourceProvider::ResourceUsage::kSoftwareResourceUsage:
+    case CanvasResourceProvider::ResourceUsage::
+        kSoftwareCompositedDirect2DResourceUsage:
       NOTREACHED();
       return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
@@ -754,10 +756,6 @@ const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedDirect3DResourceUsage:
       return kAcceleratedDirect3DFallbackList;
-    case CanvasResourceProvider::ResourceUsage::
-        kSoftwareCompositedDirect2DResourceUsage:
-      NOTREACHED();
-      return kEmptyList;
   }
   NOTREACHED();
   return kEmptyList;
@@ -776,7 +774,10 @@ std::unique_ptr<CanvasResourceProvider> CanvasResourceProvider::Create(
     base::WeakPtr<CanvasResourceDispatcher> resource_dispatcher,
     bool is_origin_top_left) {
   DCHECK_EQ(msaa_sample_count, 0u);
+  // These usages have been deprecated.
   DCHECK(usage != ResourceUsage::kSoftwareResourceUsage);
+  DCHECK(usage != ResourceUsage::kAcceleratedResourceUsage);
+  DCHECK(usage != ResourceUsage::kSoftwareCompositedDirect2DResourceUsage);
 
   std::unique_ptr<CanvasResourceProvider> provider;
 
@@ -908,6 +909,40 @@ CanvasResourceProvider::CreateBitmapProvider(
 }
 
 std::unique_ptr<CanvasResourceProvider>
+CanvasResourceProvider::CreateSharedBitmapProvider(
+    const IntSize& size,
+    base::WeakPtr<WebGraphicsContext3DProviderWrapper> context_provider_wrapper,
+    SkFilterQuality filter_quality,
+    const CanvasColorParams& color_params,
+    base::WeakPtr<CanvasResourceDispatcher> resource_dispatcher) {
+  // TODO(crbug/1035589). The former CanvasResourceProvider::Create was doing
+  // this check as well for SharedBitmapProvider, while this should not make
+  // sense, will be left for a later CL to address this issue and the failing
+  // tests due to not having this check here.
+  if (SharedGpuContext::IsGpuCompositingEnabled() && context_provider_wrapper) {
+    const auto& max_texture_size = context_provider_wrapper->ContextProvider()
+                                       ->GetCapabilities()
+                                       .max_texture_size;
+    if (size.Width() > max_texture_size || size.Height() > max_texture_size) {
+      return nullptr;
+    }
+  }
+
+  // TODO(crbug/1035589). The former CanvasResourceProvider::Create was doing
+  // this check as well for SharedBitmapProvider, as we are passing a weap_ptr
+  // maybe the caller could ensure an always valid weakptr.
+  if (!resource_dispatcher)
+    return nullptr;
+
+  auto provider = std::make_unique<CanvasResourceProviderSharedBitmap>(
+      size, filter_quality, color_params, std::move(resource_dispatcher));
+  if (provider->IsValid())
+    return provider;
+
+  return nullptr;
+}
+
+std::unique_ptr<CanvasResourceProvider>
 CanvasResourceProvider::CreateSharedImageProvider(
     const IntSize& size,
     base::WeakPtr<WebGraphicsContext3DProviderWrapper> context_provider_wrapper,
@@ -919,21 +954,29 @@ CanvasResourceProvider::CreateSharedImageProvider(
   if (!context_provider_wrapper)
     return nullptr;
 
-  const auto& caps =
+  const auto& capabilities =
       context_provider_wrapper->ContextProvider()->GetCapabilities();
-  if (size.Width() > caps.max_texture_size ||
-      size.Height() > caps.max_texture_size) {
+  if (size.Width() > capabilities.max_texture_size ||
+      size.Height() > capabilities.max_texture_size) {
     return nullptr;
   }
 
-  bool can_use_overlays =
-      IsGMBAllowed(size, color_params, caps) && caps.texture_storage_image;
-  if (!can_use_overlays)
+  const bool is_gpu_memory_buffer_image_allowed =
+      SharedGpuContext::IsGpuCompositingEnabled() &&
+      IsGMBAllowed(size, color_params, capabilities) &&
+      Platform::Current()->GetGpuMemoryBufferManager();
+
+  if (raster_mode == RasterMode::kCPU && !is_gpu_memory_buffer_image_allowed)
+    return nullptr;
+
+  // If we cannot use overlay, we have to remove scanout flag flag.
+  if (!is_gpu_memory_buffer_image_allowed ||
+      !capabilities.texture_storage_image)
     shared_image_usage_flags &= ~gpu::SHARED_IMAGE_USAGE_SCANOUT;
 
   auto provider = std::make_unique<CanvasResourceProviderSharedImage>(
       size, 0 /* msaa_sample_count */, filter_quality, color_params,
-      context_provider_wrapper, nullptr /*resource_dispatcher*/,
+      context_provider_wrapper, nullptr /* resource_dispatcher */,
       is_origin_top_left, raster_mode == RasterMode::kGPU,
       shared_image_usage_flags);
   if (provider->IsValid())
