@@ -12,7 +12,7 @@
 #include "base/test/bind_test_util.h"
 #include "chrome/test/sync_integration_test_support_jni_headers/SyncTestSigninUtils_jni.h"
 
-namespace sync_test_signin_utils_android {
+namespace sync_test_utils_android {
 
 void SetUpTestAccountAndSignIn() {
   base::RunLoop run_loop;
@@ -41,4 +41,4 @@ void TearDownAuthForTest() {
   run_loop.Run();
 }
 
-}  // namespace sync_test_signin_utils_android
+}  // namespace sync_test_utils_android

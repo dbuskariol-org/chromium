@@ -8,7 +8,7 @@
 // Utilities that are an interface with java to sign-in a test account for Sync
 // testing on Android.
 
-namespace sync_test_signin_utils_android {
+namespace sync_test_utils_android {
 
 // Sets up the test account and signs in synchronously.
 void SetUpTestAccountAndSignIn();
@@ -29,6 +29,6 @@ void SetUpAuthForTest();
 // chrome/browser/metrics/metrics_service_user_demographics_browsertest.cc.
 void TearDownAuthForTest();
 
-}  // namespace sync_test_signin_utils_android
+}  // namespace sync_test_utils_android
 
 #endif  // CHROME_BROWSER_SYNC_TEST_INTEGRATION_SYNC_TEST_SIGNIN_UTILS_ANDROID_H_
