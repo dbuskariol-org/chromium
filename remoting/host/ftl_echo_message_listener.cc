@@ -42,8 +42,8 @@ bool FtlEchoMessageListener::OnSignalStrategyIncomingMessage(
     return false;
   }
 
-  // Only allow the machine owner or service backend to send echo messages.
-  if (sender_id.type() != ftl::IdType_Type_SYSTEM &&
+  // Only respond to echo messages from the machine owner.
+  if (sender_id.type() != ftl::IdType_Type_EMAIL ||
       sender_id.id() != host_owner_) {
     LOG(WARNING) << "Dropping echo message from " << sender_id.id();
     return false;

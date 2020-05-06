@@ -113,26 +113,10 @@ TEST_F(FtlEchoMessageListenerTest, EchoRequestFromOwnerHandled) {
   run_loop.Run();
 }
 
-TEST_F(FtlEchoMessageListenerTest, EchoRequestFromServiceHandled) {
-  base::RunLoop run_loop;
-  EXPECT_CALL(signal_strategy_, SendMessagePtr(_, _, _))
-      .WillOnce([&](const ftl::Id& destination_id,
-                    const std::string& destination_registration_id,
-                    const ftl::ChromotingMessage& message) -> bool {
-        EXPECT_EQ(kSystemServiceName, destination_id.id());
-        EXPECT_TRUE(destination_registration_id.empty());
-        EXPECT_TRUE(message.has_echo());
-        EXPECT_EQ(kEchoMessagePayload, message.echo().message());
-
-        run_loop.Quit();
-        return true;
-      });
-
+TEST_F(FtlEchoMessageListenerTest, EchoRequestFromServiceRejected) {
   bool is_handled = ftl_echo_message_listener_->OnSignalStrategyIncomingMessage(
       system_sender_id_, {}, CreateEchoMessageWithPayload(kEchoMessagePayload));
-  ASSERT_TRUE(is_handled);
-
-  run_loop.Run();
+  ASSERT_FALSE(is_handled);
 }
 
 TEST_F(FtlEchoMessageListenerTest, EchoRequestFromNonOwnerRejected) {
