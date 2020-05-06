@@ -774,8 +774,8 @@ bool GetEpisode(const EpisodeCandidate& candidate, mojom::MediaFeedItem* item) {
     auto converted_images = GetMediaImage(*image);
     if (!converted_images.has_value())
       return false;
-    // TODO(sgbowen): Add an images field to TV episodes and store the converted
-    // images here.
+
+    item->tv_episode->images = std::move(converted_images.value());
   }
 
   if (!ConvertProperty<mojom::MediaFeedItem>(
@@ -816,8 +816,8 @@ bool GetPlayNextCandidate(const EpisodeCandidate& candidate,
     auto converted_images = GetMediaImage(*image);
     if (!converted_images.has_value())
       return false;
-    // TODO(sgbowen): Add an images field to TV episodes and store the converted
-    // images here.
+
+    item->play_next_candidate->images = std::move(converted_images.value());
   }
 
   if (!ConvertProperty<mojom::PlayNextCandidate>(
