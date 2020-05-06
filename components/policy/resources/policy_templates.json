@@ -18037,15 +18037,15 @@
         'type': 'string'
       },
       'supported_on': ['chrome_os:84-'],
-      'device_only': True,
       'features': {
         'dynamic_refresh': True,
+        'per_profile': False,
       },
       'example_value': "USER_ID",
       'id': 698,
       'caption': '''<ph name="PLUGIN_VM_NAME">PluginVm</ph> user id''',
       'tags': [],
-      'desc': '''This policy specifies the <ph name="PLUGIN_VM_NAME">PluginVm</ph> user id for this device.''',
+      'desc': '''This policy specifies the <ph name="PLUGIN_VM_NAME">PluginVm</ph> licensing user id for this device.''',
     },
     {
       'name': 'PluginVmImage',
@@ -21564,7 +21564,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     'DeviceWilcoDtcAllowed': 'device_wilco_dtc_allowed.device_wilco_dtc_allowed',
     'DeviceWilcoDtcConfiguration': 'device_wilco_dtc_configuration.device_wilco_dtc_configuration',
     'PluginVmLicenseKey': 'plugin_vm_license_key.plugin_vm_license_key',
-    'PluginVmUserId': 'plugin_vm_user_id.plugin_vm_user_id',
     'DeviceAuthDataCacheLifetime': 'device_auth_data_cache_lifetime.lifetime_hours',
     'DeviceGpoCacheLifetime': 'device_gpo_cache_lifetime.lifetime_hours',
     'DeviceRebootOnUserSignout': 'device_reboot_on_user_signout.reboot_on_signout_mode',
@@ -21943,6 +21942,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
         'PluginVmAllowed',
         'PluginVmLicenseKey',
         'PluginVmImage',
+        'PluginVmUserId',
       ],
     },
     {
