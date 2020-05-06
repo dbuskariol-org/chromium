@@ -22,7 +22,7 @@ class ExtensionUrlPatternIndexMatcher final : public RulesetMatcherBase {
   using UrlPatternIndexList = flatbuffers::Vector<
       flatbuffers::Offset<url_pattern_index::flat::UrlPatternIndex>>;
   ExtensionUrlPatternIndexMatcher(const ExtensionId& extension_id,
-                                  int ruleset_id,
+                                  RulesetID ruleset_id,
                                   const UrlPatternIndexList* index_list,
                                   const ExtensionMetadataList* metadata_list);
 

@@ -11,6 +11,7 @@
 
 #include "base/time/time.h"
 #include "extensions/common/api/declarative_net_request.h"
+#include "extensions/common/api/declarative_net_request/constants.h"
 #include "extensions/common/extension_id.h"
 
 namespace base {
@@ -125,12 +126,12 @@ class ActionTracker {
   // Represents a matched rule. This is used as a lightweight version of
   // api::declarative_net_request::MatchedRuleInfo.
   struct TrackedRule {
-    TrackedRule(int rule_id, int ruleset_id);
+    TrackedRule(int rule_id, RulesetID ruleset_id);
     TrackedRule(const TrackedRule& other) = delete;
     TrackedRule& operator=(const TrackedRule& other) = delete;
 
     const int rule_id;
-    const int ruleset_id;
+    const RulesetID ruleset_id;
 
     // The timestamp for when the rule was matched.
     const base::Time time_stamp;

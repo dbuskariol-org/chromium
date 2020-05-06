@@ -30,7 +30,7 @@ namespace dnr_api = api::declarative_net_request;
 RequestAction CreateRequestActionForTesting(RequestAction::Type type,
                                             uint32_t rule_id,
                                             uint32_t rule_priority,
-                                            int ruleset_id,
+                                            RulesetID ruleset_id,
                                             const ExtensionId& extension_id) {
   dnr_api::RuleActionType action = [type] {
     switch (type) {
@@ -310,7 +310,7 @@ bool CreateVerifiedMatcher(const std::vector<TestRule>& rules,
   return load_result == RulesetMatcher::kLoadSuccess;
 }
 
-RulesetSource CreateTemporarySource(int id,
+RulesetSource CreateTemporarySource(RulesetID id,
                                     size_t rule_count_limit,
                                     ExtensionId extension_id) {
   std::unique_ptr<RulesetSource> source = RulesetSource::CreateTemporarySource(

@@ -343,7 +343,7 @@ bool ActionTracker::TrackedInfoContextKey<T>::operator<(
          std::tie(other.secondary_id, other.extension_id);
 }
 
-ActionTracker::TrackedRule::TrackedRule(int rule_id, int ruleset_id)
+ActionTracker::TrackedRule::TrackedRule(int rule_id, RulesetID ruleset_id)
     : rule_id(rule_id), ruleset_id(ruleset_id), time_stamp(GetNow()) {}
 
 ActionTracker::TrackedInfo::TrackedInfo() = default;

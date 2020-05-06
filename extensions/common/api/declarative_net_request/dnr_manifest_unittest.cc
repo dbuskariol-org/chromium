@@ -66,8 +66,8 @@ class DNRManifestTest : public testing::Test {
         DNRManifestData::GetRulesets(*extension);
     ASSERT_EQ(info.size(), rulesets.size());
     for (size_t i = 0; i < rulesets.size(); ++i) {
-      EXPECT_EQ(i + kMinValidStaticRulesetID,
-                static_cast<size_t>(rulesets[i].id));
+      EXPECT_EQ(RulesetID(i + kMinValidStaticRulesetID.value()),
+                rulesets[i].id);
 
       EXPECT_EQ(info[i].manifest_id, rulesets[i].manifest_id);
 

@@ -18,6 +18,7 @@
 #include "extensions/browser/api/declarative_net_request/flat/extension_ruleset_generated.h"
 #include "extensions/browser/api/declarative_net_request/ruleset_source.h"
 #include "extensions/common/api/declarative_net_request.h"
+#include "extensions/common/api/declarative_net_request/constants.h"
 #include "third_party/re2/src/re2/re2.h"
 
 namespace base {
@@ -89,7 +90,8 @@ flat::ActionType ConvertToFlatActionType(
 // Returns the extension-specified ID for the given |ruleset_id| if it
 // corresponds to a static ruleset ID. For the dynamic ruleset ID, it returns
 // the |DYNAMIC_RULESET_ID| API constant.
-std::string GetPublicRulesetID(const Extension& extension, int ruleset_id);
+std::string GetPublicRulesetID(const Extension& extension,
+                               RulesetID ruleset_id);
 
 }  // namespace declarative_net_request
 }  // namespace extensions

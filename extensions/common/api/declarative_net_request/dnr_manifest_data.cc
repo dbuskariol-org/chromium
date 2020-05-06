@@ -13,6 +13,12 @@
 namespace extensions {
 namespace declarative_net_request {
 
+DNRManifestData::RulesetInfo::RulesetInfo() = default;
+DNRManifestData::RulesetInfo::~RulesetInfo() = default;
+DNRManifestData::RulesetInfo::RulesetInfo(RulesetInfo&&) = default;
+DNRManifestData::RulesetInfo& DNRManifestData::RulesetInfo::operator=(
+    RulesetInfo&&) = default;
+
 DNRManifestData::DNRManifestData(std::vector<RulesetInfo> rulesets)
     : rulesets(std::move(rulesets)) {}
 DNRManifestData::~DNRManifestData() = default;
@@ -35,7 +41,7 @@ const std::vector<DNRManifestData::RulesetInfo>& DNRManifestData::GetRulesets(
 
 // static
 const std::string& DNRManifestData::GetManifestID(const Extension& extension,
-                                                  int ruleset_id) {
+                                                  RulesetID ruleset_id) {
   Extension::ManifestData* data =
       extension.GetManifestData(manifest_keys::kDeclarativeNetRequestKey);
   DCHECK(data);
@@ -43,7 +49,7 @@ const std::string& DNRManifestData::GetManifestID(const Extension& extension,
   const std::vector<DNRManifestData::RulesetInfo>& rulesets =
       static_cast<DNRManifestData*>(data)->rulesets;
 
-  int index = ruleset_id - kMinValidStaticRulesetID;
+  int index = ruleset_id.value() - kMinValidStaticRulesetID.value();
   CHECK_GE(index, 0);
   CHECK_LT(static_cast<size_t>(index), rulesets.size());
 

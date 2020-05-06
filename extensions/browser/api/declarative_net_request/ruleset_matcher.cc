@@ -123,7 +123,7 @@ RulesetMatcher::GetAllowlistedFrameActionForTesting(
 }
 
 RulesetMatcher::RulesetMatcher(std::string ruleset_data,
-                               int id,
+                               RulesetID id,
                                const ExtensionId& extension_id)
     : ruleset_data_(std::move(ruleset_data)),
       root_(flat::GetExtensionIndexedRuleset(ruleset_data_.data())),

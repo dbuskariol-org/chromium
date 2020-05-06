@@ -268,7 +268,8 @@ flat::ActionType ConvertToFlatActionType(dnr_api::RuleActionType action_type) {
   return flat::ActionType_block;
 }
 
-std::string GetPublicRulesetID(const Extension& extension, int ruleset_id) {
+std::string GetPublicRulesetID(const Extension& extension,
+                               RulesetID ruleset_id) {
   if (ruleset_id == kDynamicRulesetID)
     return dnr_api::DYNAMIC_RULESET_ID;
 

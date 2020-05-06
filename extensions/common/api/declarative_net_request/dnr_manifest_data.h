@@ -19,6 +19,12 @@ namespace declarative_net_request {
 // key.
 struct DNRManifestData : Extension::ManifestData {
   struct RulesetInfo {
+    RulesetInfo();
+    ~RulesetInfo();
+
+    RulesetInfo(RulesetInfo&&);
+    RulesetInfo& operator=(RulesetInfo&&);
+
     base::FilePath relative_path;
 
     // ID provided for the ruleset in the extension manifest. Uniquely
@@ -32,8 +38,7 @@ struct DNRManifestData : Extension::ManifestData {
     // |manifest_id| since the id is also used as an input to preference keys
     // and indexed ruleset file paths, and integral IDs are easier to reason
     // about here. E.g. a string ID can have invalid file path characters.
-    // TODO(karandeepb): Use a StrongAlias for ruleset ID.
-    int id = kInvalidRulesetID;
+    RulesetID id;
 
     // Whether the ruleset is enabled by default. Note that this value
     // corresponds to the one specified in the extension manifest. Extensions
@@ -51,7 +56,7 @@ struct DNRManifestData : Extension::ManifestData {
 
   // Returns the |manifest_id| corresponding to the given |ruleset_id|.
   static const std::string& GetManifestID(const Extension& extension,
-                                          int ruleset_id);
+                                          RulesetID ruleset_id);
 
   // Static rulesets specified by the extension in its manifest, in the order in
   // which they were specified.

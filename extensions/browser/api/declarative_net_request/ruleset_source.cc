@@ -306,7 +306,7 @@ std::vector<RulesetSource> RulesetSource::CreateStatic(
     sources.push_back(RulesetSource(
         extension.path().Append(info.relative_path),
         extension.path().Append(
-            file_util::GetIndexedRulesetRelativePath(info.id)),
+            file_util::GetIndexedRulesetRelativePath(info.id.value())),
         info.id, dnr_api::MAX_NUMBER_OF_RULES, extension.id(), info.enabled));
   }
   return sources;
@@ -328,7 +328,7 @@ RulesetSource RulesetSource::CreateDynamic(content::BrowserContext* context,
 
 // static
 std::unique_ptr<RulesetSource> RulesetSource::CreateTemporarySource(
-    int id,
+    RulesetID id,
     size_t rule_count_limit,
     ExtensionId extension_id) {
   base::FilePath temporary_file_indexed;
@@ -489,7 +489,7 @@ bool RulesetSource::WriteRulesToJSON(
 
 RulesetSource::RulesetSource(base::FilePath json_path,
                              base::FilePath indexed_path,
-                             int id,
+                             RulesetID id,
                              size_t rule_count_limit,
                              ExtensionId extension_id,
                              bool enabled)

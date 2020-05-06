@@ -54,8 +54,9 @@ TEST_F(CompositeMatcherTest, SamePrioritySpace) {
   allow_rule.action->type = std::string("allow");
   allow_rule.priority = 1;
   std::unique_ptr<RulesetMatcher> allow_matcher;
+  RulesetID ruleset_id_one(1);
   ASSERT_TRUE(CreateVerifiedMatcher(
-      {allow_rule}, CreateTemporarySource(/*id*/ 1), &allow_matcher));
+      {allow_rule}, CreateTemporarySource(ruleset_id_one), &allow_matcher));
 
   // Now create the second matcher. It blocks requests to google.com, with
   // higher priority than the allow rule.
@@ -63,8 +64,9 @@ TEST_F(CompositeMatcherTest, SamePrioritySpace) {
   block_rule.action->type = std::string("block");
   block_rule.priority = 2;
   std::unique_ptr<RulesetMatcher> block_matcher;
+  RulesetID ruleset_id_two(2);
   ASSERT_TRUE(CreateVerifiedMatcher(
-      {block_rule}, CreateTemporarySource(/*id*/ 2), &block_matcher));
+      {block_rule}, CreateTemporarySource(ruleset_id_two), &block_matcher));
 
   // Create a composite matcher with both rulesets.
   std::vector<std::unique_ptr<RulesetMatcher>> matchers;
@@ -88,9 +90,9 @@ TEST_F(CompositeMatcherTest, SamePrioritySpace) {
   allow_rule.priority = 2;
   block_rule.priority = 1;
   ASSERT_TRUE(CreateVerifiedMatcher(
-      {allow_rule}, CreateTemporarySource(/*id*/ 1), &allow_matcher));
+      {allow_rule}, CreateTemporarySource(ruleset_id_one), &allow_matcher));
   ASSERT_TRUE(CreateVerifiedMatcher(
-      {block_rule}, CreateTemporarySource(/*id*/ 2), &block_matcher));
+      {block_rule}, CreateTemporarySource(ruleset_id_two), &block_matcher));
   matchers.clear();
   matchers.push_back(std::move(allow_matcher));
   matchers.push_back(std::move(block_matcher));
@@ -129,14 +131,14 @@ TEST_F(CompositeMatcherTest, HeadersMaskForRules) {
 
   // Create the first ruleset matcher, which matches all requests with "g" in
   // their URL.
-  const size_t kSource1ID = 5;
+  const RulesetID kSource1ID(5);
   std::unique_ptr<RulesetMatcher> matcher_1;
   ASSERT_TRUE(CreateVerifiedMatcher(
       {static_rule_1}, CreateTemporarySource(kSource1ID), &matcher_1));
 
   // Create a second ruleset matcher, which matches all requests from
   // |google.com|.
-  const size_t kSource2ID = kDynamicRulesetID;
+  const RulesetID kSource2ID = kDynamicRulesetID;
   std::unique_ptr<RulesetMatcher> matcher_2;
   ASSERT_TRUE(CreateVerifiedMatcher({dynamic_rule_1, dynamic_rule_2},
                                     CreateTemporarySource(kSource2ID),

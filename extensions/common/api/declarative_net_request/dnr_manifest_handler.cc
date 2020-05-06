@@ -107,7 +107,7 @@ bool DNRManifestHandler::Parse(Extension* extension, base::string16* error) {
 
     info->relative_path = resource.relative_path().NormalizePathSeparators();
 
-    info->id = kMinValidStaticRulesetID + index;
+    info->id = RulesetID(kMinValidStaticRulesetID.value() + index);
 
     info->enabled = rulesets[index].enabled;
     info->manifest_id = manifest_id;

@@ -320,7 +320,7 @@ TEST_F(RulesetMatcherTest, RedirectToExtensionPath) {
   rule.action->redirect->extension_path = "/path/newfile.js?query#fragment";
 
   std::unique_ptr<RulesetMatcher> matcher;
-  const size_t kRulesetId = 5;
+  const RulesetID kRulesetId(5);
   const size_t kRuleCountLimit = 10;
   ASSERT_TRUE(CreateVerifiedMatcher(
       {rule}, CreateTemporarySource(kRulesetId, kRuleCountLimit), &matcher));

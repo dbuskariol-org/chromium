@@ -86,7 +86,7 @@ RegexRuleInfo::RegexRuleInfo(const RegexRuleInfo& info) = default;
 RegexRuleInfo& RegexRuleInfo::operator=(const RegexRuleInfo& info) = default;
 
 RegexRulesMatcher::RegexRulesMatcher(const ExtensionId& extension_id,
-                                     int ruleset_id,
+                                     RulesetID ruleset_id,
                                      const RegexRulesList* regex_list,
                                      const ExtensionMetadataList* metadata_list)
     : RulesetMatcherBase(extension_id, ruleset_id),

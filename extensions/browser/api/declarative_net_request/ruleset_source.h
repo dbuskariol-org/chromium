@@ -135,7 +135,7 @@ class RulesetSource {
   // Creates a temporary source i.e. a source corresponding to temporary files.
   // Returns null on failure.
   static std::unique_ptr<RulesetSource> CreateTemporarySource(
-      int id,
+      RulesetID id,
       size_t rule_count_limit,
       ExtensionId extension_id);
 
@@ -152,7 +152,7 @@ class RulesetSource {
   const base::FilePath& indexed_path() const { return indexed_path_; }
 
   // Each ruleset source within an extension has a distinct ID.
-  int id() const { return id_; }
+  RulesetID id() const { return id_; }
 
   bool is_dynamic_ruleset() const { return id_ == kDynamicRulesetID; }
 
@@ -198,14 +198,14 @@ class RulesetSource {
  private:
   RulesetSource(base::FilePath json_path,
                 base::FilePath indexed_path,
-                int id,
+                RulesetID id,
                 size_t rule_count_limit,
                 ExtensionId extension_id,
                 bool enabled);
 
   base::FilePath json_path_;
   base::FilePath indexed_path_;
-  int id_;
+  RulesetID id_;
   size_t rule_count_limit_;
   ExtensionId extension_id_;
   bool enabled_;

@@ -10,7 +10,7 @@ namespace declarative_net_request {
 RequestAction::RequestAction(RequestAction::Type type,
                              uint32_t rule_id,
                              uint64_t index_priority,
-                             int ruleset_id,
+                             RulesetID ruleset_id,
                              const ExtensionId& extension_id)
     : type(type),
       rule_id(rule_id),

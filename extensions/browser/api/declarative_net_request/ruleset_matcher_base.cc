@@ -200,7 +200,7 @@ GURL GetTransformedURL(const RequestParams& params,
 }  // namespace
 
 RulesetMatcherBase::RulesetMatcherBase(const ExtensionId& extension_id,
-                                       int ruleset_id)
+                                       RulesetID ruleset_id)
     : extension_id_(extension_id), ruleset_id_(ruleset_id) {}
 RulesetMatcherBase::~RulesetMatcherBase() = default;
 
