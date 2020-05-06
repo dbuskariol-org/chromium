@@ -81,6 +81,7 @@
 #include "components/autofill/core/common/form_data_predictions.h"
 #include "components/autofill/core/common/form_field_data.h"
 #include "components/autofill/core/common/password_form_fill_data.h"
+#include "components/autofill/core/common/signatures.h"
 #include "components/pref_registry/pref_registry_syncable.h"
 #include "components/prefs/pref_service.h"
 #include "components/security_state/core/security_state.h"
@@ -1381,7 +1382,7 @@ void AutofillManager::OnLoadedServerPredictions(
     // Convert it to a uint64_t to do the lookup.
     FormSignature form_signature;
     FormStructure* form_structure;
-    if (base::StringToUint64(signature, &form_signature) &&
+    if (base::StringToUint64(signature, &form_signature.value()) &&
         FindCachedForm(form_signature, &form_structure)) {
       queried_forms.push_back(form_structure);
     }
