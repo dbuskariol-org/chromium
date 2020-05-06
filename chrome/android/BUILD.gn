@@ -3025,7 +3025,7 @@ native_java_unittests_tests = [
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/answer/AnswerSuggestionProcessorUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/editurl/EditUrlSuggestionUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/entity/EntitySuggestionProcessorUnitTest.java",
-  "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/OmniboxSuggestionUnitTest.java",
+  "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/CachedZeroSuggestionsManagerUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/partnercustomizations/PartnerBrowserCustomizationsUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/payments/AndroidPaymentAppFinderUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/payments/AndroidPaymentAppUnitTest.java",
