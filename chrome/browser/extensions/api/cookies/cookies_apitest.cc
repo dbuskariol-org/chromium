@@ -5,7 +5,6 @@
 #include "base/command_line.h"
 #include "chrome/browser/extensions/extension_apitest.h"
 #include "chrome/test/base/ui_test_utils.h"
-#include "content/public/test/browser_test.h"
 #include "net/cookies/cookie_util.h"
 
 namespace extensions {

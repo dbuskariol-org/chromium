@@ -15,7 +15,6 @@
 #include "components/policy/core/common/policy_map.h"
 #include "components/policy/core/common/policy_types.h"
 #include "components/policy/policy_constants.h"
-#include "content/public/test/browser_test.h"
 
 class PolicyMakeDefaultBrowserTest : public InProcessBrowserTest {
  protected:

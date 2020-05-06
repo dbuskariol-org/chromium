@@ -26,7 +26,6 @@
 #include "components/nacl/browser/nacl_browser.h"
 #include "components/nacl/common/nacl_switches.h"
 #include "content/public/common/content_switches.h"
-#include "content/public/test/browser_test.h"
 #include "services/service_manager/sandbox/switches.h"
 
 #if defined(OS_WIN)

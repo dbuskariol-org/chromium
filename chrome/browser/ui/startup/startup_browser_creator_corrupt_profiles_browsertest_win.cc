@@ -26,7 +26,6 @@
 #include "chrome/common/chrome_switches.h"
 #include "chrome/test/base/in_process_browser_test.h"
 #include "chrome/test/base/testing_browser_process.h"
-#include "content/public/test/browser_test.h"
 #include "content/public/test/test_launcher.h"
 
 namespace {

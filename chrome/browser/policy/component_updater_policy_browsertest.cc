@@ -17,7 +17,6 @@
 #include "components/update_client/update_client.h"
 #include "components/update_client/update_client_errors.h"
 #include "content/public/browser/browser_task_traits.h"
-#include "content/public/test/browser_test.h"
 #include "url/gurl.h"
 
 namespace policy {

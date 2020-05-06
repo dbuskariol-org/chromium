@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/extensions/extension_apitest.h"
-#include "content/public/test/browser_test.h"
 #include "net/dns/mock_host_resolver.h"
 
 const base::FilePath::CharType kFtpDocRoot[] =

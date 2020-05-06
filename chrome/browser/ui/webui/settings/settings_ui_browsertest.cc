@@ -16,7 +16,6 @@
 #include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_message_handler.h"
 #include "content/public/common/url_constants.h"
-#include "content/public/test/browser_test.h"
 #include "url/gurl.h"
 
 typedef InProcessBrowserTest SettingsUITest;

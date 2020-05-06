@@ -4,7 +4,6 @@
 
 GEN(`
 #include "base/metrics/field_trial_params.h"
-#include "content/public/test/browser_test.h"
 
 const base::Feature kTestFeature{"TestFeature",
     base::FEATURE_DISABLED_BY_DEFAULT};

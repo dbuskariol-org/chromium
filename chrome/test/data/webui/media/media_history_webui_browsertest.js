@@ -8,7 +8,6 @@
 
 GEN('#include "build/build_config.h"');
 GEN('#include "chrome/browser/ui/browser.h"');
-GEN('#include "content/public/test/browser_test.h"');
 GEN('#include "media/base/media_switches.h"');
 
 function MediaHistoryWebUIBrowserTest() {}

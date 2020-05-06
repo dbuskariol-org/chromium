@@ -5,7 +5,6 @@
 #include "base/command_line.h"
 #include "chrome/browser/ui/browser_window.h"
 #include "chrome/browser/ui/test/test_browser_dialog.h"
-#include "content/public/test/browser_test.h"
 
 class UpdateRecommendedDialogTest : public DialogBrowserTest {
  public:

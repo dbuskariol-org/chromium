@@ -13,7 +13,6 @@
 #include "base/test/metrics/user_action_tester.h"
 #include "chrome/browser/extensions/extension_apitest.h"
 #include "components/variations/variations_associated_data.h"
-#include "content/public/test/browser_test.h"
 
 namespace extensions {
 

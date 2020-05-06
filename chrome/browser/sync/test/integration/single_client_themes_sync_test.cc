@@ -11,7 +11,6 @@
 #include "chrome/browser/sync/test/integration/updated_progress_marker_checker.h"
 #include "chrome/browser/themes/theme_service_factory.h"
 #include "components/sync/driver/profile_sync_service.h"
-#include "content/public/test/browser_test.h"
 #include "content/public/test/test_utils.h"
 
 using themes_helper::GetCustomTheme;

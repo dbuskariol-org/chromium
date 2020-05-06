@@ -18,7 +18,6 @@
 #include "chrome/common/pref_names.h"
 #include "components/prefs/pref_service.h"
 #include "components/prefs/scoped_user_pref_update.h"
-#include "content/public/test/browser_test.h"
 
 namespace chromeos {
 

@@ -26,7 +26,6 @@
 #include "components/arc/mojom/app.mojom.h"
 #include "components/arc/test/connection_holder_util.h"
 #include "components/arc/test/fake_app_instance.h"
-#include "content/public/test/browser_test.h"
 #include "content/public/test/test_utils.h"
 
 namespace arc {

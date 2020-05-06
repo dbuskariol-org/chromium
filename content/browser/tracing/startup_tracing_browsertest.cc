@@ -13,7 +13,6 @@
 #include "components/tracing/common/tracing_switches.h"
 #include "content/browser/tracing/perfetto_file_tracer.h"
 #include "content/browser/tracing/tracing_controller_impl.h"
-#include "content/public/test/browser_test.h"
 #include "content/public/test/content_browser_test.h"
 #include "content/public/test/content_browser_test_utils.h"
 #include "services/tracing/perfetto/privacy_filtering_check.h"

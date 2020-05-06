@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/chromeos/file_manager/file_manager_browsertest_base.h"
-#include "content/public/test/browser_test.h"
 
 namespace file_manager {
 

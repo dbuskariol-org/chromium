@@ -5,8 +5,6 @@
 // Include test fixture.
 GEN_INCLUDE(['chromevox_unittest_base.js', 'mock_feedback.js']);
 
-GEN('#include "content/public/test/browser_test.h"');
-
 function speak(text, opt_properties) {
   ChromeVox.tts.speak(text, 0, opt_properties);
 }

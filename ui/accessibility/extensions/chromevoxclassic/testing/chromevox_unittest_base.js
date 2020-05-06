@@ -30,13 +30,6 @@ ChromeVoxUnitTestBase.prototype = {
   __proto__: testing.Test.prototype,
 
   /** @override */
-  testGenCppIncludes: function() {
-    GEN(`
-  #include "content/public/test/browser_test.h"
-      `);
-  },
-
-  /** @override */
   closureModuleDeps: [
     'cvox.ChromeVoxTester',
     'cvox.ChromeVoxUserCommands',

@@ -13,8 +13,6 @@ GEN_INCLUDE([
   'os_settings_accessibility_test.js',
 ]);
 
-GEN('#include "content/public/test/browser_test.h"');
-
 AccessibilityTest.define('CrostiniAccessibilityTest', {
   /** @override */
   name: 'CROSTINI_SHARED_USB_DEVICES',

@@ -4,7 +4,6 @@
 
 #include "build/build_config.h"
 #include "chrome/test/payments/payment_request_platform_browsertest_base.h"
-#include "content/public/test/browser_test.h"
 
 // This test suite verifies that the the "canmakepayment" event does not fire
 // for standardized payment methods. The test uses hasEnrolledInstrument() which

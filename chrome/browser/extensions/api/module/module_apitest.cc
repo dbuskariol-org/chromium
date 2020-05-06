@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/extensions/extension_apitest.h"
-#include "content/public/test/browser_test.h"
 
 using ExtensionModuleApiTest = extensions::ExtensionApiTest;
 

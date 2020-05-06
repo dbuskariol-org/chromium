@@ -7,8 +7,6 @@ GEN_INCLUDE([
   '//chrome/browser/resources/chromeos/accessibility/chromevox/testing/chromevox_unittest_base.js'
 ]);
 
-GEN('#include "content/public/test/browser_test.h"');
-
 /**
  * Test fixture.
  */

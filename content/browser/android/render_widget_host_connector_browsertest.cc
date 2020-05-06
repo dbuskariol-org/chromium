@@ -4,7 +4,6 @@
 
 #include "content/browser/android/render_widget_host_connector_browsertest.h"
 
-#include "content/public/test/browser_test.h"
 #include "content/public/test/browser_test_utils.h"
 #include "content/public/test/content_browser_test_utils.h"
 #include "content/test/content_browser_test_utils_internal.h"

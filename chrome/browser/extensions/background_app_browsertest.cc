@@ -11,7 +11,6 @@
 #include "chrome/browser/extensions/extension_browsertest.h"
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/profiles/profile_manager.h"
-#include "content/public/test/browser_test.h"
 #include "extensions/browser/test_extension_registry_observer.h"
 
 namespace extensions {

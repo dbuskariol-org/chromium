@@ -19,7 +19,6 @@
 #include "components/prefs/scoped_user_pref_update.h"
 #include "components/sync/driver/profile_sync_service.h"
 #include "components/translate/core/browser/translate_prefs.h"
-#include "content/public/test/browser_test.h"
 
 using bookmarks_helper::AddURL;
 using bookmarks_helper::IndexedURL;

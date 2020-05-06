@@ -50,7 +50,6 @@
 #include "components/crx_file/crx_verifier.h"
 #include "components/infobars/core/infobar.h"
 #include "components/nacl/common/buildflags.h"
-#include "content/public/test/browser_test.h"
 #include "extensions/browser/extension_dialog_auto_confirm.h"
 #include "extensions/browser/extension_registry.h"
 #include "extensions/browser/extension_system.h"
