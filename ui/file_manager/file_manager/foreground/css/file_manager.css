@@ -3062,14 +3062,14 @@ list.autocomplete-suggestions > [lead] {
   margin-inline-end: 50px;
 }
 
-#suggest-app-dialog {
+.cr-dialog-container:not(.files-ng) #suggest-app-dialog {
   background-color: #fff;
   border: 0;
   padding: 0;
   width: auto;
 }
 
-.suggest-apps-dialog-title.cr-dialog-title {
+.cr-dialog-container:not(.files-ng) .suggest-apps-dialog-title.cr-dialog-title {
   /* Entire height: 44px (content-box 22px + padding 11px * 2) */
   font-size: 16px;
   line-height: 22px;
@@ -3077,12 +3077,12 @@ list.autocomplete-suggestions > [lead] {
   padding: 11px 18px;
 }
 
-.suggest-apps-dialog-text.cr-dialog-text {
+.cr-dialog-container:not(.files-ng) .suggest-apps-dialog-text.cr-dialog-text {
   margin: 0;
   padding: 0 20px 10px;
 }
 
-.cr-dialog-frame.error-dialog-frame {
+.cr-dialog-container:not(.files-ng) .cr-dialog-frame.error-dialog-frame {
   width: 300px;
 }
 
@@ -3108,6 +3108,7 @@ list.autocomplete-suggestions > [lead] {
   text-align: center;
 }
 
+/* TODO(lucmult) Remove rules for multi-profile-share-dialog. */
 #multi-profile-share-dialog .cr-dialog-title {
   margin-bottom: 0;
 }
@@ -3129,6 +3130,7 @@ list.autocomplete-suggestions > [lead] {
   margin: 8px 16px;
 }
 
+/* TODO(lucmult) Remove rules for conflict-confirm-dialog. */
 #conflict-confirm-dialog .cr-dialog-buttons {
   align-items: baseline;
   display: flex;
