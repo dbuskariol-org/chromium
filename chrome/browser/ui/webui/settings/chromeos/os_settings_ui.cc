@@ -38,9 +38,7 @@
 #include "chrome/browser/ui/webui/metrics_handler.h"
 #include "chrome/browser/ui/webui/plural_string_handler.h"
 #include "chrome/browser/ui/webui/settings/about_handler.h"
-#include "chrome/browser/ui/webui/settings/accessibility_main_handler.h"
 #include "chrome/browser/ui/webui/settings/browser_lifetime_handler.h"
-#include "chrome/browser/ui/webui/settings/chromeos/accessibility_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/account_manager_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/device_storage_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/internet_handler.h"
@@ -111,8 +109,6 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
   // This handler is for chrome://os-settings.
   html_source->AddBoolean("isOSSettings", true);
 
-  AddSettingsPageUIHandler(
-      std::make_unique<::settings::AccessibilityMainHandler>());
   AddSettingsPageUIHandler(
       std::make_unique<::settings::BrowserLifetimeHandler>());
   AddSettingsPageUIHandler(std::make_unique<::settings::CookiesViewHandler>());
@@ -215,9 +211,6 @@ OSSettingsUI::~OSSettingsUI() {
 void OSSettingsUI::InitOSWebUIHandlers(content::WebUIDataSource* html_source) {
   Profile* profile = Profile::FromWebUI(web_ui());
   OsSettingsManagerFactory::GetForProfile(profile)->AddHandlers(web_ui());
-
-  web_ui()->AddMessageHandler(
-      std::make_unique<chromeos::settings::AccessibilityHandler>(profile));
 
   std::unique_ptr<chromeos::settings::KerberosAccountsHandler>
       kerberos_accounts_handler =
