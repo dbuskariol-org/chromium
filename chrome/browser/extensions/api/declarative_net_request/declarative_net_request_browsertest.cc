@@ -1993,9 +1993,7 @@ IN_PROC_BROWSER_TEST_P(DeclarativeNetRequestBrowserTest_Packed,
       [](const base::FilePath& indexed_path) {
         base::ScopedAllowBlockingForTesting scoped_allow_blocking;
         std::string corrupted_data = GetVersionHeaderForTesting() + "data";
-        ASSERT_EQ(static_cast<int>(corrupted_data.size()),
-                  base::WriteFile(indexed_path, corrupted_data.c_str(),
-                                  corrupted_data.size()));
+        ASSERT_TRUE(base::WriteFile(indexed_path, corrupted_data));
       };
 
   // Helper to reload the extension and ensure it is working.
