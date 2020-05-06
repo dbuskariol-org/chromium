@@ -858,6 +858,7 @@ android_library("chrome_test_java") {
     "//chrome/browser/ui/android/favicon:java",
     "//chrome/browser/ui/messages/android:java",
     "//chrome/browser/util:java",
+    "//chrome/test:sync_integration_test_support_java",
     "//chrome/test/android:chrome_java_test_support",
     "//chrome/test/android/test_trusted_web_activity:test_trusted_web_activity_java",
     "//components/autofill/android:autofill_java",
