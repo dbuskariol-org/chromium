@@ -53,13 +53,6 @@ void PictureInPictureServiceImpl::StartSession(
         natural_size, show_play_pause_button,
         session_remote.InitWithNewPipeAndPassReceiver(), std::move(observer),
         &window_size);
-
-    // Frames are to be blocklisted from BFCache because the picture-in-picture
-    // functionality doesn't properly close and continues to be displayed while
-    // the page is in the cache.
-    static_cast<RenderFrameHostImpl*>(render_frame_host_)
-        ->OnSchedulerTrackedFeatureUsed(
-            blink::scheduler::WebSchedulerTrackedFeature::kPictureInPicture);
   }
 
   std::move(callback).Run(std::move(session_remote), window_size);
