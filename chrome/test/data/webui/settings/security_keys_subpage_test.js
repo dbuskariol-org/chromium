@@ -761,35 +761,37 @@ suite('SecurityKeysBioEnrollment', function() {
     pinResolver.resolve();
     await browserProxy.whenCalled('enumerateEnrollments');
     uiReady = eventToPromise('bio-enroll-dialog-ready-for-testing', dialog);
-    const enrollments = [
-      {
-        name: 'Fingerprint00',
-        id: '0000',
-      },
-      {
-        name: 'FingerprintAF',
-        id: '4321',
-      },
-      {
-        name: 'FingerprintFA',
-        id: '1234',
-      },
-    ];
+
+    const fingerprintA = {
+      name: 'FingerprintA',
+      id: '1234',
+    };
+    const fingerprintB = {
+      name: 'FingerprintB',
+      id: '4321',
+    };
+    const fingerprintC = {
+      name: 'FingerprintC',
+      id: '0000',
+    };
+    const enrollments = [fingerprintC, fingerprintB, fingerprintA];
+    const sortedEnrollments = [fingerprintA, fingerprintB, fingerprintC];
     enumerateResolver.resolve(enrollments);
     await uiReady;
     assertShown(allDivs, dialog, 'enrollments');
-    assertEquals(dialog.$.enrollmentList.items, enrollments);
+    assertDeepEquals(dialog.$.enrollmentList.items, sortedEnrollments);
 
     // Delete the second enrollments and refresh the list.
     flush();
     dialog.$.enrollmentList.querySelectorAll('cr-icon-button')[1].click();
     const id = await browserProxy.whenCalled('deleteEnrollment');
-    assertEquals(enrollments[1].id, id);
+    assertEquals(sortedEnrollments[1].id, id);
+    sortedEnrollments.splice(1, 1);
     enrollments.splice(1, 1);
     deleteResolver.resolve(enrollments);
     await uiReady;
     assertShown(allDivs, dialog, 'enrollments');
-    assertEquals(dialog.$.enrollmentList.items, enrollments);
+    assertDeepEquals(dialog.$.enrollmentList.items, sortedEnrollments);
   });
 
   test('AddEnrollment', async function() {
