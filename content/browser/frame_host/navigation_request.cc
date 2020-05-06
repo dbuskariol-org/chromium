@@ -4162,19 +4162,19 @@ void NavigationRequest::SetIsOverridingUserAgent(bool override_ua) {
   if (is_for_commit_)
     return;
 
+  was_set_overriding_user_agent_called_ = true;
+
   // Don't early out if entry_overrides_ua_ == override_ua as the user-agent
   // may have changed.
-
-  // This function only applies when there is a NavigationEntry.
-  NavigationEntry* entry = GetNavigationEntry();
-  if (!entry)
-    return;
 
   // This code assumes it is only called from DidStartNavigation().
   DCHECK(!ua_change_requires_reload_);
 
   entry_overrides_ua_ = override_ua;
-  entry->SetIsOverridingUserAgent(override_ua);
+  NavigationEntry* entry = GetNavigationEntry();
+  // A NavigationEntry may not have been created yet.
+  if (entry)
+    entry->SetIsOverridingUserAgent(override_ua);
 
   commit_params_->is_overriding_user_agent = entry_overrides_ua_;
 
