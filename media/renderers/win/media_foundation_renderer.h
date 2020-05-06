@@ -18,8 +18,6 @@
 #include "base/unguessable_token.h"
 #include "base/win/windows_types.h"
 #include "media/base/buffering_state.h"
-#include "media/base/media_export.h"
-#include "media/base/media_log.h"
 #include "media/base/media_resource.h"
 #include "media/base/pipeline_status.h"
 #include "media/base/renderer.h"
@@ -77,11 +75,14 @@ class MediaFoundationRenderer : public Renderer,
   void StartSendingStatistics();
   void StopSendingStatistics();
 
+  // Callbacks for |mf_media_engine_notify_|.
   void OnPlaybackError(PipelineStatus status);
   void OnPlaybackEnded();
   void OnBufferingStateChanged(BufferingState state,
                                BufferingStateChangeReason reason);
   void OnVideoNaturalSizeChanged();
+  void OnTimeUpdate();
+
   void OnCdmProxyReceived(IMFCdmProxy* cdm);
 
   HRESULT SetDCompModeInternal(bool enabled);
