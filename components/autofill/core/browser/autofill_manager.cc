@@ -395,6 +395,26 @@ std::vector<CreditCard*> GetVirtualCardCandidates(
 }
 #endif
 
+const char* SubmissionSourceToString(SubmissionSource source) {
+  switch (source) {
+    case SubmissionSource::NONE:
+      return "NONE";
+    case SubmissionSource::SAME_DOCUMENT_NAVIGATION:
+      return "SAME_DOCUMENT_NAVIGATION";
+    case SubmissionSource::XHR_SUCCEEDED:
+      return "XHR_SUCCEEDED";
+    case SubmissionSource::FRAME_DETACHED:
+      return "FRAME_DETACHED";
+    case SubmissionSource::DOM_MUTATION_AFTER_XHR:
+      return "DOM_MUTATION_AFTER_XHR";
+    case SubmissionSource::PROBABLY_FORM_SUBMITTED:
+      return "PROBABLY_FORM_SUBMITTED";
+    case SubmissionSource::FORM_SUBMISSION:
+      return "FORM_SUBMISSION";
+  }
+  return "Unknown";
+}
+
 }  // namespace
 
 AutofillManager::FillingContext::FillingContext() = default;
@@ -605,6 +625,14 @@ bool AutofillManager::ShouldParseForms(const std::vector<FormData>& forms,
 void AutofillManager::OnFormSubmittedImpl(const FormData& form,
                                           bool known_success,
                                           SubmissionSource source) {
+  if (log_manager_) {
+    log_manager_->Log() << LoggingScope::kSubmission
+                        << LogMessage::kFormSubmissionDetected << Br{}
+                        << "known_success: " << known_success << Br{}
+                        << "source: " << SubmissionSourceToString(source)
+                        << Br{} << form;
+  }
+
   // TODO(crbug.com/801698): handle PROBABLY_FORM_SUBMITTED.
   if (source == SubmissionSource::PROBABLY_FORM_SUBMITTED &&
       !base::FeatureList::IsEnabled(
