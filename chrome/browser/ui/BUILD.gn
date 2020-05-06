@@ -629,6 +629,7 @@ jumbo_static_library("ui") {
 
   if (is_android) {
     deps += [
+      "//chrome/app:chromium_strings",
       "//chrome/browser/ui/webui/explore_sites_internals:mojo_bindings",
       "//chrome/browser/ui/webui/snippets_internals:mojo_bindings",
       "//components/browser_ui/util/android",
