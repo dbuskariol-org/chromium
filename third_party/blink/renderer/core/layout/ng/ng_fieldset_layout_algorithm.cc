@@ -54,11 +54,6 @@ scoped_refptr<const NGLayoutResult> NGFieldsetLayoutAlgorithm::Layout() {
   // anonymous child box, and since padding is inside the scrollport, padding
   // also needs to be handled by the anonymous child.
 
-  if (ConstraintSpace().HasBlockFragmentation()) {
-    SetupFragmentBuilderForFragmentation(ConstraintSpace(), BreakToken(),
-                                         &container_builder_);
-  }
-
   // Calculate the amount of the border block-start that was consumed in
   // previous fragments.
   consumed_border_block_start_ =

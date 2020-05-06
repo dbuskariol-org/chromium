@@ -464,10 +464,6 @@ inline scoped_refptr<const NGLayoutResult> NGBlockLayoutAlgorithm::Layout(
             Node().IsInlineFormattingContextRoot());
   container_builder_.SetIsInlineFormattingContext(inline_child_layout_context);
 
-  if (ConstraintSpace().HasBlockFragmentation()) {
-    SetupFragmentBuilderForFragmentation(ConstraintSpace(), BreakToken(),
-                                         &container_builder_);
-  }
   container_builder_.SetBfcLineOffset(
       ConstraintSpace().BfcOffset().line_offset);
 

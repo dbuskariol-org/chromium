@@ -127,11 +127,6 @@ scoped_refptr<const NGLayoutResult> NGColumnLayoutAlgorithm::Layout() {
   is_constrained_by_outer_fragmentation_context_ =
       ConstraintSpace().HasKnownFragmentainerBlockSize();
 
-  if (ConstraintSpace().HasBlockFragmentation()) {
-    SetupFragmentBuilderForFragmentation(ConstraintSpace(), BreakToken(),
-                                         &container_builder_);
-  }
-
   container_builder_.SetIsBlockFragmentationContextRoot();
 
   intrinsic_block_size_ = border_scrollbar_padding_.block_start;
