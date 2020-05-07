@@ -1211,6 +1211,13 @@
       'Win V8 FYI Release (NVIDIA)',
     ],
     'modifications': {
+      'Win10 FYI x64 Exp Release (Intel HD 630)': {
+        'args': [
+          # TODO(https://crbug.com/1053803): Add this to all tests once UHD
+          # 630 machines are used alongside HD 630 machines.
+          '--expected-device-id', '3e92',
+        ],
+      },
       'Win10 x64 Debug (NVIDIA)': {
         'args': [
           # TODO(https://crbug.com/1007013): Remove this flag when it's no

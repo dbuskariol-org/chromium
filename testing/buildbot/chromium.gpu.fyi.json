@@ -21738,7 +21738,9 @@
           "--expected-vendor-id",
           "8086",
           "--expected-device-id",
-          "5912"
+          "5912",
+          "--expected-device-id",
+          "3e92"
         ],
         "isolate_name": "telemetry_gpu_integration_test",
         "merge": {
