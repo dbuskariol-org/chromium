@@ -233,7 +233,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling HarfBuzz
   # and whatever else without interference from each other.
-  'harfbuzz_revision': 'e53c44e3260d6136e27635b5bbcb2da43bc4f1b1',
+  'harfbuzz_revision': '100d40c827eb8336b2b671856f151275d47e71ad',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Emoji Segmenter
   # and whatever else without interference from each other.
