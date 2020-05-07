@@ -104,8 +104,7 @@ class APP_LIST_EXPORT AppsContainerView : public HorizontalPage {
   void OnTabletModeChanged(bool started);
 
   // Calculates the apps container or apps grid margin depending on the
-  // available content bounds, and search box size (the later is not used
-  // if |for_full_container_bounds| is false).
+  // available content bounds, and search box size.
   // |available_bounds| - The bounds available to lay out either full apps
   //      container or apps grid (depending on |for_full_contaier_bounds|).
   // |search_box_size| - The expected search box size. Used to determine the
@@ -113,17 +112,13 @@ class APP_LIST_EXPORT AppsContainerView : public HorizontalPage {
   //      (if calaulating margins for apps grid, |available_bounds| should
   //      not contain the search box, so this value will not be used in that
   //      case).
-  // |for_full_container_bounds| - Whether the bounds are being calculated
-  //      for the whole apps container, or just the apps grid. It should be true
-  //      iff app_list_features::IsScalableAppListEnabled().
   //
   // NOTE: This should not call into ContentsView::GetSearchBoxBounds*()
   // methods, as CalculateMarginsForAvailableBounds is used to calculate the
   // search box bounds.
   const gfx::Insets& CalculateMarginsForAvailableBounds(
       const gfx::Rect& available_bounds,
-      const gfx::Size& search_box_size,
-      bool for_full_container_bounds);
+      const gfx::Size& search_box_size);
 
   // views::View overrides:
   void Layout() override;
@@ -173,10 +168,6 @@ class APP_LIST_EXPORT AppsContainerView : public HorizontalPage {
   // Suggestion chips and apps grid view become unfocusable if |disabled| is
   // true. This is used to trap focus within the folder when it is opened.
   void DisableFocusForShowingActiveFolder(bool disabled);
-
-  // Gets the suggestion chips container top margin for the app list transition
-  // progress.
-  int GetSuggestionChipContainerTopMargin(float progress) const;
 
   // Returns expected suggestion chip container's y position based on the app
   // list transition progress.

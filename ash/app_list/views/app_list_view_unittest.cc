@@ -311,8 +311,7 @@ class AppListViewTest : public views::ViewsTestBase,
     return delegate_->show_wallpaper_context_menu_count();
   }
 
-  // Verifies fullscreen apps container bounds and layout with
-  // app_list_features::kScalableAppList feature enabled.
+  // Verifies fullscreen apps container bounds and layout.
   void VerifyAppsContainerLayout(const gfx::Size& container_size,
                                  int column_count,
                                  int row_count,
@@ -399,15 +398,12 @@ class AppListViewTest : public views::ViewsTestBase,
   DISALLOW_COPY_AND_ASSIGN(AppListViewTest);
 };
 
-// Tests app list view layout for different screen sizes with ScalableAppList
-// feature enabled.
+// Tests app list view layout for different screen sizes.
 class AppListViewScalableLayoutTest : public AppListViewTest {
  public:
   AppListViewScalableLayoutTest() {
-    scoped_feature_list_.InitWithFeatures(
-        {app_list_features::kScalableAppList,
-         ash::features::kEnableBackgroundBlur},
-        {});
+    scoped_feature_list_.InitAndEnableFeature(
+        ash::features::kEnableBackgroundBlur);
   }
   ~AppListViewScalableLayoutTest() override = default;
 
@@ -1941,8 +1937,7 @@ TEST_F(AppListViewTest, AppsGridViewVisibilityOnReopening) {
 
   view_->SetState(ash::AppListViewState::kFullscreenSearch);
   SetAppListState(ash::AppListState::kStateSearchResults);
-  EXPECT_EQ(app_list_features::IsScalableAppListEnabled(),
-            IsViewVisibleOnScreen(apps_grid_view()));
+  EXPECT_TRUE(IsViewVisibleOnScreen(apps_grid_view()));
 
   // Close the app-list and re-show to fullscreen all apps.
   view_->SetState(ash::AppListViewState::kClosed);
@@ -1975,9 +1970,6 @@ TEST_F(AppListViewTest, AppsGridViewExpandHintingOnReopening) {
 // Tests that going into a folder view, then setting the AppListState to PEEKING
 // hides the folder view.
 TEST_F(AppListViewTest, FolderViewToPeeking) {
-  base::test::ScopedFeatureList scoped_feature_list;
-  scoped_feature_list.InitWithFeatures({app_list_features::kScalableAppList},
-                                       {});
   Initialize(false /*is_tablet_mode*/);
   AppListTestModel* model = delegate_->GetTestModel();
   model->PopulateApps(kInitialItems);

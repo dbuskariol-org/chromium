@@ -1102,8 +1102,7 @@ void AppsGridView::UpdateControlVisibility(AppListViewState app_list_state,
                                            bool is_in_drag) {
   const bool fullscreen_or_in_drag =
       is_in_drag || app_list_state == AppListViewState::kFullscreenAllApps ||
-      (app_list_features::IsScalableAppListEnabled() &&
-       app_list_state == AppListViewState::kFullscreenSearch);
+      app_list_state == AppListViewState::kFullscreenSearch;
   SetVisible(fullscreen_or_in_drag);
 }
 

@@ -1711,13 +1711,6 @@ const char kSameSiteByDefaultCookiesDescription[] =
     "SameSite=Lax. Sites must specify SameSite=None in order to enable "
     "third-party usage.";
 
-const char kScalableAppListName[] =
-    "App list UI configuration dependant on display size";
-const char kScalableAppListDescription[] =
-    "Adapts app list item sizing and spacing for smaller screen sizes, "
-    "instead of using single app list configuration, that is optionally "
-    "scaled down, for all screens.";
-
 const char kScrollableTabStripName[] = "Scrollable TabStrip";
 const char kScrollableTabStripDescription[] =
     "Allows users to access tabs by scrolling when they no longer fit in the "

@@ -1001,9 +1001,6 @@ extern const char kSafetyTipDescription[];
 extern const char kSameSiteByDefaultCookiesName[];
 extern const char kSameSiteByDefaultCookiesDescription[];
 
-extern const char kScalableAppListName[];
-extern const char kScalableAppListDescription[];
-
 extern const char kScrollableTabStripName[];
 extern const char kScrollableTabStripDescription[];
 

@@ -3637,11 +3637,6 @@
     "expiry_milestone": 88
   },
   {
-    "name": "scalable-app-list",
-    "owners": [ "tbarzic" ],
-    "expiry_milestone": 82
-  },
-  {
     "name": "scanning-ui",
     "owners": [ "jschettler", "bmgordon" ],
     "expiry_milestone": 85

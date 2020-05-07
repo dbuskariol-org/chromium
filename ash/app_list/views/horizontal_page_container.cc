@@ -11,7 +11,6 @@
 #include "ash/app_list/views/search_box_view.h"
 #include "ash/app_list/views/search_result_page_view.h"
 #include "ash/public/cpp/app_list/app_list_config.h"
-#include "ash/public/cpp/app_list/app_list_features.h"
 #include "ash/public/cpp/pagination/pagination_controller.h"
 #include "base/bind_helpers.h"
 #include "base/strings/utf_string_conversions.h"
@@ -114,10 +113,8 @@ void HorizontalPageContainer::OnAnimationStarted(AppListState from_state,
   }
 
   // Set the page opacity.
-  if (app_list_features::IsScalableAppListEnabled()) {
-    auto settings = contents_view()->CreateTransitionAnimationSettings(layer());
-    UpdateOpacityForState(to_state);
-  }
+  auto settings = contents_view()->CreateTransitionAnimationSettings(layer());
+  UpdateOpacityForState(to_state);
 
   for (size_t i = 0; i < horizontal_pages_.size(); ++i) {
     HorizontalPage* page = horizontal_pages_[i];
@@ -136,8 +133,6 @@ void HorizontalPageContainer::OnAnimationStarted(AppListState from_state,
 }
 
 void HorizontalPageContainer::UpdateOpacityForState(AppListState state) {
-  if (!app_list_features::IsScalableAppListEnabled())
-    return;
   const float target_opacity =
       state == AppListState::kStateApps ? 1.0f : kNonAppsStateOpacity;
   if (layer()->GetTargetOpacity() != target_opacity)
@@ -196,9 +191,6 @@ gfx::Rect HorizontalPageContainer::GetPageBoundsForState(
     const gfx::Rect& search_box_bounds) const {
   if (state == AppListState::kStateApps)
     return contents_bounds;
-  if (!app_list_features::IsScalableAppListEnabled())
-    return GetBelowContentsOffscreenBounds(contents_bounds.size());
-
   gfx::Rect bounds = contents_bounds;
   bounds.Offset(0, kNonAppsStateVerticalOffset);
   return bounds;

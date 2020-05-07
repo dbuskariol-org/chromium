@@ -42,6 +42,10 @@ namespace ash {
 
 namespace {
 
+// The contents view height threshold under which search box should be shown in
+// dense layout.
+constexpr int kDenseLayoutHeightThreshold = 600;
+
 // The range of app list transition progress in which the expand arrow'
 // opacity changes from 0 to 1.
 constexpr float kExpandArrowOpacityStartProgress = 0.61;
@@ -65,14 +69,6 @@ float GetOpacityForProgress(float progress,
   return base::ClampToRange(
       (progress - transition_start) / (transition_end - transition_start), 0.0f,
       1.0f);
-}
-
-bool ShouldShowDenseLayout(int height,
-                           ash::AppListViewState target_view_state) {
-  return (height < 600 &&
-          (app_list_features::IsScalableAppListEnabled() ||
-           target_view_state == ash::AppListViewState::kFullscreenAllApps ||
-           target_view_state == ash::AppListViewState::kFullscreenSearch));
 }
 
 // Notifies assistive technology that all schedules animations have completed on
@@ -292,8 +288,6 @@ AppsContainerView* ContentsView::GetAppsContainerView() {
 
 gfx::Size ContentsView::AdjustSearchBoxSizeToFitMargins(
     const gfx::Size& preferred_size) const {
-  if (!app_list_features::IsScalableAppListEnabled())
-    return preferred_size;
   const int padded_width =
       GetContentsBounds().width() -
       2 * app_list_view_->GetAppListConfig().GetIdealHorizontalMargin(
@@ -544,7 +538,7 @@ gfx::Size ContentsView::GetSearchBoxSize(AppListState state) const {
   // Reduce the search box size in fullscreen view state when the work area
   // height is less than 600 dip - the goal is to increase the amount of space
   // available to the apps grid.
-  if (ShouldShowDenseLayout(GetContentsBounds().height(), target_view_state_)) {
+  if (GetContentsBounds().height() < kDenseLayoutHeightThreshold) {
     preferred_size.set_height(
         AppListConfig::instance().search_box_height_for_dense_layout());
   } else {
@@ -947,18 +941,11 @@ void ContentsView::RemoveSearchBoxUpdateObserver(
 bool ContentsView::ShouldLayoutPage(AppListPage* page,
                                     AppListState current_state,
                                     AppListState target_state) const {
-  if ((page == horizontal_page_container_ &&
-       app_list_features::IsScalableAppListEnabled()) ||
-      page == search_results_page_view_) {
+  if (page == horizontal_page_container_ || page == search_results_page_view_) {
     return ((current_state == AppListState::kStateSearchResults &&
              target_state == AppListState::kStateApps) ||
             (current_state == AppListState::kStateApps &&
              target_state == AppListState::kStateSearchResults));
-  }
-
-  if (page == horizontal_page_container_) {
-    return (current_state == AppListState::kStateSearchResults &&
-            target_state == AppListState::kStateApps);
   }
 
   if (page == assistant_page_view_) {
@@ -991,14 +978,10 @@ int ContentsView::GetSearchBoxTopForViewState(
       return AppListConfig::instance().search_box_closed_top_padding();
     case AppListViewState::kFullscreenAllApps:
     case AppListViewState::kFullscreenSearch:
-      if (app_list_features::IsScalableAppListEnabled()) {
-        return horizontal_page_container_->apps_container_view()
-            ->CalculateMarginsForAvailableBounds(
-                GetContentsBounds(), GetSearchBoxSize(AppListState::kStateApps),
-                true /*for_full_container_bounds*/)
-            .top();
-      }
-      return AppListConfig::instance().search_box_fullscreen_top_padding();
+      return horizontal_page_container_->apps_container_view()
+          ->CalculateMarginsForAvailableBounds(
+              GetContentsBounds(), GetSearchBoxSize(AppListState::kStateApps))
+          .top();
     case AppListViewState::kPeeking:
     case AppListViewState::kHalf:
       return AppListConfig::instance().search_box_peeking_top_padding();

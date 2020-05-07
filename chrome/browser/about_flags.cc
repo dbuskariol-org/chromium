@@ -5032,10 +5032,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kAggregatedMlAppRankingDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(app_list_features::kEnableAggregatedMlAppRanking)},
 
-    {"scalable-app-list", flag_descriptions::kScalableAppListName,
-     flag_descriptions::kScalableAppListDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(app_list_features::kScalableAppList)},
-
     {"fuzzy-app-search", flag_descriptions::kFuzzyAppSearchName,
      flag_descriptions::kFuzzyAppSearchDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(app_list_features::kEnableFuzzyAppSearch)},
