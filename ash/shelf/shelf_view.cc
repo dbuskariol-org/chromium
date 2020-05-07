@@ -1950,8 +1950,9 @@ void ShelfView::ShelfItemReturnedFromRipOff(int index) {
   // Show the item and prevent it from animating into place from the position
   // where it was sitting with zero opacity.
   views::View* view = view_model_->view_at(index);
-  view->SetBoundsRect(bounds_animator_->GetTargetBounds(view));
+  const gfx::Rect bounds = bounds_animator_->GetTargetBounds(view);
   bounds_animator_->StopAnimatingView(view);
+  view->SetBoundsRect(bounds);
   view->layer()->SetOpacity(1.f);
 }
 
