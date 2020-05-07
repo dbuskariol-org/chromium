@@ -1,8 +1,8 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/plugin_vm/plugin_vm_manager.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_manager_impl.h"
 
 #include "ash/public/cpp/shelf_model.h"
 #include "base/files/file_util.h"
@@ -10,6 +10,7 @@
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/mock_callback.h"
 #include "chrome/browser/chromeos/file_manager/path_util.h"
+#include "chrome/browser/chromeos/plugin_vm/plugin_vm_manager_factory.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_metrics_util.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_pref_names.h"
 #include "chrome/browser/chromeos/plugin_vm/plugin_vm_test_helper.h"
@@ -40,13 +41,14 @@ constexpr char kStartVmFailedNotificationId[] = "plugin-vm-start-vm-failed";
 
 }  // namespace
 
-class PluginVmManagerTest : public testing::Test {
+class PluginVmManagerImplTest : public testing::Test {
  public:
-  PluginVmManagerTest() {
+  PluginVmManagerImplTest() {
     chromeos::DBusThreadManager::Initialize();
     testing_profile_ = std::make_unique<TestingProfile>();
     test_helper_ = std::make_unique<PluginVmTestHelper>(testing_profile_.get());
-    plugin_vm_manager_ = PluginVmManager::GetForProfile(testing_profile_.get());
+    plugin_vm_manager_ = static_cast<PluginVmManagerImpl*>(
+        PluginVmManagerFactory::GetForProfile(testing_profile_.get()));
     display_service_ = std::make_unique<NotificationDisplayServiceTester>(
         testing_profile_.get());
     shelf_model_ = std::make_unique<ash::ShelfModel>();
@@ -56,7 +58,7 @@ class PluginVmManagerTest : public testing::Test {
     chromeos::DlcserviceClient::InitializeFake();
   }
 
-  ~PluginVmManagerTest() override {
+  ~PluginVmManagerImplTest() override {
     histogram_tester_.reset();
     chrome_launcher_controller_.reset();
     shelf_model_.reset();
@@ -116,16 +118,16 @@ class PluginVmManagerTest : public testing::Test {
   std::unique_ptr<TestingProfile> testing_profile_;
   std::unique_ptr<PluginVmTestHelper> test_helper_;
   std::unique_ptr<NotificationDisplayServiceTester> display_service_;
-  PluginVmManager* plugin_vm_manager_;
+  PluginVmManagerImpl* plugin_vm_manager_;
   std::unique_ptr<ash::ShelfModel> shelf_model_;
   std::unique_ptr<ChromeLauncherController> chrome_launcher_controller_;
   std::unique_ptr<base::HistogramTester> histogram_tester_;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PluginVmManagerTest);
+  DISALLOW_COPY_AND_ASSIGN(PluginVmManagerImplTest);
 };
 
-TEST_F(PluginVmManagerTest, LaunchPluginVmRequiresPluginVmAllowed) {
+TEST_F(PluginVmManagerImplTest, LaunchPluginVmRequiresPluginVmAllowed) {
   EXPECT_FALSE(IsPluginVmAllowedForProfile(testing_profile_.get()));
   MockLaunchPluginVmCallback callback;
   EXPECT_CALL(callback, Run(false));
@@ -142,11 +144,11 @@ TEST_F(PluginVmManagerTest, LaunchPluginVmRequiresPluginVmAllowed) {
                                         PluginVmLaunchResult::kError, 1);
 }
 
-TEST_F(PluginVmManagerTest, LaunchPluginVmStartAndShow) {
+TEST_F(PluginVmManagerImplTest, LaunchPluginVmStartAndShow) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
-  // The PluginVmManager calls StartVm when the VM is not yet running.
+  // The PluginVmManagerImpl calls StartVm when the VM is not yet running.
   SetListVmsResponse(vm_tools::plugin_dispatcher::VmState::VM_STATE_STOPPED);
 
   MockLaunchPluginVmCallback callback;
@@ -167,11 +169,11 @@ TEST_F(PluginVmManagerTest, LaunchPluginVmStartAndShow) {
       vm_tools::plugin_dispatcher::VmToolsState::VM_TOOLS_STATE_INSTALLED);
 }
 
-TEST_F(PluginVmManagerTest, LaunchesOnceFromMultipleRequests) {
+TEST_F(PluginVmManagerImplTest, LaunchesOnceFromMultipleRequests) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
-  // The PluginVmManager calls StartVm when the VM is not yet running.
+  // The PluginVmManagerImpl calls StartVm when the VM is not yet running.
   SetListVmsResponse(vm_tools::plugin_dispatcher::VmState::VM_STATE_STOPPED);
 
   MockLaunchPluginVmCallback callback1, callback2, callback3;
@@ -190,13 +192,15 @@ TEST_F(PluginVmManagerTest, LaunchesOnceFromMultipleRequests) {
       vm_tools::plugin_dispatcher::VmToolsState::VM_TOOLS_STATE_INSTALLED);
 }
 
-TEST_F(PluginVmManagerTest, LaunchPluginVmShowAndStop) {
+TEST_F(PluginVmManagerImplTest, LaunchPluginVmShowAndStop) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
-  // The PluginVmManager skips calling StartVm when the VM is already running.
+  // The PluginVmManagerImpl skips calling StartVm when the VM is already
+  // running.
   SetListVmsResponse(vm_tools::plugin_dispatcher::VmState::VM_STATE_RUNNING);
-  // The PluginVmManager doesn't wait for VmToolsState if it is already known.
+  // The PluginVmManagerImpl doesn't wait for VmToolsState if it is already
+  // known.
   NotifyVmToolsStateChanged(
       vm_tools::plugin_dispatcher::VmToolsState::VM_TOOLS_STATE_INSTALLED);
 
@@ -220,7 +224,7 @@ TEST_F(PluginVmManagerTest, LaunchPluginVmShowAndStop) {
   EXPECT_TRUE(VmPluginDispatcherClient().stop_vm_called());
 }
 
-TEST_F(PluginVmManagerTest, OnStateChangedRunningStoppedSuspended) {
+TEST_F(PluginVmManagerImplTest, OnStateChangedRunningStoppedSuspended) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
@@ -254,7 +258,7 @@ TEST_F(PluginVmManagerTest, OnStateChangedRunningStoppedSuspended) {
   EXPECT_EQ(plugin_vm_manager_->seneschal_server_handle(), 0ul);
 }
 
-TEST_F(PluginVmManagerTest, LaunchPluginVmSpinner) {
+TEST_F(PluginVmManagerImplTest, LaunchPluginVmSpinner) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
@@ -280,7 +284,7 @@ TEST_F(PluginVmManagerTest, LaunchPluginVmSpinner) {
   EXPECT_FALSE(SpinnerController()->HasApp(kPluginVmAppId));
 }
 
-TEST_F(PluginVmManagerTest, LaunchPluginVmFromSuspending) {
+TEST_F(PluginVmManagerImplTest, LaunchPluginVmFromSuspending) {
   // We cannot start a vm in states like SUSPENDING, so the StartVm call is
   // delayed until an appropriate state change signal is received.
   test_helper_->AllowPluginVm();
@@ -312,11 +316,11 @@ TEST_F(PluginVmManagerTest, LaunchPluginVmFromSuspending) {
       vm_tools::plugin_dispatcher::VmToolsState::VM_TOOLS_STATE_INSTALLED);
 }
 
-TEST_F(PluginVmManagerTest, LaunchPluginVmInvalidLicense) {
+TEST_F(PluginVmManagerImplTest, LaunchPluginVmInvalidLicense) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
-  // The PluginVmManager calls StartVm when the VM is not yet running.
+  // The PluginVmManagerImpl calls StartVm when the VM is not yet running.
   SetListVmsResponse(vm_tools::plugin_dispatcher::VmState::VM_STATE_STOPPED);
 
   vm_tools::plugin_dispatcher::StartVmResponse start_vm_response;
@@ -336,7 +340,7 @@ TEST_F(PluginVmManagerTest, LaunchPluginVmInvalidLicense) {
       kPluginVmLaunchResultHistogram, PluginVmLaunchResult::kInvalidLicense, 1);
 }
 
-TEST_F(PluginVmManagerTest, UninstallRunningPluginVm) {
+TEST_F(PluginVmManagerImplTest, UninstallRunningPluginVm) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
@@ -362,7 +366,7 @@ TEST_F(PluginVmManagerTest, UninstallRunningPluginVm) {
       plugin_vm::prefs::kPluginVmImageExists));
 }
 
-TEST_F(PluginVmManagerTest, UninstallStoppedPluginVm) {
+TEST_F(PluginVmManagerImplTest, UninstallStoppedPluginVm) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
@@ -388,7 +392,7 @@ TEST_F(PluginVmManagerTest, UninstallStoppedPluginVm) {
       plugin_vm::prefs::kPluginVmImageExists));
 }
 
-TEST_F(PluginVmManagerTest, UninstallSuspendingPluginVm) {
+TEST_F(PluginVmManagerImplTest, UninstallSuspendingPluginVm) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
@@ -429,7 +433,7 @@ TEST_F(PluginVmManagerTest, UninstallSuspendingPluginVm) {
       plugin_vm::prefs::kPluginVmImageExists));
 }
 
-TEST_F(PluginVmManagerTest, UninstallMissingPluginVm) {
+TEST_F(PluginVmManagerImplTest, UninstallMissingPluginVm) {
   test_helper_->AllowPluginVm();
   EXPECT_TRUE(IsPluginVmAllowedForProfile(testing_profile_.get()));
 
