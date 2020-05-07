@@ -20082,7 +20082,7 @@ Called by update_document_policy_enum.py.-->
   <int value="670" label="MinimumChromeVersionEnforced"/>
   <int value="671" label="ReportDeviceTimezoneInfo"/>
   <int value="672" label="SystemProxySettings"/>
-  <int value="673" label="UserDataSnapshotRentionLimit"/>
+  <int value="673" label="UserDataSnapshotRetentionLimit"/>
   <int value="674" label="DeviceLoginScreenChromeVariations"/>
   <int value="675" label="NativeWindowOcclusionEnabled"/>
   <int value="676" label="DeviceLoginScreenPrivacyScreenEnabled"/>
