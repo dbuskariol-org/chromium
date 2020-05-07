@@ -72,15 +72,6 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
 
     private static Integer sOverrideCoreCountForTesting;
 
-    /**
-     * Construct all the variables that shouldn't change.  We do it here both to clarify when the
-     * objects are created and to ensure that they exist throughout the parallelized initialization
-     * of the WebappActivity.
-     */
-    public WebappActivity() {
-        mWebappInfo = createWebappInfo(null);
-    }
-
     @Override
     protected BrowserServicesIntentDataProvider buildIntentDataProvider(
             Intent intent, @CustomTabsIntent.ColorScheme int colorScheme) {
@@ -98,7 +89,7 @@ public class WebappActivity extends BaseCustomTabActivity<WebappActivityComponen
     }
 
     protected WebappInfo createWebappInfo(Intent intent) {
-        if (intent == null) return WebappInfo.createEmpty();
+        if (intent == null) return null;
 
         if (sWebappInfoOverride != null) {
             return sWebappInfoOverride;
