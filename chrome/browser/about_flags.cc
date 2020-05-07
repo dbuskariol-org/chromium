@@ -2283,7 +2283,7 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(ash::features::kHideShelfControlsInTabletMode)},
     {"shelf-app-scaling", flag_descriptions::kShelfAppScalingName,
      flag_descriptions::kShelfAppScalingDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(chromeos::features::kShelfAppScaling)},
+     FEATURE_VALUE_TYPE(ash::features::kShelfAppScaling)},
     {"shelf-hotseat", flag_descriptions::kShelfHotseatName,
      flag_descriptions::kShelfHotseatDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kShelfHotseat)},
