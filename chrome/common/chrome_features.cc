@@ -435,6 +435,12 @@ const base::Feature kInstallableAmbientBadgeInfoBar{
     "InstallableAmbientBadgeInfoBar", base::FEATURE_ENABLED_BY_DEFAULT};
 #endif
 
+#if !defined(OS_ANDROID)
+// Allow user to have preference for PWA in the intent picker.
+const base::Feature kIntentPickerPWAPersistence{
+    "IntentPickerPWAPersistence", base::FEATURE_DISABLED_BY_DEFAULT};
+#endif  // !defined(OS_ANDROID)
+
 #if defined(OS_CHROMEOS)
 const base::Feature kKernelnextVMs{"KernelnextVMs",
                                    base::FEATURE_DISABLED_BY_DEFAULT};
