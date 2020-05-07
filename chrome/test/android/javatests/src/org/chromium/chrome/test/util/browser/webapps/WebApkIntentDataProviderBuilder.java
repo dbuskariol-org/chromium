@@ -8,17 +8,17 @@ import android.graphics.Color;
 
 import org.chromium.chrome.browser.ShortcutHelper;
 import org.chromium.chrome.browser.ShortcutSource;
+import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.webapps.WebApkDistributor;
-import org.chromium.chrome.browser.webapps.WebApkInfo;
+import org.chromium.chrome.browser.webapps.WebApkIntentDataProviderFactory;
 import org.chromium.chrome.browser.webapps.WebDisplayMode;
-import org.chromium.chrome.browser.webapps.WebappInfo;
 import org.chromium.content_public.common.ScreenOrientationValues;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/** Builder class for {@link WebApkInfo} objects. */
-public class WebApkInfoBuilder {
+/** Builder class for WebAPK {@link BrowserServicesIntentDataProvider} objects. */
+public class WebApkIntentDataProviderBuilder {
     private String mWebApkPackageName;
     private String mUrl;
     private String mScope;
@@ -26,7 +26,7 @@ public class WebApkInfoBuilder {
     private String mManifestUrl;
     private int mWebApkVersionCode;
 
-    public WebApkInfoBuilder(String webApkPackageName, String url) {
+    public WebApkIntentDataProviderBuilder(String webApkPackageName, String url) {
         mWebApkPackageName = webApkPackageName;
         mUrl = url;
     }
@@ -48,11 +48,11 @@ public class WebApkInfoBuilder {
     }
 
     /**
-     * Builds {@link WebApkInfo} object using options that have been set.
+     * Builds {@link BrowserServicesIntentDataProvider} object using options that have been set.
      */
-    public WebappInfo build() {
-        return WebApkInfo.create(mUrl, mScope, null, null, null, null, mDisplayMode,
-                ScreenOrientationValues.DEFAULT, ShortcutSource.UNKNOWN,
+    public BrowserServicesIntentDataProvider build() {
+        return WebApkIntentDataProviderFactory.create(mUrl, mScope, null, null, null, null,
+                mDisplayMode, ScreenOrientationValues.DEFAULT, ShortcutSource.UNKNOWN,
                 ShortcutHelper.MANIFEST_COLOR_INVALID_OR_MISSING,
                 ShortcutHelper.MANIFEST_COLOR_INVALID_OR_MISSING, Color.WHITE,
                 false /* isPrimaryIconMaskable */, false /* isSplashIconMaskable */,
