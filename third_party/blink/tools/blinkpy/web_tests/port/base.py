@@ -1974,6 +1974,8 @@ class Port(object):
         return tests
 
     def _lookup_virtual_suite(self, test_name):
+        if not test_name.startswith('virtual/'):
+            return None
         for suite in self.virtual_test_suites():
             if test_name.startswith(suite.full_prefix):
                 return suite

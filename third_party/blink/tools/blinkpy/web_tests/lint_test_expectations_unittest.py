@@ -245,6 +245,38 @@ class LintTest(LoggingTestCase):
         all_logs = ''.join(self.logMessages())
         self.assertIn('directory', all_logs)
 
+    def test_virtual_test_redundant_expectation(self):
+        options = optparse.Values({
+            'additional_expectations': [],
+            'platform': 'test',
+            'debug_rwt_logging': False
+        })
+        host = MockHost()
+
+        port = host.port_factory.get(options.platform, options=options)
+        port.virtual_test_suites = lambda: [
+            VirtualTestSuite(prefix='foo', bases=['test'], args=['--foo'])
+        ]
+        test_expectations = (
+            '# tags: [ mac win ]\n'
+            '# tags: [ debug release ]\n'
+            '# results: [ Failure Pass ]\n'
+            '[ mac ] test/test1.html [ Failure ]\n'
+            '[ mac debug ] virtual/foo/test/test1.html [ Failure ]\n'
+            '[ win ] virtual/foo/test/test1.html [ Failure ]\n'
+            '[ mac release ] virtual/foo/test/test1.html [ Pass ]\n')
+        port.expectations_dict = lambda: {
+            'testexpectations': test_expectations
+        }
+
+        host.port_factory.get = lambda platform, options=None: port
+        host.port_factory.all_port_names = lambda platform=None: [port.name()]
+
+        res = lint_test_expectations.lint(host, options)
+
+        self.assertEquals(len(res), 1)
+        self.assertIn('redundant', res[0])
+
 
 class CheckVirtualSuiteTest(unittest.TestCase):
     def setUp(self):
