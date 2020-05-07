@@ -745,6 +745,10 @@ const char kEnablePortalsCrossOriginDescription[] =
     "Allows portals to load cross-origin URLs in addition to same-origin ones."
     " Has no effect if Portals are not enabled.";
 
+const char kEnableTranslateSubFramesName[] = "Translate sub frames";
+const char kEnableTranslateSubFramesDescription[] =
+    "Enable the translation of sub frames (as well as the main frame)";
+
 const char kCorsForContentScriptsName[] = "CORS for content scripts";
 const char kCorsForContentScriptsDescription[] =
     "Prevent content scripts of Chrome Extensions from bypassing CORS.";

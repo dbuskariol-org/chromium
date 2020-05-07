@@ -39284,6 +39284,7 @@ from previous Chrome versions.
   <int value="-680787130" label="ExperimentalVRFeatures:disabled"/>
   <int value="-680589442" label="MacRTL:disabled"/>
   <int value="-679500267" label="UseXpsForPrinting:disabled"/>
+  <int value="-678184617" label="TranslateSubFrames:disabled"/>
   <int value="-674804217" label="SoleIntegration:enabled"/>
   <int value="-673804828" label="EnablePlayStoreAppSearch:disabled"/>
   <int value="-673149604" label="RelatedSearches:enabled"/>
@@ -41482,6 +41483,7 @@ from previous Chrome versions.
   <int value="1914347357" label="AutofillEnableVirtualCard:disabled"/>
   <int value="1915028326" label="BuiltInModuleKvStorage:disabled"/>
   <int value="1915178511" label="disable-blink-features"/>
+  <int value="1916637435" label="TranslateSubFrames:enabled"/>
   <int value="1918984253"
       label="OmniboxUIExperimentBlueSearchLoopAndSearchQuery:disabled"/>
   <int value="1919917329" label="ImplicitRootScroller:disabled"/>

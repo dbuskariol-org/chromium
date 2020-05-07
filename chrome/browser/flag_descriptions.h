@@ -425,6 +425,9 @@ extern const char kEnableNetworkLoggingToFileDescription[];
 extern const char kEnableNetworkServiceInProcessName[];
 extern const char kEnableNetworkServiceInProcessDescription[];
 
+extern const char kEnableTranslateSubFramesName[];
+extern const char kEnableTranslateSubFramesDescription[];
+
 extern const char kCorsForContentScriptsName[];
 extern const char kCorsForContentScriptsDescription[];
 

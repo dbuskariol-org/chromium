@@ -127,6 +127,7 @@
 #include "components/tracing/common/tracing_switches.h"
 #include "components/translate/core/browser/translate_prefs.h"
 #include "components/translate/core/browser/translate_ranker_impl.h"
+#include "components/translate/core/common/translate_util.h"
 #include "components/ui_devtools/switches.h"
 #include "components/version_info/version_info.h"
 #include "components/viz/common/features.h"
@@ -5490,6 +5491,11 @@ const FeatureEntry kFeatureEntries[] = {
      kOsMac | kOsWin | kOsLinux,
      FEATURE_VALUE_TYPE(kDiceWebSigninInterceptionFeature)},
 #endif  // ENABLE_DICE_SUPPORT
+
+    {"enable-translate-sub-frames",
+     flag_descriptions::kEnableTranslateSubFramesName,
+     flag_descriptions::kEnableTranslateSubFramesDescription, kOsAll,
+     FEATURE_VALUE_TYPE(translate::kTranslateSubFrames)},
 
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
