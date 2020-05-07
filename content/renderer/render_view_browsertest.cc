@@ -2291,7 +2291,8 @@ class RendererErrorPageTest : public RenderViewImplTest {
   class TestContentRendererClient : public ContentRendererClient {
    public:
     bool ShouldSuppressErrorPage(RenderFrame* render_frame,
-                                 const GURL& url) override {
+                                 const GURL& url,
+                                 int error_code) override {
       return url == "http://example.com/suppress";
     }
 
