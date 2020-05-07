@@ -6101,6 +6101,9 @@ crbug.com/1042694 fast/forms/form-control-with-state-eager-tracing-crashTest.htm
 # QUIC reordered versions to prefer IETF QUIC
 crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
 
+# Stale revalidation shouldn't be blocked:
+crbug.com/1079188 external/wpt/fetch/stale-while-revalidate/revalidate-not-blocked-by-csp.html [ Timeout ]
+
 # Web Audio active processing tests
 crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-audiobuffersourcenode-interface/active-processing.https.html [ Pass Failure ]
 crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-channelmergernode-interface/active-processing.https.html [ Pass Failure ]
