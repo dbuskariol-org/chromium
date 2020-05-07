@@ -7,6 +7,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <functional>
 #include <set>
 #include <utility>
 #include <vector>
@@ -325,16 +326,16 @@ void OnLocalStorageUsageInfo(
 
   base::RepeatingClosure barrier =
       base::BarrierClosure(infos.size(), std::move(done_callback));
-  for (size_t i = 0; i < infos.size(); ++i) {
+  for (const StorageUsageInfo& info : infos) {
     if (origin_matcher &&
-        !origin_matcher.Run(infos[i].origin, special_storage_policy.get())) {
+        !origin_matcher.Run(info.origin, special_storage_policy.get())) {
       barrier.Run();
       continue;
     }
 
-    if (infos[i].last_modified >= delete_begin &&
-        infos[i].last_modified <= delete_end) {
-      dom_storage_context->DeleteLocalStorage(infos[i].origin, barrier);
+    if (info.last_modified >= delete_begin &&
+        info.last_modified <= delete_end) {
+      dom_storage_context->DeleteLocalStorage(info.origin, barrier);
     } else {
       barrier.Run();
     }
@@ -360,14 +361,13 @@ void OnSessionStorageUsageInfo(
   base::RepeatingClosure barrier =
       base::BarrierClosure(infos.size(), std::move(done_callback));
 
-  for (size_t i = 0; i < infos.size(); ++i) {
-    if (origin_matcher &&
-        !origin_matcher.Run(url::Origin::Create(infos[i].origin),
-                            special_storage_policy.get())) {
+  for (const SessionStorageUsageInfo& info : infos) {
+    if (origin_matcher && !origin_matcher.Run(url::Origin::Create(info.origin),
+                                              special_storage_policy.get())) {
       barrier.Run();
       continue;
     }
-    dom_storage_context->DeleteSessionStorage(infos[i], barrier);
+    dom_storage_context->DeleteSessionStorage(info, barrier);
   }
 }
 
@@ -910,7 +910,7 @@ class SSLErrorDelegate : public SSLErrorHandler::Delegate {
       network::mojom::NetworkContextClient::OnSSLCertificateErrorCallback
           response)
       : response_(std::move(response)) {}
-  ~SSLErrorDelegate() override {}
+  ~SSLErrorDelegate() override = default;
   void CancelSSLRequest(int error, const net::SSLInfo* ssl_info) override {
     std::move(response_).Run(error);
     delete this;
@@ -974,7 +974,7 @@ base::RepeatingCallback<bool(const url::Origin&)> CreateGenericOriginMatcher(
         std::move(matcher_func), std::move(policy));
   }
   DCHECK(!storage_origin.is_empty());
-  return base::BindRepeating(std::equal_to<url::Origin>(),
+  return base::BindRepeating(std::equal_to<const url::Origin&>(),
                              url::Origin::Create(storage_origin));
 }
 
@@ -1029,7 +1029,7 @@ class StoragePartitionImpl::URLLoaderFactoryForBrowserProcess
 
  private:
   friend class base::RefCounted<URLLoaderFactoryForBrowserProcess>;
-  ~URLLoaderFactoryForBrowserProcess() override {}
+  ~URLLoaderFactoryForBrowserProcess() override = default;
 
   StoragePartitionImpl* storage_partition_;
   const bool corb_enabled_;
@@ -1142,7 +1142,7 @@ class StoragePartitionImpl::DataDeletionHelper {
         callback_(std::move(callback)),
         task_count_(0) {}
 
-  ~DataDeletionHelper() {}
+  ~DataDeletionHelper() = default;
 
   void ClearDataOnUIThread(
       const GURL& storage_origin,
