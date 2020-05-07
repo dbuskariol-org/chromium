@@ -3376,7 +3376,7 @@
   {
     "name": "password-check",
     "owners": [ "jdoerrie", "vasilii" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 87
   },
   {
     "name": "password-editing-android",
