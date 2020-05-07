@@ -27191,6 +27191,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3280"
       label="V8HTMLVideoElement_RequestVideoFrameCallback_Method"/>
   <int value="3281" label="V8HTMLVideoElement_CancelVideoFrameCallback_Method"/>
+  <int value="3282" label="RubyElementWithDisplayBlock"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
