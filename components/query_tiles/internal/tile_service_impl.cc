@@ -10,6 +10,7 @@
 #include "base/bind.h"
 #include "base/rand_util.h"
 #include "components/query_tiles/internal/proto_conversion.h"
+#include "components/query_tiles/internal/tile_config.h"
 
 namespace upboarding {
 namespace {

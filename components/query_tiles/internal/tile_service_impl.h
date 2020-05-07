@@ -10,7 +10,6 @@
 
 #include "base/memory/weak_ptr.h"
 #include "components/background_task_scheduler/background_task_scheduler.h"
-#include "components/query_tiles/internal/config.h"
 #include "components/query_tiles/internal/image_loader.h"
 #include "components/query_tiles/internal/tile_fetcher.h"
 #include "components/query_tiles/internal/tile_manager.h"

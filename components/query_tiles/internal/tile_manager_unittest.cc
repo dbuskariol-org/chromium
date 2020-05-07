@@ -10,7 +10,7 @@
 #include "base/run_loop.h"
 #include "base/test/simple_test_clock.h"
 #include "base/test/task_environment.h"
-#include "components/query_tiles/internal/config.h"
+#include "components/query_tiles/internal/tile_config.h"
 #include "components/query_tiles/internal/tile_store.h"
 #include "components/query_tiles/test/test_utils.h"
 #include "testing/gmock/include/gmock/gmock.h"

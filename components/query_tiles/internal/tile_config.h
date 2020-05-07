@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_QUERY_TILES_INTERNAL_CONFIG_H_
-#define COMPONENTS_QUERY_TILES_INTERNAL_CONFIG_H_
+#ifndef COMPONENTS_QUERY_TILES_INTERNAL_TILE_CONFIG_H_
+#define COMPONENTS_QUERY_TILES_INTERNAL_TILE_CONFIG_H_
 
 #include <memory>
 #include <string>
@@ -12,6 +12,21 @@
 #include "url/gurl.h"
 
 namespace upboarding {
+
+// Default URL string for GetQueryTiles RPC.
+extern const char kDefaultGetQueryTilePath[];
+
+// Finch parameter key for experiment tag to be passed to the server.
+extern const char kExperimentTagKey[];
+
+// Finch parameter key for base server URL to retrieve the tiles.
+extern const char kBaseURLKey[];
+
+// Finch parameter key for expire duration in seconds.
+extern const char kExpireDurationKey[];
+
+// Finch parameter key for expire duration in seconds.
+extern const char kIsUnmeteredNetworkRequiredKey[];
 
 class TileConfig {
  public:
@@ -31,4 +46,4 @@ class TileConfig {
 
 }  // namespace upboarding
 
-#endif  // COMPONENTS_QUERY_TILES_INTERNAL_CONFIG_H_
+#endif  // COMPONENTS_QUERY_TILES_INTERNAL_TILE_CONFIG_H_
