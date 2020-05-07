@@ -652,7 +652,7 @@
 <translation id="1850508293116537636">Im &amp;Uhrzeigersinn drehen</translation>
 <translation id="1852141627593563189">Schädliche Software finden</translation>
 <translation id="1852799913675865625">Beim Versuch, die Datei <ph name="ERROR_TEXT" /> zu lesen, ist ein Fehler aufgetreten.</translation>
-<translation id="1853692000353488670">Neuer Inkognito-Tab</translation>
+<translation id="1853692000353488670">Neuer Inkognitotab</translation>
 <translation id="1854180393107901205">Übertragung beenden</translation>
 <translation id="1856715684130786728">Speicherort hinzufügen...</translation>
 <translation id="1858585891038687145">Diesem Zertifikat zur Identifizierung von Softwareherstellern vertrauen</translation>
@@ -888,7 +888,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2175042898143291048">Immer so verfahren</translation>
 <translation id="2175607476662778685">Schnellstartleiste</translation>
 <translation id="217576141146192373">Drucker kann nicht hinzugefügt werden. Prüfen Sie bitte die Konfiguration des Druckers und versuchen Sie es noch einmal.</translation>
-<translation id="2177950615300672361">Inkognito-Tab: <ph name="TAB_NAME" /></translation>
+<translation id="2177950615300672361">Inkognitotab: <ph name="TAB_NAME" /></translation>
 <translation id="2178098616815594724">Das Plug-in <ph name="PEPPER_PLUGIN_NAME" /> auf <ph name="PEPPER_PLUGIN_DOMAIN" /> möchte auf Ihren Computer zugreifen</translation>
 <translation id="2178614541317717477">Kompromittierung der Zertifizierungsstelle</translation>
 <translation id="2182058453334755893">In die Zwischenablage kopiert</translation>

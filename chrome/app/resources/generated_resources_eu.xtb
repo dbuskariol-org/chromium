@@ -1828,7 +1828,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3416468988018290825">Erakutsi beti URL osoak</translation>
 <translation id="3420501302812554910">Barneko segurtasun-giltza berrezarri egin behar da</translation>
 <translation id="3421387094817716717">Kurba eliptikoko gako publikoa</translation>
-<translation id="3422291238483866753">Eskatu zure baimena webguneren batek inguruaren 3D mapa bat sortu edo kameraren posizioaren jarraipena egin nahi duenean (gomendatua)</translation>
+<translation id="3422291238483866753">Eskatu zure baimena webguneren batek inguruaren 3D-ko mapa bat sortu edo kameraren posizioaren jarraipena egin nahi duenean (gomendatua)</translation>
 <translation id="3423463006624419153">"<ph name="PHONE_NAME_1" />" eta "<ph name="PHONE_NAME_2" />" telefonoetan:</translation>
 <translation id="3423858849633684918">Abiarazi berriro <ph name="PRODUCT_NAME" /></translation>
 <translation id="3424969259347320884">Azaldu zer ari zinen egiten fitxak huts egin duenean</translation>
@@ -2548,7 +2548,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="4350019051035968019">Ezin da gailua erregistratu zure kontuaren domeinuan, gailua beste domeinu batek kudeatzeko markatuta dagoelako.</translation>
 <translation id="4351060348582610152"><ph name="ORIGIN" /> webguneak inguruko Bluetooth bidezko gailuak bilatu nahi ditu. Gailu hauek aurkitu dira:</translation>
 <translation id="4353114845960720315">Errealitate birtualean zauden bitartean, baliteke webgune honek hauei buruzko informazioa lortzea:</translation>
-<translation id="4354073718307267720">Eskatu zure baimena webguneren batek inguruaren 3D mapa bat sortu edo kameraren posizioaren jarraipena egin nahi duenean</translation>
+<translation id="4354073718307267720">Eskatu zure baimena webguneren batek inguruaren 3D-ko mapa bat sortu edo kameraren posizioaren jarraipena egin nahi duenean</translation>
 <translation id="4354344420232759511">Hemen agertuko dira bisitatzen dituzun webguneak</translation>
 <translation id="435527878592612277">Hautatu argazkia</translation>
 <translation id="4358313196493694334">Egonkortu kliken kokapena</translation>
@@ -2732,7 +2732,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="4598556348158889687">Memoriaren kudeaketa</translation>
 <translation id="4598776695426288251">Gailu bat baino gehiagoren bidez erabil dezakezu wifi-konexioa</translation>
 <translation id="4602466770786743961">Eman beti kamera eta mikrofonoa erabiltzeko baimena <ph name="HOST" /> webguneari</translation>
-<translation id="4606551464649945562">Ez utzi inongo webguneri inguruaren 3D mapa bat sortzen edo kameraren posizioaren jarraipena egiten</translation>
+<translation id="4606551464649945562">Ez utzi inongo webguneri inguruaren 3D-ko mapa bat sortzen edo kameraren posizioaren jarraipena egiten</translation>
 <translation id="4608500690299898628">&amp;Bilatu…</translation>
 <translation id="4608520674724523647">Behar bezala erregistratu dela irudikatzeko ilustrazioa</translation>
 <translation id="4610162781778310380">Errore bat gertatu da <ph name="PLUGIN_NAME" /> pluginarekin</translation>
