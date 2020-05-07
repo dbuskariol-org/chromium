@@ -12316,6 +12316,11 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="2" label="HFP_CODEC_ID_MSBC"/>
 </enum>
 
+<enum name="CrashHandler">
+  <int value="0" label="Crashpad"/>
+  <int value="1" label="Breakpad"/>
+</enum>
+
 <enum name="CrashpadExceptionCaptureResult">
   <int value="0" label="kSuccess"/>
   <int value="1" label="kUnexpectedExceptionBehavior"/>
