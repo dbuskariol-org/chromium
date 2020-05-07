@@ -5540,12 +5540,6 @@ bool ShouldSkipNonDeprecatedFeatureEntry(const FeatureEntry& entry) {
 bool SkipConditionalFeatureEntry(const FeatureEntry& entry) {
   version_info::Channel channel = chrome::GetChannel();
 #if defined(OS_CHROMEOS)
-  // Don't expose mash on stable channel.
-  if (!strcmp("mash", entry.internal_name) &&
-      channel == version_info::Channel::STABLE) {
-    return true;
-  }
-
   // enable-ui-devtools is only available on for non Stable channels.
   if (!strcmp(ui_devtools::switches::kEnableUiDevTools, entry.internal_name) &&
       channel == version_info::Channel::STABLE) {
