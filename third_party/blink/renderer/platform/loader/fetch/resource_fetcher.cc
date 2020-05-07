@@ -829,6 +829,7 @@ base::Optional<ResourceRequestBlockedReason> ResourceFetcher::PrepareRequest(
   // (e.g. mixed content that is being upgraded by upgrade-insecure-requests).
   Context().CheckCSPForRequest(
       resource_request.GetRequestContext(),
+      resource_request.GetRequestDestination(),
       MemoryCache::RemoveFragmentIdentifierIfNeeded(params.Url()), options,
       reporting_disposition, resource_request.GetRedirectStatus());
 
