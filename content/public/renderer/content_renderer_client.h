@@ -58,6 +58,7 @@ struct WebURLError;
 }  // namespace blink
 
 namespace media {
+class Demuxer;
 class KeySystemProperties;
 }
 
@@ -174,6 +175,14 @@ class CONTENT_EXPORT ContentRendererClient {
   virtual bool DeferMediaLoad(RenderFrame* render_frame,
                               bool has_played_media_before,
                               base::OnceClosure closure);
+
+  // Allows the embedder to override the Demuxer used for certain URLs.
+  // If a non-null value is returned, the object will be used as the source of
+  // media data by the media player instance for which this method was called.
+  virtual std::unique_ptr<media::Demuxer> OverrideDemuxerForUrl(
+      RenderFrame* render_frame,
+      const GURL& url,
+      scoped_refptr<base::SingleThreadTaskRunner> task_runner);
 
   // Allows the embedder to override the WebThemeEngine used. If it returns NULL
   // the content layer will provide an engine.
