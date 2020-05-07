@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/arc/print/print_mojom_traits.h"
+#include "components/arc/mojom/print_mojom_traits.h"
 
 #include "base/strings/stringprintf.h"
 #include "printing/mojom/print.mojom.h"
