@@ -2012,6 +2012,14 @@
       'Linux ChromiumOS MSan Tests',  # https://crbug.com/831676
       'Linux MSan Tests',  # https://crbug.com/831676
     ],
+    'replacements': {
+      # TODO(crbug.com/1078982): Remove once the test is fixed on 10.15.4.
+      'Mac FYI Experimental Release (Intel)': {
+        'args': {
+          '--gtest_filter': '*Detection*:-FaceDetectionImplMacTest.ScanOneFace*',
+        },
+      },
+    },
   },
   'skia_renderer_gl_blink_web_tests': {
     'modifications': {
