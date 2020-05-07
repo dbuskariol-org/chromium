@@ -190,6 +190,15 @@ present for the feature to be available.
 Accepted values are a single string for the command line switch (without the
 preceeding '--').
 
+### feature\_flag
+
+The `feature_flag` property specifies the name of a `base::Feature` flag that
+must be enabled for the feature to be available. This can be used to implement a
+remote kill switch for the feature. These feature flags should be defined at
+[feature_flags.cc](https://source.chromium.org/chromium/chromium/src/+/master:extensions/common/features/feature_flags.cc).
+
+Accepted value is a single string for the feature flag.
+
 ### component\_extensions\_auto\_granted
 
 The `component_extensions_auto_granted` specifies whether or not component
