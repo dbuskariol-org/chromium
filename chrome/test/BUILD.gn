@@ -5608,6 +5608,7 @@ if (!is_android) {
     public_deps = [
       "//chrome/browser:test_support_ui",
       "//content/public/browser",
+      "//content/test:test_support",
       "//mojo/public/cpp/bindings",
       "//mojo/public/cpp/system",
     ]
