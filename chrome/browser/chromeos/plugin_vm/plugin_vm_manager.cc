@@ -86,7 +86,8 @@ void ShowStartVmFailedNotification(Profile* profile,
       NOTREACHED();
       FALLTHROUGH;
     case PluginVmLaunchResult::kError:
-      title = l10n_util::GetStringUTF16(IDS_PLUGIN_VM_START_VM_ERROR_TITLE);
+      title = l10n_util::GetStringFUTF16(IDS_PLUGIN_VM_START_VM_ERROR_TITLE,
+                                         app_name);
       message_id = IDS_PLUGIN_VM_START_VM_ERROR_MESSAGE;
       break;
     case PluginVmLaunchResult::kInvalidLicense:
@@ -100,7 +101,8 @@ void ShowStartVmFailedNotification(Profile* profile,
       message_id = IDS_PLUGIN_VM_INVALID_LICENSE_MESSAGE;
       break;
     case PluginVmLaunchResult::kNetworkError:
-      title = l10n_util::GetStringUTF16(IDS_PLUGIN_VM_START_VM_ERROR_TITLE);
+      title = l10n_util::GetStringFUTF16(IDS_PLUGIN_VM_START_VM_ERROR_TITLE,
+                                         app_name);
       message_id = IDS_PLUGIN_VM_NETWORK_ERROR_MESSAGE;
       break;
   }
