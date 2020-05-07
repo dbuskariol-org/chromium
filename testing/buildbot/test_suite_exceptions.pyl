@@ -368,6 +368,11 @@
           'shards': 20,
         },
       },
+      'mac10.15-blink-rel-dummy': {
+        'swarming': {
+          'shards': 20,
+        },
+      },
     },
   },
   'boringssl_crypto_tests': {
