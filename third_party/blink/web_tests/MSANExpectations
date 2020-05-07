@@ -31,10 +31,6 @@ crbug.com/708175 [ Linux ] external/wpt/IndexedDB/interleaved-cursors-large.html
 crbug.com/701433 [ Linux ] crypto/subtle/worker-subtle-crypto-concurrent.html [ Timeout Pass ]
 crbug.com/701563 [ Linux ] external/wpt/svg/interfaces.html [ Timeout Pass ]
 
-crbug.com/704360 [ Linux ] shapedetection/detection-HTMLVideoElement.html [ Timeout Pass ]
-crbug.com/704360 [ Linux ] shapedetection/detection-HTMLCanvasElement.html [ Timeout Pass ]
-crbug.com/704360 [ Linux ] shapedetection/detection-ImageData.html [ Timeout Pass ]
-
 
 # Times out on MSAN
 crbug.com/462190 [ Linux ] inspector-protocol/heap-profiler/heap-samples-in-snapshot.js [ Timeout ]
@@ -46,7 +42,6 @@ crbug.com/462190 [ Linux ] inspector-protocol/heap-profiler/heap-snapshot-with-e
 crbug.com/462190 [ Linux ] inspector-protocol/heap-profiler/heap-snapshot-with-multiple-retainers.js [ Timeout ]
 crbug.com/462190 [ Linux ] inspector-protocol/heap-profiler/heap-snapshot-with-no-detached-iframe.js [ Timeout ]
 
-crbug.com/667560 [ Linux ] http/tests/devtools/startup/console/console-format-startup.js [ Timeout Pass ]
 crbug.com/751906 [ Linux ] http/tests/devtools/console/console-correct-suggestions.js [ Timeout Pass ]
 crbug.com/811820 [ Linux ] http/tests/devtools/tracing-session-id.js [ Timeout Pass ]
 
@@ -295,7 +290,6 @@ crbug.com/856601 [ Linux ] external/wpt/payment-handler/idlharness.https.any.wor
 crbug.com/856601 [ Linux ] external/wpt/web-nfc/idlharness.https.window.html [ Skip ]
 crbug.com/856601 [ Linux ] external/wpt/xhr/idlharness.any.html [ Skip ]
 crbug.com/856601 [ Linux ] external/wpt/xhr/idlharness.any.sharedworker.html [ Skip ]
-crbug.com/856601 [ Linux ] http/tests/devtools/a11y-axe-core/settings/geolocations-a11y-test.js [ Pass Timeout ]
 crbug.com/856601 [ Linux ] wpt_internal/std-switch/tentative/interface.html [ Pass Timeout ]
 crbug.com/856601 [ Linux ] http/tests/devtools/a11y-axe-core/elements/main-tool-test.js [ Pass Timeout ]
 crbug.com/856601 [ Linux ] webaudio/Analyser/realtimeanalyser-freq-data.html [ Pass Timeout ]

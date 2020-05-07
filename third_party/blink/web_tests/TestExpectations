@@ -1430,7 +1430,6 @@ crbug.com/1053725 [ Mac ] virtual/web-components-v0-disabled/html/details_summar
 crbug.com/1053725 [ Mac ] fast/forms/implicit-submission.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/select/option-mouseevents.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/forms/select/menulist-popup-open-hide-using-keyboard.html [ Skip ]
-crbug.com/1053725 [ Mac ] http/tests/devtools/oopif/oopif-elements-navigate-out.html [ Skip ]
 crbug.com/1053725 [ Mac ] virtual/web-components-v0-disabled/fast/dom/title-text-property.html [ Skip ]
 crbug.com/1053725 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/select/select-popup-pagekeys.html [ Skip ]
 crbug.com/1053725 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/select/menulist-update-text-popup.html [ Skip ]
@@ -1442,7 +1441,6 @@ crbug.com/1053725 [ Mac ] fast/css/button-height.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/css/css2-system-color.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/css-grid-layout/preferred-width-computed-after-layout.html [ Skip ]
 crbug.com/1053725 [ Mac ] fast/css/text-overflow-ellipsis-button.html [ Skip ]
-crbug.com/1053725 [ Mac ] http/tests/devtools/service-workers/sw-navigate-useragent.html [ Skip ]
 crbug.com/1053725 [ Mac ] editing/selection/replaced-boundaries-3.html [ Skip ]
 
 
@@ -2957,7 +2955,6 @@ crbug.com/626703 external/wpt/webrtc/RTCRtpTransceiver.https.html [ Crash Timeou
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-all-001-manual.html [ Skip ]
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-digits-002-manual.html [ Skip ]
 crbug.com/626703 external/wpt/css/css-writing-modes/text-combine-upright-all-002-manual.html [ Skip ]
-crbug.com/967018 virtual/streaming-preload/external/wpt/html/semantics/scripting-1/the-script-element/css-module/* [ Failure ]
 crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/css-module/import-css-module-basic.html [ Failure ]
 crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/css-module/css-module-worker-test.html [ Failure ]
 crbug.com/967018 external/wpt/html/semantics/scripting-1/the-script-element/css-module/utf8.tentative.html [ Failure ]
@@ -3345,8 +3342,6 @@ crbug.com/626703 [ Win10 ] external/wpt/fetch/api/redirect/redirect-count.any.ht
 crbug.com/626703 external/wpt/css/cssom-view/scroll-behavior-smooth.html [ Timeout Crash ]
 crbug.com/626703 [ IOS ] external/wpt/websockets/Create-Secure-extensions-empty.any.html [ Timeout ]
 crbug.com/626703 [ IOS ] external/wpt/websockets/Create-Secure-extensions-empty.any.worker.html [ Timeout ]
-crbug.com/626703 virtual/streaming-preload/external/wpt/html/semantics/scripting-1/the-script-element/module/dynamic-import/string-compilation-integrity-classic.sub.html [ Skip ]
-crbug.com/626703 virtual/streaming-preload/external/wpt/html/semantics/scripting-1/the-script-element/module/dynamic-import/string-compilation-integrity-module.sub.html [ Skip ]
 crbug.com/626703 external/wpt/html/browsers/history/joint-session-history/joint-session-history-remove-iframe.html [ Timeout ]
 crbug.com/626703 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-flex-basis-content-003a.html [ Failure ]
 crbug.com/626703 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-flex-basis-content-004a.html [ Failure ]
@@ -3660,7 +3655,6 @@ crbug.com/759665 external/wpt/css/css-grid/animation/grid-template-columns-001.h
 crbug.com/759665 external/wpt/css/css-grid/animation/grid-template-rows-001.html [ Failure ]
 crbug.com/1018439 external/wpt/css/css-grid/grid-child-percent-basis-resize-1.html [ Failure ]
 crbug.com/935102 external/wpt/css/css-grid/layout-algorithm/grid-flex-track-intrinsic-sizes-002.html [ Failure ]
-crbug.com/707359 [ Mac ] fast/css-grid-layout/grid-align-baseline-vertical.html [ Failure ]
 crbug.com/707359 [ Mac ] external/wpt/css/css-grid/alignment/self-baseline/grid-self-baseline-003.html [ Failure ]
 crbug.com/707359 [ Mac ] external/wpt/css/css-grid/alignment/self-baseline/grid-self-baseline-004.html [ Failure ]
 crbug.com/707359 [ Mac ] external/wpt/css/css-grid/alignment/self-baseline/grid-self-baseline-horiz-004.html [ Failure ]
@@ -4144,10 +4138,7 @@ crbug.com/889798 external/wpt/service-workers/service-worker/import-scripts-redi
 
 # Service workers need to handle Clear-Site-Data appropriately.
 crbug.com/1052641 external/wpt/service-workers/service-worker/unregister-immediately-before-installed.https.html [ Skip ]
-crbug.com/1052641 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/unregister-immediately-before-installed.https.html [ Skip ]
-crbug.com/1052641 virtual/cache-storage-high-priority-match/external/wpt/service-workers/service-worker/unregister-immediately-before-installed.https.html [ Skip ]
 crbug.com/1052642 external/wpt/service-workers/service-worker/unregister-immediately-during-extendable-events.https.html [ Skip ]
-crbug.com/1052642 virtual/omt-service-worker-startup/external/wpt/service-workers/service-worker/unregister-immediately-during-extendable-events.https.html [ Skip ]
 
 # Sheriff failures 2017-07-03
 crbug.com/708994 http/tests/security/cross-frame-mouse-source-capabilities.html [ Timeout Pass ]
@@ -4437,7 +4428,6 @@ crbug.com/1067477 [ Fuchsia ] css3/selectors3/xhtml/css3-modsel-18.xml [ Skip ]
 crbug.com/1067477 [ Fuchsia ] css3/selectors3/xml/css3-modsel-17.xml [ Skip ]
 crbug.com/1067477 [ Fuchsia ] css3/selectors3/xml/css3-modsel-18.xml [ Skip ]
 crbug.com/1067477 [ Fuchsia ] css3/selectors3/xml/css3-modsel-61.xml [ Skip ]
-crbug.com/1067477 [ Fuchsia ] editing/execCommand/insert_list_with_underline.html.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] editing/pasteboard/paste-line-endings-001.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] editing/pasteboard/paste-line-endings-002.html [ Skip ]
 crbug.com/1067477 [ Fuchsia ] editing/pasteboard/paste-line-endings-003.html [ Skip ]
@@ -4938,7 +4928,6 @@ crbug.com/931533 media/video-played-collapse.html [ Pass Failure ]
 crbug.com/806357 virtual/threaded/fast/events/pointerevents/pinch/pointerevent_touch-action-pinch_zoom_touch.html [ Pass Failure Crash Timeout ]
 crbug.com/941931 [ Linux ] http/tests/security/contentSecurityPolicy/1.1/plugintypes-affects-cross-site-child-disallowed.html [ Pass Failure ]
 crbug.com/941931 [ Win ] http/tests/security/contentSecurityPolicy/1.1/plugintypes-affects-cross-site-child-disallowed.html [ Pass Failure ]
-crbug.com/942134 [ Win ] virtual/exotic-color-space/images/feature-policy-oversized-images.html [ Pass Failure ]
 
 # Trooper 2019-03-19
 crbug.com/943388 [ Win ] http/tests/devtools/network/network-recording-after-reload-with-screenshots-enabled.js [ Pass Failure ]
@@ -5696,7 +5685,6 @@ crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-width.html [ Crash Timeout ]
 crbug.com/1048149 [ Mac ] http/tests/inspector-protocol/emulation/emulation-oopifs.js [ Crash ]
 crbug.com/1048149 [ Mac ] fast/forms/calendar-picker/calendar-picker-appearance.html [ Pass Crash ]
-crbug.com/1048149 [ Mac ] fast/forms/calendar-picker/calendar-picker-mouse-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] fast/forms/calendar-picker/calendar-picker-touch-operations.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] fast/forms/calendar-picker/date-picker-choose-default-value-after-set-value.html [ Pass Crash ]
 crbug.com/1048149 [ Mac ] fast/forms/calendar-picker/month-picker-appearance.html [ Pass Crash ]
@@ -5841,14 +5829,8 @@ crbug.com/1058244 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/scr
 # Sheriff 2020-03-08
 crbug.com/1059645 [ Mac10.14 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 
-# Sheriff 2020-03-09
-crbug.com/1059123 http/tests/origin_trials/webexposed/animationworklet-origin-trial-interfaces-worklet-scope.html [ Pass Failure ]
-
 # Support for SharedWorker must be added.
 crbug.com/1058785 external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting-shared-worker.https.html [ Timeout ]
-
-# Sheriff 2020-03-12
-crbug.com/1061131 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/middle-click-autoscroll-latching-clicked-node.html [ Pass Failure Timeout ]
 
 # Failing on Fuchsia due to dependency on FuchsiaMediaResourceProvider, which is not implemented in content_shell.
 crbug.com/1061226 [ Fuchsia ] fast/mediastream/MediaStream-onactive-oninactive.html [ Crash ]
@@ -5858,8 +5840,6 @@ crbug.com/1061226 [ Fuchsia ] external/wpt/mediacapture-streams/MediaStream-idl.
 # Sheriff 2020-03-13
 crbug.com/1061159 [ Fuchsia ] fast/inspector-support/cssURLQuotes.html [ Pass Failure ]
 crbug.com/1061043 fast/plugins/keypress-event.html [ Pass Failure ]
-crbug.com/1061097 http/tests/security/promise-access-control-allow.htm [ Pass Failure ]
-crbug.com/1061131 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/middle-click-autoscroll-latching-clicked-node.html [ Pass Timeout ]
 crbug.com/1061131 [ Mac ] editing/selection/replaced-boundaries-1.html [ Pass Failure ]
 
 crbug.com/1058888 [ Linux ] animations/animationworklet/peek-updated-composited-property-on-main.html [ Pass Failure ]

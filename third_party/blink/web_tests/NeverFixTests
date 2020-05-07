@@ -1352,7 +1352,6 @@ crbug.com/680331 external/wpt/css/cssom-view/scrollIntoView-sideways-rl-writing-
 
 # Requires --use-fake-ui-for-media-stream to run.
 external/wpt/mediacapture-streams/MediaStream-default-feature-policy.https.html [ Skip ]
-virtual/audio-service/external/wpt/mediacapture-streams/MediaStream-default-feature-policy.https.html [ Skip ]
 virtual/feature-policy-permissions/external/wpt/mediacapture-streams/MediaStream-default-feature-policy.https.html [ Pass ]
 
 # These directories have manual tests that don't have to run with
@@ -1840,8 +1839,6 @@ external/wpt/webstorage/storage_local-manual.html [ Skip ]
 external/wpt/webstorage/storage_session-manual.html [ Skip ]
 external/wpt/xhr/send-authentication-existing-session-manual.htm [ Skip ]
 external/wpt/xhr/send-authentication-prompt-2-manual.htm [ Skip ]
-virtual/audio-service/external/wpt/mediacapture-streams/MediaStream-MediaElement-preload-none-manual.https.html [ Skip ]
-virtual/audio-service/external/wpt/mediacapture-streams/MediaStreamTrack-end-manual.https.html [ Skip ]
 
 # ==== Tests incompatible with the default WPT Origin Isolation start here ==VV
 # The section below lists web tests that are incompatible with the WPT Origin
@@ -1939,7 +1936,6 @@ crbug.com/946022 [ Win7 ] images/image-click-scale-restore-zoomed-image.html [ S
 crbug.com/946022 [ Win7 ] images/image-zoom-to-25.html [ Skip ]
 crbug.com/946022 [ Win7 ] images/image-zoom-to-500.html [ Skip ]
 crbug.com/946022 [ Win7 ] media/controls/overflow-menu-hide-on-resize.html [ Skip ]
-crbug.com/946022 [ Win7 ] virtual/audio-service/media/controls/overflow-menu-hide-on-resize.html [ Skip ]
 crbug.com/946022 [ Win7 ] paint/invalidation/resize-iframe-text.html [ Skip ]
 crbug.com/946022 [ Win7 ] paint/invalidation/scroll/scrollbar-damage-and-full-viewport-repaint.html [ Skip ]
 crbug.com/946022 [ Win7 ] paint/invalidation/window-resize/* [ Skip ]
@@ -1977,11 +1973,6 @@ crbug.com/626703 [ Linux ] external/wpt/payment-method-basic-card/billing-addres
 crbug.com/626703 [ Mac ] external/wpt/payment-method-basic-card/billing-address-is-null-manual.https.html [ Skip ]
 crbug.com/626703 [ Win ] external/wpt/payment-method-basic-card/billing-address-is-null-manual.https.html [ Skip ]
 
-# Chrome Win/Linux/Mac don't support SMS Receiver origin trial yet
-[ Win ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/sms-receiver-origin-trial-interfaces.html [ Skip ]
-[ Linux ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/sms-receiver-origin-trial-interfaces.html [ Skip ]
-[ Mac ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/sms-receiver-origin-trial-interfaces.html [ Skip ]
-
 # Chrome Win/Linux/Mac don't support WebNFC origin trial
 [ Win ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/web-nfc-origin-trial-interfaces.html [ Skip ]
 [ Linux ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/web-nfc-origin-trial-interfaces.html [ Skip ]
@@ -1992,10 +1983,6 @@ crbug.com/626703 [ Win ] external/wpt/payment-method-basic-card/billing-address-
 [ Linux ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/contacts-manager-extra-properties-trial-interfaces.html [ Skip ]
 [ Mac ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/contacts-manager-extra-properties-trial-interfaces.html [ Skip ]
 
-# Chrome Win/Linux/Mac don't support Content Index origin trial yet
-[ Win ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/content-index-origin-trial-interfaces.html [ Skip ]
-[ Linux ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/content-index-origin-trial-interfaces.html [ Skip ]
-[ Mac ] virtual/origin-trials-runtimeflags-disabled/http/tests/origin_trials/webexposed/content-index-origin-trial-interfaces.html [ Skip ]
 crbug.com/626703 [ Win7 ] external/wpt/pointerevents/pointerevent_fractional_coordinates-manual.html [ Skip ]
 
 # These tests require a preferred dark color-scheme and are only run as virtual tests
@@ -2020,7 +2007,6 @@ virtual/trust-tokens/external/wpt/trust-tokens/end-to-end/* [ Pass ]
 crbug.com/567837 fast/hidpi/static/* [ Skip ]
 virtual/scalefactor150/fast/hidpi/static/* [ Pass ]
 virtual/scalefactor200/fast/hidpi/static/* [ Pass ]
-virtual/scalefactor200withoutzoom/fast/hidpi/static/* [ Pass ]
 virtual/scalefactor200withzoom/fast/hidpi/static/* [ Pass ]
 
 # Skip the non-virtualized CORS-RFC1918 blocking tests (`.addressSpace` tests are fine):

@@ -159,6 +159,24 @@ def _check_expectations_file_content(content):
     return failures
 
 
+def _check_existence(host, port, path, expectations):
+    failures = []
+    for exp in expectations:
+        if not exp.test:
+            continue
+        test = exp.test
+        if exp.is_glob:
+            # This is ensured in typ.Expectation.
+            assert test.endswith('*')
+            test = test[:-1]
+        if not port.test_exists(test):
+            error = "{}:{} Test does not exist: {}".format(
+                host.filesystem.basename(path), exp.lineno, exp.test)
+            _log.error(error)
+            failures.append(error)
+    return failures
+
+
 def _check_directory_glob(host, port, path, expectations):
     failures = []
     for exp in expectations:
@@ -226,7 +244,8 @@ def _check_expectations(host, port, path, test_expectations):
     # Check for original expectation lines (from get_updated_lines) instead of
     # expectations filtered for the current port (test_expectations).
     expectations = test_expectations.get_updated_lines(path)
-    failures = _check_directory_glob(host, port, path, expectations)
+    failures = _check_existence(host, port, path, expectations)
+    failures.extend(_check_directory_glob(host, port, path, expectations))
     failures.extend(
         _check_redundant_virtual_expectations(host, port, path, expectations))
     return failures
