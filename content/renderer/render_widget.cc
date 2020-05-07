@@ -574,8 +574,6 @@ bool RenderWidget::OnMessageReceived(const IPC::Message& message) {
     IPC_MESSAGE_HANDLER(WidgetMsg_SetViewportIntersection,
                         OnSetViewportIntersection)
     IPC_MESSAGE_HANDLER(WidgetMsg_SetIsInert, OnSetIsInert)
-    IPC_MESSAGE_HANDLER(WidgetMsg_UpdateRenderThrottlingStatus,
-                        OnUpdateRenderThrottlingStatus)
     IPC_MESSAGE_HANDLER(WidgetMsg_WaitForNextFrameForTests,
                         OnWaitNextFrameForTests)
     IPC_MESSAGE_HANDLER(DragMsg_TargetDragEnter, OnDragTargetDragEnter)
@@ -2107,12 +2105,6 @@ void RenderWidget::OnSetViewportIntersection(
 void RenderWidget::OnSetIsInert(bool inert) {
   if (auto* frame_widget = GetFrameWidget())
     frame_widget->SetIsInert(inert);
-}
-
-void RenderWidget::OnUpdateRenderThrottlingStatus(bool is_throttled,
-                                                  bool subtree_throttled) {
-  if (auto* frame_widget = GetFrameWidget())
-    frame_widget->UpdateRenderThrottlingStatus(is_throttled, subtree_throttled);
 }
 
 void RenderWidget::OnDragTargetDragEnter(

@@ -132,13 +132,6 @@ class WebFrameWidget : public WebWidget {
   // Sets the inherited effective touch action on an out-of-process iframe.
   virtual void SetInheritedEffectiveTouchAction(WebTouchAction) {}
 
-  // Toggles render throttling for an out-of-process iframe. Local frames are
-  // throttled based on their visibility in the viewport, but remote frames
-  // have to have throttling information propagated from parent to child
-  // across processes.
-  virtual void UpdateRenderThrottlingStatus(bool is_throttled,
-                                            bool subtree_throttled) {}
-
   // Returns the currently focused WebLocalFrame (if any) inside this
   // WebFrameWidget. That is a WebLocalFrame which is focused and shares the
   // same LocalRoot() as this WebFrameWidget's LocalRoot().

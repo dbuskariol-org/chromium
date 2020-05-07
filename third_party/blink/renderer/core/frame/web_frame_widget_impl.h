@@ -104,8 +104,8 @@ class WebFrameWidgetImpl final : public WebFrameWidgetBase,
   void SetRemoteViewportIntersection(const ViewportIntersectionState&) override;
   void SetIsInert(bool) override;
   void SetInheritedEffectiveTouchAction(TouchAction) override;
-  void UpdateRenderThrottlingStatus(bool is_throttled,
-                                    bool subtree_throttled) override;
+  void UpdateRenderThrottlingStatusForSubFrame(bool is_throttled,
+                                               bool subtree_throttled) override;
   WebURL GetURLForDebugTrace() override;
 
   // WebFrameWidget implementation.

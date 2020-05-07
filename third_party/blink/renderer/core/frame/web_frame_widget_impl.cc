@@ -654,8 +654,9 @@ void WebFrameWidgetImpl::SetInheritedEffectiveTouchAction(
   LocalRootImpl()->GetFrame()->SetInheritedEffectiveTouchAction(touch_action);
 }
 
-void WebFrameWidgetImpl::UpdateRenderThrottlingStatus(bool is_throttled,
-                                                      bool subtree_throttled) {
+void WebFrameWidgetImpl::UpdateRenderThrottlingStatusForSubFrame(
+    bool is_throttled,
+    bool subtree_throttled) {
   DCHECK(LocalRootImpl()->Parent());
   DCHECK(LocalRootImpl()->Parent()->IsWebRemoteFrame());
   LocalRootImpl()->GetFrameView()->UpdateRenderThrottlingStatus(
