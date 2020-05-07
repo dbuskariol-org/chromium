@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "chrome/browser/ui/browser_navigator_browsertest.h"
+#include "content/public/test/browser_test.h"
 
 #include <memory>
 
