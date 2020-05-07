@@ -217,7 +217,7 @@ CREATE TABLE ScrollJanksMaybeNull AS
       currGestureScrollId != prevGestureScrollId OR
       prevTs IS NULL OR
       prevTs < currScrollBeginTs OR
-      prevTs > currScrollEndTs))
+      prevTs > currScrollEndTs
     THEN
       0 ELSE
       currScrollFramesExact > prevScrollFramesExact + 0.5
