@@ -87,6 +87,13 @@
 namespace chromeos {
 namespace settings {
 
+#if !BUILDFLAG(OPTIMIZE_WEBUI)
+namespace {
+const char kOsGeneratedPath[] =
+    "@out_folder@/gen/chrome/browser/resources/settings/";
+}
+#endif
+
 // static
 void OSSettingsUI::RegisterProfilePrefs(
     user_prefs::PrefRegistrySyncable* registry) {
@@ -142,12 +149,10 @@ OSSettingsUI::OSSettingsUI(content::WebUI* web_ui)
                                IDR_OS_SETTINGS_LAZY_LOAD_VULCANIZED_HTML);
   html_source->SetDefaultResource(IDR_OS_SETTINGS_VULCANIZED_HTML);
 #else
-  // Add all settings resources.
-  for (size_t i = 0; i < kOsSettingsResourcesSize; ++i) {
-    html_source->AddResourcePath(kOsSettingsResources[i].name,
-                                 kOsSettingsResources[i].value);
-  }
-  html_source->SetDefaultResource(IDR_OS_SETTINGS_SETTINGS_HTML);
+  webui::SetupWebUIDataSource(
+      html_source,
+      base::make_span(kOsSettingsResources, kOsSettingsResourcesSize),
+      kOsGeneratedPath, IDR_OS_SETTINGS_SETTINGS_V3_HTML);
 #endif
 
   html_source->AddResourcePath("constants/routes.mojom-lite.js",
