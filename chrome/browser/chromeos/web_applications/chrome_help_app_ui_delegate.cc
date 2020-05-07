@@ -78,7 +78,7 @@ void ChromeHelpAppUIDelegate::PopulateLoadTimeData(
   // Checks if there are active touch screens.
   source->AddBoolean(
       "hasTouchScreen",
-      ui::DeviceDataManager::GetInstance()->GetTouchscreenDevices().empty());
+      !ui::DeviceDataManager::GetInstance()->GetTouchscreenDevices().empty());
   // Checks if the Google Assistant is allowed on this device by going through
   // policies.
   ash::mojom::AssistantAllowedState assistant_allowed_state =
@@ -101,4 +101,9 @@ void ChromeHelpAppUIDelegate::PopulateLoadTimeData(
   source->AddInteger("userType", user_manager->GetActiveUser()->GetType());
   source->AddBoolean("isEphemeralUser",
                      user_manager->IsCurrentUserNonCryptohomeDataEphemeral());
+
+  // Hardcoding the version number of first 84 dev.
+  bool is_new_in_84 = profile->WasCreatedByVersionOrLater("84.0.4129.0");
+  // Show a notice that the app has changed to users that are not new.
+  source->AddBoolean("shouldShowMigrationNotice", !is_new_in_84);
 }
