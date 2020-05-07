@@ -77,7 +77,7 @@ class FormFetcherImpl : public FormFetcher,
   void ProcessPasswordStoreResults(
       std::vector<std::unique_ptr<autofill::PasswordForm>> results);
 
-  // Splits |results| into |federated_|, |non_federated_| and |blacklisted_|.
+  // Splits |results| into |federated_|, |non_federated_| and |is_blacklisted_|.
   virtual void SplitResults(
       std::vector<std::unique_ptr<autofill::PasswordForm>> results);
 
