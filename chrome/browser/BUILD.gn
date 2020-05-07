@@ -3803,6 +3803,7 @@ jumbo_static_library("browser") {
       "//chrome/services/app_service/public/cpp:publisher",
       "//chrome/services/sharing/public/cpp",
       "//chrome/services/sharing/public/mojom",
+      "//chrome/services/speech:buildflags",
       "//components/feedback",
       "//components/image_fetcher/core",
       "//components/keep_alive_registry",
