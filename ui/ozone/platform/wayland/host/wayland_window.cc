@@ -35,13 +35,12 @@ WaylandWindow::~WaylandWindow() {
 
   if (parent_window_)
     parent_window_->set_child_window(nullptr);
-
-  if (has_pointer_focus_)
-    connection_->pointer()->reset_window_with_pointer_focus();
 }
 
 // static
 WaylandWindow* WaylandWindow::FromSurface(wl_surface* surface) {
+  if (!surface)
+    return nullptr;
   return static_cast<WaylandWindow*>(
       wl_proxy_get_user_data(reinterpret_cast<wl_proxy*>(surface)));
 }
