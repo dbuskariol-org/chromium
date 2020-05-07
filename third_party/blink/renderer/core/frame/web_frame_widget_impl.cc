@@ -647,7 +647,7 @@ void WebFrameWidgetImpl::SetIsInert(bool inert) {
   LocalRootImpl()->GetFrame()->SetIsInert(inert);
 }
 
-void WebFrameWidgetImpl::SetInheritedEffectiveTouchAction(
+void WebFrameWidgetImpl::SetInheritedEffectiveTouchActionForSubFrame(
     TouchAction touch_action) {
   DCHECK(LocalRootImpl()->Parent());
   DCHECK(LocalRootImpl()->Parent()->IsWebRemoteFrame());

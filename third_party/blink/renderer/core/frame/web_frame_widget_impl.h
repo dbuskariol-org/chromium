@@ -103,7 +103,7 @@ class WebFrameWidgetImpl final : public WebFrameWidgetBase,
   bool SelectionBounds(WebRect& anchor, WebRect& focus) const override;
   void SetRemoteViewportIntersection(const ViewportIntersectionState&) override;
   void SetIsInert(bool) override;
-  void SetInheritedEffectiveTouchAction(TouchAction) override;
+  void SetInheritedEffectiveTouchActionForSubFrame(TouchAction) override;
   void UpdateRenderThrottlingStatusForSubFrame(bool is_throttled,
                                                bool subtree_throttled) override;
   WebURL GetURLForDebugTrace() override;

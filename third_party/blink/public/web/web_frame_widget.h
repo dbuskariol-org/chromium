@@ -129,9 +129,6 @@ class WebFrameWidget : public WebWidget {
   // input.
   virtual void SetIsInert(bool) {}
 
-  // Sets the inherited effective touch action on an out-of-process iframe.
-  virtual void SetInheritedEffectiveTouchAction(WebTouchAction) {}
-
   // Returns the currently focused WebLocalFrame (if any) inside this
   // WebFrameWidget. That is a WebLocalFrame which is focused and shares the
   // same LocalRoot() as this WebFrameWidget's LocalRoot().

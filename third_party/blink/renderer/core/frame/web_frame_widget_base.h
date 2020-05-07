@@ -190,8 +190,10 @@ class CORE_EXPORT WebFrameWidgetBase
   // mojom::blink::FrameWidget methods.
   void DragSourceSystemDragEnded() override;
   void SetBackgroundOpaque(bool opaque) override;
+
+  // Sets the inherited effective touch action on an out-of-process iframe.
   void SetInheritedEffectiveTouchActionForSubFrame(
-      WebTouchAction touch_action) override;
+      WebTouchAction touch_action) override {}
 
   // Toggles render throttling for an out-of-process iframe. Local frames are
   // throttled based on their visibility in the viewport, but remote frames
