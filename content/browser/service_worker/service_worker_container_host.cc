@@ -1307,9 +1307,6 @@ void ServiceWorkerContainerHost::CheckControllerConsistency(
       break;
     case ServiceWorkerVersion::REDUNDANT: {
       if (should_crash) {
-        DEBUG_ALIAS_FOR_CSTR(
-            redundant_callstack_str,
-            controller_->redundant_state_callstack().ToString().c_str(), 1024);
         CHECK(false);
       }
       break;
