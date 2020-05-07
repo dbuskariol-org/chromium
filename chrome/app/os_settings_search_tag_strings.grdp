@@ -821,6 +821,15 @@
   </message>
 
   <!-- Reset section. -->
+  <message name="IDS_OS_SETTINGS_TAG_RESET" desc="Text for search result item which, when clicked, navigates the user to reset settings.">
+    Reset
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_RESET_POWERWASH" desc="Text for search result item which, when clicked, navigates the user to reset settings, with a button to begin powerashing the device. Alternate phrase for: 'Factory reset'">
+    Powerwash
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_RESET_POWERWASH_ALT1" desc="Text for search result item which, when clicked, navigates the user to reset settings, with a button to begin powerashing the device. Alternate phrase for: 'Powerwash'">
+    Factory reset
+  </message>
 
   <!-- About Chrome OS section. -->
 
