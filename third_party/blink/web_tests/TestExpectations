@@ -879,6 +879,7 @@ crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/mult
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-clip-002.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-columns-003.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-columns-004.xht [ Failure ]
+crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-contained-absolute.html [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-containing-002.xht [ Crash Failure ]
 crbug.com/776051 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-count-computed-005.xht [ Failure ]
 crbug.com/591099 virtual/layout_ng_block_frag/external/wpt/css/css-multicol/multicol-fill-auto-002.xht [ Crash Failure ]
