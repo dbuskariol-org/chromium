@@ -3946,7 +3946,7 @@
   {
     "name": "tab-hover-cards",
     "owners": [ "corising", "//chrome/browser/ui/views/tabs/OWNERS" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "tab-outlines-in-low-contrast-themes",
