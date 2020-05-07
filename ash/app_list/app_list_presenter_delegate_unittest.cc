@@ -241,7 +241,7 @@ class PopulatedAppListTest : public AshTestBase,
       CreateAndOpenAppList();
     apps_grid_view_ = app_list_view_->app_list_main_view()
                           ->contents_view()
-                          ->GetAppsContainerView()
+                          ->apps_container_view()
                           ->apps_grid_view();
     apps_grid_test_api_ =
         std::make_unique<test::AppsGridViewTestApi>(apps_grid_view_);
@@ -255,14 +255,14 @@ class PopulatedAppListTest : public AshTestBase,
   bool AppListIsInFolderView() const {
     return app_list_view_->app_list_main_view()
         ->contents_view()
-        ->GetAppsContainerView()
+        ->apps_container_view()
         ->IsInFolderView();
   }
 
   AppListFolderView* folder_view() {
     return app_list_view_->app_list_main_view()
         ->contents_view()
-        ->GetAppsContainerView()
+        ->apps_container_view()
         ->app_list_folder_view();
   }
 
@@ -2475,7 +2475,7 @@ class AppListPresenterDelegateLayoutTest : public AppListPresenterDelegateTest {
     return GetAppListView()
         ->app_list_main_view()
         ->contents_view()
-        ->GetAppsContainerView()
+        ->apps_container_view()
         ->apps_grid_view();
   }
 
@@ -2960,7 +2960,7 @@ TEST_P(AppListPresenterDelegateHomeLauncherTest, MouseDragAppList) {
   AppsGridView* apps_grid_view = GetAppListView()
                                      ->app_list_main_view()
                                      ->contents_view()
-                                     ->GetAppsContainerView()
+                                     ->apps_container_view()
                                      ->apps_grid_view();
   EXPECT_FALSE(apps_grid_view->GetVisible());
 
@@ -2995,7 +2995,7 @@ TEST_P(AppListPresenterDelegateHomeLauncherTest, MouseDragAppListItemOpacity) {
   AppsGridView* apps_grid_view = GetAppListView()
                                      ->app_list_main_view()
                                      ->contents_view()
-                                     ->GetAppsContainerView()
+                                     ->apps_container_view()
                                      ->apps_grid_view();
   // No items have layer.
   for (int i = 0; i < items_in_page; ++i) {
@@ -3056,7 +3056,7 @@ TEST_P(AppListPresenterDelegateHomeLauncherTest, LayerOnSecondPage) {
   AppsGridView* apps_grid_view = GetAppListView()
                                      ->app_list_main_view()
                                      ->contents_view()
-                                     ->GetAppsContainerView()
+                                     ->apps_container_view()
                                      ->apps_grid_view();
 
   // Drags the mouse a bit above (twice as shelf's height). This should show the

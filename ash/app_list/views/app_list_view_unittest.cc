@@ -25,7 +25,6 @@
 #include "ash/app_list/views/contents_view.h"
 #include "ash/app_list/views/expand_arrow_view.h"
 #include "ash/app_list/views/folder_header_view.h"
-#include "ash/app_list/views/horizontal_page_container.h"
 #include "ash/app_list/views/page_switcher.h"
 #include "ash/app_list/views/result_selection_controller.h"
 #include "ash/app_list/views/search_box_view.h"
@@ -284,11 +283,11 @@ class AppListViewTest : public views::ViewsTestBase,
   }
 
   AppsGridView* apps_grid_view() {
-    return contents_view()->GetAppsContainerView()->apps_grid_view();
+    return contents_view()->apps_container_view()->apps_grid_view();
   }
 
   PageSwitcher* page_switcher_view() {
-    return contents_view()->GetAppsContainerView()->page_switcher();
+    return contents_view()->apps_container_view()->page_switcher();
   }
 
   views::View* assistant_page_view() {
@@ -449,7 +448,7 @@ class AppListViewFocusTest : public views::ViewsTestBase,
     Show();
     test_api_.reset(new AppsGridViewTestApi(apps_grid_view()));
     suggestions_container_ = contents_view()
-                                 ->GetAppsContainerView()
+                                 ->apps_container_view()
                                  ->suggestion_chip_container_view_for_test();
     expand_arrow_view_ = contents_view()->expand_arrow_view();
 
@@ -760,14 +759,14 @@ class AppListViewFocusTest : public views::ViewsTestBase,
   AppsGridView* apps_grid_view() {
     return main_view()
         ->contents_view()
-        ->GetAppsContainerView()
+        ->apps_container_view()
         ->apps_grid_view();
   }
 
   AppListFolderView* app_list_folder_view() {
     return main_view()
         ->contents_view()
-        ->GetAppsContainerView()
+        ->apps_container_view()
         ->app_list_folder_view();
   }
 
@@ -1043,7 +1042,7 @@ TEST_P(AppListViewFocusTest, LinearFocusTraversalInFolder) {
   SetAppListState(ash::AppListViewState::kFullscreenAllApps);
   folder_item_view()->RequestFocus();
   SimulateKeyPress(ui::VKEY_RETURN, false);
-  EXPECT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   std::vector<views::View*> forward_view_list;
   const views::ViewModelT<AppListItemView>* view_model =
@@ -1186,7 +1185,7 @@ TEST_F(AppListViewFocusTest, VerticalFocusTraversalInFirstPageOfFolder) {
   SetAppListState(ash::AppListViewState::kFullscreenAllApps);
   folder_item_view()->RequestFocus();
   SimulateKeyPress(ui::VKEY_RETURN, false);
-  EXPECT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   std::vector<views::View*> forward_view_list;
   const views::ViewModelT<AppListItemView>* view_model =
@@ -1227,7 +1226,7 @@ TEST_F(AppListViewFocusTest, VerticalFocusTraversalInSecondPageOfFolder) {
   SetAppListState(ash::AppListViewState::kFullscreenAllApps);
   folder_item_view()->RequestFocus();
   SimulateKeyPress(ui::VKEY_RETURN, false);
-  EXPECT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   // Select the second page.
   app_list_folder_view()->items_grid_view()->pagination_model()->SelectPage(
@@ -1303,7 +1302,7 @@ TEST_F(AppListViewFocusTest, FocusResetAfterStateTransition) {
   SimulateKeyPress(ui::VKEY_RETURN, false);
 
   //  Test that the first item in the folder is focused.
-  EXPECT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
   EXPECT_EQ(app_list_folder_view()->items_grid_view()->view_model()->view_at(0),
             focused_view());
 
@@ -1584,7 +1583,7 @@ TEST_P(AppListViewFocusTest, FocusResetAfterHittingEnterOnFolderName) {
   SetAppListState(ash::AppListViewState::kFullscreenAllApps);
   folder_item_view()->RequestFocus();
   SimulateKeyPress(ui::VKEY_RETURN, false);
-  EXPECT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   // Set focus on the folder name.
   views::View* folder_name_view =
@@ -1594,7 +1593,7 @@ TEST_P(AppListViewFocusTest, FocusResetAfterHittingEnterOnFolderName) {
   // Hit enter key.
   SimulateKeyPress(ui::VKEY_RETURN, false);
   search_box_view()->search_box()->RequestFocus();
-  EXPECT_FALSE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_FALSE(contents_view()->apps_container_view()->IsInFolderView());
 }
 
 // Tests that the selection highlight follows the page change.
@@ -1635,7 +1634,7 @@ TEST_F(AppListViewFocusTest, SelectionDoesNotShowInFolderIfNotSelected) {
                        0, base::TimeTicks(),
                        ui::GestureEventDetails(ui::ET_GESTURE_TAP));
   folder_item_view()->OnGestureEvent(&tap);
-  ASSERT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  ASSERT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   // Test that there is no selected view in the folders grid view, but the first
   // item is focused.
@@ -1667,7 +1666,7 @@ TEST_F(AppListViewFocusTest, SelectionGoesIntoFolderIfSelected) {
                        0, base::TimeTicks(),
                        ui::GestureEventDetails(ui::ET_GESTURE_TAP));
   folder_item_view()->OnGestureEvent(&tap);
-  ASSERT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  ASSERT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   // Test that the focused view is also selected.
   AppsGridView* items_grid_view = app_list_folder_view()->items_grid_view();
@@ -1980,19 +1979,19 @@ TEST_F(AppListViewTest, FolderViewToPeeking) {
   Show();
   AppsGridViewTestApi test_api(view_->app_list_main_view()
                                    ->contents_view()
-                                   ->GetAppsContainerView()
+                                   ->apps_container_view()
                                    ->apps_grid_view());
   test_api.PressItemAt(0);
   EXPECT_TRUE(view_->app_list_main_view()
                   ->contents_view()
-                  ->GetAppsContainerView()
+                  ->apps_container_view()
                   ->IsInFolderView());
 
   view_->SetState(ash::AppListViewState::kPeeking);
 
   EXPECT_FALSE(view_->app_list_main_view()
                    ->contents_view()
-                   ->GetAppsContainerView()
+                   ->apps_container_view()
                    ->IsInFolderView());
 }
 
@@ -2008,7 +2007,7 @@ TEST_F(AppListViewTest, TapAndClickWithinAppsGridView) {
   EXPECT_EQ(ash::AppListViewState::kFullscreenAllApps, view_->app_list_state());
   AppsGridView* apps_grid_view = view_->app_list_main_view()
                                      ->contents_view()
-                                     ->GetAppsContainerView()
+                                     ->apps_container_view()
                                      ->apps_grid_view();
   AppsGridViewTestApi test_api(apps_grid_view);
 
@@ -2369,17 +2368,17 @@ TEST_F(AppListViewTest, BackAction) {
   // Select the second page and open the folder.
   apps_grid_view()->pagination_model()->SelectPage(1, false);
   test_api_->PressItemAt(kAppListItemNum);
-  EXPECT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
   EXPECT_EQ(1, apps_grid_view()->pagination_model()->selected_page());
 
   // Back action will first close the folder.
   contents_view()->Back();
-  EXPECT_FALSE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_FALSE(contents_view()->apps_container_view()->IsInFolderView());
   EXPECT_EQ(1, apps_grid_view()->pagination_model()->selected_page());
 
   // Back action will then select the first page.
   contents_view()->Back();
-  EXPECT_FALSE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  EXPECT_FALSE(contents_view()->apps_container_view()->IsInFolderView());
   EXPECT_EQ(0, apps_grid_view()->pagination_model()->selected_page());
 
   // Select the second page and open search results page.
@@ -2485,13 +2484,13 @@ TEST_F(AppListViewTest, AppsGridVisibilityOnResetForShow) {
   Show(true /*is_tablet_mode*/);
 
   contents_view()->ShowEmbeddedAssistantUI(true);
-  EXPECT_FALSE(contents_view()->horizontal_page_container()->GetVisible());
+  EXPECT_FALSE(contents_view()->apps_container_view()->GetVisible());
   EXPECT_FALSE(contents_view()->search_results_page_view()->GetVisible());
   EXPECT_TRUE(assistant_page_view()->GetVisible());
 
   view_->OnTabletModeChanged(false);
   Show(false /*is_tablet_mode*/);
-  EXPECT_TRUE(contents_view()->horizontal_page_container()->GetVisible());
+  EXPECT_TRUE(contents_view()->apps_container_view()->GetVisible());
   EXPECT_FALSE(contents_view()->search_results_page_view()->GetVisible());
   EXPECT_FALSE(assistant_page_view()->GetVisible());
 }
@@ -2850,7 +2849,7 @@ TEST_F(AppListViewFocusTest, PageSwitchingNotRecordingMetric) {
   SetAppListState(ash::AppListViewState::kFullscreenAllApps);
   folder_item_view()->RequestFocus();
   SimulateKeyPress(ui::VKEY_RETURN, false);
-  ASSERT_TRUE(contents_view()->GetAppsContainerView()->IsInFolderView());
+  ASSERT_TRUE(contents_view()->apps_container_view()->IsInFolderView());
 
   // Create a fling to the left so the folder view changes page.
   constexpr float kFlingVelocityForChangingPage = 850.0f;
