@@ -2034,6 +2034,14 @@ void RenderWidget::UpdateSurfaceAndScreenInfo(
     render_frame->SetDeviceScaleFactorOnRenderView(
         compositor_deps_->IsUseZoomForDSFEnabled(),
         screen_info_.device_scale_factor);
+    // When the device scale changes, the size and position of the popup would
+    // need to be adjusted, which we can't do. Just close the popup, which is
+    // also consistent with page zoom and resize behavior.
+    if (previous_original_screen_info.device_scale_factor !=
+        screen_info_.device_scale_factor) {
+      blink::WebView* web_view = GetFrameWidget()->LocalRoot()->View();
+      web_view->CancelPagePopup();
+    }
   }
 
   // Propagate changes down to child local root RenderWidgets and BrowserPlugins
