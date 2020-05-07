@@ -1464,6 +1464,11 @@
           ],
         },
       },
+      'android-10-arm64-rel': {
+        'args': [
+          '--replace-system-package=com.google.ar.core,//third_party/arcore-android-sdk/test-apks/arcore/arcore_current.apk'
+        ]
+      },
       'android-pie-arm64-dbg': {
         'args': [
           '--replace-system-package=com.google.ar.core,//third_party/arcore-android-sdk/test-apks/arcore/arcore_current.apk'
