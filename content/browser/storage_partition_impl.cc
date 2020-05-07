@@ -270,9 +270,9 @@ void OnQuotaManagedOriginDeleted(const url::Origin& origin,
 void PerformQuotaManagerStorageCleanup(
     const scoped_refptr<storage::QuotaManager>& quota_manager,
     blink::mojom::StorageType quota_storage_type,
-    uint32_t remove_mask,
+    int quota_client_mask,
     base::OnceClosure callback) {
-  quota_manager->PerformStorageCleanup(quota_storage_type, remove_mask,
+  quota_manager->PerformStorageCleanup(quota_storage_type, quota_client_mask,
                                        std::move(callback));
 }
 
@@ -2186,13 +2186,16 @@ void StoragePartitionImpl::QuotaManagedDataDeletionHelper::
     return;
   }
 
+  int quota_client_mask =
+      StoragePartitionImpl::GenerateQuotaClientMask(remove_mask_);
+
   // The logic below (via CheckQuotaManagedDataDeletionStatus) only
   // invokes the callback when all processing is complete.
   base::RepeatingClosure done_callback = base::AdaptCallbackForRepeating(
       perform_storage_cleanup
           ? base::BindOnce(&PerformQuotaManagerStorageCleanup,
                            base::WrapRefCounted(quota_manager),
-                           quota_storage_type, remove_mask_,
+                           quota_storage_type, quota_client_mask,
                            std::move(callback))
           : std::move(callback));
 
@@ -2210,8 +2213,7 @@ void StoragePartitionImpl::QuotaManagedDataDeletionHelper::
 
     (*deletion_task_count)++;
     quota_manager->DeleteOriginData(
-        origin, quota_storage_type,
-        StoragePartitionImpl::GenerateQuotaClientMask(remove_mask_),
+        origin, quota_storage_type, quota_client_mask,
         base::BindOnce(&OnQuotaManagedOriginDeleted, origin, quota_storage_type,
                        deletion_task_count, done_callback));
   }
