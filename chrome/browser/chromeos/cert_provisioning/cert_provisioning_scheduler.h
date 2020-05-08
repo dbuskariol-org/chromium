@@ -81,7 +81,11 @@ class CertProvisioningScheduler : public NetworkStateHandlerObserver {
 
   void InitialUpdateCerts();
   void DeleteCertsWithoutPolicy();
-  void OnDeleteKeysWithoutPolicyDone(const std::string& error_message);
+  void OnDeleteCertsWithoutPolicyDone(const std::string& error_message);
+  void DeleteWorkersWithoutPolicy(const std::vector<CertProfile>& profiles);
+  void CleanVaKeysIfIdle();
+  void OnCleanVaKeysIfIdleDone(base::Optional<bool> delete_result);
+  void RegisterForPrefsChanges();
 
   void OnPrefsChange();
   void DailyUpdateCerts();
