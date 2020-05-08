@@ -2311,7 +2311,7 @@
 <translation id="3982375475032951137">केही सरल चरणमार्फत आफ्नो ब्राउजर सेटअप गर्नुहोस्</translation>
 <translation id="3983400541576569538">केही अनुप्रयोगहरूका डेटा हराउन सक्छन्</translation>
 <translation id="3983586614702900908">एक अज्ञात विक्रेता देखि उपकरणहरू</translation>
-<translation id="3983764759749072418">Play स्टोरका अनुप्रयोगहरूले यस यन्त्रमाथि पहुँच राख्न सक्छन्।</translation>
+<translation id="3983764759749072418">Play स्टोरका एपहरूले यस यन्त्रमाथि पहुँच राख्न सक्छन्।</translation>
 <translation id="3983769721878416534">क्लिक गर्नुभन्दा अघिको ढिलाइ</translation>
 <translation id="3984159763196946143">डेमो मोड सुरु गर्न सकिएन</translation>
 <translation id="3984431586879874039">यस साइटलाई तपाईंको सुरक्षा साँचो हेर्न दिने हो?</translation>
@@ -3409,7 +3409,7 @@
 <translation id="5546865291508181392">भेटाउनुहोस्</translation>
 <translation id="5548159762883465903">{NUM_OTHER_TABS,plural, =0{"<ph name="TAB_TITLE" />"}=1{"<ph name="TAB_TITLE" />" र अरू १ ट्याब}other{"<ph name="TAB_TITLE" />" र अरू # ट्याबहरू}}</translation>
 <translation id="5548606607480005320">सुरक्षा जाँच</translation>
-<translation id="5549467165017213645">यसले साइट तथा स्थापना गरिएका अनुप्रयोगहरूले भण्डारण गरेको <ph name="TOTAL_USAGE" /> डेटा मेटाउने छ।</translation>
+<translation id="5549467165017213645">यसले साइट तथा स्थापना गरिएका एपहरूले भण्डारण गरेको <ph name="TOTAL_USAGE" /> डेटा मेटाउने छ।</translation>
 <translation id="5551573675707792127">किबोर्ड र पाठ इनपुट</translation>
 <translation id="5553089923092577885">प्रमाणपत्र नीति मानचित्रहरू</translation>
 <translation id="5554489410841842733">यो प्रतिमा जब देखा पर्छ जब विस्तारले हालको पृष्ठमा काम गर्न सक्दैन।</translation>
@@ -3498,7 +3498,7 @@
 <translation id="5659593005791499971">इमेल</translation>
 <translation id="5659833766619490117">यस पृष्ठलाई अनुवाद गर्न सकिएन</translation>
 <translation id="5660204307954428567"><ph name="DEVICE_NAME" /> सँग जोडा बनाउनुहोस्</translation>
-<translation id="5662513737565158057">Linux अनुप्रयोगहरूले काम गर्ने तरिका परिवर्तन गर्नुहोस्।</translation>
+<translation id="5662513737565158057">Linux एपहरूले काम गर्ने तरिका परिवर्तन गर्नुहोस्।</translation>
 <translation id="5667546120811588575">Google Play सेटअप गरिँदै छ…</translation>
 <translation id="5669267381087807207">सक्रिय गर्दै</translation>
 <translation id="5669691691057771421">नयाँ PIN प्रविष्टि गर्नुहोस्</translation>

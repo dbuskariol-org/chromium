@@ -2830,7 +2830,7 @@
 <translation id="4739639199548674512">టిక్కెట్‌లు</translation>
 <translation id="4743260470722568160"><ph name="BEGIN_LINK" />అప్లికేషన్‌లను ఎలా అప్‌డేట్ చేయాలో తెలుసుకోండి<ph name="END_LINK" /></translation>
 <translation id="4744981231093950366">{NUM_TABS,plural, =1{సైట్‌ను అన్‌మ్యూట్ చేయి}other{సైట్‌లను అన్‌మ్యూట్ చేయి}}</translation>
-<translation id="4746351372139058112">సందేశాలు</translation>
+<translation id="4746351372139058112">Messages</translation>
 <translation id="4750394297954878236">సూచనలు</translation>
 <translation id="475088594373173692">మొదటి వినియోగదారు</translation>
 <translation id="4751476147751820511">కదలిక లేదా కాంతి సెన్సార్‌లు</translation>
@@ -3856,7 +3856,7 @@
 <translation id="6129938384427316298">Netscape సర్టిఫికెట్ వ్యాఖ్య</translation>
 <translation id="6129953537138746214">ఖాళీ</translation>
 <translation id="6136114942382973861">డౌన్‌లోడ్‌ల బార్‌ను మూసివేయండి</translation>
-<translation id="6137767437444130246">వినియోగదారు సర్టిఫికెట్</translation>
+<translation id="6137767437444130246">యూజర్ సర్టిఫికెట్</translation>
 <translation id="6138680304137685902">SHA-384తో X9.62 ECDSA సంతకం</translation>
 <translation id="6138894911715675297"><ph name="NETWORK_TYPE" />, నెట్‌వర్క్ లేదు</translation>
 <translation id="6141988275892716286">డౌన్‌లోడ్‌ను నిర్ధారించండి</translation>
