@@ -72,6 +72,23 @@ class FeedStream : public FeedStreamApi,
         base::Time current_time);
   };
 
+  class Metadata {
+   public:
+    explicit Metadata(FeedStore* store);
+    ~Metadata();
+
+    void Populate(feedstore::Metadata metadata);
+
+    std::string GetConsistencyToken() const;
+    void SetConsistencyToken(std::string consistency_token);
+
+    LocalActionId GetNextActionId();
+
+   private:
+    FeedStore* store_;
+    feedstore::Metadata metadata_;
+  };
+
   FeedStream(RefreshTaskScheduler* refresh_task_scheduler,
              MetricsReporter* metrics_reporter,
              Delegate* delegate,
@@ -153,8 +170,17 @@ class FeedStream : public FeedStreamApi,
 
   void SetRequestSchedule(RequestSchedule schedule);
 
+  // Store/upload an action and update the consistency token. |callback| is
+  // called with |true| if the consistency token was written to the store.
+  void UploadAction(
+      feedwire::FeedAction action,
+      bool upload_now,
+      base::OnceCallback<void(UploadActionsTask::Result)> callback);
+
   FeedNetwork* GetNetwork() { return feed_network_; }
   FeedStore* GetStore() { return store_; }
+  RequestThrottler* GetRequestThrottler() { return &request_throttler_; }
+  Metadata* GetMetadata() { return &metadata_; }
 
   // Returns the time of the last content fetch.
   base::Time GetLastFetchTime();
@@ -240,6 +266,7 @@ class FeedStream : public FeedStreamApi,
   RequestThrottler request_throttler_;
   base::TimeTicks suppress_refreshes_until_;
   std::vector<base::OnceCallback<void(bool)>> load_more_complete_callbacks_;
+  Metadata metadata_;
 
   // To allow tests to wait on task queue idle.
   base::RepeatingClosure idle_callback_;
