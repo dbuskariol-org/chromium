@@ -3529,6 +3529,8 @@ jumbo_static_library("ui") {
       "views/webauthn/ring_progress_bar.h",
       "views/webauthn/sheet_view_factory.cc",
       "views/webauthn/sheet_view_factory.h",
+      "views/webauthn/webauthn_hover_button.cc",
+      "views/webauthn/webauthn_hover_button.h",
       "webauthn/account_hover_list_model.cc",
       "webauthn/account_hover_list_model.h",
       "webauthn/authenticator_request_sheet_model.cc",
