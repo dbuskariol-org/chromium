@@ -4244,6 +4244,8 @@ jumbo_static_library("ui") {
       "webui/print_preview/policy_settings.h",
       "webui/print_preview/print_preview_handler.cc",
       "webui/print_preview/print_preview_handler.h",
+      "webui/print_preview/print_preview_metrics.cc",
+      "webui/print_preview/print_preview_metrics.h",
       "webui/print_preview/print_preview_ui.cc",
       "webui/print_preview/print_preview_ui.h",
       "webui/print_preview/print_preview_utils.cc",
