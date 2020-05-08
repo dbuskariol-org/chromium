@@ -103,7 +103,6 @@ component("lib") {
     ]
 
     deps += [
-      ":fake_audio_output_provider",
       "//chromeos/assistant/internal",
       "//chromeos/assistant/internal:build_libassistant",
       "//chromeos/assistant/internal/proto/google3",
@@ -188,7 +187,6 @@ source_set("tests") {
     ]
 
     deps += [
-      ":fake_audio_output_provider",
       "//chromeos/assistant/internal",
       "//chromeos/assistant/internal:test_support",
       "//chromeos/assistant/internal:tests",
@@ -199,10 +197,6 @@ source_set("tests") {
       "//services/device/public/cpp:test_support",
     ]
   }
-}
-
-source_set("fake_audio_output_provider") {
-  sources = [ "test_support/fake_audio_output_provider.cc" ]
 }
 
 static_library("test_support") {
