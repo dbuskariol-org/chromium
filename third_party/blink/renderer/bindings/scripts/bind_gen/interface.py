@@ -1148,12 +1148,19 @@ def make_overload_dispatcher(cg_context):
     assert isinstance(cg_context, CodeGenContext)
 
     T = TextNode
+    F = lambda *args, **kwargs: T(_format(*args, **kwargs))
 
     overload_group = cg_context.property_
     items = overload_group.effective_overload_set()
     args_size = lambda item: len(item.type_list)
     items_grouped_by_arg_size = itertools.groupby(
         sorted(items, key=args_size, reverse=True), key=args_size)
+
+    # TODO(yukishiino): Runtime-enabled features should be taken into account
+    # when calculating the max argument size.
+    max_arg_size = max(map(args_size, items))
+    arg_count_def = F("const int arg_count = std::min(${info}.Length(), {});",
+                      max_arg_size)
 
     branches = SequenceNode()
     did_use_break = False
@@ -1165,7 +1172,7 @@ def make_overload_dispatcher(cg_context):
 
         if arg_size > 0:
             node = CxxLikelyIfNode(
-                cond=_format("${info}.Length() >= {}", arg_size),
+                cond="arg_count == {}".format(arg_size),
                 body=[node, T("break;") if can_fail else None])
             did_use_break = did_use_break or can_fail
 
@@ -1179,6 +1186,10 @@ def make_overload_dispatcher(cg_context):
 
     if did_use_break:
         branches = CxxBreakableBlockNode(branches)
+    branches = SequenceNode([
+        arg_count_def,
+        branches,
+    ])
 
     if not did_use_break and arg_size == 0 and conditional.is_always_true:
         return branches
