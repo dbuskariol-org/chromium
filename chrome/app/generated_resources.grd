@@ -6017,7 +6017,7 @@ the Bookmarks menu.">
           Report anonymously
         </message>
         <message name="IDS_FEEDBACK_SCREENSHOT_LABEL" desc="Label for the screenshot field if current screenshots are being shown">
-          Include this screenshot
+          Include this screenshot and titles of open tabs
         </message>
         <message name="IDS_FEEDBACK_SCREENSHOT_A11Y_TEXT" desc="Accessibility label text for screenshot of system, which shows contents of screen apart from feedback dialog">
           Screenshot of programs that are currently on the screen
