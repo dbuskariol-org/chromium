@@ -179,7 +179,7 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
   AddSettingsPageUIHandler(std::make_unique<CookiesViewHandler>());
   AddSettingsPageUIHandler(std::make_unique<DownloadsHandler>(profile));
   AddSettingsPageUIHandler(std::make_unique<ExtensionControlHandler>());
-  AddSettingsPageUIHandler(std::make_unique<FontHandler>(web_ui));
+  AddSettingsPageUIHandler(std::make_unique<FontHandler>(profile));
   AddSettingsPageUIHandler(std::make_unique<ImportDataHandler>());
   AddSettingsPageUIHandler(std::make_unique<HatsHandler>());
 
