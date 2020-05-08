@@ -177,6 +177,63 @@ import types
 # so this global is unavoidable.
 output = collections.defaultdict(int)
 
+UPPER_CASE_PATTERN = re.compile(r'^[A-Z0-9_]+$')
+
+
+def adjust_type_case(name):
+    if UPPER_CASE_PATTERN.match(name):
+        SPECIAL = {
+            'ANIMCURSORELT': 'AnimationCursorElement',
+            'CA': 'ChangeAlarmAttribute',
+            'CHAR2B': 'Char16',
+            'CHARINFO': 'CharInfo',
+            'COLORITEM': 'ColorItem',
+            'COLORMAP': 'ColorMap',
+            'CP': 'CreatePictureAttribute',
+            'CW': 'CreateWindowAttribute',
+            'DAMAGE': 'DamageId',
+            'DIRECTFORMAT': 'DirectFormat',
+            'DOTCLOCK': 'DotClock',
+            'FBCONFIG': 'FbConfig',
+            'FLOAT32': 'float',
+            'FLOAT64': 'double',
+            'FONTPROP': 'FontProperty',
+            'GC': 'GraphicsContextAttribute',
+            'GCONTEXT': 'GraphicsContext',
+            'GLYPHINFO': 'GlyphInfo',
+            'GLYPHSET': 'GlyphSet',
+            'INDEXVALUE': 'IndexValue',
+            'KB': 'Keyboard',
+            'KEYCODE': 'KeyCode',
+            'KEYCODE32': 'KeyCode32',
+            'KEYSYM': 'KeySym',
+            'LINEFIX': 'LineFix',
+            'OP': 'Operation',
+            'PBUFFER': 'PBuffer',
+            'PCONTEXT': 'PContext',
+            'PICTDEPTH': 'PictDepth',
+            'PICTFORMAT': 'PictFormat',
+            'PICTFORMINFO': 'PictFormInfo',
+            'PICTSCREEN': 'PictScreen',
+            'PICTVISUAL': 'PictVisual',
+            'POINTFIX': 'PointFix',
+            'SEGMENT': 'SEGMENT',
+            'SPANFIX': 'SpanFix',
+            'SUBPICTURE': 'SubPicture',
+            'SYSTEMCOUNTER': 'SystemCounter',
+            'TIMECOORD': 'TimeCoord',
+            'TIMESTAMP': 'TimeStamp',
+            'VISUALID': 'VisualId',
+            'VISUALTYPE': 'VisualType',
+            'WAITCONDITION': 'WaitCondition',
+        }
+        if name in SPECIAL:
+            return SPECIAL[name]
+        return ''.join([
+            token[0].upper() + token[1:].lower() for token in name.split('_')
+        ])
+    return name
+
 
 # Left-pad with 2 spaces while this class is alive.
 class Indent:
@@ -272,6 +329,13 @@ class GenXproto:
         # Current place in C++ namespace hierarchy (including classes)
         self.namespace = []
 
+        # Map from type names to a set of types.  Certain types
+        # like enums and simple types can alias each other.
+        self.types = collections.defaultdict(set)
+
+        # Set of names of simple types to be replaced with enums
+        self.replace_with_enum = set()
+
         # Map of enums to their underlying types
         self.enum_types = collections.defaultdict(set)
 
@@ -296,6 +360,13 @@ class GenXproto:
             return 'Event'
         return ''
 
+    def rename_type(self, t, name):
+        name = list(name)
+        for i in range(1, len(name)):
+            name[i] = adjust_type_case(name[i])
+        name[-1] += self.type_suffix(t)
+        return name
+
     # Given an xcbgen.xtypes.Type, returns a C++-namespace-qualified
     # string that looks like Input::InputClass::Key.
     def qualtype(self, t, name):
@@ -303,8 +374,7 @@ class GenXproto:
         if name == 'int':
             name = ('int', )
 
-        name = list(name)
-        name[-1] += self.type_suffix(t)
+        name = self.rename_type(t, name)
 
         if name[0] == 'xcb':
             # Use namespace x11 instead of xcb.
@@ -405,16 +475,15 @@ class GenXproto:
         return expr.lenfield_name
 
     def declare_simple(self, item, name):
-        # The underlying type of an enum must be integral, so use type
-        # aliases instead of enum classes for floating point types.
-        if name[-1] == 'FLOAT32':
-            self.write('using FLOAT32 = float;')
-        elif name[-1] == 'FLOAT64':
-            self.write('using FLOAT64 = double;')
-        else:
-            self.write('enum class %s : %s {};' %
-                       (name[-1], self.qualtype(item, item.name)))
-        self.write()
+        # The underlying type of an enum must be integral, so avoid defining
+        # FLOAT32 or FLOAT64.  Usages are renamed to float and double instead.
+        renamed = tuple(self.rename_type(item, name))
+        if name[-1] not in ('FLOAT32', 'FLOAT64'
+                            ) and renamed not in self.replace_with_enum:
+            self.write(
+                'enum class %s : %s {};' %
+                (adjust_type_case(name[-1]), self.qualtype(item, item.name)))
+            self.write()
 
     def copy_primitive(self, name):
         self.write('%s(&%s, &buf);' %
@@ -596,7 +665,7 @@ class GenXproto:
         self.undef(enum.name[-1])
         with Indent(
                 self, 'enum class %s : %s {' %
-            (enum.name[-1], self.enum_types[enum.name][0]
+            (adjust_type_case(enum.name[-1]), self.enum_types[enum.name][0]
              if enum.name in self.enum_types else 'int'), '};'):
             bitnames = set([name for name, _ in enum.bits])
             for name, value in enum.values:
@@ -626,7 +695,7 @@ class GenXproto:
     def declare_container(self, struct):
         name = struct.name[-1] + self.type_suffix(struct)
         self.undef(name)
-        with Indent(self, 'struct %s {' % name, '};'):
+        with Indent(self, 'struct %s {' % adjust_type_case(name), '};'):
             for field in struct.fields:
                 self.declare_field(field)
         self.write()
@@ -751,6 +820,11 @@ class GenXproto:
                 self.enum_types[enum].add(field.type.name)
 
     def resolve_type(self, t, name):
+        renamed = tuple(self.rename_type(t, name))
+        if t in self.types[renamed]:
+            return
+        self.types[renamed].add(t)
+
         if not t.is_container:
             return
 
@@ -792,6 +866,31 @@ class GenXproto:
                 to_delete.append(enum)
         for x in to_delete:
             del self.enum_types[x]
+
+        for t in self.types:
+            l = list(self.types[t])
+            # For some reason, FDs always have distint types so they appear
+            # duplicated in the set.  If the set contains only FDs, then bail.
+            if all(x.is_fd for x in l):
+                continue
+            if len(l) == 1:
+                continue
+
+            # Allow simple types and enums to alias each other after renaming.
+            # This is done because we want strong typing even for simple types.
+            # If the types were not merged together, then a cast would be
+            # necessary to convert from eg. AtomEnum to AtomSimple.
+            assert len(l) == 2
+            if isinstance(l[0], self.xcbgen.xtypes.Enum):
+                enum = l[0]
+                simple = l[1]
+            elif isinstance(l[1], self.xcbgen.xtypes.Enum):
+                enum = l[1]
+                simple = l[0]
+            assert simple.is_simple
+            assert enum and simple
+            self.replace_with_enum.add(t)
+            self.enum_types[enum.name] = simple.name
 
         # The order of types in xcbproto's xml files are inconsistent, so sort
         # them in the order {type aliases, enums, structs, requests/replies}.
@@ -879,7 +978,7 @@ class GenXproto:
         self.module.register()
         self.module.resolve()
         self.resolve()
-        self.class_name = (self.module.namespace.ext_name
+        self.class_name = (adjust_type_case(self.module.namespace.ext_name)
                            if self.module.namespace.is_ext else 'XProto')
 
         self.gen_header()

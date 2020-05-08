@@ -10,8 +10,8 @@
 
 namespace x11 {
 
-using Atom = XProto::ATOM;
-using Window = XProto::WINDOW;
+using Atom = XProto::Atom;
+using Window = XProto::Window;
 
 // Represents a socket to the X11 server.
 class COMPONENT_EXPORT(X11) Connection : public XProto {
