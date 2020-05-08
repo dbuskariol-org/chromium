@@ -1407,7 +1407,7 @@ const FeatureEntry::FeatureParam kStartSurfaceAndroid_SingleSurface_V2[] = {
     {"start_surface_variation", "single"},
     {"show_last_active_tab_only", "true"},
     {"exclude_mv_tiles", "true"},
-    {"hide_switch_when_no_incognito_tabs", "true"}};
+    {"show_stack_tab_switcher", "true"}};
 
 const FeatureEntry::FeatureParam
     kStartSurfaceAndroid_SingleSurfaceWithoutMvTiles[] = {
