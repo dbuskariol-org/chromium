@@ -49418,6 +49418,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="Suggestion tapped."/>
 </enum>
 
+<enum name="OmniboxElisionConfig">
+  <int value="0" label="Default Configuration"/>
+  <int value="1" label="Elision Turned Off By Pref"/>
+  <int value="2" label="Elision Turned Off By Extension"/>
+</enum>
+
 <enum name="OmniboxEnteredKeywordMode">
   <obsolete>
     Deprecated 10/2018 and replaced with OmniboxEnteredKeywordMode2.
