@@ -1131,7 +1131,7 @@ blink::UserAgentMetadata GetUserAgentMetadata() {
   metadata.platform_version =
       content::GetOSVersion(content::IncludeAndroidBuildNumber::Exclude,
                             content::IncludeAndroidModel::Exclude);
-  metadata.architecture = content::BuildCpuInfo();
+  metadata.architecture = content::GetLowEntropyCpuArchitecture();
   metadata.model = content::BuildModelInfo();
 
   metadata.mobile = false;
