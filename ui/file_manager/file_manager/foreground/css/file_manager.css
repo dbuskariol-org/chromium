@@ -2988,20 +2988,37 @@ body.files-ng #list-container li .detail-thumbnail {
   margin-top: 16px;
 }
 
-.install-linux-package-details-label {
+.cr-dialog-container:not(.files-ng) .install-linux-package-details-label {
   color: #5a5a5a;
   font-weight: 500;
   margin-bottom: 10px;
 }
 
-.install-linux-package-detail-label {
+.cr-dialog-container.files-ng .install-linux-package-details-label {
+  margin-bottom: 10px;
+}
+
+.cr-dialog-container:not(.files-ng) .install-linux-package-detail-label {
   color: #5a5a5a;
   display: inline;
   font-weight: 500;
   margin-inline-end: 5px;
 }
 
-.install-linux-package-detail-value {
+.cr-dialog-container.files-ng .install-linux-package-detail-label {
+  color: var(--cros-default-text-color);
+  display: inline;
+  margin-inline-end: 5px;
+}
+
+.cr-dialog-container:not(.files-ng) .install-linux-package-detail-value {
+  display: inline;
+  margin-bottom: 5px;
+  white-space: pre-wrap;
+}
+
+.cr-dialog-container.files-ng .install-linux-package-detail-value {
+  color: var(--cros-default-text-color-secondary);
   display: inline;
   margin-bottom: 5px;
   white-space: pre-wrap;
