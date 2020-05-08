@@ -186,6 +186,8 @@ public final class BrowserViewController
 
     @Override
     public void onGestureStateChanged() {
+        // This is called from |mGestureStateTracker|.
+        assert mGestureStateTracker != null;
         if (mGestureStateTracker.isInGestureOrScroll()) {
             mCachedDoBrowserControlsShrinkRendererSize =
                     mTopControlsContainerView.isControlVisible()
@@ -217,7 +219,7 @@ public final class BrowserViewController
     }
 
     private void adjustWebContentsHeightIfNecessary() {
-        if (mGestureStateTracker.isInGestureOrScroll()
+        if (mGestureStateTracker == null || mGestureStateTracker.isInGestureOrScroll()
                 || !mTopControlsContainerView.isCompletelyShownOrHidden()
                 || !mBottomControlsContainerView.isCompletelyShownOrHidden()) {
             return;
