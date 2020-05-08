@@ -7,6 +7,7 @@
 
 #include "base/files/file_path.h"
 #include "base/memory/weak_ptr.h"
+#include "base/process/process.h"
 #include "chrome/browser/component_updater/cros_component_manager.h"
 
 // Manages download and launch of the lacros-chrome binary.
@@ -35,6 +36,9 @@ class LacrosLoader {
 
   // Path to the lacros-chrome disk image directory.
   base::FilePath lacros_path_;
+
+  // Process handle for the lacros-chrome process.
+  base::Process lacros_process_;
 
   base::WeakPtrFactory<LacrosLoader> weak_factory_{this};
 };
