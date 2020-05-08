@@ -2674,6 +2674,7 @@ Unknown properties are collapsed to zero. -->
   <int value="31" label="Assistant"/>
   <int value="32" label="OS Settings"/>
   <int value="33" label="Plugin VM App"/>
+  <int value="34" label="LaCrOS"/>
 </enum>
 
 <enum name="AppListSearchResultDisplayType">
