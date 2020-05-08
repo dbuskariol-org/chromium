@@ -334,9 +334,9 @@ class GenXproto:
 
     # Work around conflicts caused by Xlib's liberal use of macros.
     def undef(self, name):
-        self.write('#ifdef %s' % name)
-        self.write('#undef %s' % name)
-        self.write('#endif')
+        print('#ifdef %s' % name, file=self.args.undeffile)
+        print('#undef %s' % name, file=self.args.undeffile)
+        print('#endif', file=self.args.undeffile)
 
     def expr(self, expr):
         if expr.op == 'popcount':
@@ -673,6 +673,7 @@ class GenXproto:
         self.write('#include "ui/gfx/x/xproto_types.h"')
         for direct_import in self.module.direct_imports:
             self.write('#include "%s.h"' % direct_import[-1])
+        self.write('#include "%s_undef.h"' % self.module.namespace.header)
         self.write()
         self.write('typedef struct _XDisplay XDisplay;')
         self.write()
@@ -734,6 +735,7 @@ class GenXproto:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('xmlfile', type=argparse.FileType('r'))
+    parser.add_argument('undeffile', type=argparse.FileType('w'))
     parser.add_argument('headerfile', type=argparse.FileType('w'))
     parser.add_argument('sourcefile', type=argparse.FileType('w'))
     parser.add_argument('--sysroot')
