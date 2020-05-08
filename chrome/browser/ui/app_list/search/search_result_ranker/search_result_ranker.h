@@ -140,7 +140,6 @@ class SearchResultRanker : file_manager::file_tasks::FileTasksObserver {
 
   // Logs impressions and stores feature data for aggregated model.
   std::unique_ptr<SearchRankingEventLogger> search_ranking_event_logger_;
-  bool use_aggregated_search_ranking_inference_ = false;
 
   // Stores the time of the last histogram logging event for each zero state
   // search provider. Used to prevent scores from being logged multiple times

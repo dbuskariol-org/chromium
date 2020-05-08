@@ -274,11 +274,6 @@ void SearchResultRanker::Rank(Mixer::SortedResults* results) {
             [](const Mixer::SortData& a, const Mixer::SortData& b) {
               return a.score > b.score;
             });
-  std::map<std::string, float> search_ranker_score_map;
-  if (!last_query_.empty() && use_aggregated_search_ranking_inference_) {
-    search_ranking_event_logger_->CreateRankings(results, last_query_.size());
-    search_ranker_score_map = search_ranking_event_logger_->RetrieveRankings();
-  }
 
   // Counts how many times a given type has been seen so far in the results
   // list.
@@ -292,9 +287,6 @@ void SearchResultRanker::Rank(Mixer::SortedResults* results) {
       if (last_query_.empty() && zero_state_group_ranker_) {
         LogZeroStateResultScore(type, result.score);
         ScoreZeroStateItem(&result, type, &zero_state_type_counts);
-      } else if (!last_query_.empty() &&
-                 use_aggregated_search_ranking_inference_) {
-        result.score = search_ranker_score_map[result.result->id()];
       }
     } else if (model == Model::APPS) {
       // Do not rerank apps for a query-based search.
