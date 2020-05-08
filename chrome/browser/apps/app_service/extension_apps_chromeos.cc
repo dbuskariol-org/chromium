@@ -20,13 +20,16 @@
 #include "base/stl_util.h"
 #include "base/strings/string16.h"
 #include "base/strings/stringprintf.h"
+#include "base/values.h"
 #include "chrome/browser/apps/app_service/app_icon_factory.h"
 #include "chrome/browser/apps/app_service/menu_util.h"
+#include "chrome/browser/browser_process.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
 #include "chrome/browser/chromeos/arc/arc_web_contents_data.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/app_time_limit_interface.h"
 #include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/browser/chromeos/extensions/gfx_utils.h"
+#include "chrome/browser/chromeos/policy/system_features_disable_list_policy_handler.h"
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/extension_uninstall_dialog.h"
 #include "chrome/browser/extensions/extension_util.h"
@@ -56,6 +59,7 @@
 #include "chrome/services/app_service/public/cpp/intent_filter_util.h"
 #include "chrome/services/app_service/public/mojom/types.mojom.h"
 #include "components/arc/arc_service_manager.h"
+#include "components/policy/core/common/policy_pref_names.h"
 #include "content/public/browser/clear_site_data_utils.h"
 #include "extensions/browser/app_window/app_window.h"
 #include "extensions/browser/extension_system.h"
@@ -172,6 +176,16 @@ void ExtensionAppsChromeOs::Initialize() {
       prefs::kHideWebStoreIcon,
       base::Bind(&ExtensionAppsBase::OnHideWebStoreIconPrefChanged,
                  GetWeakPtr()));
+
+  auto* local_state = g_browser_process->local_state();
+  if (local_state) {
+    local_state_pref_change_registrar_.Init(local_state);
+    local_state_pref_change_registrar_.Add(
+        policy::policy_prefs::kSystemFeaturesDisableList,
+        base::Bind(&ExtensionAppsBase::OnSystemFeaturesPrefChanged,
+                   GetWeakPtr()));
+    OnSystemFeaturesPrefChanged();
+  }
 }
 
 void ExtensionAppsChromeOs::LaunchAppWithIntent(
@@ -609,6 +623,54 @@ void ExtensionAppsChromeOs::UpdateShowInFields(const std::string& app_id) {
 void ExtensionAppsChromeOs::OnHideWebStoreIconPrefChanged() {
   UpdateShowInFields(extensions::kWebStoreAppId);
   UpdateShowInFields(extension_misc::kEnterpriseWebStoreAppId);
+}
+
+void ExtensionAppsChromeOs::OnSystemFeaturesPrefChanged() {
+  if (app_type() != apps::mojom::AppType::kExtension) {
+    return;
+  }
+
+  PrefService* const local_state = g_browser_process->local_state();
+  if (!local_state || !local_state->FindPreference(
+                          policy::policy_prefs::kSystemFeaturesDisableList)) {
+    return;
+  }
+
+  const base::ListValue* disabled_system_features_pref =
+      local_state->GetList(policy::policy_prefs::kSystemFeaturesDisableList);
+  if (!disabled_system_features_pref) {
+    return;
+  }
+
+  bool is_disabled = base::Contains(*disabled_system_features_pref,
+                                    base::Value(policy::SystemFeature::CAMERA));
+  auto* app_id = extension_misc::kCameraAppId;
+
+  // Sometimes the policy is updated before the app is installed, so this way
+  // the disabled_apps_ is updated regardless the Publish should happen or not
+  // and the app will be published with the correct readiness upon its
+  // installation.
+  bool should_publish = (base::Contains(disabled_apps_, app_id) != is_disabled);
+
+  if (is_disabled) {
+    disabled_apps_.insert(app_id);
+  } else {
+    disabled_apps_.erase(app_id);
+  }
+
+  if (!should_publish) {
+    return;
+  }
+
+  const auto* extension = MaybeGetExtension(app_id);
+  if (!extension) {
+    return;
+  }
+
+  Publish(
+      Convert(extension, is_disabled ? apps::mojom::Readiness::kDisabledByPolicy
+                                     : apps::mojom::Readiness::kReady),
+      subscribers());
 }
 
 bool ExtensionAppsChromeOs::Accepts(const extensions::Extension* extension) {

@@ -130,6 +130,7 @@ class ExtensionAppsChromeOs : public ExtensionAppsBase,
 
   // ExtensionAppsBase overrides.
   void OnHideWebStoreIconPrefChanged() override;
+  void OnSystemFeaturesPrefChanged() override;
   bool Accepts(const extensions::Extension* extension) override;
   bool ShouldShownInLauncher(const extensions::Extension* extension) override;
   apps::mojom::AppPtr Convert(const extensions::Extension* extension,
@@ -177,6 +178,9 @@ class ExtensionAppsChromeOs : public ExtensionAppsBase,
 
   // Registrar used to monitor the profile prefs.
   PrefChangeRegistrar profile_pref_change_registrar_;
+
+  // Registrar used to monitor the local state prefs.
+  PrefChangeRegistrar local_state_pref_change_registrar_;
 
   ScopedObserver<NotificationDisplayService,
                  NotificationDisplayService::Observer>
