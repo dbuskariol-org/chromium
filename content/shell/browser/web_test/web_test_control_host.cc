@@ -617,7 +617,7 @@ bool WebTestControlHost::ResetBrowserAfterWebTest() {
   prefs_ = WebPreferences();
   should_override_prefs_ = false;
   WebTestContentBrowserClient::Get()->SetPopupBlockingEnabled(false);
-  WebTestContentBrowserClient::Get()->ResetMockClipboardHost();
+  WebTestContentBrowserClient::Get()->ResetMockClipboardHosts();
   WebTestContentBrowserClient::Get()->SetScreenOrientationChanged(false);
   WebTestContentBrowserClient::Get()->ResetFakeBluetoothDelegate();
   navigation_history_dump_ = "";
