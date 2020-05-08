@@ -297,9 +297,6 @@ SettingsUI::SettingsUI(content::WebUI* web_ui)
   // This is the browser settings page.
   html_source->AddBoolean("isOSSettings", false);
 #endif
-  // TODO(crbug.com/1026455): Delete this as part of the SplitSettings cleanup.
-  html_source->AddBoolean("showOSSettings", false);
-
   AddSettingsPageUIHandler(std::make_unique<AboutHandler>());
   AddSettingsPageUIHandler(std::make_unique<ResetSettingsHandler>(profile));
 
