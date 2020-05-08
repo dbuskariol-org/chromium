@@ -49992,6 +49992,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="0" label="Ok"/>
   <int value="1" label="App service unavailable"/>
   <int value="2" label="No settings icon"/>
+  <int value="3" label="Search handler unavailable"/>
 </enum>
 
 <enum name="OsSuite">
