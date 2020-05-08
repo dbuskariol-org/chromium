@@ -23,9 +23,21 @@ class ComponentUpdateService;
 class MetadataTable;
 class CrOSComponentInstaller;
 
+// Describes all metadata needed to dynamically install ChromeOS components.
 struct ComponentConfig {
+  // This is a client-only identifier for the component.
   const char* name;
+  // This is used for ABI compatibility checks. It is compared against the
+  // 'min_env_version' key in the component's manifest.json file. It uses
+  // standard major.minor compat rules, where ABI is compatible if and only if
+  // major is matching. The client will send this string to the omaha server,
+  // which will filter for a compatible update. Likewise, the client will
+  // avoid registering a component if there is an ABI mismatch between the
+  // already downloaded component and the expected major version.
+  //
+  // This field can be left empty to skip all ABI compatibility checks.
   const char* env_version;
+  // This is the app-id of the component, converted from [a-p] hex to [0-f] hex.
   const char* sha2hash;
 };
 

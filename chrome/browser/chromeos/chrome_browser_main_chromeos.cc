@@ -70,7 +70,6 @@
 #include "chrome/browser/chromeos/extensions/login_screen/login_screen_ui/ui_handler.h"
 #include "chrome/browser/chromeos/external_metrics.h"
 #include "chrome/browser/chromeos/input_method/input_method_configuration.h"
-#include "chrome/browser/chromeos/lacros/lacros_loader.h"
 #include "chrome/browser/chromeos/language_preferences.h"
 #include "chrome/browser/chromeos/lock_screen_apps/state_controller.h"
 #include "chrome/browser/chromeos/logging.h"
@@ -1003,12 +1002,6 @@ void ChromeBrowserMainPartsChromeos::PostBrowserStart() {
   crostini_unsupported_action_notifier_ =
       std::make_unique<crostini::CrostiniUnsupportedActionNotifier>();
 
-  // Always construct LacrosLoader, even if the lacros flag is disabled, so
-  // it can do cleanup work if needed.
-  lacros_loader_ = std::make_unique<LacrosLoader>(
-      g_browser_process->platform_part()->cros_component_manager());
-  lacros_loader_->Init();
-
   mojo::PendingRemote<device::mojom::WakeLockProvider> wake_lock_provider;
   content::GetDeviceService().BindWakeLockProvider(
       wake_lock_provider.InitWithNewPipeAndPassReceiver());
@@ -1024,7 +1017,6 @@ void ChromeBrowserMainPartsChromeos::PostBrowserStart() {
 // shutdown calls and test |pre_profile_init_called_| if necessary. See
 // crbug.com/702403 for details.
 void ChromeBrowserMainPartsChromeos::PostMainMessageLoopRun() {
-  lacros_loader_.reset();
   crostini_unsupported_action_notifier_.reset();
 
   BootTimesRecorder::Get()->AddLogoutTimeMarker("UIMessageLoopEnded", true);

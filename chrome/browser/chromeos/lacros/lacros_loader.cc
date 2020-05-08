@@ -43,8 +43,12 @@ void LacrosLoader::Init() {
                                   base::BindOnce(&LacrosLoader::OnLoadComplete,
                                                  weak_factory_.GetWeakPtr()));
   } else {
+    // Clean-up code is currently blocked on fixing the implementation of
+    // IsRegistered. https://crbug.com/(1077348)
+    // if (cros_component_manager_->IsRegistered(kLacrosComponentName)) {
     // Clean up any old disk images, since the user turned off the flag.
-    cros_component_manager_->Unload(kLacrosComponentName);
+    // cros_component_manager_->Unload(kLacrosComponentName);
+    // }
   }
 }
 
