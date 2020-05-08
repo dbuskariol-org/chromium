@@ -180,7 +180,8 @@ class ExtensionDevToolsClientHost : public content::DevToolsAgentHostClient,
   content::NotificationRegistrar registrar_;
   int last_request_id_ = 0;
   PendingRequests pending_requests_;
-  ExtensionDevToolsInfoBar* infobar_ = nullptr;
+  std::unique_ptr<ExtensionDevToolsInfoBar::CallbackList::Subscription>
+      subscription_;
   api::debugger::DetachReason detach_reason_ =
       api::debugger::DETACH_REASON_TARGET_CLOSED;
 
@@ -229,16 +230,14 @@ bool ExtensionDevToolsClientHost::Attach() {
   if (Manifest::IsPolicyLocation(extension_->location()))
     return true;
 
-  infobar_ = ExtensionDevToolsInfoBar::Create(
-      extension_id(), extension_->name(), this,
+  subscription_ = ExtensionDevToolsInfoBar::Create(
+      extension_id(), extension_->name(),
       base::BindOnce(&ExtensionDevToolsClientHost::InfoBarDestroyed,
                      base::Unretained(this)));
   return true;
 }
 
 ExtensionDevToolsClientHost::~ExtensionDevToolsClientHost() {
-  if (infobar_)
-    infobar_->Unregister(this);
   g_attached_client_hosts.Get().erase(this);
 }
 

@@ -10,6 +10,7 @@
 
 #include "base/bind.h"
 #include "base/callback.h"
+#include "base/callback_list.h"
 #include "base/lazy_instance.h"
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/devtools/global_confirm_info_bar.h"
@@ -89,21 +90,17 @@ int ExtensionDevToolsInfoBarDelegate::GetButtons() const {
 }  // namespace
 
 // static
-ExtensionDevToolsInfoBar* ExtensionDevToolsInfoBar::Create(
-    const std::string& extension_id,
-    const std::string& extension_name,
-    ExtensionDevToolsClientHost* client_host,
-    base::OnceClosure destroyed_callback) {
+std::unique_ptr<ExtensionDevToolsInfoBar::CallbackList::Subscription>
+ExtensionDevToolsInfoBar::Create(const std::string& extension_id,
+                                 const std::string& extension_name,
+                                 base::OnceClosure destroyed_callback) {
   auto it = g_infobars.Get().find(extension_id);
   ExtensionDevToolsInfoBar* infobar = nullptr;
   if (it != g_infobars.Get().end())
     infobar = it->second;
   else
     infobar = new ExtensionDevToolsInfoBar(extension_id, extension_name);
-  const auto result =
-      infobar->callbacks_.insert({client_host, std::move(destroyed_callback)});
-  DCHECK(result.second);
-  return infobar;
+  return infobar->RegisterDestroyedCallback(std::move(destroyed_callback));
 }
 
 ExtensionDevToolsInfoBar::ExtensionDevToolsInfoBar(
@@ -122,19 +119,14 @@ ExtensionDevToolsInfoBar::ExtensionDevToolsInfoBar(
 
 ExtensionDevToolsInfoBar::~ExtensionDevToolsInfoBar() = default;
 
-void ExtensionDevToolsInfoBar::Unregister(
-    ExtensionDevToolsClientHost* client_host) {
-  callbacks_.erase(client_host);
+std::unique_ptr<ExtensionDevToolsInfoBar::CallbackList::Subscription>
+ExtensionDevToolsInfoBar::RegisterDestroyedCallback(
+    base::OnceClosure destroyed_callback) {
+  return callback_list_.Add(std::move(destroyed_callback));
 }
 
 void ExtensionDevToolsInfoBar::InfoBarDestroyed() {
-  // Can't loop over |callbacks_| below directly, since Run() will cause the
-  // host to synchronously remove itself from |callbacks_|, invalidating the
-  // current iterator.
-  std::map<ExtensionDevToolsClientHost*, base::OnceClosure> callbacks =
-      std::move(callbacks_);
-  for (auto& pair : callbacks)
-    std::move(pair.second).Run();
+  callback_list_.Notify();
   g_infobars.Get().erase(extension_id_);
   delete this;
 }
