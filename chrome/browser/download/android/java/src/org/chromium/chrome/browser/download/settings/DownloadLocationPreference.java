@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import androidx.preference.DialogPreference;
 
 import org.chromium.chrome.browser.download.DirectoryOption;
-import org.chromium.chrome.download.R;
+import org.chromium.chrome.browser.download.R;
 
 /**
  * The preference used to save the download directory in download settings page.
