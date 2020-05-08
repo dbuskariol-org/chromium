@@ -2953,17 +2953,21 @@ body.files-ng #list-container li .detail-thumbnail {
   flex: none;
 }
 
-#default-task-dialog {
+.cr-dialog-container:not(.files-ng) #default-task-dialog {
   min-width: 300px;
   width: auto;
 }
 
-#install-linux-package-dialog {
+.cr-dialog-container.files-ng #default-task-dialog {
+  width: 352px;
+}
+
+.cr-dialog-container:not(.files-ng) #install-linux-package-dialog {
   min-width: 300px;
   width: 40%;
 }
 
-#install-linux-package-dialog .cr-dialog-text {
+.cr-dialog-container:not(.files-ng) #install-linux-package-dialog .cr-dialog-text {
   min-height: 30px;
 }
 
@@ -3067,6 +3071,12 @@ list.autocomplete-suggestions > [lead] {
   border: 0;
   padding: 0;
   width: auto;
+}
+
+.cr-dialog-container.files-ng #suggest-app-dialog.cr-dialog-frame {
+  max-width: unset !important;
+  min-width: unset !important;
+  width: 735px;
 }
 
 .cr-dialog-container:not(.files-ng) .suggest-apps-dialog-title.cr-dialog-title {

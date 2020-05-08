@@ -343,7 +343,9 @@ html[dir='rtl'] .entry-name {
   display: flex;
   flex-direction: column;
   margin: auto;
-  min-width: calc(384px - 24px - 24px);
+  /* Narrower when viewport is too narrow. */
+  max-width: min(512px - 24px - 24px, 75vw);
+  min-width: calc(320px - 24px - 24px);
   padding: 24px;
   padding-bottom: 20px;
   position: relative;
