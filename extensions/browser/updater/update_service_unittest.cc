@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "base/bind.h"
+#include "base/bind_helpers.h"
 #include "base/files/file_util.h"
 #include "base/files/scoped_temp_dir.h"
 #include "base/optional.h"
@@ -394,7 +395,7 @@ class UpdateServiceTest : public ExtensionsTest {
 
     bool done = false;
     installer->Install(
-        new_version_dir.GetPath(), std::string(), nullptr,
+        new_version_dir.GetPath(), std::string(), nullptr, base::DoNothing(),
         base::BindOnce(
             [](bool* done, const update_client::CrxInstaller::Result& result) {
               *done = true;

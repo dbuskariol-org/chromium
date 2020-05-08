@@ -150,6 +150,7 @@ void UpdateService::OnEvent(Events event, const std::string& extension_id) {
     case Events::COMPONENT_WAIT:
     case Events::COMPONENT_UPDATE_READY:
     case Events::COMPONENT_UPDATE_DOWNLOADING:
+    case Events::COMPONENT_UPDATE_UPDATING:
       break;
   }
 

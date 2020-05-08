@@ -4803,6 +4803,9 @@ Keep your key file in a safe place. You will need it to create new versions of y
       <message name="IDS_COMPONENTS_EVT_STATUS_DOWNLOADING" desc="Service Status">
         Component downloading
       </message>
+      <message name="IDS_COMPONENTS_EVT_STATUS_UPDATING" desc="Service Status">
+        Component updating
+      </message>
 
       <if expr="enable_plugins">
         <message name="IDS_PLUGINS_DISABLED_PLUGIN" desc="Text that signifies that the plugin is currently disabled.">

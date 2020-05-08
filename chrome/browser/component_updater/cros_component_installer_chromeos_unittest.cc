@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "base/bind.h"
+#include "base/bind_helpers.h"
 #include "base/callback.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
@@ -158,7 +159,7 @@ class TestUpdater : public OnDemandUpdater {
         FROM_HERE, {base::MayBlock()},
         base::BindOnce(
             &update_client::CrxInstaller::Install, installer, unpacked_path, "",
-            nullptr,
+            nullptr, base::DoNothing(),
             base::BindOnce(&WrapInstallerCallback, std::move(callback))));
     return true;
   }
