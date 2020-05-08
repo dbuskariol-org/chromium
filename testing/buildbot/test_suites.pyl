@@ -3728,6 +3728,8 @@
     },
 
     'weblayer_android_gtests': {
+      'weblayer_bundle_test': {
+      },
       'weblayer_instrumentation_test_apk': {
       },
       'weblayer_private_instrumentation_test_apk': {
