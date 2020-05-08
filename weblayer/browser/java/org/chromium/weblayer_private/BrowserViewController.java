@@ -175,6 +175,10 @@ public final class BrowserViewController
         return mContentViewRenderView.hasSurface();
     }
 
+    public void setWebContentIsObscured(boolean isObscured) {
+        mContentView.setIsObscuredForAccessibility(isObscured);
+    }
+
     @Override
     public void onBrowserControlsCompletelyShownOrHidden() {
         adjustWebContentsHeightIfNecessary();
