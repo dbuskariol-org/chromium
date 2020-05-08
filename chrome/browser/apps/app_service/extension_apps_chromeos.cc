@@ -155,6 +155,10 @@ void ExtensionAppsChromeOs::ObserveArc() {
 
 void ExtensionAppsChromeOs::Initialize() {
   app_window_registry_.Add(extensions::AppWindowRegistry::Get(profile()));
+  auto* provider = web_app::WebAppProvider::Get(profile());
+  if (provider) {
+    registrar_observer_.Add(&provider->registrar());
+  }
   notification_display_service_.Add(
       NotificationDisplayServiceFactory::GetForProfile(profile()));
 
@@ -637,8 +641,10 @@ bool ExtensionAppsChromeOs::ShouldShownInLauncher(
 apps::mojom::AppPtr ExtensionAppsChromeOs::Convert(
     const extensions::Extension* extension,
     apps::mojom::Readiness readiness) {
-  apps::mojom::AppPtr app = ConvertImpl(extension, readiness);
-
+  apps::mojom::AppPtr app =
+      ConvertImpl(extension, base::Contains(disabled_apps_, extension->id())
+                                 ? apps::mojom::Readiness::kDisabledByPolicy
+                                 : readiness);
   bool paused = paused_apps_.IsPaused(extension->id());
   app->icon_key =
       icon_key_factory_.MakeIconKey(GetIconEffects(extension, paused));
@@ -667,6 +673,10 @@ IconEffects ExtensionAppsChromeOs::GetIconEffects(
   if (paused) {
     icon_effects =
         static_cast<IconEffects>(icon_effects | IconEffects::kPaused);
+  }
+  if (base::Contains(disabled_apps_, extension->id())) {
+    icon_effects =
+        static_cast<IconEffects>(icon_effects | IconEffects::kBlocked);
   }
   return icon_effects;
 }
@@ -774,6 +784,34 @@ void ExtensionAppsChromeOs::GetMenuModelForChromeBrowserApp(
                  &menu_items);
 
   std::move(callback).Run(std::move(menu_items));
+}
+
+void ExtensionAppsChromeOs::OnWebAppDisabledStateChanged(
+    const web_app::AppId& app_id,
+    bool is_disabled) {
+  const auto* extension = MaybeGetExtension(app_id);
+  if (!extension) {
+    return;
+  }
+
+  if (base::Contains(disabled_apps_, app_id) == is_disabled) {
+    return;
+  }
+
+  if (is_disabled) {
+    disabled_apps_.insert(app_id);
+  } else {
+    disabled_apps_.erase(app_id);
+  }
+
+  Publish(
+      Convert(extension, is_disabled ? apps::mojom::Readiness::kDisabledByPolicy
+                                     : apps::mojom::Readiness::kReady),
+      subscribers());
+}
+
+void ExtensionAppsChromeOs::OnAppRegistrarDestroyed() {
+  registrar_observer_.RemoveAll();
 }
 
 }  // namespace apps
