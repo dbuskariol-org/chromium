@@ -293,9 +293,9 @@ def bind_callback_local_vars(code_node, cg_context):
            "ScriptState::From(${receiver_context});")),
     ])
 
-    is_receiver_context = (cg_context.member_like
-                           and not cg_context.member_like.is_static
-                           and not cg_context.constructor)
+    is_receiver_context = not (
+        (cg_context.member_like and cg_context.member_like.is_static)
+        or cg_context.constructor)
 
     # creation_context
     pattern = "const v8::Local<v8::Context>& ${creation_context} = {_1};"
@@ -339,7 +339,7 @@ def bind_callback_local_vars(code_node, cg_context):
         _1 = "ExceptionState::kGetterContext"
     elif cg_context.attribute_set:
         _1 = "ExceptionState::kSetterContext"
-    elif cg_context.constructor:
+    elif cg_context.constructor_group:
         _1 = "ExceptionState::kConstructionContext"
     elif cg_context.indexed_property_getter:
         _1 = "ExceptionState::kIndexedGetterContext"
@@ -358,10 +358,13 @@ def bind_callback_local_vars(code_node, cg_context):
 
     # exception_state
     pattern = "ExceptionState ${exception_state}({_1});{_2}"
-    _1 = [
-        "${isolate}", "${exception_state_context_type}", "${class_like_name}",
-    ]
-    if cg_context.property_ and cg_context.property_.identifier:
+    _1 = ["${isolate}", "${exception_state_context_type}"]
+    if cg_context.is_named_constructor:
+        _1.append("\"{}\"".format(cg_context.property_.identifier))
+    else:
+        _1.append("${class_like_name}")
+    if (cg_context.property_ and cg_context.property_.identifier
+            and not cg_context.constructor_group):
         _1.append("${property_name}")
     _2 = ""
     if cg_context.is_return_type_promise_type:
@@ -795,8 +798,7 @@ def make_check_constructor_call(cg_context):
         CxxUnlikelyIfNode(
             cond="!${info}.IsConstructCall()",
             body=T("${exception_state}.ThrowTypeError("
-                   "ExceptionMessages::ConstructorNotCallableAsFunction("
-                   "${class_like_name}));\n"
+                   "ExceptionMessages::ConstructorCalledAsFunction());\n"
                    "return;")),
     ])
     if not cg_context.is_named_constructor:
