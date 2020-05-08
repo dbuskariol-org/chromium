@@ -2,11 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ios/chrome/browser/infobars/overlays/overlay_request_infobar_util.h"
+#include "ios/chrome/browser/infobars/overlays/infobar_overlay_util.h"
 
+#include "base/bind.h"
+#include "base/check.h"
 #include "ios/chrome/browser/infobars/infobar_ios.h"
 #import "ios/chrome/browser/overlays/public/common/infobars/infobar_overlay_request_config.h"
 #include "ios/chrome/browser/overlays/public/overlay_request.h"
+#import "ios/chrome/browser/overlays/public/overlay_request_queue.h"
+#include "ios/chrome/browser/overlays/public/overlay_request_queue_util.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
@@ -25,4 +29,16 @@ InfobarType GetOverlayRequestInfobarType(OverlayRequest* request) {
 InfobarOverlayType GetOverlayRequestInfobarOverlayType(
     OverlayRequest* request) {
   return request->GetConfig<InfobarOverlayRequestConfig>()->overlay_type();
+}
+
+bool GetInfobarOverlayRequestIndex(OverlayRequestQueue* queue,
+                                   InfoBarIOS* infobar,
+                                   size_t* index) {
+  return GetIndexOfMatchingRequest(
+      queue, index,
+      base::BindRepeating(
+          [](InfoBarIOS* infobar, OverlayRequest* request) -> bool {
+            return GetOverlayRequestInfobar(request) == infobar;
+          },
+          infobar));
 }
