@@ -3654,6 +3654,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kDownloadAutoResumptionNativeName,
      flag_descriptions::kDownloadAutoResumptionNativeDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(download::features::kDownloadAutoResumptionNative)},
+
+    {"download-later", flag_descriptions::kDownloadLaterName,
+     flag_descriptions::kDownloadLaterDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(download::features::kDownloadLater)},
 #endif
 
     {"enable-new-download-backend",
