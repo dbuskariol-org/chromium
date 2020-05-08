@@ -112,6 +112,7 @@ class FeedStream : public FeedStreamApi,
   void DetachSurface(SurfaceInterface*) override;
   void SetArticlesListVisible(bool is_visible) override;
   bool IsArticlesListVisible() override;
+  void ExecuteRefreshTask() override;
   void LoadMore(base::OnceCallback<void(bool)> callback) override;
   void ExecuteOperations(
       std::vector<feedstore::DataOperation> operations) override;
@@ -160,8 +161,6 @@ class FeedStream : public FeedStreamApi,
   void OnHistoryDeleted();
   // Chrome's cached data was cleared.
   void OnCacheDataCleared();
-  // Invoked by RefreshTaskScheduler's scheduled task.
-  void ExecuteRefreshTask();
 
   // State shared for the sake of implementing FeedStream. Typically these
   // functions are used by tasks.

@@ -341,7 +341,7 @@ class TestWireResponseTranslator : public FeedStream::WireResponseTranslator {
 class FakeRefreshTaskScheduler : public RefreshTaskScheduler {
  public:
   // RefreshTaskScheduler implementation.
-  void EnsureScheduled(base::Time run_time) override {
+  void EnsureScheduled(base::TimeDelta run_time) override {
     scheduled_run_time = run_time;
   }
   void Cancel() override { canceled = true; }
@@ -352,7 +352,7 @@ class FakeRefreshTaskScheduler : public RefreshTaskScheduler {
     canceled = false;
     refresh_task_complete = false;
   }
-  base::Optional<base::Time> scheduled_run_time;
+  base::Optional<base::TimeDelta> scheduled_run_time;
   bool canceled = false;
   bool refresh_task_complete = false;
 };
@@ -777,7 +777,7 @@ TEST_F(FeedStreamTest, RefreshScheduleFlow) {
   WaitForIdleTaskQueue();
 
   // Verify the first refresh was scheduled.
-  EXPECT_EQ(kTestTimeEpoch + base::TimeDelta::FromSeconds(12),
+  EXPECT_EQ(base::TimeDelta::FromSeconds(12),
             refresh_scheduler_.scheduled_run_time);
 
   // Simulate executing the background task.
@@ -788,7 +788,7 @@ TEST_F(FeedStreamTest, RefreshScheduleFlow) {
 
   // Verify |RefreshTaskComplete()| was called and next refresh was scheduled.
   EXPECT_TRUE(refresh_scheduler_.refresh_task_complete);
-  EXPECT_EQ(kTestTimeEpoch + base::TimeDelta::FromSeconds(48),
+  EXPECT_EQ(base::TimeDelta::FromSeconds(48 - 12),
             refresh_scheduler_.scheduled_run_time);
 
   // Simulate executing the background task again.
@@ -800,8 +800,7 @@ TEST_F(FeedStreamTest, RefreshScheduleFlow) {
   // Verify |RefreshTaskComplete()| was called and next refresh was scheduled.
   EXPECT_TRUE(refresh_scheduler_.refresh_task_complete);
   ASSERT_TRUE(refresh_scheduler_.scheduled_run_time);
-  EXPECT_EQ(kTestTimeEpoch + base::TimeDelta::FromSeconds(48) +
-                GetFeedConfig().default_background_refresh_interval,
+  EXPECT_EQ(GetFeedConfig().default_background_refresh_interval,
             *refresh_scheduler_.scheduled_run_time);
 }
 

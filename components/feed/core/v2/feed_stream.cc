@@ -430,9 +430,10 @@ void FeedStream::LoadModel(std::unique_ptr<StreamModel> model) {
 }
 
 void FeedStream::SetRequestSchedule(RequestSchedule schedule) {
-  base::Time run_time = NextScheduledRequestTime(clock_->Now(), &schedule);
+  const base::Time now = clock_->Now();
+  base::Time run_time = NextScheduledRequestTime(now, &schedule);
   if (!run_time.is_null()) {
-    refresh_task_scheduler_->EnsureScheduled(run_time);
+    refresh_task_scheduler_->EnsureScheduled(run_time - now);
   } else {
     refresh_task_scheduler_->Cancel();
   }
