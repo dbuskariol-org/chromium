@@ -112,7 +112,11 @@ function createNodeForLogEntry(log) {
   nameCell.className = 'name';
   const nameDiv = document.createElement('div');
   nameDiv.className = 'stat-name';
-  nameDiv.textContent = log.statName;
+  const a = document.createElement('a');
+  a.className = 'stat-name-link';
+  a.href = `#${log.statName}`;
+  a.name = a.text = log.statName;
+  nameDiv.appendChild(a);
   nameCell.appendChild(nameDiv);
   row.appendChild(nameCell);
 
