@@ -78,7 +78,6 @@ class CrOSComponentInstaller : public CrOSComponentManager {
  public:
   CrOSComponentInstaller(std::unique_ptr<MetadataTable> metadata_table,
                          ComponentUpdateService* component_updater);
-  ~CrOSComponentInstaller() override;
 
   // CrOSComponentManager:
   void SetDelegate(Delegate* delegate) override;
@@ -93,12 +92,14 @@ class CrOSComponentInstaller : public CrOSComponentManager {
 
   void UnregisterCompatiblePath(const std::string& name) override;
   base::FilePath GetCompatiblePath(const std::string& name) const override;
-  bool IsRegistered(const std::string& name) const override;
+  bool IsRegisteredMayBlock(const std::string& name) override;
 
   // Called when a component is installed/updated.
   // Broadcasts a D-Bus signal for a successful component installation.
   void EmitInstalledSignal(const std::string& component);
 
+ protected:
+  ~CrOSComponentInstaller() override;
 
  private:
   FRIEND_TEST_ALL_PREFIXES(CrOSComponentInstallerTest, RegisterComponent);

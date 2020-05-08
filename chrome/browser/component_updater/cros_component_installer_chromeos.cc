@@ -270,7 +270,7 @@ void CrOSComponentInstaller::EmitInstalledSignal(const std::string& component) {
     delegate_->EmitInstalledSignal(component);
 }
 
-bool CrOSComponentInstaller::IsRegistered(const std::string& name) const {
+bool CrOSComponentInstaller::IsRegisteredMayBlock(const std::string& name) {
   base::FilePath root;
   if (!base::PathService::Get(DIR_COMPONENT_USER, &root))
     return false;

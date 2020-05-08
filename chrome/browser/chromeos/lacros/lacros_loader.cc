@@ -21,7 +21,7 @@ LacrosLoader* LacrosLoader::Get() {
   return g_instance;
 }
 
-LacrosLoader::LacrosLoader(CrOSComponentManager* manager)
+LacrosLoader::LacrosLoader(scoped_refptr<CrOSComponentManager> manager)
     : cros_component_manager_(manager) {
   DCHECK(cros_component_manager_);
 

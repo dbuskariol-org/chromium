@@ -300,7 +300,9 @@ class DBusServices {
         dbus::ObjectPath(kComponentUpdaterServicePath),
         CrosDBusService::CreateServiceProviderList(
             std::make_unique<ComponentUpdaterServiceProvider>(
-                g_browser_process->platform_part()->cros_component_manager())));
+                g_browser_process->platform_part()
+                    ->cros_component_manager()
+                    .get())));
 
     chrome_features_service_ = CrosDBusService::Create(
         system_bus, kChromeFeaturesServiceName,

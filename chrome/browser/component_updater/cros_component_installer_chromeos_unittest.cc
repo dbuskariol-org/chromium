@@ -300,7 +300,7 @@ class CrOSComponentInstallerTest : public testing::Test {
   // |component_install_path|: The path at which the component is expected to be
   //     installed.
   void VerifyComponentLoaded(
-      const CrOSComponentManager& cros_component_manager,
+      scoped_refptr<CrOSComponentManager> cros_component_manager,
       const std::string& component_name,
       base::Optional<CrOSComponentManager::Error> load_result,
       const base::FilePath& component_install_path) {
@@ -308,7 +308,7 @@ class CrOSComponentInstallerTest : public testing::Test {
     ASSERT_EQ(CrOSComponentManager::Error::NONE, load_result.value());
 
     EXPECT_EQ(component_install_path,
-              cros_component_manager.GetCompatiblePath(component_name));
+              cros_component_manager->GetCompatiblePath(component_name));
     EXPECT_TRUE(image_loader_client()->IsLoaded(component_name));
     EXPECT_EQ(component_install_path,
               image_loader_client()->GetComponentInstallPath(component_name));
@@ -371,20 +371,20 @@ class MockCrOSComponentInstallerPolicy : public CrOSComponentInstallerPolicy {
 };
 
 TEST_F(CrOSComponentInstallerTest, CompatibleCrOSComponent) {
-  component_updater::CrOSComponentInstaller cros_component_manager(nullptr,
-                                                                   nullptr);
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr, nullptr);
 
   const std::string kComponent = "a";
-  EXPECT_FALSE(cros_component_manager.IsCompatible(kComponent));
-  EXPECT_EQ(cros_component_manager.GetCompatiblePath(kComponent).value(),
+  EXPECT_FALSE(cros_component_manager->IsCompatible(kComponent));
+  EXPECT_EQ(cros_component_manager->GetCompatiblePath(kComponent).value(),
             std::string());
 
   const base::FilePath kPath("/component/path/v0");
-  cros_component_manager.RegisterCompatiblePath(kComponent, kPath);
-  EXPECT_TRUE(cros_component_manager.IsCompatible(kComponent));
-  EXPECT_EQ(cros_component_manager.GetCompatiblePath(kComponent), kPath);
-  cros_component_manager.UnregisterCompatiblePath(kComponent);
-  EXPECT_FALSE(cros_component_manager.IsCompatible(kComponent));
+  cros_component_manager->RegisterCompatiblePath(kComponent, kPath);
+  EXPECT_TRUE(cros_component_manager->IsCompatible(kComponent));
+  EXPECT_EQ(cros_component_manager->GetCompatiblePath(kComponent), kPath);
+  cros_component_manager->UnregisterCompatiblePath(kComponent);
+  EXPECT_FALSE(cros_component_manager->IsCompatible(kComponent));
 }
 
 TEST_F(CrOSComponentInstallerTest, CompatibilityOK) {
@@ -428,9 +428,9 @@ TEST_F(CrOSComponentInstallerTest, RegisterComponent) {
       "star-cups-driver", "1.1",
       "6d24de30f671da5aee6d463d9e446cafe9ddac672800a9defe86877dcde6c466"};
   EXPECT_CALL(*cus, RegisterComponent(testing::_)).Times(1);
-  component_updater::CrOSComponentInstaller cros_component_manager(nullptr,
-                                                                   cus.get());
-  cros_component_manager.Register(config, base::OnceClosure());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr, cus.get());
+  cros_component_manager->Register(config, base::OnceClosure());
   RunUntilIdle();
 }
 
@@ -445,12 +445,13 @@ TEST_F(CrOSComponentInstallerTest, LoadPreinstalledComponent_Skip_Mount) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kSkip,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -480,12 +481,13 @@ TEST_F(CrOSComponentInstallerTest,
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kSkip,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -509,12 +511,13 @@ TEST_F(CrOSComponentInstallerTest, LoadInstalledComponent) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kSkip,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -534,12 +537,13 @@ TEST_F(CrOSComponentInstallerTest, LoadNonInstalledComponent_Skip_Mount) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kSkip,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -552,7 +556,7 @@ TEST_F(CrOSComponentInstallerTest, LoadNonInstalledComponent_Skip_Mount) {
   EXPECT_TRUE(mount_path.empty());
 
   EXPECT_TRUE(
-      cros_component_manager.GetCompatiblePath(kTestComponentName).empty());
+      cros_component_manager->GetCompatiblePath(kTestComponentName).empty());
 
   EXPECT_FALSE(image_loader_client()->IsLoaded(kTestComponentName));
 }
@@ -571,12 +575,13 @@ TEST_F(CrOSComponentInstallerTest, LoadObsoleteInstalledComponent_Skip_Mount) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kSkip,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -589,7 +594,7 @@ TEST_F(CrOSComponentInstallerTest, LoadObsoleteInstalledComponent_Skip_Mount) {
   EXPECT_TRUE(mount_path.empty());
 
   EXPECT_TRUE(
-      cros_component_manager.GetCompatiblePath(kTestComponentName).empty());
+      cros_component_manager->GetCompatiblePath(kTestComponentName).empty());
 
   EXPECT_FALSE(image_loader_client()->IsLoaded(kTestComponentName));
 }
@@ -601,12 +606,13 @@ TEST_F(CrOSComponentInstallerTest, LoadNonInstalledComponent_DontForce_Mount) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kDontForce,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -633,19 +639,20 @@ TEST_F(CrOSComponentInstallerTest, LoadNonInstalledComponent_ForceTwice) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForMultiRegistration(kTestComponentName, &updater, 2);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result1;
   base::FilePath mount_path1;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kForce,
       base::BindOnce(&RecordLoadResult, &load_result1, &mount_path1));
 
   base::Optional<CrOSComponentManager::Error> load_result2;
   base::FilePath mount_path2;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kForce,
       base::BindOnce(&RecordLoadResult, &load_result2, &mount_path2));
@@ -692,12 +699,13 @@ TEST_F(CrOSComponentInstallerTest,
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kDontForce,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -715,7 +723,7 @@ TEST_F(CrOSComponentInstallerTest,
   EXPECT_TRUE(mount_path.empty());
 
   EXPECT_TRUE(
-      cros_component_manager.GetCompatiblePath(kTestComponentName).empty());
+      cros_component_manager->GetCompatiblePath(kTestComponentName).empty());
 
   EXPECT_FALSE(image_loader_client()->IsLoaded(kTestComponentName));
 }
@@ -736,12 +744,13 @@ TEST_F(CrOSComponentInstallerTest,
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kDontForce,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -772,15 +781,16 @@ TEST_F(CrOSComponentInstallerTest, RegisterAllRegistersInstalledComponent) {
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
-  cros_component_manager.RegisterInstalled();
+  cros_component_manager->RegisterInstalled();
   RunUntilIdle();
   EXPECT_FALSE(updater.HasPendingUpdate(kTestComponentName));
 
   EXPECT_EQ(install_path,
-            cros_component_manager.GetCompatiblePath(kTestComponentName));
+            cros_component_manager->GetCompatiblePath(kTestComponentName));
   EXPECT_FALSE(image_loader_client()->IsLoaded(kTestComponentName));
 }
 
@@ -792,13 +802,14 @@ TEST_F(CrOSComponentInstallerTest, RegisterAllIgnoresPrenstalledComponent) {
   auto update_service = std::make_unique<MockComponentUpdateService>();
   EXPECT_CALL(*update_service, RegisterComponent(testing::_)).Times(0);
   EXPECT_CALL(*update_service, GetOnDemandUpdater()).Times(0);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
-  cros_component_manager.RegisterInstalled();
+  cros_component_manager->RegisterInstalled();
   RunUntilIdle();
   EXPECT_TRUE(
-      cros_component_manager.GetCompatiblePath(kTestComponentName).empty());
+      cros_component_manager->GetCompatiblePath(kTestComponentName).empty());
   EXPECT_FALSE(image_loader_client()->IsLoaded(kTestComponentName));
 }
 
@@ -814,18 +825,19 @@ TEST_F(CrOSComponentInstallerTest,
   TestUpdater updater;
   std::unique_ptr<MockComponentUpdateService> update_service =
       CreateUpdateServiceForSingleRegistration(kTestComponentName, &updater);
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
-  cros_component_manager.RegisterInstalled();
+  cros_component_manager->RegisterInstalled();
   RunUntilIdle();
   EXPECT_FALSE(updater.HasPendingUpdate(kTestComponentName));
   EXPECT_EQ(install_path.value(),
-            cros_component_manager.GetCompatiblePath(kTestComponentName));
+            cros_component_manager->GetCompatiblePath(kTestComponentName));
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kDontForce,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));
@@ -857,15 +869,16 @@ TEST_F(CrOSComponentInstallerTest,
 
   EXPECT_CALL(*update_service, GetOnDemandUpdater())
       .WillRepeatedly(testing::ReturnRef(updater));
-  component_updater::CrOSComponentInstaller cros_component_manager(
-      nullptr, update_service.get());
+  scoped_refptr<CrOSComponentInstaller> cros_component_manager =
+      base::MakeRefCounted<CrOSComponentInstaller>(nullptr,
+                                                   update_service.get());
 
-  cros_component_manager.RegisterInstalled();
+  cros_component_manager->RegisterInstalled();
   EXPECT_FALSE(updater.HasPendingUpdate(kTestComponentName));
 
   base::Optional<CrOSComponentManager::Error> load_result;
   base::FilePath mount_path;
-  cros_component_manager.Load(
+  cros_component_manager->Load(
       kTestComponentName, CrOSComponentManager::MountPolicy::kMount,
       CrOSComponentManager::UpdatePolicy::kDontForce,
       base::BindOnce(&RecordLoadResult, &load_result, &mount_path));

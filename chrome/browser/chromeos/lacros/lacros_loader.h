@@ -15,7 +15,8 @@ class LacrosLoader {
   // Direct getter because there are no accessors to the owning object.
   static LacrosLoader* Get();
 
-  explicit LacrosLoader(component_updater::CrOSComponentManager* manager);
+  explicit LacrosLoader(
+      scoped_refptr<component_updater::CrOSComponentManager> manager);
   LacrosLoader(const LacrosLoader&) = delete;
   LacrosLoader& operator=(const LacrosLoader&) = delete;
   ~LacrosLoader();
@@ -29,7 +30,8 @@ class LacrosLoader {
   void OnLoadComplete(component_updater::CrOSComponentManager::Error error,
                       const base::FilePath& path);
 
-  component_updater::CrOSComponentManager* cros_component_manager_;
+  scoped_refptr<component_updater::CrOSComponentManager>
+      cros_component_manager_;
 
   // Path to the lacros-chrome disk image directory.
   base::FilePath lacros_path_;
