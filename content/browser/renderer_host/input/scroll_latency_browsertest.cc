@@ -227,7 +227,7 @@ IN_PROC_BROWSER_TEST_F(ScrollLatencyBrowserTest, MultipleWheelScrollOnMain) {
   ScrollLatencyNotRecordedIfGSUIgnored
 #endif
 IN_PROC_BROWSER_TEST_F(ScrollLatencyBrowserTest,
-                       ScrollLatencyNotRecordedIfGSUIgnored) {
+                       MAYBE_ScrollLatencyNotRecordedIfGSUIgnored) {
   LoadURL();
   auto scroll_update_watcher = std::make_unique<InputMsgWatcher>(
       GetWidgetHost(), blink::WebInputEvent::Type::kGestureScrollUpdate);
