@@ -3899,6 +3899,11 @@
     "expiry_milestone": 90
   },
   {
+    "name": "suggested-content-toggle",
+    "owners": [ "jiameng", "wrong" ],
+    "expiry_milestone": 85
+  },
+  {
     "name": "sync-error-infobar",
     "owners": [ "triploblastic", "bsazonov" ],
     "expiry_milestone": 85
