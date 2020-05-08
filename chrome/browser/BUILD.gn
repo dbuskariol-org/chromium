@@ -5083,6 +5083,8 @@ jumbo_static_library("browser") {
         "offline_pages/android/request_coordinator_bridge.h",
         "offline_pages/android/request_coordinator_factory.cc",
       ]
+
+      deps += [ "//chrome/browser/offline_pages/android:jni_headers" ]
     }
 
     public_deps += [
