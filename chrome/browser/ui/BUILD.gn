@@ -2176,6 +2176,7 @@ jumbo_static_library("ui") {
       "//chromeos/services/assistant/public/cpp",
       "//chromeos/services/assistant/public/mojom",
       "//chromeos/services/assistant/public/proto",
+      "//chromeos/services/assistant/public/shared",
       "//chromeos/services/cellular_setup",
       "//chromeos/services/cellular_setup/public/mojom",
       "//chromeos/services/machine_learning/public/cpp",
@@ -2220,10 +2221,6 @@ jumbo_static_library("ui") {
 
     if (use_cras) {
       defines += [ "USE_CRAS" ]
-    }
-
-    if (enable_cros_libassistant) {
-      deps += [ "//chromeos/assistant/internal" ]
     }
   }
 

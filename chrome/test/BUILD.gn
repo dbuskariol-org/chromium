@@ -4529,10 +4529,6 @@ test("unit_tests") {
     ]
   }
 
-  if (enable_cros_libassistant) {
-    deps += [ "//chromeos/assistant/internal" ]
-  }
-
   if (enable_spellcheck) {
     sources += [
       "../browser/spellchecker/spell_check_host_chrome_impl_mac_unittest.cc",
