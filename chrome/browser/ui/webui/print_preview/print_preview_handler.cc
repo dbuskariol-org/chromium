@@ -105,103 +105,97 @@ constexpr size_t kMaxCloudPrintPdfDataSizeInBytes = 80 * 1024 * 1024 / 2;
 
 // This enum is used to back an UMA histogram, and should therefore be treated
 // as append only.
-enum UserActionBuckets {
-  PRINT_TO_PRINTER,
-  PRINT_TO_PDF,
-  CANCEL,
-  FALLBACK_TO_ADVANCED_SETTINGS_DIALOG,
-  PREVIEW_FAILED,
-  PREVIEW_STARTED,
-  INITIATOR_CRASHED_UNUSED,
-  INITIATOR_CLOSED,
-  PRINT_WITH_CLOUD_PRINT,
-  PRINT_WITH_PRIVET,
-  PRINT_WITH_EXTENSION,
-  OPEN_IN_MAC_PREVIEW,
-  PRINT_TO_GOOGLE_DRIVE,
-  USERACTION_BUCKET_BOUNDARY
+enum class UserActionBuckets {
+  kPrintToPrinter = 0,
+  kPrintToPdf = 1,
+  kCancel = 2,
+  kFallbackToAdvancedSettingsDialog = 3,
+  kPreviewFailed = 4,
+  kPreviewStarted = 5,
+  // kInitiatorCrashed = 6,  // no longer used
+  kInitiatorClosed = 7,
+  kPrintWithCloudPrint = 8,
+  kPrintWithPrivet = 9,
+  kPrintWithExtension = 10,
+  kOpenInMacPreview = 11,
+  kPrintToGoogleDrive = 12,
+  kMaxValue = kPrintToGoogleDrive
 };
 
 // This enum is used to back an UMA histogram, and should therefore be treated
 // as append only.
-enum PrintSettingsBuckets {
-  LANDSCAPE = 0,
-  PORTRAIT,
-  COLOR,
-  BLACK_AND_WHITE,
-  COLLATE,
-  SIMPLEX,
-  DUPLEX,
-  TOTAL,
-  HEADERS_AND_FOOTERS,
-  CSS_BACKGROUND,
-  SELECTION_ONLY,
-  EXTERNAL_PDF_PREVIEW_UNUSED,
-  PAGE_RANGE,
-  DEFAULT_MEDIA,
-  NON_DEFAULT_MEDIA,
-  COPIES,
-  NON_DEFAULT_MARGINS,
-  DISTILL_PAGE_UNUSED,
-  SCALING,
-  PRINT_AS_IMAGE,
-  PAGES_PER_SHEET,
-  FIT_TO_PAGE,
-  DEFAULT_DPI,
-  NON_DEFAULT_DPI,
-  PIN,
-  FIT_TO_PAPER,
-  PRINT_SETTINGS_BUCKET_BOUNDARY
+enum class PrintSettingsBuckets {
+  kLandscape = 0,
+  kPortrait = 1,
+  kColor = 2,
+  kBlackAndWhite = 3,
+  kCollate = 4,
+  kSimplex = 5,
+  kDuplex = 6,
+  kTotal = 7,
+  kHeadersAndFooters = 8,
+  kCssBackground = 9,
+  kSelectionOnly = 10,
+  // kExternalPdfPreview = 11,  // no longer used
+  kPageRange = 12,
+  kDefaultMedia = 13,
+  kNonDefaultMedia = 14,
+  kCopies = 15,
+  kNonDefaultMargins = 16,
+  // kDistillPage = 17,  // no longer used
+  kScaling = 18,
+  kPrintAsImage = 19,
+  kPagesPerSheet = 20,
+  kFitToPage = 21,
+  kDefaultDpi = 22,
+  kNonDefaultDpi = 23,
+  kPin = 24,
+  kFitToPaper = 25,
+  kMaxValue = kFitToPaper
 };
 
 // This enum is used to back an UMA histogram, and should therefore be treated
 // as append only.
-enum PrintDocumentTypeBuckets {
-  HTML_DOCUMENT = 0,
-  PDF_DOCUMENT,
-  PRINT_DOCUMENT_TYPE_BUCKET_BOUNDARY
+enum class PrintDocumentTypeBuckets {
+  kHtmlDocument = 0,
+  kPdfDocument = 1,
+  kMaxValue = kPdfDocument
 };
 
 void ReportUserActionHistogram(UserActionBuckets event) {
-  UMA_HISTOGRAM_ENUMERATION("PrintPreview.UserAction", event,
-                            USERACTION_BUCKET_BOUNDARY);
+  UMA_HISTOGRAM_ENUMERATION("PrintPreview.UserAction", event);
 }
 
 void ReportPrintSettingHistogram(PrintSettingsBuckets setting) {
-  UMA_HISTOGRAM_ENUMERATION("PrintPreview.PrintSettings", setting,
-                            PRINT_SETTINGS_BUCKET_BOUNDARY);
+  UMA_HISTOGRAM_ENUMERATION("PrintPreview.PrintSettings", setting);
 }
 
 void ReportPrintDocumentTypeAndSizeHistograms(PrintDocumentTypeBuckets doctype,
                                               size_t average_page_size_in_kb) {
-  base::UmaHistogramEnumeration("PrintPreview.PrintDocumentType", doctype,
-                                PRINT_DOCUMENT_TYPE_BUCKET_BOUNDARY);
+  base::UmaHistogramEnumeration("PrintPreview.PrintDocumentType", doctype);
   switch (doctype) {
-    case HTML_DOCUMENT:
+    case PrintDocumentTypeBuckets::kHtmlDocument:
       base::UmaHistogramMemoryKB("PrintPreview.PrintDocumentSize.HTML",
                                  average_page_size_in_kb);
       break;
-    case PDF_DOCUMENT:
+    case PrintDocumentTypeBuckets::kPdfDocument:
       base::UmaHistogramMemoryKB("PrintPreview.PrintDocumentSize.PDF",
                                  average_page_size_in_kb);
-      break;
-    default:
-      NOTREACHED();
       break;
   }
 }
 
 PrinterType GetPrinterTypeForUserAction(UserActionBuckets user_action) {
   switch (user_action) {
-    case PRINT_WITH_PRIVET:
+    case UserActionBuckets::kPrintWithPrivet:
       return PrinterType::kPrivet;
-    case PRINT_WITH_EXTENSION:
+    case UserActionBuckets::kPrintWithExtension:
       return PrinterType::kExtension;
-    case PRINT_TO_PDF:
+    case UserActionBuckets::kPrintToPdf:
       return PrinterType::kPdf;
-    case PRINT_TO_PRINTER:
-    case FALLBACK_TO_ADVANCED_SETTINGS_DIALOG:
-    case OPEN_IN_MAC_PREVIEW:
+    case UserActionBuckets::kPrintToPrinter:
+    case UserActionBuckets::kFallbackToAdvancedSettingsDialog:
+    case UserActionBuckets::kOpenInMacPreview:
       return PrinterType::kLocal;
     default:
       NOTREACHED();
@@ -211,8 +205,9 @@ PrinterType GetPrinterTypeForUserAction(UserActionBuckets user_action) {
 
 base::Value GetErrorValue(UserActionBuckets user_action,
                           base::StringPiece description) {
-  return user_action == PRINT_WITH_PRIVET ? base::Value(-1)
-                                          : base::Value(description);
+  return user_action == UserActionBuckets::kPrintWithPrivet
+             ? base::Value(-1)
+             : base::Value(description);
 }
 
 // Dictionary Fields for Print Preview initial settings. Keep in sync with
@@ -302,7 +297,7 @@ base::Value GetSettingsDictionary(const std::string& json_str) {
 void ReportPrintSettingsStats(const base::Value& print_settings,
                               const base::Value& preview_settings,
                               bool is_pdf) {
-  ReportPrintSettingHistogram(TOTAL);
+  ReportPrintSettingHistogram(PrintSettingsBuckets::kTotal);
 
   // Print settings can be categorized into 2 groups: settings that are applied
   // via preview generation (page range, selection, headers/footers, background
@@ -317,7 +312,7 @@ void ReportPrintSettingsStats(const base::Value& print_settings,
       preview_settings.FindKey(kSettingPageRange);
   if (page_range_array && page_range_array->is_list() &&
       !page_range_array->GetList().empty()) {
-    ReportPrintSettingHistogram(PAGE_RANGE);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kPageRange);
   }
 
   const base::Value* media_size_value =
@@ -326,30 +321,34 @@ void ReportPrintSettingsStats(const base::Value& print_settings,
       !media_size_value->DictEmpty()) {
     if (media_size_value->FindBoolKey(kSettingMediaSizeIsDefault)
             .value_or(false)) {
-      ReportPrintSettingHistogram(DEFAULT_MEDIA);
+      ReportPrintSettingHistogram(PrintSettingsBuckets::kDefaultMedia);
     } else {
-      ReportPrintSettingHistogram(NON_DEFAULT_MEDIA);
+      ReportPrintSettingHistogram(PrintSettingsBuckets::kNonDefaultMedia);
     }
   }
 
   base::Optional<bool> landscape_opt =
       preview_settings.FindBoolKey(kSettingLandscape);
   if (landscape_opt)
-    ReportPrintSettingHistogram(landscape_opt.value() ? LANDSCAPE : PORTRAIT);
+    ReportPrintSettingHistogram(landscape_opt.value()
+                                    ? PrintSettingsBuckets::kLandscape
+                                    : PrintSettingsBuckets::kPortrait);
 
   if (print_settings.FindIntKey(kSettingCopies).value_or(1) > 1)
-    ReportPrintSettingHistogram(COPIES);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kCopies);
 
   if (preview_settings.FindIntKey(kSettingPagesPerSheet).value_or(1) != 1)
-    ReportPrintSettingHistogram(PAGES_PER_SHEET);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kPagesPerSheet);
 
   if (print_settings.FindBoolKey(kSettingCollate).value_or(false))
-    ReportPrintSettingHistogram(COLLATE);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kCollate);
 
   base::Optional<int> duplex_mode_opt =
       print_settings.FindIntKey(kSettingDuplexMode);
   if (duplex_mode_opt)
-    ReportPrintSettingHistogram(duplex_mode_opt.value() ? DUPLEX : SIMPLEX);
+    ReportPrintSettingHistogram(duplex_mode_opt.value()
+                                    ? PrintSettingsBuckets::kDuplex
+                                    : PrintSettingsBuckets::kSimplex);
 
   base::Optional<int> color_mode_opt = print_settings.FindIntKey(kSettingColor);
   if (color_mode_opt.has_value()) {
@@ -357,7 +356,9 @@ void ReportPrintSettingsStats(const base::Value& print_settings,
     if (!unknown_color_model) {
       base::Optional<bool> is_color =
           IsColorModelSelected(color_mode_opt.value());
-      ReportPrintSettingHistogram(is_color.value() ? COLOR : BLACK_AND_WHITE);
+      ReportPrintSettingHistogram(is_color.value()
+                                      ? PrintSettingsBuckets::kColor
+                                      : PrintSettingsBuckets::kBlackAndWhite);
     }
 
     // Record whether the printing backend does not understand the printer's
@@ -373,36 +374,36 @@ void ReportPrintSettingsStats(const base::Value& print_settings,
   }
 
   if (preview_settings.FindIntKey(kSettingMarginsType).value_or(0) != 0)
-    ReportPrintSettingHistogram(NON_DEFAULT_MARGINS);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kNonDefaultMargins);
 
   if (preview_settings.FindBoolKey(kSettingHeaderFooterEnabled).value_or(false))
-    ReportPrintSettingHistogram(HEADERS_AND_FOOTERS);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kHeadersAndFooters);
 
   if (preview_settings.FindBoolKey(kSettingShouldPrintBackgrounds)
           .value_or(false)) {
-    ReportPrintSettingHistogram(CSS_BACKGROUND);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kCssBackground);
   }
 
   if (preview_settings.FindBoolKey(kSettingShouldPrintSelectionOnly)
           .value_or(false)) {
-    ReportPrintSettingHistogram(SELECTION_ONLY);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kSelectionOnly);
   }
 
   if (preview_settings.FindBoolKey(kSettingRasterizePdf).value_or(false))
-    ReportPrintSettingHistogram(PRINT_AS_IMAGE);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kPrintAsImage);
 
   ScalingType scaling_type =
       static_cast<ScalingType>(preview_settings.FindIntKey(kSettingScalingType)
                                    .value_or(ScalingType::DEFAULT));
   if (scaling_type == ScalingType::CUSTOM) {
-    ReportPrintSettingHistogram(SCALING);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kScaling);
   }
 
   if (is_pdf) {
     if (scaling_type == ScalingType::FIT_TO_PAGE)
-      ReportPrintSettingHistogram(FIT_TO_PAGE);
+      ReportPrintSettingHistogram(PrintSettingsBuckets::kFitToPage);
     else if (scaling_type == ScalingType::FIT_TO_PAPER)
-      ReportPrintSettingHistogram(FIT_TO_PAPER);
+      ReportPrintSettingHistogram(PrintSettingsBuckets::kFitToPaper);
   }
 
   if (print_settings.FindIntKey(kSettingDpiHorizontal).value_or(0) > 0 &&
@@ -410,38 +411,39 @@ void ReportPrintSettingsStats(const base::Value& print_settings,
     base::Optional<bool> is_default_opt =
         print_settings.FindBoolKey(kSettingDpiDefault);
     if (is_default_opt) {
-      ReportPrintSettingHistogram(is_default_opt.value() ? DEFAULT_DPI
-                                                         : NON_DEFAULT_DPI);
+      ReportPrintSettingHistogram(is_default_opt.value()
+                                      ? PrintSettingsBuckets::kDefaultDpi
+                                      : PrintSettingsBuckets::kNonDefaultDpi);
     }
   }
 
 #if defined(OS_CHROMEOS)
   if (print_settings.FindStringKey(kSettingPinValue))
-    ReportPrintSettingHistogram(PIN);
+    ReportPrintSettingHistogram(PrintSettingsBuckets::kPin);
 #endif  // defined(OS_CHROMEOS)
 }
 
 UserActionBuckets DetermineUserAction(const base::Value& settings) {
 #if defined(OS_MACOSX)
   if (settings.FindKey(kSettingOpenPDFInPreview))
-    return OPEN_IN_MAC_PREVIEW;
+    return UserActionBuckets::kOpenInMacPreview;
 #endif
   // This needs to be checked before checking for a cloud print ID, since a
   // print ticket for printing to Drive will also contain a cloud print ID.
   if (settings.FindBoolKey(kSettingPrintToGoogleDrive).value_or(false))
-    return PRINT_TO_GOOGLE_DRIVE;
+    return UserActionBuckets::kPrintToGoogleDrive;
   if (settings.FindKey(kSettingCloudPrintId))
-    return PRINT_WITH_CLOUD_PRINT;
+    return UserActionBuckets::kPrintWithCloudPrint;
 
   PrinterType type = static_cast<PrinterType>(
       settings.FindIntKey(kSettingPrinterType).value());
   switch (type) {
     case PrinterType::kPrivet:
-      return PRINT_WITH_PRIVET;
+      return UserActionBuckets::kPrintWithPrivet;
     case PrinterType::kExtension:
-      return PRINT_WITH_EXTENSION;
+      return UserActionBuckets::kPrintWithExtension;
     case PrinterType::kPdf:
-      return PRINT_TO_PDF;
+      return UserActionBuckets::kPrintToPdf;
     case PrinterType::kLocal:
       break;
     default:
@@ -450,8 +452,8 @@ UserActionBuckets DetermineUserAction(const base::Value& settings) {
   }
 
   if (settings.FindBoolKey(kSettingShowSystemDialog).value_or(false))
-    return FALLBACK_TO_ADVANCED_SETTINGS_DIALOG;
-  return PRINT_TO_PRINTER;
+    return UserActionBuckets::kFallbackToAdvancedSettingsDialog;
+  return UserActionBuckets::kPrintToPrinter;
 }
 
 base::Optional<gfx::Size> ParsePaperSize(const base::Value* paper_size_value) {
@@ -576,7 +578,7 @@ class PrintPreviewHandler::AccessTokenService
 #endif  // defined(OS_CHROMEOS)
 
 PrintPreviewHandler::PrintPreviewHandler() {
-  ReportUserActionHistogram(PREVIEW_STARTED);
+  ReportUserActionHistogram(UserActionBuckets::kPreviewStarted);
 }
 
 PrintPreviewHandler::~PrintPreviewHandler() {
@@ -860,7 +862,7 @@ void PrintPreviewHandler::HandleGetPreview(const base::ListValue* args) {
           ? PrintViewManager::FromWebContents(initiator)->print_preview_rfh()
           : nullptr;
   if (!rfh) {
-    ReportUserActionHistogram(INITIATOR_CLOSED);
+    ReportUserActionHistogram(UserActionBuckets::kInitiatorClosed);
     print_preview_ui()->OnClosePrintPreviewDialog();
     return;
   }
@@ -940,15 +942,17 @@ void PrintPreviewHandler::HandlePrint(const base::ListValue* args) {
   if (last_preview_settings_.is_dict())
     ReportPrintSettingsStats(settings, last_preview_settings_, is_pdf);
   {
-    PrintDocumentTypeBuckets doc_type = is_pdf ? PDF_DOCUMENT : HTML_DOCUMENT;
+    PrintDocumentTypeBuckets doc_type =
+        is_pdf ? PrintDocumentTypeBuckets::kPdfDocument
+               : PrintDocumentTypeBuckets::kHtmlDocument;
     size_t average_page_size_in_kb = data->size() / page_count;
     average_page_size_in_kb /= 1024;
     ReportPrintDocumentTypeAndSizeHistograms(doc_type, average_page_size_in_kb);
   }
   ReportUserActionHistogram(user_action);
 
-  if (user_action == PRINT_WITH_CLOUD_PRINT ||
-      user_action == PRINT_TO_GOOGLE_DRIVE) {
+  if (user_action == UserActionBuckets::kPrintWithCloudPrint ||
+      user_action == UserActionBuckets::kPrintToGoogleDrive) {
     // Does not send the title like the other printer handler types below,
     // because JS already has the document title from the initial settings.
     SendCloudPrintJob(callback_id, data.get());
@@ -1059,7 +1063,8 @@ void PrintPreviewHandler::HandleGetAccessToken(const base::ListValue* args) {
 #if BUILDFLAG(ENABLE_BASIC_PRINT_DIALOG)
 void PrintPreviewHandler::HandleShowSystemDialog(
     const base::ListValue* /*args*/) {
-  ReportUserActionHistogram(FALLBACK_TO_ADVANCED_SETTINGS_DIALOG);
+  ReportUserActionHistogram(
+      UserActionBuckets::kFallbackToAdvancedSettingsDialog);
 
   WebContents* initiator = GetInitiator();
   if (!initiator)
@@ -1076,7 +1081,7 @@ void PrintPreviewHandler::HandleShowSystemDialog(
 
 void PrintPreviewHandler::HandleClosePreviewDialog(
     const base::ListValue* /*args*/) {
-  ReportUserActionHistogram(CANCEL);
+  ReportUserActionHistogram(UserActionBuckets::kCancel);
 
   // Record the number of times the user requests to regenerate preview data
   // before cancelling.
@@ -1356,7 +1361,7 @@ void PrintPreviewHandler::OnPrintPreviewFailed(int request_id) {
 
   if (!reported_failed_preview_) {
     reported_failed_preview_ = true;
-    ReportUserActionHistogram(PREVIEW_FAILED);
+    ReportUserActionHistogram(UserActionBuckets::kPreviewFailed);
   }
 
   // Keep track of failures.
