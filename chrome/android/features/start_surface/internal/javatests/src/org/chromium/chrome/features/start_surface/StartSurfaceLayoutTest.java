@@ -286,13 +286,12 @@ public class StartSurfaceLayoutTest {
     @Test
     @MediumTest
     @Feature({"RenderTest"})
+    @DisableFeatures({ChromeFeatureList.TAB_TO_GTS_ANIMATION + "<Study"})
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS})
-    @FlakyTest(message = "crbug.com/1064157 This test is flaky")
     public void testRenderGrid_3NativeTabs() throws IOException {
         // clang-format on
         ChromeTabbedActivity cta = mActivityTestRule.getActivity();
-        assertTrue(TabUiFeatureUtilities.isTabToGtsAnimationEnabled());
         // Prepare some incognito native tabs and enter tab switcher.
         // NTP in incognito mode is chosen for its consistency in look, and we don't have to mock
         // away the MV tiles, login promo, feed, etc.
