@@ -27334,6 +27334,7 @@ Called by update_feature_policy_enum.py.-->
   <int value="70" label="StorageAccessAPI"/>
   <int value="71" label="ClientHintUAFullVersion"/>
   <int value="72" label="TrustTokenRedemption"/>
+  <int value="73" label="ConversionMeasurement"/>
 </enum>
 
 <enum name="FeaturePolicyImageCompressionFormat">
