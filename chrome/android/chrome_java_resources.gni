@@ -1197,7 +1197,6 @@ chrome_java_resources = [
   "java/res/xml/data_reduction_preferences_off_lite_mode.xml",
   "java/res/xml/developer_preferences.xml",
   "java/res/xml/do_not_track_preferences.xml",
-  "java/res/xml/download_preferences.xml",
   "java/res/xml/homepage_preferences.xml",
   "java/res/xml/languages_preferences.xml",
   "java/res/xml/legal_information_preferences.xml",

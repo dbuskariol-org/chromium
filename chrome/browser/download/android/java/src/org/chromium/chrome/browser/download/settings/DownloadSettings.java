@@ -10,10 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.download.DownloadLocationDialogBridge;
 import org.chromium.chrome.browser.download.DownloadPromptStatus;
 import org.chromium.chrome.browser.offlinepages.prefetch.PrefetchConfiguration;
+import org.chromium.chrome.download.R;
 import org.chromium.components.browser_ui.settings.ChromeSwitchPreference;
 import org.chromium.components.browser_ui.settings.SettingsUtils;
 
