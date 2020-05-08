@@ -32,12 +32,10 @@
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/extension_tab_util.h"
 #include "chrome/browser/extensions/extension_util.h"
-#include "chrome/browser/infobars/infobar_service.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/webui/chrome_web_ui_controller_factory.h"
 #include "chrome/common/chrome_switches.h"
-#include "components/infobars/core/infobar.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/devtools_agent_host.h"
@@ -148,7 +146,7 @@ class ExtensionDevToolsClientHost : public content::DevToolsAgentHostClient,
                             SendCommand::Params::CommandParams* command_params);
 
   // Closes connection as terminated by the user.
-  void InfoBarDismissed();
+  void InfoBarDestroyed();
 
   // DevToolsAgentHostClient interface.
   void AgentHostClosed(DevToolsAgentHost* agent_host) override;
@@ -180,10 +178,11 @@ class ExtensionDevToolsClientHost : public content::DevToolsAgentHostClient,
   scoped_refptr<const Extension> extension_;
   Debuggee debuggee_;
   content::NotificationRegistrar registrar_;
-  int last_request_id_;
+  int last_request_id_ = 0;
   PendingRequests pending_requests_;
-  ExtensionDevToolsInfoBar* infobar_;
-  api::debugger::DetachReason detach_reason_;
+  ExtensionDevToolsInfoBar* infobar_ = nullptr;
+  api::debugger::DetachReason detach_reason_ =
+      api::debugger::DETACH_REASON_TARGET_CLOSED;
 
   // Listen to extension unloaded notification.
   ScopedObserver<ExtensionRegistry, ExtensionRegistryObserver>
@@ -199,10 +198,7 @@ ExtensionDevToolsClientHost::ExtensionDevToolsClientHost(
     const Debuggee& debuggee)
     : profile_(profile),
       agent_host_(agent_host),
-      extension_(std::move(extension)),
-      last_request_id_(0),
-      infobar_(nullptr),
-      detach_reason_(api::debugger::DETACH_REASON_TARGET_CLOSED) {
+      extension_(std::move(extension)) {
   CopyDebuggee(&debuggee_, debuggee);
 
   g_attached_client_hosts.Get().insert(this);
@@ -235,8 +231,8 @@ bool ExtensionDevToolsClientHost::Attach() {
 
   infobar_ = ExtensionDevToolsInfoBar::Create(
       extension_id(), extension_->name(), this,
-      base::Bind(&ExtensionDevToolsClientHost::InfoBarDismissed,
-                 base::Unretained(this)));
+      base::BindOnce(&ExtensionDevToolsClientHost::InfoBarDestroyed,
+                     base::Unretained(this)));
   return true;
 }
 
@@ -281,7 +277,7 @@ void ExtensionDevToolsClientHost::SendMessageToBackend(
                                        base::as_bytes(base::make_span(json)));
 }
 
-void ExtensionDevToolsClientHost::InfoBarDismissed() {
+void ExtensionDevToolsClientHost::InfoBarDestroyed() {
   detach_reason_ = api::debugger::DETACH_REASON_CANCELED_BY_USER;
   RespondDetachedToPendingRequests();
   SendDetachedEvent();

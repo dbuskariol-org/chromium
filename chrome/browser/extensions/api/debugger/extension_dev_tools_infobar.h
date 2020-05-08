@@ -9,9 +9,6 @@
 #include <string>
 
 #include "base/callback_forward.h"
-#include "base/memory/weak_ptr.h"
-
-class GlobalConfirmInfoBar;
 
 namespace extensions {
 class ExtensionDevToolsClientHost;
@@ -21,27 +18,30 @@ class ExtensionDevToolsClientHost;
 class ExtensionDevToolsInfoBar {
  public:
   // Ensures a global infobar corresponding to the supplied extension is
-  // showing and registers |dismissed_callback| with it to be called back on
+  // showing and registers |destroyed_callback| with it to be called back on
   // destruction.
   static ExtensionDevToolsInfoBar* Create(
       const std::string& extension_id,
       const std::string& extension_name,
       ExtensionDevToolsClientHost* client_host,
-      const base::Closure& dismissed_callback);
+      base::OnceClosure destroyed_callback);
+
+  ExtensionDevToolsInfoBar(const ExtensionDevToolsInfoBar&) = delete;
+  ExtensionDevToolsInfoBar& operator=(const ExtensionDevToolsInfoBar&) = delete;
 
   // Unregisters the callback associated with |client_host|, so it will not be
   // called on infobar destruction.
   void Unregister(ExtensionDevToolsClientHost* client_host);
 
  private:
-  ExtensionDevToolsInfoBar(const std::string& extension_id,
+  ExtensionDevToolsInfoBar(std::string extension_id,
                            const std::string& extension_name);
   ~ExtensionDevToolsInfoBar();
-  void InfoBarDismissed();
 
-  std::string extension_id_;
-  std::map<ExtensionDevToolsClientHost*, base::Closure> callbacks_;
-  base::WeakPtr<GlobalConfirmInfoBar> infobar_;
+  void InfoBarDestroyed();
+
+  const std::string extension_id_;
+  std::map<ExtensionDevToolsClientHost*, base::OnceClosure> callbacks_;
 };
 
 }  // namespace extensions
