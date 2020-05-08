@@ -164,7 +164,7 @@ function updateLogEntries(systemInfo) {
   const table = $('details');
 
   // Delete any existing log entries in the table
-  table.innerHtml = '';
+  table.innerHTML = trustedTypes.emptyHTML;
   table.appendChild(fragment);
 }
 
