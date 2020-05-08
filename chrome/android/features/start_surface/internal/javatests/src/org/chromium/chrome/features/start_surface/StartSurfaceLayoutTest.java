@@ -688,15 +688,13 @@ public class StartSurfaceLayoutTest {
     @Test
     @MediumTest
     @CommandLineFlags.Add({BASE_PARAMS})
-    @DisableIf.Build(sdk_is_less_than = Build.VERSION_CODES.M,
-            message = "https://crbug.com/1023833")
-    public void testIncognitoToggle_tabCount() throws InterruptedException {
+    public void testIncognitoToggle_tabCount() {
         mActivityTestRule.loadUrl(mUrl);
         ChromeTabbedActivity cta = mActivityTestRule.getActivity();
 
         // Prepare two incognito tabs and enter tab switcher.
         prepareTabs(1, 2, mUrl);
-        enterGTSWithThumbnailChecking();
+        enterTabSwitcher(cta);
         onView(withId(R.id.tab_list_view))
                 .check(TabCountAssertion.havingTabCount(2));
 
@@ -1249,39 +1247,34 @@ public class StartSurfaceLayoutTest {
 
     @Test
     @MediumTest
-    @DisabledTest(message = "crbug.com/1075787")
     @CommandLineFlags.Add({BASE_PARAMS})
-    public void testRecycling_defaultAspectRatio() throws InterruptedException {
+    public void testRecycling_defaultAspectRatio() {
         prepareTabs(10, 0, mUrl);
         ChromeTabUtils.switchTabInCurrentTabModel(mActivityTestRule.getActivity(), 0);
-        enterGTSWithThumbnailChecking();
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view)).perform(RecyclerViewActions.scrollToPosition(9));
     }
 
     @Test
     @MediumTest
     // clang-format off
-    @DisableIf.Build(sdk_is_less_than = Build.VERSION_CODES.M,
-        message = "https://crbug.com/1023833")
     @CommandLineFlags.Add({BASE_PARAMS + "/thumbnail_aspect_ratio/0.75"})
-    public void testRecycling_aspectRatioPoint75() throws InterruptedException {
+    public void testRecycling_aspectRatioPoint75() {
         // clang-format on
         prepareTabs(10, 0, mUrl);
         ChromeTabUtils.switchTabInCurrentTabModel(mActivityTestRule.getActivity(), 0);
-        enterGTSWithThumbnailChecking();
+        enterTabSwitcher(mActivityTestRule.getActivity());
         onView(withId(R.id.tab_list_view)).perform(RecyclerViewActions.scrollToPosition(9));
     }
 
     @Test
     @MediumTest
     // clang-format off
-    @DisableIf.Build(sdk_is_less_than = Build.VERSION_CODES.M,
-        message = "https://crbug.com/1023833")
     @CommandLineFlags.Add({BASE_PARAMS + "/thumbnail_aspect_ratio/0.75"})
-    public void testExpandTab_withAspectRatioPoint75() throws InterruptedException {
+    public void testExpandTab_withAspectRatioPoint75() {
         // clang-format on
         prepareTabs(1, 0, mUrl);
-        enterGTSWithThumbnailChecking();
+        enterTabSwitcher(mActivityTestRule.getActivity());
         leaveGTSAndVerifyThumbnailsAreReleased();
     }
 
