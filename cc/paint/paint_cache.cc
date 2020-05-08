@@ -34,6 +34,8 @@ bool ClientPaintCache::Get(PaintCacheDataType type, PaintCacheId id) {
 void ClientPaintCache::Put(PaintCacheDataType type,
                            PaintCacheId id,
                            size_t size) {
+  if (max_budget_ == kNoCachingBudget)
+    return;
   auto key = std::make_pair(type, id);
   DCHECK(cache_map_.Peek(key) == cache_map_.end());
 
