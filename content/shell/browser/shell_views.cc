@@ -1,4 +1,4 @@
-// Copyright 2020 The Chromium Authors. All rights reserved.
+// Copyright 2013 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -50,26 +50,6 @@
 
 namespace content {
 
-struct ShellPlatformDelegate::ShellData {
-  gfx::Size content_size;
-  // Self-owned Widget, destroyed through CloseNow().
-  views::Widget* window_widget;
-};
-
-struct ShellPlatformDelegate::PlatformData {
-  // Only used in headless mode.
-  std::unique_ptr<ShellPlatformDataAura> aura;
-
-#if defined(OS_CHROMEOS)
-  std::unique_ptr<wm::WMTestHelper> wm_test_helper;
-#else
-  std::unique_ptr<wm::WMState> wm_state;
-#endif
-
-  // TODO(danakj): This looks unused?
-  std::unique_ptr<views::ViewsDelegate> views_delegate;
-};
-
 namespace {
 
 // Maintain the UI controls and web view for content shell
@@ -77,7 +57,11 @@ class ShellWindowDelegateView : public views::WidgetDelegateView,
                                 public views::TextfieldController,
                                 public views::ButtonListener {
  public:
-  enum UIControl { BACK_BUTTON, FORWARD_BUTTON, STOP_BUTTON };
+  enum UIControl {
+    BACK_BUTTON,
+    FORWARD_BUTTON,
+    STOP_BUTTON
+  };
 
   ShellWindowDelegateView(Shell* shell) : shell_(shell) {}
 
@@ -143,53 +127,58 @@ class ShellWindowDelegateView : public views::WidgetDelegateView,
         SetLayoutManager(std::make_unique<views::GridLayout>());
 
     views::ColumnSet* column_set = layout->AddColumnSet(0);
-    if (!Shell::ShouldHideToolbar())
+    if (!shell_->hide_toolbar())
       column_set->AddPaddingColumn(0, 2);
     column_set->AddColumn(views::GridLayout::FILL, views::GridLayout::FILL, 1,
                           views::GridLayout::USE_PREF, 0, 0);
-    if (!Shell::ShouldHideToolbar())
+    if (!shell_->hide_toolbar())
       column_set->AddPaddingColumn(0, 2);
 
     // Add toolbar buttons and URL text field
-    if (!Shell::ShouldHideToolbar()) {
+    if (!shell_->hide_toolbar()) {
       layout->AddPaddingRow(0, 2);
       layout->StartRow(0, 0);
       views::GridLayout* toolbar_layout =
           toolbar_view->SetLayoutManager(std::make_unique<views::GridLayout>());
 
-      views::ColumnSet* toolbar_column_set = toolbar_layout->AddColumnSet(0);
+      views::ColumnSet* toolbar_column_set =
+          toolbar_layout->AddColumnSet(0);
       // Back button
       auto back_button =
           views::MdTextButton::Create(this, base::ASCIIToUTF16("Back"));
       gfx::Size back_button_size = back_button->GetPreferredSize();
-      toolbar_column_set->AddColumn(
-          views::GridLayout::CENTER, views::GridLayout::CENTER, 0,
-          views::GridLayout::FIXED, back_button_size.width(),
-          back_button_size.width() / 2);
+      toolbar_column_set->AddColumn(views::GridLayout::CENTER,
+                                    views::GridLayout::CENTER, 0,
+                                    views::GridLayout::FIXED,
+                                    back_button_size.width(),
+                                    back_button_size.width() / 2);
       // Forward button
       auto forward_button =
           views::MdTextButton::Create(this, base::ASCIIToUTF16("Forward"));
       gfx::Size forward_button_size = forward_button->GetPreferredSize();
-      toolbar_column_set->AddColumn(
-          views::GridLayout::CENTER, views::GridLayout::CENTER, 0,
-          views::GridLayout::FIXED, forward_button_size.width(),
-          forward_button_size.width() / 2);
+      toolbar_column_set->AddColumn(views::GridLayout::CENTER,
+                                    views::GridLayout::CENTER, 0,
+                                    views::GridLayout::FIXED,
+                                    forward_button_size.width(),
+                                    forward_button_size.width() / 2);
       // Refresh button
       auto refresh_button =
           views::MdTextButton::Create(this, base::ASCIIToUTF16("Refresh"));
       gfx::Size refresh_button_size = refresh_button->GetPreferredSize();
-      toolbar_column_set->AddColumn(
-          views::GridLayout::CENTER, views::GridLayout::CENTER, 0,
-          views::GridLayout::FIXED, refresh_button_size.width(),
-          refresh_button_size.width() / 2);
+      toolbar_column_set->AddColumn(views::GridLayout::CENTER,
+                                    views::GridLayout::CENTER, 0,
+                                    views::GridLayout::FIXED,
+                                    refresh_button_size.width(),
+                                    refresh_button_size.width() / 2);
       // Stop button
       auto stop_button =
           views::MdTextButton::Create(this, base::ASCIIToUTF16("Stop"));
       gfx::Size stop_button_size = stop_button->GetPreferredSize();
-      toolbar_column_set->AddColumn(
-          views::GridLayout::CENTER, views::GridLayout::CENTER, 0,
-          views::GridLayout::FIXED, stop_button_size.width(),
-          stop_button_size.width() / 2);
+      toolbar_column_set->AddColumn(views::GridLayout::CENTER,
+                                    views::GridLayout::CENTER, 0,
+                                    views::GridLayout::FIXED,
+                                    stop_button_size.width(),
+                                    stop_button_size.width() / 2);
       toolbar_column_set->AddPaddingColumn(0, 2);
       // URL entry
       auto url_entry = std::make_unique<views::Textfield>();
@@ -220,18 +209,20 @@ class ShellWindowDelegateView : public views::WidgetDelegateView,
       contents_view_ = layout->AddView(std::move(contents_view));
     }
 
-    if (!Shell::ShouldHideToolbar())
+    if (!shell_->hide_toolbar())
       layout->AddPaddingRow(0, 5);
 
     InitAccelerators();
   }
   void InitAccelerators() {
-    static const ui::KeyboardCode keys[] = {ui::VKEY_F5, ui::VKEY_BROWSER_BACK,
-                                            ui::VKEY_BROWSER_FORWARD};
+    static const ui::KeyboardCode keys[] = { ui::VKEY_F5,
+                                             ui::VKEY_BROWSER_BACK,
+                                             ui::VKEY_BROWSER_FORWARD };
     for (size_t i = 0; i < base::size(keys); ++i) {
       GetFocusManager()->RegisterAccelerator(
-          ui::Accelerator(keys[i], ui::EF_NONE),
-          ui::AcceleratorManager::kNormalPriority, this);
+        ui::Accelerator(keys[i], ui::EF_NONE),
+        ui::AcceleratorManager::kNormalPriority,
+        this);
     }
   }
   // Overridden from TextfieldController
@@ -249,8 +240,8 @@ class ShellWindowDelegateView : public views::WidgetDelegateView,
       }
       shell_->LoadURL(url);
       return true;
-    }
-    return false;
+   }
+   return false;
   }
 
   // Overridden from ButtonListener
@@ -293,17 +284,17 @@ class ShellWindowDelegateView : public views::WidgetDelegateView,
   // Overridden from AcceleratorTarget:
   bool AcceleratorPressed(const ui::Accelerator& accelerator) override {
     switch (accelerator.key_code()) {
-      case ui::VKEY_F5:
-        shell_->Reload();
-        return true;
-      case ui::VKEY_BROWSER_BACK:
-        shell_->GoBackOrForward(-1);
-        return true;
-      case ui::VKEY_BROWSER_FORWARD:
-        shell_->GoBackOrForward(1);
-        return true;
-      default:
-        return views::WidgetDelegateView::AcceleratorPressed(accelerator);
+    case ui::VKEY_F5:
+      shell_->Reload();
+      return true;
+    case ui::VKEY_BROWSER_BACK:
+      shell_->GoBackOrForward(-1);
+      return true;
+    case ui::VKEY_BROWSER_FORWARD:
+      shell_->GoBackOrForward(1);
+      return true;
+    default:
+      return views::WidgetDelegateView::AcceleratorPressed(accelerator);
     }
   }
 
@@ -331,89 +322,112 @@ class ShellWindowDelegateView : public views::WidgetDelegateView,
 
 }  // namespace
 
-ShellPlatformDelegate::ShellPlatformDelegate() = default;
-ShellPlatformDelegate::~ShellPlatformDelegate() = default;
+#if defined(OS_CHROMEOS)
+// static
+wm::WMTestHelper* Shell::wm_test_helper_ = nullptr;
+#elif defined(USE_AURA)
+// static
+wm::WMState* Shell::wm_state_ = nullptr;
+#endif
+// static
+views::ViewsDelegate* Shell::views_delegate_ = nullptr;
 
-void ShellPlatformDelegate::Initialize(const gfx::Size& default_window_size) {
+// static
+void Shell::PlatformInitialize(const gfx::Size& default_window_size) {
 #if defined(OS_WIN)
   _setmode(_fileno(stdout), _O_BINARY);
   _setmode(_fileno(stderr), _O_BINARY);
 #endif
-
-  platform_ = std::make_unique<PlatformData>();
-
 #if defined(OS_CHROMEOS)
-  platform_->wm_test_helper =
-      std::make_unique<wm::WMTestHelper>(default_window_size);
+  wm_test_helper_ = new wm::WMTestHelper(default_window_size);
 #else
-  platform_->wm_state = std::make_unique<wm::WMState>();
+  wm_state_ = new wm::WMState;
   views::InstallDesktopScreenIfNecessary();
 #endif
-
-  platform_->views_delegate =
-      std::make_unique<views::DesktopTestViewsDelegate>();
+  views_delegate_ = new views::DesktopTestViewsDelegate();
 }
 
-void ShellPlatformDelegate::Shutdown() {
-  platform_.reset();
+void Shell::PlatformExit() {
+#if defined(OS_CHROMEOS)
+  delete wm_test_helper_;
+  wm_test_helper_ = nullptr;
+#endif
+  delete views_delegate_;
+  views_delegate_ = nullptr;
+  delete platform_;
+  platform_ = nullptr;
+#if defined(USE_AURA) && !defined(OS_CHROMEOS)
+  delete wm_state_;
+  wm_state_ = nullptr;
+#endif
 }
 
-void ShellPlatformDelegate::CreatePlatformWindow(
-    Shell* shell,
-    const gfx::Size& initial_size) {
-  ShellData* shell_data = new ShellData;
-  shell->set_platform_data(shell_data);
+void Shell::PlatformCleanUp() {
+}
 
-  shell_data->content_size = initial_size;
+void Shell::PlatformEnableUIControl(UIControl control, bool is_enabled) {
+  if (headless_ || hide_toolbar_)
+    return;
+  ShellWindowDelegateView* delegate_view =
+    static_cast<ShellWindowDelegateView*>(window_widget_->widget_delegate());
+  if (control == BACK_BUTTON) {
+    delegate_view->EnableUIControl(ShellWindowDelegateView::BACK_BUTTON,
+        is_enabled);
+  } else if (control == FORWARD_BUTTON) {
+    delegate_view->EnableUIControl(ShellWindowDelegateView::FORWARD_BUTTON,
+        is_enabled);
+  } else if (control == STOP_BUTTON) {
+    delegate_view->EnableUIControl(ShellWindowDelegateView::STOP_BUTTON,
+        is_enabled);
+  }
+}
 
-  if (shell->headless()) {
-    if (!platform_->aura)
-      platform_->aura = std::make_unique<ShellPlatformDataAura>(initial_size);
+void Shell::PlatformSetAddressBarURL(const GURL& url) {
+  if (headless_ || hide_toolbar_)
+    return;
+  ShellWindowDelegateView* delegate_view =
+    static_cast<ShellWindowDelegateView*>(window_widget_->widget_delegate());
+  delegate_view->SetAddressBarURL(url);
+}
+
+void Shell::PlatformSetIsLoading(bool loading) {
+}
+
+void Shell::PlatformCreateWindow(int width, int height) {
+  content_size_ = gfx::Size(width, height);
+
+  if (headless_) {
+    if (!platform_)
+      platform_ = new ShellPlatformDataAura(content_size_);
     else
-      platform_->aura->ResizeWindow(initial_size);
+      platform_->ResizeWindow(content_size_);
     return;
   }
-
 #if defined(OS_CHROMEOS)
-  shell_data->window_widget = views::Widget::CreateWindowWithContext(
-      new ShellWindowDelegateView(shell),
-      platform_->wm_test_helper->GetDefaultParent(nullptr, gfx::Rect()),
-      gfx::Rect(initial_size));
+  window_widget_ = views::Widget::CreateWindowWithContext(
+      new ShellWindowDelegateView(this),
+      wm_test_helper_->GetDefaultParent(nullptr, gfx::Rect()),
+      gfx::Rect(content_size_));
 #else
-  shell_data->window_widget = new views::Widget();
+  window_widget_ = new views::Widget;
   views::Widget::InitParams params;
-  params.bounds = gfx::Rect(initial_size);
-  params.delegate = new ShellWindowDelegateView(shell);
+  params.bounds = gfx::Rect(content_size_);
+  params.delegate = new ShellWindowDelegateView(this);
   params.wm_class_class = "chromium-content_shell";
   params.wm_class_name = params.wm_class_class;
-  shell_data->window_widget->Init(std::move(params));
+  window_widget_->Init(std::move(params));
 #endif
 
-  // |window_widget| is made visible in PlatformSetContents(), so that the
+  // |window_widget_| is made visible in PlatformSetContents(), so that the
   // platform-window size does not need to change due to layout again.
+  window_ = window_widget_->GetNativeWindow();
 }
 
-gfx::NativeWindow ShellPlatformDelegate::GetNativeWindow(Shell* shell) {
-  ShellData* shell_data = shell->platform_data();
-  return shell_data->window_widget->GetNativeWindow();
-}
-
-void ShellPlatformDelegate::CleanUp(Shell* shell) {
-  ShellData* shell_data = shell->platform_data();
-
-  // The |window_widget| is simply destroyed here.
-
-  delete shell_data;
-  // This shouldn't be used anymore, but just in case.
-  shell->set_platform_data(nullptr);
-}
-
-void ShellPlatformDelegate::SetContents(Shell* shell) {
-  ShellData* shell_data = shell->platform_data();
-
-  if (shell->headless()) {
-    aura::Window* content = shell->web_contents()->GetNativeView();
-    aura::Window* parent = platform_->aura->host()->window();
+void Shell::PlatformSetContents() {
+  if (headless_) {
+    CHECK(platform_);
+    aura::Window* content = web_contents_->GetNativeView();
+    aura::Window* parent = platform_->host()->window();
     if (!parent->Contains(content)) {
       parent->AddChild(content);
       // Move the cursor to a fixed position before tests run to avoid getting
@@ -421,79 +435,37 @@ void ShellPlatformDelegate::SetContents(Shell* shell) {
       content->MoveCursorTo(gfx::Point());
       content->Show();
     }
-    content->SetBounds(gfx::Rect(shell_data->content_size));
-    RenderWidgetHostView* host_view =
-        shell->web_contents()->GetRenderWidgetHostView();
+    content->SetBounds(gfx::Rect(content_size_));
+    RenderWidgetHostView* host_view = web_contents_->GetRenderWidgetHostView();
     if (host_view)
-      host_view->SetSize(shell_data->content_size);
+      host_view->SetSize(content_size_);
   } else {
-    views::WidgetDelegate* widget_delegate =
-        shell_data->window_widget->widget_delegate();
-    auto* delegate_view =
+    views::WidgetDelegate* widget_delegate = window_widget_->widget_delegate();
+    ShellWindowDelegateView* delegate_view =
         static_cast<ShellWindowDelegateView*>(widget_delegate);
-    delegate_view->SetWebContents(shell->web_contents(),
-                                  shell_data->content_size);
-    shell_data->window_widget->GetNativeWindow()->GetHost()->Show();
-    shell_data->window_widget->Show();
+    delegate_view->SetWebContents(web_contents_.get(), content_size_);
+    window_->GetHost()->Show();
+    window_widget_->Show();
   }
 }
 
-void ShellPlatformDelegate::EnableUIControl(Shell* shell,
-                                            UIControl control,
-                                            bool is_enabled) {
-  if (shell->headless() || Shell::ShouldHideToolbar())
-    return;
-
-  ShellData* shell_data = shell->platform_data();
-
-  auto* delegate_view = static_cast<ShellWindowDelegateView*>(
-      shell_data->window_widget->widget_delegate());
-  if (control == BACK_BUTTON) {
-    delegate_view->EnableUIControl(ShellWindowDelegateView::BACK_BUTTON,
-                                   is_enabled);
-  } else if (control == FORWARD_BUTTON) {
-    delegate_view->EnableUIControl(ShellWindowDelegateView::FORWARD_BUTTON,
-                                   is_enabled);
-  } else if (control == STOP_BUTTON) {
-    delegate_view->EnableUIControl(ShellWindowDelegateView::STOP_BUTTON,
-                                   is_enabled);
-  }
+void Shell::PlatformResizeSubViews() {
 }
 
-void ShellPlatformDelegate::SetAddressBarURL(Shell* shell, const GURL& url) {
-  if (shell->headless() || Shell::ShouldHideToolbar())
-    return;
-
-  ShellData* shell_data = shell->platform_data();
-
-  auto* delegate_view = static_cast<ShellWindowDelegateView*>(
-      shell_data->window_widget->widget_delegate());
-  delegate_view->SetAddressBarURL(url);
+void Shell::Close() {
+  if (headless_)
+    delete this;
+  else
+    window_widget_->CloseNow();
 }
 
-void ShellPlatformDelegate::SetIsLoading(Shell* shell, bool loading) {}
-
-void ShellPlatformDelegate::SetTitle(Shell* shell,
-                                     const base::string16& title) {
-  if (shell->headless())
+void Shell::PlatformSetTitle(const base::string16& title) {
+  if (headless_)
     return;
-
-  ShellData* shell_data = shell->platform_data();
-
-  auto* delegate_view = static_cast<ShellWindowDelegateView*>(
-      shell_data->window_widget->widget_delegate());
+  ShellWindowDelegateView* delegate_view =
+    static_cast<ShellWindowDelegateView*>(window_widget_->widget_delegate());
   delegate_view->SetWindowTitle(title);
-  shell_data->window_widget->UpdateWindowTitle();
-}
-
-bool ShellPlatformDelegate::DestroyShell(Shell* shell) {
-  if (shell->headless())
-    return false;  // Shell destroys itself.
-
-  ShellData* shell_data = shell->platform_data();
-
-  shell_data->window_widget->CloseNow();
-  return true;  // The CloseNow() will do the destruction of Shell.
+  window_widget_->UpdateWindowTitle();
 }
 
 }  // namespace content
