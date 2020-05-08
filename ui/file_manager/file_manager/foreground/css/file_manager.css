@@ -2207,6 +2207,10 @@ html[dir='rtl'] .badge {
   padding-inline-start: 26px;
 }
 
+.files-ng #default-tasks-list {
+  margin-top: 16px;
+}
+
 #list-container list > li[selected],
 #list-container list > li:active,
 #list-container list > li.accepts,
@@ -2978,6 +2982,10 @@ body.files-ng #list-container li .detail-thumbnail {
   overflow: scroll;
   padding: 8px 10px;
   user-select: text;
+}
+
+.files-ng .install-linux-package-details-frame {
+  margin-top: 16px;
 }
 
 .install-linux-package-details-label {
