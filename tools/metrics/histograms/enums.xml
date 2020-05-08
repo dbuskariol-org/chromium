@@ -3982,6 +3982,7 @@ Unknown properties are collapsed to zero. -->
   <int value="25" label="PEDAL"/>
   <int value="26" label="CLIPBOARD_TEXT"/>
   <int value="27" label="CLIPBOARD_IMAGE"/>
+  <int value="28" label="TILE_SUGGESTION"/>
 </enum>
 
 <enum name="AutofillAssistantDropOutReason">
