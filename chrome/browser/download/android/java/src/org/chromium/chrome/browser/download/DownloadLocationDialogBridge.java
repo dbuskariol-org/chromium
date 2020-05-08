@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.browser.download;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
@@ -12,7 +13,8 @@ import android.view.LayoutInflater;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.base.metrics.RecordHistogram;
-import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.preferences.Pref;
+import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.download.R;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
@@ -57,14 +59,14 @@ public class DownloadLocationDialogBridge implements ModalDialogProperties.Contr
     @CalledByNative
     public void showDialog(WindowAndroid windowAndroid, long totalBytes,
             @DownloadLocationDialogType int dialogType, String suggestedPath) {
-        ChromeActivity activity = (ChromeActivity) windowAndroid.getActivity().get();
+        Activity activity = windowAndroid.getActivity().get();
         // If the activity has gone away, just clean up the native pointer.
         if (activity == null) {
             onDismiss(null, DialogDismissalCause.ACTIVITY_DESTROYED);
             return;
         }
 
-        mModalDialogManager = activity.getModalDialogManager();
+        mModalDialogManager = windowAndroid.getModalDialogManager();
         mContext = activity;
         mTotalBytes = totalBytes;
         mDialogType = dialogType;
@@ -115,7 +117,7 @@ public class DownloadLocationDialogBridge implements ModalDialogProperties.Contr
         if (dirs.size() == 1 && mDialogType == DownloadLocationDialogType.DEFAULT) {
             final DirectoryOption dir = dirs.get(0);
             if (dir.type == DirectoryOption.DownloadLocationDirectoryType.DEFAULT) {
-                assert(!TextUtils.isEmpty(dir.location));
+                assert (!TextUtils.isEmpty(dir.location));
                 setDownloadAndSaveFileDefaultDirectory(dir.location);
                 DownloadLocationDialogBridgeJni.get().onComplete(
                         mNativeDownloadLocationDialogBridge, DownloadLocationDialogBridge.this,
@@ -208,9 +210,9 @@ public class DownloadLocationDialogBridge implements ModalDialogProperties.Contr
         // Update preference to show prompt based on whether checkbox is checked only when the user
         // click the positive button.
         if (dontShowAgain) {
-            DownloadUtils.setPromptForDownloadAndroid(DownloadPromptStatus.DONT_SHOW);
+            setPromptForDownloadAndroid(DownloadPromptStatus.DONT_SHOW);
         } else {
-            DownloadUtils.setPromptForDownloadAndroid(DownloadPromptStatus.SHOW_PREFERENCE);
+            setPromptForDownloadAndroid(DownloadPromptStatus.SHOW_PREFERENCE);
         }
     }
 
@@ -233,6 +235,21 @@ public class DownloadLocationDialogBridge implements ModalDialogProperties.Contr
      */
     public static void setDownloadAndSaveFileDefaultDirectory(String directory) {
         DownloadLocationDialogBridgeJni.get().setDownloadAndSaveFileDefaultDirectory(directory);
+    }
+
+    /**
+     * @return The status of prompt for download pref, defined by {@link DownloadPromptStatus}.
+     */
+    @DownloadPromptStatus
+    public static int getPromptForDownloadAndroid() {
+        return PrefServiceBridge.getInstance().getInteger(Pref.PROMPT_FOR_DOWNLOAD_ANDROID);
+    }
+
+    /**
+     * @param status New status to update the prompt for download preference.
+     */
+    public static void setPromptForDownloadAndroid(@DownloadPromptStatus int status) {
+        PrefServiceBridge.getInstance().setInteger(Pref.PROMPT_FOR_DOWNLOAD_ANDROID, status);
     }
 
     @NativeMethods

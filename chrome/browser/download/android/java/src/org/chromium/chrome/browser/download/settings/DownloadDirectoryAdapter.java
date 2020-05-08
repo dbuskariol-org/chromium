@@ -233,11 +233,9 @@ public class DownloadDirectoryAdapter extends ArrayAdapter<Object> {
                     break;
                 case DirectoryOption.DownloadLocationDirectoryType.ADDITIONAL:
                     String directoryName = (numOtherAdditionalDirectories > 0)
-                            ? mContext.getString(
-                                    org.chromium.chrome.R.string.downloads_location_sd_card_number,
+                            ? mContext.getString(R.string.downloads_location_sd_card_number,
                                     numOtherAdditionalDirectories + 1)
-                            : mContext.getString(
-                                    org.chromium.chrome.R.string.downloads_location_sd_card);
+                            : mContext.getString(R.string.downloads_location_sd_card);
                     directory.name = directoryName;
                     mAdditionalOptions.add(directory);
                     numOtherAdditionalDirectories++;
