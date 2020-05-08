@@ -10,6 +10,7 @@
 #include "base/no_destructor.h"
 #include "chrome/browser/chromeos/attestation/tpm_challenge_key_result.h"
 #include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_common.h"
+#include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_invalidator.h"
 #include "chrome/browser/chromeos/cert_provisioning/cert_provisioning_serializer.h"
 #include "chrome/browser/chromeos/platform_keys/platform_keys_service.h"
 #include "chrome/browser/chromeos/platform_keys/platform_keys_service_factory.h"
@@ -125,10 +126,11 @@ std::unique_ptr<CertProvisioningWorker> CertProvisioningWorkerFactory::Create(
     PrefService* pref_service,
     const CertProfile& cert_profile,
     policy::CloudPolicyClient* cloud_policy_client,
+    std::unique_ptr<CertProvisioningInvalidator> invalidator,
     CertProvisioningWorkerCallback callback) {
   return std::make_unique<CertProvisioningWorkerImpl>(
       cert_scope, profile, pref_service, cert_profile, cloud_policy_client,
-      std::move(callback));
+      std::move(invalidator), std::move(callback));
 }
 
 std::unique_ptr<CertProvisioningWorker>
@@ -138,10 +140,11 @@ CertProvisioningWorkerFactory::Deserialize(
     PrefService* pref_service,
     const base::Value& saved_worker,
     policy::CloudPolicyClient* cloud_policy_client,
+    std::unique_ptr<CertProvisioningInvalidator> invalidator,
     CertProvisioningWorkerCallback callback) {
   auto worker = std::make_unique<CertProvisioningWorkerImpl>(
       cert_scope, profile, pref_service, CertProfile(), cloud_policy_client,
-      std::move(callback));
+      std::move(invalidator), std::move(callback));
   if (!CertProvisioningSerializer::DeserializeWorker(saved_worker,
                                                      worker.get())) {
     return {};
@@ -163,6 +166,7 @@ CertProvisioningWorkerImpl::CertProvisioningWorkerImpl(
     PrefService* pref_service,
     const CertProfile& cert_profile,
     policy::CloudPolicyClient* cloud_policy_client,
+    std::unique_ptr<CertProvisioningInvalidator> invalidator,
     CertProvisioningWorkerCallback callback)
     : cert_scope_(cert_scope),
       profile_(profile),
@@ -170,7 +174,8 @@ CertProvisioningWorkerImpl::CertProvisioningWorkerImpl(
       cert_profile_(cert_profile),
       callback_(std::move(callback)),
       request_backoff_(&kBackoffPolicy),
-      cloud_policy_client_(cloud_policy_client) {
+      cloud_policy_client_(cloud_policy_client),
+      invalidator_(std::move(invalidator)) {
   CHECK(profile);
   platform_keys_service_ =
       platform_keys::PlatformKeysServiceFactory::GetForBrowserContext(profile);
@@ -178,6 +183,7 @@ CertProvisioningWorkerImpl::CertProvisioningWorkerImpl(
 
   CHECK(pref_service);
   CHECK(cloud_policy_client_);
+  CHECK(invalidator_);
 }
 
 CertProvisioningWorkerImpl::~CertProvisioningWorkerImpl() = default;
@@ -224,6 +230,7 @@ void CertProvisioningWorkerImpl::DoStep() {
 }
 
 void CertProvisioningWorkerImpl::Cancel() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   UpdateState(CertProvisioningWorkerState::kCanceled);
 }
 
@@ -315,6 +322,7 @@ void CertProvisioningWorkerImpl::OnStartCsrDone(
   UpdateState(CertProvisioningWorkerState::kStartCsrResponseReceived);
 
   RegisterForInvalidationTopic();
+
   DoStep();
 }
 
@@ -608,12 +616,21 @@ void CertProvisioningWorkerImpl::ScheduleNextStep(base::TimeDelta delay) {
 
   base::SequencedTaskRunnerHandle::Get()->PostDelayedTask(
       FROM_HERE,
-      base::BindOnce(&CertProvisioningWorkerImpl::DoStep,
+      base::BindOnce(&CertProvisioningWorkerImpl::OnShouldContinue,
                      weak_factory_.GetWeakPtr()),
       delay);
 
   is_waiting_ = true;
   VLOG(0) << "Next step scheduled in " << delay;
+}
+
+void CertProvisioningWorkerImpl::OnShouldContinue() {
+  // Worker is already doing something.
+  if (!IsWaiting()) {
+    return;
+  }
+
+  DoStep();
 }
 
 void CertProvisioningWorkerImpl::CancelScheduledTasks() {
@@ -623,6 +640,8 @@ void CertProvisioningWorkerImpl::CancelScheduledTasks() {
 
 void CertProvisioningWorkerImpl::CleanUpAndMaybeRunCallback() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+  UnregisterFromInvalidationTopic();
 
   // Keep conditions mutually exclusive.
   if (state_ == CertProvisioningWorkerState::kSucceed) {
@@ -697,13 +716,13 @@ void CertProvisioningWorkerImpl::HandleSerialization() {
     case CertProvisioningWorkerState::kKeypairGenerated:
       CertProvisioningSerializer::SerializeWorkerToPrefs(pref_service_, *this);
       break;
-    case CertProvisioningWorkerState::kKeypairMarked:
-      break;
+
     case CertProvisioningWorkerState::kStartCsrResponseReceived:
       CertProvisioningSerializer::DeleteWorkerFromPrefs(pref_service_, *this);
       break;
     case CertProvisioningWorkerState::kVaChallengeFinished:
     case CertProvisioningWorkerState::kKeyRegistered:
+    case CertProvisioningWorkerState::kKeypairMarked:
     case CertProvisioningWorkerState::kSignCsrFinished:
       break;
     case CertProvisioningWorkerState::kFinishCsrResponseReceived:
@@ -728,6 +747,29 @@ void CertProvisioningWorkerImpl::InitAfterDeserialization() {
           GetVaKeyType(cert_scope_),
           GetVaKeyName(cert_scope_, cert_profile_.profile_id), profile_,
           GetVaKeyNameForSpkac(cert_scope_, cert_profile_.profile_id));
+}
+
+void CertProvisioningWorkerImpl::RegisterForInvalidationTopic() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  DCHECK(invalidator_);
+
+  // Can be empty after deserialization if no topic was received yet. Also
+  // protects from errors on the server side.
+  if (invalidation_topic_.empty()) {
+    return;
+  }
+
+  invalidator_->Register(
+      invalidation_topic_,
+      base::BindRepeating(&CertProvisioningWorkerImpl::OnShouldContinue,
+                          weak_factory_.GetWeakPtr()));
+}
+
+void CertProvisioningWorkerImpl::UnregisterFromInvalidationTopic() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+  DCHECK(invalidator_);
+
+  invalidator_->Unregister();
 }
 
 }  // namespace cert_provisioning

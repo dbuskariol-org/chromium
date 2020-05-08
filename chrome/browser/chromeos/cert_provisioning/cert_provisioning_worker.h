@@ -24,6 +24,8 @@ class PrefService;
 namespace chromeos {
 namespace cert_provisioning {
 
+class CertProvisioningInvalidator;
+
 using CertProvisioningWorkerCallback =
     base::OnceCallback<void(const CertProfile& profile,
                             CertProvisioningWorkerState state)>;
@@ -42,6 +44,7 @@ class CertProvisioningWorkerFactory {
       PrefService* pref_service,
       const CertProfile& cert_profile,
       policy::CloudPolicyClient* cloud_policy_client,
+      std::unique_ptr<CertProvisioningInvalidator> invalidator,
       CertProvisioningWorkerCallback callback);
 
   virtual std::unique_ptr<CertProvisioningWorker> Deserialize(
@@ -50,6 +53,7 @@ class CertProvisioningWorkerFactory {
       PrefService* pref_service,
       const base::Value& saved_worker,
       policy::CloudPolicyClient* cloud_policy_client,
+      std::unique_ptr<CertProvisioningInvalidator> invalidator,
       CertProvisioningWorkerCallback callback);
 
   // Doesn't take ownership.
@@ -90,12 +94,14 @@ class CertProvisioningWorker {
 
 class CertProvisioningWorkerImpl : public CertProvisioningWorker {
  public:
-  CertProvisioningWorkerImpl(CertScope cert_scope,
-                             Profile* profile,
-                             PrefService* pref_service,
-                             const CertProfile& cert_profile,
-                             policy::CloudPolicyClient* cloud_policy_client,
-                             CertProvisioningWorkerCallback callback);
+  CertProvisioningWorkerImpl(
+      CertScope cert_scope,
+      Profile* profile,
+      PrefService* pref_service,
+      const CertProfile& cert_profile,
+      policy::CloudPolicyClient* cloud_policy_client,
+      std::unique_ptr<CertProvisioningInvalidator> invalidator,
+      CertProvisioningWorkerCallback callback);
   ~CertProvisioningWorkerImpl() override;
 
   // CertProvisioningWorker
@@ -154,8 +160,15 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   void ScheduleNextStep(base::TimeDelta delay);
   void CancelScheduledTasks();
 
-  // TODO: implement when invalidations are supported for cert provisioning.
-  void RegisterForInvalidationTopic() {}
+  void OnShouldContinue();
+
+  // Registers for |invalidation_topic_| that allows to receive notification
+  // when server side is ready to continue provisioning process.
+  void RegisterForInvalidationTopic();
+  // Should be called only when provisioning process is finished (successfully
+  // or not). Should not be called when the worker is destroyed, but will be
+  // deserialized back later.
+  void UnregisterFromInvalidationTopic();
 
   // If it is called with kSucceed or kFailed, it will call the |callback_|. The
   // worker can be destroyed in callback and should not use any member fields
@@ -220,6 +233,8 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   std::unique_ptr<attestation::TpmChallengeKeySubtle>
       tpm_challenge_key_subtle_impl_;
   policy::CloudPolicyClient* cloud_policy_client_ = nullptr;
+
+  std::unique_ptr<CertProvisioningInvalidator> invalidator_;
 
   SEQUENCE_CHECKER(sequence_checker_);
   base::WeakPtrFactory<CertProvisioningWorkerImpl> weak_factory_{this};

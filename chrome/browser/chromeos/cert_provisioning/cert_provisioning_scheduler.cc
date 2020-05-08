@@ -108,12 +108,15 @@ CertProvisioningScheduler::CreateUserCertProvisioningScheduler(
   return std::make_unique<CertProvisioningScheduler>(
       CertScope::kUser, profile, pref_service,
       prefs::kRequiredClientCertificateForUser, cloud_policy_client,
-      network_state_handler);
+      network_state_handler,
+      std::make_unique<CertProvisioningUserInvalidatorFactory>(profile));
 }
 
 // static
 std::unique_ptr<CertProvisioningScheduler>
-CertProvisioningScheduler::CreateDeviceCertProvisioningScheduler() {
+CertProvisioningScheduler::CreateDeviceCertProvisioningScheduler(
+    policy::AffiliatedInvalidationServiceProvider*
+        invalidation_service_provider) {
   Profile* profile = ProfileHelper::GetSigninProfile();
   PrefService* pref_service = g_browser_process->local_state();
   policy::CloudPolicyClient* cloud_policy_client =
@@ -129,7 +132,9 @@ CertProvisioningScheduler::CreateDeviceCertProvisioningScheduler() {
   return std::make_unique<CertProvisioningScheduler>(
       CertScope::kDevice, profile, pref_service,
       prefs::kRequiredClientCertificateForDevice, cloud_policy_client,
-      network_state_handler);
+      network_state_handler,
+      std::make_unique<CertProvisioningDeviceInvalidatorFactory>(
+          invalidation_service_provider));
 }
 
 CertProvisioningScheduler::CertProvisioningScheduler(
@@ -138,17 +143,20 @@ CertProvisioningScheduler::CertProvisioningScheduler(
     PrefService* pref_service,
     const char* pref_name,
     policy::CloudPolicyClient* cloud_policy_client,
-    NetworkStateHandler* network_state_handler)
+    NetworkStateHandler* network_state_handler,
+    std::unique_ptr<CertProvisioningInvalidatorFactory> invalidator_factory)
     : cert_scope_(cert_scope),
       profile_(profile),
       pref_service_(pref_service),
       pref_name_(pref_name),
       cloud_policy_client_(cloud_policy_client),
-      network_state_handler_(network_state_handler) {
+      network_state_handler_(network_state_handler),
+      invalidator_factory_(std::move(invalidator_factory)) {
   CHECK(pref_service_);
   CHECK(pref_name_);
   CHECK(cloud_policy_client_);
   CHECK(profile);
+  CHECK(invalidator_factory_);
 
   platform_keys_service_ =
       platform_keys::PlatformKeysServiceFactory::GetForBrowserContext(profile);
@@ -286,7 +294,7 @@ void CertProvisioningScheduler::DeserializeWorkers() {
     std::unique_ptr<CertProvisioningWorker> worker =
         CertProvisioningWorkerFactory::Get()->Deserialize(
             cert_scope_, profile_, pref_service_, saved_worker,
-            cloud_policy_client_,
+            cloud_policy_client_, invalidator_factory_->Create(),
             base::BindOnce(&CertProvisioningScheduler::OnProfileFinished,
                            weak_factory_.GetWeakPtr()));
     if (!worker) {
@@ -395,7 +403,7 @@ void CertProvisioningScheduler::CreateCertProvisioningWorker(
   std::unique_ptr<CertProvisioningWorker> worker =
       CertProvisioningWorkerFactory::Get()->Create(
           cert_scope_, profile_, pref_service_, cert_profile,
-          cloud_policy_client_,
+          cloud_policy_client_, invalidator_factory_->Create(),
           base::BindOnce(&CertProvisioningScheduler::OnProfileFinished,
                          weak_factory_.GetWeakPtr()));
   CertProvisioningWorker* worker_unowned = worker.get();

@@ -2846,6 +2846,8 @@ source_set("unit_tests") {
     "cert_provisioning/cert_provisioning_test_helpers.cc",
     "cert_provisioning/cert_provisioning_test_helpers.h",
     "cert_provisioning/cert_provisioning_worker_unittest.cc",
+    "cert_provisioning/mock_cert_provisioning_invalidator.cc",
+    "cert_provisioning/mock_cert_provisioning_invalidator.h",
     "cert_provisioning/mock_cert_provisioning_worker.cc",
     "cert_provisioning/mock_cert_provisioning_worker.h",
     "certificate_provider/certificate_provider_service_unittest.cc",
