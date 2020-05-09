@@ -66,7 +66,6 @@ public class QueryTileSection {
         mSubmitQueryCallback = performSearchQueryCallback;
         if (!isFeatureEnabled()) return;
 
-        TileProviderFactory.setFakeTileProvider(new FakeTileProvider());
         mTileProvider = TileProviderFactory.getForProfile(profile);
         TileConfig tileConfig = new TileConfig.Builder().setUmaPrefix(UMA_PREFIX).build();
         mTileUmaLogger = new TileUmaLogger(UMA_PREFIX);
