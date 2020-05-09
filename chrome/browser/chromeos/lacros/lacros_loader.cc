@@ -10,11 +10,39 @@
 #include "chrome/browser/component_updater/cros_component_manager.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/dbus/upstart/upstart_client.h"
+#include "components/user_manager/user.h"
+#include "components/user_manager/user_manager.h"
+#include "components/user_manager/user_type.h"
 
 using component_updater::CrOSComponentManager;
 
 namespace {
+
 LacrosLoader* g_instance = nullptr;
+
+// Some account types require features that aren't yet supported by lacros.
+// See https://crbug.com/1080693
+bool IsLacrosAllowed() {
+  const user_manager::User* user =
+      user_manager::UserManager::Get()->GetPrimaryUser();
+  if (!user)
+    return false;
+  switch (user->GetType()) {
+    case user_manager::USER_TYPE_REGULAR:
+      return true;
+    case user_manager::USER_TYPE_GUEST:
+    case user_manager::USER_TYPE_PUBLIC_ACCOUNT:
+    case user_manager::USER_TYPE_SUPERVISED:
+    case user_manager::USER_TYPE_KIOSK_APP:
+    case user_manager::USER_TYPE_CHILD:
+    case user_manager::USER_TYPE_ARC_KIOSK_APP:
+    case user_manager::USER_TYPE_ACTIVE_DIRECTORY:
+    case user_manager::USER_TYPE_WEB_KIOSK_APP:
+    case user_manager::NUM_USER_TYPES:
+      return false;
+  }
+}
+
 }  // namespace
 
 // static
@@ -40,6 +68,9 @@ LacrosLoader::~LacrosLoader() {
 }
 
 void LacrosLoader::Init() {
+  if (!IsLacrosAllowed())
+    return;
+
   const char kLacrosComponentName[] = "lacros-fishfood";
   if (chromeos::features::IsLacrosComponentUpdaterEnabled()) {
     // TODO(crbug.com/1078607): Remove non-error logging from this class.
@@ -60,6 +91,9 @@ void LacrosLoader::Init() {
 }
 
 void LacrosLoader::Start() {
+  if (!IsLacrosAllowed())
+    return;
+
   std::string chrome_path;
   if (chromeos::features::IsLacrosComponentUpdaterEnabled()) {
     if (lacros_path_.empty()) {
