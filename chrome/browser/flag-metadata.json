@@ -3606,6 +3606,11 @@
     "expiry_milestone": 86
   },
   {
+    "name": "report-feed-user-actions",
+    "owners": [ "//chrome/android/feed/OWNERS", "feed@chromium.org" ],
+    "expiry_milestone": 86
+  },
+  {
     "name": "request-unbuffered-dispatch",
     "owners": [ "bokan" ],
     "expiry_milestone": 80

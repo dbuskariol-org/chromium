@@ -426,7 +426,7 @@ public class NewTabPage implements NativePage, InvalidationAwareThumbnailProvide
 
         // Determine the feed header to use.
         final SectionHeaderView sectionHeaderView;
-        if (ChromeFeatureList.isEnabled(ChromeFeatureList.FEED_HEADER_MENU)) {
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.REPORT_FEED_USER_ACTIONS)) {
             sectionHeaderView = (SectionHeaderView) inflater.inflate(
                     R.layout.new_tab_page_snippets_expandable_header_with_menu, null, false);
         } else {

@@ -38270,6 +38270,7 @@ from previous Chrome versions.
   <int value="-1907342706" label="ReadItLaterInMenu:disabled"/>
   <int value="-1903365454" label="SyncPseudoUSSPreferences:disabled"/>
   <int value="-1899715534" label="GamepadPollingInterval:enabled"/>
+  <int value="-1899652563" label="ReportFeedUserActions:enabled"/>
   <int value="-1899409297"
       label="ProcessSharingWithStrictSiteInstances:disabled"/>
   <int value="-1898386671" label="PasswordCheck:enabled"/>
@@ -41065,6 +41066,7 @@ from previous Chrome versions.
   <int value="1308537004" label="force-pnacl-subzero"/>
   <int value="1311860720" label="ChromeHomeNtpRedesign:disabled"/>
   <int value="1312025202" label="NTPOfflinePageSuggestions:disabled"/>
+  <int value="1313476409" label="ReportFeedUserActions:disabled"/>
   <int value="1313570156"
       label="HappinessTrackingSurveysForDesktopMigration:enabled"/>
   <int value="1313850691" label="Metal:disabled"/>
